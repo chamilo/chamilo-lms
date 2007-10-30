@@ -79,7 +79,8 @@ $TBL_LP_ITEM = Database :: get_course_table('lp_item');
 $TBL_LP_ITEM_VIEW = Database :: get_course_table('lp_item_view');
 $TBL_LP_VIEW = Database :: get_course_table('lp_view');
 $tbl_stats_exercices 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$sql = "SELECT max(view_count) FROM $TBL_LP_VIEW WHERE lp_id = $lp_id AND user_id = '".$user_id."'";
+$sql = "SELECT max(view_count) FROM $TBL_LP_VIEW " .
+		"WHERE lp_id = $lp_id AND user_id = '".$user_id."'";
 $res = api_sql_query($sql, __FILE__, __LINE__);
 $view = '';
 if (Database :: num_rows($res) > 0) {
@@ -112,9 +113,34 @@ foreach ($list as $my_item_id) {
 		$qry_order = 'ASC';
 	}
 	if (!empty ($view)) {
-		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, iv.score as myscore, iv.total_time as mytime, i.id as myid, i.title as mytitle, i.max_score as mymaxscore, i.item_type as item_type, iv.view_count as iv_view_count, iv.id as iv_id, path as path "." FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v "." WHERE i.id = iv.lp_item_id "." AND i.id = $my_item_id "." AND iv.lp_view_id = v.id "." AND i.lp_id = $lp_id "." AND v.user_id = ".$user_id.""." AND v.view_count = $view "." ORDER BY iv.view_count $qry_order ";
+		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, " .
+				"iv.score as myscore, iv.total_time as mytime, i.id as myid, " .
+				"i.title as mytitle, i.max_score as mymaxscore, " .
+				"iv.max_score as myviewmaxscore, " .
+				"i.item_type as item_type, iv.view_count as iv_view_count, " .
+				"iv.id as iv_id, path as path ".
+				" FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v ".
+				" WHERE i.id = iv.lp_item_id ".
+				" AND i.id = $my_item_id ".
+				" AND iv.lp_view_id = v.id ".
+				" AND i.lp_id = $lp_id ".
+				" AND v.user_id = ".$user_id." ".
+				" AND v.view_count = $view ".
+				" ORDER BY iv.view_count $qry_order ";
 	} else {
-		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, iv.score as myscore, iv.total_time as mytime, i.id as myid, i.title as mytitle, i.max_score as mymaxscore, i.item_type as item_type, iv.view_count as iv_view_count, iv.id as iv_id, path as path "." FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v "." WHERE i.id = iv.lp_item_id "." AND i.id = $my_item_id "." AND iv.lp_view_id = v.id "." AND i.lp_id = $lp_id "." AND v.user_id = ".$user_id." "." ORDER BY iv.view_count $qry_order ";
+		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, " .
+				"iv.score as myscore, iv.total_time as mytime, i.id as myid, " .
+				"i.title as mytitle, i.max_score as mymaxscore, " .
+				"iv.max_score as myviewmaxscore, " .
+				"i.item_type as item_type, iv.view_count as iv_view_count, " .
+				"iv.id as iv_id, path as path ".
+				" FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v ".	
+				" WHERE i.id = iv.lp_item_id ".
+				" AND i.id = $my_item_id ".
+				" AND iv.lp_view_id = v.id ".
+				" AND i.lp_id = $lp_id ".
+				" AND v.user_id = ".$user_id." ".
+				" ORDER BY iv.view_count $qry_order ";
 	}
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	$num = Database :: num_rows($result);
@@ -193,7 +219,25 @@ foreach ($list as $my_item_id) {
 			if ($score == 0) {
 				$maxscore = 0;
 			} else {
-				$maxscore = $row['mymaxscore'];
+				if($row['item_type'] == 'sco')
+				{
+		    		if(!empty($row['myviewmaxscore']) and $row['myviewmaxscore']>0)
+		    		{
+		    			$maxscore=$row['myviewmaxscore'];
+		    		}
+		    		elseif($row['myviewmaxscore'] === '')
+		    		{
+		    			$maxscore = 0;
+		    		}
+		    		else
+		    		{
+						$maxscore = $row['mymaxscore'];
+		    		}
+				}
+				else
+				{
+					$maxscore = $row['mymaxscore'];
+				}
 			}
 			//Remove "NaN" if any (@todo: locate the source of these NaN)
 			$time = str_replace('NaN', '00'.$h.'00\'00"', $time);
@@ -208,13 +252,13 @@ foreach ($list as $my_item_id) {
 			if ($row['item_type'] != 'dokeos_chapter') {
 				$output .= "<tr class='$oddclass'>\n"."<td></td>\n"."<td>$extend_attempt_link</td>\n".'<td colspan="3">'.htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset).' '.$row['iv_view_count']."</td>\n"
 				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
-				.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n".'<td colspan="2"><div class="mystatus" align="center">'. ($score == 0 ? '-' : $score.'/'.$maxscore)."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$time."</div></td><td></td>\n"."</tr>\n";
+				.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n".'<td colspan="2"><div class="mystatus" align="center">'. ($score == 0 ? '-' : ($maxscore==0?$score:$score.'/'.$maxscore))."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$time."</div></td><td></td>\n"."</tr>\n";
 			}
 
 			$counter ++;
 			if ($extend_this_attempt OR $extend_all) {
-				$list = learnpath :: get_iv_interactions_array($row['iv_id']);
-				foreach ($list as $id => $interaction) {
+				$list1 = learnpath :: get_iv_interactions_array($row['iv_id']);
+				foreach ($list1 as $id => $interaction) {
 					if (($counter % 2) == 0) {
 						$oddclass = "row_odd";
 					} else {
@@ -291,7 +335,25 @@ foreach ($list as $my_item_id) {
 		if ($score == 0) {
 			$maxscore = 0;
 		} else {
-			$maxscore = $row['mymaxscore'];
+				if($row['item_type'] == 'sco')
+				{
+		    		if(!empty($row['myviewmaxscore']) and $row['myviewmaxscore']>0)
+		    		{
+		    			$maxscore=$row['myviewmaxscore'];
+		    		}
+		    		elseif($row['myviewmaxscore'] === '')
+		    		{
+		    			$maxscore = 0;
+		    		}
+		    		else
+		    		{
+						$maxscore = $row['mymaxscore'];
+		    		}
+				}
+				else
+				{
+					$maxscore = $row['mymaxscore'];
+				}
 		}
 		if (empty ($title)) {
 			$title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
@@ -332,14 +394,14 @@ foreach ($list as $my_item_id) {
 			}
 			$output .= "<tr class='$oddclass'>\n"."<td>$extend_link</td>\n".'<td colspan="4"><div class="mystatus">'.$title.'</div></td>'."\n"
 			//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
-			.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n".'<td colspan="2"><div class="mystatus" align="center">'. ($score == 0 ? '-' : $score.'/'.$maxscore)."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$time."</div></td><td>$correct_test_link</td>\n"."</tr>\n";
+			.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n".'<td colspan="2"><div class="mystatus" align="center">'. ($score == 0 ? '-' : ($maxscore==0?$score:$score.'/'.$maxscore))."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$time."</div></td><td>$correct_test_link</td>\n"."</tr>\n";
 						
 			if($export_csv)
 			{
 				$temp = array();
 				$temp[] = $title;
 				$temp[] = html_entity_decode($my_lesson_status);
-				$temp[] = ($score == 0 ? '-' : $score.'/'.$maxscore);
+				$temp[] = ($score == 0 ? '-' : ($maxscore==0?$score:$score.'/'.$maxscore));
 				$temp[] = $time;
 				$csv_content[] = $temp;
 			}
@@ -348,8 +410,8 @@ foreach ($list as $my_item_id) {
 		$counter ++;
 
 		if ($extend_this_attempt OR $extend_all) {
-			$list = learnpath :: get_iv_interactions_array($row['iv_id']);
-			foreach ($list as $id => $interaction) {
+			$list1 = learnpath :: get_iv_interactions_array($row['iv_id']);
+			foreach ($list1 as $id => $interaction) {
 				if (($counter % 2) == 0) {
 					$oddclass = "row_odd";
 				} else {
@@ -383,14 +445,33 @@ foreach ($list as $my_item_id) {
 	$total_time += $time_for_total;
 }
 
-		
 $total_time = learnpathItem :: get_scorm_time('js', $total_time);
 //$total_time = str_replace('NaN','00:00:00',$total_time);
 $total_time = str_replace('NaN', '00'.$h.'00\'00"', $total_time);
-if ($total_max_score == 0) {
-	$total_max_score = 1;
+$lp_type = learnpath::get_type_static($lp_id);
+$total_percent = 0;
+$final_score = '0%';
+if($lp_type == 2) //if scorm
+{
+	if($total_max_score == 0)
+	{
+		$total_percent = number_format((float) $total_score, 1, '.', '');
+		$final_score = ($total_score == 0 ? '-' : $total_percent);
+	}
+	else
+	{
+		$total_percent = number_format((((float) $total_score / (float) $total_max_score) * 100), 1, '.', '');	
+		$final_score = ($total_score == 0 ? '-' : $total_percent.'%');
+	}
 }
-$total_percent = number_format((((float) $total_score / (float) $total_max_score) * 100), 1, '.', '');
+else
+{		
+	if ($total_max_score == 0) {
+		$total_max_score = 1;
+	}
+	$total_percent = number_format((((float) $total_score / (float) $total_max_score) * 100), 1, '.', '');
+	$final_score = ($total_score == 0 ? '-' : $total_percent.'%');
+}
 if (($counter % 2) == 0) {
 	$oddclass = "row_odd";
 } else {
@@ -399,7 +480,7 @@ if (($counter % 2) == 0) {
 
 $output .= "<tr class='$oddclass'>\n"."<td></td>\n".'<td colspan="4"><div class="mystatus"><i>'.htmlentities(get_lang('AccomplishedStepsTotal'), ENT_QUOTES, $dokeos_charset)."</i></div></td>\n"
 //."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
-.'<td colspan="2"></td>'."\n".'<td colspan="2"><div class="mystatus" align="center">'. ($total_score == 0 ? '-' : $total_percent.'%')."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$total_time.'</div></td><td></td>'."\n"."</tr>\n";
+.'<td colspan="2"></td>'."\n".'<td colspan="2"><div class="mystatus" align="center">'. $final_score."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$total_time.'</div></td><td></td>'."\n"."</tr>\n";
 
 $output .= "</table></td></tr></table>";
 
@@ -407,7 +488,7 @@ if($export_csv)
 {
 	$temp = array('','','','');
 	$csv_content[] = $temp;
-	$temp = array(get_lang('AccomplishedStepsTotal'),'',($total_score == 0 ? '-' : $total_percent.'%'),$total_time);
+	$temp = array(get_lang('AccomplishedStepsTotal'),'',$final_score,$total_time);
 	$csv_content[] = $temp;
 	ob_end_clean();
 	Export :: export_table_csv($csv_content, 'reporting_learning_path_details');

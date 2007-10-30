@@ -515,7 +515,8 @@ function LMSSetValue(param, val) {
 						item_objectives[obj_id] = ['','','','',''];
 					}
 					if( req_type == "id" ) {
-							item_objectives[obj_id][0] = val.substring(51,57);
+							//item_objectives[obj_id][0] = val.substring(51,57);
+							item_objectives[obj_id][0] = val;
 							logit_scorm("Objective "+obj_id+"'s id updated",2);
 							return_value = 'true';
 					} else if ( req_type == "score" ) {

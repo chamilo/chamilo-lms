@@ -136,6 +136,7 @@ var mastery_score = '<?php echo $oItem->get_mastery_score();?>';
 var launch_data = '<?php echo $oItem->get_launch_data();?>';
 var max_time_allowed = '<?php echo $oItem->get_max_time_allowed();?>';
 var interactions = new Array();
+item_objectives = new Array();
 
 //Dokeos internal variables
 var saved_lesson_status = 'not attempted';
@@ -158,7 +159,6 @@ var lms_item_type = '<?php echo $oItem->get_type();?>';
 var lms_item_credit = '<?php echo $oItem->get_credit();?>';
 var lms_item_lesson_mode = '<?php echo $oItem->get_lesson_mode();?>';
 var lms_item_launch_data = '<?php echo $oItem->get_launch_data();?>';
-var lms_item_interactions_count = '<?php echo $oItem->get_interactions_count(); ?>';
 var lms_item_core_exit = '<?php echo $oItem->get_core_exit();?>';
 var asset_timer = 0;
 
@@ -177,27 +177,12 @@ var lms_old_item_id = 0;
 function LMSInitialize() {  //this is the initialize function of all APIobjects
 	logit_scorm('LMSInitialise()',0);
 
-	//give api it's new ID
-	//lesson_status = 'not attempted';
-	//initialise the lesson status between two lessons, to avoid status override
-	//var msg_f = document.getElementById('message_id');
-	//var refresh_url = 'lp_controller.php?cidReq=<?php echo api_get_course_id();?>&action=js_api_refresh&lp_id=<?php echo $oLP->get_id();?>&item_id='+lms_new_item_id;
 	/* load info for this new item by calling the js_api_refresh command in
 	 * the message frame. The message frame will update the JS variables by 
 	 * itself, in JS, by doing things like top.lesson_status = 'not attempted' 
 	 * and that kind of stuff, so when the content loads in the content frame
 	 * it will have all the correct variables set 
 	 */
-	/*	
-	lms_been_synchronized = 0;
-	if(lms_item_id == lms_new_item_id || lms_new_item_id==0){
-		//no change to be done, it's the same item we just had or it's the first
-		lms_been_synchronized = 1;
-	}else{
-		lms_item_id = lms_new_item_id;
-		//msg_f.src = refresh_url;
-	}
-	*/
 	G_LastError = G_NoError ;
 	G_LastErrorMessage = 'No error';	
 	lms_initialized=1;
@@ -214,9 +199,11 @@ function LMSGetValue(param) {
 	G_LastError = G_NoError ;
 	G_LastErrorMessage = 'No error';	
 	var result='';
+	// ---- cmi.core._children
 	if(param=='cmi.core._children' || param=='cmi.core_children'){
 		result='entry, exit, lesson_status, student_id, student_name, lesson_location, total_time, credit, lesson_mode, score, session_time';
 	}else if(param == 'cmi.core.entry'){
+	// ---- cmi.core.entry
 		if(lms_item_core_exit=='none')
 		{
 			result='ab-initio';
@@ -230,9 +217,11 @@ function LMSGetValue(param) {
 			result='';
 		}
 	}else if(param == 'cmi.core.exit'){
+	// ---- cmi.core.exit
 		result='';
 		G_LastError = G_ElementIsWriteOnly;
 	}else if(param == 'cmi.core.lesson_status'){
+	// ---- cmi.core.lesson_status
 	    if(lesson_status != '') {
 	    	result=lesson_status;
 	    }
@@ -240,144 +229,163 @@ function LMSGetValue(param) {
 	    	result='not attempted';
 	    }
 	}else if(param == 'cmi.core.student_id'){
+	// ---- cmi.core.student_id
 		result='<?php echo $_user['user_id']; ?>';
 	}else if(param == 'cmi.core.student_name'){
+	// ---- cmi.core.student_name
 		  <?php
 			$who=addslashes($_user['lastName'].", ".$_user['firstName']);
 		    echo "result='$who';"; 
 		  ?>
 	}else if(param == 'cmi.core.lesson_location'){
+	// ---- cmi.core.lesson_location
 		result=lesson_location;
 	}else if(param == 'cmi.core.total_time'){
+	// ---- cmi.core.total_time
 		result=total_time;
 	}else if(param == 'cmi.core.score._children'){
+	// ---- cmi.core.score._children
 		result='raw,min,max';
 	}else if(param == 'cmi.core.score.raw'){
+	// ---- cmi.core.score.raw
 		result=score;
 	}else if(param == 'cmi.core.score.max'){
+	// ---- cmi.core.score.max
 		result=max;
 	}else if(param == 'cmi.core.score.min'){
+	// ---- cmi.core.score.min
 		result=min;
 	}else if(param == 'cmi.core.score'){
+	// ---- cmi.core.score -- non-standard item, provided as cmi.core.score.raw just in case
 		result=score;
 	}else if(param == 'cmi.core.credit'){
+	// ---- cmi.core.credit
 		result = lms_item_credit;
 	}else if(param == 'cmi.core.lesson_mode'){
+	// ---- cmi.core.lesson_mode
 		result = lms_item_lesson_mode;
 	}else if(param == 'cmi.suspend_data'){
+	// ---- cmi.suspend_data
 		result = suspend_data;
 	}else if(param == 'cmi.launch_data'){
+	// ---- cmi.launch_data
 		result = lms_item_launch_data;
+	}else if(param == 'cmi.objectives._children'){
+	// ---- cmi.objectives._children
+		result = 'id,score,status';
 	}else if(param == 'cmi.objectives._count'){
+	// ---- cmi.objectives._count
 		//result='<?php echo $oItem->get_view_count();?>';
-		result = 0;
+		result = item_objectives.length;
+	}else if(param.substring(0,15)== 'cmi.objectives.'){
+		var myres = '';
+		if(myres = param.match(/cmi.objectives.(\d+).(id|score|status|_children)(.*)/))
+		{
+			var obj_id = myres[1];
+			var req_type = myres[2];
+			if(item_objectives[obj_id]==null)
+			{
+				if(req_type == 'id')
+				{
+					result = '';
+				}else if(req_type == '_children'){
+					result = 'id,score,status';
+				}else if(req_type == 'score'){
+					if(myres[3]==null)
+					{
+						result = '';
+						G_lastError = G_NotImplementedError;
+						G_lastErrorString = 'Not implemented yet';
+					}else if (myres[3] == '._children'){
+						result = 'raw,min,max'; //non-standard, added for NetG
+					}else if (myres[3] == '.raw'){
+						result = '';
+					}else if (myres[3] == '.max'){
+						result = '';
+					}else if (myres[3] == '.min'){
+						result = '';
+					}else{
+						result = '';
+						G_lastError = G_NotImplementedError;
+						G_lastErrorString = 'Not implemented yet';
+					}
+				}else if(req_type == 'status'){
+					result = 'not attempted';
+				}
+			}
+			else
+			{
+				//the object is not null
+				if(req_type == 'id')
+				{
+					result = item_objectives[obj_id][0];
+				}else if(req_type == '_children'){
+					result = 'id,score,status';
+				}else if(req_type == 'score'){
+					if(myres[3]==null)
+					{
+						result = '';
+						G_lastError = G_NotImplementedError;
+						G_lastErrorString = 'Not implemented yet';
+					}else if (myres[3] == '._children'){
+						result = 'raw,min,max'; //non-standard, added for NetG
+					}else if (myres[3] == '.raw'){
+						if(item_objectives[obj_id][2] != null)
+						{
+							result = item_objectives[obj_id][2];
+						}else{
+							result = '';
+						}
+					}else if (myres[3] == '.max'){
+						if(item_objectives[obj_id][3] != null)
+						{
+							result = item_objectives[obj_id][3];
+						}else{
+							result = '';
+						}
+					}else if (myres[3] == '.min'){
+						if(item_objectives[obj_id][4] != null)
+						{
+							result = item_objectives[obj_id][4];
+						}else{
+							result = '';
+						}
+					}else{
+						result = '';
+						G_lastError = G_NotImplementedError;
+						G_lastErrorString = 'Not implemented yet';
+					}
+				}else if(req_type == 'status'){
+					if(item_objectives[obj_id][1] != null)
+					{
+						result = item_objectives[obj_id][1];
+					}else{
+						result = 'not attempted';
+					}
+				}
+			}
+		}
 	}else if(param == 'cmi.student_data._children'){
+	// ---- cmi.student_data._children
 		result = 'mastery_score,max_time_allowed';
 	}else if(param == 'cmi.student_data.mastery_score'){
+	// ---- cmi.student_data.mastery_score
 		result = mastery_score;
 	}else if(param == 'cmi.student_data.max_time_allowed'){
+	// ---- cmi.student_data.max_time_allowed
 		result = max_time_allowed;
 	}else if(param == 'cmi.interactions._count'){
+	// ---- cmi.interactions._count
 		result = interactions.length;
 	}else if(param == 'cmi.interactions._children'){
+	// ---- cmi.interactions._children
 		result = 'id,time,type,correct_responses,weighting,student_response,result,latency';
 	}else{
+	// ---- anything else
 		result = '';
 		G_lastError = G_NotImplementedError;
 		G_lastErrorString = 'Not implemented yet';
 	}
-	/*
-	//Switch not working??? WTF???
-	switch(param) {
-		case 'cmi.core._children'		:
-			result='entry, exit, lesson_status, student_id, student_name, lesson_location, total_time, credit, lesson_mode, score, session_time';
-			break;
-		case 'cmi.core_children'		:
-			result='entry, exit, lesson_status, student_id, student_name, lesson_location, total_time, credit, lesson_mode, score, session_time';
-			break;
-		case 'cmi.core.entry'			:
-			result='';
-			break;
-		case 'cmi.core.exit'			: 
-			result='';
-			break;
-		case 'cmi.core.lesson_status'	: 
-		    if(lesson_status != '') {
-		    	result=lesson_status;
-		    }
-		    else{
-		    	result='not attempted';
-		    }
-		    break;
-		case 'cmi.core.student_id'	   : 
-			result='<?php echo $_user['user_id']; ?>';
-			break;
-		case 'cmi.core.student_name'	: 
-		  <?php
-			$who=addslashes($_user['firstName'].",".$_user['lastName']);
-		    echo "result='$who';"; 
-		  ?>	break;
-		case 'cmi.core.lesson_location'	:
-			result='';
-			break;
-		case 'cmi.core.total_time'	:	
-			result=total_time;
-			break;
-		case 'cmi.core.score._children'	: 
-			result='raw,min,max';
-			break;
-		case 'cmi.core.score.raw'	: 
-			result=score;
-			break;
-		case 'cmi.core.score.max'	:
-			result=max;
-			break;
-		case 'cmi.core.score.min'	: 
-			result=min;
-			break;
-		case 'cmi.core.score'		: 
-			result=score;
-			break;
-		case 'cmi.score.scaled'		: //1.3
-			if(score < -1 || score >1)
-			{
-				result=score/max;
-			}
-			else
-			{
-				result=score;			
-			}
-			break;
-		case 'cmi.core.credit'		: 
-			result='no-credit';
-			break;
-		case 'cmi.core.lesson_mode'	: 
-			result='normal';
-			break;
-		case 'cmi.suspend_data'		: 
-			result='<?php echo $oItem->get_suspend_data();?>';
-			break;
-		case 'cmi.launch_data'		: 
-			result='';
-			break;
-		case 'cmi.objectives._count': 
-			//result='<?php echo $oItem->get_view_count();?>';
-			result = 0;
-			break;
-		case 'cmi.interactions._count':
-			result = interactions.length;
-			if(result == ''){
-				result = 0;
-			}
-			break;
-		case 'cmi.interactions._children':
-			result = 'id,time,type,correct_responses,weighting,student_response,result,latency'; break;
-			break;
-		default: 
-			result='';
-			break;
-	}
-	*/
 	logit_scorm("LMSGetValue\n\t('"+param+"') returned '"+result+"'",1);
 	return result;
 }
@@ -392,19 +400,24 @@ function LMSSetValue(param, val) {
 	G_LastError = G_NoError ;
 	G_LastErrorMessage = 'No error';	
 	return_value = 'false';
-	switch(param) {
-	case 'cmi.core.score.raw'		: score= val; return_value='true';	break;
-	case 'cmi.core.score.max'		: max = val;return_value='true';break;
-	case 'cmi.core.score.min'		: min = val;return_value='true';break;
-	case 'cmi.core.lesson_location' : lesson_location = val;return_value='true';break;
-	case 'cmi.core.lesson_status'	: 
+	if( param == "cmi.core.score.raw" )
+	{
+		score= val; return_value='true';
+	} else if ( param == "cmi.core.score.max" ) {
+		max = val;return_value='true';
+	} else if ( param == "cmi.core.score.min" ) {
+		min = val;return_value='true';
+	} else if ( param == "cmi.core.lesson_location" ) {
+		lesson_location = val;return_value='true';
+	} else if ( param == "cmi.core.lesson_status" ) {
 		saved_lesson_status = lesson_status;
 		lesson_status = val;
 	    return_value='true';
-		break;
-	case 'cmi.completion_status'	: lesson_status = val;return_value='true';break; //1.3
-	case 'cmi.core.session_time'	: session_time = val;return_value='true';break;
-	case 'cmi.score.scaled'			: //1.3
+	} else if ( param == "cmi.completion_status" ) {
+		lesson_status = val;return_value='true'; //1.3
+	} else if ( param == "cmi.core.session_time" ) {
+		session_time = val;return_value='true';
+	} else if ( param == "cmi.score.scaled") { //1.3
 		if(val<=1 && val>=-1)
 		{ 
 			score = val ;
@@ -414,75 +427,133 @@ function LMSSetValue(param, val) {
 		{
 			return_value='false';
 		}
-		break;
-	case 'cmi.success_status'		: success_status = val;return_value='true';break; //1.3
-	case 'cmi.suspend_data'			: suspend_data = val;return_value='true';break;
-	case 'cmi.core.exit'			: lms_item_core_exit = val;return_value='true';break;
-	case 'cmi.core.entry'			: G_LastError = G_ElementIsReadOnly; break;
-	case 'cmi.student_data.mastery_score' : G_LastError = G_ElementIsReadOnly; break;
-	case 'cmi.student_data.max_time_allowed' : G_LastError = G_ElementIsReadOnly; break;
-	case 'cmi.launch_data'			: G_LastError = G_ElementIsReadOnly; break;
-	default:
+	} else if ( param == "cmi.success_status" ) {
+		success_status = val;return_value='true'; //1.3
+	} else if ( param == "cmi.suspend_data" ) {
+		suspend_data = val;return_value='true';
+	} else if ( param == "cmi.core.exit" ) {
+		lms_item_core_exit = val;return_value='true';
+	} else if ( param == "cmi.core.entry" ) {
+		G_LastError = G_ElementIsReadOnly
+	} else if ( param == "cmi.student_data.mastery_score" ) {
+		G_LastError = G_ElementIsReadOnly;
+	} else if ( param == "cmi.student_data.max_time_allowed" ) {
+		G_LastError = G_ElementIsReadOnly;
+	} else if ( param == "cmi.launch_data" ) {
+		G_LastError = G_ElementIsReadOnly;
+	} else {
 		var myres = new Array();
-		if(myres = param.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency)(.*)/)){
-			//elems = param.split('.');
-			//elem_id = elems[2];
+		if(myres = param.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency)(.*)/))
+		{
 			elem_id = myres[1];
 			if(interactions[elem_id] == null){
 				interactions[elem_id] = ['','','','','','','',''];
 				//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
 				interactions[elem_id][4] = new Array();
 			}
-			//elem_attrib = elems[3];
 			elem_attrib = myres[2];
 			switch(elem_attrib) {
-				case 'id':
+				case "id":
 					interactions[elem_id][0] = val;
 					logit_scorm("Interaction "+elem_id+"'s id updated",2);
 					return_value='true';
 					break;
-				case 'time':
+				case "time":
 					interactions[elem_id][2] = val;
 					logit_scorm("Interaction "+elem_id+"'s time updated",2);
 					return_value='true';
 					break;
-				case 'type':
+				case "type":
 					interactions[elem_id][1] = val;
 					logit_scorm("Interaction "+elem_id+"'s type updated",2);
 					return_value='true';
 					break;
-				case 'correct_responses':
+				case "correct_responses":
 					//do nothing yet
 					interactions[elem_id][4].push(val);
 					logit_scorm("Interaction "+elem_id+"'s correct_responses not updated",2);
 					return_value='true';
 					break;
-				case 'weighting':
+				case "weighting":
 					interactions[elem_id][3] = val;
 					logit_scorm("Interaction "+elem_id+"'s weighting updated",2);
 					return_value='true';
 					break;
-				case 'student_response':
+				case "student_response":
 					interactions[elem_id][5] = val;
 					logit_scorm("Interaction "+elem_id+"'s student_response updated",2);
 					return_value='true';
 					break;
-				case 'result':
+				case "result":
 					interactions[elem_id][6] = val;
 					logit_scorm("Interaction "+elem_id+"'s result updated",2);
 					return_value='true';
 					break;
-				case 'latency':
+				case "latency":
 					interactions[elem_id][7] = val;
 					logit_scorm("Interaction "+elem_id+"'s latency updated",2);
 					return_value='true';
 					break;
-			}  
+				default:
+						G_lastError = G_NotImplementedError;
+						G_lastErrorString = 'Not implemented yet';
+			}
+		}else if(param.substring(0,15)== 'cmi.objectives.'){
+			var myres = '';
+			if(myres = param.match(/cmi.objectives.(\d+).(id|score|status)(.*)/))
+			{
+				obj_id = myres[1];
+				req_type = myres[2];
+				if(obj_id == null || obj_id == '')
+				{
+					;//do nothing
+				}
+				else
+				{
+					if(item_objectives[obj_id]==null)
+					{
+						item_objectives[obj_id] = ['','','','',''];
+					}
+					if( req_type == "id" ) {
+							item_objectives[obj_id][0] = val.substring(51,57);
+							logit_scorm("Objective "+obj_id+"'s id updated",2);
+							return_value = 'true';
+					} else if ( req_type == "score" ) {
+							if (myres[3] == '._children'){
+								return_value = '';
+								G_lastError = G_InvalidSetValue;
+								G_lastErrorString = 'Invalid set value, element is a keyword';
+							}else if (myres[3] == '.raw'){
+								item_objectives[obj_id][2] = val;
+								logit_scorm("Objective "+obj_id+"'s score raw updated",2);
+								return_value = 'true';
+							}else if (myres[3] == '.max'){
+								item_objectives[obj_id][3] = val;
+								logit_scorm("Objective "+obj_id+"'s score max updated",2);
+								return_value = 'true';
+							}else if (myres[3] == '.min'){
+								item_objectives[obj_id][4] = val;
+								logit_scorm("Objective "+obj_id+"'s score min updated",2);
+								return_value = 'true';
+							}else{
+								return_value = '';
+								G_lastError = G_NotImplementedError;
+								G_lastErrorString = 'Not implemented yet';
+							}
+					} else if ( req_type == "status" ) {
+							item_objectives[obj_id][1] = val;
+							logit_scorm("Objective "+obj_id+"'s status updated",2);
+							return_value = 'true';
+					} else {
+							G_lastError = G_NotImplementedError;
+							G_lastErrorString = 'Not implemented yet';
+					}
+				}
+			}
 		}else{
 			G_lastError = G_NotImplementedError;
 			G_lastErrorString = 'Not implemented yet';
 		}
-		break;
 	}
 	<?php 
 	if ($oLP->force_commit == 1){
@@ -511,6 +582,10 @@ function savedata(origin) { //origin can be 'commit', 'finish' or 'terminate'
     }
 	logit_lms('saving data (status='+lesson_status+' - interactions: '+ interactions.length +')',1);
 	xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit);
+	if(item_objectives.length>0)
+	{
+		xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
+	}
 }
 
 function LMSCommit(val) {
@@ -595,6 +670,8 @@ function Terminate(){
 function XAJAXobject() {
   this.xajax_switch_item_details=xajax_switch_item_details;
   this.switch_item=switch_item;
+  this.xajax_save_objectives=xajax_save_objectives;
+  this.xajax_save_item = xajax_save_item;
 }
 
 //it is not sure that the scos use the above declarations
@@ -670,12 +747,6 @@ function load_item(item_id,url){
 			cont_f.src = url;
 			update_toc('unhighlight',lms_old_item_id);
 			update_toc('highlight',item_id);
-			/* legacy code
-			lms_been_synchronized = 0;
-			lms_initialized = 0;
-			if(lms_lp_type==1 || lms_item_type=='asset'){
-				lms_item_id = lms_new_item_id;
-			}*/
 			return true;
 		}
 		logit_lms('cont_f.src has no properties',0);
@@ -688,11 +759,12 @@ function load_item(item_id,url){
  * leaving it
  */
 function dokeos_save_asset(){
-    //var linkparams = 'id='+lms_item_id+'&score='+score+'&max='+max+'&min='+min+'&lesson_status='+lesson_status+'&time='+session_time+'&suspend_data='+suspend_data;
-    //var url = "<?php echo api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php' ?>?action=save&" + linkparams + "";
 	logit_lms('dokeos_save_asset: '+url,0);
-    //frames["message_name"].src = url;
-    xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions);
+    xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
+    if(item_objectives.length>0)
+	{
+		xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
+	}
 }
 /**
  * Logs information about SCORM messages into the log frame
@@ -861,9 +933,13 @@ function switch_item(current_item, next_item){
 	//(1) save the current item
 	logit_lms('Called switch_item with params '+lms_item_id+' and '+next_item+'',0);
 	if(lms_lp_type==1 || lms_item_type=='asset' || session_time == '0' || session_time == '0:00:00'){
-		xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions);
+		xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions, lms_item_core_exit);		
 	}else{
-		xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions);
+		xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
+	}
+	if(item_objectives.length>0)
+	{
+		xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
 	}
 	//(2) Refresh all the values inside this SCORM API object - use AJAX
 	//xajax_backup_item_details(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data);

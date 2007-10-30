@@ -349,6 +349,7 @@ function update_Db_course($courseDbName)
 	$TABLELPVIEW				= $courseDbName . "lp_view";
 	$TABLELPITEMVIEW			= $courseDbName . "lp_item_view";
 	$TABLELPIVINTERACTION		= $courseDbName . "lp_iv_interaction";
+	$TABLELPIVOBJECTIVE			= $courseDbName . "lp_iv_objective";
 
 	// Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
 	$tbl_blogs					= $courseDbName . 'blog';
@@ -972,7 +973,7 @@ function update_Db_course($courseDbName)
 		"start_time		int unsigned	not null," . //when did the user open it?
 		"total_time		int unsigned not null default 0," . //after how many seconds did he close it?
 		"score			float unsigned not null default 0," . //score returned by SCORM or other techs
-		"status			char(32) not null default 'Not attempted'," . //status for this item (SCORM)
+		"status			char(32) not null default 'not attempted'," . //status for this item (SCORM)
 		"suspend_data	text null default ''," .
 		"lesson_location text null default ''," .
 		"core_exit		varchar(32) not null default 'none'," .
@@ -1011,6 +1012,25 @@ function update_Db_course($courseDbName)
 		error_log($sql,0);
 	}
 	$sql = "ALTER TABLE `$TABLELPIVINTERACTION` ADD INDEX (lp_iv_id) ";
+	if(!api_sql_query($sql))
+	{
+		error_log($sql,0);
+	}
+	
+	$sql = "CREATE TABLE IF NOT EXISTS `$TABLELPIVOBJECTIVE`(" .
+		"id				bigint	unsigned 		primary key auto_increment," .
+		"lp_iv_id		bigint	unsigned not null," . //identifier of the related sco_view
+		"objective_id	varchar(255) not null default ''," . //sco-specific, given by the sco
+		"score_raw		float unsigned not null default 0," . //score
+		"score_max		float unsigned not null default 0," . //max score
+		"score_min		float unsigned not null default 0," . //min score
+		"status			char(32) not null default 'not attempted'" . //status, just as sco status
+		")";
+	if(!api_sql_query($sql))
+	{
+		error_log($sql,0);
+	}
+	$sql = "ALTER TABLE `$TABLELPIVOBJECTIVE` ADD INDEX (lp_iv_id) ";
 	if(!api_sql_query($sql))
 	{
 		error_log($sql,0);

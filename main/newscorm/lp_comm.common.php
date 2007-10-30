@@ -18,6 +18,7 @@ require_once('learnpath.class.php');
 require('../inc/lib/xajax/xajax.inc.php');
 $xajax = new xajax(api_get_path(WEB_CODE_PATH).'newscorm/lp_comm.server.php');
 $xajax->registerFunction("save_item");
+$xajax->registerFunction("save_objectives");
 $xajax->registerFunction("switch_item_details");
 $xajax->registerFunction("backup_item_details");
 $xajax->registerFunction("start_timer");

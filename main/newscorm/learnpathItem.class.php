@@ -26,6 +26,8 @@ class learnpathItem{
 	//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
 	var $interactions = array();
 	var $interactions_count = 0;
+	var $objectives = array();
+	var $objectives_count = 0;
 	var $launch_data = '';
 	var $lesson_location = '';
 	var $level = 0;
@@ -142,6 +144,22 @@ class learnpathItem{
     	}
     	*/
     }
+    /**
+	 * Adds an objective to the current item
+	 * @param	array	Array of parameters: id(0), status(1), score_raw(2), score_max(3), score_min(4)
+	 * @result	void
+     */
+    function add_objective($index,$params)
+    {
+    	if(empty($params[0])){return null;}
+    	error_log(__FILE__.' '.__LINE__.' '.print_r($params,true),0);
+		$this->objectives[$index] = $params;
+		//take the current maximum index to generate the objectives_count
+		if((count($this->objectives)+1)>$this->objectives_count){
+			$this->objectives_count = (count($this->objectives)+1);
+		}
+    }
+    
     /**
      * Closes/stops the item viewing. Finalises runtime values. If required, save to DB.
      * @return	boolean	True on success, false otherwise
@@ -353,6 +371,19 @@ class learnpathItem{
     	return $res;
     }
     /**
+     * Gets the current count of objectives recorded in the database
+     * @return	int	The current number of objectives recorder
+     */
+    function get_objectives_count()
+    {
+    	if($this->debug>1){error_log('New LP - In learnpathItem::get_objectives_count()',0);}
+    	$res = 0;
+    	if(!empty($this->objectives_count)){
+    		$res = $this->objectives_count;
+    	}
+    	return $res;
+    }
+    /**
      * Gets the launch_data field found in imsmanifests (this is SCORM- or AICC-related, really)
      * @return	string	Launch data as found in imsmanifest and stored in Dokeos (read only). Defaults to ''.
      */
@@ -385,6 +416,7 @@ class learnpathItem{
 				$mode = 'review';
 			}
 		}
+		return $mode;
 	}
     /**
      * Gets the depth level
@@ -1434,6 +1466,8 @@ class learnpathItem{
 			$this->status = $this->possible_status[0];
 			$this->interactions_count = 0;
 			$this->interactions = array();
+			$this->objectives_count = 0;
+			$this->objectives = array();
 			$this->lesson_location = '';
 			$this->write_to_db();
 		}else{ 
@@ -1515,6 +1549,8 @@ class learnpathItem{
 		     				//foreach($interactions as $interaction){
 		     				//	;
 		     				//}
+		     				break;
+		     			case 'objectives':
 		     				break;
 		     			//case 'maxtimeallowed':
 		     			//	$this->set_max_time_allowed($value);
@@ -1681,6 +1717,15 @@ class learnpathItem{
 					$this->interactions_count = Database::num_rows($res);
 				}else{
 					$this->interactions_count = 0;
+				}
+		     	//now get the number of objectives for this little guy
+		     	$item_view_objective_table = Database::get_course_table('lp_iv_objective');
+		     	$sql = "SELECT * FROM $item_view_objective_table WHERE lp_iv_id = '".$this->db_item_view_id."'"; 
+				$res = api_sql_query($sql,__FILE__,__LINE__);
+				if($res !== false){
+					$this->objectives_count = Database::num_rows($res);
+				}else{
+					$this->objectives_count = 0;
 				}
 	     	}
      	}
@@ -1966,8 +2011,8 @@ class learnpathItem{
 	     			if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Got item_view_id '.$lp_iv_id.', now checking interactions ',0);}
 		     		foreach($this->interactions as $index => $interaction){
 		     			$correct_resp = '';
-		     			if(is_array($interaction[4]) && !empty($interactions[4][0]) ){
-		     				foreach($interactions[4] as $resp){
+		     			if(is_array($interaction[4]) && !empty($interaction[4][0]) ){
+		     				foreach($interaction[4] as $resp){
 		     					$correct_resp .= $resp.',';
 		     				}
 		     				$correct_resp = substr($correct_resp,0,strlen($correct_resp)-1);
@@ -2008,6 +2053,53 @@ class learnpathItem{
 		     						"'".$interaction[5]."','".$interaction[6]."','".$interaction[7]."'" .
 		     						")";
 		     				$ivai_res = api_sql_query($ivai_sql,__FILE__,__LINE__);
+		     			}
+		     		}
+	     		}
+	     	}
+	     	if(is_array($this->objectives) && count($this->objectives)>0){
+	     		//save objectives
+	     		$tbl = Database::get_course_table('lp_item_view');
+	     		$sql = "SELECT id FROM $tbl " .
+	     				"WHERE lp_item_id = ".$this->db_id." " .
+	     				"AND   lp_view_id = ".$this->view_id." " .
+	     				"AND   view_count = ".$this->attempt_id;
+	     		$res = api_sql_query($sql,__FILE__,__LINE__);
+	     		if(Database::num_rows($res)>0){
+	     			$row = Database::fetch_array($res);
+	     			$lp_iv_id = $row[0];
+	     			if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Got item_view_id '.$lp_iv_id.', now checking objectives ',0);}
+		     		foreach($this->objectives as $index => $objective){
+		     			$iva_table = Database::get_course_table('lp_iv_objective');
+		     			$iva_sql = "SELECT id FROM $iva_table " .
+		     					"WHERE lp_iv_id = $lp_iv_id " .
+		     					//"AND order_id = $index";
+								//also check for the objective ID as it must be unique for this SCO view
+		     					"AND objective_id = '".$objective[0]."'";
+		     			$iva_res = api_sql_query($iva_sql,__FILE__,__LINE__);
+						//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
+		     			if(Database::num_rows($iva_res)>0){
+		     				//update (or don't)
+		     				$iva_row = Database::fetch_array($iva_res);
+		     				$iva_id = $iva_row[0];
+		     				$ivau_sql = "UPDATE $iva_table " .
+		     					"SET objective_id = '".$objective[0]."'," .
+		     					"status = '".$objective[1]."'," .
+		     					"score_raw = '".$objective[2]."'," .
+		     					"score_min = '".$objective[4]."'," .
+		     					"score_max = '".$objective[3]."' " .
+		     					"WHERE id = $iva_id";
+		     				$ivau_res = api_sql_query($ivau_sql,__FILE__,__LINE__);
+		     				error_log($ivau_sql,0);
+		     			}else{
+		     				//insert new one
+		     				$ivai_sql = "INSERT INTO $iva_table " .
+		     						"(lp_iv_id, objective_id, status, score_raw, score_min, score_max )" .
+		     						"VALUES" .
+		     						"(".$lp_iv_id.",'".$objective[0]."','".$objective[1]."'," .
+		     						"'".$objective[2]."','".$objective[4]."','".$objective[3]."')";
+		     				$ivai_res = api_sql_query($ivai_sql,__FILE__,__LINE__);
+		     				error_log($ivai_sql);
 		     			}
 		     		}
 	     		}

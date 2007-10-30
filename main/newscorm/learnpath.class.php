@@ -2202,6 +2202,21 @@ class learnpath {
     	if($this->debug>2){error_log('New LP - In learnpath::get_type() - Returning '.($res==false?'false':$res),0);}
 		return $res;
 	}
+    /**
+     * Gets the learning path type as static method
+     * @param	boolean		Return the name? If false, return the ID. Default is false.
+     * @return	mixed		Type ID or name, depending on the parameter
+     */
+    function get_type_static($lp_id=0)
+    {
+    	$tbl_lp = Database::get_course_table('lp');
+		$sql = "SELECT lp_type FROM $tbl_lp WHERE id = '".$lp_id."'";
+		$res = api_sql_query($sql); 
+		if($res===false){ return null;}
+		if(Database::num_rows($res)<=0){return null;}
+		$row = Database::fetch_array($res);
+		return $row['lp_type'];
+	}
 
     /**
      * Gets a flat list of item IDs ordered for display (level by level ordered by order_display)

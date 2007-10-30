@@ -2105,6 +2105,54 @@ class learnpath {
 		}
 		return $list;	
 	}
+	/**
+	 * Return the number of objectives for the given learnpath Item View ID.
+	 * This method can be used as static. 
+	 * @param	integer	Item View ID
+	 * @return	integer	Number of objectives
+	 */
+	function get_objectives_count_from_db($lp_iv_id=0){
+		if(empty($lp_iv_id)){return -1;}
+		$table = Database::get_course_table('lp_iv_objective');
+		$sql = "SELECT count(*) FROM $table WHERE lp_iv_id = $lp_iv_id";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$row = Database::fetch_array($res);
+		$num = $row[0];
+		return $num;
+	}
+	/**
+	 * Return the objectives as an array for the given lp_iv_id.
+	 * This method can be used as static.
+	 * @param	integer	Learnpath Item View ID
+	 * @return	array
+	 * @todo 	Translate labels 
+	 */
+	function get_iv_objectives_array($lp_iv_id=0){
+		$list = array();
+		$table = Database::get_course_table('lp_iv_objective');
+		$sql = "SELECT * FROM $table WHERE lp_iv_id = $lp_iv_id ORDER BY order_id ASC";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$num = Database::num_rows($res);
+		if($num>0){
+			$list[] = array(
+				"order_id"=>htmlentities(get_lang('Order')),
+				"objective_id"=>htmlentities(get_lang('ObjectiveID')),
+				"score_raw"=>htmlentities(get_lang('ObjectiveRawScore')),
+				"score_max"=>htmlentities(get_lang('ObjectiveMaxScore')),
+				"score_min"=>htmlentities(get_lang('ObjectiveMinScore')),
+				"status"=>htmlentities(get_lang('ObjectiveStatus')));
+			while ($row = Database::fetch_array($res)){
+				$list[] = array(
+					"order_id"=>($row['order_id']+1),
+					"objective_id"=>urldecode($row['objective_id']),//urldecode because they often have %2F or stuff like that
+					"score_raw"=>$row['score_raw'],
+					"score_max"=>$row['score_max'],
+					"score_min"=>$row['score_min'],
+					"status"=>$row['status']);
+			}
+		}
+		return $list;	
+	}
 
     /**
      * Generate and return the table of contents for this learnpath. The (flat) table returned can be

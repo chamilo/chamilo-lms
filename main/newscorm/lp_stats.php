@@ -168,7 +168,7 @@ foreach ($list as $my_item_id) {
 			//check if there are interactions below
 			$extend_attempt_link = '';
 			$extend_this_attempt = 0;
-			if (learnpath :: get_interactions_count_from_db($row['iv_id']) > 0 && !$extend_all) {
+			if ((learnpath :: get_interactions_count_from_db($row['iv_id']) > 0 || learnpath :: get_objectives_count_from_db($row['iv_id']) > 0 ) && !$extend_all) {
 				if (!empty ($_GET['extend_attempt_id']) && $_GET['extend_attempt_id'] == $row['iv_id']) {
 					//the extend button for this attempt has been clicked
 					$extend_this_attempt = 1;
@@ -227,6 +227,18 @@ foreach ($list as $my_item_id) {
 					.'<td>'.urldecode($interaction['student_response'])."</td>\n".'<td>'.$interaction['result']."</td>\n".'<td>'.$interaction['latency']."</td>\n".'<td>'.$interaction['time']."</td>\n"."</tr>\n";
 					$counter ++;
 				}
+				$list2 = learnpath :: get_iv_objectives_array($row['iv_id']);
+				foreach ($list2 as $id => $interaction) {
+					if (($counter % 2) == 0) {
+						$oddclass = "row_odd";
+					} else {
+						$oddclass = "row_even";
+					}
+					$output .= "<tr class='$oddclass'>\n".'<td></td>'."\n".'<td></td>'."\n".'<td>&nbsp;</td>'."\n".'<td>'.$interaction['order_id'].'</td>'."\n".'<td colspan="2">'.$interaction['objective_id'].'</td>'."\n"
+					.'<td colspan="2">'.$interaction['status']."</td>\n"
+					.'<td>'.$interaction['score_raw']."</td>\n".'<td>'.$interaction['score_max']."</td>\n".'<td>'.$interaction['score_min']."</td>\n<td></td>\n</tr>\n";
+					$counter ++;
+				}
 			}
 		} while ($row = Database :: fetch_array($result));
 	} elseif($num>0) {
@@ -236,7 +248,8 @@ foreach ($list as $my_item_id) {
 		$extend_attempt_link = '';
 		$extend_this_attempt = 0;
 		$inter_num = learnpath :: get_interactions_count_from_db($row['iv_id']);
-		if ($inter_num > 0 && !$extend_all) {
+		$objec_num = learnpath :: get_objectives_count_from_db($row['iv_id']);
+		if (($inter_num > 0 || $objec_num > 0) && !$extend_all) {
 			if (!empty ($_GET['extend_attempt_id']) && $_GET['extend_attempt_id'] == $row['iv_id']) {
 				//the extend button for this attempt has been clicked
 				$extend_this_attempt = 1;
@@ -347,6 +360,18 @@ foreach ($list as $my_item_id) {
 				.'<td colspan="2">'.$interaction['type']."</td>\n"
 				//.'<td>'.$interaction['correct_responses']."</td>\n"
 				.'<td>'.urldecode($interaction['student_response'])."</td>\n".'<td>'.$interaction['result']."</td>\n".'<td>'.$interaction['latency']."</td>\n".'<td>'.$interaction['time']."</td>\n"."</tr>\n";
+				$counter ++;
+			}
+			$list2 = learnpath :: get_iv_objectives_array($row['iv_id']);
+			foreach ($list2 as $id => $interaction) {
+				if (($counter % 2) == 0) {
+					$oddclass = "row_odd";
+				} else {
+					$oddclass = "row_even";
+				}
+				$output .= "<tr class='$oddclass'>\n".'<td></td>'."\n".'<td></td>'."\n".'<td>&nbsp;</td>'."\n".'<td>'.$interaction['order_id'].'</td>'."\n".'<td colspan="2">'.$interaction['objective_id'].'</td>'."\n"
+				.'<td colspan="2">'.$interaction['status']."</td>\n"
+				.'<td>'.$interaction['score_raw']."</td>\n".'<td>'.$interaction['score_max']."</td>\n".'<td>'.$interaction['score_min']."</td>\n<td></td>\n</tr>\n";
 				$counter ++;
 			}
 		}

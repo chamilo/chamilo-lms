@@ -606,6 +606,7 @@ elseif($_POST['step6'])
 			case '1.8.4':
 			default:
 				include('update-db-1.8.4-1.8.5.inc.php');
+				include('update-files-1.8.4-1.8.5.inc.php');
 				break;
 		}
 	}

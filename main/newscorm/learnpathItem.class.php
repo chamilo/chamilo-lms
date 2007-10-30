@@ -2090,16 +2090,16 @@ class learnpathItem{
 		     					"score_max = '".$objective[3]."' " .
 		     					"WHERE id = $iva_id";
 		     				$ivau_res = api_sql_query($ivau_sql,__FILE__,__LINE__);
-		     				error_log($ivau_sql,0);
+		     				//error_log($ivau_sql,0);
 		     			}else{
 		     				//insert new one
 		     				$ivai_sql = "INSERT INTO $iva_table " .
-		     						"(lp_iv_id, objective_id, status, score_raw, score_min, score_max )" .
+		     						"(lp_iv_id, order_id, objective_id, status, score_raw, score_min, score_max )" .
 		     						"VALUES" .
-		     						"(".$lp_iv_id.",'".$objective[0]."','".$objective[1]."'," .
+		     						"(".$lp_iv_id.", ".$index.",'".$objective[0]."','".$objective[1]."'," .
 		     						"'".$objective[2]."','".$objective[4]."','".$objective[3]."')";
 		     				$ivai_res = api_sql_query($ivai_sql,__FILE__,__LINE__);
-		     				error_log($ivai_sql);
+		     				//error_log($ivai_sql);
 		     			}
 		     		}
 	     		}

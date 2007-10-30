@@ -1020,6 +1020,7 @@ function update_Db_course($courseDbName)
 	$sql = "CREATE TABLE IF NOT EXISTS `$TABLELPIVOBJECTIVE`(" .
 		"id				bigint	unsigned 		primary key auto_increment," .
 		"lp_iv_id		bigint	unsigned not null," . //identifier of the related sco_view
+		"order_id		smallint	unsigned	not null default 0,". //internal order (0->...) given by Dokeos
 		"objective_id	varchar(255) not null default ''," . //sco-specific, given by the sco
 		"score_raw		float unsigned not null default 0," . //score
 		"score_max		float unsigned not null default 0," . //max score

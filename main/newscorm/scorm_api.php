@@ -125,8 +125,8 @@ var commit = false ;
 
 //Strictly scorm variables
 var score=<?php echo $oItem->get_score();?>;
-var max=<?php echo $oItem->get_max();?>;
-var min=<?php echo $oItem->get_min();?>;
+var max='<?php echo $oItem->get_max();?>';
+var min='<?php echo $oItem->get_min();?>';
 var lesson_status='<?php echo $oItem->get_status();?>';
 var session_time='<?php echo $oItem->get_scorm_time('js');?>';
 var suspend_data = '<?php echo $oItem->get_suspend_data();?>';

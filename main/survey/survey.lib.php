@@ -239,6 +239,36 @@ class survey_manager
 
 		return true;
 	}
+	
+	/**
+	 * This function duplicates a survey (and also all the question in that survey
+	 *
+	 * @param $survey_id the id of the survey that has to be duplicated
+	 * @return true
+	 *
+	 * @author Eric Marguin <e.marguin@elixir-interactive.com>, Elixir Interactive
+	 * @version October 2007
+	 */
+	function empty_survey($survey_id)
+	{
+		// Database table definitions
+		$table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
+		$table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
+		$table_survey = Database :: get_course_table(TABLE_SURVEY);
+		
+		$datas = survey_manager::get_survey($survey_id);
+
+		$sql = 'DELETE FROM '.$table_survey_invitation.' WHERE survey_code = "'.Database::escape_string($datas['code']).'"';
+		api_sql_query($sql, __FILE__, __LINE__);
+		
+		$sql = 'DELETE FROM '.$table_survey_answer.' WHERE survey_id='.intval($survey_id);
+		api_sql_query($sql, __FILE__, __LINE__);
+		
+		$sql = 'UPDATE '.$table_survey.' SET invited=0, answered=0 WHERE survey_id='.intval($survey_id);
+		api_sql_query($sql, __FILE__, __LINE__);
+
+		return true;
+	}
 
 	/**
 	 * This function recalculates the number of people who have taken the survey (=filled at least one question)

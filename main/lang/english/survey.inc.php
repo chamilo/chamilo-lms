@@ -172,4 +172,7 @@ $HaveAnswered = "have answered";
 $WereInvited = "were invited";
 $PagebreakNotFirst = "The page break cannot be the first";
 $PagebreakNotLast = "The page break cannot be the last one";
+$DuplicateSurvey = "Duplicate survey";
+$EmptySurvey = "Empty survey";
+$SurveyEmptied = "Answers to survey successfully deleted";
 ?>

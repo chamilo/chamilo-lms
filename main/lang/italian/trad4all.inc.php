@@ -443,4 +443,7 @@ $PleaseLoginAgainFromHomepage = "Ti prego di accedere nuovamente al sito dalla p
 $PleaseLoginAgainFromFormBelow = "Ti prego di accedere al sito compilando il modulo sottostante";
 $AccessToFaq = "Accesso alle FAQ - Domande frequenti";
 $Faq = "FAQ - Domande frequenti";
+$RemindInactivesLearnersSince = "Richiama gli utenti inattivi dal";
+$RemindInactiveLearnersMailSubject = "Attività su %s";
+$RemindInactiveLearnersMailContent = "Gentile utente,<br /><br />ti segnaliamo che non sei attiva/o su %s da più di % giorni.";
 ?>

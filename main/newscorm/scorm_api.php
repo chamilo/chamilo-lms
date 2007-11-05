@@ -511,51 +511,59 @@ function LMSSetValue(param, val) {
 			if(myres = param.match(/cmi.objectives.(\d+).(id|score|status)(.*)/))
 			{
 				obj_id = myres[1];
-				req_type = myres[2];
-				if(obj_id == null || obj_id == '')
+				if(obj_id > item_objectives.length)
 				{
-					;//do nothing
+					G_LastError = G_InvalidArgumentError;
+					return_value = false;
 				}
 				else
 				{
-					if(item_objectives[obj_id]==null)
+					req_type = myres[2];
+					if(obj_id == null || obj_id == '')
 					{
-						item_objectives[obj_id] = ['','','','',''];
+						;//do nothing
 					}
-					if( req_type == "id" ) {
-							//item_objectives[obj_id][0] = val.substring(51,57);
-							item_objectives[obj_id][0] = val;
-							logit_scorm("Objective "+obj_id+"'s id updated",2);
-							return_value = 'true';
-					} else if ( req_type == "score" ) {
-							if (myres[3] == '._children'){
-								return_value = '';
-								G_lastError = G_InvalidSetValue;
-								G_lastErrorString = 'Invalid set value, element is a keyword';
-							}else if (myres[3] == '.raw'){
-								item_objectives[obj_id][2] = val;
-								logit_scorm("Objective "+obj_id+"'s score raw updated",2);
+					else
+					{
+						if(item_objectives[obj_id]==null)
+						{
+							item_objectives[obj_id] = ['','','','',''];
+						}
+						if( req_type == "id" ) {
+								//item_objectives[obj_id][0] = val.substring(51,57);
+								item_objectives[obj_id][0] = val;
+								logit_scorm("Objective "+obj_id+"'s id updated",2);
 								return_value = 'true';
-							}else if (myres[3] == '.max'){
-								item_objectives[obj_id][3] = val;
-								logit_scorm("Objective "+obj_id+"'s score max updated",2);
+						} else if ( req_type == "score" ) {
+								if (myres[3] == '._children'){
+									return_value = '';
+									G_lastError = G_InvalidSetValue;
+									G_lastErrorString = 'Invalid set value, element is a keyword';
+								}else if (myres[3] == '.raw'){
+									item_objectives[obj_id][2] = val;
+									logit_scorm("Objective "+obj_id+"'s score raw updated",2);
+									return_value = 'true';
+								}else if (myres[3] == '.max'){
+									item_objectives[obj_id][3] = val;
+									logit_scorm("Objective "+obj_id+"'s score max updated",2);
+									return_value = 'true';
+								}else if (myres[3] == '.min'){
+									item_objectives[obj_id][4] = val;
+									logit_scorm("Objective "+obj_id+"'s score min updated",2);
+									return_value = 'true';
+								}else{
+									return_value = '';
+									G_lastError = G_NotImplementedError;
+									G_lastErrorString = 'Not implemented yet';
+								}
+						} else if ( req_type == "status" ) {
+								item_objectives[obj_id][1] = val;
+								logit_scorm("Objective "+obj_id+"'s status updated",2);
 								return_value = 'true';
-							}else if (myres[3] == '.min'){
-								item_objectives[obj_id][4] = val;
-								logit_scorm("Objective "+obj_id+"'s score min updated",2);
-								return_value = 'true';
-							}else{
-								return_value = '';
+						} else {
 								G_lastError = G_NotImplementedError;
 								G_lastErrorString = 'Not implemented yet';
-							}
-					} else if ( req_type == "status" ) {
-							item_objectives[obj_id][1] = val;
-							logit_scorm("Objective "+obj_id+"'s status updated",2);
-							return_value = 'true';
-					} else {
-							G_lastError = G_NotImplementedError;
-							G_lastErrorString = 'Not implemented yet';
+						}
 					}
 				}
 			}

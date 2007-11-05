@@ -446,57 +446,65 @@ function LMSSetValue(param, val) {
 		if(myres = param.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency)(.*)/))
 		{
 			elem_id = myres[1];
-			if(interactions[elem_id] == null){
-				interactions[elem_id] = ['','','','','','','',''];
-				//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
-				interactions[elem_id][4] = new Array();
+			if(elem_id > interactions.length)
+			{
+				G_LastError = G_InvalidArgumentError;
+				return_value = false;
 			}
-			elem_attrib = myres[2];
-			switch(elem_attrib) {
-				case "id":
-					interactions[elem_id][0] = val;
-					logit_scorm("Interaction "+elem_id+"'s id updated",2);
-					return_value='true';
-					break;
-				case "time":
-					interactions[elem_id][2] = val;
-					logit_scorm("Interaction "+elem_id+"'s time updated",2);
-					return_value='true';
-					break;
-				case "type":
-					interactions[elem_id][1] = val;
-					logit_scorm("Interaction "+elem_id+"'s type updated",2);
-					return_value='true';
-					break;
-				case "correct_responses":
-					//do nothing yet
-					interactions[elem_id][4].push(val);
-					logit_scorm("Interaction "+elem_id+"'s correct_responses not updated",2);
-					return_value='true';
-					break;
-				case "weighting":
-					interactions[elem_id][3] = val;
-					logit_scorm("Interaction "+elem_id+"'s weighting updated",2);
-					return_value='true';
-					break;
-				case "student_response":
-					interactions[elem_id][5] = val;
-					logit_scorm("Interaction "+elem_id+"'s student_response updated",2);
-					return_value='true';
-					break;
-				case "result":
-					interactions[elem_id][6] = val;
-					logit_scorm("Interaction "+elem_id+"'s result updated",2);
-					return_value='true';
-					break;
-				case "latency":
-					interactions[elem_id][7] = val;
-					logit_scorm("Interaction "+elem_id+"'s latency updated",2);
-					return_value='true';
-					break;
-				default:
-						G_lastError = G_NotImplementedError;
-						G_lastErrorString = 'Not implemented yet';
+			else
+			{
+				if(interactions[elem_id] == null){
+					interactions[elem_id] = ['','','','','','','',''];
+					//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
+					interactions[elem_id][4] = new Array();
+				}
+				elem_attrib = myres[2];
+				switch(elem_attrib) {
+					case "id":
+						interactions[elem_id][0] = val;
+						logit_scorm("Interaction "+elem_id+"'s id updated",2);
+						return_value='true';
+						break;
+					case "time":
+						interactions[elem_id][2] = val;
+						logit_scorm("Interaction "+elem_id+"'s time updated",2);
+						return_value='true';
+						break;
+					case "type":
+						interactions[elem_id][1] = val;
+						logit_scorm("Interaction "+elem_id+"'s type updated",2);
+						return_value='true';
+						break;
+					case "correct_responses":
+						//do nothing yet
+						interactions[elem_id][4].push(val);
+						logit_scorm("Interaction "+elem_id+"'s correct_responses not updated",2);
+						return_value='true';
+						break;
+					case "weighting":
+						interactions[elem_id][3] = val;
+						logit_scorm("Interaction "+elem_id+"'s weighting updated",2);
+						return_value='true';
+						break;
+					case "student_response":
+						interactions[elem_id][5] = val;
+						logit_scorm("Interaction "+elem_id+"'s student_response updated",2);
+						return_value='true';
+						break;
+					case "result":
+						interactions[elem_id][6] = val;
+						logit_scorm("Interaction "+elem_id+"'s result updated",2);
+						return_value='true';
+						break;
+					case "latency":
+						interactions[elem_id][7] = val;
+						logit_scorm("Interaction "+elem_id+"'s latency updated",2);
+						return_value='true';
+						break;
+					default:
+							G_lastError = G_NotImplementedError;
+							G_lastErrorString = 'Not implemented yet';
+				}
 			}
 		}else if(param.substring(0,15)== 'cmi.objectives.'){
 			var myres = '';

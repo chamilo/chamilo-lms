@@ -19,7 +19,7 @@ class scormOrganization {
      * @param	string	Type of construction needed ('db' or 'manifest', default = 'manifest')
      * @param	mixed	Depending on the type given, DB id for the lp_item or reference to the DOM element
      */
-    function scormOrganization($type='manifest',&$element) {
+    function scormOrganization($type='manifest',&$element,$scorm_charset='UTF-8') {
     	if(isset($element))
     	{
 			$v = substr(phpversion(),0,1);
@@ -107,7 +107,7 @@ class scormOrganization {
 						     				$tmp_children = $child->childNodes;
 						     				if($tmp_children->length==1 and $child->firstChild->nodeValue != '' )
 						     				{
-						     					$this->title = $child->firstChild->nodeValue;
+						     					$this->title = html_entity_decode(html_entity_decode($child->firstChild->nodeValue,ENT_QUOTES,$scorm_charset));
 						     				}
 						     				break;
 				     				}

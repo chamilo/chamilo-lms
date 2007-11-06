@@ -82,7 +82,7 @@ class scorm extends learnpath {
 	     		if(!empty($doc->encoding)){
 	     			$this->manifest_encoding = strtoupper($doc->encoding);
 	     		}
-	     		if($this->debug>1){error_log('New LP - Called xmldoc() (encoding:'.strtoupper($doc->encoding).')',0);}
+	     		if($this->debug>1){error_log('New LP - Called xmldoc() (encoding:'.strtoupper($doc->encoding).' - saved: '.$this->manifest_encoding.')',0);}
 	     		if(!$doc)
 	     		{
 		     		if($this->debug>1){error_log('New LP - File '.$file.' is not an XML file',0);}
@@ -151,7 +151,7 @@ class scorm extends learnpath {
 			     									//$found_an_org = true;
 			     									$this->organizations_att[$organizations_attributes[$d1]->name] = $organizations_attributes[$d1]->value;
 			     								}
-		     									$oOrganization = new scormOrganization('manifest',$orgnode);
+		     									$oOrganization = new scormOrganization('manifest',$orgnode,$this->manifest_encoding);
 		     									if($oOrganization->identifier != ''){
 		     										$name = $oOrganization->get_name();
 		     										if(empty($name)){
@@ -218,7 +218,7 @@ class scorm extends learnpath {
 	     		if(!empty($doc->xmlEncoding)){
 	     			$this->manifest_encoding = strtoupper($doc->xmlEncoding);
 	     		}
-	     		if($this->debug>1){error_log('New LP - Called  (encoding:'.$doc->xmlEncoding.')',0);}
+	     		if($this->debug>1){error_log('New LP - Called  (encoding:'.$doc->xmlEncoding.' - saved: '.$this->manifest_encoding.')',0);}
 	     		
 				$root = $doc->documentElement;
 				if($root->hasAttributes()){
@@ -282,7 +282,7 @@ class scorm extends learnpath {
 				     								{
 				     									$this->organizations_att[$orgs_attr->name] = $orgs_attr->value;
 				     								}
-			     									$oOrganization = new scormOrganization('manifest',$orgnode);
+			     									$oOrganization = new scormOrganization('manifest',$orgnode,$this->manifest_encoding);
 			     									if($oOrganization->identifier != ''){
 			     										$name = $oOrganization->get_name();
 			     										if(empty($name)){
@@ -379,9 +379,10 @@ class scorm extends learnpath {
 	    		$dsp = $row[0]+1;
 	    	}
 	     	$myname = $oOrganization->get_name();
-	     		$this->manifest_encoding = 'UTF-8';
-	     	if($this->manifest_encoding != 'ISO-8859-1'){
-	     		$myname = mb_convert_encoding($myname,'ISO-8859-1',$this->manifest_encoding);
+	     	//$this->manifest_encoding = 'UTF-8';
+	     	global $charset;
+	     	if($this->manifest_encoding != $charset){
+	     		$myname = mb_convert_encoding($myname,$charset,$this->manifest_encoding);
 	     		//error_log('New LP - Converting name from '.$this->manifest_encoding.' to ISO-8859-1',0);
 	     	}
 			$sql = "INSERT INTO $new_lp (lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order)" .
@@ -440,8 +441,14 @@ class scorm extends learnpath {
 					$value_add .= "'".$item['maxtimeallowed']."',";
 				}
 				$title = mysql_real_escape_string($item['title']);
-		     	//if($this->manifest_encoding != 'ISO-8859-1'){
-		     		//$title = mb_convert_encoding($title,'ISO-8859-1',$this->manifest_encoding);
+				//DOM in PHP5 is always recovering data as UTF-8, somehow, no matter what
+				//the XML document encoding is. This means that we have to convert
+				//the data to the declared encoding when it is not UTF-8
+				if($this->manifest_encoding != 'UTF-8'){
+		     		$title = mb_convert_encoding($title,$this->manifest_encoding,'UTF-8');
+		     	}
+				//if($this->manifest_encoding != $charset){
+		     	//	$title = mb_convert_encoding($title,$charset,$this->manifest_encoding);
 		     	//}
 				$identifier = mysql_real_escape_string($item['identifier']);
 				$prereq = mysql_real_escape_string($item['prerequisites']);

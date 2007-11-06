@@ -7259,7 +7259,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 	$organizations->setAttribute('default','dokeos_scorm_export');
 	 	$organization = $xmldoc->createElement('organization');
 	 	$organization->setAttribute('identifier','dokeos_scorm_export');
-	 	$org_title = $xmldoc->createElement('title',htmlspecialchars($this->get_name(),ENT_QUOTES)); //filter data for XML?
+	 	//to set the title of the SCORM entity (=organization), we take the name given
+	 	//in Dokeos and convert it to HTML entities using the Dokeos charset (not the
+	 	//learning path charset) as it is the encoding that defines how it is stored
+	 	//in the database. Then we convert it to HTML entities again as the "&" character
+	 	//alone is not authorized in XML (must be &amp;)
+	 	//The title is then decoded twice when extracting (see scorm::parse_manifest)
+	 	global $charset;
+	 	$org_title = $xmldoc->createElement('title',htmlentities(htmlentities($this->get_name(),ENT_QUOTES,$charset)));
 	 	$organization->appendChild($org_title);
 	 	
 	 	//For each element, add it to the imsmanifest structure, then add it to the zip.
@@ -7954,7 +7961,7 @@ EOD;
 		//Send file to client
 		//$name = 'scorm_export_'.$this->lp_id.'.zip';
 		require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-		$name = replace_dangerous_char($this->get_name()).'.zip';
+		$name = preg_replace('([^a-zA-Z0-9_\.])','',html_entity_decode($this->get_name(),ENT_QUOTES)).'.zip';
 		DocumentManager::file_send_for_download($temp_zip_file,true,$name);
 	}
 	/**

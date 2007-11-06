@@ -202,7 +202,10 @@ class Tracking {
 												AND lp_view.lp_id = " . $lp['id'] . "
 											   ";
 				$resultItem = api_sql_query($sqlProgress, __FILE__, __LINE__);
-				$avg_progress += mysql_result($resultItem, 0, 0);
+				if(Database::num_rows($resultItem)>0)
+				{
+					$avg_progress += mysql_result($resultItem, 0, 0);
+				}
 			}
 			$avg_progress = round($avg_progress / $nb_lp, 1);
 		}
@@ -249,13 +252,14 @@ class Tracking {
 					$sql='SELECT SUM(score)/count(lp_item_id) as score FROM '.$lp_item_view_table.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
 
 					$rs_score = api_sql_query($sql, __FILE__, __LINE__);
-					$lp_scorm_score = mysql_result($rs_score,0,'score');
-					
-					$lp_scorm_score = ($lp_scorm_score / $lp_item__max_score) * 100;
-					
-					$lp_scorm_score_total+=$lp_scorm_score;
-					$lp_scorm_weighting_total+=100;
-					
+					if(Database::num_rows($rs_score)>0)
+					{
+						$lp_scorm_score = mysql_result($rs_score,0,'score');
+						$lp_scorm_score = ($lp_scorm_score / $lp_item__max_score) * 100;
+						
+						$lp_scorm_score_total+=$lp_scorm_score;
+						$lp_scorm_weighting_total+=100;
+					}
 				}
 			}
 			mysql_data_seek($sql_result_lp,0);
@@ -284,12 +288,14 @@ class Tracking {
 							';
 
 					$rsScores = api_sql_query($sql, __FILE__, __LINE__);
-					$total_score += mysql_result($rsScores, 0, 0);
-					$total_weighting += $item['max_score'];
-					
-					$lp_scorm_score_total += ($total_score/$total_weighting)*100;
-					$lp_scorm_weighting_total+=100;
-					
+					if(Database::num_rows($rsScores)>0)
+					{
+						$total_score += mysql_result($rsScores, 0, 0);
+						$total_weighting += $item['max_score'];
+						
+						$lp_scorm_score_total += ($total_score/$total_weighting)*100;
+						$lp_scorm_weighting_total+=100;
+					}					
 				}
 				
 			}
@@ -297,7 +303,11 @@ class Tracking {
 
 		$totalScore = $lp_scorm_score_total;
 
-		$pourcentageScore = round(($totalScore * 100) / $lp_scorm_weighting_total);
+		$pourcentageScore = 0;
+		if($lp_scorm_weighting_total>0)
+		{
+			$pourcentageScore = round(($totalScore * 100) / $lp_scorm_weighting_total);
+		}
 
 		return $pourcentageScore;
 	}

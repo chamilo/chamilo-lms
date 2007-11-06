@@ -13,7 +13,7 @@ if(api_get_setting('show_navigation_menu') != 'false')
 {
 
    $course_id = api_get_course_id();
-   if ( isset($course_id) )
+   if ( !empty($course_id) && ($course_id != -1) )
    {
    		if( api_get_setting('show_navigation_menu') != 'icons')
 		{

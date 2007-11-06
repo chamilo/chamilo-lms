@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 12273 2007-05-03 14:49:21Z elixir_julian $
+// $Id: tool_navigation_menu.inc.php 13630 2007-11-06 19:23:41Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -44,7 +44,7 @@ function get_navigation_items($include_admin_tools = false)
 	$navigation_items = array ();
 	$course_id = api_get_course_id();
 
-	if (isset ($course_id))
+	if (!empty ($course_id) && ($course_id != -1))
 	{
 		$user_id = api_get_user_id();
 

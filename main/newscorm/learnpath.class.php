@@ -5557,7 +5557,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			
 		}
 		
-		reset($arrLP);
+		if(is_array($arrLP)) { reset($arrLP); }
 		
 		$arrHide=array();
 
@@ -5584,7 +5584,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		}
 		if(empty($s_selected_position))
 		$position -> setSelected($s_selected_position);
-		reset($arrLP);
+		if(is_array($arrLP)) { reset($arrLP); }
 		
 		if($action != 'move'){
 			$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');

@@ -5582,8 +5582,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		foreach($arrHide as $key => $value){
 			$position->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 		}
-		if(empty($s_selected_position))
-		$position -> setSelected($s_selected_position);
+		if(!empty($s_selected_position)) { $position->setSelected($s_selected_position); }
 		if(is_array($arrLP)) { reset($arrLP); }
 		
 		if($action != 'move'){

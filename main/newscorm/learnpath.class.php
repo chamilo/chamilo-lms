@@ -6561,15 +6561,17 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		$return .= 'function load_cbo(id){' . "\n";
 		
-		$return .= "var cbo = document.getElementById('idPosition');";
+		$return .= "var cbo = document.getElementById('idPosition');\n";
 		
 		$return .= 'for(var i = cbo.length - 1; i > 0; i--)';
-			$return .= 'cbo.options[i] = null;';
-		
-		$return .= 'for(var i = 1; i <= child_name[id].length; i++)';
-			$return .= 'cbo.options[i] = new Option(child_name[id][i-1], child_value[id][i-1]);';
-		
+			$return .= 'cbo.options[i] = null;'."\n";
+		$return .= 'var k=0;'."\n";
+		$return .= 'for(var i = 1; i <= child_name[id].length; i++){'."\n";
+			$return .= '  cbo.options[i] = new Option(child_name[id][i-1], child_value[id][i-1]);'."\n";
+			$return .= 'k=i;';		
 		$return .= '}' . "\n\n";
+		$return .= 'if( typeof cbo != "undefined" ) {cbo.options[k].selected = true;}';
+		$return .='}';
 		
 		$return .= 'var child_name = new Array();' . "\n";
 		$return .= 'var child_value = new Array();' . "\n\n";

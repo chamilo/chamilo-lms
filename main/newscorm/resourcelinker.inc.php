@@ -1806,7 +1806,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 	$sql_item = "SELECT * FROM $tbl_lp_item " .
 			"WHERE lp_id = $learnpath_id AND id = $id_in_path";
 	$res_item = api_sql_query($sql_item,__FILE__,__LINE__);
-	if(Database::num_rows($res_item<1)) return -1; //exit
+	if(Database::num_rows($res_item)<1) return -1; //exit
 	$row_item = Database::fetch_array($res_item);
 	
 	$type = strtolower($row_item['item_type']);

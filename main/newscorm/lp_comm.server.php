@@ -236,7 +236,7 @@ function save_objectives($lp_id,$user_id,$view_id,$item_id,$objectives=array())
  */
 function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
 {
-	$debug=2;
+	$debug=0;
 	if($debug>0){error_log('In xajax_switch_item_details('.$lp_id.','.$user_id.','.$view_id.','.$current_item.','.$next_item.')',0);}
 	$objResponse = new xajaxResponse();
 	/*$item_id may be one of:

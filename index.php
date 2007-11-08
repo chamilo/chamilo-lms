@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 13120 2007-09-20 05:51:07Z yannoo $
+* 	@version $Id: index.php 13650 2007-11-08 20:12:47Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -277,8 +277,11 @@ function logout()
 	// selecting the last login of the user
 	$uid = intval($_GET['uid']);
 	$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='$uid' ORDER BY login_date DESC LIMIT 0,1";
-	$q_last_connection=mysql_query($sql_last_connection);
-	$i_id_last_connection=mysql_result($q_last_connection,0,"login_id");
+	$q_last_connection=api_sql_query($sql_last_connection);
+	if(Database::num_rows($q_last_connection)>0)
+	{
+		$i_id_last_connection=mysql_result($q_last_connection,0,"login_id");
+	}
 
 	$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
 	api_sql_query($s_sql_update_logout_date);

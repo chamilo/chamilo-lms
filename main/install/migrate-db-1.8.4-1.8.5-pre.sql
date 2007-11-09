@@ -28,3 +28,4 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 -- xxCOURSExx
 CREATE TABLE lp_iv_objective(id bigint unsigned primary key auto_increment, lp_iv_id bigint unsigned not null, order_id smallint unsigned not null default 0, objective_id	varchar(255) not null default '', score_raw		float unsigned not null default 0, score_max		float unsigned not null default 0, score_min		float unsigned not null default 0, status char(32) not null default 'not attempted');
 ALTER TABLE lp_iv_objective ADD INDEX (lp_iv_id);
+ALTER TABLE lp_item CHANGE prerequisite prerequisite TEXT DEFAULT NULL;

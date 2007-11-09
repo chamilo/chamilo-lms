@@ -7962,7 +7962,7 @@ EOD;
 		//Send file to client
 		//$name = 'scorm_export_'.$this->lp_id.'.zip';
 		require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-		$name = preg_replace('([^a-zA-Z0-9_\.])','',html_entity_decode($this->get_name(),ENT_QUOTES)).'.zip';
+		$name = preg_replace('([^a-zA-Z0-9_\.])','-',html_entity_decode($this->get_name(),ENT_QUOTES)).'.zip';
 		DocumentManager::file_send_for_download($temp_zip_file,true,$name);
 	}
 	/**

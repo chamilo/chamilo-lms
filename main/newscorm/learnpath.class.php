@@ -2957,7 +2957,7 @@ class learnpath {
 	    	$prereq_string = str_replace(' ','',$prereq_string);
 	    	if($this->debug>0){error_log('Found prereq_string: '.$prereq_string,0);}
 	    	//now send to the parse_prereq() function that will check this component's prerequisites
-	    	$result = $this->items[$item]->parse_prereq($prereq_string,$this);
+	    	$result = $this->items[$item]->parse_prereq($prereq_string,$this->items,$this->refs_list);
 	    	if($result === false)
 	    	{
 	    		$this->set_error_msg($this->items[$item]->prereq_alert);

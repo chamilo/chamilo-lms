@@ -1111,8 +1111,8 @@ class learnpathItem{
      * @return	boolean	True if the list of prerequisites given is entirely satisfied, false otherwise
      * @TODO //TODO if it's a Dokeos LP, use item ID instead of item REF for prereq!!!
      */
-    function parse_prereq($prereqs_string, &$oLP){
-    	if($this->debug>0){error_log('New LP - In learnpathItem::parse_prereq() for item '.$this->lp_id.' with string '.$prereqs_string,0);}
+    function parse_prereq($prereqs_string, $items, $refs_list){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::parse_prereq() for learnpath '.$this->lp_id.' with string '.$prereqs_string,0);}
     	//deal with &, |, ~, =, <>, {}, ,, X*, () in reverse order
 		$this->prereq_alert = '';
 		// First parse all parenthesis by using a sequential loop (looking for less-inclusives first)
@@ -1129,7 +1129,7 @@ class learnpathItem{
 			$res = preg_match_all('/(\(([^\(\)]*)\))/',$prereqs_string,$matches);
 			if($res){
 				foreach($matches[2] as $id=>$match){
-					$str_res = $this->parse_prereq($match);
+					$str_res = $this->parse_prereq($match,$items,$refs_list);
 					if($str_res){
 						$prereqs_string = str_replace($matches[1][$id],'_true_',$prereqs_string);
 					}else{
@@ -1147,7 +1147,7 @@ class learnpathItem{
 	    		if(count($list)>1){
 					$andstatus = true;
 					foreach($list as $condition){
-	    				$andstatus = $andstatus && $this->parse_prereq($condition);
+	    				$andstatus = $andstatus && $this->parse_prereq($condition,$items,$refs_list);
 	    				if($andstatus==false){
 							if($this->debug>1){error_log('New LP - One condition in AND was false, short-circuit',0);}
 							break;	    					
@@ -1158,8 +1158,8 @@ class learnpathItem{
     				}
 					return $andstatus;
 	    		}else{
-	    			if(isset($oLP->items[$oLP->refs_list[$list[0]]])){
-	    				$status = $oLP->items[$oLP->refs_list[$list[0]]]->get_status(true);
+	    			if(isset($items[$refs_list[$list[0]]])){
+	    				$status = $items[$refs_list[$list[0]]]->get_status(true);
 		    			$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
 				    	if(empty($this->prereq_alert) && !$returnstatus){
 				    		$this->prereq_alert = get_lang('_prereq_not_complete');
@@ -1180,8 +1180,8 @@ class learnpathItem{
 		    		$params = split('=',$prereqs_string);
 		    		if(count($params) == 2){
 		    			//right number of operands
-		    			if(isset($oLP->items[$oLP->refs_list[$params[0]]])){
-		    				$status = $oLP->items[$oLP->refs_list[$params[0]]]->get_status(true);
+		    			if(isset($items[$refs_list[$params[0]]])){
+		    				$status = $items[$refs_list[$params[0]]]->get_status(true);
 			    			$returnstatus = ($status == $params[1]);
 					    	if(empty($this->prereq_alert) && !$returnstatus){
 					    		$this->prereq_alert = get_lang('_prereq_not_complete');
@@ -1202,8 +1202,8 @@ class learnpathItem{
 			    		$params = split('<>',$prereqs_string);
 			    		if(count($params) == 2){
 			    			//right number of operands
-			    			if(isset($oLP->items[$oLP->refs_list[$params[0]]])){
-			    				$status = $oLP->items[$oLP->refs_list[$params[0]]]->get_status(true);
+			    			if(isset($items[$refs_list[$params[0]]])){
+			    				$status = $items[$refs_list[$params[0]]]->get_status(true);
 				    			$returnstatus =  ($status != $params[1]);
 						    	if(empty($this->prereq_alert) && !$returnstatus){
 						    		$this->prereq_alert = get_lang('_prereq_not_complete');
@@ -1225,7 +1225,7 @@ class learnpathItem{
 		    				$list = array();
 		    				$myres = preg_match('/~([^(\d+\*)\{]*)/',$prereqs_string,$list);
 		    				if($myres){
-		    					$returnstatus = !$this->parse_prereq($list[1]);
+		    					$returnstatus = !$this->parse_prereq($list[1],$items,$refs_list);
 						    	if(empty($this->prereq_alert) && !$returnstatus){
 						    		$this->prereq_alert = get_lang('_prereq_not_complete');
 						    	}
@@ -1254,8 +1254,8 @@ class learnpathItem{
 						    			$list = split(',',$multi[2]);
 						    			$mytrue = 0;
 						    			foreach($list as $cond){
-							    			if(isset($oLP->items[$oLP->refs_list[$cond]])){
-							    				$status = $oLP->items[$oLP->refs_list[$cond]]->get_status(true);
+							    			if(isset($items[$refs_list[$cond]])){
+							    				$status = $items[$refs_list[$cond]]->get_status(true);
 								    			if (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3])){
 						    						$mytrue ++;
 						    						if($this->debug>1){error_log('New LP - Found true item, counting.. ('.($mytrue).')',0);}
@@ -1276,8 +1276,8 @@ class learnpathItem{
 						    			$list = split(',',$gr);
 						    			$mycond = true;
 						    			foreach($list as $cond){
-							    			if(isset($oLP->items[$oLP->refs_list[$cond]])){
-							    				$status = $oLP->items[$oLP->refs_list[$cond]]->get_status(true);
+							    			if(isset($items[$refs_list[$cond]])){
+							    				$status = $items[$refs_list[$cond]]->get_status(true);
 								    			if (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3])){
 						    						$mycond = true;
 							    					if($this->debug>1){error_log('New LP - Found true item',0);}						    					
@@ -1304,12 +1304,12 @@ class learnpathItem{
 					    		//Nothing found there either. Now return the value of the corresponding resource completion status
 					    		
 				    			if($this->debug>1){error_log('New LP - Didnt find any group, returning value for '.$prereqs_string,0);}
-				    			if(isset($oLP->items[$oLP->refs_list[$prereqs_string]])){				    				
-				    				if($oLP->items[$oLP->refs_list[$prereqs_string]]->type == 'quiz')
+				    			if(isset($items[$refs_list[$prereqs_string]])){				    				
+				    				if($items[$refs_list[$prereqs_string]]->type == 'quiz')
 				    				{
 				    					$sql = 'SELECT exe_result, exe_weighting
 												FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES).'
-												WHERE exe_exo_id = '.$oLP->items[$oLP->refs_list[$prereqs_string]]->path.'
+												WHERE exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.'
 												ORDER BY exe_date DESC
 												LIMIT 0, 1';
 										$rs_quiz = api_sql_query($sql, __FILE__, __LINE__);
@@ -1334,7 +1334,7 @@ class learnpathItem{
 				    				}
 				    				else
 				    				{
-					    				$status = $oLP->items[$oLP->refs_list[$prereqs_string]]->get_status(true);
+					    				$status = $items[$refs_list[$prereqs_string]]->get_status(true);
 						    			$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
 								    	if(!$returnstatus && empty($this->prereq_alert)){
 								    		$this->prereq_alert = get_lang('_prereq_not_complete');
@@ -1347,7 +1347,7 @@ class learnpathItem{
 						    			return $returnstatus;
 				    				}
 				    			}else{
-				    				if($this->debug>1){error_log('New LP - Could not find '.$prereqs_string.' in '.print_r($oLP->refs_list,true),0);}
+				    				if($this->debug>1){error_log('New LP - Could not find '.$prereqs_string.' in '.print_r($refs_list,true),0);}
 				    			}
 					    	}
 		    			}
@@ -1361,7 +1361,7 @@ class learnpathItem{
 				$orstatus = false;
 				foreach($list as $condition){
 					if($this->debug>1){error_log('New LP - Found OR, adding it ('.$condition.')',0);}
-    				$orstatus = $orstatus || $this->parse_prereq($condition);
+    				$orstatus = $orstatus || $this->parse_prereq($condition,$items,$refs_list);
     				if($orstatus == true){
     					//shortcircuit OR
 						if($this->debug>1){error_log('New LP - One condition in OR was true, short-circuit',0);}
@@ -1374,8 +1374,8 @@ class learnpathItem{
 				return $orstatus;
     		}else{
 	    		if($this->debug>1){error_log('New LP - OR was found but only one elem present !?',0);}
-    			if(isset($oLP->items[$oLP->refs_list[$list[0]]])){
-    				$status = $oLP->items[$oLP->refs_list[$list[0]]]->get_status(true);
+    			if(isset($items[$refs_list[$list[0]]])){
+    				$status = $items[$refs_list[$list[0]]]->get_status(true);
 	    			$returnstatus = (($status == 'completed') OR ($status == 'passed'));
 			    	if(!$returnstatus && empty($this->prereq_alert)){
 			    		$this->prereq_alert = get_lang('_prereq_not_complete');

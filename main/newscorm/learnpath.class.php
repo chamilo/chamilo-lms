@@ -4336,8 +4336,6 @@ class learnpath {
 					$return .= $this->display_thread_form('edit', $item_id, $row);
 					
 					break;
-					
-				default:echo'sdv';break;
 			}
 		}
 		

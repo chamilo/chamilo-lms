@@ -4244,11 +4244,10 @@ class learnpath {
 			
 			$res = api_sql_query($sql, __FILE__, __LINE__);
 			$row = Database::fetch_array($res);
-			
+
 			switch($row['item_type'])
 			{
-				case 'dokeos_chapter': case 'dir' : case 'asset' : 
-					
+				case 'dokeos_chapter': case 'dir' : case 'asset' : case 'sco' :
 					if(isset($_GET['view']) && $_GET['view'] == 'build')
 					{
 						$return .= $this->display_manipulate($item_id, $row['item_type']);
@@ -4337,6 +4336,8 @@ class learnpath {
 					$return .= $this->display_thread_form('edit', $item_id, $row);
 					
 					break;
+					
+				default:echo'sdv';break;
 			}
 		}
 		
@@ -5455,12 +5456,15 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 */
 	function display_item_form($item_type, $title = '', $action = 'add', $id = 0, $extra_info = 'new')
 	{
+		global $_course;
+		
 		$tbl_lp_item = Database::get_course_table('lp_item');
 		
 		if($id != 0 && is_array($extra_info))
 		{
 			$item_title			= stripslashes($extra_info['title']);
 			$item_description	= stripslashes($extra_info['description']);
+			$item_path = api_get_path(WEB_COURSE_PATH) . $_course['path'].'/scorm/'.$this->path.'/'.stripslashes($extra_info['path']);
 		}
 		else
 		{
@@ -5555,6 +5559,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			}
 			$parent_select -> setSelected($s_selected_parent);
 			
+			
 		}
 		
 		if(is_array($arrLP)) { reset($arrLP); }
@@ -5602,6 +5607,16 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		}
 		
 		
+		$extension = pathinfo($item_path, PATHINFO_EXTENSION);
+		if($item_type=='asset' && ($extension == 'html' || $extension == 'htm'))
+		{
+			$renderer = $form->defaultRenderer();
+			$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}','content_lp');
+			$form->addElement('html_editor','content_lp','<a style="cursor:pointer" onclick="launch_templates()"><img src="'.api_get_path(WEB_IMG_PATH).'templates.gif" /></a>');
+			$defaults["content_lp"]=file_get_contents($item_path);
+		}
+		
+		
 		$form->addElement('hidden', 'type', 'dokeos_'.$item_type);
 		$form->addElement('hidden', 'post_time', time());
 			
@@ -5611,6 +5626,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		return $form->return_form();
 	}
+	
 	
 	/**
 	 * Enter description here...
@@ -5716,7 +5732,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$item_title			= '';
 			$item_description	= '';
 		}
-				
+			
 		$return = '<div style="margin:3px 0px;">';
 			
 			if($id != 0 && is_array($extra_info))

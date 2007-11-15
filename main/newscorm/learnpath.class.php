@@ -5606,8 +5606,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		
 		$extension = pathinfo($item_path, PATHINFO_EXTENSION);
-		if($item_type=='asset' && ($extension == 'html' || $extension == 'htm'))
+		if(($item_type=='asset' || $item_type=='sco') && ($extension == 'html' || $extension == 'htm'))
 		{
+			if($item_type=='sco')
+			{
+				$form->addElement('html','<script type="text/javascript">alert("'.get_lang('WarningWhenEditingScorm').'")</script>');
+			}
 			$renderer = $form->defaultRenderer();
 			$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}','content_lp');
 			$form->addElement('html_editor','content_lp','<a style="cursor:pointer" onclick="launch_templates()"><img src="'.api_get_path(WEB_IMG_PATH).'templates.gif" /></a>');

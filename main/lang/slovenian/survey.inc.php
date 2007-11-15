@@ -172,4 +172,7 @@ $HaveAnswered = "je odgovorilo";
 $WereInvited = "je bilo povabljenih";
 $PagebreakNotFirst = "Prelm strani ne more biti na zaèetku";
 $PagebreakNotLast = "Prelom strani ne more biti na koncu";
+$DuplicateSurvey = "Podvoji evalvacijski vprašalnik";
+$EmptySurvey = "Poèisti evalvacijski vprašalnik";
+$SurveyEmptied = "Odgovori evalvacijskega vprašalnika so bili uspešno odstranjeni";
 ?>

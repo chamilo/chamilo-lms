@@ -78,7 +78,7 @@ $YouCanNowAddQuestionToYourSurvey = "Puoi aggiungere una domanda al questionario
 $OrReturnToSurveyOverview = "O ritornare all\'elenco dei questionari";
 $SurveyParametersMissingUseCopyPaste = "Mancano parametri nel collegamento. Copia e incolla le informazioni";
 $WrongInvitationCode = "Codice di invito errato";
-$SurveyFinished = "Hai completato il questionario";
+$SurveyFinished = "Hai completato il questionario. ";
 $SurveyPreview = "Vedi il questionario";
 $InvallidSurvey = "Questionario non valido";
 $AddQuestion = "Aggiungi una domanda";
@@ -172,4 +172,7 @@ $HaveAnswered = "hanno risposto";
 $WereInvited = "sono invitati";
 $PagebreakNotFirst = "Il separatore pagina non può essere all\'inizio";
 $PagebreakNotLast = "Il separatore pagina non può essere alla fine";
+$DuplicateSurvey = "Duplica il questionario";
+$EmptySurvey = "Azzera le risposte del Questionario";
+$SurveyEmptied = "Le risposte al questionario sono state eliminate";
 ?>

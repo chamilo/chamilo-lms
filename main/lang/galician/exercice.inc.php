@@ -225,5 +225,6 @@ $StudentEmail = "Email do estudante";
 $OpenQuestionsAttemptedAre = "A pregunta aberta intentada é";
 $CourseName = "Nome do curso";
 $UploadJpgPicture = "Enviar unha imaxe JPG";
+$HotspotDescription = "Descrición da zona interactiva";
 $Regards = "Cordialmente";
 ?>

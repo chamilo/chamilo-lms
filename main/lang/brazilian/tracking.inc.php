@@ -212,4 +212,5 @@ $NoLearningPath = "Nenhuma Sequência de Aprendizagem";
 $SessionCourses = "Sessões dos cursos";
 $NoUsersInCourseTracking = "Aqui encontrará as estatísticas dos alunos inscritos no curso.";
 $AvgTimeSpentInTheCourse = "Média do tempo despendido no curso";
+$RemindInactiveUser = "Relembrar usuários inativos";
 ?>

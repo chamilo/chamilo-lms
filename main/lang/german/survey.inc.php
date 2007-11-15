@@ -173,4 +173,7 @@ $HaveAnswered = "haben geantwortet";
 $WereInvited = "wurden eingeladen";
 $PagebreakNotFirst = "Der Seitenumbruch kann nicht zuerst kommen";
 $PagebreakNotLast = "Der Seitenumbruch kann nicht zuletzt kommen";
+$DuplicateSurvey = "Duplikat Umfrage ";
+$EmptySurvey = "Leere Umfrage";
+$SurveyEmptied = "Antworten in Umfrage wurden erfolgreich gelöscht";
 ?>

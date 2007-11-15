@@ -51,4 +51,5 @@ $GenericScorm = "Scorm générique";
 $UnknownPackageFormat = "Le format du paquetage n\'a pas été identifié. Veuillez vous assurer qu\'il a été bien construit et qu\'il ne contient pas d\'erreur. Ce genre de problème peut être dû à une erreur de tranfert ou au format ZIP. Dans le dernier cas, il suffit parfois de re-zipper le fichier en choisissant moins de fonctionnalités (moindre compression, ...).";
 $Attempt = "Tentative";
 $MoveTheCurrentForum = "Déplacer le forum courant";
+$WarningWhenEditingScorm = "Attention !<br />Quand on édite une étape scorm, on peut altérer le reporting, voire endommager le document.";
 ?>

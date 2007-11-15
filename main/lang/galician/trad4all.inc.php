@@ -437,4 +437,6 @@ $ResetLink = "Pulse no seguinte enlace para rexenerar o seu contrasinal";
 $VisibilityChanged = "A visibilidade foi cambiada.";
 $MainNavigation = "Navegación principal";
 $None = "Ningún";
+$SeeDetail = "Ver detalles";
+$GroupSingle = "Grupo";
 ?>

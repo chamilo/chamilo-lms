@@ -168,4 +168,5 @@ $OrCopyPasteTheFollowingUrl = "ou copie e pegue a seguinte url:";
 $UnknowUser = "Usuario descoñecido";
 $MoveDown = "Baixar";
 $MoveUp = "Subir";
+$HaveAnswered = "Contestou";
 ?>

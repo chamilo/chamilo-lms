@@ -443,7 +443,7 @@ $PleaseLoginAgainFromHomepage = "Prosimo, da se poskušate ponovno prijaviti prek
 $PleaseLoginAgainFromFormBelow = "Prosimo, da se skušate ponovno prijaviti preko spodnje prijavne forme";
 $AccessToFaq = "Dostop do Pogosto zastavljena vprašanja (FAQ)";
 $Faq = "Pogosto zastavljena vprašanja";
-$RemindInactivesLearnersSince = "Opomni neaktivne uporabnike od";
+$RemindInactivesLearnersSince = "Opomni uporabnike, neaktivne zadnjih ";
 $RemindInactiveLearnersMailSubject = "Neaktivnost v okviru %s";
 $RemindInactiveLearnersMailContent = "Spoštovani uporabnik,<br /><br /> vaša neaktivnost v okviru %s je presegla %s dni.";
 ?>

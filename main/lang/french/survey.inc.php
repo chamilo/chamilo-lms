@@ -173,6 +173,6 @@ $WereInvited = "sont invités";
 $PagebreakNotFirst = "Le séparateur ne peut pas être en premier";
 $PagebreakNotLast = "Le séparateur ne peut pas être en dernier";
 $DuplicateSurvey = "Dupliquer l\'enquête";
-$EmptySurvey = "Empty l\'enquête";
+$EmptySurvey = "Vider l\'enquête de ses résultats";
 $SurveyEmptied = "Enquête vidée de ses résultats avec succès";
 ?>

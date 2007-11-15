@@ -4041,8 +4041,7 @@ class learnpath {
 		$content = str_replace('flv=h','flv=h|',$content);
 		$content = str_replace('flv=/','flv=/|',$content);		
 		
-		$path_to_remove = api_get_path('WEB_COURSE_PATH') . $_course['path'] . '/document' . $dir;
-		$content = str_replace($path_to_remove, './', $content);
+		$content = str_replace(api_get_path('WEB_COURSE_PATH'), api_get_path(REL_PATH).'courses/', $content);
 		
 		// for flv player : change back the url to absolute
 		$content = str_replace('flv=h|','flv=h',$content);

@@ -1903,7 +1903,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 			$result=api_sql_query($sql,__FILE__,__LINE__);
 			$myrow=Database::fetch_array($result);
 			$docurl=str_replace('%2F','/',urlencode($myrow['path']));
-			$link .= $main_course_path.'document'.$docurl.'?cidReq='.api_get_cidreq();
+			$link .= $main_course_path.'document'.$docurl.'?'.api_get_cidreq();
 			$openmethod=2;
 			$officedoc=false;
 			api_session_register('openmethod');

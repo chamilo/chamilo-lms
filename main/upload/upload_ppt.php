@@ -136,6 +136,8 @@ $group[] = FormValidator::createElement ('file', 'user_file',null);
 $group[] = FormValidator::createElement ('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
 $form -> addGroup($group);
 
+$form -> addElement('html','<br /><div style="margin:7px;">'.get_lang('UploadMaxSize').' : '.ini_get('post_max_size').'</div>');
+
 $form -> addElement ('hidden', 'ppt2lp', 'true');
 
 $form -> add_real_progress_bar('ppt2lp', 'qf_group_1', 1, true);

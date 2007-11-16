@@ -224,14 +224,15 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		if (!empty($_SESSION['toolgroup']))
 		{
 			$group_query = " WHERE post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
+			$subdirs_query = "AND url NOT LIKE '$sub_course_dir%/%'";
 		}
 		else
 		{
 			$group_query = '';
+			$subdirs_query = "WHERE url NOT LIKE '$sub_course_dir%/%'";
 		}
-		$sql_get_publications_list =	"SELECT * FROM  $work_table $group_query ORDER BY id";
+		$sql_get_publications_list =	"SELECT * FROM  $work_table $group_query $subdirs_query ORDER BY id";
 	}
-	//echo $sql_get_publications_list;
 	$sql_result = api_sql_query($sql_get_publications_list,__FILE__,__LINE__);
 
 	$table_header[] = array(get_lang('Title'),true);
@@ -252,28 +253,25 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$mydir = $my_sub_dir.$dir;
 		$action = '';
 		//display info depending on the permissions
-	if( $is_allowed_to_edit)
-	{
-			$row = array();
-			$class = '';
-			$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));
-			$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().
-				'&curdirpath='.$mydir.'"'.$class.'><img src="../img/folder_document.gif" alt="dir" height="20" width="20" align="absbottom"/>&nbsp;'.$dir.'</a>';
-			$row[] = '';
-			$row[] = '';
-			$row[] = '';
-			if( $is_allowed_to_edit)
-			{
-				//$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
-				//	'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
-				$action .= '<a href="'.api_get_self().'?'.
-					api_get_cidreq().'&delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('DirDelete').'"></a>';
-				$row[] = $action;
-			}else{
-				$row[] = "";
-	}
-			$table_data[] = $row;
+		$row = array();
+		$class = '';
+		$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));
+		$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().
+			'&curdirpath='.$mydir.'"'.$class.'><img src="../img/folder_document.gif" alt="dir" height="20" width="20" align="absbottom"/>&nbsp;'.$dir.'</a>';
+		$row[] = '';
+		$row[] = '';
+		$row[] = '';
+		if( $is_allowed_to_edit)
+		{
+			//$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
+			//	'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
+			$action .= '<a href="'.api_get_self().'?'.
+				api_get_cidreq().'&delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('DirDelete').'"></a>';
+			$row[] = $action;
+		}else{
+			$row[] = "";
 		}
+		$table_data[] = $row;
 	}
 	while( $work = mysql_fetch_object($sql_result))
 	{

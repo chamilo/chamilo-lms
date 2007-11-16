@@ -22,6 +22,16 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('extendedprofile_registrationrequired', 'mypersonalopenarea', 'checkbox', 'User', 'false', 'ExtendedProfileRegistrationRequiredTitle', ExtendedProfileRegistrationRequiredComment', NULL, 'MyPersonalOpenArea');
 
 -- xxSTATSxx
+ALTER TABLE `track_e_downloads` ADD INDEX ( `down_user_id` );
+ALTER TABLE `track_e_downloads` ADD INDEX ( `down_cours_id` );
+ALTER TABLE `track_e_exercices` ADD INDEX ( `exe_cours_id` );
+ALTER TABLE `track_e_hotpotatoes` ADD INDEX ( `exe_user_id` );
+ALTER TABLE `track_e_hotpotatoes` ADD INDEX ( `exe_cours_id` );
+ALTER TABLE `track_e_lastaccess` ADD INDEX ( `access_session_id` );
+ALTER TABLE `track_e_links` ADD INDEX ( `links_cours_id` );
+ALTER TABLE `track_e_links` ADD INDEX ( `links_user_id` );
+ALTER TABLE `track_e_uploads` ADD INDEX ( `upload_user_id` );
+ALTER TABLE `track_e_uploads` ADD INDEX ( `upload_cours_id` );
 
 -- xxUSERxx
 

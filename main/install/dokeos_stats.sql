@@ -64,8 +64,10 @@ CREATE TABLE track_e_lastaccess (
   access_session_id int unsigned default NULL,
   PRIMARY KEY  (access_id),
   KEY access_user_id (access_user_id),
-  KEY access_cours_code (access_cours_code)
+  KEY access_cours_code (access_cours_code),
+  KEY access_session_id (access_session_id)
 );
+
 
 CREATE TABLE track_e_default (
   default_id int NOT NULL auto_increment,
@@ -84,7 +86,9 @@ CREATE TABLE track_e_downloads (
   down_date datetime NOT NULL default '0000-00-00 00:00:00',
   down_cours_id varchar(40) NOT NULL default '',
   down_doc_path varchar(255) NOT NULL default '',
-  PRIMARY KEY  (down_id)
+  PRIMARY KEY  (down_id),
+  KEY down_user_id (down_user_id),
+  KEY down_cours_id (down_cours_id)
 );
 
 CREATE TABLE track_e_exercices (
@@ -95,9 +99,10 @@ CREATE TABLE track_e_exercices (
   exe_exo_id mediumint unsigned NOT NULL default 0,
   exe_result smallint NOT NULL default 0,
   exe_weighting smallint NOT NULL default 0,
-  PRIMARY KEY  (exe_id)
+  PRIMARY KEY  (exe_id),
+  KEY exe_user_id (exe_user_id),
+  KEY exe_cours_id (exe_cours_id)
 );
-ALTER TABLE track_e_exercices ADD INDEX (exe_user_id);
 
 CREATE TABLE track_e_attempt (
   exe_id int default NULL,
@@ -119,7 +124,9 @@ CREATE TABLE track_e_hotpotatoes (
   exe_date DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL ,
   exe_cours_id varchar(40) NOT NULL ,
   exe_result smallint default 0 NOT NULL ,
-  exe_weighting smallint default 0 NOT NULL
+  exe_weighting smallint default 0 NOT NULL,
+  KEY exe_user_id (exe_user_id),
+  KEY exe_cours_id (exe_cours_id)
 );
 
 CREATE TABLE track_e_links (
@@ -128,7 +135,9 @@ CREATE TABLE track_e_links (
   links_date datetime NOT NULL default '0000-00-00 00:00:00',
   links_cours_id varchar(40) NOT NULL default '' ,
   links_link_id int NOT NULL default 0,
-  PRIMARY KEY  (links_id)
+  PRIMARY KEY  (links_id),
+  KEY links_cours_id (links_cours_id),
+  KEY links_user_id (links_user_id)
 );
 
 CREATE TABLE track_e_login (
@@ -166,7 +175,9 @@ CREATE TABLE track_e_uploads (
   upload_date datetime NOT NULL default '0000-00-00 00:00:00',
   upload_cours_id varchar(40) NOT NULL default '',
   upload_work_id int NOT NULL default 0,
-  PRIMARY KEY  (upload_id)
+  PRIMARY KEY  (upload_id),
+  KEY upload_user_id (upload_user_id),
+  KEY upload_cours_id (upload_cours_id)
 );
 
 CREATE TABLE track_e_course_access (

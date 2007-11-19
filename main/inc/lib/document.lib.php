@@ -260,7 +260,7 @@ class DocumentManager
 		    "wmls" => "text/vnd.wap.wmlscript",
 		    "wmlsc" => "application/vnd.wap.wmlscriptc",
 		    "wma" => "video/x-ms-wma",   
-		    "wmv" => "video/x-ms-wmv",    
+		    "wmv" => "audio/x-ms-wmv",    
 		    "wrl" => "model/vrml",
 		    "xbm" => "image/x-xbitmap",
 		    "xht" => "application/xhtml+xml",

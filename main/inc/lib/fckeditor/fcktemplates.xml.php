@@ -10,12 +10,63 @@ function loadCSS($css_name){
 	return $template_css;
 }
 $css = loadCSS(api_get_setting('stylesheets'));
-
+//<Templates imagesBasePath="fck_template/images/">
 ?>
-<Templates imagesBasePath="fck_template/images/">
-
+<Templates imagesBasePath="">
 	
-	<Template title="Text page" image="Text.png">
+	<?php
+
+	//Get all personnal templates in the database
+	
+	$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
+	
+	$sql = 'SELECT id, title, description, ref_doc FROM '.$table_template.' WHERE course_code="'.api_get_course_id().'" AND user_id="'.api_get_user_id().'"';
+	
+	$result_template = api_sql_query($sql);
+	
+	while($a_template = mysql_fetch_array($result_template)){
+		
+		$document_id = $a_template['ref_doc'];
+		
+		$course = api_get_course_info();
+		$table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+		
+		$sql_document_path = 'SELECT path FROM '.$table_document.' WHERE id="'.$document_id.'"';
+		
+		$result_document_path = api_sql_query($sql_document_path);
+		$document_path = mysql_result($result_document_path,0,0);
+		
+		$width = 100;
+		$height = 90;
+		
+		$im = @ImageCreate($width, $height);
+		$bg_color = ImageColorAllocate($im, 255, 255, 255);
+		$ttfont   = "/usr/share/fonts/truetype/freefont/FreeSans.ttf";
+		$text_color = ImageColorAllocate($im, 0, 0, 0);
+		
+		$a_text=explode(' ',$a_template['title']);
+		$y=25;
+		foreach ($a_text as $a_part_of_title) {
+			imagettftext($im, 10, 0, 10, $y, $text_color, $ttfont, $a_part_of_title);
+			$y+=20;
+		}
+		
+		imagejpeg($im, api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'.$a_template['id'].'.jpg');
+		
+		echo '<Template title="'.htmlentities($a_template['title']).'" image="'.api_get_path(WEB_CODE_PATH).'upload/template_thumbnails/'.$a_template['id'].'.jpg">';
+			echo '<Description>'.htmlentities($a_template['description']).'</Description>';
+			echo '<Html>';
+			
+			echo htmlentities(file_get_contents(api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$document_path));
+			
+			echo '</Html>';
+		echo '</Template>';
+			
+	}
+	
+	?>
+	
+	<Template title="Text page" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Text.png';?>">
 		<Description>Theory, content section, chapter...</Description>
 		<Html>
 			<![CDATA[
@@ -55,7 +106,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Teacher explaining" image="Teacher_explaining.png">
+	<Template title="Teacher explaining" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Teacher_explaining.png';?>">
 		<Description>Mr Dokeos points to your content</Description>
 		<Html>
 			<![CDATA[
@@ -103,7 +154,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Comparison" image="Comparison.png">
+	<Template title="Comparison" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Comparison.png';?>">
 		<Description>2 columns text page</Description>
 		<Html>
 			<![CDATA[
@@ -165,7 +216,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Diagram explained" image="Diagram_explained.png">
+	<Template title="Diagram explained" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Diagram_explained.png';?>">
 		<Description>Image on the left, comment on the right</Description>
 		<Html>
 			<![CDATA[
@@ -217,7 +268,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Image alone" image="Picture.png">
+	<Template title="Image alone" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Picture.png';?>">
 		<Description>Self-explaining diagram</Description>
 		<Html>
 			<![CDATA[
@@ -254,7 +305,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Flash animation" image="Flash_animation_page.png">
+	<Template title="Flash animation" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Flash_animation_page.png';?>">
 		<Description>Animation + introduction text</Description>
 		<Html>
 			<![CDATA[
@@ -295,7 +346,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Audio page" image="Audio_page.png">
+	<Template title="Audio page" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Audio_page.png';?>">
 		<Description>Audio + image + text : listening comprehension etc.</Description>
 		<Html>
 			<![CDATA[
@@ -368,7 +419,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Video page" image="Video.png">
+	<Template title="Video page" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Video.png';?>">
 		<Description>On demand video + text</Description>
 		<Html>
 			<![CDATA[
@@ -449,7 +500,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="table page" image="Table.png">
+	<Template title="table page" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Table.png';?>">
 		<Description>Spreadsheet-like page</Description>
 		<Html>
 			<![CDATA[
@@ -606,7 +657,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Course preface" image="Course_preface.png">
+	<Template title="Course preface" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Course_preface.png';?>">
 		<Description>First page of a learning path</Description>
 		<Html>
 			<![CDATA[
@@ -654,7 +705,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	
 	
 	
-	<Template title="Assignment description" image="Assignment_description.png">
+	<Template title="Assignment description" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Assignment_description.png';?>">
 		<Description>Explain goals, roles, agenda</Description>
 		<Html>
 			<![CDATA[
@@ -739,7 +790,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Resources" image="Resources.png">
+	<Template title="Resources" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Resources.png';?>">
 		<Description>Books, links, tools</Description>
 		<Html>
 			<![CDATA[
@@ -815,7 +866,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Frequently asked questions" image="Frequently_asked_questions.png">
+	<Template title="Frequently asked questions" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Frequently_asked_questions.png';?>">
 		<Description>List of questions and answers </Description>
 		<Html>
 			<![CDATA[
@@ -871,7 +922,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Certificate of completion" image="Certificate_of_completion.png">
+	<Template title="Certificate of completion" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Certificate_of_completion.png';?>">
 		<Description>To appear at the end of a learning path</Description>
 		<Html>
 			<![CDATA[

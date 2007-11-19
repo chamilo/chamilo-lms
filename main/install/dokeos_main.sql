@@ -778,3 +778,20 @@ CREATE TABLE `shared_survey_question_option` (
   `sort` int(11) NOT NULL default '0',
   PRIMARY KEY  (`question_option_id`)
 );
+
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for `templates` (User's FCKEditor templates)
+-- 
+
+CREATE TABLE `templates` (
+  `id` int(11) NOT NULL auto_increment,
+  `title` varchar(100) NOT NULL,
+  `description` varchar(250) NOT NULL,
+  `course_code` varchar(40) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `ref_doc` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+);

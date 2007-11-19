@@ -21,6 +21,16 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('extendedprofile_registrationrequired', 'myteach', 'checkbox', 'false', 'true', 'ExtendedProfileRegistrationRequiredTitle', ExtendedProfileRegistrationRequiredComment', NULL, 'MyTeach');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('extendedprofile_registrationrequired', 'mypersonalopenarea', 'checkbox', 'User', 'false', 'ExtendedProfileRegistrationRequiredTitle', ExtendedProfileRegistrationRequiredComment', NULL, 'MyPersonalOpenArea');
 
+CREATE TABLE `templates` (
+  `id` int(11) NOT NULL auto_increment,
+  `title` varchar(100) NOT NULL,
+  `description` varchar(250) NOT NULL,
+  `course_code` varchar(40) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `ref_doc` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+);
+
 -- xxSTATSxx
 ALTER TABLE `track_e_downloads` ADD INDEX ( `down_user_id` );
 ALTER TABLE `track_e_downloads` ADD INDEX ( `down_cours_id` );

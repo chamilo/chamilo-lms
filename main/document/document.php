@@ -1,4 +1,5 @@
-<?php // $Id: document.php 13387 2007-10-04 15:28:00Z sourieo $
+<?php // $Id: document.php 13702 2007-11-19 10:12:38Z elixir_julian $
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -437,6 +438,63 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		}
 
 	}
+	
+	
+	/*======================================
+	   	  TEMPLATE ACTION
+	  ======================================*/
+	
+	if(isset($_GET['add_as_template']) && !isset($_POST['create_template'])){
+		
+		$document_id_for_template = intval($_GET['add_as_template']);
+		
+		//create the form that asks for the directory name
+		$new_folder_text = '<form name="set_document_as_new_template" action="'.api_get_self().'?add_as_template='.$document_id_for_template.'" method="post">';
+		$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$curdirpath.'" />';
+		$new_folder_text .= '<table><tr><td>';
+		$new_folder_text .= get_lang('TemplateName').' : </td>';
+		$new_folder_text .= '<td><input type="text" name="template_title" /></td></tr>';
+		$new_folder_text .= '<tr><td>'.get_lang('TemplateDescription').' : </td>';
+		$new_folder_text .= '<td><textarea name="template_description"></textarea></td></tr></table>';
+		$new_folder_text .= '<input type="submit" name="create_template" value="'.get_lang('Ok').'" />';
+		$new_folder_text .= '</form>';
+		//show the form
+		Display::display_normal_message($new_folder_text,false);
+		
+	}
+	
+	elseif(isset($_GET['add_as_template']) && isset($_POST['create_template'])){
+		
+		$document_id_for_template = intval($_GET['add_as_template']);
+		$title = $_POST['template_title'];
+		$description = $_POST['template_description'];
+		$course_code = api_get_course_id();
+		$user_id = api_get_user_id();
+		
+		if(!is_file(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/')){
+			mkdir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/',0777);
+		}
+		
+		DocumentManager::set_document_as_template($title, $description, $document_id_for_template, $course_code, $user_id);
+		
+		Display::display_confirmation_message(get_lang('DocumentSetAsTemplate'));
+		
+	}
+	
+	
+	if(isset($_GET['remove_as_template'])){
+		
+		$document_id_for_template = intval($_GET['remove_as_template']);
+		$course_code = api_get_course_id();
+		$user_id = api_get_user_id();
+		
+		DocumentManager::unset_document_as_template($document_id_for_template, $course_code, $user_id);
+		
+		Display::display_confirmation_message(get_lang('DocumentUnsetAsTemplate'));
+		
+	}
+	
+	
 } // END is allowed to edit
 
 /*
@@ -551,7 +609,7 @@ if($docs_and_folders)
 		//admins get an edit column
 		if ($is_allowed_to_edit || $group_member_with_upload_rights)
 		{
-			$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key);
+			$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key, $id['is_template']);
 
 			$row[] = $edit_icons;
 		}

@@ -64,6 +64,7 @@ define('TABLE_MAIN_SESSION_COURSE_USER', 'session_rel_course_rel_user');
 define('TABLE_MAIN_SHARED_SURVEY', 'shared_survey');
 define('TABLE_MAIN_SHARED_SURVEY_QUESTION', 'shared_survey_question');
 define('TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION', 'shared_survey_question_option');
+define('TABLE_MAIN_TEMPLATES', 'templates');
 
 //statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');

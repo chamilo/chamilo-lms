@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 13406 2007-10-07 04:18:50Z yannoo $
+<?php // $Id: document.inc.php 13702 2007-11-19 10:12:38Z elixir_julian $
 
 /*
 ==============================================================================
@@ -193,7 +193,7 @@ function build_document_icon_tag($type,$path)
  * @param int $id dbase id of the document
  * @return string html img tags with hyperlinks
  */
-function build_edit_icons($curdirpath,$type,$path,$visibility,$id)
+function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template)
 {
 	if(isset($_SESSION['_gid']))
 	{
@@ -230,6 +230,17 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id)
 	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';
 	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$req_gid.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
 	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
+	
+	if($type == 'file' && pathinfo($path,PATHINFO_EXTENSION)=='html'){
+		if($is_template==0){
+			$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;add_as_template='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/wizard_small.gif" border="0" title="'.get_lang('AddAsTemplate').'" alt="'.get_lang('AddAsTemplate').'" /></a>';
+		}
+		else{
+			$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;remove_as_template='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/wizard_gray_small.gif" border="0" title="'.get_lang('RemoveAsTemplate').'" alt=""'.get_lang('RemoveAsTemplate').'" /></a>';
+		}
+	}
+	
+	
 	return $modify_icons;
 }
 

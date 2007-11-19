@@ -532,6 +532,26 @@ class DocumentManager
 			while ($row = mysql_fetch_assoc($result))
 				//while ($row = mysql_fetch_array($result,MYSQL_NUM))
 			{
+				
+				if($row['filetype']=='file' && pathinfo($row['path'],PATHINFO_EXTENSION)=='html'){
+					
+					//Templates management
+					$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
+					$sql_is_template = 'SELECT id FROM '.$table_template.' 
+										WHERE course_code="'.$_course['id'].'" 
+										AND user_id="'.api_get_user_id().'"
+										AND ref_doc="'.$row['id'].'"
+										';
+					
+					$template_result = api_sql_query($sql_is_template);
+					if(mysql_numrows($template_result)>0){
+						$row['is_template'] = 1;
+					}
+					else{
+						$row['is_template'] = 0;
+					}
+				}
+				
 				$document_data[$row['id']] = $row;
 				//$document_data[] = $row;
 			}
@@ -779,6 +799,59 @@ class DocumentManager
 			return false;
 		}
 	}
+	
+	
+	/**
+	 * Allow to set a specific document as a new template for FCKEditor for a particular user in a particular course
+	 *
+	 * @param string $title
+	 * @param string $description
+	 * @param int $document_id_for_template the document id
+	 * @param string $couse_code
+	 * @param int $user_id
+	 */
+	function set_document_as_template($title, $description, $document_id_for_template, $couse_code, $user_id){
+		
+		$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
+		
+		$title = Database::escape_string($title);
+		$description = Database::escape_string($description);
+		$document_id_for_template = Database::escape_string($document_id_for_template);
+		$couse_code = Database::escape_string($couse_code);
+		$user_id = Database::escape_string($user_id);
+		
+		$sql = 'INSERT INTO '.$table_template.'(title, description, course_code, user_id, ref_doc)
+				VALUES ("'.$title.'", "'.$description.'", "'.$couse_code.'", "'.$user_id.'", "'.$document_id_for_template.'")';
+		
+		api_sql_query($sql);
+		
+	}
+	
+	
+	/**
+	 * Unset a document as template
+	 *
+	 * @param int $document_id
+	 * @param string $couse_code
+	 * @param int $user_id
+	 */
+	function unset_document_as_template($document_id, $couse_code, $user_id){
+		
+		$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
+		
+		$sql = 'SELECT id FROM '.$table_template.' WHERE course_code="'.$couse_code.'" AND user_id="'.$user_id.'" AND ref_doc="'.$document_id.'"';
+		$result = api_sql_query($sql);
+		$template_id = mysql_result($result,0,0);
+		
+		include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
+		my_delete(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'.$template_id.'.jpg');
+		
+		$sql = 'DELETE FROM '.$table_template.' WHERE course_code="'.$couse_code.'" AND user_id="'.$user_id.'" AND ref_doc="'.$document_id.'"';
+		
+		api_sql_query($sql);
+		
+	}
+	
 
 }
 //end class DocumentManager

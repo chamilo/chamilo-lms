@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 13320 2007-09-27 09:59:13Z elixir_julian $
+* 	@version $Id: exercise_result.php 13730 2007-11-21 15:14:12Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -737,16 +737,16 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			if(empty($choice)){
 				$choice = 0;
 			}
-			if ($answerType==2 )
+			if ($answerType==MULTIPLE_ANSWER )
 			{
 				$reply = array_keys($choice);
 				for ($i=0;$i<sizeof($reply);$i++)
 				{
 					$ans = $reply[$i];
-					exercise_attempt($questionScore,$ans,$quesId,$exeId);
+					exercise_attempt($questionScore,$ans,$quesId,$exeId,$i);
 				}
 			}
-			elseif ($answerType==4)
+			elseif ($answerType==MATCHING)
 			{
 				$j=sizeof($matching)+1;
 
@@ -765,21 +765,21 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 				}
 			}
-			elseif ($answerType==5)
+			elseif ($answerType==FREE_ANSWER)
 			{
 				$answer = $choice;
-				exercise_attempt($questionScore,$answer,$quesId,$exeId);
+				exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
 			}
-			elseif ($answerType==1)
+			elseif ($answerType==UNIQUE_ANSWER)
 			{
 				$sql = "select id from $table_ans where question_id=$questionId and position=$choice";
 				$res = api_sql_query($sql, __FILE__, __LINE__);
 				$answer = mysql_result($res,0,"id");
-				exercise_attempt($questionScore,$answer,$quesId,$exeId);
+				exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
 			}
 			else
 			{
-				exercise_attempt($questionScore,$answer,$quesId,$exeId);
+				exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
 			}
 		}
 	} // end huge foreach() block that loops over all questions

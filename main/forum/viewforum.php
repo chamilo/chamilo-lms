@@ -248,96 +248,99 @@ $threads=get_threads($_GET['forum']); // note: this has to be cleaned first
 $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
 
 $counter=0;
-foreach ($threads as $row)
+if(is_array($threads))
 {
-	// thread who have no replies yet and the only post is invisible should not be displayed to students.
-	if (api_is_allowed_to_edit() OR  !($row['thread_replies']=='0' AND $row['visible']=='0'))
+	foreach ($threads as $row)
 	{
-		if($counter%2==0)
+		// thread who have no replies yet and the only post is invisible should not be displayed to students.
+		if (api_is_allowed_to_edit() OR  !($row['thread_replies']=='0' AND $row['visible']=='0'))
 		{
-			 $class="row_odd";
-		}
-		else
-		{
-			$class="row_even";
-		}
-		echo "\t<tr class=\"$class\">\n";
-		echo "\t\t<td>";
-		if (is_array($whatsnew_post_info[$_GET['forum']][$row['thread_id']]) and !empty($whatsnew_post_info[$_GET['forum']][$row['thread_id']]))
-		{
-			echo icon('../img/forumthread.gif');
-		}
-		else
-		{
-			echo icon('../img/forumthread.gif');
-		}
-
-		if ($row['thread_sticky']==1)
-		{
-			echo icon('../img/exclamation.gif');
-		}
-		echo "</td>\n";
-		echo "\t\t<td><a href=\"viewthread.php?".api_get_cidreq()."&forum=".$_GET['forum']."&amp;thread=".$row['thread_id'].$origin_string."\" ".class_visible_invisible($row['visibility']).">".prepare4display($row['thread_title'])."</a></td>\n";
-		echo "\t\t<td>".$row['thread_replies']."</td>\n";
-		if ($row['user_id']=='0')
-		{
-			$name=prepare4display($row['thread_poster_name']);
-		}
-		else
-		{
-			$name=$row['firstname'].' '.$row['lastname'];
-		}
-		if($origin != 'learnpath')
-		{
-			echo "\t\t<td>".display_user_link($row['user_id'], $name)."</td>\n";
-		}
-		else
-		{
-			echo "\t\t<td>".$name."</td>\n";
-		}
-		echo "\t\t<td>".$row['thread_views']."</td>\n";
-		if ($row['last_poster_user_id']=='0')
-		{
-			$name=$row['poster_name'];
-		}
-		else
-		{
-			$name=$row['last_poster_firstname'].' '.$row['last_poster_lastname'];
-		}
-		// if the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread
-		if (($row['visible']=='1' OR api_is_allowed_to_edit()) && $origin!='learnpath')
-		{
-			$last_post=$row['thread_date']." ".get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name);
-		}
-		else if($origin!='learnpath')
-		{
-			$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
-			$last_post_result=api_sql_query($last_post_sql, __LINE__, __FILE__);
-			$last_post_row=mysql_fetch_array($last_post_result);
-			$name=$last_post_row['firstname'].' '.$last_post_row['lastname'];
-			$last_post=$last_post_row['post_date']." ".get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name);
-		}
-		else
-		{
-			$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
-			$last_post_result=api_sql_query($last_post_sql, __LINE__, __FILE__);
-			$last_post_row=mysql_fetch_array($last_post_result);
-			$name=$last_post_row['firstname'].' '.$last_post_row['lastname'];
-			$last_post=$last_post_row['post_date']." ".get_lang('By').' '.$name;
-		}
-		echo "\t\t<td>".$last_post."</td>\n";
-		if (api_is_allowed_to_edit())
-		{
+			if($counter%2==0)
+			{
+				 $class="row_odd";
+			}
+			else
+			{
+				$class="row_even";
+			}
+			echo "\t<tr class=\"$class\">\n";
 			echo "\t\t<td>";
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".$_GET['forum']."&amp;action=delete&amp;content=thread&amp;id=".$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteCompleteThread"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
-			display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array("forum"=>$_GET['forum'],'origin'=>$origin));
-			display_lock_unlock_icon('thread',$row['thread_id'], $row['locked'], array("forum"=>$_GET['forum'],'origin'=>$origin));
-			echo "<a href=\"viewforum.php?".api_get_cidreq()."&forum=".$_GET['forum']."&amp;action=move&amp;thread=".$row['thread_id'].$origin_string."\">".icon('../img/deplacer_fichier.gif',get_lang('MoveThread'))."</a>";
+			if (is_array($whatsnew_post_info[$_GET['forum']][$row['thread_id']]) and !empty($whatsnew_post_info[$_GET['forum']][$row['thread_id']]))
+			{
+				echo icon('../img/forumthread.gif');
+			}
+			else
+			{
+				echo icon('../img/forumthread.gif');
+			}
+	
+			if ($row['thread_sticky']==1)
+			{
+				echo icon('../img/exclamation.gif');
+			}
 			echo "</td>\n";
+			echo "\t\t<td><a href=\"viewthread.php?".api_get_cidreq()."&forum=".$_GET['forum']."&amp;thread=".$row['thread_id'].$origin_string."\" ".class_visible_invisible($row['visibility']).">".prepare4display($row['thread_title'])."</a></td>\n";
+			echo "\t\t<td>".$row['thread_replies']."</td>\n";
+			if ($row['user_id']=='0')
+			{
+				$name=prepare4display($row['thread_poster_name']);
+			}
+			else
+			{
+				$name=$row['firstname'].' '.$row['lastname'];
+			}
+			if($origin != 'learnpath')
+			{
+				echo "\t\t<td>".display_user_link($row['user_id'], $name)."</td>\n";
+			}
+			else
+			{
+				echo "\t\t<td>".$name."</td>\n";
+			}
+			echo "\t\t<td>".$row['thread_views']."</td>\n";
+			if ($row['last_poster_user_id']=='0')
+			{
+				$name=$row['poster_name'];
+			}
+			else
+			{
+				$name=$row['last_poster_firstname'].' '.$row['last_poster_lastname'];
+			}
+			// if the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread
+			if (($row['visible']=='1' OR api_is_allowed_to_edit()) && $origin!='learnpath')
+			{
+				$last_post=$row['thread_date']." ".get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name);
+			}
+			else if($origin!='learnpath')
+			{
+				$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
+				$last_post_result=api_sql_query($last_post_sql, __LINE__, __FILE__);
+				$last_post_row=mysql_fetch_array($last_post_result);
+				$name=$last_post_row['firstname'].' '.$last_post_row['lastname'];
+				$last_post=$last_post_row['post_date']." ".get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name);
+			}
+			else
+			{
+				$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
+				$last_post_result=api_sql_query($last_post_sql, __LINE__, __FILE__);
+				$last_post_row=mysql_fetch_array($last_post_result);
+				$name=$last_post_row['firstname'].' '.$last_post_row['lastname'];
+				$last_post=$last_post_row['post_date']." ".get_lang('By').' '.$name;
+			}
+			echo "\t\t<td>".$last_post."</td>\n";
+			if (api_is_allowed_to_edit())
+			{
+				echo "\t\t<td>";
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".$_GET['forum']."&amp;action=delete&amp;content=thread&amp;id=".$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteCompleteThread"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
+				display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array("forum"=>$_GET['forum'],'origin'=>$origin));
+				display_lock_unlock_icon('thread',$row['thread_id'], $row['locked'], array("forum"=>$_GET['forum'],'origin'=>$origin));
+				echo "<a href=\"viewforum.php?".api_get_cidreq()."&forum=".$_GET['forum']."&amp;action=move&amp;thread=".$row['thread_id'].$origin_string."\">".icon('../img/deplacer_fichier.gif',get_lang('MoveThread'))."</a>";
+				echo "</td>\n";
+			}
+			echo "\t</tr>\n";
 		}
-		echo "\t</tr>\n";
+		$counter++;
 	}
-	$counter++;
 }
 
 echo "</table>";

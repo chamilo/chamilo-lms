@@ -83,7 +83,6 @@ $nameTools=get_lang('Forum');
 -----------------------------------------------------------
 */
 include('forumconfig.inc.php');
-include('sanity.inc.php');
 include('forumfunction.inc.php');
 
 

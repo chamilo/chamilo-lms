@@ -410,7 +410,7 @@ function store_forumcategory($values)
 		$sql="UPDATE ".$table_categories." SET cat_title='".mysql_real_escape_string($values['forum_category_title'])."', cat_comment='".mysql_real_escape_string($values['forum_category_comment'])."' WHERE cat_id='".mysql_real_escape_string($values['forum_category_id'])."'";
 		api_sql_query($sql);
 		$last_id=mysql_insert_id();
-		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $values['forum_category_id'],"ForumCategoryAdded", $_user['user_id']);
+		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $values['forum_category_id'],"ForumCategoryAdded", api_get_user_id());
 		$return_message=get_lang('ForumCategoryEdited');
 	}
 	else
@@ -418,7 +418,7 @@ function store_forumcategory($values)
 		$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order) VALUES ('".mysql_real_escape_string($values['forum_category_title'])."','".mysql_real_escape_string($values['forum_category_comment'])."','".mysql_real_escape_string($new_max)."')";
 		api_sql_query($sql);
 		$last_id=mysql_insert_id();
-		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $last_id,"ForumCategoryAdded", $_user['user_id']);
+		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $last_id,"ForumCategoryAdded", api_get_user_id());
 		$return_message=get_lang('ForumCategoryAdded');
 	}
 
@@ -483,7 +483,7 @@ function store_forum($values)
 						'".mysql_real_escape_string($new_max)."')";
 		api_sql_query($sql, __LINE__,__FILE__);
 		$last_id=mysql_insert_id();
-		api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", $_user['user_id']);
+		api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", api_get_user_id());
 		$return_message=get_lang('ForumAdded');
 
 	}
@@ -526,7 +526,7 @@ function delete_forum_forumcategory_thread($content, $id)
 		$return_message=get_lang('ThreadDeleted');
 	}
 
-	api_item_property_update($_course,$tool_constant,$id,"delete"); // note: check if this returns a true and if so => return $return_message, if not => return false;
+	api_item_property_update($_course,$tool_constant,$id,"delete",api_get_user_id()); // note: check if this returns a true and if so => return $return_message, if not => return false;
 
 	return $return_message;
 }
@@ -698,15 +698,18 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
 function display_up_down_icon($content, $id, $list)
 {
 	$total_items=count($list);
-
+	$position = 0;
 	$internal_counter=0;
 
-	foreach ($list as $key=>$listitem)
+	if(is_array($list))
 	{
-		$internal_counter++;
-		if ($id==$key)
+		foreach ($list as $key=>$listitem)
 		{
-			$position=$internal_counter;
+			$internal_counter++;
+			if ($id==$key)
+			{
+				$position=$internal_counter;
+			}
 		}
 	}
 	if ($position>1)
@@ -742,8 +745,9 @@ function display_up_down_icon($content, $id, $list)
 */
 function change_visibility($content, $id, $target_visibility)
 {
+	global $_course;
 	$constants=array('forumcategory'=>TOOL_FORUM_CATEGORY, 'forum'=>TOOL_FORUM, 'thread'=>TOOL_FORUM_THREAD);
-	api_item_property_update($_course,$constants[$content],$id,$target_visibility); // note: check if this returns true or false => returnmessage depends on it.
+	api_item_property_update($_course,$constants[$content],$id,$target_visibility,api_get_user_id()); // note: check if this returns true or false => returnmessage depends on it.
 	if ($target_visibility=='visible')
 	{
 		handle_mail_cue($content, $id);
@@ -1555,14 +1559,14 @@ function store_thread($values)
 					'".mysql_real_escape_string($values['thread_sticky'])."')";
 	$result=api_sql_query($sql, __LINE__, __FILE__);
 	$last_thread_id=mysql_insert_id();
-	api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"ForumThreadAdded", $_user['user_id']);
+	api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"ForumThreadAdded", api_get_user_id());
 	// if the forum properties tell that the posts have to be approved we have to put the whole thread invisible
 	// because otherwise the students will see the thread and not the post in the thread.
 	// we also have to change $visible because the post itself has to be visible in this case (otherwise the teacher would have
 	// to make the thread visible AND the post
 	if ($visible==0)
 	{
-		api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"invisible", $_user['user_id']);
+		api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"invisible", api_get_user_id());
 		$visible=1;
 	}
 
@@ -1760,7 +1764,7 @@ function store_reply($values)
 	update_thread($values['thread_id'], $new_post_id,$post_date);
 
 	// update the forum
-	api_item_property_update($_course, TOOL_FORUM, $values['forum_id'],"NewMessageInForum", $_user['user_id']);
+	api_item_property_update($_course, TOOL_FORUM, $values['forum_id'],"NewMessageInForum", api_get_user_id());
 
 	$message=get_lang('ReplyAdded').'<br />';
 	if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit())

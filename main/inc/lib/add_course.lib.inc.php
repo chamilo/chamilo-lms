@@ -45,7 +45,14 @@ include_once (api_get_path(LIBRARY_PATH).'database.lib.php');
 * We need this new function so not every script that creates courses needs
 * to be changed when the behaviour necessary to create a course changes.
 * This will reduce bugs.
-*
+* @param	string	Course code requested (might be altered to match possible values)
+* @param	string	Course title
+* @param	string	Tutor name
+* @param	integer	Course category code
+* @param	string	Course language
+* @param	integer Course admin ID
+* @param	string	DB prefix
+* @param	integer	Expiration delay in unix timestamp
 * @return true if the course creation was succesful, false otherwise.
 */
 function create_course($wanted_code, $title, $tutor_name, $category_code, $course_language, $course_admin_id, $db_prefix, $firstExpirationDelay)
@@ -1460,7 +1467,10 @@ function fill_course_repository($courseRepository)
 		$perm = octdec(!empty($perm)?$perm:'0770');
 		$perm_file = api_get_setting('permissions_for_new_files');
 		$perm_file = octdec(!empty($perm_file)?$perm_file:'0660');
-		mkdir($course_documents_folder_images,$perm);
+		if(!is_dir($course_documents_folder_images))
+		{
+			mkdir($course_documents_folder_images,$perm);
+		}
 
 		$handle = opendir($img_code_path);
 
@@ -1488,7 +1498,10 @@ function fill_course_repository($courseRepository)
 		$audio_array = sort_pictures($files,"dir");
 		$audio_array = array_merge($audio_array,sort_pictures($files,"file"));
 
-		mkdir($course_documents_folder_audio,$perm);
+		if(!is_dir($course_documents_folder_audio))
+		{
+			mkdir($course_documents_folder_audio,$perm);
+		}
 
 		$handle = opendir($audio_code_path);
 
@@ -1515,7 +1528,10 @@ function fill_course_repository($courseRepository)
 		$flash_array = sort_pictures($files,"dir");
 		$flash_array = array_merge($flash_array,sort_pictures($files,"file"));
 
-		mkdir($course_documents_folder_flash,$perm);
+		if(!is_dir($course_documents_folder_flash))
+		{
+			mkdir($course_documents_folder_flash,$perm);
+		}
 
 		$handle = opendir($flash_code_path);
 
@@ -1542,7 +1558,10 @@ function fill_course_repository($courseRepository)
 		$video_array = sort_pictures($files,"dir");
 		$video_array = array_merge($video_array,sort_pictures($files,"file"));
 
-		mkdir($course_documents_folder_video,$perm);
+		if(!is_dir($course_documents_folder_video))
+		{
+			mkdir($course_documents_folder_video,$perm);
+		}
 
 		$handle = opendir($video_code_path);
 
@@ -1904,10 +1923,12 @@ function string2binary($variable)
  * @param string	$title			complete name of course
  * @param string	$course_language		lang for this course
  * @param string	$uid				uid of owner
+ * @param integer	Expiration date in unix time representation
+ * @param array		Optional array of teachers' user ID
  */
-function register_course($courseSysCode, $courseScreenCode, $courseRepository, $courseDbName, $titular, $category, $title, $course_language, $uidCreator, $expiration_date = "", $teachers)
+function register_course($courseSysCode, $courseScreenCode, $courseRepository, $courseDbName, $titular, $category, $title, $course_language, $uidCreator, $expiration_date = "", $teachers=array())
 {
-	GLOBAL $defaultVisibilityForANewCourse, $langCourseDescription, $langProfessor, $langAnnouncementEx, $error_msg, $_configuration, $_user;
+	global $defaultVisibilityForANewCourse, $langCourseDescription, $langProfessor, $langAnnouncementEx, $error_msg, $_configuration, $_user;
 	$TABLECOURSE = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 

@@ -634,7 +634,7 @@ if($show == 'test'){
   $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE `exercice_id` = '$exid'";
   $sqlresult =api_sql_query($sqlquery);
   $rowi = mysql_result($sqlresult,0);
-  echo $rowi.' Question(s)'; ?> </td>
+  echo ($rowi>1?get_lang('Questions'):get_lang('Question')); ?> </td>
 
 	<td align='center'><?php
 		$eid = $row['id'];

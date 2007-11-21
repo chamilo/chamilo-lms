@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 13730 2007-11-21 15:14:12Z yannoo $
+* 	@version $Id: exercise_result.php 13738 2007-11-21 22:03:02Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -650,10 +650,15 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 					$coursecode =  $_SESSION['_course']['id'];
 					$query1 = "SELECT user_id from $main_course_user_table where course_code= '$coursecode' and status = '1' LIMIT 0,1";
 					$result1 = api_sql_query($query1, __FILE__, __LINE__);
-					$temp = mysql_result($result1,0,"user_id");
-					$query = "select email from $main_user_table where user_id =".intval($temp) ;
-					$result = api_sql_query($query, __FILE__, __LINE__);
-					$to = mysql_result($result,0,"email");
+					if(Database::num_rows($result1)>0)
+					{
+						$temp = mysql_result($result1,0,"user_id");
+						$query = "select email from $main_user_table where user_id =".intval($temp) ;
+						$result = api_sql_query($query, __FILE__, __LINE__);
+						$to = mysql_result($result,0,"email");
+					}else{
+						//this is a problem (it means that there is no admin for this course)
+					}
 					display_free_answer($choice);
 				}
 				elseif($answerType == HOT_SPOT)

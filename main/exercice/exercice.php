@@ -638,12 +638,16 @@ if($show == 'test'){
 
 	<td align='center'><?php
 		$eid = $row['id'];
-	$uid= $_SESSION[_user][user_id];
+	$uid= api_get_user_id();
 	$qry = "select * from ".$TBL_TRACK_EXERCICES." where exe_exo_id = $eid and exe_user_id = $uid";
 	$qryres = api_sql_query($qry);
 	$num = Database::num_rows($qryres);
 	$row = Database::fetch_array($qryres);
-	$percentage = ($row['exe_result']/$row['exe_weighting'])*100;
+	$percentage = 0;
+	if($row['exe_weighting'] != 0)
+	{
+		$percentage = ($row['exe_result']/$row['exe_weighting'])*100;
+	}
 	if ($num>0)
 	{
 		echo get_lang('Attempted').' ('.get_lang('Score').':';

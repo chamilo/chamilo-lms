@@ -90,11 +90,13 @@ if(api_is_allowed_to_edit())
 		{
 			case 'unsubscribe' :
 				// Make sure we don't unsubscribe current user from the course
-				$user_ids = array_diff($_POST['user'],array($_user['user_id']));
-				if(count($user_ids) > 0)
-				{
-					CourseManager::unsubscribe_user($user_ids, $_SESSION['_course']['sysCode']);
-					$message = get_lang('UsersUnsubscribed');
+				if(is_array($_POST['user'])){
+					$user_ids = array_diff($_POST['user'],array($_user['user_id']));
+					if(count($user_ids) > 0)
+					{
+						CourseManager::unsubscribe_user($user_ids, $_SESSION['_course']['sysCode']);
+						$message = get_lang('UsersUnsubscribed');
+					}
 				}
 				break;
 		}

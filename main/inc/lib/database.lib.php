@@ -401,7 +401,7 @@ class Database
 	/**
 	*	Returns an array with all database fields for the specified course.
 	*
-	*	@param the real (system) code of the course (key of the main course table)
+	*	@param the real (system) code of the course (ID from inside the main course table)
 	* 	@todo shouldn't this be in the course.lib.php script?
 	*/
 	function get_course_info($course_code)

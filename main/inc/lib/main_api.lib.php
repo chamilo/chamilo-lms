@@ -516,7 +516,7 @@ function api_get_cidreq()
 {
 	if (!empty ($GLOBALS["_cid"]))
 	{
-		return 'cidReq='.$GLOBALS["_cid"];
+		return 'cidReq='.htmlspecialchars($GLOBALS["_cid"]);
 	}
 	return '';
 }

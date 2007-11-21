@@ -23,7 +23,7 @@
 *	5 arrays are created to receive the attributes of each answer belonging to a specified question
 * 	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer.class.php 10793 2007-01-19 09:17:15Z elixir_inter $
+* 	@version $Id: answer.class.php 13732 2007-11-21 15:19:33Z yannoo $
 */
 
 
@@ -225,7 +225,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 	 		if(!empty($this->answer[$i])){
 	 			$list[] = array(
 						'id'=>$i,
-						'answer'=>$this->answer[$i],
+						'answer'=>addslashes($this->answer[$i]),
 						'comment'=>$this->comment[$i],
 						'grade' => $this->weighting[$i],
 						'hotspot_coord' => $this->hotspot_coordinates[$i],

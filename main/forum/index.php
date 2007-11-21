@@ -231,15 +231,17 @@ foreach ($forum_categories_list as $forum_category_key => $forum_category)
 	{
 		// Here we clean the whatnew_post_info array a little bit because to display the icon we
 		// test if $whatsnew_post_info[$forum['forum_id']] is empty or not.
-		foreach ($whatsnew_post_info[$forum['forum_id']] as $key_thread_id => $new_post_array)
+		if(is_array($whatsnew_post_info[$forum['forum_id']]))
 		{
-			if (empty($whatsnew_post_info[$forum['forum_id']][$key_thread_id]))
+			foreach ($whatsnew_post_info[$forum['forum_id']] as $key_thread_id => $new_post_array)
 			{
-				unset($whatsnew_post_info[$forum['forum_id']][$key_thread_id]);
-				unset($_SESSION['whatsnew_post_info'][$forum['forum_id']][$key_thread_id]);
+				if (empty($whatsnew_post_info[$forum['forum_id']][$key_thread_id]))
+				{
+					unset($whatsnew_post_info[$forum['forum_id']][$key_thread_id]);
+					unset($_SESSION['whatsnew_post_info'][$forum['forum_id']][$key_thread_id]);
+				}
 			}
 		}
-
 		// note: this can be speeded up if we transform the $forum_list to an array that uses the forum_category as the key.
 		if (prepare4display($forum['forum_category'])==prepare4display($forum_category['cat_id']))
 		{

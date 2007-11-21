@@ -496,6 +496,14 @@ function event_exercice($exo_id, $score, $weighting)
 	//return 0;
 }
 
+/**
+ * Record an event for this attempt at answering an exercise
+ * @param	float	Score achieved
+ * @param	string	Answer given
+ * @param	integer	Question ID
+ * @param	integer Exercise ID
+ * @param	integer	Position
+ */
 function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 {
 	global $_configuration;	

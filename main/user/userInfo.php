@@ -42,7 +42,7 @@
 ==============================================================================
 */
 $editMainUserInfo = $_REQUEST['editMainUserInfo'];
-$uInfo = intval($_REQUEST['uInfo']);
+$uInfo = strval(intval($_REQUEST['uInfo']));
 // name of the language file that needs to be included
 $language_file = array ('registration', 'userInfo');
 
@@ -54,6 +54,7 @@ $this_section = SECTION_COURSES;
 $nameTools = get_lang("Users");
 api_protect_course_script();
 
+//prepare variables used in userInfoLib.php functions
 $TBL_USERINFO_DEF 		= Database :: get_course_table(TABLE_USER_INFO);
 $TBL_USERINFO_CONTENT 	= Database :: get_course_table(TABLE_USER_INFO_CONTENT);
 
@@ -104,12 +105,6 @@ $is_allowedToTrack = api_is_allowed_to_edit() && $_configuration['tracking_enabl
 // Library connection
 include ("userInfoLib.php");
 
-// clean field submitted by the user
-foreach ($_POST as $key => $value)
-{
-	$$key = replace_dangerous_char($value);
-}
-
 /*
 ==============================================================================
 	   FUNCTIONS
@@ -126,54 +121,54 @@ $displayMode = "viewContentList";
 
 if ($allowedToEditDef)
 {
-	if ($submitDef)
+	if (!empty($_POST['submitDef']))
 	{
-		if ($id)
+		if (!empty($_POST['id']))
 		{
-			edit_cat_def($id, $title, $comment, $nbline);
+			edit_cat_def($_POST['id'], $_POST['title'], $_POST['comment'], $_POST['nbline']);
 		}
 		else
 		{
-			create_cat_def($title, $comment, $nbline);
+			create_cat_def($_POST['title'], $_POST['comment'], $_POST['nbline']);
 		}
 
 		$displayMode = "viewDefList";
 	}
-	elseif ($removeDef)
+	elseif (!empty($_GET['removeDef']))
 	{
-		remove_cat_def($removeDef, true);
+		remove_cat_def($_GET['removeDef'], true);
 		$displayMode = "viewDefList";
 	}
-	elseif ($editDef)
+	elseif (!empty($_GET['editDef']))
 	{
 		$displayMode = "viewDefEdit";
 	}
-	elseif (isset ($addDef))
+	elseif (!empty ($_POST['addDef']))
 	{
 		$displayMode = "viewDefEdit";
 	}
-	elseif ($moveUpDef)
+	elseif (!empty($_GET['moveUpDef']))
 	{
-		move_cat_rank($moveUpDef, "up");
+		move_cat_rank($_GET['moveUpDef'], "up");
 		$displayMode = "viewDefList";
 	}
-	elseif ($moveDownDef)
+	elseif (!empty($_GET['moveDownDef']))
 	{
-		move_cat_rank($moveDownDef, "down");
+		move_cat_rank($_GET['moveDownDef'], "down");
 		$displayMode = "viewDefList";
 	}
-	elseif ($viewDefList)
+	elseif (!empty($_POST['viewDefList']))
 	{
 		$displayMode = "viewDefList";
 	}
-	elseif ($editMainUserInfo)
+	elseif (!empty($_GET['editMainUserInfo']))
 	{
-		$userIdViewed = $editMainUserInfo;
+		$userIdViewed = strval(intval($_GET['editMainUserInfo']));
 		$displayMode = "viewMainInfoEdit";
 	}
-	elseif ($submitMainUserInfo)
+	elseif (!empty($_GET['submitMainUserInfo']))
 	{
-		$userIdViewed = $submitMainUserInfo;
+		$userIdViewed = strval(intval($_GET['submitMainUserInfo']));
 
 		$promoteCourseAdmin ? $userProperties['status'] = 1 : $userProperties['status'] = 5;
 		$promoteTutor ? $userProperties['tutor'] = 1 : $userProperties['tutor'] = 0;
@@ -190,24 +185,24 @@ if ($allowedToEditDef)
 
 if ($allowedToEditContent)
 {
-	if ($submitContent)
+	if (isset($_POST['submitContent']))
 	{
-		if ($cntId) // submit a content change
+		if ($_POST['cntId']) // submit a content change
 		{
-			edit_cat_content($catId, $userIdViewer, $content, $REMOTE_ADDR);
+			edit_cat_content($_POST['catId'], $userIdViewed, $_POST['content'], $_SERVER['REMOTE_ADDR']);
 		}
 		else // submit a totally new content
-			{
-			fill_new_cat_content($catId, $userIdViewer, $content, $REMOTE_ADDR);
+		{
+			fill_new_cat_content($_POST['catId'], $userIdViewed, $_POST['content'], $_SERVER['REMOTE_ADDR']);
 		}
 
 		$displayMode = "viewContentList";
 	}
-	elseif ($editContent)
+	elseif (!empty($_GET['editContent']))
 	{
 		$displayMode = "viewContentEdit";
 
-		$userIdViewed = $userIdViewer;
+		$userIdViewed = $userIdViewed;
 	}
 }
 
@@ -223,7 +218,7 @@ if ($displayMode == "viewDefEdit")
 {
 	/*>>>>>>>>>>>> CATEGORIES DEFINITIONS : EDIT <<<<<<<<<<<<*/
 
-	$catToEdit = get_cat_def($editDef);
+	$catToEdit = get_cat_def($_GET['editDef']);
 	$edit_heading_form = new FormValidator('edit_heading_form');
 	$edit_heading_form->addElement('hidden', 'id');
 	$edit_heading_form->add_textfield('title', get_lang('Title'));
@@ -281,8 +276,7 @@ elseif ($displayMode == "viewContentEdit")
 {
 	/*>>>>>>>>>>>> CATEGORIES CONTENTS : EDIT <<<<<<<<<<<<*/
 
-	$catToEdit = get_cat_content($userIdViewed, $editContent);
-
+	$catToEdit = get_cat_content($userIdViewed, $_GET['editContent']);
 	$content_heading_form = new FormValidator('content_heading_form');
 	$content_heading_form->addElement('hidden', 'cntId');
 	$content_heading_form->addElement('hidden', 'catId');

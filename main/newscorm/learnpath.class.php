@@ -5837,7 +5837,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				$parent_select->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 			}
 			$parent_select -> setSelected($parent);
-			reset($arrLP);
+			if(is_array($arrLP))
+			{
+				reset($arrLP);
+			}
 			
 			$arrHide=array();
 			
@@ -5863,17 +5866,23 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				$position->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 			}
 			$position -> setSelected($s_selected_position);
-			reset($arrLP);
+			if(is_array($arrLP))
+			{
+				reset($arrLP);
+			}
 			
 			if($action != 'move'){
 				$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 				//$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"  style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 				
 				$id_prerequisite=0;
-				foreach($arrLP as $key=>$value){
-					if($value['id']==$id){
-						$id_prerequisite=$value['prerequisite'];
-						break;
+				if(is_array($arrLP))
+				{
+					foreach($arrLP as $key=>$value){
+						if($value['id']==$id){
+							$id_prerequisite=$value['prerequisite'];
+							break;
+						}
 					}
 				}
 
@@ -7159,9 +7168,11 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$return .= '<a style="cursor:hand" onclick="toggle_forum('.$forum['forum_id'].')" style="vertical-align:middle"><img src="'.api_get_path(WEB_IMG_PATH).'add.gif" id="forum_'.$forum['forum_id'].'_opener" align="absbottom" /></a>
 						<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . $forum['forum_title'] . '</a><ul style="display:none" id="forum_'.$forum['forum_id'].'_content">';
 			$a_threads = get_threads($forum['forum_id']);
-			foreach($a_threads as $thread)
-			{
-				$return .=  '<li><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_THREAD . '&amp;thread_id=' . $thread['thread_id'] . '&amp;lp_id=' . $this->lp_id . '">' . $thread['thread_title'] . '</a></li>';
+			if(is_array($a_threads)){
+				foreach($a_threads as $thread)
+				{
+					$return .=  '<li><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_THREAD . '&amp;thread_id=' . $thread['thread_id'] . '&amp;lp_id=' . $this->lp_id . '">' . $thread['thread_title'] . '</a></li>';
+				}
 			}
 			$return .= '</ul></div>';
 		}

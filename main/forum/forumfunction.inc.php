@@ -1185,15 +1185,22 @@ function get_forums($id='')
 	// finding the last post information (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
 	if ($id=='')
 	{
-		foreach ($forum_list as $key=>$value)
+		if(is_array($forum_list))
 		{
-			$last_post_info_of_forum=get_last_post_information($key,is_allowed_to_edit());
-			$forum_list[$key]['last_post_id']=$last_post_info_of_forum['last_post_id'];
-			$forum_list[$key]['last_poster_id']=$last_post_info_of_forum['last_poster_id'];
-			$forum_list[$key]['last_post_date']=$last_post_info_of_forum['last_post_date'];
-			$forum_list[$key]['last_poster_name']=$last_post_info_of_forum['last_poster_name'];
-			$forum_list[$key]['last_poster_lastname']=$last_post_info_of_forum['last_poster_lastname'];
-			$forum_list[$key]['last_poster_firstname']=$last_post_info_of_forum['last_poster_firstname'];
+			foreach ($forum_list as $key=>$value)
+			{
+				$last_post_info_of_forum=get_last_post_information($key,is_allowed_to_edit());
+				$forum_list[$key]['last_post_id']=$last_post_info_of_forum['last_post_id'];
+				$forum_list[$key]['last_poster_id']=$last_post_info_of_forum['last_poster_id'];
+				$forum_list[$key]['last_post_date']=$last_post_info_of_forum['last_post_date'];
+				$forum_list[$key]['last_poster_name']=$last_post_info_of_forum['last_poster_name'];
+				$forum_list[$key]['last_poster_lastname']=$last_post_info_of_forum['last_poster_lastname'];
+				$forum_list[$key]['last_poster_firstname']=$last_post_info_of_forum['last_poster_firstname'];
+			}
+		}
+		else
+		{
+			$forum_list = array();
 		}
 	}
 	else
@@ -1304,7 +1311,6 @@ function get_threads($forum_id)
 				ON post.poster_id= last_poster_users.user_id
 			WHERE thread.forum_id='".mysql_real_escape_string($forum_id)."'
 			ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
-		
 	if (is_allowed_to_edit())
 	{
 		// important note: 	it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement

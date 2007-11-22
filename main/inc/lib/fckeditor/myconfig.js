@@ -53,7 +53,7 @@ FCKConfig.ToolbarSets["NewTest"] = [
 ] ;
 
 FCKConfig.ToolbarSets["TestComment"] = [
-		['Bold','Italic','Underline','StrikeThrough','Subscript', 'Superscript','Link','ImageManager','Flash','MP3','Video','OrderedList','UnorderedList','Table']
+		['FontName','FontSize','TextColor','BGColor'],['Bold','Italic','Underline','StrikeThrough','Subscript', 'Superscript','Link','ImageManager','Flash','MP3','Video','OrderedList','UnorderedList','Table']
 ] ;
 
 FCKConfig.ToolbarSets["Test"] = [

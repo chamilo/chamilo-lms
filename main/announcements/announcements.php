@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 13586 2007-10-29 15:49:43Z elixir_inter $
+<?php //$Id: announcements.php 13745 2007-11-22 10:57:27Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -515,7 +515,8 @@ if (api_is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_announce
 					list($orderMax) = mysql_fetch_row($result);
 					$order = $orderMax + 1;
 					if(!empty($_SESSION['toolgroup'])){
-						$insert_id=store_advalvas_item($_POST['emailTitle'],$_POST['newContent'],$order,array('GROUP:'.$_SESSION['toolgroup']));
+						//$insert_id=store_advalvas_item($_POST['emailTitle'],$_POST['newContent'],$order,array('GROUP:'.$_SESSION['toolgroup']));
+						$insert_id=store_advalvas_group_item($_POST['emailTitle'],$_POST['newContent'],$order,array('GROUP:'.$_SESSION['toolgroup']),$_POST['selectedform']);
 					}else{
 						$insert_id=store_advalvas_item($_POST['emailTitle'],$_POST['newContent'],$order,$_POST['selectedform']);
 					}
@@ -920,12 +921,13 @@ if(!$surveyid)
 		{
 
 			echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".$_GET['origin']."'><img src=\"../img/announce_add.gif\"> ".get_lang("AddAnnouncement")."</a><br/>";
-			if ($announcement_number > 1)
-			{
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\"><img src=\"../img/valves_delete.gif\"/> ".get_lang("AnnouncementDeleteAll")."</a>\n";
-			}	// if announcementNumber > 1
-			echo "<hr noshade size=\"1\">";
+			
 		}
+		if (api_is_allowed_to_edit() && $announcement_number > 1)
+		{
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\"><img src=\"../img/valves_delete.gif\"/> ".get_lang("AnnouncementDeleteAll")."</a>\n";
+		}	// if announcementNumber > 1
+		echo "<hr noshade size=\"1\">";
 }
 
 /*----------------------------------------------------
@@ -1045,6 +1047,11 @@ if ($message == true)
 				($email_ann=='1' || !empty($surveyid))?$checked='checked':$checked='';
 				echo "<input class=\"checkbox\" type=checkbox value=\"1\" name=\"email_ann\" $checked> ".get_lang('EmailOption')," : ".get_lang('MyGroup'),
 				"<br><br>";
+				echo '<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</a>';
+				
+				show_to_form_group($_SESSION['toolgroup']);
+				
+				echo '<br><br>';
 			}
 		}
 		if($surveyid){
@@ -1086,10 +1093,14 @@ if ($message == true)
 				
 				echo $oFCKeditor->CreateHtml();
 
-		?>
-                <br /><input type="Submit" name="submitAnnouncement" value="<?php echo get_lang('Ok') ?>" onclick="selectAll(this.form.elements[3],true)" /><br /><br />
+				if(empty($_SESSION['toolgroup'])){
+                	echo '<br /><input type="Submit" name="submitAnnouncement" value="'.get_lang('Ok').'" onclick="selectAll(this.form.elements[3],true)" /><br /><br />';
+				}
+				else{
+					echo '<br /><input type="Submit" name="submitAnnouncement" value="'.get_lang('Ok').'" onclick="selectAll(this.form.elements[4],true)" /><br /><br />';
+				}
 
-        <?php
+        
 
 				"</form><br />\n";
 		if((isset($_GET['action']) && isset($_GET['id']) && is_array($to))||isset($_GET['remindallinactives'])||isset($_GET['remind_inactive'])){
@@ -1120,7 +1131,7 @@ if ($message == true)
 		//$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
 		$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_user['user_id']);
 
-		if (api_is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_announcement'))
+		if (api_is_allowed_to_edit() )
 		{
 			// A.1. you are a course admin with a USER filter
 			// => see only the messages of this specific user + the messages of the group (s)he is member of.

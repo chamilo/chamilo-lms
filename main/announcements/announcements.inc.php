@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 11860 2007-04-04 09:09:13Z elixir_inter $
+<?php //$Id: announcements.inc.php 13745 2007-11-22 10:57:27Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -208,6 +208,49 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 		}
 	}
 	echo "</select>\n";
+}
+
+
+/**
+* this function shows the form for sending a message to a specific group or user.
+*/
+function show_to_form_group($group_id)
+{
+
+	echo "\n<table id=\"recipient_list\" style=\"display: none;\">\n";
+	echo "\t<tr>\n";
+
+	echo "\t\t<td>\n";
+	
+	echo "\t\t<select name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>\n";
+	$group_users = GroupManager::get_subscribed_users($group_id);
+	foreach($group_users as $user){
+		echo '<option value="'.$user['user_id'].'">'.$user['lastname'].' '.$user['firstname'].'</option>';
+	}
+	echo '</select>';
+	
+	echo "\t\t</td>\n";
+	
+	// the buttons for adding or removing groups/users
+	echo "\n\t\t<td valign=\"middle\">\n";
+	echo "\t\t<input	type=\"button\"	",
+				"onClick=\"move(this.form.elements[1],this.form.elements[4])\" ",// 7 & 4 : fonts
+				"value=\"   >>   \">",
+
+				"\n\t\t<p>&nbsp;</p>",
+
+				"\n\t\t<input	type=\"button\"",
+				"onClick=\"move(this.form.elements[4],this.form.elements[1])\" ",
+				"value=\"   <<   \">";
+	echo "\t\t</td>\n";
+	echo "\n\t\t<td>\n";
+	
+	echo "\t\t<select name=\"selectedform[]\" size=5 style=\"width:200px\" multiple>\n";
+	echo '</select>';
+	
+	echo "\t\t</td>\n";
+	echo "\t</tr>\n";
+	echo "</table>";
 }
 
 
@@ -635,6 +678,51 @@ function store_advalvas_item($emailTitle,$newContent, $order, $to)
 	else // the message is sent to everyone, so we set the group to 0
 	{
 		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], '0');
+	}
+
+	return $last_id;
+
+}
+
+
+function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_users)
+{
+	
+	global $_course;
+	global $nameTools;
+	global $_user;
+
+	global $tbl_announcement;
+	global $tbl_item_property;
+
+	// store in the table announcement
+	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order'";
+	$result = api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
+	$last_id= mysql_insert_id();
+
+	// store in item_property (first the groups, then the users
+	if (!isset($to_users)) // !isset($to): when no user is selected we send it to everyone
+	{
+		$send_to=separate_users_groups($to);
+		// storing the selected groups
+		if (is_array($send_to['groups']))
+		{
+			foreach ($send_to['groups'] as $group)
+			{
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], $group); 
+			}
+		}
+	}
+	else // the message is sent to everyone, so we set the group to 0
+	{
+		// storing the selected users
+		if (is_array($to_users))
+		{
+			foreach ($to_users as $user)
+			{
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], '', $user);
+			}
+		}
 	}
 
 	return $last_id;

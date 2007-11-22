@@ -443,7 +443,8 @@ $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
         }
         else
         {
-            exit("WARNING UNDEFINED UID !! ");
+        	header('location:'.api_get_path(WEB_PATH));
+            //exit("WARNING UNDEFINED UID !! ");
         }
     }
     else // no uid => logout or Anonymous
@@ -549,7 +550,7 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
         else
         {
             //exit("WARNING UNDEFINED CID !! ");
-            header('location:'.api_get_path(WEB_ROOT_PATH));
+            header('location:'.api_get_path(WEB_PATH));
         }
     }
     else

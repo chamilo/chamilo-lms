@@ -548,7 +548,8 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
         }
         else
         {
-            exit("WARNING UNDEFINED CID !! ");
+            //exit("WARNING UNDEFINED CID !! ");
+            header('location:'.api_get_path(WEB_ROOT_PATH));
         }
     }
     else

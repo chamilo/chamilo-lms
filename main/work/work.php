@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 13078 2007-09-19 07:49:58Z elixir_julian $
+*  	@version $Id: work.php 13756 2007-11-23 16:30:17Z elixir_inter $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -768,16 +768,51 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 		// Lets predefine some variables. Be sure to change the from address!
 		$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
-		$sql_resp = 'SELECT u.email as myemail FROM '.$table_course_user.' cu, '.$table_user.' u WHERE cu.course_code = '."'".api_get_course_id()."'".' AND cu.status = 1 AND u.user_id = cu.user_id';
-		//echo $sql_resp;
-		$res_resp = api_sql_query($sql_resp,__FILE__,__LINE__);
-		if(Database::num_rows($res_resp)>0){
-			$emailto = '';
+		$table_session = Database::get_main_table(TABLE_MAIN_SESSION);
+		$table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+		
+		$emailto = array();
+		if(empty($_SESSION['id_session']))
+		{
+			$sql_resp = 'SELECT u.email as myemail FROM '.$table_course_user.' cu, '.$table_user.' u WHERE cu.course_code = '."'".api_get_course_id()."'".' AND cu.status = 1 AND u.user_id = cu.user_id';
+			$res_resp = api_sql_query($sql_resp,__FILE__,__LINE__);
 			while($row_email = Database::fetch_array($res_resp)){
 				if(!empty($row_email['myemail'])){
-					$emailto .= $row_email['myemail'].',';
+					$emailto[$row_email['myemail']] = $row_email['myemail'];
 				}
 			}
+		}
+		else
+		{
+			// coachs of the session
+			$sql_resp ='SELECT user.email as myemail 
+						FROM '.$table_session.' session
+						INNER JOIN '.$table_user.' user
+							ON user.user_id = session.id_coach
+						WHERE session.id = '.intval($_SESSION['id_session']);
+			$res_resp = api_sql_query($sql_resp,__FILE__,__LINE__);
+			while($row_email = Database::fetch_array($res_resp)){
+				if(!empty($row_email['myemail'])){
+					$emailto[$row_email['myemail']] = $row_email['myemail'];
+				}
+			}
+			
+			//coach of the course
+			$sql_resp ='SELECT user.email as myemail 
+						FROM '.$table_session_course.' session_course
+						INNER JOIN '.$table_user.' user
+							ON user.user_id = session_course.id_coach
+						WHERE session_course.id_session = '.intval($_SESSION['id_session']);
+			$res_resp = api_sql_query($sql_resp,__FILE__,__LINE__);
+			while($row_email = Database::fetch_array($res_resp)){
+				if(!empty($row_email['myemail'])){
+					$emailto[$row_email['myemail']] = $row_email['myemail'];
+				}
+			}			
+			
+		}
+		if(count($emailto)>0){
+			$emailto = implode(',' , $emailto);
 			$emailfromaddr = get_setting('emailAdministrator');
 			$emailfromname = get_setting('siteName');
 			$emailsubject  = "[".get_setting('siteName')."] ";

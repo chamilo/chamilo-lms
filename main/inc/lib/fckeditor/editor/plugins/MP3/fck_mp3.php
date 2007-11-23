@@ -55,6 +55,12 @@ include('../../../../../../inc/global.inc.php');
 			$form->addElement('html','</td></tr>');
 			
 			$form->addElement('html','<tr><td>');
+			$renderer = & $form->defaultRenderer();
+			$renderer->setElementTemplate('<div style="margin-left:-4px;">{element} {label}</div>', 'autostart');
+			$form->addElement('checkbox','autostart',get_lang('FckMp3Autostart'), '', 'id="autostart"');
+			$form->addElement('html','</td></tr>');
+			
+			$form->addElement('html','<tr><td>');
 			$form->addElement('submit','','Send it to the Server','id="btnUpload" fckLang="DlgLnkBtnUpload"');
 			$form->addElement('html','</td></tr></table>');
 			

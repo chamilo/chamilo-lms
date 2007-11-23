@@ -260,7 +260,7 @@ Media.prototype.getOuterHTML = function (objectId){
  * Devuelve el codigo HTML interno del elemento
  */
 Media.prototype.getInnerHTML = function (objectId){
-	var s = '<OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" WIDTH="90" HEIGHT="25" id="test" ALIGN=""><PARAM NAME=movie VALUE="'+getObjData(this.url)+'?mp3file='+getSoundUrl()+'"> <PARAM NAME=quality VALUE=high> <PARAM NAME=bgcolor VALUE=#FFFFFF> <EMBED src="'+getObjData(this.url)+'?mp3file='+getSoundUrl()+'" quality=high bgcolor=#FFFFFF  WIDTH="90" HEIGHT="25" NAME="Streaming" ALIGN=""TYPE="application/x-shockwave-flash" PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"></EMBED></OBJECT>';
+	var s = '<OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" WIDTH="90" HEIGHT="25" id="test" ALIGN=""><PARAM NAME=movie VALUE="'+getObjData(this.url)+'?autostart='+getAutostart()+'&mp3file='+getSoundUrl()+'"> <PARAM NAME=quality VALUE=high> <PARAM NAME=bgcolor VALUE=#FFFFFF> <EMBED src="'+getObjData(this.url)+'?autostart='+getAutostart()+'&mp3file='+getSoundUrl()+'" quality=high bgcolor=#FFFFFF  WIDTH="90" HEIGHT="25" NAME="Streaming" ALIGN=""TYPE="application/x-shockwave-flash" PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"></EMBED></OBJECT>';
 	return s;
 };
 
@@ -299,8 +299,10 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 			window.location.href=FCKConfig.PluginsPath + 'MP3/fck_mp3.php';
 			return ;
 	}
-
+	
 	SetUrl( fileUrl ) ;
+	//SetAutostart(GetE('autostart').value);
+	
 	GetE('frmUpload').reset() ;
 	// Reset the interface elements.
 	//document.getElementById('eUploadMessage').innerHTML = 'Upload' ;
@@ -314,7 +316,6 @@ var oUploadDeniedExtRegex	= new RegExp( FCKConfig.MP3UploadDeniedExtensions, 'i'
 function CheckUpload()
 {
 	var sFile = GetE('txtUploadFile').value ;
-	
 	if ( sFile.length == 0 )
 	{
 		alert( 'Please select a file to upload' ) ;
@@ -352,6 +353,13 @@ function setSoundUrl(url){
 function getSoundUrl(){
 	return mp3_url;
 }
+
+
+function getAutostart()
+{
+	return GetE('autostart').checked;
+}
+
 
 function getObjUrl(mpUrl2){ // to get source url
 		var url2=mpUrl2;

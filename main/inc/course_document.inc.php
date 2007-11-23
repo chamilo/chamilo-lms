@@ -312,7 +312,7 @@ function OpenFile( fileUrl, type )
 {
 	if(type=="audio")
 	{
-		ret = confirm('autostart ?');
+		ret = confirm('<?php echo get_lang('AutostartMp3') ?>');
 		if(ret==true)
 		{
 			GetE('autostart').checked = 'true';

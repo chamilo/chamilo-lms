@@ -144,6 +144,8 @@ class UserManager
 		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
+		$table_session_user = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
+		$table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 		// Unsubscribe the user from all groups in all his courses
 		$sql = "SELECT * FROM $table_course c, $table_course_user cu WHERE cu.user_id = '".$user_id."' AND c.code = cu.course_code";
@@ -161,6 +163,14 @@ class UserManager
 
 		// Unsubscribe user from all courses
 		$sql = "DELETE FROM $table_course_user WHERE user_id = '".$user_id."'";
+		api_sql_query($sql,__FILE__,__LINE__);
+		
+		// Unsubscribe user from all courses in sessions
+		$sql = "DELETE FROM $table_session_course_user WHERE id_user = '".$user_id."'";
+		api_sql_query($sql,__FILE__,__LINE__);
+		
+		// Unsubscribe user from all sessions
+		$sql = "DELETE FROM $table_session_user WHERE id_user = '".$user_id."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 
 		// Delete user picture

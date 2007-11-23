@@ -10,6 +10,7 @@ api_protect_admin_script();
 $tbl_session=Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_course=Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_course_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_session_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
 $page=intval($_GET['page']);
 $action=$_REQUEST['action'];
@@ -33,6 +34,8 @@ if($action == 'delete')
 	api_sql_query("DELETE FROM $tbl_session_rel_course WHERE id_session IN($idChecked)",__FILE__,__LINE__);
 
 	api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session IN($idChecked)",__FILE__,__LINE__);
+	
+	api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session IN($idChecked)",__FILE__,__LINE__);
 
 	header('Location: '.api_get_self().'?sort='.$sort);
 	exit();

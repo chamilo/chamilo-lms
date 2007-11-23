@@ -204,7 +204,7 @@ if($docs_and_folders)
 		//icons
 		$row[]= build_document_icon_tag($id['filetype'],$id['path']);
 		//document title with hyperlink
-		$row[] = '<a href="#" onclick="OpenFile(\''.$http_www.'/'.$id['title'].'\');return false;">'.$id['title'].'</a>';
+		$row[] = '<a href="#" onclick="OpenFile(\''.$http_www.'/'.$id['title'].'\', \''.$sType.'\');return false;">'.$id['title'].'</a>';
 		//comments => display comment under the document name
 		//$row[] = $invisibility_span_open.nl2br(htmlspecialchars($id['comment'])).$invisibility_span_close;
 		$display_size = format_file_size($size);
@@ -308,8 +308,20 @@ function getlist ($directory) {
 ?>
 <SCRIPT LANGUAGE="JavaScript">
 <!--
-function OpenFile( fileUrl )
+function OpenFile( fileUrl, type )
 {
+	if(type=="audio")
+	{
+		ret = confirm('autostart ?');
+		if(ret==true)
+		{
+			GetE('autostart').checked = 'true';
+		}
+		else
+		{
+			GetE('autostart').checked = 'false';
+		}
+	}
 	SetUrl( fileUrl ) ;
 	window.close() ;
 }

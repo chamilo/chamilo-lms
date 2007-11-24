@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 13650 2007-11-08 20:12:47Z yannoo $
+* 	@version $Id: index.php 13757 2007-11-24 01:01:22Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -44,8 +44,8 @@ $cidReset = true;
 	Included libraries
 -----------------------------------------------------------
 */
-/** @todo make all the library files consistent use filename.lib.php and not filename.lib.inc.php */
-require_once ('./main/inc/global.inc.php');
+/** @todo make all the library files consistent, use filename.lib.php and not filename.lib.inc.php */
+require_once ('main/inc/global.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
@@ -247,14 +247,6 @@ echo '</div>';
 */
 Display :: display_footer();
 
-
-
-
-
-
-
-
-
 /**
  * This function handles the logout and is called whenever there is a $_GET['logout']
  *
@@ -325,12 +317,15 @@ function logout()
  */
 function category_has_open_courses($category)
 {
+	$user_identified = (api_get_user_id()>0 && !api_is_anonymous());
 	$main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql_query = "SELECT * FROM $main_course_table WHERE category_code='$category'";
 	$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 	while ($course = mysql_fetch_array($sql_result))
 	{
-		if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)
+		if((api_get_user_id()>0 
+			and $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
+			or ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD))
 		{
 			return true; //at least one open course
 		}
@@ -536,6 +531,7 @@ function display_lost_password_info()
 function display_anonymous_course_list()
 {
 	//init
+	$user_identified = (api_get_user_id()>0 && !api_is_anonymous());
 	$web_course_path = api_get_path(WEB_COURSE_PATH);
 	$category = $_GET["category"];
 
@@ -557,11 +553,16 @@ function display_anonymous_course_list()
 		$course_list[] = $course_result;
 	}
 
+	$platform_visible_courses = '';
+	if($user_identified)
+	{
+		$platform_visible_courses = " OR t3.visibility='".COURSE_VISIBILITY_OPEN_PLATFORM."' ";
+	}
 	$sqlGetSubCatList = "
 				SELECT t1.name,t1.code,t1.parent_id,t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
 				FROM $main_category_table t1
 				LEFT JOIN $main_category_table t2 ON t1.code=t2.parent_id
-				LEFT JOIN $main_course_table t3 ON (t3.category_code=t1.code AND t3.visibility='".COURSE_VISIBILITY_OPEN_WORLD."')
+				LEFT JOIN $main_course_table t3 ON (t3.category_code=t1.code AND (t3.visibility='".COURSE_VISIBILITY_OPEN_WORLD."' $platform_visible_courses))
 				WHERE t1.parent_id ". (empty ($category) ? "IS NULL" : "='$category'")."
 				GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos";
 	$resCats = api_sql_query($sqlGetSubCatList, __FILE__, __LINE__);
@@ -651,7 +652,9 @@ function display_anonymous_course_list()
 		$courses_list_string .= "<h4 style=\"margin-top: 0px;\">".get_lang("CourseList")."</h4>\n"."<ul>\n";
 		foreach ($course_list AS $course)
 		{
-			if($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD){
+			if( ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
+				or ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD))
+			{
 				$courses_shown++;
 				$courses_list_string .= "<li>\n";
 				$courses_list_string .= "<a href=\"".$web_course_path.$course['directory']."/\">".$course['title']."</a>";

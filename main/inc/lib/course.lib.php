@@ -204,7 +204,6 @@ class CourseManager
 	*/
 	function get_access_settings($course_code)
 	{
-		$system_code = $course_info["sysCode"];
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT `visibility`, `subscribe`, `unsubscribe` from ".$course_table." where `code` = '".$course_code."'";
 		$sql_result = api_sql_query($sql, __FILE__, __LINE__);
@@ -924,8 +923,12 @@ class CourseManager
 		$tbl_course_user	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 		$sql_query='SELECT status FROM '.$tbl_course_user.' WHERE course_code="'.$course_code.'" and user_id="'.$user_id.'"';
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
-		$status=mysql_result($sql_result,0,'status');
-		if($status==1) return true; else return false;
+		if(Database::num_rows($sql_result)>0)
+		{
+			$status=mysql_result($sql_result,0,'status');
+			if($status==1) return true; else return false;
+		}
+		return false;
 	}
 
 	/**
@@ -966,7 +969,6 @@ class CourseManager
 			$tbl_sessions			= Database::get_main_table(TABLE_MAIN_SESSION);
 			$tbl_sessions_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 			$tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-			$_cid = $course_info["code"];
 
 
 			//users
@@ -984,7 +986,7 @@ class CourseManager
 					FROM $tbl_sessions_course AS session_course
 					WHERE id_session='".$_SESSION['id_session']."'
 					AND id_coach = '$user_id'
-					AND course_code='$_cid'";
+					AND course_code='$course_code'";
 
 			$result = api_sql_query($sql,__FILE__,__LINE__);
 			if(mysql_num_rows($result))

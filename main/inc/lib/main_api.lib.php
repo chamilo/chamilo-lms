@@ -442,6 +442,7 @@ function api_get_user_info($user_id = '')
 			$user_info['official_code'] = $result_array['official_code'];
 			$user_info['status'] = $result_array['status'];
 			$user_info['auth_source'] = $result_array['auth_source'];
+			$user_info['username'] = $result_array['username'];
 			return $user_info;
 		}
 		return false;

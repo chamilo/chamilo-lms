@@ -94,6 +94,7 @@ function APIobject() {
   this.LMSGetDiagnostic=LMSGetDiagnostic;
   this.GetDiagnostic=LMSGetDiagnostic;
   this.Terminate=Terminate;  //only in Scorm 1.3
+  this.save_asset = dokeos_save_asset;
 }
 
 //it is not sure that the scos use the above declarations
@@ -742,6 +743,7 @@ function addListeners(){
 	}
 	logit_lms('Quitting addListeners()',2);
 }
+
 /**
  * Load an item into the content frame:
  * - making sure the previous item status have been saved
@@ -776,7 +778,7 @@ function load_item(item_id,url){
  * leaving it
  */
 function dokeos_save_asset(){
-	logit_lms('dokeos_save_asset: '+url,0);
+	logit_lms('dokeos_save_asset',2);
     xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
     if(item_objectives.length>0)
 	{

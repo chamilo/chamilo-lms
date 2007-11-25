@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 12905 2007-08-30 12:26:09Z elixir_julian $
+// $Id: settings.php 13767 2007-11-25 05:24:37Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -232,6 +232,7 @@ function get_settings_options($var)
 function handle_plugins()
 {
 	global $SettingsStored;
+	$userplugins = array();
 	$table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
 	if ($_POST['submit_plugins'])
@@ -354,18 +355,19 @@ function display_plugin_cell($location, $plugin_info, $current_plugin, $active_p
 {
 	echo "\t\t<td align=\"center\">\n";
 	if (in_array($location, $plugin_info['location']))
-			{
-		if (in_array($current_plugin, $active_plugins[$location]))
-				{
-					$checked = "checked";
-				}
-				else
-				{
-					$checked = '';
-				}
+	{
+		if (is_array($active_plugins[$location]) 
+			&& in_array($current_plugin, $active_plugins[$location]))
+		{
+			$checked = "checked";
+		}
+		else
+		{
+			$checked = '';
+		}
 		echo '<input type="checkbox" name="'.$current_plugin.'-'.$location.'" value="true" '.$checked.'/>';
-			}
-			echo "\t\t</td>\n";
+	}
+	echo "\t\t</td>\n";
 }
 
 /**

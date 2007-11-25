@@ -172,6 +172,16 @@ echo "<div class=\"clear\">&nbsp;</div>";
 */
 if ($_user['user_id'])
 {
+	$login = '';
+	if(api_is_anonymous())
+	{
+		$login = '('.get_lang('Anonymous').')';
+	}
+	else
+	{
+		$uinfo = api_get_user_info(api_get_user_id());
+		$login = '('.$uinfo['username'].')';	
+	}
 	?>
 	 <!-- start user section line with name, my course, my profile, scorm info, etc -->
 
@@ -180,7 +190,7 @@ if ($_user['user_id'])
 	<input type="hidden" name="uid" value="<?php echo $_user['user_id']; ?>"/>
 	 <ul id="logout">
 	 <li>
-	<input type="submit" name="submit" value="<?php echo get_lang("Logout"); ?>"
+	<input type="submit" name="submit" value="<?php echo get_lang("Logout").' '.$login; ?>"
 	onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"
 	class="logout" style="	height:20px;" />
 	 </li>

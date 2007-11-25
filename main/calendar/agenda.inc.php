@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 13488 2007-10-16 18:41:03Z yannoo $
+<?php //$Id: agenda.inc.php 13766 2007-11-25 05:18:23Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -472,20 +472,21 @@ return $users;
 */
 function get_course_groups()
 {
-global $tbl_group;
-global $tbl_groupUser;
-
-$sql = "SELECT g.id, g.name, COUNT(gu.id) userNb
-		        FROM ".$tbl_group." AS g LEFT JOIN ".$tbl_groupUser." gu
-		        ON g.id = gu.group_id
-		        GROUP BY g.id";
-
-$result = api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
-while ($group_data = mysql_fetch_array($result))
+	global $tbl_group;
+	global $tbl_groupUser;
+	$group_list = array();
+	
+	$sql = "SELECT g.id, g.name, COUNT(gu.id) userNb
+			        FROM ".$tbl_group." AS g LEFT JOIN ".$tbl_groupUser." gu
+			        ON g.id = gu.group_id
+			        GROUP BY g.id";
+	
+	$result = api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
+	while ($group_data = mysql_fetch_array($result))
 	{
-	$group_list [$group_data['id']] = $group_data;
+		$group_list [$group_data['id']] = $group_data;
 	}
-return $group_list;
+	return $group_list;
 }
 
 
@@ -1041,7 +1042,7 @@ function display_courseadmin_links()
 	echo "<li><a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;origin=".$_GET['origin']."'><img src=\"../img/view_more_stats.gif\" alt=\"".get_lang('MoreStats')."\" border=\"0\" /> ".get_lang("AgendaAdd")."</a><br /></li>";
 	if (empty ($_SESSION['toolgroup']))
 	{
-		echo "<li>".get_lang(UserGroupFilter)."<br/>";
+		echo "<li>".get_lang('UserGroupFilter')."<br/>";
 		echo "<form name=\"filter\">";
 		show_user_group_filter_form();
 		echo "</form>";

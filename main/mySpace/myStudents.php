@@ -554,7 +554,11 @@ if(!empty($_GET['student']))
 						$total_score+=$lp_scorm_score;
 					}
 
-					$score = round($total_score / $total_weighting * 100,2);
+					$score = 0;
+					if($total_weighting != 0)
+					{
+						$score = round($total_score / $total_weighting * 100,2);
+					}
 					
 					if($i%2==0){
 						$s_css_class="row_odd";
@@ -681,7 +685,11 @@ if(!empty($_GET['student']))
 							$weighting = $weighting + $a_score['exe_weighting'];
 							$exe_id = $a_score['exe_id'];
 						}
-						$pourcentageScore = round(($score*100)/$weighting);
+						$pourcentageScore = 0;
+						if($weighting!=0)
+						{
+							$pourcentageScore = round(($score*100)/$weighting);
+						}
 		
 						$weighting = 0;
 						
@@ -715,10 +723,13 @@ if(!empty($_GET['student']))
 						
 						$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$a_exercices['id'].'" AND exe_user_id="'.$_GET['student'].'" AND exe_cours_id="'.$a_infosCours['code'].'" ORDER BY exe_date DESC LIMIT 1';
 						$resultLastAttempt = api_sql_query($sql_last_attempt);
-						$id_last_attempt=mysql_result($resultLastAttempt,0,0);
-						
-						if($a_essais['essais']>0)
-							echo		'<a href="../exercice/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$a_infosCours['code'].'&student='.$_GET['student'].'&origin='.(empty($_GET['origin']) ? 'tracking' : $_GET['origin']).'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
+						if(Database::num_rows($resultLastAttempt)>0)
+						{
+							$id_last_attempt=mysql_result($resultLastAttempt,0,0);
+							
+							if($a_essais['essais']>0)
+								echo		'<a href="../exercice/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$a_infosCours['code'].'&student='.$_GET['student'].'&origin='.(empty($_GET['origin']) ? 'tracking' : $_GET['origin']).'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
+						}
 						echo "	</td>
 							  </tr>
 							 ";
@@ -973,29 +984,20 @@ if(!empty($_GET['student']))
 				";
 			}
 		}
-		
 		echo "</table>";
-		
-		
-	
 	}
-	 $a_header = array_merge($a_headerLearnpath,$a_headerExercices,$a_headerProductions);
-
-	
+	//YW - commented out because it doesn't seem to be used
+	//$a_header = array_merge($a_headerLearnpath,$a_headerExercices,$a_headerProductions);
 }
-
 if($export_csv)
 {
 	ob_end_clean();
 	Export :: export_table_csv($csv_content, 'reporting_student');
 }
-	
 /*
 ==============================================================================
 		FOOTER
 ==============================================================================
 */
-
 Display::display_footer();
- 
 ?>

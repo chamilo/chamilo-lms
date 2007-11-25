@@ -736,9 +736,7 @@ function addListeners(){
 		logit_lms('Dokeos LP or asset',2);
 		//if this path is a Dokeos learnpath, then start manual save
 		//when something is loaded in there
-		var myelem = document.getElementById('content_id');
-		if(!myelem){logit_lms("Impossible to find content_id element in document",2);}
-		addEvent(myelem,'unload',dokeos_save_asset,false);
+		addEvent(window,'unload',dokeos_save_asset,false);
 		logit_lms('Added event listener on content_id for unload',2);
 	}
 	logit_lms('Quitting addListeners()',2);
@@ -1001,7 +999,7 @@ function switch_item(current_item, next_item){
 	
 	return true;
 }
-//addEvent(window,'load',addListeners,false);
+addEvent(window,'load',addListeners,false);
 if(lms_lp_type==1 || lms_item_type=='asset'){
 	xajax_start_timer();
 }

@@ -4066,7 +4066,7 @@ class learnpath {
 											
 				if($document_id)
 				{
-					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id(), $to_group_id);
+					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id());
 									
 					//update parent folders
 					//item_property_update_on_folder($_course, $_GET['dir'], $_user['user_id']);
@@ -4975,7 +4975,7 @@ class learnpath {
 		{
 			$sql_forum = "
 				SELECT
-					forum_title as title
+					forum_title as title, forum_comment as comment 
 				FROM " . $tbl_forum . "
 				WHERE forum_id = " . $extra_info;
 			
@@ -4983,10 +4983,12 @@ class learnpath {
 			$row = Database::fetch_array($result);
 			
 			$item_title = $row['title'];
+			$item_description = $row['comment'];
 		}
 		else
 		{
 			$item_title			= '';
+			$item_description 	= '';
 		}
 				
 		$return = '<div style="margin:3px 10px;">';
@@ -5223,10 +5225,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$row = Database::fetch_array($result);
 			
 			$item_title = $row['title'];
+			$item_description = '';
 		}
 		else
 		{
 			$item_title			= '';
+			$item_description	= '';
 		}
 				
 		$return = '<div style="margin:3px 10px;">';

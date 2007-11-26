@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 13766 2007-11-25 05:18:23Z yannoo $
+<?php //$Id$
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -184,7 +184,7 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 			{
 				$bgcolor = $ii < 5 ? $class="class=\"days_week\"" : $class="class=\"days_weekend\"";
 				$dayheader = "$curday";
-				if (($curday == $today[mday]) && ($year == $today[year]) && ($month == $today[mon]))
+				if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon']))
 				{
 					$dayheader = "$curday";
 					$class = "class=\"days_today\"";
@@ -278,7 +278,7 @@ function display_monthcalendar($month, $year)
 				if (in_array($curday,$data))
 					{ $dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>"; }
 
-				if (($curday==$today['mday'])&&($year ==$today['year'])&&($month == $today[mon]))
+				if (($curday==$today['mday'])&&($year ==$today['year'])&&($month == $today['mon']))
 				{
 			echo "<td id=\"today\" ",$bgcolor,"\">".$dayheader." \n";
       }
@@ -568,7 +568,7 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 
 
 /**
-* this function shows the form with the user that were selected
+* This function shows the form with the user that were selected
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return html code
 */
@@ -576,7 +576,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 {
 	// we separate the $to_already_selected array (containing groups AND users into
 	// two separate arrays
-	if (is_array($groupuser))
+	if (is_array($to_already_selected))
 	{
 		 $groupuser=separate_users_groups($to_already_selected);
 	}
@@ -613,58 +613,54 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 */
 function store_new_agenda_item()
 {
-global $TABLEAGENDA;
-global $_user;
-
-// some filtering of the input data
-$title=strip_tags(trim($_POST['title'])); // no html allowed in the title
-$content=trim($_POST['content']);
-$start_date=(int)$_POST['fyear']."-".(int)$_POST['fmonth']."-".(int)$_POST['fday']." ".(int)$_POST['fhour'].":".(int)$_POST['fminute'].":00";
-$end_date=(int)$_POST['end_fyear']."-".(int)$_POST['end_fmonth']."-".(int)$_POST['end_fday']." ".(int)$_POST['end_fhour'].":".(int)$_POST['end_fminute'].":00";
-
-
-// store in the table calendar_event
-$sql = "INSERT INTO ".$TABLEAGENDA."
-				        (title,content, start_date, end_date)
-				        VALUES
-				        ('".$title."','".$content."', '".$start_date."','".$end_date."')";
-
-$result = api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
-$last_id=mysql_insert_id();
-
-
-// store in last_tooledit (first the groups, then the users
-$to=$_POST['selectedform'];
-
-if ((!is_null($to))or (!empty($_SESSION['toolgroup']))) // !is_null($to): when no user is selected we send it to everyone
+	global $_user, $_course;
+	$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
+	
+	// some filtering of the input data
+	$title=strip_tags(trim($_POST['title'])); // no html allowed in the title
+	$content=trim($_POST['content']);
+	$start_date=(int)$_POST['fyear']."-".(int)$_POST['fmonth']."-".(int)$_POST['fday']." ".(int)$_POST['fhour'].":".(int)$_POST['fminute'].":00";
+	$end_date=(int)$_POST['end_fyear']."-".(int)$_POST['end_fmonth']."-".(int)$_POST['end_fday']." ".(int)$_POST['end_fhour'].":".(int)$_POST['end_fminute'].":00";
+	
+	// store in the table calendar_event
+	$sql = "INSERT INTO ".$TABLEAGENDA."
+					        (title,content, start_date, end_date)
+					        VALUES
+					        ('".$title."','".$content."', '".$start_date."','".$end_date."')";
+	
+	$result = api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
+	$last_id=mysql_insert_id();
+	
+	// store in last_tooledit (first the groups, then the users
+	$to=$_POST['selectedform'];
+	
+	if ((!is_null($to))or (!empty($_SESSION['toolgroup']))) // !is_null($to): when no user is selected we send it to everyone
 	{
-	$send_to=separate_users_groups($to);
-	// storing the selected groups
-	if (is_array($send_to['groups']))
+		$send_to=separate_users_groups($to);
+		// storing the selected groups
+		if (is_array($send_to['groups']))
 		{
-		foreach ($send_to['groups'] as $group)
+			foreach ($send_to['groups'] as $group)
 			{
-				api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_user['user_id'], $group,'',$start_visible, $end_visible);
+				api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_user['user_id'], $group,'',$start_date, $end_date);
 			}
 		}
-	// storing the selected users
-	if (is_array($send_to['users']))
+		// storing the selected users
+		if (is_array($send_to['users']))
 		{
-		foreach ($send_to['users'] as $user)
+			foreach ($send_to['users'] as $user)
 			{
-				api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_user['user_id'],'',$user, $start_visible,$end_visible);
+				api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_user['user_id'],'',$user, $start_date,$end_date);
 			}
 		}
 	}
-else // the message is sent to everyone, so we set the group to 0
+	else // the message is sent to everyone, so we set the group to 0
 	{
-	api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_user['user_id'], '','',$start_visible,$end_visible);
+		api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_user['user_id'], '','',$start_date,$end_date);
 	}
-
-// storing the resources
-store_resources($_SESSION['source_type'],$last_id);
-
-return $last_id;
+	// storing the resources
+	store_resources($_SESSION['source_type'],$last_id);
+	return $last_id;
 }
 
 /**
@@ -1120,7 +1116,7 @@ function get_agenda_item($id)
 */
 function store_edited_agenda_item()
 {
-	global $_user;
+	global $_user, $_course;
 
 	// database definitions
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -1152,7 +1148,7 @@ function store_edited_agenda_item()
 			{
 				foreach ($send_to['groups'] as $group)
 				{
-					api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_user['user_id'], $group,'',$start_visible, $end_visible);
+					api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_user['user_id'], $group,'',$start_date, $end_date);
 				}
 			}
 			// storing the selected users
@@ -1160,13 +1156,13 @@ function store_edited_agenda_item()
 			{
 				foreach ($send_to['users'] as $user)
 				{
-					api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_user['user_id'],'',$user, $start_visible,$end_visible);
+					api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_user['user_id'],'',$user, $start_date,$end_date);
 				}
 			}
 		}
 		else // the message is sent to everyone, so we set the group to 0
 		{
-			api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_user['user_id'], '','',$start_visible,$end_visible);
+			api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_user['user_id'], '','',$start_date,$end_date);
 		}
 
 	} //if ($edit_result=true)
@@ -1209,6 +1205,7 @@ function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 */
 function delete_agenda_item($id)
 {
+	global $_course;
 	if (is_allowed_to_edit()  OR api_get_course_setting('allow_user_edit_agenda'))
 		{
 		if (isset($_GET['id'])&&$_GET['id']&&isset($_GET['action'])&&$_GET['action']=="delete")
@@ -1240,6 +1237,7 @@ function delete_agenda_item($id)
 */
 function showhide_agenda_item($id)
 {
+	global $nameTools;
 	/*==================================================
 				SHOW / HIDE A CALENDAR ITEM
 	  ==================================================*/
@@ -1250,7 +1248,7 @@ function showhide_agenda_item($id)
 		if (isset($_GET['id'])&&$_GET['id']&&isset($_GET['action'])&&$_GET['action']=="showhide")
 		{
 			$id=(int)addslashes($_GET['id']);
-			change_visibility($_GLOBAL['nameTools'],$id);
+			change_visibility($nameTools,$id);
 			Display::display_normal_message(get_lang("VisibilityChanged"));
 		}
 	}
@@ -1356,7 +1354,7 @@ function display_agenda_items()
 		{
 			// A.3.a you are a course admin without user or group filter but WITH studentview
 			// => see all the messages of all the users and groups without editing possibilities
-			if ($isStudentView=="true")
+			if ($_GET['isStudentView']=='true')
 			{
 				$sql="SELECT
 					agenda.*, toolitemproperties.*

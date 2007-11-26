@@ -1,4 +1,4 @@
-<?php // $Id: document.php 13702 2007-11-19 10:12:38Z elixir_julian $
+<?php // $Id: document.php 13779 2007-11-26 23:55:03Z yannoo $
 
 /*
 ==============================================================================
@@ -578,7 +578,7 @@ if($docs_and_folders)
 		$invisibility_span_open = ($id['visibility']==0)?'<span class="invisible">':'';
 		$invisibility_span_close = ($id['visibility']==0)?'</span>':'';
 		//size (or total size of a directory)
-		$size = $id['filetype']=='folder' ? get_total_folder_size($id['path'],$is_allowed_to_edit) : $id[size];
+		$size = $id['filetype']=='folder' ? get_total_folder_size($id['path'],$is_allowed_to_edit) : $id['size'];
 		//get the title or the basename depending on what we're using
 		if ($use_document_title=='true' AND $id['title']<>'')
 		{

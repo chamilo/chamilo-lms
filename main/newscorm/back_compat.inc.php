@@ -5,7 +5,7 @@
  * The switch is now deprecated and this file will be renamed later on to
  * something like lp_includes.inc.php
  */
-require('../inc/global.inc.php');
+require_once('../inc/global.inc.php');
 require_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH) . 'database.lib.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');

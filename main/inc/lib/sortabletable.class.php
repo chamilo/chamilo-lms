@@ -423,6 +423,7 @@ class SortableTable extends HTML_Table
 		$result = implode('&amp;', $param_string_parts);
 		foreach($this->other_tables as $index => $tablename)
 		{
+			$param = array();
 			if( isset($_GET[$tablename.'_direction']))
 				$param[$tablename.'_direction'] = $_GET[$tablename.'_direction'];
 			if( isset($_GET[$tablename.'_page_nr']))

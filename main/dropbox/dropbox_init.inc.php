@@ -318,5 +318,5 @@ else // if we come from the learning path we have to include the stylesheet and 
 	echo $javascript;
 }
 
-api_display_tool_title();
+api_display_tool_title($nameTools);
 ?>

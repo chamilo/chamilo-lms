@@ -537,12 +537,10 @@ class DocumentManager
 					
 					//Templates management
 					$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
-					$sql_is_template = 'SELECT id FROM '.$table_template.' 
-										WHERE course_code="'.$_course['id'].'" 
-										AND user_id="'.api_get_user_id().'"
-										AND ref_doc="'.$row['id'].'"
-										';
-					
+					$sql_is_template = "SELECT id FROM $table_template 
+										WHERE course_code='".$_course['id']."' 
+										AND user_id='".api_get_user_id()."'
+										AND ref_doc='".$row['id']."'";
 					$template_result = api_sql_query($sql_is_template);
 					if(mysql_numrows($template_result)>0){
 						$row['is_template'] = 1;

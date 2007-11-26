@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_import.php 13746 2007-11-22 12:57:25Z elixir_julian $
+// $Id: user_import.php 13774 2007-11-26 08:23:42Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -79,7 +79,7 @@ function validate_data($users)
 			}
 		}
 		//3. check status
-		if (isset ($user['Status']) && ($user['Status'] != 'user' && $user['Status'] != 'teacher' && $user['Status'] != '1' && $user['Status'] != '5'))
+		if (isset ($user['Status']) && ($user['Status'] != 'user' && $user['Status'] != 'teacher' && $user['Status'] != COURSEMANAGER && $user['Status'] != STUDENT))
 		{
 			$user['error'] = get_lang('WrongStatus');
 			$errors[] = $user;
@@ -156,10 +156,10 @@ function save_data($users)
 		$user = complete_missing_data($user);
 		
 		if($user['Status'] == 'user'){
-			$user['Status'] = 5;
+			$user['Status'] = STUDENT;
 		}
 		elseif($user['Status'] == 'teacher'){
-			$user['Status'] = 1;
+			$user['Status'] = COURSEMANAGER;
 		}
 		
 		$user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], '', $user['PhoneNumber'], '', $user['AuthSource']);

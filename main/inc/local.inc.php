@@ -830,6 +830,29 @@ else
 { //if no previous value, assign caracteristic undefined value
 	$_gid = -1;
 }
+//set variable according to student_view_enabled choices
+if (api_get_setting('student_view_enabled') == "true")
+{
+	if ($_GET['isStudentView'] == 'true' and !empty($_SESSION['studentview']))
+	{
+		// switching to studentview
+		$_SESSION['studentview'] = 'studentview';
+	}
+	elseif ($_GET['isStudentView'] == 'false' and !empty($_SESSION['studentview']))
+	{
+		//switching to teacherview
+		$_SESSION['studentview'] = 'teacherview';
+	}
+	elseif (!empty($_SESSION['studentview']))
+	{
+		//all is fine, no change to that, obviously
+	}
+	elseif (empty($_SESSION['studentview']))
+	{
+		// We are in teacherview here
+		$_SESSION['studentview'] = 'teacherview';
+	}
+}
 
 if(isset($_cid))
 {

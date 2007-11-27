@@ -1,4 +1,4 @@
-<?php // $Id: chat.php 13111 2007-09-20 01:10:41Z yannoo $
+<?php // $Id: chat.php 13783 2007-11-27 04:01:59Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -34,7 +34,7 @@ $language_file = array ('chat');
 include('../inc/global.inc.php');
 $nameTools=get_lang('Chat');
 if ($_GET["origin"] != 'whoisonline') {
-	api_protect_course_script();
+	api_protect_course_script(true);
 }
 else
 {

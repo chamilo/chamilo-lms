@@ -57,6 +57,7 @@ include(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 -----------------------------------------------------------
 */
 $is_allowedToEdit = api_is_allowed_to_edit();
+$is_tutor = api_is_allowed_to_edit(true);
 
 $TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_DOCUMENT          	= Database::get_course_table(TABLE_DOCUMENT);
@@ -141,7 +142,7 @@ a.invisible:hover
 -->
 </style>';
 
-if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || $is_courseTutor))
+if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || $is_tutor))
 {
 	$id  = $_GET['exeid'];
 	$emailid = $_GET['emailid'];
@@ -262,7 +263,7 @@ if($show!='result')
 }
 else
 {
-	if($is_allowedToEdit)
+	if($is_allowedToEdit || $is_tutor)
 	{
 		$nameTools=get_lang('StudentScore');
 		$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
@@ -453,8 +454,6 @@ if($show == 'test'){
 	{
 		echo "<td width=\"50%\" nowrap=\"nowrap\">",
 			"<img src=\"../img/new_test.gif\" alt=\"new test\" align=\"absbottom\">&nbsp;<a href=\"exercise_admin.php?".api_get_cidreq()."\">".get_lang("NewEx")."</a>",
-
-			//"<img src=\"../img/quiz_na.gif\" alt=\"new test\" valign=\"ABSMIDDLE\"><a href=\"question_pool.php\">".get_lang("QuestionPool")."</a> | ",
 			" | <img src=\"../img/jqz.jpg\" alt=\"HotPotatoes\" valign=\"ABSMIDDLE\">&nbsp;<a href=\"hotpotatoes.php\">".get_lang("ImportHotPotatoesQuiz")."</a>",
 			"</td>",
 			"<td width=\"50%\" align=\"right\">";
@@ -830,18 +829,18 @@ if($_configuration['tracking_enabled'])
 
 		<table class="data_table">
 		 <tr class="row_odd">
-		  <?php if($is_allowedToEdit): ?>
-			<th><?php echo get_lang("User"); ?></th><?php endif; ?>
+		  <?php if($is_allowedToEdit || $is_tutor): ?>
+		  <th><?php echo get_lang("User"); ?></th><?php endif; ?>
 		  <th><?php echo get_lang("Exercice"); ?></th>
 		  <th><?php echo get_lang("Date"); ?></th>
 		  <th><?php echo get_lang("Result"); ?></th>
-		  <th><?php echo $is_allowedToEdit?get_lang("CorrectTest"):get_lang("ViewTest"); ?></th>
+		  <th><?php echo (($is_allowedToEdit||$is_tutor)?get_lang("CorrectTest"):get_lang("ViewTest")); ?></th>
 
 
 		 </tr>
 
 		<?php
-		if($is_allowedToEdit)
+		if($is_allowedToEdit || $is_tutor)
 		{
 			//get all results (ourself and the others) as an admin should see them
 			//AND exe_user_id <> $_user['user_id']  clause has been removed
@@ -891,7 +890,7 @@ if($_configuration['tracking_enabled'])
 				echo '<tr';
 				if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"';
 				echo '>';
-				if($is_allowedToEdit)
+				if($is_allowedToEdit || $is_tutor)
 				{
 					$user = $results[$i][0];
 					echo '<td>'.$user.'</td>';
@@ -899,7 +898,7 @@ if($_configuration['tracking_enabled'])
 				echo '<td>'.$test.'</td>';
 				echo '<td>'.format_locale_date(get_lang('dateTimeFormatLong'),$results[$i][4]).'</td>';
 		  		echo '<td>'.round(($res/($results[$i][3]!=0?$results[$i][3]:1))*100).'% ('.$res.' / '.$results[$i][3].')</td>';
-				echo '<td>'.($is_allowedToEdit?"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang("Edit")."</a>":"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>").'</td>';
+				echo '<td>'.(($is_allowedToEdit||$is_tutor)?"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang("Edit")."</a>":"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>").'</td>';
 				echo '</tr>';
 			}
 		}

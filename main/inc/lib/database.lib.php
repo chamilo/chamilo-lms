@@ -664,8 +664,25 @@ class Database
 		$database_name_with_glue = Database::fix_database_parameter($database_name);
 		return Database::format_glued_course_table_name($database_name_with_glue, CHAT_CONNECTED_TABLE);
 	}
-
-
+	/**
+	 * Acts as the relative *_result() function of most DB drivers and fetches a
+	 * specific line and a field
+	 * @param	resource	The database resource to get data from
+	 * @param	integer		The row number
+	 * @param	string		Optional field name or number
+	 * @result	mixed		One cell of the result, or FALSE on error
+	 */
+	function result($resource,$row,$field='')
+	{
+		if(!empty($field))
+		{
+			return mysql_result($resource,$row,$field);
+		}
+		else
+		{
+			return mysql_result($resource,$row);
+		}
+	}
 }
 //end class Database
 ?>

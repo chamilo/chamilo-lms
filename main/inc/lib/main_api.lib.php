@@ -1217,6 +1217,22 @@ function api_is_course_admin()
 	return $_SESSION["is_courseAdmin"];
 }
 /**
+ * Check if the current user is a course coach
+ * @return	bool	True if current user is a course coach
+ */
+function api_is_course_coach()
+{
+	return $_SESSION['is_courseCoach'];
+}
+/**
+ * Check if the current user is a course tutor
+ * @return 	bool	True if current user is a course tutor
+ */
+function api_is_course_tutor()
+{
+	return $_SESSION['is_courseTutor'];
+}
+/**
  * Check if the current user is a course or session coach
  * @return boolean True if current user is a course or session coach
  */
@@ -1312,7 +1328,7 @@ function api_display_tool_title($titleElement)
 *	student view works correctly in the new links tool
 *
 *	Example code for using this in your tools:
-*	//if ( $is_courseAdmin && api_get_setting('show_student_view') == 'true' )
+*	//if ( $is_courseAdmin && api_get_setting('student_view_enabled') == 'true' )
 *	//{
 *	//	display_tool_view_option($isStudentView);
 *	//}
@@ -1325,61 +1341,47 @@ function api_display_tool_title($titleElement)
 */
 function api_display_tool_view_option()
 {
-	$isStudentView = $_GET["isStudentView"];
+	if (api_get_setting('student_view_enabled') != "true")
+	{
+		return '';
+	}
+	if (strpos($_SERVER['REQUEST_URI'],'chat/chat_banner.php')!==false)
+	{	//the chat is a multiframe bit that doesn't work too well with the student_view, so do not show the link
+		return '';
+	}
+	$output_string='';
 	// check if the $_SERVER['REQUEST_URI'] contains already url parameters (thus a questionmark)
 	if (!strstr($_SERVER['REQUEST_URI'], "?"))
 	{
-		$sourceurl = api_get_self()."?";
+		$sourceurl = api_get_self()."?".api_get_cidreq();
 	}
 	else
 	{
 		$sourceurl = $_SERVER['REQUEST_URI'];
 		//$sourceurl = str_replace('&', '&amp;', $sourceurl);
 	}
-	if ($isStudentView == "true" and $_SESSION["studentview"])
+	if(!empty($_SESSION['studentview']))
 	{
-		// switching to studentview
-		// We are in studentview here
-		$_SESSION["studentview"] = "studentenview";
-		// we have to remove the isStudentView=true from the $sourceurl
-		$sourceurl = str_replace("&isStudentView=true", "", $sourceurl);
-		$sourceurl = str_replace("&isStudentView=false", "", $sourceurl);
-		$output_string .= '<a href="'.$sourceurl.'&isStudentView=false" target="_top">'.get_lang("CourseManagerview").'</a>';
-	}
-	elseif ($isStudentView == "false" and $_SESSION["studentview"])
-	{
-		//switching to teacherview
-		$sourceurl = str_replace("&isStudentView=true", "", $sourceurl);
-		$sourceurl = str_replace("&isStudentView=false", "", $sourceurl);
-		// We are in teacherview here
-		$_SESSION["studentview"] = "teacherview";
-		$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_top">'.get_lang("StudentView").'</a>';
-	}
-	elseif ($_SESSION["studentview"])
-	{
-		// no switching
-		if ($_SESSION["studentview"] == "teacherview")
+		if ($_SESSION['studentview']=='studentview')
 		{
-			$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_top">'.get_lang("StudentView").'</a>';
-		}
-		if ($_SESSION["studentview"] == "studentenview")
-		{
-			$sourceurl = str_replace("&isStudentView=true", "", $sourceurl);
+			// we have to remove the isStudentView=true from the $sourceurl
+			$sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
+			$sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
 			$output_string .= '<a href="'.$sourceurl.'&isStudentView=false" target="_top">'.get_lang("CourseManagerview").'</a>';
 		}
+		elseif ($_SESSION['studentview']=='teacherview')
+		{
+			//switching to teacherview
+			$sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
+			$sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
+			$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_top">'.get_lang("StudentView").'</a>';
+		}
 	}
-	elseif (!$_SESSION["studentview"])
+	else
 	{
-		// initialisation
-		// We are in teacherview here
-		$_SESSION["studentview"] = "teacherview";
 		$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_top">'.get_lang("StudentView").'</a>';
-
 	}
-	if (api_get_setting('show_student_view') == "true")
-	{
-		echo $output_string;
-	}
+	echo $output_string;
 }
 /**
  * Displays the contents of an array in a messagebox.
@@ -1417,20 +1419,30 @@ function is_allowed_to_edit()
 *	Function that removes the need to directly use is_courseAdmin global in
 *	tool scripts. It returns true or false depending on the user's rights in
 *	this particular course.
+*	Optionally checking for tutor and coach roles here allows us to use the
+*	student_view feature altogether with these roles as well.
+*	@param	bool	Whether to check if the user has the tutor role
+*	@param	bool	Whether to check if the user has the coach role
 *
 *	@author Roan Embrechts
 *	@author Patrick Cool
 *	@version 1.1, February 2004
 *	@return boolean, true: the user has the rights to edit, false: he does not
 */
-function api_is_allowed_to_edit()
+function api_is_allowed_to_edit($tutor=false,$coach=false)
 {
 	$is_courseAdmin = api_is_course_admin() || api_is_platform_admin();
-
-	if(api_get_setting('show_student_view') == 'true')
-	{
-		$is_allowed = $is_courseAdmin && $_SESSION['studentview'] != "studentenview";
-
+	if(!$is_courseAdmin && $tutor == true)
+	{	//if we also want to check if the user is a tutor...
+		$is_courseAdmin = $is_courseAdmin || api_is_course_tutor();
+	}
+	if(!$is_courseAdmin && $coach == true)
+	{	//if we also want to check if the user is a coach...
+		$is_courseAdmin = $is_courseAdmin || api_is_course_coach();
+	}	
+	if(api_get_setting('student_view_enabled') == 'true')
+	{	//check if the student_view is enabled, and if so, if it is activated
+		$is_allowed = $is_courseAdmin && $_SESSION['studentview'] != "studentview";
 		return $is_allowed;
 	}
 	else

@@ -130,12 +130,13 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
 
 	echo '</li>';
 }
-if ($_user['user_id'])
+
+if ($_user['user_id'] && isset($_cid))
 {
-	if (api_is_course_admin() && api_get_setting('show_student_view') == 'true')
+	if (api_is_course_admin() && api_get_setting('student_view_enabled') == 'true')
 	{
-		echo '<li>|';
-		api_display_tool_view_option($_GET['isStudentView']);
+		echo '<li>| ';
+		api_display_tool_view_option();
 		echo '</li>';
 	}
 }

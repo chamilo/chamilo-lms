@@ -56,7 +56,7 @@ include(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 	Constants and variables
 -----------------------------------------------------------
 */
-$is_allowedToEdit = is_allowed_to_edit();
+$is_allowedToEdit = api_is_allowed_to_edit();
 
 $TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_DOCUMENT          	= Database::get_course_table(TABLE_DOCUMENT);
@@ -187,7 +187,7 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 
 	$res = api_sql_query($qry,__FILE__,__LINE__);
 	$tot = 0;
-	while($row = mysql_fetch_assoc($res))
+	while($row = Database::fetch_array($res,'ASSOC'))
 	{
 		$tot += $row ['marks'];
 	}
@@ -335,7 +335,7 @@ $from=$page*$limitExPage;
 //	$result=api_sql_query($sql,__FILE__,__LINE__);
 $sql="SELECT count(id) FROM $TBL_EXERCICES";
 $res = api_sql_query($sql,__FILE__,__LINE__);
-list($nbrexerc) = mysql_fetch_row($res);
+list($nbrexerc) = Database::fetch_array($res);
 
 HotPotGCt($documentPath,1,$_user['user_id']);
 
@@ -444,7 +444,6 @@ elseif($show == 'test')
 
 if($show == 'test'){
 
-	//error_log('Show == test',0);
 	$nbrExercises=Database::num_rows($result);
 
 	echo "<table border=\"0\" align=\"center\" cellpadding=\"2\" cellspacing=\"2\" width=\"100%\">",
@@ -452,7 +451,6 @@ if($show == 'test'){
 
 	if (($is_allowedToEdit) and ($origin != 'learnpath'))
 	{
-		//error_log('is_allowedToEdit and origin<> learnpath',0);
 		echo "<td width=\"50%\" nowrap=\"nowrap\">",
 			"<img src=\"../img/new_test.gif\" alt=\"new test\" align=\"absbottom\">&nbsp;<a href=\"exercise_admin.php?".api_get_cidreq()."\">".get_lang("NewEx")."</a>",
 
@@ -463,7 +461,6 @@ if($show == 'test'){
 	}
 	else
 	{
-		//error_log('!is_allowedToEdit or origin == learnpath ('.$origin.')',0);
 		echo "<td align=\"right\">";
 	}
 
@@ -480,8 +477,6 @@ if($show == 'test'){
 					AND d.path LIKE '".$uploadPath."/%/%'
 					AND ip.visibility='1'", __FILE__,__LINE__);
 	$nbrActiveTests = Database::num_rows($res);
-	//error_log('nbrActiveTests = '.$nbrActiveTests,0);
-
 
 	if($is_allowedToEdit)
 	{//if user is allowed to edit, also show hidden HP tests
@@ -566,7 +561,6 @@ if($show == 'test'){
 		while($row=Database::fetch_array($result))
 		{
 
-			//error_log($row[0],0);
 			if($i%2==0) $s_class="row_odd"; else $s_class="row_even";
 			echo "<tr class='$s_class'>\n";
 
@@ -592,7 +586,7 @@ if($show == 'test'){
 		  $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE `exercice_id` = '$exid'";
 		  $sqlresult =api_sql_query($sqlquery);
 		  $rowi = mysql_result($sqlresult,0);
-		  echo $rowi.' '.strtolower(get_lang('Questions')).'</td>';
+		  echo $rowi.' '.strtolower(get_lang(($rowi>1?'Questions':'Question'))).'</td>';
   		  echo '<td width="5%" align="center"><a href="exercice.php?choice=exportqti2&exerciseId='.$row['id'].'"><img src="../img/export.png" border="0" title="IMS/QTI" /></a></td>';
   		  ?>
 	       <td width="12%" align="center"><a href="admin.php?exerciseId=<?php echo $row['id']; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build'),ENT_QUOTES,$charset); ?>" alt="<?php echo htmlentities(get_lang('Build'),ENT_QUOTES,$charset); ?>" /></a>
@@ -712,11 +706,9 @@ if($show == 'test'){
 		}
 
 		$result = api_sql_query ($sql,__FILE__,__LINE__);
-		//error_log($sql,0);
 		
 		while($row = Database::fetch_array($result, 'ASSOC'))
 		{
-			//error_log('hop',0);
 			$attribute['path'      ][] = $row['path'      ];
 			$attribute['visibility'][] = $row['visibility'];
 			$attribute['comment'   ][] = $row['comment'   ];
@@ -838,18 +830,18 @@ if($_configuration['tracking_enabled'])
 
 		<table class="data_table">
 		 <tr class="row_odd">
-		  <?php if($is_allowedToEdit || $is_courseTutor): ?>
+		  <?php if($is_allowedToEdit): ?>
 			<th><?php echo get_lang("User"); ?></th><?php endif; ?>
 		  <th><?php echo get_lang("Exercice"); ?></th>
 		  <th><?php echo get_lang("Date"); ?></th>
 		  <th><?php echo get_lang("Result"); ?></th>
-		  <th><?php echo $is_allowedToEdit || $is_courseTutor?get_lang("CorrectTest"):get_lang("ViewTest"); ?></th>
+		  <th><?php echo $is_allowedToEdit?get_lang("CorrectTest"):get_lang("ViewTest"); ?></th>
 
 
 		 </tr>
 
 		<?php
-		if($is_allowedToEdit || $is_courseTutor)
+		if($is_allowedToEdit)
 		{
 			//get all results (ourself and the others) as an admin should see them
 			//AND exe_user_id <> $_user['user_id']  clause has been removed
@@ -899,7 +891,7 @@ if($_configuration['tracking_enabled'])
 				echo '<tr';
 				if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"';
 				echo '>';
-				if($is_allowedToEdit || $is_courseTutor)
+				if($is_allowedToEdit)
 				{
 					$user = $results[$i][0];
 					echo '<td>'.$user.'</td>';
@@ -907,7 +899,7 @@ if($_configuration['tracking_enabled'])
 				echo '<td>'.$test.'</td>';
 				echo '<td>'.format_locale_date(get_lang('dateTimeFormatLong'),$results[$i][4]).'</td>';
 		  		echo '<td>'.round(($res/($results[$i][3]!=0?$results[$i][3]:1))*100).'% ('.$res.' / '.$results[$i][3].')</td>';
-				echo '<td>'.($is_allowedToEdit || $is_courseTutor?"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang("Edit")."</a>":"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>").'</td>';
+				echo '<td>'.($is_allowedToEdit?"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang("Edit")."</a>":"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>").'</td>';
 				echo '</tr>';
 			}
 		}

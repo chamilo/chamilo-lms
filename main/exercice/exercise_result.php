@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 13738 2007-11-21 22:03:02Z yannoo $
+* 	@version $Id: exercise_result.php 13790 2007-11-27 04:59:47Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -648,14 +648,16 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 					$lastName =   $_SESSION['_user']['lastName'];
 					$mail =  $_SESSION['_user']['mail'];
 					$coursecode =  $_SESSION['_course']['id'];
-					$query1 = "SELECT user_id from $main_course_user_table where course_code= '$coursecode' and status = '1' LIMIT 0,1";
+					$query1 = "SELECT u.email, cu.user_id from $main_course_user_table cu, $main_user_table u where cu.course_code= '$coursecode' and cu.status = '1' and c.user_id=cu.user_id";
 					$result1 = api_sql_query($query1, __FILE__, __LINE__);
+					$to = '';
 					if(Database::num_rows($result1)>0)
 					{
-						$temp = mysql_result($result1,0,"user_id");
-						$query = "select email from $main_user_table where user_id =".intval($temp) ;
-						$result = api_sql_query($query, __FILE__, __LINE__);
-						$to = mysql_result($result,0,"email");
+						while($temp_row = Database::fetch_array($result1))
+						{
+							$to .= $temp_row['email'].',';
+						}
+						$to = substr($to,0,-1);
 					}else{
 						//this is a problem (it means that there is no admin for this course)
 					}
@@ -838,98 +840,26 @@ if ($origin != 'learnpath')
 	//we are not in learnpath tool
 	Display::display_footer();
 }else{
-				$user_id = (!empty($_SESSION['_user']['id'])?$_SESSION['_user']['id']:0);
-                $lp_item = Database::get_course_table('lp_item');
-                $lp_item_view = Database::get_course_table('lp_item_view');
-                
-                $sql2 = "UPDATE $lp_item_view SET score = '$totalScore'
-                        WHERE lp_item_id = '$learnpath_item_id'
-                        AND lp_view_id = '".$_SESSION['scorm_view_id']."'
-						ORDER BY view_count DESC LIMIT 1";
+	$user_id = (!empty($_SESSION['_user']['id'])?$_SESSION['_user']['id']:0);
+    $lp_item = Database::get_course_table('lp_item');
+    $lp_item_view = Database::get_course_table('lp_item_view');
+    
+    $sql2 = "UPDATE $lp_item_view SET score = '$totalScore'
+            WHERE lp_item_id = '$learnpath_item_id'
+            AND lp_view_id = '".$_SESSION['scorm_view_id']."'
+			ORDER BY view_count DESC LIMIT 1";
 
-                api_sql_query($sql2,__FILE__,__LINE__);
-                $_SESSION['oLP']->save_last();
-
+    api_sql_query($sql2,__FILE__,__LINE__);
+    $_SESSION['oLP']->save_last();
 }
+$send_email = api_get_course_setting('email_alert_manager_on_new_quiz');
 $csspath = "http://portal.dokeos.com/demo/main/css/default.css";
-if (!empty($arrques))
+if ($send_email && count($arrques)>0)
 {
-	$msg = "<html><head>
-	 <link rel='stylesheet' href='http://www.dokeos.com/styles.css' type='text/css'>
-  <meta content='text/html; charset=ISO-8859-1' http-equiv='content-type'>";
-
-
-/*<style type='text/css'>
-
-<!--
-.body{
-font-family: Verdana, Arial, Helvetica, sans-serif;
-font-weight: Normal;
-color: #000000;
-}
-.style8 {font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold; color: #006699; }
-.style10 {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	font-weight: bold;
-}
-.style16 {font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; }
--->
-</style>*/
-
-/*$msg .= "</head>
-<body>
-<br>
-<p><span class='style8'>".get_lang('OpenQuestionsAttempted')."
-</span></p>
-<p><span class='style8'>Attempt Details : </span><br>
-</p>
-<table width='730' height='136' border='0' cellpadding='3' cellspacing='3'>
-					<tr>
-    <td width='229' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Course Name</span></td>
-    <td width='469' valign='top' bgcolor='#F3F3F3'><span class='style16'>#course#</span></td>
-  </tr>
-  <tr>
-    <td width='229' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>".get_lang('TestAttempted')."</span></td>
-    <td width='469' valign='top' bgcolor='#F3F3F3'><span class='style16'> #exercise#</span></td>
-  </tr>
-  <tr>
-    <td valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Student's Name </span></td>
-    <td valign='top' bgcolor='#F3F3F3'><span class='style16'> #firstName# #lastName#</span></td>
-  </tr>
-  <tr>
-    <td valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Student's Email ID </span></td>
-    <td valign='top' bgcolor='#F3F3F3'><span class='style16'> #mail#</span></td>
-</tr></table>
-<p><br>
-<span class='style8'>".get_lang('OpenQuestionsAttemptedAre')." :</span></p>
-
- <table width='730' height='136' border='0' cellpadding='3' cellspacing='3'>";
-  for($i=0;$i<sizeof($arrques);$i++)
-  {
-  $msg.="
-	<tr>
-    <td width='220' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Question</span></td>
-    <td width='473' valign='top' bgcolor='F3F3F3'><span class='style16'> #questionName#</span></td>
-  	</tr>
-  	<tr>
-    <td width='220' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Answer </span></td>
-    <td valign='top' bgcolor='F3F3F3'><span class='style16'> #answer#</span></td>
-  	</tr>";
-
-	$msg1= str_replace("#exercise#",$exerciseTitle,$msg);
-	$msg= str_replace("#firstName#",$firstName,$msg1);
-	$msg1= str_replace("#lastName#",$lastName,$msg);
-	$msg= str_replace("#mail#",$mail,$msg1);
-	$msg1= str_replace("#questionName#",$arrques[$i],$msg);
-	$msg= str_replace("#answer#",$arrans[$i],$msg1);
-	$msg1= str_replace("#i#",$i,$msg);
-	$msg= str_replace("#course#",$courseName,$msg1);
-
-	}
-	$msg.="</table><br>*/
-	//
-	$msg .= "</head>
+$msg = "<html><head>
+	<link rel='stylesheet' href='http://www.dokeos.com/styles.css' type='text/css'>
+	<meta content='text/html; charset=ISO-8859-1' http-equiv='content-type'>";
+$msg .= "</head>
 <body><br>
 <p>".get_lang('OpenQuestionsAttempted')." : 
 </p>
@@ -981,7 +911,6 @@ color: #000000;
 	$msg.="</table><br>
  	<span class='style16'>".get_lang('ClickToCommentAndGiveFeedback').",<br>
 <a href='#url#'>#url#</a></span></body></html>";
-
 
 	$msg1= str_replace("#url#",$url,$msg);
 	$mail_content = stripslashes($msg1);

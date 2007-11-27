@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 12219 2007-05-01 18:46:59Z yannoo $
+// $Id: infocours.php 13790 2007-11-27 04:59:47Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -168,6 +168,8 @@ $form->addElement('radio', 'email_alert_manager_on_new_doc', get_lang('WorkEmail
 $form->addElement('radio', 'email_alert_manager_on_new_doc', null, get_lang('WorkEmailAlertDeactivate'), 0);
 $form->addElement('radio', 'email_alert_on_new_doc_dropbox', get_lang('DropboxEmailAlert'), get_lang('DropboxEmailAlertActivate'), 1);
 $form->addElement('radio', 'email_alert_on_new_doc_dropbox', null, get_lang('DropboxEmailAlertDeactivate'), 0);
+$form->addElement('radio', 'email_alert_manager_on_new_quiz', get_lang('QuizEmailAlert'), get_lang('QuizEmailAlertActivate'), 1);
+$form->addElement('radio', 'email_alert_manager_on_new_quiz', null, get_lang('QuizEmailAlertDeactivate'), 0);
 $form->addElement('radio', 'allow_user_edit_agenda', get_lang('AllowUserEditAgenda'), get_lang('AllowUserEditAgendaActivate'), 1);
 $form->addElement('radio', 'allow_user_edit_agenda', null, get_lang('AllowUserEditAgendaDeactivate'), 0);
 $form->addElement('radio', 'allow_user_edit_announcement', get_lang('AllowUserEditAnnouncement'), get_lang('AllowUserEditAnnouncementActivate'), 1);
@@ -206,6 +208,8 @@ $values['course_registration_password'] =  $all_course_information['registration
 $values['email_alert_manager_on_new_doc'] = api_get_course_setting('email_alert_manager_on_new_doc');
 // get send_mail_setting (dropbox) from table
 $values['email_alert_on_new_doc_dropbox'] = api_get_course_setting('email_alert_on_new_doc_dropbox');
+// get send_mail_setting (work)from table
+$values['email_alert_manager_on_new_quiz'] = api_get_course_setting('email_alert_manager_on_new_quiz');
 // get allow_user_edit_agenda from table
 $values['allow_user_edit_agenda'] = api_get_course_setting('allow_user_edit_agenda');
 // get allow_user_edit_announcement from table
@@ -242,6 +246,10 @@ if ($form->validate() && is_settings_editable())
 	}
 	if($update_values['email_alert_on_new_doc_dropbox'] != $values['email_alert_on_new_doc_dropbox']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_on_new_doc_dropbox']." WHERE variable = 'email_alert_on_new_doc_dropbox' ";
+		api_sql_query($sql,__FILE__,__LINE__);
+	}
+	if($update_values['email_alert_manager_on_new_quiz'] != $values['email_alert_manager_on_new_quiz']){
+		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_manager_on_new_quiz']." WHERE variable = 'email_alert_manager_on_new_quiz' ";
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
 	if($update_values['allow_user_edit_agenda'] != $values['allow_user_edit_agenda']){

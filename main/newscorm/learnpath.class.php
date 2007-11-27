@@ -930,8 +930,10 @@ class learnpath {
 	    		UPDATE " . $tbl_lp_item . "
 	    		SET display_order = display_order - 1
 	    		WHERE
+					lp_id = " . $this->get_id() . " AND
 	    			display_order > " . $old_order . " AND
 	    			parent_item_id = " . $old_parent;
+	    	
 	    	$res_update_order = api_sql_query($sql_update_order, __FILE__, __LINE__);
 	    	
 	    	//echo '<p>' . $sql_update_order . '</p>';
@@ -1033,14 +1035,6 @@ class learnpath {
 			  	//echo '<p>' . $sql_update_next . '</p>';
     		}
     		
-    		if($old_prerequisite!=$prerequisites){
-    			$sql_update_next = "
-		    		UPDATE " . $tbl_lp_item . "
-		    		SET prerequisite = " . $prerequisites . "
-		    		WHERE id = " . $id;
-		    	$res_update_next = api_sql_query($sql_update_next, __FILE__, __LINE__);
-    		}
-    		
     		//update all the items with the same or a bigger display_order than 
     		//the current item
 	    	$sql_update_order = "
@@ -1054,6 +1048,17 @@ class learnpath {
 	    	
 	    	$res_update_next = api_sql_query($sql_update_order, __FILE__, __LINE__);
 			//echo '<p>' . $sql_update_order . '</p>';
+			
+			
+			
+    		
+    		if($old_prerequisite!=$prerequisites){
+    			$sql_update_next = "
+		    		UPDATE " . $tbl_lp_item . "
+		    		SET prerequisite = " .  intval($prerequisites) . "
+		    		WHERE id = " .$id;
+		    	$res_update_next = api_sql_query($sql_update_next, __FILE__, __LINE__);
+    		}
     		
     		/* END -- update the current item id to his new location */
     	}

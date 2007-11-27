@@ -25,16 +25,16 @@ DELETE FROM settings_options WHERE variable='show_student_view';
 CREATE TABLE templates (id int NOT NULL auto_increment, title varchar(100) NOT NULL, description varchar(250) NOT NULL, course_code varchar(40) NOT NULL, user_id int NOT NULL, ref_doc int NOT NULL, PRIMARY KEY (id));
 
 -- xxSTATSxx
-ALTER TABLE `track_e_downloads` ADD INDEX ( `down_user_id` );
-ALTER TABLE `track_e_downloads` ADD INDEX ( `down_cours_id` );
-ALTER TABLE `track_e_exercices` ADD INDEX ( `exe_cours_id` );
-ALTER TABLE `track_e_hotpotatoes` ADD INDEX ( `exe_user_id` );
-ALTER TABLE `track_e_hotpotatoes` ADD INDEX ( `exe_cours_id` );
-ALTER TABLE `track_e_lastaccess` ADD INDEX ( `access_session_id` );
-ALTER TABLE `track_e_links` ADD INDEX ( `links_cours_id` );
-ALTER TABLE `track_e_links` ADD INDEX ( `links_user_id` );
-ALTER TABLE `track_e_uploads` ADD INDEX ( `upload_user_id` );
-ALTER TABLE `track_e_uploads` ADD INDEX ( `upload_cours_id` );
+ALTER TABLE track_e_downloads ADD INDEX (down_user_id);
+ALTER TABLE track_e_downloads ADD INDEX (down_cours_id);
+ALTER TABLE track_e_exercices ADD INDEX (exe_cours_id);
+ALTER TABLE track_e_hotpotatoes ADD INDEX (exe_user_id);
+ALTER TABLE track_e_hotpotatoes ADD INDEX (exe_cours_id);
+ALTER TABLE track_e_lastaccess ADD INDEX (access_session_id);
+ALTER TABLE track_e_links ADD INDEX (links_cours_id);
+ALTER TABLE track_e_links ADD INDEX (links_user_id);
+ALTER TABLE track_e_uploads ADD INDEX (upload_user_id);
+ALTER TABLE track_e_uploads ADD INDEX (upload_cours_id);
 
 -- xxUSERxx
 

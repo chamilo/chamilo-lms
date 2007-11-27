@@ -14,165 +14,165 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `admin`
+-- Table structure for table admin
 --
 
-DROP TABLE IF EXISTS `admin`;
-CREATE TABLE `admin` (
-  `user_id` int(10) unsigned NOT NULL default '0',
-  UNIQUE KEY `user_id` (`user_id`)
+DROP TABLE IF EXISTS admin;
+CREATE TABLE admin (
+  user_id int(10) unsigned NOT NULL default '0',
+  UNIQUE KEY user_id (user_id)
 );
 
 --
--- Dumping data for table `admin`
+-- Dumping data for table admin
 --
 
 
-/*!40000 ALTER TABLE `admin` DISABLE KEYS */;
-LOCK TABLES `admin` WRITE;
-INSERT INTO `admin` VALUES (1);
+/*!40000 ALTER TABLE admin DISABLE KEYS */;
+LOCK TABLES admin WRITE;
+INSERT INTO admin VALUES (1);
 UNLOCK TABLES;
-/*!40000 ALTER TABLE `admin` ENABLE KEYS */;
+/*!40000 ALTER TABLE admin ENABLE KEYS */;
 
 --
--- Table structure for table `class`
+-- Table structure for table class
 --
 
-DROP TABLE IF EXISTS `class`;
-CREATE TABLE `class` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `code` varchar(40) default '',
-  `name` text NOT NULL,
-  PRIMARY KEY  (`id`)
+DROP TABLE IF EXISTS class;
+CREATE TABLE class (
+  id mediumint(8) unsigned NOT NULL auto_increment,
+  code varchar(40) default '',
+  name text NOT NULL,
+  PRIMARY KEY  (id)
 );
 
 --
--- Dumping data for table `class`
+-- Dumping data for table class
 --
 
 
-/*!40000 ALTER TABLE `class` DISABLE KEYS */;
-LOCK TABLES `class` WRITE;
+/*!40000 ALTER TABLE class DISABLE KEYS */;
+LOCK TABLES class WRITE;
 UNLOCK TABLES;
-/*!40000 ALTER TABLE `class` ENABLE KEYS */;
+/*!40000 ALTER TABLE class ENABLE KEYS */;
 
 --
--- Table structure for table `class_user`
+-- Table structure for table class_user
 --
 
-DROP TABLE IF EXISTS `class_user`;
-CREATE TABLE `class_user` (
-  `class_id` mediumint(8) unsigned NOT NULL default '0',
-  `user_id` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`class_id`,`user_id`)
+DROP TABLE IF EXISTS class_user;
+CREATE TABLE class_user (
+  class_id mediumint(8) unsigned NOT NULL default '0',
+  user_id int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (class_id,user_id)
 );
 
 --
--- Dumping data for table `class_user`
+-- Dumping data for table class_user
 --
 
 
-/*!40000 ALTER TABLE `class_user` DISABLE KEYS */;
-LOCK TABLES `class_user` WRITE;
+/*!40000 ALTER TABLE class_user DISABLE KEYS */;
+LOCK TABLES class_user WRITE;
 UNLOCK TABLES;
-/*!40000 ALTER TABLE `class_user` ENABLE KEYS */;
+/*!40000 ALTER TABLE class_user ENABLE KEYS */;
 
 --
--- Table structure for table `course`
+-- Table structure for table course
 --
 
-DROP TABLE IF EXISTS `course`;
-CREATE TABLE `course` (
-  `code` varchar(40) NOT NULL,
-  `directory` varchar(40) default NULL,
-  `db_name` varchar(40) default NULL,
-  `course_language` varchar(20) default NULL,
-  `title` varchar(250) default NULL,
-  `description` text,
-  `category_code` varchar(40) default NULL,
-  `visibility` tinyint(4) default '0',
-  `show_score` int(11) NOT NULL default '1',
-  `tutor_name` varchar(200) default NULL,
-  `visual_code` varchar(40) default NULL,
-  `department_name` varchar(30) default NULL,
-  `department_url` varchar(180) default NULL,
-  `disk_quota` int(10) unsigned default NULL,
-  `last_visit` datetime default NULL,
-  `last_edit` datetime default NULL,
-  `creation_date` datetime default NULL,
-  `expiration_date` datetime default NULL,
-  `target_course_code` varchar(40) default NULL,
-  `subscribe` tinyint(4) NOT NULL default '1',
-  `unsubscribe` tinyint(4) NOT NULL default '1',
-  `registration_code` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`code`)
+DROP TABLE IF EXISTS course;
+CREATE TABLE course (
+  code varchar(40) NOT NULL,
+  directory varchar(40) default NULL,
+  db_name varchar(40) default NULL,
+  course_language varchar(20) default NULL,
+  title varchar(250) default NULL,
+  description text,
+  category_code varchar(40) default NULL,
+  visibility tinyint(4) default '0',
+  show_score int(11) NOT NULL default '1',
+  tutor_name varchar(200) default NULL,
+  visual_code varchar(40) default NULL,
+  department_name varchar(30) default NULL,
+  department_url varchar(180) default NULL,
+  disk_quota int(10) unsigned default NULL,
+  last_visit datetime default NULL,
+  last_edit datetime default NULL,
+  creation_date datetime default NULL,
+  expiration_date datetime default NULL,
+  target_course_code varchar(40) default NULL,
+  subscribe tinyint(4) NOT NULL default '1',
+  unsubscribe tinyint(4) NOT NULL default '1',
+  registration_code varchar(255) NOT NULL default '',
+  PRIMARY KEY  (code)
 );
 
 --
--- Dumping data for table `course`
+-- Dumping data for table course
 --
 
 
-/*!40000 ALTER TABLE `course` DISABLE KEYS */;
-LOCK TABLES `course` WRITE;
+/*!40000 ALTER TABLE course DISABLE KEYS */;
+LOCK TABLES course WRITE;
 UNLOCK TABLES;
-/*!40000 ALTER TABLE `course` ENABLE KEYS */;
+/*!40000 ALTER TABLE course ENABLE KEYS */;
 
 --
--- Table structure for table `course_category`
+-- Table structure for table course_category
 --
 
-DROP TABLE IF EXISTS `course_category`;
-CREATE TABLE `course_category` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(100) NOT NULL default '',
-  `code` varchar(40) NOT NULL default '',
-  `parent_id` varchar(40) default NULL,
-  `tree_pos` int(10) unsigned default NULL,
-  `children_count` smallint(6) default NULL,
-  `auth_course_child` enum('TRUE','FALSE') default 'TRUE',
-  `auth_cat_child` enum('TRUE','FALSE') default 'TRUE',
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `code` (`code`),
-  KEY `parent_id` (`parent_id`),
-  KEY `tree_pos` (`tree_pos`)
+DROP TABLE IF EXISTS course_category;
+CREATE TABLE course_category (
+  id int(10) unsigned NOT NULL auto_increment,
+  name varchar(100) NOT NULL default '',
+  code varchar(40) NOT NULL default '',
+  parent_id varchar(40) default NULL,
+  tree_pos int(10) unsigned default NULL,
+  children_count smallint(6) default NULL,
+  auth_course_child enum('TRUE','FALSE') default 'TRUE',
+  auth_cat_child enum('TRUE','FALSE') default 'TRUE',
+  PRIMARY KEY  (id),
+  UNIQUE KEY code (code),
+  KEY parent_id (parent_id),
+  KEY tree_pos (tree_pos)
 );
 
 --
--- Dumping data for table `course_category`
+-- Dumping data for table course_category
 --
 
 
-/*!40000 ALTER TABLE `course_category` DISABLE KEYS */;
-LOCK TABLES `course_category` WRITE;
-INSERT INTO `course_category` VALUES (1,'Language skills','LANG',NULL,1,0,'TRUE','TRUE'),(2,'PC Skills','PC',NULL,2,0,'TRUE','TRUE'),(3,'Projects','PROJ',NULL,3,0,'TRUE','TRUE');
+/*!40000 ALTER TABLE course_category DISABLE KEYS */;
+LOCK TABLES course_category WRITE;
+INSERT INTO course_category VALUES (1,'Language skills','LANG',NULL,1,0,'TRUE','TRUE'),(2,'PC Skills','PC',NULL,2,0,'TRUE','TRUE'),(3,'Projects','PROJ',NULL,3,0,'TRUE','TRUE');
 UNLOCK TABLES;
-/*!40000 ALTER TABLE `course_category` ENABLE KEYS */;
+/*!40000 ALTER TABLE course_category ENABLE KEYS */;
 
 --
--- Table structure for table `course_module`
+-- Table structure for table course_module
 --
 
-DROP TABLE IF EXISTS `course_module`;
-CREATE TABLE `course_module` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(100) NOT NULL,
-  `link` varchar(255) NOT NULL,
-  `image` varchar(100) default NULL,
-  `row` int(10) unsigned NOT NULL default '0',
-  `column` int(10) unsigned NOT NULL default '0',
-  `position` varchar(20) NOT NULL default 'basic',
-  PRIMARY KEY  (`id`)
+DROP TABLE IF EXISTS course_module;
+CREATE TABLE course_module (
+  id int(10) unsigned NOT NULL auto_increment,
+  name varchar(100) NOT NULL,
+  link varchar(255) NOT NULL,
+  image varchar(100) default NULL,
+  row int(10) unsigned NOT NULL default '0',
+  column int(10) unsigned NOT NULL default '0',
+  position varchar(20) NOT NULL default 'basic',
+  PRIMARY KEY  (id)
 );
 
 --
--- Dumping data for table `course_module`
+-- Dumping data for table course_module
 --
 
 
-/*!40000 ALTER TABLE `course_module` DISABLE KEYS */;
-LOCK TABLES `course_module` WRITE;
-INSERT INTO `course_module` VALUES
+/*!40000 ALTER TABLE course_module DISABLE KEYS */;
+LOCK TABLES course_module WRITE;
+INSERT INTO course_module VALUES
 (1,'calendar_event','calendar/agenda.php','agenda.gif',1,1,'basic'),
 (2,'link','link/link.php','links.gif',4,1,'basic'),
 (3,'document','document/document.php','documents.gif',3,1,'basic'),
@@ -198,79 +198,79 @@ INSERT INTO `course_module` VALUES
 (23,'course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'),
 (24,'survey','survey/survey_list.php','survey.gif',2,1,'courseadmin');
 UNLOCK TABLES;
-/*!40000 ALTER TABLE `course_module` ENABLE KEYS */;
+/*!40000 ALTER TABLE course_module ENABLE KEYS */;
 
 --
--- Table structure for table `course_rel_class`
+-- Table structure for table course_rel_class
 --
 
-DROP TABLE IF EXISTS `course_rel_class`;
-CREATE TABLE `course_rel_class` (
-  `course_code` char(40) NOT NULL,
-  `class_id` mediumint(8) unsigned NOT NULL,
-  PRIMARY KEY  (`course_code`,`class_id`)
+DROP TABLE IF EXISTS course_rel_class;
+CREATE TABLE course_rel_class (
+  course_code char(40) NOT NULL,
+  class_id mediumint(8) unsigned NOT NULL,
+  PRIMARY KEY  (course_code,class_id)
 );
 
 --
--- Dumping data for table `course_rel_class`
+-- Dumping data for table course_rel_class
 --
 
 
-/*!40000 ALTER TABLE `course_rel_class` DISABLE KEYS */;
-LOCK TABLES `course_rel_class` WRITE;
+/*!40000 ALTER TABLE course_rel_class DISABLE KEYS */;
+LOCK TABLES course_rel_class WRITE;
 UNLOCK TABLES;
-/*!40000 ALTER TABLE `course_rel_class` ENABLE KEYS */;
+/*!40000 ALTER TABLE course_rel_class ENABLE KEYS */;
 
 --
--- Table structure for table `course_rel_user`
+-- Table structure for table course_rel_user
 --
 
-DROP TABLE IF EXISTS `course_rel_user`;
-CREATE TABLE `course_rel_user` (
-  `course_code` varchar(40) NOT NULL,
-  `user_id` int(10) unsigned NOT NULL default '0',
-  `status` tinyint(4) NOT NULL default '5',
-  `role` varchar(60) default NULL,
-  `group_id` int(11) NOT NULL default '0',
-  `tutor_id` int(10) unsigned NOT NULL default '0',
-  `sort` int(11) default NULL,
-  `user_course_cat` int(11) default '0',
-  PRIMARY KEY  (`course_code`,`user_id`)
+DROP TABLE IF EXISTS course_rel_user;
+CREATE TABLE course_rel_user (
+  course_code varchar(40) NOT NULL,
+  user_id int(10) unsigned NOT NULL default '0',
+  status tinyint(4) NOT NULL default '5',
+  role varchar(60) default NULL,
+  group_id int(11) NOT NULL default '0',
+  tutor_id int(10) unsigned NOT NULL default '0',
+  sort int(11) default NULL,
+  user_course_cat int(11) default '0',
+  PRIMARY KEY  (course_code,user_id)
 );
 
 --
--- Dumping data for table `course_rel_user`
+-- Dumping data for table course_rel_user
 --
 
 
-/*!40000 ALTER TABLE `course_rel_user` DISABLE KEYS */;
-LOCK TABLES `course_rel_user` WRITE;
+/*!40000 ALTER TABLE course_rel_user DISABLE KEYS */;
+LOCK TABLES course_rel_user WRITE;
 UNLOCK TABLES;
-/*!40000 ALTER TABLE `course_rel_user` ENABLE KEYS */;
+/*!40000 ALTER TABLE course_rel_user ENABLE KEYS */;
 
 --
--- Table structure for table `language`
+-- Table structure for table language
 --
 
-DROP TABLE IF EXISTS `language`;
-CREATE TABLE `language` (
-  `id` tinyint(3) unsigned NOT NULL auto_increment,
-  `original_name` varchar(255) default NULL,
-  `english_name` varchar(255) default NULL,
-  `isocode` varchar(10) default NULL,
-  `dokeos_folder` varchar(250) default NULL,
-  `available` tinyint(4) NOT NULL default '1',
-  PRIMARY KEY  (`id`)
+DROP TABLE IF EXISTS language;
+CREATE TABLE language (
+  id tinyint(3) unsigned NOT NULL auto_increment,
+  original_name varchar(255) default NULL,
+  english_name varchar(255) default NULL,
+  isocode varchar(10) default NULL,
+  dokeos_folder varchar(250) default NULL,
+  available tinyint(4) NOT NULL default '1',
+  PRIMARY KEY  (id)
 );
 
 --
--- Dumping data for table `language`
+-- Dumping data for table language
 --
 
 
-/*!40000 ALTER TABLE `language` DISABLE KEYS */;
-LOCK TABLES `language` WRITE;
-INSERT INTO `language` VALUES
+/*!40000 ALTER TABLE language DISABLE KEYS */;
+LOCK TABLES language WRITE;
+INSERT INTO language VALUES
 (1,'Arabija (el)','arabic','ar','arabic',0),
 (2,'Portugu&ecirc;s (Brazil)','brazilian','pt-BR','brazilian',1),
 (3,'Balgarski','bulgarian','bg','bulgarian',0),
@@ -306,10 +306,10 @@ INSERT INTO `language` VALUES
 (33,'Swahili (kiSw.)','swahili','sw','swahili',0),
 (34,'Esperanto','esperanto','eo','esperanto',0);
 UNLOCK TABLES;
-/*!40000 ALTER TABLE `language` ENABLE KEYS */;
+/*!40000 ALTER TABLE language ENABLE KEYS */;
 
 --
--- Table structure for table `php_session`
+-- Table structure for table php_session
 --
 
 DROP TABLE IF EXISTS php_session;
@@ -319,96 +319,96 @@ CREATE TABLE php_session (
   session_time int(11) NOT NULL default '0',
   session_start int(11) NOT NULL default '0',
   session_value text NOT NULL,
-  PRIMARY KEY  (`session_id`)
+  PRIMARY KEY  (session_id)
 );
 
 --
--- Table structure for table `session`
+-- Table structure for table session
 --
-DROP TABLE IF EXISTS `session`;
-CREATE TABLE `session` (
-  `id` smallint(5) unsigned NOT NULL auto_increment,
-  `id_coach` int(10) unsigned NOT NULL default '0',
-  `name` char(50) NOT NULL default '',
-  `nbr_courses` smallint(5) unsigned NOT NULL default '0',
-  `nbr_users` mediumint(8) unsigned NOT NULL default '0',
-  `nbr_classes` mediumint(8) unsigned NOT NULL default '0',
-  `date_start` date NOT NULL default '0000-00-00',
-  `date_end` date NOT NULL default '0000-00-00',
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `name` (`name`)
-);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `session_rel_course`
---
-DROP TABLE IF EXISTS `session_rel_course`;
-CREATE TABLE `session_rel_course` (
-  `id_session` smallint(5) unsigned NOT NULL default '0',
-  `course_code` char(40) NOT NULL default '',
-  `id_coach` int(10) unsigned NOT NULL default '0',
-  `nbr_users` smallint(5) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`id_session`,`course_code`),
-  KEY `course_code` (`course_code`)
+DROP TABLE IF EXISTS session;
+CREATE TABLE session (
+  id smallint(5) unsigned NOT NULL auto_increment,
+  id_coach int(10) unsigned NOT NULL default '0',
+  name char(50) NOT NULL default '',
+  nbr_courses smallint(5) unsigned NOT NULL default '0',
+  nbr_users mediumint(8) unsigned NOT NULL default '0',
+  nbr_classes mediumint(8) unsigned NOT NULL default '0',
+  date_start date NOT NULL default '0000-00-00',
+  date_end date NOT NULL default '0000-00-00',
+  PRIMARY KEY  (id),
+  UNIQUE KEY name (name)
 );
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `session_rel_course_rel_user`
+-- Table structure for table session_rel_course
 --
-DROP TABLE IF EXISTS `session_rel_course_rel_user`;
-CREATE TABLE `session_rel_course_rel_user` (
-  `id_session` smallint(5) unsigned NOT NULL default '0',
-  `course_code` char(40) NOT NULL default '',
-  `id_user` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`id_session`,`course_code`,`id_user`),
-  KEY `id_user` (`id_user`),
-  KEY `course_code` (`course_code`)
+DROP TABLE IF EXISTS session_rel_course;
+CREATE TABLE session_rel_course (
+  id_session smallint(5) unsigned NOT NULL default '0',
+  course_code char(40) NOT NULL default '',
+  id_coach int(10) unsigned NOT NULL default '0',
+  nbr_users smallint(5) unsigned NOT NULL default '0',
+  PRIMARY KEY  (id_session,course_code),
+  KEY course_code (course_code)
 );
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `session_rel_user`
+-- Table structure for table session_rel_course_rel_user
 --
-DROP TABLE IF EXISTS `session_rel_user`;
-CREATE TABLE `session_rel_user` (
-  `id_session` mediumint(8) unsigned NOT NULL default '0',
-  `id_user` mediumint(8) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`id_session`,`id_user`)
+DROP TABLE IF EXISTS session_rel_course_rel_user;
+CREATE TABLE session_rel_course_rel_user (
+  id_session smallint(5) unsigned NOT NULL default '0',
+  course_code char(40) NOT NULL default '',
+  id_user int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (id_session,course_code,id_user),
+  KEY id_user (id_user),
+  KEY course_code (course_code)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table session_rel_user
+--
+DROP TABLE IF EXISTS session_rel_user;
+CREATE TABLE session_rel_user (
+  id_session mediumint(8) unsigned NOT NULL default '0',
+  id_user mediumint(8) unsigned NOT NULL default '0',
+  PRIMARY KEY  (id_session,id_user)
 );
 
 
 --
--- Table structure for table `settings_current`
+-- Table structure for table settings_current
 --
 
-DROP TABLE IF EXISTS `settings_current`;
-CREATE TABLE `settings_current` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `variable` varchar(255) default NULL,
-  `subkey` varchar(255) default NULL,
-  `type` varchar(255) default NULL,
-  `category` varchar(255) default NULL,
-  `selected_value` varchar(255) default NULL,
-  `title` varchar(255) NOT NULL default '',
-  `comment` varchar(255) default NULL,
-  `scope` varchar(50) default NULL,
-  `subkeytext` varchar(255) default NULL,
-  UNIQUE KEY `id` (`id`)
+DROP TABLE IF EXISTS settings_current;
+CREATE TABLE settings_current (
+  id int(10) unsigned NOT NULL auto_increment,
+  variable varchar(255) default NULL,
+  subkey varchar(255) default NULL,
+  type varchar(255) default NULL,
+  category varchar(255) default NULL,
+  selected_value varchar(255) default NULL,
+  title varchar(255) NOT NULL default '',
+  comment varchar(255) default NULL,
+  scope varchar(50) default NULL,
+  subkeytext varchar(255) default NULL,
+  UNIQUE KEY id (id)
 );
 
 --
--- Dumping data for table `settings_current`
+-- Dumping data for table settings_current
 --
 
 
-/*!40000 ALTER TABLE `settings_current` DISABLE KEYS */;
-LOCK TABLES `settings_current` WRITE;
-INSERT INTO `settings_current` VALUES
+/*!40000 ALTER TABLE settings_current DISABLE KEYS */;
+LOCK TABLES settings_current WRITE;
+INSERT INTO settings_current VALUES
 (1,'Institution',NULL,'textfield','Platform','{ORGANISATIONNAME}','InstitutionTitle','InstitutionComment','platform',NULL),
 (2,'InstitutionUrl',NULL,'textfield','Platform','{ORGANISATIONURL}','InstitutionUrlTitle','InstitutionUrlComment',NULL,NULL),
 (3,'siteName',NULL,'textfield','Platform','{CAMPUSNAME}','SiteNameTitle','SiteNameComment',NULL,NULL),
@@ -520,30 +520,30 @@ INSERT INTO `settings_current` VALUES
 (112, 'platform_charset',NULL,'textfield','Platform','iso-8859-15','PlatformCharsetTitle','PlatformCharsetComment','platform',NULL);
 
 UNLOCK TABLES;
-/*!40000 ALTER TABLE `settings_current` ENABLE KEYS */;
+/*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
 --
--- Table structure for table `settings_options`
+-- Table structure for table settings_options
 --
 
-DROP TABLE IF EXISTS `settings_options`;
-CREATE TABLE `settings_options` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `variable` varchar(255) default NULL,
-  `value` varchar(255) default NULL,
-  `display_text` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `id` (`id`)
+DROP TABLE IF EXISTS settings_options;
+CREATE TABLE settings_options (
+  id int(10) unsigned NOT NULL auto_increment,
+  variable varchar(255) default NULL,
+  value varchar(255) default NULL,
+  display_text varchar(255) NOT NULL default '',
+  PRIMARY KEY  (id),
+  UNIQUE KEY id (id)
 );
 
 --
--- Dumping data for table `settings_options`
+-- Dumping data for table settings_options
 --
 
 
-/*!40000 ALTER TABLE `settings_options` DISABLE KEYS */;
-LOCK TABLES `settings_options` WRITE;
-INSERT INTO `settings_options` VALUES
+/*!40000 ALTER TABLE settings_options DISABLE KEYS */;
+LOCK TABLES settings_options WRITE;
+INSERT INTO settings_options VALUES
 (11,'show_administrator_data','true','Yes'),
 (12,'show_administrator_data','false','No'),
 (13,'homepage_view','activity','HomepageViewActivity'),
@@ -643,15 +643,15 @@ UNLOCK TABLES;
 
 
 
-/*!40000 ALTER TABLE `settings_options` ENABLE KEYS */;
+/*!40000 ALTER TABLE settings_options ENABLE KEYS */;
 
 
 --
--- Table structure for table `sys_announcement`
+-- Table structure for table sys_announcement
 --
 
-DROP TABLE IF EXISTS `sys_announcement`;
-CREATE TABLE `sys_announcement` (
+DROP TABLE IF EXISTS sys_announcement;
+CREATE TABLE sys_announcement (
   id int(10) unsigned NOT NULL auto_increment,
   date_start datetime NOT NULL default '0000-00-00 00:00:00',
   date_end datetime NOT NULL default '0000-00-00 00:00:00',
@@ -661,134 +661,134 @@ CREATE TABLE `sys_announcement` (
   title varchar(250) NOT NULL default '',
   content text NOT NULL,
   lang varchar(70) NULL default NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (id)
 );
 
 --
--- Dumping data for table `sys_announcement`
+-- Dumping data for table sys_announcement
 --
 
 
-/*!40000 ALTER TABLE `sys_announcement` DISABLE KEYS */;
-LOCK TABLES `sys_announcement` WRITE;
+/*!40000 ALTER TABLE sys_announcement DISABLE KEYS */;
+LOCK TABLES sys_announcement WRITE;
 UNLOCK TABLES;
-/*!40000 ALTER TABLE `sys_announcement` ENABLE KEYS */;
+/*!40000 ALTER TABLE sys_announcement ENABLE KEYS */;
 
 --
--- Table structure for table `user`
+-- Table structure for table user
 --
 
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
-  `user_id` int(10) unsigned NOT NULL auto_increment,
-  `lastname` varchar(60) default NULL,
-  `firstname` varchar(60) default NULL,
-  `username` varchar(20) NOT NULL default '',
-  `password` varchar(50) NOT NULL default '',
-  `auth_source` varchar(50) default 'platform',
-  `email` varchar(100) default NULL,
-  `status` tinyint(4) NOT NULL default '5',
-  `official_code` varchar(40) default NULL,
-  `phone` varchar(30) default NULL,
-  `picture_uri` varchar(250) default NULL,
-  `creator_id` int(10) unsigned default NULL,
-  `competences` text,
-  `diplomas` text,
-  `openarea` text,
-  `teach` text,
-  `productions` varchar(250) default NULL,
-  `chatcall_user_id` int(10) unsigned NOT NULL default '0',
-  `chatcall_date` datetime NOT NULL default '0000-00-00 00:00:00',
-  `chatcall_text` varchar(50) NOT NULL default '',
-  `language` varchar(40) default NULL,
-  `registration_date` datetime NOT NULL default '0000-00-00 00:00:00',
-  `expiration_date` datetime NOT NULL default '0000-00-00 00:00:00',
-  `active` tinyint unsigned NOT NULL default 1,
-  PRIMARY KEY  (`user_id`),
-  UNIQUE KEY `username` (`username`)
+DROP TABLE IF EXISTS user;
+CREATE TABLE user (
+  user_id int(10) unsigned NOT NULL auto_increment,
+  lastname varchar(60) default NULL,
+  firstname varchar(60) default NULL,
+  username varchar(20) NOT NULL default '',
+  password varchar(50) NOT NULL default '',
+  auth_source varchar(50) default 'platform',
+  email varchar(100) default NULL,
+  status tinyint(4) NOT NULL default '5',
+  official_code varchar(40) default NULL,
+  phone varchar(30) default NULL,
+  picture_uri varchar(250) default NULL,
+  creator_id int(10) unsigned default NULL,
+  competences text,
+  diplomas text,
+  openarea text,
+  teach text,
+  productions varchar(250) default NULL,
+  chatcall_user_id int(10) unsigned NOT NULL default '0',
+  chatcall_date datetime NOT NULL default '0000-00-00 00:00:00',
+  chatcall_text varchar(50) NOT NULL default '',
+  language varchar(40) default NULL,
+  registration_date datetime NOT NULL default '0000-00-00 00:00:00',
+  expiration_date datetime NOT NULL default '0000-00-00 00:00:00',
+  active tinyint unsigned NOT NULL default 1,
+  PRIMARY KEY  (user_id),
+  UNIQUE KEY username (username)
 );
 ALTER TABLE user ADD INDEX (status);
 
 --
--- Dumping data for table `user`
+-- Dumping data for table user
 --
 
 
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-LOCK TABLES `user` WRITE;
-INSERT INTO `user` VALUES (1,'{ADMINLASTNAME}','{ADMINFIRSTNAME}','{ADMINLOGIN}','{ADMINPASSWORD}','{PLATFORM_AUTH_SOURCE}','{ADMINEMAIL}',1,'ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,'0000-00-00 00:00:00','',NULL,NOW(),'0000-00-00 00:00:00','1');
+/*!40000 ALTER TABLE user DISABLE KEYS */;
+LOCK TABLES user WRITE;
+INSERT INTO user VALUES (1,'{ADMINLASTNAME}','{ADMINFIRSTNAME}','{ADMINLOGIN}','{ADMINPASSWORD}','{PLATFORM_AUTH_SOURCE}','{ADMINEMAIL}',1,'ADMIN',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,'0000-00-00 00:00:00','',NULL,NOW(),'0000-00-00 00:00:00','1');
 -- Insert anonymous user
 INSERT INTO user(lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active) VALUES ('Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', 1, NOW(), '0000-00-00 00:00:00', 1);
 UNLOCK TABLES;
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+/*!40000 ALTER TABLE user ENABLE KEYS */;
 
 -- 
--- Table structure for `shared_survey`
+-- Table structure for shared_survey
 -- 
 
-CREATE TABLE `shared_survey` (
-  `survey_id` int(10) unsigned NOT NULL auto_increment,
-  `code` varchar(20) default NULL,
-  `title` text default NULL,
-  `subtitle` text default NULL,
-  `author` varchar(250) default NULL,
-  `lang` varchar(20) default NULL,
-  `template` varchar(20) default NULL,
-  `intro` text,
-  `surveythanks` text,
-  `creation_date` datetime NOT NULL default '0000-00-00 00:00:00',
-  `course_code` varchar(40) NOT NULL default '',
-  PRIMARY KEY  (`survey_id`),
-  UNIQUE KEY `id` (`survey_id`)
+CREATE TABLE shared_survey (
+  survey_id int(10) unsigned NOT NULL auto_increment,
+  code varchar(20) default NULL,
+  title text default NULL,
+  subtitle text default NULL,
+  author varchar(250) default NULL,
+  lang varchar(20) default NULL,
+  template varchar(20) default NULL,
+  intro text,
+  surveythanks text,
+  creation_date datetime NOT NULL default '0000-00-00 00:00:00',
+  course_code varchar(40) NOT NULL default '',
+  PRIMARY KEY  (survey_id),
+  UNIQUE KEY id (survey_id)
 );
 
 -- --------------------------------------------------------
 
 -- 
--- Table structure for `shared_survey_question`
+-- Table structure for shared_survey_question
 -- 
 
-CREATE TABLE `shared_survey_question` (
-  `question_id` int(11) NOT NULL auto_increment,
-  `survey_id` int(11) NOT NULL default '0',
-  `survey_question` text NOT NULL,
-  `survey_question_comment` text NOT NULL,
-  `type` varchar(250) NOT NULL default '',
-  `display` varchar(10) NOT NULL default '',
-  `sort` int(11) NOT NULL default '0',
-  `code` varchar(40) NOT NULL default '',
-  `max_value` int(11) NOT NULL,
-  PRIMARY KEY  (`question_id`)
+CREATE TABLE shared_survey_question (
+  question_id int(11) NOT NULL auto_increment,
+  survey_id int(11) NOT NULL default '0',
+  survey_question text NOT NULL,
+  survey_question_comment text NOT NULL,
+  type varchar(250) NOT NULL default '',
+  display varchar(10) NOT NULL default '',
+  sort int(11) NOT NULL default '0',
+  code varchar(40) NOT NULL default '',
+  max_value int(11) NOT NULL,
+  PRIMARY KEY  (question_id)
 );
 
 -- --------------------------------------------------------
 
 -- 
--- Table structure for `shared_survey_question_option`
+-- Table structure for shared_survey_question_option
 -- 
 
-CREATE TABLE `shared_survey_question_option` (
-  `question_option_id` int(11) NOT NULL auto_increment,
-  `question_id` int(11) NOT NULL default '0',
-  `survey_id` int(11) NOT NULL default '0',
-  `option_text` text NOT NULL,
-  `sort` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`question_option_id`)
+CREATE TABLE shared_survey_question_option (
+  question_option_id int(11) NOT NULL auto_increment,
+  question_id int(11) NOT NULL default '0',
+  survey_id int(11) NOT NULL default '0',
+  option_text text NOT NULL,
+  sort int(11) NOT NULL default '0',
+  PRIMARY KEY  (question_option_id)
 );
 
 
 -- --------------------------------------------------------
 
 -- 
--- Table structure for `templates` (User's FCKEditor templates)
+-- Table structure for templates (User's FCKEditor templates)
 -- 
 
-CREATE TABLE `templates` (
-  `id` int(11) NOT NULL auto_increment,
-  `title` varchar(100) NOT NULL,
-  `description` varchar(250) NOT NULL,
-  `course_code` varchar(40) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `ref_doc` int(11) NOT NULL,
-  PRIMARY KEY  (`id`)
+CREATE TABLE templates (
+  id int(11) NOT NULL auto_increment,
+  title varchar(100) NOT NULL,
+  description varchar(250) NOT NULL,
+  course_code varchar(40) NOT NULL,
+  user_id int(11) NOT NULL,
+  ref_doc int(11) NOT NULL,
+  PRIMARY KEY  (id)
 );

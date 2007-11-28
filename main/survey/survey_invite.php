@@ -315,9 +315,12 @@ function save_invitations($users_array, $invitation_title, $invitation_text, $re
 					if(api_get_setting('survey_email_sender_noreply')=='noreply')
 					{
 						$noreply = api_get_setting('noreply_email_address');
-						$replyto['Reply-to'] = $noreply;
-						$sender_name = $noreply;
-						$sender_email = $noreply;
+						if(!empty($noreply))
+						{
+							$replyto['Reply-to'] = $noreply;
+							$sender_name = $noreply;
+							$sender_email = $noreply;
+						}
 					}
 					api_mail_html($recipient_name, $recipient_email, $invitation_title, $full_invitation_text, $sender_name, $sender_email, $replyto);
 					//mail($recipient_email, strip_tags($invitation_title), strip_tags($invitation_text));

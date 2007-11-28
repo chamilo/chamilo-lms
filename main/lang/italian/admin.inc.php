@@ -676,4 +676,13 @@ $ExtendedProfileRegistrationTitle = "Registrazione con i campi del profilo estes
 $ExtendedProfileRegistrationComment = "Quale dei seguenti campi del profilo esteso saranno presenti nel moduli di registrazione? Nota: il profilo esteso deve essere prima attivato (v. sopra).";
 $ExtendedProfileRegistrationRequiredTitle = "Campi del profilo esteso obbligatori nel modulo di registrazione";
 $ExtendedProfileRegistrationRequiredComment = "Quali campi del profilo esteso sono richiesti in fase di registrazione? Il profilo esteso deve essere attivato ed i campi relativi devono essere disponibili nel modulo (v.sopra).";
+$NoReplyEmailAddress = "Non-rispondere: indirizzo e-mail";
+$NoReplyEmailAddressComment = "L\'indirizzo è usato per spedire posta che non deve ricevere risposta. In genere il server sarà configurato in modo da ignorare o cestinare le e-mail in ingresso.";
+$SurveyEmailSenderNoReply = "Mittente del questionario (Non rispondere)";
+$SurveyEmailSenderNoReplyComment = "Nell\'invio di un questionario si impiega l\'indirizzo e-mail del docente o un indirizzo speciale del tipo Non-rispondere (definito in configurazione)?";
+$CourseCoachEmailSender = "Indirizzo e-mail del docente/tutor";
+$NoReplyEmailSender = "Indirizzo e-mail Non-rispondere";
+$Flat = "Piatta";
+$Threaded = "Indentata";
+$Nested = "Nidificata";
 ?>

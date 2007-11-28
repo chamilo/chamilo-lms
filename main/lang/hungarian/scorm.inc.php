@@ -46,4 +46,10 @@ $ContentMaker = "Tartalom készít&#337;";
 $ContentProximity = "Kapcsolódó tartalom";
 $UploadLocalFileFromGarbageDir = "Helyi állomány feltöltése a f&#337;/lomtár könyvtárból ";
 $ThisItemIsNotExportable = "Ez az elem jelenleg (még) nem Scorm kompatibilis, ezért nem exportálható.";
+$MoveCurrentChapter = "A jelenlegi fejezet áthelyezése";
+$GenericScorm = "Általános Scorm";
+$UnknownPackageFormat = "A csomag fármátumát nem sikerült meghatározni. Kérem gy&#337;z&#337;djön meg róla. hogy helyesen lett összeállítva, illetve nem hibás-e. A hibák jelentkezhetnek nagy fájlok átvitelekor vagy speciális zip tömörítési beállítások használatakor is, ezért lehet&#337;leg minimális kapcsolókkal tömörítse tananyagait.";
+$Attempt = "Próbálkozás";
+$MoveTheCurrentForum = "A jelenlegi fórum áthelyezése";
+$WarningWhenEditingScorm = "Figyelem! <br /> Amikor módosítja egy scorm lépcs&#337;fok tartalmát, az kihatással lehet a tanösvény jelentéseire,  vagy elronthatja a lépcs&#337;fokot.";
 ?>

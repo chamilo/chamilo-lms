@@ -118,4 +118,8 @@ $File = "Datoteka";
 $DocDeleteError = "Napaka med brisanjem dokumenta";
 $ViModProb = "Med ažuriranjem vidnosti se je pojavil problem";
 $DirDeleted = "Mapa je bila odstranjena";
+$TemplateName = "Ime predloge";
+$TemplateDescription = "Opis predloge";
+$DocumentSetAsTemplate = "Dokument doloèen kot nova predloga";
+$DocumentUnsetAsTemplate = "Dokument ni veè predloga";
 ?>

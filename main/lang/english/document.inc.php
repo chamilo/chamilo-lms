@@ -118,4 +118,8 @@ $File = "File";
 $DocDeleteError = "Error during the delete of document";
 $ViModProb = "A problem occured while updating visibility";
 $DirDeleted = "Folder deleted";
+$TemplateName = "Template name";
+$TemplateDescription = "Template description";
+$DocumentSetAsTemplate = "Document set as a new template";
+$DocumentUnsetAsTemplate = "Document unset as template";
 ?>

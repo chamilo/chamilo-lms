@@ -441,4 +441,11 @@ $SeeDetail = "Ver Detalhes";
 $GroupSingle = "Grupo";
 $PleaseLoginAgainFromHomepage = "Por favor tente de novo o login a partir da homepage";
 $PleaseLoginAgainFromFormBelow = "Por favor tente de novo o login usando o formulário em baixo";
+$AccessToFaq = "Acesso às perguntas mais frequentes (FAQ)";
+$Faq = "FAQ - Perguntas Frequentes";
+$RemindInactivesLearnersSince = "Alertar utilizadores inactivos a partir de";
+$RemindInactiveLearnersMailSubject = "Inactividade em %s";
+$RemindInactiveLearnersMailContent = "Caro utilizador,<br /><br /> não tem estado activo em %s há mais de %s dias.";
+$UploadMaxSize = "Tamanho máximo de upload";
+$Unknown = "Desconhecido";
 ?>

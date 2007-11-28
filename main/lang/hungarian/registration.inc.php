@@ -155,4 +155,8 @@ $YourAccountHasToBeApproved = "Felhasználói fiókját jóvá kell hagyni";
 $ApprovalForNewAccount = "Új felhasználó jóváhagyása";
 $ManageUser = "Felhasználók kezelése";
 $SubscribeUserToCourseAsTeacher = "Felhasználók tanárként beíratása a kurzusba";
+$SendMessage = "Üzenet küldése";
+$PasswordEncryptedForSecurity = "A jelszavát a rendszer titkosítva tárolja biztonsági okokból. A hivatkozásra kattintva egy újabb emailt fog kapni jelszavával.";
+$UsersUnsubscribed = "A kiválasztott felhasználókat eltávolította a kurzusból";
+$SystemUnableToSendEmailContact = "A rendszer nem tudott email üzenetet küldeni";
 ?>

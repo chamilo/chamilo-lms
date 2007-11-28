@@ -1,18 +1,19 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$lang_new_item = "new item added";
-$lang_title_notification = "Since your last visit";
-$lang_update_agenda = "existing agenda item updated";
-$lang_new_agenda = "new agenda item added";
-$lang_update_announcements = "existing announcement updated";
-$lang_new_announcements = "new announcement added";
-$lang_new_document = "new document(s) added";
-$lang_new_exercise = "new exercise enabled";
-$lang_update_link = "existing link information updated";
-$lang_new_link = "new link added";
-$lang_new_forum_topic = "new topic added";
-$lang_new_groupforum_topic = "new topic added to group forum";
-$lang_new_dropbox_file = "ny fil modtaget";
-$lang_update_dropbox_file = "fil i din dropboks blev opdateret";
+$lang_new_item = "nyt arrangement";
+$lang_title_notification = "Siden sidst";
+$lang_update_agenda = "opdateret arrangement";
+$lang_new_agenda = "nyt arrangement";
+$lang_update_announcements = "opdateret meddelelse";
+$lang_new_announcements = "ny meddelelse";
+$lang_new_document = "nyt dokument(er)";
+$lang_new_exercise = "ny øvelse";
+$lang_update_link = "Opdateret link";
+$lang_new_link = "nyt link";
+$lang_new_forum_topic = "nyt emne i forum";
+$lang_new_groupforum_topic = "nyt emne i gruppeforum";
+$lang_new_dropbox_file = "nyt dokument i dueslag";
+$lang_update_dropbox_file = "Opdateret dokument i dueslag";
+$ForumCategoryAdded = "Ny forumkategori";
 ?>

@@ -1,8 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$nameTools = "udfaset sprog variabel";
-$langMdCallingTool = "Læresti - Scorm";
+$nameTools = "ældre sprogvariabel";
+$langMdCallingTool = "Læringssti - Scorm";
 $langTool = "Scorm MD Operationer";
 $langNotInDB = "ingen Dokeos DB postering";
 $langManifestSyntax = "(syntaksfejl i manifest fil...)";

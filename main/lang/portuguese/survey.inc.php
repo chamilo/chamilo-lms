@@ -172,4 +172,7 @@ $HaveAnswered = "responderam";
 $WereInvited = "foram convidados";
 $PagebreakNotFirst = "O separador de página não pode estar no início";
 $PagebreakNotLast = "O separador de página não pode estar no fim";
+$DuplicateSurvey = "Duplicar questionário";
+$EmptySurvey = "Esvaziar questionário";
+$SurveyEmptied = "Respostas ao questionário apagadas com êxito";
 ?>

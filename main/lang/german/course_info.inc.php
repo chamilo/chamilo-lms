@@ -96,4 +96,7 @@ $CourseRegistrationPassword = "Passwort für Kursanmeldung";
 $langDescriptionDeleteCourse = "Klicken Sie auf diesen Link, um jegliche Spur von diesem Kurs vom Server zu entfernen.<br><br>Diese Funktionalität sollte mit äußerster Vorsicht benutzt werden!";
 $langDescriptionCopyCourse = "Dokeos führt die Möglichkeit ein, einen Kurs teilweise oder ganz für einen neuen Kurs zu duplizieren, der zunächst leer sein kann.<br><br>Die einzige Bedingung ist, dass man einen Kurs hat, der einige Dokumente, Ankündigungen, Foren hat ... und einen zweiten Kurs hat, der die Elemente des ersten Kurses nicht hat!";
 $DescriptionRecycleCourse = "Mit diesem Werkzeug entfernt man ausgewählte Elemente aus einem Kurs oder den gesamten Kurs. Es entfernt Dokumente, Foren, Links ... Dieser Schritt kann am Ende einer Periode, eine akademischen Jahres vorgenommen werden. Natürlich sollte man vor dem \"Recycling\" ein komplettes Backup des Kurses anlegen !";
+$QuizEmailAlert = "E-Mail Benachrichtigung für neues Quiz geschickt";
+$QuizEmailAlertActivate = "E-Mail Versand aktivieren, wenn ein Benutzer Antworten auf ein neues Quiz einschickt";
+$QuizEmailAlertDeactivate = "E-Mail Benachrichtigung bei Antworten auf neues Quiz deaktivieren";
 ?>

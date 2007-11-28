@@ -98,4 +98,7 @@ $CourseRegistrationPassword = "Password per l\'iscrizione al corso";
 $langDescriptionDeleteCourse = "Clicca su questo collegamento per eliminare completamente il corso dal server.<br /><br />LA FUNZIONE VA USATA CON ESTREMA CAUTELA !";
 $langDescriptionCopyCourse = "Dokeos fornisce la possibilità di duplicare in parte o del tutto un corso, copiandolo su un corso che sia stato creato e sia inizialmente vuoto.<br /><br />L\'unico prerequisito è che il corso origine, da cui partire per la copia, contenga informazioni (documenti, forum...) che non si sovrappongano a quelle del corso destinazione.";
 $DescriptionRecycleCourse = "Questo strumento svuota del tutto o in parte il corso dei suoi contenuti. Il riazzeramento delle informazioni (documenti, forum, collegamenti ecc. saranno cancellati) è utile alla fine dell\'anno formativo per \"riciclare\" il corso. E\' OPPORTUNO FARE UN BACKUP DEL CORSO prima di attivare tale azione distruttiva.";
+$QuizEmailAlert = "Avviso e-mail in caso di nuovi esercizi";
+$QuizEmailAlertActivate = "Attiva l\'avviso via e-mail nel caso di nuove risposte ai test date dai corsisti";
+$QuizEmailAlertDeactivate = "Disattiva l\'avviso e-mail nel caso di nuove risposte ai test";
 ?>

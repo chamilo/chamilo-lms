@@ -169,4 +169,19 @@ $DocumentHasBeenDeleted = "A dokumentumot nem lehet megjeleníteni, mert törölve 
 $EditCurrentForum = "Fórum szerkesztése";
 $NoPrerequisites = "Nincsenek el&#337;feltételek";
 $NewExercise = "Új teszt";
+$CreateANewLink = "Új hivatkozás létrehozása";
+$CreateANewForum = "Új fórum létrehozása";
+$LinkAdd = "Hivatkozás hozzáadása";
+$WoogieConversionPowerPoint = "Woogie : Word konverzió";
+$WelcomeWoogieSubtitle = "Wordb&#337;l tanösvényt készít&#337; konverter";
+$WelcomeWoogieConverter = "Üdvözli a Woogie konverter!<ul type=\\\"1\\\"><li>Válassza ki a .doc, .sxw, .odt állományát<li>Töltse fel a Woogie-ba. A dokumentum átalakul SCORM tanösvénnyé.<li>Ezután hangjegyzeteket adhat minden oldalhoz vagy beilleszthet teszteket, egyéb tevékenységeket az oldalak közé.</ul>";
+$WoogieError = "Hiba történt a word dokumentum konverziójakor. Kérem ellen&#337;rizze, hogy ne legyenek különleges karakterek (szóköz, magyar ékezetes bet&#369;k, stb.) a dokumentum nevében.";
+$WordConvert = "Word konverzió";
+$Order = "Sorrend";
+$InteractionID = "Interakció ID-je";
+$TimeFinished = "Id&#337; (befejezve ekkor)";
+$CorrectAnswers = "Helyes válaszok";
+$StudentResponse = "Tanulói válaszok";
+$LatencyTimeSpent = "Eltöltött id&#337;";
+$Result = "Eredmény";
 ?>

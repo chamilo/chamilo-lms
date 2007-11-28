@@ -1,21 +1,21 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$lang_height = "Height";
-$lang_resizing_comment = "resize the image to the following dimensions (in pixels)";
-$lang_width = "Width";
-$lang_resizing = "RESIZE";
-$lang_no_resizing_comment = "Show all images in their original size. No resizing is done. Scrollbars will automatically appear if the image is larger than your monitor size.";
-$lang_show_thumbnails = "Show Thumbnails";
-$lang_click_thumbnails = "Click on one of the thumbnails";
-$lang_set_slideshow_options = "Set Slideshow Options";
-$lang_slideshow_options = "Slideshow Options";
-$lang_no_resizing = "NO RESIZING (default)";
-$lang_exit_slideshow = "Exit Slideshow";
+$lang_height = "Højde";
+$lang_resizing_comment = "Ændre billedets dimensioner til følgende (i pixels)";
+$lang_width = "Bredde";
+$lang_resizing = "ÆNDRE";
+$lang_no_resizing_comment = "Vis alle billeder i deres oprindelige størrelse. Ingen ændringer foretages. Scroll-bar vil indsættes, hvis billedet er større end din skærm.";
+$lang_show_thumbnails = "Vis thumbnails/ store ikoner";
+$lang_click_thumbnails = "Klik på en thumbnail/ et ikon";
+$lang_set_slideshow_options = "Ændre indstillinger for slideshow";
+$lang_slideshow_options = "Indstillinger for slideshow";
+$lang_no_resizing = "INGEN ÆNDRING (standardindstilling)";
+$lang_exit_slideshow = "Luk slideshow";
 $SlideShow = "Slideshow";
-$lang_previous_slide = "Previous Slide";
-$lang_next_slide = "Next Slide";
-$lang_image = "Image";
-$lang_of = "of";
-$lang_view_slideshow = "View Slideshow";
+$lang_previous_slide = "Forrige slide";
+$lang_next_slide = "Næste slide";
+$lang_image = "Billede";
+$lang_of = "af";
+$lang_view_slideshow = "Gennemse slideshow";
 ?>

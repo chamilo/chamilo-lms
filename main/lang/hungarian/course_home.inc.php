@@ -24,4 +24,5 @@ $Interaction = "Tevékenység";
 $Authoring = "Létrehozás";
 $Administration = "Adminisztráció";
 $IntroductionTextUpdated = "A bevezet&#337; szöveg frissítve lett.";
+$IntroductionTextDeleted = "Bevezet&#337; szöveg törölve";
 ?>

@@ -83,4 +83,5 @@ $ThreadCanBeFoundHere = "Nit foruma lahko najdete tukaj";
 $MakeVisible = "Naredi vidno";
 $DeleteCompleteThread = "Odstranim celotno nit ?";
 $PostDeletedSpecial = "Posebna objava je bila odstranjena";
+$ThreadDeleted = "Nit je bila odstranjena";
 ?>

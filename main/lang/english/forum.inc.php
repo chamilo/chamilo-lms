@@ -83,4 +83,5 @@ $ThreadCanBeFoundHere = "The thread can be found here";
 $MakeVisible = "Make Visible";
 $DeleteCompleteThread = "Delete complete thread?";
 $PostDeletedSpecial = "Special Post Deleted";
+$ThreadDeleted = "Thread deleted";
 ?>

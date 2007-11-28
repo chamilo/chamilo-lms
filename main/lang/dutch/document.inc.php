@@ -121,4 +121,8 @@ $File = "Bestand";
 $DocDeleteError = "Fout bij het verwijderen van het document";
 $ViModProb = "Er deed zich een probleem voor bij het bijwerken van de zichtbaarheid";
 $DirDeleted = "Folder verwijderd";
+$TemplateName = "Sjabloonnaam";
+$TemplateDescription = "Sjabloonbeschrijving";
+$DocumentSetAsTemplate = "Document ingesteld als een nieuwe sjabloon";
+$DocumentUnsetAsTemplate = "Document niet meer gebruikt als sjabloon";
 ?>

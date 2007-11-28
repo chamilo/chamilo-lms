@@ -83,4 +83,5 @@ $ThreadCanBeFoundHere = "De discussie kan hier gevonden worden";
 $MakeVisible = "Maak zichtbaar";
 $DeleteCompleteThread = "Volledige discussie verwijderen?";
 $PostDeletedSpecial = "Speciaal bericht verwijderd";
+$ThreadDeleted = "Discussie verwijderd";
 ?>

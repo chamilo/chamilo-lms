@@ -43,4 +43,5 @@ $langAll_Link_Deleted = "A hivatkozás törölve lett.";
 $langOnHomepage = "A hivatkozás megjelenítése a kezd&#337;oldalon.";
 $langShowLinkOnHomepage = "A hivatkozás megjelenítése ikonként a kurzus kezd&#337;oldalán.";
 $langCsvImport = "CSV importálás";
+$Category = "Kategória";
 ?>

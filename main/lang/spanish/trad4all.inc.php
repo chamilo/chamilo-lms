@@ -18,6 +18,7 @@ $langGroup = "Grupos";
 $langEdit = "Modificar";
 $langGroupForum = "Foro del grupo";
 $Language = "Idioma";
+$AutostartMp3 = "Pulse Ok si desea que el archivo de audio se reproduzca automáticamente";
 $Forum = "Foro";
 $langCode = "Código del curso";
 $langUp = "Subir";
@@ -447,4 +448,8 @@ $Faq = "Preguntas más frecuentes (FAQ)";
 $RemindInactivesLearnersSince = "Recordar usuarios inactivos desde";
 $RemindInactiveLearnersMailSubject = "Falta de actividad en %s";
 $RemindInactiveLearnersMailContent = "Estimado usuario, <br /><br /> no ha tenido actividad en %s desde hace más de %s días.";
+$UploadMaxSize = "Tamaño máximo de los envíos";
+$Unknown = "Desconocido";
+$MoveUp = "Mover arriba";
+$MoveDown = "Mover abajo";
 ?>

@@ -671,4 +671,8 @@ $LetThoseFieldsEmptyToHideTheNotice = "Deixe estes campos vazios se não desejar 
 $Ppt2lpVoiceRecordingNeedsRed5 = "A funcionalidade de gravação de voz no editor de percurso de aprendizagem baseia-se num servidor de Streaming Red5. Os parâmetros deste servidor podem ser configurados na secção de videoconferência na página corrente. ";
 $PlatformCharsetTitle = "Tipo de Caracteres";
 $PlatformCharsetComment = "O tipo de caracteres é o que dirige idiomas específicos a serem mostrados no Dokeos. Se usar caracteres Russos ou Japoneses, por exemplo, deverá querer alterar esta opção. Para todos os caracteres em inglês, latinos e oeste da Europa, o tipo pré-definido iso-8859-15 é o indicado.";
+$ExtendedProfileRegistrationTitle = "Registo com campos do perfil alargado";
+$ExtendedProfileRegistrationComment = "Qual dos seguintes campos do registo com perfil alargado devem estar disponíveis no processo de registo dos utilizadores? Isto requer a activação do registo com perfil alargado (ver acima).";
+$ExtendedProfileRegistrationRequiredTitle = "Campos de preenchimento obrigatório no registo com perfil alargado";
+$ExtendedProfileRegistrationRequiredComment = "Qual dos seguintes campos do registo com perfil alargado são requeridos no processo de registo dos utilizadores? Isto requer a activação do registo com perfil alargado e que o campo esteja igualmente disponível no formulário de registo (ver acima).";
 ?>

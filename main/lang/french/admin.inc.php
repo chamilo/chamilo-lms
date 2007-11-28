@@ -672,4 +672,13 @@ $LetThoseFieldsEmptyToHideTheNotice = "Pour ne pas afficher la notice, laissez c
 $Ppt2lpVoiceRecordingNeedsRed5 = "La fonctionnalité d\'enregistrement de la voix dans les parcours d\'apprentissage dépend d\'un serveur de streaming Red5. Les paramètres de ce serveur peuvent être configurés dans la section vidéoconférence sur cette même page.";
 $PlatformCharsetTitle = "Palette de caractères";
 $PlatformCharsetComment = "La palette de caractères est ce qui dirige la façon dont certaines chaînes de caractères de langues spécifiques sont affichées. Si vous utilisez le russe ou le japonais par exemple, vous aurez certainement besoin de modifier cette variable. Pour toutes les langues anglaises, latines et ouest-européennes, le défaut iso-8859-15 devrait être tout à fait adapté.";
+$NoReplyEmailAddress = "Adresse e-mail \"no-reply\"";
+$NoReplyEmailAddressComment = "C\'est l\'adresse de courriel qui sera utilisée lorsque des courriels sont envoyés depuis la plateforme en demandant spécifiquement de ne pas y répondre. Cette adresse devrait idéalement être configurée au niveau du serveur pour ignorer/supprimer automatiquement tout courriel entrant.";
+$SurveyEmailSenderNoReply = "Adresse courriel pour l\'envoi d\'enquêtes";
+$SurveyEmailSenderNoReplyComment = "Les enquêtes envoyées par courriel doivent-elles utiliser l\'adresse du coach/tuteur du cours ou une l\'adresse sans possibilité de réponse (définie dans la section principale des paramètres de configuration)?";
+$CourseCoachEmailSender = "Adresse courriel du coach/tuteur";
+$NoReplyEmailSender = "Adresse courriel \"no-reply\"";
+$Flat = "Plate";
+$Threaded = "Par fils de discussion";
+$Nested = "Imbriquée";
 ?>

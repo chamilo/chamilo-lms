@@ -52,4 +52,5 @@ $UnknownPackageFormat = "El formato del paquete no puede ser reconocido. Por fav
 ";
 $Attempt = "Intento";
 $MoveTheCurrentForum = "Mover el foro actual";
+$WarningWhenEditingScorm = "¡ Aviso ! <br /> Si edita el contenido de un paso scorm, puede alterar el informe de la secuencia de aprendizaje o dañar el paso";
 ?>

@@ -83,4 +83,5 @@ $ThreadCanBeFoundHere = "I messaggi sull\'argomento si trovano qui";
 $MakeVisible = "Rendi visibile";
 $DeleteCompleteThread = "Eliminare completamente l\'argomento (thread)?";
 $PostDeletedSpecial = "Messaggio speciale eliminato";
+$ThreadDeleted = "Argomento eliminato";
 ?>

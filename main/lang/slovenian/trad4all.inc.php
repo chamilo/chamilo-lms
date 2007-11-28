@@ -18,6 +18,7 @@ $langGroup = "Skupine";
 $langEdit = "Uredi";
 $langGroupForum = "Forum skupine";
 $Language = "Jezik";
+$AutostartMp3 = "Kliknite OK, èe želite, da bo avdio datoteka predvajana avtomatièno";
 $Forum = "Forum";
 $langCode = "Koda teèaja";
 $langUp = "Gor";
@@ -446,4 +447,8 @@ $Faq = "Pogosto zastavljena vprašanja";
 $RemindInactivesLearnersSince = "Opomni uporabnike, neaktivne zadnjih ";
 $RemindInactiveLearnersMailSubject = "Neaktivnost v okviru %s";
 $RemindInactiveLearnersMailContent = "Spoštovani uporabnik,<br /><br /> vaša neaktivnost v okviru %s je presegla %s dni.";
+$UploadMaxSize = "Najveèja velikost nalagane datoteke";
+$Unknown = "Neznano.";
+$MoveUp = "Gor";
+$MoveDown = "Dol";
 ?>

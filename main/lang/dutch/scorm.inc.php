@@ -52,4 +52,5 @@ $GenericScorm = "Generische Scorm";
 $UnknownPackageFormat = "Het pakket kan niet worden herkend. Zorg er voor dat het correct is aangemaakt en geen fouten bevat. Problemen komen mogelijk door een eigen ZIP formaat of het uploaden van grote bestanden. Gebruik minimale zip-opties indien u niet zeker bent van de ZIP.";
 $Attempt = "Poging";
 $MoveTheCurrentForum = "Verplaats het huidige forum";
+$WarningWhenEditingScorm = "Opgelet !<br /> Wanneer u de inhoud van een scorm-fase wijzigt, kunt u de weergave van het leerpad veranderen, of de stap beschadigen.";
 ?>

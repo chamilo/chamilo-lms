@@ -675,4 +675,13 @@ $ExtendedProfileRegistrationTitle = "Extended profile fields in registration";
 $ExtendedProfileRegistrationComment = "Which of the following fields of the extended profile have to be available in the user registration process? This requires that the extended profile is activated (see above). ";
 $ExtendedProfileRegistrationRequiredTitle = "Required extended profile fields in registration";
 $ExtendedProfileRegistrationRequiredComment = "Which of the following fields of the extende profile are required in the user registration process? This requires that the extended profile is activated and that the field is also available in the registration form (see above). ";
+$NoReplyEmailAddress = "No-reply e-mail address";
+$NoReplyEmailAddressComment = "This is the e-mail address to be used when an e-mail has to be sent specifically requesting that no answer be sent in return. Generally, this e-mail address should be configured on your server to drop/ignore any incoming e-mail.";
+$SurveyEmailSenderNoReply = "Survey e-mail sender (no-reply)";
+$SurveyEmailSenderNoReplyComment = "Should the e-mails sent for survey invitations use the coach/tutor e-mail address or the special no-reply address (defined in the main configuration section)?";
+$CourseCoachEmailSender = "E-mail address of coach/tutor";
+$NoReplyEmailSender = "no-reply e-mail address";
+$Flat = "Flat";
+$Threaded = "Threaded";
+$Nested = "Nested";
 ?>

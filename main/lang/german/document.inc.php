@@ -119,4 +119,8 @@ $File = "Datei";
 $DocDeleteError = "Fehler beim Löschen des Dokuments";
 $ViModProb = "Während der Aktualisierung der Sichtbarkeit trat ein Fehler auf";
 $DirDeleted = "Verzeichnis wurde gelöscht";
+$TemplateName = "Vorlagen Name";
+$TemplateDescription = "Vorlage Beschreibung";
+$DocumentSetAsTemplate = "Als neue Vorlage eingesetztes Dokument";
+$DocumentUnsetAsTemplate = "Als Vorlage nicht mehr genutztes Dokument";
 ?>

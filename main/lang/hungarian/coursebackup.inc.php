@@ -43,4 +43,5 @@ $langImportBackupInfo = "Biztonsági mentés importálása. Lehet&#337;sége van felt
 $langCreateBackupInfo = "Biztonsági mentés készítése kurzusáról. Megadhatja, hogy milyen kurzuselemek kerüljenek bele a mentés állományba.";
 $ToolIntro = "Eszközismertet&#337;";
 $UploadError = "Sikertelen feltöltés. Kérjük, ellen&#337;rizze a fájlnagyság limitjét és a mappa jogosultságait!";
+$DocumentsWillBeAddedToo = "Dokumentumok szintén hozzá lesznek adva";
 ?>

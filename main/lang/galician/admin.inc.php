@@ -660,4 +660,8 @@ $NoUsersForThisSession = "Esta sesión non ten usuarios";
 $LastNameMandatory = "O apelido non pode estar valeiro";
 $FirstNameMandatory = "O nome non pode estar valeiro";
 $EmailMandatory = "O enderezo electrónico non pode estar valeiro";
+$ExtendedProfileRegistrationTitle = "Campos do perfil estendido do rexistro.";
+$ExtendedProfileRegistrationComment = "Que campos do perfil estendido deben estar dispoñibles no proceso de rexistro dun usuario? Isto require que o perfil estendido estea activado (ver máis arriba).";
+$ExtendedProfileRegistrationRequiredTitle = "Campos requeridos no perfil estendido do rexistro.";
+$ExtendedProfileRegistrationRequiredComment = "Que campos do perfil estendido son obrigatorios no proceso de rexistro dun usuario? Isto require que o perfil estendido estea activado e que o campo tamén estea dispoñible no formulario de rexistro (véxase máis arriba).";
 ?>

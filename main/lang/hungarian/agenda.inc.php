@@ -49,4 +49,7 @@ $ViewPersonalItem = "Személyes elemek megtekintése";
 $UserGroupFilter = "Sz&#369;r&#337; a csoportokon/felhasználókon";
 $ShowAll = "Mutat mindet";
 $Print = "Nyomtat";
+$CopiedAsAnnouncement = "Átmásolás felhívásként";
+$NewAnnouncement = "Új felhívás";
+$AddAnnouncement = "Hozzáadás felhívásként";
 ?>

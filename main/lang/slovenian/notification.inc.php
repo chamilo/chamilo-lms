@@ -16,4 +16,5 @@ $lang_new_groupforum_topic = "nova tema dodana v forum skupine";
 $lang_new_dropbox_file = "prejeta nova datoteka";
 $lang_update_dropbox_file = "datoteka v vašem nabiralniku je bila ažurirana";
 $ForumCategoryAdded = "Kategorija foruma je bila dodana";
+$LearnpathAdded = "Uèna pot je bila dodana";
 ?>

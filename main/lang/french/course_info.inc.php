@@ -97,4 +97,7 @@ $CourseRegistrationPassword = "Mot de passe du cours";
 $langDescriptionDeleteCourse = "Cliquez sur ce lien afin d\'éliminer toute trace du cours sur le serveur.<br /><br />Cette fonctionnalité est à manier avec une extrême précaution !";
 $langDescriptionCopyCourse = "Dokeos introduit la possibilité de dupliquer tout ou partie d\'un cours existant vers un autre cours, qui peut être initialement vide.<br />Le seul préalable à cette manipulation est de disposer d\'un cours contenant des documents, annonces, forums, ... et d\'un second cours ne contenant pas les éléments du premier !";
 $DescriptionRecycleCourse = "Cet outil vide le cours des éléments sélectionnés, ou de l\'ensemble des éléments qu\'il contient. Il supprime les documents, les forums, liens... Cette procédure peut être mise en oeuvre à l\'issue d\'une formation, ou d\'une année universitaire.<br />Bien entendu, avant de vider le cours, vous aurez pris soin d\'effectuer une sauvegarde complète !";
+$QuizEmailAlert = "Alerte e-mail nouvel exercice";
+$QuizEmailAlertActivate = "Activer l\'envoi d\'un e-mail lorsqu\'un étudiant soumet des réponses à un exercice";
+$QuizEmailAlertDeactivate = "Désactiver l\'envoi d\'un e-mail sur réception de réponses à un exercice";
 ?>

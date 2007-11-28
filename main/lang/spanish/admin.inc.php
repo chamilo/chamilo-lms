@@ -681,4 +681,13 @@ $ExtendedProfileRegistrationTitle = "Campos del perfil extendido del registro";
 $ExtendedProfileRegistrationComment = "¿ Qué campos del perfil extendido deben estar disponibles en el proceso de registro de un usuario ? Esto requiere que el perfil extendido esté activado (ver más arriba).";
 $ExtendedProfileRegistrationRequiredTitle = "Campos requeridos en el perfil extendido del registro";
 $ExtendedProfileRegistrationRequiredComment = "¿ Qué campos del perfil extendido son obligatorios en el proceso de registro de un usuario ? Esto requiere que el perfil extendido esté activado y que el campo también esté disponible en el formulario de registro (véase más arriba).";
+$NoReplyEmailAddress = "No responder a esta dirección de correo electrónico";
+$NoReplyEmailAddressComment = "Esta es la dirección de correo electrónico que se utiliza cuando se envía un correo para solicitar que no se realice ninguna respuesta. Generalmente, esta dirección de correo electrónico  debe ser configurada en su servidor eliminando/ignorando cualquier correo entrante.";
+$SurveyEmailSenderNoReply = "Remitente de la encuesta (no responder)";
+$SurveyEmailSenderNoReplyComment = "¿ Los correos electrónicos utilizados para enviar las encuestas, deben usar el  correo electrónico del profesor/tutor o una dirección especial de correo  a la que no se reponde (definida en la configuración de la sección principal) ?";
+$CourseCoachEmailSender = "Correo electrónico del profesor/tutor";
+$NoReplyEmailSender = "No responder a esta dirección de correo electrónico ";
+$Flat = "Plana";
+$Threaded = "Arborescente";
+$Nested = "Anidada";
 ?>

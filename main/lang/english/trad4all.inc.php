@@ -18,6 +18,7 @@ $langGroup = "Groups";
 $langEdit = "Edit";
 $langGroupForum = "Group Forum";
 $Language = "Language";
+$AutostartMp3 = "Press ok if you want the audio file to be played automatically";
 $Forum = "Forum";
 $langCode = "Course code";
 $langUp = "Up";
@@ -446,4 +447,9 @@ $Faq = "Frequently Asked Question";
 $RemindInactivesLearnersSince = "Remind inactives users since";
 $RemindInactiveLearnersMailSubject = "Inactivity on %s";
 $RemindInactiveLearnersMailContent = "Dear user,<br /><br /> you are not active on %s since more than %s days.";
+$UploadMaxSize = "Upload max size";
+$Unknown = "Unknown";
+$MoveUp = "Move up";
+$MoveDown = "Move down";
+$UplUnableToSaveFileFilteredExtension = "File upload failed: this file extension or file type is prohibited";
 ?>

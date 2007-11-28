@@ -9,10 +9,10 @@ $langSearch = "Søg";
 $langSearchCrit = "Brug området nedenfor til beskrivende ord, et ord per linie!";
 $langNoKeywords = "Dette kursus har ingen nøgleord";
 $langKwCacheProblem = "Nøgleord cache kan ikke åbnes";
-$langCourseKwds = "kursus nøgleord";
+$langCourseKwds = "Kursussidens nøgleord";
 $langKwdsInMD = "nøgleord benyttet i MD";
-$langKwdRefs = "nøgleords referencer";
+$langKwdRefs = "nøgleordreferencer";
 $langNonCourseKwds = "Ikke-kursus nøgleord";
-$langKwdsUse = "Kursus nøgleord (fed skrift = ikke benyttet)";
+$langKwdsUse = "Kursussidens nøgleord (fed skrift = ikke benyttet)";
 $langTotalMDEs = "Totalt antal MD posteringer:";
 ?>

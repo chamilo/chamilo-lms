@@ -60,4 +60,10 @@ $langRequestDenied = "Visszautasítva.";
 $UsageDatacreated = "Használati adat létrehozva.";
 $SessionView = "Kurzusok megjelenítése munkamenetek szerint rendezve";
 $CourseView = "A kurzusok teljes listájának megjelenítése.";
+$DropboxFileAdded = "Fájlposta állomány hozzáadva";
+$NewMessageInForum = "Új üzenet lett a létrehozva a fórumban";
+$FolderCreated = "Az új mappa létrehozva";
+$LinkAdded = "Új hivatkozás létrehozva";
+$AnnouncementAdded = "Felhívás hozzáadva";
+$AgendaAdded = "Naptári elem hozzáadva";
 ?>

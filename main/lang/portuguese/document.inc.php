@@ -118,4 +118,8 @@ $File = "Ficheiro";
 $DocDeleteError = "Ocorreu um erro durante a supressão do documento";
 $ViModProb = "Ocorreu um problema durante a actualização da visibilidade";
 $DirDeleted = "Directoria apagada";
+$TemplateName = "Nome do Template";
+$TemplateDescription = "Descrição do Template";
+$DocumentSetAsTemplate = "Documento acrescentado como novo template";
+$DocumentUnsetAsTemplate = "Documento retirado como template";
 ?>

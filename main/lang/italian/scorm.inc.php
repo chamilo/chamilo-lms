@@ -51,4 +51,5 @@ $GenericScorm = "SCORM generico";
 $UnknownPackageFormat = "Il formato del file non è stato riconosciuto. Assicurati che sia ben formato (in particolare che il file ZIP non abbia caratteristiche proprietarie o che il file non sia troppo lungo). Se non sei sicuro, comprimi il file ZIP con modalità di base.";
 $Attempt = "Tentativo";
 $MoveTheCurrentForum = "Sposta il Forum corrente";
+$WarningWhenEditingScorm = "Attenzione!<br/>Modificando il contenuto di un elemento SCORM, puoi modificare le informazioni sugli esiti o danneggiarlo!";
 ?>

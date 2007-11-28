@@ -674,4 +674,13 @@ $ExtendedProfileRegistrationTitle = "Zusätzliche Felder in Profil bei der Anmeld
 $ExtendedProfileRegistrationComment = "Welche der nachfolgenden Felder des ausführlichen Profils sollen dem Benutzer bei der Anmelfung angezeigt werden? Dazu muss das ausführliche Profil aktiviert sein (s. oben)";
 $ExtendedProfileRegistrationRequiredTitle = "Erforderliche Felder bei der Anmeldung für ausführliches Profil ";
 $ExtendedProfileRegistrationRequiredComment = "Welche der nachfolgenden Felder des ausführlichen Profils sind bei der Anmeldung eines Benutzers erforderlich? Dazu muss das ausführliche Profil aktiviert sein und die Felder müssen im Anmeldeformular verfügbar sein (s. oben)";
+$NoReplyEmailAddress = "Keine E-Mail Adresse für Antwort";
+$NoReplyEmailAddressComment = "Diese ist die E-Mail Adresse, die benutzt wird, wenn eine E-Mail verschickt wird, auf die gemäß besonderem Wunsch keine Antwort geschickt werden soll.  Gewöhnlich sollte diese E-Mail Adresse auf dem Server so konfiguriert sein, dass sie jede eingehende Mail löscht/ignoriert. ";
+$SurveyEmailSenderNoReply = "E-Mail Sender für Umfrage (keine Antwort)";
+$SurveyEmailSenderNoReplyComment = "Sollen E-Mails, die als Einladung für Umfragen verschickt werden, die Lehrer E-Mail Adresse oder eine \"keine Antwort\" Adresse (wird in der Hauptkonfiguration definiert) benutzen?";
+$CourseCoachEmailSender = "E-Mail Adresse des Lehrers/Tutors";
+$NoReplyEmailSender = "\"Keine Antwort\" E-Mail Adresse";
+$Flat = "Flat";
+$Threaded = "Als Thread";
+$Nested = "verschachtelt";
 ?>

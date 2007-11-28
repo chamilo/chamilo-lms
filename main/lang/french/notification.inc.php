@@ -16,4 +16,5 @@ $lang_new_groupforum_topic = "nouveau sujet ajouté dans un forum de groupe";
 $lang_new_dropbox_file = "nouveau fichier reçu";
 $lang_update_dropbox_file = "fichier de la section de partage de fichier a été mis à jour";
 $ForumCategoryAdded = "Catégorie de forum ajoutée";
+$LearnpathAdded = "Parcours d\'apprentissage ajouté";
 ?>

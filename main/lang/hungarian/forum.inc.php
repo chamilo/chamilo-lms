@@ -1,6 +1,9 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$ForumDeleted = "Fórum törölve";
+$ForumCategoryDeleted = "Fórum kategória törölve";
+$ForumBlocked = "Fórum blokkolva";
 $Forum = "Fórum";
 $AddForumCategory = "Új fórum kategória hozzáadása";
 $AddForum = "Új fórum hozzáadása";
@@ -77,4 +80,8 @@ $PostVisibilityChanged = "Üzenet láthatósága megváltoztatva";
 $PostDeleted = "Üzenet törölve";
 $MakeInvisible = "Ne legyen látható";
 $ThreadCanBeFoundHere = "Ez a téma itt található";
+$MakeVisible = "Tegyük láthatóvá";
+$DeleteCompleteThread = "Törölni akarja az egész fórum szálat?";
+$PostDeletedSpecial = "A különleges üzenet törölve";
+$ThreadDeleted = "Szál törölve";
 ?>

@@ -224,4 +224,10 @@ $StudentEmail = "Tanuló email";
 $OpenQuestionsAttemptedAre = "Megkísérelt nyitott kérdések";
 $CourseName = "Kurzus neve";
 $UploadJpgPicture = "JPG kép feltöltése";
+$HotspotDescription = "Forrópont leírása";
+$ExamSheetVCC = "Egy tesztlapját megtekintette/kommentálta/kijavította tanára.";
+$AttemptVCC = "A következ&#337; próbálkozását egy oktató megtekintette/kommentálta/kijavította";
+$ClickLinkToViewComment = "Kattintson a lenti hivatkozásra, ha be szeretne jelentkezni az oldalra és meg szeretné tekinteni a véleményezett tesztlapját.";
+$Regards = "Üdvözlettel";
+$AttemptVCCLong = "A %s tesztben végzett munkáját egy oktató megtekintette/kommentálta/kijavította. Kattintson a lenti hivatkozásra, ha be szeretne jelentkezni az oldalra és meg szeretné tekinteni a tesztlapját.";
 ?>

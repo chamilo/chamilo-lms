@@ -172,4 +172,7 @@ $HaveAnswered = "heeft geantwoord";
 $WereInvited = "zijn uitgenodigd";
 $PagebreakNotFirst = "De paginascheiding kan niet helemaal vooraan komen";
 $PagebreakNotLast = "De paginascheiding kan niet helemaal achteraan komen";
+$DuplicateSurvey = "De enquête kopiëren";
+$EmptySurvey = "De enquête leegmaken (antwoorden verwijderen)";
+$SurveyEmptied = "Antwoorden op de enquête succesvol verwijderd";
 ?>

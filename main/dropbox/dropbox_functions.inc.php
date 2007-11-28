@@ -23,18 +23,17 @@
 */
 
 /**
-* This file contains additional dropbox functions. Initially there were some functions in the init files also but I have moved them over
+* This file contains additional dropbox functions. Initially there were some 
+* functions in the init files also but I have moved them over
 * to one file 		-- Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
 
 /**
 * This function is a wrapper function for the multiple actions feature.
-*
+* @return	Mixed	If there is a problem, return a string message, otherwise nothing
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-
-
 function handle_multiple_actions()
 {
 	global $_user, $is_courseAdmin, $is_courseTutor;

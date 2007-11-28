@@ -138,7 +138,7 @@ function parse_csv_data($file)
 	return $courses;
 }
 
-$language_file = array ('admin', 'registration','create_course');
+$language_file = array ('admin', 'registration','create_course', 'document');
 
 $cidReset = true;
 
@@ -166,15 +166,23 @@ Display :: display_header($tool_name);
 api_display_tool_title($tool_name);
 if ($_POST['formSent'])
 {
-	$file_type = $_POST['file_type'];
-	$courses = parse_csv_data($_FILES['import_file']['tmp_name']);
-	$errors = validate_data($courses);
-	if (count($errors) == 0)
+	if(empty($_POST['import_file']['tmp_name']))
 	{
-		//$users = complete_missing_data($courses);
-		save_data($courses);
-		//header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('FileImported')));
-		//exit ();
+		$error_message = get_lang('UplUploadFailed');
+		Display :: display_error_message($error_message, false);
+	}
+	else
+	{
+		$file_type = $_POST['file_type'];
+		$courses = parse_csv_data($_FILES['import_file']['tmp_name']);
+		$errors = validate_data($courses);
+		if (count($errors) == 0)
+		{
+			//$users = complete_missing_data($courses);
+			save_data($courses);
+			//header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('FileImported')));
+			//exit ();
+		}
 	}
 }
 

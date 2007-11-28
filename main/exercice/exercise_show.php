@@ -632,11 +632,13 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$i_answer_position = $a_answers['position'];
 			
 			$sql_user_answer = 'SELECT answers.answer 
-								FROM '.$TBL_TRACK_ATTEMPT.' as track_e_attempt, '.$table_ans.' as answers 
-								WHERE track_e_attempt.answer=answers.position 
-								AND track_e_attempt.position="'.$i_answer_position.'" 
-								AND answers.question_id ="'.$questionId.'" 
-								AND exe_id = "'.$id.'"';
+								FROM '.$table_ans.' as answers 
+								INNER JOIN '.$TBL_TRACK_ATTEMPT.' as track_e_attempt 
+									ON track_e_attempt.answer=answers.position 
+									AND track_e_attempt.position="'.$i_answer_position.'" 
+									AND exe_id = "'.$id.'"
+								WHERE answers.question_id ="'.$questionId.'" 
+								AND correct=0';
 
 			$res_user_answer = api_sql_query($sql_user_answer, __FILE__, __LINE__);
 			$s_user_answer = mysql_result($res_user_answer,0,0);

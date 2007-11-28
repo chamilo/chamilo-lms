@@ -116,7 +116,7 @@ class survey_manager
 						'".Database::escape_string('template')."',
 						'".Database::escape_string($values['survey_introduction'])."',
 						'".Database::escape_string($values['survey_thanks'])."',
-						'".date()."',
+						'".date('Y-m-d H:i:s')."',
 						'".Database::escape_string($values['anonymous'])."'
 						)";
 			$result = api_sql_query($sql, __FILE__, __LINE__);

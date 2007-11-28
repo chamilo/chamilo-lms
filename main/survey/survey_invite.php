@@ -182,7 +182,8 @@ Display :: display_footer();
 /**
  * Save the invitation mail
  *
- * @param unknown_type $mailtext
+ * @param string 	Text of the e-mail
+ * @param integer	Whether the mail contents are for invite mail (0, default) or reminder mail (1)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version January 2007
@@ -232,10 +233,11 @@ function save_invitations($users_array, $invitation_title, $invitation_text, $re
 	$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION);
 	$table_user 				= Database :: get_main_table(TABLE_MAIN_USER);
 
+	$already_invited = array();
+	$survey_invitations = array();
 	// get the people who are already invited
 	if ($reminder == 1)
 	{
-		$already_invited = array();
 		$survey_invitations = get_invitations($survey_data['survey_code']);
 	}
 	else
@@ -248,62 +250,76 @@ function save_invitations($users_array, $invitation_title, $invitation_text, $re
 	{
 		foreach ($users_array as $key=>$value)
 		{
-			// generating the unique code
-			if ($reminder == 1 AND key_exists($value,$survey_invitations))
+			if(isset($value))
 			{
-				$invitation_code = $survey_invitations[$value]['invitation_code'];
-			}
-			else 
-			{
-				$invitation_code = md5($value.microtime());
-			}
-			$survey_link = '';
-			$full_invitation_text= '';
-						
-			// storing the invitation (only if the user_id is not in $already_invited['course_users'] OR email is not in $already_invited['additional_users']
-			if ((is_numeric($value) AND !in_array($value,$already_invited['course_users'])) OR (!is_numeric($value) AND !strstr($already_invited['additional_users'], $value)) AND !empty($value))
-			{
-				if (!key_exists($value,$survey_invitations))
+				// generating the unique code
+				if(is_array($survey_invitations))
 				{
-					$sql = "INSERT INTO $table_survey_invitation (user, survey_code, invitation_code, invitation_date) VALUES
-								('".Database::escape_string($value)."','".Database::escape_string($survey_data['code'])."','".Database::escape_string($invitation_code)."','".Database::escape_string(date('Y-m-d H:i:s'))."')";
-					$result = api_sql_query($sql, __FILE__, __LINE__);
+					if ($reminder == 1 AND array_key_exists($value,$survey_invitations))
+					{
+						$invitation_code = $survey_invitations[$value]['invitation_code'];
+					}
+					else 
+					{
+						$invitation_code = md5($value.microtime());
+					}
 				}
-
-				// replacing the **link** part with a valid link for the user
-				$survey_link = $_configuration['root_web'].$_configuration['code_append'].'survey/'.'fillsurvey.php?course='.$_course['sysCode'].'&invitationcode='.$invitation_code;
-				$text_link = '<a href="'.$survey_link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n".get_lang('OrCopyPasteTheFollowingUrl')." <br />\r\n ".$survey_link;
-				
-				
-				$full_invitation_text = str_ireplace('**link**', $text_link ,$invitation_text, $replace_count);
-				if ($replace_count < 1)
+				$survey_link = '';
+				$full_invitation_text= '';
+							
+				// storing the invitation (only if the user_id is not in $already_invited['course_users'] OR email is not in $already_invited['additional_users']
+				$add_users_array = explode(';',$already_invited['additional_users']);
+				if ((is_numeric($value) AND !in_array($value,$already_invited['course_users'])) OR (!is_numeric($value) AND !in_array($value,$add_users_array)))
 				{
-					$full_invitation_text = $full_invitation_text . "<br />\r\n<br />\r\n".$text_link;
+					if(is_array($survey_invitations))
+					{
+						if (!array_key_exists($value,$survey_invitations))
+						{
+							$sql = "INSERT INTO $table_survey_invitation (user, survey_code, invitation_code, invitation_date) VALUES
+										('".Database::escape_string($value)."','".Database::escape_string($survey_data['code'])."','".Database::escape_string($invitation_code)."','".Database::escape_string(date('Y-m-d H:i:s'))."')";
+							$result = api_sql_query($sql, __FILE__, __LINE__);
+						}
+					}
+					// replacing the **link** part with a valid link for the user
+					$survey_link = $_configuration['root_web'].$_configuration['code_append'].'survey/'.'fillsurvey.php?course='.$_course['sysCode'].'&invitationcode='.$invitation_code;
+					$text_link = '<a href="'.$survey_link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n".get_lang('OrCopyPasteTheFollowingUrl')." <br />\r\n ".$survey_link;
+					
+					$replace_count = 0;
+					$full_invitation_text = str_ireplace('**link**', $text_link ,$invitation_text, $replace_count);
+					if ($replace_count < 1)
+					{
+						$full_invitation_text = $full_invitation_text . "<br />\r\n<br />\r\n".$text_link;
+					}
+					
+	
+					// optionally: finding the e-mail of the course user
+					if (is_numeric($value))
+					{
+						$sql = "SELECT firstname, lastname, email FROM $table_user WHERE user_id='".Database::escape_string($value)."'";
+						$result = api_sql_query($sql, __FILE__, __LINE__);
+						$row = mysql_fetch_assoc($result);
+						$recipient_email = $row['email'];
+						$recipient_name = $row['firstname'].' '.$row['lastname'];
+					}
+					else
+					{
+						/** @todo check if the $value is a valid email	 */
+						$recipient_email = $value;
+					}
+	
+					// sending the mail
+					$sender_name  = $_user['firstName'].' '.$_user['lastName'];
+					$sender_email = $_user['mail'];
+					
+					$replyto = array();
+					if(api_get_setting('survey_email_sender_noreply')=='noreply')
+					{
+						$replyto['Reply-to'] = api_get_setting('noreply_email_address');
+					}
+					api_mail_html($recipient_name, $recipient_email, $invitation_title, $full_invitation_text, $sender_name, $sender_email, $replyto);
+					//mail($recipient_email, strip_tags($invitation_title), strip_tags($invitation_text));
+					$counter++;
 				}
-				
-
-				// optionally: finding the e-mail of the course user
-				if (is_numeric($value))
-				{
-					$sql = "SELECT firstname, lastname, email FROM $table_user WHERE user_id='".Database::escape_string($value)."'";
-					$result = api_sql_query($sql, __FILE__, __LINE__);
-					$row = mysql_fetch_assoc($result);
-					$recipient_email = $row['email'];
-					$recipient_name = $row['firstname'].' '.$row['lastname'];
-				}
-				else
-				{
-					/** @todo check if the $value is a valid email	 */
-					$recipient_email = $value;
-				}
-
-				// sending the mail
-				$sender_name  = $_user['firstName'].' '.$_user['lastName'];
-				$sender_email = $_user['mail'];
-				
-				api_mail_html($recipient_name, $recipient_email, $invitation_title, $full_invitation_text, $sender_name, $sender_email, '');
-				//mail($recipient_email, strip_tags($invitation_title), strip_tags($invitation_text));
-				$counter++;
 			}
 		}
 	}
@@ -355,6 +371,9 @@ function get_invited_users($survey_code)
 	// Selecting all the invitations of this survey
 	$sql = "SELECT user FROM $table_survey_invitation WHERE survey_code='".Database::escape_string($survey_code)."'";
 
+	$defaults = array();
+	$defaults['course_users'] = array();
+	$defaults['additional_users'] = '';
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_assoc($result))
 	{
@@ -392,6 +411,7 @@ function get_invitations($survey_code)
 
 	$sql = "SELECT * FROM $table_survey_invitation WHERE survey_code = '".Database::escape_string($survey_code)."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$return = array();
 	while ($row = mysql_fetch_assoc($result))
 	{
 		$return[$row['user']] = $row;

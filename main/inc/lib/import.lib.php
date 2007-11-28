@@ -1,5 +1,5 @@
 <?php
-// $Id: import.lib.php 7412 2005-12-19 12:44:45Z bmol $ 
+// $Id: import.lib.php 13806 2007-11-28 06:29:03Z yannoo $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -50,6 +50,10 @@ class Import
 	{
 		$result = array ();
 		$handle = fopen($filename, "r");
+		if($handle === false)
+		{
+			return $result;
+		}
 		$keys = fgetcsv($handle, 1000, ";");
 		while (($row_tmp = fgetcsv($handle, 1000, ";")) !== FALSE)
 		{

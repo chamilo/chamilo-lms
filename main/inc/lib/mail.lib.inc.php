@@ -163,9 +163,24 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
       $mail->AltBody    = strip_tags(str_replace('<br />',"\n",$message));
       $mail->Body    = '<html><head></head><body>'.$message.'</body></html>';
       //only valid address
-      if(eregi( $regexp, $recipient_email ))
+      if(is_array($recipient_email))
       {
-     	 $mail->AddAddress($recipient_email, $recipient_name);
+      	$i = 0;
+		foreach($recipient_email as $dest)
+		{
+	      if(eregi( $regexp, $dest ))
+	      {
+	     	 $mail->AddAddress($dest, ($i>1?'':$recipient_name));
+	      }
+	      $i++;
+		}
+      }
+      else
+      {
+	      if(eregi( $regexp, $recipient_email ))
+	      {
+	     	 $mail->AddAddress($recipient_email, $recipient_name);
+	      }
       }
 
 	if (is_array($extra_headers) && count($extra_headers)>0){

@@ -800,7 +800,6 @@ function store_add_dropbox()
 	global $dropbox_cnf;
 	global $_user;
 	global $_course;
-	require_once(api_get_path(LIBRARY_PATH) . "/fileUpload.lib.php");
 
 	// ----------------------------------------------------------
 	// Validating the form data
@@ -899,6 +898,12 @@ function store_add_dropbox()
 	$dropbox_filename = replace_dangerous_char( $dropbox_filename);
 	// Transform any .php file in .phps fo security
 	$dropbox_filename = php2phps ( $dropbox_filename);
+	//filter extension
+    if(!filter_extension($dropbox_filename))
+    {
+    	return get_lang('UplUnableToSaveFileFilteredExtension');
+    }
+	
 	// set title
 	$dropbox_title = $dropbox_filename;
 	// set author
@@ -911,7 +916,7 @@ function store_add_dropbox()
 
 	if ( $dropbox_overwrite)  // RH: Mailing: adapted
 	{
-		$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
+		$dropbox_person = new Dropbox_Person( $_user['user_id'], api_is_course_admin(), api_is_course_tutor());
 
 		foreach($dropbox_person->sentWork as $w)
 		{
@@ -949,7 +954,7 @@ function store_add_dropbox()
 			$userList = GroupManager::get_subscribed_users(substr($rec, strlen('group_') ));
 			foreach ($userList as $usr)
 			{
-				if (! in_array($usr['user_id'], $newWorkRecipients) && $usr['user_id'] != $_user['user_id'])
+				if (! in_array($usr['user_id'], $new_work_recipients) && $usr['user_id'] != $_user['user_id'])
 				{
 					$new_work_recipients[] = $usr['user_id'];
 				}

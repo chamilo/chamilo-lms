@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 13756 2007-11-23 16:30:17Z elixir_inter $
+*  	@version $Id: work.php 13804 2007-11-28 06:08:00Z yannoo $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -631,56 +631,65 @@ if($_POST['submitWork'] && $is_course_member && $check)
 
 		// Transform any .php file in .phps fo security
 		$new_file_name = php2phps($new_file_name);
-
-		if( ! $title )
+		//filter extension
+	    if(!filter_extension($new_file_name))
+	    {
+	    	Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+	    	$succeed = false;
+	    }
+	    else
 		{
-			$title = $_FILES['file']['name'];
+
+			if( ! $title )
+			{
+				$title = $_FILES['file']['name'];
+			}
+	
+			if ( ! $authors)
+			{
+				$authors = $currentUserFirstName." ".$currentUserLastName;
+			}
+	
+			// compose a unique file name to avoid any conflict
+	
+			$new_file_name = uniqid('').$new_file_name;
+	
+			if (isset($_SESSION['toolgroup']))
+			{
+				$post_group_id = $_SESSION['toolgroup'];
+			}
+			else
+			{
+				$post_group_id = '0';
+			}
+			//if we come from the group tools the groupid will be saved in $work_table
+	
+			move_uploaded_file($_FILES['file']['tmp_name'],$updir.$my_cur_dir_path.$new_file_name);
+	
+			$url = "work/".$my_cur_dir_path.$new_file_name;
+			$result = api_sql_query("SHOW FIELDS FROM ".$work_table." LIKE 'sent_date'",__FILE__,__LINE__);
+	
+			if(!mysql_num_rows($result))
+			{
+				api_sql_query("ALTER TABLE ".$work_table." ADD sent_date DATETIME NOT NULL");
+			}
+	
+			$sql_add_publication = "INSERT INTO ".$work_table."
+			               SET url         = '".$url."',
+						       title       = '".$title."',
+			                   description = '".$description."',
+			                   author      = '".$authors."',
+							   active		= '".$active."',
+							   accepted		= '".(!$uploadvisibledisabled)."',
+							   post_group_id = '".$post_group_id."',
+							   sent_date	= NOW()";
+	
+			api_sql_query($sql_add_publication,__FILE__,__LINE__);
+	
+	        $Id = mysql_insert_id();
+	        api_item_property_update($_course,'work',$Id,get_lang('DocumentAdded'),$user_id);
+			$succeed = true;
 		}
-
-		if ( ! $authors)
-		{
-			$authors = $currentUserFirstName." ".$currentUserLastName;
-		}
-
-		// compose a unique file name to avoid any conflict
-
-		$new_file_name = uniqid('').$new_file_name;
-
-		if (isset($_SESSION['toolgroup']))
-		{
-			$post_group_id = $_SESSION['toolgroup'];
-		}
-		else
-		{
-			$post_group_id = '0';
-		}
-		//if we come from the group tools the groupid will be saved in $work_table
-
-		move_uploaded_file($_FILES['file']['tmp_name'],$updir.$my_cur_dir_path.$new_file_name);
-
-		$url = "work/".$my_cur_dir_path.$new_file_name;
-		$result = api_sql_query("SHOW FIELDS FROM ".$work_table." LIKE 'sent_date'",__FILE__,__LINE__);
-
-		if(!mysql_num_rows($result))
-		{
-			api_sql_query("ALTER TABLE ".$work_table." ADD sent_date DATETIME NOT NULL");
-		}
-
-		$sql_add_publication = "INSERT INTO ".$work_table."
-		               SET url         = '".$url."',
-					       title       = '".$title."',
-		                   description = '".$description."',
-		                   author      = '".$authors."',
-						   active		= '".$active."',
-						   accepted		= '".(!$uploadvisibledisabled)."',
-						   post_group_id = '".$post_group_id."',
-						   sent_date	= NOW()";
-
-		api_sql_query($sql_add_publication,__FILE__,__LINE__);
-
-        $Id = mysql_insert_id();
-        api_item_property_update($_course,'work',$Id,get_lang('DocumentAdded'),$user_id);
-		$succeed = true;
 	}
 
 	/*

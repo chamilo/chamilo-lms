@@ -309,152 +309,161 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 	$clean_name = replace_dangerous_char($uploaded_file['name']);
 	//no "dangerous" files
 	$clean_name = disable_dangerous_file($clean_name);
-	//echo "<br/>clean name = ".$clean_name;
-	//echo "<br/>upload_path = ".$upload_path;
-	//if the upload path differs from / (= root) it will need a slash at the end
-	if ($upload_path!='/')
-		$upload_path = $upload_path.'/';
-	//echo "<br/>upload_path = ".$upload_path;
-	$file_path = $upload_path.$clean_name;
-	//echo "<br/>file path = ".$file_path;
-	//full path to where we want to store the file with trailing slash
-	$where_to_save = $base_work_dir.$upload_path;
-	//at least if the directory doesn't exist, tell so
-	if(!is_dir($where_to_save)){
-		Display::display_error_message(get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')');
+	if(!filter_extension($clean_name))
+	{
+		Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
 		return false;
 	}
-	//echo "<br/>where to save = ".$where_to_save;
-	// full path of the destination
-	$store_path = $where_to_save.$clean_name;
-	//echo "<br/>store path = ".$store_path;
-	//name of the document without the extension (for the title)
-	$document_name = get_document_title($uploaded_file['name']);
-	//size of the uploaded file (in bytes)
-	$file_size = $uploaded_file['size'];
-		//what to do if the target file exists
-		switch ($what_if_file_exists)
-			{
-			//overwrite the file if it exists
-			case 'overwrite':
-
-				//check if the target file exists, so we can give another message
-				if (file_exists($store_path))
+	else
+	{
+		//extension is good
+		//echo "<br/>clean name = ".$clean_name;
+		//echo "<br/>upload_path = ".$upload_path;
+		//if the upload path differs from / (= root) it will need a slash at the end
+		if ($upload_path!='/')
+			$upload_path = $upload_path.'/';
+		//echo "<br/>upload_path = ".$upload_path;
+		$file_path = $upload_path.$clean_name;
+		//echo "<br/>file path = ".$file_path;
+		//full path to where we want to store the file with trailing slash
+		$where_to_save = $base_work_dir.$upload_path;
+		//at least if the directory doesn't exist, tell so
+		if(!is_dir($where_to_save)){
+			Display::display_error_message(get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')');
+			return false;
+		}
+		//echo "<br/>where to save = ".$where_to_save;
+		// full path of the destination
+		$store_path = $where_to_save.$clean_name;
+		//echo "<br/>store path = ".$store_path;
+		//name of the document without the extension (for the title)
+		$document_name = get_document_title($uploaded_file['name']);
+		//size of the uploaded file (in bytes)
+		$file_size = $uploaded_file['size'];
+			//what to do if the target file exists
+			switch ($what_if_file_exists)
 				{
-					$file_exists = true;
-				}
-				else
-				{
-					$file_exists = false;
-				}
-				if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path))
-				{
-					if($file_exists)
+				//overwrite the file if it exists
+				case 'overwrite':
+	
+					//check if the target file exists, so we can give another message
+					if (file_exists($store_path))
 					{
-						//UPDATE DATABASE!
-						$document_id = DocumentManager::get_document_id($_course,$file_path);
-						if ($document_id)
-						{
-							//update filesize
-							update_existing_document($_course,$document_id,$uploaded_file['size']);
-							//update document item_property
-							api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentUpdated',$user_id,$to_group_id,$to_user_id);
-						}
-						//if the file is in a folder, we need to update all parent folders
-						item_property_update_on_folder($_course,$upload_path,$user_id);
-						//display success message with extra info to user
-						if($output){
-							Display::display_confirmation_message(get_lang('UplUploadSucceeded')."<br/>".$file_path .' '. get_lang('UplFileOverwritten'),false);
-						}
-						return $file_path;
+						$file_exists = true;
 					}
 					else
 					{
-						//put the document data in the database
-						$document_id = add_document($_course,$file_path,'file',$file_size,$document_name);
-						if ($document_id)
-						{
-							//put the document in item_property update
-							api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id);
-						}
-						//if the file is in a folder, we need to update all parent folders
-						item_property_update_on_folder($_course,$upload_path,$user_id);
-						//display success message to user
-						Display::display_confirmation_message(get_lang('UplUploadSucceeded')."<br/>".$file_path,false);
-						return $file_path;
+						$file_exists = false;
 					}
-				}
-				else
-				{
-					Display::display_error_message(get_lang('UplUnableToSaveFile'));
-					return false;
-				}
-				break;
-
-			//rename the file if it exists
-			case 'rename':
-				$new_name = unique_name($where_to_save, $clean_name);
-				$store_path = $where_to_save.$new_name;
-				$new_file_path = $upload_path.$new_name;
-
-				if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path))
-				{
-					//put the document data in the database
-					$document_id = add_document($_course,$new_file_path,'file',$file_size,$document_name);
-					if ($document_id)
-					{
-						//update document item_property
-						api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id);
-					}
-					//if the file is in a folder, we need to update all parent folders
-					item_property_update_on_folder($_course,$upload_path,$user_id);
-					//display success message to user
-					if($output){
-						Display::display_confirmation_message(get_lang('UplUploadSucceeded'). "<br>" .get_lang('UplFileSavedAs') . $new_file_path,false);
-					}
-					return $new_file_path;
-				}
-				else
-				{
-					Display::display_error_message(get_lang('UplUnableToSaveFile'));
-					return false;
-				}
-				break;
-
-			//only save the file if it doesn't exist or warn user if it does exist
-			default:
-				if (file_exists($store_path))
-				{
-					Display::display_error_message($clean_name.' '.get_lang('UplAlreadyExists'));
-				}
-				else
-				{
 					if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path))
 					{
-
-						//put the document data in the database
-						$document_id = add_document($_course,$file_path,'file',$file_size,$document_name);
-						if ($document_id)
+						if($file_exists)
 						{
-							//update document item_property
-							api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id);
+							//UPDATE DATABASE!
+							$document_id = DocumentManager::get_document_id($_course,$file_path);
+							if ($document_id)
+							{
+								//update filesize
+								update_existing_document($_course,$document_id,$uploaded_file['size']);
+								//update document item_property
+								api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentUpdated',$user_id,$to_group_id,$to_user_id);
+							}
+							//if the file is in a folder, we need to update all parent folders
+							item_property_update_on_folder($_course,$upload_path,$user_id);
+							//display success message with extra info to user
+							if($output){
+								Display::display_confirmation_message(get_lang('UplUploadSucceeded')."<br/>".$file_path .' '. get_lang('UplFileOverwritten'),false);
+							}
+							return $file_path;
 						}
-						//if the file is in a folder, we need to update all parent folders
-						item_property_update_on_folder($_course,$upload_path,$user_id);
-						//display success message to user
-						if($output){
+						else
+						{
+							//put the document data in the database
+							$document_id = add_document($_course,$file_path,'file',$file_size,$document_name);
+							if ($document_id)
+							{
+								//put the document in item_property update
+								api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id);
+							}
+							//if the file is in a folder, we need to update all parent folders
+							item_property_update_on_folder($_course,$upload_path,$user_id);
+							//display success message to user
 							Display::display_confirmation_message(get_lang('UplUploadSucceeded')."<br/>".$file_path,false);
+							return $file_path;
 						}
-						return $file_path;
 					}
 					else
 					{
 						Display::display_error_message(get_lang('UplUnableToSaveFile'));
 						return false;
 					}
+					break;
+	
+				//rename the file if it exists
+				case 'rename':
+					$new_name = unique_name($where_to_save, $clean_name);
+					$store_path = $where_to_save.$new_name;
+					$new_file_path = $upload_path.$new_name;
+	
+					if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path))
+					{
+						//put the document data in the database
+						$document_id = add_document($_course,$new_file_path,'file',$file_size,$document_name);
+						if ($document_id)
+						{
+							//update document item_property
+							api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id);
+						}
+						//if the file is in a folder, we need to update all parent folders
+						item_property_update_on_folder($_course,$upload_path,$user_id);
+						//display success message to user
+						if($output){
+							Display::display_confirmation_message(get_lang('UplUploadSucceeded'). "<br>" .get_lang('UplFileSavedAs') . $new_file_path,false);
+						}
+						return $new_file_path;
+					}
+					else
+					{
+						Display::display_error_message(get_lang('UplUnableToSaveFile'));
+						return false;
+					}
+					break;
+	
+				//only save the file if it doesn't exist or warn user if it does exist
+				default:
+					if (file_exists($store_path))
+					{
+						Display::display_error_message($clean_name.' '.get_lang('UplAlreadyExists'));
+					}
+					else
+					{
+						if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path))
+						{
+	
+							//put the document data in the database
+							$document_id = add_document($_course,$file_path,'file',$file_size,$document_name);
+							if ($document_id)
+							{
+								//update document item_property
+								api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id);
+							}
+							//if the file is in a folder, we need to update all parent folders
+							item_property_update_on_folder($_course,$upload_path,$user_id);
+							//display success message to user
+							if($output){
+								Display::display_confirmation_message(get_lang('UplUploadSucceeded')."<br/>".$file_path,false);
+							}
+							return $file_path;
+						}
+						else
+						{
+							Display::display_error_message(get_lang('UplUnableToSaveFile'));
+							return false;
+						}
+					}
+					break;
 				}
-				break;
-				}
+		}
 	}
 }
 

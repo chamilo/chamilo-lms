@@ -88,7 +88,7 @@ if ( isset( $_POST["submitWork"]))
 
     /**
      * --------------------------------------
-     *      FORM SUBMIT : VALIDATE POSTED DATA
+     * ï¿½ï¿½ï¿½ï¿½ï¿½FORM SUBMIT : VALIDATE POSTED DATA
      * --------------------------------------
      */
     // the author or description field is empty
@@ -162,7 +162,7 @@ if ( isset( $_POST["submitWork"]))
 
     /**
      * --------------------------------------
-     *     FORM SUBMIT : UPLOAD NEW FILE
+     * ï¿½ï¿½ï¿½ï¿½FORM SUBMIT : UPLOAD NEW FILE
      * --------------------------------------
      */
     if ( !$error)
@@ -193,105 +193,112 @@ if ( isset( $_POST["submitWork"]))
             $dropbox_filename = replace_dangerous_char( $dropbox_filename);
             // Transform any .php file in .phps fo security
             $dropbox_filename = php2phps ( $dropbox_filename);
-
-            // set title
-            $dropbox_title = $dropbox_filename;
-
-            // set author
-            if ( $_POST['authors'] == '')
+            if(!filter_extension($dropbox_filename))
             {
-                $_POST['authors'] = getUserNameFromId( $_user['user_id']);
+            	$error = true;
+            	$errormsg = get_lang('UplUnableToSaveFileFilteredExtension');
             }
-
-			if ( $dropbox_overwrite)  // RH: Mailing: adapted
-			{
-				$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
-
-				foreach($dropbox_person->sentWork as $w)
+            else
+            {
+	            // set title
+	            $dropbox_title = $dropbox_filename;
+	
+	            // set author
+	            if ( $_POST['authors'] == '')
+	            {
+	                $_POST['authors'] = getUserNameFromId( $_user['user_id']);
+	            }
+	
+				if ( $dropbox_overwrite)  // RH: Mailing: adapted
 				{
-					if ($w->title == $dropbox_filename)
+					$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
+	
+					foreach($dropbox_person->sentWork as $w)
 					{
-					    if ( ($w->recipients[0]['id'] > dropbox_cnf("mailingIdBase")) xor $thisIsAMailing)
-					    {
-							$error = TRUE;
-							$errormsg = dropbox_lang("mailingNonMailingError");
-						}
-						if ( ($w->recipients[0]['id'] == $_user['user_id']) xor $thisIsJustUpload)
+						if ($w->title == $dropbox_filename)
 						{
-							$error = TRUE;
-							$errormsg = dropbox_lang("mailingJustUploadNoOther");
+						    if ( ($w->recipients[0]['id'] > dropbox_cnf("mailingIdBase")) xor $thisIsAMailing)
+						    {
+								$error = TRUE;
+								$errormsg = dropbox_lang("mailingNonMailingError");
+							}
+							if ( ($w->recipients[0]['id'] == $_user['user_id']) xor $thisIsJustUpload)
+							{
+								$error = TRUE;
+								$errormsg = dropbox_lang("mailingJustUploadNoOther");
+							}
+							$dropbox_filename = $w->filename; $found = true;
+							break;
 						}
-						$dropbox_filename = $w->filename; $found = true;
-						break;
 					}
 				}
-			}
-			else  // rename file to login_filename_uniqueId format
-			{
-				$dropbox_filename = getLoginFromId( $_user['user_id']) . "_" . $dropbox_filename . "_".uniqid('');
-			}
-
-			if ( ( ! is_dir( dropbox_cnf("sysPath"))))
-            {
-				//The dropbox subdir doesn't exist yet so make it and create the .htaccess file
-                mkdir( dropbox_cnf("sysPath"), 0700) or die ( dropbox_lang("errorCreatingDir")." (code 404)");
-				$fp = fopen( dropbox_cnf("sysPath")."/.htaccess", "w") or die (dropbox_lang("errorCreatingDir")." (code 405)");
-				fwrite($fp, "AuthName AllowLocalAccess
-                             AuthType Basic
-
-                             order deny,allow
-                             deny from all
-
-                             php_flag zlib.output_compression off") or die (dropbox_lang("errorCreatingDir")." (code 406)");
-            }
-
-			if ( $error) {}
-            elseif ( $thisIsAMailing)  // RH: $newWorkRecipients is integer - see class
-			{
-			    if ( preg_match( dropbox_cnf("mailingZipRegexp"), $dropbox_title))
+				else  // rename file to login_filename_uniqueId format
 				{
-		            $newWorkRecipients = dropbox_cnf("mailingIdBase");
+					$dropbox_filename = getLoginFromId( $_user['user_id']) . "_" . $dropbox_filename . "_".uniqid('');
 				}
-				else
-				{
-			        $error = TRUE;
-			        $errormsg = $dropbox_title . ": " . dropbox_lang("mailingWrongZipfile");
-				}
-			}
-			elseif ( $thisIsJustUpload)  // RH: $newWorkRecipients is empty array
-			{
-	            $newWorkRecipients = array();
-        	}
-			else
-			{ 	// creating the array that contains all the users who will receive the file
-				$newWorkRecipients = array();
-	            foreach ($_POST["recipients"] as $rec)
+	
+				if ( ( ! is_dir( dropbox_cnf("sysPath"))))
 	            {
-	            	if (strpos($rec, 'user_') === 0) {
-	            		$newWorkRecipients[] = substr($rec, strlen('user_') );
-	            	}
-	            	elseif (strpos($rec, 'group_') === 0 )
-	            	{
-	            		$userList = GroupManager::get_subscribed_users(substr($rec, strlen('group_') ));
-	            		foreach ($userList as $usr)
-	            		{
-	            			if (! in_array($usr['user_id'], $newWorkRecipients) && $usr['user_id'] != $_user['user_id'])
-	            			{
-	            				$newWorkRecipients[] = $usr['user_id'];
-	            			}
-	            		}
-	            	}
+					//The dropbox subdir doesn't exist yet so make it and create the .htaccess file
+	                mkdir( dropbox_cnf("sysPath"), 0700) or die ( dropbox_lang("errorCreatingDir")." (code 404)");
+					$fp = fopen( dropbox_cnf("sysPath")."/.htaccess", "w") or die (dropbox_lang("errorCreatingDir")." (code 405)");
+					fwrite($fp, "AuthName AllowLocalAccess
+	                             AuthType Basic
+	
+	                             order deny,allow
+	                             deny from all
+	
+	                             php_flag zlib.output_compression off") or die (dropbox_lang("errorCreatingDir")." (code 406)");
 	            }
-        	}
-
-			//After uploading the file, create the db entries
-
-        	if ( !$error)
-        	{
-	            @move_uploaded_file( $dropbox_filetmpname, dropbox_cnf("sysPath") . '/' . $dropbox_filename)
-	            	or die( dropbox_lang("uploadError")." (code 407)");
-	            new Dropbox_SentWork( $_user['user_id'], $dropbox_title, $_POST['description'], strip_tags($_POST['authors']), $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
-        	}
+	
+				if ( $error) {}
+	            elseif ( $thisIsAMailing)  // RH: $newWorkRecipients is integer - see class
+				{
+				    if ( preg_match( dropbox_cnf("mailingZipRegexp"), $dropbox_title))
+					{
+			            $newWorkRecipients = dropbox_cnf("mailingIdBase");
+					}
+					else
+					{
+				        $error = TRUE;
+				        $errormsg = $dropbox_title . ": " . dropbox_lang("mailingWrongZipfile");
+					}
+				}
+				elseif ( $thisIsJustUpload)  // RH: $newWorkRecipients is empty array
+				{
+		            $newWorkRecipients = array();
+	        	}
+				else
+				{ 	// creating the array that contains all the users who will receive the file
+					$newWorkRecipients = array();
+		            foreach ($_POST["recipients"] as $rec)
+		            {
+		            	if (strpos($rec, 'user_') === 0) {
+		            		$newWorkRecipients[] = substr($rec, strlen('user_') );
+		            	}
+		            	elseif (strpos($rec, 'group_') === 0 )
+		            	{
+		            		$userList = GroupManager::get_subscribed_users(substr($rec, strlen('group_') ));
+		            		foreach ($userList as $usr)
+		            		{
+		            			if (! in_array($usr['user_id'], $newWorkRecipients) && $usr['user_id'] != $_user['user_id'])
+		            			{
+		            				$newWorkRecipients[] = $usr['user_id'];
+		            			}
+		            		}
+		            	}
+		            }
+	        	}
+	
+				//After uploading the file, create the db entries
+	
+	        	if ( !$error)
+	        	{
+		            @move_uploaded_file( $dropbox_filetmpname, dropbox_cnf("sysPath") . '/' . $dropbox_filename)
+		            	or die( dropbox_lang("uploadError")." (code 407)");
+		            new Dropbox_SentWork( $_user['user_id'], $dropbox_title, $_POST['description'], strip_tags($_POST['authors']), $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
+	        	}
+            }
         }
     } //end if(!$error)
 

@@ -517,7 +517,12 @@ INSERT INTO settings_current VALUES
 (109, 'show_tabs', 'my_agenda', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyAgenda'), 
 (110, 'show_tabs', 'my_profile', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyProfile'),
 (111, 'default_forum_view', NULL, 'radio', 'Course', 'flat', 'DefaultForumViewTitle','DefaultForumViewComment',NULL,NULL),
-(112, 'platform_charset',NULL,'textfield','Platform','iso-8859-15','PlatformCharsetTitle','PlatformCharsetComment','platform',NULL);
+(112, 'platform_charset',NULL,'textfield','Platform','iso-8859-15','PlatformCharsetTitle','PlatformCharsetComment','platform',NULL),
+(113,'noreply_email_address', '', 'textfield', 'Platform', '', 
+'NoReplyEmailAddress', 'NoReplyEmailAddressComment', NULL, NULL),
+(114,'survey_email_sender_noreply', '', 'radio', 'Course', 'coach', 
+'SurveyEmailSenderNoReply', 'SurveyEmailSenderNoReplyComment', NULL, NULL);
+
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -635,7 +640,9 @@ INSERT INTO settings_options VALUES
 (103, 'display_categories_on_homepage','false','No'),
 (104, 'default_forum_view', 'flat', 'Flat'),
 (105, 'default_forum_view', 'threaded', 'Threaded'),
-(106, 'default_forum_view', 'nested', 'Nested');
+(106, 'default_forum_view', 'nested', 'Nested'),
+(107, 'survey_email_sender_noreply', 'coach', 'CourseCoachEmailSender'),
+(108, 'survey_email_sender_noreply', 'noreply', 'NoReplyEmailSender');
 
 
 UNLOCK TABLES;

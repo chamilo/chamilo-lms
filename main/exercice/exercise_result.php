@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 13790 2007-11-27 04:59:47Z yannoo $
+* 	@version $Id: exercise_result.php 13800 2007-11-28 02:56:21Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -648,16 +648,20 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 					$lastName =   $_SESSION['_user']['lastName'];
 					$mail =  $_SESSION['_user']['mail'];
 					$coursecode =  $_SESSION['_course']['id'];
-					$query1 = "SELECT u.email, cu.user_id from $main_course_user_table cu, $main_user_table u where cu.course_code= '$coursecode' and cu.status = '1' and c.user_id=cu.user_id";
+					$query1 = "SELECT u.email, cu.user_id from $main_course_user_table cu, $main_user_table u where cu.course_code= '$coursecode' and cu.status = '1' and u.user_id=cu.user_id";
 					$result1 = api_sql_query($query1, __FILE__, __LINE__);
 					$to = '';
-					if(Database::num_rows($result1)>0)
+					$num = Database::num_rows($result1);
+					if($num>1)
 					{
+						$to = array();
 						while($temp_row = Database::fetch_array($result1))
 						{
-							$to .= $temp_row['email'].',';
+							$to[] = $temp_row['email'];
 						}
-						$to = substr($to,0,-1);
+					}elseif($num>0){
+						$temp_row = Database::fetch_array($result1);
+						$to = $temp_row['email'];
 					}else{
 						//this is a problem (it means that there is no admin for this course)
 					}

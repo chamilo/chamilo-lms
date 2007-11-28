@@ -73,6 +73,7 @@ require_once('dropbox_functions.inc.php');
 require(api_get_path(INCLUDE_PATH).'/conf/mail.conf.php');
 
 include_once(api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php');
+include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 
 // protecting the script 
 api_protect_course_script();

@@ -110,7 +110,7 @@ $htmlHeadXtra[] = "<style type='text/css'>
 $TABLETRACK_ACCESS      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 $TABLETRACK_LINKS       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
 $TABLETRACK_DOWNLOADS   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
-$TABLETRACK_ACCESS_2    = Database::get_statistic_table("track_e_access");
+$TABLETRACK_ACCESS_2    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 $TABLECOURSUSER	        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLECOURSE	        = Database::get_main_table(TABLE_MAIN_COURSE);
 $TABLECOURSE_LINKS      = Database::get_course_table(TABLE_LINK);
@@ -122,10 +122,10 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 //$tbl_learnpath_item = Database::get_course_table(TABLE_LEARNPATH_ITEM);
 //$tbl_learnpath_chapter = Database::get_course_table(TABLE_LEARNPATH_CHAPTER);
 
-$tbl_learnpath_main = Database::get_course_table('lp');
-$tbl_learnpath_item = Database::get_course_table('lp_item');
-$tbl_learnpath_view = Database::get_course_table('lp_view');
-$tbl_learnpath_item_view = Database::get_course_table('lp_item_view');
+$tbl_learnpath_main = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);
+$tbl_learnpath_view = Database::get_course_table(TABLE_LP_VIEW);
+$tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $view = $_REQUEST['view'];
 

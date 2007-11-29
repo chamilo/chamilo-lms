@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 13839 2007-11-29 04:13:07Z yannoo $
+* 	@version $Id: exercise_result.php 13844 2007-11-29 04:53:11Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -62,8 +62,9 @@ $language_file='exercice';
 
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
-include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
-include(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
+include_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
+include_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
+include_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 // Database table definitions
 $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -646,20 +647,29 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 					$lastName =   $_SESSION['_user']['lastName'];
 					$mail =  $_SESSION['_user']['mail'];
 					$coursecode =  $_SESSION['_course']['id'];
-					$query1 = "SELECT u.email, cu.user_id from $main_course_user_table cu, $main_user_table u where cu.course_code= '$coursecode' and cu.status = '1' and u.user_id=cu.user_id";
-					$result1 = api_sql_query($query1, __FILE__, __LINE__);
 					$to = '';
-					$num = Database::num_rows($result1);
+					$teachers = array();
+					if(api_get_setting('use_session_mode')=='true' && !empty($_SESSION['id_session']))
+					{
+						$teachers = CourseManager::get_coach_list_from_course_code($coursecode,$_SESSION['id_session']);
+					}
+					else
+					{
+						$teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
+					}
+					$num = count($teachers);
 					if($num>1)
 					{
 						$to = array();
-						while($temp_row = Database::fetch_array($result1))
+						foreach($teachers as $teacher)
 						{
-							$to[] = $temp_row['email'];
+							$to[] = $teacher['email'];
 						}
 					}elseif($num>0){
-						$temp_row = Database::fetch_array($result1);
-						$to = $temp_row['email'];
+						foreach($teachers as $teacher)
+						{
+							$to = $teacher['email'];
+						}
 					}else{
 						//this is a problem (it means that there is no admin for this course)
 					}

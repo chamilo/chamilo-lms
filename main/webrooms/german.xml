@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<language>
 	<labelfield>
 		<labelid>1</labelid>
 		<labelvalue>Kamera</labelvalue>		
@@ -416,4 +414,3 @@
 		<labelid>104</labelid>
 		<labelvalue>Synchronizing Conference Members</labelvalue>		
 	</labelfield>												
-</language>

@@ -1,419 +1,520 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<language>
 	<labelfield>
-		<labelid>1</labelid>
+		<oldid>1</oldid>
+		<labelid>Camera</labelid>
 		<labelvalue>Camera</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>2</labelid>
+		<oldid>2</oldid>
+		<labelid>Microphone</labelid>
 		<labelvalue>Microphone</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>3</labelid>
+		<oldid>3</oldid>
+		<labelid>Name</labelid>
 		<labelvalue>Name</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>4</labelid>
+		<oldid>4</oldid>
+		<labelid>DeleteStream</labelid>
 		<labelvalue>Delete Stream</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>5</labelid>
+		<oldid>5</oldid>
+		<labelid>Progress</labelid>
 		<labelvalue>Progress</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>6</labelid>
+		<oldid>6</oldid>
+		<labelid>Play</labelid>
 		<labelvalue>Play</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>7</labelid>
+		<oldid>7</oldid>
+		<labelid>Stop</labelid>
 		<labelvalue>Stop</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>8</labelid>
+		<oldid>8</oldid>
+		<labelid>Record</labelid>
 		<labelvalue>Record</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>9</labelid>
+		<oldid>9</oldid>
+		<labelid>NoFileAvailable</labelid>
 		<labelvalue>No File availible</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>10</labelid>
+		<oldid>10</oldid>
+		<labelid>RecordingOnlyForTeachers</labelid>
 		<labelvalue>Recording only for teachers</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>11</labelid>
+		<oldid>11</oldid>
+		<labelid>UsersNow</labelid>
 		<labelvalue>Users at the moment:</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>12</labelid>
+		<oldid>12</oldid>
+		<labelid>StartConference</labelid>
 		<labelvalue>Start conference</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>13</labelid>
+		<oldid>13</oldid>
+		<labelid>MyName</labelid>
 		<labelvalue>My name</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>14</labelid>
+		<oldid>14</oldid>
+		<labelid>OrganisationSVideoconference</labelid>
 		<labelvalue>Dokeos VideoConference</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>15</labelid>
+		<oldid>15</oldid>
+		<labelid>ImportPresentation</labelid>
 		<labelvalue>Import presentation</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>16</labelid>
+		<oldid>16</oldid>
+		<labelid>RefreshList</labelid>
 		<labelvalue>Refresh list</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>17</labelid>
+		<oldid>17</oldid>
+		<labelid>GoToTop</labelid>
 		<labelvalue>Go to Top</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>18</labelid>
+		<oldid>18</oldid>
+		<labelid>NewPoll</labelid>
 		<labelvalue>new Poll</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>19</labelid>
+		<oldid>19</oldid>
+		<labelid>CreateNewPoll</labelid>
 		<labelvalue>Create a new Poll for this room.</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>20</labelid>
+		<oldid>20</oldid>
+		<labelid>Question</labelid>
 		<labelvalue>Question:</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>21</labelid>
+		<oldid>21</oldid>
+		<labelid>PollType</labelid>
 		<labelvalue>Polltype:</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>22</labelid>
+		<oldid>22</oldid>
+		<labelid>Create</labelid>
 		<labelvalue>create</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>23</labelid>
+		<oldid>23</oldid>
+		<labelid>InfoConnectedUsersGetNotifiedOfThisPoll</labelid>
 		<labelvalue>Info: Every connected User in this room will get a notification of this new Poll.</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>24</labelid>
+		<oldid>24</oldid>
+		<labelid>CreatePoll</labelid>
 		<labelvalue>create Poll</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>25</labelid>
+		<oldid>25</oldid>
+		<labelid>Cancel</labelid>
 		<labelvalue>cancel</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>26</labelid>
+		<oldid>26</oldid>
+		<labelid>YesNo</labelid>
 		<labelvalue>Yes/No</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>27</labelid>
+		<oldid>27</oldid>
+		<labelid>Numeric1To10</labelid>
 		<labelvalue>Numeric 1-10</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>28</labelid>
+		<oldid>28</oldid>
+		<labelid>Poll</labelid>
 		<labelvalue>Poll</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>29</labelid>
+		<oldid>29</oldid>
+		<labelid>YouHaveToBecomeModeratorOfThisRoomToStartPolls</labelid>
 		<labelvalue>You have to become Moderator of this Room to make polls.</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>30</labelid>
+		<oldid>30</oldid>
+		<labelid>YourVoteHasBeenSent</labelid>
 		<labelvalue>Your vote has been send.</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>31</labelid>
+		<oldid>31</oldid>
+		<labelid>YouAlreadyVotedForThisPoll</labelid>
 		<labelvalue>Your already voted for this poll.</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>32</labelid>
+		<oldid>32</oldid>
+		<labelid>VoteButton</labelid>
 		<labelvalue>vote!</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>33</labelid>
+		<oldid>33</oldid>
+		<labelid>YourAnswer</labelid>
 		<labelvalue>Your answer:</labelvalue>		
 	</labelfield>												
 	<labelfield>
-		<labelid>34</labelid>
+		<oldid>34</oldid>
+		<labelid>Yes</labelid>
 		<labelvalue>Yes</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>35</labelid>
+		<oldid>35</oldid>
+		<labelid>No</labelid>
 		<labelvalue>No</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>36</labelid>
+		<oldid>36</oldid>
+		<labelid>WantsToKnow</labelid>
 		<labelvalue>wants to know:</labelvalue>		
 	</labelfield>			
 	<labelfield>
-		<labelid>37</labelid>
+		<oldid>37</oldid>
+		<labelid>PollResults</labelid>
 		<labelvalue>Poll results</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>38</labelid>
+		<oldid>38</oldid>
+		<labelid>Question</labelid>
 		<labelvalue>Question:</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>39</labelid>
+		<oldid>39</oldid>
+		<labelid>Votes</labelid>
 		<labelvalue>Votes:</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>40</labelid>
+		<oldid>40</oldid>
+		<labelid>Result</labelid>
 		<labelvalue>Result:</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>41</labelid>
+		<oldid>41</oldid>
+		<labelid>ThereIsNoPoll</labelid>
 		<labelvalue>There is no Poll.</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>42</labelid>
+		<oldid>42</oldid>
+		<labelid>VoteButton2</labelid>
 		<labelvalue>Vote!</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>43</labelid>
+		<oldid>43</oldid>
+		<labelid>MeetingMode</labelid>
 		<labelvalue>Meeting (max 4 seats)</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>44</labelid>
+		<oldid>44</oldid>
+		<labelid>ConferenceMaxSeats</labelid>
 		<labelvalue>Conference (max 50 seats)</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>45</labelid>
+		<oldid>45</oldid>
+		<labelid>Mode</labelid>
 		<labelvalue>Mode</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>46</labelid>
+		<oldid>46</oldid>
+		<labelid>RemainingSeats</labelid>
 		<labelvalue>Remaining seats</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>47</labelid>
+		<oldid>47</oldid>
+		<labelid>AlreadyIn</labelid>
 		<labelvalue>Already in</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>48</labelid>
+		<oldid>48</oldid>
+		<labelid>CheckIn</labelid>
 		<labelvalue>Check in</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>49</labelid>
+		<oldid>49</oldid>
+		<labelid>TheModeratorHasLeft</labelid>
 		<labelvalue>The Moderator of this Conference has left the room.</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>50</labelid>
+		<oldid>50</oldid>
+		<labelid>SystemMessage</labelid>
 		<labelvalue>System message</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>51</labelid>
+		<oldid>51</oldid>
+		<labelid>ChooseDevices</labelid>
 		<labelvalue>Choose devices</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>52</labelid>
+		<oldid>52</oldid>
+		<labelid>ChooseCam</labelid>
 		<labelvalue>Choose Cam:</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>53</labelid>
+		<oldid>53</oldid>
+		<labelid>ChooseMic</labelid>
 		<labelvalue>Choose Mic:</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>54</labelid>
+		<oldid>54</oldid>
+		<labelid>OK</labelid>
 		<labelvalue>ok</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>55</labelid>
+		<oldid>55</oldid>
+		<labelid>Cancel</labelid>
 		<labelvalue>cancel</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>56</labelid>
-		<labelvalue>You have to reconnect sothat the changes take effect.</labelvalue>		
+		<oldid>56</oldid>
+		<labelid>YouHaveToReconnectSoThatTheChangesTakeEffect</labelid>
+		<labelvalue>You have to reconnect so that the changes take effect.</labelvalue>		
 	</labelfield>			
 	<labelfield>
-		<labelid>57</labelid>
+		<oldid>57</oldid>
+		<labelid>ChangeSettings</labelid>
 		<labelvalue>Change settings</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>58</labelid>
+		<oldid>58</oldid>
+		<labelid>Course</labelid>
 		<labelvalue>Course:</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>59</labelid>
+		<oldid>59</oldid>
+		<labelid>CourseLanguage</labelid>
 		<labelvalue>Course Language:</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>60</labelid>
+		<oldid>60</oldid>
+		<labelid>OK</labelid>
 		<labelvalue>ok</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>61</labelid>
+		<oldid>61</oldid>
+		<labelid>Cancel</labelid>
 		<labelvalue>cancel</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>62</labelid>
+		<oldid>62</oldid>
+		<labelid>ConfirmClearWhiteboard</labelid>
 		<labelvalue>Confirm Clear Whiteboard</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>63</labelid>
+		<oldid>63</oldid>
+		<labelid>ShouldWitheboardBeClearedBeforeNewImage</labelid>
 		<labelvalue>Should the whiteboard be cleared before I add a new Image?</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>64</labelid>
+		<oldid>64</oldid>
+		<labelid>DontAskMeAgain</labelid>
 		<labelvalue>Don't ask me again</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>65</labelid>
+		<oldid>65</oldid>
+		<labelid>No</labelid>
 		<labelvalue>no</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>66</labelid>
+		<oldid>66</oldid>
+		<labelid>EditSettings</labelid>
 		<labelvalue>Edit Settings</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>67</labelid>
+		<oldid>67</oldid>
+		<labelid>ShowConfirmationBeforeClearingWhiteboard</labelid>
 		<labelvalue>Show Confirmation before clearing whiteboard</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>68</labelid>
+		<oldid>68</oldid>
+		<labelid>UserInfo</labelid>
 		<labelvalue>User Info</labelvalue>		
 	</labelfield>			
 	<labelfield>
-		<labelid>69</labelid>
-		<labelvalue>Clear DrawArea</labelvalue>		
+		<oldid>69</oldid>
+		<labelid>ClearDrawArea</labelid>
+		<labelvalue>Clear Draw Area</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>70</labelid>
+		<oldid>70</oldid>
+		<labelid>Undo</labelid>
 		<labelvalue>Undo</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>71</labelid>
+		<oldid>71</oldid>
+		<labelid>Redo</labelid>
 		<labelvalue>Redo</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>72</labelid>
+		<oldid>72</oldid>
+		<labelid>SelectAnObject</labelid>
 		<labelvalue>Select an Object</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>73</labelid>
+		<oldid>73</oldid>
+		<labelid>Text</labelid>
 		<labelvalue>Text</labelvalue>		
 	</labelfield>					
 	<labelfield>
-		<labelid>74</labelid>
+		<oldid>74</oldid>
+		<labelid>Paint</labelid>
 		<labelvalue>Paint</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>75</labelid>
+		<oldid>75</oldid>
+		<labelid>DrawLine</labelid>
 		<labelvalue>Draw line</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>76</labelid>
+		<oldid>76</oldid>
+		<labelid>DrawUnderline</labelid>
 		<labelvalue>Draw underline</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>77</labelid>
+		<oldid>77</oldid>
+		<labelid>Rectangle</labelid>
 		<labelvalue>Rectangle</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>78</labelid>
+		<oldid>78</oldid>
+		<labelid>Elipse</labelid>
 		<labelvalue>Ellipse</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>79</labelid>
+		<oldid>79</oldid>
+		<labelid>Arrow</labelid>
 		<labelvalue>Arrow</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>80</labelid>
-		<labelvalue>delete chosen Item</labelvalue>		
+		<oldid>80</oldid>
+		<labelid>DeleteChosenItem</labelid>
+		<labelvalue>Delete chosen Item</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>81</labelid>
+		<oldid>81</oldid>
+		<labelid>ApplyForModeration</labelid>
 		<labelvalue>Apply for moderation</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>82</labelid>
-		<labelvalue>apply</labelvalue>		
+		<oldid>82</oldid>
+		<labelid>Apply</labelid>
+		<labelvalue>Apply</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>83</labelid>
-		<labelvalue>cancel</labelvalue>		
+		<oldid>83</oldid>
+		<labelid>Cancel</labelid>
+		<labelvalue>Cancel</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>84</labelid>
+		<oldid>84</oldid>
+		<labelid>BecomeModerator</labelid>
 		<labelvalue>Become moderator</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>85</labelid>
-		<labelvalue>close</labelvalue>		
+		<oldid>85</oldid>
+		<labelid>Close</labelid>
+		<labelvalue>Close</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>86</labelid>
+		<oldid>86</oldid>
+		<labelid>Italic</labelid>
 		<labelvalue>italic</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>87</labelid>
+		<oldid>87</oldid>
+		<labelid>Bold</labelid>
 		<labelvalue>bold</labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>88</labelid>
+		<oldid>88</oldid>
+		<labelid>Waiting</labelid>
 		<labelvalue>WAITING</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>89</labelid>
+		<oldid>89</oldid>
+		<labelid>AUserWantsToApplyForModeration</labelid>
 		<labelvalue>A User wants to apply for moderation:</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>90</labelid>
+		<oldid>90</oldid>
+		<labelid>Accept</labelid>
 		<labelvalue>accept</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>91</labelid>
+		<oldid>91</oldid>
+		<labelid>Reject</labelid>
 		<labelvalue>reject</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>92</labelid>
+		<oldid>92</oldid>
+		<labelid>Cancel</labelid>
 		<labelvalue>cancel</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>93</labelid>
+		<oldid>93</oldid>
+		<labelid>SendingRequestToFollowingUsers</labelid>
 		<labelvalue>Sending request to following Users</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>94</labelid>
+		<oldid>94</oldid>
+		<labelid>Accepted</labelid>
 		<labelvalue>Accepted</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>95</labelid>
+		<oldid>95</oldid>
+		<labelid>Rejected</labelid>
 		<labelvalue>Rejected</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>96</labelid>
+		<oldid>96</oldid>
+		<labelid>ChangeModerator</labelid>
 		<labelvalue>Change Moderator</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>97</labelid>
+		<oldid>97</oldid>
+		<labelid>YouAreNotModeratingThisCourse</labelid>
 		<labelvalue>You are not moderating this course!</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>98</labelid>
+		<oldid>98</oldid>
+		<labelid>Moderator</labelid>
 		<labelvalue>Moderator:</labelvalue>		
 	</labelfield>		
 	<labelfield>
-		<labelid>99</labelid>
+		<oldid>99</oldid>
+		<labelid>ThisRoomIsFullPleaseTryAgain</labelid>
 		<labelvalue>This Room is full. Sorry please try again later.</labelvalue>		
 	</labelfield>	
 	<labelfield>
+		<oldid>100</oldid>
 		<labelid>100</labelid>
 		<labelvalue></labelvalue>		
 	</labelfield>
 	<labelfield>
-		<labelid>101</labelid>
-		<labelvalue>close</labelvalue>		
+		<oldid>101</oldid>
+		<labelid>Close</labelid>
+		<labelvalue>Close</labelvalue>		
 	</labelfield>				
 	<labelfield>
-		<labelid>102</labelid>
-		<labelvalue>loading</labelvalue>		
+		<oldid>102</oldid>
+		<labelid>Loading</labelid>
+		<labelvalue>Loading</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>103</labelid>
+		<oldid>103</oldid>
+		<labelid>PleaseWaitWhileLoadingImage</labelid>
 		<labelvalue>Please wait while loading image</labelvalue>		
 	</labelfield>	
 	<labelfield>
-		<labelid>104</labelid>
+		<oldid>104</oldid>
+		<labelid>SynchronisingConferenceMembers</labelid>
 		<labelvalue>Synchronizing Conference Members</labelvalue>		
-	</labelfield>															
-</language>
+	</labelfield>

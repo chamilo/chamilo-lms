@@ -1085,6 +1085,7 @@ class CourseManager
 			$user_infos["status"] = $user["status"];
 			$user_infos["role"] = $user["role"];
 			$user_infos["tutor_id"] = $user["tutor_id"];
+			$user_infos['email'] = $user['email'];
 			$a_users[$user['id_coach']] = $user_infos;
 		}
 		
@@ -1097,6 +1098,7 @@ class CourseManager
 		$user_infos["status"] = $user["status"];
 		$user_infos["role"] = $user["role"];
 		$user_infos["tutor_id"] = $user["tutor_id"];
+		$user_infos['email'] = $user['email'];
 		$a_users[$session_id_coach] = $user_infos;
 		
 		return $a_users;
@@ -1145,6 +1147,26 @@ class CourseManager
 			}
 		}
 		
+		return $a_students;
+	}
+	/**
+	*	Return user info array of all teacher-users registered in the specified real or virtual course
+	*	This only returns the users that are registered in this actual course, not linked courses.
+	*
+	*	@param string $course_code
+	*	@return array with user id
+	*/
+	function get_teacher_list_from_course_code($course_code)
+	{
+		$a_teachers = array();
+		// teachers directly subscribed to the course
+		$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		$sql_query = "SELECT * FROM $table WHERE `course_code` = '$course_code' AND `status` = 1";
+		$rs = api_sql_query($sql_query, __FILE__, __LINE__);
+		while($teacher = mysql_fetch_array($rs))
+		{
+			$a_students[$teacher['user_id']] = $teacher; 
+		}
 		return $a_students;
 	}
 

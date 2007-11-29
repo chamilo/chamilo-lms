@@ -571,7 +571,17 @@ else // continue with the previous values
 	{
 		$_cid 		= $_SESSION['_cid'   ];
    		$_course    = $_SESSION['_course'];
-
+   		
+   		// these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
+   		// Moreover, if we want to track a course with another session it can be usefull
+		if(!empty($_GET['id_session']))
+		{
+			$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
+			$_SESSION['id_session'] = Database::escape_string($_GET['id_session']);
+			$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.$_SESSION['id_session'] . '"';
+			$rs = api_sql_query($sql,__FILE__,__LINE__);
+			list($_SESSION['session_name']) = mysql_fetch_array($rs);
+		}
 
 		if($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']))
 		{

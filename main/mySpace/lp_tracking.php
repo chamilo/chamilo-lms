@@ -42,7 +42,7 @@ if(!empty($_GET['origin']) && $_GET['origin'] == 'user_course')
 else if(!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course')
 {
 	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$_course['directory'], 'name' => $_course['title']);
-	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$_GET['course'].'&studentlist=true', "name" => get_lang("Tracking"));
+	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$_GET['course'].'&studentlist=true&id_session='.$_SESSION['id_session'], "name" => get_lang("Tracking"));
 }
 else
 {

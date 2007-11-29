@@ -54,9 +54,11 @@ if(isset($_SESSION['oLP']))
 	$document_id = $_SESSION['oLP']->current;
 }
 
-printf('<studentview>%s</studentview>',$student_view);
-printf('<documentid>%s</documentid>',$document_id);
+printf('  <studentview>%s</studentview>',$student_view);
+printf('  <documentid>%s</documentid>',$document_id);
 printf('</recorderparams>');
-
+printf('<languageobject>');
+include_once($language_interface.'.xml');
+printf('</languageobject>');
 printf('</dokeosobject>');
 ?>

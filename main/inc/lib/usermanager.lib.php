@@ -333,8 +333,8 @@ class UserManager
 		echo "<select name=\"author\">";
 		while ($result = Database::fetch_array($sql_result))
 		{
-			if($sel_teacher==$result[user_id]) $selected ="selected";
-			echo "\n<option value=\"".$result[user_id]."\" $selected>".$result[firstname]."</option>";
+			if($sel_teacher==$result['user_id']) $selected ="selected";
+			echo "\n<option value=\"".$result['user_id']."\" $selected>".$result['firstname']."</option>";
 		}
 		echo "</select>";
 	}

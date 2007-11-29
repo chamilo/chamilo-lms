@@ -1160,8 +1160,13 @@ class CourseManager
 	{
 		$a_teachers = array();
 		// teachers directly subscribed to the course
-		$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-		$sql_query = "SELECT * FROM $table WHERE `course_code` = '$course_code' AND `status` = 1";
+		$t_cu = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		$t_u = Database :: get_main_table(TABLE_MAIN_USER);
+		$sql_query = "SELECT u.user_id, u.lastname, u.firstname, u.email, u.username, u.status " .
+				"FROM $t_cu cu, $t_u u " .
+				"WHERE cu.course_code = '$course_code' " .
+				"AND cu.status = 1 " .
+				"AND cu.user_id = u.user_id";
 		$rs = api_sql_query($sql_query, __FILE__, __LINE__);
 		while($teacher = mysql_fetch_array($rs))
 		{

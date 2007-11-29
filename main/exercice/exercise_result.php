@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 13844 2007-11-29 04:53:11Z yannoo $
+* 	@version $Id: exercise_result.php 13845 2007-11-29 05:03:37Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -138,6 +138,7 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 }
 $exerciseTitle=$objExercise->selectTitle();
 $exerciseDescription=$objExercise->selectDescription();
+$exerciseDescription=stripslashes($exerciseDescription);
 
 $nameTools=get_lang('Exercice');
 

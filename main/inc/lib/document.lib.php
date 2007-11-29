@@ -500,7 +500,9 @@ class DocumentManager
 		}
 
 		//escape underscores in the path so they don't act as a wildcard
-		$path = str_replace('_', '\_', $path);
+		$path 		= Database::escape_string(str_replace('_', '\_', $path));
+		$to_user_id = Database::escape_string($to_user_id);
+		$to_value	= Database::escape_string($to_value);
 
 		//if they can't see invisible files, they can only see files with visibility 1
 		$visibility_bit = ' = 1';

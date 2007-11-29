@@ -421,7 +421,7 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".htmlentities($_GET['courseCode'])."&amp;action=view&amp;view=month&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
 	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".htmlentities($_GET['courseCode'])."&amp;action=view&amp;view=month&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
-	echo "<table id=\"agenda_list\">\n", "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">«</a></td>\n", "<td width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n", "<td width=\"10%\"><a href=\"", $forewardsURL, "\">»</a></td>\n", "</tr>\n";
+	echo "<table id=\"agenda_list\">\n", "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">ï¿½</a></td>\n", "<td width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n", "<td width=\"10%\"><a href=\"", $forewardsURL, "\">ï¿½</a></td>\n", "</tr>\n";
 
 	echo "<tr>\n";
 	for ($ii = 1; $ii < 8; $ii ++)
@@ -484,7 +484,7 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
 	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
-	echo "<table id=\"smallcalendar\">\n", "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">«</a></td>\n", "<td width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n", "<td width=\"10%\"><a href=\"", $forewardsURL, "\">»</a></td>\n", "</tr>\n";
+	echo "<table id=\"smallcalendar\">\n", "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">ï¿½</a></td>\n", "<td width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n", "<td width=\"10%\"><a href=\"", $forewardsURL, "\">ï¿½</a></td>\n", "</tr>\n";
 
 	echo "<tr>\n";
 	for ($ii = 1; $ii < 8; $ii ++)
@@ -567,11 +567,11 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 	echo "<table id=\"agenda_list\">\n";
 	// The title row containing the the week information (week of the year (startdate of week - enddate of week)
 	echo "<tr class=\"title\">\n";
-	echo "<td width=\"10%\"><a href=\"", $backwardsURL, "\">«</a></td>\n";
+	echo "<td width=\"10%\"><a href=\"", $backwardsURL, "\">ï¿½</a></td>\n";
 	echo "<td colspan=\"5\">".get_lang("Week")." ".$week_number;
 	echo " (".$DaysShort['1']." ".date("j", $timestamp_first_date_of_week)." ".$MonthsLong[date("n", $timestamp_first_date_of_week) - 1]." ".date("Y", $timestamp_first_date_of_week)." - ".$DaysShort['0']." ".date("j", $timestamp_last_date_of_week)." ".$MonthsLong[date("n", $timestamp_last_date_of_week) - 1]." ".date("Y", $timestamp_last_date_of_week).')';
 	echo "</td>";
-	echo "<td width=\"10%\"><a href=\"", $forewardsURL, "\">»</a></td>\n", "</tr>\n";
+	echo "<td width=\"10%\"><a href=\"", $forewardsURL, "\">ï¿½</a></td>\n", "</tr>\n";
 	// The second row containing the short names of the days of the week
 	echo "<tr>\n";
 	// this is the Day of the month without leading zeros (1 to 31) of the monday of this week
@@ -657,10 +657,10 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=day&amp;day=".date("j", $previousday)."&amp;month=".date("n", $previousday)."&amp;year=".date("Y", $previousday);
 	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=day&amp;day=".date("j", $nextday)."&amp;month=".date("n", $nextday)."&amp;year=".date("Y", $nextday);
 	// The title row containing the day
-	echo "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">«</a></td>\n", "<td>";
+	echo "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">ï¿½</a></td>\n", "<td>";
 	echo $DaysLong[$day_of_the_week]." ".date("j", $today)." ".$MonthsLong[date("n", $today) - 1]." ".date("Y", $today);
 	echo "</td>";
-	echo "<td width=\"10%\"><a href=\"", $forewardsURL, "\">»</a></td>\n";
+	echo "<td width=\"10%\"><a href=\"", $forewardsURL, "\">ï¿½</a></td>\n";
 	echo "</tr>\n";
 	// the rows for each half an hour
 	for ($i = 10; $i < 48; $i ++)
@@ -810,7 +810,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 	// The default value of the week
 	if ($week == '')
 	{
-		$week_number = date("W", mktime());
+		$week_number = date("W", time());
 	}
 	else
 	{
@@ -819,41 +819,6 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 	$start_end = calculate_start_end_of_week($week_number, $year);
 	$start_filter = $start_end['start']['year']."-".$start_end['start']['month']."-".$start_end['start']['day'];
 	$end_filter = $start_end['end']['year']."-".$start_end['end']['month']."-".$start_end['end']['day'];
-	/*
-	// determine the start and end date
-	// step 1: we calculate a timestamp for a day in this week
-	$random_day_in_week=mktime(0,0,0,1,1,$year)+($week_number)*(7*24*60*60); // we calculate a random day in this week
-	// step 2: we which day this is (0=sunday, 1=monday, ...)
-	$number_day_in_week=date("w",$random_day_in_week);
-	// step 3: we calculate the timestamp of the monday of the week we are in
-	$start_timestamp=$random_day_in_week-(($number_day_in_week-1)*24*60*60);
-	// step 4: we calculate the timestamp of the sunday of the week we are in
-	$end_timestamp=$random_day_in_week+((7-$number_day_in_week+1)*24*60*60)-3600;
-	// step 5: calculating the start_day, end_day, start_month, end_month, start_year, end_year
-	$start_day=date("j",$start_timestamp);
-	$start_month=date("n",$start_timestamp);
-	$start_year=date("Y",$start_timestamp);
-	$end_day=date("j",$end_timestamp);
-	$end_month=date("n",$end_timestamp);
-	$end_year=date("Y",$end_timestamp);
-
-	// in sql statements you have to use year-month-day for date calculations
-	$start_filter=$start_year."-".$start_month."-".$start_day;
-	$end_filter=$end_year."-".$end_month."-".$end_day;
-
-	*/
-	//$start_end_week=calculate_start_end_of_week($week_number, $year);
-	// a little bit of debug information
-	//echo "START: ".date("l dS of F Y H:i:s A",$start_timestamp)."<br />";
-	//echo "END: ".date("l dS of F Y H:i:s A",$end_timestamp)."<br />";
-	// this date is the xth day in the week
-	// if we moved to the next / previous week we have to recalculate the $today variable
-	/*if ($_GET['week'])
-		{
-		$today=mktime(0,0,0,1,1,$year);
-		$today=$today+(($_GET['week']-1)*(7*24*60*60));
-		$week_number=date("W",$today);
-		}*/
 	// get agenda-items for every course
 	foreach ($courses_dbs as $key => $array_course_info)
 	{
@@ -869,14 +834,14 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 		{
 			//echo "course admin";
 			$sqlquery = "SELECT
-										DISTINCT agenda.*, item_property.*
-										FROM ".$TABLEAGENDA." agenda,
-											".$TABLE_ITEMPROPERTY." item_property
-										WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
-										AND start_date>='".$start_filter."' AND start_date<='".$end_filter."'
-										AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-										AND `item_property`.`visibility`='1'
-										ORDER BY start_date ".$sort;
+										DISTINCT a.*, i.*
+										FROM ".$TABLEAGENDA." a,
+											".$TABLE_ITEMPROPERTY." i
+										WHERE a.id = i.ref  
+										AND a.start_date>='".$start_filter."' AND a.start_date<='".$end_filter."'
+										AND i.tool='".TOOL_CALENDAR_EVENT."'
+										AND i.visibility='1'
+										ORDER BY a.start_date";
 		}
 		// if the user is not an administrator of that course
 		else
@@ -885,28 +850,28 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 			if (is_array($group_memberships))
 			{
 				$sqlquery = "SELECT
-													agenda.*, item_property.*
-													FROM ".$TABLEAGENDA." agenda,
-														 ".$TABLE_ITEMPROPERTY." item_property
-													WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
-													AND start_date>='".$start_filter."' AND start_date<='".$end_filter."'
-													AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-													AND	( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
-													AND `item_property`.`visibility`='1'
-													ORDER BY start_date ".$sort;
+													a.*, i.*
+													FROM ".$TABLEAGENDA." a,
+														 ".$TABLE_ITEMPROPERTY." i
+													WHERE a.id = i.`ref` 
+													AND a.start_date>='".$start_filter."' AND a.start_date<='".$end_filter."'
+													AND i.tool='".TOOL_CALENDAR_EVENT."'
+													AND	( i.to_user_id='".$_user['user_id']."' OR i.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+													AND i.visibility='1'
+													ORDER BY a.start_date";
 			}
 			else
 			{
 				$sqlquery = "SELECT
-													agenda.*, item_property.*
-													FROM ".$TABLEAGENDA." agenda,
-														 ".$TABLE_ITEMPROPERTY." item_property
-													WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
-													AND start_date>='".$start_filter."' AND start_date<='".$end_filter."'
-													AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-													AND ( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id`='0')
-													AND `item_property`.`visibility`='1'
-													ORDER BY start_date ".$sort;
+													a.*, i.*
+													FROM ".$TABLEAGENDA." a,
+														 ".$TABLE_ITEMPROPERTY." i
+													WHERE a.id = i.ref 
+													AND a.start_date>='".$start_filter."' AND a.start_date<='".$end_filter."'
+													AND i.tool='".TOOL_CALENDAR_EVENT."'
+													AND ( i.to_user_id='".$_user['user_id']."' OR i.to_group_id='0')
+													AND i.visibility='1'
+													ORDER BY a.start_date";
 			}
 		}
 		//echo "<pre>".$sqlquery."</pre>";
@@ -1364,7 +1329,7 @@ function calculate_start_end_of_week($week_number, $year)
 {
 	// determine the start and end date
 	// step 1: we calculate a timestamp for a day in this week
-	$random_day_in_week = mktime(0, 0, 0, 1, 1, $year) + ($week_number) * (7 * 24 * 60 * 60); // we calculate a random day in this week
+	$random_day_in_week = mktime(0, 0, 0, 1, 1, $year) + ($week_number-1) * (7 * 24 * 60 * 60); // we calculate a random day in this week
 	// step 2: we which day this is (0=sunday, 1=monday, ...)
 	$number_day_in_week = date('w', $random_day_in_week);
 	// step 3: we calculate the timestamp of the monday of the week we are in

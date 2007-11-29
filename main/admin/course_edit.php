@@ -1,6 +1,6 @@
 <?php
 
-// $Id: course_edit.php 12870 2007-08-03 11:55:04Z elixir_julian $
+// $Id: course_edit.php 13863 2007-11-29 15:47:06Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -226,7 +226,7 @@ if( $form->validate())
 		foreach($teachers as $key){
 			
 			//We check if the teacher is already subscribed as student in this course 
-			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" AND status="5"';
+			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" AND status<>"1"';
 			$result = api_sql_query($sql_select_teacher, __FILE__, __LINE__);
 			
 			if(mysql_num_rows($result) == 1){

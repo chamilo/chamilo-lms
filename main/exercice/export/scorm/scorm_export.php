@@ -97,13 +97,13 @@ class ScormAssessmentItem
 		{
 			$css = '<style type="text/css" media="screen, projection">'."\n";
 			$css .= '/*<![CDATA[*/'."\n";
-			$css .= '@import "http://my.dokeosyan.net/main/css/default/default.css";'."\n";
-			$css .= '@import "http://my.dokeosyan.net/main/css/default/course.css";'."\n";
+			$css .= '@import "'.api_get_path(WEB_PATH).'main/css/default/default.css";'."\n";
+			$css .= '@import "'.api_get_path(WEB_PATH).'main/css/default/course.css";'."\n";
 			$css .= '/*]]>*/'."\n";
 			$css .= '</style>'."\n";
 			$css .= '<style type="text/css" media="print">'."\n";
 			$css .= '/*<![CDATA[*/'."\n";
-			$css .= '@import "http://my.dokeosyan.net/main/css/default/print.css";'."\n";
+			$css .= '@import "'.api_get_path(WEB_PATH).'main/css/default/print.css";'."\n";
 			$css .= '/*]]>*/'."\n";
 			$css .= '</style>'."\n";
 			return $css;
@@ -313,13 +313,13 @@ class ScormSection
 
 		$css = '<style type="text/css" media="screen, projection">'."\n";
 		$css .= '/*<![CDATA[*/'."\n";
-		$css .= '@import "http://my.dokeosyan.net/main/css/default/default.css";'."\n";
-		$css .= '@import "http://my.dokeosyan.net/main/css/default/course.css";'."\n";
+		$css .= '@import "'.api_get_path(WEB_PATH).'main/css/default/default.css";'."\n";
+		$css .= '@import "'.api_get_path(WEB_PATH).'main/css/default/course.css";'."\n";
 		$css .= '/*]]>*/'."\n";
 		$css .= '</style>'."\n";
 		$css .= '<style type="text/css" media="print">'."\n";
 		$css .= '/*<![CDATA[*/'."\n";
-		$css .= '@import "http://my.dokeosyan.net/main/css/default/print.css";'."\n";
+		$css .= '@import "'.api_get_path(WEB_PATH).'main/css/default/print.css";'."\n";
 		$css .= '/*]]>*/'."\n";
 		$css .= '</style>'."\n";
 		return $css;

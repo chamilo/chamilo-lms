@@ -421,7 +421,7 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".htmlentities($_GET['courseCode'])."&amp;action=view&amp;view=month&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
 	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".htmlentities($_GET['courseCode'])."&amp;action=view&amp;view=month&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
-	echo "<table id=\"agenda_list\">\n", "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">�</a></td>\n", "<td width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n", "<td width=\"10%\"><a href=\"", $forewardsURL, "\">�</a></td>\n", "</tr>\n";
+	echo "<table id=\"agenda_list\">\n", "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">&#171;</a></td>\n", "<td width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n", "<td width=\"10%\"><a href=\"", $forewardsURL, "\">&#187;</a></td>\n", "</tr>\n";
 
 	echo "<tr>\n";
 	for ($ii = 1; $ii < 8; $ii ++)
@@ -484,7 +484,7 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
 	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
-	echo "<table id=\"smallcalendar\">\n", "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">�</a></td>\n", "<td width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n", "<td width=\"10%\"><a href=\"", $forewardsURL, "\">�</a></td>\n", "</tr>\n";
+	echo "<table id=\"smallcalendar\">\n", "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">&#171;</a></td>\n", "<td width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n", "<td width=\"10%\"><a href=\"", $forewardsURL, "\">&#187;</a></td>\n", "</tr>\n";
 
 	echo "<tr>\n";
 	for ($ii = 1; $ii < 8; $ii ++)
@@ -542,17 +542,17 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 	global $DaysShort,$course_path;
 	global $MonthsLong;
 	// timestamp of today
-	$today = mktime();
+	$today = time();
 	$day_of_the_week = date("w", $today);
 	$thisday_of_the_week = date("w", $today);
 	// the week number of the year
 	$week_number = date("W", $today);
-	$thisweek_number = date("W", $today);
+	$thisweek_number = $week_number;
 	// if we moved to the next / previous week we have to recalculate the $today variable
 	if ($_GET['week'])
 	{
 		$today = mktime(0, 0, 0, 1, 1, $year);
-		$today = $today + (((int)$_GET['week']) * (7 * 24 * 60 * 60));
+		$today = $today + (((int)$_GET['week']-1) * (7 * 24 * 60 * 60));
 		$week_number = date("W", $today);
 	}
 	// calculating the start date of the week
@@ -567,11 +567,11 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 	echo "<table id=\"agenda_list\">\n";
 	// The title row containing the the week information (week of the year (startdate of week - enddate of week)
 	echo "<tr class=\"title\">\n";
-	echo "<td width=\"10%\"><a href=\"", $backwardsURL, "\">�</a></td>\n";
+	echo "<td width=\"10%\"><a href=\"", $backwardsURL, "\">&#171;</a></td>\n";
 	echo "<td colspan=\"5\">".get_lang("Week")." ".$week_number;
 	echo " (".$DaysShort['1']." ".date("j", $timestamp_first_date_of_week)." ".$MonthsLong[date("n", $timestamp_first_date_of_week) - 1]." ".date("Y", $timestamp_first_date_of_week)." - ".$DaysShort['0']." ".date("j", $timestamp_last_date_of_week)." ".$MonthsLong[date("n", $timestamp_last_date_of_week) - 1]." ".date("Y", $timestamp_last_date_of_week).')';
 	echo "</td>";
-	echo "<td width=\"10%\"><a href=\"", $forewardsURL, "\">�</a></td>\n", "</tr>\n";
+	echo "<td width=\"10%\"><a href=\"", $forewardsURL, "\">&#187;</a></td>\n", "</tr>\n";
 	// The second row containing the short names of the days of the week
 	echo "<tr>\n";
 	// this is the Day of the month without leading zeros (1 to 31) of the monday of this week
@@ -657,10 +657,10 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=day&amp;day=".date("j", $previousday)."&amp;month=".date("n", $previousday)."&amp;year=".date("Y", $previousday);
 	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=day&amp;day=".date("j", $nextday)."&amp;month=".date("n", $nextday)."&amp;year=".date("Y", $nextday);
 	// The title row containing the day
-	echo "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">�</a></td>\n", "<td>";
+	echo "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">&#171;</a></td>\n", "<td>";
 	echo $DaysLong[$day_of_the_week]." ".date("j", $today)." ".$MonthsLong[date("n", $today) - 1]." ".date("Y", $today);
 	echo "</td>";
-	echo "<td width=\"10%\"><a href=\"", $forewardsURL, "\">�</a></td>\n";
+	echo "<td width=\"10%\"><a href=\"", $forewardsURL, "\">&#187;</a></td>\n";
 	echo "</tr>\n";
 	// the rows for each half an hour
 	for ($i = 10; $i < 48; $i ++)

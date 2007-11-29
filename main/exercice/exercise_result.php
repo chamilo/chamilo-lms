@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 13800 2007-11-28 02:56:21Z yannoo $
+* 	@version $Id: exercise_result.php 13839 2007-11-29 04:13:07Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -120,11 +120,9 @@ $main_admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 $courseName = $_SESSION['_course']['name'];
 $query = "select user_id from $main_admin_table";
 $admin_id = mysql_result(api_sql_query($query),0,"user_id");
-$query1 = "select email,firstname,lastname from $main_user_table where user_id = $admin_id";
-$rs = api_sql_query($query1);
-$row = mysql_fetch_array($rs);
-$from = $row['email'];
-$from_name = $row['firstname'].' '.$row['lastname'];
+$uinfo = api_get_user_info($admin_id);
+$from = $uinfo['mail'];
+$from_name = $uinfo['firstname'].' '.$uinfo['lastname'];
 $str = $_SERVER['REQUEST_URI'];
 $arr = explode('/',$str);
 $url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
@@ -860,61 +858,58 @@ $send_email = api_get_course_setting('email_alert_manager_on_new_quiz');
 $csspath = "http://portal.dokeos.com/demo/main/css/default.css";
 if ($send_email && count($arrques)>0)
 {
-$msg = "<html><head>
-	<link rel='stylesheet' href='http://www.dokeos.com/styles.css' type='text/css'>
-	<meta content='text/html; charset=ISO-8859-1' http-equiv='content-type'>";
-$msg .= "</head>
-<body><br>
-<p>".get_lang('OpenQuestionsAttempted')." : 
+$msg = '<html><head>
+	<link rel="stylesheet" href="http://www.dokeos.com/styles.css" type="text/css">
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">';
+$msg .= '</head>
+<body><br />
+<p>'.get_lang('OpenQuestionsAttempted').' : 
 </p>
-<p>".get_lang('AttemptDetails')." : ><br>
+<p>'.get_lang('AttemptDetails').' : ><br />
 </p>
-<table width='730' height='136' border='0' cellpadding='3' cellspacing='3'>
+<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
 					<tr>
-    <td width='229' valign='top'  class='mybody'>&nbsp;&nbsp;".get_lang('CourseName')."</td>
-    <td width='469' valign='top'  class='mybody'>#course#</td>
+    <td width="229" valign="top"  class="mybody">&nbsp;&nbsp;'.get_lang('CourseName').'</td>
+    <td width="469" valign="top"  class="mybody">#course#</td>
   </tr>
   <tr>
-    <td width='229' valign='top' class='outerframe'>&nbsp;&nbsp;".get_lang('TestAttempted')."</span></td>
-    <td width='469' valign='top' class='outerframe'>#exercise#</td>
+    <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
+    <td width="469" valign="top" class="outerframe">#exercise#</td>
   </tr>
   <tr>
-    <td valign='top'>&nbsp;&nbsp;<span class='style10'>".get_lang('StudentName')." </span></td>
-    <td valign='top' >#firstName# #lastName#</td>
+    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
+    <td valign="top" >#firstName# #lastName#</td>
   </tr>
   <tr>
-    <td valign='top' >&nbsp;&nbsp;".get_lang('StudentEmail')." </td>
-    <td valign='top'> #mail#</td>
+    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
+    <td valign="top"> #mail#</td>
 </tr></table>
-<p><br>
-".get_lang('OpenQuestionsAttemptedAre')." :</p>
-
- <table width='730' height='136' border='0' cellpadding='3' cellspacing='3'>";
+<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
+ <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
   for($i=0;$i<sizeof($arrques);$i++)
   {
-  $msg.="
-	<tr>
-    <td width='220' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>".get_lang('Question')."</span></td>
-    <td width='473' valign='top' bgcolor='F3F3F3'><span class='style16'> #questionName#</span></td>
-  	</tr>
-  	<tr>
-    <td width='220' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>".get_lang('Answer')." </span></td>
-    <td valign='top' bgcolor='F3F3F3'><span class='style16'> #answer#</span></td>
-  	</tr>";
-
-	$msg1= str_replace("#exercise#",$exerciseTitle,$msg);
-	$msg= str_replace("#firstName#",$firstName,$msg1);
-	$msg1= str_replace("#lastName#",$lastName,$msg);
-	$msg= str_replace("#mail#",$mail,$msg1);
-	$msg1= str_replace("#questionName#",$arrques[$i],$msg);
-	$msg= str_replace("#answer#",$arrans[$i],$msg1);
-	$msg1= str_replace("#i#",$i,$msg);
-	$msg= str_replace("#course#",$courseName,$msg1);
-
+	  $msg.='
+		<tr>
+	    <td width="220" valign="top" bgcolor="E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
+	    <td width="473" valign="top" bgcolor="F3F3F3"><span class="style16"> #questionName#</span></td>
+	  	</tr>
+	  	<tr>
+	    <td width="220" valign="top" bgcolor="E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
+	    <td valign="top" bgcolor="F3F3F3"><span class="style16"> #answer#</span></td>
+	  	</tr>';
+	
+		$msg1= str_replace("#exercise#",$exerciseTitle,$msg);
+		$msg= str_replace("#firstName#",$firstName,$msg1);
+		$msg1= str_replace("#lastName#",$lastName,$msg);
+		$msg= str_replace("#mail#",$mail,$msg1);
+		$msg1= str_replace("#questionName#",$arrques[$i],$msg);
+		$msg= str_replace("#answer#",$arrans[$i],$msg1);
+		$msg1= str_replace("#i#",$i,$msg);
+		$msg= str_replace("#course#",$courseName,$msg1);
 	}
-	$msg.="</table><br>
- 	<span class='style16'>".get_lang('ClickToCommentAndGiveFeedback').",<br>
-<a href='#url#'>#url#</a></span></body></html>";
+	$msg.='</table><br>
+ 	<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
+<a href="#url#">#url#</a></span></body></html>';
 
 	$msg1= str_replace("#url#",$url,$msg);
 	$mail_content = stripslashes($msg1);

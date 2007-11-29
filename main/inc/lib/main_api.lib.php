@@ -607,13 +607,6 @@ function api_sql_query($query, $file = '', $line = 0)
 
 	if ($line && !$result)
 	{
-		if (api_get_setting('server_type') !== 'test')
-		{
-			@ mysql_close();
-			die('SQL error in file <b>'.$file.'</b> at line <b>'.$line.'</b>');
-		}
-		else
-		{
 			$info = '<pre>';
 			$info .= '<b>MYSQL ERROR :</b><br/> ';
 			$info .= mysql_error();
@@ -629,7 +622,6 @@ function api_sql_query($query, $file = '', $line = 0)
 			$info .= '</pre>';
 			@ mysql_close();
 			die($info);
-		}
 	}
 	return $result;
 }
@@ -1588,8 +1580,7 @@ function api_not_allowed($print_headers = false)
 	}
 	elseif(!empty($_SERVER['REQUEST_URI']) && !empty($_GET['cidReq'])){
 		//only display form and return to the previous URL if there was a course ID included
-		include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-		$form = new FormValidator('formLogin');
+		include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');$form = new FormValidator('formLogin','post',api_get_self().'?'.$_SERVER['QUERY_STRING']);
 		$form->addElement('static',null,null,'Username');
 		$form->addElement('text','login','',array('size'=>15));
 		$form->addElement('static',null,null,'Password');

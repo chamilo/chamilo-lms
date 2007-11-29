@@ -930,10 +930,8 @@ class learnpath {
 	    		UPDATE " . $tbl_lp_item . "
 	    		SET display_order = display_order - 1
 	    		WHERE
-					lp_id = " . $this->get_id() . " AND
 	    			display_order > " . $old_order . " AND
 	    			parent_item_id = " . $old_parent;
-	    	
 	    	$res_update_order = api_sql_query($sql_update_order, __FILE__, __LINE__);
 	    	
 	    	//echo '<p>' . $sql_update_order . '</p>';
@@ -1035,6 +1033,14 @@ class learnpath {
 			  	//echo '<p>' . $sql_update_next . '</p>';
     		}
     		
+    		if($old_prerequisite!=$prerequisites){
+    			$sql_update_next = "
+		    		UPDATE " . $tbl_lp_item . "
+		    		SET prerequisite = " . $prerequisites . "
+		    		WHERE id = " . $id;
+		    	$res_update_next = api_sql_query($sql_update_next, __FILE__, __LINE__);
+    		}
+    		
     		//update all the items with the same or a bigger display_order than 
     		//the current item
 	    	$sql_update_order = "
@@ -1048,17 +1054,6 @@ class learnpath {
 	    	
 	    	$res_update_next = api_sql_query($sql_update_order, __FILE__, __LINE__);
 			//echo '<p>' . $sql_update_order . '</p>';
-			
-			
-			
-    		
-    		if($old_prerequisite!=$prerequisites){
-    			$sql_update_next = "
-		    		UPDATE " . $tbl_lp_item . "
-		    		SET prerequisite = " .  intval($prerequisites) . "
-		    		WHERE id = " .$id;
-		    	$res_update_next = api_sql_query($sql_update_next, __FILE__, __LINE__);
-    		}
     		
     		/* END -- update the current item id to his new location */
     	}
@@ -4256,7 +4251,7 @@ class learnpath {
 					{
 						$return .= $this->display_manipulate($item_id, $row['item_type']);
 						$return .= $this->display_item_form($row['item_type'], get_lang("EditCurrentChapter").' :', 'edit', $item_id, $row);
-						}
+					}
 					else
 					{
 						$return .= $this->display_item_small_form($row['item_type'], get_lang("EditCurrentChapter").' :', $row);
@@ -4422,7 +4417,7 @@ class learnpath {
 		
 		//TODO: add a path filter
 		if($iframe){
-			$return .= '<iframe frameborder="0" src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document' . str_replace('%2F','/',urlencode($row_doc['path'])) . '?cidReq='.api_get_cidreq().'" style="background:#FFFFFF; border:1px solid #CCCCCC; height:490px; width:100%; margin-top: 20px;"></iframe>';
+			$return .= '<iframe frameborder="0" src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document' . str_replace('%2F','/',urlencode($row_doc['path'])) . '?'.api_get_cidreq().'" style="background:#FFFFFF; border:1px solid #CCCCCC; height:490px; width:100%; margin-top: 20px;"></iframe>';
 		}
 		else{
 			$return .= file_get_contents(api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path']);
@@ -5540,12 +5535,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			{
 				if($action != 'add'){
 					if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)){
-						if($arrLP[$i]['id'] != $id)
-						{
-							$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
-							$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
-						}
-						if($parent == $arrLP[$i]['id']){;
+						$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
+						if($parent == $arrLP[$i]['id']){
 							$s_selected_parent=$arrHide[$arrLP[$i]['id']];
 						}
 					}
@@ -5560,12 +5552,13 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					}
 				}
 			}
+			
 			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent")." :", '', 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;" onchange="load_cbo(this.value);"');
 
 			foreach($arrHide as $key => $value){
 				$parent_select->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 			}
-			$parent_select -> setSelected($parent);
+			$parent_select -> setSelected($s_selected_parent);
 			
 			
 		}

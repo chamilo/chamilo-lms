@@ -315,11 +315,11 @@ function OpenFile( fileUrl, type )
 		ret = confirm('<?php echo get_lang('AutostartMp3') ?>');
 		if(ret==true)
 		{
-			GetE('autostart').checked = 'true';
+			GetE('autostart').checked = true;
 		}
 		else
 		{
-			GetE('autostart').checked = 'false';
+			GetE('autostart').checked = false;
 		}
 	}
 	SetUrl( fileUrl ) ;

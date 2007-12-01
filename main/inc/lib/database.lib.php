@@ -683,6 +683,14 @@ class Database
 			return mysql_result($resource,$row);
 		}
 	}
+	/**
+	 * Recovers the last ID of any insert query executed over this SQL connection
+	 * @return	integer	Unique ID of the latest inserted row
+	 */
+	function insert_id()
+	{
+		return mysql_insert_id();
+	}
 }
 //end class Database
 ?>

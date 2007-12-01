@@ -61,7 +61,7 @@ class survey_manager
 
 		$sql = "SELECT * FROM $table_survey WHERE survey_id='".Database::escape_string($survey_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		$return = mysql_fetch_assoc($result);
+		$return = Database::fetch_array($result,'ASSOC');
 
 		// we do this (temporarily) to have the array match the quickform elements immediately
 		// idealiter the fields in the db match the quickform fields
@@ -120,7 +120,7 @@ class survey_manager
 						'".Database::escape_string($values['anonymous'])."'
 						)";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$survey_id = mysql_insert_id();
+			$survey_id = Database::insert_id();
 
 			//$return['message'] = get_lang('SurveyCreatedSuccesfully').'<br />'.get_lang('YouCanNowAddQuestionToYourSurvey').': ';
 			//$return['message'] .= '<a href="survey.php?survey_id='.$survey_id.'">'.get_lang('ClickHere').'</a>';
@@ -192,7 +192,7 @@ class survey_manager
 						'".date()."',
 						'".$_course['id']."')";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$return	= mysql_insert_id();
+			$return	= Database::insert_id();
 		}
 		else
 		{
@@ -393,7 +393,7 @@ class survey_manager
 		// getting the information of the question
 		$sql = "SELECT * FROM $tbl_survey_question WHERE question_id='".Database::escape_string($question_id)."' ORDER BY `sort`";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		$row = mysql_fetch_assoc($result);
+		$row = Database::fetch_array($result,'ASSOC');
 		$return['survey_id'] 			= $row['survey_id'];
 	    $return['question_id'] 			= $row['question_id'];
 	    $return['type'] 				= $row['type'];
@@ -405,7 +405,7 @@ class survey_manager
 	    // getting the information of the question options
 		$sql = "SELECT * FROM $table_survey_question_option WHERE question_id='".Database::escape_string($question_id)."' ORDER BY `sort` ";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = Database::fetch_array($result,'ASSOC'))
 		{
 			/** @todo this should be renamed to options instead of answers */
 			$return['answers'][] = $row['option_text'];
@@ -436,7 +436,7 @@ class survey_manager
 		// getting the information of the question
 		$sql = "SELECT * FROM $tbl_survey_question WHERE survey_id='".Database::escape_string($survey_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = Database::fetch_array($result,'ASSOC'))
 		{
 			$return[$row['question_id']]['survey_id'] 			= $row['survey_id'];
 		    $return[$row['question_id']]['question_id'] 		= $row['question_id'];
@@ -451,7 +451,7 @@ class survey_manager
 	    // getting the information of the question options
 		$sql = "SELECT * FROM $table_survey_question_option WHERE survey_id='".Database::escape_string($survey_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = Database::fetch_array($result,'ASSOC'))
 		{
 			$return[$row['question_id']]['answers'][] = $row['option_text'];
 		}
@@ -491,7 +491,7 @@ class survey_manager
 			// finding the max sort order of the questions in the given survey
 			$sql = "SELECT max(sort) AS max_sort FROM $tbl_survey_question WHERE survey_id='".Database::escape_string($form_content['survey_id'])."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$row = mysql_fetch_assoc($result);
+			$row = Database::fetch_array($result,'ASSOC');
 			$max_sort = $row['max_sort'];
 
 			// adding the question to the survey_question table
@@ -506,7 +506,7 @@ class survey_manager
 						'".Database::escape_string($form_content['maximum_score'])."'
 						)";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$question_id = mysql_insert_id();
+			$question_id = Database::insert_id();
 			$form_content['question_id'] = $question_id;
 			$return_message = 'QuestionAdded';
 		}
@@ -554,7 +554,7 @@ class survey_manager
 					WHERE survey_id='".Database::escape_string($survey_data['survey_share'])."'
 					AND code='".Database::escape_string($_course['id'])."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$row = mysql_fetch_assoc($result);
+			$row = Database::fetch_array($result,'ASSOC');
 			$max_sort = $row['max_sort'];
 
 			// adding the question to the survey_question table
@@ -567,7 +567,7 @@ class survey_manager
 						'".Database::escape_string($max_sort+1)."',
 						'".Database::escape_string($_course['id'])."')";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$shared_question_id = mysql_insert_id();
+			$shared_question_id = Database::insert_id();
 		}
 		// updating an existing question
 		else
@@ -613,7 +613,7 @@ class survey_manager
 		// finding the two questions that needs to be swapped
 		$sql = "SELECT * FROM $table_survey_question WHERE survey_id='".Database::escape_string($survey_id)."' ORDER BY sort $sort";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = Database::fetch_array($result,'ASSOC'))
 		{
 			if ($found == true)
 			{
@@ -930,7 +930,7 @@ class survey_manager
 			$sql = "SELECT DISTINCT user FROM $table_survey_answer WHERE survey_id= '".Database::escape_string($survey_data['survey_id'])."'";
 		}
 		$res = api_sql_query($sql, __FILE__, __LINE__);
-		while ($row = mysql_fetch_assoc($res))
+		while ($row = Database::fetch_array($res,'ASSOC'))
 		{
 			if ($all_user_info)
 			{
@@ -1749,10 +1749,10 @@ function check_first_last_question($survey_id, $continue=true)
 	// getting the information of the question
 	$sql = "SELECT * FROM $tbl_survey_question WHERE survey_id='".Database::escape_string($survey_id)."' ORDER BY sort ASC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	$total = mysql_num_rows($result);
+	$total = Database::num_rows($result);
 	$counter=1;
 	$error = false;
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = Database::fetch_array($result,'ASSOC'))
 	{
 		if ($counter == 1 AND $row['type'] == 'pagebreak')
 		{

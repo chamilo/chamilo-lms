@@ -613,6 +613,7 @@ class survey_manager
 		// finding the two questions that needs to be swapped
 		$sql = "SELECT * FROM $table_survey_question WHERE survey_id='".Database::escape_string($survey_id)."' ORDER BY sort $sort";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$found = false;
 		while ($row = Database::fetch_array($result,'ASSOC'))
 		{
 			if ($found == true)
@@ -767,15 +768,17 @@ class survey_manager
 		}
 
 		$counter = 1;
-		foreach ($form_content['answers'] as $key=>$answer)
-		{
-			$sql = "INSERT INTO $table_survey_question_option (question_id, survey_id, option_text, sort) VALUES (
-							'".Database::escape_string($form_content['question_id'])."',
-							'".Database::escape_string($form_content['survey_id'])."',
-							'".Database::escape_string($answer)."',
-							'".Database::escape_string($counter)."')";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$counter++;
+		if(is_array($form_content['answers'])){
+			foreach ($form_content['answers'] as $key=>$answer)
+			{
+				$sql = "INSERT INTO $table_survey_question_option (question_id, survey_id, option_text, sort) VALUES (
+								'".Database::escape_string($form_content['question_id'])."',
+								'".Database::escape_string($form_content['survey_id'])."',
+								'".Database::escape_string($answer)."',
+								'".Database::escape_string($counter)."')";
+				$result = api_sql_query($sql, __FILE__, __LINE__);
+				$counter++;
+			}
 		}
 	}
 

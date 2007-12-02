@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 13587 2007-10-29 16:17:50Z elixir_inter $
+* 	@version $Id: reporting.php 13886 2007-12-02 01:20:55Z yannoo $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -894,9 +894,10 @@ function export_complete_report()
 
 	$sql = "SELECT questions.question_id, questions.type, questions.survey_question, count(options.question_option_id) as number_of_options
 			FROM $table_survey_question questions LEFT JOIN $table_survey_question_option options
-			ON questions.question_id = options.question_id
-			/*WHERE questions.question_id = options.question_id*/
-			AND questions.survey_id = '".Database::escape_string($_GET['survey_id'])."'
+			ON questions.question_id = options.question_id "
+			/*WHERE questions.question_id = options.question_id
+			AND questions.survey_id = '".Database::escape_string($_GET['survey_id'])."'*/
+			." AND questions.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 			GROUP BY questions.question_id";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_assoc($result))
@@ -904,14 +905,21 @@ function export_complete_report()
 		// we show the questions if
 		// 1. there is no question filter and the export button has not been clicked
 		// 2. there is a quesiton filter but the question is selected for display
-		if (!($_POST['submit_question_filter']  OR $_POST['export_report']) OR in_array($row['question_id'], $_POST['questions_filter']))
+		if (!($_POST['submit_question_filter']) OR (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter'])))
 		{
 			// we do not show comment and pagebreak question types
 			if ($row['type'] <> 'comment' AND $row['type'] <> 'pagebreak')
 			{
-				for ($ii = 0; $ii < $row['number_of_options']; $ii ++)
+				if($row['number_of_options'] == 0 && $row['type']=='open')
 				{
-					$return .= str_replace("\r\n",'  ',html_entity_decode(strip_tags($row['survey_question']))).';';
+						$return .= str_replace("\r\n",'  ',html_entity_decode(strip_tags($row['survey_question']))).';';					
+				}
+				else
+				{
+					for ($ii = 0; $ii < $row['number_of_options']; $ii ++)
+					{
+						$return .= str_replace("\r\n",'  ',html_entity_decode(strip_tags($row['survey_question']))).';';
+					}
 				}
 			}
 		}
@@ -928,18 +936,21 @@ function export_complete_report()
 			WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 			ORDER BY survey_question.sort ASC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$possible_answers = array();
+	$possible_answers_type = array();
 	while ($row = mysql_fetch_assoc($result))
 	{
 		// we show the options if
 		// 1. there is no question filter and the export button has not been clicked
 		// 2. there is a quesiton filter but the question is selected for display
-		if (!($_POST['submit_question_filter'] OR $_POST['export_report']) OR in_array($row['question_id'], $_POST['questions_filter']))
+		if (!($_POST['submit_question_filter']) OR (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter'])))
 		{
 			// we do not show comment and pagebreak question types
 			if ($row['type'] <> 'comment' AND $row['type'] <> 'pagebreak')
 			{
 				$return .= html_entity_decode(strip_tags($row['option_text'])).';';
 				$possible_answers[$row['question_id']][$row['question_option_id']] =$row['question_option_id'];
+				$possible_answers_type[$row['question_id']] = $row['type'];
 			}
 		}
 	}
@@ -949,19 +960,29 @@ function export_complete_report()
 	$old_user='';
 	$answers_of_user = array();
 	$sql = "SELECT * FROM $table_survey_answer WHERE survey_id='".Database::escape_string($_GET['survey_id'])."' ORDER BY user ASC";
+	
+	$open_question_iterator = 1;
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_assoc($result))
 	{
-		if ($old_user <> $row['user'] AND $old_user<>'')
+		if ($old_user <> $row['user'] AND $old_user <> '')
 		{
 			$return .= export_complete_report_row($possible_answers, $answers_of_user, $old_user);
 			$answers_of_user=array();
 		}
-		$answers_of_user[$row['question_id']][$row['option_id']] = $row;
+		if($possible_answers_type[$row['question_id']] == 'open')
+		{
+			$temp_id = 'open'.$open_question_iterator;
+			$answers_of_user[$row['question_id']][$temp_id] = $row;
+			$open_question_iterator++;
+		}
+		else
+		{
+			$answers_of_user[$row['question_id']][$row['option_id']] = $row;
+		}
 		$old_user = $row['user'];
 	}
 	$return .= export_complete_report_row($possible_answers, $answers_of_user, $old_user); // this is to display the last user
-
 	return $return;
 }
 
@@ -984,15 +1005,26 @@ function export_complete_report_row($possible_answers, $answers_of_user, $user)
 {
 	$return = $user.';'; // the user column
 
-	foreach ($possible_answers as $question_id=>$possible_option)
+	if(is_array($possible_answers))
 	{
-		foreach ($possible_option as $option_id=>$value)
+		foreach ($possible_answers as $question_id=>$possible_option)
 		{
-			if (!empty($answers_of_user[$question_id][$option_id]))
+			if(is_array($possible_option) && count($possible_option)>0)
 			{
-				$return .= 'v';
+				foreach ($possible_option as $option_id=>$value)
+				{
+					$key = array_keys($answers_of_user[$question_id]);
+					if(substr($key[0],0,4)=='open')
+					{
+						$return .= '"'.str_replace('"','""',html_entity_decode(strip_tags($answers_of_user[$question_id][$key[0]]['option_id']))).'"';
+					}
+					elseif (!empty($answers_of_user[$question_id][$option_id]))
+					{
+						$return .= 'v';
+					}
+					$return .= ';';
+				}
 			}
-			$return .= ';';
 		}
 	}
 	$return .= "\n";

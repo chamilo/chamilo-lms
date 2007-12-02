@@ -300,12 +300,13 @@ else
 // Displaying the form with the questions
 echo '<form id="question" name="question" method="post" action="'.api_get_self().'?course='.$_GET['course'].'&invitationcode='.$_GET['invitationcode'].'&show='.$show.'">';
 echo '<input type="hidden" name="language" value="'.$_POST['language'].'" />';
-foreach ($questions as $key=>$question)
-{
-	$display = new $question['type'];
-	$display->render_question($question);
+if(is_array($questions)){
+	foreach ($questions as $key=>$question)
+	{
+		$display = new $question['type'];
+		$display->render_question($question);
+	}
 }
-
 if (($show < $numberofpages) OR !$_GET['show'])
 {
 	//echo '<a href="'.api_get_self().'?survey_id='.$survey_invitation['survey_id'].'&amp;show='.$limit.'">NEXT</a>';

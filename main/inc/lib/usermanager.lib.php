@@ -203,6 +203,20 @@ class UserManager
 	}
 
 	/**
+	 * Update user information with new openid
+	 * @param int $user_id
+	 * @param string $openid
+	 * @return boolean true if the user information was updated
+	 */
+	function update_openid($user_id, $openid)
+	{
+		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+		$sql = "UPDATE $table_user SET
+				openid='".Database::escape_string($openid)."'";
+		$sql .=	" WHERE user_id='$user_id'";
+		return api_sql_query($sql,__FILE__,__LINE__);
+	}
+	/**
 	 * Update user information
 	 * @param int $user_id
 	 * @param string $firstname

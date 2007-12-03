@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 13536 2007-10-18 16:58:58Z yannoo $
+<?php // $Id: user_edit.php 13895 2007-12-03 21:54:45Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -98,6 +98,12 @@ $form->applyFilter('official_code','trim');
 $form->addElement('text', 'email', get_lang('Email'),array('size' => '40'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 $form->addRule('email', get_lang('EmailWrong'), 'required');
+
+// OpenID
+if(api_get_setting('openid_authentication')=='true')
+{
+	$form->addElement('text', 'openid', get_lang('OpenIDURL'),array('size' => '40'));
+}
 
 // Phone
 $form->addElement('text','phone',get_lang('PhoneNumber'));
@@ -265,6 +271,10 @@ if( $form->validate())
 		$auth_source = $user['auth_source'];		
 	}
 	UserManager::update_user($user_id,$firstname,$lastname,$username,$password,$auth_source,$email,$status,$official_code,$phone,$picture_uri,$expiration_date, $active);
+	if(api_get_setting('openid_authentication')=='true' && !empty($user['openid']))
+	{
+		$up = UserManager::update_openid($user_id,$user['openid']);
+	}
 	if($user_id != $_SESSION['_uid'])
 	{
 		if($platform_admin == 1)

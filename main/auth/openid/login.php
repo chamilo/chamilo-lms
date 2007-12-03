@@ -230,61 +230,6 @@ function openid_association($op_endpoint) {
 }
 
 /**
- * Authenticate a user or attempt registration.
- *
- * @param $response Response values from the OpenID Provider.
- */
-function openid_authentication($response) {
-
-  $identity = $response['openid.identity'];
-
-  $account = user_external_load($identity);
-  if (isset($account->uid)) {
-    if (!variable_get('user_email_verification', TRUE) || $account->login) {
-      user_external_login($account, $_SESSION['openid_user_login_values']);
-    }
-    else {
-      //TODO
-      //drupal_set_message(t('You must validate your email address for this account before logging in via OpenID'));
-    }
-  }
-  elseif (variable_get('user_register', 1)) {
-    // Register new user
-    $form_state['redirect'] = NULL;
-    $form_state['values']['name'] = (empty($response['openid.sreg.nickname'])) ? $identity : $response['openid.sreg.nickname'];
-    $form_state['values']['mail'] = (empty($response['openid.sreg.email'])) ? '' : $response['openid.sreg.email'];
-    $form_state['values']['pass']  = user_password();
-    $form_state['values']['status'] = variable_get('user_register', 1) == 1;
-    $form_state['values']['response'] = $response;
-    $form_state['values']['auth_openid'] = $identity;
-    //TODO
-    $form = drupal_retrieve_form('user_register', $form_state);
-    drupal_prepare_form('user_register', $form, $form_state);
-    drupal_validate_form('user_register', $form, $form_state);
-    if (form_get_errors()) {
-      // We were unable to register a valid new user, redirect to standard
-      // user/register and prefill with the values we received.
-      drupal_set_message(t('OpenID registration failed for the reasons listed. You may register now, or if you already have an account you can <a href="@login">log in</a> now and add your OpenID under "My Account"', array('@login' => url('user/login'))), 'error');
-      $_SESSION['openid'] = $form_state['values'];
-      // We'll want to redirect back to the same place.
-      $destination = drupal_get_destination();
-      unset($_REQUEST['destination']);
-      drupal_goto('user/register', $destination);
-    }
-    else {
-      unset($form_state['values']['response']);
-      $account = user_save('', $form_state['values']);
-      user_external_login($account);
-    }
-    drupal_redirect_form($form, $form_state['redirect']);
-  }
-  else {
-    drupal_set_message(t('Only site administrators can create new user accounts.'), 'error');
-  }
-  drupal_goto();
-}
-
-/**
  * ?
  */
 function openid_association_request($public) {

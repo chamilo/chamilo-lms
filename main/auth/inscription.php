@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 13551 2007-10-24 11:53:14Z pcool $
+// $Id: inscription.php 13893 2007-12-03 21:14:24Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -144,6 +144,14 @@ if(isset($_SESSION["user_language_choice"]) && $_SESSION["user_language_choice"]
 }
 else{
 	$defaults['language'] = api_get_setting('platformLanguage');
+}
+if(!empty($_GET['username']))
+{
+	$defaults['username'] = $_GET['username'];
+}
+if(!empty($_GET['email']))
+{
+	$defaults['email'] = $_GET['email'];
 }
 $defaults['status'] = STUDENT;
 $form->setDefaults($defaults);

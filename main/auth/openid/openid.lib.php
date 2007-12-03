@@ -1,7 +1,7 @@
 <?php
 /**
- * @file
  * OpenID utility functions. Taken from Drupal 6 code (from dries)
+ * @file openid.lib.php
  */
 
 // Diffie-Hellman Key Exchange Default Value.
@@ -371,15 +371,15 @@ function _openid_get_bytes($num_bytes) {
  * Fix PHP's habit of replacing '.' by '_' in posted data.
  */
 function _openid_fix_post(&$post) {
-  $extensions = module_invoke_all('openid', 'extension');
+  //$extensions = module_invoke_all('openid', 'extension');
   foreach ($post as $key => $value) {
     if (strpos($key, 'openid_') === 0) {
       $fixed_key = str_replace('openid_', 'openid.', $key);
       $fixed_key = str_replace('openid.ns_', 'openid.ns.', $fixed_key);
       $fixed_key = str_replace('openid.sreg_', 'openid.sreg.', $fixed_key);
-      foreach ($extensions as $ext) {
-        $fixed_key = str_replace('openid.'.$ext.'_', 'openid.'.$ext.'.', $fixed_key);
-      }
+      //foreach ($extensions as $ext) {
+      //  $fixed_key = str_replace('openid.'.$ext.'_', 'openid.'.$ext.'.', $fixed_key);
+      //}
       unset($post[$key]);
       $post[$fixed_key] = $value;
     }

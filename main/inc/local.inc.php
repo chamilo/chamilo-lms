@@ -347,6 +347,94 @@ else
 
         } //end else login failed
     }
+    elseif(api_get_setting('openid_authentication')=='true')
+    {
+		if(!empty($_POST['openid_url']))
+		{
+	    	include('main/auth/openid/login.php');
+	    	openid_begin(trim($_POST['openid_url']),api_get_path(WEB_PATH).'index.php');
+	    	//this last function should trigger a redirect, so we can die here safely
+	    	die('Openid login redirection should be in progress');
+		}
+		elseif(!empty($_GET['openid_identity']))
+    	{	//it's usual for PHP to replace '.' (dot) by '_' (underscore) in URL parameters
+	    	include('main/auth/openid/login.php');
+	    	$res = openid_complete($_GET);
+	    	if($res['status'] == 'success')
+	    	{
+		        //lookup the user in the main database
+				$user_table = Database::get_main_table(TABLE_MAIN_USER);
+		        $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
+		                FROM $user_table
+		                WHERE openid = '".Database::escape_string($res['openid.identity'])."'";
+		        $result = api_sql_query($sql);
+		        if($result !== false)
+		        {
+		        	if(Database::num_rows($result)>0)
+		        	{
+		        		//$row = Database::fetch_array($res);
+			            $uData = Database::fetch_array($result);
+			
+			            if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE)
+			            {
+			                //the authentification of this user is managed by Dokeos itself
+			
+		                	// check if the account is active (not locked)
+		                	if ($uData['active']=='1')
+		                	{
+		                		// check if the expiration date has not been reached
+		                		if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00')
+		                		{
+		                			
+									$_user['user_id'] = $uData['user_id'];
+									api_session_register('_user');
+									if(!function_exists('event_login')){
+										include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
+										event_login();
+									}
+		                		}
+		                		else
+		                		{
+									$loginFailed = true;
+									api_session_unregister('_uid');
+									header('Location: index.php?loginFailed=1&error=account_expired');
+									exit;
+		                		}
+		                	}
+		                	else
+		                	{
+								$loginFailed = true;
+								api_session_unregister('_uid');
+								header('Location: index.php?loginFailed=1&error=account_inactive');
+								exit;
+		                	}
+			
+			                if (isset($uData['creator_id']) && $_user['user_id'] != $uData['creator_id'])
+			                {
+			                    //first login for a not self registred
+			                    //e.g. registered by a teacher
+			                    //do nothing (code may be added later)
+			                }
+			            }
+		        	}
+		        	else
+		        	{
+		        		//Redirect to the subscription form
+		        		header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php?username='.$res['openid.sreg.nickname'].'&email='.$res['openid.sreg.email'].'&openid='.$res['openid.identity'].'&openid_msg=idnotfound');
+		        		//$loginFailed = true;
+		        	}
+		        }
+		        else
+		        {
+		        	$loginFailed = true;
+		        }
+	    	}
+	    	else
+    		{
+    			$loginFailed = true;
+    		}
+    	}
+    }
 
     //    else {} => continue as anonymous user
     $uidReset = true;

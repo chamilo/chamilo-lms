@@ -26,7 +26,13 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('survey_ema
 INSERT INTO settings_options (variable, value, display_text) VALUES ('survey_email_sender_noreply', 'noreply', 'NoReplyEmailSender');
 DELETE FROM settings_current WHERE variable='show_student_view';
 DELETE FROM settings_options WHERE variable='show_student_view';
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('openid_authentication', '', 'radio', 'Security', 'false', 'OpenIdAuthentication', 'OpenIdAuthenticationComment', NULL, NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('openid_authentication', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('openid_authentication', 'false', 'No');
 CREATE TABLE templates (id int NOT NULL auto_increment, title varchar(100) NOT NULL, description varchar(250) NOT NULL, course_code varchar(40) NOT NULL, user_id int NOT NULL, ref_doc int NOT NULL, PRIMARY KEY (id));
+ALTER TABLE user ADD openid varchar(255) DEFAULT NULL;
+ALTER TABLE user ADD INDEX (openid(50));
+CREATE TABLE IF NOT EXISTS openid_association (id int NOT NULL auto_increment,idp_endpoint_uri text NOT NULL,session_type varchar(30) NOT NULL,assoc_handle text NOT NULL,assoc_type text NOT NULL,expires_in bigint NOT NULL,mac_key text NOT NULL,created bigint NOT NULL,PRIMARY KEY (id));
 
 -- xxSTATSxx
 ALTER TABLE track_e_downloads ADD INDEX (down_user_id);

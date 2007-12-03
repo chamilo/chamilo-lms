@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 13486 2007-10-16 07:39:22Z pcool $
+// $Id: profile.php 13894 2007-12-03 21:43:34Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -152,6 +152,16 @@ if (api_get_setting('registration', 'email') == 'true')
 	$form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 
+// OPENID URL
+if(api_get_setting('openid_authentication')=='true')
+{
+	$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));
+	if (api_get_setting('profile', 'openid') !== 'true')
+		$form->freeze('openid');
+	$form->applyFilter('openid', 'trim');
+	//if (api_get_setting('registration', 'openid') == 'true')
+	//	$form->addRule('openid', get_lang('ThisFieldIsRequired'), 'required');
+}
 
 //	PHONE
 $form->addElement('text', 'phone', get_lang('phone'), array('size' => 20));
@@ -478,6 +488,7 @@ elseif ($form->validate())
 	if ($_FILES['production']['size'])
 		upload_user_production($_user['user_id']);
 
+	
 	// remove values that shouldn't go in the database
 	unset($user_data['password1'], $user_data['password2'], $user_data['MAX_FILE_SIZE'],
 		$user_data['remove_picture'], $user_data['apply_change']);

@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 13893 2007-12-03 21:14:24Z yannoo $
+// $Id: inscription.php 13894 2007-12-03 21:43:34Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -51,6 +51,11 @@ if (get_setting('allow_registration')=='approval')
 {
 	Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
 }
+//if openid was not found
+if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound')
+{
+	Display::display_warning_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));	
+}
 
 $fck_attribute['Height'] = "150";
 $fck_attribute['Width'] = "450";
@@ -67,6 +72,10 @@ $form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
 if (api_get_setting('registration', 'email') == 'true')
 	$form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email', get_lang('EmailWrong'), 'email');
+if (api_get_setting('openid_authentication')=='true')
+{
+	$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));	
+}
 //	OFFICIAL CODE
 if (CONFVAL_ASK_FOR_OFFICIAL_CODE)
 {
@@ -152,6 +161,10 @@ if(!empty($_GET['username']))
 if(!empty($_GET['email']))
 {
 	$defaults['email'] = $_GET['email'];
+}
+if (api_get_setting('openid_authentication')=='true' && !empty($_GET['openid']))
+{
+	$defaults['openid'] = $_GET['openid'];	
 }
 $defaults['status'] = STUDENT;
 $form->setDefaults($defaults);

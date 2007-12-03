@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 13757 2007-11-24 01:01:22Z yannoo $
+* 	@version $Id: index.php 13894 2007-12-03 21:43:34Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -512,6 +512,11 @@ function display_login_form()
 	$renderer =& $form->defaultRenderer();
 	$renderer->setElementTemplate('<div><label>{label}</label></div><div>{element}</div>');
 	$form->display();
+	if(api_get_setting('openid_authentication')=='true')
+	{
+		include_once('main/auth/openid/login.php');
+		echo '<div>'.openid_form().'</div>';
+	}
 }
 /**
  * Displays a link to the lost password section

@@ -521,7 +521,9 @@ INSERT INTO settings_current VALUES
 (113,'noreply_email_address', '', 'textfield', 'Platform', '', 
 'NoReplyEmailAddress', 'NoReplyEmailAddressComment', NULL, NULL),
 (114,'survey_email_sender_noreply', '', 'radio', 'Course', 'coach', 
-'SurveyEmailSenderNoReply', 'SurveyEmailSenderNoReplyComment', NULL, NULL);
+'SurveyEmailSenderNoReply', 'SurveyEmailSenderNoReplyComment', NULL, NULL),
+(115,'openid_authentication',NULL,'radio','Security','false','OpenIdAuthentication','OpenIdAuthenticationComment',NULL,NULL),
+(116,'profile','openid','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'OpenIDURL');
 
 
 UNLOCK TABLES;
@@ -642,7 +644,9 @@ INSERT INTO settings_options VALUES
 (105, 'default_forum_view', 'threaded', 'Threaded'),
 (106, 'default_forum_view', 'nested', 'Nested'),
 (107, 'survey_email_sender_noreply', 'coach', 'CourseCoachEmailSender'),
-(108, 'survey_email_sender_noreply', 'noreply', 'NoReplyEmailSender');
+(108, 'survey_email_sender_noreply', 'noreply', 'NoReplyEmailSender'),
+(109, 'openid_authentication','true','Yes'),
+(110, 'openid_authentication','false','No');
 
 
 UNLOCK TABLES;
@@ -711,6 +715,7 @@ CREATE TABLE user (
   registration_date datetime NOT NULL default '0000-00-00 00:00:00',
   expiration_date datetime NOT NULL default '0000-00-00 00:00:00',
   active tinyint unsigned NOT NULL default 1,
+  openid varchar(255) DEFAULT NULL,
   PRIMARY KEY  (user_id),
   UNIQUE KEY username (username)
 );
@@ -791,11 +796,31 @@ CREATE TABLE shared_survey_question_option (
 -- 
 
 CREATE TABLE templates (
-  id int(11) NOT NULL auto_increment,
+  id int NOT NULL auto_increment,
   title varchar(100) NOT NULL,
   description varchar(250) NOT NULL,
   course_code varchar(40) NOT NULL,
-  user_id int(11) NOT NULL,
-  ref_doc int(11) NOT NULL,
+  user_id int NOT NULL,
+  ref_doc int NOT NULL,
+  PRIMARY KEY  (id)
+);
+
+-- 
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure of openid_association (keep info on openid servers)
+-- 
+
+CREATE TABLE IF NOT EXISTS openid_association (
+  id int NOT NULL auto_increment,
+  idp_endpoint_uri text NOT NULL,
+  session_type varchar(30) NOT NULL,
+  assoc_handle text NOT NULL,
+  assoc_type text NOT NULL,
+  expires_in bigint NOT NULL,
+  mac_key text NOT NULL,
+  created bigint NOT NULL,
   PRIMARY KEY  (id)
 );

@@ -92,7 +92,7 @@ else
 	// displaying the survey thanks message
 	if ($_POST['finish_survey'])
 	{
-		echo '<div id="survey_content" class="survey_content"><strong>'.get_lang('SurveyFinished').'</strong>'.$survey_data['survey_thanks'].'</div>';
+		echo '<div id="survey_content" class="survey_content"><strong>'.get_lang('SurveyFinished').' </strong>'.$survey_data['survey_thanks'].'</div>';
 		Display :: display_footer();
 		exit;
 	}
@@ -172,10 +172,13 @@ else
 		$show = 0;
 	}
 	echo '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.$_GET['survey_id'].'&show='.$show.'">';
-	foreach ($questions as $key=>$question)
+	if(is_array($questions) && count($questions)>0)
 	{
-		$display = new $question['type'];
-		$display->render_question($question);
+		foreach ($questions as $key=>$question)
+		{
+			$display = new $question['type'];
+			$display->render_question($question);
+		}
 	}
 	if (($show < $numberofpages) OR !$_GET['show'])
 	{

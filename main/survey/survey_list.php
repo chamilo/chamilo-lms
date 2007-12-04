@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey_list.php 13606 2007-10-31 09:31:36Z elixir_inter $
+* 	@version $Id: survey_list.php 13921 2007-12-04 23:18:46Z yannoo $
 *
 * 	@todo use quickforms for the forms
 */
@@ -207,7 +207,7 @@ function display_survey_list()
 
 	// Create a sortable table with survey-data
 	$table = new SortableTable('surveys', 'get_number_of_surveys', 'get_survey_data',2);
-	$table->set_additional_parameters($parameters);
+	$table->set_additional_parameters('');
 	$table->set_header(0, '', false);
 	$table->set_header(1, get_lang('SurveyName'));
 	$table->set_header(2, get_lang('SurveyCode'));

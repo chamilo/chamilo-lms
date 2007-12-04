@@ -159,7 +159,7 @@ else
 		}
 	}
 	// selecting the maximum number of pages
-	$sql = "SELECT * FROM $table_survey_question WHERE type='".Database::escape_string('pagebreak')."' AND survey_id='".Database::escape_string($_GET[survey_id])."'";
+	$sql = "SELECT * FROM $table_survey_question WHERE type='".Database::escape_string('pagebreak')."' AND survey_id='".Database::escape_string($_GET['survey_id'])."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	$numberofpages = mysql_num_rows($result) + 1;
 	// Displaying the form with the questions

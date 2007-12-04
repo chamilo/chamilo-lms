@@ -189,7 +189,7 @@ class survey_manager
 						'".Database::escape_string('template')."',
 						'".Database::escape_string($values['survey_introduction'])."',
 						'".Database::escape_string($values['survey_thanks'])."',
-						'".date()."',
+						'".date('Y-m-d H:i:s')."',
 						'".$_course['id']."')";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$return	= Database::insert_id();
@@ -963,7 +963,7 @@ class survey_manager
 class question
 {
 	// the html code of the form
-	var $html;
+	public $html;
 
 	/**
 	 * This function does the generic part of any survey question: the question field

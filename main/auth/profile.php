@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 13894 2007-12-03 21:43:34Z yannoo $
+// $Id: profile.php 13901 2007-12-04 04:45:48Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -525,7 +525,7 @@ elseif ($form->validate())
 	$uidReset = true;
 	include (api_get_path(INCLUDE_PATH).'local.inc.php');
 	$_SESSION['profile_update'] = 'success';
-	header("Location: http://{$_SERVER['HTTP_HOST']}".api_get_self()."?{$_SERVER['QUERY_STRING']}");
+	header("Location: ".api_get_path(WEB_PATH).api_get_self()."?{$_SERVER['QUERY_STRING']}");
 	exit;
 }
 

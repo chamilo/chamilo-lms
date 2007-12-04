@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 13292 2007-09-27 01:59:07Z yannoo $
+<?php // $Id: courses.php 13919 2007-12-04 21:40:17Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -400,7 +400,7 @@ function display_search_courses()
 	echo "<p><b>".get_lang("SearchCourse")."</b><br />";
 	echo "<form class=\"course_list\" method=\"post\" action=\"".api_get_self()."?action=subscribe\">",
 					"<input type=\"hidden\" name=\"search_course\" value=\"1\" />",
-					"<input type=\"text\" name=\"search_term\" />",
+					"<input type=\"text\" name=\"search_term\" value=\"".(empty($_POST['search_term'])?'':$_POST['search_term'])."\" />",
 					"&nbsp;<input type=\"submit\" value=\"",get_lang("_search"),"\" />",
 					"</form>";
 	if (isset($_POST['search_course']))
@@ -865,6 +865,11 @@ function display_subscribe_icon($current_course, $user_coursecodes)
 		{
 			echo "<form action=\"".$_SERVER["REQUEST_URI"]."\" method=\"post\">";
 			echo "<input type=\"hidden\" name=\"subscribe\" value=\"".$current_course['code']."\" />";
+			if(!empty($_POST['search_term']))
+			{
+				echo '<input type="hidden" name="search_course" value="1" />';
+				echo '<input type="hidden" name="search_term" value="'.Security::remove_XSS($_POST['search_term']).'" />';
+			}
 			echo "<input type=\"image\" name=\"unsub\" src=\"../img/enroll.gif\" alt=\"".get_lang("Subscribe")."\" />".get_lang("Subscribe")."</form>";
 		}
 		else

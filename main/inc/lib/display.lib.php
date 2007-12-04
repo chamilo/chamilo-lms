@@ -475,11 +475,10 @@ class Display {
 	}
 	/**
 	 * Display the page header
-	 * @param string $tool_name The name of the page (will be showed in the
-	 * page title)
-	 * @param string $help
+	 * @param string The name of the page (will be showed in the page title)
+	 * @param string Optional help file name
 	 */
-	function display_header($tool_name='', $help = NULL)
+	function display_header($tool_name, $help = NULL)
 	{
 		$nameTools = $tool_name;
 		global $_plugins;

@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 13337 2007-09-27 17:09:51Z elixir_inter $
+<?php // $Id: edit_document.php 13916 2007-12-04 15:06:22Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -78,7 +78,7 @@ require_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php')
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '950';
 $fck_attribute['ToolbarSet'] = 'Full';
-
+$fck_attribute['Config']['FullPage'] = true;
 
 
 /*

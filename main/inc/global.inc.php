@@ -49,10 +49,8 @@ require_once($includePath.'/lib/main_api.lib.php');
 
 api_session_start($already_installed);
 
-if (!$already_installed)
-{
-	//require('installedVersion.inc.php');
-	$error_message = <<<EOM
+
+$error_message_not_installed = <<<EOM
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 		<head>
@@ -77,13 +75,48 @@ if (!$already_installed)
 			</div>
 
 			<div id="footer">
-				<div class="copyright">Platform <a href="http://www.dokeos.com"> Dokeos </a> &copy; 2006 </div>
+				<div class="copyright">Platform <a href="http://www.dokeos.com"> Dokeos </a> &copy; 2008 </div>
 				&nbsp;
 			</div>
 		</body>
 </html>
 EOM;
-	die($error_message);
+
+$error_message_db_problem = <<<EOM
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+		<head>
+			<title>Dokeos database unavailable!</title>
+			<style type="text/css" media="screen, projection">
+				/*<![CDATA[*/
+				@import "main/css/default/default.css";
+				/*]]>*/
+			</style>
+		</head>
+		<body>
+			<div id="header">
+				<div id="header1"><a href="http://www.dokeos.com">Dokeos Homepage</a></div>
+				<div class="clear"></div>
+				<div id="header2">&nbsp;</div>
+				<div id="header3">&nbsp;</div>
+			</div>
+EOM;
+$error_message_db_problem .= '
+			<div style="text-align: center; font-size: large; margin-bottom: 2em;"><br /><br />
+					This portal is currently experiencing database issues. Please report this to the portal administrator. Thank you for your help.</a>
+			</div>
+			<div id="footer">
+				<div class="copyright">Platform <a href="http://www.dokeos.com"> Dokeos </a> &copy; 2008 </div>
+				&nbsp;
+			</div>
+		</body>
+</html>';
+
+
+if (!$already_installed)
+{
+	//require('installedVersion.inc.php');
+	die($error_message_not_installed);
 }
 
 //Assigning a variable to avoid several useless calls to the database setting. 
@@ -106,15 +139,16 @@ if(empty($_configuration['statistics_database']) && $already_installed)
 
 // connect to the server database and select the main dokeos database
 
-$dokeos_database_connection = @mysql_connect($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password']) or die ($error_message);
+$dokeos_database_connection = @mysql_connect($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password']) or die ($error_message_db_problem);
 
 if (! $_configuration['db_host'])
 {
-	die($error_message);
+	die($error_message_db_problem);
 }
 
 
-unset($error_message);
+unset($error_message_db_problem);
+unset($error_message_not_installed);
 
 $selectResult = mysql_select_db($_configuration['main_database'],$dokeos_database_connection) or die ('<center>WARNING ! SYSTEM UNABLE TO SELECT THE MAIN DOKEOS DATABASE</center>');
 

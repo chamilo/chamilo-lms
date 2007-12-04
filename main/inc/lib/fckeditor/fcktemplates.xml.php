@@ -70,8 +70,10 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Description>Theory, content section, chapter...</Description>
 		<Html>
 			<![CDATA[
+					<head>
 					<?php echo $css ?>
-				    
+				    </head>
+				    <body>
 				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Text</div>
 				    <br />
 				
@@ -100,7 +102,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				    <br />
 				    <br />
 				    <br />
-				    
+				    </body>
 			]]>
 		</Html>
 	</Template>
@@ -110,8 +112,10 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Description>Mr Dokeos points to your content</Description>
 		<Html>
 			<![CDATA[
+					<head>
 					<?php echo $css ?>
-				    
+				    </head>
+				    <body>
 				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Teacher explaining</div>
 				    <br />
 				
@@ -148,6 +152,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				    <br />
 				    <br />
 				    <br />
+				    </body>
 				    
 			]]>
 		</Html>
@@ -158,8 +163,10 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Description>2 columns text page</Description>
 		<Html>
 			<![CDATA[
+					<head>
 					<?php echo $css ?>
-				    
+				    </head>
+				    <body>
 				   <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Comparison</div>
 				    <br />
 				    
@@ -210,6 +217,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				    <br />
 				    <br />
 				    <br />
+				    </body>
 				    
 			]]>
 		</Html>
@@ -220,8 +228,10 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Description>Image on the left, comment on the right</Description>
 		<Html>
 			<![CDATA[
+					<head>
 					<?php echo $css ?>
-				    
+				    </head>
+				    <body>
 				   <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">A diagram explained</div>
 				    <br />
 				
@@ -262,6 +272,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				    <br />
 				    <br />
 				    <br />
+				    </body>
 				    
 			]]>
 		</Html>
@@ -272,8 +283,10 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Description>Self-explaining diagram</Description>
 		<Html>
 			<![CDATA[
+					<head>
 					<?php echo $css ?>
-				    
+				    </head>
+				    <body>
 				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Picture page</div>
 				    <br />
 				
@@ -299,6 +312,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				
 				    <br />
 				    <br />
+				    </body>
 				    
 			]]>
 		</Html>
@@ -309,8 +323,10 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Description>Animation + introduction text</Description>
 		<Html>
 			<![CDATA[
+					<head>
 					<?php echo $css ?>
-				    
+				    </head>
+				    <body>
 				  <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Flash animation page</div>
 				    <br />
 				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
@@ -340,6 +356,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				    <br />
 				    <br />
 				    <br />
+				    </body>
 				    
 			]]>
 		</Html>
@@ -413,6 +430,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 					  </body>
 					
 					</html>
+				    </body>
 				    
 			]]>
 		</Html>
@@ -423,8 +441,10 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Description>On demand video + text</Description>
 		<Html>
 			<![CDATA[
+					<head>
 					<?php echo $css ?>
-				    
+				    </head>
+				    <body>
 				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">On demand video</div><br />
 				    <table width="720" cellspacing="1" cellpadding="10" border="0" align="left" summary="">
 				
@@ -495,6 +515,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				    <br />
 				    <style type="text/css">body{}</style><!-- to fix a strange bug appearing with firefox when editing this template -->
 				    
+				    </body>
 			]]>
 		</Html>
 	</Template>
@@ -504,8 +525,10 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Description>Spreadsheet-like page</Description>
 		<Html>
 			<![CDATA[
+					<head>
 					<?php echo $css ?>
-				    
+				    </head>
+				    <body>
 				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">A table<br></div>
 				    
 				    <span style="font-style: italic; font-size: 15px; "><span style="font-weight: bold">Tip</span> : to edit this table, click on the small arrows and cross-in-a-circle icons on the borders of the cells.<br />This will add /remove lines and columns. You can also right-click in the table to display the table and cell edit options.</span><br /><br />
@@ -651,6 +674,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				    <br />
 				
 				    <br />
+				    </body>
 				    
 			]]>
 		</Html>
@@ -661,8 +685,10 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Description>First page of a learning path</Description>
 		<Html>
 			<![CDATA[
+					<head>
 					<?php echo $css ?>
-				    
+				    </head>
+				    <body>
 				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Course preface</div><br />
 				    
 				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
@@ -699,6 +725,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				    <br />
 				    <br />
 				    
+				    </body>
 			]]>
 		</Html>
 	</Template>
@@ -709,8 +736,10 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Description>Explain goals, roles, agenda</Description>
 		<Html>
 			<![CDATA[
+					<head>
 					<?php echo $css ?>
-				    
+				    </head>
+				    <body>
 				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Assignment description<br />
 
 				    </div>
@@ -785,6 +814,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				    <br />
 				    <br />
 				    
+				    </body>
 			]]>
 		</Html>
 	</Template>
@@ -794,8 +824,10 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Description>Books, links, tools</Description>
 		<Html>
 			<![CDATA[
+					<head>
 					<?php echo $css ?>
-				    
+				    </head>
+				    <body>
 				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Resources</div><br />
 				    
 				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
@@ -861,6 +893,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				    <br />
 				    <br />
 				    
+				    </body>
 			]]>
 		</Html>
 	</Template>
@@ -870,8 +903,10 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Description>List of questions and answers </Description>
 		<Html>
 			<![CDATA[
+					<head>
 					<?php echo $css ?>
-				    
+				    </head>
+				    <body>
 				   <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Frequently asked questions</div>
 				    <br />
 				
@@ -917,6 +952,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				    <br />
 				    <br />
 				    
+				    </body>
 			]]>
 		</Html>
 	</Template>
@@ -926,8 +962,10 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Description>To appear at the end of a learning path</Description>
 		<Html>
 			<![CDATA[
+					<head>
 					<?php echo $css ?>
-				    
+				    </head>
+				    <body>
 				   <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Certificate of completion<br></div>
 				    
 				    <span style="font-style: italic; font-size: 15px; "><span style="font-weight: bold">Tip</span> : edit this certificate and put it at the end of your learning path.<br />If you create pre-requisites in your learning path, the certificate will be visible only to ones who deserve it.</span><br /><br />
@@ -963,6 +1001,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				
 				    <br />
 				    <br />
+				    </body>
 				    
 			]]>
 		</Html>

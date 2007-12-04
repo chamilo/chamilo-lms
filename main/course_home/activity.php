@@ -146,7 +146,7 @@ function show_tools_category($course_tool_category)
 	if($sql_links != null)
 	{
 		$result_links = api_sql_query($sql_links,__FILE__,__LINE__);
-
+		$properties = array();
 		while($links_row = Database::fetch_array($result_links))
 		{
 			unset($properties);

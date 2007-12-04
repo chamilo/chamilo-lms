@@ -1,4 +1,4 @@
-<?php // $Id: index.php 13371 2007-10-02 14:47:28Z yannoo $
+<?php // $Id: index.php 13897 2007-12-04 00:58:32Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -54,6 +54,11 @@ $tool_name=get_lang("PlatformAdmin");
 // Displaying the header
 Display::display_header($nameTools);
 
+
+if(is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php'))
+{
+	Display::display_normal_message(get_lang('InstallDirAccessibleSecurityThreat'));
+}
 /*
 ==============================================================================
 		ACTION HANDLING
@@ -62,7 +67,7 @@ Display::display_header($nameTools);
 if ($_POST['Register'])
 {
 	register_site();
-	Display :: display_confirmation_message('Version Check Enabled');
+	Display :: display_confirmation_message(get_lang('VersionCheckEnabled'));
 }
 
 /*

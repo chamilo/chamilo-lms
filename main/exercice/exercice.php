@@ -218,7 +218,7 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 				'</head>' .
 				'<body>' .
 				'<div>' .
-				'  <p>Dear Student, </p>' .
+				'  <p>'.get_lang('DearStudentEmailIntroduction').'</p>' .
 				'  <p class="style10"> '.get_lang('AttemptVCC').' </p>' .
 				'  <table width="417">' .
 				'    <tr>' .

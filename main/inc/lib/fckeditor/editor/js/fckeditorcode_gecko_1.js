@@ -1,4 +1,4 @@
-﻿/*
+/*
  * FCKeditor - The text editor for internet
  * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
@@ -23,5 +23,121 @@ var FCKXHtml=new Object();FCKXHtml.CurrentJobNum=0;FCKXHtml.GetXHTML=function(A,
 FCKXHtml._GetMainXmlString=function(){var A=new XMLSerializer();return A.serializeToString(this.MainNode).replace(FCKRegexLib.GeckoEntitiesMarker,'&');};FCKXHtml._AppendEntity=function(A,B){A.appendChild(this.XML.createTextNode('#?-:'+B+';'));};FCKXHtml._AppendAttributes=function(A,B,C){var D=B.attributes;for (var n=0;n<D.length;n++){var E=D[n];if (E.specified){var F=E.nodeName.toLowerCase();var G;if (F.startsWith('_fck')) continue;else if (F.indexOf('_moz')==0) continue;else if (F=='class') G=E.nodeValue;else if (E.nodeValue===true) G=F;else G=B.getAttribute(F,2);if (FCKConfig.ForceSimpleAmpersand&&G.replace) G=G.replace(/&/g,'___FCKAmp___');this._AppendAttribute(C,F,G);};};}
 var FCKCodeFormatter;if (!(FCKCodeFormatter=NS.FCKCodeFormatter)){FCKCodeFormatter=NS.FCKCodeFormatter=new Object();FCKCodeFormatter.Regex=new Object();FCKCodeFormatter.Regex.BlocksOpener=/\<(P|DIV|H1|H2|H3|H4|H5|H6|ADDRESS|PRE|OL|UL|LI|TITLE|META|LINK|BASE|SCRIPT|LINK|TD|TH|AREA|OPTION)[^\>]*\>/gi;FCKCodeFormatter.Regex.BlocksCloser=/\<\/(P|DIV|H1|H2|H3|H4|H5|H6|ADDRESS|PRE|OL|UL|LI|TITLE|META|LINK|BASE|SCRIPT|LINK|TD|TH|AREA|OPTION)[^\>]*\>/gi;FCKCodeFormatter.Regex.NewLineTags=/\<(BR|HR)[^\>]\>/gi;FCKCodeFormatter.Regex.MainTags=/\<\/?(HTML|HEAD|BODY|FORM|TABLE|TBODY|THEAD|TR)[^\>]*\>/gi;FCKCodeFormatter.Regex.LineSplitter=/\s*\n+\s*/g;FCKCodeFormatter.Regex.IncreaseIndent=/^\<(HTML|HEAD|BODY|FORM|TABLE|TBODY|THEAD|TR|UL|OL)[ \/\>]/i;FCKCodeFormatter.Regex.DecreaseIndent=/^\<\/(HTML|HEAD|BODY|FORM|TABLE|TBODY|THEAD|TR|UL|OL)[ \>]/i;FCKCodeFormatter.Regex.FormatIndentatorRemove=new RegExp(FCKConfig.FormatIndentator);FCKCodeFormatter.Regex.ProtectedTags=/(<PRE[^>]*>)([\s\S]*?)(<\/PRE>)/gi;FCKCodeFormatter._ProtectData=function(A,B,C,D){return B+'___FCKpd___'+FCKCodeFormatter.ProtectedData.addItem(C)+D;};FCKCodeFormatter.Format=function(A){FCKCodeFormatter.ProtectedData=new Array();var B=A.replace(this.Regex.ProtectedTags,FCKCodeFormatter._ProtectData);B=B.replace(this.Regex.BlocksOpener,'\n$&');;B=B.replace(this.Regex.BlocksCloser,'$&\n');B=B.replace(this.Regex.NewLineTags,'$&\n');B=B.replace(this.Regex.MainTags,'\n$&\n');var C='';var D=B.split(this.Regex.LineSplitter);B='';for (var i=0;i<D.length;i++){var E=D[i];if (E.length==0) continue;if (this.Regex.DecreaseIndent.test(E)) C=C.replace(this.Regex.FormatIndentatorRemove,'');B+=C+E+'\n';if (this.Regex.IncreaseIndent.test(E)) C+=FCKConfig.FormatIndentator;};for (var i=0;i<FCKCodeFormatter.ProtectedData.length;i++){var F=new RegExp('___FCKpd___'+i);B=B.replace(F,FCKCodeFormatter.ProtectedData[i]);};return B.trim();};}
 var FCKUndo=new Object();FCKUndo.SaveUndoStep=function(){}
-var FCK_StartupValue;FCK.Events=new FCKEvents(FCK);FCK.Toolbar=null;FCK.TempBaseTag=FCKConfig.BaseHref.length>0?'<base href="'+FCKConfig.BaseHref+'" _fcktemp="true"></base>':'';FCK.StartEditor=function(){this.EditorWindow=window.frames['eEditorArea'];this.EditorDocument=this.EditorWindow.document;this.SetHTML(FCKTools.GetLinkedFieldValue());this.ResetIsDirty();FCKTools.AttachToLinkedFieldFormSubmit(this.UpdateLinkedField);FCKUndo.SaveUndoStep();this.SetStatus(FCK_STATUS_ACTIVE);};function Window_OnFocus(){FCK.Focus();FCK.Events.FireEvent("OnFocus");};function Window_OnBlur(){if (!FCKDialog.IsOpened) return FCK.Events.FireEvent("OnBlur");};FCK.SetStatus=function(A){this.Status=A;if (A==FCK_STATUS_ACTIVE){window.frameElement.onfocus=window.document.body.onfocus=Window_OnFocus;window.frameElement.onblur=Window_OnBlur;if (FCKConfig.StartupFocus) FCK.Focus();if (FCKBrowserInfo.IsIE) FCKScriptLoader.AddScript('js/fckeditorcode_ie_2.js');else FCKScriptLoader.AddScript('js/fckeditorcode_gecko_2.js');};this.Events.FireEvent('OnStatusChange',A);};FCK.GetHTML=function(A){FCK.GetXHTML(A);};FCK.GetXHTML=function(A){var B=(FCK.EditMode==FCK_EDITMODE_SOURCE);if (B) this.SwitchEditMode();var C;if (FCKConfig.FullPage) C=FCKXHtml.GetXHTML(this.EditorDocument.getElementsByTagName('html')[0],true,A);else{if (FCKConfig.IgnoreEmptyParagraphValue&&this.EditorDocument.body.innerHTML=='<P>&nbsp;</P>') C='';else C=FCKXHtml.GetXHTML(this.EditorDocument.body,false,A);};if (B) this.SwitchEditMode();if (FCKBrowserInfo.IsIE) C=C.replace(FCKRegexLib.ToReplace,'$1');if (FCK.DocTypeDeclaration&&FCK.DocTypeDeclaration.length>0) C=FCK.DocTypeDeclaration+'\n'+C;if (FCK.XmlDeclaration&&FCK.XmlDeclaration.length>0) C=FCK.XmlDeclaration+'\n'+C;return FCKConfig.ProtectedSource.Revert(C);};FCK.UpdateLinkedField=function(){FCK.LinkedField.value=FCK.GetXHTML(FCKConfig.FormatOutput);FCK.Events.FireEvent('OnAfterLinkedFieldUpdate');};FCK.ShowContextMenu=function(x,y){if (this.Status!=FCK_STATUS_COMPLETE) return;FCKContextMenu.Show(x,y);this.Events.FireEvent("OnContextMenu");};FCK.RegisteredDoubleClickHandlers=new Object();FCK.OnDoubleClick=function(A){var B=FCK.RegisteredDoubleClickHandlers[A.tagName];if (B) B(A);};FCK.RegisterDoubleClickHandler=function(A,B){FCK.RegisteredDoubleClickHandlers[B.toUpperCase()]=A;};FCK.OnAfterSetHTML=function(){var A,i=0;while((A=FCKDocumentProcessors[i++])) A.ProcessDocument(FCK.EditorDocument);this.Events.FireEvent('OnAfterSetHTML');};FCK.ProtectUrls=function(A){A=A.replace(FCKRegexLib.ProtectUrlsAApo,'$1$2$3$2 _fcksavedurl=$2$3$2');A=A.replace(FCKRegexLib.ProtectUrlsANoApo,'$1$2 _fcksavedurl="$2"');A=A.replace(FCKRegexLib.ProtectUrlsImgApo,'$1$2$3$2 _fcksavedurl=$2$3$2');A=A.replace(FCKRegexLib.ProtectUrlsImgNoApo,'$1$2 _fcksavedurl="$2"');return A;};FCK.IsDirty=function(){return (FCK_StartupValue!=FCK.EditorDocument.body.innerHTML);};FCK.ResetIsDirty=function(){if (FCK.EditorDocument.body) FCK_StartupValue=FCK.EditorDocument.body.innerHTML;};var FCKDocumentProcessors=new Array();var FCKDocumentProcessors_CreateFakeImage=function(A,B){var C=FCK.EditorDocument.createElement('IMG');C.className=A;C.src=FCKConfig.FullBasePath+'images/spacer.gif';C.setAttribute('_fckfakelement','true',0);C.setAttribute('_fckrealelement',FCKTempBin.AddElement(B),0);return C;};var FCKAnchorsProcessor=new Object();FCKAnchorsProcessor.ProcessDocument=function(A){var B=A.getElementsByTagName('A');var C;var i=B.length-1;while (i>=0&&(C=B[i--])){if (C.name.length>0&&(!C.getAttribute('href')||C.getAttribute('href').length==0)){var D=FCKDocumentProcessors_CreateFakeImage('FCK__Anchor',C.cloneNode(true));D.setAttribute('_fckanchor','true',0);C.parentNode.insertBefore(D,C);C.parentNode.removeChild(C);};};};FCKDocumentProcessors.addItem(FCKAnchorsProcessor);var FCKPageBreaksProcessor=new Object();FCKPageBreaksProcessor.ProcessDocument=function(A){var B=A.getElementsByTagName('DIV');var C;var i=B.length-1;while (i>=0&&(C=B[i--])){if (C.style.pageBreakAfter=='always'&&C.childNodes.length==1&&C.childNodes[0].style&&C.childNodes[0].style.display=='none'){var D=FCKDocumentProcessors_CreateFakeImage('FCK__PageBreak',C.cloneNode(true));C.parentNode.insertBefore(D,C);C.parentNode.removeChild(C);};};};FCKDocumentProcessors.addItem(FCKPageBreaksProcessor);var FCKFlashProcessor=new Object();FCKFlashProcessor.ProcessDocument=function(A){var B=A.getElementsByTagName('EMBED');var C;var i=B.length-1;while (i>=0&&(C=B[i--])){if (C.src.endsWith('.swf',true)){var D=C.cloneNode(true);if (FCKBrowserInfo.IsIE){D.setAttribute('scale',C.getAttribute('scale'));D.setAttribute('play',C.getAttribute('play'));D.setAttribute('loop',C.getAttribute('loop'));D.setAttribute('menu',C.getAttribute('menu'));};var E=FCKDocumentProcessors_CreateFakeImage('FCK__Flash',D);E.setAttribute('_fckflash','true',0);FCKFlashProcessor.RefreshView(E,C);C.parentNode.insertBefore(E,C);C.parentNode.removeChild(C);};};};FCKFlashProcessor.RefreshView=function(A,B){if (B.width>0) A.style.width=FCKTools.ConvertHtmlSizeToStyle(B.width);if (B.height>0) A.style.height=FCKTools.ConvertHtmlSizeToStyle(B.height);};FCKDocumentProcessors.addItem(FCKFlashProcessor);FCK.GetRealElement=function(A){var e=FCKTempBin.Elements[A.getAttribute('_fckrealelement')];if (A.getAttribute('_fckflash')){if (A.style.width.length>0) e.width=FCKTools.ConvertStyleSizeToHtml(A.style.width);if (A.style.height.length>0) e.height=FCKTools.ConvertStyleSizeToHtml(A.style.height);};return e;};
-FCK.Description="FCKeditor for Gecko Browsers";FCK.InitializeBehaviors=function(){if (FCKConfig.ShowBorders){var A=FCKTools.AppendStyleSheet(this.EditorDocument,FCKConfig.FullBasePath+'css/fck_showtableborders_gecko.css');A.setAttribute('_fcktemp','true');};var B=function(e){e.preventDefault();FCK.ShowContextMenu(e.clientX,e.clientY);};this.EditorDocument.addEventListener('contextmenu',B,true);var C=function(e){var D;if (e.ctrlKey&&!e.shiftKey&&!e.altKey){switch (e.which){case 66:case 98:FCK.ExecuteNamedCommand('bold');D=true;break;case 105:case 73:FCK.ExecuteNamedCommand('italic');D=true;break;case 117:case 85:FCK.ExecuteNamedCommand('underline');D=true;break;case 86:case 118:D=(FCK.Status!=FCK_STATUS_COMPLETE||!FCK.Events.FireEvent("OnPaste"));break;};}else if (e.shiftKey&&!e.ctrlKey&&!e.altKey&&e.keyCode==45) D=(FCK.Status!=FCK_STATUS_COMPLETE||!FCK.Events.FireEvent("OnPaste"));if (D){e.preventDefault();e.stopPropagation();};};this.EditorDocument.addEventListener('keypress',C,true);this.ExecOnSelectionChange=function(){FCK.Events.FireEvent("OnSelectionChange");};this.ExecOnSelectionChangeTimer=function(){if (FCK.LastOnChangeTimer) window.clearTimeout(FCK.LastOnChangeTimer);FCK.LastOnChangeTimer=window.setTimeout(FCK.ExecOnSelectionChange,100);};this.EditorDocument.addEventListener('mouseup',this.ExecOnSelectionChange,false);this.EditorDocument.addEventListener('keyup',this.ExecOnSelectionChangeTimer,false);this._DblClickListener=function(e){FCK.OnDoubleClick(e.target);e.stopPropagation();};this.EditorDocument.addEventListener('dblclick',this._DblClickListener,true);this._OnLoad=function(){if (this._FCK_HTML){this.document.body.innerHTML=this._FCK_HTML;this._FCK_HTML=null;if (!FCK_StartupValue) FCK.ResetIsDirty();};};this.EditorWindow.addEventListener('load',this._OnLoad,true);};FCK.MakeEditable=function(){try{FCK.EditorDocument.designMode='on';FCK.EditorDocument.execCommand('useCSS',false,!FCKConfig.GeckoUseSPAN);FCK.EditorDocument.execCommand('enableObjectResizing',false,!FCKConfig.DisableImageHandles);FCK.EditorDocument.execCommand('enableInlineTableEditing',false,!FCKConfig.DisableTableHandles);}catch (e) {};};FCK.Focus=function(){try{FCK.EditorWindow.focus();}catch(e) {};};FCK.SetHTML=function(A,B){A=A.replace(FCKRegexLib.StrongOpener,'<b$1');A=A.replace(FCKRegexLib.StrongCloser,'<\/b>');A=A.replace(FCKRegexLib.EmOpener,'<i$1');A=A.replace(FCKRegexLib.EmCloser,'<\/i>');if (B||FCK.EditMode==FCK_EDITMODE_WYSIWYG){A=FCKConfig.ProtectedSource.Protect(A);A=FCK.ProtectUrls(A);if (FCKConfig.FullPage&&FCKRegexLib.BodyContents.test(A)){if (FCK.TempBaseTag.length>0&&!FCKRegexLib.HasBaseTag.test(A)) A=A.replace(FCKRegexLib.HeadOpener,'$&'+FCK.TempBaseTag);A=A.replace(FCKRegexLib.HeadCloser,'<link href="'+FCKConfig.BasePath+'css/fck_internal.css'+'" rel="stylesheet" type="text/css" _fcktemp="true" /></head>');var C=A.match(FCKRegexLib.BodyContents);var D=C[1];var E=C[2];var F=C[3];var G=D+'&nbsp;'+F;FCK.MakeEditable();this.EditorDocument.open();this.EditorDocument.write(G);this.EditorDocument.close();if (this.EditorDocument.body) this.EditorDocument.body.innerHTML=E;else this.EditorWindow._FCK_HTML=E;this.InitializeBehaviors();}else{if (!this._Initialized){this.EditorDocument.dir=FCKConfig.ContentLangDirection;var G='<title></title>'+'<link href="'+FCKConfig.EditorAreaCSS+'" rel="stylesheet" type="text/css" />'+'<link href="'+FCKConfig.BasePath+'css/fck_internal.css'+'" rel="stylesheet" type="text/css" _fcktemp="true" />'+FCK.TempBaseTag;this.EditorDocument.getElementsByTagName("HEAD")[0].innerHTML=G;this.InitializeBehaviors();this._Initialized=true;};if (A.length==0) FCK.EditorDocument.body.innerHTML=GECKO_BOGUS;else if (FCKRegexLib.EmptyParagraph.test(A)) FCK.EditorDocument.body.innerHTML=A.replace(FCKRegexLib.TagBody,'>'+GECKO_BOGUS+'<');else FCK.EditorDocument.body.innerHTML=A;FCK.MakeEditable();};FCK.OnAfterSetHTML();}else document.getElementById('eSourceField').value=A;};
+var FCK_StartupValue;FCK.Events=new FCKEvents(FCK);FCK.Toolbar=null;FCK.TempBaseTag=FCKConfig.BaseHref.length>0?'<base href="'+FCKConfig.BaseHref+'" _fcktemp="true"></base>':'';FCK.StartEditor=function(){this.EditorWindow=window.frames['eEditorArea'];this.EditorDocument=this.EditorWindow.document;this.SetHTML(FCKTools.GetLinkedFieldValue());this.ResetIsDirty();FCKTools.AttachToLinkedFieldFormSubmit(this.UpdateLinkedField);FCKUndo.SaveUndoStep();this.SetStatus(FCK_STATUS_ACTIVE);};function Window_OnFocus(){FCK.Focus();FCK.Events.FireEvent("OnFocus");};function Window_OnBlur(){if (!FCKDialog.IsOpened) return FCK.Events.FireEvent("OnBlur");};FCK.SetStatus=function(A){this.Status=A;if (A==FCK_STATUS_ACTIVE){window.frameElement.onfocus=window.document.body.onfocus=Window_OnFocus;window.frameElement.onblur=Window_OnBlur;if (FCKConfig.StartupFocus) FCK.Focus();if (FCKBrowserInfo.IsIE) FCKScriptLoader.AddScript('js/fckeditorcode_ie_2.js');else FCKScriptLoader.AddScript('js/fckeditorcode_gecko_2.js');};this.Events.FireEvent('OnStatusChange',A);};FCK.GetHTML=function(A){FCK.GetXHTML(A);};FCK.GetXHTML=function(A){var B=(FCK.EditMode==FCK_EDITMODE_SOURCE);if (B) this.SwitchEditMode();var C;if (FCKConfig.FullPage) C='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'+FCKXHtml.GetXHTML(this.EditorDocument.getElementsByTagName('html')[0],true,A);else{if (FCKConfig.IgnoreEmptyParagraphValue&&this.EditorDocument.body.innerHTML=='<P>&nbsp;</P>') C='';else C=FCKXHtml.GetXHTML(this.EditorDocument.body,false,A);};if (B) this.SwitchEditMode();if (FCKBrowserInfo.IsIE) C=C.replace(FCKRegexLib.ToReplace,'$1');if (FCK.DocTypeDeclaration&&FCK.DocTypeDeclaration.length>0) C=FCK.DocTypeDeclaration+'\n'+C;if (FCK.XmlDeclaration&&FCK.XmlDeclaration.length>0) C=FCK.XmlDeclaration+'\n'+C;return FCKConfig.ProtectedSource.Revert(C);};FCK.UpdateLinkedField=function(){FCK.LinkedField.value=FCK.GetXHTML(FCKConfig.FormatOutput);FCK.Events.FireEvent('OnAfterLinkedFieldUpdate');};FCK.ShowContextMenu=function(x,y){if (this.Status!=FCK_STATUS_COMPLETE) return;FCKContextMenu.Show(x,y);this.Events.FireEvent("OnContextMenu");};FCK.RegisteredDoubleClickHandlers=new Object();FCK.OnDoubleClick=function(A){var B=FCK.RegisteredDoubleClickHandlers[A.tagName];if (B) B(A);};FCK.RegisterDoubleClickHandler=function(A,B){FCK.RegisteredDoubleClickHandlers[B.toUpperCase()]=A;};FCK.OnAfterSetHTML=function(){var A,i=0;while((A=FCKDocumentProcessors[i++])) A.ProcessDocument(FCK.EditorDocument);this.Events.FireEvent('OnAfterSetHTML');};FCK.ProtectUrls=function(A){A=A.replace(FCKRegexLib.ProtectUrlsAApo,'$1$2$3$2 _fcksavedurl=$2$3$2');A=A.replace(FCKRegexLib.ProtectUrlsANoApo,'$1$2 _fcksavedurl="$2"');A=A.replace(FCKRegexLib.ProtectUrlsImgApo,'$1$2$3$2 _fcksavedurl=$2$3$2');A=A.replace(FCKRegexLib.ProtectUrlsImgNoApo,'$1$2 _fcksavedurl="$2"');return A;};FCK.IsDirty=function(){return (FCK_StartupValue!=FCK.EditorDocument.body.innerHTML);};FCK.ResetIsDirty=function(){if (FCK.EditorDocument.body) FCK_StartupValue=FCK.EditorDocument.body.innerHTML;};var FCKDocumentProcessors=new Array();
+
+var FCKDocumentProcessors_CreateFakeImage=function(A,B){
+	
+	var C=FCK.EditorDocument.createElement('IMG');C.className=A;C.src=FCKConfig.FullBasePath+'images/spacer.gif';C.setAttribute('_fckfakelement','true',0);C.setAttribute('_fckrealelement',FCKTempBin.AddElement(B),0);return C;};
+
+
+var FCKAnchorsProcessor=new Object();
+FCKAnchorsProcessor.ProcessDocument=function(A)
+	{
+		var B=A.getElementsByTagName('A');
+		var C;
+		var i=B.length-1;
+		while (i>=0&&(C=B[i--])){
+			if (C.name.length>0&&(!C.getAttribute('href')||C.getAttribute('href').length==0)){
+		var D=FCKDocumentProcessors_CreateFakeImage('FCK__Anchor',C.cloneNode(true));
+		D.setAttribute('_fckanchor','true',0);
+		C.parentNode.insertBefore(D,C);C.parentNode.removeChild(C);
+		}
+		;
+		};
+	};
+
+	FCKDocumentProcessors.addItem(FCKAnchorsProcessor);
+	
+	var FCKPageBreaksProcessor=new Object();
+	FCKPageBreaksProcessor.ProcessDocument=function(A){var B=A.getElementsByTagName('DIV');var C;var i=B.length-1;while (i>=0&&(C=B[i--])){if (C.style.pageBreakAfter=='always'&&C.childNodes.length==1&&C.childNodes[0].style&&C.childNodes[0].style.display=='none'){var D=FCKDocumentProcessors_CreateFakeImage('FCK__PageBreak',C.cloneNode(true));C.parentNode.insertBefore(D,C);C.parentNode.removeChild(C);};};};
+	
+	FCKDocumentProcessors.addItem(FCKPageBreaksProcessor);
+	
+	var FCKFlashProcessor=new Object();
+	FCKFlashProcessor.ProcessDocument=function(A)
+	{
+		var B=A.getElementsByTagName('EMBED');
+		var C;
+		var i=B.length-1;
+		while (i>=0&&(C=B[i--])){
+			if (C.src.endsWith('.swf',true)){
+				var D=C.cloneNode(true);
+				if (FCKBrowserInfo.IsIE){
+					D.setAttribute('scale',C.getAttribute('scale'));
+					D.setAttribute('play',C.getAttribute('play'));
+					D.setAttribute('loop',C.getAttribute('loop'));
+					D.setAttribute('menu',C.getAttribute('menu'));
+				};
+
+				var E=FCKDocumentProcessors_CreateFakeImage('FCK__Flash',D);
+
+				E.setAttribute('_fckflash','true',0);
+				FCKFlashProcessor.RefreshView(E,C);
+				C.parentNode.insertBefore(E,C);
+				C.parentNode.removeChild(C);
+			};
+
+			if (C.src.endsWith('.avi',true) || C.src.endsWith('.mp3',true) || C.src.endsWith('.mpg',true) || C.src.endsWith('.mpeg',true) || C.src.endsWith('.mov',true) || C.src.endsWith('.wmv',true) || C.src.endsWith('.rm',true)){
+				var D=C.cloneNode(true);
+				if (FCKBrowserInfo.IsIE){
+					D.setAttribute('scale',C.getAttribute('scale'));
+					D.setAttribute('play',C.getAttribute('play'));
+					D.setAttribute('loop',C.getAttribute('loop'));
+					D.setAttribute('menu',C.getAttribute('menu'));
+				};
+
+				var E=FCKDocumentProcessors_CreateFakeImage('FCK__Video',D);
+
+				E.setAttribute('_fckVideo','true',0);
+				FCKFlashProcessor.RefreshView(E,C);
+				C.parentNode.insertBefore(E,C);
+				C.parentNode.removeChild(C);
+			};
+
+		};
+
+
+		var B=A.getElementsByTagName('OBJECT');
+		var C;
+		var i=B.length-1;
+		while (i>=0&&(C=B[i--])){
+			if (C.data.endsWith('.mp3',true)){
+				var D=C.cloneNode(true);
+				if (FCKBrowserInfo.IsIE){
+					D.setAttribute('scale',C.getAttribute('scale'));
+					D.setAttribute('play',C.getAttribute('play'));
+					D.setAttribute('loop',C.getAttribute('loop'));
+					D.setAttribute('menu',C.getAttribute('menu'));
+				};
+
+				var E=FCKDocumentProcessors_CreateFakeImage('FCK__MP3',D);
+
+				E.setAttribute('_fckmp3','true',0);
+				FCKFlashProcessor.RefreshView(E,C);
+				C.parentNode.insertBefore(E,C);
+				C.parentNode.removeChild(C);
+			};
+		};
+
+	};
+
+
+FCKFlashProcessor.RefreshView=function(A,B){
+	if (B.width>0) A.style.width=FCKTools.ConvertHtmlSizeToStyle(B.width);
+	if (B.height>0) A.style.height=FCKTools.ConvertHtmlSizeToStyle(B.height);
+};
+
+FCKDocumentProcessors.addItem(FCKFlashProcessor);
+
+FCK.GetRealElement=function(A){
+	var e=FCKTempBin.Elements[A.getAttribute('_fckrealelement')];
+	if (A.getAttribute('_fckflash') || A.getAttribute('_fckVideo') || A.getAttribute('_fckmp3')){
+		if (A.style.width.length>0) e.width=FCKTools.ConvertStyleSizeToHtml(A.style.width);
+		if (A.style.height.length>0) e.height=FCKTools.ConvertStyleSizeToHtml(A.style.height);
+	};
+	return e;
+};
+
+FCK.Description="FCKeditor for Gecko Browsers";FCK.InitializeBehaviors=function(){if (FCKConfig.ShowBorders){var A=FCKTools.AppendStyleSheet(this.EditorDocument,FCKConfig.FullBasePath+'css/fck_showtableborders_gecko.css');A.setAttribute('_fcktemp','true');};var B=function(e){e.preventDefault();FCK.ShowContextMenu(e.clientX,e.clientY);};this.EditorDocument.addEventListener('contextmenu',B,true);var C=function(e){var D;if (e.ctrlKey&&!e.shiftKey&&!e.altKey){switch (e.which){case 66:case 98:FCK.ExecuteNamedCommand('bold');D=true;break;case 105:case 73:FCK.ExecuteNamedCommand('italic');D=true;break;case 117:case 85:FCK.ExecuteNamedCommand('underline');D=true;break;case 86:case 118:D=(FCK.Status!=FCK_STATUS_COMPLETE||!FCK.Events.FireEvent("OnPaste"));break;};}else if (e.shiftKey&&!e.ctrlKey&&!e.altKey&&e.keyCode==45) D=(FCK.Status!=FCK_STATUS_COMPLETE||!FCK.Events.FireEvent("OnPaste"));if (D){e.preventDefault();e.stopPropagation();};};this.EditorDocument.addEventListener('keypress',C,true);this.ExecOnSelectionChange=function(){FCK.Events.FireEvent("OnSelectionChange");};this.ExecOnSelectionChangeTimer=function(){if (FCK.LastOnChangeTimer) window.clearTimeout(FCK.LastOnChangeTimer);FCK.LastOnChangeTimer=window.setTimeout(FCK.ExecOnSelectionChange,100);};this.EditorDocument.addEventListener('mouseup',this.ExecOnSelectionChange,false);this.EditorDocument.addEventListener('keyup',this.ExecOnSelectionChangeTimer,false);this._DblClickListener=function(e){FCK.OnDoubleClick(e.target);e.stopPropagation();};this.EditorDocument.addEventListener('dblclick',this._DblClickListener,true);this._OnLoad=function(){if (this._FCK_HTML){this.document.body.innerHTML=this._FCK_HTML;this._FCK_HTML=null;if (!FCK_StartupValue) FCK.ResetIsDirty();};};this.EditorWindow.addEventListener('load',this._OnLoad,true);};FCK.MakeEditable=function(){try{FCK.EditorDocument.designMode='on';FCK.EditorDocument.execCommand('useCSS',false,!FCKConfig.GeckoUseSPAN);FCK.EditorDocument.execCommand('enableObjectResizing',false,!FCKConfig.DisableImageHandles);FCK.EditorDocument.execCommand('enableInlineTableEditing',false,!FCKConfig.DisableTableHandles);}catch (e) {};};FCK.Focus=function(){try{FCK.EditorWindow.focus();}catch(e) {};};FCK.SetHTML=function(A,B){A=A.replace(FCKRegexLib.StrongOpener,'<b$1');A=A.replace(FCKRegexLib.StrongCloser,'<\/b>');A=A.replace(FCKRegexLib.EmOpener,'<i$1');A=A.replace(FCKRegexLib.EmCloser,'<\/i>');if (B||FCK.EditMode==FCK_EDITMODE_WYSIWYG){A=FCKConfig.ProtectedSource.Protect(A);A=FCK.ProtectUrls(A);if (FCKConfig.FullPage&&FCKRegexLib.BodyContents.test(A)){if (FCK.TempBaseTag.length>0&&!FCKRegexLib.HasBaseTag.test(A)) ;A=A.replace(FCKRegexLib.HeadOpener,'$&'+FCK.TempBaseTag);A=A.replace(FCKRegexLib.HeadCloser,'<link href="'+FCKConfig.BasePath+'css/fck_internal.css'+'" rel="stylesheet" type="text/css" _fcktemp="true" /></head>');var C=A.match(FCKRegexLib.BodyContents);var D=C[1];var E=C[2];var F=C[3];
+
+var G=D+'&nbsp;'+F;FCK.MakeEditable();this.EditorDocument.open();this.EditorDocument.write(G);this.EditorDocument.close();if (this.EditorDocument.body) this.EditorDocument.body.innerHTML=E;else this.EditorWindow._FCK_HTML=E;this.InitializeBehaviors();}else{if (!this._Initialized){this.EditorDocument.dir=FCKConfig.ContentLangDirection;var G='<title></title>'+'<link href="'+FCKConfig.EditorAreaCSS+'" rel="stylesheet" type="text/css" />'+'<link href="'+FCKConfig.BasePath+'css/fck_internal.css'+'" rel="stylesheet" type="text/css" _fcktemp="true" />'+FCK.TempBaseTag;this.EditorDocument.getElementsByTagName("HEAD")[0].innerHTML=G;this.InitializeBehaviors();this._Initialized=true;};if (A.length==0) FCK.EditorDocument.body.innerHTML=GECKO_BOGUS;else if (FCKRegexLib.EmptyParagraph.test(A)) FCK.EditorDocument.body.innerHTML=A.replace(FCKRegexLib.TagBody,'>'+GECKO_BOGUS+'<');else FCK.EditorDocument.body.innerHTML=A;FCK.MakeEditable();};FCK.OnAfterSetHTML();}else document.getElementById('eSourceField').value=A;};

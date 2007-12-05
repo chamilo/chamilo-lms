@@ -1,4 +1,4 @@
-<?php //$Id$
+<?php //$Id: agenda.inc.php 13772 2007-11-26 02:54:27Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -541,25 +541,31 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 		foreach($group_list as $this_group)
 		{
 			//api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
-			if (!in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
-				{
-				echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
-					"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
-					"</option>\n";
+			if(is_array($to_already_selected))
+			{
+				if (!in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
+					{
+					echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
+						"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
+						"</option>\n";
+				}
 			}
 		}
 		// a divider
-		echo	"\t\t<option value=\"\">---------------------------------------------------------</option>\n";
+		echo	"\t\t<option value=\"\">----------------------------------</option>\n";
 	}
 
 	// adding the individual users to the select form
 	foreach($user_list as $this_user)
 	{
-		if (!in_array("USER:".$this_user['uid'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
+		if(is_array($to_already_selected))
 		{
-			echo	"\t\t<option value=\"USER:",$this_user['uid'],"\">",
-				"",$this_user['lastName']," ",$this_user['firstName'],
-				"</option>\n";
+			if (!in_array("USER:".$this_user['uid'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
+			{
+				echo	"\t\t<option value=\"USER:",$this_user['uid'],"\">",
+					"",$this_user['lastName']," ",$this_user['firstName'],
+					"</option>\n";
+			}
 		}
 	}
 	echo "\t\t</select>\n";
@@ -589,16 +595,19 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 
 	// we construct the form of the already selected groups / users
 	echo "\t\t<select name=\"selectedform[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
-	foreach($to_already_selected as $groupuser)
+	if(is_array($to_already_selected))
 	{
-		list($type,$id)=explode(":",$groupuser);
-		if ($type=="GROUP")
+		foreach($to_already_selected as $groupuser)
 		{
-			echo "\t\t<option value=\"".$groupuser."\">G: ".$ref_array_groups[$id]['name']."</option>";
-		}
-		else
-		{
-			echo "\t\t<option value=\"".$groupuser."\">".$ref_array_users[$id]['lastName']." ".$ref_array_users[$id]['firstName']."</option>";
+			list($type,$id)=explode(":",$groupuser);
+			if ($type=="GROUP")
+			{
+				echo "\t\t<option value=\"".$groupuser."\">G: ".$ref_array_groups[$id]['name']."</option>";
+			}
+			else
+			{
+				echo "\t\t<option value=\"".$groupuser."\">".$ref_array_users[$id]['lastName']." ".$ref_array_users[$id]['firstName']."</option>";
+			}
 		}
 	}
 	echo "</select>\n";
@@ -1018,12 +1027,12 @@ function change_visibility($tool,$id)
 	if ($row['visibility']=='1')
 	{
 		$sql_visibility="UPDATE $TABLE_ITEM_PROPERTY SET visibility='0' WHERE tool='$tool' AND ref='$id'";
-		api_item_property_update($_course,TOOL_CALENDAR_EVENT,$id,"invisible");
+		api_item_property_update($_course,TOOL_CALENDAR_EVENT,$id,"invisible",api_get_user_id());
 	}
 	else
 	{
 		$sql_visibility="UPDATE $TABLE_ITEM_PROPERTY SET visibility='1' WHERE tool='$tool' AND ref='$id'";
-		api_item_property_update($_course,TOOL_CALENDAR_EVENT,$id,"visible");
+		api_item_property_update($_course,TOOL_CALENDAR_EVENT,$id,"visible",api_get_user_id());
 	}
 }
 

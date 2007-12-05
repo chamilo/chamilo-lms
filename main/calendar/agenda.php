@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 13487 2007-10-16 18:27:53Z yannoo $
+<?php //$Id: agenda.php 13933 2007-12-05 05:23:10Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -210,7 +210,7 @@ $tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USE
   			ACCESS RIGHTS
 ============================================================================== */
 // permission stuff - also used by loading from global in agenda.inc.php
-$is_allowed_to_edit = is_allowed_to_edit();
+$is_allowed_to_edit = is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_agenda');
 
 /* ==============================================================================
   			TITLE
@@ -255,7 +255,7 @@ if ($_GET['origin']!='learnpath')
 	display_minimonthcalendar($agenda_items, $select_month,$select_year, $MonthName);
 	// the links for adding, filtering, showall, ...
 	echo '<ul id="agenda_select">';
-	if (is_allowed_to_edit())
+	if (is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_agenda'))
 	{
 		display_courseadmin_links();
 	}
@@ -273,7 +273,7 @@ $fck_attribute['ToolbarSet'] = 'Middle';
 // THE RIGHT PART
 echo "<td valign=\"top\">";
 
-if (is_allowed_to_edit())
+if (is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_agenda'))
 {
 	switch ($_GET['action'])
 	{

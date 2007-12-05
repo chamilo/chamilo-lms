@@ -20,12 +20,26 @@ printf ('<?xml version="1.0" encoding="UTF-8" ?>');
 printf('<dokeosobject>');
 
 printf('<courseobject>');
-foreach ($_SESSION['_course'] as $key => $val)	
+if(count($_SESSION['course'])>0)
+{
+	foreach ($_SESSION['_course'] as $key => $val)
+	{	
 		printf('<%s>%s</%s>',$key,utf8_encode($val),$key);
+	}
+}
 printf('</courseobject>');
 
 printf('<userobject>');
-foreach ($_SESSION['_user'] as $key => $val) if ($key != "auth_source") printf('<%s>%s</%s>',$key,utf8_encode($val),$key);
+if(count($_SESSION['_user'])>0)
+{
+	foreach ($_SESSION['_user'] as $key => $val) 
+	{
+		if ($key != "auth_source") 
+		{
+			printf('<%s>%s</%s>',$key,utf8_encode($val),$key);
+		}
+	}
+}
 printf('<sid>%s</sid>', session_id());
 printf('<isUploadAllowed>%s</isUploadAllowed>', (CourseManager::get_user_in_course_status($_SESSION['_user']['user_id'], $_SESSION['_course']['sysCode']) == COURSEMANAGER) ? "true" : "false");
 printf('</userobject>');

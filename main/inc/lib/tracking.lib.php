@@ -692,6 +692,22 @@ class Tracking {
 		}
 		return $inactive_users;
 	}
+	
+	function count_login_per_student($student_id, $course_code) { 
+		$student_id = intval($student_id); 
+		$course_code = addslashes($course_code); 
+		$tbl_course_rel_user = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS); 
+		
+		$sql = 'SELECT '.$student_id.' 
+		FROM ' . $tbl_course_rel_user . ' 
+		WHERE access_user_id=' . $student_id . ' 
+		AND access_cours_code="' . $course_code . '"'; 
+		
+		$rs = api_sql_query($sql, __FILE__, __LINE__); 
+		$nb_login = mysql_num_rows($rs); 
+		
+		return $nb_login; 
+	}
 
 }
 ?>

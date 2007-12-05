@@ -347,11 +347,15 @@ if (isset ($nameTools) AND $language_file<>"course_home")
 	$navigation[] = $navigation_item;
 }
 
+$final_navigation = array();
 foreach($navigation as $index => $navigation_info)
 {
-	$navigation[$index] = '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
+	if(!empty($navigation_info['title']))
+	{
+		$final_navigation[$index] = '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
+	}
 }
-echo implode(' &gt; ',$navigation);
+echo implode(' &gt; ',$final_navigation);
 ?>
 
 </div><!-- end of header4 -->

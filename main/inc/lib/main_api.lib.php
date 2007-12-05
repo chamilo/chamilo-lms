@@ -1590,7 +1590,7 @@ function api_not_allowed($print_headers = false)
 		$form->addElement('password','password','',array('size'=>15));
 		$form->addElement('submit','submitAuth',get_lang('Ok'));
 		$test = $form->return_form();
-		if(!headers_sent() or $print_headers){Display::display_header();}
+		if(!headers_sent() or $print_headers){Display::display_header('');}
 		echo '<div align="center">';
 		Display :: display_error_message('<p>'.get_lang('NotAllowed').'<br/><br/>'.get_lang('PleaseLoginAgainFromFormBelow').'<br/>'.$test,false);
 		echo '</div>';
@@ -1599,7 +1599,7 @@ function api_not_allowed($print_headers = false)
 		die();
 	}else{
 		//if no course ID was included in the requested URL, redirect to homepage
-		if($print_headers){Display::display_header();}
+		if($print_headers){Display::display_header('');}
 		echo '<div align="center">';
 		Display :: display_error_message('<p>'.get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br/>',false);
 		echo '</div>';

@@ -1028,7 +1028,7 @@ class api_failure
 	 * the change when static class variable will be possible. And the API won't
 	 * change.
 	 */
-	var $api_failureList = array ();
+	public $api_failureList = array ();
 	/**
 	 * Pile the last failure in the failure list
 	 *
@@ -1039,8 +1039,7 @@ class api_failure
 	 */
 	function set_failure($failureType)
 	{
-		global $api_failureList;
-		$api_failureList[] = $failureType;
+		$this->api_failureList[] = $failureType;
 		return false;
 	}
 	/**
@@ -1052,8 +1051,7 @@ class api_failure
 	 */
 	function get_last_failure()
 	{
-		global $api_failureList;
-		return $api_failureList[count($api_failureList) - 1];
+		return $this->api_failureList[count($this->api_failureList) - 1];
 	}
 }
 

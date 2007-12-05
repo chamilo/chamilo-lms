@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 12904 2007-08-29 14:13:08Z elixir_julian $
+<?php // $Id: course_home.php 13970 2007-12-05 16:56:20Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -73,7 +73,7 @@ width: 100%;
 
 // name of the language file that needs to be included
 $language_file[] = "course_home";
-
+$use_anonymous = true;
 // inlcuding the global file
 include('../../main/inc/global.inc.php');
 

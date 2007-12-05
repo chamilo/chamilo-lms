@@ -1,4 +1,4 @@
-<?php // $Id: resourcelinker.inc.php 12272 2007-05-03 14:40:45Z elixir_julian $
+<?php // $Id: resourcelinker.inc.php 13927 2007-12-05 03:41:30Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -57,8 +57,8 @@ function unset_session_resources()
 {
 	$_SESSION['addedresource']='';
 	$_SESSION['addedresourceid']='';
-	api_session_unregister(addedresource);
-	api_session_unregister(addedresourceid);
+	api_session_unregister('addedresource');
+	api_session_unregister('addedresourceid');
 }
 
 /**
@@ -872,7 +872,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			}
 			else
 			{
-				$enableDocumentParsing=yes;
+				$enableDocumentParsing='yes';
 				if (!$enableDocumentParsing)
 				{ //this is the solution for the non-parsing version in the builder
 					$file=urlencode($myrow["path"]);
@@ -1294,6 +1294,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			break;
 
 		case "Post":
+			/* todo REVIEW THIS SECTION - NOT USING VALID TABLES ANYMORE
 			$tbl_posts       = $_course['dbNameGlu'].'bb_posts';
 			$tbl_posts_text  = $_course['dbNameGlu'].'bb_posts_text';
 			$TBL_FORUMS = $_course['dbNameGlu']."bb_forums";
@@ -1308,7 +1309,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $myrow_titel["post_title"]=$row['title']; }
 			$desc=$row['description'];
-    $link .= str_repeat("&nbsp;&gt;",$level);
+    		$link .= str_repeat("&nbsp;&gt;",$level);
 
 			$posternom=$myrow['nom'];				$posterprenom=$myrow['prenom'];
 			$posttime=$myrow['post_time'];			$posttext=$myrow_titel['post_text'];
@@ -1323,6 +1324,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			{
 				$link .= "../phpbb/viewtopic.php?topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"];
 			}
+			*/
 			break;
 
 		case "Document":
@@ -1344,7 +1346,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			}
 			else
 			{
-				$enableDocumentParsing=yes;
+				$enableDocumentParsing='yes';
 				if (!$enableDocumentParsing)
 				{ //this is the solution for the non-parsing version in the builder
 					$file=urlencode($myrow["path"]);
@@ -1610,7 +1612,7 @@ function display_resources($showdeleteimg)
 			// should also contain this id.
 			$test=parse_url($_SERVER['REQUEST_URI']);
 			$output = array();
-			parse_str($test[query],$output);
+			parse_str($test['query'],$output);
 
 			if ($showdeleteimg==1)
 			{

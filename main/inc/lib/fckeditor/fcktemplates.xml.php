@@ -41,7 +41,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		
 		$im = @ImageCreate($width, $height);
 		$bg_color = ImageColorAllocate($im, 255, 255, 255);
-		$ttfont   = "/usr/share/fonts/truetype/freefont/FreeSans.ttf";
+		$ttfont   = api_get_path(LIBRARY_PATH).'fckeditor/FreeSans.ttf';
 		$text_color = ImageColorAllocate($im, 0, 0, 0);
 		
 		$a_text=explode(' ',$a_template['title']);

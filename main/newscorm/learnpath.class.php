@@ -6983,26 +6983,28 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		include_once(api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
 		
-		foreach($resources_sorted as $key=>$resource)
+		if(count($resources_sorted)>0)
 		{
-			
-			if(is_int($resource['id']))
-			{ // it's a folder
-				$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_'.$resource["id"].'" onclick="testResources(\''.$resource["id"].'\',\'img_'.$resource["id"].'\')"><img alt="" src="../img/lp_folder.gif" title="" align="absmiddle" />&nbsp;<span onclick="testResources(\''.$resource["id"].'\',\'img_'.$resource["id"].'\')" style="cursor: pointer;" >'.$key.'</span></div><div style="display: none;" id="'.$resource['id'].'">';
-				$return = $this->write_resources_tree($return, $resource['files'], $num+1);
-				$return .= "</div></div>\r\n";
-			}
-			else
+			foreach($resources_sorted as $key=>$resource)
 			{
-				// it's a file
-				$icon = choose_image($resource);
-				$position = strrpos($icon,'.');
-				$icon=substr($icon,0,$position).'_small.gif';
-				$return .= '<div><div style="margin-left:' . (($num+1) * 15) . 'px;margin-right:5px;"><a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $this->lp_id . '"><img align="left" alt="" src="../img/'.$icon.'" title="" />&nbsp;'.$resource."</a></div></div>\r\n";
+				
+				if(is_int($resource['id']))
+				{ // it's a folder
+					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_'.$resource["id"].'" onclick="testResources(\''.$resource["id"].'\',\'img_'.$resource["id"].'\')"><img alt="" src="../img/lp_folder.gif" title="" align="absmiddle" />&nbsp;<span onclick="testResources(\''.$resource["id"].'\',\'img_'.$resource["id"].'\')" style="cursor: pointer;" >'.$key.'</span></div><div style="display: none;" id="'.$resource['id'].'">';
+					$return = $this->write_resources_tree($return, $resource['files'], $num+1);
+					$return .= "</div></div>\r\n";
+				}
+				else
+				{
+					// it's a file
+					$icon = choose_image($resource);
+					$position = strrpos($icon,'.');
+					$icon=substr($icon,0,$position).'_small.gif';
+					$return .= '<div><div style="margin-left:' . (($num+1) * 15) . 'px;margin-right:5px;"><a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $this->lp_id . '"><img align="left" alt="" src="../img/'.$icon.'" title="" />&nbsp;'.$resource."</a></div></div>\r\n";
+				}
+				
 			}
-			
-		}
-		
+		}		
 		return $return;
 	}
 	

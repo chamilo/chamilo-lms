@@ -720,8 +720,11 @@ function api_session_register($variable)
  */
 function api_session_unregister($variable)
 {
-	session_unregister($variable);
-	$_SESSION[$variable] = null;
+	if(isset($_SESSION[$variable]))
+	{
+		session_unregister($variable);
+		$_SESSION[$variable] = null;
+	}
 	unset ($GLOBALS[$variable]);
 }
 /**

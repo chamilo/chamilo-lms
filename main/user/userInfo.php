@@ -53,6 +53,10 @@ $this_section = SECTION_COURSES;
 
 $nameTools = get_lang("Users");
 api_protect_course_script();
+if(api_is_anonymous())
+{
+	api_not_allowed(true);
+}
 
 //prepare variables used in userInfoLib.php functions
 $TBL_USERINFO_DEF 		= Database :: get_course_table(TABLE_USER_INFO);

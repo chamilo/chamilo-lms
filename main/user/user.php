@@ -48,6 +48,7 @@
 */
 // name of the language file that needs to be included
 $language_file = array('registration','admin','userInfo');
+$use_anonymous = true;
 require_once ("../inc/global.inc.php");
 $this_section = SECTION_COURSES;
 /*
@@ -184,7 +185,7 @@ function display_user_search_form()
 */
 function show_users_in_virtual_courses()
 {
-	global $_course, $_user;
+	global $_course, $_user, $origin;
 	$real_course_code = $_course['sysCode'];
 	$real_course_info = Database::get_course_info($real_course_code);
 	$user_subscribed_virtual_course_list = CourseManager::get_list_of_virtual_courses_for_specific_user_and_real_course($_user['user_id'], $real_course_code);
@@ -241,10 +242,11 @@ function show_users_in_virtual_courses()
 			$table_row[$row ++] = $role; //Description
 			$table_row[$row ++] = " - "; //Group, for the moment groups don't work for students in virtual courses
 			 if( api_is_allowed_to_edit())
+			 {
 				$table_row[$row ++] = " - "; //Tutor column
-			 if( api_is_allowed_to_edit())
 				$table_row[$row ++] = $status; //Course Manager column
-			Display::display_table_row($bgcolor, $table_row, true);
+			 }
+			Display::display_table_row(null, $table_row, true);
 		}
 		Display::display_table_footer();
 	}
@@ -462,7 +464,10 @@ function modify_filter($user_id)
 	$result="<div style='text-align: center'>";
 
 	// info
-	$result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'"><img border="0" alt="'.get_lang('Info').'" src="../img/user_info.gif" /></a>&nbsp;';
+	if(!api_is_anonymous())
+	{
+		$result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'"><img border="0" alt="'.get_lang('Info').'" src="../img/user_info.gif" /></a>&nbsp;';
+	}
 
 	if($is_allowed_to_track)
 	{
@@ -477,13 +482,15 @@ function modify_filter($user_id)
 		// unregister
 		 if( $user_id != $_user['user_id'])
 		{
-			$result .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'&amp;'.$sort_params.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;"><img border="0" alt="'.get_lang("Unreg").'" src="../img/delete.gif"/></a>';
+			$result .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;"><img border="0" alt="'.get_lang("Unreg").'" src="../img/delete.gif"/></a>';
 		}
 
 	}
 	$result.="</div>";
 	return $result;
 }
+
+
 $default_column = api_is_allowed_to_edit() ? 2 : 1;
 $table = new SortableTable('users', 'get_number_of_users', 'get_user_data',$default_column);
 $parameters['keyword'] = $_GET['keyword'];
@@ -506,6 +513,7 @@ $table->set_header($header_nr++, get_lang('GroupSingle'),false);
 
 //actions column
 $table->set_header($header_nr++, '', false);
+
 $table->set_column_filter($header_nr-1,'modify_filter');
  if( api_is_allowed_to_edit())
 {

@@ -72,7 +72,7 @@ function get_calendar_items($month, $year)
 
 	$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
 
-	if (is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_agenda'))
+	if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 	{
 		//echo "course admin";
 		// added GROUP BY agenda.id to prevent double display of a message that has been sent to two groups
@@ -1215,7 +1215,7 @@ function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 function delete_agenda_item($id)
 {
 	global $_course;
-	if (is_allowed_to_edit()  OR api_get_course_setting('allow_user_edit_agenda'))
+	if (is_allowed_to_edit()  OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 		{
 		if (isset($_GET['id'])&&$_GET['id']&&isset($_GET['action'])&&$_GET['action']=="delete")
 			{
@@ -1252,7 +1252,7 @@ function showhide_agenda_item($id)
 	  ==================================================*/
 	//  and $_GET['isStudentView']<>"false" is added to prevent that the visibility is changed after you do the following:
 	// change visibility -> studentview -> course manager view
-	if ((is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_agenda')) and $_GET['isStudentView']<>"false")
+	if ((is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) and $_GET['isStudentView']<>"false")
 	{
 		if (isset($_GET['id'])&&$_GET['id']&&isset($_GET['action'])&&$_GET['action']=="showhide")
 		{
@@ -1314,7 +1314,7 @@ function display_agenda_items()
 	//echo "user:".$_SESSION['user']."group: ".$_SESSION['group'];
 	// A. you are a course admin
 	//if ($is_courseAdmin)
-	if (is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_agenda'))
+	if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 	{
 		// A.1. you are a course admin with a USER filter
 		// => see only the messages of this specific user + the messages of the group (s)he is member of.
@@ -1390,7 +1390,7 @@ function display_agenda_items()
 			}
 		}
 
-	} //if (is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_agenda'))
+	} //if (is_allowed_to_edit() OR( api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 
 	// B. you are a student
 	else
@@ -1577,7 +1577,7 @@ function display_agenda_items()
 	$event_list.=$myrow['id'].',';
 
 	echo "<tr class='row_odd'><td>";
-			if (is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_agenda'))
+			if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 	{
 		// edit
 		echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=edit&amp;id=".$myrow['id']."\">",

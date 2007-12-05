@@ -1039,7 +1039,8 @@ class api_failure
 	 */
 	function set_failure($failureType)
 	{
-		$this->api_failureList[] = $failureType;
+		global $api_failureList;
+		$api_failureList[] = $failureType;
 		return false;
 	}
 	/**
@@ -1051,7 +1052,8 @@ class api_failure
 	 */
 	function get_last_failure()
 	{
-		return $this->api_failureList[count($this->api_failureList) - 1];
+		global $api_failureList;
+		return $api_failureList[count($api_failureList) - 1];
 	}
 }
 

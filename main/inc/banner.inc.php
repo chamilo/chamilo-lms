@@ -214,7 +214,7 @@ else
 	$menu_navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
 }
 
-if ($_user['user_id'])
+if ($_user['user_id'] && !api_is_anonymous())
 {
 	// My Courses
 	if (api_get_setting('show_tabs', 'my_courses') == 'true')

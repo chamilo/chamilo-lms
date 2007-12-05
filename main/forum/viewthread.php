@@ -132,7 +132,8 @@ if($origin=='learnpath')
 	{
 		$interbreadcrumb[]=array("url" => "viewthread.php?forum=".$_GET['forum']."&amp;thread=".$_GET['thread'],"name" => prepare4display($current_thread['thread_title']));
 	}
-	Display :: display_header();
+	// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
+	Display :: display_header('');
 	api_display_tool_title($nameTools);
 
 }

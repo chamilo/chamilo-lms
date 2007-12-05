@@ -129,7 +129,8 @@ if($origin=='learnpath')
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
 } else
 {
-	Display :: display_header();
+	// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
+	Display :: display_header('');
 	api_display_tool_title($nameTools);
 }
 

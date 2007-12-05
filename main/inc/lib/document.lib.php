@@ -85,7 +85,7 @@ class DocumentManager
 
 		$sql_query = "SELECT `".DISK_QUOTA_FIELD."` FROM $course_table WHERE `code` = '$course_code'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
-		$result = mysql_fetch_array($sql_result);
+		$result = Database::fetch_array($sql_result);
 		$course_quota = $result[DISK_QUOTA_FIELD];
 
 		if ($course_quota == NULL)
@@ -321,7 +321,7 @@ class DocumentManager
 			//echo $query;
 			$result = api_sql_query($query, __FILE__, __LINE__);
 
-			return (mysql_num_rows($result) == 0);
+			return (Database::num_rows($result) == 0);
 		}
 	}
 
@@ -527,12 +527,12 @@ class DocumentManager
 
 		//echo $sql;
 
-		$result = mysql_query($sql);
+		$result = api_sql_query($sql);
 
-		if ($result && mysql_num_rows($result) != 0)
+		if ($result && Database::num_rows($result) != 0)
 		{
-			while ($row = mysql_fetch_assoc($result))
-				//while ($row = mysql_fetch_array($result,MYSQL_NUM))
+			while ($row = Database::fetch_array($result,'ASSOC'))
+				//while ($row = Database::fetch_array($result,MYSQL_NUM))
 			{
 				
 				if($row['filetype']=='file' && pathinfo($row['path'],PATHINFO_EXTENSION)=='html'){
@@ -544,7 +544,7 @@ class DocumentManager
 										AND user_id='".api_get_user_id()."'
 										AND ref_doc='".$row['id']."'";
 					$template_result = api_sql_query($sql_is_template);
-					if(mysql_numrows($template_result)>0){
+					if(Database::num_rows($template_result)>0){
 						$row['is_template'] = 1;
 					}
 					else{
@@ -589,9 +589,9 @@ class DocumentManager
 
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 
-			if ($result && mysql_num_rows($result) != 0)
+			if ($result && Database::num_rows($result) != 0)
 			{
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = Database::fetch_array($result,'ASSOC'))
 				{
 					$document_folders[] = $row['path'];
 				}
@@ -616,7 +616,7 @@ class DocumentManager
 						AND last.to_group_id = ".$to_group_id." 
 						AND last.visibility = 1";
 			$visibleresult = api_sql_query($visible_sql, __FILE__, __LINE__);
-			while ($all_visible_folders = mysql_fetch_assoc($visibleresult))
+			while ($all_visible_folders = Database::fetch_array($visibleresult,'ASSOC'))
 			{
 				$visiblefolders[] = $all_visible_folders['path'];
 				//echo "visible folders: ".$all_visible_folders['path']."<br>";
@@ -630,20 +630,20 @@ class DocumentManager
 						AND last.to_group_id = ".$to_group_id." 
 						AND last.visibility = 0";
 			$invisibleresult = api_sql_query($invisible_sql, __FILE__, __LINE__);
-			while ($invisible_folders = mysql_fetch_assoc($invisibleresult))
+			while ($invisible_folders = Database::fetch_array($invisibleresult,'ASSOC'))
 			{
 				//get visible folders in the invisible ones -> they are invisible too
 				//echo "invisible folders: ".$invisible_folders['path']."<br>";
 				$folder_in_invisible_sql = "SELECT path 
 								FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 								WHERE docs.id = last.ref
-								AND docs.path LIKE '".mysql_real_escape_string($invisible_folders['path'])."/%' 
+								AND docs.path LIKE '".Database::escape_string($invisible_folders['path'])."/%' 
 								AND docs.filetype = 'folder' 
 								AND last.tool = '".TOOL_DOCUMENT."' 
 								AND last.to_group_id = ".$to_group_id." 
 								AND last.visibility = 1";
 				$folder_in_invisible_result = api_sql_query($folder_in_invisible_sql, __FILE__, __LINE__);
-				while ($folders_in_invisible_folder = mysql_fetch_assoc($folder_in_invisible_result))
+				while ($folders_in_invisible_folder = Database::fetch_array($folder_in_invisible_result,'ASSOC'))
 				{
 					$invisiblefolders[] = $folders_in_invisible_folder['path'];
 					//echo "<br>folders in invisible folders: ".$folders_in_invisible_folder['path']."<br><br><br>";
@@ -696,7 +696,7 @@ class DocumentManager
 				//get all id's of documents that are deleted
 				$what_to_delete_result = api_sql_query($what_to_delete_sql, __FILE__, __LINE__);
 
-				if ($what_to_delete_result && mysql_num_rows($what_to_delete_result) != 0)
+				if ($what_to_delete_result && Database::num_rows($what_to_delete_result) != 0)
 				{
 					//needed to deleted medadata
 					require_once (api_get_path(SYS_CODE_PATH).'metadata/md_funcs.php');
@@ -704,7 +704,7 @@ class DocumentManager
 					$mdStore = new mdstore(TRUE);
 
 					//delete all item_property entries
-					while ($row = mysql_fetch_array($what_to_delete_result))
+					while ($row = Database::fetch_array($what_to_delete_result))
 					{
 						//query to delete from item_property table
 						$remove_from_item_property_sql = "DELETE FROM ".$TABLE_ITEMPROPERTY." WHERE ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
@@ -735,8 +735,8 @@ class DocumentManager
 				}
 			}
 			else //set visibility to 2 and rename file/folder to qsdqsd_DELETED_#id
-				{
-				if (api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'delete', $user_id))
+			{
+				if (api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'delete', api_get_user_id()))
 				{
 					//echo('item_property_update OK');
 					if (rename($base_work_dir.$path, $base_work_dir.$new_path))
@@ -748,12 +748,12 @@ class DocumentManager
 							//if it is a folder it can contain files
 							$sql = "SELECT id,path FROM ".$TABLE_DOCUMENT." WHERE path LIKE '".$path."/%'";
 							$result = api_sql_query($sql, __FILE__, __LINE__);
-							if ($result && mysql_num_rows($result) > 0)
+							if ($result && Database::num_rows($result) > 0)
 							{
-								while ($deleted_items = mysql_fetch_assoc($result))
+								while ($deleted_items = Database::fetch_array($result,'ASSOC'))
 								{
 									//echo('to delete also: id '.$deleted_items['id']);
-									api_item_property_update($_course, TOOL_DOCUMENT, $deleted_items['id'], 'delete', $user_id);
+									api_item_property_update($_course, TOOL_DOCUMENT, $deleted_items['id'], 'delete', api_get_user_id());
 									//Change path of subfolders and documents in database
 									$old_item_path = $deleted_items['path'];
 									$new_item_path = $new_path.substr($old_item_path, strlen($path));
@@ -789,9 +789,9 @@ class DocumentManager
 
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
-		if ($result && mysql_num_rows($result) == 1)
+		if ($result && Database::num_rows($result) == 1)
 		{
-			$row = mysql_fetch_row($result);
+			$row = Database::fetch_array($result);
 			return $row[0];
 		}
 		else
@@ -841,7 +841,7 @@ class DocumentManager
 		
 		$sql = 'SELECT id FROM '.$table_template.' WHERE course_code="'.$couse_code.'" AND user_id="'.$user_id.'" AND ref_doc="'.$document_id.'"';
 		$result = api_sql_query($sql);
-		$template_id = mysql_result($result,0,0);
+		$template_id = Database::result($result,0,0);
 		
 		include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 		my_delete(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'.$template_id.'.jpg');

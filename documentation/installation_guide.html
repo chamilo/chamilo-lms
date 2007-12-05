@@ -195,11 +195,11 @@ The following directories need to be readable, writeable and executable for ever
 
 <ul>
 
-  <li>dokeos/claroline/inc/conf/</li>
+  <li>dokeos/main/inc/conf/</li>
 
-  <li>dokeos/claroline/garbage/</li>
+  <li>dokeos/main/garbage/</li>
 
-  <li>dokeos/claroline/upload/</li>
+  <li>dokeos/main/upload/</li>
 
   <li>dokeos/archive/</li>
 
@@ -223,7 +223,7 @@ In Windows, you may need to check the properties of the folders (by right-clicki
 
 <ul>
 
-  <li>dokeos/claroline/inc/conf/claro_main.conf.php (if present)</li>
+  <li>dokeos/main/inc/conf/configuration.php (if present)</li>
 
   <li>dokeos/home/*.html</li>
 
@@ -254,14 +254,14 @@ choose "Configure the homepage" in the Dokeos administration section.</p>
 <ul>
 
   <li><strong>Protect your configuration file: </strong>
-make sure no one can overwrite it. You can find the config file in <em>(dokeos folder)</em>/claroline/inc/conf/claro_main.conf.php.
+make sure no one can overwrite it. You can find the config file in <em>(dokeos folder)</em>/main/inc/conf/configuration.php.
 Make it read-only (windows/xwindows: right-click the file to edit the
 properties. linux/bsd/macosx: use the chmod 444 command). The config
 file is created by Apache so you may need to be root user to change its
 permissions.</li>
 
   <li><strong>Protect your installation folder: </strong>
-if the <em>(dokeos folder)</em>/claroline/install
+if the <em>(dokeos folder)</em>/main/install
 folder is still accessible, someone could install over your existing
 version (you could lose your data that way). Move the folder somewhere
 out of the web directories so it is not accessible, change its name, or
@@ -281,7 +281,7 @@ in the administration section of Dokeos, you can use the Dokeos Config Settings 
   <li><strong>Configure Dokeos mail: </strong>
 most of Dokeos uses the mail settings from the php.ini file. However,
 the announcements tool uses phpMailer (another free software project)
-and the settings for this tool can be adjusted in <em>(dokeos folder)</em>/claroline/inc/conf/mail.conf.php.</li>
+and the settings for this tool can be adjusted in <em>(dokeos folder)</em>/main/inc/conf/mail.conf.php.</li>
 
 </ul>
 
@@ -532,7 +532,7 @@ Newer distributions also allow downloading rpms for additional packages.
 <h3><b>Activating LDAP in Dokeos</b></h3>
 
 <p>
-In (dokeos folder)/claroline/inc/conf/claro_main.conf.php, around line 90, you see<br>
+In (dokeos folder)/main/inc/conf/configuration.php, around line 90, you see<br>
 
 
 //for new login module<br>
@@ -541,10 +541,10 @@ In (dokeos folder)/claroline/inc/conf/claro_main.conf.php, around line 90, you s
 //uncomment these to activate ldap<br>
 
 
-//$extAuthSource['ldap']['login'] = "./claroline/auth/ldap/login.php";<br>
+//$extAuthSource['ldap']['login'] = "./main/auth/ldap/login.php";<br>
 
 
-//$extAuthSource['ldap']['newUser'] = "./claroline/auth/ldap/newUser.php";<br>
+//$extAuthSource['ldap']['newUser'] = "./main/auth/ldap/newUser.php";<br>
 
 
 <br>
@@ -583,7 +583,7 @@ Ask the LDAP server admin for the settings:
 
 
 You must enter these in
-(dokeos folder)/claroline/auth/ldap/ldap_var.inc.php
+(dokeos folder)/main/auth/ldap/ldap_var.inc.php
 <br>
 
 
@@ -614,8 +614,8 @@ $ldapDc = "dc=xx, dc=yy, dc=zz"; //domain<br>
 <p>
 If you wish, you can give teacher/student status to dokeos users according to settings in the ldap server.
 This is not a standard field however, so you'll have to change some code.
-claroline/auth/ldap/ldap_var.inc.php
-around line 189, function putUserInfoInClaroline ($login, $infoArray)
+main/auth/ldap/ldap_var.inc.php
+around line 189, function putUserInfoInDokeos ($login, $infoArray)
 </p>
 
 

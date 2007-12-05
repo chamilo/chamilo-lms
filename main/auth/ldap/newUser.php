@@ -1,4 +1,4 @@
-<?php # $Id: newUser.php 13366 2007-10-01 01:52:09Z yannoo $
+<?php # $Id: newUser.php 13925 2007-12-05 03:20:28Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -35,9 +35,9 @@
 	
 /*
 ==================================================
-	when a user does not exist yet in claroline, 
+	when a user does not exist yet in dokeos, 
 	but he or she does exist in the LDAP,
-	we add him to the claroline database
+	we add him to the dokeos database
 ==================================================
 */
 
@@ -49,7 +49,7 @@ if ($loginLdapSucces)
 {
 	/*
 		In here, we know that
-		- the user does not exist in Claroline
+		- the user does not exist in dokeos
 		- the users login and password are correct
 	*/
 	$infoArray = findUserInfoInLdap($login);

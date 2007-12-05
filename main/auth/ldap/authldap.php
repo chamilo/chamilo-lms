@@ -1,4 +1,4 @@
-<?php // $Id: authldap.php 13366 2007-10-01 01:52:09Z yannoo $
+<?php // $Id: authldap.php 13925 2007-12-05 03:20:28Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -62,7 +62,7 @@
 
 	with thanks to
 	- Stefan De Wannemacker (Ghent University)
-	- Université Jean Monet (J Dubois / Michel Courbon)
+	- Universitï¿½ Jean Monet (J Dubois / Michel Courbon)
 	- Michel Panckoucke for reporting and fixing a bug
 	- Patrick Cool: fixing security hole
 
@@ -80,7 +80,7 @@ include ('ldap_var.inc.php');
 	CHECK LOGIN & PASSWORD WITH LDAP
 *	@return true when login & password both OK, false otherwise
 ===============================================================
-*	@author Roan Embrechts (based on code from Université Jean Monet)
+*	@author Roan Embrechts (based on code from Universitï¿½ Jean Monet)
 */
 //include_once("$includePath/../connect/authldap.php");
 
@@ -186,9 +186,9 @@ function findUserInfoInLdap ($login)
 /**
 ===============================================================
 *	function
-*	PUT USER INFO IN CLAROLINE
+*	PUT USER INFO IN DOKEOS
 *	this function uses the data from findUserInfoInLdap()
-*	to add the userdata to Claroline
+*	to add the userdata to Dokeos
 *
 *	the "rugid" field is specifically for the Ghent University.
 *
@@ -243,7 +243,7 @@ function putUserInfoInDokeos ($login, $infoArray)
 					 $email, $uname, $password, $official_code,
 					 'english','', '', 'ldap');
 
-	//echo "new user added to claroline, id = $_userId";
+	//echo "new user added to Dokeos, id = $_userId";
 
 	//user_id, username, password, auth_source
 
@@ -263,7 +263,7 @@ function putUserInfoInDokeos ($login, $infoArray)
 
 /* >>>>>>>>>>>>>>>> end of UGent LDAP routines <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
 
-/* >>>>> Older but necessary code of Université Jean-Monet <<<<< */
+/* >>>>> Older but necessary code of Universitï¿½ Jean-Monet <<<<< */
 
 /*
 ===========================================================
@@ -277,12 +277,12 @@ function putUserInfoInDokeos ($login, $infoArray)
 	* let these functions use the variables in config.inc instead of ldap_var.inc
 */
 
-//*** variables en entrée
-// $uname : username entré au clavier
+//*** variables en entrï¿½e
+// $uname : username entrï¿½ au clavier
 // $passwd : password fournit par l'utilisateur
 
 //*** en sortie : 3 valeurs possibles
-// 0 -> authentif réussie
+// 0 -> authentif rï¿½ussie
 // 1 -> password incorrect
 // -1 -> ne fait partie du LDAP
 

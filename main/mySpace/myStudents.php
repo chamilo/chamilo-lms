@@ -426,7 +426,8 @@ if(!empty($_GET['student']))
 			$a_date_end = explode('-',$a_infosCours['date_end']);
 			$date_end = $a_date_end[2].'/'.$a_date_end[1].'/'.$a_date_end[0];
 			$dateSession = get_lang('From').' '.$date_start.' '.get_lang('To').' '.$date_end;
-			$tableTitle = $a_infosCours['title'].'&nbsp; | &nbsp;'.get_lang('Tutor').' : '.stripslashes($a_infosCours['tutor_name']);
+			$nb_login = Tracking :: count_login_per_student($a_infosUser['user_id'], $_GET['course']);
+			$tableTitle = $a_infosCours['title'].'&nbsp;|&nbsp;'.get_lang('CountToolAccess').' : '.$nb_login.'&nbsp; | &nbsp;'.get_lang('Tutor').' : '.stripslashes($a_infosCours['tutor_name']);
 			
 			$csv_content[] = array();
 			$csv_content[] = array(str_replace('&nbsp;','',$tableTitle));	

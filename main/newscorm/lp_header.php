@@ -19,7 +19,7 @@ if(isset($_SESSION['lpobject'])){
 	$temp = $_SESSION['lpobject'];
 	$_SESSION['oLP'] = unserialize($temp);
 }
-$path_name = htmlspecialchars($_SESSION['oLP']->get_name());
+$path_name = $_SESSION['oLP']->get_name();
 $path_id = $_SESSION['oLP']->get_id();
 // use the flag set in lp_view.php to check if this script has been loaded
 // as a frame of lp_view.php. Otherwise, redirect to lp_controller

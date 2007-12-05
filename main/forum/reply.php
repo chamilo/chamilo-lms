@@ -160,7 +160,8 @@ if($origin=='learnpath')
 }
 else
 {
-	Display :: display_header();
+	// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
+	Display :: display_header('');
 	api_display_tool_title($nameTools);
 }
 //echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';

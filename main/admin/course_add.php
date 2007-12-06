@@ -1,5 +1,5 @@
 <?php
-// $Id: course_add.php 13069 2007-09-18 09:26:22Z elixir_julian $
+// $Id: course_add.php 13972 2007-12-06 10:32:41Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -135,7 +135,7 @@ if( $form->validate())
 		$department_url = 'http://'.$department_url;
 	}
 	if(trim($code) == ''){
-		$code = generate_course_code($title);
+		$code = generate_course_code(substr($title,0,20));
 	}
 	$keys = define_course_keys($code, "", $_configuration['db_prefix']);
 	if (sizeof($keys))

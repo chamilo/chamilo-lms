@@ -7219,7 +7219,19 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		//remove memory and time limits as much as possible as this might be a long process...
 		if(function_exists('ini_set'))
 		{
-			ini_set('memory_limit','128M');
+			$mem = ini_get('memory_limit');
+			if(substr($mem,-1,1)=='M')
+			{
+				$mem_num = substr($mem,0,-1);
+				if($mem_num<128)
+				{
+					ini_set('memory_limit','128M');
+				}
+			}
+			else
+			{
+				ini_set('memory_limit','128M');
+			}
 			ini_set('max_execution_time',600);
 		//}else{
 			//error_log('Scorm export: could not change memory and time limits',0);

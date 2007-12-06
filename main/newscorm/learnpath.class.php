@@ -1980,7 +1980,7 @@ class learnpath {
 	{
 		if($this->debug>0){error_log('New LP - In learnpath::get_proximity()',0);}
 		if(!empty($this->proximity)){return $this->proximity;}else{return '';}
-	}    
+	}
     /**
      * Returns a usable array of stats related to the current learnpath and user
      * @return array	Well-formatted array containing status for the current learnpath
@@ -7247,6 +7247,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$current_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
 		$root_path = $main_path = api_get_path(SYS_PATH);
 		$files_cleanup = array();
+		
 		//place to temporarily stash the zipfiles
 		//create the temp dir if it doesn't exist
 		//or do a cleanup befor creating the zipfile
@@ -7329,8 +7330,6 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		 			$inc_docs = $item->get_resources_from_source(null,api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.'scorm/'.$this->path.'/'.$item->get_path());
 		 		else
 		 			$inc_docs = $item->get_resources_from_source();
-		 		//print_r($inc_docs);
-		 		//error_log('Dealing with document '.$item->get_file_path().', found included documents: '.print_r($inc_docs,true),0);
 		 		//give a child element <item> to the <organization> element
 		 		$my_item = $xmldoc->createElement('item');
 		 		$my_item->setAttribute('identifier','ITEM_'.$item->get_id()); 
@@ -7976,6 +7975,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	</body>
 </html>
 EOD;
+		if(!is_dir($garbage_path.$temp_dir_short.'/document'))
+		{
+			@mkdir($garbage_path.$temp_dir_short.'/document');
+		}
 		file_put_contents($garbage_path.$temp_dir_short.'/document/non_exportable.html', $file_content);
 		
 		//Add the extra files that go along with a SCORM package

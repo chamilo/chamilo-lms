@@ -7891,7 +7891,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$this->create_path($dest_file);
 			//error_log('copy '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' to '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,0);
 			//echo $main_path.$file_path.'<br>';
-			copy($sys_course_path.$_course['path'].'/'.$file_path,$dest_file);
+			@copy($sys_course_path.$_course['path'].'/'.$file_path,$dest_file);
 			//check if the file needs a link update
 			if(in_array($file_path,array_keys($link_updates))){
 				$string = file_get_contents($dest_file);

@@ -1981,7 +1981,92 @@ class learnpath {
 		if($this->debug>0){error_log('New LP - In learnpath::get_proximity()',0);}
 		if(!empty($this->proximity)){return $this->proximity;}else{return '';}
 	}
-    /**
+	/**
+	 * Generate a new prerequisites string for a given item. If this item was a sco and
+	 * its prerequisites were strings (instead of IDs), then transform those strings into
+	 * IDs, knowing that SCORM IDs are kept in the "ref" field of the lp_item table.
+	 * Prefix all item IDs that end-up in the prerequisites string by "ITEM_" to use the
+	 * same rule as the scorm_export() method
+	 * @param	integer		Item ID
+	 * @return	string		Prerequisites string ready for the export as SCORM
+	 */
+	function get_scorm_prereq_string($item_id)
+	{
+		if($this->debug>0){error_log('New LP - In learnpath::get_scorm_prereq_string()',0);}
+		if(!is_object($this->items[$item_id])){return false;}
+		$oItem = $this->items[$item_id];
+		$prereq = $oItem->get_prereq_string();
+		if(empty($prereq))
+		{
+			return '';
+		}
+		if(preg_match('/^\d+$/',$prereq) && is_object($this->items[$prereq]))
+		{	//if the prerequisite is a simple integer ID and this ID exists as an item ID,
+			//then simply return it (with the ITEM_ prefix) 
+			return 'ITEM_'.$prereq;
+		}
+		else
+		{
+			if(isset($this->refs_list[$prereq]))
+			{
+				//it's a simple string item from which the ID can be found in the refs list
+				//so we can transform it directly to an ID for export
+				return 'ITEM_'.$this->refs_list[$prereq];
+			}
+			else
+			{
+				//last case, if it's a complex form, then find all the IDs (SCORM strings)
+				//and replace them, one by one, by the internal IDs (dokeos db)
+				//TODO modify the '*' replacement to replace the multiplier in front of it
+				//by a space as well
+				$find    = array('&','|','~','=','<>','{','}','*','(',')');
+				$replace = array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ');
+				$prereq_mod = str_replace($find,$replace,$prereq);
+				$ids = split(' ',$prereq_mod);
+				foreach($ids as $id)
+				{
+					$id = trim($id);
+					if(isset($this->refs_list[$id]))
+					{
+						$prereq = preg_replace('/[^a-zA-Z_0-9]('.$id.')[^a-zA-Z_0-9]/','ITEM_'.$this->refs_list[$id],$prereq);
+					}
+				}
+				error_log('New LP - In learnpath::get_scorm_prereq_string(): returning modified string: '.$prereq,0);
+				return $prereq;
+			}
+		}
+	}
+	/**
+	 * Returns the XML DOM document's node
+	 * @param	resource	Reference to a list of objects to search for the given ITEM_*
+	 * @param	string		The identifier to look for
+	 * @return	mixed		The reference to the element found with that identifier. False if not found
+	 */
+	 function get_scorm_xml_node(&$children,$id)
+	 {
+        for($i=0;$i<$children->length;$i++){
+	        $item_temp = $children->item($i);
+	        if ($item_temp -> nodeName == 'item')
+	        {
+	        	if($item_temp->getAttribute('identifier') == $id)
+	        	{
+	        		return $item_temp;
+	        	}
+	        }
+	        $subchildren = $item_temp->childNodes;
+	        if($subchildren->length>0)
+	        {
+	        	$val = $this->get_scorm_xml_node($subchildren,$id);
+	        	if(is_object($val))
+	        	{
+	        		return $val;
+	        	}
+	        }
+        }
+        return false;
+    }
+	
+	/**
      * Returns a usable array of stats related to the current learnpath and user
      * @return array	Well-formatted array containing status for the current learnpath
      */
@@ -7322,7 +7407,6 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 	//format
 	 	$link_updates = array();
 	 	foreach($this->items as $index => $item){
-	 		
 	 		if(!in_array($item->type , array(TOOL_QUIZ, TOOL_FORUM, TOOL_THREAD, TOOL_LINK, TOOL_STUDENTPUBLICATION)))
 	 		{
 		 		//get included documents from this item
@@ -7331,15 +7415,16 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		 		else
 		 			$inc_docs = $item->get_resources_from_source();
 		 		//give a child element <item> to the <organization> element
+		 		$my_item_id = $item->get_id();
 		 		$my_item = $xmldoc->createElement('item');
-		 		$my_item->setAttribute('identifier','ITEM_'.$item->get_id()); 
-		 		$my_item->setAttribute('identifierref','RESOURCE_'.$item->get_id()); 
+		 		$my_item->setAttribute('identifier','ITEM_'.$my_item_id); 
+		 		$my_item->setAttribute('identifierref','RESOURCE_'.$my_item_id); 
 		 		$my_item->setAttribute('isvisible','true');
 		 		//give a child element <title> to the <item> element
 		 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(),ENT_QUOTES));
 		 		$my_item->appendChild($my_title);
 		 		//give a child element <adlcp:prerequisites> to the <item> element
-		 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisites',$item->get_prereq_string());
+		 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisites',$this->get_scorm_prereq_string($my_item_id));
 		 		$my_prereqs->setAttribute('type','aicc_script');
 		 		$my_item->appendChild($my_prereqs);
 		 		//give a child element <adlcp:maxtimeallowed> to the <item> element - not yet supported
@@ -7357,20 +7442,19 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		 		if(!empty($item->parent) && $item->parent!=0)
 		 		{
 		 			$children = $organization->childNodes;
-			        for($i=0;$i<$children->length;$i++){
-				        $item_temp = $children->item($i);
-				        if ($item_temp -> nodeName == 'item')
-				        {
-				        	if($item_temp->getAttribute('identifier') == 'ITEM_'.$item->parent)
-				        	{
-				        		$item_temp -> appendChild($my_item);
-				        	}
-				        	
-				        }
-			        }
+		 			$possible_parent = &$this->get_scorm_xml_node($children,'ITEM_'.$item->parent);
+		 			if(is_object($possible_parent))
+		 			{
+		 				$possible_parent->appendChild($my_item);
+		 			}
+		 			else
+		 			{
+		 				if($this->debug>0){error_log('Parent ITEM_'.$item->parent.' of item ITEM_'.$my_item_id.' not found');}
+		 			}
 		 		}
 		 		else
 		 		{
+		 			if($this->debug>0){error_log('No parent');}
 		 			$organization->appendChild($my_item);
 		 		}
 		 		
@@ -7387,7 +7471,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		 		$my_resource->setAttribute('type','webcontent');
 		 		$my_resource->setAttribute('href',$my_xml_file_path);
 		 		//adlcp:scormtype can be either 'sco' or 'asset'
-		 		$my_resource->setAttribute('adlcp:scormtype','asset');
+		 		if($item->type=='sco')
+		 		{
+			 		$my_resource->setAttribute('adlcp:scormtype','sco');
+		 		}
+		 		else
+		 		{
+			 		$my_resource->setAttribute('adlcp:scormtype','asset');
+		 		}
 		 		//xml:base is the base directory to find the files declared in this resource
 		 		$my_resource->setAttribute('xml:base','');
 		 		//give a <file> child to the <resource> element

@@ -542,6 +542,14 @@ class learnpathItem{
     	return $this->prevent_reinit;
     }
     /**
+     * Gets the item's reference column
+     * @return string	The item's reference field (generally used for SCORM identifiers)
+     */
+    function get_ref()
+    {
+    	return $this->ref;
+    }
+    /**
      * Gets the list of included resources as a list of absolute or relative paths of
      * resources included in the current item. This allows for a better SCORM export.
      * The list will generally include pictures, flash objects, java applets, or any other

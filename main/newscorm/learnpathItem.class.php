@@ -152,7 +152,6 @@ class learnpathItem{
     function add_objective($index,$params)
     {
     	if(empty($params[0])){return null;}
-    	error_log(__FILE__.' '.__LINE__.' '.print_r($params,true),0);
 		$this->objectives[$index] = $params;
 		//take the current maximum index to generate the objectives_count
 		if((count($this->objectives)+1)>$this->objectives_count){
@@ -1955,6 +1954,66 @@ class learnpathItem{
     	}
     }
     /**
+     * Write objectives to DB. This method is separate from write_to_db() because otherwise
+     * objectives are lost as a side effect to AJAX and session concurrent access
+     * @return	boolean		True or false on error
+     */
+    function write_objectives_to_db()
+    {
+   		if($this->debug>0){error_log('New LP - In learnpathItem::write_objectives_to_db()',0);}
+     	if(is_array($this->objectives) && count($this->objectives)>0){
+     		//save objectives
+     		$tbl = Database::get_course_table('lp_item_view');
+     		$sql = "SELECT id FROM $tbl " .
+     				"WHERE lp_item_id = ".$this->db_id." " .
+     				"AND   lp_view_id = ".$this->view_id." " .
+     				"AND   view_count = ".$this->attempt_id;
+     		$res = api_sql_query($sql,__FILE__,__LINE__);
+     		if(Database::num_rows($res)>0){
+     			$row = Database::fetch_array($res);
+     			$lp_iv_id = $row[0];
+     			if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Got item_view_id '.$lp_iv_id.', now checking objectives ',0);}
+	     		foreach($this->objectives as $index => $objective){
+	     			$iva_table = Database::get_course_table('lp_iv_objective');
+	     			$iva_sql = "SELECT id FROM $iva_table " .
+	     					"WHERE lp_iv_id = $lp_iv_id " .
+	     					//"AND order_id = $index";
+							//also check for the objective ID as it must be unique for this SCO view
+	     					"AND objective_id = '".$objective[0]."'";
+	     			$iva_res = api_sql_query($iva_sql,__FILE__,__LINE__);
+					//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
+	     			if(Database::num_rows($iva_res)>0){
+	     				//update (or don't)
+	     				$iva_row = Database::fetch_array($iva_res);
+	     				$iva_id = $iva_row[0];
+	     				$ivau_sql = "UPDATE $iva_table " .
+	     					"SET objective_id = '".$objective[0]."'," .
+	     					"status = '".$objective[1]."'," .
+	     					"score_raw = '".$objective[2]."'," .
+	     					"score_min = '".$objective[4]."'," .
+	     					"score_max = '".$objective[3]."' " .
+	     					"WHERE id = $iva_id";
+	     				$ivau_res = api_sql_query($ivau_sql,__FILE__,__LINE__);
+	     				//error_log($ivau_sql,0);
+	     			}else{
+	     				//insert new one
+	     				$ivai_sql = "INSERT INTO $iva_table " .
+	     						"(lp_iv_id, order_id, objective_id, status, score_raw, score_min, score_max )" .
+	     						"VALUES" .
+	     						"(".$lp_iv_id.", ".$index.",'".$objective[0]."','".$objective[1]."'," .
+	     						"'".$objective[2]."','".$objective[4]."','".$objective[3]."')";
+	     				$ivai_res = api_sql_query($ivai_sql,__FILE__,__LINE__);
+	     				//error_log($ivai_sql);
+	     			}
+	     		}
+     		}
+     	}
+     	else
+     	{
+     		//error_log('no objective to save: '.print_r($this->objectives,1));
+     	}
+    }
+    /**
      * Writes the current data to the database
      * @return	boolean	Query result
      */
@@ -2101,53 +2160,6 @@ class learnpathItem{
 		     						"'".$interaction[5]."','".$interaction[6]."','".$interaction[7]."'" .
 		     						")";
 		     				$ivai_res = api_sql_query($ivai_sql,__FILE__,__LINE__);
-		     			}
-		     		}
-	     		}
-	     	}
-	     	if(is_array($this->objectives) && count($this->objectives)>0){
-	     		//save objectives
-	     		$tbl = Database::get_course_table('lp_item_view');
-	     		$sql = "SELECT id FROM $tbl " .
-	     				"WHERE lp_item_id = ".$this->db_id." " .
-	     				"AND   lp_view_id = ".$this->view_id." " .
-	     				"AND   view_count = ".$this->attempt_id;
-	     		$res = api_sql_query($sql,__FILE__,__LINE__);
-	     		if(Database::num_rows($res)>0){
-	     			$row = Database::fetch_array($res);
-	     			$lp_iv_id = $row[0];
-	     			if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Got item_view_id '.$lp_iv_id.', now checking objectives ',0);}
-		     		foreach($this->objectives as $index => $objective){
-		     			$iva_table = Database::get_course_table('lp_iv_objective');
-		     			$iva_sql = "SELECT id FROM $iva_table " .
-		     					"WHERE lp_iv_id = $lp_iv_id " .
-		     					//"AND order_id = $index";
-								//also check for the objective ID as it must be unique for this SCO view
-		     					"AND objective_id = '".$objective[0]."'";
-		     			$iva_res = api_sql_query($iva_sql,__FILE__,__LINE__);
-						//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
-		     			if(Database::num_rows($iva_res)>0){
-		     				//update (or don't)
-		     				$iva_row = Database::fetch_array($iva_res);
-		     				$iva_id = $iva_row[0];
-		     				$ivau_sql = "UPDATE $iva_table " .
-		     					"SET objective_id = '".$objective[0]."'," .
-		     					"status = '".$objective[1]."'," .
-		     					"score_raw = '".$objective[2]."'," .
-		     					"score_min = '".$objective[4]."'," .
-		     					"score_max = '".$objective[3]."' " .
-		     					"WHERE id = $iva_id";
-		     				$ivau_res = api_sql_query($ivau_sql,__FILE__,__LINE__);
-		     				//error_log($ivau_sql,0);
-		     			}else{
-		     				//insert new one
-		     				$ivai_sql = "INSERT INTO $iva_table " .
-		     						"(lp_iv_id, order_id, objective_id, status, score_raw, score_min, score_max )" .
-		     						"VALUES" .
-		     						"(".$lp_iv_id.", ".$index.",'".$objective[0]."','".$objective[1]."'," .
-		     						"'".$objective[2]."','".$objective[4]."','".$objective[3]."')";
-		     				$ivai_res = api_sql_query($ivai_sql,__FILE__,__LINE__);
-		     				//error_log($ivai_sql);
 		     			}
 		     		}
 	     		}

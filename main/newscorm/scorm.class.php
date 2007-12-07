@@ -381,7 +381,7 @@ class scorm extends learnpath {
 	     	$myname = $oOrganization->get_name();
 	     	//$this->manifest_encoding = 'UTF-8';
 	     	global $charset;
-	     	if($this->manifest_encoding != $charset){
+	     	if(!empty($charset) && !empty($this->manifest_encoding) && $this->manifest_encoding != $charset){
 	     		$myname = mb_convert_encoding($myname,$charset,$this->manifest_encoding);
 	     		//error_log('New LP - Converting name from '.$this->manifest_encoding.' to ISO-8859-1',0);
 	     	}

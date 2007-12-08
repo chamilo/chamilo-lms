@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 13702 2007-11-19 10:12:38Z elixir_julian $
+<?php // $Id: document.inc.php 13981 2007-12-08 23:43:58Z yannoo $
 
 /*
 ==============================================================================
@@ -14,12 +14,13 @@
  * Builds the form thats enables the user to 
  * select a directory to browse/upload in
  *
- * @param array $folders
- * @param string $curdirpath
- * @param string $group_dir
+ * @param array 	An array containing the folders we want to be able to select
+ * @param string	The current folder (path inside of the "document" directory, including the prefix "/")
+ * @param string	Group directory, if empty, prevents documents to be uploaded (because group documents cannot be uploaded in root)
+ * @param	boolean	Whether to change the renderer (this will add a template <span> to the QuickForm object displaying the form)
  * @return string html form
  */
-function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRenderer)
+function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRenderer=false)
 {
 	$folder_titles = array();
 	if(get_setting('use_document_title') == 'true')
@@ -60,7 +61,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 		$parent_select -> addOption(get_lang('Root'),'/');
 		if(is_array($folders))
 		{
-			foreach ($folders AS $folder)
+			foreach ($folders as $folder)
 			{
 				$selected = ($curdirpath==$folder)?' selected="selected"':'';
 				$path_parts = explode('/',$folder);
@@ -72,7 +73,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 	}
 	else
 	{
-		foreach ($folders AS $folder)
+		foreach ($folders as $folder)
 		{
 			$selected = ($curdirpath==$folder)?' selected="selected"':'';
 			$label = $folder_titles[$folder];

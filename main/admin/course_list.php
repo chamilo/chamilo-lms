@@ -1,5 +1,5 @@
 <?php
-// $Id: course_list.php 13292 2007-09-27 01:59:07Z yannoo $
+// $Id: course_list.php 13982 2007-12-10 18:04:25Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -80,7 +80,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	$users_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	
-	$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, tutor_name as col8, code AS col9 FROM $course_table";
+	$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, tutor_name as col8, code AS col9, visibility AS col10 FROM $course_table";
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = mysql_real_escape_string($_GET['keyword']);
@@ -103,10 +103,13 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	$courses = array ();
 	while ($course = mysql_fetch_row($res))
 	{
+		//place colour icons in front of courses
+		$course[1] = get_course_visibility_icon($course[10]).$course[1];
 		$course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
 		$course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
 		$course[7] = CourseManager :: is_virtual_course_from_system_code($course[7]) ? get_lang('Yes') : get_lang('No');
-		$courses[] = $course;
+		$course_rem = array($course[0],$course[1],$course[2],$course[3],$course[4],$course[5],$course[6],$course[7],$course[8],$course[9]);
+		$courses[] = $course_rem;
 	}
 	return $courses;
 }
@@ -123,6 +126,32 @@ function modify_filter($code)
 		'<a href="course_edit.php?course_code='.$code.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;'.
 		'<a href="course_list.php?delete_course='.$code.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>';	
 }
+/**
+ * Return an icon representing the visibility of the course
+ */
+function get_course_visibility_icon($v)
+{
+	$path = api_get_path(REL_CLARO_PATH);
+	$style = 'style="margin-bottom:-5px;margin-right:5px;"';
+	switch($v)
+	{
+		case 0:
+			return '<img src="'.$path.'img/bullet_red.gif" title="'.get_lang('CourseVisibilityClosed').'" '.$style.' />';
+			break;
+		case 1:
+			return '<img src="'.$path.'img/bullet_orange.gif" title="'.get_lang('Private').'" '.$style.' />';
+			break;
+		case 2:
+			return '<img src="'.$path.'img/bullet_green.gif" title="'.get_lang('OpenToThePlatform').'" '.$style.' />';
+			break;
+		case 3:
+			return '<img src="'.$path.'img/bullet_blue.gif" title="'.get_lang('OpenToTheWorld').'" '.$style.' />';
+			break;
+		default:
+			return '';
+	}
+}
+
 if (isset ($_POST['action']))
 {
 	switch ($_POST['action'])

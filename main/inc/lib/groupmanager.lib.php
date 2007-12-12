@@ -63,6 +63,10 @@ define("TOOL_PRIVATE", "2");
  */
 //define("GROUP_TOOL_FORUM", "0");
 define("GROUP_TOOL_DOCUMENTS", "1");
+define("GROUP_TOOL_CALENDAR","2");
+define("GROUP_TOOL_ANNOUNCEMENT","3");
+define("GROUP_TOOL_WORK","4");
+
 /**
  * Fixed id's for group categories
  * - VIRTUAL_COURSE_CATEGORY: in this category groups are created based on the
@@ -150,7 +154,11 @@ class GroupManager
 		$table_group = Database :: get_course_table(TABLE_GROUP);
 		$table_forum = Database :: get_course_table(TABLE_FORUM);
 		$category = GroupManager :: get_category($category_id);
-
+		
+		if (intval($places) == 0) //if the amount of users per group is not filled in, use the setting from the category
+		{
+			$places = $category['max_student'];
+		}
 		$sql = "INSERT INTO ".$table_group." SET category_id='".$category_id."', max_student = '".$places."', doc_state = '".$category['doc_state']."', calendar_state = '".$category['calendar_state']."', work_state = '".$category['work_state']."', announcements_state = '".$category['announcements_state']."', self_registration_allowed = '".$category['self_reg_allowed']."',  self_unregistration_allowed = '".$category['self_unreg_allowed']."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 		$lastId = mysql_insert_id();
@@ -368,7 +376,7 @@ class GroupManager
 					work_state = '".$work_state."',
 					calendar_state = '".$calendar_state."',
 					announcements_state = '".$announcements_state."',
-					description='".Database::escape_string(trim($description))."',
+					description='".trim($description)."',
 					max_student=".$maximum_number_of_students.",
 					self_registration_allowed='".$self_registration_allowed."',
 					self_unregistration_allowed='".$self_unregistration_allowed."'
@@ -495,7 +503,7 @@ class GroupManager
 	 * @param int $max_number_of_students
 	 * @param int $groups_per_user
 	 */
-	function create_category($title, $description, $doc_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user)
+	function create_category($title, $description, $doc_state, $work_state, $calendar_state, $announcements_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user)
 	{
 		$table_group_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "SELECT MAX(display_order)+1 as new_order FROM $table_group_category ";
@@ -507,8 +515,12 @@ class GroupManager
 		}
 		$sql = "INSERT INTO ".$table_group_category."
 					SET title='".mysql_real_escape_string($title)."',
-					display_order = $obj->new_order,description='".mysql_real_escape_string($description)."',
+					display_order = $obj->new_order,
+					description='".mysql_real_escape_string($description)."',
 					doc_state = '".$doc_state."',
+					work_state = '".$work_state."',
+					calendar_state = '".$calendar_state."',
+              		announcements_state = '".$announcements_state."',               
 					groups_per_user   = ".$groups_per_user.",
 					self_reg_allowed = '".$self_registration_allowed."',
 					self_unreg_allowed = '".$self_unregistration_allowed."',
@@ -523,6 +535,7 @@ class GroupManager
 		}
 		return $id;
 	}
+
 	/**
 	 * Update group category
 	 * @param int $id The id of the category
@@ -533,13 +546,16 @@ class GroupManager
 	 * @param int $max_number_of_students
 	 * @param int $groups_per_user
 	 */
-	function update_category($id, $title, $description, $doc_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user)
+	function update_category($id, $title, $description, $doc_state, $work_state, $calendar_state, $announcements_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user)
 	{
 		$table_group_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "UPDATE ".$table_group_category."
 				SET title='".mysql_real_escape_string($title)."',
 				description='".mysql_real_escape_string($description)."',
 				doc_state = '".$doc_state."',
+				work_state = '".$work_state."',
+            	calendar_state = '".$calendar_state."',
+            	announcements_state = '".$announcements_state."',
 				groups_per_user   = ".$groups_per_user.",
 				self_reg_allowed = '".$self_registration_allowed."',
 				self_unreg_allowed = '".$self_unregistration_allowed."',
@@ -547,6 +563,8 @@ class GroupManager
 				WHERE id=$id";
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
+	
+	
 	/**
 	 * Returns the number of groups of the user with the greatest number of
 	 * subscribtions in the given category
@@ -1265,13 +1283,18 @@ class GroupManager
 	{
 		switch ($tool)
 		{
-			/*case GROUP_TOOL_FORUM :
-				$state_key = 'forum_state';
-				break;
-			*/
 			case GROUP_TOOL_DOCUMENTS :
 				$state_key = 'doc_state';
 				break;
+			case GROUP_TOOL_CALENDAR :
+				$state_key = 'calendar_state';
+				break;
+			case GROUP_TOOL_ANNOUNCEMENT :
+				$state_key = 'announcements_state';
+				break;
+			case GROUP_TOOL_WORK :
+				$state_key = 'work_state';
+				break;	
 			default:
 				return false;
 		}

@@ -305,6 +305,33 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							}
 						}
 					}
+					
+					$mytable = $row_course['db_name'].".lp_item";
+					if($singleDbForm)
+					{
+						$mytable = "$prefix{$row_course['db_name']}_lp_item";
+					}
+					$mysql = "SELECT * FROM $mytable WHERE min_score != 0 AND prerequisite != ''";
+					$myres = mysql_query($query);
+					if($myres!==false && mysql_num_rows($myres)>0)
+					{
+						while($myrow = mysql_fetch_array($myres))
+						{
+							if(is_numeric($myrow['prerequisite']))
+							{
+								$mysql2 = "UPDATE $mytable SET mastery_score = '".$myrow['min_score']."' WHERE id = '".$myrow['prerequisite']."'";
+								$myres2 = mysql_query($mysql2);
+								//echo $mysql2."<br />";
+								if($myres2 !== false)
+								{
+									$mysql3 = "UPDATE $mytable SET min_score = 0 WHERE id = '".$myrow['id']."'";
+									$myres3 = mysql_query($mysql3);
+									//echo $mysql3."<br />"; 
+								}
+							}
+						}
+					}
+					$sql = "UPDATE $mydb.lp_item SET ";
 				}
 			}
 		}

@@ -22,11 +22,22 @@
 *	Saving the scores.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: savescores.php 12852 2007-08-02 04:54:12Z yannoo $
+* 	@version $Id: savescores.php 13988 2007-12-14 05:05:51Z yannoo $
 */
 
 // name of the language file that needs to be included
 $language_file = 'learnpath';
+
+if($_GET['origin']=='learnpath')
+{
+	require_once ('../newscorm/learnpath.class.php');
+	require_once ('../newscorm/learnpathItem.class.php');
+	require_once ('../newscorm/scorm.class.php');
+	require_once ('../newscorm/scormItem.class.php');
+	require_once ('../newscorm/aicc.class.php');
+	require_once ('../newscorm/aiccItem.class.php');
+}
+
 include ('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
@@ -47,6 +58,7 @@ $_cid = api_get_course_id();
 $test = mysql_real_escape_string($_REQUEST['test']);
 $score = mysql_real_escape_string($_REQUEST['score']);
 $origin = $_REQUEST['origin'];
+$jscript2run = '';
 
 /**
  * Save the score for a HP quiz. Can be used by the learnpath tool as well
@@ -90,12 +102,8 @@ function save_scores($file, $score)
 	{
 		//if we are in a learning path, save the score in the corresponding
 		//table to get tracking in there as well
-		$user_id = api_get_user_id();
-		$lp_item_view = Database::get_course_table('lp_item_view');
-		$sql2 = "UPDATE $lp_item_view SET score = '$score'" .
-				" WHERE lp_view_id = '".$_SESSION['scorm_view_id']."'" .
-				" AND lp_item_id = '".$_SESSION['scorm_item_id']."'";
-		$res2 = api_sql_query($sql2,__FILE__,__LINE__);
+	    global $jscript2run;
+	    $jscript2run .= '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$score.');</script>';
 	}
 		
 }
@@ -108,9 +116,8 @@ if ($origin != 'learnpath')
 {
 	// $url = "Hpdownload.php?doc_url=".$test."&cid=".$cid; // back to the test
 	$url = "exercice.php"; // back to exercices
-	echo "<SCRIPT LANGUAGE='JavaScript' type='text/javascript'>";
-	echo "window.open('$url', '_top', '')"; // back to exercices
-	echo "</SCRIPT> ";
+	$jscript2run .= '<script language="javascript" type="text/javascript">'."window.open('$url', '_top', '')".'</script>';
+	echo $jscript2run;
 }
 else
 {
@@ -118,6 +125,7 @@ else
 <html>
 <head>
 <link rel='stylesheet' type='text/css' href='../css/<?php echo api_get_setting('stylesheets');?>/scorm.css' />
+<?php echo $jscript2run; ?>
 </head>
 <body>
 <br />

@@ -22,7 +22,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: showinframes.php 12831 2007-08-01 17:22:34Z yannoo $
+* 	@version $Id: showinframes.php 13988 2007-12-14 05:05:51Z yannoo $
 */
 
 /*
@@ -139,8 +139,3 @@ if ($origin!='learnpath') {
 ?>
 
 </html>
-<?php
-//echo $full_file_path;
-//}
-//echo $uid;
-?>

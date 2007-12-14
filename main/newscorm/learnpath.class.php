@@ -1077,11 +1077,10 @@ class learnpath {
 
      */
 
-    function edit_item_prereq($id, $prerequisite_id, $min_score = 0, $max_score = 100)
+    function edit_item_prereq($id, $prerequisite_id, $mastery_score = 0, $max_score = 100)
 
     {
-
-		if($this->debug>0){error_log('New LP - In learnpath::edit_item_prereq()',0);}
+		if($this->debug>0){error_log('New LP - In learnpath::edit_item_prereq('.$id.','.$prerequisite_id.','.$mastery_score.','.$max_score.')',0);}
 
     	if(empty($id) or ($id != strval(intval($id))) or empty($prerequisite_id)){ return false; }
 
@@ -1089,28 +1088,32 @@ class learnpath {
 
 		$tbl_lp_item = Database::get_course_table('lp_item');
 		
-		if(!is_numeric($min_score) || $min_score < 0 || $min_score > 100)
-			$min_score = 0;
+		if(!is_numeric($mastery_score) || $mastery_score < 0)
+			$mastery_score = 0;
 		
-		if(!is_numeric($max_score) || $max_score < 0 || $max_score > 100)
+		if(!is_numeric($max_score) || $max_score < 0)
 			$max_score = 100;
 		
-		if($min_score > $max_score)
-			$max_score = $min_score;
+		if($mastery_score > $max_score)
+			$max_score = $mastery_score;
 		
 		if(!is_numeric($prerequisite_id))
 			$prerequisite_id = 'NULL';
 			
     	$sql_upd = "
     		UPDATE " . $tbl_lp_item . "
-    		SET
-    			min_score = " . $min_score . ",
-    			max_score = " . $max_score . ",
-    			prerequisite = " . $prerequisite_id . "
-    		WHERE id = " . $id;
-    	
+    		SET prerequisite = ".$prerequisite_id." WHERE id = ".$id;
     	$res_upd = api_sql_query($sql_upd ,__FILE__, __LINE__);
 
+		if($prerequisite_id!='NULL' && $prerequisite_id!='')
+		{
+			$sql_upd = " UPDATE ".$tbl_lp_item." SET     	
+	    			mastery_score = " . $mastery_score .
+	    			//", max_score = " . $max_score . " " . //max score cannot be changed in the form anyway - see display_item_prerequisites_form()
+	    			" WHERE ref = '" . $prerequisite_id."'" ; //will this be enough to ensure unicity?
+	    	
+	    	$res_upd = api_sql_query($sql_upd ,__FILE__, __LINE__);
+		}
     	//TODO update the item object (can be ignored for now because refreshed)
 
     	return true;
@@ -3042,7 +3045,8 @@ class learnpath {
 	    	$prereq_string = str_replace(' ','',$prereq_string);
 	    	if($this->debug>0){error_log('Found prereq_string: '.$prereq_string,0);}
 	    	//now send to the parse_prereq() function that will check this component's prerequisites
-	    	$result = $this->items[$item]->parse_prereq($prereq_string,$this->items,$this->refs_list);
+	    	$result = $this->items[$item]->parse_prereq($prereq_string,$this->items,$this->refs_list,$this->get_user_id());
+	    	
 	    	if($result === false)
 	    	{
 	    		$this->set_error_msg($this->items[$item]->prereq_alert);
@@ -3453,12 +3457,13 @@ class learnpath {
     		is_object($this->items[$this->current]))
     	{
     		$type = $this->get_type();
+    		$item_type = $this->items[$this->current]->get_type();
 			if(
-				($type == 2 && $this->items[$this->current]->get_type()!='sco')
+				($type == 2 && $item_type!='sco')
 				OR
-				($type == 3 && $this->items[$this->current]->get_type()!='au')
+				($type == 3 && $item_type!='au')
 				OR
-				($type==1)
+				($type == 1 && $item_type!=TOOL_QUIZ && $item_type!=TOOL_HOTPOTATOES)
 			)
 			{
 	    		$this->items[$this->current]->open($allow_new_attempt);
@@ -3822,6 +3827,7 @@ class learnpath {
 						'next_item_id' => $array[$i]['next_item_id'],
 						'min_score' => $array[$i]['min_score'],
 						'max_score' => $array[$i]['max_score'],
+						'mastery_score' => $array[$i]['mastery_score'],
 						'display_order' => $array[$i]['display_order'],
 						'prerequisite' => $array[$i]['prerequisite'],
 						'depth' => $depth
@@ -6904,8 +6910,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$row = Database::fetch_array($result);
 		
 		$preq_id = $row['prerequisite'];
-		$preq_min = $row['min_score'];
-		$preq_max = $row['max_score'];
+		//$preq_mastery = $row['mastery_score'];
+		//$preq_max = $row['max_score'];
 		
 		$return = $this->display_manipulate($item_id, TOOL_DOCUMENT);
 		$return .= '<div style="margin:3px 10px;">';
@@ -6938,14 +6944,21 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				'id' => $row['id'],
 				'item_type' => $row['item_type'],
 				'title' => $row['title'],
+				'ref'   => $row['ref'],
 				'description' => $row['description'],
 				'parent_item_id' => $row['parent_item_id'],
 				'previous_item_id' => $row['previous_item_id'],
 				'next_item_id' => $row['next_item_id'],
 				'max_score' => $row['max_score'],
 				'min_score' => $row['min_score'],
+				'mastery_score' => $row['mastery_score'],
 				'next_item_id' => $row['next_item_id'],
 				'display_order' => $row['display_order']);
+			if($row['ref'] == $preq_id)
+			{
+				$preq_mastery = $row['mastery_score'];
+				$preq_max = $row['max_score'];
+			}
 		}
 		
 		$this->tree_array($arrLP);
@@ -6969,7 +6982,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			if($arrLP[$i]['item_type'] == TOOL_QUIZ)
 			{	
 				$return .= '<td class="exercise">';
-				$return .= '<input maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_min : 0) . '" />';
+				$return .= '<input maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_mastery : 0) . '" />';
 				$return .= '</td>';
 				$return .= '<td class="exercise">';
 				$return .= '<input maxlength="3" name="max_' . $arrLP[$i]['id'] . '" type="text" value="' . $arrLP[$i]['max_score'] . '" disabled="true" />';
@@ -6978,7 +6991,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			if($arrLP[$i]['item_type'] == TOOL_HOTPOTATOES)
 			{
 				$return .= '<td class="exercise">';
-				$return .= '<input maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_min : 0) . '" />';
+				$return .= '<input maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_mastery : 0) . '" />';
 				$return .= '</td>';
 				$return .= '<td class="exercise">';
 				$return .= '<input maxlength="3" name="max_' . $arrLP[$i]['id'] . '" type="text" value="' . $arrLP[$i]['max_score'] . '" disabled="true" />';

@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 13845 2007-11-29 05:03:37Z yannoo $
+* 	@version $Id: exercise_result.php 13988 2007-12-14 05:05:51Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -853,17 +853,8 @@ if ($origin != 'learnpath')
 	//we are not in learnpath tool
 	Display::display_footer();
 }else{
-	$user_id = (!empty($_SESSION['_user']['id'])?$_SESSION['_user']['id']:0);
-    $lp_item = Database::get_course_table('lp_item');
-    $lp_item_view = Database::get_course_table('lp_item_view');
-    
-    $sql2 = "UPDATE $lp_item_view SET score = '$totalScore'
-            WHERE lp_item_id = '$learnpath_item_id'
-            AND lp_view_id = '".$_SESSION['scorm_view_id']."'
-			ORDER BY view_count DESC LIMIT 1";
-
-    api_sql_query($sql2,__FILE__,__LINE__);
-    $_SESSION['oLP']->save_last();
+	echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.');</script>';
+	echo '</body></html>';
 }
 $send_email = api_get_course_setting('email_alert_manager_on_new_quiz');
 $csspath = "http://portal.dokeos.com/demo/main/css/default.css";

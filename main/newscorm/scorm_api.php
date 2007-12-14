@@ -95,6 +95,7 @@ function APIobject() {
   this.GetDiagnostic=LMSGetDiagnostic;
   this.Terminate=Terminate;  //only in Scorm 1.3
   this.save_asset = dokeos_save_asset;
+  this.void_save_asset = dokeos_void_save_asset;
 }
 
 //it is not sure that the scos use the above declarations
@@ -782,6 +783,19 @@ function dokeos_save_asset(){
 	{
 		xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
 	}
+}
+/**
+ * Save a Dokeos learnpath item's time and mark as completed upon leaving it.
+ * Same function as dokeos_save_asset() but saves it with empty params
+ * to use values set from another side in the database. Only used by Dokeos quizzes.
+ * Also save the score locally because it hasn't been done through SetValue().
+ * Saving the status will be dealt with by the XAJAX function.
+ */
+function dokeos_void_save_asset(myscore)
+{
+	logit_lms('dokeos_save_asset',2);
+	score = myscore;
+    xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, myscore);
 }
 /**
  * Logs information about SCORM messages into the log frame

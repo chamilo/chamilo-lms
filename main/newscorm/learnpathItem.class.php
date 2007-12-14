@@ -167,8 +167,16 @@ class learnpathItem{
     {
 		if($this->debug>0){error_log('New LP - In learnpathItem::close()',0);}
 	   	$this->current_stop_time = time();
-    	if($this->get_type() != 'sco'){
-    		$this->status = $this->possible_status[2];
+	   	$type = $this->get_type();
+    	if($type != 'sco'){
+    		if($type == TOOL_QUIZ or $type == TOOL_HOTPOTATOES)
+    		{
+    			$this->get_status(true,true);//update status (second option forces the update)		
+    		}
+    		else
+    		{
+    			$this->status = $this->possible_status[2];
+    		}
     	}
     	if($this->save_on_close)
     	{
@@ -1114,11 +1122,12 @@ class learnpathItem{
     /**
      * Parses the prerequisites string with the AICC logic language
      * @param	string	The prerequisites string as it figures in imsmanifest.xml
-     * @param	object	Learnpath object pointer. We need it to get a list of other resources the prerequisites might be pointing to.
+     * @param	Array	Array of items in the current learnpath object. Although we're in the learnpathItem object, it's necessary to have a list of all items to be able to check the current item's prerequisites
+	 * @param	Array	List of references (the "ref" column in the lp_item table) that are strings used in the expression of prerequisites.
+	 * @param	integer	The user ID. In some cases like Dokeos quizzes, it's necessary to have the user ID to query other tables (like the results of quizzes)
      * @return	boolean	True if the list of prerequisites given is entirely satisfied, false otherwise
-     * @TODO //TODO if it's a Dokeos LP, use item ID instead of item REF for prereq!!!
      */
-    function parse_prereq($prereqs_string, $items, $refs_list){
+    function parse_prereq($prereqs_string, $items, $refs_list,$user_id){
     	if($this->debug>0){error_log('New LP - In learnpathItem::parse_prereq() for learnpath '.$this->lp_id.' with string '.$prereqs_string,0);}
     	//deal with &, |, ~, =, <>, {}, ,, X*, () in reverse order
 		$this->prereq_alert = '';
@@ -1136,7 +1145,7 @@ class learnpathItem{
 			$res = preg_match_all('/(\(([^\(\)]*)\))/',$prereqs_string,$matches);
 			if($res){
 				foreach($matches[2] as $id=>$match){
-					$str_res = $this->parse_prereq($match,$items,$refs_list);
+					$str_res = $this->parse_prereq($match,$items,$refs_list,$user_id);
 					if($str_res){
 						$prereqs_string = str_replace($matches[1][$id],'_true_',$prereqs_string);
 					}else{
@@ -1154,7 +1163,7 @@ class learnpathItem{
 	    		if(count($list)>1){
 					$andstatus = true;
 					foreach($list as $condition){
-	    				$andstatus = $andstatus && $this->parse_prereq($condition,$items,$refs_list);
+	    				$andstatus = $andstatus && $this->parse_prereq($condition,$items,$refs_list,$user_id);
 	    				if($andstatus==false){
 							if($this->debug>1){error_log('New LP - One condition in AND was false, short-circuit',0);}
 							break;	    					
@@ -1232,7 +1241,7 @@ class learnpathItem{
 		    				$list = array();
 		    				$myres = preg_match('/~([^(\d+\*)\{]*)/',$prereqs_string,$list);
 		    				if($myres){
-		    					$returnstatus = !$this->parse_prereq($list[1],$items,$refs_list);
+		    					$returnstatus = !$this->parse_prereq($list[1],$items,$refs_list,$user_id);
 						    	if(empty($this->prereq_alert) && !$returnstatus){
 						    		$this->prereq_alert = get_lang('_prereq_not_complete');
 						    	}
@@ -1316,13 +1325,14 @@ class learnpathItem{
 				    				{
 				    					$sql = 'SELECT exe_result, exe_weighting
 												FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES).'
-												WHERE exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.'
+												WHERE exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' 
+												AND exe_user_id = '.$user_id.' 
 												ORDER BY exe_date DESC
 												LIMIT 0, 1';
 										$rs_quiz = api_sql_query($sql, __FILE__, __LINE__);
 										if($quiz = Database :: fetch_array($rs_quiz))
 										{
-											if($quiz['exe_result'] >= $this -> min_score)
+											if($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score())
 											{
 												$returnstatus = true;
 											}
@@ -1368,7 +1378,7 @@ class learnpathItem{
 				$orstatus = false;
 				foreach($list as $condition){
 					if($this->debug>1){error_log('New LP - Found OR, adding it ('.$condition.')',0);}
-    				$orstatus = $orstatus || $this->parse_prereq($condition,$items,$refs_list);
+    				$orstatus = $orstatus || $this->parse_prereq($condition,$items,$refs_list,$user_id);
     				if($orstatus == true){
     					//shortcircuit OR
 						if($this->debug>1){error_log('New LP - One condition in OR was true, short-circuit',0);}
@@ -1596,40 +1606,14 @@ class learnpathItem{
 				}
 			}
 		}else{ //if not SCO, such messages should not be expected
-			$type = strtolower($type);
+			$type = strtolower($this->type);
 			switch($type){
 				case 'asset':
 		 			$this->set_status($this->possible_status[2]);
 		 			break;
-		 		case 'hotpotatoes':
-					/*
-					//This section has been commented out because the score
-					// limits should be defined when including the test in
-					// the learning path
-					$tbl_hotpot = Database::get_course_table(QUIZ_TABLE);
-					$hotpot_sql = "SELECT * FROM $tbl_hotpot WHERE ...";
-					$hotpot_res = api_sql_query($hotpot_sql,__FILE__,__LINE__);
-					if(Database::num_rows($hotpot_res)>0){
-						$hotpot_row = Database::fetch_array($hotpot_res);
-			 			$this->min_score = $hotpot_row['min_score'];
-			 			$this->max_score = $hotpot_row['max_score'];
-			 			$this->set_score($hotpot_row['score']);
-			 			//TODO move hardcoded quota value somewhere as variable
-			 			if($hotpot_row['score']/$hotpot_row['max_score']>=0.70){
-			 				$this->set_status($this->possible_status[3]);
-			 			}else{
-			 				$this->set_status($this->possible_status[4]);		 			
-			 			}
-					}else{
-						//if not found, set to incompleted as it probably means 
-						//the user hasn't passed the test
-						$this->set_status($this->possible_status[2]);
-					}
-					*/
-					$this->set_status($this->possible_status[2]);
+		 		case TOOL_HOTPOTATOES:
 		 			break;
 		 		case TOOL_QUIZ:
-						$this->set_status($this->possible_status[2]);		 			
 		 			break;
 				default:
 		 			//for now, everything that is not sco and not asset is set to
@@ -1788,7 +1772,7 @@ class learnpathItem{
      */
     function set_score($score)
     {
-   		if($this->debug>0){error_log('New LP - In learnpathItem::set_score()',0);}
+   		if($this->debug>0){error_log('New LP - In learnpathItem::set_score('.$score.')',0);}
    		if(($score <= $this->max_score) && ($score >= $this->min_score))
    		{
    			$this->current_score = $score;
@@ -1798,6 +1782,10 @@ class learnpathItem{
    			if($master != -1 && $this->current_score >= $master && $current_status != $this->possible_status[2])
    			{
    				$this->set_status($this->possible_status[3]);
+   			}
+   			elseif($master != -1 && $this->current_score<$master)
+   			{
+   				$this->set_status($this->possible_status[4]);
    			}
   			return true;
   		}

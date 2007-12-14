@@ -140,13 +140,18 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 		$mylp->save_item($item_id,false);
 	}
 	
+	$mystatus = $mylpi->get_status(false);
 	$mytotal = $mylp->get_total_items_count_without_chapters();
 	$mycomplete = $mylp->get_complete_items_count();
 	$myprogress_mode = $mylp->get_progress_bar_mode();
 	$myprogress_mode = ($myprogress_mode==''?'%':$myprogress_mode);
 	//$mylpi->write_to_db();
 	$_SESSION['lpobject'] = serialize($mylp);
-	$objResponse->addScript("update_toc('".$status."','".$item_id."');");
+	if($mylpi->get_type()!='sco')
+	{ //if this object's JS status has not been updated by the SCORM API, update now 
+		$objResponse->addScript("lesson_status='".$mystatus."';");
+	}
+	$objResponse->addScript("update_toc('".$mystatus."','".$item_id."');");
 	$update_list = $mylp->get_update_queue();
 	foreach($update_list as $my_upd_id => $my_upd_status)
 	{
@@ -157,7 +162,7 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 	$objResponse->addScript("update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');");
 
 	if($debug>0){
-		$objResponse->addScript("logit_lms('Saved data for item ".$item_id.", user ".$user_id." (status=".$status.")',2)");
+		$objResponse->addScript("logit_lms('Saved data for item ".$item_id.", user ".$user_id." (status=".$mystatus.")',2)");
 		if($debug>1){error_log('End of xajax_save_item()',0);}
 	}
 	

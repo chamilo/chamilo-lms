@@ -142,7 +142,7 @@ public class WoogieDocumentConverter extends AbstractDokeosDocumentConverter {
 		   // store the document
 		    XStorable storable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
 		    
-			storable.storeToURL(outputUrl+"/fichier.html", toPropertyValues(storeProperties));
+			storable.storeToURL(outputUrl, toPropertyValues(storeProperties));
 			document.dispose();
 		}
 	}

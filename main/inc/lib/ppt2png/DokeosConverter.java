@@ -130,10 +130,10 @@ public class DokeosConverter {
         	// choose the good constructor to deal with the conversion
         	DocumentConverter converter;
         	if(dokeosMode.equals("oogie")){
-        		converter = new OogieDocumentConverter(connection, width, height);
+        		converter = new OogieDocumentConverter(connection, new DokeosDocumentFormatRegistry(), width, height);
         	}
         	else if(dokeosMode.equals("woogie")){
-        		converter = new WoogieDocumentConverter(connection, width, height);
+        		converter = new WoogieDocumentConverter(connection, new DokeosDocumentFormatRegistry(), width, height);
         	}
         	else {
         		converter = new OpenOfficeDocumentConverter(connection);

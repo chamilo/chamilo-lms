@@ -665,7 +665,7 @@ class learnpath {
     			if($completed == true)
     			{ //if all the children were completed
 	    			$parent->set_status('completed');
-	    			$parent->save(false);
+	    			$parent->save(false,$this->prerequisites_match($parent->get_id()));
     				$this->update_queue[$parent->get_id()] = $parent->get_status();
     				if($this->debug>2){error_log('New LP - Added parent to update queue '.print_r($this->update_queue,true),0);}
 	    			$this->autocomplete_parents($parent->get_id()); //recursive call
@@ -2996,7 +2996,7 @@ class learnpath {
     {
 		if($this->debug>0){error_log('New LP - In learnpath::next()',0);}
     	$this->last = $this->get_current_item_id();
-    	$this->items[$this->last]->save(false);
+    	$this->items[$this->last]->save(false,$this->prerequisites_match($this->last));
     	$this->autocomplete_parents($this->last);
     	$new_index = $this->get_next_index();
     	if($this->debug>2){error_log('New LP - New index: '.$new_index,0);}
@@ -3069,7 +3069,7 @@ class learnpath {
     {
 		if($this->debug>0){error_log('New LP - In learnpath::previous()',0);}
     	$this->last = $this->get_current_item_id();
-    	$this->items[$this->last]->save(false);
+    	$this->items[$this->last]->save(false,$this->prerequisites_match($this->last));
     	$this->autocomplete_parents($this->last);
     	$new_index = $this->get_previous_index();
     	$this->index = $new_index;
@@ -3188,7 +3188,8 @@ class learnpath {
     	if($this->debug>2){error_log('New LP - save_current() saving item '.$this->current,0);}
     	if($this->debug>2){error_log(''.print_r($this->items,true),0);}
     	if(is_object($this->items[$this->current])){
-    		$res = $this->items[$this->current]->save(false);
+    		//$res = $this->items[$this->current]->save(false);
+	    	$res = $this->items[$this->current]->save(false,$this->prerequisites_match($this->current));
     		$this->autocomplete_parents($this->current);
     		$status = $this->items[$this->current]->get_status();
     		$this->append_message('new_item_status: '.$status);
@@ -3216,7 +3217,8 @@ class learnpath {
     	}
     	if($this->debug>2){error_log('New LP - save_current() saving item '.$item_id,0);}
     	if(is_object($this->items[$item_id])){
-    		$res = $this->items[$item_id]->save($from_outside);
+	    	$res = $this->items[$item_id]->save($from_outside,$this->prerequisites_match($item_id));
+    		//$res = $this->items[$item_id]->save($from_outside);
     		$this->autocomplete_parents($item_id);
     		$status = $this->items[$item_id]->get_status();
     		$this->append_message('new_item_status: '.$status);
@@ -3470,10 +3472,7 @@ class learnpath {
 	    		    		
 	    		$this->autocomplete_parents($this->current);
 	    		$prereq_check = $this->prerequisites_match($this->current);
-	    		if($prereq_check === true) //launch the prerequisites check and set error if needed
-	    		{
-	    			$this->items[$this->current]->save(false);
-	    		}
+    			$this->items[$this->current]->save(false,$prereq_check);
 	    		//$this->update_queue[$this->last] = $this->items[$this->last]->get_status();
 			}else{
 				//if sco, then it is supposed to have been updated by some other call

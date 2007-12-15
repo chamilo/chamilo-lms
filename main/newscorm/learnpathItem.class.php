@@ -1519,9 +1519,10 @@ class learnpathItem{
     /**
      * Saves data in the database
      * @param	boolean	Save from URL params (1) or from object attributes (0)
+     * @param	boolean	The results of a check on prerequisites for this item. True if prerequisites are completed, false otherwise. Defaults to false. Only used if not sco or au
      * @return	boolean	True on success, false on failure
      */
-    function save($from_outside=true)
+    function save($from_outside=true,$prereqs_complete=false)
     {
 		if($this->debug>0){error_log('New LP - In learnpathItem::save()',0);}
 
@@ -1609,7 +1610,10 @@ class learnpathItem{
 			$type = strtolower($this->type);
 			switch($type){
 				case 'asset':
-		 			$this->set_status($this->possible_status[2]);
+		 			if($prereqs_complete)
+		 			{
+			 			$this->set_status($this->possible_status[2]);
+		 			}
 		 			break;
 		 		case TOOL_HOTPOTATOES:
 		 			break;
@@ -1618,7 +1622,10 @@ class learnpathItem{
 				default:
 		 			//for now, everything that is not sco and not asset is set to
 		 			//completed when saved
-		 			$this->set_status($this->possible_status[2]);	 			
+		 			if($prereqs_complete)
+		 			{
+		 				$this->set_status($this->possible_status[2]);
+		 			}	 			
 				break;
 	 		}
 		}

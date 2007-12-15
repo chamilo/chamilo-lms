@@ -1,4 +1,4 @@
-<?php // $Id: index.php 13897 2007-12-04 00:58:32Z yannoo $
+<?php // $Id: index.php 13993 2007-12-15 05:19:04Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -373,7 +373,7 @@ function check_dokeos_version()
 		}
 		@fclose($fsock);
 
-		if ($dokeos_version<>$version_info)
+		if (trim($dokeos_version)<>trim($version_info))
 		{
 			$output='<span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Dokeos '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Dokeos '.$dokeos_version. '</b>. '.str_replace('http://www.dokeos.com','<a href="http://www.dokeos.com">http://www.dokeos.com</a>',get_lang('PleaseVisitDokeos')).'</span>';
 		}

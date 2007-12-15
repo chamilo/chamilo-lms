@@ -37,9 +37,6 @@ require("../inc/global.inc.php");
 // the dropbox configuration parameters
 include_once('dropbox_config.inc.php');
 
-// the dropbox sanity files (adds a new table and some new fields)
-include_once('dropbox_sanity.inc.php');
-
 // the dropbox file that contains additional functions
 include_once('dropbox_functions.inc.php');
 
@@ -74,7 +71,7 @@ if ( isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action']=
 	}
 	if ($_GET['sent_received']=='received')
 	{
-		$sql="SELECT DISTINCT file.id, file.filename, file.title FROM ".$dropbox_cnf["tbl_file"]." file, ".$dropbox_cnf["tbl_personTbl"]." person, ".$dropbox_cnf["tbl_post"]." post
+		$sql="SELECT DISTINCT file.id, file.filename, file.title FROM ".$dropbox_cnf["tbl_file"]." file, ".$dropbox_cnf["tbl_person"]." person, ".$dropbox_cnf["tbl_post"]." post
 				WHERE post.cat_id='".mysql_real_escape_string($_GET['cat_id'])."'
 				AND person.user_id='".mysql_real_escape_string($_user['user_id'])."'
 				AND person.file_id=file.id
@@ -272,61 +269,61 @@ else
  * After searching the only explanation I could find is a problem with the headers:
  *
  * HEADERS SENT WITH PHP4.3:
- * HTTP/1.1·200·OK(CR)
+ * HTTP/1.1ï¿½200ï¿½OK(CR)
  * (LF)
- * Date:·Fri,·12·Sep·2003·19:07:33·GMT(CR)
+ * Date:ï¿½Fri,ï¿½12ï¿½Sepï¿½2003ï¿½19:07:33ï¿½GMT(CR)
  * (LF)
- * Server:·Apache/2.0.47·(Win32)·PHP/4.3.3(CR)
+ * Server:ï¿½Apache/2.0.47ï¿½(Win32)ï¿½PHP/4.3.3(CR)
  * (LF)
- * X-Powered-By:·PHP/4.3.3(CR)
+ * X-Powered-By:ï¿½PHP/4.3.3(CR)
  * (LF)
- * Set-Cookie:·PHPSESSID=06880edcc8363be3f60929576fc1bc6e;·path=/(CR)
+ * Set-Cookie:ï¿½PHPSESSID=06880edcc8363be3f60929576fc1bc6e;ï¿½path=/(CR)
  * (LF)
- * Expires:·Thu,·19·Nov·1981·08:52:00·GMT(CR)
+ * Expires:ï¿½Thu,ï¿½19ï¿½Novï¿½1981ï¿½08:52:00ï¿½GMT(CR)
  * (LF)
- * Cache-Control:·public(CR)
+ * Cache-Control:ï¿½public(CR)
  * (LF)
- * Pragma:·(CR)
+ * Pragma:ï¿½(CR)
  * (LF)
- * Content-Transfer-Encoding:·binary(CR)
+ * Content-Transfer-Encoding:ï¿½binary(CR)
  * (LF)
- * Content-Disposition:·attachment;·filename=SV-262E4.png(CR)
+ * Content-Disposition:ï¿½attachment;ï¿½filename=SV-262E4.png(CR)
  * (LF)
- * Content-Length:·92178(CR)
+ * Content-Length:ï¿½92178(CR)
  * (LF)
- * Connection:·close(CR)
+ * Connection:ï¿½close(CR)
  * (LF)
- * Content-Type:·application/octet-stream(CR)
+ * Content-Type:ï¿½application/octet-stream(CR)
  * (LF)
  * (CR)
  * (LF)
  *
  * HEADERS SENT WITH PHP4.0.4:
- * HTTP/1.1·200·OK(CR)
+ * HTTP/1.1ï¿½200ï¿½OK(CR)
  * (LF)
- * Date:·Fri,·12·Sep·2003·18:28:21·GMT(CR)
+ * Date:ï¿½Fri,ï¿½12ï¿½Sepï¿½2003ï¿½18:28:21ï¿½GMT(CR)
  * (LF)
- * Server:·Apache/2.0.47·(Win32)(CR)
+ * Server:ï¿½Apache/2.0.47ï¿½(Win32)(CR)
  * (LF)
- * X-Powered-By:·PHP/4.0.4(CR)
+ * X-Powered-By:ï¿½PHP/4.0.4(CR)
  * (LF)
- * Expires:·Thu,·19·Nov·1981·08:52:00·GMT(CR)
+ * Expires:ï¿½Thu,ï¿½19ï¿½Novï¿½1981ï¿½08:52:00ï¿½GMT(CR)
  * (LF)
- * Cache-Control:·no-store,·no-cache,·must-revalidate,·post-check=0,·pre-check=0,·,·public(CR)
+ * Cache-Control:ï¿½no-store,ï¿½no-cache,ï¿½must-revalidate,ï¿½post-check=0,ï¿½pre-check=0,ï¿½,ï¿½public(CR)
  * (LF)
- * Pragma:·no-cache,·(CR)
+ * Pragma:ï¿½no-cache,ï¿½(CR)
  * (LF)
- * Content-Disposition:·attachment;·filename=SV-262E4.png(CR)
+ * Content-Disposition:ï¿½attachment;ï¿½filename=SV-262E4.png(CR)
  * (LF)
- * Content-Transfer-Encoding:·binary(CR)
+ * Content-Transfer-Encoding:ï¿½binary(CR)
  * (LF)
- * Set-Cookie:·PHPSESSID=0a5b1c1b9d5e3b474fef359ee55e82d0;·path=/(CR)
+ * Set-Cookie:ï¿½PHPSESSID=0a5b1c1b9d5e3b474fef359ee55e82d0;ï¿½path=/(CR)
  * (LF)
- * Content-Length:·92178(CR)
+ * Content-Length:ï¿½92178(CR)
  * (LF)
- * Connection:·close(CR)
+ * Connection:ï¿½close(CR)
  * (LF)
- * Content-Type:·application/octet-stream(CR)
+ * Content-Type:ï¿½application/octet-stream(CR)
  * (LF)
  * (CR)
  * (LF)
@@ -337,7 +334,7 @@ else
  * @version 1.21
  * @copyright 2004-2005
  * @author Jan Bols <jan@ivpv.UGent.be>, main programmer
- * @author René Haentjens <rene.haentjens@UGent.be>, several contributions  (see RH)
+ * @author Renï¿½ Haentjens <rene.haentjens@UGent.be>, several contributions  (see RH)
  * @author Roan Embrechts, virtual course support
  *
  * @package dokeos.dropbox

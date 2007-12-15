@@ -357,7 +357,6 @@ require_once( "dropbox_class.inc.php");
 */
 if ( !isset( $_user['user_id']) || !$is_course_member )
 {
-    require_once( "dropbox_init2.inc.php");
     exit( );
 }
 

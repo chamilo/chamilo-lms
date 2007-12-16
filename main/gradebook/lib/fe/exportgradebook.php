@@ -1,0 +1,100 @@
+<?php
+
+
+function print_table($data_array,$header_names,$view,$coursename)
+{
+	$printdata= '<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>'.get_lang('Print').'</title>
+
+<style type="text/css">
+body {
+	font-size: 12px;
+	color: #000;
+	margin: 10px;
+	padding: 0;
+}
+
+a:link {text-decoration: none; font-weight : bold; color : black;}
+a:visited {text-decoration: none; font-weight : bold; color : black;}
+a:active {text-decoration: none; font-weight : bold;  color : black;}
+
+.data_table{
+  	border-collapse: collapse;
+	width: 100%;
+	padding: 5px;
+	border: 1px;
+}
+.data_table th{
+  	padding: 5px;
+	vertical-align: top;
+  	border-top: 1px solid black;
+  	border-bottom: 1px solid black;
+  	border-right: 1px solid black;
+  	border-left: 1px solid black;
+}
+.data_table tr.row_odd{
+  	background-color: #fafafa;
+  }
+.data_table tr.row_even{
+  	background-color: #fff;
+}
+.data_table td{
+  	padding: 5px;
+	  vertical-align: top;
+  	border-bottom: 1px solid black;
+  	border-right: 1px solid black;
+  	border-left: 1px solid black;
+}
+</style>
+</head>
+<body><div id="main">';
+	
+	$printdata .= '<h2>'.$view.' : '.$coursename.'</h2>';
+	$printdata .= '<h3>'.get_lang('Date').' : '.date('j/n/Y g:i').'</h3>';
+	$printdata .= '<table border=1 width=90% cellspacing=1 cellpadding=1>';
+	foreach ($header_names as $header)
+	{
+		$printdata .= '<th>'.$header.'</th>';		
+		
+	}
+	foreach ($data_array as $data)
+	{
+		$printdata .= '<tr>';
+		foreach ($data as $rowdata)
+		{
+			$printdata .= '<td>'.$rowdata.'</td>';	
+		}
+		$printdata .= '</tr>';
+
+	}
+	$printdata .= '</table></div></body></html>';
+	return $printdata;
+}
+
+function export_pdf($pdf,$newarray,$header_names,$format)
+{
+	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Helvetica-Bold.afm');
+	$pdf->ezSetCmMargins(0,0,0,0);
+	$pdf->ezSetY(($format=='portrait')?'820':'570');
+	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Helvetica.afm');
+	$pdf->ezText(get_lang('FlatView').' ('. date('j/n/Y g:i') .')',12,array('justification'=>'center'));
+	if ($format=='portrait')
+	{
+		$pdf->line(40,790,540,790);
+		$pdf->line(40,40,540,40);
+	}
+	else
+	{
+		$pdf->line(40,540,790,540);
+		$pdf->line(40,40,790,40);		
+	}
+	$pdf->ezSetY(($format=='portrait')?'750':'520');
+	$pdf->ezTable($newarray,$header_names,'',array('showHeadings'=>1,'shaded'=>1,'showLines'=>1,'rowGap'=>3,'width'=>(($format=='portrait')?'500':'750')));
+	$pdf->ezStream();	
+	
+}
+?>

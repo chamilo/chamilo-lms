@@ -10,6 +10,7 @@
 define('LINK_EXERCISE',1);
 define('LINK_DROPBOX',2);
 define('LINK_STUDENTPUBLICATION',3);
+define('LINK_LEARNPATH',4);
 
 
 
@@ -18,11 +19,12 @@ include_once('exerciselink.class.php');
 include_once('evallink.class.php');
 include_once('dropboxlink.class.php');
 include_once('studentpublicationlink.class.php');
+include_once('learnpathlink.class.php');
 
 
 /**
  * Factory for link objects
- * @author Bert Steppé
+ * @author Bert Steppï¿½
  * @package dokeos.gradebook
  */
 class LinkFactory
@@ -78,6 +80,7 @@ class LinkFactory
 		if ($type == LINK_EXERCISE ) return new ExerciseLink();
 		elseif ($type == LINK_DROPBOX ) return new DropboxLink();
 		elseif ($type == LINK_STUDENTPUBLICATION ) return new StudentPublicationLink();
+		elseif ($type == LINK_LEARNPATH ) return new LearnpathLink();
 		else return null;
 	}
 
@@ -88,7 +91,9 @@ class LinkFactory
 	{
 		return array (LINK_EXERCISE,
 					  LINK_DROPBOX,
-					  LINK_STUDENTPUBLICATION);
+					  LINK_STUDENTPUBLICATION,
+					  LINK_LEARNPATH,
+					  );
 	}
 
 }

@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 13292 2007-09-27 01:59:07Z yannoo $
+<?php // $Id: configure_homepage.php 14000 2007-12-17 17:18:26Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -828,7 +828,7 @@ switch($action){
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Value		= $open;
 			$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-			$oFCKeditor->ToolbarSet = "Small";
+			$oFCKeditor->ToolbarSet = "Full";
 		
 			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";

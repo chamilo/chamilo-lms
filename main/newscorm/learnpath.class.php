@@ -2554,7 +2554,7 @@ class learnpath {
     		{
     			list($lp_item_path,$lp_item_params) = explode('?',$lp_item_path);
     		}
-    		$lp_item_params = '?'.$lp_item_params;
+    		//$lp_item_params = '?'.$lp_item_params;
     		
     		//add ? if none - left commented to give freedom to scorm implementation
     		//if(substr($lp_item_params,0,1)!='?'){

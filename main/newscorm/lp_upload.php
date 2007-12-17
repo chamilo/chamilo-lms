@@ -81,15 +81,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 			$oAICC->set_maker($maker);
 			$oAICC->set_jslib('aicc_api.php');
 			break;
-		case 'ppt':
-			require_once('presentation.class.php');
-			$o_ppt = new presentation();
-			$first_item_id = $o_ppt -> convert_presentation($_FILES['user_file']);				
+		case 'oogie':
+			require_once('openoffice_presentation.class.php');
+			$o_ppt = new OpenofficePresentation();
+			$first_item_id = $o_ppt -> convert_document($_FILES['user_file']);				
 			break;
 		case 'woogie':
-			require_once('word_document.class.php');
-			$o_doc = new word_document();
-			$first_item_id = $o_doc -> convert_word_document($_FILES['user_file']);				
+			require_once('openoffice_text_document.class.php');
+			$o_doc = new OpenofficeTextDocument();
+			$first_item_id = $o_doc -> convert_document($_FILES['user_file']);				
 			break;
 		case '':
 		default:

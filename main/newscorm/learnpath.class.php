@@ -1713,7 +1713,7 @@ class learnpath {
 		
 		if(!empty($_POST['ppt2lp']) && !in_array($extension,array('dll','exe')))
 		{
-			return 'ppt';
+			return 'oogie';
 		}
 		if(!empty($_POST['woogie']) && !in_array($extension,array('dll','exe')))
 		{

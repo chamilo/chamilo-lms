@@ -117,6 +117,7 @@ function show_tools($course_tool_category)
 	}
 	if( $sql_links != null )
 	{
+		$properties = array();
 		$result_links=api_sql_query($sql_links,__FILE__,__LINE__);
 		while ($links_row=mysql_fetch_array($result_links))
 		{
@@ -132,6 +133,7 @@ function show_tools($course_tool_category)
 	
 	if (isset($all_tools_list))
 	{
+		$lnk = array();
 		foreach ($all_tools_list as $toolsRow)
 		{
 

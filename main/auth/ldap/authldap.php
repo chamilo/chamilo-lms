@@ -1,4 +1,4 @@
-<?php // $Id: authldap.php 13925 2007-12-05 03:20:28Z yannoo $
+<?php // $Id: authldap.php 14019 2007-12-18 19:25:13Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -215,6 +215,7 @@ function putUserInfoInDokeos ($login, $infoArray)
 	$prenom     = $infoArray["firstname"];
 	$password   = $PLACEHOLDER;
 	$password1  = $PLACEHOLDER;
+	$official_code = '';
 
 	define ("STUDENT",5);
 	define ("COURSEMANAGER",1);
@@ -226,6 +227,7 @@ function putUserInfoInDokeos ($login, $infoArray)
 	else
 	{
 		$status = COURSEMANAGER;
+		//$official_code = $infoArray['employeenumber'];
 	}
 
 	//$official_code = xxx; //example: choose an attribute

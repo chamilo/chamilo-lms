@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 13745 2007-11-22 10:57:27Z elixir_julian $
+<?php //$Id: announcements.inc.php 14016 2007-12-18 19:16:27Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -73,7 +73,7 @@ function display_announcement($announcement_id)
 	$content	 = $result['content'];
 	$content     = make_clickable($content);
 	$content     = text_filter($content);
-	$last_post_datetime = $myrow['temps'];// post time format  datetime de mysql
+	$last_post_datetime = $result['insert_date'];// post time format  datetime de mysql
 	list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
 	
 	echo "<table height=\"100\" width=\"100%\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">\n";
@@ -139,10 +139,10 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 	{
 		foreach($group_list as $this_group)
 		{
-			if (!in_array("GROUP:".$this_group[id],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
+			if (!in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
 			{
-				echo	"\t\t<option value=\"GROUP:".$this_group[id]."\">",
-				"G: ",$this_group[name]," - " . $this_group[userNb] . " " . get_lang('Users') .
+				echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
+				"G: ",$this_group['name']," - " . $this_group['userNb'] . " " . get_lang('Users') .
 				"</option>\n";
 			}
 		}
@@ -155,7 +155,7 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 		if (!in_array("USER:".$this_user["user_id"],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 		{
 			echo	"\t\t<option value=\"USER:",$this_user["user_id"],"\">",
-				"",$this_user[lastName]," ",$this_user[firstName],
+				"",$this_user['lastName']," ",$this_user['firstName'],
 				"</option>\n";
 		}
 	}
@@ -174,7 +174,8 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 {
 	// we separate the $to_already_selected array (containing groups AND users into
 	// two separate arrays
-	if (is_array($groupuser))
+	$groupuser = array();
+	if (is_array($to_already_selected))
 	{
 		$groupuser=separate_users_groups($to_already_selected);
 	}

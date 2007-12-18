@@ -15,6 +15,7 @@ class CatForm extends FormValidator {
     const TYPE_ADD = 1;
     const TYPE_EDIT = 2;
     const TYPE_MOVE = 3;
+    const TYPE_SELECT_COURSE = 4;
     private $category_object;
     
 	/**
@@ -43,6 +44,10 @@ class CatForm extends FormValidator {
     	elseif ($this->form_type == self :: TYPE_MOVE)
     	{
     		$this->build_move_form();
+    	}
+    	elseif ($this->form_type == self :: TYPE_SELECT_COURSE)
+    	{
+    		$this->build_select_course_form();
     	}
     	$this->setDefaults();
     }
@@ -141,6 +146,28 @@ class CatForm extends FormValidator {
 		$this->addRule('weight',get_lang('OnlyNumbers'),'numeric');
 		$this->addRule('weight',get_lang('NoDecimals'),'nopunctuation');
 		$this->addRule(array ('weight', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
+   	}
+	/** 
+	 * This function builds an 'select course' form in the add category process, 
+	 * if parent id is 0, it will only show courses
+	 */
+   	protected function build_select_course_form()
+   	{
+		$select = $this->addElement('select','select_course',array(get_lang('PickACourse'),'test'), null);
+		$coursecat = Category :: get_all_courses(api_get_user_id());
+		//only return courses that are not yet created by the teacher
+
+		foreach($coursecat as $row) 
+		{
+			$select->addoption($row[1],$row[0]);
+		}
+		$this->setDefaults(array(
+		   'hid_user_id' => $this->category_object->get_user_id(),
+		   'hid_parent_id' => $this->category_object->get_parent_id()
+		));		
+   		$this->addElement('hidden','hid_user_id');
+   		$this->addElement('hidden','hid_parent_id');
+		$this->addElement('submit', null, get_lang('Ok'));
    	}
      	
    	function display()

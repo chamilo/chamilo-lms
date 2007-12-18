@@ -89,12 +89,12 @@ if (isset ($_GET['movecat']))
 								$cats[0],
 								'move_cat_form',
 								null,
-								api_get_self() . '?movecat=' . $_GET['movecat']
-													 . '&selectcat=' . $_GET['selectcat']);
+								api_get_self() . '?movecat=' . Security::remove_XSS($_GET['movecat'])
+													 . '&selectcat=' . Security::remove_XSS($_GET['selectcat']));
 		if ($move_form->validate())
 		{
-			header('Location: ' . api_get_self() . '?selectcat=' . $_GET['selectcat']
-													   . '&movecat=' . $_GET['movecat']
+			header('Location: ' . api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
+													   . '&movecat=' . Security::remove_XSS($_GET['movecat'])
 													   . '&targetcat=' . $move_form->exportValue('move_cat'));
 			exit;
 		}
@@ -108,7 +108,7 @@ if (isset ($_GET['movecat']))
 		if (!($course_to_crsind && !isset($_GET['confirm'])))
 		{
 			$cats[0]->move_to_cat($targetcat[0]);
-			header('Location: ' . api_get_self() . '?categorymoved=&selectcat=' . $_GET['selectcat']);
+			header('Location: ' . api_get_self() . '?categorymoved=&selectcat=' . Security::remove_XSS($_GET['selectcat']));
 			exit;
 		}
 		unset ($targetcat);
@@ -129,13 +129,13 @@ if (isset ($_GET['moveeval']))
 								 null,
 								 'move_eval_form',
 								 null,
-								 api_get_self() . '?moveeval=' . $_GET['moveeval']
-								 					  . '&selectcat=' . $_GET['selectcat']);
+								 api_get_self() . '?moveeval=' . Security::remove_XSS($_GET['moveeval'])
+								 					  . '&selectcat=' . Security::remove_XSS($_GET['selectcat']));
 
 		if ($move_form->validate())
 		{
-			header('Location: ' .api_get_self() . '?selectcat=' . $_GET['selectcat']
-													   . '&moveeval=' . $_GET['moveeval']
+			header('Location: ' .api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
+													   . '&moveeval=' . Security::remove_XSS($_GET['moveeval'])
 													   . '&targetcat=' . $move_form->exportValue('move_cat'));
 			exit;
 		}
@@ -149,7 +149,7 @@ if (isset ($_GET['moveeval']))
 		if (!($course_to_crsind && !isset($_GET['confirm'])))
 		{
 			$evals[0]->move_to_cat($targetcat[0]);
-			header('Location: ' . api_get_self() . '?evaluationmoved=&selectcat=' . $_GET['selectcat']);
+			header('Location: ' . api_get_self() . '?evaluationmoved=&selectcat=' . Security::remove_XSS($_GET['selectcat']));
 			exit;
 		}
 		unset ($targetcat);
@@ -162,13 +162,13 @@ if (isset ($_GET['movelink']))
 {
 	block_students();
 	$link= LinkFactory :: load($_GET['movelink']);
-	$move_form= new LinkForm(LinkForm :: TYPE_MOVE, null, $link[0], 'move_link_form', null, api_get_self() . '?movelink=' . $_GET['movelink'] . '&selectcat=' . $_GET['selectcat']);
+	$move_form= new LinkForm(LinkForm :: TYPE_MOVE, null, $link[0], 'move_link_form', null, api_get_self() . '?movelink=' . $_GET['movelink'] . '&selectcat=' . Security::remove_XSS($_GET['selectcat']));
 	if ($move_form->validate())
 	{
 		$targetcat= Category :: load($move_form->exportValue('move_cat'));
 		$link[0]->move_to_cat($targetcat[0]);
 		unset ($link);
-		header('Location: ' . api_get_self(). '?linkmoved=&selectcat=' . $_GET['selectcat']);
+		header('Location: ' . api_get_self(). '?linkmoved=&selectcat=' . Security::remove_XSS($_GET['selectcat']));
 		exit;
 	}
 }
@@ -265,10 +265,10 @@ if ($course_to_crsind && !isset($_GET['confirm']))
 	$button = '<form name="confirm"
 					 method="post"
 					 action="'.api_get_self() .'?confirm='
-													.(isset($_GET['movecat']) ? '&movecat=' . $_GET['movecat']
-																			  : '&moveeval=' . $_GET['moveeval'] )
-													.'&selectcat=' . $_GET['selectcat']
-													.'&targetcat=' . $_GET['targetcat'].'">
+													.(isset($_GET['movecat']) ? '&movecat=' . Security::remove_XSS($_GET['movecat'])
+																			  : '&moveeval=' . Security::remove_XSS($_GET['moveeval']) )
+													.'&selectcat=' . Security::remove_XSS($_GET['selectcat'])
+													.'&targetcat=' . Security::remove_XSS($_GET['targetcat']).'">
 			   <input type="submit" value="'.get_lang('Ok').'">
 			   </form>';
 
@@ -373,8 +373,8 @@ if (isset ($_POST['action']))
 
 if (isset ($_POST['submit']) && isset ($_POST['keyword']))
 {
-	header('Location: ' . api_get_self() . '?selectcat=' . $_GET['selectcat']
-											   . '&search='.$_POST['keyword']);
+	header('Location: ' . api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
+											   . '&search='.Security::remove_XSS($_POST['keyword']));
 	exit;
 }
 
@@ -388,7 +388,7 @@ if (!isset($_GET['exportpdf']))
 	if (isset ($_GET['studentoverview']))
 	{
 		$interbreadcrumb[]= array (
-			'url' => 'gradebook.php?selectcat=' . $_GET['selectcat'],
+			'url' => 'gradebook.php?selectcat=' . Security::remove_XSS($_GET['selectcat']),
 			'name' => get_lang('Gradebook'
 		));
 		Display :: display_header(get_lang('FlatView'));
@@ -396,7 +396,7 @@ if (!isset($_GET['exportpdf']))
 	elseif (isset ($_GET['search']))
 	{
 		$interbreadcrumb[]= array (
-			'url' => 'gradebook.php?selectcat=' . $_GET['selectcat'],
+			'url' => 'gradebook.php?selectcat=' . Security::remove_XSS($_GET['selectcat']),
 			'name' => get_lang('Gradebook'
 		));
 		Display :: display_header(get_lang('SearchResults'));
@@ -454,11 +454,11 @@ else
 	$category= $_GET['selectcat'];
 
 // search form
-$simple_search_form= new UserForm(UserForm :: TYPE_SIMPLE_SEARCH, null, 'simple_search_form', null, api_get_self() . '?selectcat=' . $_GET['selectcat']);
+$simple_search_form= new UserForm(UserForm :: TYPE_SIMPLE_SEARCH, null, 'simple_search_form', null, api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']));
 $values= $simple_search_form->exportValues();
 $keyword = '';
 if (isset($_GET['search']) && !empty($_GET['search']))
-	$keyword = $_GET['search'];
+	$keyword = Security::remove_XSS($_GET['search']);
 if ($simple_search_form->validate() && (empty($keyword)))
 	$keyword = $values['keyword'];
 

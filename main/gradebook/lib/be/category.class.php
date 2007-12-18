@@ -3,7 +3,7 @@
 
 /**
  * Defines a gradebook Category object
- * @author Bert Steppé, Stijn Konings
+ * @author Bert Steppï¿½, Stijn Konings
  * @package dokeos.gradebook
  */
 class Category implements GradebookItem
@@ -706,7 +706,7 @@ class Category implements GradebookItem
 		$tbl_main_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);			
 		$tbl_grade_categories = Database :: get_gradebook_table(TABLE_GRADEBOOK_CATEGORY);
 
-		$sql = 'SELECT * FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu'
+		$sql = 'SELECT DISTINCT(code), title FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu'
 				.' WHERE cc.code = cu.course_code'
 				.' AND cu.status = '.COURSEMANAGER;
 		if (!api_is_platform_admin())
@@ -716,11 +716,11 @@ class Category implements GradebookItem
 				.' WHERE parent_id = 0'
 //				.' AND user_id = '.$user_id
 				.' AND course_code IS NOT null)';
-
+		error_log($sql);
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
 		$cats=array();
-		while ($data=mysql_fetch_array($result))
+		while ($data=Database::fetch_array($result))
 		{
 			$cats[] = array ($data['code'], $data['title']);
 		}
@@ -728,6 +728,31 @@ class Category implements GradebookItem
 		
 	}
 
+	/**
+	 * Generate an array of all courses that a teacher is admin of.
+	 * @return array 2-dimensional array - every element contains 2 subelements (code, title)
+	 */
+	public function get_all_courses ($user_id)
+	{
+		$tbl_main_courses = Database :: get_main_table(TABLE_MAIN_COURSE);
+		$tbl_main_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);			
+		$tbl_grade_categories = Database :: get_gradebook_table(TABLE_GRADEBOOK_CATEGORY);
+
+		$sql = 'SELECT DISTINCT(code), title FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu'
+				.' WHERE cc.code = cu.course_code'
+				.' AND cu.status = '.COURSEMANAGER;
+		if (!api_is_platform_admin())
+			$sql .= ' AND cu.user_id = '.$user_id;
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+
+		$cats=array();
+		while ($data=Database::fetch_array($result))
+		{
+			$cats[] = array ($data['code'], $data['title']);
+		}
+		return $cats;
+		
+	}
 
 	/**
 	 * Apply the same visibility to every subcategory, evaluation and link
@@ -920,17 +945,17 @@ class Category implements GradebookItem
 		$links = array();
 		
 		// no links in root or course independent categories
-		if ($this->id == 0 || !isset($this->course_code) || empty($this->course_code))
+		if ($this->id == 0)
 			;
 		
 		// 1 student
  		elseif (isset($stud_id))
-			$links = LinkFactory::load(null,null,null,null,$this->course_code,$this->id,
+			$links = LinkFactory::load(null,null,null,null,empty($this->course_code)?null:$this->course_code,$this->id,
 						api_is_allowed_to_create_course() ? null : 1);
 		
 		// all students -> only for course/platform admin
 		elseif (api_is_allowed_to_create_course())
-			$links = LinkFactory::load(null,null,null,null,$this->course_code,$this->id, null);
+			$links = LinkFactory::load(null,null,null,null,empty($this->course_code)?null:$this->course_code,$this->id, null);
 		
 		if ($recursive)
 		{

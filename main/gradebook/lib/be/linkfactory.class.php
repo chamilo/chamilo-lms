@@ -24,7 +24,7 @@ include_once('learnpathlink.class.php');
 
 /**
  * Factory for link objects
- * @author Bert Stepp�
+ * @author Bert Steppé
  * @package dokeos.gradebook
  */
 class LinkFactory

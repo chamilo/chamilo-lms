@@ -138,10 +138,10 @@ class DisplayGradebook
 			$cattotal = Category :: load(0);
 			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
 			$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
-			$scoreinfo = get_lang('StatsStudent') . ' :<b> '.$user['lastname'].' '.$user['firstname'].'</b><br>';
+			$scoreinfo = get_lang('StatsStudent') . ' :<b> '.$user['lastname'].' '.$user['firstname'].'</b><br />';
 			if ((!$catobj->get_id() == '0') && (!isset ($_GET['studentoverview'])) && (!isset ($_GET['search'])))
-				$scoreinfo.= '<br>'.get_lang('TotalForThisCategory') . ' : <b>' . $scorecourse_display . '</b>';
-			$scoreinfo.= '<br>'.get_lang('Total') . ' : <b>' . $scoretotal_display . '</b>';
+				$scoreinfo.= '<br />'.get_lang('TotalForThisCategory') . ' : <b>' . $scorecourse_display . '</b>';
+			$scoreinfo.= '<br />'.get_lang('Total') . ' : <b>' . $scoretotal_display . '</b>';
 			Display :: display_normal_message($scoreinfo,false);
 		}
 		// show navigation tree and buttons?
@@ -206,7 +206,13 @@ class DisplayGradebook
 				$header .= '<td><a href=gradebook_add_eval.php?selectcat=' . $catobj->get_id() . '><img src=../img/filenew.gif alt=' . get_lang('NewEvaluation') . ' align=absmiddle/> ' . get_lang('NewEvaluation') . '</a>';
 				$cats= Category :: load($selectcat);
 				if ($cats[0]->get_course_code() != null)
+				{
 					$header .= '<td><a href=gradebook_add_link.php?&selectcat=' . $catobj->get_id() . '><img src=../img/link_blank.gif alt=' . get_lang('MakeLink') . ' align=absmiddle/> ' . get_lang('MakeLink') . '</a>';
+				}
+				else
+				{
+					$header .= '<td><a href=gradebook_add_link_select_course.php?&selectcat=' . $catobj->get_id() . '><img src=../img/link_blank.gif alt=' . get_lang('MakeLink') . ' align=absmiddle/> ' . get_lang('MakeLink') . '</a>';
+				}
 			}
 		}
 		elseif (isset ($_GET['search']))

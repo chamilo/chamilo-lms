@@ -6,7 +6,7 @@ include_once ('../be.inc.php');
 /**
  * Table to display categories, evaluations and links
  * @author Stijn Konings
- * @author Bert Steppé (refactored, optimised)
+ * @author Bert Steppï¿½ (refactored, optimised)
  */
 class GradebookTable extends SortableTable
 {
@@ -201,6 +201,11 @@ class GradebookTable extends SortableTable
 				else
 					$text = $item->get_name();
 				$text .= '&nbsp;[' . $item->get_type_name() . ']';
+				$cc = $this->currentcat->get_course_code();
+				if(empty($cc))
+				{
+					$text .= '&nbsp;[<a href="'.api_get_path(REL_COURSE_PATH).$item->get_course_code().'/">'.$item->get_course_code().'</a>]';
+				}
 				return $text;
 		}
 	}

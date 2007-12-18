@@ -8,7 +8,7 @@ require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.ph
 /**
  * Forms related to links
  * @author Stijn Konings
- * @author Bert Steppé (made more generic)
+ * @author Bert Steppï¿½ (made more generic)
  * @package dokeos.gradebook
  */
 class LinkForm extends FormValidator
@@ -80,14 +80,26 @@ class LinkForm extends FormValidator
 
 		$select->addoption('['.get_lang('ChooseLink').']', 0);
 
+		$cc = $this->category_object->get_course_code();
 		foreach ($linktypes as $linktype)
 		{
 			$link = LinkFactory :: create ($linktype);
-			$link->set_course_code($this->category_object->get_course_code());
+			error_log(__FUNCTION__.' '.__LINE__);
+			if(!empty($cc))
+			{
+			error_log(__FUNCTION__.' '.__LINE__);
+				$link->set_course_code($cc);
+			}
+			elseif(!empty($_GET['course_code']))
+			{
+			error_log(__FUNCTION__.' '.__LINE__.' '.$_GET['course_code']);
+				$link->set_course_code(Database::escape_string($_GET['course_code']));
+			}
+			error_log(__FUNCTION__.' '.__LINE__);
 			// disable this element if the link works with a dropdownlist
 			// and if there are no links left
 			if (!$link->needs_name_and_description()
-				&& count($link->get_not_created_links()) == '0')
+				&& count($link->get_all_links()) == '0')
 				$select->addoption($link->get_type_name(), $linktype, 'disabled');
 			else
 				$select->addoption($link->get_type_name(), $linktype);

@@ -51,13 +51,36 @@ class LearnpathLink extends AbstractLink
 		}
 		return $cats;
     }
+	/**
+	 * Generate an array of all learnpaths available.
+	 * @return array 2-dimensional array - every element contains 2 subelements (id, name)
+	 */
+    public function get_all_links()
+    {
+    	if (empty($this->course_code))
+    		die('Error in get_not_created_links() : course code not set');
+
+		$course_info = api_get_course_info($this->course_code);    	
+    	$tbl_grade_links = Database :: get_gradebook_table(TABLE_GRADEBOOK_LINK,$course_info['dbName']);
+
+		$sql = 'SELECT id,name from '.$this->get_learnpath_table();
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+
+		$cats=array();
+		while ($data=Database::fetch_array($result))
+		{
+			$cats[] = array ($data['id'], $data['name']);
+		}
+		return $cats;
+    }
+    
 
     /**
      * Has anyone used this learnpath yet ?
      */
     public function has_results()
     {
-    	$course_info = api_get_course_info($this->get_course_code);
+    	$course_info = api_get_course_info($this->get_course_code());
     	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW,$course_info['dbName']);
 		$sql = 'SELECT count(id) AS number FROM '.$tbl_stats
 				." WHERE lp_id = '".$this->get_ref_id()."'";
@@ -75,7 +98,7 @@ class LearnpathLink extends AbstractLink
 	 */
     public function calc_score($stud_id = null)
     {
-    	$course_info = api_get_course_info($this->get_course_code);
+    	$course_info = api_get_course_info($this->get_course_code());
     	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW,$course_info['dbName']);
     	$sql = 'SELECT * FROM '.$tbl_stats
     			." WHERE lp_id = ".$this->get_ref_id();
@@ -85,14 +108,17 @@ class LearnpathLink extends AbstractLink
     		
     	// order by id, that way the student's first attempt is accessed first
 		$sql .= ' ORDER BY view_count DESC';
-
+		error_log($sql);
     	$scores = api_sql_query($sql, __FILE__, __LINE__);
 
 		// for 1 student
     	if (isset($stud_id))
     	{
     		if ($data=Database::fetch_array($scores))
+    		{
+    			error_log(print_r($data,1));
     			return array ($data['progress'], 100);
+    		}
     		else
     			return null;
     	}

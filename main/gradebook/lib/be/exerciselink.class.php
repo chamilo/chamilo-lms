@@ -3,7 +3,7 @@
 
 /**
  * Defines a gradebook ExerciseLink object.
- * @author Bert Steppé
+ * @author Bert Steppï¿½
  * @package dokeos.gradebook
  */
 class ExerciseLink extends AbstractLink
@@ -45,6 +45,28 @@ class ExerciseLink extends AbstractLink
 				." AND course_code = '".$this->get_course_code()."'"
 				.')';
 
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+
+		$cats=array();
+		while ($data=mysql_fetch_array($result))
+		{
+			$cats[] = array ($data['id'], $data['title']);
+		}
+		return $cats;
+    }
+	/**
+	 * Generate an array of all exercises available.
+	 * @return array 2-dimensional array - every element contains 2 subelements (id, name)
+	 */
+    public function get_all_links()
+    {
+    	if (empty($this->course_code))
+    		die('Error in get_not_created_links() : course code not set');
+    	
+    	$course_info = api_get_course_info($this->course_code);
+    	$tbl_grade_links = Database :: get_gradebook_table(TABLE_GRADEBOOK_LINK,$course_info['dbName']);
+
+		$sql = 'SELECT id,title from '.$this->get_exercise_table();
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
 		$cats=array();

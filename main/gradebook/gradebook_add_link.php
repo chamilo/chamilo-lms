@@ -39,35 +39,50 @@ $typeform = new LinkForm(LinkForm :: TYPE_CREATE,
 						'create_link',
 						null,
 						api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
-											 . '&newtypeselected=',
-						isset($_GET['typeselected']) ? Security::remove_XSS($_GET['typeselected']) : null);
+						. '&newtypeselected=' . (isset($_GET['typeselected']) ? Security::remove_XSS($_GET['typeselected']) : '')
+						. '&course_code=' . (empty($_GET['course_code'])?'':Security::remove_XSS($_GET['course_code'])))
+						;
 
 // if user selected a link type
 if ($typeform->validate() && isset($_GET['newtypeselected']))
 {
 	// reload page, this time with a parameter indicating the selected type
 	header('Location: '.api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
-											 . '&typeselected='.$typeform->exportValue('select_link'));
+											 . '&typeselected='.$typeform->exportValue('select_link')
+											 . '&course_code=' . Security::remove_XSS($_GET['course_code']));
 	exit;
 }
 
 // link type selected, show 2nd form to retrieve the link data
 if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0')
 {
+error_log(__LINE__);
 	$addform = new LinkAddEditForm(LinkAddEditForm :: TYPE_ADD,
 								   $category[0],
 								   intval($_GET['typeselected']),
 								   null,
 								   'add_link',
 								   api_get_self() . '?selectcat=' . $_GET['selectcat']
-														. '&typeselected=' . $_GET['typeselected']);
+														. '&typeselected=' . $_GET['typeselected'] . '&course_code=' . $_GET['course_code']);
+error_log(__LINE__);
 	if ($addform->validate())
 	{
+error_log(__LINE__);
 		$addvalues = $addform->exportValues();
 
 		$link= LinkFactory :: create($_GET['typeselected']);
 		$link->set_user_id(api_get_user_id());
-		$link->set_course_code($category[0]->get_course_code());
+		if($category[0]->get_course_code() == '' && !empty($_GET['course_code']))
+		{
+error_log(__LINE__);
+			$link->set_course_code(Database::escape_string($_GET['course_code']));
+		}
+		else
+		{
+error_log(__LINE__);
+			$link->set_course_code($category[0]->get_course_code());
+		}
+error_log(__LINE__);
 		$link->set_category_id($category[0]->get_id());
 		
 		if ($link->needs_name_and_description())
@@ -88,6 +103,7 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0')
 		$link->set_visible(empty ($addvalues['visible']) ? 0 : 1);
 		
 		$link->add();
+error_log(__LINE__);
 
 
 		if ($addvalues['addresult'] == 1)

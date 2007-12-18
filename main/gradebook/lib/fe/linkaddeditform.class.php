@@ -8,7 +8,7 @@ require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.ph
 /**
  * Form used to add or edit links
  * @author Stijn Konings
- * @author Bert Steppé
+ * @author Bert Steppï¿½
  */
 class LinkAddEditForm extends FormValidator
 {
@@ -31,7 +31,15 @@ class LinkAddEditForm extends FormValidator
 		elseif (isset ($link_type) && isset ($category_object))
 		{
 			$link = LinkFactory :: create ($link_type);
-			$link->set_course_code($category_object->get_course_code());
+			$cc = $category_object->get_course_code();
+			if(empty($cc) && !empty($_GET['course_code']))
+			{
+				$link->set_course_code(Database::escape_string($_GET['course_code']));
+			}
+			else
+			{
+				$link->set_course_code($category_object->get_course_code());
+			}
 		}
 		else
 			die ('LinkAddEditForm error: define link_type/category_object or link_object');
@@ -55,7 +63,7 @@ class LinkAddEditForm extends FormValidator
 				$select = $this->addElement('select',
 											'select_link',
 											get_lang('ChooseExercise'));
-				foreach ($link->get_not_created_links() as $newlink)
+				foreach ($link->get_all_links() as $newlink)
 					$select->addoption($newlink[1],$newlink[0]);
 			}
 		}

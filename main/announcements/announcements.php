@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 13745 2007-11-22 10:57:27Z elixir_julian $
+<?php //$Id: announcements.php 14018 2007-12-18 19:19:55Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -624,7 +624,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 							{
 								while ($u = mysql_fetch_array($groupMemberResult))
 								{
-									$userlist [] = $u [user_id]; // complete the user id list ...
+									$userlist [] = $u ['user_id']; // complete the user id list ...
 								}
 							}
 						}

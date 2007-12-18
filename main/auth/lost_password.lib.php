@@ -1,5 +1,5 @@
 <?php
-// $Id: lost_password.lib.php 12348 2007-05-09 15:26:27Z elixir_julian $
+// $Id: lost_password.lib.php 14021 2007-12-18 19:48:14Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -56,7 +56,7 @@ function get_user_account_list($user, $reset = false)
 		$secretword = get_secret_word($thisUser["email"]);
 		if ($reset)
 		{
-			$reset_link = $_configuration['root_web']."main/auth/lostPassword.php?reset=".$secretword."&id=".$thisUser[uid];
+			$reset_link = $_configuration['root_web']."main/auth/lostPassword.php?reset=".$secretword."&id=".$thisUser['uid'];
 		}
 		else
 		{

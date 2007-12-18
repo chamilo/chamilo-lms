@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 13919 2007-12-04 21:40:17Z yannoo $
+<?php // $Id: courses.php 14020 2007-12-18 19:47:47Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -806,7 +806,7 @@ function display_courses_in_category($user_category_id, $showicons)
 		echo "\t\t<td valign=\"top\">\n";
 		//if ($parameter=="sorting")
 		//{
-			display_course_icons($key, $number_of_courses, $course, $user_courses);
+			display_course_icons($key, $number_of_courses, $course);
 		//}
 		// displaying the delete icon when we are unsubscribing from courses
 		//if($parameter=="deleting")
@@ -880,7 +880,7 @@ function display_subscribe_icon($current_course, $user_coursecodes)
 }
 
 /**
- * displays the subscribe icon if the subscribing is allowed and if the user is not yet
+ * Displays the subscribe icon if the subscribing is allowed and if the user is not yet
  * subscribed to this course
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @param  $key:
@@ -890,13 +890,13 @@ function display_subscribe_icon($current_course, $user_coursecodes)
  * @return html a small table containing the up/down icons and the edit icon (for moving to a different user course category)
  * @todo complete the comments on this function: the parameter section
 */
-function display_course_icons($key, $number_of_courses, $course, $user_courses)
+function display_course_icons($key, $number_of_courses, $course)
 {
 	//print_r($course);
 	global $safe,$charset;
 	echo "<table><tr><td>";
 	// the up icon
-	if ($key>0 AND $user_courses[$key-1]['user_course_category']==$course['user_course_category'])
+	if ($key>0)
 	{
 		echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=up&amp;course=".$course['code']."&amp;category=".$course['user_course_cat']."\">";
 		Display::display_icon('up.gif', get_lang('Up'));
@@ -932,7 +932,7 @@ function display_course_icons($key, $number_of_courses, $course, $user_courses)
 	}
 	echo "</td>";
 	echo "</tr><tr><td>";
-	if ($key<$number_of_courses-1 AND $user_courses[$key+1]['user_course_category']==$course['user_course_category'])
+	if ($key<$number_of_courses-1)
 	{
 		echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=down&amp;course=".$course['code']."&amp;category=".$course['user_course_cat']."\">";
 		Display::display_icon('down.gif', get_lang('Down'));

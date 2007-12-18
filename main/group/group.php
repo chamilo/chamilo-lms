@@ -332,7 +332,7 @@ foreach ($group_cats as $index => $category)
 				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=fill_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;" title="'.get_lang('FillGroup').'"><img src="../img/add_user.gif" alt="'.get_lang("FillGroup").'"/></a>';
 				$row[] = $edit_actions;
 			}
-			$totalRegistered = $totalRegistered + $this_group[nbMember];
+			$totalRegistered = $totalRegistered + $this_group['nbMember'];
 			$group_data[] = $row;
 		} // while loop
 		if (isset ($_GET['show_all']))

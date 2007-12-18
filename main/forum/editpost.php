@@ -198,7 +198,7 @@ echo "\t</tr>\n";
 echo '</table>';
 
 // the form for the reply
-$values=show_edit_post_form($current_post, $current_thread, $_SESSION['formelements']);
+$values=show_edit_post_form($current_post, $current_thread, $current_forum, $_SESSION['formelements']);
 if (!empty($values) and $_POST['SubmitPost'])
 {
 	store_edit_post($values);

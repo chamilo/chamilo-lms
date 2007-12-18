@@ -1794,14 +1794,16 @@ function store_reply($values)
 
 /**
 * This function displays the form that is used to edit a post. This can be a new thread or a reply.
-* @param $current_post array that contains all the information about the current post
-* @param $current_thread array that contains all the information about the current thread
-* @return
+* @param array contains all the information about the current post
+* @param array contains all the information about the current thread
+* @param array contains all info about the current forum (to check if attachments are allowed)
+* @param array contains the default values to fill the form
+* @return void
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
 */
-function show_edit_post_form($current_post, $current_thread, $form_values='')
+function show_edit_post_form($current_post, $current_thread, $current_forum, $form_values='')
 {
 	global $forum_setting;
 	global $_user;

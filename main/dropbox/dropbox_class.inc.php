@@ -184,7 +184,7 @@ class Dropbox_Work {
 		{
 			$this->upload_date = $this->last_upload_date;
 			$sql="INSERT INTO ".dropbox_cnf("tbl_file")." 
-				(uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date)
+				(uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, session_id)
 				VALUES ('".addslashes($this->uploader_id)."'
 						, '".addslashes($this->filename)."'
 						, '".addslashes($this->filesize)."'
@@ -193,6 +193,7 @@ class Dropbox_Work {
 						, '".addslashes($this->author)."'
 						, '".addslashes($this->upload_date)."'
 						, '".addslashes($this->last_upload_date)."'
+						, ".intval($_SESSION['id_session'])."
 						)";
 
         	$result = api_sql_query($sql,__FILE__,__LINE__);		
@@ -356,8 +357,8 @@ class Dropbox_SentWork extends Dropbox_Work
 		foreach ($this->recipients as $rec)
 		{
 			$sql="INSERT INTO ".dropbox_cnf("tbl_post")." 
-				(file_id, dest_user_id)
-				VALUES ('".addslashes($this->id)."', '".addslashes($rec["id"])."')";
+				(file_id, dest_user_id, session_id)
+				VALUES ('".addslashes($this->id)."', '".addslashes($rec["id"])."', ".intval($_SESSION['id_session']).")";
 	        $result = api_sql_query($sql);	//if work already exists no error is generated
 						
 			//insert entries into person table
@@ -461,6 +462,10 @@ class Dropbox_Person
 				WHERE r.dest_user_id = '".addslashes($this->userId)."' 
 					AND r.dest_user_id = p.user_id
 					AND r.file_id = p.file_id";
+					
+		if(intval($_SESSION['id_session']>0))
+			$sql .= " AND r.session_id = ".intval($_SESSION['id_session']);
+			
         $result = api_sql_query($sql,__FILE__,__LINE__);
 		while ($res = Database::fetch_array($result)) {
 			$temp = new Dropbox_Work($res["file_id"]);
@@ -473,7 +478,11 @@ class Dropbox_Person
 				FROM $file_tbl f, $person_tbl p 
 				WHERE f.uploader_id = '".addslashes($this->userId)."'
 				AND f.uploader_id = p.user_id
-				AND f.id = p.file_id";
+				AND f.id = p.file_id";					
+				
+		if(intval($_SESSION['id_session']>0))
+			$sql .= " AND f.session_id = ".intval($_SESSION['id_session']);
+		
         $result =api_sql_query($sql,__FILE__,__LINE__);
 		while ($res = Database::fetch_array($result)) {
 			$this->sentWork[] = new Dropbox_SentWork($res["id"]);

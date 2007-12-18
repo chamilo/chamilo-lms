@@ -850,10 +850,13 @@ function update_Db_course($courseDbName)
 		upload_date datetime NOT NULL default '0000-00-00 00:00:00',
 		last_upload_date datetime NOT NULL default '0000-00-00 00:00:00',
 		cat_id int NOT NULL default 0,
+		session_id SMALLINT UNSIGNED NOT NULL,
 		PRIMARY KEY (id),
 		UNIQUE KEY UN_filename (filename)
 		)");
-
+		
+	api_sql_query("ALTER TABLE `$TABLETOOLDROPBOXFILE` ADD INDEX ( `session_id` )");
+	
 	api_sql_query("
 		CREATE TABLE `".$TABLETOOLDROPBOXPOST . "` (
 		file_id int unsigned NOT NULL,
@@ -861,8 +864,11 @@ function update_Db_course($courseDbName)
 		feedback_date datetime NOT NULL default '0000-00-00 00:00:00',
 		feedback text default '',
 		cat_id int(11) NOT NULL default 0,
+		session_id SMALLINT UNSIGNED NOT NULL,
 		PRIMARY KEY (file_id,dest_user_id)
 		)");
+		
+	api_sql_query("ALTER TABLE `$TABLETOOLDROPBOXPOST` ADD INDEX ( `session_id` )");
 
 	api_sql_query("
 		CREATE TABLE `".$TABLETOOLDROPBOXPERSON . "` (

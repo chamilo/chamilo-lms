@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 14016 2007-12-18 19:16:27Z yannoo $
+<?php //$Id: announcements.inc.php 14017 2007-12-18 19:17:58Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -796,6 +796,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to)
 */
 function send_announcement_email($user_list, $course_code, $_course, $mail_title, $mail_content)
 {
+	global $_user;
 	foreach ($user_list as $this_user)
 	{
 		/*    Header : Bericht van uw lesgever - GES ($course_code) - Morgen geen les! ($mail_title)

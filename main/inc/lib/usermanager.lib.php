@@ -199,6 +199,10 @@ class UserManager
 		$sql = "DELETE FROM $agenda_table WHERE user = '".$user_id."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 
+		$gradebook_results_table = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+		$sql = 'DELETE FROM '.$gradebook_results_table.' WHERE user_id = '.$user_id;
+		api_sql_query($sql, __FILE__, __LINE__);
+		
 		return true;
 	}
 

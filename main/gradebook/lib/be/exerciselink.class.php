@@ -36,7 +36,7 @@ class ExerciseLink extends AbstractLink
     	if (empty($this->course_code))
     		die('Error in get_not_created_links() : course code not set');
     	
-    	$tbl_grade_links = Database :: get_gradebook_table(TABLE_GRADEBOOK_LINK);
+    	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 		$sql = 'SELECT id,title from '.$this->get_exercise_table()
 				.' WHERE id NOT IN'
@@ -64,7 +64,7 @@ class ExerciseLink extends AbstractLink
     		die('Error in get_not_created_links() : course code not set');
     	
     	$course_info = api_get_course_info($this->course_code);
-    	$tbl_grade_links = Database :: get_gradebook_table(TABLE_GRADEBOOK_LINK,$course_info['dbName']);
+    	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK,$course_info['dbName']);
 
 		$sql = 'SELECT id,title from '.$this->get_exercise_table();
 		$result = api_sql_query($sql, __FILE__, __LINE__);

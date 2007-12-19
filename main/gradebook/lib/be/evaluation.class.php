@@ -143,7 +143,7 @@ class Evaluation implements GradebookItem
 	 */
 	public function load ($id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null)
 	{
-    	$tbl_grade_evaluations = Database :: get_gradebook_table(TABLE_GRADEBOOK_EVALUATION);
+    	$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 		$sql='SELECT id,name,description,user_id,course_code,category_id,date,weight,max,visible FROM '.$tbl_grade_evaluations;
 		$paramcount = 0;
 		if (isset ($id))
@@ -213,7 +213,7 @@ class Evaluation implements GradebookItem
 	{
 		if (isset($this->name) && isset($this->user_id) && isset($this->weight) && isset ($this->eval_max) && isset($this->visible))
 		{
-			$tbl_grade_evaluations = Database :: get_gradebook_table(TABLE_GRADEBOOK_EVALUATION);
+			$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 			
 			$sql = 'INSERT INTO '.$tbl_grade_evaluations
 					.' (name,user_id,weight,max,visible';
@@ -244,7 +244,7 @@ class Evaluation implements GradebookItem
 	 */
 	public function save()
 	{
-		$tbl_grade_evaluations = Database :: get_gradebook_table(TABLE_GRADEBOOK_EVALUATION);
+		$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 		$sql = 'UPDATE '.$tbl_grade_evaluations
 			." SET name = '".mysql_real_escape_string($this->get_name())."'"
 			.', description = ';
@@ -284,7 +284,7 @@ class Evaluation implements GradebookItem
 	 */
 	public function delete()
 	{
-		$tbl_grade_evaluations = Database :: get_gradebook_table(TABLE_GRADEBOOK_EVALUATION);
+		$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 		$sql = 'DELETE FROM '.$tbl_grade_evaluations.' WHERE id = '.$this->id;
 		api_sql_query($sql, __FILE__, __LINE__);
 	}
@@ -303,7 +303,7 @@ class Evaluation implements GradebookItem
 			$name = $this->name;
 			$parent = $this->category;
 		}
-		$tbl_grade_evaluations = Database :: get_gradebook_table(TABLE_GRADEBOOK_EVALUATION);
+		$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 		$sql = 'SELECT count(id) AS number'
 			 .' FROM '.$tbl_grade_evaluations
 			 ." WHERE name = '".$name."'";
@@ -343,7 +343,7 @@ class Evaluation implements GradebookItem
 	 */
     public function has_results()
     {
-    	$tbl_grade_results = Database :: get_gradebook_table(TABLE_GRADEBOOK_RESULT);
+    	$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql='SELECT count(id) AS number FROM '.$tbl_grade_results
 			.' WHERE evaluation_id = '.$this->id;
     	$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -359,7 +359,7 @@ class Evaluation implements GradebookItem
 	 /* - not used anywhere (yet ?)
     public function has_results_for_student($stud_id)
     {
-    	$tbl_grade_results = Database :: get_gradebook_table(TABLE_GRADEBOOK_RESULT);
+    	$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql="SELECT count(id) AS number FROM ".$tbl_grade_results
 			." WHERE evaluation_id = ".$this->id." AND user_id = ".$stud_id;
     	$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -374,7 +374,7 @@ class Evaluation implements GradebookItem
      */
     public function delete_results()
     {
-		$tbl_grade_results = Database :: get_gradebook_table(TABLE_GRADEBOOK_RESULT);
+		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql = 'DELETE FROM '.$tbl_grade_results.' WHERE evaluation_id = '.$this->id;
 		api_sql_query($sql, __FILE__, __LINE__);
     }
@@ -512,8 +512,8 @@ class Evaluation implements GradebookItem
 	 */
     public function get_evaluations_with_result_for_student ($cat_id = null, $stud_id)
     {
-		$tbl_grade_evaluations = Database :: get_gradebook_table(TABLE_GRADEBOOK_EVALUATION);
-    	$tbl_grade_results = Database :: get_gradebook_table(TABLE_GRADEBOOK_RESULT);
+		$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+    	$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
 		$sql = 'SELECT * FROM '.$tbl_grade_evaluations
 				.' WHERE id IN'
@@ -541,7 +541,7 @@ class Evaluation implements GradebookItem
     public function get_not_subscribed_students ($first_letter_user = '')
     {
 		$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-    	$tbl_grade_results = Database :: get_gradebook_table(TABLE_GRADEBOOK_RESULT);
+    	$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
     	$sql = 'SELECT user_id,lastname,firstname,username FROM '.$tbl_user
 				." WHERE lastname LIKE '".$first_letter_user."%'"

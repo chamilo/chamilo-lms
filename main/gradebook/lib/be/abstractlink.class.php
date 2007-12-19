@@ -135,7 +135,7 @@ abstract class AbstractLink implements GradebookItem
 	 */
 	public function load ($id = null, $type = null, $ref_id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null)
 	{
-    	$tbl_grade_links = Database :: get_gradebook_table(TABLE_GRADEBOOK_LINK);
+    	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 		$sql='SELECT id,type,ref_id,user_id,course_code,category_id,date,weight,visible FROM '.$tbl_grade_links;
 		$paramcount = 0;
 		if (isset ($id))
@@ -221,7 +221,7 @@ abstract class AbstractLink implements GradebookItem
 		if (isset($this->type) && isset($this->ref_id) && isset($this->user_id) && isset($this->course_code)
 		 && isset($this->category) && isset($this->weight) && isset($this->visible))
 		{
-			$tbl_grade_links = Database :: get_gradebook_table(TABLE_GRADEBOOK_LINK);
+			$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 			
 			$sql = 'INSERT INTO '.$tbl_grade_links
 					.' (type,ref_id,user_id,course_code,category_id,weight,visible';
@@ -251,7 +251,7 @@ abstract class AbstractLink implements GradebookItem
 	{
 		$this->save_linked_data();
 
-		$tbl_grade_links = Database :: get_gradebook_table(TABLE_GRADEBOOK_LINK);
+		$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 		$sql = 'UPDATE '.$tbl_grade_links
 				.' SET type = '.$this->get_type()
 				.', ref_id = '.$this->get_ref_id()
@@ -277,7 +277,7 @@ abstract class AbstractLink implements GradebookItem
 	{
 		$this->delete_linked_data();
 
-		$tbl_grade_links = Database :: get_gradebook_table(TABLE_GRADEBOOK_LINK);
+		$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 		$sql = 'DELETE FROM '.$tbl_grade_links.' WHERE id = '.$this->id;
 		api_sql_query($sql, __FILE__, __LINE__);
 	}

@@ -64,7 +64,7 @@ function get_all_users ($evals = array(), $links = array())
 		else
 		{
 			$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-			$tbl_res = Database :: get_gradebook_table(TABLE_GRADEBOOK_RESULT);
+			$tbl_res = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 			
 			$sql = 'SELECT user.user_id,lastname,firstname'
 					.' FROM '.$tbl_res.' as res, '.$tbl_user.' as user'
@@ -95,7 +95,7 @@ function get_all_users ($evals = array(), $links = array())
 
 /**
  * Search students matching a given last name and/or first name
- * @author Bert Steppé
+ * @author Bert Steppï¿½
  */
 function find_students($mask= '')
 {

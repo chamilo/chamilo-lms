@@ -130,7 +130,7 @@ class Category implements GradebookItem
 			return $cats;
 		}
 		
-		$tbl_grade_categories = Database :: get_gradebook_table(TABLE_GRADEBOOK_CATEGORY);
+		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 		$sql='SELECT id,name,description,user_id,course_code,parent_id,weight,visible FROM '.$tbl_grade_categories;
 		$paramcount = 0;
 		if (isset ($id))
@@ -213,7 +213,7 @@ class Category implements GradebookItem
 	{
 		if (isset($this->name) && isset($this->user_id) && isset($this->weight) && isset($this->visible))
 		{
-			$tbl_grade_categories = Database :: get_gradebook_table(TABLE_GRADEBOOK_CATEGORY);
+			$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 			$sql = 'INSERT INTO '.$tbl_grade_categories
 					.' (name,user_id,weight,visible';
 			if (isset($this->description)) $sql .= ',description';
@@ -240,7 +240,7 @@ class Category implements GradebookItem
 	 */
 	public function save()
 	{
-		$tbl_grade_categories = Database :: get_gradebook_table(TABLE_GRADEBOOK_CATEGORY);
+		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 		$sql = 'UPDATE '.$tbl_grade_categories
 			." SET name = '".mysql_real_escape_string($this->get_name())."'"
 			.', description = ';
@@ -274,7 +274,7 @@ class Category implements GradebookItem
 	 */
 	public function delete()
 	{
-		$tbl_grade_categories = Database :: get_gradebook_table(TABLE_GRADEBOOK_CATEGORY);
+		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 		$sql = 'DELETE FROM '.$tbl_grade_categories.' WHERE id = '.$this->id;
 		api_sql_query($sql, __FILE__, __LINE__);
 	}
@@ -294,7 +294,7 @@ class Category implements GradebookItem
 			$name = $this->name;
 			$parent = $this->parent;
 		}
-		$tbl_grade_categories = Database :: get_gradebook_table(TABLE_GRADEBOOK_CATEGORY);
+		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 		$sql = 'SELECT count(id) AS number'
 			 .' FROM '.$tbl_grade_categories
 			 ." WHERE name = '".$name."'";
@@ -437,7 +437,7 @@ class Category implements GradebookItem
 		// courses
 		
 		$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);			
-		$tbl_grade_categories = Database :: get_gradebook_table(TABLE_GRADEBOOK_CATEGORY);
+		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
 		$sql = 'SELECT *'
 				.' FROM '.$tbl_grade_categories
@@ -484,7 +484,7 @@ class Category implements GradebookItem
 		// courses
 		
 		$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);			
-		$tbl_grade_categories = Database :: get_gradebook_table(TABLE_GRADEBOOK_CATEGORY);
+		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
 		$sql = 'SELECT *'
 				.' FROM '.$tbl_grade_categories
@@ -704,7 +704,7 @@ class Category implements GradebookItem
 	{
 		$tbl_main_courses = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$tbl_main_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);			
-		$tbl_grade_categories = Database :: get_gradebook_table(TABLE_GRADEBOOK_CATEGORY);
+		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
 		$sql = 'SELECT DISTINCT(code), title FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu'
 				.' WHERE cc.code = cu.course_code'
@@ -736,7 +736,7 @@ class Category implements GradebookItem
 	{
 		$tbl_main_courses = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$tbl_main_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);			
-		$tbl_grade_categories = Database :: get_gradebook_table(TABLE_GRADEBOOK_CATEGORY);
+		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
 		$sql = 'SELECT DISTINCT(code), title FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu'
 				.' WHERE cc.code = cu.course_code'

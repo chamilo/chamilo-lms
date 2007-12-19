@@ -3,7 +3,7 @@
 
 /**
  * Defines a gradebook Result object
- * @author Bert Steppé, Stijn Konings
+ * @author Bert Steppï¿½, Stijn Konings
  * @package dokeos.gradebook
  */
 class Result
@@ -86,7 +86,7 @@ class Result
 	 */
 	public function load ($id = null, $user_id = null, $evaluation_id = null)
 	{
-		$tbl_grade_results = Database :: get_gradebook_table(TABLE_GRADEBOOK_RESULT);
+		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql='SELECT id,user_id,evaluation_id,date,score FROM '.$tbl_grade_results;
 		$paramcount = 0;
 		if (!empty ($id))
@@ -131,7 +131,7 @@ class Result
 	{
 		if (isset($this->user_id) && isset($this->evaluation) && isset($this->creation_date) )
 		{
-			$tbl_grade_results = Database :: get_gradebook_table(TABLE_GRADEBOOK_RESULT);
+			$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 			$sql = 'INSERT INTO '.$tbl_grade_results
 					.' (user_id, evaluation_id,
 					date';
@@ -154,7 +154,7 @@ class Result
 	 */
 	public function save()
 	{
-		$tbl_grade_results = Database :: get_gradebook_table(TABLE_GRADEBOOK_RESULT);
+		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql = 'UPDATE '.$tbl_grade_results
 				.' SET user_id = '.$this->get_user_id()
 				.', evaluation_id = '.$this->get_evaluation_id()
@@ -175,7 +175,7 @@ class Result
 	 */
 	public function delete()
 	{
-		$tbl_grade_results = Database :: get_gradebook_table(TABLE_GRADEBOOK_RESULT);
+		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql = 'DELETE FROM '.$tbl_grade_results.' WHERE id = '.$this->id;
 		api_sql_query($sql, __FILE__, __LINE__);
 	}

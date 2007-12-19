@@ -187,7 +187,7 @@ class ScoreDisplay
    		$this->custom_display_conv = $this->convert_displays($this->custom_display);
 		
 		// remove previous settings
-    	$tbl_display = Database :: get_gradebook_table(TABLE_GRADEBOOK_SCORE_DISPLAY);
+    	$tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
 		$sql = 'TRUNCATE TABLE '.$tbl_display;
 		api_sql_query($sql, __FILE__, __LINE__);
 
@@ -353,7 +353,7 @@ class ScoreDisplay
 	 */
 	private function get_custom_displays()
 	{
-    	$tbl_display = Database :: get_gradebook_table(TABLE_GRADEBOOK_SCORE_DISPLAY);
+    	$tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
 		$sql = 'SELECT * FROM '.$tbl_display.' ORDER BY score';
 		//echo $sql;
 		$result = api_sql_query($sql, __FILE__, __LINE__);

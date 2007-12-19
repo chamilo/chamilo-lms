@@ -45,7 +45,7 @@ class GradebookTable extends SortableTable
 			$this->set_form_actions(array (
 				'delete' => get_lang('DeleteSelected'),
 				'setvisible' => get_lang('SetVisible'),
-				'setinvisible' => get_lang('SetInVisible')));
+				'setinvisible' => get_lang('SetInvisible')));
 		}
 		//students get a result column
 		else

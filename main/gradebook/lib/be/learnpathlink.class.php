@@ -199,7 +199,7 @@ class LearnpathLink extends AbstractLink
     
     public function get_type_name()
     {
-    	return get_lang('LearningPath');
+    	return get_lang('DokeosLearningPaths');
     }
     
 	public function needs_name_and_description()

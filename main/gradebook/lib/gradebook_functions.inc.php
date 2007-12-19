@@ -33,7 +33,7 @@ function get_course_name_from_code($code)
 	$result= mysql_query($sql);
 	if ($col= mysql_fetch_array($result))
 	{
-		return $col[title];
+		return $col['title'];
 	}
 }
 /**

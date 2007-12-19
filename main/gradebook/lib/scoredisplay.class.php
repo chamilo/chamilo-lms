@@ -17,7 +17,7 @@ define('SCORE_ONLY_CUSTOM',3);
 /**
  * Class to display scores according to the settings made by the platform admin.
  * This class works as a singleton: call instance() to retrieve an object.
- * @author Bert Steppé
+ * @author Bert Steppï¿½
  * @package dokeos.gradebook
  */
 class ScoreDisplay
@@ -77,14 +77,14 @@ class ScoreDisplay
 	 */
     protected function ScoreDisplay()
     {
-    	$this->coloring_enabled = $this->load_bool_setting('score_display_coloring',0);
+    	$this->coloring_enabled = $this->load_bool_setting('gradebook_score_display_coloring',0);
     	if ($this->coloring_enabled)
-    		$this->color_split_value = $this->load_int_setting('score_display_colorsplit',50);
+    		$this->color_split_value = $this->load_int_setting('gradebook_score_display_colorsplit',50);
     	
-    	$this->custom_enabled = $this->load_bool_setting('score_display_custom', 0);
+    	$this->custom_enabled = $this->load_bool_setting('gradebook_score_display_custom', 0);
     	if ($this->custom_enabled)
     	{
-    		$this->upperlimit_included = $this->load_bool_setting('score_display_upperlimit', 0);
+    		$this->upperlimit_included = $this->load_bool_setting('gradebook_score_display_upperlimit', 0);
     		$this->custom_display = $this->get_custom_displays();
     		$this->custom_display_conv = $this->convert_displays($this->custom_display);
     	}
@@ -124,7 +124,7 @@ class ScoreDisplay
 	public function set_coloring_enabled ($coloring)
 	{
 		$this->coloring_enabled = $coloring;
-		$this->save_bool_setting ('score_display_coloring', $coloring);
+		$this->save_bool_setting ('gradebook_score_display_coloring', $coloring);
 	}
 
 	/**
@@ -134,7 +134,7 @@ class ScoreDisplay
 	public function set_color_split_value ($colorsplit)
 	{
 		$this->color_split_value = $colorsplit;
-		$this->save_int_setting ('score_display_colorsplit', $colorsplit);
+		$this->save_int_setting ('gradebook_score_display_colorsplit', $colorsplit);
 	}
 
 
@@ -145,7 +145,7 @@ class ScoreDisplay
 	public function set_custom ($custom)
 	{
 		$this->custom_enabled = $custom;
-		$this->save_bool_setting ('score_display_custom', $custom);
+		$this->save_bool_setting ('gradebook_score_display_custom', $custom);
 	}
 
 	/**
@@ -155,7 +155,7 @@ class ScoreDisplay
 	public function set_upperlimit_included ($upperlimit_included)
 	{
 		$this->upperlimit_incl = $upperlimit_included;
-		$this->save_bool_setting ('score_display_upperlimit', $upperlimit_included);
+		$this->save_bool_setting ('gradebook_score_display_upperlimit', $upperlimit_included);
 	}
 
 	/**
@@ -306,15 +306,15 @@ class ScoreDisplay
 	private function load_bool_setting ($property, $default = 0)
 	{
 		$value = $this->load_int_setting($property, $default);
-		return ($value == '1' ? true : false);
+		return ($value == 'true' ? true : false);
 	}
 
 	private function load_int_setting ($property, $default = 0)
 	{
-    	$tbl_setting = Database :: get_gradebook_table(TABLE_GRADEBOOK_SETTING);
+    	$tbl_setting = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
-		$sql = 'SELECT value FROM '.$tbl_setting
-				.' WHERE property = "'.$property.'"';
+		$sql = "SELECT selected_value FROM ".$tbl_setting
+				." WHERE category = 'Gradebook' AND variable = '".$property."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
 		if ($data = mysql_fetch_row($result))
@@ -322,9 +322,9 @@ class ScoreDisplay
 		else
 		{
 			// if not present, add default setting into table...
-			$sql = 'INSERT INTO '.$tbl_setting
-					.' (property, value)'
-					.' VALUES ("'.$property.'", '.$default.')';
+			$sql = "INSERT INTO ".$tbl_setting
+					." (variable, selected_value, category)"
+					." VALUES ('".$property."', '".$default."','Gradebook')";
 			api_sql_query($sql, __FILE__, __LINE__);
 			// ...and return default value
 			return $default;
@@ -334,15 +334,15 @@ class ScoreDisplay
 	
 	private function save_bool_setting ($property, $value)
 	{
-		$this->save_int_setting ($property, ($value ? '1' : '0') );
+		$this->save_int_setting ($property, ($value ? 'true' : 'false') );
 	}
 
 	private function save_int_setting ($property, $value)
 	{
-    	$tbl_setting = Database :: get_gradebook_table(TABLE_GRADEBOOK_SETTING);
+    	$tbl_setting = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 		$sql = 'UPDATE '.$tbl_setting
-				.' SET value = '.$value
-				.' WHERE property = "'.$property.'"';
+				." SET selected_value = '".$value."' "
+				." WHERE variable = '".$property."' AND category='Gradebook'";
 		api_sql_query($sql, __FILE__, __LINE__);
 	}
 

@@ -604,7 +604,7 @@ function api_get_course_info($course_code=null)
  */
 function api_sql_query($query, $file = '', $line = 0)
 {
-	$result = mysql_query($query);
+	$result = @mysql_query($query);
 
 	if ($line && !$result)
 	{
@@ -621,8 +621,9 @@ function api_sql_query($query, $file = '', $line = 0)
 			$info .= '<b>LINE        :</b><br/> ';
 			$info .= ($line == 0 ? ' unknown ' : $line);
 			$info .= '</pre>';
-			@ mysql_close();
-			die($info);
+			//@ mysql_close();
+			//die($info);
+			echo $info;
 	}
 	return $result;
 }

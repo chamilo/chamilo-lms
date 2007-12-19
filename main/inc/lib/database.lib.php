@@ -66,6 +66,11 @@ define('TABLE_MAIN_SHARED_SURVEY_QUESTION', 'shared_survey_question');
 define('TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION', 'shared_survey_question_option');
 define('TABLE_MAIN_TEMPLATES', 'templates');
 define('TABLE_MAIN_OPENID_ASSOCIATION','openid_association');
+define('TABLE_MAIN_GRADEBOOK_CATEGORY', 'gradebook_category');
+define('TABLE_MAIN_GRADEBOOK_EVALUATION', 'gradebook_evaluation');
+define('TABLE_MAIN_GRADEBOOK_RESULT', 'gradebook_result');
+define('TABLE_MAIN_GRADEBOOK_LINK', 'gradebook_link');
+define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY', 'gradebook_score_display');
 
 //statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');
@@ -554,7 +559,7 @@ class Database
 	*/
 	function format_glued_course_table_name($database_name_with_glue, $table)
 	{
-		$course_info = api_get_course_info();
+		//$course_info = api_get_course_info();
 		return "`".$database_name_with_glue.$table."`";
 	}
 	/**

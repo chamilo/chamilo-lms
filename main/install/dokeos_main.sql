@@ -523,7 +523,13 @@ INSERT INTO settings_current VALUES
 (114,'survey_email_sender_noreply', '', 'radio', 'Course', 'coach', 
 'SurveyEmailSenderNoReply', 'SurveyEmailSenderNoReplyComment', NULL, NULL),
 (115,'openid_authentication',NULL,'radio','Security','false','OpenIdAuthentication','OpenIdAuthenticationComment',NULL,NULL),
-(116,'profile','openid','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'OpenIDURL');
+(116,'profile','openid','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'OpenIDURL'),
+(117,'gradebook_enable',NULL,'radio','Gradebook','false','GradebookActivation','GradebookActivationComment',NULL,NULL),
+(118,'show_tabs','my_gradebook','checkbox','Platform','true','ShowTabsTitle','ShowTabsComment',NULL,'TabsMyGradebook'),
+(119,'gradebook_score_display_coloring','my_display_coloring','checkbox','Gradebook','false','GradebookScoreDisplayColoring','GradebookScoreDisplayColoringComment',NULL,'TabsGradebookEnableColoring'),
+(120,'gradebook_score_display_custom','my_display_custom','checkbox','Gradebook','false','GradebookScoreDisplayCustom','GradebookScoreDisplayCustomComment',NULL,'TabsGradebookEnableCustom'),
+(121,'gradebook_score_display_colorsplit',NULL,'textfield','Gradebook','50','GradebookScoreDisplayColorSplit','GradebookScoreDisplayColorSplitComment',NULL,NULL),
+(122,'gradebook_score_display_upperlimit','my_display_upperlimit','checkbox','Gradebook','false','GradebookScoreDisplayUpperLimit','GradebookScoreDisplayUpperLimitComment',NULL,'TabsGradebookEnableUpperLimit');
 
 
 UNLOCK TABLES;
@@ -646,7 +652,9 @@ INSERT INTO settings_options VALUES
 (107, 'survey_email_sender_noreply', 'coach', 'CourseCoachEmailSender'),
 (108, 'survey_email_sender_noreply', 'noreply', 'NoReplyEmailSender'),
 (109, 'openid_authentication','true','Yes'),
-(110, 'openid_authentication','false','No');
+(110, 'openid_authentication','false','No'),
+(111, 'gradebook_enable','true','Yes'),
+(112, 'gradebook_enable','false','No');
 
 
 UNLOCK TABLES;
@@ -823,4 +831,59 @@ CREATE TABLE IF NOT EXISTS openid_association (
   mac_key text NOT NULL,
   created bigint NOT NULL,
   PRIMARY KEY  (id)
+);
+--
+-- --------------------------------------------------------
+--
+-- Tables for gradebook
+--
+CREATE TABLE gradebook_category (
+  id int NOT NULL auto_increment,
+  name text NOT NULL,
+  description text,
+  user_id int NOT NULL,
+  course_code varchar(40) default NULL,
+  parent_id int default NULL,
+  weight smallint NOT NULL,
+  visible tinyint NOT NULL,
+  PRIMARY KEY  (id)
+);
+CREATE TABLE gradebook_evaluation (
+  id int unsigned NOT NULL auto_increment,
+  name text NOT NULL,
+  description text,
+  user_id int NOT NULL,
+  course_code varchar(40) default NULL,
+  category_id int default NULL,
+  date int default 0,
+  weight smallint NOT NULL,
+  max float unsigned NOT NULL,
+  visible tinyint NOT NULL,
+  PRIMARY KEY  (id)
+);
+CREATE TABLE gradebook_link (
+  id int NOT NULL auto_increment,
+  type int NOT NULL,
+  ref_id int NOT NULL,
+  user_id int NOT NULL,
+  course_code varchar(40) NOT NULL,
+  category_id int NOT NULL,
+  date int default NULL,
+  weight smallint NOT NULL,
+  visible tinyint NOT NULL,
+  PRIMARY KEY  (id)
+);
+CREATE TABLE gradebook_result (
+  id int NOT NULL auto_increment,
+  user_id int NOT NULL,
+  evaluation_id int NOT NULL,
+  date int NOT NULL,
+  score float unsigned default NULL,
+  PRIMARY KEY  (id)
+);
+CREATE TABLE gradebook_score_display (
+  id int NOT NULL auto_increment,
+  score float unsigned NOT NULL,
+  display varchar(40) NOT NULL,
+  PRIMARY KEY (id)
 );

@@ -26,13 +26,26 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('survey_ema
 INSERT INTO settings_options (variable, value, display_text) VALUES ('survey_email_sender_noreply', 'noreply', 'NoReplyEmailSender');
 DELETE FROM settings_current WHERE variable='show_student_view';
 DELETE FROM settings_options WHERE variable='show_student_view';
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('openid_authentication', '', 'radio', 'Security', 'false', 'OpenIdAuthentication', 'OpenIdAuthenticationComment', NULL, NULL);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('openid_authentication', NULL, 'radio', 'Security', 'false', 'OpenIdAuthentication', 'OpenIdAuthenticationComment', NULL, NULL);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('openid_authentication', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('openid_authentication', 'false', 'No');
 CREATE TABLE templates (id int NOT NULL auto_increment, title varchar(100) NOT NULL, description varchar(250) NOT NULL, course_code varchar(40) NOT NULL, user_id int NOT NULL, ref_doc int NOT NULL, PRIMARY KEY (id));
 ALTER TABLE user ADD openid varchar(255) DEFAULT NULL;
 ALTER TABLE user ADD INDEX (openid(50));
 CREATE TABLE IF NOT EXISTS openid_association (id int NOT NULL auto_increment,idp_endpoint_uri text NOT NULL,session_type varchar(30) NOT NULL,assoc_handle text NOT NULL,assoc_type text NOT NULL,expires_in bigint NOT NULL,mac_key text NOT NULL,created bigint NOT NULL,PRIMARY KEY (id));
+CREATE TABLE gradebook_category (  id int NOT NULL auto_increment,  name text NOT NULL,  description text,  user_id int NOT NULL,  course_code varchar(40) default NULL,  parent_id int default NULL,  weight smallint NOT NULL,  visible tinyint NOT NULL,  PRIMARY KEY  (id));
+CREATE TABLE gradebook_evaluation (  id int unsigned NOT NULL auto_increment,  name text NOT NULL,  description text,  user_id int NOT NULL,  course_code varchar(40) default NULL,  category_id int default NULL,  date int default 0,  weight smallint NOT NULL,  max float unsigned NOT NULL,  visible tinyint NOT NULL,  PRIMARY KEY  (id));
+CREATE TABLE gradebook_link (  id int NOT NULL auto_increment,  type int NOT NULL,  ref_id int NOT NULL,  user_id int NOT NULL,  course_code varchar(40) NOT NULL,  category_id int NOT NULL,  date int default NULL,  weight smallint NOT NULL,  visible tinyint NOT NULL,  PRIMARY KEY  (id));
+CREATE TABLE gradebook_result (  id int NOT NULL auto_increment,  user_id int NOT NULL,  evaluation_id int NOT NULL,  date int NOT NULL,  score float unsigned default NULL,  PRIMARY KEY  (id));
+CREATE TABLE gradebook_score_display (  id int NOT NULL auto_increment,  score float unsigned NOT NULL,  display varchar(40) NOT NULL,  PRIMARY KEY (id));
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('gradebook_enable', NULL, 'radio', 'Gradebook', 'false', 'GradebookActivation', 'GradebookActivationComment', NULL, NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('gradebook_enable', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('gradebook_enable', 'false', 'No');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('show_tabs','my_gradebook','checkbox','Platform','true','ShowTabsTitle','ShowTabsComment',NULL,'TabsMyGradebook');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('gradebook_score_display_coloring', 'my_display_coloring', 'checkbox', 'Gradebook', 'false', 'GradebookScoreDisplayColoring', 'GradebookScoreDisplayColoringComment', NULL, 'TabsGradebookEnableColoring');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('gradebook_score_display_custom', 'my_display_custom', 'checkbox', 'Gradebook', 'false', 'GradebookScoreDisplayCustom', 'GradebookScoreDisplayCustomComment', NULL, 'TabsGradebookEnableCustom');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('gradebook_score_display_colorsplit', NULL, 'textfield', 'Gradebook', '50', 'GradebookScoreDisplayColorSplit', 'GradebookScoreDisplayColorSplitComment', NULL, NULL);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('gradebook_score_display_upperlimit', 'my_display_upperlimit', 'checkbox', 'Gradebook', 'false', 'GradebookScoreDisplayUpperLimit', 'GradebookScoreDisplayUpperLimitComment', NULL, 'TabsGradebookEnableUpperLimit');
 
 -- xxSTATSxx
 ALTER TABLE track_e_downloads ADD INDEX (down_user_id);

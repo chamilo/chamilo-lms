@@ -246,6 +246,19 @@ if ($_user['user_id'] && !api_is_anonymous())
 		$menu_navigation['myagenda'] = $possible_tabs['myagenda'];
 	}
 
+	// Gradebook
+	if (api_get_setting('gradebook_enable') == 'true')
+	{
+		if (api_get_setting('show_tabs', 'my_gradebook') == 'true')
+		{
+			$navigation['mygradebook'] = $possible_tabs['mygradebook'];
+		}
+		else
+		{
+			$menu_navigation['mygradebook'] = $possible_tabs['mygradebook'];
+		}
+	}
+	
 	// Reporting
 	if (api_get_setting('show_tabs', 'reporting') == 'true')
 	{
@@ -504,6 +517,13 @@ function get_tabs()
 	// Link to my agenda
 	$navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/myagenda.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
 	$navigation['myagenda']['title'] = get_lang('MyAgenda');
+
+	// Gradebook
+	if (api_get_setting('gradebook_enable') == 'true')
+	{
+		$navigation['mygradebook']['url'] = api_get_path(WEB_CODE_PATH).'gradebook/gradebook.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );	
+		$navigation['mygradebook']['title'] = get_lang('MyGradebook');
+	}
 
 	// Reporting
 	if(api_is_allowed_to_create_course())

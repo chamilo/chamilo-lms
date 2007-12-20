@@ -230,4 +230,5 @@ $AttemptVCC = "Lo svolgimento del test qui indicato è stato visto/commentato/cor
 $ClickLinkToViewComment = "Clicca su collegamento qui sotto per accedere al sistema e vedere la correzione del test";
 $Regards = "Cordialmente";
 $AttemptVCCLong = "Il test %s che hai svolto è stato visto/commentato/corretto dal docente. Clicca qui sotto per accedere al sistema e vedere gli esiti.";
+$DearStudentEmailIntroduction = "Caro corsista,";
 ?>

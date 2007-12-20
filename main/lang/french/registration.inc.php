@@ -167,4 +167,6 @@ $SendMessage = "Envoyer message";
 $PasswordEncryptedForSecurity = "Votre mot de passe est crypté pour des raisons de sécurité. Après avoir cliqué sur le lien, un autre e-mail vous sera envoyé avec votre mot de passe.";
 $UsersUnsubscribed = "Les utilisateurs sélectionnés ont été désinscrits de ce cours";
 $SystemUnableToSendEmailContact = "Système incapable d\'envoyer le contact e-mail";
+$OpenIDCouldNotBeFoundPleaseRegister = "Cet OpenID n\'est pas dans notre base de données. Merci de vous enregistrer sur notre portail en utilisant ce formulaire. Si vous disposez déjà d\'un compte utilisateur sur ce portail, merci d\'éditer votre profil afin d\'y ajouter cet OpenID";
+$UsernameMaxXCharacters = "Le nom d\'utilisateur doit être de %s caractères au maximum";
 ?>

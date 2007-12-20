@@ -675,4 +675,16 @@ $ExtendedProfileRegistrationTitle = "Razširjena polja profila pri registraciji";
 $ExtendedProfileRegistrationComment = "Katera od naslednjih polj razširjenega profila morajo biti dostopna v procesu registracije uporabnika? Možnost zahteva, da je razširjen profil aktiviran (glej spodaj).";
 $ExtendedProfileRegistrationRequiredTitle = "Zahtevana razširjena polja pri registraciji";
 $ExtendedProfileRegistrationRequiredComment = "Katera od naslednjih polj razširjenega profila so zahtevana v procesu registracije uporabnika? Možnost zahteva, da je razširjen profil aktiviran in da so polja dostopna v registracijskem obrazcu (glej zgoraj).";
+$NoReplyEmailAddress = "E-poštni naslov (ne odgovarjaj)";
+$NoReplyEmailAddressComment = "Ta e-poštni naslov se uporablja v primeru pošiljanja e-sporoèil, za katere posebej zahtevamo, da se na njih ne odgovarja. V splošnem je e-poštni naslov, za katerega je poštni strežnik nastavljen tako, da vsako prejeto sporoèilo zavrže oz. ignorira.";
+$SurveyEmailSenderNoReply = "Pošiljatelj evalvacijskega vprašalnika (ne odgovarjaj)";
+$SurveyEmailSenderNoReplyComment = "Naj bo e-poštni naslov vabila na izpolnjevanje vprašalnika naslov coacha/tutorja ali poseben naslov, na katerega se ne odgovarja (doloèen v glavnem nastavitvenem razdelku) ?";
+$CourseCoachEmailSender = "E-poštni naslov coacha/tutorja";
+$NoReplyEmailSender = "ne odgovarjaj na to sporoèilo";
+$Flat = "Ravninsko";
+$Threaded = "Nitno";
+$Nested = "Gnezdeno";
+$OpenIdAuthenticationComment = "Omogoèi OpenID URL bazirajoèo avtentifikacijo (prikaže dodatno prijavno formo na domaèi strani)";
+$VersionCheckEnabled = "Preverjanje verzije omogoèeno";
+$InstallDirAccessibleSecurityThreat = "Namestitvena mapa main/install vašega Dokeos sistema je še vedno dostopna spletnim uporabnikom. To lahko predstavlja varnostno grožnjo sistemu. Priporoèamo, da mapo odstranite ali spremenite dostopne pravice, da spletni uporabniki ne bodo imeli možnosti dostopa do namestitvenih datotek vsebovanih v tej mapi.";
 ?>

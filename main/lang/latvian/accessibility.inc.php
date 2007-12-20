@@ -9,4 +9,5 @@ $WCAGLink = "Saite";
 $WCAGLinkLabel = "Saites apraksts";
 $errorNoLabel = "Šim att&#275;lam nav apraksta.";
 $WCAGEditor = "WCAG redaktors";
+$WCAGGoMenu = "Iet uz izv&#275;li";
 ?>

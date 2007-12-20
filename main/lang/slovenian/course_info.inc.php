@@ -96,4 +96,7 @@ $CourseRegistrationPassword = "Geslo za registracijo v teèaj";
 $langDescriptionDeleteCourse = "Klikni to povezavo, èe želiš odstraniti vsako sled teèaja s strežnika.<br><br>Rokovanje s to funkcionalnostjo zahteva posebno pazljivost!";
 $langDescriptionCopyCourse = "Dokeos uvaja možnost podvojevanja vsebin celotnega ali dela obstojeèega te&#269;aja v nek drug teèaj, ki je prvotno lahko prazen.<br><br>Edina predpogoja za prepis vsebin sta, da obstaja teèaj za prepis, ki vsebuje npr. nekaj dokumentov, vaj, forumov, ... in da obstaja drug (ciljni) teèaj, ki ne vsebuje elementov prvega!";
 $DescriptionRecycleCourse = "To orodje odstrani iz teèaja izbrane elemente ali vse elemente, ki jih teèaj vsebuje. Odstrani dokumente, forume, povezave, ... Izvedba te procedure se obièajno upoabi po zakljuèku teèaja ali ob koncu akademskega leta. In seveda, pred “recikliranjem” poskrbite za rezervno kopijo vsebin teèaja.";
+$QuizEmailAlert = "E-poštno opozorilo ob objavi nove vaje/testa";
+$QuizEmailAlertActivate = "Aktiviraj pošiljanje e-pošte, ko uporabnik zaklju&#269;i vajo/test";
+$QuizEmailAlertDeactivate = "Onemogoèi e-poštno opozorilo ob uporabnikovi rešitvi testa/vaje";
 ?>

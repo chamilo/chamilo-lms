@@ -231,4 +231,5 @@ $AttemptVCC = "Dein nachfolgender Versuch wurde vom Lehrer angesehen/kommentiert
 $ClickLinkToViewComment = "Klicke nachfolgenden Link, um zu Deinem Account zu gelangen und Dein kommentiertes Examensblatt anzusehen";
 $Regards = "Herzliche Grüße";
 $AttemptVCCLong = "Dein Versuch an Test %s wurde vom Lehrer angesehen, kommentiert/korrigiert. Klick den nachfolgenden Link, um zu Deinem Account zu gelangen und Dein Examensblatt anzusehen.";
+$DearStudentEmailIntroduction = "Sehr geehrte(r) Student(in),";
 ?>

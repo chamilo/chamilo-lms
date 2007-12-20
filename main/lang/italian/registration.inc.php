@@ -159,4 +159,6 @@ $SendMessage = "Invia un messaggio";
 $PasswordEncryptedForSecurity = "La tua password è criptata per motivi di sicurezza e di privacy, per cui cliccando sul collegamento la password ti verrà all\'indirizzo e-mail da te fornito.";
 $UsersUnsubscribed = "Gli utenti selezionati sono stati cancellati dall\'elenco degli iscritti al corso";
 $SystemUnableToSendEmailContact = "Il sistema non è in grado di inviare il messaggio e-mail di contatto";
+$OpenIDCouldNotBeFoundPleaseRegister = "L\'OpenID non è stato trovato nel database. Ti preghiamo di registrarti con di nuovo. Se sei già registrata/o modifica il tuo profilo e aggiungi l\'OpenID corretto.";
+$UsernameMaxXCharacters = "Il Nome Utente può avere una lunghezza massima di %s caratteri";
 ?>

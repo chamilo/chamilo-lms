@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$By = "&#3650;&#3604;&#3618;";
 $UsersOnline = "ผู้ใช้ที่กำลังใช้งาน";
 $Remove = "เอาออก";
 $Description = "คำอธิบาย";

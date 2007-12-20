@@ -447,9 +447,14 @@ $Faq = "Frequently Asked Question";
 $RemindInactivesLearnersSince = "Remind inactives users since";
 $RemindInactiveLearnersMailSubject = "Inactivity on %s";
 $RemindInactiveLearnersMailContent = "Dear user,<br /><br /> you are not active on %s since more than %s days.";
+$OpenIDAuthentication = "OpenID authentication";
 $UploadMaxSize = "Upload max size";
 $Unknown = "Unknown";
 $MoveUp = "Move up";
 $MoveDown = "Move down";
 $UplUnableToSaveFileFilteredExtension = "File upload failed: this file extension or file type is prohibited";
+$OpenIDURL = "OpenID URL";
+$UplFileTooBig = "The file you uploaded is too big for the current Dokeos settings (%sMB). Please contact the portal administrator to discuss this issue.";
+$UplGenericError = "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal.";
+$MyGradebook = "My gradebook";
 ?>

@@ -232,4 +232,5 @@ $AttemptVCC = "Vaš naslednji poskus je bil pregledan/komentiran/popravljen s str
 $ClickLinkToViewComment = "Kliknite spodnjo povezavo za dostop do vašega uporabniškega raèuna in vpogled v preglednico rezultatov";
 $Regards = "Pozdrav";
 $AttemptVCCLong = "Vaš poskus testa %s je bil pregledan/komentiran/popravljen s strani uèitelja. Kliknite spodnjo povezavo za dostop do vašega uporabniškega raèuna in vpogled v preglednico rezultatov.";
+$DearStudentEmailIntroduction = "Spoštovani teèajnik,";
 ?>

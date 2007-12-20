@@ -1,0 +1,49 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$FlatView = "Flat view";
+$ScoreEdit = "Score rules edition";
+$ScoreColor = "Score color";
+$ScoringSystem = "Scoring system";
+$EnableScoreColor = "Enable score colouring";
+$Below = "below";
+$WillColorRed = "will be coloured in red";
+$EnableScoringSystem = "Enable scoring system";
+$IncludeUpperLimit = "Include upper limit";
+$ScoreInfo = "Score info";
+$Between = "between";
+$CurrentCategory = "Current category";
+$RootCat = "Root category";
+$NewCategory = "New category";
+$NewEvaluation = "New evaluation";
+$Weight = "Weight";
+$PickACourse = "Pick a course";
+$CategoryName = "Category name";
+$CourseIndependent = "Course independent";
+$CourseIndependentEvaluation = "Course independent evaluation";
+$EvaluationName = "Evaluation name";
+$Max = "Max";
+$DateEval = "Evaluation date";
+$AddUserToEval = "Add users to evaluation";
+$NewSubCategory = "New sub-category";
+$MakeLink = "Make a link";
+$DeleteSelected = "Delete selected";
+$SetVisible = "Set visible";
+$SetInvisible = "Set invisible";
+$ChooseLink = "Choose link type";
+$DokeosExercises = "Dokeos exercises";
+$DokeosDropbox = "Dokeos dropbox";
+$DokeosStudentPublications = "Dokeos student publications";
+$DokeosLearningPaths = "Dokeos learning paths";
+$ChooseExercise = "Choose exercise";
+$AddResult = "Add results";
+$BackToOverview = "Back to overview";
+$ExportPDF = "Export to PDF";
+$Print = "Print";
+$ChooseOrientation = "Choose orientation";
+$Portrait = "Portrait";
+$Landscape = "Landscape";
+$FilterCategory = "Filter category";
+$DeleteAll = "Delete all";
+$ScoringUpdated = "Scoring updated";
+?>

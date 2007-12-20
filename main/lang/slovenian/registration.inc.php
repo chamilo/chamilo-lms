@@ -159,4 +159,6 @@ $SendMessage = "Pošlji sporoèilo";
 $PasswordEncryptedForSecurity = "Vaše geslo je bilo kriptirano iz varnostnih razlogov. Zato vam bo geslo po kliku na dano povezavo poslano na vaš e-poštni naslov.";
 $UsersUnsubscribed = "Izbrani uporabnik je bil izpisan iz teèaja";
 $SystemUnableToSendEmailContact = "System ne more poslati e-pošte naslovniku";
+$OpenIDCouldNotBeFoundPleaseRegister = "Ta OpenID ne obstaja v naši podatkovni bazi. Prosimo, da se registrirajte za dodelitev novega uporabniškega raèuna. V primeru, da uporabniški raèun na tem portalu že imate, ustrezno spremenite vaš profil, tako da dodate ta OpenID.";
+$UsernameMaxXCharacters = "Uporabniško ime je lahko dolgo najveè %s znakov";
 ?>

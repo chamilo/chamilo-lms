@@ -79,7 +79,7 @@ $langLoginTitleCountColumn = "Visita";
 $langLoginsAndAccessTools = "Accessi al Campus e alle sezioni";
 $langWorkUploads = "Caricamento dei contributi";
 $langErrorUserNotInGroup = "Utente non valido: questo utente non fa parte del tuo gruppo";
-$langListStudents = "Elenco degli studenti in questo gruppo";
+$langListStudents = "Elenco degli utenti in questo gruppo";
 $langPeriodHour = "Ora";
 $langPeriodDay = "Giorno";
 $langPeriodWeek = "Settimana";
@@ -210,7 +210,7 @@ $CoachList = "Elenco tutor";
 $CoachStudents = "Corsisti assegnati al tutor";
 $NoLearningPath = "Non ci sono percorsi didattici";
 $SessionCourses = "Sessione dei corsi";
-$NoUsersInCourseTracking = "In questa sezione troverai le statistiche degli studenti iscritti al corso";
+$NoUsersInCourseTracking = "In questa sezione troverai le statistiche degli utenti iscritti al corso";
 $AvgTimeSpentInTheCourse = "Tempo medio impiegato nel corso";
 $RemindInactiveUser = "Richiama l\'utente inattivo";
 ?>

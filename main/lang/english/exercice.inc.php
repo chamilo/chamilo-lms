@@ -230,4 +230,5 @@ $AttemptVCC = "Your following attempt has been viewed/commented/corrected by tea
 $ClickLinkToViewComment = "Click the link below to access  your account and view your commented Examsheet.";
 $Regards = "Regards";
 $AttemptVCCLong = "You attempt for the test %s has been viewed/commented/corrected by the teacher. Click the link below to access  your account and view your Examsheet.";
+$DearStudentEmailIntroduction = "Dear Student,";
 ?>

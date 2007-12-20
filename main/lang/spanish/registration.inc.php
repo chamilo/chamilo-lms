@@ -162,4 +162,6 @@ $SendMessage = "Enviar mensaje";
 $PasswordEncryptedForSecurity = "Su contraseña está encriptada para su seguridad. Por ello, cuando haya pulsado en el enlace para regenerar su clave se le remitirá un nuevo correo que contendrá su contraseña.";
 $UsersUnsubscribed = "Los usuarios seleccionados han sido dados de baja en el curso";
 $SystemUnableToSendEmailContact = "El sistema no ha podido enviarle el correo electrónico";
+$OpenIDCouldNotBeFoundPleaseRegister = "Este OpenID no se encuentra en nuestra base de datos. Por favor, regístrese para obtener una cuenta. Si ya tiene una cuenta con nosotros,  edite su perfil en la misma para añadir este OpenID";
+$UsernameMaxXCharacters = "El nombre de usuario puede tener como máximo una longitud de %s caracteres";
 ?>

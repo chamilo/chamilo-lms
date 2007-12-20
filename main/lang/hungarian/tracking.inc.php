@@ -186,6 +186,7 @@ $TimeSpentInTheCourse = "A kurzusban eltöltött id&#337;";
 $AvgStudentsProgress = "Átlagos tanulói el&#337;rehaladás";
 $AvgStudentsScore = "Tanulói pontok átlaga";
 $AvgMessages = "Üzenet/tanuló";
+$AvgAssignments = "Feladatok tanulónként";
 $ToolsMostUsed = "A legtöbbet használt eszközök";
 $StudentsTracking = "Tanulók nyomonkövetése";
 $CourseTracking = "Kurzus követés";
@@ -203,4 +204,6 @@ $CoachList = "Edz&#337;k listája";
 $CoachStudents = "A trénerhez tartozó tanulók";
 $NoLearningPath = "nincsenek tanösvények";
 $SessionCourses = "Kurzusok látogatásai";
+$AvgTimeSpentInTheCourse = "A kurzusban eltöltött id&#337; átlagosan";
+$RemindInactiveUser = "Inaktív felhasználó figyelmeztetése";
 ?>

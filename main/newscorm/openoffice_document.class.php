@@ -71,7 +71,7 @@ abstract class OpenofficeDocument extends learnpath {
 		{
 			$cmd = 'cd '.api_get_path(SYS_PATH).'main/inc/lib/ppt2png && java '.$classpath.' DokeosConverter';
 		}
-		$cmd .=  ' -p 2002';		
+		$cmd .=  ' -p '.api_get_setting('service_ppt2lp','port');		
 		
 		// call to the function implemented by child
 		$cmd .= $this -> add_command_parameters();	

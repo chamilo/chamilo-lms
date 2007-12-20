@@ -161,6 +161,12 @@ if(isset($_POST['activeExtension'])){
 			api_sql_query($sql, __FILE__, __LINE__);
 			
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
+					selected_value="'.addslashes($_POST['port']).'"
+					WHERE variable="service_ppt2lp"
+					AND subkey="port"';
+			api_sql_query($sql, __FILE__, __LINE__);
+			
+			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['ftp_password']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="ftp_password"';
@@ -356,6 +362,8 @@ Display::display_header($nameTool);
 						$form = new FormValidator('ppt2lp');						
 						$form -> addElement('text', 'host', get_lang('Host'));
 						$form -> addElement('html','<br /><br />');
+						$form -> addElement('text', 'port', get_lang('Port'));
+						$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'user', get_lang('UserOnHost'));
 						$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'ftp_password', get_lang('FtpPassword'));
@@ -391,6 +399,8 @@ Display::display_header($nameTool);
 							$form -> addElement('submit', 'activeExtension', get_lang('ReconfigureExtension'));
 						}
 						else {
+							$defaults['host'] = 'localhost';
+							$defaults['port'] = '2002';
 							$defaults['size'] = '720x540';
 							$form -> addElement('submit', 'activeExtension', get_lang('ActivateExtension'));
 						}

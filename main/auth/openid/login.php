@@ -16,7 +16,7 @@ require_once('xrds.lib.php');
 
 function openid_form() 
 {
-	return '<div class="menusection"><span class="menusectioncaption">'.get_lang('OpenIDAuthentication').'</span><form name="openid_login" method="post"><label for="openid_url">'.get_lang('OpenIDURL').'</label><input type="text" id="openid_url" name="openid_url" style="background: url(main/img/openid_small_logo.png) no-repeat; background-color: #fff; background-position: 0 50%; padding-left:18px;" value="http://"></input><input type="submit" name="openid_login" value="'.get_lang('Ok').'" /><br /><br /></form></div>';
+	return '<div class="menusection"><span class="menusectioncaption">'.get_lang('OpenIDAuthentication').'</span><form name="openid_login" method="post"><label for="openid_url">'.get_lang('OpenIDURL').' <a href="main/auth/openid/whatis.php" title="'.get_lang('OpenIDWhatIs').'"><img src="main/img/info3.gif" height="15px;" width="15px;" style="margin-bottom:-3px;"/></a></label><input type="text" id="openid_url" name="openid_url" style="background: url(main/img/openid_small_logo.png) no-repeat; background-color: #fff; background-position: 0 50%; padding-left:18px;" value="http://"></input><input type="submit" name="openid_login" value="'.get_lang('Ok').'" /><br /><br /></form></div>';
 }
 
 /**

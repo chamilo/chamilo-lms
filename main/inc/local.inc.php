@@ -362,11 +362,15 @@ else
 	    	$res = openid_complete($_GET);
 	    	if($res['status'] == 'success')
 	    	{
+	    		$id1 = Database::escape_string($res['openid.identity']);
+	    		//have another id with or without the final '/'
+	    		$id2 = (substr($id1,-1,1)=='/'?substr($id1,0,-1):$id1.'/');
 		        //lookup the user in the main database
 				$user_table = Database::get_main_table(TABLE_MAIN_USER);
 		        $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
 		                FROM $user_table
-		                WHERE openid = '".Database::escape_string($res['openid.identity'])."'";
+		                WHERE openid = '$id1'
+		                OR openid = '$id2' ";
 		        $result = api_sql_query($sql);
 		        if($result !== false)
 		        {

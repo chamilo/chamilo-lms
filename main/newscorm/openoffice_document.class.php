@@ -22,7 +22,7 @@ abstract class OpenofficeDocument extends learnpath {
 	 * @param	integer	User ID
 	 */
     function OpenofficeDocument($course_code=null,$resource_id=null,$user_id=null) {
-    	if($this->debug>0){error_log('In OogieWoogie::OogieWoogie()',0);}
+    	if($this->debug>0){error_log('In OpenofficeDocument::OpenofficeDocument()',0);}
     	if(!empty($course_code) and !empty($resource_id) and !empty($user_id))
     	{
     		parent::learnpath($course_code, $resource_id, $user_id);

@@ -12,6 +12,15 @@
 require_once('openoffice_document.class.php');
 
 class OpenofficePresentation extends OpenofficeDocument {
+	
+	public $take_slide_name;
+	
+	function OpenofficePresentation($take_slide_name=false, $course_code=null, $resource_id=null,$user_id=null) {
+		
+		$this -> take_slide_name = $take_slide_name;
+		parent::OpenofficeDocument($course_code, $resource_id, $user_id);
+		
+	}
 
     
     function make_lp($files = array()) {
@@ -47,7 +56,14 @@ class OpenofficePresentation extends OpenofficeDocument {
 				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],0,0);
 				
 				$infos = pathinfo($file);
-				$slide_name = 'slide'.str_repeat('0',2-strlen($i)).$i;
+				if($this->take_slide_name === true)
+				{
+					$slide_name = substr($infos['basename'],0,strrpos($infos['basename'],'.'));
+				}
+				else
+				{
+					$slide_name = 'slide'.str_repeat('0',2-strlen($i)).$i;
+				}
 				$previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
 				if($this->first_item == 0){
 					$this->first_item = $previous;

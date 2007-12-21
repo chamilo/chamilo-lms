@@ -27,6 +27,10 @@ $form_style= '
 .row {
 	width: 200px;
 }
+.convert_button{
+	background: url("../img/scorm.gif") 0px 0px no-repeat;
+	padding: 2px 0px 2px 22px;
+}
 </style>';
 
 $htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
@@ -106,37 +110,23 @@ if(!empty($errorMessage)){
 	//Display::display_error_message($errorMessage);
 	echo '<div style="'.$s_style_error.'"><div style="float:left; margin-right:10px;"><img src="'.api_get_path(WEB_IMG_PATH)."message_error.gif".'" alt="'.$alt_text.'" '.$attribute_list.'  /></div><div style="margin-left: 43px">'.$errorMessage.'</div></div>';
 }
-echo '
-<style>
-.row{
-	width:90%;
-}
-div.row div.label {
-	width: 0%;
-}
 
-div.row div.formw {
-	width: 100%;
-}
-.convert_button{
-	background: url("../img/scorm.gif") 0px 0px no-repeat;
-	padding: 2px 0px 2px 22px;
-}
 
-</style>';
 $form = new FormValidator('update_course', 'POST', '', '', 'style="margin: 0;"');
 
 // build the form
 
 $form -> addElement ('html','<br>');
 
-$group = array();
-$group[] = FormValidator::createElement ('image','ppt_img','../img/powerpoint_big.gif','align="absbottom"');
-$group[] = FormValidator::createElement ('file', 'user_file',null);
-$group[] = FormValidator::createElement ('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
-$form -> addGroup($group);
+$renderer = & $form->defaultRenderer();
+$user_file_template = str_replace('<div class="formw">', '<div class="formw" style="padding-top:7px;">', $renderer->_elementTemplate);
+$renderer->setElementTemplate($user_file_template, 'user_file');
 
-$form -> addElement('html','<br /><div style="margin:7px;">'.get_lang('UploadMaxSize').' : '.ini_get('post_max_size').'</div>');
+$form -> addElement ('file', 'user_file','<img src="../img/powerpoint_big.gif" align="absbottom" />');
+$form -> addElement ('checkbox', 'take_slide_name','', get_lang('TakeSlideName'));
+$form -> addElement ('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
+
+$form -> addElement('html','<div class="row"><div class="label"></div><div class="formw">'.get_lang('UploadMaxSize').' : '.ini_get('post_max_size').'</div></div>');
 
 $form -> addElement ('hidden', 'ppt2lp', 'true');
 

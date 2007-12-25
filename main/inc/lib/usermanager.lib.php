@@ -425,90 +425,89 @@ class UserManager
 -----------------------------------------------------------
 */
 
-/**
- * Returns an XHTML formatted list of productions for a user, or FALSE if he
- * doesn't have any.
- *
- * If there has been a request to remove a production, the function will return
- * without building the list unless forced to do so by the optional second
- * parameter. This increases performance by avoiding to read through the
- * productions on the filesystem before the removal request has been carried
- * out because they'll have to be re-read afterwards anyway.
- *
- * @param	$user_id	User id
- * @param	$force	Optional parameter to force building after a removal request
- * @return	A string containing the XHTML code to dipslay the production list, or FALSE
- */
-function build_production_list($user_id, $force = false, $showdelete=false)
-{
-	if (!$force && $_POST['remove_production'])
-		return true; // postpone reading from the filesystem
-
-	$productions = UserManager::get_user_productions($user_id);
-
-	if (empty($productions))
-		return false;
-
-	$production_path = UserManager::get_user_picture_path_by_id($user_id,'web',true);
-	$production_dir = $production_path['dir'];
-	$del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
-	$del_text = get_lang('Delete');
-
-	$production_list = '<ul id="productions">';
-
-	foreach ($productions as $file)
+	/**
+	 * Returns an XHTML formatted list of productions for a user, or FALSE if he
+	 * doesn't have any.
+	 *
+	 * If there has been a request to remove a production, the function will return
+	 * without building the list unless forced to do so by the optional second
+	 * parameter. This increases performance by avoiding to read through the
+	 * productions on the filesystem before the removal request has been carried
+	 * out because they'll have to be re-read afterwards anyway.
+	 *
+	 * @param	$user_id	User id
+	 * @param	$force	Optional parameter to force building after a removal request
+	 * @return	A string containing the XHTML code to dipslay the production list, or FALSE
+	 */
+	function build_production_list($user_id, $force = false, $showdelete=false)
 	{
-		$production_list .= '<li><a href="'.$production_dir.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
-		if ($showdelete)
-		{
-			$production_list .= '<input type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="return confirmation(\''.htmlentities($file).'\');" /></li>';
-		}
-	}
-
-	$production_list .= '</ul>';
-
-	return $production_list;
-}
-
-/**
- * Returns an array with the user's productions.
- *
- * @param	$user_id	User id
- * @return	An array containing the user's productions
- */
-function get_user_productions($user_id)
-{
-	$production_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
-	$production_repository = $production_path['dir'].$user_id.'/';
-	$productions = array();
-
-	if (is_dir($production_repository))
-	{
-		$handle = opendir($production_repository);
-
-		while ($file = readdir($handle))
-		{
-			if ($file == '.' || $file == '..' || $file == '.htaccess')
-				continue; // skip current/parent directory and .htaccess
-
-			$productions[] = $file;
-		}
-	}
-
-	return $productions; // can be an empty array
-}
+		if (!$force && $_POST['remove_production'])
+			return true; // postpone reading from the filesystem
 	
-}
-
-/**
- * Remove a user production.
- *
- * @param	$user_id		User id
- * @param	$production	The production to remove
- */
-function remove_user_production($user_id, $production)
-{
-	$production_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
-	unlink($production_path['dir'].$user_id.'/'.$production);
+		$productions = UserManager::get_user_productions($user_id);
+	
+		if (empty($productions))
+			return false;
+	
+		$production_path = UserManager::get_user_picture_path_by_id($user_id,'web',true);
+		$production_dir = $production_path['dir'].$user_id.'/';
+		$del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
+		$del_text = get_lang('Delete');
+	
+		$production_list = '<ul id="productions">';
+	
+		foreach ($productions as $file)
+		{
+			$production_list .= '<li><a href="'.$production_dir.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
+			if ($showdelete)
+			{
+				$production_list .= '<input type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="return confirmation(\''.htmlentities($file).'\');" /></li>';
+			}
+		}
+	
+		$production_list .= '</ul>';
+	
+		return $production_list;
+	}
+	
+	/**
+	 * Returns an array with the user's productions.
+	 *
+	 * @param	$user_id	User id
+	 * @return	An array containing the user's productions
+	 */
+	function get_user_productions($user_id)
+	{
+		$production_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
+		$production_repository = $production_path['dir'].$user_id.'/';
+		$productions = array();
+	
+		if (is_dir($production_repository))
+		{
+			$handle = opendir($production_repository);
+	
+			while ($file = readdir($handle))
+			{
+				if ($file == '.' || $file == '..' || $file == '.htaccess')
+					continue; // skip current/parent directory and .htaccess
+	
+				$productions[] = $file;
+			}
+		}
+	
+		return $productions; // can be an empty array
+	}
+	
+	/**
+	 * Remove a user production.
+	 *
+	 * @param	$user_id		User id
+	 * @param	$production	The production to remove
+	 */
+	function remove_user_production($user_id, $production)
+	{
+		$production_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
+		unlink($production_path['dir'].$user_id.'/'.$production);
+	}
 }
 ?>

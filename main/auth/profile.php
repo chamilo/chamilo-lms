@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 13987 2007-12-13 09:25:18Z elixir_julian $
+// $Id: profile.php 14069 2007-12-25 22:34:35Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -64,7 +64,12 @@ if (!empty ($_GET['coursePath']))
 	$course_url = api_get_path(WEB_COURSE_PATH).htmlentities(strip_tags($_GET['coursePath'])).'/index.php';
 	$interbreadcrumb[] = array ('url' => $course_url, 'name' => $_GET['courseCode']);
 }
-
+$warning_msg = '';
+if(!empty($_GET['fe']))
+{
+	$warning_msg .= get_lang('UplUnableToSaveFileFilteredExtension');
+	$_GET['fe'] = null;
+}
 /*
 -----------------------------------------------------------
 	Configuration file
@@ -112,7 +117,7 @@ $fck_attribute['ToolbarSet'] = "Profil";
 /*
  * Initialize the form.
  */
-$form = new FormValidator('profile', 'post', api_get_self()."?{$_SERVER['QUERY_STRING']}", null, array('style' => 'width: 75%; float: '.($text_dir=='rtl'?'right;':'left;')));
+$form = new FormValidator('profile', 'post', api_get_self()."?".str_replace('&fe=1','',$_SERVER['QUERY_STRING']), null, array('style' => 'width: 75%; float: '.($text_dir=='rtl'?'right;':'left;')));
 
 /* Make sure this is the first submit on the form, even though it is hidden!
  * Otherwise, if a user has productions and presses ENTER to submit, he will
@@ -430,9 +435,11 @@ function upload_user_production($user_id)
 	$filename = replace_dangerous_char($_FILES['production']['name']);
 	$filename = php2phps($filename);
 
-	if (move_uploaded_file($_FILES['production']['tmp_name'], $production_repository.$filename))
-		return $filename;
-
+	if(filter_extension($filename))
+	{
+		if (move_uploaded_file($_FILES['production']['tmp_name'], $production_repository.$filename))
+			return $filename;
+	}
 	return false; // this should be returned if anything went wrong with the upload
 }
 
@@ -441,6 +448,7 @@ function upload_user_production($user_id)
 		MAIN CODE
 ==============================================================================
 */
+$filtered_extension = false;
 if ($_SESSION['profile_update'])
 {
 	$update_success = ($_SESSION['profile_update'] == 'success');
@@ -486,7 +494,14 @@ elseif ($form->validate())
 
 	// upload production if a new one is provided
 	if ($_FILES['production']['size'])
-		upload_user_production($_user['user_id']);
+	{
+		$res = upload_user_production($_user['user_id']);
+		if(!$res)
+		{
+			//it's a bit excessive to assume the extension is the reason why upload_user_production() returned false, but it's true in most cases
+			$filtered_extension = true;
+		}
+	}
 
 	
 	// remove values that shouldn't go in the database
@@ -525,7 +540,7 @@ elseif ($form->validate())
 	$uidReset = true;
 	include (api_get_path(INCLUDE_PATH).'local.inc.php');
 	$_SESSION['profile_update'] = 'success';
-	header("Location: ".api_get_self()."?{$_SERVER['QUERY_STRING']}");
+	header("Location: ".api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strstr($_SERVER['QUERY_STRING'],'&fe=1')===false?'&fe=1':''));
 	exit;
 }
 
@@ -538,11 +553,15 @@ Display :: display_header(get_lang('ModifyProfile'));
 
 if ($file_deleted)
 {
-	Display :: display_normal_message(get_lang('FileDeleted'));
+	Display :: display_normal_message(get_lang('FileDeleted'),false);
 }
 elseif ($update_success)
 {
-	Display :: display_normal_message(get_lang('ProfileReg'));
+	Display :: display_normal_message(get_lang('ProfileReg'),false);
+}
+if(!empty($warning_msg))
+{
+	Display :: display_warning_message($warning_msg,false);
 }
 //	USER PICTURE
 $image_path = UserManager::get_user_picture_path_by_id($_user['user_id'],'web');

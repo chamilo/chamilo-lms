@@ -70,25 +70,27 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
     function format_page_content($header, $content, $path_to_folder)
     {
     	
-		// Tidy
-		$tidy = new tidy;
-		$config = array(
-		       'indent'         => true,
-		       'output-xhtml'   => true,
-		       'wrap'           => 200,
-		       'clean'           => true,
-		       'bare'			=> true);
-		$tidy->parseString($header.$content, $config, 'utf8');		
-		$tidy->cleanRepair();
-		$content = $tidy;
 		
 		// limit the width of the doc
-		$max_width = '720px';
-		$content = preg_replace("|<body[^>]*>|","\\0\r\n<div style=\"width:".$max_width."\">",$content);
-		$content = str_replace('</body>','</div></body>',$content);
+		list($max_width, $max_height) = explode('x',api_get_setting('service_ppt2lp','size'));
+		
+		$content = preg_replace("|<body[^>]*>|i","\\0\r\n<div style=\"width:".$max_width."\">",$content, -1,$count);
+		if($count < 1)
+		{
+			$content = '<body><div style="width:'.$max_width.'">'.$content;
+		}
+		
+		$content = preg_replace('|</body>|i','</div>\\0',$content, -1, $count);
+		if($count < 1)
+		{
+			$content = $content.'</div></body>';
+		}
+		
+		// add the headers
+		$content = $header.$content;
 		
 		// line break before and after picture
-		$content = str_replace('p {','p {clear:both;',strtolower($content));
+		$content = str_replace('p {','p {clear:both;',$content);
 		
 		// dokeos styles
 		$my_style = api_get_setting('stylesheets');
@@ -100,33 +102,35 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 		
 		$content = str_replace('absolute','relative',$content);
 		
-		/*
-		// resize all the picture to the max_width-10
-		preg_match_all("|<img src=\"([^\"]*)\"|",strtolower($content),$images);
 		
-		foreach ($images[1] as $image)
+		// resize all the picture to the max_width-10
+		preg_match_all("|<img[^src]*src=\"([^\"]*)\"[^>]*>|i",$content,$images);
+		
+		foreach ($images[1] as $key => $image)
 		{
-			list($img_width, $img_height, $type) = getimagesize($path_to_folder.'/'.$image);
-			
-			$new_width = $max_width-10;
-			if($img_width > $new_width)
+			// check if the <img tag soon has a width attribute
+			$defined_width = preg_match("|width=([^\s]*)|i",$images[0][$key], $img_width);
+			$img_width = $img_width[1];
+			if(!$defined_width)
 			{
-				$new_height = round($new_width/$img_width*$img_height);
+			
+				list($img_width, $img_height, $type) = getimagesize($path_to_folder.'/'.$image);
 				
-				include_once (api_get_path(LIBRARY_PATH).'image.lib.php');
-				$src = imagecreatefromgif($path_to_folder.'/'.$image);  
-				$dstImg = imagecreatetruecolor($new_width, $new_height);  
-				 
-				$white = imagecolorallocate($dstImg, 255, 255, 255);  
-				 
-				imagefill($dstImg, 0, 0, $white);  
-				imageColorTransparent($dstImg, $white);  
-				imagecopyresampled($dstImg, $src, 0, 0, 0, 0, $new_width, $new_height, $img_width, $img_height);  
-				 
-				imagegif($dstImg,$path_to_folder.'/2'.$image);
+				$new_width = $max_width-10;
+				if($img_width > $new_width)
+				{
+					$picture_resized = str_ireplace('<img','<img width="'.$new_width.'" ',$images[0][$key]);
+					$content = str_replace($images[0][$key],$picture_resized,$content);
+				}
+				
+			}
+			else if($img_width > $max_width-10)
+			{
+				$picture_resized = str_ireplace('width='.$img_width,'width="'.($max_width-10).'"',$images[0][$key]);
+				$content = str_replace($images[0][$key],$picture_resized,$content);
 			}
 		}
-		*/
+		
 		
     	return $content;
     	

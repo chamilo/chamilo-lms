@@ -117,9 +117,9 @@ $current_post=get_post_information($_GET['post']);
 */
 $interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
 $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => prepare4display($current_forum_category['cat_title']));
-$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$_GET['forum'],"name" => prepare4display($current_forum['forum_title']));
-$interbreadcrumb[]=array("url" => "viewthread.php?forum=".$_GET['forum']."&amp;thread=".$_GET['thread'],"name" => prepare4display($current_thread['thread_title']));
-$interbreadcrumb[]=array("url" => "reply.php?forum=".$_GET['forum']."&amp;thread=".$_GET['thread'],"name" => get_lang('EditPost'));
+$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum']),"name" => prepare4display($current_forum['forum_title']));
+$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".$_GET['thread'],"name" => prepare4display($current_thread['thread_title']));
+$interbreadcrumb[]=array("url" => "reply.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => get_lang('EditPost'));
 
 /*
 -----------------------------------------------------------

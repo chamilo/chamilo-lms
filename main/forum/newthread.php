@@ -103,7 +103,7 @@ include('forumfunction.inc.php');
 $origin = '';
 if(isset($_GET['origin']))
 {
-	$origin =  $_GET['origin'];
+	$origin =  Security::remove_XSS($_GET['origin']);
 }
 
 
@@ -127,8 +127,8 @@ $current_forum_category=get_forumcategory_information($current_forum['forum_cate
 */
 $interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
 $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => $current_forum_category['cat_title']);
-$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$_GET['forum'],"name" => $current_forum['forum_title']);
-$interbreadcrumb[]=array("url" => "newthread.php?forum=".$_GET['forum'],"name" => get_lang('NewTopic'));
+$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
+$interbreadcrumb[]=array("url" => "newthread.php?forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));
 
 /*
 -----------------------------------------------------------

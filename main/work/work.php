@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 13804 2007-11-28 06:08:00Z yannoo $
+*  	@version $Id: work.php 14070 2007-12-26 00:27:59Z yannoo $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -147,19 +147,19 @@ $currentCourseRepositoryWeb =  api_get_path(WEB_COURSE_PATH) . $_course["path"].
 $currentUserFirstName       = $_user['firstName'];
 $currentUserLastName        = $_user['lastName'];
 
-$authors = $_POST['authors'];
-$delete = $_REQUEST['delete'];
-$description = $_REQUEST['description'];
+$authors = Database::escape_string($_POST['authors']);
+$delete = Database::escape_string($_REQUEST['delete']);
+$description = Database::escape_string($_REQUEST['description']);
 $display_tool_options = $_REQUEST['display_tool_options'];
 $display_upload_form = $_REQUEST['display_upload_form'];
-$edit = $_REQUEST['edit'];
-$make_invisible = $_REQUEST['make_invisible'];
-$make_visible = $_REQUEST['make_visible'];
-$origin = $_REQUEST['origin'];
-$submitGroupWorkUrl = $_REQUEST['submitGroupWorkUrl'];
-$title = $_REQUEST['title'];
-$uploadvisibledisabled = $_REQUEST['uploadvisibledisabled'];
-$id = (int) $_REQUEST['id'];
+$edit = Database::escape_string($_REQUEST['edit']);
+$make_invisible = Database::escape_string($_REQUEST['make_invisible']);
+$make_visible = Database::escape_string($_REQUEST['make_visible']);
+$origin = Security::remove_XSS($_REQUEST['origin']);
+$submitGroupWorkUrl = Security::remove_XSS($_REQUEST['submitGroupWorkUrl']);
+$title = Database::escape_string($_REQUEST['title']);
+$uploadvisibledisabled = Database::escape_string($_REQUEST['uploadvisibledisabled']);
+$id = strval(intval($_REQUEST['id']));
 
 //directories management
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
@@ -381,7 +381,7 @@ if (api_is_allowed_to_edit())
 
 	if ($edit)
 	{
-		$sql    = "SELECT * FROM  ".$work_table."  WHERE id='".mysql_real_escape_string($edit)."'";
+		$sql    = "SELECT * FROM  ".$work_table."  WHERE id='".$edit."'";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 
 		if ($result)
@@ -587,7 +587,7 @@ else
 	if ($edit)
 	{
 		//Get the author ID for that document from the item_property table
-		$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=".mysql_real_escape_string($edit);
+		$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=".$edit;
 		$author_qry = api_sql_query($author_sql,__FILE__,__LINE__);
 		if(Database::num_rows($author_qry)==1)
 		{
@@ -872,7 +872,7 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 			if($edit){
 				//Get the author ID for that document from the item_property table
 				$is_author = false;
-				$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=".mysql_real_escape_string($edit);
+				$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=".$edit;
 				$author_qry = api_sql_query($author_sql,__FILE__,__LINE__);
 				if(Database::num_rows($author_qry)==1)
 				{
@@ -883,7 +883,7 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 			require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 			require_once (api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
 			
-			$form = new FormValidator('form','POST',api_get_self()."?curdirpath=$cur_dir_path&origin=$origin",'','enctype="multipart/form-data"');
+			$form = new FormValidator('form','POST',api_get_self()."?curdirpath=".Security::remove_XSS($cur_dir_path)."&origin=$origin",'','enctype="multipart/form-data"');
 			
 			if(!empty($error_message)) Display::display_error_message($error_message);
 
@@ -955,7 +955,7 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 		{
 			//create the form that asks for the directory name
 			$new_folder_text = '<form action="'.api_get_self().'" method="POST">';
-			$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$cur_dir_path.'"/>';
+			$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.Security::remove_XSS($cur_dir_path).'"/>';
 			$new_folder_text .= get_lang('NewDir') .' ';
 			$new_folder_text .= '<input type="text" name="new_dir"/>';
 			$new_folder_text .= '<input type="submit" name="create_dir" value="'.get_lang('Ok').'"/>';

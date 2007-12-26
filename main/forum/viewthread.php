@@ -91,7 +91,7 @@ include('forumfunction.inc.php');
 $origin = '';
 if(isset($_GET['origin']))
 {
-	$origin =  $_GET['origin'];
+	$origin =  Security::remove_XSS($_GET['origin']);
 }
 
 
@@ -127,10 +127,10 @@ if($origin=='learnpath')
 
 	$interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
 	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => prepare4display($current_forum_category['cat_title']));
-	$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$_GET['forum'],"name" => prepare4display($current_forum['forum_title']));
+	$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum']),"name" => prepare4display($current_forum['forum_title']));
 	if ($message<>'PostDeletedSpecial')
 	{
-		$interbreadcrumb[]=array("url" => "viewthread.php?forum=".$_GET['forum']."&amp;thread=".$_GET['thread'],"name" => prepare4display($current_thread['thread_title']));
+		$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
 	}
 	// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
 	Display :: display_header('');
@@ -194,9 +194,11 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 	-----------------------------------------------------------
 	*/
 	echo '<div style="float:right;">';
-	echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;view=flat&origin='.$origin.'">'.get_lang('FlatView').'</a> | ';
-	echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;view=threaded&origin='.$origin.'">'.get_lang('ThreadedView').'</a> | ';
-	echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;view=nested&origin='.$origin.'">'.get_lang('NestedView').'</a>';
+	$my_url = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']);
+	echo $my_url.'&amp;view=flat&origin='.$origin.'">'.get_lang('FlatView').'</a> | ';
+	echo $my_url.'&amp;view=threaded&origin='.$origin.'">'.get_lang('ThreadedView').'</a> | ';
+	echo $my_url.'&amp;view=nested&origin='.$origin.'">'.get_lang('NestedView').'</a>';
+	$my_url = null;
 	echo '</div>';
 	// the reply to thread link should only appear when the forum_category is not locked AND the forum is not locked AND the thread is not locked.
 	// if one of the three levels is locked then the link should not be displayed
@@ -205,7 +207,7 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 		// The link should only appear when the user is logged in or when anonymous posts are allowed.
 		if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id']))
 		{
-			echo '<a href="reply.php?'.api_get_cidreq().'&forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;action=replythread&origin='.$origin.'">'.get_lang('ReplyToThread').'</a>';
+			echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread&origin='.$origin.'">'.get_lang('ReplyToThread').'</a>';
 		}
 	}
 	// note: this is to prevent that some browsers display the links over the table (FF does it but Opera doesn't)

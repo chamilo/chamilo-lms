@@ -95,14 +95,14 @@ function handle_forum_and_forumcategories()
 	{
 		if ($_GET['action']=='edit' and isset($_GET['id']) OR $_POST['SubmitForum'] )
 		{
-			$inputvalues=get_forums($_GET['id']); // note: this has to be cleaned first
+			$inputvalues=get_forums(strval(intval($_GET['id']))); // note: this has to be cleaned first
 		}
 		show_add_forum_form($inputvalues);
 	}
 	// Edit a forum category
 	if (($_GET['action']=='edit' AND $_GET['content']=='forumcategory' AND isset($_GET['id'])) OR $_POST['SubmitEditForumCategory'] )
 	{
-		$forum_category=get_forum_categories($_GET['id']); // note: this has to be cleaned first
+		$forum_category=get_forum_categories(strval(intval($_GET['id']))); // note: this has to be cleaned first
 		show_edit_forumcategory_form($forum_category);
 	}
 	// Delete a forum category
@@ -552,7 +552,7 @@ function delete_post($post_id)
 	$sql="DELETE FROM $table_posts WHERE post_id='".mysql_real_escape_string($post_id)."'"; // note: this has to be a recursive function that deletes all of the posts in this block.
 	api_sql_query($sql,__FILE__,__LINE__);
 
-	$last_post_of_thread=check_if_last_post_of_thread($_GET['thread']); // note: clean the $_GET['thread']
+	$last_post_of_thread=check_if_last_post_of_thread(strval(intval($_GET['thread'])));
 
 	if (is_array($last_post_of_thread))
 	{
@@ -561,14 +561,14 @@ function delete_post($post_id)
 					thread_poster_id='".mysql_real_escape_string($last_post_of_thread['poster_id'])."',
 					thread_last_post='".mysql_real_escape_string($last_post_of_thread['post_id'])."',
 					thread_date='".mysql_real_escape_string($last_post_of_thread['post_date'])."'
-			WHERE thread_id='".mysql_real_escape_string($_GET['thread'])."'";  // note: clean the $_GET['thread']
+			WHERE thread_id='".mysql_real_escape_string($_GET['thread'])."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 		return 'PostDeleted';
 	}
 	if ($last_post_of_thread==false)
 	{
 		// we deleted the very single post of the thread so we need to delete the entry in the thread table also.
-		$sql="DELETE FROM $table_threads WHERE thread_id='".mysql_real_escape_string($_GET['thread'])."'";  // note: clean the $_GET['thread']
+		$sql="DELETE FROM $table_threads WHERE thread_id='".mysql_real_escape_string($_GET['thread'])."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 		return 'PostDeletedSpecial';
 	}
@@ -617,6 +617,7 @@ function check_if_last_post_of_thread($thread_id)
 */
 function display_visible_invisible_icon($content, $id, $current_visibility_status, $additional_url_parameters='')
 {
+	$id = Security::remove_XSS($id);
 	if ($current_visibility_status=='1')
 	{
 		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
@@ -656,6 +657,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
 */
 function display_lock_unlock_icon($content, $id, $current_lock_status, $additional_url_parameters='')
 {
+	$id = Security::remove_XSS($id);
 	if ($current_lock_status=='1')
 	{
 		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
@@ -697,6 +699,7 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
 */
 function display_up_down_icon($content, $id, $list)
 {
+	$id = strval(intval($id));
 	$total_items=count($list);
 	$position = 0;
 	$internal_counter=0;
@@ -1637,12 +1640,12 @@ function show_add_post_form($action='', $id='', $form_values='')
 	global $origin;
 
 	// initiate the object
-	$form = new FormValidator('thread', 'post', api_get_self().'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&post='.$_GET['post'].'&action='.$_GET['action'].'&origin='.$origin);
+	$form = new FormValidator('thread', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post']).'&action='.Security::remove_XSS($_GET['action']).'&origin='.$origin);
 	$form->setConstants(array('forum' => '5'));
 
 	// settting the form elements
-	$form->addElement('hidden', 'forum_id', $_GET['forum']);
-	$form->addElement('hidden', 'thread_id', $_GET['thread']);
+	$form->addElement('hidden', 'forum_id', strval(intval($_GET['forum'])));
+	$form->addElement('hidden', 'thread_id', strval(intval($_GET['thread'])));
 
 	// if anonymous posts are allowed we also display a form to allow the user to put his name or username in
 	if ($current_forum['allow_anonymous']==1 AND !isset($_user['user_id']))
@@ -1673,10 +1676,10 @@ function show_add_post_form($action='', $id='', $form_values='')
 
 	if (!empty($form_values))
 	{
-		$defaults['post_title']=prepare4display($form_values['post_title']);
-		$defaults['post_text']=prepare4display($form_values['post_text']);
-		$defaults['post_notification']=$form_values['post_notification'];
-		$defaults['thread_sticky']=$form_values['thread_sticky'];
+		$defaults['post_title']=prepare4display(Security::remove_XSS($form_values['post_title']));
+		$defaults['post_text']=prepare4display(Security::remove_XSS($form_values['post_text']));
+		$defaults['post_notification']=Security::remove_XSS($form_values['post_notification']);
+		$defaults['thread_sticky']=Security::remove_XSS($form_values['thread_sticky']);
 	}
 
 	// if we are quoting a message we have to retrieve the information of the post we are quoting so that
@@ -1684,7 +1687,7 @@ function show_add_post_form($action='', $id='', $form_values='')
 	if (($action=='quote' OR $action=='replymessage') and isset($_GET['post']))
 	{
 		// we also need to put the parent_id of the post in a hidden form when we are quoting or replying to a message (<> reply to a thread !!!)
-		$form->addElement('hidden', 'post_parent_id', $_GET['post']); // note this has to be cleaned first
+		$form->addElement('hidden', 'post_parent_id', strval(intval($_GET['post']))); // note this has to be cleaned first
 
 		// if we are replying or are quoting then we display a default title.
  		$values=get_post_information($_GET['post']); // note: this has to be cleaned first
@@ -1716,7 +1719,7 @@ function show_add_post_form($action='', $id='', $form_values='')
 		$form->display();
 		if ($forum_setting['show_thread_iframe_on_reply'] and $action<>'newthread')
 		{
-			echo "<iframe src=\"iframe_thread.php?forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."#".$_GET['post']."\" width=\"80%\"></iframe>";
+			echo "<iframe src=\"iframe_thread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."#".Security::remove_XSS($_GET['post'])."\" width=\"80%\"></iframe>";
 		}
 	}
 }
@@ -1809,7 +1812,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	global $_user;
 
 	// initiate the object
-	$form = new FormValidator('edit_post', 'post', api_get_self().'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&post='.$_GET['post']);
+	$form = new FormValidator('edit_post', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post']));
 
 	// settting the form elements
 	$form->addElement('hidden', 'post_id', $current_post['post_id']);
@@ -1855,10 +1858,10 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 
 	if (!empty($form_values))
 	{
-		$defaults['post_title']=$form_values['post_title'];
-		$defaults['post_text']=$form_values['post_text'];
-		$defaults['post_notification']=$form_values['post_notification'];
-		$defaults['thread_sticky']=$form_values['thread_sticky'];
+		$defaults['post_title']=Security::remove_XSS($form_values['post_title']);
+		$defaults['post_text']=Security::remove_XSS($form_values['post_text']);
+		$defaults['post_notification']=Security::remove_XSS($form_values['post_notification']);
+		$defaults['thread_sticky']=Security::remove_XSS($form_values['thread_sticky']);
 	}
 
 	$form->setDefaults($defaults);
@@ -1913,8 +1916,8 @@ function store_edit_post($values)
 	//update_added_resources('forum_post',$values['post_id']);
 
 	$message=get_lang('EditPostStored').'<br />';
-	$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$_GET['forum'].'">'.get_lang('Forum').'</a><br />';
-	$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$_GET['forum'].'&amp;thread='.$values['thread_id'].'&amp;post='.$_GET['post'].'">'.get_lang('Message').'</a>';
+	$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'">'.get_lang('Forum').'</a><br />';
+	$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.$values['thread_id'].'&amp;post='.Security::remove_XSS($_GET['post']).'">'.get_lang('Message').'</a>';
 
 	session_unregister('formelements');
 	session_unregister('origin');
@@ -2383,11 +2386,11 @@ function move_thread_form()
 	global $origin;
 
 	// initiate the object
-	$form = new FormValidator('movepost', 'post', api_get_self().'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&action='.$_GET['action'].'&origin='.$origin);
+	$form = new FormValidator('movepost', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&action='.Security::remove_XSS($_GET['action']).'&origin='.$origin);
 	// the header for the form
 	$form->addElement('header', '', get_lang('MoveThread'));
 	// invisible form: the thread_id
-	$form->addElement('hidden', 'thread_id', $_GET['thread']); // note: this has to be cleaned first
+	$form->addElement('hidden', 'thread_id', strval(intval($_GET['thread']))); // note: this has to be cleaned first
 
 	// the fora
 	$forum_categories=get_forum_categories();
@@ -2440,15 +2443,15 @@ function move_thread_form()
 function move_post_form()
 {
 	// initiate the object
-	$form = new FormValidator('movepost', 'post', api_get_self().'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&post='.$_GET['post'].'&action='.$_GET['action'].'&post='.$_GET['post']);
+	$form = new FormValidator('movepost', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post']).'&action='.Security::remove_XSS($_GET['action']).'&post='.Security::remove_XSS($_GET['post']));
 	// the header for the form
 	$form->addElement('header', '', get_lang('MovePost'));
 
 	// invisible form: the post_id
-	$form->addElement('hidden', 'post_id', $_GET['post']); // note: this has to be cleaned first
+	$form->addElement('hidden', 'post_id', strval(intval($_GET['post']))); // note: this has to be cleaned first
 
 	// dropdown list: Threads of this forum
-	$threads=get_threads($_GET['forum']); // note: this has to be cleaned
+	$threads=get_threads(strval(intval($_GET['forum']))); // note: this has to be cleaned
 	//my_print_r($threads);
 	$threads_list[0]=get_lang('ANewThread');
 	foreach ($threads as $key=>$value)
@@ -2580,9 +2583,9 @@ function store_move_thread($values)
 
 
 /**
-*
-* @param
-* @return
+* Prepares a string or an array of strings for display by stripping slashes
+* @param mixed	String or array of strings
+* @return mixed String or array of strings
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8

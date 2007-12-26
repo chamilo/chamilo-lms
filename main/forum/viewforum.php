@@ -83,7 +83,7 @@ $nameTools=get_lang('Forum');
 $origin = '';
 if(isset($_GET['origin']))
 {
-	$origin =  $_GET['origin'];
+	$origin =  Security::remove_XSS($_GET['origin']);
 	$origin_string = '&origin='.$origin;
 }
 
@@ -123,7 +123,7 @@ $current_forum_category=get_forumcategory_information($current_forum['forum_cate
 */
 $interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
 $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => prepare4display($current_forum_category['cat_title']));
-$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$_GET['forum'],"name" => prepare4display($current_forum['forum_title']));
+$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum']),"name" => prepare4display($current_forum['forum_title']));
 if($origin=='learnpath')
 {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
@@ -197,7 +197,7 @@ if (api_is_allowed_to_edit() OR ($current_forum['allow_new_threads']==1 AND isse
 {
 	if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1)
 	{
-	echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.$_GET['forum'].$origin_string.'">'.Display::return_icon('forumthread_new.gif').' '.get_lang('NewTopic').'</a>';
+	echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.Display::return_icon('forumthread_new.gif').' '.get_lang('NewTopic').'</a>';
 	}
 	else
 	{
@@ -280,7 +280,7 @@ if(is_array($threads))
 				echo icon('../img/exclamation.gif');
 			}
 			echo "</td>\n";
-			echo "\t\t<td><a href=\"viewthread.php?".api_get_cidreq()."&forum=".$_GET['forum']."&amp;thread=".$row['thread_id'].$origin_string."\" ".class_visible_invisible($row['visibility']).">".prepare4display($row['thread_title'])."</a></td>\n";
+			echo "\t\t<td><a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".$row['thread_id'].$origin_string."\" ".class_visible_invisible($row['visibility']).">".prepare4display($row['thread_title'])."</a></td>\n";
 			echo "\t\t<td>".$row['thread_replies']."</td>\n";
 			if ($row['user_id']=='0')
 			{
@@ -332,10 +332,10 @@ if(is_array($threads))
 			if (api_is_allowed_to_edit())
 			{
 				echo "\t\t<td>";
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".$_GET['forum']."&amp;action=delete&amp;content=thread&amp;id=".$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteCompleteThread"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;action=delete&amp;content=thread&amp;id=".$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteCompleteThread"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 				display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array("forum"=>$_GET['forum'],'origin'=>$origin));
 				display_lock_unlock_icon('thread',$row['thread_id'], $row['locked'], array("forum"=>$_GET['forum'],'origin'=>$origin));
-				echo "<a href=\"viewforum.php?".api_get_cidreq()."&forum=".$_GET['forum']."&amp;action=move&amp;thread=".$row['thread_id'].$origin_string."\">".icon('../img/deplacer_fichier.gif',get_lang('MoveThread'))."</a>";
+				echo "<a href=\"viewforum.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;action=move&amp;thread=".$row['thread_id'].$origin_string."\">".icon('../img/deplacer_fichier.gif',get_lang('MoveThread'))."</a>";
 				echo "</td>\n";
 			}
 			echo "\t</tr>\n";

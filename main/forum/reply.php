@@ -94,7 +94,7 @@ $nameTools=get_lang('Forum');
 $origin = '';
 if(isset($_GET['origin']))
 {
-	$origin =  $_GET['origin'];
+	$origin =  Security::remove_XSS($_GET['origin']);
 	$origin_string = '&origin='.$origin;
 }
 
@@ -130,9 +130,9 @@ $current_forum_category=get_forumcategory_information($current_forum['forum_cate
 */
 $interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
 $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => $current_forum_category['cat_title']);
-$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$_GET['forum'],"name" => $current_forum['forum_title']);
-$interbreadcrumb[]=array("url" => "viewthread.php?forum=".$_GET['forum']."&amp;thread=".$_GET['thread'],"name" => $current_thread['thread_title']);
-$interbreadcrumb[]=array("url" => "reply.php?forum=".$_GET['forum']."&amp;thread=".$_GET['thread'],"name" => get_lang('Reply'));
+$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
+$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => $current_thread['thread_title']);
+$interbreadcrumb[]=array("url" => "reply.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => get_lang('Reply'));
 
 /*
 -----------------------------------------------------------

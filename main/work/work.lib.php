@@ -41,11 +41,11 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	}
 	if (! $always_show_upload_form )
 	{
-		$display_output .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".$_GET['origin']."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") . "</a> ";
+		$display_output .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") . "</a> ";
 	}
 	if (! $always_show_tool_options && api_is_allowed_to_edit() )
 	{
-		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_tool_options=true&amp;origin=".$_GET['origin']."\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a> ";
+		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_tool_options=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a> ";
 	}
 
 	if ($display_output != "")
@@ -68,7 +68,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 */
 function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cur_dir_path,$cur_dir_path_url)
 {
-	global $charset;
+	global $charset, $group_properties;
 	$is_allowed_to_edit = api_is_allowed_to_edit();
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
@@ -137,8 +137,8 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 				get_lang("Up").'</a>&nbsp;'."\n";
 }
 	echo '<!-- create directory -->' .
-			'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1"><img src="../img/folder_new.gif" border="0"alt ="" /></a>'.
-			'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1">'.get_lang("CreateDir").'</a>&nbsp;'."\n";
+			'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1"><img src="../img/folder_new.gif" border="0"alt ="'.get_lang('CreateDir').'" /></a>'.
+			'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1">'.get_lang('CreateDir').'</a>&nbsp;'."\n";
 
 	echo "</td></tr></table>";
 }
@@ -185,19 +185,19 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	$sort_params = array();
 	if( isset($_GET['column']))
 	{
-		$sort_params[] = 'column='.$_GET['column'];
+		$sort_params[] = 'column='.Security::remove_XSS($_GET['column']);
 	}
 	if( isset($_GET['page_nr']))
 	{
-		$sort_params[] = 'page_nr='.$_GET['page_nr'];
+		$sort_params[] = 'page_nr='.Security::remove_XSS($_GET['page_nr']);
 	}
 	if( isset($_GET['per_page']))
 	{
-		$sort_params[] = 'per_page='.$_GET['per_page'];
+		$sort_params[] = 'per_page='.Security::remove_XSS($_GET['per_page']);
 	}
 	if( isset($_GET['direction']))
 	{
-		$sort_params[] = 'direction='.$_GET['direction'];
+		$sort_params[] = 'direction='.Security::remove_XSS($_GET['direction']);
 	}
 	$sort_params = implode('&amp;',$sort_params);
 

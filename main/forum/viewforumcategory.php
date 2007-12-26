@@ -176,7 +176,7 @@ $groups_of_user=GroupManager::get_group_ids($_course['dbName'], $_user['user_id'
 if (api_is_allowed_to_edit())
 {
 	//echo '<a href="'.api_get_self().'?forumcategory='.$_GET['forumcategory'].'&amp;action=add&amp;content=forumcategory">'.get_lang('AddForumCategory').'</a> | ';
-	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='.$_GET['forumcategory'].'&amp;action=add&amp;content=forum">'.Display::return_icon('forum_new.gif').' '.get_lang('AddForum').'</a>';
+	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=add&amp;content=forum">'.Display::return_icon('forum_new.gif').' '.get_lang('AddForum').'</a>';
 }
 
 /*
@@ -192,8 +192,8 @@ echo "</th>\n";
 if (api_is_allowed_to_edit())
 {
 	echo "\t\t<th>";
-	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".$_GET['forumcategory']."&amp;action=edit&amp;content=forumcategory&amp;id=".$forum_category['cat_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
-	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".$_GET['forumcategory']."&amp;action=delete&amp;content=forumcategory&amp;amp;id=".$forum_category['cat_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
+	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forumcategory&amp;id=".$forum_category['cat_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
+	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=delete&amp;content=forumcategory&amp;amp;id=".$forum_category['cat_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 	display_visible_invisible_icon('forumcategory', $forum_category['cat_id'], $forum_category['visibility'], array("forumcategory"=>$_GET['forumcategory']));
 	display_lock_unlock_icon('forumcategory',$forum_category['cat_id'], $forum_category['locked'], array("forumcategory"=>$_GET['forumcategory']));
 	display_up_down_icon('forumcategory',$forum_category['cat_id'], $forum_categories_list);
@@ -332,8 +332,8 @@ foreach ($forum_list as $key=>$forum)
 			if (api_is_allowed_to_edit())
 			{
 				echo "\t\t<td NOWRAP align='center'>";
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".$_GET['forumcategory']."&amp;action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".$_GET['forumcategory']."&amp;action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForum"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForum"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 				display_visible_invisible_icon('forum',$forum['forum_id'], $forum['visibility'], array("forumcategory"=>$_GET['forumcategory']));
 				display_lock_unlock_icon('forum',$forum['forum_id'], $forum['locked'], array("forumcategory"=>$_GET['forumcategory']));
 				display_up_down_icon('forum',$forum['forum_id'], $forums_in_category);

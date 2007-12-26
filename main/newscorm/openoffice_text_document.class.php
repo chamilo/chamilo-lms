@@ -86,6 +86,14 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 			$content = $content.'</div></body>';
 		}
 		
+		// set the charset if necessary
+		$charset = api_get_setting('platform_charset');
+		if(!strcasecmp($charset,'utf-8'))
+		{
+			$content = utf8_decode($content);
+			$header = str_replace('utf-8','iso-8859-15',$header);
+		}
+		
 		// add the headers
 		$content = $header.$content;
 		

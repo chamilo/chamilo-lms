@@ -106,7 +106,7 @@ function replace_dangerous_char($filename, $strict = 'loose')
 
 function php2phps ($fileName)
 {
-	$fileName = eregi_replace("\.(php.?|phtml)$", ".phps", $fileName);
+	$fileName = preg_replace('/\.(php.?|phtml.?)\..*$/', '.phps', $fileName);
 	return $fileName;
 }
 
@@ -1097,7 +1097,7 @@ function filter_extension(&$filename)
 	{
 		$extensions = split(';',strtolower(api_get_setting('upload_extensions_blacklist')));
 		$skip = api_get_setting('upload_extensions_skip');
-		$ext = strrchr($filename, ".");		
+		$ext = strrchr($filename, ".");
 		$ext = substr($ext,1);
 		if(empty($ext)){return 1;}//we're in blacklist mode, so accept empty extensions
 		if(in_array(strtolower($ext),$extensions))

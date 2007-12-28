@@ -106,7 +106,7 @@ function replace_dangerous_char($filename, $strict = 'loose')
 
 function php2phps ($fileName)
 {
-	$fileName = preg_replace('/\.(php.?|phtml.?)\..*$/', '.phps', $fileName);
+	$fileName = preg_replace('/\.(php.?|phtml.?)(\.){0,1}.*$/', '.phps', $fileName);
 	return $fileName;
 }
 

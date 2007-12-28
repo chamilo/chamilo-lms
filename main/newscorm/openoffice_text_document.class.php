@@ -19,17 +19,44 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
     	
 		global $_course;
 		
-		$content = file_get_contents($this->base_work_dir.$this->created_dir.'/'.$this->file_name.'.html');
-		
-		
 		// we get a content where ||page_break|| indicates where the page is broken
-
+		$content = file_get_contents($this->base_work_dir.$this->created_dir.'/'.$this->file_name.'.html');	
+		
+		// set the charset if necessary
+		$charset = api_get_setting('platform_charset');
+		if(strcasecmp($charset,'utf-8')!==0)
+		{
+			$content = utf8_decode($content);
+			$content = str_replace('utf-8',$charset,$content);
+		}	
+		
+		// set the path to pictures to absolute (so that it can be modified in fckeditor)
+		$content = preg_replace("|src=\"([^\"]*)|i", "src=\"".api_get_path(REL_COURSE_PATH).$_course['path'].'/document'.$this->created_dir."/\\1", $content);
+		
 		list($header, $body) = explode('<BODY',$content);
 
 		$body = '<BODY'.$body;
 		
+		// split document to pages
+		$pages = explode('||page_break||',$body);		
+
+		// remove font-family styles
+		$header = preg_replace("|font\-family[^;]*;|i", "",$header);
 		
-		$pages = explode('||page_break||',$body);
+		// dokeos styles
+		$my_style = api_get_setting('stylesheets');
+		if(empty($my_style)){$my_style = 'default';}
+		$style_to_import = "<style type=\"text/css\">\r\n";
+		$style_to_import .= '@import "'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/default.css";'."\n";
+		$style_to_import .= '@import "'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/course.css";'."\n";
+		$style_to_import .= "</style>\r\n";		
+		$header = preg_replace("|</head>|i", "\r\n$style_to_import\r\n\\0",$header);
+		
+		// line break before and after picture
+		$header = str_replace('p {','p {clear:both;',$header);
+		
+		$header = str_replace('absolute','relative',$header);
+				
 		
 		$first_item = 0;
 		
@@ -86,29 +113,8 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 			$content = $content.'</div></body>';
 		}
 		
-		// set the charset if necessary
-		$charset = api_get_setting('platform_charset');
-		if(!strcasecmp($charset,'utf-8'))
-		{
-			$content = utf8_decode($content);
-			$header = str_replace('utf-8','iso-8859-15',$header);
-		}
-		
 		// add the headers
 		$content = $header.$content;
-		
-		// line break before and after picture
-		$content = str_replace('p {','p {clear:both;',$content);
-		
-		// dokeos styles
-		$my_style = api_get_setting('stylesheets');
-		if(empty($my_style)){$my_style = 'default';}
-		$style_to_import = '@import "'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/default.css";'."\n";
-		$style_to_import .= '@import "'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/course.css";'."\n";
-		
-		$content = str_replace('/*<![cdata[*/','/*<![cdata[*/ '.$style_to_import,$content);
-		
-		$content = str_replace('absolute','relative',$content);
 		
 		
 		// resize all the picture to the max_width-10

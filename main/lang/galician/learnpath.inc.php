@@ -182,6 +182,7 @@ $WelcomeWoogieConverter = "Benvido ó conversor Woogie<ul type=\\\"1\\\"><li>Esco
 $WoogieError = "Ocurriu un erro durante a conversión do documento. Por favor, comprove se hai caracteres especiais no nome do seu documento.";
 $WordConvert = "Conversión Word";
 $Order = "Orde";
+$TimeFinished = "Tempo (finalizado en...)";
 $StudentResponse = "Respostas do alumno";
 $LatencyTimeSpent = "Tempo empregado";
 $Result = "Resultado";

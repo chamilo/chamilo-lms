@@ -1,4 +1,49 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$FlatView = "Flat View";
+$ScoreEdit = "Ergebnis Regeln bearbeiten";
+$ScoreColor = "Ergebnis Farbe";
+$ScoringSystem = "Ergebnis System";
+$EnableScoreColor = "Farben für Ergebnisse aktivieren";
+$Below = "unten";
+$WillColorRed = "wird in rot eingefärbt";
+$EnableScoringSystem = "Ergebnis System aktivieren";
+$IncludeUpperLimit = "Obere Grenze einbeziehen";
+$ScoreInfo = "Ergebnis Information";
+$Between = "zwischen";
+$CurrentCategory = "Momentane Kategorie";
+$RootCat = "Hauptkategorie";
+$NewCategory = "Neue Kategorie";
+$NewEvaluation = "Neue Bewertung";
+$Weight = "Gewicht";
+$PickACourse = "Einen Kurs auswählen";
+$CategoryName = "Name der Kategorie";
+$CourseIndependent = "Kursunabhängig";
+$CourseIndependentEvaluation = "Kurs unabhängige Bewertung";
+$EvaluationName = "Name der Bewertung";
+$Max = "Max";
+$DateEval = "Datum der Bewertung";
+$AddUserToEval = "Benutzer zur Bewertung hinzufügen";
+$NewSubCategory = "Neue Unterkategorie";
+$MakeLink = "Link erstellen";
+$DeleteSelected = "ausgewählten Punkt löschen";
+$SetVisible = "Sichtbar einstellen";
+$SetInvisible = "unsichtbar einstellen";
+$ChooseLink = "Linktyp auswählen";
+$DokeosExercises = "Dokeos Übungen";
+$DokeosDropbox = "Dokeos Dropbox";
+$DokeosStudentPublications = "Dokeos Student Veröffentlichungen";
+$DokeosLearningPaths = "Dokeos Lernpfade";
+$ChooseExercise = "Übung auswählen";
+$AddResult = "Ergebnisse hinzufügen";
+$BackToOverview = "Zurück zur Übersicht";
+$ExportPDF = "Nach PDF exportieren";
+$Print = "Drucken";
+$ChooseOrientation = "Orientierung auswählen";
+$Portrait = "Hochformat";
+$Landscape = "Querformat";
+$FilterCategory = "Filter Kategorie";
+$DeleteAll = "Alles löschen";
+$ScoringUpdated = "Ergebnisse aktualisiert";
 ?>

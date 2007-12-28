@@ -184,4 +184,5 @@ $CorrectAnswers = "Risposte esatte";
 $StudentResponse = "Risposte del corsista";
 $LatencyTimeSpent = "Tempo impiegato";
 $Result = "Risultato";
+$langAreYouSureToDelete = "Sei sicura/o di eliminare?";
 ?>

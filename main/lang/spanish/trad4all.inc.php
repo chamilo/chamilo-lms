@@ -457,4 +457,8 @@ $UplUnableToSaveFileFilteredExtension = "Envío de archivo no completado: este ti
 $OpenIDURL = "URL OpenID";
 $UplFileTooBig = "El archivo que ha enviado es demasiado grande para la actual configuración de Dokeos (%sMB). Para más información, póngase en contacto con el administrador de la plataforma.";
 $UplGenericError = "El envío del archivo no se ha podido realizar. Por favor, inténtelo de nuevo más tarde o póngase en contacto con el administrador de la plataforma.";
+$MyGradebook = "Mi Cuaderno de notas";
+$Gradebook = "Cuaderno de notas";
+$OpenIDWhatIs = "¿ Qué es OpenID ?";
+$OpenIDDescription = "OpenID elimina la necesidad de tener varios nombres de usuario en distintos sitios web, simplificando la experiencia del usuario en la Red. Vd. puede escoger el proveedor de OpenID que mejor satisfaga sus necesidades y, lo que es más importante, aquel en el que tenga más confianza. También, aunque cambie de proveedor, podrá conservar su OpenID. Y lo mejor de todo, OpenID es una tecnología no propietaria y completamente gratuita. Para las empresas, esto significa un menor costo de administración de cuentas y contraseñas. OpenID reduce la frustración del usuario permitiendo que los usuarios tengan el control de su acceso.<br /><br /><a href=\"http://openid.net/what/\">Para saber más...</a>";
 ?>

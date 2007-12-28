@@ -693,4 +693,6 @@ $Nested = "Anidada";
 $OpenIdAuthenticationComment = "Activar la autentificación basada en URL OpenID (muestra un formulario de adicional de identificación en la página principal de la plataforma)";
 $VersionCheckEnabled = "Comprobación de la versión activada";
 $InstallDirAccessibleSecurityThreat = "El directorio de instalación main/install/ es todavía accesible a los usuarios de la Web. Esto podría representar una amenaza para su seguridad. Le recomendamos que elimine este directorio o que cambie sus permisos, de manera que los usuarios de la Web no puedan usar los scripts que contiene.";
+$GradebookActivation = "Activación de la herramienta Cuaderno de notas";
+$GradebookActivationComment = "Al activar la herramienta Cuaderno de notas se añade la posibilidad de relacionar los objetivos de aprendizaje con sus resultados; sin embargo, esto puede generar un interfaz bastante más complejo. ¿ Realmente desea activar esta herramienta ?";
 ?>

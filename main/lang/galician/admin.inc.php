@@ -163,6 +163,7 @@ $UsersNumber = "Número de usuarios";
 $PageAfterLoginTitle = "Páxina despois de rexistrarse";
 $PageAfterLoginComment = "A páxina á que se envía o usuario que se conecte";
 $DokeosAdminWebLinks = "Ligazóns Web de Dokeos";
+$TabsMyProfile = "Pestana O meu perfil";
 $GlobalRole = "Rol global";
 $langNomOutilTodo = "Xestionar a lista Por Facer";
 $langNomPageAdmin = "Administración";

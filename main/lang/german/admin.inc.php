@@ -686,4 +686,6 @@ $Nested = "verschachtelt";
 $OpenIdAuthenticationComment = "Die OpenID URL basirte Authentifizierung einschalten (zeigt ein weiteres Login Formular auf der Homepage an)";
 $VersionCheckEnabled = "Versionsprüfung ist eingeschaltet";
 $InstallDirAccessibleSecurityThreat = "Das /main/install Verzeichnis Ihres Dokeos Systems ist noch immer für Web Benutzer erreichbar. Das könnte ein Sicherheitsrisiko für Ihre Installation darstellen. Wir raten Ihnen, dieses Verzeichnis zu löschen oder die Berechtigungen so zu ändern, dass Web Benutzer die Scripts in diesem Verzeichnis nicht benutzen können.";
+$GradebookActivation = "Gradebook Werkzeug aktivieren";
+$GradebookActivationComment = "Aktivierung des Gradebook Werkzeugs ermöglicht, Lernziele mit Noten festzulegen; falls es nicht benötigt wird, könnte es die Benutzeroberfläche zu komplex machen. Soll dieses Werkzeug aktiviert werden ";
 ?>

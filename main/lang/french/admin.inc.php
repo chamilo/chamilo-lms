@@ -688,7 +688,6 @@ $Nested = "Imbriquée";
 $OpenIdAuthenticationComment = "Activer l\'authentification OpenID (affiche un formulaire de login supplémentaire sur la page d\'accueil du campus)";
 $VersionCheckEnabled = "Fonctionnalité de vérification de version activée";
 $InstallDirAccessibleSecurityThreat = "Le répertoire main/install est toujours accessible aux utilisateurs web. Ceci peut représenter un danger en termes de sécurité. Nous recommandons la suppression de ce répertoire ou le changement des permissions de telle manière que les utilisateurs web ne puissent plus utiliser les scripts qu\'il contient.";
-$Gradebook = "Cahier de notes";
 $GradebookActivation = "Activation de l\'outil Cahier de notes";
 $GradebookActivationComment = "Activer l\'outil de Cahier de notes vous permettra de gérer des objectifs d\'apprentissage cotés. L\'activation de cet outil pourrait toutefois complexifier l\'interface de façon inutile. Voulez-vous activer cet outil?";
 ?>

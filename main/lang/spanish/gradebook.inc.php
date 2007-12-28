@@ -1,4 +1,49 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$FlatView = "Vista plana";
+$ScoreEdit = "Editar las reglas de puntuación";
+$ScoreColor = "Color de la puntuación";
+$ScoringSystem = "Sistema de puntuación";
+$EnableScoreColor = "Activar el coloreado de las puntuaciones";
+$Below = "Por debajo de";
+$WillColorRed = "se coloreará en rojo";
+$EnableScoringSystem = "Activar el sistema de puntuación";
+$IncludeUpperLimit = "Incluir el límite superior";
+$ScoreInfo = "Información sobre la puntuación";
+$Between = "Entre";
+$CurrentCategory = "Categoría actual";
+$RootCat = "Categoría principal";
+$NewCategory = "Nueva categoría";
+$NewEvaluation = "Nueva evaluación";
+$Weight = "Peso";
+$PickACourse = "Seleccionar un curso";
+$CategoryName = "Nombre de la categoría";
+$CourseIndependent = "Curso independiente";
+$CourseIndependentEvaluation = "Curso de evaluación independiente";
+$EvaluationName = "Nombre de la evaluación";
+$Max = "Máx";
+$DateEval = "Fecha de evaluación";
+$AddUserToEval = "Añadir alumnos a la evaluación";
+$NewSubCategory = "Nueva subcategoría";
+$MakeLink = "Crear un enlace";
+$DeleteSelected = "Eliminar selección";
+$SetVisible = "Hacer visible";
+$SetInvisible = "Ocultar";
+$ChooseLink = "Elegir el tipo de enlace";
+$DokeosExercises = "Ejercicios";
+$DokeosDropbox = "Buzón de tareas";
+$DokeosStudentPublications = "Trabajos";
+$DokeosLearningPaths = "Itinerarios de aprendizaje";
+$ChooseExercise = "Elegir un ejercicio";
+$AddResult = "Añadir resultados";
+$BackToOverview = "Volver a la Vista general";
+$ExportPDF = "Exportar a PDF";
+$Print = "Imprimir";
+$ChooseOrientation = "Elegir orientación";
+$Portrait = "Vertical";
+$Landscape = "Horizontal";
+$FilterCategory = "Filtrar por categoría";
+$DeleteAll = "Eliminar todo";
+$ScoringUpdated = "Puntuación actualizada";
 ?>

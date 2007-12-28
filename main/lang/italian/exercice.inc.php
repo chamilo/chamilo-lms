@@ -231,4 +231,5 @@ $ClickLinkToViewComment = "Clicca su collegamento qui sotto per accedere al sist
 $Regards = "Cordialmente";
 $AttemptVCCLong = "Il test %s che hai svolto è stato visto/commentato/corretto dal docente. Clicca qui sotto per accedere al sistema e vedere gli esiti.";
 $DearStudentEmailIntroduction = "Caro corsista,";
+$langView = "Vedi";
 ?>

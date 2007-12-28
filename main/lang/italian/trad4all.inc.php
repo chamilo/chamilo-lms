@@ -456,4 +456,10 @@ $UplUnableToSaveFileFilteredExtension = "Caricamento fallito: il tipo di file o 
 $OpenIDURL = "URL OpenID";
 $UplFileTooBig = "Il file da caricare è troppo grande: la dimensione massima consentita è di %s MB. Contatta l\'amministratore dl sistema.";
 $UplGenericError = "Il file non è stato caricato correttamente. Riprova o contatta l\'amministratore del sistema.";
+$MyGradebook = "I miei esami";
+$Gradebook = "Esami";
+$OpenIDWhatIs = "Cos\'è OpenID?";
+$OpenIDDescription = "OpenID permette è un sistema di certificazione della password. Per ottenere l\'OpenID dovrai registrarti presso un sito che ti invierà un collegamento di riconoscimento. In tutti i siti che usano la tecnologia OpenID puoi usare la stessa \"password\" e sarai autenticato tramite OpenID. 
+
+<br /><br /><a href=\"http://openid.net/what/\">Approfondimento...</a>";
 ?>

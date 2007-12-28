@@ -688,4 +688,10 @@ $Nested = "Nidificata";
 $OpenIdAuthenticationComment = "Attiva l\'autenticazione URL OpenID (mostra un ulteriore modulo d\'accesso nella pagina iniziale)";
 $VersionCheckEnabled = "Controllo versione attivato";
 $InstallDirAccessibleSecurityThreat = "La directory main/install risulta accessibile dall\'esterno. CIO E\' POTENZIALMENTE PERICOLOSO. Consigliamo di eliminare la directory o di cambiarne i diritti d\'accesso in modo da non permettere l\'esecuzione di script da parte di utenti Internet.";
+$GradebookActivation = "Attivazione del registro delle valutazioni";
+$GradebookActivationComment = "Attivando il registro delle valutazioni hai la possibilità di assegnare dei punteggi su grado di realizzazione degli obiettivi didattici. Lo strumento è piuttosto complesso; è necessario attivarlo?";
+$langConfigurePortalPages = "Configura le pagine del portale";
+$langConfigureTemplates = "Configura i modelli";
+$langname = "Nome";
+$langCourses = "Corsi";
 ?>

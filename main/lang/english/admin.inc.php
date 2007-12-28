@@ -687,7 +687,6 @@ $Nested = "Nested";
 $OpenIdAuthenticationComment = "Enable the OpenID URL-based authentication (displays an additional login form on the homepage)";
 $VersionCheckEnabled = "Version check enabled";
 $InstallDirAccessibleSecurityThreat = "The main/install directory of your Dokeos system is still accessible to web users. This might represent a security threat for your installation. We recommend that you remove this directory or that you change its permissions so web users cannot use the scripts it contains.";
-$Gradebook = "Gradebook";
 $GradebookActivation = "Gradebook tool activation";
 $GradebookActivationComment = "Enabling the gradebook tool will add the possibility to set learning goals with scores, but if you don\'t need it, it might make the interface unnecessarily complex. Do you wish to activate this tool?";
 ?>

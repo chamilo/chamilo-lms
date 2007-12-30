@@ -268,7 +268,7 @@ function prepare_course_repository($courseRepository, $courseId)
 	include(\"../../main/course_home/course_home.php\");
 	?>");
 	fwrite($fd, "$string");
-	$fd = fopen(api_get_path(SYS_COURSE_PATH).$courseRepository . "/group/index.php", "w");
+	$fd = fopen(api_get_path(SYS_COURSE_PATH).$courseRepository . "/group/index.html", "w");
 	$string = "<html></html>";
 	fwrite($fd, "$string");
 	return 0;

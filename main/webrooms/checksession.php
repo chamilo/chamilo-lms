@@ -10,6 +10,7 @@ require_once('../newscorm/scorm.class.php');
 require_once('../newscorm/scormItem.class.php');
 require_once('../newscorm/aicc.class.php');
 require_once('../newscorm/aiccItem.class.php');
+require_once('get_translation.lib.php');
 
 include("../../main/inc/global.inc.php");
 api_block_anonymous_users();
@@ -72,7 +73,7 @@ printf('  <studentview>%s</studentview>',$student_view);
 printf('  <documentid>%s</documentid>',$document_id);
 printf('</recorderparams>');
 printf('<languageobject>');
-include_once($language_interface.'.xml');
+printf(get_language_file_as_xml($language_interface));
 printf('</languageobject>');
 printf('</dokeosobject>');
 ?>

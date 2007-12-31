@@ -14,6 +14,14 @@ require_once('openoffice_document.class.php');
 class OpenOfficeTextDocument extends OpenofficeDocument {
 	
 
+	public $split_steps;
+	
+	function OpenofficeTextDocument($split_steps=false, $course_code=null, $resource_id=null,$user_id=null) {
+		
+		$this -> split_steps = $split_steps;
+		parent::OpenofficeDocument($course_code, $resource_id, $user_id);
+		
+	}
     
     function make_lp($files=array()){
     	
@@ -35,10 +43,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 		
 		list($header, $body) = explode('<BODY',$content);
 
-		$body = '<BODY'.$body;
-		
-		// split document to pages
-		$pages = explode('||page_break||',$body);		
+		$body = '<BODY'.$body;		
 
 		// remove font-family styles
 		$header = preg_replace("|font\-family[^;]*;|i", "",$header);
@@ -56,7 +61,99 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 		$header = str_replace('p {','p {clear:both;',$header);
 		
 		$header = str_replace('absolute','relative',$header);
+		
+		switch($this->split_steps)
+		{
+			case 'per_page' : $this -> dealPerPage($header,$body); break;
+			case 'per_chapter' : $this -> dealPerChapter($header,$body); break;
+		}
+		
+    }
+    
+    
+    
+    function dealPerChapter($header, $content){
+		
+		global $_course;
+		
+		$content = str_replace('||page_break||','',$content);
+		
+		// get all the h1
+		preg_match_all("|<h1[^>]*>([^(h1)+]*)</h1>|is",$content,$matches_temp);
+		
+		
+		//empty the fake chapters
+		$new_index = 0;
+		for ($i=0 ; $i<count($matches_temp[0]) ; $i++) {
+
+			if(trim($matches_temp[1][$i])!=='')
+			{
+				$matches[0][$new_index] = $matches_temp[0][$i];
+				$matches[1][$new_index] = $matches_temp[1][$i];
+				$new_index++;
+			}
+			
+		}
+		
+		// add intro item
+		$intro_content = substr($content, 0, strpos($content, $matches[0][0]));
+		$items_to_create[get_lang('Introduction')] = $intro_content;
+
+		
+		for ($i=0 ; $i<count($matches[0]) ; $i++) {
+			
+			if(empty($matches[1][$i]))
+				continue;
+			
+			$content = strstr($content,$matches[0][$i]);
+			if($i+1!==count($matches[0]))
+			{
+				$chapter_content = substr($content, 0, strpos($content, $matches[0][$i+1]));
+			}
+			else
+			{
+				$chapter_content = $content;
+			}
+			$items_to_create[$matches[1][$i]] = $chapter_content;
+			
+		}
+		
+		$i = 0;
+		foreach($items_to_create as $item_title=>$item_content)
+		{
+			$i++;
+			$page_content = $this->format_page_content($header, $item_content);
+			
+			$html_file = $this->created_dir.'-'.$i.'.html';
+			$handle = fopen($this->base_work_dir.$this->created_dir.'/'.$html_file,'w+');
+			fwrite($handle, $page_content);
+			fclose($handle);
+			
+			$document_id = add_document($_course,$this->created_dir.'/'.$html_file,'file',filesize($this->base_work_dir.$this->created_dir.'/'.$html_file),$html_file);
+		
+			if ($document_id){	
+							
+				//put the document in item_property update
+				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],0,0);
 				
+				$infos = pathinfo($this->filepath);
+				$slide_name = strip_tags(nl2br($item_title));
+				$slide_name = str_replace(array("\r\n", "\r", "\n"), "", $slide_name);
+				$slide_name = html_entity_decode($slide_name);
+				$previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
+				if($this->first_item == 0){
+					$this->first_item = $previous;
+				}
+			}
+		}
+		
+	}
+    
+    function dealPerPage($header,$body)
+    {
+		
+		// split document to pages
+		$pages = explode('||page_break||',$body);		
 		
 		$first_item = 0;
 		
@@ -94,7 +191,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
     }
     
     
-    function format_page_content($header, $content, $path_to_folder)
+    function format_page_content($header, $content)
     {
     	
 		
@@ -128,7 +225,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 			if(!$defined_width)
 			{
 			
-				list($img_width, $img_height, $type) = getimagesize($path_to_folder.'/'.$image);
+				list($img_width, $img_height, $type) = getimagesize($this->base_work_dir.$this->created_dir.'/'.$image);
 				
 				$new_width = $max_width-10;
 				if($img_width > $new_width)

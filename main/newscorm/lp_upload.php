@@ -89,7 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 			break;
 		case 'woogie':
 			require_once('openoffice_text_document.class.php');
-			$o_doc = new OpenofficeTextDocument();
+			$split_steps = $_POST['split_steps'];
+			$o_doc = new OpenofficeTextDocument($split_steps);
 			$first_item_id = $o_doc -> convert_document($_FILES['user_file']);				
 			break;
 		case '':

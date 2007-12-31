@@ -112,7 +112,7 @@ if(!empty($errorMessage)){
 }
 
 
-$form = new FormValidator('update_course', 'POST', '', '', 'style="margin: 0;"');
+$form = new FormValidator('upload_ppt', 'POST', '', '', 'style="margin: 0;"');
 
 // build the form
 
@@ -130,7 +130,7 @@ $form -> addElement('html','<div class="row"><div class="label"></div><div class
 
 $form -> addElement ('hidden', 'ppt2lp', 'true');
 
-$form -> add_real_progress_bar('ppt2lp', 'qf_group_1', 1, true);
+$form -> add_real_progress_bar(md5(rand(0,10000)), 'qf_group_1', 1, true);
 
 
 // display the form

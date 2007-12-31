@@ -124,7 +124,7 @@ $form -> addElement('html','<div class="row"><div class="label"></div><div class
 
 $form -> addElement ('hidden', 'woogie', 'true');
 
-$form -> add_real_progress_bar(md5(rand(0,10000)), 'qf_group_1', 1, true);
+$form -> add_real_progress_bar(md5(rand(0,10000)), 'user_file', 1, true);
 
 $defaults['split_steps'] = 'per_page';
 $form -> setDefaults($defaults);

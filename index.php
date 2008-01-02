@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 13894 2007-12-03 21:43:34Z yannoo $
+* 	@version $Id: index.php 14090 2008-01-02 21:27:37Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -220,7 +220,16 @@ else
 // Display System announcements
 $announcement = $_GET['announcement'] ? $_GET['announcement'] : -1;
 $announcement = intval($announcement);
-SystemAnnouncementManager :: display_announcements(VISIBLE_GUEST, $announcement);
+
+if (isset($_user['user_id']))
+{
+	$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
+	SystemAnnouncementManager :: display_announcements($visibility, $announcement);
+}
+else
+{
+	SystemAnnouncementManager :: display_announcements(VISIBLE_GUEST, $announcement);
+}
 
 // Display courses and category list
 if (!$page_included)

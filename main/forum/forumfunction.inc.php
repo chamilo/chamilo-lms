@@ -2229,7 +2229,7 @@ function send_notification_mails($thread_id, $reply_info)
 	// the forum category, the forum, the thread and the reply are visible to the user
 	if ($send_mails==true)
 	{
-		$sql="SELECT user.firstname, user.lastname, user.email, user.user_id
+		$sql="SELECT DISTINCT user.firstname, user.lastname, user.email, user.user_id
 				FROM $table_posts post, $table_user user
 				WHERE post.thread_id='".mysql_real_escape_string($thread_id)."'
 				AND post.post_notification='1'

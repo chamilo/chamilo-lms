@@ -847,6 +847,7 @@ CREATE TABLE gradebook_category (
   parent_id int default NULL,
   weight smallint NOT NULL,
   visible tinyint NOT NULL,
+  certif_min_score int DEFAULT NULL,
   PRIMARY KEY  (id)
 );
 CREATE TABLE gradebook_evaluation (

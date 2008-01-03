@@ -185,4 +185,7 @@ $CorrectAnswers = "Richtige Antworten";
 $StudentResponse = "Antworten der Studenten";
 $LatencyTimeSpent = "gebrauchte Zeit";
 $Result = "Ergebnis";
+$langAreYouSureToDelete = "Möchten Sie dies wirklich löschen?";
+$SplitStepsPerPage = "Ein Schritt pro Seite";
+$SplitStepsPerChapter = "Ein Kapitel pro Schritt";
 ?>

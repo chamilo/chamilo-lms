@@ -688,4 +688,13 @@ $VersionCheckEnabled = "Versionsprüfung ist eingeschaltet";
 $InstallDirAccessibleSecurityThreat = "Das /main/install Verzeichnis Ihres Dokeos Systems ist noch immer für Web Benutzer erreichbar. Das könnte ein Sicherheitsrisiko für Ihre Installation darstellen. Wir raten Ihnen, dieses Verzeichnis zu löschen oder die Berechtigungen so zu ändern, dass Web Benutzer die Scripts in diesem Verzeichnis nicht benutzen können.";
 $GradebookActivation = "Gradebook Werkzeug aktivieren";
 $GradebookActivationComment = "Aktivierung des Gradebook Werkzeugs ermöglicht, Lernziele mit Noten festzulegen; falls es nicht benötigt wird, könnte es die Benutzeroberfläche zu komplex machen. Soll dieses Werkzeug aktiviert werden ";
+$langConfigurePortalPages = "Portal Eingangseite konfigurieren";
+$langConfigureTemplates = "Template konfigurieren";
+$langname = "Name";
+$langCourses = "Kurse";
+$langIn = "in";
+$AddRight = "Recht hinzufügen";
+$langStatistics = "Statistiken";
+$langGuest = "Gast";
+$DateStartMoreThanDateEnd = "Anfangsdatum später als Enddatum";
 ?>

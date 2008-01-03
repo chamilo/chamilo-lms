@@ -184,4 +184,6 @@ $CorrectAnswers = "Réponses correctes";
 $StudentResponse = "Réponses étudiant";
 $LatencyTimeSpent = "Temps passé";
 $Result = "Résultat";
+$SplitStepsPerPage = "Une page, une étape";
+$SplitStepsPerChapter = "Un chapitre, une étape";
 ?>

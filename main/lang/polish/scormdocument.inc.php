@@ -56,6 +56,8 @@ $lang_description = "opis";
 $lang_title = "tytu&#322;";
 $langScormBuilder = "Narz&#281;dzie budowania Scorm";
 $langCreateDoc = "Stwórz dokument";
+$langOrganiseDocuments = "Organizuj dokumenty";
 $langUncompress = "Rozpakuj";
 $ExportShort = "Eksportuj krótko";
+$progress = "Post&#281;p";
 ?>

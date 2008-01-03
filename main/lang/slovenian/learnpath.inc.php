@@ -185,4 +185,7 @@ $CorrectAnswers = "Pravilni odgovori";
 $StudentResponse = "Taèajnikovi odzivi";
 $LatencyTimeSpent = "Porabljen èas";
 $Result = "Rezultat";
+$langAreYouSureToDelete = "Resnièno želite odstraniti ?";
+$SplitStepsPerPage = "Korak na stran";
+$SplitStepsPerChapter = "Korak na poglavje";
 ?>

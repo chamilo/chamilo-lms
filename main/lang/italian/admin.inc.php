@@ -694,4 +694,6 @@ $langConfigurePortalPages = "Configura le pagine del portale";
 $langConfigureTemplates = "Configura i modelli";
 $langname = "Nome";
 $langCourses = "Corsi";
+$langIn = "in";
+$AddRight = "Aggiungi a destra";
 ?>

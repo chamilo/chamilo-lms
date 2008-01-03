@@ -687,4 +687,7 @@ $Nested = "Gnezdeno";
 $OpenIdAuthenticationComment = "Omogoèi OpenID URL bazirajoèo avtentifikacijo (prikaže dodatno prijavno formo na domaèi strani)";
 $VersionCheckEnabled = "Preverjanje verzije omogoèeno";
 $InstallDirAccessibleSecurityThreat = "Namestitvena mapa main/install vašega Dokeos sistema je še vedno dostopna spletnim uporabnikom. To lahko predstavlja varnostno grožnjo sistemu. Priporoèamo, da mapo odstranite ali spremenite dostopne pravice, da spletni uporabniki ne bodo imeli možnosti dostopa do namestitvenih datotek vsebovanih v tej mapi.";
+$GradebookActivation = "Aktivacija orodja redovalnice";
+$GradebookActivationComment = "Omogoèanje orodja redovalnice dodaja možnost povezovanja uènih ciljev z ocenami. V primeru, da redovalnice ne potrebujete in je orodje aktivirano, le to lahko vnaša nepotrebno kompleksnost in nepreglednost v uporabiški vmesnik.
+Želite aktivirati to orodje ?";
 ?>

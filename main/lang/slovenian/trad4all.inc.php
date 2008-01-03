@@ -456,4 +456,7 @@ $UplUnableToSaveFileFilteredExtension = "Nalaganje ni uspelo: datoteke s podano 
 $OpenIDURL = "OpenID URL";
 $UplFileTooBig = "Nalagana datoteka je prevelika glede na trenutne Dokeos nastavitve (%sMB). Obrnite se na upravitelja sistema.";
 $UplGenericError = "Nalagana datoteka se ni pravilno naložila. Poskusite ponovno kasneje ali pa se obrnite na upravitelja tega portala.";
+$MyGradebook = "Moja redovalnica";
+$Gradebook = "Redovalnica";
+$OpenIDWhatIs = "Kaj je OpenID?";
 ?>

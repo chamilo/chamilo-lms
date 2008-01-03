@@ -1,0 +1,51 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$lang_september = "九月";
+$langClassName = "班级名称";
+$lang_agenda = "日程";
+$langDay = "日";
+$langYear = "年";
+$langHour = "时";
+$langMinute = "分";
+$langLasting = "持续时间";
+$langOldToNew = "旧到新";
+$langNewToOld = "新到旧";
+$langNow = "现在";
+$langAddEvent = "添加事件";
+$langDetail = "详细内容";
+$langAgendaAdd = "添加日程";
+$langShowAll = "显示所有";
+$langShowCurrent = "显示本月日程";
+$langAddCalendarItem = "添加日程";
+$langMonth = "月";
+$langMinutes = "分";
+$langEditSuccess = "日程已经被修改";
+$langAddSuccess = "日程已经被添加";
+$langAgendaDeleteSuccess = "日程已经被删除";
+$langNoAgendaItems = "没有日程";
+$langModifyCalendarItem = "修改日程";
+$langItemTitle = "日程标题";
+$langmonth_default = "默认月";
+$langyear_default = "默认年";
+$langhour_default = "默认时";
+$langMonthView = "月览";
+$langWeekView = "周览";
+$langDayView = "日览";
+$langAddPersonalItem = "添加个人日程";
+$langWeek = "周";
+$langDate = "日期";
+$langTime = "时间";
+$langAddPersonalCalendarItem = "添加个人日程";
+$langModifyPersonalCalendarItem = "修改个人日程";
+$langPeronalAgendaItemAdded = "已经添加个人日程";
+$langPeronalAgendaItemEdited = "已经修改个人日程";
+$langPeronalAgendaItemDeleted = "已经删除个人日程";
+$langViewPersonalItem = "浏览个人日程";
+$langUserGroupFilter = "组/用户过滤";
+$langVisibilityChanged = "已修改显示/隐藏属性";
+$langPrint = "打印";
+$langAddAnnouncement = "添加通知";
+$langCopiedToAnnouncement = "已经复制到通知";
+$langGoAnnouncement = "进入通知";
+?>

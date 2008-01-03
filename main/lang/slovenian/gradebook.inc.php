@@ -1,4 +1,49 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$FlatView = "Ravninski pogled";
+$ScoreEdit = "Urejanje pravil ocen(jevanja)";
+$ScoreColor = "Barva ocene";
+$ScoringSystem = "Sistem ocenjevanja";
+$EnableScoreColor = "Omogoèi barvno oznaèevanje ocen";
+$Below = "pod";
+$WillColorRed = "bo obarvana rdeèe";
+$EnableScoringSystem = "Omogoèi sistem ocenjevanja";
+$IncludeUpperLimit = "Vkljuèi zgornjo mejo";
+$ScoreInfo = "Informacije o rezultatu";
+$Between = "med";
+$CurrentCategory = "Trenutna kategorija";
+$RootCat = "Korenska kategorija";
+$NewCategory = "Nova kategorija";
+$NewEvaluation = "Novo ocenjevanje";
+$Weight = "Utež";
+$PickACourse = "Izberi teèaj";
+$CategoryName = "Ime kategorije";
+$CourseIndependent = "Neodvisno od teèaja";
+$CourseIndependentEvaluation = "Ocenjevanje, neodvisno od teèaja";
+$EvaluationName = "Naziv ocenjevanja";
+$Max = "Max";
+$DateEval = "Datum ocenjevanja";
+$AddUserToEval = "Dodaj uporabnike ocenjevanju";
+$NewSubCategory = "Nova podkategorija";
+$MakeLink = "Naredi povezavo";
+$DeleteSelected = "Odstrani izbrano";
+$SetVisible = "Prikaži";
+$SetInvisible = "Skrij";
+$ChooseLink = "Izberi tip povezave";
+$DokeosExercises = "Dokeos vaje";
+$DokeosDropbox = "DOkeos nabiralnik";
+$DokeosStudentPublications = "Dokeos objave teèajnikov";
+$DokeosLearningPaths = "Dokeos uène poti";
+$ChooseExercise = "Izberi vajo";
+$AddResult = "Dodaj rezultate";
+$BackToOverview = "Nazaj na pregled";
+$ExportPDF = "Izvozi kot PDF";
+$Print = "Natisni";
+$ChooseOrientation = "Izberi usmerjenost";
+$Portrait = "Pokonèno";
+$Landscape = "Ležeèe";
+$FilterCategory = "Filtriraj kategorijo";
+$DeleteAll = "Odstrani vse";
+$ScoringUpdated = "Rezultati so bili ažurirani";
 ?>

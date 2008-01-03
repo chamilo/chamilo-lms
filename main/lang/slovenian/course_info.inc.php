@@ -99,4 +99,5 @@ $DescriptionRecycleCourse = "To orodje odstrani iz teèaja izbrane elemente ali v
 $QuizEmailAlert = "E-poštno opozorilo ob objavi nove vaje/testa";
 $QuizEmailAlertActivate = "Aktiviraj pošiljanje e-pošte, ko uporabnik zaklju&#269;i vajo/test";
 $QuizEmailAlertDeactivate = "Onemogoèi e-poštno opozorilo ob uporabnikovi rešitvi testa/vaje";
+$DropboxEmailAlertDeactivat = "Onemogoèi obvestila nabiralnika preko e-pošte";
 ?>

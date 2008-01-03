@@ -383,22 +383,22 @@ if (isset ($_POST['submit']) && isset ($_POST['keyword']))
 // -                       DISPLAY HEADERS AND MESSAGES                           -
 // --------------------------------------------------------------------------------
 
-if (!isset($_GET['exportpdf']))
+if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate']))
 {
 	if (isset ($_GET['studentoverview']))
 	{
 		$interbreadcrumb[]= array (
 			'url' => 'gradebook.php?selectcat=' . Security::remove_XSS($_GET['selectcat']),
-			'name' => get_lang('Gradebook'
-		));
+			'name' => get_lang('Gradebook')
+		);
 		Display :: display_header(get_lang('FlatView'));
 	}
 	elseif (isset ($_GET['search']))
 	{
 		$interbreadcrumb[]= array (
 			'url' => 'gradebook.php?selectcat=' . Security::remove_XSS($_GET['selectcat']),
-			'name' => get_lang('Gradebook'
-		));
+			'name' => get_lang('Gradebook')
+		);
 		Display :: display_header(get_lang('SearchResults'));
 	} else
 	{
@@ -498,6 +498,54 @@ elseif (isset ($_GET['studentoverview']))
 		$pdf->ezStream();
 		exit;
 	}
+}
+elseif(!empty($_GET['export_certificate']))
+{
+	$user_id = strval(intval($_GET['user']));
+	if(!api_is_allowed_to_edit(true,true))
+	{
+		$user_id = api_get_user_id();
+	}
+	$category = Category :: load ($_GET['cat']);
+	if($category[0]->is_certificate_available($user_id))
+	{
+		$user= get_user_info_from_id($user_id);
+		$scoredisplay = ScoreDisplay :: instance();
+		$scorecourse = $category[0]->calc_score($user_id);
+		$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
+
+		$cattotal = Category :: load(0);
+		$scoretotal= $cattotal[0]->calc_score($user_id);
+		$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
+		
+		//prepare all necessary variables:
+		$organization_name = api_get_setting('Institution');
+		$portal_name = api_get_setting('siteName');
+		$stud_fn = $user['firstname'];
+		$stud_ln = $user['lastname'];
+		$certif_text = sprintf(get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'),$organization_name,$stud_fn.' '.$stud_ln,$category[0]->get_name(),$scorecourse_display); 
+		$date = date('d/m/Y',time());
+		
+		$pdf= new Cezpdf('a4','landscape');
+		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
+		$pdf->ezSetMargins(30, 30, 50, 50);
+		//line Y coordinates in landscape mode are upside down (500 is on top, 10 is on the bottom)
+		$pdf->line(50,50,790,50);
+		$pdf->line(50,550,790,550);
+		$pdf->ezSetY(450);
+		$pdf->ezImage(api_get_path(SYS_CODE_PATH).'img/dokeos_logo_certif.png',1,400,'','center','');
+		$pdf->ezSetY(480);
+		$pdf->ezText($certif_text,28,array('justification'=>'center'));
+		//$pdf->ezSetY(750);
+		$pdf->ezSetY(50);
+		$pdf->ezText($date,18,array('justification'=>'center'));
+		$pdf->ezSetY(580);
+		$pdf->ezText($organization_name,22,array('justification'=>'left'));
+		$pdf->ezSetY(580);
+		$pdf->ezText($portal_name,22,array('justification'=>'right'));
+		$pdf->ezStream();
+	}
+	exit;	
 }
 else
 {

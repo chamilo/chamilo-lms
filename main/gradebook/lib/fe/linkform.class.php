@@ -84,18 +84,14 @@ class LinkForm extends FormValidator
 		foreach ($linktypes as $linktype)
 		{
 			$link = LinkFactory :: create ($linktype);
-			error_log(__FUNCTION__.' '.__LINE__);
 			if(!empty($cc))
 			{
-			error_log(__FUNCTION__.' '.__LINE__);
 				$link->set_course_code($cc);
 			}
 			elseif(!empty($_GET['course_code']))
 			{
-			error_log(__FUNCTION__.' '.__LINE__.' '.$_GET['course_code']);
 				$link->set_course_code(Database::escape_string($_GET['course_code']));
 			}
-			error_log(__FUNCTION__.' '.__LINE__);
 			// disable this element if the link works with a dropdownlist
 			// and if there are no links left
 			if (!$link->needs_name_and_description()

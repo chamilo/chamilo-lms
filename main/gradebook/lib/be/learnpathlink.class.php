@@ -108,7 +108,6 @@ class LearnpathLink extends AbstractLink
     		
     	// order by id, that way the student's first attempt is accessed first
 		$sql .= ' ORDER BY view_count DESC';
-		error_log($sql);
     	$scores = api_sql_query($sql, __FILE__, __LINE__);
 
 		// for 1 student
@@ -116,7 +115,6 @@ class LearnpathLink extends AbstractLink
     	{
     		if ($data=Database::fetch_array($scores))
     		{
-    			error_log(print_r($data,1));
     			return array ($data['progress'], 100);
     		}
     		else

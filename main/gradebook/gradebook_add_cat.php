@@ -35,10 +35,10 @@ block_students();
 
 $catadd = new Category();
 $catadd->set_user_id($_user['user_id']);
-$catadd->set_parent_id($_GET['selectcat']);
+$catadd->set_parent_id(Database::escape_string($_GET['selectcat']));
 $catcourse = Category :: load ($_GET['selectcat']);
 $catadd->set_course_code($catcourse[0]->get_course_code());
-$form = new CatForm(CatForm :: TYPE_ADD, $catadd, 'add_cat_form', null, api_get_self() . '?selectcat=' . $_GET['selectcat']);
+$form = new CatForm(CatForm :: TYPE_ADD, $catadd, 'add_cat_form', null, api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']));
 if ($form->validate()) {
 	$values = $form->exportValues();
 	$cat = new Category();
@@ -68,7 +68,7 @@ if ($form->validate()) {
 	exit;
 }
 $interbreadcrumb[] = array (
-	'url' => 'gradebook.php?selectcat='.$_GET['selectcat'],
+	'url' => 'gradebook.php?selectcat='.Security::remove_XSS($_GET['selectcat']),
 	'name' => get_lang('Gradebook'
 ));
 Display :: display_header(get_lang('NewCategory'));

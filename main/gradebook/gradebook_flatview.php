@@ -41,8 +41,8 @@ block_students();
 
 if (isset ($_POST['submit']) && isset ($_POST['keyword']))
 {
-	header('Location: ' . api_get_self() . '?selectcat=' . $_GET['selectcat']
-											   . '&search='.$_POST['keyword']);
+	header('Location: ' . api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
+											   . '&search='.Security::remove_XSS($_POST['keyword']));
 	exit;
 }
 
@@ -82,8 +82,8 @@ if (isset ($_GET['exportpdf']))
 {
 	$interbreadcrumb[]= array (
 		'url' => api_get_self().'?selectcat=' . $_GET['selectcat'],
-		'name' => get_lang('FlatView'
-	));
+		'name' => get_lang('FlatView')
+		);
 	$export_pdf_form= new DataForm(DataForm :: TYPE_EXPORT_PDF, 'export_pdf_form', null, api_get_self() . '?exportpdf=&offset='.$_GET['offset'].'&selectcat=' . $_GET['selectcat'],'_blank');
 	if (!$export_pdf_form->validate())
 		Display :: display_header(get_lang('ExportPDF'));
@@ -93,7 +93,7 @@ if (isset ($_GET['exportpdf']))
 
 		$export= $export_pdf_form->exportValues();
 		$format = $export['orientation'];
-		$pdf =& new Cezpdf('a4',$format);
+		$pdf =& new Cezpdf('a4',$format); //format is 'portrait' or 'landscape'
 		export_pdf($pdf,$printable_data[1],$printable_data[0],$format);
 		exit;		
 	}

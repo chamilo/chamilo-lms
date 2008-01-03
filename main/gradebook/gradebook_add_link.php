@@ -56,7 +56,6 @@ if ($typeform->validate() && isset($_GET['newtypeselected']))
 // link type selected, show 2nd form to retrieve the link data
 if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0')
 {
-error_log(__LINE__);
 	$addform = new LinkAddEditForm(LinkAddEditForm :: TYPE_ADD,
 								   $category[0],
 								   intval($_GET['typeselected']),
@@ -64,25 +63,20 @@ error_log(__LINE__);
 								   'add_link',
 								   api_get_self() . '?selectcat=' . $_GET['selectcat']
 														. '&typeselected=' . $_GET['typeselected'] . '&course_code=' . $_GET['course_code']);
-error_log(__LINE__);
 	if ($addform->validate())
 	{
-error_log(__LINE__);
 		$addvalues = $addform->exportValues();
 
 		$link= LinkFactory :: create($_GET['typeselected']);
 		$link->set_user_id(api_get_user_id());
 		if($category[0]->get_course_code() == '' && !empty($_GET['course_code']))
 		{
-error_log(__LINE__);
 			$link->set_course_code(Database::escape_string($_GET['course_code']));
 		}
 		else
 		{
-error_log(__LINE__);
 			$link->set_course_code($category[0]->get_course_code());
 		}
-error_log(__LINE__);
 		$link->set_category_id($category[0]->get_id());
 		
 		if ($link->needs_name_and_description())
@@ -103,7 +97,6 @@ error_log(__LINE__);
 		$link->set_visible(empty ($addvalues['visible']) ? 0 : 1);
 		
 		$link->add();
-error_log(__LINE__);
 
 
 		if ($addvalues['addresult'] == 1)

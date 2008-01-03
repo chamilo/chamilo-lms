@@ -51,6 +51,7 @@ class GradebookTable extends SortableTable
 		else
 		{
 			$this->set_header($column++, get_lang('Results'), false);
+			$this->set_header($column++, get_lang('Certificates'), false);
 		}
     }
 
@@ -124,12 +125,15 @@ class GradebookTable extends SortableTable
 
 			//admins get an edit column
 			if (api_is_allowed_to_create_course())
+			{
 				$row[] = $this->build_edit_column ($item);
-
-			//students get the results column
+			}
+			//students get the results and certificates columns
 			else
+			{
 				$row[] = $data[5];
-
+				$row[] = $data[6];
+			}
 			$sortable_data[] = $row;
 		}
 		

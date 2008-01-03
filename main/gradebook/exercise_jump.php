@@ -6,11 +6,11 @@
  * when visiting the gradebook, and several course scripts rely on these
  * variables.
  * Most code here is ripped from /main/course_home/course_home.php
- * @author Bert Steppé
+ * @author Bert Steppï¿½
  */
 
 
-$cidReq = $_GET['cid'];
+$cidReq = mysql_real_escape_string($_GET['cid']);
 
 include ('../inc/global.inc.php');
 
@@ -33,7 +33,7 @@ $_course['official_code'] = $course_code;
 
 if (isset($_GET['doexercise']))
 {
-	header('Location: ../exercice/exercice_submit.php?cidReq='.$cidReq.'&origin=&learnpath_id=&learnpath_item_id=&exerciseId='.$_GET['doexercise']);
+	header('Location: ../exercice/exercice_submit.php?cidReq='.$cidReq.'&origin=&learnpath_id=&learnpath_item_id=&exerciseId='.Security::remove_XSS($_GET['doexercise']));
 	exit;
 }
 else

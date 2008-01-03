@@ -54,7 +54,6 @@ abstract class AbstractLink implements GradebookItem
 
 	public function get_course_code()
 	{
-		error_log('Returning course_code = '.$this->course_code);
 		return $this->course_code;
 	}
 
@@ -103,7 +102,6 @@ abstract class AbstractLink implements GradebookItem
 	public function set_course_code ($course_code)
 	{
 		$this->course_code = $course_code;
-		error_log('Link '.$this->get_id().' course code is now = '.$this->course_code);
 	}
 	
 	public function set_category_id ($category_id)

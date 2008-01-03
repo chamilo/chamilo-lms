@@ -19,6 +19,7 @@ class Category implements GradebookItem
 	private $parent;
 	private $weight;
 	private $visible;
+	private $certificate_min_score;
 
 
 // CONSTRUCTORS
@@ -95,6 +96,11 @@ class Category implements GradebookItem
 		$this->course_code = $course_code;
 	}
 	
+	public function set_certificate_min_score ($min_score=null)
+	{
+		$this->certificate_min_score = $min_score;
+	}
+	
 	public function set_parent_id ($parent)
 	{
 		$this->parent = $parent;
@@ -135,11 +141,13 @@ class Category implements GradebookItem
 		$paramcount = 0;
 		if (isset ($id))
 		{
+			$id = Database::escape_string($id);
 			$sql.= ' WHERE id = '.$id;
 			$paramcount ++;
 		}
 		if (isset ($user_id))
 		{
+			$user_id = Database::escape_string($user_id);
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
 			$sql .= ' user_id = '.$user_id;
@@ -147,6 +155,7 @@ class Category implements GradebookItem
 		}
 		if (isset ($course_code))
 		{
+			$course_code = Database::escape_string($course_code);
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
 			if ($course_code == '0') $sql .= ' course_code is null ';
@@ -155,6 +164,7 @@ class Category implements GradebookItem
 		}
 		if (isset ($parent_id))
 		{
+			$parent_id = Database::escape_string($parent_id);
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
 			$sql .= ' parent_id = '.$parent_id;
@@ -162,6 +172,7 @@ class Category implements GradebookItem
 		}
 		if (isset ($visible))
 		{
+			$visible = Database::escape_string($visible);
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
 			$sql .= ' visible = '.$visible;
@@ -201,6 +212,7 @@ class Category implements GradebookItem
 			$cat->set_parent_id($data['parent_id']);
 			$cat->set_weight($data['weight']);
 			$cat->set_visible($data['visible']);
+			$cat->set_certificate_min_score($data['certif_min_score']);
 			$allcat[]=$cat;
 		}
 		return $allcat;
@@ -327,7 +339,22 @@ class Category implements GradebookItem
 		$number=mysql_fetch_row($result);
 		return ($number[0] != 0);
 	}
-	
+
+	/**
+	 * Checks if the certificate is available for the given user in this category
+	 * @param	integer	User ID
+	 * @return	boolean	True if conditions match, false if fails
+	 */
+	public function is_certificate_available($user_id)
+	{
+		$score = $this->calc_score($user_id);
+		if($score >= $this->certificate_min_score)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Is this category a course ?
 	 * A category is a course if it has a course code and no parent category.
@@ -716,7 +743,6 @@ class Category implements GradebookItem
 				.' WHERE parent_id = 0'
 //				.' AND user_id = '.$user_id
 				.' AND course_code IS NOT null)';
-		error_log($sql);
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
 		$cats=array();

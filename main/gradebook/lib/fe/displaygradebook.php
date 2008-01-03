@@ -67,7 +67,7 @@ class DisplayGradebook
 		if (!$evalobj->has_results())
 			$evalinfo .= '<br><i>' . get_lang('NoResultsInEvaluation') . '</i>';
 		elseif ($scoredisplay->is_custom() && api_get_self() != '/dokeos/main/gradebook/gradebook_statistics.php')
-			$evalinfo .= '<br><br><a href="gradebook_statistics.php?selecteval='.$_GET['selecteval'].'"> '. get_lang('ViewStatistics') . '</a>';
+			$evalinfo .= '<br><br><a href="gradebook_statistics.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '. get_lang('ViewStatistics') . '</a>';
 		$evalinfo .= '</td><td align=right><img src="../img/default_courses_img/tutorial.gif"></img></td></table>';
 		Display :: display_normal_message($evalinfo,false);
 		echo $header;
@@ -82,7 +82,7 @@ class DisplayGradebook
 	function display_header_flatview($catobj, $showeval, $showlink,$simple_search_form)
 	{
 		$header= '<table border=0 cellpadding=5>';
-		$header .= '<td style="vertical-align: top;"><a href=gradebook.php?selectcat=' . $_GET['selectcat'] . '><< ' . get_lang('BackToOverview') . '</a></td>';
+		$header .= '<td style="vertical-align: top;"><a href=gradebook.php?selectcat=' . Security::remove_XSS($_GET['selectcat']) . '><< ' . get_lang('BackToOverview') . '</a></td>';
 		$header .= '<td style="vertical-align: top;">' . get_lang('FilterCategory') . '</td><td style="vertical-align: top;"><form name=selector><select name=selectcat onchange="document.selector.submit()">';
 		$cats= Category :: load();
 		$tree= $cats[0]->get_tree();
@@ -106,7 +106,7 @@ class DisplayGradebook
 		if (!$catobj->get_id() == '0')
 			$header .= '<td style="vertical-align: top;"><a href=' . api_get_self() . '?selectcat=' . $catobj->get_parent_id() . '><img src="../img/folder_up.gif" border="0" alt="'.get_lang('Up').'" /></a></td>';
 		$header .= '<td style="vertical-align: top;">'.$simple_search_form->toHtml().'</td>';
-		$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?exportpdf=&offset='.$_GET['offset'].'&search=' . $_GET['search'].'&selectcat=' . $catobj->get_id() . '"><img src=../img/calendar_up.gif alt=' . get_lang('ExportPDF') . '/> ' . get_lang('ExportPDF') . '</a>';
+		$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?exportpdf=&offset='.Security::remove_XSS($_GET['offset']).'&search=' . Security::remove_XSS($_GET['search']).'&selectcat=' . $catobj->get_id() . '"><img src=../img/calendar_up.gif alt=' . get_lang('ExportPDF') . '/> ' . get_lang('ExportPDF') . '</a>';
 		$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?print=&selectcat=' . $catobj->get_id() . '" target="_blank"><img src=../img/file_oo_writer.gif alt=' . get_lang('Print') . '/> ' . get_lang('Print') . '</a>';
 		$header .= '</td></tr></table>';
 		if (!$catobj->get_id() == '0')
@@ -235,7 +235,7 @@ class DisplayGradebook
 			$img_attributes .= 'width="200" ';
 		$cattotal= Category :: load(0);
 		$info = '<table width="100%" border=0 cellpadding=5><tr><td width="80%">';
-		$info.= get_lang('Name') . ' : <b>' . $user['lastname'] . ' ' . $user['firstname'] . '</b> ( <a href="user_info.php?userid=' . $userid . '&selecteval=' . $_GET['selecteval'] . '">' . get_lang('MoreInfo') . '...</a> )<br>';
+		$info.= get_lang('Name') . ' : <b>' . $user['lastname'] . ' ' . $user['firstname'] . '</b> ( <a href="user_info.php?userid=' . $userid . '&selecteval=' . Security::remove_XSS($_GET['selecteval']) . '">' . get_lang('MoreInfo') . '...</a> )<br>';
 		$info.= get_lang('Email') . ' : <b><a href="mailto:' . $user['email'] . '">' . $user['email'] . '</a></b><br><br>';
 		$scoredisplay = ScoreDisplay :: instance(); 
 		$score_stud= $cattotal[0]->calc_score($userid);

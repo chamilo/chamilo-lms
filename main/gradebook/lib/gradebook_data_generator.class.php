@@ -3,7 +3,7 @@
 /**
  * Class to select, sort and transform object data into array data,
  * used for the general gradebook view
- * @author Bert Steppé
+ * @author Bert Steppï¿½
  */
 class GradebookDataGenerator
 {
@@ -97,6 +97,7 @@ class GradebookDataGenerator
 			$row[] = $this->build_date_column ($item);
 			if (!api_is_allowed_to_create_course())
 				$row[] = $this->build_result_column ($item, $ignore_score_color);
+				$row[] = $this->get_certificate_link ($item);
 			$data[] = $row;
 		}
 		
@@ -104,8 +105,23 @@ class GradebookDataGenerator
 
 	}
 
-
-
+	/**
+	 * Returns the link to the certificate generation, if the score is enough, otherwise
+	 * returns an empty string. This only works with categories.
+	 * @param	object Item 
+	 */
+	function get_certificate_link($item)
+	{
+		if(is_a($item, 'Category'))
+		{
+			if($item->is_certificate_available(api_get_user_id()))
+			{
+				$link = '<a href="gradebook.php?export_certificate=1&cat='.$item->get_id().'&user='.api_get_user_id().'">'.get_lang('Certificate').'</a>';
+				return $link;
+			}
+		}
+		return '';
+	}
 
 
 

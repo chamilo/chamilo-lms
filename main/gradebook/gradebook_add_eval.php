@@ -38,13 +38,13 @@ $is_allowedToEdit = $is_courseAdmin;
 $evaladd = new Evaluation();
 $evaladd->set_user_id($_user['user_id']);
 if (isset ($_GET['selectcat']) && (!empty ($_GET['selectcat']))) {
-	$evaladd->set_category_id($_GET['selectcat']);
+	$evaladd->set_category_id(Database::escape_string($_GET['selectcat']));
 	$cat = Category :: load($_GET['selectcat']);
 	$evaladd->set_course_code($cat[0]->get_course_code());
 } else {
 	$evaladd->set_category_id(0);
 }
-$form = new EvalForm(EvalForm :: TYPE_ADD, $evaladd, null, 'add_eval_form',null,api_get_self() . '?selectcat=' . $_GET['selectcat']);
+$form = new EvalForm(EvalForm :: TYPE_ADD, $evaladd, null, 'add_eval_form',null,api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']));
 if ($form->validate()) {
 	$values = $form->exportValues();
 	$eval = new Evaluation();
@@ -85,7 +85,7 @@ if ($form->validate()) {
 }
 
 $interbreadcrumb[] = array (
-	'url' => 'gradebook.php?selectcat='.$_GET['selectcat'],
+	'url' => 'gradebook.php?selectcat='.Security::remove_XSS($_GET['selectcat']),
 	'name' => get_lang('Gradebook'
 ));
 Display :: display_header(get_lang('NewEvaluation'));

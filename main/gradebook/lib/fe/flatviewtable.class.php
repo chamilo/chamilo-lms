@@ -92,9 +92,9 @@ class FlatViewTable extends SortableTable
       		if ($calcnext > 0)
       		{
 	      		$header .= '<a href="'.api_get_self()
-	      							.'?selectcat='.$_GET['selectcat']
+	      							.'?selectcat='.Security::remove_XSS($_GET['selectcat'])
 	      							.'&offset='.($this->offset+LIMIT)
-	      							.(isset($_GET['search'])?'&search='.$_GET['search']:'').'">'
+	      							.(isset($_GET['search'])?'&search='.Security::remove_XSS($_GET['search']):'').'">'
 	      					.get_lang('Next').' '.$calcnext . ' '.get_lang('Evaluations')
 	      					.'<img src="../img/lp_rightarrow.gif" alt="'.get_lang('Next').'/" />'
 	      					.'</a>';

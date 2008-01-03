@@ -49,7 +49,7 @@ class UserForm extends FormValidator
 		if (isset($_GET['search']) && (!empty($_GET['search'])))
 		{
 		   	$this->setDefaults(array(
-   		    'keyword' => $_GET['search']
+   		    'keyword' => Security::remove_XSS($_GET['search'])
    		    ));
 		}
 		$renderer =& $this->defaultRenderer();

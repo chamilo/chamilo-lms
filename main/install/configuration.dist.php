@@ -145,12 +145,6 @@ $storeSessionInDb             							= false;
 $_configuration['session_lifetime']						= {SESSION_LIFETIME};
 
 
-$openoffice_conf 										= array();
-$openoffice_conf['javacommand'] 						= 'java';
-$openoffice_conf['host'] 								= 'ns6077.ovh.net';
-$openoffice_conf['port'] 								= '2002';
-$openoffice_conf['ftpuser'] 							= '****';
-$openoffice_conf['ftppasswd'] 							= '****';
 
 // Version settings
 $_configuration['dokeos_version'] 	= '{NEW_VERSION}';

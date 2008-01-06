@@ -50,7 +50,18 @@ class Category implements GradebookItem
 	{
 		return $this->user_id;
 	}
-
+	
+	public function get_certificate_min_score ()
+	{
+		if(!empty($this->certificate_min_score))
+		{
+			return $this->certificate_min_score;
+		}
+		else
+		{
+			return null;
+		}
+	}
 	public function get_course_code()
 	{
 		return $this->course_code;
@@ -137,7 +148,7 @@ class Category implements GradebookItem
 		}
 		
 		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-		$sql='SELECT id,name,description,user_id,course_code,parent_id,weight,visible FROM '.$tbl_grade_categories;
+		$sql='SELECT id,name,description,user_id,course_code,parent_id,weight,visible,certif_min_score FROM '.$tbl_grade_categories;
 		$paramcount = 0;
 		if (isset ($id))
 		{
@@ -271,6 +282,12 @@ class Category implements GradebookItem
 		$sql .=	', parent_id = ';
 		if (isset ($this->parent))
 			$sql .= $this->get_parent_id();
+		else
+			$sql .= 'null';
+		
+		$sql .= ', certif_min_score = ';
+		if (isset ($this->certificate_min_score) && strcmp($this->certificate_min_score,'')!==0)
+			$sql .= $this->get_certificate_min_score();
 		else
 			$sql .= 'null';
 		

@@ -51,6 +51,7 @@ if ($form->validate()) {
 	$cat->set_user_id($values['hid_user_id']);
 	$cat->set_parent_id($values['hid_parent_id']);
 	$cat->set_weight($values['weight']);
+	$cat->set_certificate_min_score($values['certif_min_score']);
 	if (empty ($values['visible']))
 		$visible = 0;
 	else

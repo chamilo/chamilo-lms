@@ -126,7 +126,8 @@ class CatForm extends FormValidator {
     		'hid_user_id' => $this->category_object->get_user_id(),
     		'hid_parent_id' => $this->category_object->get_parent_id(),	
    	 		'weight' => $this->category_object->get_weight(),	
-   	 		'visible' => $this->category_object->is_visible()
+   	 		'visible' => $this->category_object->is_visible(),
+   	 		'certif_min_score' => $this->category_object->get_certificate_min_score(),
     		));
    		$this->addElement('hidden','hid_id', $this->category_object->get_id());
    		$this->addElement('hidden','course_code', $this->category_object->get_course_code());
@@ -138,6 +139,7 @@ class CatForm extends FormValidator {
 		$this->addElement('hidden', 'zero', 0);
 		$this->add_textfield('name', get_lang('CategoryName'),true,array('size'=>'54','maxlength'=>'50'));
 		$this->add_textfield('weight', get_lang('Weight'),true,array('size'=>'4','maxlength'=>'4'));			
+		$this->add_textfield('certif_min_score', get_lang('CertificateMinScore'),false,array('size'=>'4','maxlength'=>'4'));			
    		$this->addElement('hidden','hid_user_id');
    		$this->addElement('hidden','hid_parent_id');
 		$this->addElement('textarea', 'description', get_lang('Description'),array('rows'=>'3','cols' => '34'));
@@ -146,6 +148,9 @@ class CatForm extends FormValidator {
 		$this->addRule('weight',get_lang('OnlyNumbers'),'numeric');
 		$this->addRule('weight',get_lang('NoDecimals'),'nopunctuation');
 		$this->addRule(array ('weight', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
+		$this->addRule('certif_min_score',get_lang('OnlyNumbers'),'numeric');
+		$this->addRule('certif_min_score',get_lang('NoDecimals'),'nopunctuation');
+		$this->addRule(array ('certif_min_score', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
    	}
 	/** 
 	 * This function builds an 'select course' form in the add category process, 

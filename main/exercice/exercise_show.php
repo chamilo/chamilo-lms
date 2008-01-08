@@ -316,10 +316,27 @@ $query = "select * from ".$TBL_TRACK_ATTEMPT." as attempts
 
 $result =api_sql_query($query, __FILE__, __LINE__);
 ?>
-	<h3><?php echo stripslashes($test)?> : <?php echo get_lang("Result"); ?></h3>
-	<?php echo $exerciseDexcription.'<br>'; ?>
-	 </td>
-  </tr>
+	
+	<table>
+		<tr>
+			<td style="font-weight:bold"><?php echo get_lang('CourseTitle')?> : </td>
+			<td><?php echo $_course['name'] ?></td>
+		</tr>
+		<tr>
+			<td style="font-weight:bold"><?php echo get_lang('User')?> : </td>
+			<td><?php echo $user_name ?></td>
+		</tr>
+		<tr>
+			<td style="font-weight:bold">
+				<?php echo get_lang("Exercise"); ?>
+			</td>
+			<td>
+			<?php echo stripslashes($test)?><br />
+			<?php echo $exerciseDexcription; ?>
+			</td>
+		</tr>
+	 </table>
+	 <br />
   <?php
 
 

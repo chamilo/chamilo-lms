@@ -183,6 +183,7 @@ if(!empty($_GET['student']))
 		if(in_array($_GET['student'],$a_online))
 		{
 			$online = get_lang('Yes');
+			break;
 		}
 		else
 		{

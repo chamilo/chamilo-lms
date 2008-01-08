@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 13790 2007-11-27 04:59:47Z yannoo $
+// $Id: infocours.php 14101 2008-01-08 15:39:39Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -121,6 +121,7 @@ if(mysql_num_rows($q_result_titulars)==0){
 	$q_result_titulars=api_sql_query($sql, __FILE__, __LINE__);
 }
 
+$a_profs[0] = '-- '.get_lang('NoManager').' --';
 while($a_titulars=mysql_fetch_array($q_result_titulars)){
 		$s_username=$a_titulars["username"];
 		$s_lastname=$a_titulars["lastname"];

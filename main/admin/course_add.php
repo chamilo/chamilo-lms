@@ -1,5 +1,5 @@
 <?php
-// $Id: course_add.php 13972 2007-12-06 10:32:41Z elixir_inter $
+// $Id: course_add.php 14101 2008-01-08 15:39:39Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -69,6 +69,7 @@ $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status=1 ORDER BY lastname,firstname";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 $teachers = array();
+$teachers[0] = '-- '.get_lang('NoManager').' --';
 while($obj = mysql_fetch_object($res))
 {
 		$teachers[$obj->user_id] = $obj->lastname.' '.$obj->firstname;

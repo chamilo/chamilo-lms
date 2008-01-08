@@ -1980,11 +1980,6 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 		$error_msg[] = "language is missing";
 		$okForRegisterCourse = false;
 	}
-	if(empty ($uidCreator))
-	{
-		$error_msg[] = "uidCreator is missing";
-		$okForRegisterCourse = false;
-	}
 
 	if(empty ($expiration_date))
 	{
@@ -1994,7 +1989,6 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 	{
 		$expiration_date = "FROM_UNIXTIME(".$expiration_date . ")";
 	}
-
 	if($okForRegisterCourse)
 	{
 		$titular=addslashes($titular);
@@ -2016,7 +2010,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 					last_visit = NULL,
 					tutor_name = '".Database :: escape_string($titular) . "',
 					visual_code = '".Database :: escape_string($courseScreenCode) . "'";
-
+		
 		api_sql_query($sql, __FILE__, __LINE__);
 
 		$sort = api_max_sort_value('0', $_user['user_id']);

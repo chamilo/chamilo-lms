@@ -186,7 +186,7 @@ foreach ($list as $my_item_id) {
 			else{
 				$correct_test_link='-';
 			}
-			$output .= "<tr class='$oddclass'>\n"."<td>$extend_link</td>\n".'<td colspan="4" class="content"><div class="mystatus">'.$title."</div></td>\n".'<td colspan="2" class="content"></td>'."\n".'<td colspan="2" class="content"></td>'."\n".'<td colspan="2" class="content"></td><td class="content">'.$correct_test_link.'</td>'."\n"."</tr>\n";
+			$output .= "<tr class='$oddclass'>\n"."<td>$extend_link</td>\n".'<td colspan="4" class="content"><div class="mystatus">'.htmlentities($title)."</div></td>\n".'<td colspan="2" class="content"></td>'."\n".'<td colspan="2" class="content"></td>'."\n".'<td colspan="2" class="content"></td><td class="content">'.$correct_test_link.'</td>'."\n"."</tr>\n";
 		}
 
 		$counter ++;
@@ -421,7 +421,7 @@ foreach ($list as $my_item_id) {
 			else{
 				$correct_test_link='-';
 			}
-			$output .= "<tr class='$oddclass'>\n"."<td>$extend_link</td>\n".'<td colspan="4"><div class="mystatus">'.$title.'</div></td>'."\n"
+			$output .= "<tr class='$oddclass'>\n"."<td>$extend_link</td>\n".'<td colspan="4"><div class="mystatus">'.htmlentities($title).'</div></td>'."\n"
 			//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
 			.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n".'<td colspan="2"><div class="mystatus" align="center">'. ($score == 0 ? '-' : ($maxscore==0?$score:$score.'/'.$maxscore))."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$time."</div></td><td>$correct_test_link</td>\n"."</tr>\n";
 						

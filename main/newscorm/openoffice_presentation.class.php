@@ -30,7 +30,7 @@ class OpenofficePresentation extends OpenofficeDocument {
 		$previous = 0;
 		$i = 0;
 		foreach($files as $file){
-			$i++;		
+			$i++;	
 			
 			// add the png to documents
 			$document_id = add_document($_course,$this->created_dir.'/'.$file,'file',filesize($this->base_work_dir.$this->created_dir.'/'.$file),$file);
@@ -59,6 +59,7 @@ class OpenofficePresentation extends OpenofficeDocument {
 				if($this->take_slide_name === true)
 				{
 					$slide_name = substr($infos['basename'],0,strrpos($infos['basename'],'.'));
+					$slide_name = str_replace('_',' ',$slide_name);
 				}
 				else
 				{

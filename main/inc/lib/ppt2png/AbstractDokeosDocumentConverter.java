@@ -68,14 +68,14 @@ public abstract class AbstractDokeosDocumentConverter extends AbstractOpenOffice
 
 	public AbstractDokeosDocumentConverter(OpenOfficeConnection connection, int width, int height) {		
 		super(connection);
-		this.width = 800;
-		this.height = 600;
+		this.width = width;
+		this.height = height;
 	}
 
 	public AbstractDokeosDocumentConverter(OpenOfficeConnection connection, DocumentFormatRegistry formatRegistry, int width, int height) {
 		super(connection, formatRegistry);
-		this.width = 800;
-		this.height = 600;
+		this.width = width;
+		this.height = height;
 	}
 
 	/**

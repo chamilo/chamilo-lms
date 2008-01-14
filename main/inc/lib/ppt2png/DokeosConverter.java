@@ -1,6 +1,6 @@
 //
-// JODConverter - Java OpenDocument Converter
-// Copyright (C) 2004-2007 - Mirko Nasato <mirko@artofsolving.com>
+// DokeosConverter using JODConverter - Java OpenDocument Converter
+// Eric Marguin <e.marguin@elixir-interactive.com>
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public

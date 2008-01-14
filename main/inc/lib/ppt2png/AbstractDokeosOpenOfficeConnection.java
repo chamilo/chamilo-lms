@@ -1,6 +1,6 @@
 //
-// JODConverter - Java OpenDocument Converter
-// Copyright (C) 2004-2007 - Mirko Nasato <mirko@artofsolving.com>
+// DokeosConverter using JODConverter - Java OpenDocument Converter
+// Eric Marguin <e.marguin@elixir-interactive.com>
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -44,6 +44,7 @@ public abstract class AbstractDokeosOpenOfficeConnection implements OpenOfficeCo
     private String connectionString;
     private XComponent bridgeComponent;
     protected XMultiComponentFactory serviceManager;
+    protected XBridge bridge;
     protected XComponentContext componentContext;
     private boolean connected = false;
     private boolean expectingDisconnection = false;
@@ -62,7 +63,7 @@ public abstract class AbstractDokeosOpenOfficeConnection implements OpenOfficeCo
             XConnection connection = connector.connect(connectionString);
             XBridgeFactory bridgeFactory = (XBridgeFactory) UnoRuntime.queryInterface(XBridgeFactory.class,
                     localServiceManager.createInstanceWithContext("com.sun.star.bridge.BridgeFactory", localContext));
-            XBridge bridge = bridgeFactory.createBridge("", "urp", connection, null);
+            bridge = bridgeFactory.createBridge("", "urp", connection, null);
             bridgeComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, bridge);
             bridgeComponent.addEventListener(this);
             serviceManager = (XMultiComponentFactory) UnoRuntime.queryInterface(XMultiComponentFactory.class,

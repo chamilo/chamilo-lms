@@ -58,7 +58,7 @@ abstract class OpenofficeDocument extends learnpath {
 		$perm = api_get_setting('permissions_for_new_files');
 		
 		
-		$classpath = '-cp .:ridl.jar:js.jar:juh.jar:jurt.jar:jut.jar:java_uno.jar:java_uno_accessbridge.jar:edtftpj-1.5.2.jar:unoil.jar:commons-cli-1.0.jar:commons-io-1.3.1.jar:jodconverter-2.2.0.jar:jodconverter-cli-2.2.0.jar';
+		$classpath = '-cp .:ridl.jar:js.jar:juh.jar:jurt.jar:jut.jar:java_uno.jar:java_uno_accessbridge.jar:edtftpj-1.5.2.jar:unoil.jar:commons-cli-1.0.jar:commons-io-1.3.1.jar:jodconverter-2.2.1.jar:jodconverter-cli-2.2.1.jar';
 		if(strpos($_ENV['OS'],'Windows') !== false)
 		{
 			$classpath = str_replace(':',';',$classpath);

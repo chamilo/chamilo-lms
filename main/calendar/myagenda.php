@@ -346,7 +346,7 @@ function get_agendaitems($courses_dbs, $month, $year)
 										AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
 										AND `item_property`.`visibility`='1'
 										GROUP BY agenda.id
-										ORDER BY start_date ".$sort;echo $sqlquery;
+										ORDER BY start_date ".$sort;
 		}
 		// if the user is not an administrator of that course
 		else

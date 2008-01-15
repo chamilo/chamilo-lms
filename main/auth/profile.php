@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 14069 2007-12-25 22:34:35Z yannoo $
+// $Id: profile.php 14108 2008-01-15 09:41:13Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -224,7 +224,7 @@ if (api_get_setting('extended_profile') == 'true')
 	$form->addElement('file', 'production', get_lang('MyProductions'));
 	if ($production_list = UserManager::build_production_list($_user['user_id'],'',true))
 	{
-			$form->addElement('static', 'productions', null, $production_list);
+			$form->addElement('static', 'productions_list', null, $production_list);
 	}
 
 	//	MY PERSONAL OPEN AREA
@@ -463,9 +463,9 @@ elseif ($_POST['remove_production'])
 	}
 
 	if ($production_list = UserManager::build_production_list($_user['user_id'], true,true))
-		$form->insertElementBefore($form->createElement('static', null, null, $production_list), 'productions');
+		$form->insertElementBefore($form->createElement('static', null, null, $production_list), 'productions_list');
 
-	$form->removeElement('productions');
+	$form->removeElement('productions_list');
 
 	$file_deleted = true;
 }

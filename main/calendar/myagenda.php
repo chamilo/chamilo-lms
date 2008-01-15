@@ -728,6 +728,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 										AND DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
 										AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
 										AND `item_property`.`visibility`='1'
+										GROUP BY agenda.id
 										ORDER BY start_date ".$sort;
 		}
 		// if the user is not an administrator of that course
@@ -842,6 +843,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 										AND a.start_date>='".$start_filter."' AND a.start_date<='".$end_filter."'
 										AND i.tool='".TOOL_CALENDAR_EVENT."'
 										AND i.visibility='1'
+										GROUP BY a.id
 										ORDER BY a.start_date";
 		}
 		// if the user is not an administrator of that course

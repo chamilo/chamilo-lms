@@ -531,7 +531,7 @@ echo "</table>";
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return html code
 */
-function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected)
+function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected=array())
 {
 	echo "\t\t<select name=\"not_selected_form[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">\n";
 
@@ -541,14 +541,11 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 		foreach($group_list as $this_group)
 		{
 			//api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
-			if(is_array($to_already_selected))
-			{
-				if (!in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
-					{
-					echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
-						"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
-						"</option>\n";
-				}
+			if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
+				{
+				echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
+					"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
+					"</option>\n";
 			}
 		}
 		// a divider
@@ -558,14 +555,11 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 	// adding the individual users to the select form
 	foreach($user_list as $this_user)
 	{
-		if(is_array($to_already_selected))
+		if (!is_array($to_already_selected) || !in_array("USER:".$this_user['uid'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 		{
-			if (!in_array("USER:".$this_user['uid'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
-			{
-				echo	"\t\t<option value=\"USER:",$this_user['uid'],"\">",
-					"",$this_user['lastName']," ",$this_user['firstName'],
-					"</option>\n";
-			}
+			echo	"\t\t<option value=\"USER:",$this_user['uid'],"\">",
+				"",$this_user['lastName']," ",$this_user['firstName'],
+				"</option>\n";
 		}
 	}
 	echo "\t\t</select>\n";

@@ -68,7 +68,7 @@ CREATE TABLE lp_iv_objective(id bigint unsigned primary key auto_increment, lp_i
 ALTER TABLE lp_iv_objective ADD INDEX (lp_iv_id);
 ALTER TABLE lp_item CHANGE prerequisite prerequisite TEXT DEFAULT NULL;
 INSERT INTO course_setting(variable,value,category) VALUES ('email_alert_manager_on_new_quiz',0,'quiz');
-ALTER TABLE `dropbox_post` ADD `session_id` SMALLINT UNSIGNED NOT NULL ;
-ALTER TABLE `dropbox_post` ADD INDEX ( `session_id` ) ;
-ALTER TABLE `dropbox_file` ADD `session_id` SMALLINT UNSIGNED NOT NULL ;
-ALTER TABLE `dropbox_file` ADD INDEX ( `session_id` ) ;
+ALTER TABLE dropbox_post ADD session_id SMALLINT UNSIGNED NOT NULL ;
+ALTER TABLE dropbox_post ADD INDEX ( session_id ) ;
+ALTER TABLE dropbox_file ADD session_id SMALLINT UNSIGNED NOT NULL ;
+ALTER TABLE dropbox_file ADD INDEX ( session_id ) ;

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 14088 2007-12-31 10:53:01Z yannoo $
+// $Id: user_list.php 14115 2008-01-16 17:23:27Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -300,7 +300,7 @@ function modify_filter($user_id,$url_params)
 	$result_sql=api_sql_query($sql);
 
 	if(mysql_result($result_sql,0,"status")=="1"){
-		$result .= '<a href="../mySpace/teachers.php?teacher_id='.$user_id.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;';
+		$result .= '<div style="display:inline;margin-left:25px"></div>';
 	}
 	if(mysql_result($result_sql,0,"status")=="5"){
 		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;';

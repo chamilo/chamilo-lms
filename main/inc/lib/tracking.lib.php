@@ -99,6 +99,20 @@ class Tracking {
 
 		return $nb_seconds;
 	}
+	
+	function get_first_connection_date($student_id) {
+		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+		$sql = 'SELECT login_date FROM ' . $tbl_track_login . ' 
+						WHERE login_user_id = ' . intval($student_id) . ' 
+						ORDER BY login_date ASC LIMIT 0,1';
+
+		$rs = api_sql_query($sql);
+		if ($first_login_date = mysql_result($rs, 0, 0)) {
+			return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($first_login_date));			
+		} else {
+			return false;
+		}
+	}
 
 	function get_last_connection_date($student_id, $warning_message = false) {
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);

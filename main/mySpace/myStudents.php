@@ -229,10 +229,17 @@ if(!empty($_GET['student']))
 	}
 	$avg_student_progress = round($avg_student_progress / $nb_courses,2);
 	$avg_student_score = round($avg_student_score / $nb_courses,2);
+	
+	$first_connection_date = Tracking::get_first_connection_date($a_infosUser['user_id']);
+	if($first_connection_date==''){
+		$first_connection_date=get_lang('NoConnexion');
+	}
+	
 	$last_connection_date = Tracking::get_last_connection_date($a_infosUser['user_id'],true);
 	if($last_connection_date==''){
 		$last_connection_date=get_lang('NoConnexion');
 	}
+	
 	$time_spent_on_the_platform = api_time_to_hms(Tracking::get_time_spent_on_the_platform($a_infosUser['user_id']));
 	
 	// cvs informations
@@ -244,8 +251,8 @@ if(!empty($_GET['student']))
 	
 	// csv tracking
 	$csv_content[] = array(get_lang('Tracking'));
-	$csv_content[] = array(get_lang('LatestLogin'), get_lang('TimeSpentOnThePlatform'), get_lang('Progress'), get_lang('Score'));
-	$csv_content[] = array(strip_tags($last_connection_date), $time_spent_on_the_platform , $avg_student_progress.' %',$avg_student_score.' %');
+	$csv_content[] = array(get_lang('FirstLogin'),get_lang('LatestLogin'), get_lang('TimeSpentOnThePlatform'), get_lang('Progress'), get_lang('Score'));
+	$csv_content[] = array(strip_tags($first_connection_date),strip_tags($last_connection_date), $time_spent_on_the_platform , $avg_student_progress.' %',$avg_student_score.' %');
 	
 ?>
 
@@ -339,6 +346,14 @@ if(!empty($_GET['student']))
 								<tr>
 									<td>
 										<table>
+											<tr>
+												<td class="none" align="right">
+													<?php echo get_lang('FirstLogin') ?>
+												</td>
+												<td class="none" align="left">
+													<?php echo $first_connection_date ?>
+												</td>
+											</tr>
 											<tr>
 												<td class="none" align="right">
 													<?php echo get_lang('LatestLogin') ?>

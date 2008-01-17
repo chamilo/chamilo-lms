@@ -123,8 +123,9 @@ if($isCoach || api_is_platform_admin())
 		$table -> set_header(4, get_lang('Score'),false);	
 		$table -> set_header(5, get_lang('Student_publication'),false);
 		$table -> set_header(6, get_lang('Messages'),false);
-		$table -> set_header(7, get_lang('LatestLogin'), false);
-		$table -> set_header(8, get_lang('Details'),false);
+		$table -> set_header(7, get_lang('FirstLogin'), false);
+		$table -> set_header(8, get_lang('LatestLogin'), false);
+		$table -> set_header(9, get_lang('Details'),false);
 	     
 	    if($export_csv)
 		{
@@ -136,6 +137,7 @@ if($isCoach || api_is_platform_admin())
 									get_lang('Score'),
 									get_lang('Student_publication'),
 									get_lang('Messages'),
+									get_lang('FirstLogin'),
 									get_lang('LatestLogin')
 								   );
 		}
@@ -176,7 +178,8 @@ if($isCoach || api_is_platform_admin())
 			$row[] = $total_messages;
 			
 			$string_date=Tracking :: get_last_connection_date($student_id,true);
-			
+			$first_date=Tracking :: get_first_connection_date($student_id);
+			$row[] = $first_date;
 			$row[] = $string_date;
 			
 			
@@ -212,7 +215,8 @@ if($isCoach || api_is_platform_admin())
 		$table -> updateColAttributes(0,array('align'=>'left'));
 		$table -> updateColAttributes(1,array('align'=>'left'));
 		$table -> updateColAttributes(7,array('align'=>'left'));
-		$table -> setColAttributes(8,array('align'=>'center'));
+		$table -> updateColAttributes(8,array('align'=>'left'));
+		$table -> setColAttributes(9,array('align'=>'center'));
 		$table -> display();
 		
 	}

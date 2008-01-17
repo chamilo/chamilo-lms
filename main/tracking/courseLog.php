@@ -512,8 +512,9 @@ else {
 		$table -> set_header(5, get_lang('Score'),false);	
 		$table -> set_header(6, get_lang('Student_publication'),false);
 		$table -> set_header(7, get_lang('Messages'),false);
-		$table -> set_header(8, get_lang('LatestLogin'), false, 'align="center"');
-		$table -> set_header(9, get_lang('Details'),false);
+		$table -> set_header(8, get_lang('FirstLogin'), false, 'align="center"');
+		$table -> set_header(9, get_lang('LatestLogin'), false, 'align="center"');
+		$table -> set_header(10, get_lang('Details'),false);
 	     
 	    if($export_csv)
 		{
@@ -526,6 +527,7 @@ else {
 									get_lang('Score'),
 									get_lang('Student_publication'),
 									get_lang('Messages'),
+									get_lang('FirstLogin'),
 									get_lang('LatestLogin')
 								   );
 		}
@@ -553,6 +555,7 @@ else {
 			$row[] = $avg_student_score.' %';		
 			$row[] = $total_assignments;
 			$row[] = $total_messages;
+			$row[] = Tracking :: get_first_connection_date_on_the_course($student_id, $course_code);
 			$row[] = Tracking :: get_last_connection_date_on_the_course($student_id, $course_code);
 			
 			if($export_csv)
@@ -585,6 +588,7 @@ else {
 		$table -> setColAttributes(2,array('align'=>'left'));
 		$table -> setColAttributes(7,array('align'=>'right'));
 		$table -> setColAttributes(8,array('align'=>'center'));
+		$table -> setColAttributes(9,array('align'=>'center'));
 		$table -> display();
 		
 	}

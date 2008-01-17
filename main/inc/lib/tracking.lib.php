@@ -611,14 +611,21 @@ class Tracking {
 		// get the informations of the course 
 		$a_course = CourseManager :: get_course_information($course_code);
 
-		// table definition
-		$tbl_messages = Database :: get_course_table(TABLE_FORUM_POST, $a_course['db_name']);
-		$sql = 'SELECT 1
-						FROM ' . $tbl_messages . ' 
-						WHERE poster_id=' . $student_id;
-
-		$rs = api_sql_query($sql, __LINE__, __FILE__);
-		return mysql_num_rows($rs);
+		if(!empty($a_course['db_name']))
+		{
+			// table definition
+			$tbl_messages = Database :: get_course_table(TABLE_FORUM_POST, $a_course['db_name']);
+			$sql = 'SELECT 1
+							FROM ' . $tbl_messages . ' 
+							WHERE poster_id=' . $student_id;
+	
+			$rs = api_sql_query($sql, __LINE__, __FILE__);
+			return mysql_num_rows($rs);
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	function count_student_visited_links($student_id, $course_code) {

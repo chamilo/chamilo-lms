@@ -200,11 +200,15 @@ if($isCoach && $view=='coach')
 		{
 			if(CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true))
 			{
-				$nb_courses_student++;
 				$nb_posts += Tracking :: count_student_messages($student_id,$course_code);
 				$nb_assignments += Tracking :: count_student_assignments($student_id,$course_code);
 				$avgStudentProgress += Tracking :: get_avg_student_progress($student_id,$course_code);
 				$avgStudentScore += Tracking :: get_avg_student_score($student_id,$course_code);
+				if($nb_posts !== null && $nb_assignments !== null && $avgStudentProgress !== null && $avgStudentScore !== null)
+				{
+					//if one of these scores is null, it means that we had a problem connecting to the right database, so don't count it in
+					$nb_courses_student++;
+				}
 			}
 		}
 		// average progress of the student

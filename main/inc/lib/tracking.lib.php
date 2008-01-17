@@ -181,36 +181,43 @@ class Tracking {
 		// get the informations of the course 
 		$a_course = CourseManager :: get_course_information($course_code);
 
-		// table definition
-		$tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW, $a_course['db_name']);
-		$tbl_course_lp_view_item = Database :: get_course_table(TABLE_LP_ITEM_VIEW, $a_course['db_name']);
-		$tbl_course_lp_item = Database :: get_course_table(TABLE_LP_ITEM, $a_course['db_name']);
-		$tbl_course_lp = Database :: get_course_table(TABLE_LP_MAIN, $a_course['db_name']);
-
-		//get the list of learning paths
-		$sql = 'SELECT id FROM ' . $tbl_course_lp;
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
-		$nb_lp = mysql_num_rows($rs);
-		$avg_progress = 0;
-
-		if ($nb_lp > 0) {
-			while ($lp = Database :: fetch_array($rs)) {
-				// get the progress in learning pathes	
-				$sqlProgress = "SELECT progress
-												FROM " . $tbl_course_lp_view . " AS lp_view
-												WHERE lp_view.user_id = " . $student_id . " 
-												AND lp_view.lp_id = " . $lp['id'] . "
-											   ";
-				$resultItem = api_sql_query($sqlProgress, __FILE__, __LINE__);
-				if(Database::num_rows($resultItem)>0)
-				{
-					$avg_progress += mysql_result($resultItem, 0, 0);
+		if(!empty($a_course['db_name']))
+		{		
+			// table definition
+			$tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW, $a_course['db_name']);
+			$tbl_course_lp_view_item = Database :: get_course_table(TABLE_LP_ITEM_VIEW, $a_course['db_name']);
+			$tbl_course_lp_item = Database :: get_course_table(TABLE_LP_ITEM, $a_course['db_name']);
+			$tbl_course_lp = Database :: get_course_table(TABLE_LP_MAIN, $a_course['db_name']);
+	
+			//get the list of learning paths
+			$sql = 'SELECT id FROM ' . $tbl_course_lp;
+			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			$nb_lp = mysql_num_rows($rs);
+			$avg_progress = 0;
+	
+			if ($nb_lp > 0) {
+				while ($lp = Database :: fetch_array($rs)) {
+					// get the progress in learning pathes	
+					$sqlProgress = "SELECT progress
+													FROM " . $tbl_course_lp_view . " AS lp_view
+													WHERE lp_view.user_id = " . $student_id . " 
+													AND lp_view.lp_id = " . $lp['id'] . "
+												   ";
+					$resultItem = api_sql_query($sqlProgress, __FILE__, __LINE__);
+					if(Database::num_rows($resultItem)>0)
+					{
+						$avg_progress += mysql_result($resultItem, 0, 0);
+					}
 				}
+				$avg_progress = round($avg_progress / $nb_lp, 1);
 			}
-			$avg_progress = round($avg_progress / $nb_lp, 1);
+	
+			return $avg_progress;
 		}
-
-		return $avg_progress;
+		else
+		{
+			return null;
+		}
 	}
 
 	function get_avg_student_score($student_id, $course_code) {
@@ -219,97 +226,104 @@ class Tracking {
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		$course = CourseManager :: get_course_information($course_code);
-		$lp_table = Database :: get_course_table(TABLE_LP_MAIN,$course['db_name']);
-		$lp_item_table = Database  :: get_course_table(TABLE_LP_ITEM,$course['db_name']);
-		$lp_view_table = Database  :: get_course_table(TABLE_LP_VIEW,$course['db_name']);
-		$lp_item_view_table = Database  :: get_course_table(TABLE_LP_ITEM_VIEW,$course['db_name']);
-
-		$sql_course_lp = 'SELECT id FROM '.$lp_table;
-		$sql_result_lp = api_sql_query($sql_course_lp, __FILE__, __LINE__);
-		
-		$lp_scorm_score_total = 0;
-		$lp_scorm_weighting_total = 0;
-		
-		if(Database::num_rows($sql_result_lp)>0){
-			//Scorm
-			while($a_learnpath = mysql_fetch_array($sql_result_lp)){
-				$sql = 'SELECT id, max_score 
-						FROM '.$lp_item_table.' AS lp_item
-						WHERE lp_id='.$a_learnpath['id'].'
-						AND item_type="sco" LIMIT 1';
-				
-				$rs_lp_item_id_scorm = api_sql_query($sql, __FILE__, __LINE__);
-				
-				if(Database::num_rows($rs_lp_item_id_scorm)>0){
-					$lp_item_id = mysql_result($rs_lp_item_id_scorm,0,'id');
-					$lp_item__max_score = mysql_result($rs_lp_item_id_scorm,0,'max_score');				
+		if(!empty($course['db_name']))
+		{
+			$lp_table = Database :: get_course_table(TABLE_LP_MAIN,$course['db_name']);
+			$lp_item_table = Database  :: get_course_table(TABLE_LP_ITEM,$course['db_name']);
+			$lp_view_table = Database  :: get_course_table(TABLE_LP_VIEW,$course['db_name']);
+			$lp_item_view_table = Database  :: get_course_table(TABLE_LP_ITEM_VIEW,$course['db_name']);
+	
+			$sql_course_lp = 'SELECT id FROM '.$lp_table;
+			$sql_result_lp = api_sql_query($sql_course_lp, __FILE__, __LINE__);
+			
+			$lp_scorm_score_total = 0;
+			$lp_scorm_weighting_total = 0;
+			
+			if(Database::num_rows($sql_result_lp)>0){
+				//Scorm
+				while($a_learnpath = mysql_fetch_array($sql_result_lp)){
+					$sql = 'SELECT id, max_score 
+							FROM '.$lp_item_table.' AS lp_item
+							WHERE lp_id='.$a_learnpath['id'].'
+							AND item_type="sco" LIMIT 1';
+					
+					$rs_lp_item_id_scorm = api_sql_query($sql, __FILE__, __LINE__);
+					
+					if(Database::num_rows($rs_lp_item_id_scorm)>0){
+						$lp_item_id = mysql_result($rs_lp_item_id_scorm,0,'id');
+						$lp_item__max_score = mysql_result($rs_lp_item_id_scorm,0,'max_score');				
+						
+						//We get the last view id of this LP
+						$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';	
+						$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
+						$lp_view_id = mysql_result($rs_last_lp_view_id,0,'id');
+						
+						$sql='SELECT SUM(score)/count(lp_item_id) as score FROM '.$lp_item_view_table.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
+	
+						$rs_score = api_sql_query($sql, __FILE__, __LINE__);
+						if(Database::num_rows($rs_score)>0)
+						{
+							$lp_scorm_score = mysql_result($rs_score,0,'score');
+							$lp_scorm_score = ($lp_scorm_score / $lp_item__max_score) * 100;
+							
+							$lp_scorm_score_total+=$lp_scorm_score;
+							$lp_scorm_weighting_total+=100;
+						}
+					}
+				}
+				mysql_data_seek($sql_result_lp,0);
+				//Quizz in LP
+				while($a_learnpath = Database::fetch_array($sql_result_lp)){
+					
+					$sql = 'SELECT id as item_id, max_score 
+							FROM '.$lp_item_table.' AS lp_item
+							WHERE lp_id='.$a_learnpath['id'].'
+							AND item_type="quiz"';
+	
+					$rsItems = api_sql_query($sql, __FILE__, __LINE__);
 					
 					//We get the last view id of this LP
 					$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';	
 					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
 					$lp_view_id = mysql_result($rs_last_lp_view_id,0,'id');
 					
-					$sql='SELECT SUM(score)/count(lp_item_id) as score FROM '.$lp_item_view_table.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
-
-					$rs_score = api_sql_query($sql, __FILE__, __LINE__);
-					if(Database::num_rows($rs_score)>0)
+					$total_score = $total_weighting = 0;
+					while($item = Database :: fetch_array($rsItems, 'ASSOC'))
 					{
-						$lp_scorm_score = mysql_result($rs_score,0,'score');
-						$lp_scorm_score = ($lp_scorm_score / $lp_item__max_score) * 100;
-						
-						$lp_scorm_score_total+=$lp_scorm_score;
-						$lp_scorm_weighting_total+=100;
+						$sql = 'SELECT score as student_score 
+								FROM '.$lp_item_view_table.' as lp_view_item
+								WHERE lp_view_item.lp_item_id = '.$item['item_id'].'
+								AND lp_view_id = "'.$lp_view_id.'"
+								';
+	
+						$rsScores = api_sql_query($sql, __FILE__, __LINE__);
+						if(Database::num_rows($rsScores)>0)
+						{
+							$total_score += mysql_result($rsScores, 0, 0);
+							$total_weighting += $item['max_score'];
+							
+							$lp_scorm_score_total += ($total_score/$total_weighting)*100;
+							$lp_scorm_weighting_total+=100;
+						}					
 					}
+					
 				}
 			}
-			mysql_data_seek($sql_result_lp,0);
-			//Quizz in LP
-			while($a_learnpath = Database::fetch_array($sql_result_lp)){
-				
-				$sql = 'SELECT id as item_id, max_score 
-						FROM '.$lp_item_table.' AS lp_item
-						WHERE lp_id='.$a_learnpath['id'].'
-						AND item_type="quiz"';
-
-				$rsItems = api_sql_query($sql, __FILE__, __LINE__);
-				
-				//We get the last view id of this LP
-				$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';	
-				$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
-				$lp_view_id = mysql_result($rs_last_lp_view_id,0,'id');
-				
-				$total_score = $total_weighting = 0;
-				while($item = Database :: fetch_array($rsItems, 'ASSOC'))
-				{
-					$sql = 'SELECT score as student_score 
-							FROM '.$lp_item_view_table.' as lp_view_item
-							WHERE lp_view_item.lp_item_id = '.$item['item_id'].'
-							AND lp_view_id = "'.$lp_view_id.'"
-							';
-
-					$rsScores = api_sql_query($sql, __FILE__, __LINE__);
-					if(Database::num_rows($rsScores)>0)
-					{
-						$total_score += mysql_result($rsScores, 0, 0);
-						$total_weighting += $item['max_score'];
-						
-						$lp_scorm_score_total += ($total_score/$total_weighting)*100;
-						$lp_scorm_weighting_total+=100;
-					}					
-				}
-				
+	
+			$totalScore = $lp_scorm_score_total;
+	
+			$pourcentageScore = 0;
+			if($lp_scorm_weighting_total>0)
+			{
+				$pourcentageScore = round(($totalScore * 100) / $lp_scorm_weighting_total);
 			}
+	
+			return $pourcentageScore;
 		}
-
-		$totalScore = $lp_scorm_score_total;
-
-		$pourcentageScore = 0;
-		if($lp_scorm_weighting_total>0)
+		else
 		{
-			$pourcentageScore = round(($totalScore * 100) / $lp_scorm_weighting_total);
+			return null;
 		}
-
-		return $pourcentageScore;
 	}
 
 	/**
@@ -590,15 +604,22 @@ class Tracking {
 		// get the informations of the course 
 		$a_course = CourseManager :: get_course_information($course_code);
 
-		// table definition
-		$tbl_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY, $a_course['db_name']);
-		$sql = 'SELECT 1
-						FROM ' . $tbl_item_property . ' 
-						WHERE insert_user_id=' . $student_id . '
-						AND tool="work"';
-
-		$rs = api_sql_query($sql, __LINE__, __FILE__);
-		return mysql_num_rows($rs);
+		if(!empty($a_course['db_name']))
+		{
+			// table definition
+			$tbl_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY, $a_course['db_name']);
+			$sql = 'SELECT 1
+							FROM ' . $tbl_item_property . ' 
+							WHERE insert_user_id=' . $student_id . '
+							AND tool="work"';
+	
+			$rs = api_sql_query($sql, __LINE__, __FILE__);
+			return mysql_num_rows($rs);
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	function count_student_messages($student_id, $course_code) {
@@ -624,7 +645,7 @@ class Tracking {
 		}
 		else
 		{
-			return 0;
+			return null;
 		}
 	}
 

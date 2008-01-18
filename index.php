@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 14090 2008-01-02 21:27:37Z yannoo $
+* 	@version $Id: index.php 14121 2008-01-18 09:19:17Z elixir_inter $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -283,9 +283,12 @@ function logout()
 	{
 		$i_id_last_connection=mysql_result($q_last_connection,0,"login_id");
 	}
-
-	$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
-	api_sql_query($s_sql_update_logout_date);
+	
+	if(!isset($_SESSION['login_as']))
+	{
+		$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
+		api_sql_query($s_sql_update_logout_date);
+	}
 
 	LoginDelete($uid, $_configuration['statistics_database']); //from inc/lib/online.inc.php - removes the "online" status
 	

@@ -479,7 +479,7 @@ function api_get_course_setting($setting_name)
 	$setting_name = mysql_real_escape_string($setting_name);
 	$sql = "SELECT * FROM $table WHERE variable = '$setting_name'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	if(Database::num_rows($res)==1){
+	if(Database::num_rows($res)>0){
 		$row = Database::fetch_array($res);
 		return $row['value'];
 	}

@@ -613,6 +613,31 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		}
 	}
 	
+	// upgrade user categories sort
+	$table_user_categories = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+	
+	
+	$sql = 'SELECT * FROM '.$table_user_categories.' ORDER BY user_id, title';
+	
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	
+	$sort = 0;
+	$old_user = 0;
+	while($cat = Database :: fetch_array($rs))
+	{
+        if($old_user != $cat['user_id'])
+        {
+                $old_user = $cat['user_id'];
+                $sort = 0;
+        }
+        $sort++; 
+        $sql = 'UPDATE '.$table_user_categories.' SET
+	            sort = '.intval($sort).'
+	            WHERE id='.intval($cat['id']);
+        api_sql_query($sql, __FILE__, __LINE__);
+	}
+	        
+	
 }
 else
 {

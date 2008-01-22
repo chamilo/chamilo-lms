@@ -614,7 +614,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	}
 	
 	// upgrade user categories sort
-	$table_user_categories = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+	$table_user_categories = $dbUserForm.'.user_course_category';
 	
 	
 	$sql = 'SELECT * FROM '.$table_user_categories.' ORDER BY user_id, title';

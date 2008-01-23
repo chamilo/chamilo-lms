@@ -785,7 +785,7 @@ class DocumentManager
 	{
 		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 
-		$sql = "SELECT id FROM $TABLE_DOCUMENT WHERE path = '$path'";
+		$sql = "SELECT id FROM $TABLE_DOCUMENT WHERE path LIKE BINARY '$path'";
 
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 

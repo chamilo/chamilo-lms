@@ -93,6 +93,11 @@ function replace_dangerous_char($filename, $strict = 'loose')
 	return ereg_replace("[^!-~]", "x", $filename);
 }
 
+function replace_accents($string){
+	$string = htmlentities($string,ENT_QUOTES);
+	return preg_replace("/&([a-z])[a-z]+;/i","$1",$string);
+}
+
 //------------------------------------------------------------------------------
 
 /**

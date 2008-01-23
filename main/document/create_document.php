@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 13337 2007-09-27 17:09:51Z elixir_inter $
+// $Id: create_document.php 14177 2008-01-23 15:50:31Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -292,7 +292,7 @@ if ($form->validate())
 	{
 		$values['filename'] = $values['title'];
 	}
-	$filename = replace_dangerous_char($values['filename']);
+	$filename = replace_accents($values['filename']);
 	$texte = $values['content'];
 	$title = $values['filename'];
 	$extension = 'html';

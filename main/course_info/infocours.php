@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 14101 2008-01-08 15:39:39Z elixir_inter $
+// $Id: infocours.php 14175 2008-01-23 15:24:56Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -142,6 +142,8 @@ while ($cat = mysql_fetch_array($res))
 	$categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
 }
 
+$linebreak = '<div class="row"><div class="label"></div><div class="formw" style="border-bottom:1px dashed"></div></div>';
+
 // Build the form
 $form = new FormValidator('update_course');
 $visual_code=$form->addElement('text','visual_code', get_lang('Code'));
@@ -157,24 +159,42 @@ $form->add_textfield('department_url', get_lang('DepartmentUrl'), false, array (
 $form->addRule('tutor_name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
 $form->addElement('static', null, null, get_lang("TipLang"));
+$form -> addElement('html',$linebreak);
+
 $form->addElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
 $form->addElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
 $form->addElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
 $form->addElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
+$form -> addElement('html',$linebreak);
+
 $form->addElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
 $form->addElement('radio', 'subscribe', null, get_lang('Denied'), 0);
+$form -> addElement('html',$linebreak);
+
 $form->addElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
 $form->addElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
+$form -> addElement('html',$linebreak);
+
 $form->addElement('radio', 'email_alert_manager_on_new_doc', get_lang('WorkEmailAlert'), get_lang('WorkEmailAlertActivate'), 1);
 $form->addElement('radio', 'email_alert_manager_on_new_doc', null, get_lang('WorkEmailAlertDeactivate'), 0);
+$form -> addElement('html',$linebreak);
+
 $form->addElement('radio', 'email_alert_on_new_doc_dropbox', get_lang('DropboxEmailAlert'), get_lang('DropboxEmailAlertActivate'), 1);
 $form->addElement('radio', 'email_alert_on_new_doc_dropbox', null, get_lang('DropboxEmailAlertDeactivate'), 0);
+$form -> addElement('html',$linebreak);
+
 $form->addElement('radio', 'email_alert_manager_on_new_quiz', get_lang('QuizEmailAlert'), get_lang('QuizEmailAlertActivate'), 1);
 $form->addElement('radio', 'email_alert_manager_on_new_quiz', null, get_lang('QuizEmailAlertDeactivate'), 0);
+$form -> addElement('html',$linebreak);
+
 $form->addElement('radio', 'allow_user_edit_agenda', get_lang('AllowUserEditAgenda'), get_lang('AllowUserEditAgendaActivate'), 1);
 $form->addElement('radio', 'allow_user_edit_agenda', null, get_lang('AllowUserEditAgendaDeactivate'), 0);
+$form -> addElement('html',$linebreak);
+
 $form->addElement('radio', 'allow_user_edit_announcement', get_lang('AllowUserEditAnnouncement'), get_lang('AllowUserEditAnnouncementActivate'), 1);
 $form->addElement('radio', 'allow_user_edit_announcement', null, get_lang('AllowUserEditAnnouncementDeactivate'), 0);
+$form -> addElement('html',$linebreak);
+
 $form->addElement('static', null, null, get_lang("ConfTip"));
 $form->add_textfield('course_registration_password', get_lang('CourseRegistrationPassword'), false, array ('size' => '60'));
 if (is_settings_editable())
@@ -194,6 +214,7 @@ $all_course_information =  CourseManager::get_course_information($_course['sysCo
 
 
 // Set the default values of the form
+
 $values['title'] = $_course['name'];
 $values['visual_code'] = $_course['official_code'];
 $values['category_code'] = $_course['categoryCode'];

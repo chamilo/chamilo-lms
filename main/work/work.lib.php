@@ -224,15 +224,16 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		if (!empty($_SESSION['toolgroup']))
 		{
 			$group_query = " WHERE post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
-			$subdirs_query = "AND url NOT LIKE '$sub_course_dir%/%'";
+			$subdirs_query = "AND url NOT LIKE '$sub_course_dir%/%' AND url LIKE '$sub_course_dir%'";
 		}
 		else
 		{
 			$group_query = '';
-			$subdirs_query = "WHERE url NOT LIKE '$sub_course_dir%/%'";
+			$subdirs_query = "WHERE url NOT LIKE '$sub_course_dir%/%' AND url LIKE '$sub_course_dir%'";
 		}
 		$sql_get_publications_list =	"SELECT * FROM  $work_table $group_query $subdirs_query ORDER BY id";
 	}
+	
 	$sql_result = api_sql_query($sql_get_publications_list,__FILE__,__LINE__);
 
 	$table_header[] = array(get_lang('Title'),true);

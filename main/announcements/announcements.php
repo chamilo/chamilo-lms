@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 14018 2007-12-18 19:19:55Z yannoo $
+<?php //$Id: announcements.php 14192 2008-01-29 16:07:08Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -680,7 +680,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 									  		   Morgen is er geen les, de les wordt geschrapt wegens vergadering (newContent)
 							    */
 
-								$emailsubjbericht = get_lang('professorMessage');
+								$emailsubjbericht = api_is_allowed_to_edit() ? get_lang('professorMessage') : get_lang('LearnerMessage');
 								$emailSubject = $emailsubjbericht. " - ".$_course['official_code'];
 
 								$db_name = Database::get_course_table(TABLE_MAIN_SURVEY);

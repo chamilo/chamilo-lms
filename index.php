@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 14121 2008-01-18 09:19:17Z elixir_inter $
+* 	@version $Id: index.php 14194 2008-01-29 16:26:45Z elixir_inter $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -208,12 +208,14 @@ else
 	{
 		if(file_exists('home/home_top_'.$user_selected_language.'.html'))
 		{
-			include('home/home_top_'.$user_selected_language.'.html');
+			$home_top_temp = file_get_contents('home/home_top_'.$user_selected_language.'.html');
 		}
 		else
 		{
-			include('home/home_top.html');
+			$home_top_temp = file_get_contents('home/home_top.html');
 		}
+		$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);
+		echo $open;
 	}
 }
 

@@ -117,7 +117,6 @@ else
 echo '<table class="data_table">';
 echo '	<tr>';
 echo '		<th>'.get_lang('User').'</th>';
-echo '		<th>'.get_lang('InvitationCode').'</th>';
 echo '		<th>'.get_lang('InvitationDate').'</th>';
 echo '		<th>'.get_lang('Answered').'</th>';
 echo '	</tr>';
@@ -139,9 +138,6 @@ while ($row = mysql_fetch_assoc($res))
 		{
 				echo '	<td>'.$row['user'].'</td>';
 		}
-		/** @todo this is temporary to allow the developer to quickly fill a survey as a different user */
-		// echo '	<td>'.$row['invitation_code'].'</td>';
-		//echo '	<td><a href="fillsurvey.php?course='.$_course['sysCode'].'&amp;invitationcode='.$row['invitation_code'].'">'.$row['invitation_code'].'</td>';
 		echo '	<td>'.$row['invitation_date'].'</td>';
 		echo '	<td>';
 		if (in_array($row['user'], $answered_data))

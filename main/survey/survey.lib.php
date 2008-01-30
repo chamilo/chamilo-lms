@@ -924,9 +924,10 @@ class survey_manager
 		if ($all_user_info)
 		{
 			$sql = "SELECT DISTINCT answered_user.user as invited_user, user.firstname, user.lastname, user.user_id 
-						FROM $table_survey_answer answered_user, $table_user as user
-						WHERE answered_user.user = user.user_id
-						AND survey_id= '".Database::escape_string($survey_data['survey_id'])."'";
+						FROM $table_survey_answer answered_user
+						LEFT JOIN $table_user as user
+							ON answered_user.user = user.user_id
+						WHERE survey_id= '".Database::escape_string($survey_data['survey_id'])."'";
 		}
 		else 
 		{

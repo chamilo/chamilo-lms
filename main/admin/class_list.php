@@ -1,5 +1,5 @@
 <?php
-// $Id: class_list.php 13292 2007-09-27 01:59:07Z yannoo $
+// $Id: class_list.php 14209 2008-01-30 23:16:20Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -43,10 +43,10 @@ function get_number_of_classes()
 	$sql = "SELECT COUNT(*) AS number_of_classes FROM $tbl_class";
 	if (isset ($_GET['keyword']))
 	{
-		$sql .= " WHERE (name LIKE '%".mysql_real_escape_string(trim($_GET['keyword']))."%')";
+		$sql .= " WHERE (name LIKE '%".Database::escape_string(trim($_GET['keyword']))."%')";
 	}
 	$res = api_sql_query($sql, __FILE__, __LINE__);
-	$obj = mysql_fetch_object($res);
+	$obj = Database::fetch_object($res);
 	return $obj->number_of_classes;
 }
 /**
@@ -59,20 +59,22 @@ function get_class_data($from, $number_of_items, $column, $direction)
 {
 	$tbl_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 	$tbl_class = Database :: get_main_table(TABLE_MAIN_CLASS);
-	$sql = "SELECT 	id AS col0,
-							name AS col1,
-							COUNT(user_id) AS col2,
-							id AS col3
-						FROM $tbl_class
-					LEFT JOIN $tbl_class_user ON id=class_id ";
+	$from 				= Database::escape_string($from);
+	$number_of_items 	= Database::escape_string($number_of_items);
+	$column 			= Database::escape_string($column);
+	$direction 			= Database::escape_string($direction);
+	
+	$sql = "SELECT 	id AS col0, name AS col1, COUNT(user_id) AS col2, id AS col3
+				FROM $tbl_class
+				LEFT JOIN $tbl_class_user ON id=class_id ";
 	if (isset ($_GET['keyword']))
 	{
-		$sql .= " WHERE (name LIKE '%".mysql_real_escape_string(trim($_GET['keyword']))."%')";
+		$sql .= " WHERE (name LIKE '%".Database::escape_string(trim($_GET['keyword']))."%')";
 	}
 	$sql .= "GROUP BY id,name ORDER BY col$column $direction LIMIT $from,$number_of_items";
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$classes = array ();
-	while ($class = mysql_fetch_row($res))
+	while ($class = Database::fetch_row($res))
 	{
 		$classes[] = $class;
 	}
@@ -84,6 +86,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
 function modify_filter($class_id)
 {
 	global $charset;
+	$class_id = Security::remove_XSS($class_id);
 	$result = '<a href="class_information.php?id='.$class_id.'"><img src="../img/synthese_view.gif" border="0" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>';
 	$result .= '<a href="class_edit.php?idclass='.$class_id.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>';
 	$result .= '<a href="class_list.php?action=delete_class&amp;class_id='.$class_id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>';

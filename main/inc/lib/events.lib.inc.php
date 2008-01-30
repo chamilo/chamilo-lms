@@ -42,16 +42,16 @@
 ============================================================================== 
 */
 // REGROUP TABLE NAMES FOR MAINTENANCE PURPOSE
-$TABLETRACK_LOGIN = $_configuration['statistics_database']."`.`track_e_login";
-$TABLETRACK_OPEN = $_configuration['statistics_database']."`.`track_e_open";
-$TABLETRACK_ACCESS = $_configuration['statistics_database']."`.`track_e_access";
-$TABLETRACK_DOWNLOADS = $_configuration['statistics_database']."`.`track_e_downloads";
-$TABLETRACK_UPLOADS = $_configuration['statistics_database']."`.`track_e_uploads";
-$TABLETRACK_LINKS = $_configuration['statistics_database']."`.`track_e_links";
-$TABLETRACK_EXERCICES = $_configuration['statistics_database']."`.`track_e_exercices";
-$TABLETRACK_SUBSCRIPTIONS = $_configuration['statistics_database']."`.`track_e_subscriptions";
-$TABLETRACK_LASTACCESS = $_configuration['statistics_database']."`.`track_e_lastaccess"; //for "what's new" notification
-$TABLETRACK_DEFAULT = $_configuration['statistics_database']."`.`track_e_default";
+$TABLETRACK_LOGIN = $_configuration['statistics_database'].".track_e_login";
+$TABLETRACK_OPEN = $_configuration['statistics_database'].".track_e_open";
+$TABLETRACK_ACCESS = $_configuration['statistics_database'].".track_e_access";
+$TABLETRACK_DOWNLOADS = $_configuration['statistics_database'].".track_e_downloads";
+$TABLETRACK_UPLOADS = $_configuration['statistics_database'].".track_e_uploads";
+$TABLETRACK_LINKS = $_configuration['statistics_database'].".track_e_links";
+$TABLETRACK_EXERCICES = $_configuration['statistics_database'].".track_e_exercices";
+$TABLETRACK_SUBSCRIPTIONS = $_configuration['statistics_database'].".track_e_subscriptions";
+$TABLETRACK_LASTACCESS = $_configuration['statistics_database'].".track_e_lastaccess"; //for "what's new" notification
+$TABLETRACK_DEFAULT = $_configuration['statistics_database'].".track_e_default";
 
 /*
 ============================================================================== 
@@ -77,7 +77,7 @@ function event_open()
 	// @getHostByAddr($_SERVER['REMOTE_ADDR']) : will provide host and country information
 	// $_SERVER['HTTP_USER_AGENT'] :  will provide browser and os information
 	// $_SERVER['HTTP_REFERER'] : provide information about refering url
-	$referer = $_SERVER['HTTP_REFERER'];
+	$referer = Database::escape_string($_SERVER['HTTP_REFERER']);
 	// record informations only if user comes from another site
 	//if(!eregi($_configuration['root_web'],$referer))
 	$pos = strpos($referer, $_configuration['root_web']);
@@ -87,16 +87,14 @@ function event_open()
 		if ($remhost == $_SERVER['REMOTE_ADDR'])
 			$remhost = "Unknown"; // don't change this
 		$reallyNow = time();
-		$sql = "INSERT INTO `".$TABLETRACK_OPEN."`
-		
-						(`open_remote_host`,
-						 `open_agent`,
-						 `open_referer`,
-						 `open_date`)
-		
+		$sql = "INSERT INTO ".$TABLETRACK_OPEN."
+						(open_remote_host,
+						 open_agent,
+						 open_referer,
+						 open_date)
 						VALUES
 						('".$remhost."',
-						 '".$_SERVER['HTTP_USER_AGENT']."', '".$referer."', FROM_UNIXTIME($reallyNow) )";
+						 '".Database::escape_string($_SERVER['HTTP_USER_AGENT'])."', '".$referer."', FROM_UNIXTIME($reallyNow) )";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		//$mysql_query($sql);
 	}
@@ -121,15 +119,15 @@ function event_login()
 	}
 
 	$reallyNow = time();
-	$sql = "INSERT INTO `".$TABLETRACK_LOGIN."`
+	$sql = "INSERT INTO ".$TABLETRACK_LOGIN."
 	
-				(`login_user_id`,
-				 `login_ip`,
-				 `login_date`)
+				(login_user_id,
+				 login_ip,
+				 login_date)
 	
 				 VALUES
 					('".$_user['user_id']."',
-					'".$_SERVER['REMOTE_ADDR']."',
+					'".Database::escape_string($_SERVER['REMOTE_ADDR'])."',
 					FROM_UNIXTIME(".$reallyNow."))";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	//$mysql_query($sql);
@@ -173,11 +171,11 @@ function event_access_course()
 		{
 		$user_id = "NULL";
 	}
-	$sql = "INSERT INTO `".$TABLETRACK_ACCESS."`
+	$sql = "INSERT INTO ".$TABLETRACK_ACCESS."
 	
-				(`access_user_id`,
-				 `access_cours_code`,
-				 `access_date`)
+				(access_user_id,
+				 access_cours_code,
+				 access_date)
 	
 				VALUES
 	
@@ -186,14 +184,14 @@ function event_access_course()
 				FROM_UNIXTIME(".$reallyNow."))";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	// added for "what's new" notification
-	$sql = "   UPDATE `$TABLETRACK_LASTACCESS`
+	$sql = "   UPDATE $TABLETRACK_LASTACCESS
 	                    SET access_date = FROM_UNIXTIME($reallyNow)
-						WHERE `access_user_id` = ".$user_id." AND `access_cours_code` = '".$_cid."' AND `access_tool` IS NULL AND `access_session_id`=".$id_session;
+						WHERE access_user_id = ".$user_id." AND access_cours_code = '".$_cid."' AND access_tool IS NULL AND access_session_id=".$id_session;
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	if (mysql_affected_rows() == 0)
 	{
-		$sql = "	INSERT INTO `$TABLETRACK_LASTACCESS`
-		                	    (`access_user_id`,`access_cours_code`,`access_date`, access_session_id)
+		$sql = "	INSERT INTO $TABLETRACK_LASTACCESS
+		                	    (access_user_id,access_cours_code,access_date, access_session_id)
 		                    	VALUES
 		                	    (".$user_id.", '".$_cid."', FROM_UNIXTIME($reallyNow), ".$id_session.")";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -249,29 +247,29 @@ function event_access_tool($tool, $id_session=0)
 	// end "what's new" notification
 	if ($_configuration['tracking_enabled'] && ($pos !== false || $pos2 !== false))
 	{
-			$sql = "INSERT INTO `".$TABLETRACK_ACCESS."`
-							(`access_user_id`,
-							 `access_cours_code`,
-							 `access_tool`,
-							 `access_date`)
+			$sql = "INSERT INTO ".$TABLETRACK_ACCESS."
+							(access_user_id,
+							 access_cours_code,
+							 access_tool,
+							 access_date)
 			
 							VALUES
 			
 							(".$user_id.",".// Don't add ' ' around value, it's already done.
-	"'".$_cid."' ,
+					"'".$_cid."' ,
 					'".htmlspecialchars($tool, ENT_QUOTES)."',
 					FROM_UNIXTIME(".$reallyNow."))";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 	}
 	// "what's new" notification
-	$sql = "   UPDATE `$TABLETRACK_LASTACCESS`
+	$sql = "   UPDATE $TABLETRACK_LASTACCESS
 						SET access_date = FROM_UNIXTIME($reallyNow)
-						WHERE `access_user_id` = ".$user_id." AND `access_cours_code` = '".$_cid."' AND `access_tool` = '".htmlspecialchars($tool, ENT_QUOTES)."' AND `access_session_id`=".$id_session;
+						WHERE access_user_id = ".$user_id." AND access_cours_code = '".$_cid."' AND access_tool = '".htmlspecialchars($tool, ENT_QUOTES)."' AND access_session_id=".$id_session;
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	if (mysql_affected_rows() == 0)
 	{
-		$sql = "INSERT INTO `$TABLETRACK_LASTACCESS`
-							(`access_user_id`,`access_cours_code`,`access_tool`, `access_date`, `access_session_id`)
+		$sql = "INSERT INTO $TABLETRACK_LASTACCESS
+							(access_user_id,access_cours_code,access_tool, access_date, access_session_id)
 						VALUES
 							(".$user_id.", '".$_cid."' , '".htmlspecialchars($tool, ENT_QUOTES)."', FROM_UNIXTIME($reallyNow), $id_session)";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -314,12 +312,12 @@ function event_download($doc_url)
 		{
 		$user_id = "NULL";
 	}
-	$sql = "INSERT INTO `".$TABLETRACK_DOWNLOADS."`
+	$sql = "INSERT INTO ".$TABLETRACK_DOWNLOADS."
 				(
-				 `down_user_id`,
-				 `down_cours_id`,
-				 `down_doc_path`,
-				 `down_date`
+				 down_user_id,
+				 down_cours_id,
+				 down_doc_path,
+				 down_date
 				)
 	
 				VALUES
@@ -362,12 +360,12 @@ function event_upload($doc_id)
 		{
 		$user_id = "NULL";
 	}
-	$sql = "INSERT INTO `".$TABLETRACK_UPLOADS."`
+	$sql = "INSERT INTO ".$TABLETRACK_UPLOADS."
 				(
-				 `upload_user_id`,
-				 `upload_cours_id`,
-				 `upload_work_id`,
-				 `upload_date`
+				 upload_user_id,
+				 upload_cours_id,
+				 upload_work_id,
+				 upload_date
 				)
 	
 				VALUES
@@ -410,12 +408,12 @@ function event_link($link_id)
 		{
 		$user_id = "NULL";
 	}
-	$sql = "INSERT INTO `".$TABLETRACK_LINKS."`
+	$sql = "INSERT INTO ".$TABLETRACK_LINKS."
 				(
-				 `links_user_id`,
-				 `links_cours_id`,
-				 `links_link_id`,
-				 `links_date`
+				 links_user_id,
+				 links_cours_id,
+				 links_link_id,
+				 links_date
 				)
 	
 				VALUES
@@ -460,14 +458,14 @@ function event_exercice($exo_id, $score, $weighting)
 		{
 		$user_id = "NULL";
 	}
-	$sql = "INSERT INTO `".$TABLETRACK_EXERCICES."`
+	$sql = "INSERT INTO ".$TABLETRACK_EXERCICES."
 			  (
-			   `exe_user_id`,
-			   `exe_cours_id`,
-			   `exe_exo_id`,
-			   `exe_result`,
-			   `exe_weighting`,
-			   `exe_date`
+			   exe_user_id,
+			   exe_cours_id,
+			   exe_exo_id,
+			   exe_result,
+			   exe_weighting,
+			   exe_date
 			  )
 	
 			  VALUES
@@ -528,13 +526,13 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 		$user_id = "NULL";
 		}
 	$sql = "INSERT INTO ".$TBL_TRACK_ATTEMPT." 
-			  (`exe_id`,
-			   `user_id`,
-			   `question_id`,
-			   `answer`,
-			   `marks`,
-			   `course_code`,
-			   `position`
+			  (exe_id,
+			   user_id,
+			   question_id,
+			   answer,
+			   marks,
+			   course_code,
+			   position
 			   
 			  )
 	
@@ -600,14 +598,14 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 		$course_code = '';
 	}
 
-	$sql = "INSERT INTO `".$TABLETRACK_DEFAULT."`
+	$sql = "INSERT INTO ".$TABLETRACK_DEFAULT."
 	
-				(`default_user_id`,
-				 `default_cours_code`,
-				 `default_date`, .
-				 `default_event_type`,
-				 `default_value_type`,
-				 `default_value`
+				(default_user_id,
+				 default_cours_code,
+				 default_date, .
+				 default_event_type,
+				 default_value_type,
+				 default_value
 				 )
 				 VALUES
 					('".$user_id."',

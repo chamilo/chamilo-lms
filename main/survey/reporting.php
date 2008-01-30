@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 14200 2008-01-30 12:45:06Z elixir_inter $
+* 	@version $Id: reporting.php 14201 2008-01-30 13:38:13Z elixir_inter $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -192,7 +192,7 @@ function check_parameters()
 		{
 			foreach ($people_filled as $key=>$value)
 			{
-				$people_filled_userids[]=$value['user_id'];
+				$people_filled_userids[]=$value['invited_user'];
 			}
 		}
 		else 

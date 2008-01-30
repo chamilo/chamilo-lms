@@ -105,14 +105,7 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
 	$wantedCode = strtr($wantedCode, "�����������������������������������������������������������", "AAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy");
 
 	$wantedCode = ereg_replace("[^A-Z0-9]", "", strtoupper($wantedCode));
-
-	/*if(empty ($wantedCode))
-	{
-		$wantedCode = generate_course_code($wantedCode);
-	}*/
-
 	$keysCourseCode = $wantedCode;
-
 	if(!$useCodeInDepedentKeys)
 	{
 		$wantedCode = '';
@@ -127,15 +120,6 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
 		$uniquePrefix = '';
 	}
 
-	if($addUniqueSuffix)
-	{
-		$uniqueSuffix = substr(md5(uniqid(rand())), 0, 10);
-	}
-	else
-	{
-		$uniqueSuffix = '';
-	}
-
 	$keys = array ();
 
 	$finalSuffix = array ('CourseId' => '', 'CourseDb' => '', 'CourseDir' => '');
@@ -148,11 +132,11 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
 
 	while (!$keysAreUnique)
 	{
-		$keysCourseId = $prefix4all.$uniquePrefix.$wantedCode.$uniqueSuffix.$finalSuffix['CourseId'];
+		$keysCourseId = $prefix4all.$uniquePrefix.$wantedCode.$finalSuffix['CourseId'];
 
-		$keysCourseDbName = $prefix4baseName.$uniquePrefix.strtoupper($keysCourseId).$uniqueSuffix.$finalSuffix['CourseDb'];
+		$keysCourseDbName = $prefix4baseName.$uniquePrefix.strtoupper($keysCourseId).$finalSuffix['CourseDb'];
 
-		$keysCourseRepository = $prefix4path.$uniquePrefix.$wantedCode.$uniqueSuffix.$finalSuffix['CourseDir'];
+		$keysCourseRepository = $prefix4path.$uniquePrefix.$wantedCode.$finalSuffix['CourseDir'];
 
 		$keysAreUnique = true;
 
@@ -1599,7 +1583,7 @@ function fill_course_repository($courseRepository)
 function lang2db($string)
 {
 	$string = str_replace("\\'", "'", $string);
-	$string = mysql_real_escape_string($string);
+	$string = Database::escape_string($string);
 	return $string;
 }
 /**
@@ -1844,7 +1828,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 			Annoucement tool
 		-----------------------------------------------------------
 		*/
-		$sql = "INSERT INTO `".$TABLETOOLANNOUNCEMENTS . "` (title,content,end_date,display_order,email_sent) VALUES ('".lang2db($AnnouncementExampleTitle) . "', '".lang2db($langAnnouncementEx) . "', NOW(), '1','0')";
+		$sql = "INSERT INTO `".$TABLETOOLANNOUNCEMENTS . "` (title,content,end_date,display_order,email_sent) VALUES ('".lang2db(get_lang('AnnouncementExampleTitle')) . "', '".lang2db(get_lang('AnnouncementEx')) . "', NOW(), '1','0')";
 		api_sql_query($sql, __FILE__, __LINE__);
 		//we need to add the item properties too!
 		$insert_id = Database :: get_last_insert_id();
@@ -1935,11 +1919,10 @@ function string2binary($variable)
  */
 function register_course($courseSysCode, $courseScreenCode, $courseRepository, $courseDbName, $titular, $category, $title, $course_language, $uidCreator, $expiration_date = "", $teachers=array())
 {
-	global $defaultVisibilityForANewCourse, $langCourseDescription, $langProfessor, $langAnnouncementEx, $error_msg, $_configuration, $_user;
+	global $defaultVisibilityForANewCourse, $error_msg;
 	$TABLECOURSE = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
-	#$TABLEANNOUNCEMENTS=$_configuration['table_prefix'].$courseDbName.$_configuration['db_glue'].$TABLEANNOUNCEMENTS;
 	$TABLEANNOUNCEMENTS = Database :: get_course_table(TABLE_ANNOUNCEMENT,$courseDbName);
 
 	$okForRegisterCourse = true;
@@ -1997,10 +1980,10 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 					code = '".Database :: escape_string($courseSysCode) . "',
 					db_name = '".Database :: escape_string($courseDbName) . "',
 					directory = '".Database :: escape_string($courseRepository) . "',
-					course_language = '".$course_language . "',
+					course_language = '".Database :: escape_string($course_language) . "',
 					title = '".Database :: escape_string($title) . "',
-					description = '".lang2db($langCourseDescription) . "',
-					category_code = '".$category . "',
+					description = '".lang2db(get_lang('CourseDescription')) . "',
+					category_code = '".Database :: escape_string($category) . "',
 					visibility = '".$defaultVisibilityForANewCourse . "',
 					show_score = '',
 					disk_quota = '".api_get_setting('default_document_quotum') . "',
@@ -2013,16 +1996,16 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 		
 		api_sql_query($sql, __FILE__, __LINE__);
 
-		$sort = api_max_sort_value('0', $_user['user_id']);
+		$sort = api_max_sort_value('0', api_get_user_id());
 		
 		require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 		$i_course_sort = CourseManager :: userCourseSort($uidCreator,$courseSysCode);
 		
 		$sql = "INSERT INTO ".$TABLECOURSUSER . " SET
 					course_code = '".addslashes($courseSysCode) . "',
-					user_id = '".$uidCreator . "',
+					user_id = '".Database::escape_string($uidCreator) . "',
 					status = '1',
-					role = '".lang2db('Professor') . "',
+					role = '".lang2db(get_lang('Professor')) . "',
 					tutor_id='1',
 					sort='". ($i_course_sort) . "',
 					user_course_cat='0'";
@@ -2031,8 +2014,8 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 		if(count($teachers)>0){
 			foreach($teachers as $key){
 				$sql = "INSERT INTO ".$TABLECOURSUSER . " SET
-					course_code = '".addslashes($courseSysCode) . "',
-					user_id = '".$key . "',
+					course_code = '".Database::escape_string($courseSysCode) . "',
+					user_id = '".Database::escape_string($key) . "',
 					status = '1',
 					role = '',
 					tutor_id='0',
@@ -2059,6 +2042,7 @@ function readPropertiesInArchive($archive, $isCompressed = TRUE)
 {
 	include (api_get_path(LIBRARY_PATH) . "pclzip/pclzip.lib.php");
 	printVar(dirname($archive), "Zip : ");
+	$uid = api_get_user_id();
 	/*
 	string tempnam ( string dir, string prefix)
 	tempnam() cree un fichier temporaire unique dans le dossier dir. Si le dossier n'existe pas, tempnam() va generer un nom de fichier dans le dossier temporaire du systeme.
@@ -2070,7 +2054,7 @@ function readPropertiesInArchive($archive, $isCompressed = TRUE)
 	if(mkpath($tmpDirName))
 		$unzippingSate = $zipFile->extract($tmpDirName);
 	else
-		die("mkpath va pas");
+		die("mkpath failed");
 	$pathToArchiveIni = dirname($tmpDirName) . "/archive.ini";
 	//	echo $pathToArchiveIni;
 	$courseProperties = parse_ini_file($pathToArchiveIni);

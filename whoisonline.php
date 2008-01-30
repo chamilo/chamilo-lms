@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 14205 2008-01-30 17:47:35Z yannoo $
+<?php // $Id: whoisonline.php 14206 2008-01-30 22:12:56Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -280,6 +280,11 @@ if ((api_get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR 
 		{
 			display_individual_user($_GET['id']);
 		}
+	}
+	elseif(isset($_GET['id']))
+	{
+		Display::display_header(get_lang('UsersOnLineList'));
+		api_display_tool_title(get_lang('UsersOnLineList'));
 	}
 }
 else

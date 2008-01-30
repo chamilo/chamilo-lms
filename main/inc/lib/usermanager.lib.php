@@ -401,6 +401,10 @@ class UserManager
 				$first = substr(''.$user_id,0,1).'/';
 			}
 		}
+		else
+		{
+			$first = $user_id.'/';
+		}
 		switch($type)
 		{
 			case 'system': //return the complete path to the file, from root

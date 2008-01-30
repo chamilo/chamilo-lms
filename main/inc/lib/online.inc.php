@@ -128,7 +128,8 @@ function WhoIsOnline($uid,$statistics_database,$valid)
 function GetFullUserName($uid)
 {
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
-	$query = "SELECT `firstname`,`lastname` FROM ".$user_table." WHERE `user_id`='$uid'";
+	$safe_uid = Database::escape_string($uid);
+	$query = "SELECT firstname,lastname FROM ".$user_table." WHERE user_id='$safe_uid'";
 	$result = @api_sql_query($query,__FILE__,__LINE__);
 	if (count($result)>0)
 	{
@@ -247,6 +248,7 @@ function chatcall() {
 function who_is_online_in_this_course($uid, $valid, $coursecode)
 {				
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+	$coursecode = Database::escape_string($coursecode);
 	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() ";	
 	$result = api_sql_query($query,__FILE__,__LINE__);							
 	if (count($result)>0)

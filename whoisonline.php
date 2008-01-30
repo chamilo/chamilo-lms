@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 13297 2007-09-27 02:20:35Z yannoo $
+<?php // $Id: whoisonline.php 14205 2008-01-30 17:47:35Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -29,23 +29,13 @@
 * Who is online list
 ==============================================================================
 */
-// @todo: is this necessary?
-if(isset($_GET['cidReq']))
-{
-	$course_code = $_GET['cidReq'];
-}
-else
-{
-	$cidReset = true;
-}
-
-
 // name of the language file that needs to be included
 $language_file = array('index','registration');
 
 // including necessary files
 require_once('./main/inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 
 // table definitions
 $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -61,7 +51,7 @@ if ($_GET['chatid'] != '')
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 
 	//redirect caller to chat
-	header("Location: ".$_configuration['code_append']."chat/chat.php?cidReq=".$_cid."&origin=whoisonline&target=$chatid");
+	header("Location: ".$_configuration['code_append']."chat/chat.php?".api_get_cidreq()."&origin=whoisonline&target=".Security::remove_XSS($chatid));
 	exit();
 }
 
@@ -79,8 +69,8 @@ function display_user_list($user_list, $_plugins)
 		$course_url = '';
 		if(strlen($_GET['cidReq']) > 0)
 		{
-			$extra_params['cidReq'] = $_GET['cidReq'];
-			$course_url = '&amp;cidReq='.$_GET['cidReq'];
+			$extra_params['cidReq'] = Database::escape_string($_GET['cidReq']);
+			$course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
 		}
 		foreach($user_list as $user)
 		{
@@ -119,7 +109,7 @@ function display_user_list($user_list, $_plugins)
 		{
 			$table_header[] = array(get_lang('SendMessage'),true);
 		}
-		$sorting_options['column'] = (isset ($_GET['column']) ? $_GET['column'] : 2);
+		$sorting_options['column'] = (isset ($_GET['column']) ? (int)$_GET['column'] : 2);
 		Display::display_sortable_table($table_header,$table_data,$sorting_options,array('per_page_default'=>count($table_data)),$extra_params);
 	}
 }
@@ -130,14 +120,15 @@ function display_user_list($user_list, $_plugins)
 function display_individual_user($user_id)
 {
 	global $interbreadcrumb;
+	$safe_user_id = Database::escape_string($user_id);
 
 	// to prevent a hacking attempt: http://www.dokeos.com/forum/viewtopic.php?t=5363
 	$user_table=Database::get_main_table(TABLE_MAIN_USER);
-	$sql = "SELECT * FROM $user_table WHERE user_id='".mysql_real_escape_string($user_id)."'";
+	$sql = "SELECT * FROM $user_table WHERE user_id='".$safe_user_id."'";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	if (mysql_num_rows($result)==1)
+	if (Database::num_rows($result)==1)
 	{
-		$user_object = mysql_fetch_object($result);
+		$user_object = Database::fetch_object($result);
 		$name = GetFullUserName($user_id).($_SESSION['_uid'] == $user_id ? '&nbsp;<b>('.get_lang('Me').')</b>' : '' );
 		$alt = GetFullUserName($user_id).($_SESSION['_uid'] == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
 		$status = ($user_object->status == COURSEMANAGER ? get_lang('Teacher') : get_lang('Student'));
@@ -147,8 +138,12 @@ function display_individual_user($user_id)
 		echo '<div style="text-align: center">';
 		if (strlen(trim($user_object->picture_uri)) > 0)
 		{
-			$fullurl=api_get_path(WEB_CODE_PATH).'upload/users/'.$user_object->picture_uri;
-			$system_image_path=api_get_path(SYS_CODE_PATH).'upload/users/'.$user_object->picture_uri;
+			$sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id,'system');
+			$sysdir = $sysdir_array['dir'];
+			$webdir_array = UserManager::get_user_picture_path_by_id($safe_user_id,'web');
+			$webdir = $webdir_array['dir'];
+			$fullurl=$webdir.$user_object->picture_uri;
+			$system_image_path=$sysdir.$user_object->picture_uri;
 			list($width, $height, $type, $attr) = getimagesize($system_image_path);
 			$resizing = (($height > 200) ? 'height="200"' : '');
 			$height += 30;
@@ -183,6 +178,11 @@ function display_individual_user($user_id)
 			echo '<dd>'.$user_object->openarea.'</dd>';
 		}
 	}
+	else
+	{
+		Display::display_header(get_lang('UsersOnLineList'));
+		api_display_tool_title(get_lang('UsersOnLineList'));
+	}
 }
 /**
  * Display productions in whoisonline
@@ -192,8 +192,10 @@ function display_individual_user($user_id)
 function display_productions($user_id)
 {
 	global $clarolineRepositoryWeb, $disabled_output;
-	$sysdir=api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id;
-	$webdir=$clarolineRepositoryWeb.'upload/users/'.$user_id;
+	$sysdir_array = UserManager::get_user_picture_path_by_id($user_id,'system');
+	$sysdir = $sysdir_array['dir'];
+	$webdir_array = UserManager::get_user_picture_path_by_id($user_id,'web');
+	$webdir = $webdir_array['dir'];
 	if( !is_dir($sysdir))
 	{
 		mkpath($sysdir);
@@ -214,7 +216,21 @@ function display_productions($user_id)
 		echo '<dd><ul>';
 		foreach($productions as $index => $file)
 		{
-			echo '<li><a href="'.$webdir.'/'.urlencode($file).'" target=_blank>'.$file.'</a></li>';
+			// Only display direct file links to avoid browsing an empty directory
+			if(is_file($sysdir.$file) && $file != $webdir_array['file']){
+				echo '<li><a href="'.$webdir.urlencode($file).'" target=_blank>'.$file.'</a></li>';
+			}
+			// Real productions are under a subdirectory by the User's id
+			if(is_dir($sysdir.$file)){
+				$subs = scandir($sysdir.$file);
+				foreach($subs as $my => $sub)
+				{
+					if(substr($sub,0,1) != '.' && is_file($sysdir.$file.'/'.$sub))
+					{
+						echo '<li><a href="'.$webdir.urlencode($file).'/'.urlencode($sub).'" target=_blank>'.$sub.'</a></li>';						
+					}
+				}
+			}
 		}
 		echo '</ul></dd>';
 	}
@@ -223,7 +239,7 @@ function display_productions($user_id)
 
 
 // This if statement prevents users accessing the who's online feature when it has been disabled.
-if ((get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR (get_setting('showonline','users') == 'true' AND $_user['user_id']))
+if ((api_get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR (api_get_setting('showonline','users') == 'true' AND $_user['user_id']))
 {
 	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0)
 	{
@@ -233,6 +249,7 @@ if ((get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR (get
 	{
 		$user_list = WhoIsOnline($_user['user_id'],$_configuration['statistics_database'],api_get_setting('time_limit_whosonline'));
 	}
+
 
 	$total=count($user_list);
 	if (!isset($_GET['id']))
@@ -248,7 +265,7 @@ if ((get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR (get
 		{
 			if(0) // if ($_user['user_id'] && $_GET["id"] != $_user['user_id'])
 			{
-				echo '<a href="'.api_get_self().'?chatid='.$_GET['id'].'">'.get_lang('SendChatRequest').'</a>';
+				echo '<a href="'.api_get_self().'?chatid='.Security::remove_XSS($_GET['id']).'">'.get_lang('SendChatRequest').'</a>';
 			}
 		}
 	}
@@ -259,7 +276,7 @@ if ((get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR (get
 		{
 			display_user_list($user_list, $_plugins);
 		}
-		else   //individual user information
+		else   //individual user information - also displays header info
 		{
 			display_individual_user($_GET['id']);
 		}
@@ -271,7 +288,7 @@ else
 	Display::display_error_message(get_lang('AccessNotAllowed'));
 }
 $referer = empty($_GET['referer'])?'index.php':htmlentities(strip_tags($_GET['referer']),ENT_QUOTES,$charset);
-echo '<a href="'.($_GET['id']?'javascript:window.history.back();':$referer).'">&lt; '.get_lang('Back').'</a>';
+echo '<a href="'.(Security::remove_XSS($_GET['id'])?'javascript:window.history.back();':$referer).'">&lt; '.get_lang('Back').'</a>';
 
 /*
 ==============================================================================

@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 13932 2007-12-05 05:00:18Z yannoo $
+// $Id: inscription.php 14212 2008-01-31 02:09:57Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -156,15 +156,15 @@ else{
 }
 if(!empty($_GET['username']))
 {
-	$defaults['username'] = $_GET['username'];
+	$defaults['username'] = Security::remove_XSS($_GET['username']);
 }
 if(!empty($_GET['email']))
 {
-	$defaults['email'] = $_GET['email'];
+	$defaults['email'] = Security::remove_XSS($_GET['email']);
 }
 if (api_get_setting('openid_authentication')=='true' && !empty($_GET['openid']))
 {
-	$defaults['openid'] = $_GET['openid'];	
+	$defaults['openid'] = Security::remove_XSS($_GET['openid']);	
 }
 $defaults['status'] = STUDENT;
 $form->setDefaults($defaults);

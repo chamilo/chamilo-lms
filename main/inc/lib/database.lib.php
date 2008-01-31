@@ -655,6 +655,16 @@ class Database
 		return mysql_fetch_object($res);
 	}
 	/**
+	 * Gets the array from a SQL result (as returned by api_sql_query) - help achieving database independence
+	 * @param     resource    The result from a call to sql_query (e.g. api_sql_query)
+	 * @return    array       Array of results as returned by php (mysql_fetch_row)
+	 * @author    Yannick Warnier <yannick.warnier@dokeos.com>
+	 */
+	function fetch_row($res)
+	{
+		return mysql_fetch_row($res);
+	}
+	/**
 	 * Gets the number of rows from the last query result - help achieving database independence
 	 * @param   resource    The result
 	 * @return  integer     The number of rows contained in this result

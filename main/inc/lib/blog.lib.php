@@ -600,6 +600,7 @@ class Blog
 			$sql = "SELECT task_rel_user.*, task.title, blog.blog_name FROM $tbl_blogs_tasks_rel_user task_rel_user
 			INNER JOIN $tbl_blogs_tasks task ON task_rel_user.task_id = task.task_id
 			INNER JOIN $tbl_blogs blog ON task_rel_user.blog_id = blog.blog_id
+			AND blog.blog_id = ".intval($_GET['blog_id'])."
 			WHERE task_rel_user.user_id = ".(int)$_user['user_id']." ORDER BY `target_date` ASC";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 

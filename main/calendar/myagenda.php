@@ -1,5 +1,4 @@
 <?php
-
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -340,11 +339,11 @@ function get_agendaitems($courses_dbs, $month, $year)
 										DISTINCT agenda.*, item_property.*
 										FROM ".$TABLEAGENDA." agenda,
 											 ".$TABLE_ITEMPROPERTY." item_property
-										WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
-										AND MONTH(`agenda`.`start_date`)='".$month."'
-										AND YEAR(`agenda`.`start_date`)='".$year."'
-										AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-										AND `item_property`.`visibility`='1'
+										WHERE agenda.id = item_property.ref   ".$show_all_current."
+										AND MONTH(agenda.start_date)='".$month."'
+										AND YEAR(agenda.start_date)='".$year."'
+										AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+										AND item_property.visibility='1'
 										GROUP BY agenda.id
 										ORDER BY start_date ".$sort;
 		}
@@ -387,7 +386,7 @@ function get_agendaitems($courses_dbs, $month, $year)
 		{
 			$agendaday = date("j",strtotime($item['start_date']));
 			$time= date("H:i",strtotime($item['start_date']));
-			$URL = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			$items[$agendaday][$item['start_time']] .= "<i>".$time."</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$array_course_info["visual_code"]."</a>  ".$item['title']."<br />";
 		}
 	}
@@ -419,8 +418,8 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 	$dayone = getdate(mktime(0, 0, 0, $month, 1, $year));
 	//Start the week on monday
 	$startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
-	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".htmlentities($_GET['courseCode'])."&amp;action=view&amp;view=month&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
-	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".htmlentities($_GET['courseCode'])."&amp;action=view&amp;view=month&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
+	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=month&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
+	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=month&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
 	echo "<table id=\"agenda_list\">\n", "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">&#171;</a></td>\n", "<td width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n", "<td width=\"10%\"><a href=\"", $forewardsURL, "\">&#187;</a></td>\n", "</tr>\n";
 
@@ -482,8 +481,8 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 	$dayone = getdate(mktime(0, 0, 0, $month, 1, $year));
 	//Start the week on monday
 	$startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
-	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
-	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
+	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
+	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
 	echo "<table id=\"smallcalendar\">\n", "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">&#171;</a></td>\n", "<td width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n", "<td width=\"10%\"><a href=\"", $forewardsURL, "\">&#187;</a></td>\n", "</tr>\n";
 
@@ -563,8 +562,8 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 	$day_of_the_week = date("w", $today); // Numeric representation of the day of the week	0 (for Sunday) through 6 (for Saturday) of today
 	$timestamp_first_date_of_week = $today - (($day_of_the_week -1) * 24 * 60 * 60); // timestamp of the monday of this week
 	$timestamp_last_date_of_week = $today + ((7 - $day_of_the_week) * 24 * 60 * 60); // timestamp of the sunday of this week
-	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=week&amp;week=". ($week_number -1);
-	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=week&amp;week=". ($week_number +1);
+	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=week&amp;week=". ($week_number -1);
+	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=week&amp;week=". ($week_number +1);
 	echo "<table id=\"agenda_list\">\n";
 	// The title row containing the the week information (week of the year (startdate of week - enddate of week)
 	echo "<tr class=\"title\">\n";
@@ -655,8 +654,8 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 	// we are loading all the calendar items of all the courses for today
 	echo "<table id=\"agenda_list\">\n";
 	// the forward and backwards url
-	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=day&amp;day=".date("j", $previousday)."&amp;month=".date("n", $previousday)."&amp;year=".date("Y", $previousday);
-	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=day&amp;day=".date("j", $nextday)."&amp;month=".date("n", $nextday)."&amp;year=".date("Y", $nextday);
+	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=day&amp;day=".date("j", $previousday)."&amp;month=".date("n", $previousday)."&amp;year=".date("Y", $previousday);
+	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=day&amp;day=".date("j", $nextday)."&amp;month=".date("n", $nextday)."&amp;year=".date("Y", $nextday);
 	// The title row containing the day
 	echo "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">&#171;</a></td>\n", "<td>";
 	echo $DaysLong[$day_of_the_week]." ".date("j", $today)." ".$MonthsLong[date("n", $today) - 1]." ".date("Y", $today);

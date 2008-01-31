@@ -1,4 +1,4 @@
-<?php // $Id: course_category.php 13295 2007-09-27 02:16:44Z yannoo $
+<?php // $Id: course_category.php 14214 2008-01-31 03:31:49Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -50,7 +50,7 @@ if(!empty($action))
 	{
 		deleteNode($_GET['id']);
 
-		header('Location: '.api_get_self().'?category='.$category);
+		header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
 		exit();
 	}
 	elseif(($action == 'add' || $action == 'edit') && $_POST['formSent'])
@@ -85,11 +85,11 @@ if(!empty($action))
 	}
 	elseif($action == 'edit')
 	{
-		$categoryCode=$_GET['id'];
+		$categoryCode=Database::escape_string($_GET['id']);
 
 		$result=api_sql_query("SELECT name,auth_course_child FROM $tbl_category WHERE code='$categoryCode'",__FILE__,__LINE__);
 
-		list($categoryName,$canHaveCourses)=mysql_fetch_row($result);
+		list($categoryName,$canHaveCourses)=Database::fetch_row($result);
 
 		$canHaveCourses=($canHaveCourses == 'FALSE')?0:1;
 	}
@@ -97,7 +97,7 @@ if(!empty($action))
 	{
 		moveNodeUp($_GET['id'],$_GET['tree_pos'],$category);
 
-		header('Location: '.api_get_self().'?category='.$category);
+		header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
 		exit();
 	}
 }
@@ -110,80 +110,93 @@ Display::display_header($tool_name);
 
 //api_display_tool_title($tool_name);
 
+if(!empty($category))
+{
+	$myquery = "SELECT * FROM $tbl_category WHERE code ='$category'";
+	$result	= api_sql_query($myquery,__FILE__,__LINE__);
+	if(Database::num_rows($result)==0)
+	{
+		$category = '';
+	}
+}
 
 if(empty($action))
 {
-	$result=api_sql_query("SELECT t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count,COUNT(DISTINCT t3.code) AS nbr_courses FROM $tbl_category t1 LEFT JOIN $tbl_category t2 ON t1.code=t2.parent_id LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code WHERE t1.parent_id ".(empty($category)?"IS NULL":"='$category'")." GROUP BY t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count ORDER BY t1.tree_pos",__FILE__,__LINE__);
+	$myquery="SELECT t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count,COUNT(DISTINCT t3.code) AS nbr_courses FROM $tbl_category t1 LEFT JOIN $tbl_category t2 ON t1.code=t2.parent_id LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code WHERE t1.parent_id ".(empty($category)?"IS NULL":"='$category'")." GROUP BY t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count ORDER BY t1.tree_pos";
+	$result=api_sql_query($myquery,__FILE__,__LINE__);
 
 	$Categories=api_store_result($result);
 }
 
 if(!empty($category) && empty($action))
 {
-	$result=api_sql_query("SELECT parent_id FROM $tbl_category WHERE code='$category'",__FILE__,__LINE__);
-
-	list($parent_id)=mysql_fetch_row($result);
-?>
-
-<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($parent_id); ?>">&lt;&lt; <?php echo get_lang("Back"); if(!empty($parent_id)) echo ' ('.$parent_id.')'; ?></a>
-
-<?php
+	$myquery = "SELECT parent_id FROM $tbl_category WHERE code='$category'";
+	$result=api_sql_query($myquery,__FILE__,__LINE__);
+	$parent_id = 0;
+	if(Database::num_rows($result)>0){
+		$parent_id=Database::fetch_row($result);
+	}
+	?>
+	
+	<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($parent_id); ?>">&lt;&lt; <?php echo get_lang("Back"); if(!empty($parent_id)) echo ' ('.$parent_id.')'; ?></a>
+	
+	<?php
 }
 
 if($action == 'add' || $action == 'edit')
 {
-?>
-
-<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($category); ?>">&lt;&lt; <?php echo get_lang("Back"); if(!empty($category)) echo ' ('.$category.')'; ?></a>
-
-<h3><?php echo ($action == 'add')?get_lang('AddACategory'):get_lang('EditNode'); if(!empty($category)) echo ' '.get_lang('Into').' '.$category; ?></h3>
-
-<form method="post" action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>&category=<?php echo urlencode($category); ?>&amp;id=<?php echo urlencode(stripslashes($_GET['id'])); ?>">
-<input type="hidden" name="formSent" value="1" />
-<table border="0" cellpadding="5" cellspacing="0">
-
-<?php
-if(!empty($errorMsg))
-{
-?>
-
-<tr>
-  <td colspan="2">
-
-<?php
-	Display::display_normal_message($errorMsg); //main API
-?>
-
-  </td>
-</tr>
-
-<?php
-}
-?>
-
-<tr>
-  <td nowrap="nowrap"><?php echo get_lang("CategoryCode"); ?> :</td>
-  <td><input type="text" name="categoryCode" size="20" maxlength="20" value="<?php echo htmlentities(stripslashes($categoryCode),ENT_QUOTES,$charset); ?>" /></td>
-</tr>
-<tr>
-  <td nowrap="nowrap"><?php echo get_lang("CategoryName"); ?> :</td>
-  <td><input type="text" name="categoryName" size="20" maxlength="100" value="<?php echo htmlentities(stripslashes($categoryName),ENT_QUOTES,$charset); ?>" /></td>
-</tr>
-<tr>
-  <td nowrap="nowrap"><?php echo get_lang("AllowCoursesInCategory"); ?></td>
-  <td>
-	<input class="checkbox" type="radio" name="canHaveCourses" value="0" <?php if(($action == 'edit' && !$canHaveCourses) || ($action == 'add' && $formSent && !$canHaveCourses)) echo 'checked="checked"'; ?> /><?php echo get_lang("No"); ?>
-	<input class="checkbox" type="radio" name="canHaveCourses" value="1" <?php if(($action == 'edit' && $canHaveCourses) || ($action == 'add' && !$formSent || $canHaveCourses)) echo 'checked="checked"'; ?> /><?php echo get_lang("Yes"); ?>
-  </td>
-</tr>
-<tr>
-  <td>&nbsp;</td>
-  <td><input type="submit" value="<?php echo get_lang("Ok"); ?>" /></td>
-</tr>
-</table>
-</form>
-
-<?php
+	?>
+	
+	<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>">&lt;&lt; <?php echo get_lang("Back"); if(!empty($category)) echo ' ('.Security::remove_XSS($category).')'; ?></a>
+	
+	<h3><?php echo ($action == 'add')?get_lang('AddACategory'):get_lang('EditNode'); if(!empty($category)) echo ' '.get_lang('Into').' '.Security::remove_XSS($category); ?></h3>
+	
+	<form method="post" action="<?php echo api_get_self(); ?>?action=<?php echo Security::remove_XSS($action); ?>&category=<?php echo Security::remove_XSS($category); ?>&amp;id=<?php echo Security::remove_XSS($_GET['id']); ?>">
+	<input type="hidden" name="formSent" value="1" />
+	<table border="0" cellpadding="5" cellspacing="0">
+	
+	<?php
+	if(!empty($errorMsg))
+	{
+	?>
+	
+	<tr>
+	  <td colspan="2">
+	
+	<?php
+		Display::display_normal_message($errorMsg); //main API
+	?>
+	
+	  </td>
+	</tr>
+	
+	<?php
+	}
+	?>
+	
+	<tr>
+	  <td nowrap="nowrap"><?php echo get_lang("CategoryCode"); ?> :</td>
+	  <td><input type="text" name="categoryCode" size="20" maxlength="20" value="<?php echo htmlentities(stripslashes($categoryCode),ENT_QUOTES,$charset); ?>" /></td>
+	</tr>
+	<tr>
+	  <td nowrap="nowrap"><?php echo get_lang("CategoryName"); ?> :</td>
+	  <td><input type="text" name="categoryName" size="20" maxlength="100" value="<?php echo htmlentities(stripslashes($categoryName),ENT_QUOTES,$charset); ?>" /></td>
+	</tr>
+	<tr>
+	  <td nowrap="nowrap"><?php echo get_lang("AllowCoursesInCategory"); ?></td>
+	  <td>
+		<input class="checkbox" type="radio" name="canHaveCourses" value="0" <?php if(($action == 'edit' && !$canHaveCourses) || ($action == 'add' && $formSent && !$canHaveCourses)) echo 'checked="checked"'; ?> /><?php echo get_lang("No"); ?>
+		<input class="checkbox" type="radio" name="canHaveCourses" value="1" <?php if(($action == 'edit' && $canHaveCourses) || ($action == 'add' && !$formSent || $canHaveCourses)) echo 'checked="checked"'; ?> /><?php echo get_lang("Yes"); ?>
+	  </td>
+	</tr>
+	<tr>
+	  <td>&nbsp;</td>
+	  <td><input type="submit" value="<?php echo get_lang("Ok"); ?>" /></td>
+	</tr>
+	</table>
+	</form>
+	
+	<?php
 }
 else
 {
@@ -192,35 +205,31 @@ else
 <ul>
 
 <?php
-	if(sizeof($Categories))
+if(count($Categories)>0)
+{
+	foreach($Categories as $enreg)
 	{
-		foreach($Categories as $enreg)
-		{
-?>
-
-  <li>
-	<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($enreg['code']); ?>"><img src="../img/folder_document.gif" border="0" title="<?php echo get_lang("OpenNode"); ?>" alt="" align="absbottom" /></a>
-	<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($category); ?>&amp;action=edit&amp;id=<?php echo urlencode($enreg['code']); ?>"><img src="../img/edit.gif" border="0" title="<?php echo get_lang("EditNode"); ?>" alt ="" /></a>
-	<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($category); ?>&amp;action=delete&amp;id=<?php echo urlencode($enreg['code']); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;"><img src="../img/delete.gif" border="0" title="<?php echo get_lang("DeleteNode"); ?>" alt="" /></a>
-	<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($category); ?>&amp;action=moveUp&amp;id=<?php echo urlencode($enreg['code']); ?>&amp;tree_pos=<?php echo $enreg['tree_pos']; ?>"><img src="../img/up.gif" border="0" title="<?php echo get_lang("UpInSameLevel"); ?>" alt="" /></a>
-	<?php echo $enreg['name']; ?>
-	(<?php echo $enreg['children_count']; ?> <?php echo get_lang("Categories"); ?> - <?php echo $enreg['nbr_courses']; ?> <?php echo get_lang("Courses"); ?>)
-  </li>
-
-<?php
-		}
-
-		unset($Categories);
+	?>
+	  <li>
+		<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($enreg['code']); ?>"><img src="../img/folder_document.gif" border="0" title="<?php echo get_lang("OpenNode"); ?>" alt="<?php echo get_lang("OpenNode"); ?>" align="absbottom" /></a>
+		<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=edit&amp;id=<?php echo Security::remove_XSS($enreg['code']); ?>"><img src="../img/edit.gif" border="0" title="<?php echo get_lang("EditNode"); ?>" alt ="<?php echo get_lang("EditNode"); ?>" /></a>
+		<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=delete&amp;id=<?php echo Security::remove_XSS($enreg['code']); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;"><img src="../img/delete.gif" border="0" title="<?php echo get_lang("DeleteNode"); ?>" alt="<?php echo get_lang("DeleteNode"); ?>" /></a>
+		<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=moveUp&amp;id=<?php echo Security::remove_XSS($enreg['code']); ?>&amp;tree_pos=<?php echo $enreg['tree_pos']; ?>"><img src="../img/up.gif" border="0" title="<?php echo get_lang("UpInSameLevel"); ?>" alt="<?php echo get_lang("UpInSameLevel"); ?>" /></a>
+		<?php echo $enreg['name']; ?>
+		(<?php echo $enreg['children_count']; ?> <?php echo get_lang("Categories"); ?> - <?php echo $enreg['nbr_courses']; ?> <?php echo get_lang("Courses"); ?>)
+	  </li>
+	<?php
 	}
-	else
-	{
-		echo get_lang("NoCategories");
-	}
+	unset($Categories);
+}
+else
+{
+	echo get_lang("NoCategories");
+}
 ?>
-
 </ul>
 
-<a href="<?php echo api_get_self(); ?>?category=<?php echo $category; ?>&amp;action=add"><?php echo get_lang("AddACategory"); if(!empty($category)) echo ' '.get_lang('Into').' '.$category; ?></a>
+<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=add"><?php echo get_lang("AddACategory"); if(!empty($category)) echo ' '.get_lang('Into').' '.Security::remove_XSS($category); ?></a>
 
 <?php
 }
@@ -237,15 +246,16 @@ Display::display_footer();
 function deleteNode($node)
 {
 	global $tbl_category, $tbl_course;
+	$node = Database::escape_string($node);
 
 	$result=api_sql_query("SELECT parent_id,tree_pos FROM $tbl_category WHERE code='$node'",__FILE__,__LINE__);
 
-	if($row=mysql_fetch_array($result))
+	if($row=Database::fetch_array($result))
 	{
 		if(!empty($row['parent_id']))
 		{
-			api_sql_query("UPDATE $tbl_course SET category_code='$row[parent_id]' WHERE category_code='$node'",__FILE__,__LINE__);
-			api_sql_query("UPDATE $tbl_category SET parent_id='$row[parent_id]' WHERE parent_id='$node'",__FILE__,__LINE__);
+			api_sql_query("UPDATE $tbl_course SET category_code='".$row['parent_id']."' WHERE category_code='$node'",__FILE__,__LINE__);
+			api_sql_query("UPDATE $tbl_category SET parent_id='".$row['parent_id']."' WHERE parent_id='$node'",__FILE__,__LINE__);
 		}
 		else
 		{
@@ -253,7 +263,7 @@ function deleteNode($node)
 			api_sql_query("UPDATE $tbl_category SET parent_id=NULL WHERE parent_id='$node'",__FILE__,__LINE__);
 		}
 
-		api_sql_query("UPDATE $tbl_category SET tree_pos=tree_pos-1 WHERE tree_pos > '$row[tree_pos]'",__FILE__,__LINE__);
+		api_sql_query("UPDATE $tbl_category SET tree_pos=tree_pos-1 WHERE tree_pos > '".$row['tree_pos']."'",__FILE__,__LINE__);
 		api_sql_query("DELETE FROM $tbl_category WHERE code='$node'",__FILE__,__LINE__);
 
 		if(!empty($row['parent_id']))
@@ -268,17 +278,20 @@ function addNode($code,$name,$canHaveCourses,$parent_id)
 	global $tbl_category;
 
 	$canHaveCourses=$canHaveCourses?'TRUE':'FALSE';
+	$code 			= Database::escape_string($code);
+	$name 			= Database::escape_string($name);
+	$parent_id		= Database::escape_string($parent_id);	
 
 	$result=api_sql_query("SELECT 1 FROM $tbl_category WHERE code='$code'",__FILE__,__LINE__);
 
-	if(mysql_num_rows($result))
+	if(Database::num_rows($result))
 	{
 		return false;
 	}
 
 	$result=api_sql_query("SELECT MAX(tree_pos) AS maxTreePos FROM $tbl_category",__FILE__,__LINE__);
 
-	$row=mysql_fetch_array($result);
+	$row=Database::fetch_array($result);
 
 	$tree_pos=$row['maxTreePos']+1;
 
@@ -294,12 +307,15 @@ function editNode($code,$name,$canHaveCourses,$old_code)
 	global $tbl_category;
 
 	$canHaveCourses=$canHaveCourses?'TRUE':'FALSE';
+	$code 			= Database::escape_string($code);
+	$name 			= Database::escape_string($name);
+	$old_code 		= Database::escape_string($old_code);
 
 	if($code != $old_code)
 	{
 		$result=api_sql_query("SELECT 1 FROM $tbl_category WHERE code='$code'",__FILE__,__LINE__);
 
-		if(mysql_num_rows($result))
+		if(Database::num_rows($result))
 		{
 			return false;
 		}
@@ -313,14 +329,17 @@ function editNode($code,$name,$canHaveCourses,$old_code)
 function moveNodeUp($code,$tree_pos,$parent_id)
 {
 	global $tbl_category;
-
+	$code 		= Database::escape_string($code);
+	$tree_pos 	= Database::escape_string($tree_pos);
+	$parent_id	= Database::escape_string($parent_id);
+	
 	$result=api_sql_query("SELECT code,tree_pos FROM $tbl_category WHERE parent_id ".(empty($parent_id)?"IS NULL":"='$parent_id'")." AND tree_pos<'$tree_pos' ORDER BY tree_pos DESC LIMIT 0,1",__FILE__,__LINE__);
 
-	if(!$row=mysql_fetch_array($result))
+	if(!$row=Database::fetch_array($result))
 	{
 		$result=api_sql_query("SELECT code,tree_pos FROM $tbl_category WHERE parent_id ".(empty($parent_id)?"IS NULL":"='$parent_id'")." AND tree_pos>'$tree_pos' ORDER BY tree_pos DESC LIMIT 0,1",__FILE__,__LINE__);
 
-		if(!$row=mysql_fetch_array($result))
+		if(!$row=Database::fetch_array($result))
 		{
 			return false;
 		}
@@ -333,10 +352,10 @@ function moveNodeUp($code,$tree_pos,$parent_id)
 function updateFils($category)
 {
 	global $tbl_category;
-
+	$category = Database::escape_string($category);
 	$result=api_sql_query("SELECT parent_id FROM $tbl_category WHERE code='$category'",__FILE__,__LINE__);
 
-	if($row=mysql_fetch_array($result))
+	if($row=Database::fetch_array($result))
 	{
 		updateFils($row['parent_id']);
 	}
@@ -349,10 +368,10 @@ function updateFils($category)
 function compterFils($pere,$cpt)
 {
 	global $tbl_category;
-
+	$pere = Database::escape_string($pere);
 	$result=api_sql_query("SELECT code FROM $tbl_category WHERE parent_id='$pere'",__FILE__,__LINE__);
 
-	while($row=mysql_fetch_array($result))
+	while($row=Database::fetch_array($result))
 	{
 		$cpt=compterFils($row['code'],$cpt);
 	}

@@ -22,7 +22,7 @@ if($action == 'delete')
 {
 	if(is_array($idChecked))
 	{
-		$idChecked=implode(',',$idChecked);
+		$idChecked=Database::escape_string(implode(',',$idChecked));
 	}
 	else
 	{
@@ -64,12 +64,12 @@ api_display_tool_title($tool_name);
 <?php
 
 if(isset($_GET['action'])){
-	Display::display_normal_message(stripslashes($_GET['message']), false);
+	Display::display_normal_message(Security::remove_XSS($_GET['message']), false);
 }
 
 ?>
 <form method="POST" action="session_list.php">
-		<input type="text" name="keyword" value="<?php echo $_GET['keyword']; ?>"/>
+	<input type="text" name="keyword" value="<?php echo Security::remove_XSS($_GET['keyword']); ?>"/>
 	<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
 	</form>
 <form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
@@ -141,7 +141,7 @@ else
 		$sql = 'SELECT COUNT(course_code) FROM '.$tbl_session_rel_course.' WHERE id_session='.intval($enreg['id']);
 
 	  	$rs = api_sql_query($sql, __FILE__, __LINE__);
-	  	list($nb_courses) = mysql_fetch_array($rs);
+	  	list($nb_courses) = Database::fetch_array($rs);
 
 	?>
 
@@ -155,7 +155,7 @@ else
 		<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><img src="../img/add_user_big.gif" border="0" align="absmiddle" title="<?php echo get_lang('SubscribeUsersToSession'); ?>"></a>
 		<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><img src="../img/synthese_view.gif" border="0" align="absmiddle" title="<?php echo get_lang('SubscribeCoursesToSession'); ?>"></a>
 		<a href="session_edit.php?page=session_list.php&id=<?php echo $enreg['id']; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="<?php echo get_lang('Edit'); ?>"></a>
-		<a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="<?php echo get_lang('Delete'); ?>"></a>
+		<a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="<?php echo get_lang('Delete'); ?>" alt="<?php echo get_lang('Delete'); ?>"></a>
 	  </td>
 	</tr>
 

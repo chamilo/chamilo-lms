@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 14108 2008-01-15 09:41:13Z elixir_inter $
+// $Id: profile.php 14237 2008-02-03 18:57:05Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -62,7 +62,7 @@ function confirmation(name)
 if (!empty ($_GET['coursePath']))
 {
 	$course_url = api_get_path(WEB_COURSE_PATH).htmlentities(strip_tags($_GET['coursePath'])).'/index.php';
-	$interbreadcrumb[] = array ('url' => $course_url, 'name' => $_GET['courseCode']);
+	$interbreadcrumb[] = array ('url' => $course_url, 'name' => Security::remove_XSS($_GET['courseCode']));
 }
 $warning_msg = '';
 if(!empty($_GET['fe']))

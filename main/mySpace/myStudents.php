@@ -597,7 +597,7 @@ if(!empty($_GET['student']))
 						<?php echo api_time_to_hms($total_time) ?>
 						</td>
 						<td align="right">
-							<?php echo $score.'%' ?>
+							<?php echo $total_weighting>0 ? $score.'%' : '-' ?>
 						</td>
 						<td align="right">
 							<?php echo $progress ?>

@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 13692 2007-11-14 14:38:13Z elixir_inter $
+* 	@version $Id: question.class.php 14272 2008-02-08 13:02:50Z elixir_inter $
 */
 
 
@@ -588,6 +588,13 @@ abstract class Question
 		// if the question is created in an exercise
 		if($exerciseId)
 		{
+			
+			$sql = 'UPDATE '.Database::get_course_table(TABLE_LP_ITEM).' 
+					SET max_score = '.intval($weighting).'
+					WHERE item_type = "'.TOOL_QUIZ.'"
+					AND path='.intval($exerciseId);
+			api_sql_query($sql,__FILE__,__LINE__);
+			
 			// adds the exercise into the exercise list of this question
 			$this->addToList($exerciseId);
 		}

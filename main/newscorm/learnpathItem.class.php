@@ -1618,7 +1618,6 @@ class learnpathItem{
 		 		case TOOL_HOTPOTATOES:
 		 			break;
 		 		case TOOL_QUIZ:
-		 			break;
 				default:
 		 			//for now, everything that is not sco and not asset is set to
 		 			//completed when saved

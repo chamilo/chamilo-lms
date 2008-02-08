@@ -45,7 +45,7 @@ class OpenofficePresentation extends OpenofficeDocument {
 					'<html>
 					<head></head>
 					<body>
-						<img src="'.$this->file_name.'/'.$file.'" />
+						<img src="'.api_get_path(REL_COURSE_PATH).$_course['path'].'/document/'.$this->created_dir.'/'.$this->file_name.'/'.$file.'" />
 					</body>
 					</html>');
 			fclose($fp);

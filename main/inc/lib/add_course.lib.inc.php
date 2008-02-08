@@ -805,6 +805,7 @@ function update_Db_course($courseDbName)
 		start_visible datetime NOT NULL default '0000-00-00 00:00:00',
 		end_visible datetime NOT NULL default '0000-00-00 00:00:00'
 		) TYPE=MyISAM;");
+	api_sql_query("ALTER TABLE `$TABLEITEMPROPERTY` ADD INDEX (tool,ref)");
 
 	/*
 	-----------------------------------------------------------

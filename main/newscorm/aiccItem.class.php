@@ -124,9 +124,9 @@ class aiccItem extends learnpathItem{
      * Save function. Uses the parent save function and adds a layer for AICC.
      * @param	boolean	Save from URL params (1) or from object attributes (0)
      */
-    function save($from_outside=true)
+    function save($from_outside=true, $prereqs_complete=false)
     {
-    	parent::save($from_outside);
+    	parent::save($from_outside, $prereqs_complete=false);
     	//under certain conditions, the scorm_contact should not be set, because no scorm signal was sent
     	$this->aicc_contact = true;
     	if(!$this->aicc_contact){

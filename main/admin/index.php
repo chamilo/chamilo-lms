@@ -1,4 +1,4 @@
-<?php // $Id: index.php 13993 2007-12-15 05:19:04Z yannoo $
+<?php // $Id: index.php 14281 2008-02-11 15:52:36Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -305,16 +305,18 @@ function check_dokeos_version2()
 	if (ini_get('allow_url_fopen')==1)
 	{
 		// the number of courses
-		$sql="SELECT code FROM ".Database::get_main_table(TABLE_MAIN_COURSE);
+		$sql="SELECT count(code) FROM ".Database::get_main_table(TABLE_MAIN_COURSE);
 		$result=api_sql_query($sql);
-		$number_of_courses = Database::num_rows($result);
+		$row = Database::fetch_array($result);
+		$number_of_courses = $row[0];
 
 		// the number of users
-		$sql="SELECT user_id FROM ".Database::get_main_table(TABLE_MAIN_USER);
+		$sql="SELECT count(user_id) FROM ".Database::get_main_table(TABLE_MAIN_USER);
 		$result=api_sql_query($sql);
-		$number_of_users = Database::num_rows($result);
+		$row = Database::fetch_array($result);
+		$number_of_users = $row[0];
 
-		$version_url= 'http://www.dokeos.com/version.php?url='.urlencode(api_get_path(WEB_PATH)).'&campus='.urlencode(api_get_setting('siteName')).'&contact='.urlencode(get_setting('emailAdministrator')).'&version='.urlencode($dokeos_version).'&numberofcourses='.urlencode($number_of_courses).'&numberofusers='.urlencode($number_of_users).'&donotlistcampus='.get_setting('donotlistcampus');
+		$version_url= 'http://www.dokeos.com/version.php?url='.urlencode(api_get_path(WEB_PATH)).'&campus='.urlencode(api_get_setting('siteName')).'&contact='.urlencode(api_get_setting('emailAdministrator')).'&version='.urlencode($dokeos_version).'&numberofcourses='.urlencode($number_of_courses).'&numberofusers='.urlencode($number_of_users).'&donotlistcampus='.api_get_setting('donotlistcampus').'&organisation='.urlencode(api_get_setting('Institution')).'&adminname='.urlencode(api_get_setting('administratorName').' '.api_get_setting('administratorSurname'));
 		$handle=@fopen($version_url,'r');
 		$version_info=@fread($handle, 1024);
 

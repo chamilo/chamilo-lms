@@ -168,7 +168,7 @@ if($session['nbr_courses']==0){
 }
 else {
 	// select the courses
-	$sql = "SELECT code,title,nbr_users, lastname, firstname, username
+	$sql = "SELECT code,title,visual_code, nbr_users, lastname, firstname, username
 			FROM $tbl_course,$tbl_session_rel_course
 			LEFT JOIN $tbl_user
 				ON $tbl_session_rel_course.id_coach = $tbl_user.user_id
@@ -188,7 +188,7 @@ else {
 			$coach = $course['lastname'].' '.$course['firstname'].' ('.$course['username'].')';
 		echo '
 		<tr>
-			<td>'.$course['title'].' ('.$course['code'].')</td>
+			<td>'.$course['title'].' ('.$course['visual_code'].')</td>
 			<td>'.$coach.'</td>
 			<td>'.$course['nbr_users'].'</td>
 			<td>

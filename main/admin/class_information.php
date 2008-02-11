@@ -1,4 +1,4 @@
-<?php // $Id: class_information.php 10920 2007-01-26 10:55:37Z elixir_julian $
+<?php // $Id: class_information.php 14280 2008-02-11 10:51:59Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -103,7 +103,7 @@ if (count($courses) > 0)
 	foreach( $courses as $index=>$course)
 	{
 		$row = array ();
-		$row[] = $course['code'];
+		$row[] = $course['visual_code'];
 		$row[] = $course['title'];
 		$row[] = '<a href="course_information.php?code='.$course['code'].'"><img src="../img/info_small.gif" border="0" /></a>'.'<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'"><img src="../img/course_home.gif" border="0"/></a>' .
 				'<a href="course_edit.php?course_code='.$course['code'].'"><img src="../img/edit.gif" border="0" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>';

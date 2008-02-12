@@ -2410,7 +2410,9 @@ class learnpath {
     	//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
     	$html .= '<div class="inner_lp_toc">'."\n" ;
     	if(api_is_allowed_to_edit()){
-    		$html.="<a href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."' style='font-size: 11px' target='_parent'>".mb_convert_encoding(get_lang("Build"),$this->encoding)."</a>&#124;<a style='font-size: 11px' href='lp_controller.php?".api_get_cidreq()."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".mb_convert_encoding(get_lang("BasicOverview"),$this->encoding)."</a>&#124;".mb_convert_encoding(get_lang("Display"),$this->encoding)."<br/><br/>";
+    		$mych = api_get_setting('platform_charset');
+    		$html.="<a href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."' style='font-size: 11px' target='_parent'>".mb_convert_encoding(get_lang("Build"),$this->encoding,$mych)."</a>&#124;<a style='font-size: 11px' href='lp_controller.php?".api_get_cidreq()."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".mb_convert_encoding(get_lang("BasicOverview"),$this->encoding,$mych)."</a>&#124;".mb_convert_encoding(get_lang("Display"),$this->encoding,$mych)."<br/><br/>";
+			unset($mych);
     	}
     	//		" onchange=\"javascript:document.getElementById('toc_$parent').focus();\">\n";
 		require_once('resourcelinker.inc.php');

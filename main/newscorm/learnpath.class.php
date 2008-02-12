@@ -597,7 +597,7 @@ class learnpath {
     					"default_encoding,display_order,content_maker," .
     					"content_local,js_lib) " .
     					"VALUES ($type,'$name','$description','','embedded'," .
-    					"'ISO-8859-1','$dsp','Dokeos'," .
+    					"'UTF-8','$dsp','Dokeos'," .
     					"'local','')";
     			//if($this->debug>2){error_log('New LP - Inserting new lp '.$sql_insert,0);}
     			$res_insert = api_sql_query($sql_insert);

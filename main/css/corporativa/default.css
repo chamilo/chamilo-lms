@@ -1382,3 +1382,41 @@ div.system_announcement {
 	padding:5px;
 	/*border: 1px solid #264269;*/
 }
+
+/*
+------------------------------------------------------------------------------^M
+    sessions
+------------------------------------------------------------------------------^M
+*/
+
+#ajax_list_coachs {
+        position:absolute;
+        border:1px solid #4171B5;
+        margin:0px;
+        padding:0px;
+        margin-left:200px;
+        margin-top:-23px;
+        background-color:#FFFFFF;
+        height:auto;
+        overflow:auto;
+}
+#ajax_list_courses {
+        position:absolute;
+        border:1px solid #4171B5;
+        margin:0px;
+        padding:0px;
+        margin-left:200px;
+        background-color:#FFFFFF;
+        height:auto;
+        overflow:auto;
+}
+#ajax_list_users {
+        position:absolute;
+        border:1px solid #4171B5;
+        margin:0px;
+        padding:0px;
+        margin-left:200px;
+        background-color:#FFFFFF;
+        height:auto;
+        overflow:auto;
+}

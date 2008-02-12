@@ -36,6 +36,11 @@ $cidReset=true;
 // including some necessary dokeos files
 require('../inc/global.inc.php');
 
+require_once ('../inc/lib/xajax/xajax.inc.php');
+$xajax = new xajax();
+//$xajax->debugOn();
+$xajax -> registerFunction ('search_courses');
+
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -57,6 +62,64 @@ $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 $tool_name= get_lang('SubscribeCoursesToSession');
 
 $id_session=intval($_GET['id_session']);
+
+
+
+function search_courses($needle)
+{
+	global $tbl_course, $tbl_session_rel_course, $id_session;
+	
+	$xajax_response = new XajaxResponse();
+	$return = '';
+	if(!empty($needle))
+	{
+		// search users where username or firstname or lastname begins likes $needle
+		$sql = 'SELECT course.code, course.visual_code, course.title, session_rel_course.id_session
+				FROM '.$tbl_course.' course
+				LEFT JOIN '.$tbl_session_rel_course.' session_rel_course
+					ON course.code = session_rel_course.course_code
+					AND session_rel_course.id_session = '.intval($id_session).'
+				WHERE course.visual_code LIKE "'.$needle.'%"
+				OR course.title LIKE "'.$needle.'%"';
+				
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		
+		while($course = Database :: fetch_array($rs))
+		{
+			$return .= '<a href="#" onclick="add_course_to_session(\''.$course['code'].'\',\''.$course['title'].' ('.$course['visual_code'].')'.'\')">'.$course['title'].' ('.$course['visual_code'].')</a><br />';
+		}
+	}
+	$xajax_response -> addAssign('ajax_list_courses','innerHTML',utf8_encode($return));
+	return $xajax_response;
+}
+$xajax -> processRequests();
+
+$htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
+$htmlHeadXtra[] = '
+<script type="text/javascript">
+function add_course_to_session (code, content) {
+
+	document.getElementById("course_to_add").value = "";
+	document.getElementById("ajax_list_courses").innerHTML = "";
+	
+	destination = document.getElementById("destination");
+	destination.options[destination.length] = new Option(content,code);
+	
+	destination.selectedIndex = -1;
+	sortOptions(destination.options);
+	
+}
+function remove_item(origin)
+{
+	for(var i = 0 ; i<origin.options.length ; i++) {
+		if(origin.options[i].selected) {
+			origin.options[i]=null;
+			i = i-1;
+		}
+	}
+}
+</script>';
+
 
 $formSent=0;
 $errorMsg=$firstLetterCourse=$firstLetterSession='';
@@ -151,28 +214,56 @@ Display::display_header($tool_name);
 
 api_display_tool_title($tool_name);
 
+$sql = 'SELECT COUNT(1) FROM '.$tbl_course;
+$rs = api_sql_query($sql, __FILE__, __LINE__);
+$count_courses = mysql_result($rs, 0, 0);
+$ajax_search = $count_courses > 50 ? true : false;
 
-$sql="SELECT code, title, visual_code, id_session
-		FROM $tbl_course
-		LEFT JOIN $tbl_session_rel_course
-			ON code = course_code
-		ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
-
-$result=api_sql_query($sql,__FILE__,__LINE__);
-
-$Courses=api_store_result($result);
 $nosessionCourses = $sessionCourses = array();
 
+if($ajax_search)
+{
 
-foreach($Courses as $course)
-	if($course['id_session'] == $id_session)
+	$sql="SELECT code, title, visual_code, id_session
+			FROM $tbl_course course
+			INNER JOIN $tbl_session_rel_course session_rel_course
+				ON course.code = session_rel_course.course_code
+				AND session_rel_course.id_session = ".intval($id_session)."
+			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";			
+
+	$result=api_sql_query($sql,__FILE__,__LINE__);	
+	$Courses=api_store_result($result);
+	
+	
+	foreach($Courses as $course)
+	{
 		$sessionCourses[$course['code']] = $course ;
+	}
+}
+else
+{
+	$sql="SELECT code, title, visual_code, id_session
+			FROM $tbl_course course
+			LEFT JOIN $tbl_session_rel_course session_rel_course
+				ON course.code = session_rel_course.course_code
+				AND session_rel_course.id_session = ".intval($id_session)."
+			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";			
 
-foreach($Courses as $course)
-	if(empty($sessionCourses[$course['code']]) && empty($nosessionCourses[$course['code']]))
-		$nosessionCourses[$course['code']] = $course ;
-
-
+	$result=api_sql_query($sql,__FILE__,__LINE__);	
+	$Courses=api_store_result($result);
+	
+	foreach($Courses as $course)
+	{
+		if($course['id_session'] == $id_session)
+		{
+			$sessionCourses[$course['code']] = $course ;
+		}
+		else
+		{
+			$nosessionCourses[$course['code']] = $course ;
+		}
+	}	
+}			
 unset($Courses);
 ?>
 
@@ -194,26 +285,47 @@ if(!empty($errorMsg))
   <td align="center" width="45%"><b><?php echo get_lang('CourseListInSession') ?> :</b></td>
 </tr>
 <tr>
-  <td width="45%" align="center"><select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:300px;">
+  <td width="45%" align="center">
 
 <?php
-foreach($nosessionCourses as $enreg)
-{
-?>
-
-	<option value="<?php echo $enreg['code']; ?>" <?php if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
-
-<?php
+if($ajax_search){
+	?>
+	<input type="text" id="course_to_add" onkeyup="xajax_search_courses(this.value)" />
+	<div id="ajax_list_courses"></div>
+	<?php
 }
-
+else
+{
+	?> <select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:300px;"> <?php
+	foreach($nosessionCourses as $enreg)
+	{
+		?>
+		<option value="<?php echo $enreg['code']; ?>" <?php if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
+		<?php
+	}
+	?>  </select> <?php
+}	
 unset($nosessionCourses);
 ?>
 
   </select></td>
   <td width="10%" valign="middle" align="center">
+  <?php
+  if($ajax_search)
+  {
+  ?>
+  	<input type="button" onclick="remove_item(document.getElementById('destination'))" value="<<" />
+  <?php
+  }
+  else
+  {
+  ?>
 	<input type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" value=">>" />
 	<br /><br />
 	<input type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" value="<<" />
+  <?php 
+  } 
+  ?>
 	<br /><br /><br /><br /><br /><br />
 	<?php
 	if(isset($_GET['add']))

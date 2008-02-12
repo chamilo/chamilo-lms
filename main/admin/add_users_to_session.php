@@ -36,6 +36,11 @@ $cidReset=true;
 // including some necessary dokeos files
 require('../inc/global.inc.php');
 
+require_once ('../inc/lib/xajax/xajax.inc.php');
+$xajax = new xajax();
+//$xajax->debugOn();
+$xajax -> registerFunction ('search_users');
+
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -61,6 +66,63 @@ $tbl_class_user						= Database::get_main_table(TABLE_MAIN_CLASS_USER);
 $tool_name=get_lang('SubscribeUsersToSession');
 
 $id_session=intval($_GET['id_session']);
+
+
+function search_users($needle)
+{
+	global $tbl_user;
+	
+	$xajax_response = new XajaxResponse();
+	$return = '';
+	if(!empty($needle))
+	{
+		// search users where username or firstname or lastname begins likes $needle
+		$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
+				WHERE (username LIKE "'.$needle.'%"
+				OR firstname LIKE "'.$needle.'%"
+				OR lastname LIKE "'.$needle.'%")
+				ORDER BY lastname, firstname, username
+				LIMIT 10';
+				
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		
+		while($user = Database :: fetch_array($rs))
+		{
+			$return .= '<a href="#" onclick="add_user_to_session(\''.$user['user_id'].'\',\''.$user['firstname'].' '.$user['lastname'].' ('.$user['username'].')'.'\')">'.$user['firstname'].' '.$user['lastname'].' ('.$user['username'].')</a><br />';
+		}
+	}
+	$xajax_response -> addAssign('ajax_list_users','innerHTML',utf8_encode($return));
+	return $xajax_response;
+}
+$xajax -> processRequests();
+
+$htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
+$htmlHeadXtra[] = '
+<script type="text/javascript">
+function add_user_to_session (code, content) {
+
+	document.getElementById("user_to_add").value = "";
+	document.getElementById("ajax_list_users").innerHTML = "";
+	
+	destination = document.getElementById("destination_users");
+	destination.options[destination.length] = new Option(content,code);
+	
+	destination.selectedIndex = -1;
+	sortOptions(destination.options);
+	
+}
+function remove_item(origin)
+{
+	for(var i = 0 ; i<origin.options.length ; i++) {
+		if(origin.options[i].selected) {
+			origin.options[i]=null;
+			i = i-1;
+		}
+	}
+}
+</script>';
+
+
 $formSent=0;
 $errorMsg=$firstLetterUser=$firstLetterSession='';
 $UserList=$SessionList=array();
@@ -153,40 +215,48 @@ Display::display_header($tool_name);
 
 api_display_tool_title($tool_name);
 
-$nosessionUsersList = $sessionUsersList = $nosessionClassesList = $sessionClassesList = array();
+$nosessionUsersList = $sessionUsersList = array();
+$sql = 'SELECT COUNT(1) FROM '.$tbl_user;
+$rs = api_sql_query($sql, __FILE__, __LINE__);
+$count_courses = mysql_result($rs, 0, 0);
+$ajax_search = $count_courses > 100 ? true : false;
 
-//classes
-$sql="SELECT id, name FROM $tbl_class ORDER BY name";
-$result=api_sql_query($sql,__FILE__,__LINE__);
-
-$Classes=api_store_result($result);
-foreach($Classes as $classe)
-	if($classe['id_session'] == $id_session)
-		$sessionClassesList[$classe['id']] = $classe ;
-
-foreach($Classes as $classe)
-	if(empty($sessionClassesList[$classe['user_id']]) && empty($nosessionClassesList[$classe['user_id']]))
-		$nosessionClassesList[$classe['id']] = $classe ;
-
-
-//users
-$sql="SELECT user_id, lastname, firstname, username, id_session
-		FROM $tbl_user
-		LEFT JOIN $tbl_session_rel_user
-			ON $tbl_session_rel_user.id_user = $tbl_user.user_id
-		ORDER BY lastname,firstname,username";
-
-$result=api_sql_query($sql,__FILE__,__LINE__);
-
-$Users=api_store_result($result);
-
-foreach($Users as $user)
-	if($user['id_session'] == $id_session)
+if($ajax_search)
+{
+	$sql="SELECT user_id, lastname, firstname, username, id_session
+			FROM $tbl_user
+			INNER JOIN $tbl_session_rel_user
+				ON $tbl_session_rel_user.id_user = $tbl_user.user_id
+				AND $tbl_session_rel_user.id_session = ".intval($id_session)."
+			ORDER BY lastname,firstname,username";
+	
+	$result=api_sql_query($sql,__FILE__,__LINE__);	
+	$Users=api_store_result($result);
+	
+	foreach($Users as $user)
+	{
 		$sessionUsersList[$user['user_id']] = $user ;
-
-foreach($Users as $user)
-	if(empty($sessionUsersList[$user['user_id']]) && empty($nosessionUsersList[$user['user_id']]))
-		$nosessionUsersList[$user['user_id']] = $user ;
+	}
+}
+else
+{
+	$sql="SELECT user_id, lastname, firstname, username, id_session
+			FROM $tbl_user
+			LEFT JOIN $tbl_session_rel_user
+				ON $tbl_session_rel_user.id_user = $tbl_user.user_id
+			ORDER BY lastname,firstname,username";
+	
+	$result=api_sql_query($sql,__FILE__,__LINE__);	
+	$Users=api_store_result($result);
+	
+	foreach($Users as $user)
+	{
+		if($user['id_session'] == $id_session)
+			$sessionUsersList[$user['user_id']] = $user ;
+		else
+			$nosessionUsersList[$user['user_id']] = $user ;
+	}
+}
 
 
 
@@ -218,6 +288,18 @@ if(!empty($errorMsg))
 <tr>
   <td align="center">
   <div id="content_source">
+  	  <?php
+  	  if($ajax_search)
+  	  {
+  	  	?>
+		<input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value)" />
+		<div id="ajax_list_users"></div>
+		<?php
+  	  }
+  	  else
+  	  {
+  	  ?>
+  	  
 	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:300px;">
 
 		<?php
@@ -234,12 +316,28 @@ if(!empty($errorMsg))
 		?>
 
 	  </select>
+	<?php
+  	  }
+  	 ?>
   </div>
   </td>
   <td width="10%" valign="middle" align="center">
+  <?php
+  if($ajax_search)
+  {
+  ?>
+  	<input type="button" onclick="remove_item(document.getElementById('destination_users'))" value="<<" />
+  <?php
+  }
+  else
+  {
+  ?>
 	<input type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" value=">>" />
 	<br /><br />
 	<input type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" value="<<" />
+	<?php 
+  } 
+  ?>
 	<br /><br /><br /><br /><br /><br />
   </td>
   <td align="center">

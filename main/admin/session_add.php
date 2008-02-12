@@ -6,6 +6,11 @@ $cidReset=true;
 
 include('../inc/global.inc.php');
 
+require_once ('../inc/lib/xajax/xajax.inc.php');
+$xajax = new xajax();
+//$xajax->debugOn();
+$xajax -> registerFunction ('search_coachs');
+
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
 
@@ -17,6 +22,48 @@ $errorMsg='';
 // Database Table Definitions
 $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
+
+function search_coachs($needle)
+{
+	global $tbl_user;
+	
+	$xajax_response = new XajaxResponse();
+	$return = '';
+	
+	if(!empty($needle))
+	{
+		// search users where username or firstname or lastname begins likes $needle
+		$sql = 'SELECT username, lastname, firstname FROM '.$tbl_user.' user
+				WHERE (username LIKE "'.$needle.'%"
+				OR firstname LIKE "'.$needle.'%"
+				OR lastname LIKE "'.$needle.'%")
+				AND status=1
+				ORDER BY lastname, firstname, username
+				LIMIT 10';
+				
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		
+		while($user = Database :: fetch_array($rs))
+		{
+			$return .= '<a href="#" onclick="fill_coach_field(\''.$user['username'].'\')">'.$user['firstname'].' '.$user['lastname'].' ('.$user['username'].')</a><br />';
+		}
+	}
+	$xajax_response -> addAssign('ajax_list_coachs','innerHTML',utf8_encode($return));
+	return $xajax_response;
+}
+$xajax -> processRequests();
+
+$htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
+
+$htmlHeadXtra[] = '
+<script type="text/javascript">
+function fill_coach_field (username) {
+
+	document.getElementById("coach_username").value = username;
+	document.getElementById("ajax_list_coachs").innerHTML = "";
+
+}
+</script>';
 
 $tool_name = get_lang('AddSession');
 
@@ -34,7 +81,10 @@ if($_POST['formSent'])
 	$year_end=intval($_POST['year_end']);
 	$month_end=intval($_POST['month_end']);
 	$day_end=intval($_POST['day_end']);
-	$id_coach=intval($_POST['id_coach']);
+	
+	$sql = 'SELECT user_id FROM '.$tbl_user.' WHERE username="'.Database::escape_string($_POST['coach_username']).'"';
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	$id_coach = mysql_result($rs,0,'user_id');
 
 	if(empty($_POST['nolimit'])){
 		$date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
@@ -44,6 +94,7 @@ if($_POST['formSent'])
 		$date_start="000-00-00";
 		$date_end="000-00-00";
 	}
+	
 	if(empty($name)) $errorMsg=get_lang('SessionNameIsRequired');
 	elseif(empty($_POST['nolimit']) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) $errorMsg=get_lang('InvalidStartDate');
 	elseif(empty($_POST['nolimit']) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) $errorMsg=get_lang('InvalidEndDate');
@@ -64,11 +115,6 @@ if($_POST['formSent'])
 	}
 }
 
-$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1' ORDER BY lastname,firstname,username";
-
-$result=api_sql_query($sql,__FILE__,__LINE__);
-
-$Coaches=api_store_result($result);
 
 $thisYear=date('Y');
 $thisMonth=date('m');
@@ -109,23 +155,36 @@ if(!empty($errorMsg))
 </tr>
 <tr>
   <td width="30%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>
-  <td width="70%"><select name="id_coach" value="true" style="width:250px;">
-	<option value="0"><?php get_lang('None'); ?></option>
-
+  <td width="70%">
 <?php
-foreach($Coaches as $enreg)
+$sql = 'SELECT COUNT(1) FROM '.$tbl_user.' WHERE status=1';
+$rs = api_sql_query($sql, __FILE__, __LINE__);
+$count_users = mysql_result($rs, 0, 0);
+
+if(intval($count_users)<50)
 {
-?>
-
-	<option value="<?php echo $enreg['user_id']; ?>" <?php if($sent && $enreg['user_id'] == $id_coach) echo 'selected="selected"'; ?>><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
-
-<?php
+	$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1' ORDER BY lastname,firstname,username";
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$Coaches=api_store_result($result);
+	?>
+	<select name="coach_username" value="true" style="width:250px;">
+		<option value="0"><?php get_lang('None'); ?></option>
+		<?php foreach($Coaches as $enreg): ?>
+		<option value="<?php echo $enreg['username']; ?>" <?php if($sent && $enreg['user_id'] == $id_coach) echo 'selected="selected"'; ?>><?php echo $enreg['firstname'].' '.$enreg['lastname'].' ('.$enreg['username'].')'; ?></option>
+		<?php endforeach; ?>
+	</select>
+	<?php
 }
-
-unset($Coaches);
+else
+{
+	?>
+	<input type="text" name="coach_username" id="coach_username" onkeyup="xajax_search_coachs(document.getElementById('coach_username').value)" /><div id="ajax_list_coachs"></div>
+	<?php
+}
 ?>
 
-  </select></td>
+	
+</td>
 </tr>
 <tr>
   <td width="30%"><?php echo get_lang('NoTimeLimits') ?></td>

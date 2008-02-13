@@ -1,4 +1,4 @@
-<?php // $Id: download.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: download.php 14289 2008-02-13 17:57:11Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -54,7 +54,7 @@ elseif($extension == 'zip' && $_cid && $is_courseAdmin)
 
 if(empty($content_type))
 {
-	not_allowed();
+	api_not_allowed(true);
 }
 
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');

@@ -36,9 +36,9 @@ if($origin != 'tracking')
 	if (!empty ($stats_charset)) {
 		$charset_lang = $stats_charset;
 	} else {
-		$charset_lang = 'ISO-8859-1';
+		$charset_lang = api_get_setting('platform_charset');
 	}
-	$dokeos_charset = 'ISO-8859-1';
+	$dokeos_charset = api_get_setting('platform_charset');
 	$charset = $charset_lang;
 	$w = $tablewidth -20;
 	$htmlHeadXtra[] = ''.'<style type="text/css" media="screen, projection">

@@ -484,7 +484,7 @@ if($show == 'test'){
 	{
 		$nbrHpTests = $nbrActiveTests;
 	}
-	$nbrNextTests = $nbrHpTests-(($page*$limitExPage));
+	$nbrNextTests = $nbrexerc-$nbrHpTests-(($page*$limitExPage));
 
 
 	//show pages navigation link for previous page

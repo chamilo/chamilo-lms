@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 14193 2008-01-29 16:09:53Z elixir_inter $
+<?php // $Id: courses.php 14293 2008-02-14 14:09:51Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -371,7 +371,7 @@ function browse_courses_in_category()
 
 	echo "<p><b>".get_lang('CoursesInCategory')."</b>";
 	$my_category = (empty($category)?" IS NULL":"='".$category."'");
-	$sql="SELECT * FROM $tbl_course WHERE category_code".$my_category.' ORDER BY visual_code';
+	$sql="SELECT * FROM $tbl_course WHERE category_code".$my_category.' ORDER BY title, visual_code';
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	while ($row=Database::fetch_array($result))
 	{
@@ -486,7 +486,7 @@ function search_courses($search_term)
 
 	$search_term_safe=Database::escape_string($search_term);
 
-	$sql_find="SELECT * FROM $TABLECOURS WHERE code LIKE '%".$search_term_safe."%' OR title LIKE '%".$search_term_safe."%' OR tutor_name LIKE '%".$search_term_safe."%' ORDER BY visual_code ASC";
+	$sql_find="SELECT * FROM $TABLECOURS WHERE code LIKE '%".$search_term_safe."%' OR title LIKE '%".$search_term_safe."%' OR tutor_name LIKE '%".$search_term_safe."%' ORDER BY title, visual_code ASC";
 	$result_find=api_sql_query($sql_find,__FILE__,__LINE__);
 
 	while ($row=Database::fetch_array($result_find))

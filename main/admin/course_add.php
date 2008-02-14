@@ -1,5 +1,5 @@
 <?php
-// $Id: course_add.php 14101 2008-01-08 15:39:39Z elixir_inter $
+// $Id: course_add.php 14291 2008-02-14 08:17:23Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -44,6 +44,7 @@ api_protect_admin_script();
 require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 require_once (api_get_path(CONFIGURATION_PATH).'add_course.conf.php');
 require_once (api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
+require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tool_name = get_lang('AddCourse');
@@ -55,14 +56,7 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 ==============================================================================
 */
 
-// Get all course categories
-$table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
-$sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE' ORDER BY tree_pos";
-$res = api_sql_query($sql, __FILE__, __LINE__);
-while ($cat = mysql_fetch_array($res))
-{
-	$categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
-}
+
 
 // Get all possible teachers
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -82,7 +76,8 @@ $form->addRule('wanted_code',get_lang('Max'),'maxlength',20);
 $form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers);
 $form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'multiple=multiple size=5');
 $form->add_textfield('title', get_lang('Title'),true, array ('size' => '60'));
-$form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories);
+$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories);
+CourseManager::select_and_sort_categories($categories_select);
 $form->add_textfield('department_name', get_lang('CourseDepartment'),false, array ('size' => '60'));
 $form->add_textfield('department_url', get_lang('CourseDepartmentURL'),false, array ('size' => '60'));
 $form->addElement('select_language', 'course_language', get_lang('CourseLanguage'));

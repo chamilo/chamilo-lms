@@ -1,6 +1,6 @@
 <?php
 
-// $Id: course_edit.php 14101 2008-01-08 15:39:39Z elixir_inter $
+// $Id: course_edit.php 14291 2008-02-14 08:17:23Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -44,6 +44,7 @@ $this_section=SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 include (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $course_code = isset($_GET['course_code']) ? $_GET['course_code'] : $_POST['code'];
@@ -70,14 +71,7 @@ $interbreadcrumb[] = array ("url" => "course_list.php", "name" => get_lang('Admi
 */
 // Get all course categories
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-$table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 
-$sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE' ORDER BY tree_pos";
-$res = api_sql_query($sql, __FILE__, __LINE__);
-while ($cat = mysql_fetch_array($res))
-{
-	$categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
-}
 
 //Get the course infos
 $sql = "SELECT * FROM $course_table WHERE code='".mysql_real_escape_string($course_code)."'";
@@ -160,7 +154,8 @@ $renderer -> setElementTemplate($element_template, 'group');
 $form -> addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="50" align="center"><input type="button" onclick="moveItem(document.getElementById(\'platform_teachers\'), document.getElementById(\'course_teachers\'))" value=">>"><br><br><input type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" value="<<"></td><td>');
 
 $form->add_textfield( 'title', get_lang('Title'),true, array ('size' => '60'));
-$form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories);
+$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories);
+CourseManager::select_and_sort_categories($categories_select);
 $form->add_textfield( 'department_name', get_lang('CourseDepartment'), false,array ('size' => '60'));
 $form->add_textfield( 'department_url', get_lang('CourseDepartmentURL'),false, array ('size' => '60'));
 $form->addElement('select_language', 'course_language', get_lang('CourseLanguage'));

@@ -1641,5 +1641,36 @@ class CourseManager
 		return $i_course_sort;
 	}
 	
+	/**
+	 * create recursively all categories as option of the select passed in paramater.
+	 * 
+	 * @param object $select_element the quickform select where the options will be added
+	 * @param string $category_selected_code the option value to select by default (used mainly for edition of courses)
+	 * @param string $parent_code the parent category of the categories added (default=null for root category)
+	 * @param string $padding the indent param (you shouldn't indicate something here)
+	 */
+	function select_and_sort_categories($select_element, $category_selected_code="", $parent_code=null , $padding="")
+	{
+		$table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
+		$sql = "SELECT code, name, auth_course_child, auth_cat_child
+				FROM ".$table_course_category." 
+				WHERE parent_id ".(is_null($parent_code) ? "IS NULL" : "='".Database::escape_string($parent_code)."'")."
+				ORDER BY tree_pos";
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+		
+		$new_padding = $padding.str_repeat('-',3);
+		
+		while ($cat = Database::fetch_array($res))
+		{
+			$params = $cat['auth_course_child'] == 'TRUE' ? '' : 'disabled';
+			$params .= ($cat['code'] == $category_selected_code) ? ' selected' : '';
+			$select_element->addOption($padding.'('.$cat['code'].') '.$cat['name'], $cat['code'], $params);
+			if($cat['auth_cat_child'])
+			{
+				CourseManager::select_and_sort_categories($select_element, $cat['code'], $category_selected_code, $new_padding);
+			}
+		}
+}
+	
 } //end class CourseManager
 ?>

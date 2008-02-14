@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 13755 2007-11-23 15:06:16Z elixir_inter $
+// $Id: add_course.php 14291 2008-02-14 08:17:23Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -46,6 +46,7 @@ include (api_get_path(CONFIGURATION_PATH).'add_course.conf.php');
 
 // include additional libraries
 include_once (api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
+include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
@@ -68,17 +69,12 @@ if (!api_is_allowed_to_create_course())
 $table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 
-$sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE' ORDER BY tree_pos";
-$res = api_sql_query($sql, __FILE__, __LINE__);
-while ($cat = mysql_fetch_array($res))
-{
-	$categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
-}
 // Build the form
 $form = new FormValidator('add_course');
 $form->add_textfield('title',get_lang('Title'),true,array('size'=>'60'));
 $form->addElement('static',null,null,get_lang('Ex'));
-$form->addElement('select', 'category_code', get_lang('Fac'), $categories);
+$categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), $categories);
+CourseManager::select_and_sort_categories($categories_select);
 $form->addElement('static',null,null, get_lang('TargetFac'));
 $form->add_textfield('wanted_code', get_lang('Code'),false,array('size'=>'20','maxlength'=>20));
 $form->addRule('wanted_code',get_lang('Max'),'maxlength',20);

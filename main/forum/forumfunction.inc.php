@@ -1481,6 +1481,7 @@ function get_forum_information($forum_id)
 			AND forums.forum_id='".mysql_real_escape_string($forum_id)."'";
 	$result=api_sql_query($sql);
 	$row=mysql_fetch_array($result);
+	$row['approval_direct_post'] = 0; // we can't anymore change this option, so it should always be activated
 	return $row;
 }
 

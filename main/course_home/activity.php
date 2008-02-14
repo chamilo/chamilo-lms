@@ -285,7 +285,7 @@ function show_tools_category($course_tool_category)
 				$toolsRow['link'] = $toolsRow['link'].$qm_or_amp.api_get_cidreq();
 			}
 				if(strpos($toolsRow['name'],'visio_')!==false){
-					echo "\t" . ' &nbsp <a ' . $class . ' href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio\',config=\'height=\'+(screen.height)+\', width=\'+(screen.width-20)+\', toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">&nbsp;&nbsp;';
+					echo "\t" . ' &nbsp <a ' . $class . ' href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio\',config=\'height=\'+730+\', width=\'+1020+\', left=20, top=50, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">&nbsp;&nbsp;';
 				}
 				else {
 					echo "\t" . ' &nbsp <a ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">&nbsp;&nbsp;';

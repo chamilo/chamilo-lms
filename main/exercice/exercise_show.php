@@ -648,21 +648,22 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$i_answer_correct_answer = $a_answers['correct'];
 			$i_answer_position = $a_answers['position'];
 			
-			$sql_user_answer = 'SELECT answers.answer 
-								FROM '.$table_ans.' as answers 
-								INNER JOIN '.$TBL_TRACK_ATTEMPT.' as track_e_attempt 
-									ON track_e_attempt.answer=answers.position 
-									AND track_e_attempt.position="'.$i_answer_position.'" 
-									AND exe_id = "'.$id.'"
-								WHERE answers.question_id ="'.$questionId.'" 
-								AND correct=0';
-
+			$sql_user_answer = 
+					'SELECT answers.answer 
+					FROM '.$TBL_TRACK_ATTEMPT.' as track_e_attempt 
+					INNER JOIN '.$table_ans.' as answers 
+						ON answers.position = track_e_attempt.answer
+						AND track_e_attempt.question_id=answers.question_id
+					WHERE answers.correct = 0
+					AND track_e_attempt.exe_id = "'.$id.'"
+					AND track_e_attempt.question_id = "'.$questionId.'" 
+					AND track_e_attempt.position="'.$i_answer_position.'"';
+			
+			
 			$res_user_answer = api_sql_query($sql_user_answer, __FILE__, __LINE__);
 			$s_user_answer = mysql_result($res_user_answer,0,0);
 			
-			$sql_correct_answer = 'SELECT answer FROM '.$table_ans.' WHERE position = "'.$i_answer_correct_answer.'" AND question_id="'.$questionId.'"';
-			$res_correct_answer = api_sql_query($sql_correct_answer, __FILE__, __LINE__);
-			$s_correct_answer = mysql_result($res_correct_answer,0,0);
+			$s_correct_answer = $s_answer_label;
 			
 			$i_answerWeighting=$objAnswerTmp->selectWeighting($i_answer_id);
 			

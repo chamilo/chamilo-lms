@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 13988 2007-12-14 05:05:51Z yannoo $
+* 	@version $Id: exercise_result.php 14300 2008-02-15 11:40:43Z elixir_inter $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -777,7 +777,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 						$val = $arr1[1][0];
 					$val=addslashes($val);
 					$val=strip_tags($val);
-					$sql = "select position from $table_ans where question_id=$questionId and answer='$val'";
+					$sql = "select position from $table_ans where question_id=$questionId and answer='$val' AND correct=0";
 					$res = api_sql_query($sql, __FILE__, __LINE__);
 					$answer = mysql_result($res,0,"position");				
 					

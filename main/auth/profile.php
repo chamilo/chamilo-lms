@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 14237 2008-02-03 18:57:05Z yannoo $
+// $Id: profile.php 14305 2008-02-17 21:21:42Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -508,6 +508,12 @@ elseif ($form->validate())
 	unset($user_data['password1'], $user_data['password2'], $user_data['MAX_FILE_SIZE'],
 		$user_data['remove_picture'], $user_data['apply_change']);
 
+	// Following RFC2396 (http://www.faqs.org/rfcs/rfc2396.html), a URI uses ':' as a reserved character
+	// we can thus ensure the URL doesn't contain any scheme name by searching for ':' in the string
+	if(!preg_match('/^[^:]*:\/\/.*$/',$user_data['openid']))
+	{	//ensure there is at least a http:// scheme in the URI provided
+		$user_data['openid'] = 'http://'.$user_data['openid'];
+	}
 	// build SQL query
 	$sql = "UPDATE $table_user SET";
 

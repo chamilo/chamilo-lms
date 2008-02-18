@@ -530,8 +530,9 @@ INSERT INTO settings_current VALUES
 (119,'gradebook_score_display_coloring','my_display_coloring','checkbox','Gradebook','false','GradebookScoreDisplayColoring','GradebookScoreDisplayColoringComment',NULL,'TabsGradebookEnableColoring'),
 (120,'gradebook_score_display_custom','my_display_custom','checkbox','Gradebook','false','GradebookScoreDisplayCustom','GradebookScoreDisplayCustomComment',NULL,'TabsGradebookEnableCustom'),
 (121,'gradebook_score_display_colorsplit',NULL,'textfield','Gradebook','50','GradebookScoreDisplayColorSplit','GradebookScoreDisplayColorSplitComment',NULL,NULL),
-(122,'gradebook_score_display_upperlimit','my_display_upperlimit','checkbox','Gradebook','false','GradebookScoreDisplayUpperLimit','GradebookScoreDisplayUpperLimitComment',NULL,'TabsGradebookEnableUpperLimit');
-
+(122,'gradebook_score_display_upperlimit','my_display_upperlimit','checkbox','Gradebook','false','GradebookScoreDisplayUpperLimit','GradebookScoreDisplayUpperLimitComment',NULL,'TabsGradebookEnableUpperLimit'),
+(123,'user_selected_theme',NULL,'radio','Platform','false','UserThemeSelection','UserThemeSelectionComment',NULL,NULL),
+(124,'profile','theme','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'UserThemeSelection');
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -655,7 +656,9 @@ INSERT INTO settings_options VALUES
 (109, 'openid_authentication','true','Yes'),
 (110, 'openid_authentication','false','No'),
 (111, 'gradebook_enable','true','Yes'),
-(112, 'gradebook_enable','false','No');
+(112, 'gradebook_enable','false','No'),
+(113, 'user_selected_theme','true','Yes'),
+(114, 'user_selected_theme','false','No');
 
 
 UNLOCK TABLES;
@@ -725,6 +728,7 @@ CREATE TABLE user (
   expiration_date datetime NOT NULL default '0000-00-00 00:00:00',
   active tinyint unsigned NOT NULL default 1,
   openid varchar(255) DEFAULT NULL,
+  theme varchar(255) DEFAULT NULL,
   PRIMARY KEY  (user_id),
   UNIQUE KEY username (username)
 );

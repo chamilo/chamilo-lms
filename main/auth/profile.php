@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 14305 2008-02-17 21:21:42Z yannoo $
+// $Id: profile.php 14307 2008-02-18 17:12:29Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -158,7 +158,7 @@ if (api_get_setting('registration', 'email') == 'true')
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 
 // OPENID URL
-if(api_get_setting('openid_authentication')=='true')
+if(is_profile_editable() && api_get_setting('openid_authentication')=='true')
 {
 	$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));
 	if (api_get_setting('profile', 'openid') !== 'true')
@@ -246,6 +246,15 @@ if (is_profile_editable() && api_get_setting('profile', 'password') == 'true')
 	$form->addRule(array('password1', 'password2'), get_lang('PassTwo'), 'compare');
 	if (CHECK_PASS_EASY_TO_FIND)
 		$form->addRule('password1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
+}
+if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true')
+{
+	$form->addElement('select_theme', 'theme', get_lang('Theme'));
+	if (api_get_setting('profile', 'theme') !== 'true')
+		$form->freeze('theme');
+	$form->applyFilter('theme', 'trim');
+	//if (api_get_setting('registration', 'openid') == 'true')
+	//	$form->addRule('openid', get_lang('ThisFieldIsRequired'), 'required');
 }
 
 //	SUBMIT

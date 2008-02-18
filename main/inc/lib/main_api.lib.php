@@ -444,6 +444,7 @@ function api_get_user_info($user_id = '')
 			$user_info['status'] = $result_array['status'];
 			$user_info['auth_source'] = $result_array['auth_source'];
 			$user_info['username'] = $result_array['username'];
+			$user_info['theme'] = $result_array['theme'];
 			return $user_info;
 		}
 		return false;
@@ -1816,6 +1817,40 @@ function api_get_languages()
 		$language_list['folder'][] = $row['dokeos_folder'];
 	}
 	return $language_list;
+}
+
+/**
+ * Returns a list of CSS themes currently available in the CSS folder
+ * @return	array	List of themes directories from the css folder
+ */
+function api_get_themes()
+{
+	$cssdir = api_get_path(SYS_PATH).'main/css/';
+	$list = array();
+	if (is_dir($cssdir))
+	{
+		$themes = scandir($cssdir);
+		if($themes !== false)
+		{
+			sort($themes);
+			foreach($themes as $theme)
+			{
+				if(substr($theme,0,1)=='.')
+				{
+					//ignore
+					continue;
+				}
+				else
+				{
+					if(is_dir($cssdir.$theme))
+					{
+						$list[] = $theme;
+					}	
+				}
+			}
+		}
+	}
+	return $list;
 }
 
 /*

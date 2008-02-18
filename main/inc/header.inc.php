@@ -74,6 +74,16 @@ echo get_setting('siteName');
 /*<![CDATA[*/
 <?php
 $my_style = api_get_setting('stylesheets');
+if(api_get_setting('user_selected_theme') == 'true')
+{
+	$useri = api_get_user_info();
+	$theme = $useri['theme'];
+	error_log('Theme is now: '.$theme.' while $my_style is now: '.$my_style,0);
+	if(!empty($theme) && $theme != $my_style)
+	{
+		$my_style = $theme;
+	}
+}
 $my_code_path = api_get_path(WEB_CODE_PATH);
 if(empty($my_style)){$my_style = 'default';}
 echo '@import "'.$my_code_path.'css/'.$my_style.'/default.css";'."\n";

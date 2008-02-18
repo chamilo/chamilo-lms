@@ -1826,7 +1826,7 @@ function api_get_languages()
 function api_get_themes()
 {
 	$cssdir = api_get_path(SYS_PATH).'main/css/';
-	$list = array();
+	$list = array('');
 	if (is_dir($cssdir))
 	{
 		$themes = scandir($cssdir);

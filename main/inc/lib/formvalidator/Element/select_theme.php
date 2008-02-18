@@ -39,7 +39,7 @@ class HTML_QuickForm_Select_Theme extends HTML_QuickForm_select
 		$this->_values = array();
 		foreach ($themes as $theme)
 		{
-			$this->addOption($theme,$theme);
+			$this->addOption((empty($theme)?'--':$theme),$theme);
 		}
 	}
 }

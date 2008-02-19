@@ -204,6 +204,23 @@ if ($_POST)
 echo '<div id="survey_title">'.$survey_data['survey_title'].'</div>';
 echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
 
+// checking time availability
+$start_date = mktime(0,0,0,substr($survey_data['start_date'],5,2),substr($survey_data['start_date'],8,2),substr($survey_data['start_date'],0,4));
+$end_date = mktime(0,0,0,substr($survey_data['end_date'],5,2),substr($survey_data['end_date'],8,2),substr($survey_data['end_date'],0,4));
+$cur_date = time();
+if($cur_date < $start_date)
+{
+	Display :: display_warning_message(get_lang('SurveyNotAvailableYet'), false);
+	Display :: display_footer();
+	exit;
+}
+if($cur_date > $end_date)
+{
+	Display :: display_warning_message(get_lang('SurveyNotAvailableAnymore'), false);
+	Display :: display_footer();
+	exit;
+}
+
 // displaying the survey introduction
 if (!isset($_GET['show']))
 {

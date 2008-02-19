@@ -1,4 +1,4 @@
-<?php # $Id: fileManage.lib.php 12807 2007-07-30 21:25:52Z yannoo $
+<?php # $Id: fileManage.lib.php 14316 2008-02-19 15:38:24Z yannoo $
 
 /* vim: set expandtab tabstop=4 shiftwidth=4:
 ===============================================================================
@@ -56,7 +56,7 @@ function update_db_info($action, $oldPath, $newPath="")
         	$query = "DELETE FROM `$dbTable`
     		WHERE path='".$oldPath."' OR path LIKE '".$oldPath."/%'";
         */
-        $to_delete = "WHERE path='".$oldPath."' OR path LIKE '".$oldPath."/%'";
+        $to_delete = "WHERE path LIKE BINARY '".$oldPath."' OR path LIKE BINARY '".$oldPath."/%'";
         $query = "DELETE FROM $dbTable " . $to_delete;
 
         $result = api_sql_query("SELECT id FROM $dbTable " . $to_delete);
@@ -96,7 +96,7 @@ function update_db_info($action, $oldPath, $newPath="")
 		//attempt to update	- tested & working for root	dir
 		$query = "UPDATE $dbTable
 		SET path = CONCAT('".$newPath."', SUBSTRING(path, LENGTH('".$oldPath."')+1) )
-		WHERE path = '".$oldPath."' OR path LIKE '".$oldPath."/%'";
+		WHERE path LIKE BINARY '".$oldPath."' OR path LIKE BINARY '".$oldPath."/%'";
 	}
 	//echo $query;
 	//error_log($query,0);
@@ -517,7 +517,7 @@ function form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir)
  *
  * @returns a resource identifier or FALSE if the query was not executed correctly.
  * @author KilerCris@Mail.com original function from  php manual
- * @author Christophe Gesché gesche@ipm.ucl.ac.be Claroline Team
+ * @author Christophe Geschï¿½ gesche@ipm.ucl.ac.be Claroline Team
  * @since  28-Aug-2001 09:12
  * @param 	sting	$path 		wanted path
  * @param 	boolean	$verbose	fix if comments must be printed

@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 13916 2007-12-04 15:06:22Z elixir_inter $
+<?php // $Id: edit_document.php 14316 2008-02-19 15:38:24Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -252,7 +252,7 @@ if (isset($_POST['newComment']))
 	$newTitle = trim($_POST['newTitle']); // remove spaces
 	// Check if there is already a record for this file in the DB
 
-	$result = mysql_query ("SELECT * FROM $dbTable WHERE path='".$commentPath."'");
+	$result = mysql_query ("SELECT * FROM $dbTable WHERE path LIKE BINARY '".$commentPath."'");
 
 	while($row = mysql_fetch_array($result, MYSQL_ASSOC))
 	{
@@ -263,7 +263,7 @@ if (isset($_POST['newComment']))
 	//Determine the correct query to the DB
 
 	//new code always keeps document in database
-	$query = "UPDATE $dbTable SET comment='".$newComment."', title='".$newTitle."' WHERE path='".$commentPath."'";
+	$query = "UPDATE $dbTable SET comment='".$newComment."', title='".$newTitle."' WHERE path LIKE BINARY '".$commentPath."'";
 	mysql_query($query);
 	//this is an UPDATE page... we shouldn't be creating new documents here.
 	/*
@@ -303,7 +303,7 @@ if (isset($_POST['renameTo']))
 
 
 /* Search the old comment */  // RH: metadata: added 'id,'
-$result = mysql_query ("SELECT id,comment,title FROM $dbTable WHERE path='$dir$doc'");
+$result = mysql_query ("SELECT id,comment,title FROM $dbTable WHERE path LIKE BINARY '$dir$doc'");
 
 $message = "<i>Debug info</i><br>directory = $dir<br>";
 $message .= "document = $file_name<br>";

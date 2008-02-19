@@ -325,6 +325,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 	//clean up the name and prevent dangerous files
 	//remove strange characters
 	$clean_name = replace_dangerous_char($uploaded_file['name']);
+	$clean_name = replace_accents($clean_name);
 	//no "dangerous" files
 	$clean_name = disable_dangerous_file($clean_name);
 	if(!filter_extension($clean_name))

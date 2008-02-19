@@ -250,7 +250,7 @@ else
                 		{
 							$loginFailed = true;
 							api_session_unregister('_uid');
-							header('Location: index.php?loginFailed=1&error=account_expired');
+							header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_expired');
 							exit;
                 		}
                 	}
@@ -258,7 +258,7 @@ else
                 	{
 						$loginFailed = true;
 						api_session_unregister('_uid');
-						header('Location: index.php?loginFailed=1&error=account_inactive');
+						header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
 						exit;
                 	}
                 }
@@ -266,7 +266,7 @@ else
                 {
                     $loginFailed = true;
                     api_session_unregister('_uid');
-                    header('Location: index.php?loginFailed=1&error=user_password_incorrect');
+                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
                     exit;
                 }
 

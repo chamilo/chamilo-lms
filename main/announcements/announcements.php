@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 14192 2008-01-29 16:07:08Z elixir_inter $
+<?php //$Id: announcements.php 14310 2008-02-19 03:17:51Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -257,20 +257,20 @@ if(!empty($_GET['remind_inactive']))
 	Survey
 -----------------------------------------------------------
 */
-$surveyid=$_REQUEST['publish_survey'];
-$cidReq=$_REQUEST['cidReq'];
+$surveyid=Database::escape_string($_REQUEST['publish_survey']);
+$cidReq=Database::escape_string($_REQUEST['cidReq']);
 if($surveyid)
 {
-$db_name=$_REQUEST['db_name'];
-$sql_temp = "SELECT * FROM $db_name.survey WHERE survey_id='$surveyid'";
-$res_temp = api_sql_query($sql_temp, __FILE__, __LINE__);
-$obj=@mysql_fetch_object($res_temp);
-$template=$obj->template;
+	$db_name=Database::escape_string($_REQUEST['db_name']);
+	$sql_temp = "SELECT * FROM $db_name.survey WHERE survey_id='$surveyid'";
+	$res_temp = api_sql_query($sql_temp, __FILE__, __LINE__);
+	$obj=@mysql_fetch_object($res_temp);
+	$template=$obj->template;
 }
 if($surveyid)
 {
-$interbreadcrumb[] = array ("url" => "../survey/survey_list.php?cidReq=$cidReq", "name" => get_lang('Survey'));
-$nameTools = get_lang('PublishSurvey');
+	$interbreadcrumb[] = array ("url" => "../survey/survey_list.php?cidReq=$cidReq", "name" => get_lang('Survey'));
+	$nameTools = get_lang('PublishSurvey');
 }
 else
 $nameTools = get_lang('Announcement');
@@ -312,7 +312,7 @@ echo "<a name=\"top\"></a>";
 			  ACTION HANDLING
 =============================================*/
 
-if (api_is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_announcement'))
+if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()))
 {
 	/*
 	-----------------------------------------------------------
@@ -486,7 +486,7 @@ if (api_is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_announce
 		Submit announcement
 	-----------------------------------------------------------
 	*/
-	if (api_is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_announcement'))
+	if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()))
 	{
 
 		$emailTitle=$_POST['emailTitle'];
@@ -835,7 +835,7 @@ if ($_GET['origin'] !== 'learnpath')
       /*======================================================================
                               DISPLAY LEFT COLUMN
       ======================================================================*/
-		if(api_is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_announcement')) // check teacher status
+		if(api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ) // check teacher status
 		{
 	      	if ($_GET['origin'] !== 'learnpath')
 				{
@@ -917,7 +917,7 @@ $announcement_number = mysql_num_rows($result);
 ----------------------------------------------------*/
 if(!$surveyid)
 {
-		if ((api_is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_announcement')) and ($_GET['origin'] !== 'learnpath'))
+		if ((api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and ($_GET['origin'] !== 'learnpath'))
 		{
 
 			echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".$_GET['origin']."'><img src=\"../img/announce_add.gif\"> ".get_lang("AddAnnouncement")."</a><br/>";
@@ -1401,7 +1401,7 @@ if ($message == true)
 				echo   "<br />";
 
 
-				if(api_is_allowed_to_edit() || api_get_course_setting('allow_user_edit_announcement'))
+				if(api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()))
 				{
 					/*=====================================================================
 												SHOW MOD/DEL/VIS FUNCTIONS

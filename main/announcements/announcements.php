@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 14310 2008-02-19 03:17:51Z yannoo $
+<?php //$Id: announcements.php 14311 2008-02-19 04:07:07Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -44,6 +44,9 @@
 $language_file[] = "announcements";
 $language_file[] = "group";
 $language_file[] = "survey";
+
+// use anonymous mode when accessing this course tool
+$use_anonymous = true;
 
 // setting the global file that gets the general configuration, the databases, the languages, ...
 include('../inc/global.inc.php');

@@ -93,6 +93,19 @@ function replace_dangerous_char($filename, $strict = 'loose')
 	return ereg_replace("[^!-~]", "x", $filename);
 }
 
+/**
+ * Replaces all accentuated characters by non-accentuated characters for filenames, as
+ * well as special HTML characters by their HTML entity's first letter.
+ * 
+ * Although this method is not absolute, it gives good results in general. It first
+ * transforms the string to HTML entities (&ocirc;, @oslash;, etc) then removes the
+ * HTML character part to result in simple characters (o, o, etc).
+ * In the case of special characters (out of alphabetical value) like &nbsp; and &lt;,
+ * it will still replace them by the first letter of the HTML entity (n, l, ...) but it
+ * is still an acceptable method, knowing we're filtering filenames here...
+ * @param	string	The accentuated string
+ * @return	string	The escaped string, not absolutely correct but satisfying
+ */
 function replace_accents($string){
 	$string = htmlentities($string,ENT_QUOTES);
 	return preg_replace("/&([a-z])[a-z]+;/i","$1",$string);

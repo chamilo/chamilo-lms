@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 14307 2008-02-18 17:12:29Z yannoo $
+// $Id: profile.php 14319 2008-02-19 17:42:23Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -125,6 +125,27 @@ $form = new FormValidator('profile', 'post', api_get_self()."?".str_replace('&fe
 if (is_profile_editable())
 	$form->addElement('submit', null, get_lang('Ok'), array('style' => 'visibility:hidden;'));
 
+//	SUBMIT (visible)
+if (is_profile_editable())
+{
+	$form->addElement('submit', 'apply_change', get_lang('Ok'));
+}
+else
+{
+	$form->freeze();
+}
+
+//THEME
+if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true')
+{
+	$form->addElement('select_theme', 'theme', get_lang('Theme'));
+	if (api_get_setting('profile', 'theme') !== 'true')
+		$form->freeze('theme');
+	$form->applyFilter('theme', 'trim');
+	//if (api_get_setting('registration', 'openid') == 'true')
+	//	$form->addRule('openid', get_lang('ThisFieldIsRequired'), 'required');
+}
+
 //	LAST NAME and FIRST NAME
 $form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
 $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
@@ -246,15 +267,6 @@ if (is_profile_editable() && api_get_setting('profile', 'password') == 'true')
 	$form->addRule(array('password1', 'password2'), get_lang('PassTwo'), 'compare');
 	if (CHECK_PASS_EASY_TO_FIND)
 		$form->addRule('password1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
-}
-if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true')
-{
-	$form->addElement('select_theme', 'theme', get_lang('Theme'));
-	if (api_get_setting('profile', 'theme') !== 'true')
-		$form->freeze('theme');
-	$form->applyFilter('theme', 'trim');
-	//if (api_get_setting('registration', 'openid') == 'true')
-	//	$form->addRule('openid', get_lang('ThisFieldIsRequired'), 'required');
 }
 
 //	SUBMIT

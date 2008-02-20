@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 14175 2008-01-23 15:24:56Z elixir_inter $
+// $Id: infocours.php 14330 2008-02-20 17:07:13Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -140,6 +140,7 @@ while($a_titulars=mysql_fetch_array($q_result_titulars)){
 while ($cat = mysql_fetch_array($res))
 {
 	$categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
+	ksort($categories);
 }
 
 $linebreak = '<div class="row"><div class="label"></div><div class="formw" style="border-bottom:1px dashed"></div></div>';

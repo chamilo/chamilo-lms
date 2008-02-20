@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 13539 2007-10-22 08:53:27Z elixir_inter $
+// $Id: CourseRestorer.class.php 14324 2008-02-20 02:46:30Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -777,8 +777,10 @@ class CourseRestorer
 					*/
 					//Get the new ref ID for all items that are not sco (dokeos quizzes, documents, etc)
 					$ref = '';
-					if(!empty($item['ref'])){
+					if(!empty($item['ref']) && $lp->lp_type!='2'){
 						$ref = $this->get_new_id($item['item_type'],$item['ref']);
+					}else{
+						$ref = $item['ref'];
 					}
 					//Dealing with path the same way as ref as some data has been put into path when it's a
 					//local resource

@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseSelectForm.class.php 12973 2007-09-10 04:39:14Z yannoo $
+// $Id: CourseSelectForm.class.php 14323 2008-02-20 02:25:29Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -114,6 +114,7 @@ class CourseSelectForm
 					case RESOURCE_QUIZQUESTION:
 					case RESOURCE_SURVEYQUESTION:
 					case RESOURCE_SURVEYINVITATION:
+					case RESOURCE_SCORM:
 						break;
 					default :
 						echo ' <img id="img_'.$type.'" src="../img/1.gif" onclick="javascript:exp('."'$type'".');" >';
@@ -148,6 +149,7 @@ class CourseSelectForm
 		echo '<br/><input type="submit" value="'.get_lang('Ok').'" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')"/>';
 		
 		CourseSelectForm :: display_hidden_quiz_questions($course);
+		CourseSelectForm :: display_hidden_scorm_directories($course);
 		echo '</form>';
 		echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
 	}
@@ -169,6 +171,24 @@ class CourseSelectForm
 						}
 						break;
 
+				}
+			}
+		}
+	}
+	function display_hidden_scorm_directories($course)
+	{
+		foreach ($course->resources as $type => $resources)
+		{
+			if(count($resources) > 0)
+			{
+				switch($type)
+				{
+					case RESOURCE_SCORM:
+						foreach ($resources as $id=>$resource)
+						{
+							echo '<input type="hidden" name="resource['.RESOURCE_SCORM.']['.$id.'] id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
+						}
+						break;
 				}
 			}
 		}

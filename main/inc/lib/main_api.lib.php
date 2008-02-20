@@ -1546,6 +1546,17 @@ function api_is_anonymous($user_id=null,$db_check=false)
 	else
 	{
 		global $_user;
+		if(!isset($_user)){
+			//in some cases, api_set_anonymous doesn't seem to be
+			//triggered in local.inc.php. Make sure it is.	
+			//Occurs in agenda for admin links - YW
+			global $use_anonymous;
+                        if(isset($use_anonymous) && $use_anonymous == true)
+                        {
+                                api_set_anonymous();
+                        }
+			return true;
+		}
 		if(isset($_user['is_anonymous']) and $_user['is_anonymous'] === true)
 		{
 			return true;

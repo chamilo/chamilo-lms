@@ -1,5 +1,5 @@
 <?php
-// $Id: group_category.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: group_category.php 14339 2008-02-23 05:07:14Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -141,8 +141,8 @@ $group[] = & $form->createElement('static', null, null, get_lang('GroupPlacesThi
 $form->addGroup($group, 'max_member_group', null, '',false);
 $form->addRule('max_member_group',get_lang('InvalidMaxNumberOfMembers'),'callback','check_max_number_of_members');
 // Self registration
-$form->addElement('checkbox', 'self_registration_allowed', get_lang('GroupSelfRegistration'), get_lang('GroupAllowStudentRegistration'), 1);
-$form->addElement('checkbox', 'self_unregistration_allowed', null, get_lang('GroupAllowStudentUnregistration'), 1);
+$form->addElement('checkbox', 'self_reg_allowed', get_lang('GroupSelfRegistration'), get_lang('GroupAllowStudentRegistration'), 1);
+$form->addElement('checkbox', 'self_unreg_allowed', null, get_lang('GroupAllowStudentUnregistration'), 1);
 // Forum settings
 //$form->addElement('radio', 'forum_state', get_lang('GroupForum'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
 //$form->addElement('radio', 'forum_state', null, get_lang('Public'), TOOL_PUBLIC);
@@ -181,8 +181,8 @@ if ($form->validate())
 	{
 		$max_member = $values['max_member'];
 	}
-	$self_reg_allowed = isset ($values['self_registration_allowed']) ? $values['self_registration_allowed'] : 0;
-	$self_unreg_allowed = isset ($values['self_unregistration_allowed']) ? $values['self_unregistration_allowed'] : 0;
+	$self_reg_allowed = isset ($values['self_reg_allowed']) ? $values['self_reg_allowed'] : 0;
+	$self_unreg_allowed = isset ($values['self_unreg_allowed']) ? $values['self_unreg_allowed'] : 0;
 	switch ($values['action'])
 	{
 		case 'update_settings' :

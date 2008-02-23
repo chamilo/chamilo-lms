@@ -1655,7 +1655,7 @@ class CourseManager
 		$sql = "SELECT code, name, auth_course_child, auth_cat_child
 				FROM ".$table_course_category." 
 				WHERE parent_id ".(is_null($parent_code) ? "IS NULL" : "='".Database::escape_string($parent_code)."'")."
-				ORDER BY tree_pos";
+				ORDER BY code";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		
 		$new_padding = $padding.str_repeat('-',3);

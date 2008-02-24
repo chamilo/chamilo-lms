@@ -55,6 +55,7 @@ class FormValidator extends HTML_QuickForm
 		$dir = dirname(__FILE__).'/';
 		$this->registerElementType('html_editor', $dir.'Element/html_editor.php', 'HTML_QuickForm_html_editor');
 		$this->registerElementType('datepicker', $dir.'Element/datepicker.php', 'HTML_QuickForm_datepicker');
+		$this->registerElementType('datepickerdate', $dir.'Element/datepickerdate.php', 'HTML_QuickForm_datepickerdate');
 		$this->registerElementType('receivers', $dir.'Element/receivers.php', 'HTML_QuickForm_receivers');
 		$this->registerElementType('select_language', $dir.'Element/select_language.php', 'HTML_QuickForm_Select_Language');
 		$this->registerElementType('select_theme', $dir.'Element/select_theme.php', 'HTML_QuickForm_Select_Theme');
@@ -173,6 +174,18 @@ EOT;
 	function add_datepicker($name,$label)
 	{
 		$this->addElement('datepicker', $name, $label, array ('form_name' => $this->getAttribute('name')));
+		$this->addRule($name, get_lang('InvalidDate'), 'date');
+	}
+
+	/**
+	 * Add a datepickerdate element to the form
+	 * A rule is added to check if the date is a valid one
+	 * @param string $label The label for the form-element
+	 * @param string $name The element name
+	 */
+	function add_datepickerdate($name,$label)
+	{
+		$this->addElement('datepickerdate', $name, $label, array ('form_name' => $this->getAttribute('name')));
 		$this->addRule($name, get_lang('InvalidDate'), 'date');
 	}
 

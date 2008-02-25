@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 14307 2008-02-18 17:12:29Z yannoo $
+// $Id: settings.php 14372 2008-02-25 23:42:16Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -249,7 +249,7 @@ function handle_plugins()
 	$handle = opendir($pluginpath);
 	while (false !== ($file = readdir($handle)))
 	{
-		if (is_dir(api_get_path(SYS_PLUGIN_PATH).$file) AND $file <> '.' AND $file <> '..')
+		if ($file <> '.' AND $file <> '..' AND is_dir(api_get_path(SYS_PLUGIN_PATH).$file))
 		{
 			$possibleplugins[] = $file;
 		}

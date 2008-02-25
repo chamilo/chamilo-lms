@@ -6,41 +6,24 @@
   <style type="text/css">
 	<!--
 		@page { size: 21cm 29.7cm; margin: 2cm }
-		PRE { font-family: "Courier New", monospace }
-		P { margin-bottom: 0.21cm }
+		pre { font-family: "Courier New", monospace }
+		p { margin-bottom: 0.21cm }
 	--></style>
 </head>
 <body>
 
-
-
 <div id="header1">
-<h1>Dokeos 1.8.4 installation guide</h1>
-
-
+<h1>Dokeos 1.8.5 installation guide</h1>
 </div>
-
-
-
 <div id="outerframe">
 <div id="main">
-
-
-
-
-
 <p></p>
 
 <p>Thank you for downloading Dokeos, the open source Learning Management System for professionals.&nbsp;</p>
 
 <ul>
-
   <li>Quick preview of <a href="http://www.dokeos.com/features.php">Dokeos features&nbsp;</a></li>
-
-  <li>test Dokeos on <a href="http://campus.dokeos.com">Free Campus</a><br>
-
-  </li>
-
+  <li>Test Dokeos on <a href="http://campus.dokeos.com">Free Campus</a></li>
 </ul>
 
 <p>This guide explains how to install Dokeos Learning
@@ -48,190 +31,116 @@ Management System (LMS). It explains how to install Dokeos Oogie
 PowerPoint conversion and Dokeos Videoconferencing although these
 packages are not required to use Dokeos LMS. &nbsp;Please read this fully before proceeding with the installation. </p>
 
-If
-you want to save time, trouble and money, you can alternatively have
-your Dokeos portal <a href="http://www.dokeos.com/get.php">hosted</a> by Dokeos or one of its partners.<a href="http://www.dokeos.com/get.php"></a><br>
-
-
+If you want to save time, trouble and money, you can alternatively have your Dokeos portal <a href="http://www.dokeos.com/get.php">hosted</a> by Dokeos or one of its partners.<a href="http://www.dokeos.com/get.php"></a><br>
 
 <h2><b>Contents</b></h2>
-
 <ol>
-
   <li><a href="#1._Pre-requisites">Pre-requisites</a></li>
-
-
   <li><a href="#2._Installation_of_Dokeos_LMS">Installation of Dokeos LMS</a></li>
-
-
-
   <li><a href="#3._Upgrade_from_a_previous_version_of">Upgrade from a previous version of Dokeos</a></li>
-
-
   <li><a href="#4._Troubleshooting">Troubleshooting</a></li>
-
-
   <li><a href="#5._Administration_section">Administration section</a></li>
-
   <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
-
   <li><a href="#7._Oogie_PowerPoint__Impress_conversion">Oogie PowerPoint / Impress conversion</a></li>
-
   <li><a href="#8._Videoconferencing_and_audio-recorder">Videoconferencing and audio-recorder</a></li>
-
-
 </ol>
 
-<br>
+<br />
 <hr style="width: 100%; height: 2px;">
 <h2><a name="1._Pre-requisites"></a>1. Pre-requisites</h2>
 
 Dokeos
 can be installed on Windows, Linux, Mac OS X and UNIX servers
 indifferently. However, we recommend the use of Linux server for
-optimal flexibility, remote control and scalability. <br>
+optimal flexibility, remote control and scalability. <br />
+<br />
+Dokeos is mainly a LMS running <span style="font-weight: bold;">Apache</span>, <span style="font-weight: bold;">MySQL</span> and <span style="font-weight: bold;">PHP5</span> (the so called <span style="font-weight: bold;">AMP</span> trilogy). <br />
+<br />
 
-<br>
-
-Dokeos is mainly a LMS running <span style="font-weight: bold;">Apache</span>, <span style="font-weight: bold;">MySQL</span> and <span style="font-weight: bold;">PHP5</span> (the so called <span style="font-weight: bold;">AMP</span> trilogy). <br>
-
-<br>
-
-It
-can be enriched with&nbsp;PowerPoint conversion (feature called Dokeos
+It can be enriched with&nbsp;PowerPoint conversion (feature called Dokeos
 Oogie) using <span style="font-weight: bold;">OpenOffice</span> + Java. You may also want to add the Dokeos Videoconferencing plugin using the <span style="font-weight: bold;">RED5</span> Open
-Source Flash server. <br>
+Source Flash server. <br />
 
-<br>
-
-All these software are open source and freely available. <br>
-
-<br>
-
+<br />
+All these software are open source and freely available. <br />
+<br />
 To run Dokeos <span style="font-weight: bold;">LMS</span> on your server, you need to install WAMP, LAMP or MAMP: 
 <ul>
-
-  <li>To install <span style="font-weight: bold;">WAMP</span> (AMP on Windows), we recommend the <a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a> .exe installer<a href="http://www.apachefriends.org/en/xampp.html"><br>
-
-    </a></li>
-
+  <li>To install <span style="font-weight: bold;">WAMP</span> (AMP on Windows), we recommend the <a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a> .exe installer<a href="http://www.apachefriends.org/en/xampp.html"></a></li>
   <li>To install <span style="font-weight: bold;">LAMP</span>
 (AMP on Linux), use the Package manager of your favourite distribution (Synaptic, RPMFinder etc.).
 For instance, on a Ubuntu server,&nbsp;use Shell or Synaptic following the
     <a href="http://ubuntuguide.org/wiki/Ubuntu:Feisty#Apache_HTTP_Server">Ubuntuguide on Apache</a> and the following sections</li>
-
   <li>To install <span style="font-weight: bold;">MAMP</span> (AMP on Mac OS X), refer to the <a href="http://www.mamp.info/en/index.php">MAMP</a> dedicated website<a href="http://www.mamp.info/en/index.php"></a></li>
-
 </ul>
 
-<br>
+<br />
 
 <h3><span style="font-weight: bold;">MySQL database server</span></h3>
-
-
-
-
 You will need a login and password allowing to administrate and create
 at least one database. By default, Dokeos will create a new database
 for each course created. It means your host should allow you to create
 and administrate several databases. You can also install Dokeos using
 only one database, in that case you have to select this option during
 the installation.
-<br>
+<br />
 
-<br>
-
+<br />
 To take advantage of <span style="font-weight: bold;">Oogie</span> PowerPoint / Impress conversion, you need&nbsp; : <br>
 
 <ul>
-
-  <li><a href="http://www.openoffice.org/">OpenOffice</a><a href="http://www.openoffice.org/"></a><br>
-
-  </li>
-
+  <li><a href="http://www.openoffice.org/">OpenOffice</a><a href="http://www.openoffice.org/"></a></li>
   <li><a href="http://www.java.com/en/download/manual.jsp">Java Runtime Environment</a><a href="../*%20http://www.java.com/en/download/manual.jsp"></a></li>
-
 </ul>
 
-<br>
-
-To take advantage of Dokeos <span style="font-weight: bold;">Videoconferencing</span>, you need :<br>
+<br />
+To take advantage of Dokeos <span style="font-weight: bold;">Videoconferencing</span>, you need :<br />
 
 <ul>
-
   <li><a href="http://osflash.org/red5">RED5 Open Source Flash Server</a><a href="http://osflash.org/red5"></a></li>
-
 </ul>
 
-<span style="font-weight: bold;"><br>
+<span style="font-weight: bold;"><br />
 </span>
 <hr style="width: 100%; height: 2px;">
 <h2><a name="2._Installation_of_Dokeos_LMS"></a><span style="font-weight: bold;">2. Installation of Dokeos LMS</span></h2>
-
 <a href="http://www.dokeos.com/download.php"></a> 
 <ul>
-
   <li><a href="http://www.dokeos.com/download.php">Download Dokeos LMS</a></li>
-
   <li>Unzip it</li>
-
-  <li>Copy
-the dokeos directory in your Apache web directory. This can be
+  <li>Copy the dokeos directory in your Apache web directory. This can be
     <span style="font-weight: bold;">C:\xampp\htdocs\</span> on a Windows server or <span style="font-weight: bold;">/var/www/html/</span> on a Linux server</li>
-
-  <li>Open
-your web browser (Internet Explorer, Firefox...) and type
+  <li>Open your web browser (Internet Explorer, Firefox...) and type
     <span style="font-weight: bold;">http://localhost/dokeos/</span> if you install locally or
     <span style="font-weight: bold;">http://www.mydomain.com/dokeos/</span> if you install remotely</li>
-
-  <li>Follow the web installation process. You can accept all default
-values. Consider changing the admin password to remember it.&nbsp;</li>
-
+  <li>Follow the web installation process. You can accept all default values. Consider changing the admin password to remember it.&nbsp;</li>
 </ul>
 
-<br>
-
+<br />
 The following directories need to be readable, writeable and executable for everyone:
-
 <ul>
-
   <li>dokeos/main/inc/conf/</li>
-
   <li>dokeos/main/garbage/</li>
-
   <li>dokeos/main/upload/</li>
-
   <li>dokeos/archive/</li>
-
   <li>dokeos/courses/</li>
-
   <li>dokeos/home/</li>
-
 </ul>
-
+(where 'dokeos' is the directory in which you installed Dokeos)
 <p>
-On Linux, Mac OS X and BSD operating systems you can use the CHMOD 777 command for this.
+On Linux, Mac OS X and BSD operating systems you can use the CHMOD 777 command for this (although we recommend you seek advice from an experienced system administrator).
 In Windows, you may need to check the properties of the folders (by right-clicking on them).
 </p>
-
-
-
 <p>
-2.5. The following files need to be readable and writeable for everyone:
+2.5. The following files need to be readable and writeable for the web browser:
 </p>
-
-
 <ul>
-
   <li>dokeos/main/inc/conf/configuration.php (if present)</li>
-
   <li>dokeos/home/*.html</li>
-
 </ul>
 
-
 <p>
-On Linux, Mac OS X and BSD operating systems you can use the CHMOD 666 command for this.
+On Linux, Mac OS X and BSD operating systems you can use the CHMOD 666 command for this (although we recommend you seek advice from an experienced system administrator).
 In Windows, you may need to check the properties of the files and folders (by right-clicking on them).
 </p>
 
@@ -239,34 +148,26 @@ In Windows, you may need to check the properties of the files and folders (by ri
 
 <p>
 <b>NOTES:</b><br>
-
-
 Do not modify the home_*.html files directly. Instead,
 choose "Configure the homepage" in the Dokeos administration section.</p>
-
 <p><span style="font-weight: bold;">Windows</span> : with combination packages like XAMPP, out of the box, login and password
    for MySQL should probably remain empty.</p>
-
 <p></p>
 
 <h3><strong> Configuration and security after installation</strong></h3>
-
 <ul>
-
   <li><strong>Protect your configuration file: </strong>
 make sure no one can overwrite it. You can find the config file in <em>(dokeos folder)</em>/main/inc/conf/configuration.php.
 Make it read-only (windows/xwindows: right-click the file to edit the
 properties. linux/bsd/macosx: use the chmod 444 command). The config
 file is created by Apache so you may need to be root user to change its
 permissions.</li>
-
   <li><strong>Protect your installation folder: </strong>
 if the <em>(dokeos folder)</em>/main/install
 folder is still accessible, someone could install over your existing
 version (you could lose your data that way). Move the folder somewhere
 out of the web directories so it is not accessible, change its name, or
 edit its properties so no one can read or execute it.</li>
-
   <li><strong>For better security: </strong>
 making the files world-writable will help you install, and solves many
 issues for people without much admin experience. However, it's better
@@ -274,81 +175,49 @@ security to make the owner of the apache process (often called apache
 or www-data) also owner of all the dokeos files and folders. Ths way,
 these files need only be readable and writable by the Apache process
 owner, not by the entire world.</li>
-
   <li><strong>Configure your Dokeos installation: </strong>
 in the administration section of Dokeos, you can use the Dokeos Config Settings to adjust the behavior of your installation.</li>
-
   <li><strong>Configure Dokeos mail: </strong>
 most of Dokeos uses the mail settings from the php.ini file. However,
 the announcements tool uses phpMailer (another free software project)
 and the settings for this tool can be adjusted in <em>(dokeos folder)</em>/main/inc/conf/mail.conf.php.</li>
 
 </ul>
-
-<br>
+<br />
 
 <h3>PHP configuration</h3>
 
-To get the best of Dokeos, you need to finetune PHP settings. Consider : <br>
-
+To get the best of Dokeos, you need to finetune PHP settings. Consider : <br />
 <ul>
-
   <li>Editing php.ini file (on windows can be located at <span style="font-weight: bold;">C:\xampp\php\php.ini</span>, on Ubuntu Linux : <span style="font-weight: bold;">/etc/php5/apache2/php.ini</span></li>
-
   <li>search the word "max" and increase values to optimise the server</li>
-
-  <li>you may want to end up&nbsp;with the following values : <br>
-
-  </li>
-
+  <li>you may want to end up&nbsp;with the following values : </li>
 </ul>
-
-<br>
-
+<br />
 <table style="text-align: left; width: 100%;" border="1" cellpadding="10" cellspacing="0">
-
   <tbody>
-
     <tr>
-
-      <td style="vertical-align: top; background-color: rgb(229, 229, 229);"><small>max_execution_time = 300&nbsp;&nbsp;&nbsp; ; Maximum execution time of each script, in seconds<br>
-
-max_input_time = 600 ; Maximum amount of time each script may spend parsing request data<br>
-
-memory_limit = 256M&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ; Maximum amount of memory a script may consume (128MB)<br>
-
-post_max_size = 64M<br>
-
-upload_max_filesize = 100M</small></td>
-
+      <td style="vertical-align: top; background-color: rgb(229, 229, 229);">
+		  <small>
+			  max_execution_time = 300&nbsp;&nbsp;&nbsp; ; Maximum execution time of each script, in seconds<br />
+			  max_input_time = 600 ; Maximum amount of time each script may spend parsing request data<br />
+			  memory_limit = 256M&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ; Maximum amount of memory a script may consume (128MB)<br />
+			  post_max_size = 64M<br />
+			  upload_max_filesize = 100M
+		  </small>
+	  </td>
     </tr>
-
-  
   </tbody>
 </table>
-
-<br>
-
+<br />
 <p>
-Some users could meet problems if their PHP setting doesn't fit
+Some users could meet problems if their PHP settings don't fit
 these ones:</p>
-
-
 <ul>
-
-
   <li>short_open_tag       = On</li>
-
-
   <li>safe_mode            = Off</li>
-
-
   <li>magic_quotes_gpc     = On</li>
-
-
   <li>magic_quotes_runtime = Off</li>
-
-
 </ul>
 
 
@@ -357,47 +226,31 @@ Past Dokeos versions required register_globals to be set to On. This is
 no longer necessary, this can be set to Off and Dokeos will work fine.
 </p>
 
-
-
 <p><strong>BSD users:</strong> these php libraries have to be included during php installation:</p>
 
-
 <ul>
-
-
   <li>php-mysql The mysql shared extension for php</li>
-
-
   <li>php-pcre The pcre shared extension for php</li>
-
-
   <li>php-session The session shared extension for php</li>
-
-
   <li>php-zlib The zlib shared extension for php</li>
-
-
   <li>(optional) php-ldap if you want to be able to use LDAP authentication</li>
-
-
 </ul>
 
-
-
-<p><a href="http://dev.mysql.com/doc/mysql/en/index.html"></a><br>
+<p><a href="http://dev.mysql.com/doc/mysql/en/index.html"></a><br />
 
 </p>
 
-<hr><h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Upgrade from a previous version of Dokeos</h2>Before upgrading we <b>heavily</b> recommend you do a full backup of the previous
+<hr />
+<h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Upgrade from a previous version of Dokeos</h2>Before upgrading we <b>heavily</b> recommend you do a full backup of the previous
 Dokeos directories and databases. If you are unsure how to achieve this
-please ask your hosting provider for advice.<br><p>
-</p>
+please ask your hosting provider for advice.<br />
+<p></p>
 
 <h3>3.1 Upgrading from Dokeos 1.8.x</h3>
 
 <em>If you upgrade from Dokeos 1.8.x</em> :&nbsp;
 <ul><li> check that you haven't left any customised stylesheet or image*</li><li> download the Dokeos 1.8.4 install package from the <a href="http://www.dokeos.com/download.php">Dokeos download page</a></li><li> unzip the new files of Dokeos 1.8.4 over the files of the older version</li><li> point your browser on your portal URL + main/install/</li><li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.8.x</span></li></ul>
-<br>
+<br />
 <font size="-1">* Styles and images are located in the main/css or main/img 
 directories. You can still recover them from your backup if you have made it.
  Any modified style or image that uses the default style/image name will be 
@@ -405,11 +258,9 @@ directories. You can still recover them from your backup if you have made it.
  ensure you copy the styles/images under a new name and use and modify the 
  copy, not the original. The original will always be overwritten by newer 
  versions.</font>
-
-<br>
-
-<p>
-</p><h3>3.2 Upgrading from Dokeos 1.6.x</h3>
+<br />
+<p></p>
+<h3>3.2 Upgrading from Dokeos 1.6.x</h3>
 
 <em>If you upgrade from a lower version of Dokeos (1.6.x)</em>, the first 
 and most important thing to do is to *move* your current directory to another 
@@ -423,62 +274,53 @@ mv * old_verion/), then make the old_version/ directory writeable by the web ser
 new directory <em>main</em> should be located directly inside your 
 Dokeos root folder</li><li> point your browser on your portal URL</li><li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.6.x</span> and confirm the 
 current directory of the old version</li></ul>
-<br>
+<br />
 <em> NOTE: </em> The upgrade from 1.6.x to 1.8.x implies a revision of 
 the customised graphics and styles. The new version uses a complete new 
 set of icons and styles, which means the ones from version 1.6 cannot be 
 simply reused. The good news is the version 1.8.x allows you to create 
 your own style in a separate css folder, that you can then reuse through 
 all the 1.8.x versions
-<br>
-
+<br />
 <p></p>
 <p>
-<b>WARNING:</b><br>
-
+<b>WARNING:</b><br />
 Do not delete the previous Dokeos installation directory before installing
 the new one. When the update is successfully finished, you can remove
 the old path.
 </p>
 
 <p>
-<b>NOTE:</b><br>
-
+<b>NOTE:</b><br />
 Do not modify the home_*.html files directly. Instead,
 choose "Configure the homepage" in the Dokeos administration section.
 </p>
-
-
 <p>
 </p><h3>3.3 In both cases</h3>
-
 The following directories need to be readable, writeable and executable for the web server:
-
-
 <ul><li>dokeos/main/inc/conf/</li><li>dokeos/main/garbage/</li><li>dokeos/main/upload/</li><li>dokeos/main/default_course_document/</li><li>dokeos/archive/</li><li>dokeos/courses/</li><li>dokeos/home/</li></ul>
 On Linux, Mac OS X and BSD operating systems you can quick-fix this using the 
 CHMOD 777 command, but if you are unsure, we recommend you seek advice for 
 your own OS on <a href="http://www.dokeos.com/forum/">our forum</a>.
 In Windows, you may need to check the properties of the folders.
-
 <p>
 </p><h3>3.4 Quick-upgrade from 1.6.x guide for Linux</h3>
 
 The following quick-upgrade guide assumes that:
 <ul><li>the Dokeos database username (for MySQL) is "dokeos_db_user" and your login is "dokeos_user"</li><li>the Dokeos installation is currently in /var/www/dokeos/ and it has 777 permissions</li><li>your portal's URL is http://www.portalurl.com/</li></ul>
-<br>
+<br />
 
 On the command-line, type:
 <ul><li>cd /tmp</li><li>mysqldump -u dokeos_db_user -p --all-databases --result-file=/home/dokeos_user/dokeos_old.sql</li><li>cp -ra /var/www/dokeos /home/dokeos_user/backup_dokeos</li><li>mkdir /var/www/dokeos/old_version</li><li>mv /var/www/dokeos/* /var/www/dokeos/old_version/</li><li>chmod -R 0777 /var/www/dokeos/old_version/</li><li>wget http://www.dokeos.com/download/dokeos-1.8.4.zip</li><li>unzip dokeos-1.8.4.zip</li><li>cp -r dokeos/* /var/www/dokeos/</li><li>sudo chmod -R 0777 /var/www/dokeos/</li><li>rm dokeos-1.8.4.zip</li><li>rm -r dokeos/</li></ul>
-<br>
+<br />
 Then:
 <ul><li>Direct your browser to http://www.portalurl.com/main/install/</li><li>Proceed with the installation</li><li>Review the directories permissions</li></ul>
-<p></p><p></p>
+<p></p>
+<p></p>
 
-<hr style="width: 100%; height: 2px;">
+<hr style="width: 100%; height: 2px;" />
 
 <h2><a name="4._Troubleshooting"></a>4. Troubleshooting</h2>
-
 
 <p>If you have&nbsp;problems, go to the <a href="http://www.dokeos.com">Dokeos website</a> and ask a question on the
 <a href="http://www.dokeos.com/forum/">support forum</a>. Please read the previous messages first to see if there is
@@ -486,14 +328,10 @@ already an answer to your question. We also maintain a list of
 <a href="http://www.dokeos.com/wiki/index.php/FAQ">Frequently Asked Questions</a>.
 </p>
 
-
-
 <h2></h2>
 
-<hr style="width: 100%; height: 2px;">
+<hr style="width: 100%; height: 2px;" />
 <h2><a name="5._Administration_section"></a>5. Administration section</h2>
-
-
 <p>To access the Dokeos administration section, open browser,
 go to your Dokeos adress and log in with the admin user.
 Then you will see a "Platform admin section" link in the header of the
@@ -501,150 +339,70 @@ web page. There you can manage users, courses, sessions, portal look
 and feel, homepage content, course categories etc.&nbsp;</p>
 
 <p></p>
-
 <hr style="width: 100%; height: 2px;">
-
 <h2><a name="6._LDAP"></a>6. LDAP</h2>
-
-
 <p>
 <i>This part is optional, only organisations with an LDAP server will need to read this.</i><br>
-
-
 An LDAP module is already provided in Dokeos, but it has to be configured to make it work.
 </p>
 
-
-
 <h3><b>Compiling</b></h3>
-
 <p>
 Linux servers: It's possible that you have to recompile php with ldap support.
 Newer distributions also allow downloading rpms for additional packages.
 </p>
 
-
-
-<h3><br>
-
-</h3>
-
 <h3><b>Activating LDAP in Dokeos</b></h3>
 
 <p>
-In (dokeos folder)/main/inc/conf/configuration.php, around line 90, you see<br>
-
-
-//for new login module<br>
-
-
-//uncomment these to activate ldap<br>
-
-
-//$extAuthSource['ldap']['login'] = "./main/auth/ldap/login.php";<br>
-
-
-//$extAuthSource['ldap']['newUser'] = "./main/auth/ldap/newUser.php";<br>
-
-
-<br>
-
-
-remove the // from the last two lines to activate LDAP.<br>
-
-
+In (dokeos folder)/main/inc/conf/configuration.php, around line 90, you see<br />
+//for new login module<br />
+//uncomment these to activate ldap<br />
+//$extAuthSource['ldap']['login'] = "./main/auth/ldap/login.php";<br />
+//$extAuthSource['ldap']['newUser'] = "./main/auth/ldap/newUser.php";<br />
+<br />
+remove the // from the last two lines to activate LDAP.<br />
 </p>
 
-
-
-<h3><br>
-
-</h3>
-
 <h3><b>Settings</b></h3>
-
 <p>
 Ask the LDAP server admin for the settings:
 </p>
-
 <ul>
-
-
   <li>ldap server name</li>
-
-
   <li>ldap server port (usually 389)</li>
-
-
   <li>ldap dc</li>
-
-
 </ul>
-
 
 You must enter these in
 (dokeos folder)/main/auth/ldap/ldap_var.inc.php
-<br>
+<br />
 
 
-//parameters for LDAP module<br>
-
-
-$usesLDAP						=	TRUE;<br>
-
-
-$usesCurriculum					=	FALSE;<br>
-
-
-$ldaphost = "myldapserver.com";  // your ldap server<br>
-
-
-$ldapport = 389;                 // your ldap server's port number<br>
-
-
-$ldapDc = "dc=xx, dc=yy, dc=zz"; //domain<br>
-
-
-<br>
-
-
+//parameters for LDAP module<br />
+$usesLDAP						=	TRUE;<br />
+$usesCurriculum					=	FALSE;<br />
+$ldaphost = "myldapserver.com";  // your ldap server<br />
+$ldapport = 389;                 // your ldap server's port number<br />
+$ldapDc = "dc=xx, dc=yy, dc=zz"; //domain<br />
+<br />
 
 <h3><b>Teacher/student status</b></h3>
-
 <p>
 If you wish, you can give teacher/student status to dokeos users according to settings in the ldap server.
 This is not a standard field however, so you'll have to change some code.
 main/auth/ldap/ldap_var.inc.php
 around line 189, function putUserInfoInDokeos ($login, $infoArray)
 </p>
-
-
-
 <p>
-if (<i>your criterium</i>)<br>
-
-
-{<br>
-
-
-   $statut = STUDENT;<br>
-
-
-}<br>
-
-
-else<br>
-
-
-{<br>
-
-
-   $statut = COURSEMANAGER;<br>
-
-
-}<br>
-
-
+if (<i>your criterium</i>)<br />
+{<br />
+   $statut = STUDENT;<br />
+}<br />
+else<br />
+{<br />
+   $statut = COURSEMANAGER;<br />
+}<br />
 </p>
 
 
@@ -668,226 +426,133 @@ just ask on a forum or email for this.</p>
 
 <p></p>
 
-<hr style="width: 100%; height: 2px;"><span style="font-weight: bold;"><br>
+<hr style="width: 100%; height: 2px;" />
 
-</span>
 <h2><a name="7._Oogie_PowerPoint__Impress_conversion"></a>7. Oogie PowerPoint / Impress conversion</h2>
 
 Oogie converts your presentations coming from Ms-Office and OpenOffice into SCORM standardized e-courses or&nbsp;<span style="font-style: italic;">learning paths</span>.
 This feature needs OpenOffice to convert the slides and RED5 (optional)
 to record your voice on top of the slides through a Flash based
-audio-recorder.<br>
+audio-recorder.<br />
 
-<br>
+<br />
 
 <h3>7.1. PowerPoint / Impress conversion </h3>
 
 <ul>
-
   <li>Install OpenOffice</li>
-
   <li>Edit the OpenOffice Setup.xcu file </li>
-
 </ul>
 
 <table style="text-align: left; width: 100%;" border="1" cellpadding="10" cellspacing="0">
-
   <tbody>
-
     <tr>
-
       <td style="vertical-align: top; background-color: rgb(229, 229, 229);"><small>On some Windows computers, located : <span style="font-weight: bold;">C:\Program Files\OpenOffice.org 2.2\share\registry\data\org\openoffice\Setup.xcu</span><br>
-
 On some Linux computers, located : <span style="font-weight: bold;">/usr/lib/openoffice/share/registry/data/org/openoffice/Setup.xcu</span></small></td>
-
     </tr>
-
-  
   </tbody>
 </table>
 
-<br>
-
-And add the following code <br>
-
+<br />
+And add the following code <br />
 <table style="text-align: left; width: 100%;" border="1" cellpadding="10" cellspacing="0">
-
   <tbody>
-
     <tr>
-
       <td style="vertical-align: top; background-color: rgb(229, 229, 229);">
-
-
-	
-      
-      
-      
-      
-      
-      
-      
-
-	
-	
-      <small>&lt;prop oor:name="ooSetupConnectionURL"&gt;<br>
-
-&lt;value&gt;<br>
-
-socket,host=localhost,port=2002;urp;StarOffice.ServiceManager<br>
-
-&lt;/value&gt;<br>
-
+      <small>&lt;prop oor:name="ooSetupConnectionURL"&gt;<br />
+&lt;value&gt;<br />
+socket,host=localhost,port=2002;urp;StarOffice.ServiceManager<br />
+&lt;/value&gt;<br />
 &lt;/prop&gt;</small></td>
-
     </tr>
-
-  
   </tbody>
 </table>
+<br />
 
-<br>
+... just below these lines<br />
 
-... just below these lines<br>
-
-&nbsp;<br>
+&nbsp;<br />
 
 <table style="text-align: left; width: 100%;" border="1" cellpadding="10" cellspacing="0">
-
   <tbody>
-
     <tr>
-
       <td style="vertical-align: top; background-color: rgb(229, 229, 229);">
-
-
-	
-      
-      
-      
-      
-      
-      
-      
-
-	
-	
-      <small>&lt;prop oor:name="ooSetupInstCompleted"&gt;<br>
-
-&lt;value&gt;false&lt;/value&gt;<br>
-
+		  <small>&lt;prop oor:name="ooSetupInstCompleted"&gt;<br />
+&lt;value&gt;false&lt;/value&gt;<br />
 &lt;/prop&gt;</small></td>
-
-    </tr>
-
-  
+    </tr>  
   </tbody>
 </table>
-
-Enter your Dokeos portal on the web &gt; <span style="font-style: italic;">Admin section &gt;&nbsp; Configure the Services &gt; Oogie </span>and type :<br>
-
-<br>
-
- 
+Enter your Dokeos portal on the web &gt; <span style="font-style: italic;">Admin section &gt;&nbsp; Configure the Services &gt; Oogie </span>and type :<br />
+<br /> 
 <table style="text-align: left; width: 100%;" border="1" cellpadding="10" cellspacing="0">
-
   <tbody>
-
     <tr>
-
-      <td style="vertical-align: top; background-color: rgb(229, 229, 229);"><small><span style="font-weight: bold;">Host : </span>localhost<br>
-
+      <td style="vertical-align: top; background-color: rgb(229, 229, 229);"><small><span style="font-weight: bold;">Host : </span>localhost<br />
       <span style="font-weight: bold;">Path to LZX Files</span>: /main/webrooms/recorder.swf<br>
-
-      <br>
-
-Leave the other fields empty<br>
-
+      <br />
+Leave the other fields empty<br />
 Leave the default width and height of the converted slides unchanged
 (as long as your clients use most often a 1024x768 standard definition
-screen)<span style="font-weight: bold;"></span></small></td>
-
+screen)</small></td>
     </tr>
-
-  
   </tbody>
 </table>
 
 <ul>
-
   <li>Start OpenOffice. Conversion will work only if this software is up and running. Check the&nbsp;<a href="http://www.dokeos.com/wiki/index.php/MakeOOOListening">MakeOOOListening</a> wiki page to start OpenOffice as a service.</li>
-
   <li>Test the conversion : create a course &gt; enter the course &gt;
 Learning Path &gt; PowerPoint conversion. If the slides are converted,
 then OpenOffice is listening to Dokeos.&nbsp;</li>
-
 </ul>
 
 <span style="font-weight: bold;">NOTE</span> : during the conversion,
 you should see a progress bar with a percentage. If you only see a
 default animated GIF progress bar without percentage, you may want to
-install the PECL library for PHP. <br><br><span style="font-weight: bold;">NOTE</span> : On Linux servers, you may want to do a <span style="font-weight: bold;">$ sudo apt-get install msttcorefonts</span> so as to install Microsoft fonts. This will give PowerPoint conversion a better rendering. <br>
+install the PECL library for PHP. <br /><br /><span style="font-weight: bold;">NOTE</span> : On Linux servers, you may want to do a <span style="font-weight: bold;">$ sudo apt-get install msttcorefonts</span> so as to install Microsoft fonts. This will give PowerPoint conversion a better rendering. <br />
+<br />
+<span style="font-weight: bold;"><br /></span>
+		  
+<h3>7.2.&nbsp;Audio-recorder</h3>See below : Videoconferencing<br /><br />
+		  
+<hr style="width: 100%; height: 2px;" />
 
-<br>
-
-<span style="font-weight: bold;"><br></span><h3>7.2.&nbsp;Audio-recorder</h3>See below : Videoconferencing<br><br><hr style="width: 100%; height: 2px;"><h2><a name="8._Videoconferencing_and_audio-recorder"></a>8. Videoconferencing and audio-recorder</h2>We will now install and configure RED5 Open Source Flash server � the Dokeos RED5 webapplication. These will provide both <br><ul><li>Videoconferencing and</li><li>Audio recorder for Oogie</li></ul>
-
-Oogie allows you to convert slides but also <br>
+<h2><a name="8._Videoconferencing_and_audio-recorder"></a>8. Videoconferencing and audio-recorder</h2>We will now install and configure RED5 Open Source Flash server � the Dokeos RED5 webapplication. These will provide both <br /><ul><li>Videoconferencing and</li><li>Audio recorder for Oogie</li></ul>
+Oogie allows you to convert slides but also <br />
 
 <ul>
-
   <li>add tests, pages and activities between the slides, thanks to the Learning Path builder</li>
-
   <li>get SCORM reporting thanks to the Learning path tool</li>
-
   <li>add audio on top of the slides thanks to the online audio recorder</li>
-
 </ul><span style="font-weight: bold;">NOTE</span>&nbsp;: previous
 installation processes for this part were very complex. The whole setup
 was considerably simplified. Please ignore any previous documentation
 on the same topic.
-
- <br><br><br>You may&nbsp;want to take advantage of the audio recorder. For this :<br>
+ <br /><br /><br />You may&nbsp;want to take advantage of the audio recorder. For this :<br />
 
 <ul>
-
   <li>Download and install <a href="http://osflash.org/red5">RED5 Open Source Flash server</a> (you will find Linux packages and a Windows installer on the RED 5 website)</li>
-
   <li>Download <a href="http://www.dokeos.com/download.php">Dokeos RED5 webapplication</a></li>
-
   <li>Unzip it and copy it into the <span style="font-style: italic;">webapps</span> directory of your RED5 installation.&nbsp;Windows : you can use <a href="http://www.7-zip.org/">7-ZIP</a>
 to untar. Target directory can be C:/Program Files/Red5/webapps/ .
 Linux with Nautilus or through a shell : cp dokeos-red5APP-1.8/*
 /usr/lib/red5/webapps</li>
-
   <li>Edit the RED5 settings to fit with your firewall requirements in terms of open ports if there is a limitation.&nbsp;</li><li>Configure Red5.</li><ul><li>Edit /usr/lib/red5/conf/red5.properties</li><li>Edit /usr/lib/red5/conf/realm.properties and change the default administrator password.</li></ul></ul><h4>More informations on RED5</h4>Please take a look on this page : <a href="http://www.dokeos.com/wiki/index.php/Installing_videoconference">http://www.dokeos.com/wiki/index.php/Installing_videoconference</a><br><br><h4>Configuration of your dokeos Videoconference plugin</h4>The
 configuration of the VideoServing is done via the admin pages of Dokeos
 configuration in Dokeos platform admin, Configure the services,
-Configure Visio-conference<br>This contains the URL to the video
+Configure Visio-conference<br />This contains the URL to the video
 conferencing application. You probably need to add something before
 these paths if Dokeos is not installed into the root of your webserver.<br>url:/main/webrooms/videoconference.html and <br>&nbsp;&nbsp;&nbsp;&nbsp; /main/webrooms/videoconference2.html<br><br><h4>Connect your Dokeos installation to RED5</h4>You
 should tell Dokeos the configuration of you red5 server. This is done
 using the administration page of Dokeos. In the first field below the
-two url, set the public ip of your red5 server. The second field <br>will
+two url, set the public ip of your red5 server. The second field <br />will
 contain the value of �&nbsp;rtmp.port&nbsp;� from you red5
 configuration and the last field will contains �&nbsp;rtmpt.port&nbsp;�
 value.<span style="font-style: italic;"><br><br></span><hr>
-Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium<br>
-
-
-Mail: info@dokeos.com<br>
-
-Tel. +32 (0)2 211 34 56
-<hr>
-<p></p>
-
-
-
+Contact address: Dokeos, Rue du Corbeau, 108, B-1030 Brussels, Belgium<br />
+Mail: info@dokeos.com<br />
+Tel. +32 (0)2 669 69 55
+<hr />
 </div>
-
-
 </div>
-
-
-
 </body></html>

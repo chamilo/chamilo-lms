@@ -1,0 +1,55 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$AgendaAdd = "Ajouter un événement";
+$ShowAll = "Afficher tous les événements";
+$ShowCurrent = "Afficher les événements du mois";
+$AddCalendarItem = "Ajouter un événement";
+$Day = "Jour";
+$Month = "Mois";
+$Year = "Année";
+$Hour = "Heure";
+$Minutes = "Minutes";
+$Detail = "Détail";
+$EditSuccess = "L\'événement a été modifié";
+$AddSuccess = "L\'événement a été ajouté";
+$AgendaDeleteSuccess = "L\'événement a été supprimé";
+$NoAgendaItems = "Il n\'y a aucun événement";
+$lang_september = "Septembre";
+$langClassName = "Nom de la classe";
+$lang_agenda = "Agenda";
+$ModifyCalendarItem = "Modifier un événement";
+$ItemTitle = "Titre de l\'événement";
+$langDay = "jour";
+$month_default = "mois par défaut";
+$langYear = "Année";
+$year_default = "année par défaut";
+$langHour = "Heure";
+$hour_default = "heure par défaut";
+$langMinute = "minute par défaut";
+$langLasting = "durée";
+$langOldToNew = "d\'ancien à nouveau";
+$langNewToOld = "de nouveau à ancien";
+$langNow = "maintenant";
+$langAddEvent = "Ajouter un événement";
+$langDetail = "détail";
+$MonthView = "Vue par mois";
+$WeekView = "Vue par semaine";
+$DayView = "Vue par jour";
+$AddPersonalItem = "Ajouter un événement perso";
+$Week = "Semaine";
+$Date = "Date";
+$Time = "Heure";
+$AddPersonalCalendarItem = "Ajouter un événement perso";
+$ModifyPersonalCalendarItem = "Modifier un événement perso";
+$PeronalAgendaItemAdded = "Votre événement perso a été ajouté";
+$PeronalAgendaItemEdited = "Votre événement perso a été modifié";
+$PeronalAgendaItemDeleted = "Votre événement perso a été supprimé";
+$ViewPersonalItem = "Visualiser l\'agenda perso";
+$UserGroupFilter = "Filtrer par groupes/utilisateurs";
+$ShowAll = "Tous les utilisateurs";
+$Print = "Imprimer";
+$CopiedAsAnnouncement = "Copié comme annonce";
+$NewAnnouncement = "Nouvelle annonce";
+$AddAnnouncement = "Ajouter comme une annonce";
+?>

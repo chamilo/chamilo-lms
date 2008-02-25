@@ -1,0 +1,50 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$FlatView = "Vue à plat";
+$ScoreEdit = "Édition des règles de cotation";
+$ScoreColor = "Couleur des cotes";
+$ScoringSystem = "Système de cotation";
+$EnableScoreColor = "Activer la coloration des cotes";
+$Below = "en dessous de";
+$WillColorRed = "sera affiché en rouge";
+$EnableScoringSystem = "Activer le système de cotation";
+$IncludeUpperLimit = "Inclure la limite supérieure";
+$ScoreInfo = "Informations sur la cotation";
+$Between = "entre";
+$CurrentCategory = "Catégorie courante";
+$RootCat = "Catégorie principale";
+$NewCategory = "Nouvelle catégorie";
+$NewEvaluation = "Nouvelle évaluation";
+$Weight = "Pondération";
+$PickACourse = "Choisissez un cours";
+$CategoryName = "Nom de la catégorie";
+$CourseIndependent = "Indépendant d\'un cours";
+$CourseIndependentEvaluation = "Évaluation indépendante d\'un cours";
+$EvaluationName = "Nom de l\'évaluation";
+$Max = "Max";
+$DateEval = "Date de l\'évaluation";
+$AddUserToEval = "Ajouter des utilisateurs à l\'évaluation";
+$NewSubCategory = "Nouvelle sous-catégorie";
+$MakeLink = "Créer un lien";
+$DeleteSelected = "Supprimer sélection";
+$SetVisible = "Rendre visible";
+$SetInvisible = "Rendre invisible";
+$ChooseLink = "Sélectionnez le type de lien";
+$DokeosExercises = "Exercices";
+$DokeosDropbox = "Partage de fichiers";
+$DokeosStudentPublications = "Travaux d\'étudiants";
+$DokeosLearningPaths = "Parcours d\'apprentissage";
+$ChooseExercise = "Choisissez un exercice";
+$AddResult = "Ajouter des résultats";
+$BackToOverview = "Retour à la vue d\'ensemble";
+$ExportPDF = "Exporter en PDF";
+$Print = "Imprimer";
+$ChooseOrientation = "Choisissez l\'orientation";
+$Portrait = "Portrait";
+$Landscape = "Paysage";
+$FilterCategory = "Filtrer par catégorie";
+$DeleteAll = "Supprimer entièrement";
+$ScoringUpdated = "Cotations mises à jour";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s certifie que \\n\\n %s \\n\\na réussi le cours \\n\\n \'%s\' \\n\\navec la mention\\n\\n \'%s\'";
+?>

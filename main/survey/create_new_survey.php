@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: create_new_survey.php 12901 2007-08-28 12:32:02Z pcool $
+* 	@version $Id: create_new_survey.php 14361 2008-02-25 05:35:58Z yannoo $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -129,8 +129,8 @@ foreach ($lang_array['name'] as $key=>$value)
 	$languages[$lang_array['folder'][$key]] = $value;
 }
 $form->addElement('select', 'survey_language', get_lang('Language'), $languages);
-$form->addElement('datepicker', 'start_date', get_lang('StartDate'), array('form_name'=>'survey'));
-$form->addElement('datepicker', 'end_date', get_lang('EndDate'), array('form_name'=>'survey'));
+$form->addElement('datepickerdate', 'start_date', get_lang('StartDate'), array('form_name'=>'survey'));
+$form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form_name'=>'survey'));
 $group='';
 $group[] =& HTML_QuickForm::createElement('radio', 'survey_share',null, get_lang('Yes'),$form_share_value);
 /** @todo maybe it is better to change this into false instead see line 95 in survey.lib.php */

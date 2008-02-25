@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 14330 2008-02-20 17:07:13Z yannoo $
+// $Id: infocours.php 14371 2008-02-25 22:28:33Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -196,6 +196,11 @@ $form->addElement('radio', 'allow_user_edit_announcement', get_lang('AllowUserEd
 $form->addElement('radio', 'allow_user_edit_announcement', null, get_lang('AllowUserEditAnnouncementDeactivate'), 0);
 $form -> addElement('html',$linebreak);
 
+$form->addElement('radio', 'allow_user_image_forum', get_lang('AllowUserImageForum'), get_lang('AllowUserImageForumActivate'), 1);
+$form->addElement('radio', 'allow_user_image_forum', null, get_lang('AllowUserImageForumDeactivate'), 0);
+$form -> addElement('html',$linebreak);
+
+
 $form->addElement('static', null, null, get_lang("ConfTip"));
 $form->add_textfield('course_registration_password', get_lang('CourseRegistrationPassword'), false, array ('size' => '60'));
 if (is_settings_editable())
@@ -237,6 +242,9 @@ $values['email_alert_manager_on_new_quiz'] = api_get_course_setting('email_alert
 $values['allow_user_edit_agenda'] = api_get_course_setting('allow_user_edit_agenda');
 // get allow_user_edit_announcement from table
 $values['allow_user_edit_announcement'] = api_get_course_setting('allow_user_edit_announcement');
+// get allow_user_image_forum from table
+$values['allow_user_image_forum'] = api_get_course_setting('allow_user_image_forum');
+
 $form->setDefaults($values);
 // Validate form
 if ($form->validate() && is_settings_editable())
@@ -282,7 +290,11 @@ if ($form->validate() && is_settings_editable())
 	if($update_values['allow_user_edit_announcement'] != $values['allow_user_edit_announcement']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_edit_announcement']." WHERE variable = 'allow_user_edit_announcement' ";
 		api_sql_query($sql,__FILE__,__LINE__);
-	}
+	}	
+	if($update_values['allow_user_image_forum'] != $values['allow_user_image_forum']){
+		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_image_forum']." WHERE variable = 'allow_user_image_forum' ";
+		api_sql_query($sql,__FILE__,__LINE__);
+	}	
 
 	$cidReset = true;
 	$cidReq = $course_code;

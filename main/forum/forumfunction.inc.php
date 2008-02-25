@@ -69,8 +69,9 @@
  **************************************************************************
  */
 
-include(api_get_path(INCLUDE_PATH).'/lib/mail.lib.inc.php');
-include(api_get_path(INCLUDE_PATH).'/conf/mail.conf.php');
+require_once(api_get_path(INCLUDE_PATH).'/lib/mail.lib.inc.php');
+require_once(api_get_path(INCLUDE_PATH).'/conf/mail.conf.php');
+require_once(api_get_path(INCLUDE_PATH).'/lib/usermanager.lib.php');
 
 /**
 * This function handles all the forum and forumcategories actions. This is a wrapper for the
@@ -1943,13 +1944,47 @@ function display_user_link($user_id, $name)
 {
 	if ($user_id<>0)
 	{
-		return "<a href=\"../user/userInfo.php?uInfo=".$user_id."\">".$name."</a>";
+		return '<a href="../user/userInfo.php?uInfo='.$user_id.'">'.$name.'</a>';
 	}
 	else
 	{
 		return $name.' ('.get_lang('Anonymous').')';
 	}
 }
+
+/**
+* This function displays the user image from the profile, with a link to the user's details.
+* @param 	int 	User's database ID
+* @param 	str 	User's name
+* @return 	string 	An HTML with the anchor and the image of the user
+* @author Julio Montoya <julio.montoya@dokeos.com>
+*/
+
+function display_user_image($user_id,$name)
+{
+	$link='<a href="../user/userInfo.php?uInfo='.$user_id.'">';
+	$attrb=array();
+		
+	if ($user_id<>0)
+	{		
+		$image_path = UserManager::get_user_picture_path_by_id($user_id,'web');
+		$image_repository = $image_path['dir'];
+		$existing_image = $image_path['file'];
+		if (is_array($image_path) && $existing_image!='') {
+			return 	$link.'<img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  title="'.$name.'"  /></a>';			
+		}
+		else			
+			return $link.'<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  title="'.$name.'"  /></a>';
+			 	
+			
+	}
+	else
+	{
+		return $link.'<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  title="'.$name.'"  /></a>';
+	}
+	
+}
+
 
 /**
 * The thread view counter gets increased every time someone looks at the thread

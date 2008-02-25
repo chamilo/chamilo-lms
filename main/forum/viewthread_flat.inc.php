@@ -86,6 +86,11 @@ foreach ($rows as $row)
 	}
 	if($origin!='learnpath')
 	{
+	
+		if (api_get_course_setting('allow_user_image_forum')) {
+			echo '<br />'.display_user_image($row['user_id'],$name).'<br />';
+		}
+				
 		echo display_user_link($row['user_id'], $name).'<br />';
 	}
 	else 

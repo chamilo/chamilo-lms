@@ -89,6 +89,7 @@ foreach ($rows as $post)
 	{
 		$name=$post['firstname'].' '.$post['lastname'];
 	}	
+	if (api_get_course_setting('allow_user_image_forum')) {echo '<br />'.display_user_image($post['user_id']).'<br />';	}
 	echo display_user_link($post['user_id'], $name).'<br />';
 	echo $post['post_date'].'<br /><br />';
 	// The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum

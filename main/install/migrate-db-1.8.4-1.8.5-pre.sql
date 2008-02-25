@@ -30,6 +30,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('openid_authentication', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('openid_authentication', 'false', 'No');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('profile','openid','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'OpenIDURL');
+
 CREATE TABLE templates (id int NOT NULL auto_increment, title varchar(100) NOT NULL, description varchar(250) NOT NULL, course_code varchar(40) NOT NULL, user_id int NOT NULL, ref_doc int NOT NULL, PRIMARY KEY (id));
 ALTER TABLE user ADD openid varchar(255) DEFAULT NULL;
 ALTER TABLE user ADD INDEX (openid(50));
@@ -78,3 +79,4 @@ ALTER TABLE dropbox_post ADD INDEX ( session_id ) ;
 ALTER TABLE dropbox_file ADD session_id SMALLINT UNSIGNED NOT NULL ;
 ALTER TABLE dropbox_file ADD INDEX ( session_id ) ;
 ALTER TABLE item_property ADD INDEX (tool,ref);
+INSERT INTO course_setting(variable,value,category) VALUES ('allow_user_image_forum',1,'forum');

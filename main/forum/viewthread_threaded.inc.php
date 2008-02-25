@@ -100,6 +100,7 @@ else
 {
 	$name=$rows[$display_post_id]['firstname'].' '.$rows[$display_post_id]['lastname'];
 }
+if (api_get_course_setting('allow_user_image_forum')) {echo '<br />'.display_user_image($rows[$display_post_id]['user_id']).'<br />';	}
 echo display_user_link($rows[$display_post_id]['user_id'], $name).'<br />';
 echo $rows[$display_post_id]['post_date'].'<br /><br />';
 // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum

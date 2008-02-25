@@ -766,7 +766,7 @@ function update_Db_course($courseDbName)
 		doc_state tinyint unsigned NOT NULL default 1,
 		calendar_state tinyint unsigned NOT NULL default 1,
 		work_state tinyint unsigned NOT NULL default 1,
-		announcements_state tinyint unsigned NOT NULL default 1,
+		announcements_state tinyint unsigned databaseNOT NULL default 1,
 		max_student smallint unsigned NOT NULL default 8,
 		self_reg_allowed tinyint unsigned NOT NULL default 0,
 		self_unreg_allowed tinyint unsigned NOT NULL default 0,
@@ -1701,6 +1701,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_edit_agenda',0,'agenda')");
 	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_edit_announcement',0,'announcement')");
 	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_manager_on_new_quiz',0,'quiz')");
+	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_image_forum',1,'forum')");
 	/*
 	-----------------------------------------------------------
 		Course homepage tools for platform admin only

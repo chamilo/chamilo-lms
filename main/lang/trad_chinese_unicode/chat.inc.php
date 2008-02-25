@@ -32,7 +32,6 @@ $langNoLinkAvailable = "沒有鏈接可用";
 $langChat_reset_by = "重置聊天室";
 $langCallSent = "聊天請求已經發送，等待對方同意。";
 $langChatDenied = "你的聊天請求已經被對方拒絕。";
-$langOrFile = "或檔案";
-$langSend = "發送";
-$langConnected = "線上";
+$Send = "已傳送";
+$Connected = "已連線";
 ?>

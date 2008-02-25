@@ -1,24 +1,24 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langInbox = "收件箱";
-$langMessages = "郵件";
-$langSendMessage = "發送郵件";
-$langNewMessage = "新郵件";
-$langComposeMessage = "編寫郵件";
-$langDeleteSelectedMessages = "刪除選中的郵件";
-$langSelectAll = "選全部";
-$langDeselectAll = "不選全部";
-$langReplyToMessage = "回複";
-$langBackToInbox = "返回收件箱";
-$langMessageSentTo = "郵件已發給";
-$langSendMessageTo = "收件人";
-$langMyself = "我自己";
-$langFrom = "由";
-$langTo = "收件人";
-$langDate = "日期";
-$langInvalidMessageId = "要回複的郵件 ID 無效。";
-$langErrorSendingMessage = "發送郵件時發生錯誤。";
-$langSureYouWantToDeleteSelectedMessages = "你確定要刪除選中的郵件嗎？";
-$langEnterTitle = "請輸入主題";
+$Inbox  = "收件箱";
+$Messages = "訊息";
+$SendMessage = "傳送訊息";
+$NewMessage = "新訊息";
+$ComposeMessage = "編寫訊息";
+$DeleteSelectedMessages = "刪除已選訊息";
+$SelectAll = "全選";
+$DeselectAll  = "全部不選";
+$ReplyToMessage = "回覆";
+$BackToInbox = "返回收件箱";
+$MessageSentTo = "訊息已被發送給";
+$SendMessageTo = "送給";
+$Myself = "自己";
+$From = "由";
+$To = "給";
+$Date = "日期";
+$InvalidMessageId = "要回覆郵件的 ID 無效";
+$ErrorSendingMessage = "傳送訊息時發生問題。 ";
+$SureYouWantToDeleteSelectedMessages = "你真的要刪除已選訊息嗎？";
+$SelectedMessagesDeleted = "所選訊息已被刪除 ";
 ?>

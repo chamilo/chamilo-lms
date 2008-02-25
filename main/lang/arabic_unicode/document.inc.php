@@ -118,5 +118,8 @@ $File = "ملف ";
 $DocDeleteError = "خطأ أثناء حذف المستند ";
 $ViModProb = "حدثت مشكلة أثناء تحديث خاصية الظهور ";
 $DirDeleted = "لقد تم حذف المجلد ";
-$langCreateDir = "إنشاء مجلد";
+$TemplateName = "اسم القالب";
+$TemplateDescription = "وصف القالب";
+$DocumentSetAsTemplate = "حفظ المستند كقالب جديد";
+$DocumentUnsetAsTemplate = "ازالة المستند من القوالب";
 ?>

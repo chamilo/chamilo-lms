@@ -46,6 +46,4 @@ $langMainMD = "開啟主要 MDE";
 $langOrElse = "選擇一個鏈接分類";
 $langWarningDups = "- 已經從清單中刪除了重複的分類名﹗";
 $langSLC = "啟用鏈接分類名稱";
-$langSorry = "首先選擇一門課程";
-$langDenied = "這項功能只能由課程管理員使用";
 ?>

@@ -99,5 +99,4 @@ $ExampleForumCategory = " مثال عن تصنيف منتدى ";
 $ExampleForum = " مثال منتدى ";
 $ExampleThread = " مثال موضوع ";
 $ExampleThreadContent = " مثال محتوى ";
-$langCode = " رمز الدرس / المادة";
 ?>

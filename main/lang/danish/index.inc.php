@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langInvalidId = "Fejl ved login.<BR>Hvis du ikke er registreret, brug <a href=claroline/auth/inscription.php>Registrering</a></font color>. <br><br>Du kan få tilsendt dine brugeroplysninger ved at klikke på linket Glemt adgangskode.";
+$langInvalidId = "Fejl ved login.<BR>Hvis du ikke er registreret, brug <a href=claroline/auth/inscription.php>Registrering</a></font color>. <br><br>Du kan få tilsendt dine brugeroplysninger ved at klikke på linket Glemt brugeroplysninger.";
 $langWelcome = "kurser er tilgængelige for alle interesserede. Andre kurser kræver, at du enten er logget ind eller står på kursussidens deltagerliste for at kunne se tilgå siden/siderne. ";
 $langPass = "Adgangskode";
 $langEnter = "OK";
@@ -15,9 +15,9 @@ $langSupportForum = "Hjælpeforum";
 $langCategories  = "Kategorier";
 $langBackToHomePage  = "Tilbage til kursusoversigten";
 $lang_No_course_publicly_available  = "Der er ingen åbne kursussider tilgængelige.";
-$langLostPassword  = "Glemt adgangskode?";
+$langLostPassword  = "Glemt brugeroplysninger?";
 $lang_edit_my_course_list  = "Rediger min kursusoversigt";
-$langAgenda  = "Kommende arrangementer i kalenderen";
+$langAgenda  = "Kommende aftaler i kalenderen";
 $langValvas  = "Seneste meddelelser";
 $langUp  = "Forrige niveau";
 $langCatList  = "Kategorier";
@@ -31,7 +31,7 @@ $Englin = "English";
 $langInvalidForSelfRegistration = "Fejl med login - hvis du ikke er registreret, kan du bruge bruge denne <a href=claroline/auth/inscription.php>registreringsformular</a>";
 $langSubCat = "underkategorier";
 $langMenuGeneral = "Generelt";
-$langMenuUser = "Bruger";
+$langMenuUser = "Deltagere";
 $langMenuAdmin = "Systemadmin";
 $langUsersOnLineList = "Online deltagerliste";
 $langTotalOnLine = "Online i alt";
@@ -40,7 +40,7 @@ $langMe = "mig";
 $langSystemAnnouncements = "Systemmeddelelser";
 $langHelpMaj = "Hjælp";
 $langNotRegistered = "Ikke registreret";
-$langAdmin = "System Admin";
+$langAdmin = "Systemadmin";
 $Login = "Login";
 $langRegisterForCourse = "Tilmeld kursusside";
 $langUnregisterForCourse = "Afmeld kursusside";
@@ -65,5 +65,5 @@ $NewMessageInForum = "Der er skrevet et nyt indlæg i diskussionsforummet";
 $FolderCreated = "Ny mappe er oprettet";
 $LinkAdded = "Et nyt link er tilføjet";
 $AnnouncementAdded = "Meddelelse er tilføjet";
-$AgendaAdded = "Kalenderarrangement er tilføjet";
+$AgendaAdded = "Aftale er tilføjet";
 ?>

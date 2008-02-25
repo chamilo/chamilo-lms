@@ -211,6 +211,7 @@ $CoachStudents = "Students for this coach";
 $NoLearningPath = "No SCORM courses";
 $SessionCourses = "جلسة المقررات ";
 $NoUsersInCourseTracking = "هنا يمكنك تتبع حركة الطلاب المسجلين في هذا المقرر ";
-$langShowAll = "إظهار الكل";
-$Comments = "تعليقات ";
+$AvgTimeSpentInTheCourse = "معدل الوقت المستهلك في الدرس";
+$RemindInactiveUser = "اذكر المستخدم الغير نشط";
+$FirstLogin = "الاتصال الأول";
 ?>

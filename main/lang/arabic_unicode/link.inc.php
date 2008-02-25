@@ -56,5 +56,5 @@ $langAll_Link_Deleted = "لقد تم حذف الرابط ";
 $langOnHomepage = "أظهر الرابط في الصفحة الرئسية ";
 $langShowLinkOnHomepage = "أظهر هذا الرابط على شكل أيقونة في صحفة المقررات ";
 $langCsvImport = "   استيراد ملف - CSV";
-$VisibilityChanged = "  لقد تم تغيير خاصية ظهور الرابط  ";
+$Category = "الفئة";
 ?>

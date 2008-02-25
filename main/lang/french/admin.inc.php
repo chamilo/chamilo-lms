@@ -690,4 +690,8 @@ $VersionCheckEnabled = "Fonctionnalité de vérification de version activée";
 $InstallDirAccessibleSecurityThreat = "Le répertoire main/install est toujours accessible aux utilisateurs web. Ceci peut représenter un danger en termes de sécurité. Nous recommandons la suppression de ce répertoire ou le changement des permissions de telle manière que les utilisateurs web ne puissent plus utiliser les scripts qu\'il contient.";
 $GradebookActivation = "Activation de l\'outil Cahier de notes";
 $GradebookActivationComment = "Activer l\'outil de Cahier de notes vous permettra de gérer des objectifs d\'apprentissage cotés. L\'activation de cet outil pourrait toutefois complexifier l\'interface de façon inutile. Voulez-vous activer cet outil?";
+$UserTheme = "Thème (feuille de style)";
+$UserThemeSelection = "Sélection du thème visuel par l\'utilisateur";
+$UserThemeSelectionComment = "Autoriser le choix du style visuel par les utilisateurs. Ce paramètre permettra à chaque utilisateur de choisir son propre style. Le style par défaut du portail restera toutefois inchangé. Si un cours ou une session dispose d\'un style visuel qui lui est propre, celui-ci aura la priorité sur le style sélectionné par l\'utilisateur.";
+$AllowurlfopenIsSetToOff = "Le paramètre de configuration de PHP \"allow_url_fopen\" est désactivé, ce qui empêche le mécanisme d\'enregistrement de votre portail de fonctionner correctement. Ce paramètre peut être modifié dans votre fichier de configuration de PHP (php.ini) ou dans la configuration du Virtual Host d\'Apache, en utilisant la directive php_admin_value.";
 ?>

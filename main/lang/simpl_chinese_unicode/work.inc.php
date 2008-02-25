@@ -26,12 +26,4 @@ $langNameDir = "重命名目录";
 $langFileExists = "文件已存在";
 $langDirCr = "新建目录";
 $langCurrentDir = "当前目录";
-$langCreateDir = "新建目录";
-$langTools = "工具";
-$langUploadADocument = "上传作业";
-$langEditToolOptions = "工具选项";
-$langDocumentDeleted = "作业已删除";
-$langSendMailBody = "一位用户在您的课程中上传了一份作业：";
-$langDirDelete = "删除目录";
-$langValidateChanges = "确认更改";
 ?>

@@ -41,8 +41,4 @@ $langNoDestinationCoursesAvailable = "没有目标课程可用";
 $langBackup = "备份";
 $langImportBackupInfo = "导入备份，你可以从本地磁盘上传备份文件或使用服务器上可用的备份文件。";
 $langCreateBackupInfo = "创建此课程的备份，你可以选择放在备份文件中课程内容。";
-$langToolIntro = "工具介绍";
-$langUploadError = "上传失败，请检查文件容量限制和文件夹权限。";
-$langstudent_publication = "学生作业";
-$langRecycleOption = "清空选项";
 ?>

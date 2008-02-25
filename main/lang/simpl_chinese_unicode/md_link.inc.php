@@ -46,6 +46,4 @@ $langMainMD = "开启主要 MDE";
 $langOrElse = "选择一个链接分类";
 $langWarningDups = "- 已经从列表中删除了重复的分类名！";
 $langSLC = "启用链接分类名称";
-$langSorry = "首先选择一门课程";
-$langDenied = "这项功能只能由课程管理员使用";
 ?>

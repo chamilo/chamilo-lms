@@ -17,5 +17,4 @@ $lang_next_slide = "下一张";
 $lang_image = "图像";
 $lang_of = "的";
 $lang_view_slideshow = "查看幻灯";
-$langSlideShow = "幻灯";
 ?>

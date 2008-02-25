@@ -46,8 +46,4 @@ $langAll_Link_Deleted = "链接已删除";
 $langOnHomepage = "主页中显示";
 $langShowLinkOnHomepage = "在课程主页将链接显示为一个图标";
 $langCsvImport = "导入-CSV";
-$langLinkMoved = "链接已移动";
-$langVisibilityChanged = "链接的可见性已移除";
-$langshowall = "打开所有分类";
-$langshownone = "关闭所有分类";
 ?>

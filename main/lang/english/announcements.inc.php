@@ -50,4 +50,5 @@ $AnnouncementMoved = "The announcement has been moved";
 $NoAnnouncements = "There are no announcements.";
 $SelectEverybody = "Select Everybody";
 $SelectedUsersGroups = "selected user groups";
+$LearnerMessage = "Message from a learner";
 ?>

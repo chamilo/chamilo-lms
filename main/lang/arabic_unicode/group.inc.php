@@ -91,5 +91,5 @@ $GroupAnnouncements = "الإعلانات";
 $NoCategoriesDefined = "لم يتم تعريف تصنيفات ";
 $GroupsFromClasses = "مجموعات من الفصول";
 $GroupsFromClassesInfo = "باستخدام هذه الخاصية, يمكنك  إنشاء مجموعات بناءا على الفصول المسجلة في مقررك ";
-$Tools = "الآدواة";
+$Group = "المجموعة";
 ?>

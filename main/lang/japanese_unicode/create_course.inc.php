@@ -46,5 +46,4 @@ $langTargetFac = "このコ〖スの池彩、池婶";
 $langMax = "呵络１バイト矢机で12矢机 e.g. <i>ROM2121</i>";
 $langDoubt = "コ〖ス戎规が悼わしいなら、碰澈婶金に息晚してください";
 $langProgram = "コ〖スプログラム";
-$langCode = "コ〖ス戎规";
 ?>

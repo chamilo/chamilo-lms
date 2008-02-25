@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $ForumDeleted = "Foro eliminado";
 $ForumCategoryDeleted = "Categoría de foro eliminada";
-$ForumBlocked = "Foro cerrado";
+$ForumLocked = "Foro cerrado";
 $Forum = "Foro";
 $AddForumCategory = "Engadir unha categoría nova ao foro";
 $AddForum = "Engadir un novo foro";
@@ -83,4 +83,5 @@ $ThreadCanBeFoundHere = "Non se pode atopar o tema aquí";
 $MakeVisible = "Facer visible";
 $DeleteCompleteThread = "Eliminar o tema por completo?";
 $PostDeletedSpecial = "Mensaxe de aviso eliminada";
+$ThreadDeleted = "Tema eliminado";
 ?>

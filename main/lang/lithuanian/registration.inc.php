@@ -157,8 +157,4 @@ $SendMessage = "Send Message";
 $PasswordEncryptedForSecurity = "Your password is encrypted for security reasons. Thus, after pressing the link an e-mail will be sent to you again with your password.";
 $UsersUnsubscribed = "The selected users have been unsubscribed from the course";
 $SystemUnableToSendEmailContact = "System unable to send email contact ";
-$langMyCompetences = "Mano kompetencijos";
-$langMyDiplomas = "Mano diplomai";
-$langMyPersonalOpenArea = "Mano platesnė asmeninė informacija";
-$langMyTeach = "Ką aš galėčiau išmokti";
 ?>

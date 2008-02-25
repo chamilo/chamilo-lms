@@ -675,4 +675,7 @@ $ExtendedProfileRegistrationTitle = "Registo com campos do perfil alargado";
 $ExtendedProfileRegistrationComment = "Qual dos seguintes campos do registo com perfil alargado devem estar disponíveis no processo de registo dos utilizadores? Isto requer a activação do registo com perfil alargado (ver acima).";
 $ExtendedProfileRegistrationRequiredTitle = "Campos de preenchimento obrigatório no registo com perfil alargado";
 $ExtendedProfileRegistrationRequiredComment = "Qual dos seguintes campos do registo com perfil alargado são requeridos no processo de registo dos utilizadores? Isto requer a activação do registo com perfil alargado e que o campo esteja igualmente disponível no formulário de registo (ver acima).";
+$Flat = "Linear";
+$Threaded = "Árvore";
+$Nested = "Hierarquizada";
 ?>

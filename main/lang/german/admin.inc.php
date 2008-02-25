@@ -688,13 +688,8 @@ $VersionCheckEnabled = "Versionsprüfung ist eingeschaltet";
 $InstallDirAccessibleSecurityThreat = "Das /main/install Verzeichnis Ihres Dokeos Systems ist noch immer für Web Benutzer erreichbar. Das könnte ein Sicherheitsrisiko für Ihre Installation darstellen. Wir raten Ihnen, dieses Verzeichnis zu löschen oder die Berechtigungen so zu ändern, dass Web Benutzer die Scripts in diesem Verzeichnis nicht benutzen können.";
 $GradebookActivation = "Gradebook Werkzeug aktivieren";
 $GradebookActivationComment = "Aktivierung des Gradebook Werkzeugs ermöglicht, Lernziele mit Noten festzulegen; falls es nicht benötigt wird, könnte es die Benutzeroberfläche zu komplex machen. Soll dieses Werkzeug aktiviert werden ";
-$langConfigurePortalPages = "Portal Eingangseite konfigurieren";
-$langConfigureTemplates = "Template konfigurieren";
-$langname = "Name";
-$langCourses = "Kurse";
-$langIn = "in";
-$AddRight = "Recht hinzufügen";
-$langStatistics = "Statistiken";
-$langGuest = "Gast";
-$DateStartMoreThanDateEnd = "Anfangsdatum später als Enddatum";
+$UserTheme = "Theme (Stylesheet)";
+$UserThemeSelection = "Benutzer Theme Auswahl";
+$UserThemeSelectionComment = "Benutzer können ihr eigenes Theme in ihrem Profil auswählen. Das verändert das Aussehen von Dokeos für sie, lässt aber den Stil des Portals intakt. Falls ein bestimmter Kurs oder eine Session ein bestimmtes Theme verwendet, hat dies Vorrang über Benutzer definierte Themes";
+$AllowurlfopenIsSetToOff = "Die PHP Auswahl \"allow_url_fopen\" steht auf off. Dies verhindert die korrekte Funktion der Anmeldung. Diese Auswahl kann in der PHP Konfigurationsdatei (php,ini) oder in der Apache Virtual Host Konfiguration mittels des Befehls php_admin_value geändert werden  ";
 ?>

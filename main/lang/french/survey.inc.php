@@ -172,7 +172,11 @@ $HaveAnswered = "ont répondu";
 $WereInvited = "sont invités";
 $PagebreakNotFirst = "Le séparateur ne peut pas être en premier";
 $PagebreakNotLast = "Le séparateur ne peut pas être en dernier";
+$SurveyNotAvailableAnymore = "Désolé, cette enquête n\'est plus disponible. Merci d\'avoir essayé d\'y répondre.";
 $DuplicateSurvey = "Dupliquer l\'enquête";
 $EmptySurvey = "Vider l\'enquête de ses résultats";
 $SurveyEmptied = "Enquête vidée de ses résultats avec succès";
+$SurveyNotAvailableYet = "Cette enquête n\'est pas encore disponible. Veuillez réessayer plus tard. Merci.";
+$PeopleAnswered = "personnes ont répondu";
+$AnonymousSurveyCannotKnowWhoAnswered = "Cette enquête est anonyme. Vous ne pouvez pas voir qui a répondu.";
 ?>

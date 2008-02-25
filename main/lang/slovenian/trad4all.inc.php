@@ -24,6 +24,7 @@ $langCode = "Koda teèaja";
 $langUp = "Gor";
 $Down = "dol";
 $Up = "gor";
+$Theme = "Tema";
 $TheListIsEmpty = "Seznam je prazen.";
 $langCourseCreate = "Tvori podroèje teèaja";
 $langTodo = "Predlogi";
@@ -459,4 +460,6 @@ $UplGenericError = "Nalagana datoteka se ni pravilno naložila. Poskusite ponovno
 $MyGradebook = "Moja redovalnica";
 $Gradebook = "Redovalnica";
 $OpenIDWhatIs = "Kaj je OpenID?";
+$OpenIDDescription = "OpenID omogoèa rabo enega samega uporabniškega imena v razliènih spletnih storitvah na veèih internetnih mestih.  Za pridobitev OpenID je potrebno izbrati je potrebno OpenID ponudnika; ki najbolj ustreza vašim potrebam in kateremu zaupate.  OpenID ostaja z vami ne glede na to, katerega ponudnika ste izbrali oz. h kateremu se kasneje prestavite. OpenID technologija ni lastniška in je popolnoma brezplaèna.<br /><br /><a href=\"http://openid.net/what/\">Veè ...</a>";
+$NoManager = "Ni upravitelja";
 ?>

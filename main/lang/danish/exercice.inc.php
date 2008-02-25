@@ -229,4 +229,5 @@ $AttemptVCC = "Dine forsøg er set/rettet/kommenteret af underviseren";
 $ClickLinkToViewComment = "Klik på det nedenstående link for at adgang til informationer og se tilbagemelding";
 $Regards = "Med venlig hilsen";
 $AttemptVCCLong = "Din besvarelse af øvelsen er set/rettet/kommenteret af underviseren. Klik på nedenstående link for at få adgang til dine informationer og se vurderingen";
+$DearStudentEmailIntroduction = "Kære deltager,";
 ?>

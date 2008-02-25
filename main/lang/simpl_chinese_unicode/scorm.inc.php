@@ -36,11 +36,4 @@ $langRemote = "远距";
 $langAutodetect = "自动侦测";
 $langAccomplishedStepsTotal = "合计";
 $langUnknown = "未知";
-$langScormBrowsed = "已浏览";
-$langAreYouSureToDeleteSteps = "你确定要删除该步骤";
-$langOrigin = "类型";
-$langFileToUpload = "上传文件";
-$langContentMaker = "创建工具";
-$langContentProximity = "访问";
-$langUploadLocalFileFromGarbageDir = "选择文件";
 ?>

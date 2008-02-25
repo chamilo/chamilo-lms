@@ -49,4 +49,5 @@ $AnnouncementMoved = "O anúncio foi deslocado";
 $NoAnnouncements = "Não existem anúncios";
 $SelectEverybody = "Seleccionar Todos";
 $SelectedUsersGroups = "utilizadores dos grupos seleccionados";
+$LearnerMessage = "Mensagem de um estudante";
 ?>

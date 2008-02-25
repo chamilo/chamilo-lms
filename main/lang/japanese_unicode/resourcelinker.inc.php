@@ -22,5 +22,4 @@ $Exercise = "Test";
 $Link = "Link";
 $AdValvas = "Ad Valvas";
 $Document = "Document";
-$Dropbox = "Dropbox";
 ?>

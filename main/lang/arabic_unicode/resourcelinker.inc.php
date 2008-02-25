@@ -56,5 +56,4 @@ $ForumEditTopic = "من : تحرير موضوع";
 $ExerciseAnswers = "تمارين : أجوبة ";
 $ForumReply = "من : الرد";
 $AgendaSortChronologicallyDown = " رتب الأجندة زمنا (للأسفل) ";
-$Dropbox = "صندوق المشاركات ";
 ?>

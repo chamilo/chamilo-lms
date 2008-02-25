@@ -49,4 +49,5 @@ $AnnouncementMoved = "لقد تم تحريك الإعلان بنجاح";
 $NoAnnouncements = "لا يوجد أي إعلان";
 $SelectEverybody = "حدد الجميع";
 $SelectedUsersGroups = "مجموعات المستخدمين المحددة ";
+$LearnerMessage = "رسالة من المتعلم";
 ?>

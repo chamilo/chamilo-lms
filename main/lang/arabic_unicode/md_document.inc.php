@@ -87,5 +87,4 @@ $langLngResTypes = ":exercise:exercise,,
      problem statement:problem statement,, 
      self assessment:self assessment,, 
      lecture:lecture";
-$langSorry = "حدد مقرر أولا ";
 ?>

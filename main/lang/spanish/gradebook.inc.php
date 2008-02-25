@@ -46,4 +46,5 @@ $Landscape = "Horizontal";
 $FilterCategory = "Filtrar por categoría";
 $DeleteAll = "Eliminar todo";
 $ScoringUpdated = "Puntuación actualizada";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s certifica que\\n\\n %s \\n\\nha realizado el curso \\n\\n \'%s\' \\n\\ncon la calificación de\\n\\n \'%s\'";
 ?>

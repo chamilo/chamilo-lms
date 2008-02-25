@@ -101,5 +101,4 @@ $DescriptionRecycleCourse = "Questo strumento svuota del tutto o in parte il cor
 $QuizEmailAlert = "Avviso nuove risposte ad esercizi";
 $QuizEmailAlertActivate = "Attiva l\'avviso via e-mail nel caso di nuove risposte ai test date dai corsisti";
 $QuizEmailAlertDeactivate = "Disattiva l\'avviso e-mail nel caso di nuove risposte ai test";
-$DropboxEmailAlertDeactivat = "Avviso nuovi file scambiati disattivato";
 ?>

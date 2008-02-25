@@ -91,15 +91,4 @@ $langRestoreACourse = "恢复课程";
 $langBackup = "备份";
 $langCopy = "复制课程内容";
 $langRecycle = "循环利用课程";
-$langCode = "课程代码";
-$langAnnouncementExampleTitle = "这是一个通知样例";
-$langWikipedia = "免费的在线百科全书";
-$langDefaultGroupCategory = "默认小组";
-$langDefaultCourseImages = "图库";
-$langExampleForumCategory = "论坛分类";
-$langExampleForum = "例子论坛";
-$langExampleThread = "例子线程";
-$langExampleThreadContent = "例子内容";
-$langCourseCodeAlreadyExist = "课程代码已经存在";
-$langCourseCodeAlreadyExistExplained = "课程代码已经存在";
 ?>

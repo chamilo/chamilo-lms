@@ -22,7 +22,7 @@ $lang_doc_unvisible = "ملفاتك ظاهرة فقط لمدرسي هذا الم
 $langDelLk = "حذف رابط ";
 $langMustBeRegisteredUser = "فقط المستخدمين المسجلين في هذا المقرر بإمكانهم نشر المستندات ";
 $langListDel = "حذف قائمة ";
-$langWork = "Work";
+$langWork = "أعمال-مهام";
 $langNameDir = "أعد تسمية مسار / مجلد";
 $langFileExists = "هذا الملف موجود مسبقا ";
 $langDirCr = "إنشاء  مسار / مجلد ";
@@ -33,5 +33,4 @@ $DocumentDeleted = "تم حذف المستند ";
 $SendMailBody = "قام مستخدم بتحميل مستند في أداة المستندات الخاصة بمقررك ";
 $DirDelete = "حذف المسار";
 $ValidateChanges = "اقرار التغييرات ";
-$langCreateDir = "إنشاء  مسار / مجلد ";
 ?>

@@ -26,12 +26,4 @@ $langNameDir = "重命名目錄";
 $langFileExists = "檔案已存在";
 $langDirCr = "新建目錄";
 $langCurrentDir = "當前目錄";
-$langCreateDir = "新建目錄";
-$langTools = "工具";
-$langUploadADocument = "上傳作業";
-$langEditToolOptions = "工具選項";
-$langDocumentDeleted = "作業已刪除";
-$langSendMailBody = "一位用戶在您的課程中上傳了一份作業︰";
-$langDirDelete = "刪除目錄";
-$langValidateChanges = "確認更改";
 ?>

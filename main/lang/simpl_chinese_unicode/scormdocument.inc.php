@@ -59,10 +59,4 @@ $langScormBuilder = "Scorm 创建者";
 $langCreateDoc = "新建文档";
 $langOrganiseDocuments = "组织文档";
 $langUncompress = "未压缩";
-$langDocuments = "文档";
-$langCreateDir = "新建目录";
-$langlearning_path_access = "点击‘创建学习路径‘删除/修改/显示/创建/添加新的学习路径";
-$langExportShort = "导出 SCORM";
-$langDescription = "描述";
-$langprogress = "进度";
 ?>

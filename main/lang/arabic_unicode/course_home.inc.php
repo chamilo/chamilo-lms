@@ -24,4 +24,5 @@ $Interaction = " التفاعل";
 $Authoring = " التحرير";
 $Administration = " الإدارة";
 $IntroductionTextUpdated = " تم تحديث النص التوضيحي";
+$IntroductionTextDeleted = "تم حذف نص المقدمة";
 ?>

@@ -204,7 +204,7 @@ $langCourseCreationSucceeded = "Il corso è stato creato correttamente.";
 $langYourDokeosUses = "La configurazione di Dokeos usata prevede";
 $langOnTheHardDisk = "sul disco rigido";
 $langIsVirtualCourse = "E\' un corso virtuale";
-$langSystemAnnouncements = "Novità";
+$langSystemAnnouncements = "Avvisi di sistema";
 $langAddAnnouncement = "Aggiungi un avviso";
 $langAnnouncementAdded = "L\'avviso è stato aggiunto";
 $langAnnouncementUpdated = "L\'avviso è stato aggiornato";
@@ -690,10 +690,9 @@ $VersionCheckEnabled = "Controllo versione attivato";
 $InstallDirAccessibleSecurityThreat = "La directory main/install risulta accessibile dall\'esterno. CIO E\' POTENZIALMENTE PERICOLOSO. Consigliamo di eliminare la directory o di cambiarne i diritti d\'accesso in modo da non permettere l\'esecuzione di script da parte di utenti Internet.";
 $GradebookActivation = "Attivazione del registro delle valutazioni";
 $GradebookActivationComment = "Attivando il registro delle valutazioni hai la possibilità di assegnare dei punteggi su grado di realizzazione degli obiettivi didattici. Lo strumento è piuttosto complesso; è necessario attivarlo?";
-$langConfigurePortalPages = "Configura le pagine del portale";
-$langConfigureTemplates = "Configura i modelli";
-$langname = "Nome";
-$langCourses = "Corsi";
-$langIn = "in";
-$AddRight = "Aggiungi a destra";
+$UserTheme = "Aspetto (foglio di stile)";
+$UserThemeSelection = "Aspetto scelto dall\'utente";
+$UserThemeSelectionComment = "Permetti agli utenti di scegliere nel profilo l\'aspetto grafico (tema): Dokeos apparirà diverso solo a loro. La scelta sarà inefficace nel caso in cui il gestore abbia scelto un aspetto specifico per una certa sezione del corso.";
+$AllowurlfopenIsSetToOff = "Il settaggio \"allow_url_fopen\" di PHP è disattivato, per cui la registrazione non può funzionare correttamente. 
+Per attivarlo deve essere cambiato il file php.in di PHP oppre php_admin_value nel server Apache.";
 ?>

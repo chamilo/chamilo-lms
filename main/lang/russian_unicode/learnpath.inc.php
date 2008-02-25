@@ -184,5 +184,6 @@ $CorrectAnswers = "Правильные ответы";
 $StudentResponse = "Ответы студента";
 $LatencyTimeSpent = "Затрачено времени";
 $Result = "Результат";
-$langAreYouSureToDelete = "Вы уверены, что хотите удалить?";
+$SplitStepsPerPage = "Страница, шаг";
+$SplitStepsPerChapter = "Глава, шаг";
 ?>

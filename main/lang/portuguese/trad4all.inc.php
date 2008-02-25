@@ -23,6 +23,7 @@ $langCode = "Código do curso";
 $langUp = "Voltar";
 $Down = "abaixo";
 $Up = "acima";
+$Theme = "Tema";
 $TheListIsEmpty = "A lista está vazia";
 $langCourseCreate = "Criar novo curso";
 $langTodo = "Sugestões";
@@ -448,4 +449,7 @@ $RemindInactiveLearnersMailSubject = "Inactividade em %s";
 $RemindInactiveLearnersMailContent = "Caro utilizador,<br /><br /> não tem estado activo em %s há mais de %s dias.";
 $UploadMaxSize = "Tamanho máximo de upload";
 $Unknown = "Desconhecido";
+$MoveUp = "Mover para cima";
+$MoveDown = "Mover para baixo";
+$NoManager = "Sem administrador";
 ?>

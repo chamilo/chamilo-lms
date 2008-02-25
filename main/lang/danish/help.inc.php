@@ -1,48 +1,26 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langHFor = "Hjælpeforum";
-$langForContent = "Diskussionsforum er et skriftligt asynkront værktøj, 
- hvor e-mail giver adgang til en-til-en dialog, der enten har en åben eller
- lukket form. </p><p>Teknisk behøver den studerende kun sin browser for at få adgang til et
+$langHFor = "Hjælp til diskussionsforum";
+$langForContent = "Diskussionsforum er et skriftligt asynkront værktøj. Hvor e-mail giver adgang til en-til-en dialog, tillader et diskussionsforum en åben eller semi-åben diskussionsform. </p><p>Teknisk set behøver man kun en browser og internetadgang for at få adgang til et
  Diskussionsforum.</P><p>For at oprette et Diskussionforum, klik på
  \'Administration af forum\'. Diskussionerne er organiseret i grupper og undergrupper med
  følgende struktur:</p><p><b>Kategori > Forum > Emne > Svar</b></p> For at strukturere
- de studerendes diskussioner, er det nødvendigt at organisere kategorierne og 
+ deltagerns diskussioner, er det nødvendigt at organisere kategorierne og 
  foraene på forhånd, således at oprettelsen af emner og svar overlades til de studerende. Som
- standard er claroline forum kun sat op til kategorien \'åben\', et testforum
- og et testemne.</p><p>Det første du skal gøre er at slette
- testemnet og tilpasse navnet på det første forum. Så kan du oprette,
- i den \'offentlige\' kategori, andre fora, med grupper eller temaer, som passer til
- dine læringsscenarier.</p><p>Bland ikke kategorier og fora,
- og husk at en tom kategori (uden forum) ikke kan ses af den
- studende.</p><p>Beskrivelsen af et forum kan være deltagerlisten, målformulering, 
- et tema...";
-$langHDropbox = "Dropboks";
-$langDropboxContent = "<p>Dropboksen er et Indholds Styrings Værktøj til P2P data-udveksling. Alle filtyper er accepteret: Word, Excel, PDF, osv. Det vil håndtere versioner i den forstand at det vil undgå ødelæggelse af et dokument på grund af et andet dokument med samme navn.</p> <p>Dropboksen viser filerne som er blevet sendt til dig (modtaget mappen) og filerne som du har sendt til andre medlemmer af dette kursus (afsendt mappen).</p> <p>Hvis listen over modtagede eller afsendte filer bliver for lang, kan du slette alle eller nogle filer fra listen. Filen bliver ikke fjernet fra disken så længe den anden part kan se det.</p> <p>For at afsende et dokument til mere end een person, skal du bruge CTRL+klik i listboksen som viser medlemmerne.</p>";
-$langHHome = "Hjælp til kursushjemmesiden";
-$langHomeContent = "For at komme i gang, indeholder værktøjerne i claroline standard opsætninger.
- Der er et lille eksempel på indhold i hvert værktøj for at hjælpe dig til hurtigt at forstå,
- hvordan det fungerer. Det er op til dig at ændre eksemplerne eller slette dem.</p><p>For
- eksempel er der her på din kursushjemmeside en lille introduktionstekst: 
- \'Dette er introduktionsteksten til dit kursus. For at ersatte den med din egen tekst, Klik på ændre.\' 
- Så simpelt er det. Hvert værktøj har den samme logik:
- tilføj, slet, ændre, som er logikken på et dynamisk website.</p><p>Når du 
- opretter dit website, er de fleste værktøjer aktive. Det er op til dig
- at gøre dem passive, som du ikke ønsker at bruge i første omgang. Klik på \'gør passiv\'.
- Derefter lander værktøjet nede i den grå sektion af din kursushjemmeside, og er dermed
- usynlig for de studerende.  Du kan når som helst gøre værktøjet aktivt igen og dermed 
- gøre det synligt for de studerende.</p>
-<p>Du kan tilføje dine egne tekster på forsiden af din kursushjemmeside.
- Disse tekster skal være i HTML format (som nemt kan laves med f.eks. Word ved at gemme teksten i web-format).
- Brug \'læg et dokument ud på hjemmesiden\' for at overføre din tekst til serveren.
- Claroline opretter automatisk en URL til din tekst, således at du kun behøver at koncentrere
- dig om tekstens indhold. Ønsker du at linke til websites udenfor din kursushjemmeside (eller for den sags skyld indenfor),
- brug \'Tilføj link til hjemmesiden\'. De sider du har tilføjet til din hjemmeside kan gøres passive
- og derefter fjernes, medens standardværktøjerne på kursushjemmesiden kun kan
- gøres passive, men ikke fjernes.</p><p>Når din kursushjemmeside er klar, gå
- til \'Ændre kursusinformation\' og beslut hvilket fortrolighedsniveau du ønsker for dit kursus.
- Som standard har dit kursus \'offentlig adgang\'.</p>";
+ standard er et forum sat op til kategorien \'åben\' med et testforum og et testemne.</p><p>Det første du skal gøre er at slette
+ testemnet og tilpasse navnet på det første forum. Så kan du oprette andre fora i den \'offentlige\' kategori med grupper eller temaer, som passer til
+ din brug.</p><p>Bland ikke kategorier og fora,
+ og husk at en tom kategori (uden forum) ikke kan ses af deltagerne.</p><p>Gruppefora skal ikke oprettes via diskussionsforummet med via Gruppeværktøjet. Derfra har du mulighed for at vælge, om et gruppeforum skal være åbent eller lukket. </p><b>Pædagogisk anvendelse</b> <p>Nogle undervisere anvender et forum til eksamensspørgsmål eller til diskussion af tekster. Man kan også bruge det til afleveringer, idet underviseren kan gå ind og kommentere direkte i det indlæg, som en deltager har skrevet.";
+$langHDropbox = "Dueslag";
+$langDropboxContent = "<p>Dueslaget er et styringsværktøj til udveksling af filer/dokumenter. Alle filtyper er accepteret: Word, Excel, PDF, osv. Det vil håndtere versioner i den forstand, at man ikke ødelægger et dokument ved upload af et andet dokument med samme navn.</p> <p>Dueslaget viser filerne, som er blevet sendt til dig (Modtaget filer-faneblad), og filerne som du har sendt til andre medlemmer af dette kursus (Sendte filer-faneblad).</p> <p>Hvis listen over modtaget eller afsendte filer bliver for lang, kan du slette alle eller nogle filer fra listen. Hvis du sletter en fil, som du har sendt, vil modtageren af filen stadig kunne se filen i eget dueslag.</p> <p>For at afsende et dokument til mere end een person, skal du bruge CTRL+klik i listboksen som viser medlemmerne.</p>Dueslaget er personligt og kun tilgængeligt for de personer, der står på kursussidens deltagerliste";
+$langHHome = "Hjælp til kursussiden";
+$langHomeContent = "Som standard indeholder en kursusside en række synlige værktøjer/funktioner såsom dokumenter, kursusbeskrivelse mv. Du kan aktivere eller deaktivere et værktøj ved at klikke på øjet til højre for værktøjet. Det er op til underviseren at vælge, hvilket værktøjer der skal anvendes og derfor være synlige. Det er en god ide at skjule de værktøjer, der alligevel ikke anvendes på kursussiden, da deres tilstedeværelse kan forvirre.</p><p><b>Navigation</b></p>For at afsøge mulighederne og værktøjerne på en kursusside er der to måder at navigere/bevæge sig rundt. Øverst til højre kan du klikke på små ikoner, der fører til værktøjets hovedside. Øverst til venstre ser du krummestien, som hele tiden fortæller dig, hvor du er på siden og på hvilket niveau. Du kan f.eks. altid finde tilbage til kursussidens forside ved at klikke på kursets navn i krummestien.</p> <p>Gode råd</p><p><b>Dynamisk forside</b></p><p>En dynamisk kursusside er motiverende for deltagerne. Dette indikerer, at siden anvendes, og at der faktisk sker noget på siden. Du kan understrege dette budskab ved at bruge billeder og evt. arbejde med tabeller, når du skriver en tekst, så du på den måde får en flot opsætning. For at skabe en dynamisk forside kan du f.eks. løbende ændre din introduktionstekst på kursussidens forside. Dette gør du ved at klikke på den guleblyant. Markere teksten der skal slettes og skrive en ny.</p><p> 
+
+
+
+
+ ";
 $langHOnline = "Live Hjælp Konference system";
 $langOnlineContent = "<br><span style=\\\"font-weight: bold;\\\">Introduction </span><br>  <br>  <div style=\\\"margin-left: 40px;\\\">Dokeos online conferencing system allows you to teach, inform or gather together up to 500 people in a simple and quick way.<br>  </div>  <ul>  <ul>  <li><b>live audio :</b> the trainer\'s voice is broadcasted live to participants,<br>  </li>  <li><b>slides :</b> the participants follow the Power Point or PDF presentation,<br>  </li>  <li><b>interaction :</b> the participants ask questions through a chat.</li>  </ul>  </ul>  <span style=\\\"font-weight: bold;\\\"></span><span style=\\\"font-weight: bold;\\\"><br> Student / participant</span><br>  <br>  <div style=\\\"margin-left: 40px;\\\">To attend a conference you need:<br>  </div>  <br>  <div style=\\\"margin-left: 40px;\\\">1. Loudspeakers (or headset) connected to your PC<br>  <br>  <a href=\\\"http://www.logitech.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 58px;\\\" alt=\\\"speakers\\\" src=\\\"../img/speaker.gif\\\"></a><br>  <br> 2. Winamp Media player<br>  <br>  <a href=\\\"http://www.winamp.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 27px;\\\" alt=\\\"Winamp\\\" src=\\\"../img/winamp.gif\\\"></a><br>  <br> Mac : use <a href=\\\"http://www.quicktime.com\\\">Quicktime</a><br> Linux : use <a href=\\\"http://www.xmms.org/\\\">XMMS</a> <br>  <br>   3. Acrobat PDF reader or Word or PowerPoint, depending on the format of the teacher\'s slides<br>  <br>  <a href=\\\"http://www.acrobat.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 31px;\\\" alt=\\\"acrobat reader\\\" src=\\\"../img/acroread.gif\\\"></a><br>  </div>  <br>  <span style=\\\"font-weight: bold;\\\"><br> Teacher / lecturer</span><br>  <br>  <div style=\\\"margin-left: 40px;\\\">To give a lecture, you need :<br>  </div>  <br>  <div style=\\\"margin-left: 40px;\\\">1. A microphone headset<br>  <br>  <a href=\\\"http://www.logitech.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 87px;\\\" alt=\\\"Headset\\\" src=\\\"../img/headset.gif\\\"></a><br> We advise you to use a <a href=\\\"http://www.logitech.com/\\\">Logitech</a> USB one for a better audio broadcasting quality.<br>  <br> 2. Winamp<br>  <br>  <a href=\\\"http://www.winamp.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 27px;\\\" alt=\\\"Winamp\\\" src=\\\"../img/winamp.gif\\\"></a><br>  <br> 3. SHOUTcast DSP Plug-In for Winamp 2.x <br>  <br>  <a href=\\\"http://www.shoutcast.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 24px;\\\" alt=\\\"Shoutcast\\\" src=\\\"../img/shoutcast.gif\\\"></a><br>  <br> Follow instructions on <a href=\\\"http://www.shoutcast.com\\\">www.shoutcast.com</a> on how to install and configure Shoutcast Winamp DSP Plug-In. <br>  </div>  <br>  <span style=\\\"font-weight: bold;\\\"><br> How to give a conference?<br>  <br>  </span>  <div style=\\\"margin-left: 40px;\\\">Create a Dokeos course > Enter it > Show then enter Conference tool > Edit (pencil icon on top left) the settings > upload your slides (PDF, PowerPoint or whatever) > type an introduction text > type the URL of your live streaming according to the information you got from your technical admin.<span style=\\\"font-weight: bold;\\\"></span><br>  <span style=\\\"font-weight: bold;\\\"></span></div>  <div style=\\\"margin-left: 40px;\\\"><img style=\\\"width: 256px; height: 182px;\\\" alt=\\\"conference config\\\" src=\\\"../img/conf_screen_conf.gif\\\"><br> Don\'t forget to give a clear meeting date, time and other guidelines to your participants beforehand. <br>  <br>  <span style=\\\"font-weight: bold;\\\">Tip</span> : 10 minutes before conference time, type a short message in the chat to inform participants that you are here and to help people who might have audio trouble. <br>  </div>  <br>  <br>  <span style=\\\"font-weight: bold;\\\">Streaming Server</span><br>  <br>  <div style=\\\"margin-left: 40px;\\\">To give an online live streaming conference, you need a streaming server and probably a technical admin to help you use it. This guy will give you the URL you need to type in the live streaming form field once you edit your conference settings.<br>  <br>  <small><a href=\\\"http://www.dokeos.com/hosting.php#streaming\\\"><img style=\\\"border: 0px solid ; width: 258px; height: 103px;\\\" alt=\\\"dokeos streaming\\\" src=\\\"../img/streaming.jpg\\\"><br> dokeos streaming</a></small><br>  <br> Do it yourself : install, configure and admin <a href=\\\"http://www.shoutcast.com\\\">Shoutcast</a> or <a href=\\\"http://developer.apple.com/darwin/projects/streaming/\\\">Apple Darwin</a>. <br>  <br> Or contact Dokeos. We can help you organise your conference, asssist your lecturer and rent you a low cost streaming slot on our servers : <a href=\\\"http://www.dokeos.com/hosting.php#streaming\\\">http://www.dokeos.com/hosting.php</a><br>  <br>  <br>";
 $langHClar = "Kom i gang";

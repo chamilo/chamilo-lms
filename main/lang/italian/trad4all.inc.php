@@ -24,6 +24,7 @@ $langCode = "Codice del Corso";
 $langUp = "Risali";
 $Down = "giù";
 $Up = "su";
+$Theme = "Aspetto";
 $TheListIsEmpty = "L\'elenco è vuoto.";
 $langCourseCreate = "Crea un corso";
 $langTodo = "Suggerimenti";
@@ -459,7 +460,8 @@ $UplGenericError = "Il file non è stato caricato correttamente. Riprova o contat
 $MyGradebook = "I miei esami";
 $Gradebook = "Esami";
 $OpenIDWhatIs = "Cos\'è OpenID?";
-$OpenIDDescription = "OpenID permette è un sistema di certificazione della password. Per ottenere l\'OpenID dovrai registrarti presso un sito che ti invierà un collegamento di riconoscimento. In tutti i siti che usano la tecnologia OpenID puoi usare la stessa \"password\" e sarai autenticato tramite OpenID. 
+$OpenIDDescription = "OpenID è un sistema di certificazione della password. Per ottenere l\'OpenID dovrai registrarti presso un sito che ti invierà un collegamento di riconoscimento. In tutti i siti che usano la tecnologia OpenID puoi usare la stessa \"password\" e sarai autenticato tramite OpenID. 
 
 <br /><br /><a href=\"http://openid.net/what/\">Approfondimento...</a>";
+$NoManager = "Nessun gestore";
 ?>

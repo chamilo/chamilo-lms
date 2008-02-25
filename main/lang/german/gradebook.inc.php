@@ -46,4 +46,5 @@ $Landscape = "Querformat";
 $FilterCategory = "Filter Kategorie";
 $DeleteAll = "Alles löschen";
 $ScoringUpdated = "Ergebnisse aktualisiert";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = " %s bestätigt, dass \\n\\n %s \\n\\nerfolgreich den Kurs \\n\\n \'%s\' \\n\\n mit der Note \\n\\n \'%s\' \\n abgeschlossen hat.";
 ?>

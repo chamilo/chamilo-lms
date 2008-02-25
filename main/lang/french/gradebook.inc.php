@@ -46,4 +46,5 @@ $Landscape = "Paysage";
 $FilterCategory = "Filtrer par catégorie";
 $DeleteAll = "Supprimer entièrement";
 $ScoringUpdated = "Cotations mises à jour";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s certifie que \\n\\n %s \\n\\na réussi le cours \\n\\n \'%s\' \\n\\navec la mention\\n\\n \'%s\'";
 ?>

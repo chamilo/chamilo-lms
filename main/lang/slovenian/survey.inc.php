@@ -172,7 +172,11 @@ $HaveAnswered = "je odgovorilo";
 $WereInvited = "je bilo povabljenih";
 $PagebreakNotFirst = "Prelm strani ne more biti na zaèetku";
 $PagebreakNotLast = "Prelom strani ne more biti na koncu";
+$SurveyNotAvailableAnymore = "Oprostite, ta vprašalnik ni veè na voljo. Hvala za poskus.";
 $DuplicateSurvey = "Podvoji evalvacijski vprašalnik";
 $EmptySurvey = "Poèisti evalvacijski vprašalnik";
 $SurveyEmptied = "Odgovori evalvacijskega vprašalnika so bili uspešno odstranjeni";
+$SurveyNotAvailableYet = "Ta vprašalnik še ni dostopen. Poskusite ponovno kasneje. Hvala.";
+$PeopleAnswered = "Osebe so odgovorile";
+$AnonymousSurveyCannotKnowWhoAnswered = "Ta vprašalnik je anonimen. Ne morete videti, kdo je odgovarjal.";
 ?>

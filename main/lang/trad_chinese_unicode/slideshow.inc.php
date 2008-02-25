@@ -12,10 +12,10 @@ $lang_set_slideshow_options = "幻燈設定";
 $lang_slideshow_options = "幻燈選項";
 $lang_no_resizing = "不可重新定義尺寸(預設)";
 $lang_exit_slideshow = "退出幻燈";
+$SlideShow = "幻燈片";
 $lang_previous_slide = "上一張";
 $lang_next_slide = "下一張";
 $lang_image = "圖像";
 $lang_of = "的";
 $lang_view_slideshow = "檢視幻燈";
-$langSlideShow = "幻燈";
 ?>

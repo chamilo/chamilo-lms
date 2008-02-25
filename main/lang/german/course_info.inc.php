@@ -99,5 +99,4 @@ $DescriptionRecycleCourse = "Mit diesem Werkzeug entfernt man ausgewählte Elemen
 $QuizEmailAlert = "E-Mail Benachrichtigung für neues Quiz geschickt";
 $QuizEmailAlertActivate = "E-Mail Versand aktivieren, wenn ein Benutzer Antworten auf ein neues Quiz einschickt";
 $QuizEmailAlertDeactivate = "E-Mail Benachrichtigung bei Antworten auf neues Quiz deaktivieren";
-$DropboxEmailAlertDeactivat = "Dropbox E-Mail Warnung deaktivieren";
 ?>

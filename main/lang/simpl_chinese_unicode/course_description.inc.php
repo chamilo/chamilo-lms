@@ -12,9 +12,4 @@ $langAdd  = "添加";
 $langValid  = "可用的";
 $langBackAndForget  = "返回和取消";
 $langOkSent = "你的页面已经上传。<p>现在链接<a href=\"../..//index.php\">首页</a>";
-$langQuestionPlan = "提示";
-$langContent = "内容";
-$langCourseDescriptionUpdated = "教学大纲已经更新";
-$langCourseDescriptionDeleted = "教学大纲已经删除";
-$langCourseDescriptionIntro = "为了创建教学大纲，请点击下面图标然后输入内容。点击确定后再输入另一个。";
 ?>

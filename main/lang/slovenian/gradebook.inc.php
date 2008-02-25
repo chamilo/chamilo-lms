@@ -46,4 +46,5 @@ $Landscape = "Ležeèe";
 $FilterCategory = "Filtriraj kategorijo";
 $DeleteAll = "Odstrani vse";
 $ScoringUpdated = "Rezultati so bili ažurirani";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s potrjuje, da je\\n\\n %s \\n\\nuspešno zakljuèil teèaj \\n\\n \'%s\' \\n\\nz oceno\\n\\n \'%s\'";
 ?>

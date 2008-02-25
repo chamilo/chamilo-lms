@@ -50,4 +50,7 @@ $langAdminPhone = "Administrators telefonnummer";
 $langInstituteURL = "Denne organisations URL";
 $langDokeosURL = "Dokeos URL";
 $langUserDB = "Bruger DB";
+$PleaseWait = "Vent venligst";
+$PleaseCheckTheseValues = "Venligst undersøg disse værdier";
+$PleasGoBackToStep1 = "Gå venligst tilbage til trin 1";
 ?>

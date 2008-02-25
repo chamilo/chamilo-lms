@@ -690,4 +690,8 @@ $InstallDirAccessibleSecurityThreat = "Namestitvena mapa main/install vašega Dok
 $GradebookActivation = "Aktivacija orodja redovalnice";
 $GradebookActivationComment = "Omogoèanje orodja redovalnice dodaja možnost povezovanja uènih ciljev z ocenami. V primeru, da redovalnice ne potrebujete in je orodje aktivirano, le to lahko vnaša nepotrebno kompleksnost in nepreglednost v uporabiški vmesnik.
 Želite aktivirati to orodje ?";
+$UserTheme = "Tema (predloga)";
+$UserThemeSelection = "Uporabnikova izbira teme";
+$UserThemeSelectionComment = "Dovoljuje uporabniku uporabo izbrane teme v njegovem profilu. Izbira teme menja izgled Dokeos platforme za posameznika, pri tem pa privzete teme portala ne spremeni. V primeru, da ima posamezen teèaj ali posamezna seja nastavljeno specifièno temo, ta tema prevlada nad uporabnikovo izbrano temo.";
+$AllowurlfopenIsSetToOff = "PHP nastavitev \"allow_url_fopen\" je nastavljena na \"off\". To onemogoèa registracijskemu mehanizmu pravilno delovanje. Nastavitev lahko spremenite v datoteki \"php.ini\" ali pa preko \"Virtual host configuration\" nastavitve Apache strežnika z uporabo mehanizma \"php_admin_value\".";
 ?>

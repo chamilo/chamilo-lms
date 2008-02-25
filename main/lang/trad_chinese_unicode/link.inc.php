@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$LinkMoved = "這連結已被移動";
 $langLinkName = "鏈接名稱";
 $langLinkAdd = "添加鏈接";
 $langLinkAdded = "鏈接已添加。";
@@ -22,6 +23,8 @@ $langAllCategoryDel = "刪除所有分類及其鏈接";
 $langGiveURL = "請輸入鏈接網址";
 $langGiveCategoryName = "請輸入分類名稱";
 $langNoCategory = "無分類";
+$showall = "開放所有分類";
+$shownone = "關閉所有分類";
 $langListDeleted = "清單已刪除";
 $langAddLink = "添加鏈接";
 $langDelList = "刪除鏈接";
@@ -46,8 +49,5 @@ $langAll_Link_Deleted = "鏈接已刪除";
 $langOnHomepage = "主頁中顯示";
 $langShowLinkOnHomepage = "在課程主頁將鏈接顯示為一個圖示";
 $langCsvImport = "匯入-CSV";
-$langLinkMoved = "鏈接已移動";
-$langVisibilityChanged = "鏈接的可見性已移除";
-$langshowall = "打開所有分類";
-$langshownone = "關閉所有分類";
+$Category = "分類";
 ?>

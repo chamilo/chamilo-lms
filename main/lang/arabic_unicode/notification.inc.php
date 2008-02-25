@@ -15,4 +15,6 @@ $lang_new_forum_topic = "تم إضافة موضوع جديد ";
 $lang_new_groupforum_topic = "تم إضافة موضوع جديد إلى المجموعة من ";
 $lang_new_dropbox_file = "تم استلام مستند جديد ";
 $lang_update_dropbox_file = "تم تحديث مستند في صندوق مشاركاتك ";
+$ForumCategoryAdded = "إضافة قائمة المنتدى";
+$LearnpathAdded = "إضافة مسار التعلم";
 ?>

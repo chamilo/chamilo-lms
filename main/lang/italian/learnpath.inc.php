@@ -184,5 +184,6 @@ $CorrectAnswers = "Risposte esatte";
 $StudentResponse = "Risposte del corsista";
 $LatencyTimeSpent = "Tempo impiegato";
 $Result = "Risultato";
-$langAreYouSureToDelete = "Sei sicura/o di eliminare?";
+$SplitStepsPerPage = "Un paragrafo per elemento";
+$SplitStepsPerChapter = "Un capitolo per elemento";
 ?>

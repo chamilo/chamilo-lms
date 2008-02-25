@@ -161,8 +161,4 @@ $UsersUnsubscribed = "Izbrani uporabnik je bil izpisan iz teèaja";
 $SystemUnableToSendEmailContact = "System ne more poslati e-pošte naslovniku";
 $OpenIDCouldNotBeFoundPleaseRegister = "Ta OpenID ne obstaja v naši podatkovni bazi. Prosimo, da se registrirajte za dodelitev novega uporabniškega raèuna. V primeru, da uporabniški raèun na tem portalu že imate, ustrezno spremenite vaš profil, tako da dodate ta OpenID.";
 $UsernameMaxXCharacters = "Uporabniško ime je lahko dolgo najveè %s znakov";
-$langMyCompetences = "Moje kompetence";
-$langMyDiplomas = "Moje diplome";
-$langMyPersonalOpenArea = "Osebna podroèja zanimanja";
-$langMyTeach = "Podroèja pouèevanja";
 ?>

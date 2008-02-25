@@ -24,6 +24,7 @@ $langCode = "Kurscode";
 $langUp = "nach oben";
 $Down = "nach unten";
 $Up = "nach oben";
+$Theme = "Theme";
 $TheListIsEmpty = "Die Liste ist leer.";
 $langCourseCreate = "Kurs erstellen";
 $langTodo = "Noch zu tun";
@@ -460,4 +461,5 @@ $MyGradebook = "Mein Gradebook";
 $Gradebook = "Gradebook";
 $OpenIDWhatIs = "Wie lautet die OpenID?";
 $OpenIDDescription = "Mit OpenID benötigt man nicht mehrere Benutzernamen auf verschiedenen Websites, ,was die Online Erfahrung vereinfacht. Sie wöhlen den OpenID Provider, der am besten Ihren Bedürfnissen entspricht, und dem Sie vor allem vertrauen. Andererseits behalten Sie Ihre OpenID unabhängig von dem Provider, den Sie benutzen. Am besten ist dabei, dass OpenID kein proprietäres Format ist sondern frei verfügbar ist. Für Firmen bedeutet das weniger Kosten für Benutzernamen und Passwort Verwaltung, gleichzeitig wird mehr WebTraffic angezogen. OpenID bringt weniger Frustration für die Benutzer, da Sie Ihre Logins selbst kontrollieren.<br /><br /><a href=\"http://openid.net/what/\">Lesen Sie mehr ...Read on...</a>";
+$NoManager = "Kein Manager";
 ?>

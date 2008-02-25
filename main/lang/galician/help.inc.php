@@ -526,7 +526,7 @@ $langChatContent = "<p>A Ferramenta Chat permíteche discutir ao vivo cos teus al
 <p><b>Relevancia pedagóxica</b></p>
 <p>Engadir un chat ao teu curso non ten por que ser unha boa idea. Porén, se participa do teu escenario didáctico, o chat pode axudar. Pódese, por exemplo, agochar o chat excepto en determinados momentos nos que se pode celebrar unha reunión cos alumnos para respostar ás súas preguntas ao vivo. Non é tal ferramenta \"libre\" se se usar así, mais estaslles dando aos teus alumnos a garantía de que se beneficiarán deste encontro ao vivo.</p>";
 $langHWork = "Axuda Traballos";
-$langWorkContent = "<p>A ferramenta de publicacións dos alumnos é moi simple. Permítelles enviar calquer documento ao curso.</p>
+$langWorkContent = "<p>A ferramenta Tarefas dos alumnos é moi simple. Permítelles enviar calquer documento ao curso.</p>
 <p>Dependendo do deseño do curso, podes facer que todos os ficheiros sexan visíbeis para todos os estudantes ou só visíbeis para ti. Facer que todos os ficheiros sexan visíbeis resulta útil cando, por exemplo, lles queres pedir que den a súa opinión sobre os traballos dos demáis ou que aprendan a publicar textos na Internet. Oculta os ficheiros se, por exemplo, lles fas a mesma pregunta a todos e queres evitar que se copien.</p>
 <p>Esta ferramenta conta cun <i>Texto introdutorio</i> que permite que escribas unha preguntas, directrices detalladas, un recordatorio dun prazo ou o que vexas que sexa interesante.</p>";
 $langHTracking = "Axuda Seguimento";

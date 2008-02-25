@@ -95,5 +95,4 @@ $CourseRegistrationPassword = "Kurso registracijos slaptažodis";
 $langDescriptionDeleteCourse = "Visiškai neatstatomai ištrina kursą ir jo dokumentus.<br><br>Elkitės atidžiai!";
 $langDescriptionCopyCourse = "Galimybė dublikuoti visą arba dalį kurso.";
 $DescriptionRecycleCourse = "Šis įrankis ištrina kurso dokumentus, forumo įrašus, nuorodas ir t.t. Patogu panaudoti pvz.: kartą į metus. Prieš tai išsaugokite atsarginę kurso dokumentų kopiją!";
-$DropboxEmailAlertDeactivat = "Deaktyvuoti e-mail perspėjimą naujo dokumento failų saugykloje pateikimo atveju";
 ?>

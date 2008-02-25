@@ -226,5 +226,10 @@ $OpenQuestionsAttemptedAre = "A pregunta aberta intentada é";
 $CourseName = "Nome do curso";
 $UploadJpgPicture = "Enviar unha imaxe JPG";
 $HotspotDescription = "Descrición da zona interactiva";
+$ExamSheetVCC = "Exercicio visto/corrixido/comentado polo profesor";
+$AttemptVCC = "Os seguintes intentos foron vistos/comentados/corrixidos polo profesor";
+$ClickLinkToViewComment = "Faga clic no enlace inferior para acceder á súa conta e ver corrixida a súa folla de exercicios";
 $Regards = "Cordialmente";
+$AttemptVCCLong = "O seu intento no exercicio %s foi visto/comentado/corrixido polo profesor. Faga clic no enlace inferior para acceder á súa conta e ver a súa folla de exercicios.";
+$DearStudentEmailIntroduction = "Estimado alumno,";
 ?>

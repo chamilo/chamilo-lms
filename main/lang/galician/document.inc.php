@@ -118,4 +118,8 @@ $File = "Ficheiro";
 $DocDeleteError = "Erro durante a eliminación do documento";
 $ViModProb = "Produciuse un problema durante a actualización da visibilidade";
 $DirDeleted = "Eliminouse o directorio";
+$TemplateName = "Nome da plantilla";
+$TemplateDescription = "Descrición da plantilla";
+$DocumentSetAsTemplate = "Documento convertido nunha nova plantilla ";
+$DocumentUnsetAsTemplate = "O documento deixou de ser unha plantilla";
 ?>

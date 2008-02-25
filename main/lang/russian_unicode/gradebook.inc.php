@@ -46,4 +46,6 @@ $Landscape = "Пейзаж";
 $FilterCategory = "Фильтрующий раздел";
 $DeleteAll = "Удалить все";
 $ScoringUpdated = "Результат обновлен";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "% аттестованных, что \\н\\н % \\н\\н успешно закончили курс \\н\\н \"%\" \\н\\н с результатом н\\н\\ \"%\" 
+";
 ?>

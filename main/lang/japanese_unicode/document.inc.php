@@ -20,5 +20,4 @@ $langDirCr = "ディレクトリ侯喇";
 $langDirMv = "ディレクトリを败瓢";
 $langComMod = "コメントを饯赖";
 $langViMod = "材粕を饯赖";
-$langCreateDir = "ディレクトリを侯る";
 ?>

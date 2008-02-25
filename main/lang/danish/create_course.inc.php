@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Underviser(e)";
 $langExplanation = "Når du klikker ok, vil der blive oprettet en kursusside indeholdende Diskussionforum, Kalender, Dokumenter osv. Som administrator af siden kan du til enhver tid redigere kursussiden efter behov og ønsker";
-$langEmpty = "Du har ikke udfyldt alle felter.<br>Brug<b>Tilbage</b> knappen på din browser og prøv igen.<br>Husk at anføre en kursuskode";
+$langEmpty = "Du har ikke udfyldt alle felter.<br>Brug<b> Tilbage</b> knappen på din browser og prøv igen.<br>Husk at anføre en kursuskode";
 $langCodeTaken = "Den anførte kursuskode bruges af en andet kursus.  <br>Brug <b>Tilbage</b> knappen på din browser og prøv igen";
 $langFormula = "Med venlig hilsen, underviseren";
 $langMessage = "Når du sletter testforum, så sletter du samtidig også alle meddelelser i testforum.";
@@ -93,7 +93,7 @@ $langCopy = "Kopier kursusindhold";
 $langRecycle = "Smid kurset væk";
 $AnnouncementExampleTitle = "Dette er et eksempel på en meddelelse";
 $Wikipedia = "Gratis online opslagsværk";
-$DefaultGroupCategory = "Standard grupper";
+$DefaultGroupCategory = "Standardgrupper";
 $DefaultCourseImages = "Galleri";
 $ExampleForumCategory = "Eksempel på forumkategori";
 $ExampleForum = "Eksempel på forum";

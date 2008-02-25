@@ -17,6 +17,4 @@ $langKwdRefs = "关键词参考";
 $langNonCourseKwds = "非课程关键词";
 $langKwdsUse = "课程关键字(粗体就是未被使用) ";
 $langTotalMDEs = "全部MD条目数量:";
-$langSorry = "请先选择一门课程";
-$langDenied = "只有课程管理员才能使用此功能";
 ?>

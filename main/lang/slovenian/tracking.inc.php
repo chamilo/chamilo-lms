@@ -213,4 +213,5 @@ $SessionCourses = "Seja teèajev";
 $NoUsersInCourseTracking = "Tu boste našli sledenje za uporabnike, vpisane v ta teèaj.";
 $AvgTimeSpentInTheCourse = "Povpreèje èasa porabljenega v teèaju";
 $RemindInactiveUser = "Opozori neaktivne uporabnike";
+$FirstLogin = "Prva povezava";
 ?>

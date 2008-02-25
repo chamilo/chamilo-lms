@@ -55,6 +55,4 @@ $langMainMD = "الرئيسية  MDE فتح ";
 $langOrElse = "حدد تصنيف روابط ";
 $langWarningDups = " تم حذف التصنيفات المتكررة من القائمة ";
 $langSLC = "Work with Links category named";
-$langSorry = "حدد مقرر أولا";
-$langDenied = "هذه الخاصية متاحة فقط لمدير المقرر ";
 ?>

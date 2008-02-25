@@ -173,7 +173,11 @@ $HaveAnswered = "haben geantwortet";
 $WereInvited = "wurden eingeladen";
 $PagebreakNotFirst = "Der Seitenumbruch kann nicht zuerst kommen";
 $PagebreakNotLast = "Der Seitenumbruch kann nicht zuletzt kommen";
+$SurveyNotAvailableAnymore = "Leider ist diese Umfrage nicht mehr verfügbar. Vielen Dank für die Bemühungen.";
 $DuplicateSurvey = "Duplikat Umfrage ";
 $EmptySurvey = "Leere Umfrage";
 $SurveyEmptied = "Antworten in Umfrage wurden erfolgreich gelöscht";
+$SurveyNotAvailableYet = "Diese Umfrage ist noch nicht verfügbar. Bitte versuchen Sie es später nochmals. Vielen Dank.";
+$PeopleAnswered = "Leute haben geantwortet";
+$AnonymousSurveyCannotKnowWhoAnswered = "Dies ist eine anonyme Umfrage. Man kann nicht sehen, wer geantwortet hat.";
 ?>

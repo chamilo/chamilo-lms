@@ -232,5 +232,4 @@ $ClickLinkToViewComment = "Klicke nachfolgenden Link, um zu Deinem Account zu ge
 $Regards = "Herzliche Grüße";
 $AttemptVCCLong = "Dein Versuch an Test %s wurde vom Lehrer angesehen, kommentiert/korrigiert. Klick den nachfolgenden Link, um zu Deinem Account zu gelangen und Dein Examensblatt anzusehen.";
 $DearStudentEmailIntroduction = "Sehr geehrte(r) Student(in),";
-$langView = "Ansicht";
 ?>

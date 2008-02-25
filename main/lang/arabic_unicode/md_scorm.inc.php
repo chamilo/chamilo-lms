@@ -34,6 +34,4 @@ $langMffNotOk = "Manifest file replace has failed";
 $langMffOk = "Manifest file has been replaced";
 $langMffFileNotFound = "New manifest file could not be opened (e.g. empty, too big)";
 $langUploadMff = "Replace manifest file";
-$langSorry = "اختر مقرر أولا ";
-$langDenied = "هذه الخاصية متاحة فقط لمدير المقرر ";
 ?>

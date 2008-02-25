@@ -82,10 +82,4 @@ $EditBlog = "تعديل العنوان والعنوان الفرعي ";
 $DeleteBlog = "حذف هذه المدونة ";
 $NoTasks = "لا مهام ";
 $Shared = "مشترك ";
-$Search = "بحث";
-$Lastname = "اللقب";
-$Firstname = "الإسم ";
-$Email = "البريد الإلكتروني";
-$SearchResults = "نتائج البحث ";
-$Comments = "تعليقات ";
 ?>

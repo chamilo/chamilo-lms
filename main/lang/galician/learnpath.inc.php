@@ -182,8 +182,12 @@ $WelcomeWoogieConverter = "Benvido ó conversor Woogie<ul type=\\\"1\\\"><li>Esco
 $WoogieError = "Ocurriu un erro durante a conversión do documento. Por favor, comprove se hai caracteres especiais no nome do seu documento.";
 $WordConvert = "Conversión Word";
 $Order = "Orde";
+$InteractionID = "ID de Interacción";
 $TimeFinished = "Tempo (finalizado en...)";
+$CorrectAnswers = "Respostas correctas";
 $StudentResponse = "Respostas do alumno";
 $LatencyTimeSpent = "Tempo empregado";
 $Result = "Resultado";
+$SplitStepsPerPage = "Un paso por páxina";
+$SplitStepsPerChapter = "Un capítulo por paso";
 ?>

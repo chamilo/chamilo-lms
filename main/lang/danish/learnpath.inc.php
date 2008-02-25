@@ -182,4 +182,6 @@ $CorrectAnswers = "Rigtige svar";
 $StudentResponse = "Deltagerens svar";
 $LatencyTimeSpent = "Tidsforbrug";
 $Result = "Resultat";
+$SplitStepsPerPage = "En side et trin";
+$SplitStepsPerChapter = "Et kapitel et trin";
 ?>

@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $ForumDeleted = "Forum deleted";
 $ForumCategoryDeleted = "Forum category deleted";
-$ForumBlocked = "Forum blocked";
+$ForumLocked = "Forum blocked";
 $Forum = "Forumas";
 $AddForumCategory = "Sukurti naują forumo kategoriją";
 $AddForum = "Sukurti naują forumą";

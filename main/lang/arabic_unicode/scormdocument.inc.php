@@ -62,7 +62,4 @@ $langOrganiseDocuments = "ترتيب المستندات ";
 $langUncompress = "فك الضغظ ";
 $ExportShort = "تصدير إلى سكورم ";
 $progress = "الإجراء";
-$langDocuments = "المستندات ";
-$langCreateDir = "إنشاء مجلد";
-$Description = "نبذة ";
 ?>

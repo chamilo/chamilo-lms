@@ -17,6 +17,7 @@ $langDescriptionTip = "beskrivelse eller kommentar og sprog brugt til beskrivels
 $langKeyword = "Nøgleord";
 $langKeywordTip = "del ved kommaer (bogstaver, tal, -.)";
 $langCoverage = "Kategori";
+$langCoverageTip = "categoryname, cfr. Links ";
 $langKwNote = "Hvis du ændrer sporgbeskrivelsen, så tilføj ikke nøglord samtidig med.";
 $langClickKw = "Klik på et nøgleord i mappestrukturen for at vælge eller fravælge nøgleordet";
 $langKwHelp = "<br/> Klik på \'+\' knappen for at åbne, klik på \'-\' knappen for at lukke, klik 2 gange på \'++\' knappen for at åbne alt, klik 2 gange på \'--\' knappen for at lukke alt.<br/> <br/> Fravælg alle valgte nøgleord ved at lukke \"træet\" og åbn det igen ved at klikke på \'+\' knappen.<br/> Alt-klik \'+\' søger på originale nøgleord i \"træet\".<br/> <br/> Alt-klik nøgleord vælger et nøgleord uden yderligere begreber eller fravælg et nøgleord uden yderlgere begreber.<br/> <br/> Hvis du ændrer sprogbeskrivelsen, så tilføj ikke nøgleord på samme tid.<br/> <br/> ";

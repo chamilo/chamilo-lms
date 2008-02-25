@@ -10,5 +10,4 @@ $langMenu  = "メニュ";
 $langCourseDoesntExist = "焚桂¨このコ〖スは赂哼しません。";
 $langHelpMaj = "へルプ";
 $langAdmin = "瓷妄荚";
-$langCourseCreate = "コ〖ス侯喇";
 ?>

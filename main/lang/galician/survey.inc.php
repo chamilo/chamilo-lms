@@ -169,4 +169,13 @@ $UnknowUser = "Usuario descoñecido";
 $MoveDown = "Baixar";
 $MoveUp = "Subir";
 $HaveAnswered = "Contestou";
+$WereInvited = "foron invitados";
+$PagebreakNotFirst = "O separador de páxina non pode estar ao comezo";
+$PagebreakNotLast = "O separador de páxina non pode estar ao final";
+$DuplicateSurvey = " 	
+Duplicar a enquisa";
+$EmptySurvey = " 	
+Baleirar a enquisa";
+$SurveyEmptied = " 	
+As respostas á enquisa foron eliminadas";
 ?>

@@ -41,8 +41,7 @@ $langNoDestinationCoursesAvailable = "沒有目標課程可用";
 $langBackup = "備份";
 $langImportBackupInfo = "匯入備份，你可以從本地磁片上傳備份檔案或使用伺服器上可用的備份檔案。";
 $langCreateBackupInfo = "創建此課程的備份，你可以選擇放在備份檔案中課程內容。";
-$langToolIntro = "工具介紹";
-$langUploadError = "上傳失敗，請檢查檔案容量限制和檔案夾權限。";
-$langstudent_publication = "學生作業";
-$langRecycleOption = "清空選項";
+$ToolIntro = "工具簡介";
+$UploadError = "上傳失敗，請檢查上傳檔案大小上限及資料夾權限。";
+$DocumentsWillBeAddedToo = "文件會同時被加入";
 ?>

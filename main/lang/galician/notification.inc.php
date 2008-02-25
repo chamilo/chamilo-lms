@@ -16,4 +16,5 @@ $lang_new_groupforum_topic = "novo tema engadido ó foro do grupo";
 $lang_new_dropbox_file = "recibiuse un novo ficheiro";
 $lang_update_dropbox_file = "Actualizouse un ficheiro do teu buzón de tarefas";
 $ForumCategoryAdded = "Engadiuse unha categoría ao foro";
+$LearnpathAdded = "Itinerario de aprendizaxe engadido";
 ?>

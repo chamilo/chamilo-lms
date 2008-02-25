@@ -184,5 +184,4 @@ $CorrectAnswers = "Correct answers";
 $StudentResponse = "Student responses";
 $LatencyTimeSpent = "Time spent";
 $Result = "Result";
-$langAreYouSureToDelete = "Ar tikrai norite ištrinti?";
 ?>

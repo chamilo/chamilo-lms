@@ -397,7 +397,7 @@ Déle un título y opcionalmente una descripción.
   <li>Mensajes individuales de los foros
   <li>Enlaces              
   <li>Ejercicios tipo test (no olvide hacerlos visibles con la utilidad de ejercicios)
-  <li>Publicaciones de los estudiantes
+  <li>Trabajos
   <li>Baúl de tareas (para compartir ficheros, ...)
   <li>Enlaces externos a Dokeos 
 </li>

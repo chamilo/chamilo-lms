@@ -118,4 +118,8 @@ $File = "Fil";
 $DocDeleteError = "Fejl opstod under sletning af dokument. Prøv igen.";
 $ViModProb = "Der opstod et problem, idet indstillingen for synlighed blev ændret. Prøv igen.";
 $DirDeleted = "Mappen er slettet";
+$TemplateName = "Navn på skabelon";
+$TemplateDescription = "Skabelonbeskrivelse";
+$DocumentSetAsTemplate = "Dokument der er valgt som ny skabelon";
+$DocumentUnsetAsTemplate = "Dokument fravalgt som skabelon";
 ?>

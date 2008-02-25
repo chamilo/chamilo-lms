@@ -34,6 +34,4 @@ $langMffNotOk = "替換 manifest 檔案失敗";
 $langMffOk = "已替換 manifest 檔案";
 $langMffFileNotFound = "新的 manifest 檔案無法開啟（可能是空或太大）";
 $langUploadMff = "替換 manifest 檔案";
-$langSorry = "先選擇一門課程";
-$langDenied = "只有課程管理員才能使用此功能";
 ?>

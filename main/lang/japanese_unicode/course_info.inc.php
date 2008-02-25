@@ -32,5 +32,4 @@ $langByDel = "このコ〖スのウエブサイトを猴近すると、そこに
 $langY = "はい";
 $langN = "いいえ";
 $langBackH = "コ〖スのホ〖ムペ〖ジ";
-$langCode = "コ〖ス戎规";
 ?>

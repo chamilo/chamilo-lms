@@ -49,4 +49,5 @@ $AnnouncementMoved = "Объявление перемещено";
 $NoAnnouncements = "Объявления отсутствуют";
 $SelectEverybody = "Выбрать всех";
 $SelectedUsersGroups = "выбранные группы пользователей";
+$LearnerMessage = "Сообщение от учащегося";
 ?>

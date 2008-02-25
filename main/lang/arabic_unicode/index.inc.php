@@ -60,7 +60,10 @@ $langRequestDenied = "لقد تم حظر  المكالمة ";
 $UsageDatacreated = "Usage data created";
 $SessionView = "عرض المقررات مرتبة حسب الجلسات ";
 $CourseView = "عرض قائمة بجميع المقررات ";
-$email = "البريد الإلكتروني";
-$UsersOnLine = "الأعضاء المتصلون";
-$langCourseCreate = "أضف مقرر";
+$DropboxFileAdded = "ملف Dropbox مضاف ";
+$NewMessageInForum = "نشر رسالة جديدة في المنتدى";
+$FolderCreated = "تم إنشاء مجلد جديد";
+$LinkAdded = "تمت إضافة رابط جديد";
+$AnnouncementAdded = "تمت إضافة إعلان";
+$AgendaAdded = "إضافة موضوع الأجندة";
 ?>

@@ -1,6 +1,9 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$ForumDeleted = "حذف المنتدى";
+$ForumCategoryDeleted = "فئة المنتدى محذوفه";
+$ForumLocked = "حظر المنتدى";
 $Forum = "المنتدى ";
 $AddForumCategory = "أضف تصنيف منتدى جديد ";
 $AddForum = "أضف منتدى جديد ";
@@ -77,6 +80,8 @@ $PostVisibilityChanged = "تم تغيير خاصية ظهور المشاركة "
 $PostDeleted = "تم حذف المشاركة ";
 $MakeInvisible = "اجعلها غير مرئية ";
 $ThreadCanBeFoundHere = "يمكن إيجاد الموضوع هنا ";
-$ThisFieldIsRequired = "هذا الحقل مطلوب ";
-$VisibilityChanged = "تم تغيير خاصة الظهور ";
+$MakeVisible = "جعله مرئي";
+$DeleteCompleteThread = "حذف الموضوع بشكل كامل؟";
+$PostDeletedSpecial = "الرسالة الخاصة محذوفة";
+$ThreadDeleted = "الموضوع محذوف";
 ?>

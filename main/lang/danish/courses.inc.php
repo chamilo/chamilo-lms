@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $lang_already_enrolled                      = "allerede tilmeldt";
-$lang_my_personnal_course_list              = "Min personlige kursusliste";
+$lang_my_personnal_course_list              = "Min personlige kursusoversigt";
 $lang_course_enrollment                     = "Tilmeldte kurser";
 $lang_course_not_available                  = "Kurset er ikke tilgængeligt eller findes ikke";
 $lang_enroll                                = "Tilmeld";
@@ -18,7 +18,7 @@ $lang_select_course_in_search_results       = "Vælg kursus blandt søgeresultater
 $lang_unsubscribe                           = "Afmeld";
 $lang_back_to_my_home_page                  = "Tilbage til min kursusoversigt";
 $lang_back_to_my_personnal_course_list      = "Tilbage til min kursusoversigt";
-$langTitular  = "Titular";
+$langTitular  = "Koordinator";
 $langBackToListOfThisUser  = "Tilbage til kursusoversigten";
 $langAdministrationTools  = "Administrationsværktøjer";
 $lang_back_to_parent_category               = "Tilbage til ovenstående kategori";
@@ -29,6 +29,7 @@ $langCourseList  = "Kurser";
 $Subscribe = "Tilmeld";
 $AlreadySubscribed = "Allerede tilmeldt";
 $CourseCategoryStored = "Kursuskategori er oprettet";
+$langWithoutTimeLimits = "Uden tidsbegrænsninger";
 $lang_back_to_main_category_list = "Tilbage til kategorier";
 $langAdded = "Tilføjet";
 $langDeleted = "Slettet";
@@ -42,7 +43,7 @@ $langManage = "Systemansvarlig";
 $langEnrollToCourseSuccessful = "Du er tilmeldt dette kursus";
 $langSubCat = "underkategorier";
 $langUnsubscribeNotAllowed = "Afmelding ikke tilladt for dette kursus.";
-$langCourseAdminUnsubscribeNotAllowed  = "Du er kursus administrator for dette kursus.";
+$langCourseAdminUnsubscribeNotAllowed  = "Du er kursusadministrator på kursussiden.";
 $CourseManagement = "Kursushåndtering";
 $SortMyCourses = "Sorter mine kurser";
 $SubscribeToCourse = "Tilmeld kurser";

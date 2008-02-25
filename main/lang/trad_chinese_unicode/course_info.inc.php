@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$ModifInfo = "課程設定";
 $langModifDone = "課程訊息已更新";
 $langDelCourse = "刪除課程";
 $langProfessors = "教師";
@@ -13,7 +14,8 @@ $langPrivate = "內部訪問-僅對課程用戶開放 (檢視 <a href=\"../user/
 $langForbidden = "禁止";
 $langConfTip = "預設訪問策略設定為開放，您可自定義訪問限制策略。";
 $langOpenToTheWorld = "開放－允許任何人訪問";
-$langOpenToThePlatform = "開放－允許註冊用戶訪問";
+$OpenToThePlatform = "開放 - 允許已於本平台註冊人士進入";
+$langOpenToThePlatform = "開放 - 允許已於本平台註冊人士進入 ";
 $langTipLang  = "將此語言設為課程的預設語言。";
 $langVid = "視頻";
 $langWork = "作業論文";
@@ -74,24 +76,25 @@ $langOtherCategory = "其他課程分類";
 $langAllowedToUnsubscribe = "允許";
 $langNotAllowedToUnsubscribe = "拒絕";
 $langCourseVisibilityClosed = "關閉－僅允許管理員和助教訪問這門課程";
+$CourseVisibilityClosed = "關閉－僅允許管理員和助教進入這門課程 ";
+$CourseVisibilityModified = "修訂(使用角色 - 權限系統進行詳細設定)";
+$WorkEmailAlert = "提交工作時發出電郵通知";
+$WorkEmailAlertActivate = "啟動提交工作時電郵通知服務";
+$WorkEmailAlertDeactivate = "取消提交工作時電郵通知服務 ";
+$DropboxEmailAlert = "於上傳檔案至投遞箱時發出電郵通知 ";
+$DropboxEmailAlertActivate = "啟動上傳檔案至投遞箱時發出電郵通知服務 ";
+$DropboxEmailAlertDeactivate = "取消上傳檔案至投遞箱時發出電郵通知服務";
+$AllowUserEditAgenda = "允許所有使用者編輯課程日程";
+$AllowUserEditAgendaActivate = "向使用者啟動課程日程編輯器";
+$AllowUserEditAgendaDeactivate = "取消使用者課程日程編輯器";
+$AllowUserEditAnnouncement = "允許使用者編輯課程公告";
+$AllowUserEditAnnouncementActivate = "允許使用者編輯";
+$AllowUserEditAnnouncementDeactivate = "取消使用者編輯";
+$CourseRegistrationPassword = "課程註冊密碼";
 $langDescriptionDeleteCourse = "點擊鏈接後將會提示永久刪除該課程。<br><br>請謹慎使用該功能﹗";
 $langDescriptionCopyCourse = "系統允許您將課程整個或部分的複製到另一個空的課程，<br><br>複製的前提是必需有一門課程包含內容，同時另一門課程是空的﹗";
-$langModifInfo = "課程設定";
-$langCode = "課程代碼";
-$langCourseVisibilityModified = "修改（角色-權限系統有更多詳細設定）";
-$langWorkEmailAlert = "作業上傳提醒";
-$langWorkEmailAlertActivate = "郵件提醒";
-$langWorkEmailAlertDeactivate = "不提醒";
-$langDropboxEmailAlert = "投遞檔案提醒";
-$langDropboxEmailAlertActivate = "郵件提醒";
-$langDropboxEmailAlertDeactivate = "不提醒";
-$langAllowUserEditAgenda = "允許修改日程";
-$langAllowUserEditAgendaActivate = "允許";
-$langAllowUserEditAgendaDeactivate = "拒絕";
-$langAllowUserEditAnnouncement = "允許修改通知";
-$langAllowUserEditAnnouncementActivate = "允許";
-$langAllowUserEditAnnouncementDeactivate = "拒絕";
-$langOrInTime = "或在";
-$langCourseRegistrationPassword = "課程註冊密碼";
-$langDescriptionRecycleCourse = "該工具將會清空課程的全部或選擇的部分內容，請在操作前注意備份您的課程﹗";
+$DescriptionRecycleCourse = "本工具將清空所有課程中所有或已選取的項目，包括文件、討論區及連結，通常於課程、學期結束或有需要重整時進行。我們建議你在執行動作前先把整個課程備份！";
+$QuizEmailAlert = "提交新測驗時發出電郵通知";
+$QuizEmailAlertActivate = "當使用者提供新測驗答案時啟動郵件通知服務";
+$QuizEmailAlertDeactivate = "取消提供新測驗答案時郵件通知服務";
 ?>

@@ -99,4 +99,7 @@ $CourseRegistrationPassword = "Contrasinal de rexistro no curso";
 $langDescriptionDeleteCourse = "Clique nesta ligazón para eliminar calquer resto do curso no servidor.<br><br>Esta funcionalidade haina que usar co máximo de precaución!";
 $langDescriptionCopyCourse = "Dokeos introduce a posibilidade de duplicar todo ou parte dun curso xa existente noutro curso, que pode comezar baleiro.<br><br>A única condición previa para esta xestión consiste en ter un curso que conteña documentos, avisos, foros,... e un segundo curso que non conteña os elementos do primeiro!";
 $DescriptionRecycleCourse = "Esta ferramenta baleira o curso dos elementos seleccionados ou todos os elementos que contén. Elimina os documentos, foros, vínculos... Este procedemento pódese levar a cabo ao rematar unha formación ou un ano académico. Por suposto, antes de \"reciclar\", terá que asegurarse de ter gardado completamente o seu curso!";
+$QuizEmailAlert = "Avisar mediante un correo electrónico cando se envíe un novo exercicio";
+$QuizEmailAlertActivate = "Activar o aviso por correo electrónico de que se enviaron as respostas dun exercicio";
+$QuizEmailAlertDeactivate = "Desactivar o aviso por correo electrónico de que se enviaron as respostas dun exercicio";
 ?>

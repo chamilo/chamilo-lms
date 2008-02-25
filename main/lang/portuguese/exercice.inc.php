@@ -230,4 +230,5 @@ $AttemptVCC = "As seguintes tentativas foram vistas/comentadas/corrigidas pelo p
 $ClickLinkToViewComment = "Clique no link seguinte para aceder à sua conta e ver a correcção do seu teste.";
 $Regards = "Cumprimentos";
 $AttemptVCCLong = "A sua tentativa no exercício %s foi vista/comentada/corregida pelo professor. Clique no link em baixo para aceder à sua conta e ver a sua folha de exercícios.";
+$DearStudentEmailIntroduction = "Caro(a) Estudante,";
 ?>

@@ -172,7 +172,11 @@ $HaveAnswered = "have answered";
 $WereInvited = "were invited";
 $PagebreakNotFirst = "The page break cannot be the first";
 $PagebreakNotLast = "The page break cannot be the last one";
+$SurveyNotAvailableAnymore = "Sorry, this survey is not available anymore. Thank you for trying.";
 $DuplicateSurvey = "Duplicate survey";
 $EmptySurvey = "Empty survey";
 $SurveyEmptied = "Answers to survey successfully deleted";
+$SurveyNotAvailableYet = "This survey is not yet available. Please try again later. Thank you.";
+$PeopleAnswered = "people answered";
+$AnonymousSurveyCannotKnowWhoAnswered = "This survey is anonymous. You can\'t see who answered.";
 ?>

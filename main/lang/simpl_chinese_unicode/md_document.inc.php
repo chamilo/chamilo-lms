@@ -49,5 +49,4 @@ $langCosts = ":否:免费,, 是:要收费";
 $langCopyrights = ":是:有版权,, 否:无版权";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
 $langLngResTypes = ":练习:练习,, 模拟:模拟,, 问卷:问卷,, 图表:图表,, 图:图,, 图:图,, 索引:索引,, 幻灯:幻灯,, 表:表,, 描述文本:描述文本,, 考试:考试,, 实验:实验,, 问题声明:问题声明,, 自我评价:自我评价,, 演讲:演讲";
-$langSorry = "首先选择一门课程";
 ?>

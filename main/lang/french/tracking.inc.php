@@ -213,4 +213,5 @@ $SessionCourses = "Session de cours";
 $NoUsersInCourseTracking = "Ici vous trouverez le suivi de tous les apprenants inscrits à votre cours.";
 $AvgTimeSpentInTheCourse = "Temps moyen passé dans le cours";
 $RemindInactiveUser = "Relancer l\'utilisateur inactif";
+$FirstLogin = "First connexion";
 ?>

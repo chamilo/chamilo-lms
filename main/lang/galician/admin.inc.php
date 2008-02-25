@@ -363,7 +363,7 @@ $CheckToSendNewPassword = "Marcar para enviar unha nova contrasinal";
 $AutoGeneratePassword = "autoxerar unha contrasinal nova";
 $UseDocumentTitleTitle = "Usar un título para o nome do documento";
 $UseDocumentTitleComment = "Isto permitirá o uso dun título para o documento no lugar do nome_documento.extensión";
-$StudentPublications = "Publicacións dos alumnos";
+$StudentPublications = "Tarefas";
 $PermanentlyRemoveFilesTitle = "Os ficheiros eliminados non poden ser recuperados";
 $PermanentlyRemoveFilesComment = "Borrar un ficheiro na ferramenta documentos elimínao de forma definitiva. O ficheiro non pode recuperarse.";
 $ClassName = "Nome da clase";
@@ -656,6 +656,8 @@ $ShowTabsTitle = "Pestanas na cabeceira";
 $ShowTabsComment = "Seleccione as etiquetas que desexa na cabeceira. As etiquetas non seleccionadas aparecerán no menú do lado dereito da páxina principal do campus e na páxina dos cursos, no caso de ser necesario que aparezan.";
 $DefaultForumViewTitle = "Vista do foro por defecto";
 $DefaultForumViewComment = "Cal debería ser a opción por defecto cando se crea un foro.  Calquera administrador de curso pode, sen embargo, escoller unha vista diferente para cada foro de xeito individual. ";
+$TabsMyCourses = " 	
+Pestaña Os meus cursos";
 $NoCoursesForThisSession = "Esta sesión non ten cursos";
 $NoUsersForThisSession = "Esta sesión non ten usuarios";
 $LastNameMandatory = "O apelido non pode estar valeiro";
@@ -665,4 +667,7 @@ $ExtendedProfileRegistrationTitle = "Campos do perfil estendido do rexistro.";
 $ExtendedProfileRegistrationComment = "Que campos do perfil estendido deben estar dispoñibles no proceso de rexistro dun usuario? Isto require que o perfil estendido estea activado (ver máis arriba).";
 $ExtendedProfileRegistrationRequiredTitle = "Campos requeridos no perfil estendido do rexistro.";
 $ExtendedProfileRegistrationRequiredComment = "Que campos do perfil estendido son obrigatorios no proceso de rexistro dun usuario? Isto require que o perfil estendido estea activado e que o campo tamén estea dispoñible no formulario de rexistro (véxase máis arriba).";
+$Flat = "Plana";
+$Threaded = "Arborescente";
+$Nested = "Anidada";
 ?>

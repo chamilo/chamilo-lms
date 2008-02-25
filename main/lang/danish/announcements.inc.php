@@ -49,4 +49,5 @@ $AnnouncementMoved = "Meddelelsen er flyttet";
 $NoAnnouncements = "Der er ingen meddelelser";
 $SelectEverybody = "Vælg alle";
 $SelectedUsersGroups = "valgte grupper";
+$LearnerMessage = "Besked fra student";
 ?>

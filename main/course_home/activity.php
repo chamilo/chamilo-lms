@@ -89,13 +89,19 @@ function show_tools_category($course_tool_category)
 				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE category = 'admin' ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
+		
 
 	}
 
 	while ($temp_row = Database::fetch_array($result))
 	{
 		$all_tools_list[]=$temp_row;
-
+	}
+	
+	if(api_is_course_coach())
+	{
+		$result = api_sql_query("SELECT * FROM $course_tool_table WHERE name='tracking'",__FILE__,__LINE__);
+		$all_tools_list[]=Database :: fetch_array($result);
 	}
 
 	$i=0;

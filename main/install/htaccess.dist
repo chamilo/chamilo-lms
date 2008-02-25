@@ -13,7 +13,7 @@ RewriteBase {DOKEOS_URL_APPEND_PATH}/courses/
 
 #do not rewrite on the main dir
 #change this path to the path of your main folder
-RewriteCond %{REQUEST_URI} !^'.$urlAppendPath.'/main/
+RewriteCond %{REQUEST_URI} !^'.{DOKEOS_URL_APPEND_PATH}.'/main/
 
 #replace nasty ampersands by 3 slashes, we change these back in download.php
 RewriteRule ([^/]+)/document/(.*)&(.*)$ $1/document/$2///$3 [N]

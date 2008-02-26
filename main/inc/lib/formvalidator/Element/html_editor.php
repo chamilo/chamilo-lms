@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 13148 2007-09-20 18:38:01Z yannoo $
+// $Id: html_editor.php 14373 2008-02-26 00:48:45Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -49,7 +49,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		
 		
 		@ $editor_lang = Database :: get_language_isocode($language_interface);
-		$language_file = api_get_path(REL_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
+		$language_file = api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
 		if (empty ($editor_lang) || !file_exists($language_file))
 		{
 			//if there was no valid iso-code, use the english one

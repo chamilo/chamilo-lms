@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 14293 2008-02-14 14:09:51Z elixir_inter $
+<?php // $Id: courses.php 14406 2008-02-27 21:53:15Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -50,6 +50,9 @@ api_block_anonymous_users();
 include_once(api_get_path(LIBRARY_PATH) . 'debug.lib.inc.php');
 include_once(api_get_path(LIBRARY_PATH) . 'course.lib.php');
 
+$ctok = $_SESSION['sec_token'];
+$stok = Security::get_token();
+
 // Database table definitions
 $tbl_course             = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_courses_nodes      = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -85,9 +88,6 @@ $interbreadcrumb[] = array('name'=> get_lang('CourseManagement'), 'url'=>'course
 // Displaying the header
 Display::display_header($nameTools);
 
-// Diplaying the tool title
-// api_display_tool_title($nameTools);
-
 /*
 ==============================================================================
 		COMMANDS SECTION
@@ -99,51 +99,69 @@ if (isset($_GET['move']))
 {
 	if (isset($_GET['course']))
 	{
-		$message=move_course($_GET['move'], $_GET['course'],$_GET['category']);
+		if($ctok == $_GET['sec_token'])
+		{
+			$message=move_course($_GET['move'], $_GET['course'],$_GET['category']);
+		}
 	}
 	if (isset($_GET['category']) and !$_GET['course'])
 	{
-		$message=move_category($_GET['move'], $_GET['category']);
+		if($ctok == $_GET['sec_token'])
+		{
+			$message=move_category($_GET['move'], $_GET['category']);
+		}			
 	}
 }
 
 // we are moving the course of the user to a different user defined course category (=Sort My Courses)
 if (isset($_POST['submit_change_course_category']))
 {
-	$message=store_changecoursecategory($_POST['course_2_edit_category'], $_POST['course_categories']);
+	if($ctok == $_POST['sec_token'])
+	{
+		$message=store_changecoursecategory($_POST['course_2_edit_category'], $_POST['course_categories']);
+	}
 }
 // we are creating a new user defined course category (= Create Course Category)
 if (isset($_POST['create_course_category']) AND isset($_POST['title_course_category']) AND strlen(trim($_POST['title_course_category'])) > 0)
 {
-	$message=store_course_category();
+	if($ctok == $_POST['sec_token'])
+	{
+		$message=store_course_category();
+	}
 }
 
 if (isset($_POST['submit_edit_course_category']) AND isset($_POST['title_course_category']) AND strlen(trim($_POST['title_course_category'])) > 0)
 {
-	$message=store_edit_course_category();
+	if($ctok == $_POST['sec_token'])
+	{
+		$message=store_edit_course_category();
+	}
 }
 
 // we are subcribing to a course (=Subscribe to course)
 if (isset($_POST['subscribe']))
 {
-	$message = subscribe_user($_POST['subscribe']);
+	if($ctok == $_POST['sec_token'])
+	{
+		$message = subscribe_user($_POST['subscribe']);
+	}
 }
 
 // we are unsubscribing from a course (=Unsubscribe from course)
 if (isset($_POST['unsubscribe']))
 {
-	$message=remove_user_from_course($_user['user_id'], $_POST['unsubscribe']);
+	if($ctok == $_POST['sec_token'])
+	{
+		$message=remove_user_from_course($_user['user_id'], $_POST['unsubscribe']);
+	}
 }
 // we are deleting a course category
 if ($safe['action']=='deletecoursecategory' AND isset($_GET['id']))
 {
-	$message=delete_course_category($_GET['id']);
-}
-
-// we are displaying any result messages;
-if (isset($message))
-{
-	Display::display_confirmation_message($message, false);
+	if($ctok == $_GET['sec_token'])
+	{
+		$message=delete_course_category($_GET['id']);
+	}
 }
 
 /*
@@ -151,6 +169,15 @@ if (isset($message))
 					DISPLAY SECTION
 ==============================================================================
 */
+// Diplaying the tool title
+// api_display_tool_title($nameTools);
+
+// we are displaying any result messages;
+if (isset($message))
+{
+	Display::display_confirmation_message($message, false);
+}
+
 // The menu with the different options in the course management
 echo "<div id=\"actions\">\n";
 if ($safe['action'] <> 'sortmycourses' AND isset($safe['action']))
@@ -221,7 +248,7 @@ Display :: display_footer();
  */
 function subscribe_user($course_code)
 {
-	global $_user;
+	global $_user, $stok;
 
 	$all_course_information =  CourseManager::get_course_information($course_code);
 
@@ -247,6 +274,7 @@ function subscribe_user($course_code)
 		$return.=$all_course_information['visual_code'].' - '.$all_course_information['title'];
 
 		$return.="<form action=\"".$_SERVER["REQUEST_URI"]."\" method=\"post\">";
+		$return.='<input type="hidden" name="sec_token" value="'.$stok.'" />';
 		$return.="<input type=\"hidden\" name=\"subscribe\" value=\"".$all_course_information['code']."\" />";
 		$return.="<input type=\"text\" name=\"course_registration_code\" value=\"".$_POST['course_registration_code']."\" />";
 		$return.="<input type=\"Submit\" name=\"submit_course_registration_code\" value=\"OK\" alt=\"".get_lang("SubmitRegistrationCode")."\" /></form>";
@@ -292,7 +320,7 @@ function courses_subscribing()
 }
 
 /**
- * allows you to browse through the course categories (faculties) and subscribe to the courses of
+ * Allows you to browse through the course categories (faculties) and subscribe to the courses of
  * this category (faculty)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
@@ -306,7 +334,7 @@ function browse_courses()
 }
 
 /**
- * counts the number of courses in a given course category
+ * Counts the number of courses in a given course category
 */
 function count_courses_in_category($category)
 {
@@ -324,6 +352,7 @@ function count_courses_in_category($category)
 */
 function browse_course_categories()
 {
+	global $stok;
 	$tbl_courses_nodes      = Database::get_main_table(TABLE_MAIN_CATEGORY);
 	$category = Database::escape_string($_GET['category']);
 	$safe_url_categ = Security::remove_XSS($_GET['category']);
@@ -338,12 +367,12 @@ function browse_course_categories()
 		$count_courses_in_categ = count_courses_in_category($row['code']);
 		if ($row['children_count'] > 0 OR $count_courses_in_categ>0)
 		{
-			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".$safe_url_categ."\">".$row['name']."</a>".
+			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".$safe_url_categ."&amp;sec_token=".$stok."\">".$row['name']."</a>".
 				" (".$count_courses_in_categ.")</li>";
 		}
 		elseif ($row['nbChilds'] > 0)
 		{
-			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".$safe_url_categ."\">".$row['name']."</a></li>";
+			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".$safe_url_categ."&amp;sec_token=".$stok."\">".$row['name']."</a></li>";
 		}
 		else
 		{
@@ -354,7 +383,7 @@ function browse_course_categories()
 	echo "</ul>";
 	if ($_GET['category'])
 	{
-		echo "<a href=\"".api_get_self()."?action=subscribe&amp;category=".Security::remove_XSS($_GET['up'])."\">&lt; ".get_lang('UpOneCategory')."</a>";
+		echo "<a href=\"".api_get_self()."?action=subscribe&amp;category=".Security::remove_XSS($_GET['up'])."&amp;sec_token=".$stok."\">&lt; ".get_lang('UpOneCategory')."</a>";
 	}
 }
 
@@ -396,9 +425,10 @@ function browse_courses_in_category()
 */
 function display_search_courses()
 {
-	global $_user,$charset;
+	global $_user,$charset,$stok;
 	echo "<p><b>".get_lang("SearchCourse")."</b><br />";
 	echo "<form class=\"course_list\" method=\"post\" action=\"".api_get_self()."?action=subscribe\">",
+					'<input type="hidden" name="sec_token" value="'.$stok.'">',
 					"<input type=\"hidden\" name=\"search_course\" value=\"1\" />",
 					"<input type=\"text\" name=\"search_term\" value=\"".(empty($_POST['search_term'])?'':$_POST['search_term'])."\" />",
 					"&nbsp;<input type=\"submit\" value=\"",get_lang("_search"),"\" />",
@@ -507,11 +537,10 @@ function delete_course_category($id)
 {
 	global $_user, $_configuration;
 
-	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
-	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
+	$tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 	$TABLECOURSUSER=Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$id = intval($id);
-	$sql_delete="DELETE FROM `$TABLE_USER_COURSE_CATEGORY` WHERE id='".$id."' and user_id='".$_user['user_id']."'";
+	$sql_delete="DELETE FROM $tucc WHERE id='".$id."' and user_id='".$_user['user_id']."'";
 	$sql_update="UPDATE $TABLECOURSUSER SET user_course_cat='0' WHERE user_course_cat='".$id."' AND user_id='".$_user['user_id']."'";
 	api_sql_query($sql_delete,__FILE__,__LINE__);
 	api_sql_query($sql_update,__FILE__,__LINE__);
@@ -529,21 +558,20 @@ function store_course_category()
 {
 	global $_user, $_configuration, $charset;
 
-	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
-	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
+	$tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 
 	// step 1: we determine the max value of the user defined course categories
-	$sql="SELECT sort FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."' ORDER BY sort DESC";
+	$sql="SELECT sort FROM $tucc WHERE user_id='".$_user['user_id']."' ORDER BY sort DESC";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$maxsort=Database::fetch_array($result);
 	$nextsort=$maxsort['sort']+1;
 
 	// step 2: we check if there is already a category with this name, if not we store it, else we give an error.
-	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."' AND title='".Database::escape_string($_POST['title_course_category'])."'ORDER BY sort DESC";
+	$sql="SELECT * FROM $tucc WHERE user_id='".$_user['user_id']."' AND title='".Database::escape_string($_POST['title_course_category'])."'ORDER BY sort DESC";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	if (Database::num_rows($result) == 0)
 	{
-		$sql_insert="INSERT INTO `$TABLE_USER_COURSE_CATEGORY` (user_id, title,sort) VALUES ('".$_user['user_id']."', '".htmlentities($_POST['title_course_category'],ENT_QUOTES,$charset)."', '".$nextsort."')";
+		$sql_insert="INSERT INTO $tucc (user_id, title,sort) VALUES ('".$_user['user_id']."', '".htmlentities($_POST['title_course_category'],ENT_QUOTES,$charset)."', '".$nextsort."')";
 		api_sql_query($sql_insert,__FILE__,__LINE__);
 		Display::display_confirmation_message(get_lang("CourseCategoryStored"));
 	}
@@ -561,17 +589,17 @@ function store_course_category()
 */
 function display_create_course_category_form()
 {
-	global $_user, $_configuration;
+	global $_user, $_configuration,$stok;
 
 	echo "<form name=\"create_course_category\" method=\"post\" action=\"".api_get_self()."?action=sortmycourses\">\n";
+	echo '<input type="hidden" name="sec_token" value="'.$stok.'">';
 	echo "<input type=\"text\" name=\"title_course_category\" />\n";
 	echo "<input type=\"submit\" name=\"create_course_category\" value=\"".get_lang("Ok")."\" />\n";
 	echo "</form>\n";
 
 	echo get_lang("ExistingCourseCategories");
-	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
-	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
-	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."'";
+	$tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+	$sql="SELECT * FROM $tucc WHERE user_id='".$_user['user_id']."'";
 	$result=api_sql_query($sql, __LINE__, __FILE__);
 	if (Database::num_rows($result)>0)
 	{
@@ -623,6 +651,7 @@ function move_course($direction, $course2move, $category)
 	$all_user_courses=get_courses_of_user($_user['user_id']);
 
 	// we need only the courses of the category we are moving in
+	$user_courses = array();
 	foreach ($all_user_courses as $key=>$course)
 	{
 		if ($course['user_course_category']==$category)
@@ -630,9 +659,6 @@ function move_course($direction, $course2move, $category)
 			$user_courses[]=$course;
 		}
 	}
-
-
-
 
 	foreach ($user_courses as $key=>$course)
 	{
@@ -648,11 +674,15 @@ function move_course($direction, $course2move, $category)
 		} // if ($course2move==$course['code'])
 	}
 
-	$sql_update1="UPDATE $TABLECOURSUSER SET sort='".$target_course['sort']."' WHERE course_code='".$source_course['code']."' AND user_id='".$_user['user_id']."'";
-	$sql_update2="UPDATE $TABLECOURSUSER SET sort='".$source_course['sort']."' WHERE course_code='".$target_course['code']."' AND user_id='".$_user['user_id']."'";
-	api_sql_query($sql_update2,__FILE__,__LINE__);
-	api_sql_query($sql_update1,__FILE__,__LINE__);
-	return get_lang("CourseSortingDone");
+	if(count($target_course)>0 && count($source_course)>0)
+	{
+		$sql_update1="UPDATE $TABLECOURSUSER SET sort='".$target_course['sort']."' WHERE course_code='".$source_course['code']."' AND user_id='".$_user['user_id']."'";
+		$sql_update2="UPDATE $TABLECOURSUSER SET sort='".$source_course['sort']."' WHERE course_code='".$target_course['code']."' AND user_id='".$_user['user_id']."'";
+		api_sql_query($sql_update2,__FILE__,__LINE__);
+		api_sql_query($sql_update1,__FILE__,__LINE__);
+		return get_lang("CourseSortingDone");
+	}
+	return '';
 }
 
 
@@ -691,11 +721,15 @@ function move_category($direction, $category2move)
 		} // if ($course2move==$course['code'])
 	} // foreach ($user_courses as $key=>$course)
 
-	$sql_update1="UPDATE $table_user_defined_category SET sort='".$target_category['sort']."' WHERE id='".$source_category['id']."' AND user_id='".$_user['user_id']."'";
-	$sql_update2="UPDATE $table_user_defined_category SET sort='".$source_category['sort']."' WHERE id='".$target_category['id']."' AND user_id='".$_user['user_id']."'";
-	api_sql_query($sql_update2,__FILE__,__LINE__);
-	api_sql_query($sql_update1,__FILE__,__LINE__);
-	return get_lang("CategorySortingDone");
+	if(count($target_category)>0 && count($source_category)>0)
+	{
+		$sql_update1="UPDATE $table_user_defined_category SET sort='".$target_category['sort']."' WHERE id='".$source_category['id']."' AND user_id='".$_user['user_id']."'";
+		$sql_update2="UPDATE $table_user_defined_category SET sort='".$source_category['sort']."' WHERE id='".$target_category['id']."' AND user_id='".$_user['user_id']."'";
+		api_sql_query($sql_update2,__FILE__,__LINE__);
+		api_sql_query($sql_update1,__FILE__,__LINE__);
+		return get_lang("CategorySortingDone");
+	}
+	return '';
 }
 
 /**
@@ -722,9 +756,8 @@ function display_courses($user_id, $show_course_icons, $user_courses)
 	display_courses_in_category(0,'true');
 
 	// Step 1: we get all the categories of the user
-	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
-	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
-	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
+	$tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+	$sql="SELECT * FROM $tucc WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	while ($row=Database::fetch_array($result))
 	{
@@ -768,7 +801,8 @@ function display_courses_in_category($user_category_id, $showicons)
 	// table definitions
 	$TABLECOURS=Database::get_main_table(TABLE_MAIN_COURSE);
 	$TABLECOURSUSER=Database::get_main_table(TABLE_MAIN_COURSE_USER);
-	$TABLE_USER_COURSE_CATEGORY = "`".Database::get_user_personal_database()."`.`user_course_category`";
+	$TABLE_USER_COURSE_CATEGORY = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+	
 
 
 	$sql_select_courses="SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
@@ -834,10 +868,9 @@ function get_user_course_category($id)
 {
 	global $_user, $_configuration;
 
-	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
-	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
+	$tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 	$id = intval($id);
-	$sql="SELECT * FROM `".$TABLE_USER_COURSE_CATEGORY."` WHERE user_id='".$_user['user_id']."' AND id='$id'";
+	$sql="SELECT * FROM $tucc WHERE user_id='".$_user['user_id']."' AND id='$id'";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$row=Database::fetch_array($result);
 	return $row;
@@ -853,7 +886,7 @@ function get_user_course_category($id)
 */
 function display_subscribe_icon($current_course, $user_coursecodes)
 {
-
+	global $stok;
 	// we display the icon to subscribe or the text already subscribed
 	if (in_array($current_course['code'],$user_coursecodes))
 	{
@@ -864,6 +897,7 @@ function display_subscribe_icon($current_course, $user_coursecodes)
 		if ($current_course['subscribe'] == SUBSCRIBE_ALLOWED)
 		{
 			echo "<form action=\"".$_SERVER["REQUEST_URI"]."\" method=\"post\">";
+			echo '<input type="hidden" name="sec_token" value="'.$stok.'">';
 			echo "<input type=\"hidden\" name=\"subscribe\" value=\"".$current_course['code']."\" />";
 			if(!empty($_POST['search_term']))
 			{
@@ -893,12 +927,12 @@ function display_subscribe_icon($current_course, $user_coursecodes)
 function display_course_icons($key, $number_of_courses, $course)
 {
 	//print_r($course);
-	global $safe,$charset;
+	global $safe,$charset,$stok;
 	echo "<table><tr><td>";
 	// the up icon
 	if ($key>0)
 	{
-		echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=up&amp;course=".$course['code']."&amp;category=".$course['user_course_cat']."\">";
+		echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=up&amp;course=".$course['code']."&amp;category=".$course['user_course_cat']."&amp;sec_token=".$stok."\">";
 		Display::display_icon('up.gif', get_lang('Up'));
 		echo '</a>';
 	}
@@ -910,7 +944,7 @@ function display_course_icons($key, $number_of_courses, $course)
 	}
 	else
 	{
-		echo "<td rowspan=\"2\" valign=\"middle\"><a href=\"courses.php?action=".$safe['action']."&amp;edit=".$course['code']."\">";
+		echo "<td rowspan=\"2\" valign=\"middle\"><a href=\"courses.php?action=".$safe['action']."&amp;edit=".$course['code']."&amp;sec_token=".$stok."\">";
 		Display::display_icon('edit.gif',get_lang('Edit'));
 		echo "</a></td>";
 	}
@@ -920,6 +954,7 @@ function display_course_icons($key, $number_of_courses, $course)
 		if ($course['unsubscr'] == 1)
 			{	// changed link to submit to avoid action by the search tool indexer
 				echo	"<form action=\"".api_get_self()."\" method=\"post\" onsubmit=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmUnsubscribeFromCourse"),ENT_QUOTES,$charset))."')) return false;\">";
+				echo    '<input type="hidden" name="sec_token" value="'.$stok.'">';
 				echo 	"<input type=\"hidden\" name=\"unsubscribe\" value=\"".$course['code']."\" />";
 				echo 	"<input type=\"image\" name=\"unsub\" src=\"../img/delete.gif\" alt=\"".get_lang("_unsubscribe")."\" /></form>";
 			}
@@ -934,7 +969,7 @@ function display_course_icons($key, $number_of_courses, $course)
 	echo "</tr><tr><td>";
 	if ($key<$number_of_courses-1)
 	{
-		echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=down&amp;course=".$course['code']."&amp;category=".$course['user_course_cat']."\">";
+		echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=down&amp;course=".$course['code']."&amp;category=".$course['user_course_cat']."&amp;sec_token=".$stok."\">";
 		Display::display_icon('down.gif', get_lang('Down'));
 		echo '</a>';
 	}
@@ -951,7 +986,7 @@ function display_course_icons($key, $number_of_courses, $course)
 */
 function display_category_icons($current_category, $all_user_categories)
 {
-	global $safe,$charset;
+	global $safe,$charset,$stok;
 	$max_category_key=count($all_user_categories);
 
 	if ($safe['action']<>'unsubscribe') // we are in the unsubscribe section then we do not show the icons.
@@ -961,17 +996,17 @@ function display_category_icons($current_category, $all_user_categories)
 		echo "<td>";
 		if ($current_category<>$all_user_categories[0])
 		{
-			echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=up&amp;category=".$current_category."\">";
+			echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=up&amp;category=".$current_category."&amp;sec_token=".$stok."\">";
 			echo "<img src=\"../img/up.gif\" alt=\"".htmlentities(get_lang("Up"),ENT_QUOTES,$charset)."\"></a>";
 		}
 		echo "</td>";
    		echo " <td rowspan=\"2\">";
- 		echo " <a href=\"courses.php?action=sortmycourses&amp;categoryid=".$current_category."#category".$current_category."\">";
+ 		echo " <a href=\"courses.php?action=sortmycourses&amp;categoryid=".$current_category."&amp;sec_token=".$stok."#category".$current_category."\">";
 		Display::display_icon('edit.gif',get_lang('Edit'));
 		echo "</a>";
    		echo "</td>";
 		echo "<td rowspan=\"2\">";
-		echo " <a href=\"courses.php?action=deletecoursecategory&amp;id=".$current_category."\">";
+		echo " <a href=\"courses.php?action=deletecoursecategory&amp;id=".$current_category."&amp;sec_token=".$stok."\">";
 		Display::display_icon('delete.gif',get_lang('Edit'),array('onclick'=>"javascript:if(!confirm('".addslashes(htmlentities(get_lang("CourseCategoryAbout2bedeleted"),ENT_QUOTES,$charset))."')) return false;"));
 		echo "</a>";
 		echo "</td>";
@@ -980,7 +1015,7 @@ function display_category_icons($current_category, $all_user_categories)
 		echo " <td>";
 		if ($current_category<>$all_user_categories[$max_category_key-1])
 		{
-			echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=down&amp;category=".$current_category."\">";
+			echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=down&amp;category=".$current_category."&amp;sec_token=".$stok."\">";
 			echo "<img src=\"../img/down.gif\" alt=\"".htmlentities(get_lang("Down"),ENT_QUOTES,$charset)."\"></a>";
 		}
 		echo "</td>";
@@ -1000,16 +1035,17 @@ function display_category_icons($current_category, $all_user_categories)
 */
 function display_change_course_category_form($edit_course)
 {
-	global $_user, $_configuration, $safe;
+	global $_user, $_configuration, $safe, $stok;
 	$edit_course = Security::remove_XSS($edit_course);
 
 	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
-	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
-	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."'";
+	$tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+	$sql="SELECT * FROM $tucc WHERE user_id='".$_user['user_id']."'";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 
 
 	$output="<form name=\"edit_course_category\" method=\"post\" action=\"courses.php?action=".$safe['action']."\">\n";
+	$output.= '<input type="hidden" name="sec_token" value="'.$stok.'">';
 	$output.="<input type=\"hidden\" name=\"course_2_edit_category\" value=\"".$edit_course."\" />";
 	$output.="\t<select name=\"course_categories\">\n";
 	$output.="\t\t<option value=\"0\">".get_lang("NoCourseCategory")."</option>";
@@ -1033,12 +1069,13 @@ function display_change_course_category_form($edit_course)
 */
 function display_unsubscribe_icons($course)
 {
-	global $charset;
+	global $charset, $stok;
 	if ($course['status'] != 1)
 	{
 		if ($course['unsubscribe'] == 1)
 			{	// changed link to submit to avoid action by the search tool indexer
 				echo	"<form action=\"".api_get_self()."\" method=\"post\" onsubmit=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmUnsubscribeFromCourse"),ENT_QUOTES,$charset))."')) return false;\">";
+				echo    '<input type="hidden" name="sec_token" value="'.$stok.'">';
 				echo 	"<input type=\"hidden\" name=\"unsubscribe\" value=\"".$course['code']."\" />";
 				echo 	"<input type=\"image\" name=\"unsub\" src=\"../img/delete.gif\" alt=\"".get_lang("_unsubscribe")."\" /></form>";
 			}
@@ -1140,9 +1177,10 @@ function display_info_text($text)
 */
 function display_edit_course_category_form($edit_course_category)
 {
-	global $safe;
+	global $safe, $stok;
 	echo "<form name=\"edit_course_category\" method=\"post\" action=\"courses.php?action=".$safe['action']."\">\n";
 	echo "\t<input type=\"hidden\" name=\"edit_course_category\" value=\"".$edit_course_category."\" />\n";
+	echo '<input type="hidden" name="sec_token" value="'.$stok.'">';
 	$info_this_user_course_category=get_user_course_category($edit_course_category);
 	echo "\t<input type=\"text\" name=\"title_course_category\" value=\"".$info_this_user_course_category['title']."\" />";
 	echo "\t<input type=\"submit\" name=\"submit_edit_course_category\" value=\"".get_lang("Ok")."\" />\n";
@@ -1158,12 +1196,9 @@ function store_edit_course_category()
 {
 	global $_user, $_configuration, $charset;
 
-	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
-	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
-
-	$sql_update="UPDATE `$TABLE_USER_COURSE_CATEGORY` SET title='".htmlentities($_POST['title_course_category'],ENT_QUOTES,$charset)."' WHERE id='".(int)$_POST['edit_course_category']."'";
+	$tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+	$sql_update="UPDATE $tucc SET title='".htmlentities($_POST['title_course_category'],ENT_QUOTES,$charset)."' WHERE id='".(int)$_POST['edit_course_category']."'";
 	api_sql_query($sql_update,__FILE__,__LINE__);
-	//api_sql_query(sql_update);
 	return get_lang("CourseCategoryEditStored");
 }
 ?>

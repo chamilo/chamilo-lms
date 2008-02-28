@@ -468,64 +468,99 @@ class survey_manager
 	 * @version January 2007
 	 */
 	function save_question($form_content)
-	{
-		global $_course;
-
-		// table definitions
-		$table_survey 			= Database :: get_course_table(TABLE_SURVEY, $_course['db_name']);
-		$tbl_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION, $_course['db_name']);
-
-		// getting all the information of the survey
-		$survey_data = survey_manager::get_survey($form_content['survey_id']);
-
-		// storing the question in the shared database
-		if (is_numeric($survey_data['survey_share']) AND $survey_data['survey_share'] <> 0)
-		{
-			$shared_question_id = survey_manager::save_shared_question($form_content, $survey_data);
-			$form_content['shared_question_id'] = $shared_question_id;
+	{			
+		if (strlen($form_content['question'])>1)
+		{		//checks lenght of the question	
+			$empty_answer=false;	
+					
+			if ($form_content['type'] != 'percentage')
+			{
+				for($i=0;$i<count($form_content['answers']);$i++)
+				{									
+					if (strlen($form_content['answers'][$i])<1) 
+					{
+						$empty_answer=true;					
+						break;									
+					}							
+				}
+			}
+			
+			if ($form_content['type'] == 'score' )
+			{
+				if (strlen($form_content['maximum_score'])<1)
+				{
+					$empty_answer=true;					
+				}
+			}
+									
+			if (!$empty_answer)  
+			{			
+				global $_course;			
+				// table definitions
+				$table_survey 			= Database :: get_course_table(TABLE_SURVEY, $_course['db_name']);
+				$tbl_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION, $_course['db_name']);
+		
+				// getting all the information of the survey
+				$survey_data = survey_manager::get_survey($form_content['survey_id']);
+		
+				// storing the question in the shared database
+				if (is_numeric($survey_data['survey_share']) AND $survey_data['survey_share'] <> 0)
+				{
+					$shared_question_id = survey_manager::save_shared_question($form_content, $survey_data);
+					$form_content['shared_question_id'] = $shared_question_id;
+				}	
+				
+				// storing a new question
+				if ($form_content['question_id'] == '' OR !is_numeric($form_content['question_id']))
+				{
+					// finding the max sort order of the questions in the given survey
+					$sql = "SELECT max(sort) AS max_sort FROM $tbl_survey_question WHERE survey_id='".Database::escape_string($form_content['survey_id'])."'";
+					$result = api_sql_query($sql, __FILE__, __LINE__);
+					$row = Database::fetch_array($result,'ASSOC');
+					$max_sort = $row['max_sort'];
+		
+					// adding the question to the survey_question table
+					$sql = "INSERT INTO $tbl_survey_question (survey_id,survey_question,survey_question_comment,type,display, sort, shared_question_id, max_value) VALUES (
+								'".Database::escape_string($form_content['survey_id'])."',
+								'".Database::escape_string($form_content['question'])."',
+								'".Database::escape_string($form_content['question_comment'])."',
+								'".Database::escape_string($form_content['type'])."',
+								'".Database::escape_string($form_content['horizontalvertical'])."',
+								'".Database::escape_string($max_sort+1)."',
+								'".Database::escape_string($form_content['shared_question_id'])."',
+								'".Database::escape_string($form_content['maximum_score'])."'
+								)";
+					$result = api_sql_query($sql, __FILE__, __LINE__);
+					$question_id = Database::insert_id();
+					$form_content['question_id'] = $question_id;
+					$return_message = 'QuestionAdded';
+				}
+				// updating an existing question
+				else
+				{
+					// adding the question to the survey_question table
+					$sql = "UPDATE $tbl_survey_question SET
+								survey_question 		= '".Database::escape_string($form_content['question'])."',
+								survey_question_comment = '".Database::escape_string($form_content['question_comment'])."',
+								display 				= '".Database::escape_string($form_content['horizontalvertical'])."',
+								max_value 				= '".Database::escape_string($form_content['maximum_score'])."'
+								WHERE question_id 		= '".Database::escape_string($form_content['question_id'])."'";
+					$result = api_sql_query($sql, __FILE__, __LINE__);
+					$return_message = 'QuestionUpdated'; 
+				}				
+				// storing the options of the question
+				$message_options=survey_manager::save_question_options($form_content, $survey_data);
+			}
+			else
+			{			
+				$return_message='PleasFillAllAnswer'; 
+			}		
 		}
-
-		// storing a new question
-		if ($form_content['question_id'] == '' OR !is_numeric($form_content['question_id']))
-		{
-			// finding the max sort order of the questions in the given survey
-			$sql = "SELECT max(sort) AS max_sort FROM $tbl_survey_question WHERE survey_id='".Database::escape_string($form_content['survey_id'])."'";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$row = Database::fetch_array($result,'ASSOC');
-			$max_sort = $row['max_sort'];
-
-			// adding the question to the survey_question table
-			$sql = "INSERT INTO $tbl_survey_question (survey_id,survey_question,survey_question_comment,type,display, sort, shared_question_id, max_value) VALUES (
-						'".Database::escape_string($form_content['survey_id'])."',
-						'".Database::escape_string($form_content['question'])."',
-						'".Database::escape_string($form_content['question_comment'])."',
-						'".Database::escape_string($form_content['type'])."',
-						'".Database::escape_string($form_content['horizontalvertical'])."',
-						'".Database::escape_string($max_sort+1)."',
-						'".Database::escape_string($form_content['shared_question_id'])."',
-						'".Database::escape_string($form_content['maximum_score'])."'
-						)";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$question_id = Database::insert_id();
-			$form_content['question_id'] = $question_id;
-			$return_message = 'QuestionAdded';
-		}
-		// updating an existing question
 		else
 		{
-			// adding the question to the survey_question table
-			$sql = "UPDATE $tbl_survey_question SET
-						survey_question 		= '".Database::escape_string($form_content['question'])."',
-						survey_question_comment = '".Database::escape_string($form_content['question_comment'])."',
-						display 				= '".Database::escape_string($form_content['horizontalvertical'])."',
-						max_value 				= '".Database::escape_string($form_content['maximum_score'])."'
-						WHERE question_id 		= '".Database::escape_string($form_content['question_id'])."'";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$return_message = 'QuestionUpdated';
+			$return_message='PleaseEnterAQuestion';	 
 		}
-		// storing the options of the question
-		survey_manager::save_question_options($form_content, $survey_data);
-		return $return_message;
+		return $return_message;		
 	}
 
 	/**
@@ -542,47 +577,47 @@ class survey_manager
 	function save_shared_question($form_content, $survey_data)
 	{
 		global $_course;
-
-		// table definitions
-		$tbl_survey_question 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
-
-		// storing a new question
-		if ($form_content['shared_question_id'] == '' OR !is_numeric($form_content['shared_question_id']))
-		{
-			// finding the max sort order of the questions in the given survey
-			$sql = "SELECT max(sort) AS max_sort FROM $tbl_survey_question
-					WHERE survey_id='".Database::escape_string($survey_data['survey_share'])."'
-					AND code='".Database::escape_string($_course['id'])."'";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$row = Database::fetch_array($result,'ASSOC');
-			$max_sort = $row['max_sort'];
-
-			// adding the question to the survey_question table
-			$sql = "INSERT INTO $tbl_survey_question (survey_id, survey_question, survey_question_comment, type, display, sort, code) VALUES (
-						'".Database::escape_string($survey_data['survey_share'])."',
-						'".Database::escape_string($form_content['question'])."',
-						'".Database::escape_string($form_content['question_comment'])."',
-						'".Database::escape_string($form_content['type'])."',
-						'".Database::escape_string($form_content['horizontalvertical'])."',
-						'".Database::escape_string($max_sort+1)."',
-						'".Database::escape_string($_course['id'])."')";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$shared_question_id = Database::insert_id();
-		}
-		// updating an existing question
-		else
-		{
-			// adding the question to the survey_question table
-			$sql = "UPDATE $tbl_survey_question SET
-						survey_question = '".Database::escape_string($form_content['question'])."',
-						survey_question_comment = '".Database::escape_string($form_content['question_comment'])."',
-						display = '".Database::escape_string($form_content['horizontalvertical'])."'
-						WHERE question_id = '".Database::escape_string($form_content['shared_question_id'])."'
+	
+			// table definitions
+			$tbl_survey_question 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
+	
+			// storing a new question
+			if ($form_content['shared_question_id'] == '' OR !is_numeric($form_content['shared_question_id']))
+			{
+				// finding the max sort order of the questions in the given survey
+				$sql = "SELECT max(sort) AS max_sort FROM $tbl_survey_question
+						WHERE survey_id='".Database::escape_string($survey_data['survey_share'])."'
 						AND code='".Database::escape_string($_course['id'])."'";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$shared_question_id = $form_content['shared_question_id'];
-		}
-
+				$result = api_sql_query($sql, __FILE__, __LINE__);
+				$row = Database::fetch_array($result,'ASSOC');
+				$max_sort = $row['max_sort'];
+	
+				// adding the question to the survey_question table
+				$sql = "INSERT INTO $tbl_survey_question (survey_id, survey_question, survey_question_comment, type, display, sort, code) VALUES (
+							'".Database::escape_string($survey_data['survey_share'])."',
+							'".Database::escape_string($form_content['question'])."',
+							'".Database::escape_string($form_content['question_comment'])."',
+							'".Database::escape_string($form_content['type'])."',
+							'".Database::escape_string($form_content['horizontalvertical'])."',
+							'".Database::escape_string($max_sort+1)."',
+							'".Database::escape_string($_course['id'])."')";
+				$result = api_sql_query($sql, __FILE__, __LINE__);
+				$shared_question_id = Database::insert_id();
+			}
+			// updating an existing question
+			else
+			{
+				// adding the question to the survey_question table
+				$sql = "UPDATE $tbl_survey_question SET
+							survey_question = '".Database::escape_string($form_content['question'])."',
+							survey_question_comment = '".Database::escape_string($form_content['question_comment'])."',
+							display = '".Database::escape_string($form_content['horizontalvertical'])."'
+							WHERE question_id = '".Database::escape_string($form_content['shared_question_id'])."'
+							AND code='".Database::escape_string($_course['id'])."'";
+				$result = api_sql_query($sql, __FILE__, __LINE__);
+				$shared_question_id = $form_content['shared_question_id'];
+			}
+		
 		return $shared_question_id;
 	}
 
@@ -750,8 +785,8 @@ class survey_manager
 			{
 				$form_content['answers'][] = $i;
 			}
-		}
-
+		}				
+			
 		if (is_numeric($survey_data['survey_share']) AND $survey_data['survey_share'] <> 0)
 		{
 			survey_manager::save_shared_question_options($form_content, $survey_data);
@@ -767,7 +802,7 @@ class survey_manager
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 		}
 
-		$counter = 1;
+		$counter=1;		
 		if(is_array($form_content['answers'])){
 			foreach ($form_content['answers'] as $key=>$answer)
 			{
@@ -1089,17 +1124,30 @@ class question
 
 		// saving a question
 		if ($_POST['save_question'])
-		{
+		{					
 			$message = survey_manager::save_question($form_content);
-			if ($config['survey']['debug'])
-			{
-				Display :: display_header();
-				Display :: display_confirmation_message($message.'<br />'.get_lang('ReturnTo').' <a href="survey.php?survey_id='.$_GET['survey_id'].'">'.get_lang('Survey').'</a>', false);
+									
+			if ($message == 'QuestionAdded' || $message == 'QuestionUpdated' ) {				
+				if ($config['survey']['debug'])
+				{								
+					Display :: display_header();
+					Display :: display_confirmation_message($message.'<br />'.get_lang('ReturnTo').' <a href="survey.php?survey_id='.$_GET['survey_id'].'">'.get_lang('Survey').'</a>', false);					
+				}
+				else			
+				{					
+					header('location:survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'&message='.$message);
+				}
 			}
-			else
-			{
-				header('location:survey.php?survey_id='.$_GET['survey_id'].'&message='.$message);
-			}
+			else 
+			{			
+				if ($message == 'PleaseEnterAQuestion' || $message=='PleasFillAllAnswer'){							
+					$_SESSION['temp_user_message']=$form_content['question'];
+					$_SESSION['temp_sys_message']=$message;
+					$_SESSION['temp_answers']=$form_content['answers'];																						
+					header('location:question.php?'.api_get_cidreq().'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&action='.Security::remove_XSS($_GET['action']).'&type='.Security::remove_XSS($_GET['type']).'');																  										
+				}
+				
+			}					
 		}
 
 		/**

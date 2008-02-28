@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 12887 2007-08-11 22:17:36Z yannoo $
+* 	@version $Id: question.php 14424 2008-02-28 21:47:57Z yannoo $
 */
 
 // name of the language file that needs to be included
@@ -73,8 +73,6 @@ if ($_GET['action'] == 'edit')
 	$tool_name = get_lang('EditQuestion');
 }
 
-
-
 // the possible question types
 $possible_types = array('yesno', 'multiplechoice', 'multipleresponse', 'open', 'dropdown', 'comment', 'pagebreak', 'percentage', 'score');
 
@@ -87,10 +85,24 @@ if (!in_array($_GET['type'], $possible_types))
 }
 
 // displaying the form for adding or editing the question
-if (!$_POST['save_question'] && in_array($_GET['type'],$possible_types))
+if (!empty($_POST['save_question']) && in_array($_GET['type'],$possible_types))
 {
 	// Displaying the header
 	Display::display_header($tool_name);
+	
+
+	$error_message='';	
+	// Displys message if exists					
+	if (isset($_SESSION['temp_sys_message']))
+	{	
+		$error_message=$_SESSION['temp_sys_message'];
+		unset($_SESSION['temp_sys_message']);				
+		if ($error_message=='PleaseEnterAQuestion' || $error_message=='PleasFillAllAnswer')
+		{
+			Display::display_error_message(get_lang($error_message), true);			
+		}		
+	}
+	
 	echo '<img src="../img/'.survey_manager::icon_question($_GET['type']).'" alt="'.get_lang(ucfirst($_GET['type'])).'" title="'.get_lang(ucfirst($_GET['type'])).'" /><br />';
 	echo get_lang(ucfirst($_GET['type']));
 
@@ -99,10 +111,12 @@ if (!$_POST['save_question'] && in_array($_GET['type'],$possible_types))
 	// The defaults values for the form
 	$form_content['horizontalvertical'] = 'vertical';
 	$form_content['answers'] = array('', '');
+		
 	if ($_GET['type'] == 'yesno')
 	{
 		$form_content['answers'][0]=get_lang('Yes');
-		$form_content['answers'][1]=get_lang('No');
+		$form_content['answers'][1]=get_lang('No');			
+
 	}
 	// We are editing a question
 	if (isset($_GET['question_id']) AND !empty($_GET['question_id']))
@@ -116,9 +130,17 @@ if (!$_POST['save_question'] && in_array($_GET['type'],$possible_types))
 		$form_content = $_POST;
 		$form_content = $form->handle_action($form_content);
 	}
-
+	
+	if ($error_message!='')
+	{						
+		$form_content['question']=$_SESSION['temp_user_message'];
+		$form_content['answers']=$_SESSION['temp_answers'];
+		unset($_SESSION['temp_user_message']);
+		unset($_SESSION['temp_answers']);								
+	}
 	$form->create_form($form_content);
 	$form->render_form();
+	 
 }
 else
 {

@@ -43,26 +43,36 @@ if(isset($_POST['activeExtension'])){
 					if(!empty($_POST['visio_host']))
 					{
 						$tool_table = Database::get_course_table(TABLE_TOOL_LIST,$row['db_name']);
-						$sql = 'INSERT INTO '.$tool_table.' SET 
-								name="'.TOOL_VISIO_CONFERENCE.'",
-								link="conference/index.php?type=conference",
-								image="visio.gif",
-								visibility="1",
-								admin="0",
-								address="squaregrey.gif",
-								target="_self",
-								category="interaction"';
-						api_sql_query($sql, __FILE__, __LINE__);		
-						$sql = 'INSERT INTO '.$tool_table.' SET 
-								name="'.TOOL_VISIO_CLASSROOM.'",
-								link="conference/index.php?type=classroom",
-								image="visio.gif",
-								visibility="1",
-								admin="0",
-								address="squaregrey.gif",
-								target="_self",
-								category="authoring"';
-						api_sql_query($sql, __FILE__, __LINE__);
+						$select = "SELECT id FROM $toos_table WHERE name='".TOOL_VISIO_CONFERENCE."'";
+						$selectres = api_sql_query($select);
+						if(Database::num_rows($selectres)<1)
+						{
+							$sql = 'INSERT INTO '.$tool_table.' SET 
+									name="'.TOOL_VISIO_CONFERENCE.'",
+									link="conference/index.php?type=conference",
+									image="visio.gif",
+									visibility="1",
+									admin="0",
+									address="squaregrey.gif",
+									target="_self",
+									category="interaction"';
+							api_sql_query($sql, __FILE__, __LINE__);		
+						}
+						$select = "SELECT id FROM $toos_table WHERE name='".TOOL_VISIO_CLASSROOM."'";
+						$selectres = api_sql_query($select);
+						if(Database::num_rows($selectres)<1)
+						{
+							$sql = 'INSERT INTO '.$tool_table.' SET 
+									name="'.TOOL_VISIO_CLASSROOM.'",
+									link="conference/index.php?type=classroom",
+									image="visio.gif",
+									visibility="1",
+									admin="0",
+									address="squaregrey.gif",
+									target="_self",
+									category="authoring"';
+							api_sql_query($sql, __FILE__, __LINE__);
+						}
 					}					
 				}
 				$message = get_lang('ServiceActivated');

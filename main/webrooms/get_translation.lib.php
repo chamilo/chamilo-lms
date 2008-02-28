@@ -1,4 +1,5 @@
 <?php
+/* See license terms in /dokeos_license.txt */
 /**
  * Library for language translation from Dokeos language files to XML for videoconference
  * @uses main_api.lib.php for api_get_path() 
@@ -21,7 +22,7 @@ function get_language_file_as_xml($language='english')
 			return '';
 		}
 	}
-	error_log('Analysing path '.$path);
+	//error_log('Analysing path '.$path);
 	$file = $path.'videoconf.inc.php';
 	if(!is_file($file) or !is_readable($file))
 	{
@@ -34,6 +35,11 @@ function get_language_file_as_xml($language='english')
 			return '';
 		}
 	}
+	$convert = true;
+	if(substr($language,-7,7) == 'unicode')
+	{//do not convert if the language ends with 'unicode', which means it's in UTF-8
+		$convert=false;
+	}
 	$list = file($file);
 	$xml = '';
 	foreach ( $list as $line )
@@ -45,7 +51,14 @@ function get_language_file_as_xml($language='english')
 			if($match)
 			{
 				//todo: The following conversion should only happen for old language files (encoded in ISO-8859-1).
-				$string = iconv('ISO-8859-1','UTF-8',$items[2]);
+				if($convert)
+				{
+					$string = mb_convert_encoding($items[2],'UTF-8','ISO-8859-1');
+				}
+				else
+				{
+					$string = $items[2];
+				}
 				$xml .= '<labelfield><labelid>'.$items[1].'</labelid><labelvalue>'.$string.'</labelvalue></labelfield>'."\n";
 			}
 		}

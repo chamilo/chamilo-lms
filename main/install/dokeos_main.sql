@@ -529,7 +529,8 @@ VALUES
 ('gradebook_score_display_colorsplit',NULL,'textfield','Gradebook','50','GradebookScoreDisplayColorSplit','GradebookScoreDisplayColorSplitComment',NULL,NULL),
 ('gradebook_score_display_upperlimit','my_display_upperlimit','checkbox','Gradebook','false','GradebookScoreDisplayUpperLimit','GradebookScoreDisplayUpperLimitComment',NULL,'TabsGradebookEnableUpperLimit'),
 ('user_selected_theme',NULL,'radio','Platform','false','UserThemeSelection','UserThemeSelectionComment',NULL,NULL),
-('profile','theme','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'UserTheme');
+('profile','theme','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'UserTheme'),
+('allow_course_theme',NULL,'radio','Course','true','AllowCourseThemeTitle','AllowCourseThemeComment',NULL,NULL);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -656,8 +657,8 @@ VALUES
 ('gradebook_enable','false','No'),
 ('user_selected_theme','true','Yes'),
 ('user_selected_theme','false','No'),
-('user_selected_theme','true','Yes'),
-('user_selected_theme','false','No');
+('allow_course_theme','true','Yes'),
+('allow_course_theme','false','No');
 
 
 

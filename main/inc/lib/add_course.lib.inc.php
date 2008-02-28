@@ -905,7 +905,8 @@ function update_Db_course($courseDbName)
 		"content_license	text not null default ''," . //content license
 		"prevent_reinit tinyint		unsigned not null default 1," . //stores the default behaviour regarding items re-initialisation when viewed a second time after success
 		"js_lib         tinytext    not null default ''," . //the JavaScript library to load for this lp
-		"debug 			tinyint		unsigned not null default 0" . //stores the default behaviour regarding items re-initialisation when viewed a second time after success
+		"debug 			tinyint		unsigned not null default 0," . //stores the default behaviour regarding items re-initialisation when viewed a second time after success
+		"theme 		varchar(255)    not null default '' " . //stores the theme of the LP 			
 		")";
 	if(!api_sql_query($sql))
 	{
@@ -1702,6 +1703,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_edit_announcement',0,'announcement')");
 	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_manager_on_new_quiz',0,'quiz')");
 	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_image_forum',1,'forum')");
+	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('course_theme','','theme')");
 	/*
 	-----------------------------------------------------------
 		Course homepage tools for platform admin only

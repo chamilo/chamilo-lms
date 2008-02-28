@@ -68,21 +68,39 @@ if(!empty($_course['official_code']))
 }
 
 echo get_setting('siteName');
+	
 ?>
 </title>
 <style type="text/css" media="screen, projection">
 /*<![CDATA[*/
 <?php
-$my_style = api_get_setting('stylesheets');
-if(api_get_setting('user_selected_theme') == 'true')
-{
+$style = api_get_setting('stylesheets'); 	// plataform's css
+
+if(api_get_setting('user_selected_theme') == 'true') 
+{		
 	$useri = api_get_user_info();
 	$theme = $useri['theme'];
 	if(!empty($theme) && $theme != $my_style)
 	{
-		$my_style = $theme;
+		$my_style = $theme;					// user's css
 	}
 }
+$mycourseid = api_get_course_id();
+if (!empty($mycourseid) && $mycourseid != -1) {		 		
+	
+	if (api_get_setting('allow_course_theme') == 'true') 
+	{	
+		$mycoursetheme=api_get_course_setting('course_theme');			
+		if (!empty($mycoursetheme) && $mycoursetheme!=-1)		 
+		{							
+			if(!empty($mycoursetheme) && $mycoursetheme != $my_style)
+			{				
+				$my_style = $mycoursetheme;		// course's css
+			}			
+		}
+	}
+}
+
 $my_code_path = api_get_path(WEB_CODE_PATH);
 if(empty($my_style)){$my_style = 'default';}
 echo '@import "'.$my_code_path.'css/'.$my_style.'/default.css";'."\n";
@@ -140,6 +158,6 @@ include(api_get_path(LIBRARY_PATH).'/javascript/email_links.lib.js.php');
 <div id="outerframe">
 
 <?php
+						
 //  Banner
 include(api_get_path(INCLUDE_PATH)."banner.inc.php");
-?>

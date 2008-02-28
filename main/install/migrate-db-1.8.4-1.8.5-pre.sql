@@ -54,7 +54,6 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('user_selected_theme', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('user_selected_theme', 'false', 'No');
 ALTER TABLE user ADD theme varchar(255) DEFAULT NULL;
-
 UPDATE settings_current SET variable='service_visio', subkey='active'    , title='VisioEnable' WHERE variable='service_visio' AND subkey='active';
 UPDATE settings_current SET variable='service_visio', subkey='visio_host', title='VisioHost' WHERE variable='service_visio' AND subkey='visio_rtmp_host_local';
 UPDATE settings_current SET variable='service_visio', subkey='visio_port', title='VisioPort' WHERE variable='service_visio' AND subkey='visio_rtmp_port';
@@ -63,6 +62,9 @@ DELETE FROM settings_options WHERE variable = 'visio_rtmp_host_local';
 DELETE FROM settings_current WHERE variable='service_visio' AND subkey='visioconference_url';
 DELETE FROM settings_current WHERE variable='service_visio' AND subkey='visioclassroom_url';
 DELETE FROM settings_current WHERE variable='service_visio' AND subkey='visio_is_web_rtmp';
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_course_theme',NULL,'radio','Course','true','AllowCourseThemeTitle','AllowCourseThemeComment',NULL,NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_course_theme', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_course_theme', 'false', 'No');
 
 -- xxSTATSxx
 ALTER TABLE track_e_downloads ADD INDEX (down_user_id);
@@ -89,3 +91,4 @@ ALTER TABLE dropbox_file ADD session_id SMALLINT UNSIGNED NOT NULL ;
 ALTER TABLE dropbox_file ADD INDEX ( session_id ) ;
 ALTER TABLE item_property ADD INDEX (tool,ref);
 INSERT INTO course_setting(variable,value,category) VALUES ('allow_user_image_forum',1,'forum');
+INSERT INTO course_setting(variable,value,category) VALUES ('course_theme','','theme');

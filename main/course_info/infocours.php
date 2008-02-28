@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 14371 2008-02-25 22:28:33Z yannoo $
+// $Id: infocours.php 14425 2008-02-28 22:33:09Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -143,6 +143,7 @@ while ($cat = mysql_fetch_array($res))
 	ksort($categories);
 }
 
+
 $linebreak = '<div class="row"><div class="label"></div><div class="formw" style="border-bottom:1px dashed"></div></div>';
 
 // Build the form
@@ -200,6 +201,14 @@ $form->addElement('radio', 'allow_user_image_forum', get_lang('AllowUserImageFor
 $form->addElement('radio', 'allow_user_image_forum', null, get_lang('AllowUserImageForumDeactivate'), 0);
 $form -> addElement('html',$linebreak);
 
+// Course theme picker
+if (api_get_setting('allow_course_theme') == 'true')
+{
+	$form->addElement('select_theme', 'course_theme', get_lang('Theme'));
+	$form->applyFilter('course_theme', 'trim');
+	$form -> addElement('html',$linebreak);
+}
+
 
 $form->addElement('static', null, null, get_lang("ConfTip"));
 $form->add_textfield('course_registration_password', get_lang('CourseRegistrationPassword'), false, array ('size' => '60'));
@@ -244,6 +253,8 @@ $values['allow_user_edit_agenda'] = api_get_course_setting('allow_user_edit_agen
 $values['allow_user_edit_announcement'] = api_get_course_setting('allow_user_edit_announcement');
 // get allow_user_image_forum from table
 $values['allow_user_image_forum'] = api_get_course_setting('allow_user_image_forum');
+// get course_theme from table
+$values['course_theme'] = api_get_course_setting('course_theme');
 
 $form->setDefaults($values);
 // Validate form
@@ -294,6 +305,10 @@ if ($form->validate() && is_settings_editable())
 	if($update_values['allow_user_image_forum'] != $values['allow_user_image_forum']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_image_forum']." WHERE variable = 'allow_user_image_forum' ";
 		api_sql_query($sql,__FILE__,__LINE__);
+	}
+	if($update_values['course_theme'] != $values['course_theme']){
+		$sql = "UPDATE $table_course_setting SET value = '".$update_values['course_theme']."' WHERE variable = 'course_theme' ";
+		api_sql_query($sql,__FILE__,__LINE__); 
 	}	
 
 	$cidReset = true;

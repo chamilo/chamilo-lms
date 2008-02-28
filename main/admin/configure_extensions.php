@@ -1,27 +1,5 @@
 <?php // $Id: configure_homepage.php 9246 2006-09-25 13:24:53 +0000 (lun., 25 sept. 2006) bmol $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
-
+/* See license terms in /dokeos_license.txt */
 // name of the language file that needs to be included 
 $language_file='admin';
 
@@ -54,16 +32,15 @@ if(isset($_POST['activeExtension'])){
 					selected_value="true"
 					WHERE variable="service_visio"
 					AND subkey="active"';
-			$rs = api_sql_query($sql, __FILE__, __LINE__);			
-			if(mysql_affected_rows()>0){
+			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			if(mysql_affected_rows()>0)
+			{
 				
 				// select all the courses and insert the tool inside
 				$sql = 'SELECT db_name FROM '.Database::get_main_table(TABLE_MAIN_COURSE);
-				
 				$rs = api_sql_query($sql, __FILE__, __LINE__);
 				while($row = mysql_fetch_array($rs)){
-					
-					if(!empty($_POST['visioconference_url']))
+					if(!empty($_POST['visio_host']))
 					{
 						$tool_table = Database::get_course_table(TABLE_TOOL_LIST,$row['db_name']);
 						$sql = 'INSERT INTO '.$tool_table.' SET 
@@ -75,11 +52,7 @@ if(isset($_POST['activeExtension'])){
 								address="squaregrey.gif",
 								target="_self",
 								category="interaction"';
-
 						api_sql_query($sql, __FILE__, __LINE__);		
-					}
-					if(!empty($_POST['visioclassroom_url']))
-					{
 						$sql = 'INSERT INTO '.$tool_table.' SET 
 								name="'.TOOL_VISIO_CLASSROOM.'",
 								link="conference/index.php?type=classroom",
@@ -89,7 +62,6 @@ if(isset($_POST['activeExtension'])){
 								address="squaregrey.gif",
 								target="_self",
 								category="authoring"';
-								
 						api_sql_query($sql, __FILE__, __LINE__);
 					}					
 				}

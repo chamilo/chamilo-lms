@@ -97,39 +97,21 @@ if(isset($_POST['activeExtension'])){
 				
 			}
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['visioconference_url']).'"
+					selected_value="'.Database::escape_string($_POST['visio_host']).'"
 					WHERE variable="service_visio"
-					AND subkey="visioconference_url"';
+					AND subkey="visio_host"';
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
 			
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['visioclassroom_url']).'"
+					selected_value="'.Database::escape_string($_POST['visio_port']).'"
 					WHERE variable="service_visio"
-					AND subkey="visioclassroom_url"';
+					AND subkey="visio_port"';
 			$rs = api_sql_query($sql, __FILE__, __LINE__);	
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['visio_rtmp_host_local']).'"
+					selected_value="'.Database::escape_string($_POST['visio_pass']).'"
 					WHERE variable="service_visio"
-					AND subkey="visio_rtmp_host_local"';
-			$rs = api_sql_query($sql, __FILE__, __LINE__);	
-
-			//$sql = 'UPDATE '.$tbl_settings_current.' SET
-			//		selected_value="'.addslashes($_POST['visio_is_web_rtmp']).'"
-			//		WHERE variable="service_visio"
-			//		AND subkey="visio_is_web_rtmp"';
-			//$rs = api_sql_query($sql, __FILE__, __LINE__);	
-
-			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['visio_rtmp_port']).'"
-					WHERE variable="service_visio"
-					AND subkey="visio_rtmp_port"';
-			$rs = api_sql_query($sql, __FILE__, __LINE__);	
-
-			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['visio_rtmp_tunnel_port']).'"
-					WHERE variable="service_visio"
-					AND subkey="visio_rtmp_tunnel_port"';
+					AND subkey="visio_pass"';
 			$rs = api_sql_query($sql, __FILE__, __LINE__);	
 			
 			if(empty($message))
@@ -304,17 +286,14 @@ Display::display_header($nameTool);
 					<td align="center" width="50%">
 						<?php 
 						$form = new FormValidator('visio');						
-						$form -> addElement('text', 'visioconference_url', get_lang('VideoConferenceUrl'));
+						$form -> addElement('text', 'visio_host', get_lang('VisioHost'));
 						$form -> addElement('html','<br /><br />');
-						$form -> addElement('text', 'visioclassroom_url', get_lang('VideoClassroomUrl'));
+						$form -> addElement('text', 'visio_port', get_lang('VisioPort'));
 						$form -> addElement('html','<br /><br />');
-						$form -> addElement('text', 'visio_rtmp_host_local', get_lang('VisioHostLocal'));
+						$form -> addElement('text', 'visio_pass', get_lang('VisioPassword'));
 						$form -> addElement('html','<br /><br />');
 						//$form -> addElement('text', 'visio_is_web_rtmp', get_lang('VisioRTMPIsWeb'));
 						//$form -> addElement('html','<br /><br />');
-						$form -> addElement('text', 'visio_rtmp_port', get_lang('VisioRTMPPort'));
-						$form -> addElement('html','<br /><br />');
-						$form -> addElement('text', 'visio_rtmp_tunnel_port', get_lang('VisioRTMPTunnelPort'));
 						$form -> addElement('hidden', 'extension_code', 'visio');
 						$defaults = array();
 						$renderer = $form -> defaultRenderer();

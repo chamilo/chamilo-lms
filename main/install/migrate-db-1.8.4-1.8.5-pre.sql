@@ -55,6 +55,15 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('user_selec
 INSERT INTO settings_options (variable, value, display_text) VALUES ('user_selected_theme', 'false', 'No');
 ALTER TABLE user ADD theme varchar(255) DEFAULT NULL;
 
+UPDATE settings_current SET variable='service_visio', subkey='active'    , title='VisioEnable' WHERE variable='service_visio' AND subkey='active';
+UPDATE settings_current SET variable='service_visio', subkey='visio_host', title='VisioHost' WHERE variable='service_visio' AND subkey='visio_rtmp_host_local';
+UPDATE settings_current SET variable='service_visio', subkey='visio_port', title='VisioPort' WHERE variable='service_visio' AND subkey='visio_rtmp_port';
+UPDATE settings_current SET variable='service_visio', subkey='visio_pass', title='VisioPassword', type='textfield' WHERE variable='service_visio' AND subkey='visio_rtmp_tunnel_port';
+DELETE FROM settings_options WHERE variable = 'visio_rtmp_host_local';
+DELETE FROM settings_current WHERE variable='service_visio' AND subkey='visioconference_url';
+DELETE FROM settings_current WHERE variable='service_visio' AND subkey='visioclassroom_url';
+DELETE FROM settings_current WHERE variable='service_visio' AND subkey='visio_is_web_rtmp';
+
 -- xxSTATSxx
 ALTER TABLE track_e_downloads ADD INDEX (down_user_id);
 ALTER TABLE track_e_downloads ADD INDEX (down_cours_id);

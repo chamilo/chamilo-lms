@@ -437,6 +437,23 @@ if(!empty($_GET['student']))
 		
 				$a_infosCours = CourseManager :: get_course_information($_GET['course']);
 			
+			 //get coach if there is one
+			$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+			$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+			$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+			$sql = 'SELECT user.* FROM '.$tbl_user.' user
+					INNER JOIN '.$tbl_session_course.' session_course
+					        ON user.user_id = session_course.id_coach
+					INNER JOIN '.$tbl_session_course_user.' session_course_user
+					        ON session_course.id_session = session_course_user.id_session
+					        AND session_course_user.id_user = '.intval($a_infosUser['user_id']).'
+					        AND session_course_user.course_code = "'.Database::escape_string($_GET['course']).'"';
+			
+			$rs = api_sql_query($sql,__FILE__,__LINE__);
+			if(mysql_num_rows($rs)>0)
+			        $a_infosCours['tutor_name'] = mysql_result($rs,0,'firstname').' '.mysql_result($rs,0,'lastname');
+			
+			
 			$a_date_start = explode('-',$a_infosCours['date_start']);
 			$date_start = $a_date_start[2].'/'.$a_date_start[1].'/'.$a_date_start[0];
 			$a_date_end = explode('-',$a_infosCours['date_end']);

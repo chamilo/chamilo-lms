@@ -559,10 +559,10 @@ function delete_post($post_id)
 	{
 		// Decreasing the number of replies for this thread and also changing the last post information
 		$sql="UPDATE $table_threads SET thread_replies=thread_replies-1,
-					thread_poster_id='".mysql_real_escape_string($last_post_of_thread['poster_id'])."',
 					thread_last_post='".mysql_real_escape_string($last_post_of_thread['post_id'])."',
 					thread_date='".mysql_real_escape_string($last_post_of_thread['post_date'])."'
 			WHERE thread_id='".mysql_real_escape_string($_GET['thread'])."'";
+		echo $sql;
 		api_sql_query($sql,__FILE__,__LINE__);
 		return 'PostDeleted';
 	}

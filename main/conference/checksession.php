@@ -17,7 +17,8 @@ if($debug>0) error_log('New LP - Included aicc',0);
 require_once('../newscorm/aiccItem.class.php');
 if($debug>0) error_log('New LP - Included aiccItem',0);
 
-include("../../main/inc/global.inc.php");
+require("../../main/inc/global.inc.php");
+require_once('get_translation.lib.php');
 api_block_anonymous_users();
 
 //$confkey = "0123456789abcdef0123456789abcdef";

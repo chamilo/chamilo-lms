@@ -633,7 +633,7 @@ if($show == 'test'){
 	<td align='center'><?php
 		$eid = $row['id'];
 	$uid= api_get_user_id();
-	$qry = "select * from ".$TBL_TRACK_EXERCICES." where exe_exo_id = $eid and exe_user_id = $uid";
+	$qry = "select * from `".$TBL_TRACK_EXERCICES."` where exe_exo_id = $eid and exe_user_id = $uid and exe_cours_id = '".api_get_course_id()."'";	
 	$qryres = api_sql_query($qry);
 	$num = Database::num_rows($qryres);
 	$row = Database::fetch_array($qryres);

@@ -246,6 +246,11 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
     	return $content;
     	
     }
+    
+    function add_docs_to_visio (){
+    	
+    	
+    }
    
 		
 }

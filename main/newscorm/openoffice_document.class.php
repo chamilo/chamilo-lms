@@ -31,7 +31,7 @@ abstract class OpenofficeDocument extends learnpath {
     	}
     }
     
-    function convert_document($file){
+    function convert_document($file, $action_after_conversion='make_lp'){
     	
     	global $_course, $_user, $_configuration;
     
@@ -48,9 +48,11 @@ abstract class OpenofficeDocument extends learnpath {
 		
 	
 		//create the directory
-		
 		$this->base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-		$this->created_dir = create_unexisting_directory($_course,$_user['user_id'],0,0,$this->base_work_dir,$dir_name);
+		
+		$visio_dir = ($action_after_conversion=='add_docs_to_visio')?VIDEOCONF_UPLOAD_PATH:'';
+		
+		$this->created_dir = create_unexisting_directory($_course,$_user['user_id'],0,0,$this->base_work_dir,$visio_dir.$dir_name);
 
 		
 		move_uploaded_file($file['tmp_name'],$this->base_work_dir.'/'.$this->file_path);
@@ -76,14 +78,14 @@ abstract class OpenofficeDocument extends learnpath {
 		// call to the function implemented by child
 		$cmd .= $this -> add_command_parameters();	
 			
-		$cmd .= ' "'.$this->base_work_dir.'/'.$this->file_path.'" "'.$this->base_work_dir.$this->created_dir.'/'.$this->file_name.'.html"';
+		$cmd .= ' "'.$this->base_work_dir.'/'.$this->file_path.'" "'.$this->base_work_dir.$this->created_dir.'.html"';
 
 		// to allow openoffice to manipulate docs.
 		chmod ($this->base_work_dir.$this->created_dir,0777);
 		chmod($this->base_work_dir.'/'.$this->file_path,0777);
 		
 		$shell = exec($cmd, $files, $return);
-		
+
 		if($return != 0) { //if the java application returns an error code
 		
 			DocumentManager::delete_document($_course, $dir_name, $this->base_work_dir);	 
@@ -94,8 +96,14 @@ abstract class OpenofficeDocument extends learnpath {
 		// create lp
 		$this->lp_id = learnpath::add_lp($_course['id'], $this->file_name,'','guess','manual');
 		
-		// call to the function implemented by child
-		$this -> make_lp($files);
+		// call to the function implemented by child following action_after_conversion parameter
+		switch ($action_after_conversion)
+		{
+			case 'make_lp':$this -> make_lp($files);	
+			break;		
+			case 'add_docs_to_visio':$this -> add_docs_to_visio($files);	
+			break;	
+		}
 				
 	    $perm = api_get_setting('permissions_for_new_directories');
 		$perm = octdec(!empty($perm)?$perm:0770);
@@ -106,6 +114,7 @@ abstract class OpenofficeDocument extends learnpath {
 
     
     abstract function make_lp();
+    abstract function add_docs_to_visio();
     abstract function add_command_parameters();
    
 		

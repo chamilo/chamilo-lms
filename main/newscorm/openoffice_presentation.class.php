@@ -45,7 +45,7 @@ class OpenofficePresentation extends OpenofficeDocument {
 					'<html>
 					<head></head>
 					<body>
-						<img src="'.api_get_path(REL_COURSE_PATH).$_course['path'].'/document/'.$this->created_dir.'/'.$this->file_name.'/'.$file.'" />
+						<img src="'.api_get_path(REL_COURSE_PATH).$_course['path'].'/document/'.$this->created_dir.'/'.$file.'" />
 					</body>
 					</html>');
 			fclose($fp);
@@ -78,6 +78,20 @@ class OpenofficePresentation extends OpenofficeDocument {
     	list($slide_width, $slide_height) = explode('x',api_get_setting('service_ppt2lp','size'));
     	return " -w $slide_width -h $slide_height -d oogie";
     
+    }
+    
+    function add_docs_to_visio ($files=array()){
+    	
+    	global $_course;
+    	/* Add Files */
+    	
+		foreach($files as $f)
+		{
+			$did = add_document($_course, $this->created_dir.'/'.$f, 'file', filesize($this->base_work_dir.$this->created_dir.'/'.$f), $f);
+			if ($did)
+				api_item_property_update($_course, TOOL_DOCUMENT, $did, 'DocumentAdded', $_SESSION['_uid'], 0, NULL);
+		}
+		
     }
 	    
 		

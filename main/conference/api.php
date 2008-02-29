@@ -34,6 +34,8 @@ api_block_anonymous_users();
 require_once (api_get_path(LIBRARY_PATH)."course.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."document.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."fileUpload.lib.php");
+require_once ("../newscorm/learnpath.class.php");
+require_once ("../newscorm/openoffice_presentation.class.php");
 
 /*==== Variables initialisation ====*/
 $action = $_REQUEST["action"]; //safe as only used in if()'s
@@ -45,7 +47,7 @@ $cidReq = Security::remove_XSS($cidReq);
 $user_id = api_get_user_id();
 $coursePath = api_get_path(SYS_COURSE_PATH).$cidReq.'/document';
 $_course = CourseManager::get_course_information($cidReq);
-
+$_course['path'] = $_course['directory'];
 // FIXME: add_document needs this to work
 $_course['dbName'] = $_course['db_name'];
 
@@ -86,62 +88,10 @@ else if ($action == "upload")
 			if ($debug>0) error_log("Can't create ".$destPath." folder",0);
 		}
 	}
-	
-	$newPath = handle_uploaded_document($_course,$_FILES['filedata'],$coursePath,VIDEOCONF_UPLOAD_PATH,$user_id,0,NULL,'',0,'rename',false);
-	// based on ../newscorm/presentation.class.php
-   	$file_name = (strrpos($newPath,'.')>0 ? substr($newPath, 0, strrpos($newPath,'.')) : $newPath);
-   	$file_extension = (strrpos($newPath,'.')>0 ? substr($newPath, strrpos($newPath,'.'),10) : '');
-	if (in_array($file_extension, $presentation_extension))
-	{
-		if ($debug > 0) error_log("converting $coursePath$newPath", 0);
-		/* creating output folder */
-		$created_dir = create_unexisting_directory($_course,$user_id,0,NULL,$coursePath,$file_name);
-		
-		/* alow user of openoffice to write into the folder */
-		// FIXME
-		chmod($coursePath.$created_dir, 0777);
+	$take_slide_name = false;
+	$o_ppt = new OpenofficePresentation($take_slide_name);
+	$o_ppt -> convert_document($_FILES['filedata'],'add_docs_to_visio');
 
-		/*
-		 * exec java application
-		 * the parameters of the program are :
-		 * - javacommand on this server ;
-		 * - host where openoffice is running;
-		 * - port with which openoffice is listening
-		 * - file to convert
-		 * - folder where put the slides
-		 * - ftppassword if required
-		 * The program fills $files with the list of slides created
-		 */
-		/* building command line */
-		$classpath = '-cp .:ridl.jar:js.jar:juh.jar:jurt.jar:jut.jar:java_uno.jar:java_uno_accessbridge.jar:edtftpj-1.5.2.jar:unoil.jar';
-		if(strpos($_ENV['OS'],'Windows') !== false)
-		{
-			$classpath = str_replace(':',';',$classpath);
-		}
-		$slide_width=640;
-		$slide_height=480;
-		
-		if(strpos($_ENV['OS'],'Windows') !== false)
-		{
-			$cmd = 'cd '.str_replace('/','\\',api_get_path(SYS_PATH)).'main/inc/lib/ppt2png && java '.$classpath.' DocumentConverter '.api_get_setting('service_ppt2lp','host').' 2002'.' "'.$coursePath.$newPath.'" "'.$coursePath.$created_dir.'"'.' '.$slide_width.' '.$slide_height.' '.api_get_setting('service_ppt2lp','user').' '.api_get_setting('service_ppt2lp','ftp_password');
-		}
-		else
-		{
-			$cmd = 'cd '.api_get_path(SYS_PATH).'main/inc/lib/ppt2png && java '.$classpath.' DocumentConverter '.api_get_setting('service_ppt2lp','host').' 2002'.' "'.$coursePath.$newPath.'" "'.$coursePath.$created_dir.'"'.' '.$slide_width.' '.$slide_height.' '.api_get_setting('service_ppt2lp','user').' '.api_get_setting('service_ppt2lp','ftp_password');
-		}
-		if ($debug>0) error_log($cmd,0);
-
-		/* Exec */
-		$shell = exec($cmd, $files, $return); // files: list of created files, return: shell return code
-		
-		/* Add Files */
-		foreach($files as $f)
-		{
-			$did = add_document($_course, $created_dir.'/'.$f, 'file', filesize($coursePath.$created_dir.'/'.$f), $f);
-			if ($did)
-				api_item_property_update($_course, TOOL_DOCUMENT, $did, 'DocumentAdded', $user_id, 0, NULL);
-		}
-	}
 	echo '<html><body><script language="javascript">setTimeout(1000,window.close());</script></body></html>';
 } 
 else if ($action == "service") 

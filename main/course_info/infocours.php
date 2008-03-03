@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 14425 2008-02-28 22:33:09Z yannoo $
+// $Id: infocours.php 14477 2008-03-03 21:42:03Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -201,9 +201,17 @@ $form->addElement('radio', 'allow_user_image_forum', get_lang('AllowUserImageFor
 $form->addElement('radio', 'allow_user_image_forum', null, get_lang('AllowUserImageForumDeactivate'), 0);
 $form -> addElement('html',$linebreak);
 
+
+
 // Course theme picker
 if (api_get_setting('allow_course_theme') == 'true')
-{
+{	
+	//Allow Learning path 
+	$form->addElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeActivate'), 1);
+	$form->addElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDectivate'), 0);
+	$form -> addElement('html',$linebreak);
+	
+	
 	$form->addElement('select_theme', 'course_theme', get_lang('Theme'));
 	$form->applyFilter('course_theme', 'trim');
 	$form -> addElement('html',$linebreak);
@@ -255,6 +263,9 @@ $values['allow_user_edit_announcement'] = api_get_course_setting('allow_user_edi
 $values['allow_user_image_forum'] = api_get_course_setting('allow_user_image_forum');
 // get course_theme from table
 $values['course_theme'] = api_get_course_setting('course_theme');
+// get allow_learning_path_theme from table
+$values['allow_learning_path_theme'] = api_get_course_setting('allow_learning_path_theme');
+
 
 $form->setDefaults($values);
 // Validate form
@@ -309,7 +320,12 @@ if ($form->validate() && is_settings_editable())
 	if($update_values['course_theme'] != $values['course_theme']){
 		$sql = "UPDATE $table_course_setting SET value = '".$update_values['course_theme']."' WHERE variable = 'course_theme' ";
 		api_sql_query($sql,__FILE__,__LINE__); 
-	}	
+	}
+	if($update_values['allow_learningpath_theme'] != $values['allow_learning_path_theme']){
+		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_learning_path_theme']." WHERE variable = 'allow_learning_path_theme' ";
+		api_sql_query($sql,__FILE__,__LINE__);
+	}
+	
 
 	$cidReset = true;
 	$cidReq = $course_code;

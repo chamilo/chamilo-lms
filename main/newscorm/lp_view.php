@@ -79,7 +79,8 @@ unset($_SESSION['questionList']);
  * Get a link to the corresponding document
  */
 $src = '';
-switch($lp_type){
+switch($lp_type)
+{
 	case 1:
 		$_SESSION['oLP']->stop_previous_item();
 		$htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
@@ -118,23 +119,21 @@ switch($lp_type){
 	case 4:
 		break;
 }
-$_SESSION['oLP']->set_previous_item($lp_item_id);
 
+$_SESSION['oLP']->set_previous_item($lp_item_id);
 $nameTools = $_SESSION['oLP']->get_name();
 $save_setting = get_setting("show_navigation_menu");
 global $_setting;
 $_setting['show_navigation_menu'] = false;
 
-
-if($_SESSION['oLP']->mode == 'fullscreen'){
-	$htmlHeadXtra[] =
-	'<style type="text/css" media="screen, projection">
-	/*<![CDATA[*/
-	@import "scorm.css";
-	/*]]>*/
-	</style>';
-	$htmlHeadXtra[] = "<script>window.open('$src','content_name','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";
+$scorm_css_header=true; 	
+$lp_theme_css=$_SESSION['oLP']->get_theme(); //sets the css theme of the LP this call is also use at the frames (toc, nav, message)
+	
+if($_SESSION['oLP']->mode == 'fullscreen')
+{
+	$htmlHeadXtra[] = "<script>window.open('$src','content_name','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";	
 	include_once('../inc/reduced_header.inc.php');
+	
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
 	$_SESSION['loaded_lp_view'] = true;
 	?>
@@ -156,21 +155,19 @@ if($_SESSION['oLP']->mode == 'fullscreen'){
 	</frameset>
 </html>
 <?php
-}else{
-	$htmlHeadXtra[] =
-	'<style type="text/css" media="screen, projection">
-	/*<![CDATA[*/
-	@import "scorm.css";
-	/*]]>*/
-	</style>';
+}
+else
+{	
 	include_once('../inc/reduced_header.inc.php');
 	$displayAudioRecorder = (api_get_setting('service_ppt2lp','active')=='true' && api_get_setting('service_ppt2lp','path_to_lzx')!='') ? true : false;
 	//check if audio recorder needs to be in studentview
 	$course_id=$_SESSION["_course"]["id"];
-	if($_SESSION["status"][$course_id]==5){
+	if($_SESSION["status"][$course_id]==5)
+	{
 		$audio_recorder_studentview = true;
 	}
-	else{
+	else
+	{
 		$audio_recorder_studentview = false;
 	}
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)

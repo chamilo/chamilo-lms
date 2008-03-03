@@ -33,12 +33,9 @@ $charset = $_SESSION['oLP']->encoding;
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
   var dokeos_xajax_handler = window.parent.oxajax;
 </script>';
-$htmlHeadXtra[] = '' .
-'<style type="text/css" media="screen, projection">
-	/*<![CDATA[*/
-	@import "scorm.css";
-	/*]]>*/
-</style>';
+$scorm_css_header=true;
+$display_mode='';
+$lp_theme_css=$_SESSION['oLP']->get_theme();
 include_once('../inc/reduced_header.inc.php');
 ?>
 <body>

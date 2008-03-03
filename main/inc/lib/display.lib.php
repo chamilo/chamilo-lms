@@ -481,7 +481,7 @@ class Display {
 	function display_header($tool_name, $help = NULL)
 	{
 		$nameTools = $tool_name;
-		global $_plugins;
+		global $_plugins,$lp_theme_css,$mycoursetheme,$user_theme,$platform_theme;
 		global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $clarolineRepositoryWeb, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
 		global $menu_navigation;
 		include (api_get_path(INCLUDE_PATH)."header.inc.php");

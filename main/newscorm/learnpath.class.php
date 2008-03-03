@@ -37,6 +37,7 @@ class learnpath {
 	var $name; //learnpath name (they generally have one)
 	var $ordered_items = array(); //list of the learnpath items in the order they are to be read
 	var $path = ''; //path inside the scorm directory (if scorm)
+	var $theme; // the current theme of the learning path  
 	
 	// Tells if all the items of the learnpath can be tried again. Defaults to "no" (=1)
 	var $prevent_reinit = 1;
@@ -122,6 +123,7 @@ class learnpath {
     			$this->name = stripslashes($row['name']);
     			$this->encoding = $row['default_encoding'];
     			$this->proximity = $row['content_local'];
+    			$this->theme = $row['theme'];
     			$this->maker = $row['content_maker'];
     			$this->prevent_reinit = $row['prevent_reinit'];
     			$this->license = $row['content_license'];
@@ -1901,6 +1903,18 @@ class learnpath {
      */
     function get_progress_bar($mode='',$percentage=-1,$text_add='')
     {
+    	global $lp_theme_css;
+    	
+    	// Setting up the CSS path of the current style if exists   
+    	if (!empty($lp_theme_css))
+    	{    
+	    	$css_path=api_get_path(WEB_CODE_PATH).'css/'.$lp_theme_css.'/images/';
+    	}
+    	else 
+    	{
+    		$css_path='../img/';	
+    	}  
+	    	
 		//if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar()',0);}
     	if(is_object($this) && ($percentage=='-1' OR $text_add==''))
     	{
@@ -1911,15 +1925,20 @@ class learnpath {
     	$output = '' 
     	//.htmlentities(get_lang('ScormCompstatus'),ENT_QUOTES,'ISO-8859-1')."<br />"
 	    .'<table border="0" cellpadding="0" cellspacing="0"><tr><td>'
-	    .'<img id="progress_img_limit_left" src="../img/bar_1.gif" width="1" height="12">'
-	    .'<img id="progress_img_full" src="../img/bar_1u.gif" width="'.$size.'px" height="12" id="full_portion">'
-	    .'<img id="progress_img_limit_middle" src="../img/bar_1m.gif" width="1" height="12">';
-	    if($percentage <= 98){
-	    	$output .= '<img id="progress_img_empty" src="../img/bar_1r.gif" width="'.(100-$size).'px" height="12" id="empty_portion">';
-	    }else{
-	    	$output .= '<img id="progress_img_empty" src="../img/bar_1r.gif" width="0" height="12" id="empty_portion">';
+	    .'<img id="progress_img_limit_left" src="'.$css_path.'bar_1.gif" width="1" height="12">'
+	    .'<img id="progress_img_full" src="'.$css_path.'bar_1u.gif" width="'.$size.'px" height="12" id="full_portion">'
+	    .'<img id="progress_img_limit_middle" src="'.$css_path.'bar_1m.gif" width="1" height="12">';
+	    
+	    if($percentage <= 98)
+	    {
+	    	$output .= '<img id="progress_img_empty" src="'.$css_path.'bar_1r.gif" width="'.(100-$size).'px" height="12" id="empty_portion">';
 	    }
-	    $output .= '<img id="progress_bar_img_limit_right" src="../img/bar_1.gif" width="1" height="12"></td></tr></table>'
+	    else
+	    {
+	    	$output .= '<img id="progress_img_empty" src="'.$css_path.'bar_1r.gif" width="0" height="12" id="empty_portion">';
+	    }
+	    
+	    $output .= '<img id="progress_bar_img_limit_right" src="'.$css_path.'bar_1.gif" width="1" height="12"></td></tr></table>'
 	    .'<div class="progresstext" id="progress_text">'.$text.'</div>';
 	    return $output;
     }
@@ -1984,6 +2003,17 @@ class learnpath {
 		if($this->debug>0){error_log('New LP - In learnpath::get_proximity()',0);}
 		if(!empty($this->proximity)){return $this->proximity;}else{return '';}
 	}
+	
+	 /**
+     * Gets the learnpath theme (remote or local)
+     * @return	string	Learnpath theme
+     */
+    function get_theme()
+	{
+		if($this->debug>0){error_log('New LP - In learnpath::get_theme()',0);}
+		if(!empty($this->theme)){return $this->theme;}else{return '';}
+	}
+	
 	/**
 	 * Generate a new prerequisites string for a given item. If this item was a sco and
 	 * its prerequisites were strings (instead of IDs), then transform those strings into
@@ -3410,6 +3440,25 @@ class learnpath {
     	return true;
 
     }
+    
+       /**
+     * Sets the theme of the LP (local/remote) (and save)
+     * @param	string	Optional string giving the new theme of this learnpath
+     * @return bool returns true if theme name is not empty
+     */
+    function set_theme($name=''){
+		if($this->debug>0){error_log('New LP - In learnpath::set_theme()',0);}
+    	if(empty($name))return false;
+    	
+    	$this->theme = $this->escape_string($name);
+		$lp_table = Database::get_course_table('lp');
+		$lp_id = $this->get_id();
+		$sql = "UPDATE $lp_table SET theme = '".$this->theme."' WHERE id = '$lp_id'";
+		if($this->debug>2){error_log('New LP - lp updated with new theme : '.$this->theme,0);}
+		//$res = Database::query($sql);
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+    	return true;
+    }    
 
     /**
      * Sets the location/proximity of the LP (local/remote) (and save)
@@ -3425,9 +3474,9 @@ class learnpath {
 		$sql = "UPDATE $lp_table SET content_local = '".$this->proximity."' WHERE id = '$lp_id'";
 		if($this->debug>2){error_log('New LP - lp updated with new proximity : '.$this->proximity,0);}
 		//$res = Database::query($sql);
-		$res = api_sql_query($sql);
+		$res = api_sql_query($sql, __FILE__, __LINE__);
     	return true;
-    }    
+    }   
     /**
      * Sets the previous item ID to a given ID. Generally, this should be set to the previous 'current' item
      * @param	integer	DB ID of the item

@@ -27,12 +27,10 @@ function cleanlog(){
   }
 }
 </script>';
-$htmlHeadXtra[] = '' .
-'<style type="text/css" media="screen, projection">
-	/*<![CDATA[*/
-	@import "../css/default/scorm.css";
-	/*]]>*/
-</style>';
+
+$scorm_css_header=true;
+$display_mode='';
+$lp_theme_log=true;
 include_once('../inc/reduced_header.inc.php');
 ?>
 <body>

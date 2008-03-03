@@ -74,23 +74,26 @@ echo get_setting('siteName');
 <style type="text/css" media="screen, projection">
 /*<![CDATA[*/
 <?php
-$style = api_get_setting('stylesheets'); 	// plataform's css
+
+$platform_theme= api_get_setting('stylesheets'); 	// plataform's css
+$my_style=$platform_theme;
 
 if(api_get_setting('user_selected_theme') == 'true') 
 {		
 	$useri = api_get_user_info();
-	$theme = $useri['theme'];
-	if(!empty($theme) && $theme != $my_style)
+	$user_theme = $useri['theme'];
+	if(!empty($user_theme) && $user_theme != $my_style)
 	{
-		$my_style = $theme;					// user's css
+		$my_style = $user_theme;					// user's css
 	}
 }
 $mycourseid = api_get_course_id();
-if (!empty($mycourseid) && $mycourseid != -1) {		 		
-	
+if (!empty($mycourseid) && $mycourseid != -1) 
+{	
 	if (api_get_setting('allow_course_theme') == 'true') 
 	{	
-		$mycoursetheme=api_get_course_setting('course_theme');			
+		$mycoursetheme=api_get_course_setting('course_theme');
+					
 		if (!empty($mycoursetheme) && $mycoursetheme!=-1)		 
 		{							
 			if(!empty($mycoursetheme) && $mycoursetheme != $my_style)
@@ -98,7 +101,36 @@ if (!empty($mycourseid) && $mycourseid != -1) {
 				$my_style = $mycoursetheme;		// course's css
 			}			
 		}
+				
+		$mycourselptheme=api_get_course_setting('allow_learning_path_theme');
+		if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1)		 
+		{	
+			
+			global $lp_theme_css; //  it comes from the lp_controller.php 
+			global $lp_theme_config; // it comes from the lp_controller.php
+											
+			if (!$lp_theme_config)			 											
+			{
+				if ($lp_theme_css!='') 
+				{				
+					$theme=$lp_theme_css;						
+					if(!empty($theme) && $theme != $my_style)
+					{								
+						$my_style = $theme;	 // LP's css
+					}
+				}				
+			}
+		}
 	}
+}
+
+global $show_learn_path;
+
+if ($show_learn_path) {
+	$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/learnpath.css"/>';
+	$htmlHeadXtra[] = "<link rel='stylesheet' type='text/css' href='dtree.css' />"; //will be moved
+	$htmlHeadXtra[] = "<script src='dtree.js' type='text/javascript'></script>"; //will be moved
+		
 }
 
 $my_code_path = api_get_path(WEB_CODE_PATH);
@@ -157,7 +189,6 @@ include(api_get_path(LIBRARY_PATH).'/javascript/email_links.lib.js.php');
 <!-- #outerframe container to control some general layout of all pages -->
 <div id="outerframe">
 
-<?php
-						
+<?php						
 //  Banner
 include(api_get_path(INCLUDE_PATH)."banner.inc.php");

@@ -63,16 +63,6 @@ $language_file = "learnpath";
 
 /*
 -----------------------------------------------------------
-	Header and action code
------------------------------------------------------------
-*/ 
-$currentstyle = api_get_setting('stylesheets');
-$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'css/'.$currentstyle.'/learnpath.css"/>';
-$htmlHeadXtra[] = "<link rel='stylesheet' type='text/css' href='learnpath.css' />"; //will be a merged with original learnpath.css
-$htmlHeadXtra[] = "<link rel='stylesheet' type='text/css' href='dtree.css' />"; //will be moved
-$htmlHeadXtra[] = "<script src='dtree.js' type='text/javascript'></script>"; //will be moved
-/*
------------------------------------------------------------
 	Constants and variables
 -----------------------------------------------------------
 */ 
@@ -160,7 +150,12 @@ $interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_
 
 $interbreadcrumb[]= array ("url"=>api_get_self()."?action=build&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));
 
+//Theme calls
+$lp_theme_css=$_SESSION['oLP']->get_theme();
+$show_learn_path=true;
 Display::display_header(null,'Path');
+
+
 //api_display_tool_title($therow['name']);
 
 $suredel = get_lang('AreYouSureToDelete');

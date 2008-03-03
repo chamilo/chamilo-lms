@@ -569,6 +569,24 @@ class aicc extends learnpath {
 	 		return false;
 	 	}
 	 }
+	 
+	 /**
+	 * Sets the theme setting in the database
+	 * @param	string	Theme setting
+	 */
+	 function set_theme($theme=''){
+		if($this->debug>0){error_log('In aicc::set_theme('.$theme.') method',0);}
+	 	$lp = $this->get_id();
+	 	if($lp!=0){
+	 		$tbl_lp = Database::get_course_table('lp');
+	 		$sql = "UPDATE $tbl_lp SET theme = '$theme' WHERE id = ".$lp;
+	 		$res = api_sql_query($sql);
+	 		return $res;
+	 	}else{
+	 		return false;
+	 	}
+	 }
+	 
 	/**
 	 * Sets the content maker setting in the database
 	 * @param	string	Proximity setting

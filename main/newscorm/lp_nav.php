@@ -21,6 +21,10 @@ require_once('aicc.class.php');
 
 //error_log('New LP - Loaded lp_nav: '.$_SERVER['REQUEST_URI'],0);
 
+$htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
+	  var dokeos_xajax_handler = window.parent.oxajax;
+	</script>';
+
 $progress_bar = '';
 $navigation_bar = '';
 $display_mode = '';
@@ -29,37 +33,36 @@ if(isset($_SESSION['lpobject']))
 {
 	//if($debug>0) //error_log('New LP - in lp_nav.php - SESSION[lpobject] is defined',0);
 	$oLP = unserialize($_SESSION['lpobject']);
-	if(is_object($oLP)){
+	if(is_object($oLP))
+	{
 		$_SESSION['oLP'] = $oLP;
-	}else{
+	}
+	else
+	{
 		//error_log('New LP - in lp_nav.php - SESSION[lpobject] is not object - dying',0);
 		die('Could not instanciate lp object');
-	}
+	}	
 	$display_mode = $_SESSION['oLP']->mode;
+		
+	$scorm_css_header=true;
+	$lp_theme_css=$_SESSION['oLP']->get_theme();	
+	
+	//Setting up the CSS theme if exists	
+	include_once('../inc/reduced_header.inc.php');	
+	
+	if (!empty($lp_theme_css) && !empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1 )	
+	{
+		global $lp_theme_css;			
+	}
+	else 
+	{
+		$lp_theme_css=$my_style;
+	}
+	
 	$progress_bar = $_SESSION['oLP']->get_progress_bar();
-	$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
-}
-
-$htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
-  var dokeos_xajax_handler = window.parent.oxajax;
-</script>';
-if($display_mode == 'fullscreen'){
-	$htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
-						/*<![CDATA[*/
-						@import "scormfs.css";
-						/*]]>*/
-						</style>';
-}else{
-	$htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
-						/*<![CDATA[*/
-						@import "scorm.css";
-						/*]]>*/
-						</style>';
-}
-include_once('../inc/reduced_header.inc.php');
+	$navigation_bar = $_SESSION['oLP']->get_navigation_bar();}
 session_write_close();
 ?>
-
 <body>
 	<div class="lp_navigation_elem">
 	  <?php echo $progress_bar; ?>

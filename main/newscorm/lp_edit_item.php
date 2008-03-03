@@ -64,11 +64,6 @@ $language_file = "learnpath";
 	Header and action code
 -----------------------------------------------------------
 */ 
-$currentstyle = api_get_setting('stylesheets');
-$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'css/'.$currentstyle.'/learnpath.css"/>';
-$htmlHeadXtra[] = "<link rel='stylesheet' type='text/css' href='learnpath.css' />"; //will be a merged with original learnpath.css
-$htmlHeadXtra[] = "<link rel='stylesheet' type='text/css' href='dtree.css' />"; //will be moved
-$htmlHeadXtra[] = "<script src='dtree.js' type='text/javascript'></script>"; //will be moved
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 function launch_templates(){
@@ -144,6 +139,9 @@ $therow=Database::fetch_array($result);
 $interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_lang("_learning_path"));
 
 $interbreadcrumb[]= array ("url"=>api_get_self()."?action=build&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));
+//Theme calls
+$show_learn_path=true;
+$lp_theme_css=$_SESSION['oLP']->get_theme();
 
 Display::display_header(null,'Path');
 //api_display_tool_title($therow['name']);

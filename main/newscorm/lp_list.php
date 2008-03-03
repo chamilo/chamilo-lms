@@ -34,6 +34,7 @@
 /**
  * Script
  */
+
 if(empty($lp_controller_touched) || $lp_controller_touched!=1){
 	header('location: lp_controller.php?action=list');
 }
@@ -203,6 +204,26 @@ if (is_array($flat_list))
 	    $dsp_default_view = '';
 	    $dsp_debug = '';
 	    $dsp_order = '';
+	    
+	    // Select course theme	
+		if (!empty($platform_theme))
+		{	
+			$mystyle=$platform_theme;
+		}
+		
+		if (!empty($user_theme)) 
+		{	 
+			$mystyle=$user_theme;
+		}		
+				
+		if (!empty($mycoursetheme)) 
+		{	 
+			$mystyle=$mycoursetheme;
+		}
+		
+		$lp_theme_css=$mystyle;
+		
+	    
 	    if($display_progress_bar)
 	    {
 	    	$dsp_progress = '<td>'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id,api_get_user_id()),'').'</td>';

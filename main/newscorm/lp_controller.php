@@ -80,7 +80,7 @@ if(isset($_SESSION['lpobject']))
 			api_session_unregister('lpobject');
 		}else{
 			$_SESSION['oLP'] = $oLP;
-			$lp_found = true;
+			$lp_found = true;			
 		}
 	}
 }
@@ -566,6 +566,7 @@ switch($_REQUEST['action'])
 			$_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);
 			$_SESSION['oLP']->set_maker($_REQUEST['lp_maker']);
 			$_SESSION['oLP']->set_proximity($_REQUEST['lp_proximity']);
+			$_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);				
 			require('lp_list.php');
 		}	
 		break;

@@ -65,18 +65,12 @@ $language_file = "learnpath";
 	Header and action code
 -----------------------------------------------------------
 */ 
-$currentstyle = api_get_setting('stylesheets');
-$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'css/'.$currentstyle.'/learnpath.css"/>';
-$htmlHeadXtra[] = "<link rel='stylesheet' type='text/css' href='learnpath.css' />"; //will be a merged with original learnpath.css
-$htmlHeadXtra[] = "<link rel='stylesheet' type='text/css' href='dtree.css' />"; //will be moved
-$htmlHeadXtra[] = "<script src='dtree.js' type='text/javascript'></script>"; //will be moved
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 function launch_templates(){
 	window.frames[0].FCKToolbarItems.GetItem("Templates").Click();
 }
 </script>';
-
 
 $htmlHeadXtra[] = $_SESSION['oLP']->create_js();
 /*
@@ -149,6 +143,10 @@ switch($_GET['type']){
 		$interbreadcrumb[]= array ("url"=>"#", "name" => get_lang("NewStep"));
 	break;
 }
+
+//Theme calls
+$show_learn_path=true;
+$lp_theme_css=$_SESSION['oLP']->get_theme();
 
 Display::display_header(null,'Path');
 //api_display_tool_title($therow['name']);

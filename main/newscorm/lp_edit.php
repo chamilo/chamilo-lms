@@ -64,12 +64,26 @@ $content_proximity_select->addOption(get_lang('Local'), 'local');
 $content_proximity_select->addOption(get_lang('Remote'), 'remote');
 
 
+if (api_get_setting('allow_course_theme') == 'true')
+{		
+	$mycourselptheme=api_get_course_setting('allow_learning_path_theme');
+	if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1) 
+	{			
+		//LP theme picker				
+		$theme_select = &$form->addElement('select_theme', 'lp_theme', get_lang('Theme'));
+		$form->applyFilter('lp_theme', 'trim');
+		
+		$s_theme = $_SESSION['oLP']->get_theme();
+		$theme_select ->setSelected($s_theme); //default	
+	}	
+}
+
+
 //default values
 $content_proximity_select -> setSelected($s_selected_proximity);
 $origin_select -> setSelected($s_selected_origin);
 $encoding_select -> setSelected($s_selected_encoding);
 $defaults["lp_name"]=$_SESSION['oLP']->get_name();
-
 
 //Submit button
 $form->addElement('submit', 'Submit', get_lang('Ok'));

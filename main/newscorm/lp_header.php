@@ -57,7 +57,9 @@ if($show_link)
 // else we don't display get_lang(ucfirst(TOOL_LEARNPATH)) in the breadcrumb since the learner accessed it directly from the course homepage
 $interbreadcrumb[] = array("url"=>"./lp_controller.php?action=view&lp_id=".$path_id,'name'=>$path_name);
 $noPHP_SELF = true;
+$lp_theme_css=$_SESSION['oLP']->get_theme();
 Display::display_header($nameTools,"Path", null);
+
 ?>
 </div>
 </body>

@@ -1,4 +1,4 @@
-<?php // $Id: showinframes.php 13074 2007-09-18 16:06:35Z elixir_inter $ 
+.<?php // $Id: showinframes.php 14478 2008-03-03 21:46:38Z yannoo $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -89,7 +89,7 @@ if($is_courseAdmin)
 <title><?php echo $browser_display_title;?></title>
 </head>
 	<frameset rows="<?php echo $frameheight; ?>,*" border="0" frameborder="no" >
-		<frame name="top" scrolling="no" noresize target="contents" src="headerpage.php?file=<?php echo urlencode($_GET['file']); ?>">
+		<frame name="top" scrolling="no" noresize target="contents" src="headerpage.php?file=<?php echo urlencode($_GET['file']).'&amp;'.api_get_cidreq(); ?>">
 		<frame name="main" src="<?php echo api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.str_replace('%2F', '/',urlencode($_GET['file'])).'?'.api_get_cidreq().'&rand='.mt_rand(1,10000); ?>">
 	<noframes>
 	<body>

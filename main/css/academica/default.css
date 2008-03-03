@@ -31,6 +31,7 @@ body {
 	background-color: #fff;
 }
 
+
 h3 {
 	font: bold 1.3em Arial, sans-serif, sans;
 }
@@ -1536,4 +1537,8 @@ div.system_announcement {
         background-color:#FFFFFF;
         height:auto;
         overflow:auto;
+}
+
+#chat_login_name {
+	color : #4171b5;
 }

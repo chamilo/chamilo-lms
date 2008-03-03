@@ -2125,3 +2125,6 @@ input.forms	{
         height:auto;
         overflow:auto;
 }
+#chat_login_name {
+	color : #4171b5;  
+}

@@ -117,7 +117,6 @@ if($remove < 0)
 }
 
 array_splice($content,0,$remove);
-
 include('header_frame.inc.php');
 
 if ($_GET["origin"]=='whoisonline') {  //the caller

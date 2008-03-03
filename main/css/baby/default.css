@@ -1463,3 +1463,7 @@ div.system_announcement {
         height:auto;
         overflow:auto;
 }
+
+#chat_login_name {
+	color : #317100;  
+}

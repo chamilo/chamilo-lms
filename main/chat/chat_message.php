@@ -95,6 +95,8 @@ if(!is_dir($chatPath))
 	
 }
 
+include('header_frame.inc.php');
+
 $chat_size=0;
 
 if($sent)
@@ -121,7 +123,8 @@ if($sent)
 
 		if($isMaster)
 		{
-			fputs($fp,"<span style='color: #2754AF;'><b>$firstname $lastname</b></span> : $message<br>\n");
+			fputs($fp,'<span id="chat_login_name"><b>'.$firstname.' '.$lastname.'</b></span> : '.$message.'<br>'."\n");	 		
+			
 		}
 		else
 		{
@@ -137,7 +140,7 @@ if($sent)
 	}
 }
 
-include('header_frame.inc.php');
+
 ?>
 
 <form name="formMessage" method="post" action="<?php echo api_get_self(); ?>" onsubmit="javascript:if(document.formMessage.message.value == '') { alert('<?php echo addslashes(htmlentities(get_lang('TypeMessage'),ENT_QUOTES,$charset)); ?>'); document.formMessage.message.focus(); return false; }" autocomplete="off">

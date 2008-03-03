@@ -1,4 +1,4 @@
-<?php // $Id: chat.php 13783 2007-11-27 04:01:59Z yannoo $
+<?php // $Id: chat.php 14480 2008-03-03 21:59:10Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -49,9 +49,41 @@ else
 include('../inc/lib/events.lib.inc.php');
 event_access_tool(TOOL_CHAT);
 
-$used_stylesheet=api_get_setting('stylesheets');
 
-switch($used_stylesheet){
+
+/*
+ * Choose CSS style (platform's, user's, or course's) 
+ */
+$platform_theme = api_get_setting('stylesheets'); 	// plataform's css
+$my_style=$platform_theme;
+if(api_get_setting('user_selected_theme') == 'true') 
+{		
+	$useri = api_get_user_info();
+	$user_theme = $useri['theme'];
+	if(!empty($user_theme) && $user_theme != $my_style)
+	{
+		$my_style = $user_theme;					// user's css
+	}
+}
+
+$mycourseid = api_get_course_id();
+if (!empty($mycourseid) && $mycourseid != -1) 
+{	
+	if (api_get_setting('allow_course_theme') == 'true') 
+	{	
+		$mycoursetheme=api_get_course_setting('course_theme');			
+		if (!empty($mycoursetheme) && $mycoursetheme!=-1)		 
+		{							
+			if(!empty($mycoursetheme) && $mycoursetheme != $my_style)
+			{				
+				$my_style = $mycoursetheme;		// course's css
+			}			
+		}				
+	
+	}
+}
+
+switch($my_style){
 	case 'default' : 
 		$footer_size = 48;
 		break;
@@ -62,13 +94,12 @@ switch($used_stylesheet){
 		$footer_size = 60;
 		break;
 	case 'baby' : 
-		$footer_size = 50;
+		$footer_size = 120;
 		break;
 	default : 
 		$footer_size = 48;
 		break;
 }
-
 ?>
 
 <frameset rows="130,*,<?php echo $footer_size;?>" border="0" frameborder="0" framespacing="1">
@@ -83,5 +114,4 @@ switch($used_stylesheet){
 	</frameset>
 	<frame src="chat_footer.php" name="chat_footer" scrolling="no">
 </frameset>
-
 </html>

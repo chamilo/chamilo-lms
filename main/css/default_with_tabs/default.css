@@ -1541,3 +1541,6 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
         height:auto;
         overflow:auto;
 }
+#chat_login_name {
+	color : #4171b5;  
+}

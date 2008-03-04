@@ -59,7 +59,7 @@ function get_language_file_as_xml($language='english')
 				{
 					$string = $items[2];
 				}
-				$xml .= '<labelfield><labelid>'.$items[1].'</labelid><labelvalue>'.$string.'</labelvalue></labelfield>'."\n";
+				$xml .= '<labelfield><labelid>'.$items[1].'</labelid><labelvalue>'.stripslashes($string).'</labelvalue></labelfield>'."\n";
 			}
 		}
 	}

@@ -96,10 +96,10 @@
 	*	+ Integrated code from kses 0.2.2 into class.
 	*	+ Added methods DumpProtocols(), DumpMethods()
 	*
-	*	@author     Richard R. Vásquez, Jr. (Original procedural code by Ulf Härnhammar)
+	*	@author     Richard R. Vï¿½squez, Jr. (Original procedural code by Ulf Hï¿½rnhammar)
 	*	@link       http://sourceforge.net/projects/kses/ Home Page for Kses
 	*	@link       http://chaos.org/contact/ Contact page with current email address for Richard Vasquez
-	*	@copyright  Richard R. Vásquez, Jr. 2005
+	*	@copyright  Richard R. Vï¿½squez, Jr. 2005
 	*	@version    PHP5 OOP 1.0.2
 	*	@license    http://www.gnu.org/licenses/gpl.html GNU Public License
 	*	@package    kses
@@ -924,17 +924,11 @@
 				$string = preg_replace('/\xad+/', '', $string); # deals with Opera "feature"
 				$string2 = $string . 'a';
 
-				while ($string != $string2)
+				$string2 = preg_split('/:|&#58;|&#x3a;/i', $string, 2);
+				if(isset($string2[1]) && !preg_match('%/\?%',$string2[0]))
 				{
-					$string2 = $string;
-					$string  =  preg_replace(
-										'/^((&[^;]*;|[\sA-Za-z0-9])*)'.
-										'(:|&#58;|&#[Xx]3[Aa];)\s*/e',
-										'\$this->filterProtocols("\\1")',
-										$string
-									);
+					$string = $this->filterProtocols($string2[0]).trim($string2[1]);
 				}
-
 				return $string;
 			}
 

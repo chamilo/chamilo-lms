@@ -71,10 +71,10 @@
 	*	+ Deprecated _hook(), Protocols()
 	*	+ Integrated code from kses 0.2.2 into class.
 	*
-	*	@author     Richard R. Vásquez, Jr. (Original procedural code by Ulf Härnhammar)
+	*	@author     Richard R. Vï¿½squez, Jr. (Original procedural code by Ulf Hï¿½rnhammar)
 	*	@link       http://sourceforge.net/projects/kses/ Home Page for Kses
 	*	@link       http://chaos.org/contact/ Contact page with current email address for Richard Vasquez
-	*	@copyright  Richard R. Vásquez, Jr. 2003-2005
+	*	@copyright  Richard R. Vï¿½squez, Jr. 2003-2005
 	*	@version    PHP4 OOP 0.2.2
 	*	@license    http://www.gnu.org/licenses/gpl.html GNU Public License
 	*	@package    kses
@@ -931,6 +931,7 @@
 			 *
 			 *	This function searches for URL protocols at the beginning of $string, while
 			 *	handling whitespace and HTML entities.
+			 *  Function updated to fix security vulnerability (see http://projects.dokeos.com/index.php?do=details&task_id=2312)
 			 *
 			 *	@access private
 			 *	@param string $string String to check for protocols
@@ -940,14 +941,13 @@
 			 */
 			function _bad_protocol_once($string)
 			{
-				return preg_replace(
-					'/^((&[^;]*;|[\sA-Za-z0-9])*)'.
-					'(:|&#58;|&#[Xx]3[Aa];)\s*/e',
-					'\$this->_bad_protocol_once2("\\1")',
-					$string
-				);
+				$string2 = preg_split('/:|&#58;|&#x3a;/i', $string, 2);
+				if(isset($string2[1]) && !preg_match('%/\?%',$string2[0]))
+				{
+					$string = $this->_bad_protocol_once2($string2[0]).trim($string2[1]);
+				}
+				return $string;
 			}
-
 			/**
 			 *	Helper method used by _bad_protocol_once() regex
 			 *

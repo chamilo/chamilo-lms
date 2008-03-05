@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 14311 2008-02-19 04:07:07Z yannoo $
+<?php //$Id: announcements.php 14522 2008-03-05 16:20:33Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1102,10 +1102,7 @@ if ($message == true)
 				else{
 					echo '<br /><input type="Submit" name="submitAnnouncement" value="'.get_lang('Ok').'" onclick="selectAll(this.form.elements[4],true)" /><br /><br />';
 				}
-
-        
-
-				"</form><br />\n";
+				echo '</form><br />';
 		if((isset($_GET['action']) && isset($_GET['id']) && is_array($to))||isset($_GET['remindallinactives'])||isset($_GET['remind_inactive'])){
 			echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';
 		}

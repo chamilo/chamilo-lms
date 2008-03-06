@@ -518,7 +518,7 @@ class ScormSection
     function start_body()
     {
        return '<body>'. "\n".
-       		'<h1>'.$this->exercise->selectTitle().'</h1>'."\n".
+       		'<h1>'.$this->exercise->selectTitle().'</h1><p>'.$this->exercise->selectDescription()."</p>\n".
 			'<form id="dokeos_scorm_form" method="post" action="">'."\n".
 			'<table width="100%">'."\n";
     }

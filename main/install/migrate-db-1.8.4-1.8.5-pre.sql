@@ -90,5 +90,6 @@ ALTER TABLE dropbox_post ADD INDEX ( session_id ) ;
 ALTER TABLE dropbox_file ADD session_id SMALLINT UNSIGNED NOT NULL ;
 ALTER TABLE dropbox_file ADD INDEX ( session_id ) ;
 ALTER TABLE item_property ADD INDEX (tool,ref);
+ALTER TABLE forum_forum ADD session_id SMALLINT UNSIGNED  DEFAULT 0 ;
 INSERT INTO course_setting(variable,value,category) VALUES ('allow_user_image_forum',1,'forum');
 INSERT INTO course_setting(variable,value,category) VALUES ('course_theme','','theme');

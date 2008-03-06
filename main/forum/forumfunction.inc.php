@@ -187,7 +187,8 @@ function show_add_forum_form($inputvalues=array())
 	$form = new FormValidator('forumcategory', 'post', 'index.php');
 
 	// the header for the form
-	$form->addElement('header', '', get_lang('AddForum'));
+	$session_header = isset($_SESSION['session_name']) ? ' ('.$_SESSION['session_name'].') ' : '';
+	$form->addElement('header', '', get_lang('AddForum').$session_header);
 
 	// we have a hidden field if we are editing
 	if (is_array($inputvalues))
@@ -446,7 +447,8 @@ function store_forum($values)
 	$result=api_sql_query($sql);
 	$row=mysql_fetch_array($result);
 	$new_max=$row['sort_max']+1;
-
+	
+	$session_id = isset($_SESSION['id_session']) ? $_SESSION['id_session'] : 0;
 
 	if (isset($values['forum_id']))
 	{ // storing an edit
@@ -469,7 +471,7 @@ function store_forum($values)
 	else
 	{
 		$sql="INSERT INTO ".$table_forums."
-					(forum_title, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order)
+					(forum_title, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order, session_id)
 					VALUES ('".mysql_real_escape_string($values['forum_title'])."',
 						'".mysql_real_escape_string($values['forum_comment'])."',
 						'".mysql_real_escape_string($values['forum_category'])."',
@@ -481,7 +483,8 @@ function store_forum($values)
 						'".mysql_real_escape_string($values['default_view_type_group']['default_view_type'])."',
 						'".mysql_real_escape_string($values['group_forum'])."',
 						'".mysql_real_escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
-						'".mysql_real_escape_string($new_max)."')";
+						'".mysql_real_escape_string($new_max)."',
+						".intval($session_id).")";
 		api_sql_query($sql, __LINE__,__FILE__);
 		$last_id=mysql_insert_id();
 		api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", api_get_user_id());
@@ -1068,6 +1071,9 @@ function get_forums($id='')
 	global $table_users;
 
 	// **************** GETTING ALL THE FORUMS ************************* //
+	
+	$session_condition = isset($_SESSION['id_session']) ? 'AND forum.session_id IN (0,'.intval($_SESSION['id_session']).')' : '';
+	
 	if ($id=='')
 	{
 		//-------------- Student -----------------//
@@ -1076,6 +1082,7 @@ function get_forums($id='')
 					WHERE forum.forum_id=item_properties.ref
 					AND item_properties.visibility=1
 					AND item_properties.tool='".TOOL_FORUM."'
+					$session_condition
 					ORDER BY forum.forum_order ASC";
 		// select the number of threads of the forums (only the threads that are visible)
 		$sql2="SELECT count(*) AS number_of_threads, threads.forum_id FROM $table_threads threads, ".$table_item_property." item_properties
@@ -1100,6 +1107,7 @@ function get_forums($id='')
 							WHERE forum.forum_id=item_properties.ref
 							AND item_properties.visibility<>2
 							AND item_properties.tool='".TOOL_FORUM."'
+							$session_condition
 							ORDER BY forum_order ASC";
 			//echo $sql.'<hr>';
 			// select the number of threads of the forums (only the threads that are not deleted)
@@ -1128,6 +1136,7 @@ function get_forums($id='')
 							AND forum_id='".mysql_real_escape_string($id)."'
 							AND item_properties.visibility<>2
 							AND item_properties.tool='".TOOL_FORUM."'
+							$session_condition
 							ORDER BY forum_order ASC";
 		// select the number of threads of the forum
 		$sql2="SELECT count(*) AS number_of_threads, forum_id FROM $table_threads WHERE forum_id=".mysql_real_escape_string($id)." GROUP BY forum_id";
@@ -1141,7 +1150,6 @@ function get_forums($id='')
 					GROUP BY post.forum_id
 					ORDER BY post.post_id ASC";
 	}
-
 	// handling all the forum information
 	$result=api_sql_query($sql);
 	while ($row=mysql_fetch_array($result))

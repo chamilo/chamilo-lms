@@ -474,6 +474,7 @@ function update_Db_course($courseDbName)
 		 forum_group_public_private varchar(20) default 'public',
 		 forum_order int default NULL,
 		 locked int NOT NULL default 0,
+		 session_id int NOT NULL default 0,
 		 PRIMARY KEY (forum_id)
 		) TYPE=MyISAM";
 

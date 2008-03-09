@@ -2141,4 +2141,20 @@ function api_chmod_R($path, $filemode) {
       return FALSE;
 }
 
+/**
+ * Get Dokeos version from the configuration files
+ * @return	string	A string of type "1.8.4", or an empty string if the version could not be found
+ */
+function api_get_version()
+{
+	global $_configuration;
+	if(!empty($_configuration['dokeos_version']))
+	{
+		return $_configuration['dokeos_version'];
+	}
+	else
+	{
+		return '';
+	}
+}
 ?>

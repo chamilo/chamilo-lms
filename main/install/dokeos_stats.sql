@@ -112,7 +112,8 @@ CREATE TABLE track_e_attempt (
   teacher_comment text NOT NULL,
   marks int NOT NULL default 0,
   course_code varchar(40) NOT NULL default '',
-  position int default 0
+  position int default 0,
+  tms datetime NOT NULL default '0000-00-00 00:00:00'
 );
 ALTER TABLE track_e_attempt ADD INDEX (exe_id);
 ALTER TABLE track_e_attempt ADD INDEX (user_id); 

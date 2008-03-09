@@ -77,6 +77,7 @@ ALTER TABLE track_e_links ADD INDEX (links_cours_id);
 ALTER TABLE track_e_links ADD INDEX (links_user_id);
 ALTER TABLE track_e_uploads ADD INDEX (upload_user_id);
 ALTER TABLE track_e_uploads ADD INDEX (upload_cours_id);
+ALTER TABLE track_e_attempt ADD tms datetime not null default '0000-00-00 00:00:00';
 
 -- xxUSERxx
 

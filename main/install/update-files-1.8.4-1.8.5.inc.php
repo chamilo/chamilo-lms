@@ -1,26 +1,5 @@
-<?php //$Id: update-files-1.8.4-1.8.5.inc.php 13601 2007-10-30 06:20:17Z yannoo $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2007 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php //$Id: update-files-1.8.4-1.8.5.inc.php 14543 2008-03-09 17:32:54Z yannoo $
+/* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
 * Updates the Dokeos files from version 1.8.3 to version 1.8.4

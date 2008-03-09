@@ -1,27 +1,5 @@
-<?php
-/*
-============================================================================== 
-	Dokeos - elearning and course management software
-	
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Sebastien Piraux
-	Copyright (c) Toon Van Hoecke
-	
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-	
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-	
-	See the GNU General Public License for more details.
-	
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
-*/
+<?php // $Id: events.lib.inc.php 14543 2008-03-09 17:32:54Z yannoo $
+/* See license terms in /dokeos_license.txt */
 /**
 ============================================================================== 
 * EVENTS LIBRARY
@@ -437,11 +415,8 @@ function event_link($link_id)
 */
 function event_exercice($exo_id, $score, $weighting)
 {
-	global $_configuration;	
-	global $_user;
-	global $_cid;
-	global $TABLETRACK_EXERCICES;
-	global $origin, $learnpath_id, $learnpath_item_id;
+	global $_configuration, $_user, $_cid;
+	$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	
 	// if tracking is disabled record nothing
 	if (!$_configuration['tracking_enabled'])
@@ -458,7 +433,7 @@ function event_exercice($exo_id, $score, $weighting)
 		{
 		$user_id = "NULL";
 	}
-	$sql = "INSERT INTO ".$TABLETRACK_EXERCICES."
+	$sql = "INSERT INTO $TABLETRACK_EXERCICES
 			  (
 			   exe_user_id,
 			   exe_cours_id,
@@ -477,21 +452,8 @@ function event_exercice($exo_id, $score, $weighting)
 			   '".$weighting."',
 			   FROM_UNIXTIME(".$reallyNow.")
 			  )";
-	/* SEE WHAT WE DO WITH THAT
-	$tbl_learnpath_user = Database::get_course_table(TABLE_LEARNPATH_USER);
-	if ($origin == 'learnpath')
-	{
-		if ($user_id == "NULL")
-		{
-			$user_id = '0';
-		}
-		$sql2 = "update $tbl_learnpath_user set score='$score' where (user_id=$user_id and learnpath_id='$learnpath_id' and learnpath_item_id='$learnpath_item_id')";
-		$res2 = api_sql_query($sql2,__FILE__,__LINE__);
-	}
-	*/
-	$res = api_sql_query($sql,__FILE__,__LINE__);
-	//$mysql_query($sql);
-	//return 0;
+	$res = @api_sql_query($sql,__FILE__,__LINE__);
+	return $res;
 }
 
 /**
@@ -501,14 +463,12 @@ function event_exercice($exo_id, $score, $weighting)
  * @param	integer	Question ID
  * @param	integer Exercise ID
  * @param	integer	Position
+ * @return	boolean	Result of the insert query
  */
 function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 {
-	global $_configuration;	
-	global $_user;
-	global $_cid;
-	global $TBL_TRACK_ATTEMPT;
-	global $origin, $learnpath_id, $learnpath_item_id;
+	global $_configuration, $_user, $_cid;
+	$TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 	
 	// if tracking is disabled record nothing
 	if (!$_configuration['tracking_enabled'])
@@ -522,20 +482,20 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 		$user_id = "'".$_user['user_id']."'";
 	}
 	else // anonymous
-		{
+	{
 		$user_id = "NULL";
-		}
-	$sql = "INSERT INTO ".$TBL_TRACK_ATTEMPT." 
-			  (exe_id,
+	}
+	$sql = "INSERT INTO $TBL_TRACK_ATTEMPT  
+			  (
+			   exe_id,
 			   user_id,
 			   question_id,
 			   answer,
 			   marks,
 			   course_code,
-			   position
-			   
+			   position,
+			   tms
 			  )
-	
 			  VALUES
 			  (
 			  ".$exeId.",
@@ -544,24 +504,11 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 			   '".addslashes($answer)."',
 			   '".$score."',
 			   '".$_cid."',
-			   '".$j."'
-			  
-			   			    )";
-	/* SEE WHAT WE DO WITH THAT
-	$tbl_learnpath_user = Database::get_course_table(TABLE_LEARNPATH_USER);
-	if ($origin == 'learnpath')
-	{
-		if ($user_id == "NULL")
-		{
-			$user_id = '0';
-		}
-		$sql2 = "update $tbl_learnpath_user set score='$score' where (user_id=$user_id and learnpath_id='$learnpath_id' and learnpath_item_id='$learnpath_item_id')";
-		$res2 = api_sql_query($sql2,__FILE__,__LINE__);
-	}
-	*/
-	//$res = api_sql_query($sql,__FILE__,__LINE__);
-	$res = mysql_query($sql) or die(mysql_error());
-	//return 0;
+			   '".$j."',
+			   FROM_UNIXTIME(".$reallyNow.")
+			  )";
+	$res = @api_sql_query($sql,__FILE__,__LINE__);
+	return $res;
 }
 
 /**

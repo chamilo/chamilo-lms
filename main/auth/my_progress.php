@@ -6,6 +6,8 @@ $cidReset = true;
 
 require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'tracking.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once ('../newscorm/learnpath.class.php');
 
 $nameTools=get_lang('MyProgress');
@@ -31,48 +33,22 @@ $tbl_course_lp 				= Database :: get_course_table('lp');
 $tbl_course_lp_item 		= Database :: get_course_table('lp_item');
 $tbl_course_quiz 			= Database :: get_course_table('quiz');
 
-$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end FROM session_rel_course_rel_user,session WHERE id_session=id AND id_user=".$_user['user_id']." ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
-$Sessions=api_store_result($result);
-
+// get course list
+$sql = 'SELECT course_code FROM '.$tbl_course_user.' WHERE user_id='.$_user['user_id'];
+$rs = api_sql_query($sql, __FILE__, __LINE__);
 $Courses = array();
-
-foreach($Sessions as $enreg){
-	
-	$id_session_temp = $enreg['id'];
-	
-	$sql = "SELECT DISTINCT code,title, CONCAT(lastname, ' ',firstname) coach, username, date_start, date_end, db_name
-			FROM $tbl_course , $tbl_session_course
-			LEFT JOIN $tbl_user
-				ON $tbl_session_course.id_coach = $tbl_user.user_id
-			INNER JOIN $tbl_session_course_user
-				ON $tbl_session_course_user.id_session = $tbl_session_course.id_session
-				AND $tbl_session_course_user.id_user = '".$_user['user_id']."'
-			INNER JOIN $tbl_session ON $tbl_session.id = $tbl_session_course.id_session
-			WHERE $tbl_session_course.course_code=code
-			AND $tbl_session_course.id_session='$id_session_temp'
-			ORDER BY title";
-
-	$result=api_sql_query($sql);
-
-	while($a_session_courses = mysql_fetch_array($result)){
-		$a_session_courses['id_session'] = $id_session_temp;
-		$Courses[$a_session_courses['code']] = $a_session_courses;
-	}
-	
+while($row = Database :: fetch_array($rs))
+{
+	$Courses[$row['course_code']] = CourseManager::get_course_information($row['course_code']);
 }
 
-	
-$sql = "SELECT DISTINCT code,title, db_name
-		FROM $tbl_course as course, $tbl_course_user as course_rel_user
-		WHERE course_rel_user.user_id = '".$_user['user_id']."'
-		AND course_rel_user.course_code = course.code
-		";
-$result=api_sql_query($sql);
-
-while($a_courses = mysql_fetch_array($result)){
-	$a_courses['id_session'] = 0;
-	$Courses[$a_courses['code']] = $a_courses;
+// get the list of sessions where the user is subscribed as student
+$sql = 'SELECT DISTINCT course_code FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' WHERE id_user='.intval($_user['user_id']);
+$rs = api_sql_query($sql, __FILE__, __LINE__);
+while($row = Database :: fetch_array($rs))
+{
+	$Courses[$row['course_code']] = CourseManager::get_course_information($row['course_code']);
 }
 
 
@@ -140,7 +116,7 @@ foreach($Courses as $enreg)
   	</td>
 
   	<td align='center'>
-		<a href="<?php echo $SERVER['PHP_SELF']; ?>?id_session=<?php echo $enreg['id_session'] ?>&course=<?php echo $enreg['code']; ?>"> <?php echo '<img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" />';?> </a>
+		<a href="<?php echo $SERVER['PHP_SELF']; ?>?course=<?php echo $enreg['code']; ?>"> <?php echo '<img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" />';?> </a>
   	</td>
 </tr>
 
@@ -166,32 +142,55 @@ foreach($Courses as $enreg)
 	if(isset($_GET['course']))
 	{
 		$course = Database::escape_string($_GET['course']);
-		if($_GET['id_session']!=0){
-			$sqlInfosCourse = "	SELECT course.code,course.title,course.db_name,CONCAT(user.firstname,' ',user.lastname,' / ',user.email) as tutor_infos
-								FROM $tbl_user as user,$tbl_course as course
-								INNER JOIN $tbl_session_course as sessionCourse
-									ON sessionCourse.course_code = course.code
-								WHERE sessionCourse.id_coach = user.user_id
-								AND course.code= '".$course."'
-							 ";
-		}
-		else{
-			$sqlInfosCourse = "	SELECT course.code,course.title,course.db_name
-								FROM $tbl_course as course
-								WHERE course.code= '".$course."'
-							 ";
-		}
-
-		$resultInfosCourse = api_sql_query($sqlInfosCourse);
-
-		$a_infosCours = mysql_fetch_array($resultInfosCourse);
+		$a_infosCours = CourseManager::get_course_information($course);
 		
-		if($_GET['id_session']!=0){
-			$tableTitle = $a_infosCours['title'].' - '.get_lang('Tutor').' : '.$a_infosCours['tutor_infos'];
-		}
-		else{
-			$tableTitle = $a_infosCours['title'];
-		}
+		//get coach and session_name if there is one and if session_mode is activated
+		if(api_get_setting('use_session_mode')=='true')
+		{
+			$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+			$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+			$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+			$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+			
+			$sql = 'SELECT id_session 
+					FROM '.$tbl_session_course_user.' session_course_user
+					WHERE session_course_user.id_user = '.intval($_user['user_id']).'
+					AND session_course_user.course_code = "'.Database::escape_string($course).'"
+					ORDER BY id_session DESC';
+			$rs = api_sql_query($sql,__FILE__,__LINE__);
+			
+			$session_id = intval(mysql_result($rs,0,0));
+			if($session_id>0)
+			{
+				// get session name and coach of the session
+				$sql = 'SELECT name, id_coach FROM '.$tbl_session.' 
+						WHERE id='.$session_id;
+				$rs = api_sql_query($sql,__FILE__,__LINE__);						
+				$session_name = mysql_result($rs,0,'name');
+				$session_coach_id = intval(mysql_result($rs,0,'id_coach'));
+				
+				// get coach of the course in the session
+				$sql = 'SELECT id_coach FROM '.$tbl_session_course.' 
+						WHERE id_session='.$session_id.'
+						AND course_code = "'.Database::escape_string($_GET['course']).'"';
+				$rs = api_sql_query($sql,__FILE__,__LINE__);						
+				$session_course_coach_id = intval(mysql_result($rs,0,0));
+
+				if($session_course_coach_id!=0)
+				{
+					$coach_infos = UserManager :: get_user_info_by_id($session_course_coach_id);
+					$a_infosCours['tutor_name'] = $coach_infos['firstname'].' '.$coach_infos['lastname'];
+				}
+				else if($session_coach_id!=0)
+				{
+					$coach_infos = UserManager :: get_user_info_by_id($session_coach_id);
+					$a_infosCours['tutor_name'] = $coach_infos['firstname'].' '.$coach_infos['lastname'];
+				}
+			}
+		} // end if(api_get_setting('use_session_mode')=='true')
+		
+		$tableTitle = $a_infosCours['title'].' | Coach : '.$a_infosCours['tutor_name'].((!empty($session_name)) ? ' | '.get_lang('Session').' : '.$session_name : '');
+		
 
 		?>
 		<table class="data_table" width="100%">

@@ -437,33 +437,63 @@ if(!empty($_GET['student']))
 		
 				$a_infosCours = CourseManager :: get_course_information($_GET['course']);
 			
-			 //get coach if there is one
-			$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-			$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-			$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-			$sql = 'SELECT user.* FROM '.$tbl_user.' user
-					INNER JOIN '.$tbl_session_course.' session_course
-					        ON user.user_id = session_course.id_coach
-					INNER JOIN '.$tbl_session_course_user.' session_course_user
-					        ON session_course.id_session = session_course_user.id_session
-					        AND session_course_user.id_user = '.intval($a_infosUser['user_id']).'
-					        AND session_course_user.course_code = "'.Database::escape_string($_GET['course']).'"';
-			
-			$rs = api_sql_query($sql,__FILE__,__LINE__);
-			if(mysql_num_rows($rs)>0)
-			        $a_infosCours['tutor_name'] = mysql_result($rs,0,'firstname').' '.mysql_result($rs,0,'lastname');
-			
-			
-			$a_date_start = explode('-',$a_infosCours['date_start']);
-			$date_start = $a_date_start[2].'/'.$a_date_start[1].'/'.$a_date_start[0];
-			$a_date_end = explode('-',$a_infosCours['date_end']);
-			$date_end = $a_date_end[2].'/'.$a_date_end[1].'/'.$a_date_end[0];
-			$dateSession = get_lang('From').' '.$date_start.' '.get_lang('To').' '.$date_end;
-			$nb_login = Tracking :: count_login_per_student($a_infosUser['user_id'], $_GET['course']);
-			$tableTitle = $a_infosCours['title'].'&nbsp;|&nbsp;'.get_lang('CountToolAccess').' : '.$nb_login.'&nbsp; | &nbsp;'.get_lang('Tutor').' : '.stripslashes($a_infosCours['tutor_name']);
-			
-			$csv_content[] = array();
-			$csv_content[] = array(str_replace('&nbsp;','',$tableTitle));	
+				//get coach and session_name if there is one and if session_mode is activated
+				if(api_get_setting('use_session_mode')=='true')
+				{
+					$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+					$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+					$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+					$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+					
+					$sql = 'SELECT id_session 
+							FROM '.$tbl_session_course_user.' session_course_user
+							WHERE session_course_user.id_user = '.intval($a_infosUser['user_id']).'
+							AND session_course_user.course_code = "'.Database::escape_string($_GET['course']).'"
+							ORDER BY id_session DESC';
+					$rs = api_sql_query($sql,__FILE__,__LINE__);
+					
+					$le_session_id = intval(mysql_result($rs,0,0));
+					
+					if($le_session_id>0)
+					{
+						// get session name and coach of the session
+						$sql = 'SELECT name, id_coach FROM '.$tbl_session.' 
+								WHERE id='.$le_session_id;
+						$rs = api_sql_query($sql,__FILE__,__LINE__);						
+						$session_name = mysql_result($rs,0,'name');
+						$session_coach_id = intval(mysql_result($rs,0,'id_coach'));
+						
+						// get coach of the course in the session
+						$sql = 'SELECT id_coach FROM '.$tbl_session_course.' 
+								WHERE id_session='.$le_session_id.'
+								AND course_code = "'.Database::escape_string($_GET['course']).'"';
+						$rs = api_sql_query($sql,__FILE__,__LINE__);						
+						$session_course_coach_id = intval(mysql_result($rs,0,0));
+
+						if($session_course_coach_id!=0)
+						{
+							$coach_infos = UserManager :: get_user_info_by_id($session_course_coach_id);
+							$a_infosCours['tutor_name'] = $coach_infos['firstname'].' '.$coach_infos['lastname'];
+						}
+						else if($session_coach_id!=0)
+						{
+							$coach_infos = UserManager :: get_user_info_by_id($session_coach_id);
+							$a_infosCours['tutor_name'] = $coach_infos['firstname'].' '.$coach_infos['lastname'];
+						}
+					}
+				} // end if(api_get_setting('use_session_mode')=='true')
+				
+				
+				$a_date_start = explode('-',$a_infosCours['date_start']);
+				$date_start = $a_date_start[2].'/'.$a_date_start[1].'/'.$a_date_start[0];
+				$a_date_end = explode('-',$a_infosCours['date_end']);
+				$date_end = $a_date_end[2].'/'.$a_date_end[1].'/'.$a_date_end[0];
+				$dateSession = get_lang('From').' '.$date_start.' '.get_lang('To').' '.$date_end;
+				$nb_login = Tracking :: count_login_per_student($a_infosUser['user_id'], $_GET['course']);
+				$tableTitle = $a_infosCours['title'].'&nbsp;|&nbsp;'.get_lang('CountToolAccess').' : '.$nb_login.'&nbsp; | &nbsp;'.get_lang('Tutor').' : '.stripslashes($a_infosCours['tutor_name']).((!empty($session_name)) ? ' | '.get_lang('Session').' : '.$session_name : '');
+				
+				$csv_content[] = array();
+				$csv_content[] = array(str_replace('&nbsp;','',$tableTitle));	
 				
 ?>
 		<tr class="tableName">

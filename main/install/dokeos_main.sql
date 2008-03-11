@@ -477,7 +477,7 @@ VALUES
 ('breadcrumbs_course_homepage', NULL, 'radio','Course','course_title', 'BreadCrumbsCourseHomepageTitle','BreadCrumbsCourseHomepageComment', NULL, NULL),
 ('example_material_course_creation', NULL, 'radio','Platform','true', 'ExampleMaterialCourseCreationTitle','ExampleMaterialCourseCreationComment', NULL, NULL),
 ('account_valid_duration',NULL, 'textfield','Platform','3660', 'AccountValidDurationTitle','AccountValidDurationComment', NULL, NULL),
-('use_session_mode', NULL, 'radio','Platform','false', 'UseSessionModeTitle','UseSessionModeComment', NULL, NULL),
+('use_session_mode', NULL, 'radio','Platform','true', 'UseSessionModeTitle','UseSessionModeComment', NULL, NULL),
 ('allow_email_editor', NULL, 'radio', 'Tools', 'false', 'AllowEmailEditorTitle', 'AllowEmailEditorComment', NULL, NULL),
 ('registered', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL),
 ('donotlistcampus', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL),

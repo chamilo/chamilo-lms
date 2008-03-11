@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 14194 2008-01-29 16:26:45Z elixir_inter $
+* 	@version $Id: index.php 14572 2008-03-11 21:40:44Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -370,7 +370,7 @@ function display_anonymous_right_menu()
 
 	$platformLanguage = api_get_setting('platformLanguage');
 
-	if ( !($_user['user_id']) ) // only display if the user isn't logged in
+	if ( !($_user['user_id']) or api_is_anonymous($_user['user_id']) ) // only display if the user isn't logged in
 	{
 		api_display_language_form();
 		echo '<br />';

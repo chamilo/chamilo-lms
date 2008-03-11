@@ -83,7 +83,7 @@ function debug_paths()
 	echo 'WEB_COURSE_PATH :'.api_get_path(WEB_COURSE_PATH).'<br />';
 	echo 'SYS_COURSE_PATH :'.api_get_path(SYS_COURSE_PATH).'<br />';
 	echo 'REL_COURSE_PATH :'.api_get_path(REL_COURSE_PATH).'<br />';
-	echo 'REL_CLARO_PATH :'.api_get_path(REL_CLARO_PATH).'<br />';
+	echo 'REL_CLARO_PATH :'.api_get_path(REL_CODE_PATH).'<br />';
 	echo 'WEB_CODE_PATH :'.api_get_path(WEB_CODE_PATH).'<br />';
 	echo 'SYS_CODE_PATH :'.api_get_path(SYS_CODE_PATH).'<br />';
 	echo 'SYS_LANG_PATH :'.api_get_path(SYS_LANG_PATH).'<br />';

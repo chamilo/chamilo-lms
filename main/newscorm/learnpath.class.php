@@ -7215,7 +7215,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		$return .= '<div class="lp_resource_element">';	
 		$return .= '<img alt="" src="../img/new_test_small.gif" style="margin-right:5px;" title="" />';
-		$return .= '<a href="'.api_get_path(REL_CLARO_PATH).'exercice/exercise_admin.php">' . get_lang('NewExercise') . '</a>';
+		$return .= '<a href="'.api_get_path(REL_CODE_PATH).'exercice/exercise_admin.php">' . get_lang('NewExercise') . '</a>';
 		$return .= '</div>';
 
 		$return .= '</div>';
@@ -7254,7 +7254,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			}
 		$return .= '<div class="lp_resource_element">';
 			$return .= '<img align="left" alt="" src="../img/file_html_new_small.gif" style="margin-right:5px;" title="" />';
-			$return .= '<a href="'.api_get_path(REL_CLARO_PATH).'link/link.php?'.api_get_cidreq().'&action=addlink" title="' . get_lang('LinkAdd') . '">' . get_lang('LinkAdd') . '</a>';
+			$return .= '<a href="'.api_get_path(REL_CODE_PATH).'link/link.php?'.api_get_cidreq().'&action=addlink" title="' . get_lang('LinkAdd') . '">' . get_lang('LinkAdd') . '</a>';
 		$return .= '</div>';
 			
 			if(Database::num_rows($res_link) == 0)
@@ -7337,7 +7337,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		$return .= '<div class="lp_resource_element">';
 		$return .= '<img align="left" alt="" src="../img/forum_new_small.gif" style="margin-right:5px;" title="" />';
-		$return .= '<a href="'.api_get_path(REL_CLARO_PATH).'forum/index.php?'.api_get_cidreq().'&action=add&amp;content=forum" title="'.get_lang('CreateANewForum').'">'.get_lang('CreateANewForum').'</a>';
+		$return .= '<a href="'.api_get_path(REL_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&action=add&amp;content=forum" title="'.get_lang('CreateANewForum').'">'.get_lang('CreateANewForum').'</a>';
 		$return .= '</div>';
 		
 		return $return;

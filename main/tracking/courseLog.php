@@ -472,7 +472,7 @@ if($_GET['studentlist'] == 'false')
 else {
 	
 	// BEGIN : form to remind inactives susers
-	$form = new FormValidator('reminder_form','get',api_get_path(REL_CLARO_PATH).'announcements/announcements.php');
+	$form = new FormValidator('reminder_form','get',api_get_path(REL_CODE_PATH).'announcements/announcements.php');
 	
 	$renderer = $form->defaultRenderer();
 	$renderer->setElementTemplate('<span>{label} {element}</span>&nbsp;<input type="submit" value="'.get_lang('Ok').'"','since');

@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 13630 2007-11-06 19:23:41Z yannoo $
+// $Id: tool_navigation_menu.inc.php 14573 2008-03-11 22:54:59Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -73,7 +73,7 @@ function get_navigation_items($include_admin_tools = false)
 			$navigation_items[$row['id']] = $row;
 			if (!stristr($row['link'], 'http://'))
 			{
-				$navigation_items[$row['id']]['link'] = api_get_path(REL_CLARO_PATH).$row['link'];
+				$navigation_items[$row['id']]['link'] = api_get_path(REL_CODE_PATH).$row['link'];
 				$navigation_items[$row['id']]['name'] = $row['image'] == 'scormbuilder.gif' ? $navigation_items[$row['id']]['name'] : get_lang(ucfirst($navigation_items[$row['id']]['name']));
 			}
 		}
@@ -96,7 +96,7 @@ function get_navigation_items($include_admin_tools = false)
 
 			// course settings item
 			$navigation_items['course_settings']['image'] = $course_setting_info['image'];
-			$navigation_items['course_settings']['link'] = api_get_path(REL_CLARO_PATH).'course_info/infocours.php';
+			$navigation_items['course_settings']['link'] = api_get_path(REL_CODE_PATH).'course_info/infocours.php';
 			$navigation_items['course_settings']['name'] = $course_setting_visual_name;
 
 		}

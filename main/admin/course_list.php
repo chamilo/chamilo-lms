@@ -1,5 +1,5 @@
 <?php
-// $Id: course_list.php 13982 2007-12-10 18:04:25Z yannoo $
+// $Id: course_list.php 14573 2008-03-11 22:54:59Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -131,7 +131,7 @@ function modify_filter($code)
  */
 function get_course_visibility_icon($v)
 {
-	$path = api_get_path(REL_CLARO_PATH);
+	$path = api_get_path(REL_CODE_PATH);
 	$style = 'style="margin-bottom:-5px;margin-right:5px;"';
 	switch($v)
 	{

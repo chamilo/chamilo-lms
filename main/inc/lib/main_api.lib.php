@@ -71,7 +71,7 @@ define('REL_PATH', 'REL_PATH');
 define('WEB_COURSE_PATH', 'WEB_COURSE_PATH');
 define('SYS_COURSE_PATH', 'SYS_COURSE_PATH');
 define('REL_COURSE_PATH', 'REL_COURSE_PATH');
-define('REL_CLARO_PATH', 'REL_CLARO_PATH');
+define('REL_CODE_PATH', 'REL_CODE_PATH');
 define('WEB_CODE_PATH', 'WEB_CODE_PATH');
 define('SYS_CODE_PATH', 'SYS_CODE_PATH');
 define('SYS_LANG_PATH', 'SYS_LANG_PATH');
@@ -254,7 +254,7 @@ function api_is_self_registration_allowed()
 *
 *	@param one of the following constants:
 *	WEB_PATH, SYS_PATH, REL_PATH, WEB_COURSE_PATH, SYS_COURSE_PATH,
-*	REL_COURSE_PATH, REL_CLARO_PATH, WEB_CODE_PATH, SYS_CODE_PATH,
+*	REL_COURSE_PATH, REL_CODE_PATH, WEB_CODE_PATH, SYS_CODE_PATH,
 *	SYS_LANG_PATH, WEB_IMG_PATH, GARBAGE_PATH, PLUGIN_PATH, SYS_ARCHIVE_PATH,
 *	INCLUDE_PATH, LIBRARY_PATH, CONFIGURATION_PATH
 *
@@ -267,7 +267,7 @@ function api_is_self_registration_allowed()
 * 	WEB_COURSE_PATH		http://www.mydokeos.com/courses/
 * 	SYS_COURSE_PATH		/var/www/dokeos/courses/
 *	REL_COURSE_PATH
-* 	REL_CLARO_PATH
+* 	REL_CODE_PATH
 * 	WEB_CODE_PATH
 * 	SYS_CODE_PATH
 * 	SYS_LANG_PATH
@@ -336,7 +336,7 @@ function api_get_path($path_type)
 			// example: courses/ or dokeos/courses/
 			return api_get_path(REL_PATH).$_configuration['course_folder'];
 			break;
-		case REL_CLARO_PATH :
+		case REL_CODE_PATH :
 			// example: main/ or dokeos/main/
 			return api_get_path(REL_PATH).$_configuration['code_append'];
 			break;

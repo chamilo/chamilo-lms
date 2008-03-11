@@ -86,7 +86,7 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 			$mylp = & $oLP;
 		}
 	}
-	//$objResponse->addAlert(api_get_path(REL_CLARO_PATH).'newscorm/learnpathItem.class.php');
+	//$objResponse->addAlert(api_get_path(REL_CODE_PATH).'newscorm/learnpathItem.class.php');
 	
 	
 	$prereq_check = $mylp->prerequisites_match($item_id);
@@ -312,7 +312,7 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
 	if($mylp->force_commit){
 		$mylp->save_current();
 	}
-	//$objResponse->addAlert(api_get_path(REL_CLARO_PATH).'newscorm/learnpathItem.class.php');
+	//$objResponse->addAlert(api_get_path(REL_CODE_PATH).'newscorm/learnpathItem.class.php');
 	if(is_object($mylp->items[$new_item_id])){
 		$mylpi = & $mylp->items[$new_item_id];
 	}else{

@@ -365,6 +365,7 @@ class UserManager
 		}
 		echo "</select>";
 	}
+	
 	/**
 	 * Get user picture URL or path from user ID (returns an array).
 	 * The return format is a complete path, enabling recovery of the directory
@@ -374,31 +375,109 @@ class UserManager
 	 * @param	integer	User ID
 	 * @param	string	Type of path to return (can be 'none','system','rel','web')
 	 * @param	bool	Whether we want to have the directory name returned 'as if' there was a file or not (in the case we want to know which directory to create - otherwise no file means no split subdir)
-	 * @return	array 	Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies
+	 * @param	bool	If we want that the function returns the /main/img/unknown.jpg image set it at true 
+	 * @return	array 	Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies if image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty array
 	 */
-	function get_user_picture_path_by_id($id,$type='none',$preview=false)
+	function get_user_picture_path_by_id($id,$type='none',$preview=false,$anonymous=false)
 	{
 		if(empty($id) or empty($type))
 		{
-			//$error = 'Insufficient parameters';
-			return array('dir'=>'','file'=>'');
+			if ($anonymous) 
+			{
+				$dir='';
+				switch($type)
+				{
+					case 'system': //return the complete path to the file, from root
+						$dir = api_get_path(SYS_CODE_PATH).'img/';
+						break;
+					case 'rel': //return the relative path to the file, from the Dokeos base dir
+						$dir = api_get_path(REL_CODE_PATH).'img/';
+						break;
+					case 'web': //return the complete web URL to the file 
+						$dir = api_get_path(WEB_CODE_PATH).'img/';
+						break;
+					case 'none': //return only the picture_uri (as is, without subdir)
+					default:
+						break;
+				}
+				$file_anonymous='unknown.jpg';
+				return array('dir'=>$dir,'file'=>$file_anonymous);
+			}
+			else 
+			{
+				return array('dir'=>'','file'=>'');
+			}			
 		}
+		
 		$user_id = intval($id);
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT picture_uri FROM $user_table WHERE user_id=".$user_id;
 		$res = api_sql_query($sql,__FILE__,__LINE__);
+		
+		$user=array();
+		
 		if(Database::num_rows($res)>0)
 		{
-			$user = Database::fetch_array($res);
+			$user = Database::fetch_array($res);			
 		}
 		else
-		{
-			$user = false;
-			return array('dir'=>'','file'=>'');
+		{									
+			if ($anonymous) 
+			{
+				$dir='';
+				switch($type)
+				{
+					case 'system': //return the complete path to the file, from root
+						$dir = api_get_path(SYS_CODE_PATH).'img/';
+						break;
+					case 'rel': //return the relative path to the file, from the Dokeos base dir
+						$dir = api_get_path(REL_CODE_PATH).'img/';
+						break;
+					case 'web': //return the complete web URL to the file 
+						$dir = api_get_path(WEB_CODE_PATH).'img/';
+						break;
+					case 'none': //return only the picture_uri (as is, without subdir)
+					default:
+						break;
+				}
+				$file_anonymous='unknown.jpg';
+				return array('dir'=>$dir,'file'=>$file_anonymous);
+			}
+			else 
+			{
+				return array('dir'=>'','file'=>'');	
+			}		
 		}
+				
 		$path = trim($user['picture_uri']);
+		
+		if (empty($path)) 
+		{			
+			if ($anonymous) 
+			{			
+				switch($type)
+				{
+					case 'system': //return the complete path to the file, from root
+						$dir = api_get_path(SYS_CODE_PATH).'img/';
+						break;
+					case 'rel': //return the relative path to the file, from the Dokeos base dir
+						$dir = api_get_path(REL_CODE_PATH).'img/';
+						break;
+					case 'web': //return the complete web URL to the file 
+						$dir = api_get_path(WEB_CODE_PATH).'img/';
+						break;
+					case 'none': //return only the picture_uri (as is, without subdir)
+					default:
+						break;
+				}
+				$file_anonymous='unknown.jpg';
+				return array('dir'=>$dir,'file'=>$file_anonymous);			
+			}
+		}		
+		
 		$dir = '';
 		$first = '';
+		
 		if(api_get_setting('split_users_upload_directory') === 'true')
 		{
 			if(!empty($path))
@@ -414,6 +493,7 @@ class UserManager
 		{
 			$first = $user_id.'/';
 		}
+				
 		switch($type)
 		{
 			case 'system': //return the complete path to the file, from root

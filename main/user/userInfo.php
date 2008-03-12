@@ -215,7 +215,6 @@ if ($allowedToEditContent)
 	   DISPLAY MODES
 ==============================================================================
 */
-
 // Back button for each display mode (Top)
 echo "<div align=\"right\"><a href=\"user.php?".api_get_cidreq()."&amp;origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
 if ($displayMode == "viewDefEdit")
@@ -312,17 +311,10 @@ elseif ($displayMode == "viewMainInfoEdit")
 	{
 		($mainUserInfo['status'] == 1) ? $courseAdminChecked = "checked" : $courseAdminChecked = "";
 		($mainUserInfo['tutor_id'] == 1) ? $tutorChecked = "checked" : $tutorChecked = "";
-
-		if ($mainUserInfo['picture'] != '')
-		{
-			$size = @ getImageSize('../upload/users/'.$mainUserInfo['picture']);
-			$vertical_space = (($size[1] > 200) ? 'height="200"' : '');
-			echo "<img src=\"../upload/users/".$mainUserInfo['picture']."\" $vertical_space border=\"1\">";
-		}
-		else
-		{
-			Display::display_icon('unknown.jpg', get_lang('Unknown'));
-		}
+				
+		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);						
+		echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';			
+		 
 
 		echo "<form action=\"".api_get_self()."\" method=\"post\">\n",
 				"<input type=\"hidden\" name=\"submitMainUserInfo\" value=\"$userIdViewed\" />\n",
@@ -382,17 +374,10 @@ elseif ($displayMode == "viewContentList") // default display
 
 	if ($mainUserInfo)
 	{
-		if ($mainUserInfo['picture'] != '')
-		{
-			$size = @ getImageSize('../upload/users/'.$mainUserInfo['picture']);
-			$vertical_space = (($size[1] > 200) ? 'height="200"' : '');
-			echo "<img src=\"../upload/users/".$mainUserInfo['picture']."\" $vertical_space border=\"1\">";
-		}
-		else
-		{
-			Display::display_icon('unknown.jpg', get_lang('Unknown'));
-		}
-
+		
+		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);			
+		echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';
+		
 		//DISPLAY TABLE HEADING
 		if ($origin == 'learnpath') { $allowedToEditDef=false; $is_allowedToTrack=false; }
 		echo	"<table width=\"80%\" border=\"0\">",

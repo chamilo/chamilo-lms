@@ -255,7 +255,6 @@ if(!empty($_GET['student']))
 	$csv_content[] = array(strip_tags($first_connection_date),strip_tags($last_connection_date), $time_spent_on_the_platform , $avg_student_progress.' %',$avg_student_score.' %');
 	
 ?>
-
 	<a name="infosStudent"></a>
 	<table class="data_table">
 		<tr>
@@ -263,21 +262,11 @@ if(!empty($_GET['student']))
 				<table width="100%" border="0" >
 					<tr>
 						
-							<?php
-								if(!empty($a_infosUser['picture_uri']))
-								{
-									echo '	<td class="borderRight" width="10%" valign="top">
-												<img src="../upload/users/'.$a_infosUser['picture_uri'].'" width="100" />
-											</td>
-										 	';
-								}
-								else{
-									echo '	<td class="borderRight" width="10%" valign="top">
-												<img src="../img/unknown.jpg" />
-											</td>
-										 	'; 
-								}
-								
+							<?php							
+								$image_array=UserManager::get_user_picture_path_by_id($a_infosUser['user_id'],'web',false, true);																					
+								echo '<td class="borderRight" width="10%" valign="top">';
+								echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';
+								echo '</td>';
 							?>
 						
 						<td class="none" width="40%" valign="top">

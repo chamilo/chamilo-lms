@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 14201 2008-01-30 13:38:13Z elixir_inter $
+* 	@version $Id: reporting.php 14580 2008-03-12 14:21:20Z pcool $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -712,7 +712,7 @@ function display_complete_report()
 	$sql = "SELECT questions.question_id, questions.type, questions.survey_question, count(options.question_option_id) as number_of_options
 			FROM $table_survey_question questions LEFT JOIN $table_survey_question_option options
 			ON questions.question_id = options.question_id
-			/*WHERE questions.question_id = options.question_id*/
+			WHERE questions.question_id = options.question_id
 			AND questions.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 			GROUP BY questions.question_id";
 	$result = api_sql_query($sql, __FILE__, __LINE__);

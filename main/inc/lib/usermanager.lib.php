@@ -57,10 +57,19 @@ class UserManager
 	  *
 	  * @todo Add the user language to the parameters
 	  */
-	function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language="english", $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1)
+	function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language='', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1)
 	{
 		global $_user, $userPasswordCrypted;
+		
+		// database table definition
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
+		
+		// default langauge
+		if ($language=='')
+		{
+			$language = api_get_setting('platformLanguage');
+		}
+		
 		if ($_user['user_id'])
 		{
 			$creator_id = $_user['user_id'];

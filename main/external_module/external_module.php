@@ -70,10 +70,10 @@ if($is_allowedToEdit && $_POST['formSent'] && $toolid)  // RH: new section
 	else
 	{
 		$sql =  "UPDATE $tbl_courseHome SET " .
-		        "name='" .   addslashes($name_link) .
-		        "', link='" .    addslashes($link) .
-		        "', target='" .  addslashes($target) .
-		        "' WHERE id='" . addslashes($id) . "'";
+		        "name='" .   Database::escape_string($name_link) .
+		        "', link='" .    Database::escape_string($link) .
+		        "', target='" .  Database::escape_string($target) .
+		        "' WHERE id='" . Database::escape_string($id) . "'";
 
 		api_sql_query($sql, __FILE__, __LINE__);
 
@@ -95,7 +95,7 @@ elseif($is_allowedToEdit && $_POST['formSent'])
 			$link='http://'.$link;
 		}
 
-		api_sql_query("INSERT INTO $tbl_courseHome(name,link,image,visibility,admin,address,target) VALUES('".addslashes($name_link)."','".addslashes($link)."','$iconForImportedTools','1','0','$iconForInactiveImportedTools','$target')",__FILE__,__LINE__);
+		api_sql_query("INSERT INTO $tbl_courseHome(name,link,image,visibility,admin,address,target) VALUES('".Database::escape_string($name_link)."','".Database::escape_string($link)."','$iconForImportedTools','1','0','$iconForInactiveImportedTools','$target')",__FILE__,__LINE__);
 
 		$linkAdded=true;
 	}
@@ -123,11 +123,11 @@ else
     if ($toolid)  // RH: new section
     {
     	$sql =  "SELECT name,link,target FROM $tbl_courseHome" .
-        " WHERE id='" . addslashes($id) . "'";
+        " WHERE id='" . Database::escape_string($id) . "'";
 
     	$result = api_sql_query($sql, __FILE__, __LINE__);
 
-    	(mysql_num_rows($result) == 1 && ($row = mysql_fetch_array($result)))
+    	(Database::num_rows($result) == 1 && ($row = Database::fetch_array($result)))
     	    or die('? Could not fetch data with ' . htmlspecialchars($sql));
 	}
 

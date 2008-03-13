@@ -33,7 +33,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 13476 2007-10-12 11:38:16Z elixir_inter $
+* 	@version $Id: exercice_submit.php 14588 2008-03-13 11:17:02Z vanwayenbergh $
 */
 
 
@@ -60,6 +60,10 @@ $language_file='exercice';
 
 include_once('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
+
+/* ------------	ACCESS RIGHTS ------------ */
+// notice for unauthorized people.
+api_protect_course_script(true);
 
 include_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 

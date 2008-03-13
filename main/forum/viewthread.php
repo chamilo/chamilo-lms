@@ -58,6 +58,12 @@
 		INIT SECTION
 ==============================================================================
 */
+
+	include('../inc/global.inc.php');
+	$this_section=SECTION_COURSES;
+	/* ------------	ACCESS RIGHTS ------------ */
+	// notice for unauthorized people.
+	api_protect_course_script(true);
 /*
 -----------------------------------------------------------
 	Language Initialisation

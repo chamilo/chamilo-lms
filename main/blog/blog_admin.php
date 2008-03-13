@@ -34,6 +34,11 @@
 $language_file = "blog";
 
 include('../inc/global.inc.php');
+$this_section=SECTION_COURSES;
+/* ------------	ACCESS RIGHTS ------------ */
+// notice for unauthorized people.
+api_protect_course_script(true);
+
 require_once(api_get_path(LIBRARY_PATH) . "blog.lib.php");
 
 $nameTools = get_lang("blog_management");

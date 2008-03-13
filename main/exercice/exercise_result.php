@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 14300 2008-02-15 11:40:43Z elixir_inter $
+* 	@version $Id: exercise_result.php 14588 2008-03-13 11:17:02Z vanwayenbergh $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -62,6 +62,11 @@ $language_file='exercice';
 
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
+
+/* ------------	ACCESS RIGHTS ------------ */
+// notice for unauthorized people.
+api_protect_course_script(true);
+
 include_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 include_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 include_once(api_get_path(LIBRARY_PATH).'course.lib.php');

@@ -66,6 +66,9 @@ require ('../inc/global.inc.php');
 
 // the section (tabs)
 $this_section=SECTION_COURSES;
+// notice for unauthorized people.
+api_protect_course_script(true);
+
 
 // FCKeditor configuration
 $fck_attribute['Width'] = '100%';

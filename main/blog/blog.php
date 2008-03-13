@@ -40,6 +40,12 @@ $language_file = "blog";
 $blog_id = intval($_GET['blog_id']);
 
 include ('../inc/global.inc.php');
+$this_section=SECTION_COURSES;
+
+/* ------------	ACCESS RIGHTS ------------ */
+// notice for unauthorized people.
+api_protect_course_script(true);
+
 
 //session
 if(isset($_GET['id_session']))

@@ -1144,8 +1144,8 @@ function get_personal_agendaitems($agendaitems, $day = "", $month = "", $year = 
 		$end_month = $start_end_day_of_week['end']['month'];
 		$end_year = $start_end_day_of_week['end']['year'];
 		// in sql statements you have to use year-month-day for date calculations
-		$start_filter = $start_year."-".$start_month."-".$start_day;
-		$end_filter = $end_year."-".$end_month."-".$end_day;
+		$start_filter = $start_year."-".$start_month."-".$start_day." 00:00:00";
+		$end_filter = $end_year."-".$end_month."-".$end_day." 23:59:59";
 		$sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."'
 								AND date>='".$start_filter."' AND date<='".$end_filter."'";
 	}
@@ -1153,7 +1153,7 @@ function get_personal_agendaitems($agendaitems, $day = "", $month = "", $year = 
 	if ($type == "day_view") // we are in day view
 	{
 		// we could use mysql date() function but this is only available from 4.1 and higher
-		$start_filter = $year."-".$month."-".$day." 00:00:01";
+		$start_filter = $year."-".$month."-".$day." 00:00:00";
 		$end_filter = $year."-".$month."-".$day." 23:59:59";
 		$sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND date>='".$start_filter."' AND date<='".$end_filter."'";
 	}

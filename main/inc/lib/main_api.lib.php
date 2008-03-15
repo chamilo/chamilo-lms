@@ -1819,7 +1819,6 @@ function api_display_language_form()
 function api_get_languages()
 {
 	$tbl_language = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-	;
 	$sql = "SELECT * FROM $tbl_language WHERE available='1' ORDER BY original_name ASC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_array($result))
@@ -1829,7 +1828,22 @@ function api_get_languages()
 	}
 	return $language_list;
 }
-
+/**
+ * Get language isocode column from the language table, taking the current language as a query
+ * @return	string	The isocode (two-letters code or 5 letters code, fr or fr-BE) or null if error
+ */
+function api_get_language_isocode()
+{
+	$tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+	$sql = "SELECT isocode FROM $tbl_language WHERE dokeos_folder = '".api_get_interface_language()."'";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	if(mysql_num_rows($res))
+	{
+		$row = mysql_fetch_array($res);
+		return $row['isocode'];
+	}
+	return null;
+}
 /**
  * Returns a list of CSS themes currently available in the CSS folder
  * @return	array	List of themes directories from the css folder

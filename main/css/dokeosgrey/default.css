@@ -633,7 +633,7 @@ a.personal_agenda:link, a.personal_agenda:visited {color: #008000; }
 .personal_agenda a:hover, .personal_agenda a:hover {color: #666666; } 
 a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 
-
+.ical_export { float: right; margin-top: 0.2em;}
 
 /***************************************************** 
  *  DISPLAY MESSAGES	                             *

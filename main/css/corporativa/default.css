@@ -928,6 +928,7 @@ span.agendaitem i {
 	background-color: #667;
 	text-align: center;
 }
+.ical_export { float: right; margin-top: 0.2em;}
 
 /*
 ==============================================================================

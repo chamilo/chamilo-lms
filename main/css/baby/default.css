@@ -972,7 +972,7 @@ span.agendaitem i {
 	background: #eebb03;
 	text-align: center;
 }
-
+.ical_export { float: right; margin-top: 0.2em;}
 /*
 ==============================================================================
     DOKEOS CONFIG SETTINGS

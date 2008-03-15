@@ -935,7 +935,7 @@ a.personal_agenda:visited{
 a.personal_agenda:hover  {
 	color: #666666;
 }
-
+.ical_export { float: right; margin-top: 0.2em;}
 
 
 /*

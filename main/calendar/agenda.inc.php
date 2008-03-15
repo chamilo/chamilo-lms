@@ -1090,14 +1090,14 @@ function get_agenda_item($id)
 {
 	global $TABLEAGENDA;
 	$id=(int)addslashes($_GET['id']);
-	$sql 			= "SELECT * FROM ".$TABLEAGENDA." WHERE id='".$id."'";
-	$result			= api_sql_query($sql,__FILE__,__LINE__);
-	$entry_to_edit 	= mysql_fetch_array($result);
-	$item['title']	= $entry_to_edit["title"];
+	$sql 					= "SELECT * FROM ".$TABLEAGENDA." WHERE id='".$id."'";
+	$result					= api_sql_query($sql,__FILE__,__LINE__);
+	$entry_to_edit 			= mysql_fetch_array($result);
+	$item['title']			= $entry_to_edit["title"];
 	$item['content']		= $entry_to_edit["content"];
-	$item['start_date']	= $entry_to_edit["start_date"];
+	$item['start_date']		= $entry_to_edit["start_date"];
 	$item['end_date']		= $entry_to_edit["end_date"];
-	$item['to']=load_edit_users(TOOL_CALENDAR_EVENT, $id);
+	$item['to']				= load_edit_users(TOOL_CALENDAR_EVENT, $id);
 	// if the item has been sent to everybody then we show the compact to form
 	if ($item['to']=="everyone")
 	{
@@ -1447,6 +1447,7 @@ function display_agenda_items()
 	$month_bar="";
 	$event_list="";
 	$counter=0;
+	$export_icon = api_get_path('WEB_IMG_PATH').'export.png';
 	while ($myrow=mysql_fetch_array($result))
 {
 	echo "<table class=\"data_table\">\n";
@@ -1544,6 +1545,7 @@ function display_agenda_items()
 	echo "<tr class='row_even'>";
 	echo "<td colspan='2'>";
 
+	echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&type=public&id='.$myrow['id'].'" title="'.get_lang('ExportiCal').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCal').'"/></a>';
 	echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('print.gif', get_lang('Print')).'</a>&nbsp;';
 
 	echo $content;

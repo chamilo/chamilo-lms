@@ -16,7 +16,6 @@ $this_section = SECTION_MYAGENDA;
 api_block_anonymous_users();
 require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php');
-require_once (api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php');
 // setting the name of the tool
 $nameTools = get_lang('MyAgenda');
 
@@ -41,6 +40,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 	switch($_GET['type'])
 	{
 		case 'personal':
+			require_once (api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php');
 			$ical = new vcalendar();
 			$ai = get_personal_agenda_item($_GET['id']);
 			$ical->setConfig('unique_id',api_get_path(WEB_PATH));
@@ -67,11 +67,14 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 			$vevent->setProperty('organizer',$user['mail']);
 			$vevent->setProperty('attendee',$user['mail']);
 			$ical->setComponent ($vevent); // add event to calendar
-			$err = $ical->setConfig('url',api_get_path(WEB_PATH));
-			$err = $ical->setConfig('filename',$y.$m.$d.$h.$M.$s.'-'.rand(1,1000).'.ics');
+			$ical->setConfig('url',api_get_path(WEB_PATH));
+			$ical->setConfig('filename',$y.$m.$d.$h.$M.$s.'-'.rand(1,1000).'.ics');
 			$ical->returnCalendar();
 			break;
 		case 'public':
+			$TABLEAGENDA 			= Database::get_course_table(TABLE_AGENDA);
+			$TABLE_ITEM_PROPERTY 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
+			require_once (api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php');
 			$ical = new vcalendar();
 			$ai = get_agenda_item($_GET['id']);
 			$ical->setConfig('unique_id',api_get_path(WEB_PATH));
@@ -95,9 +98,11 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 			//$vevent->setProperty( 'comment', 'This is a comment' );
 			$user = api_get_user_info($ai['user']);
 			$vevent->setProperty('organizer',$user['mail']);
-			$vevent->setProperty('attendee',$user['mail']);
+			//$vevent->setProperty('attendee',$user['mail']);
 			$course = api_get_course_info();
 			$vevent->setProperty( 'LOCATION', $course['name'] ); // property name - case independent
+			$ical->setConfig('url',api_get_path(WEB_PATH));
+			$ical->setConfig('filename',$y.$m.$d.$h.$M.$s.'-'.rand(1,1000).'.ics');
 			$ical->setComponent ($vevent); // add event to calendar
 			$ical->returnCalendar();
 			break;

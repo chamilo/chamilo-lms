@@ -66,6 +66,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 			$user = api_get_user_info($ai['user']);
 			$vevent->setProperty('organizer',$user['mail']);
 			$vevent->setProperty('attendee',$user['mail']);
+			//$vevent->setProperty( 'rrule', array( 'FREQ' => 'WEEKLY', 'count' => 4));// occurs also four next weeks
 			$ical->setComponent ($vevent); // add event to calendar
 			$ical->setConfig('url',api_get_path(WEB_PATH));
 			$ical->setConfig('filename',$y.$m.$d.$h.$M.$s.'-'.rand(1,1000).'.ics');
@@ -100,7 +101,8 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 			$vevent->setProperty('organizer',$user['mail']);
 			//$vevent->setProperty('attendee',$user['mail']);
 			$course = api_get_course_info();
-			$vevent->setProperty( 'LOCATION', $course['name'] ); // property name - case independent
+			$vevent->setProperty('location', $course['name']); // property name - case independent
+			//$vevent->setProperty( 'rrule', array( 'FREQ' => 'WEEKLY', 'count' => 4));// occurs also four next weeks
 			$ical->setConfig('url',api_get_path(WEB_PATH));
 			$ical->setConfig('filename',$y.$m.$d.$h.$M.$s.'-'.rand(1,1000).'.ics');
 			$ical->setComponent ($vevent); // add event to calendar

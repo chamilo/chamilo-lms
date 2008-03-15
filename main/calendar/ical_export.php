@@ -11,11 +11,104 @@ $language_file = 'agenda';
 // we are not inside a course, so we reset the course id
 $cidReset = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...
-require ('../inc/global.inc.php');
+require_once ('../inc/global.inc.php');
 $this_section = SECTION_MYAGENDA;
 api_block_anonymous_users();
-require (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php');
+require_once (api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php');
 // setting the name of the tool
 $nameTools = get_lang('MyAgenda');
- 
+
+// setting the database variables
+$TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
+$TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA);
+$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+
+// the variables for the days and the months
+// Defining the shorts for the days
+$DaysShort = array (get_lang("SundayShort"), get_lang("MondayShort"), get_lang("TuesdayShort"), get_lang("WednesdayShort"), get_lang("ThursdayShort"), get_lang("FridayShort"), get_lang("SaturdayShort"));
+// Defining the days of the week to allow translation of the days
+$DaysLong = array (get_lang("SundayLong"), get_lang("MondayLong"), get_lang("TuesdayLong"), get_lang("WednesdayLong"), get_lang("ThursdayLong"), get_lang("FridayLong"), get_lang("SaturdayLong"));
+// Defining the months of the year to allow translation of the months
+$MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
+
+if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
+{
+	define('ICAL_LANG',api_get_language_isocode());
+	switch($_GET['type'])
+	{
+		case 'personal':
+			$ical = new vcalendar();
+			$ai = get_personal_agenda_item($_GET['id']);
+			$ical->setConfig('unique_id',api_get_path(WEB_PATH));
+			$ical->setProperty( 'method', 'PUBLISH' );
+			$vevent = new vevent();
+			if(empty($ai['date'])){header('location:'.$_SERVER['REFERER_URI']);}
+			list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['date']);
+			$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
+			if(empty($ai['enddate']))
+			{	
+				$y2=$y;$m2=$m;$d2=$d;$h2=$h;$M2=$M+15;$s2=$s;
+				if($M2>60){$M2=$M2-60;$h2+=1;}
+			}
+			else
+			{
+				list($y2,$m2,$d2,$h2,$M2,$s2) = preg_split('/[\s:-]/',$ai['enddate']);
+			}
+			$vevent->setProperty('dtend',array('year'=>$y2,'month'=>$m2,'day'=>$d2,'hour'=>$h2,'min'=>$M2,'sec'=>$s2));
+			//$vevent->setProperty( 'LOCATION', get_lang('Unknown') ); // property name - case independent
+			$vevent->setProperty( 'summary', mb_convert_encoding($ai['title'],'UTF-8',$charset));
+			$vevent->setProperty( 'description', mb_convert_encoding($ai['text'],'UTF-8',$charset));
+			//$vevent->setProperty( 'comment', 'This is a comment' );
+			$user = api_get_user_info($ai['user']);
+			$vevent->setProperty('organizer',$user['mail']);
+			$vevent->setProperty('attendee',$user['mail']);
+			$ical->setComponent ($vevent); // add event to calendar
+			$err = $ical->setConfig('url',api_get_path(WEB_PATH));
+			$err = $ical->setConfig('filename',$y.$m.$d.$h.$M.$s.'-'.rand(1,1000).'.ics');
+			$ical->returnCalendar();
+			break;
+		case 'public':
+			$ical = new vcalendar();
+			$ai = get_agenda_item($_GET['id']);
+			$ical->setConfig('unique_id',api_get_path(WEB_PATH));
+			$ical->setProperty( 'method', 'PUBLISH' );
+			$vevent = new vevent();
+			if(empty($ai['start_date'])){header('location:'.$_SERVER['REFERER_URI']);}
+			list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['start_date']);
+			$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
+			if(empty($ai['end_date']))
+			{	
+				$y2=$y;$m2=$m;$d2=$d;$h2=$h;$M2=$M+15;$s2=$s;
+				if($M2>60){$M2=$M2-60;$h2+=1;}
+			}
+			else
+			{
+				list($y2,$m2,$d2,$h2,$M2,$s2) = preg_split('/[\s:-]/',$ai['end_date']);
+			}
+			$vevent->setProperty('dtend',array('year'=>$y2,'month'=>$m2,'day'=>$d2,'hour'=>$h2,'min'=>$M2,'sec'=>$s2));
+			$vevent->setProperty( 'summary', mb_convert_encoding($ai['title'],'UTF-8',$charset));
+			$vevent->setProperty( 'description', mb_convert_encoding($ai['content'],'UTF-8',$charset));
+			//$vevent->setProperty( 'comment', 'This is a comment' );
+			$user = api_get_user_info($ai['user']);
+			$vevent->setProperty('organizer',$user['mail']);
+			$vevent->setProperty('attendee',$user['mail']);
+			$course = api_get_course_info();
+			$vevent->setProperty( 'LOCATION', $course['name'] ); // property name - case independent
+			$ical->setComponent ($vevent); // add event to calendar
+			$ical->returnCalendar();
+			break;
+		default:
+			header('location:'.$_SERVER['REFERER_URI']);
+			die();	
+	}
+}
+else
+{
+	header('location:'.$_SERVER['REFERER_URI']);
+	die();	
+}
 ?>

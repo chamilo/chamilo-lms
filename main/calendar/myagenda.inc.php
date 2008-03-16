@@ -988,6 +988,8 @@ function show_personal_agenda()
 		$day = $today['mday'];
 	}
 	$export_icon = api_get_path('WEB_IMG_PATH').'export.png';
+	$export_icon_low = api_get_path('WEB_IMG_PATH').'export_low_fade.png';
+	$export_icon_high = api_get_path('WEB_IMG_PATH').'export_high_fade.png';
 	if (Database::num_rows($result) > 0)
 	{
 		while ($myrow = Database::fetch_array($result))
@@ -1023,9 +1025,9 @@ function show_personal_agenda()
 			echo ucfirst(strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"])));
 			echo "</td>";
 			echo '<td class="'.$style.'">';
-			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=confidential" title="'.get_lang('ExportiCal').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalConfidential').'"/></a>';
-			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=private" title="'.get_lang('ExportiCalPerso').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalPrivate').'"/></a>';
-			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=public" title="'.get_lang('ExportiCalPro').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalPublic').'"/></a>';
+			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=confidential" title="'.get_lang('ExportiCalConfidential').'"><img src="'.$export_icon_high.'" alt="'.get_lang('ExportiCalConfidential').'"/></a>';
+			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=private" title="'.get_lang('ExportiCalPrivate').'"><img src="'.$export_icon_low.'" alt="'.get_lang('ExportiCalPrivate').'"/></a>';
+			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=public" title="'.get_lang('ExportiCalPublic').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalPublic').'"/></a>';
 			echo "\n\t\t</td>\n\t";
 			echo "</tr>";
 			/*--------------------------------------------------

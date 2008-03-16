@@ -1448,6 +1448,8 @@ function display_agenda_items()
 	$event_list="";
 	$counter=0;
 	$export_icon = api_get_path('WEB_IMG_PATH').'export.png';
+	$export_icon_low = api_get_path('WEB_IMG_PATH').'export_low_fade.png';
+	$export_icon_high = api_get_path('WEB_IMG_PATH').'export_high_fade.png';
 	while ($myrow=mysql_fetch_array($result))
 {
 	echo "<table class=\"data_table\">\n";
@@ -1544,8 +1546,8 @@ function display_agenda_items()
 	$content = text_filter($content);
 	echo "<tr class='row_even'>";
 	echo "<td colspan='2'>";
-	echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&type=course&id='.$myrow['id'].'&class=confidential" title="'.get_lang('ExportiCalConfidential').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalConfidential').'"/></a>';
-	echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&type=course&id='.$myrow['id'].'&class=private" title="'.get_lang('ExportiCalPrivate').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalPrivate').'"/></a>';
+	echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&type=course&id='.$myrow['id'].'&class=confidential" title="'.get_lang('ExportiCalConfidential').'"><img src="'.$export_icon_high.'" alt="'.get_lang('ExportiCalConfidential').'"/></a>';
+	echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&type=course&id='.$myrow['id'].'&class=private" title="'.get_lang('ExportiCalPrivate').'"><img src="'.$export_icon_low.'" alt="'.get_lang('ExportiCalPrivate').'"/></a>';
 	echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&type=course&id='.$myrow['id'].'&class=public" title="'.get_lang('ExportiCalPublic').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalPublic').'"/></a>';
 	echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('print.gif', get_lang('Print')).'</a>&nbsp;';
 	echo $content;

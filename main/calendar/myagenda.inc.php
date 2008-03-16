@@ -943,7 +943,7 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 	return $agendaitems;
 }
 /**
- * This function retrieves all the personal agenda items and add them to the agenda items found by the other functions.
+ * This function retrieves one personal agenda item returns it.
  * @param	int	The agenda item ID
  * @return 	array	The results of the database query, or null if not found
  */
@@ -951,7 +951,9 @@ function get_personal_agenda_item($id)
 {
 	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 	$id = Database::escape_string($id);
-	$sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE id=".$id;
+	// make sure events of the personal agenda can only be seen by the user himself
+	$user = api_get_user_id();
+	$sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE id=".$id." AND user = ".$user;
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	if(Database::num_rows($result)==1)
 	{

@@ -1022,8 +1022,10 @@ function show_personal_agenda()
 			echo date("d", strtotime($myrow["date"]))." ".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."&nbsp;";
 			echo ucfirst(strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"])));
 			echo "</td>";
-			echo "<td class=\"".$style."\">";
-			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'" title="'.get_lang('ExportiCal').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCal').'"/></a>';
+			echo '<td class="'.$style.'">';
+			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=confidential" title="'.get_lang('ExportiCal').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalConfidential').'"/></a>';
+			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=private" title="'.get_lang('ExportiCalPerso').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalPrivate').'"/></a>';
+			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=public" title="'.get_lang('ExportiCalPro').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalPublic').'"/></a>';
 			echo "\n\t\t</td>\n\t";
 			echo "</tr>";
 			/*--------------------------------------------------

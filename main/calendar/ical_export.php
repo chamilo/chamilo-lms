@@ -37,80 +37,93 @@ $MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang
 if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 {
 	define('ICAL_LANG',api_get_language_isocode());
-	switch($_GET['type'])
+	if(!empty($_GET['type']))
 	{
-		case 'personal':
-			require_once (api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php');
-			$ical = new vcalendar();
-			$ai = get_personal_agenda_item($_GET['id']);
-			$ical->setConfig('unique_id',api_get_path(WEB_PATH));
-			$ical->setProperty( 'method', 'PUBLISH' );
-			$vevent = new vevent();
-			if(empty($ai['date'])){header('location:'.$_SERVER['REFERER_URI']);}
-			list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['date']);
-			$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
-			if(empty($ai['enddate']))
-			{	
-				$y2=$y;$m2=$m;$d2=$d;$h2=$h;$M2=$M+15;$s2=$s;
-				if($M2>60){$M2=$M2-60;$h2+=1;}
-			}
-			else
-			{
-				list($y2,$m2,$d2,$h2,$M2,$s2) = preg_split('/[\s:-]/',$ai['enddate']);
-			}
-			$vevent->setProperty('dtend',array('year'=>$y2,'month'=>$m2,'day'=>$d2,'hour'=>$h2,'min'=>$M2,'sec'=>$s2));
-			//$vevent->setProperty( 'LOCATION', get_lang('Unknown') ); // property name - case independent
-			$vevent->setProperty( 'summary', mb_convert_encoding($ai['title'],'UTF-8',$charset));
-			$vevent->setProperty( 'description', mb_convert_encoding($ai['text'],'UTF-8',$charset));
-			//$vevent->setProperty( 'comment', 'This is a comment' );
-			$user = api_get_user_info($ai['user']);
-			$vevent->setProperty('organizer',$user['mail']);
-			$vevent->setProperty('attendee',$user['mail']);
-			//$vevent->setProperty( 'rrule', array( 'FREQ' => 'WEEKLY', 'count' => 4));// occurs also four next weeks
-			$ical->setComponent ($vevent); // add event to calendar
-			$ical->setConfig('url',api_get_path(WEB_PATH));
-			$ical->setConfig('filename',$y.$m.$d.$h.$M.$s.'-'.rand(1,1000).'.ics');
-			$ical->returnCalendar();
-			break;
-		case 'public':
-			$TABLEAGENDA 			= Database::get_course_table(TABLE_AGENDA);
-			$TABLE_ITEM_PROPERTY 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-			require_once (api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php');
-			$ical = new vcalendar();
-			$ai = get_agenda_item($_GET['id']);
-			$ical->setConfig('unique_id',api_get_path(WEB_PATH));
-			$ical->setProperty( 'method', 'PUBLISH' );
-			$vevent = new vevent();
-			if(empty($ai['start_date'])){header('location:'.$_SERVER['REFERER_URI']);}
-			list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['start_date']);
-			$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
-			if(empty($ai['end_date']))
-			{	
-				$y2=$y;$m2=$m;$d2=$d;$h2=$h;$M2=$M+15;$s2=$s;
-				if($M2>60){$M2=$M2-60;$h2+=1;}
-			}
-			else
-			{
-				list($y2,$m2,$d2,$h2,$M2,$s2) = preg_split('/[\s:-]/',$ai['end_date']);
-			}
-			$vevent->setProperty('dtend',array('year'=>$y2,'month'=>$m2,'day'=>$d2,'hour'=>$h2,'min'=>$M2,'sec'=>$s2));
-			$vevent->setProperty( 'summary', mb_convert_encoding($ai['title'],'UTF-8',$charset));
-			$vevent->setProperty( 'description', mb_convert_encoding($ai['content'],'UTF-8',$charset));
-			//$vevent->setProperty( 'comment', 'This is a comment' );
-			$user = api_get_user_info($ai['user']);
-			$vevent->setProperty('organizer',$user['mail']);
-			//$vevent->setProperty('attendee',$user['mail']);
-			$course = api_get_course_info();
-			$vevent->setProperty('location', $course['name']); // property name - case independent
-			//$vevent->setProperty( 'rrule', array( 'FREQ' => 'WEEKLY', 'count' => 4));// occurs also four next weeks
-			$ical->setConfig('url',api_get_path(WEB_PATH));
-			$ical->setConfig('filename',$y.$m.$d.$h.$M.$s.'-'.rand(1,1000).'.ics');
-			$ical->setComponent ($vevent); // add event to calendar
-			$ical->returnCalendar();
-			break;
-		default:
-			header('location:'.$_SERVER['REFERER_URI']);
-			die();	
+		$ical = new vcalendar();
+		$ical->setConfig('unique_id',api_get_path(WEB_PATH));
+		$ical->setProperty( 'method', 'PUBLISH' );
+		$ical->setConfig('url',api_get_path(WEB_PATH));
+		$vevent = new vevent();
+		$vevent->setProperty( 'summary', mb_convert_encoding($ai['title'],'UTF-8',$charset));
+		switch($_GET['class'])
+		{
+			case 'public':
+				$vevent->setClass('PUBLIC');			
+				break;
+			case 'private':
+				$vevent->setClass('PRIVATE');
+				break;
+			case 'confidential':
+				$vevent->setClass('CONFIDENTIAL');
+				break;
+			default:
+				$vevent->setClass('PRIVATE');				
+				break;
+		}
+
+		switch($_GET['type'])
+		{
+			case 'personal':
+				require_once (api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php');
+				$ai = get_personal_agenda_item($_GET['id']);
+				if(empty($ai['date'])){header('location:'.$_SERVER['REFERER_URI']);}
+				list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['date']);
+				$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
+				if(empty($ai['enddate']))
+				{	
+					$y2=$y;$m2=$m;$d2=$d;$h2=$h;$M2=$M+15;$s2=$s;
+					if($M2>60){$M2=$M2-60;$h2+=1;}
+				}
+				else
+				{
+					list($y2,$m2,$d2,$h2,$M2,$s2) = preg_split('/[\s:-]/',$ai['enddate']);
+				}
+				$vevent->setProperty('dtend',array('year'=>$y2,'month'=>$m2,'day'=>$d2,'hour'=>$h2,'min'=>$M2,'sec'=>$s2));
+				//$vevent->setProperty( 'LOCATION', get_lang('Unknown') ); // property name - case independent
+				$vevent->setProperty( 'description', mb_convert_encoding($ai['text'],'UTF-8',$charset));
+				//$vevent->setProperty( 'comment', 'This is a comment' );
+				$user = api_get_user_info($ai['user']);
+				$vevent->setProperty('organizer',$user['mail']);
+				$vevent->setProperty('attendee',$user['mail']);
+				//$vevent->setProperty( 'rrule', array( 'FREQ' => 'WEEKLY', 'count' => 4));// occurs also four next weeks
+				$ical->setConfig('filename',$y.$m.$d.$h.$M.$s.'-'.rand(1,1000).'.ics');
+				$ical->setComponent ($vevent); // add event to calendar
+				$ical->returnCalendar();
+				break;
+			case 'course':
+				$TABLEAGENDA 			= Database::get_course_table(TABLE_AGENDA);
+				$TABLE_ITEM_PROPERTY 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
+				require_once (api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php');
+				$ai = get_agenda_item($_GET['id']);
+				if(empty($ai['start_date'])){header('location:'.$_SERVER['REFERER_URI']);}
+				list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['start_date']);
+				$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
+				if(empty($ai['end_date']))
+				{	
+					$y2=$y;$m2=$m;$d2=$d;$h2=$h;$M2=$M+15;$s2=$s;
+					if($M2>60){$M2=$M2-60;$h2+=1;}
+				}
+				else
+				{
+					list($y2,$m2,$d2,$h2,$M2,$s2) = preg_split('/[\s:-]/',$ai['end_date']);
+				}
+				$vevent->setProperty('dtend',array('year'=>$y2,'month'=>$m2,'day'=>$d2,'hour'=>$h2,'min'=>$M2,'sec'=>$s2));
+				$vevent->setProperty( 'description', mb_convert_encoding($ai['content'],'UTF-8',$charset));
+				//$vevent->setProperty( 'comment', 'This is a comment' );
+				$user = api_get_user_info($ai['user']);
+				$vevent->setProperty('organizer',$user['mail']);
+				//$vevent->setProperty('attendee',$user['mail']);
+				$course = api_get_course_info();
+				$vevent->setProperty('location', $course['name']); // property name - case independent
+				//$vevent->setProperty( 'rrule', array( 'FREQ' => 'WEEKLY', 'count' => 4));// occurs also four next weeks
+				$ical->setConfig('filename',$y.$m.$d.$h.$M.$s.'-'.rand(1,1000).'.ics');
+				$ical->setComponent ($vevent); // add event to calendar
+				$ical->returnCalendar();
+				break;
+			default:
+				header('location:'.$_SERVER['REFERER_URI']);
+				die();	
+		}
 	}
 }
 else

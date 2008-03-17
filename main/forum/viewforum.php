@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006 Dokeos S.A.
+	Copyright (c) 2006-2008 Dokeos S.A.
 	Copyright (c) 2006 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
@@ -194,20 +194,26 @@ if (api_is_allowed_to_edit() OR ($current_forum['allow_new_threads']==1 AND isse
 */
 echo "<table class=\"data_table\" width='100%'>\n";
 
-// the forum category
+// the current forum 
 if($origin != 'learnpath')
 {
-	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"7\">";
-	echo '<a href="index.php?'.api_get_cidreq().'" '.class_visible_invisible($current_forum_category['visibility']).'>'.prepare4display($current_forum_category['cat_title']).'</a><br />';
-	echo '<span>'.prepare4display($current_forum_category['cat_comment']).'</span>';
+	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"7\">";	
+	echo '<span class="forum_title">'.prepare4display($current_forum['forum_title']).'</span>';
+		
+	if (!empty ($current_forum['forum_comment'])) 
+	{
+		echo '<br><span class="forum_description">'.prepare4display($current_forum['forum_comment']).'</span>';
+	}
+	
+	if (!empty ($current_forum_category['cat_title'])) 
+	{
+		echo '<br /><span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])."</span><br />";
+	}
+	
 	echo "</th>\n";
 	echo "\t</tr>\n";
 }
 
-// the forum
-echo "\t<tr class=\"forum_header\">\n";
-echo "\t\t<td colspan=\"7\">".prepare4display($current_forum['forum_title'])."<br />";
-echo '<span>'.prepare4display($current_forum['forum_comment']).'</span>';
 echo "</th>\n";
 echo "\t</tr>\n";
 
@@ -216,8 +222,8 @@ echo "\t<tr class=\"forum_threadheader\">\n";
 echo "\t\t<td></td>\n";
 echo "\t\t<td>".get_lang('Title')."</td>\n";
 echo "\t\t<td>".get_lang('Replies')."</td>\n";
-echo "\t\t<td>".get_lang('Author')."</td>\n";
 echo "\t\t<td>".get_lang('Views')."</td>\n";
+echo "\t\t<td>".get_lang('Author')."</td>\n";
 echo "\t\t<td>".get_lang('LastPost')."</td>\n";
 if (api_is_allowed_to_edit())
 {
@@ -271,7 +277,18 @@ if(is_array($threads))
 			else
 			{
 				$name=$row['firstname'].' '.$row['lastname'];
+			}			
+			echo "\t\t<td>".$row['thread_views']."</td>\n";
+			
+			if ($row['last_poster_user_id']=='0')
+			{
+				$name=$row['poster_name'];  
 			}
+			else
+			{
+				$name=$row['last_poster_firstname'].' '.$row['last_poster_lastname'];
+			}
+			
 			if($origin != 'learnpath')
 			{
 				echo "\t\t<td>".display_user_link($row['user_id'], $name)."</td>\n";
@@ -280,15 +297,7 @@ if(is_array($threads))
 			{
 				echo "\t\t<td>".$name."</td>\n";
 			}
-			echo "\t\t<td>".$row['thread_views']."</td>\n";
-			if ($row['last_poster_user_id']=='0')
-			{
-				$name=$row['poster_name'];
-			}
-			else
-			{
-				$name=$row['last_poster_firstname'].' '.$row['last_poster_lastname'];
-			}
+			
 			// if the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread
 			if (($row['visible']=='1' OR api_is_allowed_to_edit()) && $origin!='learnpath')
 			{
@@ -323,6 +332,8 @@ if(is_array($threads))
 			echo "\t</tr>\n";
 		}
 		$counter++;
+
+
 	}
 }
 

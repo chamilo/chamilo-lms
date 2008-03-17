@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006 Dokeos S.A.
+	Copyright (c) 2006-2008 Dokeos S.A.
 	Copyright (c) 2006 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
@@ -93,7 +93,16 @@ $current_forum_category=get_forum_categories($_GET['forumcategory']);
 $interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
 $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => prepare4display($current_forum_category['cat_title']));
 
-Display :: display_header();
+
+if (!empty($_GET['action']) && !empty($_GET['content'])) 
+{	  
+	if ($_GET['action']=='add' && $_GET['content']=='forum' ) 
+	{		
+		$interbreadcrumb[] = array ("url" => api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forum', 'name' => get_lang('AddForum'));	  
+	}
+}
+
+Display :: display_header(null);
 api_display_tool_title($nameTools);
 
 /*
@@ -125,6 +134,8 @@ if (api_is_allowed_to_edit())
 	handle_forum_and_forumcategories();
 }
 
+if ($_GET['action']!='add')
+{ 
 /*
 ------------------------------------------------------------------------------------------------------
 	RETRIEVING ALL THE FORUM CATEGORIES AND FORUMS
@@ -163,26 +174,28 @@ if (api_is_allowed_to_edit())
 }
 
 /*
------------------------------------------------------------
-	Display Forum Categories and the Forums in it
------------------------------------------------------------
-*/
-echo "<table class=\"data_table\" width='100%'>\n";
-echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"5\">";
-echo '<a href="#" '.class_visible_invisible($forum_category['visibility']).'>'.prepare4display($forum_category['cat_title']).'</a><br />';
-echo '<span>'.prepare4display($forum_category['cat_comment']).'</span>';
-echo "</th>\n";
-if (api_is_allowed_to_edit())
-{
-	echo "\t\t<th>";
-	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forumcategory&amp;id=".$forum_category['cat_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
-	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=delete&amp;content=forumcategory&amp;amp;id=".$forum_category['cat_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
-	display_visible_invisible_icon('forumcategory', $forum_category['cat_id'], $forum_category['visibility'], array("forumcategory"=>$_GET['forumcategory']));
-	display_lock_unlock_icon('forumcategory',$forum_category['cat_id'], $forum_category['locked'], array("forumcategory"=>$_GET['forumcategory']));
-	display_up_down_icon('forumcategory',$forum_category['cat_id'], $forum_categories_list);
+	-----------------------------------------------------------
+		Display Forum Categories and the Forums in it
+	-----------------------------------------------------------
+	*/
+	echo "<table class=\"data_table\" width='100%'>\n";
+	
+	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"5\">";
+	echo '<span class="forum_title">'.prepare4display($forum_category['cat_title']).'</span><br />';
+	echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
 	echo "</th>\n";
-}
-echo "\t</tr>\n";
+	if (api_is_allowed_to_edit())
+	{
+		
+		echo '<th style="padding: 5px; vertical-align: top;" align="center" >';			
+		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forumcategory&amp;id=".$forum_category['cat_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
+		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=delete&amp;content=forumcategory&amp;amp;id=".$forum_category['cat_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
+		display_visible_invisible_icon('forumcategory', $forum_category['cat_id'], $forum_category['visibility'], array("forumcategory"=>$_GET['forumcategory']));
+		display_lock_unlock_icon('forumcategory',$forum_category['cat_id'], $forum_category['locked'], array("forumcategory"=>$_GET['forumcategory']));
+		display_up_down_icon('forumcategory',$forum_category['cat_id'], $forum_categories_list);
+		echo "</th>\n";
+	}
+	echo "\t</tr>\n";
 
 // step 3: the interim headers (for the forum)
 echo "\t<tr class=\"forum_header\">\n";
@@ -332,7 +345,7 @@ if (count($forum_list)==0)
 }
 
 echo "</table>\n";
-
+}
 /*
 ==============================================================================
 		FOOTER

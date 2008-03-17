@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006 Dokeos S.A.
+	Copyright (c) 2006-2008 Dokeos S.A.
 	Copyright (c) 2006 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
@@ -142,7 +142,7 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resour
 	Header
 -----------------------------------------------------------
 */
-Display :: display_header();
+Display :: display_header(null);
 api_display_tool_title($nameTools);
 ////echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
 /*
@@ -181,23 +181,15 @@ if (!api_is_allowed_to_edit() AND $current_forum['allow_edit']==0)
 	Display Forum Category and the Forum information
 -----------------------------------------------------------
 */
-echo "<table width='100%'>\n";
+echo "<table class=\"data_table\" width='100%'>\n";
+
 
 // the forum category
-echo "\t<tr class=\"forum_category_header\">\n\t\t<td colspan=\"2\">";
-echo '<a href="index.php" '.class_visible_invisible($current_forum_category['visibility']).'>'.prepare4display($current_forum_category['cat_title']).'</a><br />';
-echo '<span>'.prepare4display($current_forum_category['cat_comment']).'</span>';
-echo "</td>\n";
-echo "\t</tr>\n";
-
-// the forum
-echo "\t<tr class=\"forum_header\">\n";
-echo "\t\t<td colspan=\"2\">";
+echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"2\">";
 echo '<a href="viewforum.php?forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a><br />';
-echo '<span>'.prepare4display($current_forum['forum_comment']).'</span>';
-echo "</td>\n";
+echo '<span class="forum_description">'.prepare4display($current_forum['forum_comment']).'</span>';echo "</th>\n";
+echo "</th>\n";
 echo "\t</tr>\n";
-
 echo '</table>';
 
 // the form for the reply
@@ -215,6 +207,3 @@ if (!empty($values) and $_POST['SubmitPost'])
 
 Display :: display_footer();
 ?>
-
-
-

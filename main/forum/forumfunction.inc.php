@@ -721,11 +721,21 @@ function display_up_down_icon($content, $id, $list)
 	}
 	if ($position>1)
 	{
-		$return_value='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=up&amp;content='.$content.'&amp;id='.$id.'"><img src="../img/up.gif" /></a>';
+		$return_value='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=up&amp;content='.$content.'&amp;id='.$id.'" title="'.get_lang('MoveUp').'"><img src="../img/up.gif" /></a>';
 	}
+	else
+	{
+		$return_value='<img src="../img/up_na.gif" />';
+	}
+	
 	if ($position<$total_items)
 	{
-		$return_value.='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=down&amp;content='.$content.'&amp;id='.$id.'"><img src="../img/down.gif" /></a>';
+		$return_value.='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=down&amp;content='.$content.'&amp;id='.$id.'" title="'.get_lang('MoveDown').'" ><img src="../img/down.gif" /></a>';
+	}	
+	else
+	{
+		
+	   $return_value.='<img src="../img/down_na.gif" />';
 	}
 
 	echo $return_value;
@@ -1975,15 +1985,10 @@ function display_user_image($user_id,$name)
 		
 	if ($user_id<>0)
 	{		
-		$image_path = UserManager::get_user_picture_path_by_id($user_id,'web');
+		$image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);
 		$image_repository = $image_path['dir'];
 		$existing_image = $image_path['file'];
-		if (is_array($image_path) && $existing_image!='') {
-			return 	$link.'<img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  title="'.$name.'"  /></a>';			
-		}
-		else			
-			return $link.'<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  title="'.$name.'"  /></a>';
-			 	
+		return 	$link.'<img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  title="'.$name.'"  /></a>';			
 			
 	}
 	else

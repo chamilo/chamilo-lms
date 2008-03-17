@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006 Dokeos S.A.
+	Copyright (c) 2006-2008 Dokeos S.A.
 	Copyright (c) 2006 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
@@ -200,7 +200,25 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 		// The link should only appear when the user is logged in or when anonymous posts are allowed.
 		if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id']))
 		{
+			//reply link
 			echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread&origin='.$origin.'">'.get_lang('ReplyToThread').'</a>';
+			
+			//new thread link
+			if (api_is_allowed_to_edit() OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1))
+			{
+				if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1)
+				{
+				echo '&nbsp;&nbsp;'; 
+				echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.Display::return_icon('forumthread_new.gif').' '.get_lang('NewTopic').'</a>';
+				}
+				else
+				{
+					echo get_lang('ForumLocked');
+				}
+			}
+
+
+			
 		}
 	}
 	// note: this is to prevent that some browsers display the links over the table (FF does it but Opera doesn't)
@@ -243,32 +261,21 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 	// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
 	echo "<table class=\"data_table\" width='100%'>\n";
 
-	// the forum category
+	// the thread	
+	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";		
+	echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
+	
 	if($origin!='learnpath')
-	{
-		echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
-		echo '<a href="index.php?'.api_get_cidreq().'" '.class_visible_invisible($current_forum_category['visibility']).'>'.prepare4display($current_forum_category['cat_title']).'</a><br />';
-		echo '<span>'.prepare4display($current_forum_category['cat_comment']).'</span>';
-		echo "</th>\n";
-		echo "\t</tr>\n";
+	{		
+		echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title']).' - ';				
 	}
-
-	// the forum
-	echo "\t<tr class=\"forum_header\">\n";
-	echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$current_forum['forum_id']."\" ".class_visible_invisible($current_forum['visibility']).">".prepare4display($current_forum['forum_title'])."</a><br />";
-	echo '<span>'.prepare4display($current_forum['forum_comment']).'</span>';
-	echo "</td>\n";
-	echo "\t</tr>\n";
-
-	// the thread
-	echo "\t<tr class=\"forum_thread\">\n";
-	echo "\t\t<td><span ".class_visible_invisible($current_thread['visibility']).">".prepare4display($current_thread['thread_title'])."</span><br />";
-	echo "</td>\n";
-	echo "\t</tr>\n";
+		
+	echo prepare4display($current_forum['forum_title']).'<br />';						
+	echo "</th>\n";
+	echo "\t</tr>\n";		
+	echo '<span>'.prepare4display($current_thread['thread_comment']).'</span>';	
 	echo "</table>";
-
-	echo '<br />';
-
+	
 	switch ($viewmode)
 	{
 		case 'flat':
@@ -286,6 +293,7 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 	}
 } // if ($message<>'PostDeletedSpecial') // in this case the first and only post of the thread is removed
 
+	
 
 
 /*

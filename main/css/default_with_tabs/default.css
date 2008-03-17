@@ -1090,6 +1090,23 @@ a.forum_group_link {
 	display:inline;
 }
 
+.forum_description {
+	color: #000;
+	font-weight: normal;
+}
+
+.forum_title{
+	color: #000;
+	font-size: 14px;
+
+}
+.forum_low_description{
+	color: #737780;	
+	font-style: italic ;
+	font-weight: normal;		
+}
+
+
 /* **** BLOG **** */
 span.blog_title {
  	font-size: 20px;

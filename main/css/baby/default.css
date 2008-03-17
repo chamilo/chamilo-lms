@@ -1214,6 +1214,30 @@ th span {
 	vertical-align: top;
 }
 
+.forum_description {
+	color: #000;
+	font-weight: normal;
+	font-family:Arial,sans,sans-serif;
+}
+
+.forum_title{
+	color: #317100;
+	font-size: 14px;
+	font-family:Arial,sans,sans-serif;
+
+}
+
+.forum_low_description{
+	color: #000;	
+	font-style: italic ;
+	font-weight: normal;
+	
+	font-size: 11px;
+	font-family:Arial,sans,sans-serif;
+}
+
+
+
 /*
 ==============================================================================
     DISPLAY MESSAGES

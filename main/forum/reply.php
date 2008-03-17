@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006 Dokeos S.A.
+	Copyright (c) 2006-2008 Dokeos S.A.
 	Copyright (c) 2006 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
@@ -187,19 +187,17 @@ echo "<table class=\"data_table\" width='100%'>\n";
 
 // the forum category
 echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"2\">";
-echo '<a href="index.php" '.class_visible_invisible($current_forum_category['visibility']).'>'.$current_forum_category['cat_title'].'</a><br />';
-echo '<span>'.$current_forum_category['cat_comment'].'</span>';
+
+echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
+
+if (!empty ($current_forum_category['cat_title'])) 
+{
+	echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])." - </span>";
+}
+	
+echo '<span class="forum_low_description">'.prepare4display($current_forum['forum_title']).'</span>';
 echo "</th>\n";
 echo "\t</tr>\n";
-
-// the forum
-echo "\t<tr class=\"forum_header\">\n";
-echo "\t\t<td colspan=\"2\">";
-echo '<a href="viewforum.php?forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.$current_forum['forum_title'].'</a><br />';
-echo '<span>'.$current_forum['forum_comment'].'</span>';
-echo "</td>\n";
-echo "\t</tr>\n";
-
 echo '</table>';
 
 // the form for the reply

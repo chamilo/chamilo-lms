@@ -89,7 +89,7 @@ foreach ($rows as $post)
 	{
 		$name=$post['firstname'].' '.$post['lastname'];
 	}	
-	if (api_get_course_setting('allow_user_image_forum')) {echo '<br />'.display_user_image($post['user_id']).'<br />';	}
+	if (api_get_course_setting('allow_user_image_forum')) {echo '<br />'.display_user_image($post['user_id'],$name,false,true).'<br />';	}
 	echo display_user_link($post['user_id'], $name).'<br />';
 	echo $post['post_date'].'<br /><br />';
 	// The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
@@ -103,7 +103,7 @@ foreach ($rows as $post)
 		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=delete&amp;content=post&amp;id=".$post['post_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeletePost"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>\n";
 		display_visible_invisible_icon('post', $post['post_id'], $post['visible'],array('forum'=>Security::remove_XSS($_GET['forum']),'thread'=>Security::remove_XSS($_GET['thread']) ));
 		echo "\n";
-		echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=move&amp;post=".$post['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('Edit'))."</a>";
+		echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=move&amp;post=".$post['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>";
 	}
 	echo '<br /><br />';
 	//if (($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0) OR api_is_allowed_to_edit())

@@ -25,5 +25,11 @@ post a message there.</p>
  and Ok to access your courses. The URL of the site is";
 $test = "deneme";
 $WCAGImage = "Resim";
+$WCAGLabel = "Görüntü etiketi";
 $WCAGLink = "Ba&#287;lant&#305;";
+$WCAGLinkLabel = "Ba&#287;lant&#305; etiketi";
+$errorNoLabel = "Resimde etiket yok";
+$WCAGEditor = "WCAG Editörü";
+$WCAGGoMenu = "Menüye git";
+$WCAGGoContent = "&#304;çeri&#287;e git";
 ?>

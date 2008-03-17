@@ -149,6 +149,7 @@ $langSearchAUser   = "Kat&#305;l&#305;mc&#305; ara";
 $langTechnicalTools  = "Teknik yönetim araçlar&#305;";
 $langConfig  = "Konfigürasyon";
 $langLogIdentLogoutComplete  = "Kay&#305;t listesi (ayr&#305;nt&#305;l&#305;)";
+$langLimitUsersListDefaultMax = "Kayd&#305;rma çubu&#287;unda gösterilen en fazla kullan&#305;c&#305;";
 $DokeosAdminWebLinks = "Dokeos Internet Ba&#287;lant&#305;lar&#305;";
 $langNomOutilTodo = "Yap&#305;lacaklar listesini düzenle";
 $langNomPageAdmin = "Yönetim";

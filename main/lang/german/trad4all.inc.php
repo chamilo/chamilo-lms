@@ -462,4 +462,10 @@ $Gradebook = "Gradebook";
 $OpenIDWhatIs = "Wie lautet die OpenID?";
 $OpenIDDescription = "Mit OpenID benötigt man nicht mehrere Benutzernamen auf verschiedenen Websites, ,was die Online Erfahrung vereinfacht. Sie wöhlen den OpenID Provider, der am besten Ihren Bedürfnissen entspricht, und dem Sie vor allem vertrauen. Andererseits behalten Sie Ihre OpenID unabhängig von dem Provider, den Sie benutzen. Am besten ist dabei, dass OpenID kein proprietäres Format ist sondern frei verfügbar ist. Für Firmen bedeutet das weniger Kosten für Benutzernamen und Passwort Verwaltung, gleichzeitig wird mehr WebTraffic angezogen. OpenID bringt weniger Frustration für die Benutzer, da Sie Ihre Logins selbst kontrollieren.<br /><br /><a href=\"http://openid.net/what/\">Lesen Sie mehr ...Read on...</a>";
 $NoManager = "Kein Manager";
+$ExportiCal = "Export im iCal Format";
+$ExportiCalPublic = "Als öffentliches Ereignis in iCal Format exportieren";
+$ExportiCalPrivate = "Als privates Ereignis im iCal Format exportieren";
+$ExportiCalConfidential = "Als vertrauliches Ereignis im iCal Format exportieren";
+$MoreStats = "Weitere Statistiken";
+$Drh = "Leiter der Personalabteilung ";
 ?>

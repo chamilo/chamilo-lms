@@ -23,10 +23,12 @@ $langInC = "在這門課程中";
 $langFilled = "不必填寫所有選項";
 $langUserNo = "用戶序號";
 $langTaken = "正在使用. 請選擇另外一個";
-$langTutor = "導師";
+$langTutor = "指導員";
 $langUnreg = "註銷";
 $langGroupUserManagement = "小組管理";
 $langUserInfo = "用戶訊息";
 $langUnregister = "註銷";
 $langAddAUser = "添加用戶";
+$UsersUnsubscribed = "已把選定的使用者從本課程中取消";
+$ThisStudentIsSubscribeThroughASession = "這學員是由學期模式中選修本課程的。你不能編輯他的資訊。";
 ?>

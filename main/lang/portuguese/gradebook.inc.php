@@ -1,14 +1,49 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$FlatView = "Visão linear";
+$ScoreEdit = "Editar regras de pontuação";
+$ScoreColor = "Cor da pontuação";
+$ScoringSystem = "Sistema de pontuação";
+$EnableScoreColor = "Activar a coloração da pontuação";
+$Below = "abaixo";
+$WillColorRed = "será colorido em vermelho";
+$EnableScoringSystem = "Activar o sistema de pontuação";
+$IncludeUpperLimit = "Incluir um limite superior";
+$ScoreInfo = "Informação sobre pontuação";
 $Between = "entre";
+$CurrentCategory = "Categoria actual";
+$RootCat = "Raiz ";
 $NewCategory = "Nova categoria";
+$NewEvaluation = "Nova avaliação";
+$Weight = "Ponderação";
 $PickACourse = "Escolher um curso";
+$CategoryName = "Nome da categoria";
+$CourseIndependent = "Curso independente";
+$CourseIndependentEvaluation = "Curso de avaliação independente";
+$EvaluationName = "Nome da avaliação";
 $Max = "Máx.";
+$DateEval = "Data da avaliação";
+$AddUserToEval = "Acrescentar estudantes à avaliação";
+$NewSubCategory = "Nova subcategoria";
+$MakeLink = "Criar uma ligação";
 $DeleteSelected = "Apagar selecção";
+$SetVisible = "Tornar visível";
+$SetInvisible = "Tornar invisível";
+$ChooseLink = "Escolher tipo de ligação";
+$DokeosExercises = "Exercícios Dokeos";
+$DokeosDropbox = "Dropbox Dokeos";
+$DokeosStudentPublications = "Trabalhos Dokeos";
+$DokeosLearningPaths = "Sequências de Aprendizagem Dokeos";
+$ChooseExercise = "Seleccionar exercício";
 $AddResult = "Acrescentar resultados";
+$BackToOverview = "Voltar à visão geral";
 $ExportPDF = "Exportar para PDF";
 $Print = "Imprimir";
 $ChooseOrientation = "Escolher orientação";
+$Portrait = "Vertical";
+$Landscape = "Horizontal";
+$FilterCategory = "Filtrar por categorias";
 $DeleteAll = "Apagar tudo";
+$ScoringUpdated = "Pontuação actualizada";
 ?>

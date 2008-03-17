@@ -172,7 +172,11 @@ $HaveAnswered = "responderam";
 $WereInvited = "foram convidados";
 $PagebreakNotFirst = "O separador de página não pode estar no início";
 $PagebreakNotLast = "O separador de página não pode estar no fim";
+$SurveyNotAvailableAnymore = "Queira desculpar, mas este inquérito já não está disponível. Obrigado por ter tentado.";
 $DuplicateSurvey = "Duplicar questionário";
 $EmptySurvey = "Esvaziar questionário";
 $SurveyEmptied = "Respostas ao questionário apagadas com êxito";
+$SurveyNotAvailableYet = "Este inquérito ainda não está disponível. Por favor, tente novamente mais tarde. Obrigado.";
+$PeopleAnswered = "pessoas que responderam";
+$AnonymousSurveyCannotKnowWhoAnswered = "Este inquérito é anónimo. Não pode ver quem respondeu.";
 ?>

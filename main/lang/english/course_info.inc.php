@@ -99,4 +99,7 @@ $DescriptionRecycleCourse = "This tool empties the course of the selected elemen
 $QuizEmailAlert = "E-mail alert on new quiz submitted";
 $QuizEmailAlertActivate = "Activate e-mail sending when a user submits new quiz answers";
 $QuizEmailAlertDeactivate = "Disable e-mail alert on new quiz answers submission";
+$AllowUserImageForum = "User picture in forum";
+$AllowUserImageForumActivate = "Display users pictures in the forum";
+$AllowUserImageForumDeactivate = "Hide users pictures in the forum";
 ?>

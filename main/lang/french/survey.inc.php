@@ -179,4 +179,5 @@ $SurveyEmptied = "Enquête vidée de ses résultats avec succès";
 $SurveyNotAvailableYet = "Cette enquête n\'est pas encore disponible. Veuillez réessayer plus tard. Merci.";
 $PeopleAnswered = "personnes ont répondu";
 $AnonymousSurveyCannotKnowWhoAnswered = "Cette enquête est anonyme. Vous ne pouvez pas voir qui a répondu.";
+$IllegalSurveyId = "Numéro d\'enquête inconnu";
 ?>

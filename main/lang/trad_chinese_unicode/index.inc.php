@@ -56,6 +56,7 @@ $langOpenarea = "個人開放區";
 $langProductions = "作品";
 $langSendChatRequest = "發送對話請求給這人";
 $langRequestDenied = "已拒絕請求.";
+$SessionView = "以學期排序顯示課程";
 $CourseView = "展示所有課程";
 $DropboxFileAdded = "已加入投遞箱檔案";
 $NewMessageInForum = "討論區新帖子";

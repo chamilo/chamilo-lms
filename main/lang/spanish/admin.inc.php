@@ -285,7 +285,7 @@ $AllowRegistrationComment = "¿ Está permitido que los nuevos usuarios puedan reg
 $AllowRegistrationAsTeacherTitle = "Registro como profesor";
 $AllowRegistrationAsTeacherComment = "¿ Alguien puede registrarse como profesor (y poder crear cursos) ?";
 $PlatformLanguage = "Idioma de la plataforma";
-$Tuning = "Mejorar las prestaciones";
+$Tuning = "Mejorar el rendimiento";
 $SplitUsersUploadDirectory = "Dividir el directorio de transferencias (upload) de los usuarios";
 $SplitUsersUploadDirectoryComment = "En portales que tengan un uso muy elevado, donde están registrados muchos usuarios que envían sus fotos, el directorio al que se transfieren (main/upload/users/) puede contener demasiados archivos para que el sistema los maneje de forma eficiente (se ha documentado el caso de un servidor Debian con más de 36000 archivos). Si cambia esta opción añadirá un nivel de división a los directorios del directorio upload. Nueve directorios se utilizarán en el directorio base para contener los directorios de todos los usuarios. El cambio de esta opción no afectará a la estructura de los directorios en el disco, sino al comportamiento del código de Dokeos, por lo que si la activa tendrá que crear nuevos directorios y mover manualmente los directorios existentes en el servidor. Cuando cree y mueva estos directorios, tendrá que mover los directorios de los usuarios 1 a 9 a subdirectorios con el mismo nombre. Si no está seguro de usar esta opción, es mejor que no la active.";
 $CourseQuota = "Cuota de espacio del curso en el servidor";
@@ -699,4 +699,7 @@ $UserTheme = "Tema (hoja de estilo)";
 $UserThemeSelection = "Selección de tema por el usuario";
 $UserThemeSelectionComment = "Permitir a los usuarios elegir su propio tema visual en su perfil. Esto les cambiará el aspecto de Dokeos, pero dejará intacto el estilo por defecto de la plataforma.  Si un curso o una sesión han sido asignados a un tema específico, en ellos éste tendrá prioridad sobre el tema definido para el perfil de un usuario.";
 $AllowurlfopenIsSetToOff = "El parámetro de PHP \"allow_url_fopen\" está desactivado. Esto impide que el mecanismo de registro funcione correctamente. Este parámetro puede cambiarse en el archivo de configuración de PHP (php.ini) o en la configuración del Virtual Host de Apache, mediante la directiva php_admin_value";
+$VisioHost = "Nombre o dirección IP del servidor de streaming para la videoconferencia";
+$VisioPort = "Puerto del servidor de streaming para la videoconferencia";
+$VisioPassword = "Contraseña del servidor de streaming para la videoconferencia";
 ?>

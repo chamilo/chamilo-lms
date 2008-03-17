@@ -693,4 +693,7 @@ $UserTheme = "Theme (stylesheet)";
 $UserThemeSelection = "User theme selection";
 $UserThemeSelectionComment = "Allow users to select their own visual theme in their profile. This will change the look of Dokeos for them, but will leave the default style of the portal intact. If a specific course or session has a specific theme assigned, it will have priority over user-defined themes.";
 $AllowurlfopenIsSetToOff = "The PHP setting \"allow_url_fopen\" is set to off. This prevents the registration mechanism to work properly. This setting can be changed in you PHP configuration file (php.ini) or in the Apache Virtual Host configuration, using the php_admin_value directive";
+$VisioHost = "Videoconference streaming server hostname or IP address";
+$VisioPort = "Videoconference streaming server port";
+$VisioPassword = "Videoconference streaming server password";
 ?>

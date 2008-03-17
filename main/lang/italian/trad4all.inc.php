@@ -464,4 +464,10 @@ $OpenIDDescription = "OpenID è un sistema di certificazione della password. Per 
 
 <br /><br /><a href=\"http://openid.net/what/\">Approfondimento...</a>";
 $NoManager = "Nessun gestore";
+$ExportiCal = "Esporta in formato iCal";
+$ExportiCalPublic = "Esporta in formato iCal come evento pubblico";
+$ExportiCalPrivate = "Esporta in formato iCal come evento privato";
+$ExportiCalConfidential = "Esporta in formato iCal come evento confidenziale";
+$MoreStats = "Altre statistiche";
+$Drh = "Responsabile Risorse Umane";
 ?>

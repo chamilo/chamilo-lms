@@ -168,6 +168,7 @@ $CreateANewForum = "創建新討論區";
 $LinkAdd = "加入連結";
 $TimeFinished = "時間(完結於...)";
 $CorrectAnswers = "正確答案";
+$StudentResponse = "學員回應";
 $LatencyTimeSpent = "使用時間";
 $Result = "成績";
 $SplitStepsPerPage = "每頁一個步驟";

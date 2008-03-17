@@ -179,4 +179,5 @@ $SurveyEmptied = "Le risposte al questionario sono state eliminate";
 $SurveyNotAvailableYet = "Il questionario non è ancora attivo. Sei pregato di riprovare più tardi, grazie.";
 $PeopleAnswered = "Persone che hanno risposto";
 $AnonymousSurveyCannotKnowWhoAnswered = "Il questionario è anonimo. Non è possibile conoscere il nome di chi ha risposto.";
+$IllegalSurveyId = "Identificativo di questionario inesistente";
 ?>

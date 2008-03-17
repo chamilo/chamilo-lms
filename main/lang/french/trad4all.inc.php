@@ -463,4 +463,10 @@ $OpenIDWhatIs = "OpenID, qu\'est-ce que c\'est?";
 $OpenIDDescription = "OpenID élimine le besoin de nom d\'utilisateurs multiples pour accéder à différents sites web, simplifiant ainsi votre expérience en ligne.
  Vous pouvez choisir un fournisseur OpenID en qui vous avez confiance et qui vous convient le mieux. En même temps, vous gardez votre OpenID, quel que soit le fournisseur que vous choisissez. Et le mieux c\'est que la technologie OpenID n\'est pas propriétaire et est totalement gratuite. <br /><br /><a href=\"http://openid.net/what/\">Pour en savoir plus...</a>";
 $NoManager = "Pas de responsable";
+$ExportiCal = "Exporter au format iCal";
+$ExportiCalPublic = "Exporter au format iCal comme évènement public";
+$ExportiCalPrivate = "Exporter au format iCal comme évènement privé";
+$ExportiCalConfidential = "Exporter au format iCal comme évènement confidentiel";
+$MoreStats = "Plus de statistiques";
+$Drh = "Responsable des Ressources Humaines ";
 ?>

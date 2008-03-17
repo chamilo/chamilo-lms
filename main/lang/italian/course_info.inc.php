@@ -101,4 +101,7 @@ $DescriptionRecycleCourse = "Questo strumento svuota del tutto o in parte il cor
 $QuizEmailAlert = "Avviso nuove risposte ad esercizi";
 $QuizEmailAlertActivate = "Attiva l\'avviso via e-mail nel caso di nuove risposte ai test date dai corsisti";
 $QuizEmailAlertDeactivate = "Disattiva l\'avviso e-mail nel caso di nuove risposte ai test";
+$AllowUserImageForum = "Immagine dell\'utente nei forum";
+$AllowUserImageForumActivate = "Mostra nel forum l\'immagine memorizzata nel profilo utente";
+$AllowUserImageForumDeactivate = "Non mostrare nel forum l\'immagine memorizzata nel profilo utente";
 ?>

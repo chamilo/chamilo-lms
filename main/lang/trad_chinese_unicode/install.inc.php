@@ -74,6 +74,7 @@ $ConfigSettingsInfo = "以下數據會被寫入至你的設定檔";
 $DokeosInstallation = "Dokeos 安裝";
 $InstallDokeos = "安裝 Dokeos";
 $GoToYourNewlyCreatedPortal = "瀏覽你新建的站台";
+$FirstUseTip = "當你首次進入的學園時，瞭解它的最佳辦法是選課程創建者的身份註冊，然後按步去做。";
 $Version_ = "版本";
 $UpdateFromDokeosVersion = "由 Dokeos 更新";
 $WelcomToTheDokeosInstaller = "歡迎來到安裝 Dokeos 的畫面";
@@ -90,6 +91,8 @@ $Error = "錯誤";
 $Back = "返回";
 $PleaseGoBackToStep1 = "請回到步驟 1 ";
 $NoWritePermissionPleaseReadInstallGuide = "部份檔案或資料夾沒有寫入的權限。要安裝 Dokeos，你必須先使用 CHMOD 改變它們的權限，詳情請看安裝說明。";
+$DBServerDoesntWorkOrLoginPassIsWrong = "數據庫伺服器沒有運作或登入失敗。";
+$PleaseCheckTheseValues = "請檢查這些資料";
 $PleaseGoBackToStep = "請回到步驟";
 $PleasGoBackToStep1 = "請回到步驟 1";
 ?>

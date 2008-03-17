@@ -100,4 +100,7 @@ $DescriptionRecycleCourse = "Cet outil vide le cours des éléments sélectionnés, 
 $QuizEmailAlert = "Alerte e-mail nouvel exercice";
 $QuizEmailAlertActivate = "Activer l\'envoi d\'un e-mail lorsqu\'un étudiant soumet des réponses à un exercice";
 $QuizEmailAlertDeactivate = "Désactiver l\'envoi d\'un e-mail sur réception de réponses à un exercice";
+$AllowUserImageForum = "Photo utilisateur dans le forum";
+$AllowUserImageForumActivate = "Afficher les photos des utilisateurs dans le forum";
+$AllowUserImageForumDeactivate = "Ne pas afficher les photos des utilisateurs dans le forum";
 ?>

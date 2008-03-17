@@ -695,4 +695,7 @@ $UserThemeSelection = "Aspetto scelto dall\'utente";
 $UserThemeSelectionComment = "Permetti agli utenti di scegliere nel profilo l\'aspetto grafico (tema): Dokeos apparirà diverso solo a loro. La scelta sarà inefficace nel caso in cui il gestore abbia scelto un aspetto specifico per una certa sezione del corso.";
 $AllowurlfopenIsSetToOff = "Il settaggio \"allow_url_fopen\" di PHP è disattivato, per cui la registrazione non può funzionare correttamente. 
 Per attivarlo deve essere cambiato il file php.in di PHP oppre php_admin_value nel server Apache.";
+$VisioHost = "URL o IP del server di videoconferenza";
+$VisioPort = "Porta del server di videoconferenza";
+$VisioPassword = "Password del server di videoconferenza";
 ?>

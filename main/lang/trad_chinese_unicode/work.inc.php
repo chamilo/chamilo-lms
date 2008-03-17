@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$Tools  = "工具";
 $langDownloadFile = "上傳檔案";
 $langTooBig = "沒有選擇檔案或檔案太大。";
 $langListDeleted = "整個清單已刪除。";
@@ -26,4 +27,10 @@ $langNameDir = "重命名目錄";
 $langFileExists = "檔案已存在";
 $langDirCr = "新建目錄";
 $langCurrentDir = "當前目錄";
+$UploadADocument = "上載文件";
+$EditToolOptions = "編輯工具選項";
+$DocumentDeleted = "文件已被刪除";
+$SendMailBody = "一位使用者在你的課程課業工具中加入了一份文件。";
+$DirDelete = "刪除目錄";
+$ValidateChanges = "確認改變";
 ?>

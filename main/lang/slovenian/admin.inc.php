@@ -694,4 +694,7 @@ $UserTheme = "Tema (predloga)";
 $UserThemeSelection = "Uporabnikova izbira teme";
 $UserThemeSelectionComment = "Dovoljuje uporabniku uporabo izbrane teme v njegovem profilu. Izbira teme menja izgled Dokeos platforme za posameznika, pri tem pa privzete teme portala ne spremeni. V primeru, da ima posamezen teèaj ali posamezna seja nastavljeno specifièno temo, ta tema prevlada nad uporabnikovo izbrano temo.";
 $AllowurlfopenIsSetToOff = "PHP nastavitev \"allow_url_fopen\" je nastavljena na \"off\". To onemogoèa registracijskemu mehanizmu pravilno delovanje. Nastavitev lahko spremenite v datoteki \"php.ini\" ali pa preko \"Virtual host configuration\" nastavitve Apache strežnika z uporabo mehanizma \"php_admin_value\".";
+$VisioHost = "Ime ali IP strežnika podatkovnega toka videokonference";
+$VisioPort = "Št. vrat strežnika podatkovnega toka videokonference";
+$VisioPassword = "Geslo strežnika podatkovnega toka videokonference";
 ?>

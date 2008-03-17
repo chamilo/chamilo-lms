@@ -462,4 +462,10 @@ $Gradebook = "Redovalnica";
 $OpenIDWhatIs = "Kaj je OpenID?";
 $OpenIDDescription = "OpenID omogoèa rabo enega samega uporabniškega imena v razliènih spletnih storitvah na veèih internetnih mestih.  Za pridobitev OpenID je potrebno izbrati je potrebno OpenID ponudnika; ki najbolj ustreza vašim potrebam in kateremu zaupate.  OpenID ostaja z vami ne glede na to, katerega ponudnika ste izbrali oz. h kateremu se kasneje prestavite. OpenID technologija ni lastniška in je popolnoma brezplaèna.<br /><br /><a href=\"http://openid.net/what/\">Veè ...</a>";
 $NoManager = "Ni upravitelja";
+$ExportiCal = "Izvoz v iCal obliko";
+$ExportiCalPublic = "Izvoz v iCal obliko kot javni dogodek";
+$ExportiCalPrivate = "Izvoz v iCal obliko kot privatni dogodek";
+$ExportiCalConfidential = "Izvoz v iCal obliko kot zaupen dogodek";
+$MoreStats = "Veè statistik";
+$Drh = "Upravitelj èloveških virov";
 ?>

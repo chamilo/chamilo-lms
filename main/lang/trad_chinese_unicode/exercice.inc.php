@@ -84,6 +84,7 @@ $langScore = "得分";
 $langCorrespondsTo = "答案";
 $langExpectedChoice = "正確答案";
 $langYourTotalScore = "您的總分︰";
+$Build = "建立";
 $langEvalSet = "評分設定";
 $langActive = "顯示";
 $langInactive = "隱藏";
@@ -220,5 +221,6 @@ $UploadJpgPicture = "上載 JPG 圖片";
 $ExamSheetVCC = "老師已檢視/訂正/評鑑之考卷 ";
 $AttemptVCC = "你以下的嘗試已被老師檢視/訂正/評鑑";
 $ClickLinkToViewComment = "按以下連結以進入你的帳戶並檢視已評鑑的考卷";
+$AttemptVCCLong = "你嘗試了的測驗 %s 已由老師檢視/評審/訂正。按以下的連結來檢視你的考卷。";
 $DearStudentEmailIntroduction = "親愛的學員：";
 ?>

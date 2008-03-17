@@ -463,4 +463,5 @@ $Gradebook = "Cuaderno de calificaciones";
 $OpenIDWhatIs = "¿ Qué es OpenID ?";
 $OpenIDDescription = "OpenID elimina la necesidad de tener varios nombres de usuario en distintos sitios web, simplificando la experiencia del usuario en la Red. Vd. puede escoger el proveedor de OpenID que mejor satisfaga sus necesidades y, lo que es más importante, aquel en el que tenga más confianza. También, aunque cambie de proveedor, podrá conservar su OpenID. Y lo mejor de todo, OpenID es una tecnología no propietaria y completamente gratuita. Para las empresas, esto significa un menor costo de administración de cuentas y contraseñas. OpenID reduce la frustración del usuario permitiendo que los usuarios tengan el control de su acceso.<br /><br /><a href=\"http://openid.net/what/\">Para saber más...</a>";
 $NoManager = "Sin responsable";
+$ExportiCal = "Exportar en formato iCal";
 ?>

@@ -97,4 +97,7 @@ $DescriptionRecycleCourse = "本工具將清空所有課程中所有或已選取
 $QuizEmailAlert = "提交新測驗時發出電郵通知";
 $QuizEmailAlertActivate = "當使用者提供新測驗答案時啟動郵件通知服務";
 $QuizEmailAlertDeactivate = "取消提供新測驗答案時郵件通知服務";
+$AllowUserImageForum = "討論區使用者圖像";
+$AllowUserImageForumActivate = "在討論區顯示使用者圖像";
+$AllowUserImageForumDeactivate = "在討論區隱藏使用者圖像";
 ?>

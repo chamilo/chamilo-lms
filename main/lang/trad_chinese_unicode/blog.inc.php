@@ -61,6 +61,7 @@ $ExecuteThisTask = "執行本任務";
 $WrittenBy = "撰寫人";
 $InBlog = "於網誌中";
 $ViewPostsOfThisDay = "閱讀今天張貼的文章";
+$PostsOf = "文章屬於";
 $NoArticleMatches = "找不到文章。請檢查串字或嘗試新的搜尋。";
 $langTask1 = "任務 1";
 $langTask2 = "任務 2";

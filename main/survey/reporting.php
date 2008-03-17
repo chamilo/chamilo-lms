@@ -20,7 +20,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 14635 2008-03-17 21:43:24Z yannoo $
+* 	@version $Id: reporting.php 14636 2008-03-17 22:24:08Z yannoo $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -37,6 +37,16 @@ require ('../inc/global.inc.php');
  */
 if ($_POST['export_report'])
 {
+	if($_POST['export_xls'])
+	{
+			$data = export_complete_report();
+			$filename = 'fileexport.csv';
+
+			echo $data;
+			exit;
+	}
+	else
+	{
 			$data = export_complete_report();
 			$filename = 'fileexport.csv';
 
@@ -62,7 +72,7 @@ if ($_POST['export_report'])
 
 			echo $data;
 			exit;
-
+	}
 }
 
 // including additional libraries

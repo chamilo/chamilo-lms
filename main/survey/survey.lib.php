@@ -1787,11 +1787,13 @@ class score extends question
 	}
 }
 
-function db_escape_string($value)
-{
-
-}
-
+/**
+ * Checks whether the given survey has a pagebreak question as the first or the last question.
+ * If so, break the current process, displaying an error message
+ * @param	integer	Survey ID (database ID)
+ * @param	boolean	Optional. Whether to continue the current process or exit when breaking condition found. Defaults to true (do not break).
+ * @return	void 
+ */
 function check_first_last_question($survey_id, $continue=true)
 {
 	// table definitions

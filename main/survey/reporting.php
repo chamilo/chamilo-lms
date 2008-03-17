@@ -12,16 +12,15 @@
 
     Contact:
 		Dokeos
-		Rue des Palais 44 Paleizenstraat
+		Rue du Corbeau, 108
 		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
 */
 
 /**
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 14634 2008-03-17 21:39:04Z yannoo $
+* 	@version $Id: reporting.php 14635 2008-03-17 21:43:24Z yannoo $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */

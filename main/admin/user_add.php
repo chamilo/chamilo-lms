@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 14615 2008-03-17 09:53:23Z elixir_inter $
+<?php // $Id: user_add.php 14632 2008-03-17 17:49:21Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -152,7 +152,7 @@ $form->addElement('select','status',get_lang('Status'),$status,'id="status_selec
 //drh list (display only if student)
 $display = $_POST['status'] == STUDENT ? 'block' : 'none';
 $form->addElement('html','<div id="drh_list" style="display:'.$display.';">');
-$drh_select = $form->addElement('select','drh_id',get_lang('Drh'),array(),'id="drh_select"');
+$drh_select = $form->addElement('select','hr_dept_id',get_lang('Drh'),array(),'id="drh_select"');
 $drh_list = UserManager :: get_user_list(array('status'=>DRH),array('lastname','firstname'));
 $drh_select->addOption('---',0);
 foreach($drh_list as $drh)
@@ -230,7 +230,7 @@ if( $form->validate())
 		$picture = $_FILES['picture'];
 		$platform_admin = intval($user['admin']['platform_admin']);
 		$send_mail = intval($user['mail']['send_mail']);
-		$drh_id = intval($user['drh_id']);
+		$hr_dept_id = intval($user['hr_dept_id']);
 		if(count($extAuthSource) > 0 && $user['password']['password_auto'] == '2')
 		{
 			$auth_source = $user['password']['auth_source'];
@@ -251,7 +251,7 @@ if( $form->validate())
 		}
 		$active = intval($user['active']);
 	
-		$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active, $drh_id);
+		$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active, $hr_dept_id);
 		if ($platform_admin)
 		{
 			$sql = "INSERT INTO $table_admin SET user_id = '".$user_id."'";

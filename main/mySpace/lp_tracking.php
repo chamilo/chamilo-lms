@@ -30,7 +30,7 @@ $user_infos = UserManager :: get_user_info_by_id($user_id);
 $name = $user_infos['firstname'].' '.$user_infos['lastname'];
 
 
-if(!api_is_platform_admin() && !CourseManager :: is_course_teacher($_user['user_id'], $_GET['course']) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']) && $user_infos['drh_id']!==$_user['user_id'])
+if(!api_is_platform_admin() && !CourseManager :: is_course_teacher($_user['user_id'], $_GET['course']) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']) && $user_infos['hr_dept_id']!==$_user['user_id'])
 {
 	Display::display_header('');
 	api_not_allowed();

@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 14615 2008-03-17 09:53:23Z elixir_inter $
+<?php // $Id: user_edit.php 14632 2008-03-17 17:49:21Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -166,7 +166,7 @@ $form->addElement('select','status',get_lang('Status'),$status,'id="status_selec
 
 $display = $user_data['status'] == STUDENT || $_POST['status'] == STUDENT ? 'block' : 'none';
 $form->addElement('html','<div id="drh_list" style="display:'.$display.';">');
-$drh_select = $form->addElement('select','drh_id',get_lang('Drh'),array(),'id="drh_select"');
+$drh_select = $form->addElement('select','hr_dept_id',get_lang('Drh'),array(),'id="drh_select"');
 $drh_list = UserManager :: get_user_list(array('status'=>DRH),array('lastname','firstname'));
 $drh_select->addOption('---',0);
 foreach($drh_list as $drh)
@@ -265,7 +265,7 @@ if( $form->validate())
 	$platform_admin = intval($user['platform_admin']);
 	$send_mail = intval($user['send_mail']);
 	$reset_password = intval($user['reset_password']);
-	$drh_id = intval($user['drh_id']);
+	$hr_dept_id = intval($user['hr_dept_id']);
 	if ($user['radio_expiration_date']=='1' && ! $user_data['platform_admin'] )
 	{
 		$expiration_date=$user['expiration_date'];
@@ -296,7 +296,7 @@ if( $form->validate())
 		$password = $user['password'];
 		$auth_source = $user['auth_source'];		
 	}
-	UserManager::update_user($user_id,$firstname,$lastname,$username,$password,$auth_source,$email,$status,$official_code,$phone,$picture_uri,$expiration_date, $active, null, $drh_id);
+	UserManager::update_user($user_id,$firstname,$lastname,$username,$password,$auth_source,$email,$status,$official_code,$phone,$picture_uri,$expiration_date, $active, null, $hr_dept_id);
 	if(api_get_setting('openid_authentication')=='true' && !empty($user['openid']))
 	{
 		$up = UserManager::update_openid($user_id,$user['openid']);

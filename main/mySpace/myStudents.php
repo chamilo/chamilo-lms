@@ -171,7 +171,7 @@ if(!empty($_GET['student']))
 	
 	// infos about user
 	$a_infosUser = UserManager::get_user_info_by_id($student_id);
-	if($_user['status']==DRH && $a_infosUser['drh_id']!=$_user['user_id'])
+	if($_user['status']==DRH && $a_infosUser['hr_dept_id']!=$_user['user_id'])
 	{
 		api_not_allowed();
 	}

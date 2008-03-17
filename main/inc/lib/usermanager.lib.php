@@ -57,7 +57,7 @@ class UserManager
 	  *
 	  * @todo Add the user language to the parameters
 	  */
-	function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language='', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $drh_id=0)
+	function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language='', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id=0)
 	{
 		global $_user, $userPasswordCrypted;
 		
@@ -98,7 +98,7 @@ class UserManager
 				                    language = '".Database::escape_string($language)."', 
 				                    registration_date = now(),
 				                    expiration_date = '".Database::escape_string($expiration_date)."',
-									drh_id = '".Database::escape_string($drh_id)."',
+									hr_dept_id = '".Database::escape_string($hr_dept_id)."',
 									active = '".Database::escape_string($active)."'";
 		$result = api_sql_query($sql);
 		if ($result)
@@ -246,7 +246,7 @@ class UserManager
 	 * @param int $creator_id
 	 * @return boolean true if the user information was updated
 	 */
-	function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id= null, $drh_id=0)
+	function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id= null, $hr_dept_id=0)
 	{
 		global $userPasswordCrypted;
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -271,7 +271,7 @@ class UserManager
 				picture_uri='".Database::escape_string($picture_uri)."',
 				expiration_date='".Database::escape_string($expiration_date)."',
 				active='".Database::escape_string($active)."',
-				drh_id=".intval($drh_id);
+				hr_dept_id=".intval($hr_dept_id);
 		if(!is_null($creator_id))
 		{
 			$sql .= ", creator_id='".Database::escape_string($creator_id)."'";

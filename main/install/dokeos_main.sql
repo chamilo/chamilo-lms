@@ -730,6 +730,7 @@ CREATE TABLE user (
   active tinyint unsigned NOT NULL default 1,
   openid varchar(255) DEFAULT NULL,
   theme varchar(255) DEFAULT NULL,
+  hr_dept_id smallint unsigned NOT NULL default 0,
   PRIMARY KEY  (user_id),
   UNIQUE KEY username (username)
 );

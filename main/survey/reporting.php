@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 14580 2008-03-12 14:21:20Z pcool $
+* 	@version $Id: reporting.php 14634 2008-03-17 21:39:04Z yannoo $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -217,7 +217,8 @@ function check_parameters()
 
 	if ($error)
 	{
-		Display::display_header();
+		$tool_name = get_lang('Reporting');
+		Display::display_header($tool_name);
 		Display::display_error_message(get_lang('Error').': '.$error, false);
 		Display::display_footer();
 		exit;

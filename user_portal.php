@@ -317,7 +317,7 @@ function get_personal_session_course_list($user_id)
 									LEFT JOIN `".$tbl_user_course_category."`.`user_course_category`
 									ON course_rel_user.user_course_cat = user_course_category.id
 									WHERE  course_rel_user.user_id = '".$user_id."'
-									ORDER BY user_course_category.sort, course_rel_user.sort ASC,user_course_category.title, i";
+									ORDER BY user_course_category.sort, course_rel_user.sort ASC,i";
 	
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 	

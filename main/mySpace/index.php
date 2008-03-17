@@ -136,6 +136,12 @@ if(api_is_platform_admin())
 		$menu_items[] = '<a href="'.api_get_self().'?view=admin">'.get_lang('AdminInterface').'</a>';
 	}
 }
+if($_user['status']==DRH)
+{
+	$view = 'drh';
+	$title = get_lang('DrhInterface');
+	$menu_items[] = '<a href="'.api_get_self().'?view=drh">'.get_lang('DrhInterface').'</a>';
+}
 
 $nb_menu_items = count($menu_items);
 if($nb_menu_items>1)
@@ -157,14 +163,23 @@ echo '<div align="left" style="float:left"><h4>'.$title.'</h4></div>
 	  </div>
 	  <div class="clear"></div>';
 
+if($_user['status']==DRH && $view=='drh')
+{
+	$a_students = Tracking :: get_student_followed_by_drh($_user['user_id']);
+	$courses_of_the_platform = CourseManager :: get_real_course_list();
+	foreach($courses_of_the_platform as $course)
+		$a_courses[$course['code']] = $course['code'];
+}
+
 if($isCoach && $view=='coach')
 {
-	
-	/****************************************
-	 * Infos about students of the coach
-	 ****************************************/
 	$a_students = Tracking :: get_student_followed_by_coach($_user['user_id']);
 	$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);
+	
+}
+
+if($view=='coach' || $view=='drh')
+{
 	$nbStudents = count($a_students);
 	
 	$totalTimeSpent = 0;
@@ -200,6 +215,7 @@ if($isCoach && $view=='coach')
 		{
 			if(CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true))
 			{
+				$nb_courses_student++;
 				$nb_posts += Tracking :: count_student_messages($student_id,$course_code);
 				$nb_assignments += Tracking :: count_student_assignments($student_id,$course_code);
 				$avgStudentProgress += Tracking :: get_avg_student_progress($student_id,$course_code);
@@ -322,7 +338,9 @@ if($isCoach && $view=='coach')
 			<a href="student.php">'.get_lang('SeeStudentList').'</a>
 		 </div>';
 	 }
-	 
+}
+if($view == 'coach')
+{
 	 
 	 /****************************************
 	 * Infos about sessions of the coach

@@ -262,7 +262,7 @@ if ($_user['user_id'] && !api_is_anonymous())
 	// Reporting
 	if (api_get_setting('show_tabs', 'reporting') == 'true')
 	{
-		if(api_is_allowed_to_create_course())
+		if(api_is_allowed_to_create_course() || $_user['status'] == DRH)
 		{
 			$navigation['session_my_space'] = $possible_tabs['session_my_space'];
 		}
@@ -273,7 +273,7 @@ if ($_user['user_id'] && !api_is_anonymous())
 	}
 	else
 	{
-		if(api_is_allowed_to_create_course())
+		if(api_is_allowed_to_create_course() || $_user['status'] == DRH)
 		{
 			$menu_navigation['session_my_space'] = $possible_tabs['session_my_space'];
 		}
@@ -473,7 +473,7 @@ if(api_get_setting('show_navigation_menu') != 'false' && api_get_setting('show_n
  */
 function get_tabs()
 {
-	global $_course, $rootAdminWeb;
+	global $_course, $rootAdminWeb, $_user;
 
 	// Campus Homepage
 	$navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
@@ -526,7 +526,7 @@ function get_tabs()
 	}
 
 	// Reporting
-	if(api_is_allowed_to_create_course())
+	if(api_is_allowed_to_create_course() || $_user['status']==DRH)
 	{
 		// Link to my space
 		$navigation['session_my_space']['url'] = api_get_path(WEB_PATH).'main/mySpace/';

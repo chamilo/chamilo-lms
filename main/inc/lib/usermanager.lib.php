@@ -57,7 +57,7 @@ class UserManager
 	  *
 	  * @todo Add the user language to the parameters
 	  */
-	function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language='', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1)
+	function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language='', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $drh_id=0)
 	{
 		global $_user, $userPasswordCrypted;
 		
@@ -98,6 +98,7 @@ class UserManager
 				                    language = '".Database::escape_string($language)."', 
 				                    registration_date = now(),
 				                    expiration_date = '".Database::escape_string($expiration_date)."',
+									drh_id = '".Database::escape_string($drh_id)."',
 									active = '".Database::escape_string($active)."'";
 		$result = api_sql_query($sql);
 		if ($result)
@@ -245,7 +246,7 @@ class UserManager
 	 * @param int $creator_id
 	 * @return boolean true if the user information was updated
 	 */
-	function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id= null )
+	function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id= null, $drh_id=0)
 	{
 		global $userPasswordCrypted;
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -269,7 +270,8 @@ class UserManager
 				phone='".Database::escape_string($phone)."',
 				picture_uri='".Database::escape_string($picture_uri)."',
 				expiration_date='".Database::escape_string($expiration_date)."',
-				active='".Database::escape_string($active)."'";
+				active='".Database::escape_string($active)."',
+				drh_id=".intval($drh_id);
 		if(!is_null($creator_id))
 		{
 			$sql .= ", creator_id='".Database::escape_string($creator_id)."'";
@@ -292,14 +294,27 @@ class UserManager
 	}
 
 	/**
+	* @param array $conditions a list of condition (exemple : status=>STUDENT)
+	* @param array $order_by a list of fields on which sort
 	* @return an array with all users of the platform.
 	* @todo optional course code parameter, optional sorting parameters...
-	* @deprecated This function isn't used anywhere in the code.
 	*/
-	function get_user_list()
+	function get_user_list($conditions = array(), $order_by = array())
 	{
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql_query = "SELECT * FROM $user_table";
+		if(count($conditions)>0)
+		{
+			$sql_query .= ' WHERE ';
+			foreach($conditions as $field=>$value)
+			{
+				$sql_query .= $field.' = '.$value;
+			}
+		}
+		if(count($order_by)>0)
+		{
+			$sql_query .= ' ORDER BY '.implode(',',$order_by);
+		}
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 		while ($result = Database::fetch_array($sql_result))
 		{
@@ -307,6 +322,9 @@ class UserManager
 		}
 		return $return_array;
 	}
+	
+	
+	
 	/**
 	 * Get user information
 	 * @param string $username The username

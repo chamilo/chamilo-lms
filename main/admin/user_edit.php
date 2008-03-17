@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 13895 2007-12-03 21:54:45Z yannoo $
+<?php // $Id: user_edit.php 14615 2008-03-17 09:53:23Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -42,6 +42,18 @@ $htmlHeadXtra[] = '
 function enable_expiration_date() { //v2.0
 	document.user_add.radio_expiration_date[0].checked=false;
 	document.user_add.radio_expiration_date[1].checked=true;
+}
+
+function display_drh_list(){
+	if(document.getElementById("status_select").value=='.STUDENT.')
+	{
+		document.getElementById("drh_list").style.display="block";
+	}
+	else
+	{ 
+		document.getElementById("drh_list").style.display="none";
+		document.getElementById("drh_select").options[0].selected="selected";
+	}
 }
 //-->
 </script>';
@@ -148,7 +160,20 @@ $form->addGroup($group, 'password', null, '',false);
 $status = array();
 $status[COURSEMANAGER]  = get_lang('CourseAdmin');
 $status[STUDENT] = get_lang('Student');
-$form->addElement('select','status',get_lang('Status'),$status);
+$status[DRH] = get_lang('Drh');
+$status[ADMINCRFP] = get_lang('AdminCrfp');
+$form->addElement('select','status',get_lang('Status'),$status,'id="status_select" onchange="display_drh_list()"');
+
+$display = $user_data['status'] == STUDENT || $_POST['status'] == STUDENT ? 'block' : 'none';
+$form->addElement('html','<div id="drh_list" style="display:'.$display.';">');
+$drh_select = $form->addElement('select','drh_id',get_lang('Drh'),array(),'id="drh_select"');
+$drh_list = UserManager :: get_user_list(array('status'=>DRH),array('lastname','firstname'));
+$drh_select->addOption('---',0);
+foreach($drh_list as $drh)
+{
+	$drh_select->addOption($drh['lastname'].' '.$drh['firstname'],$drh['user_id']);
+}
+$form->addElement('html', '</div>');
 
 // Platform admin
 // Only when changing another user!
@@ -240,6 +265,7 @@ if( $form->validate())
 	$platform_admin = intval($user['platform_admin']);
 	$send_mail = intval($user['send_mail']);
 	$reset_password = intval($user['reset_password']);
+	$drh_id = intval($user['drh_id']);
 	if ($user['radio_expiration_date']=='1' && ! $user_data['platform_admin'] )
 	{
 		$expiration_date=$user['expiration_date'];
@@ -270,7 +296,7 @@ if( $form->validate())
 		$password = $user['password'];
 		$auth_source = $user['auth_source'];		
 	}
-	UserManager::update_user($user_id,$firstname,$lastname,$username,$password,$auth_source,$email,$status,$official_code,$phone,$picture_uri,$expiration_date, $active);
+	UserManager::update_user($user_id,$firstname,$lastname,$username,$password,$auth_source,$email,$status,$official_code,$phone,$picture_uri,$expiration_date, $active, null, $drh_id);
 	if(api_get_setting('openid_authentication')=='true' && !empty($user['openid']))
 	{
 		$up = UserManager::update_openid($user_id,$user['openid']);

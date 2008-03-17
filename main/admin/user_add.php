@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 13273 2007-09-26 09:50:11Z elixir_julian $
+<?php // $Id: user_add.php 14615 2008-03-17 09:53:23Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -68,6 +68,18 @@ function password_switch_radio_button(form, input){
 	}
 }
 
+function display_drh_list(){
+	if(document.getElementById("status_select").value=='.STUDENT.')
+	{
+		document.getElementById("drh_list").style.display="block";
+	}
+	else
+	{ 
+		document.getElementById("drh_list").style.display="none";
+		document.getElementById("drh_select").options[0].selected="selected";
+	}
+}
+
 //-->
 </script>';
 
@@ -127,11 +139,28 @@ $group[] =& HTML_QuickForm::createElement('radio','password_auto',get_lang('Pass
 $group[] =& HTML_QuickForm::createElement('radio', 'password_auto','id="radio_user_password"',null,0);
 $group[] =& HTML_QuickForm::createElement('password', 'password',null,'onkeydown=password_switch_radio_button(document.user_add,"password[password_auto]")');
 $form->addGroup($group, 'password', get_lang('Password'), '');
+
 // Status
 $status = array();
-$status[COURSEMANAGER]  = get_lang('CourseAdmin');
-$status[STUDENT] = get_lang('Student');
-$form->addElement('select','status',get_lang('Status'),$status);
+$status[COURSEMANAGER]  = get_lang('Teacher');
+$status[STUDENT] = get_lang('Learner');
+$status[DRH] = get_lang('Drh');
+//$status[ADMINCRFP] = get_lang('AdminCrfp');
+
+$form->addElement('select','status',get_lang('Status'),$status,'id="status_select" onchange="display_drh_list()"');
+
+//drh list (display only if student)
+$display = $_POST['status'] == STUDENT ? 'block' : 'none';
+$form->addElement('html','<div id="drh_list" style="display:'.$display.';">');
+$drh_select = $form->addElement('select','drh_id',get_lang('Drh'),array(),'id="drh_select"');
+$drh_list = UserManager :: get_user_list(array('status'=>DRH),array('lastname','firstname'));
+$drh_select->addOption('---',0);
+foreach($drh_list as $drh)
+{
+	$drh_select->addOption($drh['lastname'].' '.$drh['firstname'],$drh['user_id']);
+}
+$form->addElement('html', '</div>');
+
 // Platform admin
 $group = array();
 $group[] =& HTML_QuickForm::createElement('radio', 'platform_admin',null,get_lang('Yes'),1);
@@ -201,6 +230,7 @@ if( $form->validate())
 		$picture = $_FILES['picture'];
 		$platform_admin = intval($user['admin']['platform_admin']);
 		$send_mail = intval($user['mail']['send_mail']);
+		$drh_id = intval($user['drh_id']);
 		if(count($extAuthSource) > 0 && $user['password']['password_auto'] == '2')
 		{
 			$auth_source = $user['password']['auth_source'];
@@ -221,7 +251,7 @@ if( $form->validate())
 		}
 		$active = intval($user['active']);
 	
-		$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active);
+		$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active, $drh_id);
 		if ($platform_admin)
 		{
 			$sql = "INSERT INTO $table_admin SET user_id = '".$user_id."'";

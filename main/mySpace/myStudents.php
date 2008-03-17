@@ -77,7 +77,7 @@ $csv_content = array();
  
 api_block_anonymous_users();
 
-if(empty($_SESSION['is_allowedCreateCourse']) && !api_is_coach()){
+if(empty($_SESSION['is_allowedCreateCourse']) && !api_is_coach() && $_user['status']!=DRH){
 	api_not_allowed(true);
 }
 
@@ -169,6 +169,15 @@ if(!empty($_GET['student']))
 	
 	$student_id = intval($_GET['student']);
 	
+	// infos about user
+	$a_infosUser = UserManager::get_user_info_by_id($student_id);
+	if($_user['status']==DRH && $a_infosUser['drh_id']!=$_user['user_id'])
+	{
+		api_not_allowed();
+	}
+	
+	$a_infosUser['name'] = $a_infosUser['firstname'].' '.$a_infosUser['lastname'];
+	
 	echo '<div align="right">
 		<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
 		<a href="'.api_get_self().'?'.$_SERVER['QUERY_STRING'].'&export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
@@ -191,9 +200,6 @@ if(!empty($_GET['student']))
 		}
 	}
 	
-	// infos about user
-	$a_infosUser = UserManager::get_user_info_by_id($_GET['student']);
-	$a_infosUser['name'] = $a_infosUser['firstname'].' '.$a_infosUser['lastname'];
 	
 	
 	$avg_student_progress = $avg_student_score = $nb_courses = 0;
@@ -899,8 +905,7 @@ if(!empty($_GET['student']))
 			</th>
 		</tr>
 <?php
-	
-		if(!api_is_platform_admin()){
+		if(!api_is_platform_admin() && $_user['status']!=DRH){
 			// courses followed by user where we are coach
 			if(!isset($_GET['id_coach'])){
 				$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);

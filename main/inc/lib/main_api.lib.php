@@ -48,6 +48,8 @@
 define('STUDENT', 5);
 /** global status of a user: course manager */
 define('COURSEMANAGER', 1);
+define('ADMINCRFP', 3);
+define('DRH', 4);
 
 //COURSE VISIBILITY CONSTANTS
 /** only visible for course admin */

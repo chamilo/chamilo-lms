@@ -528,6 +528,7 @@ $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 			$_user ['language'] = $uData ['language'];
 			$_user ['auth_source'] = $uData ['auth_source'];
 			$_user ['theme']	= $uData ['theme'];
+			$_user ['status']	= $uData ['status'];
 
             $is_platformAdmin        = (bool) (! is_null( $uData['is_admin']));
             $is_allowedCreateCourse  = (bool) ($uData ['status'] == 1);

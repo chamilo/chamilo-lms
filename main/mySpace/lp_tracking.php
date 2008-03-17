@@ -12,6 +12,7 @@ include ('../inc/global.inc.php');
 include_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'export.lib.inc.php');
 include_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+include_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 include_once('../newscorm/learnpath.class.php');
 include_once('../newscorm/learnpathItem.class.php');
 require_once (api_get_path(LIBRARY_PATH).'export.lib.inc.php');
@@ -23,7 +24,13 @@ if($export_csv)
 }
 $csv_content = array();
 
-if(!api_is_platform_admin() && !CourseManager :: is_course_teacher($_user['user_id'], $_GET['course']) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']))
+
+$user_id = intval($_GET['student_id']);
+$user_infos = UserManager :: get_user_info_by_id($user_id);
+$name = $user_infos['firstname'].' '.$user_infos['lastname'];
+
+
+if(!api_is_platform_admin() && !CourseManager :: is_course_teacher($_user['user_id'], $_GET['course']) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']) && $user_infos['drh_id']!==$_user['user_id'])
 {
 	Display::display_header('');
 	api_not_allowed();
@@ -118,7 +125,6 @@ div.description {
 
 Display :: display_header($nameTools);
 
-$user_id = intval($_GET['student_id']);
 $lp_id = intval($_GET['lp_id']);
 
 $sql = 'SELECT name 
@@ -127,11 +133,6 @@ $sql = 'SELECT name
 $rs = api_sql_query($sql, __FILE__, __LINE__);
 $lp_title = mysql_result($rs, 0, 0);
 
-$sql = 'SELECT lastname, firstname 
-		FROM '.Database::get_main_table(TABLE_MAIN_USER).'
-		WHERE user_id='.$user_id;
-$rs = api_sql_query($sql, __FILE__, __LINE__);
-$name = mysql_result($rs, 0, 0).' '.mysql_result($rs, 0, 1);
 
 echo '<div align="left" style="float:left"><h4>'.$_course['title'].' - '.$lp_title.' - '.$name.'</h4></div>
 	  <div align="right">

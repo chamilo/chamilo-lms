@@ -86,7 +86,7 @@ function sort_users($a, $b)
  ===============================================================================  
  */ 
 
-if($isCoach || api_is_platform_admin())
+if($isCoach || api_is_platform_admin() || $_user['status']==DRH)
 {
 
 	echo '<div align="left" style="float:left"><h4>'.$title.'</h4></div>
@@ -103,8 +103,18 @@ if($isCoach || api_is_platform_admin())
 	}
 	
 	if(!isset($_GET['id_session'])){
-		$a_courses = Tracking :: get_courses_followed_by_coach($coach_id);
-		$a_students = Tracking :: get_student_followed_by_coach($coach_id);
+		if($isCoach)
+		{
+			$a_courses = Tracking :: get_courses_followed_by_coach($coach_id);
+			$a_students = Tracking :: get_student_followed_by_coach($coach_id);
+		}
+		else if($_user['status']==DRH)
+		{
+			$a_students = Tracking :: get_student_followed_by_drh($_user['user_id']);
+			$courses_of_the_platform = CourseManager :: get_real_course_list();
+			foreach($courses_of_the_platform as $course)
+				$a_courses[$course['code']] = $course['code'];
+		}
 	}
 	else{
 		$a_students = Tracking :: get_student_followed_by_coach_in_a_session($_GET['id_session'], $coach_id);

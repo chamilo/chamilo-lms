@@ -765,6 +765,28 @@ class Tracking {
 		
 		return $nb_login; 
 	}
+	
+	
+	function get_student_followed_by_drh($drh_id) {
+		
+		$drh_id = intval($drh_id);
+		$a_students = array ();
+		
+		$tbl_organism = Database :: get_main_table(TABLE_MAIN_ORGANISM);
+		$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+		
+		$sql = 'SELECT DISTINCT user_id FROM '.$tbl_user.' as user
+				WHERE drh_id='.$drh_id;
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		
+		while($user = Database :: fetch_array($rs))
+		{
+			$a_students[$user['user_id']] = $user['user_id'];
+		}
+		
+		
+		return $a_students;
+	}
 
 }
 ?>

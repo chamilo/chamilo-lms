@@ -54,6 +54,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('user_selected_theme', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('user_selected_theme', 'false', 'No');
 ALTER TABLE user ADD theme varchar(255) DEFAULT NULL;
+ALTER TABLE user ADD drh_hr_dept_id smallint unsigned NOT NULL default 0;
 UPDATE settings_current SET variable='service_visio', subkey='active'    , title='VisioEnable' WHERE variable='service_visio' AND subkey='active';
 UPDATE settings_current SET variable='service_visio', subkey='visio_host', title='VisioHost' WHERE variable='service_visio' AND subkey='visio_rtmp_host_local';
 UPDATE settings_current SET variable='service_visio', subkey='visio_port', title='VisioPort' WHERE variable='service_visio' AND subkey='visio_rtmp_port';

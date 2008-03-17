@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006 Dokeos S.A.
+	Copyright (c) 2006-2008 Dokeos S.A.
 	Copyright (c) 2006 Ghent University (UGent)
 	Copyright (c) various contributors
 
@@ -1047,10 +1047,9 @@ function feedback($array)
 */
 function format_feedback($feedback)
 {
-
-	$output.='<strong>'.get_lang('Date').'</strong>: '.$feedback['feedback_date'].'<br />';
-	$output.='<strong>'.get_lang('Author').'</strong>: '.display_user_link($feedback['author_user_id']).'<br />';
-	$output.='<strong>'.get_lang('Text').'</strong>: '.nl2br($feedback['feedback']).'<hr size="1" noshade/>';
+	$output.=display_user_link($feedback['author_user_id']);
+	$output.='&nbsp;&nbsp;['.$feedback['feedback_date'].']<br>';
+	$output.='<div style="padding-top:6px">'.nl2br($feedback['feedback']).'</div><hr size="1" noshade/><br>';
 	return $output;
 }
 

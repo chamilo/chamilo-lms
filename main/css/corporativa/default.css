@@ -1269,6 +1269,13 @@ a.specialLink:hover,a.specialLink:focus {
 	margin: 0 .8em;
 }
 
+.dropbox_date {
+	color: #737780;	
+	font-style: italic ;
+	font-weight: normal;	
+}
+
+
 /*
 ==============================================================================
     SYSTEM ANNOUNCEMENTS

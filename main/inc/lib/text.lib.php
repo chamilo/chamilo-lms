@@ -1,9 +1,9 @@
-<?php // $Id: text.lib.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: text.lib.php 14637 2008-03-17 22:44:52Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -75,7 +75,7 @@ function make_clickable($string)
  * formats the date according to the locale settings
  *
  * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @author  Christophe Gesché <gesche@ipm.ucl.ac.be>
+ * @author  Christophe Geschï¿½ <gesche@ipm.ucl.ac.be>
  *          originally inspired from from PhpMyAdmin
  * @param  string  $formatOfDate date pattern
  * @param  integer $timestamp, default is NOW.
@@ -277,5 +277,133 @@ function latex_gif_renderer($latex_code)
 	$return  = "<a href=\"\" onclick=\"newWindow=window.open('".api_get_path(WEB_CODE_PATH)."inc/latex.php?code=".urlencode($latex_code)."&amp;filename=$latex_filename','latexCode','toolbar=no,location=no,scrollbars=yes,resizable=yes,status=yes,width=375,height=250,left=200,top=100');\">";
 	$return .= '<img src="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/temp/'.$latex_filename.'" alt="'.$latex_code.'" border="0" /></a>';
 	return $return; 
+}
+
+
+/**
+ * This function returns the difference between the current date (date(now)) with the parameter $date in a string format like "2 days, 1 hour" 
+ * Example: $date="2008-03-07 15:44:08"; 
+ * 			date_to_str($date) it will return 3 days, 20 hours 		
+ *  
+ * @param string This string has to be the result of a date function in this format -> date("Y-m-d H:i:s",time());
+ * @return string The difference between the current date and the parameter in a literal way "3 days, 2 hour" * 
+ * @author Julio Montoya 
+ */
+
+function date_to_str_ago($date)
+{
+	$dst_date=strtotime($date);
+	//for not call date several times
+	$date_array=date("s/i/G/j/n/Y",$dst_date);
+	$date_split=explode("/",$date_array);
+			
+	$dst_s=$date_split[0];
+	$dst_m=$date_split[1];  
+	$dst_h=$date_split[2];
+	$dst_day=$date_split[3];
+	$dst_mth=$date_split[4];
+	$dst_yr=$date_split[5];	
+	
+	$dst_date = mktime($dst_h,$dst_m,$dst_s,$dst_mth,$dst_day,$dst_yr);	
+	$time=$offset = time()-$dst_date; //seconds between current days and today
+			
+	//------------ Here start the functions sec_to_str
+	$act_day=date('d');
+	$act_mth=date('n');
+	$act_yr = date('Y');
+	
+	if ($dst_day==$act_day && $dst_mth==$act_mth && $dst_yr == $act_yr )
+	{
+		return ucfirst(get_lang('Today'));
+	}
+		
+	if ($dst_day==$act_day-1 && $dst_mth==$act_mth && $dst_yr == $act_yr )
+	{
+		return ucfirst(get_lang('Yesterday'));
+	}
+	
+	// original 1 
+	//$sec_time=array("century"=>3.1556926*pow(10,9),"decade"=>315569260,"year"=>31556926,"month"=>2629743.83,"week"=>604800,"day"=>86400,"hour"=>3600,"minute"=>60,"second"=>1);	
+	//$sec_time=array(get_lang('MinDecade')=>315569260,get_lang('MinYear')=>31556926,get_lang('MinMonth')=>2629743.83,get_lang('MinWeek')=>604800,get_lang('MinDay')=>86400,get_lang('MinHour')=>3600,get_lang('MinMinute')=>60);
+
+	$MinDecade=get_lang('MinDecade');
+	$MinYear=get_lang('MinYear');
+	$MinMonth=get_lang('MinMonth');
+	$MinWeek=get_lang('MinWeek');
+	$MinDay=get_lang('MinDay');
+	$MinHour=get_lang('MinHour');
+	$MinMinute=get_lang('MinMinute');
+	
+	$MinDecades=get_lang('MinDecades');
+	$MinYears=get_lang('MinYears');
+	$MinMonths=get_lang('MinMonths');
+	$MinWeeks=get_lang('MinWeeks');
+	$MinDays=get_lang('MinDays');
+	$MinHours=get_lang('MinHours');
+	$MinMinutes=get_lang('MinMinutes');
+	
+	$sec_time_time=array(315569260,31556926,2629743.83,604800,86400,3600,60);		
+	$sec_time_sing=array($MinDecade,$MinYear,$MinMonth,$MinWeek,$MinDay,$MinHour,$MinMinute);
+	$sec_time_plu =array($MinDecades,$MinYears,$MinMonths,$MinWeeks,$MinDays,$MinHours,$MinMinutes);
+	
+				
+	$str_result=array();	
+	$time_result=array();
+	$key_result=array();
+	
+	$str='';
+	$i=0;		
+	for ($i=0;$i<count($sec_time_time);$i++)
+	{
+		$seconds=$sec_time_time[$i];
+			
+		if($seconds > $time) {
+			continue;
+		}
+					
+		$current_value=intval($time/$seconds);
+					
+		if ($current_value!='1') 
+		{			
+			$date_str=	$sec_time_plu[$i];
+		} 
+		else
+		{
+			$date_str=	$sec_time_sing[$i];
+	
+		}			
+		$key_result[]=$sec_time_sing[$i];
+					
+		$str_result[]=$current_value.' '.$date_str;		
+		$time_result[]=	$current_value;				
+		$str.=$current_value.$date_str;				
+		$time%=$seconds;			
+	}	
+
+		
+	if ($key_result[0]== $MinDay && $key_result[1]== $MinMinute)
+	{
+		$key_result[1]=' 0 '.$MinHours;
+		$str_result[0]=$time_result[0].' '.$key_result[0];
+		$str_result[1]=$key_result[1];		
+	}
+	
+	if ($key_result[0]== $MinYear && ($key_result[1]== $MinDay || $key_result[1]== $MinWeek))
+	{
+		$key_result[1]=' 0 '.$MinMonths;
+		$str_result[0]=$time_result[0].' '.$key_result[0];
+		$str_result[1]=$key_result[1];		
+	}
+	
+	if (!empty($str_result[1])) 
+	{
+		$str=$str_result[0].', '.$str_result[1];
+	}	
+	else 
+	{
+		$str=$str_result[0];
+	}
+	
+	return $str;	
 }
 ?>

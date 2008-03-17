@@ -4,7 +4,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) Roan Embrechts, Vrije Universiteit Brussel
 	Copyright (c) Wolfgang Schneider
 	Copyright (c) Bert Vanderkimpen, Ghent University
@@ -281,17 +281,75 @@ class Display {
 		global $origin;
 		$column = isset ($sorting_options['column']) ? $sorting_options['column'] : 0;
 		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;
+			
 		$table = new SortableTableFromArray($content, $column, $default_items_per_page);
+
 		if (is_array($query_vars)) {
 			$table->set_additional_parameters($query_vars);
 		}
 		foreach ($header as $index => $header_item)
-		{
+		{			
 			$table->set_header($index, $header_item[0], $header_item[1], $header_item[2], $header_item[3]);
 		}
 		$table->set_form_actions($form_actions);
 		$table->display();
 	}
+	
+	
+	/**
+	 * Display a table with a special configuration
+	 * @param array $header Titles for the table header
+	 * 						each item in this array can contain 3 values
+	 * 						- 1st element: the column title
+	 * 						- 2nd element: true or false (column sortable?)
+	 * 						- 3th element: additional attributes for
+	 *  						th-tag (eg for column-width)
+	 * 						- 4the element: additional attributes for the td-tags
+	 * @param array $content 2D-array with the tables content
+	 * @param array $sorting_options Keys are:
+	 * 					'column' = The column to use as sort-key
+	 * 					'direction' = SORT_ASC or SORT_DESC
+	 * @param array $paging_options Keys are:
+	 * 					'per_page_default' = items per page when switching from
+	 * 										 full-	list to per-page-view
+	 * 					'per_page' = number of items to show per page
+	 * 					'page_nr' = The page to display
+	 * @param array $query_vars Additional variables to add in the query-string
+	 * @param array $column_show Array of binaries 1= show columns 0. hide a column
+	 * @param array $column_order An array of integers that let us decide how the columns are going to be sort. 
+	 * 						      i.e:  $column_order=array('1''4','3','4'); The 2nd column will be order like the 4th column 
+	 * @param array $form_actions Set optional forms actions
+	 * 
+	 * @author Julio Montoya
+	 */
+	 
+	function display_sortable_config_table($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $column_show=array(),$column_order=array(),$form_actions=array())
+	{
+		global $origin;
+		$column = isset ($sorting_options['column']) ? $sorting_options['column'] : 0;
+		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;
+		
+		$table = new SortableTableFromArrayConfig($content, $column, $default_items_per_page,'tablename',$column_show,$column_order);
+
+		if (is_array($query_vars)) {
+			$table->set_additional_parameters($query_vars);
+		}
+		// show or hide the columns header
+		if (is_array($column_show) ) 
+		{
+			for ($i=0;$i<count($column_show);$i++)
+			{
+				if ($column_show[$i])
+				{
+					$table->set_header($i, $header[$i][0], $header[$i][1], $header[$i][2], $header[$i][3]);
+				}			
+			}
+		}		
+		$table->set_form_actions($form_actions);
+		$table->display();
+	}	
+	
+		
 	/**
 	* Displays a normal message. It is recommended to use this function
 	* to display any normal information messages.

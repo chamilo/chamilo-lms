@@ -3,7 +3,7 @@
 ============================================================================== 
 	Dokeos - elearning and course management software
 	
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
@@ -36,31 +36,31 @@ class TableSort
 	/**
 	 * String to lowercase (keep accents).
 	 * @param string $txt The string to convert
-	 * @author René Haentjens
+	 * @author Renï¿½ Haentjens
 	 * This  function is 8859-1 specific and should be adapted when Dokeos is
 	 * used with other charsets. 
 	 */
 	function strtolower_keepaccents($txt)
 	{
-		return strtolower(strtr($txt, "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ", "àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþ"));
+		return strtolower(strtr($txt, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"));
 	}
 	/**
 	 * String to lowercase.
 	 * @param string $txt The string to convert
-	 * @author René Haentjens
+	 * @author Renï¿½ Haentjens
 	 * This  function is 8859-1 specific and should be adapted when Dokeos is
 	 * used with other charsets.
 	 */
 	function strtolower_eorlatin($txt)
 	{
-		return str_replace(array ("æ", "ß"), array ("ae", "ss"), strtr(TableSort::strtolower_keepaccents($txt), "àáâãäåçèéêëìíîïðñòóôõöøùúûüýÿ", "aaaaaaceeeeiiiidnoooooouuuuyy"));
-		// do not replace "þ" by "th", leave it at the end of the alphabet...
-		// do not replace any of "$&¢£¥©ª®µº", though they resemble letters...
+		return str_replace(array ("ï¿½", "ï¿½"), array ("ae", "ss"), strtr(TableSort::strtolower_keepaccents($txt), "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", "aaaaaaceeeeiiiidnoooooouuuuyy"));
+		// do not replace "ï¿½" by "th", leave it at the end of the alphabet...
+		// do not replace any of "$&ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", though they resemble letters...
 	}
 	/**
 	 * Create a string to use in sorting.
 	 * @param string $txt The string to convert
-	 * @author René Haentjens
+	 * @author Renï¿½ Haentjens
 	 * This  function is 8859-1 specific and should be adapted when Dokeos is
 	 * used with other charsets. 
 	 * See http://anubis.dkuug.dk/CEN/TC304/EOR/eorhome.html 
@@ -69,7 +69,7 @@ class TableSort
 	 */
 	function orderingstring($txt)
 	{
-		return ereg_replace("[^0-9a-zþ]", "", TableSort::strtolower_eorlatin($txt));
+		return ereg_replace("[^0-9a-zï¿½]", "", TableSort::strtolower_eorlatin($txt));
 	}
 	/**
 	 * Sort 2-dimensional table.
@@ -101,7 +101,6 @@ class TableSort
 				{
 					return TableSort::sort_table($data, $column, $direction, SORT_NUMERIC);
 				}
-
 				return TableSort::sort_table($data, $column, $direction, SORT_STRING);
 				break;
 			case SORT_NUMERIC :
@@ -130,13 +129,13 @@ class TableSort
 	 * @author bart.mollet@hogent.be
 	 */
 	function is_numeric_column($data, $column)
-	{
+	{	
 		$is_numeric = true;
+	
 		foreach ($data as $index => $row)
 		{
 			$is_numeric &= is_numeric(strip_tags($row[$column]));
-		}
-		return $is_numeric;
+		}		
 	}
 	/**
 	 * Checks if a column of a 2D-array contains only dates (GNU date syntax)
@@ -146,7 +145,7 @@ class TableSort
 	 * @author bart.mollet@hogent.be
 	 */
 	function is_date_column($data, $column)
-	{
+	{	
 		$is_date = true;
 		foreach ($data as $index => $row)
 		{
@@ -182,5 +181,104 @@ class TableSort
 		}
 		return $is_image;
 	}
+	
+	
+	/**
+	 * Sort 2-dimensional table. It is possile of change the columns that will be show and the way that the columns are sorted.
+	 * @param array $data The data to be sorted.
+	 * @param int $column The column on which the data should be sorted (default = 0)
+	 * @param string $direction The direction to sort (SORT_ASC (default) orSORT_DESC)
+	 * @param array $column_show The columns that we will show in the table i.e: $column_show=array('1','0','1') we will show the 1st and the 3th column. 
+	 * @param array $column_order Changes how the columns will be sorted ie. $column_order=array('1','4','3','4') The 2nd column will be sorted like the 4 column
+	 * @param constant $type How should data be sorted (SORT_REGULAR, SORT_NUMERIC,SORT_STRING,SORT_DATE,SORT_IMAGE)	 * 
+	 * @return array The sorted dataset
+	 * @author bart.mollet@hogent.be
+	 */
+		
+	function sort_table_config($data, $column = 0, $direction = SORT_ASC, $column_show=null, $column_order=null,$type = SORT_REGULAR)
+	{
+		if(!is_array($data) || count($data)==0)
+		{
+			return array();
+		}
+		
+		// Change columns sort 			 
+	 	// Here we say that the real way of how the columns are going to be order is manage by the $column_order array
+	 	if(is_array($column_order)) 
+	 	{
+			for($i=0;$i<count($column_order);$i++)
+			{
+				if ($column== $i+1)
+				{
+					$column=$column_order[$i];
+				}			
+			}
+	 	}
+					
+		switch ($type)
+		{
+			case SORT_REGULAR :
+				if (TableSort::is_image_column($data, $column))
+				{
+					return TableSort::sort_table_config($data, $column, $direction, $column_show, $column_order,SORT_IMAGE);
+				}
+				elseif (TableSort::is_date_column($data, $column))
+				{
+					return TableSort::sort_table_config($data, $column, $direction, $column_show, $column_order,SORT_DATE);
+				}
+				elseif (TableSort::is_numeric_column($data, $column))
+				{
+					return TableSort::sort_table_config($data, $column, $direction, $column_show, $column_order,SORT_NUMERIC);
+				}
+				return TableSort::sort_table_config($data, $column, $direction, $column_show, $column_order,SORT_STRING);
+				break;
+			case SORT_NUMERIC :
+				$compare_function = 'strip_tags($el1) > strip_tags($el2)';
+				break;
+			case SORT_STRING :
+				$compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
+				break;
+			case SORT_IMAGE :
+				$compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1,"<img>")),TableSort::orderingstring(strip_tags($el2,"<img>"))) > 0';
+				break;
+			case SORT_DATE :
+				$compare_function = 'strtotime(strip_tags($el1)) > strtotime(strip_tags($el2))';
+		}		
+				
+		$function_body = '$el1 = $a['.$column.']; ' .
+						 '$el2 = $b['.$column.']; ' .
+						 'return ('.$direction.' == SORT_ASC ? ('.$compare_function.') : !('.$compare_function.'));';
+
+		// Sort the content
+		usort($data, create_function('$a,$b', $function_body));
+		
+		// We show only the columns data that were set up on the $column_show array		
+		$new_order_data=array();
+		
+		if(is_array($column_show))
+		{		
+			
+			for ($j=0;$j<count($data);$j++)
+			{
+				$k=0;				
+				for ($i=0;$i<count($column_show);$i++)
+				{
+					if ($column_show[$i])
+					{
+						$new_order_data[$j][$k]=$data[$j][$i];					
+					}
+					$k++;						
+				}			
+			}			
+			//replace the multi-arrays
+			$data=$new_order_data;
+		}
+		else
+		{
+			return $data;			
+		}		
+		return $data;
+	}
+	
 }
 ?>

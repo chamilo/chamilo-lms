@@ -721,7 +721,12 @@ dl.upload_option {margin: 1em 0; padding: 0;}
  **********************************************/
 /* styles from dropbox.php file */
 .dropbox_detail {font-size: small}
-.dropbox_date {font-style: italic}
+.dropbox_date {
+	color: #737780;	
+	font-style: italic ;
+	font-weight: normal;	
+}
+
 .dropbox_person {font-weight: bold}
 .dropbox_listTitle { color: #000000;}
 .dropbox_feedback {font-size: x-small; height: 50px; width: 200px; overflow: auto}

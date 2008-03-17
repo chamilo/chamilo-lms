@@ -1045,8 +1045,10 @@ dl.upload_option {
 	font-style: italic
 }
 
-.dropbox_person {
-	font-weight: bold
+.dropbox_date {
+	color: #737780;	
+	font-style: italic ;
+	font-weight: normal;	
 }
 
 .dropbox_listTitle {

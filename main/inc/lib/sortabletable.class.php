@@ -4,7 +4,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2005 Dokeos S.A.
+	Copyright (c) 2005-2008 Dokeos S.A.
 	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
 
 	For a full list of contributors, see "credits.txt".
@@ -107,6 +107,8 @@ class SortableTable extends HTML_Table
 	 * table
 	 */
 	var $other_tables;
+	
+
 	/**
 	 * Create a new SortableTable
 	 * @param string $table_name A name for the table (default = 'table')
@@ -611,5 +613,70 @@ class SortableTableFromArray extends SortableTable
 	{
 		return count($this->table_data);
 	}
+}
+
+
+/**
+ * Sortable table which can be used for data available in an array
+ * 
+ * Is a variation of SortableTableFromArray because we add 2 new arrays  $column_show and $column_order
+ * $column_show is an array that lets us decide which are going to be the columns to show
+ * $column_order is an array that lets us decide the ordering of the columns 
+ * i.e: $column_header=array('a','b','c','d','e'); $column_order=array(1,2,5,4,5);
+ * These means that the 3th column (letter "c") will be sort like the order we use in the 5th column 
+ */
+ 
+class SortableTableFromArrayConfig extends SortableTable
+{	
+	/**
+	 * The array containing the columns that will be show i.e $column_show=array('1','0','0'); we will show only the 1st column
+	 */
+	private $column_show;
+		
+	/**
+	 *The array containing the real sort column $column_order=array('1''4','3','4'); The 2nd column will be order like the 4th column 
+	 */
+	private $column_order;		
+	/**
+	 * The array containing all data for this table
+	 */
+	private $table_data;
+	
+	/**
+	 * Constructor
+	 * @param array $table_data All the information of the table
+	 * @param int $default_column Default column that will be use in the sorts functions 
+	 * @param int $default_items_per_page quantity of pages that we are going to see
+	 * @param int $tablename Name of the table
+	 * @param array $column_show An array with binary values 1: we show the column 2: we don't show it 
+	 * @param array $column_order An array of integers that let us decide how the columns are going to be sort.   
+	 */ 
+	public function SortableTableFromArrayConfig($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename',$column_show=null,$column_order=null)
+	{
+		$this->column_show=$column_show;
+		$this->column_order=$column_order;
+		
+		parent :: SortableTable($tablename, null, null, $default_column, $default_items_per_page,'ASC');
+		
+		$this->table_data = $table_data;
+	}
+	/**
+	 * Get table data to show on current page
+	 * @see SortableTable#get_table_data
+	 */
+	public function get_table_data($from = 1)
+	{			
+		$content = TableSort :: sort_table_config($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC ,$this->column_show, $this->column_order);
+		return array_slice($content, $from, $this->per_page);
+	}
+	
+	/**
+	 * Get total number of items
+	 * @see SortableTable#get_total_number_of_items
+	 */
+	public function get_total_number_of_items()
+	{
+		return count($this->table_data);
+	}	
 }
 ?>

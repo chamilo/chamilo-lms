@@ -1,10 +1,10 @@
-<?php 
+<?php //$id: $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006 Dokeos S.A.
-	Copyright (c) 2006 Ghent University (UGent)
+	Copyright (c) 2008 Dokeos S.A.
+	Copyright (c) 2008 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -16,7 +16,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, Rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -67,7 +67,7 @@ $interbreadcrumb[]=array('url' => 'index.php','name' => $nameTools);
 $interbreadcrumb[]=array('url' => 'forumsearch.php','name' => get_lang('ForumSearch'));
 
 // Display the header
-Display :: display_header();
+Display :: display_header($nameTools);
 
 // Display the tool title
 api_display_tool_title($nameTools);

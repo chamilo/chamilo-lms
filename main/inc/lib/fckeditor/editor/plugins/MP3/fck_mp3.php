@@ -37,7 +37,9 @@ include('../../../../../../inc/global.inc.php');
 		  <?php
 
 		  $sType = "MP3";
-		  include(api_get_path(INCLUDE_PATH).'course_document.inc.php');
+		  if(isset($_course["sysCode"])){
+		 	 include(api_get_path(INCLUDE_PATH).'course_document.inc.php');
+		  }
 		  
 		  ?>
 		</div>

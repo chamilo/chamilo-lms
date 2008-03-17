@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 14000 2007-12-17 17:18:26Z elixir_inter $
+<?php // $Id: configure_homepage.php 14625 2008-03-17 15:48:21Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -835,6 +835,16 @@ switch($action){
 			$result_sql=api_sql_query($sql);
 			$isocode_language=mysql_result($result_sql,0,0);
 			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+			$upload_path = api_get_path(REL_PATH)."main/upload/";
+			
+			//for MP3
+			$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+			$oFCKeditor->Config['MP3UploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
+	
+			//for video
+			$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+			$oFCKeditor->Config['VideoUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
+			
 			echo $oFCKeditor->CreateHtml();
 		}
 		?>

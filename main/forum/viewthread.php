@@ -53,22 +53,6 @@
  **************************************************************************
  */
 
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
-
-	include('../inc/global.inc.php');
-	$this_section=SECTION_COURSES;
-	/* ------------	ACCESS RIGHTS ------------ */
-	// notice for unauthorized people.
-	api_protect_course_script(true);
-/*
------------------------------------------------------------
-	Language Initialisation
------------------------------------------------------------
-*/
 // name of the language file that needs to be included
 $language_file = 'forum';
 
@@ -77,6 +61,9 @@ require ('../inc/global.inc.php');
 
 // the section (tabs)
 $this_section=SECTION_COURSES;
+
+// notice for unauthorized people.
+api_protect_course_script(true);
 
 // including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');

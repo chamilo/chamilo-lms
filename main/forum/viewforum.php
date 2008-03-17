@@ -42,38 +42,14 @@
 * 	@package dokeos.forum
 */
 
-/**
- **************************************************************************
- *						IMPORTANT NOTICE
- * Please do not change anything is this code yet because there are still
- * some significant code that need to happen and I do not have the time to
- * merge files and test it all over again. So for the moment, please do not
- * touch the code
- * 							-- Patrick Cool <patrick.cool@UGent.be>
- **************************************************************************
- */
-
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
-	include('../inc/global.inc.php');
-	$this_section=SECTION_COURSES;
-	/* ------------	ACCESS RIGHTS ------------ */
-	// notice for unauthorized people.
-	api_protect_course_script(true);
-/*
------------------------------------------------------------
-	Language Initialisation
------------------------------------------------------------
-*/
 // name of the language file that needs to be included
 $language_file = 'forum';
 
 // including the global dokeos file
 require ('../inc/global.inc.php');
 
+// notice for unauthorized people.
+api_protect_course_script(true);
 
 // the section (tabs)
 $this_section=SECTION_COURSES;
@@ -194,6 +170,7 @@ if (isset($message))
 	Action Links
 -----------------------------------------------------------
 */
+echo '<span style="float:right;"><a href="forumsearch.php?'.api_get_cidreq().'&action=search"> '.Display::return_icon('search.gif').' '.get_lang('Search').'</a></span>';
 // The link should appear when
 // 1. the course admin is here
 // 2. the course member is here and new threads are allowed

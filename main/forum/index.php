@@ -42,32 +42,6 @@
 * 	@package dokeos.forum
 */
 
-/**
- **************************************************************************
- *						IMPORTANT NOTICE
- * Please do not change anything is this code yet because there are still
- * some significant code that need to happen and I do not have the time to
- * merge files and test it all over again. So for the moment, please do not
- * touch the code
- * 							-- Patrick Cool <patrick.cool@UGent.be>
- **************************************************************************
- */
-
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
-	include('../inc/global.inc.php');
-	$this_section=SECTION_COURSES;
-	/* ------------	ACCESS RIGHTS ------------ */
-	// notice for unauthorized people.
-	api_protect_course_script(true);
-/*
------------------------------------------------------------
-	Language Initialisation
------------------------------------------------------------
-*/
 // name of the language file that needs to be included
 $language_file = 'forum';
 
@@ -76,6 +50,9 @@ require ('../inc/global.inc.php');
 
 // the section (tabs)
 $this_section=SECTION_COURSES;
+
+// notice for unauthorized people.
+api_protect_course_script(true);
 
 // including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
@@ -177,6 +154,7 @@ if(is_array($all_groups))
 ------------------------------------------------------------------------------------------------------
 */
 //if (api_is_allowed_to_edit() and !$_GET['action'])
+echo '<span style="float:right;"><a href="forumsearch.php?'.api_get_cidreq().'&action=search"> '.Display::return_icon('search.gif').' '.get_lang('Search').'</a></span>';
 if (api_is_allowed_to_edit())
 {
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forumcategory"> '.Display::return_icon('forum_category_new.gif').' '.get_lang('AddForumCategory').'</a> ';

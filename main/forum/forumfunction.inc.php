@@ -2398,7 +2398,6 @@ function send_mail($user_info=array(), $thread_information=array())
 	if (isset($thread_information) and is_array($thread_information))
 	{
 		$thread_link= api_get_path('WEB_CODE_PATH').'forum/viewthread.php?'.api_get_cidreq().'&forum='.$thread_information['forum_id'].'&thread='.$thread_information['thread_id'];
-		//http://157.193.57.110/dokeos_cvs/claroline/forum/viewthread.php?forum=12&thread=49
 	}
 	$email_body= $user_info['firstname']." ".$user_info['lastname']."\n\r";
 	$email_body .= '['.$_course['official_code'].'] - ['.$_course['name']."]<br>\n";
@@ -2651,4 +2650,111 @@ function prepare4display($input='')
 	}
 }
 
+/**
+ * Display the search form for the forum and display the search results
+ *
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+* @version march 2008, dokeos 1.8.5
+ */
+function forum_search()
+{
+	// initiate the object
+	$form = new FormValidator('forumsearch');
+
+	// settting the form elements
+	$form->addElement('header', '', get_lang('ForumSearch'));
+	$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles"');
+	$form->addElement('submit', 'SubmitForumCategory', get_lang('Search'));
+
+	// setting the rules
+	$form->addRule('search_term', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+	$form->addRule('search_term', get_lang('TooShort'),'minlength',3);
+
+	// The validation or display
+	if( $form->validate() )
+	{
+	   $values = $form->exportValues();
+	   $form->setDefaults($values);
+	   $form->display();
+	   
+	   // display the search results
+	   display_forum_search_results($values['search_term']);
+	}
+	else
+	{
+		$form->display();
+	}	
+}
+/**
+ * Display the search results
+ *
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+* @version march 2008, dokeos 1.8.5
+ */
+function display_forum_search_results($search_term)
+{
+	global $table_categories, $table_forums, $table_threads, $table_posts; 
+	
+	$sql = "SELECT * FROM $table_posts posts
+				WHERE posts.post_title LIKE '%".Database::escape_string($search_term)."%' 
+				OR posts.post_text LIKE '%".Database::escape_string($search_term)."%'
+				/*AND posts.thread_id = threads.thread_id*/
+				GROUP BY posts.post_id";
+
+	// getting all the information of the forum categories
+	$forum_categories_list=get_forum_categories();
+	
+	// getting all the information of the forums
+	$forum_list=get_forums();	
+
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	while ($row = mysql_fetch_assoc($result))
+	{
+		$display_result = false; 
+		/*
+			we only show it when
+			1. forum cateogory is visible
+			2. forum is visible
+			3. thread is visible (to do)
+			4. post is visible
+		*/
+		if (!api_is_allowed_to_edit())
+		{
+			if ($forum_categories_list[$row['forum_id']['forum_category']]['visibility'] == '1'  AND $forum_list[$row['forum_id']]['visibility'] == '1' AND $row['visible'] == '1')
+			{
+				$display_result = true;
+			}
+		}
+		else 
+		{
+			$display_result = true; 
+		}
+		
+		if ($display_result == true)
+		{
+			$search_results_item = '<li><a href="viewforumcategory.php?forumcategory='.$forum_list[$row['forum_id']]['forum_category'].'">'.$forum_categories_list[$row['forum_id']['forum_category']]['cat_title'].'</a> > ';
+			$search_results_item .= '<a href="viewforum.php?forum='.$row['forum_id'].'">'.$forum_list[$row['forum_id']]['forum_title'].'</a> > ';
+			//$search_results_item .= '<a href="">THREAD</a> > ';
+			$search_results_item .= '<a href="viewthread.php?forum='.$row['forum_id'].'&amp;thread='.$row['thread_id'].'">'.$row['post_title'].'</a>';
+			$search_results_item .= '<br />';
+			if (strlen($row['post_title']) > 200 )
+			{
+				$search_results_item .= substr(strip_tags($row['post_title']),0,200).'...';
+			}
+			else 
+			{
+				$search_results_item .= $row['post_title'];
+			}
+			$search_results_item .= '</li>';
+			
+			
+			
+			$search_results[] = $search_results_item;
+		}
+	}
+	echo '<div class="row"><div class="form_header">'.count($search_results).' '.get_lang('ForumSearchResults').'</div></div>';
+	echo '<ol>';
+	echo implode($search_results);
+	echo '</ol>';
+}
 ?>

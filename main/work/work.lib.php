@@ -341,8 +341,8 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		{
 			//$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
 			//	'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
-			$action .= '<a href="'.api_get_self().'?'.
-				api_get_cidreq().'&delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  ><img src="../img/delete.gif" alt="'.get_lang('DirDelete').'"></a>';
+			$action .= '<img src="'.api_get_path(WEB_IMG_PATH).'edit_na.gif" alt="'.get_lang('Modify').'">';			
+			$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  ><img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('DirDelete').'"></a>';
 			$row[] = $action;
 		}
 		else
@@ -402,7 +402,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			}
 			elseif($is_author)
 			{
-				$action = '';
+				$action = '';				
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('WorkDelete').'"  ><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
 
@@ -418,6 +418,8 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	//if( count($table_data) > 0)
 	//{
 	$sorting_options=array();
+	$sorting_options['column']=1; 
+	
 	$paging_options=array();
 	Display::display_sortable_config_table($table_header,$table_data,$sorting_options, $paging_options,NULL,$column_show,$column_order);
 		

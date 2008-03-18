@@ -1,4 +1,4 @@
-<?php // $Id: document.php 14649 2008-03-18 20:03:41Z juliomontoya $
+<?php // $Id: document.php 14657 2008-03-18 21:59:53Z juliomontoya $
 
 /*
 ==============================================================================
@@ -687,7 +687,7 @@ if (count($row)==5)
 	$column_order[]=4;			
 }
 
-$table = new SortableTableFromArrayConfig($sortable_data,4,100,'tablename',$column_show,$column_order,'ASC');
+$table = new SortableTableFromArrayConfig($sortable_data,2,100,'tablename',$column_show,$column_order,'ASC');
  
 $query_vars['curdirpath'] = $curdirpath;
 

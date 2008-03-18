@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 14632 2008-03-17 17:49:21Z elixir_inter $
+<?php // $Id: user_add.php 14654 2008-03-18 21:18:10Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -19,7 +19,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1000 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -38,7 +38,6 @@ include_once ($libpath.'fileManage.lib.php');
 include_once ($libpath.'fileUpload.lib.php');
 include_once ($libpath.'usermanager.lib.php');
 require_once ($libpath.'formvalidator/FormValidator.class.php');
-require_once ($libpath.'security.lib.php');
 
 // section for the tabs
 $this_section=SECTION_PLATFORM_ADMIN;

@@ -1,20 +1,23 @@
 <?php
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2004-2008 Dokeos S.A.
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
 
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
 
 /**
@@ -23,7 +26,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 14070 2007-12-26 00:27:59Z yannoo $
+*  	@version $Id: work.php 14651 2008-03-18 20:15:04Z juliomontoya $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -117,12 +120,12 @@ function updateDocumentTitle(value){
 -----------------------------------------------------------
 */
 require('../inc/global.inc.php');
+
 require_once(api_get_path(LIBRARY_PATH) . "course.lib.php");
 require_once(api_get_path(LIBRARY_PATH) . "debug.lib.inc.php");
 require_once(api_get_path(LIBRARY_PATH) . "events.lib.inc.php");
 require_once(api_get_path(LIBRARY_PATH) . "security.lib.php");
 require_once('work.lib.php');
-
 
 /*
 -----------------------------------------------------------
@@ -279,25 +282,64 @@ if (!api_is_course_admin()){
 	Header
 -----------------------------------------------------------
 */
+
+
+
 if ($origin != 'learnpath')
 {
+	$interbreadcrumb[]= array ('url'=>$url_dir, 'name'=> get_lang('StudentPublications'));	
+	
+
+	//if (!$display_tool_options  && !$display_upload_form)
+	//{
+		//------interbreadcrumb for the current directory root path
+		$dir_array=explode("/",$cur_dir_path);
+		$array_len=count($dir_array);
+		
+		if ($array_len >0)
+		{
+			$url_dir='work.php?&curdirpath=/'; 
+			$interbreadcrumb[]= array ('url'=>$url_dir, 'name'=> get_lang('HomeDirectory'));		
+		}
+		
+		$dir_acum='';
+		for ($i=0; $i<$array_len;$i++)
+		{ 
+			$url_dir='work.php?&curdirpath='.$dir_acum.$dir_array[$i]; 
+			$interbreadcrumb[]= array ('url'=>$url_dir, 'name'=> $dir_array[$i]);
+			$dir_acum.=$dir_array[$i].'/';
+		}
+//	}
+
 	if($display_upload_form)
 	{
-		$tool_name = get_lang("UploadADocument");
-		$interbreadcrumb[] = array ("url" => "work.php", "name" => get_lang('StudentPublications'));
+		//$tool_name = get_lang("UploadADocument");
+		//$interbreadcrumb[] = array ("url" => "work.php", "name" => get_lang('StudentPublications'));
+		$interbreadcrumb[] = array ("url" => "work.php", "name" => get_lang('UploadADocument'));
 	}
+	
 	if($display_tool_options)
 	{
-		$tool_name = get_lang("EditToolOptions");
-		$interbreadcrumb[] = array ("url" => "work.php", "name" => get_lang('StudentPublications'));
+		//$tool_name = get_lang("EditToolOptions");
+		//$interbreadcrumb[] = array ("url" => "work.php", "name" => get_lang('StudentPublications'));
+		$interbreadcrumb[] = array ("url" => "work.php", "name" => get_lang('EditToolOptions'));
 	}
-	Display::display_header($tool_name);
+
+
+	
+//--------------------------------------------------
+
+
+	
+	
+	Display::display_header(null);
 }
 else
 {
 	//we are in the learnpath tool
 	include api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
 }
+
 
 //stats
 event_access_tool(TOOL_STUDENTPUBLICATION);
@@ -492,7 +534,7 @@ if (api_is_allowed_to_edit())
 	if(!empty($_REQUEST['move']))
 	{
 		$folders = get_subdirs_list($base_work_dir,1);
-		Display::display_normal_message(build_move_to_selector($folders,$cur_dir_path,$_REQUEST['move']),false);
+		Display::display_normal_message(build_work_move_to_selector($folders,$cur_dir_path,$_REQUEST['move']),false);
 	}
 	/* ------------------
 	 * Move file command
@@ -856,9 +898,12 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 //{
 	/*=======================================
 		 Display links to upload form and tool options
-	  =======================================*/
+	  =======================================
+	*/
 
 	display_action_links($cur_dir_path,$always_show_tool_options, $always_show_upload_form);
+	
+	
 
 	/*=======================================
 		 Display form to upload document
@@ -954,7 +999,7 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 		if(isset($_REQUEST['createdir']) && $is_allowed_to_edit)
 		{
 			//create the form that asks for the directory name
-			$new_folder_text = '<form action="'.api_get_self().'" method="POST">';
+			$new_folder_text = '<br /><br /><form action="'.api_get_self().'" method="POST">';
 			$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.Security::remove_XSS($cur_dir_path).'"/>';
 			$new_folder_text .= get_lang('NewDir') .' ';
 			$new_folder_text .= '<input type="text" name="new_dir"/>';
@@ -975,7 +1020,6 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 		Display of tool options
 ==============================================================================
 */
-
 	if ($display_tool_options)
 	{
 		display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cur_dir_path,$cur_dir_path_url);
@@ -994,8 +1038,12 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 	{
 		$my_cur_dir_path = $cur_dir_path;
 	}
-	display_student_publications_list($base_work_dir.'/'.$my_cur_dir_path,'work/'.$my_cur_dir_path,$currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin);
-//}
+	
+	if (!$display_upload_form && !$display_tool_options) 
+	{
+		display_student_publications_list($base_work_dir.'/'.$my_cur_dir_path,'work/'.$my_cur_dir_path,$currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin);
+	}
+
 
 /*
 ==============================================================================

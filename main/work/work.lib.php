@@ -1,20 +1,23 @@
 <?php
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2004-2008 Dokeos S.A.
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
 
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
 /**
 *	@package dokeos.studentpublications
@@ -31,6 +34,11 @@
  * @param	integer	Whether to show upload form option
  * @return	void
  */
+ 
+require_once('../document/document.inc.php');
+require_once('../inc/lib/fileDisplay.lib.php');
+
+
 function display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form)
 {
 	$display_output = "";
@@ -39,13 +47,18 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 		$parent_dir = dirname($cur_dir_path);
 		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$parent_dir.'">'.Display::return_icon('folder_up.gif').' '.get_lang('Up').'</a> ';
 	}
+	
 	if (! $always_show_upload_form )
 	{
-		$display_output .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") . "</a> ";
+		$display_output .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") . "</a> ";			
 	}
+	
 	if (! $always_show_tool_options && api_is_allowed_to_edit() )
 	{
-		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_tool_options=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a> ";
+		// Create dir
+		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1"><img src="../img/folder_new.gif" border="0"alt ="'.get_lang('CreateDir').'" /> '.get_lang('CreateDir').' </a>';
+		// Options
+		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_tool_options=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a> ";							
 	}
 
 	if ($display_output != "")
@@ -78,9 +91,9 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 
 	echo	"<br/><table class=\"data_table\">\n",
 			"<tr><th>&nbsp;</th><th>".get_lang("Modify")."</th></tr><tr class=\"row_even\">\n",
-			"<td>",
+			"<td align=\"right\">",
 			get_lang('AllFiles')." : </td>",
-			"<td><a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;delete=all&amp;display_tool_options=true\" ",
+			"<td ><a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;delete=all&amp;display_tool_options=true\" ",
 			"onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">",
 			"<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Delete')."\" />",
 			"</a>",
@@ -115,19 +128,19 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 
 	echo '<div>'.get_lang("ValidateChanges").' : <input type="submit" name="changeProperties" value="'.get_lang("Ok").'" /></div></form>';
 
+/*
 	echo	"<br/><table cellpadding=\"5\" cellspacing=\"2\" border=\"0\">\n";
-
-
-	/*
-	==============================================================================
-			Display directories list
-	==============================================================================
-	*/
+	
+	//==============================================================================
+	//		Display directories list
+	//==============================================================================
+	
+	
 	//$folders = DocumentManager::get_all_document_folders($_course,$to_group_id,$is_allowed_to_edit || $group_member_with_upload_rights);
 	if($cur_dir_path=='/'){$my_cur_dir_path='';}else{$my_cur_dir_path=$cur_dir_path;}
 	$folders = get_subdirs_list($base_work_dir,1);
 	echo '<div id="folderselector">';
-	echo(build_directory_selector($folders,$cur_dir_path,''));
+	echo(build_work_directory_selector($folders,$cur_dir_path,''));
 	echo '</div>';
 	echo '</td></tr><tr><td>';
 	if ($cur_dir_path!= '/' && $cur_dir_path!=$group_properties['directory'])
@@ -139,8 +152,8 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 	echo '<!-- create directory -->' .
 			'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1"><img src="../img/folder_new.gif" border="0"alt ="'.get_lang('CreateDir').'" /></a>'.
 			'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1">'.get_lang('CreateDir').'</a>&nbsp;'."\n";
-
 	echo "</td></tr></table>";
+	*/
 }
 
 /**
@@ -153,7 +166,7 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 function display_default_visibility_form($uploadvisibledisabled)
 {
 	?>
-	<tr class="row_odd"><td align="left">
+	<tr class="row_odd"><td align="right">
 		<strong><?php echo get_lang("_default_upload"); ?></strong></td>
 		<td><input class="checkbox" type="radio" name="uploadvisibledisabled" value="0"
 			<?php if($uploadvisibledisabled==0) echo "checked";  ?> />
@@ -164,6 +177,44 @@ function display_default_visibility_form($uploadvisibledisabled)
 	</td></tr>
 	<?php
 }
+
+
+/**
+* This function displays the firstname and lastname of the user as a link to the user tool.
+*
+* @see this is the same function as in the new forum, so this probably has to move to a user library.
+*
+* @todo move this function to the user library
+*
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @version march 2006
+*/
+function display_user_link($user_id, $name='')
+{
+	global $_otherusers;
+
+	if ($user_id<>0)
+	{
+		if ($name=='')
+		{
+			$table_user = Database::get_main_table(TABLE_MAIN_USER);
+			$sql="SELECT * FROM $table_user WHERE user_id='".Database::escape_string($user_id)."'";
+			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$row=mysql_fetch_array($result);
+			return "<a href=\"../user/userInfo.php?uInfo=".$row['user_id']."\">".$row['firstname']." ".$row['lastname']."</a>";
+		}
+		else
+		{
+			return "<a href=\"../user/userInfo.php?uInfo=".$user_id."\">".$name."</a>";
+		}
+	}
+	else
+	{
+		return $name.' ('.get_lang('Anonymous').')';
+	}
+}
+
+
 
 /**
 * Display the list of student publications, taking into account the user status
@@ -183,6 +234,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	$user_id = api_get_user_id();
 	$publications_list = array();
 	$sort_params = array();
+	
 	if( isset($_GET['column']))
 	{
 		$sort_params[] = 'column='.Security::remove_XSS($_GET['column']);
@@ -235,20 +287,42 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	}
 	
 	$sql_result = api_sql_query($sql_get_publications_list,__FILE__,__LINE__);
-
-	$table_header[] = array(get_lang('Title'),true);
-	$table_header[] = array(get_lang('Description'),true);
+	
+	$table_header[] = array(get_lang('Type'),true,'style="width:40px"');
+	$table_header[] = array(get_lang('Title'),true);	
+	//$table_header[] = array(get_lang('Description'),true);
 	$table_header[] = array(get_lang('Authors'),true);
 	$table_header[] = array(get_lang('Date'),true);
 	//if( $is_allowed_to_edit)
 	//{
-		$table_header[] = array(get_lang('Modify'),true);
+	$table_header[] = array(get_lang('Modify'),true);
 	//}
+	
+	$table_header[] = array('RealDate',false);
+		
+	// An array with the setting of the columns -> 1: columns that we will show, 0:columns that will be hide 
+	$column_show[]=1;
+	$column_show[]=1;
+	$column_show[]=1;
+	$column_show[]=1;
+	$column_show[]=1;
+	$column_show[]=0;	
+	
+	// Here we change the way how the colums are going to be sort
+	// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate 
+	// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
+	
+	$column_order[]=1;
+	$column_order[]=2;
+	$column_order[]=3;
+	$column_order[]=6;
+	$column_order[]=5;
+	$column_order[]=6;
+	
 	$table_data = array();
-
 	$dirs_list = get_subdirs_list($work_dir);
-
 	$my_sub_dir = str_replace('work/','',$sub_course_dir);
+	
 	foreach($dirs_list as $dir)
 	{
 		$mydir = $my_sub_dir.$dir;
@@ -257,33 +331,40 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$row = array();
 		$class = '';
 		$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));
-		$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().
-			'&curdirpath='.$mydir.'"'.$class.'><img src="../img/folder_document.gif" alt="dir" height="20" width="20" align="absbottom"/>&nbsp;'.$dir.'</a>';
+				
+		$row[] = '<img src="../img/folder_document.gif" border="0" hspace="5" align="middle" />';
+		$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>';
 		$row[] = '';
 		$row[] = '';
-		$row[] = '';
+		
 		if( $is_allowed_to_edit)
 		{
 			//$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
 			//	'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
 			$action .= '<a href="'.api_get_self().'?'.
-				api_get_cidreq().'&delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('DirDelete').'"></a>';
+				api_get_cidreq().'&delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  ><img src="../img/delete.gif" alt="'.get_lang('DirDelete').'"></a>';
 			$row[] = $action;
-		}else{
+		}
+		else
+		{
 			$row[] = "";
 		}
+		
 		$table_data[] = $row;
 	}
+	
 	while( $work = mysql_fetch_object($sql_result))
 	{
 		//Get the author ID for that document from the item_property table
 		$is_author = false;
 		$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=".$work->id;
 		$author_qry = api_sql_query($author_sql,__FILE__,__LINE__);
-		if(Database::num_rows($author_qry)==1){
+		
+		if(Database::num_rows($author_qry)==1)
+		{
 			$is_author = true;
 		}
-
+				
 		//display info depending on the permissions
 		if( $work->accepted == '1' || $is_allowed_to_edit)
 		{
@@ -296,34 +377,39 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			{
 				$class='';
 			}
-			$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));
-			$row[] = '<a href="'.$currentCourseRepositoryWeb.$url.'"'.$class.'>'.$work->title.'</a>';
-			$row[] = $work->description;
-			$row[] = $work->author;
-			$row[] = $work->sent_date;
+			$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));			
+			$row[]= build_document_icon_tag('file',$work->url);			
+			$row[]= '<a href="'.$currentCourseRepositoryWeb.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;
+			$row[]= display_user_link($user_id,$work->author);// $work->author;			
+			$row[]= date_to_str_ago($work->sent_date).'<br><span class="dropbox_date">'.$work->sent_date.'</span>';
+			
 			if( $is_allowed_to_edit)
 			{
 				$action = '';
-				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
-				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
-				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;move='.$work->id.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
+				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
+				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('WorkDelete').'" ><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
+				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;move='.$work->id.'" title="'.get_lang('Move').'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
 				if($work->accepted == '1')
 				{
-					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;make_invisible='.$work->id.'&amp;'.$sort_params.'"><img src="../img/visible.gif" alt="'.get_lang('Invisible').'"></a>';
+					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;make_invisible='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Invisible').'" ><img src="../img/visible.gif" alt="'.get_lang('Invisible').'"></a>';
 				}
 				else
 				{
-					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;make_visible='.$work->id.'&amp;'.$sort_params.'"><img src="../img/invisible.gif" alt="'.get_lang('Visible').'"></a>';
+					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;make_visible='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Visible').'" ><img src="../img/invisible.gif" alt="'.get_lang('Visible').'"></a>';
 				}
 
 				$row[] = $action;
-			}elseif($is_author){
+			}
+			elseif($is_author)
+			{
 				$action = '';
-				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
-				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
+				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
+				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('WorkDelete').'"  ><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
 
 				$row[] = $action;
-			}else{
+			}
+			else
+			{
 				$row[] = " ";
 			}
 			$table_data[] = $row;
@@ -331,7 +417,10 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	}
 	//if( count($table_data) > 0)
 	//{
-		Display::display_sortable_table($table_header,$table_data);
+	$sorting_options=array();
+	$paging_options=array();
+	Display::display_sortable_config_table($table_header,$table_data,$sorting_options, $paging_options,NULL,$column_show,$column_order);
+		
 	//}
 }
 /**
@@ -373,7 +462,7 @@ function get_subdirs_list($basedir='',$recurse=0){
  * @param string $group_dir
  * @return string html form
  */
-function build_directory_selector($folders,$curdirpath,$group_dir='')
+function build_work_directory_selector($folders,$curdirpath,$group_dir='')
 {
 	$form = '<form name="selector" action="'.api_get_self().'?'.api_get_cidreq().'" method="POST">'."\n";
 	$form .= get_lang('CurrentDirectory').' <select name="curdirpath" onchange="javascript:document.selector.submit()">'."\n";
@@ -417,7 +506,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='')
  * @param string $move_file
  * @return string html form
  */
-function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
+function build_work_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 {
 	$form = '<form name="move_to" action="'.api_get_self().'" method="POST">'."\n";
 	$form .= '<input type="hidden" name="move_file" value="'.$move_file.'" />'."\n";

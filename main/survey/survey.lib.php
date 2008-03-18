@@ -2426,8 +2426,8 @@ class SurveyUtil {
 		echo '<input type="hidden" name="export_format" value="xls">';
 		echo '</form>';
 		echo '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'">';
-		echo '<a href="#" onclick="document.form1a.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportCurrentReportAsCSV').'</a>';
-		echo '<a href="#" onclick="document.form1b.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportCurrentReportAsXLS').'</a>';
+		echo '<a href="#" onclick="document.form1a.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+		echo '<a href="#" onclick="document.form1b.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a>';
 		// the table
 		echo '<table class="data_table" border="1">';
 		// getting the number of options per question
@@ -2771,18 +2771,14 @@ class SurveyUtil {
 		$workbook->send($filename);
 		$worksheet =& $workbook->addWorksheet('Report 1');
 		$line = 0;
-		$column = 0;
-		
-		//$worksheet->write($line, 0, 'Name');
+		$column = 1; //skip the first column (row titles)
 		
 		// Database table definitions
 		$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 		$table_survey_answer 			= Database :: get_course_table(TABLE_SURVEY_ANSWER);
 	
-		// the first column
-	
-		$column ++; //skip the first column (row titles)
+		// First line (questions)
 		$sql = "SELECT questions.question_id, questions.type, questions.survey_question, count(options.question_option_id) as number_of_options
 				FROM $table_survey_question questions LEFT JOIN $table_survey_question_option options
 				ON questions.question_id = options.question_id "
@@ -2818,7 +2814,7 @@ class SurveyUtil {
 		$line++;
 		$column = 1;
 	
-		// getting all the questions and options
+		// getting all the questions and options (second line)
 		$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type,
 						survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
 				FROM $table_survey_question survey_question
@@ -2842,17 +2838,19 @@ class SurveyUtil {
 					$worksheet->write($line,$column,html_entity_decode(strip_tags($row['option_text'])));
 					$possible_answers[$row['question_id']][$row['question_option_id']] =$row['question_option_id'];
 					$possible_answers_type[$row['question_id']] = $row['type'];
+					$column++;
 				}
 			}
 		}
+
+		// getting all the answers of the users
 		$line ++;
 		$column = 0;
-	
-		// getting all the answers of the users
 		$old_user='';
 		$answers_of_user = array();
-		$sql = "SELECT * FROM $table_survey_answer WHERE survey_id='".Database::escape_string($_GET['survey_id'])."' ORDER BY user ASC";
-		
+		$sql = "SELECT * FROM $table_survey_answer " .
+				"WHERE survey_id='".Database::escape_string($_GET['survey_id'])."' " .
+						"ORDER BY user ASC";
 		$open_question_iterator = 1;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = Database::fetch_array($result))
@@ -2865,9 +2863,9 @@ class SurveyUtil {
 					$worsheet->write($line,$column,$elem);
 					$column++;
 				}
+				$answers_of_user=array();
 				$line++;
 				$column=0;
-				$answers_of_user=array();
 			}
 			if($possible_answers_type[$row['question_id']] == 'open')
 			{
@@ -2921,6 +2919,10 @@ class SurveyUtil {
 						elseif (!empty($answers_of_user[$question_id][$option_id]))
 						{
 							$return[] = 'v';
+						}
+						else
+						{
+							$return[] = '';
 						}
 					}
 				}

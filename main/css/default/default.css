@@ -937,7 +937,6 @@ a.personal_agenda:hover  {
 }
 .ical_export { float: right; margin-top: 0.2em;}
 
-
 /*
 ==============================================================================
     DISPLAY MESSAGES
@@ -2109,6 +2108,7 @@ input.forms	{
 	padding:5px;
 	/*border: 1px solid #264269;*/
 }
+.survey_export_link { float: right; }
 
 /*
 ------------------------------------------------------------------------------^M

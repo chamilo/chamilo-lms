@@ -1413,7 +1413,7 @@ div.system_announcement {
 	padding:5px;
 	/*border: 1px solid #264269;*/
 }
-
+.survey_export_link { float: right; }
 /*
 ------------------------------------------------------------------------------^M
     sessions

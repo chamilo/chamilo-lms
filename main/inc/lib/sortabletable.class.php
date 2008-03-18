@@ -651,12 +651,12 @@ class SortableTableFromArrayConfig extends SortableTable
 	 * @param array $column_show An array with binary values 1: we show the column 2: we don't show it 
 	 * @param array $column_order An array of integers that let us decide how the columns are going to be sort.   
 	 */ 
-	public function SortableTableFromArrayConfig($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename',$column_show=null,$column_order=null)
+	public function SortableTableFromArrayConfig($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename',$column_show=null,$column_order=null,$direction='ASC')
 	{
 		$this->column_show=$column_show;
 		$this->column_order=$column_order;
 		
-		parent :: SortableTable($tablename, null, null, $default_column, $default_items_per_page,'ASC');
+		parent :: SortableTable($tablename, null, null, $default_column, $default_items_per_page,$direction);
 		
 		$this->table_data = $table_data;
 	}

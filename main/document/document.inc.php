@@ -1,4 +1,27 @@
-<?php // $Id: document.inc.php 13981 2007-12-08 23:43:58Z yannoo $
+<?php // $Id: document.inc.php 13981 2007-12-08 23:43:58Z yannoo
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
+*/
 
 /*
 ==============================================================================
@@ -58,7 +81,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 	//group documents cannot be uploaded in the root
 	if($group_dir=='')
 	{
-		$parent_select -> addOption(get_lang('Root'),'/');
+		$parent_select -> addOption(get_lang('HomeDirectory'),'/');
 		if(is_array($folders))
 		{
 			foreach ($folders as $folder)
@@ -79,7 +102,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 			$label = $folder_titles[$folder];
 			if( $folder == $group_dir)
 			{
-				$label = '/ ('.get_lang('Root').')';
+				$label = '/ ('.get_lang('HomeDirectory').')';
 			}
 			else
 			{
@@ -257,7 +280,7 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 	{
 		if($curdirpath!='/')
 		{
-			$form .= '<option value="/">/ ('.get_lang('Root').')</option>';
+			$form .= '<option value="/">/ ('.get_lang('HomeDirectory').')</option>';
 		}
 		if(is_array($folders))
 		{
@@ -281,7 +304,7 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 			if(($curdirpath!=$folder) && ($folder!=$move_file) && (substr($folder,0,strlen($move_file)+1) != $move_file.'/'))//cannot copy dir into his own subdir
 			{
 				$display_folder = substr($folder,strlen($group_dir));
-				$display_folder = ($display_folder == '')?'/ ('.get_lang('Root').')':$display_folder;
+				$display_folder = ($display_folder == '')?'/ ('.get_lang('HomeDirectory').')':$display_folder;
 				$form .= '<option value="'.$folder.'">'.$display_folder.'</option>'."\n";
 			}
 		}

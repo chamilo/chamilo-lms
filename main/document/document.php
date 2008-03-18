@@ -1,10 +1,10 @@
-<?php // $Id: document.php 13779 2007-11-26 23:55:03Z yannoo $
+<?php // $Id: document.php 14649 2008-03-18 20:03:41Z juliomontoya $
 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -19,7 +19,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -189,7 +189,8 @@ include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 //-----------------------------------------------------------
 //check the path
 //if the path is not found (no document id), set the path to /
-if(!DocumentManager::get_document_id($_course,$curdirpath)){
+if(!DocumentManager::get_document_id($_course,$curdirpath))
+{
 	$curdirpath = '/';
 	//urlencoded version
 	$curdirpathurl = '%2F';
@@ -261,7 +262,30 @@ $image_files_only="";
 -----------------------------------------------------------
 */
 
-$tool_name = get_lang("Document"); // title of the page (should come from the language file)
+$interbreadcrumb[]= array ('url'=>'#', 'name'=> get_lang('Document'));
+
+//------interbreadcrumb for the current directory root path
+
+$dir_array=explode("/",$curdirpath);
+$array_len=count($dir_array);
+
+if ($array_len >1)
+{
+	if(! isset($_SESSION['_gid']) && $_SESSION['_gid']=='')
+	{
+		$url_dir='document.php?&curdirpath=/'; 
+		$interbreadcrumb[]= array ('url'=>$url_dir, 'name'=> get_lang('HomeDirectory'));
+	}	
+} 
+
+$dir_acum='';
+for ($i=0; $i<$array_len;$i++)
+{ 
+	$url_dir='document.php?&curdirpath='.$dir_acum.$dir_array[$i]; 
+	$interbreadcrumb[]= array ('url'=>$url_dir, 'name'=> $dir_array[$i]);
+	$dir_acum.=$dir_array[$i].'/';
+}
+
 Display::display_header($tool_name,"Doc");
 $is_allowed_to_edit  = api_is_allowed_to_edit();
 
@@ -570,6 +594,7 @@ if($docs_and_folders)
 	$use_document_title = get_setting('use_document_title');
 	//create a sortable table with our data
 	$sortable_data = array();
+		
 	while (list ($key, $id) = each($docs_and_folders))
 	{
 		$row = array ();
@@ -588,31 +613,32 @@ if($docs_and_folders)
 		{
 			$document_name=basename($id['path']);
 		}
-		//$row[] = $key; //testing
 		//data for checkbox
 		if (($is_allowed_to_edit || $group_member_with_upload_rights) AND count($docs_and_folders)>1)
 		{
-			$row[] = $id['path'];
+			$row[] = $id['path'];			
 		}
 		//icons
-		$row[]= build_document_icon_tag($id['filetype'],$id['path']);
+		$row[]= build_document_icon_tag($id['filetype'],$id['path']); 
 		//document title with hyperlink
 		$row[] = create_document_link($http_www,$document_name,$id['path'],$id['filetype'],$size,$id['visibility']).'<br />'.$invisibility_span_open.nl2br(htmlspecialchars($id['comment'],ENT_QUOTES,$charset)).$invisibility_span_close;
 		//comments => display comment under the document name
 		//$row[] = $invisibility_span_open.nl2br(htmlspecialchars($id['comment'])).$invisibility_span_close;
 		$display_size = format_file_size($size);
 		$row[] = '<span style="display:none;">'.$size.'</span>'.$invisibility_span_open.$display_size.$invisibility_span_close;
+
 		//last edit date
-		$display_date = format_date(strtotime($id['lastedit_date']));
-		$row[] = '<span style="display:none;">'.$id['lastedit_date'].'</span>'.$invisibility_span_open.$display_date.$invisibility_span_close;
+		$last_edit_date=$id['lastedit_date'];		
+		$display_date = date_to_str_ago($last_edit_date).'<br><span class="dropbox_date">'.$last_edit_date.'</span>';		
+		$row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
 
 		//admins get an edit column
 		if ($is_allowed_to_edit || $group_member_with_upload_rights)
 		{
 			$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key, $id['is_template']);
-
 			$row[] = $edit_icons;
 		}
+		$row[]=$last_edit_date;
 		$sortable_data[] = $row;
 	}
 	//*******************************************************************************************
@@ -621,17 +647,57 @@ else
 {
 	$sortable_data='';
 	$table_footer='<div style="text-align:center;"><strong>'.get_lang('NoDocsInFolder').'</strong></div>';
-	//echo('<p><strong>'.get_lang('NoDocsInFolder').'</strong></p>');
 }
 
-$table = new SortableTableFromArray($sortable_data,2,100);
+$column_show=array();
+
+if (($is_allowed_to_edit || $group_member_with_upload_rights) AND count($docs_and_folders)>1)
+{
+	$column_show[]=1;
+}
+
+$column_show[]=1;
+$column_show[]=1;
+$column_show[]=1;
+$column_show[]=1;
+
+if ($is_allowed_to_edit || $group_member_with_upload_rights)
+{
+	$column_show[]=1;
+}
+$column_show[]=0;
+
+
+$column_order=array();
+
+if (count($row)==7)
+{
+	$column_order[]=1;
+	$column_order[]=2;
+	$column_order[]=3;
+	$column_order[]=6;
+	$column_order[]=5;
+}
+
+if (count($row)==5)
+{
+	$column_order[]=1;
+	$column_order[]=2;
+	$column_order[]=4;
+	$column_order[]=4;			
+}
+
+$table = new SortableTableFromArrayConfig($sortable_data,4,100,'tablename',$column_show,$column_order,'ASC');
+ 
 $query_vars['curdirpath'] = $curdirpath;
+
 if(isset($_SESSION['_gid']))
 {
 	$query_vars['gidReq'] = $_SESSION['_gid'];
 }
 $table->set_additional_parameters($query_vars);
 $column = 0;
+
 if (($is_allowed_to_edit || $group_member_with_upload_rights) AND count($docs_and_folders)>1)
 {
 	$table->set_header($column++,'',false);
@@ -654,7 +720,7 @@ if (count($docs_and_folders)>1)
 {
 	if ($is_allowed_to_edit || $group_member_with_upload_rights)
 	{
-		$form_actions = array();
+		$form_actions = array();		
 		$form_action['delete'] = get_lang('Delete');
 		$table->set_form_actions($form_action,'path');
 	}

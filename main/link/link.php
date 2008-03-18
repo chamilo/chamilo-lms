@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) 2003-2005 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
@@ -17,7 +17,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -58,33 +58,6 @@ $this_section=SECTION_COURSES;
 
 api_protect_course_script();
 
-// Database Table definitions
-$tbl_link = Database::get_course_table(TABLE_LINK);
-$tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
-
-//statistics
-event_access_tool(TOOL_LINK);
-$nameTools = get_lang("Links");
-Display::display_header($nameTools, 'Links');
-?>
-<script type="text/javascript">
-/* <![CDATA[ */
-function MM_popupMsg(msg) { //v1.0
-  confirm(msg);
-}
-/* ]]> */
-</script>
-
-<?php
-
-/*
------------------------------------------------------------
-	Introduction section
------------------------------------------------------------
-*/
-Display::display_introduction_section(TOOL_LINK);
-
-
 // @todo change the $_REQUEST into $_POST or $_GET
 // @todo remove this code
 $link_submitted = $_POST["submitLink"];
@@ -105,60 +78,113 @@ $action = $_REQUEST['action'];
 $category_title = $_REQUEST['category_title'];
 $submitCategory = $_REQUEST['submitCategory'];
 
+$nameTools = get_lang('Links');
+
+	if ($_GET['action']=='addlink')
+	{
+		$nameTools = '';
+		$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
+		$interbreadcrumb[] = array ('url' => 'link.php?action=addlink', 'name' => get_lang('AddLink'));
+	}	
+	
+	if ($_GET['action']=='addcategory') 
+	{
+		$nameTools = '';
+		$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
+		$interbreadcrumb[] = array ('url' => 'link.php?action=addcategory', 'name' => get_lang('AddCategory'));
+	}
+	
+	if ($_GET['action']=='editlink') 
+	{
+		$nameTools = '';
+		$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
+		$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditLink'));
+	}	 	
+	
+		
+		
+// Database Table definitions
+$tbl_link = Database::get_course_table(TABLE_LINK);
+$tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
+
+//statistics
+event_access_tool(TOOL_LINK);
+
+Display::display_header($nameTools, 'Links');
+?>
+<script type="text/javascript">
+/* <![CDATA[ */
+function MM_popupMsg(msg) { //v1.0
+  confirm(msg);
+}
+/* ]]> */
+</script>
+
+<?php
+
+
 
 /*
 -----------------------------------------------------------
 	Action Handling
 -----------------------------------------------------------
 */
+$nameTools = get_lang("Links");
+
 switch($_GET['action'])
 {
-	case "addlink":
+	case "addlink":		
 		if($link_submitted)
-							{
-								if(!addlinkcategory("link"))	// here we add a link
-								{
-									unset($submitLink);
-								}
-							}
-							break;
-	case "addcategory":
+		{
+			if(!addlinkcategory("link"))	// here we add a link
+			{
+				unset($submitLink);
+			}
+		}
+		break;
+	case "addcategory":		
 		if($category_submitted)
-							{
-								if(!addlinkcategory("category"))	// here we add a category
-								{
-									unset($submitCategory);
-								}
-							}
-							break;
+		{
+			if(!addlinkcategory("category"))	// here we add a category
+			{
+				unset($submitCategory);
+			}
+		}
+		break;		
 	case "importcsv":
 		if($_POST["submitImport"])
 		{
 			import_csvfile();
 		}
-							break;
+		break;
 	case "deletelink":
 		deletelinkcategory("link"); // here we delete a link
-							break;
+		break;
+		
 	case "deletecategory":
 		deletelinkcategory("category"); // here we delete a category
-							break;
+		break;
 	case "editlink":
 		editlinkcategory("link"); // here we edit a link
-							break;
+		break;
 	case "editcategory":
 		editlinkcategory("category"); // here we edit a category
-							break;
+		break;
 	case "visible":
 		change_visibility($_GET['id'],$_GET['scope']); // here we edit a category
-							break;
+		break;
 	case "invisible":
 		change_visibility($_GET['id'],$_GET['scope']); // here we edit a category
-							break;
+		break;
 }
 
 
-
+/*
+-----------------------------------------------------------
+	Introduction section
+-----------------------------------------------------------
+*/
+Display::display_introduction_section(TOOL_LINK);
 
 
 if (is_allowed_to_edit())
@@ -263,113 +289,132 @@ if (isset($up))
 	movecatlink($up);
 	}
 
-
-
-
-/*
------------------------------------------------------------
-	Action Links
------------------------------------------------------------
-*/
-if(is_allowed_to_edit())
-{
-	echo Display::return_icon('file_html_new.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addlink&amp;category=".$category."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
-	echo Display::return_icon('folder_new.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addcategory&amp;urlview=".$urlview."\">".get_lang("CategoryAdd")."</a>\n";
-	   /* "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=importcsv&amp;urlview=".$urlview."\">".get_lang('CsvImport')."</a>\n", // RH*/
-}
-//making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
-//number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
-$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
-$resultcategories=api_sql_query($sqlcategories);
-$aantalcategories = @mysql_num_rows($resultcategories);
-echo Display::return_icon('remove.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
-for($j = 1; $j <= $aantalcategories; $j++)
-{
-	echo "0";
-}
-echo "\">$shownone</a>";
-echo Display::return_icon('add.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
-for($j = 1; $j <= $aantalcategories; $j++)
-{
-echo "1";
-}
-echo "\">$showall</a>";
-
-
-
-$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
-$resultcategories=api_sql_query($sqlcategories);
-
-//Starting the table which contains the categories
-echo "<br /><br /><table class=\"data_table\">";
-// displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
-	$sqlLinks = "SELECT * FROM ".$tbl_link." WHERE category_id=0 or category_id IS NULL";
-	$result = api_sql_query($sqlLinks);
-	$numberofzerocategory=mysql_num_rows($result);
-	if ($numberofzerocategory!==0)
-		{
-		echo "<tr><th style=\"font-weight: bold; text-align:left;padding-left: 10px;\"><i>".get_lang('NoCategory')."</i></th></tr>";
-		echo "<tr><td>";
-		showlinksofcategory(0);
-		echo "</td></tr>";
-		}
-$i=0;
-$catcounter=1;
-$view="0";
-while ($myrow=@mysql_fetch_array($resultcategories))
+if ($_GET['action']!='editlink' && $_GET['action']!='addcategory' && $_GET['action']!='addlink' || $link_submitted || $category_submitted)
+{	
+	/*
+	-----------------------------------------------------------
+		Action Links
+	-----------------------------------------------------------
+	*/
+	
+	if(is_allowed_to_edit())
 	{
-	if (!isset($urlview))
-		{
-		// No $view set in the url, thus for each category link it should be all zeros except it's own
-		makedefaultviewcode($i);
-		}
-	else
-		{
-		$view=$urlview;
-		$view[$i]="1";
-		}
-	// if the $urlview has a 1 for this categorie, this means it is expanded and should be desplayed as a
-	// - instead of a +, the category is no longer clickable and all the links of this category are displayed
-	$myrow["description"]=text_filter($myrow["description"]);
-	if ($urlview[$i]=="1")
-		{
-		$newurlview=$urlview;
-		$newurlview[$i]="0";
-		echo "<tr>",
-			"<th style=\"font-weight: bold; text-align:left;padding-left: 10px;\">- <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=".$newurlview."\">".htmlentities($myrow["category_title"],ENT_QUOTES,$charset)."</a><br/>&nbsp;&nbsp;&nbsp;".$myrow["description"];
-		if (is_allowed_to_edit())
-		{
-		showcategoryadmintools($myrow["id"]);
-		}
-	echo "</th>",
-		"</tr>",
-		"<tr>",
-		"<td>",showlinksofcategory($myrow["id"])."</td>",
-		"</tr>";
-
-		}
-	else
-		{
-
-		echo "<tr><th style=\"font-weight: bold; text-align:left;padding-left: 10px;\">+ <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
-		echo is_array($view)?implode('',$view):$view;
-		echo "\">".htmlentities($myrow["category_title"],ENT_QUOTES,$charset)."</a><br />&nbsp;&nbsp;&nbsp;";
-		echo $myrow["description"];
-
-		if (is_allowed_to_edit())
-		{
-			showcategoryadmintools($myrow["id"]);
-		}
-		echo "</th>",
-			"</tr>";
-		}
-	// displaying the link of the category
-
-	$i++;
+		echo Display::return_icon('file_html_new.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addlink&amp;category=".$category."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
+		echo Display::return_icon('folder_new.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addcategory&amp;urlview=".$urlview."\">".get_lang("CategoryAdd")."</a>\n";
+		   /* "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=importcsv&amp;urlview=".$urlview."\">".get_lang('CsvImport')."</a>\n", // RH*/
 	}
-echo "</table>";
+	//making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
+	//number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
+	$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
+	$resultcategories=api_sql_query($sqlcategories);
+	$aantalcategories = @mysql_num_rows($resultcategories);
+	echo Display::return_icon('remove.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
+	for($j = 1; $j <= $aantalcategories; $j++)
+	{
+		echo "0";
+	}
+	echo "\">$shownone</a>";
+	echo Display::return_icon('add.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
+	for($j = 1; $j <= $aantalcategories; $j++)
+	{
+	echo "1";
+	}
+	echo "\">$showall</a>";
 
-//////////////////////////////////////////////////////////////////////////////
+	//Starting the table which contains the categories
+	
+	$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
+	$resultcategories=api_sql_query($sqlcategories);
+	
+	echo '<br /><br /><table class="data_table">';
+	// displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
+		$sqlLinks = "SELECT * FROM ".$tbl_link." WHERE category_id=0 or category_id IS NULL";
+		$result = api_sql_query($sqlLinks);
+		$numberofzerocategory=mysql_num_rows($result);
+		
+		if ($numberofzerocategory!==0)
+		{
+			echo "<tr><th style=\"font-weight: bold; text-align:left;padding-left: 10px;\"><i>".get_lang('General')."</i></th></tr>";
+			echo '</table>';	
+			showlinksofcategory(0);		
+		}
+		
+	$i=0;
+	$catcounter=1;
+	$view="0";
+	
+	while ($myrow=@mysql_fetch_array($resultcategories))
+	{
+		if (!isset($urlview))
+		{
+			// No $view set in the url, thus for each category link it should be all zeros except it's own
+			makedefaultviewcode($i);
+		}
+		else
+		{
+			$view=$urlview;
+			$view[$i]="1";
+		}
+		// if the $urlview has a 1 for this categorie, this means it is expanded and should be desplayed as a
+		// - instead of a +, the category is no longer clickable and all the links of this category are displayed
+		$myrow["description"]=text_filter($myrow["description"]);
+		
+		if ($urlview[$i]=="1")
+		{
+			$newurlview=$urlview;
+			$newurlview[$i]="0";
+			
+			echo '<tr>';
+				echo '<table class="data_table">';
+				echo '<tr>';			
+					echo '<th width="81%"  style="font-weight: bold; text-align:left;padding-left: 5px;">';
+					echo '<a href="'.api_get_self()."?".api_get_cidreq()."&urlview=".$newurlview."\">";
+					echo "<img src=../img/remove.gif>&nbsp;&nbsp;".htmlentities($myrow["category_title"],ENT_QUOTES,$charset)."</a><br/>&nbsp;&nbsp;&nbsp;".$myrow["description"];
+					
+					if (is_allowed_to_edit())
+						{	
+							echo '<th>';	
+							showcategoryadmintools($myrow["id"]);
+							echo '</th>';			
+						}
+					echo '</th>';						
+				echo '</tr>';
+				echo '</table>';		
+				echo showlinksofcategory($myrow["id"]);						
+			echo '</tr>';			
+		}
+		else
+		{		
+			echo '<tr>';
+				echo '<table class="data_table">';
+				echo '<tr>';			
+					echo '<th width="81%" style="font-weight: bold; text-align:left;padding-left: 5px;"><a href="'.api_get_self()."?".api_get_cidreq()."&urlview=";
+					echo is_array($view)?implode('',$view):$view;
+					echo "\"><img src=../img/add.gif>&nbsp;&nbsp;".  htmlentities($myrow["category_title"],ENT_QUOTES,$charset);
+					echo'</a><br />&nbsp;&nbsp;&nbsp;';
+					echo $myrow["description"];						
+						if (is_allowed_to_edit())
+						{		
+							echo '<th style="text-align:center;">';	
+							showcategoryadmintools($myrow["id"]);			
+							echo '</th>';
+						}
+					echo '</th>';			
+				echo '</tr>';
+				
+				
+				echo '</table>';						
+			echo '</tr>';				
+		}
+		// displaying the link of the category
+		$i++;
+	}
+	echo '</table>';
+	////////////////////////////////////////////////////////////////////////////
+}		
+		
+		
+
 
 Display::display_footer();
 

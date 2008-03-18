@@ -370,7 +370,8 @@ function showlinksofcategory($catid)
 	$sqlLinks = "SELECT * FROM ".$tbl_link." link, ".$TABLE_ITEM_PROPERTY." itemproperties WHERE itemproperties.tool='".TOOL_LINK."' AND link.id=itemproperties.ref AND  link.category_id='".$catid."' AND (itemproperties.visibility='0' OR itemproperties.visibility='1')ORDER BY link.display_order DESC";
 	$result = api_sql_query($sqlLinks);
 	$numberoflinks = mysql_num_rows($result);
-	echo "<table class='data_table'>";
+	
+	echo '<table class="data_table" width="100%">';
 	$i = 1;
 	while ($myrow = mysql_fetch_array($result))
 	{
@@ -380,42 +381,56 @@ function showlinksofcategory($catid)
 		$myrow[3] = text_filter($myrow[3]);
 		if ($myrow['visibility'] == '1')
 		{
-			echo "<tr class='".$css_class."'>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", "<img src=\"../../main/img/file_html.gif\" border=\"0\" alt=\"".get_lang('Links')."\"/>", "</a></td>", "<td width=\"580\" valign=\"top\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", htmlentities($myrow[2],ENT_QUOTES,$charset), "</a>\n", "<br/>", $myrow[3], "";
+			echo "<tr class='".$css_class."'>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", "<img src=\"../../main/img/file_html.gif\" border=\"0\" alt=\"".get_lang('Links')."\"/>", "</a></td>", "<td width=\"80%\" valign=\"top\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", htmlentities($myrow[2],ENT_QUOTES,$charset), "</a>\n", "<br/>", $myrow[3], "";
 		}
 		else
 		{
 			if (api_is_allowed_to_edit())
 			{
-				echo "<tr class='".$css_class."'>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\" class=\"invisible\">", Display::return_icon('file_html_na.gif', get_lang('Links')),"</a></td>", "<td width=\"580\" valign=\"top\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\"  class=\"invisible\">", htmlentities($myrow[2],ENT_QUOTES,$charset), "</a>\n", "<br />", $myrow[3], "";
+				echo "<tr class='".$css_class."'>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\" class=\"invisible\">", Display::return_icon('file_html_na.gif', get_lang('Links')),"</a></td>", "<td width=\"80%\" valign=\"top\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\"  class=\"invisible\">", htmlentities($myrow[2],ENT_QUOTES,$charset), "</a>\n", "<br />", $myrow[3], "";
 			}
 		}
+		
+		echo '<td style="text-align:center;">';
 		if (api_is_allowed_to_edit())
 		{
-			echo "<br />", "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=editlink&amp;category=$category&amp;id=$myrow[0]&amp;urlview=$urlview\">", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"", get_lang('Modify'), "\" />", "</a>", " <a href=\"".api_get_self()."?".api_get_cidreq()."&action=deletelink&amp;id=", $myrow[0], "&amp;urlview=", $urlview, "\" onclick=\"javascript:if(!confirm('".get_lang('LinkDelconfirm')."')) return false;\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"", get_lang('Delete'), "\" />", "</a>";
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=editlink&amp;category=$category&amp;id=$myrow[0]&amp;urlview=$urlview\"  title=\"".get_lang('Modify')."\"  >", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"", get_lang('Modify'), "\" />", "</a>";			
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=deletelink&amp;id=", $myrow[0], "&amp;urlview=", $urlview, "\" onclick=\"javascript:if(!confirm('".get_lang('LinkDelconfirm')."')) return false;\"  title=\"".get_lang('Delete')."\" >", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"", get_lang('Delete'), "\" />", "</a>";
 			// DISPLAY MOVE UP COMMAND only if it is not the top link
 			if ($i != 1)
 			{
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=".$urlview."&amp;up=", $myrow["id"], "\">", "<img src=../img/up.gif border=0 alt=\"Up\"/>", "</a>\n";
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=".$urlview."&amp;up=", $myrow["id"], "\"  title=\"".get_lang('Up')."\"   >", "<img src=../img/up.gif border=0 alt=\"Up\"/>", "</a>\n";
 			}
+			else 
+			{
+				echo '<img src=../img/up_na.gif border=0 alt=\"Up\"/>';
+			}	
+			
 			// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 			if ($i < $numberoflinks)
 			{
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=".$urlview."&amp;down=".$myrow["id"]."\">", "<img src=\"../img/down.gif\" border=\"0\" alt=\"Down\"/>", "</a>\n";
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=".$urlview."&amp;down=".$myrow["id"]."\"  title=\"".get_lang('Down')."\" >", "<img src=\"../img/down.gif\" border=\"0\" alt=\"Down\"/>", "</a>\n";
 			}
+			else
+			{
+				echo '<img src=../img/down_na.gif border=0 alt=\"Up\"/>';	
+			}
+			
 			if ($myrow['visibility'] == "1")
 			{
-				echo "<a href=\"link.php?".api_get_cidreq()."&action=invisible&amp;id=".$myrow['id']."&amp;scope=link\">".Display::return_icon('visible.gif')."</a>";
+				echo '<a href="link.php?'.api_get_cidreq().'&action=invisible&amp;id='.$myrow['id'].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('langVisible').'"><img src="../img/visible.gif" border="0" /></a>'; 
 			}
 			if ($myrow['visibility'] == "0")
 			{
-				echo "<a href=\"link.php?".api_get_cidreq()."&action=visible&amp;id=".$myrow['id']."&amp;scope=link\">".Display::return_icon('invisible.gif')."</a>";
+ 				echo '<a href="link.php?'.api_get_cidreq().'&action=visible&amp;id='.$myrow['id'].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('langVisible').'"><img src="../img/invisible.gif" border="0" /></a>';
 			}
-
 		}
-		echo "</td>", "</tr>";
+		echo '</td>';
+		echo '</td>';
+		echo '</tr>';
 		$i ++;
 	}
-	echo "</table>";
+	echo '</table>';
 }
 
 /**
@@ -427,19 +442,33 @@ function showcategoryadmintools($categoryid)
 	global $urlview;
 	global $aantalcategories;
 	global $catcounter;
-
-	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=editcategory&amp;id=$categoryid&amp;urlview=$amp;urlview\">", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"", get_lang('Modify'), "\"/>", "</a> \n";
+ 
+	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=editcategory&amp;id='.$categoryid.'&amp;urlview=$amp;urlview\" title="'.get_lang('Modify').'" ><img src="../img/edit.gif" border="0" alt="'.get_lang('Modify').' "/></a>';
 	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=deletecategory&amp;id=", $categoryid, "&amp;urlview=$urlview\" onclick=\"javascript:if(!confirm('".get_lang('CategoryDelconfirm')."')) return false;\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"", get_lang('Delete'), "\"/>", "</a>";
-	// DISPLAY MOVE UP COMMAND only if it is not the top link
+
+	// DISPLAY MOVE UP COMMAND only if it is not the top link	
 	if ($catcounter != 1)
 	{
-		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&catmove=true&amp;up=", $categoryid, "&amp;urlview=$urlview\">", "<img src=../img/up.gif border=0 alt=\"Up\"/>", "</a>\n";
+		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&catmove=true&amp;up=", $categoryid, "&amp;urlview=$urlview\"  title=\"".get_lang('Up')."\" >", "<img src=../img/up.gif border=0 alt=\"Up\"/>", "</a>\n";
 	}
+	else
+	{
+		echo '<img src=../img/up_na.gif border=0 alt=\"Up\"/>';	
+	}
+	
 	// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 	if ($catcounter < $aantalcategories)
 	{
 		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&catmove=true&amp;down=".$categoryid."&amp;urlview=$urlview\">", "<img src=\"../img/down.gif\" border=\"0\" alt=\"Down\"/>", "</a>\n";
 	}
+	else
+	{
+		echo '<img src=../img/down_na.gif border=0 alt=\"Up\"/>';
+	}
+	
+	//echo Display::return_icon('visible.gif');
+			
+			
 	$catcounter ++;
 }
 

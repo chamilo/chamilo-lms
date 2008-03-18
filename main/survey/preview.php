@@ -68,7 +68,7 @@ $interbreadcrumb[] = array ("url" => "survey.php?survey_id=".$_GET['survey_id'],
 Display :: display_header(get_lang('SurveyPreview'));
 
 // We exit here is the first or last question is a pagebreak (which causes errors)
-check_first_last_question($_GET['survey_id'], false);
+SurveyUtil::check_first_last_question($_GET['survey_id'], false);
 
 // only a course admin is allowed to preview a survey: you are NOT a course admin => error message
 if (!api_is_allowed_to_edit())
@@ -108,7 +108,7 @@ else
 				ORDER BY sort ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = Database::fetch_array($result))
 		{
 			if($row['type'] == 'pagebreak')
 			{
@@ -128,15 +128,15 @@ else
 					LEFT JOIN $table_survey_question_option survey_question_option
 					ON survey_question.question_id = survey_question_option.question_id
 					WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
-					AND survey_question.question_id IN (".implode(',',$paged_questions[$_GET['show']]).")
+					AND survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']])).")
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$question_counter_max = mysql_num_rows($result);
+			$question_counter_max = Database::num_rows($result);
 			$counter = 0;
 			$limit=0;
 			$questions = array();
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = Database::fetch_array($result))
 			{
 				// if the type is not a pagebreak we store it in the $questions array
 				if($row['type'] <> 'pagebreak')
@@ -161,7 +161,7 @@ else
 	// selecting the maximum number of pages
 	$sql = "SELECT * FROM $table_survey_question WHERE type='".Database::escape_string('pagebreak')."' AND survey_id='".Database::escape_string($_GET['survey_id'])."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	$numberofpages = mysql_num_rows($result) + 1;
+	$numberofpages = Database::num_rows($result) + 1;
 	// Displaying the form with the questions
 	if (isset($_GET['show']))
 	{
@@ -171,7 +171,7 @@ else
 	{
 		$show = 0;
 	}
-	echo '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.$_GET['survey_id'].'&show='.$show.'">';
+	echo '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.Security::remove_XSS($_GET['survey_id']).'&show='.$show.'">';
 	if(is_array($questions) && count($questions)>0)
 	{
 		foreach ($questions as $key=>$question)

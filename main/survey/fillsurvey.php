@@ -125,12 +125,6 @@ $survey_data['survey_id'] = $survey_invitation['survey_id'];
 // storing the answers
 if ($_POST)
 {
-	/*
-	echo '<pre>';
-	print_r($_POST);
-	echo '</pre>';
-	*/
-
 	// getting all the types of the question (because of the special treatment of the score question type
 	$sql = "SELECT * FROM $table_survey_question WHERE survey_id = '".Database::escape_string($survey_invitation['survey_id'])."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -154,7 +148,7 @@ if ($_POST)
 			// 		   when it is a scoring question then the key of the array is the option_id and the value is the value
 			if (is_array($value))
 			{
-				remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id);
+				SurveyUtil::remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id);
 				foreach ($value as $answer_key => $answer_value)
 				{
 					if ($types[$survey_question_id] == 'score')
@@ -167,7 +161,7 @@ if ($_POST)
 						$option_id = $answer_value;
 						$option_value = '';
 					}
-					store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $option_id, $option_value, $survey_data);
+					SurveyUtil::store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $option_id, $option_value, $survey_data);
 				}
 			}
 			// all the other question types (open question, multiple choice, percentage, ...)
@@ -192,9 +186,9 @@ if ($_POST)
 
 
 				$survey_question_answer = $value;
-				remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id);
-				store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $value, $option_value, $survey_data);
-				//store_answer($user,$survey_id,$question_id, $option_id, $option_value, $survey_data);
+				SurveyUtil::remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id);
+				SurveyUtil::store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $value, $option_value, $survey_data);
+				//SurveyUtil::store_answer($user,$survey_id,$question_id, $option_id, $option_value, $survey_data);
 			}
 		}
 	}
@@ -337,75 +331,4 @@ echo '</form>';
 
 // Footer
 Display :: display_footer();
-
-
-/**
- * This function stores an answer of a user on a question of a survey
- *
- * @param mixed $user the user id or email of the person who fills the survey
- * @param integer $survey_id the survey id
- * @param integer $question_id the question id
- * @param integer $option_id the option id
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version January 2007
- */
-function store_answer($user, $survey_id, $question_id, $option_id, $option_value, $survey_data)
-{
-	global $_course;
-	global $types;
-
-
-
-	// table definition
-	$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER, $_course['db_name']);
-
-	// make the survey anonymous
-	if ($survey_data['anonymous'] == 1)
-	{
-		if (!$_SESSION['surveyuser'])
-		{
-			$user = md5($user.time());
-			$_SESSION['surveyuser'] = $user;
-		}
-		else
-		{
-			$user = $_SESSION['surveyuser'];
-		}
-	}
-
-	$sql = "INSERT INTO $table_survey_answer (user, survey_id, question_id, option_id, value) VALUES (
-			'".Database::escape_string($user)."',
-			'".Database::escape_string($survey_id)."',
-			'".Database::escape_string($question_id)."',
-			'".Database::escape_string($option_id)."',
-			'".Database::escape_string($option_value)."'
-			)";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
-}
-
-/**
- * This function removes an (or multiple) answer(s) of a user on a question of a survey
- *
- * @param mixed $user the user id or email of the person who fills the survey
- * @param integer $survey_id the survey id
- * @param integer $question_id the question id
- * @param integer $option_id the option id
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version January 2007
- */
-function remove_answer($user, $survey_id, $question_id)
-{
-	global $_course;
-
-	// table definition
-	$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER, $_course['db_name']);
-
-	$sql = "DELETE FROM $table_survey_answer
-			WHERE user = '".Database::escape_string($user)."'
-			AND survey_id = '".Database::escape_string($survey_id)."'
-			AND question_id = '".Database::escape_string($question_id)."'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
-}
 ?>

@@ -41,7 +41,7 @@ require_once (api_get_path(LIBRARY_PATH)."mail.lib.inc.php");
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit())
 {
-	Display :: display_header();
+	Display :: display_header(get_lang('Survey'));
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 	Display :: display_footer();
 	exit;
@@ -157,12 +157,6 @@ echo '</table>';
 
 // Footer
 Display :: display_footer();
-
-
-
-
-
-
 /**
  * @todo add the additional parameters
  */
@@ -173,70 +167,6 @@ $table->set_header(0, get_lang('User'));
 $table->set_header(1, get_lang('InvitationCode'));
 $table->set_header(2, get_lang('InvitationDate'));
 $table->set_header(3, get_lang('Answered'));
-$table->set_column_filter(3, 'modify_filter');
+$table->set_column_filter(3, 'SurveyUtil::modify_filter');
 $table->display();
 */
-
-/**
- * Get all the information about the invitations of a certain survey
- *
- * @return unknown
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version January 2007
- *
- * @todo use survey_id parameter instead of $_GET
- */
-function get_survey_invitations_data()
-{
-	// Database table definition
-	$table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION);
-	$table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-
-	$sql = "SELECT
-				survey_invitation.user as col1,
-				survey_invitation.invitation_code as col2,
-				survey_invitation.invitation_date as col3,
-				'' as col4
-				FROM $table_survey_invitation survey_invitation
-		LEFT JOIN $table_user user ON  survey_invitation.user = user.user_id
-		WHERE survey_invitation.survey_id = '".Database::escape_string($_GET['survey_id'])."'";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
-	while ($row = mysql_fetch_array($res))
-	{
-		$survey_invitation_data[] = $row;
-	}
-	return $survey_invitation_data;
-}
-
-/**
- * Get the total number of survey invitations for a given survey (through $_GET['survey_id'])
- *
- * @return unknown
- *
- * @todo use survey_id parameter instead of $_GET
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version January 2007
- */
-function get_number_of_survey_invitations()
-{
-	// Database table definition
-	$table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION);
-
-	$sql = "SELECT count(user) AS total FROM $table_survey_invitation WHERE survey_id='".Database::escape_string($_GET['survey_id'])."'";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
-	$row = mysql_fetch_assoc($res);
-	return $row['total'];
-}
-/**
- * @todo use global array for answered or not
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version January 2007
- */
-function modify_filter()
-{
-
-}
-?>

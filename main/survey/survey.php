@@ -21,7 +21,7 @@ Tel. +32 (2) 211 34 56
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 14636 2008-03-17 22:24:08Z yannoo $
+* 	@version $Id: survey.php 14639 2008-03-18 05:31:08Z yannoo $
 *
 * 	@todo use quickforms for the forms
 */
@@ -97,7 +97,7 @@ if (isset($_GET['message']))
 }
 
 // We exit here is the first or last question is a pagebreak (which causes errors)
-check_first_last_question($_GET['survey_id']);
+SurveyUtil::check_first_last_question($_GET['survey_id']);
 
 // Action links
 $survey_actions = get_lang('Survey').': ';

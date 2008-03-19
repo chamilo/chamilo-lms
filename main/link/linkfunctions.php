@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
@@ -17,7 +17,8 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
 ==============================================================================
 */
 /**
@@ -403,7 +404,7 @@ function showlinksofcategory($catid)
 			}
 			else 
 			{
-				echo '<img src=../img/up_na.gif border=0 alt=\"Up\"/>';
+				echo '<img src="'.api_get_path(WEB_IMG_PATH).'up_na.gif" border=0 alt="Up"/>';
 			}	
 			
 			// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
@@ -413,7 +414,7 @@ function showlinksofcategory($catid)
 			}
 			else
 			{
-				echo '<img src=../img/down_na.gif border=0 alt=\"Up\"/>';	
+				echo '<img src="'.api_get_path(WEB_IMG_PATH).'down_na.gif" border=0 alt="Up"/>';	
 			}
 			
 			if ($myrow['visibility'] == "1")
@@ -424,8 +425,7 @@ function showlinksofcategory($catid)
 			{
  				echo '<a href="link.php?'.api_get_cidreq().'&action=visible&amp;id='.$myrow['id'].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('langVisible').'"><img src="../img/invisible.gif" border="0" /></a>';
 			}
-		}
-		echo '</td>';
+		} 
 		echo '</td>';
 		echo '</tr>';
 		$i ++;
@@ -453,9 +453,8 @@ function showcategoryadmintools($categoryid)
 	}
 	else
 	{
-		echo '<img src=../img/up_na.gif border=0 alt=\"Up\"/>';	
-	}
-	
+		echo '<img src="'.api_get_path(WEB_IMG_PATH).'up_na.gif" border=0 alt="Up"/>';	
+	}	
 	// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 	if ($catcounter < $aantalcategories)
 	{
@@ -463,12 +462,8 @@ function showcategoryadmintools($categoryid)
 	}
 	else
 	{
-		echo '<img src=../img/down_na.gif border=0 alt=\"Up\"/>';
-	}
-	
-	//echo Display::return_icon('visible.gif');
-			
-			
+		echo '<img src="'.api_get_path(WEB_IMG_PATH).'down_na.gif" border=0 alt="Up"/>';
+	}		
 	$catcounter ++;
 }
 

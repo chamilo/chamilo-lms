@@ -1,10 +1,10 @@
 <?php
-// $Id: profile.php 14319 2008-02-19 17:42:23Z yannoo $
+// $Id: profile.php 14667 2008-03-19 15:08:54Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
@@ -19,7 +19,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -156,6 +156,18 @@ $form->applyFilter(array('lastname', 'firstname'), 'trim');
 $form->addRule('lastname' , get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 
+
+//	USERNAME
+$form->addElement('text', 'username', get_lang('UserName'), array('size' => 40));
+if (api_get_setting('profile', 'login') !== 'true')
+	$form->freeze('username');
+$form->applyFilter('username', 'stripslashes');
+$form->applyFilter('username', 'trim');
+$form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('username', get_lang('UsernameWrong'), 'username');
+$form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
+
+
 //	OFFICIAL CODE
 if (CONFVAL_ASK_FOR_OFFICIAL_CODE)
 {
@@ -211,16 +223,6 @@ if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true')
 	}
 	$form->addRule('picture', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png','image/pjpeg'));
 }
-
-//	USERNAME
-$form->addElement('text', 'username', get_lang('UserName'), array('size' => 40));
-if (api_get_setting('profile', 'login') !== 'true')
-	$form->freeze('username');
-$form->applyFilter('username', 'stripslashes');
-$form->applyFilter('username', 'trim');
-$form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('username', get_lang('UsernameWrong'), 'username');
-$form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 
 //	LANGUAGE
 $form->addElement('select_language', 'language', get_lang('Language'));

@@ -33,6 +33,7 @@
 	'HotPotatoes',
 	'Hyperoffice',
 	'Ingenatic',
+	'Instruxion',
 	'iProgress',
 	'Lectora',
 	'Microsoft',

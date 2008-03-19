@@ -21,7 +21,7 @@
 	
 	See the GNU General Public License for more details.
 	
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ============================================================================== 
 */
@@ -53,15 +53,12 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 ============================================================================== 
 */
 
-
-
-
-
 /*
 -----------------------------------------------------------
 	Header
 -----------------------------------------------------------
 */
+
 $tool_name = get_lang("SubscribeUserToCourse");
 //extra entries in breadcrumb
 $interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
@@ -75,30 +72,129 @@ api_display_tool_title($tool_name);
 ============================================================================== 
 */
 
+$list_register_user='';
+$list_not_register_user='';
+
 if (isset ($_REQUEST['register']))
 {
-	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher'){
-		CourseManager :: subscribe_user($_REQUEST['user_id'], $_course['sysCode'],COURSEMANAGER);
+	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher')
+	{		
+		$result_simple_sub=CourseManager :: subscribe_user(Database::escape_string($_REQUEST['user_id']), $_course['sysCode'],COURSEMANAGER);	
 	}
-	else{
-		CourseManager :: subscribe_user($_REQUEST['user_id'], $_course['sysCode']);
+	else
+	{		
+		$result_simple_sub=CourseManager :: subscribe_user(Database::escape_string($_REQUEST['user_id']), $_course['sysCode']);
+	}
+	
+	$user_id_temp=$_SESSION['session_user_id'];
+
+	if (is_array($user_id_temp))
+	{
+		for ($j=0; $j<count($user_id_temp);$j++)
+		{
+			if 	($user_id_temp[$j]==$_GET['user_id']) 
+			{	
+				if ($result_simple_sub)	
+				{
+					Display::display_confirmation_message($_SESSION['session_user_name'][$j].' '.get_lang('langAddedToCourse'));
+				}
+				else
+				{			
+					Display::display_error_message($_SESSION['session_user_name'][$j].' '.get_lang('langNotAddedToCourse'));
+					
+				}
+			}
+		}
+		unset($_SESSION['session_user_id']);
+		unset($_SESSION['session_user_name']);	
 	}
 }
+
 if (isset ($_POST['action']))
 {
 	switch ($_POST['action'])
 	{
 		case 'subscribe' :
+				
 			if (is_array($_POST['user']))
 			{
 				foreach ($_POST['user'] as $index => $user_id)
-				{
-					CourseManager :: subscribe_user($user_id, $_course['sysCode']);
+				{	
+					$user_id=Database::escape_string($user_id);					
+					$is_suscribe[]=CourseManager :: subscribe_user($user_id, $_course['sysCode']);										
+					$is_suscribe_user_id[]=$user_id;					
 				}
 			}
+			
+			$user_id_temp=$_SESSION['session_user_id'];
+			$user_name_temp=$_SESSION['session_user_name'];
+				
+			unset($_SESSION['session_user_id']);
+ 			unset($_SESSION['session_user_name']);
+			$counter=0;
+			$$is_suscribe_counter=count($is_suscribe_user_id);
+			
+			$list_register_user='';
+			
+			if ($$is_suscribe_counter!=1)
+			{			
+				for ($i=0; $i<$$is_suscribe_counter;$i++)		
+				{
+					for ($j=0; $j<count($user_id_temp);$j++)
+					{
+						if ($is_suscribe_user_id[$i]==$user_id_temp[$j]) 
+						{
+								if ($is_suscribe[$i]) 
+								{										
+									$list_register_user.=" - ".$user_name_temp[$j].'<br/>';								
+									$counter++;
+								}
+								else
+								{
+									$list_not_register_user.=" - ".$user_name_temp[$j].'<br/>';							
+								}													
+						}
+					}
+				}
+			}
+			else			
+			{			
+				$list_register_user=$user_name_temp[0]; // only 1 user register 
+			}
+				
+			if (!empty($list_register_user))
+			{					
+				if ($$is_suscribe_counter==1) 
+				{	
+					$register_user_message=$list_register_user.' '.get_lang('langAddedToCourse');
+					Display::display_confirmation_message($register_user_message,false);				
+				}
+				else
+				{										
+					$register_user_message='<br />'.get_lang('UsersRegistered').'<br/><br />'.$list_register_user;
+					Display::display_confirmation_message($register_user_message,false);								
+				}				
+			}
+						
+			if (!empty($list_not_register_user))
+			{
+				$not_register_user_message='<br />'.get_lang('UsersNotRegistered').'<br/><br /><br />'.$list_not_register_user;			
+				Display::display_error_message($not_register_user_message,false); 
+			}
+			
 			break;
 	}
 }
+
+if (!empty($_SESSION['session_user_id']))
+{
+	unset($_SESSION['session_user_id']);
+}
+
+if (!empty($_SESSION['session_user_name']))
+{	
+	unset($_SESSION['session_user_name']);
+}	
 
 /*
 -----------------------------------------------------------
@@ -113,20 +209,23 @@ function get_number_of_users()
 {
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher'){
+	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher')
+	{
 		$sql = "SELECT 	u.user_id  
 							FROM $user_table u
 							LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
 							WHERE cu.user_id IS NULL AND u.status='1'
 							";
 	}
-	else{
+	else
+	{
 		$sql = "SELECT 	u.user_id  
 							FROM $user_table u
 							LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
 							WHERE cu.user_id IS NULL AND u.status='5'
 							";
 	}
+	
 	if (isset ($_REQUEST['keyword']))
 	{
 		$keyword = mysql_real_escape_string($_REQUEST['keyword']);
@@ -144,7 +243,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	
-	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher'){
+	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher')
+	{
 		$sql = "SELECT 
 					u.user_id AS col0,
 					u.official_code   AS col1, 
@@ -157,7 +257,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				WHERE u.status='1' and cu.user_id IS NULL
 				";
 	}
-	else{
+	else
+	{
 		$sql = "SELECT 
 					u.user_id AS col0,
 					u.official_code   AS col1, 
@@ -182,7 +283,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	while ($user = mysql_fetch_row($res))
 	{
 		$users[] = $user;
-	}
+		$_SESSION['session_user_id'][]=$user[0];
+		$_SESSION['session_user_name'][]=$user[3].' '.$user[2];		
+	}	
 	return $users;
 }
 /**
@@ -232,6 +335,13 @@ $table->set_form_actions(array ('subscribe' => get_lang('reg')), 'user');
 $form->display();
 echo '<br />';
 $table->display();
+
+if ( !empty($_POST['keyword']))
+{
+	$keyword_name=Security::remove_XSS($_POST['keyword']);
+	echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';	
+}
+
 /*
 ============================================================================== 
 		FOOTER 

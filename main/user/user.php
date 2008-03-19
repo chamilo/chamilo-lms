@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -18,7 +18,8 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
 ==============================================================================
 */
 /**
@@ -233,8 +234,12 @@ function show_users_in_virtual_courses()
 			//if(xxx['tutor'] == '0') $tutor = " - ";
 			//else  $tutor = get_lang("Tutor");
 			$full_name = $lastname.", ".$firstname;
-			 if( $lastname == "" || $firstname == '')
+			
+			 if( $lastname == "" || $firstname == '') 
+			 {
 				$full_name = $loginname;
+			 }
+			 
 			$user_info_hyperlink = "<a href=\"userInfo.php?".api_get_cidreq()."&origin=".$origin."&uInfo=".$user_id."&virtual_course=".$virtual_course["code"]."\">".$full_name."</a>";
 			$row = 0;
 			$table_row[$row ++] = $user_id;
@@ -252,7 +257,8 @@ function show_users_in_virtual_courses()
 	}
 }
 
-if(!$is_allowed_in_course){
+if(!$is_allowed_in_course)
+{
 	api_not_allowed(true);
 }
 
@@ -415,14 +421,16 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 			$groups_name=GroupManager :: get_user_group_name($user_id);
 
-			if(api_is_allowed_to_edit()){
+			if(api_is_allowed_to_edit())
+			{
 				$temp=array();
 				$temp[] = $user_id;
-				$temp[] = $o_course_user['official_code'];
-				$temp[] = $o_course_user['lastname'];
+				
 				$temp[] = $o_course_user['firstname'];
+				$temp[] = $o_course_user['lastname'];				
 				$temp[] = $o_course_user['role'];
 				$temp[] = implode(', ',$groups_name); //Group
+				$temp[] = $o_course_user['official_code'];
 
 				if(isset($o_course_user['tutor_id']) && $o_course_user['tutor_id']==1)
 					$temp[] = get_lang('Tutor');
@@ -435,19 +443,21 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 				$temp[] = $user_id;
 			}
-			else{
-				$temp=array();
-				$temp[] = $o_course_user['official_code'];
-				$temp[] = $o_course_user['lastname'];
+			else
+			{
+				$temp=array();				
 				$temp[] = $o_course_user['firstname'];
+				$temp[] = $o_course_user['lastname'];				
 				$temp[] = $o_course_user['role'];
 				$temp[] = implode(', ',$groups_name);//Group
+				$temp[] = $o_course_user['official_code'];
 				$temp[] = $user_id;
 			}
 			$a_users[$user_id] = $temp;
 		}
 	}
 	usort($a_users, 'sort_users');
+	
 	return $a_users;
 }
 
@@ -466,25 +476,28 @@ function modify_filter($user_id)
 	// info
 	if(!api_is_anonymous())
 	{
-		$result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'"><img border="0" alt="'.get_lang('Info').'" src="../img/user_info.gif" /></a>&nbsp;';
+		$result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'" title="'.get_lang('Info').'"  ><img border="0" alt="'.get_lang('Info').'" src="../img/user_info.gif" /></a>&nbsp;';
 	}
 
 	if($is_allowed_to_track)
 	{
-		$result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&amp;details=true&amp;course='.$_course['id'].'&amp;origin=user_course"><img border="0" alt="'.get_lang('Tracking').'" src="../img/statistics.gif" /></a>&nbsp;';
+		$result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&amp;details=true&amp;course='.$_course['id'].'&amp;origin=user_course" title="'.get_lang('Tracking').'"  ><img border="0" alt="'.get_lang('Tracking').'" src="../img/statistics.gif" /></a>&nbsp;';
 	}
 
 	if(api_is_allowed_to_edit())
 	{
 
 		// edit
-		$result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;editMainUserInfo='.$user_id.'"><img border="0" alt="'.get_lang('Edit').'" src="../img/edit.gif" /></a>&nbsp;';
+		$result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;editMainUserInfo='.$user_id.'" title="'.get_lang('Edit').'" ><img border="0" alt="'.get_lang('Edit').'" src="../img/edit.gif" /></a>&nbsp;';
 		// unregister
-		 if( $user_id != $_user['user_id'])
+		if( $user_id != $_user['user_id'])
 		{
-			$result .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;"><img border="0" alt="'.get_lang("Unreg").'" src="../img/delete.gif"/></a>';
+			$result .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;"><img border="0" alt="'.get_lang("Unreg").'" src="../img/delete.gif"/></a>';
 		}
-
+		else
+		{			
+			$result .= '<img border="0" alt="'.get_lang("Unreg").'" src="../img/delete_na.gif"/>';
+		}
 	}
 	$result.="</div>";
 	return $result;
@@ -496,15 +509,18 @@ $table = new SortableTable('users', 'get_number_of_users', 'get_user_data',$defa
 $parameters['keyword'] = $_GET['keyword'];
 $table->set_additional_parameters($parameters);
 $header_nr = 0;
- if( api_is_allowed_to_edit())
+
+if( api_is_allowed_to_edit())
 {
 	$table->set_header($header_nr++, '', false);
-}
-$table->set_header($header_nr++, get_lang('OfficialCode'));
-$table->set_header($header_nr++, get_lang('LastName'));
+}			
+
 $table->set_header($header_nr++, get_lang('FirstName'));
+$table->set_header($header_nr++, get_lang('LastName'));
 $table->set_header($header_nr++, get_lang('Description'));
 $table->set_header($header_nr++, get_lang('GroupSingle'),false);
+$table->set_header($header_nr++, get_lang('OfficialCode'));
+
  if( api_is_allowed_to_edit())
 {
 	$table->set_header($header_nr++, get_lang('Tutor'));
@@ -521,16 +537,23 @@ $table->set_column_filter($header_nr-1,'modify_filter');
 }
 
 // Build search-form
+
 $form = new FormValidator('search_user', 'get','','',null,false);
 $renderer = & $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->add_textfield('keyword', '', false);
 $form->addElement('submit', 'submit', get_lang('SearchButton'));
-
 $form->display();
 echo '<br />';
 $table->display();
- if( get_setting('allow_user_headings') == 'true' && $is_courseAdmin && api_is_allowed_to_edit() && $origin != 'learnpath') // only course administrators see this line
+
+if ( !empty($_GET['keyword']) && !empty($_GET['submit']) )
+{
+	$keyword_name=Security::remove_XSS($_GET['keyword']);
+	echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';	
+} 
+
+if( get_setting('allow_user_headings') == 'true' && $is_courseAdmin && api_is_allowed_to_edit() && $origin != 'learnpath') // only course administrators see this line
 {
 	echo "<div align=\"right\">", "<form method=\"post\" action=\"userInfo.php\">", get_lang("CourseAdministratorOnly"), " : ", "<input type=\"submit\" name=\"viewDefList\" value=\"".get_lang("DefineHeadings")."\" />", "</form>", "</div>\n";
 }

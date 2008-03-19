@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
@@ -17,7 +17,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 	@author: Patrick Cool, patrick.cool@UGent.be
@@ -1460,7 +1460,7 @@ function display_agenda_items()
 	if ($month_bar != date("m",strtotime($myrow["start_date"])).date("Y",strtotime($myrow["start_date"])))
 		{
 		$month_bar = date("m",strtotime($myrow["start_date"])).date("Y",strtotime($myrow["start_date"]));
-			echo "\t<tr>\n\t\t<td class=\"agenda_month_divider\" colspan=\"2\" valign=\"top\">".
+			echo "\t<tr>\n\t\t<td class=\"agenda_month_divider\" colspan=\"3\" valign=\"top\">".
 			ucfirst(format_locale_date("%B %Y",strtotime($myrow["start_date"]))).
 			"</td>\n\t</tr>\n";
 		}
@@ -1468,7 +1468,7 @@ function display_agenda_items()
 /*--------------------------------------------------
  display: the icon, title, destinees of the item
   --------------------------------------------------*/
-	echo "\t<tr>\n";
+	echo '<tr>';
 
 	// highlight: if a date in the small calendar is clicked we highlight the relevant items
 	$db_date=(int)date("d",strtotime($myrow["start_date"])).date("n",strtotime($myrow["start_date"])).date("Y",strtotime($myrow["start_date"]));
@@ -1518,7 +1518,14 @@ function display_agenda_items()
 	$sent_to=sent_to(TOOL_CALENDAR_EVENT, $myrow["ref"]);
 	$sent_to_form=sent_to_form($sent_to);
 	echo $sent_to_form;
-	echo "</th>\n\t</tr>\n";
+	echo "</th>";
+
+	if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
+	{
+		echo '<th>'.get_lang('Modify');	
+		echo '</th></tr>';
+	}
+	
 
 /*--------------------------------------------------
  			display: the title
@@ -1536,54 +1543,24 @@ function display_agenda_items()
 		echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["end_date"])))."";
 	}
 	echo "</td>\n";
-	echo "\n\t</tr>\n";
-
-/*--------------------------------------------------
- 			display: the content
-  --------------------------------------------------*/
-	$content = $myrow['content'];
-	$content = make_clickable($content);
-	$content = text_filter($content);
-	echo "<tr class='row_even'>";
-	echo "<td colspan='2'>";
-	echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&type=course&id='.$myrow['id'].'&class=confidential" title="'.get_lang('ExportiCalConfidential').'"><img src="'.$export_icon_high.'" alt="'.get_lang('ExportiCalConfidential').'"/></a>';
-	echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&type=course&id='.$myrow['id'].'&class=private" title="'.get_lang('ExportiCalPrivate').'"><img src="'.$export_icon_low.'" alt="'.get_lang('ExportiCalPrivate').'"/></a>';
-	echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&type=course&id='.$myrow['id'].'&class=public" title="'.get_lang('ExportiCalPublic').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalPublic').'"/></a>';
-	echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('print.gif', get_lang('Print')).'</a>&nbsp;';
-	echo $content;
-	echo "</td></tr>";
-
-/*--------------------------------------------------
- 			display: the added resources
-  --------------------------------------------------*/
-	if (check_added_resources("Agenda", $myrow["id"]))
-		{
-		echo "<tr><td colspan='2'>";
-		echo "<i>".get_lang("AddedResources")."</i><br/>";
-		if ($myrow['visibility']==0)
-		{
-			$addedresource_style="invisible";
-		}
-		display_added_resources("Agenda", $myrow["id"], $addedresource_style);
-		echo "</td></tr>";
-		}
-
+	
 /*--------------------------------------------------
 	display: edit delete button (course admin only)
   --------------------------------------------------*/
 
-	$event_list.=$myrow['id'].',';
-
-	echo "<tr class='row_odd'><td>";
-			if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
+	
+	if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 	{
+		echo '<td align="center">';
 		// edit
-		echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=edit&amp;id=".$myrow['id']."\">",
-				"<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang("ModifyCalendarItem")."\" /></a>",
-				"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">",
-				"<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang("Delete")."\"/></a>";
-		echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=announce&amp;id=".$myrow['id']."\">".
-				"<img src=\"../img/announce_add.gif\" border=\"0\" alt=\"".get_lang("AddAnnouncement")."\"/></a>";
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$_GET['origin'].'&amp;action=edit&amp;id='.$myrow['id'].'" title="'.get_lang("ModifyCalendarItem").'">';
+		echo "<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang("ModifyCalendarItem")."\" /></a>";
+		
+		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\">";
+		echo "<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang("Delete")."\"/></a>";
+		 	 
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$_GET['origin'].'&amp;action=announce&amp;id='.$myrow['id'].'" title="'.get_lang("AddAnnouncement").'">';				
+		echo "<img src=\"../img/announce_add.gif\" border=\"0\" alt=\"".get_lang("AddAnnouncement")."\"/></a>";
 		if ($myrow['visibility']==1)
 		{
 			$image_visibility="visible";
@@ -1592,17 +1569,66 @@ function display_agenda_items()
 		{
 			$image_visibility="invisible";
 		}
-		echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=showhide&amp;id=".$myrow['id']."\">",
+		echo 	'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$_GET['origin'].'&amp;action=showhide&amp;id='.$myrow['id'].'" title="'.get_lang("langVisible").'">',
 				"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" alt=\"".get_lang("Visible")."\" /></a>";
+		echo '</td>';	
 	}
-	echo "</td>";
+	echo '</tr>';
+
+echo '<tr class="row_even">';
+	
+	if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
+	{
+		$td_colspan= '<td colspan="3">';
+	}
+	else
+	{
+		$td_colspan= '<td colspan="2">';
+	}
+	
+	
+/*--------------------------------------------------
+ 			display: the content
+  --------------------------------------------------*/
+	$content = $myrow['content'];
+	$content = make_clickable($content);
+	$content = text_filter($content);
+	echo "<tr class='row_even'>";
+	echo $td_colspan;	
+	echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&type=course&id='.$myrow['id'].'&class=confidential" title="'.get_lang('ExportiCalConfidential').'"><img src="'.$export_icon_high.'" alt="'.get_lang('ExportiCalConfidential').'"/></a>';
+	echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&type=course&id='.$myrow['id'].'&class=private" title="'.get_lang('ExportiCalPrivate').'"><img src="'.$export_icon_low.'" alt="'.get_lang('ExportiCalPrivate').'"/></a>';
+	echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&type=course&id='.$myrow['id'].'&class=public" title="'.get_lang('ExportiCalPublic').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalPublic').'"/></a>';
+	echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('print.gif', get_lang('Print')).'</a>&nbsp;';
+	echo $content;
+	echo '</td></tr>';
+
+/*--------------------------------------------------
+ 			display: the added resources
+  --------------------------------------------------*/
+	if (check_added_resources("Agenda", $myrow["id"]))
+	{
+		
+		echo '<tr>';
+		echo $td_colspan;		
+		echo "<i>".get_lang("AddedResources")."</i><br/>";
+		if ($myrow['visibility']==0)
+		{
+			$addedresource_style="invisible";
+		}
+		display_added_resources("Agenda", $myrow["id"], $addedresource_style);
+		echo "</td></tr>";
+	}
+
+
+	$event_list.=$myrow['id'].',';
 
 	$counter++;
 
 /*--------------------------------------------------
 	display: jump-to-top icon
   --------------------------------------------------*/
-	echo "<td><a href=\"#top\"><img src=\"../img/top.gif\" border=\"0\" alt=\"to top\" align=\"right\" /></a></td></tr>";
+	echo $td_colspan;
+	echo "<a href=\"#top\"><img src=\"../img/top.gif\" border=\"0\" alt=\"to top\" align=\"right\" /></a></td></tr>";
 	echo "</table><br /><br />";
 } // end while ($myrow=mysql_fetch_array($result))
 

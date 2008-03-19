@@ -343,7 +343,7 @@ foreach ($group_cats as $index => $category)
 		{
 			$paging_options = array ();
 		}
-		$table = new SortableTableFromArray($group_data, 0);
+		$table = new SortableTableFromArray($group_data, 1);
 		$table->set_additional_parameters(array('category'=>$_GET['category']));
 		$column = 0;
 		if (api_is_allowed_to_edit() and count($group_list) > 1)

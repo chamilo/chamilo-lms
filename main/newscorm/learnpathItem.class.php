@@ -940,7 +940,8 @@ class learnpathItem{
     function get_suspend_data()
     {
     	if($this->debug>0){error_log('New LP - In learnpathItem::get_suspend_data()',0);}
-    	if(!empty($this->current_data)){return $this->current_data;}else{return '';}
+    	//TODO : improve cleaning of breaklines ... it works but is it really a beautiful way to do it ?
+    	if(!empty($this->current_data)){return str_replace(array("\r","\n"),array('\r','\n'),$this->current_data);}else{return '';}
     }
     /**
      * Gets the total time spent on this item view so far

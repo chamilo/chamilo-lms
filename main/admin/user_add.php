@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 14654 2008-03-18 21:18:10Z yannoo $
+<?php // $Id: user_add.php 14672 2008-03-20 11:14:01Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -154,9 +154,12 @@ $form->addElement('html','<div id="drh_list" style="display:'.$display.';">');
 $drh_select = $form->addElement('select','hr_dept_id',get_lang('Drh'),array(),'id="drh_select"');
 $drh_list = UserManager :: get_user_list(array('status'=>DRH),array('lastname','firstname'));
 $drh_select->addOption('---',0);
-foreach($drh_list as $drh)
+if(is_array($drh_list))
 {
-	$drh_select->addOption($drh['lastname'].' '.$drh['firstname'],$drh['user_id']);
+	foreach($drh_list as $drh)
+	{
+		$drh_select->addOption($drh['lastname'].' '.$drh['firstname'],$drh['user_id']);
+	}
 }
 $form->addElement('html', '</div>');
 

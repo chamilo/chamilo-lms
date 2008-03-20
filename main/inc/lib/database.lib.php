@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 14543 2008-03-09 17:32:54Z yannoo $
+<?php // $Id: database.lib.php 14674 2008-03-20 12:24:34Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -43,11 +43,14 @@ define('TABLE_MAIN_SHARED_SURVEY_QUESTION', 'shared_survey_question');
 define('TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION', 'shared_survey_question_option');
 define('TABLE_MAIN_TEMPLATES', 'templates');
 define('TABLE_MAIN_OPENID_ASSOCIATION','openid_association');
-define('TABLE_MAIN_GRADEBOOK_CATEGORY', 'gradebook_category');
-define('TABLE_MAIN_GRADEBOOK_EVALUATION', 'gradebook_evaluation');
-define('TABLE_MAIN_GRADEBOOK_RESULT', 'gradebook_result');
-define('TABLE_MAIN_GRADEBOOK_LINK', 'gradebook_link');
-define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY', 'gradebook_score_display');
+define('TABLE_MAIN_GRADEBOOK_CATEGORY', 	'gradebook_category');
+define('TABLE_MAIN_GRADEBOOK_EVALUATION', 	'gradebook_evaluation');
+define('TABLE_MAIN_GRADEBOOK_RESULT', 		'gradebook_result');
+define('TABLE_MAIN_GRADEBOOK_LINK', 		'gradebook_link');
+define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY','gradebook_score_display');
+define('TABLE_MAIN_USER_FIELD',			'user_field');
+define('TABLE_MAIN_USER_FIELD_OPTIONS',	'user_field_options');
+define('TABLE_MAIN_USER_FIELD_VALUES',	'user_field_values');
 
 //statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');

@@ -30,6 +30,13 @@
 *	@package dokeos.library
 ==============================================================================
 */
+// define constants for user extra field types
+define('USER_FIELD_TYPE_TEXT',1);
+define('USER_FIELD_TYPE_TEXTAREA',2);
+define('USER_FIELD_TYPE_RADIO',3);
+define('USER_FIELD_TYPE_SELECT',4);
+define('USER_FIELD_TYPE_SELECT_MULTIPLE',5);
+
 class UserManager
 {
 	/**
@@ -37,27 +44,29 @@ class UserManager
 	  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,
 	  * 		Roan Embrechts <roan_embrechts@yahoo.com>
 	  *
-	  * @param string $firstName
-	  *        string $lastName
-	  *        int    $status
-	  *        string $email
-	  *        string $loginName
-	  *        string $password
-	  *        string $official_code	(optional)
-	  *        string $phone		(optional)
-	  *        string $picture_uri	(optional)
-	  *        string $auth_source	(optional)
-	  *
+	  * @param	string	Firstname
+	  * @param	string	Lastname
+	  * @param	int   	Status (1 for course tutor, 5 for student, 6 for anonymous)
+	  * @param	string	e-mail address
+	  * @param	string	Login
+	  * @param	string	Password
+	  * @param	string	Any official code (optional)
+	  * @param	int	  	User language	(optional)
+	  * @param	string	Phone number	(optional)
+	  * @param	string	Picture URI		(optional)
+	  * @param	string	Authentication source	(optional, defaults to 'platform', dependind on constant)
+	  * @param	string	Account expiration date (optional, defaults to '0000-00-00 00:00:00')
+	  * @param	int		Whether the account is enabled or disabled by default
+ 	  * @param	int		The user ID of the person who registered this user (optional, defaults to null)
+ 	  * @param	int		The department of HR in which the user is registered (optional, defaults to 0)
 	  * @return int     new user id - if the new user creation succeeds
 	  *         boolean false otherwise
 	  *
 	  * @desc The function tries to retrieve $_user['user_id'] from the global space.
 	  * if it exists, $_user['user_id'] is the creator id       If       a problem arises,
 	  * it stores the error message in global $api_failureList
-	  *
-	  * @todo Add the user language to the parameters
 	  */
-	function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language='', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id=0)
+	function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language='', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id=0, $extra=null)
 	{
 		global $_user, $userPasswordCrypted;
 		
@@ -100,17 +109,27 @@ class UserManager
 				                    expiration_date = '".Database::escape_string($expiration_date)."',
 									hr_dept_id = '".Database::escape_string($hr_dept_id)."',
 									active = '".Database::escape_string($active)."'";
+		error_log($sql);
 		$result = api_sql_query($sql);
 		if ($result)
 		{
 			//echo "id returned";
-			return Database::get_last_insert_id();
+			$return=Database::get_last_insert_id();
 		}
 		else
 		{
 			//echo "false - failed" ;
-			return false;
+			$return=false;
 		}
+		if(is_array($extra) AND count($extra)>0)
+		{
+			$res = true;
+			foreach($extra as $fname => $fvalue)
+			{
+				$res = $res && UserManager::update_extra_field($return,$fname,$fvalue);
+			}
+		}
+		return $return;
 	}
 
 	/**
@@ -212,6 +231,11 @@ class UserManager
 		$gradebook_results_table = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql = 'DELETE FROM '.$gradebook_results_table.' WHERE user_id = '.$user_id;
 		api_sql_query($sql, __FILE__, __LINE__);
+
+		$user = Database::fetch_array($res);
+		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+		$sqlv = "DELETE FROM $t_ufv WHERE user_id = $user_id";
+		$resv = api_sql_query($sqlv,__FILE__,__LINE__);
 		
 		return true;
 	}
@@ -243,10 +267,12 @@ class UserManager
 	 * @param string $official_code
 	 * @param string $phone
 	 * @param string $picture_uri
-	 * @param int $creator_id
+	 * @param int The user ID of the person who registered this user (optional, defaults to null)
+	 * @param int The department of HR in which the user is registered (optional, defaults to 0)
+	 * @param	array	A series of additional fields to add to this user as extra fields (optional, defaults to null)
 	 * @return boolean true if the user information was updated
 	 */
-	function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id= null, $hr_dept_id=0)
+	function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id= null, $hr_dept_id=0, $extra=null)
 	{
 		global $userPasswordCrypted;
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -277,7 +303,17 @@ class UserManager
 			$sql .= ", creator_id='".Database::escape_string($creator_id)."'";
 		}
 		$sql .=	" WHERE user_id='$user_id'";
-		return api_sql_query($sql,__FILE__,__LINE__);
+		$return = api_sql_query($sql,__FILE__,__LINE__);
+		if(is_array($extra) and count($extra)>0)
+		{
+			$res = true;
+			foreach($extra as $fname => $fvalue)
+			{
+				$res = $res && UserManager::update_extra_field($user_id,$fname,$fvalue);
+			}
+		}
+
+		return $return;
 	}
 
 	/**
@@ -327,7 +363,7 @@ class UserManager
 	
 	/**
 	 * Get user information
-	 * @param string $username The username
+	 * @param 	string 	The username
 	 * @return array All user information as an associative array
 	 */
 	function get_user_info($username)
@@ -348,10 +384,11 @@ class UserManager
 	
 	/**
 	 * Get user information
-	 * @param string $id The id
-	 * @return array All user information as an associative array
+	 * @param	string	The id
+	 * @param	boolean	Whether to return the user's extra fields (defaults to false)
+	 * @return	array 	All user information as an associative array
 	 */
-	function get_user_info_by_id($user_id)
+	function get_user_info_by_id($user_id,$user_fields=false)
 	{
 		$user_id = intval($user_id);
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
@@ -360,6 +397,29 @@ class UserManager
 		if(Database::num_rows($res)>0)
 		{
 			$user = Database::fetch_array($res);
+			$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+			$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+			$sqlf = "SELECT * FROM $t_uf ORDER BY field_order";
+			$resf = api_sql_query($sqlf,__FILE__,__LINE__);
+			if(Database::num_rows($resf)>0)
+			{
+				while($rowf = Database::fetch_array($resf))
+				{
+					$sqlv = "SELECT * FROM $t_ufv WHERE field_id = ".$rowf['id']." AND user_id = ".$user['user_id']." ORDER BY id DESC";
+					$resv = api_sql_query($sqlv,__FILE__,__LINE__);
+					if(Database::num_rows($resv)>0)
+					{
+						//There should be only one value for a field and a user
+						$rowv = Database::fetch_array($resv);
+						$user['extra'][$rowf['field_variable']] = $rowv['field_value'];
+					}
+					else
+					{
+						$user['extra'][$rowf['field_variable']] = '';
+					}
+				}
+			}
+			
 		}
 		else
 		{
@@ -619,6 +679,282 @@ class UserManager
 	{
 		$production_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
 		unlink($production_path['dir'].$user_id.'/'.$production);
+	}
+	/**
+	 * Update an extra field
+	 * @param	integer	Field ID
+	 * @param	array	Database columns and their new value
+	 * @return	boolean	true if field updated, false otherwise
+	 */
+	function update_extra_field($fid,$columns)
+	{
+		//TODO check that values added are values proposed for enumerated field types
+		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+		$fid = Database::escape_string($fid);
+		$sqluf = "UPDATE $t_uf SET ";
+		$known_fields = array('id','field_variable','field_type','field_display_text','field_default_value','field_order','field_visible','field_changeable');
+		$safecolumns = array(); 
+		foreach($columns as $index => $newval)
+		{
+			if(in_array($index,$known_fields))
+			{			
+				$safecolumns[$index] = Database::escape_string($newval);
+				$sqluf .= $index." = '".$safecolumns[$index]."', ";
+			}
+		}
+		$time = time();
+		$sqluf .= " tms = FROM_UNIXTIME($time) WHERE id='$fid'";
+		$resuf = api_sql_query($sqluf,__FILE__,__LINE__);
+		return $resuf;
+	}
+	/**
+	 * Update an extra field value for a given user
+	 * @param	integer	User ID
+	 * @param	string	Field variable name
+	 * @param	string	Field value
+	 * @return	boolean	true if field updated, false otherwise
+	 */
+	function update_extra_field_value($user_id,$fname,$fvalue='')
+	{
+		//TODO check that values added are values proposed for enumerated field types
+		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+		$t_ufo = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
+		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+		$fname = Database::escape_string($fname);
+		$fvalue = Database::escape_string($fvalue);
+		$sqluf = "SELECT * FROM $t_uf WHERE field_variable='$fname'";
+		$resuf = api_sql_query($sqluf,__FILE__,__LINE__);
+		if(Database::num_rows($resuf)==1)
+		{ //ok, the field exists
+			//	Check if enumerated field, if the option is available 
+			$rowuf = Database::fetch_array($resuf);
+			switch($rowuf['field_type'])
+			{
+				case 3:
+				case 4:
+				case 5:
+					$sqluo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowuf['id'];
+					$resuo = api_sql_query($sqluo,__FILE__,__LINE__);
+					if(Database::num_rows($resuo)>0)
+					{
+						$check = false;
+						while($rowuo = Database::fetch_array($resuo))
+						{
+							if($rowuo['field_value'] == $fvalue)
+							{
+								$check = true;
+								break;
+							}
+						}
+						if($check == false)
+						{
+							return false; //option value not found
+						}
+					}
+					else
+					{
+						return false; //enumerated type but no option found
+					}
+					break;
+				case 1:
+				case 2:
+				default:
+					break;
+			}
+			$tms = time();
+			$sqlufv = "SELECT * FROM $t_ufv WHERE user_id = $user_id AND field_id = ".$rowuf['id']." ORDER BY id";
+			$resufv = api_sql_query($sqlufv,__FILE__,__LINE__);
+			$n = Database::num_rows($resufv);
+			if($n>1)
+			{
+				//problem, we already have to values for this field and user combination - keep last one
+				while($rowufv = Database::fetch_array($resufv))
+				{
+					if($n > 1)
+					{
+						$sqld = "DELETE FROM $t_ufv WHERE id = ".$rowufv['id'];
+						$resd = api_sql_query($sqld,__FILE__,__LINE__);
+						$n--;
+					}
+					$rowufv = Database::fetch_array($resufv);
+					$sqlu = "UPDATE $t_ufv SET field_value = '$fvalue', tms = $tms WHERE id = ".$rowufv['id'];
+					$resu = api_sql_query($sqlu,__FILE__,__LINE__);
+					return($resu?true:false);					
+				}		
+			}
+			elseif($n==1)
+			{
+				//we need to update the current record
+				$rowufv = Database::fetch_array($resufv);
+				$sqlu = "UPDATE $t_ufv SET field_value = '$fvalue', tms = $tms WHERE id = ".$rowufv['id'];
+				error_log('UM::update_extra_field_value: '.$sqlu);
+				$resu = api_sql_query($sqlu,__FILE__,__LINE__);
+				return($resu?true:false);
+			}
+			else
+			{
+				$sqli = "INSERT INTO $t_ufv (user_id,field_id,field_value,tms) " .
+					"VALUES ($user_id,".$rowuf['id'].",'$fvalue',$tms)";
+				error_log('UM::update_extra_field_value: '.$sqli);
+				$resi = api_sql_query($sqli,__FILE__,__LINE__);
+				return($resi?true:false);
+			}
+		}
+		else
+		{
+			return false; //field not found
+		}
+	}
+	/**
+	 * Get an array of extra fieds with field details (type, default value and options)
+	 * @param	integer	Offset (from which row)
+	 * @param	integer	Number of items
+	 * @param	integer	
+	 * @return	array	Extra fields details (e.g. $list[2]['type'], $list[4]['options'][2]['title']
+	 */
+	function get_extra_fields($from=0, $number_of_items=20, $column=5, $direction='ASC')
+	{
+		$fields = array();
+		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
+		$t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
+		$columns = array('id','field_variable','field_type','field_display_text','field_default_value','field_order','tms');
+		$sort_direction = '';
+		if(in_array(strtoupper($direction),array('ASC','DESC')))
+		{
+			$sort_direction = strtoupper($direction);
+		}
+		$sqlf = "SELECT * FROM $t_uf ORDER BY ".$columns[$column]." $sort_direction LIMIT ".Database::escape_string($from).','.Database::escape_string($number_of_items);
+		$resf = api_sql_query($sqlf,__FILE__,__LINE__);
+		if(Database::num_rows($resf)>0)
+		{
+			while($rowf = Database::fetch_array($resf))
+			{
+				$fields[$rowf['id']] = array(
+					0=>$rowf['id'],
+					1=>$rowf['field_variable'],
+					2=>$rowf['field_type'],
+					3=>(empty($rowf['field_display_text'])?'':get_lang($rowf['field_display_text'])),
+					4=>$rowf['field_default_value'],
+					5=>$rowf['field_order'],
+					6=>$rowf['field_visible'],
+					7=>$rowf['field_changeable'],
+					8=>array()
+				);
+				$sqlo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowf['id'];
+				$reso = api_sql_query($sqlo,__FILE__,__LINE__);
+				if(Database::num_rows($reso)>0)
+				{
+					while($rowo = Database::fetch_array($reso))
+					{
+						$fields[$rowf['id']][8][$rowo['id']] = array(
+							0=>$rowo['id'],
+							1=>$rowo['option_value'],
+							2=>$rowo['option_display_text'],
+							3=>$rowo['option_order']
+						);
+					}	
+				}
+			}
+		}
+		return $fields;
+	}
+	/**
+	 * Get the number of extra fields currently recorded
+	 * @return	integer	Number of fields
+	 */
+	function get_number_of_extra_fields()
+	{
+		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
+		$sqlf = "SELECT * FROM $t_uf ORDER BY field_order";
+		$resf = api_sql_query($sqlf,__FILE__,__LINE__);
+		return Database::num_rows($resf);
+	}
+	/**
+	  * Creates a new extra field
+	  * @param	string	Field's internal variable name
+	  * @param	int		Field's type
+	  * @param	string	Field's language var name
+	  * @param	string	Field's default value
+	  * @return int     new user id - if the new user creation succeeds, false otherwise
+	  */
+	function create_extra_field($fieldvarname, $fieldtype, $fieldtitle, $fielddefault)
+	{		
+		// database table definition
+		$table_field 	= Database::get_main_table(TABLE_MAIN_USER_FIELD);
+		
+		// First check wether the login already exists
+		if (! UserManager::is_extra_field_available($fieldvarname))
+			return api_set_failure('login-pass already taken');
+		$sql = "SELECT MAX(field_order) FROM $table_field";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$order = 0;
+		if(Database::num_rows($res)>0)
+		{
+			$row = Database::fetch_array($res);
+			$order = $row[0]+1;
+		}
+		$time = time();
+		$sql = "INSERT INTO $table_field
+					                SET field_type = '".Database::escape_string($fieldtype)."',
+					                field_variable = '".Database::escape_string($fieldvarname)."',
+					                field_display_text = '".Database::escape_string($fieldtitle)."',
+					                field_default_value = '".Database::escape_string($fielddefault)."',
+					                field_order = '$order',
+					                tms = FROM_UNIXTIME($time)";
+		$result = api_sql_query($sql);
+		if ($result)
+		{
+			//echo "id returned";
+			$return=Database::get_last_insert_id();
+		}
+		else
+		{
+			//echo "false - failed" ;
+			$return=false;
+		}
+		return $return;
+	}
+	/**
+	 * Check if a field is available
+	 * @param	string	the wanted username
+	 * @return	boolean	true if the wanted username is available
+	 */
+	function is_extra_field_available($fieldname)
+	{
+		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
+		$sql = "SELECT * FROM $t_uf WHERE field_variable = '".Database::escape_string($fieldname)."'";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		return Database::num_rows($res) <= 0;
+	}
+	/**
+	 * Gets user extra fields data
+	 * @param	integer	User ID
+	 * @param	boolean	Whether to prefix the fields indexes with "extra_" (might be used by formvalidator)
+	 * @return	array	Array of fields => value for the given user
+	 */
+	function get_extra_user_data($user_id, $prefix=false)
+	{
+		$extra_data = array();
+		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+		$user_id = Database::escape_string($user_id);
+		$sql = "SELECT f.id as fid, f.field_variable as fvar, fv.field_value as fval FROM $t_uf f, $t_ufv fv WHERE fv.user_id = $user_id AND fv.field_id = f.id ORDER BY f.field_order";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		if(Database::num_rows($res)>0)
+		{
+			while($row = Database::fetch_array($res))
+			{
+				if($prefix)
+				{
+					$extra_data['extra_'.$row['fvar']] = $row['fval']; 
+				}
+				else
+				{
+					$extra_data[$row['fvar']] = $row['fval']; 
+				}
+			}
+		}
+		return $extra_data;
 	}
 }
 ?>

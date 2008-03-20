@@ -66,6 +66,9 @@ DELETE FROM settings_current WHERE variable='service_visio' AND subkey='visio_is
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_course_theme',NULL,'radio','Course','true','AllowCourseThemeTitle','AllowCourseThemeComment',NULL,NULL);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_course_theme', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_course_theme', 'false', 'No');
+CREATE TABLE user_field (id	INT NOT NULL auto_increment,field_type int NOT NULL DEFAULT 1,field_variable	varchar(64) NOT NULL,field_display_text	varchar(64),field_default_value text,field_order int,field_visible tinyint default 0,field_changeable tinyint default 0,tms	TIMESTAMP,PRIMARY KEY(id));
+CREATE TABLE user_field_options (id	int NOT NULL auto_increment,field_id int	NOT NULL,option_value	text,option_display_text varchar(64),option_order int,tms	TIMESTAMP,PRIMARY KEY (id));
+CREATE TABLE user_field_values(id	int	NOT NULL auto_increment,user_id	int	NOT NULL,field_id int NOT NULL,field_value	text,tms TIMESTAMP,PRIMARY KEY(id));
 
 -- xxSTATSxx
 ALTER TABLE track_e_downloads ADD INDEX (down_user_id);

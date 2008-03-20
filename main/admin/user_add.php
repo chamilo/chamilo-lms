@@ -1,9 +1,9 @@
-<?php // $Id: user_add.php 14672 2008-03-20 11:14:01Z yannoo $
+<?php // $Id: user_add.php 14674 2008-03-20 12:24:34Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -272,12 +272,14 @@ if( $form->validate())
 		if(isset($user['submit_plus']))
 		{
 			//we want to add more. Prepare report message and redirect to the same page (to clean the form)
-			header('Location: user_add.php?message='.urlencode(get_lang('UserAdded')));
+			$tok = Security::get_token();
+			header('Location: user_add.php?message='.urlencode(get_lang('UserAdded').'&sec_token='.$tok));
 			exit ();
 		}
 		else
 		{
-			header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserAdded')));
+			$tok = Security::get_token();
+			header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserAdded').'&sec_token='.$tok));
 			exit ();
 		}
 	}

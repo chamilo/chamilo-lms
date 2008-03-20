@@ -1,4 +1,4 @@
-<?php // $Id: index.php 14281 2008-02-11 15:52:36Z yannoo $
+<?php // $Id: index.php 14674 2008-03-20 12:24:34Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -94,6 +94,7 @@ $keyword_url = Security::remove_XSS($_GET['keyword']);
 <li><a href="user_add.php"><?php echo get_lang('AddUsers') ?></a></li>
 <li><a href="user_export.php"><?php echo get_lang('ExportUserListXMLCSV') ?></a></li>
 <li><a href="user_import.php"><?php echo get_lang('ImportUserListXMLCSV') ?></a></li>
+<li><a href="user_fields.php"><?php echo get_lang('ManageUserFields'); ?></a></li>
 </ul>
 </div>
 

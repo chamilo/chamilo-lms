@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 14667 2008-03-19 15:08:54Z juliomontoya $
+// $Id: profile.php 14674 2008-03-20 12:24:34Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -271,6 +271,23 @@ if (is_profile_editable() && api_get_setting('profile', 'password') == 'true')
 		$form->addRule('password1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
 }
 
+// EXTRA FIELDS
+$extra = UserManager::get_extra_fields();
+$ftypeco = array(); //make a correspondance array for the form types 
+foreach($extra as $id => $field_details)
+{
+	if($field_details[6] == 0)
+	{
+		continue;
+	}
+	//todo add field type management (rather than just "text")
+	$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
+	if ($field_details[7] == 0)
+		$form->freeze('extra_'.$field_details[1]);
+	$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+	$form->applyFilter('extra_'.$field_details[1], 'trim');
+}
+
 //	SUBMIT
 if (is_profile_editable())
 {
@@ -284,6 +301,8 @@ else
 /*
  * Set initial values for all fields.
  */
+$extra_data = UserManager::get_extra_user_data(api_get_user_id(),true);
+$user_data = array_merge($user_data,$extra_data);
 $form->setDefaults($user_data);
 
 /*
@@ -537,12 +556,20 @@ elseif ($form->validate())
 	{	//ensure there is at least a http:// scheme in the URI provided
 		$user_data['openid'] = 'http://'.$user_data['openid'];
 	}
+	$extras = array();
 	// build SQL query
 	$sql = "UPDATE $table_user SET";
 
 	foreach($user_data as $key => $value)
 	{
-		$sql .= " $key = '".addslashes($value)."',";
+		if(substr($key,0,6)=='extra_') //an extra field
+		{
+			$extras[substr($key,6)] = $value;
+		}
+		else
+		{
+			$sql .= " $key = '".addslashes($value)."',";
+		}
 	}
 
 	if (isset($password))
@@ -562,9 +589,15 @@ elseif ($form->validate())
 	}
 
 	$sql .= " WHERE user_id  = '".$_user['user_id']."'";
-
+		
 	api_sql_query($sql, __FILE__, __LINE__);
 
+	//update the extra fields
+	foreach($extras as $key=>$value)
+	{
+		$myres = UserManager::update_extra_field_value($_user['user_id'],$key,$value);
+	}
+	
 	// re-init the system to take new settings into account
 	$uidReset = true;
 	include (api_get_path(INCLUDE_PATH).'local.inc.php');

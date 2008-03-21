@@ -325,22 +325,58 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	
 	foreach($dirs_list as $dir)
 	{
+		
 		$mydir = $my_sub_dir.$dir;
+		$display_edit_form = false;
+		
+		if(isset($_GET['edit_dir']) && $_GET['edit_dir']==$mydir)
+		{
+			$display_edit_form = true;
+			$form_folder = new FormValidator('edit_dir', 'post', api_get_self().'?curdirpath='.$my_sub_dir.'&edit_dir='.$mydir);
+			$group_name[] = FormValidator :: createElement('text','dir_name');
+			$group_name[] = FormValidator :: createElement('submit','submit_edit_dir',get_lang('Ok'));
+			$form_folder -> addGroup($group_name,'my_group');
+			$form_folder -> addGroupRule('my_group',get_lang('ThisFieldIsRequired'),'required');
+			$form_folder -> setDefaults(array('my_group[dir_name]'=>$dir));			
+			if($form_folder -> validate())
+			{
+				$values = $form_folder -> exportValues();
+				$values = $values['my_group'];
+				update_dir_name($mydir,$values['dir_name']);
+				$mydir = $my_sub_dir.$values['dir_name'];
+				$dir = $values['dir_name'];
+				$display_edit_form = false;
+			}
+		}
+		
 		$action = '';
 		//display info depending on the permissions
 		$row = array();
 		$class = '';
 		$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));
+
+		if($display_edit_form)
+		{
+			$row[] = $form_folder->toHtml();
+		}
+		else
+		{
+			$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().
+				'&curdirpath='.$mydir.'"'.$class.'><img src="../img/folder_document.gif" alt="dir" height="20" width="20" align="absbottom"/>&nbsp;'.$dir.'</a>';
+		}
+		$row[] = '';
+
 				
 		$row[] = '<img src="../img/folder_document.gif" border="0" hspace="5" align="middle" />';
 		$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>';
+
 		$row[] = '';
 		$row[] = '';
 		
 		if( $is_allowed_to_edit)
 		{
-			//$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
-			//	'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
+			$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
+				'&curdirpath='.$my_sub_dir.'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
 			$action .= '<img src="'.api_get_path(WEB_IMG_PATH).'edit_na.gif" alt="'.get_lang('Modify').'">';			
 			$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  ><img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('DirDelete').'"></a>';
 			$row[] = $action;
@@ -667,6 +703,38 @@ function update_work_url($id,$new_path){
 		$sql2 = "UPDATE $table SET url = '$new_url' WHERE id=$id";
 		$res2 = api_sql_query($sql2);
 		return $res2;
+	}
+}
+
+/**
+ * Update the url of a dir in the student_publication table
+ * @param	string old path
+ * @param	string new path
+ */
+function update_dir_name($path, $new_name)
+{
+	global $base_work_dir; 
+	
+	include_once(api_get_path(LIBRARY_PATH) . "/fileManage.lib.php");
+	include_once(api_get_path(LIBRARY_PATH) . "/fileUpload.lib.php");
+	
+	$path_to_dir = dirname($path);
+	if($path_to_dir=='.')
+		$path_to_dir = '';
+	else
+		$path_to_dir .= '/';
+	
+	my_rename($base_work_dir.'/'.$path,$new_name);
+	
+	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+	$sql = 'SELECT id, url FROM '.$table.' WHERE url LIKE "work/'.$path.'/%"';
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	while($work = Database :: fetch_array($rs))
+	{
+		$work_name = basename($work['url']);
+		//echo $work_name;
+		$sql = 'UPDATE '.$table.' SET url="work/'.$path_to_dir.$new_name.'/'.$work_name.'" WHERE id= '.$work['id'];
+		api_sql_query($sql, __FILE__, __LINE__);		
 	}
 }
 ?>

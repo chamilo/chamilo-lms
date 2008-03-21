@@ -26,7 +26,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 14651 2008-03-18 20:15:04Z juliomontoya $
+*  	@version $Id: work.php 14679 2008-03-21 14:15:28Z elixir_inter $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -125,6 +125,7 @@ require_once(api_get_path(LIBRARY_PATH) . "course.lib.php");
 require_once(api_get_path(LIBRARY_PATH) . "debug.lib.inc.php");
 require_once(api_get_path(LIBRARY_PATH) . "events.lib.inc.php");
 require_once(api_get_path(LIBRARY_PATH) . "security.lib.php");
+require_once(api_get_path(LIBRARY_PATH) . "formvalidator/FormValidator.class.php");
 require_once('work.lib.php');
 
 /*

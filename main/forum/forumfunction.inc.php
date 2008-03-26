@@ -406,10 +406,12 @@ function store_forumcategory($values)
 	$result=api_sql_query($sql);
 	$row=mysql_fetch_array($result);
 	$new_max=$row['sort_max']+1;
+	
+	$clean_cat_title=Security::remove_XSS(mysql_real_escape_string(htmlspecialchars($values['forum_category_title'])));
 
 	if (isset($values['forum_category_id']))
 	{ // storing an edit
-		$sql="UPDATE ".$table_categories." SET cat_title='".mysql_real_escape_string($values['forum_category_title'])."', cat_comment='".mysql_real_escape_string($values['forum_category_comment'])."' WHERE cat_id='".mysql_real_escape_string($values['forum_category_id'])."'";
+		$sql="UPDATE ".$table_categories." SET cat_title='".$clean_cat_title."', cat_comment='".mysql_real_escape_string($values['forum_category_comment'])."' WHERE cat_id='".mysql_real_escape_string($values['forum_category_id'])."'";
 		api_sql_query($sql);
 		$last_id=mysql_insert_id();
 		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $values['forum_category_id'],"ForumCategoryAdded", api_get_user_id());
@@ -417,7 +419,7 @@ function store_forumcategory($values)
 	}
 	else
 	{
-		$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order) VALUES ('".mysql_real_escape_string($values['forum_category_title'])."','".mysql_real_escape_string($values['forum_category_comment'])."','".mysql_real_escape_string($new_max)."')";
+		$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order) VALUES ('".$clean_cat_title."','".mysql_real_escape_string($values['forum_category_comment'])."','".mysql_real_escape_string($new_max)."')";
 		api_sql_query($sql);
 		$last_id=mysql_insert_id();
 		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $last_id,"ForumCategoryAdded", api_get_user_id());
@@ -446,14 +448,17 @@ function store_forum($values)
 	$sql="SELECT MAX(forum_order) as sort_max FROM ".$table_forums." WHERE forum_category=".mysql_real_escape_string($values['forum_category']);
 	$result=api_sql_query($sql);
 	$row=mysql_fetch_array($result);
-	$new_max=$row['sort_max']+1;
-	
+	$new_max=$row['sort_max']+1;	
 	$session_id = isset($_SESSION['id_session']) ? $_SESSION['id_session'] : 0;
-
+	
+	$clean_title=Security::remove_XSS(mysql_real_escape_string(htmlspecialchars($values['forum_title'])));
+	
 	if (isset($values['forum_id']))
-	{ // storing an edit
+	{	
+	
+	// storing an edit
 		$sql="UPDATE ".$table_forums." SET
-					forum_title='".mysql_real_escape_string($values['forum_title'])."',
+					forum_title='".$clean_title."',
 					forum_comment='".mysql_real_escape_string($values['forum_comment'])."',
 					forum_category='".mysql_real_escape_string($values['forum_category'])."',
 					allow_anonymous='".mysql_real_escape_string($values['allow_anonymous_group']['allow_anonymous'])."',
@@ -472,7 +477,7 @@ function store_forum($values)
 	{
 		$sql="INSERT INTO ".$table_forums."
 					(forum_title, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order, session_id)
-					VALUES ('".mysql_real_escape_string($values['forum_title'])."',
+					VALUES ('".$clean_title."',
 						'".mysql_real_escape_string($values['forum_comment'])."',
 						'".mysql_real_escape_string($values['forum_category'])."',
 						'".mysql_real_escape_string($values['allow_anonymous_group']['allow_anonymous'])."',
@@ -489,9 +494,7 @@ function store_forum($values)
 		$last_id=mysql_insert_id();
 		api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", api_get_user_id());
 		$return_message=get_lang('ForumAdded');
-
 	}
-
 	Display :: display_confirmation_message($return_message);
 }
 
@@ -1577,10 +1580,12 @@ function store_thread($values)
 	{
 		$visible=1;
 	}
-
+	
+	$clean_post_title=Security::remove_XSS(mysql_real_escape_string(htmlspecialchars($values['post_title'])));
+	
 	// We first store an entry in the forum_thread table because the thread_id is used in the forum_post table
 	$sql="INSERT INTO $table_threads (thread_title, forum_id, thread_poster_id, thread_poster_name, thread_date, thread_sticky)
-			VALUES ('".mysql_real_escape_string($values['post_title'])."',
+			VALUES ('".$clean_post_title."',
 					'".mysql_real_escape_string($values['forum_id'])."',
 					'".mysql_real_escape_string($_user['user_id'])."',
 					'".mysql_real_escape_string($values['poster_name'])."',
@@ -1602,7 +1607,7 @@ function store_thread($values)
 
 	// We now store the content in the table_post table
 	$sql="INSERT INTO $table_posts (post_title, post_text, thread_id, forum_id, poster_id, poster_name, post_date, post_notification, post_parent_id, visible)
-			VALUES ('".mysql_real_escape_string($values['post_title'])."',
+			VALUES ('".$clean_post_title."',
 			'".mysql_real_escape_string($values['post_text'])."',
 			'".mysql_real_escape_string($last_thread_id)."',
 			'".mysql_real_escape_string($values['forum_id'])."',

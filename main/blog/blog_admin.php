@@ -35,78 +35,92 @@ $language_file = "blog";
 
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
+
 /* ------------	ACCESS RIGHTS ------------ */
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-require_once(api_get_path(LIBRARY_PATH) . "blog.lib.php");
-
-$nameTools = get_lang("blog_management");
-
-
-// showing the header if we are not in the learning path, if we are in
-// the learning path, we do not include the banner so we have to explicitly
-// include the stylesheet, which is normally done in the header
-if ($_GET['origin'] != 'learnpath')
+//------------ ONLY USERS REGISTERED IN THE COURSE----------------------
+if((!$is_allowed_in_course || !$is_courseMember) && !api_is_allowed_to_edit())
 {
-	Display::display_header($nameTools,'Blogs');
-}
-else
-{
-	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".$clarolineRepositoryWeb."css/default.css\"/>";
-}
-/*
-==============================================================================
-	PROCESSING..
-==============================================================================
-*/
-if ($_POST['new_blog_submit'])
-{
-	Blog::create_blog($_POST['blog_name'],$_POST['blog_subtitle']);
-}
-if ($_POST['edit_blog_submit'])
-{
-	Blog::edit_blog($_POST['blog_id'],$_POST['blog_name'],$_POST['blog_subtitle']);
-}
-if ($_GET['action'] == 'visibility')
-{
-	Blog::change_blog_visibility(mysql_real_escape_string((int)$_GET['blog_id']));
-}
-if ($_GET['action'] == 'delete')
-{
-	Blog::delete_blog(mysql_real_escape_string((int)$_GET['blog_id']));
+	api_not_allowed(true);//print headers/footers
 }
 
 
-/*
-==============================================================================
-	DISPLAY
-==============================================================================
-*/
-api_display_tool_title($nameTools);
-//api_introductionsection(TOOL_BLOG);
-
-
-	if ($_GET['action'] == 'add')
+if (api_is_allowed_to_edit())
+{
+	
+	require_once(api_get_path(LIBRARY_PATH) . "blog.lib.php");	
+	$nameTools = get_lang("blog_management");
+	
+	
+	// showing the header if we are not in the learning path, if we are in
+	// the learning path, we do not include the banner so we have to explicitly
+	// include the stylesheet, which is normally done in the header
+	if ($_GET['origin'] != 'learnpath')
 	{
-		Blog::display_new_blog_form();
+		Display::display_header($nameTools,'Blogs');
 	}
-	if ($_GET['action'] == 'edit')
+	else
 	{
-		Blog::display_edit_blog_form(mysql_real_escape_string((int)$_GET['blog_id']));
+		echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".$clarolineRepositoryWeb."css/default.css\"/>";
 	}
-
-	echo "<a href='".api_get_self()."?action=add'>",
-	"<img src='../img/blog_new.gif' border=\"0\" align=\"absmiddle\" alt='".get_lang('NewBlog')."'>&nbsp;&nbsp;".get_lang('AddBlog')."</a>";
-	echo "<table width=\"100%\" border=\"0\" cellspacing=\"2\" class='data_table'>";
-	echo	"<tr>",
-				 "<th>",get_lang('Title'),"</th>\n",
-				 "<th>",get_lang('Subtitle'),"</th>\n",
-				 "<th>",get_lang('Modify'),"</th>\n",
-			"</tr>\n";
-	Blog::display_blog_list();
-	echo "</table>";
-
+	/*
+	==============================================================================
+		PROCESSING..
+	==============================================================================
+	*/
+	if ($_POST['new_blog_submit'])
+	{
+		Blog::create_blog($_POST['blog_name'],$_POST['blog_subtitle']);
+	}
+	if ($_POST['edit_blog_submit'])
+	{
+		Blog::edit_blog($_POST['blog_id'],$_POST['blog_name'],$_POST['blog_subtitle']);
+	}
+	if ($_GET['action'] == 'visibility')
+	{
+		Blog::change_blog_visibility(mysql_real_escape_string((int)$_GET['blog_id']));
+	}
+	if ($_GET['action'] == 'delete')
+	{
+		Blog::delete_blog(mysql_real_escape_string((int)$_GET['blog_id']));
+	}
+	
+	
+	/*
+	==============================================================================
+		DISPLAY
+	==============================================================================
+	*/
+	api_display_tool_title($nameTools);
+	//api_introductionsection(TOOL_BLOG);
+	
+	
+		if ($_GET['action'] == 'add')
+		{
+			Blog::display_new_blog_form();
+		}
+		if ($_GET['action'] == 'edit')
+		{
+			Blog::display_edit_blog_form(mysql_real_escape_string((int)$_GET['blog_id']));
+		}
+	
+		echo "<a href='".api_get_self()."?action=add'>",
+		"<img src='../img/blog_new.gif' border=\"0\" align=\"absmiddle\" alt='".get_lang('NewBlog')."'>&nbsp;&nbsp;".get_lang('AddBlog')."</a>";
+		echo "<table width=\"100%\" border=\"0\" cellspacing=\"2\" class='data_table'>";
+		echo	"<tr>",
+					 "<th>",get_lang('Title'),"</th>\n",
+					 "<th>",get_lang('Subtitle'),"</th>\n",
+					 "<th>",get_lang('Modify'),"</th>\n",
+				"</tr>\n";
+		Blog::display_blog_list();
+		echo "</table>";			
+	}
+	else
+	{
+		api_not_allowed(true);		
+	}
 
 // Display the footer
 Display::display_footer();

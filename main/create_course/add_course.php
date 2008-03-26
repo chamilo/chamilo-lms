@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 14291 2008-02-14 08:17:23Z elixir_inter $
+// $Id: add_course.php 14696 2008-03-26 15:59:30Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -99,10 +99,10 @@ $form->setDefaults($values);
 if($form->validate())
 {
 	$course_values = $form->exportValues();
-	$wanted_code = $course_values['wanted_code'];
-	$tutor_name = $course_values['tutor_name'];
+	$wanted_code = Security::remove_XSS($course_values['wanted_code']);
+	$tutor_name = Security::remove_XSS($course_values['tutor_name']);
 	$category_code = $course_values['category_code'];
-	$title = $course_values['title'];
+	$title = Security::remove_XSS($course_values['title']);
 	$course_language = $course_values['course_language'];
 	
 	if(trim($wanted_code) == ''){
@@ -137,7 +137,7 @@ if($form->validate())
 	}
 	else
 	{
-				Display :: display_error_message(get_lang('CourseCodeAlreadyExists'),false);
+		Display :: display_error_message(get_lang('CourseCodeAlreadyExists'),false);
 		$form->display();
 		echo '<p>'.get_lang('CourseCodeAlreadyExistExplained').'</p>';
 	}

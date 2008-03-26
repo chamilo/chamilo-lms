@@ -1,4 +1,4 @@
-<?php // $Id: document.php 14657 2008-03-18 21:59:53Z juliomontoya $
+<?php // $Id: document.php 14697 2008-03-26 16:05:34Z juliomontoya $
 
 /*
 ==============================================================================
@@ -401,24 +401,35 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 	{
 		//needed for directory creation
 		include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-		$added_slash = ($curdirpath=='/')?'':'/';
-		$dir_name = $curdirpath.$added_slash.replace_dangerous_char($_POST['dirname']);
-		if(!is_dir($dir_name))
+		$post_dir_name=$_POST['dirname'];
+		
+		if ($post_dir_name=='../' || $post_dir_name=='.' || $post_dir_name=='..') 
 		{
-			$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name,$_POST['dirname']);
-			if($created_dir)
+			Display::display_error_message(get_lang('CannotCreateDir'));
+		}
+		else
+		{
+			$added_slash = ($curdirpath=='/')?'':'/';
+			$dir_name = $curdirpath.$added_slash.replace_dangerous_char($post_dir_name);
+			
+			if(!is_dir($dir_name))
 			{
-				Display::display_confirmation_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>',false);
-				//uncomment if you want to enter the created dir
-				//$curdirpath = $created_dir;
-				//$curdirpathurl = urlencode($curdirpath);
-			}
-			else
-			{
-				Display::display_error_message(get_lang('CannotCreateDir'));
+				$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name,$post_dir_name);
+				if($created_dir)
+				{
+					Display::display_confirmation_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>',false);
+					//uncomment if you want to enter the created dir
+					//$curdirpath = $created_dir;
+					//$curdirpathurl = urlencode($curdirpath);
+				}
+				else
+				{
+					Display::display_error_message(get_lang('CannotCreateDir'));
+				}
 			}
 		}
 	}
+	
 	//show them the form for the directory name
 	if(isset($_GET['createdir']))
 	{

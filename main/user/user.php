@@ -52,6 +52,9 @@ $language_file = array('registration','admin','userInfo');
 $use_anonymous = true;
 require_once ("../inc/global.inc.php");
 $this_section = SECTION_COURSES;
+
+// notice for unauthorized people.
+api_protect_course_script(true);
 /*
 -----------------------------------------------------------
 	Libraries

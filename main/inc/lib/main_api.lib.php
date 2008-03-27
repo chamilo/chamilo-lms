@@ -3,7 +3,7 @@
 ===============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Hugues Peeters
@@ -24,7 +24,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium	
 	Mail: info@dokeos.com
 ===============================================================================
 */
@@ -156,10 +156,11 @@ define('DIR_HOTPOTATOES','/HotPotatoes_files');
 * @author Roan Embrechts
 */
 function api_protect_course_script($print_headers=false)
-{
-	global $is_allowed_in_course;
-	if (!isset ($_SESSION["_course"]) || !$is_allowed_in_course)
-	{
+{	
+ 	global $is_allowed_in_course; 	 	 	
+	//if (!isset ($_SESSION["_course"]) || !$is_allowed_in_course)	
+	if (!$is_allowed_in_course)
+	{			
 		api_not_allowed($print_headers);
 	}
 }

@@ -59,7 +59,7 @@ function get_icon_file_name ($type)
 	elseif ($type == 'evalnotempty')
 		return api_get_path(WEB_CODE_PATH) . 'img/gradebook_eval_not_empty.gif';
 	elseif ($type == 'link')
-		return api_get_path(WEB_CODE_PATH) . 'img/link_blank.gif';
+		return api_get_path(WEB_CODE_PATH) . 'img/link.gif';
 	else
 		return null;
 }

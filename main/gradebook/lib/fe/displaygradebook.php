@@ -35,7 +35,7 @@ class DisplayGradebook
 				$header .= '<td><a href=gradebook_edit_result.php?selecteval=' . $evalobj->get_id() .'><img src=../img/works.gif alt=' . get_lang('EditResult') . ' align=absmiddle/> ' . get_lang('EditResult') . '</a></td>';
 				$header .= '<td><a href=' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&deleteall= onclick="return confirmationall();"><img src="../img/delete.gif" border="0" alt="" />' . ' ' . get_lang('DeleteResult') . '</a></td>';
 			}
-			$header .= '<td><a href=' . api_get_self() . '?print=&selecteval=' . $evalobj->get_id() . ' target="_blank"><img src=../img/file_oo_writer.gif alt=' . get_lang('Print') . '/> ' . get_lang('Print') . '</a>';
+			$header .= '<td><a href=' . api_get_self() . '?print=&selecteval=' . $evalobj->get_id() . ' target="_blank"><img src=../img/printmgr.gif alt=' . get_lang('Print') . '/> ' . get_lang('Print') . '</a>';
 			$header .= '</td></tr></table>';
 		}
 		if ($evalobj->is_visible() == '1')
@@ -107,7 +107,7 @@ class DisplayGradebook
 			$header .= '<td style="vertical-align: top;"><a href=' . api_get_self() . '?selectcat=' . $catobj->get_parent_id() . '><img src="../img/folder_up.gif" border="0" alt="'.get_lang('Up').'" /></a></td>';
 		$header .= '<td style="vertical-align: top;">'.$simple_search_form->toHtml().'</td>';
 		$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?exportpdf=&offset='.Security::remove_XSS($_GET['offset']).'&search=' . Security::remove_XSS($_GET['search']).'&selectcat=' . $catobj->get_id() . '"><img src=../img/calendar_up.gif alt=' . get_lang('ExportPDF') . '/> ' . get_lang('ExportPDF') . '</a>';
-		$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?print=&selectcat=' . $catobj->get_id() . '" target="_blank"><img src=../img/file_oo_writer.gif alt=' . get_lang('Print') . '/> ' . get_lang('Print') . '</a>';
+		$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?print=&selectcat=' . $catobj->get_id() . '" target="_blank"><img src="../img/printmgr.gif" alt=' . get_lang('Print') . '/> ' . get_lang('Print') . '</a>';
 		$header .= '</td></tr></table>';
 		if (!$catobj->get_id() == '0')
 		{
@@ -207,11 +207,11 @@ class DisplayGradebook
 				$cats= Category :: load($selectcat);
 				if ($cats[0]->get_course_code() != null)
 				{
-					$header .= '<td><a href=gradebook_add_link.php?&selectcat=' . $catobj->get_id() . '><img src=../img/link_blank.gif alt=' . get_lang('MakeLink') . ' align=absmiddle/> ' . get_lang('MakeLink') . '</a>';
+					$header .= '<td><a href=gradebook_add_link.php?&selectcat=' . $catobj->get_id() . '><img src=../img/link.gif alt=' . get_lang('MakeLink') . ' align=absmiddle/> ' . get_lang('MakeLink') . '</a>';
 				}
 				else
 				{
-					$header .= '<td><a href=gradebook_add_link_select_course.php?&selectcat=' . $catobj->get_id() . '><img src=../img/link_blank.gif alt=' . get_lang('MakeLink') . ' align=absmiddle/> ' . get_lang('MakeLink') . '</a>';
+					$header .= '<td><a href=gradebook_add_link_select_course.php?&selectcat=' . $catobj->get_id() . '><img src=../img/link.gif alt=' . get_lang('MakeLink') . ' align=absmiddle/> ' . get_lang('MakeLink') . '</a>';
 				}
 			}
 		}

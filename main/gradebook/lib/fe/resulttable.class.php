@@ -139,7 +139,7 @@ class ResultTable extends SortableTable
 			$doc_url = $link->get_view_url($item['id']);
 			if ($doc_url != null)
 				$edit_column .= '&nbsp;<a href="'. $doc_url . '" target="_blank">'
-								.'<img src="'. api_get_path(WEB_CODE_PATH) . 'img/link_blank.gif" border="0" title="' . get_lang('OpenDocument') . '" alt="" />'
+								.'<img src="'. api_get_path(WEB_CODE_PATH) . 'img/link.gif" border="0" title="' . get_lang('OpenDocument') . '" alt="" />'
 								.'</a>';
 		}
 

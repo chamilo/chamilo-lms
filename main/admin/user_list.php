@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 14706 2008-03-31 13:04:57Z pcool $
+<?php // $Id: user_list.php 14707 2008-03-31 13:12:03Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -49,7 +49,6 @@ function courses_of_user($arg)
 	// put it into a variable like $newContent
     //$newContent = 'werkt het? en met een beetje meer text, wordt dat goed opgelost? ';    
     $personal_course_list = UserManager::get_personal_session_course_list($arg);
-	$newContent = count($personal_course_list); 
     foreach ($personal_course_list as $key=>$course)
     {
     	$newContent .= $course['i'].'<br />';

@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 14707 2008-03-31 13:12:03Z pcool $
+<?php // $Id: user_list.php 14708 2008-03-31 13:25:44Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -41,7 +41,7 @@ require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 // xajax
 $xajax = new xajax();
 $xajax->registerFunction('courses_of_user');
-$xajax->registerFunction('empty_courses_of_user');
+//$xajax->registerFunction('empty_courses_of_user');
 $xajax->processRequests();
 function courses_of_user($arg)
 {
@@ -361,7 +361,7 @@ function modify_filter($user_id,$url_params,$row)
 	$result .= '<span id="tooltip">
 				<span class="toolbox">
 				<a style="position: relative;" class="tooltipLinkInner" href="#">
-				<img src="../img/courses.gif" id="coursesofuser'.$user_id.'" onmouseout="xajax_empty_courses_of_user('.$user_id.');" onmouseover="xajax_courses_of_user('.$user_id.');" />
+				<img src="../img/courses.gif" id="coursesofuser'.$user_id.'" onmouseover="xajax_courses_of_user('.$user_id.');" />
 				<span id="user'.$user_id.'" style="margin-left: -100px; border:1px solid black; width: 200px; background-color:white; z-index:99; padding: 3px; display: none; margin-right:inherit;">
 				<div style="text-align:center;"><img src="../img/anim-loader.gif" height="20" /></div>
 				</span></a></span></span>';	

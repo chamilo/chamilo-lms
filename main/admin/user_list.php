@@ -1,6 +1,4 @@
-<?php
-
-// $Id: user_list.php 14705 2008-03-31 12:40:51Z pcool $
+<?php // $Id: user_list.php 14706 2008-03-31 13:04:57Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -37,7 +35,77 @@ require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH).'security.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+
+// xajax
+$xajax = new xajax();
+$xajax->registerFunction('courses_of_user');
+$xajax->registerFunction('empty_courses_of_user');
+$xajax->processRequests();
+function courses_of_user($arg)
+{
+	// do some stuff based on $arg like query data from a database and
+	// put it into a variable like $newContent
+    //$newContent = 'werkt het? en met een beetje meer text, wordt dat goed opgelost? ';    
+    $personal_course_list = UserManager::get_personal_session_course_list($arg);
+	$newContent = count($personal_course_list); 
+    foreach ($personal_course_list as $key=>$course)
+    {
+    	$newContent .= $course['i'].'<br />';
+    }
+    
+	// Instantiate the xajaxResponse object
+	$objResponse = new xajaxResponse();
+        
+	// add a command to the response to assign the innerHTML attribute of
+	// the element with id="SomeElementId" to whatever the new content is
+	$objResponse->addAssign("user".$arg,"innerHTML", $newContent);
+	$objResponse->addReplace("coursesofuser".$arg,"alt", $newContent);
+	$objResponse->addReplace("coursesofuser".$arg,"title", $newContent);
+        
+	//return the  xajaxResponse object
+	return $objResponse;
+}
+function empty_courses_of_user($arg)
+{
+	// do some stuff based on $arg like query data from a database and
+	// put it into a variable like $newContent
+    $newContent = '';    
+	// Instantiate the xajaxResponse object
+	$objResponse = new xajaxResponse();
+        
+	// add a command to the response to assign the innerHTML attribute of
+	// the element with id="SomeElementId" to whatever the new content is
+	$objResponse->addAssign("user".$arg,"innerHTML", $newContent);
+	
+        
+	//return the  xajaxResponse object
+	return $objResponse;
+}
+
+
+$htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
+$htmlHeadXtra[] = '		<style>
+		.tooltipLinkInner {
+			color:blue;
+			text-decoration:none;												
+		}
+		
+		#tooltip .toolbox a:hover span {
+		  display: block! important;
+		  color: black;
+		  position: absolute;
+		}
+		
+		.tooltipInner {
+			margin:7px;
+			font-size:8pt;
+			float:right;
+		}
+		
+		</style>';
+
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -290,6 +358,14 @@ function email_filter($email)
 function modify_filter($user_id,$url_params,$row)
 {
 	global $charset;
+	
+	$result .= '<span id="tooltip">
+				<span class="toolbox">
+				<a style="position: relative;" class="tooltipLinkInner" href="#">
+				<img src="../img/courses.gif" id="coursesofuser'.$user_id.'" onmouseout="xajax_empty_courses_of_user('.$user_id.');" onmouseover="xajax_courses_of_user('.$user_id.');" />
+				<span id="user'.$user_id.'" style="margin-left: -100px; border:1px solid black; width: 200px; background-color:white; z-index:99; padding: 3px; display: none; margin-right:inherit;">
+				<div style="text-align:center;"><img src="../img/anim-loader.gif" height="20" /></div>
+				</span></a></span></span>';	
 	$result .= '<a href="user_information.php?user_id='.$user_id.'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>&nbsp;';
 	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'"><img src="../img/login_as.gif" border="0" style="vertical-align: middle;" alt="'.get_lang('LoginAs').'" title="'.get_lang('LoginAs').'"/></a>&nbsp;';
 

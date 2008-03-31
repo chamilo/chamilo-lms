@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 14615 2008-03-17 09:53:23Z elixir_inter $
+// $Id: user_list.php 14705 2008-03-31 12:40:51Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -37,6 +37,7 @@ require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH).'security.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -265,11 +266,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$sql .= " LIMIT $from,$number_of_items";
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$users = array ();
-	$status = array(1=>get_lang('Teacher'),4=>get_lang('Drh'),5=>get_lang('Student'),6=>get_lang('Anonymous'));
 	while ($user = mysql_fetch_row($res))
 	{
-		
-		$user[6] = $status[$user[6]]; 
 		$users[] = $user;
 	}
 	return $users;
@@ -289,20 +287,19 @@ function email_filter($email)
  * @param string $url_params
  * @return string Some HTML-code with modify-buttons
  */
-function modify_filter($user_id,$url_params)
+function modify_filter($user_id,$url_params,$row)
 {
 	global $charset;
 	$result .= '<a href="user_information.php?user_id='.$user_id.'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>&nbsp;';
 	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'"><img src="../img/login_as.gif" border="0" style="vertical-align: middle;" alt="'.get_lang('LoginAs').'" title="'.get_lang('LoginAs').'"/></a>&nbsp;';
 
-	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-	$sql="SELECT status FROM ".$tbl_user." WHERE user_id='".$user_id."'";
-	$result_sql=api_sql_query($sql);
-
-	if(mysql_result($result_sql,0,"status")=="1"){
+	$statusname = array(1=>get_lang('Teacher'),4=>get_lang('Drh'),5=>get_lang('Student'),6=>get_lang('Anonymous'));
+	if ($row['6'] == $statusname[1])
+	{
 		$result .= '<div style="display:inline;margin-left:25px"></div>';
 	}
-	if(mysql_result($result_sql,0,"status")=="5"){
+	if ($row['6'] == $statusname[5])
+	{
 		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;';
 	}
 
@@ -376,13 +373,27 @@ function lock_unlock_user($status,$user_id)
 	}
 }
 
+/**
+ * instead of displaying the integer of the status, we give a translation for the status
+ *
+ * @param integer $status
+ * @return string translation
+ * 
+ * @version march 2008
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ */
+function status_filter($status)
+{
+	$statusname = array(1=>get_lang('Teacher'),4=>get_lang('Drh'),5=>get_lang('Student'),6=>get_lang('Anonymous'));
+	return $statusname[$status];
+}
+
 
 /**
 ==============================================================================
 		INIT SECTION
 ==============================================================================
 */
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 $action = $_GET["action"];
 $login_as_user_id = $_GET["user_id"];
 
@@ -529,6 +540,7 @@ else
 	$table->set_header(7, get_lang('Active'));
 	$table->set_header(8, get_lang('Modify'));
 	$table->set_column_filter(5, 'email_filter');
+	$table->set_column_filter(6, 'status_filter');
 	$table->set_column_filter(7, 'active_filter');
 	$table->set_column_filter(8, 'modify_filter');
 	$table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));

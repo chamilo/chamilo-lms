@@ -327,25 +327,31 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	{
 		
 		$mydir = $my_sub_dir.$dir;
-		$display_edit_form = false;
-		
-		if(isset($_GET['edit_dir']) && $_GET['edit_dir']==$mydir)
-		{
-			$display_edit_form = true;
-			$form_folder = new FormValidator('edit_dir', 'post', api_get_self().'?curdirpath='.$my_sub_dir.'&edit_dir='.$mydir);
-			$group_name[] = FormValidator :: createElement('text','dir_name');
-			$group_name[] = FormValidator :: createElement('submit','submit_edit_dir',get_lang('Ok'));
-			$form_folder -> addGroup($group_name,'my_group');
-			$form_folder -> addGroupRule('my_group',get_lang('ThisFieldIsRequired'),'required');
-			$form_folder -> setDefaults(array('my_group[dir_name]'=>$dir));			
-			if($form_folder -> validate())
-			{
-				$values = $form_folder -> exportValues();
-				$values = $values['my_group'];
-				update_dir_name($mydir,$values['dir_name']);
-				$mydir = $my_sub_dir.$values['dir_name'];
-				$dir = $values['dir_name'];
-				$display_edit_form = false;
+			
+		if ($is_allowed_to_edit) 
+		{		
+			$clean_edit_dir=Security :: remove_XSS(Database::escape_string($_GET['edit_dir']));
+			
+						
+			if(isset($clean_edit_dir) && $clean_edit_dir==$mydir)
+			{	
+				$form_folder = new FormValidator('edit_dir', 'post', api_get_self().'?curdirpath='.$my_sub_dir.'&edit_dir='.$mydir);
+				$group_name[] = FormValidator :: createElement('text','dir_name');
+				$group_name[] = FormValidator :: createElement('submit','submit_edit_dir',get_lang('Ok'));
+				$form_folder -> addGroup($group_name,'my_group');
+				$form_folder -> addGroupRule('my_group',get_lang('ThisFieldIsRequired'),'required');
+				$form_folder -> setDefaults(array('my_group[dir_name]'=>$dir));				
+				$display_edit_form=true;		
+					
+				if($form_folder -> validate())
+				{
+					$values = $form_folder -> exportValues();
+					$values = $values['my_group'];
+					update_dir_name($mydir,$values['dir_name']);
+					$mydir = $my_sub_dir.$values['dir_name'];
+					$dir = $values['dir_name'];
+					$display_edit_form=false;				
+				}			
 			}
 		}
 		
@@ -354,30 +360,27 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$row = array();
 		$class = '';
 		$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));
+		
+		$row[] = '<img src="../img/folder_document.gif" alt="dir" border="0" hspace="5" align="middle" />'; //image
+				
 
 		if($display_edit_form)
 		{
-			$row[] = $form_folder->toHtml();
+			$row[] = $form_folder->toHtml(); // form to edit the directory's name
 		}
 		else
 		{
-			$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().
-				'&curdirpath='.$mydir.'"'.$class.'><img src="../img/folder_document.gif" alt="dir" height="20" width="20" align="absbottom"/>&nbsp;'.$dir.'</a>';
-		}
-		$row[] = '';
-
+			$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'; // title of directory
 				
-		$row[] = '<img src="../img/folder_document.gif" border="0" hspace="5" align="middle" />';
-		$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>';
-
-		$row[] = '';
-		$row[] = '';
+		}
+		
+		$row[] = ''; //authors		
+		$row[] = ''; //date		
 		
 		if( $is_allowed_to_edit)
 		{
 			$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
-				'&curdirpath='.$my_sub_dir.'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
-			$action .= '<img src="'.api_get_path(WEB_IMG_PATH).'edit_na.gif" alt="'.get_lang('Modify').'">';			
+				'&curdirpath='.$my_sub_dir.'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';						
 			$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  ><img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('DirDelete').'"></a>';
 			$row[] = $action;
 		}
@@ -413,6 +416,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			{
 				$class='';
 			}
+			
 			$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));			
 			$row[]= build_document_icon_tag('file',$work->url);			
 			$row[]= '<a href="'.$currentCourseRepositoryWeb.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;

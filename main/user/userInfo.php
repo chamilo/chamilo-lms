@@ -1,9 +1,9 @@
-<?php
+<?php // $Id: userInfo.php 14712 2008-04-01 19:56:23Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) 2003 hent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -18,7 +18,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -52,7 +52,7 @@ require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 $this_section = SECTION_COURSES;
 
 $nameTools = get_lang("Users");
-api_protect_course_script();
+api_protect_course_script(true);
 if(api_is_anonymous())
 {
 	api_not_allowed(true);

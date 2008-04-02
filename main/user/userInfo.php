@@ -1,4 +1,4 @@
-<?php // $Id: userInfo.php 14712 2008-04-01 19:56:23Z yannoo $
+<?php // $Id: userInfo.php 14725 2008-04-02 15:31:22Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -122,6 +122,11 @@ include ("userInfoLib.php");
 */
 
 $displayMode = "viewContentList";
+
+$removeDef =  Security::remove_XSS($_GET['removeDef']); 
+$editDef = Security::remove_XSS($_GET['editDef']); 
+$moveUpDef = Security::remove_XSS($_GET['moveUpDef']); 
+$moveDownDef = Security::remove_XSS($_GET['moveDownDef']);
 
 if ($allowedToEditDef)
 {

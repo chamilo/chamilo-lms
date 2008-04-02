@@ -1,9 +1,9 @@
-<?php // $Id: user_list.php 14708 2008-03-31 13:25:44Z pcool $
+<?php // $Id: user_list.php 14713 2008-04-02 04:58:20Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -18,7 +18,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -49,11 +49,18 @@ function courses_of_user($arg)
 	// put it into a variable like $newContent
     //$newContent = 'werkt het? en met een beetje meer text, wordt dat goed opgelost? ';    
     $personal_course_list = UserManager::get_personal_session_course_list($arg);
-    foreach ($personal_course_list as $key=>$course)
+    $newContent = '';
+    if(count($personal_course_list)>0)
     {
-    	$newContent .= $course['i'].'<br />';
+	    foreach ($personal_course_list as $key=>$course)
+	    {
+	    	$newContent .= $course['i'].'<br />';
+	    }
     }
-    
+    else
+    {
+    	$newContent .= '- '.get_lang('None').' -<br />';
+    }    
 	// Instantiate the xajaxResponse object
 	$objResponse = new xajaxResponse();
         
@@ -170,11 +177,11 @@ function login_user($user_id)
 
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 
-		if (mysql_num_rows($sql_result) > 0)
+		if (Database::num_rows($sql_result) > 0)
 		{
 			// Extracting the user data
 
-			$user_data = mysql_fetch_array($sql_result);
+			$user_data = Database::fetch_array($sql_result);
 
             //Delog the current user
 			 
@@ -228,17 +235,17 @@ function get_number_of_users()
 	$sql = "SELECT COUNT(u.user_id) AS total_number_of_items FROM $user_table u";
 	if (isset ($_GET['keyword']))
 	{
-		$keyword = mysql_real_escape_string($_GET['keyword']);
+		$keyword = Database::escape_string($_GET['keyword']);
 		$sql .= " WHERE u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.email LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%'";
 	}
 	elseif (isset ($_GET['keyword_firstname']))
 	{
 		$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
-		$keyword_firstname = mysql_real_escape_string($_GET['keyword_firstname']);
-		$keyword_lastname = mysql_real_escape_string($_GET['keyword_lastname']);
-		$keyword_email = mysql_real_escape_string($_GET['keyword_email']);
-		$keyword_username = mysql_real_escape_string($_GET['keyword_username']);
-		$keyword_status = mysql_real_escape_string($_GET['keyword_status']);
+		$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
+		$keyword_lastname = Database::escape_string($_GET['keyword_lastname']);
+		$keyword_email = Database::escape_string($_GET['keyword_email']);
+		$keyword_username = Database::escape_string($_GET['keyword_username']);
+		$keyword_status = Database::escape_string($_GET['keyword_status']);
 		$query_admin_table = '';
 		$keyword_admin = '';
 		if($keyword_status == 10)
@@ -267,7 +274,7 @@ function get_number_of_users()
 		}
 	}
 	$res = api_sql_query($sql, __FILE__, __LINE__);
-	$obj = mysql_fetch_object($res);
+	$obj = Database::fetch_object($res);
 	return $obj->total_number_of_items;
 }
 /**
@@ -292,17 +299,17 @@ function get_user_data($from, $number_of_items, $column, $direction)
                  $user_table u";
 	if (isset ($_GET['keyword']))
 	{
-		$keyword = mysql_real_escape_string($_GET['keyword']);
+		$keyword = Database::escape_string($_GET['keyword']);
 		$sql .= " WHERE u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%'";
 	}
 	elseif (isset ($_GET['keyword_firstname']))
 	{
 		$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
-		$keyword_firstname = mysql_real_escape_string($_GET['keyword_firstname']);
-		$keyword_lastname = mysql_real_escape_string($_GET['keyword_lastname']);
-		$keyword_email = mysql_real_escape_string($_GET['keyword_email']);
-		$keyword_username = mysql_real_escape_string($_GET['keyword_username']);
-		$keyword_status = mysql_real_escape_string($_GET['keyword_status']);
+		$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
+		$keyword_lastname = Database::escape_string($_GET['keyword_lastname']);
+		$keyword_email = Database::escape_string($_GET['keyword_email']);
+		$keyword_username = Database::escape_string($_GET['keyword_username']);
+		$keyword_status = Database::escape_string($_GET['keyword_status']);
 		$query_admin_table = '';
 		$keyword_admin = '';
 		if($keyword_status == 10)
@@ -333,7 +340,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$sql .= " LIMIT $from,$number_of_items";
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$users = array ();
-	while ($user = mysql_fetch_row($res))
+	while ($user = Database::fetch_row($res))
 	{
 		$users[] = $user;
 	}
@@ -438,7 +445,7 @@ function lock_unlock_user($status,$user_id)
 
 	if(($status_db=='1' OR $status_db=='0') AND is_numeric($user_id))
 	{
-		$sql="UPDATE $user_table SET active='".mysql_real_escape_string($status_db)."' WHERE user_id='".mysql_real_escape_string($user_id)."'";
+		$sql="UPDATE $user_table SET active='".Database::escape_string($status_db)."' WHERE user_id='".Database::escape_string($user_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 	}
 

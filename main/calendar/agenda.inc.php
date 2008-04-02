@@ -1,9 +1,9 @@
-<?php //$Id: agenda.inc.php 13772 2007-11-26 02:54:27Z yannoo $
+<?php //$Id: agenda.inc.php 14723 2008-04-02 15:29:06Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
@@ -2308,7 +2308,7 @@ function get_agendaitems($month, $year)
 	$TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA);
 	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
-	$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_user['user_id']);
+	$group_memberships = GroupManager :: get_group_ids(Database::get_current_course_database(), $_user['user_id']);
 	// if the user is administrator of that course we show all the agenda items
 	if (api_is_allowed_to_edit())
 	{
@@ -2317,11 +2317,11 @@ function get_agendaitems($month, $year)
 						DISTINCT agenda.*, item_property.*
 						FROM ".$TABLEAGENDA." agenda,
 							 ".$TABLE_ITEMPROPERTY." item_property
-						WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
-						AND MONTH(`agenda`.`start_date`)='".$month."'
-						AND YEAR(`agenda`.`start_date`)='".$year."'
-						AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-						AND `item_property`.`visibility`='1'
+						WHERE agenda.id = item_property.ref   ".$show_all_current."
+						AND MONTH(agenda.start_date)='".$month."'
+						AND YEAR(agenda.start_date)='".$year."'
+						AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+						AND item_property.visibility='1'
 						GROUP BY agenda.id
 						ORDER BY start_date ".$sort;
 	}
@@ -2335,12 +2335,12 @@ function get_agendaitems($month, $year)
 							agenda.*, item_property.*
 							FROM ".$TABLEAGENDA." agenda,
 								".$TABLE_ITEMPROPERTY." item_property
-							WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
-							AND MONTH(`agenda`.`start_date`)='".$month."'
-							AND YEAR(`agenda`.`start_date`)='".$year."'
-							AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-							AND	( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
-							AND `item_property`.`visibility`='1'
+							WHERE agenda.id = item_property.ref   ".$show_all_current."
+							AND MONTH(agenda.start_date)='".$month."'
+							AND YEAR(agenda.start_date)='".$year."'
+							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+							AND	( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+							AND item_property.visibility='1'
 							ORDER BY start_date ".$sort;
 		}
 		else
@@ -2349,12 +2349,12 @@ function get_agendaitems($month, $year)
 							agenda.*, item_property.*
 							FROM ".$TABLEAGENDA." agenda,
 							".$TABLE_ITEMPROPERTY." item_property
-							WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
-							AND MONTH(`agenda`.`start_date`)='".$month."'
-							AND YEAR(`agenda`.`start_date`)='".$year."'
-							AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-							AND ( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id`='0')
-							AND `item_property`.`visibility`='1'
+							WHERE agenda.id = item_property.ref   ".$show_all_current."
+							AND MONTH(agenda.start_date)='".$month."'
+							AND YEAR(agenda.start_date)='".$year."'
+							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+							AND ( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id='0')
+							AND item_property.visibility='1'
 							ORDER BY start_date ".$sort;
 		}
 	}

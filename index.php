@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 14572 2008-03-11 21:40:44Z yannoo $
+* 	@version $Id: index.php 14724 2008-04-02 15:30:14Z elixir_inter $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -583,7 +583,7 @@ function display_anonymous_course_list()
 				LEFT JOIN $main_category_table t2 ON t1.code=t2.parent_id
 				LEFT JOIN $main_course_table t3 ON (t3.category_code=t1.code AND (t3.visibility='".COURSE_VISIBILITY_OPEN_WORLD."' $platform_visible_courses))
 				WHERE t1.parent_id ". (empty ($category) ? "IS NULL" : "='$category'")."
-				GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos";
+				GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
 	$resCats = api_sql_query($sqlGetSubCatList, __FILE__, __LINE__);
 	$thereIsSubCat = false;
 	if (mysql_num_rows($resCats) > 0)

@@ -159,9 +159,9 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 
 	echo 	"<table id=\"smallcalendar\">\n",
 			"<tr class=\"title\">\n",
-			"<td width=\"10%\"><a href=\"", $backwardsURL, "\"></a></td>\n",
+			"<td width=\"10%\"><a href=\"", $backwardsURL, "\"> &laquo; </a></td>\n",
 			"<td width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n",
-			"<td width=\"10%\"><a href=\"", $forewardsURL, "\"></a></td>\n", "</tr>\n";
+			"<td width=\"10%\"><a href=\"", $forewardsURL, "\"> &raquo; </a></td>\n", "</tr>\n";
 
 	echo "<tr>\n";
 	for ($ii = 1; $ii < 8; $ii ++)

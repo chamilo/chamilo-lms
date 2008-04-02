@@ -1,9 +1,9 @@
-<?php
+<?php //$Id: group_space.php 14722 2008-04-02 14:44:21Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -19,7 +19,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -281,12 +281,12 @@ function get_number_of_group_users()
 				FROM ".$table_group_user."
 				WHERE group_id='".Database::escape_string($current_group['id'])."'";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
-	$return = mysql_fetch_assoc($result);
+	$return = Database::fetch_array($result,'ASSOC');
 	return $return['number_of_users']; 
 }
 
 /**
- * Enter description here...
+ * Get the details of the users in a group
  *
  * @param integer $from starting row
  * @param integer $number_of_items number of items to be displayed
@@ -318,7 +318,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 	$sql .= " LIMIT $from,$number_of_items";
 	$return = array ();
 	$result = api_sql_query($sql,__FILE__,__LINE__);
-	while ($row = mysql_fetch_row($result))
+	while ($row = Database::fetch_row($result))
 	{
 		$return[] = $row;
 	}
@@ -336,7 +336,7 @@ function email_filter($email)
 }
 
 /**
- * display a user icon that links to the user page
+ * Display a user icon that links to the user page
  *
  * @param integer $user_id the id of the user
  * @return html code

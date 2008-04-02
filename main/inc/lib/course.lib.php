@@ -1670,7 +1670,20 @@ class CourseManager
 				CourseManager::select_and_sort_categories($select_element, $cat['code'], $category_selected_code, $new_padding);
 			}
 		}
-}
+	}
+
+	/**
+	 * check if course exists
+	 * @param string course_code
+	 * @return true if exists, false else
+	 */
+	function course_exists($course_code)
+	{
+		$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_COURSE).' WHERE code="'.Database::escape_string($course_code).'"';
+		$rs = api_sql_query($sql,__FILE__,__LINE__);
+		return mysql_num_rows($rs);
+	}
+	
 	
 } //end class CourseManager
 ?>

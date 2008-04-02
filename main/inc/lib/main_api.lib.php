@@ -48,8 +48,17 @@
 define('STUDENT', 5);
 /** global status of a user: course manager */
 define('COURSEMANAGER', 1);
+/** global status of a user: session admin */
 define('ADMINCRFP', 3);
+/** global status of a user: human ressource manager */
 define('DRH', 4);
+
+// table of status
+$_status_list[STUDENT] = 'user';
+$_status_list[COURSEMANAGER] = 'teacher';
+$_status_list[ADMINCRFP] = 'admincrfp';
+$_status_list[DRH] = 'drh';
+
 
 //COURSE VISIBILITY CONSTANTS
 /** only visible for course admin */
@@ -2172,6 +2181,43 @@ function api_get_version()
 	else
 	{
 		return '';
+	}
+}
+
+
+/**
+ * Check if status given in parameter exists in the platform
+ * @param mixed the status (can be either int either string)
+ * @return true if the status exists, else returns false
+ */
+function api_status_exists($status_asked)
+{
+	global $_status_list;
+	if(in_array($status_asked, $_status_list))
+	{
+		return true;
+	}
+	else 
+	{
+		return isset($_status_list[$status_asked]);
+	}
+}
+
+/**
+ * Check if status given in parameter exists in the platform
+ * @param mixed the status (can be either int either string)
+ * @return true if the status exists, else returns false
+ */
+function api_status_key($status)
+{
+	global $_status_list;
+	if(isset($_status_list[$status]))
+	{
+		return $status;
+	}
+	else
+	{
+		return array_search($status,$_status_list);
 	}
 }
 ?>

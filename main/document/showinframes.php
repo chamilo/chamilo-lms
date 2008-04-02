@@ -1,4 +1,4 @@
-.<?php // $Id: showinframes.php 14478 2008-03-03 21:46:38Z yannoo $ 
+<?php // $Id: showinframes.php 14728 2008-04-02 23:42:56Z yannoo $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software

@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 14609 2008-03-16 02:07:51Z yannoo $
+<?php //$Id: agenda.php 14721 2008-04-02 11:19:08Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -70,6 +70,11 @@ if($id) // this is to correctly handle edits
 //print_r($form_elements);
 header('Location: '.api_get_path(WEB_CODE_PATH)."resourcelinker/resourcelinker.php?source_id=1&action=$action&id=$id&originalresource=no");
 exit;
+}
+
+if ($_GET['view'])
+{
+	$_SESSION['view'] = $_GET['view'];
 }
 
 /*
@@ -332,7 +337,14 @@ if (!$_GET['action'] OR $_GET['action']=="showall"  OR $_GET['action']=="showcur
 {
 	if ($_GET['origin'] != 'learnpath')
 	{
-		display_agenda_items();
+		if (!$_SESSION['view'] OR $_SESSION['view'] <> 'month')
+		{
+			display_agenda_items();
+		}
+		else 
+		{
+			display_monthcalendar($select_month, $select_year);
+		}
 	}
 	else
 	{

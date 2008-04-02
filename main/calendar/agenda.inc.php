@@ -127,7 +127,7 @@ function get_calendar_items($month, $year)
 	{
 		$datum_item=(int)substr($row["start_date"],8,2);
 		//$dag_item=date("d",strtotime($datum_item));
-		$data[$datum_item]=intval($datum_item);
+		$data[$datum_item][intval($datum_item)][] = $row;
 	}
 	return $data;
 }
@@ -246,16 +246,16 @@ function display_monthcalendar($month, $year)
 
 	echo "<table id=\"smallcalendar\">\n",
 		"<tr class=\"title\">\n",
-		"<td width=\"10%\"><a href=\"",$backwardsURL,"\"></a></td>\n",
+		"<td width=\"10%\"><a href=\"",$backwardsURL,"\"> &laquo; </a></td>\n",
 		"<td width=\"80%\" colspan=\"5\">",$MonthsLong[$maand_array_maandnummer]," ",$year,"</td>\n",
-		"<td width=\"10%\"><a href=\"",$forewardsURL,"\"></a></td>\n",
+		"<td width=\"10%\"><a href=\"",$forewardsURL,"\"> &raquo; </a></td>\n",
 		"</tr>\n";
 
 	echo "<tr>\n";
 
 	for ($ii=1;$ii<8; $ii++)
 	{
-	echo "<td id=\"weekdays\">",$DaysShort[$ii%7],"</td>\n";
+	echo "<td class=\"weekdays\" width=\"14%\">",$DaysShort[$ii%7],"</td>\n";
   }
 
 	echo "</tr>\n";
@@ -275,8 +275,19 @@ function display_monthcalendar($month, $year)
 				$bgcolor = $ii<5 ? "class=\"alternativeBgLight\"" : "class=\"alternativeBgDark\"";
 
 				$dayheader = "$curday";
-				if (in_array($curday,$data))
-					{ $dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>"; }
+				if (key_exists($curday,$data))
+				{
+					$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>"; 
+					foreach ($data[$curday] as $key=>$agenda_item)
+					{
+						foreach ($agenda_item as $key=>$value)
+						{
+							$dayheader .= '<br /><b>'.substr($value['start_date'],11,8).'</b>';	
+							$dayheader .= ' - ';
+							$dayheader .= $value['title'];
+						}
+					}
+				}
 
 				if (($curday==$today['mday'])&&($year ==$today['year'])&&($month == $today['mon']))
 				{
@@ -1075,6 +1086,15 @@ function display_student_links()
 	else
 	{
 		echo "<li><a href='".api_get_self()."?".api_get_cidreq()."&action=showcurrent&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_month.gif').' '.get_lang("ShowCurrent")."</a></li>";
+	}
+	
+	if ($_SESSION['view'] <> 'month')
+	{
+		echo "\t<li><a href=\"".api_get_self()."?action=view&amp;view=month\"><img src=\"../img/calendar_month.gif\" border=\"0\" alt=\"".get_lang('MonthView')."\" /> ".get_lang('MonthView')."</a></li>\n";
+	}
+	else 
+	{
+		echo "\t<li><a href=\"".api_get_self()."?action=view&amp;view=list\"><img src=\"../img/calendar_select.gif\" border=\"0\" alt=\"".get_lang('ListView')."\" /> ".get_lang('ListView')."</a></li>\n";
 	}
 }
 
@@ -2275,5 +2295,89 @@ function show_add_form($id = '')
 </form>
 <p>&nbsp;</p>
 <?php
+}
+
+function get_agendaitems($month, $year)
+{
+	global $_user;
+	global $_configuration;
+
+	$items = array ();
+
+	//databases of the courses
+	$TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA);
+	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+
+	$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_user['user_id']);
+	// if the user is administrator of that course we show all the agenda items
+	if (api_is_allowed_to_edit())
+	{
+		//echo "course admin";
+		$sqlquery = "SELECT
+						DISTINCT agenda.*, item_property.*
+						FROM ".$TABLEAGENDA." agenda,
+							 ".$TABLE_ITEMPROPERTY." item_property
+						WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
+						AND MONTH(`agenda`.`start_date`)='".$month."'
+						AND YEAR(`agenda`.`start_date`)='".$year."'
+						AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
+						AND `item_property`.`visibility`='1'
+						GROUP BY agenda.id
+						ORDER BY start_date ".$sort;
+	}
+	// if the user is not an administrator of that course
+	else
+	{
+		//echo "GEEN course admin";
+		if (is_array($group_memberships))
+		{
+			$sqlquery = "SELECT
+							agenda.*, item_property.*
+							FROM ".$TABLEAGENDA." agenda,
+								".$TABLE_ITEMPROPERTY." item_property
+							WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
+							AND MONTH(`agenda`.`start_date`)='".$month."'
+							AND YEAR(`agenda`.`start_date`)='".$year."'
+							AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
+							AND	( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
+							AND `item_property`.`visibility`='1'
+							ORDER BY start_date ".$sort;
+		}
+		else
+		{
+			$sqlquery = "SELECT
+							agenda.*, item_property.*
+							FROM ".$TABLEAGENDA." agenda,
+							".$TABLE_ITEMPROPERTY." item_property
+							WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
+							AND MONTH(`agenda`.`start_date`)='".$month."'
+							AND YEAR(`agenda`.`start_date`)='".$year."'
+							AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
+							AND ( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id`='0')
+							AND `item_property`.`visibility`='1'
+							ORDER BY start_date ".$sort;
+		}
+	}
+
+	$result = api_sql_query($sqlquery, __FILE__, __LINE__);
+	while ($item = mysql_fetch_array($result))
+	{
+		$agendaday = date("j",strtotime($item['start_date']));
+		$time= date("H:i",strtotime($item['start_date']));
+		$URL = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
+		$items[$agendaday][$item['start_time']] .= "<i>".$time."</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$array_course_info["visual_code"]."</a>  ".$item['title']."<br />";
+	}
+		
+	// sorting by hour for every day
+	$agendaitems = array ();
+	while (list ($agendaday, $tmpitems) = each($items))
+	{
+		sort($tmpitems);
+		while (list ($key, $val) = each($tmpitems))
+		{
+			$agendaitems[$agendaday] .= $val;
+		}
+	}
+	return $agendaitems;
 }
 ?>

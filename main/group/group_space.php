@@ -46,6 +46,7 @@ include ('../inc/global.inc.php');
 */
 include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+include_once (api_get_path(LIBRARY_PATH).'sortabletable.lib.php');
 /*
 ==============================================================================
 		MAIN CODE
@@ -247,24 +248,109 @@ if (!empty($tutor_info))
 /*
  * list all the members of the current group
  */
-$tutors = GroupManager::get_subscribed_users($current_group['id']);
-if (count($tutors) == 0)
+echo '<b>'.get_lang("GroupMembers").':</b>';
+
+$table = new SortableTable('group_users', 'get_number_of_group_users', 'get_group_user_data',2);
+$parameters = array('cidReq' => $_GET['cidReq'], 'origin'=> $_GET['origin'], 'gidReq' => $_GET['gidReq']);
+$table->set_additional_parameters($parameters);
+$table->set_header(0, '');
+$table->set_header(1, get_lang('LastName'));
+$table->set_header(2, get_lang('FirstName'));
+$table->set_header(3, get_lang('Email'));
+$table->set_column_filter(3, 'email_filter');
+$table->set_column_filter(0, 'user_icon_filter');
+$table->display();
+
+/**
+ * Get the number of subscribed users to the group
+ *
+ * @return integer
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version April 2008
+ */
+function get_number_of_group_users()
 {
-	$member_info = get_lang("GroupNoneMasc");
+	global $current_group;
+	
+	// Database table definition
+	$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
+	
+	// query
+	$sql = "SELECT count(id) AS number_of_users
+				FROM ".$table_group_user."
+				WHERE group_id='".Database::escape_string($current_group['id'])."'";
+	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$return = mysql_fetch_assoc($result);
+	return $return['number_of_users']; 
 }
-else
+
+/**
+ * Enter description here...
+ *
+ * @param integer $from starting row
+ * @param integer $number_of_items number of items to be displayed
+ * @param integer $column sorting colum
+ * @param integer $direction sorting direction
+ * @return array
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version April 2008
+ */
+function get_group_user_data($from, $number_of_items, $column, $direction)
 {
-	foreach($tutors as $index => $member)
+	global $current_group;
+	
+	// Database table definition
+	$table_group_user 	= Database :: get_course_table(TABLE_GROUP_USER);
+	$table_user 		= Database :: get_main_table(TABLE_MAIN_USER);
+	
+	// query
+	$sql = "SELECT 
+				user.user_id 	AS col0,
+				user.lastname 	AS col1,
+				user.firstname 	AS col2,
+				user.email		AS col3
+				FROM ".$table_user." user, ".$table_group_user." group_rel_user 
+				WHERE group_rel_user.user_id = user.user_id 
+				AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
+	$sql .= " ORDER BY col$column $direction ";
+	$sql .= " LIMIT $from,$number_of_items";
+	$return = array ();
+	$result = api_sql_query($sql,__FILE__,__LINE__);
+	while ($row = mysql_fetch_row($result))
 	{
-		$member_info .= "<div style='margin-bottom: 5px;'><a href='../user/userInfo.php?origin=".$origin."&amp;uInfo=".$member['user_id']."'><img src='../img/members.gif' align='absbottom'>&nbsp;".$member['firstname']." ".$member['lastname']."</a></div>";
+		$return[] = $row;
 	}
+	return $return; 
 }
-echo '<b>'.get_lang("GroupMembers").':</b><blockquote>'.$member_info.'</blockquote>';
-/*
-==============================================================================
-		FOOTER
-==============================================================================
+
+/**
+* Returns a mailto-link
+* @param string $email An email-address
+* @return string HTML-code with a mailto-link
 */
+function email_filter($email)
+{
+	return Display :: encrypted_mailto_link($email, $email);
+}
+
+/**
+ * display a user icon that links to the user page
+ *
+ * @param integer $user_id the id of the user
+ * @return html code
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version April 2008
+ */
+function user_icon_filter($user_id)
+{
+	global $origin;
+	return "<a href='../user/userInfo.php?origin=".$origin."&amp;uInfo=".$user_id."'><img src='../img/members.gif' >";
+}
+
+// footer
 if ($origin != 'learnpath')
 {
 	Display::display_footer();

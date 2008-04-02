@@ -498,7 +498,7 @@ function update_Db_course($courseDbName)
 		) TYPE=MyISAM";
 
 	api_sql_query($sql, __FILE__, __LINE__);
-	$sql = "ALTER TABLE `".$TABLETOOLFORUMTHREAD . "` ADD INDEX (forum_id)";
+	$sql = "ALTER TABLE `".$TABLETOOLFORUMTHREAD . "` ADD INDEX idx_forum_thread_forum_id (forum_id)";
 	api_sql_query($sql, __FILE__, __LINE__);
 	
 	// Forum Posts
@@ -520,6 +520,10 @@ function update_Db_course($courseDbName)
 		 KEY forum_id (forum_id)
 		) TYPE=MyISAM";
 
+	api_sql_query($sql, __FILE__, __LINE__);
+	$sql = "ALTER TABLE `".$TABLETOOLFORUMPOST . "` ADD INDEX idx_forum_post_thread_id (thread_id)";
+	api_sql_query($sql, __FILE__, __LINE__);
+	$sql = "ALTER TABLE `".$TABLETOOLFORUMPOST . "` ADD INDEX idx_forum_post_visible (visible)";
 	api_sql_query($sql, __FILE__, __LINE__);
 
 	// Forum Mailcue
@@ -806,7 +810,7 @@ function update_Db_course($courseDbName)
 		start_visible datetime NOT NULL default '0000-00-00 00:00:00',
 		end_visible datetime NOT NULL default '0000-00-00 00:00:00'
 		) TYPE=MyISAM;");
-	api_sql_query("ALTER TABLE `$TABLEITEMPROPERTY` ADD INDEX (tool,ref)");
+	api_sql_query("ALTER TABLE `$TABLEITEMPROPERTY` ADD INDEX idx_item_property_toolref (tool,ref)");
 
 	/*
 	-----------------------------------------------------------

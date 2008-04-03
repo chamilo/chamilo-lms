@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 14372 2008-02-25 23:42:16Z yannoo $
+// $Id: settings.php 14730 2008-04-03 01:34:07Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -20,7 +20,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -347,7 +347,7 @@ function handle_plugins()
 				}
 	echo '</table>';
 
-	echo '<input type="submit" name="submit_plugins" value="Submit" /></form>';
+	echo '<input type="submit" name="submit_plugins" value="'.get_lang('Ok').'" /></form>';
 			}
 
 

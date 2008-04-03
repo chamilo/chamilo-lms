@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 14721 2008-04-02 11:19:08Z pcool $
+<?php //$Id: agenda.php 14734 2008-04-03 08:05:10Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -260,7 +260,14 @@ if ($_GET['origin']!='learnpath')
 	// the small calendar
 	$MonthName = $MonthsLong[$select_month -1];
 	$agenda_items=get_calendar_items($select_month,$select_year);
-	display_minimonthcalendar($agenda_items, $select_month,$select_year, $MonthName);
+	if (api_get_setting('display_mini_month_calendar') == 'true')
+	{
+		display_minimonthcalendar($agenda_items, $select_month,$select_year, $MonthName);
+	}
+	if (api_get_setting('display_upcoming_events') == 'true')
+	{
+		display_upcoming_events();
+	}
 	// the links for adding, filtering, showall, ...
 	echo '<ul id="agenda_select">';
 	if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))

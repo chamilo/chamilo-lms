@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 14723 2008-04-02 15:29:06Z yannoo $
+<?php //$Id: agenda.inc.php 14734 2008-04-03 08:05:10Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -2379,5 +2379,73 @@ function get_agendaitems($month, $year)
 		}
 	}
 	return $agendaitems;
+}
+
+function display_upcoming_events()
+{
+	echo '<b>'.get_lang('UpcomingEvent').'</b><br />';
+	$number_of_items_to_show = (int)api_get_setting('number_of_upcoming_events');
+	
+	//databases of the courses
+	$TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA);
+	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+
+	$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_user['user_id']);
+	// if the user is administrator of that course we show all the agenda items
+	if (api_is_allowed_to_edit())
+	{
+		//echo "course admin";
+		$sqlquery = "SELECT
+						DISTINCT agenda.*, item_property.*
+						FROM ".$TABLEAGENDA." agenda,
+							 ".$TABLE_ITEMPROPERTY." item_property
+						WHERE agenda.id = item_property.ref   ".$show_all_current."
+						AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+						AND item_property.visibility='1'
+						AND agenda.start_date > NOW()
+						GROUP BY agenda.id
+						ORDER BY start_date ".$sort;
+	}
+	// if the user is not an administrator of that course
+	else
+	{
+		//echo "GEEN course admin";
+		if (is_array($group_memberships))
+		{
+			$sqlquery = "SELECT
+							agenda.*, item_property.*
+							FROM ".$TABLEAGENDA." agenda,
+								".$TABLE_ITEMPROPERTY." item_property
+							WHERE agenda.id = item_property.ref   ".$show_all_current."
+							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+							AND	( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+							AND item_property.visibility='1'
+							AND agenda.start_date > NOW()
+							ORDER BY start_date ".$sort;
+		}
+		else
+		{
+			$sqlquery = "SELECT
+							agenda.*, item_property.*
+							FROM ".$TABLEAGENDA." agenda,
+							".$TABLE_ITEMPROPERTY." item_property
+							WHERE agenda.id = item_property.ref   ".$show_all_current."
+							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+							AND ( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id='0')
+							AND item_property.visibility='1'
+							AND agenda.start_date > NOW()
+							ORDER BY start_date ".$sort;
+		}
+	}
+	$result = api_sql_query($sqlquery, __FILE__, __LINE__);
+	$counter = 0;
+	while ($item = mysql_fetch_assoc($result))	
+	{
+		if ($counter < $number_of_items_to_show)
+		{
+			echo $item['start_date'].' - '.$item['title'].'<br />';
+			$counter++;
+		}
+	}
 }
 ?>

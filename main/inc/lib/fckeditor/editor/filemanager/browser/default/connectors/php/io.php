@@ -52,6 +52,7 @@ function GetParentFolder( $folderPath )
 
 function CreateServerFolder( $folderPath )
 {
+	$php_errormsg = '';
 	$sParent = GetParentFolder( $folderPath ) ;
 
 	// Check if the parent exists, or create it.
@@ -76,7 +77,7 @@ function CreateServerFolder( $folderPath )
 		mkdir( $folderPath, $perm ) ;
 		umask( $oldumask ) ;
 
-		$sErrorMsg = $php_errormsg ;
+		$sErrorMsg = $php_errormsg ; //php_errormsg is filled by the result of a @'d operation
 
 		// Restore the configurations.
 		ini_restore( 'track_errors' ) ;

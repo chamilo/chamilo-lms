@@ -504,7 +504,7 @@ function directory_to_array($directory)
 			{
 				if (is_dir($directory. "/" . $file)) 
 				{
-					$array_items = array_merge($array_items, directoryToArray($directory. "/" . $file));					
+					$array_items = array_merge($array_items, directory_to_array($directory. "/" . $file));					
 					$file = $directory . "/" . $file;					
 					$array_items[] = preg_replace("/\/\//si", "/", $file);
 				}	

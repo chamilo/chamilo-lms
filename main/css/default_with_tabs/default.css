@@ -227,7 +227,7 @@ input[text] {font-size: 12px; }
 	height:auto;
 	margin-bottom: 1px;
 }
-#header3 A {
+#header3 a {
 	PADDING-RIGHT: 15px;
 	DISPLAY: block;
 	PADDING-LEFT: 6px;
@@ -239,12 +239,12 @@ input[text] {font-size: 12px; }
 	TEXT-DECORATION: none;
 	border: 0;
 }
-#header3 A:hover {
+#header3 a:hover {
 	COLOR: #333;
 	BACKGROUND:  url(../../img/tab_right_hover.gif) no-repeat right top;
 	border: 0;
 }
-#header3 UL {
+#header3 ul {
 	PADDING-RIGHT: 10px;
 	PADDING-LEFT: 10px;
 	PADDING-BOTTOM: 0px;
@@ -252,7 +252,7 @@ input[text] {font-size: 12px; }
 	LIST-STYLE-TYPE: none;
 	display: inline;
 }
-#header3 LI {
+#header3 li {
 	PADDING-RIGHT: 0px;
 	PADDING-LEFT: 9px;
 	BACKGROUND:  url(../../img/tab_left.gif) no-repeat left top;
@@ -263,13 +263,13 @@ input[text] {font-size: 12px; }
 	border: 0;
 	/*border-bottom: 1px solid #4171b5;*/
 }
-#header3 LI:hover {
+#header3 li:hover {
 	PADDING-RIGHT: 0px;
 	PADDING-LEFT: 9px;
 	BACKGROUND: url(../../img/tab_left_hover.gif) no-repeat left top;
 	PADDING-BOTTOM: 0px;
 	MARGIN: 0px;
-	PADDING-TOP: 0px
+	PADDING-TOP: 0px;
 	border: 0;
 }
 #header3 #current {
@@ -277,9 +277,9 @@ input[text] {font-size: 12px; }
 	border-bottom: 1px solid #fff;
 	background-color: transparent;
 }
-#header3 #current A {
+#header3 #current a {
 	BACKGROUND-IMAGE:  url(../../img/tab_right_active.gif);
-	COLOR: #333
+	COLOR: #333;
 	background-color: transparent;
 }
 
@@ -496,11 +496,9 @@ this lets the navigation menu appear to the left:
 * html #toolnav { margin-right: 0px;}
 * html #center { height: 1%; margin-left: 0; }
  /* End hide from IE5/mac */
-*/
 
-/*****************************************************
- *  LOGIN AND LANGUAGE FORM                          *
- *****************************************************/
+/*  LOGIN AND LANGUAGE FORM */
+
 #lang_form {
 	text-align: left;
 	font-size: 12px;
@@ -716,7 +714,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 	width: 500px;
 	left: 50%;
 	right: 50%;
-	border-width: 1;
+	border-width: 1px;
 	border-style: solid;
 	padding: 5px;
 	border: 1px solid #FF0000;
@@ -764,7 +762,7 @@ dl.upload_option {margin: 1em 0; padding: 0;}
 background-color: #D6E5FA; border-top: 1px solid #4171B5;
  padding: 5px; margin: 0;}
 
-/* the following for the greyed out elements */
+/* the following for the grayed out elements */
 a.nobold:link, a.nobold:visited, a.nobold:active { font-weight: normal; color: #999; margin: 0 0 0 25px;}
 a.nobold:hover { font-weight: normal; color: #999; text-decoration: underline; margin: 0 0 0 25px;}
 
@@ -882,7 +880,7 @@ span.form_error {
 	border-right:none;
 }
 .data_table td.noLink {
-	color:grey;
+	color: gray;
 }
 .data_table tr.tableName{
 	padding: 5px;
@@ -1377,8 +1375,8 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 }
 #tabbed_menu #tabbed_menu_tabs li
 {
-	margin: 0 10;
-	padding: 0;
+	margin: 0px 10px;
+	padding: 0px;
 	display: inline;
 	list-style-type: none;
 }

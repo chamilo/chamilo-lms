@@ -30,6 +30,13 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('openid_authentication', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('openid_authentication', 'false', 'No');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('profile','openid','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'OpenIDURL');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('display_mini_month_calendar', '', 'radio', 'Tools', 'true', 'DisplayMiniMonthCalendarTitle', 'DisplayMiniMonthCalendarComment', NULL, NULL);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('display_upcoming_events', '', 'radio', 'Tools', 'true', 'DisplayUpcomingEventsTitle', 'DisplayUpcomingEventsComment', NULL, NULL);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('number_of_upcoming_events', '', 'textfield', 'Tools', '1', 'NumberOfUpcomingEventsTitle', 'NumberOfUpcomingEventsComment', NULL, NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('display_mini_month_calendar', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('display_mini_month_calendar', 'false', 'No');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('display_upcoming_events', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('display_upcoming_events', 'false', 'No');
 
 CREATE TABLE templates (id int NOT NULL auto_increment, title varchar(100) NOT NULL, description varchar(250) NOT NULL, course_code varchar(40) NOT NULL, user_id int NOT NULL, ref_doc int NOT NULL, PRIMARY KEY (id));
 ALTER TABLE user ADD openid varchar(255) DEFAULT NULL;

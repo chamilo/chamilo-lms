@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 	
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.P.R.L
 	Copyright (c) Roan Embrechts, Vrije Universiteit Brussel
 	Copyright (c) Bart Mollet, Hogeschool Gent
 	
@@ -17,7 +17,7 @@
 	
 	See the GNU General Public License for more details.
 	
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -492,4 +492,28 @@ function get_sql_file_contents($file,$section,$print_errors=true)
 	//now we have our section's SQL statements group ready, return
 	return $section_contents;
 }
+
+function directory_to_array($directory)
+{
+	$array_items = array();
+	if ($handle = opendir($directory)) 
+	{
+		while (false !== ($file = readdir($handle))) 
+		{
+			if ($file != "." && $file != "..") 
+			{
+				if (is_dir($directory. "/" . $file)) 
+				{
+					$array_items = array_merge($array_items, directoryToArray($directory. "/" . $file));					
+					$file = $directory . "/" . $file;					
+					$array_items[] = preg_replace("/\/\//si", "/", $file);
+				}	
+			}
+		}
+		closedir($handle);
+	}
+	return $array_items;
+}
+
+
 ?>

@@ -240,10 +240,12 @@ function get_config_param($param,$updatePath='')
 
 					$configFile[$enreg[0]]=$enreg[1];
 
-					if($enreg[0] == $param)
-					{
-						$val=$enreg[1];
-					}
+					$a=explode("'",$enreg[0]);
+					$key_tmp=$a[1];							
+					if($key_tmp== $param)					
+					{					
+						$val=$enreg[1];					
+					} 
 				}
 			}
 		}

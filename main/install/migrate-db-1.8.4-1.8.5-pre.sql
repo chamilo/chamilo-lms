@@ -109,3 +109,4 @@ INSERT INTO course_setting(variable,value,category) VALUES ('allow_learning_path
 ALTER TABLE forum_post ADD INDEX idx_forum_post_thread_id (thread_id);
 ALTER TABLE forum_post ADD INDEX idx_forum_post_visible (visible);
 ALTER TABLE forum_thread ADD INDEX idx_forum_thread_forum_id (forum_id);
+ALTER TABLE student_publication ADD COLUMN filetype SET('file','folder')  NOT NULL DEFAULT 'file' AFTER sent_date;

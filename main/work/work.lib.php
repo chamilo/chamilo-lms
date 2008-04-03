@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -267,72 +267,138 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	{
 		$sql_get_publications_list = 	"SELECT * " .
 										"FROM  ".$work_table." " .
-										"WHERE url LIKE '$sub_course_dir%' " .
-										"AND url NOT LIKE '$sub_course_dir%/%' " .
+										"WHERE url LIKE BINARY '$sub_course_dir%' " .
+										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .
 		                 				"ORDER BY id";
+		                 				
+		$sql_get_publications_num = 	"SELECT count(*) " .
+										"FROM  ".$work_table." " .
+										"WHERE url LIKE BINARY '$sub_course_dir%' " .
+										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .
+		                 				"ORDER BY id";
+		                 				
 	}
 	else
 	{
 		if (!empty($_SESSION['toolgroup']))
 		{
 			$group_query = " WHERE post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
-			$subdirs_query = "AND url NOT LIKE '$sub_course_dir%/%' AND url LIKE '$sub_course_dir%'";
+			$subdirs_query = "AND url NOT LIKE BINARY '$sub_course_dir%/%' AND url LIKE BINARY '$sub_course_dir%'";
 		}
 		else
 		{
 			$group_query = '';
 			$subdirs_query = "WHERE url NOT LIKE '$sub_course_dir%/%' AND url LIKE '$sub_course_dir%'";
 		}
+		
 		$sql_get_publications_list =	"SELECT * FROM  $work_table $group_query $subdirs_query ORDER BY id";
+		
+		$sql_get_publications_num = "SELECT count(url) " .
+										"FROM  ".$work_table." " .
+										"WHERE url LIKE BINARY '$sub_course_dir%' " .
+										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .
+		                 				"ORDER BY id";
+		                 				
 	}
 	
 	$sql_result = api_sql_query($sql_get_publications_list,__FILE__,__LINE__);
+	$sql_result_num = api_sql_query($sql_get_publications_num,__FILE__,__LINE__);
 	
+	$row=Database::fetch_array($sql_result_num);
+	$count_files=$row[0];
+
 	$table_header[] = array(get_lang('Type'),true,'style="width:40px"');
-	$table_header[] = array(get_lang('Title'),true);	
-	//$table_header[] = array(get_lang('Description'),true);
-	$table_header[] = array(get_lang('Authors'),true);
+	$table_header[] = array(get_lang('Title'),true);
+		
+	if ($count_files!=0)
+	{
+		$table_header[] = array(get_lang('Authors'),true);
+	}
+
+	
 	$table_header[] = array(get_lang('Date'),true);
-	//if( $is_allowed_to_edit)
-	//{
+	
+	if( $is_allowed_to_edit)
+	{
 	$table_header[] = array(get_lang('Modify'),true);
-	//}
+	}
 	
 	$table_header[] = array('RealDate',false);
 		
 	// An array with the setting of the columns -> 1: columns that we will show, 0:columns that will be hide 
-	$column_show[]=1;
-	$column_show[]=1;
-	$column_show[]=1;
-	$column_show[]=1;
-	$column_show[]=1;
-	$column_show[]=0;	
+	$column_show[]=1; // type
+	$column_show[]=1; // title
+	
+	if ($count_files!=0)
+	{
+		$column_show[]=1;	 // authors
+	}
+
+	$column_show[]=1; //date
+	
+	if( $is_allowed_to_edit)
+	{
+		$column_show[]=1; //modify
+	}
+	
+	$column_show[]=0;	 //real date in correct format
+	
 	
 	// Here we change the way how the colums are going to be sort
 	// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate 
 	// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
 	
-	$column_order[]=1;
-	$column_order[]=2;
-	$column_order[]=3;
-	$column_order[]=6;
-	$column_order[]=5;
+	$column_order[]=1; //type
+	$column_order[]=2; // title
+	
+	if ($count_files!=0)
+	{
+		$column_order[]=3; //authors
+	}
+	
+	$column_order[]=6; // date
+	
+	if( $is_allowed_to_edit)
+	{
+		$column_order[]=5;
+	}
+	
 	$column_order[]=6;
 	
 	$table_data = array();
 	$dirs_list = get_subdirs_list($work_dir);
 	$my_sub_dir = str_replace('work/','',$sub_course_dir);
 	
+	// List of all folders
 	foreach($dirs_list as $dir)
 	{
+		if ($my_sub_dir=='')
+		{	
+				$mydir_temp = '/'.$dir;
+		}
+		else
+		{
+			$mydir_temp = '/'.$my_sub_dir.$dir;
+		}
+		
+		// select the directory's date
+        /*$sql_select_directory= "SELECT sent_date FROM ".$work_table." WHERE " .
+							   "url LIKE BINARY '".$mydir_temp."' AND filetype = 'folder'";
+							   
+		*/					   
+		$sql_select_directory= "SELECT prop.lastedit_date, author FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE " .
+							   	    "work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' ";													   
+		$result=api_sql_query($sql_select_directory,__FILE__,__LINE__);
+		$row=Database::fetch_array($result);
+		$direc_date= $row['lastedit_date']; //directory's date
+		$author= $row['author']; //directory's author			
 		
 		$mydir = $my_sub_dir.$dir;
 			
 		if ($is_allowed_to_edit) 
 		{		
-			$clean_edit_dir=Security :: remove_XSS(Database::escape_string($_GET['edit_dir']));
-			
-						
+			$clean_edit_dir=Security :: remove_XSS(Database::escape_string($_GET['edit_dir']));			
+			// form edit directory				
 			if(isset($clean_edit_dir) && $clean_edit_dir==$mydir)
 			{	
 				$form_folder = new FormValidator('edit_dir', 'post', api_get_self().'?curdirpath='.$my_sub_dir.'&edit_dir='.$mydir);
@@ -346,36 +412,68 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				if($form_folder -> validate())
 				{
 					$values = $form_folder -> exportValues();
-					$values = $values['my_group'];
+					$values = $values['my_group'];					
 					update_dir_name($mydir,$values['dir_name']);
 					$mydir = $my_sub_dir.$values['dir_name'];
 					$dir = $values['dir_name'];
-					$display_edit_form=false;				
-				}			
+					$display_edit_form=false;					
+				}
+				
 			}
 		}
 		
 		$action = '';
-		//display info depending on the permissions
 		$row = array();
-		$class = '';
-		$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));
-		
-		$row[] = '<img src="../img/folder_document.gif" alt="dir" border="0" hspace="5" align="middle" />'; //image
-				
+		$class = '';										
+		$row[] = '<img src="../img/folder_document.gif" border="0" hspace="5" align="middle" alt="'.get_lang('Folder').'" />'; //image
+		$a_count_directory=count_dir($work_dir.'/'.$dir,false);
+		$cant_files=$a_count_directory[0];
+		$cant_dir=$a_count_directory[1];
 
-		if($display_edit_form)
+		$text_file=get_lang('FilesUpload');
+		$text_dir=get_lang('Directories');
+				
+		if ($cant_files==1)
 		{
-			$row[] = $form_folder->toHtml(); // form to edit the directory's name
+			$text_file=strtolower(get_lang('FileUpload'));			
+		}
+		
+		if ($cant_dir==1)
+		{
+			$text_dir=get_lang('directory');	
+		}
+		
+		if ($cant_dir!=0) 
+		{
+			$dirtext=' ('.$cant_dir.' '.$text_dir.')';
 		}
 		else
 		{
-			$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'; // title of directory
-				
+			$dirtext='';
+		}
+
+		if($display_edit_form)
+		{
+			$row[] = '<span class="invisible" style="display:none">'.$dir.'</span>'.$form_folder->toHtml(); // form to edit the directory's name
+		}
+		else
+		{
+			$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a><br>'.$cant_files.' '.$text_file.$dirtext;				
 		}
 		
-		$row[] = ''; //authors		
-		$row[] = ''; //date		
+		if ($count_files!=0)
+		{
+			$row[] = "";
+		}	
+	
+		if ($direc_date!='' && $direc_date!='0000-00-00 00:00:00') 
+		{
+			$row[]= date_to_str_ago($direc_date).'<br><span class="dropbox_date">'.$direc_date.'</span>';
+		}
+		else
+		{
+			$row[]='';			
+		}	
 		
 		if( $is_allowed_to_edit)
 		{
@@ -387,8 +485,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		else
 		{
 			$row[] = "";
-		}
-		
+		}		
 		$table_data[] = $row;
 	}
 	
@@ -455,15 +552,12 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$table_data[] = $row;
 		}
 	}
-	//if( count($table_data) > 0)
-	//{
+
 	$sorting_options=array();
 	$sorting_options['column']=1; 
 	
 	$paging_options=array();
 	Display::display_sortable_config_table($table_header,$table_data,$sorting_options, $paging_options,NULL,$column_show,$column_order);
-		
-	//}
 }
 /**
  * Returns a list of subdirectories found in the given directory.
@@ -657,17 +751,26 @@ function create_unexisting_work_directory($base_work_dir,$desired_dir_name)
  * @param	string	The directory name as the bit after "work/", without trailing slash
  * @return	integer	-1 on error
  */
-function del_dir($base_work_dir,$dir){
+function del_dir($base_work_dir,$dir)
+{
 	if(empty($dir) or $dir=='/'){return -1;}//not authorized
 	//escape hacks
+/*
 	$dir = str_replace('../','',$dir);
 	$dir = str_replace('..','',$dir);
 	$dir = str_replace('./','',$dir);
 	$dir = str_replace('.','',$dir);
-	if(!is_dir($base_work_dir.$dir)) {return -1;}
+*/
+	$check = Security::check_abs_path($base_work_dir.$dir,$base_work_dir);
+	if (!$check || !is_dir($base_work_dir.$dir)) return -1;
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "DELETE FROM $table WHERE url LIKE 'work/".$dir."/%'";
+	$sql = "DELETE FROM $table WHERE url LIKE BINARY 'work/".$dir."/%'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
+	
+	//delete from DB the directories
+	$sql = "DELETE FROM $table WHERE filetype = 'folder' AND url LIKE BINARY '/".$dir."%'";
+	$res = api_sql_query($sql,__FILE__,__LINE__);	
+		
 	require_once(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 	my_delete($base_work_dir.$dir);
 }
@@ -693,7 +796,8 @@ function get_work_path($id){
  * @param	string	Destination directory where the work has been moved (must end with a '/')
  * @return	-1 on error, sql query result on success
  */
-function update_work_url($id,$new_path){
+function update_work_url($id,$new_path)
+{
 	if(empty($id)) return -1;
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql = "SELECT * FROM $table WHERE id=$id";
@@ -723,22 +827,174 @@ function update_dir_name($path, $new_name)
 	include_once(api_get_path(LIBRARY_PATH) . "/fileUpload.lib.php");
 	
 	$path_to_dir = dirname($path);
-	if($path_to_dir=='.')
-		$path_to_dir = '';
-	else
-		$path_to_dir .= '/';
 	
-	my_rename($base_work_dir.'/'.$path,$new_name);
-	
-	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = 'SELECT id, url FROM '.$table.' WHERE url LIKE "work/'.$path.'/%"';
-	$rs = api_sql_query($sql, __FILE__, __LINE__);
-	while($work = Database :: fetch_array($rs))
+	if($path_to_dir=='.') 
 	{
-		$work_name = basename($work['url']);
-		//echo $work_name;
-		$sql = 'UPDATE '.$table.' SET url="work/'.$path_to_dir.$new_name.'/'.$work_name.'" WHERE id= '.$work['id'];
+		$path_to_dir = '';
+	}
+	else
+	{
+		$path_to_dir .= '/';
+	}
+	
+	my_rename($base_work_dir.'/'.$path,$new_name);			
+	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+
+	//update all the files in the other directories according with the next query
+	$sql = 'SELECT id, url FROM '.$table.' WHERE url LIKE BINARY "work/'.$path.'/%"'; // like binary (Case Sensitive) 
+	
+	$rs = api_sql_query($sql, __FILE__, __LINE__);		
+	$work_len=strlen('work/'.$path);	
+	while($work = Database :: fetch_array($rs))
+	{		 				 
+		$new_dir=$work['url'];		
+		$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));				
+		$sql = 'UPDATE '.$table.' SET url="work/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE id= '.$work['id'];		
 		api_sql_query($sql, __FILE__, __LINE__);		
 	}
+
+	//update all the directory's children according with the next query 
+	$sql = 'SELECT id, url FROM '.$table.' WHERE url LIKE BINARY "/'.$path.'%"';
+	$rs = api_sql_query($sql, __FILE__, __LINE__);	
+	$work_len=strlen('/'.$path);	
+	while($work = Database :: fetch_array($rs))
+	{		
+		$new_dir=$work['url'];
+		$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));	
+		$sql = 'UPDATE '.$table.' SET url="/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE id= '.$work['id'];		
+		api_sql_query($sql, __FILE__, __LINE__);		
+	}	
+}
+
+/**
+ * Return an array with all the folder's ids that are in the given path  
+ * @param	string Path of the directory  
+ * @return	array The list of ids of all the directories in the path 
+ * @author 	Julio Montoya Dokeos
+ * @version April 2008
+ */
+  
+ function get_parent_directories($my_cur_dir_path)
+{
+			$list_parents = explode('/', $my_cur_dir_path);						
+			$dir_acum = '';
+			global $work_table;			
+			$list_id=array();
+			for ($i = 0; $i < count($list_parents) - 1; $i++)
+			{			
+				$where_sentence = "url  LIKE BINARY '" . $dir_acum . "/" . $list_parents[$i]."'";							
+				$dir_acum .= '/' . $list_parents[$i];							
+				$sql = "SELECT id FROM ". $work_table . " WHERE ". $where_sentence;								
+				$result = api_sql_query($sql, __FILE__, __LINE__);
+				$row= Database::fetch_array($result);									
+				$list_id[]=$row['id'];	
+			}			
+			return $list_id;
+}
+
+/**
+ * Transform an all directory structure (only directories) in an array 
+ * @param	string path of the directory
+ * @return	array the directory structure into an array
+ * @author 	Julio Montoya Dokeos
+ * @version April 2008
+ */ 
+function directory_to_array($directory)
+{
+	$array_items = array();
+	if ($handle = opendir($directory)) 
+	{
+		while (false !== ($file = readdir($handle))) 
+		{
+			if ($file != "." && $file != "..") 
+			{
+				if (is_dir($directory. "/" . $file)) 
+				{
+					$array_items = array_merge($array_items, directory_to_array($directory. "/" . $file));					
+					$file = $directory . "/" . $file;					
+					$array_items[] = preg_replace("/\/\//si", "/", $file);
+				}	
+			}
+		}
+		closedir($handle);
+	}
+	return $array_items;
+}
+
+/**
+ * Insert into the DB of the course all the directories  
+ * @param	string path of the /work directory of the course 
+ * @return	-1 on error, sql query result on success
+ * @author 	Julio Montoya Dokeos
+ * @version April 2008
+ */ 
+ 
+function insert_all_directory_in_course_table($base_work_dir)
+{	
+	$dir_to_array =directory_to_array($base_work_dir,true);	
+	$only_dir=array();	
+	
+	for($i=0;$i<count($dir_to_array);$i++)
+	{
+		$only_dir[]=substr($dir_to_array[$i],strlen($base_work_dir), strlen($dir_to_array[$i]));				
+	}	
+		
+	echo "<pre>";
+	print_r($only_dir);
+	echo "<pre>";
+	
+	for($i=0;$i<count($only_dir);$i++)
+	{		
+		global $work_table;
+		$sql_insert_all= "INSERT INTO " . $work_table . " SET url = '" . $only_dir[$i] . "', " .
+							  "title        = '',
+			                   description 	= '',
+			                   author      	= '',
+							   active		= '0',
+							   accepted		= '1',
+							   filetype		= 'folder',
+							   post_group_id = '0',
+							   sent_date	= '0000-00-00 00:00:00' ";				  
+		//api_sql_query($sql_insert_all, __FILE__, __LINE__);			
+	}	
+}
+
+/**
+* This function displays the number of files contained in a directory
+*
+* @param	string the path of the directory 
+* @param	boolean true if we want the total quantity of files include in others child directorys , false only  files in the directory		
+* @return	array the first element is an integer with the number of files in the folder, the second element is the number of directories
+* @author 	Julio Montoya Dokeos
+* @version	April 2008
+*/
+function count_dir($path_dir, $recurse)
+{
+	$count = 0;
+	$count_dir= 0;
+    $d = dir($path_dir);   
+    while ($entry = $d->Read())
+    {    
+    	if (!(($entry == "..") || ($entry == ".")))
+		{		
+        	if (Is_Dir($path_dir.'/'.$entry))
+        	{       		
+        		$count_dir++;
+          		if ($recurse)
+          		{
+            		$count += count_dir($path_dir . '/' . $entry, $recurse);
+          		}
+          		
+        	}
+			else
+        	{
+        		$count++;
+        	}
+		}
+	}
+	$return_array=array();
+	$return_array[]=$count;
+	$return_array[]=$count_dir;	
+    return $return_array;
 }
 ?>

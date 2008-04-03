@@ -103,8 +103,8 @@ $current_forum_category=get_forumcategory_information($current_forum['forum_cate
 -----------------------------------------------------------
 */
 $interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS($_GET['search']),"name" => $nameTools);
-$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS($_GET['search']),"name" => prepare4display($current_forum_category['cat_title']));
-$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;search=".Security::remove_XSS($_GET['search']),"name" => prepare4display($current_forum['forum_title']));
+$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
+$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
 if($origin=='learnpath')
 {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
@@ -268,7 +268,7 @@ if(is_array($threads))
 				echo icon('../img/exclamation.gif');
 			}
 			echo "</td>\n";
-			echo "\t\t<td><a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".$row['thread_id'].$origin_string."&amp;search=".Security::remove_XSS($_GET['search'])."\" ".class_visible_invisible($row['visibility']).">".prepare4display($row['thread_title'])."</a></td>\n";
+			echo "\t\t<td><a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".$row['thread_id'].$origin_string."&amp;search=".Security::remove_XSS(urlencode($_GET['search']))."\" ".class_visible_invisible($row['visibility']).">".prepare4display($row['thread_title'])."</a></td>\n";
 			echo "\t\t<td>".$row['thread_replies']."</td>\n";
 			if ($row['user_id']=='0')
 			{

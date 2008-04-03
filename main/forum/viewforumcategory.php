@@ -90,8 +90,8 @@ if(!api_is_allowed_to_edit())
 -----------------------------------------------------------
 */
 $current_forum_category=get_forum_categories($_GET['forumcategory']);
-$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS($_GET['search']),"name" => $nameTools);
-$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS($_GET['search']),"name" => prepare4display($current_forum_category['cat_title']));
+$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(url_encode($_GET['search'])),"name" => $nameTools);
+$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(url_encode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
 
 
 if (!empty($_GET['action']) && !empty($_GET['content'])) 
@@ -303,7 +303,7 @@ foreach ($forum_list as $key=>$forum)
 				}
 			}
 			echo "</td>\n";
-			echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;search=".Security::remove_XSS($_GET['search'])."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).'</a><br />'.prepare4display($forum['forum_comment'])."</td>\n";
+			echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search']))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).'</a><br />'.prepare4display($forum['forum_comment'])."</td>\n";
 			//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 			// the number of topics and posts
 			echo "\t\t<td>".$forum['number_of_threads']."</td>\n";

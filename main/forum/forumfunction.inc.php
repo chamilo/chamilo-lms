@@ -2645,11 +2645,25 @@ function store_move_thread($values)
 */
 function prepare4display($input='')
 {
+	$highlightcolors = array('yellow', '#33CC33','#3399CC', '#9999FF', '#33CC33');
 	if (!is_array($input))
 	{
-		if (isset($_GET['search']))
+		if (!empty($_GET['search']))
 		{
-			$input = str_replace($_GET['search'],'<span style="background-color: yellow">'.$_GET['search'].'</span>',$input);
+			if (strstr($_GET['search'],'+'))
+			{
+				$search_terms = explode('+',$_GET['search']);
+			}
+			else 
+			{
+				$search_terms[] = trim($_GET['search']);
+			}
+			$counter = 0;
+			foreach ($search_terms as $key=>$search_term)
+			{
+				$input = str_replace(trim(html_entity_decode($search_term)),'<span style="background-color: '.$highlightcolors[$counter].'">'.trim(html_entity_decode($search_term)).'</span>',$input);
+				$counter++;
+			}
 		}
 		return stripslashes($input);
 	}
@@ -2678,6 +2692,7 @@ function forum_search()
 	// settting the form elements
 	$form->addElement('header', '', get_lang('ForumSearch'));
 	$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles"');
+	$form->addElement('static', 'search_information', '', get_lang('ForumSearchInformation'), $dissertation[$_GET['opleidingsonderdeelcode']]['code']);
 	$form->addElement('submit', 'SubmitForumCategory', get_lang('Search'));
 
 	// setting the rules
@@ -2709,9 +2724,25 @@ function display_forum_search_results($search_term)
 {
 	global $table_categories, $table_forums, $table_threads, $table_posts; 
 	
+	// defining the search strings as an array
+	if (strstr($search_term,'+'))
+	{
+		$search_terms = explode('+',$search_term);
+	}
+	else 
+	{
+		$search_terms[] = $search_term;
+	}
+	
+	// search restriction
+	foreach ($search_terms as $key => $value)
+	{
+		$search_restriction[] = "(posts.post_title LIKE '%".Database::escape_string(trim($value))."%' 
+									OR posts.post_text LIKE '%".Database::escape_string(trim($value))."%')";
+	}
+	
 	$sql = "SELECT * FROM $table_posts posts
-				WHERE posts.post_title LIKE '%".Database::escape_string($search_term)."%' 
-				OR posts.post_text LIKE '%".Database::escape_string($search_term)."%'
+				WHERE ".implode(' AND ',$search_restriction)."
 				/*AND posts.thread_id = threads.thread_id*/
 				GROUP BY posts.post_id";
 
@@ -2746,10 +2777,10 @@ function display_forum_search_results($search_term)
 		
 		if ($display_result == true)
 		{
-			$search_results_item = '<li><a href="viewforumcategory.php?forumcategory='.$forum_list[$row['forum_id']]['forum_category'].'&amp;search='.$search_term.'">'.$forum_categories_list[$row['forum_id']['forum_category']]['cat_title'].'</a> > ';
-			$search_results_item .= '<a href="viewforum.php?forum='.$row['forum_id'].'&amp;search='.$search_term.'">'.$forum_list[$row['forum_id']]['forum_title'].'</a> > ';
+			$search_results_item = '<li><a href="viewforumcategory.php?forumcategory='.$forum_list[$row['forum_id']]['forum_category'].'&amp;search='.urlencode($search_term).'">'.$forum_categories_list[$row['forum_id']['forum_category']]['cat_title'].'</a> > ';
+			$search_results_item .= '<a href="viewforum.php?forum='.$row['forum_id'].'&amp;search='.urlencode($search_term).'">'.$forum_list[$row['forum_id']]['forum_title'].'</a> > ';
 			//$search_results_item .= '<a href="">THREAD</a> > ';
-			$search_results_item .= '<a href="viewthread.php?forum='.$row['forum_id'].'&amp;thread='.$row['thread_id'].'&amp;search='.$search_term.'">'.$row['post_title'].'</a>';
+			$search_results_item .= '<a href="viewthread.php?forum='.$row['forum_id'].'&amp;thread='.$row['thread_id'].'&amp;search='.urlencode($search_term).'">'.$row['post_title'].'</a>';
 			$search_results_item .= '<br />';
 			if (strlen($row['post_title']) > 200 )
 			{

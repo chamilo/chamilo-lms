@@ -1,4 +1,4 @@
-<?php // $Id: index.php 14674 2008-03-20 12:24:34Z yannoo $
+<?php // $Id: index.php 14749 2008-04-03 14:19:49Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -301,7 +301,7 @@ function register_site()
 function check_dokeos_version2()
 {
 	global $_configuration;
-	$dokeos_version = $_configuration['dokeos_version']; // the dokeos version of your installation
+	$dokeos_version = trim($_configuration['dokeos_version']); // the dokeos version of your installation
 
 	if (ini_get('allow_url_fopen')==1)
 	{
@@ -319,9 +319,9 @@ function check_dokeos_version2()
 
 		$version_url= 'http://www.dokeos.com/version.php?url='.urlencode(api_get_path(WEB_PATH)).'&campus='.urlencode(api_get_setting('siteName')).'&contact='.urlencode(api_get_setting('emailAdministrator')).'&version='.urlencode($dokeos_version).'&numberofcourses='.urlencode($number_of_courses).'&numberofusers='.urlencode($number_of_users).'&donotlistcampus='.api_get_setting('donotlistcampus').'&organisation='.urlencode(api_get_setting('Institution')).'&adminname='.urlencode(api_get_setting('administratorName').' '.api_get_setting('administratorSurname'));
 		$handle=@fopen($version_url,'r');
-		$version_info=@fread($handle, 1024);
+		$version_info=trim(@fread($handle, 1024));
 
-		if (trim($dokeos_version)<>trim($version_info))
+		if ($dokeos_version<>$version_info)
 		{
 			$output='<br /><span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Dokeos '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Dokeos '.$dokeos_version. '</b>. '.str_replace('http://www.dokeos.com','<a href="http://www.dokeos.com">http://www.dokeos.com</a>',get_lang('PleaseVisitDokeos')).'</span>';
 		}

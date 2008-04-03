@@ -1,0 +1,334 @@
+<html>
+  <head>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript">
+
+      var mimetex_url = "/cgi-bin/mimetex.cgi";
+      var mimetex_cgi = mimetex_url + "? \\Large ";
+      var preview_cgi = mimetex_cgi + "\\nocach ";
+      var result_cgi  = mimetex_cgi;
+      var img_tag = true;
+
+// FCKEditor
+var oEditor = window.parent.InnerDialogLoaded() ;
+var FCKLang = oEditor.FCKLang ;
+var FCK = oEditor.FCK;
+
+// look for a MATH-tag
+var eSelected = FCK.Selection.MoveToAncestorNode( 'MATH' ) 
+
+// else look for an IMG-tag
+if ( !eSelected )
+    eSelected = FCK.Selection.MoveToAncestorNode( 'IMG' ) 
+
+// End FCKEditor
+
+      function setSelRange(inputEl, selStart, selEnd) 
+      {
+        if (inputEl.setSelectionRange) 
+        {
+          inputEl.focus();
+          inputEl.setSelectionRange(selStart, selEnd);
+        } 
+        else if (inputEl.createTextRange) 
+        {
+          var range = inputEl.createTextRange();
+          range.collapse(true);
+          range.moveEnd('character', selEnd);
+          range.moveStart('character', selStart);
+          range.select();
+        }
+      }
+
+      function insertAtCursor(myField, myValue) 
+      {
+        //IE support
+        if (document.selection) 
+        {
+          myField.focus();
+          sel = document.selection.createRange();
+          sel.text = myValue;
+        }
+        //MOZILLA/NETSCAPE support
+        else if (myField.selectionStart || myField.selectionStart == '0') 
+        {
+          var startPos = myField.selectionStart;
+          var endPos = myField.selectionEnd;
+          myField.value = myField.value.substring(0, startPos)
+            + myValue
+            + myField.value.substring(endPos, myField.value.length);
+          setSelRange(myField, startPos + myValue.length, endPos + myValue.length);
+        } 
+        else 
+        {
+          myField.value += myValue;
+        }
+      }
+
+      function cursorHand(obj)
+      {
+	$(obj).css('cursor', 'pointer');
+      }
+
+      function cursorDefault(obj)
+      {
+	$(obj).css('cursor', 'default');
+      }
+
+      function formulaPreview()
+      {
+	if (document.pastemath.formula.value.length > 0)
+	{
+		$("#preview").css('display', 'block');
+		$("#formula_preview").attr('src', preview_cgi + document.pastemath.formula.value);
+	}
+	else
+		$("#preview").css('display', 'none');
+      }
+
+      function addFormula(expr)
+      {
+	if (document.pastemath.formula.value.length > 0)
+          expr = ' ' + expr;
+        textField = document.getElementById("formula");
+        insertAtCursor(textField, expr)
+        formulaPreview();
+      }
+
+      // append a mimetex image to the last DIV of the Helper-DIV
+      function appendHelper(expr, alt) 
+      {
+        add_expr = expr.replace(/\\/g, "\\\\");
+        src_expr = mimetex_cgi + expr;
+
+        $("#helpers/div:last/p:last").append("<img class=helper title='" + alt + "' alt='" + alt + "' onMouseOver='cursorHand(this)' onMouseOut='cursorDefault(this)' onClick='addFormula(\"" + add_expr + "\")' src='" + src_expr + "'>");
+      }
+
+      function htmlHelper(html)
+      {
+        $("#helpers/div:last/p:last").append(html);
+      }
+
+      function addHelper(id, title)
+      {
+        $("#helpers").append("<div id='" + id + "' class=helper>" + title + "<p id='" + id + "_pane' class='off pane' /></div>");
+      }
+
+      // init helper on document ready
+      $(function () {
+        addHelper("numeric", "Numeric");
+        var al_l = "abcdefghijklmnopqrstuvwxyz";
+        var al_u = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var num  = "0123456789";
+        var alnum = al_u + num;
+        for (var i in alnum) 
+        {
+          appendHelper("\\mathbb{" + alnum[i] + "}", "math bold " + alnum[i]);
+        }
+        htmlHelper("<br />");
+        for (var i in al_u) 
+        {
+          appendHelper("\\mathcal{" + alnum[i] + "}", "math cal " + alnum[i]);
+        }
+        htmlHelper("<br />");
+        for (var i in al_u) 
+        {
+          appendHelper("\\mathfrak{" + alnum[i] + "}", "math frak " + alnum[i]);
+        }
+
+        addHelper("lowergreek", "Lower Greeks");
+        appendHelper("\\alpha", "lower alpha");
+        appendHelper("\\beta",  "lower beta");
+        appendHelper("\\delta", "lower delta");
+        appendHelper("\\epsilon", "lower epsilon");
+        appendHelper("\\varepsilon", "lower varepsilon");
+        appendHelper("\\eta", "lower eta");
+        appendHelper("\\gamma", "lower gamma");
+        appendHelper("\\lambda", "lower lambda");
+        appendHelper("\\mu", "lower mu");
+        appendHelper("\\nu", "lower nu");
+        appendHelper("\\omega", "lower omega");
+        appendHelper("\\rho", "lower rho");
+        appendHelper("\\varrho", "lower varrho");
+        appendHelper("\\sigma", "lower sigma");
+        appendHelper("\\varsigma", "lower varsigma");
+        appendHelper("\\tau", "lower tau");
+        appendHelper("\\phi", "lower phi");
+        appendHelper("\\psi", "lower psi");
+        appendHelper("\\chi", "lower chi");
+        appendHelper("\\theta", "lower theta");
+        appendHelper("\\kappa", "lower kappa");
+        appendHelper("\\xi", "lower xi");
+        appendHelper("\\zeta", "lower zeta");
+
+        addHelper("uppergreek", "Upper Greeks");
+        appendHelper("\\Delta", "upper delta");
+        appendHelper("\\Gamma", "upper gamma");
+        appendHelper("\\Lambda", "upper lambda");
+        appendHelper("\\Theta", "upper theta");
+        appendHelper("\\Pi", "upper pi");
+        appendHelper("\\Phi", "upper phi");
+        appendHelper("\\Psi", "upper psi");
+        appendHelper("\\Omega", "upper omega");
+        appendHelper("\\Sigma", "upper sigma");
+        appendHelper("\\Xi", "upper xi");
+        appendHelper("\\Upsilon", "upper upsilon");
+
+        addHelper("operators", "Operators");
+        appendHelper("\\frac{x}{y}", "");
+        appendHelper("x^{n}", "");
+        appendHelper("x_{n}", "");
+        appendHelper("\\sqrt {x}", "");
+        appendHelper("\\sqrt[3]{x}", "");
+        appendHelper("\\sqrt[4]{x}", "");
+        appendHelper("\\vec {x}", "");
+
+        addHelper("functions", "Funktionen");
+        appendHelper("\\ln", "ln");
+        appendHelper("\\log", "log");
+        appendHelper("\\exp", "exp");
+        appendHelper("\\arg", "arg");
+        appendHelper("\\Re", "Re");
+        appendHelper("\\Im", "Im");
+
+        addHelper("trigonometry", "Trigonometrie");
+        appendHelper("\\sin", "sin");
+        appendHelper("\\cos", "cos");
+        appendHelper("\\tan", "tan");
+        appendHelper("\\cot", "cot");
+        appendHelper("\\arcsin", "arcsin");
+        appendHelper("\\arccos", "arccos");
+        appendHelper("\\arctan", "arctan");
+        appendHelper("\\sinh", "sinh");
+        appendHelper("\\cosh", "cosh");
+        appendHelper("\\tanh", "tanh");
+        appendHelper("\\coth", "coth");
+
+        addHelper("analysis", "Analysis");
+        appendHelper("\\int _{-\\infty}^{x}\\mathrm{d}t", "integral dt from -infinite to x");
+        appendHelper("\\sum_{k=1}^{+\\infty}", "sum from k=1 to +infinite");
+        appendHelper("\\frac{\\mathrm{d} f(x,y)}{\\mathrm{d}x}", "");
+        appendHelper("\\frac{\\partial  f(x,y)}{\\partial x}", "");
+        appendHelper("\\lim _{\\small{x\\to +\\infty}}", "");
+
+        $('#helpers > div').hover(function() {
+            $(this).find('p').fadeIn('fast');
+          }, function() {
+            $(this).find('p').fadeOut('fast');
+          });
+
+        // FCKEditor 
+
+        // First of all, translate the dialog box texts
+        oEditor.FCKLanguageManager.TranslatePage( document ) ;
+
+        LoadSelected() ;
+
+        // Show the "Ok" button.
+        window.parent.SetOkButton( true ) ;
+
+        // End FCKEditor 
+    });
+
+
+      // FCKEditor 
+
+      function LoadSelected()
+      {
+        if ( !eSelected )
+                return ;
+
+        if ( eSelected.tagName == 'MATH' )
+	{
+                img_tag = false;
+	        document.pastemath.formula.value = eSelected.firstChild.nodeValue;
+        	formulaPreview();
+	}
+        else if ( eSelected.tagName == 'IMG' )
+	{
+                img_tag = true;
+	        document.pastemath.formula.value = eSelected.alt;
+        	formulaPreview();
+	}
+        else
+	{
+                eSelected == null;
+	}
+      }
+
+
+      function Ok() 
+      {
+	        result = document.pastemath.formula.value;
+                if(result.length > 0) {
+                        FCK.Focus();
+                        if ( eSelected )
+				FCK.Selection.SelectNode( eSelected );
+                        if ( img_tag )
+                        {
+			    FCK.InsertHtml('<img src="' + result_cgi + result + '" title="' + result + '" alt="' + result + '" />');
+                        }
+                        else
+                        {
+			    FCK.InsertHtml('<math>' + result + '</math>');
+                        }
+                }
+                window.close();
+		return true;
+      }
+
+      // End FCKEditor
+
+    </script>
+    <style type="text/css">
+      div.helpers
+      {
+        position: absolute;
+        max-width: 290px;
+      }
+      li.helpers 
+      {
+        margin: 3px;
+        list-style-type: none;
+      }
+      .helper 
+      {
+        margin: 3px;
+      }
+      .off
+      { 
+        display: none;
+      }
+      .pane
+      {
+        margin: 1px;
+        border: 1px solid black;
+      }
+      .formula
+      {
+        position: absolute;
+        left: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <div class="helpers">
+        <b>Helpers:</b>
+        <div id="helpers">
+        </div>
+      </div>
+      <div class="formula">
+      <b>Formula:</b>
+      <form name="pastemath" id="pastemath">
+        <textarea id="formula" name="formula" cols="60" rows="8" onKeyUp="formulaPreview()"></textarea>
+      </form>
+      <div id="preview" class=off>
+        <b>Preview:</b>
+        <br />
+        <img src="" alt="Image" name="formula_preview" id="formula_preview" align="middle"/>
+      </div>
+      </div>
+    </div>
+  </body>
+</html>

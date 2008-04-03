@@ -43,6 +43,7 @@ If you want to save time, trouble and money, you can alternatively have your Dok
   <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
   <li><a href="#7._Oogie_PowerPoint__Impress_conversion">Oogie PowerPoint / Impress conversion</a></li>
   <li><a href="#8._Videoconferencing_and_audio-recorder">Videoconferencing and audio-recorder</a></li>
+  <li><a href="#9._Mathematical_formulas">Mathematical formulas with LaTeX</a></li>
 </ol>
 
 <br />
@@ -546,9 +547,36 @@ these paths if Dokeos is not installed into the root of your webserver.<br>url:/
 should tell Dokeos the configuration of you red5 server. This is done
 using the administration page of Dokeos. In the first field below the
 two url, set the public ip of your red5 server. The second field <br />will
-contain the value of �&nbsp;rtmp.port&nbsp;� from you red5
-configuration and the last field will contains �&nbsp;rtmpt.port&nbsp;�
-value.<span style="font-style: italic;"><br><br></span><hr>
+contain the value of <i>&nbsp;rtmp.port&nbsp;</i> from you red5
+configuration and the last field will contains <i>&nbsp;rtmpt.port&nbsp;</i>
+value.<span style="font-style: italic;"><br /><br /></span>
+
+<hr style="width: 100%; height: 2px;" />
+<h2><a name="9._Mathematical_formulas"></a>9. Mathematical formulas with LaTeX</h2>		  
+You can enable mathematical equations writing inside the Dokeos online editor (FCKEditor) by applying the following steps:
+<ul>
+	<li>1. Configure your Apache installation to make the <i>dokeos/main/inc/lib/mimetex/</i> directory an authorized cgi-bin directory*</li>
+	<li>2. Reload your Apache configuration</li>
+	<li>3. Edit the <i>dokeos/main/inc/lib/fckeditor/myconfig.js</i> and
+		<ul>
+			<li>3.1. Add <b>FCKConfig.Plugins.Add("mimetex", "en", sOtherPluginPath ) ;</b> at the end of the file</li>
+			<li>3.2. Add <b>'mimetex'</b> at the end of the FCKConfig.ToolbarSets lines where you want the LaTeX icon to appear (there is one FCKConfig.ToolbarSets by tool). For example: 
+			<table style="text-align: left; width: 100%;" border="1" cellpadding="10" cellspacing="0">
+			  <tbody>
+				<tr>
+			      <td style="vertical-align: top; background-color: rgb(229, 229, 229);">
+			      <small>FCKConfig.ToolbarSets["Test"] = [<br />
+		&nbsp;&nbsp;['Bold','Italic','Underline','StrikeThrough','Subscript','Superscript','Link','ImageManager','MP3','OrderedList','UnorderedList','Table','mimetex']<br />
+] ;</small></td></tr></tbody></table>
+				You can add it to all the tools, or only to the document and tests tools, for example<br /><br />
+			</li>
+		</ul>
+	<li>4. For Windows servers only, update <i>dokeos/main/inc/lib/fckeditor/editor/plugins/mimetex/mimetex.html</i> to replace <b>mimetex.cgi</b> by <b>mimetex.exe</b></li>
+	<li>5. Clear your browser's cache to test it (very important). This can be done using your browser's settings page</li>
+</ul>
+This procedure should make a new icon available in your Dokeos online editor, which will make it possible to insert mathematical formulas into your documents.
+		  
+<br><br></span><hr>
 Contact address: Dokeos, Rue du Corbeau, 108, B-1030 Brussels, Belgium<br />
 Mail: info@dokeos.com<br />
 Tel. +32 (0)2 669 69 55

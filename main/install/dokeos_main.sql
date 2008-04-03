@@ -530,7 +530,10 @@ VALUES
 ('gradebook_score_display_upperlimit','my_display_upperlimit','checkbox','Gradebook','false','GradebookScoreDisplayUpperLimit','GradebookScoreDisplayUpperLimitComment',NULL,'TabsGradebookEnableUpperLimit'),
 ('user_selected_theme',NULL,'radio','Platform','false','UserThemeSelection','UserThemeSelectionComment',NULL,NULL),
 ('profile','theme','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'UserTheme'),
-('allow_course_theme',NULL,'radio','Course','true','AllowCourseThemeTitle','AllowCourseThemeComment',NULL,NULL);
+('allow_course_theme',NULL,'radio','Course','true','AllowCourseThemeTitle','AllowCourseThemeComment',NULL,NULL),
+('display_mini_month_calendar',NULL,'radio','Tools', 'true', 'DisplayMiniMonthCalendarTitle', 'DisplayMiniMonthCalendarComment', NULL, NULL),
+('display_upcoming_events',NULL,'radio','Tools','true','DisplayUpcomingEventsTitle','DisplayUpcomingEventsComment',NULL,NULL);
+('number_of_upcoming_events',NULL,'textfield','Tools','1','NumberOfUpcomingEventsTitle','NumberOfUpcomingEventsComment',NULL,NULL);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -658,7 +661,11 @@ VALUES
 ('user_selected_theme','true','Yes'),
 ('user_selected_theme','false','No'),
 ('allow_course_theme','true','Yes'),
-('allow_course_theme','false','No');
+('allow_course_theme','false','No'),
+('display_mini_month_calendar', 'true', 'Yes'),
+('display_mini_month_calendar', 'false', 'No'),
+('display_upcoming_events', 'true', 'Yes'),
+('display_upcoming_events', 'false', 'No');
 
 
 

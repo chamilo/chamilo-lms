@@ -1,9 +1,9 @@
-<?php // $Id: user_list.php 14713 2008-04-02 04:58:20Z yannoo $
+<?php // $Id: user_list.php 14750 2008-04-03 14:45:13Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -368,7 +368,7 @@ function modify_filter($user_id,$url_params,$row)
 	$result .= '<span id="tooltip">
 				<span class="toolbox">
 				<a style="position: relative;" class="tooltipLinkInner" href="#">
-				<img src="../img/courses.gif" id="coursesofuser'.$user_id.'" onmouseover="xajax_courses_of_user('.$user_id.');" />
+				<img src="../img/courses.gif" id="coursesofuser'.$user_id.'" onmouseover="xajax_courses_of_user('.$user_id.');" style="vertical-align:middle;"/>
 				<span id="user'.$user_id.'" style="margin-left: -100px; border:1px solid black; width: 200px; background-color:white; z-index:99; padding: 3px; display: none; margin-right:inherit;">
 				<div style="text-align:center;"><img src="../img/anim-loader.gif" height="20" /></div>
 				</span></a></span></span>';	

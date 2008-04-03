@@ -448,13 +448,13 @@ function store_forum($values)
 	$sql="SELECT MAX(forum_order) as sort_max FROM ".$table_forums." WHERE forum_category=".mysql_real_escape_string($values['forum_category']);
 	$result=api_sql_query($sql);
 	$row=mysql_fetch_array($result);
-	$new_max=$row['sort_max']+1;	
+	$new_max=$row['sort_max']+1;
 	$session_id = isset($_SESSION['id_session']) ? $_SESSION['id_session'] : 0;
 	
 	$clean_title=Security::remove_XSS(mysql_real_escape_string(htmlspecialchars($values['forum_title'])));
 	
 	if (isset($values['forum_id']))
-	{	
+	{
 	
 	// storing an edit
 		$sql="UPDATE ".$table_forums." SET
@@ -2647,6 +2647,10 @@ function prepare4display($input='')
 {
 	if (!is_array($input))
 	{
+		if (isset($_GET['search']))
+		{
+			$input = str_replace($_GET['search'],'<span style="background-color: yellow">'.$_GET['search'].'</span>',$input);
+		}
 		return stripslashes($input);
 	}
 	else
@@ -2663,8 +2667,8 @@ function prepare4display($input='')
 /**
  * Display the search form for the forum and display the search results
  *
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
-* @version march 2008, dokeos 1.8.5
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version march 2008, dokeos 1.8.5
  */
 function forum_search()
 {
@@ -2698,8 +2702,8 @@ function forum_search()
 /**
  * Display the search results
  *
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
-* @version march 2008, dokeos 1.8.5
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version march 2008, dokeos 1.8.5
  */
 function display_forum_search_results($search_term)
 {
@@ -2742,10 +2746,10 @@ function display_forum_search_results($search_term)
 		
 		if ($display_result == true)
 		{
-			$search_results_item = '<li><a href="viewforumcategory.php?forumcategory='.$forum_list[$row['forum_id']]['forum_category'].'">'.$forum_categories_list[$row['forum_id']['forum_category']]['cat_title'].'</a> > ';
-			$search_results_item .= '<a href="viewforum.php?forum='.$row['forum_id'].'">'.$forum_list[$row['forum_id']]['forum_title'].'</a> > ';
+			$search_results_item = '<li><a href="viewforumcategory.php?forumcategory='.$forum_list[$row['forum_id']]['forum_category'].'&amp;search='.$search_term.'">'.$forum_categories_list[$row['forum_id']['forum_category']]['cat_title'].'</a> > ';
+			$search_results_item .= '<a href="viewforum.php?forum='.$row['forum_id'].'&amp;search='.$search_term.'">'.$forum_list[$row['forum_id']]['forum_title'].'</a> > ';
 			//$search_results_item .= '<a href="">THREAD</a> > ';
-			$search_results_item .= '<a href="viewthread.php?forum='.$row['forum_id'].'&amp;thread='.$row['thread_id'].'">'.$row['post_title'].'</a>';
+			$search_results_item .= '<a href="viewthread.php?forum='.$row['forum_id'].'&amp;thread='.$row['thread_id'].'&amp;search='.$search_term.'">'.$row['post_title'].'</a>';
 			$search_results_item .= '<br />';
 			if (strlen($row['post_title']) > 200 )
 			{
@@ -2766,5 +2770,32 @@ function display_forum_search_results($search_term)
 	echo '<ol>';
 	echo implode($search_results);
 	echo '</ol>';
+}
+
+/**
+ * Return the link to the forum search page
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version April 2008, dokeos 1.8.5
+ */
+function search_link()
+{
+	$return = '<a href="forumsearch.php?'.api_get_cidreq().'&action=search"> '.Display::return_icon('search.gif').' '.get_lang('Search').'</a>';
+	if (!empty($_GET['search']))
+	{
+		$return .= ': '.Security::remove_XSS($_GET['search']).' ';
+		$url = api_get_self().'?';
+		foreach ($_GET as $key=>$value)
+		{
+			if ($key<>'search')
+			{
+				$url_parameter[]=Security::remove_XSS($key).'='.Security::remove_XSS($value);
+			}
+		}
+		$url = $url.implode('&amp;',$url_parameter);
+		$return .= '<a href="'.$url.'">'.Display::return_icon('delete.gif', get_lang('RemoveSearchResults')).'</a>';
+	}
+	return $return;
+	
 }
 ?>

@@ -85,7 +85,7 @@ if(!api_is_allowed_to_edit()) $fck_attribute['Config']['UserStatus'] = 'student'
 	Header
 -----------------------------------------------------------
 */
-$interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
+$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS($_GET['search']),"name" => $nameTools);
 
 if ($_GET['action']=='add' ) {
 		
@@ -170,7 +170,7 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' )
 	------------------------------------------------------------------------------------------------------
 	*/
 	//if (api_is_allowed_to_edit() and !$_GET['action'])
-	echo '<span style="float:right;"><a href="forumsearch.php?'.api_get_cidreq().'&action=search"> '.Display::return_icon('search.gif').' '.get_lang('Search').'</a></span>';
+	echo '<span style="float:right;">'.search_link().'</span>';
 	if (api_is_allowed_to_edit())
 	{
 		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forumcategory"> '.Display::return_icon('forum_category_new.gif').' '.get_lang('AddForumCategory').'</a> ';

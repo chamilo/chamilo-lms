@@ -90,8 +90,8 @@ if(!api_is_allowed_to_edit())
 -----------------------------------------------------------
 */
 $current_forum_category=get_forum_categories($_GET['forumcategory']);
-$interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
-$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => prepare4display($current_forum_category['cat_title']));
+$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS($_GET['search']),"name" => $nameTools);
+$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS($_GET['search']),"name" => prepare4display($current_forum_category['cat_title']));
 
 
 if (!empty($_GET['action']) && !empty($_GET['content'])) 
@@ -166,7 +166,7 @@ $groups_of_user=GroupManager::get_group_ids($_course['dbName'], $_user['user_id'
 	Action Links
 -----------------------------------------------------------
 */
-echo '<span style="float:right;"><a href="forumsearch.php?'.api_get_cidreq().'&action=search"> '.Display::return_icon('search.gif').' '.get_lang('Search').'</a></span>';
+echo '<span style="float:right;">'.search_link().'</span>';
 if (api_is_allowed_to_edit())
 {
 	//echo '<a href="'.api_get_self().'?forumcategory='.$_GET['forumcategory'].'&amp;action=add&amp;content=forumcategory">'.get_lang('AddForumCategory').'</a> | ';
@@ -303,7 +303,7 @@ foreach ($forum_list as $key=>$forum)
 				}
 			}
 			echo "</td>\n";
-			echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).'</a><br />'.prepare4display($forum['forum_comment'])."</td>\n";
+			echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;search=".Security::remove_XSS($_GET['search'])."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).'</a><br />'.prepare4display($forum['forum_comment'])."</td>\n";
 			//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 			// the number of topics and posts
 			echo "\t\t<td>".$forum['number_of_threads']."</td>\n";

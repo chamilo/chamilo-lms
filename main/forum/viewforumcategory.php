@@ -90,8 +90,8 @@ if(!api_is_allowed_to_edit())
 -----------------------------------------------------------
 */
 $current_forum_category=get_forum_categories($_GET['forumcategory']);
-$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(url_encode($_GET['search'])),"name" => $nameTools);
-$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(url_encode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
+$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => $nameTools);
+$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
 
 
 if (!empty($_GET['action']) && !empty($_GET['content'])) 

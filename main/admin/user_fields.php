@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2008 Dokeos S.A.
+	Copyright (c) 2008 Dokeos SPRL
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -15,7 +15,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, rue du Corbeau, 108, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -51,7 +51,6 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 // Display form
 if(1)
 {
-	$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 	$tool_name = get_lang('UserFields');
 	Display :: display_header($tool_name, "");
 	//api_display_tool_title($tool_name);
@@ -122,7 +121,7 @@ if(1)
 	$table->set_header(2, get_lang('FieldType'));
 	$table->set_header(3, get_lang('FieldTitle'));
 	$table->set_header(4, get_lang('FieldDefaultValue'));
-	$table->set_header(5, '', false);
+	$table->set_header(5, get_lang('FieldOrder'), false);
 	$table->set_header(6, get_lang('FieldVisibility'));
 	$table->set_header(7, get_lang('FieldChangeability'));
 	$table->display();

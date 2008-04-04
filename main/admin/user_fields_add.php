@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2008 Dokeos S.A.
+	Copyright (c) 2008 Dokeos SPRL
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -15,7 +15,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, rue du Corbeau, 108, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -47,6 +47,8 @@ $table_uf_opt 	= Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 $table_uf_val 	= Database :: get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => 'user_fields.php', "name" => get_lang('UserFields'));
+
 $tool_name = get_lang('AddUserFields');
 // Create the form
 $form = new FormValidator('user_fields_add');

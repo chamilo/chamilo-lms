@@ -1,4 +1,4 @@
-<?php // $Id: authldap.php 14019 2007-12-18 19:25:13Z yannoo $
+<?php // $Id: authldap.php 14757 2008-04-04 02:55:38Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -62,7 +62,7 @@
 
 	with thanks to
 	- Stefan De Wannemacker (Ghent University)
-	- Universit� Jean Monet (J Dubois / Michel Courbon)
+	- Universite Jean Monet (J Dubois / Michel Courbon)
 	- Michel Panckoucke for reporting and fixing a bug
 	- Patrick Cool: fixing security hole
 
@@ -265,7 +265,7 @@ function putUserInfoInDokeos ($login, $infoArray)
 
 /* >>>>>>>>>>>>>>>> end of UGent LDAP routines <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
 
-/* >>>>> Older but necessary code of Universit� Jean-Monet <<<<< */
+/* >>>>> Older but necessary code of Universite Jean-Monet <<<<< */
 
 /*
 ===========================================================
@@ -279,12 +279,12 @@ function putUserInfoInDokeos ($login, $infoArray)
 	* let these functions use the variables in config.inc instead of ldap_var.inc
 */
 
-//*** variables en entr�e
-// $uname : username entr� au clavier
+//*** variables en entree
+// $uname : username entre au clavier
 // $passwd : password fournit par l'utilisateur
 
 //*** en sortie : 3 valeurs possibles
-// 0 -> authentif r�ussie
+// 0 -> authentif reussie
 // 1 -> password incorrect
 // -1 -> ne fait partie du LDAP
 

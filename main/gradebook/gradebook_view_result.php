@@ -22,7 +22,7 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
-$language_file= 'gradebook';
+$language_file[] = 'gradebook';
 $cidReset= true;
 include_once ('../inc/global.inc.php');
 include_once ('lib/be.inc.php');
@@ -160,7 +160,7 @@ if (isset ($_GET['import']))
 		'url' => 'gradebook_view_result.php?selecteval=' . $_GET['selecteval'],
 		'name' => get_lang('ViewResult'
 	));
-	$import_result_form= new DataForm(DataForm :: TYPE_IMPORT, 'import_result_form', null, api_get_self() . '?import=&selecteval=' . $_GET['selecteval']);
+	$import_result_form = new DataForm(DataForm :: TYPE_IMPORT, 'import_result_form', null, api_get_self() . '?import=&selecteval=' . $_GET['selecteval']);
 	if (!$import_result_form->validate())
 		Display :: display_header(get_lang('Import'));
 	if ($_POST['formSent'])

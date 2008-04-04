@@ -1,7 +1,7 @@
 <?php
-include_once ('../../../inc/global.inc.php');
-include_once ('../be.inc.php');
-include_once ('../gradebook_functions.inc.php');
+include_once (dirname(__FILE__).'/../../../inc/global.inc.php');
+include_once (dirname(__FILE__).'/../be.inc.php');
+include_once (dirname(__FILE__).'/../gradebook_functions.inc.php');
 include_once (api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php');
 
@@ -26,7 +26,7 @@ class DataForm extends FormValidator {
 	 * @param method
 	 * @param action
 	 */
-	function DataForm($form_type, $form_name, $method = 'post', $action = null,$target) {
+	function DataForm($form_type, $form_name, $method = 'post', $action = null,$target='') {
 		parent :: __construct($form_name, $method, $action,$target);
 		$this->form_type = $form_type;
 		if ($this->form_type == self :: TYPE_IMPORT) {

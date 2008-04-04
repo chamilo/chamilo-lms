@@ -1,12 +1,12 @@
 <?php
-include_once ('../../../inc/global.inc.php');
-include_once ('../gradebook_functions.inc.php');
+include_once (dirname(__FILE__).'/../../../inc/global.inc.php');
+include_once (dirname(__FILE__).'/../gradebook_functions.inc.php');
 include_once (api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php');
 /**
  * Form for the score display dialog
  * @author Stijn Konings
- * @author Bert Steppé
+ * @author Bert Steppï¿½
  * @package dokeos.gradebook
  */
 class ScoreDisplayForm extends FormValidator
@@ -29,13 +29,16 @@ class ScoreDisplayForm extends FormValidator
 		
 		//setting the default values
 		
-		foreach ($customdisplays as $customdisplay)
+		if(is_array($customdisplays))
 		{
-			$this->setDefaults(array (
-				'endscore[' . $counter . ']' => $customdisplay['score'],
-				'displaytext[' . $counter . ']' => $customdisplay['display']
-			));
-			$counter++;
+			foreach ($customdisplays as $customdisplay)
+			{
+				$this->setDefaults(array (
+					'endscore[' . $counter . ']' => $customdisplay['score'],
+					'displaytext[' . $counter . ']' => $customdisplay['display']
+				));
+				$counter++;
+			}
 		}
 		$scorecol= array ();
 		
@@ -93,8 +96,8 @@ class ScoreDisplayForm extends FormValidator
 
 				$elementTemplateTwoLabel2 =
 				'<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->&nbsp{element}
-				<a href="javascript:minItem(' . ($counter) . ')"><img style="display: '.(($counter>=$nr_items && $counter!=1)?'inline':'none').';" id="min-' . $counter . '" src="../img/gradebook_remove.gif"></img></a>			
-				<a href="javascript:plusItem(' . ($counter+1) . ')"><img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="plus-' . ($counter+1) . '" src=../img/gradebook_add.gif></img></a>
+				<a href="javascript:minItem(' . ($counter) . ')"><img style="display: '.(($counter>=$nr_items && $counter!=1)?'inline':'none').';" id="min-' . $counter . '" src="../img/gradebook_remove.gif" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></img></a>			
+				<a href="javascript:plusItem(' . ($counter+1) . ')"><img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="plus-' . ($counter+1) . '" src="../img/gradebook_add.gif" alt="'.get_lang('Add').'" title="'.get_lang('Add').'"></img></a>
 				</div></p></div>';
 				
 				$scorebetw= array ();

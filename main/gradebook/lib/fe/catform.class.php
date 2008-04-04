@@ -1,7 +1,7 @@
 <?php
 
-include_once ('../../../inc/global.inc.php');
-include_once ('../be.inc.php');
+include_once (dirname(__FILE__).'/../../../inc/global.inc.php');
+include_once (dirname(__FILE__).'/../be.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 /**

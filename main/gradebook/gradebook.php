@@ -49,6 +49,8 @@ function confirmation ()
 }
 </script>';
 
+$filter_confirm_msg = true;
+$filter_warning_msg = true;
 // --------------------------------------------------------------------------------
 // -                                  ACTIONS                                     -
 // --------------------------------------------------------------------------------
@@ -188,9 +190,15 @@ if (isset ($_GET['visiblecat']))
 	$cats[0]->apply_visibility_to_children();
 	unset ($cats);
 	if ($visibility_command)
+	{
 		$confirmation_message = get_lang('ViMod');
+		$filter_confirm_msg = false;
+	}
 	else
+	{
 		$confirmation_message = get_lang('InViMod');
+		$filter_confirm_msg = false;
+	}
 }
 if (isset ($_GET['deletecat']))
 {
@@ -203,6 +211,7 @@ if (isset ($_GET['deletecat']))
 			$cats[0]->delete_all();
 	}
 	$confirmation_message = get_lang('CategoryDeleted');
+	$filter_confirm_msg = false;
 }
 //parameters for evaluations
 if (isset ($_GET['visibleeval']))
@@ -217,9 +226,15 @@ if (isset ($_GET['visibleeval']))
 	$eval[0]->save();
 	unset ($eval);
 	if ($visibility_command)
+	{
 		$confirmation_message = get_lang('ViMod');
+		$filter_confirm_msg = false;
+	}
 	else
+	{
 		$confirmation_message = get_lang('InViMod');
+		$filter_confirm_msg = false;
+	}
 }
 if (isset ($_GET['deleteeval']))
 {
@@ -228,6 +243,7 @@ if (isset ($_GET['deleteeval']))
 	if ($eval[0] != null)
 		$eval[0]->delete_with_results();
 	$confirmation_message = get_lang('EvaluationDeleted');
+	$filter_confirm_msg = false;
 }
 //parameters for links
 if (isset ($_GET['visiblelink']))
@@ -242,9 +258,15 @@ if (isset ($_GET['visiblelink']))
 	$link[0]->save();
 	unset ($link);
 	if ($visibility_command)
+	{
 		$confirmation_message = get_lang('ViMod');
+		$filter_confirm_msg = false;
+	}
 	else
+	{
 		$confirmation_message = get_lang('InViMod');
+		$filter_confirm_msg = false;
+	}
 }
 if (isset ($_GET['deletelink']))
 {
@@ -254,6 +276,7 @@ if (isset ($_GET['deletelink']))
 		$link[0]->delete();
 	unset ($link);
 	$confirmation_message = get_lang('LinkDeleted');
+	$filter_confirm_msg = false;
 }
 
 if ($course_to_crsind && !isset($_GET['confirm']))
@@ -273,6 +296,7 @@ if ($course_to_crsind && !isset($_GET['confirm']))
 			   </form>';
 
 	$warning_message = get_lang('MoveWarning').'<br><br>'.$button;
+	$filter_warning_msg = false;
 }
 
 
@@ -282,7 +306,10 @@ if (isset ($_POST['action']))
 	block_students();
 	$number_of_selected_items= count($_POST['id']);
 	if ($number_of_selected_items == '0')
+	{
 		$warning_message = get_lang('NoItemsSelected');
+		$filter_warning_msg = false;
+	}
 	else
 	{
 		switch ($_POST['action'])
@@ -315,7 +342,8 @@ if (isset ($_POST['action']))
 						$number_of_deleted_links++;
 					}
 				}
-				$confirmation_message = get_lang('DeletedCategories') . ' : <b>' . $number_of_deleted_categories . '</b><br>' . get_lang('DeletedEvaluations') . ' : <b>' . $number_of_deleted_evaluations . '</b><br>' . get_lang('DeletedLinks') . ' : <b>' . $number_of_deleted_links . '</b><br><br>' . get_lang('TotalItems') . ' : <b>' . $number_of_selected_items . '</b>';
+				$confirmation_message = get_lang('DeletedCategories') . ' : <b>' . $number_of_deleted_categories . '</b><br />' . get_lang('DeletedEvaluations') . ' : <b>' . $number_of_deleted_evaluations . '</b><br />' . get_lang('DeletedLinks') . ' : <b>' . $number_of_deleted_links . '</b><br /><br />' . get_lang('TotalItems') . ' : <b>' . $number_of_selected_items . '</b>';
+				$filter_confirm_msg = false;
 				break;
 			case 'setvisible' :
 				foreach ($_POST['id'] as $indexstr)
@@ -341,6 +369,7 @@ if (isset ($_POST['action']))
 					}
 				}
 				$confirmation_message = get_lang('ItemsVisible');
+				$filter_confirm_msg = false;
 				break;
 			case 'setinvisible' :
 				foreach ($_POST['id'] as $indexstr)
@@ -366,6 +395,7 @@ if (isset ($_POST['action']))
 					}
 				}
 				$confirmation_message = get_lang('ItemsInVisible');
+				$filter_confirm_msg = false;
 				break;
 		}
 	}
@@ -430,9 +460,9 @@ if (isset ($_GET['addallcat']))
 	Display :: display_normal_message(get_lang('AddAllCat'),false);
 
 if (isset ($confirmation_message))
-	Display :: display_confirmation_message($confirmation_message);
+	Display :: display_confirmation_message($confirmation_message,$filter_confirm_msg);
 if (isset ($warning_message))
-	Display :: display_warning_message($warning_message);
+	Display :: display_warning_message($warning_message,$filter_warning_msg);
 
 if (isset ($move_form))
 	Display :: display_normal_message($move_form->toHtml(),false);

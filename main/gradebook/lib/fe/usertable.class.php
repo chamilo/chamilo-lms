@@ -1,12 +1,12 @@
 <?php
 
-include_once ('../../../inc/global.inc.php');
-include_once ('../be.inc.php');
+include_once (dirname(__FILE__).'/../../../inc/global.inc.php');
+include_once (dirname(__FILE__).'/../be.inc.php');
 
 /**
  * Table to display flat view of a student's evaluations and links
  * @author Stijn Konings
- * @author Bert Steppé (refactored, optimised, use of caching, datagenerator class)
+ * @author Bert Steppï¿½ (refactored, optimised, use of caching, datagenerator class)
  */
 class UserTable extends SortableTable
 {

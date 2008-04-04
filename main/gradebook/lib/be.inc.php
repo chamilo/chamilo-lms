@@ -1,7 +1,7 @@
 <?php
 
 // include this file to have access to all backend classes
-// @author Bert Steppé
+// @author Bert SteppÃ©
 
 include_once ('be/gradebookitem.class.php');
 include_once ('be/category.class.php');

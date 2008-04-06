@@ -9,7 +9,7 @@ FCKCommands.RegisterCommand(
     new FCKDialogCommand(
         FCKLang['DlgMimeTeX'],
         FCKLang['DlgMimeTeX'],
-        FCKConfig.PluginsPath + 'mimetex/mimetex.html', 750, 400));
+        FCKConfig.PluginsPath + 'mimetex/mimetex.html', 750, 500));
 // Create the "mimeTeX" toolbar button.
 var oFindItem = new FCKToolbarButton('mimetex', FCKLang['DlgMimeTeX']);
 oFindItem.IconPath = FCKConfig.PluginsPath + 'mimetex/mimetex.gif' ;

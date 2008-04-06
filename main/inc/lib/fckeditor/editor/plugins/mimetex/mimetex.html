@@ -1,9 +1,12 @@
 <html>
+<!-- Author Dirk Datzert 2007
+ Patches and improvements by Juan Carlos Raña Trabado 2008 -->
   <head>
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript">
 
-      var mimetex_url = "/cgi-bin/mimetex.cgi";
+      var mimetex_url = "/cgi-bin/mimetex.cgi"; //Linux
+      //var mimetex_url = "/cgi-bin/mimetex.exe"; //Windows
       var mimetex_cgi = mimetex_url + "? \\Large ";
       var preview_cgi = mimetex_cgi + "\\nocach ";
       var result_cgi  = mimetex_cgi;
@@ -116,6 +119,163 @@ if ( !eSelected )
 
       // init helper on document ready
       $(function () {
+		
+	  ////jc
+		addHelper("symbols1", "Symbols 1");
+		//appendHelper("\\-", "-"); //jc
+		appendHelper("\-", "-");
+        appendHelper("\\cdot",  "cdot");
+        appendHelper("\\times", "times");
+        appendHelper("\\ast", "ast");
+        appendHelper("\\div", "div");
+        appendHelper("\\diamond", "diamond");
+        appendHelper("\\pm", "pm");
+        appendHelper("\\mp", "mp");
+        appendHelper("\\oplus", "oplus");
+        appendHelper("\\ominus", "ominus");
+        appendHelper("\\otimes", "otimes");
+        appendHelper("\\oslash", "oslash");
+        appendHelper("\\odot", "odot");
+        appendHelper("\\bigcirc", "bigcirc");
+        appendHelper("\\circ", "circ");
+        appendHelper("\\bullet", "bullet");
+        appendHelper("\\asymp", "asymp");
+        appendHelper("\\equiv", "equiv");
+        appendHelper("\\subseteq", "subseteq");
+        appendHelper("\\supseteq", "supseteq");
+        appendHelper("\\leq", "leq");
+        appendHelper("\\geq", "geq");
+        appendHelper("\\preceq", "preceq");		
+		appendHelper("\\succeq", "succeq");
+        appendHelper("\\sim", "sim");
+        appendHelper("\\approx", "approx");		
+        appendHelper("\\subset", "subset");
+        appendHelper("\\supset", "supset");
+        appendHelper("\\ll", "ll");
+        appendHelper("\\gg", "gg");
+        appendHelper("\\prec", "prec");
+        appendHelper("\\succ", "succ");		
+        appendHelper("\\leftar", "leftar");
+        appendHelper("\\rightar", "rightar");
+        appendHelper("\\uparr", "uparr");
+        appendHelper("\\downar", "downar");
+        appendHelper("\\leftrightar", "leftrightar");
+        appendHelper("\\near", "near");
+        appendHelper("\\sear", "sear");
+        appendHelper("\\simeq", "simeq");		
+        appendHelper("\\Leftar", "Leftar");		
+		appendHelper("\\Rightar", "Rightar");
+        appendHelper("\\Upar", "Upar");
+        appendHelper("\\Downar", "Downar");		
+        appendHelper("\\Leftrightar", "Leftrightar");
+        appendHelper("\\nwar", "nwar");
+        appendHelper("\\swar", "swar");		
+		appendHelper("\\propto", "propto");		
+        appendHelper("\\prime", "prime");
+        appendHelper("\\infty", "infty");		
+        appendHelper("\\in", "in");
+        appendHelper("\\ni", "ni");
+        appendHelper("\\triangle", "triangle");
+        appendHelper("\\bigtriangledo", "bigtriangledo");
+        appendHelper("\/", "/"); //no va es la barra normal inclinada a la derecha
+		appendHelper("\\forall", "forall");
+        appendHelper("\\exists", "exists");		
+        appendHelper("\\neg", "neg");		
+		appendHelper("\\emptyset", "emptyset");
+        appendHelper("\\Re", "Re");
+        appendHelper("\\Im", "Im");		
+        appendHelper("\\top", "top");
+        appendHelper("\\bot", "bot");
+        appendHelper("\\aleph", "aleph");				
+		appendHelper("\\calA", "calA");		
+        appendHelper("\\calZ", "calZ");
+        appendHelper("\\cup", "cup");		
+        appendHelper("\\cap", "cap");
+        appendHelper("\\uplus", "uplus");
+        appendHelper("\\wedge", "wedge");
+        appendHelper("\\vee", "vee");		
+		appendHelper("\\vdash", "vdash");
+        appendHelper("\\dashv", "dshv");				
+        appendHelper("\\lfloor", "lfloor");
+        appendHelper("\\rfloor", "rfloor");		
+        appendHelper("\\lceil", "lceil");				
+		appendHelper("\\rceil", "rceil");				
+        appendHelper("\\lbrace", "lbrace");
+        appendHelper("\\rbrace", "rbrace");				
+        appendHelper("\\langle", "langle");
+        appendHelper("\\rangle", "rangle");		
+        appendHelper("\\mid", "mid");
+        appendHelper("\\parallel", "parallel");		
+        appendHelper("\\updownar", "updownar");		
+		appendHelper("\\Updownar", "Updownar");		
+        appendHelper("\\setminus", "setminus");				
+        appendHelper("\\wr", "wr");		
+        appendHelper("\\surd", "surd");		
+        appendHelper("\\amalg", "amalg");				
+		appendHelper("\\nabla", "nabla");				
+        appendHelper("\\int", "int");		
+        appendHelper("\\sqcup", "sqcup");					
+        appendHelper("\\sqcap", "sqcap");
+        appendHelper("\\sqsubseteq", "sqsubseteq");		
+        appendHelper("\\sqsupseteq", "sqsupseteq");
+        appendHelper("\\S", "S");		
+		appendHelper("\\dag", "dag");		
+        appendHelper("\\ddag", "ddag");
+        appendHelper("\\P", "P");
+        appendHelper("\\clubsuit", "clubsuit");		
+        appendHelper("\\Diamond", "Diamond");		
+		appendHelper("\\Heart", "Heart");
+        appendHelper("\\spadesuit", "spadesuit");       
+		
+		
+		addHelper("symbols2", "Symbols 2");
+		appendHelper("\\leftharpoonup", "leftharpoonup");
+        appendHelper("\\leftharpoondo",  "leftharpoondo");
+        appendHelper("\\rightharpoonup", "rightharpoonup");
+        appendHelper("\\rightharpoondo", "rightharpoondo");
+        appendHelper("\\triangleright", "triangleright");
+        appendHelper("\\triangleleft", "triangleleft");
+        appendHelper("\\star", "star");
+        appendHelper("\\partial", "partial");		
+        appendHelper("\\flat", "flat");
+        appendHelper("\\natural", "natural");		
+        appendHelper("\\sharp", "sharp");
+        appendHelper("\\smile", "smile");		
+        appendHelper("\\frown", "frown");
+        appendHelper("\\ell", "ell");
+        appendHelper("\\imath", "imath");
+        appendHelper("\\jmath", "jmath");		
+        //appendHelper("\\vp", "vp");
+        //appendHelper("\\vec", "vec");
+        appendHelper("\\ss", "ss");
+        appendHelper("\\ae", "ae");
+		appendHelper("\\oe",  "oe");
+        appendHelper("\\AE", "AE");
+        appendHelper("\\OE", "OE");
+        appendHelper("\\moo", "moo");
+        appendHelper("\\Lbag", "Lbag");
+        appendHelper("\\Rbag", "Rbag");		
+        appendHelper("\\lightning", "lightning");		
+        appendHelper("\\llbracket", "llbracket");
+        appendHelper("\\rrbracket", "rrbracket");				
+        appendHelper("\\subsetpluseq", "subsetpluseq");
+        appendHelper("\\supsetpluseq", "supsetpluseq");		
+        appendHelper("\\Yup", "Yup");		
+        appendHelper("\\Ydown", "Ydown");		
+        //appendHelper("\\cyr A", "cyr A");
+        //appendHelper("\\cyr a", "cyr a");		
+        //appendHelper("\\cyr Dj", "cyr Dj");
+        //appendHelper("\\cyr Zh", "cyr Zh");
+        addHelper("calendar", "Calendar");
+		
+		appendHelper("\\blue\\normalsize\\calendar", "");
+    	appendHelper("\\reverse\\opaque\\red\\normalsize\\calendar[2008,9,11]", "");		
+        appendHelper("\\today",  "");
+		appendHelper("\\green\\today[2]",  "");
+		appendHelper("\\red\\today[3]",  "");	
+						
+		////jc end	  		
+		
         addHelper("numeric", "Numeric");
         var al_l = "abcdefghijklmnopqrstuvwxyz";
         var al_u = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -135,7 +295,7 @@ if ( !eSelected )
         {
           appendHelper("\\mathfrak{" + alnum[i] + "}", "math frak " + alnum[i]);
         }
-
+		
         addHelper("lowergreek", "Lower Greeks");
         appendHelper("\\alpha", "lower alpha");
         appendHelper("\\beta",  "lower beta");
@@ -183,7 +343,7 @@ if ( !eSelected )
         appendHelper("\\sqrt[4]{x}", "");
         appendHelper("\\vec {x}", "");
 
-        addHelper("functions", "Funktionen");
+        addHelper("functions", "Functions");
         appendHelper("\\ln", "ln");
         appendHelper("\\log", "log");
         appendHelper("\\exp", "exp");
@@ -191,7 +351,7 @@ if ( !eSelected )
         appendHelper("\\Re", "Re");
         appendHelper("\\Im", "Im");
 
-        addHelper("trigonometry", "Trigonometrie");
+        addHelper("trigonometry", "Trigonometry");
         appendHelper("\\sin", "sin");
         appendHelper("\\cos", "cos");
         appendHelper("\\tan", "tan");
@@ -211,6 +371,27 @@ if ( !eSelected )
         appendHelper("\\frac{\\partial  f(x,y)}{\\partial x}", "");
         appendHelper("\\lim _{\\small{x\\to +\\infty}}", "");
 
+		////jc
+		addHelper("moresamples", "More samples");		
+        
+		appendHelper("\\\large\\begin{array}{c.c|c}       a_1&a_2&a_3\\\\\\hdash b_1&b_2&b_3\\\\\\hline c_1&c_2&c_3\\end{array}", "");
+		appendHelper("\\large e^x=\\sum_{n=0}^\\infty\\frac{x^n}{n!}", "");
+		appendHelper("\\large      e^x=\\lim_{n\\to\\infty} \\left(1+\\frac xn\\right)^n", "");
+		appendHelper("\\large     \\left( \\begin{array}{GC+30}            \\cos\\frac\\theta2 & i\\,\\sin\\frac\\theta2\\\            i\\,\\sin\\frac\\theta2 & \\cos\\frac\\theta2 \\end{array} \\right)     \\left( \\begin{array}            z & x_{\\tiny-} \\\ x_{\\tiny+} & -z \\end{array} \\right)     \\hfill{300}\\text{\\normalsize Example 1}", "");
+		appendHelper("\\large x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}", "");
+		appendHelper("\\large f^\\prime(x)\\ =         \\lim_{\\Delta x\\to0}\\frac{f(x+\\Delta x)-f(x)}{\\Delta x}", "");
+		appendHelper("\\large\\hspace{5}\\unitlength{1}    \\picture(175,100){ (50,50){\\circle(100)}    (1,50){\\overbrace{\\line(46)}^{4$\\;\\;a}}    (52,50){\\line(125)} (50,52;115;2){\\mid} (52,55){\\longleftar[60]}    (130,56){\\longrightar[35]} (116,58){r} (c85,50;80;2){\\bullet}    (c85,36){\\large-q} (c165,36){\\large q}    (42,29){\\underbrace{\\line(32)}_{\\small a^2/r\\;\\;\\;}} }",  "");
+		appendHelper("\\large\\varepsilon=\\sum_{i=1}^{n-1}    \\frac1{\\Delta x}\\int_{x_i}^{x_{i+1}}\\left\\{\\frac1{\\Delta x}\\big[    (x_{i+1}-x)y_i^\\ast+(x-x_i)y_{i+1}^\\ast\\big]-f(x)\\right\\}^2dx",  "");
+		appendHelper("\\large\\frac{dv^m}{ds}=-\\Gamma^m_{oo}v^{o^2}    =-g^{mn}\\Gamma_{noo}v^{o^2}=\\frac12g^{mn}g_{oo,n}v^{o^2}",  "");
+		appendHelper("\\large f=b_o+\\frac{a_1}{b_1+    \\frac{a_2}{b_2+\\frac{a_3}{b_3+a_4}}}",  "");
+		appendHelper("\\large\\tilde y=\\left\\{    {\\ddot x\\text{ if \\vec x odd}\\atop\\hat{\\,\\bar x+1}\\text{ if even}}\\right.",  "");
+		appendHelper("\\large\\overbrace{a,...,a}^{\\text{k a^,s}},    \\underbrace{b,...,b}_{\\text{l b^,s}}\\hspace{10}    \\large\\underbrace{\\overbrace{a...a}^{\\text{k a^,s}},    \\overbrace{b...b}^{\\text{l b^,s}}}_{\\text{k+l elements}}",  "");
+		appendHelper("\\large\\scr{J}^{i0}=+\\frac i2         \\left[\\begin{array}{cc}\\sigma_i&0\\\0&-\\sigma_i\\end{array}\\right]         \\hspace{10}\\scr{J}^{ij}=\\frac12\\varepsilon_{ijk}         \\left[\\begin{array}{cc}\\sigma_k&0\\\0&\\sigma_k\\end{array}\\right]",  "");			  
+		appendHelper("\\small\\hspace{10}\\unitlength{.75}    \\picture(120,220){ (60,200){\\circle(120,40)} (0,20){\\line(0,180)}    (5,189;0,-30){\\pict(110,20){(c20,10;70;2){    \\pict(40,20){(20,10){\\circle(40,20)}(c10,10)+(c30,10)-}} } }    (119,20){\\line(0,180)} (60,20){\\circle(120,40;34)}}",  "");
+		appendHelper("\\normalsize\\unitlength{.6}\\picture(100){   (50,50){\\circle(99)} (20,55;50,0;2){\\fs{+1}\\hat\\bullet} (50,40){\\bullet}   (50,35){\\circle(50,25;34)} (50,35){\\circle(50,45;34)}}", "");	
+		////jc end
+		
+		
         $('#helpers > div').hover(function() {
             $(this).find('p').fadeIn('fast');
           }, function() {
@@ -280,11 +461,14 @@ if ( !eSelected )
       // End FCKEditor
 
     </script>
+    <!--solved problem with iexplorer 7 jc -->
     <style type="text/css">
       div.helpers
       {
         position: absolute;
-        max-width: 290px;
+        max-width: 290px; 
+		width:expression(document.body.clientWidth > 290? "290px": "auto" );
+		overflow:auto;
       }
       li.helpers 
       {
@@ -323,6 +507,7 @@ if ( !eSelected )
       <form name="pastemath" id="pastemath">
         <textarea id="formula" name="formula" cols="60" rows="8" onKeyUp="formulaPreview()"></textarea>
       </form>
+      <div align="right"><a href="http://www.forkosh.com/mimetex.html" title="Manual" target="_blank" style="left:auto">Manual</a></div>
       <div id="preview" class=off>
         <b>Preview:</b>
         <br />

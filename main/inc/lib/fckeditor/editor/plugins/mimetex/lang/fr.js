@@ -19,3 +19,4 @@
 FCKLang.mimetexBtn			= 'Insertion/Edition d\'un tag' ;
 FCKLang.mimetexDlgTitle		= 'Propriétés du tag' ;
 FCKLang.mimetexDlgName		= 'Nom du tag' ;
+FCKLang.DlgMimeTex			= 'mimeTeX Editor' ;

@@ -19,4 +19,4 @@
 FCKLang.mimetexBtn			= 'Insert/Edit Placeholder' ;
 FCKLang.mimetexDlgTitle		= 'Placeholder Properties' ;
 FCKLang.mimetexDlgName		= 'Placeholder Name' ;
-FCKLang.DlgMimeTex			= 'mimeTeX Editor' ;
+FCKLang.DlgMimeTeX			= 'mimeTeX Editor' ;

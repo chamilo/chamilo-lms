@@ -1,10 +1,9 @@
-<?php
-// $Id: gradebook.php 1020 2007-05-11 08:20:27Z stijn $
+<?php // $Id: gradebook.php 14772 2008-04-07 15:37:18Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006 Dokeos S.A.
+	Copyright (c) 2006-2008 Dokeos SPRL
 	Copyright (c) 2006 Ghent University (UGent)
 	Copyright (c) various contributors
 
@@ -18,7 +17,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -553,7 +552,8 @@ elseif(!empty($_GET['export_certificate']))
 		$portal_name = api_get_setting('siteName');
 		$stud_fn = $user['firstname'];
 		$stud_ln = $user['lastname'];
-		$certif_text = sprintf(get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'),$organization_name,$stud_fn.' '.$stud_ln,$category[0]->get_name(),$scorecourse_display); 
+		$certif_text = sprintf(get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'),$organization_name,$stud_fn.' '.$stud_ln,$category[0]->get_name(),$scorecourse_display);
+		$certif_text = str_replace("\\n","\n",$certif_text);
 		$date = date('d/m/Y',time());
 		
 		$pdf= new Cezpdf('a4','landscape');

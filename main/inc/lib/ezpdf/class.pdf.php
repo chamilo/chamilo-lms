@@ -1231,7 +1231,7 @@ function output($debug=0){
   $this->checkAllHere();
 
   $xref=array();
-  $content="%PDF-1.3\n%âãÏÓ\n";
+  $content="%PDF-1.3\n%ï¿½ï¿½ï¿½ï¿½\n";
 //  $content="%PDF-1.3\n";
   $pos=strlen($content);
   foreach($this->objects as $k=>$v){
@@ -2238,7 +2238,6 @@ function addText($x,$y,$size,$text,$angle=0,$wordSpaceAdjust=0){
       $this->$func($info);
     }
   }
-
 }
 
 /**
@@ -2331,13 +2330,11 @@ function PRVTadjustWrapText($text,$actual,$width,&$x,&$adjust,$justification){
 function addTextWrap($x,$y,$width,$size,$text,$justification='left',$angle=0,$test=0){
   // this will display the text, and if it goes beyond the width $width, will backtrack to the 
   // previous space or hyphen, and return the remainder of the text.
-
   // $justification can be set to 'left','right','center','centre','full'
 
   // need to store the initial text state, as this will change during the width calculation
   // but will need to be re-set before printing, so that the chars work out right
   $store_currentTextState = $this->currentTextState;
-
   if (!$this->numFonts){$this->selectFont('./fonts/Helvetica');}
   if ($width<=0){
     // error, pretend it printed ok, otherwise risking a loop

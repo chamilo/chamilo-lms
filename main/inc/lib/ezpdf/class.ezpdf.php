@@ -1261,22 +1261,35 @@ function ezText($text,$size=0,$options=array(),$test=0){
 
   
   $lines = explode("\n",$text);
-  foreach ($lines as $line){
+  foreach ($lines as $line)
+  {
+  	// for each line of text to print
     $start=1;
-    while (strlen($line) || $start){
+    while (strlen($line) || $start)
+    {
+      //while there is still some text to print or if this is the first line
       $start=0;
-      $this->y=$this->y-$height;
-      if ($this->y < $this->ez['bottomMargin']){
-        if ($test){
+      $this->y=$this->y-$height; //make Y position depend on font-size
+      if ($this->y < $this->ez['bottomMargin'])
+      {
+      	//if this vertical position (Y) is not out of the page 
+        if ($test)
+        {
+          //we are on a new page, nothing to do
           $newPage=true;
-        } else {
+        }
+        else 
+        {
+          //else start new page
           $this->ezNewPage();
           // and then re-calc the left and right, in case they have changed due to columns
         }
       }
       if (is_array($options) && isset($options['aleft'])){
+      	//there are options and they include left position
         $left=$options['aleft'];
       } else {
+      	//there are no options, or they don't include left position
         $left = $this->ez['leftMargin'] + ((is_array($options) && isset($options['left']))?$options['left']:0);
       }
       if (is_array($options) && isset($options['aright'])){

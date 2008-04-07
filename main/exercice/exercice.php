@@ -581,7 +581,7 @@ if($show == 'test'){
 		  </td>
 		  <td width="8%" align="center"> <?php
 		  $exid = $row['id'];
-		  $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE `exercice_id` = '$exid'";
+		  $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '$exid'";
 		  $sqlresult =api_sql_query($sqlquery);
 		  $rowi = mysql_result($sqlresult,0);
 		  echo $rowi.' '.strtolower(get_lang(($rowi>1?'Questions':'Question'))).'</td>';
@@ -625,7 +625,7 @@ if($show == 'test'){
     </table></td>
 	 <td align='center'> <?php
   $exid = $row['id'];
-  $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE `exercice_id` = '$exid'";
+  $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '$exid'";
   $sqlresult =api_sql_query($sqlquery);
   $rowi = mysql_result($sqlresult,0);
   echo ($rowi>1?get_lang('Questions'):get_lang('Question')); ?> </td>
@@ -633,7 +633,7 @@ if($show == 'test'){
 	<td align='center'><?php
 		$eid = $row['id'];
 	$uid= api_get_user_id();
-	$qry = "select * from `".$TBL_TRACK_EXERCICES."` where exe_exo_id = $eid and exe_user_id = $uid and exe_cours_id = '".api_get_course_id()."'";	
+	$qry = "select * from $TBL_TRACK_EXERCICES where exe_exo_id = $eid and exe_user_id = $uid and exe_cours_id = '".api_get_course_id()."'";	
 	$qryres = api_sql_query($qry);
 	$num = Database::num_rows($qryres);
 	$row = Database::fetch_array($qryres);
@@ -845,11 +845,11 @@ if($_configuration['tracking_enabled'])
 		{
 			//get all results (ourself and the others) as an admin should see them
 			//AND exe_user_id <> $_user['user_id']  clause has been removed
-			$sql="SELECT CONCAT(`lastname`,' ',`firstname`),`ce`.`title`, `te`.`exe_result` ,
-						`te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`),`te`.`exe_Id`,email
+			$sql="SELECT CONCAT(lastname,' ',firstname),ce.title, te.exe_result ,
+						te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id,email
 				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
-				  WHERE `te`.`exe_exo_id` = `ce`.`id` AND `user_id`=`te`.`exe_user_id` AND `te`.`exe_cours_id`='$_cid'
-				  ORDER BY `te`.`exe_cours_id` ASC, `ce`.`title` ASC, `te`.`exe_date`ASC";
+				  WHERE te.exe_exo_id = ce.id AND user_id=te.exe_user_id AND te.exe_cours_id='$_cid'
+				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
 			$hpsql="SELECT CONCAT(tu.lastname,' ',tu.firstname), tth.exe_name,
 						tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date)
@@ -860,10 +860,10 @@ if($_configuration['tracking_enabled'])
 		}
 		else
 		{ // get only this user's results
-			  $sql="SELECT '',`ce`.`title`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`),`te`.`exe_Id`
+			  $sql="SELECT '',ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id
 				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te
-				  WHERE `te`.`exe_exo_id` = `ce`.`id` AND `te`.`exe_user_id`='".$_user['user_id']."' AND `te`.`exe_cours_id`='$_cid'
-				  ORDER BY `te`.`exe_cours_id` ASC, `ce`.`title` ASC, `te`.`exe_date`ASC";
+				  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".$_user['user_id']."' AND te.exe_cours_id='$_cid'
+				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
 			$hpsql="SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)
 					FROM $TBL_TRACK_HOTPOTATOES

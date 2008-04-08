@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 14316 2008-02-19 15:38:24Z yannoo $
+<?php // $Id: edit_document.php 14776 2008-04-08 06:55:16Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -301,7 +301,7 @@ if (isset($_POST['renameTo']))
 */
 
 
-
+/** TODO check if this code is still used **/
 /* Search the old comment */  // RH: metadata: added 'id,'
 $result = mysql_query ("SELECT id,comment,title FROM $dbTable WHERE path LIKE BINARY '$dir$doc'");
 
@@ -508,6 +508,31 @@ else
 {
 	$form->addElement('hidden','renameTo');
 }
+
+// readonly
+$sql = 'SELECT id, readonly FROM '.$dbTable.'
+		WHERE path LIKE BINARY "'.$dir.$doc.'"';
+$rs = api_sql_query($sql, __FILE__, __LINE__);
+$readonly = mysql_result($rs,0,'readonly');
+$doc_id = mysql_result($rs,0,'id');
+// owner
+$sql = 'SELECT insert_user_id FROM '.Database::get_course_table(TABLE_ITEM_PROPERTY).'
+		WHERE tool LIKE "document"
+		AND ref='.intval($doc_id);
+$rs = api_sql_query($sql, __FILE__, __LINE__);
+$owner_id = mysql_result($rs,0,'insert_user_id');
+if($owner_id != $_user['user_id'])
+{
+	$form->addElement('hidden','readonly');
+}
+else
+{
+	$renderer = $form->defaultRenderer();
+	$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
+	$form->addElement('checkbox','readonly',get_lang('ReadOnly'));
+}
+$defaults['readonly']=$readonly;
+
 if($extension == "htm" || $extension == "html")
 {
 	$form->addElement('hidden','formSent');

@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 14177 2008-01-23 15:50:31Z elixir_inter $
+// $Id: create_document.php 14776 2008-04-08 06:55:16Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -271,6 +271,9 @@ else
 	$form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
 }
 
+$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
+$form->addElement('checkbox','readonly',get_lang('ReadOnly'));
+
 $form->addElement('submit', 'submit', get_lang('Ok'));
 
 // HTML-editor
@@ -284,6 +287,7 @@ $form->setDefaults($default);
 if ($form->validate())
 {
 	$values = $form->exportValues();
+	$readonly = isset($values['readonly']) ? 1 : 0;
 	if (api_get_setting('use_document_title') != 'true')
 	{
 		$values['title'] = $values['filename'];
@@ -348,7 +352,7 @@ if ($form->validate())
 		$file_size = filesize($filepath.$filename.'.'.$extension);
 		$save_file_path = $dir.$filename.'.'.$extension;
 
-		$document_id = add_document($_course, $save_file_path, 'file', $file_size, $filename);
+		$document_id = add_document($_course, $save_file_path, 'file', $file_size, $filename,null,$readonly);
 		if ($document_id)
 		{
 			api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_user['user_id'], $to_group_id);

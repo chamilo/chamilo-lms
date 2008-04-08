@@ -1,4 +1,4 @@
-<?php // $Id: document.php 14697 2008-03-26 16:05:34Z juliomontoya $
+<?php // $Id: document.php 14776 2008-04-08 06:55:16Z elixir_inter $
 
 /*
 ==============================================================================
@@ -646,7 +646,11 @@ if($docs_and_folders)
 		//admins get an edit column
 		if ($is_allowed_to_edit || $group_member_with_upload_rights)
 		{
-			$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key, $id['is_template']);
+			// if readonly, check if it the owner of the file ?
+			if (!$id['readonly'] || $id['insert_user_id'] == $_user['user_id'] || api_is_platform_admin())
+				$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key, $id['is_template']);
+			else
+				$row[] = '';
 			$row[] = $edit_icons;
 		}
 		$row[]=$last_edit_date;

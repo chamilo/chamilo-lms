@@ -661,6 +661,7 @@ function update_Db_course($courseDbName)
 			title varchar(255) default NULL,
 			filetype set('file','folder') NOT NULL default 'file',
 			size int NOT NULL default 0,
+			readonly TINYINT UNSIGNED NOT NULL,
 			PRIMARY KEY (`id`)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);

@@ -1176,12 +1176,12 @@ function filter_extension(&$filename)
  * @param string $title
  * @return id if inserted document
  */
-function add_document($_course,$path,$filetype,$filesize,$title,$comment=NULL)
+function add_document($_course,$path,$filetype,$filesize,$title,$comment=NULL, $readonly=0)
 {
 	$table_document = Database::get_course_table(TABLE_DOCUMENT,$_course['dbName']);
 	$sql="INSERT INTO $table_document
-	(`path`,`filetype`,`size`,`title`, `comment`)
-	VALUES ('$path','$filetype','$filesize','$title', '$comment')";
+	(`path`,`filetype`,`size`,`title`, `comment`, readonly)
+	VALUES ('$path','$filetype','$filesize','$title', '$comment',$readonly)";
 	if(api_sql_query($sql,__FILE__,__LINE__))
 	{
 		//display_message("Added to database (id ".mysql_insert_id().")!");

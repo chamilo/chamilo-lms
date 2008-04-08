@@ -18,8 +18,9 @@ $table_categories 		= "`".$_course["dbNameGlu"]."forum_category"."`";
 $table_forums 			= "`".$_course["dbNameGlu"]."forum_forum"."`"; 
 $table_threads 			= "`".$_course["dbNameGlu"]."forum_thread"."`"; 
 $table_posts 			= "`".$_course["dbNameGlu"]."forum_post"."`"; 
-$table_mailcue			= "`".$_course["dbNameGlu"]."forum_mailcue"."`"; 
-
+$table_mailcue			= "`".$_course["dbNameGlu"]."forum_mailcue"."`";
+ 
+$forum_table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
 $table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 $table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
 

@@ -16,7 +16,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -268,7 +268,8 @@ if(is_array($threads))
 				echo icon('../img/exclamation.gif');
 			}
 			echo "</td>\n";
-			echo "\t\t<td><a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".$row['thread_id'].$origin_string."&amp;search=".Security::remove_XSS(urlencode($_GET['search']))."\" ".class_visible_invisible($row['visibility']).">".prepare4display($row['thread_title'])."</a></td>\n";
+			echo "\t\t<td>";			
+			echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".$row['thread_id'].$origin_string."&amp;search=".Security::remove_XSS(urlencode($_GET['search']))."\" ".class_visible_invisible($row['visibility']).">".prepare4display($row['thread_title'])."</a></td>\n";
 			echo "\t\t<td>".$row['thread_replies']."</td>\n";
 			if ($row['user_id']=='0')
 			{

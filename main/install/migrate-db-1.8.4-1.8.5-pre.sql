@@ -112,3 +112,6 @@ ALTER TABLE forum_thread ADD INDEX idx_forum_thread_forum_id (forum_id);
 ALTER TABLE student_publication ADD COLUMN filetype SET('file','folder')  NOT NULL DEFAULT 'file' AFTER sent_date;
 ALTER TABLE document ADD readonly TINYINT UNSIGNED NOT NULL ;
 ALTER TABLE quiz ADD results_disabled TINYINT UNSIGNED NOT NULL DEFAULT 0;
+CREATE TABLE blog_attachment ( id int unsigned NOT NULL auto_increment, path varchar(255) NOT NULL COMMENT 'the real filename', comment text, size int NOT NULL default '0', post_id int NOT NULL, filename varchar(255) NOT NULL COMMENT 'the user s file name', blog_id int NOT NULL, comment_id int NOT NULL default '0', PRIMARY KEY  (id));
+CREATE TABLE forum_attachment (id int NOT NULL auto_increment, path varchar(255) NOT NULL, comment text, size int NOT NULL default 0, post_id int NOT NULL, filename varchar(255) NOT NULL, PRIMARY KEY (id));
+		

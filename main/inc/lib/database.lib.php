@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 14674 2008-03-20 12:24:34Z yannoo $
+<?php // $Id: database.lib.php 14793 2008-04-08 22:03:04Z juliomontoya $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -91,6 +91,7 @@ define('TABLE_FORUM_CATEGORY','forum_category');
 define('TABLE_FORUM','forum_forum');
 define('TABLE_FORUM_THREAD','forum_thread');
 define('TABLE_FORUM_POST','forum_post');
+define('TABLE_FORUM_ATTACHMENT','forum_attachment');
 //course group tables
 define('TABLE_GROUP', 'group_info');
 define('TABLE_GROUP_USER', 'group_rel_user');
@@ -138,6 +139,7 @@ define('TABLE_BLOGS_REL_USER', 'blog_rel_user');
 define('TABLE_BLOGS_TASKS', 'blog_task');
 define('TABLE_BLOGS_TASKS_REL_USER', 'blog_task_rel_user');
 define('TABLE_BLOGS_RATING', 'blog_rating');
+define('TABLE_BLOGS_ATTACHMENT', 'blog_attachment');
 define('TABLE_BLOGS_TASKS_PERMISSIONS', 'permission_task');
 //end of Smartblogs
 // user information tables

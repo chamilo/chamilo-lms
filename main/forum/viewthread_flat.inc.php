@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006 Dokeos S.A.
+	Copyright (c) 2008 Dokeos SPRL
 	Copyright (c) 2006 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
@@ -16,7 +16,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -159,25 +159,23 @@ foreach ($rows as $row)
 	echo "\t\t<td class=\"$messageclass\">".prepare4display($row['post_text'])."</td>\n";
 	echo "\t</tr>\n";
 	
-	// The added resources
-	/*
-	echo "<tr><td>";
-	if (check_added_resources("forum_post", $row["post_id"]))
+	// The check if there is an attachment
+	$attachment_list=get_attachment($row['post_id']);	
+	
+	if (!empty($attachment_list))
 	{
-		
-		echo "<i>".get_lang("AddedResources")."</i><br/>";
-		if ($row['visible']=='0')
-		{
-			$addedresource_style="invisible";
-		}
-		display_added_resources("forum_post", $row["post_id"], $addedresource_style);
-		
+		echo '<tr><td height="50%">';	
+		$realname=$attachment_list['path'];			
+		$user_filename=$attachment_list['filename'];
+						
+		echo Display::return_icon('attachment.gif',get_lang('attachment'));
+		echo '<a href="download.php?file=';		
+		echo $realname;
+		echo ' "> '.$user_filename.' </a>';
+		echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span><br />';	
+		echo '</td></tr>';		
 	}
-	echo "</td></tr>";
-	*/
 	
-	
-
 	// The post has been displayed => it can be removed from the what's new array
 	unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
 	unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']]);
@@ -185,5 +183,4 @@ foreach ($rows as $row)
 	unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']]);
 	echo "</table>";
 }
-
 ?>

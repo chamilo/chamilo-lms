@@ -1108,6 +1108,13 @@ a.forum_group_link {
 	font-weight: normal;		
 }
 
+.forum_attach_comment {
+	color: #737780;	
+	font-style: italic ;
+	font-weight: normal;	
+}
+
+
 
 /* **** BLOG **** */
 span.blog_title {
@@ -1231,6 +1238,12 @@ div.comments {
 	margin-top: 10px;
 	padding: 10px;
 	background-color: #F4F4F4;
+}
+
+.attachment_comment {
+	color: #737780;	
+	font-style: italic ;
+	font-weight: normal;	
 }
 
 .link {text-decoration: none; font-weight : bold; color : #1657A9; cursor: pointer}

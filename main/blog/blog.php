@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -18,7 +18,8 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium 
+	info@dokeos.com
 
 ==============================================================================
 
@@ -57,6 +58,7 @@ require_once (api_get_path(LIBRARY_PATH)."/display.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/text.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/blog.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/fckeditor.lib.php");
+$blog_table_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 
 $nameTools = get_lang("Blogs");
 $DaysShort = array (get_lang("SundayShort"), get_lang("MondayShort"), get_lang("TuesdayShort"), get_lang("WednesdayShort"), get_lang("ThursdayShort"), get_lang("FridayShort"), get_lang("SaturdayShort"));
@@ -71,8 +73,8 @@ $current_page = $_GET['action'];
 ==============================================================================
 */
 if ($_POST['new_post_submit'])
-{
-	Blog :: create_post($_POST['post_title'], $_POST['post_full_text'], $blog_id);
+{	
+	Blog :: create_post($_POST['post_title'], $_POST['post_full_text'], $_POST['post_file_comment'],$blog_id);
 }
 if ($_POST['edit_post_submit'])
 {
@@ -80,7 +82,7 @@ if ($_POST['edit_post_submit'])
 }
 if ($_POST['new_comment_submit'])
 {
-	Blog :: create_comment($_POST['comment_title'], $_POST['comment_text'], $blog_id, (int)$_GET['post_id'], $_POST['comment_parent_id']);
+	Blog :: create_comment($_POST['comment_title'], $_POST['comment_text'], $_POST['post_file_comment'],$blog_id, (int)$_GET['post_id'], $_POST['comment_parent_id']);
 }
 
 if ($_POST['new_task_submit'])
@@ -144,8 +146,8 @@ if ($_GET['action'] == 'view_post')
 	if ($_GET['do'] == 'delete_comment')
 	{
 		if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_delete', $task_id))
-		{
-			Blog :: delete_comment($blog_id, (int)$_GET['comment_id']);
+		{		
+			Blog :: delete_comment($blog_id, (int)$_GET['post_id'],(int)$_GET['comment_id']); 
 		}
 		else
 		{

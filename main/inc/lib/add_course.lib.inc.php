@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
@@ -16,8 +16,8 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium 
+	info@dokeos.com
 ==============================================================================
 */
 /**
@@ -304,6 +304,7 @@ function update_Db_course($courseDbName)
 	$TABLETOOLFORUMTHREAD 		= $courseDbName . "forum_thread";
 	$TABLETOOLFORUMPOST 		= $courseDbName . "forum_post";
 	$TABLETOOLFORUMMAILCUE 		= $courseDbName . "forum_mailcue";
+	$TABLETOOLFORUMATTACHMENT	= $courseDbName . "forum_attachment";
 
 	// Link
 	$TABLETOOLLINK 				= $courseDbName . "link";
@@ -350,6 +351,7 @@ function update_Db_course($courseDbName)
 	$tbl_blogs_rel_user			= $courseDbName . 'blog_rel_user';
 	$tbl_blogs_tasks			= $courseDbName . 'blog_task';
 	$tbl_blogs_tasks_rel_user	= $courseDbName . 'blog_task_rel_user';
+	$tbl_blogs_attachment		= $courseDbName . 'blog_attachment';
 
 	//Smartblogs permissions (Kevin Van Den Haute :: kevin@develop-it.be)
 	$tbl_permission_group		= $courseDbName . 'permission_group';
@@ -535,7 +537,19 @@ function update_Db_course($courseDbName)
 		) TYPE=MyISAM";
 
 	api_sql_query($sql, __FILE__, __LINE__);
-
+	
+	
+	// Forum Attachment
+	$sql = "CREATE TABLE  `".$TABLETOOLFORUMATTACHMENT."` (
+			  id int NOT NULL auto_increment,
+			  path varchar(255) NOT NULL,
+			  comment text,
+			  size int NOT NULL default 0,
+			  post_id int NOT NULL,
+			  filename varchar(255) NOT NULL,
+			  PRIMARY KEY (id)
+			)";
+	api_sql_query($sql, __FILE__, __LINE__);
 
 	/*
 	-----------------------------------------------------------
@@ -1155,6 +1169,26 @@ function update_Db_course($courseDbName)
 	{
 		error_log($sql, 0);
 	}
+	
+	$sql ="CREATE TABLE  `" .$tbl_blogs_attachment."` (
+		  id int unsigned NOT NULL auto_increment,
+		  path varchar(255) NOT NULL COMMENT 'the real filename',
+		  comment text,
+		  size int NOT NULL default '0',
+		  post_id int NOT NULL,
+		  filename varchar(255) NOT NULL COMMENT 'the user s file name',
+		  blog_id int NOT NULL,
+		  comment_id int NOT NULL default '0',
+  		PRIMARY KEY  (id)
+		)";
+	
+	if(!api_sql_query($sql))
+	{
+		error_log($sql, 0);
+	}
+	
+	
+	
 
 	$sql = "
 		CREATE TABLE `" . $tbl_permission_group . "` (

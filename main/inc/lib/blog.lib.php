@@ -4,7 +4,7 @@
 
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) Keppens Toon
 
 	For a full list of contributors, see "credits.txt".
@@ -17,7 +17,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 
 ===============================================================================
@@ -211,11 +211,16 @@ class Blog
 		$tbl_blogs_tasks 	= Database::get_course_table(TABLE_BLOGS_TASKS);
 		$tbl_tool 			= Database::get_course_table(TABLE_TOOL_LIST);
 		$tbl_blogs_rating 	= Database::get_course_table(TABLE_BLOGS_RATING);
-
-		// Delete posts
-		$sql = "DELETE FROM $tbl_blogs_posts WHERE blog_id ='".(int)$blog_id."'";
+		$tbl_blogs_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
+		
+		
+		// Delete posts and attachments
+		delete_all_blog_attachment($blog_id);
+		
+		// Delete attachments from DB
+		$sql = "DELETE FROM $tbl_blogs_attachment WHERE blog_id ='".(int)$blog_id."'";		
 		api_sql_query($sql, __FILE__, __LINE__);
-
+				
 		// Delete tasks
 		$sql = "DELETE FROM $tbl_blogs_tasks WHERE blog_id ='".(int)$blog_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
@@ -231,7 +236,7 @@ class Blog
 		// Delete from course homepage
 		$sql = "DELETE FROM $tbl_tool WHERE link = 'blog/blog.php?blog_id=".(int)$blog_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
-
+	
 		return void;
 	}
 
@@ -245,17 +250,72 @@ class Blog
 	 *
 	 * @return void
 	 */
-	function create_post($title, $full_text, $blog_id)
+	function create_post($title, $full_text, $file_comment, $blog_id)
 	{
 		global $_user;
+		global $_course;
+		global $blog_table_attachment;
+		
+		$upload_ok=true;
+		$has_attachment=false;
 
-		// Table Definitions
-		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
-
-		// Create the post
-		$sql = "INSERT INTO " . $tbl_blogs_posts." (`title`, `full_text`, `date_creation`, `blog_id`, `author_id` )
-					VALUES ('".mysql_real_escape_string($title)."', '".mysql_real_escape_string($full_text)."', NOW(), '".(int)$blog_id."', '".(int)$_user['user_id']."');";
-		api_sql_query($sql, __FILE__, __LINE__);
+		if(!empty($_FILES['user_upload']['name']))
+		{
+			require_once('fileUpload.lib.php'); 
+			$upload_ok = process_uploaded_file($_FILES['user_upload']);
+			$has_attachment=true;
+		}
+		
+		if($upload_ok)
+		{	
+			// Table Definitions
+			$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
+	
+			// Create the post
+			$sql = "INSERT INTO " . $tbl_blogs_posts." (`title`, `full_text`, `date_creation`, `blog_id`, `author_id` )
+					VALUES ('".Database::escape_string($title)."', '".Database::escape_string($full_text)."', NOW(), '".(int)$blog_id."', '".(int)$_user['user_id']."');";
+						
+			api_sql_query($sql, __FILE__, __LINE__);
+			$last_post_id=Database::insert_id();
+			
+			if ($has_attachment)
+			{			
+				$courseDir   = $_course['path'].'/upload/blog';
+				$sys_course_path = api_get_path(SYS_COURSE_PATH);		
+				$updir = $sys_course_path.$courseDir;
+							
+				// Try to add an extension to the file if it hasn't one
+				$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);	
+			
+				// user's file name
+				$file_name =$_FILES['user_upload']['name'];
+							
+				if (!filter_extension($new_file_name)) 
+				{
+					Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));				
+				}
+				else
+				{
+					$new_file_name = uniqid('');						
+					$new_path=$updir.'/'.$new_file_name;
+					$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
+					$comment=Database::escape_string($file_comment);				
+									
+					// Storing the attachments if any
+					if ($result)
+					{					
+						$sql='INSERT INTO '.$blog_table_attachment.'(filename,comment, path, post_id,size, blog_id,comment_id) '.
+							 "VALUES ( '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$last_post_id."', '".$_FILES['user_upload']['size']."',  '".$blog_id."', '0' )";						
+						$result=api_sql_query($sql, __LINE__, __FILE__);					
+						$message.=' / '.get_lang('AttachmentUpload');			
+					}			
+				}			 
+			}
+		}
+		else
+		{
+			Display::display_error_message(get_lang('UplNoFileUploaded'));
+		}	
 
 		return void;
 	}
@@ -310,6 +370,9 @@ class Blog
 		// Delete the comments
 		$sql = "DELETE FROM $tbl_blogs_comments WHERE `post_id` = '".(int)$post_id."' AND `blog_id` = '".(int)$blog_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
+					
+		// Delete posts and attachments
+		delete_all_blog_attachment($blog_id,$post_id);	
 
 		return void;
 	}
@@ -326,22 +389,75 @@ class Blog
 	 *
 	 * @return void
 	 */
-	function create_comment($title, $full_text, $blog_id, $post_id, $parent_id, $task_id = 'NULL')
+	function create_comment($title, $full_text, $file_comment,$blog_id, $post_id, $parent_id, $task_id = 'NULL')
 	{
-		global $_user;
+		global $_user;		
+		global $_course;				
+		global $blog_table_attachment;
+		
+		$upload_ok=true;
+		$has_attachment=false;
 
-		// Table Definition
-		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
-
-		// Create the comment
-		$sql = "INSERT INTO $tbl_blogs_comments (`title`, `comment`, `author_id`, `date_creation`, `blog_id`, `post_id`, `parent_comment_id`, `task_id` )
-					VALUES ('".mysql_real_escape_string($title)."', '".mysql_real_escape_string($full_text)."', '".(int)$_user['user_id']."', NOW(), '".(int)$blog_id."', '".(int)$post_id."', '".(int)$parent_id."', '".(int)$task_id."')";
-		api_sql_query($sql, __FILE__, __LINE__);
-
-		// Empty post values, or they are shown on the page again
-		$_POST['comment_title'] = "";
-		$_POST['comment_text'] = "";
-
+		if(!empty($_FILES['user_upload']['name']))
+		{
+			require_once('fileUpload.lib.php'); 
+			$upload_ok = process_uploaded_file($_FILES['user_upload']);
+			$has_attachment=true;
+		}
+		
+		if($upload_ok)
+		{	
+			// Table Definition
+			$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
+	
+			// Create the comment
+			$sql = "INSERT INTO $tbl_blogs_comments (`title`, `comment`, `author_id`, `date_creation`, `blog_id`, `post_id`, `parent_comment_id`, `task_id` )
+						VALUES ('".mysql_real_escape_string($title)."', '".mysql_real_escape_string($full_text)."', '".(int)$_user['user_id']."', NOW(), '".(int)$blog_id."', '".(int)$post_id."', '".(int)$parent_id."', '".(int)$task_id."')";
+			api_sql_query($sql, __FILE__, __LINE__);
+	
+			// Empty post values, or they are shown on the page again
+			$_POST['comment_title'] = "";
+			$_POST['comment_text'] = "";
+			
+			$last_id=Database::insert_id();
+			
+			if ($has_attachment)
+			{			
+				$courseDir   = $_course['path'].'/upload/blog';
+				$sys_course_path = api_get_path(SYS_COURSE_PATH);		
+				$updir = $sys_course_path.$courseDir;
+							
+				// Try to add an extension to the file if it hasn't one
+				$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);	
+			
+				// user's file name 
+				$file_name =$_FILES['user_upload']['name'];
+							
+				if (!filter_extension($new_file_name)) 
+				{
+					Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));				
+				}
+				else
+				{
+					$new_file_name = uniqid('');						
+					$new_path=$updir.'/'.$new_file_name;
+					$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
+					$comment=Database::escape_string($file_comment);				
+									
+					// Storing the attachments if any
+					if ($result)
+					{					
+						$sql='INSERT INTO '.$blog_table_attachment.'(filename,comment, path, post_id,size,blog_id,comment_id) '.
+							 "VALUES ( '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$post_id."', '".$_FILES['user_upload']['size']."',  '".$blog_id."', '".$last_id."'  )";						
+						$result=api_sql_query($sql, __LINE__, __FILE__);					
+						$message.=' / '.get_lang('AttachmentUpload');			
+					}			
+				}			 
+			}
+		}
+		
+		
+	
 		return void;
 	}
 
@@ -354,30 +470,31 @@ class Blog
 	 *
 	 * @return void
 	 */
-	function delete_comment($blog_id, $comment_id)
+	function delete_comment($blog_id, $post_id, $comment_id)
 	{
 		// Init
 		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
 		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
-
+		
+		delete_all_blog_attachment($blog_id,$post_id,$comment_id);
+		
 		// Delete ratings on this comment
 		$sql = "DELETE FROM $tbl_blogs_rating WHERE blog_id = '".(int)$blog_id."' AND item_id = '".(int)$comment_id."' AND rating_type = 'comment'";
 		api_sql_query($sql, __FILE__, __LINE__);
 
 		// select comments that have the selected comment as their parent
-		$sql = "SELECT comment_id FROM $tbl_blogs_comments WHERE parent_comment_id = '".(int)$comment_id."'";
+		$sql = "SELECT comment_id FROM $tbl_blogs_comments WHERE parent_comment_id = '".(int)$comment_id."'";		
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-
+			
 		// Delete them recursively
 		while($comment = mysql_fetch_array($result))
-		{
-			Blog::delete_comment($blog_id, $comment['comment_id']);
-		}
+		{					
+			Blog::delete_comment($blog_id,$post_id,$comment['comment_id']);					
+		}		
 
 		// Finally, delete the selected comment to
-		$sql = "DELETE FROM $tbl_blogs_comments WHERE `comment_id` = '".(int)$comment_id."'";
+		$sql = "DELETE FROM $tbl_blogs_comments WHERE `comment_id` = '".(int)$comment_id."'";				
 		api_sql_query($sql, __FILE__, __LINE__);
-
 		return void;
 	}
 
@@ -726,6 +843,7 @@ class Blog
 					}
 					$tok = strtok(" ");
 				}
+				
 				if($words >= $limit)
 				{
 					$readMoreLink = ' <span class="link" onclick="document.getElementById(\'blogpost_text_' . $blog_post_id . '\').style.display=\'block\'; document.getElementById(\'blogpost_introduction_' . $blog_post_id . '\').style.display=\'none\'">' . get_lang('ReadMore') . '</span>';
@@ -738,14 +856,27 @@ class Blog
 				$introduction_text=stripslashes($introduction_text);
 
 				echo '<div class="blogpost">'."\n";
-					echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>'."\n";
-					echo '<span class="blogpost_date">' . $blog_post_date . ' (' . $blog_post_time . ')</span>'."\n";
-					echo '<span class="blogpost_introduction" id="blogpost_introduction_' . $blog_post_id . '">' . $introduction_text . $readMoreLink . '</span>'."\n";
-					echo '<span class="blogpost_text" id="blogpost_text_' . $blog_post_id . '" style="display: none">' . $blog_post_text . '</span>'."\n";
-					echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . $blog_post['lastname'] . ' ' . $blog_post['firstname'] . ' - <a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>'."\n";
+				echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>'."\n";
+				echo '<span class="blogpost_date">' . $blog_post_date . ' (' . $blog_post_time . ')</span>'."\n";
+				echo '<span class="blogpost_introduction" id="blogpost_introduction_' . $blog_post_id . '">' . $introduction_text . $readMoreLink . '</span>'."\n";
+				echo '<span class="blogpost_text" id="blogpost_text_' . $blog_post_id . '" style="display: none">' . $blog_post_text . '</span>'."\n";
+				$file_name_array=get_blog_attachment($blog_id,$blog_post_id,0);
+		
+				if (!empty($file_name_array))
+				{								
+					echo '<br /><br />';
+					echo Display::return_icon('attachment.gif',get_lang('attachment'));
+					echo '<a href="download.php?file=';		
+					echo $file_name_array['path'];	
+					echo ' "> '.$file_name_array['filename'].' </a><br />';
+					echo '</span>';														
+				}				
+				echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . $blog_post['lastname'] . ' ' . $blog_post['firstname'] . ' - <a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>'."\n";
 				echo '</div>'."\n";
-			}
-		} else {
+			}					
+		}
+		else	
+		{
 			if($filter == '1=1')
 			{
 				echo get_lang('NoArticles');
@@ -754,9 +885,8 @@ class Blog
 			{
 				echo get_lang('NoArticleMatches');
 			}
-
 		}
-	}
+}
 
 	/**
 	 * Display the search results
@@ -852,11 +982,28 @@ class Blog
 		
 		// Display post
 		echo '<div class="blogpost">';
-			echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>';
-			echo '<span class="blogpost_date">' . $blog_post_date . ' (' . $blog_post_time . ')</span>';
-			echo '<span class="blogpost_text">' . $blog_post_text . '</span>';
-			echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . $blog_post['lastname'] . ' ' . $blog_post['firstname'] . ' - ' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . ' - ' . get_lang('Rating') . ': '.Blog::display_rating('post',$blog_id,$post_id) . $rating_select . '</span>';
-			echo '<span class="blogpost_actions">' . $blog_post_actions . '</span>';
+		echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>';
+		echo '<span class="blogpost_date">' . $blog_post_date . ' (' . $blog_post_time . ')</span>';
+		echo '<span class="blogpost_text">' . $blog_post_text . '</span><br />';
+		
+		$file_name_array=get_blog_attachment($blog_id,$post_id);
+		
+		if (!empty($file_name_array))
+		{			
+			echo ' <br />';
+			echo Display::return_icon('attachment.gif',get_lang('attachment'));
+			echo '<a href="download.php?file=';		
+			echo $file_name_array['path'];	
+			echo ' "> '.$file_name_array['filename'].' </a>';					
+			echo '</span>';		
+			echo '<span class="attachment_comment">';	
+			echo $file_name_array['comment'];
+			echo '</span>';	
+			echo '<br />';
+		}			
+			
+		echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . $blog_post['lastname'] . ' ' . $blog_post['firstname'] . ' - ' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . ' - ' . get_lang('Rating') . ': '.Blog::display_rating('post',$blog_id,$post_id) . $rating_select . '</span>';
+		echo '<span class="blogpost_actions">' . $blog_post_actions . '</span>';
 		echo '</div>';
 
 		// Display comments if there are any
@@ -1043,6 +1190,20 @@ class Blog
 				echo '<span class="blogpost_comment_title"><a href="#add_comment" onclick="document.getElementById(\'comment_parent_id\').value=\'' . $comment['comment_id'] . '\'; document.getElementById(\'comment_title\').value=\'Re: '.addslashes($comment['title']) . '\'" title="' . get_lang('ReplyToThisComment') . '" >'.stripslashes($comment['title']) . '</a></span>';
 				echo '<span class="blogpost_comment_date">' . $blog_comment_date . ' (' . $blog_comment_time . ')</span>';
 				echo '<span class="blogpost_text">' . $comment_text . '</span>';
+				
+				$file_name_array=get_blog_attachment($blog_id,$post_id, $comment['comment_id']);
+				if (!empty($file_name_array))
+				{								
+					echo '<br /><br />';
+					echo Display::return_icon('attachment.gif',get_lang('attachment'));
+					echo '<a href="download.php?file=';		
+					echo $file_name_array['path'];	
+					echo ' "> '.$file_name_array['filename'].' </a>';	
+					echo '<span class="attachment_comment">';	
+					echo $file_name_array['comment'];
+					echo '</span><br />';								
+				}				
+				
 				echo '<span class="blogpost_comment_info">' . get_lang('Author') . ': ' . $comment['lastname'] . ' ' . $comment['firstname'] . ' - ' . get_lang('Rating') . ': '.Blog::display_rating('comment', $blog_id, $comment['comment_id']) . $rating_select . '</span>';
 				echo '<span class="blogpost_actions">' . $blog_comment_actions . '</span>';
 			echo '</div>';
@@ -1141,12 +1302,13 @@ class Blog
 			</script>';
 
 
-			echo '<form name="add_post" method="post" action="blog.php?blog_id=' . $blog_id . '">
-				 <span class="blogpost_title">' . get_lang('NewPost') . '</span>
+			echo '<form name="add_post" enctype="multipart/form-data"  method="post" action="blog.php?blog_id=' . $blog_id . '">
+				 <span class="blogpost_title">' . get_lang('NewPost') . '</span> 
 						<table width="100%" border="0" cellspacing="2" cellpadding="0">
 							<tr>
 						   <td width="80" valign="top">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
-						   <td><input name="post_title" id="post_title" type="text" size="60" onblur="check_if_still_empty()" /><input type="hidden" name="post_title_edited" id="post_title_edited" value="false" /><br /><br /></td>
+						   <td><input name="post_title" id="post_title" type="text" size="60" onblur="check_if_still_empty()" />' .
+						   		'<input type="hidden" name="post_title_edited" id="post_title_edited" value="false" /><br /><br /></td>
 							</tr>
 							<tr>
 						   <td valign="top">' . get_lang('PostFullText') . ':&nbsp;&nbsp;</td>
@@ -1168,7 +1330,12 @@ class Blog
 
 									$oFCKeditor->Create() ;
 			echo '			 <br /></td>
-							</tr>
+							</tr> 
+							<tr><td><b>'.get_lang('AddAnAttachment').'</b><br /><br /></td></tr>	
+							<tr><td width="80" valign="top">' . ucwords(get_lang('FileName') ). ':&nbsp;&nbsp;</td>
+						    <td><input type="file" name="user_upload"/></td><br></tr>						    
+						    <tr><td width="80" valign="top">' . get_lang('FileComment'). ':&nbsp;&nbsp;</td>
+						    <td><br /><textarea name="post_file_comment" cols="34" /></textarea></td></tr>
 							<tr>
 								<td >&nbsp;</td>
 								<td>
@@ -1456,6 +1623,7 @@ class Blog
 					</table>
 				</form>';
 	}
+	
 
 	/**
 	 * Displays edit task form
@@ -2246,7 +2414,7 @@ class Blog
 	 */
 	function display_new_comment_form($blog_id, $post_id, $title)
 	{
-		echo '<form name="add_post" method="post" action="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '">
+		echo '<form name="add_post" enctype="multipart/form-data" method="post" action="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '">
 					<table width="100%" border="0" cellspacing="2" cellpadding="0" class="new_comment">
 						<tr>
 							<td colspan="2">
@@ -2279,6 +2447,16 @@ class Blog
 									$oFCKeditor->Create() ;
 		echo '			 <br /></td>
 						</tr>
+							 
+							<tr><td><b>'.get_lang('AddAnAttachment').'</b><br /><br /></td></tr>	
+							<tr><td width="80" valign="top">' . ucwords(get_lang('FileName') ). ':&nbsp;&nbsp;</td>
+						    <td><input type="file" name="user_upload"/></td><br></tr>						    
+						    <tr><td width="80" valign="top">' .get_lang('FileComment'). ':&nbsp;&nbsp;</td>
+						    <td><br /><textarea name="post_file_comment" cols="34" /></textarea></td></tr>
+							<tr>	
+								
+								
+								
 						<tr>
 							<td >&nbsp;</td>
 							<td>
@@ -2400,9 +2578,9 @@ class Blog
 
 		echo 	"<table id=\"smallcalendar\">\n",
 				"<tr id=\"title\">\n",
-				"<td width=\"10%\"><a href=\"", $backwardsURL, "\">«</a></td>\n",
+				"<td width=\"10%\"><a href=\"", $backwardsURL, "\">ï¿½</a></td>\n",
 				"<td width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n",
-				"<td width=\"10%\"><a href=\"", $forewardsURL, "\">»</a></td>\n", "</tr>\n";
+				"<td width=\"10%\"><a href=\"", $forewardsURL, "\">ï¿½</a></td>\n", "</tr>\n";
 
 		echo "<tr>\n";
 
@@ -2444,7 +2622,7 @@ class Blog
 
 					// Add tasks to calendar
 					foreach ($tasks[$curday] as $task)
-						echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $task['blog_id'] . '&amp;task_id='.stripslashes($task['task_id']) . '" title="« ' . $task['title'] . ' » ' . get_lang('InBlog') . ' « ' . $task['blog_name'] . ' » - ' . get_lang('ExecuteThisTask') . '"><img src="../img/blog_task.gif" alt="Task" /></a>';
+						echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $task['blog_id'] . '&amp;task_id='.stripslashes($task['task_id']) . '" title="ï¿½ ' . $task['title'] . ' ï¿½ ' . get_lang('InBlog') . ' ï¿½ ' . $task['blog_name'] . ' ï¿½ - ' . get_lang('ExecuteThisTask') . '"><img src="../img/blog_task.gif" alt="Task" /></a>';
 
 					echo "</td>\n";
 
@@ -2568,6 +2746,97 @@ class Blog
 					'</tr>';
 		}
 	}
-
 }
+
+
+
+/**
+ * Show a list with all the attachments according the parameter's
+ * @param the blog's id
+ * @param the post's id 
+ * @param the comment's id
+ * @return array with the post info according the parameters  
+ * @author Julio Montoya Dokeos
+ * @version avril 2008, dokeos 1.8.5
+ */ 
+function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
+{	
+	global $blog_table_attachment;
+	$row=array();
+	$where='';
+	
+	if (!empty ($post_id))
+	{
+		$where.=' AND post_id ="'.$post_id.'" ';
+	}
+		
+	if (!empty ($comment_id) )
+	{
+		if (!empty ($post_id) )
+		{
+			$where.= ' AND ';
+		}
+		$where.=' comment_id ="'.$comment_id.'" ';
+	}
+	
+	$sql = 'SELECT path, filename, comment FROM '. $blog_table_attachment.' WHERE blog_id ="'.$blog_id.'"  '.$where;
+	
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	if (Database::num_rows($result)!=0)
+	{
+		$row=Database::fetch_array($result);
+	}
+	return $row;	
+}
+
+/**
+ * Delete the all the attachments according the parameters.
+ * @param the blog's id
+ * @param the post's id 
+ * @param the comment's id
+ * @author Julio Montoya Dokeos
+ * @version avril 2008, dokeos 1.8.5
+ */ 
+
+function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
+{	
+	global $blog_table_attachment;
+	global $_course;
+	
+	// delete files in DB	
+	if (!empty ($post_id))
+	{
+		$where.=' AND post_id ="'.$post_id.'" ';
+	}
+		
+	if (!empty ($comment_id) )
+	{
+		if (!empty ($post_id) )
+		{
+			$where.= ' AND ';
+		}
+		$where.=' comment_id ="'.$comment_id.'" ';
+	}
+			
+	// delete all files in directory
+	$courseDir   = $_course['path'].'/upload/blog';
+	$sys_course_path = api_get_path(SYS_COURSE_PATH);		
+	$updir = $sys_course_path.$courseDir;
+	
+	$sql= 'SELECT path FROM '.$blog_table_attachment.' WHERE blog_id ="'.$blog_id.'"  '.$where;	
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	
+	while ($row=Database::fetch_row($result))
+	{
+		$file=$updir.'/'.$row[0];											
+		if (Security::check_abs_path($file,$updir) )
+		{			
+			@ unlink($file);
+		}		
+	}	
+	$sql = 'DELETE FROM '. $blog_table_attachment.' WHERE blog_id ="'.$blog_id.'"  '.$where;	
+	api_sql_query($sql, __FILE__, __LINE__);		
+}
+
+
 ?>

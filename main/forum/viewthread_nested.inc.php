@@ -57,9 +57,6 @@
 $rows=get_posts($_GET['thread']); // note: this has to be cleaned first
 $rows=calculate_children($rows);
 
-
-
-
 foreach ($rows as $post)
 {
 	// the style depends on the status of the message: approved or not
@@ -152,6 +149,26 @@ foreach ($rows as $post)
 	echo "\t<tr>\n";
 	echo "\t\t<td class=\"$messageclass\">".prepare4display($post['post_text'])."</td>\n";
 	echo "\t</tr>\n";
+	
+
+	// The check if there is an attachment
+	$attachment_list=get_attachment($post['post_id']);	
+	
+	if (!empty($attachment_list))
+	{
+		echo '<tr><td height="50%">';	
+		$realname=$attachment_list['path'];			
+		$user_filename=$attachment_list['filename'];
+						
+		echo Display::return_icon('attachment.gif',get_lang('attachment'));
+		echo '<a href="download.php?file=';		
+		echo $realname;
+		echo ' "> '.$user_filename.' </a>';
+		echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span><br />';	
+		echo '</td></tr>';		
+	}
+	
+	
 	
 	/*
 	// The added resources

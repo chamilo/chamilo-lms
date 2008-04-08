@@ -281,6 +281,25 @@ echo "\t<tr>\n";
 echo "\t\t<td class=\"$messageclass\">".prepare4display($rows[$display_post_id]['post_text'])."</td>\n";
 echo "\t</tr>\n";
 
+// The check if there is an attachment
+$attachment_list=get_attachment($display_post_id);	
+
+if (!empty($attachment_list))
+{
+	echo '<tr><td height="50%">';	
+	$realname=$attachment_list['path'];			
+	$user_filename=$attachment_list['filename'];
+					
+	echo Display::return_icon('attachment.gif',get_lang('attachment'));
+	echo '<a href="download.php?file=';		
+	echo $realname;
+	echo ' "> '.$user_filename.' </a>';
+	echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span><br />';	
+	echo '</td></tr>';		
+}
+
+	
+
 // The post has been displayed => it can be removed from the what's new array
 unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
 unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);

@@ -1,10 +1,9 @@
-<?php
-// $Id: profile.php 14674 2008-03-20 12:24:34Z yannoo $
+<?php // $Id: profile.php 14791 2008-04-08 20:39:30Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
@@ -332,32 +331,6 @@ function is_profile_editable()
 	USER IMAGE FUNCTIONS
 -----------------------------------------------------------
 */
-
-/**
- * Deprecated function. Use UserManager::get_user_picture_path_by_id($user_id,'none') instead
- * Get a user's display picture. If the user doesn't have a picture, this
- * function will return an empty string.
- *
- * @param	$user_id	User id
- * @return	The uri to the picture
- */
-function get_user_image($user_id)
-{
-	$path = UserManager::get_user_picture_path_by_id($user_id,'none');
-	return $path['file'];
-	/*
-	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-	$sql = "SELECT picture_uri FROM $table_user WHERE user_id = '$user_id'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
-
-	if ($result && $row = mysql_fetch_array($result, MYSQL_ASSOC))
-		$image = trim($row['picture_uri']);
-	else
-		$image = '';
-
-	return $image;
-	*/
-}
 
 /**
  * Upload a submitted user image.

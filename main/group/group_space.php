@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 14722 2008-04-02 14:44:21Z yannoo $
+<?php //$Id: group_space.php 14789 2008-04-08 15:10:20Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -46,7 +46,7 @@ include ('../inc/global.inc.php');
 */
 include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'sortabletable.lib.php');
+include_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
 /*
 ==============================================================================
 		MAIN CODE

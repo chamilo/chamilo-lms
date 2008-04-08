@@ -33,15 +33,22 @@
 $language_file = 'survey';
 
 // unsetting the course id (because it is in the URL)
-$cidReset = true;
+if (!isset($_GET['cidReq']))
+{
+	$cidReset = true;
+}
+else 
+{
+	$_cid = $_GET['cidReq']; 
+}
 
 // including the global dokeos file
 require ('../inc/global.inc.php');
 
 // including additional libraries
-//require_once (api_get_path(LIBRARY_PATH)."/survey.lib.php");
+//require_once (api_get_path(LIBRARY_PATH)."survey.lib.php");
 require_once('survey.lib.php');
-require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
+require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 
 // getting all the course information
 $_course = CourseManager::get_course_information($_GET['course']);
@@ -55,7 +62,10 @@ $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 $table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION, $_course['db_name']);
 
 // breadcrumbs
-// $interbreadcrumb[] = array ("url" => 'survey_list.php', 'name' => get_lang('SurveyList'));
+if (!empty($_user))
+{
+	$interbreadcrumb[] = array ("url" => 'survey_list.php', 'name' => get_lang('SurveyList'));
+}
 
 // Header
 Display :: display_header(get_lang('Survey'));
@@ -99,7 +109,7 @@ if (mysql_num_rows($result) > 1)
 	}
 	else
 	{
-		echo '<form id="language" name="language" method="POST" action="'.api_get_self().'?course='.$_GET['course'].'&invitationcode='.$_GET['invitationcode'].'">';
+		echo '<form id="language" name="language" method="POST" action="'.api_get_self().'?course='.$_GET['course'].'&invitationcode='.$_GET['invitationcode'].'&cidReq='.$_GET['cidReq'].'">';
 		echo '  <select name="language">';
 		while ($row=mysql_fetch_assoc($result))
 		{
@@ -309,7 +319,7 @@ else
 
 
 // Displaying the form with the questions
-echo '<form id="question" name="question" method="post" action="'.api_get_self().'?course='.$_GET['course'].'&invitationcode='.$_GET['invitationcode'].'&show='.$show.'">';
+echo '<form id="question" name="question" method="post" action="'.api_get_self().'?course='.$_GET['course'].'&invitationcode='.$_GET['invitationcode'].'&show='.$show.'&cidReq='.$_GET['cidReq'].'">';
 echo '<input type="hidden" name="language" value="'.$_POST['language'].'" />';
 if(is_array($questions)){
 	foreach ($questions as $key=>$question)

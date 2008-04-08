@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey_list.php 14639 2008-03-18 05:31:08Z yannoo $
+* 	@version $Id: survey_list.php 14784 2008-04-08 12:58:45Z pcool $
 *
 * 	@todo use quickforms for the forms
 */
@@ -40,8 +40,8 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit())
 {
-	Display :: display_header(get_lang('Survey'));
-	Display :: display_error_message(get_lang('NotAllowed'), false);
+	Display :: display_header(get_lang('SurveyList'));
+	SurveyUtil::survey_list_user($_user['user_id']);
 	Display :: display_footer();
 	exit;
 }

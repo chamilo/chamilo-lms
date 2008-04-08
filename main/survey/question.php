@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 14542 2008-03-07 14:48:09Z juliomontoya $
+* 	@version $Id: question.php 14784 2008-04-08 12:58:45Z pcool $
 */
 
 // name of the language file that needs to be included
@@ -115,8 +115,7 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types))
 	if ($_GET['type'] == 'yesno')
 	{
 		$form_content['answers'][0]=get_lang('Yes');
-		$form_content['answers'][1]=get_lang('No');			
-
+		$form_content['answers'][1]=get_lang('No');
 	}
 	// We are editing a question
 	if (isset($_GET['question_id']) AND !empty($_GET['question_id']))
@@ -139,8 +138,7 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types))
 		unset($_SESSION['temp_answers']);								
 	}
 	$form->create_form($form_content);
-	$form->render_form();
-	 
+	$form->render_form();	 
 }
 else
 {

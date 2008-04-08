@@ -3307,7 +3307,7 @@ class SurveyUtil {
 	 *
 	 * @todo create the survey link
 	 */
-	function save_invitations($users_array, $invitation_title, $invitation_text, $reminder=0)
+	function save_invitations($users_array, $invitation_title, $invitation_text, $reminder=0, $sendmail = 0)
 	{
 		global $_user;
 		global $_course;
@@ -3409,8 +3409,10 @@ class SurveyUtil {
 								$sender_email = $noreply;
 							}
 						}
-						api_mail_html($recipient_name, $recipient_email, $invitation_title, $full_invitation_text, $sender_name, $sender_email, $replyto);
-						//mail($recipient_email, strip_tags($invitation_title), strip_tags($invitation_text));
+						if ($sendmail<>0)
+						{
+							api_mail_html($recipient_name, $recipient_email, $invitation_title, $full_invitation_text, $sender_name, $sender_email, $replyto);
+						}
 						$counter++;
 					}
 				}
@@ -3747,5 +3749,58 @@ class SurveyUtil {
 		}
 		return $surveys;
 	}
+	
+	/**
+	 * Display all the active surveys for the given course user
+	 *
+	 * @param unknown_type $user_id
+	 * 
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @version April 2007
+	 */
+	function survey_list_user($user_id)
+	{
+		global $_course;	
+	
+		// Database table definitions
+		$table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
+		$table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
+		$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
+		$table_user 			= Database :: get_main_table(TABLE_MAIN_USER);
+	
+		$sql = "SELECT * FROM $table_survey survey, $table_survey_invitation survey_invitation
+				WHERE survey_invitation.user = '".Database::escape_string($user_id)."'
+				AND survey.code = survey_invitation.survey_code
+				AND survey.avail_from <= '".date('Y-m-d H:i:s')."'
+				AND survey.avail_till >= '".date('Y-m-d H:i:s')."'
+				";
+	
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		
+		echo '<table class="data_table">';
+		echo '<tr>';
+		echo '	<th>'.get_lang('SurveyName').'</th>';
+		echo '	<th>'.get_lang('Anonymous').'</th>';
+		echo '</tr>';
+		
+		$counter = 0;
+		while ($row = Database::fetch_array($result,'ASSOC'))
+		{
+			echo '<tr>';
+			if ($row['answered'] == 0)
+			{
+				echo '<td><a href="fillsurvey.php?course='.$_course['sysCode'].'&amp;invitationcode='.$row['invitation_code'].'&amp;cidReq='.$_course['sysCode'].'">'.$row['title'].'</a></td>';
+			}
+			else 
+			{
+				echo '<td>'.$row['title'].'</td>';
+			}
+			echo '<td>';
+			echo ($row['anonymous'] == 1)?get_lang('Yes'):get_lang('No');
+			echo '</td>';
+			echo '</tr>';
+		}
+		echo '</table>';
+	}	
 }
 ?>

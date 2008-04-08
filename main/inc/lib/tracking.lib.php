@@ -145,38 +145,42 @@ class Tracking {
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 		$sql = 'SELECT login_course_date FROM ' . $tbl_track_login . ' 
 						WHERE user_id = ' . intval($student_id) . ' 
-						AND course_code = "' . mysql_real_escape_string($course_code) . '"
+						AND course_code = "' . Database::escape_string($course_code) . '"
 						ORDER BY login_course_date ASC LIMIT 0,1';
 
 		$rs = api_sql_query($sql);
-		if ($first_login_date = mysql_result($rs, 0, 0)) {
-			return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($first_login_date));
-		} else {
-			return false;
+		if(Database::num_rows($rs)>0)
+		{
+			if ($first_login_date = Database::result($rs, 0, 0)) {
+				return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($first_login_date));
+			}
 		}
+		return false;
 	}
 
 	function get_last_connection_date_on_the_course($student_id, $course_code) {
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 		$sql = 'SELECT login_course_date FROM ' . $tbl_track_login . ' 
 						WHERE user_id = ' . intval($student_id) . ' 
-						AND course_code = "' . mysql_real_escape_string($course_code) . '"
+						AND course_code = "' . Database::escape_string($course_code) . '"
 						ORDER BY login_course_date DESC LIMIT 0,1';
 
 		$rs = api_sql_query($sql);
-		if ($last_login_date = mysql_result($rs, 0, 0)) {
-			$timestamp = strtotime($last_login_date);
-			$currentTimestamp = mktime();
-			//If the last connection is > than 7 days, the text is red
-			//345600 = 7 days in seconds 
-			if ($currentTimestamp - $timestamp > 604800) {
-				return '<span style="color: #F00;">' . format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date)) . ' <a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /></a></span>';
-			} else {
-				return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date));
+		if(Database::num_rows($rs)>0)
+		{
+			if ($last_login_date = Database::result($rs, 0, 0)) {
+				$timestamp = strtotime($last_login_date);
+				$currentTimestamp = mktime();
+				//If the last connection is > than 7 days, the text is red
+				//345600 = 7 days in seconds 
+				if ($currentTimestamp - $timestamp > 604800) {
+					return '<span style="color: #F00;">' . format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date)) . ' <a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /></a></span>';
+				} else {
+					return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date));
+				}
 			}
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	function count_course_per_student($user_id) {

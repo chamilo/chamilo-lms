@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 14713 2008-04-02 04:58:20Z yannoo $
+<?php // $Id: usermanager.lib.php 14797 2008-04-08 23:17:58Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -332,12 +332,13 @@ class UserManager
 	/**
 	* @param array $conditions a list of condition (exemple : status=>STUDENT)
 	* @param array $order_by a list of fields on which sort
-	* @return an array with all users of the platform.
+	* @return array An array with all users of the platform.
 	* @todo optional course code parameter, optional sorting parameters...
 	*/
 	function get_user_list($conditions = array(), $order_by = array())
 	{
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
+		$return_array = array();
 		$sql_query = "SELECT * FROM $user_table";
 		if(count($conditions)>0)
 		{

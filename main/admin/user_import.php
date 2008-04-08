@@ -1,4 +1,4 @@
-<?php // $Id: user_import.php 14790 2008-04-08 20:31:45Z yannoo $
+<?php // $Id: user_import.php 14792 2008-04-08 20:57:53Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -155,7 +155,7 @@ function save_data($users)
 		
 		$user['Status'] = api_status_key($user['Status']);
 		
-		$user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], '', $user['PhoneNumber'], '', $user['AuthSource']);
+		$user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], api_get_setting('PlatformLanguage'), $user['PhoneNumber'], '', $user['AuthSource']);
 		foreach ($user['Courses'] as $index => $course)
 		{
 			if(CourseManager :: course_exists($course))
@@ -169,10 +169,10 @@ function save_data($users)
 		if ($sendMail)
 		{
 			$emailto = '"'.$user['FirstName'].' '.$user['LastName'].'" <'.$user['Email'].'>';
-			$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
-			$emailbody = get_lang('Dear').$user['FirstName'].' '.$user['LastName'].",\n\n".get_lang('YouAreReg')." ".get_setting('siteName')." ".get_lang('Settings')." $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is')." : ".api_get_path('WEB_PATH')." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n".get_lang('Manager')." ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n".get_lang('Email')." : ".get_setting('emailAdministrator')."";
-			$emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
-			$emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');
+			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+			$emailbody = get_lang('Dear').$user['FirstName'].' '.$user['LastName'].",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('Settings')." $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path('WEB_PATH')." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";
+			$emailheaders = 'From: '.api_get_setting('administratorName').' '.api_get_setting('administratorSurname').' <'.api_get_setting('emailAdministrator').">\n";
+			$emailheaders .= 'Reply-To: '.api_get_setting('emailAdministrator');
 			@ api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
 		}
 

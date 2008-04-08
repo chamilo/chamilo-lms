@@ -277,7 +277,7 @@ class SystemAnnouncementManager
 	 * @param string $date_start Start date (YYYY-MM-DD HH:II: SS)
 	 * @param string $date_end End date (YYYY-MM-DD HH:II: SS)
 	 */
-	function add_announcement($title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0, $lang = null)
+	function add_announcement($title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0, $lang = null, $send_mail=0)
 	{
 
 		$a_dateS = explode(' ',$date_start);
@@ -314,6 +314,10 @@ class SystemAnnouncementManager
 		$lang = is_null($lang) ? 'NULL' : "'".mysql_real_escape_string($lang)."'";
 		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang)
 												VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$lang.")";
+		if ($send_mail<>'0')
+		{
+			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);	
+		}		
 		return api_sql_query($sql,__FILE__,__LINE__);
 	}
 	/**
@@ -324,7 +328,7 @@ class SystemAnnouncementManager
 	 * @param array $date_start: start date of announcement (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
 	 * @param array $date_end : end date of announcement (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
 	 */
-	function update_announcement($id, $title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0,$lang=null)
+	function update_announcement($id, $title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0,$lang=null, $send_mail=0)
 	{
 
 		$a_dateS = explode(' ',$date_start);
@@ -360,6 +364,11 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		$id = intval($id);
 		$sql = "UPDATE ".$db_table." SET lang=$lang,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
 		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' WHERE id='".$id."'";
+		
+		if ($send_mail<>'0')
+		{
+			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);	
+		}
 		return api_sql_query($sql,__FILE__,__LINE__);
 	}
 	/**
@@ -399,6 +408,35 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		$field = ($user == VISIBLE_TEACHER ? 'visible_teacher' : ($user == VISIBLE_STUDENT ? 'visible_student' : 'visible_guest'));
 		$sql = "UPDATE ".$db_table." SET ".$field." = '".$visible."' WHERE id='".$announcement_id."'";
 		return api_sql_query($sql,__FILE__,__LINE__);
+	}
+	
+	function send_system_announcement_by_email($title,$content,$teacher, $student)
+	{
+		global $_user; 
+		global $_setting; 
+		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
+		if ($teacher<>0 AND $student == '0')
+		{
+			$sql = "SELECT * FROM $user_table WHERE email<>'' AND status = '1'";
+		}
+		if ($teacher == '0' AND $student <> '0')
+		{
+			$sql = "SELECT * FROM $user_table WHERE email<>'' AND status = '5'";
+		}
+		if ($teacher<>'0' AND $student <> '0')
+		{
+			$sql = "SELECT * FROM $user_table WHERE email<>''";
+		}
+		if ($teacher == '0' AND $student == '0')
+		{
+			return true;
+		}
+			
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		while($row = Database::fetch_array($result,'ASSOC'))
+		{
+			api_mail_html($row['firstname'].' '.$row['lastname'], $row['email'], $title, $content, $_user['firstName'].' '.$_user['lastName'], api_get_setting('emailAdministrator'), api_get_setting('emailAdministrator'));
+		}
 	}
 }
 ?>

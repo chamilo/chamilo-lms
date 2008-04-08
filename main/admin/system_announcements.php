@@ -1,5 +1,5 @@
 <?php
-// $Id: system_announcements.php 13292 2007-09-27 01:59:07Z yannoo $
+// $Id: system_announcements.php 14787 2008-04-08 14:16:25Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -44,6 +44,7 @@ include ('../inc/global.inc.php');
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 include (api_get_path(LIBRARY_PATH).'system_announcements.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php');
+require_once (api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -186,6 +187,7 @@ if ($action_todo)
 	$form->addElement('checkbox', 'visible_guest', null, get_lang('Guest'));
 	$form->addElement('hidden', 'action');
 	$form->addElement('hidden', 'id');
+	$form->addElement('checkbox', 'send_mail', get_lang('SendMail'));
 	$form->addElement('submit', 'submit', get_lang('Ok'));
 	if (api_get_setting('wcag_anysurfer_public_pages')=='true')
 	{
@@ -218,17 +220,23 @@ if ($action_todo)
 		switch($values['action'])
 		{
 			case 'add':
-				if(SystemAnnouncementManager::add_announcement($values['title'],$values['content'],$values['start'],$values['end'],$values['visible_teacher'],$values['visible_student'],$values['visible_guest'], $values['lang']))
+				if(SystemAnnouncementManager::add_announcement($values['title'],$values['content'],$values['start'],$values['end'],$values['visible_teacher'],$values['visible_student'],$values['visible_guest'], $values['lang'],$values['send_mail']))
+				{
 					Display :: display_normal_message(get_lang('AnnouncementAdded'));
-				else {
+				}
+				else 
+				{
 					$show_announcement_list = false;
 					$form->display();
 				}
 				break;
 			case 'edit':
-				if (SystemAnnouncementManager::update_announcement($values['id'],$values['title'],$values['content'],$values['start'],$values['end'],$values['visible_teacher'],$values['visible_student'],$values['visible_guest'], $values['lang']))
+				if (SystemAnnouncementManager::update_announcement($values['id'],$values['title'],$values['content'],$values['start'],$values['end'],$values['visible_teacher'],$values['visible_student'],$values['visible_guest'], $values['lang'],$values['send_mail']))
+				{
 					Display :: display_normal_message(get_lang('AnnouncementUpdated'));
-				else {
+				}
+				else
+				{
 					$show_announcement_list = false;
 					$form->display();
 				}

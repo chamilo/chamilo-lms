@@ -85,7 +85,7 @@ class Tracking {
 
 		$nb_seconds = 0;
 
-		while ($a_connections = mysql_fetch_array($rs)) {
+		while ($a_connections = Database::fetch_array($rs)) {
 
 			$s_login_date = $a_connections["login_course_date"];
 			$s_logout_date = $a_connections["logout_course_date"];
@@ -107,11 +107,13 @@ class Tracking {
 						ORDER BY login_date ASC LIMIT 0,1';
 
 		$rs = api_sql_query($sql);
-		if ($first_login_date = mysql_result($rs, 0, 0)) {
-			return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($first_login_date));			
-		} else {
-			return false;
+		if(Database::num_rows($rs)>0)
+		{
+			if ($first_login_date = Database::result($rs, 0, 0)) {
+				return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($first_login_date));			
+			}
 		}
+		return false;
 	}
 
 	function get_last_connection_date($student_id, $warning_message = false) {
@@ -121,24 +123,26 @@ class Tracking {
 						ORDER BY login_date DESC LIMIT 0,1';
 
 		$rs = api_sql_query($sql);
-		if ($last_login_date = mysql_result($rs, 0, 0)) {
-			if (!$warning_message) {
-				return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date));
-			} else {
-				$timestamp = strtotime($last_login_date);
-				$currentTimestamp = mktime();
-
-				//If the last connection is > than 7 days, the text is red
-				//345600 = 7 days in seconds 
-				if ($currentTimestamp - $timestamp > 604800) {
-					return '<span style="color: #F00;">' . format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date)) . '</span>';
-				} else {
+		if(Database::num_rows($rs)>0)
+		{
+			if ($last_login_date = Database::result($rs, 0, 0)) {
+				if (!$warning_message) {
 					return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date));
+				} else {
+					$timestamp = strtotime($last_login_date);
+					$currentTimestamp = mktime();
+	
+					//If the last connection is > than 7 days, the text is red
+					//345600 = 7 days in seconds 
+					if ($currentTimestamp - $timestamp > 604800) {
+						return '<span style="color: #F00;">' . format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date)) . '</span>';
+					} else {
+						return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date));
+					}
 				}
 			}
-		} else {
-			return false;
 		}
+		return false;
 	}
 	
 	function get_first_connection_date_on_the_course($student_id, $course_code) {

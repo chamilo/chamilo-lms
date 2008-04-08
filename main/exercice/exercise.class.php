@@ -22,7 +22,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 13184 2007-09-22 05:30:47Z yannoo $
+* 	@version $Id: exercise.class.php 14786 2008-04-08 14:11:46Z elixir_inter $
 */
 
 
@@ -75,7 +75,7 @@ class Exercise
 	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
     	#$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
-		$sql="SELECT title,description,sound,type,random,active FROM $TBL_EXERCICES WHERE id='$id'";
+		$sql="SELECT title,description,sound,type,random,active, results_disabled FROM $TBL_EXERCICES WHERE id='$id'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
 		// if the exercise has been found
@@ -88,6 +88,7 @@ class Exercise
 			$this->type=$object->type;
 			$this->random=$object->random;
 			$this->active=$object->active;
+			$this->results_disabled =$object->results_disabled;
 
 			$sql="SELECT question_id,position FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='$id' ORDER BY position";
 			$result=api_sql_query($sql,__FILE__,__LINE__);
@@ -411,6 +412,16 @@ class Exercise
 	{
 		$this->active=0;
 	}
+	
+	function disable_results()
+	{
+		$this->results_disabled = true;
+	}
+	
+	function enable_results()
+	{
+		$this->results_disabled = false;
+	}
 
 	/**
 	 * updates the exercise in the data base
@@ -429,17 +440,18 @@ class Exercise
 		$type=$this->type;
 		$random=$this->random;
 		$active=$this->active;
+		$results_disabled = intval($this->results_disabled);
 
 		// exercise already exists
 		if($id)
 		{
-			$sql="UPDATE $TBL_EXERCICES SET title='$exercise',description='$description',sound='$sound',type='$type',random='$random',active='$active' WHERE id='$id'";
+			$sql="UPDATE $TBL_EXERCICES SET title='$exercise',description='$description',sound='$sound',type='$type',random='$random',active='$active',results_disabled='$results_disabled' WHERE id='$id'";
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
 		// creates a new exercise
 		else
 		{
-			$sql="INSERT INTO $TBL_EXERCICES(title,description,sound,type,random,active) VALUES('$exercise','$description','$sound','$type','$random','$active')";
+			$sql="INSERT INTO $TBL_EXERCICES(title,description,sound,type,random,active, results_disabled) VALUES('$exercise','$description','$sound','$type','$random','$active',$results_disabled)";
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			$this->id=mysql_insert_id();

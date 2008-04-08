@@ -373,6 +373,16 @@ if($is_allowedToEdit)
 								$objExerciseTmp->save();
 								Display::display_confirmation_message(get_lang('VisibilityChanged'));
 								break;
+				case 'disable_results' : //disable the results for the learners
+								$objExerciseTmp->disable_results();
+								$objExerciseTmp->save();
+								Display::display_confirmation_message(get_lang('ResultsDisabled'));
+								break;
+				case 'enable_results' : //disable the results for the learners
+								$objExerciseTmp->enable_results();
+								$objExerciseTmp->save();
+								Display::display_confirmation_message(get_lang('ResultsEnabled'));
+								break;
 			}
 		}
 
@@ -431,14 +441,14 @@ if($is_allowedToEdit)
 
 	if($show == 'test')
 	{
-		$sql="SELECT id,title,type,active,description FROM $TBL_EXERCICES WHERE active<>'-1' ORDER BY title LIMIT $from,".($limitExPage+1);
+		$sql="SELECT id,title,type,active,description, results_disabled FROM $TBL_EXERCICES WHERE active<>'-1' ORDER BY title LIMIT $from,".($limitExPage+1);
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 	}
 }
 // only for students
 elseif($show == 'test')
 {
-	$sql="SELECT id,title,type,description FROM $TBL_EXERCICES WHERE active='1' ORDER BY title LIMIT $from,".($limitExPage+1);
+	$sql="SELECT id,title,type,description, results_disabled FROM $TBL_EXERCICES WHERE active='1' ORDER BY title LIMIT $from,".($limitExPage+1);
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 }
 
@@ -606,6 +616,12 @@ if($show == 'test'){
       <a href="exercice.php?choice=enable&page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/invisible.gif" border="0" alt="<?php echo htmlentities(get_lang('Activate'),ENT_QUOTES,$charset); ?>" /></a>
     <?php
 				}
+				
+				if($row['results_disabled'])
+					echo '<a href="exercice.php?choice=enable_results&page='.$page.'&exerciseId='.$row['id'].'" title="'.get_lang('EnableResults').'" alt="'.get_lang('EnableResults').'"><img src="../img/lp_quiz_na.gif" border="0" alt="'.htmlentities(get_lang('EnableResults'),ENT_QUOTES,$charset).'" /></a>';
+				else
+					echo '<a href="exercice.php?choice=disable_results&page='.$page.'&exerciseId='.$row['id'].'" title="'.get_lang('DisableResults').'" alt="'.get_lang('DisableResults').'"><img src="../img/lp_quiz.gif" border="0" alt="'.htmlentities(get_lang('DisableResults'),ENT_QUOTES,$charset).'" /></a>';
+				
 				echo "</td>";
 				echo "</tr>\n";
 
@@ -862,7 +878,7 @@ if($_configuration['tracking_enabled'])
 		{ // get only this user's results
 			  $sql="SELECT '',ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id
 				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te
-				  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".$_user['user_id']."' AND te.exe_cours_id='$_cid'
+				  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".$_user['user_id']."' AND te.exe_cours_id='$_cid'  AND results_disabled=0
 				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
 			$hpsql="SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)

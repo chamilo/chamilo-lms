@@ -111,3 +111,4 @@ ALTER TABLE forum_post ADD INDEX idx_forum_post_visible (visible);
 ALTER TABLE forum_thread ADD INDEX idx_forum_thread_forum_id (forum_id);
 ALTER TABLE student_publication ADD COLUMN filetype SET('file','folder')  NOT NULL DEFAULT 'file' AFTER sent_date;
 ALTER TABLE document ADD readonly TINYINT UNSIGNED NOT NULL ;
+ALTER TABLE quiz ADD results_disabled TINYINT UNSIGNED NOT NULL DEFAULT 0;

@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 14588 2008-03-13 11:17:02Z vanwayenbergh $
+* 	@version $Id: exercise_result.php 14786 2008-04-08 14:11:46Z elixir_inter $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -145,6 +145,7 @@ $exerciseTitle=$objExercise->selectTitle();
 $exerciseDescription=$objExercise->selectDescription();
 $exerciseDescription=stripslashes($exerciseDescription);
 
+
 $nameTools=get_lang('Exercice');
 
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
@@ -190,6 +191,11 @@ else
 <?php
 }
 
+
+if($objExercise->results_disabled)
+{
+	ob_start();
+}
 
 /*
 ==============================================================================
@@ -851,6 +857,12 @@ if($_configuration['tracking_enabled'])
 	//include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 	event_exercice($objExercise->selectId(),$totalScore,$totalWeighting,$answer,$question_id);
 
+}
+
+if($objExercise->results_disabled)
+{
+	ob_end_clean();
+	Display :: display_normal_message(get_lang('ExerciseFinished').'<br /><a href="exercice.php" />'.get_lang('Back').'</a>',false);
 }
 
 if ($origin != 'learnpath')

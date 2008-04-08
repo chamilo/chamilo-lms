@@ -552,6 +552,7 @@ function update_Db_course($courseDbName)
 		type tinyint unsigned NOT NULL default 1,
 		random smallint(6) NOT NULL default 0,
 		active tinyint NOT NULL default 0,
+		results_disabled TINYINT UNSIGNED NOT NULL DEFAULT 0,
 		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);

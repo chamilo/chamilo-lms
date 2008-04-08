@@ -1,28 +1,38 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langClarContent = "Here, professors and assistants create and administer
- courses websites. Students read (documents, agendas, informations) and, 
- sometimes, make exercices, publish papers, participate to
- forum discussions...</p><b>Registration</b><p>The following instructions
- only apply if your version of claroline allows self-registration (some sites 
- register you automatically). <br>If you are a Student, you
- just need to register selecting \'Follow courses (student)\', then choose
- the courses you would like to follow.</p><p>If you are a Professor or an
- Assistant, register too, but select \'Create courses (professor)\'. You will
- then have to fill a form with Course Code, Faculty and Course Title. Once
- this validated, you will be driven to the site you have just created and
- allowed to modify its content and organisation according to your
- requirements. </p><p>The \'To do\' option is to allow feedback to your claroline website administrators.  
- Things that you might post here include faults or suggestions for improvements. The \'To do\' 
- list is linked to on the Home Page of the campus (once
- logged in).</p>
-<p>The support forum is different. It connects all Claroline users worldwide. 
-If you don\'t find the answer to a question inside your claroline campus and environment, 
-post a message there.</p>
-<p>The link to Registration (if present) is on the Home Page of the campus
- (top right).</p><b>Login</b><p>On your next visits, type login/password
- and Ok to access your courses. The URL of the site is";
+$langClarContent = "<p><b>E&#287;itmen</b></p> <p>Dokeos bir Ö&#287;renme ve Bilgi Yönetim Sistemidir. E&#287;itmenlere ö&#287;renme materyallerini, ö&#287;renme yollar&#305;n&#305; 
+
+organize etmeyi ve ö&#287;rencileri ile olan etkile&#351;imi yönetmesi sa&#287;lar. Bunlar&#305;n hepsi Web taray&#305;c&#305;n&#305;n içerisinde yap&#305;lmaktad&#305;r. </p> 
+
+<p>Dokeos\'u bir e&#287;itmen olarak kullanabilmek için, bir kullan&#305;c&#305; ismine ve &#351;ifresine ihtiyac&#305;n&#305;z vard&#305;r. Portal&#305;n&#305;z&#305;n güvenlik ayarlar&#305;na ba&#287;l&#305; 
+
+olarak, bunlar&#305; kendin kay&#305;t ol (sa&#287; yan menü) veya kurumunuzun merkez yönetiminden elde edebilirsiniz. Bir kullan&#305;c&#305; isminin ve &#351;ifresinin 
+
+asla bo&#351;luk veya i&#351;aret içermemesine ve büyük/küçük harfe duyarl&#305; olu&#351;una dikkat ediniz. Kullan&#305;c&#305; isminizi ve &#351;ifrenizi giriniz, sonra bir ders 
+
+olu&#351;turunuz (sa&#287; üstte) veya kurumunuzun merkez yönetim sisteminden kendiniz için olu&#351;turdu&#287;unuz dersi kullan&#305;n&#305;z. </p> <p>Bir 
+
+meslekta&#351;&#305;n&#305;z&#305;  dersiniz için yard&#305;mc&#305; yönetici olarak eklemek:<ol><li>E&#287;er ki&#351;i henüz sistemde kay&#305;tl&#305; de&#287;ilse onu kay&#305;t edin ve profilinden 
+
+\"E&#287;itmen\" i seçin.</li> <li>E&#287;er ki&#351;i sistemde kay&#305;tl&#305; ise, geçici olarak Ders ayarlar&#305;nda ders aboneli&#287;ini aç&#305;n ve kursunuza kay&#305;t olmas&#305; için 
+
+ona sorun. Sonra onun profilini de&#287;i&#351;tirin ve ona E&#287;itmen haklar&#305;n&#305; verin.</li></ol></p> <p> Her Dokeos arac&#305; k&#305;rm&#305;z&#305; bir &#351;amand&#305;ra taraf&#305;ndan 
+
+temsil edilen ba&#287;lamsal bir yard&#305;m içerir. E&#287;er uygun bilgiyi bulamazsan&#305;z, Dokeos belgeleme sayfas&#305;na bak&#305;n: <a 
+
+href=\\\"http://www.dokeos.com/documentation.php\\\">http://www.dokeos.com/documentation.php</a> ve kendi dilinizde ya da &#304;ngilizce 
+
+e&#287;itmen k&#305;lavuzunu indirin.
+</p> <p><b>Ö&#287;renci</b></p> <p>Bu portal size derslere, e&#287;itimlere, birlikte çal&#305;&#351;ma alanlar&#305;na vb.. kat&#305;lman&#305;za ve takip etmenize izin verir. 
+
+Aktif ö&#287;renmeyi te&#351;vik etmek için yarat&#305;ld&#305;: proje tabanl&#305;, problem tabanl&#305;, konu tabanl&#305; ö&#287;renme, birlikte ara&#351;t&#305;rma gibi... E&#287;itmenleriniz basit 
+
+doküman klasörleri veya tefferuatl&#305;  kendin ö&#287;renme ya da  grup ö&#287;renme ard&#305;&#351;&#305;k aktivitelerini sunan ö&#287;renme alanr&#305; in&#351;a etmi&#351;lerdir.</p> 
+
+<p>Kay&#305;t süreci bir kurumdan di&#287;er bir kuruma de&#287;i&#351;ebilir. Baz&#305; durumlarda, kendin kay&#305;t olmaya izin verilir. Di&#287;erlerinde, merkez yönetimden 
+
+bir kullan&#305;c&#305; ismi veya &#351;ifresi elde etmelisiniz.</p>";
 $test = "deneme";
 $WCAGImage = "Resim";
 $WCAGLabel = "Görüntü etiketi";

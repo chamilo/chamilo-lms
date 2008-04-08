@@ -697,4 +697,6 @@ $AllowurlfopenIsSetToOff = "PHP nastavitev \"allow_url_fopen\" je nastavljena na
 $VisioHost = "Ime ali IP strežnika podatkovnega toka videokonference";
 $VisioPort = "Št. vrat strežnika podatkovnega toka videokonference";
 $VisioPassword = "Geslo strežnika podatkovnega toka videokonference";
+$ManageUserFields = "Upravljaj uporabniška polja";
+$UserFields = "Uporabniška polja";
 ?>

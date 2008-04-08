@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Move to";
-$langDownloadFile = "Upload file to the server";
+$langDownloadFile = "Upload file";
 $langNameDir = "Name of the new folder";
 $langSize = "Size";
 $langRename = "Rename";
@@ -25,7 +25,7 @@ $langGroupSpace = "Group area";
 $langGroupSpaceLink = "Group area";
 $langGroupForumLink = "Group forum";
 $langZipNoPhp = "The zip file can not contain .PHP files";
-$langUncompress = "uncompress zip";
+$langUncompress = "Uncompress zip";
 $langDownloadAndZipEnd = " Zip file uploaded and uncompressed";
 $langRoot = "root";
 $langCreateDoc = "Create a document";
@@ -122,4 +122,7 @@ $TemplateName = "Template name";
 $TemplateDescription = "Template description";
 $DocumentSetAsTemplate = "Document set as a new template";
 $DocumentUnsetAsTemplate = "Document unset as template";
+$AddAsTemplate = "Add as a template";
+$RemoveAsTemplate = "Remove template";
+$ReadOnly = "Read only";
 ?>

@@ -179,4 +179,5 @@ $SurveyEmptied = "Odgovori evalvacijskega vprašalnika so bili uspešno odstranjen
 $SurveyNotAvailableYet = "Ta vprašalnik še ni dostopen. Poskusite ponovno kasneje. Hvala.";
 $PeopleAnswered = "Osebe so odgovorile";
 $AnonymousSurveyCannotKnowWhoAnswered = "Ta vprašalnik je anonimen. Ne morete videti, kdo je odgovarjal.";
+$IllegalSurveyId = "Neznan ID vprašalnika";
 ?>

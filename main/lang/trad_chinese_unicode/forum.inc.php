@@ -84,4 +84,8 @@ $MakeVisible = "設為可見";
 $DeleteCompleteThread = "刪除整個論題樹？";
 $PostDeletedSpecial = "已刪除指定帖子";
 $ThreadDeleted = "已刪除論題";
+$NextMessage = "下一段訊息";
+$PrevMessage = "上一段訊息";
+$FirstMessage = "第一段訊息";
+$LastMessage = "最後一段訊息";
 ?>

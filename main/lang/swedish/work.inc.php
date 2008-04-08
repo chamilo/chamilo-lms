@@ -30,6 +30,7 @@ $langCurrentDir = "Aktuell mapp";
 $UploadADocument = "Ladda upp dokument";
 $EditToolOptions = "Ändra verktygs val";
 $DocumentDeleted = "Dokument raderat";
+$SendMailBody = "En användare har postat ett dokument genom uppgiftsverktyget på din kurs";
 $DirDelete = "Radera katalog";
 $ValidateChanges = "Godkänn ändringar";
 ?>

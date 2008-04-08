@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Mover a";
-$langDownloadFile = "Enviar un archivo al servidor";
+$langDownloadFile = "Enviar un archivo";
 $langNameDir = "Nombre del nuevo directorio";
 $langSize = "Tamaño";
 $langRename = "Renombrar";
@@ -122,4 +122,6 @@ $TemplateName = "Nombre de la plantilla";
 $TemplateDescription = "Descripción de la plantilla";
 $DocumentSetAsTemplate = "Documento convertido en una nueva plantilla";
 $DocumentUnsetAsTemplate = "El documento ha dejado de ser una plantilla";
+$AddAsTemplate = "Agregar como plantilla";
+$RemoveAsTemplate = "Quitar plantilla";
 ?>

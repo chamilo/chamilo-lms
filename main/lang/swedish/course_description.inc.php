@@ -14,4 +14,7 @@ $langValid  = "Godkänn";
 $langBackAndForget  = "Bakåt och avbryt";
 $langOkSent = "din sida har skickats.<p>Den är nu länkad till från kursens <a href=../..//index.php>hemsida</a>";
 $Content = "Innehåll";
+$CourseDescriptionUpdated = "Kursbeskrivningen har uppdaterats";
+$CourseDescriptionDeleted = "Kursbeskrivningen har tagits bort";
+$CourseDescriptionIntro = "För att skriva en kursbeskrivning, klicka på en rubrik och fyll i rätt formulärfält <br />Klicka sedan OK och fortsätt därefter med nästa.";
 ?>

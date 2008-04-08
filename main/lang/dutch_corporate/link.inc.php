@@ -53,8 +53,8 @@ Inhoud mag tussen aanhalingstekens, veldnamen niet.
 Enkele HTML-tags worden herkend in het veld \'description\'.";
 $langLinkUpdated = "Link is geüpdatet.";
 $langAll_Link_Deleted = "Link is verwijderd.";
-$langOnHomepage = "Toon link op cursushoofdpagina";
-$langShowLinkOnHomepage = "Toon deze link als een icoon op de cursushoofdpagina";
+$langOnHomepage = "Toon link op modulehoofdpagina";
+$langShowLinkOnHomepage = "Toon deze link als een icoon op de hoofdpagina van de module";
 $langCsvImport = "CSV-bestand importeren";
 $Category = "Categorie";
 ?>

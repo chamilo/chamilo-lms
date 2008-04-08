@@ -179,4 +179,5 @@ $SurveyEmptied = "Antwoorden op de enquête succesvol verwijderd";
 $SurveyNotAvailableYet = "Deze enquete is nog niet beschikbaar. Gelieve later opnieuw te proberen. ";
 $PeopleAnswered = "personen hebben geantwoord";
 $AnonymousSurveyCannotKnowWhoAnswered = "Deze enquete is anoniem. U kunt niet zien wie heeft geantwoord. ";
+$IllegalSurveyId = "Onbekend enquête id";
 ?>

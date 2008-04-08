@@ -122,4 +122,7 @@ $TemplateName = "Name der Vorlage";
 $TemplateDescription = "Beschreibung der Vorlage";
 $DocumentSetAsTemplate = "Dokument als neue Vorlage verwenden";
 $DocumentUnsetAsTemplate = "Dokument nicht mehr als Vorlage verwenden";
+$AddAsTemplate = "Als Vorlage hinzufügen";
+$RemoveAsTemplate = "Vorlage entfernen";
+$ReadOnly = "Nur lesen";
 ?>

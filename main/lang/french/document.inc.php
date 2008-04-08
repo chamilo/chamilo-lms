@@ -123,4 +123,7 @@ $TemplateName = "Nom du template";
 $TemplateDescription = "Description du template";
 $DocumentSetAsTemplate = "Le document a bien été ajouté aux templates";
 $DocumentUnsetAsTemplate = "Le document a bien été retiré des templates";
+$AddAsTemplate = "Ajouter en tant que template";
+$RemoveAsTemplate = "Supprimer template";
+$ReadOnly = "Lecture seule";
 ?>

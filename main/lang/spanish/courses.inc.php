@@ -66,7 +66,7 @@ $ErrorContactPlatformAdmin = "Se ha producido un error desconocido. Por favor, p
 $CourseRegistrationCodeIncorrect = "El código del curso es incorrecto";
 $CourseRequiresPassword = "El curso requiere una contraseña";
 $SubmitRegistrationCode = "Enviar el código de registro";
-$CourseCategoryDeleted = "Categoría de cursos borrada";
+$CourseCategoryDeleted = "La categoría fue eliminada";
 $CategorySortingDone = "Ordenación de categorías realizada";
 $CourseCategoryEditStored = "Categoría actualizada";
 ?>

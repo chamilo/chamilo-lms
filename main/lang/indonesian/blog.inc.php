@@ -9,6 +9,7 @@ $Subtitle = "Sub-judul";
 $ThisBlog = "Blog ini";
 $NewPost = "Artikel baru";
 $TaskManager = "Pengelolaan Tugas/task";
+$Member = "Anggota";
 $blog_management = "Pengelolaan Blog";
 $langWelcome = "Selamat Datang !";
 $langModule = "Modul";

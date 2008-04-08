@@ -47,7 +47,7 @@ $CourseManagement = "Course Management";
 $SortMyCourses = "Sort my courses";
 $SubscribeToCourse = "Subscribe to courses";
 $UnsubscribeFromCourse = "Unsubscribe from courses";
-$CreateCourseCategory = "Create a course category";
+$CreateCourseCategory = "Create course category";
 $CourseCategoryAbout2bedeleted = "Are you sure you want to delete this course category? Courses inside this course category will be moved outside the course categories";
 $CourseCategories = "Course Categories";
 $CoursesInCategory = "Courses in this category";
@@ -66,7 +66,7 @@ $ErrorContactPlatformAdmin = "There happened an unknown error. Please contact th
 $CourseRegistrationCodeIncorrect = "The course code is incorrect";
 $CourseRequiresPassword = "Course requires password";
 $SubmitRegistrationCode = "Submit registration code";
-$CourseCategoryDeleted = "Course category deleted";
+$CourseCategoryDeleted = "The category was deleted";
 $CategorySortingDone = "Category sorting done";
 $CourseCategoryEditStored = "Category updated";
 ?>

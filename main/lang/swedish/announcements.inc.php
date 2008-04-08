@@ -49,4 +49,5 @@ $AnnouncementMoved = "Tillkännagivanden har flyttats";
 $NoAnnouncements = "Det finns inga tillkännagivanden";
 $SelectEverybody = "Välj alla";
 $SelectedUsersGroups = "valda användargrupper";
+$LearnerMessage = "Meddelande från en användare";
 ?>

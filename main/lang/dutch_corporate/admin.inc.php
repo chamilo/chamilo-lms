@@ -343,7 +343,7 @@ $Links = "Links";
 $LearningPath = "Leerpad";
 $Documents = "Documenten";
 $UserPicture = "Afbeelding";
-$officialcode = "Officiële code";
+$officialcode = "Bibliotheek of organisatie";
 $Login = "Login";
 $UserPassword = "Wachtwoord";
 $SubscriptionAllowed = "Inschrijven toegelaten";
@@ -676,4 +676,7 @@ $ExtendedProfileRegistrationTitle = "Velden van het uitgebreid profiel bij regis
 $ExtendedProfileRegistrationComment = "Welke van de onderstaande velden van het uitgebreid profiel moeten beschikbaar zijn als een gebruiker zich registreert? Dit vereist dat het uitgebreid profiel geactiveerd is (zie hierboven)";
 $ExtendedProfileRegistrationRequiredTitle = "Verplichte velden van het uitgebreid profiel bij registratie";
 $ExtendedProfileRegistrationRequiredComment = "Welke van de onderstaande velden van het uitgebreid profiel moeten verplicht ingevuld worden als een gebruiker zich registreert? Dit vereist dat het uitgebreid profiel geactiveerd is en dat het veld beschikbaar is bij registratie (zie hierboven)";
+$Flat = "Vlakke weergave";
+$Threaded = "Gestructureerde weergave";
+$Nested = "Geneste weergave";
 ?>

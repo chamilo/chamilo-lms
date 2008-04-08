@@ -395,4 +395,5 @@ $ShowOnlineWorld = "Prikaži broj aktivnih korisnika na stranici prijave (vidljiv
 $ShowOnlineUsers = "Prikaži broj aktivnih korisnika na svim stranicama (vidljivo prijavljenim korisnicima)";
 $ShowOnlineCourse = "Prikaži broj aktivnih korisnika u ovom kolegiju";
 $ShowIconsInNavigationsMenuTitle = "Prikaži ikone u navigacijskom meniju?";
+$YourVersionIs = "Vaša verzija je";
 ?>

@@ -1,4 +1,50 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$FlatView = "Vlakke weergave";
+$ScoreEdit = "Scoreregels bewerken";
+$ScoreColor = "Scorekleur";
+$ScoringSystem = "Scoresysteem";
+$EnableScoreColor = "Scorekleuring inschakelen";
+$Below = "beneden";
+$WillColorRed = "wordt rood gekleurd";
+$EnableScoringSystem = "Scoresysteem inschakelen";
+$IncludeUpperLimit = "Bovengrens inbegrepen";
+$ScoreInfo = "Score-info";
+$Between = "tussen";
+$CurrentCategory = "Huidige categorie";
+$RootCat = "Hoofdcategorie";
+$NewCategory = "Nieuwe categorie";
+$NewEvaluation = "Nieuwe evaluatie";
+$Weight = "Gewicht";
+$PickACourse = "Kies een cursus of module";
+$CategoryName = "Categorienaam";
+$CourseIndependent = "Cursus/module-onafhankelijk";
+$CourseIndependentEvaluation = "Cursus/module-onafhankelijke evaluatie";
+$EvaluationName = "Evaluatienaam";
+$Max = "Max";
+$DateEval = "Evaluatiedatum";
+$AddUserToEval = "Gebruikers aan evaluatie toevoegen";
+$NewSubCategory = "Nieuwe subcategorie";
+$MakeLink = "Maak een link";
+$DeleteSelected = "Selectie verwijderen";
+$SetVisible = "Zichtbaar maken";
+$SetInvisible = "Onzichtbaar maken";
+$ChooseLink = "Soort link kiezen";
+$DokeosExercises = "Dokeos oefeningen";
+$DokeosDropbox = "Dokeos dropbox";
+$DokeosStudentPublications = "Dokeos gebruikerspublicaties";
+$DokeosLearningPaths = "Dokeos Leerpaden";
+$ChooseExercise = "Oefening kiezen";
+$AddResult = "Resultaten toevoegen";
+$BackToOverview = "Terug naar overzicht";
+$ExportPDF = "Exporteren naar PDF";
+$Print = "Afdrukken";
+$ChooseOrientation = "Oriëntatie kiezen";
+$Portrait = "Staand (portret)";
+$Landscape = "Liggend (landschap)";
+$FilterCategory = "Filtercategorie";
+$DeleteAll = "Alles verwijderen";
+$ScoringUpdated = "Scoring geüpdated";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s bevestigt dat\\n\\n %s \\n\\nmet succes de cursus \\n\\n heeft doorlopen \'%s\' \\n\\nmet als graad\\n\\n \'%s";
 ?>

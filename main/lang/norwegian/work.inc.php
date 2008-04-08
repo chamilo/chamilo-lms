@@ -29,4 +29,7 @@ $langDirCr = "Opprett mappe";
 $langCurrentDir = "gjeldende mappe";
 $UploadADocument = "Last opp ett dokument";
 $EditToolOptions = "Rediger verktøysinnstillinger";
+$DocumentDeleted = "Dokument slettet";
+$DirDelete = "Slett katalog";
+$ValidateChanges = "Valider endringer";
 ?>

@@ -34,5 +34,5 @@ $OrFile = "O archivo";
 $langCallSent = "Una petición de chat ha sido enviada. Esperando la aprobación de la persona contactada.";
 $langChatDenied = "Su llamada ha sido rechazada por la persona contactada";
 $Send = "Enviar";
-$Connected = "Conectado";
+$Connected = "Conectados";
 ?>

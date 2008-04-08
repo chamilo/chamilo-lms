@@ -84,4 +84,12 @@ $MakeVisible = "Rendi visibile";
 $DeleteCompleteThread = "Eliminare completamente l\'argomento (thread)?";
 $PostDeletedSpecial = "Messaggio speciale eliminato";
 $ThreadDeleted = "Argomento eliminato";
+$NextMessage = "Messaggio successivo";
+$PrevMessage = "Messaggio precedente";
+$FirstMessage = "Primo messaggio";
+$LastMessage = "Ultimo messaggio";
+$ForumSearch = "Cerca nel Forum";
+$SearchTerm  = "Parola da cercare";
+$ForumSearchResults = "Risultati della ricerca";
+$ForumSearchInformation = "Per cercare più parole usa il simbolo + ";
 ?>

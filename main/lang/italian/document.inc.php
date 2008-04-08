@@ -122,4 +122,7 @@ $TemplateName = "Nome del modello";
 $TemplateDescription = "Descrizione del modello";
 $DocumentSetAsTemplate = "Documento salvato come modello";
 $DocumentUnsetAsTemplate = "Il documento non è più un modello";
+$AddAsTemplate = "Aggiungi come modello";
+$RemoveAsTemplate = "Elimina dai modelli";
+$ReadOnly = "Sola lettura";
 ?>

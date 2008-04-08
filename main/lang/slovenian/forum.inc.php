@@ -84,4 +84,12 @@ $MakeVisible = "Naredi vidno";
 $DeleteCompleteThread = "Odstranim celotno nit ?";
 $PostDeletedSpecial = "Posebna objava je bila odstranjena";
 $ThreadDeleted = "Nit je bila odstranjena";
+$NextMessage = "Naslednje sporoèilo";
+$PrevMessage = "Predhodno sporoèilo";
+$FirstMessage = "Prvo sporoèilo";
+$LastMessage = "Zadnje sporoèilo";
+$ForumSearch = "Poiš&#269;i v forumu";
+$SearchTerm  = "Iskani izraz";
+$ForumSearchResults = "Rezultati iskanja po forumu";
+$ForumSearchInformation = "Iskanje sestavljenih izrazov izvedete z uporabo + znaka";
 ?>

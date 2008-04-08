@@ -468,4 +468,7 @@ $ExportiCalPrivate = "Izvoz v iCal obliko kot privatni dogodek";
 $ExportiCalConfidential = "Izvoz v iCal obliko kot zaupen dogodek";
 $MoreStats = "Veè statistik";
 $Drh = "Upravitelj èloveških virov";
+$directory = "mapa";
+$Directories = "mape";
+$UserBirthday = "Rojstni datum";
 ?>

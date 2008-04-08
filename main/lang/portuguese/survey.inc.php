@@ -179,4 +179,5 @@ $SurveyEmptied = "Respostas ao questionário apagadas com êxito";
 $SurveyNotAvailableYet = "Este inquérito ainda não está disponível. Por favor, tente novamente mais tarde. Obrigado.";
 $PeopleAnswered = "pessoas que responderam";
 $AnonymousSurveyCannotKnowWhoAnswered = "Este inquérito é anónimo. Não pode ver quem respondeu.";
+$IllegalSurveyId = "Número de questionário desconhecido";
 ?>

@@ -125,4 +125,6 @@ $TemplateName = "Sjabloonnaam";
 $TemplateDescription = "Sjabloonbeschrijving";
 $DocumentSetAsTemplate = "Document ingesteld als een nieuwe sjabloon";
 $DocumentUnsetAsTemplate = "Document niet meer gebruikt als sjabloon";
+$AddAsTemplate = "Als sjabloon toevoegen";
+$RemoveAsTemplate = "Sjabloon verwijderen";
 ?>

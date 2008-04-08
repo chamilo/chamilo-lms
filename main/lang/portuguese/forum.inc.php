@@ -84,4 +84,12 @@ $MakeVisible = "Tornar visível";
 $DeleteCompleteThread = "Tem a certeza que deseja apagar todo o tópico?";
 $PostDeletedSpecial = "Primeira mensagem apagada.";
 $ThreadDeleted = "Tema apagado";
+$NextMessage = "Próxima mensagem";
+$PrevMessage = "Mensagem anterior";
+$FirstMessage = "Primeira mensagem";
+$LastMessage = "Última mensagem";
+$ForumSearch = "Pesquisar no fórum";
+$SearchTerm  = "Pesquisar palavra";
+$ForumSearchResults = "Resultados da pesquisa do fórum";
+$ForumSearchInformation = "Pode pesquisar múltiplas palavras usando o sinal + entre elas";
 ?>

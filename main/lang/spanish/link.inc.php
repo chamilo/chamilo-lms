@@ -23,7 +23,7 @@ los enlaces dentro de la misma.\\ ¿Seguro que quiere eliminar esta categoría y t
 $langAllCategoryDel = "Borrar todas las categorías y sus enlaces";
 $langGiveURL = "Por favor, ponga la URL";
 $langGiveCategoryName = "Por favor, ponga un nombre para la categoría";
-$langNoCategory = "Sin categorizar";
+$langNoCategory = "General";
 $showall = "Expandir todas las categorías";
 $shownone = "Contraer todas las categorías";
 $langListDeleted = "La lista ha sido completamente borrada";

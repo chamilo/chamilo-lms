@@ -49,4 +49,7 @@ $ViewPersonalItem = "Vis personlige oppføringer";
 $UserGroupFilter = "Filtrer på grupper / brukere";
 $ShowAll = "Vis alle";
 $Print = "Utskrift";
+$CopiedAsAnnouncement = "Kopiert som meddelelse";
+$NewAnnouncement = "Ny meddelelse";
+$AddAnnouncement = "Legg til som meddelelse";
 ?>

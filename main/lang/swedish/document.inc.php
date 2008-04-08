@@ -115,5 +115,13 @@ $Validate = "Validera";
 $AdvancedSettings = "Avancerade inställningar";
 $AdvancedSettings = "Avancerade inställningar";
 $File = "Fil";
+$DocDeleteError = "Ett fel uppstod när dokumentet skulle tas bort";
+$ViModProb = "Ett problem uppstod vid uppdateringen";
 $DirDeleted = "Mapp raderad";
+$TemplateName = "Mallnamn";
+$TemplateDescription = "Mallbeskrivning";
+$DocumentSetAsTemplate = "Spara dokumentet som ny mall";
+$DocumentUnsetAsTemplate = "Inte malldokument längre";
+$AddAsTemplate = "Lägg till som mall";
+$RemoveAsTemplate = "Ta bort mall";
 ?>

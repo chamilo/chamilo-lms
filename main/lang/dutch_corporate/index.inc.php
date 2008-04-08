@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langInvalidId = "Deze identificatie is niet geldig (verkeerde log-in of wachtwoord). ";
-$langWelcome = "Cursussites hieronder hebben vrije toegang. De andere cursussen vereisen een gebruikersnaam en een wachtwoord. Die kunt u krijgen door een klik op \'Registratie\'. Lesgevers kunnen bij registratie aangeven dat ze cursussites wensen aan te maken.";
+$langWelcome = "De modules hieronder hebben vrije toegang. De andere modules vereisen een gebruikersnaam en een wachtwoord. Die kunt u krijgen door een klik op \'Registratie\'. Lesgevers en begeleiders kunnen bij registratie aangeven dat ze een nieuwe module wensen aan te maken.";
 $langPass = "Wachtwoord";
 $langEnter = "Log in";
 $langReg = "Registratie";
@@ -49,7 +49,7 @@ $Platform = "Platform";
 $Refresh = "Vernieuw";
 $TotalOnLine = "Aantal gebruikers online";
 $langCourseClosed = "(de module is niet toegankelijk)";
-$ViewOpenCourses = "Bekijk open cursussen";
+$ViewOpenCourses = "Bekijk open modules";
 $langCompetences = "Competenties";
 $langDiplomas = "Diploma\'s";
 $langTeach = "Waarin u kunt lesgeven";

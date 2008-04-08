@@ -23,10 +23,10 @@ $langSearch = "Zoeken";
 $langSearchCrit = "Gebruik de ruimte hieronder voor omschrijvende woorden, één woord per lijn!";
 $langNoKeywords = "De cursus heeft geen kernwoorden";
 $langKwCacheProblem = "De cache van de kernwoorden kan niet geopend worden";
-$langCourseKwds = "cursuskernwoorden";
+$langCourseKwds = "kernwoorden van de module";
 $langKwdsInMD = "kernwoorden gebruikt in MD";
 $langKwdRefs = "kernwoordverwijzingen";
 $langNonCourseKwds = "Niet-cursuskernwoorden";
-$langKwdsUse = "Cursuskernwoorden (vet = niet gebruikt)";
+$langKwdsUse = "Kernwoorden van de module (vet = niet gebruikt)";
 $langTotalMDEs = "Totaal aantal MD-gegevens: ";
 ?>

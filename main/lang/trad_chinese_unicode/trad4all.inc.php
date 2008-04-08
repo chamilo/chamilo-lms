@@ -340,6 +340,7 @@ $Faq = "常見問題";
 $UploadMaxSize = "上載檔案大小上限";
 $MoveUp = "上移";
 $MoveDown = "下移";
+$UplUnableToSaveFileFilteredExtension = "檔案上傳失敗：檔案的類型或延伸檔名不被接受";
 $UplFileTooBig = "你上載的案大小超出本 Dokeos 平台的設定上限 (%sMB) 。請聯絡本平台的管理員。 ";
 $UplGenericError = "未能成功收到你上傳的檔案，請稍後再試或聯絡本平台的管理員。 ";
 $MyGradebook = "我的成績本子";

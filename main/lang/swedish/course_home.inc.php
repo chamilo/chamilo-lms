@@ -20,5 +20,9 @@ $Forum = "Forum";
 $Course_maintenance = "Kursunderhåll";
 $TOOL_SURVEY = "Enkäter";
 $GreyIcons = "Verktygslåda";
+$Interaction = "Interaktion";
+$Authoring = "Redigera";
 $Administration = "Administrering";
+$IntroductionTextUpdated = "Introduktionstexten har uppdaterats";
+$IntroductionTextDeleted = "Introduktionstexten har tagits bort";
 ?>

@@ -83,4 +83,5 @@ $InvalidMaxNumberOfMembers = "Var vänlig ange ett tillåtet antal maximalt antal 
 $CategoryOrderChanged = "Kategorins ordningsföljd är ändrad";
 $Wiki = "Grupp wiki";
 $CategoryCreated = "Kategori skapad";
+$Group = "Grupp";
 ?>

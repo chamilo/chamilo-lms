@@ -122,4 +122,6 @@ $TemplateName = "Ime predloge";
 $TemplateDescription = "Opis predloge";
 $DocumentSetAsTemplate = "Dokument doloèen kot nova predloga";
 $DocumentUnsetAsTemplate = "Dokument ni veè predloga";
+$AddAsTemplate = "Dodaj kot predlogo";
+$RemoveAsTemplate = "Odstrani predlogo";
 ?>

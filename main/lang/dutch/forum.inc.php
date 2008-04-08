@@ -84,4 +84,12 @@ $MakeVisible = "Maak zichtbaar";
 $DeleteCompleteThread = "Volledige discussie verwijderen?";
 $PostDeletedSpecial = "Speciaal bericht verwijderd";
 $ThreadDeleted = "Discussie verwijderd";
+$NextMessage = "Volgend bericht";
+$PrevMessage = "Vorig bericht";
+$FirstMessage = "Eerste bericht";
+$LastMessage = "Laatste bericht";
+$ForumSearch = "Zoek in de forum module";
+$SearchTerm  = "Zoekterm";
+$ForumSearchResults = "Forum zoekresultaten";
+$ForumSearchInformation = "U kunt op meerdere zoektermen zoeken door gebruik te maken van het + teken";
 ?>

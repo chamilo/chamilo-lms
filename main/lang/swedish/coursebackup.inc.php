@@ -42,4 +42,6 @@ $langBackup = "Säkerhetskopia";
 $langImportBackupInfo = "Importera en säkerhetskopia. Du kan ladda upp en säkerhetskopia från din egen dator eller använda en säkerhetskopia från servern.";
 $langCreateBackupInfo = "Gör en säkerhetskopia från denna kurs. Du kan välja kursinnehåll att göra en säkerhetskopia av.";
 $ToolIntro = "Verktygsintroduktion";
+$UploadError = "Misslyckades med filuppladdning. Kontrollera maximalt accepterad filstorlek och rättigheter för mappen på servern";
+$DocumentsWillBeAddedToo = "Dokument kommer också att läggas till";
 ?>

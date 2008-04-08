@@ -14,7 +14,7 @@ $lang_new_link = "nieuwe link toegevoegd";
 $lang_new_forum_topic = "nieuw onderwerp toegevoegd";
 $lang_new_groupforum_topic = "nieuw onderwerp toegevoegd aan groepsforum";
 $lang_new_dropbox_file = "nieuw bestand ontvangen";
-$lang_update_dropbox_file = "bestand in de studentenpublicatie gewijzigd";
+$lang_update_dropbox_file = "bestand in de dropbox werd gewijzigd";
 $ForumCategoryAdded = "Forumcategorie toegevoegd";
 $LearnpathAdded = "Leerpad toegevoegd";
 ?>

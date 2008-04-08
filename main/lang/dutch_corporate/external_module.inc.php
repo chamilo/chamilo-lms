@@ -2,14 +2,14 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langLinkSite = "Link naar een site";
-$langSubTitle = "Voegt een link toe aan uw cursusstartpagina.";
+$langSubTitle = "Voegt een link toe aan uw modulestartpagina.";
 $langAddPage            = "Pagina toevoegen";
 $langSendPage           = "Pagina om toe te voegen";
 $langCouldNot           = "Het bestand kon niet verzonden worden.";
-$langOkSentPage         = "De pagina is toegevoegd. Deze is nu toegankelijk via de <a href=\\\"../../\".$_course[\'path\'].\"/index.php\\\">cursusstartpagina</a>.";
-$langOkSentLink         = "De link is toegevoegd. Deze is nu toegankelijk via de <a href=\\\"\".api_get_path(WEB_COURSE_PATH). $_course[\'path\'] . \"/index.php\\\">cursusstartpagina</a>.";
+$langOkSentPage         = "De pagina is toegevoegd. Deze is nu toegankelijk via de <a href=\\\"../../\".$_course[\'path\'].\"/index.php\\\">modulestartpagina</a>.";
+$langOkSentLink         = "De link is toegevoegd. Deze is nu toegankelijk via de <a href=\\\"\".api_get_path(WEB_COURSE_PATH). $_course[\'path\'] . \"/index.php\\\">modulestartpagina</a>.";
 $langTooBig             = "U hebt geen bestand gekozen op te verzenden, of het bestand is te groot.";
-$langExplanation        = "Deze pagina moet in HTML-formaat zijn (bv. \"mijn_pagina.html\"). Die zal door een link verbonden worden met de cursusstartpagina. Om een niet-HTML-document (PDF, OpenDocument, video...) op te sturen, gebruik de <a href=\"../document/document.php\">documentenmodule</a>.";
+$langExplanation        = "Deze pagina moet in HTML-formaat zijn (bv. \"mijn_pagina.html\"). Die zal door een link verbonden worden met de modulestartpagina. Om een niet-HTML-document (PDF, OpenDocument, video...) op te sturen, gebruik de <a href=\"../document/document.php\">documentenmodule</a>.";
 $langPgTitle            = "Titel van de pagina";
 $langNoLinkURL          = "Geef het adres (URL) van de link.";
 $langLinkTarget = "Doel van de link";
@@ -18,9 +18,9 @@ $langNewWindow = "In een nieuw venster";
 $langAdded = "De link is toegevoegd.";
 $langAddLink = "Link toevoegen";
 $langNoLinkName = "Geef een naam aan de link.";
-$langEditLink = "Wijzig link op cursusstartpagina";
+$langEditLink = "Wijzig link op modulestartpagina";
 $langChangePress = "Wijzig en druk OK";
-$langLinkChanged = "De link op de cursusstartpagina is gewijzigd. Gebruik het broodkruimelmenu boven om terug te keren naar de hoofdpagina.";
+$langLinkChanged = "De link op de modulestartpagina is gewijzigd. Gebruik het broodkruimelmenu boven om terug te keren naar de hoofdpagina.";
 $NoLinkName = "Geen link naam";
 $NoLinkURL = "Geen link URL";
 $LinkChanged = "Link aangepast";

@@ -99,7 +99,7 @@ $DescriptionRecycleCourse = "Esta utilidad elimina de forma total o parcial los 
 $QuizEmailAlert = "Avisar mediante un correo electrónico cuando se envíe un nuevo ejercicio";
 $QuizEmailAlertActivate = "Activar el aviso por correo electrónico de que se han enviado las respuestas de un ejercicio";
 $QuizEmailAlertDeactivate = "Desactivar el aviso por correo electrónico de que se han enviado las respuestas de un ejercicio";
-$AllowUserImageForum = "Imagen de usuario en el foro";
+$AllowUserImageForum = "Imagen de los usuarios en el foro";
 $AllowUserImageForumActivate = "Muestra las imágenes de los usuarios en el foro";
 $AllowUserImageForumDeactivate = "Oculta las imágenes de los usuarios en el foro";
 ?>

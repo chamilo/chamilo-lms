@@ -21,4 +21,8 @@ $langNoLinkName = "Var vänlig skriv länkens namn";
 $langEditLink = "Ändra Kurshemsidans länk";
 $langChangePress = "Ändra och tryck OK";
 $langLinkChanged = "Kurshemsidans länk är ändrad. Använd brödtextmenyn ovan för att komma till hemsidan.";
+$NoLinkName = "Ingen länkbeskrivning";
+$NoLinkURL = "Ingen URL";
+$LinkChanged = "Länk ändrad";
+$OkSentLink = "Länken är skickad";
 ?>

@@ -148,4 +148,5 @@ $SendMessage = "發送訊息";
 $PasswordEncryptedForSecurity = "因應安全理由，你的密碼已被加密。按下連結，你的密碼便會通過電郵傳送給你。";
 $UsersUnsubscribed = "已把選定使用者從本課程中取消";
 $SystemUnableToSendEmailContact = "系統未能發送電郵給聯絡人";
+$UsernameMaxXCharacters = "使用者名稱最長為 %s 字母 ";
 ?>

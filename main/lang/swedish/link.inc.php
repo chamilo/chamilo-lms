@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$LinkMoved = "Länken är flyttad";
 $langLinkName = "Länknamn";
 $langLinkAdd = "Länken har lagts till listan";
 $langLinkAdded = "Länken har lagts till.";
@@ -43,4 +44,5 @@ $langAll_Link_Deleted = "Länken är raderad";
 $langOnHomepage = "Visa länk på hemsidan";
 $langShowLinkOnHomepage = "Visa denna länk som en ikon på kursens hemsida";
 $langCsvImport = "CSV import";
+$Category = "Kategori";
 ?>

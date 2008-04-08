@@ -84,4 +84,12 @@ $MakeVisible = "Make Visible";
 $DeleteCompleteThread = "Delete complete thread?";
 $PostDeletedSpecial = "Special Post Deleted";
 $ThreadDeleted = "Thread deleted";
+$NextMessage = "Next message";
+$PrevMessage = "Previous message";
+$FirstMessage = "First message";
+$LastMessage = "Last message";
+$ForumSearch = "Search in the Forum";
+$SearchTerm  = "Search term";
+$ForumSearchResults = "Forum search results";
+$ForumSearchInformation = "You search on multiple words by using the + sign";
 ?>

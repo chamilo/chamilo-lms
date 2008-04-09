@@ -1,10 +1,9 @@
-<?php
-// $Id: datepicker.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: datepickerdate.php 14806 2008-04-09 15:12:15Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 	
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL.
 	Copyright (c) Bart Mollet, Hogeschool Gent
 	
 	For a full list of contributors, see "credits.txt".
@@ -32,7 +31,7 @@ class HTML_QuickForm_datepickerdate extends HTML_QuickForm_date
 	 */
 	function HTML_QuickForm_datepickerdate($elementName = null, $elementLabel = null, $attributes = null)
 	{
-		global $language_interface;
+		global $language_interface, $myMinYear, $myMaxYear;
 		$js_form_name = $attributes['form_name'];
 		unset($attributes['form_name']);
 		HTML_QuickForm_element :: HTML_QuickForm_element($elementName, $elementLabel, $attributes);
@@ -104,6 +103,13 @@ class HTML_QuickForm_datepickerdate extends HTML_QuickForm_date
 		$datetime = $y.'-'.$m.'-'.$d;
 		$result[$this->getName()]= $datetime;
 		return $result;
+	}
+	/**
+	 * Sets an option to a value
+	 */
+	function setLocalOption($name,$value)
+	{
+		$this->_options[$name] = $value;
 	}
 }
 ?>

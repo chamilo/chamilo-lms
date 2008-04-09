@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 14798 2008-04-09 05:26:13Z yannoo $
+<?php // $Id: profile.php 14807 2008-04-09 15:29:12Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -272,18 +272,45 @@ if (is_profile_editable() && api_get_setting('profile', 'password') == 'true')
 
 // EXTRA FIELDS
 $extra = UserManager::get_extra_fields();
-$ftypeco = array(); //make a correspondance array for the form types 
 foreach($extra as $id => $field_details)
 {
 	if($field_details[6] == 0)
 	{
 		continue;
 	}
-	//todo add field type management (rather than just "text")
-	$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
-	$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-	$form->applyFilter('extra_'.$field_details[1], 'trim');
-	if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+	switch($field_details[2])
+	{
+		case USER_FIELD_TYPE_TEXT:
+			$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
+			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+			$form->applyFilter('extra_'.$field_details[1], 'trim');
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+			break;
+		case USER_FIELD_TYPE_TEXTAREA:
+			$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false);
+			//$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
+			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+			$form->applyFilter('extra_'.$field_details[1], 'trim');
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+			break;
+		case USER_FIELD_TYPE_RADIO:
+			break;
+		case USER_FIELD_TYPE_SELECT:
+			break;
+		case USER_FIELD_TYPE_SELECT_MULTIPLE:
+			break;
+		case USER_FIELD_TYPE_DATE:
+			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3]);
+			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+			$form->applyFilter('theme', 'trim');
+			break;
+		case USER_FIELD_TYPE_DATETIME:
+			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3]);
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+			$form->applyFilter('theme', 'trim');
+			break;
+	}
 }
 
 //	SUBMIT

@@ -63,10 +63,12 @@ $form->addRule('fieldlabel', get_lang('FieldTaken'), 'fieldlabel_available');
 // Field type
 $types = array();
 $types[USER_FIELD_TYPE_TEXT]  = get_lang('FieldTypeText');
-//$types[USER_FIELD_TYPE_TEXTAREA] = get_lang('FieldTypeTextarea');
+$types[USER_FIELD_TYPE_TEXTAREA] = get_lang('FieldTypeTextarea');
 //$types[USER_FIELD_TYPE_RADIO] = get_lang('FieldTypeRadio');
 //$types[USER_FIELD_TYPE_SELECT] = get_lang('FieldTypeSelect');
 //$types[USER_FIELD_TYPE_SELECT_MULTIPLE] = get_lang('FieldTypeSelectMultiple');
+$types[USER_FIELD_TYPE_DATE] = get_lang('FieldTypeDate');
+$types[USER_FIELD_TYPE_DATETIME] = get_lang('FieldTypeDatetime');
 $form->addElement('select','fieldtype',get_lang('FieldType'),$types);
 $form->addRule('fieltype', get_lang('ThisFieldIsRequired'), 'required');
 // Field display name

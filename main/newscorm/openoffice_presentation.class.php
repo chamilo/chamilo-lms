@@ -74,10 +74,17 @@ class OpenofficePresentation extends OpenofficeDocument {
     }
     
     function add_command_parameters(){
+    	
+    	if(empty($this->slide_width) || empty($this->slide_height))
+    		list($this->slide_width, $this->slide_height) = explode('x',api_get_setting('service_ppt2lp','size'));
+    	return ' -w '.$this->slide_width.' -h '.$this->slide_height.' -d oogie';
     
-    	list($slide_width, $slide_height) = explode('x',api_get_setting('service_ppt2lp','size'));
-    	return " -w $slide_width -h $slide_height -d oogie";
+    }
     
+    function set_slide_size($width,$height)
+    {
+    	$this->slide_width = $width;
+    	$this->slide_height = $height;
     }
     
     function add_docs_to_visio ($files=array()){

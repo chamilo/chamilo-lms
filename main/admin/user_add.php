@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 14674 2008-03-20 12:24:34Z yannoo $
+<?php // $Id: user_add.php 14804 2008-04-09 14:00:16Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -149,7 +149,7 @@ $status[DRH] = get_lang('Drh');
 $form->addElement('select','status',get_lang('Status'),$status,'id="status_select" onchange="display_drh_list()"');
 
 //drh list (display only if student)
-$display = $_POST['status'] == STUDENT ? 'block' : 'none';
+$display = $_POST['status'] == STUDENT || !isset($_POST['status']) ? 'block' : 'none';
 $form->addElement('html','<div id="drh_list" style="display:'.$display.';">');
 $drh_select = $form->addElement('select','hr_dept_id',get_lang('Drh'),array(),'id="drh_select"');
 $drh_list = UserManager :: get_user_list(array('status'=>DRH),array('lastname','firstname'));
@@ -194,6 +194,7 @@ $defaults['expiration_date']['d']=date('d',$time);
 $defaults['expiration_date']['F']=date('m',$time);
 $defaults['expiration_date']['Y']=date('Y',$time);
 $defaults['radio_expiration_date'] = 0;
+$defaults['status'] = STUDENT;
 $form->setDefaults($defaults);
 // Submit button
 $form->addElement('submit', 'submit', get_lang('Add'));

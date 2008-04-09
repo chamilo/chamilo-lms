@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 14807 2008-04-09 15:29:12Z yannoo $
+<?php // $Id: profile.php 14811 2008-04-09 18:50:44Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -271,7 +271,7 @@ if (is_profile_editable() && api_get_setting('profile', 'password') == 'true')
 }
 
 // EXTRA FIELDS
-$extra = UserManager::get_extra_fields();
+$extra = UserManager::get_extra_fields(0,50,5,'ASC');
 foreach($extra as $id => $field_details)
 {
 	if($field_details[6] == 0)
@@ -294,10 +294,41 @@ foreach($extra as $id => $field_details)
 			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			break;
 		case USER_FIELD_TYPE_RADIO:
+			/*
+			$group = array();
+			$auth_sources = 0; //make available wider as we need it in case of form reset (see below)
+			if(count($extAuthSource) > 0)
+			{
+				$group[] =& HTML_QuickForm::createElement('radio','password_auto',null,get_lang('ExternalAuthentication').' ',2);
+				$auth_sources = array();
+				foreach($extAuthSource as $key => $info)
+				{
+					$auth_sources[$key] = $key;
+				}
+				$group[] =& HTML_QuickForm::createElement('select','auth_source',null,$auth_sources);
+				$group[] =& HTML_QuickForm::createElement('static','','','<br />');
+			}
+			$group[] =& HTML_QuickForm::createElement('radio','password_auto',get_lang('Password'),get_lang('AutoGeneratePassword').'<br />',1);
+			$group[] =& HTML_QuickForm::createElement('radio', 'password_auto','id="radio_user_password"',null,0);
+			$group[] =& HTML_QuickForm::createElement('password', 'password',null,'onkeydown=password_switch_radio_button(document.user_add,"password[password_auto]")');
+			$form->addGroup($group, 'password', get_lang('Password'), '');
+			*/
 			break;
 		case USER_FIELD_TYPE_SELECT:
+			$options = array();
+			foreach($field_details[8] as $option_id => $option_details)
+			{
+				$options[$option_details[1]] = $option_details[2];
+			}
+			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');			
 			break;
 		case USER_FIELD_TYPE_SELECT_MULTIPLE:
+			$options = array();
+			foreach($field_details[8] as $option_id => $option_details)
+			{
+				$options[$option_details[1]] = $option_details[2];
+			}
+			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
 			break;
 		case USER_FIELD_TYPE_DATE:
 			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3]);

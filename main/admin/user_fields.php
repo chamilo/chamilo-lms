@@ -136,7 +136,11 @@ if(1)
 
 	// Create a sortable table with user-data
 	$parameters['sec_token'] = Security::get_token();
-	$table = new SortableTable('extra_fields', 'get_number_of_extra_fields', 'get_extra_fields',5);
+	$column_show = array(1,1,1,1,1,1,1,1,0);
+	$column_order = array(0,1,2,3,4,5,6,7,8);
+	$extra_fields = get_extra_fields(0,50,5,'ASC');
+ 
+	$table = new SortableTableFromArrayConfig($extra_fields, 5, 50, '', $column_show, $column_order, 'ASC');
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false);
 	$table->set_header(1, get_lang('FieldLabel'));

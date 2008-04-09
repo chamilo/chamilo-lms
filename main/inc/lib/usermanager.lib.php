@@ -1,9 +1,9 @@
-<?php // $Id: usermanager.lib.php 14797 2008-04-08 23:17:58Z yannoo $
+<?php // $Id: usermanager.lib.php 14811 2008-04-09 18:50:44Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -36,6 +36,8 @@ define('USER_FIELD_TYPE_TEXTAREA',2);
 define('USER_FIELD_TYPE_RADIO',3);
 define('USER_FIELD_TYPE_SELECT',4);
 define('USER_FIELD_TYPE_SELECT_MULTIPLE',5);
+define('USER_FIELD_TYPE_DATE',6);
+define('USER_FIELD_TYPE_DATETIME',7);
 
 class UserManager
 {
@@ -109,7 +111,6 @@ class UserManager
 				                    expiration_date = '".Database::escape_string($expiration_date)."',
 									hr_dept_id = '".Database::escape_string($hr_dept_id)."',
 									active = '".Database::escape_string($active)."'";
-		error_log($sql);
 		$result = api_sql_query($sql);
 		if ($result)
 		{
@@ -722,7 +723,22 @@ class UserManager
 		$t_ufo = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 		$fname = Database::escape_string($fname);
-		$fvalue = Database::escape_string($fvalue);
+		$fvalues = '';
+		if(is_array($fvalue))
+		{
+			foreach($fvalue as $val)
+			{
+				$fvalues .= Database::escape_string($val).';';
+			}
+			if(!empty($fvalues))
+			{
+				$fvalues = substr($fvalues,0,-1);
+			}
+		}
+		else
+		{
+			$fvalues = Database::escape_string($fvalue);
+		}
 		$sqluf = "SELECT * FROM $t_uf WHERE field_variable='$fname'";
 		$resuf = api_sql_query($sqluf,__FILE__,__LINE__);
 		if(Database::num_rows($resuf)==1)
@@ -736,12 +752,13 @@ class UserManager
 				case 5:
 					$sqluo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowuf['id'];
 					$resuo = api_sql_query($sqluo,__FILE__,__LINE__);
+					$values = split(';',$fvalues);
 					if(Database::num_rows($resuo)>0)
 					{
 						$check = false;
 						while($rowuo = Database::fetch_array($resuo))
 						{
-							if($rowuo['field_value'] == $fvalue)
+							if(in_array($rowuo['option_value'],$values))
 							{
 								$check = true;
 								break;
@@ -778,25 +795,33 @@ class UserManager
 						$n--;
 					}
 					$rowufv = Database::fetch_array($resufv);
-					$sqlu = "UPDATE $t_ufv SET field_value = '$fvalue', tms = $tms WHERE id = ".$rowufv['id'];
-					$resu = api_sql_query($sqlu,__FILE__,__LINE__);
-					return($resu?true:false);					
-				}		
+					if($rowufv['field_value'] != $fvalues)
+					{ 
+						$sqlu = "UPDATE $t_ufv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowufv['id'];
+						$resu = api_sql_query($sqlu,__FILE__,__LINE__);
+						return($resu?true:false);					
+					}
+					return true;
+				}
 			}
 			elseif($n==1)
 			{
 				//we need to update the current record
 				$rowufv = Database::fetch_array($resufv);
-				$sqlu = "UPDATE $t_ufv SET field_value = '$fvalue', tms = $tms WHERE id = ".$rowufv['id'];
-				error_log('UM::update_extra_field_value: '.$sqlu);
-				$resu = api_sql_query($sqlu,__FILE__,__LINE__);
-				return($resu?true:false);
+				if($rowufv['field_value'] != $fvalues)
+				{
+					$sqlu = "UPDATE $t_ufv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowufv['id'];
+					//error_log('UM::update_extra_field_value: '.$sqlu);
+					$resu = api_sql_query($sqlu,__FILE__,__LINE__);
+					return($resu?true:false);
+				}
+				return true;
 			}
 			else
 			{
 				$sqli = "INSERT INTO $t_ufv (user_id,field_id,field_value,tms) " .
-					"VALUES ($user_id,".$rowuf['id'].",'$fvalue',$tms)";
-				error_log('UM::update_extra_field_value: '.$sqli);
+					"VALUES ($user_id,".$rowuf['id'].",'$fvalues',FROM_UNIXTIME($tms))";
+				//error_log('UM::update_extra_field_value: '.$sqli);
 				$resi = api_sql_query($sqli,__FILE__,__LINE__);
 				return($resi?true:false);
 			}
@@ -850,7 +875,7 @@ class UserManager
 						$fields[$rowf['id']][8][$rowo['id']] = array(
 							0=>$rowo['id'],
 							1=>$rowo['option_value'],
-							2=>$rowo['option_display_text'],
+							2=>(empty($rowo['option_display_text'])?'':get_lang($rowo['option_display_text'])),
 							3=>$rowo['option_order']
 						);
 					}	
@@ -876,12 +901,14 @@ class UserManager
 	  * @param	int		Field's type
 	  * @param	string	Field's language var name
 	  * @param	string	Field's default value
+	  * @param	string	Optional comma-separated list of options to provide for select and radio
 	  * @return int     new user id - if the new user creation succeeds, false otherwise
 	  */
-	function create_extra_field($fieldvarname, $fieldtype, $fieldtitle, $fielddefault)
+	function create_extra_field($fieldvarname, $fieldtype, $fieldtitle, $fielddefault, $fieldoptions='')
 	{		
 		// database table definition
-		$table_field 	= Database::get_main_table(TABLE_MAIN_USER_FIELD);
+		$table_field 		= Database::get_main_table(TABLE_MAIN_USER_FIELD);
+		$table_field_options= Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 		
 		// First check wether the login already exists
 		if (! UserManager::is_extra_field_available($fieldvarname))
@@ -911,7 +938,39 @@ class UserManager
 		else
 		{
 			//echo "false - failed" ;
-			$return=false;
+			return false;
+		}
+		if(!empty($fieldoptions) && in_array($fieldtype,array(USER_FIELD_TYPE_RADIO,USER_FIELD_TYPE_SELECT,USER_FIELD_TYPE_SELECT_MULTIPLE)))
+		{
+			$list = split(';',$fieldoptions);
+			foreach($list as $option)
+			{
+				$option = Database::escape_string($option);
+				$sql = "SELECT * FROM $table_field_options WHERE field_id = $return AND option_value = '".$option."'";
+				$res = api_sql_query($sql,__FILE__,__LINE__);
+				if(Database::num_rows($res)>0)
+				{
+					//the option already exists, do nothing
+				}
+				else
+				{
+					$sql = "SELECT MAX(option_order) FROM $table_field_options WHERE field_id = $return";
+					$res = api_sql_query($sql,__FILE__,__LINE__);
+					$max = 1;
+					if(Database::num_rows($res)>0)
+					{
+						$row = Database::fetch_array($res);
+						$max = $row[0]+1;
+					}
+					$time = time();
+					$sql = "INSERT INTO $table_field_options (field_id,option_value,option_display_text,option_order,tms) VALUES ($return,'$option','$option',$max,FROM_UNIXTIME($time))";
+					$res = api_sql_query($sql,__FILE__,__LINE__);
+					if($res === false)
+					{
+						$return = false;
+					}
+				}
+			}
 		}
 		return $return;
 	}

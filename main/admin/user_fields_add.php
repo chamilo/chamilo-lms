@@ -65,7 +65,7 @@ $types = array();
 $types[USER_FIELD_TYPE_TEXT]  = get_lang('FieldTypeText');
 $types[USER_FIELD_TYPE_TEXTAREA] = get_lang('FieldTypeTextarea');
 //$types[USER_FIELD_TYPE_RADIO] = get_lang('FieldTypeRadio');
-//$types[USER_FIELD_TYPE_SELECT] = get_lang('FieldTypeSelect');
+$types[USER_FIELD_TYPE_SELECT] = get_lang('FieldTypeSelect');
 //$types[USER_FIELD_TYPE_SELECT_MULTIPLE] = get_lang('FieldTypeSelectMultiple');
 $types[USER_FIELD_TYPE_DATE] = get_lang('FieldTypeDate');
 $types[USER_FIELD_TYPE_DATETIME] = get_lang('FieldTypeDatetime');
@@ -76,8 +76,12 @@ $form->addElement('text','fieldtitle',get_lang('FieldTitle'));
 $form->applyFilter('fieldtitle','html_filter');
 $form->applyFilter('fieldtitle','trim');
 $form->addRule('fieldtitle', get_lang('ThisFieldIsRequired'), 'required');
+// Field options
+$form->addElement('text','fieldoptions',get_lang('FieldOptions'));
+$form->applyFilter('fieldoptions','trim');
 // Field default value
 $form->addElement('text','fielddefaultvalue',get_lang('FieldDefaultValue'));
+$form->applyFilter('fielddefaultvalue','trim');
 
 // Set default values
 $defaults = array();
@@ -95,8 +99,9 @@ if( $form->validate())
 		$fieldtype = $field['fieldtype'];
 		$fieldtitle = $field['fieldtitle'];
 		$fielddefault = $field['fielddefaultvalue'];
+		$fieldoptions = $field['fieldoptions']; //comma-separated list of options
 	
-		$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+		$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault,$fieldoptions);
 		Security::clear_token();
 		header('Location: user_fields.php?action=show_message&message='.urlencode(get_lang('FieldAdded')));
 		exit ();

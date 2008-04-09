@@ -532,13 +532,9 @@ function delete_forum_forumcategory_thread($content, $id)
 	{
 		$tool_constant=TOOL_FORUM_THREAD;
 		$return_message=get_lang('ThreadDeleted');
-	}
-			
-	api_item_property_update($_course,$tool_constant,$id,"delete",api_get_user_id()); // note: check if this returns a true and if so => return $return_message, if not => return false;
-			
+	}			
+	api_item_property_update($_course,$tool_constant,$id,'delete',api_get_user_id()); // note: check if this returns a true and if so => return $return_message, if not => return false;
 	//delete_attachment($post_id);
-	
-
 	return $return_message;
 }
 
@@ -562,6 +558,7 @@ function delete_post($post_id)
 
 	$sql="DELETE FROM $table_posts WHERE post_id='".Database::escape_string($post_id)."'"; // note: this has to be a recursive function that deletes all of the posts in this block.
 	api_sql_query($sql,__FILE__,__LINE__);
+	
 	delete_attachment($post_id);
 	
 	$last_post_of_thread=check_if_last_post_of_thread(strval(intval($_GET['thread'])));
@@ -584,7 +581,6 @@ function delete_post($post_id)
 		api_sql_query($sql,__FILE__,__LINE__);
 		return 'PostDeletedSpecial';
 	}
-
 }
 
 
@@ -1639,7 +1635,14 @@ function store_thread($values)
 				'".Database::escape_string($visible)."')";
 		api_sql_query($sql, __LINE__, __FILE__);
 		$last_post_id=Database::insert_id();
+				
+		// now have to update the thread table to fill the thread_last_post field (so that we know when the thread has been updated for the last time)
+		$sql="UPDATE $table_threads SET thread_last_post='".Database::escape_string($last_post_id)."'  WHERE thread_id='".Database::escape_string($last_thread_id)."'";
+		$result=api_sql_query($sql, __LINE__, __FILE__);
 	
+		$message=get_lang('NewThreadStored');
+		
+		
 		// Storing the attachments if any
 		if ($has_attachment)
 		{			
@@ -1670,16 +1673,19 @@ function store_thread($values)
 					$sql='INSERT INTO '.$forum_table_attachment.'(filename,comment, path, post_id,size) '.
 						 "VALUES ( '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$last_post_id."', '".$_FILES['user_upload']['size']."' )";						
 					$result=api_sql_query($sql, __LINE__, __FILE__);					
-					$message.=' / '.get_lang('AttachmentUpload');			
+					$message.=' / '.get_lang('FileUploadSucces').'<br />';
+					
+					$last_id=Database::insert_id();
+					api_item_property_update($_course, TOOL_FORUM_ATTACH, $last_id ,'ForumAttachmentAdded', api_get_user_id());
+								
 				}			
 			}			 
-		}		
-			
-		// now have to update the thread table to fill the thread_last_post field (so that we know when the thread has been updated for the last time)
-		$sql="UPDATE $table_threads SET thread_last_post='".Database::escape_string($last_post_id)."'  WHERE thread_id='".Database::escape_string($last_thread_id)."'";
-		$result=api_sql_query($sql, __LINE__, __FILE__);
-	
-		$message=get_lang('NewThreadStored').'<br />';
+		}
+		else
+		{
+			$message.='<br />';
+		}
+
 		if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit())
 		{
 			$message.=get_lang('MessageHasToBeApproved').'<br />';
@@ -1901,7 +1907,10 @@ function store_reply($values)
 					$sql='INSERT INTO '.$forum_table_attachment.'(filename,comment, path, post_id,size) '.
 						 "VALUES ( '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$new_post_id."', '".$_FILES['user_upload']['size']."' )";						
 					$result=api_sql_query($sql, __LINE__, __FILE__);					
-					$message.=' / '.get_lang('AttachmentUpload');			
+					$message.=' / '.get_lang('FileUploadSucces');
+					$last_id=Database::insert_id();
+					
+					api_item_property_update($_course, TOOL_FORUM_ATTACH, $last_id ,'ForumAttachmentAdded', api_get_user_id());							
 				}			
 			}			 
 		}
@@ -1911,7 +1920,8 @@ function store_reply($values)
 	
 		// update the forum
 		api_item_property_update($_course, TOOL_FORUM, $values['forum_id'],"NewMessageInForum", api_get_user_id());
-	
+		
+		
 
 		if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit())
 		{
@@ -2950,7 +2960,7 @@ function search_link()
 }
 
 /**
- * Show a list with all the attachments according the post's id
+ * Show a list with all the attachments according to the post's id
  * @param the post's id 
  * @return array with the post info   
  * @author Julio Montoya Dokeos
@@ -2970,8 +2980,8 @@ function get_attachment($post_id)
 	return $row;	
 }
 /**
- * Delete the all the attachments from the DB and the file according the parameters.
- * @param the post's id
+ * Delete the all the attachments from the DB and the file according to the post's id
+ * @param post id
  * @author Julio Montoya Dokeos
  * @version avril 2008, dokeos 1.8.5
  */ 
@@ -2988,10 +2998,13 @@ function delete_attachment($id)
 	$courseDir   = $_course['path'].'/upload/forum';
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);		
 	$updir = $sys_course_path.$courseDir;
-	$file=$updir.'/'.$attach_list['path'];												
+	$file=$updir.'/'.$attach_list['path'];
+	
+	api_item_property_update($_course, TOOL_FORUM_ATTACH, $id ,'ForumAttachmentDelete', api_get_user_id());
+												
 	if (Security::check_abs_path($file,$updir) )
 	{			
 		@ unlink($file);
-	}			
+	}		
 }
 ?>

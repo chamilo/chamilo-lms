@@ -43,7 +43,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file = 'forum';
+$language_file = array('forum','document');
 
 // including the global dokeos file
 require ('../inc/global.inc.php');

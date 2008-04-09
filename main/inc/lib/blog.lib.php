@@ -208,18 +208,22 @@ class Blog
 		// Init
 		$tbl_blogs 			= Database::get_course_table(TABLE_BLOGS);
 		$tbl_blogs_posts 	= Database::get_course_table(TABLE_BLOGS_POSTS);
+		$tbl_blogs_comment 	= Database::get_course_table(TABLE_BLOGS_COMMENTS);
 		$tbl_blogs_tasks 	= Database::get_course_table(TABLE_BLOGS_TASKS);
 		$tbl_tool 			= Database::get_course_table(TABLE_TOOL_LIST);
 		$tbl_blogs_rating 	= Database::get_course_table(TABLE_BLOGS_RATING);
-		$tbl_blogs_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
+		$tbl_blogs_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);		
 		
-		
-		// Delete posts and attachments
+		// Delete posts from DB and the attachments 
 		delete_all_blog_attachment($blog_id);
 		
-		// Delete attachments from DB
-		$sql = "DELETE FROM $tbl_blogs_attachment WHERE blog_id ='".(int)$blog_id."'";		
-		api_sql_query($sql, __FILE__, __LINE__);
+		//Delete comments
+		$sql = "DELETE FROM $tbl_blogs_comment WHERE blog_id ='".(int)$blog_id."'";
+   		api_sql_query($sql, __FILE__, __LINE__);	
+   					
+		// Delete posts
+   		$sql = "DELETE FROM $tbl_blogs_posts WHERE blog_id ='".(int)$blog_id."'";
+   		api_sql_query($sql, __FILE__, __LINE__); 		
 				
 		// Delete tasks
 		$sql = "DELETE FROM $tbl_blogs_tasks WHERE blog_id ='".(int)$blog_id."'";

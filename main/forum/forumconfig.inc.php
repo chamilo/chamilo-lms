@@ -20,7 +20,7 @@ $table_threads 			= "`".$_course["dbNameGlu"]."forum_thread"."`";
 $table_posts 			= "`".$_course["dbNameGlu"]."forum_post"."`"; 
 $table_mailcue			= "`".$_course["dbNameGlu"]."forum_mailcue"."`";
  
-$forum_table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
+$forum_table_attachment = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
 $table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 $table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
 
@@ -33,10 +33,7 @@ define("TOOL_FORUM_CATEGORY",'forum_category');
 define("TOOL_FORUM",'forum');
 define("TOOL_FORUM_THREAD",'forum_thread');
 define("TOOL_FORUM_POST",'forum_post');
-
-
-
-
+define("TOOL_FORUM_ATTACH",'forum_attachment');
 /*
 -----------------------------------------------------------
 	Some configuration settings 

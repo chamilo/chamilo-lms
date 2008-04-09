@@ -64,8 +64,10 @@ if (! isset($_course))
 {
 	api_not_allowed(true);	
 }
-//if the rewrite rule asks for a directory, we redirect to the document explorer
-if (is_dir(api_get_path(SYS_COURSE_PATH).$_course['path'].'/upload/blog/'.$doc_url)) 
+$full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/blog/'.$doc_url;
+
+//if the rewrite rule asks for a directory, we redirect to the course view
+if (is_dir($full_file_name)) 
 {
 	//remove last slash if present	
 	while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
@@ -75,14 +77,13 @@ if (is_dir(api_get_path(SYS_COURSE_PATH).$_course['path'].'/upload/blog/'.$doc_u
 	header('Location: '.$document_explorer);
 }
 
-$blog_table_attachment	= '`'.$_course['dbNameGlu'].'blog_attachment'.'`';
+$tbl_blogs_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 
 // launch event
 event_download($doc_url);
-$sys_course_path = api_get_path(SYS_COURSE_PATH);
-$full_file_name = $sys_course_path.$_course['path'].'/upload/blog/'.$doc_url;
 
-$sql = 'SELECT filename FROM '.$blog_table_attachment.' WHERE path LIKE BINARY "'.$doc_url.'"';
+$sql = 'SELECT filename FROM '.$tbl_blogs_attachment.' WHERE path LIKE BINARY "'.$doc_url.'"';
+
 $result= api_sql_query($sql, __FILE__, __LINE__);
 $row= Database::fetch_array($result);
 DocumentManager::file_send_for_download($full_file_name,TRUE, $row['filename']);

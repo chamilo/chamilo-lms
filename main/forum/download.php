@@ -42,6 +42,7 @@ include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
 include(api_get_path(LIBRARY_PATH).'document.lib.php');
+require_once('forumconfig.inc.php');
 
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
@@ -64,29 +65,40 @@ if (! isset($_course))
 {
 	api_not_allowed(true);	
 }
+
+$full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/'.$doc_url;
+
 //if the rewrite rule asks for a directory, we redirect to the document explorer
-if (is_dir(api_get_path(SYS_COURSE_PATH).$_course['path'].'/upload/forum/'.$doc_url)) 
+if (is_dir($full_file_name)) 
 {
 	//remove last slash if present
 	//$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url; 
 	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (Ren�)
 	while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
 	//create the path
-	$document_explorer = api_get_path(WEB_CODE_PATH).'forum';
+	$document_explorer = api_get_path(WEB_COURSE_PATH).api_get_course_path(); // home course path
 	//redirect
 	header('Location: '.$document_explorer);
 }
 
-$tbl_blogs_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
+$tbl_forum_attachment 	= Database::get_course_table(TABLE_FORUM_ATTACHMENT);
+$tbl_forum_post 	= Database::get_course_table(TABLE_FORUM_POST);
 
 // launch event
 event_download($doc_url);
-$sys_course_path = api_get_path(SYS_COURSE_PATH);
-$full_file_name = $sys_course_path.$_course['path'].'/upload/forum/'.$doc_url;
 
-$sql = 'SELECT filename FROM '.$tbl_blogs_attachment.' WHERE path LIKE BINARY "'.$doc_url.'"';
+$sql='SELECT thread_id, forum_id,filename FROM '.$tbl_forum_post.'  f  INNER JOIN '.$tbl_forum_attachment.' a
+  	  ON a.post_id=f.post_id WHERE path LIKE BINARY "'.$doc_url.'"';
+
 $result= api_sql_query($sql, __FILE__, __LINE__);
 $row= Database::fetch_array($result);
-DocumentManager::file_send_for_download($full_file_name,TRUE, $row['filename']);
+
+$forum_thread_visibility=api_get_item_visibility(api_get_course_info($course_code),TOOL_FORUM_THREAD,$row['thread_id']);
+$forum_forum_visibility=api_get_item_visibility(api_get_course_info($course_code),TOOL_FORUM,$row['forum_id']);
+
+if ($forum_thread_visibility==1 && $forum_forum_visibility==1)
+{
+	DocumentManager::file_send_for_download($full_file_name,TRUE, $row['filename']);
+}
 exit;
 ?>

@@ -1831,9 +1831,11 @@ class learnpath {
      * @param	integer	Learnpath ID
      * @param	integer	User ID
      * @param	string	Mode of display ('%','abs' or 'both')
+     * @param	string	Course database name (optional, defaults to '')
+     * @param	boolean	Whether to return null if no record was found (true), or 0 (false) (optional, defaults to false)
      * @return	integer	Current progress value as found in the database
      */
-	function get_db_progress($lp_id,$user_id,$mode='%', $course_db='')
+	function get_db_progress($lp_id,$user_id,$mode='%', $course_db='', $sincere=false)
 	{
 		//if($this->debug>0){error_log('New LP - In learnpath::get_db_progress()',0);}
     	$table = Database::get_course_table('lp_view', $course_db);
@@ -1845,6 +1847,13 @@ class learnpath {
     		$row = Database::fetch_array($res);
     		$progress = $row['progress'];
     		$view_id = $row['id'];
+    	}
+    	else
+    	{
+    		if($sincere)
+    		{
+    			return null;
+    		}
     	}
     	if(!$progress)
     	{

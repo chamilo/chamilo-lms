@@ -1,5 +1,5 @@
 <?php
-// $Id: copy_course.php 13315 2007-09-27 08:17:12Z yannoo $
+// $Id: copy_course.php 14803 2008-04-09 13:45:28Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -127,10 +127,10 @@ else
 ?>
 	<br/>
 	<br/>
-	<input type="radio" class="checkbox" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>
+	<input type="radio" class="checkbox" id="copy_option_1" name="copy_option" value="full_copy"/>
 	<label for="copy_option_1"><?php echo get_lang('FullCopy') ?></label>
 	<br/>
-	<input type="radio" class="checkbox" id="copy_option_2" name="copy_option" value="select_items"/>
+	<input type="radio" class="checkbox" id="copy_option_2" name="copy_option" value="select_items" checked="checked"/>
 	<label for="copy_option_2"><?php echo get_lang('LetMeSelectItems') ?></label>
 	<br/>
 	<br/>

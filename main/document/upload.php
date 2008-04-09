@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 13520 2007-10-17 21:28:34Z yannoo $
+<?php // $Id: upload.php 14802 2008-04-09 12:53:59Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -322,7 +322,7 @@ $form = new FormValidator('upload','POST',api_get_self(),'','enctype="multipart/
 
 $form->addElement('hidden','curdirpath',$path);
 
-$form->addElement('file','user_upload',get_lang('File'),'');
+$form->addElement('file','user_upload',get_lang('File'),'id="user_upload" size="45"');
 
 if(get_setting('use_document_title')=='true')
 {

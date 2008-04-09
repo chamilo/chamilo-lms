@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 14791 2008-04-08 20:39:30Z yannoo $
+<?php // $Id: profile.php 14798 2008-04-09 05:26:13Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -281,10 +281,9 @@ foreach($extra as $id => $field_details)
 	}
 	//todo add field type management (rather than just "text")
 	$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
-	if ($field_details[7] == 0)
-		$form->freeze('extra_'.$field_details[1]);
 	$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
 	$form->applyFilter('extra_'.$field_details[1], 'trim');
+	if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 }
 
 //	SUBMIT

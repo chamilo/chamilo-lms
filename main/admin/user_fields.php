@@ -64,25 +64,46 @@ if(1)
 				case 'show_message' :
 					Display :: display_normal_message($_GET['message']);
 					break;
-				case 'delete_user' :
-					if ($user_id != $_user['user_id'] && UserManager :: delete_user($_GET['user_id']))
+				case 'show_field' :
+					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_visible'=>'1')))
 					{
-						Display :: display_normal_message(get_lang('UserDeleted'));
+						Display :: display_normal_message(get_lang('FieldShown'));
 					}
 					else
 					{
-						Display :: display_error_message(get_lang('CannotDeleteUser'));
+						Display :: display_error_message(get_lang('CannotShowField'));
 					}
 					break;
-				case 'lock' :
-					$message=lock_unlock_user('lock',$_GET['user_id']);
-					Display :: display_normal_message($message);
+				case 'hide_field' :
+					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_visible'=>'0')))
+					{
+						Display :: display_normal_message(get_lang('FieldHidden'));
+					}
+					else
+					{
+						Display :: display_error_message(get_lang('CannotHideField'));
+					}
+					break;	
+				case 'thaw_field' :
+					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_changeable'=>'1')))
+					{
+						Display :: display_normal_message(get_lang('FieldMadeChangeable'));
+					}
+					else
+					{
+						Display :: display_error_message(get_lang('CannotMakeFieldChangeable'));
+					}
+					break;	
+				case 'freeze_field' :
+					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_changeable'=>'0')))
+					{
+						Display :: display_normal_message(get_lang('FieldMadeUnchangeable'));
+					}
+					else
+					{
+						Display :: display_error_message(get_lang('CannotMakeFieldUnchangeable'));
+					}
 					break;
-				case 'unlock';
-					$message=lock_unlock_user('unlock',$_GET['user_id']);
-					Display :: display_normal_message($message);
-					break;
-	
 			}
 			Security::clear_token();
 		}
@@ -100,6 +121,7 @@ if(1)
 			Security::clear_token();
 		}
 	}
+	
 	// Create an add-field box
 	$form = new FormValidator('add_field','post','','',null,false);
 	$renderer =& $form->defaultRenderer();
@@ -124,6 +146,8 @@ if(1)
 	$table->set_header(5, get_lang('FieldOrder'), false);
 	$table->set_header(6, get_lang('FieldVisibility'));
 	$table->set_header(7, get_lang('FieldChangeability'));
+	$table->set_column_filter(6, 'modify_visibility');
+	$table->set_column_filter(7, 'modify_changeability');
 	$table->display();
 }
 
@@ -143,5 +167,27 @@ function get_number_of_extra_fields()
 function get_extra_fields($f,$n,$o,$d)
 {
 	return UserManager::get_extra_fields($f,$n,$o,$d);
+}
+/**
+ * Modify the visible field to show links and icons
+ * @param	int 	The current visibility
+ * @param	array	Url parameters
+ * @param	array	The results row
+ * @return	string	The link
+ */
+function modify_visibility($visibility,$url_params,$row)
+{
+	return ($visibility?'<a href="'.api_get_self().'?action=hide_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'right.gif" alt="'.get_lang('Hide').'" /></a>':'<a href="'.api_get_self().'?action=show_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'wrong.gif" alt="'.get_lang('Show').'" /></a>');
+}
+/**
+ * Modify the changeability field to show links and icons
+ * @param	int 	The current changeability
+ * @param	array	Url parameters
+ * @param	array	The results row
+ * @return	string	The link
+ */
+function modify_changeability($visibility,$url_params,$row)
+{
+	return ($visibility?'<a href="'.api_get_self().'?action=freeze_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'right.gif" alt="'.get_lang('MakeUnchangeable').'" /></a>':'<a href="'.api_get_self().'?action=thaw_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'wrong.gif" alt="'.get_lang('MakeFieldChangeable').'" /></a>');
 }
 ?>

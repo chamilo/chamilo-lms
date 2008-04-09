@@ -391,13 +391,14 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$result=api_sql_query($sql_select_directory,__FILE__,__LINE__);
 		$row=Database::fetch_array($result);
 		$direc_date= $row['lastedit_date']; //directory's date
-		$author= $row['author']; //directory's author			
-		
-		$mydir = $my_sub_dir.$dir;
+		$author= $row['author']; //directory's author
+			
+		$mydir = $my_sub_dir.$dir;	
 			
 		if ($is_allowed_to_edit) 
-		{		
-			$clean_edit_dir=Security :: remove_XSS(Database::escape_string($_GET['edit_dir']));			
+		{				
+			$clean_edit_dir=Security :: remove_XSS(Database::escape_string($_GET['edit_dir']));
+				
 			// form edit directory				
 			if(isset($clean_edit_dir) && $clean_edit_dir==$mydir)
 			{	
@@ -452,7 +453,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$dirtext='';
 		}
 
-		if($display_edit_form)
+		if($display_edit_form && isset($clean_edit_dir) && $clean_edit_dir==$mydir)
 		{
 			$row[] = '<span class="invisible" style="display:none">'.$dir.'</span>'.$form_folder->toHtml(); // form to edit the directory's name
 		}

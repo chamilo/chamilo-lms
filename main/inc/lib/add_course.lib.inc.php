@@ -697,6 +697,7 @@ function update_Db_course($courseDbName)
 		accepted tinyint default 0,
 		post_group_id int DEFAULT 0 NOT NULL,
 		sent_date datetime NOT NULL default '0000-00-00 00:00:00',
+		filetype set('file','folder') NOT NULL default 'file',
 		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);

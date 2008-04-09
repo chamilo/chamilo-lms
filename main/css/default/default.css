@@ -1515,6 +1515,12 @@ tr.forum_category_header a {
 	background-color: #EFEFEF;
 }
 
+.forum_attach_comment {
+	color: #737780;	
+	font-style: italic ;
+	font-weight: normal;	
+}
+
 /*
 ------------------------------------------------------------------------------
    THREAD
@@ -1773,6 +1779,14 @@ div.comments {
 	font-weight: bold;
 	text-decoration: none;
 }
+
+.attachment_comment {
+	color: #737780;	
+	font-style: italic ;
+	font-weight: normal;	
+}
+
+
 
 
 /*

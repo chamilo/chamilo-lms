@@ -573,6 +573,12 @@ td .menu {
 	margin: 0 .2em;
 }
 
+.forum_attach_comment {
+	color: #737780;	
+	font-style: italic ;
+	font-weight: normal;	
+}
+
 /*
 ==============================================================================
     FORM STYLES
@@ -1148,6 +1154,12 @@ body:last-child:not(:root:root) .blog_subtitle {
 	font: bold 1.2em Arial, sans-serif, sans;
 	color: #000;
 	text-align: center;
+}
+
+.attachment_comment {
+	color: #737780;	
+	font-style: italic ;
+	font-weight: normal;	
 }
 
 /*

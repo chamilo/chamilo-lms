@@ -1200,6 +1200,14 @@ body:last-child:not(:root:root) .blog_title {
 	text-align: center;
 }
 
+
+.attachment_comment {
+	color: #737780;	
+	font-style: italic ;
+	font-weight: normal;	
+}
+
+
 /*
 ==============================================================================
     TRACKING
@@ -1229,6 +1237,13 @@ a.specialLink:hover,a.specialLink:focus {
 .forum_header td {
 	background: transparent url('images/line.jpg') repeat-x bottom center;
 }
+
+.forum_attach_comment {
+	color: #737780;	
+	font-style: italic ;
+	font-weight: normal;	
+}
+
 
 /*
 ------------------------------------------------------------------------------

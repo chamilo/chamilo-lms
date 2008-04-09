@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 14812 2008-04-09 19:19:11Z yannoo $
+<?php // $Id: profile.php 14815 2008-04-09 21:33:41Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -401,7 +401,9 @@ function upload_user_image($user_id)
 	{
 		//error_log('Making path '.$image_repository,0);
 		mkpath($image_repository);
-	}else{
+	}
+	else
+	{
 		//error_log('Path '.$image_repository.' exists',0);
 	}
 	if ($existing_image != '')
@@ -418,9 +420,13 @@ function upload_user_image($user_id)
 		}
 
 		if (KEEP_THE_OLD_IMAGE_AFTER_CHANGE)
-			rename($image_repository.$existing_image, $image_repository.$old_picture_filename);
+		{
+			@rename($image_repository.$existing_image, $image_repository.$old_picture_filename);
+		}
 		else
-			unlink($image_repository.$existing_image);
+		{
+			@unlink($image_repository.$existing_image);
+		}
 	}
 	else
 	{
@@ -465,10 +471,14 @@ function remove_user_image($user_id)
 
 	if ($image != '')
 	{
-		if (KEEP_THE_OLD_IMAGE_AFTER_CHANGE)
-			rename($image_repository.$image, $image_repository.'deleted_'.date('Y_m_d_H_i_s').'_'.$image);
+		if (KEEP_THE_OLD_IMAGE_AFTER_CHANGE) 
+		{
+			@rename($image_repository.$image, $image_repository.'deleted_'.date('Y_m_d_H_i_s').'_'.$image);
+		}
 		else
-			unlink($image_repository.$image);
+		{
+			@unlink($image_repository.$image);
+		}
 	}
 }
 
@@ -489,16 +499,20 @@ function upload_user_production($user_id)
 	$image_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
 	$production_repository = $image_path['dir'].$user_id.'/';
 
-	if (!file_exists($production_repository))
+	if (!file_exists($production_repository)) 
+	{
 		mkpath($production_repository);
+	}
 
 	$filename = replace_dangerous_char($_FILES['production']['name']);
-	$filename = php2phps($filename);
+	$filename = disable_dangerous_file($filename);
 
 	if(filter_extension($filename))
 	{
-		if (move_uploaded_file($_FILES['production']['tmp_name'], $production_repository.$filename))
+		if (@move_uploaded_file($_FILES['production']['tmp_name'], $production_repository.$filename))
+		{
 			return $filename;
+		}
 	}
 	return false; // this should be returned if anything went wrong with the upload
 }
@@ -509,12 +523,26 @@ function upload_user_production($user_id)
 ==============================================================================
 */
 $filtered_extension = false;
+
 if ($_SESSION['profile_update'])
 {
 	$update_success = ($_SESSION['profile_update'] == 'success');
-
 	unset($_SESSION['profile_update']);
 }
+
+if ($_SESSION['image_uploaded'])
+{
+	$upload_picture_success = ($_SESSION['image_uploaded'] == 'success');
+	unset($_SESSION['image_uploaded']);
+}
+
+if ($_SESSION['production_uploaded'])
+{
+	$upload_production_success = ($_SESSION['production_uploaded'] == 'success');
+	unset($_SESSION['production_uploaded']);
+}
+
+
 elseif ($_POST['remove_production'])
 {
 	foreach (array_keys($_POST['remove_production']) as $production)
@@ -540,15 +568,16 @@ elseif ($form->validate())
 	// upload picture if a new one is provided
 	if ($_FILES['picture']['size'])
 	{
-		if ($new_picture = upload_user_image($_user['user_id']))
+		if ($new_picture = upload_user_image($_user['user_id'])) 
+		{
 			$user_data['picture_uri'] = $new_picture;
-
+			$_SESSION['image_uploaded'] = 'success';			
+		}
 	}
 	// remove existing picture if asked
 	elseif ($user_data['remove_picture'])
 	{
 		remove_user_image($_user['user_id']);
-
 		$user_data['picture_uri'] = '';
 	}
 
@@ -560,6 +589,10 @@ elseif ($form->validate())
 		{
 			//it's a bit excessive to assume the extension is the reason why upload_user_production() returned false, but it's true in most cases
 			$filtered_extension = true;
+		}
+		else
+		{
+			$_SESSION['production_uploaded'] = 'success';	
 		}
 	}
 
@@ -637,8 +670,21 @@ if ($file_deleted)
 }
 elseif ($update_success)
 {
-	Display :: display_normal_message(get_lang('ProfileReg'),false);
+	$message=get_lang('ProfileReg');
+	
+	if ($upload_picture_success) 
+	{
+		$message.='<br /> '.get_lang('PictureUploaded');
+	}
+	
+	if ($upload_production_success) 
+	{
+		$message.='<br />'.get_lang('ProductionUploaded');
+	}
+		
+	Display :: display_normal_message($message,false);	
 }
+
 if(!empty($warning_msg))
 {
 	Display :: display_warning_message($warning_msg,false);

@@ -359,6 +359,10 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 		$document_name = get_document_title($uploaded_file['name']);
 		//size of the uploaded file (in bytes)
 		$file_size = $uploaded_file['size'];
+		
+		$files_perm = api_get_setting('permissions_for_new_files');
+		$files_perm = octdec(!empty($files_perm)?$files_perm:'0770');
+		
 			//what to do if the target file exists
 			switch ($what_if_file_exists)
 				{
@@ -376,6 +380,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 					}
 					if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path))
 					{
+						chmod($store_path,$files_perm);
 						if($file_exists)
 						{
 							//UPDATE DATABASE!
@@ -426,6 +431,8 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 	
 					if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path))
 					{
+						chmod($store_path,$files_perm);
+						
 						//put the document data in the database
 						$document_id = add_document($_course,$new_file_path,'file',$file_size,$document_name);
 						if ($document_id)
@@ -457,8 +464,9 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 					else
 					{
 						if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path))
-						{
-	
+						{							
+							chmod($store_path,$files_perm);
+								
 							//put the document data in the database
 							$document_id = add_document($_course,$file_path,'file',$file_size,$document_name);
 							if ($document_id)

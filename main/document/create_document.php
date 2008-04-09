@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 14776 2008-04-08 06:55:16Z elixir_inter $
+// $Id: create_document.php 14805 2008-04-09 14:44:54Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -324,6 +324,10 @@ if ($form->validate())
 		fputs($fp, $content);
 
 		fclose($fp);
+		
+		$files_perm = api_get_setting('permissions_for_new_files');
+		$files_perm = octdec(!empty($files_perm)?$files_perm:'0770');
+		chmod($filepath.$filename.'.'.$extension,$files_perm);
 
 		$perm = api_get_setting('permissions_for_new_directories');
 		$perm = octdec(!empty($perm)?$perm:'0770');

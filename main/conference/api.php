@@ -80,17 +80,28 @@ else if ($action == "upload")
 	}
 	/*==== UPLOAD ====*/
 	$destPath = $coursePath.VIDEOCONF_UPLOAD_PATH;
-	if (!is_dir($destPath))
+
+	$newPath = handle_uploaded_document($_course,$_FILES['filedata'],$coursePath,VIDEOCONF_UPLOAD_PATH,$user_id,0,NULL,'',0,'rename',false);
+	error_log($newPath);
+    	$file_name = (strrpos($newPath,'.')>0 ? substr($newPath, 0, strrpos($newPath,'.')) : $newPath);
+    	$file_extension = (strrpos($newPath,'.')>0 ? substr($newPath, strrpos($newPath,'.'),10) : '');
+	error_log(strrpos($newPath,'.'));
+	error_log($file_extension);
+	if (!in_array(strtolower($file_extension), $image_extension))
 	{
-		$result = create_unexisting_directory($_course,$user_id,0,NULL,$coursePath,VIDEOCONF_UPLOAD_PATH);
-		if (!$result)
+		error_log('toc');
+		if (!is_dir($destPath))
 		{
-			if ($debug>0) error_log("Can't create ".$destPath." folder",0);
+			$result = create_unexisting_directory($_course,$user_id,0,NULL,$coursePath,VIDEOCONF_UPLOAD_PATH);
+			if (!$result)
+			{
+				if ($debug>0) error_log("Can't create ".$destPath." folder",0);
+			}
 		}
+		$take_slide_name = false;
+		$o_ppt = new OpenofficePresentation($take_slide_name);
+		$o_ppt -> convert_document($_FILES['filedata'],'add_docs_to_visio');
 	}
-	$take_slide_name = false;
-	$o_ppt = new OpenofficePresentation($take_slide_name);
-	$o_ppt -> convert_document($_FILES['filedata'],'add_docs_to_visio');
 
 	echo '<html><body><script language="javascript">setTimeout(1000,window.close());</script></body></html>';
 } 
@@ -99,13 +110,13 @@ else if ($action == "service")
 	/*==== List files ====*/
 	if ($debug>0) error_log("sending file list",0);
 	$subaction = $_REQUEST["subaction"];
-	$can_delete = (CourseManager::get_user_in_course_status($user_id, $cidReq) == COURSEMANAGER);
+	$is_manager = (CourseManager::get_user_in_course_status($user_id, $cidReq) == COURSEMANAGER);
 	if ($subaction == "list") 
 	{
 		// FIXME: check security around $_REQUEST["cwd"]
 		$cwd = $_REQUEST["cwd"];
-		$is_bellow_videoconf_upload_path = Security::check_abs_path($cwd,api_get_path(SYS_PATH));
-		/*
+
+		
 		// treat /..
 		$nParent = 0; // the number of /.. into the url
 		while (substr($cwd, -3, 3) == "/..")
@@ -121,38 +132,35 @@ else if ($action == "service")
 
 		if (strlen($cwd) == 0) $cwd="/";
 		
+		if (Security::check_abs_path($cwd,api_get_path(SYS_PATH)))
+			die();
+
 		// check if user can delete files. He must be manager and be inside /videoconf
-		$isBellowVideoConfUploadPath = (substr($cwd,0,strlen(VIDEOCONF_UPLOAD_PATH)) == VIDEOCONF_UPLOAD_PATH);
-		$canDelete = ($canDelete && $isBellowVideoConfUploadPath);
+		$is_below_videoconf_dir = (substr($cwd,0,strlen(VIDEOCONF_UPLOAD_PATH)) == VIDEOCONF_UPLOAD_PATH);
+		error_log($cwd);
+		error_log(VIDEOCONF_UPLOAD_PATH);
+		/* $canDelete = ($canDelete && $isBellowVideoConfUploadPath);
 		*/
-		$can_delete = ($can_delete && $is_bellow_videoconf_upload_path);
+		$can_delete = ($is_manager && $is_below_videoconf_dir);
 		
 		// get files list
 		$files = DocumentManager::get_all_document_data($_course, $cwd, 0, NULL, false);
 		printf("<dokeosobject><fileListMeta></fileListMeta><fileList>");
 		printf("<folders>");
+		// title filter
+		foreach (array_keys($files) as $k)
+			$files[$k]['title'] = strlen($files[$k]['title']) > 32 ? substr($files[$k]['title'],0, 32)."..." : $files[$k]['title'];
+
 		foreach($files as $i)
 		{
-			if ($i["filetype"] != "folder")
-			{
-				continue;
-			}
-			else 
-			{
+			if ($i["filetype"] == "folder")
 				printf('<folder><path>%s</path><title>%s</title><canDelete>%s</canDelete></folder>', $i['path'],$i['title'],($can_delete?'true':'false'));
-			}
 		}
 		printf("</folders><files>");
 		foreach($files as $i) {
   			$extension = (strrpos($i['path'],'.')>0 ? substr($i['path'], strrpos($i['path'],'.'),10) : '');
-			if ($i["filetype"] != "file" || !in_array($extension, $image_extension))
-			{
-				continue;
-			}
-			else 
-			{
+			if ($i["filetype"] == "file" && in_array(strtolower($extension), $image_extension))
 				printf('<file><path>%s</path><title>%s</title><canDelete>%s</canDelete></file>', $i['path'],$i['title'],($can_delete?'true':'false'));
-			}
 		}
 		printf("</files><ppts>");
 		printf("</ppts>");

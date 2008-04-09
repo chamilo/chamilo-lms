@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 14794 2008-04-08 22:14:30Z yannoo $
+<?php //$Id: myStudents.php 14818 2008-04-09 22:33:57Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -549,14 +549,21 @@ if(!empty($_GET['student']))
 			$csv_content[] = array();
 			$csv_content[] = array(get_lang('Learnpath'),get_lang('Time'),get_lang('Score'),get_lang('Progress'),get_lang('LastConnexion'));
 			
-			if(mysql_num_rows($resultLearnpath)>0)
+			if(Database::num_rows($resultLearnpath)>0)
 			{
 				$i = 0;
-				while($a_learnpath = mysql_fetch_array($resultLearnpath))
+				while($a_learnpath = Database::fetch_array($resultLearnpath))
 				{
-					
-					$progress = learnpath :: get_db_progress($a_learnpath['id'],$student_id, '%',$a_infosCours['db_name']);
-					
+					$any_result = false;
+					$progress = learnpath :: get_db_progress($a_learnpath['id'],$student_id, '%',$a_infosCours['db_name'],true);
+					if($progress === null)
+					{
+						$progress = '0%';
+					}
+					else
+					{
+						$any_result = true;
+					}
 					
 					// calculates time
 					$sql = 'SELECT SUM(total_time) 
@@ -566,9 +573,13 @@ if(!empty($_GET['student']))
 									AND view.lp_id = '.$a_learnpath['id'].'
 									AND view.user_id = '.intval($_GET['student']);
 					$rs = api_sql_query($sql, __FILE__, __LINE__);
-					$total_time = mysql_result($rs, 0, 0);
-					
-					
+					$total_time = 0;
+					if(Database::num_rows($rs)>0)
+					{
+						$total_time = Database::result($rs, 0, 0);
+						if($total_time>0) $any_result = true;
+					}
+				
 					// calculates last connection time
 					$sql = 'SELECT MAX(start_time) 
 								FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
@@ -577,8 +588,12 @@ if(!empty($_GET['student']))
 									AND view.lp_id = '.$a_learnpath['id'].'
 									AND view.user_id = '.intval($_GET['student']);
 					$rs = api_sql_query($sql, __FILE__, __LINE__);
-					$start_time = mysql_result($rs, 0, 0);
-					
+					$start_time = null;
+					if(Database::num_rows($rs)>0)
+					{
+						$start_time = Database::result($rs, 0, 0);
+						if($start_time > 0) $any_result = true;
+					}
 					
 					//QUIZZ IN LP
 					$sql = 'SELECT id as item_id, max_score 
@@ -591,7 +606,12 @@ if(!empty($_GET['student']))
 					//We get the last view id of this LP
 					$sql='SELECT max(id) as id FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
 					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
-					$lp_view_id = mysql_result($rs_last_lp_view_id,0,'id');
+					$lp_view_id = 0;
+					if(Database::num_rows($rs_last_lp_view_id)>0)
+					{
+						$lp_view_id = Database::result($rs_last_lp_view_id,0,'id');
+						if($lp_view_id > 0)	$any_result = true;
+					}
 					
 					$total_score = $total_weighting = 0;
 					while($item = Database :: fetch_array($rsItems, 'ASSOC'))
@@ -605,6 +625,7 @@ if(!empty($_GET['student']))
 						$rsScores = api_sql_query($sql, __FILE__, __LINE__);
 						$total_score += mysql_result($rsScores, 0, 0);
 						$total_weighting += $item['max_score'];
+						$any_result = true;
 					}
 					
 					$sql = 'SELECT id, max_score 
@@ -614,21 +635,25 @@ if(!empty($_GET['student']))
 					
 					$rs_lp_item_id_scorm = api_sql_query($sql, __FILE__, __LINE__);
 					
-					if(mysql_num_rows($rs_lp_item_id_scorm)>0){
-						$lp_item_id = mysql_result($rs_lp_item_id_scorm,0,'id');
-						$lp_item__max_score = mysql_result($rs_lp_item_id_scorm,0,'max_score');	
+					if(Database::num_rows($rs_lp_item_id_scorm)>0){
+						$lp_item_id = Database::result($rs_lp_item_id_scorm,0,'id');
+						$lp_item__max_score = Database::result($rs_lp_item_id_scorm,0,'max_score');	
 						$total_weighting+=$lp_item__max_score;
 						
 						//We get the last view id of this LP
 						$sql='SELECT max(id) as id FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
 						$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
-						$lp_view_id = mysql_result($rs_last_lp_view_id,0,'id');
+						$lp_view_id = Database::result($rs_last_lp_view_id,0,'id');
 						
 						$sql='SELECT SUM(score)/count(lp_item_id) as score FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
 						$rs_score = api_sql_query($sql, __FILE__, __LINE__);
-						$lp_scorm_score = mysql_result($rs_score,0,'score');
-						
-						$total_score+=$lp_scorm_score;
+						if(Database::num_rows($rs_score)>0)
+						{
+							$lp_scorm_score = Database::result($rs_score,0,'score');
+							
+							$total_score+=$lp_scorm_score;
+							$any_result = true;
+						}
 					}
 
 					$score = 0;
@@ -667,7 +692,7 @@ if(!empty($_GET['student']))
 						</td>
 						<td align="center">
 							<?php
-							if($progress > 0 || $score > 0)
+							if($any_result === true)
 							{
 							?>
 							<a href="lp_tracking.php?course=<?php echo $_GET['course'] ?>&origin=<?php echo $_GET['origin'] ?>&lp_id=<?php echo $a_learnpath['id']?>&student_id=<?php echo $a_infosUser['user_id'] ?>">

@@ -5624,8 +5624,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$sql = "
 			SELECT *
 			FROM " . $tbl_lp_item . "
-			WHERE
-				lp_id = " . $this->lp_id;
+			WHERE lp_id = " . $this->lp_id. " AND id != " . $id. "    ";
 		
 		if($item_type == 'module')
 			$sql .= " AND parent_item_id = 0";

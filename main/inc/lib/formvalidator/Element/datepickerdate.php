@@ -1,4 +1,4 @@
-<?php // $Id: datepickerdate.php 14806 2008-04-09 15:12:15Z yannoo $
+<?php // $Id: datepickerdate.php 14809 2008-04-09 17:13:52Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -59,9 +59,9 @@ class HTML_QuickForm_datepickerdate extends HTML_QuickForm_date
 		$this->_options['minYear'] = date('Y')-1;
 		$this->_options['maxYear'] = date('Y')+5;
 		$this->_options['language'] = $editor_lang;
-		//$this->_options['addEmptyOption'] = true; 
-		//$this->_options['emptyOptionValue'] = 0; 
-		//$this->_options['emptyOptionText'] = ' -- '; 
+		//$this->_options['addEmptyOption'] = true;
+		//$this->_options['emptyOptionValue'] = 0;
+		//$this->_options['emptyOptionText'] = ' -- ';
 	}
 	/**
 	 * HTML code to display this datepicker

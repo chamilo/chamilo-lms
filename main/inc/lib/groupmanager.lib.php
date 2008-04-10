@@ -174,6 +174,42 @@ class GroupManager
 		/* Stores the directory path into the group table */
 		$sql = "UPDATE ".$table_group." SET   name = '".mysql_real_escape_string($name)."', secret_directory = '".$dir_name."' WHERE id ='".$lastId."'";
 		api_sql_query($sql,__FILE__,__LINE__);
+		
+		// create a forum if needed
+		if ($category['forum_state'] > 0)
+		{
+			include_once(api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php');
+			include_once(api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php');
+			
+			$forum_categories = get_forum_categories();
+			$values['forum_title'] = get_lang('ForumOfGroup').' '.$name;
+			$counter = 0;
+			foreach ($forum_categories as $key=>$value)
+			{
+				if ($counter==0)	
+				{
+					$forum_category_id = $key;
+				}
+				$counter++;
+			}
+			$values['forum_category'] = $forum_category_id;
+			$values['allow_anonymous_group']['allow_anonymous'] = 0;
+			$values['students_can_edit_group']['students_can_edit'] = 0;
+			$values['approval_direct_group']['approval_direct'] = 0;
+			$values['allow_attachments_group']['allow_attachments'] = 1;
+			$values['allow_new_threads_group']['allow_new_threads'] = 1;
+			$values['default_view_type_group']['default_view_type']=api_get_setting('default_forum_view');
+			$values['group_forum'] = $lastId; 
+			if ($category['forum_state'] == '1')
+			{
+				$values['public_private_group_forum_group']['public_private_group_forum']='public';
+			}
+			else 
+			{
+				$values['public_private_group_forum_group']['public_private_group_forum']='private';
+			}
+			store_forum($values);
+		}
 		return $lastId;
 	}
 	/**
@@ -503,7 +539,7 @@ class GroupManager
 	 * @param int $max_number_of_students
 	 * @param int $groups_per_user
 	 */
-	function create_category($title, $description, $doc_state, $work_state, $calendar_state, $announcements_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user)
+	function create_category($title, $description, $doc_state, $work_state, $calendar_state, $announcements_state, $forum_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user)
 	{
 		$table_group_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "SELECT MAX(display_order)+1 as new_order FROM $table_group_category ";
@@ -520,7 +556,8 @@ class GroupManager
 					doc_state = '".$doc_state."',
 					work_state = '".$work_state."',
 					calendar_state = '".$calendar_state."',
-              		announcements_state = '".$announcements_state."',               
+              		announcements_state = '".$announcements_state."',  
+              		forum_state = '".Database::escape_string($forum_state)."',
 					groups_per_user   = ".$groups_per_user.",
 					self_reg_allowed = '".$self_registration_allowed."',
 					self_unreg_allowed = '".$self_unregistration_allowed."',
@@ -546,7 +583,7 @@ class GroupManager
 	 * @param int $max_number_of_students
 	 * @param int $groups_per_user
 	 */
-	function update_category($id, $title, $description, $doc_state, $work_state, $calendar_state, $announcements_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user)
+	function update_category($id, $title, $description, $doc_state, $work_state, $calendar_state, $announcements_state, $forum_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user)
 	{
 		$table_group_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "UPDATE ".$table_group_category."
@@ -556,6 +593,7 @@ class GroupManager
 				work_state = '".$work_state."',
             	calendar_state = '".$calendar_state."',
             	announcements_state = '".$announcements_state."',
+            	forum_state = '".Database::escape_string($forum_state)."', 
 				groups_per_user   = ".$groups_per_user.",
 				self_reg_allowed = '".$self_registration_allowed."',
 				self_unreg_allowed = '".$self_unregistration_allowed."',

@@ -789,6 +789,7 @@ function update_Db_course($courseDbName)
 		calendar_state tinyint unsigned NOT NULL default 1,
 		work_state tinyint unsigned NOT NULL default 1,
 		announcements_state tinyint unsigned NOT NULL default 1,
+		forum_state tinyint unsigned NOT NULL default 0,
 		max_student smallint unsigned NOT NULL default 8,
 		self_reg_allowed tinyint unsigned NOT NULL default 0,
 		self_unreg_allowed tinyint unsigned NOT NULL default 0,

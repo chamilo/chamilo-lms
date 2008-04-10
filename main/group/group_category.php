@@ -1,5 +1,5 @@
 <?php
-// $Id: group_category.php 14339 2008-02-23 05:07:14Z yannoo $
+// $Id: group_category.php 14826 2008-04-10 08:10:19Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -143,10 +143,7 @@ $form->addRule('max_member_group',get_lang('InvalidMaxNumberOfMembers'),'callbac
 // Self registration
 $form->addElement('checkbox', 'self_reg_allowed', get_lang('GroupSelfRegistration'), get_lang('GroupAllowStudentRegistration'), 1);
 $form->addElement('checkbox', 'self_unreg_allowed', null, get_lang('GroupAllowStudentUnregistration'), 1);
-// Forum settings
-//$form->addElement('radio', 'forum_state', get_lang('GroupForum'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
-//$form->addElement('radio', 'forum_state', null, get_lang('Public'), TOOL_PUBLIC);
-//$form->addElement('radio', 'forum_state', null, get_lang('Private'), TOOL_PRIVATE);
+
 // Documents settings
 $form->addElement('radio', 'doc_state', get_lang('GroupDocument'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
 $form->addElement('radio', 'doc_state', null, get_lang('Public'), TOOL_PUBLIC);
@@ -167,6 +164,11 @@ $form->addElement('radio', 'announcements_state', get_lang('GroupAnnouncements')
 $form->addElement('radio', 'announcements_state', null, get_lang('Public'), TOOL_PUBLIC);
 $form->addElement('radio', 'announcements_state', null, get_lang('Private'), TOOL_PRIVATE);
 
+//Forum settings
+$form->addElement('radio', 'forum_state', get_lang('GroupForum'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
+$form->addElement('radio', 'forum_state', null, get_lang('Public'), TOOL_PUBLIC);
+$form->addElement('radio', 'forum_state', null, get_lang('Private'), TOOL_PRIVATE);
+
 // Submit
 $form->addElement('submit', 'submit', get_lang('Ok'));
 // If form validates -> save data
@@ -186,12 +188,12 @@ if ($form->validate())
 	switch ($values['action'])
 	{
 		case 'update_settings' :
-			GroupManager :: update_category($values['id'], $values['title'], $values['description'], $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $self_reg_allowed, $self_unreg_allowed, $max_member, $values['groups_per_user']);
+			GroupManager :: update_category($values['id'], $values['title'], $values['description'], $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'], $self_reg_allowed, $self_unreg_allowed, $max_member, $values['groups_per_user']);
 			$msg = urlencode(get_lang("GroupPropertiesModified"));
 			header('Location: group.php?action=show_msg&msg='.$msg.'&category='.$values['id']);
 			break;
 		case 'add_category' :
-			GroupManager :: create_category($values['title'], $values['description'], $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $self_reg_allowed, $self_unreg_allowed, $max_member, $values['groups_per_user']);
+			GroupManager :: create_category($values['title'], $values['description'], $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'], $self_reg_allowed, $self_unreg_allowed, $max_member, $values['groups_per_user']);
 			$msg = urlencode(get_lang("CategoryCreated"));
 			header('Location: group.php?action=show_msg&msg='.$msg);
 			break;

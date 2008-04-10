@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 14789 2008-04-08 15:10:20Z yannoo $
+<?php //$Id: group_space.php 14826 2008-04-10 08:10:19Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -47,6 +47,8 @@ include ('../inc/global.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
+require_once (api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php');
+require_once (api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php');
 /*
 ==============================================================================
 		MAIN CODE
@@ -154,10 +156,16 @@ if (!empty($current_group['description']))
 if (api_is_allowed_to_edit() OR GroupManager :: is_user_in_group($_SESSION['_user']['user_id'], $current_group['id']))
 {
 	$tools = '';
-	// Edited by Patrick Cool, 12 feb 2004: hide the forum link if there is no forum for this group (deleted through forum_admin.php)
-	if (!is_null($current_group['forum_id']) && $current_group['forum_state'] != TOOL_NOT_AVAILABLE)
+	$forums_of_groups = get_forums_of_group($current_group['id']);
+	if (is_array($forums_of_groups))
 	{
-		$tools .= "<a href=\"../forum/viewforum.php?".api_get_cidreq()."&amp;origin=$origin&amp;gidReq=".$current_group['id']."&amp;forum=".$current_group['forum_id']."\">".Display::return_icon('forum.gif')."&nbsp;".get_lang("Forums")."</a></div>";
+		foreach ($forums_of_groups as $key => $value)
+		{
+			if($value['forum_group_public_private'] == 'public' || ($user_subscribe_to_current_group && $value['forum_group_public_private'] == 'private') || $user_is_tutor || api_is_allowed_to_edit())
+			{
+				$tools.= Display::return_icon('forum.gif') . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.$value['forum_title'].'</a><br />';
+			}
+		}
 	}
 	if( $current_group['doc_state'] != TOOL_NOT_AVAILABLE )
 	{
@@ -190,10 +198,17 @@ if (api_is_allowed_to_edit() OR GroupManager :: is_user_in_group($_SESSION['_use
 else
 {
 	$tools = '';
-	if ($current_group['forum_state'] == TOOL_PUBLIC && !is_null($current_group['forum_id']))
+	$forums_of_groups = get_forums_of_group($current_group['id']);
+	if (is_array($forums_of_groups))
 	{
-		$tools .= "<a href=\"../forum/viewforum.php?".api_get_cidreq()."&amp;origin=$origin&amp;gidReq=".$current_group['id']."&amp;forum=".$current_group['forum_id']."\">".Display::return_icon('forum.gif')."&nbsp;".get_lang("Forums")."</a><br/>";
-	}
+		foreach ($forums_of_groups as $key => $value)
+		{
+			if($value['forum_group_public_private'] == 'public' )
+			{
+				$tools.= Display::return_icon('forum.gif') . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.$value['forum_title'].'</a><br />';
+			}
+		}
+	}	
 	if( $current_group['doc_state'] == TOOL_PUBLIC )
 	{
 		// link to the documents area of this group

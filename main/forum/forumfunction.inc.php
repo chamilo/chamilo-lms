@@ -439,9 +439,10 @@ function store_forumcategory($values)
 */
 function store_forum($values)
 {
-	global $table_forums;
 	global $_course;
 	global $_user;
+	
+	$table_forums = Database::get_course_table(TABLE_FORUM);
 
 	// find the max forum_order for the given category. The new forum is added at the end => max cat_order + &
 	$sql="SELECT MAX(forum_order) as sort_max FROM ".$table_forums." WHERE forum_category=".Database::escape_string($values['forum_category']);
@@ -494,7 +495,7 @@ function store_forum($values)
 		api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", api_get_user_id());
 		$return_message=get_lang('ForumAdded');
 	}
-	Display :: display_confirmation_message($return_message);
+	return $return_message;
 }
 
 /**
@@ -521,18 +522,16 @@ function delete_forum_forumcategory_thread($content, $id)
 		$tool_constant=TOOL_FORUM_CATEGORY;
 		$return_message=get_lang('ForumCategoryDeleted');
 	}
-	
 	if ($content=='forum')
 	{
 		$tool_constant=TOOL_FORUM;
 		$return_message=get_lang('ForumDeleted');
 	}
-	
 	if ($content=='thread')
 	{
 		$tool_constant=TOOL_FORUM_THREAD;
 		$return_message=get_lang('ThreadDeleted');
-	}			
+	}
 	api_item_property_update($_course,$tool_constant,$id,'delete',api_get_user_id()); // note: check if this returns a true and if so => return $return_message, if not => return false;
 	//delete_attachment($post_id);
 	return $return_message;
@@ -569,9 +568,8 @@ function delete_post($post_id)
 		$sql="UPDATE $table_threads SET thread_replies=thread_replies-1,
 					thread_last_post='".Database::escape_string($last_post_of_thread['post_id'])."',
 					thread_date='".Database::escape_string($last_post_of_thread['post_date'])."'
-			WHERE thread_id='".Database::escape_string($_GET['thread'])."'";		
+			WHERE thread_id='".Database::escape_string($_GET['thread'])."'";
 		api_sql_query($sql,__FILE__,__LINE__);
-		
 		return 'PostDeleted';
 	}
 	if ($last_post_of_thread==false)
@@ -988,8 +986,8 @@ function class_visible_invisible($current_visibility_status)
 */
 function get_forum_categories($id='')
 {
-	global $table_categories;
-	global $table_item_property;
+	$table_categories		= Database :: get_course_table(TABLE_FORUM_CATEGORY);
+	$table_item_property	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 	if ($id=='')
 	{
@@ -2956,7 +2954,7 @@ function search_link()
 		$url = $url.implode('&amp;',$url_parameter);
 		$return .= '<a href="'.$url.'">'.Display::return_icon('delete.gif', get_lang('RemoveSearchResults')).'</a>';
 	}
-	return $return;	
+	return $return;
 }
 
 /**
@@ -3006,5 +3004,108 @@ function delete_attachment($id)
 	{			
 		@ unlink($file);
 	}		
+}
+/**
+ * This function gets all the forum information of the all the forum of the group
+ *
+ * @param integer $group_id the id of the group we need the fora of (see forum.forum_of_group)
+ * @return array
+ *
+ * @todo this is basically the same code as the get_forums function. Consider merging the two.
+ */
+function get_forums_of_group($group_id)
+{
+	global $table_forums;
+	global $table_threads;
+	global $table_posts;
+	global $table_item_property;
+	global $table_users;
+
+	//-------------- Student -----------------//
+	// select all the forum information of all forums (that are visible to students)
+	$sql="SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
+				WHERE forum.forum_of_group = '".Database::escape_string($group_id)."'
+				AND forum.forum_id=item_properties.ref
+				AND item_properties.visibility=1
+				AND item_properties.tool='".TOOL_FORUM."'
+				ORDER BY forum.forum_order ASC";
+	// select the number of threads of the forums (only the threads that are visible)
+	$sql2="SELECT count(thread_id) AS number_of_threads, threads.forum_id FROM $table_threads threads, ".$table_item_property." item_properties
+					WHERE threads.thread_id=item_properties.ref
+					AND item_properties.visibility=1
+					AND item_properties.tool='".TOOL_FORUM_THREAD."'
+					GROUP BY threads.forum_id";
+	// select the number of posts of the forum (post that are visible and that are in a thread that is visible)
+	$sql3="SELECT count(post_id) AS number_of_posts, posts.forum_id FROM $table_posts posts, $table_threads threads, ".$table_item_property." item_properties
+			WHERE posts.visible=1
+			AND posts.thread_id=threads.thread_id
+			AND threads.thread_id=item_properties.ref
+			AND item_properties.visibility=1
+			AND item_properties.tool='".TOOL_FORUM_THREAD."'
+			GROUP BY threads.forum_id";
+
+	//-------------- Course Admin  -----------------//
+	if (is_allowed_to_edit())
+	{
+		// select all the forum information of all forums (that are not deleted)
+		$sql="SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
+					WHERE forum.forum_of_group = '".Database::escape_string($group_id)."'
+					AND forum.forum_id=item_properties.ref
+					AND item_properties.visibility<>2
+					AND item_properties.tool='".TOOL_FORUM."'
+					ORDER BY forum_order ASC";
+		//echo $sql.'<hr>';
+		// select the number of threads of the forums (only the threads that are not deleted)
+		$sql2="SELECT count(thread_id) AS number_of_threads, threads.forum_id FROM $table_threads threads, ".$table_item_property." item_properties
+						WHERE threads.thread_id=item_properties.ref
+						AND item_properties.visibility<>2
+						AND item_properties.tool='".TOOL_FORUM_THREAD."'
+						GROUP BY threads.forum_id";
+		//echo $sql2.'<hr>';
+		// select the number of posts of the forum
+		$sql3="SELECT count(post_id) AS number_of_posts, forum_id FROM $table_posts GROUP BY forum_id";
+		//echo $sql3.'<hr>';
+	}
+
+	// handling all the forum information
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	while ($row=mysql_fetch_assoc($result))
+	{
+		$forum_list[$row['forum_id']]=$row;
+	}
+
+	// handling the threadcount information
+	$result2=api_sql_query($sql2, __FILE__, __LINE__);
+	while ($row2=mysql_fetch_assoc($result2))
+	{
+		if (array_key_exists($row2['forum_id'],$forum_list))
+		{
+			$forum_list[$row2['forum_id']]['number_of_threads']=$row2['number_of_threads'];
+		}
+	}
+
+	// handling the postcount information
+	$result3=api_sql_query($sql3, __FILE__, __LINE__);
+	while ($row3=mysql_fetch_assoc($result3))
+	{
+		if (array_key_exists($row3['forum_id'],$forum_list)) // this is needed because sql3 takes also the deleted forums into account
+		{
+			$forum_list[$row3['forum_id']]['number_of_posts']=$row3['number_of_posts'];
+		}
+	}
+
+	// finding the last post information (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
+	foreach ($forum_list as $key=>$value)
+	{
+		$last_post_info_of_forum=get_last_post_information($key,is_allowed_to_edit());
+		$forum_list[$key]['last_post_id']=$last_post_info_of_forum['last_post_id'];
+		$forum_list[$key]['last_poster_id']=$last_post_info_of_forum['last_poster_id'];
+		$forum_list[$key]['last_post_date']=$last_post_info_of_forum['last_post_date'];
+		$forum_list[$key]['last_poster_name']=$last_post_info_of_forum['last_poster_name'];
+		$forum_list[$key]['last_poster_lastname']=$last_post_info_of_forum['last_poster_lastname'];
+		$forum_list[$key]['last_poster_firstname']=$last_post_info_of_forum['last_poster_firstname'];
+	}
+
+	return $forum_list;
 }
 ?>

@@ -42,7 +42,7 @@ $language_file = "scormdocument";
 $use_anonymous = true;
 
 require('back_compat.inc.php');
-include("../learnpath/learnpath_functions.inc.php");
+include('learnpath_functions.inc.php');
 include_once('scorm.lib.php');
 $courseDir   = api_get_course_path().'/scorm';
 $baseWordDir = $courseDir;

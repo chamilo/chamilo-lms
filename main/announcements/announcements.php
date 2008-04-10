@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 14522 2008-03-05 16:20:33Z juliomontoya $
+<?php //$Id: announcements.php 14830 2008-04-10 10:05:03Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -685,6 +685,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 
 								$emailsubjbericht = api_is_allowed_to_edit() ? get_lang('professorMessage') : get_lang('LearnerMessage');
 								$emailSubject = $emailsubjbericht. " - ".$_course['official_code'];
+								$emailSubject = $emailTitle;
 
 								$db_name = Database::get_course_table(TABLE_MAIN_SURVEY);
 

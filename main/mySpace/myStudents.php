@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 14818 2008-04-09 22:33:57Z yannoo $
+<?php //$Id: myStudents.php 14827 2008-04-10 08:22:32Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -614,20 +614,21 @@ if(!empty($_GET['student']))
 					}
 					
 					$total_score = $total_weighting = 0;
-					while($item = Database :: fetch_array($rsItems, 'ASSOC'))
+					if($lp_view_id)
 					{
-						$sql = 'SELECT score as student_score 
-								FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' as lp_view_item
-								WHERE lp_view_item.lp_item_id = '.$item['item_id'].'
-								AND lp_view_id = "'.$lp_view_id.'"
-								';
-								
-						$rsScores = api_sql_query($sql, __FILE__, __LINE__);
-						$total_score += mysql_result($rsScores, 0, 0);
-						$total_weighting += $item['max_score'];
+						while($item = Database :: fetch_array($rsItems, 'ASSOC'))
+						{
+							$sql = 'SELECT score as student_score 
+									FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' as lp_view_item
+									WHERE lp_view_item.lp_item_id = '.$item['item_id'].'
+									AND lp_view_id = "'.$lp_view_id.'"';
+									
+							$rsScores = api_sql_query($sql, __FILE__, __LINE__);
+							$total_score += mysql_result($rsScores, 0, 0);
+							$total_weighting += $item['max_score'];
+						}
 						$any_result = true;
 					}
-					
 					$sql = 'SELECT id, max_score 
 							FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_item.' AS lp_item
 							WHERE lp_id='.$a_learnpath['id'].'

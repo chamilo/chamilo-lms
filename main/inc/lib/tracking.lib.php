@@ -322,26 +322,29 @@ class Tracking {
 					//We get the last view id of this LP
 					$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';	
 					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
-					$lp_view_id = mysql_result($rs_last_lp_view_id,0,'id');
+					$lp_view_id = intval(mysql_result($rs_last_lp_view_id,0,'id'));
 					
 					$total_score = $total_weighting = 0;
-					while($item = Database :: fetch_array($rsItems, 'ASSOC'))
+					if($lp_view_id!=0)
 					{
-						$sql = 'SELECT score as student_score 
-								FROM '.$lp_item_view_table.' as lp_view_item
-								WHERE lp_view_item.lp_item_id = '.$item['item_id'].'
-								AND lp_view_id = "'.$lp_view_id.'"
-								';
-	
-						$rsScores = api_sql_query($sql, __FILE__, __LINE__);
-						if(Database::num_rows($rsScores)>0)
+						while($item = Database :: fetch_array($rsItems, 'ASSOC'))
 						{
-							$total_score += mysql_result($rsScores, 0, 0);
-							$total_weighting += $item['max_score'];
-							
-							$lp_scorm_score_total += ($total_score/$total_weighting)*100;
-							$lp_scorm_weighting_total+=100;
-						}					
+							$sql = 'SELECT score as student_score 
+									FROM '.$lp_item_view_table.' as lp_view_item
+									WHERE lp_view_item.lp_item_id = '.$item['item_id'].'
+									AND lp_view_id = "'.$lp_view_id.'"
+									';
+		
+							$rsScores = api_sql_query($sql, __FILE__, __LINE__);
+							if(Database::num_rows($rsScores)>0)
+							{
+								$total_score += mysql_result($rsScores, 0, 0);
+								$total_weighting += $item['max_score'];
+								
+								$lp_scorm_score_total += ($total_score/$total_weighting)*100;
+								$lp_scorm_weighting_total+=100;
+							}					
+						}
 					}
 					
 				}

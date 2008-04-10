@@ -12,9 +12,9 @@
 
     Contact:
 		Dokeos
-		Rue des Palais 44 Paleizenstraat
+		Rue du Corbeau, 108
 		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+		info@dokeos.com
 */
 /**
 *	Exercise submission
@@ -33,7 +33,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 14588 2008-03-13 11:17:02Z vanwayenbergh $
+* 	@version $Id: exercice_submit.php 14834 2008-04-10 20:55:50Z yannoo $
 */
 
 

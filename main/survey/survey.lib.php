@@ -2,6 +2,8 @@
 $config['survey']['debug'] = false;
 /*
     DOKEOS - elearning and course management software
+    Copyright (c)	2008		Dokeos SPRL
+    Copyright (c)   2006-2008	Patrick Cool
 
     For a full list of contributors, see documentation/credits.html
 
@@ -13,19 +15,20 @@ $config['survey']['debug'] = false;
 
     Contact:
 		Dokeos
-		Rue des Palais 44 Paleizenstraat
+		Rue du Corbeau, 108
 		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+		info@dokeos.com
 */
 
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@version $Id: survey.lib.php 14822 2008-04-10 04:44:54Z yannoo $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
 */
+require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 
 class survey_manager
 {
@@ -2439,6 +2442,21 @@ class SurveyUtil {
 		}
 		echo '			<input type="submit" name="submit_question_filter" value="'.get_lang('SubmitQuestionFilter').'" />';
 		echo '</th>';
+		
+		$display_extra_user_fields = false;
+		if (!($_POST['submit_question_filter'] OR $_POST['export_report']) OR !empty($_POST['fields_filter']))
+		{
+			//show user fields section with a big th colspan that spans over all fields
+			$extra_user_fields = UserManager::get_extra_fields(0,0,5,'ASC',false);
+			$num = count($extra_user_fields);
+			echo '<th '.($num>0?' colspan="'.$num.'"':'').'>';
+			echo '<label><input type="checkbox" name="fields_filter" value="1" checked="checked"/> ';
+			echo get_lang('UserFields');
+			echo '</label>';
+			echo '</th>';		
+			$display_extra_user_fields = true;
+		}
+
 		$sql = "SELECT questions.question_id, questions.type, questions.survey_question, count(options.question_option_id) as number_of_options
 				FROM $table_survey_question questions LEFT JOIN $table_survey_question_option options
 				ON questions.question_id = options.question_id
@@ -2475,6 +2493,16 @@ class SurveyUtil {
 		// getting all the questions and options
 		echo '	<tr>';
 		echo '		<th>&nbsp;</th>'; // the user column
+		
+		if (!($_POST['submit_question_filter'] OR $_POST['export_report']) OR !empty($_POST['fields_filter']))
+		{
+			//show the fields names for user fields
+			foreach($extra_user_fields as $field)
+			{
+				echo '<th>'.$field[3].'</th>';
+			}
+		}
+		
 		$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type,
 						survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
 				FROM $table_survey_question survey_question
@@ -2511,7 +2539,7 @@ class SurveyUtil {
 		{
 			if ($old_user <> $row['user'] AND $old_user<>'')
 			{
-				SurveyUtil::display_complete_report_row($possible_answers, $answers_of_user, $old_user, $questions);
+				SurveyUtil::display_complete_report_row($possible_answers, $answers_of_user, $old_user, $questions, $display_extra_user_fields);
 				$answers_of_user=array();
 			}
 			if ($questions[$row['question_id']]['type']<> 'open')
@@ -2524,7 +2552,7 @@ class SurveyUtil {
 			}
 			$old_user = $row['user'];
 		}
-		SurveyUtil::display_complete_report_row($possible_answers, $answers_of_user, $old_user, $questions); // this is to display the last user
+		SurveyUtil::display_complete_report_row($possible_answers, $answers_of_user, $old_user, $questions, $display_extra_user_fields); // this is to display the last user
 	
 		echo '</table>';
 	
@@ -2538,10 +2566,11 @@ class SurveyUtil {
 	 * @param 	array	Possible options
 	 * @param 	array 	User answers
 	 * @param	mixed	User ID or user details string
+	 * @param	boolean	Whether to show extra user fields or not
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007 - Updated March 2008
 	 */
-	function display_complete_report_row($possible_options, $answers_of_user, $user, $questions)
+	function display_complete_report_row($possible_options, $answers_of_user, $user, $questions, $display_extra_user_fields=false)
 	{
 		global $survey_data;
 		
@@ -2573,6 +2602,15 @@ class SurveyUtil {
 			echo '<th>-</th>';
 		}
 		
+		if ($display_extra_user_fields)
+		{
+			//show user fields data, if any, for this user
+			$user_fields_values = UserManager::get_extra_user_data(intval($user),false,false);
+			foreach($user_fields_values as $value)
+			{
+				echo '<td align="center">'.$value.'</td>';
+			}
+		}
 	
 		foreach ($possible_options as $question_id=>$possible_option)
 		{
@@ -2624,6 +2662,18 @@ class SurveyUtil {
 		// the first column
 		$return = ';';
 	
+		//show extra fields blank space (enough for extra fields on next line)
+		$display_extra_user_fields = false;
+		if (!($_POST['submit_question_filter'] OR $_POST['export_report']) OR !empty($_POST['fields_filter']))
+		{
+			//show user fields section with a big th colspan that spans over all fields
+			$extra_user_fields = UserManager::get_extra_fields(0,0,5,'ASC',false);
+			$num = count($extra_user_fields);
+			$return .= str_repeat(';',$num);
+			$display_extra_user_fields = true;
+		}
+		
+	
 		$sql = "SELECT questions.question_id, questions.type, questions.survey_question, count(options.question_option_id) as number_of_options
 				FROM $table_survey_question questions LEFT JOIN $table_survey_question_option options
 				ON questions.question_id = options.question_id "
@@ -2658,6 +2708,17 @@ class SurveyUtil {
 	
 		// getting all the questions and options
 		$return .= ';';
+		
+		//show extra field values
+		if (!($_POST['submit_question_filter'] OR $_POST['export_report']) OR !empty($_POST['fields_filter']))
+		{
+			//show the fields names for user fields
+			foreach($extra_user_fields as $field)
+			{
+				$return .= '"'.str_replace("\r\n",'  ',html_entity_decode(strip_tags($field[3]))).'";';
+			}
+		}
+		
 		$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type,
 						survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
 				FROM $table_survey_question survey_question
@@ -2697,7 +2758,7 @@ class SurveyUtil {
 		{
 			if ($old_user <> $row['user'] AND $old_user <> '')
 			{
-				$return .= SurveyUtil::export_complete_report_row($possible_answers, $answers_of_user, $old_user);
+				$return .= SurveyUtil::export_complete_report_row($possible_answers, $answers_of_user, $old_user, $display_extra_user_fields);
 				$answers_of_user=array();
 			}
 			if($possible_answers_type[$row['question_id']] == 'open')
@@ -2712,7 +2773,7 @@ class SurveyUtil {
 			}
 			$old_user = $row['user'];
 		}
-		$return .= SurveyUtil::export_complete_report_row($possible_answers, $answers_of_user, $old_user); // this is to display the last user
+		$return .= SurveyUtil::export_complete_report_row($possible_answers, $answers_of_user, $old_user, $display_extra_user_fields); // this is to display the last user
 		return $return;
 	}
 	
@@ -2723,13 +2784,25 @@ class SurveyUtil {
 	 * @param	array	Possible answers
 	 * @param	array	User's answers
 	 * @param 	mixed	User ID or user details as string - Used as a string in the result string
+	 * @param	boolean	Whether to display user fields or not
 	 * @return	string	One line of the csv file
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function export_complete_report_row($possible_options, $answers_of_user, $user)
+	function export_complete_report_row($possible_options, $answers_of_user, $user, $display_extra_user_fields=false)
 	{
 		$return = $user.';'; // the user column
+
+		if($display_extra_user_fields)
+		{
+			//show user fields data, if any, for this user
+			$user_fields_values = UserManager::get_extra_user_data(intval($user),false,false);
+			foreach($user_fields_values as $value)
+			{
+				$return .= '"'.str_replace('"','""',html_entity_decode(strip_tags($value))).'";';
+			}
+		}
+	
 	
 		if(is_array($possible_options))
 		{
@@ -2772,6 +2845,21 @@ class SurveyUtil {
 		$worksheet =& $workbook->addWorksheet('Report 1');
 		$line = 0;
 		$column = 1; //skip the first column (row titles)
+
+		//show extra fields blank space (enough for extra fields on next line)
+		$display_extra_user_fields = false;
+		if (!($_POST['submit_question_filter'] OR $_POST['export_report']) OR !empty($_POST['fields_filter']))
+		{
+			//show user fields section with a big th colspan that spans over all fields
+			$extra_user_fields = UserManager::get_extra_fields(0,0,5,'ASC',false);
+			$num = count($extra_user_fields);
+			for($i=0;$i<$num;$i++)
+			{
+				$worksheet->write($line,$column,'');
+				$column ++;
+			}
+			$display_extra_user_fields = true;
+		}
 		
 		// Database table definitions
 		$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -2813,6 +2901,17 @@ class SurveyUtil {
 		}
 		$line++;
 		$column = 1;
+
+		//show extra field values
+		if ($display_extra_user_fields)
+		{
+			//show the fields names for user fields
+			foreach($extra_user_fields as $field)
+			{
+				$worksheet->write($line,$column,html_entity_decode(strip_tags($field[3])));
+				$column++;
+			}
+		}
 	
 		// getting all the questions and options (second line)
 		$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type,
@@ -2857,7 +2956,7 @@ class SurveyUtil {
 		{
 			if ($old_user <> $row['user'] AND $old_user <> '')
 			{
-				$return = SurveyUtil::export_complete_report_row_xls($possible_answers, $answers_of_user, $old_user);
+				$return = SurveyUtil::export_complete_report_row_xls($possible_answers, $answers_of_user, $old_user, $display_extra_user_fields);
 				foreach($return as $elem)
 				{
 					$worsheet->write($line,$column,$elem);
@@ -2896,13 +2995,24 @@ class SurveyUtil {
 	 * @param	array	Possible answers
 	 * @param	array	User's answers
 	 * @param 	mixed	User ID or user details as string - Used as a string in the result string
+	 * @param	boolean	Whether to display user fields or not
 	 * @return	string	One line of the csv file
 	 */
-	function export_complete_report_row_xls($possible_options, $answers_of_user, $user)
+	function export_complete_report_row_xls($possible_options, $answers_of_user, $user, $display_extra_user_fields=false)
 	{
 		$return = array();
 		$return[] = $user; // the user column
 	
+		if($display_extra_user_fields)
+		{
+			//show user fields data, if any, for this user
+			$user_fields_values = UserManager::get_extra_user_data(intval($user),false,false);
+			foreach($user_fields_values as $value)
+			{
+				$return[] = html_entity_decode(strip_tags($value));
+			}
+		}
+
 		if(is_array($possible_options))
 		{
 			foreach ($possible_options as $question_id=>$possible_option)

@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 14811 2008-04-09 18:50:44Z yannoo $
+<?php // $Id: usermanager.lib.php 14822 2008-04-10 04:44:54Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -835,10 +835,12 @@ class UserManager
 	 * Get an array of extra fieds with field details (type, default value and options)
 	 * @param	integer	Offset (from which row)
 	 * @param	integer	Number of items
-	 * @param	integer	
+	 * @param	integer	Column on which sorting is made
+	 * @param	string	Sorting direction
+	 * @param	boolean	Optional. Whether we get all the fields or just the visible ones
 	 * @return	array	Extra fields details (e.g. $list[2]['type'], $list[4]['options'][2]['title']
 	 */
-	function get_extra_fields($from=0, $number_of_items=20, $column=5, $direction='ASC')
+	function get_extra_fields($from=0, $number_of_items=0, $column=5, $direction='ASC', $all_visibility=true)
 	{
 		$fields = array();
 		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
@@ -849,7 +851,16 @@ class UserManager
 		{
 			$sort_direction = strtoupper($direction);
 		}
-		$sqlf = "SELECT * FROM $t_uf ORDER BY ".$columns[$column]." $sort_direction LIMIT ".Database::escape_string($from).','.Database::escape_string($number_of_items);
+		$sqlf = "SELECT * FROM $t_uf ";
+		if($all_visibility==false)
+		{
+			$sqlf .= " WHERE field_visible = 1 ";
+		}
+		$sqlf .= " ORDER BY ".$columns[$column]." $sort_direction " ;
+		if($number_of_items != 0)
+		{
+			$sqlf .= " LIMIT ".Database::escape_string($from).','.Database::escape_string($number_of_items);
+		}
 		$resf = api_sql_query($sqlf,__FILE__,__LINE__);
 		if(Database::num_rows($resf)>0)
 		{
@@ -886,12 +897,18 @@ class UserManager
 	}
 	/**
 	 * Get the number of extra fields currently recorded
+	 * @param	boolean	Optional switch. true (default) returns all fields, false returns only visible fields
 	 * @return	integer	Number of fields
 	 */
-	function get_number_of_extra_fields()
+	function get_number_of_extra_fields($all_visibility=true)
 	{
 		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
-		$sqlf = "SELECT * FROM $t_uf ORDER BY field_order";
+		$sqlf = "SELECT * FROM $t_uf ";
+		if($all_visibility == false)
+		{
+			$sqlf .= " WHERE field_visible = 1 ";
+		}
+		$sqlf .= " ORDER BY field_order";
 		$resf = api_sql_query($sqlf,__FILE__,__LINE__);
 		return Database::num_rows($resf);
 	}
@@ -990,15 +1007,24 @@ class UserManager
 	 * Gets user extra fields data
 	 * @param	integer	User ID
 	 * @param	boolean	Whether to prefix the fields indexes with "extra_" (might be used by formvalidator)
+	 * @param	boolean	Whether to return invisible fields as well
 	 * @return	array	Array of fields => value for the given user
 	 */
-	function get_extra_user_data($user_id, $prefix=false)
+	function get_extra_user_data($user_id, $prefix=false, $all_visibility = true)
 	{
 		$extra_data = array();
 		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 		$user_id = Database::escape_string($user_id);
-		$sql = "SELECT f.id as fid, f.field_variable as fvar, fv.field_value as fval FROM $t_uf f, $t_ufv fv WHERE fv.user_id = $user_id AND fv.field_id = f.id ORDER BY f.field_order";
+		$sql = "SELECT f.id as fid, f.field_variable as fvar, fv.field_value as fval " .
+				"FROM $t_uf f, $t_ufv fv " .
+				"WHERE fv.user_id = $user_id " .
+				"AND fv.field_id = f.id ";
+		if($all_visibility == false)
+		{
+			$sql .= " AND f.field_visible = 1 ";
+		}
+		$sql .= " ORDER BY f.field_order";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		if(Database::num_rows($res)>0)
 		{

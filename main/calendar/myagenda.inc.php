@@ -454,6 +454,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 {
 	global $_user;
 	global $_configuration;
+	global $setting_agenda_link;
 
 	$items = array ();
 
@@ -531,9 +532,19 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 			{
 				$halfhour = $halfhour +1;
 			}
+
+			if ($setting_agenda_link == 'coursecode')
+			{
+				$agenda_link = $array_course_info["visual_code"];
+			}
+			else 
+			{
+				$agenda_link = Display::return_icon('course_home.gif');
+			}			
+			
 			//$URL = $_configuration['root_web'].$mycours["dir"]."/";
 			$URL = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
-			$items[$halfhour][] .= "<i>".$hours.":".$minutes."</i> <a href=\"$URL\" title=\"".$array_course_info['name']."\">".$array_course_info['visual_code']."</a>  ".$item['title']."<br />";
+			$items[$halfhour][] .= "<i>".$hours.":".$minutes."</i> <a href=\"$URL\" title=\"".$array_course_info['name']."\">".$agenda_link."</a>  ".$item['title']."<br />";
 		}
 	}
 	// sorting by hour for every day
@@ -558,6 +569,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 	global $TABLEAGENDA, $TABLE_ITEMPROPERTY;
 	global $_user;
 	global $_configuration;
+	global $setting_agenda_link;
 
 	$items = array ();
 	// The default value of the week
@@ -637,8 +649,18 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 		{
 			$agendaday = date("j",strtotime($item['start_date']));
 			$time= date("H:i",strtotime($item['start_date']));
+
+			if ($setting_agenda_link == 'coursecode')
+			{
+				$agenda_link = $array_course_info["visual_code"];
+			}
+			else 
+			{
+				$agenda_link = Display::return_icon('course_home.gif');
+			}			
+			
 			$URL = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
-			$items[$agendaday][$item['start_time']] .= "<i>$time</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$array_course_info["visual_code"]."</a>  ".$item['title']."<br />";
+			$items[$agendaday][$item['start_time']] .= "<i>$time</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$agenda_link."</a>  ".$item['title']."<br />";
 		}
 	}
 	// sorting by hour for every day

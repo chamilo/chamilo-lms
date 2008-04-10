@@ -54,6 +54,12 @@
 	items of all the courses one is subscribed to. It was very soon integrated in
 	Dokeos as this was a really basic and very usefull tool.
 */
+
+/**
+ * Settings (you may alter this at will
+ */
+$setting_agenda_link = 'coursecode'; // valid values are coursecode and icon
+
 /**
  *	This function retrieves all the agenda items of all the course of the user
  */
@@ -61,6 +67,7 @@ function get_agendaitems($courses_dbs, $month, $year)
 {
 	global $_user;
 	global $_configuration;
+	global $setting_agenda_link;
 
 	$items = array ();
 	// get agenda-items for every course
@@ -127,7 +134,15 @@ function get_agendaitems($courses_dbs, $month, $year)
 			$agendaday = date("j",strtotime($item['start_date']));
 			$time= date("H:i",strtotime($item['start_date']));
 			$URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
-			$items[$agendaday][$item['start_time']] .= "<i>".$time."</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$array_course_info["visual_code"]."</a>  ".$item['title']."<br />";
+			if ($setting_agenda_link == 'coursecode')
+			{
+				$agenda_link = $array_course_info["visual_code"];
+			}
+			else 
+			{
+				$agenda_link = Display::return_icon('course_home.gif');
+			}
+			$items[$agendaday][$item['start_time']] .= "<i>".$time."</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$agenda_link."</a>  ".$item['title']."<br />";
 		}
 	}
 	// sorting by hour for every day

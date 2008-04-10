@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 14753 2008-04-03 22:20:25Z juliomontoya $
+*  	@version $Id: work.php 14835 2008-04-10 21:26:48Z juliomontoya $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -219,6 +219,7 @@ elseif (substr($my_cur_dir_path, -1, 1) != '/')
 $link_target_parameter = ""; //or e.g. "target=\"_blank\"";
 $always_show_tool_options = false;
 $always_show_upload_form = false;
+
 if ($always_show_tool_options) {
 	$display_tool_options = true;
 }
@@ -273,8 +274,7 @@ if (!api_is_course_admin()) {
 if ($origin != 'learnpath') {
 	$interbreadcrumb[] = array (
 		'url' => $url_dir,
-		'name' => get_lang('StudentPublications'
-	));
+		'name' => get_lang('StudentPublications'));
 
 	//if (!$display_tool_options  && !$display_upload_form)
 	//{
@@ -282,12 +282,12 @@ if ($origin != 'learnpath') {
 	$dir_array = explode("/", $cur_dir_path);
 	$array_len = count($dir_array);
 
-	if ($array_len > 0) {
+	if ($array_len > 0) 
+	{
 		$url_dir = 'work.php?&curdirpath=/';
 		$interbreadcrumb[] = array (
 			'url' => $url_dir,
-			'name' => get_lang('HomeDirectory'
-		));
+			'name' => get_lang('HomeDirectory'));
 	}
 
 	$dir_acum = '';
@@ -316,11 +316,11 @@ if ($origin != 'learnpath') {
 			"url" => "work.php",
 			"name" => get_lang('EditToolOptions'));
 	}
-
 	//--------------------------------------------------
-
 	Display :: display_header(null);
-} else {
+}
+else 
+{
 	//we are in the learnpath tool
 	include api_get_path(INCLUDE_PATH) . 'reduced_header.inc.php';
 }
@@ -694,7 +694,7 @@ $error_message = "";
 
 $check = Security :: check_token('post'); //check the token inserted into the form
 if ($_POST['submitWork'] && $is_course_member && $check)
- {
+{
 	if ($_FILES['file']['size']) 
 	{
 		$updir = $currentCourseRepositorySys . 'work/'; //directory path to upload
@@ -949,7 +949,8 @@ display_action_links($cur_dir_path, $always_show_tool_options, $always_show_uplo
 	 Display form to upload document
   =======================================*/
 
-if ($is_course_member) {
+if ($is_course_member) 
+{
 	if ($display_upload_form || $edit) 
 	{
 		$token = Security :: get_token(); //generate token to be used to check validity of request
@@ -997,7 +998,7 @@ if ($is_course_member) {
 		} 
 		else // else standard upload option
 		{
-			$form->addElement('file', 'file', get_lang('DownloadFile'), 'size="30" onchange="updateDocumentTitle(this.value)"');
+			$form->addElement('file', 'file', get_lang('DownloadFile'), 'size="40" onchange="updateDocumentTitle(this.value)"');
 		}
 
 		$titleWork = $form->addElement('text', 'title', get_lang("TitleWork"), 'id="file_upload"  style="width: 350px;"');
@@ -1018,9 +1019,19 @@ if ($is_course_member) {
 		$form->addElement('hidden', 'active', 1);
 		$form->addElement('hidden', 'accepted', 1);
 		$form->addElement('hidden', 'sec_token', $token);
-
-		$form->addElement('submit', 'submitWork', get_lang('Ok'));
-
+		
+		// fix the Ok button when we see the tool in the learn path
+		if ($origin== 'learnpath')
+		{
+			$form->addElement('html', '<div style="margin-left:137px">');		
+			$form->addElement('submit', 'submitWork', get_lang('Ok'));		
+			$form->addElement('html', '</div>');
+		}
+		else
+		{
+			$form->addElement('submit', 'submitWork', get_lang('Ok'));
+		}
+		
 		if ($_POST['submitWork'] || $edit) 
 		{
 			$form->addElement('submit', 'cancelForm', get_lang('Cancel'));
@@ -1028,14 +1039,17 @@ if ($is_course_member) {
 
 		$form->add_real_progress_bar('uploadWork', 'DownloadFile');
 		$form->setDefaults($defaults);
-		$form->display();
+		echo '<br /><br />';
+		$form->display();			
+	
+			
 
 	}
 	//show them the form for the directory name
 	if (isset ($_REQUEST['createdir']) && $is_allowed_to_edit) 
 	{
 		//create the form that asks for the directory name
-		$new_folder_text = '<br /><br /><form action="' . api_get_self() . '" method="POST">';
+		$new_folder_text = '<br /><br /><form action="' . api_get_self() . '?origin='.$origin.'" method="POST">';
 		$new_folder_text .= '<input type="hidden" name="curdirpath" value="' . Security :: remove_XSS($cur_dir_path) . '"/>';
 		$new_folder_text .= get_lang('NewDir') . ' ';
 		$new_folder_text .= '<input type="text" name="new_dir"/>';

@@ -336,7 +336,7 @@ if (is_array($flat_list))
 			if($details['lp_type']==1 || $details['lp_type']==2){
 				$dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'"><img src="../img/wizard.gif" border="0" title="'.get_lang("Build").'"></a>&nbsp;';
 			}else{
-				$dsp_build = '<img src="../img/wizard_gray.gif" border="0" title="'.get_lang("build").'">&nbsp;';
+				$dsp_build = '<img src="../img/wizard_gray.gif" border="0" title="'.get_lang("Build").'">&nbsp;';
 			}
 			if($test_mode == 'test' or api_is_course_admin())
 			{

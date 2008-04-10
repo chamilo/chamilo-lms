@@ -39,7 +39,7 @@ $lp_theme_css=$_SESSION['oLP']->get_theme();
 include_once('../inc/reduced_header.inc.php');
 ?>
 <body>
-  <?php echo $_SESSION['oLP']->get_html_toc();?><br/>
+  <?php  echo $_SESSION['oLP']->get_html_toc();?><br/>
 </body>
 </html>
 <?php

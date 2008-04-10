@@ -2450,7 +2450,7 @@ class learnpath {
     	$html .= '<div class="inner_lp_toc">'."\n" ;
     	if(api_is_allowed_to_edit()){
     		$mych = api_get_setting('platform_charset');
-    		$html.="<a href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."' style='font-size: 11px' target='_parent'>".mb_convert_encoding(get_lang("Build"),$this->encoding,$mych)."</a>&#124;<a style='font-size: 11px' href='lp_controller.php?".api_get_cidreq()."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".mb_convert_encoding(get_lang("BasicOverview"),$this->encoding,$mych)."</a>&#124;".mb_convert_encoding(get_lang("Display"),$this->encoding,$mych)."<br/><br/>";
+    		$html.="<p>&nbsp;&nbsp;&nbsp;&nbsp;<a  target='_parent' href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."' style= target='_parent'>".mb_convert_encoding(get_lang("Build"),$this->encoding,$mych)."</a>&nbsp;&#124;&nbsp;<a href='lp_controller.php?".api_get_cidreq()."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".mb_convert_encoding(get_lang("BasicOverview"),$this->encoding,$mych)."</a>&nbsp;&#124;&nbsp;".mb_convert_encoding(get_lang("Display"),$this->encoding,$mych)."</p>";
 			unset($mych);
     	}
     	//		" onchange=\"javascript:document.getElementById('toc_$parent').focus();\">\n";
@@ -3968,7 +3968,7 @@ class learnpath {
 		unset($this->arrMenu);
 		
 		if(api_is_allowed_to_edit())
-			$return .= '<p><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=build&amp;lp_id=' . $this->lp_id . '">'.get_lang("Advanced").'</a>&#124;'.get_lang("BasicOverview").'&#124;<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$this->lp_id.'">'.get_lang("Display").'</a></p>';
+			$return .= '<p><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=build&amp;lp_id=' . $this->lp_id . '">'.get_lang("Advanced").'</a>&nbsp;&#124;&nbsp;'.get_lang("BasicOverview").'&nbsp;&#124;&nbsp;<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$this->lp_id.'">'.get_lang("Display").'</a></p>';
 		
 		$return .= '<table class="data_table">' . "\n";
 		

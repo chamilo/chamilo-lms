@@ -45,20 +45,22 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	if(strlen($cur_dir_path) > 0 && $cur_dir_path != '/')
 	{
 		$parent_dir = dirname($cur_dir_path);
-		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$parent_dir.'">'.Display::return_icon('folder_up.gif').' '.get_lang('Up').'</a> ';
+		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.Security::remove_XSS($_GET['origin']).'&curdirpath='.$parent_dir.'">'.Display::return_icon('folder_up.gif').' '.get_lang('Up').'</a>&nbsp&nbsp';
+		
+		
 	}
 	
 	if (! $always_show_upload_form )
 	{
-		$display_output .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") . "</a> ";			
+		$display_output .= "&nbsp&nbsp<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") .'</a>&nbsp&nbsp&nbsp&nbsp';			
 	}
 	
 	if (! $always_show_tool_options && api_is_allowed_to_edit() )
 	{
 		// Create dir
-		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1"><img src="../img/folder_new.gif" border="0"alt ="'.get_lang('CreateDir').'" /> '.get_lang('CreateDir').' </a>';
+		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.Security::remove_XSS($_GET['origin']).'"><img src="../img/folder_new.gif" border="0"alt ="'.get_lang('CreateDir').'" /> '.get_lang('CreateDir').' </a>&nbsp&nbsp';
 		// Options
-		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_tool_options=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a> ";							
+		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".Security::remove_XSS($_GET['origin'])."&amp;display_tool_options=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a>&nbsp&nbsp";							
 	}
 
 	if ($display_output != "")
@@ -252,7 +254,9 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$sort_params[] = 'direction='.Security::remove_XSS($_GET['direction']);
 	}
 	$sort_params = implode('&amp;',$sort_params);
-
+	
+	$origin=Security::remove_XSS($origin);
+	
 	if(substr($sub_course_dir,-1,1)!='/' && !empty($sub_course_dir))
 	{
 		$sub_course_dir = $sub_course_dir.'/';
@@ -402,7 +406,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			// form edit directory				
 			if(isset($clean_edit_dir) && $clean_edit_dir==$mydir)
 			{	
-				$form_folder = new FormValidator('edit_dir', 'post', api_get_self().'?curdirpath='.$my_sub_dir.'&edit_dir='.$mydir);
+				$form_folder = new FormValidator('edit_dir', 'post', api_get_self().'?curdirpath='.$my_sub_dir.'&origin='.$origin.'&edit_dir='.$mydir);
 				$group_name[] = FormValidator :: createElement('text','dir_name');
 				$group_name[] = FormValidator :: createElement('submit','submit_edit_dir',get_lang('Ok'));
 				$form_folder -> addGroup($group_name,'my_group');
@@ -417,7 +421,8 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 					update_dir_name($mydir,$values['dir_name']);
 					$mydir = $my_sub_dir.$values['dir_name'];
 					$dir = $values['dir_name'];
-					$display_edit_form=false;					
+					$display_edit_form=false;
+								
 				}
 				
 			}
@@ -459,7 +464,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		}
 		else
 		{
-			$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a><br>'.$cant_files.' '.$text_file.$dirtext;				
+			$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a><br>'.$cant_files.' '.$text_file.$dirtext;				
 		}
 		
 		if ($count_files!=0)
@@ -479,8 +484,8 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		if( $is_allowed_to_edit)
 		{
 			$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
-				'&curdirpath='.$my_sub_dir.'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';						
-			$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  ><img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('DirDelete').'"></a>';
+				'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';						
+			$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  ><img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('DirDelete').'"></a>';
 			$row[] = $action;
 		}
 		else
@@ -939,11 +944,11 @@ function insert_all_directory_in_course_table($base_work_dir)
 	{
 		$only_dir[]=substr($dir_to_array[$i],strlen($base_work_dir), strlen($dir_to_array[$i]));				
 	}	
-		
+	/*	
 	echo "<pre>";
 	print_r($only_dir);
 	echo "<pre>";
-	
+	*/
 	for($i=0;$i<count($only_dir);$i++)
 	{		
 		global $work_table;
@@ -956,7 +961,7 @@ function insert_all_directory_in_course_table($base_work_dir)
 							   filetype		= 'folder',
 							   post_group_id = '0',
 							   sent_date	= '0000-00-00 00:00:00' ";				  
-		//api_sql_query($sql_insert_all, __FILE__, __LINE__);			
+		//api_sql_query($sql_insert_all, __FILE__, __LINE__);
 	}	
 }
 
@@ -978,7 +983,7 @@ function count_dir($path_dir, $recurse)
     {    
     	if (!(($entry == "..") || ($entry == ".")))
 		{		
-        	if (Is_Dir($path_dir.'/'.$entry))
+        	if (is_dir($path_dir.'/'.$entry))
         	{       		
         		$count_dir++;
           		if ($recurse)

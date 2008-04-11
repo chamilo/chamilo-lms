@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 14841 2008-04-11 07:52:45Z yannoo $
+<?php // $Id: usermanager.lib.php 14848 2008-04-11 13:21:04Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1198,6 +1198,6 @@ class UserManager
 		//print_r($personal_course_list);
 	
 		return $personal_course_list;
-	}	
+	}
 }
 ?>

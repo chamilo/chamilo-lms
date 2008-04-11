@@ -42,7 +42,7 @@ require ('../inc/global.inc.php');
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+api_protect_admin_script(true);
 $tool_name = get_lang('SessionOverview');
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
@@ -60,6 +60,20 @@ $tbl_class_rel_user					= Database::get_main_table(TABLE_MAIN_CLASS_USER);
 
 $id_session = $_GET['id_session'];
 
+$sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id
+		FROM '.$tbl_session.'
+		LEFT JOIN '.$tbl_user.'
+			ON id_coach = user_id
+		WHERE '.$tbl_session.'.id='.$id_session;
+
+$rs = api_sql_query($sql, __FILE__, __LINE__);
+$session = api_store_result($rs);
+$session = $session[0];
+
+if(!api_is_platform_admin() && $session['session_admin_id']!=$_user['user_id'])
+{
+	api_not_allowed(true);
+}
 
 
 if($_GET['action'] == 'delete')
@@ -98,15 +112,7 @@ if($_GET['action'] == 'delete')
 	}
 }
 
-$sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username
-		FROM '.$tbl_session.'
-		LEFT JOIN '.$tbl_user.'
-			ON id_coach = user_id
-		WHERE '.$tbl_session.'.id='.$id_session;
 
-$rs = api_sql_query($sql, __FILE__, __LINE__);
-$session = api_store_result($rs);
-$session = $session[0];
 
 
 
@@ -192,7 +198,7 @@ else {
 			<td>'.$coach.'</td>
 			<td>'.$course['nbr_users'].'</td>
 			<td>
-				<a href="../tracking/courseLog.php?cidReq='.$course['code'].'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Tracking').'" alt="'.get_lang('Tracking').'"/></a>&nbsp;
+				<a href="../tracking/courseLog.php?id_session='.$id_session.'&cidReq='.$course['code'].'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Tracking').'" alt="'.get_lang('Tracking').'"/></a>&nbsp;
 				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].'"><img src="../img/edit.gif" border="0" align="absmiddle" title="'.get_lang('Edit').'"></a>
 				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="'.get_lang('Delete').'"></a>
 			</td>

@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 14804 2008-04-09 14:00:16Z elixir_inter $
+<?php // $Id: user_add.php 14848 2008-04-11 13:21:04Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -144,7 +144,7 @@ $status = array();
 $status[COURSEMANAGER]  = get_lang('Teacher');
 $status[STUDENT] = get_lang('Learner');
 $status[DRH] = get_lang('Drh');
-//$status[ADMINCRFP] = get_lang('AdminCrfp');
+$status[SESSIONADMIN] = get_lang('SessionsAdmin');
 
 $form->addElement('select','status',get_lang('Status'),$status,'id="status_select" onchange="display_drh_list()"');
 

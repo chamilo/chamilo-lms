@@ -284,7 +284,7 @@ if ($_user['user_id'] && !api_is_anonymous())
 	}
 	
 	
-	if(api_is_platform_admin())
+	if(api_is_platform_admin(true))
 	{
 		if (api_get_setting('show_tabs', 'platform_administration') == 'true')
 		{
@@ -540,7 +540,7 @@ function get_tabs()
 	}
 
 	// Platform administration
-	if (api_is_platform_admin())
+	if (api_is_platform_admin(true))
 	{
 		$navigation['platform_admin']['url'] = $rootAdminWeb;
 		$navigation['platform_admin']['title'] = get_lang('PlatformAdmin');

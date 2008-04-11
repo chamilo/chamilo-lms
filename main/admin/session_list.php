@@ -5,7 +5,7 @@ $cidReset=true;
 
 include('../inc/global.inc.php');
 
-api_protect_admin_script();
+api_protect_admin_script(true);
 
 $tbl_session=Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_course=Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -28,6 +28,16 @@ if($action == 'delete')
 	{
 		$idChecked=intval($idChecked);
 	}
+	
+	if(!api_is_platform_admin())
+	{
+		$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$idChecked;
+		$rs = api_sql_query($sql,__FILE__,__LINE__);
+		if(mysql_result($rs,0,0)!=$_user['user_id'])
+		{
+			api_not_allowed(true);
+		}
+	}
 
 	api_sql_query("DELETE FROM $tbl_session WHERE id IN($idChecked)",__FILE__,__LINE__);
 
@@ -44,7 +54,20 @@ if($action == 'delete')
 $limit=20;
 $from=$page * $limit;
 
-$result=api_sql_query("SELECT id,name,nbr_courses,date_start,date_end FROM $tbl_session ".(empty($_POST['keyword']) ? "" : "WHERE name LIKE '%".addslashes($_POST['keyword'])."%'")." ORDER BY $sort LIMIT $from,".($limit+1),__FILE__,__LINE__);
+//if user is crfp admin only list its sessions
+if(!api_is_platform_admin())
+{
+	$where = 'WHERE session_admin_id='.intval($_user['user_id']);
+	$where .= (empty($_POST['keyword']) ? " " : " AND name LIKE '%".addslashes($_POST['keyword'])."%'");
+}
+else
+	$where .= (empty($_POST['keyword']) ? " " : " WHERE name LIKE '%".addslashes($_POST['keyword'])."%'");
+
+$result=api_sql_query("SELECT id,name,nbr_courses,date_start,date_end 
+						FROM $tbl_session 
+						 $where
+						ORDER BY $sort 
+						LIMIT $from,".($limit+1),__FILE__,__LINE__);
 
 $Sessions=api_store_result($result);
 

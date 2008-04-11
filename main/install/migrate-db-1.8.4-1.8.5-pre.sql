@@ -76,6 +76,8 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_cour
 CREATE TABLE user_field (id	INT NOT NULL auto_increment,field_type int NOT NULL DEFAULT 1,field_variable	varchar(64) NOT NULL,field_display_text	varchar(64),field_default_value text,field_order int,field_visible tinyint default 0,field_changeable tinyint default 0,tms	TIMESTAMP,PRIMARY KEY(id));
 CREATE TABLE user_field_options (id	int NOT NULL auto_increment,field_id int	NOT NULL,option_value	text,option_display_text varchar(64),option_order int,tms	TIMESTAMP,PRIMARY KEY (id));
 CREATE TABLE user_field_values(id	int	NOT NULL auto_increment,user_id	int	NOT NULL,field_id int NOT NULL,field_value	text,tms TIMESTAMP,PRIMARY KEY(id));
+ALTER TABLE session ADD session_admin_id INT UNSIGNED NOT NULL ;
+ALTER TABLE session ADD INDEX ( session_admin_id ) ;
 
 -- xxSTATSxx
 ALTER TABLE track_e_downloads ADD INDEX (down_user_id);

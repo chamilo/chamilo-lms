@@ -772,28 +772,38 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 	        }
 	        if (!$is_courseAdmin) // this user has no status related to this course
 		        {
-		    	// is it the session coach ?
+		    	// is it the session coach or the session admin ?
 		    	
 		    	$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 		    	$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 		    	$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		    	
-		        $sql = "SELECT 1
-						FROM ".$tbl_session."
+		        $sql = "SELECT session.id_coach, session_admin_id
+						FROM ".$tbl_session." as session
 						INNER JOIN ".$tbl_session_course."
 							ON session_rel_course.id_session = session.id
-							AND session_rel_course.course_code='$_cid'
-						WHERE session.id_coach = '".$_user['user_id']."'";
-	
+							AND session_rel_course.course_code='$_cid'";
+
 		        $result = api_sql_query($sql,__FILE__,__LINE__);
-		        if($row = mysql_fetch_array($result)){
+		        $row = api_store_result($result);
+		        
+		        if($row[0]['id_coach']==$_user['user_id']){
 		        	$_courseUser['role'] = 'Professor';
 		            $is_courseMember     = true;
 		            $is_courseTutor      = true;
 		            $is_courseAdmin      = false;
 		            $is_courseCoach      = true;
+		            $is_sessionAdmin     = false;
 	
 		            api_session_register('_courseUser');
+		        }
+		        else if($row[0]['session_admin_id']==$_user['user_id']){
+		        	$_courseUser['role'] = 'Professor';
+		            $is_courseMember     = false;
+		            $is_courseTutor      = false;
+		            $is_courseAdmin      = false;
+		            $is_courseCoach      = false;
+		            $is_sessionAdmin     = true;
 		        }
 	        	else
 	        	{
@@ -809,6 +819,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 			            $is_courseMember     = true;
 			            $is_courseTutor      = true;
 			            $is_courseCoach      = true;
+			            $is_sessionAdmin     = false;
 			            
 			            $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 			            
@@ -839,6 +850,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 					            $is_courseMember     = true;
 					            $is_courseTutor      = false;
 					            $is_courseAdmin      = false;
+					            $is_sessionAdmin     = false;
 	
 					            api_session_register('_courseUser');
 				        	}
@@ -856,6 +868,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
         $is_courseAdmin  = false;
         $is_courseTutor  = false;
         $is_courseCoach  = false;
+        $is_sessionAdmin     = false;
 
         api_session_unregister('_courseUser');
     }
@@ -885,6 +898,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 	api_session_register('is_courseTutor');
 	api_session_register('is_allowed_in_course'); //new permission var
 	api_session_register('is_courseCoach');
+	api_session_register('is_sessionAdmin');
 }
 else // continue with the previous values
 {

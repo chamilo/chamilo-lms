@@ -9,7 +9,7 @@ include('../inc/global.inc.php');
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+api_protect_admin_script(true);
 
 $id=intval($_GET['id']);
 
@@ -24,6 +24,22 @@ $tool_name = get_lang('EditSession');
 
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
+
+$result=api_sql_query("SELECT name,date_start,date_end,id_coach, session_admin_id FROM $tbl_session WHERE id='$id'",__FILE__,__LINE__);
+
+if(!$infos=mysql_fetch_array($result))
+{
+	header('Location: session_list.php');
+	exit();
+}
+
+list($year_start,$month_start,$day_start)=explode('-',$infos['date_start']);
+list($year_end,$month_end,$day_end)=explode('-',$infos['date_end']);
+
+if(!api_is_platform_admin() && $infos['session_admin_id']!=$_user['user_id'])
+{
+	api_not_allowed(true);
+}
 
 if($_POST['formSent'])
 {
@@ -74,19 +90,6 @@ if($_POST['formSent'])
 			exit();
 		}
 	}
-}
-else
-{
-	$result=api_sql_query("SELECT name,date_start,date_end,id_coach FROM $tbl_session WHERE id='$id'",__FILE__,__LINE__);
-
-	if(!$infos=mysql_fetch_array($result))
-	{
-		header('Location: session_list.php');
-		exit();
-	}
-
-	list($year_start,$month_start,$day_start)=explode('-',$infos['date_start']);
-	list($year_end,$month_end,$day_end)=explode('-',$infos['date_end']);
 }
 
 $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1' ORDER BY lastname,firstname,username";

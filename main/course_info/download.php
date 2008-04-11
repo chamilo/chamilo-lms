@@ -1,4 +1,4 @@
-<?php // $Id: download.php 14289 2008-02-13 17:57:11Z yannoo $
+<?php // $Id: download.php 14848 2008-04-11 13:21:04Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -43,7 +43,7 @@ if(empty($extension) || !file_exists($archivePath.$archiveFile))
 
 $content_type='';
 
-if(in_array($extension,array('xml','csv')) && $is_platformAdmin)
+if(in_array($extension,array('xml','csv')) && api_is_platform_admin(true))
 {
 	$content_type='application/force-download';
 }

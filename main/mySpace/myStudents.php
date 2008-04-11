@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 14827 2008-04-10 08:22:32Z elixir_inter $
+<?php //$Id: myStudents.php 14848 2008-04-11 13:21:04Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -95,7 +95,7 @@ $csv_content = array();
  
 api_block_anonymous_users();
 
-if(empty($_SESSION['is_allowedCreateCourse']) && !api_is_coach() && $_user['status']!=DRH){
+if(empty($_SESSION['is_allowedCreateCourse']) && !api_is_coach() && $_user['status']!=DRH && $_user['status']!=SESSIONADMIN){
 	api_not_allowed(true);
 }
 
@@ -949,7 +949,7 @@ if(!empty($_GET['student']))
 			</th>
 		</tr>
 <?php
-		if(!api_is_platform_admin() && $_user['status']!=DRH){
+		if(!api_is_platform_admin(true) && $_user['status']!=DRH){
 			// courses followed by user where we are coach
 			if(!isset($_GET['id_coach'])){
 				$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);

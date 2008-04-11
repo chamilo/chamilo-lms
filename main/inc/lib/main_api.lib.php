@@ -49,15 +49,18 @@ define('STUDENT', 5);
 /** global status of a user: course manager */
 define('COURSEMANAGER', 1);
 /** global status of a user: session admin */
-define('ADMINCRFP', 3);
+define('SESSIONADMIN', 3);
 /** global status of a user: human ressource manager */
 define('DRH', 4);
+/** global status of a user: human ressource manager */
+define('ANONYMOUS', 6);
 
 // table of status
 $_status_list[STUDENT] = 'user';
 $_status_list[COURSEMANAGER] = 'teacher';
-$_status_list[ADMINCRFP] = 'admincrfp';
+$_status_list[SESSIONADMIN] = 'session_admin';
 $_status_list[DRH] = 'drh';
+$_status_list[ANONYMOUS] = 'anonymous';
 
 
 //COURSE VISIBILITY CONSTANTS
@@ -184,9 +187,9 @@ function api_protect_course_script($print_headers=false)
 *
 * @author Roan Embrechts
 */
-function api_protect_admin_script()
+function api_protect_admin_script($allow_sessions_admins=false)
 {
-	if (!api_is_platform_admin())
+	if (!api_is_platform_admin($allow_sessions_admins))
 	{
 		include (api_get_path(INCLUDE_PATH)."header.inc.php");
 		api_not_allowed();
@@ -1205,9 +1208,17 @@ function api_get_interface_language()
 * @return boolean True if the user has platform admin rights,
 * false otherwise.
 */
-function api_is_platform_admin()
+function api_is_platform_admin($allow_sessions_admins = false)
 {
-	return $_SESSION["is_platformAdmin"];
+	if($_SESSION['is_platformAdmin'])
+		return true;
+	else
+	{
+		global $_user;
+		if($allow_sessions_admins && $_user['status']==SESSIONADMIN)
+			return true;
+	}
+	return false;
 }
 /**
  * Check if current user is allowed to create courses
@@ -2219,5 +2230,20 @@ function api_status_key($status)
 	{
 		return array_search($status,$_status_list);
 	}
+}
+
+/**
+ * get the status langvars list
+ * @return array the list of status with their translations
+ */
+function api_get_status_langvars()
+{
+	return array(
+				COURSEMANAGER=>get_lang('Teacher'),
+				SESSIONADMIN=>get_lang('SessionsAdmin'),
+				DRH=>get_lang('Drh'),
+				STUDENT=>get_lang('Student'),
+				ANONYMOUS=>get_lang('Anonymous')
+				);
 }
 ?>

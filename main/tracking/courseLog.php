@@ -47,7 +47,7 @@ $language_file[] = 'scorm';
 include('../inc/global.inc.php');
 
 
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach;
+$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
 
 if(!$is_allowedToTrack)
 {

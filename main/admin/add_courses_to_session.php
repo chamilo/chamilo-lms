@@ -45,7 +45,7 @@ $xajax -> registerFunction ('search_courses');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions
-api_protect_admin_script();
+api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
@@ -62,6 +62,16 @@ $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 $tool_name= get_lang('SubscribeCoursesToSession');
 
 $id_session=intval($_GET['id_session']);
+
+if(!api_is_platform_admin())
+{
+	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
+	$rs = api_sql_query($sql,__FILE__,__LINE__);
+	if(mysql_result($rs,0,0)!=$_user['user_id'])
+	{
+		api_not_allowed(true);
+	}
+}
 
 
 

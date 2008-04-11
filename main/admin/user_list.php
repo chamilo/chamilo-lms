@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 14750 2008-04-03 14:45:13Z yannoo $
+<?php // $Id: user_list.php 14848 2008-04-11 13:21:04Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -375,12 +375,12 @@ function modify_filter($user_id,$url_params,$row)
 	$result .= '<a href="user_information.php?user_id='.$user_id.'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>&nbsp;';
 	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'"><img src="../img/login_as.gif" border="0" style="vertical-align: middle;" alt="'.get_lang('LoginAs').'" title="'.get_lang('LoginAs').'"/></a>&nbsp;';
 
-	$statusname = array(1=>get_lang('Teacher'),4=>get_lang('Drh'),5=>get_lang('Student'),6=>get_lang('Anonymous'));
-	if ($row['6'] == $statusname[1])
+	$statusname = api_get_status_langvars();
+	if ($row['6'] != $statusname[STUDENT])
 	{
 		$result .= '<div style="display:inline;margin-left:25px"></div>';
 	}
-	if ($row['6'] == $statusname[5])
+	else
 	{
 		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;';
 	}
@@ -466,7 +466,7 @@ function lock_unlock_user($status,$user_id)
  */
 function status_filter($status)
 {
-	$statusname = array(1=>get_lang('Teacher'),4=>get_lang('Drh'),5=>get_lang('Student'),6=>get_lang('Anonymous'));
+	$statusname = api_get_status_langvars();
 	return $statusname[$status];
 }
 

@@ -36,7 +36,7 @@ if(empty($charset))
 {
 	$charset = 'ISO-8859-15';
 }
-api_protect_admin_script();
+api_protect_admin_script(true);
 
 include(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 include (api_get_path(LIBRARY_PATH)."/add_course.conf.php");
@@ -325,7 +325,8 @@ if($_POST['formSent'])
 									name = '".Database::escape_string($SessionName)."',
 									id_coach = '$CoachId',
 									date_start = '$DateStart',
-									date_end = '$DateEnd'";
+									date_end = '$DateEnd',
+									session_admin_id=".intval($_user['user_id']);
 					$rsSession = api_sql_query($sqlSession, __FILE__, __LINE__);
 					$session_id = mysql_insert_id();
 					

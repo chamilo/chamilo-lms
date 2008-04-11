@@ -14,7 +14,7 @@ $xajax -> registerFunction ('search_coachs');
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+api_protect_admin_script(true);
 
 $formSent=0;
 $errorMsg='';
@@ -106,7 +106,7 @@ if($_POST['formSent'])
 			$errorMsg = get_lang('SessionNameSoonExists');
 		}
 		else {
-			api_sql_query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach) VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach')",__FILE__,__LINE__);
+			api_sql_query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id) VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).")",__FILE__,__LINE__);
 			$id_session=mysql_insert_id();
 
 			header('Location: add_courses_to_session.php?id_session='.$id_session.'&add=true');

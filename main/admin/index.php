@@ -1,4 +1,4 @@
-<?php // $Id: index.php 14790 2008-04-08 20:31:45Z yannoo $
+<?php // $Id: index.php 14848 2008-04-11 13:21:04Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -42,7 +42,7 @@ require_once(api_get_path(LIBRARY_PATH).'security.lib.php');
 $this_section=SECTION_PLATFORM_ADMIN;
 
 // Access restrictions
-api_protect_admin_script();
+api_protect_admin_script(true);
 $nameTools = get_lang('PlatformAdmin');
 
 // setting breadcrumbs
@@ -55,6 +55,7 @@ $tool_name=get_lang("PlatformAdmin");
 Display::display_header($nameTools);
 
 
+if(api_is_platform_admin()):
 if(is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php'))
 {
 	Display::display_normal_message(get_lang('InstallDirAccessibleSecurityThreat'));
@@ -76,7 +77,6 @@ if ($_POST['Register'])
 ==============================================================================
 */
 $keyword_url = Security::remove_XSS($_GET['keyword']);
-
 ?>
 
 <div class="admin_section">
@@ -150,6 +150,8 @@ $keyword_url = Security::remove_XSS($_GET['keyword']);
 
 
 <?php
+endif;
+
 if(api_get_setting('use_session_mode')=='true')
 {
 ?>
@@ -174,7 +176,7 @@ if(api_get_setting('use_session_mode')=='true')
 
 <?php
 }
-else
+else if(api_is_platform_admin())
 {
 ?>
 
@@ -195,6 +197,7 @@ else
 </div>
 <?php
 }
+if(api_is_platform_admin()):
 ?>
 
 
@@ -222,6 +225,9 @@ else
 
 
 <?php
+
+endif;
+
 /**
  * Displays either the text for the registration or the message that the installation is (not) up to date
  *

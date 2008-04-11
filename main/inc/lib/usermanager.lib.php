@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 14848 2008-04-11 13:21:04Z elixir_inter $
+<?php // $Id: usermanager.lib.php 14858 2008-04-11 22:17:20Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -870,7 +870,7 @@ class UserManager
 					0=>$rowf['id'],
 					1=>$rowf['field_variable'],
 					2=>$rowf['field_type'],
-					3=>(empty($rowf['field_display_text'])?'':get_lang($rowf['field_display_text'])),
+					3=>(empty($rowf['field_display_text'])?'':get_lang($rowf['field_display_text'],'')),
 					4=>$rowf['field_default_value'],
 					5=>$rowf['field_order'],
 					6=>$rowf['field_visible'],
@@ -886,7 +886,7 @@ class UserManager
 						$fields[$rowf['id']][8][$rowo['id']] = array(
 							0=>$rowo['id'],
 							1=>$rowo['option_value'],
-							2=>(empty($rowo['option_display_text'])?'':get_lang($rowo['option_display_text'])),
+							2=>(empty($rowo['option_display_text'])?'':get_lang($rowo['option_display_text'],'')),
 							3=>$rowo['option_order']
 						);
 					}	

@@ -78,6 +78,7 @@ CREATE TABLE user_field_options (id	int NOT NULL auto_increment,field_id int	NOT
 CREATE TABLE user_field_values(id	int	NOT NULL auto_increment,user_id	int	NOT NULL,field_id int NOT NULL,field_value	text,tms TIMESTAMP,PRIMARY KEY(id));
 ALTER TABLE session ADD session_admin_id INT UNSIGNED NOT NULL ;
 ALTER TABLE session ADD INDEX ( session_admin_id ) ;
+UPDATE course_module SET position='basic' WHERE name='survey';
 
 -- xxSTATSxx
 ALTER TABLE track_e_downloads ADD INDEX (down_user_id);
@@ -117,3 +118,5 @@ ALTER TABLE quiz ADD results_disabled TINYINT UNSIGNED NOT NULL DEFAULT 0;
 CREATE TABLE blog_attachment ( id int unsigned NOT NULL auto_increment, path varchar(255) NOT NULL COMMENT 'the real filename', comment text, size int NOT NULL default '0', post_id int NOT NULL, filename varchar(255) NOT NULL COMMENT 'the user s file name', blog_id int NOT NULL, comment_id int NOT NULL default '0', PRIMARY KEY  (id));
 CREATE TABLE forum_attachment (id int NOT NULL auto_increment, path varchar(255) NOT NULL, comment text, size int NOT NULL default 0, post_id int NOT NULL, filename varchar(255) NOT NULL, PRIMARY KEY (id));
 ALTER TABLE group_category ADD forum_state TINYINT DEFAULT 0 AFTER announcements_state;
+UPDATE tool SET category='interaction', admin='0', visibility='1' WHERE name='survey';
+CREATE TABLE  forum_notification (user_id int(11) , forum_id varchar(11), thread_id varchar(11), post_id varchar(11), KEY user_id (user_id), KEY forum_id (forum_id));

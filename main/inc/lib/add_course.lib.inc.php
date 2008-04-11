@@ -305,6 +305,7 @@ function update_Db_course($courseDbName)
 	$TABLETOOLFORUMPOST 		= $courseDbName . "forum_post";
 	$TABLETOOLFORUMMAILCUE 		= $courseDbName . "forum_mailcue";
 	$TABLETOOLFORUMATTACHMENT	= $courseDbName . "forum_attachment";
+	$TABLETOOLFORUMNOTIFICATION = $courseDbName . 'forum_notification';
 
 	// Link
 	$TABLETOOLLINK 				= $courseDbName . "link";
@@ -550,6 +551,17 @@ function update_Db_course($courseDbName)
 			  PRIMARY KEY (id)
 			)";
 	api_sql_query($sql, __FILE__, __LINE__);
+	
+	// Forum notification
+	$sql = "CREATE TABLE  `".$TABLETOOLFORUMNOTIFICATION."` (
+			  user_id int(11),
+			  forum_id varchar(11),
+			  thread_id varchar(11),
+			  post_id varchar(11),
+			    KEY user_id (user_id),
+  				KEY forum_id (forum_id)
+			)";
+	api_sql_query($sql, __FILE__, __LINE__);	
 
 	/*
 	-----------------------------------------------------------
@@ -1711,6 +1723,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_GROUP . "','group/group.php','group.gif','".string2binary(api_get_setting('course_create_active_tools', 'groups')) . "','0','squaregrey.gif','NO','_self','interaction')");
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_CHAT . "','chat/chat.php','chat.gif','".string2binary(api_get_setting('course_create_active_tools', 'chat')) . "','0','squaregrey.gif','NO','_self','interaction')");
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_STUDENTPUBLICATION . "','work/work.php','works.gif','".string2binary(api_get_setting('course_create_active_tools', 'student_publications')) . "','0','squaregrey.gif','NO','_self','interaction')");
+	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_SURVEY."','survey/survey_list.php','survey.gif','1','0','','NO','_self','interaction')");	
 
 
 	if(api_get_setting('service_visio','active')=='true')
@@ -1735,7 +1748,6 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	*/
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible4AdminOfCourse','1','', 'NO','_self','admin')");
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible4AdminOfCourse','1','', 'NO','_self','admin')");
-	api_sql_query("INSERT INTO `".$tbl_course_homepage."` VALUES ('','".TOOL_SURVEY."','survey/survey_list.php','survey.gif','$visible4AdminOfCourse','1','','NO','_self','admin')");
 	api_sql_query("INSERT INTO `".$tbl_course_homepage."` VALUES ('','".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible4AdminOfCourse','1','','NO','_self', 'admin')");
 
 	/*

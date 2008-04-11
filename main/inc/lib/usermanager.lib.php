@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 14822 2008-04-10 04:44:54Z yannoo $
+<?php // $Id: usermanager.lib.php 14841 2008-04-11 07:52:45Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1016,13 +1016,10 @@ class UserManager
 		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 		$user_id = Database::escape_string($user_id);
-		$sql = "SELECT f.id as fid, f.field_variable as fvar, fv.field_value as fval " .
-				"FROM $t_uf f, $t_ufv fv " .
-				"WHERE fv.user_id = $user_id " .
-				"AND fv.field_id = f.id ";
+		$sql = "SELECT f.id as id, f.field_variable as fvar FROM $t_uf f ";
 		if($all_visibility == false)
 		{
-			$sql .= " AND f.field_visible = 1 ";
+			$sql .= " WHERE f.field_visible = 1 ";
 		}
 		$sql .= " ORDER BY f.field_order";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -1030,16 +1027,28 @@ class UserManager
 		{
 			while($row = Database::fetch_array($res))
 			{
+				$sqlu = "SELECT field_value as fval " .
+						" FROM $t_ufv " .
+						" WHERE field_id=".$row['id']."" .
+						" AND user_id=".$user_id;
+				$resu = api_sql_query($sqlu,__FILE__,__LINE__);
+				$fval = '';
+				if(Database::num_rows($resu)>0)
+				{
+					$rowu = Database::fetch_array($resu);
+					$fval = $rowu['fval'];
+				}
 				if($prefix)
 				{
-					$extra_data['extra_'.$row['fvar']] = $row['fval']; 
+					$extra_data['extra_'.$row['fvar']] = $fval; 
 				}
 				else
 				{
-					$extra_data[$row['fvar']] = $row['fval']; 
+					$extra_data[$row['fvar']] = $fval; 
 				}
 			}
 		}
+		
 		return $extra_data;
 	}
 	

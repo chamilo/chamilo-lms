@@ -77,7 +77,7 @@ $form->applyFilter('fieldtitle','html_filter');
 $form->applyFilter('fieldtitle','trim');
 $form->addRule('fieldtitle', get_lang('ThisFieldIsRequired'), 'required');
 // Field options
-$form->addElement('text','fieldoptions',get_lang('FieldOptions'));
+$form->addElement('text','fieldoptions',get_lang('FieldPossibleValues').' <img src="../img/info3.gif" height="16" width="16" alt="'.get_lang('FieldPossibleValuesComment').'" title="'.get_lang('FieldPossibleValuesComment').'">');
 $form->applyFilter('fieldoptions','trim');
 // Field default value
 $form->addElement('text','fielddefaultvalue',get_lang('FieldDefaultValue'));

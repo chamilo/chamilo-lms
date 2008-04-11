@@ -36,6 +36,7 @@ $language_file = array ('chat');
 
 include('../inc/global.inc.php');
 include('../inc/lib/course.lib.php');
+include('../inc/lib/usermanager.lib.php');
 
 $showPic=intval($_GET['showPic']);
 
@@ -52,53 +53,48 @@ list($pseudoUser)=mysql_fetch_row($result);
 $isAllowed=(empty($pseudoUser) || !$_cid)?false:true;
 $isMaster=$is_courseAdmin?true:false;
 
-$pictureURL=api_get_path(WEB_CODE_PATH).'upload/users/';
-
-if(!isset($_SESSION['id_session'])){
+if(!isset($_SESSION['id_session']))
+{
 	$query="SELECT t1.user_id,username,firstname,lastname,picture_uri,t3.status FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_course_user t3 WHERE t1.user_id=t2.user_id AND t3.user_id=t2.user_id AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".date('Y-m-d H:i:s',time()-60*5)."' ORDER BY username";
 }
-else{
+else
+{
 	$query="SELECT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session_course_user t3 WHERE t1.user_id=t2.user_id AND t3.id_user=t2.user_id AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".date('Y-m-d H:i:s',time()-60*5)."' ORDER BY username";
 }
 
 $result=api_sql_query($query,__FILE__,__LINE__);
-
 $Users=api_store_result($result);
-
 include('header_frame.inc.php');
 ?>
-
 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="data_table">
-
 <tr><th colspan="2"><?php echo get_lang("Connected"); ?></th></tr>
-
 <?php
 foreach($Users as $enreg)
-{
-
-if(!isset($_SESSION['id_session'])){
-	$status=$enreg['status'];
-}
-else{
-	if(CourseManager::is_course_teacher($enreg['user_id'],$_SESSION['_course']['id'])) $status=1; else $status=5;
-}
-
+{	
+	if(!isset($_SESSION['id_session']))
+	{
+		$status=$enreg['status'];
+	}
+	else
+	{
+		if(CourseManager::is_course_teacher($enreg['user_id'],$_SESSION['_course']['id'])) $status=1; else $status=5;
+	}
 ?>
-
 <tr>
   <td width="1%" valign="top"><?php if($status == 1) echo '<img src="../img/teachers.gif" align="absbottom" border="0" alt="" style="margin: 1px;">'; else echo '<img src="../img/students.gif" align="absbottom" border="0" alt="" style="margin: 1px;">';?></td>
   <td width="99%"><a <?php if($status == 1) echo 'class="master"'; ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo api_get_self(); ?>?showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><?php echo ucfirst($enreg['firstname']).' '.ucfirst($enreg['lastname']); ?></a></td>
 </tr>
+<?php
+$user_image=UserManager::get_user_picture_path_by_id($enreg['user_id'],'web',false,true);
+$file_url=$user_image['dir'].$user_image['file'];
 
-<?php if($showPic == $enreg['user_id']): ?>
+if($showPic == $enreg['user_id']): ?>
 <tr>
-  <td colspan="2" align="center"><img src="<?php if(empty($enreg['picture_uri'])) echo '../img/unknown.jpg'; else echo $pictureURL.$enreg['picture_uri']; ?>" border="0" width="100" alt="" style="margin-top: 5px;"></td>
+  <td colspan="2" align="center"><img src="<?php echo $file_url;?>" border="0" width="100" alt="" style="margin-top: 5px;"></td>
 </tr>
 <?php endif; ?>
-
 <?php
 }
-
 unset($Users);
 ?>
 

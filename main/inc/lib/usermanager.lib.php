@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 14858 2008-04-11 22:17:20Z yannoo $
+<?php // $Id: usermanager.lib.php 14861 2008-04-11 22:53:34Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1008,15 +1008,16 @@ class UserManager
 	 * @param	integer	User ID
 	 * @param	boolean	Whether to prefix the fields indexes with "extra_" (might be used by formvalidator)
 	 * @param	boolean	Whether to return invisible fields as well
+	 * @param	boolean	Whether to split multiple-selection fields or not
 	 * @return	array	Array of fields => value for the given user
 	 */
-	function get_extra_user_data($user_id, $prefix=false, $all_visibility = true)
+	function get_extra_user_data($user_id, $prefix=false, $all_visibility = true, $splitmultiple=false)
 	{
 		$extra_data = array();
 		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 		$user_id = Database::escape_string($user_id);
-		$sql = "SELECT f.id as id, f.field_variable as fvar FROM $t_uf f ";
+		$sql = "SELECT f.id as id, f.field_variable as fvar, f.field_type as type FROM $t_uf f ";
 		if($all_visibility == false)
 		{
 			$sql .= " WHERE f.field_visible = 1 ";
@@ -1037,6 +1038,10 @@ class UserManager
 				{
 					$rowu = Database::fetch_array($resu);
 					$fval = $rowu['fval'];
+					if($row['type'] ==  USER_FIELD_TYPE_SELECT_MULTIPLE)
+					{
+						$fval = split(';',$rowu['fval']);
+					}
 				}
 				if($prefix)
 				{

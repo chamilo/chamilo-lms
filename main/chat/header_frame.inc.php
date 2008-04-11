@@ -65,6 +65,7 @@ if(api_get_setting('user_selected_theme') == 'true')
 }
 
 $mycourseid = api_get_course_id();
+
 if (!empty($mycourseid) && $mycourseid != -1) 
 {	
 	if (api_get_setting('allow_course_theme') == 'true') 
@@ -81,15 +82,20 @@ if (!empty($mycourseid) && $mycourseid != -1)
 	}
 }
 
-
-
+if (empty($mycourseid))
+{
+	// if it is not set $mycourse id we reload the chat_message window in order to hide the
+	// textarea to submit a message
+	echo '<script type="text/javascript" language="javascript">';
+	echo "parent.chat_message.location.href='chat_whoisonline.php';";
+	echo '</script>';
+}
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset;?>">
 <title>Chat</title>
 <link rel="stylesheet" type="text/css" href="../css/<?php echo $my_style; ?>/default.css">
-
 <style>
 	a{
 		font-size: 12px;
@@ -110,7 +116,7 @@ function updateChat()
 {
 	if('<?php echo $chat_size_old; ?>' != '<?php echo $chat_size_new; ?>')
 	{
-		parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size_new; ?>#bottom';
+		parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size_new; ?>#bottom';				
 	}
 }
 
@@ -148,7 +154,6 @@ function send_message(evenement){
     {
     	document.formMessage.submit();
     }
-
 }
 
 //-->

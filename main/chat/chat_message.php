@@ -42,121 +42,123 @@ $language_file = array ('chat');
 
 require('../inc/global.inc.php');
 api_protect_course_script();
+$course=api_get_course_id();
 
-include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'text.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-
-/*
------------------------------------------------------------
-	Constants and variables
------------------------------------------------------------
-*/
-$tbl_user	= Database::get_main_table(TABLE_MAIN_USER);
-$sent = $_REQUEST['sent'];
-
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
-$query="SELECT lastname, firstname, username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
-$result=api_sql_query($query,__FILE__,__LINE__);
-
-list($pseudoUser)=mysql_fetch_row($result);
-
-$isAllowed=(empty($pseudoUser) || !$_cid)?false:true;
-$isMaster=$is_courseAdmin?true:false;
-
-$firstname=mysql_result($result,0,'firstname');
-$lastname=mysql_result($result,0,'lastname');
-
-$dateNow=date('Y-m-d');
-
-$documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
-$chatPath=$documentPath.'chat_files/';
-$TABLEITEMPROPERTY= Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-if(!is_dir($chatPath))
+// if we have the session set up 
+if (!empty($course))
 {
-	if(is_file($chatPath))
+	include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
+	include_once(api_get_path(LIBRARY_PATH).'text.lib.php');
+	include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+	
+	/*
+	-----------------------------------------------------------
+		Constants and variables
+	-----------------------------------------------------------
+	*/
+	$tbl_user	= Database::get_main_table(TABLE_MAIN_USER);
+	$sent = $_REQUEST['sent'];
+	
+	/*
+	==============================================================================
+			MAIN CODE
+	==============================================================================
+	*/
+	$query="SELECT lastname, firstname, username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
+	$result=api_sql_query($query,__FILE__,__LINE__);
+	
+	list($pseudoUser)=mysql_fetch_row($result);
+	
+	$isAllowed=(empty($pseudoUser) || !$_cid)?false:true;
+	$isMaster=$is_courseAdmin?true:false;
+	
+	$firstname=mysql_result($result,0,'firstname');
+	$lastname=mysql_result($result,0,'lastname');
+	
+	$dateNow=date('Y-m-d');
+	
+	$documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
+	$chatPath=$documentPath.'chat_files/';
+	$TABLEITEMPROPERTY= Database::get_course_table(TABLE_ITEM_PROPERTY);
+	
+	if(!is_dir($chatPath))
 	{
-		@unlink($chatPath);
+		if(is_file($chatPath))
+		{
+			@unlink($chatPath);
+		}
+	
+		$perm = api_get_setting('permissions_for_new_directories');
+		$perm = octdec(!empty($perm)?$perm:'0770');
+		@mkdir($chatPath,$perm);
+		@chmod($chatPath,$perm);
+	
+		$doc_id=add_document($_course,'/chat_files','folder',0,'chat_files');
+	
+		api_sql_query("INSERT INTO ".$TABLEITEMPROPERTY . " (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'DocumentAdded',1,0,NULL,0)");
+		
 	}
 
-	$perm = api_get_setting('permissions_for_new_directories');
-	$perm = octdec(!empty($perm)?$perm:'0770');
-	@mkdir($chatPath,$perm);
-	@chmod($chatPath,$perm);
-
-	$doc_id=add_document($_course,'/chat_files','folder',0,'chat_files');
-
-	api_sql_query("INSERT INTO ".$TABLEITEMPROPERTY . " (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'DocumentAdded',1,0,NULL,0)");
 	
-}
-
-include('header_frame.inc.php');
-
-$chat_size=0;
-
-if($sent)
-{
-	$message=trim(htmlspecialchars(stripslashes($_POST['message']),ENT_QUOTES,$charset));
+	include('header_frame.inc.php');
 	
-	if(!empty($message))
+	$chat_size=0;
+	
+	if($sent)
 	{
-		$message=make_clickable($message);
-
-		if(!file_exists($chatPath.'messages-'.$dateNow.'.log.html'))
+		$message=trim(htmlspecialchars(stripslashes($_POST['message']),ENT_QUOTES,$charset));
+		
+		if(!empty($message))
 		{
-			$doc_id=add_document($_course,'/chat_files/messages-'.$dateNow.'.log.html','file',0,'messages-'.$dateNow.'.log.html');
-
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
+			$message=make_clickable($message);
+	
+			if(!file_exists($chatPath.'messages-'.$dateNow.'.log.html'))
+			{
+				$doc_id=add_document($_course,'/chat_files/messages-'.$dateNow.'.log.html','file',0,'messages-'.$dateNow.'.log.html');
+	
+				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
+				item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
+			}
+			else
+			{
+				$doc_id = DocumentManager::get_document_id($_course,'/chat_files/messages-'.$dateNow.'.log.html');
+			}
+	
+			$fp=fopen($chatPath.'messages-'.$dateNow.'.log.html','a');
+	
+			if($isMaster)
+			{
+				fputs($fp,'<span id="chat_login_name"><b>'.$firstname.' '.$lastname.'</b></span> : '.$message.'<br>'."\n");	 		
+				
+			}
+			else
+			{
+				fputs($fp,"<b>$firstname $lastname</b> : $message<br>\n");
+			}
+	
+			fclose($fp);
+	
+			$chat_size=filesize($chatPath.'messages-'.$dateNow.'.log.html');
+	
+			update_existing_document($_course, $doc_id,$chat_size);
 			item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
 		}
-		else
-		{
-			$doc_id = DocumentManager::get_document_id($_course,'/chat_files/messages-'.$dateNow.'.log.html');
-		}
-
-		$fp=fopen($chatPath.'messages-'.$dateNow.'.log.html','a');
-
-		if($isMaster)
-		{
-			fputs($fp,'<span id="chat_login_name"><b>'.$firstname.' '.$lastname.'</b></span> : '.$message.'<br>'."\n");	 		
-			
-		}
-		else
-		{
-			fputs($fp,"<b>$firstname $lastname</b> : $message<br>\n");
-		}
-
-		fclose($fp);
-
-		$chat_size=filesize($chatPath.'messages-'.$dateNow.'.log.html');
-
-		update_existing_document($_course, $doc_id,$chat_size);
-		item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
 	}
+	?>
+	<form name="formMessage" method="post" action="<?php echo api_get_self(); ?>" onsubmit="javascript:if(document.formMessage.message.value == '') { alert('<?php echo addslashes(htmlentities(get_lang('TypeMessage'),ENT_QUOTES,$charset)); ?>'); document.formMessage.message.focus(); return false; }" autocomplete="off">
+	<input type="hidden" name="sent" value="1">
+	<table border="0" cellpadding="5" cellspacing="0" width="100%">
+	<tr>
+	  <td width="520" valign="middle">
+	  	<textarea name="message" style="width: 520px; height: 35px" onkeydown="send_message(event);"></textarea>
+	  </td>
+	  <td>
+	  	<input type="submit" value="<?php echo get_lang("Send"); ?>" class="background_submit">
+	  </td>
+	</tr>
+	</table>
+	</form>
+	<?php
 }
-
-
-?>
-
-<form name="formMessage" method="post" action="<?php echo api_get_self(); ?>" onsubmit="javascript:if(document.formMessage.message.value == '') { alert('<?php echo addslashes(htmlentities(get_lang('TypeMessage'),ENT_QUOTES,$charset)); ?>'); document.formMessage.message.focus(); return false; }" autocomplete="off">
-<input type="hidden" name="sent" value="1">
-<table border="0" cellpadding="5" cellspacing="0" width="100%">
-<tr>
-  <td width="520" valign="middle">
-  	<textarea name="message" style="width: 520px; height: 35px" onkeydown="send_message(event);"></textarea>
-  </td>
-  <td>
-  	<input type="submit" value="<?php echo get_lang("Send"); ?>" class="background_submit">
-  </td>
-</tr>
-</table>
-</form>
-
-<?php
 include('footer_frame.inc.php');
 ?>

@@ -136,18 +136,18 @@ if(1)
 
 	// Create a sortable table with user-data
 	$parameters['sec_token'] = Security::get_token();
-	$column_show = array(1,1,1,1,1,1,1,1,0);
-	$column_order = array(0,1,2,3,4,5,6,7,8);
-	$extra_fields = get_extra_fields(0,50,5,'ASC');
+	$column_show = array(0,1,1,1,1,1,1,1,0);
+	$column_order = array(1,2,3,4,5,6,7,8,9);
+	$extra_fields = UserManager::get_extra_fields(0,50,5,'ASC');
  
 	$table = new SortableTableFromArrayConfig($extra_fields, 5, 50, '', $column_show, $column_order, 'ASC');
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false);
 	$table->set_header(1, get_lang('FieldLabel'));
 	$table->set_header(2, get_lang('FieldType'));
-	$table->set_header(3, get_lang('FieldTitle'));
-	$table->set_header(4, get_lang('FieldDefaultValue'));
-	$table->set_header(5, get_lang('FieldOrder'), false);
+	$table->set_header(3, get_lang('FieldTitle'),false);
+	$table->set_header(4, get_lang('FieldDefaultValue'),false);
+	$table->set_header(5, get_lang('FieldOrder'));
 	$table->set_header(6, get_lang('FieldVisibility'));
 	$table->set_header(7, get_lang('FieldChangeability'));
 	$table->set_column_filter(6, 'modify_visibility');
@@ -192,6 +192,6 @@ function modify_visibility($visibility,$url_params,$row)
  */
 function modify_changeability($visibility,$url_params,$row)
 {
-	return ($visibility?'<a href="'.api_get_self().'?action=freeze_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'right.gif" alt="'.get_lang('MakeUnchangeable').'" /></a>':'<a href="'.api_get_self().'?action=thaw_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'wrong.gif" alt="'.get_lang('MakeFieldChangeable').'" /></a>');
+	return ($visibility?'<a href="'.api_get_self().'?action=freeze_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'right.gif" alt="'.get_lang('MakeUnchangeable').'" /></a>':'<a href="'.api_get_self().'?action=thaw_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'wrong.gif" alt="'.get_lang('MakeChangeable').'" /></a>');
 }
 ?>

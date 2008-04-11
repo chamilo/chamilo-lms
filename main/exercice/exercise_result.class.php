@@ -125,13 +125,13 @@ class ExerciseResult
 			//get all results (ourself and the others) as an admin should see them
 			//AND exe_user_id <> $_user['user_id']  clause has been removed
 			$sql="SELECT CONCAT(lastname,' ',firstname),ce.title, te.exe_result ,
-						te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id,email
+						te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id, user.email, user.user_id
 				  FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te, $TBL_USER user
 				  WHERE te.exe_exo_id = ce.id AND user_id=te.exe_user_id AND te.exe_cours_id='$cid'
 				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
 			$hpsql="SELECT CONCAT(tu.lastname,' ',tu.firstname), tth.exe_name,
-						tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date)
+						tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date), tu.email, tu.user_id
 					FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
 					WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '".$cid."'
 					ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
@@ -139,7 +139,8 @@ class ExerciseResult
 		}
 		else
 		{ // get only this user's results
-			  $sql="SELECT '',ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id
+			  $sql="SELECT '',ce.title, te.exe_result , te.exe_weighting, " .
+			  		"UNIX_TIMESTAMP(te.exe_date),te.exe_id
 				  FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te
 				  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".$user_id."' AND te.exe_cours_id='$cid'
 				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
@@ -151,8 +152,8 @@ class ExerciseResult
 
 		}
 
-		$results=getManyResultsXCol($sql,7);
-		$hpresults=getManyResultsXCol($hpsql,5);
+		$results=getManyResultsXCol($sql,8);
+		$hpresults=getManyResultsXCol($hpsql,7);
 
 		$NoTestRes = 0;
 		$NoHPTestRes = 0;
@@ -172,7 +173,8 @@ class ExerciseResult
 				if(empty($user_id))
 				{
 					$user = $results[$i][0];
-					$return[$i]['user'] = $user; 
+					$return[$i]['user'] = $user;
+					$return[$i]['user_id'] = $results[$i][7];
 				}
 				$return[$i]['title'] = $test;
 				$return[$i]['time'] = format_locale_date(get_lang('dateTimeFormatLong'),$results[$i][4]);
@@ -196,6 +198,7 @@ class ExerciseResult
 				if(empty($user_id))
 				{
 					$return[$j+$i]['user'] = $hpresults[$i][0];
+					$return[$j+$i]['user_id'] = $results[$i][6];
 					
 				}
 				$return[$j+$i]['title'] = $title;
@@ -211,9 +214,10 @@ class ExerciseResult
 	 * Exports the complete report as a CSV file
 	 * @param	string		Document path inside the document tool
 	 * @param	integer		Optional user ID
+	 * @param	boolean		Whether to include user fields or not
 	 * @return	boolean		False on error
 	 */
-	public function exportCompleteReportCSV($document_path='',$user_id=null)
+	public function exportCompleteReportCSV($document_path='',$user_id=null, $export_user_fields)
 	{
 		$this->_getExercisesReporting($document_path,$user_id);
 		$filename = 'exercise_results_'.date('YmdGis').'.csv';
@@ -228,6 +232,17 @@ class ExerciseResult
 		{
 			$data .= get_lang('User').';';
 		}
+		if($export_user_fields)
+		{
+			//show user fields section with a big th colspan that spans over all fields
+			$extra_user_fields = UserManager::get_extra_fields(0,0,5,'ASC',false);
+			$num = count($extra_user_fields);
+			foreach($extra_user_fields as $field)
+			{
+				$data .= '"'.str_replace("\r\n",'  ',html_entity_decode(strip_tags($field[3]))).'";';
+			}
+			$display_extra_user_fields = true;
+		}
 		$data .= get_lang('Title').';';
 		$data .= get_lang('Date').';';
 		$data .= get_lang('Results').';';
@@ -239,6 +254,15 @@ class ExerciseResult
 			if(!empty($row['user']))
 			{
 				$data .= str_replace("\r\n",'  ',html_entity_decode(strip_tags($row['user']))).';';
+			}
+			if($export_user_fields)
+			{
+				//show user fields data, if any, for this user
+				$user_fields_values = UserManager::get_extra_user_data(intval($row['user_id']),false,false);
+				foreach($user_fields_values as $value)
+				{
+					$data .= '"'.str_replace('"','""',html_entity_decode(strip_tags($value))).'";';
+				}
 			}
 			$data .= str_replace("\r\n",'  ',html_entity_decode(strip_tags($row['title']))).';';
 			$data .= str_replace("\r\n",'  ',$row['time']).';';
@@ -274,7 +298,7 @@ class ExerciseResult
 	 * Exports the complete report as an XLS file
 	 * @return	boolean		False on error
 	 */
-	public function exportCompleteReportXLS($document_path='',$user_id=null)
+	public function exportCompleteReportXLS($document_path='',$user_id=null, $export_user_fields)
 	{
 		$this->_getExercisesReporting($document_path,$user_id);
 		$filename = 'exercise_results_'.date('YmdGis').'.xls';
@@ -293,6 +317,17 @@ class ExerciseResult
 			$worksheet->write($line,$column,get_lang('User'));
 			$column++;
 		}
+		if($export_user_fields)
+		{
+			//show user fields section with a big th colspan that spans over all fields
+			$extra_user_fields = UserManager::get_extra_fields(0,0,5,'ASC',false);
+			//show the fields names for user fields
+			foreach($extra_user_fields as $field)
+			{
+				$worksheet->write($line,$column,html_entity_decode(strip_tags($field[3])));
+				$column++;
+			}
+		}
 		$worksheet->write($line,$column,get_lang('Title'));
 		$column++;
 		$worksheet->write($line,$column,get_lang('Date'));
@@ -308,6 +343,13 @@ class ExerciseResult
 			if(!empty($row['user']))
 			{
 				$worksheet->write($line,$column,html_entity_decode(strip_tags($row['user'])));
+				$column++;
+			}
+			//show user fields data, if any, for this user
+			$user_fields_values = UserManager::get_extra_user_data(intval($row['user_id']),false,false);
+			foreach($user_fields_values as $value)
+			{
+				$worksheet->write($line,$column,html_entity_decode(strip_tags($value)));
 				$column++;
 			}
 			$worksheet->write($line,$column,html_entity_decode(strip_tags($row['title'])));

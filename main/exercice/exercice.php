@@ -50,6 +50,7 @@ require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 require_once('hotpotatoes.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 include(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
+include(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 
 /*
 -----------------------------------------------------------
@@ -302,10 +303,23 @@ if($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2')
 	rmdir($temp_zip_dir);
 	exit(); //otherwise following clicks may become buggy
 }
-
-if($_POST['export_report'] == 'export_report')
+if(!empty($_POST['export_user_fields']))
+{
+	switch($_POST['export_user_fields'])
+	{
+		case 'export_user_fields':
+			$_SESSION['export_user_fields'] = true;
+			break;
+		case 'do_not_export_user_fields':
+		default:
+			$_SESSION['export_user_fields'] = false;
+			break;
+	}
+}
+if(!empty($_POST['export_report']) && $_POST['export_report'] == 'export_report')
 {
 	$user_id = null;
+	if(empty($_SESSION['export_user_fields'])) $_SESSION['export_user_fields'] = false;
 	if(!$is_allowedToEdit and !$is_tutor)
 	{
 		$user_id = api_get_user_id();
@@ -315,13 +329,13 @@ if($_POST['export_report'] == 'export_report')
 	{
 		case 'xls':
 			$export = new ExerciseResult();
-			$export->exportCompleteReportXLS($documentPath, $user_id);
+			$export->exportCompleteReportXLS($documentPath, $user_id, $_SESSION['export_user_fields']);
 			exit;
 			break;
 		case 'csv':
 		default:
 			$export = new ExerciseResult();
-			$export->exportCompleteReportCSV($documentPath, $user_id);
+			$export->exportCompleteReportCSV($documentPath, $user_id, $_SESSION['export_user_fields']);
 			exit;
 			break;
 	}
@@ -873,8 +887,21 @@ if($_configuration['tracking_enabled'])
 		echo '<input type="hidden" name="export_report" value="export_report">';
 		echo '<input type="hidden" name="export_format" value="xls">';
 		echo '</form>';
-		echo '<a class="quiz_export_link" href="#" onclick="document.form1a.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
-		echo '<a class="quiz_export_link" href="#" onclick="document.form1b.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a>';
+		echo '<form id="form1c" name="form1c" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
+		if($_SESSION['export_user_fields']==false)
+		{
+			$alt = get_lang('ExportWithUserFields');
+			echo '<input type="hidden" name="export_user_fields" value="export_user_fields">';
+		}
+		else
+		{
+			$alt = get_lang('ExportWithoutUserFields');
+			echo '<input type="hidden" name="export_user_fields" value="do_not_export_user_fields">';
+		}
+		echo '</form>';
+		echo '<a class="quiz_export_link" href="#" onclick="document.form1a.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif" alt="'.get_lang('ExportAsCSV').'">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+		echo '<a class="quiz_export_link" href="#" onclick="document.form1b.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif" alt="'.get_lang('ExportAsXLS').'">&nbsp;'.get_lang('ExportAsXLS').'</a>';
+		echo '<a class="quiz_export_link" href="#" onclick="document.form1c.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'synthese_view.gif" alt="'.$alt.'">&nbsp;'.$alt.'</a>';
 		echo '<br /><br />';		
 		?>
 

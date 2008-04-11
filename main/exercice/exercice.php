@@ -12,9 +12,9 @@
 
     Contact:
 		Dokeos
-		Rue des Palais 44 Paleizenstraat
+		Rue du Corbeau, 108
 		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+		info@dokeos.com
 */
 
 
@@ -275,6 +275,9 @@ else
 	}
 }
 
+// need functions of statsutils lib to display previous exercices scores
+include_once(api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php');
+
 if($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2')
 {
 	require_once('export/qti2/qti2_export.php');
@@ -300,6 +303,30 @@ if($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2')
 	exit(); //otherwise following clicks may become buggy
 }
 
+if($_POST['export_report'] == 'export_report')
+{
+	$user_id = null;
+	if(!$is_allowedToEdit and !$is_tutor)
+	{
+		$user_id = api_get_user_id();
+	}
+	require_once('exercise_result.class.php');
+	switch($_POST['export_format'])
+	{
+		case 'xls':
+			$export = new ExerciseResult();
+			$export->exportCompleteReportXLS($documentPath, $user_id);
+			exit;
+			break;
+		case 'csv':
+		default:
+			$export = new ExerciseResult();
+			$export->exportCompleteReportCSV($documentPath, $user_id);
+			exit;
+			break;
+	}
+}
+
 if ($origin != 'learnpath')
 {
 	//so we are not in learnpath tool
@@ -323,17 +350,11 @@ include_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 
 event_access_tool(TOOL_QUIZ);
 
-// need functions of statsutils lib to display previous exercices scores
-include_once(api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php');
-
-
 Display::display_introduction_section(TOOL_QUIZ);
 
 
 // selects $limitExPage exercises at the same time
 $from=$page*$limitExPage;
-//	$sql="SELECT id,title,type,active FROM $TBL_EXERCICES ORDER BY title LIMIT $from,".($limitExPage+1);
-//	$result=api_sql_query($sql,__FILE__,__LINE__);
 $sql="SELECT count(id) FROM $TBL_EXERCICES";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 list($nbrexerc) = Database::fetch_array($res);
@@ -457,20 +478,20 @@ if($show == 'test'){
 
 	$nbrExercises=Database::num_rows($result);
 
-	echo "<table border=\"0\" align=\"center\" cellpadding=\"2\" cellspacing=\"2\" width=\"100%\">",
-		"<tr>";
+	echo '<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">'.
+		'<tr>';
 
 	if (($is_allowedToEdit) and ($origin != 'learnpath'))
 	{
-		echo "<td width=\"50%\" nowrap=\"nowrap\">",
-			"<img src=\"../img/new_test.gif\" alt=\"new test\" align=\"absbottom\">&nbsp;<a href=\"exercise_admin.php?".api_get_cidreq()."\">".get_lang("NewEx")."</a>",
-			" | <img src=\"../img/jqz.jpg\" alt=\"HotPotatoes\" valign=\"ABSMIDDLE\">&nbsp;<a href=\"hotpotatoes.php\">".get_lang("ImportHotPotatoesQuiz")."</a>",
-			"</td>",
-			"<td width=\"50%\" align=\"right\">";
+		echo '<td width="50%" nowrap="nowrap">'.
+			'<img src="../img/new_test.gif" alt="new test" align="absbottom">&nbsp;<a href="exercise_admin.php?'.api_get_cidreq().'">'.get_lang('NewEx').'</a>'.
+			' | <img src="../img/jqz.jpg" alt="HotPotatoes" valign="ABSMIDDLE">&nbsp;<a href="hotpotatoes.php">'.get_lang('ImportHotPotatoesQuiz').'</a>'.
+			'</td>'.
+			'<td width="50%" align="right">';
 	}
 	else
 	{
-		echo "<td align=\"right\">";
+		echo '<td align="right">';
 	}
 
 	//get HotPotatoes files (active and inactive)
@@ -518,9 +539,9 @@ if($show == 'test'){
 		echo get_lang("NextPage") . " &gt;&gt;";
 	}
 
-	echo "</td>",
-			"</tr>",
-			"</table>";
+	echo '</td>',
+			'</tr>',
+			'</table>';
 
 ?>
 <table class="data_table">
@@ -571,7 +592,7 @@ if($show == 'test'){
 		{
 
 			if($i%2==0) $s_class="row_odd"; else $s_class="row_even";
-			echo "<tr class='$s_class'>\n";
+			echo '<tr class="'.$s_class.'">'."\n";
 
 			// prof only
 			if($is_allowedToEdit)
@@ -639,14 +660,14 @@ if($show == 'test'){
 
 			</tr>
     </table></td>
-	 <td align='center'> <?php
+	 <td align="center"> <?php
   $exid = $row['id'];
   $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '$exid'";
   $sqlresult =api_sql_query($sqlquery);
   $rowi = mysql_result($sqlresult,0);
   echo ($rowi>1?get_lang('Questions'):get_lang('Question')); ?> </td>
 
-	<td align='center'><?php
+	<td align="center"><?php
 		$eid = $row['id'];
 	$uid= api_get_user_id();
 	$qry = "select * from $TBL_TRACK_EXERCICES where exe_exo_id = $eid and exe_user_id = $uid and exe_cours_id = '".api_get_course_id()."'";	
@@ -709,7 +730,7 @@ if($show == 'test'){
 			$sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
 				FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
 							WHERE   d.id = ip.ref AND ip.tool = '".TOOL_DOCUMENT."' AND
-							 (d.path LIKE '%htm%' OR d.path LIKE '%html%')
+							 (d.path LIKE '%htm%')
 							AND   d.path  LIKE '".$uploadPath."/%/%' LIMIT $from,$to"; // only .htm or .html files listed
 		}
 		else
@@ -717,7 +738,7 @@ if($show == 'test'){
 			$sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
 				FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
 								WHERE d.id = ip.ref AND ip.tool = '".TOOL_DOCUMENT."' AND
-								 (d.path LIKE '%htm%' OR d.path LIKE '%html%')
+								 (d.path LIKE '%htm%')
 								AND   d.path  LIKE '".$uploadPath."/%/%' AND ip.visibility='1' LIMIT $from,$to";
 		}
 
@@ -817,7 +838,6 @@ if($show == 'test'){
 						$ind++;
 					}
 				}
-				//echo '<tr><td colspan="5"><hr /></td></tr>';
 			}
 		}
 
@@ -840,8 +860,22 @@ if($show == 'test'){
 if($_configuration['tracking_enabled'])
 {
 
-	if($show == 'result'){
-		
+	if($show == 'result')
+	{
+
+
+		// the form
+		echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
+		echo '<input type="hidden" name="export_report" value="export_report">';
+		echo '<input type="hidden" name="export_format" value="csv">';
+		echo '</form>';
+		echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
+		echo '<input type="hidden" name="export_report" value="export_report">';
+		echo '<input type="hidden" name="export_format" value="xls">';
+		echo '</form>';
+		echo '<a class="quiz_export_link" href="#" onclick="document.form1a.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+		echo '<a class="quiz_export_link" href="#" onclick="document.form1b.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a>';
+		echo '<br /><br />';		
 		?>
 
 		<table class="data_table">
@@ -978,7 +1012,9 @@ if($_configuration['tracking_enabled'])
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
 	Display::display_footer();
-} else {
+} 
+else 
+{
 	?>
 	<link rel="stylesheet" type="text/css" href="<?php echo $clarolineRepositoryWeb ?>css/default.css" />
 	<?php

@@ -12,9 +12,9 @@
 
     Contact:
 		Dokeos
-		Rue des Palais 44 Paleizenstraat
+		Rue du Corbeau, 108
 		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+		info@dokeos.com
 */
 /**
 *	Exercise result
@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 14786 2008-04-08 14:11:46Z elixir_inter $
+* 	@version $Id: exercise_result.php 14840 2008-04-11 06:21:45Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */

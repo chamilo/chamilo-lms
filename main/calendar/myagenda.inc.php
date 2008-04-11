@@ -68,11 +68,12 @@ function get_agendaitems($courses_dbs, $month, $year)
 	global $_user;
 	global $_configuration;
 	global $setting_agenda_link;
+	
 
 	$items = array ();
 	// get agenda-items for every course
 	foreach ($courses_dbs as $key => $array_course_info)
-	{
+	{		
 		//databases of the courses
 		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info["db"]);
 		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info["db"]);
@@ -136,7 +137,8 @@ function get_agendaitems($courses_dbs, $month, $year)
 			$URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			if ($setting_agenda_link == 'coursecode')
 			{
-				$agenda_link = $array_course_info["visual_code"];
+				$title=$array_course_info['title'];
+				$agenda_link = substr($title, 0, 14);
 			}
 			else 
 			{
@@ -535,7 +537,8 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 
 			if ($setting_agenda_link == 'coursecode')
 			{
-				$agenda_link = $array_course_info["visual_code"];
+				$title=$array_course_info['title'];
+				$agenda_link = substr($title, 0, 14);
 			}
 			else 
 			{
@@ -651,8 +654,9 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 			$time= date("H:i",strtotime($item['start_date']));
 
 			if ($setting_agenda_link == 'coursecode')
-			{
-				$agenda_link = $array_course_info["visual_code"];
+			{				
+				$title=$array_course_info['title'];
+				$agenda_link = substr($title, 0, 14);
 			}
 			else 
 			{

@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 14573 2008-03-11 22:54:59Z yannoo $
+// $Id: tool_navigation_menu.inc.php 14846 2008-04-11 13:05:49Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -40,6 +40,13 @@ define('SHORTCUTS_VERTICAL',1);
 function get_navigation_items($include_admin_tools = false)
 {
 	global $is_courseMember;
+	global $_user;
+	global $_course;
+	
+	if (!empty($_course['db_name']))
+	{
+		$database = $_course['db_name'];
+	}
 
 	$navigation_items = array ();
 	$course_id = api_get_course_id();
@@ -48,7 +55,7 @@ function get_navigation_items($include_admin_tools = false)
 	{
 		$user_id = api_get_user_id();
 
-		$course_tools_table = Database :: get_course_table(TABLE_TOOL_LIST);
+		$course_tools_table = Database :: get_course_table(TABLE_TOOL_LIST,$database);
 
 		/*
 		--------------------------------------------------------------

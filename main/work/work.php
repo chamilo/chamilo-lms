@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 14835 2008-04-10 21:26:48Z juliomontoya $
+*  	@version $Id: work.php 14854 2008-04-11 15:42:13Z juliomontoya $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -740,7 +740,7 @@ if ($_POST['submitWork'] && $is_course_member && $check)
 			
 			//if we come from the group tools the groupid will be saved in $work_table
 
-			move_uploaded_file($_FILES['file']['tmp_name'], $updir . $my_cur_dir_path . $new_file_name);
+			@move_uploaded_file($_FILES['file']['tmp_name'], $updir . $my_cur_dir_path . $new_file_name);
 
 			$url = "work/" . $my_cur_dir_path . $new_file_name;
 						
@@ -855,11 +855,15 @@ if ($_POST['submitWork'] && $is_course_member && $check)
 	}
 	Security :: clear_token(); //clear the token to prevent re-executing the request with back button
 }
+
 if ($_POST['submitWork'] && $succeed && !$id) //last value is to check this is not "just" an edit
 {
+
 	//YW Tis part serve to send a e-mail to the tutors when a new file is sent
 	$send = api_get_course_setting('email_alert_manager_on_new_doc');
-	if ($send > 0) {
+	
+	if ($send > 0) 
+	{
 		// Lets predefine some variables. Be sure to change the from address!
 		$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -903,7 +907,9 @@ if ($_POST['submitWork'] && $succeed && !$id) //last value is to check this is n
 			}
 
 		}
-		if (count($emailto) > 0) {
+		
+		if (count($emailto) > 0) 
+		{
 			$emailto = implode(',', $emailto);
 			$emailfromaddr = get_setting('emailAdministrator');
 			$emailfromname = get_setting('siteName');
@@ -911,8 +917,8 @@ if ($_POST['submitWork'] && $succeed && !$id) //last value is to check this is n
 
 			// The body can be as long as you wish, and any combination of text and variables
 
-			//$emailbody=get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()." ($title)\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
-			$emailbody = get_lang('SendMailBody') . ' ' . api_get_path(WEB_CODE_PATH) . "work/work.php?" . api_get_cidreq() . " (" . stripslashes($title) . ")\n\n" . get_setting('administratorName') . " " . get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . get_setting('siteName') . "\n" . get_lang('Email') . " : " . get_setting('emailAdministrator');
+			//$emailbody=get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()." ($title)\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');			
+			$emailbody = get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;curdirpath=".$my_cur_dir_path." (" . stripslashes($title) . ")\n\n" . get_setting('administratorName') . " " . get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . get_setting('siteName') . "\n" . get_lang('Email') . " : " . get_setting('emailAdministrator');
 
 			// Here we are forming one large header line
 			// Every header must be followed by a \n except the last

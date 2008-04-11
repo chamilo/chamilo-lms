@@ -1592,3 +1592,5 @@ div.system_announcement {
 #chat_login_name {
 	color : #4171b5;
 }
+/* Quizzes tool */
+.quiz_export_link { float: right; }

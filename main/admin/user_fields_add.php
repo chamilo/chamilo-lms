@@ -120,6 +120,10 @@ Display::display_header($tool_name);
 if(!empty($_GET['message'])){
 	Display::display_normal_message($_GET['message']);
 }
+else
+{
+	Display::display_normal_message(get_lang('UserFieldsAddHelp'),false);
+}
 $form->display();
 /*
 ==============================================================================

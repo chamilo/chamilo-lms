@@ -33,4 +33,5 @@ $DocumentDeleted = "Dokument je bil odstranjen";
 $SendMailBody = "Uporabnik je prepisal dokument v objave teajnikov tvojega tečaja.";
 $DirDelete = "Odstrani mapo";
 $ValidateChanges = "Uveljavi spremembe";
+$FolderUpdated = "Mapa je bila ažurirana";
 ?>

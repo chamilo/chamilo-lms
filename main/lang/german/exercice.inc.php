@@ -235,4 +235,7 @@ $ClickLinkToViewComment = "Klicke nachfolgenden Link, um zu Deinem Account zu ge
 $Regards = "Mit freundlichen Grüßen";
 $AttemptVCCLong = "Dein Versuch an Test %s wurde vom Lehrer angesehen, kommentiert/korrigiert. Klick den nachfolgenden Link, um zu Deinem Account zu gelangen und Dein Examensblatt anzusehen.";
 $DearStudentEmailIntroduction = "Sehr geehrte(r) Teilnehmer(in),";
+$ExerciseFinished = "Übung beendet";
+$ResultsEnabled = "Resultate für Studenten aktiviert";
+$ResultsDisabled = "Resultate für Studenten deaktiviert";
 ?>

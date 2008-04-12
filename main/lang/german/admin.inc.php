@@ -723,4 +723,5 @@ $GradebookScoreDisplayColorSplitComment = "Die Prozentangabe, unter welcher die 
 $GradebookScoreDisplayUpperLimit = "Obere Grenze der Resultate anzeigen";
 $GradebookScoreDisplayUpperLimitComment = "Box auswählen, um Obere Grenze der Resultate anzuzeigen";
 $TabsGradebookEnableUpperLimit = "Anzeige der Obergrenze der Resultate aktivieren";
+$AddUserFields = "Benutzer Felder hinzufügen";
 ?>

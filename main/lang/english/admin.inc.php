@@ -723,4 +723,10 @@ $GradebookScoreDisplayColorSplitComment = "The percentage limit under which scor
 $GradebookScoreDisplayUpperLimit = "Display score upper limit";
 $GradebookScoreDisplayUpperLimitComment = "Tick the box to show the score\'s upper limit";
 $TabsGradebookEnableUpperLimit = "Enable score\'s upper limit display";
+$AddUserFields = "Add user fields";
+$FieldPossibleValues = "Possible values";
+$FieldPossibleValuesComment = "Only given for repetitive fields, split by semi-column (;)";
+$FieldTypeDate = "Date";
+$FieldTypeDatetime = "Date and time";
+$UserFieldsAddHelp = "Adding a user field is very easy:<br />- pick a one-word, lowercase identifier,<br />- select a type,<br />- pick a text that should appear to the user (if you use an existing translated name like BirthDate or UserSex, it will automatically get translated to any language),<br />- if you picked a multiple type (radio, select, multiple select), provide the possible choices (again, it can make use of the language variables defined in Dokeos), split by semi-column characters,<br />- for text types, you can choose a default value.<br /><br />Once you\'re done, add the field and choose whether you want to make it visible and modifiable. Making it modifiable but not visible is useless.";
 ?>

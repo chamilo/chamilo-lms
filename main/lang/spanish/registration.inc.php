@@ -164,4 +164,7 @@ $UsersUnsubscribed = "Los usuarios seleccionados han sido dados de baja en el cu
 $SystemUnableToSendEmailContact = "El sistema no ha podido enviarle el correo electrónico";
 $OpenIDCouldNotBeFoundPleaseRegister = "Este OpenID no se encuentra en nuestra base de datos. Por favor, regístrese para obtener una cuenta. Si ya tiene una cuenta con nosotros,  edite su perfil en la misma para añadir este OpenID";
 $UsernameMaxXCharacters = "El nombre de usuario puede tener como máximo una longitud de %s caracteres";
+$PictureUploaded = "Su imagen ha sido enviada";
+$ProductionUploaded = "Su trabajo ha sido enviado";
+$FolderUpdated = "Folder actualizado";
 ?>

@@ -166,4 +166,7 @@ $UsersUnsubscribed = "Os utilizadores seleccionados foram desinscritos do curso"
 $SystemUnableToSendEmailContact = "Não foi possível enviar a senha perdida/esquecida. Contactar o administrador da plataforma clicando no seguinte link: ";
 $OpenIDCouldNotBeFoundPleaseRegister = "Este OpenID não foi encontrado na nossa base de dados. Por favor, registe-se novamente. Se já está registado, conecte-se, edite o seu perfil no interior da sua conta e acrescente este OpenID.";
 $UsernameMaxXCharacters = "O Nome de Utilizador só pode ter um máximo de %s caracteres";
+$PictureUploaded = "A foto foi enviada";
+$ProductionUploaded = "O ficheiro foi enviado";
+$FolderUpdated = "Pasta actualizada";
 ?>

@@ -232,4 +232,11 @@ $ClickLinkToViewComment = "Click the link below to access  your account and view
 $Regards = "Regards";
 $AttemptVCCLong = "You attempt for the test %s has been viewed/commented/corrected by the teacher. Click the link below to access  your account and view your Examsheet.";
 $DearStudentEmailIntroduction = "Dear Student,";
+$ExerciseFinished = "Exercise Finished";
+$ResultsEnabled = "Results enabled for learners";
+$ResultsDisabled = "Results disabled for learners";
+$ExportWithUserFields = "Include user fields in export";
+$ExportWithoutUserFields = "Exclude user fields from export";
+$DisableResults = "Do not show results to learners";
+$EnableResults = "Show results to learners";
 ?>

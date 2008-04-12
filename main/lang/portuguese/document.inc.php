@@ -124,4 +124,5 @@ $DocumentSetAsTemplate = "Documento acrescentado como novo template";
 $DocumentUnsetAsTemplate = "Documento retirado como template";
 $AddAsTemplate = "Juntar como tabela";
 $RemoveAsTemplate = "Retirar tabela modelo";
+$ReadOnly = "Só leitura";
 ?>

@@ -233,4 +233,11 @@ $ClickLinkToViewComment = "Haga clic en el enlace inferior para acceder a su cue
 $Regards = "Cordialmente";
 $AttemptVCCLong = "Su intento en el ejercicio %s ha sido visto/comentado/corregido por el profesor. Haga clic en el enlace inferior para acceder a su cuenta y ver su hoja de ejercicios.";
 $DearStudentEmailIntroduction = "Estimado alumno,";
+$ExerciseFinished = "Ejercicio finalizado";
+$ResultsEnabled = "Modo autoevaluación activado. Ahora, al final del ejercicio los alumnos podrán ver las respuestas correctas.";
+$ResultsDisabled = "Modo examen activado. Ahora, al final del ejercicio los alumnos no podrán ver las respuestas correctas.";
+$ExportWithUserFields = "Incluir los campos de usuario en la exportación";
+$ExportWithoutUserFields = "Excluir en la exportación los campos de usuario";
+$DisableResults = "No mostrar los resultados a los alumnos";
+$EnableResults = "Mostrar los resultados a los alumnos";
 ?>

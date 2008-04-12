@@ -124,4 +124,5 @@ $DocumentSetAsTemplate = "Dokument določen kot nova predloga";
 $DocumentUnsetAsTemplate = "Dokument ni več predloga";
 $AddAsTemplate = "Dodaj kot predlogo";
 $RemoveAsTemplate = "Odstrani predlogo";
+$ReadOnly = "Le za branje";
 ?>

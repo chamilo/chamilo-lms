@@ -33,4 +33,5 @@ $DocumentDeleted = "Documento eliminato";
 $SendMailBody = "Un utente ha inviato un documento nella sezione Elaborati del tuo corso";
 $DirDelete = "Elimina la cartella";
 $ValidateChanges = "Conferma le modifiche";
+$FolderUpdated = "Cartella aggiornata";
 ?>

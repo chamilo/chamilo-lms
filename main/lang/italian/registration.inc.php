@@ -161,4 +161,7 @@ $UsersUnsubscribed = "Gli utenti selezionati sono stati cancellati dall\'elenco 
 $SystemUnableToSendEmailContact = "Il sistema non è in grado di inviare il messaggio e-mail di contatto";
 $OpenIDCouldNotBeFoundPleaseRegister = "L\'OpenID non è stato trovato nel database. Ti preghiamo di registrarti con di nuovo. Se sei già registrata/o modifica il tuo profilo e aggiungi l\'OpenID corretto.";
 $UsernameMaxXCharacters = "Il Nome Utente può avere una lunghezza massima di %s caratteri";
+$PictureUploaded = "L\'immagine è stata caricata";
+$ProductionUploaded = "Il file dei dati è stato caricato";
+$FolderUpdated = "Cartella caricata";
 ?>

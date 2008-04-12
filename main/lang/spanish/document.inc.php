@@ -124,4 +124,5 @@ $DocumentSetAsTemplate = "Documento convertido en una nueva plantilla";
 $DocumentUnsetAsTemplate = "El documento ha dejado de ser una plantilla";
 $AddAsTemplate = "Agregar como plantilla";
 $RemoveAsTemplate = "Quitar plantilla";
+$ReadOnly = "Sólo lectura";
 ?>

@@ -91,4 +91,5 @@ $NoCategoriesDefined = "No categories defined";
 $GroupsFromClasses = "Groups from classes";
 $GroupsFromClassesInfo = "Using this option, you can create groups based on the classes subscribed to your course.";
 $Group = "Group";
+$ForumOfGroup = "Forum of group: ";
 ?>

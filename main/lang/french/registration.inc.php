@@ -169,4 +169,7 @@ $UsersUnsubscribed = "Les utilisateurs sélectionnés ont été désinscrits de ce co
 $SystemUnableToSendEmailContact = "Système incapable d\'envoyer le contact e-mail";
 $OpenIDCouldNotBeFoundPleaseRegister = "Cet OpenID n\'est pas dans notre base de données. Merci de vous enregistrer sur notre portail en utilisant ce formulaire. Si vous disposez déjà d\'un compte utilisateur sur ce portail, merci d\'éditer votre profil afin d\'y ajouter cet OpenID";
 $UsernameMaxXCharacters = "Le nom d\'utilisateur doit être de %s caractères au maximum";
+$PictureUploaded = "Votre photo a été envoyée";
+$ProductionUploaded = "Votre production a été envoyée";
+$FolderUpdated = "Répertoire mis à jour";
 ?>

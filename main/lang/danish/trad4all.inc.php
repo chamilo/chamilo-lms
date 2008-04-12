@@ -450,7 +450,7 @@ $RemindInactiveLearnersMailSubject = "Inaktivitet er på %";
 $RemindInactiveLearnersMailContent = "Kære bruger,
 
 Du har ikke været % aktiv i % dage.";
-$OpenIDAuthentication = "OpenID authentication";
+$OpenIdAuthentication = "OpenID authentication";
 $UploadMaxSize = "Max størrelse ved upload";
 $Unknown = "Ukendt";
 $MoveUp = "Flyt op";

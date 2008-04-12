@@ -233,4 +233,7 @@ $ClickLinkToViewComment = "Kliknite spodnjo povezavo za dostop do vašega uporab
 $Regards = "Pozdrav";
 $AttemptVCCLong = "Vaš poskus testa %s je bil pregledan/komentiran/popravljen s strani učitelja. Kliknite spodnjo povezavo za dostop do vašega uporabniškega računa in vpogled v preglednico rezultatov.";
 $DearStudentEmailIntroduction = "Spoštovani tečajnik,";
+$ExerciseFinished = "Vaja je dokončana";
+$ResultsEnabled = "Prikaz rezultatov za tečajnike omogočen";
+$ResultsDisabled = "Prikaz rezultatov za tečajnike onemogočen";
 ?>

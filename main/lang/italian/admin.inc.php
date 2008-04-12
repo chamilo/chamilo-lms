@@ -725,4 +725,9 @@ $GradebookScoreDisplayColorSplitComment = "Il punteggio % sotto il quale si user
 $GradebookScoreDisplayUpperLimit = "Limitazione superiore del punteggio";
 $GradebookScoreDisplayUpperLimitComment = "Spunta la casella per mostrare il limite superiore";
 $TabsGradebookEnableUpperLimit = "Abilita la visualizzazione del punteggio limite superiore";
+$AddUserFields = "Aggiungi campi utente";
+$FieldPossibleValues = "Possibili valori";
+$FieldPossibleValuesComment = "I valori possibili devono essere indicati per i soli campi ripetitivi, separandoli con un punto e virgola (;)";
+$FieldTypeDate = "Data";
+$FieldTypeDatetime = "Data e ora";
 ?>

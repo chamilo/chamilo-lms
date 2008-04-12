@@ -113,7 +113,7 @@ $AdditonalUsersComment = "K odgovarjanju lahko povabite dodatne osebe, ki npr. n
 $MailTitle = "Naslov e-sporočila";
 $MailText = "Besedilo e-sporočila";
 $UseLinkSyntax = "Izbrani uporabniki bodo prejeli e-sporočilo z gornjim besedilom in unikatno povezavo, ki ji morajo slediti, da bi izpolnili vprašalnik. V primeru, da želite povezavo v vašem lastnem besedilu, na mestu, kjer želite to povezavo, vnesite oznako **link** (zvezdica zvezdica link zvezdica zvezdica). Oznaka bo pri pošiljanju avtomatično nadomeščena z ustrezno povezavo. V primeru, da oznake v svojem besedilu ne boste vnesli, se bo povezava dodala na koncu vašega e-sporočila.";
-$InvitationsSend = "vabilo poslano.";
+$InvitationsSend = "vabil poslanih.";
 $SurveyDeleted = "Vprašalnik je bil odstranjen.";
 $NoSurveysSelected = "Noben vprašalnik ni bil izbran.";
 $NumberOfQuestions = "Število vprašanj";
@@ -177,7 +177,7 @@ $DuplicateSurvey = "Podvoji evalvacijski vprašalnik";
 $EmptySurvey = "Počisti evalvacijski vprašalnik";
 $SurveyEmptied = "Odgovori evalvacijskega vprašalnika so bili uspešno odstranjeni";
 $SurveyNotAvailableYet = "Ta vprašalnik še ni dostopen. Poskusite ponovno kasneje. Hvala.";
-$PeopleAnswered = "Osebe so odgovorile";
+$PeopleAnswered = "oseb je odgovorilo";
 $AnonymousSurveyCannotKnowWhoAnswered = "Ta vprašalnik je anonimen. Ne morete videti, kdo je odgovarjal.";
 $IllegalSurveyId = "Neznan ID vprašalnika";
 ?>

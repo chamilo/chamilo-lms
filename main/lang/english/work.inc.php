@@ -33,4 +33,5 @@ $DocumentDeleted = "Document deleted";
 $SendMailBody = "A user posted a document in the Assignments tool of your course.";
 $DirDelete = "Delete directory";
 $ValidateChanges = "Validate changes";
+$FolderUpdated = "Folder updated";
 ?>

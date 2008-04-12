@@ -161,4 +161,7 @@ $UsersUnsubscribed = "Izbrani uporabnik je bil izpisan iz tečaja";
 $SystemUnableToSendEmailContact = "System ne more poslati e-pošte naslovniku";
 $OpenIDCouldNotBeFoundPleaseRegister = "Ta OpenID ne obstaja v naši podatkovni bazi. Prosimo, da se registrirajte za dodelitev novega uporabniškega računa. V primeru, da uporabniški račun na tem portalu že imate, ustrezno spremenite vaš profil, tako da dodate ta OpenID.";
 $UsernameMaxXCharacters = "Uporabniško ime je lahko dolgo največ %s znakov";
+$PictureUploaded = "Vaša slika je bila naložena";
+$ProductionUploaded = "Tvoja (produkcijska) datoteka je bila naložena";
+$FolderUpdated = "Mapa je bila ažurirana";
 ?>

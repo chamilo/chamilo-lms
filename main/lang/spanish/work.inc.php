@@ -33,4 +33,5 @@ $DocumentDeleted = "Documento eliminado";
 $SendMailBody = "Un usuario ha enviado un documento mediante la herramienta trabajos.";
 $DirDelete = "Eliminar el directorio";
 $ValidateChanges = "Confirmar los cambios";
+$FolderUpdated = "Folder actualizado";
 ?>

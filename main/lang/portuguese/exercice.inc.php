@@ -231,4 +231,7 @@ $ClickLinkToViewComment = "Clique no link seguinte para aceder à sua conta e ver
 $Regards = "Cumprimentos";
 $AttemptVCCLong = "A sua tentativa no exercício %s foi vista/comentada/corregida pelo professor. Clique no link em baixo para aceder à sua conta e ver a sua folha de exercícios.";
 $DearStudentEmailIntroduction = "Caro(a) Estudante,";
+$ExerciseFinished = "Exercício concluído";
+$ResultsEnabled = "Resultados permitidos para estudantes";
+$ResultsDisabled = "Resultados bloqueados para estudantes";
 ?>

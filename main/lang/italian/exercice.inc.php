@@ -231,4 +231,11 @@ $ClickLinkToViewComment = "Clicca su collegamento qui sotto per accedere al sist
 $Regards = "Cordialmente";
 $AttemptVCCLong = "Il test %s che hai svolto è stato visto/commentato/corretto dal docente. Clicca qui sotto per accedere al sistema e vedere gli esiti.";
 $DearStudentEmailIntroduction = "Caro corsista,";
+$ExerciseFinished = "Test completato";
+$ResultsEnabled = "Risutati attivati per i corsisti";
+$ResultsDisabled = "Risultati disabilitati per i corsisti";
+$ExportWithUserFields = "Includi i campi utente nell\'esportazione";
+$ExportWithoutUserFields = "Escludi i campi utente dall\'esportazione";
+$DisableResults = "Non mostrare i risultati ai corsisti";
+$EnableResults = "Mostra i risultati ai corsisti";
 ?>

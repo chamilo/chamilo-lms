@@ -724,4 +724,10 @@ $GradebookScoreDisplayColorSplitComment = "Le pourcentage limite sous lequel les
 $GradebookScoreDisplayUpperLimit = "Affichage de la limite supérieure";
 $GradebookScoreDisplayUpperLimitComment = "Cocher la case pour activer l\'affichage de la limite supérieure des scores";
 $TabsGradebookEnableUpperLimit = "Activer l\'affichage de la limite supérieure";
+$AddUserFields = "Ajout de champs utilisateurs";
+$FieldPossibleValues = "Valeurs possible";
+$FieldPossibleValuesComment = "Uniquement pour champs répétitifs, séparées par des point-virgules (;)";
+$FieldTypeDate = "Date";
+$FieldTypeDatetime = "Date et heure";
+$UserFieldsAddHelp = "L\'ajout de champs utilisateurs est aisé:<br />- sélectionnez un identifiant interne en un mot et en minuscules,<br />- sélectionnez un type,<br />- choisissez un titre qui aparraîtra pour les utilisateurs (il est possible de faire usage de variables de langues existantes comme BirthDate ou UserSex, qui seront automatiquement traduites),<br />- si vous avez choisi un type multiple (radio, barre déroulante ou barre déroulante à choix multiple), fournissez les différentes possibilités (variables de langues possibles), séparées par des points-virgules,<br />- pour les types texte, vous pouvez sélectionner une valeur par défaut.<br /><br />Une fois terminé, ajoutez le champ et choisissez dans la table résultante si vous désirez l\'afficher et le rendre modifiable. Le rendre modifiable sans l\'afficher est inutile...";
 ?>

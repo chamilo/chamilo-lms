@@ -450,7 +450,7 @@ $RemindInactiveLearnersMailSubject = "غير مفعّل على  %s";
 $RemindInactiveLearnersMailContent = "عزيزي المستخدم ،
 أنت غير مفعّل على %s منذ أكثر من %s أيام
 ";
-$OpenIDAuthentication = "توثيق الهوية المفتوحة ";
+$OpenIdAuthentication = "توثيق الهوية المفتوحة ";
 $UploadMaxSize = "تحميل اكبر حجم";
 $Unknown = "غير معروف";
 $MoveUp = "تحرك للاعلى";

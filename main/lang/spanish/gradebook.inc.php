@@ -86,4 +86,8 @@ $EditResult = "Editar resultados";
 $GradebookWelcomeMessage = "Bienvenido a la utilidad Cuaderno de calificaciones. Esta herramienta le permite establecer los objetivos que se deben alcanzar en un curso o conjunto de cursos, así como introducir puntuaciones externas en el sistema.";
 $CreateAllCat = "Crear todas las categorías del curso";
 $AddAllCat = "Se han añadido todas las categorías";
+$StatsStudent = "Estadísticas de";
+$Results = "Resultados";
+$Certificates = "Certificados";
+$Certificate = "Certificado";
 ?>

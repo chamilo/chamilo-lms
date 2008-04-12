@@ -231,4 +231,11 @@ $ClickLinkToViewComment = "Cliquez sur le lien ci-dessous pour accéder à votre c
 $Regards = "Cordialement";
 $AttemptVCCLong = "Votre tentative pour l\'exercice %s a été vue/commentée/corrigée par un responsable. Cliquez sur le ien suivant pour accéder à votre compte et voir la feuille d\'examen.";
 $DearStudentEmailIntroduction = "Cher étudiant,";
+$ExerciseFinished = "Exercice terminé";
+$ResultsEnabled = "Résultats activés pour les apprenants";
+$ResultsDisabled = "Résultats désactivés pour les apprenants";
+$ExportWithUserFields = "Inclure champs utilisateurs dans l\'export";
+$ExportWithoutUserFields = "Exclure champs utilisateurs de l\'export";
+$DisableResults = "Ne pas montrer les résultats aux apprenants";
+$EnableResults = "Montrer les résultats aux apprenants";
 ?>

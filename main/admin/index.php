@@ -1,4 +1,4 @@
-<?php // $Id: index.php 14848 2008-04-11 13:21:04Z elixir_inter $
+<?php // $Id: index.php 14869 2008-04-13 03:07:26Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -134,20 +134,8 @@ $keyword_url = Security::remove_XSS($_GET['keyword']);
   <?php if(!empty($phpMyAdminPath)): ?>
   <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang("AdminDatabases"); ?></a><br />(<?php echo get_lang("DBManagementOnlyForServerAdmin"); ?>)</li>
   <?php endif; ?>
-  <li><a href="configure_extensions.php"><?php echo get_lang('ConfigureExtensions'); ?></a></li>
-  <ul>
-  <li><a href="configure_extensions.php?display=visio"><?php echo get_lang('Visioconf'); ?></a></li>
-  <li><a href="configure_extensions.php?display=ppt2lp"><?php echo get_lang('Ppt2lp'); ?></a></li>
-  <li><a href="configure_extensions.php?display=ephorus"><?php echo get_lang('EphorusPlagiarismPrevention'); ?></a></li>
-  <li><a href="configure_extensions.php?display=search"><?php echo get_lang('SearchEngine'); ?></a></li>
-  <li><a href="configure_extensions.php?display=serverstats"><?php echo get_lang('ServerStatistics'); ?></a></li>
-  <li><a href="configure_extensions.php?display=bandwidthstats"><?php echo get_lang('BandWidthStatistics'); ?></a></li>
-  </ul>
-
-
  </ul>
 </div>
-
 
 <?php
 endif;
@@ -197,6 +185,25 @@ else if(api_is_platform_admin())
 </div>
 <?php
 }
+?>
+
+<div class="admin_section">
+ <h4>
+  <img src="../img/visio_meeting.gif" border="0" style="vertical-align: middle;" alt="" />
+  <?php echo ucfirst(get_lang('ConfigureExtensions')); ?>
+ </h4>
+ <ul>
+  <li><a href="configure_extensions.php?display=visio"><?php echo get_lang('Visioconf'); ?></a></li>
+  <li><a href="configure_extensions.php?display=ppt2lp"><?php echo get_lang('Ppt2lp'); ?></a></li>
+  <li><a href="configure_extensions.php?display=ephorus"><?php echo get_lang('EphorusPlagiarismPrevention'); ?></a></li>
+  <li><a href="configure_extensions.php?display=search"><?php echo get_lang('SearchEngine'); ?></a></li>
+  <li><a href="configure_extensions.php?display=serverstats"><?php echo get_lang('ServerStatistics'); ?></a></li>
+  <li><a href="configure_extensions.php?display=bandwidthstats"><?php echo get_lang('BandWidthStatistics'); ?></a></li>
+  </ul>
+</div>
+
+
+<?php
 if(api_is_platform_admin()):
 ?>
 

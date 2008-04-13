@@ -497,4 +497,15 @@ $AddAnAttachment = "Dodaj priponko";
 $FileComment = "Komentar (datoteke)";
 $FileName = "Ime datoteke";
 $SessionsAdmin = "Upravitelj seje";
+$MakeChangeable = "Naredi spremenljivo";
+$MakeUnchangeable = "Naredi nespremenljivo";
+$UserFields = "Uporabniška polja";
+$FieldShown = "Polje prikazano";
+$CannotShowField = "Polja ne morem narediti vidnega";
+$FieldHidden = "Polje je postalo nevidno";
+$CannotHideField = "Polja ne morem narediti nevidnega";
+$FieldMadeChangeable = "Polje je postalo spremenljivo";
+$CannotMakeFieldChangeable = "Polja ne morem narediti spremenljivega";
+$FieldMadeUnchangeable = "Polje je postalo nespremenljivo";
+$CannotMakeFieldUnchangeable = "Polja ne morem narediti nespremenljivega";
 ?>

@@ -730,4 +730,5 @@ $FieldPossibleValues = "Possibili valori";
 $FieldPossibleValuesComment = "I valori possibili devono essere indicati per i soli campi ripetitivi, separandoli con un punto e virgola (;)";
 $FieldTypeDate = "Data";
 $FieldTypeDatetime = "Data e ora";
+$UserFieldsAddHelp = "Per aggiungere un campo utente semplicemente:<br />- scegli un identificatore formato da una sola parola, minuscola,<br />- selezionane il tipo,<br />- immetti un testo che l\'utente possa vedere (un termine già tadotto come BirthDate o UserSex sarà automaticamente tradotto nelle altre lingue),<br />- se selezioni un tipo che permette più valori contemporanei (spunta o tendina multipla), indicane i possibili valori (anch\'essi possono essere variabili già definite in Dokeos), separati da punti e virgola,<br />- per il tipo testo puoi indicare il valore di default.<br /><br />Terminata la definizione conferma l\'aggiunta e scegli se il campo debba essere visibile (ed eventualmente  modificabile).";
 ?>

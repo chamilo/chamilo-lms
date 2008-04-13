@@ -237,7 +237,7 @@ $ExerciseFinished = "Ejercicio finalizado";
 $ResultsEnabled = "Modo autoevaluación activado. Ahora, al final del ejercicio los alumnos podrán ver las respuestas correctas.";
 $ResultsDisabled = "Modo examen activado. Ahora, al final del ejercicio los alumnos no podrán ver las respuestas correctas.";
 $ExportWithUserFields = "Incluir los campos de usuario en la exportación";
-$ExportWithoutUserFields = "Excluir en la exportación los campos de usuario";
+$ExportWithoutUserFields = "Excluir los campos de usuario de la exportación";
 $DisableResults = "No mostrar los resultados a los alumnos";
 $EnableResults = "Mostrar los resultados a los alumnos";
 ?>

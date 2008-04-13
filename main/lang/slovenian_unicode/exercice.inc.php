@@ -236,4 +236,8 @@ $DearStudentEmailIntroduction = "Spoštovani tečajnik,";
 $ExerciseFinished = "Vaja je dokončana";
 $ResultsEnabled = "Prikaz rezultatov za tečajnike omogočen";
 $ResultsDisabled = "Prikaz rezultatov za tečajnike onemogočen";
+$ExportWithUserFields = "Vključi uporabniška polja v izvoz";
+$ExportWithoutUserFields = "Izključi uporabniška polja iz izvoza";
+$DisableResults = "Ne prikaži rezultatov tečajnikom";
+$EnableResults = "Prikaži rezultate tečajnikom";
 ?>

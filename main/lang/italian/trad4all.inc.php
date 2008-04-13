@@ -502,4 +502,12 @@ $SessionsAdmin = "Amministratore delle sessioni";
 $MakeChangeable = "Rendi modificabile";
 $MakeUnchangeable = "Rendi non modificabile";
 $UserFields = "Campi utente";
+$FieldShown = "Campo visibile";
+$CannotShowField = "Campo non visibile";
+$FieldHidden = "Campo reso non visibile";
+$CannotHideField = "Il campo può essere solo visibile";
+$FieldMadeChangeable = "Campo reso modificabile";
+$CannotMakeFieldChangeable = "Il campo non può essere modificabile";
+$FieldMadeUnchangeable = "Campo reso non modificabile";
+$CannotMakeFieldUnchangeable = "Il campo deve poter essere modificabile";
 ?>

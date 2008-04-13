@@ -501,4 +501,12 @@ $SessionsAdmin = "Administrador de sesiones";
 $MakeChangeable = "Convertir en modificable";
 $MakeUnchangeable = "Convertir en no modificable";
 $UserFields = "Campos de usuario";
+$FieldShown = "Mostrar el campo";
+$CannotShowField = "No se puede hacer visible el campo";
+$FieldHidden = "Hacer el campo invisible";
+$CannotHideField = "No se puede ocultar el campo";
+$FieldMadeChangeable = "El campo ahora es modificable";
+$CannotMakeFieldChangeable = "No se puede convertir el campo en modificable";
+$FieldMadeUnchangeable = "Campo convertido en no modificable";
+$CannotMakeFieldUnchangeable = "No se puede convertir el campo en no modificable";
 ?>

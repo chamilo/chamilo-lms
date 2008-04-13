@@ -114,4 +114,5 @@ $ExtensionMBStringNotAvailable = "Estensione MBString non disponibile";
 $ExtensionMySQLNotAvailable = "Estensione MySQL non disponibile";
 $DokeosArtLicense = "Le immagini e le gallerie multimediali di Dokeos utilizzano icone e materiali provenienti dai repertori di Nuvola, Crystal Clear e Tango. Le altre immagini e media (come diagrammi e animazioni Flash) provengono da Wikimedia e dai corsi di Pakdel e di Denis Hoa e sono rilasciate con il loro permesso con licenza BY-SA Creative Common. Per dettagli sulla licenza vedi <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">il sito di CC</a>, ed il collegamento a piè di pagina,  che punta al testo completo della licenza.";
 $PleasGoBackToStep1 = "Ritorna al passo 1";
+$OptionalParameters = "Parametri opzionali";
 ?>

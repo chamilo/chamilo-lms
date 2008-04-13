@@ -725,4 +725,9 @@ $GradebookScoreDisplayUpperLimit = "Prikaži zgornjo mejo rezultata";
 $GradebookScoreDisplayUpperLimitComment = "Označi, da omogočiš prikaz zgornje meje rezultata";
 $TabsGradebookEnableUpperLimit = "Omogoči prikaz zgornje meje rezultata";
 $AddUserFields = "Dodaj uporabniška polja";
+$FieldPossibleValues = "Možne vrednosti";
+$FieldPossibleValuesComment = "Le za ponavljajoča se polja, ločena s podpičjem (;)";
+$FieldTypeDate = "Datum";
+$FieldTypeDatetime = "Datum in čas";
+$UserFieldsAddHelp = "Dodajanje uporabniških polj je preprosto:<br />- izberite besedo, identifikator, ki ga sestavljajo male črke<br />- izberite tip,<br />- izberite besedilo, ki se bo prikazalo uporabniku (če boste uporabili besedo, ki predstavlja Dokeos jezikovno spremenljivko, kot sta npr. BirthDate ali UserSex, se bo ta avtomatično prevedla v poljuben jezik),<br />- v primeru, da izberete tip z večkratnimi vrednostmi odgovorov (izbirni gumbi, izbira, večkratna izbira), podajte vse možnosti izbire (v primeru rabe jezikovnih spremenljivk Dokeos, bo prišlo do avtomatičnega prevoda), ločene z znakom za podpičje,<br />- za besedilne tipe lahko podate privzete vrednosti.<br /><br />Na koncu dodajte polje in izberite enega od načinov vidnosti in spremenljivosti. Spremenljivo polje, ki ni vidno, je neuporabno.";
 ?>

@@ -1,4 +1,4 @@
-<?php // $Id: $
+<?php // $Id: user_fields_add.php 14874 2008-04-13 19:25:19Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -120,11 +120,12 @@ Display::display_header($tool_name);
 if(!empty($_GET['message'])){
 	Display::display_normal_message($_GET['message']);
 }
-else
-{
-	Display::display_normal_message(get_lang('UserFieldsAddHelp'),false);
-}
+//else
+//{
+	//Display::display_normal_message(get_lang('UserFieldsAddHelp'),false);
+//}
 $form->display();
+echo '<br /><img src="../img/add_user_field_howto.png" alt="'.get_lang('AddUserFields').'" />';
 /*
 ==============================================================================
 		FOOTER

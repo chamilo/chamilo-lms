@@ -579,6 +579,7 @@ function update_Db_course($courseDbName)
 		random smallint(6) NOT NULL default 0,
 		active tinyint NOT NULL default 0,
 		results_disabled TINYINT UNSIGNED NOT NULL DEFAULT 0,
+		access_condition TEXT DEFAULT NULL,
 		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
@@ -1341,6 +1342,7 @@ function update_Db_course($courseDbName)
 			  invite_mail text NOT NULL,
 			  reminder_mail text NOT NULL,
 			  anonymous enum('0','1') NOT NULL default '0',
+			  access_condition TEXT DEFAULT NULL,
 			  PRIMARY KEY  (survey_id)
 			)";
 

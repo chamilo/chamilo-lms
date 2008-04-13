@@ -120,3 +120,5 @@ CREATE TABLE forum_attachment (id int NOT NULL auto_increment, path varchar(255)
 ALTER TABLE group_category ADD forum_state TINYINT DEFAULT 0 AFTER announcements_state;
 UPDATE tool SET category='interaction', admin='0', visibility='1' WHERE name='survey';
 CREATE TABLE  forum_notification (user_id int(11) , forum_id varchar(11), thread_id varchar(11), post_id varchar(11), KEY user_id (user_id), KEY forum_id (forum_id));
+ALTER TABLE quiz ADD access_condition text DEFAULT NULL;
+ALTER TABLE survey ADD access_condition text DEFAULT NULL;

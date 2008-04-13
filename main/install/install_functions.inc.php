@@ -705,10 +705,18 @@ function display_license_agreement()
 /**
 * Displays a parameter in a table row.
 * Used by the display_database_settings_form function.
+* @param	string	Type of install
+* @param	string	Name of parameter
+* @param	string	Field name (in the HTML form)
+* @param	string	Field value
+* @param	string	Extra notice (to show on the right side)
+* @param	boolean	Whether to display in update mode
+* @param	string	Additional attribute for the <tr> element
+* @return	void	Direct output	
 */
-function display_database_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $extra_notice, $display_when_update = 'true')
+function display_database_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $extra_notice, $display_when_update = true, $tr_attribute='')
 {
-	echo "<tr>\n";
+	echo "<tr ".$tr_attribute.">\n";
 	echo "<td>$parameter_name&nbsp;&nbsp;</td>\n";
 	if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update)
 	{
@@ -789,6 +797,10 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 		echo "<h2>" . display_step_sequence() .get_lang("DBSetting") . "</h2>";
 		echo get_lang("DBSettingUpgradeIntro");
 	}else{
+		if(empty($dbPrefixForm)) //make sure there is a default value for db prefix
+		{
+			$dbPrefixForm = 'dokeos_';
+		}
 		echo "<h2>" . display_step_sequence() .get_lang("DBSetting") . "</h2>";
 		echo get_lang("DBSettingIntro");
 	}
@@ -822,15 +834,16 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	//database prefix
 	display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, get_lang('DbPrefixCom'));
 	//fields for the four standard Dokeos databases
-	display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm', $dbNameForm, '&nbsp;');
-	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;');
+	echo '<tr><td colspan="3"><a href="" onclick="show_hide_option();return false;"><img src="../img/add_na.gif" alt="show-hide" />'.get_lang('OptionalParameters','').'</a></td></tr>';
+	display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm', $dbNameForm, '&nbsp;',null,'id="optional_param1" style="display:none;"');
+	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;',null,'id="optional_param2" style="display:none;"');
 	if($installType == 'update' && in_array($_POST['old_version'],$update_from_version_6))
 	{
-		display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;');
+		display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;',null,'id="optional_param3" style="display:none;"');
 	}
-	display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;');
+	display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;',null,'id="optional_param4" style="display:none;"');
 	?>
-	<tr>
+	<tr id="optional_param5" style="display:none;">
 	  <td><?php echo get_lang('EnableTracking'); ?> </td>
 
 	  <?php if($installType == 'update'): ?>
@@ -844,7 +857,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 
 	  <td>&nbsp;</td>
 	</tr>
-	<tr>
+	<tr id="optional_param6" style="display:none;">
 	  <td><?php echo get_lang('SingleDb'); ?> </td>
 
 	  <?php if($installType == 'update'): ?>
@@ -858,6 +871,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 
 	  <td>&nbsp;</td>
 	</tr>
+	</div>
 	<tr>
 		<td><input type="submit" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" /> </td>
 		<?php $dbConnect = test_db_connect ($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm);

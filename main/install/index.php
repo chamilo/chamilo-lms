@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2007 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -19,7 +19,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -345,6 +345,38 @@ elseif (!empty($_POST['step5']))
 		@import "../css/default/default.css";
 		/*]]>*/
 	</style>
+	<script language="javascript">
+		init_visibility=0;
+		function show_hide_option()
+		{
+			if(init_visibility == 0)
+			{
+				document.getElementById('optional_param1').style.display = '';
+				document.getElementById('optional_param2').style.display = '';
+				if(document.getElementById('optional_param3'))
+				{
+					document.getElementById('optional_param3').style.display = '';
+				}
+				document.getElementById('optional_param4').style.display = '';
+				document.getElementById('optional_param5').style.display = '';
+				document.getElementById('optional_param6').style.display = '';
+				init_visibility = 1;
+			}
+			else
+			{
+				document.getElementById('optional_param1').style.display = 'none';
+				document.getElementById('optional_param2').style.display = 'none';
+				if(document.getElementById('optional_param3'))
+				{
+					document.getElementById('optional_param3').style.display = 'none';
+				}
+				document.getElementById('optional_param4').style.display = 'none';
+				document.getElementById('optional_param5').style.display = 'none';
+				document.getElementById('optional_param6').style.display = 'none';
+				init_visibility = 0;				
+			}
+		}
+	</script>
 <?php if(!empty($charset)){ ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>" />
 <?php } ?>

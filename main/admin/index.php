@@ -1,4 +1,4 @@
-<?php // $Id: index.php 14869 2008-04-13 03:07:26Z yannoo $
+<?php // $Id: index.php 14872 2008-04-13 18:55:06Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -87,7 +87,7 @@ $keyword_url = Security::remove_XSS($_GET['keyword']);
 	<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
 	</form></li>
 	<li>
-<a href="user_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a>
+<a href="user_list.php?search=advanced"><?php echo ucfirst(get_lang('AdvancedSearch')); ?></a>
 
 </li>
 <li><a href="user_list.php"><?php echo get_lang('UserList') ?></a></li>
@@ -106,7 +106,7 @@ $keyword_url = Security::remove_XSS($_GET['keyword']);
 	<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
 	</form></li>
 	<li>
-	<a href="course_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a>
+	<a href="course_list.php?search=advanced"><?php echo ucfirst(get_lang('AdvancedSearch')); ?></a>
 
 </li>
 <li><a href="course_list.php"><?php echo get_lang('CourseList') ?></a></li>

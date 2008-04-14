@@ -1,4 +1,4 @@
-<?php // $Id: document.php 14776 2008-04-08 06:55:16Z elixir_inter $
+<?php // $Id: document.php 14883 2008-04-14 16:32:14Z juliomontoya $
 
 /*
 ==============================================================================
@@ -411,10 +411,12 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		{
 			$added_slash = ($curdirpath=='/')?'':'/';
 			$dir_name = $curdirpath.$added_slash.replace_dangerous_char($post_dir_name);
+			$dir_check=$base_work_dir.''.$dir_name;
 			
-			if(!is_dir($dir_name))
+			if(!is_dir($dir_check))
 			{
 				$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name,$post_dir_name);
+				
 				if($created_dir)
 				{
 					Display::display_confirmation_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>',false);
@@ -426,6 +428,10 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 				{
 					Display::display_error_message(get_lang('CannotCreateDir'));
 				}
+			}
+			else
+			{
+				Display::display_error_message(get_lang('CannotCreateDir'));
 			}
 		}
 	}
@@ -545,7 +551,10 @@ $docs_and_folders = DocumentManager::get_all_document_data($_course,$curdirpath,
 <div id="folderselector" style="float:left;margin-right:10px;margin-top:5px;">
 <?php
 $folders = DocumentManager::get_all_document_folders($_course,$to_group_id,$is_allowed_to_edit || $group_member_with_upload_rights);
-if($folders===false){$folders = array();}
+if($folders===false)
+{
+	$folders = array();
+}
 echo(build_directory_selector($folders,$curdirpath,$group_properties['directory'],true));
 ?>
 </div>

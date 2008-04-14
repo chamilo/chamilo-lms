@@ -48,16 +48,19 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 	$folder_titles = array();
 	if(get_setting('use_document_title') == 'true')
 	{
-		$escaped_folders = $folders;
-		array_walk($escaped_folders, 'mysql_real_escape_string');
-		$folder_sql = implode("','",$escaped_folders);
-		$doc_table = Database::get_course_table(TABLE_DOCUMENT);
-		$sql = "SELECT * FROM $doc_table WHERE filetype='folder' AND path IN ('".$folder_sql."')";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$folder_titles = array();
-		while($obj = mysql_fetch_object($res))
+		if (is_array($folders))
 		{
-			$folder_titles[$obj->path] = $obj->title;	
+			$escaped_folders = $folders;
+			array_walk($escaped_folders, 'mysql_real_escape_string');
+			$folder_sql = implode("','",$escaped_folders);
+			$doc_table = Database::get_course_table(TABLE_DOCUMENT);
+			$sql = "SELECT * FROM $doc_table WHERE filetype='folder' AND path IN ('".$folder_sql."')";
+			$res = api_sql_query($sql,__FILE__,__LINE__);
+			$folder_titles = array();
+			while($obj = mysql_fetch_object($res))
+			{
+				$folder_titles[$obj->path] = $obj->title;	
+			}
 		}
 	}
 	else

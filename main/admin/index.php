@@ -1,4 +1,4 @@
-<?php // $Id: index.php 14872 2008-04-13 18:55:06Z yannoo $
+<?php // $Id: index.php 14875 2008-04-14 07:06:32Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -187,6 +187,13 @@ else if(api_is_platform_admin())
 }
 ?>
 
+
+
+<?php
+if(api_is_platform_admin()):
+?>
+
+
 <div class="admin_section">
  <h4>
   <img src="../img/visio_meeting.gif" border="0" style="vertical-align: middle;" alt="" />
@@ -201,12 +208,6 @@ else if(api_is_platform_admin())
   <li><a href="configure_extensions.php?display=bandwidthstats"><?php echo get_lang('BandWidthStatistics'); ?></a></li>
   </ul>
 </div>
-
-
-<?php
-if(api_is_platform_admin()):
-?>
-
 
 <div class="admin_section">
  <h4>

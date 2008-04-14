@@ -31,7 +31,7 @@ $dirs = $manager->getDirs();
 	<?php
 	//It's a teacher
 		if(api_is_allowed_to_edit()){
-			echo "window.resizeTo(600, 430);";
+			echo "window.resizeTo(600, 450);";
 		}
 		else{
 			echo "window.resizeTo(600, 125);";

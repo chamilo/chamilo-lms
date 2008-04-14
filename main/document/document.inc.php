@@ -330,6 +330,12 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 	return $form;
 }
 
+
+/**
+ * get the path translated with title of docs and folders
+ * @param string the real path
+ * @return the path which should be displayed
+ */
 function get_titles_of_path($path)
 {
 	global $tmp_folders_titles;

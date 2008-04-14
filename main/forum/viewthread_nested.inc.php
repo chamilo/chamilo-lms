@@ -160,7 +160,7 @@ foreach ($rows as $post)
 		$realname=$attachment_list['path'];			
 		$user_filename=$attachment_list['filename'];
 						
-		echo Display::return_icon('attachment.gif',get_lang('attachment'));
+		echo Display::return_icon('attachment.gif',get_lang('Attachment'));
 		echo '<a href="download.php?file=';		
 		echo $realname;
 		echo ' "> '.$user_filename.' </a>';

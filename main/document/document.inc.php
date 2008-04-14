@@ -1,9 +1,9 @@
-<?php // $Id: document.inc.php 13981 2007-12-08 23:43:58Z yannoo
+<?php // $Id: document.inc.php 14885 2008-04-14 16:55:13Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -57,7 +57,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 			$sql = "SELECT * FROM $doc_table WHERE filetype='folder' AND path IN ('".$folder_sql."')";
 			$res = api_sql_query($sql,__FILE__,__LINE__);
 			$folder_titles = array();
-			while($obj = mysql_fetch_object($res))
+			while($obj = Database::fetch_object($res))
 			{
 				$folder_titles[$obj->path] = $obj->title;	
 			}
@@ -362,9 +362,9 @@ function get_titles_of_path($path)
 		}
 		else
 		{
-			$sql = 'SELECT title FROM '.Database::get_course_table(TABLE_DOCUMENT).' WHERE path LIKE "'.$tmp_path.'"';
+			$sql = 'SELECT title FROM '.Database::get_course_table(TABLE_DOCUMENT).' WHERE path LIKE BINARY "'.$tmp_path.'"';
 			$rs = api_sql_query($sql,__FILE__,__LINE__);
-			$tmp_title = '/'.mysql_result($rs,0,0);
+			$tmp_title = '/'.Database::result($rs,0,0);
 			$path_displayed .= $tmp_title;
 			$tmp_folders_titles[$tmp_path] = $tmp_title;
 		}

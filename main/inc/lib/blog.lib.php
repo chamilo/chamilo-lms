@@ -2518,7 +2518,7 @@ class Blog
 			$numberofdays[2] = 29;
 
 		//Get the first day of the month
-		$dayone = getdate(mktime(0, 0, 0, $month, 1, $year));
+		$dayone = getdate(mktime(0, 0, 0, $month, 1, $year));		
 		$monthName = $MonthsLong[$month-1];
 
 		//Start the week on monday
@@ -2537,7 +2537,7 @@ class Blog
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
 		// We will create an array of days on which there are posts.
-		if(mysql_num_rows($result) > 0)
+		if( Database::num_rows($result) > 0)
 		{
 			while($blog_post = mysql_fetch_array($result))
 			{
@@ -2580,11 +2580,11 @@ class Blog
 			}
 		}
 
-		echo 	"<table id=\"smallcalendar\">\n",
+		echo 	'<table id="smallcalendar">',
 				"<tr id=\"title\">\n",
-				"<td width=\"10%\"><a href=\"", $backwardsURL, "\">�</a></td>\n",
-				"<td width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n",
-				"<td width=\"10%\"><a href=\"", $forewardsURL, "\">�</a></td>\n", "</tr>\n";
+				"<td width=\"10%\"><a href=\"", $backwardsURL, "\">&laquo;</a></td>\n",
+				"<td align=\"center\" width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n",
+				"<td width=\"10%\" align=\"right\"><a href=\"", $forewardsURL, "\">&raquo;</a></td>\n", "</tr>\n";
 
 		echo "<tr>\n";
 
@@ -2623,11 +2623,19 @@ class Blog
 						echo '<a href="blog.php?blog_id=' . $blog_id . '&amp;filter=' . $year . '-' . $month . '-' . $curday . '&amp;month=' . $month . '&amp;year=' . $year . '" title="' . get_lang('ViewPostsOfThisDay') . '">' . $curday . '</a>';
 					else
 						echo $dayheader;
-
-					// Add tasks to calendar
-					foreach ($tasks[$curday] as $task)
-						echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $task['blog_id'] . '&amp;task_id='.stripslashes($task['task_id']) . '" title="� ' . $task['title'] . ' � ' . get_lang('InBlog') . ' � ' . $task['blog_name'] . ' � - ' . get_lang('ExecuteThisTask') . '"><img src="../img/blog_task.gif" alt="Task" /></a>';
-
+			
+					if (count($tasks) > 0) 
+					{
+						if (is_array($tasks[$curday])) 
+						{
+							// Add tasks to calendar
+							foreach ($tasks[$curday] as $task)
+							{
+								echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $task['blog_id'] . '&amp;task_id='.stripslashes($task['task_id']) . '" title="� ' . $task['title'] . ' � ' . get_lang('InBlog') . ' � ' . $task['blog_name'] . ' � - ' . get_lang('ExecuteThisTask') . '"><img src="../img/blog_task.gif" alt="Task" /></a>';
+							}
+						}
+					}
+					
 					echo "</td>\n";
 
 					$curday ++;

@@ -292,7 +292,14 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 				//3. inside a subfolder of the folder you want to move
 				if(($curdirpath!=$folder) && ($folder!=$move_file) && (substr($folder,0,strlen($move_file)+1) != $move_file.'/'))
 				{
-					$form .= '<option value="'.$folder.'">'.$folder.'</option>'."\n";
+					$path_displayed = $folder;
+					
+					// if document title is used, we have to display titles instead of real paths...
+					if(api_get_setting('use_document_title'))
+					{
+						$path_displayed = get_titles_of_path($folder);
+					}
+					$form .= '<option value="'.$folder.'">'.$path_displayed.'</option>'."\n";
 				}
 			}
 		}
@@ -303,8 +310,14 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 		{	
 			if(($curdirpath!=$folder) && ($folder!=$move_file) && (substr($folder,0,strlen($move_file)+1) != $move_file.'/'))//cannot copy dir into his own subdir
 			{
-				$display_folder = substr($folder,strlen($group_dir));
+				if(api_get_setting('use_document_title'))
+				{
+					$path_displayed = get_titles_of_path($folder);
+				}
+				
+				$display_folder = substr($path_displayed,strlen($group_dir));
 				$display_folder = ($display_folder == '')?'/ ('.get_lang('HomeDirectory').')':$display_folder;
+								
 				$form .= '<option value="'.$folder.'">'.$display_folder.'</option>'."\n";
 			}
 		}
@@ -315,5 +328,38 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 	$form .= '</form>';
 
 	return $form;
+}
+
+function get_titles_of_path($path)
+{
+	global $tmp_folders_titles;
+
+	$nb_slashes = substr_count($path,'/');
+	$tmp_path = '';
+	$current_slash_pos = 0;
+	$path_displayed = '';
+	for($i=0; $i<$nb_slashes; $i++)
+	{ // foreach folders of the path, retrieve title.
+	
+		$current_slash_pos = strpos($path,'/',$current_slash_pos+1);
+		$tmp_path = substr($path,strpos($path,'/',0),$current_slash_pos);
+		
+		if(empty($tmp_path)) // if empty, then we are in the final part of the path
+			$tmp_path = $path;
+			
+		if(!empty($tmp_folders_titles[$tmp_path])) // if this path has soon been stored here we don't need a new query
+		{
+			$path_displayed .= $tmp_folders_titles[$tmp_path];
+		}
+		else
+		{
+			$sql = 'SELECT title FROM '.Database::get_course_table(TABLE_DOCUMENT).' WHERE path LIKE "'.$tmp_path.'"';
+			$rs = api_sql_query($sql,__FILE__,__LINE__);
+			$tmp_title = '/'.mysql_result($rs,0,0);
+			$path_displayed .= $tmp_title;
+			$tmp_folders_titles[$tmp_path] = $tmp_title;
+		}
+	}
+	return $path_displayed;
 }
 ?>

@@ -1,10 +1,10 @@
 <?php
-// $Id: create_document.php 14805 2008-04-09 14:44:54Z elixir_inter $
+// $Id: create_document.php 14886 2008-04-14 17:42:08Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -20,7 +20,9 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+	
 ==============================================================================
 */
 /**
@@ -260,19 +262,54 @@ $renderer = & $form->defaultRenderer();
 //$filename_template = str_replace('{element}', "<tt>$display_dir</tt> {element} <tt>.html</tt>", $renderer->_elementTemplate);
 $filename_template = str_replace('{element}', "{element}", $renderer->_elementTemplate);
 $renderer->setElementTemplate($filename_template, 'filename');
+
+// initialize group array
+$group = array();
+	
 // If allowed, add element for document title
 if (api_get_setting('use_document_title') == 'true')
-{
-	$form->add_textfield('title', get_lang('Title'),true,'class="input_titles" id="title"');
+{	
+	//$group[]= $form->add_textfield('title', get_lang('Title'),true,'class="input_titles" id="title"');
+	// replace the 	add_textfield with this	
+	$group[]=$form->createElement('text','title',get_lang('Title'),'class="input_titles" id="title"');
+	//$form->applyFilter('title','trim');		
+	//$form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');		
 }
 else
-{	
-	$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles" id="filename"  onblur="check_if_still_empty()"');
-	$form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
+{		
+	//$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles" id="filename"  onblur="check_if_still_empty()"');
+	// replace the 	add_textfield with this 
+	$group[]=$form->createElement('text','filename',get_lang('FileName'),'class="input_titles" id="filename"  onblur="check_if_still_empty()"');
+	//$form->applyFilter('filename','trim');		
+	//$form->addRule('filename', get_lang('ThisFieldIsRequired'), 'required');				
+	//$form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
 }
 
-$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
-$form->addElement('checkbox','readonly',get_lang('ReadOnly'));
+//$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
+$group[]= $form->createElement('checkbox','readonly','',get_lang('ReadOnly'));
+
+// add group to the form
+$form->addGroup($group, 'filename_group', get_lang('FileName') ,'&nbsp;&nbsp;&nbsp;', false);
+$form->addRule('filename_group', get_lang('ThisFieldIsRequired'), 'required');
+
+if (api_get_setting('use_document_title') == 'true')
+{			
+	$form->addGroupRule('filename_group', array(
+	  'title' => array(
+	    array(get_lang('ThisFieldIsRequired'), 'required'),
+	    array(get_lang('FileExists'),'callback', 'document_exists')
+	    )
+	));
+}
+else
+{
+	$form->addGroupRule('filename_group', array(
+	  'filename' => array(
+	    array(get_lang('ThisFieldIsRequired'), 'required'),
+	    array(get_lang('FileExists'),'callback', 'document_exists')
+	    )
+	));
+}
 
 $form->addElement('submit', 'submit', get_lang('Ok'));
 
@@ -288,6 +325,9 @@ if ($form->validate())
 {
 	$values = $form->exportValues();
 	$readonly = isset($values['readonly']) ? 1 : 0;
+	$values['title']=trim($values['title']);
+	$values['filename']=trim($values['filename']);
+	
 	if (api_get_setting('use_document_title') != 'true')
 	{
 		$values['title'] = $values['filename'];
@@ -296,6 +336,7 @@ if ($form->validate())
 	{
 		$values['filename'] = $values['title'];
 	}
+	
 	$filename = replace_accents($values['filename']);
 	$texte = $values['content'];
 	$title = $values['filename'];

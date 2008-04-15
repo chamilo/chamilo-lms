@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2007 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -18,7 +18,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -449,6 +449,16 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						//error_log($sql,0);
 					}
 					unset($users_list);
+
+					$sql_orig = "SELECT id, tutor_id FROM ".$prefix_course."group_info";
+					$res_orig = mysql_query($sql_orig);
+					$order = 1;
+					while($row = mysql_fetch_array($res_orig)){
+						$sql = "INSERT INTO ".$prefix_course."group_rel_tutor " .
+								"(user_id,group_id) VALUES " .
+								"('".$row['tutor_id']."','".$row['id']."')";
+						$res = mysql_query($sql);
+					}
 				}
 			}
 		}

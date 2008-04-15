@@ -136,7 +136,7 @@ if(1)
 
 	// Create a sortable table with user-data
 	$parameters['sec_token'] = Security::get_token();
-	$column_show = array(0,1,1,1,1,1,1,1,0);
+	$column_show = array(1,1,1,1,1,1,1,1,0);
 	$column_order = array(1,2,3,4,5,6,7,8,9);
 	$extra_fields = UserManager::get_extra_fields(0,50,5,'ASC');
  

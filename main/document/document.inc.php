@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 14907 2008-04-15 20:21:15Z juliomontoya $
+<?php // $Id: document.inc.php 14908 2008-04-15 20:36:40Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -254,8 +254,8 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$
 	$visibility_command = ($visibility==0)?'set_visible':'set_invisible';
 	$curdirpath = urlencode($curdirpath);
 	
-	$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
-	
+	$modify_icons = '';
+		
 	if ($is_read_only)
 	{
 		$modify_icons = '<img src="../img/edit_na.gif" border="0" title="'.get_lang('Modify').'" alt="" />';		
@@ -278,9 +278,7 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$
 		else{
 			$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;remove_as_template='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/wizard_gray_small.gif" border="0" title="'.get_lang('RemoveAsTemplate').'" alt=""'.get_lang('RemoveAsTemplate').'" /></a>';
 		}
-	}
-	
-	
+	}	
 	return $modify_icons;
 }
 

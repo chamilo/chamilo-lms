@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 14885 2008-04-14 16:55:13Z yannoo $
+<?php // $Id: document.inc.php 14907 2008-04-15 20:21:15Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -183,7 +183,8 @@ function create_document_link($www,$title,$path,$filetype,$size,$visibility)
 			$target='_blank';
 		}
 	}
-	else {
+	else 
+	{
 		$url=api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$url_path.$req_gid;
 	}
 	//the little download icon
@@ -220,7 +221,7 @@ function build_document_icon_tag($type,$path)
  * @param int $id dbase id of the document
  * @return string html img tags with hyperlinks
  */
-function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template)
+function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$is_read_only=0)
 {
 	if(isset($_SESSION['_gid']))
 	{
@@ -254,12 +255,24 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template)
 	$curdirpath = urlencode($curdirpath);
 	
 	$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
+	
+	if ($is_read_only)
+	{
+		$modify_icons = '<img src="../img/edit_na.gif" border="0" title="'.get_lang('Modify').'" alt="" />';		
+	}
+	else
+	{
+		$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
+	}
+	
 	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';
 	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$req_gid.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
 	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
 	
-	if($type == 'file' && pathinfo($path,PATHINFO_EXTENSION)=='html'){
-		if($is_template==0){
+	if($type == 'file' && pathinfo($path,PATHINFO_EXTENSION)=='html')
+	{
+		if($is_template==0)
+		{
 			$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;add_as_template='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/wizard_small.gif" border="0" title="'.get_lang('AddAsTemplate').'" alt="'.get_lang('AddAsTemplate').'" /></a>';
 		}
 		else{

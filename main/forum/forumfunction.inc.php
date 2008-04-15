@@ -402,8 +402,8 @@ function store_forumcategory($values)
 
 	// find the max cat_order. The new forum category is added at the end => max cat_order + &
 	$sql="SELECT MAX(cat_order) as sort_max FROM ".Database::escape_string($table_categories);
-	$result=api_sql_query($sql);
-	$row=mysql_fetch_array($result);
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$row=Database::fetch_array($result);
 	$new_max=$row['sort_max']+1;
 	
 	$clean_cat_title=Security::remove_XSS(Database::escape_string(htmlspecialchars($values['forum_category_title'])));
@@ -411,16 +411,16 @@ function store_forumcategory($values)
 	if (isset($values['forum_category_id']))
 	{ // storing an edit
 		$sql="UPDATE ".$table_categories." SET cat_title='".$clean_cat_title."', cat_comment='".Database::escape_string($values['forum_category_comment'])."' WHERE cat_id='".Database::escape_string($values['forum_category_id'])."'";
-		api_sql_query($sql);
-		$last_id=mysql_insert_id();
+		api_sql_query($sql,__FILE__,__LINE__);
+		$last_id=Database::get_last_insert_id();
 		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $values['forum_category_id'],"ForumCategoryAdded", api_get_user_id());
 		$return_message=get_lang('ForumCategoryEdited');
 	}
 	else
 	{
 		$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order) VALUES ('".$clean_cat_title."','".Database::escape_string($values['forum_category_comment'])."','".Database::escape_string($new_max)."')";
-		api_sql_query($sql);
-		$last_id=mysql_insert_id();
+		api_sql_query($sql,__FILE__,__LINE__);
+		$last_id=Database::get_last_insert_id();
 		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $last_id,"ForumCategoryAdded", api_get_user_id());
 		$return_message=get_lang('ForumCategoryAdded');
 	}
@@ -446,8 +446,8 @@ function store_forum($values)
 
 	// find the max forum_order for the given category. The new forum is added at the end => max cat_order + &
 	$sql="SELECT MAX(forum_order) as sort_max FROM ".$table_forums." WHERE forum_category=".Database::escape_string($values['forum_category']);
-	$result=api_sql_query($sql);
-	$row=mysql_fetch_array($result);
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$row=Database::fetch_array($result);
 	$new_max=$row['sort_max']+1;
 	$session_id = isset($_SESSION['id_session']) ? $_SESSION['id_session'] : 0;
 	
@@ -470,7 +470,7 @@ function store_forum($values)
 					default_view='".Database::escape_string($values['default_view_type_group']['default_view_type'])."',
 					forum_of_group='".Database::escape_string($values['group_forum'])."'
 				WHERE forum_id='".Database::escape_string($values['forum_id'])."'";
-		mysql_query($sql) or die(mysql_error());
+		api_sql_query($sql,__FILE__,__LINE__);
 		$return_message=get_lang('ForumEdited');
 	}
 	else
@@ -491,7 +491,7 @@ function store_forum($values)
 						'".Database::escape_string($new_max)."',
 						".intval($session_id).")";
 		api_sql_query($sql, __LINE__,__FILE__);
-		$last_id=mysql_insert_id();
+		$last_id=Database::get_last_insert_id();
 		api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", api_get_user_id());
 		$return_message=get_lang('ForumAdded');
 	}
@@ -598,9 +598,9 @@ function check_if_last_post_of_thread($thread_id)
 
 	$sql="SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($thread_id)."' ORDER BY post_date DESC";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	if (mysql_num_rows($result)>0)
+	if (Database::num_rows($result)>0)
 	{
-		$row=mysql_fetch_array($result);
+		$row=Database::fetch_array($result);
 		return $row;
 	}
 	else
@@ -835,7 +835,7 @@ function change_lock_status($content, $id, $action)
 
 	// Doing the change in the database
 	$sql="UPDATE $table SET locked='".Database::escape_string($db_locked)."' WHERE $id_field='".Database::escape_string($id)."'";
-	if (api_sql_query($sql))
+	if (api_sql_query($sql,__FILE__,__LINE__))
 	{
 		return $return_message;
 	}
@@ -882,8 +882,8 @@ function move_up_down($content, $direction, $id)
 		$sort_column='forum_order';
 		// we also need the forum_category of this forum
 		$sql="SELECT forum_category FROM $table_forums WHERE forum_id=".Database::escape_string($id);
-		$result=api_sql_query($sql);
-		$row=mysql_fetch_array($result);
+		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$row=Database::fetch_array($result);
 		$forum_category=$row['forum_category'];
 	}
 	else
@@ -923,9 +923,9 @@ function move_up_down($content, $direction, $id)
 
 
 	// finding the items that need to be switched
-	$result=api_sql_query($sql);
+	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$found=false;
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		//echo $row[$id_column].'-';
 		if ($found==true)
@@ -949,8 +949,8 @@ function move_up_down($content, $direction, $id)
 	{
 		$sql_update1="UPDATE $table SET $sort_column='".Database::escape_string($this_sort)."' WHERE $id_column='".Database::escape_string($next_id)."'";
 		$sql_update2="UPDATE $table SET $sort_column='".Database::escape_string($next_sort)."' WHERE $id_column='".Database::escape_string($this_id)."'";
-		api_sql_query($sql_update1);
-		api_sql_query($sql_update2);
+		api_sql_query($sql_update1,__FILE__,__LINE__);
+		api_sql_query($sql_update2,__FILE__,__LINE__);
 	}
 
 	return get_lang(ucfirst($content).'Moved');
@@ -1013,8 +1013,8 @@ function get_forum_categories($id='')
 				AND forum_categories.cat_id='".Database::escape_string($id)."'
 				ORDER BY forum_categories.cat_order ASC";
 	}
-	$result=api_sql_query($sql);
-	while ($row=mysql_fetch_array($result))
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+	while ($row=Database::fetch_array($result))
 	{
 		if ($id=='')
 		{
@@ -1057,8 +1057,8 @@ function get_forums_in_category($cat_id)
 				AND item_properties.tool='".TOOL_FORUM."'
 				ORDER BY forum_order ASC";
 	}
-	$result=api_sql_query($sql);
-	while ($row=mysql_fetch_array($result))
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+	while ($row=Database::fetch_array($result))
 	{
 		$forum_list[$row['forum_id']]=$row;
 	}
@@ -1163,8 +1163,8 @@ function get_forums($id='')
 					ORDER BY post.post_id ASC";
 	}
 	// handling all the forum information
-	$result=api_sql_query($sql);
-	while ($row=mysql_fetch_array($result))
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+	while ($row=Database::fetch_array($result))
 	{
 		if ($id=='')
 		{
@@ -1177,8 +1177,8 @@ function get_forums($id='')
 	}
 
 	// handling the threadcount information
-	$result2=api_sql_query($sql2);
-	while ($row2=mysql_fetch_array($result2))
+	$result2=api_sql_query($sql2,__FILE__,__LINE__);
+	while ($row2=Database::fetch_array($result2))
 	{
 		if ($id=='')
 		{
@@ -1190,8 +1190,8 @@ function get_forums($id='')
 		}
 	}
 	// handling the postcount information
-	$result3=api_sql_query($sql3);
-	while ($row3=mysql_fetch_array($result3))
+	$result3=api_sql_query($sql3,__FILE__,__LINE__);
+	while ($row3=Database::fetch_array($result3))
 	{
 		if ($id=='')
 		{
@@ -1270,7 +1270,7 @@ function get_last_post_information($forum_id, $show_invisibles=false)
 	$result=api_sql_query($sql,__LINE__,__FILE__);
 	if ($show_invisibles==true)
 	{
-		$row=mysql_fetch_array($result);
+		$row=Database::fetch_array($result);
 		$return_array['last_post_id']=$row['post_id'];
 		$return_array['last_poster_id']=$row['poster_id'];
 		$return_array['last_post_date']=$row['post_date'];
@@ -1282,7 +1282,7 @@ function get_last_post_information($forum_id, $show_invisibles=false)
 	else
 	{
 		// we have to loop through the results to find the first one that is actually visible to students (forum_category, forum, thread AND post are visible)
-		while ($row=mysql_fetch_array($result))
+		while ($row=Database::fetch_array($result))
 		{
 			if ($row['visible']=='1' AND $row['thread_visibility']=='1' AND $row['forum_visibility']=='1')
 			{
@@ -1357,8 +1357,8 @@ function get_threads($forum_id)
 				WHERE thread.forum_id='".Database::escape_string($forum_id)."'
 				ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
 	}
-	$result=api_sql_query($sql);
-	while ($row=mysql_fetch_assoc($result))
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	while ($row=Database::fetch_array($result,'ASSOC'))
 	{
 		$thread_list[]=$row;
 	}
@@ -1398,7 +1398,7 @@ function get_posts($thread_id)
 				ORDER BY posts.post_id ASC";
 	}
 	$result=api_sql_query($sql, __FILE__, __LINE__);
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		$post_list[]=$row;
 	}
@@ -1450,8 +1450,8 @@ function get_post_information($post_id)
 	global $table_users;
 
 	$sql="SELECT * FROM ".$table_posts."posts, ".$table_users." users WHERE posts.poster_id=users.user_id AND posts.post_id='".Database::escape_string($post_id)."'";
-	$result=api_sql_query($sql);
-	$row=mysql_fetch_array($result);
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$row=Database::fetch_array($result);
 	return $row;
 }
 
@@ -1474,8 +1474,8 @@ function get_thread_information($thread_id)
 			WHERE item_properties.tool='".TOOL_FORUM_THREAD."'
 			AND item_properties.ref='".Database::escape_string($thread_id)."'
 			AND threads.thread_id='".Database::escape_string($thread_id)."'";
-	$result=api_sql_query($sql);
-	$row=mysql_fetch_array($result);
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$row=Database::fetch_array($result);
 	return $row;
 }
 
@@ -1500,8 +1500,8 @@ function get_forum_information($forum_id)
 			WHERE item_properties.tool='".TOOL_FORUM."'
 			AND item_properties.ref='".Database::escape_string($forum_id)."'
 			AND forums.forum_id='".Database::escape_string($forum_id)."'";
-	$result=api_sql_query($sql);
-	$row=mysql_fetch_array($result);
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$row=Database::fetch_array($result);
 	$row['approval_direct_post'] = 0; // we can't anymore change this option, so it should always be activated
 	return $row;
 }
@@ -1524,8 +1524,8 @@ function get_forumcategory_information($cat_id)
 			WHERE item_properties.tool='".TOOL_FORUM_CATEGORY."'
 			AND item_properties.ref='".Database::escape_string($cat_id)."'
 			AND forumcategories.cat_id='".Database::escape_string($cat_id)."'";
-	$result=api_sql_query($sql);
-	$row=mysql_fetch_array($result);
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$row=Database::fetch_array($result);
 	return $row;
 }
 
@@ -1545,8 +1545,8 @@ function count_number_of_forums_in_category($cat_id)
 	global $table_forums;
 
 	$sql="SELECT count(*) AS number_of_forums FROM ".$table_forums." WHERE forum_category='".Database::escape_string($cat_id)."'";
-	$result=api_sql_query($sql);
-	$row=mysql_fetch_array($result);
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$row=Database::fetch_array($result);
 	return $row['number_of_forums'];
 }
 
@@ -2215,7 +2215,7 @@ function get_whats_new()
 		$tracking_last_tool_access=Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 		$sql="SELECT * FROM ".$tracking_last_tool_access." WHERE access_user_id='".Database::escape_string($_user['user_id'])."' AND access_cours_code='".Database::escape_string($_course['sysCode'])."' AND access_tool='".Database::escape_string($tool)."'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-		$row=mysql_fetch_array($result);
+		$row=Database::fetch_array($result);
 		$_SESSION['last_forum_access']=$row['access_date'];
 	}
 
@@ -2226,7 +2226,7 @@ function get_whats_new()
 			$whatsnew_post_info = array();
 			$sql="SELECT * FROM".$table_posts."WHERE post_date>'".Database::escape_string($_SESSION['last_forum_access'])."'"; // note: check the performance of this query.
 			$result=api_sql_query($sql,__FILE__,__LINE__);
-			while ($row=mysql_fetch_array($result))
+			while ($row=Database::fetch_array($result))
 			{
 				$whatsnew_post_info[$row['forum_id']][$row['thread_id']][$row['post_id']]=$row['post_date'];
 			}
@@ -2280,8 +2280,8 @@ function get_post_topics_of_forum($forum_id)
 				AND item_property.tool='".TOOL_FORUM_THREAD."'
 				";
 	}
-	$result=api_sql_query($sql);
-	$row=mysql_fetch_array($result);
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$row=Database::fetch_array($result);
 	$number_of_posts=$row['number_of_posts'];
 
 	// we could loop through the result array and count the number of different group_ids but I have chosen to use a second sql statement
@@ -2305,8 +2305,8 @@ function get_post_topics_of_forum($forum_id)
 				AND item_property.tool='".TOOL_FORUM_THREAD."'
 				";
 	}
-	$result=api_sql_query($sql);
-	$row=mysql_fetch_array($result);
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$row=Database::fetch_array($result);
 	$number_of_topics=$row['number_of_topics'];
 	if ($number_of_topics=='')
 	{
@@ -2341,7 +2341,7 @@ function approve_post($post_id, $action)
 	}
 
 	$sql="UPDATE $table_posts SET visible='".Database::escape_string($visibility_value)."' WHERE post_id='".Database::escape_string($post_id)."'";
-	$return=api_sql_query($sql);
+	$return=api_sql_query($sql, __FILE__, __LINE__);
 	if ($return)
 	{
 		return 'PostVisibilityChanged';
@@ -2366,8 +2366,8 @@ function get_unaproved_messages($forum_id)
 	$return_array=array();
 
 	$sql="SELECT DISTINCT thread_id FROM $table_posts WHERE forum_id='".Database::escape_string($forum_id)."' AND visible='0'";
-	$result=api_sql_query($sql);
-	while($row=mysql_fetch_array($result))
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	while($row=Database::fetch_array($result))
 	{
 		$return_array[]=$row['thread_id'];
 	}
@@ -2417,7 +2417,7 @@ function send_notification_mails($thread_id, $reply_info)
 				AND post.post_notification='1'
 				AND post.poster_id=user.user_id";
 		$result=api_sql_query($sql, __LINE__, __FILE__);
-		while ($row=mysql_fetch_array($result))
+		while ($row=Database::fetch_array($result))
 		{
 			send_mail($row, $current_thread);
 		}
@@ -2426,7 +2426,7 @@ function send_notification_mails($thread_id, $reply_info)
 	{
 		$sql="SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($thread_id)."' AND post_notification='1'";
 		$result=api_sql_query($sql, __LINE__, __FILE__);
-		while ($row=mysql_fetch_array($result))
+		while ($row=Database::fetch_array($result))
 		{
 			$sql_mailcue="INSERT INTO $table_mailcue (thread_id, post_id) VALUES ('".Database::escape_string($thread_id)."', '".Database::escape_string($reply_info['new_post_id'])."')";
 			$result_mailcue=api_sql_query($sql_mailcue, __LINE__, __FILE__);
@@ -2466,7 +2466,7 @@ function handle_mail_cue($content, $id)
 				AND users.user_id=posts.poster_id
 				GROUP BY users.email";
 		$result=api_sql_query($sql, __LINE__, __FILE__);
-		while ($row=mysql_fetch_array($result))
+		while ($row=Database::fetch_array($result))
 		{
 			send_mail($row, get_thread_information($post_info['thread_id']));
 		}
@@ -2485,7 +2485,7 @@ function handle_mail_cue($content, $id)
 				AND users.user_id=posts.poster_id
 				GROUP BY users.email";
 		$result=api_sql_query($sql, __LINE__, __FILE__);
-		while ($row=mysql_fetch_array($result))
+		while ($row=Database::fetch_array($result))
 		{
 			send_mail($row, get_thread_information($id));
 		}
@@ -2498,7 +2498,7 @@ function handle_mail_cue($content, $id)
 	{
 		$sql="SELECT * FROM $table_threads WHERE forum_id='".Database::escape_string($id)."'";
 		$result=api_sql_query($sql, __LINE__, __FILE__);
-		while ($row=mysql_fetch_array($result))
+		while ($row=Database::fetch_array($result))
 		{
 			handle_mail_cue('thread',$row['thread_id']);
 		}
@@ -2507,7 +2507,7 @@ function handle_mail_cue($content, $id)
 	{
 		$sql="SELECT * FROM $table_forums WHERE forum_category ='".Database::escape_string($id)."'";
 		$result=api_sql_query($sql, __LINE__, __FILE__);
-		while ($row=mysql_fetch_array($result))
+		while ($row=Database::fetch_array($result))
 		{
 			handle_mail_cue('forum',$row['forum_id']);
 		}
@@ -2693,7 +2693,7 @@ function store_move_post($values)
 				)";
 		//echo $sql.'<br />';
 		$result=api_sql_query($sql, __LINE__, __FILE__);
-		$new_thread_id=mysql_insert_id();
+		$new_thread_id=Database::get_last_insert_id();
 		api_item_property_update($_course, TOOL_FORUM_THREAD, $new_thread_id,"visible", $current_post['poster_id']);
 
 		// moving the post to the newly created thread
@@ -2715,7 +2715,7 @@ function store_move_post($values)
 		$sql="SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($current_post['thread_id'])."' ORDER BY post_id DESC";
 		//echo $sql.'<br />';
 		$result=api_sql_query($sql, __LINE__, __FILE__);
-		$row=mysql_fetch_array($result);
+		$row=Database::fetch_array($result);
 		//my_print_r($row);
 		$sql="UPDATE $table_threads SET thread_last_post='".$row['post_id']."', thread_replies=thread_replies-1 WHERE thread_id='".Database::escape_string($current_post['thread_id'])."'";
 		$result=api_sql_query($sql, __LINE__, __FILE__);
@@ -2881,7 +2881,7 @@ function display_forum_search_results($search_term)
 	$forum_list=get_forums();	
 
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = Database::fetch_array($result,'ASSOC'))
 	{
 		$display_result = false; 
 		/*
@@ -2970,7 +2970,7 @@ function get_attachment($post_id)
 	global $forum_table_attachment;
 	$row=array();	
 	$sql = 'SELECT path, filename,comment FROM '. $forum_table_attachment.' WHERE post_id ="'.$post_id.'"';
-	$result=api_sql_query($sql);
+	$result=api_sql_query($sql, __FILE__, __LINE__);
 	if (Database::num_rows($result)!=0)
 	{
 		$row=Database::fetch_array($result);
@@ -2991,7 +2991,7 @@ function delete_attachment($id)
 	
 	$attach_list=get_attachment($id);
 	$sql = 'DELETE FROM '. $forum_table_attachment.' WHERE post_id ="'.$id.'"';
-	$result=api_sql_query($sql);
+	$result=api_sql_query($sql, __FILE__, __LINE__);
 	
 	$courseDir   = $_course['path'].'/upload/forum';
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);		
@@ -3069,43 +3069,51 @@ function get_forums_of_group($group_id)
 
 	// handling all the forum information
 	$result=api_sql_query($sql, __FILE__, __LINE__);
-	while ($row=mysql_fetch_assoc($result))
+	while ($row=Database::fetch_array($result,'ASSOC'))
 	{
 		$forum_list[$row['forum_id']]=$row;
 	}
 
 	// handling the threadcount information
 	$result2=api_sql_query($sql2, __FILE__, __LINE__);
-	while ($row2=mysql_fetch_assoc($result2))
+	while ($row2=Database::fetch_array($result2,'ASSOC'))
 	{
-		if (array_key_exists($row2['forum_id'],$forum_list))
+		if (is_array($forum_list))
 		{
-			$forum_list[$row2['forum_id']]['number_of_threads']=$row2['number_of_threads'];
+			if (array_key_exists($row2['forum_id'],$forum_list))
+			{
+				$forum_list[$row2['forum_id']]['number_of_threads']=$row2['number_of_threads'];
+			}
 		}
 	}
 
 	// handling the postcount information
 	$result3=api_sql_query($sql3, __FILE__, __LINE__);
-	while ($row3=mysql_fetch_assoc($result3))
+	while ($row3=Database::fetch_array($result3,'ASSOC'))
 	{
-		if (array_key_exists($row3['forum_id'],$forum_list)) // this is needed because sql3 takes also the deleted forums into account
-		{
-			$forum_list[$row3['forum_id']]['number_of_posts']=$row3['number_of_posts'];
+		if (is_array($forum_list))
+		{		
+			if (array_key_exists($row3['forum_id'],$forum_list)) // this is needed because sql3 takes also the deleted forums into account
+			{
+				$forum_list[$row3['forum_id']]['number_of_posts']=$row3['number_of_posts'];
+			}
 		}
 	}
 
 	// finding the last post information (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
-	foreach ($forum_list as $key=>$value)
+	if (is_array($forum_list))
 	{
-		$last_post_info_of_forum=get_last_post_information($key,is_allowed_to_edit());
-		$forum_list[$key]['last_post_id']=$last_post_info_of_forum['last_post_id'];
-		$forum_list[$key]['last_poster_id']=$last_post_info_of_forum['last_poster_id'];
-		$forum_list[$key]['last_post_date']=$last_post_info_of_forum['last_post_date'];
-		$forum_list[$key]['last_poster_name']=$last_post_info_of_forum['last_poster_name'];
-		$forum_list[$key]['last_poster_lastname']=$last_post_info_of_forum['last_poster_lastname'];
-		$forum_list[$key]['last_poster_firstname']=$last_post_info_of_forum['last_poster_firstname'];
+		foreach ($forum_list as $key=>$value)
+		{
+			$last_post_info_of_forum=get_last_post_information($key,is_allowed_to_edit());
+			$forum_list[$key]['last_post_id']=$last_post_info_of_forum['last_post_id'];
+			$forum_list[$key]['last_poster_id']=$last_post_info_of_forum['last_poster_id'];
+			$forum_list[$key]['last_post_date']=$last_post_info_of_forum['last_post_date'];
+			$forum_list[$key]['last_poster_name']=$last_post_info_of_forum['last_poster_name'];
+			$forum_list[$key]['last_poster_lastname']=$last_post_info_of_forum['last_poster_lastname'];
+			$forum_list[$key]['last_poster_firstname']=$last_post_info_of_forum['last_poster_firstname'];
+		}
 	}
-
 	return $forum_list;
 }
 ?>

@@ -1,10 +1,10 @@
-<?php // $Id: document.php 14883 2008-04-14 16:32:14Z juliomontoya $
+<?php // $Id: document.php 14907 2008-04-15 20:21:15Z juliomontoya $
 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -614,7 +614,7 @@ if($docs_and_folders)
 	$use_document_title = get_setting('use_document_title');
 	//create a sortable table with our data
 	$sortable_data = array();
-		
+	
 	while (list ($key, $id) = each($docs_and_folders))
 	{
 		$row = array ();
@@ -656,10 +656,14 @@ if($docs_and_folders)
 		if ($is_allowed_to_edit || $group_member_with_upload_rights)
 		{
 			// if readonly, check if it the owner of the file ?
-			if (!$id['readonly'] || $id['insert_user_id'] == $_user['user_id'] || api_is_platform_admin())
-				$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key, $id['is_template']);
+			if ($id['insert_user_id'] == $_user['user_id'] || api_is_platform_admin())
+			{
+				$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key, $id['is_template'],0);
+			}
 			else
-				$row[] = '';
+			{
+				$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key, $id['is_template'],$id['readonly']);			
+			}			
 			$row[] = $edit_icons;
 		}
 		$row[]=$last_edit_date;

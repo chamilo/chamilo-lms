@@ -1,9 +1,9 @@
-<?php // $Id: edit_document.php 14904 2008-04-15 17:22:45Z juliomontoya $
+<?php // $Id: edit_document.php 14907 2008-04-15 20:21:15Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -74,6 +74,8 @@ include(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 include(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 include(api_get_path(LIBRARY_PATH).'document.lib.php');
+
+include_once(api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 $fck_attribute['Width'] = '100%';
@@ -253,9 +255,9 @@ if (isset($_POST['newComment']))
 	$newTitle = trim($_POST['newTitle']); // remove spaces
 	// Check if there is already a record for this file in the DB
 
-	$result = api_sql_query ("SELECT * FROM $dbTable WHERE path LIKE BINARY '".$commentPath."'");
+	$result = api_sql_query ("SELECT * FROM $dbTable WHERE path LIKE BINARY '".$commentPath."'",__FILE__,__LINE__);
 
-	while($row = Database::fetch_array($result, MYSQL_ASSOC))
+	while($row = Database::fetch_array($result, 'ASSOC'))
 	{
 		$attribute['path'      ] = $row['path'      ];
 		$attribute['comment'   ] = $row['title'   ];
@@ -265,7 +267,7 @@ if (isset($_POST['newComment']))
 
 	//new code always keeps document in database
 	$query = "UPDATE $dbTable SET comment='".$newComment."', title='".$newTitle."' WHERE path LIKE BINARY '".$commentPath."'";
-	api_sql_query($query);
+	api_sql_query($query,__FILE__,__LINE__);
 	//this is an UPDATE page... we shouldn't be creating new documents here.
 	/*
 	if (mysql_affected_rows() == 0)
@@ -304,14 +306,14 @@ if (isset($_POST['renameTo']))
 
 /** TODO check if this code is still used **/
 /* Search the old comment */  // RH: metadata: added 'id,'
-$result = api_sql_query("SELECT id,comment,title FROM $dbTable WHERE path LIKE BINARY '$dir$doc'");
+$result = api_sql_query("SELECT id,comment,title FROM $dbTable WHERE path LIKE BINARY '$dir$doc'",__FILE__,__LINE__);
 
 $message = "<i>Debug info</i><br>directory = $dir<br>";
 $message .= "document = $file_name<br>";
 $message .= "comments file = " . $file . "<br>";
 //Display::display_normal_message($message);
 
-while($row = Database::fetch_array($result, MYSQL_ASSOC))
+while($row = Database::fetch_array($result, 'ASSOC'))
 {
 	$oldComment = $row['comment'];
 	$oldTitle = $row['title'];
@@ -482,56 +484,25 @@ if(file_exists($filepath.$doc))
 ==============================================================================
 */
 Display::display_header($nameTools,"Doc");
-
-
 api_display_tool_title(get_lang("EditDocument") . ": $file_name");
 
 if(isset($msgError))
 {
 	Display::display_error_message($msgError); //main API
 }
+
 if( isset($info_message))
 {
 	Display::display_normal_message($info_message); //main API
 }
-$action =  api_get_self().'?sourceFile='.urlencode($file_name).'&curdirpath='.urlencode($_GET['curdirpath']).'&file='.urlencode($_GET['file']).'&doc='.urlencode($doc);
-$form = new FormValidator('formEdit','post',$action);
-$form->addElement('hidden','filename');
-$form->addElement('hidden','extension');
-$form->addElement('hidden','file_path');
-$form->addElement('hidden','commentPath');
-if($use_document_title)
-{
-	$form->add_textfield('newTitle',get_lang('Title'));
-	$defaults['newTitle'] = $oldTitle;
-}
-else
-{
-	$form->addElement('hidden','renameTo');
-}
 
-if($extension == "htm" || $extension == "html")
-{
-	$form->addElement('hidden','formSent');
-	$defaults['formSent'] = 1;
-	$form->addElement('submit','submit',get_lang('Ok'));
-	$form->add_html_editor('texte','<a style="cursor:pointer" onclick="launch_templates()"><img src="'.api_get_path(WEB_IMG_PATH).'templates.gif" /></a>',false,true);
-	$defaults['texte'] = $texte;
-}
-if(!$group_document)
-{
-	$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$docId).'">'.get_lang('AddMetadata').'</a>';
-	$form->addElement('static',null,get_lang('Metadata'),$metadata_link);
-}
-
-$form->addElement('textarea','newComment',get_lang('Comment'),'rows="3" style="width:300px;"');
 
 // readonly
-$sql = 'SELECT id, readonly FROM '.$dbTable.'
-		WHERE path LIKE BINARY "'.$dir.$doc.'"';
+$sql = 'SELECT id, readonly FROM '.$dbTable.' WHERE path LIKE BINARY "'.$dir.$doc.'"';
 $rs = api_sql_query($sql, __FILE__, __LINE__);
 $readonly = Database::result($rs,0,'readonly');
 $doc_id = Database::result($rs,0,'id');
+
 // owner
 $sql = 'SELECT insert_user_id FROM '.Database::get_course_table(TABLE_ITEM_PROPERTY).'
 		WHERE tool LIKE "document"
@@ -539,31 +510,74 @@ $sql = 'SELECT insert_user_id FROM '.Database::get_course_table(TABLE_ITEM_PROPE
 $rs = api_sql_query($sql, __FILE__, __LINE__);
 $owner_id = Database::result($rs,0,'insert_user_id');
 
-if($owner_id != $_user['user_id'])
+if (api_is_allowed_to_edit() || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid'] ))
 {
-	$form->addElement('hidden','readonly');
+	// if readonly, check if it the owner of the file ?
+	if ($owner_id == $_user['user_id'] || api_is_platform_admin())
+	{	
+		$action =  api_get_self().'?sourceFile='.urlencode($file_name).'&curdirpath='.urlencode($_GET['curdirpath']).'&file='.urlencode($_GET['file']).'&doc='.urlencode($doc);
+		$form = new FormValidator('formEdit','post',$action);
+		$form->addElement('hidden','filename');
+		$form->addElement('hidden','extension');
+		$form->addElement('hidden','file_path');
+		$form->addElement('hidden','commentPath');
+		
+		if($use_document_title)
+		{
+			$form->add_textfield('newTitle',get_lang('Title'));
+			$defaults['newTitle'] = $oldTitle;
+		}
+		else
+		{
+			$form->addElement('hidden','renameTo');
+		}
+		
+		if($extension == "htm" || $extension == "html")
+		{
+			$form->addElement('hidden','formSent');
+			$defaults['formSent'] = 1;
+			$form->addElement('submit','submit',get_lang('Ok'));
+			$form->add_html_editor('texte','<a style="cursor:pointer" onclick="launch_templates()"><img src="'.api_get_path(WEB_IMG_PATH).'templates.gif" /></a>',false,true);
+			$defaults['texte'] = $texte;
+		}
+		if(!$group_document)
+		{
+			$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$docId).'">'.get_lang('AddMetadata').'</a>';
+			$form->addElement('static',null,get_lang('Metadata'),$metadata_link);
+		}
+		
+		$form->addElement('textarea','newComment',get_lang('Comment'),'rows="3" style="width:300px;"');
+		
+	/*	if($owner_id != $_user['user_id'])
+		{
+			$form->addElement('hidden','readonly');	
+		}
+		else
+		{
+		*/
+		$renderer = $form->defaultRenderer();
+		$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
+		$form->addElement('checkbox','readonly',get_lang('ReadOnly'));	
+		//}
+		
+		$defaults['readonly']=$readonly;
+		
+		$form->addElement('submit','submit',get_lang('Ok'));
+		$defaults['filename'] = $filename;
+		$defaults['extension'] = $extension;
+		$defaults['file_path'] = $_GET['file'];
+		$defaults['commentPath'] = $file;
+		$defaults['renameTo'] = $file_name;
+		$defaults['newComment'] = $oldComment;
+		$form->setDefaults($defaults);		
+		$form->display();	
+	}
+	else
+	{
+		Display::display_error_message(get_lang('ReadOnlyFile')); //main API		
+	}
 }
-else
-{
-	$renderer = $form->defaultRenderer();
-	$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
-	$form->addElement('checkbox','readonly',get_lang('ReadOnly'));
-}
-$defaults['readonly']=$readonly;
 
-
-
-
-
-$form->addElement('submit','submit',get_lang('Ok'));
-$defaults['filename'] = $filename;
-$defaults['extension'] = $extension;
-$defaults['file_path'] = $_GET['file'];
-$defaults['commentPath'] = $file;
-$defaults['renameTo'] = $file_name;
-$defaults['newComment'] = $oldComment;
-$form->setDefaults($defaults);
-$form->display();
 /*
 ==============================================================================
 	   DOKEOS FOOTER

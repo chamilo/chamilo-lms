@@ -23,7 +23,7 @@ $config['survey']['debug'] = false;
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 14911 2008-04-15 21:39:40Z yannoo $
+* 	@version $Id: survey.lib.php 14912 2008-04-15 22:44:17Z yannoo $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -2449,21 +2449,25 @@ class SurveyUtil {
 			//show user fields section with a big th colspan that spans over all fields
 			$extra_user_fields = UserManager::get_extra_fields(0,0,5,'ASC',false);
 			$num = count($extra_user_fields);
-			echo '<th '.($num>0?' colspan="'.$num.'"':'').'>';
-			echo '<label><input type="checkbox" name="fields_filter" value="1" checked="checked"/> ';
-			echo get_lang('UserFields');
-			echo '</label>';
-			echo '</th>';		
-			$display_extra_user_fields = true;
+			if($num > 0)
+			{
+				echo '<th '.($num>0?' colspan="'.$num.'"':'').'>';
+				echo '<label><input type="checkbox" name="fields_filter" value="1" checked="checked"/> ';
+				echo get_lang('UserFields');
+				echo '</label>';
+				echo '</th>';		
+				$display_extra_user_fields = true;
+			}
 		}
 
-		$sql = "SELECT questions.question_id, questions.type, questions.survey_question, count(options.question_option_id) as number_of_options
-				FROM $table_survey_question questions LEFT JOIN $table_survey_question_option options
-				ON questions.question_id = options.question_id
-				WHERE questions.question_id = options.question_id
-				AND questions.survey_id = '".Database::escape_string($_GET['survey_id'])."'
-				GROUP BY questions.question_id 
-				ORDER BY questions.sort ASC";
+		// Get all the questions ordered by the "sort" column 
+		$sql = "SELECT q.question_id, q.type, q.survey_question, count(o.question_option_id) as number_of_options
+				FROM $table_survey_question q LEFT JOIN $table_survey_question_option o
+				ON q.question_id = o.question_id
+				WHERE q.question_id = o.question_id
+				AND q.survey_id = '".Database::escape_string($_GET['survey_id'])."'
+				GROUP BY q.question_id 
+				ORDER BY q.sort ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = Database::fetch_array($result))
 		{
@@ -2487,6 +2491,7 @@ class SurveyUtil {
 					echo '</label>';
 					echo '</th>';
 				}
+				//no column at all if it's not a question
 			}
 			$questions[$row['question_id']] = $row;
 		}
@@ -2504,29 +2509,32 @@ class SurveyUtil {
 			}
 		}
 		
-		$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type,
-						survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
-				FROM $table_survey_question survey_question
-				LEFT JOIN $table_survey_question_option survey_question_option
-				ON survey_question.question_id = survey_question_option.question_id
-				WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
-				ORDER BY survey_question.sort ASC";
+		$sql = "SELECT 	sq.question_id, sq.survey_id, 
+						sq.survey_question, sq.display,
+						sq.sort, sq.type, sqo.question_option_id,
+						sqo.option_text, sqo.sort as option_sort
+				FROM $table_survey_question sq
+				LEFT JOIN $table_survey_question_option sqo
+				ON sq.question_id = sqo.question_id
+				WHERE sq.survey_id = '".Database::escape_string($_GET['survey_id'])."'
+				ORDER BY sq.sort ASC, sqo.sort ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = Database::fetch_array($result))
 		{
 			// we show the options if
 			// 1. there is no question filter and the export button has not been clicked
-			// 2. there is a quesiton filter but the question is selected for display
+			// 2. there is a question filter but the question is selected for display
 			if (!($_POST['submit_question_filter'] OR $_POST['export_report']) OR in_array($row['question_id'], $_POST['questions_filter']))
 			{
 				// we do not show comment and pagebreak question types
-				if ($row['type'] <> 'comment' AND $row['type'] <> 'pagebreak')
+				if ($row['type'] <> 'comment' AND $row['type'] <> 'pagebreak' AND $row['type'] <> 'open')
 				{
 					echo '			<th>';
 					echo $row['option_text'];
 					echo '</th>';
 					$possible_answers[$row['question_id']][$row['question_option_id']] =$row['question_option_id'];
 				}
+				//no column at all if the question was not a question
 			}
 		}
 		echo '	</tr>';

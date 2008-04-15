@@ -1,9 +1,9 @@
-<?php // $Id: edit_document.php 14776 2008-04-08 06:55:16Z elixir_inter $
+<?php // $Id: edit_document.php 14904 2008-04-15 17:22:45Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -21,7 +21,8 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
+	
 ==============================================================================
 */
 /**
@@ -252,9 +253,9 @@ if (isset($_POST['newComment']))
 	$newTitle = trim($_POST['newTitle']); // remove spaces
 	// Check if there is already a record for this file in the DB
 
-	$result = mysql_query ("SELECT * FROM $dbTable WHERE path LIKE BINARY '".$commentPath."'");
+	$result = api_sql_query ("SELECT * FROM $dbTable WHERE path LIKE BINARY '".$commentPath."'");
 
-	while($row = mysql_fetch_array($result, MYSQL_ASSOC))
+	while($row = Database::fetch_array($result, MYSQL_ASSOC))
 	{
 		$attribute['path'      ] = $row['path'      ];
 		$attribute['comment'   ] = $row['title'   ];
@@ -264,7 +265,7 @@ if (isset($_POST['newComment']))
 
 	//new code always keeps document in database
 	$query = "UPDATE $dbTable SET comment='".$newComment."', title='".$newTitle."' WHERE path LIKE BINARY '".$commentPath."'";
-	mysql_query($query);
+	api_sql_query($query);
 	//this is an UPDATE page... we shouldn't be creating new documents here.
 	/*
 	if (mysql_affected_rows() == 0)
@@ -303,14 +304,14 @@ if (isset($_POST['renameTo']))
 
 /** TODO check if this code is still used **/
 /* Search the old comment */  // RH: metadata: added 'id,'
-$result = mysql_query ("SELECT id,comment,title FROM $dbTable WHERE path LIKE BINARY '$dir$doc'");
+$result = api_sql_query("SELECT id,comment,title FROM $dbTable WHERE path LIKE BINARY '$dir$doc'");
 
 $message = "<i>Debug info</i><br>directory = $dir<br>";
 $message .= "document = $file_name<br>";
 $message .= "comments file = " . $file . "<br>";
 //Display::display_normal_message($message);
 
-while($row = mysql_fetch_array($result, MYSQL_ASSOC))
+while($row = Database::fetch_array($result, MYSQL_ASSOC))
 {
 	$oldComment = $row['comment'];
 	$oldTitle = $row['title'];
@@ -509,30 +510,6 @@ else
 	$form->addElement('hidden','renameTo');
 }
 
-// readonly
-$sql = 'SELECT id, readonly FROM '.$dbTable.'
-		WHERE path LIKE BINARY "'.$dir.$doc.'"';
-$rs = api_sql_query($sql, __FILE__, __LINE__);
-$readonly = mysql_result($rs,0,'readonly');
-$doc_id = mysql_result($rs,0,'id');
-// owner
-$sql = 'SELECT insert_user_id FROM '.Database::get_course_table(TABLE_ITEM_PROPERTY).'
-		WHERE tool LIKE "document"
-		AND ref='.intval($doc_id);
-$rs = api_sql_query($sql, __FILE__, __LINE__);
-$owner_id = mysql_result($rs,0,'insert_user_id');
-if($owner_id != $_user['user_id'])
-{
-	$form->addElement('hidden','readonly');
-}
-else
-{
-	$renderer = $form->defaultRenderer();
-	$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
-	$form->addElement('checkbox','readonly',get_lang('ReadOnly'));
-}
-$defaults['readonly']=$readonly;
-
 if($extension == "htm" || $extension == "html")
 {
 	$form->addElement('hidden','formSent');
@@ -546,7 +523,38 @@ if(!$group_document)
 	$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$docId).'">'.get_lang('AddMetadata').'</a>';
 	$form->addElement('static',null,get_lang('Metadata'),$metadata_link);
 }
+
 $form->addElement('textarea','newComment',get_lang('Comment'),'rows="3" style="width:300px;"');
+
+// readonly
+$sql = 'SELECT id, readonly FROM '.$dbTable.'
+		WHERE path LIKE BINARY "'.$dir.$doc.'"';
+$rs = api_sql_query($sql, __FILE__, __LINE__);
+$readonly = Database::result($rs,0,'readonly');
+$doc_id = Database::result($rs,0,'id');
+// owner
+$sql = 'SELECT insert_user_id FROM '.Database::get_course_table(TABLE_ITEM_PROPERTY).'
+		WHERE tool LIKE "document"
+		AND ref='.intval($doc_id);
+$rs = api_sql_query($sql, __FILE__, __LINE__);
+$owner_id = Database::result($rs,0,'insert_user_id');
+
+if($owner_id != $_user['user_id'])
+{
+	$form->addElement('hidden','readonly');
+}
+else
+{
+	$renderer = $form->defaultRenderer();
+	$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
+	$form->addElement('checkbox','readonly',get_lang('ReadOnly'));
+}
+$defaults['readonly']=$readonly;
+
+
+
+
+
 $form->addElement('submit','submit',get_lang('Ok'));
 $defaults['filename'] = $filename;
 $defaults['extension'] = $extension;

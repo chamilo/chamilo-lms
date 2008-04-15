@@ -1,4 +1,4 @@
-<?php // $Id: showinframes.php 14729 2008-04-02 23:44:29Z yannoo $ 
+<?php // $Id: showinframes.php 14904 2008-04-15 17:22:45Z juliomontoya $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -52,15 +52,25 @@
 	   DOKEOS INIT 
 ============================================================================== 
 */ 
-
+$language_file[] = 'document';
 include('../inc/global.inc.php');
+
+if (!empty($_GET['nopages']))
+{
+	$nopages=Security::remove_XSS($_GET['nopages']);
+	if ($nopages==1)
+	{		
+		require_once(api_get_path(INCLUDE_PATH) . 'reduced_header.inc.php');
+		Display::display_error_message(get_lang('FileNotFound'));
+	}
+	exit();	
+}
 
 $_SESSION['whereami'] = 'document/view';
 	
-$interbreadcrumb[]= array ("url"=>"./document.php", "name"=> get_lang("Documents"));
-$nameTools = get_lang("Documents");
-
-$file = $_GET['file'];
+$interbreadcrumb[]= array ('url'=>'./document.php', 'name'=> get_lang('Documents'));
+$nameTools = get_lang('Documents');
+$file = Security::remove_XSS(urldecode($_GET['file']));
 
 /*
 ============================================================================== 
@@ -74,14 +84,18 @@ header('Last-Modified: Wed, 01 Jan 2100 00:00:00 GMT');
 header('Cache-Control: no-cache, must-revalidate');
 header('Pragma: no-cache');
 
-$browser_display_title = "Dokeos Documents - " . $_GET['cidReq'] . " - " . $_GET['file'];
+$browser_display_title = "Dokeos Documents - " . $_GET['cidReq'] . " - " . $file;
 
 //only admins get to see the "no frames" link in pageheader.php, so students get a header that's not so high
 $frameheight = 130;
 if($is_courseAdmin)
 {
-	$frameheight = 150;
+	$frameheight = 150;	
 }
+$file_root=$_course['path'].'/document'.str_replace('%2F', '/',$file);
+$file_url_sys=api_get_path('SYS_COURSE_PATH').$file_root;
+$file_url_web=api_get_path('WEB_COURSE_PATH').$file_root;
+
 
 ?>
 <html>
@@ -89,8 +103,17 @@ if($is_courseAdmin)
 <title><?php echo $browser_display_title;?></title>
 </head>
 	<frameset rows="<?php echo $frameheight; ?>,*" border="0" frameborder="no" >
-		<frame name="top" scrolling="no" noresize target="contents" src="headerpage.php?file=<?php echo urlencode($_GET['file']).'&amp;'.api_get_cidreq(); ?>">
-		<frame name="main" src="<?php echo api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.str_replace('%2F', '/',urlencode($_GET['file'])).'?'.api_get_cidreq().'&rand='.mt_rand(1,10000); ?>">
+		<frame name="top" scrolling="no" noresize target="contents" src="headerpage.php?file=<?php echo $file.'&amp;'.api_get_cidreq(); ?>">
+		<?php
+		if (file_exists($file_url_sys))
+		{								
+			echo '<frame name="main" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1,10000).'">';		
+		}
+		else
+		{
+			echo '<frame name="main" src=showinframes.php?nopages=1>';				
+		}		
+		?>
 	<noframes>
 	<body>
 		<p>This page uses frames, but your browser doesn't support them.<br/>

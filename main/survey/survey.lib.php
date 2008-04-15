@@ -23,7 +23,7 @@ $config['survey']['debug'] = false;
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 14822 2008-04-10 04:44:54Z yannoo $
+* 	@version $Id: survey.lib.php 14910 2008-04-15 21:36:21Z yannoo $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -2462,7 +2462,8 @@ class SurveyUtil {
 				ON questions.question_id = options.question_id
 				WHERE questions.question_id = options.question_id
 				AND questions.survey_id = '".Database::escape_string($_GET['survey_id'])."'
-				GROUP BY questions.question_id";
+				GROUP BY questions.question_id 
+				ORDER BY questions.sort ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = Database::fetch_array($result))
 		{
@@ -2678,7 +2679,8 @@ class SurveyUtil {
 				FROM $table_survey_question questions LEFT JOIN $table_survey_question_option options
 				ON questions.question_id = options.question_id "
 				." AND questions.survey_id = '".Database::escape_string($_GET['survey_id'])."'
-				GROUP BY questions.question_id";
+				GROUP BY questions.question_id "
+				." ORDER BY questions.sort ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = Database::fetch_array($result))
 		{
@@ -2871,7 +2873,8 @@ class SurveyUtil {
 				FROM $table_survey_question questions LEFT JOIN $table_survey_question_option options
 				ON questions.question_id = options.question_id "
 				." AND questions.survey_id = '".Database::escape_string($_GET['survey_id'])."'
-				GROUP BY questions.question_id";
+				GROUP BY questions.question_id "
+				." ORDER BY questions.sort ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = Database::fetch_array($result))
 		{

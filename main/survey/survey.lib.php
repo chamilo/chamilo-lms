@@ -23,7 +23,7 @@ $config['survey']['debug'] = false;
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 14910 2008-04-15 21:36:21Z yannoo $
+* 	@version $Id: survey.lib.php 14911 2008-04-15 21:39:40Z yannoo $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -2962,7 +2962,7 @@ class SurveyUtil {
 				$return = SurveyUtil::export_complete_report_row_xls($possible_answers, $answers_of_user, $old_user, $display_extra_user_fields);
 				foreach($return as $elem)
 				{
-					$worsheet->write($line,$column,$elem);
+					$worksheet->write($line,$column,$elem);
 					$column++;
 				}
 				$answers_of_user=array();

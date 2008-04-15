@@ -23,7 +23,7 @@ $config['survey']['debug'] = false;
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 14912 2008-04-15 22:44:17Z yannoo $
+* 	@version $Id: survey.lib.php 14913 2008-04-15 23:03:21Z yannoo $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -2735,7 +2735,7 @@ class SurveyUtil {
 				LEFT JOIN $table_survey_question_option survey_question_option
 				ON survey_question.question_id = survey_question_option.question_id
 				WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
-				ORDER BY survey_question.sort ASC";
+				ORDER BY survey_question.sort ASC, survey_question_option.sort ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$possible_answers = array();
 		$possible_answers_type = array();
@@ -2931,7 +2931,7 @@ class SurveyUtil {
 				LEFT JOIN $table_survey_question_option survey_question_option
 				ON survey_question.question_id = survey_question_option.question_id
 				WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
-				ORDER BY survey_question.sort ASC";
+				ORDER BY survey_question.sort ASC, survey_question_option.sort ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$possible_answers = array();
 		$possible_answers_type = array();

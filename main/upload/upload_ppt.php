@@ -131,8 +131,8 @@ $form -> addElement('html','<div class="row"><div class="label"></div><div class
 $form -> addElement ('hidden', 'ppt2lp', 'true');
 
 $form -> add_real_progress_bar(md5(rand(0,10000)), 'user_file', 1, true);
-
-
+$defaults = array('take_slide_name'=>'checked="checked"');
+$form->setDefaults($defaults);
 // display the form
 $form -> display();
 

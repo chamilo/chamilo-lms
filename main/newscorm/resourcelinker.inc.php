@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Patrick Cool (patrick.cool@ugent.be)
@@ -19,7 +19,8 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
 ==============================================================================
 */
 /**
@@ -1945,13 +1946,16 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 {
 	$_course = Database::get_course_info($course_code);
-
 	$tbl_lp_item = Database::get_course_table('lp_item');
 
 	$sql_item = "SELECT * FROM $tbl_lp_item " .
 			"WHERE lp_id = $learnpath_id AND id = $id_in_path";
 	$res_item = api_sql_query($sql_item,__FILE__,__LINE__);
-	if(Database::num_rows($res_item<1)) return ''; //exit
+	
+	if(Database::num_rows($res_item)<1)
+	{
+		return ''; //exit
+	}
 	$row_item = Database::fetch_array($res_item);
 	$type = strtolower($row_item['item_type']);
 	$id = $row_item['ref'];
@@ -2006,7 +2010,28 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 			$post = Database::fetch_array($result);
 			$output = $post['post_title'];
 			break;
+		case 'dokeos_chapter':	 
+			$title=$row_item['title'];			
+			if (!empty($title))
+			{
+				$output =$title;
+			}
+			else 
+			{
+				$output ='-';
+			}
+			break;
 		case TOOL_DOCUMENT:
+			$title=$row_item['title'];			
+			if (!empty($title))
+			{
+				$output =$title;
+			}
+			else 
+			{
+				$output ='-';
+			}
+			break;
 		case 'hotpotatoes':
 			$tbl_doc = Database::get_course_table(TABLE_DOCUMENT,$_course['database']);
 			$result = api_sql_query("SELECT * FROM $tbl_doc WHERE id=$id",__FILE__,__LINE__);

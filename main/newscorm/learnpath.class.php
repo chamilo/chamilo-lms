@@ -87,7 +87,7 @@ class learnpath {
     		$sql = "SELECT * FROM $main_table WHERE code = '$course'";
     		if($this->debug>2){error_log('New LP - learnpath::learnpath() '.__LINE__.' - Querying course: '.$sql,0);}
     		//$res = Database::query($sql);
-    		$res = api_sql_query($sql);
+    		$res = api_sql_query($sql, __FILE__, __LINE__);
     		if(Database::num_rows($res)>0)
     		{
     			$this->cc = $course;
@@ -114,7 +114,7 @@ class learnpath {
     		$sql = "SELECT * FROM $lp_table WHERE id = '$lp_id'";
     		if($this->debug>2){error_log('New LP - learnpath::learnpath() '.__LINE__.' - Querying lp: '.$sql,0);}
     		//$res = Database::query($sql);
-    		$res = api_sql_query($sql);
+    		$res = api_sql_query($sql, __FILE__, __LINE__);
     		if(Database::num_rows($res)>0)
     		{
     			$this->lp_id = $lp_id;
@@ -420,7 +420,7 @@ class learnpath {
 						ON quiz_question.id = quiz_rel_question.question_id
 						AND quiz_rel_question.exercice_id = '.$id;
 			$rsQuiz = api_sql_query($sql, __FILE__, __LINE__);
-			$max_score = mysql_result($rsQuiz, 0, 0);
+			$max_score = Database::result($rsQuiz, 0, 0);
     	}
     	else
     	{
@@ -558,14 +558,14 @@ class learnpath {
     	$name = learnpath::escape_string(htmlentities($name)); //Kevin Van Den Haute: added htmlentities()
     	$check_name = "SELECT * FROM $tbl_lp WHERE name = '$name'";
     	//if($this->debug>2){error_log('New LP - Checking the name for new LP: '.$check_name,0);}
-    	$res_name = api_sql_query($check_name);
+    	$res_name = api_sql_query($check_name, __FILE__, __LINE__);
 		while(Database::num_rows($res_name)){
     		//there is already one such name, update the current one a bit
     		$i++;
     		$name = $name.' - '.$i;
 	    	$check_name = "SELECT * FROM $tbl_lp WHERE name = '$name'";
 	    	//if($this->debug>2){error_log('New LP - Checking the name for new LP: '.$check_name,0);}
-	    	$res_name = api_sql_query($check_name);
+	    	$res_name = api_sql_query($check_name, __FILE__, __LINE__);
     	}
     	//new name does not exist yet; keep it
     	//escape description
@@ -587,7 +587,7 @@ class learnpath {
     		case 'manual':
     		default:
 		    	$get_max = "SELECT MAX(display_order) FROM $tbl_lp";
-		    	$res_max = api_sql_query($get_max);
+		    	$res_max = api_sql_query($get_max, __FILE__, __LINE__);
 		    	if(Database::num_rows($res_max)<1){
 		    		$dsp = 1;
 		    	}else{
@@ -602,7 +602,7 @@ class learnpath {
     					"'UTF-8','$dsp','Dokeos'," .
     					"'local','')";
     			//if($this->debug>2){error_log('New LP - Inserting new lp '.$sql_insert,0);}
-    			$res_insert = api_sql_query($sql_insert);
+    			$res_insert = api_sql_query($sql_insert, __FILE__, __LINE__);
 				$id = Database::get_last_insert_id();
 				if($id>0){
 					//insert into item_property
@@ -764,18 +764,18 @@ class learnpath {
     	$lp_view = Database::get_course_table('lp_view');
     	$sql_del_view = "DELETE FROM $lp_view WHERE lp_id = ".$this->lp_id;
     	//if($this->debug>2){error_log('New LP - Deleting views bound to lp '.$this->lp_id.': '.$sql_del_view,0);}
-    	$res_del_view = api_sql_query($sql_del_view);
+    	$res_del_view = api_sql_query($sql_del_view, __FILE__, __LINE__);
 	$this->toggle_publish($this->lp_id,'i');
     	//if($this->debug>2){error_log('New LP - Deleting lp '.$this->lp_id.' of type '.$this->type,0);}
     	if($this->type == 2 OR $this->type==3){
     		//this is a scorm learning path, delete the files as well
     		$sql = "SELECT path FROM $lp WHERE id = ".$this->lp_id;
-    		$res = api_sql_query($sql);
+    		$res = api_sql_query($sql, __FILE__, __LINE__);
     		if(Database::num_rows($res)>0){
     			$row = Database::fetch_array($res);
     			$path = $row['path'];
     			$sql = "SELECT id FROM $lp WHERE path = '$path' AND id != ".$this->lp_id;
-    			$res = api_sql_query($sql);
+    			$res = api_sql_query($sql, __FILE__, __LINE__);
     			if(Database::num_rows($res)>0)
     			{ //another learning path uses this directory, so don't delete it 
     				if($this->debug>2){error_log('New LP - In learnpath::delete(), found other LP using path '.$path.', keeping directory',0);}
@@ -792,7 +792,7 @@ class learnpath {
     	}
     	$sql_del_lp = "DELETE FROM $lp WHERE id = ".$this->lp_id;
     	//if($this->debug>2){error_log('New LP - Deleting lp '.$this->lp_id.': '.$sql_del_lp,0);}
-    	$res_del_lp = api_sql_query($sql_del_lp);
+    	$res_del_lp = api_sql_query($sql_del_lp, __FILE__, __LINE__);
     	$this->update_display_order();//updates the display order of all lps
  		api_item_property_update(api_get_course_info(),TOOL_LEARNPATH,$this->lp_id,'delete',api_get_user_id());
     	//TODO: also delete items and item-views
@@ -809,11 +809,11 @@ class learnpath {
     	if(empty($id) || $id != strval(intval($id))){return false;}
 		$lp_item = Database::get_course_table('lp_item');
 		$sql = "SELECT * FROM $lp_item WHERE parent_item_id = $id";
-		$res = api_sql_query($sql);
+		$res = api_sql_query($sql, __FILE__, __LINE__);
 		while($row = Database::fetch_array($res)){
 			$num += $this->delete_children_items($row['id']);
 			$sql_del = "DELETE FROM $lp_item WHERE id = ".$row['id'];
-			$res_del = api_sql_query($sql_del);
+			$res_del = api_sql_query($sql_del, __FILE__, __LINE__);
 			$num++;
 		}
 		return $num;
@@ -1136,7 +1136,7 @@ class learnpath {
 
 		//if($this->debug>0){error_log('New LP - In learnpath::escape_string('.$string.')',0);}
 
-    	return mysql_real_escape_string($string);
+    	return Database::escape_string($string);
 
     }
 
@@ -1869,7 +1869,7 @@ class learnpath {
     		$tbl = Database::get_course_table('lp_item', $course_db);
     		$sql = "SELECT count(*) FROM $tbl WHERE lp_id = ".$lp_id." 
 					AND item_type NOT IN('dokeos_chapter','chapter','dir')";
-    		$res = api_sql_query($sql);
+    		$res = api_sql_query($sql, __FILE__, __LINE__);
     		$row = Database::fetch_array($res);
     		$total = $row[0];
     		$tbl_item_view = Database::get_course_table('lp_item_view', $course_db);
@@ -2338,7 +2338,7 @@ class learnpath {
     {
     	$tbl_lp = Database::get_course_table('lp');
 		$sql = "SELECT lp_type FROM $tbl_lp WHERE id = '".$lp_id."'";
-		$res = api_sql_query($sql); 
+		$res = api_sql_query($sql, __FILE__, __LINE__); 
 		if($res===false){ return null;}
 		if(Database::num_rows($res)<=0){return null;}
 		$row = Database::fetch_array($res);
@@ -2442,8 +2442,6 @@ class learnpath {
 		if($this->debug>0){error_log('New LP - In learnpath::get_html_toc()',0);}
     	$list = $this->get_toc();
     	
-    	
-    	
     	//echo $this->current;
     	//$parent = $this->items[$this->current]->get_parent();
     	//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
@@ -2472,7 +2470,8 @@ class learnpath {
     							'browsed'      => 'completed.png');
     		
     		$style = 'scorm_item';
-    		if($item['id'] == $this->current){
+    		if($item['id'] == $this->current)
+    		{
     			$style = 'scorm_item_highlight';
     		}
     		//the anchor will let us center the TOC on the currently viewed item &^D
@@ -2480,8 +2479,7 @@ class learnpath {
     		if($item['type']!='dokeos_module' AND $item['type']!='dokeos_chapter'){
     		
 	    		$html .= '<a name="atoc_'.$item['id'].'" /><div class="'.$style.'" style="padding-left: '.($item['level']*1.5).'em; padding-right:'.($item['level']/2).'em" id="toc_'.$item['id'].'" title="'.$item['description'].'" >' .
-	    				'';
-    		
+	    				'';    		
     		}
     		
     		else{
@@ -2489,35 +2487,35 @@ class learnpath {
     			$html .= '<div class="'.$style.'" style="padding-left: '.($item['level']*2).'em; padding-right:'.($item['level']*1.5).'em" id="toc_'.$item['id'].'" title="'.$item['description'].'" >' .
 	    				'';
     			
+    		}   		
+			$title=$item['title'];
+    		if(empty($title))
+    		{
+    			$title = rl_get_resource_name(api_get_course_id(),$this->get_id(),$item['id']);    			
     		}
+    		$title = html_entity_decode($title,ENT_QUOTES,$this->encoding);   		
+    	
     		
-    		//$title = htmlspecialchars($item['title'],ENT_QUOTES,$this->encoding);
-    		$title = $item['title'];
-    		if(empty($title)){
-    			$title = rl_get_resource_name(api_get_course_id(),$this->get_id(),$item['id']);
-    			$title = htmlspecialchars($title,ENT_QUOTES,$this->encoding);
-    		}
-    		if(empty($title))$title = '-';
-    		
-    		if($item['type']!='dokeos_chapter' and $item['type']!='dir' AND $item['type']!='dokeos_module'){
+    		if($item['type']!='dokeos_chapter' and $item['type']!='dir' AND $item['type']!='dokeos_module')
+    		{
 					//$html .= "<a href='lp_controller.php?".api_get_cidreq()."&action=content&lp_id=".$this->get_id()."&item_id=".$item['id']."' target='lp_content_frame_name'>".$title."</a>" ;
 					$url = $this->get_link('http',$item['id']);
 					//$html .= '<a href="'.$url.'" target="content_name" onclick="top.load_item('.$item['id'].',\''.$url.'\');">'.$title.'</a>' ;
 					//$html .= '<a href="" onclick="top.load_item('.$item['id'].',\''.$url.'\');return false;">'.$title.'</a>' ;
 					
-					
+					//<img align="absbottom" width="13" height="13" src="../img/lp_document.png">&nbsp;
 					$html .= '<a href="" onclick="dokeos_xajax_handler.switch_item(' .
 							$mycurrentitemid.',' .
 							$item['id'].');' .
-							'return false;" ><img align="absbottom" width="13" height="13" src="../img/lp_document.png">&nbsp;'.stripslashes($title).'</a>' ;
-					
-					
+							'return false;" >'.stripslashes($title).'</a>' ;
     		}
-    		elseif($item['type']=='dokeos_module' || $item['type']=='dokeos_chapter'){
+    		elseif($item['type']=='dokeos_module' || $item['type']=='dokeos_chapter')
+    		{
     				$html .= "<img align='absbottom' width='13' height='13' src='../img/lp_dokeos_module.png'>&nbsp;".stripslashes($title);
     		}
     		
-    		elseif($item['type']=='dir'){
+    		elseif($item['type']=='dir')
+    		{
     				$html .= stripslashes($title);
     		}
     		$html .= "<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'],0,1)."' /></div>\n";
@@ -2581,7 +2579,7 @@ class learnpath {
     	$sel = "SELECT l.lp_type as ltype, l.path as lpath, li.item_type as litype, li.path as lipath, li.parameters as liparams " .
     			"FROM $lp_table l, $lp_item_table li WHERE li.id = $item_id AND li.lp_id = l.id";
     	if($this->debug>2){error_log('New LP - In learnpath::get_link() - selecting item '.$sel,0);}
-    	$res = api_sql_query($sel);
+    	$res = api_sql_query($sel, __FILE__, __LINE__);
     	if(Database::num_rows($res)>0)
     	{
     		$row = Database::fetch_array($res);
@@ -2755,7 +2753,7 @@ class learnpath {
     			"AND user_id = ".$this->get_user_id()." " .
     			$search .
     			" ORDER BY view_count DESC";
-    	$res = api_sql_query($sql);
+    	$res = api_sql_query($sql, __FILE__, __LINE__);
     	if(Database::num_rows($res)>0)
     	{
     		$row = Database::fetch_array($res);
@@ -2764,7 +2762,7 @@ class learnpath {
     		//no database record, create one
     		$sql = "INSERT INTO $lp_view_table(lp_id,user_id,view_count)" .
     				"VALUES (".$this->get_id().",".$this->get_user_id().",1)";
-    		$res = api_sql_query($sql);
+    		$res = api_sql_query($sql, __FILE__, __LINE__);
     		$id = Database::get_last_insert_id();
     		$this->lp_view_id = $id;
     	}
@@ -2867,27 +2865,27 @@ class learnpath {
 			 		{
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET next_item_id = $id WHERE id = $previous_previous";
 				    	if($this->debug>2){error_log($sql_upd2,0);}
-				    	$res_upd2 = api_sql_query($sql_upd2);
+				    	$res_upd2 = api_sql_query($sql_upd2, __FILE__, __LINE__);
 			 		}
 				 	//update previous item (switch with current)
 			    	if($previous != 0)
 			    	{
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET next_item_id = $next, previous_item_id = $id, display_order = display_order +1 WHERE id = $previous";
 				    	if($this->debug>2){error_log($sql_upd2,0);}
-				    	$res_upd2 = api_sql_query($sql_upd2);
+				    	$res_upd2 = api_sql_query($sql_upd2, __FILE__, __LINE__);
 			    	}
 
 			    	//update current item (switch with previous)
 			    	if($id != 0){
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET next_item_id = $previous, previous_item_id = $previous_previous, display_order = display_order-1 WHERE id = $id";
 				    	if($this->debug>2){error_log($sql_upd2,0);}
-				    	$res_upd2 = api_sql_query($sql_upd2);
+				    	$res_upd2 = api_sql_query($sql_upd2, __FILE__, __LINE__);
 			    	}
 			    	//update next item (new previous item)
 			    	if($next != 0){
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET previous_item_id = $previous WHERE id = $next";
 				    	if($this->debug>2){error_log($sql_upd2,0);}
-				    	$res_upd2 = api_sql_query($sql_upd2);
+				    	$res_upd2 = api_sql_query($sql_upd2, __FILE__, __LINE__);
 			    	}
 			    	$display = $display-1;    				
     			}
@@ -2908,27 +2906,27 @@ class learnpath {
 					if($previous != 0)
 					{
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET next_item_id = $next WHERE id = $previous";
-				    	$res_upd2 = api_sql_query($sql_upd2);
+				    	$res_upd2 = api_sql_query($sql_upd2, __FILE__, __LINE__);
 					}
 				    //update current item (switch with previous)
 			    	if($id != 0)
 			    	{
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET previous_item_id = $next, next_item_id = $next_next, display_order = display_order+1 WHERE id = $id";
-				    	$res_upd2 = api_sql_query($sql_upd2);
+				    	$res_upd2 = api_sql_query($sql_upd2, __FILE__, __LINE__);
 			    	}
 
 			    	//update next item (new previous item)
 			    	if($next != 0)
 			    	{
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET previous_item_id = $previous, next_item_id = $id, display_order = display_order-1 WHERE id = $next";
-				    	$res_upd2 = api_sql_query($sql_upd2);    				
+				    	$res_upd2 = api_sql_query($sql_upd2, __FILE__, __LINE__);    				
 			    	}
 
 			    	//update next_next item (switch "previous" with current)
 			    	if($next_next != 0)
 			    	{
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET previous_item_id = $id WHERE id = $next_next";
-				    	$res_upd2 = api_sql_query($sql_upd2);    				
+				    	$res_upd2 = api_sql_query($sql_upd2, __FILE__, __LINE__);    				
 			    	}
 			    	$display = $display+1;    				
     			}
@@ -2947,7 +2945,7 @@ class learnpath {
     {
     	$lp_table = Database::get_course_table(TABLE_LP_MAIN);
     	$sql = "SELECT * FROM $lp_table ORDER BY display_order";
-    	$res = api_sql_query($sql);
+    	$res = api_sql_query($sql, __FILE__, __LINE__);
     	if($res === false) return false;
     	$lps = array();
     	$lp_order = array();
@@ -2963,7 +2961,7 @@ class learnpath {
 				{	//if we find a gap in the order, we need to fix it
 					$need_fix = true;
 					$sql_u = "UPDATE $lp_table SET display_order = $i WHERE id = ".$row['id'];
-					$res_u = api_sql_query($sql_u);
+					$res_u = api_sql_query($sql_u, __FILE__, __LINE__);
 				}
 				$row['display_order'] = $i;
 				$lps[$row['id']] = $row;
@@ -2977,9 +2975,9 @@ class learnpath {
     		if($order>1) //if it's the first element, no need to move up
     		{
     			$sql_u1 = "UPDATE $lp_table SET display_order = $order WHERE id = ".$lp_order[$order-1];
-    			$res_u1 = api_sql_query($sql_u1);
+    			$res_u1 = api_sql_query($sql_u1, __FILE__, __LINE__);
     			$sql_u2 = "UPDATE $lp_table SET display_order = ".($order-1)." WHERE id = ".$lp_id;
-    			$res_u2 = api_sql_query($sql_u2);    			
+    			$res_u2 = api_sql_query($sql_u2, __FILE__, __LINE__);    			
     		}
     	}
     }
@@ -2991,7 +2989,7 @@ class learnpath {
     {
     	$lp_table = Database::get_course_table(TABLE_LP_MAIN);
     	$sql = "SELECT * FROM $lp_table ORDER BY display_order";
-    	$res = api_sql_query($sql);
+    	$res = api_sql_query($sql, __FILE__, __LINE__);
     	if($res === false) return false;
     	$lps = array();
     	$lp_order = array();
@@ -3009,7 +3007,7 @@ class learnpath {
 				{	//if we find a gap in the order, we need to fix it
 					$need_fix = true;
 					$sql_u = "UPDATE $lp_table SET display_order = $i WHERE id = ".$row['id'];
-					$res_u = api_sql_query($sql_u);
+					$res_u = api_sql_query($sql_u, __FILE__, __LINE__);
 				}
 				$row['display_order'] = $i;
 				$lps[$row['id']] = $row;
@@ -3023,9 +3021,9 @@ class learnpath {
     		if($order<$max) //if it's the first element, no need to move up
     		{
     			$sql_u1 = "UPDATE $lp_table SET display_order = $order WHERE id = ".$lp_order[$order+1];
-    			$res_u1 = api_sql_query($sql_u1);
+    			$res_u1 = api_sql_query($sql_u1, __FILE__, __LINE__);
     			$sql_u2 = "UPDATE $lp_table SET display_order = ".($order+1)." WHERE id = ".$lp_id;
-    			$res_u2 = api_sql_query($sql_u2);    			
+    			$res_u2 = api_sql_query($sql_u2, __FILE__, __LINE__);    			
     		}
     	}
     }
@@ -3201,7 +3199,7 @@ class learnpath {
    		$sql = "INSERT INTO $lp_view_table (lp_id, user_id, view_count) " .
    				"VALUES (".$this->lp_id.",".$this->get_user_id().",".($this->attempt+1).")";
    		if($this->debug>2){error_log('New LP - Inserting new lp_view for restart: '.$sql,0);}
-  		$res = api_sql_query($sql);     	
+  		$res = api_sql_query($sql, __FILE__, __LINE__);     	
     	if($view_id = Database::get_last_insert_id($res))
     	{
      		$this->lp_view_id = $view_id;
@@ -3305,7 +3303,7 @@ class learnpath {
 
     						"user_id = ".$this->get_user_id();
 
-    		$res = @mysql_query($sql); //ignore errors as some tables might not have the progress field just yet
+    		$res = api_sql_query($sql,__FILE__, __LINE__); //ignore errors as some tables might not have the progress field just yet
 
     		$this->progress_db = $progress;
 
@@ -3353,7 +3351,7 @@ class learnpath {
 		 	if($lp!=0){
 		 		$tbl_lp = Database::get_course_table('lp');
 		 		$sql = "UPDATE $tbl_lp SET default_encoding = '$enc' WHERE id = ".$lp;
-		 		$res = api_sql_query($sql);
+		 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		 		return $res;
 		 	}
 		}
@@ -3370,7 +3368,7 @@ class learnpath {
 	 	if($lp!=0){
 	 		$tbl_lp = Database::get_course_table('lp');
 	 		$sql = "UPDATE $tbl_lp SET js_lib = '$lib' WHERE id = ".$lp;
-	 		$res = api_sql_query($sql);
+	 		$res = api_sql_query($sql, __FILE__, __LINE__);
 	 		return $res;
 	 	}else{
 	 		return false;
@@ -3400,7 +3398,7 @@ class learnpath {
 
 		//$res = Database::query($sql);
 
-		$res = api_sql_query($sql);
+		$res = api_sql_query($sql, __FILE__, __LINE__);
 
     	return true;
 
@@ -3610,7 +3608,7 @@ class learnpath {
 
     	$sql = "SELECT * FROM $lp_table WHERE id = ".$this->get_id();
 
-    	$res = api_sql_query($sql);
+    	$res = api_sql_query($sql, __FILE__, __LINE__);
 
     	if(Database::num_rows($res)>0){
 
@@ -3630,7 +3628,7 @@ class learnpath {
 
     		$sql = "UPDATE $lp_table SET default_view_mod = '$view_mode' WHERE id = ".$this->get_id();
 
-    		$res = api_sql_query($sql);
+    		$res = api_sql_query($sql, __FILE__, __LINE__);
 
    			$this->mode = $view_mode;
 
@@ -3662,7 +3660,7 @@ class learnpath {
 
     	$sql = "SELECT * FROM $lp_table WHERE id = ".$this->get_id();
 
-    	$res = api_sql_query($sql);
+    	$res = api_sql_query($sql, __FILE__, __LINE__);
 
     	if(Database::num_rows($res)>0){
 
@@ -3686,7 +3684,7 @@ class learnpath {
 
     		$sql = "UPDATE $lp_table SET force_commit = $force WHERE id = ".$this->get_id();
 
-    		$res = api_sql_query($sql);
+    		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 			$this->force_commit = $force_return;
 
@@ -3710,7 +3708,7 @@ class learnpath {
 	{
     	$lp_table = Database::get_course_table(TABLE_LP_MAIN);
     	$sql = "SELECT * FROM $lp_table ORDER BY display_order";
-    	$res = api_sql_query($sql);
+    	$res = api_sql_query($sql, __FILE__, __LINE__);
     	if($res === false) return false;
     	$lps = array();
     	$lp_order = array();
@@ -3726,7 +3724,7 @@ class learnpath {
 				{	//if we find a gap in the order, we need to fix it
 					$need_fix = true;
 					$sql_u = "UPDATE $lp_table SET display_order = $i WHERE id = ".$row['id'];
-					$res_u = api_sql_query($sql_u);
+					$res_u = api_sql_query($sql_u, __FILE__, __LINE__);
 				}
 				$i++;
 			}
@@ -3750,7 +3748,7 @@ class learnpath {
 
     	$sql = "SELECT * FROM $lp_table WHERE id = ".$this->get_id();
 
-    	$res = api_sql_query($sql);
+    	$res = api_sql_query($sql, __FILE__, __LINE__);
 
     	if(Database::num_rows($res)>0){
 
@@ -3802,7 +3800,7 @@ class learnpath {
 
     	$sql = "SELECT * FROM $lp_table WHERE id = ".$this->get_id();
 
-    	$res = api_sql_query($sql);
+    	$res = api_sql_query($sql, __FILE__, __LINE__);
 
     	if(Database::num_rows($res)>0){
 
@@ -3950,17 +3948,17 @@ class learnpath {
 		
 		while($row = Database::fetch_array($result))
 		{
-			$arrLP[] = array(
+				$arrLP[] = array(
 				'id' => $row['id'],
 				'item_type' => $row['item_type'],
-				'title' => $row['title'],
+				'title' => stripslashes(html_entity_decode($row['title'])),
 				'description' => $row['description'],
 				'parent_item_id' => $row['parent_item_id'],
 				'previous_item_id' => $row['previous_item_id'],
 				'next_item_id' => $row['next_item_id'],
-				'display_order' => $row['display_order']);
+				'display_order' => $row['display_order']);		
 		}
-		
+		 
 		$this->tree_array($arrLP);
 		
 		$arrLP = $this->arrMenu;
@@ -4096,10 +4094,11 @@ class learnpath {
 			{
 				$row['title'] = utf8_decode($row['title']);
 			}
+			
 			$arrLP[] = array(
 				'id' => $row['id'],
 				'item_type' => $row['item_type'],
-				'title' => addslashes($row['title']),
+				'title' => $row['title'],
 				'path' => $row['path'],
 				'description' => $row['description'],
 				'parent_item_id' => $row['parent_item_id'],
@@ -4107,27 +4106,28 @@ class learnpath {
 				'next_item_id' => $row['next_item_id'],
 				'display_order' => $row['display_order']);
 		}
-		
+
 		$this->tree_array($arrLP);
 		
 		$arrLP = $this->arrMenu;
 		
 		unset($this->arrMenu);
-		
+		$title='';
 		for($i = 0; $i < count($arrLP); $i++)
 		{
+			$title=html_entity_decode($arrLP[$i]['title']);
 			$menu_page = api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=view_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $_SESSION['oLP']->lp_id;
 			if(file_exists("../img/lp_" . $arrLP[$i]['item_type'] . ".png"))
 			{
-				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . stripslashes($arrLP[$i]['title']) . "', '" . $menu_page . "', '', '', '../img/lp_" . $arrLP[$i]['item_type'] . ".png', '../img/lp_" . $arrLP[$i]['item_type'] . ".png');\n";
+				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $title . "', '" . $menu_page . "', '', '', '../img/lp_" . $arrLP[$i]['item_type'] . ".png', '../img/lp_" . $arrLP[$i]['item_type'] . ".png');\n";
 			}
 			else if(file_exists("../img/lp_" . $arrLP[$i]['item_type'] . ".gif"))
 			{
-				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . stripslashes($arrLP[$i]['title']) . "', '" . $menu_page . "', '', '', '../img/lp_" . $arrLP[$i]['item_type'] . ".gif', '../img/lp_" . $arrLP[$i]['item_type'] . ".gif');\n";
+				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $title . "', '" . $menu_page . "', '', '', '../img/lp_" . $arrLP[$i]['item_type'] . ".gif', '../img/lp_" . $arrLP[$i]['item_type'] . ".gif');\n";
 			}
 			else
 			{
-				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . stripslashes($arrLP[$i]['title']) . "', '" . $menu_page . "', '', '', '../img/lp_document.png', '../img/lp_document.png');\n";
+				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $title . "', '" . $menu_page . "', '', '', '../img/lp_document.png', '../img/lp_document.png');\n";
 			}
 			if($menu < $arrLP[$i]['id'])
 				$menu = $arrLP[$i]['id'];
@@ -4353,7 +4353,7 @@ class learnpath {
 				{
 					$tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
 					$sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE id = " . $row['path'];
-					$result=api_sql_query($sql_doc);
+					$result=api_sql_query($sql_doc, __FILE__, __LINE__);
 					$path_file=mysql_result($result,0,0);					
 					$path_parts = pathinfo($path_file);
 					
@@ -5831,7 +5831,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			if(is_numeric($extra_info)){
 				
 				$sql_doc = "SELECT path FROM " . $tbl_doc . "WHERE id = " . $extra_info;
-				$result=api_sql_query($sql_doc);
+				$result=api_sql_query($sql_doc, __FILE__, __LINE__);
 				$path_file=mysql_result($result,0,0);				
 				
 				$path_parts = pathinfo($path_file);

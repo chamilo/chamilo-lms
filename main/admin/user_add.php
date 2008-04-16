@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 14919 2008-04-16 13:07:16Z elixir_inter $
+<?php // $Id: user_add.php 14923 2008-04-16 14:06:02Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -199,14 +199,12 @@ foreach($extra as $id => $field_details)
 			$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
 			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
 			$form->applyFilter('extra_'.$field_details[1], 'trim');
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			break;
 		case USER_FIELD_TYPE_TEXTAREA:
 			$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false);
 			//$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
 			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
 			$form->applyFilter('extra_'.$field_details[1], 'trim');
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			break;
 		case USER_FIELD_TYPE_RADIO:
 			$group = array();
@@ -236,12 +234,10 @@ foreach($extra as $id => $field_details)
 		case USER_FIELD_TYPE_DATE:
 			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3]);
 			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			$form->applyFilter('theme', 'trim');
 			break;
 		case USER_FIELD_TYPE_DATETIME:
 			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3]);
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			$form->applyFilter('theme', 'trim');
 			break;
 	}

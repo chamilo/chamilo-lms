@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 14908 2008-04-15 20:36:40Z juliomontoya $
+<?php // $Id: document.inc.php 14914 2008-04-16 05:02:08Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -50,8 +50,8 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 	{
 		if (is_array($folders))
 		{
-			$escaped_folders = $folders;
-			array_walk($escaped_folders, 'mysql_real_escape_string');
+			$escaped_folders = array();
+			foreach($folders as $key=>$val){$escaped_folders[$key] = Database::escape_string($val);}
 			$folder_sql = implode("','",$escaped_folders);
 			$doc_table = Database::get_course_table(TABLE_DOCUMENT);
 			$sql = "SELECT * FROM $doc_table WHERE filetype='folder' AND path IN ('".$folder_sql."')";

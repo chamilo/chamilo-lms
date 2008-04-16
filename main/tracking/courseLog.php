@@ -273,9 +273,9 @@ if($_GET['studentlist'] == 'false')
     	$csv_content[] = $temp;
     }
 	
-	if(mysql_num_rows($rs)>0)
+	if(Database::num_rows($rs)>0)
 	{
-		while($quiz = mysql_fetch_array($rs))
+		while($quiz = Database::fetch_array($rs))
 		{
 			$quiz_avg_score = 0;
 			
@@ -287,10 +287,14 @@ if($_GET['studentlist'] == 'false')
 					LIMIT 0, 1';
 			$rsAttempt = api_sql_query($sql, __FILE__, __LINE__);
 			$nb_attempts = 0;
-			while($attempt = mysql_fetch_array($rsAttempt))
+			while($attempt = Database::fetch_array($rsAttempt))
 			{
 				$nb_attempts++;
-				$quiz_avg_score += $attempt['exe_result']/$attempt['exe_weighting']*100;
+				$exe_weight=$attempt['exe_weighting'];
+				if ($exe_weight>0)
+				{
+					$quiz_avg_score += $attempt['exe_result']/$exe_weight*100;
+				}
 			}
 			if($nb_attempts>0)
 				$quiz_avg_score = $quiz_avg_score / $nb_attempts;
@@ -339,7 +343,7 @@ if($_GET['studentlist'] == 'false')
     	$csv_content[] = $temp;
     }
 	
-	while ($row = mysql_fetch_array($rs))
+	while ($row = Database::fetch_array($rs))
 	{
 		echo '	<tr>
 					<td>'.get_lang(ucfirst($row['access_tool'])).'</td>
@@ -380,9 +384,9 @@ if($_GET['studentlist'] == 'false')
     	$csv_content[] = $temp;
     }
     
-    if(mysql_num_rows($rs)>0)
+    if(Database::num_rows($rs)>0)
     {
-	    while($row = mysql_fetch_array($rs))
+	    while($row = Database::fetch_array($rs))
 	    {
 	    	echo '	<tr>
 						<td>'.$row['down_doc_path'].'</td>
@@ -433,9 +437,9 @@ if($_GET['studentlist'] == 'false')
     	$csv_content[] = $temp;
     }
     
-    if(mysql_num_rows($rs)>0)
+    if(Database::num_rows($rs)>0)
     {
-	    while($row = mysql_fetch_array($rs))
+	    while($row = Database::fetch_array($rs))
 	    {
 	    	echo '	<tr>
 						<td>'.$row['title'].'</td>

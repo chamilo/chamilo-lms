@@ -16,18 +16,34 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 
 	public $split_steps;
 	
-	function OpenofficeTextDocument($split_steps=false, $course_code=null, $resource_id=null,$user_id=null) {
+	/**
+	 * Class constructor. Calls the parent class and initialises the local attribute split_steps
+	 * @param	boolean	Whether to split steps (true) or make one large page (false)
+	 * @param	string	Course code
+	 * @param	integer	Resource ID
+	 * @param	integer Creator user id
+	 * @return	void
+	 */
+	function OpenofficeTextDocument($split_steps=false, $course_code=null, $resource_id=null,$user_id=null)
+	{
 		
 		$this -> split_steps = $split_steps;
 		parent::OpenofficeDocument($course_code, $resource_id, $user_id);
 		
 	}
     
-    function make_lp($files=array()){
+    /**
+     * Gets html pages and compose them into a learning path
+     * @param	array	The files that will compose the generated learning path. Unused so far.
+     * @return	boolean	False if file does not exit. Nothing otherwise.
+     */
+    function make_lp($files=array())
+    {
     	
 		global $_course;
 		
 		// we get a content where ||page_break|| indicates where the page is broken
+		if(!file_exists($this->base_work_dir.$this->created_dir.'/'.$this->file_name.'.html')){return false;}
 		$content = file_get_contents($this->base_work_dir.$this->created_dir.'/'.$this->file_name.'.html');	
 		
 		// set the charset if necessary
@@ -70,9 +86,14 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 		
     }
     
-    
-    
-    function dealPerChapter($header, $content){
+    /**
+     * Manages chapter splitting
+     * @param	string	Chapter header
+     * @param	string	Content
+     * @return	void
+     */
+    function dealPerChapter($header, $content)
+    {
 		
 		global $_course;
 		
@@ -149,15 +170,22 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 		
 	}
     
+    /**
+     * Manages page splitting
+     * @param	string	Page header
+     * @param	string	Page body
+     * @return	void
+     */
     function dealPerPage($header,$body)
     {
-		
+		global $_course;
 		// split document to pages
 		$pages = explode('||page_break||',$body);		
 		
 		$first_item = 0;
 		
-		foreach($pages as $key=>$page_content){ // for every pages, we create a new file
+		foreach($pages as $key=>$page_content)
+		{ // for every pages, we create a new file
 			
 			$key +=1;
 			
@@ -185,12 +213,20 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 			
     }
     
-    
+    /**
+     * Returns additional Java command parameters
+     * @return	string	The additional parameters to be used in the Java call
+     */
     function add_command_parameters(){
     	return ' -d woogie';
     }
     
-    
+    /**
+     * Formats a page content by reorganising the HTML code a little
+     * @param	string	Page header
+     * @param	string	Page content
+     * @return	string	Formatted page content 
+     */
     function format_page_content($header, $content)
     {
     	
@@ -246,12 +282,11 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
     	return $content;
     	
     }
-    
+    /**
+     * Add documents to the visioconference (to be implemented)
+     */
     function add_docs_to_visio (){
-    	
-    	
+    	  	
     }
-   
-		
 }
 ?>

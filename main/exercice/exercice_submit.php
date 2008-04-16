@@ -33,7 +33,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 14834 2008-04-10 20:55:50Z yannoo $
+* 	@version $Id: exercice_submit.php 14930 2008-04-16 21:41:35Z juliomontoya $
 */
 
 
@@ -553,8 +553,9 @@ $s="</table>
    &nbsp;&nbsp; //-->
 	 <input type='submit' name='submit' value='";
 
-  if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
-	$s.=get_lang('Ok');
+  if ($exerciseType == 1 || $nbrQuestions == $questionNum) 
+  {
+	$s.=get_lang('ValidateAnswer'); 
   }
   else
   {

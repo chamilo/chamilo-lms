@@ -51,7 +51,6 @@ while($row = Database :: fetch_array($rs))
 	$Courses[$row['course_code']] = CourseManager::get_course_information($row['course_code']);
 }
 
-
 api_display_tool_title($nameTools);
 
 $now=date('Y-m-d');
@@ -85,18 +84,14 @@ foreach($Courses as $enreg)
 	$weighting = 0;
 
 	$lastConnexion = Tracking :: get_last_connection_date_on_the_course($_user['user_id'],$enreg['code']);
-
 	$progress = Tracking :: get_avg_student_progress($_user['user_id'], $enreg['code']);
-
 	$time = api_time_to_hms(Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code']));
-
 	$pourcentageScore = Tracking :: get_avg_student_score($_user['user_id'], $enreg['code']);
-
 ?>
 
 <tr class='<?php echo $i?'row_odd':'row_even'; ?>'>
   	<td>
-		<?php echo htmlentities($enreg['title'],ENT_QUOTES,$charset); ?>
+		<?php echo html_entity_decode($enreg['title'],ENT_QUOTES,$charset); ?>
   	</td>
 
   	<td align='center'>
@@ -159,22 +154,28 @@ foreach($Courses as $enreg)
 					ORDER BY id_session DESC';
 			$rs = api_sql_query($sql,__FILE__,__LINE__);
 			
-			$session_id = intval(mysql_result($rs,0,0));
+			$row=Database::fetch_array($rs);			
+			if (!empty ($row[0]))
+			{
+				$session_id =intval($row[0]);	
+			}
+			//$session_id =intval(Database::result($rs,0,0));			
+			
 			if($session_id>0)
 			{
 				// get session name and coach of the session
 				$sql = 'SELECT name, id_coach FROM '.$tbl_session.' 
 						WHERE id='.$session_id;
 				$rs = api_sql_query($sql,__FILE__,__LINE__);						
-				$session_name = mysql_result($rs,0,'name');
-				$session_coach_id = intval(mysql_result($rs,0,'id_coach'));
+				$session_name = Database::result($rs,0,'name');
+				$session_coach_id = intval(Database::result($rs,0,'id_coach'));
 				
 				// get coach of the course in the session
 				$sql = 'SELECT id_coach FROM '.$tbl_session_course.' 
 						WHERE id_session='.$session_id.'
 						AND course_code = "'.Database::escape_string($_GET['course']).'"';
 				$rs = api_sql_query($sql,__FILE__,__LINE__);						
-				$session_course_coach_id = intval(mysql_result($rs,0,0));
+				$session_course_coach_id = intval(Database::result($rs,0,0));
 
 				if($session_course_coach_id!=0)
 				{
@@ -212,9 +213,9 @@ foreach($Courses as $enreg)
 
 				$resultLearnpath = api_sql_query($sqlLearnpath);
 
-				if(mysql_num_rows($resultLearnpath)>0)
+				if(Database::num_rows($resultLearnpath)>0)
 				{
-					while($a_learnpath = mysql_fetch_array($resultLearnpath))
+					while($a_learnpath = Database::fetch_array($resultLearnpath))
 					{
 
 
@@ -229,7 +230,7 @@ foreach($Courses as $enreg)
 										AND view.lp_id = '.$a_learnpath['id'].'
 										AND view.user_id = '.$_user['user_id'];
 						$rs = api_sql_query($sql, __FILE__, __LINE__);
-						$start_time = mysql_result($rs, 0, 0);
+						$start_time = Database::result($rs, 0, 0);
 
 						// calculates time
 						$sql = 'SELECT SUM(total_time)
@@ -239,7 +240,7 @@ foreach($Courses as $enreg)
 										AND view.lp_id = '.$a_learnpath['id'].'
 										AND view.user_id = '.$_user['user_id'];
 						$rs = api_sql_query($sql, __FILE__, __LINE__);
-						$total_time = mysql_result($rs, 0, 0);
+						$total_time = Database::result($rs, 0, 0);
 
 
 						echo "<tr>
@@ -294,7 +295,7 @@ foreach($Courses as $enreg)
 				$sql='SELECT visibility FROM '.$a_infosCours['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz"';
 				$resultVisibilityTests = api_sql_query($sql);
 				
-				if(mysql_result($resultVisibilityTests,0,'visibility')==1){
+				if(Database::result($resultVisibilityTests,0,'visibility')==1){
 				
 					$sqlExercices = "	SELECT quiz.title,id
 									FROM ".$a_infosCours['db_name'].".".$tbl_course_quiz." AS quiz
@@ -303,8 +304,8 @@ foreach($Courses as $enreg)
 	
 	
 					$resuktExercices = api_sql_query($sqlExercices);
-					if(mysql_num_rows($resuktExercices)>0){
-						while($a_exercices = mysql_fetch_array($resuktExercices))
+					if(Database::num_rows($resuktExercices)>0){
+						while($a_exercices = Database::fetch_array($resuktExercices))
 						{
 							$sqlEssais = "	SELECT COUNT(ex.exe_id) as essais
 											FROM $tbl_stats_exercices AS ex
@@ -312,7 +313,7 @@ foreach($Courses as $enreg)
 											AND ex.exe_exo_id = ".$a_exercices['id']
 										 ;
 							$resultEssais = api_sql_query($sqlEssais);
-							$a_essais = mysql_fetch_array($resultEssais);
+							$a_essais = Database::fetch_array($resultEssais);
 		
 							$sqlScore = "SELECT exe_id , exe_result,exe_weighting
 										 FROM $tbl_stats_exercices
@@ -324,13 +325,21 @@ foreach($Courses as $enreg)
 		
 							$resultScore = api_sql_query($sqlScore);
 							$score = 0;
-							while($a_score = mysql_fetch_array($resultScore))
+							while($a_score = Database::fetch_array($resultScore))
 							{
 								$score = $score + $a_score['exe_result'];
 								$weighting = $weighting + $a_score['exe_weighting'];
 								$exe_id = $a_score['exe_id'];
+							}					
+							
+							if  ($weighting>0)
+							{							
+								$pourcentageScore = round(($score*100)/$weighting);
 							}
-							$pourcentageScore = round(($score*100)/$weighting);
+							else
+							{
+								$pourcentageScore=0;			
+							}
 		
 							$weighting = 0;
 		

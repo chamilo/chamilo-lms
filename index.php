@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 14724 2008-04-02 15:30:14Z elixir_inter $
+* 	@version $Id: index.php 14921 2008-04-16 13:10:59Z pcool $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -54,6 +54,7 @@ include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 $loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
+$setting_show_also_closed_courses = (api_get_setting(show_closed_courses)=='true') ? true : false;
 
 // the section (for the tabs)
 $this_section = SECTION_CAMPUS;
@@ -331,17 +332,29 @@ function logout()
  */
 function category_has_open_courses($category)
 {
+	global $setting_show_also_closed_courses;
+	
 	$user_identified = (api_get_user_id()>0 && !api_is_anonymous());
 	$main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql_query = "SELECT * FROM $main_course_table WHERE category_code='$category'";
 	$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 	while ($course = mysql_fetch_array($sql_result))
 	{
-		if((api_get_user_id()>0 
-			and $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-			or ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD))
+		if ($setting_show_also_closed_courses == false)
 		{
-			return true; //at least one open course
+			if((api_get_user_id()>0 
+				and $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
+				or ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD))
+			{
+				return true; //at least one open course
+			}
+		}
+		else 
+		{
+			if(isset($course['visibility']))
+			{
+				return true; //at least one course (does not matter weither it's open or not because $setting_show_also_closed_courses = true
+			}			
 		}
 	}
 	return false;
@@ -549,10 +562,14 @@ function display_lost_password_info()
 */
 function display_anonymous_course_list()
 {
+	$ctok = $_SESSION['sec_token'];
+	$stok = Security::get_token();	
+	
 	//init
 	$user_identified = (api_get_user_id()>0 && !api_is_anonymous());
 	$web_course_path = api_get_path(WEB_COURSE_PATH);
 	$category = $_GET["category"];
+	global $setting_show_also_closed_courses;
 
 	// Database table definitions
 	$main_course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -563,7 +580,7 @@ function display_anonymous_course_list()
 	//get list of courses in category $category
 	$sql_get_course_list = "SELECT * FROM $main_course_table cours
 								WHERE category_code = '".mysql_real_escape_string($_GET["category"])."'
-								ORDER BY UPPER(visual_code)";
+								ORDER BY title, UPPER(visual_code)";
 	//removed: AND cours.visibility='".COURSE_VISIBILITY_OPEN_WORLD."'
 	$sql_result_courses = api_sql_query($sql_get_course_list, __FILE__, __LINE__);
 
@@ -573,15 +590,34 @@ function display_anonymous_course_list()
 	}
 
 	$platform_visible_courses = '';
+	// $setting_show_also_closed_courses
 	if($user_identified)
 	{
-		$platform_visible_courses = " OR t3.visibility='".COURSE_VISIBILITY_OPEN_PLATFORM."' ";
+		if ($setting_show_also_closed_courses)
+		{
+			$platform_visible_courses = '';
+		}
+		else 
+		{
+			$platform_visible_courses = "  AND (t3.visibility='".COURSE_VISIBILITY_OPEN_WORLD."' OR t3.visibility='".COURSE_VISIBILITY_OPEN_PLATFORM."' )";	
+		}
+	}
+	else 
+	{
+		if ($setting_show_also_closed_courses)
+		{
+			$platform_visible_courses = '';
+		}
+		else 
+		{
+			$platform_visible_courses = "  AND (t3.visibility='".COURSE_VISIBILITY_OPEN_WORLD."' )";	
+		}				
 	}
 	$sqlGetSubCatList = "
 				SELECT t1.name,t1.code,t1.parent_id,t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
 				FROM $main_category_table t1
 				LEFT JOIN $main_category_table t2 ON t1.code=t2.parent_id
-				LEFT JOIN $main_course_table t3 ON (t3.category_code=t1.code AND (t3.visibility='".COURSE_VISIBILITY_OPEN_WORLD."' $platform_visible_courses))
+				LEFT JOIN $main_course_table t3 ON (t3.category_code=t1.code $platform_visible_courses)
 				WHERE t1.parent_id ". (empty ($category) ? "IS NULL" : "='$category'")."
 				GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
 	$resCats = api_sql_query($sqlGetSubCatList, __FILE__, __LINE__);
@@ -669,19 +705,111 @@ function display_anonymous_course_list()
 			$courses_list_string .= "<hr size=\"1\" noshade=\"noshade\">\n";
 		}
 		$courses_list_string .= "<h4 style=\"margin-top: 0px;\">".get_lang("CourseList")."</h4>\n"."<ul>\n";
+		
+		if (api_get_user_id())
+		{
+			$courses_of_user = get_courses_of_user(api_get_user_id());
+		}
+		
 		foreach ($course_list AS $course)
 		{
-			if( ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-				or ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD))
+			// $setting_show_also_closed_courses
+			
+			if ($setting_show_also_closed_courses==false)
+			{
+				// if we do not show the closed courses 
+				// we only show the courses that are open to the world (to everybody)
+				// and the courses that are open to the platform (if the current user is a registered user
+				if( ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) OR ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD))
+				{
+					$courses_shown++;
+					$courses_list_string .= "<li>\n";
+				$courses_list_string .= "<a href=\"".$web_course_path.$course['directory']."/\">".$course['title']."</a><br />";
+				if (get_setting("display_coursecode_in_courselist") == "true")
+				{
+					$courses_list_string .= $course['visual_code'];
+				}
+				if (get_setting("display_coursecode_in_courselist") == "true" AND get_setting("display_teacher_in_courselist") == "true")
+				{
+					$courses_list_string .= " - ";
+				}
+				if (get_setting("display_teacher_in_courselist") == "true")
+				{
+					$courses_list_string .= $course['tutor_name'];
+				}				
+					if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] <> api_get_setting('platformLanguage'))
+					{
+						$courses_list_string .= ' - '.$course['course_language'];
+					}
+					$courses_list_string .= "</li>\n";
+				}
+			}
+			// we DO show the closed courses.
+			// the course is accessible if (link to the course homepage)
+			// 1. the course is open to the world (doesn't matter if the user is logged in or not): $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)
+			// 2. the user is logged in and the course is open to the world or open to the platform: ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
+			// 3. the user is logged in and the user is subscribed to the course and the course visibility is not COURSE_VISIBILITY_CLOSED
+			// 4. the user is logged in and the user is course admin of te course (regardless of the course visibility setting)
+			// 5. the user is the platform admin api_is_platform_admin()
+			// 
+			else 
 			{
 				$courses_shown++;
 				$courses_list_string .= "<li>\n";
-				$courses_list_string .= "<a href=\"".$web_course_path.$course['directory']."/\">".$course['title']."</a>";
-				$courses_list_string .= "<br/>".$course['visual_code']." - ".$course['tutor_name'];
+					if( $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
+							OR ($user_identified AND $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) 
+							OR ($user_identified AND key_exists($course['code'],$courses_of_user) AND $course['visibility'] <> COURSE_VISIBILITY_CLOSED) 
+							OR $courses_of_user[$course['code']]['status'] == '1'
+							OR api_is_platform_admin())
+					{
+						$courses_list_string .= "<a href=\"".$web_course_path.$course['directory']."/\">";
+					}
+					$courses_list_string .= $course['title'];
+					if( $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
+							OR ($user_identified AND $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) 
+							OR ($user_identified AND key_exists($course['code'],$courses_of_user) AND $course['visibility'] <> COURSE_VISIBILITY_CLOSED) 
+							OR $courses_of_user[$course['code']]['status'] == '1'
+							OR api_is_platform_admin())
+					{
+						$courses_list_string .="</a><br />";
+					}
+					if (get_setting("display_coursecode_in_courselist") == "true")
+					{
+						$courses_list_string .= $course['visual_code'];
+					}
+					if (get_setting("display_coursecode_in_courselist") == "true" AND get_setting("display_teacher_in_courselist") == "true")
+					{
+						$courses_list_string .= " - ";
+					}
+					if (get_setting("display_teacher_in_courselist") == "true")
+					{
+						$courses_list_string .= $course['tutor_name'];
+					}				
 				if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] <> api_get_setting('platformLanguage'))
 				{
 					$courses_list_string .= ' - '.$course['course_language'];
 				}
+					if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] <> api_get_setting('platformLanguage'))
+					{
+						$courses_list_string .= ' - '.$course['course_language'];
+					}
+					// We display a subscription link if 
+					// 1. it is allowed to register for the course and if the course is not already in the courselist of the user and if the user is identiefied
+					// 2
+					if ($user_identified AND !key_exists($course['code'],$courses_of_user))
+					{
+						if ($course['subscribe'] == '1')
+						{
+							$courses_list_string .= "<form action=\"main/auth/courses.php?action=subscribe&category=".$_GET['category']."\" method=\"post\">";
+							$courses_list_string .= '<input type="hidden" name="sec_token" value="'.$stok.'">';
+							$courses_list_string .= "<input type=\"hidden\" name=\"subscribe\" value=\"".$course['code']."\" />";
+							$courses_list_string .= "<input type=\"image\" name=\"unsub\" src=\"main/img/enroll.gif\" alt=\"".get_lang("Subscribe")."\" />".get_lang("Subscribe")."</form>";
+						}
+						else
+						{
+							$courses_list_string .= '<br />'.get_lang("SubscribingNotAllowed");
+						}
+					}
 				$courses_list_string .= "</li>\n";
 			}
 		}
@@ -700,5 +828,35 @@ function display_anonymous_course_list()
 	{
 		echo "<p>", "<a href=\"".api_get_self()."\"><b>&lt;&lt;</b> ", get_lang("BackToHomePage"), "</a>", "</p>\n";
 	}
+}
+
+/**
+ * retrieves all the courses that the user has already subscribed to
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @param int $user_id: the id of the user
+ * @return array an array containing all the information of the courses of the given user
+*/
+function get_courses_of_user($user_id)
+{
+	$table_course		= Database::get_main_table(TABLE_MAIN_COURSE);
+	$table_course_user	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+	// Secondly we select the courses that are in a category (user_course_cat<>0) and sort these according to the sort of the category
+	$user_id = intval($user_id);
+	$sql_select_courses="SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,
+								course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status,
+								course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+		                        FROM    $table_course       course,
+										$table_course_user  course_rel_user
+		                        WHERE course.code = course_rel_user.course_code
+		                        AND   course_rel_user.user_id = '".$user_id."'
+		                        ORDER BY course_rel_user.sort ASC";
+	$result = api_sql_query($sql_select_courses,__FILE__,__LINE__);
+	while ($row=Database::fetch_array($result))
+	{
+		// we only need the database name of the course
+		$courses[$row['k']] = array("db"=> $row['db'], "code" => $row['k'], "visual_code" => $row['vc'], "title" => $row['i'], "directory" => $row['dir'], "status" => $row['status'], "tutor" => $row['t'], "subscribe" => $row['subscr'], "unsubscribe" => $row['unsubscr'], "sort" => $row['sort'], "user_course_category" => $row['user_course_cat']);
+	}
+	return $courses;
 }
 ?>

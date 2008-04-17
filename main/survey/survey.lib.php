@@ -1,33 +1,34 @@
 <?php
-$config['survey']['debug'] = false;
 /*
-    DOKEOS - elearning and course management software
-    Copyright (c)	2008		Dokeos SPRL
-    Copyright (c)   2006-2008	Patrick Cool
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2006-2008	Patrick Cool
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-    Contact:
-		Dokeos
-		Rue du Corbeau, 108
-		B-1030 Brussels - Belgium
-		info@dokeos.com
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
-
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 14913 2008-04-15 23:03:21Z yannoo $
+* 	@version $Id: survey.lib.php 14940 2008-04-17 17:44:03Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
 */
+$config['survey']['debug'] = false;
 require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 
 class survey_manager
@@ -96,10 +97,11 @@ class survey_manager
 		// table defnitions
 		$table_survey 	= Database :: get_course_table(TABLE_SURVEY);
 
-		if ($values['survey_share']['survey_share'] !== '0')
+		/*if ($values['survey_share']['survey_share'] !== '0')
 		{
 			$shared_survey_id = survey_manager::store_shared_survey($values);
-		}
+		}*/		
+		$shared_survey_id=0;
 
 		if (!$values['survey_id'] OR !is_numeric($values['survey_id']))
 		{
@@ -2088,7 +2090,7 @@ class SurveyUtil {
 					WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 					ORDER BY survey_question.sort ASC";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = Database::fetch_array($result,'ASSOC'))
 			{
 				if($row['type'] <> 'pagebreak')
 				{
@@ -2105,7 +2107,7 @@ class SurveyUtil {
 			// getting all the answers of the user
 			$sql = "SELECT * FROM $table_survey_answer WHERE survey_id = '".Database::escape_string($_GET['survey_id'])."' AND user = '".Database::escape_string($_GET['user'])."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = Database::fetch_array($result,'ASSOC'))
 			{
 				$answers[$row['question_id']][] = $row['option_id'];
 				$all_answers[$row['question_id']][] = $row;
@@ -3384,7 +3386,7 @@ class SurveyUtil {
 	
 		$sql = "SELECT count(user) AS total FROM $table_survey_invitation WHERE survey_id='".Database::escape_string($_GET['survey_id'])."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
-		$row = mysql_fetch_assoc($res);
+		$row = Database::fetch_array($res,'ASSOC');
 		return $row['total'];
 	}
 	/**

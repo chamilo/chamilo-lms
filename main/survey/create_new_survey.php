@@ -1,27 +1,30 @@
 <?php
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2004-2008 Dokeos SPRL
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
 
 /**
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: create_new_survey.php 14361 2008-02-25 05:35:58Z yannoo $
+* 	@version $Id: create_new_survey.php 14940 2008-04-17 17:44:03Z juliomontoya $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -86,8 +89,10 @@ if ($_GET['action'] == 'edit' AND isset($_GET['survey_id']) AND is_numeric($_GET
 {
 	$defaults = $survey_data;
 	$defaults['survey_id'] = $_GET['survey_id'];
+	/*
 	$defaults['survey_share'] = array();
 	$defaults['survey_share']['survey_share'] = $survey_data['survey_share'];
+	
 	if (!is_numeric($survey_data['survey_share']) OR $survey_data['survey_share'] == 0)
 	{
 		$form_share_value = 'true';
@@ -96,6 +101,8 @@ if ($_GET['action'] == 'edit' AND isset($_GET['survey_id']) AND is_numeric($_GET
 	{
 		$form_share_value = $defaults['survey_share']['survey_share'];
 	}
+	*/
+	
 	$defaults['anonymous'] = $survey_data['anonymous'];
 }
 else
@@ -104,8 +111,8 @@ else
 	$defaults['start_date'] = date('d-F-Y H:i');
 	$startdateandxdays = time() + 864000; // today + 10 days
 	$defaults['end_date'] = date('d-F-Y H:i', $startdateandxdays);
-	$defaults['survey_share']['survey_share'] = 0;
-	$form_share_value = 1;
+	//$defaults['survey_share']['survey_share'] = 0;
+	//$form_share_value = 1;
 	$defaults['anonymous'] = 0;
 }
 
@@ -131,12 +138,14 @@ foreach ($lang_array['name'] as $key=>$value)
 $form->addElement('select', 'survey_language', get_lang('Language'), $languages);
 $form->addElement('datepickerdate', 'start_date', get_lang('StartDate'), array('form_name'=>'survey'));
 $form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form_name'=>'survey'));
-$group='';
-$group[] =& HTML_QuickForm::createElement('radio', 'survey_share',null, get_lang('Yes'),$form_share_value);
+
+//$group='';
+//$group[] =& HTML_QuickForm::createElement('radio', 'survey_share',null, get_lang('Yes'),$form_share_value);
 /** @todo maybe it is better to change this into false instead see line 95 in survey.lib.php */
-$group[] =& HTML_QuickForm::createElement('radio', 'survey_share',null, get_lang('No'),0);
+//$group[] =& HTML_QuickForm::createElement('radio', 'survey_share',null, get_lang('No'),0);
+
 $fck_attribute['Height'] = '200';
-$form->addGroup($group, 'survey_share', get_lang('ShareSurvey'), '&nbsp;');
+//$form->addGroup($group, 'survey_share', get_lang('ShareSurvey'), '&nbsp;');
 $form->addElement('checkbox', 'anonymous', get_lang('Anonymous'));
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'));
@@ -159,7 +168,8 @@ if( $form->validate() )
 	$values = $form->exportValues();
 	// storing the survey
 	$return = survey_manager::store_survey($values);
-	// deleting the shared survey if the survey is getting unshared (this only happens when editing)
+	
+	/*// deleting the shared survey if the survey is getting unshared (this only happens when editing)	
 	if (is_numeric($survey_data['survey_share']) AND $values['survey_share']['survey_share'] == 0 AND $values['survey_id']<>'')
 	{
 		survey_manager::delete_survey($survey_data['survey_share'], true);
@@ -169,7 +179,7 @@ if( $form->validate() )
 	{
 		survey_manager::get_complete_survey_structure($return['id']);
 	}
-
+	*/
 	if ($config['survey']['debug'])
 	{
 		// displaying a feedback message

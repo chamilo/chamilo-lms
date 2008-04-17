@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 14923 2008-04-16 14:06:02Z elixir_inter $
+<?php // $Id: user_edit.php 14933 2008-04-17 09:02:15Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -159,11 +159,7 @@ $group[] =& HTML_QuickForm::createElement('password', 'password',null,null);
 $form->addGroup($group, 'password', null, '',false);
 
 // Status
-$status = array();
-$status[COURSEMANAGER]  = get_lang('CourseAdmin');
-$status[STUDENT] = get_lang('Student');
-$status[DRH] = get_lang('Drh');
-$status[ADMINCRFP] = get_lang('AdminCrfp');
+$status = api_get_status_langvar();
 $form->addElement('select','status',get_lang('Status'),$status,'id="status_select" onchange="display_drh_list()"');
 
 $display = $user_data['status'] == STUDENT || $_POST['status'] == STUDENT ? 'block' : 'none';

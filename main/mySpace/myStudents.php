@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 14848 2008-04-11 13:21:04Z elixir_inter $
+<?php //$Id: myStudents.php 14945 2008-04-17 21:53:37Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -19,7 +19,7 @@
 	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
- */
+*/
  
  // name of the language file that needs to be included 
 $language_file = array ('registration', 'index', 'tracking', 'exercice');
@@ -133,8 +133,9 @@ function is_teacher($course_code){
 	global $_user;
 	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$sql="SELECT 1 FROM $tbl_course_user WHERE user_id='".$_user["user_id"]."' AND course_code='".$course_code."' AND status='1'";
-	$result=api_sql_query($sql);
-	if(mysql_result($result)!=1){
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+	if(Database::result($result)!=1)
+	{
 		return true;
 	}
 	else{
@@ -465,7 +466,7 @@ if(!empty($_GET['student']))
 							ORDER BY id_session DESC';
 					$rs = api_sql_query($sql,__FILE__,__LINE__);
 					
-					$le_session_id = intval(mysql_result($rs,0,0));
+					$le_session_id = intval(Database::result($rs,0,0));
 					
 					if($le_session_id>0)
 					{
@@ -473,15 +474,15 @@ if(!empty($_GET['student']))
 						$sql = 'SELECT name, id_coach FROM '.$tbl_session.' 
 								WHERE id='.$le_session_id;
 						$rs = api_sql_query($sql,__FILE__,__LINE__);						
-						$session_name = mysql_result($rs,0,'name');
-						$session_coach_id = intval(mysql_result($rs,0,'id_coach'));
+						$session_name = Database::result($rs,0,'name');
+						$session_coach_id = intval(Database::result($rs,0,'id_coach'));
 						
 						// get coach of the course in the session
 						$sql = 'SELECT id_coach FROM '.$tbl_session_course.' 
 								WHERE id_session='.$le_session_id.'
 								AND course_code = "'.Database::escape_string($_GET['course']).'"';
 						$rs = api_sql_query($sql,__FILE__,__LINE__);						
-						$session_course_coach_id = intval(mysql_result($rs,0,0));
+						$session_course_coach_id = intval(Database::result($rs,0,0));
 
 						if($session_course_coach_id!=0)
 						{
@@ -544,7 +545,7 @@ if(!empty($_GET['student']))
 								FROM ".$a_infosCours['db_name'].".".$tbl_course_lp." AS lp ORDER BY lp.name ASC
 							";
 
-			$resultLearnpath = api_sql_query($sqlLearnpath);
+			$resultLearnpath = api_sql_query($sqlLearnpath,__FILE__,__LINE__);
 			
 			$csv_content[] = array();
 			$csv_content[] = array(get_lang('Learnpath'),get_lang('Time'),get_lang('Score'),get_lang('Progress'),get_lang('LastConnexion'));
@@ -624,7 +625,12 @@ if(!empty($_GET['student']))
 									AND lp_view_id = "'.$lp_view_id.'"';
 									
 							$rsScores = api_sql_query($sql, __FILE__, __LINE__);
-							$total_score += mysql_result($rsScores, 0, 0);
+							
+							if (Database::num_rows($rsScores) > 0)
+							{			
+								$total_score += Database::result($rsScores, 0, 0);
+							}
+							
 							$total_weighting += $item['max_score'];
 						}
 						$any_result = true;
@@ -749,20 +755,20 @@ if(!empty($_GET['student']))
 			$a_infosCours = CourseManager :: get_course_information($_GET['course']);
 
 			$sql='SELECT visibility FROM '.$a_infosCours['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz"';
-			$resultVisibilityQuizz = api_sql_query($sql);
+			$resultVisibilityQuizz = api_sql_query($sql,__FILE__,__LINE__);
 			
-			if(mysql_result($resultVisibilityQuizz,0,'visibility')==1){
+			if(Database::result($resultVisibilityQuizz,0,'visibility')==1){
 			
 				$sqlExercices = "	SELECT quiz.title,id
 									FROM ".$a_infosCours['db_name'].".".$tbl_course_quiz." AS quiz
 									WHERE active='1' ORDER BY quiz.title ASC
 									";
 		
-				$resultExercices = api_sql_query($sqlExercices);
+				$resultExercices = api_sql_query($sqlExercices,__FILE__,__LINE__);
 				$i = 0;
-				if(mysql_num_rows($resultExercices)>0)
+				if(Database::num_rows($resultExercices)>0)
 				{
-					while($a_exercices = mysql_fetch_array($resultExercices))
+					while($a_exercices = Database::fetch_array($resultExercices))
 					{
 						$sqlEssais = "	SELECT COUNT(ex.exe_id) as essais
 										FROM $tbl_stats_exercices AS ex
@@ -770,8 +776,8 @@ if(!empty($_GET['student']))
 										AND ex.exe_exo_id = ".$a_exercices['id']."
 										AND exe_user_id='".$_GET["student"]."'"
 									 ;
-						$resultEssais = api_sql_query($sqlEssais);
-						$a_essais = mysql_fetch_array($resultEssais);
+						$resultEssais = api_sql_query($sqlEssais,__FILE__,__LINE__);
+						$a_essais = Database::fetch_array($resultEssais);
 						
 						$sqlScore = "SELECT exe_id, exe_result,exe_weighting
 									 FROM $tbl_stats_exercices
@@ -780,9 +786,9 @@ if(!empty($_GET['student']))
 									 AND exe_exo_id = ".$a_exercices['id']."
 									 ORDER BY exe_date DESC LIMIT 1";
 	
-						$resultScore = api_sql_query($sqlScore);
+						$resultScore = api_sql_query($sqlScore,__FILE__,__LINE__);
 						$score = 0; 
-						while($a_score = mysql_fetch_array($resultScore))
+						while($a_score = Database::fetch_array($resultScore))
 						{
 							$score = $score + $a_score['exe_result'];
 							$weighting = $weighting + $a_score['exe_weighting'];
@@ -825,18 +831,17 @@ if(!empty($_GET['student']))
 							 ";
 						
 						$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$a_exercices['id'].'" AND exe_user_id="'.$_GET['student'].'" AND exe_cours_id="'.$a_infosCours['code'].'" ORDER BY exe_date DESC LIMIT 1';
-						$resultLastAttempt = api_sql_query($sql_last_attempt);
+						$resultLastAttempt = api_sql_query($sql_last_attempt,__FILE__,__LINE__);
 						if(Database::num_rows($resultLastAttempt)>0)
 						{
-							$id_last_attempt=mysql_result($resultLastAttempt,0,0);
+							$id_last_attempt=Database::result($resultLastAttempt,0,0);
 							
 							if($a_essais['essais']>0)
 								echo		'<a href="../exercice/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$a_infosCours['code'].'&student='.$_GET['student'].'&origin='.(empty($_GET['origin']) ? 'tracking' : $_GET['origin']).'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
 						}
 						echo "	</td>
 							  </tr>
-							 ";
-							 
+							 ";							 
 						$dataExercices[$i][] =  $a_exercices['title'];
 						$dataExercices[$i][] = $pourcentageScore.'%';
 						$dataExercices[$i][] =  $a_essais['essais'];
@@ -1030,7 +1035,7 @@ if(!empty($_GET['student']))
 								
 							 ;
 				 
-		$resultExerciceDetails = api_sql_query($sqlExerciceDetails);
+		$resultExerciceDetails = api_sql_query($sqlExerciceDetails,__FILE__,__LINE__);
 		
 		
 		$sqlExName = "	SELECT quiz.title
@@ -1038,8 +1043,8 @@ if(!empty($_GET['student']))
 					 	WHERE quiz.id = ".$_GET['exe_id']
 					 ;
 	
-		$resultExName = api_sql_query($sqlExName);
-		$a_exName = mysql_fetch_array($resultExName);
+		$resultExName = api_sql_query($sqlExName,__FILE__,__LINE__);
+		$a_exName = Database::fetch_array($resultExName);
 		
 		echo "<table class='data_table'>
 			 	<tr>
@@ -1049,14 +1054,14 @@ if(!empty($_GET['student']))
 				</tr>
              ";
 		
-		while($a_exerciceDetails = mysql_fetch_array($resultExerciceDetails))
+		while($a_exerciceDetails = Database::fetch_array($resultExerciceDetails))
 		{
 			$sqlAnswer = "	SELECT qa.comment, qa.answer
 							FROM  ".$a_infosCours['db_name'].".".$course_quiz_answer." as qa
 							WHERE qa.question_id = ".$a_exerciceDetails['id']
 					 	 ;
 			
-			$resultAnswer = api_sql_query($sqlAnswer);
+			$resultAnswer = api_sql_query($sqlAnswer,__FILE__,__LINE__);
 			
 			echo "<a name='infosExe'></a>";
 
@@ -1067,7 +1072,7 @@ if(!empty($_GET['student']))
 				</td>
 			</tr>
 			";
-			while($a_answer = mysql_fetch_array($resultAnswer))
+			while($a_answer = Database::fetch_array($resultAnswer))
 			{
 				echo"
 				<tr>

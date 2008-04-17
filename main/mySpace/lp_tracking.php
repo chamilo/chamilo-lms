@@ -1,11 +1,30 @@
 <?php
 /*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2008 Dokeos SPRL
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
+*/
+
+/*
  * Created on 26 mars 07 by Eric Marguin
- *
  * Script to display the tracking of the students in the learning paths.
  */
  
-
 $language_file = array ('registration', 'index', 'tracking', 'exercice', 'scorm', 'learnpath');
 $cidReset = true;
 include ('../inc/global.inc.php');
@@ -131,8 +150,8 @@ $sql = 'SELECT name
 		FROM '.Database::get_course_table(TABLE_LP_MAIN, $_course['db_name']).'
 		WHERE id='.$lp_id;
 $rs = api_sql_query($sql, __FILE__, __LINE__);
-$lp_title = mysql_result($rs, 0, 0);
-
+$lp_title = Database::result($rs, 0, 0);
+	
 
 echo '<div align="left" style="float:left"><h4>'.$_course['title'].' - '.$lp_title.' - '.$name.'</h4></div>
 	  <div align="right">
@@ -144,7 +163,6 @@ echo '<div align="left" style="float:left"><h4>'.$_course['title'].' - '.$lp_tit
 $list = learnpath :: get_flat_ordered_items_list($lp_id);
 
 $origin = 'tracking';
-
 
 
 if($export_csv)
@@ -159,9 +177,8 @@ else
 	include_once('../newscorm/lp_stats.php');
 	$tracking_content = ob_get_contents();
 	ob_end_clean();
-	echo utf8_decode($tracking_content);
+	echo utf8_decode($tracking_content);   
 	
 }
 Display :: display_footer();
 ?>
-

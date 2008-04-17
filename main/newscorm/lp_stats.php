@@ -1,5 +1,24 @@
 <?php
-//$id:$
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2008 Dokeos SPRL
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
+*/
 /**
  * This script displays statistics on the current learning path (scorm)
  * 
@@ -7,9 +26,7 @@
  * @package dokeos.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Script
- */
+
 require_once('learnpath.class.php');
 //require_once('scorm.class.php');
 require_once ('resourcelinker.inc.php');
@@ -51,9 +68,12 @@ if($origin != 'tracking')
 }
 
 //if display in fullscreen required
-if (strcmp($_GET["fs"], "true") == 0) {
+if (strcmp($_GET["fs"], "true") == 0) 
+{
 	$output .= "<table align='center'>";
-} else {
+} 
+else 
+{
 	$output .= "<table class='margin_table'>";
 }
 
@@ -70,10 +90,13 @@ else
 	$url_suffix = '';
 }
 	
-if (!empty ($_GET['extend_all'])) {
+if (!empty ($_GET['extend_all'])) 
+{
 	$extend_all_link = '<a href="'.api_get_self().'?action=stats'.$url_suffix.'"><img src="../img/view_less_stats.gif" alt="fold_view" border="0"></a>';
 	$extend_all = 1;
-} else {
+} 
+else
+{
 	$extend_all_link = '<a href="'.api_get_self().'?action=stats&extend_all=1'.$url_suffix.'"><img src="../img/view_more_stats.gif" alt="extend_view" border="0"></a>';
 }
 
@@ -81,7 +104,7 @@ if($origin != 'tracking')
 {
 	$output .= "<tr><td><div class='title'>".htmlentities(get_lang('ScormMystatus'), ENT_QUOTES, $dokeos_charset)."</div></td></tr>";
 }
-$output .= "<tr><td>&nbsp;</td></tr>"."<tr><td>"."<table border='0' class='data_table'><tr>\n".'<td width="16">'.$extend_all_link.'</td>'.'<td colspan="4" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormLessonTitle'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormStatus'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormScore'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormTime'), ENT_QUOTES, $dokeos_charset)."</div></td><td class='title'><div class='mystatusfirstrow'>".get_lang('Actions')."</div></td></tr>\n";
+$output .= "<tr><td>&nbsp;</td></tr>"."<tr><td>"."<table border='0' class='data_table'><tr>\n".'<td width="16">'.$extend_all_link.'</td>'.'<td colspan="4" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormLessonTitle'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormStatus'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormScore'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormTime'), ENT_QUOTES, $dokeos_charset)."</div></td><td class='title'><div class='mystatusfirstrow'>".htmlentities(get_lang('Actions'), ENT_QUOTES, $dokeos_charset)."</div></td></tr>\n";
 //going through the items using the $items[] array instead of the database order ensures
 // we get them in the same order as in the imsmanifest file, which is rather random when using
 // the database table
@@ -93,7 +116,9 @@ $sql = "SELECT max(view_count) FROM $TBL_LP_VIEW " .
 		"WHERE lp_id = $lp_id AND user_id = '".$user_id."'";
 $res = api_sql_query($sql, __FILE__, __LINE__);
 $view = '';
-if (Database :: num_rows($res) > 0) {
+
+if (Database :: num_rows($res) > 0) 
+{
 	$myrow = Database :: fetch_array($res);
 	$view = $myrow[0];
 }
@@ -115,14 +140,16 @@ if($export_csv)
 						   );
 }
 
-foreach ($list as $my_item_id) {
+foreach ($list as $my_item_id) 
+{
 	$extend_this = 0;
 	$qry_order = 'DESC';
 	if ((!empty ($_GET['extend_id']) and $_GET['extend_id'] == $my_item_id) OR $extend_all) {
 		$extend_this = 1;
 		$qry_order = 'ASC';
 	}
-	if (!empty ($view)) {
+	if (!empty ($view)) 
+	{
 		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, " .
 				"iv.score as myscore, iv.total_time as mytime, i.id as myid, " .
 				"i.title as mytitle, i.max_score as mymaxscore, " .
@@ -155,41 +182,57 @@ foreach ($list as $my_item_id) {
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	$num = Database :: num_rows($result);
 	$time_for_total = 'NaN';
-	if (($extend_this OR $extend_all) && $num > 0) {
+	if (($extend_this OR $extend_all) && $num > 0) 
+	{
 		$row = Database :: fetch_array($result);
 
 		//if there are several attempts, and the link to extend has been clicked...
-		if (($counter % 2) == 0) {
+		if (($counter % 2) == 0) 
+		{
 			$oddclass = "row_odd";
-		} else {
+		}
+		else 
+		{
 			$oddclass = "row_even";
 		}
 		if ($inter_num)
 			$extend_link = '<a href="'.api_get_self().'?action=stats&fold_id='.$my_item_id.$url_suffix.'"><img src="../img/visible.gif" alt="fold_view" border="0"></a>'."\n";
 
 		$title = $row['mytitle'];
-		$title = stripslashes($title);
-		if (empty ($title)) {
+		$title = stripslashes(html_entity_decode($title,ENT_QUOTES, $dokeos_charset));
+		
+		if (empty ($title)) 
+		{
 			$title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
 		}
 
-		if ($row['item_type'] != 'dokeos_chapter') {
-			if($row['item_type'] == 'quiz'){
+		if ($row['item_type'] != 'dokeos_chapter') 
+		{
+			if($row['item_type'] == 'quiz')
+			{
 				
-				if($origin != 'tracking'){
+				if($origin != 'tracking')
+				{
 					$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$row['path'].'" AND exe_user_id="'.api_get_user_id().'" AND exe_cours_id="'.$course_code.'" ORDER BY exe_date DESC LIMIT 1';
 				}
 				else{
 					$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$row['path'].'" AND exe_user_id="'.$_GET['student_id'].'" AND exe_cours_id="'.$course_code.'" ORDER BY exe_date DESC LIMIT 1';
 				}
 				
-				$resultLastAttempt = api_sql_query($sql_last_attempt);
-				$id_last_attempt=mysql_result($resultLastAttempt,0,0);
+				$resultLastAttempt = api_sql_query($sql_last_attempt,__FILE__,__LINE__);
 				
-				if($origin != 'tracking'){
+				$num = Database::num_rows($resultLastAttempt);
+				if($num>0)
+				{								
+					$id_last_attempt=Database::result($resultLastAttempt,0,0);
+				}
+				
+				if($origin != 'tracking')
+				{
 					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$id_last_attempt.'&cidReq='.$course_code.'" target="_parent"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
 				}
-				else{
+				else
+				{
 					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&id='.$id_last_attempt.'&cidReq='.$course_code.'&student='.$_GET['student_id'].'" target="_parent"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
 				}
 			}
@@ -215,7 +258,8 @@ foreach ($list as $my_item_id) {
 				}
 			}
 
-			if (($counter % 2) == 0) {
+			if (($counter % 2) == 0) 
+			{
 				$oddclass = "row_odd";
 			} else {
 				$oddclass = "row_even";
@@ -333,18 +377,23 @@ foreach ($list as $my_item_id) {
 		$score = $row['myscore'];
 		$subtotal_time = $row['mytime'];
 		//if($row['mytime']==0){
-		while ($tmp_row = Database :: fetch_array($result)) {
+		while ($tmp_row = Database :: fetch_array($result))
+		{
 			$subtotal_time += $tmp_row['mytime'];
 		}
 		//}
 		$time_for_total = $subtotal_time;
 		$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
 		$scoIdentifier = $row['myid'];
-		$title = $row['mytitle'];
-		$title = stripslashes($title);
-		if ($score == 0) {
+		$title = $row['mytitle'];		
+		$title = stripslashes(html_entity_decode($title,ENT_QUOTES, $dokeos_charset));
+		
+		if ($score == 0) 
+		{
 			$maxscore = 0;
-		} else {
+		} 
+		else 
+		{
 				if($row['item_type'] == 'sco')
 				{
 		    		if(!empty($row['myviewmaxscore']) and $row['myviewmaxscore']>0)
@@ -365,7 +414,8 @@ foreach ($list as $my_item_id) {
 					$maxscore = $row['mymaxscore'];
 				}
 		}
-		if (empty ($title)) {
+		if (empty ($title)) 
+		{
 			$title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
 		}
 		//Remove "NaN" if any (@todo: locate the source of these NaN)
@@ -390,7 +440,7 @@ foreach ($list as $my_item_id) {
 					$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$row['path'].'" AND exe_user_id="'.Database::escape_string($_GET['student_id']).'" AND exe_cours_id="'.Database::escape_string($_GET['course']).'" ORDER BY exe_date';
 				}
 				
-				$resultLastAttempt = api_sql_query($sql_last_attempt);
+				$resultLastAttempt = api_sql_query($sql_last_attempt,__FILE__,__LINE__);
 				$num = Database::num_rows($resultLastAttempt);
 				if($num>0)
 				{
@@ -400,7 +450,8 @@ foreach ($list as $my_item_id) {
 						while($rowLA = Database::fetch_array($resultLastAttempt))
 						{
 							$laid = $rowLA['exe_id'];
-							if($origin != 'tracking'){
+							if($origin != 'tracking')
+							{
 								$correct_test_link .= '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$laid.'&cidReq='.$course_code.'" target="_parent" title="'.get_lang('Attempt').' '.$i.'"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a> ';
 							}
 							else
@@ -413,7 +464,7 @@ foreach ($list as $my_item_id) {
 					}
 					else
 					{
-						$id_last_attempt=mysql_result($resultLastAttempt,0,0);
+						$id_last_attempt=Database::result($resultLastAttempt,0,0);
 						
 						if($origin != 'tracking'){
 							$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$id_last_attempt.'&cidReq='.$course_code.'" target="_parent"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';

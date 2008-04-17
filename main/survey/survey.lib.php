@@ -23,7 +23,7 @@
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 14940 2008-04-17 17:44:03Z juliomontoya $
+* 	@version $Id: survey.lib.php 14942 2008-04-17 20:32:14Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1287,10 +1287,15 @@ class yesno extends question
 		foreach ($form_content['options'] as $key=>$value)
 		{
 			$this->html .= '<label><input name="question'.$form_content['question_id'].'" type="radio" value="'.$key.'"';
-			if (in_array($key,$answers))
+			
+			if (is_array($answers))
 			{
-				$this->html .= 'checked="checked"';
+				if (in_array($key,$answers))
+				{
+					$this->html .= 'checked="checked"';
+				}
 			}
+			
 			$this->html .= '/>'.$value.'</label>';
 			if ($form_content['display'] == 'vertical')
 			{
@@ -1490,9 +1495,12 @@ class multipleresponse extends question
 		foreach ($form_content['options'] as $key=>$value)
 		{
 			$this->html .= '<label><input name="question'.$form_content['question_id'].'[]" type="checkbox" value="'.$key.'"';
-			if (in_array($key,$answers))
+			if (is_array($answers))
 			{
-				$this->html .= 'checked="checked"';
+				if (in_array($key,$answers))
+				{
+					$this->html .= 'checked="checked"';
+				}
 			}
 			$this->html .= ' />'.$value.'</label>';
 			if ($form_content['display'] == 'vertical')
@@ -1562,13 +1570,17 @@ class dropdown extends question
 
 		foreach ($form_content['options'] as $key=>$value)
 		{
-			$this->html .= '<option value="'.$key.'" ';
-			if (in_array($key,$answers))
+			$this->html .= '<option value="'.$key.'" ';			
+			if (is_array($answers))
 			{
-				$this->html .= 'selected="selected"';
-			}
+				if (in_array($key,$answers))
+				{
+					$this->html .= 'selected="selected"';
+				}
+			}			
 			$this->html .= '>'.$value.'</option>';
 		}
+		
 		echo '<div class="survey_question_wrapper">';
 		echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
 		echo '<div class="survey_question_options">';
@@ -1577,10 +1589,7 @@ class dropdown extends question
 		echo '</select>';
 		echo '</div>';
 		/*
-
-
-    <option value="test">test</option>
-
+    		<option value="test">test</option>
 		*/
 	}
 }
@@ -1692,9 +1701,12 @@ class percentage extends question
 		foreach ($form_content['options'] as $key=>$value)
 		{
 			$this->html .= '<option value="'.$key.'" ';
-			if (in_array($key,$answers))
+			if (is_array($answers))
 			{
-				$this->html .= 'selected="selected"';
+				if (in_array($key,$answers))
+				{
+					$this->html .= 'selected="selected"';
+				}
 			}
 			$this->html .= '>'.$value.'</option>';
 		}
@@ -2113,14 +2125,19 @@ class SurveyUtil {
 				$all_answers[$row['question_id']][] = $row;
 			}
 			// displaying all the questions
+			$second_parameter=array();
+			
 			foreach ($questions as $key=>$question)
 			{
 				// if the question type is a scoring then we have to format the answers differently
 				if ($question['type'] == 'score')
 				{
-					foreach($all_answers[$question['question_id']] as $key=>$answer_array)
+					if (is_array($second_parameter) && is_array($question) &&is_array($all_answers))
 					{
-						$second_parameter[$answer_array['option_id']] = $answer_array['value'];
+						foreach($all_answers[$question['question_id']] as $key=>$answer_array)
+						{
+							$second_parameter[$answer_array['option_id']] = $answer_array['value'];
+						}
 					}
 				}
 				else

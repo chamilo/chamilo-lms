@@ -23,7 +23,7 @@
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 14942 2008-04-17 20:32:14Z juliomontoya $
+* 	@version $Id: survey.lib.php 14943 2008-04-17 20:42:54Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -808,7 +808,8 @@ class survey_manager
 		}
 
 		$counter=1;		
-		if(is_array($form_content['answers'])){
+		if(is_array($form_content['answers']))
+		{
 			foreach ($form_content['answers'] as $key=>$answer)
 			{
 				$sql = "INSERT INTO $table_survey_question_option (question_id, survey_id, option_text, sort) VALUES (
@@ -835,23 +836,27 @@ class survey_manager
 	 */
 	function save_shared_question_options($form_content, $survey_data)
 	{
-		// table defintion
-		$table_survey_question_option 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
-
-		// we are editing a question so we first have to remove all the existing options from the database
-		$sql = "DELETE FROM $table_survey_question_option WHERE question_id = '".Database::escape_string($form_content['shared_question_id'])."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
-
-		$counter = 1;
-		foreach ($form_content['answers'] as $key=>$answer)
+		if (is_array($form_content))
 		{
-			$sql = "INSERT INTO $table_survey_question_option (question_id, survey_id, option_text, sort) VALUES (
-							'".Database::escape_string($form_content['shared_question_id'])."',
-							'".Database::escape_string($survey_data['is_shared'])."',
-							'".Database::escape_string($answer)."',
-							'".Database::escape_string($counter)."')";
+			// table defintion
+			$table_survey_question_option 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
+	
+			// we are editing a question so we first have to remove all the existing options from the database
+			$sql = "DELETE FROM $table_survey_question_option WHERE question_id = '".Database::escape_string($form_content['shared_question_id'])."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$counter++;
+	
+			$counter = 1;
+			
+			foreach ($form_content['answers'] as $key=>$answer)
+			{
+				$sql = "INSERT INTO $table_survey_question_option (question_id, survey_id, option_text, sort) VALUES (
+								'".Database::escape_string($form_content['shared_question_id'])."',
+								'".Database::escape_string($survey_data['is_shared'])."',
+								'".Database::escape_string($answer)."',
+								'".Database::escape_string($counter)."')";
+				$result = api_sql_query($sql, __FILE__, __LINE__);
+				$counter++;
+			}
 		}
 	}
 

@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -19,7 +19,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -27,7 +27,7 @@
 *	This is the export library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *
-*	plusieures fonctions ci-dessous  ont été adaptées de fonctions  distribuées par www.nexen.net
+*	plusieures fonctions ci-dessous  ont ï¿½tï¿½ adaptï¿½es de fonctions  distribuï¿½es par www.nexen.net
 *
 *	@package dokeos.library
 ==============================================================================
@@ -41,22 +41,22 @@ class Export
 	 * @param string $filename
 	 */
 	function export_table_csv($data, $filename = 'export')
-	{
-		$file = api_get_path(SYS_ARCHIVE_PATH).'/'.uniqid('').'.csv';
-		$handle = fopen($file, 'a+');
+	{			
+		$file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.csv';
+		$handle = @fopen($file, 'a+');		
+			
 		foreach ($data as $index => $row)
 		{
-			$line = '';
-			foreach($row as $value)
-			{
+			$line='';	
+			foreach($row as $value)			
+			{				
 				$line .= '"'.str_replace('"','""',$value).'";';
 			}
-			
-			fwrite($handle, $line."\n");
+			@fwrite($handle, $line."\n");	
 		}
-		fclose($handle);
-		DocumentManager :: file_send_for_download($file, true, $filename.'.csv');
-		exit;
+		@fclose($handle);				
+		DocumentManager :: file_send_for_download($file, true, $filename.'.csv');	
+		exit();
 	}
 	/**
 	 * Export tabular data to XLS-file
@@ -65,15 +65,15 @@ class Export
 	 */
 	function export_table_xls($data, $filename = 'export')
 	{
-		$file = api_get_path(SYS_ARCHIVE_PATH).'/'.uniqid('').'.xls';
-		$handle = fopen($file, 'a+');
-		foreach ($data as $index => $row)
-		{
-			fwrite($handle, implode("\t", $row)."\n");
-		}
-		fclose($handle);
+		$file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xls';
+		$handle = @fopen($file, 'a+');		
+		foreach ($data as $index => $row)	
+		{						
+			@fwrite($handle, implode("\t", $row)."\n");							
+		}	
+		@fclose($handle);
 		DocumentManager :: file_send_for_download($file, true, $filename.'.xls');
-		exit;
+		exit();
 	}
 	/**
 	 * Export tabular data to XML-file
@@ -145,7 +145,7 @@ function backupDatabase($link, $db_name, $structure, $donnees, $format = 'SQL', 
 		return false;
 	// liste des tables
 	$res = mysql_list_tables($db_name, $link);
-	$num_rows = mysql_num_rows($res);
+	$num_rows = Database::num_rows($res);
 	$i = 0;
 	while ($i < $num_rows)
 	{
@@ -167,8 +167,8 @@ function backupDatabase($link, $db_name, $structure, $donnees, $format = 'SQL', 
 				fwrite($fp, "\nmysql_query(\"");
 			// requete de creation de la table
 			$query = "SHOW CREATE TABLE `".$tablename."`";
-			$resCreate = mysql_query($query);
-			$row = mysql_fetch_array($resCreate);
+			$resCreate = api_sql_query($query,__FILE__, __LINE__);
+			$row = Database::fetch_array($resCreate);
 			$schema = $row[1].";";
 			if ($format == "PHP" || $format == "SQL")
 				fwrite($fp, "$schema");
@@ -177,10 +177,10 @@ function backupDatabase($link, $db_name, $structure, $donnees, $format = 'SQL', 
 		}
 		if ($donnees === true)
 		{
-			// les données de la table
+			// les donnï¿½es de la table
 			$query = "SELECT * FROM $tablename";
-			$resData = mysql_query($query);
-			if (mysql_num_rows($resData) > 0)
+			$resData = api_sql_query($query,__FILE__, __LINE__);
+			if (Database::num_rows($resData) > 0)
 			{
 				$sFieldnames = "";
 				if ($insertComplet === true)
@@ -193,7 +193,7 @@ function backupDatabase($link, $db_name, $structure, $donnees, $format = 'SQL', 
 					$sFieldnames = "(".substr($sFieldnames, 0, -2).")";
 				}
 				$sInsert = "INSERT INTO `$tablename` $sFieldnames values ";
-				while ($rowdata = mysql_fetch_assoc($resData))
+				while ($rowdata = Database::fetch_array($resData,'ASSOC'))
 				{
 					if ($format == "HTML")
 					{
@@ -234,7 +234,7 @@ function copydir($origine, $destination, $verbose = false)
 		echo "<BR> $origine -> $destination";
 	/*	if (file_exists($destination))
 		{
-			echo "la cible existe, ca ne va pas être possible";
+			echo "la cible existe, ca ne va pas ï¿½tre possible";
 			return 0;
 		}
 		*/
@@ -287,10 +287,10 @@ function copydir($origine, $destination, $verbose = false)
  *
  * @deprecated Function not in use (old backup system)
  *
- * 1° Check if all data needed are aivailable
- * 2° Build the archive repository tree
- * 3° Build exported element and Fill  the archive repository tree
- * 4° Compress the tree
+ * 1ï¿½ Check if all data needed are aivailable
+ * 2ï¿½ Build the archive repository tree
+ * 3ï¿½ Build exported element and Fill  the archive repository tree
+ * 4ï¿½ Compress the tree
 == tree structure ==				== here we can found ==
 /archivePath/						temporary files of export for the current claroline
 	/$exportedCourseId				temporary files of export for the current course
@@ -316,11 +316,11 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "",
 		global $error_msg, $error_no, $db, $archiveRepositorySys, $archiveRepositoryWeb,
 				$appendCourse, $appendMainDb, $archiveName, $_configuration, $_course, $TABLEUSER, $TABLECOURSUSER, $TABLECOURS, $TABLEANNOUNCEMENT;
 
-	// ****** 1° 2. params.
+	// ****** 1ï¿½ 2. params.
 	$errorCode = 0;
 	$stop = FALSE;
 
-	// ****** 1° 2. 1 params.needed
+	// ****** 1ï¿½ 2. 1 params.needed
 	if (!isset ($exportedCourseId))
 	{
 		$error_msg["backup"][] = "[".basename(__FILE__)."][".__LINE__."] Course Id Missing";
@@ -374,17 +374,17 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "",
 		return false;
 	}
 
-	// ****** 1° 2. 2 params.optional
+	// ****** 1ï¿½ 2. 2 params.optional
 	if (!isset ($verbose_backup))
 	{
 		$verbose_backup = false;
 	}
 
-	// ****** 1° 3. check if course exist
+	// ****** 1ï¿½ 3. check if course exist
 	//  not  done
 	//////////////////////////////////////////////
-	// ****** 2° Build the archive repository tree
-	// ****** 2° 1. fix names
+	// ****** 2ï¿½ Build the archive repository tree
+	// ****** 2ï¿½ 1. fix names
 	$shortDateBackuping = date("YzBs"); // YEAR - Day in Year - Swatch - second
 	$archiveFileName = "archive.".$exportedCourseId.".".$shortDateBackuping.".zip";
 	$dateBackuping = $shortDateBackuping;
@@ -425,7 +425,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "",
 	$dirCourBase = $archiveDirSqlCourse;
 	$dirMainBase = $archiveDirSqlMainDb;
 	/////////////////////////////////////////////////////////////////////////
-	// ****** 3° Build exported element and Fill  the archive repository tree
+	// ****** 3ï¿½ Build exported element and Fill  the archive repository tree
 	if ($verbose_backup)
 		echo "
 				build config file
@@ -474,7 +474,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "",
 	$iniCourse = "[".$exportedCourseId."]\n";
 	$sqlSelectInfoCourse = "Select * from `".$TABLECOURS."` `course` where code = '".$exportedCourseId."' ";
 	$resInfoCourse = api_sql_query($sqlSelectInfoCourse, __FILE__, __LINE__);
-	$infoCourse = mysql_fetch_array($resInfoCourse);
+	$infoCourse = Database::fetch_array($resInfoCourse);
 	for ($noField = 0; $noField < mysql_num_fields($resInfoCourse); $noField ++)
 	{
 		if ($noField > 0)
@@ -534,7 +534,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "",
 						WHERE `user`.`user_id`=`".$TABLECOURSUSER."`.`user_id`
 							AND `".$TABLECOURSUSER."`.`course_code`='".$exportedCourseId."'";
 		$resUsers = api_sql_query($sqlUserOfTheCourse, __FILE__, __LINE__);
-		$nbUsers = mysql_num_rows($resUsers);
+		$nbUsers = Database::num_rows($resUsers);
 		if ($nbUsers > 0)
 		{
 			$nbFields = mysql_num_fields($resUsers);
@@ -554,7 +554,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "",
 			//
 			// creation of body
 			//
-			while ($users = mysql_fetch_array($resUsers))
+			while ($users = Database::fetch_array($resUsers))
 			{
 				$htmlInsertUsers .= "\t<TR>\n";
 				$sqlInsertUsers .= "
@@ -643,7 +643,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "",
 		//
 		// creation of body
 		//
-		while ($announce = mysql_fetch_array($resAnn))
+		while ($announce = Database::fetch_array($resAnn))
 		{
 			$htmlInsertAnn .= "\t<TR>\n";
 			$sqlInsertAnn .= "
@@ -759,7 +759,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "",
 
 					<br>";
 	///////////////////////////////////
-	// ****** 4° Compress the tree
+	// ****** 4ï¿½ Compress the tree
 	if (extension_loaded("zlib"))
 	{
 		$whatZip[] = $archiveRepositorySys.$exportedCourseId."/".$shortDateBackuping."/HTML";

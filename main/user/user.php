@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -115,34 +115,60 @@ if(api_is_allowed_to_edit())
 	{
 		switch ($_GET['action'])
 		{
-			case 'export' :
-				if(api_get_setting('use_session_mode')!="true"){
-					$table_user = Database::get_main_table(TABLE_MAIN_USER);
-					$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-					$course = api_get_course_info();
-					$sql = "SELECT official_code,firstname,lastname,email FROM $table_user u, $table_course_user cu WHERE cu.user_id = u.user_id AND cu.course_code = '".$course['sysCode']."' ORDER BY lastname ASC";
-				}
-				else
+			case 'export' :						
+				$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);		
+				$session_id=0;								
+				$table_users = Database :: get_main_table(TABLE_MAIN_USER);
+								
+				$data=array();
+				$a_users=array();
+				
+				// users subscribed to the course through a session		
+				if(api_get_setting('use_session_mode')=='true')
 				{
-					$sql = "SELECT `user`.`user_id`, `user`.`lastname`, `user`.`firstname`,
-				                      `user`.`email`, `user`.`official_code`, session.name
-				               FROM ".Database::get_main_table(TABLE_MAIN_USER)." `user`, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." cu, ".Database::get_main_table(TABLE_MAIN_SESSION)." session
-				               WHERE `user`.`user_id`= cu.`id_user`
-				               AND cu.`course_code`='".$currentCourseID."'
-								AND session.id=cu.id_session
-								AND session.id='".$_SESSION['id_session']."'";
+					$session_id = intval($_SESSION['id_session']);
+					$table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);					
+					$sql_query = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, user.email, user.official_code 
+								  FROM $table_session_course_user as session_course_user, $table_users as user
+								  WHERE `course_code` = '$currentCourseID' AND session_course_user.id_user = user.user_id ";
+					
+					if($session_id!=0) 
+					{
+						$sql_query .= ' AND id_session = '.$session_id;
+					}									
+					$sql_query.=' ORDER BY user.lastname';			
+					$rs = api_sql_query($sql_query, __FILE__, __LINE__);					
+					while($user = Database:: fetch_array($rs,'ASSOC'))
+					{
+						$data[]=$user;							
+						//$user_infos = Database :: get_user_info_from_id($user['user_id']);													
+						$a_users[$user['user_id']] = $user; 					
+					}
+				}			
+							
+				if($session_id == 0)
+				{					
+					// users directly subscribed to the course
+					$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);					
+					$sql_query = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, user.email, user.official_code
+								  FROM $table_course_user as course_user, $table_users as user WHERE `course_code` = '$currentCourseID' AND course_user.user_id = user.user_id ORDER BY user.lastname";
+								
+					$rs = api_sql_query($sql_query, __FILE__, __LINE__);				
+					
+					while($user = Database::fetch_array($rs,'ASSOC'))
+					{
+						$data[]=$user;				
+						$a_users[$user['user_id']] = $user;					
+					}					
 				}
-				$users = api_sql_query($sql, __FILE__, __LINE__);
-				while ($user = mysql_fetch_array($users, MYSQL_ASSOC))
-				{
-					$data[] = $user;
-				}
+				
+				
 				switch ($_GET['type'])
 				{
 					case 'csv' :
-						Export::export_table_csv($data);
+						Export::export_table_csv($a_users);
 					case 'xls' :
-						Export::export_table_xls($data);
+						Export::export_table_xls($a_users);
 				}
 
 		}
@@ -412,14 +438,16 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$a_users=array();
 
 	if(!empty($_SESSION["id_session"])){
+		
 		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
 	}
-	else{
+	else
+	{		
 		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true);
 	}
-
-	foreach($a_course_users as $user_id=>$o_course_user){
-
+		
+	foreach($a_course_users as $user_id=>$o_course_user)
+	{
 		if( (isset ($_GET['keyword']) && search_keyword($o_course_user['firstname'],$o_course_user['lastname'],$o_course_user['username'],$o_course_user['official_code'],$_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])){
 
 			$groups_name=GroupManager :: get_user_group_name($user_id);
@@ -430,7 +458,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				$temp[] = $user_id;
 				
 				$temp[] = $o_course_user['firstname'];
-				$temp[] = $o_course_user['lastname'];				
+				$temp[] = $o_course_user['lastname'];	
+							
 				$temp[] = $o_course_user['role'];
 				$temp[] = implode(', ',$groups_name); //Group
 				$temp[] = $o_course_user['official_code'];

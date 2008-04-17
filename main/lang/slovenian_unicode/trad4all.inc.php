@@ -508,4 +508,8 @@ $FieldMadeChangeable = "Polje je postalo spremenljivo";
 $CannotMakeFieldChangeable = "Polja ne morem narediti spremenljivega";
 $FieldMadeUnchangeable = "Polje je postalo nespremenljivo";
 $CannotMakeFieldUnchangeable = "Polja ne morem narediti nespremenljivega";
+$Folder = "Mapa";
+$CloseOtherSession = "Klepet ni na voljo, ker je neka druga stran tečaja že odprta; poskusite ponovno naložiti to stran";
+$FileUploadSucces = "Datoteka je bila uspešno naložena";
+$Yesterday = "Včeraj";
 ?>

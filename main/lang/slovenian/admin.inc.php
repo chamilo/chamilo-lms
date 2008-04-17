@@ -714,6 +714,37 @@ $FieldTypeSelect = "Padajoèa izbira";
 $FieldTypeSelectMultiple = "Veèkratna padajoèa izbira";
 $FieldAdded = "Polje je bilo uspešno dodano";
 $GradebookScoreDisplayColoring = "Barvanje rezultatov";
+$GradebookScoreDisplayColoringComment = "Oznaèi, da omogoèiš barvno oznaèevanje ocen(definirati boste morali, katere ocene naj bodo obarvane rdeèe, ...) ";
+$TabsGradebookEnableColoring = "Omogoèi barvanje rezultatov";
+$GradebookScoreDisplayCustom = "Lasten naèin prikaza rezultatov";
+$GradebookScoreDisplayCustomComment = "Oznaèi, da omogoèiš prilagoditev rezultatov(prirediti bo potrebno ocene posameznim rezultatom) ";
 $TabsGradebookEnableCustom = "Omogoèi prilagoditev vizualizacije rezultatov";
+$GradebookScoreDisplayColorSplit = "Prikai loèevanje barv ";
+$GradebookScoreDisplayColorSplitComment = "Procentualna meja, pod katero bodo rezultati obarvani rdeèe ";
+$GradebookScoreDisplayUpperLimit = "Prikai zgornjo mejo rezultata";
+$GradebookScoreDisplayUpperLimitComment = "Oznaèi, da omogoèiš prikaz zgornje meje rezultata ";
+$TabsGradebookEnableUpperLimit = "Omogoèi prikaz zgornje meje rezultata";
 $AddUserFields = "Dodaj uporabniška polja";
+$FieldPossibleValues = "Mone vrednosti";
+$FieldPossibleValuesComment = "Le za ponavljajoèa se polja, loèena s podpièjem (;)";
+$FieldTypeDate = "Datum";
+$FieldTypeDatetime = "Datum in èas";
+$UserFieldsAddHelp = "Dodajanje uporabniških polj je preprosto:<br />
+- izberite besedo, identifikator, ki ga sestavljajo male èrke<br />
+- izberite tip,<br />
+- izberite besedilo, ki se bo prikazalo uporabniku (èe boste uporabili besedo, ki predstavlja Dokeos jezikovno spremenljivko, kot sta npr. BirthDate ali UserSex, se bo ta avtomatièno prevedla v poljuben jezik),<br />
+- v primeru, da izberete tip z veèkratnimi vrednostmi odgovorov (izbirni gumbi, izbira, veèkratna izbira), podajte vse monosti izbire (v primeru rabe jezikovnih spremenljivk Dokeos, bo prišlo do avtomatiènega prevoda), loèene z znakom za podpièje,<br />
+- za besedilne tipe lahko podate privzete vrednosti.
+<br /><br />
+Na koncu dodajte polje in izberite enega od naèinov vidnosti in spremenljivosti. Spremenljivo polje, ki ni vidno, je neuporabno. ";
+$AllowCourseThemeTitle = "Dovoli teme teèaja";
+$AllowCourseThemeComment = "Dovoljenje za izbiranje teme teèaja omogoèa izbiro poljubne teme izmed tistih, ki so dosegljive znotraj Dokeos. Ko uporabnik vstopi v teèaj, je izbrana tema teèaja prioritetna uporabnikovi temi in privzeti temi platforme.";
+$DisplayMiniMonthCalendarTitle = "Prikai koledarèek v orodju Agende";
+$DisplayMiniMonthCalendarComment = "Ta nastavitev omogoèi oz. onemogoèi majhen meseèni koledarèek v levem stolpcu orodja Agende posameznega teèaja";
+$DisplayUpcomingEventsTitle  = "Prikai prihajajoèe dogodke v orodju Agende ";
+$DisplayUpcomingEventsComment = "Monost omogoèi ali onemogoèi prikaz prihajajoèih dodogodkov v levem stolpcu orodja Agenda posameznega teèaja";
+$NumberOfUpcomingEventsTitle = "Število prikazanih prihajajoèih dogodkov";
+$NumberOfUpcomingEventsComment = "Število prikazanih prihajajoèih dogodkov v agendi. Monost zahteva, da je funkcija prikaza prihajajoèih dogodkov aktivirana (glej zgoraj).";
+$ShowClosedCoursesTitle = "Prikaem zaprte teèaje na prijavni strani in na zaèetni strani portala?";
+$ShowClosedCoursesComment = "Prikae zaprte teèaje v seznamih teèajev. V primeru, da je uporabnik prijavljen v portal, se v seznamu ob imenu teèaja pojavi ikona, ki omogoèa hiter vpis v teèaj; èe je vpis mogoè in teèajnik še ni vpisan v ta teèaj.";
 ?>

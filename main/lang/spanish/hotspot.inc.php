@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $select = "Seleccionar";
-$square = "Rectángulo";
+$square = "Cuadrado";
 $circle = "Elipse";
 $poly = "Polígono";
 $status1 = "Dibujar una zona interactiva.";
@@ -12,7 +12,7 @@ $status3 = "Zona interactiva guardada";
 $exercise_status_1 = "Estatus: Pregunta sin contestar";
 $exercise_status_2 = "Confirmar mi selección";
 $exercise_status_3 = "Estatus: Pregunta contestada";
-$showUserPoints = "Mostrar/Ocultar clics";
+$showUserPoints = "Mostrar/Ocultar clicks";
 $showHotspots = "Mostrar/Ocultar zonas interactivas";
 $labelPolyMenu = "Cerrar polígono";
 $triesleft = "Intentos restantes";

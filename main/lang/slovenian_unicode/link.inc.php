@@ -44,4 +44,5 @@ $langOnHomepage = "Na domači strani";
 $langShowLinkOnHomepage = "Prikaži to povezavo kot ikono na domači strani";
 $langCsvImport = "CSV uvoz";
 $Category = "Kategorija";
+$General = "Splošno";
 ?>

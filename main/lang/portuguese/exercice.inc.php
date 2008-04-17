@@ -234,4 +234,6 @@ $DearStudentEmailIntroduction = "Caro(a) Estudante,";
 $ExerciseFinished = "Exercício concluído";
 $ResultsEnabled = "Resultados permitidos para estudantes";
 $ResultsDisabled = "Resultados bloqueados para estudantes";
+$EnableResults = "Mostrar resultados aos estudantes";
+$ValidateAnswer = "Validar respostas";
 ?>

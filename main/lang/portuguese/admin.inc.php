@@ -724,4 +724,8 @@ $GradebookScoreDisplayUpperLimit = "Mostrar limite superior da pontuação";
 $GradebookScoreDisplayUpperLimitComment = "Marcar casilha para mostrar limite superior da pontuação";
 $TabsGradebookEnableUpperLimit = "Activar visualização do limite superior da pontuação";
 $AddUserFields = "Acrescentar campos para o utilizador";
+$FieldPossibleValues = "Valores possíveis";
+$FieldTypeDate = "Data";
+$FieldTypeDatetime = "Data e Hora";
+$AllowCourseThemeTitle = "Permitir temas de curso";
 ?>

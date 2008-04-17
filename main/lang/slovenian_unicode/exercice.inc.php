@@ -240,4 +240,5 @@ $ExportWithUserFields = "Vključi uporabniška polja v izvoz";
 $ExportWithoutUserFields = "Izključi uporabniška polja iz izvoza";
 $DisableResults = "Ne prikaži rezultatov tečajnikom";
 $EnableResults = "Prikaži rezultate tečajnikom";
+$ValidateAnswer = "Uveljavi odgovore";
 ?>

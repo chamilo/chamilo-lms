@@ -184,6 +184,7 @@ $CorrectAnswers = "Risposte esatte";
 $StudentResponse = "Risposte del corsista";
 $LatencyTimeSpent = "Tempo impiegato";
 $Result = "Risultato";
-$SplitStepsPerPage = "Un paragrafo per elemento";
-$SplitStepsPerChapter = "Un capitolo per elemento";
+$SplitStepsPerPage = "Un paragrafo per pagina";
+$SplitStepsPerChapter = "Un capitolo per pagina";
+$TakeSlideName = "Usa il nome delle diapositive come titolo degli elementi del percorso";
 ?>

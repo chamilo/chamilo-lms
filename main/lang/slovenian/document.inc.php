@@ -125,4 +125,6 @@ $DocumentUnsetAsTemplate = "Dokument ni veè predloga";
 $AddAsTemplate = "Dodaj kot predlogo";
 $RemoveAsTemplate = "Odstrani predlogo";
 $ReadOnly = "Le za branje";
+$ReadOnlyFile = "Datoteka je zgolj bralna";
+$FileNotFound = "Datoteke ni mogoèe najti";
 ?>

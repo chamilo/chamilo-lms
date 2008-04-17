@@ -729,4 +729,14 @@ $FieldPossibleValuesComment = "Only given for repetitive fields, split by semi-c
 $FieldTypeDate = "Date";
 $FieldTypeDatetime = "Date and time";
 $UserFieldsAddHelp = "Adding a user field is very easy:<br />- pick a one-word, lowercase identifier,<br />- select a type,<br />- pick a text that should appear to the user (if you use an existing translated name like BirthDate or UserSex, it will automatically get translated to any language),<br />- if you picked a multiple type (radio, select, multiple select), provide the possible choices (again, it can make use of the language variables defined in Dokeos), split by semi-column characters,<br />- for text types, you can choose a default value.<br /><br />Once you\'re done, add the field and choose whether you want to make it visible and modifiable. Making it modifiable but not visible is useless.";
+$AllowCourseThemeTitle = "Allow course themes";
+$AllowCourseThemeComment = "Allowing courses graphical themes makes it possible to change the stylesheet used by a course to any of the possible stylesheets available to Dokeos. When a user enters the course, the stylesheet of the course will have priority over the user\'s own stylesheet and the platform\'s default stylesheet.";
+$DisplayMiniMonthCalendarTitle = "Display the small month calendar in the agenda tool";
+$DisplayMiniMonthCalendarComment = "This setting enables or disables the small month calendar that appears in the left column of the agenda tool of the course";
+$DisplayUpcomingEventsTitle  = "Display the upcoming events in the agenda tool";
+$DisplayUpcomingEventsComment = "This setting enables or disables the upcoming events that appears in the left column of the agenda tool of the course";
+$NumberOfUpcomingEventsTitle = "Number of upcoming events that have to be displayed.";
+$NumberOfUpcomingEventsComment = "The number of upcoming events that have to be displayed in the agenda. This requires that the upcoming event functionlity is activated (see setting above). ";
+$ShowClosedCoursesTitle = "Display closed courses on login page and campus startpage?";
+$ShowClosedCoursesComment = "Display closed courses on the login page and course startpage? On the campus startpage an icon will appear next to the course to quickly subscribe to the course. This will only appear on the campus startpage when the user is logged in and when the user is not subscribed to the course yet. ";
 ?>

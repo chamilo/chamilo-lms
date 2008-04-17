@@ -125,4 +125,6 @@ $DocumentUnsetAsTemplate = "Document unset as template";
 $AddAsTemplate = "Add as a template";
 $RemoveAsTemplate = "Remove template";
 $ReadOnly = "Read only";
+$ReadOnlyFile = "The file is read only";
+$FileNotFound = "The file was not found";
 ?>

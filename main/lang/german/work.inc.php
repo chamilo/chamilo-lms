@@ -33,4 +33,5 @@ $DocumentDeleted = "Dokument wurde gelöscht";
 $SendMailBody = "Ein Benutzer hat ein Dokument im Aufgaben Tool Deines Kurses veröffentlicht";
 $DirDelete = "Verzeichnis wurde gelöscht";
 $ValidateChanges = "Gültige Änderungen";
+$FolderUpdated = "Verzeichnis wurde aktualisiert";
 ?>

@@ -90,4 +90,5 @@ $StatsStudent = "Estatísticas de";
 $Results = "Resultados";
 $Certificates = "Certificados";
 $Certificate = "Certificado";
+$ChooseFormat = "Escolher formato";
 ?>

@@ -238,4 +238,8 @@ $DearStudentEmailIntroduction = "Sehr geehrte(r) Teilnehmer(in),";
 $ExerciseFinished = "Übung beendet";
 $ResultsEnabled = "Resultate für Studenten aktiviert";
 $ResultsDisabled = "Resultate für Studenten deaktiviert";
+$ExportWithUserFields = "Benutzer Felder beim Export einbeziehen";
+$ExportWithoutUserFields = "Benutzer Felder beim Export ausschließen";
+$DisableResults = "Studenten die Ergebnisse nicht anzeigen";
+$EnableResults = "Studenten die Ergebnisse anzeigen";
 ?>

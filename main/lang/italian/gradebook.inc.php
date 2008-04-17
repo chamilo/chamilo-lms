@@ -90,4 +90,10 @@ $StatsStudent = "Statistica di ";
 $Results = "Risultati";
 $Certificates = "Certificati";
 $Certificate = "Certificato";
+$ChooseUser = "Scegli gli utenti per questa verifica";
+$FirstLetter = "Iniziale del cognome";
+$UserAdded = "Utente aggiunto";
+$ResultEdited = "Risultato modificato";
+$ChooseFormat = "Scegli il formato";
+$OutputFileType = "File di output";
 ?>

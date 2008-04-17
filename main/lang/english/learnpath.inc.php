@@ -186,4 +186,5 @@ $LatencyTimeSpent = "Time spent";
 $Result = "Result";
 $SplitStepsPerPage = "A page a step";
 $SplitStepsPerChapter = "A chapter a step";
+$TakeSlideName = "Use the slides names for the learning path steps";
 ?>

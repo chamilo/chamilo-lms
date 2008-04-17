@@ -187,4 +187,5 @@ $LatencyTimeSpent = "Porabljen èas";
 $Result = "Rezultat";
 $SplitStepsPerPage = "Korak na stran";
 $SplitStepsPerChapter = "Korak na poglavje";
+$TakeSlideName = "Uporabi imena diapozitivov za imena korakov uène poti";
 ?>

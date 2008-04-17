@@ -90,4 +90,10 @@ $StatsStudent = "Statistiken für";
 $Results = "Resultate";
 $Certificates = "Zertifikate";
 $Certificate = "Zertifikat";
+$ChooseUser = "Studenten für diese Beurteilung auswählen";
+$FirstLetter = "Erster Buchstabe des Nachnamens";
+$UserAdded = "Benutzer wurde hinzugefügt";
+$ResultEdited = "Ergebnis wurde bearbeitet";
+$ChooseFormat = "Format auswählen";
+$OutputFileType = "Dateiformat für Output";
 ?>

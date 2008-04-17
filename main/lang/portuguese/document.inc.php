@@ -125,4 +125,6 @@ $DocumentUnsetAsTemplate = "Documento retirado como template";
 $AddAsTemplate = "Juntar como tabela";
 $RemoveAsTemplate = "Retirar tabela modelo";
 $ReadOnly = "Só leitura";
+$ReadOnlyFile = "Ficheiro só de leitura";
+$FileNotFound = "O ficheiro não foi encontrado";
 ?>

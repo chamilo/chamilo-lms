@@ -21,4 +21,5 @@ $langNoLinkName = "Lütfen ba&#287;lant&#305; ismini yaz&#305;n";
 $langEditLink = "Ders AnaSayfa ba&#287;lant&#305;s&#305;n&#305; düzenle";
 $langChangePress = "De&#287;i&#351;tir ve OK ye t&#305;kla";
 $langLinkChanged = "Ders anasayfas&#305;n&#305;n ba&#287;lant&#305;s&#305; de&#287;i&#351;ti. Ana menüye dönmek için yukar&#305;daki menüyü kullanabilirsiniz.";
+$NoLinkName = "Ba&#287;lant&#305; ismi yok";
 ?>

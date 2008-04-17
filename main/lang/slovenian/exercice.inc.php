@@ -236,4 +236,9 @@ $DearStudentEmailIntroduction = "Spoštovani teèajnik,";
 $ExerciseFinished = "Vaja je dokon&#269;ana";
 $ResultsEnabled = "Prikaz rezultatov teèajnikom omogoèen";
 $ResultsDisabled = "Prikaz rezultatov teèajnikom onemogoèen";
+$ExportWithUserFields = "Vkljuèi uporabniška polja v izvoz";
+$ExportWithoutUserFields = "Izkljuèi uporabniška polja iz izvoza";
+$DisableResults = "Ne prikaži rezultatov teèajnikom";
+$EnableResults = "Prikaži rezultate teèajnikom";
+$ValidateAnswer = "Uveljavi odgovore";
 ?>

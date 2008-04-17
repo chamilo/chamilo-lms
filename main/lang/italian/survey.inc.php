@@ -180,4 +180,5 @@ $SurveyNotAvailableYet = "Il questionario non è ancora attivo. Sei pregato di ri
 $PeopleAnswered = "Persone che hanno risposto";
 $AnonymousSurveyCannotKnowWhoAnswered = "Il questionario è anonimo. Non è possibile conoscere il nome di chi ha risposto.";
 $IllegalSurveyId = "Identificativo di questionario inesistente";
+$SurveyQuestionMoved = "Il test è stato spostato";
 ?>

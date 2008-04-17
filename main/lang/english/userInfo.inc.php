@@ -30,5 +30,5 @@ $langUserInfo = "user information";
 $langUnregister = "Unregister";
 $langAddAUser = "Add users";
 $UsersUnsubscribed = "The selected users have been unsubscribed from the course";
-$ThisStudentIsSubscribeThroughASession = "This student is subscribed in this course through a session. You cannot edit his informations";
+$ThisStudentIsSubscribeThroughASession = "This student is subscribed in this course through a session. You cannot edit these informations";
 ?>

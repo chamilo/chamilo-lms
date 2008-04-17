@@ -724,4 +724,12 @@ $GradebookScoreDisplayUpperLimit = "Obere Grenze der Resultate anzeigen";
 $GradebookScoreDisplayUpperLimitComment = "Box auswählen, um Obere Grenze der Resultate anzuzeigen";
 $TabsGradebookEnableUpperLimit = "Anzeige der Obergrenze der Resultate aktivieren";
 $AddUserFields = "Benutzer Felder hinzufügen";
+$FieldPossibleValues = "Mögliche Werte";
+$FieldPossibleValuesComment = "Nur für wiederholende Felder, durch semi-colon (;) getrennt";
+$FieldTypeDate = "Datum";
+$FieldTypeDatetime = "Datum und Uhrzeit";
+$AllowCourseThemeTitle = "Themen für Kurse erlauben";
+$DisplayMiniMonthCalendarTitle = "Kleinen Monatskalender im Agenda Tool anzeigen";
+$DisplayUpcomingEventsTitle  = "Bevorstehende Ereignisse im Agenda Tool anzeigen";
+$NumberOfUpcomingEventsTitle = "Anzahl bevorstehender Ereignisse, die angezeigt werden müssen";
 ?>

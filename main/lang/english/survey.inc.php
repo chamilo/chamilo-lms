@@ -180,4 +180,5 @@ $SurveyNotAvailableYet = "This survey is not yet available. Please try again lat
 $PeopleAnswered = "people answered";
 $AnonymousSurveyCannotKnowWhoAnswered = "This survey is anonymous. You can\'t see who answered.";
 $IllegalSurveyId = "Unknown survey id";
+$SurveyQuestionMoved = "The question has been moved";
 ?>

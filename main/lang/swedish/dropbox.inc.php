@@ -113,6 +113,7 @@ $AuthorFieldCannotBeEmpty = "Ägarnamn måste anges";
 $YouMustSelectAtLeastOneDestinee = "Du måste välja minst en mottagare";
 $InvalidUserDetected = "Ogiltig användare funnen";
 $InvalidGroupDetected = "Ogiltig grupp funnen";
+$DropboxFileTooBig = "Filen är för stor för inlämningsmappen";
 $TheFileIsNotUploaded = "Filen är inte uppladdad.";
 $FileUploadSucces = "Filuppladdningen lyckades.";
 $NoFilesHere = "Inga filer här";

@@ -498,4 +498,11 @@ $UserResidenceCountry = "País de residência";
 $AddAnAttachment = "Acrescentar anexo";
 $FileComment = "Comentário";
 $FileName = "Nome do ficheiro";
+$UserFields = "Campos do utilizador";
+$FieldShown = "Campo visível";
+$CannotShowField = "Não se pode tornar o campo visível";
+$FieldHidden = "Campo tornado invisível";
+$Folder = "Pasta";
+$FileUploadSucces = "Ficheiro foi carregado com êxito";
+$Yesterday = "Ontem";
 ?>

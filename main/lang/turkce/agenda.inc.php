@@ -49,4 +49,7 @@ $ViewPersonalItem = "Ki&#351;isel etkinlikleri göster";
 $UserGroupFilter = "Grup/Kullan&#305;c&#305;lar filtresi";
 $ShowAll = "Hepsini göster";
 $Print = "Yaz&#305;c&#305;ya gönder";
+$CopiedAsAnnouncement = "Duyuru olarak kopyaland&#305;";
+$NewAnnouncement = "Yeni duyuru";
+$AddAnnouncement = "Duyuru olarak ekle";
 ?>

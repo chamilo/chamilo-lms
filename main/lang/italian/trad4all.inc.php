@@ -510,4 +510,8 @@ $FieldMadeChangeable = "Campo reso modificabile";
 $CannotMakeFieldChangeable = "Il campo non può essere modificabile";
 $FieldMadeUnchangeable = "Campo reso non modificabile";
 $CannotMakeFieldUnchangeable = "Il campo deve poter essere modificabile";
+$Folder = "Cartella";
+$CloseOtherSession = "La Chat non è disponibile perché c\'è un\'altra pagina del corso aperta; chiudila e ricarica la pagina.";
+$FileUploadSucces = "Il file è stato caricato con successo";
+$Yesterday = "Ieri";
 ?>

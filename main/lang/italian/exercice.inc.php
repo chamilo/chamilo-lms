@@ -238,4 +238,5 @@ $ExportWithUserFields = "Includi i campi utente nell\'esportazione";
 $ExportWithoutUserFields = "Escludi i campi utente dall\'esportazione";
 $DisableResults = "Non mostrare i risultati ai corsisti";
 $EnableResults = "Mostra i risultati ai corsisti";
+$ValidateAnswer = "Convalida le risposte";
 ?>

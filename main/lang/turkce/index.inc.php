@@ -61,5 +61,10 @@ $langOpenarea = "Ki&#351;isel alan";
 $langProductions = "Yay&#305;nlar&#305;-Eserleri";
 $langSendChatRequest = "Sohbet iste&#287;i gönder";
 $langRequestDenied = "Ça&#287;r&#305;n&#305;z kabul edilmedi.";
+$SessionView = "Dersleri dönemlere göre göster";
+$CourseView = "Ders listesinin tamam&#305;n&#305; göster";
+$FolderCreated = "Yeni klasör olu&#351;turuldu";
 $LinkAdded = "Yeni ba&#287;lant&#305; eklendi";
+$AnnouncementAdded = "Duyuru eklendi";
+$AgendaAdded = "Ajandaya eklendi";
 ?>

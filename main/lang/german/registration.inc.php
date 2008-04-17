@@ -159,4 +159,7 @@ $UsersUnsubscribed = "Die ausgewählten Benutzer wurden aus dem Kurs abgemeldet";
 $SystemUnableToSendEmailContact = "System konnte E-Mail Kontakt nicht versenden";
 $OpenIDCouldNotBeFoundPleaseRegister = "Diese OpenID konnte in unserer Datenbank nicht gefunden werden. Registrieren Sie sich bitte für einen neuen Account. Sollten Sie bereits einen Account bei uns haben, bearbeiten Sie bitte Ihr Profil in Ihrem Account, und fügen Sie diese OpenID hinzu.";
 $UsernameMaxXCharacters = "Der Benutzername darf höchstens %s Zeichen lang sein";
+$PictureUploaded = "Ihr Bild wurde hochgeladen";
+$ProductionUploaded = "Ihre Produktion Datei wurde hochgeladen";
+$FolderUpdated = "Verzeichnis aktualisiert";
 ?>

@@ -180,4 +180,5 @@ $SurveyNotAvailableYet = "Ta vprašalnik še ni dostopen. Poskusite ponovno kasn
 $PeopleAnswered = "oseb je odgovorilo";
 $AnonymousSurveyCannotKnowWhoAnswered = "Ta vprašalnik je anonimen. Ne morete videti, kdo je odgovarjal.";
 $IllegalSurveyId = "Neznan ID vprašalnika";
+$SurveyQuestionMoved = "Vprašanje je bilo prestavljeno";
 ?>

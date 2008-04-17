@@ -100,7 +100,7 @@ $MultipleChoice = "Elección múltiple";
 $MultipleResponse = "Respuesta múltiple";
 $Open = "Respuesta abierta";
 $Dropdown = "Lista desplegable";
-$Pagebreak = "Página final";
+$Pagebreak = "Fin de página";
 $QuestionNumber = "Pregunta número";
 $NumberOfOptions = "Número de opciones";
 $SurveyInvitations = "Invitaciones a la encuesta";
@@ -180,4 +180,5 @@ $SurveyNotAvailableYet = "Esta encuesta aún no está disponible. Inténtelo más ta
 $PeopleAnswered = "Personas que han respondido";
 $AnonymousSurveyCannotKnowWhoAnswered = "Esta encuesta es anónima. Vd. no puede ver quien ha respondido.";
 $IllegalSurveyId = "Identificador de encuesta desconocido";
+$SurveyQuestionMoved = "La pregunta ha sido movida";
 ?>

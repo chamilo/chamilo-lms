@@ -697,4 +697,12 @@ $AllowurlfopenIsSetToOff = "De PHP-instelling \"allow_url_fopen\" staat op \"off
 $VisioHost = "Videoconference streaming server hostname of IP-adres";
 $VisioPort = "Videoconference streaming server poort";
 $VisioPassword = "Videoconference streaming server wachtwoord";
+$DisplayMiniMonthCalendarTitle = "Kleine maandkalender weergeven in de agenda functionaliteit";
+$DisplayMiniMonthCalendarComment = "Deze paramter activeert of desactiveert de kleine kalendar die u links te zien krijgt in de agenda functionaliteit van een cursus";
+$DisplayUpcomingEventsTitle  = "De eerstkomende activiteiten weergeven in de agenda functionaliteit";
+$DisplayUpcomingEventsComment = "Deze paramter activeert of desactiveert de eerstkomende activiteiten die u links te zien krijgt in de agenda functionaliteit van een cursus";
+$NumberOfUpcomingEventsTitle = "Aantal komende activiteiten die weergegeven moeten worden";
+$NumberOfUpcomingEventsComment = "Aantal komende activiteiten dat weergegeven moet worden. Dit vereist dat de komende evenementenfunctionaliteit geactiveerd is (zie parameter hierboven). Geef een geheel getal in";
+$ShowClosedCoursesTitle = "Gesloten cursussen weergeven op loginpagina en campus startpagina?";
+$ShowClosedCoursesComment = "Moeten gesloten cursussen weergegeven worden op de loginpagina en de campus startpagina? Op de campus startpagina zal er voor de ingelogde gebruikers eveneens een icoontje verschijnen om in te schrijven voor deze cursus als dit toegelaten is en de gebruiker nog geen deel uitmaakt van deze cursus";
 ?>

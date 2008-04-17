@@ -91,4 +91,5 @@ $NoCategoriesDefined = "Nobena kategorija ni definirana";
 $GroupsFromClasses = "Skupine iz razredov";
 $GroupsFromClassesInfo = "Z uporabo te možnosti lahko ustvarite skupine iz razredov, vpisanih v vaš teèaj.";
 $Group = "Skupina";
+$ForumOfGroup = "Forum skupine:";
 ?>

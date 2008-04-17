@@ -187,4 +187,5 @@ $LatencyTimeSpent = "Tiempo empleado";
 $Result = "Resultado";
 $SplitStepsPerPage = "Una paso por página";
 $SplitStepsPerChapter = "Un capítulo por paso";
+$TakeSlideName = "Usar los nombres de las diapositivas para los pasos del itinerario de aprendizaje";
 ?>

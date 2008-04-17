@@ -186,4 +186,5 @@ $LatencyTimeSpent = "Temps passé";
 $Result = "Résultat";
 $SplitStepsPerPage = "Une page, une étape";
 $SplitStepsPerChapter = "Un chapitre, une étape";
+$TakeSlideName = "Utiliser les nom des diapos comme nom d\'étapes";
 ?>

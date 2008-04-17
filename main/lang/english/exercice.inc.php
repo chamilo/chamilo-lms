@@ -239,4 +239,5 @@ $ExportWithUserFields = "Include user fields in export";
 $ExportWithoutUserFields = "Exclude user fields from export";
 $DisableResults = "Do not show results to learners";
 $EnableResults = "Show results to learners";
+$ValidateAnswer = "Validate answers";
 ?>

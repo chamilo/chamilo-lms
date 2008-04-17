@@ -180,4 +180,5 @@ $SurveyNotAvailableYet = "Cette enquête n\'est pas encore disponible. Veuillez r
 $PeopleAnswered = "personnes ont répondu";
 $AnonymousSurveyCannotKnowWhoAnswered = "Cette enquête est anonyme. Vous ne pouvez pas voir qui a répondu.";
 $IllegalSurveyId = "Numéro d\'enquête inconnu";
+$SurveyQuestionMoved = "La question a été déplacée";
 ?>

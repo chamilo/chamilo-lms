@@ -125,4 +125,6 @@ $DocumentUnsetAsTemplate = "Il documento non è più un modello";
 $AddAsTemplate = "Aggiungi come modello";
 $RemoveAsTemplate = "Elimina dai modelli";
 $ReadOnly = "Sola lettura";
+$ReadOnlyFile = "Il file è a sola lettura";
+$FileNotFound = "File non trovato";
 ?>

@@ -94,7 +94,7 @@ $UplFileOverwritten = "fue sobreescrito.";
 $CannotCreateDir = "¡ No se puede crear el directorio !";
 $UplUpload = "Enviar";
 $UplWhatIfFileExists = "Si ya existe el archivo:";
-$UplDoNothing = "No hacer nada";
+$UplDoNothing = "No enviar";
 $UplDoNothingLong = "No enviar si el archivo existe";
 $UplOverwrite = "Sobreescribir";
 $UplOverwriteLong = "Sobreescribir el archivo existente";
@@ -125,4 +125,6 @@ $DocumentUnsetAsTemplate = "El documento ha dejado de ser una plantilla";
 $AddAsTemplate = "Agregar como plantilla";
 $RemoveAsTemplate = "Quitar plantilla";
 $ReadOnly = "Sólo lectura";
+$ReadOnlyFile = "El archivo es de solo lectura";
+$FileNotFound = "El archivo no fue encontrado";
 ?>

@@ -869,7 +869,7 @@ class Blog
 				if (!empty($file_name_array))
 				{								
 					echo '<br /><br />';
-					echo Display::return_icon('attachment.gif',get_lang('attachment'));
+					echo Display::return_icon('attachment.gif',get_lang('Attachment'));
 					echo '<a href="download.php?file=';		
 					echo $file_name_array['path'];	
 					echo ' "> '.$file_name_array['filename'].' </a><br />';
@@ -995,7 +995,7 @@ class Blog
 		if (!empty($file_name_array))
 		{			
 			echo ' <br />';
-			echo Display::return_icon('attachment.gif',get_lang('attachment'));
+			echo Display::return_icon('attachment.gif',get_lang('Attachment'));
 			echo '<a href="download.php?file=';		
 			echo $file_name_array['path'];	
 			echo ' "> '.$file_name_array['filename'].' </a>';					
@@ -1199,7 +1199,7 @@ class Blog
 				if (!empty($file_name_array))
 				{								
 					echo '<br /><br />';
-					echo Display::return_icon('attachment.gif',get_lang('attachment'));
+					echo Display::return_icon('attachment.gif',get_lang('Attachment'));
 					echo '<a href="download.php?file=';		
 					echo $file_name_array['path'];	
 					echo ' "> '.$file_name_array['filename'].' </a>';	

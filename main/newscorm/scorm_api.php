@@ -834,10 +834,20 @@ function update_toc(update_action,update_id)
 		var myelem = myframe.document.getElementById("toc_"+update_id);
 		var myelemimg = myframe.document.getElementById("toc_img_"+update_id);
 		logit_lms('update_toc("'+update_action+'",'+update_id+')',2);
-		if(update_id != 0){
-			switch(update_action){
+		
+		if(update_id != 0)
+		{
+			switch(update_action)
+			{
 				case 'unhighlight':
-					myelem.className = "scorm_item";
+					if (update_id%2==0)
+					{
+						myelem.className = "scorm_item_2";
+					}
+					else
+					{
+						myelem.className = "scorm_item_1";
+					}
 					break;
 				case 'highlight':
 					myelem.className = "scorm_item_highlight";

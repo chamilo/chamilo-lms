@@ -2445,8 +2445,12 @@ class learnpath {
     	//echo $this->current;
     	//$parent = $this->items[$this->current]->get_parent();
     	//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
-    	$html .= '<div class="inner_lp_toc">'."\n" ;
-    	if(api_is_allowed_to_edit()){
+    	$html.= '<div class="inner_lp_toc">'."\n" ;
+    	$html.= '<div class="scorm_title">&nbsp;&nbsp;&nbsp;&nbsp;'.$this->get_name().'</div>';
+    	
+    	// build, display
+    	if(api_is_allowed_to_edit())
+    	{
     		$mych = api_get_setting('platform_charset');
     		$html.="<p>&nbsp;&nbsp;&nbsp;&nbsp;<a  target='_parent' href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."' style= target='_parent'>".mb_convert_encoding(get_lang("Build"),$this->encoding,$mych)."</a>&nbsp;&#124;&nbsp;<a href='lp_controller.php?".api_get_cidreq()."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".mb_convert_encoding(get_lang("BasicOverview"),$this->encoding,$mych)."</a>&nbsp;&#124;&nbsp;".mb_convert_encoding(get_lang("Display"),$this->encoding,$mych)."</p>";
 			unset($mych);
@@ -2456,7 +2460,8 @@ class learnpath {
 		
 		//temp variables
 		$mycurrentitemid = $this->get_current_item_id();
-		
+		$color_counter=0;
+		$i=0;
     	foreach($list as $item)
     	{
     		if($this->debug>2){error_log('New LP - learnpath::get_html_toc(): using item '.$item['id'],0);}
@@ -2469,56 +2474,86 @@ class learnpath {
     							'succeeded'    => 'succeeded.png',
     							'browsed'      => 'completed.png');
     		
-    		$style = 'scorm_item';
+    		$style = 'scorm_item';    		
+    		$scorm_color_background='scorm_item';
+    		$style_item ='scorm_item';
+    		$current=false;
+    		
     		if($item['id'] == $this->current)
     		{
     			$style = 'scorm_item_highlight';
-    		}
+    			$scorm_color_background ='scorm_item_highlight';
+    		}	
+    		else 
+    		
+	    		if ($color_counter%2==0)
+		    	{
+		    		$scorm_color_background='scorm_item_1'; 			
+		    	}
+		    	else
+		    	{
+		    		$scorm_color_background='scorm_item_2'; 
+		    	}
+	    	
+			if ($scorm_color_background!='')
+			{
+				$html .= '<div id="toc_'.$item['id'].'" class="'.$scorm_color_background.'">';
+			}
+			
     		//the anchor will let us center the TOC on the currently viewed item &^D
-    		
-    		if($item['type']!='dokeos_module' AND $item['type']!='dokeos_chapter'){
-    		
-	    		$html .= '<a name="atoc_'.$item['id'].'" /><div class="'.$style.'" style="padding-left: '.($item['level']*1.5).'em; padding-right:'.($item['level']/2).'em" id="toc_'.$item['id'].'" title="'.$item['description'].'" >' .
-	    				'';    		
-    		}
-    		
-    		else{
+    		if($item['type']!='dokeos_module' AND $item['type']!='dokeos_chapter')
+    		{       		
+	    		$html .= '<a name="atoc_'.$item['id'].'" />';								
+				$html .= '<div class="'.$style_item.'" style="padding-left: '.($item['level']*1.5).'em; padding-right:'.($item['level']/2).'em"             title="'.$item['description'].'" >';
+	    	}    		
+    		else
+    		{  
+    			$html .= '<div class="'.$style_item.'" style="padding-left: '.($item['level']*2).'em; padding-right:'.($item['level']*1.5).'em"             title="'.$item['description'].'" >';
+   			}
     			
-    			$html .= '<div class="'.$style.'" style="padding-left: '.($item['level']*2).'em; padding-right:'.($item['level']*1.5).'em" id="toc_'.$item['id'].'" title="'.$item['description'].'" >' .
-	    				'';
+			$title=$item['title'];		
     			
-    		}   		
-			$title=$item['title'];
     		if(empty($title))
     		{
     			$title = rl_get_resource_name(api_get_course_id(),$this->get_id(),$item['id']);    			
     		}
+    		
     		$title = html_entity_decode($title,ENT_QUOTES,$this->encoding);   		
     	
-    		
     		if($item['type']!='dokeos_chapter' and $item['type']!='dir' AND $item['type']!='dokeos_module')
     		{
-					//$html .= "<a href='lp_controller.php?".api_get_cidreq()."&action=content&lp_id=".$this->get_id()."&item_id=".$item['id']."' target='lp_content_frame_name'>".$title."</a>" ;
-					$url = $this->get_link('http',$item['id']);
-					//$html .= '<a href="'.$url.'" target="content_name" onclick="top.load_item('.$item['id'].',\''.$url.'\');">'.$title.'</a>' ;
-					//$html .= '<a href="" onclick="top.load_item('.$item['id'].',\''.$url.'\');return false;">'.$title.'</a>' ;
-					
-					//<img align="absbottom" width="13" height="13" src="../img/lp_document.png">&nbsp;
-					$html .= '<a href="" onclick="dokeos_xajax_handler.switch_item(' .
-							$mycurrentitemid.',' .
-							$item['id'].');' .
-							'return false;" >'.stripslashes($title).'</a>' ;
+				//$html .= "<a href='lp_controller.php?".api_get_cidreq()."&action=content&lp_id=".$this->get_id()."&item_id=".$item['id']."' target='lp_content_frame_name'>".$title."</a>" ;
+				$url = $this->get_link('http',$item['id']);
+				//$html .= '<a href="'.$url.'" target="content_name" onclick="top.load_item('.$item['id'].',\''.$url.'\');">'.$title.'</a>' ;
+				//$html .= '<a href="" onclick="top.load_item('.$item['id'].',\''.$url.'\');return false;">'.$title.'</a>' ;
+				
+				//<img align="absbottom" width="13" height="13" src="../img/lp_document.png">&nbsp;
+				$html .= '<a href="" onclick="dokeos_xajax_handler.switch_item(' .
+						$mycurrentitemid.',' .
+						$item['id'].');' .
+						'return false;" >'.stripslashes($title).'</a>' ;
     		}
     		elseif($item['type']=='dokeos_module' || $item['type']=='dokeos_chapter')
     		{
-    				$html .= "<img align='absbottom' width='13' height='13' src='../img/lp_dokeos_module.png'>&nbsp;".stripslashes($title);
-    		}
-    		
+    			$html .= "<img align='absbottom' width='13' height='13' src='../img/lp_dokeos_module.png'>&nbsp;".stripslashes($title);
+    		}    		
     		elseif($item['type']=='dir')
     		{
-    				$html .= stripslashes($title);
-    		}
-    		$html .= "<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'],0,1)."' /></div>\n";
+    			$html .= stripslashes($title);
+    		}   		
+    		
+    		$html .= "<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'],0,1)."' />"; 		
+    		$html .= "</div>";
+    		
+    		if ($scorm_color_background!='')
+			{
+				$html .= '</div>';
+			}
+			
+    		
+			
+			
+    	$color_counter++;
     	}
     	$html .= "</div>\n";
     	return $html;

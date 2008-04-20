@@ -480,7 +480,6 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 						get_lang('AvgAssignments')
 						);
 				
-		$a_students = array();
 		$a_course_students = array();
 		
 		foreach($a_courses as $course)
@@ -503,8 +502,7 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 				$avg_time_spent_in_course += Tracking :: get_time_spent_on_the_course ($row['user_id'], $course_code);
 				$avg_messages_in_course += Tracking :: count_student_messages ($row['user_id'], $course_code);
 				$avg_assignments_in_course += Tracking :: count_student_assignments ($row['user_id'], $course_code);
-				$a_students[] = $row['user_id'];
-				$a_course_students = $row['user_id'];
+				$a_course_students[] = $row['user_id'];
 			}
 			
 			// students subscribed to the course through a session
@@ -526,8 +524,7 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 						$avg_time_spent_in_course += Tracking :: get_time_spent_on_the_course ($row['user_id'], $course_code);
 						$avg_messages_in_course += Tracking :: count_student_messages ($row['user_id'], $course_code);
 						$avg_assignments_in_course += Tracking :: count_student_assignments ($row['user_id'], $course_code);
-						$a_students[] = $row['user_id'];
-						$a_course_students = $row['user_id'];
+						$a_course_students[] = $row['user_id'];
 					}
 				}
 			}

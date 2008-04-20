@@ -1,9 +1,9 @@
-<?php // $Id: scorm_api.php,v 1.30 2006/09/12 13:42:18 yannoo Exp $ 
+<?php // $Id: scorm_api.php 14952 2008-04-20 01:37:51Z yannoo $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
 	
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) Denes Nagy (darkden@freemail.hu)
 	
 	For a full list of contributors, see "credits.txt".
@@ -16,7 +16,7 @@
 	
 	See the GNU General Public License for more details.
 	
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ============================================================================== 
 */
 /**

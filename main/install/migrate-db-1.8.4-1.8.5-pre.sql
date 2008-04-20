@@ -79,7 +79,7 @@ CREATE TABLE user_field_values(id	int	NOT NULL auto_increment,user_id	int	NOT NU
 ALTER TABLE session ADD session_admin_id INT UNSIGNED NOT NULL ;
 ALTER TABLE session ADD INDEX ( session_admin_id ) ;
 UPDATE course_module SET position='basic' WHERE name='survey';
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('show_closed_courses',NULL,'radio','Platfrom','false','ShowClosedCoursesTitle','ShowClosedCoursesComment',NULL,NULL);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('show_closed_courses',NULL,'radio','Platform','false','ShowClosedCoursesTitle','ShowClosedCoursesComment',NULL,NULL);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_closed_courses', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_closed_courses', 'false', 'No');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('ldap_main_server_address', NULL, 'textfield', 'LDAP', 'localhost', 'LDAPMainServerAddressTitle', 'LDAPMainServerAddressComment', NULL, NULL);

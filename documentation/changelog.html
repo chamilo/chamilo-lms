@@ -43,7 +43,19 @@
     <li>in the agenda you can display the X upcoming events (can be configured by the platform admin)</li>
     <li>The course agenda now has a month view like the my agenda</li>
     <li>In the user list of the platform administration you can now quickly see for what courses the user is subscribed by hovering over the courses icon</li>
-    <li>the platform system announcements can now be sent through email also</li>
+    <li>The platform system announcements can now be sent through email also</li>
+	<li>LDAP
+		<ul>
+			<li>The LDAP code has changed. If you had some customisations there, you might want to save them and re-apply them after the upgrade</li>
+			<li>Functions renamed to respect coding conventions and use ldap_ namespace</li>
+			<li>Most parameters moved to the administration panel. You will need to configure the administration panel with the settings that were previously in ldap_var.inc.php</li>
+			<li>Added non-anonymous mode (just add a login and a password in the configuration panel)</li>
+			<li>Added search domain configuration through panel</li>
+			<li>Added customizable field-check for student-teacher switch</li>
+			<li>The installation guide has been updated to help you find your way through the new LDAP configuration panel</li>
+			<li>You still need to activate LDAP by uncommenting two lines in configuration.php</li>
+		</ul>
+	</li>	
 </ul>
 <br />
 <h3>Debugging</h3>

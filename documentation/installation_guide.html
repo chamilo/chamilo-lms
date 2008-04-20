@@ -370,55 +370,28 @@ Ask the LDAP server admin for the settings:
   <li>ldap dc</li>
 </ul>
 
-You must enter these in
-(dokeos folder)/main/auth/ldap/ldap_var.inc.php
+Since 1.8.5, you have to change the LDAP settings inside the "Portal administration" panel, under "Dokeos configuration settings", section "LDAP".
 <br />
-
-
-//parameters for LDAP module<br />
-$usesLDAP						=	TRUE;<br />
-$usesCurriculum					=	FALSE;<br />
-$ldaphost = "myldapserver.com";  // your ldap server<br />
-$ldapport = 389;                 // your ldap server's port number<br />
-$ldapDc = "dc=xx, dc=yy, dc=zz"; //domain<br />
+As an example, you should find the following kind of values:<br />
+LDAP main server's address: "myldapserver.com";  // your ldap server<br />
+LDAP main server's port: 389;                 // your ldap server's port number<br />
+LDAP domain: "dc=xx, dc=yy, dc=zz"; //domain<br />
 <br />
 
 <h3><b>Teacher/student status</b></h3>
 <p>
-If you wish, you can give teacher/student status to dokeos users according to settings in the ldap server.
-This is not a standard field however, so you'll have to change some code.
-main/auth/ldap/ldap_var.inc.php
-around line 189, function putUserInfoInDokeos ($login, $infoArray)
-</p>
-<p>
-if (<i>your criterium</i>)<br />
-{<br />
-   $statut = STUDENT;<br />
-}<br />
-else<br />
-{<br />
-   $statut = COURSEMANAGER;<br />
-}<br />
-</p>
-
-
-
-<p>
-If this seems too difficult, the simplest solution is to just put
-$statut = STUDENT; and give course manager rights through the administration section.
-</p>
-
-
-
-<p>
+By default, Dokeos will check if the "employeenumber" field has a value. If it has, then Dokeos will
+consider this user as being a teacher.<br />
+If you want to change this behaviour, you can edit main/auth/ldap/authldap.php, function ldap_put_user_info_locally(),
+and change the <em>if (empty($info_array[$tutor_field]))</em> condition to whatever suits you.<br />
+You can also remove this check by removing the condition and leaving only the <em>$status = STUDENT;</em> line.
 </p>
 
 <h3><b>Protected LDAP servers</b></h3>
 
 <p>
-Some LDAP servers do not support anonymous use of the directory services
-In this case, you need code that binds with a name and password - this code has already been provided,
-just ask on a forum or email for this.</p>
+Some LDAP servers do not support anonymous use of the directory services.<br />
+In this case, you should fill in the appropriate fields in the administration panel (e.g. "manager" and "mypassword") and Dokeos will try to authenticate using these, or fall back to anonymous mode before giving up.</p>
 
 <p></p>
 

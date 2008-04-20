@@ -1,9 +1,9 @@
-<?php // $Id: login.php 13113 2007-09-20 03:22:21Z yannoo $
+<?php // $Id: login.php 14962 2008-04-20 22:43:21Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 	
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Roan Embrechts
@@ -18,7 +18,7 @@
 	
 	See the GNU General Public License for more details.
 	
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -31,6 +31,7 @@
 *	@package dokeos.auth.ldap
 ==============================================================================
 */
+
 	/*
 		An external authentification module
 		needs to set
@@ -48,21 +49,22 @@
 		variables based on the result.
 	===============================================
 	*/
-	include_once('authldap.php');
+//require_once('../../inc/global.inc.php'); - this script should be loaded by the /index.php script anyway, so global is already loaded
+include_once('authldap.php');
 
-	$loginLdapSucces = loginWithLdap($login, $password);	
+$loginLdapSucces = ldap_login($login, $password);	
 
-	if ($loginLdapSucces)
-	{
-		$loginFailed = false;
-		$uidReset = true;
-		$_user['user_id'] = $uData['user_id'];
-		api_session_register('_uid');
-	}
-	else
-	{
-		$loginFailed = true;
-		unset($_user['user_id']);
-    	$uidReset = false;
-	}
+if ($loginLdapSucces)
+{
+	$loginFailed = false;
+	$uidReset = true;
+	$_user['user_id'] = $uData['user_id'];
+	api_session_register('_uid');
+}
+else
+{
+	$loginFailed = true;
+	unset($_user['user_id']);
+	$uidReset = false;
+}
 ?>

@@ -1,9 +1,9 @@
-<?php # $Id: newUser.php 13925 2007-12-05 03:20:28Z yannoo $
+<?php # $Id: newUser.php 14962 2008-04-20 22:43:21Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 	
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Roan Embrechts
@@ -18,7 +18,7 @@
 	
 	See the GNU General Public License for more details.
 	
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -40,23 +40,27 @@
 	we add him to the dokeos database
 ==================================================
 */
-
+//require_once('../../inc/global.inc.php'); - this script should be loaded by the /index.php script anyway, so global is already loaded
 include_once('authldap.php');
 
-$loginLdapSucces = loginWithLdap($login, $password);	
+//error_log('Trying to register new user '.$login.' with pass '.$password,0);
 
-if ($loginLdapSucces)
+$ldap_login_success = ldap_login($login, $password);	
+
+if ($ldap_login_success)
 {
+	//error_log('Found user '.$login.' on LDAP server',0);
 	/*
 		In here, we know that
 		- the user does not exist in dokeos
 		- the users login and password are correct
 	*/
-	$infoArray = findUserInfoInLdap($login);
-	putUserInfoInDokeos ($login, $infoArray);
+	$info_array = ldap_find_user_info($login);
+	ldap_put_user_info_locally($login, $info_array);
 }
 else
 {
+	//error_log('Could not find '.$login.' on LDAP server',0);
 	$loginFailed = true;
 	unset($_user['user_id']);
 	$uidReset = false;

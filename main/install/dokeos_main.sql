@@ -535,7 +535,18 @@ VALUES
 ('display_mini_month_calendar',NULL,'radio','Tools', 'true', 'DisplayMiniMonthCalendarTitle', 'DisplayMiniMonthCalendarComment', NULL, NULL),
 ('display_upcoming_events',NULL,'radio','Tools','true','DisplayUpcomingEventsTitle','DisplayUpcomingEventsComment',NULL,NULL),
 ('number_of_upcoming_events',NULL,'textfield','Tools','1','NumberOfUpcomingEventsTitle','NumberOfUpcomingEventsComment',NULL,NULL),
-('show_closed_courses',NULL,'radio','Platform','false','ShowClosedCoursesTitle','ShowClosedCoursesComment',NULL,NULL);
+('show_closed_courses',NULL,'radio','Platform','false','ShowClosedCoursesTitle','ShowClosedCoursesComment',NULL,NULL),
+('ldap_main_server_address', NULL, 'textfield', 'LDAP', 'localhost', 'LDAPMainServerAddressTitle', 'LDAPMainServerAddressComment', NULL, NULL),
+('ldap_main_server_port', NULL, 'textfield', 'LDAP', '389', 'LDAPMainServerPortTitle', 'LDAPMainServerPortComment', NULL, NULL),
+('ldap_domain', NULL, 'textfield', 'LDAP', 'dc=nodomain', 'LDAPDomainTitle', 'LDAPDomainComment', NULL, NULL),
+('ldap_replicate_server_address', NULL, 'textfield', 'LDAP', 'localhost', 'LDAPReplicateServerAddressTitle', 'LDAPReplicateServerAddressComment', NULL, NULL),
+('ldap_replicate_server_port', NULL, 'textfield', 'LDAP', '389', 'LDAPReplicateServerPortTitle', 'LDAPReplicateServerPortComment', NULL, NULL),
+('ldap_search_term', NULL, 'textfield', 'LDAP', '', 'LDAPSearchTermTitle', 'LDAPSearchTermComment', NULL, NULL),
+('ldap_version', NULL, 'radio', 'LDAP', '3', 'LDAPVersionTitle', 'LDAPVersionComment', NULL, ''),
+('ldap_filled_tutor_field', NULL, 'textfield', 'LDAP', 'employeenumber', 'LDAPFilledTutorFieldTitle', 'LDAPFilledTutorFieldComment', NULL, ''),
+('ldap_authentication_login', NULL, 'textfield', 'LDAP', '', 'LDAPAuthenticationLoginTitle', 'LDAPAuthenticationLoginComment', NULL, ''),
+('ldap_authentication_password', NULL, 'textfield', 'LDAP', '', 'LDAPAuthenticationPasswordTitle', 'LDAPAuthenticationPasswordComment', NULL, '');
+
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -669,17 +680,13 @@ VALUES
 ('display_upcoming_events', 'true', 'Yes'),
 ('display_upcoming_events', 'false', 'No'),
 ('show_closed_courses', 'true', 'Yes'),
-('show_closed_courses', 'false', 'No');
-
-
+('show_closed_courses', 'false', 'No'),
+('ldap_version', '2', 'LDAPVersion2'),
+('ldap_version', '3', 'LDAPVersion3');
 
 UNLOCK TABLES;
 
-
-
-
 /*!40000 ALTER TABLE settings_options ENABLE KEYS */;
-
 
 --
 -- Table structure for table sys_announcement

@@ -1,9 +1,9 @@
-<?php // $Id: ldap_var.inc.php 13366 2007-10-01 01:52:09Z yannoo $
+<?php // $Id: ldap_var.inc.php 14962 2008-04-20 22:43:21Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
@@ -18,7 +18,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -50,30 +50,26 @@
 ==============================================================================
 */
 
-//parameters for LDAP module
-$usesLDAP						=	TRUE;
-$usesCurriculum					=	FALSE;
 // your ldap server
-$ldaphost = "adresse du serveur LDAP";
+$ldap_host = api_get_setting('ldap_main_server_address');
 // your ldap server's port number
-$ldapport = "port";
+$ldap_port = api_get_setting('ldap_main_server_port');
 //domain
-$ldapDc = "OU";
-
-// Variable for the teacher's LDAP directory
-$LDAPserv = $ldaphost;
-$LDAPport = $ldapport;
-$LDAPbasedn = $ldapDc;
+$ldap_basedn = api_get_setting('ldap_domain');
 
 //search term for students
-$critereRechercheEtu = "employeeType";
+$ldap_search_dn = api_get_setting('ldap_search_string');
 
 //additional server params for use of replica in case of problems
-$LDAPserv2 = "adresse replica LDAP";
-$LDAPport2 = "port replica";
+$ldap_host2 = api_get_setting('ldap_replicate_server_address');
+$ldap_port2 = api_get_setting('ldap_replicate_server_port');
 
 //protocol version - set to 3 for LDAP 3
-$LDAPversion = 2;
+$ldap_version = api_get_setting('ldap_version');
 
-$PLACEHOLDER = "PLACEHOLDER";
+//non-anonymous LDAP mode
+$ldap_rdn = api_get_setting('ldap_authentication_login');
+$ldap_pass = api_get_setting('ldap_authentication_password');
+
+$ldap_pass_placeholder = "PLACEHOLDER";
 ?>

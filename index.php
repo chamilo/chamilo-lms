@@ -12,15 +12,15 @@
 
     Contact:
 		Dokeos
-		Rue des Palais 44 Paleizenstraat
+		Rue du Corbeau, 108
 		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+		Contact: info@dokeos.com
 */
 
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 14921 2008-04-16 13:10:59Z pcool $
+* 	@version $Id: index.php 14958 2008-04-20 18:17:02Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */

@@ -1,9 +1,9 @@
-<?php // $Id: whoisonline.php 14206 2008-01-30 22:12:56Z yannoo $
+<?php // $Id: whoisonline.php 14958 2008-04-20 18:17:02Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
@@ -16,7 +16,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**

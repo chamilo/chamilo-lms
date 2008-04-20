@@ -743,4 +743,12 @@ $NumberOfUpcomingEventsTitle = "Numero di prossimi eventi da visualizzare";
 $NumberOfUpcomingEventsComment = "Se la funzionalità di visualizzazione dei prossimi eventi è attiva, l\'opzione permette di scegliere il numero di quelli che saranno visualizzati";
 $ShowClosedCoursesTitle = "Mostro anche i corsi chiusi nella pagina di accesso al Campus ed ai corsi?";
 $ShowClosedCoursesComment = "Mostro i corsi chiusi nella pagina d\'accesso? Nella pagina di accesso ai corsi (dopo l\'accesso al Campus) un\'icona vicino al nome del corso permette una rapida iscrizione per coloro che non sono già iscritti.";
+$LDAPConnectionError = "Errore di connessione LDAP";
+$LDAP = "LDAP";
+$LDAPEnableTitle = "Abilita LDAP";
+$LDAPMainServerAddressTitle = "Indirizzo del server LDAP principale";
+$LDAPMainServerAddressComment = "L\'indirizzo IP o l\'URL del server LDAP principale";
+$LDAPMainServerPortTitle = "Porta del server LDAP principale";
+$LDAPDomainTitle = "Dominio LDAP";
+$LDAPReplicateServerAddressTitle = "Indirizzo del replication server";
 ?>

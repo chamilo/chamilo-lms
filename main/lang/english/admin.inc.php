@@ -746,9 +746,9 @@ $LDAPEnableComment = "If you have an LDAP server, you will have to configure its
 $LDAPMainServerAddressTitle = "Main LDAP server\'s address";
 $LDAPMainServerAddressComment = "The IP address or url of your main LDAP server.";
 $LDAPMainServerPortTitle = "Main LDAP server\'s port.";
-$LDAPMainServerPortComment = "The port on which the main LDAP server will respond. This is a mandatory setting.";
+$LDAPMainServerPortComment = "The port on which the main LDAP server will respond (usually 389). This is a mandatory setting.";
 $LDAPDomainTitle = "LDAP domain";
-$LDAPDomainComment = "This is the LDAP domain (dn) that will be used to find the contacts on the LDAP server.";
+$LDAPDomainComment = "This is the LDAP domain (dc) that will be used to find the contacts on the LDAP server. For example: dc=xx, dc=yy, dc=zz";
 $LDAPReplicateServerAddressTitle = "Replicate server\'s address";
 $LDAPReplicateServerAddressComment = "When the main server is not available, this server will be accessed. Leave blank or use the same value as the main server if you don\'t have a replicate server.";
 $LDAPReplicateServerPortTitle = "Replicate server\'s port";
@@ -757,4 +757,12 @@ $LDAPSearchTermTitle = "Search term";
 $LDAPSearchTermComment = "This term will be used to filter the search for contacts on the LDAP server. If you are unsure what to put in here, please refer to your LDAP server\'s documentation and configuration.";
 $LDAPVersionTitle = "LDAP version";
 $LDAPVersionComment = "Please select the version of the LDAP server you want to use. Using the right version depends on your LDAP server\'s configuration.";
+$LDAPVersion2 = "LDAP 2";
+$LDAPVersion3 = "LDAP 3";
+$LDAPFilledTutorFieldTitle = "Tutor identification field";
+$LDAPFilledTutorFieldComment = "A check will be done on this LDAP contact field on new users insertion. If this field is not empty, the user will be considered as a tutor and inserted in Dokeos as such. If you want all your users to be recognised as simple users, leave this field empty. You can modify this behaviour by changing the code. Please read the <a href=\"../../documentation/installation_guide.html\">installation guide</a> for more information.";
+$LDAPAuthenticationLoginTitle = "Authentication login";
+$LDAPAuthenticationLoginComment = "If you are using an LDAP server that does not support or accept anonymous access, fill the following field with the user login that should be used. Do not include \"cn=\". Leave empty for anonymous access.";
+$LDAPAuthenticationPasswordTitle = "Authentication password";
+$LDAPAuthenticationPasswordComment = "If you are using an LDAP server that does not support or accept anonymous access, fill the following field with the user password that should be used.";
 ?>

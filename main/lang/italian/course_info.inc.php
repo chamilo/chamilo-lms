@@ -104,4 +104,7 @@ $QuizEmailAlertDeactivate = "Disattiva l\'avviso e-mail nel caso di nuove rispos
 $AllowUserImageForum = "Immagine dell\'utente nei forum";
 $AllowUserImageForumActivate = "Mostra nel forum l\'immagine memorizzata nel profilo utente";
 $AllowUserImageForumDeactivate = "Non mostrare nel forum l\'immagine memorizzata nel profilo utente";
+$AllowLearningPathTheme = "Abilita aspetti personalizzati per i percorsi";
+$AllowLearningPathThemeAllow = "Abilitato";
+$AllowLearningPathThemeDisallow = "Disabilitato";
 ?>

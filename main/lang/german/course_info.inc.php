@@ -102,4 +102,7 @@ $QuizEmailAlertDeactivate = "E-Mail Benachrichtigung bei Antworten auf neues Qui
 $AllowUserImageForum = "Benutzer-Bild im Forum";
 $AllowUserImageForumActivate = "Benutzer-Bilder im Forum anzeigen";
 $AllowUserImageForumDeactivate = "keine Benutzer-Bilder im Forum";
+$AllowLearningPathTheme = "Lernpfad Theme erlauben";
+$AllowLearningPathThemeAllow = "Erlaubt";
+$AllowLearningPathThemeDisallow = "Nicht erlaubt";
 ?>

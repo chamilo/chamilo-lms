@@ -126,4 +126,6 @@ $DocumentUnsetAsTemplate = "Le document a bien été retiré des templates";
 $AddAsTemplate = "Ajouter en tant que template";
 $RemoveAsTemplate = "Supprimer template";
 $ReadOnly = "Lecture seule";
+$ReadOnlyFile = "Le fichier est en lecture seule";
+$FileNotFound = "Le fichier est introuvable";
 ?>

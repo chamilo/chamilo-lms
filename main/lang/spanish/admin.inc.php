@@ -748,4 +748,24 @@ $NumberOfUpcomingEventsTitle = "Número de próximos eventos que se deben mostrar"
 $NumberOfUpcomingEventsComment = "Número de próximos eventos que serán mostrados en la agenda. Esto requiere que la funcionalidad próximos eventos esté activada (ver más arriba la configuración)";
 $ShowClosedCoursesTitle = "¿ Mostrar los cursos cerrados en la página de registro y en la página principal de la plataforma ?";
 $ShowClosedCoursesComment = "¿ Mostrar los cursos cerrados en la página de registro y en la página principal de la plataforma ? En la página de inicio de la plataforma aparecerá un icono junto al curso, para inscribirse rápidamente en el mismo. Esto solo se mostrará en la página principal de la plataforma tras la autentificación del usuario y siempre que ya no esté inscrito en el curso.";
+$LDAPConnectionError = "Error de conexión LDAP";
+$LDAP = "LDAP";
+$LDAPEnableTitle = "Habilitar LDAP";
+$LDAPEnableComment = "Si tiene un servidor LDAP, tendrá que configurar los parámetros inferiores y modificar el fichero de configuración descrito en la guía de instalación, y finalmente activarlo. Esto permitirá a los usuarios autentificarse usando su nombre de usuario LDAP. Si no conoce LDAP es mejor que deje esta opción desactivada";
+$LDAPMainServerAddressTitle = "Dirección del servidor LDAP principal";
+$LDAPMainServerAddressComment = "La dirección IP o la URL de su servidor LDAP principal.";
+$LDAPMainServerPortTitle = "Puerto del servidor LDAP principal";
+$LDAPMainServerPortComment = "El puerto  en el que el servidor LDAP principal responderá (generalmente 389). Este parámetro es obligatorio.";
+$LDAPDomainTitle = "Dominio LDAP";
+$LDAPDomainComment = "Este es el dominio (dc) LDAP que será usado para encontrar los contactos en el servidor LDAP. Por ejemplo: dc=xx, dc=yy, dc=zz";
+$LDAPReplicateServerAddressTitle = "Dirección del servidor de replicación";
+$LDAPReplicateServerAddressComment = "Cuando el servidor principal no está disponible, este servidor le dará acceso. Deje en blanco o use el mismo valor que el del servidor principal si no tiene un servidor de replicación.";
+$LDAPReplicateServerPortTitle = "Puerto del servidor LDAP de replicación";
+$LDAPReplicateServerPortComment = "El puerto en el que el servidor LDAP de replicación responderá.";
+$LDAPSearchTermTitle = "Término de búsqueda";
+$LDAPSearchTermComment = "Este término será usado para filtrar la búsqueda de contactos en el servidor LDAP. Si no está seguro de lo que escribir aquí, consulte la documentación y configuración de su servidor LDAP.";
+$LDAPVersionTitle = "Versión LDAP";
+$LDAPVersionComment = "Por favor, seleccione la versión del servidor LDAP que quiere usar. El uso de la versión correcta depende de la configuración de su servidor LDAP.";
+$LDAPVersion2 = "LDAP 2";
+$LDAPVersion3 = "LDAP 3";
 ?>

@@ -739,9 +739,9 @@ $LDAPEnableComment = "Si vous disposez d\'un serveur LDAP, vous devriez d\'abord
 $LDAPMainServerAddressTitle = "Adresse du serveur LDAP principal";
 $LDAPMainServerAddressComment = "L\'adresse IP ou l\'url de votre serveur LDAP principal.";
 $LDAPMainServerPortTitle = "Port du serveur LDAP principal.";
-$LDAPMainServerPortComment = "Le port sur lequel le serveur LDAP principal répondra. Ceci est un paramètre obligatoire.";
+$LDAPMainServerPortComment = "Le port sur lequel le serveur LDAP principal répondra (généralement 389). Ceci est un paramètre obligatoire.";
 $LDAPDomainTitle = "Domaine LDAP";
-$LDAPDomainComment = "Il s\'agit du domaine (dn) LDAP qui sera exploré sur le serveur pour retrouver les contacts.";
+$LDAPDomainComment = "Il s\'agit du domaine (dc) LDAP qui sera exploré sur le serveur pour retrouver les contacts. Exemple: dc=xx, dc=yy, dc=zz";
 $LDAPReplicateServerAddressTitle = "Adresse du serveur de réplication";
 $LDAPReplicateServerAddressComment = "Lorsque le serveur principal est indisponible, c\'est ce serveur qui sera utilisé. Laissez vide ou mettez-y la même valeur que pour le serveur principal si vous n\'avez pas de serveur de réplication.";
 $LDAPReplicateServerPortTitle = "Port du serveur LDAP de réplication";
@@ -750,4 +750,12 @@ $LDAPSearchTermTitle = "Terme de recherche";
 $LDAPSearchTermComment = "Ce terme sera utilisé comme filtre dans la recherche des contacts sur le serveur LDAP. Si vous ne savez pas quoi indiquer ici, merci de vous référer à la documentation et configuration de votre serveur LDAP.";
 $LDAPVersionTitle = "Version LDAP";
 $LDAPVersionComment = "Veuillez sélectionner la version de votre serveur LDAP. La bonne version devrait être indiquée dans la configuration de votre serveur LDAP.";
+$LDAPVersion2 = "LDAP 2";
+$LDAPVersion3 = "LDAP 3";
+$LDAPFilledTutorFieldTitle = "Champ d\'identification d\'un enseignant";
+$LDAPFilledTutorFieldComment = "Une vérification sera faite sur le contenu du champ LDAP donné ci-dessous lorsque de nouveaux utilisateurs seront importés via LDAP. Si le champ n\'est pas vide, l\'utilisateur sera considéré comme un enseignant et inséré tel quel dans Dokeos. Si vous voulez que tous vos utilisateurs soient insérés comme des utilisateurs simples, laissez ce champ vide. Vous pouvez modifier ce comportement en modifiant le code. Veuillez consulter le <a href=\"../../documentation/installation_guide.html\">guide d\'installation</a> pour plus d\'informations.";
+$LDAPAuthenticationLoginTitle = "Login d\'authentification";
+$LDAPAuthenticationLoginComment = "Dans le cas d\'un serveur LDAP n\'autorisant pas les accès anonymes, remplissez le champ suivant avec le nom d\'utilisateur ayant accès au système. N\'incluez pas de \"cn=\". Laissez vide pour le mode anonyme.";
+$LDAPAuthenticationPasswordTitle = "Mot de passe d\'authentification";
+$LDAPAuthenticationPasswordComment = "Dans le cas d\'un serveur LDAP n\'autorisant pas les accès anonymes, remplissez le champ suivant avec le mot de passe de l\'utilisateur ayant accès au système.";
 ?>

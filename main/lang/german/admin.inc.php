@@ -739,4 +739,16 @@ $NumberOfUpcomingEventsTitle = "Anzahl bevorstehender Ereignisse, die angezeigt 
 $NumberOfUpcomingEventsComment = "Die Anzahl der bevorstehenden Ereignisse, die in der Agenda angezeigt werden sollen. Hierzu ist erforderlich, dass die Funktion zur Anzeige bevorstehender Ereignisse aktiviert ist (vgl. obige Einstellung)";
 $ShowClosedCoursesTitle = "Abgeschlossene Kurse auf der Login Seite und Campus Startseite anzeigen?";
 $ShowClosedCoursesComment = "Abgeschlossene Kurse auf der Loginseite bzw Startseite anzeigen? Auf der Campus Startseite wird ein Icon bei dem Kurs eingeblendet, wo der Kurs kurz beschrieben wird. Dies wird nur auf der Campus Startseite angezeigt, wenn ein Benutzer eingeloggt aber noch nicht zu dem Kurs angemeldet ist.";
+$LDAPConnectionError = "LDAP Verbindungsfehler";
+$LDAP = "LDAP";
+$LDAPEnableTitle = "LDAP aktivieren";
+$LDAPMainServerAddressTitle = "Adresse des LDAÜ Hauptservers ";
+$LDAPMainServerPortTitle = "Haupt LDAP Server Port";
+$LDAPDomainTitle = "LDAP Domain";
+$LDAPReplicateServerAddressTitle = "Replicate Server Adresse";
+$LDAPReplicateServerPortTitle = "Replicate Server Port";
+$LDAPSearchTermTitle = "Suchbegriff";
+$LDAPVersionTitle = "LDAP Version";
+$LDAPVersion2 = "LDAP 2";
+$LDAPVersion3 = "LDAP 3";
 ?>

@@ -122,6 +122,8 @@ var G_IncorrectDataType = 405;
 
 var G_LastError = G_NoError ;
 var G_LastErrorMessage = 'No error';
+//this is not necessary and is only provided to make bad Articulate contents shut up (and not trigger useless JS messages)
+var G_LastErrorString = 'No error';
 
 var commit = false ;
 

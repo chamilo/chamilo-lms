@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 14477 2008-03-03 21:42:03Z juliomontoya $
+// $Id: infocours.php 14956 2008-04-20 14:21:32Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -207,8 +207,8 @@ $form -> addElement('html',$linebreak);
 if (api_get_setting('allow_course_theme') == 'true')
 {	
 	//Allow Learning path 
-	$form->addElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeActivate'), 1);
-	$form->addElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDectivate'), 0);
+	$form->addElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeAllow'), 1);
+	$form->addElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
 	$form -> addElement('html',$linebreak);
 	
 	

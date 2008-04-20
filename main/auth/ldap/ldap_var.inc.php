@@ -1,9 +1,9 @@
-<?php // $Id: ldap_var.inc.php 14962 2008-04-20 22:43:21Z yannoo $
+<?php // $Id: ldap_var.inc.php 14966 2008-04-20 23:03:11Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos SPRL
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
@@ -43,13 +43,6 @@
 *	@package dokeos.auth.ldap
 ==============================================================================
 */
-
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
-
 // your ldap server
 $ldap_host = api_get_setting('ldap_main_server_address');
 // your ldap server's port number

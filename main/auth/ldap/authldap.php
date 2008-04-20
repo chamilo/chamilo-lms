@@ -1,4 +1,4 @@
-<?php // $Id: authldap.php 14962 2008-04-20 22:43:21Z yannoo $
+<?php // $Id: authldap.php 14965 2008-04-20 23:01:17Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -75,7 +75,7 @@
 =======================================================================
 */
 
-include ('ldap_var.inc.php');
+require('ldap_var.inc.php');
 
 /**
 ===============================================================
@@ -85,7 +85,7 @@ include ('ldap_var.inc.php');
 ===============================================================
 *	@author Roan Embrechts (based on code from Universit� Jean Monet)
 */
-//include_once("$includePath/../connect/authldap.php");
+//require_once(api_get_path(INCLUDE_PATH).'../connect/authldap.php');
 
 function ldap_login($login, $password)
 {

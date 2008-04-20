@@ -1,4 +1,4 @@
-<?php // $Id: login.php 14962 2008-04-20 22:43:21Z yannoo $
+<?php // $Id: login.php 14965 2008-04-20 23:01:17Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -50,7 +50,7 @@
 	===============================================
 	*/
 //require_once('../../inc/global.inc.php'); - this script should be loaded by the /index.php script anyway, so global is already loaded
-include_once('authldap.php');
+require_once('authldap.php');
 
 $loginLdapSucces = ldap_login($login, $password);	
 

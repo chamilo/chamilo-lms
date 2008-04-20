@@ -53,4 +53,5 @@ $langOnHomepage = "Link auf Homepage anzeigen";
 $langShowLinkOnHomepage = "Diesen Link als Icon auf der Kurs-Homepage anzeigen";
 $langCsvImport = "CSV Import";
 $Category = "Kategorie";
+$General = "Allgemein";
 ?>

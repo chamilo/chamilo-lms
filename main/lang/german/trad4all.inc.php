@@ -511,4 +511,5 @@ $CannotMakeFieldUnchangeable = "Feld kann nicht unveränderbar gemacht werden";
 $Folder = "Verzeichnis";
 $CloseOtherSession = "Der Chat ist nicht verfügbar, da andere Seite des Kurses geöffnet ist; bitte die Seite aktualisieren";
 $FileUploadSucces = "Upload der Datei war erfolgreich";
+$Yesterday = "Gestern";
 ?>

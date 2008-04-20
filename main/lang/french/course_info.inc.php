@@ -103,4 +103,7 @@ $QuizEmailAlertDeactivate = "Désactiver l\'envoi d\'un e-mail sur réception de r
 $AllowUserImageForum = "Photo utilisateur dans le forum";
 $AllowUserImageForumActivate = "Afficher les photos des utilisateurs dans le forum";
 $AllowUserImageForumDeactivate = "Ne pas afficher les photos des utilisateurs dans le forum";
+$AllowLearningPathTheme = "Autoriser les thèmes de parcours";
+$AllowLearningPathThemeAllow = "Autorisé";
+$AllowLearningPathThemeDisallow = "Non autorisé";
 ?>

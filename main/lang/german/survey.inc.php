@@ -181,4 +181,5 @@ $SurveyNotAvailableYet = "Diese Umfrage ist noch nicht verfügbar. Bitte versuche
 $PeopleAnswered = "Leute haben geantwortet";
 $AnonymousSurveyCannotKnowWhoAnswered = "Dies ist eine anonyme Umfrage. Man kann nicht sehen, wer geantwortet hat.";
 $IllegalSurveyId = "Unbekannte Umfrage ID";
+$SurveyQuestionMoved = "Die Frage wurde verschoben";
 ?>

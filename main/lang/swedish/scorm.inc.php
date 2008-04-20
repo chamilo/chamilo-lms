@@ -37,4 +37,13 @@ $langRemote = "Fjärr";
 $langAutodetect = "Automatisk";
 $langAccomplishedStepsTotal = "Totalt antal slutförda steg";
 $langUnknown = "Okänd";
+$AreYouSureToDeleteSteps = "Är du säker på att du vill radera stegen?";
+$FileToUpload = "SCORM- eller AICC-paket att ladda upp";
+$ContentMaker = "Innehållets ursprung";
+$ContentProximity = "Kursplacering";
+$MoveCurrentChapter = "Flytta detta kapitel";
+$UnknownPackageFormat = "Paketets format känns inte igen. Se till att det är välformaterat och inte innehåller fel. Problem kan också uppstå med vissa proprietära zip-format. Försök då att packa om paketet med ett enklare zipprogram (t ex 7zip).";
+$Attempt = "Försök";
+$MoveTheCurrentForum = "Flytta detta forum";
+$WarningWhenEditingScorm = "Varning!<br /> När du ändrar i innehållet för ett SCORM-steg kanske du ändrar rapportdelen för inlärningsvägen eller funktionen i steget.";
 ?>

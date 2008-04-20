@@ -187,4 +187,5 @@ $LatencyTimeSpent = "gebrauchte Zeit";
 $Result = "Ergebnis";
 $SplitStepsPerPage = "Ein Schritt pro Seite";
 $SplitStepsPerChapter = "Ein Kapitel pro Schritt";
+$TakeSlideName = "Dia Namen der Slides für Lernpfad Schritte nutzen";
 ?>

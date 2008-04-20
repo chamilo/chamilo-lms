@@ -95,6 +95,7 @@ $langItemMissing1 = "Det var en";
 $langItemMissing2 = "sida (steg) här i Dokeos originalinlärningsväg";
 $langDone = "Klart";
 $langNoItemSelected = "För att visa någonting här, var vänlig välj ett objekt från sidomenyn";
+$langUploadScorm = "SCORM- eller AICC-paket att ladda upp";
 $CreateTheForum = "Lägg till forumet";
 $AddLpToStart = "För att börja, ge din inlärningsväg en titel";
 $CreateTheLink = "Importera en länk";

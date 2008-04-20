@@ -180,4 +180,5 @@ $SurveyNotAvailableYet = "Este inquérito ainda não está disponível. Por favor, t
 $PeopleAnswered = "pessoas que responderam";
 $AnonymousSurveyCannotKnowWhoAnswered = "Este inquérito é anónimo. Não pode ver quem respondeu.";
 $IllegalSurveyId = "Número de questionário desconhecido";
+$SurveyQuestionMoved = "A questão foi movida";
 ?>

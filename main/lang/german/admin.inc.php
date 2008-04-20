@@ -728,8 +728,15 @@ $FieldPossibleValues = "Mögliche Werte";
 $FieldPossibleValuesComment = "Nur für wiederholende Felder, durch semi-colon (;) getrennt";
 $FieldTypeDate = "Datum";
 $FieldTypeDatetime = "Datum und Uhrzeit";
+$UserFieldsAddHelp = "Ein Benutzerfeld hinzufügen ist sehr einfach:<br/>-einzelnes Wort in Kleinbuchstaben als eindeutigen Namen auswählen,<br/>- Typus auswählen,<br/>-einen Text wählen, der dem Benutzer angezeigt wird (nimmt man einen existierenden übersetzten Begriff wie BirthDate oder UserSex, so wird er automatisch in andere Sprache übersetzt), <br/>-wählt man einen Multityp (radio, select, multiple select), muss man die möglichen Werte angeben (auch hier kann man in Dokeos bereits benutzte Sprachvariablen nehmen), die durch Semicolon voneinander getrennt werden,<br/>-für Text kann ein Defaultwert angegeben werden,<br/><br/>Wenn man fertig ist, das Feld hinzufügen und auswählen, ob es sichtbar und veränderbar sein soll. Es veränderbar und unsichtbar zu machen bringt nichts.";
 $AllowCourseThemeTitle = "Themen für Kurse erlauben";
+$AllowCourseThemeComment = "Grafische Themen für Kurse zu erlauben, ermöglicht das Verändern des von einem Kurs benutzten Stylesheets zu einem anderen in Dokeos verfügbaren Stylesheet. Wenn ein Benutzer den Kurs aufruft, hat das Stylesheet des Kurses Priorität über das vom Benutzer benutzte und das Dokeos Default Stylesheet.";
 $DisplayMiniMonthCalendarTitle = "Kleinen Monatskalender im Agenda Tool anzeigen";
+$DisplayMiniMonthCalendarComment = "Mit dieser Einstellung kann der kleine Monatskalender in der linken Spalte im Agenda Tool eines Kurses aktiviert oder deaktiviert werden.";
 $DisplayUpcomingEventsTitle  = "Bevorstehende Ereignisse im Agenda Tool anzeigen";
+$DisplayUpcomingEventsComment = "Mit dieser Einstellung kann die Darstellung bevorstehender Ereignisse in der linken Spalte des Agenda Tools eines Kurses aktiviert oder deaktiviert werden.";
 $NumberOfUpcomingEventsTitle = "Anzahl bevorstehender Ereignisse, die angezeigt werden müssen";
+$NumberOfUpcomingEventsComment = "Die Anzahl der bevorstehenden Ereignisse, die in der Agenda angezeigt werden sollen. Hierzu ist erforderlich, dass die Funktion zur Anzeige bevorstehender Ereignisse aktiviert ist (vgl. obige Einstellung)";
+$ShowClosedCoursesTitle = "Abgeschlossene Kurse auf der Login Seite und Campus Startseite anzeigen?";
+$ShowClosedCoursesComment = "Abgeschlossene Kurse auf der Loginseite bzw Startseite anzeigen? Auf der Campus Startseite wird ein Icon bei dem Kurs eingeblendet, wo der Kurs kurz beschrieben wird. Dies wird nur auf der Campus Startseite angezeigt, wenn ein Benutzer eingeloggt aber noch nicht zu dem Kurs angemeldet ist.";
 ?>

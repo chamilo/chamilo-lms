@@ -125,4 +125,6 @@ $DocumentUnsetAsTemplate = "Dokument nicht mehr als Vorlage verwenden";
 $AddAsTemplate = "Als Vorlage hinzufügen";
 $RemoveAsTemplate = "Vorlage entfernen";
 $ReadOnly = "Nur lesen";
+$ReadOnlyFile = "Die Datei ist \"read only\"";
+$FileNotFound = "Datei wurde nicht gefunden";
 ?>

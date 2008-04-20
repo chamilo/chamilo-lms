@@ -464,8 +464,8 @@ $langActiveExtensions = "Aktiviraj to storitev";
 $langVisioconf = "Visio-konferenca";
 $langVisioconfDescription = "Dokeos Live Conferencing® je standardno orodje, namenjeno videokonferencam, in ponuja: prikaz diapozitivov, belo tablo (whiteboard) za risanje in pisanje, dvosmeren avdio in video prenos, klepet. Zahteva le Flash® predvajalnik in dovoljuje uporabo treh različnih načinov interakcije : ena-na-ena, ena-na-več in več-z-večimi.
 ";
-$langPpt2lp = "PPT2LP";
-$langPpt2lpDescription = "PPT2LP omogoča pretvorbo predstavitev, izdelanih v PowerPoint obliki v učno pot.";
+$langPpt2lp = "Oogie-Woogie pretvornik";
+$langPpt2lpDescription = "Oogie-Woogie je orodje za hitro izdelovanje/pretvorbo učnih vsebin. Omogoča pretvorbo predstavitev, izdelanih z MS Powerpoint, MS Word dokumentov in njihovih OpenOffice ekvivalentov v SCORM združljive e-tečaje. Po izvedeni pretvorbi, lahko preko urejevalnika orodja Učne poti dodajate zvok posameznim stranem, dodate nove strani, teste, vaje, pa tudi interakcijske aktivnosti, kot so forumi, objave tečajnikov, ... . Pri tem spremenjene vsebine ostanejo SCORM združljive. Sistem združuje moč pretvorbe dokumentov OpenOffice in MS-Office + RED5 strežnika podatkovnega toka za snemanje zvoka + Dokeos orodij za upravljanje z učnimi potmi.";
 $langBandWidthStatistics = "Statistika izrabe pasovne širine";
 $langBandWidthStatisticsDescription = "MRTG omogoča vpogled na napredno statistiko stanja strežnika v zadnjih 24-tih urah.";
 $ServerStatistics = "Statistike strežnika";

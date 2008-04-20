@@ -509,4 +509,5 @@ $FieldMadeChangeable = "Le champ est maintenant modifiable";
 $CannotMakeFieldChangeable = "Impossible de rendre le champ modifiable";
 $FieldMadeUnchangeable = "Le champ n\'est  plus modifiable";
 $CannotMakeFieldUnchangeable = "Impossible d\'empêcher la modification du champ";
+$Folder = "Répertoire";
 ?>

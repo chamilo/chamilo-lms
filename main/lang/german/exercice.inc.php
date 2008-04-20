@@ -242,4 +242,5 @@ $ExportWithUserFields = "Benutzer Felder beim Export einbeziehen";
 $ExportWithoutUserFields = "Benutzer Felder beim Export ausschließen";
 $DisableResults = "Studenten die Ergebnisse nicht anzeigen";
 $EnableResults = "Studenten die Ergebnisse anzeigen";
+$ValidateAnswer = "Antworten validieren";
 ?>

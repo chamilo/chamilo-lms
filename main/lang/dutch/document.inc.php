@@ -127,4 +127,7 @@ $DocumentSetAsTemplate = "Document ingesteld als een nieuwe sjabloon";
 $DocumentUnsetAsTemplate = "Document niet meer gebruikt als sjabloon";
 $AddAsTemplate = "Als sjabloon toevoegen";
 $RemoveAsTemplate = "Sjabloon verwijderen";
+$ReadOnly = "Enkel lezen";
+$ReadOnlyFile = "Het bestand is enkel lezen";
+$FileNotFound = "Het bestand werd niet gevonden";
 ?>

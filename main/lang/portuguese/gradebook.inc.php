@@ -90,5 +90,10 @@ $StatsStudent = "Estatísticas de";
 $Results = "Resultados";
 $Certificates = "Certificados";
 $Certificate = "Certificado";
+$ChooseUser = "Seleccionar utilizadores para esta avaliação";
+$FirstLetter = "Primeira letra do último nome";
+$UserAdded = "Utilizador acrescentado";
+$ResultEdited = "Resultado actualizado";
 $ChooseFormat = "Escolher formato";
+$OutputFileType = "Tipo de ficheiro de saída";
 ?>

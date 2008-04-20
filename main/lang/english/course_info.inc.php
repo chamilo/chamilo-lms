@@ -102,4 +102,7 @@ $QuizEmailAlertDeactivate = "Disable e-mail alert on new quiz answers submission
 $AllowUserImageForum = "User picture in forum";
 $AllowUserImageForumActivate = "Display users pictures in the forum";
 $AllowUserImageForumDeactivate = "Hide users pictures in the forum";
+$AllowLearningPathTheme = "Allow learning path theme";
+$AllowLearningPathThemeAllow = "Allowed";
+$AllowLearningPathThemeDisallow = "Disallowed";
 ?>

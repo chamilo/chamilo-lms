@@ -493,7 +493,7 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 			// students directly subscribed to the course
 			$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
 			$rs = api_sql_query($sql, __FILE__, __LINE__);	
-			while($row = mysql_fetch_array($rs))
+			while($row = Database::fetch_array($rs))
 			{
 				$nb_students_in_course++;
 				
@@ -507,14 +507,14 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 				$a_course_students = $row['user_id'];
 			}
 			
-			// students subscribed to the course throw a session
+			// students subscribed to the course through a session
 			if(api_get_setting('use_session_mode') == 'true')
 			{
 				$sql = 'SELECT id_user as user_id
 						FROM '.$tbl_session_course_user.'
 						WHERE course_code="'.addslashes($course_code).'" ORDER BY course_code';
 				$rs = api_sql_query($sql, __FILE__, __LINE__);
-				while($row = mysql_fetch_array($rs))
+				while($row = Database::fetch_array($rs))
 				{
 					if(!in_array($row['user_id'], $a_course_students))
 					{
@@ -614,10 +614,10 @@ if(api_is_platform_admin() && $view=='admin'){
 	}
 
 	$result_coaches=api_sql_query($sqlCoachs, __FILE__, __LINE__);
-	$total_no_coachs = mysql_num_rows($result_coaches);
+	$total_no_coachs = Database::num_rows($result_coaches);
 
 	$global_coachs=array();
-	while($a_coach=mysql_fetch_array($result_coaches)){
+	while($a_coach=Database::fetch_array($result_coaches)){
 		$global_coachs[$a_coach['user_id']] = $a_coach;
 	}
 	
@@ -627,8 +627,8 @@ if(api_is_platform_admin() && $view=='admin'){
 							GROUP BY user_id
 							ORDER BY login_date '.$tracking_direction;
 	$result_sessions_coach=api_sql_query($sql_session_coach, __FILE__, __LINE__);
-	$total_no_coachs += mysql_num_rows($result_sessions_coach);
-	while($a_coach=mysql_fetch_array($result_sessions_coach)){
+	$total_no_coachs += Database::num_rows($result_sessions_coach);
+	while($a_coach=Database::fetch_array($result_sessions_coach)){
 		$global_coachs[$a_coach['user_id']] = $a_coach;
 	}	
 	

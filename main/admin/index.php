@@ -1,4 +1,4 @@
-<?php // $Id: index.php 14988 2008-04-21 17:42:34Z yannoo $
+<?php // $Id: index.php 14992 2008-04-21 20:24:31Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -49,7 +49,7 @@ $nameTools = get_lang('PlatformAdmin');
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => $nameTools);
 
 // setting the name of the tool
-$tool_name=get_lang("PlatformAdmin");
+$tool_name=get_lang('PlatformAdmin');
 
 // Displaying the header
 Display::display_header($nameTools);
@@ -233,7 +233,7 @@ if(api_is_platform_admin()){
  <ul>
   <li><a href="http://www.dokeos.com/"><?php echo get_lang('DokeosHomepage'); ?></a></li>
   <li><a href="http://www.dokeos.com/forum/"><?php echo get_lang('DokeosForum'); ?></a></li>
-  <li><a href="http://www.dokeos.com/community_add_portal.php?url=<?php echo $_configuration['root_web']; ?>&amp;name=<?php echo urlencode(get_setting('siteName'));?>&amp;organisation=<?php echo urlencode(get_setting('InstitutionUrl'));?>&amp;manager=<?php echo urlencode(get_setting('administratorSurname')." ".get_setting('administratorName'));?>&amp;manageremail=<?php echo urlencode(get_setting('emailAdministrator'));?>"><?php echo get_lang('RegisterYourPortal'); ?></a></li>
+  <li><a href="http://www.dokeos.com/community_add_portal.php?url=<?php echo $_configuration['root_web']; ?>&amp;name=<?php echo urlencode(api_get_setting('siteName'));?>&amp;organisation=<?php echo urlencode(api_get_setting('InstitutionUrl'));?>&amp;manager=<?php echo urlencode(api_get_setting('administratorSurname')." ".api_get_setting('administratorName'));?>&amp;manageremail=<?php echo urlencode(api_get_setting('emailAdministrator'));?>"><?php echo get_lang('RegisterYourPortal'); ?></a></li>
   <li><a href="http://www.dokeos.com/extensions/"><?php echo get_lang('DokeosExtensions'); ?></a></li>
   <li>
   <?php
@@ -259,10 +259,17 @@ if(api_is_platform_admin()){
  */
 function version_check()
 {
+	$tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+	$sql = 'SELECT selected_value FROM  '.$tbl_settings.' WHERE variable="registered" ';
+	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$row=Database::fetch_array($result,'ASSOC');
+								
 	// The site has not been registered yet
-	if (get_setting('registered')=='false' OR get_setting('registered') == false )
-	{
-		$return = '';
+	//if (api_get_setting('registered')=='false')
+	
+	$return = '';
+	if ($row['selected_value']=='false')
+	{	
 		$return .= '<form action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';
 		$return .= get_lang('VersionCheckExplanation');
 		$return .= '<input type="checkbox" name="donotlistcampus" value="1" id="checkbox" /> Do not display my campus in the list of Dokeos platforms';
@@ -272,7 +279,8 @@ function version_check()
 	else
 	{
 		// The site has been registered already but is seriously out of date (registration date + 15552000 seconds)
-		if ((get_setting('registered') + 15552000) > mktime())
+		/*
+		if ((api_get_setting('registered') + 15552000) > mktime())
 		{
 			$return = 'It has been a long time since about your campus has been updated on Dokeos.com';
 			$return .= '<form action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';
@@ -281,13 +289,12 @@ function version_check()
 		}
 		else
 		{
-			$return = 'site registered. ';
-			$return .= check_dokeos_version2();
-		}
+		*/
+		$return = 'site registered. ';
+		$return .= check_dokeos_version2();
+		//}
 	}
-
 	return $return;
-
 }
 
 /**
@@ -305,13 +312,13 @@ function register_site()
 
 	// the SQL statment
 	$sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
-	$result = api_sql_query($sql);
+	$result = api_sql_query($sql,__FILE__,__LINE__);
 
 	//
 	if ($_POST['donotlistcampus'])
 	{
 		$sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
-		$result = api_sql_query($sql);
+		$result = api_sql_query($sql,__FILE__,__LINE__);
 	}
 
 	// reload the settings
@@ -334,13 +341,13 @@ function check_dokeos_version2()
 	{
 		// the number of courses
 		$sql="SELECT count(code) FROM ".Database::get_main_table(TABLE_MAIN_COURSE);
-		$result=api_sql_query($sql);
+		$result=api_sql_query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_array($result);
 		$number_of_courses = $row[0];
 
 		// the number of users
 		$sql="SELECT count(user_id) FROM ".Database::get_main_table(TABLE_MAIN_USER);
-		$result=api_sql_query($sql);
+		$result=api_sql_query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_array($result);
 		$number_of_users = $row[0];
 

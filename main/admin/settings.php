@@ -1,10 +1,10 @@
 <?php
-// $Id: settings.php 14730 2008-04-03 01:34:07Z yannoo $
+// $Id: settings.php 14990 2008-04-21 17:54:31Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University
 	Copyright (c) Patrick Cool, Ghent University
 	Copyright (c) Roan Embrechts, Vrije Universiteit Brussel

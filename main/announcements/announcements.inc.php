@@ -1,9 +1,9 @@
-<?php //$Id: announcements.inc.php 14017 2007-12-18 19:17:58Z yannoo $
+<?php //$Id: announcements.inc.php 14994 2008-04-21 22:35:11Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
@@ -16,7 +16,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -67,7 +67,7 @@ function display_announcement($announcement_id)
 						AND toolitemproperties.visibility='1'";
 	}
 	$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
-	$result = mysql_fetch_array($sql_result);
+	$result = Database::fetch_array($sql_result);
 	
 	$title		 = $result['title'];
 	$content	 = $result['content'];
@@ -139,11 +139,14 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 	{
 		foreach($group_list as $this_group)
 		{
-			if (!in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
+			if (is_array($to_already_selected))
 			{
-				echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
-				"G: ",$this_group['name']," - " . $this_group['userNb'] . " " . get_lang('Users') .
-				"</option>\n";
+				if (!in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
+				{
+					echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
+					"G: ",$this_group['name']," - " . $this_group['userNb'] . " " . get_lang('Users') .
+					"</option>\n";
+				}
 			}
 		}
 		// a divider
@@ -298,7 +301,7 @@ function load_edit_users($tool, $id)
 
 	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
 	$result=api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		$to_group=$row['to_group_id'];
 		switch ($to_group)
@@ -578,7 +581,7 @@ function sent_to($tool, $id)
 	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='".$id."'";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		// if to_group_id is null then it is sent to a specific user
 		// if to_group_id = 0 then it is sent to everybody
@@ -620,7 +623,7 @@ function change_visibility($tool,$id)
 	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
 
 	$result=api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
-	$row=mysql_fetch_array($result);
+	$row=Database::fetch_array($result);
 
 	if ($row['visibility']=='1')
 	{
@@ -652,7 +655,7 @@ function store_advalvas_item($emailTitle,$newContent, $order, $to)
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order'";
 	$result = api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
-	$last_id= mysql_insert_id();
+	$last_id= Database::get_last_insert_id();
 
 	// store in item_property (first the groups, then the users
 	if (!is_null($to)) // !is_null($to): when no user is selected we send it to everyone
@@ -699,7 +702,7 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order'";
 	$result = api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
-	$last_id= mysql_insert_id();
+	$last_id= Database::get_last_insert_id();
 
 	// store in item_property (first the groups, then the users
 	if (!isset($to_users)) // !isset($to): when no user is selected we send it to everyone

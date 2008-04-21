@@ -105,6 +105,7 @@ if (isset($id_session) && $id_session!="")
 		elseif ($annee <> "" && $composante == "" && $etape == "") {
 
 			$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
+			ldap_set_version($ds);
 
 			if ($ds) {
 				$r = false;
@@ -158,6 +159,7 @@ if (isset($id_session) && $id_session!="")
 			echo '<div style="align:center;">';
 			echo '<h3><img src="../img/group.gif" alt="'.get_lang('SearchResults').'" />'.get_lang('SearchResults').'</h3>';
 			$ds = ldap_connect($ldap_host, $ldap_port);
+			ldap_set_version($ds);
 
 			if ($ds) {
 
@@ -237,6 +239,8 @@ if (isset($id_session) && $id_session!="")
 		// Ajout de l'etape
 		if ($annee <> "" && $composante <> "" && $etape <> "") {
 			$ds = ldap_connect($ldap_host, $ldap_port);
+			ldap_set_version($ds);
+
 			if ($ds) {
 				$r = false;
 				$res = ldap_handle_bind($ds, $r);
@@ -364,6 +368,7 @@ if (isset($id_session) && $id_session!="")
 				ORDER BY code_ufr, code_etape";
 			$result = api_sql_query($sql);
 			$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
+			ldap_set_version($ds);
 			// Import des utilisateurs des etapes dans la session
 			if ($ds)
 				$r = false;

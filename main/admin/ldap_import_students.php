@@ -93,14 +93,14 @@ elseif ($annee <> "" && $composante == "" && $etape == "") // form 2 annee != 0;
 		//$sr = @ ldap_search($ds, "o=groups,$ldap_basedn", "(&(description=etape*)(cn=*$annee))", array ('cn'));
 		//$sr = @ ldap_search($ds, "ou=$annee, ou=diploma, o=paris1, $ldap_basedn", "ou=02*", array ('description'));
 		//$sr = @ ldap_search($ds, "ou=structures, o=paris1, $ldap_basedn", "businessCategory=pedagogy", array ('ou','description'));
-		$sr = @ ldap_search($ds, "$ldap_basedn", "", array ('ou','description'));
+		$sr = ldap_search($ds, "ou=test-ou, o=test-o, $ldap_basedn", "businessCategory=education", array ('ou','description'));
 		// "ou=2006,ou=diploma,o=Paris1,dc=univ-paris1,dc=fr
 
 		$info = ldap_get_entries($ds, $sr);
 		$composante = array();
 		for($i = 0; $i < $info['count']; $i ++)
 		{
-			//on suppose que le serveur LDAP est en UTF-8
+			//presupose LDAP server is UTF-8
 			$composante[$info[$i]['ou'][0]] = iconv('utf-8', api_get_setting('platform_charset'), $info[$i]['description'][0]);
 		}
 		$oucompotab3=$composante;

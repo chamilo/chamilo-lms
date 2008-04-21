@@ -79,6 +79,7 @@ foreach($Sessions as $session){
 		ORDER BY code_ufr, code_etape";
 	$result = api_sql_query($sql);
 	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
+	ldap_set_version($ds);
 	// Import des utilisateurs des etapes dans la session
 	if ($ds)
 	{

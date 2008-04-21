@@ -79,6 +79,7 @@ function get_ldap_users()
 	}
 
 	$ds = ldap_connect($ldap_host, $ldap_port);
+	ldap_set_version($ds);
 	if ($ds && sizeof($ldap_querry)>0) {
 		$r = false;
 		$res = ldap_handle_bind($ds, $r);
@@ -160,6 +161,7 @@ function addLdapUser($login){
 	global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass;
 	
 	$ds = ldap_connect($ldap_host, $ldap_port);
+	ldap_set_version($ds);
 	if ($ds) {
 		$str_querry="(uid=".$login.")";
 		$r = false;

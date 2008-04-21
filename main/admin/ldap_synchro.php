@@ -34,7 +34,7 @@ require('../inc/global.inc.php');
 $libpath = api_get_path(LIBRARY_PATH);
 require_once($libpath.'formvalidator/FormValidator.class.php');
 require_once($libpath.'usermanager.lib.php');
-require('../auth/ldap/authldap.php');
+require_once('../auth/ldap/authldap.php');
 $annee_base=date('Y');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -73,11 +73,13 @@ foreach($Sessions as $session){
 	$UserAdd=array();
 	
 	// Parse des code etape de la session
+	/*
 	$sql = "SELECT  id_session, code_etape, etape_description, code_ufr, annee 
 		FROM $tbl_session_rel_etape
 		WHERE id_session='$id_session'
 		ORDER BY code_ufr, code_etape";
 	$result = api_sql_query($sql);
+	*/
 	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
 	ldap_set_version($ds);
 	// Import des utilisateurs des etapes dans la session
@@ -86,47 +88,57 @@ foreach($Sessions as $session){
 		$r = false;
 		$res = ldap_handle_bind($ds, $r);
 		$UserList=array();
-		while($row = Database::fetch_array($result))
+		if($result !== false)
 		{
-			$annee = $row['annee'];
-			$code_ufr = $row['code_ufr'];
-			$etape = $row['code_etape'];
-			// LDAP Querry
-			// edupersonorgunitdn=ou=12CI1,ou=2006,ou=diploma,o=Paris1,dc=univ-paris1,dc=fr
-			$sr = @ ldap_search($ds, "ou=people,$LDAPbasedn", "edupersonorgunitdn=ou=$etape,ou=$annee,ou=diploma,$LDAPbasedn");
-			$info = ldap_get_entries($ds, $sr);
-			for ($key = 0; $key < $info["count"]; $key ++)
-			{
-				$lastname = iconv("utf-8", api_get_setting('platform_charset'), $info[$key]["sn"][0]);
-				$firstname = iconv("utf-8", api_get_setting('platform_charset'), $info[$key]["givenname"][0]);
-				$email = $info[$key]["mail"][0];
-				// Get uid from dn
-				$dn_array=ldap_explode_dn($info[$key]["dn"],1);
-				$username = $dn_array[0]; // uid is first key
-				$outab[] = $info[$key]["edupersonprimaryaffiliation"][0]; // Ici "student"
-				$val = ldap_get_values_len($ds, $entry, "userPassword");
-				$password = $val[0];
-				// Pour faciliter la gestion on ajoute le code "etape-annee"
-				$official_code=$etape."-".$annee;
-				$auth_source="cas";
-				// Pas de date d'expiration d'etudiant (a recuperer par rapport au shadow expire LDAP)
-				$expiration_date='0000-00-00 00:00:00';
-				$active=1;
-				// Ajout de l'utilisateur
-				if (UserManager::is_username_available($username))
+			//while($row = Database::fetch_array($result))
+			//{
+				/*
+				$annee = $row['annee'];
+				$code_ufr = $row['code_ufr'];
+				$etape = $row['code_etape'];
+				*/
+				// LDAP Query
+				// edupersonorgunitdn=ou=12CI1,ou=2006,ou=diploma,o=Paris1,dc=univ-paris1,dc=fr
+				//etapescommented
+				//$sr = @ ldap_search($ds, "ou=people,$LDAPbasedn", "edupersonorgunitdn=ou=$etape,ou=$annee,ou=diploma,$LDAPbasedn");
+				$sr = @ ldap_search($ds, $ldap_basedn, '(uid=*)');
+				$info = ldap_get_entries($ds, $sr);
+				for ($key = 0; $key < $info["count"]; $key ++)
 				{
-					$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active);
-					$UserAdd[]=$user_id;
+					echo "<pre>";
+					print_r($info[$key]);
+					echo "</pre>";
+					$lastname = iconv('utf-8', api_get_setting('platform_charset'), $info[$key]["sn"][0]);
+					$firstname = iconv('utf-8', api_get_setting('platform_charset'), $info[$key]["givenname"][0]);
+					$email = $info[$key]["mail"][0];
+					// Get uid from dn
+					$dn_array=ldap_explode_dn($info[$key]["dn"],1);
+					$username = $dn_array[0]; // uid is first key
+					$outab[] = $info[$key]["edupersonprimaryaffiliation"][0]; // Ici "student"
+					$val = ldap_get_values_len($ds, $sr, "userPassword");
+					$password = $val[0];
+					// Pour faciliter la gestion on ajoute le code "etape-annee"
+					$official_code=$etape."-".$annee;
+					$auth_source="ldap";
+					// Pas de date d'expiration d'etudiant (a recuperer par rapport au shadow expire LDAP)
+					$expiration_date='0000-00-00 00:00:00';
+					$active=1;
+					// Ajout de l'utilisateur
+					if (UserManager::is_username_available($username))
+					{
+						$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active);
+						$UserAdd[]=$user_id;
+					}
+					else
+					{
+						$user = UserManager::get_user_info($username);
+						$user_id=$user['user_id'];
+						UserManager::update_user($user_id, $firstname, $lastname, $username, null, null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active);
+						$UserUpdate[]=$user_id;
+					}
+					$UserList[]=$user_id;
 				}
-				else
-				{
-					$user = UserManager::get_user_info($username);
-					$user_id=$user['user_id'];
-					UserManager::update_user($user_id, $firstname, $lastname, $username, null, null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active);
-					$UserUpdate[]=$user_id;
-				}
-				$UserList[]=$user_id;
-			}
+			//}
 		}
 		if (isset($included) && ($included))
 		{

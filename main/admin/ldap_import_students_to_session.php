@@ -359,7 +359,7 @@ if (isset($id_session) && $id_session!="")
 		}
 		
 		// Importing periods/steps users into the session
-		if (isset($action) && ($action=="import")) {
+		if (isset($action) && ($action=='import')) {
 			// id_session
 			// Parse des code etape de la session
 			$sql = "SELECT  id_session, code_etape, etape_description, code_ufr, annee 
@@ -482,12 +482,10 @@ if (isset($id_session) && $id_session!="")
 		  </th>
 		</tr>
 		<tr>
-		  <tr>
 		  <th width="20%"><?php echo get_lang('Department');?></th>
 		  <th width="20%"><?php echo get_lang('StepCode');?></th>
 		  <th width="45%"><?php echo get_lang('Label');?></th>
 		  <th width="15%"><?php echo get_lang('Actions'); ?></th>
-		</tr>
 		</tr>
 		<?php
 		
@@ -496,9 +494,17 @@ if (isset($id_session) && $id_session!="")
 				WHERE id_session='$id_session'
 				ORDER BY code_ufr, code_etape";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-		$etapes=api_store_result($result);
+		if($result)
+		{
+			$etapes=api_store_result($result);
+		}
+		else
+		{
+			$etapes = array();
+		}
 			
-		if(sizeof($etapes)==0){
+		if(count($etapes)==0)
+		{
 			echo '
 				<tr>
 					<td colspan="4">'.get_lang('NoStepForThisSession').'</td>
@@ -528,7 +534,7 @@ if (isset($id_session) && $id_session!="")
 		
 		<form method="get" action="<?php echo api_get_self(); ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
 			<select name="action">
-			<option value="import"><?php echo get_lang('ImportStudentsOfAllSteps');?></option>
+			  <option value="import"><?php echo get_lang('ImportStudentsOfAllSteps');?></option>
 			</select>
 			<input type="hidden" name="id_session" value="<?php echo $id_session; ?>">
 			<input type="submit" value="<?php echo get_lang('Submit'); ?>">
@@ -590,11 +596,13 @@ else
 	$limit=20;
 	$from=$page * $limit;
 
-	$result=api_sql_query("SELECT id,name,nbr_courses,date_start,date_end FROM $tbl_session ".(empty($_POST['keyword']) ? "" : "WHERE name LIKE '%".Database::escape_string($_POST['keyword'])."%'")." ORDER BY $sort LIMIT $from,".($limit+1),__FILE__,__LINE__);
+	$result=api_sql_query("SELECT id,name,nbr_courses,date_start,date_end " .
+			" FROM $tbl_session ".(empty($_POST['keyword']) ? "" : "WHERE name LIKE '%".Database::escape_string($_POST['keyword'])."%'")." " .
+			" ORDER BY $sort LIMIT $from,".($limit+1),__FILE__,__LINE__);
 
 	$Sessions=api_store_result($result);
 
-	$nbr_results=sizeof($Sessions);
+	$nbr_results=count($Sessions);
 
 	//$tool_name = "Import LDAP session";
 	//$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('AdministrationTools'));

@@ -54,42 +54,43 @@ function get_ldap_users()
 	$keyword_username = trim(Database::escape_string($_GET['keyword_username']));
 	$keyword_type = Database::escape_string($_GET['keyword_type']);
 	
-	$ldap_querry=array();
+	$ldap_query=array();
 	
 	if ($keyword_username != "") {
-		$ldap_querry[]="(uid=".$keyword_username."*)";
+		$ldap_query[]="(uid=".$keyword_username."*)";
 	} else if ($keyword_lastname!=""){
-		$ldap_querry[]="(sn=".$keyword_lastname."*)";
+		$ldap_query[]="(sn=".$keyword_lastname."*)";
 		if ($keyword_firstname!="") {
-			$ldap_querry[]="(givenName=".$keyword_firstname."*)";
+			$ldap_query[]="(givenName=".$keyword_firstname."*)";
 		}
 	}
 	if ($keyword_type !="" && $keyword_type !="all") {
-		$ldap_querry[]="(eduPersonPrimaryAffiliation=".$keyword_type.")";
+		$ldap_query[]="(eduPersonPrimaryAffiliation=".$keyword_type.")";
 	}
 	
-	if (sizeof($ldap_querry)>1){
-		$str_querry.="(& ";
-		foreach ($ldap_querry as $query){
-			$str_querry.=" $query";
+	if (count($ldap_query)>1){
+		$str_query.="(& ";
+		foreach ($ldap_query as $query){
+			$str_query.=" $query";
 		}
-		$str_querry.=" )"; 
+		$str_query.=" )"; 
 	} else {
-		$str_querry=$ldap_querry[0];
+		$str_query=$ldap_query[0];
 	}
 
 	$ds = ldap_connect($ldap_host, $ldap_port);
 	ldap_set_version($ds);
-	if ($ds && sizeof($ldap_querry)>0) {
+	if ($ds && count($ldap_query)>0) {
 		$r = false;
 		$res = ldap_handle_bind($ds, $r);
-		$sr = @ ldap_search($ds, "ou=people,$ldap_basedn", $str_querry);
+		//$sr = ldap_search($ds, "ou=test-ou,$ldap_basedn", $str_query);
+		$sr = ldap_search($ds, $ldap_basedn, $str_query);
 		//echo "Le nombre de resultats est : ".ldap_count_entries($ds,$sr)."<p>";
 		$info = ldap_get_entries($ds, $sr);
 		return $info;
 
 	} else {
-		if (sizeof($ldap_querry)!=0)
+		if (count($ldap_query)!=0)
 			Display :: display_error_message(get_lang('LDAPConnectionError'));
 		return array();
 	}
@@ -105,7 +106,7 @@ function get_number_of_users()
 {
 		
 	$info = get_ldap_users();
-	if (sizeof($info)>0)
+	if (count($info)>0)
 		return $info['count'];
 	else 
 		return 0;
@@ -163,10 +164,10 @@ function addLdapUser($login){
 	$ds = ldap_connect($ldap_host, $ldap_port);
 	ldap_set_version($ds);
 	if ($ds) {
-		$str_querry="(uid=".$login.")";
+		$str_query="(uid=".$login.")";
 		$r = false;
 		$res = ldap_handle_bind($ds, $r);
-		$sr = @ ldap_search($ds, "ou=people,$ldap_basedn", $str_querry);
+		$sr = @ ldap_search($ds, "ou=people,$ldap_basedn", $str_query);
 		//echo "Le nombre de resultats est : ".ldap_count_entries($ds,$sr)."<p>";
 		$info = ldap_get_entries($ds, $sr);
 
@@ -286,7 +287,7 @@ if (($_GET['action']=="add_user") && (isInteger($_GET['id_session']))){
 }
 
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-$tool_name = get_lang('SearchAUser'). " LDAP";
+$tool_name = get_lang('SearchAUser'). " - LDAP";
 Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);
 
@@ -384,9 +385,9 @@ if (isset ($_POST['action']))
 				}
 				if (isset($_GET['id_session']) && (trim($_GET['id_session'])!=""))
 					addUserToSession($UserList, $_GET['id_session']);
-				if(sizeof($UserList)>0)
+				if(count($UserList)>0)
 				{
-					Display :: display_normal_message(sizeof($UserList)." ".get_lang('LDAPUsersAdded'));
+					Display :: display_normal_message(count($UserList)." ".get_lang('LDAPUsersAdded'));
 				}
 				else
 				{
@@ -437,6 +438,7 @@ $table->set_header(1, get_lang('LoginName'));
 $table->set_header(2, get_lang('LastName'));
 $table->set_header(3, get_lang('FirstName'));
 $table->set_header(4, get_lang('Email'));
+$table->set_header(5, get_lang('Actions'));
 //$table->set_column_filter(5, 'email_filter');
 //$table->set_column_filter(5, 'active_filter');
 $table->set_column_filter(5, 'modify_filter');

@@ -116,8 +116,14 @@ $user_file_template = str_replace('<div class="formw">', '<div class="formw" sty
 $renderer->setElementTemplate($user_file_template, 'user_file');
 
 $form -> addElement ('file', 'user_file','<img src="../img/word_big.gif" align="absbottom" />');
-$form -> addElement ('radio', 'split_steps',null, get_lang('SplitStepsPerPage'),'per_page');
-$form -> addElement ('radio', 'split_steps',null, get_lang('SplitStepsPerChapter'),'per_chapter');
+
+/*
+ * commented because SplitStepsPerChapter is not stable at all
+ * $form -> addElement ('radio', 'split_steps',null, get_lang('SplitStepsPerPage'),'per_page');
+ * $form -> addElement ('radio', 'split_steps',null, get_lang('SplitStepsPerChapter'),'per_chapter');
+ */
+$form -> addElement ('hidden', 'split_steps','per_page');
+
 $form -> addElement ('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
 
 $form -> addElement('html','<div class="row"><div class="label"></div><div class="formw">'.get_lang('UploadMaxSize').' : '.ini_get('post_max_size').'</div></div>');

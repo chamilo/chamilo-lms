@@ -33,13 +33,13 @@ if(isset($_POST['activeExtension'])){
 					WHERE variable="service_visio"
 					AND subkey="active"';
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
-			if(mysql_affected_rows()>0)
+			if(Database::affected_rows()>0)
 			{
 				
 				// select all the courses and insert the tool inside
 				$sql = 'SELECT db_name FROM '.Database::get_main_table(TABLE_MAIN_COURSE);
 				$rs = api_sql_query($sql, __FILE__, __LINE__);
-				while($row = mysql_fetch_array($rs)){
+				while($row = Database::fetch_array($rs)){
 					if(!empty($_POST['visio_host']))
 					{
 						$tool_table = Database::get_course_table(TABLE_TOOL_LIST,$row['db_name']);
@@ -114,7 +114,7 @@ if(isset($_POST['activeExtension'])){
 					
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
 			
-			if(mysql_affected_rows()>0){
+			if(Database::affected_rows()>0){
 				$message = get_lang('ServiceActivated');
 			}
 			
@@ -166,7 +166,7 @@ $listActiveServices = array();
 $sql = 'SELECT variable FROM '.$tbl_settings_current.' WHERE variable LIKE "service_%" AND subkey="active" and selected_value="true"';
 
 $rs = api_sql_query($sql, __FILE__, __LINE__);
-while($row = mysql_fetch_array($rs)){
+while($row = Database::fetch_array($rs)){
 	$listActiveServices[] = $row['variable'];
 }
 
@@ -286,7 +286,7 @@ Display::display_header($nameTool);
 							$sql = 'SELECT subkey, selected_value FROM '.$tbl_settings_current.' 
 									WHERE variable = "service_visio"';
 							$rs = api_sql_query($sql, __FILE__, __LINE__);
-							while($row = mysql_fetch_assoc($rs))
+							while($row = Database::fetch_array($rs,'ASSOC'))
 							{
 								$defaults[$row['subkey']] = $row['selected_value'];
 							}							
@@ -353,7 +353,7 @@ Display::display_header($nameTool);
 									WHERE variable = "service_ppt2lp"
 									AND subkey <> "active"';
 							$rs = api_sql_query($sql, __FILE__, __LINE__);
-							while($row = mysql_fetch_assoc($rs))
+							while($row = Database::fetch_array($rs,'ASSOC'))
 							{
 								$defaults[$row['subkey']] = $row['selected_value'];
 							}							

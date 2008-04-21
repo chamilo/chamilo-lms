@@ -20,7 +20,7 @@ border-right: 1px none;
 overflow: auto;
 background-color: white;
 height: 325px;
-width: 99%;
+width: 92%;
 border-right: 1px #999999 solid;
 border-left: 15px #FFF solid;
 }
@@ -41,23 +41,51 @@ text-decoration: none;
 		}
 
 .inner_lp_toc .scorm_item_highlight{
-font-size: 11px;
-margin-left: 10px;
-margin-right: 25px;
-padding-bottom: 2px;
-text-decoration: none;
-background:#F8F8F8; border:1px dashed #999999;
+	font-size: 11px;
+	margin-right: 1px;
+	padding-bottom: 2px;
+	text-decoration: none;
+	font-weight: normal;	
+	
+	background:#aaa;
 }
 
 	.inner_lp_toc .scorm_item_highlight A{
 		font-weight: normal;
 	}
 	
-.inner_lp_toc .scorm_item_highlight .highlight{
-	font-weight: normal;
-	background:#F3F3F3; border:1px dashed #949494;
+
+.inner_lp_toc  .scorm_item_1
+{
+	font-size: 11px;
 	margin-right: 1px;
+	padding-bottom: 2px;
+	text-decoration: none;
+	font-weight: normal;	
+	
+	background:#ddd;
 }
+
+.inner_lp_toc  .scorm_item_2
+{
+	font-size: 11px;
+	margin-right: 1px;
+	padding-bottom: 2px;
+	text-decoration: none;
+	font-weight: normal;
+	
+	background:#eee;		
+}
+
+.inner_lp_toc .scorm_title
+{
+	font-weight: bold;
+	background:#aaa;
+	font-size: 12px;	
+	color: #FFF;	
+}
+
+
 
 .inner_lp_toc .scorm_status_img{
 margin:0px;

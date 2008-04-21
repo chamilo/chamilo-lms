@@ -190,6 +190,63 @@ class CourseManager
 		$result = Database::fetch_array($sql_result);
 		return $result;
 	}
+	/**
+	 * Returns a list of courses. Should work with quickform syntax
+	 * @param	integer	Offset (from the 7th = '6'). Optional.
+	 * @param	integer	Number of results we want. Optional.
+	 * @param	string	The column we want to order it by. Optional, defaults to first column.
+	 * @param	string	The direction of the order (ASC or DESC). Optional, defaults to ASC.
+	 * @param	string	The visibility of the course, or all by default.
+	 * @param	string	If defined, only return results for which the course *title* begins with this string
+	 */
+	function get_courses_list($from=0,$howmany=0,$orderby=1,$orderdirection='ASC',$visibility=-1,$startwith='')
+	{
+		$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+		$sql = "SELECT code, title " .
+				"FROM $tbl_course ";
+		if(!empty($startwith))
+		{
+			$sql .= "WHERE LIKE title '".Database::escape_string($startwith)."%' ";
+		}
+		else
+		{
+			$sql .= "WHERE 1 ";
+		}
+		if(!empty($orderby))
+		{
+			$sql .= " ORDER BY ".Database::escape_string($orderby)." ";
+		}
+		else
+		{
+			$sql .= " ORDER BY 1 ";
+		}
+		if(!empty($orderdirection))
+		{
+			$sql .= Database::escape_string($orderdirection);
+		}
+		else
+		{
+			$sql .= 'ASC';
+		}
+		if(!empty($howmany) and is_int($howmany) and $howmany>0)
+		{
+			$sql .= ' LIMIT '.Database::escape_string($howmany);
+		}
+		else
+		{
+			$sql .= ' LIMIT 1000000'; //virtually no limit
+		}
+		if(!empty($from))
+		{
+			$sql .= ' OFFSET '.Database::escape_string($from);
+		}
+		else
+		{
+			$sql .= ' OFFSET 0';
+		}
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		return api_store_result($res);
+	}
 
 
 	/**

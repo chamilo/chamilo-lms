@@ -78,7 +78,7 @@ foreach($Sessions as $session){
 		WHERE id_session='$id_session'
 		ORDER BY code_ufr, code_etape";
 	$result = api_sql_query($sql);
-	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('Impossible de se connecter au serveur LDAP'));
+	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
 	// Import des utilisateurs des etapes dans la session
 	if ($ds)
 	{
@@ -92,7 +92,7 @@ foreach($Sessions as $session){
 			$etape = $row['code_etape'];
 			// LDAP Querry
 			// edupersonorgunitdn=ou=12CI1,ou=2006,ou=diploma,o=Paris1,dc=univ-paris1,dc=fr
-			$sr = @ ldap_search($ds, "ou=people,$LDAPbasedn", "edupersonorgunitdn=ou=$etape,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn");
+			$sr = @ ldap_search($ds, "ou=people,$LDAPbasedn", "edupersonorgunitdn=ou=$etape,ou=$annee,ou=diploma,$LDAPbasedn");
 			$info = ldap_get_entries($ds, $sr);
 			for ($key = 0; $key < $info["count"]; $key ++)
 			{

@@ -127,15 +127,15 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				$dn_array=ldap_explode_dn($info[$key]["dn"],1);
 				$user[] = $dn_array[0]; // uid is first key
 				$user[] = $dn_array[0]; // uid is first key
-				$user[] = iconv("utf-8", "iso-8859-1", $info[$key]["sn"][0]);
-				$user[] = iconv("utf-8", "iso-8859-1", $info[$key]["givenname"][0]);
+				$user[] = iconv("utf-8", api_get_setting('platform_charset'), $info[$key]["sn"][0]);
+				$user[] = iconv("utf-8", api_get_setting('platform_charset'), $info[$key]["givenname"][0]);
 				$user[] = $info[$key]["mail"][0];
 				$outab[] = $info[$key]["eduPersonPrimaryAffiliation"][0]; // Ici "student"
 				$users[] = $user;
 			}
 			
 		} else
-			Display :: display_error_message("Pas d'utilisateurs");	
+			Display :: display_error_message("NoUser");	
 	}
 	return $users;
 }
@@ -330,7 +330,7 @@ if (isset ($_GET['action']))
 					addUserToSession($UserList, $_GET['id_session']);
 					header('Location: resume_session.php?id_session='.$id_session);
 				} else {
-					$message=get_lang('Utilisateur(s) LDAP ajoute(s)');
+					$message=get_lang('LDAPUsersAdded');
 					Display :: display_normal_message($message);
 				}
 				break;
@@ -384,11 +384,11 @@ if (isset ($_POST['action']))
 					addUserToSession($UserList, $_GET['id_session']);
 				if(sizeof($UserList)>0)
 				{
-					Display :: display_normal_message(sizeof($UserList)." ".get_lang('utilisateur(s) ajoute(s)'));
+					Display :: display_normal_message(sizeof($UserList)." ".get_lang('LDAPUsersAdded'));
 				}
 				else
 				{
-					Display :: display_normal_message(get_lang('Aucun utilisateur ajoute'));
+					Display :: display_normal_message(get_lang('NoUserAdded'));
 				}				
 				break;
 				
@@ -406,7 +406,7 @@ if (isset($_GET['id_session']))
 
 $type = array();
 $type["all"] = get_lang('All');
-$type["employee"]  = get_lang('Staff');
+$type["employee"]  = get_lang('Teacher');
 $type["student"] = get_lang('Student');
 
 $form->addElement('select','keyword_type',get_lang('Status'),$type);
@@ -438,7 +438,7 @@ $table->set_header(4, get_lang('Email'));
 //$table->set_column_filter(5, 'email_filter');
 //$table->set_column_filter(5, 'active_filter');
 $table->set_column_filter(5, 'modify_filter');
-$table->set_form_actions(array ('add_user' => get_lang('Ajouter les utilisateurs LDAP')));
+$table->set_form_actions(array ('add_user' => get_lang('AddLDAPUsers')));
 $table->display();
 
 /*

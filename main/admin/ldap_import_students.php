@@ -68,12 +68,12 @@ $etape =  $_GET['etape'];
 	if ($annee == "" && $composante == "" && $etape == "") {
 
 		echo '<div style="align:center">';
-		echo '<h3><img src="../img/group.gif" alt="'.get_lang('SAISIE DES ETUDIANTS POUR LESQUELS VOUS SOUHAITEZ ADRESSER VOTRE COURS').'" />'.get_lang('SAISIE DES ETUDIANTS POUR LESQUELS VOUS SOUHAITEZ ADRESSER VOTRE COURS').'</h3>';
-		echo '<em>'.get_lang('POUR CELA, IL FAUT SAISIR LA DATE, LA COMPOSANTE ET L\'ETAPE DE LA COMPOSANTE').'</b><br />';
-		echo get_lang('Suivre chacune de ces etapes pas a pas').'<br />';
+		echo '<h3><img src="../img/group.gif" alt="'.get_lang('EnterStudentsToSubscribeToCourse').'" />'.get_lang('EnterStudentsToSubscribeToCourse').'</h3>';
+		echo '<em>'.get_lang('ToDoThisYouMustEnterYearComponentAndComponentStep').'</b><br />';
+		echo get_lang('FollowEachOfTheseStepsStepByStep').'<br />';
 		
 		echo '<form method="get" action="'.api_get_self().'"><br />';
-		echo '<b>'.get_lang('ANNEE D\'INSCRIPTION - <i>Ex: %s pour l\'annee %s/%s</i>').' :</b> ';
+		echo '<b>'.sprintf(get_lang('RegistrationYearExample'),date('Y'),date('Y'),date('Y')+1).' :</b> ';
 		echo '<input  type="text" name="annee" size="4" maxlength="30" value="'.$annee_base.'"><br />';
 		echo '<input type="submit" value="'.get_lang('Submit').'">';
 		echo '</form>';
@@ -83,7 +83,7 @@ $etape =  $_GET['etape'];
 elseif ($annee <> "" && $composante == "" && $etape == "") // form 2 annee != 0; composante= 0 etape = 0 
 {
 
-	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('Impossible de se connecter au serveur LDAP'));
+	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
 	ldap_set_version($ds);
 	
 	if ($ds) {
@@ -107,11 +107,11 @@ elseif ($annee <> "" && $composante == "" && $etape == "") // form 2 annee != 0;
 
 		echo '<div style="align: center">';
 		echo '<br />';
-		echo '<h3><img src="../img/group.gif" alt="'.get_lang('SELECTIONNER VOTRE COMPOSANTE').'" />'.get_lang('SELECTIONNER VOTRE COMPOSANTE').'</h3>';
+		echo '<h3><img src="../img/group.gif" alt="'.get_lang('SelectComponent').'" />'.get_lang('SelectComponent').'</h3>';
 		echo '<form method="get" action="'.api_get_self().'">';
-		echo '<b>'.get_lang('ANNEE D\'INSCRIPTION').'</b> : ';
+		echo '<b>'.get_lang('RegistrationYear').'</b> : ';
 		echo '<input type="text" name="annee" size="4" maxlength="30" value="'.$annee.'">';
-		echo '<b>'.get_lang('COMPOSANTE').' : </b> ';
+		echo '<b>'.get_lang('Component').' : </b> ';
 		echo '<select name="composante" size="1">';
 		while (list ($key, $val) = each($oucompotab3)) {
 			echo '<option value="'.$key.'">'.$oucompotab3[$key].'</option>';
@@ -127,7 +127,7 @@ elseif ($annee <> "" && $composante == "" && $etape == "") // form 2 annee != 0;
 	echo '<br />';
 	echo '<br />';
 	echo '<br />';
-	echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('RETOUR : nouvelle recherche').'</a>';
+	echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';
 	echo '<br />';
 	echo '</div>';
 }
@@ -135,7 +135,7 @@ elseif ($annee <> "" && $composante <> "" && $etape == "") // form3 :annee!=0com
 {
 
 	echo '<div style="align: center">';
-	echo '<h3><img src="../img/group.gif" alt="'.get_lang('SearchResults').'" />'.get_lang('LE RESULTAT DE VOTRE RECHERCHE').'</h3>';
+	echo '<h3><img src="../img/group.gif" alt="'.get_lang('SearchResults').'" />'.get_lang('SearchResults').'</h3>';
 	$ds = ldap_connect($ldap_host, $ldap_port);
 	ldap_set_version($ds);
 
@@ -146,7 +146,7 @@ elseif ($annee <> "" && $composante <> "" && $etape == "") // form3 :annee!=0com
 
 		// $sr = @ ldap_search($ds, "ou=groups, $LDAPbasedn", "(&(cn=*$annee*)(cn=*$composante*))");
 
-		$sr = @ ldap_search($ds, "ou=$annee, ou=diploma, o=paris1, $ldap_basedn", "seeAlso=ou=$composante,ou=structures,o=Paris1,$ldap_basedn", array ('ou','description'));
+		$sr = @ ldap_search($ds, "ou=$annee, ou=diploma, $ldap_basedn", "seeAlso=ou=$composante,ou=structures,$ldap_basedn", array ('ou','description'));
 
 		//echo "Le nombre de resultats est : ".ldap_count_entries($ds,$sr)."<p>";
 		$info = ldap_get_entries($ds, $sr);
@@ -165,14 +165,14 @@ elseif ($annee <> "" && $composante <> "" && $etape == "") // form3 :annee!=0com
 
 		echo '<form method="get" action="'.api_get_self().'">';
 
-		echo '<b>'.get_lang('ANNEE D\'INSCRIPTION').':</b><input type="text"  name="annee" size="4" maxlength="30" value="'.$annee.'">';
+		echo '<b>'.get_lang('RegistrationYear').':</b><input type="text"  name="annee" size="4" maxlength="30" value="'.$annee.'">';
 		echo '<br /><br />';
-		echo '<b>'.get_lang('COMPOSANTE').' :</b><input type="text" name="composante" size="4" maxlength="30" value="'.$composante.'">';
+		echo '<b>'.get_lang('Component').' :</b><input type="text" name="composante" size="4" maxlength="30" value="'.$composante.'">';
 		echo '<br />';
-		echo '<h4>'.get_lang('SELECTIONNER VOTRE ETAPE (ANNEE PEDAGOGIQUE)').'</h4>';
+		echo '<h4>'.get_lang('SelectStepAcademicYear').'</h4>';
 		echo '<br />';
 
-		echo '<b>'.get_lang('ETAPE').': </b>';
+		echo '<b>'.get_lang('Step').': </b>';
 		echo '<select name="etape" size="1">';
 		$tempcomp = "";
 
@@ -200,7 +200,7 @@ elseif ($annee <> "" && $composante <> "" && $etape == "") // form3 :annee!=0com
 	}
 	echo '<br />';
 	echo '<br />';
-    echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('RETOUR : nouvelle recherche').'</a>';
+    echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';
 	echo '</div>';
 }
 
@@ -209,9 +209,9 @@ elseif ($annee <> "" && $composante <> "" && $etape <> "" && $listeok != yes) {
 	echo '<div style="align: center;">';
 	echo '<br />';
 	echo '<br />';
-	echo '<h3><img src="../img/group.gif" alt="'.get_lang('SELECTION DES ETUDIANTS').'" />'.get_lang('SELECTION DES ETUDIANTS').'</h3>';
+	echo '<h3><img src="../img/group.gif" alt="'.get_lang('SelectStudents').'" />'.get_lang('SelectStudents').'</h3>';
 	//echo "Connection ...";
-	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('Impossible de se connecter au serveur LDAP'));
+	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
 	ldap_set_version($ds);
 
 	if ($ds) {
@@ -220,7 +220,7 @@ elseif ($annee <> "" && $composante <> "" && $etape <> "" && $listeok != yes) {
 		$res = ldap_handle_bind($ds, $r);
 
 		//$sr = @ ldap_search($ds, "ou=people,$LDAPbasedn", "(|(edupersonprimaryorgunitdn=ou=$etape,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn)(edupersonprimaryorgunitdn=ou=02PEL,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn))");
-		$sr = @ ldap_search($ds, "ou=people,$ldap_basedn", "edupersonprimaryorgunitdn=ou=$etape,ou=$annee,ou=diploma,o=Paris1,$ldap_basedn");
+		$sr = @ ldap_search($ds, "ou=people,$ldap_basedn", "edupersonprimaryorgunitdn=ou=$etape,ou=$annee,ou=diploma,$ldap_basedn");
 
 		$info = ldap_get_entries($ds, $sr);
 
@@ -246,10 +246,10 @@ elseif ($annee <> "" && $composante <> "" && $etape <> "" && $listeok != yes) {
 		include ('ldap_form_add_users_group.php');
 		ldap_unbind($ds);
 	} else {
-		echo '<h4>'.get_lang('Unable to connect to').' '.$host.'</h4>';
+		echo '<h4>'.get_lang('UnableToConnectTo').' '.$host.'</h4>';
 	}
 	echo '<br /><br />';
-    echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('RETOUR : nouvelle recherche').'</a>';
+    echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';
     echo '<br /><br />';
     echo '</div>';
 

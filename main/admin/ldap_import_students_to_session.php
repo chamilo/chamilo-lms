@@ -45,7 +45,7 @@ $annee_base=date('Y');
 
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => api_get_self(),"name" => "Liste des sessions");
+$interbreadcrumb[]=array('url' => api_get_self(),"name" => get_lang('SessionList'));
 
 // Database Table Definitions
 $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -79,7 +79,7 @@ $etape =  $_GET['etape'];
 
 if (isset($id_session) && $id_session!="") 
 {
-	$tool_name = get_lang('Import LDAP : Utilisateurs/Etapes');;
+	$tool_name = get_lang('LDAPImportUsersSteps');;
 	Display::display_header($tool_name);
 	//api_display_tool_title($tool_name);
 
@@ -89,22 +89,22 @@ if (isset($id_session) && $id_session!="")
 		// form1 annee = 0; composante= 0 etape = 0
 		if ($annee == "" && $composante == "" && $etape == "") {
 			echo '<div style="align:center">';
-			echo '<h3><img src=\"../img/group.gif\" alt="'.get_lang('SAISIE DE L\'ETAPE A AJOUTER A VOTRE SESSION').'" />'.get_lang('SAISIE DE L\'ETAPE A AJOUTER A VOTRE SESSION').'</h3>';
-			echo '<b>'.get_lang('POUR CELA, IL FAUT SAISIR L\'ANNEE, L\'UFR ET L\'ETAPE').'</b><br />';
-			echo get_lang('Suivre chacune de ces &eacute;tapes pas &agrave; pas').'<br />';
+			echo '<h3><img src=\"../img/group.gif\" alt="'.get_lang('EnterStepToAddToYourSession').'" />'.get_lang('EnterStepToAddToYourSession').'</h3>';
+			echo '<b>'.get_lang('ToDoThisYouMustEnterYearDepartmentAndStep').'</b><br />';
+			echo get_lang('FollowEachOfTheseStepsStepByStep').'<br />';
 			echo '<form method="get" action="'.api_get_self().'"><br />';
-			echo '<b>'.sprintf(get_lang('ANNEE D\'INSCRIPTION - <i>Ex: %s pour l\'ann&eacute;e %s/%s</i>'),date('Y'),date('Y'),date('Y')+1).' :</b>';
+			echo '<b>'.sprintf(get_lang('RegistrationYearExample'),date('Y'),date('Y'),date('Y')+1).' :</b>';
 			echo '<input type="text" name="annee" size="4" maxlength="30" value="'.$annee_base.'"><br />';
 			echo '<input type="hidden" name="id_session" value="'.$id_session.'">';
 			echo '<input type="hidden" name="action" value="add">';
-			echo '<input type="submit" value="'.get_lang('Valider').'">';
+			echo '<input type="submit" value="'.get_lang('Submit').'">';
 			echo '</form>';
 			echo '</div>';
 		}
 		// form 2 annee != 0; composante= 0 etape = 0
 		elseif ($annee <> "" && $composante == "" && $etape == "") {
 
-			$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('Impossible de se connecter au serveur LDAP'));
+			$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
 
 			if ($ds) {
 				$r = false;
@@ -124,11 +124,11 @@ if (isset($id_session) && $id_session!="")
 				
 				echo '<div style="align:center">';
 				echo '<br />';
-				echo '<h3><img src="../img/group.gif" alt="'.get_lang('SELECTIONNER VOTRE UFR').'"/>'.get_lang('SELECTIONNER VOTRE UFR').'</h3>';
+				echo '<h3><img src="../img/group.gif" alt="'.get_lang('SelectDepartment').'"/>'.get_lang('SelectDepartment').'</h3>';
 				echo '<form method="get" action="'.api_get_self().'">';
-				echo '<b>'.get_lang('ANNEE D\'INSCRIPTION').'</b> : ';
+				echo '<b>'.get_lang('RegistrationYear').'</b> : ';
 				echo '<input type="text" name="annee" size="4" maxlength="30" value="'.$annee.'">';
-				echo '<b>'.get_lang('UFR').' : </b>';
+				echo '<b>'.get_lang('Department').' : </b>';
 				echo '<select name="composante" size="1">';
 				while (list ($key, $val) = each($oucompotab3)) {
 					echo '<option value="'.$key.'">'.$oucompotab3[$key].'</option>';
@@ -147,7 +147,7 @@ if (isset($id_session) && $id_session!="")
 			}
 			echo '<br />';
 			echo '<br />';
-			echo '<a href="'.api_get_self().'"?id_session='.$id_session.'&annee=&action=add&composante=&etape=">'.get_lang('RETOUR : nouvelle recherche').'</a>';
+			echo '<a href="'.api_get_self().'"?id_session='.$id_session.'&annee=&action=add&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';
 			echo '<br />';
 			echo '</div>';
 		}
@@ -182,14 +182,14 @@ if (isset($id_session) && $id_session!="")
 				reset($ouetapetab);
 				echo '<form method="get" action="'.api_get_self().'">';
 
-				echo '<b>'.get_lang('ANNEE D\'INSCRIPTION').' :</b> <input type="text" name="annee" size="4" maxlength="30" value="'.$annee.'">';
+				echo '<b>'.get_lang('RegistrationYear').' :</b> <input type="text" name="annee" size="4" maxlength="30" value="'.$annee.'">';
 				echo '<br /><br />';
-				echo '<b>'.get_lang('UFR').' :</b><input type="text" name="composante" size="4" maxlength="30" value="'.$composante.'">';
+				echo '<b>'.get_lang('Department').' :</b><input type="text" name="composante" size="4" maxlength="30" value="'.$composante.'">';
 				echo '<br />';
-				echo '<h4>'.get_lang('SELECTIONNER VOTRE ETAPE (ANNEE PEDAGOGIQUE)').'</h4>';
+				echo '<h4>'.get_lang('SelectStepAcademicYear').'</h4>';
 				echo '<br />';
 
-				echo '<b>'.get_lang('ETAPE').' : </b>';
+				echo '<b>'.get_lang('Step').' : </b>';
 				echo '<select name="etape" size="1">';
 				$tempcomp = "";
 
@@ -224,7 +224,7 @@ if (isset($id_session) && $id_session!="")
 			echo '<br />';
 			echo '<br />';
 			echo '<br />';
-				echo '<a href="'.api_get_self().'"?id_session='.$id_session.'&annee=&action=add&composante=&etape=">'.get_lang('RETOUR : nouvelle recherche').'</a>';
+				echo '<a href="'.api_get_self().'"?id_session='.$id_session.'&annee=&action=add&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';
 		        echo '<br />';
 		        echo '</form>';
 			echo '</div>';
@@ -252,13 +252,13 @@ if (isset($id_session) && $id_session!="")
 							"VALUES " .
 							"('$id_session','".Database::escape_string($info[0]["ou"][0])."','".$description."','$composante','$annee')";
 					if (api_sql_query($sql,__FILE__,__LINE__))
-						Display :: display_normal_message(get_lang('ETAPE').": $annee, $composante, $description ".get_lang('A ETE AJOUTE AVEC SUCCES'));
+						Display :: display_normal_message(get_lang('Step').": $annee, $composante, $description ".get_lang('SomethingFemininAddedSuccessfully'));
 					else
-						Display :: display_error_message(get_lang('ERREUR : ETAPE EXISTANTE OU AUTRE ?'));
+						Display :: display_error_message(get_lang('ErrorExistingStep'));
 				} else
-					Display :: display_error_message(get_lang('ETAPE NON PRESENTE DANS LDAP'));
+					Display :: display_error_message(get_lang('ErrorStepNotFoundOnLDAP'));
 			} else 
-				Display :: display_error_message(get_lang('ERREUR CONNEXION LDAP'));
+				Display :: display_error_message(get_lang('LDAPConnectionError'));
 		}
 		
 		$sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, ' .
@@ -283,9 +283,9 @@ if (isset($id_session) && $id_session!="")
 					"AND code_etape IN($idChecked)";
 			api_sql_query($sql,__FILE__,__LINE__);
 			if (mysql_affected_rows()>0)
-				Display :: display_normal_message(get_lang('ETAPE SUPPRIMEE AVEC SUCCES'));
+				Display :: display_normal_message(get_lang('StepDeletedSuccessfully'));
 			else 
-				Display :: display_error_message(get_lang('Erreur de suppression'));
+				Display :: display_error_message(get_lang('DeleteError'));
 		
 		} else if (isset($action) && ($action=='deleteusers')) {
 			$idChecked = $_GET['idChecked'];
@@ -350,7 +350,7 @@ if (isset($id_session) && $id_session!="")
 				if (UserManager::can_delete_user($enreg_user))
 					 UserManager::delete_user($enreg_user);
 			}
-			Display :: display_normal_message(get_lang('UTILISATEURS ETAPE SUPPRIME AVEC SUCCES'));
+			Display :: display_normal_message(get_lang('StepUsersDeletedSuccessfully'));
 			
 		}
 		
@@ -363,7 +363,7 @@ if (isset($id_session) && $id_session!="")
 				WHERE id_session='$id_session'
 				ORDER BY code_ufr, code_etape";
 			$result = api_sql_query($sql);
-			$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('Impossible de se connecter au serveur LDAP'));
+			$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
 			// Import des utilisateurs des etapes dans la session
 			if ($ds)
 				$r = false;
@@ -470,17 +470,17 @@ if (isset($id_session) && $id_session!="")
 		<!--List des etapes -->
 		<table class="data_table" width="100%">
 		<tr>
-		  <th colspan="4"><?php echo get_lang('Liste des etapes');?>
+		  <th colspan="4"><?php echo get_lang('StepsList');?>
 		  	<a href="<?php echo api_get_self(); ?>?action=add&id_session=<?php echo $id_session; ?>">
-		  	  <img src="../img/group_add_big.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Ajouter etape');?>">
+		  	  <img src="../img/group_add_big.gif" border="0" align="absmiddle" alt="<?php echo get_lang('AddStep');?>">
 		  	</a>
 		  </th>
 		</tr>
 		<tr>
 		  <tr>
-		  <th width="20%"><?php echo get_lang('UFR');?></th>
-		  <th width="20%"><?php echo get_lang('Code etape');?></th>
-		  <th width="45%"><?php echo get_lang('Intitule');?></th>
+		  <th width="20%"><?php echo get_lang('Department');?></th>
+		  <th width="20%"><?php echo get_lang('StepCode');?></th>
+		  <th width="45%"><?php echo get_lang('Label');?></th>
 		  <th width="15%"><?php echo get_lang('Actions'); ?></th>
 		</tr>
 		</tr>
@@ -496,7 +496,7 @@ if (isset($id_session) && $id_session!="")
 		if(sizeof($etapes)==0){
 			echo '
 				<tr>
-					<td colspan="4">'.get_lang('Pas d\'etape pour cette session').'</td>
+					<td colspan="4">'.get_lang('NoStepForThisSession').'</td>
 				</tr>';
 		} else {
 			foreach($etapes as $etape){
@@ -510,7 +510,7 @@ if (isset($id_session) && $id_session!="")
 							'<img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'">' .
 						'</a>
 						<a href="'.api_get_self().'?id_session='.$id_session.'&action=deleteusers&idChecked[]='.$etape['code_etape'].'-'.$etape['annee'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">' .
-							'<img src="../img/undelete.gif" border="0" align="absmiddle" title="'.get_lang('Supprimer utilisateurs etapes').'">' .
+							'<img src="../img/undelete.gif" border="0" align="absmiddle" title="'.get_lang('DeleteStepUsers').'">' .
 						'</a>
 						</td>
 				</tr>';
@@ -523,7 +523,7 @@ if (isset($id_session) && $id_session!="")
 		
 		<form method="get" action="<?php echo api_get_self(); ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
 			<select name="action">
-			<option value="import"><?php echo get_lang('Importer les etudiants de toutes les etapes');?></option>
+			<option value="import"><?php echo get_lang('ImportStudentsOfAllSteps');?></option>
 			</select>
 			<input type="hidden" name="id_session" value="<?php echo $id_session; ?>">
 			<input type="submit" value="<?php echo get_lang('Submit'); ?>">
@@ -538,7 +538,7 @@ if (isset($id_session) && $id_session!="")
 		  <th colspan="4"><?php echo get_lang('UserList')." (".$session['nbr_users'].")"; ?>
 		  	<a href="add_users_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Edit');?>"></a>
 			&nbsp;
-			<a href="ldap_users_list.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><img src="../img/add_user.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Ajouter ustilisateurs LDAP');?>"></a>
+			<a href="ldap_users_list.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><img src="../img/add_user.gif" border="0" align="absmiddle" alt="<?php echo get_lang('AddLDAPUsers');?>"></a>
 			</th>
 		  </th>
 		</tr>
@@ -547,7 +547,7 @@ if (isset($id_session) && $id_session!="")
 		if($session['nbr_users']==0){
 			echo '
 				<tr>
-					<td colspan="2">'.get_lang('Pas d\'utilisateurs pour cette session').'</td>
+					<td colspan="2">'.get_lang('NoUserInThisSession').'</td>
 				</tr>';
 		}
 		else {
@@ -675,7 +675,8 @@ else
 			{
 				break;
 			}
-			$sql = 'SELECT COUNT(course_code) FROM '.$tbl_session_rel_course.' WHERE id_session='.intval($enreg['id']);
+			$sql = 'SELECT COUNT(course_code) FROM '.$tbl_session_rel_course.' ' .
+					'WHERE id_session='.intval($enreg['id']);
 
 		  	$rs = api_sql_query($sql, __FILE__, __LINE__);
 		  	list($nb_courses) = Database::fetch_array($rs);
@@ -688,7 +689,7 @@ else
 		  <td><?php echo htmlentities($enreg['date_start']); ?></td>
 		  <td><?php echo htmlentities($enreg['date_end']); ?></td>
 		  <td>
-			<a href="<?php echo api_get_self(); ?>?id_session=<?php echo $enreg['id']; ?>"><img src="../img/add_user_big.gif" border="0" align="absmiddle" title="Inscrire des utilisateurs � cette session"></a>
+			<a href="<?php echo api_get_self(); ?>?id_session=<?php echo $enreg['id']; ?>"><img src="../img/add_user_big.gif" border="0" align="absmiddle" title="<?php echo get_lang('SubscribeSomeUsersToThisSession');?>"></a>
 		  </td>
 		</tr>
 

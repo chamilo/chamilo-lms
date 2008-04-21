@@ -26,7 +26,7 @@ $nbre=0;
 echo '<form name="form" method="post" action="ldap_users_list.php">';
 	if($statut==1)
 	{
-		echo get_lang('Notification par courriel de l\'inscription').': <input type="checkbox" name="mailling" value="1" checked="checked"><i>'.get_lang('ne pas d&eacute;cocher').'</i>';
+		echo get_lang('EmailNotifySubscription').': <input type="checkbox" name="mailling" value="1" checked="checked"><i>'.get_lang('DontUnchek').'</i>';
 	}
 	else
 	{
@@ -38,7 +38,7 @@ echo '<tr align="center" id="header3">' .
 		'<td width="15%"><input type="button" value="'.get_lang('AllSlashNone').'" onClick="checkAll();"></td>' .
 		'<td width="40%"><b>'.get_lang('Email').'</b></td>' .
 		'<td width="15%"><b>'.get_lang('Name').'</b></td>' .
-		'<td width="15%"><b>'.get_lang('Firstname').'</b></td>' .
+		'<td width="15%"><b>'.get_lang('FirstName').'</b></td>' .
 		'<td width="15%"><b>'.get_lang('Login').'</b></td>' .
 	  '</tr>'."\n";																																																					   
 while (list ($key, $val) = each($nom_form)) {

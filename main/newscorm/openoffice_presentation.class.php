@@ -23,7 +23,7 @@ class OpenofficePresentation extends OpenofficeDocument {
 	}
 
     
-    function make_lp() {
+    function make_lp($files=array()) {
     
     	global $_course;
    
@@ -33,50 +33,46 @@ class OpenofficePresentation extends OpenofficeDocument {
 		if(!is_dir($this->base_work_dir.$this->created_dir))
 			return false;
 		
-		$files = scandir($this->base_work_dir.$this->created_dir);
 		
 		foreach($files as $file){
 			
-		
-			if($file=='.' || $file=='..')
-				continue;
-				
+			list($slide_name,$file_name) = explode('||',$file); // '||' is used as separator between slide name (with accents) and file name (without accents)
+			$slide_name = utf8_decode($slide_name); //filename has been written in java, so unicode
+			
+			if($this->take_slide_name === true)
+			{
+				$slide_name = str_replace('_',' ',$slide_name);
+				$slide_name = ucfirst($slide_name);
+			}
+			else
+			{
+				$slide_name = 'slide'.str_repeat('0',2-strlen($i)).$i;
+			}
+			
 			$i++;	
-			$file = utf8_decode($file); //filename has been written in java, so unicode
 			// add the png to documents
-			$document_id = add_document($_course,$this->created_dir.'/'.urlencode($file),'file',filesize($this->base_work_dir.$this->created_dir.'/'.$file),$file);
+			$document_id = add_document($_course,$this->created_dir.'/'.urlencode($file_name),'file',filesize($this->base_work_dir.$this->created_dir.'/'.$file_name),$slide_name);
 			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],0,0);
 			
 			
 			// create an html file
-			$html_file = $file.'.html';
+			$html_file = $file_name.'.html';
 			$fp = fopen($this->base_work_dir.$this->created_dir.'/'.$html_file, 'w+');
 			
 			fwrite($fp,
 					'<html>
 					<head></head>
 					<body>
-						<img src="'.api_get_path(REL_COURSE_PATH).$_course['path'].'/document/'.$this->created_dir.'/'.utf8_encode($file).'" />
+						<img src="'.api_get_path(REL_COURSE_PATH).$_course['path'].'/document/'.$this->created_dir.'/'.utf8_encode($file_name).'" />
 					</body>
 					</html>');
 			fclose($fp);
-			$document_id = add_document($_course,$this->created_dir.'/'.urlencode($html_file),'file',filesize($this->base_work_dir.$this->created_dir.'/'.$html_file),$html_file);
+			$document_id = add_document($_course,$this->created_dir.'/'.urlencode($html_file),'file',filesize($this->base_work_dir.$this->created_dir.'/'.$html_file),$slide_name);
 			if ($document_id){	
 							
 				//put the document in item_property update
 				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],0,0);
 				
-				$infos = pathinfo($file);
-				if($this->take_slide_name === true)
-				{
-					$slide_name = substr($infos['basename'],0,strrpos($infos['basename'],'.'));
-					$slide_name = str_replace('_',' ',$slide_name);
-					$slide_name = ucfirst($slide_name);
-				}
-				else
-				{
-					$slide_name = 'slide'.str_repeat('0',2-strlen($i)).$i;
-				}
 				$previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
 				if($this->first_item == 0){
 					$this->first_item = $previous;
@@ -104,16 +100,13 @@ class OpenofficePresentation extends OpenofficeDocument {
     	global $_course;
     	/* Add Files */
     	
-		$files = scandir($this->base_work_dir.$this->created_dir);
 		
 		foreach($files as $file){
 			
-			if($file=='.' || $file=='..')
-				continue;
-				
-			$file = utf8_decode($file);
+			list($slide_name,$file_name) = explode('||',$file); // '||' is used as separator between slide name (with accents) and file name (without accents)
+			$slide_name = utf8_decode($slide_name); //filename has been written in java, so unicode
 			
-			$did = add_document($_course, $this->created_dir.'/'.urlencode($file), 'file', filesize($this->base_work_dir.$this->created_dir.'/'.$file), $file);
+			$did = add_document($_course, $this->created_dir.'/'.urlencode($file_name), 'file', filesize($this->base_work_dir.$this->created_dir.'/'.$file_name), $slide_name);
 			if ($did)
 				api_item_property_update($_course, TOOL_DOCUMENT, $did, 'DocumentAdded', $_SESSION['_uid'], 0, NULL);
 		

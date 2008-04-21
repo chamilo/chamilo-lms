@@ -82,8 +82,9 @@ abstract class OpenofficeDocument extends learnpath {
 		chmod ($this->base_work_dir.$this->created_dir,0777);
 		chmod($this->base_work_dir.'/'.$this->file_path,0777);
 		
+		$locale = 'fr_FR.UTF-8';
+		putenv('LC_ALL='.$locale);
 		$shell = exec($cmd, $files, $return);
-		
 		
 		if($return != 0) { //if the java application returns an error code
 			DocumentManager::delete_document($_course, $dir_name, $this->base_work_dir);	 
@@ -97,9 +98,9 @@ abstract class OpenofficeDocument extends learnpath {
 		// call to the function implemented by child following action_after_conversion parameter
 		switch ($action_after_conversion)
 		{
-			case 'make_lp':$this -> make_lp();	
+			case 'make_lp':$this -> make_lp($files);	
 			break;		
-			case 'add_docs_to_visio':$this -> add_docs_to_visio();	
+			case 'add_docs_to_visio':$this -> add_docs_to_visio($files);	
 			break;	
 		}
 				

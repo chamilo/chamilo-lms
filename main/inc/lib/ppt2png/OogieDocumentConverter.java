@@ -130,7 +130,8 @@ public class OogieDocumentConverter extends AbstractDokeosDocumentConverter {
 						}
 					}
 				}
-				
+
+				String slidenameDisplayed = "";
 				if(slidename.length()==0)
 				{
 					slidename = "slide"+(i+1);		
@@ -142,8 +143,6 @@ public class OogieDocumentConverter extends AbstractDokeosDocumentConverter {
 					slidename = slidename.replaceAll(" ", "_");
 					slidename = slidename.replaceAll("\n", "_");
 					slidename = slidename.replaceAll("__", "_");
-					//slidename = slidename.replaceAll("\\W", "_");
-					//slidename = slidename.replaceAll("__", "_");
 					
 					for(int j=0 ; j<slidename.length() ; j++)
 					{
@@ -158,8 +157,15 @@ public class OogieDocumentConverter extends AbstractDokeosDocumentConverter {
 						}
 						formatedSlidename += slidename.charAt(j);
 					}
+					
+
+					slidenameDisplayed = formatedSlidename;
+					
 					slidename = formatedSlidename.toLowerCase();
-					//slidename = StringOperation.sansAccent(slidename);
+					slidename = slidename.replaceAll("\\W", "_");
+					slidename = slidename.replaceAll("__", "_");
+					slidename = StringOperation.sansAccent(slidename);
+
 				}
 				int j=1;
 				String slidenamebackup = slidename;
@@ -205,7 +211,9 @@ public class OogieDocumentConverter extends AbstractDokeosDocumentConverter {
 				XFilter xFilter = (XFilter) UnoRuntime.queryInterface(XFilter.class, GraphicExportFilter);
 
 				xFilter.filter(loadProps);
-				System.out.println(xPageName.getName()+".png");
+				if(slidenameDisplayed=="")
+					slidenameDisplayed = xPageName.getName();
+				System.out.println(slidenameDisplayed+"||"+xPageName.getName()+".png");
 				
 			}
 			

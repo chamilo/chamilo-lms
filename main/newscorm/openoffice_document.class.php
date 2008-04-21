@@ -82,7 +82,7 @@ abstract class OpenofficeDocument extends learnpath {
 		chmod ($this->base_work_dir.$this->created_dir,0777);
 		chmod($this->base_work_dir.'/'.$this->file_path,0777);
 		
-		$locale = 'fr_FR.UTF-8';
+		$locale = 'en_US.UTF-8'; // TODO : improve it because we're not sure this locale is present everywhere
 		putenv('LC_ALL='.$locale);
 		$shell = exec($cmd, $files, $return);
 		

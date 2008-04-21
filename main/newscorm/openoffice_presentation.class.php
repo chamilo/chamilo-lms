@@ -77,7 +77,7 @@ class OpenofficePresentation extends OpenofficeDocument {
     	
     	if(empty($this->slide_width) || empty($this->slide_height))
     		list($this->slide_width, $this->slide_height) = explode('x',api_get_setting('service_ppt2lp','size'));
-    	return ' -w '.$this->slide_width.' -h '.$this->slide_height.' -d oogie';
+    	return ' -w '.$this->slide_width.' -h '.$this->slide_height.' -d oogie "'.$this->base_work_dir.'/'.$this->file_path.'"  "'.$this->base_work_dir.$this->created_dir.'.html"';
     
     }
     

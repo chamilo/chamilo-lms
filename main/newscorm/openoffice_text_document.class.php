@@ -41,12 +41,13 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
     {
     	
 		global $_course;
-		
 		// we get a content where ||page_break|| indicates where the page is broken
-		if(!file_exists($this->base_work_dir.'/'.$this->file_name.'.html')){return false;}
-		$content = file_get_contents($this->base_work_dir.'/'.$this->file_name.'.html');	
+		if(!file_exists($this->base_work_dir.'/'.$this->created_dir.'/'.$this->file_name.'.html')){return false;}
+		$content = file_get_contents($this->base_work_dir.'/'.$this->created_dir.'/'.$this->file_name.'.html');	
 		
-		unlink($this->base_work_dir.'/'.$this->file_name.'.html');
+		
+		unlink($this->base_work_dir.'/'.$this->file_path);
+		unlink($this->base_work_dir.'/'.$this->created_dir.'/'.$this->file_name.'.html');
 		
 		// set the charset if necessary
 		$charset = api_get_setting('platform_charset');
@@ -220,7 +221,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
      * @return	string	The additional parameters to be used in the Java call
      */
     function add_command_parameters(){
-    	return ' -d woogie';
+    	return ' -d woogie "'.$this->base_work_dir.'/'.$this->file_path.'"  "'.$this->base_work_dir.$this->created_dir.'/'.$this->file_name.'.html"';
     }
     
     /**

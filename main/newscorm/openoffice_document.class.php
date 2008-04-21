@@ -77,17 +77,14 @@ abstract class OpenofficeDocument extends learnpath {
 		
 		// call to the function implemented by child
 		$cmd .= $this -> add_command_parameters();	
-			
-		$cmd .= ' "'.$this->base_work_dir.'/'.$this->file_path.'" "'.$this->base_work_dir.$this->created_dir.'.html"';
 
 		// to allow openoffice to manipulate docs.
 		chmod ($this->base_work_dir.$this->created_dir,0777);
 		chmod($this->base_work_dir.'/'.$this->file_path,0777);
 		
 		$shell = exec($cmd, $files, $return);
-
-		if($return != 0) { //if the java application returns an error code
 		
+		if($return != 0) { //if the java application returns an error code
 			DocumentManager::delete_document($_course, $dir_name, $this->base_work_dir);	 
 			return false;   
 				

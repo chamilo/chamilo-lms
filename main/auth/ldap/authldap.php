@@ -1,4 +1,4 @@
-<?php // $Id: authldap.php 14965 2008-04-20 23:01:17Z yannoo $
+<?php // $Id: authldap.php 14968 2008-04-21 02:06:06Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -386,15 +386,15 @@ function ldap_set_version(&$resource)
  */
 function ldap_handle_bind(&$ldap_handler,&$ldap_bind)
 {
-	error_log('Entering ldap_handle_bind(&$ldap_handler,&$ldap_bind)',0);
+	//error_log('Entering ldap_handle_bind(&$ldap_handler,&$ldap_bind)',0);
 	global $ldap_rdn,$ldap_pass;
 	if(!empty($ldap_rdn) and !empty($ldap_pass))
 	{
-		error_log('Trying authenticated login :'.$ldap_rdn.'/'.$ldap_pass,0);
+		//error_log('Trying authenticated login :'.$ldap_rdn.'/'.$ldap_pass,0);
     	$ldap_bind = ldap_bind($ldap_handler,$ldap_rdn,$ldap_pass);
     	if(!$ldap_bind)
     	{
-    		error_log('Authenticated login failed',0);
+    		//error_log('Authenticated login failed',0);
     		//try in anonymous mode, you never know...
 	    	$ldap_bind = ldap_bind($ldap_handler);
     	}
@@ -410,7 +410,7 @@ function ldap_handle_bind(&$ldap_handler,&$ldap_bind)
 	}
 	else
 	{
-		error_log('Login finally OK',0);
+		//error_log('Login finally OK',0);
 		return true;
 	}
 }

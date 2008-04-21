@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 14793 2008-04-08 22:03:04Z juliomontoya $
+<?php // $Id: database.lib.php 14991 2008-04-21 17:59:41Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -688,6 +688,21 @@ class Database
 	function insert_id()
 	{
 		return mysql_insert_id();
+	}
+	/**
+	 * Returns the number of affected rows
+	 * @param	resource	Optional database resource
+	 */
+	function affected_rows($r=null)
+	{
+		if(isset($r))
+		{
+			return mysql_affected_rows($r);
+		}
+		else
+		{
+			return mysql_affected_rows();
+		}
 	}
 }
 //end class Database

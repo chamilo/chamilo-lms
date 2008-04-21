@@ -751,4 +751,9 @@ $LDAPMainServerAddressComment = "L\'indirizzo IP o l\'URL del server LDAP princi
 $LDAPMainServerPortTitle = "Porta del server LDAP principale";
 $LDAPDomainTitle = "Dominio LDAP";
 $LDAPReplicateServerAddressTitle = "Indirizzo del replication server";
+$LDAPReplicateServerPortTitle = "Porta del replicate server";
+$LDAPSearchTermTitle = "Parola da cercare";
+$LDAPSearchTermComment = "La parola sarà usata come filtro di ricerca di contatti del server LDAP. Se non sei sicuro su cosa immettere, riferisciti alla documentazione e alla configurazione del tuo server LDAP.";
+$LDAPVersion2 = "LDAP 2";
+$LDAPVersion3 = "LDAP 3";
 ?>

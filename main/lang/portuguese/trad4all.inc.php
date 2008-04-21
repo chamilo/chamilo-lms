@@ -514,4 +514,16 @@ $Folder = "Pasta";
 $CloseOtherSession = "O chat não está disponível porque uma outra página do curso está aberta. Por favor actualize esta página.";
 $FileUploadSucces = "Ficheiro foi carregado com êxito";
 $Yesterday = "Ontem";
+$Submit = "Submeter";
+$Department = "Departamento";
+$BackToNewSearch = "Voltar para iniciar nova pesquisa";
+$Step = "Etapa";
+$SomethingFemininAddedSuccessfully = "acrescentado com sucesso";
+$SomethingMasculinAddedSuccessfully = "acrescentado com sucesso";
+$DeleteError = "Apagar erro";
+$StepsList = "Lista de etapas";
+$AddStep = "Acrescentar etapa";
+$StepCode = "Código da etapa";
+$Label = "Etiqueta";
+$UnableToConnectTo = "Impossível conectar a";
 ?>

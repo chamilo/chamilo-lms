@@ -513,4 +513,17 @@ $Folder = "Directorio";
 $CloseOtherSession = "El chat no está disponible debido a que otra página del curso está abierta, por favor vuelva a ingresar al chat";
 $FileUploadSucces = "El archivo fue enviado";
 $Yesterday = "Ayer";
+$Submit = "Enviar";
+$Department = "Departamento";
+$BackToNewSearch = "Volver para realizar una nueva búsqueda";
+$Step = "Etapa";
+$SomethingFemininAddedSuccessfully = "ha sido añadida";
+$SomethingMasculinAddedSuccessfully = "ha sido añadido";
+$DeleteError = "Error de borrado";
+$StepsList = "Lista de etapas";
+$AddStep = "Añadir etapa";
+$StepCode = "Código de la etapa";
+$Label = "Etiqueta";
+$UnableToConnectTo = "Imposible conectar con";
+$NoUser = "Sin usuarios";
 ?>

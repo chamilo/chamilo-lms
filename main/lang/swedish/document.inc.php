@@ -124,4 +124,7 @@ $DocumentSetAsTemplate = "Spara dokumentet som ny mall";
 $DocumentUnsetAsTemplate = "Inte malldokument längre";
 $AddAsTemplate = "Lägg till som mall";
 $RemoveAsTemplate = "Ta bort mall";
+$ReadOnly = "Endast läsbart";
+$ReadOnlyFile = "Filen kan bara läsas, inte ändras";
+$FileNotFound = "Filen hittades inte";
 ?>

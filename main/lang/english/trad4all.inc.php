@@ -514,4 +514,17 @@ $Folder = "Folder";
 $CloseOtherSession = "The chat is not available, because other page of the course is open, please reload this page";
 $FileUploadSucces = "The file has successfully been uploaded";
 $Yesterday = "Yesterday";
+$Submit = "Submit";
+$Department = "Department";
+$BackToNewSearch = "Back to start new search";
+$Step = "Step";
+$SomethingFemininAddedSuccessfully = "added successfully";
+$SomethingMasculinAddedSuccessfully = "added successfully";
+$DeleteError = "Delete error";
+$StepsList = "Steps list";
+$AddStep = "Add step";
+$StepCode = "Step code";
+$Label = "Label";
+$UnableToConnectTo = "Unable to connect to";
+$NoUser = "No user";
 ?>

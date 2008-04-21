@@ -512,4 +512,16 @@ $Folder = "Verzeichnis";
 $CloseOtherSession = "Der Chat ist nicht verfügbar, da andere Seite des Kurses geöffnet ist; bitte die Seite aktualisieren";
 $FileUploadSucces = "Upload der Datei war erfolgreich";
 $Yesterday = "Gestern";
+$Submit = "Absenden";
+$Department = "Abteilung";
+$BackToNewSearch = "Zurück, neue Suche starten";
+$Step = "Schritt";
+$SomethingFemininAddedSuccessfully = "erfolgreich hinzugefügt";
+$SomethingMasculinAddedSuccessfully = "erfolgreich hinzugefügt";
+$DeleteError = "Fehler löschen";
+$StepsList = "Liste der Schritte";
+$AddStep = "Schritt hinzufügen";
+$StepCode = "Code für Schritt";
+$Label = "Bezeichnung";
+$UnableToConnectTo = "Keine Verbindung mit ";
 ?>

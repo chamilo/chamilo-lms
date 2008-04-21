@@ -512,4 +512,16 @@ $Folder = "Mapa";
 $CloseOtherSession = "Klepet ni na voljo, ker je neka druga stran tečaja že odprta; poskusite ponovno naložiti to stran";
 $FileUploadSucces = "Datoteka je bila uspešno naložena";
 $Yesterday = "Včeraj";
+$Submit = "Uveljavi";
+$Department = "Oddelek";
+$BackToNewSearch = "Nazaj na novo iskanje";
+$Step = "Korak";
+$SomethingFemininAddedSuccessfully = "Uspešno dodana";
+$SomethingMasculinAddedSuccessfully = "Uspešno dodan";
+$DeleteError = "Odstrani napako";
+$StepsList = "Seznam korakov";
+$AddStep = "Dodaj korak";
+$StepCode = "Koda koraka";
+$Label = "Oznaka";
+$UnableToConnectTo = "Ne morem se povezati z";
 ?>

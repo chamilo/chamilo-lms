@@ -510,4 +510,17 @@ $CannotMakeFieldChangeable = "Impossible de rendre le champ modifiable";
 $FieldMadeUnchangeable = "Le champ n\'est  plus modifiable";
 $CannotMakeFieldUnchangeable = "Impossible d\'empêcher la modification du champ";
 $Folder = "Répertoire";
+$Submit = "Valider";
+$Department = "Département";
+$BackToNewSearch = "Retour vers page nouvelle recherche";
+$Step = "Étape";
+$SomethingFemininAddedSuccessfully = "ajoutée avec succès";
+$SomethingMasculinAddedSuccessfully = "ajouté avec succès";
+$DeleteError = "Erreur de suppression";
+$StepsList = "Liste des étapes";
+$AddStep = "Ajouter une étape";
+$StepCode = "Code de l\'étape";
+$Label = "Intitulé";
+$UnableToConnectTo = "Impossible de se connecter à";
+$NoUser = "Aucun utilisateur";
 ?>

@@ -120,24 +120,34 @@ function get_number_of_users()
 function get_user_data($from, $number_of_items, $column, $direction)
 {
 	$users = array();
-	if (isset($_GET['submit'])) {
+	if (isset($_GET['submit']))
+	{
 		$info = get_ldap_users();
-		if ($info['count']>0) {
-			for ($key = 0; $key < $info["count"]; $key ++) {
+		if ($info['count']>0)
+		{
+			for ($key = 0; $key < $info["count"]; $key ++)
+			{
 				$user=array();
 				// Get uid from dn
-				$dn_array=ldap_explode_dn($info[$key]["dn"],1);
-				$user[] = $dn_array[0]; // uid is first key
-				$user[] = $dn_array[0]; // uid is first key
-				$user[] = iconv("utf-8", api_get_setting('platform_charset'), $info[$key]["sn"][0]);
-				$user[] = iconv("utf-8", api_get_setting('platform_charset'), $info[$key]["givenname"][0]);
-				$user[] = $info[$key]["mail"][0];
-				$outab[] = $info[$key]["eduPersonPrimaryAffiliation"][0]; // Ici "student"
+				//YW: this might be a variation between LDAP 2 and LDAP 3, but in LDAP 3, the uid is in
+				//the corresponding index of the array
+				//$dn_array=ldap_explode_dn($info[$key]["dn"],1);
+				//$user[] = $dn_array[0]; // uid is first key
+				//$user[] = $dn_array[0]; // uid is first key
+				$user[] = $info[$key]['uid'][0];
+				$user[] = $info[$key]['uid'][0];
+				$user[] = iconv('utf-8', api_get_setting('platform_charset'), $info[$key]['sn'][0]);
+				$user[] = iconv('utf-8', api_get_setting('platform_charset'), $info[$key]['givenname'][0]);
+				$user[] = $info[$key]['mail'][0];
+				$outab[] = $info[$key]['eduPersonPrimaryAffiliation'][0]; // Ici "student"
 				$users[] = $user;
 			}
 			
-		} else
-			Display :: display_error_message("NoUser");	
+		} 
+		else
+		{
+			Display :: display_error_message(get_lang('NoUser'));
+		}	
 	}
 	return $users;
 }
@@ -150,38 +160,42 @@ function get_user_data($from, $number_of_items, $column, $direction)
  */
 function modify_filter($user_id,$url_params, $row)
 {
-
 	$url_params_id="id[]=".$row[0];
+	//$url_params_id="id=".$row[0];	
 	$result .= '<a href="ldap_users_list.php?action=add_user&amp;user_id='.$user_id.'&amp;id_session='.Security::remove_XSS($_GET['id_session']).'&amp;'.$url_params_id.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;"><img src="../img/add_user.gif" border="0" style="vertical-align: middle;" title="'.get_lang('AddUsers').'" alt="'.get_lang('AddUsers').'"/></a>';
-	
 	return $result;
 }
 
-
-function addLdapUser($login){
+function addLdapUser($login)
+{
 	global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass;
 	
 	$ds = ldap_connect($ldap_host, $ldap_port);
 	ldap_set_version($ds);
-	if ($ds) {
+	if ($ds)
+	{
 		$str_query="(uid=".$login.")";
 		$r = false;
 		$res = ldap_handle_bind($ds, $r);
-		$sr = @ ldap_search($ds, "ou=people,$ldap_basedn", $str_query);
+		$sr = ldap_search($ds, $ldap_basedn, $str_query);
 		//echo "Le nombre de resultats est : ".ldap_count_entries($ds,$sr)."<p>";
 		$info = ldap_get_entries($ds, $sr);
 
-		for ($key = 0; $key < $info["count"]; $key ++) {
-			$lastname = iconv("utf-8", api_get_setting('platform_charset'), $info[$key]["sn"][0]);
-			$firstname = iconv("utf-8", api_get_setting('platform_charset'), $info[$key]["givenname"][0]);
-			$email = $info[$key]["mail"][0];
+		for ($key = 0; $key < $info['count']; $key ++)
+		{
+			$lastname = iconv('utf-8', api_get_setting('platform_charset'), $info[$key]['sn'][0]);
+			$firstname = iconv('utf-8', api_get_setting('platform_charset'), $info[$key]['givenname'][0]);
+			$email = $info[$key]['mail'][0];
 			// Get uid from dn
-			$dn_array=ldap_explode_dn($info[$key]["dn"],1);
+			$dn_array=ldap_explode_dn($info[$key]['dn'],1);
 			$username = $dn_array[0]; // uid is first key
-			$outab[] = $info[$key]["edupersonprimaryaffiliation"][0]; // Ici "student"
-			$val = ldap_get_values_len($ds, $entry, "userPassword");
-			$password = $val[0];
-			$structure=$info[$key]["edupersonprimaryorgunitdn"][0];
+			$outab[] = $info[$key]['edupersonprimaryaffiliation'][0]; // Ici "student"
+			//$val = ldap_get_values_len($ds, $entry, "userPassword");
+			//$val = ldap_get_values_len($ds, $info[$key], "userPassword");
+			//$password = $val[0];
+			// TODO the password, if encrypted at the source, will be encrypted twice, which makes it useless. Try to fix that.
+			$password = $info[$key]['userPassword'][0];
+			$structure=$info[$key]['edupersonprimaryorgunitdn'][0];
 			$array_structure=explode(",", $structure);
 			$array_val=explode("=", $array_structure[0]);
 			$etape=$array_val[1];
@@ -189,7 +203,7 @@ function addLdapUser($login){
 			$annee=$array_val[1];
 			// Pour faciliter la gestion on ajoute le code "etape-annee"
 			$official_code=$etape."-".$annee;
-			$auth_source="cas";
+			$auth_source='ldap';
 			// Pas de date d'expiration d'etudiant (a recuperer par rapport au shadow expire LDAP)
 			$expiration_date='0000-00-00 00:00:00';
 			$active=1;
@@ -198,21 +212,27 @@ function addLdapUser($login){
 			if(empty($picture_uri)){$picture_uri = '';}
 			// Ajout de l'utilisateur
 			if (UserManager::is_username_available($username))
+			{
 				$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active);
-			else{
+			}
+			else
+			{
 				$user = UserManager::get_user_info($username);
 				$user_id=$user['user_id'];
 				UserManager::update_user($user_id, $firstname, $lastname, $username, null, null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active);
 			}
 		}
 
-	} else {
-		Display :: display_error_message(get_lang('ERREUR CONNEXION LDAP'));
+	} 
+	else 
+	{
+		Display :: display_error_message(get_lang('LDAPConnectionError'));
 	}
 	return $user_id;;
 }
 
-function addUserToSession($UserList, $id_session){
+function addUserToSession($UserList, $id_session)
+{
 
 	// Database Table Definitions
 	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -246,7 +266,8 @@ function addUserToSession($UserList, $id_session){
 		api_sql_query("UPDATE $tbl_session_rel_course  SET nbr_users=$nbr_users " .
 				"WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
 	}
-	foreach($UserList as $enreg_user){
+	foreach($UserList as $enreg_user)
+	{
 			api_sql_query("INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) " .
 					"VALUES('$id_session','$enreg_user')",__FILE__,__LINE__);
 	}
@@ -258,14 +279,6 @@ function addUserToSession($UserList, $id_session){
 	
 }
 
-// Fonction pour dire si c'est un entier
-function isInteger($n) {
-	if (preg_match("/[^0-^9]+/",$n) > 0) {
-		return false;
-	} 
-	return true;
-}
-
 /**
 ==============================================================================
 		INIT SECTION
@@ -274,7 +287,6 @@ function isInteger($n) {
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 $action = $_GET["action"];
 $login_as_user_id = $_GET["user_id"];
-
 	
 // Login as ...
 if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
@@ -282,13 +294,14 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 	login_user($login_as_user_id);
 }
 
-if (($_GET['action']=="add_user") && (isInteger($_GET['id_session']))){
-	header('Location: ldap_import_students_to_session.php?id_session='.$id_session);
+//if we already have a session id and a user...
+if (($_GET['action']=="add_user") && ($_GET['id_session'] == strval(intval($_GET['id_session']))) && $_GET['id_session']>0 ){
+	header('Location: ldap_import_students_to_session.php?id_session='.$_GET['id_session'].'&ldap_user='.$_GET['id']);
 }
 
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $tool_name = get_lang('SearchAUser'). " - LDAP";
-Display :: display_header($tool_name);
+//Display :: display_header($tool_name); //cannot display now as we need to redirect
 //api_display_tool_title($tool_name);
 
 if (isset ($_GET['action']))
@@ -326,15 +339,30 @@ if (isset ($_GET['action']))
 			case 'add_user';
 				$id=$_GET['id'];
 				$UserList=array();
+				$userid_match_login = array();
 				foreach ($id as $user_id) {
-					$UserList[]=addLdapUser($user_id);
+					$tmp = addLdapUser($user_id);
+					$UserList[]= $tmp;
+					$userid_match_login[$tmp] = $user_id;
 				}
-				if (isset($_GET['id_session']) && ($_GET['id_session']>=0)) {
+				if (isset($_GET['id_session']) && ($_GET['id_session'] == strval(intval($_GET['id_session']))) && ($_GET['id_session']>0)) {
 					addUserToSession($UserList, $_GET['id_session']);
-					header('Location: resume_session.php?id_session='.$id_session);
+					header('Location: resume_session.php?id_session='.$_GET['id_session']);
 				} else {
-					$message=get_lang('LDAPUsersAdded');
-					Display :: display_normal_message($message);
+					Display :: display_header($tool_name);
+					if(count($userid_match_login)>0)
+					{
+						$message=get_lang('LDAPUsersAddedOrUpdated').':<br />';
+						foreach($userid_match_login as $user_id => $login)
+						{
+							$message .= '- '.$login.'<br />';
+						}
+					}
+					else
+					{
+						$message=get_lang('NoUserAdded');
+					}
+					Display :: display_normal_message($message,false);
 				}
 				break;
 			default : 
@@ -342,6 +370,14 @@ if (isset ($_GET['action']))
 		}
 		Security::clear_token();
 	}
+	else
+	{
+		Display::display_header($tool_name);
+	}
+}
+else
+{
+	Display::display_header($tool_name);
 }
 if (isset ($_POST['action']))
 {

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 14875 2008-04-14 07:06:32Z elixir_inter $
+<?php // $Id: index.php 14988 2008-04-21 17:42:34Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -190,7 +190,7 @@ else if(api_is_platform_admin())
 
 
 <?php
-if(api_is_platform_admin()):
+if(api_is_platform_admin()){
 ?>
 
 
@@ -208,7 +208,23 @@ if(api_is_platform_admin()):
   <li><a href="configure_extensions.php?display=bandwidthstats"><?php echo get_lang('BandWidthStatistics'); ?></a></li>
   </ul>
 </div>
-
+<?php
+	if(count($extAuthSource['ldap'])>0){
+	?>
+	<!-- dynamic ldap code --> 
+	<div class="admin_section">
+	 <h4><img src="../img/members.gif" border="0" style="vertical-align: middle;" alt="LDAP" />LDAP</h4>
+	 <ul>
+	  <!--li><a href="ldap_import_students.php"><?php echo get_lang('ImportLDAPUsersIntoCourse');?></a></li-->
+	  <!--li><a href="ldap_import_students_to_session.php"><?php echo get_lang('ImportLDAPUsersAndStepIntoSession');?></a></li-->
+	  <li><a href="ldap_users_list.php"><?php echo get_lang('AddLDAPUsers');?></a></li>
+	  <!--li><a href="ldap_users_synchro.php"><?php echo get_lang('LDAPSynchroImportUsersAndStepsInSessions');?></a></li-->
+	 </ul>
+	</div>
+	<!-- dynamic ldap code -->
+	<?php 
+	}
+?>
 <div class="admin_section">
  <h4>
   <img src="../img/dokeos.gif" border="0" style="vertical-align: middle;" alt="" />
@@ -230,11 +246,8 @@ if(api_is_platform_admin()):
   </li>
  </ul>
 </div>
-
-
 <?php
-
-endif;
+}
 
 /**
  * Displays either the text for the registration or the message that the installation is (not) up to date

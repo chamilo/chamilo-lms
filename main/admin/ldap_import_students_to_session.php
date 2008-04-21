@@ -338,7 +338,8 @@ if (isset($id_session) && $id_session!="")
 						"WHERE id_session='$id_session' " .
 						"AND course_code='$enreg_course'",__FILE__,__LINE__);
 			}
-			foreach($UserList as $enreg_user){
+			foreach($UserList as $enreg_user)
+			{
 					api_sql_query("DELETE IGNORE FROM $tbl_session_rel_user " .
 							"WHERE id_user='$enreg_user'",__FILE__,__LINE__);
 			}
@@ -347,8 +348,9 @@ if (isset($id_session) && $id_session!="")
 					"WHERE id_session='$id_session'";
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
 			list($nbr_users) = Database::fetch_array($rs);
-			api_sql_query("UPDATE $tbl_session SET nbr_users=$nbr_users " .
-					"WHERE id='$id_session'",__FILE__,__LINE__);	
+			$sql = "UPDATE $tbl_session SET nbr_users=$nbr_users " .
+					"WHERE id='$id_session'";
+			api_sql_query($sql,__FILE__,__LINE__);	
 				
 			foreach($UserList as $enreg_user){
 				if (UserManager::can_delete_user($enreg_user))
@@ -359,29 +361,34 @@ if (isset($id_session) && $id_session!="")
 		}
 		
 		// Importing periods/steps users into the session
-		if (isset($action) && ($action=='import')) {
-			// id_session
-			// Parse des code etape de la session
+		if (isset($action) && ($action=='import')) 
+		{
+			// Parsing steps codes from sessions
+			/*
 			$sql = "SELECT  id_session, code_etape, etape_description, code_ufr, annee 
 				FROM $tbl_session_rel_etape
 				WHERE id_session='$id_session'
 				ORDER BY code_ufr, code_etape";
 			$result = api_sql_query($sql);
+			*/
 			$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
 			ldap_set_version($ds);
-			// Import des utilisateurs des etapes dans la session
+			// Importing steps users into session
 			if ($ds)
+			{
 				$r = false;
 				$res = ldap_handle_bind($ds, $r);
 				$UserList=array();
-				while($row = Database::fetch_array($result)){
-					$annee = $row['annee'];
-					$code_ufr = $row['code_ufr'];
-					$etape = $row['code_etape'];
+				//while($row = Database::fetch_array($result))
+				//{
+				//	$annee = $row['annee'];
+				//	$code_ufr = $row['code_ufr'];
+				//	$etape = $row['code_etape'];
 					// LDAP Querry
 					// edupersonorgunitdn=ou=12CI1,ou=2006,ou=diploma,o=Paris1,dc=univ-paris1,dc=fr
 					//$sr = @ ldap_search($ds, "ou=people,$ldap_basedn", "edupersonorgunitdn=ou=$etape,ou=$annee,ou=diploma,o=Paris1,$ldap_basedn");
-					$sr = @ ldap_search($ds, "ou=people,$ldap_basedn", "edupersonorgunitdn=ou=$etape,ou=$annee,ou=diploma,$ldap_basedn");
+					// TODO search string should be based on the users we wanted to insert, in the first place
+					$sr = @ ldap_search($ds, $ldap_basedn, $ldap_basedn);
 					$info = ldap_get_entries($ds, $sr);
 
 					for ($key = 0; $key < $info["count"]; $key ++) {
@@ -413,7 +420,9 @@ if (isset($id_session) && $id_session!="")
 				}
 				
 				// Une fois les utilisateurs importer dans la base des utilisateurs, on peux les affecter a la session
-				$result=api_sql_query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'",__FILE__,__LINE__);
+				$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
+				$result = api_sql_query($sql,__FILE__,__LINE__);
+				
 				$CourseList=array();
 				while($row=Database::fetch_array($result))
 				{
@@ -424,12 +433,20 @@ if (isset($id_session) && $id_session!="")
 					// On ajoute la relation entre l'utilisateur et le cours
 					foreach($UserList as $enreg_user)
 					{
-						api_sql_query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')",__FILE__,__LINE__);
+						$sql = "INSERT IGNORE " .
+								"INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) " .
+								"VALUES('$id_session','$enreg_course','$enreg_user')";
+						api_sql_query($sql,__FILE__,__LINE__);
 					}
-					$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
+					$sql = "SELECT COUNT(id_user) as nbUsers " .
+							"FROM $tbl_session_rel_course_rel_user " .
+							"WHERE id_session='$id_session' AND course_code='$enreg_course'";
 					$rs = api_sql_query($sql, __FILE__, __LINE__);
 					list($nbr_users) = Database::fetch_array($rs);
-					api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
+					$sql = "UPDATE $tbl_session_rel_course " .
+							"SET nbr_users=$nbr_users " .
+							"WHERE id_session='$id_session' AND course_code='$enreg_course'";
+					api_sql_query($sql,__FILE__,__LINE__);
 				}
 				// On ajoute la relation entre l'utilisateur et la session
 				foreach($UserList as $enreg_user){
@@ -439,7 +456,7 @@ if (isset($id_session) && $id_session!="")
 				$rs = api_sql_query($sql, __FILE__, __LINE__);
 				list($nbr_users) = Database::fetch_array($rs);
 				api_sql_query("UPDATE $tbl_session SET nbr_users=$nbr_users WHERE id='$id_session'",__FILE__,__LINE__);
-			}
+		}
 		?>
 		
 		<!-- General properties -->
@@ -464,14 +481,20 @@ if (isset($id_session) && $id_session!="")
 			<td>
 			<?php
 				if($session['date_start']=='00-00-0000')
+				{
 					echo get_lang('NoTimeLimits');
+				}
 				else
+				{
 					echo get_lang('From').' '.$session['date_start'].' '.get_lang('To').' '.$session['date_end'];
+				}
 				 ?>
 			</td>
 		</tr>
 		</table>
 		
+<?php
+		/*
 		<!--List des etapes -->
 		<table class="data_table" width="100%">
 		<tr>
@@ -527,9 +550,9 @@ if (isset($id_session) && $id_session!="")
 				</tr>';
 			}
 		}
-		?>
-		</table>
-	
+		echo '</table>';
+		*/
+?>
 		<br />
 		
 		<form method="get" action="<?php echo api_get_self(); ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">

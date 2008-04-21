@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: QuickForm.php 12272 2007-05-03 14:40:45Z elixir_julian $
+// $Id: QuickForm.php 14987 2008-04-21 17:14:12Z juliomontoya $
 
 require_once('PEAR.php');
 require_once('HTML/Common.php');
@@ -675,9 +675,13 @@ class HTML_QuickForm extends HTML_Common {
                 $this->_elements[$i + 1] =& $this->_elements[$i];
                 if ($this->_elementIndex[$currentName] == $i) {
                     $this->_elementIndex[$currentName] = $i + 1;
-                } else {
-                    $dupIdx = array_search($i, $this->_duplicateIndex[$currentName]);
-                    $this->_duplicateIndex[$currentName][$dupIdx] = $i + 1;
+                } else 
+                {
+                	if (is_array($this->_duplicateIndex[$currentName]))
+                	{
+                    	$dupIdx = array_search($i, $this->_duplicateIndex[$currentName]);
+                    	$this->_duplicateIndex[$currentName][$dupIdx] = $i + 1;
+                	}
                 }
                 unset($this->_elements[$i]);
             }

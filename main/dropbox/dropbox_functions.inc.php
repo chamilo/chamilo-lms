@@ -1416,9 +1416,16 @@ function get_total_number_feedback($file_id='')
 */
 function check_number_feedback($key, $array)
 {
-	if (key_exists($key,$array))
-	{
-		return $array[$key];
+	if (is_array($array))
+	{	
+		if (key_exists($key,$array))
+		{
+			return $array[$key];
+		}
+		else
+		{
+			return 0;
+		}
 	}
 	else
 	{

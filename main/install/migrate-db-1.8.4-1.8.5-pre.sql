@@ -137,3 +137,4 @@ UPDATE tool SET category='interaction', admin='0', visibility='1' WHERE name='su
 CREATE TABLE  forum_notification (user_id int(11) , forum_id varchar(11), thread_id varchar(11), post_id varchar(11), KEY user_id (user_id), KEY forum_id (forum_id));
 ALTER TABLE quiz ADD access_condition text DEFAULT NULL;
 ALTER TABLE survey ADD access_condition text DEFAULT NULL;
+UPDATE tool SET category='authoring' WHERE name = 'announcement';

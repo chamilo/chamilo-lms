@@ -37,7 +37,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
      * @param	array	The files that will compose the generated learning path. Unused so far.
      * @return	boolean	False if file does not exit. Nothing otherwise.
      */
-    function make_lp($files=array())
+    function make_lp()
     {
     	
 		global $_course;

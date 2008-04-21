@@ -23,17 +23,28 @@ class OpenofficePresentation extends OpenofficeDocument {
 	}
 
     
-    function make_lp($files = array()) {
+    function make_lp() {
     
     	global $_course;
    
 		$previous = 0;
 		$i = 0;
+		
+		if(!is_dir($this->base_work_dir.$this->created_dir))
+			return false;
+		
+		$files = scandir($this->base_work_dir.$this->created_dir);
+		
 		foreach($files as $file){
-			$i++;	
 			
+		
+			if($file=='.' || $file=='..')
+				continue;
+				
+			$i++;	
+			$file = utf8_decode($file); //filename has been written in java, so unicode
 			// add the png to documents
-			$document_id = add_document($_course,$this->created_dir.'/'.$file,'file',filesize($this->base_work_dir.$this->created_dir.'/'.$file),$file);
+			$document_id = add_document($_course,$this->created_dir.'/'.urlencode($file),'file',filesize($this->base_work_dir.$this->created_dir.'/'.$file),$file);
 			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],0,0);
 			
 			
@@ -45,11 +56,11 @@ class OpenofficePresentation extends OpenofficeDocument {
 					'<html>
 					<head></head>
 					<body>
-						<img src="'.api_get_path(REL_COURSE_PATH).$_course['path'].'/document/'.$this->created_dir.'/'.$file.'" />
+						<img src="'.api_get_path(REL_COURSE_PATH).$_course['path'].'/document/'.$this->created_dir.'/'.utf8_encode($file).'" />
 					</body>
 					</html>');
 			fclose($fp);
-			$document_id = add_document($_course,$this->created_dir.'/'.$html_file,'file',filesize($this->base_work_dir.$this->created_dir.'/'.$html_file),$html_file);
+			$document_id = add_document($_course,$this->created_dir.'/'.urlencode($html_file),'file',filesize($this->base_work_dir.$this->created_dir.'/'.$html_file),$html_file);
 			if ($document_id){	
 							
 				//put the document in item_property update
@@ -60,6 +71,7 @@ class OpenofficePresentation extends OpenofficeDocument {
 				{
 					$slide_name = substr($infos['basename'],0,strrpos($infos['basename'],'.'));
 					$slide_name = str_replace('_',' ',$slide_name);
+					$slide_name = ucfirst($slide_name);
 				}
 				else
 				{
@@ -92,11 +104,19 @@ class OpenofficePresentation extends OpenofficeDocument {
     	global $_course;
     	/* Add Files */
     	
-		foreach($files as $f)
-		{
-			$did = add_document($_course, $this->created_dir.'/'.$f, 'file', filesize($this->base_work_dir.$this->created_dir.'/'.$f), $f);
+		$files = scandir($this->base_work_dir.$this->created_dir);
+		
+		foreach($files as $file){
+			
+			if($file=='.' || $file=='..')
+				continue;
+				
+			$file = utf8_decode($file);
+			
+			$did = add_document($_course, $this->created_dir.'/'.urlencode($file), 'file', filesize($this->base_work_dir.$this->created_dir.'/'.$file), $file);
 			if ($did)
 				api_item_property_update($_course, TOOL_DOCUMENT, $did, 'DocumentAdded', $_SESSION['_uid'], 0, NULL);
+		
 		}
 		
     }

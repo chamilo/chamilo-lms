@@ -84,6 +84,7 @@ abstract class OpenofficeDocument extends learnpath {
 		
 		$shell = exec($cmd, $files, $return);
 		
+		
 		if($return != 0) { //if the java application returns an error code
 			DocumentManager::delete_document($_course, $dir_name, $this->base_work_dir);	 
 			return false;   
@@ -96,9 +97,9 @@ abstract class OpenofficeDocument extends learnpath {
 		// call to the function implemented by child following action_after_conversion parameter
 		switch ($action_after_conversion)
 		{
-			case 'make_lp':$this -> make_lp($files);	
+			case 'make_lp':$this -> make_lp();	
 			break;		
-			case 'add_docs_to_visio':$this -> add_docs_to_visio($files);	
+			case 'add_docs_to_visio':$this -> add_docs_to_visio();	
 			break;	
 		}
 				

@@ -142,13 +142,13 @@ public class OogieDocumentConverter extends AbstractDokeosDocumentConverter {
 					slidename = slidename.replaceAll(" ", "_");
 					slidename = slidename.replaceAll("\n", "_");
 					slidename = slidename.replaceAll("__", "_");
-					slidename = slidename.replaceAll("\\W", "_");
-					slidename = slidename.replaceAll("__", "_");
+					//slidename = slidename.replaceAll("\\W", "_");
+					//slidename = slidename.replaceAll("__", "_");
 					
 					for(int j=0 ; j<slidename.length() ; j++)
 					{
 						char currentChar = slidename.charAt(j);
-						if(currentChar==' ')
+						if(currentChar=='_')
 						{
 							nbSpaces++;
 						}
@@ -159,7 +159,7 @@ public class OogieDocumentConverter extends AbstractDokeosDocumentConverter {
 						formatedSlidename += slidename.charAt(j);
 					}
 					slidename = formatedSlidename.toLowerCase();
-					slidename = StringOperation.sansAccent(slidename);
+					//slidename = StringOperation.sansAccent(slidename);
 				}
 				int j=1;
 				String slidenamebackup = slidename;

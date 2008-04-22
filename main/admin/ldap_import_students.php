@@ -289,11 +289,14 @@ elseif (!empty($annee) && !empty($course) && ($_POST['confirmed']=='yes'))
 	$id=$_POST['username_form'];
 	$UserList=array();
 	$userid_match_login = array();
-	foreach ($id as $user_id)
+	foreach ($id as $form_index=>$user_id)
 	{
-		$tmp = ldap_add_user($user_id);
-		$UserList[]= $tmp;
-		$userid_match_login[$tmp] = $user_id;
+		if(is_array($_POST['checkboxes']) && in_array($form_index,array_values($_POST['checkboxes'])))
+		{
+			$tmp = ldap_add_user($user_id);
+			$UserList[]= $tmp;
+			$userid_match_login[$tmp] = $user_id;
+		}
 	}
 	if (!empty($_POST['course']))
 	{

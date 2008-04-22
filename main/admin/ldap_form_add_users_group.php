@@ -20,10 +20,10 @@
 ==============================================================================
 */
 /**
- * This form is included by ldap_import_students.php
+ * This form is included by ldap_import_students.php and ldap_import_students_to_session.php
  */
 $nbre=0;
-echo '<form name="form" method="post" action="ldap_import_students.php?annee='.Security::remove_XSS($annee).'">';
+echo '<form name="form" method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'">';
 	if($statut==1)
 	{
 		echo get_lang('EmailNotifySubscription').': <input type="checkbox" name="mailling" value="1" checked="checked"><i>'.get_lang('DontUnchek').'</i>';
@@ -32,7 +32,14 @@ echo '<form name="form" method="post" action="ldap_import_students.php?annee='.S
 	{
 		echo '<input type="hidden" name="mailling" value="1">';
 	}
-echo '<input type="hidden" name="course" value="'.Security::remove_XSS($course).'">';
+if(!empty($course))
+{
+	echo '<input type="hidden" name="course" value="'.Security::remove_XSS($course).'">';
+}
+elseif(!empty($id_session))
+{
+	echo '<input type="hidden" name="id_session" value="'.Security::remove_XSS($id_session).'">';
+}
 echo '<input type="hidden" name="confirmed" value="yes">';
 echo '<table border="0" cellspacing="0" width="100%">';
 echo '<tr align="center" id="header3">' .

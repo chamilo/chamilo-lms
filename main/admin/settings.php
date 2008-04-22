@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 14990 2008-04-21 17:54:31Z yannoo $
+// $Id: settings.php 14996 2008-04-22 01:24:39Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -42,7 +42,8 @@
 */
 // name of the language file that needs to be included
 $language_file = 'admin';
-
+// resetting the course id
+$cidReset=true;
 // including some necessary dokeos files
 include_once ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');

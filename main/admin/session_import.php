@@ -1,9 +1,9 @@
-<?php // $Id: user_import.php,v 1.17 2005/06/22 08:00:31 bmol Exp $
+<?php // $Id: session_import.php 14999 2008-04-22 02:30:35Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -18,7 +18,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -26,36 +26,33 @@
 *	@package dokeos.admin
 ==============================================================================
 */
-
 $language_file = array('admin','registration');
-
 $cidReset=true;
-
-include('../inc/global.inc.php');
+require('../inc/global.inc.php');
 if(empty($charset))
 {
 	$charset = 'ISO-8859-15';
 }
 api_protect_admin_script(true);
 
-include(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
-include (api_get_path(LIBRARY_PATH)."/add_course.conf.php");
-include_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
+require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
+require(api_get_path(CONFIGURATION_PATH).'add_course.conf.php');
+require_once(api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
 
 $formSent=0;
 $errorMsg='';
 
-$tbl_user      = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course      = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_course_user      = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_session      = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_user      = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session_course      = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_course_user      = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_user					= Database::get_main_table(TABLE_MAIN_USER);
+$tbl_course					= Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_course_user			= Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_session				= Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_user			= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_session_course			= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_course_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $tool_name=get_lang('ImportSessionListXMLCSV');
 
-$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('AdministrationTools'));
+$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('AdministrationTools'));
 
 set_time_limit(0);
 
@@ -139,7 +136,7 @@ if($_POST['formSent'])
 							$emailto='"'.$firstname.' '.$lastname.'" <'.$email.'>';
 							$emailsubject='['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
 							$emailbody="[NOTE:] ".get_lang('ThisIsAutomaticEmailNoReply').".\n\n".get_lang('langDear')." $firstname $lastname,\n\n".get_lang('langYouAreReg')." ". get_setting('siteName') ." ".get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') ." ". get_lang('langIs') ." ". $serverAddress ."\n\n".get_lang('YouWillSoonReceiveMailFromCoach')."\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');
-							//#287 modifiée par Stéphane DEBIEVE - FOREM
+							//#287 modifiï¿½e par Stï¿½phane DEBIEVE - FOREM
 							$emailheaders='From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
 							$emailheaders.='Reply-To: '.get_setting('emailAdministrator');
 

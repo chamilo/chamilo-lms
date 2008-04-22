@@ -40,7 +40,7 @@ function Node(id, pid, name, url, title, target, icon, iconOpen, open) {
 
 	this.iconOpen = iconOpen;
 
-	this._io = open || false;
+	this._io = open || true;
 
 	this._is = false;
 

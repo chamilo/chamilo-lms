@@ -1,4 +1,4 @@
-<?php // $Id: session_import.php 14999 2008-04-22 02:30:35Z yannoo $
+<?php // $Id: session_import.php 15000 2008-04-22 02:32:46Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -136,7 +136,7 @@ if($_POST['formSent'])
 							$emailto='"'.$firstname.' '.$lastname.'" <'.$email.'>';
 							$emailsubject='['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
 							$emailbody="[NOTE:] ".get_lang('ThisIsAutomaticEmailNoReply').".\n\n".get_lang('langDear')." $firstname $lastname,\n\n".get_lang('langYouAreReg')." ". get_setting('siteName') ." ".get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') ." ". get_lang('langIs') ." ". $serverAddress ."\n\n".get_lang('YouWillSoonReceiveMailFromCoach')."\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');
-							//#287 modifi�e par St�phane DEBIEVE - FOREM
+							//#287 modifiee par Stephane DEBIEVE - FOREM
 							$emailheaders='From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
 							$emailheaders.='Reply-To: '.get_setting('emailAdministrator');
 
@@ -425,14 +425,9 @@ if($_POST['formSent'])
 			}
 		}
 
-
-
-
-
 		/////////////////////
 		// CSV /////////////
 		///////////////////
-
 
 		else
 		{
@@ -599,12 +594,8 @@ if($_POST['formSent'])
 	}
 }
 
-
 Display::display_header($tool_name);
-
 api_display_tool_title($tool_name);
-
-
 ?>
 
 <form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin:0px;">
@@ -615,21 +606,16 @@ api_display_tool_title($tool_name);
 if(!empty($errorMsg))
 {
 ?>
-
 <tr>
   <td colspan="2">
-
 <?php
 	Display::display_normal_message($errorMsg,false); //main API
 ?>
-
   </td>
 </tr>
-
 <?php
 }
 ?>
-
 <tr>
   <td nowrap="nowrap"><?php echo get_lang('ImportFileLocation'); ?> :</td>
   <td><input type="file" name="import_file" size="30"></td>
@@ -709,7 +695,6 @@ if(!empty($errorMsg))
 </pre>
 </blockquote>
 </font>
-
 <?php
 /*
 ==============================================================================

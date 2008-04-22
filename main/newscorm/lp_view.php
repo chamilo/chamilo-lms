@@ -139,7 +139,7 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 	?>
 	<frameset rows="130,*">
 		<frame id="header" src="lp_header.php" border="0" frameborder="0" scrolling="no" />
-		<frameset cols="240,*">
+		<frameset cols="270,*">
 			<frameset rows="475,95,80,*">
 				<frame id="toc_id" name="toc_name" class="lp_toc" src="lp_toc.php" border="0" frameborder="0" scrolling="no"/>
 				<frame id="nav_id" name="nav_name" class="lp_nav" src="lp_nav.php" border="0" frameborder="0" />
@@ -175,7 +175,7 @@ else
 	?>
 	<frameset rows="130,*">
 		<frame id="header" src="lp_header.php" border="0" frameborder="0" scrolling="no" />
-		<frameset cols="240,*">
+		<frameset cols="270,*">
 			<frameset rows="<?php echo($displayAudioRecorder?'60,':'');?>600,70,80,*">
 				<?php
 				if($displayAudioRecorder) //if audio recorder is required (set a few lines above)

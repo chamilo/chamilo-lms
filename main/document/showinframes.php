@@ -1,4 +1,4 @@
-<?php // $Id: showinframes.php 14904 2008-04-15 17:22:45Z juliomontoya $ 
+<?php // $Id: showinframes.php 15013 2008-04-22 17:47:13Z juliomontoya $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -90,7 +90,7 @@ $browser_display_title = "Dokeos Documents - " . $_GET['cidReq'] . " - " . $file
 $frameheight = 130;
 if($is_courseAdmin)
 {
-	$frameheight = 150;	
+	$frameheight = 155;	
 }
 $file_root=$_course['path'].'/document'.str_replace('%2F', '/',$file);
 $file_url_sys=api_get_path('SYS_COURSE_PATH').$file_root;

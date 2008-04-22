@@ -1,4 +1,4 @@
-<?php // $Id: index.php 14992 2008-04-21 20:24:31Z juliomontoya $
+<?php // $Id: index.php 14998 2008-04-22 01:36:35Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -215,7 +215,7 @@ if(api_is_platform_admin()){
 	<div class="admin_section">
 	 <h4><img src="../img/members.gif" border="0" style="vertical-align: middle;" alt="LDAP" />LDAP</h4>
 	 <ul>
-	  <!--li><a href="ldap_import_students.php"><?php echo get_lang('ImportLDAPUsersIntoCourse');?></a></li-->
+	  <li><a href="ldap_import_students.php"><?php echo get_lang('ImportLDAPUsersIntoCourse');?></a></li>
 	  <!--li><a href="ldap_import_students_to_session.php"><?php echo get_lang('ImportLDAPUsersAndStepIntoSession');?></a></li-->
 	  <li><a href="ldap_users_list.php"><?php echo get_lang('AddLDAPUsers');?></a></li>
 	  <!--li><a href="ldap_users_synchro.php"><?php echo get_lang('LDAPSynchroImportUsersAndStepsInSessions');?></a></li-->

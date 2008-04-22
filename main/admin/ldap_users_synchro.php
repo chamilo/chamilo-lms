@@ -1,4 +1,5 @@
 <?php //$id: $
+exit(); //not yet functional, needs to be revised
 /*
 ==============================================================================
 	Dokeos - elearning and course management software

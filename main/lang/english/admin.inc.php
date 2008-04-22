@@ -799,4 +799,10 @@ $ImportLDAPUsersAndStepIntoSession = "Import LDAP users and a step into a sessio
 $LDAPSynchroImportUsersAndStepsInSessions = "LDAP synchro: Import students/steps into sessions";
 $TabsMyGradebook = "My gradebook tab";
 $LDAPUsersAddedOrUpdated = "LDAP users added or updated";
+$SearchLDAPUsers = "Search for LDAP users";
+$SelectCourseToImportUsersTo = "Select a course in which you would like to register the users you are going to select next";
+$ImportLDAPUsersIntoSession = "Import LDAP users into a session";
+$LDAPSelectFilterOnUsersOU = "Select a filter to find a matching string at the end of the OU attribute";
+$LDAPOUAttributeFilter = "The OU attribute filter";
+$SelectSessionToImportUsersTo = "Select the session in which you want to import these users";
 ?>

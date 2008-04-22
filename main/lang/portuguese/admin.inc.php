@@ -797,4 +797,12 @@ $NoUserAdded = "Nenhum utilizador acrescentado";
 $ImportLDAPUsersIntoCourse = "Importar utilizadores LDAP para um curso";
 $ImportLDAPUsersAndStepIntoSession = "Importar utilizadores LDAP e uma etapa para esta sessão";
 $LDAPSynchroImportUsersAndStepsInSessions = "Sincronização LDAP: importar estudantes/etapas para as sessões";
+$TabsMyGradebook = "Janela Minhas Classificações";
+$LDAPUsersAddedOrUpdated = "Utilizadores LDAP acrescentados ou actualizados";
+$SearchLDAPUsers = "Procurar utilizadores LDAP";
+$SelectCourseToImportUsersTo = "Seleccione um curso no qual deseja registar os utilizadores que irá escolher de seguida";
+$ImportLDAPUsersIntoSession = "Importar utilizadores LDAP para uma sessão";
+$LDAPSelectFilterOnUsersOU = "Seleccione um filtro que permitirá encontrar os utilizadores cujo atributo OU termina por este filtro";
+$LDAPOUAttributeFilter = "Filtro sobre o atributo OU";
+$SelectSessionToImportUsersTo = "Seleccione a sessão para a qual deseja importar estes utilizadores";
 ?>

@@ -104,4 +104,7 @@ $QuizEmailAlertDeactivate = "Inaktivera att e-post skickas när användare genomfö
 $AllowUserImageForum = "Användarbilder i forum";
 $AllowUserImageForumActivate = "Visa användarbilder i forumet";
 $AllowUserImageForumDeactivate = "Dölj användarbilder i forumet";
+$AllowLearningPathTheme = "Tillåt teman för kursmoment";
+$AllowLearningPathThemeAllow = "Tillåtet";
+$AllowLearningPathThemeDisallow = "Otillåtet";
 ?>

@@ -526,4 +526,5 @@ $AddStep = "Acrescentar etapa";
 $StepCode = "Código da etapa";
 $Label = "Etiqueta";
 $UnableToConnectTo = "Impossível conectar a";
+$NoUser = "Nenhum utilizador";
 ?>

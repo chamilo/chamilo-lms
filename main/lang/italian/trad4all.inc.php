@@ -514,5 +514,17 @@ $Folder = "Cartella";
 $CloseOtherSession = "La Chat non è disponibile perché c\'è un\'altra pagina del corso aperta; chiudila e ricarica la pagina.";
 $FileUploadSucces = "Il file è stato caricato con successo";
 $Yesterday = "Ieri";
+$Submit = "Immetti";
+$Department = "Dipartimento";
+$BackToNewSearch = "Fai una nuova ricerca";
+$Step = "Attività";
+$SomethingFemininAddedSuccessfully = "Aggiunta con successo";
+$SomethingMasculinAddedSuccessfully = "Aggiunto con successo";
+$DeleteError = "Errore di cancellazione";
+$StepsList = "Elenco attività";
+$AddStep = "Aggiungi attività";
+$StepCode = "Codice attività";
+$Label = "Etichetta";
 $UnableToConnectTo = "Impossibile connettersi con";
+$NoUser = "Nessun utente";
 ?>

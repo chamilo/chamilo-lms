@@ -118,4 +118,6 @@ $TheFileIsNotUploaded = "Filen är inte uppladdad.";
 $FileUploadSucces = "Filuppladdningen lyckades.";
 $NoFilesHere = "Inga filer här";
 $NoFilesHere = "Inga filer här";
+$NewDropboxFileUploaded = "Ny fil i inlämningsmappen";
+$NewDropboxFileUploadedContent = "En ny fil har lämnats i inlämningsmappen för din kurs";
 ?>

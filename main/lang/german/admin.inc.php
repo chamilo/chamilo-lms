@@ -797,4 +797,8 @@ $NoUserAdded = "Keine Benutzer hinzugefügt";
 $ImportLDAPUsersIntoCourse = "LDAP Benutzer in Kurs importieren";
 $ImportLDAPUsersAndStepIntoSession = "LDAP Benutzer und einen Schritt in eine Session importieren";
 $LDAPSynchroImportUsersAndStepsInSessions = "LDAP Synchro: Studenten/Schritte in eine Session importieren";
+$TabsMyGradebook = "Mein gradebook Tab";
+$LDAPUsersAddedOrUpdated = "LDAP Benutzer hinzugefügt bzw. bearbeitet";
+$SearchLDAPUsers = "Nach LDAP Benutzern suchen";
+$SelectCourseToImportUsersTo = "Kurs auswählen, für den die als nächstes ausgewählten Benutzer registriert werden sollen";
 ?>

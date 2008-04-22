@@ -524,4 +524,5 @@ $AddStep = "Schritt hinzufügen";
 $StepCode = "Code für Schritt";
 $Label = "Bezeichnung";
 $UnableToConnectTo = "Keine Verbindung mit ";
+$NoUser = "Kein Benutzer";
 ?>

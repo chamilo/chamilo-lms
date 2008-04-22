@@ -15,4 +15,6 @@ $lang_new_forum_topic = "ny överskrift tillagd";
 $lang_new_groupforum_topic = "ny överskrift tillagd till gruppforum";
 $lang_new_dropbox_file = "ny fil mottagen";
 $lang_update_dropbox_file = "fil i din dropbox är uppdaterad";
+$ForumCategoryAdded = "Forumkategori tillagd";
+$LearnpathAdded = "Kursmoment tillagt";
 ?>

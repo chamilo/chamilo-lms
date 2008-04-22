@@ -792,4 +792,10 @@ $ImportLDAPUsersAndStepIntoSession = "Importer des utilisateurs et une étape LDA
 $LDAPSynchroImportUsersAndStepsInSessions = "Synchro LDAP : Import étudiants/étapes dans sessions";
 $TabsMyGradebook = "Onglet Mon cahier de notes";
 $LDAPUsersAddedOrUpdated = "Utilisateurs LDAP ajoutés ou mis à jour";
+$SearchLDAPUsers = "Recherche d\'utilisateurs LDAP";
+$SelectCourseToImportUsersTo = "Sélectionnez un cours auquel vous voulez inscrire les utilisateurs que vous allez sélectionner";
+$ImportLDAPUsersIntoSession = "Importer des utilisateurs LDAP dans une session";
+$LDAPSelectFilterOnUsersOU = "Sélectionnez un filtre permettant de trouver les utilisateurs dont l\'attribut OU se termine par ce filtre";
+$LDAPOUAttributeFilter = "Le filtre sur l\'attribut OU";
+$SelectSessionToImportUsersTo = "Sélectionnez la session à laquelle vous voulez inscrire ces utilisateurs";
 ?>

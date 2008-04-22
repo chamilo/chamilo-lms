@@ -524,4 +524,5 @@ $AddStep = "Dodaj korak";
 $StepCode = "Koda koraka";
 $Label = "Oznaka";
 $UnableToConnectTo = "Ne morem se povezati z";
+$NoUser = "Ni uporabnikov";
 ?>

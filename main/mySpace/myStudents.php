@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 14945 2008-04-17 21:53:37Z juliomontoya $
+<?php //$Id: myStudents.php 15010 2008-04-22 16:16:13Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -106,9 +106,7 @@ Display :: display_header($nameTools);
   * 	FUNCTIONS
   * ======================================================================================
   */
-
-
-
+  
 function calculHours($seconds)
 {
 	
@@ -465,34 +463,36 @@ if(!empty($_GET['student']))
 							AND session_course_user.course_code = "'.Database::escape_string($_GET['course']).'"
 							ORDER BY id_session DESC';
 					$rs = api_sql_query($sql,__FILE__,__LINE__);
-					
-					$le_session_id = intval(Database::result($rs,0,0));
-					
-					if($le_session_id>0)
+					$num_row=Database::num_rows($rs);
+					if ($num_row > 0) 
 					{
-						// get session name and coach of the session
-						$sql = 'SELECT name, id_coach FROM '.$tbl_session.' 
-								WHERE id='.$le_session_id;
-						$rs = api_sql_query($sql,__FILE__,__LINE__);						
-						$session_name = Database::result($rs,0,'name');
-						$session_coach_id = intval(Database::result($rs,0,'id_coach'));
-						
-						// get coach of the course in the session
-						$sql = 'SELECT id_coach FROM '.$tbl_session_course.' 
-								WHERE id_session='.$le_session_id.'
-								AND course_code = "'.Database::escape_string($_GET['course']).'"';
-						$rs = api_sql_query($sql,__FILE__,__LINE__);						
-						$session_course_coach_id = intval(Database::result($rs,0,0));
-
-						if($session_course_coach_id!=0)
+					$le_session_id = intval(Database::result($rs,0,0));					
+						if($le_session_id>0)
 						{
-							$coach_infos = UserManager :: get_user_info_by_id($session_course_coach_id);
-							$a_infosCours['tutor_name'] = $coach_infos['firstname'].' '.$coach_infos['lastname'];
-						}
-						else if($session_coach_id!=0)
-						{
-							$coach_infos = UserManager :: get_user_info_by_id($session_coach_id);
-							$a_infosCours['tutor_name'] = $coach_infos['firstname'].' '.$coach_infos['lastname'];
+							// get session name and coach of the session
+							$sql = 'SELECT name, id_coach FROM '.$tbl_session.' 
+									WHERE id='.$le_session_id;
+							$rs = api_sql_query($sql,__FILE__,__LINE__);						
+							$session_name = Database::result($rs,0,'name');
+							$session_coach_id = intval(Database::result($rs,0,'id_coach'));
+							
+							// get coach of the course in the session
+							$sql = 'SELECT id_coach FROM '.$tbl_session_course.' 
+									WHERE id_session='.$le_session_id.'
+									AND course_code = "'.Database::escape_string($_GET['course']).'"';
+							$rs = api_sql_query($sql,__FILE__,__LINE__);						
+							$session_course_coach_id = intval(Database::result($rs,0,0));
+	
+							if($session_course_coach_id!=0)
+							{
+								$coach_infos = UserManager :: get_user_info_by_id($session_course_coach_id);
+								$a_infosCours['tutor_name'] = $coach_infos['firstname'].' '.$coach_infos['lastname'];
+							}
+							else if($session_coach_id!=0)
+							{
+								$coach_infos = UserManager :: get_user_info_by_id($session_coach_id);
+								$a_infosCours['tutor_name'] = $coach_infos['firstname'].' '.$coach_infos['lastname'];
+							}
 						}
 					}
 				} // end if(api_get_setting('use_session_mode')=='true')

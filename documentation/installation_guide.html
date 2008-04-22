@@ -393,7 +393,18 @@ You can also remove this check by removing the condition and leaving only the <e
 Some LDAP servers do not support anonymous use of the directory services.<br />
 In this case, you should fill in the appropriate fields in the administration panel (e.g. "manager" and "mypassword") and Dokeos will try to authenticate using these, or fall back to anonymous mode before giving up.</p>
 
-<p></p>
+<h3>LDAP import into sessions</h3>
+<p>There is a new set of scripts now that allow you to insert users from LDAP directly into a Dokeos session. This, however, relies on a set of static choices in the LDAP contact attributes.<br />
+The fields used intensively by the Dokeos module are:<br />
+</p>
+<ul>
+	<li>uid, which is matched to the username in Dokeos</li>
+	<li>userPassword, which is matched to the user password, although this part will only work for non-encrypted passwords for now, but it shouldn't be necessary if using the LDAP server as authentication</li>
+	<li>ou should end with the year of the person registration or any criteria you will use to filter users, so that they can be retrieved on that criteria</li>
+	<li>sn is used as the lastname field in Dokeos</li>
+	<li>givenName is used as the firstname field in Dokeos</li>
+	<li>mail is used as the email field in Dokeos</li>
+</ul>
 
 <hr style="width: 100%; height: 2px;" />
 

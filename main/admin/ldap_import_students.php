@@ -73,12 +73,12 @@ if (empty($annee) && empty($course))
 {
 		Display::display_header($tool_name);
 		echo '<div style="align:center">';
-		echo '<h3><img src="../img/group.gif" alt="'.get_lang('EnterStudentsToSubscribeToCourse').'" /> '.get_lang('EnterStudentsToSubscribeToCourse').'</h3>';
-		echo '<em>'.get_lang('ToDoThisYouMustEnterYearComponentAndComponentStep').'</em><br />';
-		echo get_lang('FollowEachOfTheseStepsStepByStep').'<br />';
+		echo '<img src="../img/group.gif" alt="'.get_lang('LDAPSelectFilterOnUsersOU').'" /> '.get_lang('LDAPSelectFilterOnUsersOU');
+		//echo '<em>'.get_lang('ToDoThisYouMustEnterYearComponentAndComponentStep').'</em><br />';
+		///echo get_lang('FollowEachOfTheseStepsStepByStep').'<br />';
 		
 		echo '<form method="get" action="'.api_get_self().'"><br />';
-		echo '<em>'.sprintf(get_lang('RegistrationYearExample'),date('Y'),date('Y'),date('Y')+1).' :</em> ';
+		echo '<em>'.get_lang('LDAPOUAttributeFilter').' :</em> ';
 		echo '<input  type="text" name="annee" size="4" maxlength="30" value="'.$annee_base.'"><br />';
 		echo '<input type="submit" value="'.get_lang('Submit').'">';
 		echo '</form>';
@@ -255,7 +255,7 @@ elseif (!empty($annee) && !empty($course) && empty($_POST['confirmed']))
 
 		for ($key = 0; $key < $info["count"]; $key ++) {
 			$nom_form[] = $info[$key]["sn"][0];//iconv("utf-8",api_get_setting('platform_charset'), $info[$key]["sn"][0]);
-			$prenom_form[] = $info[$key]["givenName"][0];//iconv("utf-8",api_get_setting('platform_charset'), $info[$key]["givenname"][0]);
+			$prenom_form[] = $info[$key]["givenname"][0];//iconv("utf-8",api_get_setting('platform_charset'), $info[$key]["givenname"][0]);
 			$email_form[] = $info[$key]["mail"][0];
 			// Get uid from dn
 			//$dn_array=ldap_explode_dn($info[$key]["dn"],1);

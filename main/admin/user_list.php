@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 14848 2008-04-11 13:21:04Z elixir_inter $
+<?php // $Id: user_list.php 15015 2008-04-22 20:33:17Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -378,7 +378,7 @@ function modify_filter($user_id,$url_params,$row)
 	$statusname = api_get_status_langvars();
 	if ($row['6'] != $statusname[STUDENT])
 	{
-		$result .= '<div style="display:inline;margin-left:25px"></div>';
+		$result .= '<img src="../img/statistics_na.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/>&nbsp;';
 	}
 	else
 	{

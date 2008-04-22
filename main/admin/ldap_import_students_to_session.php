@@ -193,7 +193,6 @@ elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed']=='yes'))
 		if($num>0)
 		{
 			$sql = 'UPDATE '.$tbl_session.' SET nbr_users = (nbr_users + '.$num.') WHERE id = '.intval($id_session);
-			error_log($sql);
 			$res = api_sql_query($sql,__FILE__,__LINE__);			 
 		}
 		header('Location: resume_session.php?id_session='.Security::remove_XSS($_POST['id_session']));

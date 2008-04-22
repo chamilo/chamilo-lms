@@ -255,7 +255,7 @@ elseif (!empty($annee) && !empty($course) && empty($_POST['confirmed']))
 
 		for ($key = 0; $key < $info["count"]; $key ++) {
 			$nom_form[] = $info[$key]["sn"][0];//iconv("utf-8",api_get_setting('platform_charset'), $info[$key]["sn"][0]);
-			$prenom_form[] = $info[$key]["givenname"][0];//iconv("utf-8",api_get_setting('platform_charset'), $info[$key]["givenname"][0]);
+			$prenom_form[] = $info[$key]["givenName"][0];//iconv("utf-8",api_get_setting('platform_charset'), $info[$key]["givenname"][0]);
 			$email_form[] = $info[$key]["mail"][0];
 			// Get uid from dn
 			//$dn_array=ldap_explode_dn($info[$key]["dn"],1);

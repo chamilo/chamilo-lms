@@ -1,10 +1,10 @@
 <?php
-// $Id: course_list.php 14573 2008-03-11 22:54:59Z yannoo $
+// $Id: course_list.php 15014 2008-04-22 20:22:28Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -20,7 +20,8 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
 ==============================================================================
 */
 /**
@@ -41,7 +42,7 @@ require ('../inc/global.inc.php');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-require_once (api_get_path(LIBRARY_PATH)."course.lib.php");
+require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
 /**
@@ -53,22 +54,22 @@ function get_number_of_courses()
 	$sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table";
 	if (isset ($_GET['keyword']))
 	{
-		$keyword = mysql_real_escape_string($_GET['keyword']);
+		$keyword = Database::escape_string($_GET['keyword']);
 		$sql .= " WHERE title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%'";
 	}
 	elseif (isset ($_GET['keyword_code']))
 	{
-		$keyword_code = mysql_real_escape_string($_GET['keyword_code']);
-		$keyword_title = mysql_real_escape_string($_GET['keyword_title']);
-		$keyword_category = mysql_real_escape_string($_GET['keyword_category']);
-		$keyword_language = mysql_real_escape_string($_GET['keyword_language']);
-		$keyword_visibility = mysql_real_escape_string($_GET['keyword_visibility']);
-		$keyword_subscribe = mysql_real_escape_string($_GET['keyword_subscribe']);
-		$keyword_unsubscribe = mysql_real_escape_string($_GET['keyword_unsubscribe']);
+		$keyword_code = Database::escape_string($_GET['keyword_code']);
+		$keyword_title = Database::escape_string($_GET['keyword_title']);
+		$keyword_category = Database::escape_string($_GET['keyword_category']);
+		$keyword_language = Database::escape_string($_GET['keyword_language']);
+		$keyword_visibility = Database::escape_string($_GET['keyword_visibility']);
+		$keyword_subscribe = Database::escape_string($_GET['keyword_subscribe']);
+		$keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
 		$sql .= " WHERE code LIKE '%".$keyword_code."%' AND title LIKE '%".$keyword_title."%' AND category_code LIKE '%".$keyword_category."%'  AND course_language LIKE '%".$keyword_language."%'   AND visibility LIKE '%".$keyword_visibility."%'    AND subscribe LIKE '".$keyword_subscribe."'AND unsubscribe LIKE '".$keyword_unsubscribe."'";
 	}
 	$res = api_sql_query($sql, __FILE__, __LINE__);
-	$obj = mysql_fetch_object($res);
+	$obj = Database::fetch_object($res);
 	return $obj->total_number_of_items;
 }
 /**
@@ -83,25 +84,25 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, tutor_name as col8, code AS col9, visibility AS col10 FROM $course_table";
 	if (isset ($_GET['keyword']))
 	{
-		$keyword = mysql_real_escape_string($_GET['keyword']);
+		$keyword = Database::escape_string($_GET['keyword']);
 		$sql .= " WHERE title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%'";
 	}
 	elseif (isset ($_GET['keyword_code']))
 	{
-		$keyword_code = mysql_real_escape_string($_GET['keyword_code']);
-		$keyword_title = mysql_real_escape_string($_GET['keyword_title']);
-		$keyword_category = mysql_real_escape_string($_GET['keyword_category']);
-		$keyword_language = mysql_real_escape_string($_GET['keyword_language']);
-		$keyword_visibility = mysql_real_escape_string($_GET['keyword_visibility']);
-		$keyword_subscribe = mysql_real_escape_string($_GET['keyword_subscribe']);
-		$keyword_unsubscribe = mysql_real_escape_string($_GET['keyword_unsubscribe']);
+		$keyword_code = Database::escape_string($_GET['keyword_code']);
+		$keyword_title = Database::escape_string($_GET['keyword_title']);
+		$keyword_category = Database::escape_string($_GET['keyword_category']);
+		$keyword_language = Database::escape_string($_GET['keyword_language']);
+		$keyword_visibility = Database::escape_string($_GET['keyword_visibility']);
+		$keyword_subscribe = Database::escape_string($_GET['keyword_subscribe']);
+		$keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
 		$sql .= " WHERE code LIKE '%".$keyword_code."%' AND title LIKE '%".$keyword_title."%' AND category_code LIKE '%".$keyword_category."%'  AND course_language LIKE '%".$keyword_language."%'   AND visibility LIKE '%".$keyword_visibility."%'    AND subscribe LIKE '".$keyword_subscribe."'AND unsubscribe LIKE '".$keyword_unsubscribe."'";
 	}
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$courses = array ();
-	while ($course = mysql_fetch_row($res))
+	while ($course = Database::fetch_row($res))
 	{
 		//place colour icons in front of courses
 		$course[1] = get_course_visibility_icon($course[10]).$course[1];
@@ -176,7 +177,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	$sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE' ORDER BY tree_pos";
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$categories['%'] = get_lang('All');
-	while ($cat = mysql_fetch_array($res))
+	while ($cat = Database::fetch_array($res))
 	{
 		$categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
 	}
@@ -230,6 +231,7 @@ else
 	$form->display();
 	// Create a sortable table with the course data
 	$table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data',2);
+	$parameters=array();
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false);
 	$table->set_header(1, get_lang('Code'));

@@ -132,7 +132,7 @@ public class OogieDocumentConverter extends AbstractDokeosDocumentConverter {
 				}
 
 				String slidenameDisplayed = "";
-				if(slidename.length()==0)
+				if(slidename.trim().length()==0)
 				{
 					slidename = "slide"+(i+1);		
 				}

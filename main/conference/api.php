@@ -63,8 +63,8 @@ if ($action == "uploadgui")
 	<input type="hidden" name="cidReq" value="'.$cidReq.'" />
 	<input type="hidden" name="sid" value="'.Security::remove_XSS($_REQUEST["sid"]).'" />
 
-	Choose a file to upload: <input name="filedata" type="file" /><br />
-	<input type="submit" value="Upload File"  />
+	'.get_lang('SelectFile').': <input name="filedata" type="file" /><br />
+	<input type="submit" value="'.get_lang('UploadFile').'"  />
 	</form>
 	';
 	die();

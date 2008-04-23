@@ -526,4 +526,5 @@ $StepCode = "Código de la etapa";
 $Label = "Etiqueta";
 $UnableToConnectTo = "Imposible conectar con";
 $NoUser = "Sin usuarios";
+$SearchResultsFor = "Resultados de la búsqueda para:";
 ?>

@@ -162,4 +162,5 @@ $UsernameMaxXCharacters = "Der Benutzername darf höchstens %s Zeichen lang sein"
 $PictureUploaded = "Ihr Bild wurde hochgeladen";
 $ProductionUploaded = "Ihre Produktion Datei wurde hochgeladen";
 $FolderUpdated = "Verzeichnis aktualisiert";
+$UsersRegistered = "Diese Benutzer wurden zum Kurs angemeldet";
 ?>

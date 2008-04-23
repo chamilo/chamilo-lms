@@ -784,7 +784,7 @@ $StepUsersDeletedSuccessfully = "Benutzer des Schritte erfolgreich entfernt";
 $NoStepForThisSession = "Kein Schritt für diese Session";
 $DeleteStepUsers = "Benutzer aus Schritt entfernen";
 $ImportStudentsOfAllSteps = "Studenten aller Schritte importieren";
-$AddLDAPUsers = "LDAP Benutzer hinzufügen";
+$ImportLDAPUsersIntoPlatform = "LDAP Benutzer hinzufügen";
 $NoUserInThisSession = "Kein Benutzer in dieser Session";
 $SubscribeSomeUsersToThisSession = "Benutzer zu dieser Session anmelden";
 $EnterStudentsToSubscribeToCourse = "Studenten eingeben, die zu dem Kurs angemeldet werden sollen";
@@ -801,4 +801,8 @@ $TabsMyGradebook = "Mein gradebook Tab";
 $LDAPUsersAddedOrUpdated = "LDAP Benutzer hinzugefügt bzw. bearbeitet";
 $SearchLDAPUsers = "Nach LDAP Benutzern suchen";
 $SelectCourseToImportUsersTo = "Kurs auswählen, für den die als nächstes ausgewählten Benutzer registriert werden sollen";
+$ImportLDAPUsersIntoSession = "LDAP Benutzer in eine Session importieren";
+$LDAPSelectFilterOnUsersOU = "Filter auswählen, um einen Text am Ende des OU Attributs zu finden";
+$LDAPOUAttributeFilter = "Der OU Attribut Filer";
+$SelectSessionToImportUsersTo = "Session auswählen, in die diese Benutzer importierte werden sollen";
 ?>

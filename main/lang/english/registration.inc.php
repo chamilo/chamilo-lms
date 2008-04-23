@@ -162,4 +162,5 @@ $UsernameMaxXCharacters = "The username needs to be maximum %s characters long";
 $PictureUploaded = "Your picture has been uploaded";
 $ProductionUploaded = "Your production file has been uploaded";
 $FolderUpdated = "Folder updated";
+$UsersRegistered = "These users have been registered into the course";
 ?>

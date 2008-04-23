@@ -172,4 +172,5 @@ $UsernameMaxXCharacters = "Le nom d\'utilisateur doit être de %s caractères au m
 $PictureUploaded = "Votre photo a été envoyée";
 $ProductionUploaded = "Votre production a été envoyée";
 $FolderUpdated = "Répertoire mis à jour";
+$UsersRegistered = "Ces utilisateurs ont été inscrits au cours";
 ?>

@@ -510,6 +510,9 @@ $CannotMakeFieldChangeable = "Impossible de rendre le champ modifiable";
 $FieldMadeUnchangeable = "Le champ n\'est  plus modifiable";
 $CannotMakeFieldUnchangeable = "Impossible d\'empêcher la modification du champ";
 $Folder = "Répertoire";
+$CloseOtherSession = "Le chat n\'est pas disponible car une autre page a été ouverte dans un autre cours. Pour éviter ce problème, merci de rester dans le même cours pendant toute la durée de votre session de chat. Nous vous invitons à recharger la page courante depuis le menu du cours.";
+$FileUploadSucces = "Le fichier a été envoyé avec succès";
+$Yesterday = "Hier";
 $Submit = "Valider";
 $Department = "Département";
 $BackToNewSearch = "Retour vers page nouvelle recherche";
@@ -523,4 +526,5 @@ $StepCode = "Code de l\'étape";
 $Label = "Intitulé";
 $UnableToConnectTo = "Impossible de se connecter à";
 $NoUser = "Aucun utilisateur";
+$SearchResultsFor = "Rechercher parmi les résultats:";
 ?>

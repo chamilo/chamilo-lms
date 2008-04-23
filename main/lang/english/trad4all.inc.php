@@ -511,7 +511,7 @@ $CannotMakeFieldChangeable = "Cannot make field changeable";
 $FieldMadeUnchangeable = "Field made unchangeable";
 $CannotMakeFieldUnchangeable = "Cannot make field unchangeable";
 $Folder = "Folder";
-$CloseOtherSession = "The chat is not available, because other page of the course is open, please reload this page";
+$CloseOtherSession = "The chat is not available because another course has been opened in another page. To avoid this, please make sure you remain inside the same course for the duration of your chat session. To join the chat session again, please re-launch the chat from the course homepage.";
 $FileUploadSucces = "The file has successfully been uploaded";
 $Yesterday = "Yesterday";
 $Submit = "Submit";
@@ -527,4 +527,5 @@ $StepCode = "Step code";
 $Label = "Label";
 $UnableToConnectTo = "Unable to connect to";
 $NoUser = "No user";
+$SearchResultsFor = "Search results for:";
 ?>

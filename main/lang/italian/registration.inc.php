@@ -164,4 +164,5 @@ $UsernameMaxXCharacters = "Il Nome Utente può avere una lunghezza massima di %s 
 $PictureUploaded = "L\'immagine è stata caricata";
 $ProductionUploaded = "Il file dei dati è stato caricato";
 $FolderUpdated = "Cartella caricata";
+$UsersRegistered = "Questi utenti sono stati iscritti al corso";
 ?>

@@ -167,4 +167,5 @@ $UsernameMaxXCharacters = "El nombre de usuario puede tener como máximo una long
 $PictureUploaded = "Su imagen ha sido enviada";
 $ProductionUploaded = "Su trabajo ha sido enviado";
 $FolderUpdated = "Folder actualizado";
+$UsersRegistered = "Los siguientes usuarios han sido registrados";
 ?>

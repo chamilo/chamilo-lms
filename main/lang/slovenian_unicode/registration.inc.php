@@ -164,4 +164,5 @@ $UsernameMaxXCharacters = "Uporabniško ime je lahko dolgo največ %s znakov";
 $PictureUploaded = "Vaša slika je bila naložena";
 $ProductionUploaded = "Tvoja (produkcijska) datoteka je bila naložena";
 $FolderUpdated = "Mapa je bila ažurirana";
+$UsersRegistered = "Ti uporabniki so bili vpisani v tečaj";
 ?>

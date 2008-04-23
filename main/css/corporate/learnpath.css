@@ -33,7 +33,11 @@ option.top{border-bottom:1px solid #999999; margin-bottom:2px; padding-bottom:2p
 
 p.lp_action{margin:5px 0;}
 p.lp_text{margin-top:0px;}
-p.lp_title{font-weight:bold; margin-top:0px;}
+p.lp_title{
+font-weight:bold; 
+margin-top:0px;
+padding-left:7px;
+}
 
 
 table.lp_build{font-size:12px; height:400px; width:100%;}

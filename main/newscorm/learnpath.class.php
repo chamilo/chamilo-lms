@@ -4740,8 +4740,10 @@ class learnpath {
 											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
 									}
 								}
-								
-								reset($arrLP);
+								if (is_array($arrLP))
+								{
+									reset($arrLP);	
+								}
 								
 							$return .= "\t\t\t\t" . '</select>';
 						
@@ -4790,13 +4792,15 @@ class learnpath {
 						
 						
 						$id_prerequisite=0;
-						foreach($arrLP as $key=>$value){
-							if($value['id']==$id){
-								$id_prerequisite=$value['prerequisite'];
-								break;
+						if (is_array($arrLP ))
+						{
+							foreach($arrLP as $key=>$value){
+								if($value['id']==$id){
+									$id_prerequisite=$value['prerequisite'];
+									break;
+								}
 							}
-						}
-						
+						}						
 						$arrHide=array();
 						for($i = 0; $i < count($arrLP); $i++)
 						{

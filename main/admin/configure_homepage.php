@@ -1,9 +1,9 @@
-<?php // $Id: configure_homepage.php 14625 2008-03-17 15:48:21Z elixir_inter $
+<?php // $Id: configure_homepage.php 15040 2008-04-23 20:28:52Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2007 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -18,7 +18,8 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
 ==============================================================================
 */
 
@@ -743,8 +744,8 @@ switch($action){
 				
 					$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 					$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
-					$result_sql=api_sql_query($sql);
-					$isocode_language=mysql_result($result_sql,0,0);
+					$result_sql=api_sql_query($sql,__FILE__,__LINE__);
+					$isocode_language=Database::result($result_sql,0,0);
 					$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
 					echo $oFCKeditor->CreateHtml();
 				}
@@ -782,7 +783,7 @@ switch($action){
 		else
 		{
 			$name = $newsf;
-			$open=file_get_contents($homep.$newsf.'_'.$lang.$ext);
+			$open=@file_get_contents($homep.$newsf.'_'.$lang.$ext);
 	
 		}
 		// print form header + important formSent attribute
@@ -832,8 +833,8 @@ switch($action){
 		
 			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
-			$result_sql=api_sql_query($sql);
-			$isocode_language=mysql_result($result_sql,0,0);
+			$result_sql=api_sql_query($sql,__FILE__,__LINE__);
+			$isocode_language=Database::result($result_sql,0,0);
 			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
 			$upload_path = api_get_path(REL_PATH)."main/upload/";
 			
@@ -907,7 +908,7 @@ switch($action){
 				{
 					foreach($Categories as $enreg)
 					{
-						echo '<tr><td><img src="../img/opendir.gif" border="0" alt="'.get_lang('Directory').'"/>&nbsp;'.$enreg['name'].'</td></tr>';
+						echo '<tr><td><img src="../img/opendir.gif" border="0" />&nbsp;'.$enreg['name'].'</td></tr>';
 					}		
 					unset($Categories);
 				}
@@ -1002,11 +1003,11 @@ switch($action){
 			$home_notice = '';
 			if(file_exists($homep.$noticef.'_'.$lang.$ext))
 			{
-				$home_notice = file_get_contents($homep.$noticef.'_'.$lang.$ext);
+				$home_notice = @file_get_contents($homep.$noticef.'_'.$lang.$ext);
 			}
 			else
 			{
-				$home_notice = file_get_contents($homep.$noticef.$ext);
+				$home_notice = @file_get_contents($homep.$noticef.$ext);
 			}
 			echo $home_notice
 			?>

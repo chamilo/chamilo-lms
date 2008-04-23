@@ -149,7 +149,9 @@ else if ($action == "service")
 		printf("<folders>");
 		// title filter
 		foreach (array_keys($files) as $k)
-			$files[$k]['title'] = utf8_encode(strlen($files[$k]['title']) > 32 ? substr($files[$k]['title'],0, 32)."..." : $files[$k]['title']); // data is iso and java waits for utf-8
+		{
+			$files[$k]['title'] = mb_convert_encoding(strlen($files[$k]['title']) > 32 ? substr($files[$k]['title'],0, 32)."..." : $files[$k]['title'],'utf-8',api_get_setting('platform_charset')); // data is iso and java waits for utf-8
+		}
 
 		foreach($files as $i)
 		{

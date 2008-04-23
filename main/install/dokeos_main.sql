@@ -545,7 +545,8 @@ VALUES
 ('ldap_version', NULL, 'radio', 'LDAP', '3', 'LDAPVersionTitle', 'LDAPVersionComment', NULL, ''),
 ('ldap_filled_tutor_field', NULL, 'textfield', 'LDAP', 'employeenumber', 'LDAPFilledTutorFieldTitle', 'LDAPFilledTutorFieldComment', NULL, ''),
 ('ldap_authentication_login', NULL, 'textfield', 'LDAP', '', 'LDAPAuthenticationLoginTitle', 'LDAPAuthenticationLoginComment', NULL, ''),
-('ldap_authentication_password', NULL, 'textfield', 'LDAP', '', 'LDAPAuthenticationPasswordTitle', 'LDAPAuthenticationPasswordComment', NULL, '');
+('ldap_authentication_password', NULL, 'textfield', 'LDAP', '', 'LDAPAuthenticationPasswordTitle', 'LDAPAuthenticationPasswordComment', NULL, ''),
+('service_visio', 'visio_use_rtmpt', 'radio',false,'', 'VisioUseRtmptTitle','VisioUseRtmptComment', NULL, NULL);
 
 
 UNLOCK TABLES;
@@ -682,7 +683,9 @@ VALUES
 ('show_closed_courses', 'true', 'Yes'),
 ('show_closed_courses', 'false', 'No'),
 ('ldap_version', '2', 'LDAPVersion2'),
-('ldap_version', '3', 'LDAPVersion3');
+('ldap_version', '3', 'LDAPVersion3'),
+('visio_use_rtmpt','true','Yes'),
+('visio_use_rtmpt','false','No');
 
 UNLOCK TABLES;
 

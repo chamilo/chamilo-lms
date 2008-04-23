@@ -95,6 +95,12 @@ if(isset($_POST['activeExtension'])){
 					WHERE variable="service_visio"
 					AND subkey="visio_pass"';
 			$rs = api_sql_query($sql, __FILE__, __LINE__);	
+
+			$sql = 'UPDATE '.$tbl_settings_current.' SET
+					selected_value="'.($_POST['visio_use_rtmpt']=='true'?'true':'false').'"
+					WHERE variable="service_visio"
+					AND subkey="visio_use_rtmpt"';
+			$rs = api_sql_query($sql, __FILE__, __LINE__);	
 			
 			if(empty($message))
 			{
@@ -274,6 +280,10 @@ Display::display_header($nameTool);
 						$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'visio_pass', get_lang('VisioPassword'));
 						$form -> addElement('html','<br /><br />');
+						$group = array();
+						$group[] =& HTML_QuickForm::createElement('radio', 'visio_use_rtmpt',null,get_lang('Yes'),'true');
+						$group[] =& HTML_QuickForm::createElement('radio', 'visio_use_rtmpt',null,get_lang('No'),'false');
+						$form->addGroup($group, '', get_lang('VisioUseRtmptTitle').' ('.get_lang('VisioUseRtmptComment').')', '&nbsp;');
 						//$form -> addElement('text', 'visio_is_web_rtmp', get_lang('VisioRTMPIsWeb'));
 						//$form -> addElement('html','<br /><br />');
 						$form -> addElement('hidden', 'extension_code', 'visio');

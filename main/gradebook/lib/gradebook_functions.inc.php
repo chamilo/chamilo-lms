@@ -1,5 +1,25 @@
 <?php
 /*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2008 Dokeos SPRL
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
+*/
+/*
 * These are functions used in gradebook
 *
 * @author Stijn Konings <konings.stijn@skynet.be>, Hogeschool Ghent
@@ -30,8 +50,8 @@ function get_course_name_from_code($code)
 {
 	$tbl_main_categories= Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql= 'SELECT title,code FROM ' . $tbl_main_categories . 'WHERE code = "' . $code . '"';
-	$result= mysql_query($sql);
-	if ($col= mysql_fetch_array($result))
+	$result= api_sql_query($sql,__FILE__,__LINE__);
+	if ($col= Database::fetch_array($result))
 	{
 		return $col['title'];
 	}
@@ -83,7 +103,7 @@ function build_edit_icons_cat($cat, $selectcat)
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
 	} else
 	{
-		$modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_gray.gif" border="0" title="' . get_lang('Move') . '" alt="" />';
+		$modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_na.gif" border="0" title="' . get_lang('Move') . '" alt="" />';
 	}
 	$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblecat=' . $cat->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . '"><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="" /></a>';
 	return $modify_icons;

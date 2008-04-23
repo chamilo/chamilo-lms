@@ -476,12 +476,20 @@ function api_get_course_id()
  * Returns the current course directory
  *
  * This function relies on api_get_course_info()
+ * @param	string	The course code - optional (takes it from session if not given)
  * @return	string	The directory where the course is located inside the Dokeos "courses" directory
  * @author	Yannick Warnier <yannick.warnier@dokeos.com>
 */
-function api_get_course_path()
+function api_get_course_path($course_code=null)
 {
-	$info = api_get_course_info();
+	if(!empty($course_code))
+	{
+		$info = api_get_course_info($course_code);
+	}
+	else
+	{
+		$info = api_get_course_info();
+	}
 	return $info['path'];
 }
 /**

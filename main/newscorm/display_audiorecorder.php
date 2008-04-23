@@ -1,4 +1,5 @@
 <?php //$id: $
+// This file is part of the Dokeos software - See license and credits in the documentation/ directory
 /**
  * Script opened in an iframe and containing the learning path's table of contents
  * @package dokeos.learnpath
@@ -40,12 +41,10 @@ $audio_recorder_studentview = 'true';
 
 
 $audio_recorder_item_id = $_SESSION['oLP']->current;
-if(api_get_setting('service_ppt2lp','active')=='true' && api_get_setting('service_ppt2lp','path_to_lzx')!=''){
+if(api_get_setting('service_visio','active')=='true'){
 	include('audiorecorder.inc.php');
 }
 // end of audiorecorder include
-	
+
 echo '</div></body></html>';
-
-
 ?>

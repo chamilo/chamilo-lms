@@ -1,4 +1,4 @@
-<?php // $Id: gradebook.php 14772 2008-04-07 15:37:18Z yannoo $
+<?php // $Id: gradebook.php 15047 2008-04-23 22:41:04Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -516,7 +516,7 @@ elseif (isset ($_GET['studentoverview']))
 			$newarray[] = array_slice($data, 1);		
 		
 		$pdf= new Cezpdf();
-		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Helvetica.afm');
+		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 		$pdf->ezSetMargins(30, 30, 50, 30);
 		$pdf->ezSetY(810);
 		$pdf->ezText(get_lang('FlatView').' ('. date('j/n/Y g:i') .')',12,array('justification'=>'center'));

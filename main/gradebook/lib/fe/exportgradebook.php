@@ -88,10 +88,10 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
  */
 function export_pdf($pdf,$newarray,$header_names,$format)
 {
-	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Helvetica-Bold.afm');
+	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 	$pdf->ezSetCmMargins(0,0,0,0);
 	$pdf->ezSetY(($format=='portrait')?'820':'570');
-	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Helvetica.afm');
+	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 	$pdf->ezText(get_lang('FlatView').' ('. date('j/n/Y g:i') .')',12,array('justification'=>'center'));
 	if ($format=='portrait')
 	{

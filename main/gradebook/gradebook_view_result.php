@@ -302,7 +302,7 @@ if (isset ($_GET['export']))
 			else
 				$course= get_course_name_from_code($eval[0]->get_course_code());
 			$pdf= new Cezpdf();
-			$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Helvetica.afm');
+			$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 			$pdf->ezSetMargins(30, 30, 50, 30);
 			$pdf->ezSetY(800);
 			$pdf->ezText(get_lang('EvaluationName') . ' : ' . $eval[0]->get_name() . ' (' . date('j/n/Y g:i', $eval[0]->get_date()) . ')', 12, array (

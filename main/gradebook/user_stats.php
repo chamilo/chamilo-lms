@@ -56,7 +56,7 @@ $user_table= new UserTable($_GET['userid'], $allevals, $alllinks, $addparams);
 if (isset ($_GET['exportpdf']))
 {
 	$pdf= new Cezpdf();
-	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Helvetica.afm');
+	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 	$pdf->ezSetMargins(30, 30, 50, 30);
 	$pdf->ezSetY(800);
 	$datagen= new UserDataGenerator($_GET['userid'], $allevals,$alllinks);

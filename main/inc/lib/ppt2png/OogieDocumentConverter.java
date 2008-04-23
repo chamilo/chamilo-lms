@@ -175,7 +175,7 @@ public class OogieDocumentConverter extends AbstractDokeosDocumentConverter {
 					j++;
 					slidename = slidenamebackup+j;
 				}
-				slidenames[i] = slidename;
+				slidenames[nbPages-(i+1)] = slidename;
 				
 				XNamed xPageName = (XNamed)UnoRuntime.queryInterface(XNamed.class,page);
 				

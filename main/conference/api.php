@@ -82,14 +82,14 @@ else if ($action == "upload")
 	$destPath = $coursePath.VIDEOCONF_UPLOAD_PATH;
 
 	$newPath = handle_uploaded_document($_course,$_FILES['filedata'],$coursePath,VIDEOCONF_UPLOAD_PATH,$user_id,0,NULL,'',0,'rename',false);
-	error_log($newPath);
-    	$file_name = (strrpos($newPath,'.')>0 ? substr($newPath, 0, strrpos($newPath,'.')) : $newPath);
-    	$file_extension = (strrpos($newPath,'.')>0 ? substr($newPath, strrpos($newPath,'.'),10) : '');
-	error_log(strrpos($newPath,'.'));
-	error_log($file_extension);
+	if($debug>0) error_log($newPath);
+    $file_name = (strrpos($newPath,'.')>0 ? substr($newPath, 0, strrpos($newPath,'.')) : $newPath);
+    $file_extension = (strrpos($newPath,'.')>0 ? substr($newPath, strrpos($newPath,'.'),10) : '');
+	if($debug>0) error_log(strrpos($newPath,'.'));
+	if($debug>0) error_log($file_extension);
 	if (!in_array(strtolower($file_extension), $image_extension))
 	{
-		error_log('toc');
+		if($debug>0) error_log('toc');
 		if (!is_dir($destPath))
 		{
 			$result = create_unexisting_directory($_course,$user_id,0,NULL,$coursePath,VIDEOCONF_UPLOAD_PATH);
@@ -137,8 +137,8 @@ else if ($action == "service")
 
 		// check if user can delete files. He must be manager and be inside /videoconf
 		$is_below_videoconf_dir = (substr($cwd,0,strlen(VIDEOCONF_UPLOAD_PATH)) == VIDEOCONF_UPLOAD_PATH);
-		error_log($cwd);
-		error_log(VIDEOCONF_UPLOAD_PATH);
+		if($debug>0) error_log('Current working directory: '.$cwd);
+		if($debug>0) error_log('Videoconf upload path: '.VIDEOCONF_UPLOAD_PATH);
 		/* $canDelete = ($canDelete && $isBellowVideoConfUploadPath);
 		*/
 		$can_delete = ($is_manager && $is_below_videoconf_dir);
@@ -148,21 +148,27 @@ else if ($action == "service")
 		printf("<dokeosobject><fileListMeta></fileListMeta><fileList>");
 		printf("<folders>");
 		// title filter
-		foreach (array_keys($files) as $k)
+		if(is_array($files))
 		{
-			$files[$k]['title'] = mb_convert_encoding(strlen($files[$k]['title']) > 32 ? substr($files[$k]['title'],0, 32)."..." : $files[$k]['title'],'utf-8',api_get_setting('platform_charset')); // data is iso and java waits for utf-8
-		}
-
-		foreach($files as $i)
-		{
-			if ($i["filetype"] == "folder")
-				printf('<folder><path>%s</path><title>%s</title><canDelete>%s</canDelete></folder>', $i['path'],$i['title'],($can_delete?'true':'false'));
+			foreach (array_keys($files) as $k)
+			{
+				$files[$k]['title'] = mb_convert_encoding(strlen($files[$k]['title']) > 32 ? substr($files[$k]['title'],0, 32)."..." : $files[$k]['title'],'utf-8',api_get_setting('platform_charset')); // data is iso and java waits for utf-8
+			}
+	
+			foreach($files as $i)
+			{
+				if ($i["filetype"] == "folder")
+					printf('<folder><path>%s</path><title>%s</title><canDelete>%s</canDelete></folder>', $i['path'],$i['title'],($can_delete?'true':'false'));
+			}
 		}
 		printf("</folders><files>");
-		foreach($files as $i) {
-  			$extension = (strrpos($i['path'],'.')>0 ? substr($i['path'], strrpos($i['path'],'.'),10) : '');
-			if ($i["filetype"] == "file" && in_array(strtolower($extension), $image_extension))
-				printf('<file><path>%s</path><title>%s</title><canDelete>%s</canDelete></file>', $i['path'],$i['title'],($can_delete?'true':'false'));
+		if(is_array($files))
+		{
+			foreach($files as $i) {
+	  			$extension = (strrpos($i['path'],'.')>0 ? substr($i['path'], strrpos($i['path'],'.'),10) : '');
+				if ($i["filetype"] == "file" && in_array(strtolower($extension), $image_extension))
+					printf('<file><path>%s</path><title>%s</title><canDelete>%s</canDelete></file>', $i['path'],$i['title'],($can_delete?'true':'false'));
+			}
 		}
 		printf("</files><ppts>");
 		printf("</ppts>");
@@ -187,7 +193,7 @@ else if ($action == "service")
 		DocumentManager::delete_document($_course, $path, $coursePath);
 		echo "<result>OK</result>"; // We have to returns something to OpenLaszlo 
 	}
-} 
+}
 else if ($action == "download")
 {
 	/*==== DOWNLOAD ====*/

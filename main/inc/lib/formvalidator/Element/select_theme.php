@@ -16,7 +16,7 @@
 	of the License, or (at your option) any later version.
 	
 	See the GNU General Public License for more details.
-	
+	 
 	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
@@ -37,10 +37,15 @@ class HTML_QuickForm_Select_Theme extends HTML_QuickForm_select
 		$themes = api_get_themes();
 		$this->_options = array();
 		$this->_values = array();
-		foreach ($themes as $theme)
+		
+		for ($i=0; $i< count($themes[0]);$i++)
+		{
+			$this->addOption((empty($themes[1][$i])?'--':$themes[1][$i]),$themes[0][$i]);
+		}		
+		/*foreach ($themes as $theme)
 		{
 			$this->addOption((empty($theme)?'--':$theme),$theme);
-		}
+		}*/
 	}
 }
 ?>

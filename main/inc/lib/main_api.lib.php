@@ -1874,31 +1874,42 @@ function api_get_language_isocode()
 function api_get_themes()
 {
 	$cssdir = api_get_path(SYS_PATH).'main/css/';
-	$list = array('');
-	if (is_dir($cssdir))
+	$list_dir= array();
+	$list_name= array();
+	
+	if (@is_dir($cssdir))
 	{
-		$themes = scandir($cssdir);
-		if($themes !== false)
+		$themes = @scandir($cssdir);
+		
+		if (is_array($themes))
 		{
-			sort($themes);
-			foreach($themes as $theme)
+			if($themes !== false)
 			{
-				if(substr($theme,0,1)=='.')
+				sort($themes);
+				
+				foreach($themes as $theme)
 				{
-					//ignore
-					continue;
-				}
-				else
-				{
-					if(is_dir($cssdir.$theme))
+					if(substr($theme,0,1)=='.')
 					{
-						$list[] = $theme;
-					}	
+						//ignore
+						continue;
+					}
+					else
+					{
+						if(@is_dir($cssdir.$theme))
+						{
+							$list_dir[] = $theme;
+							$list_name[] = ucwords(str_replace('_',' ',$theme));
+						}	
+					}
 				}
 			}
-		}
+		}		
 	}
-	return $list;
+	$return=array();
+	$return[]=$list_dir;
+	$return[]=$list_name;	
+	return $return;
 }
 
 /*

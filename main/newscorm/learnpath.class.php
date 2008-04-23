@@ -6757,7 +6757,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		ob_start();
 		$audio_recorder_studentview = 'false';
 		$audio_recorder_item_id = $item_id;
-		if(api_get_setting('service_ppt2lp','active')=='true' && api_get_setting('service_ppt2lp','path_to_lzx')!=''){
+		if(api_get_setting('service_visio','active')=='true'){
 			include('audiorecorder.inc.php');
 		}
 		$return .= ob_get_contents();

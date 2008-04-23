@@ -30,6 +30,7 @@ if(isset($_SESSION['lpobject']))
 	}
 }
 $charset = $_SESSION['oLP']->encoding;
+$lp_id = $_SESSION['oLP']->get_id();
 
 echo '<html>
 		<body>';

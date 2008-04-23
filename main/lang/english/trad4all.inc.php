@@ -528,4 +528,6 @@ $Label = "Label";
 $UnableToConnectTo = "Unable to connect to";
 $NoUser = "No user";
 $SearchResultsFor = "Search results for:";
+$SelectFile = "Select a file";
+$UploadFile = "Upload file";
 ?>

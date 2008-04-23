@@ -527,4 +527,6 @@ $Label = "Etiqueta";
 $UnableToConnectTo = "Imposible conectar con";
 $NoUser = "Sin usuarios";
 $SearchResultsFor = "Resultados de la búsqueda para:";
+$SelectFile = "Seleccione un archivo";
+$UploadFile = "Enviar archivo";
 ?>

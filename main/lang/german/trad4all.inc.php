@@ -526,4 +526,6 @@ $Label = "Bezeichnung";
 $UnableToConnectTo = "Keine Verbindung mit ";
 $NoUser = "Kein Benutzer";
 $SearchResultsFor = "Suchergebnisse für: ";
+$SelectFile = "Eine Datei auswählen";
+$UploadFile = "Datei hochladen";
 ?>

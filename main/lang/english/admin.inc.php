@@ -805,4 +805,5 @@ $ImportLDAPUsersIntoSession = "Import LDAP users into a session";
 $LDAPSelectFilterOnUsersOU = "Select a filter to find a matching string at the end of the OU attribute";
 $LDAPOUAttributeFilter = "The OU attribute filter";
 $SelectSessionToImportUsersTo = "Select the session in which you want to import these users";
+$VisioUseRtmptTitle = "Use the rtmpt protocol";
 ?>

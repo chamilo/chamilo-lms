@@ -9,7 +9,7 @@
  */
 $audio_recorder_studentview = false;
 list($width, $height) = $audio_recorder_studentview =='true' ? array(295, 24) : array(295,90);
-$player = $audio_recorder_studentview =='true' ? 'player2.swf' : 'record2.swf';
+$player = $audio_recorder_studentview =='true' ? 'player2.swf' : 'recorder2.swf';
 
 $server = api_get_setting('service_visio','visio_host');
 $web_path = api_get_path(WEB_PATH);

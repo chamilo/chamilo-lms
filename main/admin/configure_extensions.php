@@ -1,5 +1,25 @@
 <?php // $Id: configure_homepage.php 9246 2006-09-25 13:24:53 +0000 (lun., 25 sept. 2006) bmol $
-/* See license terms in /dokeos_license.txt */
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2008 Dokeos SPRL
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
+*/
+
 // name of the language file that needs to be included 
 $language_file='admin';
 
@@ -44,7 +64,7 @@ if(isset($_POST['activeExtension'])){
 					{
 						$tool_table = Database::get_course_table(TABLE_TOOL_LIST,$row['db_name']);
 						$select = "SELECT id FROM $toos_table WHERE name='".TOOL_VISIO_CONFERENCE."'";
-						$selectres = api_sql_query($select);
+						$selectres = api_sql_query($select,__FILE__, __LINE__);
 						if(Database::num_rows($selectres)<1)
 						{
 							$sql = 'INSERT INTO '.$tool_table.' SET 
@@ -59,7 +79,7 @@ if(isset($_POST['activeExtension'])){
 							api_sql_query($sql, __FILE__, __LINE__);		
 						}
 						$select = "SELECT id FROM $toos_table WHERE name='".TOOL_VISIO_CLASSROOM."'";
-						$selectres = api_sql_query($select);
+						$selectres = api_sql_query($select,__FILE__, __LINE__);
 						if(Database::num_rows($selectres)<1)
 						{
 							$sql = 'INSERT INTO '.$tool_table.' SET 
@@ -324,7 +344,7 @@ Display::display_header($nameTool);
 			<table width="100%">
 				<tr>
 					<td width="50%" valign="top">
-						<img width="90%" src="<?php echo api_get_path(WEB_IMG_PATH).'screenshot_ppt2lp.jpg' ?>" />
+						<img src="<?php echo api_get_path(WEB_IMG_PATH).'screenshot_ppt2lp.jpg' ?>" />
 					</td>
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">

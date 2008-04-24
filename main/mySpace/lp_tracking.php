@@ -166,10 +166,9 @@ $origin = 'tracking';
 
 
 if($export_csv)
-{
-	include_once('../newscorm/lp_stats.php');
-	ob_end_clean();
-	Export :: export_table_csv($csv_content, 'reporting_student');
+{	
+	include_once('../newscorm/lp_stats.php');	
+	//Export :: export_table_csv($csv_content, 'reporting_student');
 }
 else
 {

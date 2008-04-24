@@ -577,17 +577,20 @@ $output .= "</table></td></tr></table>";
 if($export_csv)
 {
 	$temp = array('','','','');
-	$csv_content[] = $temp;
+	$csv_content[] = $temp;	
 	$temp = array(get_lang('AccomplishedStepsTotal'),'',$final_score,$total_time);
-	$csv_content[] = $temp;
-	ob_end_clean();
+	$csv_content[] = $temp; 
+	ob_end_clean();	
 	Export :: export_table_csv($csv_content, 'reporting_learning_path_details');
 }
 
 if($origin != 'tracking')
 {
 	$output .= "</body></html>";
-}
-echo $output;
-?>
+} 
 
+if(!$export_csv)
+{
+	echo $output;
+}
+?>

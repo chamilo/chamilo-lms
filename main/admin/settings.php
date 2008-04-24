@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 15067 2008-04-24 17:39:03Z juliomontoya $
+// $Id: settings.php 15078 2008-04-24 23:15:37Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -79,9 +79,11 @@ if ($_GET['category'] and $_GET['category'] <> "Plugins" and $_GET['category'] <
 	$renderer->setHeaderTemplate('<div class="settingtitle">{header}</div>'."\n");
 	$renderer->setElementTemplate('<div class="settingcomment">{label}</div>'."\n".'<div class="settingvalue">{element}</div>'."\n");
 	$my_category = mysql_real_escape_string($_GET['category']);
-	$sqlsettings = "SELECT DISTINCT * FROM $table_settings_current WHERE category='$my_category' GROUP BY variable ORDER BY id ASC";
-	$resultsettings = api_sql_query($sqlsettings, __FILE__, __LINE__);
-	while ($row = mysql_fetch_array($resultsettings))
+	$settings = api_get_settings($my_category,'group',$_configuration['access_url']);
+	//$sqlsettings = "SELECT DISTINCT * FROM $table_settings_current WHERE category='$my_category' GROUP BY variable ORDER BY id ASC";
+	//$resultsettings = api_sql_query($sqlsettings, __FILE__, __LINE__);
+	//while ($row = mysql_fetch_array($resultsettings))
+	foreach($settings as $row)
 	{
 		$form->addElement('header', null, get_lang($row['title']));
 		switch ($row['type'])
@@ -130,23 +132,28 @@ if ($_GET['category'] and $_GET['category'] <> "Plugins" and $_GET['category'] <
 		$values = $form->exportValues();
 		// the first step is to set all the variables that have type=checkbox of the category
 		// to false as the checkbox that is unchecked is not in the $_POST data and can
-		// therefore not be set to false
-		$sql = "UPDATE $table_settings_current SET selected_value='false' WHERE category='$my_category' AND type='checkbox'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		// therefore not be set to false.
+		// This, however, also means that if the process breaks on the third of five checkboxes, the others
+		// will be set to false.
+		$r = api_set_settings_category($my_category,'false',$_configuration['access_url']);
+		//$sql = "UPDATE $table_settings_current SET selected_value='false' WHERE category='$my_category' AND type='checkbox'";
+		//$result = api_sql_query($sql, __FILE__, __LINE__);
 		// Save the settings
 		foreach ($values as $key => $value)
 		{
 			if (!is_array($value))
 			{
-				$sql = "UPDATE $table_settings_current SET selected_value='".mysql_real_escape_string($value)."' WHERE variable='$key'";
-				$result = api_sql_query($sql, __FILE__, __LINE__);
+				//$sql = "UPDATE $table_settings_current SET selected_value='".mysql_real_escape_string($value)."' WHERE variable='$key'";
+				//$result = api_sql_query($sql, __FILE__, __LINE__);
+				$result = api_set_setting($key,$value,null,null,$_configuration['access_url']);
 			}
 			else
 			{
 				foreach ($value as $subkey => $subvalue)
 				{
-					$sql = "UPDATE $table_settings_current SET selected_value='true' WHERE variable='$key' AND subkey = '$subkey'";
-					$result = api_sql_query($sql, __FILE__, __LINE__);
+					//$sql = "UPDATE $table_settings_current SET selected_value='true' WHERE variable='$key' AND subkey = '$subkey'";
+					//$result = api_sql_query($sql, __FILE__, __LINE__);
+					$result = api_set_setting($key,'true',$subkey,null,$_configuration['access_url']);				
 				}
 			}
 		}
@@ -166,10 +173,12 @@ if ($_GET['action'] == "stored")
 }
 
 // grabbing the categories
-$selectcategories = "SELECT DISTINCT category FROM ".$table_settings_current." WHERE category NOT IN ('stylesheets','Plugins')";
-$resultcategories = api_sql_query($selectcategories, __FILE__, __LINE__);
+//$selectcategories = "SELECT DISTINCT category FROM ".$table_settings_current." WHERE category NOT IN ('stylesheets','Plugins')";
+//$resultcategories = api_sql_query($selectcategories, __FILE__, __LINE__);
+$resultcategories = api_get_settings_categories(array('stylesheets','Plugins'));
 echo "\n<div><ul>";
-while ($row = mysql_fetch_array($resultcategories))
+//while ($row = mysql_fetch_array($resultcategories))
+foreach($resultcategories as $row)
 {
 	echo "\n\t<li><a href=\"".api_get_self()."?category=".$row['category']."\">".ucfirst(get_lang($row['category']))."</a></li>";
 }
@@ -299,9 +308,11 @@ function handle_plugins()
 	echo "\t</tr>\n";
 
 	/* We retrieve all the active plugins. */
-	$sql = "SELECT * FROM $table_settings_current WHERE category='Plugins'";
-	$result = api_sql_query($sql);
-	while ($row = mysql_fetch_array($result))
+	//$sql = "SELECT * FROM $table_settings_current WHERE category='Plugins'";
+	//$result = api_sql_query($sql);
+	$result = api_get_settings('Plugins');
+	//while ($row = mysql_fetch_array($result))
+	foreach($result as $row)
 	{
 		$usedplugins[$row['variable']][] = $row['selected_value'];
 	}
@@ -430,10 +441,12 @@ function handle_stylesheets()
 function store_plugins()
 {
 	$table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+	global $_configuration;
 
 	// Step 1 : we remove all the plugins
-	$sql = "DELETE FROM $table_settings_current WHERE category='Plugins'";
-	api_sql_query($sql, __LINE__, __FILE__);
+	//$sql = "DELETE FROM $table_settings_current WHERE category='Plugins'";
+	//api_sql_query($sql, __LINE__, __FILE__);
+	$r = api_delete_category_settings('Plugins',$_configuration['access_url']);
 
 	// step 2: looping through all the post values we only store these which are really a valid plugin location.
 	foreach ($_POST as $form_name => $formvalue)
@@ -441,8 +454,9 @@ function store_plugins()
 		$form_name_elements = explode("-", $form_name);
 		if (is_valid_plugin_location($form_name_elements[1]))
 		{
-			$sql = "INSERT into $table_settings_current (variable,category,selected_value) VALUES ('".$form_name_elements['1']."','Plugins','".$form_name_elements['0']."')";
-			api_sql_query($sql, __LINE__, __FILE__);
+			//$sql = "INSERT into $table_settings_current (variable,category,selected_value) VALUES ('".$form_name_elements['1']."','Plugins','".$form_name_elements['0']."')";
+			//api_sql_query($sql, __LINE__, __FILE__);
+			api_add_setting($form_name_elements['0'],$form_name_elements['1'],null,null,'Plugins',null,null,null,null,$_configuration['access_url'],1);			
 		}
 	}
 }
@@ -471,6 +485,7 @@ function is_valid_plugin_location($location)
 */
 function store_stylesheets()
 {
+	global $_configuration;
 	// Database Table Definitions
 	$table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
@@ -478,12 +493,15 @@ function store_stylesheets()
 	$style = Database::escape_string($_POST['style']);
 	if (is_style($style))
 	{
+		/*
 		$sql = 'UPDATE '.$table_settings_current.' SET
 				selected_value = "'.$style.'"
 				WHERE variable = "stylesheets"
 				AND category = "stylesheets"';
 
 		api_sql_query($sql, __LINE__, __FILE__);
+		*/
+		api_set_setting('stylesheets',$style,null,'stylesheets');
 	}
 
 	return true;

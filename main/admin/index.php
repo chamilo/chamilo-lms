@@ -1,4 +1,4 @@
-<?php // $Id: index.php 15050 2008-04-23 22:50:59Z yannoo $
+<?php // $Id: index.php 15078 2008-04-24 23:15:37Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -134,6 +134,12 @@ $keyword_url = Security::remove_XSS($_GET['keyword']);
   <?php if(!empty($phpMyAdminPath)): ?>
   <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang("AdminDatabases"); ?></a><br />(<?php echo get_lang("DBManagementOnlyForServerAdmin"); ?>)</li>
   <?php endif; ?>
+  <?php 
+  if(!empty($_configuration['multiple_access_urls']))
+  {
+  	echo '	<li><a href="access_urls.php">'.get_lang('ConfigureMultipleAccessURLs').'</a></li>';
+  }
+  ?>
  </ul>
 </div>
 
@@ -160,6 +166,7 @@ if(api_get_setting('use_session_mode')=='true')
   <li><a href="session_import.php"><?php echo get_lang('ImportSessionListXMLCSV') ?></a></li>
   <li><a href="session_export.php"><?php echo get_lang('ExportSessionListXMLCSV') ?></a></li>
   </ul>
+  <br /><br />
 </div>
 
 <?php
@@ -182,6 +189,8 @@ else if(api_is_platform_admin())
 <li><a href="class_import.php"><?php echo get_lang('ImportClassListCSV'); ?></a></li>
 <li><a href="class_user_import.php"><?php echo get_lang('AddUsersToAClass'); ?> CSV</a></li>
 </ul>
+<br />
+<br />
 </div>
 <?php
 }

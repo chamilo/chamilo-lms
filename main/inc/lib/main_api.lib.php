@@ -1094,8 +1094,9 @@ class api_failure
 function get_setting($variable, $key = NULL)
 {
 	global $_setting;
-	return is_null($key) ? $_setting[$variable] : $_setting[$variable][$key];
+	return api_get_setting($variable, $key);
 }
+
 
 /**
 * Returns the value of a setting from the web-adjustable admin config settings.
@@ -1104,7 +1105,8 @@ function get_setting($variable, $key = NULL)
 * if(api_get_setting("show_navigation_menu") == "true") //CORRECT
 * instead of
 * if(api_get_setting("show_navigation_menu") == true) //INCORRECT
-*
+* @param	string	The variable name
+* @param	string	The subkey (sub-variable) if any. Defaults to NULL
 * @author Rene Haentjens
 * @author Bart Mollet
 */
@@ -2273,5 +2275,395 @@ function api_get_status_langvars()
 				STUDENT=>get_lang('Student'),
 				ANONYMOUS=>get_lang('Anonymous')
 				);
+}
+/**
+ * Sets a platform configuration setting to a given value
+ * @param	string	The variable we want to update
+ * @param	string	The value we want to record
+ * @param	string	The sub-variable if any (in most cases, this will remain null)
+ * @param	string	The category if any (in most cases, this will remain null)
+ * @param	int		The access_url for which this parameter is valid
+ */
+function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1)
+{
+	if(empty($var)) { return false; }
+	$t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+	$var = Database::escape_string($var);
+	$value = Database::escape_string($value);
+	$access_url = (int) $access_url;
+	if(empty($access_url)){$access_url=1;}
+	$select = "SELECT * FROM $t_settings WHERE variable = '$var' ";
+	if(!empty($subvar))
+	{
+		$subvar = Database::escape_string($subvar);
+		$select .= " AND subkey = '$subvar'";
+	}
+	if(!empty($cat))
+	{
+		$cat = Database::escape_string($cat);
+		$select .= " AND category = '$cat'";
+	}
+	if($access_url > 1)
+	{
+		$select .= " AND access_url = $access_url";
+	}
+	else
+	{
+		$select .= " AND access_url = 1 ";
+	}
+	$res = api_sql_query($select,__FILE__,__LINE__);
+	if(Database::num_rows($res)>0)
+	{ //found item for this access_url
+		$row = Database::fetch_array($res);
+		$update = "UPDATE $t_settings SET selected_value = '$value' WHERE id = ".$row['id'];
+		$res = api_sql_query($update,__FILE__,__LINE__); 	
+	}
+	else
+	{ //item not found for this access_url, we have to check if the whole thing is missing 
+	  //(in which case we ignore the insert) or if there *is* a record but just for access_url=1
+		$select = "SELECT * FROM $t_settings WHERE variable = '$var' AND access_url = 1 ";
+		if(!empty($subvar))
+		{
+			$select .= " AND subkey = '$subvar'";
+		}
+		if(!empty($cat))
+		{
+			$select .= " AND category = '$cat'";
+		}
+		$res = api_sql_query($select,__FILE__,__LINE__);
+		if(Database::num_rows($select)>0)
+		{ //we have a setting for access_url 1, but none for the current one, so create one
+			$row = Database::fetch_array($res);
+			$insert = "INSERT INTO $t_settings " .
+					"(variable,subkey," .
+					"type,category," .
+					"selected_value,title," .
+					"comment,scope," .
+					"subkeytext,access_url)" .
+					" VALUES " .
+					"('".$row['variable']."',".(!empty($row['subkey'])?"'".$row['subkey']."'":"NULL")."," .
+					"'".$row['type']."','".$row['category']."'," .
+					"'$value','".$row['title']."'," .
+					"".(!empty($row['comment'])?"'".$row['comment']."'":"NULL").",'".(!empty($row['scope'])?"'".$row['scope']."'":"NULL")."'," .
+					"'".(!empty($row['subkeytext'])?"'".$row['subkeytext']."'":"NULL")."',$access_url)";
+			$res = api_sql_query($insert,__FILE__,__LINE__);
+		}
+		else
+		{ // this setting does not exist
+			error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all',0);
+		}
+	}
+}
+/**
+ * Sets a whole category of settings to one specific value
+ * @param	string	Category
+ * @param	string 	Value
+ * @param	int		Access URL. Optional. Defaults to 1
+ */
+function api_set_settings_category($category,$value=null,$access_url=1)
+{
+	if(empty($category)){return false;}
+	$category = Database::escape_string($category);
+	$t_s = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+	$access_url = (int) $access_url;
+	if(empty($access_url)){$access_url=1;}
+	if(isset($value))
+	{
+		$value = Database::escape_string($value);
+		$sql = "UPDATE $t_s SET selected_value = '$value' WHERE category = '$category' AND access_url = $access_url";
+		$res = api_sql_query($sql,__FILE__,__LINE__); 
+		if($res === false){ return false; }
+		return true;
+	}
+	else
+	{
+		$sql = "UPDATE $t_s SET selected_value = NULL WHERE category = '$category' AND access_url = $access_url";
+		$res = api_sql_query($sql,__FILE__,__LINE__); 
+		if($res === false){ return false; }
+		return true;		
+	}
+}
+/**
+ * Get all available access urls in an array (as in the database)
+ * @return	array	Array of database records
+ */
+function api_get_access_urls($from=0,$to=1000000,$order='url',$direction='ASC')
+{
+	$result = array();
+	$t_au = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+	$from = (int) $from;
+	$to = (int) $to;
+	$order = Database::escape_string($order);
+	$direction = Database::escape_string($direction);
+	$sql = "SELECT id, url, description, active, created_by, tms FROM $t_au ORDER BY $order $direction LIMIT $to OFFSET $from";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	if($res !==false)
+	{
+		$result = api_store_result($res);
+	}
+	return $result;
+}
+/**
+ * Adds an access URL into the database
+ * @param	string	URL
+ * @param	string	Description
+ * @param	int		Active (1= active, 0=disabled)
+ * @return	int		The new database id, or the existing database id if this url already exists
+ */
+function api_add_access_url($u,$d='',$a=1)
+{
+	$t_au = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+	$u = Database::escape_string($u);
+	$d = Database::escape_string($d);
+	$a = (int) $a;
+	$sql = "SELECT * FROM $t_au WHERE url LIKE '$u'";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	if($res === false)
+	{
+		//problem querying the database - return false
+		return false;
+	}
+	else
+	{
+		if(Database::num_rows($res)>0)
+		{
+			return Database::result($res,0,'id');
+		}
+		else
+		{
+			$ui = api_get_user_id();
+			$time = 
+			$sql = "INSERT INTO $t_au (url,description,active,created_by,tms)"
+					." VALUES ('$u','$d',$a,$ui,'')";
+			$res = api_sql_query($sql,__FILE__,__LINE__);
+			if($res === false){return false;}
+			return Database::insert_id();
+		}
+	}
+}
+/**
+ * Gets all the current settings for a specific access url
+ * @param	string	The category, if any, that we want to get
+ * @param	string	Whether we want a simple list (display a catgeory) or a grouped list (group by variable as in settings.php default). Values: 'list' or 'group'
+ * @param	int		Access URL's ID. Optional. Uses 1 by default, which is the unique URL
+ * @return	array	Array of database results for the current settings of the current access URL
+ */
+function api_get_settings($cat=null,$ordering='list',$access_url=1)
+{
+	$results = array();
+	$t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+	$access_url = (int) $access_url;
+	if(empty($access_url)){$access_url=1;}
+	$sql = "SELECT id, variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable " .
+			" FROM $t_cs WHERE access_url = $access_url ";
+	if(!empty($cat))
+	{
+		$cat = Database::escape_string($cat);
+		$sql .= " AND category='$cat' ";
+	}
+	if($ordering=='group')
+	{
+		$sql .= " GROUP BY variable ORDER BY id ASC";
+	}
+	else
+	{
+		$sql .= " ORDER BY 1,2 ASC";
+	}
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	if($res === false){return $results;}
+	$results = api_store_result($res);
+	return $results;
+}
+/**
+ * Gets the distinct settings categories
+ * @param	array	Array of strings giving the categories we want to exclude
+ * @param	int		Access URL. Optional. Defaults to 1
+ * @return	array	A list of categories
+ */
+function api_get_settings_categories($exceptions=array(),$access_url=1)
+{
+	$result = array();
+	$access_url = (int) $access_url;
+	$t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+	$list = "'".implode("','",$exceptions)."'";
+	$sql = "SELECT DISTINCT category FROM $t_cs";
+	if($list != "'',''" and $list != "''" and !empty($list))
+	{
+		$sql .= " WHERE category NOT IN ($list)"; 
+	}
+	$r = api_sql_query($sql,__FILE__,__LINE__);
+	if($r === false)
+	{
+		return $result;
+	}
+	$result = api_store_result($r);
+	return $result;
+}
+/**
+ * Delete setting
+ * @param	string	Variable
+ * @param	string	Subkey
+ * @param	int		Access URL
+ * @return	boolean	False on failure, true on success
+ */
+function api_delete_setting($v,$s=NULL,$a=1)
+{
+	if(empty($v)){return false;}
+	$t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+	$v = Database::escape_string($v);
+	$a = (int) $a;
+	if(empty($a)){$a=1;}
+	if(!empty($s))
+	{
+		$s = Database::escape_string($s);
+		$sql = "DELETE FROM $t_cs WHERE variable = '$v' AND subkey = '$s' AND access_url = $a";
+		$r = api_sql_query($sql);
+		return $r;
+	}
+	else
+	{
+		$sql = "DELETE FROM $t_cs WHERE variable = '$v' AND access_url = $a";
+		$r = api_sql_query($sql);
+		return $r;
+	}
+}
+/**
+ * Delete all the settings from one category
+ * @param	string	Category
+ * @param	int		Access URL
+ * @return	boolean	False on failure, true on success
+ */
+function api_delete_category_settings($c,$a=1)
+{
+	if(empty($c)){return false;}
+	$t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+	$c = Database::escape_string($c);
+	$a = (int) $a;
+	if(empty($a)){$a=1;}
+	$sql = "DELETE FROM $t_cs WHERE category = '$c' AND access_url = $a";
+	$r = api_sql_query($sql);
+	return $r;
+}
+/**
+ * Sets a platform configuration setting to a given value
+ * @param	string	The value we want to record
+ * @param	string	The variable name we want to insert
+ * @param	string	The subkey for the variable we want to insert
+ * @param	string	The type for the variable we want to insert
+ * @param	string	The category for the variable we want to insert
+ * @param	string	The title
+ * @param	string	The comment
+ * @param	string	The scope
+ * @param	string	The subkey text
+ * @param	int		The access_url for which this parameter is valid
+ * @param	int		The changeability of this setting for non-master urls
+ * @return	boolean	true on success, false on failure
+ */
+function api_add_setting($val,$var,$sk=null,$type='textfield',$c=null,$title='',$com='',$sc=null,$skt=null,$a=1,$v=0)
+{
+	if(empty($var) or !isset($val)) { return false; }
+	$t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+	$var = Database::escape_string($var);
+	$val = Database::escape_string($val);
+	$a = (int) $a;
+	if(empty($a)){$a=1;}
+	//check if this variable doesn't exist already
+	$select = "SELECT * FROM $t_settings WHERE variable = '$var' ";
+	if(!empty($sk))
+	{
+		$sk = Database::escape_string($sk);
+		$select .= " AND subkey = '$sk'";
+	}
+	if($a > 1)
+	{
+		$select .= " AND access_url = $a";
+	}
+	else
+	{
+		$select .= " AND access_url = 1 ";
+	}
+	$res = api_sql_query($select,__FILE__,__LINE__);
+	if(Database::num_rows($res)>0)
+	{ //found item for this access_url
+		$row = Database::fetch_array($res);
+		return $row['id']; 	
+	}
+	else
+	{ //item not found for this access_url, we have to check if the whole thing is missing 
+	  //(in which case we ignore the insert) or if there *is* a record but just for access_url=1		
+		$insert = "INSERT INTO $t_settings " .
+				"(variable,selected_value," .
+				"type,category," .
+				"subkey,title," .
+				"comment,scope," .
+				"subkeytext,access_url,access_url_changeable)" .
+				" VALUES ('$var','$val',";
+		if(isset($type))
+		{
+			$type = Database::escape_string($type);
+			$insert .= "'$type',";
+		}
+		else
+		{
+			$insert .= "NULL,";
+		}
+		if(isset($c)) //category
+		{
+			$c = Database::escape_string($c);
+			$insert .= "'$c',";
+		}
+		else
+		{
+			$insert .= "NULL,";
+		}
+		if(isset($sk)) //subkey
+		{
+			$sk = Database::escape_string($sk);
+			$insert .= "'$sk',";
+		}
+		else
+		{
+			$insert .= "NULL,";
+		}
+		if(isset($title)) //title
+		{
+			$title = Database::escape_string($title);
+			$insert .= "'$title',";
+		}
+		else
+		{
+			$insert .= "NULL,";
+		}
+		if(isset($com)) //comment
+		{
+			$com = Database::escape_string($com);
+			$insert .= "'$com',";
+		}
+		else
+		{
+			$insert .= "NULL,";
+		}
+		if(isset($sc)) //scope
+		{
+			$sc = Database::escape_string($sc);
+			$insert .= "'$sc',";
+		}
+		else
+		{
+			$insert .= "NULL,";
+		}
+		if(isset($skt)) //subkey text
+		{
+			$skt = Database::escape_string($skt);
+			$insert .= "'$skt',";
+		}
+		else
+		{
+			$insert .= "NULL,";
+		}
+		$insert .= "$a,$v)";
+		$res = api_sql_query($insert,__FILE__,__LINE__);
+		return $res;
+	}
 }
 ?>

@@ -156,26 +156,57 @@ $selectResult = mysql_select_db($_configuration['main_database'],$dokeos_databas
 --------------------------------------------
   RETRIEVING ALL THE DOKEOS CONFIG SETTINGS
 --------------------------------------------
-*/
-$sql="SELECT * FROM settings_current";
-$result=mysql_query($sql) or die(mysql_error());
-while ($row=mysql_fetch_array($result))
+*/	
+if(!empty($_configuration['multiple_access_urls']))
+{
+	error_log(__FILE__.' '.__LINE__);
+	$_configuration['access_url'] = 1;
+	$access_urls = api_get_access_urls();
+	$protocol =  ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS'])!='OFF')?'https':'http').'://';
+	$request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
+	$request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
+
+	foreach($access_urls as $details)
+	{
+		if($request_url1 == $details['url'] or $request_url2 == $details['url'])
+		{
+			$_configuration['access_url'] = $details['id'];
+		}
+	}
+}
+else
+{
+	error_log(__FILE__.' '.__LINE__);
+	$_configuration['access_url'] = 1;
+}
+error_log(__FILE__.' '.__LINE__.' access url is :'.$_configuration['access_url']);
+
+//$sql="SELECT * FROM settings_current";
+//$result=mysql_query($sql) or die(mysql_error());
+$result = api_get_settings(null,'list',$_configuration['access_url']);
+//while ($row=mysql_fetch_array($result))
+foreach($result as $row)
 {
 	if ($row['subkey']==NULL)
 	{
 		$_setting[$row['variable']]=$row['selected_value'];
+		error_log(__FILE__.' '.__LINE__.' v.'.$row['variable'].'='.$row['selected_value']);
 	}
 	else
 	{
 		$_setting[$row['variable']][$row['subkey']]=$row['selected_value'];
+		error_log(__FILE__.' '.__LINE__.' v.'.$row['variable'].'.'.$row['subkey'].'='.$row['selected_value']);
 	}
 }
 // we have to store the settings for the plugins differently because it expects an array
-$sql="SELECT * FROM settings_current WHERE category='plugins'";
-$result=mysql_query($sql) or die(mysql_error());
+//$sql="SELECT * FROM settings_current WHERE category='plugins'";
+//$result=mysql_query($sql) or die(mysql_error());
+$result = api_get_settings('Plugins','list',$_configuration['access_url']);
 $_plugins=array();
-while ($row=mysql_fetch_array($result))
+//while ($row=mysql_fetch_array($result))
+foreach($result as $row)
 {
+	error_log(__FILE__.' '.__LINE__);
 	$key= $row['variable'];
 	if (is_string($_setting[$key]))
 	{

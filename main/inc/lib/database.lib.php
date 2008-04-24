@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 14991 2008-04-21 17:59:41Z yannoo $
+<?php // $Id: database.lib.php 15078 2008-04-24 23:15:37Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -51,6 +51,7 @@ define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY','gradebook_score_display');
 define('TABLE_MAIN_USER_FIELD',			'user_field');
 define('TABLE_MAIN_USER_FIELD_OPTIONS',	'user_field_options');
 define('TABLE_MAIN_USER_FIELD_VALUES',	'user_field_values');
+define('TABLE_MAIN_ACCESS_URL', 'access_url');
 
 //statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');

@@ -546,7 +546,7 @@ VALUES
 ('ldap_filled_tutor_field', NULL, 'textfield', 'LDAP', 'employeenumber', 'LDAPFilledTutorFieldTitle', 'LDAPFilledTutorFieldComment', NULL, ''),
 ('ldap_authentication_login', NULL, 'textfield', 'LDAP', '', 'LDAPAuthenticationLoginTitle', 'LDAPAuthenticationLoginComment', NULL, ''),
 ('ldap_authentication_password', NULL, 'textfield', 'LDAP', '', 'LDAPAuthenticationPasswordTitle', 'LDAPAuthenticationPasswordComment', NULL, ''),
-('service_visio', 'visio_use_rtmpt', 'radio',false,'', 'VisioUseRtmptTitle','VisioUseRtmptComment', NULL, NULL);
+('service_visio', 'visio_use_rtmpt', 'radio',null,'false', 'VisioUseRtmptTitle','VisioUseRtmptComment', NULL, NULL);
 
 
 UNLOCK TABLES;

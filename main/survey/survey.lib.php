@@ -23,7 +23,7 @@
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 14943 2008-04-17 20:42:54Z juliomontoya $
+* 	@version $Id: survey.lib.php 15076 2008-04-24 22:51:56Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1947,7 +1947,7 @@ class SurveyUtil {
 	
 		// user report
 		if ($_GET['action'] == 'userreport')
-		{
+		{ 
 			global $people_filled;
 			if ($survey_data['anonymous'] == 0)
 			{
@@ -3108,15 +3108,19 @@ class SurveyUtil {
 		echo '<option value="">---</option>';
 		foreach ($questions as $key=>$question)
 		{
-			if (in_array($question['type'], $allowed_question_types))
+			if (is_array($allowed_question_types))
 			{
-				echo '<option value="'.$question['question_id'].'"';
-				if ($_GET['xaxis'] == $question['question_id'])
+				if (in_array($question['type'], $allowed_question_types))
 				{
-					echo ' selected="selected"';
+					echo '<option value="'.$question['question_id'].'"';
+					if ($_GET['xaxis'] == $question['question_id'])
+					{
+						echo ' selected="selected"';
+					}
+					echo '">'.substr(strip_tags($question['question']), 0, 50).'</option>';
 				}
-				echo '">'.substr(strip_tags($question['question']), 0, 50).'</option>';
 			}
+			
 		}
 		echo '</select><br /><br />';
 		// Y axis

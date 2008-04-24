@@ -1,4 +1,25 @@
 <?php
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2004-2008 Dokeos SPRL
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
+*/
+
 /**
  * @todo use constant for $this_section
  */
@@ -191,12 +212,16 @@ if($view=='coach' || $view=='drh')
 	foreach($a_students as $student_id)
 	{
 		// inactive students
-		if($last_connection_date = Tracking :: get_last_connection_date($student_id))
+		$last_connection_date = Tracking :: get_last_connection_date($student_id,true,true);		
+		if($last_connection_date!=false)
 		{
+			/*
 			list($last_connection_date, $last_connection_hour) = explode(' ',$last_connection_date);
 			$last_connection_date = explode('-',$last_connection_date);
 			$last_connection_hour = explode(':',$last_connection_hour);
-			$last_connection_time = mktime($last_connection_hour[0],$last_connection_hour[1],$last_connection_hour[2],$last_connection_date[1],$last_connection_date[2],$last_connection_date[0]);			
+			$last_connection_hour[0];
+			$last_connection_time = mktime($last_connection_hour[0],$last_connection_hour[1],$last_connection_hour[2],$last_connection_date[1],$last_connection_date[2],$last_connection_date[0]);
+			*/			
 			if(time()-(3600*24*7) > $last_connection_time)
 			{
 				$nb_inactive_students++;
@@ -548,7 +573,7 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 			$table_row[] = '<a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 			
 			$csv_content[] = array(
-								$course['title'],
+								html_entity_decode($course['title']),
 								$nb_students_in_course,
 								$avg_time_spent_in_course,
 								$avg_progress_in_course,
@@ -651,8 +676,8 @@ if(api_is_platform_admin() && $view=='admin'){
 		$all_datas[] = $table_row;
 		
 		$csv_content[] = array(
-								$a_coachs['firstname'],
-								$a_coachs['lastname'],
+								html_entity_decode($a_coachs['firstname']),
+								html_entity_decode($a_coachs['lastname']),
 								$time_on_platform,
 								$last_connection,
 								$nb_courses,
@@ -689,6 +714,9 @@ if(api_is_platform_admin() && $view=='admin'){
 if($export_csv)
 {
 	ob_end_clean();
+	/*echo "<pre>";
+	print_r($csv_content);
+	echo "</pre>";*/
 	Export :: export_table_csv($csv_content, 'reporting_index');
 }
  

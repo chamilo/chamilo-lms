@@ -4,7 +4,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -19,7 +19,9 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+	
 ==============================================================================
 */
 /**
@@ -45,11 +47,11 @@ class Tracking {
 		$sql = 'SELECT login_date, logout_date FROM ' . $tbl_track_login . ' 
 						WHERE login_user_id = ' . intval($user_id).' AND logout_date IS NOT NULL';
 
-		$rs = api_sql_query($sql);
+		$rs = api_sql_query($sql,__FILE__,__LINE__);
 
 		$nb_seconds = 0;
 
-		while ($a_connections = mysql_fetch_array($rs)) {
+		while ($a_connections = Database::fetch_array($rs)) {
 
 			$s_login_date = $a_connections["login_date"];
 			$s_logout_date = $a_connections["logout_date"];
@@ -81,7 +83,7 @@ class Tracking {
 						WHERE user_id = ' . intval($user_id) . '
 						AND course_code="' . $course_code . '"';
 
-		$rs = api_sql_query($sql);
+		$rs = api_sql_query($sql,__FILE__,__LINE__);
 
 		$nb_seconds = 0;
 
@@ -106,7 +108,7 @@ class Tracking {
 						WHERE login_user_id = ' . intval($student_id) . ' 
 						ORDER BY login_date ASC LIMIT 0,1';
 
-		$rs = api_sql_query($sql);
+		$rs = api_sql_query($sql,__FILE__,__LINE__);
 		if(Database::num_rows($rs)>0)
 		{
 			if ($first_login_date = Database::result($rs, 0, 0)) {
@@ -116,28 +118,42 @@ class Tracking {
 		return false;
 	}
 
-	function get_last_connection_date($student_id, $warning_message = false) {
+	function get_last_connection_date($student_id, $warning_message = false, $return_timestamp = false) {
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 		$sql = 'SELECT login_date FROM ' . $tbl_track_login . ' 
 						WHERE login_user_id = ' . intval($student_id) . ' 
 						ORDER BY login_date DESC LIMIT 0,1';
 
-		$rs = api_sql_query($sql);
+		$rs = api_sql_query($sql,__FILE__,__LINE__);
 		if(Database::num_rows($rs)>0)
 		{
-			if ($last_login_date = Database::result($rs, 0, 0)) {
-				if (!$warning_message) {
-					return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date));
-				} else {
-					$timestamp = strtotime($last_login_date);
-					$currentTimestamp = mktime();
-	
-					//If the last connection is > than 7 days, the text is red
-					//345600 = 7 days in seconds 
-					if ($currentTimestamp - $timestamp > 604800) {
-						return '<span style="color: #F00;">' . format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date)) . '</span>';
-					} else {
+			if ($last_login_date = Database::result($rs, 0, 0)) 
+			{
+				if ($return_timestamp)
+				{
+					return strtotime($last_login_date);
+				}
+				else
+				{				
+					if (!$warning_message) 
+					{
 						return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date));
+					} 
+					else 
+					{
+						$timestamp = strtotime($last_login_date);
+						$currentTimestamp = mktime();
+		
+						//If the last connection is > than 7 days, the text is red
+						//345600 = 7 days in seconds 
+						if ($currentTimestamp - $timestamp > 604800) 
+						{
+							return '<span style="color: #F00;">' . format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date)) . '</span>';
+						} 
+						else 
+						{
+							return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date));
+						}
 					}
 				}
 			}
@@ -152,7 +168,7 @@ class Tracking {
 						AND course_code = "' . Database::escape_string($course_code) . '"
 						ORDER BY login_course_date ASC LIMIT 0,1';
 
-		$rs = api_sql_query($sql);
+		$rs = api_sql_query($sql,__FILE__,__LINE__);
 		if(Database::num_rows($rs)>0)
 		{
 			if ($first_login_date = Database::result($rs, 0, 0)) {
@@ -169,7 +185,7 @@ class Tracking {
 						AND course_code = "' . Database::escape_string($course_code) . '"
 						ORDER BY login_course_date DESC LIMIT 0,1';
 
-		$rs = api_sql_query($sql);
+		$rs = api_sql_query($sql,__FILE__,__LINE__);
 		if(Database::num_rows($rs)>0)
 		{
 			if ($last_login_date = Database::result($rs, 0, 0)) {
@@ -197,13 +213,13 @@ class Tracking {
 						FROM ' . $tbl_course_rel_user . '
 						WHERE user_id = ' . $user_id;
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
-		$nb_courses = mysql_num_rows($rs);
+		$nb_courses = Database::num_rows($rs);
 
 		$sql = 'SELECT DISTINCT course_code
 						FROM ' . $tbl_session_course_rel_user . '
 						WHERE id_user = ' . $user_id;
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
-		$nb_courses += mysql_num_rows($rs);
+		$nb_courses += Database::num_rows($rs);
 
 		return $nb_courses;
 	}
@@ -229,7 +245,7 @@ class Tracking {
 			//get the list of learning paths
 			$sql = 'SELECT id FROM ' . $tbl_course_lp;
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
-			$nb_lp = mysql_num_rows($rs);
+			$nb_lp = Database::num_rows($rs);
 			$avg_progress = 0;
 	
 			if ($nb_lp > 0) {
@@ -243,7 +259,7 @@ class Tracking {
 					$resultItem = api_sql_query($sqlProgress, __FILE__, __LINE__);
 					if(Database::num_rows($resultItem)>0)
 					{
-						$avg_progress += mysql_result($resultItem, 0, 0);
+						$avg_progress += Database::result($resultItem, 0, 0);
 					}
 				}
 				$avg_progress = round($avg_progress / $nb_lp, 1);
@@ -278,7 +294,7 @@ class Tracking {
 			
 			if(Database::num_rows($sql_result_lp)>0){
 				//Scorm
-				while($a_learnpath = mysql_fetch_array($sql_result_lp)){
+				while($a_learnpath = Database::fetch_array($sql_result_lp)){
 					$sql = 'SELECT id, max_score 
 							FROM '.$lp_item_table.' AS lp_item
 							WHERE lp_id='.$a_learnpath['id'].'
@@ -287,20 +303,20 @@ class Tracking {
 					$rs_lp_item_id_scorm = api_sql_query($sql, __FILE__, __LINE__);
 					
 					if(Database::num_rows($rs_lp_item_id_scorm)>0){
-						$lp_item_id = mysql_result($rs_lp_item_id_scorm,0,'id');
-						$lp_item__max_score = mysql_result($rs_lp_item_id_scorm,0,'max_score');				
+						$lp_item_id = Database::result($rs_lp_item_id_scorm,0,'id');
+						$lp_item__max_score = Database::result($rs_lp_item_id_scorm,0,'max_score');				
 						
 						//We get the last view id of this LP
 						$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';	
 						$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
-						$lp_view_id = mysql_result($rs_last_lp_view_id,0,'id');
+						$lp_view_id = Database::result($rs_last_lp_view_id,0,'id');
 						
 						$sql='SELECT SUM(score)/count(lp_item_id) as score FROM '.$lp_item_view_table.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
 	
 						$rs_score = api_sql_query($sql, __FILE__, __LINE__);
 						if(Database::num_rows($rs_score)>0)
 						{
-							$lp_scorm_score = mysql_result($rs_score,0,'score');
+							$lp_scorm_score = Database::result($rs_score,0,'score');
 							$lp_scorm_score = ($lp_scorm_score / $lp_item__max_score) * 100;
 							
 							$lp_scorm_score_total+=$lp_scorm_score;
@@ -322,7 +338,7 @@ class Tracking {
 					//We get the last view id of this LP
 					$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';	
 					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
-					$lp_view_id = intval(mysql_result($rs_last_lp_view_id,0,'id'));
+					$lp_view_id = intval(Database::result($rs_last_lp_view_id,0,'id'));
 					
 					$total_score = $total_weighting = 0;
 					if($lp_view_id!=0)
@@ -338,7 +354,7 @@ class Tracking {
 							$rsScores = api_sql_query($sql, __FILE__, __LINE__);
 							if(Database::num_rows($rsScores)>0)
 							{
-								$total_score += mysql_result($rsScores, 0, 0);
+								$total_score += Database::result($rsScores, 0, 0);
 								$total_weighting += $item['max_score'];
 								
 								$lp_scorm_score_total += ($total_score/$total_weighting)*100;
@@ -384,9 +400,9 @@ class Tracking {
 		// At first, courses where $coach_id is coach of the course //
 		//////////////////////////////////////////////////////////////
 		$sql = 'SELECT id_session, course_code FROM ' . $tbl_session_course . ' WHERE id_coach=' . $coach_id;
-		$result = api_sql_query($sql);
+		$result = api_sql_query($sql,__FILE__,__LINE__);
 
-		while ($a_courses = mysql_fetch_array($result)) {
+		while ($a_courses = Database::fetch_array($result)) {
 			$course_code = $a_courses["course_code"];
 			$id_session = $a_courses["id_session"];
 
@@ -394,9 +410,9 @@ class Tracking {
 								FROM $tbl_session_course_user AS srcru 
 								WHERE course_code='$course_code' AND id_session='$id_session'";
 
-			$rs = api_sql_query($sql);
+			$rs = api_sql_query($sql,__FILE__,__LINE__);
 
-			while ($row = mysql_fetch_array($rs)) {
+			while ($row = Database::fetch_array($rs)) {
 				$a_students[$row['id_user']] = $row['id_user'];
 			}
 		}
@@ -413,9 +429,9 @@ class Tracking {
 						INNER JOIN ' . $tbl_session . ' as session
 							ON session.id = session_course.id_session
 							AND session.id_coach = ' . $coach_id;
-		$result = api_sql_query($sql);
+		$result = api_sql_query($sql,__FILE__,__LINE__);
 
-		while ($row = mysql_fetch_array($result)) {
+		while ($row = Database::fetch_array($result)) {
 			$a_students[$row['id_user']] = $row['id_user'];
 		}
 		return $a_students;
@@ -436,9 +452,9 @@ class Tracking {
 		//////////////////////////////////////////////////////////////
 		$sql = 'SELECT course_code FROM ' . $tbl_session_course . ' WHERE id_session="' . $id_session . '" AND id_coach=' . $coach_id;
 
-		$result = api_sql_query($sql);
+		$result = api_sql_query($sql,__FILE__,__LINE__);
 
-		while ($a_courses = mysql_fetch_array($result)) {
+		while ($a_courses = Database::fetch_array($result)) {
 			$course_code = $a_courses["course_code"];
 
 			$sql = "SELECT distinct	srcru.id_user  
@@ -447,7 +463,7 @@ class Tracking {
 
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
 
-			while ($row = mysql_fetch_array($rs)) {
+			while ($row = Database::fetch_array($rs)) {
 				$a_students[$row['id_user']] = $row['id_user'];
 			}
 		}
@@ -459,10 +475,10 @@ class Tracking {
 		$dsl_session_coach = 'SELECT id_coach FROM ' . $tbl_session . ' WHERE id="' . $id_session . '" AND id_coach="' . $coach_id . '"';
 		$result = api_sql_query($dsl_session_coach, __FILE__, __LINE__);
 		//He is the session_coach so we select all the users in the session
-		if (mysql_num_rows($result) > 0) {
+		if (Database::num_rows($result) > 0) {
 			$sql = 'SELECT DISTINCT srcru.id_user FROM ' . $tbl_session_course_user . ' AS srcru WHERE id_session="' . $id_session . '"';
-			$result = api_sql_query($sql);
-			while ($row = mysql_fetch_array($result)) {
+			$result = api_sql_query($sql,__FILE__,__LINE__);
+			while ($row = Database::fetch_array($result)) {
 				$a_students[$row['id_user']] = $row['id_user'];
 			}
 		}
@@ -487,7 +503,7 @@ class Tracking {
 							AND id_coach=' . $coach_id . ' 
 						WHERE id_user=' . $student_id;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		if (mysql_num_rows($result) > 0) {
+		if (Database::num_rows($result) > 0) {
 			return true;
 		}
 
@@ -504,7 +520,7 @@ class Tracking {
 							AND session.id_coach = ' . $coach_id . '
 						WHERE id_user = ' . $student_id;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		if (mysql_num_rows($result) > 0) {
+		if (Database::num_rows($result) > 0) {
 			return true;
 		}
 
@@ -512,7 +528,8 @@ class Tracking {
 
 	}
 
-	function get_courses_followed_by_coach($coach_id, $id_session = '') {
+	function get_courses_followed_by_coach($coach_id, $id_session = '') 
+	{
 
 		$coach_id = intval($coach_id);
 		if (!empty ($id_session))
@@ -530,7 +547,7 @@ class Tracking {
 		if (!empty ($id_session))
 			$sql .= ' AND id_session=' . $id_session;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($row = mysql_fetch_array($result)) {
+		while ($row = Database::fetch_array($result)) {
 			$a_courses[$row['course_code']] = $row['course_code'];
 		}
 
@@ -548,7 +565,7 @@ class Tracking {
 			$sql .= ' WHERE session_course.id_session=' . $id_session;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
-		while ($row = mysql_fetch_array($result)) {
+		while ($row = Database::fetch_array($result)) {
 			$a_courses[$row['course_code']] = $row['course_code'];
 		}
 
@@ -568,8 +585,10 @@ class Tracking {
 						FROM ' . $tbl_session . ' 
 						WHERE id_coach=' . $coach_id;
 
-		$rs = api_sql_query($sql);
-		while ($row = mysql_fetch_array($rs)) {
+		$rs = api_sql_query($sql,__FILE__,__LINE__);
+		
+		while ($row = Database::fetch_array($rs)) 
+		{
 			$a_sessions[$row["id"]] = $row;
 		}
 
@@ -579,13 +598,15 @@ class Tracking {
 						INNER JOIN ' . $tbl_session_course . ' as session_course
 							ON session.id = session_course.id_session
 							AND session_course.id_coach=' . $coach_id;
-		$rs = api_sql_query($sql);
+		$rs = api_sql_query($sql,__FILE__,__LINE__);
 
-		while ($row = mysql_fetch_array($rs)) {
+		while ($row = Database::fetch_array($rs)) 
+		{
 			$a_sessions[$row["id"]] = $row;
 		}
 
-		foreach ($a_sessions as & $session) {
+		foreach ($a_sessions as & $session) 
+		{
 			if ($session['date_start'] == '0000-00-00') {
 				$session['status'] = get_lang('SessionActive');
 			} 
@@ -628,7 +649,7 @@ class Tracking {
 
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		$a_courses = array ();
-		while ($row = mysql_fetch_array($rs)) {
+		while ($row = Database::fetch_array($rs)) {
 			$a_courses[$row['course_code']] = $row;
 		}
 		return $a_courses;
@@ -654,7 +675,7 @@ class Tracking {
 							AND tool="work"';
 	
 			$rs = api_sql_query($sql, __LINE__, __FILE__);
-			return mysql_num_rows($rs);
+			return Database::num_rows($rs);
 		}
 		else
 		{
@@ -681,7 +702,7 @@ class Tracking {
 							WHERE poster_id=' . $student_id;
 	
 			$rs = api_sql_query($sql, __LINE__, __FILE__);
-			return mysql_num_rows($rs);
+			return Database::num_rows($rs);
 		}
 		else
 		{
@@ -703,7 +724,7 @@ class Tracking {
 						AND links_cours_id="' . $course_code . '"';
 
 		$rs = api_sql_query($sql, __LINE__, __FILE__);
-		return mysql_num_rows($rs);
+		return Database::num_rows($rs);
 	}
 
 	function count_student_downloaded_documents($student_id, $course_code) {
@@ -720,7 +741,7 @@ class Tracking {
 						AND down_cours_id="' . $course_code . '"';
 
 		$rs = api_sql_query($sql, __LINE__, __FILE__);
-		return mysql_num_rows($rs);
+		return Database::num_rows($rs);
 	}
 
 	function get_course_list_in_session_from_student($user_id, $id_session) {
@@ -730,7 +751,7 @@ class Tracking {
 		$sql = 'SELECT course_code FROM ' . $tbl_session_course_user . ' WHERE id_user="' . $user_id . '" AND id_session="' . $id_session . '"';
 		$result = api_sql_query($sql, __LINE__, __FILE__);
 		$a_courses = array ();
-		while ($row = mysql_fetch_array($result)) {
+		while ($row = Database::fetch_array($result)) {
 			$a_courses[$row['course_code']] = $row['course_code'];
 		}
 		return $a_courses;
@@ -772,7 +793,7 @@ class Tracking {
 		AND access_cours_code="' . $course_code . '"'; 
 		
 		$rs = api_sql_query($sql, __FILE__, __LINE__); 
-		$nb_login = mysql_num_rows($rs); 
+		$nb_login = Database::num_rows($rs); 
 		
 		return $nb_login; 
 	}

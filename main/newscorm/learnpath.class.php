@@ -4535,11 +4535,11 @@ class learnpath {
 	{
 		global $_course; //TODO: don't use globals
 		
-		$return = '<div style="margin:3px 10px;">' . "\n";
+		$return = '<div style="margin:3px 12px;">' . "\n";
 		
 			$return .= '<p class="lp_title" style="margin-top:0;">'.get_lang("CreateNewStep").'</p>';
 		
-			$return .= '<div><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("NewDocument").'</a></div>';
+			$return .= '<div style="margin-left:7px;"><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("NewDocument").'</a></div>';
 			
 			$return .= '<p class="lp_title" style="margin-top:10px;">'.get_lang("UseAnExistingResource").'</p>';
 			
@@ -4651,7 +4651,7 @@ class learnpath {
 			$item_description	= '';
 		}
 				
-		$return = '<div style="margin:3px 10px;">';
+		$return = '<div style="margin:3px 12px;">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -4916,7 +4916,7 @@ class learnpath {
 			$item_description	= '';
 		}
 
-		$return = '<div style="margin:3px 10px;">';
+		$return = '<div style="margin:3px 12px;">';
 
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -5180,7 +5180,7 @@ class learnpath {
 			$item_description 	= '';
 		}
 				
-		$return = '<div style="margin:3px 10px;">';
+		$return = '<div style="margin:3px 12px;">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -5422,7 +5422,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$item_description	= '';
 		}
 				
-		$return = '<div style="margin:3px 10px;">';
+		$return = '<div style="margin:3px 12px;">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -5662,7 +5662,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$item_description	= '';
 		}
 	
-		$return = '<div style="margin:3px 10px;">';
+		$return = '<div style="margin:3px 12px;">';
 			
 		if($id != 0 && is_array($extra_info))
 			$parent = $extra_info['parent_item_id'];
@@ -5926,7 +5926,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$item_description	= '';
 		}
 			
-		$return = '<div style="margin:3px 0px;">';
+		$return = '<div style="margin:3px 12px;">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -5965,19 +5965,23 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			unset($this->arrMenu);
 			
 			if($action == 'add')
+			{
 				$return .= '<p class="lp_title">'.get_lang("CreateTheDocument").' :</p>' . "\n";
+			}
 			elseif($action == 'move')
+			{
 				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentDocument").' :</p>' . "\n";
+			}
 			else
+			{
 				$return .= '<p class="lp_title">'.get_lang("EditTheCurrentDocument").' :</p>' . "\n";
+			}
 			
 			if(isset($_GET['edit']) && $_GET['edit'] == 'true')
 			{
-				$return .= '<div class="lp_message" style="margin-bottom:15px;">';
-				
-					$return .= '<p class="lp_title">'.get_lang("Warning").' !</p>';
-					$return .= get_lang("WarningEditingDocument");
-				
+				$return .= '<div class="lp_message" style="margin-bottom:15px;">';				
+				$return .= '<p class="lp_title">'.get_lang("Warning").' !</p>';
+				$return .= get_lang("WarningEditingDocument");				
 				$return .= '</div>';
 			}
 			/*
@@ -6214,7 +6218,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$item_description	= '';
 		}
 				
-		$return = '<div style="margin:3px 10px;">';
+		$return = '<div style="margin:3px 12px;">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -6470,7 +6474,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$item_title			= '';
 		}
 				
-		$return = '<div style="margin:3px 10px;">';
+		$return = '<div style="margin:3px 12px;">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -7015,7 +7019,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		//$preq_max = $row['max_score'];
 		
 		$return = $this->display_manipulate($item_id, TOOL_DOCUMENT);
-		$return .= '<div style="margin:3px 10px;">';
+		$return .= '<div style="margin:3px 12px;">';
 		$return .= '<p class="lp_title">'.get_lang("AddEditPrerequisites").'</p>';
 		$return .= '<form method="POST">';
 		$return .= '<table class="lp_form">';

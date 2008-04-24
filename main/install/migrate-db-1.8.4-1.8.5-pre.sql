@@ -97,7 +97,8 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('ldap_versi
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('service_visio', 'visio_use_rtmpt', 'radio', 'false', '', 'VisioUseRtmptTitle', 'VisioUseRtmptComment', NULL, '');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('visio_use_rtmpt', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('visio_use_rtmpt', 'false', 'No');
-
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('stylesheets', NULL, 'textfield','stylesheets','default','',NULL, NULL, NULL);
+UPDATE settings_current SET selected_value='dokeos_classic' WHERE variable='stylesheets';
 
 -- xxSTATSxx
 ALTER TABLE track_e_downloads ADD INDEX (down_user_id);

@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 14996 2008-04-22 01:24:39Z yannoo $
+// $Id: settings.php 15067 2008-04-24 17:39:03Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -247,7 +247,7 @@ function handle_plugins()
 	/* We scan the plugin directory. Each folder is a potential plugin. */
 	$pluginpath = api_get_path(SYS_PLUGIN_PATH);
 
-	$handle = opendir($pluginpath);
+	$handle = @opendir($pluginpath);
 	while (false !== ($file = readdir($handle)))
 	{
 		if ($file <> '.' AND $file <> '..' AND is_dir(api_get_path(SYS_PLUGIN_PATH).$file))
@@ -255,7 +255,7 @@ function handle_plugins()
 			$possibleplugins[] = $file;
 		}
 	}
-	closedir($handle);
+	@closedir($handle);
 
 	/* 	for each of the possible plugin dirs we check if a file plugin.php (that contains all the needed information about this plugin)
 	 	can be found in the dir.
@@ -384,7 +384,7 @@ function handle_stylesheets()
 	echo '<div><iframe src="style_preview.php" width="100%" height="300" name="preview"></iframe></div>';
 
 	echo '<form name="stylesheets" method="post" action="'.api_get_self().'?category='.$_GET['category'].'">';
-	if ($handle = opendir(api_get_path(SYS_PATH).'main/css/'))
+	if ($handle = @opendir(api_get_path(SYS_PATH).'main/css/'))
 	{
 		$counter=1;
 		while (false !== ($style_dir = readdir($handle)))
@@ -398,7 +398,7 @@ function handle_stylesheets()
 			{
 				if ($style_dir != '.' && $style_dir != '..')
 				{
-					if ($currentstyle == $style_dir OR ($style_dir == 'default' AND !$currentstyle))
+					if ($currentstyle == $style_dir OR ($style_dir == 'dokeos_classic' AND !$currentstyle))
 					{
 						$selected = 'checked="checked"';
 					}
@@ -406,9 +406,9 @@ function handle_stylesheets()
 					{
 						$selected = '';
 					}
-
+					$show_name=ucwords(str_replace('_',' ', $style_dir));
 					echo "<input type=\"radio\" name=\"style\" value=\"".$style_dir."\" ".$selected." onClick=\"parent.preview.location='style_preview.php?style=".$style_dir."';\"/>";
-					echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$style_dir.'</a>';
+					echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
 					//echo '<div id="Layer'.$counter.'" style="position:relative; width:687px; z-index:2; visibility: hidden;">';
 					//echo '<a href="#" onClick="MM_showHideLayers(\'Layer'.$counter.'\',\'\',\'hide\')">'.get_lang('Close').'</a>';
 					//echo '<iframe src="style_preview.php?style='.$file.'" width="100%" style="float:right;"></iframe></div>';
@@ -417,7 +417,7 @@ function handle_stylesheets()
 				}
 			}
 		}
-		closedir($handle);
+		@closedir($handle);
 	}
 	echo '<input type="submit" name="submit_stylesheets" value="'.get_lang('Ok').'" /></form>';
 }

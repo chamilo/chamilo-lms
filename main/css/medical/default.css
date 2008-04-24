@@ -50,13 +50,15 @@ body {
 	min-height: 333px;
 	margin-top:0;
 	background-color: #ffffff;
+}
 
-}.maincontent td {
+/* only use in gradebook
+.maincontent td {
 	float: left;
 	width: 100%;
 	padding: 4px;
+}*/
 
-}
 #center {
 	margin: 0 190px 0 0;
 	padding: 10px 0 40px 0;

@@ -1,4 +1,4 @@
-<?php // $Id: chat.php 14480 2008-03-03 21:59:10Z juliomontoya $
+<?php // $Id: chat.php 15067 2008-04-24 17:39:03Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -84,16 +84,16 @@ if (!empty($mycourseid) && $mycourseid != -1)
 }
 
 switch($my_style){
-	case 'default' : 
+	case 'dokeos_classic' : 
 		$footer_size = 48;
 		break;
 	case 'academica' : 
 		$footer_size = 140;
 		break;
-	case 'corporativa' : 
+	case 'silver_line' : 
 		$footer_size = 60;
 		break;
-	case 'baby' : 
+	case 'baby_orange' : 
 		$footer_size = 120;
 		break;
 	default : 

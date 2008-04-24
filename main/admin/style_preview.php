@@ -2,30 +2,44 @@
 include_once('../inc/global.inc.php');
 if (isset($_GET['style']) AND $_GET['style']<>'')
 {
-	$htmlHeadXtra[] = '<link href="../css/'.$_GET['style'].'/default.css" rel="stylesheet" type="text/css">';
+	$style=Security::remove_XSS($_GET['style']);
+	//$htmlHeadXtra[] = '<link href="../css/'.$_GET['style'].'/default.css" rel="stylesheet" type="text/css">';
+	echo '<link href="../css/'.$style.'/default.css" rel="stylesheet" type="text/css">';
 }
-Display::display_header($tool_name);
-?>
+else
+{
+	$currentstyle = api_get_setting('stylesheets');
+	echo '<link href="../css/'.$currentstyle.'/default.css" rel="stylesheet" type="text/css">';
+}
 
-  <!-- start of #main wrapper for #content and #menu divs -->
+
+//Display::display_header($tool_name);
+include(api_get_path(INCLUDE_PATH).'banner.inc.php');
+
+?>
+<!-- start of #main wrapper for #content and #menu divs -->
   <!--   Begin Of script Output   -->
   <div class="maincontent">
     <h3>tool title</h3>
     <div id="courseintro">
       <p>This is the introduction text.
     </div>
-    <div id="courseintro_icons"><a href="#"><img src="../img/edit.gif" alt="edit"/></a><a href="#"><img src="../img/delete.gif" alt="delete"/></a></div>
+    <div id="courseintro_icons">
+    <a href="#"><img src="../img/edit.gif" alt="edit"/></a><a href="#"><img src="../img/delete.gif" alt="delete"/></a></div>
     <div class="normal-message"> Normal Message </div>
     <div class="error-message"> Error Message </div>
     <table width="750">
       <tr>
-        <td><table>
+        <td>
+        <table>
             <tr>
-              <td width="220"><table id="smallcalendar">
+              <td width="220">
+              
+              <table id="smallcalendar">
                   <tr id="title">
-                    <td width="10%"><a href="#">«</a></td>
-                    <td width="80%" colspan="5"> 2006</td>
-                    <td width="10%"><a href="#">»</a></td>
+                    <td width="10%"><a href="#"><<</a></td>
+                    <td width="80%" colspan="5" align="center"> 2006</td>
+                    <td width="10%"><a href="#">>></a></td>
                   </tr>
                   <tr>
                     <td class="weekdays">Mon</td>
@@ -134,7 +148,7 @@ Display::display_header($tool_name);
       </tr>
     </table>
   </div>
-  <div class="menu">
+  <div class="menu" style="width:200px">
     <form action="#" method="post" id="loginform" name="loginform">
       <label>Username</label>
       <input type="text" name="login" id="login" size="15" value="" />

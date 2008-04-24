@@ -126,15 +126,18 @@ if (!empty($mycourseid) && $mycourseid != -1)
 
 global $show_learn_path;
 
-if ($show_learn_path) {
+if ($show_learn_path) 
+{
 	$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/learnpath.css"/>';
 	$htmlHeadXtra[] = "<link rel='stylesheet' type='text/css' href='dtree.css' />"; //will be moved
-	$htmlHeadXtra[] = "<script src='dtree.js' type='text/javascript'></script>"; //will be moved
-		
+	$htmlHeadXtra[] = "<script src='dtree.js' type='text/javascript'></script>"; //will be moved		
 }
 
 $my_code_path = api_get_path(WEB_CODE_PATH);
-if(empty($my_style)){$my_style = 'default';}
+if(empty($my_style))
+{
+	$my_style = 'dokeos_classic';
+}
 echo '@import "'.$my_code_path.'css/'.$my_style.'/default.css";'."\n";
 echo '@import "'.$my_code_path.'css/'.$my_style.'/course.css";'."\n";
 ?>

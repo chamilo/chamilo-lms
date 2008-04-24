@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 14958 2008-04-20 18:17:02Z yannoo $
+* 	@version $Id: index.php 15074 2008-04-24 22:47:26Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -54,7 +54,7 @@ include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 $loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
-$setting_show_also_closed_courses = (api_get_setting(show_closed_courses)=='true') ? true : false;
+$setting_show_also_closed_courses = (api_get_setting('show_closed_courses')=='true') ? true : false;
 
 // the section (for the tabs)
 $this_section = SECTION_CAMPUS;

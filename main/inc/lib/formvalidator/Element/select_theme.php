@@ -4,7 +4,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 	
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) Bart Mollet, Hogeschool Gent
 	
 	For a full list of contributors, see "credits.txt".
@@ -17,7 +17,7 @@
 	
 	See the GNU General Public License for more details.
 	 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -37,10 +37,10 @@ class HTML_QuickForm_Select_Theme extends HTML_QuickForm_select
 		$themes = api_get_themes();
 		$this->_options = array();
 		$this->_values = array();
-		
+		$this->addOption('--',''); // no theme select
 		for ($i=0; $i< count($themes[0]);$i++)
 		{
-			$this->addOption((empty($themes[1][$i])?'--':$themes[1][$i]),$themes[0][$i]);
+			$this->addOption($themes[1][$i],$themes[0][$i]);
 		}		
 		/*foreach ($themes as $theme)
 		{

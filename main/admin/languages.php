@@ -1,5 +1,5 @@
 <?php
-// $Id: languages.php 12263 2007-05-03 13:34:40Z elixir_julian $
+// $Id: languages.php 15079 2008-04-24 23:22:29Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -81,8 +81,9 @@ if ($_POST['Submit'])
 	// changing the Platform language
 	if ($_POST['platformlanguage'] && $_POST['platformlanguage'] <> '')
 	{
-		$sql_update_2 = "UPDATE $tbl_settings_current SET selected_value='{$_POST['platformlanguage']}' WHERE variable='platformLanguage'";
-		$result_2 = api_sql_query($sql_update_2);
+		//$sql_update_2 = "UPDATE $tbl_settings_current SET selected_value='{$_POST['platformlanguage']}' WHERE variable='platformLanguage'";
+		//$result_2 = api_sql_query($sql_update_2);
+		api_set_setting('platformLanguage',$_POST['platformlanguage'],null,null,$_configuration['access_url']);
 	}
 }
 elseif (isset($_POST['action']))

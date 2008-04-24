@@ -11,7 +11,7 @@ $audio_recorder_studentview = false;
 list($width, $height) = $audio_recorder_studentview =='true' ? array(295, 24) : array(295,90);
 $player = $audio_recorder_studentview =='true' ? 'player2.swf' : 'recorder2.swf';
 
-$server = api_get_setting('service_visio','visio_host');
+$server = (api_get_setting('service_visio','visio_use_rtmpt')=='true'?'rtmpt://':'rtmp://').api_get_setting('service_visio','visio_host').':'.api_get_setting('service_visio','visio_port');
 $web_path = api_get_path(WEB_CODE_PATH);
 $post_uri = urlencode($web_path.'conference/audiopost.php?course_code='.api_get_course_id().'&user_id='.api_get_user_id().'&checker='.md5(api_get_course_id().api_get_user_id().gmdate('Ymd').$_configuration['security_key']));
 //$filename = str_replace('.','dot',substr($web_path,strpos($web_path,'://')+3,-1)).'-z-'.api_get_course_id().'-z-'.api_get_user_id().'-z-'.gmdate('YmdHis').'.flv';//using -z- as fields splitter

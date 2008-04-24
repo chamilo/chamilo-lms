@@ -371,15 +371,16 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 		{
 			$dropbox_file_data[]=$dropbox_file->id;
 			
-			// new icon
-			if ($dropbox_file->last_upload_date > $last_access AND !in_array($dropbox_file->id,$_SESSION['_seen'][$_course['id']][TOOL_DROPBOX]))
-			{
-				$new_icon='&nbsp;<img src="../img/new.gif" align="absmiddle" alt="'.get_lang('New').'" />';
+			$new_icon='';
+			if (is_array($_SESSION['_seen'][$_course['id']][TOOL_DROPBOX]))
+			{			
+				// new icon
+				if ($dropbox_file->last_upload_date > $last_access AND !in_array($dropbox_file->id,$_SESSION['_seen'][$_course['id']][TOOL_DROPBOX]))
+				{
+					$new_icon='&nbsp;<img src="../img/new.gif" align="absmiddle" alt="'.get_lang('New').'" />';
+				}
 			}
-			else
-			{
-				$new_icon='';
-			}
+			
 			$dropbox_file_data[]=build_document_icon_tag('file',$dropbox_file->title);
 			$dropbox_file_data[]='<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download"><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'"/></a><a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">'.$dropbox_file->title.'</a>'.$new_icon.'<br>'.$dropbox_file->description;
 			$dropbox_file_data[]=ceil(($dropbox_file->filesize)/1024).' '.get_lang('kB');

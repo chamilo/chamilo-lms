@@ -1,4 +1,4 @@
-<?php // $Id: events.lib.inc.php 14543 2008-03-09 17:32:54Z yannoo $
+<?php // $Id: events.lib.inc.php 15073 2008-04-24 22:46:42Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ============================================================================== 
@@ -55,11 +55,18 @@ function event_open()
 	// @getHostByAddr($_SERVER['REMOTE_ADDR']) : will provide host and country information
 	// $_SERVER['HTTP_USER_AGENT'] :  will provide browser and os information
 	// $_SERVER['HTTP_REFERER'] : provide information about refering url
-	$referer = Database::escape_string($_SERVER['HTTP_REFERER']);
+	if(isset($_SERVER['HTT_REFERER']))
+	{
+		$referer = Database::escape_string($_SERVER['HTTP_REFERER']);
+	}
+	else
+	{
+		$referer = '';
+	}
 	// record informations only if user comes from another site
 	//if(!eregi($_configuration['root_web'],$referer))
 	$pos = strpos($referer, $_configuration['root_web']);
-	if ($pos === false)
+	if ($pos === false && $referer != '')
 	{
 		$remhost = @ getHostByAddr($_SERVER['REMOTE_ADDR']);
 		if ($remhost == $_SERVER['REMOTE_ADDR'])
@@ -74,7 +81,6 @@ function event_open()
 						('".$remhost."',
 						 '".Database::escape_string($_SERVER['HTTP_USER_AGENT'])."', '".$referer."', FROM_UNIXTIME($reallyNow) )";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		//$mysql_query($sql);
 	}
 	return 1;
 }

@@ -399,7 +399,10 @@ CREATE TABLE settings_current (
   comment varchar(255) default NULL,
   scope varchar(50) default NULL,
   subkeytext varchar(255) default NULL,
-  UNIQUE KEY id (id)
+  access_url int unsigned not null default 1,
+  access_url_changeable int unsigned not null default 0,
+  PRIMARY KEY id (id),
+  INDEX (access_url)
 );
 
 --
@@ -774,6 +777,7 @@ UNLOCK TABLES;
 -- Table structure for shared_survey
 -- 
 
+DROP TABLE IF EXISTS shared_survey;
 CREATE TABLE shared_survey (
   survey_id int(10) unsigned NOT NULL auto_increment,
   code varchar(20) default NULL,
@@ -796,6 +800,7 @@ CREATE TABLE shared_survey (
 -- Table structure for shared_survey_question
 -- 
 
+DROP TABLE IF EXISTS shared_survey_question;
 CREATE TABLE shared_survey_question (
   question_id int(11) NOT NULL auto_increment,
   survey_id int(11) NOT NULL default '0',
@@ -815,6 +820,7 @@ CREATE TABLE shared_survey_question (
 -- Table structure for shared_survey_question_option
 -- 
 
+DROP TABLE IF EXISTS shared_survey_question_option;
 CREATE TABLE shared_survey_question_option (
   question_option_id int(11) NOT NULL auto_increment,
   question_id int(11) NOT NULL default '0',
@@ -831,6 +837,7 @@ CREATE TABLE shared_survey_question_option (
 -- Table structure for templates (User's FCKEditor templates)
 -- 
 
+DROP TABLE IF EXISTS templates;
 CREATE TABLE templates (
   id int NOT NULL auto_increment,
   title varchar(100) NOT NULL,
@@ -849,6 +856,7 @@ CREATE TABLE templates (
 -- Table structure of openid_association (keep info on openid servers)
 -- 
 
+DROP TABLE IF EXISTS openid_association;
 CREATE TABLE IF NOT EXISTS openid_association (
   id int NOT NULL auto_increment,
   idp_endpoint_uri text NOT NULL,
@@ -865,6 +873,7 @@ CREATE TABLE IF NOT EXISTS openid_association (
 --
 -- Tables for gradebook
 --
+DROP TABLE IF EXISTS gradebook_category;
 CREATE TABLE gradebook_category (
   id int NOT NULL auto_increment,
   name text NOT NULL,
@@ -877,6 +886,7 @@ CREATE TABLE gradebook_category (
   certif_min_score int DEFAULT NULL,
   PRIMARY KEY  (id)
 );
+DROP TABLE IF EXISTS gradebook_evaluation;
 CREATE TABLE gradebook_evaluation (
   id int unsigned NOT NULL auto_increment,
   name text NOT NULL,
@@ -890,6 +900,7 @@ CREATE TABLE gradebook_evaluation (
   visible tinyint NOT NULL,
   PRIMARY KEY  (id)
 );
+DROP TABLE IF EXISTS gradebook_link;
 CREATE TABLE gradebook_link (
   id int NOT NULL auto_increment,
   type int NOT NULL,
@@ -902,6 +913,7 @@ CREATE TABLE gradebook_link (
   visible tinyint NOT NULL,
   PRIMARY KEY  (id)
 );
+DROP TABLE IF EXISTS gradebook_result;
 CREATE TABLE gradebook_result (
   id int NOT NULL auto_increment,
   user_id int NOT NULL,
@@ -910,12 +922,14 @@ CREATE TABLE gradebook_result (
   score float unsigned default NULL,
   PRIMARY KEY  (id)
 );
+DROP TABLE IF EXISTS gradebook_score_display;
 CREATE TABLE gradebook_score_display (
   id int NOT NULL auto_increment,
   score float unsigned NOT NULL,
   display varchar(40) NOT NULL,
   PRIMARY KEY (id)
 );
+DROP TABLE IF EXISTS user_field;
 CREATE TABLE user_field (
 	id	INT NOT NULL auto_increment,
 	field_type int NOT NULL DEFAULT 1,
@@ -928,6 +942,7 @@ CREATE TABLE user_field (
 	tms	TIMESTAMP,	
 	PRIMARY KEY(id)
 );
+DROP TABLE IF EXISTS user_field_options;
 CREATE TABLE user_field_options (
 	id	int NOT NULL auto_increment,
 	field_id int	NOT NULL,
@@ -937,6 +952,7 @@ CREATE TABLE user_field_options (
 	tms	TIMESTAMP,
 	PRIMARY KEY (id)
 );
+DROP TABLE IF EXISTS user_field_values;
 CREATE TABLE user_field_values(
 	id	int	NOT NULL auto_increment,
 	user_id	int	NOT NULL,
@@ -945,3 +961,14 @@ CREATE TABLE user_field_values(
 	tms TIMESTAMP,
 	PRIMARY KEY(id)
 );
+DROP TABLE IF EXISTS access_url;
+CREATE TABLE access_url(
+	id	int	unsigned NOT NULL auto_increment,
+	url	varchar(255) NOT NULL default 'localhost',
+	description text,
+	active	int unsigned not null default 0,
+	created_by	int	not null,
+	tms TIMESTAMP,
+	PRIMARY KEY (id)
+);
+INSERT INTO access_url(url,description,active,created_by) VALUES ('http://localhost/','URL 1',1,1);

@@ -143,7 +143,8 @@ $userPasswordCrypted          							= {ENCRYPT_PASSWORD};
 $storeSessionInDb             							= false;
 // Session lifetime
 $_configuration['session_lifetime']						= {SESSION_LIFETIME};
-
+// Activation for multi-url access
+//$_configuration['multiple_access_urls']					= true;
 
 
 // Version settings

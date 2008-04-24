@@ -50,4 +50,5 @@ $AnnouncementMoved = "Minden hirdetmény át lett mozgatva";
 $NoAnnouncements = "Nincsenek hirdetrmények";
 $SelectEverybody = "Mindenkit kiválaszt";
 $SelectedUsersGroups = "kiválasztott felhasználói csoportok";
+$LearnerMessage = "Üzenet egy tanulótól";
 ?>

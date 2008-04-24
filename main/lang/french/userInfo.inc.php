@@ -23,12 +23,12 @@ $langInC = "dans ce cours";
 $langFilled = "Tous les champs ne sont pas complétés";
 $langUserNo = "Numéro d\'utilisateur";
 $langTaken = "est déjà utilisé.";
-$langTutor = "Tuteur";
+$langTutor = "Coach";
 $langUnreg = "Désinscrire";
 $langGroupUserManagement = "Gestion des groupes";
 $langUserInfo = "Fiche utilisateur";
 $langUnregister = "Non enregistré";
 $langAddAUser = "Ajouter des utilisateurs";
 $UsersUnsubscribed = "Les utilisateurs sélectionnés ont été désinscrits du cours";
-$ThisStudentIsSubscribeThroughASession = "Cet apprenant est inscrit dans ce cours via une session. Vous ne pouvez pas éditer ses informations";
+$ThisStudentIsSubscribeThroughASession = "Cet apprenant est inscrit dans ce cours via une session de formation. Vous ne pouvez pas modifier ses informations";
 ?>

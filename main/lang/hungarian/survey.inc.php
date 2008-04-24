@@ -173,7 +173,13 @@ $HaveAnswered = "megválaszolva";
 $WereInvited = "meghívva";
 $PagebreakNotFirst = "Nem használhat oldaltörést legelöl.";
 $PagebreakNotLast = "Nem használhat oldaltörést a legvégén.";
+$SurveyNotAvailableAnymore = "Sajnos ez a kérd&#337;ív már nem érhet&#337; el. Azért köszönjük a próbálkozását!";
 $DuplicateSurvey = "Kérd&#337;ív másolása";
 $EmptySurvey = "Üres kérd&#337;ív";
 $SurveyEmptied = "A kérd&#337;ívre adott válaszokat sikeresen törölte.";
+$SurveyNotAvailableYet = "Ez a kérd&#337;ív még nem elérhet&#337;. Kérjük, próbálja meg kés&#337;bb. Köszönjük!";
+$PeopleAnswered = "személy válaszolt";
+$AnonymousSurveyCannotKnowWhoAnswered = "A felmérés anonim. Nem láthatja a válaszadók adatait.";
+$IllegalSurveyId = "Ismeretlen kérd&#337;ív azonosító";
+$SurveyQuestionMoved = "A kérdés áthelyezve";
 ?>

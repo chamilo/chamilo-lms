@@ -109,5 +109,7 @@ $PleaseGoBackToStep = "Kérem térjen vissza a következ&#337; lépéshez:";
 $DBSettingUpgradeIntro = "A frissít&#337;program visszaállítja és frissíti a Dokeos adatbázis(oka)t. Ezek végrehajtásához a megadott adatbázis és egyéb információkat fogja felhasználni. Mivel a szofverünk számos operációs rendszeren és környezetben futtatható, de nem minden környezetben tudtuk tesztelni, ezért nyomtatékosan javasoljuk, hogy végezzen teljes biztonségi mentést, miel&#337;tt továbbmenne a frissítéssel!";
 $ExtensionMBStringNotAvailable = "Az MBString kiterjesztés nem használható";
 $ExtensionMySQLNotAvailable = "A MySQL kiterjesztés nem érhet&#337; el";
+$DokeosArtLicense = "A Dokeosban felhasznált és látható képek a Nuvola, Crystal Clear és Tango ikongy&#369;jteményb&#337;l származnak. Más képek, mint például a táblázatok és Flash animációk a Wikimedia és Ali Pakdel, Denis Hoa kurzusaiból származnak az engedélyükkel a BY-SA Creative Commons licensz oltalma alatt. A licensz réslzeteir&#337;l angolul <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">a CC weboldalán olvashat</a>, ahol elolvashatja a licensz teljes szövegét.";
 $PleasGoBackToStep1 = "Kérem, menjen vissza az els&#337; lépéshez";
+$OptionalParameters = "Opcionális paraméterek";
 ?>

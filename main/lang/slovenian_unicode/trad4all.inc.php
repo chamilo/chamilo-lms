@@ -526,4 +526,6 @@ $Label = "Oznaka";
 $UnableToConnectTo = "Ne morem se povezati z";
 $NoUser = "Ni uporabnikov";
 $SearchResultsFor = "Rezultati iskanja za:";
+$SelectFile = "Izberi datoteko";
+$UploadFile = "Naloži datoteko";
 ?>

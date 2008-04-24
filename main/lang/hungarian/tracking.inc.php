@@ -204,6 +204,8 @@ $CoachList = "Edz&#337;k listája";
 $CoachStudents = "A trénerhez tartozó tanulók";
 $NoLearningPath = "nincsenek tanösvények";
 $SessionCourses = "Kurzusok látogatásai";
+$NoUsersInCourseTracking = "Itt tudja megtekinteni a kurzusra beiratkozott tanulók nyomonkövetését.";
 $AvgTimeSpentInTheCourse = "A kurzusban eltöltött id&#337; átlagosan";
 $RemindInactiveUser = "Inaktív felhasználó figyelmeztetése";
+$FirstLogin = "Els&#337; belépés";
 ?>

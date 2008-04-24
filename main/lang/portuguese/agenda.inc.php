@@ -52,4 +52,5 @@ $Print = "Imprimir";
 $CopiedAsAnnouncement = "Copiado como anúncio";
 $NewAnnouncement = "Novo anúncio";
 $AddAnnouncement = "Acrescentado como anúncio";
+$UpcomingEvent = "Evento próximo";
 ?>

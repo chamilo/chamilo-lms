@@ -800,4 +800,6 @@ $SelectCourseToImportUsersTo = "Izberi tečaj v katerega želiš vpisati uporabn
 $ImportLDAPUsersIntoSession = "Uvozi LDAP uporabnike v sejo";
 $LDAPOUAttributeFilter = "Filter OU atributa";
 $SelectSessionToImportUsersTo = "Izberi sejo, v katero želiš uvoziti uporabnike";
+$VisioUseRtmptTitle = "Uporabi rtmpt protokol";
+$VisioUseRtmptComment = "RTMPT protokol omogoča rabo videokonference izza požarnega zidu, s preusmeritvijo prenosa podatkov preko vrat 80. Ta preusmeritev (piggyback) pa bo verjetno upočasnila hitrost prenosa videokonferenčnega toka podatkov, zato priporočamo, da je ne uporabite, razen če to ni nujno.";
 ?>

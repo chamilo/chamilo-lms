@@ -169,4 +169,5 @@ $UsernameMaxXCharacters = "O Nome de Utilizador só pode ter um máximo de %s cara
 $PictureUploaded = "A foto foi enviada";
 $ProductionUploaded = "O ficheiro foi enviado";
 $FolderUpdated = "Pasta actualizada";
+$UsersRegistered = "Estes utilizadores foram inscritos no curso";
 ?>

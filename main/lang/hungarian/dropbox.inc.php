@@ -123,4 +123,6 @@ $MailingSelectNoOther = "A Levélküldést nem lehet kombinálni más címzettekkel";
 $mailingJustUploadSelectNoOther = "A Csak Feltöltés-t nem lehet kombinálni más címzettekkel";
 $NoFilesHere = "Nem tartalmaz állományokat.";
 $NoFilesHere = "Nem tartalmaz állományokat";
+$NewDropboxFileUploaded = "Az új állomány el lett küldve a fájl posta segítségével.";
+$NewDropboxFileUploadedContent = "Az új állomány el lett küldve a kurzusába a Fájl posta segítségével.";
 ?>

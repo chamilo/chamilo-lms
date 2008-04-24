@@ -231,4 +231,12 @@ $ClickLinkToViewComment = "Kattintson a lenti hivatkozásra, ha be szeretne jelen
 $Regards = "Üdvözlettel";
 $AttemptVCCLong = "A %s tesztben végzett munkáját egy oktató megtekintette/kommentálta/kijavította. Kattintson a lenti hivatkozásra, ha be szeretne jelentkezni az oldalra és meg szeretné tekinteni a tesztlapját.";
 $DearStudentEmailIntroduction = "Kedves Tanuló,";
+$ExerciseFinished = "Teszt befejezve";
+$ResultsEnabled = "Az eredmények láthatóak a hallgatók számára";
+$ResultsDisabled = "Az eredmények nem láthatóak a hallgatók számára";
+$ExportWithUserFields = "Felhasználói mez&#337;k beszúrása exportáláskor";
+$ExportWithoutUserFields = "Felhasználói mez&#337;k kihagyása exportáláskor";
+$DisableResults = "Ne mutassa meg az eredményeket a hallgatóknak";
+$EnableResults = "Mutassa meg az eredményeket a hallgatóknak";
+$ValidateAnswer = "Válaszok kiértékelése";
 ?>

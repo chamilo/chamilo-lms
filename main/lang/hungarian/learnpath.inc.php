@@ -184,4 +184,7 @@ $CorrectAnswers = "Helyes válaszok";
 $StudentResponse = "Tanulói válaszok";
 $LatencyTimeSpent = "Eltöltött id&#337;";
 $Result = "Eredmény";
+$SplitStepsPerPage = "Egy oldal egy lépés";
+$SplitStepsPerChapter = "Egy fejezet egy lépés";
+$TakeSlideName = "Használja a dia címeit a tanösvény lépéseinek elnevezéséhez";
 ?>

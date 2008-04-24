@@ -806,4 +806,5 @@ $LDAPSelectFilterOnUsersOU = "Select a filter to find a matching string at the e
 $LDAPOUAttributeFilter = "The OU attribute filter";
 $SelectSessionToImportUsersTo = "Select the session in which you want to import these users";
 $VisioUseRtmptTitle = "Use the rtmpt protocol";
+$VisioUseRtmptComment = "The rtmpt protocol allows access to the videoconference from behind a firewall, by redirecting the communications on port 80. This, however, will slow down the streaming, so it is recommended not to use it unless necessary.";
 ?>

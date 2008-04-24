@@ -159,4 +159,10 @@ $SendMessage = "Üzenet küldése";
 $PasswordEncryptedForSecurity = "A jelszavát a rendszer titkosítva tárolja biztonsági okokból. A hivatkozásra kattintva egy újabb emailt fog kapni jelszavával.";
 $UsersUnsubscribed = "A kiválasztott felhasználókat eltávolította a kurzusból";
 $SystemUnableToSendEmailContact = "A rendszer nem tudott email üzenetet küldeni";
+$OpenIDCouldNotBeFoundPleaseRegister = "Ez az OpenID nem található az adatbázisban. Kérem, regisztrálja magát egy új azonosítóért. Ha már van azonosítója nálunk, kérjük, belépés után módosítsa profilját OpenID hozzáadásához";
+$UsernameMaxXCharacters = "A felhasználónév maximum %s karakter hosszú lehet.";
+$PictureUploaded = "A képet sikeresen feltöltötte";
+$ProductionUploaded = "Produkciós képe sikeresen feltöltve.";
+$FolderUpdated = "Mappa frissítve";
+$UsersRegistered = "Ezek a felhasználók lettek beiratva a kurzusba";
 ?>

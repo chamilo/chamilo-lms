@@ -2,13 +2,13 @@
 for more information: see languages.txt in the lang folder. 
 */
 $nameTools = "Variable linguistique obsolète";
-$langMdCallingTool = "Parcours pédagogique - Scorm";
-$langTool = "Opérations sur les Métadonnées SCORM";
+$langMdCallingTool = "Cours SCORM";
+$langTool = "Opérations sur les métadonnées SCORM";
 $langNotInDB = "pas d\'entrée dans la base de donnée de Dokeos";
 $langManifestSyntax = "(erreur de syntaxe dans le fichier manifeste...)";
 $langEmptyManifest = "(le fichier manifeste est vide...)";
 $langNoManifest = "(pas de fichier manifeste...)";
-$langNotFolder = "est impossible, ce n\'est pas un répertoire...";
+$langNotFolder = "est impossible, ce n\'est pas un dossier...";
 $langUploadHtt = "Transférer un fichier-gabarit HTML (HTT)";
 $langHttFileNotFound = "Le nouveau fichier-gabarit HTML (HTT) ne peut être ouvert (fichier vide ou trop lourd)";
 $langHttOk = "Le nouveau fichier-gabarit HTML (HTT) a été transféré correctement";

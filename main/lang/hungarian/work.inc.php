@@ -33,4 +33,5 @@ $DocumentDeleted = "A dokumentum törölve";
 $SendMailBody = "A kurzusod egyik résztvev&#337;je beküldött egy hallgatói publikációt.";
 $DirDelete = "Könyvtár törlése";
 $ValidateChanges = "Változások jóváhagyása";
+$FolderUpdated = "Mappa frissítve";
 ?>

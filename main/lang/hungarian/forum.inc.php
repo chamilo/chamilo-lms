@@ -84,4 +84,12 @@ $MakeVisible = "Tegyük láthatóvá";
 $DeleteCompleteThread = "Törölni akarja az egész fórum szálat?";
 $PostDeletedSpecial = "A különleges üzenet törölve";
 $ThreadDeleted = "Szál törölve";
+$NextMessage = "Következ&#337; üzenet";
+$PrevMessage = "El&#337;z&#337; üzenet";
+$FirstMessage = "Els&#337; üzenet";
+$LastMessage = "Utolsó üzenet";
+$ForumSearch = "Keresés a Fórumban";
+$SearchTerm  = "Keresett szó";
+$ForumSearchResults = "A  Fórumban keresés eredménye";
+$ForumSearchInformation = "Több szóra is kereshet, ha + jellel kezdi azokat";
 ?>

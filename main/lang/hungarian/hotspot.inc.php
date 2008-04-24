@@ -17,4 +17,5 @@ $showHotspots = "Hotspot mutatása/elrejtése";
 $labelPolyMenu = "Poligon zárása";
 $triesleft = "Hátralév&#337; próbálkozások";
 $exeFinished = "Minden választ megadott. Most már elhelyezheti a forrópontokat, vagy továbbléphet.";
+$nextAnswer = "Most kattintson erre: &done=done";
 ?>

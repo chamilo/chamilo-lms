@@ -528,4 +528,6 @@ $Label = "Etichetta";
 $UnableToConnectTo = "Impossibile connettersi con";
 $NoUser = "Nessun utente";
 $SearchResultsFor = "Trova tra i risultati:";
+$SelectFile = "Seleziona un file";
+$UploadFile = "Carica il file";
 ?>

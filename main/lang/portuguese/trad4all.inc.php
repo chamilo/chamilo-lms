@@ -527,4 +527,7 @@ $StepCode = "Código da etapa";
 $Label = "Etiqueta";
 $UnableToConnectTo = "Impossível conectar a";
 $NoUser = "Nenhum utilizador";
+$SearchResultsFor = "Resultados da pesquisa de:";
+$SelectFile = "Seleccionar ficheiro";
+$UploadFile = "Enviar ficheiro";
 ?>

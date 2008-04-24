@@ -91,4 +91,5 @@ $NoCategoriesDefined = "Nincs létehozott kategória.";
 $GroupsFromClasses = "Csoportok osztályokból";
 $GroupsFromClassesInfo = "Az opció használatával csoportokat hozhat létre a kurzusára feliratkozott osztályok felhasználásával.";
 $Group = "Csoport";
+$ForumOfGroup = "Csoport fóruma:";
 ?>

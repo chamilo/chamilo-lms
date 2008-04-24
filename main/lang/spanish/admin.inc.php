@@ -814,4 +814,6 @@ $ImportLDAPUsersIntoSession = "Importar usuarios LDAP en una sesión";
 $LDAPSelectFilterOnUsersOU = "Seleccione un filtro para encontrar usuarios cuyo atributo OU (Unidad Organizativa) acabe por el mismo";
 $LDAPOUAttributeFilter = "Filtro del atributo OU";
 $SelectSessionToImportUsersTo = "Seleccione la sesión en la que quiere importar estos usuarios";
+$VisioUseRtmptTitle = "Usar el protocolo rtmpt";
+$VisioUseRtmptComment = "El protocolo rtmpt permite acceder a una videoconferencia desde detrás de un firewall, redirigiendo las comunicaciones a través del puerto 80. Esto ralentizará el streaming por lo que se recomienda no utilizarlo a menos que sea necesario.";
 ?>

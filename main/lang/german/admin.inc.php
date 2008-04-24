@@ -806,4 +806,5 @@ $LDAPSelectFilterOnUsersOU = "Filter auswählen, um einen Text am Ende des OU Att
 $LDAPOUAttributeFilter = "Der OU Attribut Filer";
 $SelectSessionToImportUsersTo = "Session auswählen, in die diese Benutzer importierte werden sollen";
 $VisioUseRtmptTitle = "Das rtmpt Protokoll benutzen";
+$VisioUseRtmptComment = "Das rtmpt Protokoll ermöglicht Videokonferenz von hinter einer Firewall, indem die Kommunikation über Port 80 weitergeleitet wird. Dadurch wird allerdings das Streaming langsamer, weshalb es empfehlenswert ist, dies nur dann zu benutzen, wenn es notwendig ist.";
 ?>

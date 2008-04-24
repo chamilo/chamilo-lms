@@ -57,7 +57,7 @@ class GradebookTable extends SortableTable
 		$this->set_header($column++, get_lang('Name'));
 		$this->set_header($column++, get_lang('Description')); 
 		$this->set_header($column++, get_lang('Weight'));
-		$this->set_header($column++, get_lang('Date'),true, 'width="80"');
+		$this->set_header($column++, get_lang('Date'),true, 'width="100"');
 		
 		//admins get an edit column
 		if (api_is_allowed_to_create_course())

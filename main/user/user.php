@@ -95,15 +95,20 @@ if(api_is_allowed_to_edit())
 		{
 			case 'unsubscribe' :
 				// Make sure we don't unsubscribe current user from the course
-				if(is_array($_POST['user'])){
+				print_r($_POST['user']);
+				if(is_array($_POST['user']))
+				{
 					$user_ids = array_diff($_POST['user'],array($_user['user_id']));
 					if(count($user_ids) > 0)
 					{
+						
+				
+											
+					
 						CourseManager::unsubscribe_user($user_ids, $_SESSION['_course']['sysCode']);
 						$message = get_lang('UsersUnsubscribed');
 					}
-				}
-				break;
+				}			
 		}
 	}
 }
@@ -182,8 +187,36 @@ if(api_is_allowed_to_edit())
 	{
 		if(isset($_GET['user_id']) && is_numeric($_GET['user_id']) && $_GET['user_id'] != $_user['user_id'])
 		{
-			CourseManager::unsubscribe_user($_GET['user_id'],$_SESSION['_course']['sysCode']);
-			$message = get_lang('UserUnsubscribed');
+			$user_id					= Database::escape_string($_GET['user_id']);			
+			$tbl_user					= Database::get_main_table(TABLE_MAIN_USER);
+			$tbl_session_rel_course		= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+			$tbl_session_rel_user		= Database::get_main_table(TABLE_MAIN_SESSION_USER);		
+		
+			$sql = 'SELECT '.$tbl_user.'.user_id
+					FROM '.$tbl_user.' user
+					INNER JOIN '.$tbl_session_rel_user.' reluser
+					ON user.user_id = reluser.id_user 
+					INNER JOIN '.$tbl_session_rel_course.' rel_course
+					ON rel_course.id_session = reluser.id_session
+					WHERE user.user_id = "'.$user_id.'"
+					AND rel_course.course_code = "'.$currentCourseID.'"
+					ORDER BY lastname, firstname';
+			$result=api_sql_query($sql,__FILE__,__LINE__);
+			
+			$row=Database::fetch_array($result,'ASSOC');		
+			
+			if ($row['user_id']!=$user_id || $row['user_id']=="")
+			{	
+				CourseManager::unsubscribe_user($_GET['user_id'],$_SESSION['_course']['sysCode']);
+				$message = get_lang('UserUnsubscribed');
+			}
+			else
+			{
+				
+				$message = get_lang('ThisStudentIsSubscribeThroughASession');
+			
+			}
+			
 		}
 	}
 } // end if allowed to edit

@@ -23,7 +23,7 @@
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 15076 2008-04-24 22:51:56Z juliomontoya $
+* 	@version $Id: survey.lib.php 15089 2008-04-25 04:57:51Z yannoo $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -836,7 +836,7 @@ class survey_manager
 	 */
 	function save_shared_question_options($form_content, $survey_data)
 	{
-		if (is_array($form_content))
+		if (is_array($form_content) && is_array($form_content['answers']))
 		{
 			// table defintion
 			$table_survey_question_option 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);

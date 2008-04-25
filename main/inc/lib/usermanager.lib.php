@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 14861 2008-04-11 22:53:34Z yannoo $
+<?php // $Id: usermanager.lib.php 15085 2008-04-25 04:29:50Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -870,7 +870,9 @@ class UserManager
 					0=>$rowf['id'],
 					1=>$rowf['field_variable'],
 					2=>$rowf['field_type'],
-					3=>(empty($rowf['field_display_text'])?'':get_lang($rowf['field_display_text'],'')),
+					//3=>(empty($rowf['field_display_text'])?'':get_lang($rowf['field_display_text'],'')),
+					//temporarily removed auto-translation. Need update to get_lang() to know if translation exists (todo)
+					3=>(empty($rowf['field_display_text'])?'':$rowf['field_display_text']),
 					4=>$rowf['field_default_value'],
 					5=>$rowf['field_order'],
 					6=>$rowf['field_visible'],

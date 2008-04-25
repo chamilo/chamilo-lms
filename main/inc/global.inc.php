@@ -57,7 +57,7 @@ $error_message_not_installed = <<<EOM
 			<title>Dokeos not installed!</title>
 			<style type="text/css" media="screen, projection">
 				/*<![CDATA[*/
-				@import "main/css/default/default.css";
+				@import "main/css/public_admin/default.css";
 				/*]]>*/
 			</style>
 		</head>
@@ -89,7 +89,7 @@ $error_message_db_problem = <<<EOM
 			<title>Dokeos database unavailable!</title>
 			<style type="text/css" media="screen, projection">
 				/*<![CDATA[*/
-				@import "main/css/default/default.css";
+				@import "main/css/public_admin/default.css";
 				/*]]>*/
 			</style>
 		</head>

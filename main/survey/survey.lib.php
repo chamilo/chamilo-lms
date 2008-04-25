@@ -23,7 +23,7 @@
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 15089 2008-04-25 04:57:51Z yannoo $
+* 	@version $Id: survey.lib.php 15090 2008-04-25 05:11:42Z yannoo $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -2825,7 +2825,35 @@ class SurveyUtil {
 	 */
 	function export_complete_report_row($possible_options, $answers_of_user, $user, $display_extra_user_fields=false)
 	{
-		$return = $user.';'; // the user column
+		global $survey_data;
+		$return = '';
+		if ($survey_data['anonymous'] == 0)
+		{
+			if(intval($user)!==0)
+			{
+				$sql = 'SELECT firstname, lastname FROM '.Database::get_main_table(TABLE_MAIN_USER).' WHERE user_id='.intval($user);
+				$rs = api_sql_query($sql, __FILE__, __LINE__);
+				if($row = Database::fetch_array($rs))
+				{
+					$user_displayed = $row['lastname'].' '.$row['firstname'];
+				}
+				else
+				{
+					$user_displayed = '-';
+				}
+				//echo '		<th><a href="'.api_get_self().'?action=userreport&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user='.$user.'">'.$user_displayed.'</a></th>'; // the user column
+				$return .= $user_displayed.';';
+			}
+			else
+			{
+				//echo '		<th>'.$user.'</th>'; // the user column
+				$return .= $user.';';
+			}
+		}
+		else
+		{
+			$return .= '-;'; // the user column
+		}
 
 		if($display_extra_user_fields)
 		{
@@ -3036,7 +3064,34 @@ class SurveyUtil {
 	function export_complete_report_row_xls($possible_options, $answers_of_user, $user, $display_extra_user_fields=false)
 	{
 		$return = array();
-		$return[] = $user; // the user column
+		global $survey_data;
+		if ($survey_data['anonymous'] == 0)
+		{
+			if(intval($user)!==0)
+			{
+				$sql = 'SELECT firstname, lastname FROM '.Database::get_main_table(TABLE_MAIN_USER).' WHERE user_id='.intval($user);
+				$rs = api_sql_query($sql, __FILE__, __LINE__);
+				if($row = Database::fetch_array($rs))
+				{
+					$user_displayed = $row['lastname'].' '.$row['firstname'];
+				}
+				else
+				{
+					$user_displayed = '-';
+				}
+				//echo '		<th><a href="'.api_get_self().'?action=userreport&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user='.$user.'">'.$user_displayed.'</a></th>'; // the user column
+				$return[] = $user_displayed;
+			}
+			else
+			{
+				//echo '		<th>'.$user.'</th>'; // the user column
+				$return[] = $user;
+			}
+		}
+		else
+		{
+			$return[] = '-'; // the user column
+		}
 	
 		if($display_extra_user_fields)
 		{

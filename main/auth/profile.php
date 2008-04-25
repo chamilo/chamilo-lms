@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 14815 2008-04-09 21:33:41Z juliomontoya $
+<?php // $Id: profile.php 15083 2008-04-25 03:49:17Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -110,7 +110,7 @@ if ($user_data !== false)
 
 $user_image = UserManager::get_user_picture_path_by_id(api_get_user_id(),'none');
 $fck_attribute['Height'] = "150";
-$fck_attribute['Width'] = "450";
+$fck_attribute['Width'] = "100%";
 $fck_attribute['ToolbarSet'] = "Profil";
 
 /*

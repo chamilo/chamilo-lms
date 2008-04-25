@@ -1,10 +1,10 @@
 <?php
-// $Id: create_backup.php 15114 2008-04-25 19:06:55Z yannoo $
+// $Id: create_backup.php 15117 2008-04-25 19:36:36Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
 	
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
@@ -19,7 +19,7 @@
 	
 	See the GNU General Public License for more details.
 	
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ============================================================================== 
 */
@@ -105,6 +105,7 @@ elseif (isset ($_POST['backup_option']) && $_POST['backup_option'] == 'select_it
 {
 	$cb = new CourseBuilder();
 	$course = $cb->build();
+	Display::display_normal_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
 	CourseSelectForm :: display_form($course);
 }
 else

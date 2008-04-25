@@ -476,9 +476,9 @@ install the PECL library for PHP. <br /><br /><span style="font-weight: bold;">N
 		  
 <hr style="width: 100%; height: 2px;" />
 
-<h2><a name="8._Videoconferencing_and_audio-recorder"></a>8. Videoconferencing and audio-recorder</h2>We will now install and configure RED5 Open Source Flash server � the Dokeos RED5 webapplication. These will provide both <br /><ul><li>Videoconferencing and</li><li>Audio recorder for Oogie</li></ul>
+<h2><a name="8._Videoconferencing_and_audio-recorder"></a>8. Videoconferencing and audio-recorder</h2>
+We will now install and configure RED5 Open Source Flash server : the Dokeos RED5 webapplication. These will provide both <br /><ul><li>Videoconferencing and</li><li>Audio recorder for Oogie</li></ul>
 Oogie allows you to convert slides but also <br />
-
 <ul>
   <li>add tests, pages and activities between the slides, thanks to the Learning Path builder</li>
   <li>get SCORM reporting thanks to the Learning path tool</li>
@@ -490,39 +490,52 @@ on the same topic.
  <br /><br /><br />You may&nbsp;want to take advantage of the audio recorder. For this :<br />
 
 <ul>
-  <li>Download and install <a href="http://osflash.org/red5">RED5 Open Source Flash server</a> (you will find Linux packages and a Windows installer on the RED 5 website)</li>
-  <li>Download <a href="http://www.dokeos.com/download.php">Dokeos RED5 webapplication</a></li>
-  <li>Unzip it and copy it into the <span style="font-style: italic;">webapps</span> directory of your RED5 installation.&nbsp;Windows : you can use <a href="http://www.7-zip.org/">7-ZIP</a>
-to untar. Target directory can be C:/Program Files/Red5/webapps/ .
-Linux with Nautilus or through a shell : cp dokeos-red5APP-1.8/*
-/usr/lib/red5/webapps</li>
-  <li>Edit the RED5 settings to fit with your firewall requirements in terms of open ports if there is a limitation.&nbsp;</li>
-  <li>Configure Red5.
-	<ul>
-		<li>Edit /usr/lib/red5/conf/red5.properties</li>
-		<li>Edit /usr/lib/red5/conf/realm.properties and change the default administrator password.</li>
-	</ul>
-  </li>
-  </ul>
-	<h4>More informations on RED5</h4>
-	Please take a look on this page : <a href="http://www.dokeos.com/wiki/index.php/Installing_videoconference">http://www.dokeos.com/wiki/index.php/Installing_videoconference</a><br /><br />
-	<h4>Configuration of your dokeos Videoconference plugin</h4>
-	The configuration of the VideoServing is done via the admin pages of Dokeos
-configuration in Dokeos platform admin, Configure the services,
-Configure Visio-conference<br />
-This contains the URL to the video conferencing application. 
-You probably need to add something before these paths if Dokeos is not 
-installed into the root of your webserver.<br />
-url:/main/webrooms/videoconference.html and <br />
-&nbsp;&nbsp;&nbsp;&nbsp; /main/webrooms/videoconference2.html<br /><br />
+  <li>Download and install <a href="http://osflash.org/red5">RED5 Open Source Flash server version 0.6</a> (you will find Linux packages and a Windows installer on the RED 5 website)</li>
+  <li>Download <a href="http://www.dokeos.com/maven/repository/com/dokeos/dokeos-recorder/2.0.0-SNAPSHOT/dokeos-recorder-2.0.0-SNAPSHOT.war">Dokeos RED5 webapplication</a></li>
+  <li>Rename it to "dokeos-recorder.war" and copy it into the <span style="font-style: italic;">webapps</span> directory of your RED5 installation.&nbsp;Windows : Target directory can be C:/Program Files/Red5/webapps/ .
+Linux with Nautilus or through a shell : cp dokeos-recorder.war /usr/lib/red5/webapps</li>
+  <li>Create an XML configuration file for Red5 (e.g. Linux: sudo mkdir /etc/dokeos/; sudo gedit /etc/dokeos/videoconference-config.xml)</li>
+  <li>Then insert the configuration as follows:</li>
+</ul>
+  <div class="code"><pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  &lt;videoconference-config&gt;
+    &lt;server-keys&gt;
+      &lt;server-key host="dokeos.domaine.com_" key="PaSSw0rd" /&gt;
+      &lt;server-key host="www.domaine.com_dokeos_" key="p4ssWoRD" /&gt;
+    &lt;/server-keys&gt;
+    &lt;moderator-check-on-whiteboard&gt;false&lt;/moderator-check-on-whiteboard&gt;
+    &lt;video-streams-dir&gt;/opt/dokeos/recorded-streams&lt;/video-streams-dir&gt;
+    &lt;vod-streams-dir&gt;/opt/dokeos/vod-streams&lt;/vod-streams-dir&gt;
+  &lt;/videoconference-config&gt;</pre></div>
 
-<h4>Connect your Dokeos installation to RED5</h4>
-You should tell Dokeos the configuration of you red5 server. This is done
-using the administration page of Dokeos. In the first field below the
-two url, set the public ip of your red5 server. The second field <br />
-will contain the value of <i>&nbsp;rtmp.port&nbsp;</i> from you red5
-configuration and the last field will contains <i>&nbsp;rtmpt.port&nbsp;</i>
-value.<br /><br />
+In this file, you will have to put at least one server-key line per portal. In this above example we authorize portals installed at the URLs:
+<ul><li>http://dokeos.domaine.com/</li><li>http://www.domaine.com/dokeos/</li></ul>
+
+The "_" at the end of each URL really matters, don't forget it.<br />
+<h4>Reloading Red5</h4>
+
+Restart Red5 to reload the configuration file and the new application using, on Ubuntu or Debian:
+<div class="code">
+/etc/init.d/red5 stop
+/etc/init.d/red5 start
+</div>
+	<h4>More information on RED5 + Dokeos</h4>
+	Please take a look on this page : <a href="http://www.dokeos.com/wiki/index.php/Installing_videoconference_2.0">http://www.dokeos.com/wiki/index.php/Installing_videoconference_2.0</a><br /><br />
+
+<h4>Configuration of your dokeos Videoconference plugin</h4>
+The configuration of the Videoconference plugin is done via the admin pages of Dokeos
+configuration in the Dokeos platform administration section, "Configure the services",
+"Visio-conference"<br /><br />
+You will be asked for 4 things
+	<ul>
+		<li>the hostname or IP address of your Red5 server (e.g. red5.myserver.com)</li>
+		<li>the port (the default port is 1935 and we recommend you leave it like this)</li>
+		<li>the password (which you have configured in your red5 configuration file</li>
+		<li>whether you want to use rtmpt or not (useful to pass through firewalls but slower)</li>
+	</ul>
+<br />
+That's it! Click "Reconfigure extension" and your courses should be equipped with two additional links to videoconference rooms...<br />
+
 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="9._Mathematical_formulas"></a>9. Mathematical formulas with LaTeX</h2>		  

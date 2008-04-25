@@ -1,5 +1,5 @@
 <?php
-// $Id: create_backup.php 13315 2007-09-27 08:17:12Z yannoo $
+// $Id: create_backup.php 15114 2008-04-25 19:06:55Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -88,7 +88,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 		$course = $cb->build();
 	}
 	$zip_file = CourseArchiver :: write_course($course);
-	Display::display_confirmation_message(get_lang('BackupCreated').'<br/><br/><a href="../course_info/download.php?archive='.$zip_file.'">'.$zip_file.'</a>', false);
+	Display::display_confirmation_message(get_lang('BackupCreated').'<br /><br /><a class="bottom-link" href="../course_info/download.php?archive='.$zip_file.'">'.$zip_file.'</a>', false);
 	echo '<p><a href="../course_home/course_home.php">&lt;&lt; '.get_lang('CourseHomepage').'</a></p>';
 ?>
 	<!-- Manual download <script language="JavaScript">
@@ -125,7 +125,7 @@ else
 		$renderer->setElementTemplate('<div>{element}</div> ');
 		$form->addElement('radio', 'backup_option', '', get_lang('CreateFullBackup'), 'full_backup');
 		$form->addElement('radio', 'backup_option', '',  get_lang('LetMeSelectItems'), 'select_items');
-		$form->addElement('html','<br/>');
+		$form->addElement('html','<br />');
 		$form->addElement('submit', null, get_lang('CreateBackup'));
 		
 		$form->add_progress_bar();

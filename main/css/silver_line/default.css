@@ -1241,7 +1241,12 @@ a.specialLink:hover,a.specialLink:focus {
 	top: 0;
 	left: 238px;
 }
-
+.confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link
+{
+	position: absolute;
+	bottom: 0.2em;
+	right: 0.5em;
+}
 #message {
 	margin: 0 auto;
 	text-align: center;

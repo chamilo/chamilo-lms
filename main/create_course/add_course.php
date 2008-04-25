@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 14696 2008-03-26 15:59:30Z juliomontoya $
+// $Id: add_course.php 15112 2008-04-25 17:43:41Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -131,8 +131,8 @@ if($form->validate())
 		}
 		$message = get_lang('JustCreated');
 		$message .= " <strong>".$visual_code."</strong>";
-		$message .= "<br/><br/>";
-		$message .= '<a href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
+		$message .= "<br /><br /><br />";
+		$message .= '<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
 		Display :: display_confirmation_message($message,false);
 	}
 	else

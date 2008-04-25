@@ -984,7 +984,12 @@ a.personal_agenda:hover  {
 	border-color: #FF0000;
 	color: #000;
 }
-
+.confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link
+{
+	position: absolute;
+	bottom: 0.2em;
+	right: 0.5em;
+}
 #message {
 	margin: 0 auto;
 	text-align: center;

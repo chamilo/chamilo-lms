@@ -437,7 +437,7 @@ class Display {
 						</style>';
 		}
 		echo '<div class="confirmation-message">';
-		Display :: display_icon('message_confirmation.gif', '', array ('style' => 'float:left; margin-right:10px;'));
+		Display :: display_icon('message_confirmation.gif', '', array ('style' => 'float:left; margin-right:10px;margin-left:5px;'));
 		echo $message.'</div>';
 	}
 

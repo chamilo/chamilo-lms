@@ -763,7 +763,12 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 	background-color: #FFD1D1;
 	min-height: 30px;
 }
-
+.confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link
+{
+	position: absolute;
+	bottom: 0.2em;
+	right: 0.5em;
+}
 #message {margin: 0 auto; text-align: center;}
 #message select {margin: 10px 0; width: 220px;}
 #message textarea {margin: 10px 0;}

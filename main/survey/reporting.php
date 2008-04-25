@@ -20,7 +20,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 14639 2008-03-18 05:31:08Z yannoo $
+* 	@version $Id: reporting.php 15091 2008-04-25 05:18:30Z yannoo $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -41,12 +41,14 @@ if ($_POST['export_report'])
 	switch($_POST['export_format'])
 	{
 		case 'xls':
+			$survey_data = survey_manager::get_survey($_GET['survey_id']);
 			$filename = 'survey_results_'.$_GET['survey_id'].'.xls';
 			$data = SurveyUtil::export_complete_report_xls($filename);
 			exit;
 			break;
 		case 'csv':
 		default:
+			$survey_data = survey_manager::get_survey($_GET['survey_id']);
 			$data = SurveyUtil::export_complete_report();
 			//$filename = 'fileexport.csv';
 			$filename = 'survey_results_'.$_GET['survey_id'].'.csv';

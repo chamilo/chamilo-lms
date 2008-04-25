@@ -1,5 +1,4 @@
-<?php
-// $Id: user_portal.php,v 1.10 2006/08/19 09:33:14 yannoo Exp $
+<?php // $Id: user_portal.php,v 1.10 2006/08/19 09:33:14 yannoo Exp $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -294,7 +293,7 @@ function get_personal_course_list($user_id)
 function display_admin_links()
 {
 	global $rootAdminWeb;
-	echo "<li><a href=\"".$rootAdminWeb."\">".get_lang("PlatformAdmin")."</a></li>";
+	echo "<li><a href=\"".$rootAdminWeb."\">".get_lang('PlatformAdmin')."</a></li>";
 }
 /**
  * Enter description here...
@@ -302,7 +301,7 @@ function display_admin_links()
  */
 function display_create_course_link()
 {
-	echo "<li><a href=\"main/create_course/add_course.php\">".get_lang("CourseCreate")."</a></li>";
+	echo "<li><a href=\"main/create_course/add_course.php\">".get_lang('CourseCreate')."</a></li>";
 }
 /**
  * Enter description here...
@@ -310,7 +309,7 @@ function display_create_course_link()
  */
 function display_edit_course_list_links()
 {
-	echo "<li><a href=\"main/auth/courses.php\">".get_lang("CourseManagement")."</a></li>";
+	echo "<li><a href=\"main/auth/courses.php\">".get_lang('CourseManagement')."</a></li>";
 }
 
 /**
@@ -327,7 +326,7 @@ function display_digest($toolsList, $digest, $orderKey, $courses)
 	{
 		// // // LEVEL 1 // // //
 		reset($digest);
-		echo "<br/><br/>\n";
+		echo "<br /><br />\n";
 		while (list ($key1) = each($digest))
 		{
 			if (is_array($digest[$key1]))
@@ -337,12 +336,12 @@ function display_digest($toolsList, $digest, $orderKey, $courses)
 				if ($orderKey[0] == 'keyTools')
 				{
 					$tools = $key1;
-					echo $toolsList[$key1][name];
+					echo $toolsList[$key1]['name'];
 				}
 				elseif ($orderKey[0] == 'keyCourse')
 				{
 					$courseSysCode = $key1;
-					echo "<a href=\"", api_get_path(WEB_COURSE_PATH), $courses[$key1][coursePath], "\">", $courses[$key1][courseCode], "</a>\n";
+					echo "<a href=\"", api_get_path(WEB_COURSE_PATH), $courses[$key1]['coursePath'], "\">", $courses[$key1]['courseCode'], "</a>\n";
 				}
 				elseif ($orderKey[0] == 'keyTime')
 				{
@@ -380,7 +379,7 @@ function display_digest($toolsList, $digest, $orderKey, $courses)
 						// // // Title of LEVEL 3 // // //
 						if ($orderKey[2] == 'keyTools')
 						{
-							$level3title = "<a href=\"".$toolsList[$key3]["path"].$courseSysCode."\">".$toolsList[$key3]["name"]."</a>";
+							$level3title = "<a href=\"".$toolsList[$key3]["path"].$courseSysCode."\">".$toolsList[$key3]['name']."</a>";
 						}
 						elseif ($orderKey[2] == 'keyCourse')
 						{
@@ -402,7 +401,7 @@ function display_digest($toolsList, $digest, $orderKey, $courses)
 								echo '...';
 							}
 						}
-						echo "<br/>\n";
+						echo "<br />\n";
 					}
 				}
 			}
@@ -484,7 +483,7 @@ function get_logged_user_course_html($my_course)
 		$course_display_code = $course_visual_code;
 	}
 
-	$s_course_status=$my_course["s"];
+	$s_course_status=$my_course['s'];
 
 	$s_htlm_status_icon="";
 
@@ -525,22 +524,22 @@ function get_logged_user_course_html($my_course)
 	}
 	else
 	{
-		$result .= $course_display_title." "." ".get_lang("CourseClosed")."";
+		$result .= $course_display_title." "." ".get_lang('CourseClosed')."";
 	}
 	// show the course_code and teacher if chosen to display this
-	if (get_setting("display_coursecode_in_courselist") == "true" OR get_setting("display_teacher_in_courselist") == "true")
+	if (get_setting('display_coursecode_in_courselist') == 'true' OR get_setting('display_teacher_in_courselist') == 'true')
 	{
-		$result .= "<br/>";
+		$result .= '<br />';
 	}
-	if (get_setting("display_coursecode_in_courselist") == "true")
+	if (get_setting('display_coursecode_in_courselist') == 'true')
 	{
 		$result .= $course_display_code;
 	}
-	if (get_setting("display_coursecode_in_courselist") == "true" AND get_setting("display_teacher_in_courselist") == "true")
+	if (get_setting('display_coursecode_in_courselist') == 'true' AND get_setting('display_teacher_in_courselist') == 'true')
 	{
 		$result .= ' &ndash; ';
 	}
-	if (get_setting("display_teacher_in_courselist") == "true")
+	if (get_setting('display_teacher_in_courselist') == 'true')
 	{
 		$result .= $course_teacher;
 		if(!empty($course_teacher_email))
@@ -558,10 +557,10 @@ function get_logged_user_course_html($my_course)
 	if ((CONFVAL_showExtractInfo == SCRIPTVAL_InCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both) && $nbDigestEntries > 0)
 	{
 		reset($digest);
-		$result .= "<ul>";
+		$result .= '<ul>';
 		while (list ($key2) = each($digest[$thisCourseSysCode]))
 		{
-			$result .= "<li>";
+			$result .= '<li>';
 			if ($orderKey[1] == 'keyTools')
 			{
 				$result .= "<a href=\"$toolsList[$key2] [\"path\"] $thisCourseSysCode \">";
@@ -571,12 +570,12 @@ function get_logged_user_course_html($my_course)
 			{
 				$result .= format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($key2));
 			}
-			$result .= "</li>";
-			$result .= "<ul>";
+			$result .= '</li>';
+			$result .= '<ul>';
 			reset($digest[$thisCourseSysCode][$key2]);
 			while (list ($key3, $dataFromCourse) = each($digest[$thisCourseSysCode][$key2]))
 			{
-				$result .= "<li>";
+				$result .= '<li>';
 				if ($orderKey[2] == 'keyTools')
 				{
 					$result .= "<a href=\"$toolsList[$key3] [\"path\"] $thisCourseSysCode \">";
@@ -586,23 +585,23 @@ function get_logged_user_course_html($my_course)
 				{
 					$result .= format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($key3));
 				}
-				$result .= "<ul compact=\"compact\">";
+				$result .= '<ul compact="compact">';
 				reset($digest[$thisCourseSysCode][$key2][$key3]);
 				while (list ($key4, $dataFromCourse) = each($digest[$thisCourseSysCode][$key2][$key3]))
 				{
-					$result .= "<li>";
+					$result .= '<li>';
 					$result .= htmlspecialchars(substr(strip_tags($dataFromCourse), 0, CONFVAL_NB_CHAR_FROM_CONTENT));
-					$result .= "</li>";
+					$result .= '</li>';
 				}
-				$result .= "</ul>";
-				$result .= "</li>";
+				$result .= '</ul>';
+				$result .= '</li>';
 			}
-			$result .= "</ul>";
-			$result .= "</li>";
+			$result .= '</ul>';
+			$result .= '</li>';
 		}
-		$result .= "</ul>";
+		$result .= '</ul>';
 	}
-	$result .= "</li>";
+	$result .= '</li>';
 
 
 	if(api_get_setting('use_session_mode')=='true' && !$nosession)
@@ -651,9 +650,9 @@ function show_notification($my_course)
 	$oldestTrackDate = "3000-01-01 00:00:00";
 	while ($lastTrackInCourse = mysql_fetch_array($resLastTrackInCourse))
 	{
-		$lastTrackInCourseDate[$lastTrackInCourse["access_tool"]] = $lastTrackInCourse["access_date"];
-		if ($oldestTrackDate > $lastTrackInCourse["access_date"])
-			$oldestTrackDate = $lastTrackInCourse["access_date"];
+		$lastTrackInCourseDate[$lastTrackInCourse['access_tool']] = $lastTrackInCourse['access_date'];
+		if ($oldestTrackDate > $lastTrackInCourse['access_date'])
+			$oldestTrackDate = $lastTrackInCourse['access_date'];
 	}
 	// get the last edits of all tools of this course
 	$sql = "SELECT tet.*, tet.lastedit_date last_date, tet.tool tool, tet.ref ref,
@@ -684,7 +683,7 @@ function show_notification($my_course)
 	{
 		while (list ($key, $notification) = each($notifications))
 		{
-			$lastDate = date("d/m/Y H:i", convert_mysql_date($notification['lastedit_date']));
+			$lastDate = date('d/m/Y H:i', convert_mysql_date($notification['lastedit_date']));
 			$type = $notification['lastedit_type'];
 			//$notification[image]=str_replace(".png","gif",$notification[image]);
 			//$notification[image]=str_replace(".gif","_s.gif",$notification[image]);
@@ -748,7 +747,7 @@ if ($maxCourse > 0)
 }
 
 
-echo "<div class=\"maincontent\">"; // start of content for logged in users
+echo '<div class="maincontent">'; // start of content for logged in users
 
 // Plugins for the my courses main area
 api_plugin('mycourses_main');
@@ -1004,98 +1003,6 @@ if (is_array($list))
 
 		echo "\n</ul><br /><br />\n";
 	}
-
-
-	/*if(api_get_setting('use_session_mode')=='true' && !$nosession)
-	{
-		$listActives = $listInactives = $listCourses = array();
-		foreach($list as $key=>$value){
-			if($value['active'])
-				$listActives[] = $value;
-			else if(!empty($value[2]))
-				$listInactives[] = $value;
-		}
-		$old_user_category = 0;
-		$userdefined_categories = get_user_course_categories();
-
-		//Courses which belong to no sessions
-		//echo "<ul style=\"line-height: 20px;\">\n\n\n\t<ul class=\"user_course_category\"><li>".get_lang("Courses_no_sessions")."</li></ul>\n</ul>";
-
-
-		if(count($listActives)>0 && $display_actives){
-			echo "<ul style=\"line-height: 20px;\">\n";
-
-			foreach ($listActives as $key => $value)
-			{
-				if(!empty($value[2])){
-					if($old_session != $value[2]){
-						$old_session = $value[2];
-						if($key != 0){
-							echo "\n</ul>";
-						}
-						echo "\n\n\t<ul class=\"user_course_category\"><li>".$value[3]."</li></ul>\n";
-
-						echo "<ul>";
-					}
-				}
-				echo $value[1];
-
-			}
-
-			echo "\n</ul></ul><br /><br />\n";
-
-		}
-
-		if(count($listInactives)>0 && !$display_actives){
-			echo "<ul style=\"line-height: 20px;\">";
-
-			foreach ($listInactives as $key => $value)
-			{
-				if(!empty($value[2])){
-					if($old_session != $value[2]){
-						$old_session = $value[2];
-						if($key != 0){
-							echo "\n</ul>";
-						}
-					echo "\n\n\t<ul class=\"user_course_category\"><li>".$value[3]."</li></ul>\n";
-
-					echo "<ul>";
-
-					}
-				}
-				echo $value[1];
-
-			}
-
-			echo "\n</ul><br /><br />\n";
-		}
-	}
-	else
-	{
-		$old_user_category = 0;
-		$userdefined_categories = get_user_course_categories();
-		echo "<ul>\n";
-		foreach ($list as $key => $value)
-		{
-			if ($old_user_category<>$value[0])
-			{
-				if ($key<>0 OR $value[0]<>0) // there are courses in the previous category
-				{
-					echo "\n</ul>";
-				}
-				echo "\n\n\t<ul class=\"user_course_category\"><li>".$userdefined_categories[$value[0]]."</li></ul>\n";
-				if ($key<>0 OR $value[0]<>0) // there are courses in the previous category
-				{
-					echo "<ul>";
-				}
-				$old_user_category=$value[0];
-
-			}
-			echo $value[1];
-
-		}
-		echo "\n</ul>\n";
-	}*/
 }
 echo "</div>"; // end of content section
 // Register whether full admin or null admin course
@@ -1107,14 +1014,14 @@ api_session_register('status');
 		RIGHT MENU
 ==============================================================================
 */
-echo "<div class=\"menu\">";
+echo '<div class="menu">';
 
 // tabs that are deactivated are added here
 if (!empty($menu_navigation))
 {
-	echo "<div class=\"menusection\">";
-	echo "<span class=\"menusectioncaption\">".get_lang("MainNavigation")."</span>";
-	echo "<ul class=\"menulist\">";
+	echo '<div class="menusection">';
+	echo '<span class="menusectioncaption">'.get_lang('MainNavigation').'</span>';
+	echo '<ul class="menulist">';
 	foreach($menu_navigation as $section => $navigation_info)
 	{
 		$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
@@ -1123,14 +1030,14 @@ if (!empty($menu_navigation))
 		echo '</li>';
 		echo "\n";
 	}
-	echo "</ul>";
+	echo '</ul>';
 	echo '</div>';
 }
 
 // api_display_language_form(); // moved to the profile page.
-echo "<div class=\"menusection\">";
-echo "<span class=\"menusectioncaption\">".get_lang("MenuUser")."</span>";
-echo "<ul class=\"menulist\">";
+echo '<div class="menusection">';
+echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
+echo '<ul class="menulist">';
 
 $display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION["studentview"] != "studentenview");
 if ($display_add_course_link)
@@ -1138,19 +1045,19 @@ if ($display_add_course_link)
 display_edit_course_list_links();
 display_digest($toolsList, $digest, $orderKey, $courses);
 
-echo "</ul>";
-echo "</div>";
+echo '</ul>';
+echo '</div>';
 
 // plugins for the my courses menu
 if (is_array($_plugins['mycourses_menu'])){
 
 	echo '<div class="note" style="background: none">';
 	api_plugin('mycourses_menu');
-	echo "</div>";
+	echo '</div>';
 
 }
 
-echo "</div>"; // end of menu
+echo '</div>'; // end of menu
 
 /*
 ==============================================================================

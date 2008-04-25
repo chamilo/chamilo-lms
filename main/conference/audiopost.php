@@ -11,7 +11,13 @@ if(is_array($ips))
 {
 	foreach($ips as $ip)
 	{
-		if($ip == $_SERVER['REMOTE_HOST']){$is_our_server = true;}
+		//get 255 range for known server address
+		$split = split('.',$ip);
+		$ip_range_server = $split[0].'.'.$split[1].'.'.$split[2];
+		//get 255 range for request source address
+		$split = split('.',$_SERVER['REMOTE_ADDR']);
+		$ip_range_request = $split[0].'.'.$split[1].'.'.$split[2];
+		if($ip_range_server == $ip_range_request){$is_our_server = true;}
 	}
 }
 if($is_our_server)

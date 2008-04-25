@@ -97,7 +97,6 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('ldap_versi
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('service_visio', 'visio_use_rtmpt', 'radio', null, 'false', 'VisioUseRtmptTitle', 'VisioUseRtmptComment', NULL, '');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('visio_use_rtmpt', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('visio_use_rtmpt', 'false', 'No');
-UPDATE settings_current SET selected_value='dokeos_classic' WHERE variable='stylesheets' AND category='stylesheets';
 ALTER TABLE settings_current ADD COLUMN access_url int unsigned not null default 1;
 ALTER TABLE settings_current ADD COLUMN access_url_changeable int unsigned not null default 0;
 ALTER TABLE settings_current ADD INDEX (access_url);

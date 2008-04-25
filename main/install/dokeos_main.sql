@@ -499,7 +499,7 @@ VALUES
 ('service_ppt2lp', 'path_to_lzx', 'textfield', NULL, NULL, '', NULL, NULL, NULL),
 ('service_ppt2lp', 'size', 'radio', NULL, '720x540', '', NULL, NULL, NULL),
 ('wcag_anysurfer_public_pages', NULL, 'radio','Platform','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL),
-('stylesheets', NULL, 'textfield','stylesheets','dokeos_classic','',NULL, NULL, NULL),
+('stylesheets', NULL, 'textfield','stylesheets','public_admin','',NULL, NULL, NULL),
 ('upload_extensions_list_type', NULL, 'radio', 'Security', 'blacklist', 'UploadExtensionsListType', 'UploadExtensionsListTypeComment', NULL, NULL),
 ('upload_extensions_blacklist', NULL, 'textfield', 'Security', '', 'UploadExtensionsBlacklist', 'UploadExtensionsBlacklistComment', NULL, NULL),
 ('upload_extensions_whitelist', NULL, 'textfield', 'Security', 'htm;html;jpg;jpeg;gif;png;swf;avi;mpg;mpeg', 'UploadExtensionsWhitelist', 'UploadExtensionsWhitelistComment', NULL, NULL),

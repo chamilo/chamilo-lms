@@ -52,4 +52,5 @@ $Print = "Stampa";
 $CopiedAsAnnouncement = "Copiato come avviso ";
 $NewAnnouncement = " Nuovo avviso";
 $AddAnnouncement = "Aggiungi come avviso ";
+$UpcomingEvent = "Prossimo evento";
 ?>

@@ -700,6 +700,8 @@ Per attivarlo deve essere cambiato il file php.in di PHP oppre php_admin_value n
 $VisioHost = "URL o IP del server di videoconferenza";
 $VisioPort = "Porta del server di videoconferenza";
 $VisioPassword = "Password del server di videoconferenza";
+$Port = "Porta";
+$EphorusClickHereForADemoAccount = "Clicca per un account dimostrativo";
 $ManageUserFields = "Gestisci i campi-utente";
 $UserFields = "Campi utente";
 $AddUserField = "Aggiungi un campo";

@@ -97,4 +97,11 @@ $ResultEdited = "Rezultat je bil ažuriran";
 $ChooseFormat = "Izberi format";
 $OutputFileType = "Oblika izhodne datoteke";
 $OverMax = "Vrednost, ki jo želite dodeliti je večja od zgornje meje vrednosti za to ocenjevanje.";
+$MoreInfo = "Več informacij";
+$ResultsPerUser = "Rezultati po uporabnikih";
+$TotalUser = "Zbir za uporabnika";
+$AverageTotal = "Povprečje zbirov";
+$Evaluation = "Ocenjevanje";
+$Category = "Kategorija";
+$EvaluationAverage = "Povprečje ocenjevanja";
 ?>

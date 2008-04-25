@@ -532,7 +532,12 @@ $NoUser = "Ni uporabnikov";
 $SearchResultsFor = "Rezultati iskanja za:";
 $SelectFile = "Izberi datoteko";
 $UploadFile = "Naloži datoteko";
+$WarningFaqFileNonWriteable = "Opozorilo - FAQ datoteka, locirana v /home mapi namestite Dokeos, ni pisalna. Vaše besedilo ne bo shranjeno, dokler lastnosti (atributi, dovoljenja,...) datoteke ne bodo ustrezno spremenjeni.";
 $AddCategory = "Dodaj kategorijo";
 $NoExercises = "Ni nobene vaje";
 $Exercise = "Vaja";
+$Result = "Rezultat";
+$AttemptingToLoginAs = "Poskus prijave kot %s %s (id %s)";
+$LoginSuccessfulGoToX = "Prijava uspešna. Pojdite na %s";
+$FckMp3Autostart = "Zaženi zvok avtomatično";
 ?>

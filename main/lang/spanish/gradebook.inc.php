@@ -96,4 +96,12 @@ $UserAdded = "Usuario añadido";
 $ResultEdited = "Resultado actualizado";
 $ChooseFormat = "Escoger formato";
 $OutputFileType = "Tipo de fichero de salida";
+$OverMax = "El valor que ha intentado guardar es superior al límite máximo establecido para esta evaluación.";
+$MoreInfo = "Más información";
+$ResultsPerUser = "Resultados por usuario";
+$TotalUser = "Total por usuario";
+$AverageTotal = "Media total";
+$Evaluation = "Evaluación";
+$Category = "Categoría";
+$EvaluationAverage = "Media de la evaluación";
 ?>

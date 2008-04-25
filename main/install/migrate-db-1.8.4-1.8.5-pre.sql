@@ -97,12 +97,11 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('ldap_versi
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('service_visio', 'visio_use_rtmpt', 'radio', null, 'false', 'VisioUseRtmptTitle', 'VisioUseRtmptComment', NULL, '');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('visio_use_rtmpt', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('visio_use_rtmpt', 'false', 'No');
-INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('stylesheets', NULL, 'textfield','stylesheets','default','',NULL, NULL, NULL);
-UPDATE settings_current SET selected_value='dokeos_classic' WHERE variable='stylesheets';
+UPDATE settings_current SET selected_value='dokeos_classic' WHERE variable='stylesheets' AND category='stylesheets';
 ALTER TABLE settings_current ADD COLUMN access_url int unsigned not null default 1;
 ALTER TABLE settings_current ADD COLUMN access_url_changeable int unsigned not null default 0;
 ALTER TABLE settings_current ADD INDEX (access_url);
-CREATE TABLE access_url(id	int	unsigned NOT NULL auto_increment, url	varchar(255) NOT NULL default 'localhost', description text, active int unsigned not null default 0, created_by	int	not null, tms TIMESTAMP, PRIMARY KEY (id));
+CREATE TABLE access_url(id	int	unsigned NOT NULL auto_increment, url	varchar(255) NOT NULL default 'http://localhost/', description text, active int unsigned not null default 0, created_by	int	not null, tms TIMESTAMP, PRIMARY KEY (id));
 INSERT INTO access_url(url,description,active,created_by) VALUES ('http://localhost/','URL 1',1,1);
 
 -- xxSTATSxx

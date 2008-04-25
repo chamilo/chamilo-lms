@@ -964,7 +964,7 @@ CREATE TABLE user_field_values(
 DROP TABLE IF EXISTS access_url;
 CREATE TABLE access_url(
 	id	int	unsigned NOT NULL auto_increment,
-	url	varchar(255) NOT NULL default 'localhost',
+	url	varchar(255) NOT NULL default 'http://localhost/',
 	description text,
 	active	int unsigned not null default 0,
 	created_by	int	not null,

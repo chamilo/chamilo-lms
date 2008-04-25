@@ -159,7 +159,6 @@ $selectResult = mysql_select_db($_configuration['main_database'],$dokeos_databas
 */	
 if(!empty($_configuration['multiple_access_urls']))
 {
-	error_log(__FILE__.' '.__LINE__);
 	$_configuration['access_url'] = 1;
 	$access_urls = api_get_access_urls();
 	$protocol =  ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS'])!='OFF')?'https':'http').'://';
@@ -176,10 +175,8 @@ if(!empty($_configuration['multiple_access_urls']))
 }
 else
 {
-	error_log(__FILE__.' '.__LINE__);
 	$_configuration['access_url'] = 1;
 }
-error_log(__FILE__.' '.__LINE__.' access url is :'.$_configuration['access_url']);
 
 //$sql="SELECT * FROM settings_current";
 //$result=mysql_query($sql) or die(mysql_error());
@@ -190,12 +187,10 @@ foreach($result as $row)
 	if ($row['subkey']==NULL)
 	{
 		$_setting[$row['variable']]=$row['selected_value'];
-		error_log(__FILE__.' '.__LINE__.' v.'.$row['variable'].'='.$row['selected_value']);
 	}
 	else
 	{
 		$_setting[$row['variable']][$row['subkey']]=$row['selected_value'];
-		error_log(__FILE__.' '.__LINE__.' v.'.$row['variable'].'.'.$row['subkey'].'='.$row['selected_value']);
 	}
 }
 // we have to store the settings for the plugins differently because it expects an array
@@ -206,7 +201,6 @@ $_plugins=array();
 //while ($row=mysql_fetch_array($result))
 foreach($result as $row)
 {
-	error_log(__FILE__.' '.__LINE__);
 	$key= $row['variable'];
 	if (is_string($_setting[$key]))
 	{

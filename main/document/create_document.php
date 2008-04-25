@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 14886 2008-04-14 17:42:08Z juliomontoya $
+// $Id: create_document.php 15118 2008-04-25 19:42:55Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -325,8 +325,17 @@ if ($form->validate())
 {
 	$values = $form->exportValues();
 	$readonly = isset($values['readonly']) ? 1 : 0;
-	$values['title']=trim($values['title']);
-	$values['filename']=trim($values['filename']);
+	
+	$values['title']=addslashes(trim($values['title']));
+
+	$clean_val=$values['filename']; 
+
+	$clean_val=replace_dangerous_char(($clean_val));
+	$clean_val=disable_dangerous_file($clean_val);
+	$clean_val=replace_accents($clean_val);
+
+	
+	$values['filename']=$clean_val;
 	
 	if (api_get_setting('use_document_title') != 'true')
 	{
@@ -334,7 +343,7 @@ if ($form->validate())
 	}
 	else
 	{
-		$values['filename'] = $values['title'];
+		$values['filename'] = $values['title'];	
 	}
 	
 	$filename = replace_accents($values['filename']);

@@ -96,4 +96,5 @@ $UserAdded = "Uporabnik dodan";
 $ResultEdited = "Rezultat je bil ažuriran";
 $ChooseFormat = "Izberi format";
 $OutputFileType = "Oblika izhodne datoteke";
+$OverMax = "Vrednost, ki jo želite dodeliti je večja od zgornje meje vrednosti za to ocenjevanje.";
 ?>

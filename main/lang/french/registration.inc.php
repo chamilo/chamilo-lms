@@ -38,11 +38,7 @@ $langGiveAdmin = "Rendre responsable de l\'espace de cours";
 $langUserNumber = "nombre";
 $langDownloadUserList = "Importer la liste";
 $langSend = "Importer";
-$langUserAddExplanation = "Chaque ligne du fichier à importer
-		contiendra nécessairement et uniquement les
-		5 champs <b>FirstName   LastName    Login   Password    Email</b> séparés par des tabulations
-		et présentés dans cet ordre. Les membres recevront
-		par email identifiant et mot de passe.";
+$langUserAddExplanation = "Chaque ligne du fichier à importe contiendra nécessairement et uniquement les 5 champs <b>FirstName   LastName    Login   Password    Email</b> séparés par des tabulations et présentés dans cet ordre. Les membres recevront par email login et mot de passe.";
 $langUserMany = "Importer une liste d\'utilisateurs via un fichier CSV / XML";
 $langOneByOne = "Ajouter manuellement un utilisateur";
 $langNow = "actuellement";
@@ -86,7 +82,7 @@ $langIs = "est";
 $langAddress = "L\'adresse de";
 $langSettings = "avec les paramètres suivants :
 
-Identifiant :";
+Login :";
 $langYouAreReg = "Vous êtes inscrit(e) sur";
 $langDear = "Cher(ère)";
 $langYourReg = "Votre inscription sur";
@@ -162,7 +158,7 @@ $ActiveAccount = "Activation du compte";
 $YourAccountHasToBeApproved = "Votre inscription doit être validée";
 $ApprovalForNewAccount = "Approbation pour un nouveau compte";
 $ManageUser = "Gestion de l\'utilisateur";
-$SubscribeUserToCourseAsTeacher = "Inscrire des responsables comme utilisateurs";
+$SubscribeUserToCourseAsTeacher = "Inscrire des formateurs";
 $SendMessage = "Envoyer message";
 $PasswordEncryptedForSecurity = "Votre mot de passe est crypté pour des raisons de sécurité. Après avoir cliqué sur le lien, un autre email vous sera envoyé avec votre mot de passe.";
 $UsersUnsubscribed = "Les utilisateurs sélectionnés ont été désinscrits de cet espace de cours";

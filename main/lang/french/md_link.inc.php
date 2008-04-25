@@ -10,7 +10,7 @@ $nameTools = "variable désuète de langage";
 $langTool = "Liens Metadata";
 $langNoScript = "Le script n\'est pas permis dans votre navigateur, svp ignorer l\'écran au-dessous de ce texte, il ne fonctionnera pas...";
 $langLanguageTip = "Langue utilisée pour cet Objet d\'Apprentissage";
-$langIdentifier = "Identifiant";
+$langIdentifier = "Login";
 $langIdentifierTip = "seule identification pour cet objet d\'apprentissage, composée de lettres, chiffres, _-.()\\\'!*
 ";
 $langTitleTip = "titre ou nom, et langage de ce titre ou nom";

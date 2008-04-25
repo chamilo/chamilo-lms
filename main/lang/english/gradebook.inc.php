@@ -96,4 +96,12 @@ $UserAdded = "User added";
 $ResultEdited = "Result edited";
 $ChooseFormat = "Choose format";
 $OutputFileType = "Output file type";
+$OverMax = "The value you are trying to record is over the maximum limit for this evaluation.";
+$MoreInfo = "More info";
+$ResultsPerUser = "Results per user";
+$TotalUser = "Total for user";
+$AverageTotal = "Average total";
+$Evaluation = "Evaluation";
+$Category = "Category";
+$EvaluationAverage = "Evaluation average";
 ?>

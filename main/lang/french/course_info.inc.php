@@ -1,13 +1,13 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$ModifInfo = "Propriétés de l\'espace de cours";
+$ModifInfo = "Propriétés";
 $langModifDone = "Les informations ont été modifiées";
-$langDelCourse = "Supprimer cet espace";
-$langProfessors = "Co-responsables";
+$langDelCourse = "Supprimer cet espace de cours";
+$langProfessors = "Formateurs";
 $langFaculty = "Catégorie";
 $langConfidentiality = "Confidentialité";
-$langPublic = "Accès public (depuis la page d\'accueil du portail, sans identifiant)";
+$langPublic = "Accès public (depuis l\'accueil portail, sans login)";
 $langUnsubscription = "Annuler l\'inscription";
 $langPrivOpen = "Accès privé, inscription ouverte";
 $langPrivate = "Accès privé (site réservé aux personnes figurant dans la liste <a href=../user/user.php>utilisateurs</a>)";
@@ -22,12 +22,12 @@ $langWork = "Travaux";
 $langProgramMenu = "Cahier des charges";
 $langAnnouncement = "Annonces";
 $langExercise = "Tests";
-$langStats = "Suivi";
+$langStats = "Statistiques";
 $langUplPage = "Déposer page et lier à l\\\'accueil";
 $langLinkSite = "Ajouter un lien sur la page d\\\'accueil";
 $langCourse = "L\'espace de cours ";
 $langHasDel = "a été supprimé";
-$langBackHome = "Retour à la page d\'accueil de ";
+$langBackHome = "Retour à l\'accueil de ";
 $langByDel = "En supprimant cet espace de cours, vous supprimerez tous les documents
 qu\'il contient et désinscrirez tous les utilisateurs qui y sont inscrits. <p>Voulez-vous réellement supprimer cet espace";
 $langY = "Oui";
@@ -86,7 +86,7 @@ $WorkEmailAlertDeactivate = "Désactiver alerte par e-mail pour nouveau travail s
 $DropboxEmailAlert = "Alerte par e-mail sur nouveau document soumis dans Partage de documents";
 $DropboxEmailAlertActivate = "Activer alerte par e-mail pour nouveau document soumis dans Partage de documents";
 $DropboxEmailAlertDeactivate = "Désactiver alerte par e-mail pour nouveau document soumis dans Partage de documents";
-$AllowUserEditAgenda = "Autoriser les utilisateurs à éditer l\'agenda de l\'espace de cours";
+$AllowUserEditAgenda = "Autoriser les utilisateurs à modifier l\'agenda de l\'espace de cours";
 $AllowUserEditAgendaActivate = "Activer l\'édition de l\'agenda de l\'espace de cours par les utilisateurs";
 $AllowUserEditAgendaDeactivate = "Désactiver l\'édition de l\'agenda de l\'espace de cours par les utilisateurs";
 $AllowUserEditAnnouncement = "Autoriser les utilisateurs à modifier les annonces de l\'espace de cours";

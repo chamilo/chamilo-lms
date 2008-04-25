@@ -54,13 +54,13 @@ $ChooseMic = "Sélection du micro:";
 $OK = "OK";
 $YouHaveToReconnectSoThatTheChangesTakeEffect = "Vous devez vous reconnecter pour activer les modifications.";
 $ChangeSettings = "Modifier les valeurs";
-$Course = "Cours:";
+$Course = "Espace de cours:";
 $CourseLanguage = "Langue:";
 $ConfirmClearWhiteboard = "Confirmez l\'effacement du tableau";
 $ShouldWitheboardBeClearedBeforeNewImage = "Le tableau doit-il être effacé avant ajout d\'une dia?
 ";
 $DontAskMeAgain = "Ne plus me demander";
-$EditSettings = "Editer les valeurs";
+$EditSettings = "Modifier les valeurs";
 $ShowConfirmationBeforeClearingWhiteboard = "Demander confirmation avant d\'effacer le tableau";
 $UserInfo = "Info utilisateur";
 $ClearDrawArea = "Effacer le tableau";

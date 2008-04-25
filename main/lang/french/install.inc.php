@@ -17,7 +17,7 @@ $langLocalPath = "Chemin local correspondant";
 $langAdminEmail = "Email de l\'administrateur";
 $langAdminName = "Nom de l\'administrateur";
 $langAdminSurname = "Prénom de l\'administrateur";
-$langAdminLogin = "Identifiant de l\'administrateur";
+$langAdminLogin = "Login de l\'administrateur";
 $langAdminPass = "Mot de passe de l\'administrateur (<font color=\"red\">en choisir un autre pourrait être une bonne idée</font>)";
 $langEducationManager = "Responsable du contenu";
 $langCampusName = "Nom du campus";

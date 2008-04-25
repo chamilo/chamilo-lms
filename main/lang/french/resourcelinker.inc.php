@@ -1,8 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$ResourceAdded = "Ressource ajoutée. Vous pouvez maintenant retourner vers le parcours ou ajouter d\'autres ressources.";
-$LearningPath = "Parcours";
+$ResourceAdded = "Ressource ajoutée. Vous pouvez maintenant retourner vers le cours ou ajouter d\'autres ressources.";
+$LearningPath = "Cours";
 $LevelUp = "Monter";
 $AddIt = "Ajouter";
 $MainCategory = "catégorie principale";
@@ -15,8 +15,8 @@ $BackTo = "Retourner à:";
 $ExternalResources = "Ressources externes";
 $CourseResources = "Ressources du cours";
 $ExternalLink = "Lien externe";
-$DropboxAdd = "Ajouter le partage de fichiers à ce module.";
-$AddAssignmentPage = "Ajouter un lien vers Travaux dans ce module.";
+$DropboxAdd = "Ajouter le partage de documents à ce module.";
+$AddAssignmentPage = "Ajouter un lien vers Travaux";
 $Assignments = "Travaux";
 $Exercise = "Tests";
 $Link = "Liens";
@@ -38,7 +38,7 @@ $SameWindow = "Dans la même fenêtre";
 $NewWindow = "Dans une nouvelle fenêtre";
 $StepDeleted1 = "Ce";
 $StepDeleted2 = "(article) a été supprimé de cet outil. ";
-$Modify = "modifié";
+$Modify = "Modifié";
 $Chapter = "Chapitre";
 $NoAgendaItems = "Evènements";
 $AgendaAdd = "Ajouter un nouvel événement";
@@ -52,7 +52,7 @@ $EditSuccess = "Modifié avec succès";
 $AddCalendarItem = "Ajouter un nouvel événement";
 $AddAnn = "Ajouter une annonce";
 $ForumAddNewTopic = "Forum: ajouter un nouveau message";
-$ForumEditTopic = "Forum: éditer le message";
+$ForumEditTopic = "Forum: modifier le message";
 $ExerciseAnswers = "Exercice: Réponses";
 $ForumReply = "Forum: répondre";
 $AgendaSortChronologicallyDown = "Afficher les événements (du plus récent au plus ancien)";

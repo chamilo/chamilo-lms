@@ -41,20 +41,20 @@ Si la liste des fichiers devient trop longue, vous pouvez supprimer certains doc
 tous les documents. Le fichier lui-même n\'est toutefois pas supprimé pour les autres utilisateurs
 qui y ont accès à moins que tous le suppriment.
 <br>";
-$langHHome = "Aide Page d\'accueil";
-$langHomeContent = "<p>La page d\'accueil de votre espace de cours présente une série d\'outils : un texte d\'introduction, une Description du cours, un outil de publication de Documents, etc. Cette page est modulaire. Vous pouvez masquer ou afficher chacun des outils en cliquant sur + ou - (parfois icone Oeil fermé Oeil ouvert).</p>
+$langHHome = "Aide Accueil";
+$langHomeContent = "<p>L\'Accueil de votre espace de cours présente une série d\'outils : un texte d\'introduction, une Description, un outil de publication de Documents, etc. Cette page est modulaire. Vous pouvez masquer ou afficher chacun des outils en cliquant sur les icônes Oeil fermé et Oeil ouvert.</p>
 <b>Navigation</b>
-<p>La navigation se fait soit au moyen du menu en arborescence situé sous la bannière de couleur, dans le coin supérieur gauche, soit au moyen des icônes permettant un accès direct aux outils.</p>
+<p>La navigation se fait soit au moyen du menu en arborescence situé sous la bannière de couleur, dans le coin supérieur gauche.</p>
 <b>Méthodologie</b>
-<p>Il importe de rendre votre espace dynamique afin de montrer aux apprenants qu\'il y a quelqu\'un derrière l\'écran. Ainsi vous pouvez modifier régulièrement le texte d\'introduction (en cliquant sur le crayon jaune) pour y signaler des événements ou rappeler des étapes du cours.</p>
+<p>Il importe de rendre votre espace de cours dynamique afin de montrer aux apprenants qu\'il y a quelqu\'un derrière l\'écran. Ainsi vous pouvez modifier régulièrement le texte d\'introduction (en cliquant sur le crayon jaune) pour y signaler des événements ou rappeler des étapes de la formation.</p>
 <p>Pour construire votre espace de cours, une manière classique de travailler est de procéder comme suit:
-<ol><li>Dans Propriétés de l\'espace de cours, cochez Accès : privé et Inscription : refusé afin d\'interdire toute visite pendant la phase de fabrication de l\'espace de cours,</li>
-<li>Affichez tous les outils en cliquant sur le lien gris \'Afficher\' sous le nom des outils masqués dans le bas de l\'écran,</li>
-<li>Utilisez les outils pour \'remplir\' votre espace de cours de contenus, d\'événements, de groupes, etc.,</li>
+<ol><li>Dans Propriétés, cochez Accès : privé et Inscription : refusé afin d\'interdire toute visite pendant la phase de fabrication,</li>
+<li>Affichez tous les outils en cliquant sur le lien gris Afficher sous le nom des outils masqués dans le bas de l\'écran,</li>
+<li>Utilisez les outils pour composer votre espace de cours de contenus, d\'événements, de groupes, etc.,</li>
 <li>Désactivez tous les outils,</li>
 <li>Utilisez l\'outil Cours pour construire une séquence de formation à travers les autres outils</li>
-<li>Rendez le cours ainsi créé visible : il s\'affichera sur la page d\'accueil</li>
-<li> Votre espace de cours est terminé. Il présente un texte d\'introduction suivi d\'un lien portant le titre du parcours que vous avez créé.<I></I></li></ol>";
+<li>Rendez le cours ainsi créé visible : il s\'affichera sur l\'accueil</li>
+<li> Votre espace de cours est prêt. Il présente un texte d\'introduction suivi d\'un lien portant le titre du parcours que vous avez créé.<I></I></li></ol>";
 $langHOnline = "Aide Vidéoconférence";
 $langOnlineContent = "<b>Dokeos Vidéoconférence</b>
 <p>Dokeos Vidéoconférence  est un outil de vidéoconférence basé sur le web et qui utilise la technologie Flash. Il vous permet d\'organiser facilement des réunions virtuelles entre 2, 3 ou 4 lieux distants ainsi que des classes virtuelles (interaction entre un formateur et jusqu\'à 200 apprenants).</p>
@@ -349,7 +349,7 @@ $langHLinks = "Aide Liens";
 $langLinksContent = "<p>L\'outil Liens vous permet de constituer une bibliothèque de ressources pour vos apprenants et en particulier de ressources que vous n\'avez pas produites vous-même.</p>
 <p>Lorsque la liste s\'allonge, il peut être utile d\'organiser les liens en catégories afin de faciliter la recherche d\'information par vos apprenants. Veillez é vérifier de temps en temps si les liens sont toujours valides.</p>
 <p>Le champ description peut être utilisé de manière pédagogiquement dynamique en y ajoutant non pas nécessairement la description des documents ou des sites eux-mêmes, mais la description de l\'activité que vous attendez de vos apprenants par rapport aux ressources. Si vous pointez, par exemple, vers une page sur la méthode SONCAS, le champ Description peut inviter à définir chacun des termes de cet acronyme. ";
-$langHMycourses = "Aide Ma page d\'accueil";
+$langHMycourses = "Aide Mes espaces de cours";
 $langMycoursesContent = "<p>Une fois identifié dans le système, vous êtes ici sur <i>votre</i> page. Vous voyez:
 <ul><li><b>Mes espaces de cours</b> au milieu de la page, ainsi que la possibilité de créer de nouveaux espaces de cours (bouton dans le menu de droite),</li>
 <li>Dans l\'entête, <b>Mon profil</b>: vous pouvez modifier là votre mot de passe, importer votre photo dans le système, modifier votre login,</li>
@@ -383,10 +383,9 @@ $langTrackingContent = "<p>L\'outil de suivi statistique vous permet de suivre l
 Pour obtenir les statistiques nominatives, cliquez sur \'Utilisateurs\'. Pour les statistiques globales, cliquez sur \'Montrer tout\'.</p>
 <p>";
 $langHSettings = "Aide Propriétés de l\'espace de cours";
-$langSettingsContent = "<p>L\'outil \'Propriétés de l\'espace de cours\' vous permet de modifier le comportement global de votre espace.</p>
-<p>La partie supérieure de la page permet de modifier les rubriques qui apparaissent dans l\'entête de l\'espace: nom du formateur, intitulé de l\'espace de cours, code, langue. Le département est facultatif et peut représenter un sous-ensemble de votre organisation : cellule, groupe de travail etc.</p>
-<p>La partie médiane de la page vous permet de déterminer les paramètres de confidentialité. Une utilisation classique consiste à fermer tout accès à l\'espace de cours pendant la période de fabrication (pas d\'accès, pas d\'inscription), d\'ouvrir ensuite à l\'inscription mais non à la visibilité publique, et ce le temps nécessaire pour que chacun des participants s\'inscrive, puis de refermer l\'inscription et d\'aller dans Utilisateurs chasser les éventuels intrus. Certaines organisations préfèrent ne pas utiliser cette méthode et recourir à une inscription administrative centralisée. Dans ce cas, les participants n\'ont pas même l\'opportunité de s\'inscrire à votre cours, quand bien même vous, en tant que formateur, leur en donneriez l\'accès. Observez donc la page d\'accueil de votre portail (non celle de votre espace de cours) pour voir si le lien \'S\'inscrire\' est présent.</p>
-<p>La partie inférieure de la page permet d\'effectuer une sauvegarde de l\'espace de cours et/ou de supprimer celui-ci. La sauvegarde copiera une archive ZIP de votre espace sur le serveur et vous permettra en outre de le récupérer sur votre ordinateur local par téléchargement. C\'est une façon commode de récupérer l\'ensemble des documents qui se trouvent dans votre espace. Il vous faudra utiliser un outil de décompression genre Winzip® ou 7zip pour ouvrir l\'archive une fois récupérée.";
+$langSettingsContent = "<p>L\'outil Propriétés vous permet de modifier le comportement global de votre espace de cours.</p>
+<p>La partie supérieure de la page permet de modifier les rubriques qui apparaissent dans l\'entête de l\'espace: nom du formateur, intitulé, code, langue. Le département est facultatif et peut représenter un sous-ensemble de votre organisation : cellule, groupe de travail etc.</p>
+<p>La partie médiane de la page vous permet de déterminer les paramètres de confidentialité. Une utilisation classique consiste à fermer tout accès à l\'espace de cours pendant la période de fabrication (pas d\'accès, pas d\'inscription), d\'ouvrir ensuite à l\'inscription mais non à la visibilité publique, et ce le temps nécessaire pour que chacun des participants s\'inscrive, puis de refermer l\'inscription et d\'aller dans Utilisateurs chasser les éventuels intrus. Certaines organisations préfèrent ne pas utiliser cette méthode et recourir à une inscription centralisée. Dans ce cas, les participants n\'ont pas  l\'opportunité de s\'inscrire à votre espace de cours, quand bien même vous, en tant que formateur, leur en donneriez l\'accès. Observez donc l\'accueil de votre portail (non celui de votre espace de cours) pour voir si le lien S\'inscrire est présent.</p>";
 $langHExternal = "Aide Ajouter un lien";
 $langExternalContent = "<p>Dokeos est un outil modulaire. Il vous permet de masquer et d\'afficher les outils à votre guise. Poussant plus loin cette logique, Dokeos vous permet aussi d\'ajouter des liens sur votre page d\'accueil.</p>
 Ces liens peuvent être de deux types:

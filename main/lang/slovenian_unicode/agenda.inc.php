@@ -52,4 +52,5 @@ $Print = "Natisni";
 $CopiedAsAnnouncement = "Kopirano kot obvestilo";
 $NewAnnouncement = "Novo obvestilo";
 $AddAnnouncement = "Dodano kot obvestilo";
+$UpcomingEvent = "Prihajajoč dogodek";
 ?>

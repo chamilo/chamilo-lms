@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003-2005 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
@@ -19,7 +19,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -86,9 +86,17 @@ if(!empty($_GET['edit']) && $_GET['edit']=='true' && api_is_platform_admin())
 	if($form -> validate())
 	{
 		$content = $form -> getSubmitValue('faq_content');
-		$fp = fopen(api_get_path(SYS_PATH).'home/'.$faq_file,'w');
-		fwrite($fp, $content);
-		fclose($fp);
+		$fpath = api_get_path(SYS_PATH).'home/'.$faq_file;
+		if(is_file($fpath) && is_writeable($fpath))
+		{
+			$fp = fopen(api_get_path(SYS_PATH).'home/'.$faq_file,'w');
+			fwrite($fp, $content);
+			fclose($fp);
+		}
+		else
+		{
+			echo get_lang('WarningFaqFileNonWriteable').'<br />';
+		}
 		echo $content;
 	}
 	else

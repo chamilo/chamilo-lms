@@ -771,7 +771,8 @@ class Tracking {
 		}
 		$sql = 'SELECT user_id, MAX(login_course_date) max_date FROM'.$tbl_track_login.' stats_login'.$inner.'
 				GROUP BY user_id
-				HAVING DATE_ADD(max_date, INTERVAL '.$since.' DAY) < NOW() ';
+				HAVING DATE_SUB( NOW(), INTERVAL '.$since.' DAY) > max_date ';
+		//HAVING DATE_ADD(max_date, INTERVAL '.$since.' DAY) < NOW() ';
 
 		$rs = api_sql_query($sql,__FILE__,__LINE__);
 		$inactive_users = array();

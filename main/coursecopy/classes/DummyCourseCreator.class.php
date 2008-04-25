@@ -1,5 +1,5 @@
 <?php
-// $Id: DummyCourseCreator.class.php 9246 2006-09-25 13:24:53Z bmol $
+// $Id: DummyCourseCreator.class.php 15087 2008-04-25 04:37:14Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -187,7 +187,7 @@ class DummyCourseCreator
 		$number_of_categories = rand(5, 10);
 		for ($i = 0; $i < $number_of_categories; $i ++)
 		{
-			$linkcat = new LinkCategory($i, $this->get_dummy_content('title'), $this->get_dummy_content('description'));
+			$linkcat = new LinkCategory($i, $this->get_dummy_content('title'), $this->get_dummy_content('description'),$i);
 			$this->course->add_resource($linkcat);
 		}
 		// create links

@@ -1,4 +1,4 @@
-<?php // $Id: LinkCategory.class.php 11363 2007-03-03 10:47:32Z yannoo $
+<?php // $Id: LinkCategory.class.php 15087 2008-04-25 04:37:14Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -60,7 +60,7 @@ class LinkCategory extends Resource
 	function show()
 	{
 		parent::show();
-		echo $this->title.' '.$this->description.'<br/>';
+		echo $this->title.' '.$this->description.'<br />';
 	}
 }
 ?>

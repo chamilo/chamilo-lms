@@ -44,15 +44,21 @@ class Export
 	{			
 		$file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.csv';
 		$handle = @fopen($file, 'a+');		
-			
-		foreach ($data as $index => $row)
+		
+		if(is_array($data))
 		{
-			$line='';	
-			foreach($row as $value)			
-			{				
-				$line .= '"'.str_replace('"','""',$value).'";';
+			foreach ($data as $index => $row)
+			{
+				$line='';
+				if(is_array($row))
+				{	
+					foreach($row as $value)			
+					{				
+						$line .= '"'.str_replace('"','""',$value).'";';
+					}
+				}
+				@fwrite($handle, $line."\n");	
 			}
-			@fwrite($handle, $line."\n");	
 		}
 		@fclose($handle);				
 		DocumentManager :: file_send_for_download($file, true, $filename.'.csv');	

@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 15083 2008-04-25 03:49:17Z yannoo $
+<?php // $Id: profile.php 15102 2008-04-25 08:22:09Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -301,6 +301,7 @@ foreach($extra as $id => $field_details)
 				$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
 			}
 			$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);	
 			break;
 		case USER_FIELD_TYPE_SELECT:
 			$options = array();
@@ -308,7 +309,8 @@ foreach($extra as $id => $field_details)
 			{
 				$options[$option_details[1]] = $option_details[2];
 			}
-			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');			
+			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');	
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);			
 			break;
 		case USER_FIELD_TYPE_SELECT_MULTIPLE:
 			$options = array();
@@ -317,6 +319,7 @@ foreach($extra as $id => $field_details)
 				$options[$option_details[1]] = $option_details[2];
 			}
 			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);	
 			break;
 		case USER_FIELD_TYPE_DATE:
 			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3]);

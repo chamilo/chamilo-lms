@@ -95,7 +95,7 @@ if(api_is_allowed_to_edit())
 		{
 			case 'unsubscribe' :
 				// Make sure we don't unsubscribe current user from the course
-				print_r($_POST['user']);
+				
 				if(is_array($_POST['user']))
 				{
 					$user_ids = array_diff($_POST['user'],array($_user['user_id']));

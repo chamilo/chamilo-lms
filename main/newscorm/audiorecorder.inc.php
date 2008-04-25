@@ -7,6 +7,7 @@
  * @author Eric Marguin <e.marguin@elixir-interactive.com>
  * @author Arnaud Ligot <arnaud@cblue.be>
  */
+global $_configuration;
 $audio_recorder_studentview = false;
 list($width, $height) = $audio_recorder_studentview =='true' ? array(295, 24) : array(295,90);
 $player = $audio_recorder_studentview =='true' ? 'player2.swf' : 'recorder2.swf';

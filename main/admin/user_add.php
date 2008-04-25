@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 14923 2008-04-16 14:06:02Z elixir_inter $
+<?php // $Id: user_add.php 15105 2008-04-25 08:38:20Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -189,10 +189,6 @@ $form->addElement('radio','active','',get_lang('Inactive'),0);
 $extra = UserManager::get_extra_fields(0,50,5,'ASC');
 foreach($extra as $id => $field_details)
 {
-	if($field_details[6] == 0)
-	{
-		continue;
-	}
 	switch($field_details[2])
 	{
 		case USER_FIELD_TYPE_TEXT:

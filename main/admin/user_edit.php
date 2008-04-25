@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 14955 2008-04-20 03:20:36Z yannoo $
+<?php // $Id: user_edit.php 15105 2008-04-25 08:38:20Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -211,10 +211,6 @@ if(! $user_data['platform_admin'] )
 $extra = UserManager::get_extra_fields(0,50,5,'ASC');
 foreach($extra as $id => $field_details)
 {
-	if($field_details[6] == 0)
-	{
-		continue;
-	}
 	switch($field_details[2])
 	{
 		case USER_FIELD_TYPE_TEXT:

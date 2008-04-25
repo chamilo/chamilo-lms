@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 14854 2008-04-11 15:42:13Z juliomontoya $
+*  	@version $Id: work.php 15082 2008-04-25 03:35:07Z yannoo $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -478,7 +478,7 @@ if (api_is_allowed_to_edit())
 		$list_id=get_parent_directories($my_cur_dir_path);
 		for ($i = 0; $i < count($list_id); $i++)
 		{
-			api_item_property_update($_course, 'work', $list_id[$i], get_lang('FolderUpdated'), $user_id);								
+			api_item_property_update($_course, 'work', $list_id[$i], 'FolderUpdated', $user_id);								
 		}			
 	}
 	
@@ -523,18 +523,18 @@ if (api_is_allowed_to_edit())
 			// add the directory	
 			$id = mysql_insert_id();
 			//Folder created
-			api_item_property_update($_course, 'work', $id, get_lang('DirCr'), $user_id);			
+			api_item_property_update($_course, 'work', $id, 'DirectoryCreated', $user_id);			
 			
 			// update all the parents in the table item propery
 			$list_id=get_parent_directories($my_cur_dir_path);
 									
 			for ($i = 0; $i < count($list_id); $i++)
 			{
-				api_item_property_update($_course, 'work', $list_id[$i], get_lang('FolderUpdated'), $user_id);								
+				api_item_property_update($_course, 'work', $list_id[$i], 'FolderUpdated', $user_id);								
 			}			
 			//-------------------------------------------------------------------------------
 
-			Display :: display_normal_message('<span title="' . $created_dir . '">' . get_lang('DirCr') . '</span>', false);
+			Display :: display_normal_message('<span title="' . $created_dir . '">' . 'DirectoryCreated' . '</span>', false);
 			//uncomment if you want to enter the created dir
 			//$curdirpath = $created_dir;
 			//$curdirpathurl = urlencode($curdirpath);
@@ -591,7 +591,7 @@ if (api_is_allowed_to_edit())
 				$list_id=get_parent_directories($cur_dir_path);						
 				for ($i = 0; $i < count($list_id); $i++)
 				{					
-					api_item_property_update($_course, 'work', $list_id[$i], get_lang('FolderUpdated'), $user_id);								
+					api_item_property_update($_course, 'work', $list_id[$i], 'FolderUpdated', $user_id);								
 				}		
 				
 				Display :: display_normal_message(get_lang('DirMv'));
@@ -643,7 +643,7 @@ else
 				
 				if ($result1) 
 				{
-					api_item_property_update($_course, 'work', $delete, get_lang('DocumentDeleted'), $user_id);
+					api_item_property_update($_course, 'work', $delete, 'DocumentDeleted', $user_id);
 					while ($thisUrl = mysql_fetch_array($result1)) 
 					{
 						// check the url really points to a file in the work area
@@ -765,14 +765,14 @@ if ($_POST['submitWork'] && $is_course_member && $check)
 			api_sql_query($sql_add_publication, __FILE__, __LINE__);
 
 			$Id = mysql_insert_id();
-			api_item_property_update($_course, 'work', $Id, get_lang('DocumentAdded'), $user_id);
+			api_item_property_update($_course, 'work', $Id, 'DocumentAdded', $user_id);
 			$succeed = true;
 			
 			// update all the parents in the table item propery
 			$list_id=get_parent_directories($my_cur_dir_path);						
 			for ($i = 0; $i < count($list_id); $i++)
 			{
-				api_item_property_update($_course, 'work', $list_id[$i], get_lang('FolderUpdated'), $user_id);								
+				api_item_property_update($_course, 'work', $list_id[$i], 'FolderUpdated', $user_id);								
 			}	
 			
 		}
@@ -805,14 +805,14 @@ if ($_POST['submitWork'] && $is_course_member && $check)
 		api_sql_query($sql, __FILE__, __LINE__);
 
 		$insertId = Database::insert_id();
-		api_item_property_update($_course, 'work', $insertId, get_lang('DocumentAdded'), $user_id);
+		api_item_property_update($_course, 'work', $insertId, 'DocumentAdded', $user_id);
 		$succeed = true;
 				
 		// update all the parents in the table item propery
 		$list_id=get_parent_directories($my_cur_dir_path);						
 		for ($i = 0; $i < count($list_id); $i++)
 		{
-			api_item_property_update($_course, 'work', $list_id[$i], get_lang('FolderUpdated'), $user_id);								
+			api_item_property_update($_course, 'work', $list_id[$i], 'FolderUpdated', $user_id);								
 		}		
 	}
 
@@ -845,7 +845,7 @@ if ($_POST['submitWork'] && $is_course_member && $check)
 
 			api_sql_query($sql, __FILE__, __LINE__);
 			$insertId = $id;
-			api_item_property_update($_course, 'work', $insertId, get_lang('DocumentUpdated'), $user_id);
+			api_item_property_update($_course, 'work', $insertId, 'DocumentUpdated', $user_id);
 			$succeed = true;			
 		} 
 		else 

@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 15015 2008-04-22 20:33:17Z juliomontoya $
+<?php // $Id: user_list.php 15095 2008-04-25 06:11:13Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -147,7 +147,8 @@ function login_user($user_id)
 	$lastname = $result["lastname"];
 	$user_id = $result["user_id"];
 
-	$message = "Attempting to login as ".$firstname." ".$lastname." (id ".$user_id.")";
+	//$message = "Attempting to login as ".$firstname." ".$lastname." (id ".$user_id.")";
+	$message = sprintf(get_lang('AttemptingToLoginAs'),$firstname,$lastname,$user_id);
 
 	$loginFailed = false;
 	$uidReset = false;
@@ -213,7 +214,8 @@ function login_user($user_id)
 			$_SESSION['login_as'] = true; // will be usefull later to know if the user is actually an admin or not (example reporting)s
 
 			$target_url = api_get_path(WEB_PATH)."user_portal.php";
-			$message .= "<br/>Login successful. Go to <a href=\"$target_url\">$target_url</a>";
+			//$message .= "<br/>Login successful. Go to <a href=\"$target_url\">$target_url</a>";
+			$message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'),'<a href="'.$target_url.'">$target_url</a>');
 			Display :: display_header(get_lang('UserList'));
 			Display :: display_normal_message($message,false);
 			Display :: display_footer();

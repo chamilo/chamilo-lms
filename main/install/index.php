@@ -342,7 +342,7 @@ elseif (!empty($_POST['step5']))
 	<title>&mdash; <?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
 	<style type="text/css" media="screen, projection">
 		/*<![CDATA[*/
-		@import "../css/default/default.css";
+		@import "../css/public_admin/default.css";
 		/*]]>*/
 	</style>
 	<script language="javascript">

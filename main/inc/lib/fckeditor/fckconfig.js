@@ -20,7 +20,7 @@
 
 FCKConfig.CustomConfigurationsPath = '' ;
 
-FCKConfig.EditorAreaCSS = FCKConfig.BasePath + '../../../../css/default/course.css';
+FCKConfig.EditorAreaCSS = FCKConfig.BasePath + '../../../../css/public_admin/course.css';
 
 FCKConfig.DocType = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' ;
 

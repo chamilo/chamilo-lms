@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 15095 2008-04-25 06:11:13Z yannoo $
+<?php // $Id: user_list.php 15137 2008-04-26 01:34:17Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -215,7 +215,7 @@ function login_user($user_id)
 
 			$target_url = api_get_path(WEB_PATH)."user_portal.php";
 			//$message .= "<br/>Login successful. Go to <a href=\"$target_url\">$target_url</a>";
-			$message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'),'<a href="'.$target_url.'">$target_url</a>');
+			$message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'),'<a href="'.$target_url.'">'.$target_url.'</a>');
 			Display :: display_header(get_lang('UserList'));
 			Display :: display_normal_message($message,false);
 			Display :: display_footer();

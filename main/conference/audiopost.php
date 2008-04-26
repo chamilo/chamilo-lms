@@ -39,13 +39,18 @@ if($is_our_server)
 			}
 			else
 			{
-				$id = DocumentManager::add_document($course_info,'/audio/'.$basename,'file',filesize($target),$basename);
+				require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+				$id = add_document($course_info,'/audio/'.$basename,'file',filesize($target),$basename);
 				if($id !== false)
 				{
 					$res = api_item_property_update($course_info,TOOL_DOCUMENT,$id,'DocumentAdded',$_GET['user_id']);
 					if($res === false)
 					{
 						error_log(__FILE__.':'.__LINE__.': Something went wrong with item properties update of '.$target,0);					
+					}
+					else
+					{//make sound invisible?
+						//$res = api_item_property_update($course_info,TOOL_DOCUMENT,$id,'invisible',$_GET['user_id']);
 					}
 				}
 				else

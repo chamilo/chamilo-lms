@@ -541,4 +541,5 @@ $Result = "Résultat";
 $AttemptingToLoginAs = "Tentative d\'identification comme %s %s (id %s)";
 $LoginSuccessfulGoToX = "Identification réussie. Cliquez sur le lien suivant pour continuer: %s";
 $FckMp3Autostart = "Démarrer le son automatiquement";
+$Learner = "Apprenant";
 ?>

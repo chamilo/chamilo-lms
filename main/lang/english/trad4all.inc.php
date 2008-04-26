@@ -542,4 +542,5 @@ $Result = "Result";
 $AttemptingToLoginAs = "Attempting to login as %s %s (id %s)";
 $LoginSuccessfulGoToX = "Login successful. Go to %s";
 $FckMp3Autostart = "Start audio automatically";
+$Learner = "Learner";
 ?>

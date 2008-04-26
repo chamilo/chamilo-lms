@@ -45,7 +45,7 @@ header('Content-Type: text/html; charset='.$charset);
 </title>
 <style type="text/css" media="screen, projection">
 /*<![CDATA[*/
-@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/default/default.css";
+@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/public_admin/default.css";
 /*]]>*/
 </style>
 <?php

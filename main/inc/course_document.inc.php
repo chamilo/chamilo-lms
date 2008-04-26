@@ -93,7 +93,7 @@ $tool_name = get_lang("Doc"); // title of the page (should come from the languag
 ?>
 <style type="text/css" media="screen, projection">
 /*<![CDATA[*/
-@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/default/default.css";
+@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/public_admin/default.css";
 /*]]>*/
 </style>
 

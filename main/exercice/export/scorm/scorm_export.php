@@ -97,8 +97,8 @@ class ScormAssessmentItem
 		{
 			$css = '<style type="text/css" media="screen, projection">'."\n";
 			$css .= '/*<![CDATA[*/'."\n";
-			$css .= '@import "'.api_get_path(WEB_PATH).'main/css/default/default.css";'."\n";
-			$css .= '@import "'.api_get_path(WEB_PATH).'main/css/default/course.css";'."\n";
+			$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/default.css";'."\n";
+			$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/course.css";'."\n";
 			$css .= '/*]]>*/'."\n";
 			$css .= '</style>'."\n";
 			$css .= '<style type="text/css" media="print">'."\n";
@@ -313,8 +313,8 @@ class ScormSection
 
 		$css = '<style type="text/css" media="screen, projection">'."\n";
 		$css .= '/*<![CDATA[*/'."\n";
-		$css .= '@import "'.api_get_path(WEB_PATH).'main/css/default/default.css";'."\n";
-		$css .= '@import "'.api_get_path(WEB_PATH).'main/css/default/course.css";'."\n";
+		$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/default.css";'."\n";
+		$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/course.css";'."\n";
 		$css .= '/*]]>*/'."\n";
 		$css .= '</style>'."\n";
 		$css .= '<style type="text/css" media="print">'."\n";

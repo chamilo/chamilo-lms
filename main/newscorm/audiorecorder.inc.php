@@ -33,7 +33,8 @@ else
 	if(Database::num_rows($res)>0)
 	{  
 		$row = Database::fetch_array($res);
-		$filepath = api_get_path(WEB_COURSE_PATH).$cp.'/document'.$row['path'];
+		//$filepath = api_get_path(WEB_COURSE_PATH).$cp.'/document'.$row['path'];
+		$filepath = api_get_path(WEB_CODE_PATH).'document/download.php?'.api_get_cidreq().'&doc_url='.$row['path'];
 		$path_to_lzx = $web_path.'conference/'.$player.'?uri='.$filepath.'&autostart=true';
 	}	
 }

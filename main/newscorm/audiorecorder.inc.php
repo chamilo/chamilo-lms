@@ -25,7 +25,7 @@ else
 	$height = 24;
 	$player = 'player2.swf';
 	$cp = api_get_course_path();
-	$docs = Database::get_main_table(TABLE_MAIN_DOCUMENT);
+	$docs = Database::get_course_table(TABLE_DOCUMENT);
 	$select = "SELECT * FROM $docs " .
 			" WHERE path like BINARY '/audio/lpi".Database::escape_string($audio_recorder_item_id)."-%' AND filetype='file' " .
 			" ORDER BY path DESC";

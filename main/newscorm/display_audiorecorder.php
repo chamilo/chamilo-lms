@@ -9,7 +9,6 @@
 /**
  * Script
  */
-
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
 
@@ -18,23 +17,16 @@ require_once('learnpath.class.php');
 require_once('scorm.class.php');
 require_once('aicc.class.php');
 
-$mylpid = 0;
-$mylpitemid = 0;
 if(isset($_SESSION['lpobject']))
 {
-	//if($debug>0) error_log('New LP - in lp_toc.php - SESSION[lpobject] is defined',0);
 	$oLP = unserialize($_SESSION['lpobject']);
 	if(is_object($oLP)){
 		$_SESSION['oLP'] = $oLP;
-		$mylpid = $oLP->get_id();
-		$mylpitemid = $oLP->get_current_item_id();
 	}else{
-		//error_log('New LP - in lp_toc.php - SESSION[lpobject] is not object - dying',0);
 		die('Could not instanciate lp object');
 	}
 }
 $charset = $_SESSION['oLP']->encoding;
-//$lp_id = $_SESSION['oLP']->get_id();
 
 echo '<html>
 		<body>';

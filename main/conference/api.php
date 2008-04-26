@@ -28,6 +28,15 @@ if ($debug>0)
 
 }
 
+
+/*==== Flash loose the cookie ===*/
+/* needed when using the nice upload window : 
+if ($_SERVER['HTTP_USER_AGENT'] == 'Shockwave Flash') {
+	$sid = $_REQUEST['sid'];
+	if ($debug>0) error_log("reusing: ".$sid);
+	session_id($sid);
+} */
+
 /*==== INCLUDE ====*/
 require_once ('../inc/global.inc.php');
 api_block_anonymous_users();
@@ -63,7 +72,7 @@ if ($action == "uploadgui")
 	<input type="hidden" name="cidReq" value="'.$cidReq.'" />
 	<input type="hidden" name="sid" value="'.Security::remove_XSS($_REQUEST["sid"]).'" />
 
-	'.get_lang('SelectFile').': <input name="filedata" type="file" /><br />
+	'.get_lang('SelectFile').': <input name="Filedata" type="file" /><br />
 	<input type="submit" value="'.get_lang('UploadFile').'"  />
 	</form>
 	';
@@ -71,6 +80,7 @@ if ($action == "uploadgui")
 }
 else if ($action == "upload")
 {
+	if ($debug >0) error_log("upload".$_FILES['Filedata']);
 	/*==== PERMISSION ====*/
 	$permissions = CourseManager::get_user_in_course_status($user_id, $cidReq);
 	if ($permissions != COURSEMANAGER)
@@ -81,23 +91,24 @@ else if ($action == "upload")
 	/*==== UPLOAD ====*/
 	$destPath = $coursePath.VIDEOCONF_UPLOAD_PATH;
 
-	$newPath = handle_uploaded_document($_course,$_FILES['filedata'],$coursePath,VIDEOCONF_UPLOAD_PATH,$user_id,0,NULL,'',0,'rename',false);
+	if (!is_dir($destPath))
+	{
+		$result = create_unexisting_directory($_course,$user_id,0,NULL,$coursePath,VIDEOCONF_UPLOAD_PATH);
+		if (!$result)
+		{
+			if ($debug>0) error_log("Can't create ".$destPath." folder",0);
+		}
+	}
+
+	$newPath = handle_uploaded_document($_course,$_FILES['Filedata'],$coursePath,VIDEOCONF_UPLOAD_PATH,$user_id,0,NULL,'',0,'rename',false);
 	if($debug>0) error_log($newPath);
-    $file_name = (strrpos($newPath,'.')>0 ? substr($newPath, 0, strrpos($newPath,'.')) : $newPath);
-    $file_extension = (strrpos($newPath,'.')>0 ? substr($newPath, strrpos($newPath,'.'),10) : '');
+	$file_name = (strrpos($newPath,'.')>0 ? substr($newPath, 0, strrpos($newPath,'.')) : $newPath);
+ 	$file_extension = (strrpos($newPath,'.')>0 ? substr($newPath, strrpos($newPath,'.'),10) : '');
 	if($debug>0) error_log(strrpos($newPath,'.'));
 	if($debug>0) error_log($file_extension);
 	if (!in_array(strtolower($file_extension), $image_extension))
 	{
-		if($debug>0) error_log('toc');
-		if (!is_dir($destPath))
-		{
-			$result = create_unexisting_directory($_course,$user_id,0,NULL,$coursePath,VIDEOCONF_UPLOAD_PATH);
-			if (!$result)
-			{
-				if ($debug>0) error_log("Can't create ".$destPath." folder",0);
-			}
-		}
+		if($debug>0) error_log("converting: ".$file_extension);
 		$take_slide_name = false;
 		$o_ppt = new OpenofficePresentation($take_slide_name);
 		$o_ppt -> convert_document($_FILES['filedata'],'add_docs_to_visio');

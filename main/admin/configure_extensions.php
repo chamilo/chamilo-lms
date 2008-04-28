@@ -63,7 +63,7 @@ if(isset($_POST['activeExtension'])){
 					if(!empty($_POST['visio_host']))
 					{
 						$tool_table = Database::get_course_table(TABLE_TOOL_LIST,$row['db_name']);
-						$select = "SELECT id FROM $toos_table WHERE name='".TOOL_VISIO_CONFERENCE."'";
+						$select = "SELECT id FROM $tool_table WHERE name='".TOOL_VISIO_CONFERENCE."'";
 						$selectres = api_sql_query($select,__FILE__, __LINE__);
 						if(Database::num_rows($selectres)<1)
 						{
@@ -78,7 +78,7 @@ if(isset($_POST['activeExtension'])){
 									category="interaction"';
 							api_sql_query($sql, __FILE__, __LINE__);		
 						}
-						$select = "SELECT id FROM $toos_table WHERE name='".TOOL_VISIO_CLASSROOM."'";
+						$select = "SELECT id FROM $tool_table WHERE name='".TOOL_VISIO_CLASSROOM."'";
 						$selectres = api_sql_query($select,__FILE__, __LINE__);
 						if(Database::num_rows($selectres)<1)
 						{

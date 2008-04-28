@@ -1189,7 +1189,8 @@ function add_document($_course,$path,$filetype,$filesize,$title,$comment=NULL, $
 	$table_document = Database::get_course_table(TABLE_DOCUMENT,$_course['dbName']);
 	$sql="INSERT INTO $table_document
 	(`path`,`filetype`,`size`,`title`, `comment`, readonly)
-	VALUES ('$path','$filetype','$filesize','$title', '$comment',$readonly)";
+	VALUES ('$path','$filetype','$filesize','".mysql_escape_string($title)."
+	', '$comment',$readonly)";
 	if(api_sql_query($sql,__FILE__,__LINE__))
 	{
 		//display_message("Added to database (id ".mysql_insert_id().")!");

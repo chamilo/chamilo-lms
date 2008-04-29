@@ -1,4 +1,4 @@
-<?php // $Id: document_slideshow.inc.php 12923 2007-09-03 12:40:45Z elixir_julian $
+<?php // $Id: document_slideshow.inc.php 15178 2008-04-29 18:35:20Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -66,7 +66,7 @@ the same starting point.
 $accepted_extensions = array('.jpg','.jpeg','.gif','.png');
 
 // resetting the images of the slideshow = destroying the slideshow
-if ($_GET['action']=="exit_slideshow")
+if (isset($_GET['action']) && $_GET['action']=="exit_slideshow")
 {
 	$_SESSION["image_files_only"]=null;
 	unset($image_files_only); 
@@ -107,14 +107,14 @@ if ( count($all_files) > 0 )
 	}
 }
 
-$tablename_column = $_GET['tablename_column'];
+$tablename_column = (isset($_GET['tablename_column'])?$_GET['tablename_column']:0);
 if($tablename_column==0){
 	$tablename_column=1;
 }
 else{
 	$tablename_column= intval($tablename_column)-1;
 }
-$tablename_direction = $_GET['tablename_direction'];
+$tablename_direction = (isset($_GET['tablename_direction'])?$_GET['tablename_direction']:'ASC');
 
 $image_files_only = sort_files($array_to_search);
 $_SESSION["image_files_only"] = $image_files_only;

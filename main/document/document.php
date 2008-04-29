@@ -1,4 +1,4 @@
-<?php // $Id: document.php 15176 2008-04-29 18:20:02Z yannoo $
+<?php // $Id: document.php 15178 2008-04-29 18:35:20Z yannoo $
 
 /*
 ==============================================================================
@@ -286,7 +286,7 @@ for ($i=0; $i<$array_len;$i++)
 	$dir_acum.=$dir_array[$i].'/';
 }
 
-Display::display_header($tool_name,"Doc");
+Display::display_header('',"Doc");
 $is_allowed_to_edit  = api_is_allowed_to_edit();
 
 /*
@@ -313,7 +313,14 @@ if($to_group_id !=0) //add group name after for group documents
 -----------------------------------------------------------
 */
 
-Display::display_introduction_section(TOOL_DOCUMENT.$_SESSION['_gid']);
+if(!empty($_SESSION['_gid']))
+{
+	Display::display_introduction_section(TOOL_DOCUMENT.$_SESSION['_gid']);
+}
+else
+{
+	Display::display_introduction_section(TOOL_DOCUMENT);
+}
 
 /*============================================================================*/
 
@@ -555,7 +562,7 @@ if($folders===false)
 {
 	$folders = array();
 }
-echo(build_directory_selector($folders,$curdirpath,$group_properties['directory'],true));
+echo(build_directory_selector($folders,$curdirpath,(isset($group_properties['directory'])?$group_properties['directory']:array()),true));
 ?>
 </div>
 	<?php
@@ -603,7 +610,7 @@ echo(build_directory_selector($folders,$curdirpath,$group_properties['directory'
 
 //==============================================================================
 
-if($docs_and_folders)
+if(isset($docs_and_folders) && is_array($docs_and_folders))
 {
 	//echo('<pre>');
 	//print_r($docs_and_folders);
@@ -655,14 +662,15 @@ if($docs_and_folders)
 		//admins get an edit column
 		if ($is_allowed_to_edit || $group_member_with_upload_rights)
 		{
+			$is_template = (isset($id['is_template'])?$id['is_template']:false);
 			// if readonly, check if it the owner of the file ?
 			if ($id['insert_user_id'] == $_user['user_id'] || api_is_platform_admin())
 			{
-				$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key, $id['is_template'],0);
+				$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key, $is_template,0);
 			}
 			else
 			{
-				$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key, $id['is_template'],$id['readonly']);			
+				$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key, $is_template,$id['readonly']);			
 			}			
 			$row[] = $edit_icons;
 		}
@@ -723,6 +731,7 @@ if(isset($_SESSION['_gid']))
 {
 	$query_vars['gidReq'] = $_SESSION['_gid'];
 }
+$query_vars['cidReq'] = api_get_course_id();
 $table->set_additional_parameters($query_vars);
 $column = 0;
 
@@ -755,8 +764,10 @@ if (count($docs_and_folders)>1)
 }
 
 $table->display();
-echo $table_footer;
-
+if(!empty($table_footer))
+{
+	echo $table_footer;
+}
 
 /*
 ==============================================================================

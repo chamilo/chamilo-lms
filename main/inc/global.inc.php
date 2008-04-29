@@ -234,8 +234,8 @@ if(get_setting('server_type') == 'test')
 	- only do addslashes on $_GET and $_POST
 	--------------------------------------------
 	*/
-	//error_reporting(E_ALL & ~E_NOTICE);
-	error_reporting(E_ALL);
+	error_reporting(E_ALL & ~E_NOTICE);
+	//error_reporting(E_ALL);
 
 	//Addslashes to all $_GET variables
 	foreach($_GET as $key=>$val)

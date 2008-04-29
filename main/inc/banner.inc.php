@@ -417,7 +417,7 @@ $chat = strpos(api_get_self(), 'chat_banner.php');
 if (!$chat)
 {
 	include_once (api_get_path(LIBRARY_PATH)."online.inc.php");
-	echo $accept;
+	//echo $accept;
 	$chatcall = chatcall();
 	if ($chatcall)
 	{

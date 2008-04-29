@@ -1820,7 +1820,10 @@ function api_display_language_form()
 	// retrieve a complete list of all the languages.
 	$language_list = api_get_languages();
 	// the the current language of the user so that his/her language occurs as selected in the dropdown menu
-	$user_selected_language = $_SESSION["user_language_choice"];
+	if(isset($_SESSION['user_language_choice']))
+	{
+		$user_selected_language = $_SESSION['user_language_choice'];
+	}
 	if (!isset ($user_selected_language))
 		$user_selected_language = $platformLanguage;
 	$original_languages = $language_list['name'];
@@ -2051,7 +2054,7 @@ function string_2_boolean($string)
 function api_number_of_plugins($location)
 {
 	global $_plugins;
-	if (is_array($_plugins[$location]))
+	if (isset($_plugins[$location]) && is_array($_plugins[$location]))
 	{
 		return count($_plugins[$location]);
 	}
@@ -2066,7 +2069,7 @@ function api_plugin($location)
 {
 	global $_plugins;
 
-	if (is_array($_plugins[$location]))
+	if (isset($_plugins[$location]) && is_array($_plugins[$location]))
 	{
 		foreach ($_plugins[$location] as $this_plugin)
 		{

@@ -38,6 +38,7 @@ define('TEACHER_HTML_FULLPAGE',5);
  */
 class FormValidator extends HTML_QuickForm
 {
+	var $with_progress_bar=false;
 	/**
 	 * Constructor
 	 * @param string $form_name Name of the form
@@ -349,7 +350,7 @@ EOT;
 		}
 		$return_value = parent::toHtml();
 		// Add the div which will hold the progress bar
-		if($this->with_progress_bar)
+		if(isset($this->with_progress_bar) && $this->with_progress_bar)
 		{
 			$return_value .= '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
 		}

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 15074 2008-04-24 22:47:26Z yannoo $
+* 	@version $Id: index.php 15166 2008-04-29 06:03:54Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -69,7 +69,7 @@ $this_section = SECTION_CAMPUS;
  * 			this can be usefull when you are on an open course and you need to log in to edit something and you immediately want to check how anonymous users
  * 			will see it.
  */
-if ($_GET['logout'])
+if (!empty($_GET['logout']))
 {
 	logout();
 }
@@ -107,10 +107,10 @@ if (isset ($_user['user_id']))
  * @todo This piece of code should probably move to local.inc.php where the actual login / logout procedure is handled.
  * @todo consider removing this piece of code because does nothing.
  */
-if ($_GET["submitAuth"] == 1)
+if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1)
 {
 	// nice lie!!!
-	echo "Attempted breakin - sysadmins notified.";
+	echo 'Attempted breakin - sysadmins notified.';
 	session_destroy();
 	die();
 }
@@ -121,7 +121,7 @@ if ($_GET["submitAuth"] == 1)
  * 		 the code does the stuff in local.inc.php and then redirects to index.php or user_portal.php depending
  * 		 on api_get_setting('page_after_login')
  */
-if ($_POST["submitAuth"])
+if (!empty($_POST["submitAuth"]))
 {
 	// the user is already authenticated, we now find the last login of the user.
 	if (isset ($_user['user_id']))
@@ -221,7 +221,7 @@ else
 }
 
 // Display System announcements
-$announcement = $_GET['announcement'] ? $_GET['announcement'] : -1;
+$announcement = isset($_GET['announcement']) ? $_GET['announcement'] : -1;
 $announcement = intval($announcement);
 
 if (isset($_user['user_id']))

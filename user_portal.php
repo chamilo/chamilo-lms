@@ -450,10 +450,10 @@ function get_logged_user_course_html($my_course)
 	$course_title = $my_course['i'];
 	$course_directory = $my_course['d'];
 	$course_teacher = $my_course['t'];
-	$course_teacher_email = $my_course['email'];
+	$course_teacher_email = isset($my_course['email'])?$my_course['email']:'';
 	$course_info = Database :: get_course_info($course_system_code);
 	$course_access_settings = CourseManager :: get_access_settings($course_system_code);
-	$course_id = $course_info['course_id'];
+	$course_id = isset($course_info['course_id'])?$course_info['course_id']:null;
 	$course_visibility = $course_access_settings['visibility'];
 	$user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_system_code);
 	//function logic - act on the data
@@ -631,6 +631,8 @@ function get_logged_user_course_html($my_course)
 
 /**
  * Returns the "what's new" icon notifications
+ * @param	array	Course information array, containing at least elements 'db' and 'k'
+ * @return	string	The HTML link to be shown next to the course
  * @version
  */
 function show_notification($my_course)
@@ -752,22 +754,12 @@ echo '<div class="maincontent">'; // start of content for logged in users
 // Plugins for the my courses main area
 api_plugin('mycourses_main');
 
-// link to see the session view or course view
-/*if(api_get_setting('use_session_mode')=='true' && api_is_allowed_to_create_course()) {
-	if(isset($_GET['sessionview'])){
-		echo '<a href="'.api_get_self().'">'.get_lang('CourseView').'</a>';
-	}
-	else {
-		echo '<a href="'.api_get_self().'?sessionview=true">'.get_lang('SessionView').'</a>';
-	}
-}*/
-
 /*
 -----------------------------------------------------------------------------
 	System Announcements
 -----------------------------------------------------------------------------
 */
-$announcement = $_GET['announcement'] ? $_GET['announcement'] : -1;
+$announcement = isset($_GET['announcement']) ? $_GET['announcement'] : -1;
 $visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
 SystemAnnouncementManager :: display_announcements($visibility, $announcement);
 
@@ -786,16 +778,6 @@ else
 
 	$personal_course_list = UserManager::get_personal_session_course_list($_user['user_id']);
 
-	/*if(api_get_setting('use_session_mode')=='true' && !$nosession)
-	{
-		echo "bouh";
-		$personal_course_list = UserManager::get_personal_session_course_list($_user['user_id']);
-	}
-	else
-	{
-		$personal_course_list = get_personal_course_list($_user['user_id']);
-	}*/
-
 	foreach ($personal_course_list as $my_course)
 	{
 		$thisCourseDbName = $my_course['db'];
@@ -803,17 +785,6 @@ else
 		$thisCoursePublicCode = $my_course['c'];
 		$thisCoursePath = $my_course['d'];
 		$sys_course_path = api_get_path(SYS_COURSE_PATH);
-		/*
-		currently disabled functionality, should return
-		$thisCoursePath = $sys_course_path . $thisCoursePath;
-		if(! file_exists($thisCoursePath))
-		{
-		echo	"<li>".$my_course['i']."<br/>";
-		echo "".get_lang("CourseDoesntExist")." (<a href=\"main/install/update_courses.php\">";
-		echo	"".get_lang("GetCourseFromOldPortal")."</a>)</li>";
-
-			continue;
-		}*/
 		$dbname = $my_course['k'];
 		$status[$dbname] = $my_course['s'];
 
@@ -1043,13 +1014,16 @@ $display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION["stud
 if ($display_add_course_link)
 	display_create_course_link();
 display_edit_course_list_links();
-display_digest($toolsList, $digest, $orderKey, $courses);
+if(isset($toolsList) and is_array($toolsList) and isset($digest))
+{
+	display_digest($toolsList, $digest, $orderKey, $courses);
+}
 
 echo '</ul>';
 echo '</div>';
 
 // plugins for the my courses menu
-if (is_array($_plugins['mycourses_menu'])){
+if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu'])){
 
 	echo '<div class="note" style="background: none">';
 	api_plugin('mycourses_menu');

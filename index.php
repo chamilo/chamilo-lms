@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 15166 2008-04-29 06:03:54Z yannoo $
+* 	@version $Id: index.php 15173 2008-04-29 17:29:11Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -504,24 +504,35 @@ function display_anonymous_right_menu()
 */
 function handle_login_failed()
 {
-	switch ($_GET['error'])
+	if(!isset($_GET['error']))
 	{
-		case '':
-			$message = get_lang("InvalidId");
-			if (api_is_self_registration_allowed())
-			{
-				$message = get_lang("InvalidForSelfRegistration");
-			}
-			break;
-		case 'account_expired':
-			$message=get_lang('AccountExpired');
-			break;
-		case 'account_inactive':
-			$message=get_lang('AccountInactive');
-			break;
-		case 'user_password_incorrect':
-			$message=get_lang('InvalidId');
-			break;
+		$message = get_lang("InvalidId");
+		if (api_is_self_registration_allowed())
+		{
+			$message = get_lang("InvalidForSelfRegistration");
+		}
+	}
+	else
+	{
+		switch ($_GET['error'])
+		{
+			case '':
+				$message = get_lang("InvalidId");
+				if (api_is_self_registration_allowed())
+				{
+					$message = get_lang("InvalidForSelfRegistration");
+				}
+				break;
+			case 'account_expired':
+				$message=get_lang('AccountExpired');
+				break;
+			case 'account_inactive':
+				$message=get_lang('AccountInactive');
+				break;
+			case 'user_password_incorrect':
+				$message=get_lang('InvalidId');
+				break;
+		}
 	}
 	echo "<div id=\"login_fail\">".$message."</div>";
 }

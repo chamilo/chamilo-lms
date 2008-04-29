@@ -259,7 +259,14 @@ function api_get_navigator()
 */
 function api_is_self_registration_allowed()
 {
-	return $GLOBALS["allowSelfReg"];
+	if(isset($GLOBALS['allowSelfReg']))
+	{
+		return $GLOBALS["allowSelfReg"];
+	}
+	else
+	{
+		return false;
+	}
 }
 /**
 *	Returns a full path to a certain Dokeos area, which you specify

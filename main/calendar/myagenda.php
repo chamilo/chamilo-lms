@@ -118,7 +118,7 @@ $MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang
 			6. delete personal agenda
   ============================================================================== */
 // 1. The default values. if there is no session yet, we have by default the month view
-if (!$_SESSION['view'])
+if (empty($_SESSION['view']))
 {
 	$_SESSION['view'] = "month";
 }
@@ -243,7 +243,7 @@ if (isset ($_user['user_id']))
 			{
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 			}
-			display_monthcalendar($agendaitems, $month, $year, $langDay_of_weekNames['long'], $monthName);
+			display_monthcalendar($agendaitems, $month, $year, array(), $monthName);
 			break;
 		case "week_view" :
 			$agendaitems = get_week_agendaitems($courses_dbs, $month, $year, $week);
@@ -251,7 +251,7 @@ if (isset ($_user['user_id']))
 			{
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
 			}
-			display_weekcalendar($agendaitems, $month, $year, $langDay_of_weekNames['long'], $monthName);
+			display_weekcalendar($agendaitems, $month, $year, array(), $monthName);
 			break;
 		case "day_view" :
 			$agendaitems = get_day_agendaitems($courses_dbs, $month, $year, $day);
@@ -259,7 +259,7 @@ if (isset ($_user['user_id']))
 			{
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");
 			}
-			display_daycalendar($agendaitems, $day, $month, $year, $langDay_of_weekNames['long'], $monthName);
+			display_daycalendar($agendaitems, $day, $month, $year, array(), $monthName);
 			break;
 		case "personal_view" :
 			show_personal_agenda();

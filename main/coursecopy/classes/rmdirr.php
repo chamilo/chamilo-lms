@@ -1,4 +1,4 @@
-<?php // $Id: rmdirr.php 3305 2005-02-03 12:44:01Z bmol $
+<?php // $Id: rmdirr.php 15180 2008-04-29 22:40:16Z yannoo $
 /**
  * Delete a file, or a folder and its contents
  *
@@ -16,7 +16,12 @@ function rmdirr($dirname)
  
     // Simple delete for a file
     if (is_file($dirname)) {
-        return unlink($dirname);
+        $res = @unlink($dirname);
+	if($res === false)
+    	{
+      		error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini'),0);
+    	}
+ 	return $res;
     }
  
     // Loop through the folder
@@ -33,7 +38,12 @@ function rmdirr($dirname)
  
     // Clean up
     $dir->close();
-    return rmdir($dirname);
+    $res = @rmdir($dirname);
+    if($res === false)
+    {
+      error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini'),0);
+    }
+    return $res;
 }
  
 ?>

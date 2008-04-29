@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseArchiver.class.php 11378 2007-03-04 01:34:09Z yannoo $
+// $Id: CourseArchiver.class.php 15180 2008-04-29 22:40:16Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -70,11 +70,29 @@ class CourseArchiver
 		$zip_dir = api_get_path(SYS_ARCHIVE_PATH).'';
 		$user = api_get_user_info();
 		$zip_file = $user['user_id'].'_'.$course->code.'_'.date("YmdHis").'.zip';
-		mkdir($backup_dir, 0755);
+		
+		$res = @mkdir($backup_dir, 0755);
+		if($res == false)
+		{
+			//TODO set and handle an error message telling the user to review the permissions on the archive directory
+      			error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini').' - This error, occuring because your archive directory will not let this script write data into it, will prevent courses backups to be created',0);
+		} 
 		// Write the course-object to the file
-		$fp = fopen($course_info_file, 'w');
-		fwrite($fp, base64_encode(serialize($course)));
-		fclose($fp);
+		$fp = @fopen($course_info_file, 'w');
+		if($fp == false)
+		{
+      			error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini'),0);
+		} 
+		$res = @fwrite($fp, base64_encode(serialize($course)));
+		if($res == false)
+		{
+      			error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini'),0);
+		} 
+		$res = @fclose($fp);
+		if($res == false)
+		{
+      			error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini'),0);
+		} 
 
 		// Copy all documents to the temp-dir
 		if( is_array($course->resources[RESOURCE_DOCUMENT]))

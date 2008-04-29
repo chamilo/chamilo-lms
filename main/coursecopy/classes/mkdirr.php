@@ -1,4 +1,4 @@
-<?php // $Id: mkdirr.php 3305 2005-02-03 12:44:01Z bmol $
+<?php // $Id: mkdirr.php 15180 2008-04-29 22:40:16Z yannoo $
 /**
  * Create a directory structure recursively
  *
@@ -25,7 +25,12 @@ function mkdirr($pathname, $mode = null)
     $next_pathname = substr($pathname, 0, strrpos($pathname, DIRECTORY_SEPARATOR));
     if (mkdirr($next_pathname, $mode)) {
         if (!file_exists($pathname)) {
-            return mkdir($pathname, $mode);
+            $res = @mkdir($pathname, $mode);
+            if($res == false)
+            {
+              error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini'),0);
+            } 
+            return $res;
         }
     }
  

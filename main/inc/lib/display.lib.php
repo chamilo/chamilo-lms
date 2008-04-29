@@ -649,6 +649,7 @@ class Display {
 	*/
 	function return_icon($image,$alt_text='',$additional_attributes=array())
 	{
+		$attribute_list = '';
 		// alt text = the image if there is none provided (for XHTML compliance)
 		if ($alt_text=='')
 		{
@@ -664,7 +665,6 @@ class Display {
 				$attribute_list.=$key.'="'.$value.'" ';
 			}
 		}
-
 		return '<img src="'.api_get_path(WEB_IMG_PATH).$image.'" alt="'.$alt_text.'"  title="'.$alt_text.'" '.$attribute_list.'  />';
 	}
 

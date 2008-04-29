@@ -1160,6 +1160,7 @@ class GroupManager
 	 */
 	function get_group_ids($course_db,$user_id)
 	{
+	$groups = array();
 	$tbl_group = Database::get_course_table(TABLE_GROUP_USER,$course_db);
 
 	$sql = "SELECT group_id FROM $tbl_group WHERE user_id = '$user_id'";

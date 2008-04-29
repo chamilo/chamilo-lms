@@ -1274,6 +1274,7 @@ class CourseManager
 	*/
 	function get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code)
 	{
+		$result_array = array();
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 

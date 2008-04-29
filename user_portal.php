@@ -606,6 +606,8 @@ function get_logged_user_course_html($my_course)
 
 	if(api_get_setting('use_session_mode')=='true' && !$nosession)
 	{
+		$session = '';
+		$active = false;
 		if(!empty($my_course['session_name']))
 		{
 			$session = $my_course['session_name'];
@@ -704,6 +706,7 @@ function get_user_course_categories()
 {
 	global $_user;
 
+	$output = array();
 	$table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 	$sql = "SELECT * FROM ".$table_category." WHERE user_id='".$_user['user_id']."'";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
@@ -933,7 +936,7 @@ if (is_array($list))
 		foreach ($listActives as $key => $value)
 		{
 			if(!empty($value[2])){
-				if($old_session != $value[2]){
+				if((isset($old_session) && $old_session != $value[2]) or ((!isset($old_session)) && isset($value[2]))){
 					$old_session = $value[2];
 					if($key != 0){
 						echo "\n</ul>";

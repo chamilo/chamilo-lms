@@ -233,7 +233,7 @@ if (!isset($_GET['show']))
 }
 
 // displaying the survey thanks message
-if ($_POST['finish_survey'])
+if (isset($_POST['finish_survey']))
 {
 	echo '<div id="survey_content" class="survey_content"><strong>'.get_lang('SurveyFinished').'</strong> <br />'.$survey_data['survey_thanks'].'</div>';
 	survey_manager::update_survey_answered($survey_data['survey_id'], $survey_invitation['user'], $survey_invitation['survey_code']);
@@ -319,9 +319,13 @@ else
 
 
 // Displaying the form with the questions
-echo '<form id="question" name="question" method="post" action="'.api_get_self().'?course='.$_GET['course'].'&invitationcode='.$_GET['invitationcode'].'&show='.$show.'&cidReq='.$_GET['cidReq'].'">';
-echo '<input type="hidden" name="language" value="'.$_POST['language'].'" />';
-if(is_array($questions)){
+$g_c = (isset($_GET['course'])?Security::remove_XSS($_GET['course']):'');
+$g_ic = (isset($_GET['invitationcode'])?Security::remove_XSS($_GET['invitationcode']):'');
+$g_cr = (isset($_GET['cidReq'])?Security::remove_XSS($_GET['cidReq']):'');
+$p_l = (isset($_POST['language'])?Security::remove_XSS($_POST['language']):'');
+echo '<form id="question" name="question" method="post" action="'.api_get_self().'?course='.$g_c.'&invitationcode='.$g_ic.'&show='.$show.'&cidReq='.$g_cr.'">';
+echo '<input type="hidden" name="language" value="'.$p_l.'" />';
+if(isset($questions) && is_array($questions)){
 	foreach ($questions as $key=>$question)
 	{
 		$display = new $question['type'];

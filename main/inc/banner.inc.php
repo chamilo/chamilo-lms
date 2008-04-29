@@ -23,7 +23,7 @@
 	Course title section
 -----------------------------------------------------------------------------
 */
-if (isset ($_cid))
+if (!empty($_cid) and $_cid != -1 and isset($_course))
 {
 	//Put the name of the course in the header
 	?>
@@ -83,7 +83,7 @@ $web_course_path = api_get_path(WEB_COURSE_PATH);
 	External link section
 -----------------------------------------------------------------------------
 */
-if ($_course['extLink']['name'] != "") /* ---  --- */
+if (isset($_course['extLink']) && $_course['extLink']['name'] != "")
 {
 	echo " / ";
 	if ($_course['extLink']['url'] != "")
@@ -111,8 +111,15 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
 
 	$statistics_database = Database :: get_statistic_database();
 	$number = count(WhoIsOnline(api_get_user_id(), $statistics_database, api_get_setting('time_limit_whosonline')));
-	$online_in_course = who_is_online_in_this_course(api_get_user_id(), api_get_setting('time_limit_whosonline'), $_course['id']);
-	$number_online_in_course= count( $online_in_course );
+	if(!empty($_course['id']))
+	{
+		$online_in_course = who_is_online_in_this_course(api_get_user_id(), api_get_setting('time_limit_whosonline'), $_course['id']);
+		$number_online_in_course= count( $online_in_course );
+	}
+	else
+	{
+		$number_online_in_course = 0;
+	}
 	echo "<li>".get_lang('UsersOnline').": ";
 
 	// Display the who's online of the platform
@@ -122,7 +129,7 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
 	}
 
 	// Display the who's online for the course
-	if ($_course AND api_get_setting('showonline','course') == "true")
+	if (is_array($_course) AND api_get_setting('showonline','course') == "true" AND isset($_course['sysCode']))
 	{
 		echo "(<a href='".api_get_path(WEB_PATH)."whoisonline.php?cidReq=".$_course['sysCode']."' target='_top'>$number_online_in_course ".get_lang('InThisCourse')."</a>)";
 	}
@@ -300,7 +307,14 @@ if ($_user['user_id'] && !api_is_anonymous())
 // Displaying the tabs
 foreach($navigation as $section => $navigation_info)
 {
-	$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
+	if(isset($GLOBALS['this_section']))
+	{
+		$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
+	}
+	else
+	{
+		$current = '';
+	}
 	echo '<li'.$current.'>';
 	echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
 	echo '</li>';
@@ -323,7 +337,7 @@ foreach($navigation as $section => $navigation_info)
  */
 $navigation = array();
 // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
-if (isset ($_cid))
+if (isset ($_cid) and $_cid!=-1 and isset($_course))
 {
 	$navigation_item['url'] = $web_course_path . $_course['path'].'/index.php';
 	switch(api_get_setting('breadcrumbs_course_homepage'))

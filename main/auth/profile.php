@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 15102 2008-04-25 08:22:09Z elixir_inter $
+<?php // $Id: profile.php 15169 2008-04-29 06:27:22Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -527,26 +527,26 @@ function upload_user_production($user_id)
 */
 $filtered_extension = false;
 
-if ($_SESSION['profile_update'])
+if (!empty($_SESSION['profile_update']))
 {
 	$update_success = ($_SESSION['profile_update'] == 'success');
 	unset($_SESSION['profile_update']);
 }
 
-if ($_SESSION['image_uploaded'])
+if (!empty($_SESSION['image_uploaded']))
 {
 	$upload_picture_success = ($_SESSION['image_uploaded'] == 'success');
 	unset($_SESSION['image_uploaded']);
 }
 
-if ($_SESSION['production_uploaded'])
+if (!empty($_SESSION['production_uploaded']))
 {
 	$upload_production_success = ($_SESSION['production_uploaded'] == 'success');
 	unset($_SESSION['production_uploaded']);
 }
 
 
-elseif ($_POST['remove_production'])
+elseif (isset($_POST['remove_production']))
 {
 	foreach (array_keys($_POST['remove_production']) as $production)
 	{
@@ -667,11 +667,11 @@ elseif ($form->validate())
 */
 Display :: display_header(get_lang('ModifyProfile'));
 
-if ($file_deleted)
+if (!empty($file_deleted))
 {
 	Display :: display_normal_message(get_lang('FileDeleted'),false);
 }
-elseif ($update_success)
+elseif (!empty($update_success))
 {
 	$message=get_lang('ProfileReg');
 	

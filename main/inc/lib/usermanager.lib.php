@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 15086 2008-04-25 04:31:27Z yannoo $
+<?php // $Id: usermanager.lib.php 15169 2008-04-29 06:27:22Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -614,7 +614,7 @@ class UserManager
 	 */
 	function build_production_list($user_id, $force = false, $showdelete=false)
 	{
-		if (!$force && $_POST['remove_production'])
+		if (!$force && !empty($_POST['remove_production']))
 			return true; // postpone reading from the filesystem
 	
 		$productions = UserManager::get_user_productions($user_id);

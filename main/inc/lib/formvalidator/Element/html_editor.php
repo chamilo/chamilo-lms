@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 14373 2008-02-26 00:48:45Z yannoo $
+// $Id: html_editor.php 15169 2008-04-29 06:27:22Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -60,11 +60,11 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		$this -> fck_editor = new FCKeditor($name);
 		$this -> fck_editor->BasePath = api_get_path(REL_PATH).'main/inc/lib/fckeditor/';
 
-		$this -> fck_editor->Width = $fck_attribute['Width'] ? $fck_attribute['Width'] : '990';
-		$this -> fck_editor->Height = $fck_attribute['Height'] ? $fck_attribute['Height'] : '400';
+		$this -> fck_editor->Width = !empty($fck_attribute['Width']) ? $fck_attribute['Width'] : '990';
+		$this -> fck_editor->Height = !empty($fck_attribute['Height']) ? $fck_attribute['Height'] : '400';
 		
 		//We get the optionnals config parameters in $fck_attribute array
-		$this -> fck_editor->Config = $fck_attribute['Config'] ? $fck_attribute['Config'] : array();
+		$this -> fck_editor->Config = !empty($fck_attribute['Config']) ? $fck_attribute['Config'] : array();
 		
 
 		
@@ -93,7 +93,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		$this -> fck_editor->Config['DefaultLanguage'] = $isocode_language;
 		
 		
-		if($_SESSION['_course']['path']!=''){
+		if(isset($_SESSION['_course']) && $_SESSION['_course']['path']!=''){
 			$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
 
 		}else{
@@ -176,6 +176,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 	 */
 	function build_FCKeditor()
 	{
+		$result = '';
 		if(! FCKeditor :: IsCompatible())
 		{
 			return parent::toHTML();

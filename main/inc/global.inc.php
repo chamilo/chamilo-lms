@@ -234,8 +234,8 @@ if(get_setting('server_type') == 'test')
 	- only do addslashes on $_GET and $_POST
 	--------------------------------------------
 	*/
-	error_reporting(E_ALL & ~E_NOTICE);
-	//error_reporting(E_ALL);
+	//error_reporting(E_ALL & ~E_NOTICE);
+	error_reporting(E_ALL);
 
 	//Addslashes to all $_GET variables
 	foreach($_GET as $key=>$val)
@@ -319,9 +319,13 @@ else
 
 // if we use the javascript version (without go button) we receive a get
 // if we use the non-javascript version (with the go button) we receive a post
-$user_language = $_GET["language"];
+$user_language = '';
+if(!empty($_GET['language']))
+{
+	$user_language = $_GET["language"];
+}
 
-if ($_POST["language_list"])
+if (!empty($_POST["language_list"]))
 {
 	$user_language = str_replace("index.php?language=","",$_POST["language_list"]);
 }
@@ -398,7 +402,7 @@ $charset = api_get_setting('platform_charset');
 
 //Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 
-if($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']))
+if($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']) && isset($_user))
 { // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
 	$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);

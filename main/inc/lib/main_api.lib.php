@@ -99,6 +99,7 @@ define('SYS_ARCHIVE_PATH', 'SYS_ARCHIVE_PATH');
 define('INCLUDE_PATH', 'INCLUDE_PATH');
 define('LIBRARY_PATH', 'LIBRARY_PATH');
 define('CONFIGURATION_PATH', 'CONFIGURATION_PATH');
+define('WEB_LIBRARY_PATH','WEB_LIBRARY_PATH');
 
 //CONSTANTS defining all tools, using the english version
 define('TOOL_DOCUMENT', 'document');
@@ -1113,7 +1114,7 @@ function get_setting($variable, $key = NULL)
 function api_get_setting($variable, $key = NULL)
 {
 	global $_setting;
-	return is_null($key) ? $_setting[$variable] : $_setting[$variable][$key];
+	return is_null($key) ? (!empty($_setting[$variable])?$_setting[$variable]:null) : $_setting[$variable][$key];
 }
 
 /**

@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 15112 2008-04-25 17:43:41Z yannoo $
+// $Id: add_course.php 15174 2008-04-29 18:00:04Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -70,6 +70,7 @@ $table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 
 // Build the form
+$categories = array();
 $form = new FormValidator('add_course');
 $form->add_textfield('title',get_lang('Title'),true,array('size'=>'60'));
 $form->addElement('static',null,null,get_lang('Ex'));

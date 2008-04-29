@@ -59,7 +59,7 @@ define("DEFAULT_DOCUMENT_QUOTA", get_setting('default_document_quotum'));
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $baseServDir = api_get_path(SYS_PATH);
 $baseServUrl = $_configuration['url_append']."/";
-$baseWorkDir = $sys_course_path.$courseDir;
+$baseWorkDir = $sys_course_path.(!empty($courseDir)?$courseDir:'');
 
 /*
 ============================================================================== 

@@ -149,7 +149,7 @@ if ($_user['user_id'] && isset($_cid))
 }
 if ( api_is_allowed_to_edit() )
 {
-	if( $help != null)
+	if(!empty($help))
 	{
 	// Show help
 	?>
@@ -355,7 +355,7 @@ if (isset ($_cid) and $_cid!=-1 and isset($_course))
 	$navigation[] = $navigation_item;
 }
 // part 2: Interbreadcrumbs. If there is an array $interbreadcrumb defined then these have to appear before the last breadcrumb (which is the tool itself)
-if (is_array($interbreadcrumb))
+if (isset($interbreadcrumb) && is_array($interbreadcrumb))
 {
 	foreach($interbreadcrumb as $breadcrumb_step)
 	{

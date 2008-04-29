@@ -78,7 +78,7 @@ if($export_csv)
 $csv_content = array();
 
 // charset determination
-if ($_GET['scormcontopen'])
+if (!empty($_GET['scormcontopen']))
 {
 	$tbl_lp = Database::get_course_table('lp');
 	$contopen = (int) $_GET['scormcontopen'];
@@ -127,7 +127,7 @@ $tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);
 $tbl_learnpath_view = Database::get_course_table(TABLE_LP_VIEW);
 $tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
-$view = $_REQUEST['view'];
+$view = (isset($_REQUEST['view'])?$_REQUEST['view']:'');
 
 $nameTools = get_lang('Tracking');
 
@@ -137,7 +137,7 @@ include("../resourcelinker/resourcelinker.inc.php");
 
 
  
-$a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, $_SESSION['id_session']);
+$a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, (empty($_SESSION['id_session'])?null:$_SESSION['id_session']));
 $nbStudents = count($a_students);
 
 /**
@@ -503,7 +503,7 @@ else {
 	
 
 	$tracking_column = isset($_GET['tracking_column']) ? $_GET['tracking_column'] : 0;
-	$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : DESC;
+	$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : 'DESC';
 	
 	if(count($a_students)>0)
 	{

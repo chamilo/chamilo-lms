@@ -238,7 +238,7 @@ function show_tools_category($course_tool_category)
 					$lnk[] = $link;
 				}
 
-				if($toolsRow['adminlink'])
+				if(!empty($toolsRow['adminlink']))
 				{
 					echo	'<a href="'.$toolsRow['adminlink'].'"><img src="'.api_get_path(WEB_CODE_PATH).'img/edit.gif" align="absmiddle" alt="'.get_lang("Edit").'"/></a>';
 				}
@@ -256,11 +256,11 @@ function show_tools_category($course_tool_category)
 
 			}
 
-			if(is_array($lnk))
+			if(isset($lnk) && is_array($lnk))
 			{
 				foreach($lnk as $this_link)
 				{
-					if(!$toolsRow['adminlink'])
+					if(empty($toolsRow['adminlink']))
 					{
 							echo "<a href=\"" .api_get_self(). "?".api_get_cidreq()."&amp;id=" . $toolsRow["id"] . "&amp;" . $this_link['cmd'] . "\">" .	$this_link['name'] . "</a>";
 					}
@@ -337,7 +337,7 @@ if(api_is_allowed_to_edit())
 		HIDE
 	-----------------------------------------------------------
 	*/
-	if($_GET["hide"]) // visibility 1 -> 0
+	if(!empty($_GET['hide'])) // visibility 1 -> 0
 	{
 		api_sql_query("UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
 		Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
@@ -348,7 +348,7 @@ if(api_is_allowed_to_edit())
 		REACTIVATE
 	-----------------------------------------------------------
 	*/
-	elseif($_GET["restore"]) // visibility 0,2 -> 1
+	elseif(!empty($_GET['restore'])) // visibility 0,2 -> 1
 	{
 		api_sql_query("UPDATE $tool_table SET visibility=1 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
 		Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
@@ -361,7 +361,7 @@ if(api_is_platform_admin())
 {
 	// Show message to confirm that a tools must be hide from available tools
 	// visibility 0,1->2
-	if($_GET["askDelete"])
+	if(!empty($_GET['askDelete']))
 	{
 		?>
 			<div id="toolhide">

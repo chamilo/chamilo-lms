@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 15078 2008-04-24 23:15:37Z yannoo $
+// $Id: settings.php 15174 2008-04-29 18:00:04Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -55,7 +55,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 // Submit Stylesheets
-if ($_POST['submit_stylesheets'])
+if (!empty($_POST['submit_stylesheets']))
 {
 	$message = store_stylesheets();
 	header("Location: ".api_get_self()."?category=stylesheets");
@@ -72,7 +72,7 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 $tool_name = get_lang('DokeosConfigSettings');
 
 // Build the form
-if ($_GET['category'] and $_GET['category'] <> "Plugins" and $_GET['category'] <> "stylesheets")
+if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['category'] <> "stylesheets")
 {
 	$form = new FormValidator('settings', 'post', 'settings.php?category='.$_GET['category']);
 	$renderer = & $form->defaultRenderer();
@@ -83,6 +83,7 @@ if ($_GET['category'] and $_GET['category'] <> "Plugins" and $_GET['category'] <
 	//$sqlsettings = "SELECT DISTINCT * FROM $table_settings_current WHERE category='$my_category' GROUP BY variable ORDER BY id ASC";
 	//$resultsettings = api_sql_query($sqlsettings, __FILE__, __LINE__);
 	//while ($row = mysql_fetch_array($resultsettings))
+	$default_values = array();
 	foreach($settings as $row)
 	{
 		$form->addElement('header', null, get_lang($row['title']));
@@ -167,7 +168,7 @@ Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);
 
 // displaying the message that the settings have been stored
-if ($_GET['action'] == "stored")
+if (!empty($_GET['action']) && $_GET['action'] == "stored")
 {
 	Display :: display_normal_message($SettingsStored);
 }
@@ -245,7 +246,7 @@ function handle_plugins()
 	$userplugins = array();
 	$table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
-	if ($_POST['submit_plugins'])
+	if (!empty($_POST['submit_plugins']))
 	{
 		store_plugins();
 		Display :: display_normal_message($SettingsStored);
@@ -346,6 +347,10 @@ function handle_plugins()
 			echo "\t\t</td>\n";
 
 			// column: LoginPageMainArea
+			if(empty($usedplugins))
+			{
+				$usedplugins = array();
+			}
 			display_plugin_cell('loginpage_main', $plugin_info, $testplugin, $usedplugins);
 			display_plugin_cell('loginpage_menu', $plugin_info, $testplugin, $usedplugins);
 			display_plugin_cell('campushomepage_main', $plugin_info, $testplugin, $usedplugins);
@@ -368,7 +373,7 @@ function display_plugin_cell($location, $plugin_info, $current_plugin, $active_p
 	echo "\t\t<td align=\"center\">\n";
 	if (in_array($location, $plugin_info['location']))
 	{
-		if (is_array($active_plugins[$location]) 
+		if (isset($active_plugins[$location]) && is_array($active_plugins[$location]) 
 			&& in_array($current_plugin, $active_plugins[$location]))
 		{
 			$checked = "checked";

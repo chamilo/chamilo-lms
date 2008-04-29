@@ -1,4 +1,4 @@
-<?php // $Id: index.php 15078 2008-04-24 23:15:37Z yannoo $
+<?php // $Id: index.php 15174 2008-04-29 18:00:04Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -65,7 +65,7 @@ if(is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SY
 		ACTION HANDLING
 ==============================================================================
 */
-if ($_POST['Register'])
+if (!empty($_POST['Register']))
 {
 	register_site();
 	Display :: display_confirmation_message(get_lang('VersionCheckEnabled'));
@@ -76,7 +76,7 @@ if ($_POST['Register'])
 		MAIN SECTION
 ==============================================================================
 */
-$keyword_url = Security::remove_XSS($_GET['keyword']);
+$keyword_url = Security::remove_XSS((empty($_GET['keyword'])?'':$_GET['keyword']));
 ?>
 
 <div class="admin_section">
@@ -134,12 +134,6 @@ $keyword_url = Security::remove_XSS($_GET['keyword']);
   <?php if(!empty($phpMyAdminPath)): ?>
   <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang("AdminDatabases"); ?></a><br />(<?php echo get_lang("DBManagementOnlyForServerAdmin"); ?>)</li>
   <?php endif; ?>
-  <?php 
-  if(!empty($_configuration['multiple_access_urls']))
-  {
-  	echo '	<li><a href="access_urls.php">'.get_lang('ConfigureMultipleAccessURLs').'</a></li>';
-  }
-  ?>
  </ul>
 </div>
 
@@ -218,7 +212,7 @@ if(api_is_platform_admin()){
   </ul>
 </div>
 <?php
-	if(count($extAuthSource['ldap'])>0){
+	if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
 	?>
 	<!-- dynamic ldap code --> 
 	<div class="admin_section">
@@ -249,7 +243,7 @@ if(api_is_platform_admin()){
   //try to display a maximum before we check the dokeos version and all that
   	session_write_close(); //close session to avoid blocking concurrent access
 	flush(); //send data to client as much as allowed by the web server
-	ob_flush();
+	//ob_flush();
 	echo get_lang('VersionCheck').': '.version_check();
   ?>
   </li>

@@ -1341,15 +1341,15 @@ function api_display_tool_title($titleElement)
 		$titleElement['mainTitle'] = $tit;
 	}
 	echo '<h3>';
-	if ($titleElement['supraTitle'])
+	if (!empty($titleElement['supraTitle']))
 	{
 		echo '<small>'.$titleElement['supraTitle'].'</small><br>';
 	}
-	if ($titleElement['mainTitle'])
+	if (!empty($titleElement['mainTitle']))
 	{
 		echo $titleElement['mainTitle'];
 	}
-	if ($titleElement['subTitle'])
+	if (!empty($titleElement['subTitle']))
 	{
 		echo '<br><small>'.$titleElement['subTitle'].'</small>';
 	}

@@ -1,4 +1,4 @@
-<?php // $Id: text.lib.php 14637 2008-03-17 22:44:52Z juliomontoya $
+<?php // $Id: text.lib.php 15174 2008-04-29 18:00:04Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -187,7 +187,7 @@ function _text_parse_tex($textext)
 	
 	foreach ($input_array as $key=>$value)
 	{
-		if ($input_array[$key-1]=='[tex]' AND $input_array[$key+1]=='[/tex]')
+		if ($key>0 && $input_array[$key-1]=='[tex]' AND $input_array[$key+1]=='[/tex]')
 		{
 			$input_array[$key]=latex_gif_renderer($value);
 			unset($input_array[$key-1]);

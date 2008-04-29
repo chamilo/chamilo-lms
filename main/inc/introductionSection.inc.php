@@ -56,10 +56,11 @@ include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php')
 $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
 $intro_editAllowed = $is_allowed_to_edit;
 
-$intro_cmdEdit = $_GET['intro_cmdEdit'];
-$intro_cmdUpdate = $_POST['intro_cmdUpdate'];
-$intro_cmdDel= $_GET['intro_cmdDel'];
-$intro_cmdAdd= $_GET['intro_cmdAdd'];
+global $charset;
+$intro_cmdEdit = (empty($_GET['intro_cmdEdit'])?'':$_GET['intro_cmdEdit']);
+$intro_cmdUpdate = (empty($_POST['intro_cmdUpdate'])?'':$_GET['intro_cmdUpdate']);
+$intro_cmdDel= (empty($_GET['intro_cmdDel'])?'':$_GET['intro_cmdDel']);
+$intro_cmdAdd= (empty($_GET['intro_cmdAdd'])?'':$_GET['intro_cmdAdd']);
 
 $form = new FormValidator('introduction_text');
 $renderer =& $form->defaultRenderer();

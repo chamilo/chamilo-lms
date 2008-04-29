@@ -74,13 +74,13 @@ class Tracking {
 	 */
 	function get_time_spent_on_the_course($user_id, $course_code) {
 		// protect datas
-		$student_id = intval($student_id);
+		$user_id = intval($user_id);
 		$course_code = addslashes($course_code);
 
 		$tbl_track_course = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
 		$sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . ' 
-						WHERE user_id = ' . intval($user_id) . '
+						WHERE user_id = ' . $user_id . '
 						AND course_code="' . $course_code . '"';
 
 		$rs = api_sql_query($sql,__FILE__,__LINE__);

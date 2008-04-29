@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 15010 2008-04-22 16:16:13Z juliomontoya $
+<?php //$Id: myStudents.php 15174 2008-04-29 18:00:04Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -60,7 +60,7 @@ $csv_content = array();
  		$course_infos = CourseManager :: get_course_information($_GET['course']);
  		if(empty($cidReq))
  			$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_infos['directory'], 'name' => $course_infos['title']);
- 		$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$_GET['course'].'&studentlist=true&id_session='.$_SESSION['id_session'], "name" => get_lang("Tracking"));
+ 		$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$_GET['course'].'&studentlist=true&id_session='.(empty($_SESSION['id_session'])?'':$_SESSION['id_session']), "name" => get_lang("Tracking"));
  	}
  	else
  	{
@@ -497,11 +497,18 @@ if(!empty($_GET['student']))
 					}
 				} // end if(api_get_setting('use_session_mode')=='true')
 				
-				
-				$a_date_start = explode('-',$a_infosCours['date_start']);
-				$date_start = $a_date_start[2].'/'.$a_date_start[1].'/'.$a_date_start[0];
-				$a_date_end = explode('-',$a_infosCours['date_end']);
-				$date_end = $a_date_end[2].'/'.$a_date_end[1].'/'.$a_date_end[0];
+				$date_start = '';
+				if(!empty($a_infosCours['date_start']))
+				{
+					$a_date_start = explode('-',$a_infosCours['date_start']);
+					$date_start = $a_date_start[2].'/'.$a_date_start[1].'/'.$a_date_start[0];
+				}
+				$date_end = '';
+				if(!empty($a_infosCours['date_end']))
+				{	
+					$a_date_end = explode('-',$a_infosCours['date_end']);
+					$date_end = $a_date_end[2].'/'.$a_date_end[1].'/'.$a_date_end[0];
+				}
 				$dateSession = get_lang('From').' '.$date_start.' '.get_lang('To').' '.$date_end;
 				$nb_login = Tracking :: count_login_per_student($a_infosUser['user_id'], $_GET['course']);
 				$tableTitle = $a_infosCours['title'].'&nbsp;|&nbsp;'.get_lang('CountToolAccess').' : '.$nb_login.'&nbsp; | &nbsp;'.get_lang('Tutor').' : '.stripslashes($a_infosCours['tutor_name']).((!empty($session_name)) ? ' | '.get_lang('Session').' : '.$session_name : '');

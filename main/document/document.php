@@ -1,4 +1,4 @@
-<?php // $Id: document.php 14907 2008-04-15 20:21:15Z juliomontoya $
+<?php // $Id: document.php 15174 2008-04-29 18:00:04Z yannoo $
 
 /*
 ==============================================================================
@@ -218,7 +218,7 @@ $course_quota = DocumentManager::get_course_quota();
 */
 
 //-------------------------------------------------------------------//
-if ($_GET['action']=="download")
+if (isset($_GET['action']) && $_GET['action']=="download")
 {
 	//check if the document is in the database
 	if(!DocumentManager::get_document_id($_course,$_GET['id']))
@@ -246,7 +246,7 @@ if ($_GET['action']=="download")
 //-------------------------------------------------------------------//
 
 //download of an completed folder
-if($_GET['action']=="downloadfolder")
+if(isset($_GET['action']) && $_GET['action']=="downloadfolder")
 {
 	include('downloadfolder.inc.php');
 }

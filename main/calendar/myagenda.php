@@ -74,7 +74,10 @@ $nameTools = get_lang('MyAgenda');
 
 // if we come from inside a course and click on the 'My Agenda' link we show a link back to the course
 // in the breadcrumbs
-$course_path = htmlentities(strip_tags($_GET['coursePath']),ENT_QUOTES,$charset);
+if(!empty($_GET['coursePath']))
+{
+	$course_path = htmlentities(strip_tags($_GET['coursePath']),ENT_QUOTES,$charset);
+}
 if (!empty ($course_path))
 {
 	$interbreadcrumb[] = array ('url' => api_get_path(WEB_COURSE_PATH).urlencode($course_path).'/index.php', 'name' => $_GET['courseCode']);
@@ -120,7 +123,7 @@ if (!$_SESSION['view'])
 	$_SESSION['view'] = "month";
 }
 // 2. Storing it in the session. If we change the view by clicking on the links left, we change the session
-if ($_GET['view'])
+if (!empty($_GET['view']))
 {
 	$_SESSION['view'] = $_GET['view'];
 }
@@ -148,25 +151,25 @@ if ($_SESSION['view'])
 	}
 }
 // 4. add personal agenda
-if ($_GET['action'] == "add_personal_agenda_item" and !$_POST['Submit'])
+if (!empty($_GET['action']) && $_GET['action'] == "add_personal_agenda_item" and !$_POST['Submit'])
 {
 	$proces = "add_personal_agenda_item";
 }
-if ($_GET['action'] == "add_personal_agenda_item" and $_POST['Submit'])
+if (!empty($_GET['action']) && $_GET['action'] == "add_personal_agenda_item" and $_POST['Submit'])
 {
 	$proces = "store_personal_agenda_item";
 }
 // 5. edit personal agenda
-if ($_GET['action'] == "edit_personal_agenda_item" and !$_POST['Submit'])
+if (!empty($_GET['action']) && $_GET['action'] == "edit_personal_agenda_item" and !$_POST['Submit'])
 {
 	$proces = "edit_personal_agenda_item";
 }
-if ($_GET['action'] == "edit_personal_agenda_item" and $_POST['Submit'])
+if (!empty($_GET['action']) && $_GET['action'] == "edit_personal_agenda_item" and $_POST['Submit'])
 {
 	$proces = "store_personal_agenda_item";
 }
 // 6. delete personal agenda
-if ($_GET['action'] == "delete" AND $_GET['id'])
+if (!empty($_GET['action']) && $_GET['action'] == "delete" AND $_GET['id'])
 {
 	$proces = "delete_personal_agenda_item";
 }
@@ -183,22 +186,22 @@ if (isset ($_user['user_id']))
 	}
 	// setting and/or getting the year, month, day, week
 	$today = getdate();
-	$year = (int)$_GET['year'];
+	$year = (!empty($_GET['year'])? (int)$_GET['year'] : NULL);
 	if ($year == NULL)
 	{
 		$year = $today['year'];
 	}
-	$month = (int)$_GET['month'];
+	$month = (!empty($_GET['month'])? (int)$_GET['month']:NULL);
 	if ($month == NULL)
 	{
 		$month = $today['mon'];
 	}
-	$day = (int)$_GET['day'];
+	$day = (!empty($_GET['day']) ? (int)$_GET['day']:NULL);
 	if ($day == NULL)
 	{
 		$day = $today['mday'];
 	}
-	$week = (int)$_GET['week'];
+	$week = (!empty($_GET['week']) ?(int)$_GET['week']:NULL);
 	if ($week == NULL)
 	{
 		$week = date("W");

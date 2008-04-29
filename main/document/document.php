@@ -1,4 +1,4 @@
-<?php // $Id: document.php 15175 2008-04-29 18:05:07Z yannoo $
+<?php // $Id: document.php 15176 2008-04-29 18:20:02Z yannoo $
 
 /*
 ==============================================================================
@@ -271,7 +271,7 @@ $array_len=count($dir_array);
 
 if ($array_len >1)
 {
-	if(empty($_SESSION['_gid']==''))
+	if(empty($_SESSION['_gid']))
 	{
 		$url_dir='document.php?&curdirpath=/'; 
 		$interbreadcrumb[]= array ('url'=>$url_dir, 'name'=> get_lang('HomeDirectory'));

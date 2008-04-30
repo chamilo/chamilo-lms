@@ -1,9 +1,9 @@
-<?php //$Id: agenda.php 14734 2008-04-03 08:05:10Z pcool $
+<?php //$Id: agenda.php 15185 2008-04-30 03:55:19Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003-2005 Ghent University (UGent)
 	Copyright (c) various contributors
 
@@ -17,7 +17,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -59,7 +59,7 @@ api_protect_course_script();
 */
 $_SESSION['source_type'] = 'Agenda';
 include('../resourcelinker/resourcelinker.inc.php');
-if ($addresources) // When the "Add Resource" button is clicked we store all the form data into a session
+if (!empty($addresources)) // When the "Add Resource" button is clicked we store all the form data into a session
 {
 $form_elements= array ('day'=>$_POST['fday'], 'month'=>$_POST['fmonth'], 'year'=>$_POST['fyear'], 'hour'=>$_POST['fhour'], 'minutes'=>$_POST['fminute'],
 						'end_day'=>$_POST['end_fday'], 'end_month'=>$_POST['end_fmonth'], 'end_year'=>$_POST['end_fyear'], 'end_hours'=>$_POST['end_fhour'], 'end_minutes'=>$_POST['end_fminute'],
@@ -72,7 +72,7 @@ header('Location: '.api_get_path(WEB_CODE_PATH)."resourcelinker/resourcelinker.p
 exit;
 }
 
-if ($_GET['view'])
+if (!empty($_GET['view']))
 {
 	$_SESSION['view'] = $_GET['view'];
 }
@@ -99,53 +99,53 @@ if (!$_SESSION['show'])
 {
 	$_SESSION['show']="showall";
 }
-if ($_GET['action']=="showcurrent")
+if (!empty($_GET['action']) and $_GET['action']=="showcurrent")
 {
 	$_SESSION['show']="showcurrent";
 }
-if ($_GET['action']=="showall")
+if (!empty($_GET['action']) and $_GET['action']=="showall")
 {
 	$_SESSION['show']="showall";
 }
 //echo $_SESSION['show'];
 
 // 2. sorting order (ASC or DESC)
-if (!$_GET['sort'] and !$_SESSION['sort'])
+if (empty($_GET['sort']) and empty($_SESSION['sort']))
 {
 	$_SESSION['sort']="DESC";
 }
-if ($_GET['sort']=="asc")
+if (!empty($_GET['sort']) and $_GET['sort']=="asc")
 {
 	$_SESSION['sort']="ASC";
 }
-if ($_GET['sort']=="desc")
+if (!empty($_GET['sort']) and $_GET['sort']=="desc")
 {
 	$_SESSION['sort']="DESC";
 }
 
 // 3. showing or hiding the send-to-specific-groups-or-users form
 $setting_allow_individual_calendar=true;
-if (!$_POST['To'] and !$_SESSION['allow_individual_calendar'])
+if (empty($_POST['To']) and empty($_SESSION['allow_individual_calendar']))
 {
 	$_SESSION['allow_individual_calendar']="hide";
 }
 $allow_individual_calendar_status=$_SESSION['allow_individual_calendar'];
-if ($_POST['To'] and ($allow_individual_calendar_status=="hide"))
+if (!empty($_POST['To']) and ($allow_individual_calendar_status=="hide"))
 {
 	$_SESSION['allow_individual_calendar']="show";
 }
-if ($_POST['To'] and ($allow_individual_calendar_status=="show"))
+if (!empty($_GET['sort']) and ($allow_individual_calendar_status=="show"))
 {
 	$_SESSION['allow_individual_calendar']="hide";
 }
 
 // 4. filter user or group
-if ($_GET['user'] or $_GET['group'])
+if (!empty($_GET['user']) or !empty($_GET['group']))
 {
 	$_SESSION['user']=(int)$_GET['user'];
 	$_SESSION['group']=(int)$_GET['group'];
 }
-if ($_GET['user']=="none" or $_GET['group']=="none")
+if ((!empty($_GET['user']) and $_GET['user']=="none") or (!empty($_GET['group']) and $_GET['group']=="none"))
 {
 	api_session_unregister("user");
 	api_session_unregister("group");
@@ -158,7 +158,7 @@ if (!$is_courseAdmin){
 		}
 	}
 	//It comes from the group tools. If it's define it overwrites $_SESSION['group']
-if ($_GET['isStudentView']=="false")
+if (!empty($_GET['isStudentView']) and $_GET['isStudentView']=="false")
 {
 	api_session_unregister("user");
 	api_session_unregister("group");
@@ -176,7 +176,7 @@ $nameTools = get_lang('Agenda'); // language variable in trad4all.inc.php
 // showing the header if we are not in the learning path, if we are in
 // the learning path, we do not include the banner so we have to explicitly
 // include the stylesheet, which is normally done in the header
-if ($_GET['origin'] != 'learnpath')
+if (empty($_GET['origin']) or $_GET['origin'] != 'learnpath')
 {
 	Display::display_header($nameTools,'Agenda');
 }
@@ -239,22 +239,28 @@ echo "<a name=\"top\"></a>";
 */
 
 //setting the default year and month
-$select_year = (int)$_GET['year'];
-$select_month = (int)$_GET['month'];
-if (($select_year==NULL) && ($select_month==NULL))
+$select_year = '';
+$select_month = '';
+if(!empty($_GET['year']))
+{
+	$select_year = (int)$_GET['year'];
+}
+if(!empty($_GET['month']))
+{
+	$select_month = (int)$_GET['month'];
+}
+if (empty($select_year) && empty($select_month))
 {
 	$today = getdate();
 	$select_year = $today['year'];
 	$select_month = $today['mon'];
 }
 
-
-
 echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">'
 		. '<tr>';
 
 // THE LEFT PART
-if ($_GET['origin']!='learnpath')
+if (empty($_GET['origin']) or $_GET['origin']!='learnpath')
 {
 	echo '<td width="220" height="19" valign="top">';
 	// the small calendar

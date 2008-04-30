@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 14734 2008-04-03 08:05:10Z pcool $
+<?php //$Id: agenda.inc.php 15185 2008-04-30 03:55:19Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -154,8 +154,8 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 	$dayone = getdate(mktime(0, 0, 0, $month, 1, $year));
 	//Start the week on monday
 	$startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
-	$backwardsURL = api_get_self()."?".api_get_cidreq()."&coursePath=".$_GET['coursePath']."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
-	$forewardsURL = api_get_self()."?".api_get_cidreq()."&coursePath=".$_GET['coursePath']."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
+	$backwardsURL = api_get_self()."?".api_get_cidreq()."&coursePath=".(empty($_GET['coursePath'])?'':$_GET['coursePath'])."&amp;courseCode=".(empty($_GET['courseCode'])?'':$_GET['courseCode'])."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
+	$forewardsURL = api_get_self()."?".api_get_cidreq()."&coursePath=".(empty($_GET['coursePath'])?'':$_GET['coursePath'])."&amp;courseCode=".(empty($_GET['courseCode'])?'':$_GET['courseCode'])."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
 	echo 	"<table id=\"smallcalendar\">\n",
 			"<tr class=\"title\">\n",
@@ -190,7 +190,7 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 					$class = "class=\"days_today\"";
 				}
 				echo "\t<td ".$class.">";
-				if ($agendaitems[$curday] <> "")
+				if (!empty($agendaitems[$curday]))
 				{
 					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=view&amp;view=day&amp;day=".$curday."&amp;month=".$month."&amp;year=".$year."\">".$dayheader."</a>";
 				}

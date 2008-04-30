@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 15185 2008-04-30 03:55:19Z yannoo $
+<?php //$Id: agenda.inc.php 15192 2008-04-30 21:53:53Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -92,7 +92,7 @@ function get_calendar_items($month, $year)
 	else
 	{
 		//echo "GEEN course admin";
-		if (is_array($group_memberships))
+		if (is_array($group_memberships) and count($group_memberships)>0)
 		{
 			$sql="SELECT
 				agenda.*, toolitemproperties.*
@@ -1409,7 +1409,7 @@ function display_agenda_items()
 	// B. you are a student
 	else
 	{
-		if (is_array($group_memberships))
+		if (is_array($group_memberships) and count($group_memberships)>0)
 		{
 			$sql="SELECT
 				agenda.*, toolitemproperties.*
@@ -2410,7 +2410,7 @@ function display_upcoming_events()
 	else
 	{
 		//echo "GEEN course admin";
-		if (is_array($group_memberships))
+		if (is_array($group_memberships) and count($group_memberships)>0)
 		{
 			$sqlquery = "SELECT
 							agenda.*, item_property.*

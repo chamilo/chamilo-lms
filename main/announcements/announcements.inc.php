@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 14994 2008-04-21 22:35:11Z juliomontoya $
+<?php //$Id: announcements.inc.php 15183 2008-04-30 03:30:29Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -514,23 +514,25 @@ function sent_to_form($sent_to_array)
 	}
 	else // there is only one user/group
 	{
-		if (is_array($sent_to_array['users']))
+		if (isset($sent_to_array['users']) and is_array($sent_to_array['users']))
 		{
 			$user_info=api_get_user_info($sent_to_array['users'][0]);
 			echo $user_info['lastName']." ".$user_info['firstName'];
 		}
-		if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0)
+		if (isset($sent_to_array['groups']) and is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0)
 		{
 			$group_id=$sent_to_array['groups'][0];
 			echo $group_names[$group_id]['name'];
 		}
-		if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]==0)
+		if (isset($sent_to_array['groups']) and is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]==0)
 		{
 			echo get_lang("Everybody");
 		}
 	}
-
-	echo $output;
+	if(!empty($output))
+	{
+		echo $output;
+	}
 }
 
 

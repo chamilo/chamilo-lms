@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 14830 2008-04-10 10:05:03Z pcool $
+<?php //$Id: announcements.php 15183 2008-04-30 03:30:29Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -98,7 +98,7 @@ $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 $_SESSION['source_type']="Ad_Valvas";
 include('../resourcelinker/resourcelinker.inc.php');
 
-if ($_POST['addresources']) // When the "Add Resource" button is clicked we store all the form data into a session
+if (!empty($_POST['addresources'])) // When the "Add Resource" button is clicked we store all the form data into a session
 {
 	include('announcements.inc.php');
 
@@ -154,7 +154,7 @@ require_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
 	POST TO
 -----------------------------------------------------------
 */
-if ($_POST['To'])
+if (!empty($_POST['To']))
 {
 	$display_form = true;
 
@@ -177,16 +177,16 @@ if ($_POST['To'])
 */
 
 $setting_select_groupusers=true;
-if (!$_POST['To'] and !$_SESSION['select_groupusers'])
+if (empty($_POST['To']) and !$_SESSION['select_groupusers'])
 {
 	$_SESSION['select_groupusers']="hide";
 }
 $select_groupusers_status=$_SESSION['select_groupusers'];
-if ($_POST['To'] and ($select_groupusers_status=="hide"))
+if (!empty($_POST['To']) and ($select_groupusers_status=="hide"))
 {
 	$_SESSION['select_groupusers']="show";
 }
-if ($_POST['To'] and ($select_groupusers_status=="show"))
+if (!empty($_POST['To']) and ($select_groupusers_status=="show"))
 {
 	$_SESSION['select_groupusers']="hide";
 }
@@ -198,15 +198,15 @@ if ($_POST['To'] and ($select_groupusers_status=="show"))
 */
 
 // display the form
-if (($_GET['action'] == 'add' && $_GET['origin'] == "") || $_GET['action'] == 'edit' || $_POST['To'])
+if (((!empty($_GET['action']) && $_GET['action'] == 'add') && $_GET['origin'] == "") || (!empty($_GET['action']) && $_GET['action'] == 'edit') || !empty($_POST['To']))
 {
 	$display_form = true;
 }
 
 // clear all resources
-if ($originalresource!=="no" and $action=="add")
+if ((empty($originalresource) || ($originalresource!=='no')) and (!empty($action) && $action=='add'))
 {
-	$_SESSION["formelements"]=null;
+	$_SESSION['formelements']=null;
 	unset_session_resources();
 }
 
@@ -240,7 +240,7 @@ if(!empty($_GET['toolgroup'])){
 	Sessions
 -----------------------------------------------------------
 */
-if ($_SESSION['formelements'] and $_GET['originalresource'] == 'no')
+if (!empty($_SESSION['formelements']) and !empty($_GET['originalresource']) and $_GET['originalresource'] == 'no')
 {
 	$form_elements			= $_SESSION['formelements'];
 	$title_to_modify		= $form_elements['emailTitle'];
@@ -260,7 +260,11 @@ if(!empty($_GET['remind_inactive']))
 	Survey
 -----------------------------------------------------------
 */
-$surveyid=Database::escape_string($_REQUEST['publish_survey']);
+$surveyid = 0;
+if(!empty($_REQUEST['publish_survey']))
+{
+	$surveyid=Database::escape_string($_REQUEST['publish_survey']);
+}
 $cidReq=Database::escape_string($_REQUEST['cidReq']);
 if($surveyid)
 {
@@ -290,7 +294,7 @@ $nameTools12 = get_lang('PublishSurvey');
 // showing the header if we are not in the learning path, if we are in
 // the learning path, we do not include the banner so we have to explicitly
 // include the stylesheet, which is normally done in the header
-if ($_GET['origin'] !== 'learnpath')
+if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
 {
 	//we are not in the learning path
 	Display::Display_header($nameTools,"Announcements");
@@ -325,7 +329,7 @@ if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announc
 	// $_GET['isStudentView']<>"false" is added to prevent that the visibility
 	// is changed after you do the following:
 	// change visibility -> studentview -> course manager view
-	if ($_GET['isStudentView']<>"false")
+	if (isset($_GET['isStudentView']) && $_GET['isStudentView']!='false')
 	{
 		if (isset($_GET['id']) AND $_GET['id'] AND isset($_GET['action']) AND $_GET['action']=="showhide")
 		{
@@ -340,7 +344,7 @@ if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announc
 		Delete announcement
 	-----------------------------------------------------------
 	*/
-	if ($_GET['action']=="delete" AND isset($_GET['id']))
+	if (!empty($_GET['action']) AND $_GET['action']=='delete' AND isset($_GET['id']))
 	{
 		//api_sql_query("DELETE FROM  $tbl_announcement WHERE id='$delete'",__FILE__,__LINE__);
 		$id=intval(addslashes($_GET['id']));
@@ -362,7 +366,7 @@ if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announc
 		Delete all announcements
 	-----------------------------------------------------------
 	*/
-	if ($_GET['action']=="delete_all")
+	if (!empty($_GET['action']) and $_GET['action']=='delete_all')
 	{
 
 		//api_sql_query("DELETE FROM $tbl_announcement",__FILE__,__LINE__);
@@ -383,7 +387,7 @@ if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announc
 		Modify announcement
 	-----------------------------------------------------------
 	*/
-	if ($_GET['action']=="modify" AND isset($_GET['id']))
+	if (!empty($_GET['action']) and $_GET['action']=='modify' AND isset($_GET['id']))
 	{
 		$display_form = true;
 
@@ -426,19 +430,19 @@ if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announc
 		Move announcement up/down
 	-----------------------------------------------------------
 	*/
-	if ($_GET['down'])
+	if (!empty($_GET['down']))
 	{
 		$thisAnnouncementId = intval($_GET['down']);
 		$sortDirection = "DESC";
 	}
 
-	if ($_GET['up'])
+	if (!empty($_GET['up']))
 	{
 		$thisAnnouncementId = intval($_GET['up']);
 		$sortDirection = "ASC";
 	}
 
-	if ($sortDirection)
+	if (!empty($sortDirection))
 	{
 		if (!in_array(trim(strtoupper($sortDirection)), array('ASC', 'DESC')))
 		{
@@ -492,11 +496,15 @@ if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announc
 	if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()))
 	{
 
-		$emailTitle=$_POST['emailTitle'];
-		$newContent=$_POST['newContent'];
+		$emailTitle=(!empty($_POST['emailTitle'])?$_POST['emailTitle']:'');
+		$newContent=(!empty($_POST['newContent'])?$_POST['newContent']:'');
 		$submitAnnouncement=isset($_POST['submitAnnouncement'])?$_POST['submitAnnouncement']:0;
 
-		$id=intval($_POST['id']);
+		$id = 0;
+		if(!empty($_POST['id']))
+		{
+			$id=intval($_POST['id']);
+		}
 
 		if ($submitAnnouncement)
 		{
@@ -810,10 +818,10 @@ if($_REQUEST['publish_survey'])
 /*====================================================
 		     		Tool Title
 ====================================================*/
-if ($_GET['origin'] !== 'learnpath')
+if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 {
 	//api_display_tool_title($nameTools);
-	Display::display_introduction_section(TOOL_ANNOUNCEMENT, $is_allowed);
+	Display::display_introduction_section(TOOL_ANNOUNCEMENT);
 }
 
 /*
@@ -829,7 +837,7 @@ if ($_GET['origin'] !== 'learnpath')
 	// The commands below will change these display settings if they need it
 
 
-		if ($_GET['origin'] !== 'learnpath')
+		if (empty($_GET['origin']) OR $_GET['origin'] !== 'learnpath')
 		{
 			echo "\n\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n";
 			echo "\t<tr>\n";
@@ -841,7 +849,7 @@ if ($_GET['origin'] !== 'learnpath')
       ======================================================================*/
 		if(api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ) // check teacher status
 		{
-	      	if ($_GET['origin'] !== 'learnpath')
+	      	if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
 				{
 
 					$sql="SELECT
@@ -857,7 +865,7 @@ if ($_GET['origin'] !== 'learnpath')
 		}
 		else 	// students only get to see the visible announcements
 		{
-			if ($_GET['origin'] !== 'learnpath')
+			if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
 				{
 					$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
 
@@ -921,10 +929,10 @@ $announcement_number = mysql_num_rows($result);
 ----------------------------------------------------*/
 if(!$surveyid)
 {
-		if ((api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and ($_GET['origin'] !== 'learnpath'))
+		if ((api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath'))
 		{
 
-			echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".$_GET['origin']."'><img src=\"../img/announce_add.gif\"> ".get_lang("AddAnnouncement")."</a><br/>";
+			echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'><img src=\"../img/announce_add.gif\"> ".get_lang("AddAnnouncement")."</a><br/>";
 			
 		}
 		if (api_is_allowed_to_edit() && $announcement_number > 1)
@@ -960,7 +968,7 @@ if ($display_title_list == true)
 } // end $display_title_list == true
 }
 
-if ($_GET['origin'] !== 'learnpath')
+if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
 {
 	echo   "\t\t</td>\n";
 	echo "\t\t<td width=\"20\" background=\"../img/verticalruler.gif\">&nbsp;</td>\n";
@@ -972,7 +980,7 @@ if ($_GET['origin'] !== 'learnpath')
 	        DISPLAY ACTION MESSAGE
 =======================================*/
 
-if ($message == true)
+if (isset($message) && $message == true)
 {
 	Display::display_normal_message($message);
 	$display_announcement_list = true;
@@ -1120,11 +1128,11 @@ if ($message == true)
 	{
 		// by default we use the id of the current user. The course administrator can see the announcement of other users by using the user / group filter
 		$user_id=$_user['user_id'];
-		if ($_SESSION['user']!==null)
+		if (isset($_SESSION['user']))
 		{
 			$user_id=$_SESSION['user'];
 		}
-		if ($_SESSION['group']!==null)
+		if (isset($_SESSION['group']))
 		{
 			$group_id=$_SESSION['group'];
 		}
@@ -1137,7 +1145,7 @@ if ($message == true)
 			// A.1. you are a course admin with a USER filter
 			// => see only the messages of this specific user + the messages of the group (s)he is member of.
 
-			if ($_SESSION['user']!==null)
+			if (isset($_SESSION['user']))
 			{
 				if (is_array($group_memberships))
 				{
@@ -1166,7 +1174,7 @@ if ($message == true)
 
 			// A.2. you are a course admin with a GROUP filter
 			// => see only the messages of this specific group
-			elseif ($_SESSION['group']!==null)
+			elseif (isset($_SESSION['group']))
 			{
 				$sql="SELECT
 					announcement.*, toolitemproperties.*
@@ -1184,7 +1192,7 @@ if ($message == true)
 				// A.3.a you are a course admin without user or group filter but WITH studentview
 				// => see all the messages of all the users and groups without editing possibilities
 
-				if ($isStudentView=="true")
+				if (isset($isStudentView) and $isStudentView=="true")
 				{
 
 					$sql="SELECT
@@ -1426,7 +1434,7 @@ if ($message == true)
 									$image_visibility="invisible";
 							}
 
-							echo 	"<td valign=\"top\"><a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&action=showhide&id=".$myrow['id']."\">",
+							echo 	"<td valign=\"top\"><a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".(!empty($_GET['origin'])?$_GET['origin']:'')."&action=showhide&id=".$myrow['id']."\">",
 									"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" alt=\"".get_lang('Visible')."\"/></a></td>";
 
 
@@ -1471,14 +1479,14 @@ if ($message == true)
 
 echo "</table>";
 
-if ($display_specific_announcement) display_announcement($announcement_id);
+if (!empty($display_specific_announcement)) display_announcement($announcement_id);
 
 /*
 ==============================================================================
 		FOOTER
 ==============================================================================
 */
-if ($_GET['origin'] !== 'learnpath')
+if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
 {
 	//we are not in learnpath tool
 	Display::display_footer();

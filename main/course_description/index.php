@@ -1,9 +1,9 @@
-<?php // $Id: index.php 13294 2007-09-27 02:14:48Z yannoo $
+<?php // $Id: index.php 15181 2008-04-30 02:12:58Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Bart Mollet, Hogeschool Gent
@@ -18,7 +18,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -29,7 +29,7 @@
 *
 *	@author Thomas Depraetere
 *	@author Hugues Peeters
-*	@author Christophe Gesché
+*	@author Christophe GeschÃ©
 *	@author Olivier brouckaert
 *	@package dokeos.course_description
 ==============================================================================
@@ -55,7 +55,7 @@ include_once(api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php');
 -----------------------------------------------------------
 */
 
-$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('CourseProgram'));
+//$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('CourseProgram'));
 
 if(isset($_GET['description_id']) && $_GET['description_id']==1) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('GeneralDescription'));
 if(isset($_GET['description_id']) && $_GET['description_id']==2) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Objectives'));
@@ -67,9 +67,9 @@ if(isset($_GET['description_id']) && $_GET['description_id']==7) $interbreadcrum
 if(isset($_GET['description_id']) && $_GET['description_id']==8) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('NewBloc'));
 
 api_protect_course_script();
-
-Display :: display_header($nameTools, "Description");
-api_display_tool_title($nameTools);
+$nameTools = get_lang('CourseProgram');
+Display :: display_header($nameTools, 'Description');
+//api_display_tool_title($nameTools);
 
 
 
@@ -291,7 +291,7 @@ if ($show_description_list)
 		
 		echo '<br>';
 	}
-	if (count($descriptions) > 0)
+	if (isset($descriptions) && count($descriptions) > 0)
 	{
 		foreach ($descriptions as $id => $description)
 		{

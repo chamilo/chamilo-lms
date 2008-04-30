@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003-2005 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
@@ -60,41 +60,41 @@ api_protect_course_script();
 
 // @todo change the $_REQUEST into $_POST or $_GET
 // @todo remove this code
-$link_submitted = $_POST["submitLink"];
-$category_submitted = $_POST["submitCategory"];
-$urlview = $_GET["urlview"];
-$submitImport = $_POST["submitImport"];
-$down = $_GET['down'];
-$up = $_GET['up'];
-$catmove = $_GET['catmove'];
-$editlink = $_REQUEST['editlink'];
-$id = $_REQUEST['id'];
-$urllink = $_REQUEST['urllink'];
-$title = $_REQUEST['title'];
-$description = $_REQUEST['description'];
-$selectcategory = $_REQUEST['selectcategory'];
-$submitLink = $_REQUEST['submitLink'];
-$action = $_REQUEST['action'];
-$category_title = $_REQUEST['category_title'];
-$submitCategory = $_REQUEST['submitCategory'];
+$link_submitted = (!empty($_POST['submitLink'])?$_POST['submitLink']:'');
+$category_submitted = (!empty($_POST['submitCategory'])?$_POST['submitCategory']:'');
+$urlview = (!empty($_GET['urlview'])?$_GET['urlview']:'');
+$submitImport = (!empty($_POST['submitImport'])?$_POST['submitImport']:'');
+$down = (!empty($_GET['down'])?$_GET['down']:'');
+$up = (!empty($_GET['up'])?$_GET['up']:'');
+$catmove = (!empty($_GET['catmove'])?$_GET['catmove']:'');
+$editlink = (!empty($_REQUEST['editlink'])?$_REQUEST['editlink']:'');
+$id = (!empty($_REQUEST['id'])?$_REQUEST['id']:'');
+$urllink = (!empty($_REQUEST['urllink'])?$_REQUEST['urllink']:'');
+$title = (!empty($_REQUEST['title'])?$_REQUEST['title']:'');
+$description = (!empty($_REQUEST['description'])?$_REQUEST['description']:'');
+$selectcategory = (!empty($_REQUEST['selectcategory'])?$_REQUEST['selectcategory']:'');
+$submitLink = (!empty($_REQUEST['submitLink'])?$_REQUEST['submitLink']:'');
+$action = (!empty($_REQUEST['action'])?$_REQUEST['action']:'');
+$category_title = (!empty($_REQUEST['category_title'])?$_REQUEST['category_title']:'');
+$submitCategory = (!empty($_REQUEST['submitCategory'])?$_REQUEST['submitCategory']:'');
 
 $nameTools = get_lang('Links');
 
-	if ($_GET['action']=='addlink')
+	if (isset($_GET['action']) && $_GET['action']=='addlink')
 	{
 		$nameTools = '';
 		$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
 		$interbreadcrumb[] = array ('url' => 'link.php?action=addlink', 'name' => get_lang('AddLink'));
 	}	
 	
-	if ($_GET['action']=='addcategory') 
+	if (isset($_GET['action']) && $_GET['action']=='addcategory') 
 	{
 		$nameTools = '';
 		$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
 		$interbreadcrumb[] = array ('url' => 'link.php?action=addcategory', 'name' => get_lang('AddCategory'));
 	}
 	
-	if ($_GET['action']=='editlink') 
+	if (isset($_GET['action']) && $_GET['action']=='editlink') 
 	{
 		$nameTools = '';
 		$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
@@ -131,53 +131,55 @@ function MM_popupMsg(msg) { //v1.0
 */
 $nameTools = get_lang("Links");
 
-switch($_GET['action'])
+if(isset($_GET['action']))
 {
-	case "addlink":		
-		if($link_submitted)
-		{
-			if(!addlinkcategory("link"))	// here we add a link
+	switch($_GET['action'])
+	{
+		case "addlink":		
+			if($link_submitted)
 			{
-				unset($submitLink);
+				if(!addlinkcategory("link"))	// here we add a link
+				{
+					unset($submitLink);
+				}
 			}
-		}
-		break;
-	case "addcategory":		
-		if($category_submitted)
-		{
-			if(!addlinkcategory("category"))	// here we add a category
+			break;
+		case "addcategory":		
+			if($category_submitted)
 			{
-				unset($submitCategory);
+				if(!addlinkcategory("category"))	// here we add a category
+				{
+					unset($submitCategory);
+				}
 			}
-		}
-		break;		
-	case "importcsv":
-		if($_POST["submitImport"])
-		{
-			import_csvfile();
-		}
-		break;
-	case "deletelink":
-		deletelinkcategory("link"); // here we delete a link
-		break;
-		
-	case "deletecategory":
-		deletelinkcategory("category"); // here we delete a category
-		break;
-	case "editlink":
-		editlinkcategory("link"); // here we edit a link
-		break;
-	case "editcategory":
-		editlinkcategory("category"); // here we edit a category
-		break;
-	case "visible":
-		change_visibility($_GET['id'],$_GET['scope']); // here we edit a category
-		break;
-	case "invisible":
-		change_visibility($_GET['id'],$_GET['scope']); // here we edit a category
-		break;
+			break;		
+		case "importcsv":
+			if($_POST["submitImport"])
+			{
+				import_csvfile();
+			}
+			break;
+		case "deletelink":
+			deletelinkcategory("link"); // here we delete a link
+			break;
+			
+		case "deletecategory":
+			deletelinkcategory("category"); // here we delete a category
+			break;
+		case "editlink":
+			editlinkcategory("link"); // here we edit a link
+			break;
+		case "editcategory":
+			editlinkcategory("category"); // here we edit a category
+			break;
+		case "visible":
+			change_visibility($_GET['id'],$_GET['scope']); // here we edit a category
+			break;
+		case "invisible":
+			change_visibility($_GET['id'],$_GET['scope']); // here we edit a category
+			break;
+	}
 }
-
 
 /*
 -----------------------------------------------------------
@@ -187,11 +189,11 @@ switch($_GET['action'])
 Display::display_introduction_section(TOOL_LINK);
 
 
-if (is_allowed_to_edit())
+if (is_allowed_to_edit() and isset($_GET['action']))
 {
 	// Displaying the correct title and the form for adding a category or link. This is only shown when nothing
 	// has been submitted yet, hence !isset($submitLink)
-	if (($_GET['action']=="addlink" or $_GET['action']=="editlink") and !$_POST['submitLink'])
+	if (($_GET['action']=="addlink" or $_GET['action']=="editlink") and empty($_POST['submitLink']))
 	{
 		echo "<h4>";
 		if ($_GET['action']=="addlink")
@@ -280,16 +282,16 @@ if (is_allowed_to_edit())
 }
 
 
-if (isset($down))
+if (!empty($down))
 	{
 	movecatlink($down);
 	}
-if (isset($up))
+if (!empty($up))
 	{
 	movecatlink($up);
 	}
 
-if ($_GET['action']!='editlink' && $_GET['action']!='addcategory' && $_GET['action']!='addlink' || $link_submitted || $category_submitted)
+if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='addcategory' && $_GET['action']!='addlink') || $link_submitted || $category_submitted)
 {	
 	/*
 	-----------------------------------------------------------
@@ -299,7 +301,7 @@ if ($_GET['action']!='editlink' && $_GET['action']!='addcategory' && $_GET['acti
 	
 	if(is_allowed_to_edit())
 	{
-		echo Display::return_icon('file_html_new.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addlink&amp;category=".$category."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
+		echo Display::return_icon('file_html_new.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addlink&amp;category=".(!empty($category)?$category:'')."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
 		echo Display::return_icon('folder_new.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addcategory&amp;urlview=".$urlview."\">".get_lang("CategoryAdd")."</a>\n";
 		   /* "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=importcsv&amp;urlview=".$urlview."\">".get_lang('CsvImport')."</a>\n", // RH*/
 	}

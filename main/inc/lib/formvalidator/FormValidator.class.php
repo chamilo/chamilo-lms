@@ -141,7 +141,11 @@ EOT;
 	{
 		$this->addElement('html_editor',$name,$label,'rows="15" cols="80"');
 		$this->applyFilter($name,'trim');
-		$html_type = $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML : STUDENT_HTML;
+		$html_type = STUDENT_HTML;
+		if(!empty($_SESSION['status']))
+		{
+			$html_type = $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML : STUDENT_HTML;
+		}
 		if($full_page)
 		{
 			$html_type = $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML_FULLPAGE : STUDENT_HTML_FULLPAGE;

@@ -395,7 +395,7 @@ function showlinksofcategory($catid)
 		echo '<td style="text-align:center;">';
 		if (api_is_allowed_to_edit())
 		{
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=editlink&amp;category=$category&amp;id=$myrow[0]&amp;urlview=$urlview\"  title=\"".get_lang('Modify')."\"  >", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"", get_lang('Modify'), "\" />", "</a>";			
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=editlink&amp;category=".(!empty($category)?$category:'')."&amp;id=$myrow[0]&amp;urlview=$urlview\"  title=\"".get_lang('Modify')."\"  >", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"", get_lang('Modify'), "\" />", "</a>";			
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=deletelink&amp;id=", $myrow[0], "&amp;urlview=", $urlview, "\" onclick=\"javascript:if(!confirm('".get_lang('LinkDelconfirm')."')) return false;\"  title=\"".get_lang('Delete')."\" >", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"", get_lang('Delete'), "\" />", "</a>";
 			// DISPLAY MOVE UP COMMAND only if it is not the top link
 			if ($i != 1)
@@ -479,12 +479,12 @@ function movecatlink($catlinkid)
 	$tbl_link = Database :: get_course_table(TABLE_LINK);
 	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
 
-	if ($_GET['down'])
+	if (!empty($_GET['down']))
 	{
 		$thiscatlinkId = $_GET['down'];
 		$sortDirection = "DESC";
 	}
-	if ($_GET['up'])
+	if (!empty($_GET['up']))
 	{
 		$thiscatlinkId = $_GET['up'];
 		$sortDirection = "ASC";
@@ -500,13 +500,16 @@ function movecatlink($catlinkid)
 	{
 		$movetable = $tbl_link;
 		//getting the category of the link
-		$sql = "SELECT category_id from ".$movetable." WHERE id='$thiscatlinkId'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
-		$catid = mysql_fetch_array($result);
+		if(!empty($thiscatlinkId))
+		{
+			$sql = "SELECT category_id from ".$movetable." WHERE id='$thiscatlinkId'";
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$catid = mysql_fetch_array($result);
+		}
 	}
 
 	// this code is copied and modified from announcements.php
-	if ($sortDirection)
+	if (!empty($sortDirection))
 	{
 		if (!in_array(trim(strtoupper($sortDirection)), array ('ASC', 'DESC')))
 			die("Bad sort direction used."); //sanity check of sortDirection var

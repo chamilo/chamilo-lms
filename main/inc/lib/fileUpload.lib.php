@@ -1218,12 +1218,13 @@ function get_document_id() moved to document.lib.php
  * @param array $_course
  * @param int $document_id
  * @param int $filesize
+ * @param int $readonly
  * @return boolean true /false
  */
-function update_existing_document($_course,$document_id,$filesize)
-{
+function update_existing_document($_course,$document_id,$filesize,$readonly=0)
+{ 
 	$document_table = Database::get_course_table(TABLE_DOCUMENT,$_course['dbName']);
-	$sql="UPDATE $document_table SET `size`='$filesize' WHERE id='$document_id'";
+	$sql="UPDATE $document_table SET size = '$filesize' , readonly = '$readonly' WHERE id='$document_id'";
 	if(api_sql_query($sql,__FILE__,__LINE__))
 	{
 		return true;

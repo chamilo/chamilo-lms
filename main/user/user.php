@@ -469,16 +469,18 @@ function sort_users($a,$b){
 function get_user_data($from, $number_of_items, $column, $direction)
 {
 	$a_users=array();
+	
+	$limit = 'LIMIT '.intval($from).','.intval($number_of_items);
 
 	if(!empty($_SESSION["id_session"])){
 		
-		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
+		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session'], $limit);
 	}
 	else
 	{		
-		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true);
+		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, 0, $limit);
 	}
-		
+	
 	foreach($a_course_users as $user_id=>$o_course_user)
 	{
 		if( (isset ($_GET['keyword']) && search_keyword($o_course_user['firstname'],$o_course_user['lastname'],$o_course_user['username'],$o_course_user['official_code'],$_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])){

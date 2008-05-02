@@ -1071,7 +1071,7 @@ class CourseManager
 	*	@param string $course_code
 	*	@return array with user info
 	*/
-	function get_user_list_from_course_code($course_code, $with_session=true, $session_id=0)
+	function get_user_list_from_course_code($course_code, $with_session=true, $session_id=0, $limit='')
 	{		
 		$session_id = intval($session_id);
 		$a_users = array();		
@@ -1087,6 +1087,8 @@ class CourseManager
 				$sql_query .= ' AND id_session = '.$session_id;
 			}
 			$sql_query.=' ORDER BY user.lastname';
+			
+			$sql_query .= ' '.$limit;
 			
 			$rs = api_sql_query($sql_query, __FILE__, __LINE__);
 			
@@ -1106,7 +1108,9 @@ class CourseManager
 			$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);			
 			$sql_query = "SELECT course_user.user_id, user.user_id, course_user.status, course_user.role, course_user.tutor_id " .
 					"FROM $table_course_user as course_user, $table_users as user WHERE `course_code` = '$course_code' AND course_user.user_id = user.user_id ORDER BY user.lastname";
-						
+			
+			$sql_query .= ' '.$limit;
+				
 			$rs = api_sql_query($sql_query, __FILE__, __LINE__);
 			
 			while($user = Database::fetch_array($rs))

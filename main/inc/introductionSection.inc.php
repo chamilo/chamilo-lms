@@ -58,7 +58,7 @@ $intro_editAllowed = $is_allowed_to_edit;
 
 global $charset;
 $intro_cmdEdit = (empty($_GET['intro_cmdEdit'])?'':$_GET['intro_cmdEdit']);
-$intro_cmdUpdate = (empty($_POST['intro_cmdUpdate'])?'':$_GET['intro_cmdUpdate']);
+$intro_cmdUpdate = (empty($_POST['intro_cmdUpdate'])?'':$_POST['intro_cmdUpdate']);
 $intro_cmdDel= (empty($_GET['intro_cmdDel'])?'':$_GET['intro_cmdDel']);
 $intro_cmdAdd= (empty($_GET['intro_cmdAdd'])?'':$_GET['intro_cmdAdd']);
 
@@ -88,7 +88,7 @@ if ($intro_editAllowed)
 			{
 				$sql = "REPLACE $TBL_INTRODUCTION SET id='$moduleId',intro_text='".mysql_real_escape_string($intro_content)."'";
 				api_sql_query($sql,__FILE__,__LINE__);
-				Display::display_confirmation_message(get_lang('IntroductionTextUpdated'));
+				Display::display_confirmation_message(get_lang('IntroductionTextUpdated'),false);
 			}
 			else
 			{

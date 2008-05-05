@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 15207 2008-05-05 16:25:20Z juliomontoya $
+// $Id: create_document.php 15208 2008-05-05 16:43:52Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -53,9 +53,12 @@ $htmlHeadXtra[]='<script>
 	
 function InnerDialogLoaded()
 {	
-	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);	
+	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
+		
+	
+				
 	return B.ClickFrame();
-}
+};
 	
 
 			
@@ -71,7 +74,7 @@ function InnerDialogLoaded()
 	
 		document.getElementById(\'frmModel\').style.display="block";				
 		document.getElementById(\'frmModel\').innerHTML = "<iframe height=945px; frameborder=0 src=\'http://my.dokeos.net/main/inc/lib/fckeditor/editor/fckdialogframe.html \'>";
-				
+		document.getElementById(\'content___Frame\').width=\'70%\'; 		
 		//window.frames[0].FCKToolbarItems.GetItem("Template").Click;
 		
 	}
@@ -169,7 +172,7 @@ include (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $nameTools = get_lang('CreateDocument');
 
-$fck_attribute['Width'] = '70%';
+$fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '950';
 $fck_attribute['ToolbarSet'] = 'Full';
 $fck_attribute['Config']['FullPage'] = true;

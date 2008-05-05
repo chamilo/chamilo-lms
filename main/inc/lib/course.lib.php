@@ -1071,58 +1071,53 @@ class CourseManager
 	*	@param string $course_code
 	*	@return array with user info
 	*/
-	function get_user_list_from_course_code($course_code, $with_session=true, $session_id=0, $limit='')
+	function get_user_list_from_course_code($course_code, $with_session=true, $session_id=0, $limit='', $order_by='')
 	{		
 		$session_id = intval($session_id);
 		$a_users = array();		
 		$table_users = Database :: get_main_table(TABLE_MAIN_USER);
 		
-		// users subscribed to the course through a session		
+		
+		$sql = 'SELECT DISTINCT user.user_id
+				FROM '.$table_users.' as user';
+		
 		if(api_get_setting('use_session_mode')=='true' && $with_session)
-		{			
-			$table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);			
-			$sql_query = "SELECT session_course_user.*, user.user_id FROM $table_session_course_user as session_course_user, $table_users as user WHERE `course_code` = '$course_code' AND session_course_user.id_user = user.user_id ";
+		{
+			$table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+			$sql .= ' LEFT JOIN '.$table_session_course_user.' as session_course_user
+	        			 ON user.user_id = session_course_user.id_user
+						 AND session_course_user.course_code="'.Database::escape_string($course_code).'"';
 			if($session_id!=0) 
 			{
-				$sql_query .= ' AND id_session = '.$session_id;
+				$sql .= ' AND session_course_user.id_session = '.$session_id;
 			}
-			$sql_query.=' ORDER BY user.lastname';
-			
-			$sql_query .= ' '.$limit;
-			
-			$rs = api_sql_query($sql_query, __FILE__, __LINE__);
-			
-			while($user = Database::fetch_array($rs))
-			{
-				$user_infos = Database :: get_user_info_from_id($user['id_user']);
-				$user_infos["status"] = $user["status"];
-				$user_infos["role"] = $user["role"];
-				$user_infos["tutor_id"] = $user["tutor_id"];
-				$a_users[$user['id_user']] = $user_infos; 
-			}			
 		}
 		
 		if($session_id == 0)
-		{			
-			// users directly subscribed to the course
-			$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);			
-			$sql_query = "SELECT course_user.user_id, user.user_id, course_user.status, course_user.role, course_user.tutor_id " .
-					"FROM $table_course_user as course_user, $table_users as user WHERE `course_code` = '$course_code' AND course_user.user_id = user.user_id ORDER BY user.lastname";
-			
-			$sql_query .= ' '.$limit;
-				
-			$rs = api_sql_query($sql_query, __FILE__, __LINE__);
-			
-			while($user = Database::fetch_array($rs))
-			{
-				$user_infos = Database :: get_user_info_from_id($user['user_id']);
-				$user_infos["status"] = $user["status"];
-				$user_infos["role"] = $user["role"];
-				$user_infos["tutor_id"] = $user["tutor_id"];
-				$a_users[$user['user_id']] = $user_infos;
-			}
-			
-		}
+		{
+			$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+			$sql .= ' LEFT JOIN '.$table_course_user.' as course_rel_user
+				        ON user.user_id = course_rel_user.user_id
+						AND course_rel_user.course_code="'.Database::escape_string($course_code).'"';
+		}		
+		
+		$sql .= ' WHERE session_course_user.course_code IS NOT NULL 
+				  OR course_rel_user.course_code IS NOT NULL';
+				  
+		$sql .= ' '.$order_by;
+		$sql .= ' '.$limit;
+
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		
+		while($user = Database::fetch_array($rs))
+		{
+			$user_infos = Database :: get_user_info_from_id($user['user_id']);
+			$user_infos["status"] = $user["status"];
+			$user_infos["role"] = $user["role"];
+			$user_infos["tutor_id"] = $user["tutor_id"];
+			$a_users[$user['user_id']] = $user_infos; 
+		}	
+		
 		return $a_users;
 		
 	}

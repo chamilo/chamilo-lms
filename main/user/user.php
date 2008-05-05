@@ -454,14 +454,6 @@ function search_keyword($firstname,$lastname,$username,$official_code,$keyword){
 
 }
 
-function sort_users($a,$b){
-	$a = trim(strtolower($a[$_SESSION['users_column']]));
-	$b = trim(strtolower($b[$_SESSION['users_column']]));
-	if($_SESSION['users_direction'] == 'DESC')
-		return strcmp($b, $a);
-	else
-		return strcmp($a, $b);
-}
 
 /**
  * Get the users to display on the current page.
@@ -470,15 +462,26 @@ function get_user_data($from, $number_of_items, $column, $direction)
 {
 	$a_users=array();
 	
+	// limit
 	$limit = 'LIMIT '.intval($from).','.intval($number_of_items);
+
+	// order by
+	switch($column)
+	{
+		case 1 : $order_by = 'ORDER BY user.firstname';break;
+		case 2:  $order_by = 'ORDER BY user.lastname';break;
+		case 5:  $order_by = 'ORDER BY user.official_code';break;
+		default : $order_by = 'ORDER BY user.lastname';break;
+	}
+	$order_by .= ' '.$direction;
 
 	if(!empty($_SESSION["id_session"])){
 		
-		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session'], $limit);
+		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session'], $limit, $order_by);
 	}
 	else
 	{		
-		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, 0, $limit);
+		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, 0, $limit, $order_by);
 	}
 	
 	foreach($a_course_users as $user_id=>$o_course_user)
@@ -523,7 +526,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
 			$a_users[$user_id] = $temp;
 		}
 	}
-	usort($a_users, 'sort_users');
 	
 	return $a_users;
 }
@@ -584,14 +586,14 @@ if( api_is_allowed_to_edit())
 
 $table->set_header($header_nr++, get_lang('FirstName'));
 $table->set_header($header_nr++, get_lang('LastName'));
-$table->set_header($header_nr++, get_lang('Description'));
+$table->set_header($header_nr++, get_lang('Description'),false);
 $table->set_header($header_nr++, get_lang('GroupSingle'),false);
 $table->set_header($header_nr++, get_lang('OfficialCode'));
 
  if( api_is_allowed_to_edit())
 {
-	$table->set_header($header_nr++, get_lang('Tutor'));
-	$table->set_header($header_nr++, get_lang('CourseManager'));
+	$table->set_header($header_nr++, get_lang('Tutor'),false);
+	$table->set_header($header_nr++, get_lang('CourseManager'),false);
 }
 
 //actions column

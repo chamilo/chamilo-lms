@@ -54,11 +54,13 @@ var oEditor		= window.parent.InnerDialogLoaded() ;
 var FCK			= oEditor.FCK ;
 var FCKLang		= oEditor.FCKLang ;
 var FCKConfig	= oEditor.FCKConfig ;
-
+			
+var Size = window.parent.WindowSize;
+			
 window.onload = function()
 {
 	// Set the right box height (browser dependent).
-	GetE('eList').style.height = document.all ? '100%' : '295px' ;
+	GetE('eList').style.height = document.all ? '100%' : Size ;
 
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage(document) ;

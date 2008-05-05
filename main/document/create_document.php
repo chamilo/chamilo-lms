@@ -1,10 +1,10 @@
 <?php
-// $Id: create_document.php 15118 2008-04-25 19:42:55Z juliomontoya $
+// $Id: create_document.php 15207 2008-05-05 16:25:20Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -27,7 +27,7 @@
 */
 /**
 ==============================================================================
-*	This file allows creating new html documents with an online WYSIWYG html
+*	This file allows creating new html documents with an online WYSIWYG html380
 *	editor.
 *
 *	@package dokeos.document
@@ -46,16 +46,34 @@ $language_file = 'document';
 include ('../inc/global.inc.php');
 
 $_SESSION['whereami'] = 'document/create';
+
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[]='<script>
 	
+function InnerDialogLoaded()
+{	
+	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);	
+	return B.ClickFrame();
+}
+	
+
+			
+	 
+
 	var temp=false;
 	var temp2=false;
 	var use_document_title='.api_get_setting('use_document_title').';
 
-	function launch_templates(){
-		window.frames[0].FCKToolbarItems.GetItem("Templates").Click();
+	function launch_templates()
+	{	
+	
+	
+		document.getElementById(\'frmModel\').style.display="block";				
+		document.getElementById(\'frmModel\').innerHTML = "<iframe height=945px; frameborder=0 src=\'http://my.dokeos.net/main/inc/lib/fckeditor/editor/fckdialogframe.html \'>";
+				
+		//window.frames[0].FCKToolbarItems.GetItem("Template").Click;
+		
 	}
 
 	function FCKeditor_OnComplete( editorInstance )
@@ -151,7 +169,7 @@ include (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $nameTools = get_lang('CreateDocument');
 
-$fck_attribute['Width'] = '100%';
+$fck_attribute['Width'] = '70%';
 $fck_attribute['Height'] = '950';
 $fck_attribute['ToolbarSet'] = 'Full';
 $fck_attribute['Config']['FullPage'] = true;
@@ -212,6 +230,7 @@ if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != '')
 	{
 		api_not_allowed(true);
 	}
+	
 }
 $interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GET['dir']).$req_gid, "name" => get_lang('Documents'));
 
@@ -314,11 +333,15 @@ else
 $form->addElement('submit', 'submit', get_lang('Ok'));
 
 // HTML-editor
-$form->add_html_editor('content', '<a style="cursor:pointer" onclick="launch_templates()"><img src="'.api_get_path(WEB_IMG_PATH).'templates.gif" /></a>', false, true);
+$form->add_html_editor('content','<a style="cursor:pointer" onclick="launch_templates()"><img src="'.api_get_path(WEB_IMG_PATH).'templates.gif" /></a>', false, true);
 // Comment-field
+
 //$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));
 $form->addElement('submit', 'submit', get_lang('Ok'));
 $form->setDefaults($default);
+
+// HTML-editor
+$form->addElement('html','<div id="frmModel" style="display:none;height:500px;width:300px; position:absolute; top:72px; left:76%;"></div>');
 
 // If form validates -> save the new document
 if ($form->validate())

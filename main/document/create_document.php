@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 15208 2008-05-05 16:43:52Z juliomontoya $
+// $Id: create_document.php 15209 2008-05-05 18:02:15Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -73,7 +73,7 @@ function InnerDialogLoaded()
 	
 	
 		document.getElementById(\'frmModel\').style.display="block";				
-		document.getElementById(\'frmModel\').innerHTML = "<iframe height=945px; frameborder=0 src=\'http://my.dokeos.net/main/inc/lib/fckeditor/editor/fckdialogframe.html \'>";
+		document.getElementById(\'frmModel\').innerHTML = "<iframe height=945px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
 		document.getElementById(\'content___Frame\').width=\'70%\'; 		
 		//window.frames[0].FCKToolbarItems.GetItem("Template").Click;
 		

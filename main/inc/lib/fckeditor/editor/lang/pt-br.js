@@ -466,6 +466,21 @@ DlgDocMeAuthor		: "Autor",
 DlgDocMeCopy		: "Direitos Autorais",
 DlgDocPreview		: "Visualizar",
 
+
+//Video dialog
+DlgVideoTitle 			: "Import Video",
+DlgVideoUpload      	: "From my Computer",
+DlgVideoTab      		: "From course", 
+
+// MP3 Dialog
+DlgMP3Title 	: "Import MP3",
+DlgMP3Upload    : "From my Computer",
+DlgMP3Tab      	: "From course",
+
+// Image admin
+DlgImageManagerTitle : "Import Image",
+
+
 // Templates Dialog
 Templates			: "Modelos de layout",
 DlgTemplatesTitle	: "Modelo de layout do conteúdo",

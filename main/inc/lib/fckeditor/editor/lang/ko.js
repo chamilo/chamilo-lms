@@ -466,6 +466,21 @@ DlgDocMeAuthor		: "작성자",
 DlgDocMeCopy		: "저작권",
 DlgDocPreview		: "미리보기",
 
+
+//Video dialog
+DlgVideoTitle 			: "Import Video",
+DlgVideoUpload      	: "From my Computer",
+DlgVideoTab      		: "From course", 
+
+// MP3 Dialog
+DlgMP3Title 	: "Import MP3",
+DlgMP3Upload    : "From my Computer",
+DlgMP3Tab      	: "From course",
+
+// Image admin
+DlgImageManagerTitle : "Import Image",
+
+
 // Templates Dialog
 Templates			: "템플릿",
 DlgTemplatesTitle	: "내용 템플릿",

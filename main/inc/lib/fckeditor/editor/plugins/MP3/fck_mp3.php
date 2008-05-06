@@ -6,7 +6,7 @@ include('../../../../../../inc/global.inc.php');
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 	<head>
-		<title>Flash Properties</title>
+		<title>Audio Properties</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta content="noindex, nofollow" name="robots">
 		<script src="../../dialog/common/fck_dialog_common.js" type="text/javascript"></script>
@@ -37,7 +37,8 @@ include('../../../../../../inc/global.inc.php');
 		  <?php
 
 		  $sType = "MP3";
-		  if(isset($_course["sysCode"])){
+		  if(isset($_course["sysCode"]))
+		  {
 		 	 include(api_get_path(INCLUDE_PATH).'course_document.inc.php');
 		  }
 		  
@@ -70,10 +71,8 @@ include('../../../../../../inc/global.inc.php');
 			
 			$form->add_real_progress_bar('fckMP3','NewFile');
 			
-			$form->display();
-			
-		?>
-		
+			$form->display();			
+		?>		
 		</div>
 		<script language="javascript">window_onload();</script>
 	</body>

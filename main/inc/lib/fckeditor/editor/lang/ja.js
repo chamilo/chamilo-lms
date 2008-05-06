@@ -465,6 +465,21 @@ DlgDocMeAuthor		: "文書の作者",
 DlgDocMeCopy		: "文書の著作権",
 DlgDocPreview		: "プレビュー",
 
+
+//Video dialog
+DlgVideoTitle 			: "Import Video",
+DlgVideoUpload      	: "From my Computer",
+DlgVideoTab      		: "From course", 
+
+// MP3 Dialog
+DlgMP3Title 	: "Import MP3",
+DlgMP3Upload    : "From my Computer",
+DlgMP3Tab      	: "From course",
+
+// Image admin
+DlgImageManagerTitle : "Import Image",
+
+
 // Templates Dialog
 Templates			: "テンプレート(雛形)",
 DlgTemplatesTitle	: "テンプレート内容",

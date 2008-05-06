@@ -34,10 +34,10 @@
 		return FCK_TRISTATE_OFF;  
 	}  
 	 
-	FCKCommands.RegisterCommand('ImageManager', new FCKImageManager('ImageManager')) ;  
-	 
+	FCKCommands.RegisterCommand('ImageManager', new FCKImageManager('ImageManager')) ;
+	  
 	// Create the toolbar button. 
-	var oImageManagerItem = new FCKToolbarButton( 'ImageManager', "ImageManager", null, null, false, true ) ; 
+	var oImageManagerItem = new FCKToolbarButton( 'ImageManager', FCKLang["DlgImageManagerTitle"], null, null, false, true ) ; 
 	oImageManagerItem.IconPath = FCKConfig.PluginsPath + 'ImageManager/icon.gif' ; 
 	FCKToolbarItems.RegisterItem( 'ImageManager', oImageManagerItem ) ;
 	
@@ -47,7 +47,6 @@
 
     // Open the Placeholder dialog on double click.
     function ImageManager_doubleClick (img) {
-
 		if ( img.tagName == 'IMG' ) FCKCommands.GetCommand( 'ImageManager' ).Execute() ;
 	}
 
@@ -103,6 +102,7 @@ function setAttrib(element, name, value, fixval) { // set element attributes
 function ImageManager()
 {
 	//var tt = ImageManager.I18N;	
+	
 };
 
 

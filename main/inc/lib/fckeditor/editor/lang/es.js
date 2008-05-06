@@ -465,6 +465,20 @@ DlgDocMeAuthor		: "Autor",
 DlgDocMeCopy		: "Copyright",
 DlgDocPreview		: "Vista Previa",
 
+//Video dialog
+DlgVideoTitle		: "Insertar Video",
+DlgVideoUpload    	: "Desde mi PC",
+DlgVideoTab   		: "Desde un curso",
+
+// MP3 Dialog
+DlgMP3Title 		: "Insertar MP3",
+DlgMP3Upload    	: "Desde mi PC",
+DlgMP3Tab      		: "Desde un curso",
+
+// Image admin
+DlgImageManagerTitle : "Insertar imagen",
+
+
 // Templates Dialog
 Templates			: "Plantillas",
 DlgTemplatesTitle	: "Contenido de Plantillas",

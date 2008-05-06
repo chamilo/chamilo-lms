@@ -17,12 +17,11 @@ $dirs = $manager->getDirs();
 
 <html>
 <head>
-<title>Insert Image</title>
+<title><?php echo get_lang('InsertImage'); ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="assets/manager.css" rel="stylesheet" type="text/css" />	
 
 <script type="text/javascript">
-
 
 	var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
 	var base_url = "<?php echo $manager->getBaseURL(); ?>";
@@ -79,38 +78,44 @@ $dirs = $manager->getDirs();
 </head>
 
 <body>
-<div class="title">Insert Image</div>
+<div class="title"><?php echo get_lang('InsertImage'); ?></div>
 <form action="images.php<?php if(isset($_GET['uploadPath']) && $_GET['uploadPath']!="") echo "?uploadPath=".$_GET['uploadPath']; ?>" id="uploadForm" method="post" enctype="multipart/form-data">
 
-<fieldset <?php if(!api_is_allowed_to_edit()) echo "style='display: none;'"; ?>><legend>Image Manager</legend>
+<fieldset <?php if(!api_is_allowed_to_edit()) echo "style='display: none;'"; ?>>
+<legend><?php echo get_lang('ImageManager'); ?></legend>
 <div class="dirs">
-	<label for="dirPath">Directory</label>
+	<label for="dirPath"><?php echo ucwords(get_lang('directory')); ?></label>
 	<select name="dir" class="dirWidth" id="dirPath" onchange="updateDir(this)">
 	<option value="/">/</option>
-<?php foreach($dirs as $relative=>$fullpath) { ?>
-		<option value="<?php echo rawurlencode($relative); ?>"><?php echo $relative; ?></option>
-<?php } ?>
-	</select>
-	<a href="#" onclick="javascript: goUpDir();" title="Directory Up"><img src="img/btnFolderUp.gif" height="15" width="15" alt="Directory Up" /></a>
-<?php if($IMConfig['safe_mode'] == false && $IMConfig['allow_new_dir']) { ?>
-	<a href="#" onclick="newFolder();" title="New Folder"><img src="img/btnFolderNew.gif" height="15" width="15" alt="New Folder" /></a>
-<?php } ?>
-	<div id="messages" style="display: none;"><span id="message"></span><img SRC="img/dots.gif" width="22" height="12" alt="..." /></div>
+		<?php foreach($dirs as $relative=>$fullpath) { ?>
+				<option value="<?php echo rawurlencode($relative); ?>"><?php echo $relative; ?></option>
+		<?php } ?>
+			</select>
+			<a href="#" onclick="javascript: goUpDir();" title="<?php echo get_lang('Up'); ?>">
+			<img src="img/btnFolderUp.gif" height="15" width="15" alt="<?php echo get_lang('Up'); ?>" /></a>
+		<?php if($IMConfig['safe_mode'] == false && $IMConfig['allow_new_dir']) { ?>
+			<a href="#" onclick="newFolder();" title="New Folder">
+				<img src="img/btnFolderNew.gif" height="15" width="15" alt="New Folder" />
+			</a>
+		<?php } ?>
+	<div id="messages" style="display: none;">
+	<span id="message"></span>
+	<img src="img/dots.gif" width="22" height="12" alt="..." /></div>
 	<iframe src="images.php<?php if(isset($_GET['uploadPath']) && $_GET['uploadPath']!="") echo "?uploadPath=".$_GET['uploadPath']; ?>" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>
 </div>
 </fieldset>
 
 
 <!-- image properties -->
-<input type="file" name="upload" id="upload"/>&nbsp;<button type="submit" name="submit" onclick="doUpload();"/>Upload</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		  <button type="button" class="buttons" onclick="return refresh();" style="display: none">Refresh</button>
-          <button type="button" class="buttons" onclick="return onOK();">OK</button>
-          <button type="button" class="buttons" onclick="return onCancel();">Cancel</button>
+<input type="file" name="upload" id="upload"/>&nbsp;<button type="submit" name="submit" onclick="doUpload();"/><?php echo get_lang('Send'); ?></button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		  <button type="button" class="buttons" onclick="return refresh();" style="display: none"><?php echo get_lang('Regresh'); ?></button>
+          <button type="button" class="buttons" onclick="return onOK();"><?php echo get_lang('Ok'); ?></button>
+          <button type="button" class="buttons" onclick="return onCancel();"><?php echo get_lang('Cancel'); ?></button>
 		  <?php
 		  
 		  if(api_is_allowed_to_edit()){
 		  ?>
-		  	<span style="cursor: pointer" onclick="showAdvancedSettings();"><?php echo utf8_encode(get_lang("AdvancedSettings"));?></span>
+		  	<span style="cursor: pointer" onclick="showAdvancedSettings();"><?php echo utf8_encode(get_lang('AdvancedSettings'));?></span>
 		  	
 		  <?php
 		  }
@@ -118,22 +123,36 @@ $dirs = $manager->getDirs();
 		  
 	<table class="inputTable" style="display: none" id="advanced_settings">
 		<tr>
-			<td align="right"><label for="f_url">Image File</label></td>
-			<td><input type="text" id="f_url" class="largelWidth" value="" /></td>
+			<td align="right">			
+				<label for="f_url"><?php echo get_lang('ImageFile'); ?></label></td>				
+			<td>
+				<input type="text" id="f_url" class="largelWidth" value="" /></td>
 			<td rowspan="3" align="right">&nbsp;</td>
-			<td align="right"><label for="f_width">Width</label></td>
+			<td align="right">
+			
+			<label for="f_width"><?php echo get_lang('Width'); ?></label></td>
+			
 			<td><input type="text" id="f_width" class="smallWidth" value="" onchange="javascript:checkConstrains('width');"/></td>
 			<td rowspan="2" align="right"><img src="img/locked.gif" id="imgLock" width="25" height="32" alt="Constrained Proportions" /></td>
-			<td rowspan="3" align="right">&nbsp;</td>
-			<td align="right"><label for="f_vert">V Space</label></td>
+			<td rowspan="3" align="right">&nbsp;</td>			
+			<td align="right">
+			
+			<label for="f_vert"><?php echo get_lang('VSpace'); ?></label></td>
+			
 			<td><input type="text" id="f_vert" class="smallWidth" value="" /></td>
 		</tr>
 		<tr>
-			<td align="right"><label for="f_alt">Alt</label></td>
+			<td align="right">
+			<label for="f_alt"><?php echo get_lang('Alt'); ?></label></td>
+			
 			<td><input type="text" id="f_alt" class="largelWidth" value="" /></td>
-			<td align="right"><label for="f_height">Height</label></td>
+			<td align="right">
+			<label for="f_height"><?php echo get_lang('Height'); ?></label></td>
+			
 			<td><input type="text" id="f_height" class="smallWidth" value="" onchange="javascript:checkConstrains('height');"/></td>
-			<td align="right"><label for="f_horiz">H Space</label></td>
+			<td align="right">
+			<label for="f_horiz"><?php echo get_lang('HSpace'); ?></label></td>
+			
 			<td><input type="text" id="f_horiz" class="smallWidth" value="" /></td>
 		</tr>
 		<tr>
@@ -142,7 +161,7 @@ $dirs = $manager->getDirs();
 <?php } else { ?>
 			<td colspan="2"></td>
 <?php } ?>
-			<td align="right"><label for="f_align">Align</label></td>
+			<td align="right"><label for="f_align"><?php echo get_lang('Align'); ?></label></td>
 			<td colspan="2">
 				<select size="1" id="f_align"  title="Positioning of this image">
 				  <option value=""                             >Not Set</option>
@@ -157,7 +176,7 @@ $dirs = $manager->getDirs();
 				  <option value="top"                          >Top</option>
 				</select>
 			</td>
-			<td align="right"><label for="f_border">Border</label></td>
+			<td align="right"><label for="f_border"><?php echo get_lang('Border'); ?></label></td>
 			<td><input type="text" id="f_border" class="smallWidth" value="" /></td>
 		</tr>
 		<tr>
@@ -166,7 +185,7 @@ $dirs = $manager->getDirs();
 				<input type="hidden" id="orginal_height" />
             <input type="checkbox" id="constrain_prop" checked="checked" onclick="javascript:toggleConstrains(this);" />
           </td>
-          <td colspan="5"><label for="constrain_prop">Constrain Proportions</label></td>
+          <td colspan="5"><label for="constrain_prop"><?php echo get_lang('ConstrainProportions'); ?></label></td>
       </tr>
 	</table>
 

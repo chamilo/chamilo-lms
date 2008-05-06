@@ -1,4 +1,4 @@
-// Flash Dialog
+/*
 FCKLang["DlgVideoTitle"] = "Video Dialog";
 FCKLang["DlgVideoURL"] = "URL" ;
 FCKLang["DlgVideoBtnBrowse"]    = "Browse Server" ;
@@ -27,6 +27,7 @@ FCKLang["DlgVideoScale"]        = "Scale" ;
 FCKLang["DlgVideoScaleShowAll"] = "Show all" ;
 FCKLang["DlgVideoScaleNoBorder"]        = "No border" ;
 FCKLang["DlgVideoScaleExactFit"]        = "Exact fit" ;
-FCKLang["DlgVideoBgColor"]      = "Bg Color"
+FCKLang["DlgVideoBgColor"]      = "Bg Color";
 FCKLang["DlgVideoUpload"]      = "From my computer";
 FCKLang["DlgVideoTab"]      = "From the course";
+*/

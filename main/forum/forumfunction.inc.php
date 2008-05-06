@@ -3227,6 +3227,7 @@ function get_notifications($content,$id)
 			WHERE user.user_id = notification.user_id
 			AND notification.$database_field= '".Database::escape_string($id)."'";
 	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$return = array();
 	while ($row=Database::fetch_array($result))
 	{
 		$return['user'.$row['user_id']]=array('email' => $row['email'], 'user_id' => $row['user_id']); 
@@ -3294,10 +3295,7 @@ function send_notifications($forum_id=0, $thread_id=0, $post_id=0)
 					$charset='ISO-8859-1';
 				}
 			
-				if ($user_info['user_id']<>$_user['user_id'])
-				{
-					$newmail = api_mail_html($value['lastname'].' '.$value['firstname'], $value['email'], $email_subject, $email_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail']);
-				}
+				$newmail = api_mail_html($value['lastname'].' '.$value['firstname'], $value['email'], $email_subject, $email_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail']);
 			}
 		}
 	}

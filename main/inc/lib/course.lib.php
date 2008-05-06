@@ -1077,6 +1077,7 @@ class CourseManager
 		$a_users = array();		
 		$table_users = Database :: get_main_table(TABLE_MAIN_USER);
 		
+		$where = array();
 		
 		$sql = 'SELECT DISTINCT user.user_id
 				FROM '.$table_users.' as user';
@@ -1091,6 +1092,7 @@ class CourseManager
 			{
 				$sql .= ' AND session_course_user.id_session = '.$session_id;
 			}
+			$where[] = ' session_course_user.course_code IS NOT NULL ';
 		}
 		
 		if($session_id == 0)
@@ -1099,10 +1101,10 @@ class CourseManager
 			$sql .= ' LEFT JOIN '.$table_course_user.' as course_rel_user
 				        ON user.user_id = course_rel_user.user_id
 						AND course_rel_user.course_code="'.Database::escape_string($course_code).'"';
+			$where[] = ' course_rel_user.course_code IS NOT NULL ';
 		}		
 		
-		$sql .= ' WHERE session_course_user.course_code IS NOT NULL 
-				  OR course_rel_user.course_code IS NOT NULL';
+		$sql .= ' WHERE '.implode(' OR ',$where);
 				  
 		$sql .= ' '.$order_by;
 		$sql .= ' '.$limit;

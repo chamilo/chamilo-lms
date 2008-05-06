@@ -127,19 +127,27 @@ if (($_GET['action']=='invisible' OR $_GET['action']=='visible') AND isset($_GET
 {
 	$message=change_visibility($_GET['content'], $_GET['id'],$_GET['action']);// note: this has to be cleaned first
 }
+// locking and unlocking
 if (($_GET['action']=='lock' OR $_GET['action']=='unlock') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit())
 {
 	$message=change_lock_status($_GET['content'], $_GET['id'],$_GET['action']);// note: this has to be cleaned first
 }
+// deleting
 if ($_GET['action']=='delete'  AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit())
 {
 	$message=delete_forum_forumcategory_thread($_GET['content'],$_GET['id']); // note: this has to be cleaned first
 }
-if ($_GET['action']=='move' and isset($_GET['thread']))
+// moving
+if ($_GET['action']=='move' and isset($_GET['thread']) AND api_is_allowed_to_edit())
 {
 	$message=move_thread_form();
 }
-
+// notification
+if ($_GET['action'] == 'notify' AND isset($_GET['content']) AND isset($_GET['id']))
+{
+	$return_message = set_notification($_GET['content'],$_GET['id']);
+	Display :: display_confirmation_message($return_message,false);
+}
 
 /*
 -----------------------------------------------------------
@@ -225,10 +233,7 @@ echo "\t\t<td>".get_lang('Replies')."</td>\n";
 echo "\t\t<td>".get_lang('Views')."</td>\n";
 echo "\t\t<td>".get_lang('Author')."</td>\n";
 echo "\t\t<td>".get_lang('LastPost')."</td>\n";
-if (api_is_allowed_to_edit())
-{
-	echo "\t\t<td>".get_lang('Actions')."</td>\n";
-}
+echo "\t\t<td>".get_lang('Actions')."</td>\n";
 echo "\t</tr>\n";
 
 // getting al the threads
@@ -321,15 +326,24 @@ if(is_array($threads))
 				$last_post=$last_post_row['post_date']." ".get_lang('By').' '.$name;
 			}
 			echo "\t\t<td>".$last_post."</td>\n";
+			echo "\t\t<td>";			
 			if (api_is_allowed_to_edit())
 			{
-				echo "\t\t<td>";
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;action=delete&amp;content=thread&amp;id=".$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteCompleteThread"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 				display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array("forum"=>$_GET['forum'],'origin'=>$origin));
 				display_lock_unlock_icon('thread',$row['thread_id'], $row['locked'], array("forum"=>$_GET['forum'],'origin'=>$origin));
 				echo "<a href=\"viewforum.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;action=move&amp;thread=".$row['thread_id'].$origin_string."\">".icon('../img/deplacer_fichier.gif',get_lang('MoveThread'))."</a>";
-				echo "</td>\n";
 			}
+			$iconnotify = 'send_mail.gif';
+			if (is_array($_SESSION['forum_notification']['thread']))
+			{
+				if (in_array($row['thread_id'],$_SESSION['forum_notification']['thread']))
+				{
+					$iconnotify = 'send_mail_checked.gif';
+				}
+			}
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($_GET['forum'])."&amp;action=notify&amp;content=thread&amp;id=".$row['thread_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";			
+			echo "</td>\n";
 			echo "\t</tr>\n";
 		}
 		$counter++;

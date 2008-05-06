@@ -71,7 +71,7 @@
 require_once(api_get_path(INCLUDE_PATH).'/lib/mail.lib.inc.php');
 require_once(api_get_path(INCLUDE_PATH).'/conf/mail.conf.php');
 require_once(api_get_path(INCLUDE_PATH).'/lib/usermanager.lib.php');
-
+get_notifications_of_user();
 /**
 * This function handles all the forum and forumcategories actions. This is a wrapper for the
 * forum and forum categories. All this code code could go into the section where this function is
@@ -1694,6 +1694,14 @@ function store_thread($values)
 			$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
 			$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
 		}
+		$reply_info['new_post_id'] = $last_post_id;
+
+		if ($values['post_notification'] == 1)
+		{
+			set_notification('thread',$last_thread_id, true);
+		}		
+		
+		send_notification_mails($last_thread_id,$reply_info);
 	
 		session_unregister('formelements');
 		session_unregister('origin');
@@ -1929,6 +1937,12 @@ function store_reply($values)
 		$message.='<br />'.get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
 		$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'&origin='.$origin.'">'.get_lang('Message').'</a>';
 	
+		// setting the notification correctly
+		if ($values['post_notification'] == 1)
+		{
+			set_notification('thread',$values['thread_id'], true);
+		}
+		
 		send_notification_mails($values['thread_id'], $values);
 	
 		session_unregister('formelements');
@@ -2411,6 +2425,8 @@ function send_notification_mails($thread_id, $reply_info)
 	// the forum category, the forum, the thread and the reply are visible to the user
 	if ($send_mails==true)
 	{
+		send_notifications($current_thread['forum_id'],$thread_id);
+		/*
 		$sql="SELECT DISTINCT user.firstname, user.lastname, user.email, user.user_id
 				FROM $table_posts post, $table_user user
 				WHERE post.thread_id='".Database::escape_string($thread_id)."'
@@ -2421,10 +2437,16 @@ function send_notification_mails($thread_id, $reply_info)
 		{
 			send_mail($row, $current_thread);
 		}
+		*/
 	}
 	else
 	{
+		/*
 		$sql="SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($thread_id)."' AND post_notification='1'";
+		$result=api_sql_query($sql, __LINE__, __FILE__);
+		*/
+		$table_notification = Database::get_course_table('forum_notification');
+		$sql = "SELECT * FROM $table_notification WHERE forum_id = '".Database::escape_string($current_forum['forum_id'])."' OR thread_id = '".Database::escape_string($thread_id)."'";
 		$result=api_sql_query($sql, __LINE__, __FILE__);
 		while ($row=Database::fetch_array($result))
 		{
@@ -3115,5 +3137,215 @@ function get_forums_of_group($group_id)
 		}
 	}
 	return $forum_list;
+}
+
+/**
+ * This function stores which users have to be notified of which forums or threads
+ *
+ * @param string $content does the user want to be notified about a forum or about a thread
+ * @param integer $id the id of the forum or thread
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version May 2008, dokeos 1.8.5
+ * @since May 2008, dokeos 1.8.5
+ */
+function set_notification($content,$id, $add_only = false)
+{
+	global $_user;
+	
+	// which database field do we have to store the id in?
+	if ($content == 'forum')
+	{
+		$database_field = 'forum_id';
+	}
+	else 
+	{
+		$database_field = 'thread_id';
+	}
+	
+	// database table definition
+	$table_notification = Database::get_course_table('forum_notification');
+	
+	// first we check if the notification is already set for this
+	$sql = "SELECT * FROM $table_notification WHERE $database_field = '".Database::escape_string($id)."' AND user_id = '".Database::escape_string($_user['user_id'])."'";
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$total = mysql_num_rows($result);
+	
+	// if the user did not indicate that (s)he wanted to be notified already then we store the notification request (to prevent double notification requests)
+	if ($total <= 0)
+	{
+		$sql = "INSERT INTO $table_notification ($database_field, user_id) VALUES ('".Database::escape_string($id)."','".Database::escape_string($_user['user_id'])."')";
+		$result=api_sql_query($sql, __FILE__, __LINE__);
+		api_session_unregister('forum_notification'); 
+		get_notifications_of_user(0,true);		
+		return get_lang('YouWillBeNotifiedOfNewPosts');
+	}
+	else 
+	{
+		if (!$add_only)
+		{
+			$sql = "DELETE FROM $table_notification WHERE $database_field = '".Database::escape_string($id)."' AND user_id = '".Database::escape_string($_user['user_id'])."'";
+			$result=api_sql_query($sql, __FILE__, __LINE__);
+			api_session_unregister('forum_notification'); 
+			get_notifications_of_user(0,true);
+			return get_lang('YouWillNoLongerBeNotifiedOfNewPosts');	
+		}
+			
+	}
+}
+
+/**
+ * This function retrieves all the email adresses of the users who wanted to be notified
+ * about a new post in a certain forum or thread
+ *
+ * @param string $content does the user want to be notified about a forum or about a thread
+ * @param integer $id the id of the forum or thread
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version May 2008, dokeos 1.8.5
+ * @since May 2008, dokeos 1.8.5
+ */
+function get_notifications($content,$id)
+{
+	global $table_users;
+
+	// which database field contains the notification?
+	if ($content == 'forum')
+	{
+		$database_field = 'forum_id';
+	}
+	else 
+	{
+		$database_field = 'thread_id';
+	}
+		
+	// database table definition
+	$table_notification = Database::get_course_table('forum_notification');
+	
+	
+	$sql = "SELECT user.user_id, user.firstname, user.lastname, user.email, user.user_id user FROM $table_users user, $table_notification notification
+			WHERE user.user_id = notification.user_id
+			AND notification.$database_field= '".Database::escape_string($id)."'";
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	while ($row=Database::fetch_array($result))
+	{
+		$return['user'.$row['user_id']]=array('email' => $row['email'], 'user_id' => $row['user_id']); 
+	}	
+	return $return;
+}
+
+/**
+ * Get all the users who need to receive a notification of a new post (those subscribed to 
+ * the forum or the thread)
+ *
+ * @param integer $forum_id the id of the forum
+ * @param integer $thread_id the id of the thread
+ * @param integer $post_id the id of the post
+ * @return unknown
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version May 2008, dokeos 1.8.5
+ * @since May 2008, dokeos 1.8.5
+ */
+function send_notifications($forum_id=0, $thread_id=0, $post_id=0)
+{
+	global $_course; 
+	
+	// the content of the mail
+	$email_subject = get_lang('NewForumPost')." - ".$_course['official_code'];
+	$thread_link= api_get_path('WEB_CODE_PATH').'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forum_id.'&thread='.$thread_id;
+	$message .= $link;
+	
+	// users who subscribed to the forum
+	if ($forum_id<>0)
+	{
+		$users_to_be_notified_by_forum = get_notifications('forum',$forum_id);
+	}
+	else 
+	{
+		return false;
+	}
+	
+	// user who subscribed to the thread
+	if ($thread_id<>0)
+	{
+		$users_to_be_notified_by_thread = get_notifications('thread',$thread_id);
+	}	
+	
+	// merging the two
+	$users_to_be_notified = array_merge($users_to_be_notified_by_forum, $users_to_be_notified_by_thread);
+	
+	if (is_array($users_to_be_notified))
+	{
+		foreach ($users_to_be_notified as $key=>$value)
+		{
+			if ($value['email'] <> $_user['email'])
+			{
+				$email_body= $value['firstname']." ".$value['lastname']."\n\r";
+				$email_body .= '['.$_course['official_code'].'] - ['.$_course['name']."]<br>\n";
+				$email_body .= get_lang('NewForumPost')."\n";
+				$email_body .= get_lang('YouWantedToStayInformed')."<br><br>\n";
+				$email_body .= get_lang('ThreadCanBeFoundHere')." : <a href=\"".$thread_link."\">".$thread_link."</a>\n";
+			
+				//set the charset and use it for the encoding of the email - small fix, not really clean (should check the content encoding origin first)
+				//here we use the encoding used for the webpage where the text is encoded (ISO-8859-1 in this case)
+				if(empty($charset))
+				{
+					$charset='ISO-8859-1';
+				}
+			
+				if ($user_info['user_id']<>$_user['user_id'])
+				{
+					$newmail = api_mail_html($value['lastname'].' '.$value['firstname'], $value['email'], $email_subject, $email_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail']);
+				}
+			}
+		}
+	}
+}
+
+/**
+ * Get all the notification subscriptions of the user 
+ * = which forums and which threads does the user wants to be informed of when a new 
+ * post is added to this thread
+ *
+ * @param integer $user_id the user_id of a user (default = 0 => the current user)
+ * @param boolean $force force get the notification subscriptions (even if the information is already in the session
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version May 2008, dokeos 1.8.5
+ * @since May 2008, dokeos 1.8.5
+ */
+function get_notifications_of_user($user_id = 0, $force = false)
+{
+	global $_course; 
+	
+	if ($user_id == 0)
+	{
+		global $_user;
+		$user_id = $_user['user_id'];
+	}
+	
+	// database table definition
+	$table_notification = Database::get_course_table('forum_notification');
+	
+	if (!$_SESSION['forum_notification'] OR $_SESSION['forum_notification']['course'] <> $_course['code'] OR $force=true)
+	{
+		$_SESSION['forum_notification']['course'] = $_course['code'];
+		
+		
+		$sql = "SELECT * FROM $table_notification WHERE user_id='".Database::escape_string($user_id)."'";
+		$result=api_sql_query($sql, __FILE__, __LINE__);
+		while ($row=Database::fetch_array($result))
+		{
+			if (!is_null($row['forum_id']))
+			{
+				$_SESSION['forum_notification']['forum'][] = $row['forum_id'];
+			}
+			if (!is_null($row['thread_id']))
+			{
+				$_SESSION['forum_notification']['thread'][] = $row['thread_id'];
+			}		
+		}
+	}
 }
 ?>

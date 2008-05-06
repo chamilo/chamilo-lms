@@ -134,6 +134,12 @@ if (api_is_allowed_to_edit())
 	handle_forum_and_forumcategories();
 }
 
+// notification
+if ($_GET['action'] == 'notify' AND isset($_GET['content']) AND isset($_GET['id']))
+{
+	$return_message = set_notification($_GET['content'],$_GET['id']);
+	Display :: display_confirmation_message($return_message,false);
+}
 if ($_GET['action']!='add')
 { 
 /*
@@ -180,7 +186,7 @@ if (api_is_allowed_to_edit())
 	*/
 	echo "<table class=\"data_table\" width='100%'>\n";
 	
-	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"5\">";
+	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
 	echo '<span class="forum_title">'.prepare4display($forum_category['cat_title']).'</span><br />';
 	echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
 	echo "</th>\n";
@@ -203,10 +209,7 @@ echo "\t\t<td colspan='2'>".get_lang('Forum')."</td>\n";
 echo "\t\t<td>".get_lang('Topics')."</td>\n";
 echo "\t\t<td>".get_lang('Posts')."</td>\n";
 echo "\t\t<td>".get_lang('LastPosts')."</td>\n";
-if (api_is_allowed_to_edit())
-{
-	echo "\t\t<td>".get_lang('Actions')."</td>\n";
-}
+echo "\t\t<td>".get_lang('Actions')."</td>\n";
 echo "\t</tr>\n";
 
 // the forums in this category
@@ -325,16 +328,25 @@ foreach ($forum_list as $key=>$forum)
 				echo $forum['last_post_date']." ".get_lang('By').' '.display_user_link($poster_id, $name);
 			}
 			echo "</td>\n";
+			echo "\t\t<td NOWRAP align='center'>";
 			if (api_is_allowed_to_edit())
 			{
-				echo "\t\t<td NOWRAP align='center'>";
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForum"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 				display_visible_invisible_icon('forum',$forum['forum_id'], $forum['visibility'], array("forumcategory"=>$_GET['forumcategory']));
 				display_lock_unlock_icon('forum',$forum['forum_id'], $forum['locked'], array("forumcategory"=>$_GET['forumcategory']));
 				display_up_down_icon('forum',$forum['forum_id'], $forums_in_category);
-				echo "</td>\n";
 			}
+			$iconnotify = 'send_mail.gif';
+			if (is_array($_SESSION['forum_notification']['forum']))
+			{
+				if (in_array($forum['forum_id'],$_SESSION['forum_notification']['forum']))
+				{
+					$iconnotify = 'send_mail_checked.gif';
+				}
+			}
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=notify&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
+			echo "</td>\n";
 			echo "\t</tr>";
 		}
 	}

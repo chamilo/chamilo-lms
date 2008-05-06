@@ -115,6 +115,13 @@ if (api_is_allowed_to_edit())
 	handle_forum_and_forumcategories();
 }
 
+// notification
+if ($_GET['action'] == 'notify' AND isset($_GET['content']) AND isset($_GET['id']))
+{
+	$return_message = set_notification($_GET['content'],$_GET['id']);
+	Display :: display_confirmation_message($return_message,false);
+}
+
 if ($_GET['action']!='add' && $_GET['action']!='edit' )
 {
 	get_whats_new();
@@ -201,16 +208,16 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' )
 			}			
 			echo "</th>\n";
 			
+			echo '<th style="padding: 5px; vertical-align: top;" align="center" >';
 			if (api_is_allowed_to_edit())
 			{
-				echo '<th style="padding: 5px; vertical-align: top;" align="center" >';
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=edit&amp;content=forumcategory&amp;id=".prepare4display($forum_category['cat_id'])."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&amp;content=forumcategory&amp;id=".prepare4display($forum_category['cat_id'])."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 				display_visible_invisible_icon('forumcategory', prepare4display($forum_category['cat_id']), prepare4display($forum_category['visibility']));
 				display_lock_unlock_icon('forumcategory',prepare4display($forum_category['cat_id']), prepare4display($forum_category['locked']));
 				display_up_down_icon('forumcategory',prepare4display($forum_category['cat_id']), $forum_categories_list);
-				echo '</th>';				
 			}
+			echo '</th>';				
 			echo "\t</tr>\n";
 		
 			// step 4: the interim headers (for the forum)
@@ -219,10 +226,7 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' )
 			echo "\t\t<td>".get_lang('Topics')."</td>\n";
 			echo "\t\t<td>".get_lang('Posts')."</td>\n";
 			echo "\t\t<td>".get_lang('LastPosts')."</td>\n";
-			if (api_is_allowed_to_edit())
-			{
 				echo "\t\t<td>".get_lang('Actions')."</td>\n";
-			}
 			echo "\t</tr>\n";
 		
 			// the forums in this category
@@ -374,16 +378,26 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' )
 						echo "</td>\n";
 		
 		
+						echo "\t\t<td NOWRAP align='center'>";
 						if (api_is_allowed_to_edit())
 						{
-							echo "\t\t<td NOWRAP align='center'>";
 							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForum"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 							display_visible_invisible_icon('forum',$forum['forum_id'], $forum['visibility']);
 							display_lock_unlock_icon('forum',$forum['forum_id'], $forum['locked']);
 							display_up_down_icon('forum',$forum['forum_id'], $forums_in_category);
-							echo "</td>\n";
+							
 						}
+						$iconnotify = 'send_mail.gif';
+						if (is_array($_SESSION['forum_notification']['forum']))
+						{
+							if (in_array($forum['forum_id'],$_SESSION['forum_notification']['forum']))
+							{
+								$iconnotify = 'send_mail_checked.gif';
+							}
+						}
+						echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=notify&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
+						echo "</td>\n";
 						echo "\t</tr>";
 					}
 				}					

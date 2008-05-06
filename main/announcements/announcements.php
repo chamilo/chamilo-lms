@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 15184 2008-04-30 03:36:30Z yannoo $
+<?php //$Id: announcements.php 15220 2008-05-06 20:13:19Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -41,9 +41,9 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file[] = "announcements";
-$language_file[] = "group";
-$language_file[] = "survey";
+$language_file[] = 'announcements';
+$language_file[] = 'group';
+$language_file[] = 'survey';
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
@@ -207,6 +207,7 @@ if (((!empty($_GET['action']) && $_GET['action'] == 'add') && $_GET['origin'] ==
 if ((empty($originalresource) || ($originalresource!=='no')) and (!empty($action) && $action=='add'))
 {
 	$_SESSION['formelements']=null;
+	//unset($_SESSION['formelements']);
 	unset_session_resources();
 }
 
@@ -271,7 +272,7 @@ if($surveyid)
 	$db_name=Database::escape_string($_REQUEST['db_name']);
 	$sql_temp = "SELECT * FROM $db_name.survey WHERE survey_id='$surveyid'";
 	$res_temp = api_sql_query($sql_temp, __FILE__, __LINE__);
-	$obj=@mysql_fetch_object($res_temp);
+	$obj=@Database::fetch_object($res_temp);
 	$template=$obj->template;
 }
 if($surveyid)
@@ -395,7 +396,7 @@ if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announc
 		$id = intval(addslashes($_GET['id']));
 		$sql="SELECT * FROM  $tbl_announcement WHERE id='$id'";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
-		$myrow = mysql_fetch_array($result);
+		$myrow = Database::fetch_array($result);
 
 		if ($myrow)
 		{
@@ -457,7 +458,7 @@ if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announc
 				"ORDER BY display_order $sortDirection";
 		$result = api_sql_query($my_sql,__FILE__,__LINE__);
 
-		while (list ($announcementId, $announcementOrder) = mysql_fetch_row($result))
+		while (list ($announcementId, $announcementOrder) = Database::fetch_row($result))
 		{
 			// STEP 2 : FOUND THE NEXT ANNOUNCEMENT ID AND ORDER.
 			//          COMMIT ORDER SWAP ON THE DB
@@ -523,7 +524,7 @@ if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announc
 				if(!$surveyid){
 					$result = api_sql_query("SELECT MAX(display_order) FROM $tbl_announcement",__FILE__,__LINE__);
 	
-					list($orderMax) = mysql_fetch_row($result);
+					list($orderMax) = Database::fetch_row($result);
 					$order = $orderMax + 1;
 					if(!empty($_SESSION['toolgroup'])){
 						//$insert_id=store_advalvas_item($_POST['emailTitle'],$_POST['newContent'],$order,array('GROUP:'.$_SESSION['toolgroup']));
@@ -563,8 +564,8 @@ if($_POST['emailsAdd'])
 			$newContentsix=str_replace("#uid#","",$newContentfive);
 
 if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,3})$', $to ))
-	{
-	  $subject=stripslashes($emailTitle);
+{
+	 $subject=stripslashes($emailTitle);
 	 $message=stripslashes($newContentsix);
 
     $sender_name = $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'];
@@ -574,8 +575,8 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 	//api_send_mail($to,$subject,$message,$headers);
 	api_mail('',$to,$subject,$message,$sender_name,$email,$headers);
 	$sql_date="SELECT * FROM $db_name.survey WHERE survey_id='$surveyid'";
-	$res_date=api_sql_query($sql_date);
-	$obj_date=mysql_fetch_object($res_date);
+	$res_date=api_sql_query($sql_date, __FILE__, __LINE__);
+	$obj_date=Database::fetch_object($res_date);
 	$end_date=$obj_date->avail_till;
 	$table_reminder = Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
 	if($_REQUEST['reminder']=="1")
@@ -584,7 +585,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 		$time = $time['yday'];
 		$time = $time+7;
 		$sql_insert="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$to','".addslashes($subject)."','".addslashes($message)."','1','$time','$end_date')";
-		api_sql_query($sql_insert);
+		api_sql_query($sql_insert, __FILE__, __LINE__);
 	}
 	else if($_REQUEST['reminder']=="2")
 	{
@@ -592,7 +593,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 		$time = $time['yday'];
 		$time = $time+14;
 		$sql_insert="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$to','".addslashes($subject)."','".addslashes($message)."','1','$time','$end_date')";
-		api_sql_query($sql_insert);
+		api_sql_query($sql_insert, __FILE__, __LINE__);
 	}
 	else if($_REQUEST['reminder']=="3")
 	{
@@ -600,7 +601,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 		$time = $time['yday'];
 		$time = $time+30;
 		$sql_insert="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$to','".addslashes($subject)."','".addslashes($message)."','1','$time','$end_date')";
-		api_sql_query($sql_insert);
+		api_sql_query($sql_insert, __FILE__, __LINE__);
 	}
   }
  }
@@ -633,7 +634,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 
 							if ($groupMemberResult)
 							{
-								while ($u = mysql_fetch_array($groupMemberResult))
+								while ($u = Database::fetch_array($groupMemberResult))
 								{
 									$userlist [] = $u ['user_id']; // complete the user id list ...
 								}
@@ -657,7 +658,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 					    		// send to everybody
 					    		$sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
 						                     FROM $tbl_course_user, $tbl_user
-						                     WHERE course_code='".mysql_real_escape_string($_course['sysCode'])."'
+						                     WHERE course_code='".Database::escape_string($_course['sysCode'])."'
 						                     AND course_rel_user.user_id = user.user_id";
 				    		}
 				    		else
@@ -672,7 +673,8 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 				    		}
 				    	}
 
-						if($sqlmail!=''){
+						if($sqlmail!='')
+						{
 							$result = api_sql_query($sqlmail,__FILE__,__LINE__);
 
 					    	/*=================================================================================
@@ -680,7 +682,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 						    =================================================================================*/
 
 
-							while ($myrow = mysql_fetch_array($result))
+							while ($myrow = Database::fetch_array($result))
 							{
 								/*    Header : Bericht van uw lesgever - GES ($_cid)
 
@@ -697,7 +699,8 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 
 								$db_name = Database::get_course_table(TABLE_MAIN_SURVEY);
 
-	                            if($surveyid) {
+	                            if($surveyid)
+	                            {
 	                            	$newContentone=str_replace("#page#","choose_language.php",$newContent);
 									$newContenttwo=str_replace("#temp#",$template,$newContentone);
 									$newContentthree=str_replace("#sid#",$surveyid,$newContenttwo);
@@ -714,7 +717,8 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 									//@mail($myrow["email"],stripslashes($emailTitle),$message,$headers);
 									api_mail('',$myrow["email"],stripslashes($emailTitle),$message,$sender_name,$email);
 	                            }
-	                            else{
+	                            else
+	                            {
 									$mail_body = $myrow["lastname"]." ".$myrow["firstname"]." <".$myrow["email"]."><br /> \n\n".stripslashes($emailTitle)."<br />".trim(stripslashes($newContent))." <br /><br />-- <br />";
 									$mail_body .= $_user['firstName'].' '.$_user['lastName']." ";
 									$mail_body .= "<".$_user['mail'].">\n";
@@ -730,21 +734,23 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 									$headers['Content-Type'] = 'text/html';
 									$headers['charset'] = $charset;
 			                        $mailid=$myrow["email"];
-
-									$newmail = api_mail_html($myrow["lastname"].' '.$myrow["firstname"], $myrow["email"],    $emailSubject, $mail_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail'],$headers);
+ 
+									$newmail = api_mail_html($myrow["lastname"].' '.$myrow["firstname"], $myrow["email"], stripslashes($emailSubject), $mail_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail'],$headers);
 	                            }
+	                            
 								$sql_date="SELECT * FROM $db_name WHERE survey_id='$surveyid'";
-								$res_date=api_sql_query($sql_date);
-								$obj_date=mysql_fetch_object($res_date);
+								$res_date=api_sql_query($sql_date, __FILE__, __LINE__);
+								$obj_date=Database::fetch_object($res_date);
 								$end_date=$obj_date->avail_till;
 								$table_reminder = Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
+								
 								if($_REQUEST['reminder']=="1")
 								{
 									$time=getdate();
 									$time = $time['yday'];
 									$time = $time+7;
 									$sql="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$mailid','".addslashes($emailSubject)."','".addslashes($mail_body)."','1','$time','$end_date')";
-									api_sql_query($sql);
+									api_sql_query($sql, __FILE__, __LINE__);
 								}
 								else if($_REQUEST['reminder']=="2")
 								{
@@ -752,7 +758,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 									$time = $time['yday'];
 									$time = $time+14;
 									$sql="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$mailid','".addslashes($emailSubject)."','".addslashes($mail_body)."','1','$time','$end_date')";
-									api_sql_query($sql);
+									api_sql_query($sql, __FILE__, __LINE__);
 
 								}
 								else if($_REQUEST['reminder']=="3")
@@ -761,13 +767,9 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 									$time = $time['yday'];
 									$time = $time+30;
 									$sql="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$mailid','".addslashes($emailSubject)."','".addslashes($mail_body)."','1','$time','$end_date')";
-									api_sql_query($sql);
+									api_sql_query($sql, __FILE__, __LINE__);
 								}
-
-
-
 							}
-
 							update_mail_sent($insert_id);
 							$message = $added_and_sent;
 						}
@@ -922,7 +924,7 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 
 $result = api_sql_query($sql,__FILE__,__LINE__);
 
-$announcement_number = mysql_num_rows($result);
+$announcement_number = Database::num_rows($result);
 
 /*----------------------------------------------------
 				ADD ANNOUNCEMENT / DELETE ALL
@@ -951,7 +953,7 @@ if(!$surveyid)
 if ($display_title_list == true)
 {
 	echo "\t\t\t<table>\n";
-	while ($myrow = mysql_fetch_array($result))
+	while ($myrow = Database::fetch_array($result))
 	{
 			$title = $myrow['title'];
 
@@ -1099,8 +1101,8 @@ if (isset($message) && $message == true)
 				
 				$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 				$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
-				$result_sql=api_sql_query($sql);
-				$isocode_language=mysql_result($result_sql,0,0);
+				$result_sql=api_sql_query($sql, __FILE__, __LINE__);
+				$isocode_language=Database::result($result_sql,0,0);
 				$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
 				
 				echo $oFCKeditor->CreateHtml();
@@ -1268,7 +1270,7 @@ if (isset($message) && $message == true)
 
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 
-		$num_rows = mysql_num_rows($result);
+		$num_rows = Database::num_rows($result);
 
 
 		/*=================================================
@@ -1289,7 +1291,7 @@ if (isset($message) && $message == true)
 
 		$displayed=array();
 
-		while ($myrow = mysql_fetch_array($result))
+		while ($myrow = Database::fetch_array($result))
 		{
 			if (!in_array($myrow['id'], $displayed))
 			{
@@ -1471,7 +1473,7 @@ if (isset($message) && $message == true)
 				echo "<tr><td width=\"100%\" colspan=\"3\"><a href=\"#top\"><img src=\"../img/top.gif\" border=\"0\" alt=\"To top\" align=\"right\"></a></td></tr>";
 			}
 			$displayed[]=$myrow['id'];
-		}	// end while ($myrow = mysql_fetch_array($result))
+		}	// end while ($myrow = Database::fetch_array($result))
 
 		echo "</table>";
 

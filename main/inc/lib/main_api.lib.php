@@ -754,12 +754,16 @@ function api_session_register($variable)
  */
 function api_session_unregister($variable)
 {
+	if(isset($GLOBALS[$variable]))
+	{
+		unset ($GLOBALS[$variable]);
+	}
+	
 	if(isset($_SESSION[$variable]))
 	{
-		session_unregister($variable);
 		$_SESSION[$variable] = null;
-	}
-	unset ($GLOBALS[$variable]);
+		session_unregister($variable);		
+	}	
 }
 /**
  * Clear the session

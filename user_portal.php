@@ -645,8 +645,9 @@ function show_notification($my_course)
 	$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST, $course_database);
 	$tool_edit_table = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_database);
 	$course_group_user_table = Database :: get_course_table(TABLE_GROUP_USER, $course_database);
+	$t_track_e_access = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 	// get the user's last access dates to all tools of this course
-	$sqlLastTrackInCourse = "SELECT * FROM $statistic_database.track_e_lastaccess
+	$sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access
 									 USE INDEX (access_cours_code, access_user_id)
 									 WHERE access_cours_code = '".$my_course['k']."'
 									 AND access_user_id = '$user_id'";

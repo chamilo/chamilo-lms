@@ -461,7 +461,7 @@ function search_keyword($firstname,$lastname,$username,$official_code,$keyword){
 function get_user_data($from, $number_of_items, $column, $direction)
 {
 	$a_users=array();
-	
+
 	// limit
 	$limit = 'LIMIT '.intval($from).','.intval($number_of_items);
 
@@ -483,7 +483,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	{		
 		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, 0, $limit, $order_by);
 	}
-	
+		
 	foreach($a_course_users as $user_id=>$o_course_user)
 	{
 		if( (isset ($_GET['keyword']) && search_keyword($o_course_user['firstname'],$o_course_user['lastname'],$o_course_user['username'],$o_course_user['official_code'],$_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])){
@@ -501,6 +501,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				$temp[] = $o_course_user['role'];
 				$temp[] = implode(', ',$groups_name); //Group
 				$temp[] = $o_course_user['official_code'];
+				
+				
 
 				if(isset($o_course_user['tutor_id']) && $o_course_user['tutor_id']==1)
 					$temp[] = get_lang('Tutor');
@@ -510,8 +512,10 @@ function get_user_data($from, $number_of_items, $column, $direction)
 					$temp[] = get_lang('CourseManager');
 				else
 					$temp[] = '-';
-
+					
+				$temp[] = $o_course_user['active'];
 				$temp[] = $user_id;
+				
 			}
 			else
 			{
@@ -520,14 +524,47 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				$temp[] = $o_course_user['lastname'];				
 				$temp[] = $o_course_user['role'];
 				$temp[] = implode(', ',$groups_name);//Group
-				$temp[] = $o_course_user['official_code'];
+				$temp[] = $o_course_user['official_code'];					
 				$temp[] = $user_id;
-			}
+				
+			}			
 			$a_users[$user_id] = $temp;
 		}
 	}
 	
 	return $a_users;
+}
+
+
+
+/**
+ * Build the active-column of the table to lock or unlock a certain user
+ * lock = the user can no longer use this account
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @param int $active the current state of the account
+ * @param int $user_id The user id
+ * @param string $url_params
+ * @return string Some HTML-code with the lock/unlock button
+ */
+function active_filter($active, $url_params, $row)
+{
+	global $_user;
+	if ($active=='1')
+	{
+		$action='AccountActive';
+		$image='right';
+	}
+	
+	if ($active=='0')
+	{
+		$action='AccountInactive';
+		$image='wrong';
+	}
+	if ($row['0']<>$_user['user_id']) // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
+	{
+		$result = '<center><img src="../img/'.$image.'.gif" border="0" style="vertical-align: middle;" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></center>';
+	}
+	return $result;
 }
 
 
@@ -590,14 +627,16 @@ $table->set_header($header_nr++, get_lang('Description'),false);
 $table->set_header($header_nr++, get_lang('GroupSingle'),false);
 $table->set_header($header_nr++, get_lang('OfficialCode'));
 
- if( api_is_allowed_to_edit())
+if( api_is_allowed_to_edit())
 {
 	$table->set_header($header_nr++, get_lang('Tutor'),false);
 	$table->set_header($header_nr++, get_lang('CourseManager'),false);
+	$table->set_header($header_nr++, get_lang('Active'));
+	$table->set_column_filter(8,'active_filter');
 }
 
 //actions column
-$table->set_header($header_nr++, '', false);
+$table->set_header($header_nr++, get_lang('Modify'), false);
 
 $table->set_column_filter($header_nr-1,'modify_filter');
  if( api_is_allowed_to_edit())

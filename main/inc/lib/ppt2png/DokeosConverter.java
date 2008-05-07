@@ -57,6 +57,7 @@ public class DokeosConverter {
     private static final Options OPTIONS = initOptions();
 
     private static final int EXIT_CODE_CONNECTION_FAILED = 1;
+    private static final int EXIT_CODE_CONVERSION_FAILED = 2;
     private static final int EXIT_CODE_TOO_FEW_ARGS = 255;
 
     private static Options initOptions() {
@@ -152,7 +153,14 @@ public class DokeosConverter {
                     convertOne(converter, inputFile, outputFile, verbose);
                 }
             }
-        } finally {
+        } 
+        catch (com.artofsolving.jodconverter.openoffice.connection.OpenOfficeException e)
+        {
+        	connection.disconnect();
+        	System.err.println("ERROR: conversion failed.");
+        	System.exit(EXIT_CODE_CONVERSION_FAILED);
+        }
+        finally {
             if (verbose) {
                 System.out.println("-- disconnecting");
             }

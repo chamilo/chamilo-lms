@@ -37,12 +37,26 @@ $htmlHeadXtra[] = $form_style;
 
 if(isset($_POST['convert'])){
 	$cwdir = getcwd();
-	require('../newscorm/lp_upload.php');
-	if(isset($o_doc) && $first_item_id != 0){
-		header('Location: ../newscorm/lp_controller.php?'.api_get_cidreq().'&lp_id='.$o_doc->lp_id.'&action=view_item&id='.$first_item_id);
-	}
-	else {
-		$errorMessage = get_lang('WoogieError');
+	if(isset($_FILES['user_file']))
+	{
+		$allowed_extensions = array('doc','docx','odt','txt','sxw','rtf');
+		if(in_array(strtolower(pathinfo($_FILES['user_file']['name'],PATHINFO_EXTENSION)),$allowed_extensions))
+		{
+			require('../newscorm/lp_upload.php');
+			if(isset($o_doc) && $first_item_id != 0){
+				header('Location: ../newscorm/lp_controller.php?'.api_get_cidreq().'&lp_id='.$o_doc->lp_id.'&action=view_item&id='.$first_item_id);
+			}
+			else {
+				if(!empty($o_doc->error))
+					$errorMessage = $o_doc->error;
+				else
+					$errorMessage = get_lang('OogieUnknownError');
+			}
+		}
+		else
+		{
+			$errorMessage = get_lang('BadExtension');
+		}
 	}
 }
 

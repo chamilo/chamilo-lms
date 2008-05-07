@@ -85,9 +85,20 @@ abstract class OpenofficeDocument extends learnpath {
 		$locale = 'en_US.UTF-8'; // TODO : improve it because we're not sure this locale is present everywhere
 		putenv('LC_ALL='.$locale);
 		$shell = exec($cmd, $files, $return);
-		
 		if($return != 0) { //if the java application returns an error code
-			DocumentManager::delete_document($_course, $dir_name, $this->base_work_dir);	 
+			switch($return)
+			{
+				// can't connect to openoffice
+				case 1 : $this->error = get_lang('CannotConnectToOpenOffice');break;
+				
+				// conversion failed in openoffice
+				case 2 : $this->error = get_lang('OogieConversionFailed');break;
+				
+				// conversion can't be launch because command failed
+				case 255 : $this->error = get_lang('OogieUnknownError');break;
+			}
+			
+			DocumentManager::delete_document($_course, $dir_name, $this->base_work_dir);	
 			return false;   
 				
 	    }

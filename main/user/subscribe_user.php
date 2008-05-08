@@ -39,7 +39,7 @@
 ============================================================================== 
 */
 // name of the language file that needs to be included 
-$language_file = 'registration';
+$language_file = array('registration','admin');
 include ("../inc/global.inc.php");
 $this_section = SECTION_COURSES;
 if (!api_is_allowed_to_edit()) api_not_allowed(true);

@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 15174 2008-04-29 18:00:04Z yannoo $
+// $Id: settings.php 15236 2008-05-08 08:15:21Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -47,6 +47,8 @@ $cidReset=true;
 // including some necessary dokeos files
 include_once ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -396,6 +398,45 @@ function handle_stylesheets()
 	// Current style
 	$currentstyle = api_get_setting('stylesheets');
 
+	// uploading a new stylesheet
+	echo '<a href="" id="stylesheetuploadlink" onclick="document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\';return false; ">'.get_lang('UploadNewStylesheet').'</a>';
+	$form = new FormValidator('stylesheet_upload','post','settings.php?category=stylesheets&showuploadform=true');
+	$form->addElement('text','name_stylesheet',get_lang('NameStylesheet'),array('size' => '40', 'maxlength' => '40'));
+	$form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
+	$form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
+	$allowed_file_types = array ('css');
+	$form->addRule('new_stylesheet', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
+	$form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
+	$form->addElement('submit', 'stylesheet_upload', get_lang('Ok'));
+	if( $form->validate() AND is_writable(api_get_path(SYS_CODE_PATH).'css/'))
+	{
+		$values = $form->exportValues();
+		$picture_element = & $form->getElement('new_stylesheet');
+		$picture = $picture_element->getValue();
+		upload_stylesheet($values, $picture);
+		Display::display_confirmation_message(get_lang('StylesheetAdded'));
+	}
+	else 
+	{
+		if (!is_writable(api_get_path(SYS_CODE_PATH).'css/'))
+		{
+			Display::display_error_message(api_get_path(SYS_CODE_PATH).'css/'.get_lang('IsNotWritable'));
+		}
+		else 
+		{
+			if ($_GET['showuploadform'] == 'true')
+			{
+				echo '<div id="newstylesheetform">';
+			}
+			else 
+			{
+				echo '<div id="newstylesheetform" style="display: none;">';
+			}
+			$form->display();
+			echo '</div>';
+		}
+	}
+
 	// Preview of the stylesheet
 	echo '<div><iframe src="style_preview.php" width="100%" height="300" name="preview"></iframe></div>';
 
@@ -436,6 +477,36 @@ function handle_stylesheets()
 		@closedir($handle);
 	}
 	echo '<input type="submit" name="submit_stylesheets" value="'.get_lang('Ok').'" /></form>';
+}
+
+/**
+ * creates the folder (if needed) and uploads the stylesheet in it
+ *
+ * @param array $values the values of the form
+ * @param array $picture the values of the uploaded file
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version May 2008
+ * @since Dokeos 1.8.5
+ */
+function upload_stylesheet($values,$picture)
+{
+	// valid name for the stylesheet folder
+	$style_name = ereg_replace("[^A-Za-z0-9]", "", $values['name_stylesheet'] );
+	
+	// create the folder if needed
+	if(!is_dir(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'))
+	{
+		if(mkdir(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'))
+		{
+			$perm = api_get_setting('permissions_for_new_directories');
+			$perm = octdec(!empty($perm)?$perm:'0770');
+			chmod(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/');
+		}		
+	}
+	
+	// move the file in the folder
+	move_uploaded_file($picture['tmp_name'], api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'.$picture['name']);
 }
 
 /**

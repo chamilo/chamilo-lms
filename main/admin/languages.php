@@ -1,5 +1,5 @@
 <?php
-// $Id: languages.php 15079 2008-04-24 23:22:29Z yannoo $
+// $Id: languages.php 15243 2008-05-08 14:05:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -156,8 +156,13 @@ while ($row = mysql_fetch_array($result_select))
 	// the first column is the original name of the language OR a form containing the original name
 	if ($_GET['action'] == 'edit' and $row['id'] == $_GET['id'])
 	{
+		if ($row['english_name'] == api_get_setting('platformLanguage'))
+		{
+			$checked = ' checked="checked" ';
+		}
+		
 		$row_td[] = '<input type="hidden" name="edit_id" value="'.$_GET['id'].'" /><input type="text" name="txt_name" value="'.$row['original_name'].'" /> '
-			. '<input type="checkbox" name="platformlanguage" id="platformlanguage" value="'.$row['english_name'].'" /><label for="platformlanguage">'.$row['original_name'].' '.get_lang('AsPlatformLanguage').'</label> <input type="submit" name="Submit" value="'.get_lang('Ok').'" />';
+			. '<input type="checkbox" '.$checked.'name="platformlanguage" id="platformlanguage" value="'.$row['english_name'].'" /><label for="platformlanguage">'.$row['original_name'].' '.get_lang('AsPlatformLanguage').'</label> <input type="submit" name="Submit" value="'.get_lang('Ok').'" />';
 	}
 	else
 	{

@@ -33,7 +33,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 14930 2008-04-16 21:41:35Z juliomontoya $
+* 	@version $Id: exercice_submit.php 15251 2008-05-08 20:28:28Z yannoo $
 */
 
 
@@ -100,7 +100,7 @@ if ( empty ( $exerciseType ) ) {
     $exerciseType = $_REQUEST['exerciseType'];
 }
 if ( empty ( $exerciseId ) ) {
-    $exerciseId = $_REQUEST['exerciseId'];
+    $exerciseId = intval($_REQUEST['exerciseId']);
 }
 if ( empty ( $choice ) ) {
     $choice = $_REQUEST['choice'];
@@ -114,6 +114,7 @@ if ( empty ( $nbrQuestions ) ) {
 if ( empty ($buttonCancel) ) {
 	$buttonCancel 	= $_REQUEST['buttonCancel'];
 }
+$error = '';
 
 // if the user has clicked on the "Cancel" button
 if($buttonCancel)
@@ -199,24 +200,26 @@ if($formSent)
 }
 
 // if the object is not in the session
-if(!isset($_SESSION['objExercise']) || $origin == 'learnpath')
+if(!isset($_SESSION['objExercise']) || $origin == 'learnpath' || $_SESSION['objExercise']->id != $_REQUEST['exerciseId'])
 {
     if($debug>0){echo str_repeat('&nbsp;',0).'$_SESSION[objExercise] was unset'."<br />\n";}
     // construction of Exercise
     $objExercise=new Exercise();
-
-    #$sql="SELECT title,description,sound,type,random,active FROM `$TBL_EXERCICES` WHERE id='$exerciseId'";
+    unset($_SESSION['questionList']);
 
     // if the specified exercise doesn't exist or is disabled
     if(!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !$is_allowedToEdit && ($origin != 'learnpath') ))
     {
-        die(get_lang('ExerciseNotFound'));
+    	unset($objExercise);
+    	$error = get_lang('ExerciseNotFound');
+        //die(get_lang('ExerciseNotFound'));
     }
-
-    // saves the object into the session
-    api_session_register('objExercise');
-    if($debug>0){echo str_repeat('&nbsp;',0).'$_SESSION[objExercise] was unset - set now - end'."<br />\n";}
-
+    else
+    {
+	    // saves the object into the session
+	    api_session_register('objExercise');
+	    if($debug>0){echo str_repeat('&nbsp;',0).'$_SESSION[objExercise] was unset - set now - end'."<br />\n";}
+    }
 }
 
 if(!isset($objExcercise) && isset($_SESSION['objExercise'])){
@@ -410,7 +413,7 @@ else
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $document_language; ?>" lang="<?php echo $document_language; ?>">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>" />
 </head>
 
 <body>
@@ -423,30 +426,46 @@ else
 
 echo "<h3>".$exerciseTitle."</h3>";
 
-if(!empty($exerciseSound))
+if(!empty($error))
 {
-	echo "<a href=\"../document/download.php?doc_url=%2Faudio%2F".$exerciseSound."\" target=\"_blank\">",
-		"<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=",get_lang('Sound')."\" /></a>";
+	Display::display_error_message($error,false);
 }
-
-
-// Get number of hotspot questions for javascript validation
-$number_of_hotspot_questions = 0;
-$onsubmit = '';
-$i=0;
-
-foreach($questionList as $questionId)
+else
 {
-	$i++;
-	$objQuestionTmp = Question :: read($questionId);
 
-	// for sequential exercises
-	if($exerciseType == 2)
+	if(!empty($exerciseSound))
 	{
-		// if it is not the right question, goes to the next loop iteration
-		if($questionNum != $i)
+		echo "<a href=\"../document/download.php?doc_url=%2Faudio%2F".$exerciseSound."\" target=\"_blank\">",
+			"<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=",get_lang('Sound')."\" /></a>";
+	}
+	
+	
+	// Get number of hotspot questions for javascript validation
+	$number_of_hotspot_questions = 0;
+	$onsubmit = '';
+	$i=0;
+	
+	foreach($questionList as $questionId)
+	{
+		$i++;
+		$objQuestionTmp = Question :: read($questionId);
+	
+		// for sequential exercises
+		if($exerciseType == 2)
 		{
-			continue;
+			// if it is not the right question, goes to the next loop iteration
+			if($questionNum != $i)
+			{
+				continue;
+			}
+			else
+			{
+				if ($objQuestionTmp->selectType() == HOT_SPOT)
+				{
+					$number_of_hotspot_questions++;
+				}
+				break;
+			}
 		}
 		else
 		{
@@ -454,119 +473,111 @@ foreach($questionList as $questionId)
 			{
 				$number_of_hotspot_questions++;
 			}
-			break;
 		}
 	}
-	else
+	
+	if($number_of_hotspot_questions > 0)
 	{
-		if ($objQuestionTmp->selectType() == HOT_SPOT)
-		{
-			$number_of_hotspot_questions++;
-		}
+		$onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
 	}
-}
-
-if($number_of_hotspot_questions > 0)
-{
-	$onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
-}
-$s="<p>$exerciseDescription</p>";
-
-if($origin == 'learnpath' && $exerciseType==2){
-	$s2 = "&exerciseId=".$exerciseId;
-}
-$s.=" <form method='post' action='".api_get_self()."?autocomplete=off".$s2."' name='frm_exercise' $onsubmit>
- <input type='hidden' name='formSent' value='1' />
- <input type='hidden' name='exerciseType' value='".$exerciseType."' />
- <input type='hidden' name='questionNum' value='".$questionNum."' />
- <input type='hidden' name='nbrQuestions' value='".$nbrQuestions."' />
- <input type='hidden' name='origin' value='".$origin."' />
- <input type='hidden' name='learnpath_id' value='".$learnpath_id."' />
- <input type='hidden' name='learnpath_item_id' value='".$learnpath_item_id."' />
-<table width='100%' border='0' cellpadding='1' cellspacing='0'>
- <tr>
-  <td>
-  <table width='100%' cellpadding='3' cellspacing='0' border='0'>";
-echo $s;
-
-$i=0;
-
-foreach($questionList as $questionId)
-{
-	$i++;
-
-	// for sequential exercises
-	if($exerciseType == 2)
+	$s="<p>$exerciseDescription</p>";
+	
+	if($origin == 'learnpath' && $exerciseType==2){
+		$s2 = "&exerciseId=".$exerciseId;
+	}
+	$s.=" <form method='post' action='".api_get_self()."?autocomplete=off".$s2."' name='frm_exercise' $onsubmit>
+	 <input type='hidden' name='formSent' value='1' />
+	 <input type='hidden' name='exerciseType' value='".$exerciseType."' />
+	 <input type='hidden' name='questionNum' value='".$questionNum."' />
+	 <input type='hidden' name='nbrQuestions' value='".$nbrQuestions."' />
+	 <input type='hidden' name='origin' value='".$origin."' />
+	 <input type='hidden' name='learnpath_id' value='".$learnpath_id."' />
+	 <input type='hidden' name='learnpath_item_id' value='".$learnpath_item_id."' />
+	<table width='100%' border='0' cellpadding='1' cellspacing='0'>
+	 <tr>
+	  <td>
+	  <table width='100%' cellpadding='3' cellspacing='0' border='0'>";
+	echo $s;
+	
+	$i=0;
+	
+	foreach($questionList as $questionId)
 	{
-		// if it is not the right question, goes to the next loop iteration
-		if($questionNum != $i)
+		$i++;
+	
+		// for sequential exercises
+		if($exerciseType == 2)
 		{
-			continue;
-		}
-		else
-		{
-			// if the user has already answered this question
-			if(isset($exerciseResult[$questionId]))
+			// if it is not the right question, goes to the next loop iteration
+			if($questionNum != $i)
 			{
-				// construction of the Question object
-				$objQuestionTmp = Question::read($questionId);
-
-				$questionName=$objQuestionTmp->selectTitle();
-
-				// destruction of the Question object
-				unset($objQuestionTmp);
-
-				echo '<tr><td>'.get_lang('AlreadyAnswered').' &quot;'.$questionName.'&quot;</td></tr>';
-
-				break;
+				continue;
+			}
+			else
+			{
+				// if the user has already answered this question
+				if(isset($exerciseResult[$questionId]))
+				{
+					// construction of the Question object
+					$objQuestionTmp = Question::read($questionId);
+	
+					$questionName=$objQuestionTmp->selectTitle();
+	
+					// destruction of the Question object
+					unset($objQuestionTmp);
+	
+					echo '<tr><td>'.get_lang('AlreadyAnswered').' &quot;'.$questionName.'&quot;</td></tr>';
+	
+					break;
+				}
 			}
 		}
-	}
-
-	$s="<tr>
-	 <td width='3%' bgcolor='#e6e6e6'><img src=\"".api_get_path(WEB_IMG_PATH)."test.gif\" align=\"absmiddle\"></td>
-	 <td valign='middle' bgcolor='#e6e6e6'>
-		".get_lang('Question')." ";
-	$s.=$i;
-	if($exerciseType == 2) $s.=' / '.$nbrQuestions;
-	$s.='</td></tr>';
-
+	
+		$s="<tr>
+		 <td width='3%' bgcolor='#e6e6e6'><img src=\"".api_get_path(WEB_IMG_PATH)."test.gif\" align=\"absmiddle\"></td>
+		 <td valign='middle' bgcolor='#e6e6e6'>
+			".get_lang('Question')." ";
+		$s.=$i;
+		if($exerciseType == 2) $s.=' / '.$nbrQuestions;
+		$s.='</td></tr>';
+	
+		echo $s;
+	
+		// shows the question and its answers
+		showQuestion($questionId, false, $origin);
+	
+		// for sequential exercises
+		if($exerciseType == 2)
+		{
+			// quits the loop
+			break;
+		}
+	}	// end foreach()
+	
+	$s="</table>
+	  </td>
+	 </tr>
+	 <tr>
+	  <td><br/>
+		 <!-- <input type='submit' name='buttonCancel' value=".get_lang('Cancel')." />
+	   &nbsp;&nbsp; //-->
+		 <input type='submit' name='submit' value='";
+	
+	  if ($exerciseType == 1 || $nbrQuestions == $questionNum) 
+	  {
+		$s.=get_lang('ValidateAnswer'); 
+	  }
+	  else
+	  {
+		$s.=get_lang('Next').' &gt;';
+	  }
+	  //$s.='\'&gt;';
+	  $s.= '\' />';
+	  $s.="</td></tr></form></table>";
+	
+	$b=2;
 	echo $s;
-
-	// shows the question and its answers
-	showQuestion($questionId, false, $origin);
-
-	// for sequential exercises
-	if($exerciseType == 2)
-	{
-		// quits the loop
-		break;
-	}
-}	// end foreach()
-
-$s="</table>
-  </td>
- </tr>
- <tr>
-  <td><br/>
-	 <!-- <input type='submit' name='buttonCancel' value=".get_lang('Cancel')." />
-   &nbsp;&nbsp; //-->
-	 <input type='submit' name='submit' value='";
-
-  if ($exerciseType == 1 || $nbrQuestions == $questionNum) 
-  {
-	$s.=get_lang('ValidateAnswer'); 
-  }
-  else
-  {
-	$s.=get_lang('Next').' &gt;';
-  }
-  //$s.='\'&gt;';
-  $s.= '\' />';
-  $s.="</td></tr></form></table>";
-
-$b=2;
-echo $s;
+}
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display::display_footer();

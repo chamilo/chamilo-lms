@@ -3,7 +3,7 @@
 ============================================================================== 
 	Dokeos - elearning and course management software
 	
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2005 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Elie harfouche (elie at harfdesign dot com)
@@ -228,11 +228,11 @@ function get_number_of_users()
 	
 	if (isset ($_REQUEST['keyword']))
 	{
-		$keyword = mysql_real_escape_string($_REQUEST['keyword']);
+		$keyword = Database::escape_string($_REQUEST['keyword']);
 		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
 	}
 	$res = api_sql_query($sql, __FILE__, __LINE__);
-	$result = mysql_num_rows($res);
+	$result = Database::num_rows($res);
 	return $result;
 }
 /**
@@ -251,7 +251,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 					u.lastname  AS col2, 
 					u.firstname AS col3, 
 					u.email 	AS col4,
-					u.user_id   AS col5 
+					u.active 	AS col5,
+					u.user_id   AS col6
 				FROM $user_table u
 				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
 				WHERE u.status='1' and cu.user_id IS NULL
@@ -265,7 +266,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 					u.lastname  AS col2, 
 					u.firstname AS col3, 
 					u.email 	AS col4,
-					u.user_id   AS col5 
+					u.active 	AS col5,
+					u.user_id   AS col6 
 				FROM $user_table u
 				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
 				WHERE u.status='5' and cu.user_id IS NULL
@@ -273,14 +275,14 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	}
 	if (isset ($_REQUEST['keyword']))
 	{
-		$keyword = mysql_real_escape_string($_REQUEST['keyword']);
+		$keyword = Database::escape_string($_REQUEST['keyword']);
 		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
 	}
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$users = array ();
-	while ($user = mysql_fetch_row($res))
+	while ($user = Database::fetch_row($res))
 	{
 		$users[] = $user;
 		$_SESSION['session_user_id'][]=$user[0];
@@ -308,6 +310,41 @@ function reg_filter($user_id)
 	$result = "<a href=\"".api_get_self()."?register=yes&amp;type=".$type."&amp;user_id=".$user_id."\">".get_lang("reg")."</a>";
 	return $result;
 }
+
+
+/**
+ * Build the active-column of the table to lock or unlock a certain user
+ * lock = the user can no longer use this account
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @param int $active the current state of the account
+ * @param int $user_id The user id
+ * @param string $url_params
+ * @return string Some HTML-code with the lock/unlock button
+ */
+ 
+function active_filter($active, $url_params, $row)
+{
+	global $_user;
+	if ($active=='1')
+	{
+		$action='AccountActive';
+		$image='right';
+	}
+	
+	if ($active=='0')
+	{
+		$action='AccountInactive';
+		$image='wrong';
+	}
+	if ($row['0']<>$_user['user_id']) // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
+	{
+		$result = '<center><img src="../img/'.$image.'.gif" border="0" style="vertical-align: middle;" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></center>';
+	}
+	return $result;
+}
+
+
+
 // Build search-form
 $form = new FormValidator('search_user', 'POST',api_get_self().'?type='.$_REQUEST['type'],'',null,false);
 $renderer = & $form->defaultRenderer();
@@ -327,6 +364,8 @@ $table->set_header($col ++, get_lang('LastName'));
 $table->set_header($col ++, get_lang('FirstName'));
 $table->set_header($col ++, get_lang('Email'));
 $table->set_column_filter($col -1, 'email_filter');
+$table->set_header($col ++, get_lang('Active'),false);
+$table->set_column_filter($col -1, 'active_filter');
 $table->set_header($col ++, get_lang('reg'), false);
 $table->set_column_filter($col -1, 'reg_filter');
 $table->set_form_actions(array ('subscribe' => get_lang('reg')), 'user');

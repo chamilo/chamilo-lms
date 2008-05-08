@@ -23,7 +23,7 @@
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 15090 2008-04-25 05:11:42Z yannoo $
+* 	@version $Id: survey.lib.php 15250 2008-05-08 19:51:09Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -3787,14 +3787,14 @@ class SurveyUtil {
 		$table->set_header(3, get_lang('NumberOfQuestions'));
 		$table->set_header(4, get_lang('Author'));
 		$table->set_header(5, get_lang('Language'));
-		$table->set_header(6, get_lang('Shared'));
-		$table->set_header(7, get_lang('AvailableFrom'));
-		$table->set_header(8, get_lang('AvailableUntill'));
-		$table->set_header(9, get_lang('Invite'));
-		$table->set_header(10, get_lang('Anonymous'));
-		$table->set_header(11, get_lang('Modify'), false);
-		$table->set_column_filter(10, 'anonymous_filter');
-		$table->set_column_filter(11, 'modify_filter');
+		//$table->set_header(6, get_lang('Shared'));
+		$table->set_header(6, get_lang('AvailableFrom'));
+		$table->set_header(7, get_lang('AvailableUntill'));
+		$table->set_header(8, get_lang('Invite'));
+		$table->set_header(9, get_lang('Anonymous'));
+		$table->set_header(10, get_lang('Modify'), false,'width="120"');
+		$table->set_column_filter(9, 'anonymous_filter');
+		$table->set_column_filter(10, 'modify_filter');
 		$table->set_form_actions(array ('delete' => get_lang('DeleteSurvey')));
 		$table->display();
 	
@@ -3923,19 +3923,19 @@ class SurveyUtil {
 		{
 			$search_restriction = ' AND '.$search_restriction;
 		}
+		//IF(is_shared<>0,'V','-')	 					AS col6,
 		$sql = "SELECT
 					survey.survey_id							AS col0,
 	                CONCAT('<a href=\"survey.php?survey_id=',survey.survey_id,'\">',survey.title,'</a>')		AS col1,
 					survey.code									AS col2,
 					count(survey_question.question_id)			AS col3,
 	                CONCAT(user.firstname, ' ', user.lastname)	AS col4,
-	                survey.lang									AS col5,
-	                IF(is_shared<>0,'V','-')	 					AS col6,
-					survey.avail_from							AS col7,
-	                survey.avail_till							AS col8,
-	                CONCAT('<a href=\"survey_invitation.php?view=answered&amp;survey_id=',survey.survey_id,'\">',survey.answered,'</a> / <a href=\"survey_invitation.php?view=invited&amp;survey_id=',survey.survey_id,'\">',survey.invited, '</a>')	AS col9,
-	                survey.anonymous							AS col10,
-	                survey.survey_id							AS col11
+	                survey.lang									AS col5,	                
+					survey.avail_from							AS col6,
+	                survey.avail_till							AS col7,
+	                CONCAT('<a href=\"survey_invitation.php?view=answered&amp;survey_id=',survey.survey_id,'\">',survey.answered,'</a> / <a href=\"survey_invitation.php?view=invited&amp;survey_id=',survey.survey_id,'\">',survey.invited, '</a>')	AS col8,
+	                survey.anonymous							AS col9,
+	                survey.survey_id							AS col10
 	             FROM $table_survey survey
 				 LEFT JOIN $table_survey_question survey_question ON survey.survey_id = survey_question.survey_id
 	             , $table_user user

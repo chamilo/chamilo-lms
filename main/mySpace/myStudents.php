@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 15174 2008-04-29 18:00:04Z yannoo $
+<?php //$Id: myStudents.php 15248 2008-05-08 19:15:46Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -685,8 +685,8 @@ if(!empty($_GET['student']))
 					
 					$i++;
 					
-					$csv_content[] = array(stripslashes($a_learnpath['name']),api_time_to_hms($total_time),$score.'%',$progress,date('Y-m-d',$start_time));
-					
+					$csv_content[] = array(html_entity_decode(stripslashes($a_learnpath['name']),ENT_QUOTES,$charset),api_time_to_hms($total_time),$score.'%',$progress,date('Y-m-d',$start_time));
+										
 				?>
 					<tr class="<?php echo $s_css_class;?>">
 						<td>

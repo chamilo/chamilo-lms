@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 15248 2008-05-08 19:15:46Z juliomontoya $
+<?php //$Id: myStudents.php 15252 2008-05-08 21:51:28Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -546,10 +546,14 @@ if(!empty($_GET['student']))
 						</th>
 					</tr>
 <?php
-				$a_headerLearnpath = array(get_lang('Learnpath'),get_lang('Time'),get_lang('Progress'),get_lang('LastConnexion'));
+			$a_headerLearnpath = array(get_lang('Learnpath'),get_lang('Time'),get_lang('Progress'),get_lang('LastConnexion'));
 			
-			$sqlLearnpath = "	SELECT lp.name,lp.id
-								FROM ".$a_infosCours['db_name'].".".$tbl_course_lp." AS lp ORDER BY lp.name ASC
+			$t_lp = Database::get_course_table(TABLE_LP_MAIN,$a_infosCours['db_name']);
+			$t_lpi = Database::get_course_table(TABLE_LP_ITEM,$a_infosCours['db_name']);
+			$t_lpv = Database::get_course_table(TABLE_LP_VIEW,$a_infosCours['db_name']);
+			$t_lpiv = Database::get_course_table(TABLE_LP_ITEM_VIEW,$a_infosCours['db_name']);
+			$sqlLearnpath = "SELECT lp.name,lp.id
+								FROM $t_lp AS lp ORDER BY lp.name ASC
 							";
 
 			$resultLearnpath = api_sql_query($sqlLearnpath,__FILE__,__LINE__);
@@ -575,8 +579,8 @@ if(!empty($_GET['student']))
 					
 					// calculates time
 					$sql = 'SELECT SUM(total_time) 
-								FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
-								INNER JOIN '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' AS view
+								FROM '.$t_lpiv.' AS item_view
+								INNER JOIN '.$t_lpv.' AS view
 									ON item_view.lp_view_id = view.id
 									AND view.lp_id = '.$a_learnpath['id'].'
 									AND view.user_id = '.intval($_GET['student']);
@@ -590,8 +594,8 @@ if(!empty($_GET['student']))
 				
 					// calculates last connection time
 					$sql = 'SELECT MAX(start_time) 
-								FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
-								INNER JOIN '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' AS view
+								FROM '.$t_lpiv.' AS item_view
+								INNER JOIN '.$t_lpv.' AS view
 									ON item_view.lp_view_id = view.id
 									AND view.lp_id = '.$a_learnpath['id'].'
 									AND view.user_id = '.intval($_GET['student']);
@@ -605,14 +609,14 @@ if(!empty($_GET['student']))
 					
 					//QUIZZ IN LP
 					$sql = 'SELECT id as item_id, max_score 
-							FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_item.' AS lp_item
+							FROM '.$t_lpi.' AS lp_item
 							WHERE lp_id='.$a_learnpath['id'].'
 							AND item_type="quiz"';
 
 					$rsItems = api_sql_query($sql, __FILE__, __LINE__);
 					
 					//We get the last view id of this LP
-					$sql='SELECT max(id) as id FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
+					$sql='SELECT max(id) as id FROM '.$t_lpv.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
 					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
 					$lp_view_id = 0;
 					if(Database::num_rows($rs_last_lp_view_id)>0)
@@ -627,7 +631,7 @@ if(!empty($_GET['student']))
 						while($item = Database :: fetch_array($rsItems, 'ASSOC'))
 						{
 							$sql = 'SELECT score as student_score 
-									FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' as lp_view_item
+									FROM '.$t_lpiv.' as lp_view_item
 									WHERE lp_view_item.lp_item_id = '.$item['item_id'].'
 									AND lp_view_id = "'.$lp_view_id.'"';
 									
@@ -643,7 +647,7 @@ if(!empty($_GET['student']))
 						$any_result = true;
 					}
 					$sql = 'SELECT id, max_score 
-							FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_item.' AS lp_item
+							FROM '.$t_lpi.' AS lp_item
 							WHERE lp_id='.$a_learnpath['id'].'
 							AND item_type="sco" LIMIT 1';
 					
@@ -655,11 +659,11 @@ if(!empty($_GET['student']))
 						$total_weighting+=$lp_item__max_score;
 						
 						//We get the last view id of this LP
-						$sql='SELECT max(id) as id FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
+						$sql='SELECT max(id) as id FROM '.$t_lpv.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
 						$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
 						$lp_view_id = Database::result($rs_last_lp_view_id,0,'id');
 						
-						$sql='SELECT SUM(score)/count(lp_item_id) as score FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
+						$sql='SELECT SUM(score)/count(lp_item_id) as score FROM '.$t_lpiv.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
 						$rs_score = api_sql_query($sql, __FILE__, __LINE__);
 						if(Database::num_rows($rs_score)>0)
 						{
@@ -763,11 +767,12 @@ if(!empty($_GET['student']))
 
 			$sql='SELECT visibility FROM '.$a_infosCours['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz"';
 			$resultVisibilityQuizz = api_sql_query($sql,__FILE__,__LINE__);
+			$t_quiz = Database::get_course_table(TABLE_QUIZ_TEST,$a_infosCours['db_name']);
 			
 			if(Database::result($resultVisibilityQuizz,0,'visibility')==1){
 			
 				$sqlExercices = "	SELECT quiz.title,id
-									FROM ".$a_infosCours['db_name'].".".$tbl_course_quiz." AS quiz
+									FROM ".$t_quiz." AS quiz
 									WHERE active='1' ORDER BY quiz.title ASC
 									";
 		
@@ -1034,20 +1039,22 @@ if(!empty($_GET['student']))
 		}
 		if(!empty($_GET['exe_id']))
 	{
+		$t_q = Database::get_course_table(TABLE_QUIZ_TEST,$a_infosCours['db_name']);
+		$t_qq = Database::get_course_table(TABLE_QUIZ_QUESTION,$a_infosCours['db_name']);
+		$t_qa = Database::get_course_table(TABLE_QUIZ_ANSWER,$a_infosCours['db_name']);
+		$t_qtq = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION,$a_infosCours['db_name']);
 		$sqlExerciceDetails = " SELECT qq.question, qq.ponderation, qq.id
-				 				FROM ".$a_infosCours['db_name'].".".$course_quiz_question." as qq
-								INNER JOIN ".$a_infosCours['db_name'].".".$course_quiz_rel_question." as qrq
+				 				FROM ".$t_qq." as qq
+								INNER JOIN ".$t_qtq." as qrq
 									ON qrq.question_id = qq.id
-									AND qrq.exercice_id = ".$_GET['exe_id']
-								
-							 ;
+									AND qrq.exercice_id = ".intval($_GET['exe_id']);
 				 
 		$resultExerciceDetails = api_sql_query($sqlExerciceDetails,__FILE__,__LINE__);
 		
 		
 		$sqlExName = "	SELECT quiz.title
-						FROM ".$a_infosCours['db_name'].".".$tbl_course_quiz." AS quiz
-					 	WHERE quiz.id = ".$_GET['exe_id']
+						FROM ".$t_q." AS quiz
+					 	WHERE quiz.id = ".intval($_GET['exe_id']);
 					 ;
 	
 		$resultExName = api_sql_query($sqlExName,__FILE__,__LINE__);
@@ -1064,7 +1071,7 @@ if(!empty($_GET['student']))
 		while($a_exerciceDetails = Database::fetch_array($resultExerciceDetails))
 		{
 			$sqlAnswer = "	SELECT qa.comment, qa.answer
-							FROM  ".$a_infosCours['db_name'].".".$course_quiz_answer." as qa
+							FROM  ".$t_qa." as qa
 							WHERE qa.question_id = ".$a_exerciceDetails['id']
 					 	 ;
 			

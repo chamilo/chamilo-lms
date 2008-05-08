@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 15231 2008-05-07 16:40:30Z juliomontoya $
+<?php //$Id: announcements.inc.php 15247 2008-05-08 19:07:01Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -822,7 +822,7 @@ function send_announcement_email($user_list, $course_code, $_course, $mail_title
 		//set the charset and use it for the encoding of the email - small fix, not really clean (should check the content encoding origin first)
 		//here we use the encoding used for the webpage where the text is encoded (ISO-8859-1 in this case)
 		if(empty($charset)){$charset='ISO-8859-1';}
-		$encoding = 'Content-Type: text/html; charset='. $charset;
+		$encoding = 'Content-Type: text/plain; charset='. $charset;
 		
 		$newmail = api_mail($this_user['lastname'].' '.$this_user['firstname'], $this_user['email'], $mail_subject, $mail_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail'], $encoding);
 	}

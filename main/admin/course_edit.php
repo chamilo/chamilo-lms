@@ -1,11 +1,11 @@
 <?php
 
-// $Id: course_edit.php 14291 2008-02-14 08:17:23Z elixir_inter $
+// $Id: course_edit.php 15245 2008-05-08 16:53:52Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -21,7 +21,8 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
 ==============================================================================
 */
 /**
@@ -74,21 +75,21 @@ $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
 
 //Get the course infos
-$sql = "SELECT * FROM $course_table WHERE code='".mysql_real_escape_string($course_code)."'";
+$sql = "SELECT * FROM $course_table WHERE code='".Database::escape_string($course_code)."'";
 $result = api_sql_query($sql, __FILE__, __LINE__);
-if (mysql_num_rows($result) != 1)
+if (Database::num_rows($result) != 1)
 {
 	header('Location: course_list.php');
 	exit ();
 }
-$course = mysql_fetch_array($result,MYSQL_ASSOC);
+$course = Database::fetch_array($result,'ASSOC');
 
 // Get course teachers
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $sql = "SELECT user.user_id,lastname,firstname FROM $table_user as user,$table_course_user as course_user WHERE course_user.status='1' AND course_user.user_id=user.user_id AND course_user.course_code='".$course_code."' ORDER BY lastname,firstname";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 $course_teachers = array();
-while($obj = mysql_fetch_object($res))
+while($obj = Database::fetch_object($res))
 {
 		$course_teachers[$obj->user_id] = $obj->lastname.' '.$obj->firstname;
 }
@@ -99,7 +100,7 @@ $res = api_sql_query($sql,__FILE__,__LINE__);
 $teachers = array();
 
 $platform_teachers[0] = '-- '.get_lang('NoManager').' --';
-while($obj = mysql_fetch_object($res))
+while($obj = Database::fetch_object($res))
 {		
 	if(!array_key_exists($obj->user_id,$course_teachers)){
 		$teachers[$obj->user_id] = $obj->lastname.' '.$obj->firstname;
@@ -117,7 +118,7 @@ while($obj = mysql_fetch_object($res))
 if(count($course_teachers)==0){
 	$sql='SELECT tutor_name FROM '.$course_table.' WHERE code="'.$course_code.'"';
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	$tutor_name=mysql_result($res,0,0);
+	$tutor_name=Database::result($res,0,0);
 	$course['tutor_name']=array_search($tutor_name,$platform_teachers);
 }
 
@@ -174,6 +175,7 @@ $form->addElement('button', null, get_lang('Ok'), 'onclick="valide()"');
 // Set some default values
 
 $course_db_name = $course['db_name'];
+$course['title']=html_entity_decode($course['title'],ENT_QUOTES,$charset);
 $form->setDefaults($course);
 // Validate form
 if( $form->validate())
@@ -201,21 +203,21 @@ if( $form->validate())
 	{
 		$department_url = 'http://'.$department_url;
 	}
-	$sql = "UPDATE $course_table SET course_language='".mysql_real_escape_string($course_language)."',
-								title='".mysql_real_escape_string($title)."',
-								category_code='".mysql_real_escape_string($category_code)."',
-								tutor_name='".mysql_real_escape_string($tutor_name)."',
-								visual_code='".mysql_real_escape_string($visual_code)."',
-								department_name='".mysql_real_escape_string($department_name)."',
-								department_url='".mysql_real_escape_string($department_url)."',
-								disk_quota='".mysql_real_escape_string($disk_quota)."',
-								visibility = '".mysql_real_escape_string($visibility)."', 
-								subscribe = '".mysql_real_escape_string($subscribe)."',
-								unsubscribe='".mysql_real_escape_string($unsubscribe)."'
-							WHERE code='".mysql_real_escape_string($course_code)."'";
+	$sql = "UPDATE $course_table SET course_language='".Database::escape_string($course_language)."',
+								title='".Database::escape_string($title)."',
+								category_code='".Database::escape_string($category_code)."',
+								tutor_name='".Database::escape_string($tutor_name)."',
+								visual_code='".Database::escape_string($visual_code)."',
+								department_name='".Database::escape_string($department_name)."',
+								department_url='".Database::escape_string($department_url)."',
+								disk_quota='".Database::escape_string($disk_quota)."',
+								visibility = '".Database::escape_string($visibility)."', 
+								subscribe = '".Database::escape_string($subscribe)."',
+								unsubscribe='".Database::escape_string($unsubscribe)."'
+							WHERE code='".Database::escape_string($course_code)."'";
 	api_sql_query($sql, __FILE__, __LINE__);
 	
-	$sql='DELETE FROM '.$course_user_table.' WHERE course_code="'.mysql_real_escape_string($course_code).'" AND status="1"';
+	$sql='DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"';
 	api_sql_query($sql, __FILE__, __LINE__);
 	
 	if(count($teachers)>0){
@@ -226,12 +228,12 @@ if( $form->validate())
 			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" AND status<>"1"';
 			$result = api_sql_query($sql_select_teacher, __FILE__, __LINE__);
 			
-			if(mysql_num_rows($result) == 1){
+			if(Database::num_rows($result) == 1){
 				$sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$key.'"';
 			}
 			else{
 				$sql = "INSERT INTO ".$course_user_table . " SET
-					course_code = '".mysql_real_escape_string($course_code). "',
+					course_code = '".Database::escape_string($course_code). "',
 					user_id = '".$key . "',
 					status = '1',
 					role = '',
@@ -245,7 +247,7 @@ if( $form->validate())
 	}
 	
 	$sql = "INSERT IGNORE INTO ".$course_user_table . " SET
-				course_code = '".mysql_real_escape_string($course_code). "',
+				course_code = '".Database::escape_string($course_code). "',
 				user_id = '".$tutor_id . "',
 				status = '1',
 				role = '',
@@ -255,7 +257,7 @@ if( $form->validate())
 	api_sql_query($sql, __FILE__, __LINE__);
 	
 	$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE,$course_db_name);
-	$sql = "UPDATE ".$forum_config_table." SET default_lang='".mysql_real_escape_string($course_language)."'";
+	$sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."'";
 	header('Location: course_list.php');
 	exit ();
 }

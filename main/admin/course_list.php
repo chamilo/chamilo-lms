@@ -1,5 +1,5 @@
 <?php
-// $Id: course_list.php 15014 2008-04-22 20:22:28Z juliomontoya $
+// $Id: course_list.php 15245 2008-05-08 16:53:52Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -242,8 +242,8 @@ else
 	$table->set_header(6, get_lang('UnsubscriptionAllowed'));
 	$table->set_header(7, get_lang('IsVirtualCourse'));
 	$table->set_header(8, get_lang('Teacher'));
-	$table->set_header(9, '', false);
-	$table->set_column_filter(9,'modify_filter');
+	$table->set_header(9, get_lang('Modify'), false,'width="120px"');	
+	$table->set_column_filter(9,'modify_filter');	
 	$table->set_form_actions(array ('delete_courses' => get_lang('DeleteCourse')),'course');
 	$table->display();
 }

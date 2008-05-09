@@ -102,6 +102,8 @@ ALTER TABLE settings_current ADD COLUMN access_url_changeable int unsigned not n
 ALTER TABLE settings_current ADD INDEX (access_url);
 CREATE TABLE access_url(id	int	unsigned NOT NULL auto_increment, url	varchar(255) NOT NULL default 'http://localhost/', description text, active int unsigned not null default 0, created_by	int	not null, tms TIMESTAMP, PRIMARY KEY (id));
 INSERT INTO access_url(url,description,active,created_by) VALUES ('http://localhost/','URL 1',1,1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('ldap_filled_tutor_field_value', NULL, 'textfield', 'LDAP', '', 'LDAPFilledTutorFieldValueTitle', 'LDAPFilledTutorFieldValueComment', NULL, '');
+
 
 -- xxSTATSxx
 ALTER TABLE track_e_downloads ADD INDEX (down_user_id);

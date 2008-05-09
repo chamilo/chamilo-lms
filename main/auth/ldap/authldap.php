@@ -1,4 +1,4 @@
-<?php // $Id: authldap.php 14997 2008-04-22 01:33:31Z yannoo $
+<?php // $Id: authldap.php 15253 2008-05-09 03:00:19Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -47,6 +47,7 @@
 
 	version history
 	---------------
+	3.2 - updated to allow for specific term search for teachers identification
 	3.1 - updated code to use database settings, to respect coding conventions as much as possible (camel-case removed) and to allow for non-anonymous login 
 	3.0	- updated to use ldap_var.inc.php instead of ldap_var.inc (deprecated)
 		(November 2003)
@@ -182,7 +183,8 @@ function ldap_find_user_info ($login)
 	$result["firstname"] = $info[0]["givenname"][0];
 	$result["name"] = $info[0]["sn"][0];
 	$result["email"] = $info[0]["mail"][0];
-	$result["employeenumber"] = $info[0]["employeenumber"][0];
+	$tutor_field = api_get_setting('ldap_filled_tutor_field');
+	$result[$tutor_field] = $info[0][$tutor_field]; //employeenumber by default
 
 	return $result;
 }
@@ -221,20 +223,37 @@ function ldap_put_user_info_locally($login, $info_array)
 	define ("COURSEMANAGER",1);
 
 	$tutor_field = api_get_setting('ldap_filled_tutor_field');
+	$tutor_value = api_get_setting('ldap_filled_tutor_field_value');
 	if(empty($tutor_field))
 	{
 		$status = STUDENT;
 	}
 	else
 	{
-		if (empty($info_array[$tutor_field]))
+		if(empty($tutor_value))
 		{
-			$status = STUDENT;
+			//in this case, we are assuming that the admin didn't give a criteria
+			// so that if the field is not empty, it is a tutor
+			if(!empty($info_array[$tutor_field]))
+			{
+				$status = COURSEMANAGER;
+			}
+			else
+			{
+				$status = STUDENT;
+			}
 		}
 		else
 		{
-			$status = COURSEMANAGER;
-			//$official_code = $info_array['employeenumber'];
+			//the tutor_value is filled, so we need to check the contents of the LDAP field
+			if (is_array($info_array[$tutor_field]) && in_array($tutor_value,$info_array[$tutor_field]))
+			{
+				$status = COURSEMANAGER;
+			}
+			else
+			{
+				$status = STUDENT;
+			}
 		}
 	}
 	//$official_code = xxx; //example: choose an attribute

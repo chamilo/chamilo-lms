@@ -33,4 +33,5 @@ $DocumentDeleted = "Documento borrado";
 $SendMailBody = "Un usuario publicou un documento na ferramenta traballos do seu curso.";
 $DirDelete = "Borrar o directorio";
 $ValidateChanges = "Confirmar os cambios";
+$FolderUpdated = "Cartafol actualizado";
 ?>

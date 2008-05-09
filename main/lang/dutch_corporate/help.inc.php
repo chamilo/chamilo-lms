@@ -282,15 +282,15 @@ $langLinksContent = "<p>De linkmodule laat u toe een verzameling cursusmateriaal
 <p>Het tekstvak \'Omschrijving\' kan gebruikt worden om informatie te geven over het doel van websites maar ook om mee te geven wat de student met de link moet doen. Als, bijvoorbeeld, u verwijst naar een website op Aristoteles, kan u de student vragen om het verschil tussen synthese en analyse te bestuderen.</p>";
 $langHMycourses = "Over de startpagina";
 $langMycoursesContent = "<p>Eenmaal ingelogd bent u op uw <em>persoonlijke startpagina</em>.</p>
-<p>In het hoofdgedeelte (centrum) ziet u \"<b>Mijn cursussen</b>\", een lijst met al uw cursussen. Afhankelijk van uw gebruikersrechten kunt u ook de mogelijkheid hebben om nieuwe cursussen aan te maken (via het menu aan de rechterkant van de pagina).</p>
+<p>In het hoofdgedeelte (centrum) ziet u \"<b>Mijn modules</b>\", een lijst met al de modules waar u voor ingeschreven bent. Afhankelijk van uw gebruikersrechten kunt u ook de mogelijkheid hebben om nieuwe modulepagina\'s aan te maken (via het menu aan de rechterkant van de pagina).</p>
 <p>Bovenaan ziet u
 <ul>
 	<li>\"<b>Mijn profiel</b>\": hier kunt u verschillende zaken (naam, voornaam, e-mailadres&hellip;) wijzigen. U kunt ook de statistieken van uw platformgebruik opvragen.</li>
-	<li>\"<b>Mijn agenda</b>\": dit bevat de agenda-items van al uw cursussen.</li>
+	<li>\"<b>Mijn agenda</b>\": dit bevat de agenda-items van al uw modules.</li>
 </ul></p>
-<p><b>Wijzig mijn cursuslijst</b>, in het menu aan de rechterkant, laat u toe in te schrijven voor nieuwe cursussen. Deze link laat u ook uitschrijven uit cursussen.</p>
+<p><b>Modulebeheer</b>, in het menu aan de rechterkant, laat u toe in te schrijven voor nieuwe modules. Deze link laat u ook uitschrijven uit modules.</p>
 <p>De links <b>Ondersteuningsforum</b> en <b>Documentatie</b> verwijzen naar de Dokeoswebsite, waar u terecht kunt voor technische informatie of pedagogisch advies.</p>
-<p>Om naar een cursus te gaan, klikt u op de naam. Uw status als cursusgebruiker kan variëren van de ene cursus tot de andere. Het is mogelijk dat u cursusbeheerder (lesgever) bent in een cursus, en student (leerling) in een andere.</p>";
+<p>Om naar een module te gaan, klikt u op de naam. Uw status als gebruiker kan variëren van de ene module tot de andere. Het is mogelijk dat u beheerder (lesgever) bent in een module, en student (leerling) in een andere.</p>";
 $langHAgenda = "Hulp bij agendamodule";
 $langAgendaContent = "<p>De agenda verschijnt niet alleen in elke cursus zelf, maar ook als een overzichtsagenda voor de student (\'Mijn agenda\' in de menubalk bovenaan).</p>
 <p>Binnen de cursus ziet de agenda eruit als een lijst met evenementen. U kan documenten of activiteiten met een agenda-item verbinden, zodat de agenda een chronologisch programma wordt voor uw leeractiviteiten.</p>

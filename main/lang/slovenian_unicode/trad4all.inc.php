@@ -540,4 +540,17 @@ $Result = "Rezultat";
 $AttemptingToLoginAs = "Poskus prijave kot %s %s (id %s)";
 $LoginSuccessfulGoToX = "Prijava uspešna. Pojdite na %s";
 $FckMp3Autostart = "Zaženi zvok avtomatično";
+$Learner = "Tečajnik";
+$IntroductionTextUpdated = "Uvodno besedilo je bilo ažurirano";
+$Align = "Poravnava";
+$Width = "Širina";
+$VSpace = "V prostor";
+$HSpace = "H prostor";
+$Border = "Okvir";
+$Alt = "Alt";
+$Height = "Višina";
+$ImageManager = "Upravljalec slik";
+$ImageFile = "Slika";
+$ConstrainProportions = "Ohrani razmerja";
+$InsertImage = "Vstavi sliko";
 ?>

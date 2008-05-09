@@ -188,4 +188,8 @@ $Result = "Resultado";
 $SplitStepsPerPage = "Una paso por página";
 $SplitStepsPerChapter = "Un capítulo por paso";
 $TakeSlideName = "Usar los nombres de las diapositivas para los pasos del itinerario de aprendizaje";
+$CannotConnectToOpenOffice = "La conexión con el conversor de documentos ha fallado. Póngase en contacto con el administrador de su plataforma para solucionar el problema.";
+$OogieConversionFailed = "Conversión fallida. <br />Algunos documentos son demasiado complejos para su tratamiento automático mediante el conversor de documentos.<br />En sucesivas versiones se irá ampliando esta capacidad.";
+$OogieUnknownError = "La conversión ha fallado por una razón desconocida. <br /> Contacte a su administrador para más información.";
+$BadExtension = "El archivo no tiene una extensión correcta.";
 ?>

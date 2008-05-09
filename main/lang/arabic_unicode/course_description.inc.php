@@ -12,7 +12,6 @@ $langAddCat  = "  أضف تصنيف";
 $langAdd  = "  أضف";
 $langValid  = "  متاح";
 $langBackAndForget  = "  تراجع و انس الأمر ";
-$langOkSent = "  تم تحميل الصفحة الخاصة بك <p> تم ربطها من  <a href=../..//index.php> صفحة البداية </a>";
 $Content = "  المحتوى";
 $CourseDescriptionUpdated = "  تم تحديث وصف المقرر ";
 $CourseDescriptionDeleted = "  تم حذف وصف المقرر ";

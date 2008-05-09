@@ -12,7 +12,6 @@ $langAddCat  = "Dodaj kategorijo";
 $langAdd  = "Dodaj";
 $langValid  = "Uveljavi";
 $langBackAndForget  = "Prekliči";
-$langOkSent = "Tvoja stran je bila poslana.<p>Sedaj je povezana s tečajem <a href=../..//index.php>Domača stran</a>";
 $Content = "Vsebina";
 $CourseDescriptionUpdated = "Opis tečaja je bil ažuriran";
 $CourseDescriptionDeleted = "Opis tečaja je bil odstranjen";

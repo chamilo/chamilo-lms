@@ -12,7 +12,6 @@ $langAddCat  = "添加分類";
 $langAdd  = "添加";
 $langValid  = "可用的";
 $langBackAndForget  = "返回和取消";
-$langOkSent = "你的頁面已經上傳。<p>現下鏈接<a href=\"../..//index.php\">首頁</a>";
 $Content = "內容";
 $CourseDescriptionUpdated = "已更新課程簡介";
 $CourseDescriptionDeleted = "已刪除課程簡介";

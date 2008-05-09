@@ -24,6 +24,7 @@ $langCode = "Modulecode";
 $langUp = "Hoger niveau";
 $Down = "omlaag";
 $Up = "omhoog";
+$Theme = "Thema";
 $TheListIsEmpty = "De lijst is leeg.";
 $langCourseCreate = "Nieuwe modulepagina\'s aanmaken";
 $langTodo = "Suggesties";

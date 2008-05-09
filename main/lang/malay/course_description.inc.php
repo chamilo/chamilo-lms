@@ -12,5 +12,4 @@ $langAddCat  = "Tambah Penerangan";
 $langAdd  = "Tambah";
 $langValid  = "Proses";
 $langBackAndForget  = "Kembali";
-$langOkSent = "<i>Page<i/> telah dihantar.<p>ia telah dipautkan pada <a href=../../DOKEOSDEV/index.php>laman subjek</a>";
 ?>

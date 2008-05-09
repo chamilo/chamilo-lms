@@ -188,4 +188,8 @@ $Result = "Ergebnis";
 $SplitStepsPerPage = "Ein Schritt pro Seite";
 $SplitStepsPerChapter = "Ein Kapitel pro Schritt";
 $TakeSlideName = "Dia Namen der Slides für Lernpfad Schritte nutzen";
+$CannotConnectToOpenOffice = "Die Verbindung zum Konvertierer für das Dokument schlug fehl. Verständigen Sie bitte den Plattform Administrator, um das Problem zu beheben.";
+$OogieConversionFailed = "Die Konvertierung ist fehlgeschlagen. <br/>Einige Dokumente sind zu komplex, um automatisch vom Konvertierer für Dokumente verarbeitet zu werden.<br/>Wir sind bemüht, dies zu verbessern.";
+$OogieUnknownError = "Die Konvertierung ist aus unbekanntem Grund fehlgeschlagen. <br/>Kontaktieren Sie den Administrator, um weitere Informationen einzuholen.";
+$BadExtension = "Die Datei hat eine falsche Endung.";
 ?>

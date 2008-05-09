@@ -12,7 +12,6 @@ $langAddCat  = "kategória hozzáadása";
 $langAdd  = "Hozzáad";
 $langValid  = "Érvényes";
 $langBackAndForget  = "Vissza és felejt";
-$langOkSent = "Az oldal feltölt&#337;dött.<p>Most már a <a href=../../DOKEOSDEV/index.php>Kezd&#337;lapról</a> elérhet&#337;.";
 $Content = "Tartalom";
 $CourseDescriptionUpdated = "A kurzus leírása frissítve.";
 $CourseDescriptionDeleted = "A kurzus leírása törölve.";

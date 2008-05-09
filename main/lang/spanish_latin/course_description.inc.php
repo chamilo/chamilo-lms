@@ -12,6 +12,5 @@ $langAddCat  = "agregar categoría";
 $langAdd  = "Agregar";
 $langValid  = "Validar";
 $langBackAndForget  = "Volver y descartar";
-$langOkSent = "Su página ha sido enviada al servidor.<p>Es accesible desde la <a href=../..//index.php>página principal</a> de su curso";
 $Content = "Contenido";
 ?>

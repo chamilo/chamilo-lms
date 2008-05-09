@@ -12,7 +12,6 @@ $langAddCat  = "kategori ekle";
 $langAdd  = "Ekle";
 $langValid  = "Geçerli";
 $langBackAndForget  = "Ýptal";
-$langOkSent = "Sayfanýz gönderildi.<p>Ve bu dersin <a href=../..//index.php>Ana Sayfasýna</a> baðlantýsý kuruldu";
 $Content = "&#304;çerik";
 $CourseDescriptionUpdated = "Ders tan&#305;m&#305; güncellendi";
 $CourseDescriptionDeleted = "Ders tan&#305;m&#305; silindi";

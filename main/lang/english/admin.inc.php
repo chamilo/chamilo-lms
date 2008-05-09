@@ -809,4 +809,10 @@ $LDAPOUAttributeFilter = "The OU attribute filter";
 $SelectSessionToImportUsersTo = "Select the session in which you want to import these users";
 $VisioUseRtmptTitle = "Use the rtmpt protocol";
 $VisioUseRtmptComment = "The rtmpt protocol allows access to the videoconference from behind a firewall, by redirecting the communications on port 80. This, however, will slow down the streaming, so it is recommended not to use it unless necessary.";
+$UploadNewStylesheet = "Upload a new stylesheet";
+$NameStylesheet = "Name of the stylesheet";
+$UploadNewStylesheet = "New stylesheet file";
+$StylesheetAdded = "The stylesheet has been added";
+$LDAPFilledTutorFieldValueTitle = "Tutor identification value";
+$LDAPFilledTutorFieldValueComment = "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a teacher. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a teacher. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\".";
 ?>

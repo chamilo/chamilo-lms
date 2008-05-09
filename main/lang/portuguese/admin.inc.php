@@ -809,4 +809,8 @@ $LDAPOUAttributeFilter = "Filtro sobre o atributo OU";
 $SelectSessionToImportUsersTo = "Seleccione a sessão para a qual deseja importar estes utilizadores";
 $VisioUseRtmptTitle = "Usar o protocolo rtmtp";
 $VisioUseRtmptComment = "O protocolo rtmpt permite o acesso à vídeo-conferência através de um computador protegido por uma firewall. Esta solução torna mais lenta a difusão de vídeo e áudio e, por essa razão, não é recomendada se não for estritamente necessária.";
+$UploadNewStylesheet = "Enviar nova folha de estilos";
+$NameStylesheet = "Nome da folha de estilos";
+$UploadNewStylesheet = "Novo ficheiro da folha de estilos";
+$StylesheetAdded = "A folha de estilos foi acrescentada";
 ?>

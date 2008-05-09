@@ -12,5 +12,4 @@ $langAddCat  = "legg til kategori";
 $langAdd  = "Legg til";
 $langValid  = "Gyldig";
 $langBackAndForget  = "Glem og tilbake";
-$langOkSent = "Siden din ble lastet opp.<p>Den er nå lenket fra <a href=../../$dbname/index.php>hjemmeside</a>";
 ?>

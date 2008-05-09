@@ -213,7 +213,7 @@ $langContent = "Contenu";
 $PermissionsForNewFiles = "Permissions des nouveaux fichiers";
 $PermissionsForNewFilesComment = "La possibilité de définir les permissions allouées aux nouveaux fichiers vous permet d\'augmenter la sécurité contre les attaques de pirates envoyant des contenus dangereux sur votre serveur. La valeur par défaut (0550) devrait être suffisante pour garantir un bon niveau de protection. Le format donné utilise la terminologie UNIX de Propriétaire-Groupe-Autres et de leurs permissions en Lecture-Écriture-Exécution.
 Attention, si vous utilisez Oogie, veillez à ce que l\'utilisateur qui lance OpenOffice ait les droits en écriture sur les dossiers du cours.";
-$langStudent = "Elève";
+$langStudent = "Apprenant";
 $Guest = "Invité";
 $langLoginAsThisUserColumnName = "S\'authentifier en tant que";
 $langLoginAsThisUser = "S\'authentifier";
@@ -810,4 +810,10 @@ $LDAPOUAttributeFilter = "Le filtre sur l\'attribut OU";
 $SelectSessionToImportUsersTo = "Sélectionnez la session de formation à laquelle vous voulez inscrire ces utilisateurs";
 $VisioUseRtmptTitle = "Utiliser le protocole rtmpt";
 $VisioUseRtmptComment = "Le protocole rtmpt permet l\'accès à la vidéoconférence depuis un ordinateur protégé par un firewall. Cette solution ralentit toutefois le streaming audio et vidéo, et n\'est donc pas recommandée si ce n\'est pas nécessaire.";
+$UploadNewStylesheet = "Envoyer une nouvelle feuille de style";
+$NameStylesheet = "Nom de la feuille de style";
+$UploadNewStylesheet = "Fichier de la nouvelle feuille de style";
+$StylesheetAdded = "La feuille de style a été ajoutée";
+$LDAPFilledTutorFieldValueTitle = "Valeur d\'identification d\'un enseignant";
+$LDAPFilledTutorFieldValueComment = "Lorsque la vérification du champ enseignant est faite sur le champ donné ci-dessus, la valeur donnée ci-dessous doit se trouver dans les sous-éléments du champ donné pour que l\'utilisateur soit considéré comme un enseignant. Si vous laissez ce champ vide, la seule condition est que le sous-élément défini par le champ enseignant ci-dessus existe pour l\'utilisateur LDAP pour qu\'il soit considéré comme un enseignant. Par exemple, le champ pourrait être \"memberof\" et la valeur à trouver \"CN=G_TRAINER,OU=Trainer\".";
 ?>

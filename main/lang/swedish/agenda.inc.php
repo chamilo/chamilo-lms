@@ -52,4 +52,5 @@ $Print = "Skriv ut";
 $CopiedAsAnnouncement = "Kopierad som tillkännagivande";
 $NewAnnouncement = "Nytt tillkännagivande";
 $AddAnnouncement = "Lägg till som ett tillkännagivande";
+$UpcomingEvent = "Kommande händelser";
 ?>

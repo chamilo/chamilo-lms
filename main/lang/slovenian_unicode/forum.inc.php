@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $ForumDeleted = "Forum je bil odstranjen";
 $ForumCategoryDeleted = "Kategorija foruma je odstranjena";
-$ForumLocked = "Forum je blokiran";
+$ForumLocked = "Forum je zaklenjen";
 $Forum = "Forum";
 $AddForumCategory = "Dodaj novo kategorijo foruma";
 $AddForum = "Dodaj nov forum";
@@ -47,7 +47,7 @@ $Nested = "Gnezdeno";
 $FlatView = "Ravninski pogled";
 $ThreadedView = "Pogled tematske niti";
 $NestedView = "Gnezden pogled";
-$Anonymous = "Anonimno";
+$Anonymous = "Anonimnež";
 $Structure = "Zgradba";
 $ForumCategoryAdded = "Kategorija foruma je bila dodana";
 $ForumCategoryEdited = "Kategorija foruma je bila spremenjena";

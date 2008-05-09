@@ -12,5 +12,4 @@ $langAddCat  = "เพิ่มประเภท";
 $langAdd  = "เพิ่ม";
 $langValid  = "ถูกต้อง";
 $langBackAndForget  = "ย้อนกลับ";
-$langOkSent = "ส่งข้อมูลเสร็จสิ้น<p> ทำการเพิ่ม link ที่รายวิชา <a href=../..//index.php>หน้าแรก</a> เรียบร้อย";
 ?>

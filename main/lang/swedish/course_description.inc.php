@@ -12,7 +12,6 @@ $langAddCat  = "lägg till en kategori";
 $langAdd  = "Lägg till";
 $langValid  = "Godkänn";
 $langBackAndForget  = "Bakåt och avbryt";
-$langOkSent = "din sida har skickats.<p>Den är nu länkad till från kursens <a href=../..//index.php>hemsida</a>";
 $Content = "Innehåll";
 $CourseDescriptionUpdated = "Kursbeskrivningen har uppdaterats";
 $CourseDescriptionDeleted = "Kursbeskrivningen har tagits bort";

@@ -12,7 +12,6 @@ $langAddCat  = "добавить раздел";
 $langAdd  = "Добавить";
 $langValid  = "Подтвердить";
 $langBackAndForget  = "Отменить";
-$langOkSent = "Ваша страница опубликована. Она доступна на домашней странице курса, ее ссылка <a href=../../$dbname/index.php>Домашняя страница</a>";
 $Content = "Содержание (суть)";
 $CourseDescriptionUpdated = "Описание курса обновлено";
 $CourseDescriptionDeleted = "Описание курса удалено";

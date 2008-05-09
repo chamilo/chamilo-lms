@@ -12,5 +12,4 @@ $langAddCat  = "Lis‰‰ aihe";
 $langAdd  = "Lis‰‰";
 $langValid  = "voimassaoleva";
 $langBackAndForget  = "Peruuta";
-$langOkSent = "Sivu on l‰hetetty.<p>Se on linkitetty kurssin <a href=../..//index.php>kotisivulta</a>";
 ?>

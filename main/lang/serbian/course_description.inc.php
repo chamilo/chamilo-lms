@@ -12,5 +12,4 @@ $langAddCat  = "dodaj kategoriju";
 $langAdd  = "Dodavanje";
 $langValid  = "Važe&#263;e";
 $langBackAndForget  = "Nazad i zaboravi";
-$langOkSent = "Vaša stranica je u&#269;itana na server.<p>Sada za nju postoji link sa <a href=../../$dbname/index.php>Po&#269;etne stranice</a>";
 ?>

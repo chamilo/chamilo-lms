@@ -12,7 +12,6 @@ $langAddCat  = "Ajouter une catégorie";
 $langAdd  = "Ajouter";
 $langValid  = "Enregistrer";
 $langBackAndForget  = "Abandonner";
-$langOkSent = "Votre page a été envoyée.<p>Elle est accessible depuis la <a href=../..//index.php>page d\'accueil</a> de votre cours";
 $Content = "Contenu";
 $CourseDescriptionUpdated = "La description du cour a été mise à jour";
 $CourseDescriptionDeleted = "La description du cours a été supprimée";

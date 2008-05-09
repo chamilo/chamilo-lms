@@ -187,4 +187,8 @@ $Result = "Résultat";
 $SplitStepsPerPage = "Une page, une étape";
 $SplitStepsPerChapter = "Un chapitre, une étape";
 $TakeSlideName = "Utiliser les nom des diapos comme nom d\'étapes";
+$CannotConnectToOpenOffice = "La connexion au convertisseur de documents a échoué.<br />Contactez l\'administrateur de la plateforme pour résoudre le problème.";
+$OogieConversionFailed = "La conversion a échoué.<br />Certains documents sont trop complexes pour être traités automatiquement par le convertisseur de documents.<br /> Nous tâchons d\'améliorer le processus.";
+$OogieUnknownError = "La conversion de ce document a échoué pour une raison inconnue. <br />Merci de contacter votre administrateur pour obtenir de plus amples informations.";
+$BadExtension = "Votre fichier n\'a pas la bonne extension.";
 ?>

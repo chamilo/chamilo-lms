@@ -52,6 +52,7 @@ $ForumCategoryEdited = "Forumkategorin ändrad";
 $ForumAdded = "Forumet är tillagt";
 $ForumEdited = "Forumet är ändrat";
 $NewThreadStored = "Ny tråd är tillagd";
+$ForGroup = "För grupp";
 $ThreadLocked = "Tråden är låst.";
 $ReplyAdded = "Svaret är tillagt";
 $EditPost = "Ändra i inlägg";

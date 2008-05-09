@@ -699,6 +699,7 @@ $AllowurlfopenIsSetToOff = "Inställningen för \"allow_url_fopen\" i PHP är satt 
 $VisioHost = "Värdnamn eller IP-adress till server för strömmande videokonferens";
 $VisioPort = "Serverport för strömmande videokonferens";
 $VisioPassword = "Lösenord till server för strömmande videokonferens";
+$Port = "Port";
 $ManageUserFields = "Hantera användarfält";
 $UserFields = "Användarfält";
 $AddUserField = "Lägg till användarfält";
@@ -743,7 +744,7 @@ $LDAPVersionComment = "Välj den version av LDAP som servern använder. Se din LDA
 $LDAPVersion2 = "LDAP 2";
 $LDAPVersion3 = "LDAP 3";
 $LDAPFilledTutorFieldTitle = "Identifiering av handledare";
-$LDAPFilledTutorFieldComment = "En kontroll görs mot LDAP-servern om den som får ett konto är handledare/lärare eller vanlig användare. Om du vill att alla ska bli vanliga användare lämnar du fältet tomt. Inställningen kan även ändras i koden, läs isåfall mer om det i <a href=\"../../doc/installation_guide.html\">installationsguiden</a> .";
+$LDAPFilledTutorFieldComment = "En kontroll görs mot LDAP-servern om den som får ett konto är handledare/lärare eller vanlig användare. Om du vill att alla ska bli vanliga användare lämnar du fältet tomt. Inställningen kan även ändras i koden, läs isåfall mer om det i <a href=\"../../documentation/installation_guide.html\">installationsguiden</a> .";
 $LDAPAuthenticationLoginTitle = "Login för verifiering";
 $LDAPAuthenticationLoginComment = "Om du använder LDAP-server som inte stöder anonym förfrågan kan du här fylla i det login som isåfall ska användas. Använd inte \"cn=\". Lämna tomt för anonym förfrågan.";
 $LDAPAuthenticationPasswordTitle = "Lösenord för verifiering";

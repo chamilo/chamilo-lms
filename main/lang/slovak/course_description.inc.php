@@ -12,9 +12,6 @@ $langAddCat  = "prida&#357; kategóriu";
 $langAdd  = "Prida&#357;";
 $langValid  = "Platný";
 $langBackAndForget  = "Spä&#357; a zabudnú&#357;";
-$langOkSent = "Vaša <a href=../../$dbname/index.php>domovská stránka</a> bola uložená na serveri.
-
-";
 $Content = "Obsah";
 $CourseDescriptionUpdated = "Popis kurzu bol aktualizovaný";
 $CourseDescriptionDeleted = "Popis kurzu bol vymazaný";

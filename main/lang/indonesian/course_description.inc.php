@@ -12,6 +12,5 @@ $langAddCat  = "tambah kategori";
 $langAdd  = "Tambah";
 $langValid  = "Sah";
 $langBackAndForget  = "Kembali dan lupakan";
-$langOkSent = "Halaman anda telah di-upload.<p>Kini telah di-link-kan ke a href=../../$dbname/index.php>Homepage</a>";
 $Content = "Konten";
 ?>

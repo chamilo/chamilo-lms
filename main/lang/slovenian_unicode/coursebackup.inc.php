@@ -44,4 +44,5 @@ $langCreateBackupInfo = "Ustvari vsebino arhivske datoteke. Izbrati je možno po
 $ToolIntro = "Predstavitev orodja";
 $UploadError = "Nalaganje je bilo neuspešno. Preverite največjo dovoljeno dolžino datoteke in pravice za dostop do mape, kamor nalagate.";
 $DocumentsWillBeAddedToo = "Pripadajači dokumenti bodo tudi dodani";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "V primeru, da želite izvoziti učno pot, ki vsebuje teste/vaje, morate zagotoviti, da so ustrezni testi/vaje vključeni v izvoz; izberete jih iz seznama testov.";
 ?>

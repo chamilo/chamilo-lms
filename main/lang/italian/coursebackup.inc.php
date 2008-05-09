@@ -44,4 +44,5 @@ $langCreateBackupInfo = "Crea la copia di backup del corso";
 $ToolIntro = "Strumento Introduzione";
 $UploadError = "Caricamento fallito, controlla la dimensione dei file e i diritti di scrittura.";
 $DocumentsWillBeAddedToo = "Saranno aggiunti anche i documenti ";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Seleziona i test in elenco per includerli nella esportazione del percorso didattico";
 ?>

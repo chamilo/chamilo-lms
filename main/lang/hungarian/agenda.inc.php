@@ -52,4 +52,5 @@ $Print = "Nyomtat";
 $CopiedAsAnnouncement = "Átmásolás felhívásként";
 $NewAnnouncement = "Új felhívás";
 $AddAnnouncement = "Hozzáadás felhívásként";
+$UpcomingEvent = "Következ&#337; esemény";
 ?>

@@ -52,4 +52,5 @@ $Print = "Afdrukken";
 $CopiedAsAnnouncement = "Gekopieerd als aankondiging";
 $NewAnnouncement = "Nieuwe aankondiging";
 $AddAnnouncement = "Toevoegen als aankondiging";
+$UpcomingEvent = "Volgende gebeurtenis";
 ?>

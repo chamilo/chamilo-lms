@@ -12,5 +12,4 @@ $langAddCat  = "Dodaj kategoriju";
 $langAdd  = "Dodaj";
 $langValid  = "Prihvati";
 $langBackAndForget  = "Odustani";
-$langOkSent = "Vaša stranica je predana.<p>Sada je povezana s <a href=../..//index.php>Po&#269;etna stranica</a>";
 ?>

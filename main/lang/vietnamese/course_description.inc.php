@@ -12,5 +12,4 @@ $langAddCat  = "Thêm chủ đề";
 $langAdd  = "Thêm";
 $langValid  = "OK";
 $langBackAndForget  = "Xoá";
-$langOkSent = "Your page has been sent.<p>It is now linked from course <a href=../..//index.php>Homepage</a>";
 ?>

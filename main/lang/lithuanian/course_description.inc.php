@@ -12,7 +12,6 @@ $langAddCat  = "įrašyti kategoriją";
 $langAdd  = "Įrašyti";
 $langValid  = "Galiojantis";
 $langBackAndForget  = "Back and forget";
-$langOkSent = "Jūsų puslapis įkrautas.<p>It is now linked from <a href=../..//index.php>Homepage</a>";
 $Content = "Turinys";
 $CourseDescriptionUpdated = "Kurso aprašymas atnaujintas";
 $CourseDescriptionDeleted = "Kurso aprašymas ištrintas";

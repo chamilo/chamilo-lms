@@ -39,7 +39,7 @@ $StickyPost = "C\'est un message \"Post_it\" (il apparaît toujours au premier pl
 $ReplyShort = "Re:";
 $DeletePost = "Eters-vous certain de vouloir détruire cet article? Ceci détruira également toutes les réponses qui y ont été faites. Veuillez vérifier dans la vue thématique quels autres articles seront également détruits.";
 $By = "Par";
-$Locked = "Accès limité à la lecture des anciens articles. Il n\'est plus possible aux élèves d\'ajouter de nouveaux messages dans cette catégorie du forum, dans ce forum ou dans ce fil de discussion.";
+$Locked = "Accès limité à la lecture des anciens articles. Il n\'est plus possible aux apprenants d\'ajouter de nouveaux messages dans cette catégorie du forum, dans ce forum ou dans ce fil de discussion.";
 $Unlocked = "Accès ouvert au dépot de nouveaux articles dans cette catégorie de forum, dans ce forum ou dans ce fil de discussion.";
 $Flat = "Linéaire";
 $Threaded = "Thématique";
@@ -92,4 +92,6 @@ $ForumSearch = "Rechercher dans les forums";
 $SearchTerm  = "Rechercher terme";
 $ForumSearchResults = "Résultats de la recherche dans les forums";
 $ForumSearchInformation = "Vous pouvez rechercher plusieurs mots en utilisant le signe +";
+$YouWillBeNotifiedOfNewPosts = "Vous serez informé des nouveaux messages par e-mail.";
+$YouWillNoLongerBeNotifiedOfNewPosts = "Vous ne serez plus informé par e-mail des nouveaux messages";
 ?>

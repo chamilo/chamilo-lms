@@ -48,4 +48,6 @@ $AnnouncementDeletedAll = "Mesajlar&#305;n hepsi silindi";
 $AnnouncementMoved = "Mesaj ta&#351;&#305;nd&#305;.";
 $NoAnnouncements = "Herhangi bir duyuru bulunmuyor.";
 $SelectEverybody = "Herkesi seç";
+$SelectedUsersGroups = "seçilen kullan&#305;c&#305; gruplar&#305;";
+$LearnerMessage = "Bir ö&#287;renciden mesaj";
 ?>

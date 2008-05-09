@@ -12,7 +12,6 @@ $langAddCat  = "Tilføj kategori";
 $langAdd  = "Tilføj";
 $langValid  = "Godkend";
 $langBackAndForget  = "Glem og tilbage";
-$langOkSent = "Din tekst er lagt ud.<p>Den er nu et link til den <a href=../..//index.php>Start</a>";
 $Content = "Indhold";
 $CourseDescriptionUpdated = "Kursusbeskrivelsen er blevet ændret";
 $CourseDescriptionDeleted = "Kursusbeskrivelsen af slettet";

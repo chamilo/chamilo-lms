@@ -91,6 +91,7 @@ else if ($action == "upload")
 	/*==== UPLOAD ====*/
 	$destPath = $coursePath.VIDEOCONF_UPLOAD_PATH;
 
+	/*==== creation of /videoconf ====*/
 	if (!is_dir($destPath))
 	{
 		$result = create_unexisting_directory($_course,$user_id,0,NULL,$coursePath,VIDEOCONF_UPLOAD_PATH);
@@ -100,18 +101,24 @@ else if ($action == "upload")
 		}
 	}
 
+	/*==== file upload ====*/
 	$newPath = handle_uploaded_document($_course,$_FILES['Filedata'],$coursePath,VIDEOCONF_UPLOAD_PATH,$user_id,0,NULL,'',0,'rename',false);
 	if($debug>0) error_log($newPath);
+
+	/*==== extension extraction ====*/
 	$file_name = (strrpos($newPath,'.')>0 ? substr($newPath, 0, strrpos($newPath,'.')) : $newPath);
  	$file_extension = (strrpos($newPath,'.')>0 ? substr($newPath, strrpos($newPath,'.'),10) : '');
 	if($debug>0) error_log(strrpos($newPath,'.'));
 	if($debug>0) error_log($file_extension);
+
+	/*==== conversion if needed ====*/
 	if (!in_array(strtolower($file_extension), $image_extension))
 	{
 		if($debug>0) error_log("converting: ".$file_extension);
 		$take_slide_name = false;
 		$o_ppt = new OpenofficePresentation($take_slide_name);
-		$o_ppt -> convert_document($_FILES['filedata'],'add_docs_to_visio');
+		$o_ppt -> set_slide_size(640,480);
+		$o_ppt -> convert_document($_FILES['Filedata'],'add_docs_to_visio');
 	}
 
 	echo '<html><body><script language="javascript">setTimeout(1000,window.close());</script></body></html>';
@@ -158,13 +165,22 @@ else if ($action == "service")
 		$files = DocumentManager::get_all_document_data($_course, $cwd, 0, NULL, false);
 		printf("<dokeosobject><fileListMeta></fileListMeta><fileList>");
 		printf("<folders>");
+
 		// title filter
+		foreach (array_keys($files) as $k)
+		{
+			// converting to UTF-8
+			$files[$k]['title'] = mb_convert_encoding(
+						strlen($files[$k]['title']) > 32 ? 
+							substr($files[$k]['title'],0, 32)."..." : 
+							$files[$k]['title'],
+						'utf-8',api_get_setting('platform_charset')); 
+			// removing '<', '>' and '_'
+			$files[$k]['title'] = str_replace(array('<','>','_'),' ', $files[$k]['title']);
+		}
+
 		if(is_array($files))
 		{
-			foreach (array_keys($files) as $k)
-			{
-				$files[$k]['title'] = mb_convert_encoding(strlen($files[$k]['title']) > 32 ? substr($files[$k]['title'],0, 32)."..." : $files[$k]['title'],'utf-8',api_get_setting('platform_charset')); // data is iso and java waits for utf-8
-			}
 	
 			foreach($files as $i)
 			{

@@ -59,7 +59,7 @@ if(isset($_POST['convert'])){
 		}
 		else
 		{
-			$errorMessage = get_lang('BadExtension');
+			$errorMessage = get_lang('OogieBadExtension');
 		}
 	}
 }

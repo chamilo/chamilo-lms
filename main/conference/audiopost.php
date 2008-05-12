@@ -7,6 +7,11 @@ require('../inc/global.inc.php');
 // check the request comes from our red5 server
 $ips = gethostbynamel(api_get_setting('service_visio','visio_host'));
 $is_our_server = false;
+
+// ignoring null file
+if ($_FILES["file"]["size"] == 0)
+	exit(0);
+
 if(is_array($ips))
 {
 	foreach($ips as $ip)

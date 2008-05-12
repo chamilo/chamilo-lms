@@ -9,6 +9,23 @@
  */
 global $_configuration;
 $web_path = api_get_path(WEB_CODE_PATH);
+$getid3_path = api_get_path(LIBRARY_PATH);
+
+
+require_once($getid3_path."getid3/getid3.php");
+
+function getFLVDuration($flv_path) {
+	$getid3 = new getID3;
+	$getid3->encoding = 'UTF-8';
+	try {
+		$getid3->Analyze($flv_path);
+		return $getid3->info['playtime_seconds'];
+	} catch (Exception $e) { 
+		return 0;
+	} 
+}
+
+
 if($audio_recorder_studentview=='false')
 {
 	$width = 295;
@@ -34,8 +51,9 @@ else
 	{  
 		$row = Database::fetch_array($res);
 		//$filepath = api_get_path(WEB_COURSE_PATH).$cp.'/document'.$row['path'];
+		$duration = getFLVDuration(api_get_path(SYS_COURSE_PATH).$cp.'/document'.$row['path']);
 		$filepath = api_get_path(WEB_CODE_PATH).'document/download.php?'.api_get_cidreq().'&doc_url='.$row['path'];
-		$path_to_lzx = $web_path.'conference/'.$player.'?uri='.$filepath.'&autostart=true';
+		$path_to_lzx = $web_path.'conference/'.$player.'?uri='.urlencode($filepath).'&autostart=true&duration='.$duration;
 	}	
 }
 

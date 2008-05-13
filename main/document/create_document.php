@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 15271 2008-05-13 15:37:00Z juliomontoya $
+// $Id: create_document.php 15272 2008-05-13 17:42:48Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -299,9 +299,12 @@ else
 	//$form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
 }
 
-//$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
-$group[]= $form->createElement('checkbox','readonly','',get_lang('ReadOnly'));
-
+/* Show read-only box only in groups */
+if(!empty($_SESSION['_gid']))
+{
+	//$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
+	$group[]= $form->createElement('checkbox','readonly','',get_lang('ReadOnly'));
+}
 // add group to the form
 $form->addGroup($group, 'filename_group', get_lang('FileName') ,'&nbsp;&nbsp;&nbsp;', false);
 $form->addRule('filename_group', get_lang('ThisFieldIsRequired'), 'required');

@@ -71,12 +71,11 @@ $htmlHeadXtra[] = '
 <script type="text/javascript">
 function launch_templates(){
 	//window.frames[0].FCKToolbarItems.GetItem("Templates").Click();
-	//document.getElementById(\'frmModel\').innerHTML = "<iframe height=600px; width=230; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
 }
 			
 function FCKeditor_OnComplete( editorInstance )
 {	
-	document.getElementById(\'frmModel\').innerHTML = "<iframe height=600px; width=230; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
+	document.getElementById(\'frmModel\').innerHTML = "<iframe height=600px; width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
 }	
 	
 function InnerDialogLoaded()
@@ -225,7 +224,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				
 			echo '</div>';
 			
-			echo '<div class="lp_tree" style="height:90%">';					
+			echo '<div class="lp_tree" style="height:50%">';					
 				//build the tree with the menu items in it
 				echo $_SESSION['oLP']->build_tree();			
 			echo '</div>';

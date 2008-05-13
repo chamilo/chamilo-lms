@@ -15,6 +15,7 @@
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+ *      Julio Montoya Armas (template's changes)	
 -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
@@ -27,12 +28,12 @@
 				/* border: #dcdcdc 2px solid; */
 				background-color: #ffffff;
 				overflow: auto;
-				width: 90%;
+				width: 100%;
 			}
 
 			.TplItem
 			{
-				margin: 5px;
+				margin: 3px;
 				padding: 0px;
 				border: #eeeeee 0px solid;
 				text-align:right;
@@ -184,7 +185,6 @@ function SelectTemplate( index )
 {
 	oEditor.FCKUndo.SaveUndoStep() ;
 	FCK.SetHTML( FCK._Templates[index].Html ) ;
-	window.parent.Cancel() ;
 }
 
 		</script>

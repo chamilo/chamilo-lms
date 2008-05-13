@@ -3,8 +3,8 @@
 require_once('../../global.inc.php');
 echo '<?xml version="1.0" encoding="utf-8" ?>';
 $IMConfig['base_url'] = $_configuration['root_web'].'main/img/gallery/';
-
-function loadCSS($css_name){
+function loadCSS($css_name)
+{
 	$template_css = '<style type="text/css">'.file_get_contents(api_get_path(SYS_PATH).'main/css/'.$css_name.'/default.css').'</style>';
 	$template_css=str_replace('images/',api_get_path(WEB_PATH).'main/css/'.$css_name.'/images/',$template_css);
 	return $template_css;
@@ -24,17 +24,16 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	
 	$result_template = api_sql_query($sql);
 	
-	while($a_template = mysql_fetch_array($result_template)){
-		
-		$document_id = $a_template['ref_doc'];
-		
+	while($a_template = Database::fetch_array($result_template))
+	{		
+		$document_id = $a_template['ref_doc'];		
 		$course = api_get_course_info();
 		$table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		
 		$sql_document_path = 'SELECT path FROM '.$table_document.' WHERE id="'.$document_id.'"';
 		
 		$result_document_path = api_sql_query($sql_document_path);
-		$document_path = mysql_result($result_document_path,0,0);
+		$document_path = Database::result($result_document_path,0,0);
 		
 		$width = 100;
 		$height = 90;
@@ -64,84 +63,221 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			
 	}
 	
+	//Maybe helpfull to translate the tips ? I can delete this if don't
+	function tip($type){
+	 $tip='<br /><table width=\'100%\' cellpadding="5px" padding="5px"><tbody><tr><td>'
+            .'<div class="tip">'
+            .'<span style="font-weight: bold;">Tip :</span>'
+			.'<ul>';					
+				 switch ($type):
+				 case "flash":
+					 $tip.='<li>To add your flash animation, delete this and go to the flash Icon</li>';
+					 break;
+				 case "video":
+					 $tip.='<li>To add a video, delete this and go to the video button Icon</li>';
+					 break;
+				 case "table":
+					 $tip.='<li>To add row, click on the narrow button on the left or right when you click on a table</li>'
+					        .'<li>To add column, click on the narrow button on the top or bottom when you click on a table</li>';
+					 break;
+				 case "image":
+					 $tip.='<li>To add an image, delete this and go to the picture button Icon</li>';
+					 break;
+				 case "audio":
+					 $tip.='<li>Audio tips</li>';
+					 break;
+				 case "cover":
+					 $tip.='<li>Welcome to the Dokeos document creator</li>';
+					 break;
+				 case "glossary":
+					 $tip.='<li>Here glossary tips</li>';
+					 break;
+			     case "preface":
+				     $tip.='<li>Describe the course to the learner entering it.</li>';
+				 default:
+				    $tip.='<li>Here you can enter all the default tips for all</li>'
+					      .'<li>To delete the tip, click on the delete button on the left</li>';
+				 endswitch;
+	 $tip.='</ul>';
+	             
+	 $tip.='For more information &amp; tutorials go to : <a target="_blank" href="http://www.dokeos.com/en/tutorials.php">http://www.dokeos.com/en/tutorials.php</a>'                          
+            .'</div>'
+			.'</td></tr></tbody></table>';
+	 echo $tip;
+	  }
+	
 	?>
+    <!--PRESENTATION TEMPLATES-->
+        <Template title="First page" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/cover.png';?>" cat="presentation" style="elegant">
+            <Description>It's the cover page of your course</Description>
+            <Html>
+                <![CDATA[
+                        <head>
+                           <?php echo $css ?>
+                           <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
+                        </head>
+                        <body>
+                       <div id="course-content">
+                        <h2 align="center" margin-top="60%">Your name</h2>
+                        <br/>
+                        <br/>                    
+                            <h1 align="center" margin-top="60%">Click here to enter the title</h1>
+                            <h2 align="center" margin-top="60%">Your subtitle here</h2>
+                             <br/>
+                            <div align="center"><img name="Logo" src="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/images/logo.png';?>" width="30%" height="30%" alt="Logo" /></div>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                           <h2 align="center" margin-top="60%">Your organisation</h2>
+                           <?php tip('help'); ?>
+                        </body>
+                ]]>
+            </Html>
+        </Template>
+        
+        
+        <Template title="Dedicace" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/dedicace.png';?>" cat="presentation" style="elegant">
+            <Description>Make your own dedicace</Description>
+            <Html>
+                <![CDATA[
+                        <head>
+                           <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
+                        </head>
+                        <body>
+                            <div id="course-content">
+                            <table id="dedicace" width="100%" height="500" cellspacing="5" cellpadding="5" border="0">
+                                <tbody>
+                                    <tr height="45%">
+                                        <td width="90%">&nbsp;</td>
+                                        <td width="10%" rowspan="3">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        <p align="right" class="dedicace" style="font-style: italic;">Enter your dedicace here, e.g. to L&eacute;on Werth, Mr Dokeos ...</p>
+                                        <p style="font-style: italic;">                     </p>
+                                        <p class="dedicace" style="text-align: right;"><span style="font-style: italic;">Triple-click here to enter your comment...</span><br />                     		                                        </p>                                        </td>
+                                    </tr>
+                                    <tr height="30%">
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </body>
+                ]]>
+            </Html>
+        </Template>
+        
+        
+        <Template title="Course preface" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Course_preface.png';?>" cat="presentation" style="elegant">
+            <Description>First page of a learning path</Description>
+            <Html>
+                <![CDATA[
+                        <head>
+                           <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
+                        </head>
+                        <body>
+                       <div id="course-content">
+                        <h2>Course preface</h2>
+                                                
+                          <table width="100%" cellspacing="5" cellpadding="5" border="0" summary="" id="dedicace">
+                              <tbody>
+                                  <tr>
+                                      <td width="75%">&nbsp; <br />                                 
+                                    <span style="font-weight: bold;">Pre-requisites</span> : Course A, Diploma 1<br />                                                      <br />                                 <span style="font-weight: bold;">Objectives</span> : Be able to do X, Succeed in examination Y<br />                                 <br />                                 <span style="font-weight: bold;">Format</span> : Self-paced, facilitated. Takes about 5 hours.<br />                                 <br />                                 <span style="font-weight: bold;">Fee</span> : XXX <br />                                                      <br />                                 <span style="font-weight: bold;">Offered by</span> : Your organisation name<br />                                 <br />                                 <span style="font-weight: bold;">Facilitated by</span> : Your name<br />                                 <br />                                 <br />                                                      <br />                               </td>
+                                      <td width="25%" style="vertical-align: bottom;"><div align="center"><img align="bottom" src="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/images/trainer/trainer_glasses.png'?>" alt="trainer_glasses.png" style="width: 138px; height: 208px;" /></div></td>
+                                </tr>
+                              </tbody>
+                          </table>
+
+                        <?php tip('preface'); ?>
+                        </div>
+                        </body>
+                ]]>
+            </Html>
+        </Template>
+        
+        
+        <!--INTRODUCTION TEMPLATES-->
+        <Template title="Introduction" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/intro.png';?>" cat="presentation" style="elegant">
+            <Description>It's the cover page of your course</Description>
+            <Html>
+                <![CDATA[
+                        <head>
+                           <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
+                        </head>
+                        <body>
+                            <div id="course-content">
+                            <h1>Introduction</h1>
+                            <p><img width="128" hspace="5" height="128" align="left" alt="presentation.jpg" src="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/images/presentation.jpg';?>" />Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis pellentesque. Sed quis arcu sed dolor laoreet dictum. Sed sed arcu laoreet nibh scelerisque tempor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam vitae purus id tortor adipiscing tincidunt. Nam pharetra, lorem vel ullamcorper tempus, turpis enim lacinia quam, id sollicitudin orci nunc et lectus. Pellentesque ut eros. Pellentesque lacus dui, ornare at, feugiat sollicitudin, porttitor quis, justo. Nulla nec augue. Curabitur mattis facilisis est. Vivamus at orci consequat turpis hendrerit lobortis. Suspendisse pharetra placerat quam. Maecenas commodo venenatis felis. Nam ornare molestie neque. Sed porta, est quis eleifend laoreet, neque metus mattis neque, vitae bibendum sem ante non libero.Quisque ante est, sodales nec, dignissim non, tristique sed, nisi. Nam commodo neque sit amet augue ultrices auctor. Mauris ornare. Donec ullamcorper dolor in tellus. Nunc dapibus, enim id accumsan vehicula, arcu orci rutrum tortor, a facilisis dui nunc vitae mi. Nulla facilisi. Mauris ac pede non magna rutrum viverra. Nulla in ligula. Mauris tincidunt. Aenean eu orci vel nulla ultricies bibendum. Sed adipiscing augue sit amet elit. Fuctus, mauris est lacinia lectus, non blandit eros orci sed tellus. Curabitur arcu ligula, bibendum vitae, iaculis eu, ultrices sit amet, nunc.</p>
+                            <h2>Enter your title 2 here</h2>
+                            <p>In hac habitasse platea dictumst. Suspendisse vulputate felis ac urna. Fusce pharetra ligula. Cras dui magna, elementum vitae, adipiscing eget, sodales commodo, nisl. Maecenas risus lectus, molestie et, lobortis sit amet, pulvinar eget, elit. In nisl sapien, rhoncus a, imperdiet in, cursus at, sem. In sit amet neque. <br /></p>
+                            <ul>
+                                <li>Explain step here</li>
+                            </ul>
+                            <br />
+                            </div>
+                           <?php tip('help'); ?>
+                        </body>
+                ]]>
+            </Html>
+        </Template>
+    
+        <Template title="Text page" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Text.png';?>" cat="explanation" style="elegant">
+            <Description>Theory, content section, chapter...</Description>
+            <Html>
+                <![CDATA[
+                        <head>
+                           <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
+                        </head>
+                        <body>
+                        <div id="course-content">
+                        <h1>Click here to add your title</h1>
+                        <h2>Header 2</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis pellentesque. Sed quis arcu sed dolor laoreet dictum. Sed sed arcu laoreet nibh scelerisque tempor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam vitae purus id tortor adipiscing tincidunt. Nam pharetra, lorem vel ullamcorper tempus, turpis enim lacinia quam, id sollicitudin orci nunc et lectus. Pellentesque ut eros. Pellentesque lacus dui, ornare at, feugiat sollicitudin, porttitor quis, justo. Nulla nec augue. Curabitur mattis facilisis est. Vivamus at orci consequat turpis hendrerit lobortis. Suspendisse pharetra placerat quam. Maecenas commodo venenatis felis. Nam ornare molestie neque. Sed porta, est quis eleifend laoreet, neque metus mattis neque, vitae bibendum sem ante non libero.</p>
+                        <h3>Header 3</h3>
+                        <p>Quisque ante est, sodales nec, dignissim non, tristique sed, nisi. Nam commodo neque sit amet augue ultrices auctor. Mauris ornare. Donec ullamcorper dolor in tellus. Nunc dapibus, enim id accumsan vehicula, arcu orci rutrum tortor, a facilisis dui nunc vitae mi. Nulla facilisi. Mauris ac pede non magna rutrum viverra. Nulla in ligula. Mauris tincidunt. Aenean eu orci vel nulla ultricies bibendum. Sed adipiscing augue sit amet elit. Pellentesque lorem lectus, dictum vitae, suscipit sit amet, sagittis eu, turpis. Suspendisse et mi ut tellus luctus sodales. Etiam eleifend lorem ac sem. Donec nec velit sed velit aliquet venenatis. Donec vel lectus. Donec mollis tellus. Sed scelerisque, sapien vitae consectetuer luctus, mauris est lacinia lectus, non blandit eros orci sed tellus. Curabitur arcu ligula, bibendum vitae, iaculis eu, ultrices sit amet, nunc.</p>
+                        
+                        <?php tip('help'); ?>
+                        </div>
+                   	    </body>
+                        
+                ]]>
+            </Html>
+        </Template>
 	
-	<Template title="Text page" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Text.png';?>">
-		<Description>Theory, content section, chapter...</Description>
+	
+	<Template title="Teacher explaining" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Teacher_explaining.png';?>" cat="explanation" style="elegant">
+		<Description>Mr Dokeos points to your content <em>!</em></Description>
 		<Html>
 			<![CDATA[
 					<head>
-					<?php echo $css ?>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
 				    </head>
 				    <body>
-				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Text</div>
-				    <br />
-				
-				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
+                    <div id="course-content">
+				    <h2>Teacher explaining</h2>
+                     <table width="100%" cellspacing="5" cellpadding="1em" border="0" summary="" id="teacherExplaining">
 				      <tbody>
-				        <tr>
-				          <td>
-				            <span style="font-style: italic; font-weight: bold;">Tip</span> <span style="font-style: italic;">: this template is plain text divided in sections. All Dokeos templates can be edited.
-				            Replace text by selecting it. This text is placed in a 720 pixels wide table cell. You can add more cells, divide the table in two colums etc. by clicking on the arrows and cross in a
-				            circle icons on the borders of the table (this feature will work in Firefox and recent Internet Explorer browsers). For other templates, select the templates gallery at the top of your
-				            WYSIWYG editor. You may want to add media (images, audio, video, flash animations). Select the corresponding buttons and add the media. You can click on an image to resize and right-click
-				            on it for more options.</span><br />
-				            <br />
-				            <span style="font-weight: bold;">Second section<br />
-				
-				            <br /></span>Your text<br />
-				            <br />
-				            <span style="font-weight: bold;">Third section<br />
-				            <br /></span>Your text<br />
-				            <br />
-				          </td>
-				        </tr>
-				
-				      </tbody>
-				    </table><br />
-				    <br />
-				    <br />
-				    <br />
-				    </body>
-			]]>
-		</Html>
-	</Template>
-	
-	
-	<Template title="Teacher explaining" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Teacher_explaining.png';?>">
-		<Description>Mr Dokeos points to your content</Description>
-		<Html>
-			<![CDATA[
-					<head>
-					<?php echo $css ?>
-				    </head>
-				    <body>
-				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Teacher explaining</div>
-				    <br />
-				
-				    <table width="720" cellspacing="1" cellpadding="5" border="0" align="left" summary="">
-				      <tbody>
-				        <tr>
-				          <td style="vertical-align: top;" colspan="2">
-				            <span style="font-style: italic;"><span style="font-weight: bold;">Tip</span> : to replace the teacher mascot with another one, remove it then select the Images icon in the editor, enter
-				            Gallery &gt; Mr Dokeos and choose a static or an animated Mr Dokeos. Alternatively : import your own gallery of mascots or order one at Dokeos.</span><br />
-				          </td>
-				
-				        </tr>
 				        <tr>
 				          <td valign="top">
-				            <span style="font-weight: bold;"><img width="250" height="250" align="bottom" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/images/mr_dokeos/anim_teaching.jpg" alt=
+				            <span style="font-weight: bold;"><img width="250" height="250" align="bottom" src="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/anim_teaching.jpg';?>" alt=
 				            "anim_teaching.jpg" /><br /></span>
 				          </td>
-				          <td style="vertical-align: top;">
-				            <font size="4"><span style="font-weight: bold;">The cell</span></font><br />
-				            <br />
-				
+				          <td style="vertical-align: top; padding:1em;">
+				            <h3>Your title here</h3>
+							<p>
 				            The cell is the structural and functional unit of all known living organisms. It is the simplest unit of an organism that is classified as living, and is sometimes called the building
-				            block of life.<br />
-				            <br />
+				            block of life.<p/>
+				            <p>
 				            Some organisms, such as bacteria, are unicellular (consist of a single cell). Other organisms, such as humans, are multicellular. (Humans have an estimated 100 trillion or 1014 cells; a
-				            typical cell size is 10 µm; a typical cell mass is 1 nanogram.)<br />
+				            typical cell size is 10 µm; a typical cell mass is 1 nanogram.)<p/>
 				            <br />
 				            <br />
 				          </td>
@@ -149,169 +285,168 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				      </tbody>
 				
 				    </table><br />
-				    <br />
-				    <br />
-				    <br />
+					<?php tip('help');?>
+                    
+                    </div>
 				    </body>
 				    
 			]]>
 		</Html>
 	</Template>
 	
+    
+    
+    <Template title="Left image with text" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/img_left_encadred.png';?>" cat="explanation" style="elegant">
+		<Description>It's a picture on the left picture with encadred text</Description>
+		<Html>
+			<![CDATA[
+					<head>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
+				   </head>
+                    <body>
+                        <div id="course-content">
+                        <h1>Click here to add your title 1</h1>
+                        <p style="text-align: center;"><img vspace="10" hspace="10" align="left" src="<?php echo api_get_path(WEB_CODE_PATH)?>default_course_document/images/mr_dokeos/anim_teaching.jpg" alt="anim_teaching.jpg" style="width: 209px; height: 209px;" /></p>
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus eleifend libero eget tortor. Mauris ac massa id orci viverra interdum. Pellentesque quis lacus. Fusce lacinia lacinia ipsum. Vivamus a quam. Aliquam lobortis vestibulum elit. Vivamus iaculis, ante ut iaculis placerat, est pede posuere sem, at feugiat lorem magna in enim. Etiam lacinia, justo a tincidunt pretium, massa justo aliquam purus, ac suscipit metus orci sed enim. Vestibulum a lacus. Maecenas lacus. Donec pede nibh, pellentesque vitae, rutrum porttitor, posuere at, mi. Duis ut nulla a quam laoreet rhoncus. Suspendisse potenti. In porttitor accumsan pede. Donec massa. Proin a est. In enim lectus, convallis ut, pretium malesuada, ultrices rutrum, felis. </p>
+                        <p>Nullam lorem nisi, pulvinar vitae, dapibus id, bibendum quis, tortor. Quisque eu sem. Pellentesque dictum facilisis eros. Donec sagittis rutrum sem. Nullam sed mi. Integer ac eros vel mi tincidunt gravida. Nulla facilisi. Etiam justo. Praesent tristique elit ut pede auctor eleifend. Mauris libero. Vestibulum porta. Donec orci.</p>
+                        <p>Etiam fermentum est at pede. Nulla malesuada porttitor sapien. Donec ullamcorper feugiat nisi. Donec mattis felis consequat ante. Sed nec enim eu tortor tincidunt auctor. Vestibulum gravida enim id diam. Nam id nunc et ante aliquam egestas. Donec auctor dictum dui. Nulla facilisi. Fusce nibh. In suscipit elit sed quam. Cras eu nulla. Curabitur euismod cursus ligula. Phasellus iaculis elementum augue. Suspendisse porta diam. Sed tortor arcu, euismod eu, lacinia nec, imperdiet vel, nunc. Vivamus pede ligula, congue euismod, lobortis at, fringilla in, sem. Sed eu lectus non tellus faucibus adipiscing. Proin adipiscing nulla eu ante.</p>
+                        <br />
+ 						<?php tip('help');?>
+                        </div>
+                    </body>
+                                                    
+             ]]>
+         </Html>
+    </Template>
+    
+    <Template title="Text and image centered" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/text_img_centered.png';?>" cat="explanation" style="elegant">
+		<Description>It's a text with an image centered and legend.</Description>
+		<Html>
+			<![CDATA[
+					<head>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
+				   </head>
+                    <body>
+                        <div id="course-content">
+                        <h1>Click here to add your title 1</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus eleifend libero eget tortor. Mauris ac massa id orci viverra interdum. Pellentesque quis lacus. Fusce lacinia lacinia ipsum. Vivamus a quam. Aliquam lobortis vestibulum elit. Vivamus iaculis, ante ut iaculis placerat, est pede posuere sem, at feugiat lorem magna in enim. Etiam lacinia, justo a tincidunt pretium, massa justo aliquam purus, ac suscipit metus orci sed enim. Vestibulum a lacus. Maecenas lacus. Donec pede nibh, pellentesque vitae, rutrum porttitor, posuere at, mi. Duis ut nulla a quam laoreet rhoncus. Suspendisse potenti. In porttitor accumsan pede. Donec massa. Proin a est. In enim lectus, convallis ut, pretium malesuada, ultrices rutrum, felis. </p>
+                        <p>Nullam lorem nisi, pulvinar vitae, dapibus id, bibendum quis, tortor. Quisque eu sem. Pellentesque dictum facilisis eros. Donec sagittis rutrum sem. Nullam sed mi. Integer ac eros vel mi tincidunt gravida. Nulla facilisi. Etiam justo. Praesent tristique elit ut pede auctor eleifend. Mauris libero. Vestibulum porta. Donec orci.</p>
+                        <div style="text-align: center;"><img width="720" height="326" align="bottom" src="<?php echo api_get_path(WEB_CODE_PATH)?>default_course_document/images/diagrams/brain.png" alt="Brain" />&nbsp;                                                 <br /></div>
+                        <div style="text-align: center;">Your legend here</div>
+                        <br />
+                      <br />
+                    <p>&nbsp;</p>
+                     <?php tip('help'); ?>
+                    
+                    </div>
+                    </body>
+                                                    
+             ]]>
+         </Html>
+    </Template>
+    
 	
-	<Template title="Comparison" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Comparison.png';?>">
+	<Template title="Comparison" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/comparison.png';?>" cat="explanation" style="elegant">
 		<Description>2 columns text page</Description>
 		<Html>
 			<![CDATA[
 					<head>
-					<?php echo $css ?>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
 				    </head>
-				    <body>
-				   <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Comparison</div>
-				    <br />
-				    
-				    <span style="font-style: italic; font-size: 15px; "><span style="font-weight: bold">Tip : </span>use this template to compare two sets of propositions.</span>
-				    
-				    <br /><br />
-				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
-				      <tbody>
-				        <tr>
-				          <td>
-				            <span style="font-weight: bold;"><font size="4">Set 1</font><br /></span>
-				
-				            <ul>
-				              <li>item 1
-				              </li>
-				              <li>item 2
-				              </li>
-				              <li>item 3
-				              </li>
-				              <li>item 4
-				              </li>
-				              <li>item 5
-				              </li>
-				
-				            </ul><span style="font-weight: bold;"><br /></span><br />
-				            <br />
-				          </td>
-				          <td style="vertical-align: top;">
-				            <span style="font-weight: bold;"><font size="4">Set 1</font><br /></span>
-				            <ul>
-				              <li>item 1
-				              </li>
-				              <li>item 2
-				              </li>
-				
-				              <li>item 3
-				              </li>
-				              <li>item 4
-				              </li>
-				              <li>item 5<img width="100" height="100" align="right" alt="pointing_left.jpg" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/images/mr_dokeos/pointing_left.jpg" />
-				              </li>
-				            </ul>
-				          </td>
-				        </tr>
-				
-				      </tbody>
-				    </table><br />
-				    <br />
-				    <br />
-				    <br />
-				    </body>
+                    <body>
+                    <div id="course-content">
+                    <h2>Comparison</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis pellentesque. Sed quis arcu sed dolor laoreet dictum. Sed sed arcu laoreet nibh scelerisque tempor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam vitae purus id tortor adipiscing tincidunt. Nam pharetra, lorem vel ullamcorper tempus, turpis enim lacinia quam, id sollicitudin orci nunc et lectus. Pellentesque ut eros. Pellentesque lacus dui, ornare at, feugiat sollicitudin, porttitor quis, justo. Nulla nec augue. Curabitur mattis facilisis est. Vivamus at orci consequat turpis hendrerit lobortis. Suspendisse pharetra placerat quam. Maecenas commodo venenatis felis. Nam ornare molestie neque. Sed porta, est quis eleifend laoreet, neque metus mattis neque, vitae bibendum sem ante non libero.                    </p>
+                    <table width="100%" cellspacing="5" cellpadding="5" border="0" align="left" summary="">
+                        <tbody>
+                            <tr>
+                                <td width="50%" valign="top" align="left" style="padding: 1em;">
+                                <h3>Set 1</h3>
+                                <ul>
+                                    <li>Enter your argument here</li>
+                                </ul>
+                                </td>
+                                <td width="50%" valign="top" align="left" style="padding: 1em;">
+                                <h3>Set 2</h3>
+                                <ul>
+                                    <li>Enter your argument here</li>
+                                </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
+                    <p>&nbsp;</p>
+                    <?php tip('help'); ?>
+                    </div>
+                </body>
 				    
 			]]>
 		</Html>
 	</Template>
 	
 	
-	<Template title="Diagram explained" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Diagram_explained.png';?>">
+	<Template title="Diagram explained" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Diagram_explained.png';?>" cat="explanation" style="elegant">
 		<Description>Image on the left, comment on the right</Description>
 		<Html>
 			<![CDATA[
 					<head>
-					<?php echo $css ?>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
 				    </head>
-				    <body>
-				   <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">A diagram explained</div>
-				    <br />
-				
-				    <table width="720" cellspacing="1" cellpadding="5" border="0" align="left" summary="">
-				      <tbody>
-				        <tr>
-				          <td style="vertical-align: top;" colspan="2">
-				            <span style="font-style: italic;"><span style="font-weight: bold;">Tip</span> : to replace the image by yours, select it and click on the Delete key of your keyboard. Then open the image
-				            gallery and upload your own diagram then select it to insert in the page. Image should not be bigger than 720x540pixels and must be a GIF, JPG or PNG format to comply with web standards.
-				            To replace the text, just select with your mouse, then replace.</span><br />
-				          </td>
-				        </tr>
-				
-				        <tr>
-				          <td valign="top">
-				            <span style="font-weight: bold;"><img width="165" height="287" align="bottom" alt="anim_twostroke.gif" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/images/diagrams/animated/anim_twostroke.gif" /><br /></span>
-				          </td>
-				          <td style="vertical-align: top;">
-				            Two-stroke cycle engines operate in two strokes, instead of the four strokes of the more common Otto cycle.<br />
-				            <ol>
-				              <li>
-				
-				                <span style="font-weight: bold;">Power/exhaust</span> : This stroke occurs immediately after the ignition of the charge. The piston is forced down. After a certain point, the top of
-				                the piston passes the exhaust port, and most of the pressurized exhaust gases escape. As the piston continues down, it compresses the air/fuel/oil mixture in the crankcase. Once the
-				                top of the piston passes the transfer port, the compressed charge enters the cylinder from the crankcase and any remaining exhaust is forced out.<br />
-				              </li>
-				              <li>
-				                <span style="font-weight: bold;">Compression/intake</span> : The air/fuel/oil mixture has entered the cylinder, and the piston begins to move up. This compresses the charge in the
-				                cylinder and draws a vacuum in the crankcase, pulling in more air, fuel, and oil from the carburetor. The compressed charge is ignited by the spark plug, and the cycle begins again.
-				              </li>
-				            </ol>In engines like the one described above, where some of the exhaust and intake charge are in the cylinder simultaneously the gasses are kept separate by careful timing and aiming of
-				            the transfer ports such that the fresh gas has minimal contact with the exiting exhaust which it is pushing ahead of itself.
-				          </td>
-				
-				        </tr>
-				      </tbody>
-				    </table><br />
-				    <br />
-				    <br />
-				    <br />
-				    </body>
+                    <body>
+                    <div id="course-content">
+                    <h1>Click here to add your title 1</h1>
+                    <table width="100%" cellspacing="5" cellpadding="5" border="0" align="" summary="">
+                        <tbody>
+                            <tr>
+                                <td width="40%"><div align="center"><img align="bottom" src="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/images/diagrams/alaska_chart.png'?>" alt="alaska_chart.png" style="width: 424px; height: 381px;" /></div></td>
+                                <td width="60%" align="left" valign="top"><h2>Explanations : </h2>
+                                <ul>
+                                    <li>Enter your explanation here</li>
+                                </ul>
+                              </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
+                    <p>&nbsp;</p>
+                    <?php tip('help'); ?>
+                    </div>
+                </body>
 				    
 			]]>
 		</Html>
 	</Template>
 	
 	
-	<Template title="Image alone" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Picture.png';?>">
+	<Template title="Image alone" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Picture.png';?>" cat="multimedia" style="elegant">
 		<Description>Self-explaining diagram</Description>
 		<Html>
 			<![CDATA[
 					<head>
-					<?php echo $css ?>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
 				    </head>
 				    <body>
-				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Picture page</div>
-				    <br />
-				
-				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
+                   <div id="course-content">
+				    <h1>Picture page</h1> 
+				    <table width="100%" cellspacing="5" cellpadding="5" border="0" summary="">
 				      <tbody>
 				        <tr>
 				          <td>
-				            <span style="font-style: italic;"><span style="font-weight: bold;">Tip</span> : in some pages, you want just a picture. Take it as self-explaining as possible and consider the default
-				            sizing for a page in Dokeos is 720x540 to fit within a learning path under the LMS bars and beside the learning path table of contents. Consider using the same image as a page and as a
-				            test support in the hotspots test type (see Dokeos tests tool).<br />
-				            <br />
-				            <img width="600" height="469" align="bottom" alt="piano.jpg" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/images/diagrams/piano.jpg" /><br />
-				
-				            <br />
-				            <br /></span><span style="font-weight: bold;"><br /></span><span style="font-weight: bold;"><span style="font-weight: bold;"><br />
-				            <br />
-				            <br /></span></span>
+				            <img width="100%" height="100%" align="bottom" alt="piano.jpg" src="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/images/diagrams/piano.jpg'?>" />
 				          </td>
 				        </tr>
 				      </tbody>
-				    </table><br />
+				    </table>
 				    <br />
-				
-				    <br />
-				    <br />
+                    <p>&nbsp;</p>
+                    <?php tip('help'); ?>
+					</div>
 				    </body>
 				    
 			]]>
@@ -324,38 +459,23 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Html>
 			<![CDATA[
 					<head>
-					<?php echo $css ?>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
 				    </head>
 				    <body>
-				  <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Flash animation page</div>
-				    <br />
-				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
-				
-				      <tbody>
-				        <tr>
-				          <td>
-				            <span style="font-style: italic;"><span style="font-weight: bold;">Tip</span> : to insert a Flash animation (whether simulation, desktop captivate movie etc.), select the Flash icon in
-				            the editor, upload it from your PC, type the exact width and height of the animation (or leave default and adjust later by dragging the border of the animation zone. Then validate.<br />
-				            <br /></span> The NMR signal observed following an initial excitation pulse (<span style="color: rgb(128, 0, 128); font-weight: bold;">purple in diagram</span>) decays with time due to
-				            both spin-spin relaxation and any inhomogeneous effects which cause different spins to precess at different rates e.g. a distribution of chemical shifts or magnetic field gradients.
-				            Relaxation leads to an irreversible loss of magnetisation (decoherence), but the inhomogeneous dephasing can be reversed by applying a 180° or inversion pulse (<span style=
-				            "color: rgb(51, 153, 102); font-weight: bold;">green in diagram</span>) that inverts the magnetisation vectors.<br />
-				
-				            <br />
-				          </td>
-				        </tr>
-				        <tr>
-				          <td style="vertical-align: top;">
-				            <span style="font-style: italic;"><embed width="722" height="332" menu="true" loop="true" play="true" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/flash/SpinEchoSequence.swf"
-				            pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" /></span><br />
-				          </td>
-				        </tr>
-				      </tbody>
-				
-				    </table><br />
-				    <br />
-				    <br />
-				    <br />
+                   <div id="course-content">
+                   <h1>Flash animation page</h1>
+                    <table width="100%" cellspacing="5" cellpadding="5" border="0" summary="">
+                        <tbody>
+                            <tr>
+                                <td style="vertical-align: middle; text-align: center;"> <span style="font-style: italic;"><embed width="450" height="450" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="<?php echo api_get_path(REL_PATH); ?>main/default_course_document/flash/SpinEchoSequence.swf" play="true" loop="true" menu="true"></embed></span><br /> 				          </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
+                    <p>&nbsp;</p>
+                    <?php tip('flash');?>
+					</div>
 				    </body>
 				    
 			]]>
@@ -367,68 +487,49 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Description>Audio + image + text : listening comprehension etc.</Description>
 		<Html>
 			<![CDATA[
-					<?php echo $css; ?>
 				    
 				    <html xmlns="http://www.w3.org/1999/xhtml">
 					  <head>
-					    <title></title>
+					    <title>Audio</title>
+                          <?php echo $css ?>
+                                                    
 					  </head>
 					  <body>
-					    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Listening comprehension</div>
-					    <br />
-					    <table width="720" cellspacing="1" cellpadding="5" border="0" align="left" summary="">
-					
-					      <tbody>
-					        <tr>
-					          <td colspan="2" style="vertical-align: top;">
-					            <span style="font-style: italic;"><span style="font-weight: bold;">Tip</span> : to replace the audio by yours, select it and click on the Delete key of your keyboard. Then open the audio
-					            gallery and upload + insert your own file. Audio should be a MP3 file.&nbsp;<br />
-					            <br /></span>
-					          </td>
-					        </tr>
-					
-					        <tr>
-					          <td valign="top">
-					            <span style="font-weight: bold;">
-					            <object width="90" height="25" align="" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" id="test">
-									<param name="movie" value="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/mp3player/player_mp3.swf?mp3file=/dokeosSVN/courses/FLV/document/audio/ListeningComprehension.mp3" />
-									<param name="quality" value="high" />
-									<param name="bgcolor" value="#FFFFFF" /> 
-									<embed width="90" height="25" align="" src="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/mp3player/player_mp3.swf?mp3file=<?php echo api_get_path(REL_COURSE_PATH) ?>FLV/document/audio/ListeningComprehension.mp3" quality="high" bgcolor="#FFFFFF" name="Streaming" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>
-								</object><br />
-					              <br />
-					              <img width="128" height="128" align="bottom" alt="female.jpg" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/images/female.jpg" /><br />
-					
-					            <br />
-					            <br /></span>
-					          </td>
-					          <td style="vertical-align: top;">
-					            <span style="font-weight: bold;">Listening comprehension</span><br />
-					            <br />
-					            Listen carefully and repeat the text as many times as required.<br />
-					            <br />
-					
-					            Try answering the following questions :<br />
-					            <ul>
-					              <li>What is the conference about?
-					              </li>
-					              <li>Who produces solid waste?
-					              </li>
-					              <li>List 3 examples of solid waste?
-					              </li>
-					            </ul><br />
-					            Then go the test and evaluate your comprehension.<br />
-					
-					            <br />
-					            <br />
-					            <br />
-					          </td>
-					        </tr>
-					      </tbody>
-					    </table><br />
-					    <br />
-					  </body>
-					
+					    <h2>Listening comprehension</h2>
+                        <table width="100%" cellspacing="5" cellpadding="5" border="0" align="left" summary="">
+                                    <tbody>
+                                        <tr>
+                                            <td valign="top"> 					            <span style="font-weight: bold;">
+                                            <div style="text-align: center;"><img width="250" height="235" align="bottom" alt="Listening image" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/images/trainer/trainer_staring.png" /></div>
+                                            <div style="text-align: center;"></div></span> 					          </td>
+                                            <td rowspan="2" class="listeningaudio" style="vertical-align: top;"> 					            
+                                            <h2>Listening comprehension</h2>
+                                            <p>Listen carefully and repeat the text as many times as required.<p/>
+                                            <p>Try answering the following questions :<p/>
+                                              <ul>
+                                                  <li>What is the conference about? 					              </li>
+                                                  <li>Who produces solid waste? 					              </li>
+                                                  <li>List 3 examples of solid waste? 					              </li>
+                                              </ul>
+                                            <p>Then go the test and evaluate your comprehension.</p>			           
+                                           </td>
+                                        </tr>
+                                            <tr>
+                                              <td valign="top"><div align="center"><span style="text-align: center;">
+                                                    <object width="90" height="25" align="" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" id="test">
+                                                    <param name="movie" value="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/mp3player/player_mp3.swf?mp3file=/dokeosSVN/courses/FLV/document/audio/ListeningComprehension.mp3" />
+                                                    <param name="quality" value="high" />
+                                                    <param name="bgcolor" value="#FFFFFF" /> 
+                                                    <embed width="90" height="25" align="" src="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/mp3player/player_mp3.swf?mp3file=<?php echo api_get_path(REL_COURSE_PATH) ?>FLV/document/audio/ListeningComprehension.mp3" quality="high" bgcolor="#FFFFFF" name="Streaming" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>
+                                                  </object>
+                                              </span></div></td>
+                                            </tr>
+                                    </tbody>
+                                </table>
+					<br />
+                    <p>&nbsp;</p>
+                     <?php tip('audio'); ?>
+					</body>
 					</html>
 				    </body>
 				    
@@ -442,19 +543,19 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Html>
 			<![CDATA[
 					<head>
-					<?php echo $css ?>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
 				    </head>
 				    <body>
-				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">On demand video</div><br />
-				    <table width="720" cellspacing="1" cellpadding="10" border="0" align="left" summary="">
+                   <div id="course-content">
+				    <h2>On demand video</h2><br />
+				    <table width="100%" cellspacing="5" cellpadding="10" border="0" align="left" summary="">
 				
 				      <tbody>
 				        <tr>
 				          <td style="vertical-align: top;" colspan="2">
-				            <span style="font-weight: bold; font-style: italic;">Tip</span> <span style="font-style: italic;">: to replace the video, click on its border then clikc on the Delete touch of your
-				            keyboard &gt; open the Video menu of the editor and upload your own video in MPG, MOV or WMV format. Once in the page, drag its border to fit the video dimensions. For instance
-				            320x240.</span><br />
-				            <br />
+				            <h2>Header 2</h2>
+                            <p>Your text here</p>
 				          </td>
 				
 				        </tr>
@@ -474,15 +575,14 @@ $css = loadCSS(api_get_setting('stylesheets'));
 					          		<param name="movie" value="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/flv_player/player_flv_mini.swf" />
 					          		<param name="FlashVars" value="flv=<?php echo api_get_path(REL_PATH) ?>main/default_course_document/video/example.flv&autoplay=1&width=320&amp;height=240" />
 					          </object>
-					          <style type="text/css">body{}</style>
+					                              <style type="text/css">body{}</style>
 				          	
 				          	<?php
 				          	}
 				          	?>
 				          </td>
 				          <td style="vertical-align: top;">
-				            <span class="tablehead"><font size="4"><span style="font-weight: bold;">Excerpt from Marc Shuttleworth's keynote</span></font><br />
-				            <br />
+				            <h3>e.g. : Excerpt from Marc Shuttleworth's keynote</span></h3>
 				
 				            Main topics of the conference are :<br /></span>
 				            <ul>
@@ -508,11 +608,70 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				            </ul>
 				          </td>
 				        </tr>
+                        <tr>
+                          <td colspan="2">
+                          <p>You can drag and drop the video here</p>
+                          </td>
+                        <tr>
 				      </tbody>
-				    </table><br />
-				    <br />
-				    <br />
-				    <br />
+				    </table>
+                    <br />
+                    <p>&nbsp;</p>
+                    <?php tip('video'); ?>
+				    <style type="text/css">body{}</style><!-- to fix a strange bug appearing with firefox when editing this template -->
+				    
+				    </body>
+			]]>
+		</Html>
+	</Template>
+    
+    
+    <Template title="Video page fullscreen" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/video_fullscreen.png';?>">
+		<Description>On demand video in fullscreen</Description>
+		<Html>
+			<![CDATA[
+					<head>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
+				    </head>
+				    <body>
+                   <div id="course-content">
+				    <h2>On demand video</h2>
+				    <table width="100%" cellspacing="5" cellpadding="10" border="0" align="left" summary="">			
+				      <tbody>
+				        <tr>
+				          <td valign="top" align="center">
+				          	<?php
+				          	if(strpos($_SERVER['HTTP_USER_AGENT'],'Gecko')!==false)
+				          	{
+				          	?>
+				            	<img src="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/fckeditor/editor/css/images/flv.gif?flv=<?php echo api_get_path(WEB_CODE_PATH) ?>default_course_document/video/example.flv&endflv" />
+				          	<?php
+				          	}
+				          	else
+				          	{
+				          	?>
+				          	<object type="application/x-shockwave-flash" data="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/flv_player/player_flv_mini.swf" height="480" width="640">
+					          		<param name="movie" value="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/flv_player/player_flv_mini.swf" />
+					          		<param name="FlashVars" value="flv=<?php echo api_get_path(REL_PATH) ?>main/default_course_document/video/example.flv&autoplay=1&width=640&amp;height=480" />
+					          </object>
+					                              <style type="text/css">body{}</style>
+				          	
+				          	<?php
+				          	}
+				          	?>
+				          </td>
+                          </tr>
+                          <tr>
+                          <td align="center">
+                            <p>Your comment here</p>
+                          </td>
+                          </tr>
+				      </tbody>
+				    </table>
+                    <br />
+                    <br />
+                    <p><?php tip('video'); ?></p>
 				    <style type="text/css">body{}</style><!-- to fix a strange bug appearing with firefox when editing this template -->
 				    
 				    </body>
@@ -521,20 +680,22 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="table page" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Table.png';?>">
+	<Template title="Table page" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Table.png';?>">
 		<Description>Spreadsheet-like page</Description>
 		<Html>
 			<![CDATA[
 					<head>
-					<?php echo $css ?>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
 				    </head>
 				    <body>
-				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">A table<br></div>
+                   <div id="course-content">
+				    <h2>A table</h2>
 				    
 				    <span style="font-style: italic; font-size: 15px; "><span style="font-weight: bold">Tip</span> : to edit this table, click on the small arrows and cross-in-a-circle icons on the borders of the cells.<br />This will add /remove lines and columns. You can also right-click in the table to display the table and cell edit options.</span><br /><br />
 				    
 				    
-				    <table width="720" cellspacing="0" cellpadding="2" border="1" align="left" summary="" style="font-size: 12px">
+				    <table width="100%" cellspacing="0" cellpadding="2" border="1" summary="" style="font-size: 12px">
 				      <tbody>
 				        <tr>
 				          <td valign="top" bgcolor="#E3E3E3" style="font-weight: bold;">
@@ -671,65 +832,13 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				      </tbody>
 				    </table><br />
 				    <br />
-				    <br />
-				
-				    <br />
+                    <?php tip('table'); ?>
+					</div>
 				    </body>
 				    
 			]]>
 		</Html>
 	</Template>
-	
-	
-	<Template title="Course preface" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Course_preface.png';?>">
-		<Description>First page of a learning path</Description>
-		<Html>
-			<![CDATA[
-					<head>
-					<?php echo $css ?>
-				    </head>
-				    <body>
-				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Course preface</div><br />
-				    
-				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
-				      <tbody>
-				        <tr>
-				          <td>
-				            <img width="128" height="128" align="right" alt="female.jpg" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/images/female.jpg" /><span style=
-				            "font-style: italic;"><span style="font-weight: bold;">Tip</span> : describe the course to the learner entering it. You are in an editable template so feel free to remove, add and replace
-				            any part of the content. To replace the image to the right with your picture, select and delete it, then open the images gallery, upload your picture and select Align : right in Advanced
-				            options.</span><br />
-				            <br />
-				            <span style="font-weight: bold;">Pre-requisites</span> : Course A, Diploma 1<br />
-				
-				            <br />
-				            <span style="font-weight: bold;">Objectives</span> : Be able to do X, Succeed in examination Y<br />
-				            <br />
-				            <span style="font-weight: bold;">Format</span> : Self-paced, facilitated. Takes about 5 hours.<br />
-				            <br />
-				            <span style="font-weight: bold;">Fee</span> : XXX <br />
-				
-				            <br />
-				            <span style="font-weight: bold;">Offered by</span> : Your organisation name<br />
-				            <br />
-				            <span style="font-weight: bold;">Facilitated by</span> : Your name<br />
-				            <br />
-				            <br />
-				
-				            <br />
-				          </td>
-				        </tr>
-				      </tbody>
-				    </table><br />
-				    <br />
-				    <br />
-				    <br />
-				    
-				    </body>
-			]]>
-		</Html>
-	</Template>
-	
 	
 	
 	<Template title="Assignment description" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Assignment_description.png';?>">
@@ -737,19 +846,14 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Html>
 			<![CDATA[
 					<head>
-					<?php echo $css ?>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
 				    </head>
 				    <body>
-				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Assignment description<br />
-
-				    </div>
-				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
-				      <tr>
-				        <td>
-				          <span style="font-style: italic;"><span style="font-weight: bold;">Tip</span> : before linking individuals or groups to the assignments page, you may want to describe the learning activity
-				          in detail. The page below is an example of this.</span> <span style="font-weight: bold;"><br />
-				          <br />
-				          <font size="4">Goals</font></span><br />
+                   <div id="course-content">
+				    <h2>Assignment description</h2>
+				    <?php tip('help'); ?>
+				          <h4>Goals</h4>
 				
 				          <br />
 				          Describe here the goals of the assignment : for instance what kind of report you expect from the group at the end. <span style="font-weight: bold;"><br />
@@ -757,7 +861,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				          <font size="4">Group organisation</font><br />
 				          <br /></span> The group will be organised so as to optimise collaboration. Roles will be assigned like this :<br />
 				          <br />
-				          <table width="100%" cellspacing="0" cellpadding="5" border="1" align="" summary="">
+				          <table width="100%" cellspacing="5" cellpadding="5" border="1" align="" summary="">
 				
 				            <tbody>
 				              <tr>
@@ -792,16 +896,12 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				            </tbody>
 				
 				          </table><br />
-				          <font size="4" style="font-weight: bold;"><br />
-				          Agenda</font><br />
-				          <br />
-				          <span style="font-weight: bold;">Week 1</span> : describe group organisation and roles in the group forum. Select a topic for the presentation in the list of topics.<br />
-				          <br />
-				          <span style="font-weight: bold;">Week 2</span> : each member of the group provides in the group forum a summary of his book chapter.<br />
-				
-				          <br />
-				          <span style="font-weight: bold;">Week 3</span> : the work of the group is uploaded in the Assignments tool for evaluation.<br />
-				          <br />
+                          <h3>Agenda</h3>
+                             <ul>
+                                <li><span style="font-weight: bold;">Week 1</span> : describe group organisation and roles in the group forum. Select a topic for the presentation in the list of topics.</li>
+                                <li><span style="font-weight: bold;">Week 2</span> : each member of the group provides in the group forum a summary of his book chapter.</li>
+                                <li><span style="font-weight: bold;">Week 3</span> : the work of the group is uploaded in the Assignments tool for evaluation.</li>
+                            </ul>
 				          <br />
 				          <span style="font-weight: bold;"><font size="4">Format</font><br />
 				          <br /></span>The document will be uploaded in the Assigment tool as a Word or an Openoffice document, 10 pages max. Use standard fonts like Arial or Times. The text should include a table
@@ -811,9 +911,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				      </tr>
 				    </table><br />
 				    <br />
-				    <br />
-				    <br />
-				    
+                    
+					</div>
 				    </body>
 			]]>
 		</Html>
@@ -825,12 +924,14 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Html>
 			<![CDATA[
 					<head>
-					<?php echo $css ?>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
 				    </head>
 				    <body>
-				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Resources</div><br />
+                   <div id="course-content">
+				    <h2>Resources</h2>
 				    
-				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
+				    <table width="100%" cellspacing="5" cellpadding="5" border="0" align="left" summary="">
 				      <tbody>
 				        <tr>
 				          <td>
@@ -890,87 +991,139 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				      </tbody>
 				    </table><br />
 				    <br />
-				    <br />
-				    <br />
-				    
+					</div>
 				    </body>
 			]]>
 		</Html>
 	</Template>
 	
-	
+	<Template title="Bibliography" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Resources.png';?>">
+		<Description>Books, links, tools</Description>
+		<Html>
+			<![CDATA[
+					<head>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
+				    </head>
+				    <body>
+                   <div id="course-content">
+				    <h1>Bibliography</h2>
+				    <h2>Books</h2>
+                     <ul>
+                        <li>Enter your reference here e.g : L.M., Mashburn-Warren; Whiteley, M. (2006). "Special delivery: vesicle trafficking in prokaryotes.", <span style="font-style: italic;">Mol Microbiol</span> <span style="font-weight: bold;">61</span> (4): 839-46</li>
+                     </ul>
+                     <h2>Periodic</h2>
+                     <ul>
+                        <li>Enter your reference here e.g : L.M., Mashburn-Warren; Whiteley, M. (2006). "Special delivery: vesicle trafficking in prokaryotes.", <span style="font-style: italic;">Mol Microbiol</span> <span style="font-weight: bold;">61</span> (4): 839-46</li>
+                     </ul> 
+				    <?php tip('help'); ?>                     
+					</div>
+				    </body>
+			]]>
+		</Html>
+	</Template>
+    
+    
 	<Template title="Frequently asked questions" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Frequently_asked_questions.png';?>">
 		<Description>List of questions and answers </Description>
 		<Html>
 			<![CDATA[
 					<head>
-					<?php echo $css ?>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
 				    </head>
 				    <body>
-				   <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Frequently asked questions</div>
-				    <br />
+                   <div id="course-content">
+				   <h1>Frequently asked questions</h1>
+				   <?php tip('help');?>
 				
-				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
+				    <table width="100%" cellspacing="5" cellpadding="5" border="0" align="left" summary="">
 				      <tbody>
 				        <tr>
 				          <td>
-				            <img width="128" height="128" align="right" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/images/search.jpg" alt="search.jpg" /><span style=
-				            "font-weight: bold; font-style: italic;">Tip</span> <span style="font-style: italic;">: replace questions and answers by yours. To edit this file, click on the yellow pencil icon beside
-				            the document title.</span><br />
-				            <br />
-				            <span style="font-weight: bold;">Introduction</span><br />
-				
-				            <br />
+				            <img width="128" height="128" align="right" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/images/search.jpg" alt="search.jpg" />
+				            <h2>Introduction</h2>
+							<p>
 				            These questions are compiled from our customer support log and are updated weekly. If you have experienced a problem and have found a solution for it, please enter the solution in the
-				            forum so that we can include it here for others users.<br />
-				            <span style="font-weight: bold;"><br />
-				            <br />
-				            Q : What is a learning path?<br />
-				            <br /></span>A learning path is a course module providing a mix of multimedia, tests and activities, a standardised navigation menu on the left, a progress bar and a link to your detailed
-				            progress in the module. The reporting on your progress is saved in the database to help your coach help you. <span style="font-weight: bold;"><br />
-				            <br />
+				            forum so that we can include it here for others users.
+                            </p>
+				            <h3>Q : What is a learning path?</h3>
+				            <p>A learning path is a course module providing a mix of multimedia, tests and activities, a standardised navigation menu on the left, a progress bar and a link to your detailed
+				            progress in the module. The reporting on your progress is saved in the database to help your coach help you.</p>
 				
-				            Q : What are the course technical prerequisites?<br />
-				            <br /></span>The course is web-based. You need a recent computer (3 years old max), a browser (Firefox or Internet Explorer), some activities like hotspot questions may require Flash
-				            Player 9 and you need a quick internet connection (ADSL or +). <span style="font-weight: bold;"><br />
-				            <br />
-				            <br />
-				            Q : How do I resize my course window?<br />
-				            <br /></span>Select the border of the window with your mouse and drag it, keeping your mouse button down. <span style="font-weight: bold;"><br />
-				            <br />
-				
-				            <br />
-				            <br />
-				            <br />
-				            <br /></span><br />
+				            <h3>Q : What are the course technical prerequisites?</h3>
+				            <p>The course is web-based. You need a recent computer (3 years old max), a browser (Firefox or Internet Explorer), some activities like hotspot questions may require Flash Player 9 and you need a quick internet connection (ADSL or +). </p>
+				            <h3>Q : How do I resize my course window?</h3>
+				            <p>Select the border of the window with your mouse and drag it, keeping your mouse button down. </p>
+	
 				          </td>
 				        </tr>
 				      </tbody>
-				    </table><br />
+				    </table>
 				    <br />
-				
-				    <br />
-				    <br />
-				    
+					</div>
 				    </body>
 			]]>
 		</Html>
 	</Template>
 	
-	
+	<Template title="Glossary" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/glossary.png';?>">
+		<Description>List of term of the section</Description>
+		<Html>
+			<![CDATA[
+					<head>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
+				    </head>
+				    <body>
+                   <div id="course-content">
+				   <h1>Glossary</h1>
+				   <?php tip('glossary');?>
+ 				   <?php 
+				   $letter=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+				   echo "<div text-align='center' style='text-align: center;'><font size='4'>";
+					echo '<a href="#'.$letter[0].'">'.$letter[0].'</a>';
+					for($i=1 ; $i<26 ; $i++){
+					  echo '-<a href="#'.$letter[$i].'">'.$letter[$i].'</a>';
+					
+					}
+				   echo "</font></div>";
+					
+					
+					echo '<h2>'.$letter[0].'<a name=\''.$letter[0].'\' id=\''.$letter[0].'\'></a></h2>'
+						 .'<dl>'							
+						 .'<dt>An exemple of term</dt>'
+						 .'<dd>Copy-paste this to make a definition</dd>'								
+						 .'</dl>';
+						 
+					for($i=1 ; $i<26 ; $i++){
+						 echo '<h2>'.$letter[$i].'<a name=\''.$letter[$i].'\' id=\''.$letter[$i].'\'></a></h2>'
+						 .'<dl>'							
+						 .'<dt>&nbsp;</dt>'
+						 .'<dd>&nbsp;</dd>'								
+						 .'</dl>';
+					} 
+				
+				   ?>
+				    <br />
+					</div>
+				    </body>
+			]]>
+		</Html>
+	</Template>
+    
+    
 	<Template title="Certificate of completion" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Certificate_of_completion.png';?>">
 		<Description>To appear at the end of a learning path</Description>
 		<Html>
 			<![CDATA[
 					<head>
-					<?php echo $css ?>
+                       <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
 				    </head>
 				    <body>
-				   <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Certificate of completion<br></div>
-				    
-				    <span style="font-style: italic; font-size: 15px; "><span style="font-weight: bold">Tip</span> : edit this certificate and put it at the end of your learning path.<br />If you create pre-requisites in your learning path, the certificate will be visible only to ones who deserve it.</span><br /><br />
-				    
-				    <table width="720" cellspacing="0" cellpadding="20" border="5" align="left" summary="">
+                   <div id="course-content">
+				    <table width="720px" id="certificate" cellspacing="0" cellpadding="20" border="5" align="left" summary="">
 				      <tbody>
 				        <tr>
 				          <td>
@@ -998,14 +1151,58 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				      </tbody>
 				    </table><br />
 				    <br />
-				
-				    <br />
-				    <br />
+					</div>
 				    </body>
 				    
 			]]>
 		</Html>
+	</Template>
+    
+    <!--Proposition de template supplémentaire-->
+    <Template title="Schema with explain" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Audio_page.png';?>" cat="communication" style="elegant">
+		<Description>A schema explain by a trainer</Description>
+		<Html>
+			<![CDATA[
+				    
+				    <html xmlns="http://www.w3.org/1999/xhtml">
+					  <head>
+					    <title>Audio</title>
+                          <?php echo $css ?>
+                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>                         
+					  </head>
+					  <body>
+					    <h2>Explication</h2>
+                        <table width="100%" cellspacing="5" cellpadding="5" border="0" align="left" summary="">
+                                    <tbody>
+                                        <tr>
+                                            <td valign="bottom">
+                                            <div align="center"><span style="text-align: center;">
+                                                    <object width="90" height="25" align="" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" id="test">
+                                                    <param name="movie" value="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/mp3player/player_mp3.swf?mp3file=/dokeosSVN/courses/FLV/document/audio/ListeningComprehension.mp3" />
+                                                    <param name="quality" value="high" />
+                                                    <param name="bgcolor" value="#FFFFFF" /> 
+                                                    <embed width="90" height="25" align="" src="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/mp3player/player_mp3.swf?mp3file=<?php echo api_get_path(REL_COURSE_PATH) ?>FLV/document/audio/ListeningComprehension.mp3" quality="high" bgcolor="#FFFFFF" name="Streaming" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>
+                                                  </object>
+                                              </span></div></span> 					          </td>
+                                            <td rowspan="2" style="vertical-align: top;"> 					            
+                                            	 <div style="text-align: center;"><img width="auto" height="auto" align="bottom" alt="Listening image" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/images/diagrams/tetralogy.png" />          
+                                           </td>
+                                        </tr>
+                                            <tr>
+                                              <td valign="bottom">
+                                              <span style="font-weight: bold;">
+                                            <div style="text-align: center;"><img width="250" height="235" align="bottom" alt="Listening image" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/images/trainer/trainer_points_right.png" /></div>
+                                           </td>
+                                            </tr>
+                                    </tbody>
+                                </table>
+					<br />
+                    <p>&nbsp;</p>
+                     <?php tip('audio'); ?>
+					</body>
+					</html>
+				    </body>				    
+			]]>
+		</Html>
 	</Template>	
-	
-	
 </Templates>

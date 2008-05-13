@@ -70,12 +70,11 @@ $htmlHeadXtra[] = '
 <script type="text/javascript">
 function launch_templates(){
 	//window.frames[0].FCKToolbarItems.GetItem("Templates").Click();
-}
-		
+}		
 		
 function FCKeditor_OnComplete( editorInstance )
 {	
-	document.getElementById(\'frmModel\').innerHTML = "<iframe height=600px; width=230; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
+	document.getElementById(\'frmModel\').innerHTML = "<iframe height=600px; width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
 }	
 	
 function InnerDialogLoaded()
@@ -84,10 +83,6 @@ function InnerDialogLoaded()
 	return B.ClickFrame();
 };	
 
-		
-		
-		
-		
 </script>';
 $htmlHeadXtra[] = $_SESSION['oLP']->create_js();
 /*

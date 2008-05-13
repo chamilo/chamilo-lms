@@ -1,0 +1,38 @@
+@charset "UTF-8";
+/* CSS Document */
+body{
+	background-repeat:no-repeat;
+	background-position:right;
+	background-position:bottom;
+}
+
+#course-content
+{
+	min-height:500px;
+	margin:1em;
+}
+
+#course-content h1,h2,h3,h4{
+ font-family:Arial, Helvetica, sans-serif;
+}
+
+.tip{
+  -moz-border-radius:1em;
+  border:1px solid black;
+  border:1px 2px 2px 1px;
+  background:#F5F5B5;
+  padding:1em;
+  padding-left:40px;
+  background-image:url(../images/help.png) left;
+}
+
+.dial_horizontal
+{
+  border:3px 0px black;
+}
+
+.dial_vert
+{
+  border:0px 3px black;
+}
+

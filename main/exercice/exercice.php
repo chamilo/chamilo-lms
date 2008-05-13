@@ -796,6 +796,7 @@ if($show == 'test'){
   </table></td>
   <td></td><td></td>
       <td width="12%" align="center"><a href="adminhp.php?hotpotatoesName=<?php echo $path; ?>"> <img src="../img/edit.gif" border="0" alt="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" /></a>
+       <img src="../img/wizard_gray_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build'),ENT_QUOTES,$charset); ?>" alt="<?php echo htmlentities(get_lang('Build'),ENT_QUOTES,$charset); ?>" />
   <a href="<?php echo $exercicePath; ?>?hpchoice=delete&file=<?php echo $path; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('AreYouSure'),ENT_QUOTES,$charset).$title."?"); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>
     <?php
 					// if active
@@ -813,6 +814,7 @@ if($show == 'test'){
     <a href="<?php echo $exercicePath; ?>?hpchoice=enable&page=<?php echo $page; ?>&file=<?php echo $path; ?>"><img src="../img/invisible.gif" border="0" alt="<?php echo htmlentities(get_lang('Activate'),ENT_QUOTES,$charset); ?>" /></a>
     <?php
 					}
+					echo '<img src="../img/lp_quiz_na.gif" border="0" alt="" />';
 				/****************/
 				?></td>
       <?php }

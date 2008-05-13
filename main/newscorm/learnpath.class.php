@@ -5806,6 +5806,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$renderer = $form->defaultRenderer();
 			$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}','content_lp');
 			$form->addElement('html_editor','content_lp','<a style="cursor:pointer" onclick="launch_templates()"><img src="'.api_get_path(WEB_IMG_PATH).'templates.gif" /></a>');
+			//$form->addElement('html_editor','content_lp','');
 			$defaults["content_lp"]=file_get_contents($item_path);
 		}
 		
@@ -6029,7 +6030,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			}
 			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent")." :", '', 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;" onchange="load_cbo(this.value);"');
 
-			foreach($arrHide as $key => $value){
+			foreach($arrHide as $key => $value)
+			{
 				$parent_select->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 			}
 			$parent_select -> setSelected($parent);
@@ -6067,7 +6069,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				reset($arrLP);
 			}
 			
-			if($action != 'move'){
+			if($action != 'move')
+			{
 				$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 				//$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"  style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 				
@@ -6082,7 +6085,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					}
 				}
 
-				$select_prerequisites=$form->addElement('select', 'prerequisites', get_lang('Prerequisites'), '', 'id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
+				$select_prerequisites=$form->addElement('select', 'prerequisites', get_lang('Prerequisites').':', '', 'id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
 				$select_prerequisites->addOption(get_lang("NoPrerequisites"),0,'style="padding-left:3px;"');
 				
 				$arrHide=array();
@@ -6135,7 +6138,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 							$renderer = $form->defaultRenderer();
 							$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}','content_lp');
 
-							$form->addElement('html_editor','content_lp','<a style="cursor:pointer" onclick="launch_templates()"><img src="'.api_get_path(WEB_IMG_PATH).'templates.gif" /></a>');
+							$form->addElement('html_editor','content_lp','');
 							$defaults["content_lp"]=$content;
 						}
 						
@@ -6172,8 +6175,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$form->addElement('hidden', 'post_time', time());
 			
 		$form->addElement('html','</div>');
+	 
+		$form->setDefaults($defaults);	
 		
-		$form->setDefaults($defaults);
 		
 		return $form->return_form();
 	}
@@ -6555,7 +6559,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 								}
 								if(is_array($arrLP))
 								{
-									reset($arrLP);
+								reset($arrLP);
 								}
 								
 							$return .= "\t\t\t\t" . '</select>';
@@ -6606,12 +6610,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 						$id_prerequisite=0;
 						if(is_array($arrLP))
 						{
-							foreach($arrLP as $key=>$value){
-								if($value['id']==$id){
-									$id_prerequisite=$value['prerequisite'];
-									break;
-								}
+						foreach($arrLP as $key=>$value){
+							if($value['id']==$id){
+								$id_prerequisite=$value['prerequisite'];
+								break;
 							}
+						}
 						}						
 						$arrHide=array();
 						for($i = 0; $i < count($arrLP); $i++)

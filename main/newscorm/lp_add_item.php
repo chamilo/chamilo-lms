@@ -3,7 +3,7 @@
 ============================================================================== 
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Patrick Cool
@@ -20,7 +20,8 @@
 	
 	See the GNU General Public License for more details.
 	
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
 ============================================================================== 
 */
 /**
@@ -32,6 +33,7 @@
 * @author Denes Nagy
 * @author Roan Embrechts, refactoring and code cleaning
 * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update
+* @author Julio Montoya  - Improving the list of templates
 * @package dokeos.learnpath
 ============================================================================== 
 */
@@ -68,8 +70,24 @@ $language_file = "learnpath";
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 function launch_templates(){
-	window.frames[0].FCKToolbarItems.GetItem("Templates").Click();
+	//window.frames[0].FCKToolbarItems.GetItem("Templates").Click();
+	//document.getElementById(\'frmModel\').innerHTML = "<iframe height=600px; width=230; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
 }
+			
+function FCKeditor_OnComplete( editorInstance )
+{	
+	document.getElementById(\'frmModel\').innerHTML = "<iframe height=600px; width=230; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
+}	
+	
+function InnerDialogLoaded()
+{	
+	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);				
+	return B.ClickFrame();
+};	
+
+
+		
+		
 </script>';
 
 $htmlHeadXtra[] = $_SESSION['oLP']->create_js();
@@ -207,13 +225,20 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				
 			echo '</div>';
 			
-			echo '<div class="lp_tree">';
-					
+			echo '<div class="lp_tree" style="height:90%">';					
 				//build the tree with the menu items in it
-				echo $_SESSION['oLP']->build_tree();
-			
+				echo $_SESSION['oLP']->build_tree();			
 			echo '</div>';
-					
+			
+			// show the template list 
+			if ($_GET['type']=='document')
+			{
+				echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>'; //line					
+				echo '<br>';			
+				echo '<div id="frmModel" style="display:block; height:600px;width:100px; position:relative;"></div>';
+			}
+							
+			
 		echo '</td>';
 		echo '<td class="workspace">';
 		
@@ -337,11 +362,11 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 						
 						break;
 						
-					case 'document':
+					case 'document': 
 						
 						if(isset($_GET['file']) && is_numeric($_GET['file']))
 						{
-						echo $_SESSION['oLP']->display_document_form('add', 0, $_GET['file']);
+							echo $_SESSION['oLP']->display_document_form('add', 0, $_GET['file']);
 						}
 						else
 						{

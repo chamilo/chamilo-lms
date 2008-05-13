@@ -1388,11 +1388,26 @@ function api_display_tool_view_option()
 	{
 		return '';
 	}
+	$output_string='';
+
+	$sourceurl = '';
+	// Exceptions apply for all multi-frames pages
 	if (strpos($_SERVER['REQUEST_URI'],'chat/chat_banner.php')!==false)
 	{	//the chat is a multiframe bit that doesn't work too well with the student_view, so do not show the link
-		return '';
+		$sourceurl = '';
 	}
-	$output_string='';
+	if(strpos($_SERVER['REQUEST_URI'],'document/headerpage.php')!==false)
+	{
+		//$sourceurl = str_replace('document/headerpage.php','document/showinframes.php',$_SERVER['REQUEST_URI']);
+		//showinframes doesn't handle student view anyway...
+		$sourceurl = '';
+	}
+	//exit if sourceurl is empty
+	if(empty($sourceurl))
+	{
+		return $sourceurl;
+	}
+
 	// check if the $_SERVER['REQUEST_URI'] contains already url parameters (thus a questionmark)
 	if (!strstr($_SERVER['REQUEST_URI'], "?"))
 	{

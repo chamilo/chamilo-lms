@@ -265,10 +265,12 @@ EOT;
 	
 		// IMPORTANT : must be the first element of the form
 		$el = $this->insertElementBefore(FormValidator::createElement('html','<input type="hidden" name="UPLOAD_IDENTIFIER" value="'.$upload_id.'" />'), $elementAfter);
-
+		
+		$this->addElement('html','<br />');
+		
 		// add the div where the progress bar will be displayed
 		$this->addElement('html','
-		<div id="dynamic_div_container" style="display:none;"><br />
+		<div id="dynamic_div_container" style="display:none">
 			<div id="dynamic_div_label">'.get_lang('UploadFile').'</div>
 			<div id="dynamic_div_frame" style="width:214px; height:12px; border:1px solid grey; background-image:url('.api_get_path(REL_PATH).'main/img/real_upload_frame.gif);">
 				<div id="dynamic_div_filled" style="width:0%;height:100%;background-image:url('.api_get_path(REL_PATH).'main/img/real_upload_step.gif);background-repeat:repeat-x;background-position:center;"></div>
@@ -277,7 +279,7 @@ EOT;
 		
 		if($waitAfterUpload){
 			$this->addElement('html','
-			<div id="dynamic_div_waiter_container" style="display:none;">
+			<div id="dynamic_div_waiter_container" style="display:none">
 				<div id="dynamic_div_waiter_label">
 					'.get_lang('SlideshowConversion').'
 				</div>			

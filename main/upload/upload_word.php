@@ -27,6 +27,12 @@ $form_style= '
 .row {
 	width: 200px;
 }
+.convert_button{
+	background: url("../img/scorm.gif") 0px 0px no-repeat;
+	padding: 2px 0px 2px 22px;
+}
+#dynamic_div_container{float:left;margin-right:10px;}
+#dynamic_div_waiter_container{float:left;}
 </style>';
 
 $htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
@@ -125,9 +131,28 @@ $form = new FormValidator('update_course', 'POST', '', '', 'style="margin: 0;"')
 
 $form -> addElement ('html','<br>');
 
+$div_upload_limit = '&nbsp;&nbsp;'.get_lang('UploadMaxSize').' : '.ini_get('post_max_size');
+
 $renderer = & $form->defaultRenderer();
-$user_file_template = str_replace('<div class="formw">', '<div class="formw" style="padding-top:7px;">', $renderer->_elementTemplate);
-$renderer->setElementTemplate($user_file_template, 'user_file');
+// set template for user_file element
+$user_file_template = 
+<<<EOT
+<div class="row" style="margin-top:10px;width:100%">
+		<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}{element}$div_upload_limit
+		<!-- BEGIN error --><br /><span class="form_error">{error}</span><!-- END error -->	
+</div>
+EOT;
+$renderer->setElementTemplate($user_file_template,'user_file');
+
+// set template for other elements
+$user_file_template = 
+<<<EOT
+<div class="row" style="margin-top:10px;width:100%">
+		<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}{element}
+		<!-- BEGIN error --><br /><span class="form_error">{error}</span><!-- END error -->	
+</div>
+EOT;
+$renderer->setElementTemplate($user_file_template);
 
 $form -> addElement ('file', 'user_file','<img src="../img/word_big.gif" align="absbottom" />');
 
@@ -139,8 +164,6 @@ $form -> addElement ('file', 'user_file','<img src="../img/word_big.gif" align="
 $form -> addElement ('hidden', 'split_steps','per_page');
 
 $form -> addElement ('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
-
-$form -> addElement('html','<div class="row"><div class="label"></div><div class="formw">'.get_lang('UploadMaxSize').' : '.ini_get('post_max_size').'</div></div>');
 
 $form -> addElement ('hidden', 'woogie', 'true');
 

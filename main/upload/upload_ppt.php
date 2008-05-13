@@ -31,6 +31,8 @@ $form_style= '
 	background: url("../img/scorm.gif") 0px 0px no-repeat;
 	padding: 2px 0px 2px 22px;
 }
+#dynamic_div_container{float:left;margin-right:10px;}
+#dynamic_div_waiter_container{float:left;}
 </style>';
 
 $htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
@@ -126,21 +128,41 @@ if(!empty($errorMessage)){
 }
 
 
-$form = new FormValidator('upload_ppt', 'POST', '', '', 'style="margin: 0;"');
+$form = new FormValidator('upload_ppt', 'POST', '', '');
 
 // build the form
 
 $form -> addElement ('html','<br>');
 
-$renderer = & $form->defaultRenderer();
-$user_file_template = str_replace('<div class="formw">', '<div class="formw" style="padding-top:7px;">', $renderer->_elementTemplate);
-$renderer->setElementTemplate($user_file_template, 'user_file');
+$div_upload_limit = '&nbsp;&nbsp;'.get_lang('UploadMaxSize').' : '.ini_get('post_max_size');
 
-$form -> addElement ('file', 'user_file','<img src="../img/powerpoint_big.gif" align="absbottom" />');
+$renderer = & $form->defaultRenderer();
+
+
+
+// set template for user_file element
+$user_file_template = 
+<<<EOT
+<div class="row" style="margin-top:10px;width:100%">
+		<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}{element}$div_upload_limit
+		<!-- BEGIN error --><br /><span class="form_error">{error}</span><!-- END error -->	
+</div>
+EOT;
+$renderer->setElementTemplate($user_file_template,'user_file');
+
+// set template for other elements
+$user_file_template = 
+<<<EOT
+<div class="row" style="margin-top:10px;width:100%">
+		<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}{element}
+		<!-- BEGIN error --><br /><span class="form_error">{error}</span><!-- END error -->	
+</div>
+EOT;
+$renderer->setElementTemplate($user_file_template);
+
+$form -> addElement ('file', 'user_file','<img src="../img/powerpoint_big.gif" align="absbottom" />&nbsp;&nbsp;');
 $form -> addElement ('checkbox', 'take_slide_name','', get_lang('TakeSlideName'));
 $form -> addElement ('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
-
-$form -> addElement('html','<div class="row"><div class="label"></div><div class="formw">'.get_lang('UploadMaxSize').' : '.ini_get('post_max_size').'</div></div>');
 
 $form -> addElement ('hidden', 'ppt2lp', 'true');
 

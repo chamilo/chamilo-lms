@@ -4,7 +4,7 @@ FCKConfig.AudioUploadPath = '' ;
 FCKConfig.UserStatus = 'teacher' ;
 
 FCKConfig.ToolbarSets["Question"] = [
-	['Source','DocProps','-','NewPage','Preview','-','Templates'],
+	['Source','DocProps','-','NewPage','Preview','-'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
@@ -37,7 +37,7 @@ FCKConfig.ToolbarSets["Announcements"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Full"] = [
-	['Templates','PasteWord','Link','Anchor','-','ImageManager','Flash','MP3','Video','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
+	['PasteWord','Link','Anchor','-','ImageManager','Flash','MP3','Video','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
 ] ;
 
 FCKConfig.ToolbarSets["Comment"] = [

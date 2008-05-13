@@ -1,4 +1,4 @@
-<?php # $Id: fileManage.lib.php 14316 2008-02-19 15:38:24Z yannoo $
+<?php # $Id: fileManage.lib.php 15278 2008-05-13 22:43:40Z yannoo $
 
 /* vim: set expandtab tabstop=4 shiftwidth=4:
 ===============================================================================
@@ -119,6 +119,10 @@ function check_name_exist($filePath)
 {
 	clearstatcache();
 	$save_dir = getcwd();
+	if(!is_dir(dirname($filePath)))
+	{
+		return false;
+	}
 	chdir ( dirname($filePath) );
 	$fileName = basename ($filePath);
 

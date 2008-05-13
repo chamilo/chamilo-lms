@@ -81,10 +81,18 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
 }
 
 
-function generate_course_code($course_title){
-	$wantedCode = strtr($course_title, "�����������������������������������������������������������", "AAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy");
-	$wantedCode = ereg_replace("[^A-Z0-9]", "", strtoupper($wantedCode));
-	return $wantedCode;
+function generate_course_code($course_title)
+{
+	//$wantedCode = strtr($course_title, "�����������������������������������������������������������", "AAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy");
+	//$wantedCode = substr(str_replace(
+	//	array('Á','À','Â','Ä','Ã','Å','Æ' ,'Ç','É','È','Ê','Ë','Í','Ì','Î','Ï','Ĩ','Ó','Ò','Ô','Ö','Õ','Ø' ,'Œ' ,'Ú','Ù','Û','Ü','Ũ','Ÿ','Ý','Ð','Ñ','ß' ,'à','á','â','ä','ã','å','æ' ,'ç','Š','é','è','ê','ë','ì','í','î','ï','ĩ','ò','ó','ô','ö','õ','ø' ,'œ' ,'ú','ù','û','ü','ũ','ÿ','ý','ñ','š','€'),
+	//	array('A','A','A','A','A','A','Ae','C','E','E','E','E','I','I','I','I','I','O','O','O','O','O','Oe','Oe','U','U','U','U','U','Y','Y','D','N','SS','a','a','a','a','a','a','ae','c','S','e','e','e','e','i','i','i','i','i','o','o','o','o','o','oe','oe','u','u','u','u','u','y','y','n','š','Euro'),
+	//	$course_title)
+	//	,0,20);
+	$string    = htmlentities(strtolower($course_title));
+   	$string    = strtoupper(preg_replace("/&(.)(acute|grave|cedil|circ|ring|tilde|uml|slash|elig|Elig|mp);/", "$1", $string));
+   	$string    = preg_replace("/[^A-Z0-9]/", "", html_entity_decode($string));
+	return $string;
 }
 
 
@@ -99,12 +107,8 @@ function generate_course_code($course_title){
 function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = "", $prefix4path = "", $addUniquePrefix = false, $useCodeInDepedentKeys = true)
 {
 	global $prefixAntiNumber, $_configuration;
-
-	$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-
-	$wantedCode = strtr($wantedCode, "�����������������������������������������������������������", "AAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy");
-
-	$wantedCode = ereg_replace("[^A-Z0-9]", "", strtoupper($wantedCode));
+	$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);	
+	$wantedCode = generate_course_code($wantedCode);
 	$keysCourseCode = $wantedCode;
 	if(!$useCodeInDepedentKeys)
 	{

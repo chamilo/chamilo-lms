@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 15209 2008-05-05 18:02:15Z juliomontoya $
+// $Id: create_document.php 15271 2008-05-13 15:37:00Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -53,35 +53,26 @@ $htmlHeadXtra[]='<script>
 	
 function InnerDialogLoaded()
 {	
-	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
-		
-	
-				
+	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);				
 	return B.ClickFrame();
-};
-	
-
-			
-	 
+};	
 
 	var temp=false;
 	var temp2=false;
 	var use_document_title='.api_get_setting('use_document_title').';
 
 	function launch_templates()
-	{	
-	
-	
-		document.getElementById(\'frmModel\').style.display="block";				
-		document.getElementById(\'frmModel\').innerHTML = "<iframe height=945px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
-		document.getElementById(\'content___Frame\').width=\'70%\'; 		
+	{		
+		//document.getElementById(\'frmModel\').style.display="block";				
+		document.getElementById(\'frmModel\').innerHTML = "<iframe height=600px; width=230; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
+		//document.getElementById(\'content___Frame\').width=\'70%\'; 		
 		//window.frames[0].FCKToolbarItems.GetItem("Template").Click;
-		
 	}
 
 	function FCKeditor_OnComplete( editorInstance )
 	{
-	  editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
+		editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
+		document.getElementById(\'frmModel\').innerHTML = "<iframe height=600px; width=230; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
 	}
 
 	function check_for_title()
@@ -145,7 +136,8 @@ function InnerDialogLoaded()
 		temp=true;
 	}
 
-	function trim(s) {
+	function trim(s)
+	{
 	 while(s.substring(0,1) == \' \') {
 	  s = s.substring(1,s.length);
 	 }
@@ -336,15 +328,15 @@ else
 $form->addElement('submit', 'submit', get_lang('Ok'));
 
 // HTML-editor
-$form->add_html_editor('content','<a style="cursor:pointer" onclick="launch_templates()"><img src="'.api_get_path(WEB_IMG_PATH).'templates.gif" /></a>', false, true);
+$form->add_html_editor('content','<a style="cursor:pointer" onclick="launch_templates()"></a>', false, true);
 // Comment-field
 
 //$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));
 $form->addElement('submit', 'submit', get_lang('Ok'));
 $form->setDefaults($default);
 
-// HTML-editor
-$form->addElement('html','<div id="frmModel" style="display:none;height:500px;width:300px; position:absolute; top:72px; left:76%;"></div>');
+// HTML
+$form->addElement('html','<div id="frmModel" style="display:block; height:600px;width:100px; position:absolute; top:135px; left:1%;"></div>');
 
 // If form validates -> save the new document
 if ($form->validate())

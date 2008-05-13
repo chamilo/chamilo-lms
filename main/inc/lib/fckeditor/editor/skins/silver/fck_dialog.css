@@ -26,13 +26,13 @@ body
 
 body, td, input, select, textarea
 {
-	font-size: 11px;
+	font-size: 12px;
 	font-family: 'Microsoft Sans Serif' , Arial, Helvetica, Verdana;
 }
 
 body, .BackColor
 {
-	background-color: #f7f7f7;
+	background-color: #fff;
 }
 
 .PopupBody
@@ -51,6 +51,17 @@ body, .BackColor
 	color: #504845;
 	padding-top: 3px;
 	background-color: #dedede;
+}
+
+
+.PopupTitleSimple
+{
+	font-size: 11pt;
+	color: #000;
+	font-weight: bold;
+	background-color: #fff;
+	text-align:right;
+	padding-right:28px;
 }
 
 .PopupButtons
@@ -74,7 +85,7 @@ body, .BackColor
 
 .LightBackground
 {
-	background-color: #ffffbe;
+	background-color: #ffffbe; 
 }
 
 .PopupTitleBorder
@@ -120,12 +131,11 @@ body, .BackColor
 	cursor: default;
 	padding-top: 4px;
 	border-bottom: #f1f1e3 1px solid;
-	background-color: #f7f7f7;
+	background-color: #f7f7f7; 
 }
 
 .PopupSelectionBox
 {
-	border: #a9a9a9 1px solid;
 	background-color: #dcdcdc;
 	cursor: pointer;
 	cursor: hand;

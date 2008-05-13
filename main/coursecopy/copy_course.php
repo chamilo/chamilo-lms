@@ -1,5 +1,5 @@
 <?php
-// $Id: copy_course.php 14803 2008-04-09 13:45:28Z elixir_inter $
+// $Id: copy_course.php 15281 2008-05-13 23:10:40Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -86,10 +86,11 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 // Else, if a CourseSelectForm is requested, show it
 elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items')
 {
+	Display::display_normal_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
 	$cb = new CourseBuilder();
 	$course = $cb->build();
-	echo get_lang('SelectItemsToCopy');
-	echo '<br/><br/>';
+	//echo get_lang('SelectItemsToCopy');
+	//echo '<br/><br/>';
 	$hidden_fields['same_file_name_option'] = $_POST['same_file_name_option'];
 	$hidden_fields['destination_course'] = $_POST['destination_course'];
 	CourseSelectForm :: display_form($course, $hidden_fields);

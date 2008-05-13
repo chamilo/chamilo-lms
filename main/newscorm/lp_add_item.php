@@ -224,7 +224,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				
 			echo '</div>';
 			
-			echo '<div class="lp_tree" style="height:50%">';					
+			echo '<div class="lp_tree" style="height:90%">';					
 				//build the tree with the menu items in it
 				echo $_SESSION['oLP']->build_tree();			
 			echo '</div>';

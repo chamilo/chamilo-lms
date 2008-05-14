@@ -68,10 +68,7 @@ $language_file = "learnpath";
 */ 
 $htmlHeadXtra[] = '
 <script type="text/javascript">
-function launch_templates(){
-	//window.frames[0].FCKToolbarItems.GetItem("Templates").Click();
-}		
-		
+	
 function FCKeditor_OnComplete( editorInstance )
 {	
 	document.getElementById(\'frmModel\').innerHTML = "<iframe height=600px; width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
@@ -79,7 +76,15 @@ function FCKeditor_OnComplete( editorInstance )
 	
 function InnerDialogLoaded()
 {	
-	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);				
+	if (document.all)
+	{			
+		// if is iexplorer
+		var B=new window.frames.content_lp___Frame.FCKToolbarButton(\'Templates\',window.content_lp___Frame.FCKLang.Templates);		
+	}
+	else
+	{		
+		var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);	
+	}			
 	return B.ClickFrame();
 };	
 

@@ -11,6 +11,8 @@
  * "Support Open Source software. What about a donation today?"
  * 
  * This file has been compacted for best loading performance.
+ * Changelog:
+ * @author Julio Montoya  - Changes made to show the template list in a iframe.
  */
 FCK.RedirectNamedCommands=new Object();FCK.ExecuteNamedCommand=function(A,B,C){FCKUndo.SaveUndoStep();if (!C&&FCK.RedirectNamedCommands[A]!=null) FCK.ExecuteRedirectedNamedCommand(A,B);else{FCK.Focus();FCK.EditorDocument.execCommand(A,false,B);FCK.Events.FireEvent('OnSelectionChange');};FCKUndo.SaveUndoStep();};FCK.GetNamedCommandState=function(A){try{if (!FCK.EditorDocument.queryCommandEnabled(A)) return FCK_TRISTATE_DISABLED;else return FCK.EditorDocument.queryCommandState(A)?FCK_TRISTATE_ON:FCK_TRISTATE_OFF;}catch (e){return FCK_TRISTATE_OFF;};};FCK.GetNamedCommandValue=function(A){var B='';var C=FCK.GetNamedCommandState(A);if (C==FCK_TRISTATE_DISABLED) return null;try{B=this.EditorDocument.queryCommandValue(A);}catch(e) {};return B?B:'';};FCK.PasteFromWord=function(){FCKDialog.OpenDialog('FCKDialog_Paste',FCKLang.PasteFromWord,'dialog/fck_paste.html',400,330,'Word');};FCK.Preview=function(){var A=FCKConfig.ScreenWidth*0.8;var B=FCKConfig.ScreenHeight*0.7;var C=(FCKConfig.ScreenWidth-A)/2;var D=window.open('',null,'toolbar=yes,location=no,status=yes,menubar=yes,scrollbars=yes,resizable=yes,width='+A+',height='+B+',left='+C);var E;if (FCKConfig.FullPage){if (FCK.TempBaseTag.length>0) E=FCK.GetXHTML().replace(FCKRegexLib.HeadOpener,'$&'+FCK.TempBaseTag);else E=FCK.GetXHTML();}else{E=FCKConfig.DocType+'<html dir="'+FCKConfig.ContentLangDirection+'">'+'<head><title>'+FCKLang.Preview+'</title>'+'<link href="'+FCKConfig.EditorAreaCSS+'" rel="stylesheet" type="text/css" />'+FCK.TempBaseTag+'</head><body>'+FCK.GetXHTML()+'</body></html>';};D.document.write(E);D.document.close();};FCK.SwitchEditMode=function(){var A=(FCK.EditMode==FCK_EDITMODE_WYSIWYG);document.getElementById('eWysiwyg').style.display=A?'none':'';document.getElementById('eSource').style.display=A?'':'none';if (A){if (FCKBrowserInfo.IsIE) FCKUndo.SaveUndoStep();document.getElementById('eSourceField').value=FCK.GetXHTML(FCKConfig.FormatSource);}else FCK.SetHTML(document.getElementById('eSourceField').value,true);FCK.EditMode=A?FCK_EDITMODE_SOURCE:FCK_EDITMODE_WYSIWYG;FCKToolbarSet.RefreshModeState();FCK.Focus();};FCK.CreateElement=function(A){var e=FCK.EditorDocument.createElement(A);return FCK.InsertElementAndGetIt(e);};FCK.InsertElementAndGetIt=function(e){e.setAttribute('__FCKTempLabel',1);this.InsertElement(e);var A=FCK.EditorDocument.getElementsByTagName(e.tagName);for (var i=0;i<A.length;i++){if (A[i].getAttribute('__FCKTempLabel')){A[i].removeAttribute('__FCKTempLabel');return A[i];};};return null;};
 FCK._BaseGetNamedCommandState=FCK.GetNamedCommandState;FCK.GetNamedCommandState=function(A){switch (A){case 'Unlink':return FCKSelection.HasAncestorNode('A')?FCK_TRISTATE_OFF:FCK_TRISTATE_DISABLED;default:return FCK._BaseGetNamedCommandState(A);};};FCK.RedirectNamedCommands={Print:true,Paste:true,Cut:true,Copy:true};FCK.ExecuteRedirectedNamedCommand=function(A,B){switch (A){case 'Print':FCK.EditorWindow.print();break;case 'Paste':try			{ if (FCK.Paste()) FCK.ExecuteNamedCommand('Paste',null,true);}catch (e)	{ alert(FCKLang.PasteErrorPaste);};break;case 'Cut':try			{ FCK.ExecuteNamedCommand('Cut',null,true);}catch (e)	{ alert(FCKLang.PasteErrorCut);};break;case 'Copy':try			{ FCK.ExecuteNamedCommand('Copy',null,true);}catch (e)	{ alert(FCKLang.PasteErrorCopy);};break;default:FCK.ExecuteNamedCommand(A,B);};};FCK.AttachToOnSelectionChange=function(A){this.Events.AttachEvent('OnSelectionChange',A);};FCK.Paste=function(){if (FCKConfig.ForcePasteAsPlainText){FCK.PasteAsPlainText();return false;}else return true;};FCK.InsertHtml=function(A){A=FCKConfig.ProtectedSource.Protect(A);A=FCK.ProtectUrls(A);var B=FCKSelection.Delete();var C=B.getRangeAt(0);var D=C.createContextualFragment(A);var E=D.lastChild;C.insertNode(D);FCKSelection.SelectNode(E);FCKSelection.Collapse(false);this.Focus();};FCK.InsertElement=function(A){var B=FCKSelection.Delete();var C=B.getRangeAt(0);C.insertNode(A);FCKSelection.SelectNode(A);FCKSelection.Collapse(false);this.Focus();};FCK.PasteAsPlainText=function(){FCKDialog.OpenDialog('FCKDialog_Paste',FCKLang.PasteAsText,'dialog/fck_paste.html',400,330,'PlainText');};FCK.GetClipboardHTML=function(){return '';};FCK.CreateLink=function(A){FCK.ExecuteNamedCommand('Unlink');if (A.length>0){var B='javascript:void(0);/*'+(new Date().getTime())+'*/';FCK.ExecuteNamedCommand('CreateLink',B);var C=document.evaluate("//a[@href='"+B+"']",this.EditorDocument.body,null,9,null).singleNodeValue;if (C){C.href=A;return C;};};};
@@ -65,18 +67,14 @@ var FCKToolbarButton=function(A,B,C,D,E,F){this.Command=FCKCommands.GetCommand(A
 	this.Label=B?B:A;this.Tooltip=C?C:(B?B:A);this.Style=D?D:FCK_TOOLBARITEM_ONLYICON;this.SourceView=E?true:false;this.ContextSensitive=F?true:false;this.IconPath=FCKConfig.SkinPath+'toolbar/'+A.toLowerCase()+'.gif';this.State=FCK_UNKNOWN;};FCKToolbarButton.prototype.CreateInstance=function(A){this.DOMDiv=document.createElement('div');this.DOMDiv.className='TB_Button_Off';this.DOMDiv.FCKToolbarButton=this;var B='<table title="'+this.Tooltip+'" cellspacing="0" cellpadding="0" border="0">'+'<tr>';if (this.Style!=FCK_TOOLBARITEM_ONLYTEXT) B+='<td class="TB_Icon"><img src="'+this.IconPath+'" width="21" height="21"></td>';if (this.Style!=FCK_TOOLBARITEM_ONLYICON) B+='<td class="TB_Text" nowrap>'+this.Label+'</td>';B+='</tr>'+'</table>';this.DOMDiv.innerHTML=B;var C=A.DOMRow.insertCell(-1);C.appendChild(this.DOMDiv);this.RefreshState();};FCKToolbarButton.prototype.RefreshState=function(){var A=this.Command.GetState();if (A==this.State) return;this.State=A;switch (this.State){case FCK_TRISTATE_ON:this.DOMDiv.className='TB_Button_On';this.DOMDiv.onmouseover=FCKToolbarButton_OnMouseOnOver;this.DOMDiv.onmouseout=FCKToolbarButton_OnMouseOnOut;this.DOMDiv.onclick=FCKToolbarButton_OnClick;break;case FCK_TRISTATE_OFF:this.DOMDiv.className='TB_Button_Off';this.DOMDiv.onmouseover=FCKToolbarButton_OnMouseOffOver;this.DOMDiv.onmouseout=FCKToolbarButton_OnMouseOffOut;this.DOMDiv.onclick=FCKToolbarButton_OnClick;break;default:this.Disable();break;};};function FCKToolbarButton_OnMouseOnOver(){this.className='TB_Button_On TB_Button_On_Over';};function FCKToolbarButton_OnMouseOnOut(){this.className='TB_Button_On';};function FCKToolbarButton_OnMouseOffOver(){this.className='TB_Button_On TB_Button_Off_Over';};function FCKToolbarButton_OnMouseOffOut(){this.className='TB_Button_Off';};	
 	function FCKToolbarButton_OnClick(e){		
 	this.FCKToolbarButton.Click(e);return false;
-	};
-	
-	
+	};	
 //----------------------- 1 -------------------
 	FCKToolbarButton.prototype.Click=function(){
 		this.Command.Execute();
-	};
-	
+	};	
 	FCKToolbarButton.prototype.ClickFrame=function(){
 		return this.Command.ExecuteFrame();
-	};
-	
+	};	
 FCKToolbarButton.prototype.Enable=function(){this.RefreshState();};
 FCKToolbarButton.prototype.Disable=function(){this.State=FCK_TRISTATE_DISABLED;this.DOMDiv.className='TB_Button_Disabled';
 this.DOMDiv.onmouseover=null;this.DOMDiv.onmouseout=null;this.DOMDiv.onclick=null;}
@@ -98,7 +96,6 @@ var FCKToolbarSet=FCK.ToolbarSet=new Object();document.getElementById('ExpandHan
 var FCKDialog=new Object();
 
 //----------------------- 3----------------------------
-
 FCKDialog.OpenDialog=function(A,B,C,D,E,F,G,H){
 	var I=new Object();
 	I.Title=B;
@@ -108,7 +105,6 @@ FCKDialog.OpenDialog=function(A,B,C,D,E,F,G,H){
 	var J=FCKConfig.BasePath+'fckdialog.html';
 	this.Show(I,A,J,D,E,G,H);
 };
-
 FCKDialog.OpenDialogFrame=function(A,B,C,D,E,F,G,H){
 	var I=new Object();
 	I.Title=B;
@@ -120,17 +116,11 @@ FCKDialog.OpenDialogFrame=function(A,B,C,D,E,F,G,H){
 	return I;
 };
 
-
-
 //-----------------------4----------------------------
-
 FCKDialog.Show=function(A,B,C,D,E,F,G)
 {
-	var H=(FCKConfig.ScreenHeight-E)/2;
-	var I=(FCKConfig.ScreenWidth-D)/2;
+	var H=(FCKConfig.ScreenHeight-E)/2;var I=(FCKConfig.ScreenWidth-D)/2;
 	var J="location=no,menubar=no,toolbar=no,dependent=yes,dialog=yes,minimizable=no,modal=yes,alwaysRaised=yes"+",resizable="+(G?'yes':'no')+",width="+D+",height="+E+",top="+H+",left="+I;
-	
-	
 	if (!F)	
 		F=window;
 	// here we open the damn window!!
@@ -156,58 +146,12 @@ FCKDialog.Show=function(A,B,C,D,E,F,G)
 		window.top.parent.addEventListener('click',this.CheckFocus,true);
 		window.top.parent.addEventListener('focus',this.CheckFocus,true);
 	}
-	catch (e){};
-	
+	catch (e){};	
 };
-
-FCKDialog.ShowFrame=function(A,B,C,D,E,F,G)
-{
-	var H=(FCKConfig.ScreenHeight-E)/2;
-	var I=(FCKConfig.ScreenWidth-D)/2;
-	var J="location=no,menubar=no,toolbar=no,dependent=yes,dialog=yes,minimizable=no,modal=yes,alwaysRaised=yes"+",resizable="+(G?'yes':'no')+",width="+D+",height="+E+",top="+H+",left="+I;
-	
-	if (!F)	
-		F=window;
-	// here we open the damn window!!
-	//var K=F.open('','FCKeditorDialog_'+B,J,true);
-	
-	//alert('FCKeditorDialog_'+C);
-	
-	/*if (!K)
-	{		
-		alert(FCKLang.DialogBlocked);
-		return;
-	};*/
-	
-	K.moveTo(I,H);
-	K.resizeTo(D,E);
-	K.focus();
-	K.location.href=C;
-	K.dialogArguments=A;
-	F.FCKLastDialogInfo=A;
-	this.Window=K;
-	try
-	{		
-		window.top.captureEvents(Event.CLICK|Event.MOUSEDOWN|Event.MOUSEUP|Event.FOCUS);
-		window.top.parent.addEventListener('mousedown',this.CheckFocus,true);
-		window.top.parent.addEventListener('mouseup',this.CheckFocus,true);
-		window.top.parent.addEventListener('click',this.CheckFocus,true);
-		window.top.parent.addEventListener('focus',this.CheckFocus,true);
-	}
-	catch (e){};
-	return A;
-};
-
-
-
-
-
-
-
 
 	
 FCKDialog.CheckFocus=function(){if (typeof(FCKDialog)!="object") return false;if (FCKDialog.Window&&!FCKDialog.Window.closed) FCKDialog.Window.focus();else{try{window.top.releaseEvents(Event.CLICK|Event.MOUSEDOWN|Event.MOUSEUP|Event.FOCUS);window.top.parent.removeEventListener('onmousedown',FCKDialog.CheckFocus,true);window.top.parent.removeEventListener('mouseup',FCKDialog.CheckFocus,true);window.top.parent.removeEventListener('click',FCKDialog.CheckFocus,true);
-		window.top.parent.removeEventListener('onfocus',FCKDialog.CheckFocus,true);}catch (e){};};return false;};
+window.top.parent.removeEventListener('onfocus',FCKDialog.CheckFocus,true);}catch (e){};};return false;};
 var FCKContextMenuItem=function(A,B,C,D){this.ContextMenu=A;this.Command=FCKCommands.GetCommand(B);this.Label=C?C:B;this.HasIcon=D?true:false;};function FCKContextMenuItem_OnMouseOver(){if (this.className!='CM_Disabled') this.className='CM_Over';};function FCKContextMenuItem_OnMouseOut(){if (this.className!='CM_Disabled') this.className='CM_Option';};function FCKContextMenuItem_OnClick(){if (this.className!='CM_Disabled'){this.FCKContextMenuItem.ContextMenu.Hide();this.FCKContextMenuItem.Command.Execute();};return false;};FCKContextMenuItem.prototype.CreateTableRow=function(A){this._Row=A.insertRow(-1);this._Row.className='CM_Disabled';this._Row.FCKContextMenuItem=this;this._Row.onmouseover=FCKContextMenuItem_OnMouseOver;this._Row.onmouseout=FCKContextMenuItem_OnMouseOut;this._Row.onclick=FCKContextMenuItem_OnClick;var B=this._Row.insertCell(-1);B.className='CM_Icon';if (this.HasIcon) B.innerHTML='<img alt="" src="'+FCKConfig.SkinPath+'toolbar/'+this.Command.Name.toLowerCase()+'.gif" width="21" height="20">';B=this._Row.insertCell(-1);B.className='CM_Label';B.noWrap=true;B.innerHTML=this.Label;};FCKContextMenuItem.prototype.SetVisible=function(A){this._Row.style.display=A?'':'none';};FCKContextMenuItem.prototype.RefreshState=function(){switch (this.Command.GetState()){case FCK_TRISTATE_ON:case FCK_TRISTATE_OFF:this._Row.className='CM_Option';break;default:this._Row.className='CM_Disabled';break;};};
 var FCKContextMenuSeparator=function(){};FCKContextMenuSeparator.prototype.CreateTableRow=function(A){this._Row=A.insertRow(-1);this._Row.className='CM_Separator';var B=this._Row.insertCell(-1);B.className='CM_Icon';var C=A.ownerDocument||A.document;B=this._Row.insertCell(-1);B.className='CM_Label';B.appendChild(C.createElement('DIV')).className='CM_Separator_Line';};FCKContextMenuSeparator.prototype.SetVisible=function(A){this._Row.style.display=A?'':'none';};FCKContextMenuSeparator.prototype.RefreshState=function(){};
 var FCKContextMenuGroup=function(A,B,C,D,E){this.IsVisible=true;this.Items=new Array();if (A) this.Add(new FCKContextMenuSeparator());if (B&&C&&D) this.Add(new FCKContextMenuItem(B,C,D,E));this.ValidationFunction=null;};FCKContextMenuGroup.prototype.Add=function(A){this.Items[this.Items.length]=A;};FCKContextMenuGroup.prototype.CreateTableRows=function(A){for (var i=0;i<this.Items.length;i++){this.Items[i].CreateTableRow(A);};};FCKContextMenuGroup.prototype.SetVisible=function(A){for (var i=0;i<this.Items.length;i++){this.Items[i].SetVisible(A);};this.IsVisible=A;};FCKContextMenuGroup.prototype.RefreshState=function(){if (!this.IsVisible) return;for (var i=0;i<this.Items.length;i++){this.Items[i].RefreshState();};}

@@ -21,7 +21,7 @@ body
 {
 	margin: 0px;
 	padding: 10px;
-	background-color: #f7f7f7;
+	/* background-color: #f7f7f7; */
 }
 
 body, td, input, select, textarea
@@ -32,7 +32,7 @@ body, td, input, select, textarea
 
 body, .BackColor
 {
-	background-color: #fff;
+	/* background-color: #fff; */
 }
 
 .PopupBody

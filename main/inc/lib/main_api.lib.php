@@ -1391,27 +1391,34 @@ function api_display_tool_view_option()
 	$output_string='';
 
 	$sourceurl = '';
+	$is_framed = false;
 	// Exceptions apply for all multi-frames pages
 	if (strpos($_SERVER['REQUEST_URI'],'chat/chat_banner.php')!==false)
 	{	//the chat is a multiframe bit that doesn't work too well with the student_view, so do not show the link
+		$is_framed = true;
 		return '';
 	}
+	// Uncomment to remove student view link from document view page
 	if(strpos($_SERVER['REQUEST_URI'],'document/headerpage.php')!==false)
 	{
-		//$sourceurl = str_replace('document/headerpage.php','document/showinframes.php',$_SERVER['REQUEST_URI']);
+		$sourceurl = str_replace('document/headerpage.php','document/showinframes.php',$_SERVER['REQUEST_URI']);
 		//showinframes doesn't handle student view anyway...
-		return '';
+		//return '';
+		$is_framed = true;
 	}
 
 	// check if the $_SERVER['REQUEST_URI'] contains already url parameters (thus a questionmark)
-	if (!strstr($_SERVER['REQUEST_URI'], "?"))
+	if(!$is_framed)
 	{
-		$sourceurl = api_get_self()."?".api_get_cidreq();
-	}
-	else
-	{
-		$sourceurl = $_SERVER['REQUEST_URI'];
-		//$sourceurl = str_replace('&', '&amp;', $sourceurl);
+		if (!strstr($_SERVER['REQUEST_URI'], "?"))
+		{
+			$sourceurl = api_get_self()."?".api_get_cidreq();
+		}
+		else
+		{
+			$sourceurl = $_SERVER['REQUEST_URI'];
+			//$sourceurl = str_replace('&', '&amp;', $sourceurl);
+		}
 	}
 	if(!empty($_SESSION['studentview']))
 	{

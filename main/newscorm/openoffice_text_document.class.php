@@ -198,7 +198,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 			fwrite($handle, $page_content);
 			fclose($handle);
 			
-			$document_id = add_document($_course,$this->created_dir.'/'.$html_file,'file',filesize($this->base_work_dir.$this->created_dir.'/'.$html_file),$html_file);
+			$document_id = add_document($_course,$this->created_dir.$html_file,'file',filesize($this->base_work_dir.$this->created_dir.$html_file),$html_file);
 		
 			if ($document_id){	
 							

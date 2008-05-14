@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 15272 2008-05-13 17:42:48Z yannoo $
+<?php // $Id: edit_document.php 15291 2008-05-14 22:26:37Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -62,9 +62,19 @@ $language_file = 'document';
 include('../inc/global.inc.php');
 $htmlHeadXtra[] = '
 <script type="text/javascript">
-function launch_templates(){
-	window.frames[0].FCKToolbarItems.GetItem("Templates").Click();
+
+function InnerDialogLoaded()
+{	
+	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);	
+	return B.ClickFrame();
+};	
+		
+function FCKeditor_OnComplete( editorInstance )
+{
+	document.getElementById(\'frmModel\').innerHTML = "<iframe height=600px; width=230; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
 }
+		
+
 </script>';
 
 $_SESSION['whereami'] = 'document/create';
@@ -549,7 +559,7 @@ if (api_is_allowed_to_edit() || GroupManager :: is_user_in_group($_user['user_id
 			else
 			{					
 				$_SESSION['showedit']=1;
-				$form->add_html_editor('texte','<a style="cursor:pointer" onclick="launch_templates()"><img src="'.api_get_path(WEB_IMG_PATH).'templates.gif" /></a>',false,true);	
+				$form->add_html_editor('texte','',false,true);	
 			}			
 			
 		}
@@ -566,8 +576,7 @@ if (api_is_allowed_to_edit() || GroupManager :: is_user_in_group($_user['user_id
 		if(!empty($_SESSION['_gid']))
 		{
 			$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
-			$form->addElement('checkbox','readonly',get_lang('ReadOnly'));	
-		
+			$form->addElement('checkbox','readonly',get_lang('ReadOnly'));		
 			$defaults['readonly']=$readonly; 
 		}
 		
@@ -578,7 +587,11 @@ if (api_is_allowed_to_edit() || GroupManager :: is_user_in_group($_user['user_id
 		$defaults['commentPath'] = $file;
 		$defaults['renameTo'] = $file_name;
 		$defaults['newComment'] = $oldComment;
-		$form->setDefaults($defaults);		
+		$form->setDefaults($defaults);
+		// show templates
+		$form->addElement('html','<div id="frmModel" style="display:block; height:600px;width:100px; position:absolute; top:135px; left:1%;"></div>');
+		
+			
 		$form->display();	
 	}
 	else

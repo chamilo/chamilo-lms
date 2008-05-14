@@ -151,7 +151,7 @@ public class OogieDocumentConverter extends AbstractDokeosDocumentConverter {
 						{
 							nbSpaces++;
 						}
-						if(nbSpaces == 4)
+						if(nbSpaces == 5)
 						{
 							break;
 						}

@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 15272 2008-05-13 17:42:48Z yannoo $
+// $Id: create_document.php 15298 2008-05-15 14:58:01Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -42,18 +42,15 @@
 
 // name of the language file that needs to be included 
 $language_file = 'document';
-
 include ('../inc/global.inc.php');
-
 $_SESSION['whereami'] = 'document/create';
-
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[]='<script>
 	
 function InnerDialogLoaded()
-{	
-	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);				
+{		
+	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);	
 	return B.ClickFrame();
 };	
 
@@ -64,7 +61,6 @@ function InnerDialogLoaded()
 	function launch_templates()
 	{		
 		//document.getElementById(\'frmModel\').style.display="block";				
-		document.getElementById(\'frmModel\').innerHTML = "<iframe height=600px; width=230; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
 		//document.getElementById(\'content___Frame\').width=\'70%\'; 		
 		//window.frames[0].FCKToolbarItems.GetItem("Template").Click;
 	}
@@ -72,7 +68,7 @@ function InnerDialogLoaded()
 	function FCKeditor_OnComplete( editorInstance )
 	{
 		editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
-		document.getElementById(\'frmModel\').innerHTML = "<iframe height=600px; width=230; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
+		document.getElementById(\'frmModel\').innerHTML = "<iframe height=950px; width=100%; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
 	}
 
 	function check_for_title()
@@ -339,7 +335,7 @@ $form->addElement('submit', 'submit', get_lang('Ok'));
 $form->setDefaults($default);
 
 // HTML
-$form->addElement('html','<div id="frmModel" style="display:block; height:600px;width:100px; position:absolute; top:135px; left:1%;"></div>');
+$form->addElement('html','<div id="frmModel" style="display:block; height:950px;width:20%; position:absolute; top:135px; left:1px;"></div>');
 
 // If form validates -> save the new document
 if ($form->validate())

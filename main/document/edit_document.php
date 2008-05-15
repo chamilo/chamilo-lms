@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 15299 2008-05-15 15:21:43Z juliomontoya $
+<?php // $Id: edit_document.php 15300 2008-05-15 15:26:53Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -50,10 +50,8 @@
 * not for validation at the moment)
 ==============================================================================
 */
-
 // name of the language file that needs to be included 
 $language_file = 'document';
-
 /*
 ------------------------------------------------------------------------------
 	Included libraries
@@ -155,9 +153,7 @@ if(!is_dir($filepath))
 }
 
 /**************************************************/
-
 $nameTools = get_lang('EditDocument');
-
 $dbTable = Database::get_course_table(TABLE_DOCUMENT);
 
 if(!empty($_SESSION['_gid']))
@@ -429,6 +425,7 @@ if($is_allowedToEdit)
 						api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $_user['user_id']);
 						//update parent folders
 						item_property_update_on_folder($_course,$dir,$_user['user_id']);
+						$dir= substr($dir,0,-1);
 						header('Location: document.php?curdirpath='.urlencode($dir));
 						exit ();
 					}
@@ -592,7 +589,6 @@ if (api_is_allowed_to_edit() || GroupManager :: is_user_in_group($_user['user_id
 		$form->setDefaults($defaults);
 		// show templates
 		$form->addElement('html','<div id="frmModel" style="display:block; height:950px;width:20%; position:absolute; top:135px; left:1px;"></div>');
-		
 			
 		$form->display();	
 	}

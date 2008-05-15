@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 15298 2008-05-15 14:58:01Z juliomontoya $
+<?php // $Id: edit_document.php 15299 2008-05-15 15:21:43Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -429,6 +429,8 @@ if($is_allowedToEdit)
 						api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $_user['user_id']);
 						//update parent folders
 						item_property_update_on_folder($_course,$dir,$_user['user_id']);
+						header('Location: document.php?curdirpath='.urlencode($dir));
+						exit ();
 					}
 					else
 					{

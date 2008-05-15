@@ -1,12 +1,9 @@
-<?php
-
-
-// $Id: CourseRestorer.class.php 14324 2008-02-20 02:46:30Z yannoo $
+<?php // $Id: CourseRestorer.class.php 15292 2008-05-15 05:33:23Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
@@ -857,6 +854,7 @@ class CourseRestorer
 	function get_new_id($tool,$ref)
 	{
 		//transform $tool into one backup/restore constant
+		if($tool == 'hotpotatoes'){$tool = 'document';}
 		if(!empty($this->course->resources[$tool][$ref]->destination_id)){
 			return $this->course->resources[$tool][$ref]->destination_id;
 		}

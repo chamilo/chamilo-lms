@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 14840 2008-04-11 06:21:45Z yannoo $
+* 	@version $Id: exercise_result.php 15302 2008-05-16 04:05:01Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -328,6 +328,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		$objQuestionTmp = Question :: read($questionId);
 
 		$questionName=$objQuestionTmp->selectTitle();
+		$questionDescription=$objQuestionTmp->selectDescription();
 		$questionWeighting=$objQuestionTmp->selectWeighting();
 		$answerType=$objQuestionTmp->selectType();
 		$quesId =$objQuestionTmp->selectId(); //added by priya saini
@@ -362,6 +363,10 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			<tr>
 			<td colspan="<?php echo $colspan; ?>">
 				<?php echo $questionName; ?>
+				<br />
+				<i>
+				<?php echo $questionDescription; ?>
+				</i>
 			</td>
 			</tr>
 		<?php

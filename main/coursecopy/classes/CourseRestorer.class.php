@@ -1,4 +1,4 @@
-<?php // $Id: CourseRestorer.class.php 15292 2008-05-15 05:33:23Z yannoo $
+<?php // $Id: CourseRestorer.class.php 15301 2008-05-16 03:21:42Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -167,7 +167,9 @@ class CourseRestorer
 			foreach ($resources[RESOURCE_DOCUMENT] as $id => $document)
 			{
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
-				mkdirr(dirname($path.$document->path), 0755);
+				$perm = api_get_setting('permissions_for_new_directories');
+			        $perm = octdec(!empty($perm)?$perm:'0770');
+				mkdirr(dirname($path.$document->path),$perm);
 				if ($document->file_type == DOCUMENT)
 				{
 					if (file_exists($path.$document->path))
@@ -229,10 +231,29 @@ class CourseRestorer
 					} // end if file exists
 					else
 					{
-						copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
-						$sql = "INSERT INTO ".$table." SET path = '/".substr($document->path, 9)."', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
-						api_sql_query($sql, __FILE__, __LINE__);
-						$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::get_last_insert_id();
+						//make sure the source file actually exists
+						if(is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path) && is_dir(dirname($path.$document->path)) && is_writeable(dirname($path.$document->path)))
+						{
+							copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
+							$sql = "INSERT INTO ".$table." SET path = '/".substr($document->path, 9)."', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
+							api_sql_query($sql, __FILE__, __LINE__);
+							$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::get_last_insert_id();
+						}
+						else
+						{
+							if(is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path))
+							{
+								error_log('Course copy generated an ignoreable error while trying to copy '.$this->course->backup_path.'/'.$document->path.': file not found');
+							}
+							if(!is_dir(dirname($path.$document->path)))
+							{
+								error_log('Course copy generated an ignoreable error while trying to copy to '.dirname($path.$document->path).': directory not found');
+							}
+							if(!is_writeable(dirname($path.$document->path)))
+							{
+								error_log('Course copy generated an ignoreable error while trying to copy to '.dirname($path.$document->path).': directory not writeable');
+							}
+						}
 					} // end file doesn't exist
 				}
 				else
@@ -269,7 +290,9 @@ class CourseRestorer
 			{
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 
-				mkdirr(dirname($path.$document->path), 0755);
+				$perm = api_get_setting('permissions_for_new_directories');
+			        $perm = octdec(!empty($perm)?$perm:'0770');
+				mkdirr(dirname($path.$document->path),$perm);
 
 				if (file_exists($path.$document->path))
 				{

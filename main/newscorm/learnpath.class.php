@@ -8135,6 +8135,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		foreach($zip_files_abs as $file_path)
 		{
 			if(empty($file_path)){continue;}
+			if(!is_file($main_path.$file_path) || !is_readable($main_path.$file_path)){continue;}
 			//error_log('getting document from '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' removing '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/',0);
 			$dest_file = $garbage_path.$temp_dir_short.'/document/'.$file_path;
 			$this->create_path($dest_file);
@@ -8144,7 +8145,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			
 			copy($main_path.$file_path,$dest_file);
 			//check if the file needs a link update
-			if(in_array($file_path,array_keys($link_updates))){
+			if(in_array($file_path,array_keys($link_updates)))
+			{
 				$string = file_get_contents($dest_file);
 				unlink($dest_file);
 				foreach($link_updates[$file_path] as $old_new)

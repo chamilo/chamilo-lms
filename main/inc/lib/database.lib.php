@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 15078 2008-04-24 23:15:37Z yannoo $
+<?php // $Id: database.lib.php 15309 2008-05-18 22:57:12Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -704,6 +704,10 @@ class Database
 		{
 			return mysql_affected_rows();
 		}
+	}
+	function query($sql,$file='',$line=0)
+	{
+		return 	api_sql_query($sql,$file,$line);
 	}
 }
 //end class Database

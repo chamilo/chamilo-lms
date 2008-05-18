@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 15302 2008-05-16 04:05:01Z yannoo $
+* 	@version $Id: exercise_result.php 15310 2008-05-18 23:08:33Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -879,12 +879,12 @@ if ($origin != 'learnpath')
 	echo '</body></html>';
 }
 $send_email = api_get_course_setting('email_alert_manager_on_new_quiz');
-$csspath = "http://portal.dokeos.com/demo/main/css/default.css";
 if ($send_email && count($arrques)>0)
 {
+$mycharset = api_get_setting('platform_charset'); 
 $msg = '<html><head>
-	<link rel="stylesheet" href="http://www.dokeos.com/styles.css" type="text/css">
-	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">';
+	<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
+	<meta content="text/html; charset='.$mycharset.'" http-equiv="content-type">';
 $msg .= '</head>
 <body><br />
 <p>'.get_lang('OpenQuestionsAttempted').' : 
@@ -893,8 +893,8 @@ $msg .= '</head>
 </p>
 <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
 					<tr>
-    <td width="229" valign="top"  class="mybody">&nbsp;&nbsp;'.get_lang('CourseName').'</td>
-    <td width="469" valign="top"  class="mybody">#course#</td>
+    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
+    <td width="469" valign="top"><h2>#course#</h2></td>
   </tr>
   <tr>
     <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
@@ -914,12 +914,12 @@ $msg .= '</head>
   {
 	  $msg.='
 		<tr>
-	    <td width="220" valign="top" bgcolor="E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
-	    <td width="473" valign="top" bgcolor="F3F3F3"><span class="style16"> #questionName#</span></td>
+	    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
+	    <td width="473" valign="top" bgcolor="#F3F3F3"><span class="style16"> #questionName#</span></td>
 	  	</tr>
 	  	<tr>
-	    <td width="220" valign="top" bgcolor="E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
-	    <td valign="top" bgcolor="F3F3F3"><span class="style16"> #answer#</span></td>
+	    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
+	    <td valign="top" bgcolor="#F3F3F3"><span class="style16"> #answer#</span></td>
 	  	</tr>';
 	
 		$msg1= str_replace("#exercise#",$exerciseTitle,$msg);
@@ -939,6 +939,6 @@ $msg .= '</head>
 	$mail_content = stripslashes($msg1);
 	$student_name = $_SESSION['_user']['firstName'].' '.$_SESSION['_user']['lastName'];
 	$subject = get_lang('OpenQuestionsAttempted');
-	api_mail_html($student_name, $to, $subject, $mail_content, $from_name, $from);
+	api_mail_html($student_name, $to, $subject, $mail_content, $from_name, $from, array('encoding'=>$mycharset,'charset'=>$mycharset));
 }
 ?>

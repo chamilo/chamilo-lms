@@ -22,7 +22,7 @@
 *	Saving the scores.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: savescores.php 13988 2007-12-14 05:05:51Z yannoo $
+* 	@version $Id: savescores.php 15312 2008-05-19 01:15:03Z yannoo $
 */
 
 // name of the language file that needs to be included
@@ -103,7 +103,8 @@ function save_scores($file, $score)
 		//if we are in a learning path, save the score in the corresponding
 		//table to get tracking in there as well
 	    global $jscript2run;
-	    $jscript2run .= '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$score.');</script>';
+		//record the results in the learning path, using the SCORM interface (API)
+	    $jscript2run .= '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$score.','.$weighting.');</script>';
 	}
 		
 }

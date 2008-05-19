@@ -62,7 +62,7 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 {
 	global $_configuration;
 	$debug=0;
-	if($debug>0){error_log('In xajax_save_item('.$lp_id.','.$user_id.','.$view_id.','.$item_id.','.$score.','.$max.','.$min.','.$status.','.$time.',"'.$suspend.'","'.$location.'","'.(count($interactions)>0?$interactions[0]:'').'","'.$core_exit.'")',0);}
+	if($debug>0){error_log('In xajax_save_item('.$lp_id.','.$user_id.','.$view_id.','.$item_id.','.$score.','.$max.','.$min.',"'.$status.'",'.$time.',"'.$suspend.'","'.$location.'","'.(count($interactions)>0?$interactions[0]:'').'","'.$core_exit.'")',0);}
 	$objResponse = new xajaxResponse();
 	require_once('learnpath.class.php');
 	require_once('scorm.class.php');
@@ -95,14 +95,17 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 	
 		$mylpi =& $mylp->items[$item_id];
 		//$mylpi->set_lp_view($view_id);
-		if($score!=-1){
-			$mylpi->set_score($score);
-		}
-		if($max!=-1){
+		if($max!=-1)
+		{
 			$mylpi->max_score=$max;
 		}
-		if($min!=-1){
+		if($min!=-1)
+		{
 			$mylpi->min_score=$min;
+		}
+		if($score!=-1)
+		{
+			$mylpi->set_score($score);
 		}
 		if($status!='')
 		{

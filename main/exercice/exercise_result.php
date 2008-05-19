@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 15310 2008-05-18 23:08:33Z yannoo $
+* 	@version $Id: exercise_result.php 15312 2008-05-19 01:15:03Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -875,7 +875,8 @@ if ($origin != 'learnpath')
 	//we are not in learnpath tool
 	Display::display_footer();
 }else{
-	echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.');</script>';
+	//record the results in the learning path, using the SCORM interface (API)
+	echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
 	echo '</body></html>';
 }
 $send_email = api_get_course_setting('email_alert_manager_on_new_quiz');

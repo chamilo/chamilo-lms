@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 14952 2008-04-20 01:37:51Z yannoo $ 
+<?php // $Id: scorm_api.php 15312 2008-05-19 01:15:03Z yannoo $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -793,11 +793,12 @@ function dokeos_save_asset(){
  * Also save the score locally because it hasn't been done through SetValue().
  * Saving the status will be dealt with by the XAJAX function.
  */
-function dokeos_void_save_asset(myscore)
+function dokeos_void_save_asset(myscore,mymax)
 {
 	logit_lms('dokeos_save_asset',2);
 	score = myscore;
-    xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, myscore);
+	if((mymax == null) || (mymax == '')){mymax = 100;} //assume a default of 100, otherwise the score will not get saved (see lpi->set_score())
+    xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, myscore, mymax);
 }
 /**
  * Logs information about SCORM messages into the log frame

@@ -7,7 +7,7 @@
 ==============================================================================
 */
 /*==== DEBUG ====*/
-$debug=0;
+$debug=255;
 /*==== CONSTANTS ==== */
 define('VIDEOCONF_UPLOAD_PATH', '/videoconf');
 $presentation_extension = array('.ppt', '.odp');
@@ -167,7 +167,7 @@ else if ($action == "service")
 		printf("<folders>");
 
 		// title filter
-		foreach (array_keys($files) as $k)
+		if (is_array($files)) foreach (array_keys($files) as $k)
 		{
 			// converting to UTF-8
 			$files[$k]['title'] = mb_convert_encoding(

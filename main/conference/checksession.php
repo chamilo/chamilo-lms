@@ -38,7 +38,11 @@ printf('</courseobject>');
 printf('<userobject>');
 foreach ($_SESSION['_user'] as $key => $val) if ($key != "auth_source") printf('<%s>%s</%s>',$key,utf8_encode($val),$key);
 printf('<sid>%s</sid>', session_id());
-$isadmin =((CourseManager::get_user_in_course_status($_SESSION['_user']['user_id'], $_SESSION['_course']['sysCode']) == COURSEMANAGER)||api_is_platform_admin() ? "true" : "false");
+$isadmin =((CourseManager::get_user_in_course_status($_SESSION['_user']['user_id'], $_SESSION['_course']['sysCode']) == COURSEMANAGER)||
+		api_is_platform_admin() || 
+		api_is_course_tutor() ||  
+		api_is_course_admin() || 
+		api_is_course_coach() ? "true" : "false");
 printf('<key>%s</key>', md5($confkey.$challenge));
 printf('<challenge>%s</challenge>', $challenge);
 printf('<isUploadAllowed>%s</isUploadAllowed>', $isadmin);

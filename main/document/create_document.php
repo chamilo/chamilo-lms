@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 15298 2008-05-15 14:58:01Z juliomontoya $
+// $Id: create_document.php 15322 2008-05-19 16:31:13Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -68,7 +68,7 @@ function InnerDialogLoaded()
 	function FCKeditor_OnComplete( editorInstance )
 	{
 		editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
-		document.getElementById(\'frmModel\').innerHTML = "<iframe height=950px; width=100%; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
+		document.getElementById(\'frmModel\').innerHTML = "<iframe height=950px; width=97%; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
 	}
 
 	function check_for_title()
@@ -327,7 +327,7 @@ else
 $form->addElement('submit', 'submit', get_lang('Ok'));
 
 // HTML-editor
-$form->add_html_editor('content','<a style="cursor:pointer" onclick="launch_templates()"></a>', false, true);
+$form->add_html_editor('content','', false, false);
 // Comment-field
 
 //$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));

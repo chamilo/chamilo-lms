@@ -1,38 +1,129 @@
 @charset "UTF-8";
 /* CSS Document */
 body{
-	background-repeat:no-repeat;
-	background-position:right;
-	background-position:bottom;
+background-image:;
+
+background-repeat:no-repeat;
+background-position:right;
+background-position:bottom;
 }
 
-#course-content
-{
-	min-height:500px;
-	margin:1em;
+#course-content{
+min-height:500px;
+margin:1em;
 }
 
 #course-content h1,h2,h3,h4{
  font-family:Arial, Helvetica, sans-serif;
 }
 
+#course-content h1 {
+ border-bottom: solid thin #B7B7B7;
+ color: #8D8D8D;
+ border-top: solid thin #B7B7B7;
+ font-size: x-large;
+ background-color: #FAFAFA;
+ font-weight: bold;
+ padding:0.2em;
+}
+#course-content h2 {
+ font-size: large;
+ font-weight: bold;
+ padding-left: 10px;
+}
+#course-Content h3 {
+ font-weight: bold;
+ padding-left: 20px;
+}
+
 .tip{
   -moz-border-radius:1em;
   border:1px solid black;
   border:1px 2px 2px 1px;
-  background:#F5F5B5;
   padding:1em;
   padding-left:40px;
-  background-image:url(../images/help.png) left;
+  background:url(../help.png) left;
 }
 
-.dial_horizontal
-{
-  border:3px 0px black;
+/* TEMPLATES STYLES */
+
+#course-content #cover{
+	padding:2em 0px;  				 
+	}
+
+#course-content .dial_horizontal{
+  border:3px 0px #B7B7B7;
 }
 
-.dial_vert
-{
-  border:0px 3px black;
+#course-content .dial_vert{
+  border:0px 3px #B7B7B7;
 }
 
+/*
+ #dialogFix{
+ background-image:url(../images/dialogs/dialog_left_500x500.png);
+ padding:30px;
+ padding-left:80px
+ 
+ }*/
+#course-content p{
+  font-size:medium;
+}
+
+/* Template cover */
+
+#cover {
+  padding:1em 0px;  
+
+}
+
+
+/* Modèle Liste à puce */
+
+#boom ul li{
+list-style-image:url(img/puce.png);
+list-style-type:disc;
+font-size:medium;
+line-height:20px;
+margin-bottom:0.5em;
+}
+
+#boom ul li:hover{
+list-style-image:url(img/puce_hover.png);
+}
+
+
+
+#argument_1{
+
+}
+
+#argument_2{
+  
+}
+
+#glossary{
+  padding:0.2em;
+}
+
+
+/*Certificate
+  You can set your own certificate
+*/
+
+
+/*#certificate{
+	background:url('img/certificate_blue.jpg') no-repeat;
+	padding:0px 50px 0px;
+	padding-top:120px;
+	height:500px;
+	width:700px;
+}*/
+
+#certificate{
+	background:url('img/certificate_grey.jpg') no-repeat;
+	padding:0px 00px 00px;
+	padding-top:20px;
+	height:500px;
+	width:700px;
+}

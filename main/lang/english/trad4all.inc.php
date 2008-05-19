@@ -537,6 +537,7 @@ $UploadFile = "Upload file";
 $WarningFaqFileNonWriteable = "Warning - The FAQ file, located in the /home/ directory of your campus, is not writeable. Your text will not be saved until the file permissions are changed.";
 $AddCategory = "Add category";
 $NoExercises = "No exercises";
+$NotAllowedClickBack = "Sorry, you are not allowed to access this page. Please click your browser\'s \"Back\" button or follow the link below to return to the previous page.";
 $Exercise = "Exercise";
 $Result = "Result";
 $AttemptingToLoginAs = "Attempting to login as %s %s (id %s)";
@@ -556,4 +557,7 @@ $ImageFile = "Image File";
 $ConstrainProportions = "Constrain proportions";
 $InsertImage = "Insert image";
 $AccountActive = "Account active ";
+$ExportToPDF = "Export to PDF";
+$CommentAdded = "You comment has been added";
+$BackToPreviousPage = "Back to previous page";
 ?>

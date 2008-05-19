@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langClarContent = "<p><b>Instructor</b></p>
-<p>Dokeos es un Sistema de Gestión del Aprendizaje y el Conocimiento. Permite a los instructores organizar material e itinerarios de aprendizaje y administrar las interacciones con sus alumnos, todo mediante un simple navegador web. </p>
+<p>Dokeos es un Sistema de Gestión del Aprendizaje y Conocimiento. Permite a los instructores organizar material e itinerarios de aprendizaje y administrar las interacciones con sus alumnos, todo mediante un simple navegador web. </p>
 
 <p>Para usar Dokeos como un instructor, usted necesita un nombre de usuario y una contraseña. Dependiendo de la configuración de seguridad de su portal, usted obtiene éstos por auto-registro (menú a la mano derecha) o de la administración central de su organización. Recuerde que un nombre de usuario y una contraseña nunca contienen espacios o acentos y son sensibles al uso de mayúsculas. Escriba su nombre de usuario y contraseña, entonces cree un curso (superior derecha) o use el curso que ha sido creado para usted por la administración central de su organización. </p>
 

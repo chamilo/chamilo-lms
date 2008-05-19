@@ -188,4 +188,9 @@ $Result = "Rezultat";
 $SplitStepsPerPage = "Korak na stran";
 $SplitStepsPerChapter = "Korak na poglavje";
 $TakeSlideName = "Uporabi imena diapozitivov za imena korakov učne poti";
+$CannotConnectToOpenOffice = "Poveza s pretvornikom dokumentov ni uspela. Prosimo, da se za rešitev problema obrnete na upravitelja platforme.";
+$OogieConversionFailed = "Pretvorba ni uspela. <br />Nekateri dokumenti so prekompleksni, da bi se jih dalo avtomatično pretvoriti. ";
+$OogieUnknownError = "Pretvorba iz neznanega razloga ni uspela.<br />Prosimo, da se za podrobnejšo informacijo brnete na upravitelja platforme.";
+$OogieBadExtension = "Vaša datoteka nima ustrezne končnice.";
+$WoogieBadExtension = "Prosimo, da nalagate zgolj besedilne dokumente. Končnica datotek naj bo .doc, .docx ali .odt";
 ?>

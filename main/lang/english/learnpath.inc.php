@@ -190,5 +190,6 @@ $TakeSlideName = "Use the slides names for the learning path steps";
 $CannotConnectToOpenOffice = "The connexion to the document converter failed. Please contact your platform administrator to fix the problem.";
 $OogieConversionFailed = "The conversion failed. <br />Some documents are too complex to be threated automatically by the document converter. <br />We try to improve it.";
 $OogieUnknownError = "The conversion failed for an unknown reason.<br />Please contact your administrator to get more information.";
-$BadExtension = "Your file has not the good extension.";
+$OogieBadExtension = "Please upload presentations only. Filename should end with .ppt or .odp";
+$WoogieBadExtension = "Please upload text documents only. Filename should end with .doc, .docx or .odt";
 ?>

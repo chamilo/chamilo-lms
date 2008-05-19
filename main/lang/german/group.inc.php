@@ -91,4 +91,5 @@ $GroupsFromClasses = "Gruppen aus Klassen";
 $GroupsFromClassesInfo = "Mit dieser Option können Sie Gruppen auf der Grundlage von Klassen erstellen, die für den Kurs angemeldet sind";
 $Group = "Gruppe";
 $ForumOfGroup = "Forum der Gruppe:";
+$GroupWiki = "Wiki";
 ?>

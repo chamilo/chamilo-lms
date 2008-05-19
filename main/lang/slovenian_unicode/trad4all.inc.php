@@ -535,6 +535,7 @@ $UploadFile = "Naloži datoteko";
 $WarningFaqFileNonWriteable = "Opozorilo - FAQ datoteka, locirana v /home mapi namestite Dokeos, ni pisalna. Vaše besedilo ne bo shranjeno, dokler lastnosti (atributi, dovoljenja,...) datoteke ne bodo ustrezno spremenjeni.";
 $AddCategory = "Dodaj kategorijo";
 $NoExercises = "Ni nobene vaje";
+$NotAllowedClickBack = "Oprostite, za dostop do te strani nimate dovoljenja. Uporabite gumb \'Nazaj\' ali pa sledite povezavi spodaj za vrnitev na predhodno stran.";
 $Exercise = "Vaja";
 $Result = "Rezultat";
 $AttemptingToLoginAs = "Poskus prijave kot %s %s (id %s)";
@@ -553,4 +554,8 @@ $ImageManager = "Upravljalec slik";
 $ImageFile = "Slika";
 $ConstrainProportions = "Ohrani razmerja";
 $InsertImage = "Vstavi sliko";
+$AccountActive = "Uporabniški račun je aktiven";
+$ExportToPDF = "Izvozi v PDF";
+$CommentAdded = "Tvoj komentar je bil dodan";
+$BackToPreviousPage = "Nazaj na prehodno stran";
 ?>

@@ -2,17 +2,17 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langScormVersion = "versión";
-$langScormRestarted = "Todos los pasos están sin completar.";
-$langScormNoNext = "Este es el último paso.";
-$langScormNoPrev = "Este es el primer paso.";
+$langScormRestarted = "Todos los elementos están sin completar.";
+$langScormNoNext = "Este es el último elemento.";
+$langScormNoPrev = "Este es el primer elemento.";
 $langScormTime = "Tiempo";
 $langScormNoOrder = "No hay un orden preestablecido, puedes hacer clic en cualquier lección.";
 $langScormScore = "Puntuación";
-$langScormLessonTitle = "Título del paso";
+$langScormLessonTitle = "Título del elemento";
 $langScormStatus = "Estado";
 $langScormToEnter = "Para entrar en";
 $langScormFirstNeedTo = "primero debe terminar";
-$langScormThisStatus = "Este paso ahora está";
+$langScormThisStatus = "Este elemento ahora está";
 $langScormClose = "Cerrar aplicación";
 $langScormRestart = "Reiniciar";
 $langScormCompstatus = "Completado";
@@ -35,9 +35,9 @@ $langCharset = "Juego de caracteres";
 $langLocal = "Local";
 $langRemote = "Remoto";
 $langAutodetect = "Autodetectar";
-$langAccomplishedStepsTotal = "Total de pasos completados";
+$langAccomplishedStepsTotal = "Total de elementos realizados";
 $langUnknown = "Desconocido";
-$AreYouSureToDeleteSteps = "¿ Está seguro de querer borrar estos pasos ?";
+$AreYouSureToDeleteSteps = "¿ Está seguro de querer eliminar estos elementos ?";
 $Origin = "Origen";
 $Local = "Local";
 $Remote = "Remoto";
@@ -52,5 +52,5 @@ $UnknownPackageFormat = "El formato del paquete no puede ser reconocido. Por fav
 ";
 $Attempt = "Intento";
 $MoveTheCurrentForum = "Mover el foro actual";
-$WarningWhenEditingScorm = "¡ Aviso ! <br /> Si edita el contenido de un paso scorm, puede alterar el informe de la secuencia de aprendizaje o dañar el paso";
+$WarningWhenEditingScorm = "¡ Aviso ! <br /> Si edita el contenido de un elemento scorm, puede alterar el informe de la secuencia de aprendizaje o dañar el elemento.";
 ?>

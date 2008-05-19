@@ -190,5 +190,6 @@ $TakeSlideName = "Usar os nomes dos diapositivos para as etapas da Sequência de 
 $CannotConnectToOpenOffice = "A ligação com o conversor de documentos falhou. Por favor contacte com o administrador da plataforma para resolver o problema.";
 $OogieConversionFailed = "A conversão falhou. <br />Alguns documentos são demasiado complexos para serem processados pelo conversor de documentos. <br />Estamos a tentar melhorá-lo.";
 $OogieUnknownError = "A conversão falhou por uma razão desconhecida. <br />Por favor contacte com o administrador da plataforma para obter mais informações.";
-$BadExtension = "O ficheiro não tem uma extensão correcta";
+$OogieBadExtension = "O ficheiro não tem uma extensão correcta";
+$WoogieBadExtension = "Por favor envie somente documentos de texto. A extensão deve ser só .doc, .docx ou .odt";
 ?>

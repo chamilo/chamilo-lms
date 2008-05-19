@@ -33,4 +33,5 @@ $DocumentDeleted = "Het document is verwijderd";
 $SendMailBody = "Een gebruiker postte een document in de publicaties-tool van uw cursus.";
 $DirDelete = "Verwijder folder";
 $ValidateChanges = "Valideer wijzigingen";
+$FolderUpdated = "Map bijgewerkt";
 ?>

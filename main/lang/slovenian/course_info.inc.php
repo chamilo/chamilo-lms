@@ -102,4 +102,7 @@ $QuizEmailAlertDeactivate = "Onemogoèi e-poštno opozorilo ob uporabnikovi rešitv
 $AllowUserImageForum = "Slike uporabnikov v forumih";
 $AllowUserImageForumActivate = "Prikaži slike uporabnikov v forumih";
 $AllowUserImageForumDeactivate = "Skrij slike uporabnikov v forumih";
+$AllowLearningPathTheme = "Dovoli uporabo teme uène poti";
+$AllowLearningPathThemeAllow = "Dovoljeno";
+$AllowLearningPathThemeDisallow = "Prepovedano";
 ?>

@@ -187,4 +187,9 @@ $Result = "Risultato";
 $SplitStepsPerPage = "Un paragrafo per pagina";
 $SplitStepsPerChapter = "Un capitolo per pagina";
 $TakeSlideName = "Usa il nome delle diapositive come titolo degli elementi del percorso";
+$CannotConnectToOpenOffice = "La connessione con l\'applicativo di conversione del documento è fallita. Contatta l\'amministratore del sistema per risolvere il problema.";
+$OogieConversionFailed = "Conversione fallita.<br />Alcuni documenti sono troppo complessi per poter essere convertiti.<br />Stiamo lavorando per migliorare l\'applicativo.";
+$OogieUnknownError = "Conversione fallita per un motivo non precisato.<br />Contatta l\'amministratore per ottenere informazioni più approfondite.";
+$OogieBadExtension = "L\'estensione del file non è consentita.";
+$WoogieBadExtension = "Carica solo documenti .doc, .docx o .odt provenienti da un elaboratore di testi.";
 ?>

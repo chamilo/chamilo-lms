@@ -2,11 +2,11 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AdminBy  = "Mastrumado fare de";
-$AdministrationTools  = "Mastruma ilaro";
+$AdministrationTools  = "Mastrumilaro";
 $State  = "Superrigardo";
 $Statistiques  = "Statistikoj";
 $VisioHostLocal = "Gastiganto de videokonferenco";
-$VisioRTMPIsWeb = "&#264;u la videokonferenca protokolo estas rete bazita (plejofte ne)";
+$VisioRTMPIsWeb = "&#264;u la videokonferenca protokolo estas retbaza (plejofte ne)";
 $ShowBackLinkOnTopOfCourseTreeComment = "Montri ligilon por retroiri al la kursa hierar&#293;io. La ligilo tutprete disponeblas fine de la listo.";
 $langUsed       = "uzata lingvo";
 $langPresent   = "En ordo";
@@ -668,6 +668,21 @@ $NoticeWillBeNotDisplayed = "La averto ne estas montrata sur la startpa&#285;o";
 $LetThoseFieldsEmptyToHideTheNotice = "Lasu la kampojn malplenaj por ka&#349;i la averton";
 $Ppt2lpVoiceRecordingNeedsRed5 = "La vo&#265;rikorda funkcio en la lernpada redaktilo uzas Red5 fluiga servilo. La parametroj de tiu servilo povas esti konfigurataj en la videokonferenca sekcio &#265;i-pa&#285;e.";
 $PlatformCharsetTitle = "Tiparo";
-$PlatformCharsetComment = "La tiparo difinal la manieron prezenti apartajn lingvojn en Dokeos. Se vi ekzemple uzas rusajn a&#365; japanajn signojn, povas esti oportune adapti &#285;in. Sed por &#265;iuj anglaj, latinaj kaj okcidente&#365;ropaj signoj la tiparo iso-8859-15 kutimo ta&#365;gas.";
+$PlatformCharsetComment = "La tiparo difinas la manieron prezenti apartajn lingvojn en Dokeos. Se vi ekzemple uzas rusajn a&#365; japanajn signojn, povas esti oportune adapti &#285;in. Sed por &#265;iuj anglaj, latinaj kaj okcidente&#365;ropaj signoj la tiparo iso-8859-15 kutimo ta&#365;gas.";
 $ExtendedProfileRegistrationTitle = "Kampo de la etendita profilo dum registrado";
+$ExtendedProfileRegistrationComment = "Kiuj el la &#265;i-subaj kampoj de la ampleksa profilo estu disponeblaj, kiam uzanto registri&#285;as? Tio postulas, ke la ampleksa profilo estu aktiva (vidu supre)";
+$ExtendedProfileRegistrationRequiredTitle = "Plenendaj kampoj de la ampleksa profilo dum registrado";
+$ExtendedProfileRegistrationRequiredComment = "Kiuj el la &#265;i-subaj kampoj de la ampleksa profilo estu devige plenigataj, kiam uzul registri&#285;as? Tio postulas, ke la ampleksa profilo estu aktiva, kaj ke la kampo disponeblas &#265;e registrado (vidu &#265;i-supre)";
+$NoReplyEmailAddress = "Mankas responda retpo&#349;tadreso";
+$NoReplyEmailAddressComment = "Tiu estas la retpo&#349;tadreso uzata, kiam estas sendenda mesa&#285;o, en kiu eksplicite estas petata ne respondi. Plejofte tiu retpo&#349;tadreso estas tiel notita en via servilo, ke envenantaj mesa&#285;oj estas ignorataj/ rifuzataj.";
+$SurveyEmailSenderNoReply = "Sendinto de esplora nerespondenda retpo&#349;ta&#309;o";
+$SurveyEmailSenderNoReplyComment = "&#264;u la retpo&#349;taj invitoj sendotaj por esplori povas uzi la retpo&#349;tadreson de la ekzercanto/instruisto, a&#365; de la speciala nerespondadreso (donita en la &#285;enerala konfiguro)?";
+$NoReplyEmailSender = "\"Senresponda\" retpo&#349;tadreso";
+$AddUserField = "Aldoni uzulan kampon";
+$FieldTypeText = "Teksto";
+$GradebookScoreDisplayColorSplit = "Disponeblaj koloroj";
+$UploadNewStylesheet = "Nova stilpa&#285;a dosiero";
+$StylesheetAdded = "Stilpa&#285;o aldonitas";
+$LDAPFilledTutorFieldValueTitle = "Identiga valoro de  repetitoro";
+$LDAPFilledTutorFieldValueComment = "Se la &#265;i-supre donita repetitora kampo estas markita, ties valoro estu ene de unu el la repetitorkampaj subelementoj por ke la uzanto estu konsiderata kiel instruisto. Se vi lasas &#265;i tiun kampon malplena, la sola kondi&#265;o estas, ke la kampo ekzistas por &#265;i tiu LDAP-uzanto estu konsiderata kiel instruisto. Ekzemple, la kampo povus esti \"membro de\" kaj la valoro ser&#265;ata povus esti \"CN=G_TREJNISTO,OU=Trejnisto\". ";
 ?>

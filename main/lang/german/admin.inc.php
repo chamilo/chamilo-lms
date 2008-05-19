@@ -813,4 +813,6 @@ $UploadNewStylesheet = "Neues Stylesheet hochladen";
 $NameStylesheet = "Name des Stylesheets";
 $UploadNewStylesheet = "Neue Stylesheet Datei";
 $StylesheetAdded = "Das Stylesheet wurde hinzugefügt";
+$LDAPFilledTutorFieldValueTitle = "Tutor Identifikationswert";
+$LDAPFilledTutorFieldValueComment = "Gibt es einen Check für das obige Tutor Feld, muss der Wert innerhalb eines der Unterlemente des Tutor Feldes sein, damit der Benutzer als ein Lehrer eingeordnet wird. Wird das Feld leer gelassen, dann ist die einzige Bedingung, dass das Feld für diesen LDAP Benutzer existiert, damit er als Lehrer eingeordnet wird. Zum Beispiel: das Feld könnte sein \"memberof\" und der Wert für die Suche könnte sein \"\"CN=G_TRAINER,OU=Trainer\"";
 ?>

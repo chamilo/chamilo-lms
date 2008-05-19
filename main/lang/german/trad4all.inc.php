@@ -554,4 +554,6 @@ $ImageFile = "Bilddatei";
 $ConstrainProportions = "Constrain Proportionen";
 $InsertImage = "Bild einfügen";
 $AccountActive = "Account ist aktiv";
+$ExportToPDF = "Export nach PDF";
+$CommentAdded = "Ihr Kommentar wurde hinzugefügt";
 ?>

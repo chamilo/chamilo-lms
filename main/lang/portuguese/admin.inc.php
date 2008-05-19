@@ -813,4 +813,6 @@ $UploadNewStylesheet = "Enviar nova folha de estilos";
 $NameStylesheet = "Nome da folha de estilos";
 $UploadNewStylesheet = "Novo ficheiro da folha de estilos";
 $StylesheetAdded = "A folha de estilos foi acrescentada";
+$LDAPFilledTutorFieldValueTitle = "Valor de identificação do professor";
+$LDAPFilledTutorFieldValueComment = "Quando se realiza uma verificação no campo professor que aparece acima, para que o utilizador seja considerado professor, o valor que se lhe atribui deve ser um dos sub-elementos do campo professor. Se deixa este campo em branco, a única condição para que seja considerado como professor é que neste utilizador LDAP o campo exista. Por exemplo, o campo pode ser \"memberof\" e o valor de busca pode ser \"CN=G_TRAINER,OU=Trainer\"";
 ?>

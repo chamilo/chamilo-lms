@@ -815,4 +815,11 @@ $LDAPOUAttributeFilter = "Filtro sui valori di OU (organizationalUnit)";
 $SelectSessionToImportUsersTo = "Seleziona la sessione in cui importare gli utenti";
 $VisioUseRtmptTitle = "Usa il protocollo rtmpt";
 $VisioUseRtmptComment = "Il protocollo rtmpt permette di accedere alla videoconferenza anche attraverso un firewall, ridirezionando la comunicazione alla porta 80. Ciò ovviamente peggiora la velocità dello streaming, per cui tale soluzione è da utilizzare solo se strettamente necessario.";
+$UploadNewStylesheet = "Carica un nuovo foglio di stile";
+$NameStylesheet = "Nome del foglio di stile";
+$UploadNewStylesheet = "Nuovo foglio di stile";
+$StylesheetAdded = "Il nuovo foglio di stile è stato aggiunto";
+$LDAPFilledTutorFieldValueTitle = "Valore dell\'identificativo di un docente";
+$LDAPFilledTutorFieldValueComment = "Se il campo è lasciato vuoto, un utente è considerato docente solo se il rispettivo sottocampo LDAP lo definisce tale ( ad esempio campo \"memberof\" e  valore da cercare  \"CN=G_TRAINER,OU=Trainer\").
+Se il campo è marcato un utente è considerato docente se il valore assegnato si trova tra i sotto-elementi del campo docente.";
 ?>

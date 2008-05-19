@@ -70,11 +70,11 @@ if($origin != 'tracking')
 //if display in fullscreen required
 if (strcmp($_GET["fs"], "true") == 0) 
 {
-	$output .= "<table align='center'>";
+	$output .= '<table width="100%" align="center">';
 } 
 else 
 {
-	$output .= "<table class='margin_table'>";
+	$output .= '<table width="100%">';
 }
 
 //check if the user asked for the "extend all" option

@@ -5662,7 +5662,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$item_description	= '';
 		}
 	
-		$return = '<div style="margin:3px 12px;">';
+		$return = '<div style="margin:10px 12px;">';
 			
 		if($id != 0 && is_array($extra_info))
 			$parent = $extra_info['parent_item_id'];
@@ -5695,12 +5695,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				'display_order' => $row['display_order']);
 		}
 		
-		$this->tree_array($arrLP);
-		
-		$arrLP = $this->arrMenu;
-		
-		unset($this->arrMenu);
-		
+		$this->tree_array($arrLP);		
+		$arrLP = $this->arrMenu;		
+		unset($this->arrMenu);		
 		$return .= '<p class="lp_title">' . $title . '</p>' . "\n";
 
 		require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
@@ -5709,7 +5706,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		$defaults["title"]=html_entity_decode($item_title);
 		$defaults["description"]=html_entity_decode($item_description);
-		
+
+
 		$form->addElement('html',$return);
 					
 		//$arrHide = array($id);
@@ -5779,7 +5777,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		if(!empty($s_selected_position)) { $position->setSelected($s_selected_position); }
 		if(is_array($arrLP)) { reset($arrLP); }
 		
-		if($action != 'move'){
+		if($action != 'move')
+		{
 			$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 			//$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"  style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 		}
@@ -5793,9 +5792,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		if($item_type == 'module' || $item_type == 'dokeos_module')
 		{
 			$form->addElement('hidden', 'parent', '0');
-		}
+		}		
+
 		
-		
+
 		$extension = pathinfo($item_path, PATHINFO_EXTENSION);
 		if(($item_type=='asset' || $item_type=='sco') && ($extension == 'html' || $extension == 'htm'))
 		{
@@ -5809,15 +5809,16 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			//$form->addElement('html_editor','content_lp','');
 			$defaults["content_lp"]=file_get_contents($item_path);
 		}
+
 		
 		
 		$form->addElement('hidden', 'type', 'dokeos_'.$item_type);
 		$form->addElement('hidden', 'post_time', time());
 			
-		$form->addElement('html','</div>');
+		
 		
 		$form->setDefaults($defaults);
-		
+		$form->addElement('html','</div>');
 		return $form->return_form();
 	}
 	
@@ -5835,15 +5836,13 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		echo '
 		<style>
-		.row{
-			width:100%;
-		}
+	
 		div.row div.label {
-			width: 75px;
+			width:110px;
 		}
 		
 		div.row div.formw {
-			width: 88%;
+			width: 82%;
 		}
 		</style>';
 			
@@ -5977,7 +5976,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			{
 				$return .= '<p class="lp_title">'.get_lang("EditTheCurrentDocument").' :</p>' . "\n";
 			}
-			
+
+			$return .= '</div>';
+
 			if(isset($_GET['edit']) && $_GET['edit'] == 'true')
 			{
 				$return .= '<div class="lp_message" style="margin-bottom:15px;">';				
@@ -6057,7 +6058,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				}
 			}
 			
-			$position = &$form->addElement('select', 'previous', get_lang("Position")." :", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
+			$position = &$form->addElement('select', 'previous', get_lang("Position")." :", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 			$position->addOption(get_lang("FirstPosition"),0,'style="padding-left:3px;"');
 			
 			foreach($arrHide as $key => $value){
@@ -6071,8 +6072,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			
 			if($action != 'move')
 			{
-				$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
-				//$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"  style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
+				$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:295px;"');
+
 				
 				$id_prerequisite=0;
 				if(is_array($arrLP))
@@ -6085,7 +6086,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					}
 				}
 
-				$select_prerequisites=$form->addElement('select', 'prerequisites', get_lang('Prerequisites').':', '', 'id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
+				$select_prerequisites=$form->addElement('select', 'prerequisites', get_lang('Prerequisites').' :', '', 'id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
 				$select_prerequisites->addOption(get_lang("NoPrerequisites"),0,'style="padding-left:3px;"');
 				
 				$arrHide=array();
@@ -6134,11 +6135,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 						
 						$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="padding:1px 2px; width:75px;"');
 						
-						if(!$no_display_edit_textarea){
+						if(!$no_display_edit_textarea)
+						{
 							$renderer = $form->defaultRenderer();
 							$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}','content_lp');
 
+							$form->addElement('html','<div style="margin:3px 12px">');
 							$form->addElement('html_editor','content_lp','');
+							$form->addElement('html','</div>');
 							$defaults["content_lp"]=$content;
 						}
 						
@@ -6174,7 +6178,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$form->addElement('hidden', 'type', TOOL_DOCUMENT);
 			$form->addElement('hidden', 'post_time', time());
 			
-		$form->addElement('html','</div>');
+	
 	 
 		$form->setDefaults($defaults);	
 		

@@ -72,7 +72,7 @@ $htmlHeadXtra[] = '
 			
 function FCKeditor_OnComplete( editorInstance )
 {	
-	document.getElementById(\'frmModel\').innerHTML = "<iframe height=600px; width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
+	document.getElementById(\'frmModel\').innerHTML = "<iframe height=890px width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
 }	
 	
 function InnerDialogLoaded()
@@ -213,12 +213,9 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 			echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;">'.get_lang("Build").'&nbsp;&#124;&nbsp;<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("BasicOverview").'</a>&nbsp;&#124;&nbsp;<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.get_lang("Display").'</a></p>';
 			
 			//links for adding a module, chapter or step
-			echo '<div class="lp_actions">';
-				
-				echo '<p class="lp_action">';
-				
-					echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'"><img align="left" alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';
-						
+			echo '<div class="lp_actions">';				
+				echo '<p class="lp_action">';				
+					echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'"><img align="left" alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';						
 				echo '</p>';
 				echo '<p class="lp_action">';
 				
@@ -228,7 +225,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				
 			echo '</div>';
 			
-			echo '<div class="lp_tree" style="height:90%">';					
+			echo '<div class="lp_tree" style="height:250px">';					
 				//build the tree with the menu items in it
 				echo $_SESSION['oLP']->build_tree();			
 			echo '</div>';
@@ -238,7 +235,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 			{
 				echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>'; //line					
 				echo '<br>';			
-				echo '<div id="frmModel" style="display:block; height:600px;width:100px; position:relative;"></div>';
+				echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
 			}
 							
 			

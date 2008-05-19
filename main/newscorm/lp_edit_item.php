@@ -71,7 +71,7 @@ $htmlHeadXtra[] = '
 	
 function FCKeditor_OnComplete( editorInstance )
 {	
-	document.getElementById(\'frmModel\').innerHTML = "<iframe height=600px; width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
+	document.getElementById(\'frmModel\').innerHTML = "<iframe height=890px; width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
 }	
 	
 function InnerDialogLoaded()
@@ -228,7 +228,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 			// show the template list 
 			echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>'; //line				
 			echo '<br>';				
-			echo '<div id="frmModel" style="display:block; height:600px;width:100px; position:relative;"></div>';				
+			echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';				
 					
 		echo '</td>';
 		

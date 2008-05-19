@@ -99,7 +99,7 @@ function get_agendaitems($courses_dbs, $month, $year)
 		else
 		{
 			//echo "GEEN course admin";
-			if (is_array($group_memberships))
+			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
 				$sqlquery = "SELECT
 													agenda.*, item_property.*

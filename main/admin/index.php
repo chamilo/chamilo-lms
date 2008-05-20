@@ -1,4 +1,4 @@
-<?php // $Id: index.php 15174 2008-04-29 18:00:04Z yannoo $
+<?php // $Id: index.php 15344 2008-05-20 22:47:40Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -235,8 +235,7 @@ if(api_is_platform_admin()){
  </h4>
  <ul>
   <li><a href="http://www.dokeos.com/"><?php echo get_lang('DokeosHomepage'); ?></a></li>
-  <li><a href="http://www.dokeos.com/forum/"><?php echo get_lang('DokeosForum'); ?></a></li>
-  <li><a href="http://www.dokeos.com/community_add_portal.php?url=<?php echo $_configuration['root_web']; ?>&amp;name=<?php echo urlencode(api_get_setting('siteName'));?>&amp;organisation=<?php echo urlencode(api_get_setting('InstitutionUrl'));?>&amp;manager=<?php echo urlencode(api_get_setting('administratorSurname')." ".api_get_setting('administratorName'));?>&amp;manageremail=<?php echo urlencode(api_get_setting('emailAdministrator'));?>"><?php echo get_lang('RegisterYourPortal'); ?></a></li>
+  <li><a href="http://www.dokeos.com/forum/"><?php echo get_lang('DokeosForum'); ?></a></li>  
   <li><a href="http://www.dokeos.com/extensions/"><?php echo get_lang('DokeosExtensions'); ?></a></li>
   <li>
   <?php

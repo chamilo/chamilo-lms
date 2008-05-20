@@ -717,4 +717,11 @@ $GradebookScoreDisplayColoringComment = "Marcar esta opção para permitir a color
 $TabsGradebookEnableColoring = "Permitir coloração da pontuação";
 $GradebookScoreDisplayCustom = "Personalização da apresentação da pontuação";
 $GradebookScoreDisplayCustomComment = "Marque esta opção para permitir a personalização das pontuações (selecionar o grau que será associado à pontuação)";
+$TabsGradebookEnableCustom = "Permitir configuração das pontuações";
+$GradebookScoreDisplayColorSplit = "Exibição das cores de pontuação";
+$FieldTypeDate = "Data";
+$FieldTypeDatetime = "Data e Hora";
+$UserFieldsAddHelp = "Adicionar um novo campo ao cadastro de usuário é muito fácil:<br />- basta escolher uma palavra como identificador usando letras minúsculas,<br />- selecionar um tipo,<br />- escolher o texto que deve aparecer ao usuário (se utilizar um nome já traduzido por Dokeos, como BirthDate ou UserSex, automaticamente este será traduzido a todos os idiomas automáticamente),<br />- se escolheu um campo do tipo seleção múltipla (radio, selecionar, seleção múltipla), poderá escolher (aqui também pode-se fazer uso das variáveis do idioma definidas por Dokeos), separado por ponto e vírgula,<br />- nos campos tipo texto, pode escolher um valor padrão.<br /><br />Logo que esteja pronto, agregue o campo e escolha se deseja torná-lo visível e modificável. Torná-lo modificável, mas oculto, é inútil.";
+$AllowCourseThemeTitle = "Permitir temas personalizados para os cursos";
+$LDAPDomainTitle = "Domínio LDAP";
 ?>

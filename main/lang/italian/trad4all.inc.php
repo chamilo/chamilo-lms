@@ -537,6 +537,7 @@ $UploadFile = "Carica il file";
 $WarningFaqFileNonWriteable = "Attenzione, il file di FAQ, posizionato nella cartella /home/directory del tuo campus, è protetto da scrittura. Il testo immesso non verrà salvato se non verranno cambiati i diritti di lettura/scrittura";
 $AddCategory = "Aggiungi una categoria";
 $NoExercises = "Nessun test";
+$NotAllowedClickBack = "Spiacente, non sei abilitato ad accedere alla pagina. Per ritornare alla pagina precedente clicca sul pulsante \"Torna indietro\" del browser o sul collegamento qui sotto indicato.";
 $Exercise = "Test";
 $Result = "Risultati";
 $AttemptingToLoginAs = "Tentativo di accesso come %s %s (id %s)";
@@ -558,4 +559,5 @@ $InsertImage = "Inserisci immagine";
 $AccountActive = "Account attivo";
 $ExportToPDF = "Esporta in PDF";
 $CommentAdded = "Il tuo commento è stato aggiunto";
+$BackToPreviousPage = "Torna alla pagina precedente";
 ?>

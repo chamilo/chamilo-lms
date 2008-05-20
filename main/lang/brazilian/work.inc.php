@@ -33,4 +33,5 @@ $DocumentDeleted = "Documento apagado";
 $SendMailBody = "Um usuário postou um documento na ferramenta Publicações";
 $DirDelete = "Deleta diretório";
 $ValidateChanges = "Validar alterações";
+$FolderUpdated = "Pasta atualizada";
 ?>

@@ -83,4 +83,5 @@ $ThreadCanBeFoundHere = "O tópico pode ser encontrado aqui";
 $MakeVisible = "Tornar visível";
 $DeleteCompleteThread = "Tem certeza que deseja apagar todo o tópico?";
 $PostDeletedSpecial = "Primeira mensagem apagada.";
+$ThreadDeleted = "Tema apagado";
 ?>

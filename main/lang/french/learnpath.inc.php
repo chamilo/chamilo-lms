@@ -192,4 +192,5 @@ $OogieConversionFailed = "La conversion a échoué.<br />Certains documents sont t
 $OogieUnknownError = "La conversion de ce document a échoué pour une raison inconnue. <br />Merci de contacter votre administrateur pour obtenir de plus amples informations.";
 $OogieBadExtension = "Seules les présentations peuvent être uploadées. Le fichier doit avoir l\'extension .ppt ou .odp";
 $WoogieBadExtension = "Seuls les documents texte peuvent être uploadés. Le fichier doit avoir l\'extension .doc, .docx ou .odt";
+$ShowAudioRecorder = "Montrer l\'enregistreur audio";
 ?>

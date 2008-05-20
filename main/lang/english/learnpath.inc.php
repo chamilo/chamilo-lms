@@ -192,4 +192,5 @@ $OogieConversionFailed = "The conversion failed. <br />Some documents are too co
 $OogieUnknownError = "The conversion failed for an unknown reason.<br />Please contact your administrator to get more information.";
 $OogieBadExtension = "Please upload presentations only. Filename should end with .ppt or .odp";
 $WoogieBadExtension = "Please upload text documents only. Filename should end with .doc, .docx or .odt";
+$ShowAudioRecorder = "Show audio recorder";
 ?>

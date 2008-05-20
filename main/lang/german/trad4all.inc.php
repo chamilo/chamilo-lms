@@ -535,6 +535,7 @@ $UploadFile = "Datei hochladen";
 $WarningFaqFileNonWriteable = "Warnung -- in die FAQ Datei im /home/ Verzeichnis des Camps kann nicht geschrieben werden. Der Text wird nicht gespeichert, bis die Dateirechte geändert werden.";
 $AddCategory = "Kategorie hinzufügen";
 $NoExercises = "keine Übungen";
+$NotAllowedClickBack = "Leider ist es Ihnen nicht gestattet, diese Seite aufzurufen. Klicken Sie auf den \"Zurück\" Knopf in Ihrem Browser oder folgen Sie dem Link unten, um zur vorherigen Seite zu gelangen.";
 $Exercise = "Übung";
 $Result = "Ergebnis";
 $AttemptingToLoginAs = "Loginversuch als %s %s (id %s)";
@@ -556,4 +557,5 @@ $InsertImage = "Bild einfügen";
 $AccountActive = "Account ist aktiv";
 $ExportToPDF = "Export nach PDF";
 $CommentAdded = "Ihr Kommentar wurde hinzugefügt";
+$BackToPreviousPage = "Zurück zur vorherigen Seite";
 ?>

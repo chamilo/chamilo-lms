@@ -536,6 +536,7 @@ $UploadFile = "Enviar archivo";
 $WarningFaqFileNonWriteable = "Atención - El archivo FAQ localizado en el directorio  /home/ de su plataforma, no es un archivo en el que se pueda escribir. Su texto no será guardado hasta que no cambie los permisos del archivo.";
 $AddCategory = "Añadir categoría";
 $NoExercises = "No hay ejercicios disponibles";
+$NotAllowedClickBack = "Lo sentimos, no le está permitido acceder a esta página. Para volver a la página anterior pulse el enlace inferior o haga clic en el botón \"Atrás\" de su navegador.";
 $Exercise = "Ejercicio";
 $Result = "Resultado";
 $AttemptingToLoginAs = "Intentar identificarse como %s %s (id %s)";
@@ -557,4 +558,5 @@ $InsertImage = "Importar imagen";
 $AccountActive = "Cuenta activa";
 $ExportToPDF = "Exportar a PDF";
 $CommentAdded = "Comentario agregado";
+$BackToPreviousPage = "Volver a la página anterior";
 ?>

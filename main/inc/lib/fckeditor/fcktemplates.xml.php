@@ -1,40 +1,32 @@
 <?php header('Content-Type: text/xml; charset=utf-8');
-
+$language_file = 'document';
 require_once('../../global.inc.php');
 echo '<?xml version="1.0" encoding="utf-8" ?>';
 $IMConfig['base_url'] = $_configuration['root_web'].'main/img/gallery/';
-
-function loadCSS($css_name){
-	$template_css = '                    <style type="text/css">'.file_get_contents(api_get_path(SYS_PATH).'main/css/'.$css_name.'/default.css').'</style>';
+function loadCSS($css_name)
+{
+	$template_css = ' <style type="text/css">'.file_get_contents(api_get_path(SYS_PATH).'main/css/'.$css_name.'/default.css').'</style>';
 	$template_css=str_replace('images/',api_get_path(WEB_PATH).'main/css/'.$css_name.'/images/',$template_css);
 	return $template_css;
 }
 $css = loadCSS(api_get_setting('stylesheets'));
 //<Templates imagesBasePath="fck_template/images/">
 ?>
-<Templates imagesBasePath="">
-	
+<Templates imagesBasePath="">	
 	<?php
-
-	//Get all personnal templates in the database
+	//Get all personnal templates in the database	
+	$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);	
+	$sql = 'SELECT id, title, description, ref_doc FROM '.$table_template.' WHERE course_code="'.api_get_course_id().'" AND user_id="'.api_get_user_id().'"';	
+	$result_template = api_sql_query($sql,__FILE__,__LINE__);
 	
-	$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
-	
-	$sql = 'SELECT id, title, description, ref_doc FROM '.$table_template.' WHERE course_code="'.api_get_course_id().'" AND user_id="'.api_get_user_id().'"';
-	
-	$result_template = api_sql_query($sql);
-	
-	while($a_template = mysql_fetch_array($result_template)){
-		
-		$document_id = $a_template['ref_doc'];
-		
+	while($a_template = Database::fetch_array($result_template))
+	{		
+		$document_id = $a_template['ref_doc'];		
 		$course = api_get_course_info();
-		$table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-		
-		$sql_document_path = 'SELECT path FROM '.$table_document.' WHERE id="'.$document_id.'"';
-		
-		$result_document_path = api_sql_query($sql_document_path);
-		$document_path = mysql_result($result_document_path,0,0);
+		$table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);		
+		$sql_document_path = 'SELECT path FROM '.$table_document.' WHERE id="'.$document_id.'"';		
+		$result_document_path = api_sql_query($sql_document_path,__FILE__,__LINE__);
+		$document_path = Database::result($result_document_path,0,0);
 		
 		$width = 100;
 		$height = 90;
@@ -46,7 +38,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		
 		$a_text=explode(' ',$a_template['title']);
 		$y=25;
-		foreach ($a_text as $a_part_of_title) {
+		foreach ($a_text as $a_part_of_title) 
+		{
 			imagettftext($im, 10, 0, 10, $y, $text_color, $ttfont, $a_part_of_title);
 			$y+=20;
 		}
@@ -55,10 +48,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		
 		echo '<Template title="'.htmlentities($a_template['title']).'" image="'.api_get_path(WEB_CODE_PATH).'upload/template_thumbnails/'.$a_template['id'].'.jpg">';
 			echo '<Description>'.htmlentities($a_template['description']).'</Description>';
-			echo '<Html>';
-			
-			echo htmlentities(file_get_contents(api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$document_path));
-			
+			echo '<Html>';			
+			echo htmlentities(file_get_contents(api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$document_path));			
 			echo '</Html>';
 		echo '</Template>';
 			
@@ -68,7 +59,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 
 //Maybe helpfull to translate the tips ? I can delete this if don't
 	
-	function tip($type){
+	function tip($type)
+	{
 	 $tip='<br /><table width=\'100%\' cellpadding="5px" padding="5px"><tbody><tr><td>'
             .'<div class=\'tip\'>'
             .'<span style="font-weight: bold;">Tip :</span>'
@@ -104,25 +96,25 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				 endswitch;
 	 $tip.='</ul>';
 	             
-	 $tip.='For more information &amp; tutorials go to : <a target="_blank" href="http://www.dokeos.com/fr/tutorials">http://www.dokeos.com/fr/tutorials</a>'                          
+	 $tip.='For more information &amp; tutorials go to : <a target="_blank" href="http://www.dokeos.com/en/tutorials.php">http://www.dokeos.com/en/tutorials.php</a>'                          
             .'</div>'
 			.'</td></tr></tbody></table>';
 	 echo $tip;
-	  }
+	}
 	  
 	//Show a Title dialog when the mouse is over
-	function titleHelp($type){
+	function titleHelp($type)
+	{
 	 	switch ($type):
 	 		default:
 	      		$titleH="Click here & delete this to add your media";
 		endswitch;
 		echo $titleH;
 	}
-	?>
+	?>   
     
-    
-        <Template title="First page" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Cover.png';?>" cat="presentation" style="elegant">
-            <Description>It's the cover page of your course</Description>
+        <Template title="<?php echo get_lang('TemplateTitleFirstPage'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Cover.png';?>" cat="presentation" style="elegant">
+            <Description><?php echo get_lang('TemplateTitleFirstPageDescription'); ?></Description>
             <Html>
                 <![CDATA[
                         <head>
@@ -151,13 +143,13 @@ $css = loadCSS(api_get_setting('stylesheets'));
         </Template>
         
         
-        <Template title="Dedicace" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Dedicace.png';?>" cat="presentation" style="elegant">
-            <Description>Make your own dedicace</Description>
+        <Template title="<?php echo get_lang('TemplateTitleDedicatory'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Dedicace.png';?>" cat="presentation" style="elegant">
+            <Description><?php echo get_lang('TemplateTitleDedicatoryDescription'); ?></Description>
             <Html>
                 <![CDATA[
                         <head>
                            <?php echo $css ?>
-                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
+                        <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
                         </head>
                         <body>
                             <div id="course-content">
@@ -186,13 +178,13 @@ $css = loadCSS(api_get_setting('stylesheets'));
         </Template>
         
         
-        <Template title="Course preface" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Course_preface.png';?>" cat="presentation" style="elegant">
-            <Description>First page of a learning path</Description>
+        <Template title="<?php echo get_lang('TemplateTitlePreface'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Course_preface.png';?>" cat="presentation" style="elegant">
+            <Description><?php echo get_lang('TemplateTitlePrefaceDescription'); ?></Description>
             <Html>
                 <![CDATA[
                         <head>
                            <?php echo $css ?>
-                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
+                        <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
                         </head>
                         <body>
                        <div id="course-content">
@@ -209,7 +201,6 @@ $css = loadCSS(api_get_setting('stylesheets'));
                                 </tr>
                               </tbody>
                           </table>
-
                         </div>
                         </body>
                 ]]>
@@ -217,8 +208,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
         </Template>
         
         
-        <Template title="Introduction" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/intro.png';?>" cat="presentation" style="elegant">
-            <Description>It's the cover page of your course</Description>
+        <Template title="<?php echo get_lang('TemplateTitleIntroduction'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/intro.png';?>" cat="presentation" style="elegant">
+            <Description><?php echo get_lang('TemplateTitleIntroductionDescription'); ?></Description>
             <Html>
                 <![CDATA[
                         <head>
@@ -250,8 +241,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
             </Html>
         </Template>
         
-        <Template title="Plan" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/bloom.png';?>" cat="presentation" style="elegant">
-            <Description>It's the table of content</Description>
+        <Template title="<?php echo get_lang('TemplateTitlePlan'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/bloom.png';?>" cat="presentation" style="elegant">
+            <Description><?php echo get_lang('TemplateTitlePlanDescription'); ?></Description>
             <Html>
                 <![CDATA[
                         <head>
@@ -284,8 +275,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
         </Template>
     
     
-    <Template title="Mr Dokeos little explaining" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Teacher_explaining.png';?>" cat="content" style="elegant">
-		<Description>Dialog on the bottom with Mr Dokeos</Description>
+    <Template title="<?php echo get_lang('TemplateTitleMrDokeos'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Teacher_explaining.png';?>" cat="content" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleMrDokeosDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -322,8 +313,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
     
-        <Template title="Teacher big explaining" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Teacher_explaining.png';?>" cat="content" style="elegant">
-		<Description>Personnalisable dialog and elastic text <em>!</em></Description>
+        <Template title="<?php echo get_lang('TemplateTitleTeacher'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Teacher_explaining.png';?>" cat="content" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleTeacherDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -362,8 +353,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		</Html>
 	</Template>
     
-     <Template title="Production" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/bloom.png';?>" cat="content" style="elegant">
-            <Description>Attended production description</Description>
+     <Template title="<?php echo get_lang('TemplateTitleProduction'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/bloom.png';?>" cat="content" style="elegant">
+            <Description><?php echo get_lang('TemplateTitleProductionDescription'); ?></Description>
             <Html>
                 <![CDATA[
                         
@@ -400,8 +391,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
             </Html>
         </Template>
     
-         <Template title="Analyze" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/bloom.png';?>" cat="content" style="elegant">
-            <Description>Analyze description</Description>
+         <Template title="<?php echo get_lang('TemplateTitleAnalyze'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/bloom.png';?>" cat="content" style="elegant">
+            <Description><?php echo get_lang('TemplateTitleAnalyzeDescription'); ?></Description>
             <Html>
                 <![CDATA[
                         
@@ -439,8 +430,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
         
 
         
-                     <Template title="Synthetize" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/bloom.png';?>" cat="content" style="elegant">
-            <Description>Synthetize description</Description>
+          <Template title="<?php echo get_lang('TemplateTitleSynthetize'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/bloom.png';?>" cat="content" style="elegant">
+            <Description><?php echo get_lang('TemplateTitleSynthetizeDescription'); ?></Description>
             <Html>
                 <![CDATA[
                         
@@ -476,8 +467,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
             </Html>
         </Template>
     
-    <Template title="Text page" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Text.png';?>" cat="content" style="elegant">
-            <Description>Plain text page</Description>
+    <Template title="<?php echo get_lang('TemplateTitleText'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Text.png';?>" cat="content" style="elegant">
+            <Description><?php echo get_lang('TemplateTitleTextDescription'); ?></Description>
             <Html>
                 <![CDATA[
                         <head>
@@ -499,8 +490,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
             </Html>
         </Template>
         
-        <Template title="Left image" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/img_left_encadred.png';?>" cat="content" style="elegant">
-		<Description>Left image</Description>
+        <Template title="<?php echo get_lang('TemplateTitleLeftImage'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/img_left_encadred.png';?>" cat="content" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleLeftImageDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -539,8 +530,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
     
     
-        <Template title="Text and image centered" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/text_img_centered.png';?>" cat="content" style="elegant">
-		<Description>It's a text with an image centered and legend.</Description>
+        <Template title="<?php echo get_lang('TemplateTitleTextCentered'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/text_img_centered.png';?>" cat="content" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleTextCenteredDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -565,8 +556,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
     </Template>
     
 	
-	<Template title="Comparison" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/comparison.png';?>" cat="content" style="elegant">
-		<Description>2 columns text page</Description>
+	<Template title="<?php echo get_lang('TemplateTitleComparison'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/comparison.png';?>" cat="content" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleComparisonDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -626,8 +617,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Diagram explained" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Diagram_explained.png';?>" cat="content" style="elegant">
-		<Description>Image on the left, comment on the right</Description>
+	<Template title="<?php echo get_lang('TemplateTitleDiagram'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Diagram_explained.png';?>" cat="content" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleDiagramDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -659,8 +650,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Image alone" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Picture.png';?>" cat="content" style="elegant">
-		<Description>Self-explaining diagram</Description>
+	<Template title="<?php echo get_lang('TemplateTitleImage'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Picture.png';?>" cat="content" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleImageDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -689,13 +680,13 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Flash animation" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Flash_animation_page.png';?>" cat="content" style="elegant">
-		<Description>Animation + introduction text</Description>
+	<Template title="<?php echo get_lang('TemplateTitleFlash'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Flash_animation_page.png';?>" cat="content" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleFlashDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
                        <?php echo $css ?>
-                                     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
+                    <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'default_course_document/themes/elegant.css';?>"/>
 				    </head>
 				    <body>
                    <div id="course-content">
@@ -717,8 +708,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Audio page" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Audio_page.png';?>" cat="content" style="elegant">
-		<Description>Audio + image + text : listening comprehension etc.</Description>
+	<Template title="<?php echo get_lang('TemplateTitleAudio'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Audio_page.png';?>" cat="content" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleAudioDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 				    
@@ -767,8 +758,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		</Html>
 	</Template>
     
-            <Template title="Schema with audio explain" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Audio_page.png';?>" cat="content" style="elegant">
-            <Description>A schema explain by a trainer</Description>
+            <Template title="<?php echo get_lang('TemplateTitleSchema'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Audio_page.png';?>" cat="content" style="elegant">
+            <Description><?php echo get_lang('TemplateTitleSchemaDescription'); ?></Description>
             <Html>
                 <![CDATA[
                         
@@ -815,8 +806,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
         </Template>
 	
 	
-	<Template title="Video page" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Video.png';?>" cat="content" style="elegant">
-		<Description>On demand video + text</Description>
+	<Template title="<?php echo get_lang('TemplateTitleVideo'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Video.png';?>" cat="content" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleVideoDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -875,8 +866,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
     
     
-    <Template title="Video page fullscreen" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Video_fullscreen.png';?>" cat="content" style="elegant">
-		<Description>On demand video in fullscreen</Description>
+    <Template title="<?php echo get_lang('TemplateTitleVideoFullscreen'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Video_fullscreen.png';?>" cat="content" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleVideoFullscreenDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -928,8 +919,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Table page" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Table.png';?>" cat="content" style="elegant">
-		<Description>Spreadsheet-like page</Description>
+	<Template title="<?php echo get_lang('TemplateTitleTable'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Table.png';?>" cat="content" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleTableDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -1085,8 +1076,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Assignment description" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Assignment_description.png';?>"  cat="ressources" style="elegant">
-		<Description>Explain goals, roles, agenda</Description>
+	<Template title="<?php echo get_lang('TemplateTitleAssigment'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Assignment_description.png';?>"  cat="ressources" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleAssigmentDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -1154,8 +1145,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Resources" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Resources.png';?>"  cat="ressources" style="elegant">
-		<Description>Books, links, tools</Description>
+	<Template title="<?php echo get_lang('TemplateTitleResources'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Resources.png';?>"  cat="ressources" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleResourcesDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -1210,8 +1201,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		</Html>
 	</Template>
 	
-	<Template title="Bibliography" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Resources.png';?>"  cat="ressources" style="elegant">
-		<Description>Books, links, tools</Description>
+	<Template title="<?php echo get_lang('TemplateTitleBibliography'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Resources.png';?>"  cat="ressources" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleBibliographyDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -1236,8 +1227,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
     
     
-	<Template title="Frequently asked questions" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Frequently_asked_questions.png';?>" cat="ressources" style="elegant">
-		<Description>List of questions and answers </Description>
+	<Template title="<?php echo get_lang('TemplateTitleFAQ'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Frequently_asked_questions.png';?>" cat="ressources" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleFAQDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -1272,8 +1263,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		</Html>
 	</Template>
 	
-	<Template title="Glossary" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Glossary.png';?>" cat="ressources" style="elegant">
-		<Description>List of term of the section</Description>
+	<Template title="<?php echo get_lang('TemplateTitleGlossary'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Glossary.png';?>" cat="ressources" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleGlossaryDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -1287,12 +1278,11 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				   $letter=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 				   echo "<div id='glossary' text-align='center' style='text-align: center;'><font size='4'>";
 					echo '<a href="#'.$letter[0].'">'.$letter[0].'</a>';
-					for($i=1 ; $i<26 ; $i++){
-					  echo '-<a href="#'.$letter[$i].'">'.$letter[$i].'</a>';
-					
+					for($i=1 ; $i<26 ; $i++)
+					{
+					  echo '-<a href="#'.$letter[$i].'">'.$letter[$i].'</a>';					
 					}
-				   echo "</font></div>";
-					
+				   echo "</font></div>";			
 					
 					echo '<h2>'.$letter[0].'<a name=\''.$letter[0].'\' id=\''.$letter[0].'\'></a></h2>'
 						 .'<dl>'							
@@ -1317,8 +1307,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
     
     
-    <Template title="Evaluation" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Audio_page.png';?>" cat="evaluation" style="elegant">
-            <Description>Attended production description</Description>
+    <Template title="<?php echo get_lang('TemplateTitleEvaluation'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Audio_page.png';?>" cat="evaluation" style="elegant">
+            <Description><?php echo get_lang('TemplateTitleEvaluationDescription'); ?></Description>
             <Html>
                 <![CDATA[
                         
@@ -1355,8 +1345,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
         </Template>
     
     
-	<Template title="Certificate of completion" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Certificate_of_completion.png';?>" cat="evaluation" style="elegant">
-		<Description>To appear at the end of a learning path</Description>
+	<Template title="<?php echo get_lang('TemplateTitleCertificate'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/Certificate_of_completion.png';?>" cat="evaluation" style="elegant">
+		<Description><?php echo get_lang('TemplateTitleCertificateDescription'); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>

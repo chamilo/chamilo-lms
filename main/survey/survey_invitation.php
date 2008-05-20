@@ -57,7 +57,7 @@ $table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATIO
 
 // getting the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
-$urlname = substr(strip_tags($survey_data['title']), 0, 40);
+$urlname =substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
 if (strlen(strip_tags($survey_data['title'])) > 40)
 {
 	$urlname .= '...';

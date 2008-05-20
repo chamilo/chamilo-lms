@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: create_new_survey.php 14940 2008-04-17 17:44:03Z juliomontoya $
+* 	@version $Id: create_new_survey.php 15331 2008-05-20 15:48:35Z juliomontoya $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -65,7 +65,8 @@ if (!api_is_allowed_to_edit())
 
 // getting the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
-$urlname = substr(strip_tags($survey_data['title']), 0, 40);
+$urlname =substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
+
 if (strlen(strip_tags($survey_data['title'])) > 40)
 {
 	$urlname .= '...';

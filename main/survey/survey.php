@@ -21,7 +21,7 @@ Tel. +32 (2) 211 34 56
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 14639 2008-03-18 05:31:08Z yannoo $
+* 	@version $Id: survey.php 15331 2008-05-20 15:48:35Z juliomontoya $
 *
 * 	@todo use quickforms for the forms
 */
@@ -59,7 +59,8 @@ $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Surv
 
 // getting the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
-$tool_name = substr(strip_tags($survey_data['title']), 0, 40);
+$tool_name = substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
+
 if (strlen(strip_tags($survey_data['title'])) > 40)
 {
 	$tool_name .= '...';

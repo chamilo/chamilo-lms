@@ -20,7 +20,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 15091 2008-04-25 05:18:30Z yannoo $
+* 	@version $Id: reporting.php 15331 2008-05-20 15:48:35Z juliomontoya $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -105,7 +105,7 @@ $user_info 						= Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
 
 // getting the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
-$urlname = substr(strip_tags($survey_data['title']), 0, 40);
+$urlname = substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
 if (strlen(strip_tags($survey_data['title'])) > 40)
 {
 	$urlname .= '...';

@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 14784 2008-04-08 12:58:45Z pcool $
+* 	@version $Id: question.php 15331 2008-05-20 15:48:35Z juliomontoya $
 */
 
 // name of the language file that needs to be included
@@ -53,7 +53,7 @@ $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 
 // getting the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
-$urlname = substr(strip_tags($survey_data['title']), 0, 40);
+$urlname = substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
 if (strlen(strip_tags($survey_data['title'])) > 40)
 {
 	$urlname .= '...';

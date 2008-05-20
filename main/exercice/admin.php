@@ -60,7 +60,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 13302 2007-09-27 04:10:15Z yannoo $
+* 	@version $Id: admin.php 15330 2008-05-20 13:07:44Z elixir_inter $
 */
 
 
@@ -451,7 +451,7 @@ if(isset($_GET['message']))
 }
 
 $description = $objExercise->selectDescription();
-echo '<h3 style="display:inline">'.$objExercise->selectTitle().'</h3>&nbsp;';
+echo '<h3 style="display:inline">'.$objExercise->selectTitle().'</h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--> <a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('TestPreview').'</a>';
 if(!empty($description))
 {
 	echo '<div id="description_box">'.stripslashes($description).'</div>';

@@ -58,12 +58,26 @@ else
 }
 
 if(!empty($path_to_lzx)){
-	printf("<object type=\"application/x-shockwave-flash\" data=\"%s\" 
-			width='$width' height='$height'>
-	         <param name=\"movie\" value=\"%s\">
-		 <param name=\"quality\" value=\"high\">
-		 <param name=\"scale\" value=\"noscale\">
-		 <param name=\"salign\" value=\"LT\">
-		 <param name=\"menu\" value=\"false\"></object>",$path_to_lzx,$path_to_lzx);
+	$recorder_content = sprintf("<object type=\"application/x-shockwave-flash\" data=\"%s\" ".
+			"width='$width' height='$height'>".
+	         "<param name=\"movie\" value=\"%s\">".
+		 "<param name=\"quality\" value=\"high\">".
+		 "<param name=\"scale\" value=\"noscale\">".
+		 "<param name=\"salign\" value=\"LT\">".
+		 "<param name=\"menu\" value=\"false\"></object>",$path_to_lzx,$path_to_lzx);
+	
+	echo '<script type="text/javascript">
+
+	function show_audiorecorder()
+	{
+		document.getElementById("audiorecorder_frame").innerHTML = "'.addslashes($recorder_content).'";
+		document.getElementById("show_audiorecorder_div").style.display="none";
+	}
+
+	</script>
+	';
+	
+	echo '<div id="show_audiorecorder_div"><a style="cursor:pointer" onclick="show_audiorecorder()">'.get_lang('ShowAudioRecorder').'</a></div>';
+	echo '<div id="audiorecorder_frame"></div>';
 }
 ?>

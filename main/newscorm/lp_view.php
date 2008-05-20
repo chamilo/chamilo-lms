@@ -159,7 +159,7 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 else
 {	
 	include_once('../inc/reduced_header.inc.php');
-	$displayAudioRecorder = (api_get_setting('service_ppt2lp','active')=='true' && api_get_setting('service_ppt2lp','path_to_lzx')!='') ? true : false;
+	$displayAudioRecorder = (api_get_setting('service_visio','active')=='true') ? true : false;
 	//check if audio recorder needs to be in studentview
 	$course_id=$_SESSION["_course"]["id"];
 	if($_SESSION["status"][$course_id]==5)

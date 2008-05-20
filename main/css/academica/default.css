@@ -1599,3 +1599,10 @@ div.system_announcement {
 }
 /* Quizzes tool */
 .quiz_export_link { float: right; }
+
+/*
+------------------------------------------------------------------------------
+    Learning path
+------------------------------------------------------------------------------
+*/
+#show_audiorecorder_div{background:#F0F0F0; border:1px solid #999999; font-weight:bold; padding:2px; width:350px;}

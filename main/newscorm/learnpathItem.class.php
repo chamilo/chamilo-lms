@@ -1759,7 +1759,7 @@ class learnpathItem{
     function set_score($score)
     {
    		if($this->debug>0){error_log('New LP - In learnpathItem::set_score('.$score.')',0);}
-   		if(($score <= $this->max_score) && ($score >= $this->min_score))
+   		if(($this->max_score<=0 || $score <= $this->max_score) && ($score >= $this->min_score))
    		{
    			$this->current_score = $score;
    			$master = $this->get_mastery_score();

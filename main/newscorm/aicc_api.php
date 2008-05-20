@@ -488,38 +488,38 @@ function update_toc(update_action,update_id)
 					myelem.className = "scorm_item_highlight";
 					break;
 				case 'not attempted':
-					if(myelemimg.src != 'notattempted.png'){
-						myelemimg.src = "notattempted.png";
+					if(myelemimg.src != '../img/notattempted.gif'){
+						myelemimg.src = "../img/notattempted.gif";
 						myelemimg.alt = "not attempted";
 					}
 					break;
 				case 'incomplete':
-					if(myelemimg.src != 'incomplete.png'){
-						myelemimg.src = "incomplete.png";
+					if(myelemimg.src != '../img/incomplete.gif'){
+						myelemimg.src = "../img/incomplete.gif";
 						myelemimg.alt = "incomplete";
 					}
 					break;
 				case 'completed':
-					if(myelemimg.src != 'completed.png'){
-						myelemimg.src = "completed.png";
+					if(myelemimg.src != '../img/completed.gif'){
+						myelemimg.src = "../img/completed.gif";
 						myelemimg.alt = "completed";
 					}
 					break;
 				case 'failed':
-					if(myelemimg.src != 'failed.png'){
-						myelemimg.src = "failed.png";
+					if(myelemimg.src != '../img/failed.gif'){
+						myelemimg.src = "../img/failed.gif";
 						myelemimg.alt = "failed";
 					}
 					break;
 				case 'passed':
-					if(myelemimg.src != 'completed.png' && myelemimg.alt != 'passed'){
-						myelemimg.src = "completed.png";
+					if(myelemimg.src != '../img/completed.gif' && myelemimg.alt != 'passed'){
+						myelemimg.src = "../img/completed.gif";
 						myelemimg.alt = "passed";
 					}
 					break;
 				case 'browsed':
-					if(myelemimg.src != 'completed.png' && myelemimg.alt != 'browsed'){
-						myelemimg.src = "completed.png";
+					if(myelemimg.src != '../img/completed.gif' && myelemimg.alt != 'browsed'){
+						myelemimg.src = "../img/completed.gif";
 						myelemimg.alt = "browsed";
 					}
 					break;

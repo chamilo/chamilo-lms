@@ -2390,13 +2390,13 @@ class learnpath {
     	{
     		if($this->debug>2){error_log('New LP - learnpath::get_html_toc(): using item '.$item['id'],0);}
     		//TODO complete this
-    		$icon_name = array('not attempted' => 'notattempted.png',
-    							'incomplete'   => 'incomplete.png',
-    							'failed'       => 'failed.png',
-    							'completed'    => 'completed.png',
-    							'passed'	   => 'passed.png',
-    							'succeeded'    => 'succeeded.png',
-    							'browsed'      => 'completed.png');
+    		$icon_name = array('not attempted' => '../img/notattempted.gif',
+    							'incomplete'   => '../img/incomplete.gif',
+    							'failed'       => '../img/failed.gif',
+    							'completed'    => '../img/completed.gif',
+    							'passed'	   => '../img/passed.gif',
+    							'succeeded'    => '../img/succeeded.gif',
+    							'browsed'      => '../img/completed.gif');
     		
     		$style = 'scorm_item';
     		if($item['id'] == $this->current){
@@ -2466,13 +2466,13 @@ class learnpath {
     	{
     		if($this->debug>2){error_log('New LP - learnpath::get_html_toc(): using item '.$item['id'],0);}
     		//TODO complete this
-    		$icon_name = array('not attempted' => 'notattempted.png',
-    							'incomplete'   => 'incomplete.png',
-    							'failed'       => 'failed.png',
-    							'completed'    => 'completed.png',
-    							'passed'	   => 'passed.png',
-    							'succeeded'    => 'succeeded.png',
-    							'browsed'      => 'completed.png');
+    		$icon_name = array('not attempted' => '../img/notattempted.gif',
+    							'incomplete'   => '../img/incomplete.gif',
+    							'failed'       => '../img/failed.gif',
+    							'completed'    => '../img/completed.gif',
+    							'passed'	   => '../img/passed.gif',
+    							'succeeded'    => '../img/succeeded.gif',
+    							'browsed'      => '../img/completed.gif');
     		
     		$style = 'scorm_item';    		
     		$scorm_color_background='scorm_item';

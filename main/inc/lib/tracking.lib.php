@@ -357,8 +357,11 @@ class Tracking {
 								$total_score += Database::result($rsScores, 0, 0);
 								$total_weighting += $item['max_score'];
 								
-								$lp_scorm_score_total += ($total_score/$total_weighting)*100;
-								$lp_scorm_weighting_total+=100;
+								if($total_weighting>0)
+								{
+									$lp_scorm_score_total += ($total_score/$total_weighting)*100;
+									$lp_scorm_weighting_total+=100;
+								}
 							}					
 						}
 					}

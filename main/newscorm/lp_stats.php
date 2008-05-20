@@ -148,6 +148,7 @@ foreach ($list as $my_item_id)
 		$extend_this = 1;
 		$qry_order = 'ASC';
 	}
+	//prepare statement to go through each attempt
 	if (!empty ($view)) 
 	{
 		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, " .
@@ -186,7 +187,7 @@ foreach ($list as $my_item_id)
 	{
 		$row = Database :: fetch_array($result);
 
-		//if there are several attempts, and the link to extend has been clicked...
+		//if there are several attempts, and the link to extend has been clicked, show each attempt...
 		if (($counter % 2) == 0) 
 		{
 			$oddclass = "row_odd";
@@ -196,8 +197,9 @@ foreach ($list as $my_item_id)
 			$oddclass = "row_even";
 		}
 		if ($inter_num)
+		{
 			$extend_link = '<a href="'.api_get_self().'?action=stats&fold_id='.$my_item_id.$url_suffix.'"><img src="../img/visible.gif" alt="fold_view" border="0"></a>'."\n";
-
+		}
 		$title = $row['mytitle'];
 		$title = stripslashes(html_entity_decode($title,ENT_QUOTES, $dokeos_charset));
 		
@@ -208,38 +210,59 @@ foreach ($list as $my_item_id)
 
 		if ($row['item_type'] != 'dokeos_chapter') 
 		{
+			$correct_test_link = array();
 			if($row['item_type'] == 'quiz')
 			{
 				
 				if($origin != 'tracking')
 				{
-					$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$row['path'].'" AND exe_user_id="'.api_get_user_id().'" AND exe_cours_id="'.$course_code.'" ORDER BY exe_date DESC LIMIT 1';
+					$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$row['path'].'" AND exe_user_id="'.api_get_user_id().'" AND exe_cours_id="'.$course_code.'" ORDER BY exe_date DESC limit 1';
 				}
-				else{
-					$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$row['path'].'" AND exe_user_id="'.$_GET['student_id'].'" AND exe_cours_id="'.$course_code.'" ORDER BY exe_date DESC LIMIT 1';
+				else
+				{
+					$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$row['path'].'" AND exe_user_id="'.$_GET['student_id'].'" AND exe_cours_id="'.$course_code.'" ORDER BY exe_date DESC limit 1';
 				}
 				
 				$resultLastAttempt = api_sql_query($sql_last_attempt,__FILE__,__LINE__);
 				
 				$num = Database::num_rows($resultLastAttempt);
 				if($num>0)
-				{								
-					$id_last_attempt=Database::result($resultLastAttempt,0,0);
+				{	
+					if($num>1)
+					{
+						while($rowLA = Database::fetch_row($resultLastAttempt))
+						{
+							$id_last_attempt = $rowLA[0];
+							if($origin != 'tracking')
+							{
+								$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$id_last_attempt.'&cidReq='.$course_code.'" target="_parent"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
+							}
+							else
+							{
+								$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&id='.$id_last_attempt.'&cidReq='.$course_code.'&student='.$_GET['student_id'].'" target="_parent"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
+							}							
+						}
+					}
+					else
+					{					
+						$id_last_attempt=Database::result($resultLastAttempt,0,0);
+						if($origin != 'tracking')
+						{
+							$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$id_last_attempt.'&cidReq='.$course_code.'" target="_parent"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
+						}
+						else
+						{
+							$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&id='.$id_last_attempt.'&cidReq='.$course_code.'&student='.$_GET['student_id'].'" target="_parent"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
+						}
+					}
 				}
 				
-				if($origin != 'tracking')
-				{
-					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$id_last_attempt.'&cidReq='.$course_code.'" target="_parent"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
-				}
-				else
-				{
-					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&id='.$id_last_attempt.'&cidReq='.$course_code.'&student='.$_GET['student_id'].'" target="_parent"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
-				}
 			}
 			else{
 				$correct_test_link='-';
 			}
-			$output .= "<tr class='$oddclass'>\n"."<td>$extend_link</td>\n".'<td colspan="4" class="content"><div class="mystatus">'.htmlentities($title,ENT_QUOTES,$charset_lang)."</div></td>\n".'<td colspan="2" class="content"></td>'."\n".'<td colspan="2" class="content"></td>'."\n".'<td colspan="2" class="content"></td><td class="content">'.$correct_test_link.'</td>'."\n"."</tr>\n";
+			//new attempt
+			$output .= "<tr class='$oddclass'>\n"."<td>$extend_link</td>\n".'<td colspan="4" class="content"><div class="mystatus">'.htmlentities($title,ENT_QUOTES,$charset_lang)."</div></td>\n".'<td colspan="2" class="content"></td>'."\n".'<td colspan="2" class="content"></td>'."\n".'<td colspan="2" class="content"></td><td class="content"></td>'."\n"."</tr>\n";
 		}
 
 		$counter ++;
@@ -482,6 +505,7 @@ foreach ($list as $my_item_id)
 			else{
 				$correct_test_link='-';
 			}
+			
 			$output .= "<tr class='$oddclass'>\n"."<td>$extend_link</td>\n".'<td colspan="4"><div class="mystatus">'.htmlentities($title,ENT_QUOTES,$charset_lang).'</div></td>'."\n"
 			//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
 			.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n".'<td colspan="2"><div class="mystatus" align="center">'. ($score == 0 ? '-' : ($maxscore==0?$score:$score.'/'.$maxscore))."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$time."</div></td><td>$correct_test_link</td>\n"."</tr>\n";

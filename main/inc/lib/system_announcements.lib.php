@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) 2004 Bart Mollet (HoGent)
@@ -18,7 +18,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -58,7 +58,7 @@ class SystemAnnouncementManager
 		}
 		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
 		$announcements = api_sql_query($sql,__FILE__,__LINE__);
-		if (mysql_num_rows($announcements))
+		if (Database::num_rows($announcements))
 		{
 			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
 			$query_string = ereg_replace('&$', '', $query_string);
@@ -66,7 +66,7 @@ class SystemAnnouncementManager
 			echo '<div class="system_announcements">';
 			echo '<h3>'.get_lang('SystemAnnouncements').'</h3>';
 			echo '<table border="0">';
-			while ($announcement = mysql_fetch_object($announcements))
+			while ($announcement = Database::fetch_object($announcements))
 			{
 
 				if ($id != $announcement->id)
@@ -145,7 +145,7 @@ class SystemAnnouncementManager
 		}
 		$announcements = api_sql_query($sql,__FILE__,__LINE__);
 
-		if (mysql_num_rows($announcements))
+		if (Database::num_rows($announcements))
 		{
 			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
 			$query_string = ereg_replace('&$', '', $query_string);
@@ -160,7 +160,7 @@ class SystemAnnouncementManager
 				echo '</tr>';
 			echo '</table>';
 			echo '<table align="center" border="0" width="900px">';
-			while ($announcement = mysql_fetch_object($announcements))
+			while ($announcement = Database::fetch_object($announcements))
 			{
 					echo '<tr><td>';
 					echo '<a name="'.$announcement->id.'"></a>
@@ -245,7 +245,7 @@ class SystemAnnouncementManager
 		$sql .= 'LIMIT '.$start.',21';
 		$announcements = api_sql_query($sql,__FILE__,__LINE__);
 		$i = 0;
-		while($rows = mysql_fetch_array($announcements))
+		while($rows = Database::fetch_array($announcements))
 		{
 			$i++;
 		}
@@ -264,7 +264,7 @@ class SystemAnnouncementManager
 		$sql = "SELECT *, IF( NOW() BETWEEN date_start AND date_end, '1', '0') AS visible FROM ".$db_table." ORDER BY date_start ASC";
 		$announcements = api_sql_query($sql,__FILE__,__LINE__);
 		$all_announcements = array();
-		while ($announcement = mysql_fetch_object($announcements))
+		while ($announcement = Database::fetch_object($announcements))
 		{
 			$all_announcements[] = $announcement;
 		}
@@ -309,9 +309,9 @@ class SystemAnnouncementManager
 		}
 		$start = $date_start[0]."-".$date_start[1]."-".$date_start[2]." ".$date_start[3].":".$date_start[4].":".$date_start[5];
 		$end = $date_end[0]."-".$date_end[1]."-".$date_end[2]." ".$date_end[3].":".$date_end[4].":".$date_start[5];
-		$title = mysql_real_escape_string($title);
-		$content = mysql_real_escape_string($content);
-		$lang = is_null($lang) ? 'NULL' : "'".mysql_real_escape_string($lang)."'";
+		$title = Database::escape_string($title);
+		$content = Database::escape_string($content);
+		$lang = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
 		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang)
 												VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$lang.")";
 		if ($send_mail<>'0')
@@ -340,7 +340,7 @@ class SystemAnnouncementManager
 		$a_arrayED = explode('-',$a_dateE[0]);
 		$a_arrayEH = explode(':',$a_dateE[1]);
 		$date_end = array_merge($a_arrayED,$a_arrayEH);
-		$lang = is_null($lang) ? 'NULL' : "'".mysql_real_escape_string($lang)."'";
+		$lang = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		{
@@ -359,8 +359,8 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		}
 		$start = $date_start[0]."-".$date_start[1]."-".$date_start[2]." ".$date_start[3].":".$date_start[4].":".$date_start[5];
 		$end = $date_end[0]."-".$date_end[1]."-".$date_end[2]." ".$date_end[3].":".$date_end[4].":".$date_start[5];
-		$title = mysql_real_escape_string($title);
-		$content = mysql_real_escape_string($content);
+		$title = Database::escape_string($title);
+		$content = Database::escape_string($content);
 		$id = intval($id);
 		$sql = "UPDATE ".$db_table." SET lang=$lang,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
 		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' WHERE id='".$id."'";
@@ -393,7 +393,7 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$id = intval($id);
 		$sql = "SELECT * FROM ".$db_table." WHERE id='".$id."'";
-		$announcement = mysql_fetch_object(api_sql_query($sql,__FILE__,__LINE__));
+		$announcement = Database::fetch_object(api_sql_query($sql,__FILE__,__LINE__));
 		return $announcement;
 	}
 	/**
@@ -413,7 +413,8 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 	function send_system_announcement_by_email($title,$content,$teacher, $student)
 	{
 		global $_user; 
-		global $_setting; 
+		global $_setting;
+		global $charset; 
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		if ($teacher<>0 AND $student == '0')
 		{
@@ -435,7 +436,7 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		while($row = Database::fetch_array($result,'ASSOC'))
 		{
-			api_mail_html($row['firstname'].' '.$row['lastname'], $row['email'], $title, $content, $_user['firstName'].' '.$_user['lastName'], api_get_setting('emailAdministrator'), api_get_setting('emailAdministrator'));
+			api_mail_html($row['firstname'].' '.$row['lastname'], $row['email'], html_entity_decode(stripslashes($title),ENT_QUOTES,$charset), html_entity_decode(stripslashes($content),ENT_QUOTES,$charset), $_user['firstName'].' '.$_user['lastName'], api_get_setting('emailAdministrator'), api_get_setting('emailAdministrator'));
 		}
 	}
 }

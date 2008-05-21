@@ -20,7 +20,7 @@ error_log('New LP - Loaded lp_save : '.$_SERVER['REQUEST_URI'].' from '.$_SERVER
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<link rel="stylesheet" type="text/css" href="../css/scorm.css">
+
 <script language='javascript'>
 <?php
 if($_SESSION['oLP']->mode != 'fullscreen'){

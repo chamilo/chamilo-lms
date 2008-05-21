@@ -289,6 +289,8 @@ function update_Db_course($courseDbName)
 
 	$TABLETOOLCOURSEDESC		= $courseDbName . "course_description";
 	$TABLETOOLAGENDA 			= $courseDbName . "calendar_event";
+	$TABLETOOLAGENDAREPEAT		= $courseDbName . "calendar_event_repeat";
+	$TABLETOOLAGENDAREPEATNOT	= $courseDbName . "calendar_event_repeat_not";
 
 	// Announcements
 	$TABLETOOLANNOUNCEMENTS 	= $courseDbName . "announcement";
@@ -680,6 +682,24 @@ function update_Db_course($courseDbName)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
 
+	$sql = "
+		CREATE TABLE `".$TABLETOOLAGENDAREPEAT. "` (
+		cal_id INT DEFAULT 0 NOT NULL,
+		cal_type VARCHAR(20),  
+		cal_end INT,  
+		cal_frequency INT DEFAULT 1,  
+		cal_days CHAR(7),  
+		PRIMARY KEY (cal_id)
+		)";
+	api_sql_query($sql,__FILE__,__LINE__);
+	$sql = "
+		CREATE TABLE `".$TABLETOOLAGENDAREPEATNOT."` (
+		cal_id INT NOT NULL,  
+		cal_date INT NOT NULL,  
+		PRIMARY KEY ( cal_id, cal_date )
+		)";
+	api_sql_query($sql,__FILE__,__LINE__);
+		
 	/*
 	-----------------------------------------------------------
 		Document tool

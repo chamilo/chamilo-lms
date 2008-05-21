@@ -119,6 +119,8 @@ ALTER TABLE track_e_uploads ADD INDEX (upload_cours_id);
 ALTER TABLE track_e_attempt ADD tms datetime not null default '0000-00-00 00:00:00';
 
 -- xxUSERxx
+CREATE TABLE personal_agenda_repeat (cal_id INT DEFAULT 0 NOT NULL,  cal_type VARCHAR(20),  cal_end INT,  cal_frequency INT DEFAULT 1,  cal_days CHAR(7),  PRIMARY KEY (cal_id));
+CREATE TABLE personal_agenda_repeat_not (cal_id INT NOT NULL,  cal_date INT NOT NULL,  PRIMARY KEY ( cal_id, cal_date ));
 
 -- xxCOURSExx
 CREATE TABLE lp_iv_objective(id bigint unsigned primary key auto_increment, lp_iv_id bigint unsigned not null, order_id smallint unsigned not null default 0, objective_id	varchar(255) not null default '', score_raw		float unsigned not null default 0, score_max		float unsigned not null default 0, score_min		float unsigned not null default 0, status char(32) not null default 'not attempted');
@@ -148,3 +150,5 @@ CREATE TABLE  forum_notification (user_id int(11) , forum_id varchar(11), thread
 ALTER TABLE quiz ADD access_condition text DEFAULT NULL;
 ALTER TABLE survey ADD access_condition text DEFAULT NULL;
 UPDATE tool SET category='authoring' WHERE name = 'announcement';
+CREATE TABLE calendar_event_repeat (cal_id INT DEFAULT 0 NOT NULL,  cal_type VARCHAR(20),  cal_end INT,  cal_frequency INT DEFAULT 1,  cal_days CHAR(7),  PRIMARY KEY (cal_id));
+CREATE TABLE calendar_event_repeat_not (cal_id INT NOT NULL,  cal_date INT NOT NULL,  PRIMARY KEY ( cal_id, cal_date ));

@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 15309 2008-05-18 22:57:12Z yannoo $
+<?php // $Id: database.lib.php 15345 2008-05-21 06:04:40Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -74,6 +74,8 @@ define('TABLE_SCORM_SCO_DATA', 'scorm_sco_data');
 
 //course tables
 define('TABLE_AGENDA', 'calendar_event');
+define('TABLE_AGENDA_REPEAT', 'calendar_event_repeat');
+define('TABLE_AGENDA_REPEAT_NOT', 'calendar_event_repeat_not');
 define('TABLE_ANNOUNCEMENT', 'announcement');
 define('TABLE_CHAT_CONNECTED', 'chat_connected'); // @todo: probably no longer in use !!!
 define('TABLE_COURSE_DESCRIPTION', 'course_description');
@@ -153,6 +155,8 @@ define('TABLE_ONLINE_LINK', 'online_link');
 define('TABLE_ONLINE_CONNECTED', 'online_connected');
 // dokeos_user database
 define('TABLE_PERSONAL_AGENDA', 'personal_agenda');
+define('TABLE_PERSONAL_AGENDA_REPEAT', 'personal_agenda_repeat');
+define('TABLE_PERSONAL_AGENDA_REPEAT_NOT', 'personal_agenda_repeat_not');
 define('TABLE_USER_COURSE_CATEGORY', 'user_course_category');
 //Survey
 // @todo: are these MAIN tables or course tables ?

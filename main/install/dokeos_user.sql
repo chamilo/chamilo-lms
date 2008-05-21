@@ -18,7 +18,20 @@ CREATE TABLE personal_agenda (
   course varchar(255),
   UNIQUE KEY id (id)
 );
+CREATE TABLE personal_agenda_repeat (
+  cal_id INT DEFAULT 0 NOT NULL,
+  cal_type VARCHAR(20),
+  cal_end INT,
+  cal_frequency INT DEFAULT 1,
+  cal_days CHAR(7),
+  PRIMARY KEY (cal_id)
+);
 
+CREATE TABLE personal_agenda_repeat_not (
+  cal_id INT NOT NULL,
+  cal_date INT NOT NULL,
+  PRIMARY KEY ( cal_id, cal_date )
+);
 CREATE TABLE user_course_category (
   id int unsigned NOT NULL auto_increment,
   user_id int unsigned NOT NULL default 0,

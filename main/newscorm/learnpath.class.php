@@ -157,7 +157,7 @@ class learnpath {
     		$sql = "SELECT * FROM $main_table WHERE user_id = '$user_id'";
     		if($this->debug>2){error_log('New LP - learnpath::learnpath() '.__LINE__.' - Querying user: '.$sql,0);}
     		//$res = Database::query($sql);
-    		$res = api_sql_query($sql);
+    		$res = api_sql_query($sql, __FILE__, __LINE__);
     		if(Database::num_rows($res)>0)
     		{
     			$this->user_id = $user_id;
@@ -176,7 +176,7 @@ class learnpath {
 		$sql = "SELECT * FROM $lp_table WHERE lp_id = '$lp_id' AND user_id = '$user_id' ORDER BY view_count DESC";
 		if($this->debug>2){error_log('New LP - learnpath::learnpath() '.__LINE__.' - querying lp_view: '.$sql,0);}
 		//$res = Database::query($sql);
-		$res = api_sql_query($sql);
+		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$view_id = 0; //used later to query lp_item_view
 		if(Database::num_rows($res)>0)
 		{
@@ -192,7 +192,7 @@ class learnpath {
 			if($this->debug>2){error_log('New LP - learnpath::learnpath() '.__LINE__.' - NOT Found previous view',0);}
 			$this->attempt = 1;
 			$sql_ins = "INSERT INTO $lp_table (lp_id,user_id,view_count) VALUES ($lp_id,$user_id,1)";
-			$res_ins = api_sql_query($sql_ins);
+			$res_ins = api_sql_query($sql_ins, __FILE__, __LINE__);
 			$this->lp_view_id = Database::get_last_insert_id();
 			if($this->debug>2){error_log('New LP - learnpath::learnpath() '.__LINE__.' - inserting new lp_view: '.$sql_ins,0);}
 		}
@@ -200,7 +200,7 @@ class learnpath {
     	//initialise items
 		$lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
     	$sql = "SELECT * FROM $lp_item_table WHERE lp_id = '".$this->lp_id."' ORDER BY parent_item_id, display_order";
-    	$res = api_sql_query($sql);
+    	$res = api_sql_query($sql, __FILE__, __LINE__);
     	
     	while($row = Database::fetch_array($res))
     	{
@@ -276,7 +276,7 @@ class learnpath {
 	    			"AND lp_item_id = ".$row['id']." ORDER BY view_count DESC ";
 	    	if($this->debug>2){error_log('New LP - learnpath::learnpath() - Selecting item_views: '.$sql,0);}
 	    	//get the item status
-	    	$res2 = api_sql_query($sql);
+	    	$res2 = api_sql_query($sql, __FILE__, __LINE__);
 	    	if(Database::num_rows($res2)>0)
 	    	{
 	    		//if this learnpath has already been used by this user, get his last attempt count and
@@ -303,7 +303,7 @@ class learnpath {
 	    				"(lp_item_id, lp_view_id, view_count, status) VALUES " .
 	    				"(".$row['id'].",".$this->lp_view_id.",1,'not attempted')";
 	    		if($this->debug>2){error_log('New LP - learnpath::learnpath() '.__LINE__.' - Inserting blank item_view : '.$sql_ins,0);}
-	    		$res_ins = api_sql_query($sql_ins);
+	    		$res_ins = api_sql_query($sql_ins, __FILE__, __LINE__);
 			}
 			//setting the view in the item object
 			$this->items[$row['id']]->set_lp_view($this->lp_view_id);
@@ -3977,16 +3977,19 @@ class learnpath {
 			WHERE
 				lp_id = " . $this->lp_id;
 		
-		$result = api_sql_query($sql, __FILE__, __LINE__);
-		
-		$arrLP = array();
+		$result = api_sql_query($sql, __FILE__, __LINE__);		
+		$arrLP = array();		
 		
 		while($row = Database::fetch_array($result))
 		{
+			if($this->encoding=='UTF-8')
+			{
+				$row['title'] = utf8_decode($row['title']);
+			}
 				$arrLP[] = array(
 				'id' => $row['id'],
 				'item_type' => $row['item_type'],
-				'title' => stripslashes(html_entity_decode($row['title'])),
+				'title' => $row['title'],
 				'description' => $row['description'],
 				'parent_item_id' => $row['parent_item_id'],
 				'previous_item_id' => $row['previous_item_id'],
@@ -3994,11 +3997,9 @@ class learnpath {
 				'display_order' => $row['display_order']);		
 		}
 		 
-		$this->tree_array($arrLP);
-		
-		$arrLP = $this->arrMenu;
-		
-		unset($this->arrMenu);
+		$this->tree_array($arrLP);		
+		$arrLP = $this->arrMenu;		
+		unset($this->arrMenu);	 
 		
 		if(api_is_allowed_to_edit())
 			$return .= '<p><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=build&amp;lp_id=' . $this->lp_id . '">'.get_lang("Advanced").'</a>&nbsp;&#124;&nbsp;'.get_lang("BasicOverview").'&nbsp;&#124;&nbsp;<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$this->lp_id.'">'.get_lang("Display").'</a></p>';
@@ -4016,6 +4017,7 @@ class learnpath {
 			
 			for($i = 0; $i < count($arrLP); $i++)
 			{
+				$title = stripslashes($arrLP[$i]['title']);
 				if($arrLP[$i]['description'] == '')
 					$arrLP[$i]['description'] = '&nbsp;';
 				
@@ -4023,7 +4025,7 @@ class learnpath {
 				
 				$return .= "\t" . '<tr class="'.$oddclass.'">' . "\n";
 					
-					$return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:3px;" />' . stripslashes($arrLP[$i]['title']) . '</td>' . "\n";
+					$return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:3px;" />' . $title . '</td>' . "\n";
 					//$return .= "\t\t" . '<td>' . stripslashes($arrLP[$i]['description']) . '</td>' . "\n";
 					
 					if(api_is_allowed_to_edit())
@@ -4065,7 +4067,7 @@ class learnpath {
 							$return .= '</a>' . "\n";
 						}
 						
-						$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $arrLP[$i]['title'] . '\');">';
+						$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $title . '\');">';
 							$return .= '<img alt="" src="../img/delete.gif" title="' . get_lang('_delete_learnpath_module') . '" />';
 						$return .= '</a>' . "\n";
 						
@@ -4080,10 +4082,8 @@ class learnpath {
 				$return .= "\t" . '<tr>' . "\n";
 					$return .= "\t\t" . '<td colspan="4">'.get_lang("NoItemsInLp").'</td>' . "\n";
 				$return .= "\t" . '</tr>' . "\n";
-			}
-		
-		$return .= '</table>' . "\n";
-		
+			}		
+		$return .= '</table>' . "\n";		
 		return $return;
 	}
 	
@@ -4119,10 +4119,8 @@ class learnpath {
 			WHERE
 				lp_id = " . $this->lp_id;
 		
-		$result = api_sql_query($sql, __FILE__, __LINE__);
-		
-		$arrLP = array();
-		
+		$result = api_sql_query($sql, __FILE__, __LINE__);		
+		$arrLP = array();		
 		while($row = Database::fetch_array($result))
 		{
 			if($this->encoding=='UTF-8')
@@ -4389,7 +4387,7 @@ class learnpath {
 					$tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
 					$sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE id = " . $row['path'];
 					$result=api_sql_query($sql_doc, __FILE__, __LINE__);
-					$path_file=mysql_result($result,0,0);					
+					$path_file=Database::result($result,0,0);					
 					$path_parts = pathinfo($path_file);
 					
 					if(in_array($path_parts['extension'],array('html','txt','png', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'swf')))
@@ -5871,7 +5869,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				
 				$sql_doc = "SELECT path FROM " . $tbl_doc . "WHERE id = " . $extra_info;
 				$result=api_sql_query($sql_doc, __FILE__, __LINE__);
-				$path_file=mysql_result($result,0,0);				
+				$path_file=Database::result($result,0,0);				
 				
 				$path_parts = pathinfo($path_file);
 				
@@ -6752,7 +6750,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		
-		$s_description=mysql_result($result,0,0);
+		$s_description=Database::result($result,0,0);
 		
 		$return .= '<p class="lp_title">' . $lang . '</p>';
 		
@@ -7251,7 +7249,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$return .= '<div class="lp_resource_header_end"' . " onclick=\"if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_QUIZ . '.gif" style="margin-right:5px;" title="" />'.get_lang('Quiz').'</div>';
 		$return .= '<div class="lp_resource_elements_end" id="resExercise">';
 
-		while ($row_hot = mysql_fetch_array($res_hot))
+		while ($row_hot = Database::fetch_array($res_hot))
  		{
 			$return .= '<div class="lp_resource_element">';
 			//display quizhotpotatoes

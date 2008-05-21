@@ -172,7 +172,7 @@ $lp_theme_css=$_SESSION['oLP']->get_theme();
 Display::display_header(null,'Path');
 //api_display_tool_title($therow['name']);
 
-$suredel = trim(get_lang('AreYouSureToDelete')).' '.trim(get_lang('ThisItem'));
+$suredel = trim(get_lang('AreYouSureToDelete'));
 //$suredelstep = trim(get_lang('AreYouSureToDeleteSteps'));
 ?>
 <script type='text/javascript'>

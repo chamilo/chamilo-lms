@@ -2451,7 +2451,7 @@ class learnpath {
     	// build, display
     	if(api_is_allowed_to_edit())
     	{
-    		$mych = api_get_setting('platform_charset');
+    		$mych = api_get_setting('platform_charset'); 
     		$html.="<p>&nbsp;&nbsp;&nbsp;&nbsp;<a  target='_parent' href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."' style= target='_parent'>".mb_convert_encoding(get_lang("Build"),$this->encoding,$mych)."</a>&nbsp;&#124;&nbsp;<a href='lp_controller.php?".api_get_cidreq()."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".mb_convert_encoding(get_lang("BasicOverview"),$this->encoding,$mych)."</a>&nbsp;&#124;&nbsp;".mb_convert_encoding(get_lang("Display"),$this->encoding,$mych)."</p>";
 			unset($mych);
     	}
@@ -2518,7 +2518,7 @@ class learnpath {
     			$title = rl_get_resource_name(api_get_course_id(),$this->get_id(),$item['id']);    			
     		}
     		
-    		$title = html_entity_decode($title,ENT_QUOTES,$this->encoding);   		
+    		$title = html_entity_decode($title,ENT_QUOTES,$this->encoding);	
     	
     		if($item['type']!='dokeos_chapter' and $item['type']!='dir' AND $item['type']!='dokeos_module')
     		{
@@ -3979,22 +3979,25 @@ class learnpath {
 		
 		$result = api_sql_query($sql, __FILE__, __LINE__);		
 		$arrLP = array();		
+		$mycharset=api_get_setting('platform_charset');		
 		
 		while($row = Database::fetch_array($result))
 		{
-			if($this->encoding=='UTF-8')
+				
+			if($this->encoding!=$mycharset)
 			{
-				$row['title'] = utf8_decode($row['title']);
-			}
-				$arrLP[] = array(
-				'id' => $row['id'],
-				'item_type' => $row['item_type'],
-				'title' => $row['title'],
-				'description' => $row['description'],
-				'parent_item_id' => $row['parent_item_id'],
-				'previous_item_id' => $row['previous_item_id'],
-				'next_item_id' => $row['next_item_id'],
-				'display_order' => $row['display_order']);		
+				$row['title'] = mb_convert_encoding($row['title'], $mycharset,$this->encoding);
+			}			
+			
+			$arrLP[] = array(
+			'id' => $row['id'],
+			'item_type' => $row['item_type'],
+			'title' => $row['title'],
+			'description' => $row['description'],
+			'parent_item_id' => $row['parent_item_id'],
+			'previous_item_id' => $row['previous_item_id'],
+			'next_item_id' => $row['next_item_id'],
+			'display_order' => $row['display_order']);		
 		}
 		 
 		$this->tree_array($arrLP);		
@@ -4120,13 +4123,16 @@ class learnpath {
 				lp_id = " . $this->lp_id;
 		
 		$result = api_sql_query($sql, __FILE__, __LINE__);		
-		$arrLP = array();		
+		$arrLP = array();	
+		$mycharset=api_get_setting('platform_charset');		
+				
 		while($row = Database::fetch_array($result))
 		{
-			if($this->encoding=='UTF-8')
+			
+			if($this->encoding!=$mycharset)
 			{
-				$row['title'] = utf8_decode($row['title']);
-			}
+				$row['title'] = mb_convert_encoding($row['title'], $mycharset,$this->encoding);
+			}		
 			
 			$arrLP[] = array(
 				'id' => $row['id'],

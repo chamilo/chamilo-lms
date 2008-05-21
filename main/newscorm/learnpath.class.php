@@ -6696,6 +6696,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 */
 	function display_manipulate($item_id, $item_type = TOOL_DOCUMENT)
 	{
+		global $charset; 
 		$return = '<div class="lp_manipulate"><table border="0" width="100%"><tr><td valign="top" width="400">';
 		
 		switch($item_type)
@@ -6743,14 +6744,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		$sql = "
 			SELECT
-				description 
+				title 
 			FROM " . $tbl_lp_item . " as lp
 			WHERE
 				lp.id = " . $item_id;
 
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		
-		$s_description=Database::result($result,0,0);
+		$s_title=Database::result($result,0,0);
 		
 		$return .= '<p class="lp_title">' . $lang . '</p>';
 		
@@ -6761,7 +6762,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		{
 			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang('Prerequisites').'"><img align="absbottom" alt="'.get_lang('Prerequisites').'" src="../img/right.gif" title="'.get_lang('Prerequisites').'" /> '.get_lang('Prerequisites').'</a>';
 		}
-		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . htmlentities($s_description) . '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="Delete the current item" /> '.get_lang("Delete").'</a>';
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' .addslashes($s_title). '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="Delete the current item" /> '.get_lang("Delete").'</a>';
 		
 		//$return .= '<br><br><p class="lp_text">' . ((trim($s_description) == '') ? ''.get_lang("NoDescription").'' : stripslashes(nl2br($s_description))) . '</p>';
 		

@@ -145,29 +145,29 @@ $lp_theme_css=$_SESSION['oLP']->get_theme();
 Display::display_header(null,'Path');
 //api_display_tool_title($therow['name']);
 
-$suredel = get_lang('AreYouSureToDelete');
-$suredelstep = get_lang('AreYouSureToDeleteSteps');
-
-
+$suredel = trim(get_lang('AreYouSureToDelete'));
+//$suredelstep = trim(get_lang('AreYouSureToDeleteSteps'));
 ?>
 <script type='text/javascript'>
 /* <![CDATA[ */
-function confirmation (name)
+
+function stripslashes(str) {
+	str=str.replace(/\\'/g,'\'');
+	str=str.replace(/\\"/g,'"');
+	str=str.replace(/\\\\/g,'\\');
+	str=str.replace(/\\0/g,'\0');
+	return str;
+}
+function confirmation(name)
 {
-	if (name!='Users' && name!='Assignments' && name!='Document' && name!='Forum' && name!='Agenda' && name!='Groups' && name!='Link _self'  && name!='Dropbox' && name!='Course_description' && name!='Exercise' && name!='Introduction_text')
-	{ 
-		if (confirm("<?php echo $suredel; ?> "+ name + " <?php echo $suredelstep;?>?"))
-			{return true;}
-		else
-			{return false;}
-	}
+	name=stripslashes(name);		if (confirm("<?php echo $suredel; ?> " + name + " ?"))
+	{
+		return true;
+	} 
 	else
 	{
-		if (confirm("<?php echo $suredel; ?> "+ name + "?"))
-			{return true;}
-		else
-			{return false;}
-	}
+		return false;
+	}	
 }
 </script>
 <?php

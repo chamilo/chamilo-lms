@@ -56,9 +56,10 @@ require_once('learnpathItem.class.php');
 //extra javascript functions for in html head:
 $htmlHeadXtra[] =
 "<script language='javascript' type='text/javascript'>
-function confirmation (name)
+
+function confirmation(name)
 {
-	if (confirm(\" ".get_lang('AreYouSureToDelete')." \"+ name + \" ?\"))
+	if (confirm(\" ".trim(get_lang('AreYouSureToDelete'))." ?\"))
 		{return true;}
 	else
 		{return false;}

@@ -5392,6 +5392,17 @@ class learnpath {
 	
 function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	{
+		echo '
+		<style>
+	
+		div.row div.label {
+			width:110px;
+		}
+		
+		div.row div.formw {
+			width: 82%;
+		}
+		</style>';
 		
 		$tbl_lp_item = Database::get_course_table('lp_item');
 		$tbl_forum = Database::get_course_table(TABLE_FORUM_THREAD);
@@ -5834,15 +5845,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		echo '
 		<style>
-	
-		div.row div.label {
-			width:110px;
-		}
-		
-		div.row div.formw {
-			width: 82%;
-		}
-		</style>';
+	        div.row div.formw { 	              
+    		width: 80%; 	                        
+ 	              }
+ 	                 </style>';
 			
 		$tbl_lp_item = Database::get_course_table('lp_item');
 		$tbl_doc = Database::get_course_table(TABLE_DOCUMENT);

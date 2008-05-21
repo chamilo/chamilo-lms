@@ -62,41 +62,43 @@ table.lp_build td{vertical-align:top;}
 table.lp_build td.tree{border-right:1px solid #999999; width:240px;}
 table.lp_build td.workspace{padding:0; width:auto;}
 
+table.lp_form{
+	font-size:12px; 
+	margin:0 10px; 
+	width:auto;
+}
 
-table.lp_form{font-size:12px; margin:0 10px; width:100%;}
+table.lp_form td{
+	height:25px; 
+	padding:5px; 
+	vertical-align:top; 
+	width:auto;
+}
+table.lp_form td.label
+{
+	padding-top:7px; 
+	text-align:right;
+}
 
-table.lp_form td{height:25px; padding:5px; vertical-align:top; width:auto;}
-table.lp_form td.label{padding-top:7px; text-align:right; width:75px;}
 table.lp_form td.radio{width:300px;}
 table.lp_form td.exercise{width:50px;}
-
 table.lp_form th{background:#F8F8F8; border-bottom:1px solid #999999; border-top:1px solid #999999;}
 table.lp_overview th.exercise{width:50px;}
 
-table.lp_form input,
-	table.lp_form select,
-	table.lp_form textarea{background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;}
+table.lp_form input,table.lp_form select,table.lp_form textarea{background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;}
 
 table.lp_form td.radio input,
-	table.lp_form td.exercise input{width:auto;}	
-	
-table.lp_form .small_form{background:#FFFFFF;}	
-	
+table.lp_form td.exercise input{width:auto;}		
+table.lp_form .small_form{background:#FFFFFF;}		
 table.lp_form select{padding:0;}
-
 table.lp_form input.button{width:75px;}
 
-
 table.lp_overview{font-size:12px; width:100%;}
-
 table.lp_overview td{border-bottom:1px solid #999999; border-top:1px solid #999999; height:20px; padding:3px; vertical-align:middle; width:auto;}
 table.lp_overview td.title{width:200px;}
 table.lp_overview td.actions{text-align:center; width:100px;}
 table.lp_overview td.move{text-align:center; width:50px;}
-
 table.lp_overview th{background:#FFFFFF; padding-left:3px; text-align:center;}
-
 table.lp_overview tr{background:#F8F8F8;}
 table.lp_overview tr:hover{background:#E5EDF9;}
-
 table.lp_overview img{margin-left:3px;}

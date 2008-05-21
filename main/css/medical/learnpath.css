@@ -62,11 +62,24 @@ table.lp_build td{vertical-align:top;}
 table.lp_build td.tree{border-right:1px solid #999999; width:240px;}
 table.lp_build td.workspace{padding:0; width:auto;}
 
+table.lp_form{
+	font-size:12px; 
+	margin:0 10px; 
+	width:auto;
+}
 
-table.lp_form{font-size:12px; margin:0 10px; width:100%;}
+table.lp_form td{
+	height:25px; 
+	padding:5px; 
+	vertical-align:top; 
+	width:auto;
+}
+table.lp_form td.label
+{
+	padding-top:7px; 
+	text-align:right;
+}
 
-table.lp_form td{height:25px; padding:5px; vertical-align:top; width:auto;}
-table.lp_form td.label{padding-top:7px; text-align:right; width:75px;}
 table.lp_form td.radio{width:300px;}
 table.lp_form td.exercise{width:50px;}
 

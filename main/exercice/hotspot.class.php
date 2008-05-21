@@ -71,9 +71,9 @@ class HotSpot extends Question {
 			$this->uploadPicture($file_info['tmp_name'], $file_info['name']);
 			list($width,$height) = getimagesize($file_info['tmp_name']);
 			if($width>=$height)
-				$this->resizePicture('width',720);
+				$this->resizePicture('width',544);
 			else
-				$this->resizePicture('height',540);
+				$this->resizePicture('height',408);
 			$this->save();
 		}
 	}

@@ -105,13 +105,13 @@ function get_myagendaitems($courses_dbs, $month, $year)
 													agenda.*, item_property.*
 													FROM ".$TABLEAGENDA." agenda,
 														".$TABLE_ITEMPROPERTY." item_property
-													WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
-													AND MONTH(`agenda`.`start_date`)='".$month."'
-													AND YEAR(`agenda`.`start_date`)='".$year."'
-													AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-													AND	( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
-													AND `item_property`.`visibility`='1'
-													ORDER BY start_date ".$sort;
+													WHERE agenda.id = item_property.ref
+													AND MONTH(agenda.start_date)='".$month."'
+													AND YEAR(agenda.start_date)='".$year."'
+													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+													AND	( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+													AND item_property.visibility='1'
+													ORDER BY start_date ";
 			}
 			else
 			{
@@ -119,18 +119,18 @@ function get_myagendaitems($courses_dbs, $month, $year)
 													agenda.*, item_property.*
 													FROM ".$TABLEAGENDA." agenda,
 														".$TABLE_ITEMPROPERTY." item_property
-													WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
-													AND MONTH(`agenda`.`start_date`)='".$month."'
-													AND YEAR(`agenda`.`start_date`)='".$year."'
-													AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-													AND ( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id`='0')
-													AND `item_property`.`visibility`='1'
-													ORDER BY start_date ".$sort;
+													WHERE agenda.id = item_property.ref
+													AND MONTH(agenda.start_date)='".$month."'
+													AND YEAR(agenda.start_date)='".$year."'
+													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+													AND ( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id='0')
+													AND item_property.visibility='1'
+													ORDER BY start_date ";
 			}
 		}
 
 		$result = api_sql_query($sqlquery, __FILE__, __LINE__);
-		while ($item = mysql_fetch_array($result))
+		while ($item = Database::fetch_array($result))
 		{
 			$agendaday = date("j",strtotime($item['start_date']));
 			if(!isset($items[$agendaday])){$items[$agendaday]=array();}
@@ -332,10 +332,10 @@ function show_new_personal_item_form($id = "")
 	{
 		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		$aantal = mysql_num_rows($result);
+		$aantal = Database::num_rows($result);
 		if ($aantal <> 0)
 		{
-			$row = mysql_fetch_array($result);
+			$row = Database::fetch_array($result);
 			$year = substr($row['date'], 0, 4);
 			$month = substr($row['date'], 5, 2);
 			$day = substr($row['date'], 8, 2);
@@ -514,7 +514,7 @@ function get_courses_of_user()
 			                        WHERE course.code = course_rel_user.course_code
 			                        AND   course_rel_user.user_id = '".$_user['user_id']."'";
 	$result = api_sql_query($sql_select_courses);
-	while ($row = mysql_fetch_array($result))
+	while ($row = Database::fetch_array($result))
 	{
 		// we only need the database name of the course
 		$courses[] = array ("db" => $row['db'], "code" => $row['k'], "visual_code" => $row['vc'], "title" => $row['i'], "directory" => $row['dir'], "status" => $row['status']);
@@ -565,7 +565,7 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 	//echo $type."<p>";
 	//echo "<pre>".$sql."</pre>";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	while ($item = mysql_fetch_array($result))
+	while ($item = Database::fetch_array($result))
 	{
 		// we break the date field in the database into a date and a time part
 		$agenda_db_date = explode(" ", $item[date]);
@@ -747,7 +747,7 @@ function delete_personal_agenda($id)
 	{
 		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		$aantal = mysql_num_rows($result);
+		$aantal = Database::num_rows($result);
 		if ($aantal <> 0)
 		{
 			$sql = "DELETE FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";

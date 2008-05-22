@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 15360 2008-05-22 18:07:51Z yannoo $
+<?php //$Id: agenda.inc.php 15362 2008-05-22 18:27:41Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -122,7 +122,7 @@ function get_calendar_items($month, $year)
 	}
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$data=array();
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		$datum_item=(int)substr($row["start_date"],8,2);
 		//$dag_item=date("d",strtotime($datum_item));
@@ -451,7 +451,7 @@ $sql = "SELECT u.user_id uid, u.lastname lastName, u.firstname firstName
 			AND cu.user_id = u.user_id $courseadmin_filter
 		ORDER BY u.lastname, u.firstname";
 $result = api_sql_query($sql,__FILE__,__LINE__);
-while($user=mysql_fetch_array($result)){
+while($user=Database::fetch_array($result)){
 	$users[$user[0]] = $user;
 }
 
@@ -464,7 +464,7 @@ if(!empty($_SESSION['id_session'])){
 			AND course_code='$_cid'";
 
 	$result = api_sql_query($sql,__FILE__,__LINE__);
-	while($user=mysql_fetch_array($result)){
+	while($user=Database::fetch_array($result)){
 		$users[$user[0]] = $user;
 	}
 
@@ -491,8 +491,8 @@ function get_course_groups()
 			        ON g.id = gu.group_id
 			        GROUP BY g.id";
 	
-	$result = api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
-	while ($group_data = mysql_fetch_array($result))
+	$result = api_sql_query($sql,__FILE__,__LINE__) or die(Database::error());
+	while ($group_data = Database::fetch_array($result))
 	{
 		$group_list [$group_data['id']] = $group_data;
 	}
@@ -641,8 +641,8 @@ function store_new_agenda_item()
 					        VALUES
 					        ('".$title."','".$content."', '".$start_date."','".$end_date."')";
 	
-	$result = api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
-	$last_id=mysql_insert_id();
+	$result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
+	$last_id=Database::insert_id();
 	
 	// store in last_tooledit (first the groups, then the users
 	$to=$_POST['selectedform'];
@@ -786,7 +786,7 @@ $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 $sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".$tool."' AND ref='".$id."'";
 $result=api_sql_query($sql,__FILE__,__LINE__);
-while ($row=mysql_fetch_array($result))
+while ($row=Database::fetch_array($result))
 	{
 	// if to_group_id is null then it is sent to a specific user
 	// if to_group_id = 0 then it is sent to everybody
@@ -991,8 +991,8 @@ global $_course;
 $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 $sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='$tool' AND ref='$id'";
-$result=api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
-while ($row=mysql_fetch_array($result))
+$result=api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
+while ($row=Database::fetch_array($result))
 	{
 	$to_group=$row['to_group_id'];
 	switch ($to_group)
@@ -1025,8 +1025,8 @@ function change_visibility($tool,$id)
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 	$sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".TOOL_CALENDAR_EVENT."' AND ref='$id'";
-	$result=api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
-	$row=mysql_fetch_array($result);
+	$result=api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
+	$row=Database::fetch_array($result);
 
 	if ($row['visibility']=='1')
 	{
@@ -1111,7 +1111,7 @@ function get_agenda_item($id)
 	$id=(int)addslashes($_GET['id']);
 	$sql 					= "SELECT * FROM ".$TABLEAGENDA." WHERE id='".$id."'";
 	$result					= api_sql_query($sql,__FILE__,__LINE__);
-	$entry_to_edit 			= mysql_fetch_array($result);
+	$entry_to_edit 			= Database::fetch_array($result);
 	$item['title']			= $entry_to_edit["title"];
 	$item['content']		= $entry_to_edit["content"];
 	$item['start_date']		= $entry_to_edit["start_date"];
@@ -1160,7 +1160,7 @@ function store_edited_agenda_item()
 		// 2.a. delete everything for the users
 		$sql_delete="DELETE FROM ".$TABLE_ITEM_PROPERTY." WHERE ref='$id' AND tool='".TOOL_CALENDAR_EVENT."'";
 
-		$result = api_sql_query($sql_delete,__FILE__,__LINE__) or die (mysql_error());
+		$result = api_sql_query($sql_delete,__FILE__,__LINE__) or die (Database::error());
 		// 2.b. storing the new users/groups
 		if (!is_null($to)) // !is_null($to): when no user is selected we send it to everyone
 		{
@@ -1212,7 +1212,7 @@ function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 									start_date='".$start_date."',
 									end_date='".$end_date."'
 								WHERE id='".$id."'";
-	$result = api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
+	$result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
 	return true;
 }
 
@@ -1234,7 +1234,7 @@ function delete_agenda_item($id)
 			{
 			//$sql = "DELETE FROM ".$TABLEAGENDA." WHERE id='$id'";
 			//$sql= "UPDATE ".$TABLE_ITEM_PROPERTY." SET visibility='2' WHERE tool='Agenda' and ref='$id'";
-			//$result = api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
+			//$result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
 			$id=(int)addslashes($_GET['id']);
 			api_item_property_update($_course,TOOL_CALENDAR_EVENT,$id,"delete");
 
@@ -1447,8 +1447,8 @@ function display_agenda_items()
 	} // you are a student
 
 	//echo "<pre>".$sql."</pre>";
-	$result=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
-	$number_items=mysql_num_rows($result);
+	$result=api_sql_query($sql,__FILE__,__LINE__) or die(Database::error());
+	$number_items=Database::num_rows($result);
 
 
 	/*--------------------------------------------------
@@ -1469,7 +1469,7 @@ function display_agenda_items()
 	$export_icon = api_get_path('WEB_IMG_PATH').'export.png';
 	$export_icon_low = api_get_path('WEB_IMG_PATH').'export_low_fade.png';
 	$export_icon_high = api_get_path('WEB_IMG_PATH').'export_high_fade.png';
-	while ($myrow=mysql_fetch_array($result))
+	while ($myrow=Database::fetch_array($result))
 {
 	echo "<table class=\"data_table\">\n";
 /*--------------------------------------------------
@@ -1649,7 +1649,7 @@ echo '<tr class="row_even">';
 	echo $td_colspan;
 	echo "<a href=\"#top\"><img src=\"../img/top.gif\" border=\"0\" alt=\"to top\" align=\"right\" /></a></td></tr>";
 	echo "</table><br /><br />";
-} // end while ($myrow=mysql_fetch_array($result))
+} // end while ($myrow=Database::fetch_array($result))
 
 
 if(!empty($event_list))
@@ -1698,9 +1698,9 @@ function display_one_agenda_item($agenda_id)
 					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 					AND toolitemproperties.visibility='1'
 					AND agenda.id='$agenda_id'";
-	$result=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
-	$number_items=mysql_num_rows($result);
-	$myrow=mysql_fetch_array($result); // there should be only one item so no need for a while loop
+	$result=api_sql_query($sql,__FILE__,__LINE__) or die(Database::error());
+	$number_items=Database::num_rows($result);
+	$myrow=Database::fetch_array($result); // there should be only one item so no need for a while loop
 
 	/*--------------------------------------------------
 			DISPLAY: NO ITEMS
@@ -2252,7 +2252,7 @@ function show_add_form($id = '')
 			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
 			$result_sql=api_sql_query($sql);
-			$isocode_language=mysql_result($result_sql,0,0);
+			$isocode_language=Database::result($result_sql,0,0);
 			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
 
 			$return =	$oFCKeditor->CreateHtml();
@@ -2316,13 +2316,13 @@ function get_agendaitems($month, $year)
 						DISTINCT agenda.*, item_property.*
 						FROM ".$TABLEAGENDA." agenda,
 							 ".$TABLE_ITEMPROPERTY." item_property
-						WHERE agenda.id = item_property.ref   ".$show_all_current."
+						WHERE agenda.id = item_property.ref
 						AND MONTH(agenda.start_date)='".$month."'
 						AND YEAR(agenda.start_date)='".$year."'
 						AND item_property.tool='".TOOL_CALENDAR_EVENT."'
 						AND item_property.visibility='1'
 						GROUP BY agenda.id
-						ORDER BY start_date ".$sort;
+						ORDER BY start_date ";
 	}
 	// if the user is not an administrator of that course
 	else
@@ -2334,13 +2334,13 @@ function get_agendaitems($month, $year)
 							agenda.*, item_property.*
 							FROM ".$TABLEAGENDA." agenda,
 								".$TABLE_ITEMPROPERTY." item_property
-							WHERE agenda.id = item_property.ref   ".$show_all_current."
+							WHERE agenda.id = item_property.ref 
 							AND MONTH(agenda.start_date)='".$month."'
 							AND YEAR(agenda.start_date)='".$year."'
 							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
 							AND	( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 							AND item_property.visibility='1'
-							ORDER BY start_date ".$sort;
+							ORDER BY start_date ";
 		}
 		else
 		{
@@ -2348,23 +2348,24 @@ function get_agendaitems($month, $year)
 							agenda.*, item_property.*
 							FROM ".$TABLEAGENDA." agenda,
 							".$TABLE_ITEMPROPERTY." item_property
-							WHERE agenda.id = item_property.ref   ".$show_all_current."
+							WHERE agenda.id = item_property.ref
 							AND MONTH(agenda.start_date)='".$month."'
 							AND YEAR(agenda.start_date)='".$year."'
 							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
 							AND ( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id='0')
 							AND item_property.visibility='1'
-							ORDER BY start_date ".$sort;
+							ORDER BY start_date ";
 		}
 	}
 
-	$result = api_sql_query($sqlquery, __FILE__, __LINE__);
-	while ($item = mysql_fetch_array($result))
+	$mycourse = api_get_course_info();
+    $result = api_sql_query($sqlquery, __FILE__, __LINE__);
+	while ($item = Database::fetch_array($result))
 	{
-		$agendaday = date("j",strtotime($item['start_date']));
-		$time= date("H:i",strtotime($item['start_date']));
-		$URL = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
-		$items[$agendaday][$item['start_time']] .= "<i>".$time."</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$array_course_info["visual_code"]."</a>  ".$item['title']."<br />";
+		$agendaday = date('j',strtotime($item['start_date']));
+		$time= date('H:i',strtotime($item['start_date']));
+		$URL = $_configuration['root_web'].'main/calendar/agenda.php?cidReq='.$mycourse['id']."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
+		$items[$agendaday][$item['start_time']] .= '<i>'.$time.'</i> <a href="'.$URL.'" title="'.$mycourse['name'].'">'.$mycourse['official_code'].'</a> '.$item['title'].'<br />';
 	}
 		
 	// sorting by hour for every day
@@ -2388,8 +2389,10 @@ function display_upcoming_events()
 	//databases of the courses
 	$TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA);
 	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+    $mycourse = api_get_course_info();
+    $myuser = api_get_user_info();
 
-	$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_user['user_id']);
+	$group_memberships = GroupManager :: get_group_ids($mycourse['dbName'], $myuser['user_id']);
 	// if the user is administrator of that course we show all the agenda items
 	if (api_is_allowed_to_edit())
 	{
@@ -2398,12 +2401,12 @@ function display_upcoming_events()
 						DISTINCT agenda.*, item_property.*
 						FROM ".$TABLEAGENDA." agenda,
 							 ".$TABLE_ITEMPROPERTY." item_property
-						WHERE agenda.id = item_property.ref   ".$show_all_current."
+						WHERE agenda.id = item_property.ref
 						AND item_property.tool='".TOOL_CALENDAR_EVENT."'
 						AND item_property.visibility='1'
 						AND agenda.start_date > NOW()
 						GROUP BY agenda.id
-						ORDER BY start_date ".$sort;
+						ORDER BY start_date ";
 	}
 	// if the user is not an administrator of that course
 	else
@@ -2415,12 +2418,12 @@ function display_upcoming_events()
 							agenda.*, item_property.*
 							FROM ".$TABLEAGENDA." agenda,
 								".$TABLE_ITEMPROPERTY." item_property
-							WHERE agenda.id = item_property.ref   ".$show_all_current."
+							WHERE agenda.id = item_property.ref 
 							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-							AND	( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+							AND	( item_property.to_user_id='".$myuser['user_id']."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 							AND item_property.visibility='1'
 							AND agenda.start_date > NOW()
-							ORDER BY start_date ".$sort;
+							ORDER BY start_date ";
 		}
 		else
 		{
@@ -2428,21 +2431,21 @@ function display_upcoming_events()
 							agenda.*, item_property.*
 							FROM ".$TABLEAGENDA." agenda,
 							".$TABLE_ITEMPROPERTY." item_property
-							WHERE agenda.id = item_property.ref   ".$show_all_current."
+							WHERE agenda.id = item_property.ref
 							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-							AND ( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id='0')
+							AND ( item_property.to_user_id='".$myuser['user_id']."' OR item_property.to_group_id='0')
 							AND item_property.visibility='1'
 							AND agenda.start_date > NOW()
-							ORDER BY start_date ".$sort;
+							ORDER BY start_date ";
 		}
 	}
 	$result = api_sql_query($sqlquery, __FILE__, __LINE__);
 	$counter = 0;
-	while ($item = mysql_fetch_assoc($result))	
+	while ($item = Database::fetch_array($result,'ASSOC'))	
 	{
 		if ($counter < $number_of_items_to_show)
 		{
-			echo $item['start_date'].' - '.$item['title'].'<br />';
+			echo $item['start_date'],' - ',$item['title'],'<br />';
 			$counter++;
 		}
 	}
@@ -2631,7 +2634,7 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 		}
 
 		echo "\t<td ".$class.">";
-		echo "<span class=\"agendaitem\">".$agendaitems[date("j", $value)]."&nbsp;</span> ";
+		echo "<span class=\"agendaitem\">".$agendaitems[date('j', $value)]."&nbsp;</span> ";
 		echo "</td>\n";
 		$counter ++;
 	}
@@ -2654,11 +2657,11 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 	foreach ($courses_dbs as $key => $array_course_info)
 	{
 		//databases of the courses
-		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info["db"]);
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info["db"]);
+		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info['db']);
+		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info['db']);
 
 		// getting all the groups of the user for the current course
-		$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_user['user_id']);
+		$group_memberships = GroupManager :: get_group_ids($array_course_info['db'], $_user['user_id']);
 		// if the user is administrator of that course we show all the agenda items
 		if ($array_course_info['status'] == '1')
 		{
@@ -2667,12 +2670,12 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 										DISTINCT agenda.*, item_property.*
 										FROM ".$TABLEAGENDA." agenda,
 											".$TABLE_ITEMPROPERTY." item_property
-										WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
+										WHERE agenda.id = item_property.ref
 										AND DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
-										AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-										AND `item_property`.`visibility`='1'
+										AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+										AND item_property.visibility='1'
 										GROUP BY agenda.id
-										ORDER BY start_date ".$sort;
+										ORDER BY start_date ";
 		}
 		// if the user is not an administrator of that course
 		else
@@ -2684,12 +2687,12 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 													agenda.*, item_property.*
 													FROM ".$TABLEAGENDA." agenda,
 														".$TABLE_ITEMPROPERTY." item_property
-													WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
+													WHERE agenda.id = item_property.ref
 													AND DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
-													AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-													AND	( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
-													AND `item_property`.`visibility`='1'
-													ORDER BY start_date ".$sort;
+													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+													AND	( item_property.to_user_id='".$_user['user_id']."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
+													AND item_property.visibility='1'
+													ORDER BY start_date ";
 			}
 			else
 			{
@@ -2697,20 +2700,20 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 													agenda.*, item_property.*
 													FROM ".$TABLEAGENDA." agenda,
 														".$TABLE_ITEMPROPERTY." item_property
-													WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
+													WHERE agenda.id = item_property.ref 
 													AND DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
-													AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-													AND ( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id`='0')
-													AND `item_property`.`visibility`='1'
-													ORDER BY start_date ".$sort;
+													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+													AND ( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id='0')
+													AND item_property.visibility='1'
+													ORDER BY start_date ";
 			}
 		}
 		//$sqlquery = "SELECT * FROM $agendadb WHERE DAYOFMONTH(day)='$day' AND month(day)='$month' AND year(day)='$year'";
 		//echo "abc";
 		//echo $sqlquery;
 		$result = api_sql_query($sqlquery, __FILE__, __LINE__);
-		//echo mysql_num_rows($result);
-		while ($item = mysql_fetch_array($result))
+		//echo Database::num_rows($result);
+		while ($item = Database::fetch_array($result))
 		{
 			// in the display_daycalendar function we use $i (ranging from 0 to 47) for each halfhour
 			// we want to know for each agenda item for this day to wich halfhour it must be assigned
@@ -2735,7 +2738,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 			}			
 			
 			//$URL = $_configuration['root_web'].$mycours["dir"]."/";
-			$URL = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$URL = $_configuration['root_web'].'main/calendar/agenda.php?cidReq='.urlencode($array_course_info["code"])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			$items[$halfhour][] .= "<i>".$hours.":".$minutes."</i> <a href=\"$URL\" title=\"".$array_course_info['name']."\">".$agenda_link."</a>  ".$item['title']."<br />";
 		}
 	}
@@ -2837,7 +2840,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 		//				AND (MONTH(day)>='$start_month' AND MONTH(day)<='$end_month')
 		//				AND (YEAR(day)>='$start_year' AND YEAR(day)<='$end_year')";
 		$result = api_sql_query($sqlquery, __FILE__, __LINE__);
-		while ($item = mysql_fetch_array($result))
+		while ($item = Database::fetch_array($result))
 		{
 			$agendaday = date("j",strtotime($item['start_date']));
 			$time= date("H:i",strtotime($item['start_date']));

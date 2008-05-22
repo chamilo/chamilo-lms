@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 15362 2008-05-22 18:27:41Z yannoo $
+<?php //$Id: agenda.inc.php 15365 2008-05-22 22:05:51Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -69,28 +69,32 @@ function get_calendar_items($month, $year)
 	$TABLEAGENDA=Database::get_course_table(TABLE_AGENDA);
 	$TABLE_ITEM_PROPERTY=Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-	$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
+    $month_first_day = mktime(0,0,0,$month,1,$year);
+    $month_last_day  = mktime(0,0,0,$month+1,1,$year)-1;
+    if($month==12)
+    {
+        $month_last_day = mktime(0,0,0,1,1,$year+1)-1;
+    }
 
+	$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
+    $repeats = array();
 	if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 	{
-		//echo "course admin";
-		// added GROUP BY agenda.id to prevent double display of a message that has been sent to two groups
 		$sql="SELECT
 			DISTINCT agenda.*, toolitemproperties.*
 			FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
 			WHERE agenda.id = toolitemproperties.ref   ".
-			//$show_all_current.
 			" AND MONTH(agenda.start_date)='".$month."' AND YEAR(agenda.start_date)='".$year."'
 			AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 			AND toolitemproperties.visibility='1'
 			GROUP BY agenda.id ".
 			"ORDER BY  start_date ";
-			//.$sort;
+        $params = array('orderby'=>'start_date ASC','groupby'=>'id');
+        $repeats = get_repeated_events_month_view($_course,$month_first_day,$month_last_day,$params);
 	}
 	// if the user is not an administrator of that course
 	else
 	{
-		//echo "GEEN course admin";
 		if (is_array($group_memberships) and count($group_memberships)>0)
 		{
 			$sql="SELECT
@@ -103,7 +107,11 @@ function get_calendar_items($month, $year)
 				AND	( toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 				AND toolitemproperties.visibility='1'"
 				."ORDER BY  start_date ";
-				//.$sort;
+            $params = array(
+                'orderby'=>'start_date ASC',
+                'conditions'=>" AND (item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships)."))",
+            );
+            $repeats = get_repeated_events_month_view($_course,$month_first_day,$month_last_day,$params);
 		}
 		else
 		{
@@ -111,13 +119,16 @@ function get_calendar_items($month, $year)
 				agenda.*, toolitemproperties.*
 				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
 				WHERE agenda.id = toolitemproperties.ref   ".
-				//$show_all_current.
 				" AND MONTH(agenda.start_date)='".$month."'
 				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 				AND ( toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0')
 				AND toolitemproperties.visibility='1' ".
 				"ORDER BY  start_date ";
-				//.$sort;
+            $params = array(
+                'orderby'=>'start_date ASC',
+                'conditions'=>" AND (item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id='0')",
+            );
+            $repeats = get_repeated_events_month_view($_course,$month_first_day,$month_last_day,$params);
 		}
 	}
 	$result=api_sql_query($sql,__FILE__,__LINE__);
@@ -125,9 +136,25 @@ function get_calendar_items($month, $year)
 	while ($row=Database::fetch_array($result))
 	{
 		$datum_item=(int)substr($row["start_date"],8,2);
-		//$dag_item=date("d",strtotime($datum_item));
 		$data[$datum_item][intval($datum_item)][] = $row;
 	}
+    foreach($repeats as $item)
+    {   $sql = "SELECT c.id, c.title, c.content, " .
+            " UNIX_TIMESTAMP(c.start_date) as orig_start, UNIX_TIMESTAMP(c.end_date) as orig_end, " .
+            " cr.cal_type, cr.cal_end " .
+            " FROM $t_cal c, $t_cal_repeat cr " .
+            " WHERE cr.cal_end >= $end " .
+            " AND cr.cal_id = c.id" .
+            " AND c.start_date <= $db_start";
+        $day = date('d',$item[2]);
+        $data[$day][$day][] = array(
+                'id'=>$item[1],
+                'start_date'=>date('Y-m-d H:i:s',$item[2]),
+                'end_date'=>date('Y-m-d H:i:s',$item[3]),
+                'title'=>$item[4],
+                'content'=>$item[5],
+                );
+    }
 	return $data;
 }
 
@@ -628,6 +655,7 @@ function store_new_agenda_item()
 {
 	global $_user, $_course;
 	$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
+    $t_agenda_repeat = Database::get_course_Table(TABLE_AGENDA_REPEAT);
 	
 	// some filtering of the input data
 	$title=strip_tags(trim($_POST['title'])); // no html allowed in the title
@@ -673,6 +701,28 @@ function store_new_agenda_item()
 	}
 	// storing the resources
 	store_resources($_SESSION['source_type'],$last_id);
+    
+    //if repetitive, insert element into agenda_repeat table
+    if(!empty($_POST['repeat']) && !empty($_POST['repeat_type']))
+    {
+    	if(!empty($_POST['repeat_end_year']) && !empty($_POST['repeat_end_month']) && !empty($_POST['repeat_end_day']))
+        {
+        	$end_y = intval($_POST['repeat_end_year']);
+            $end_m = intval($_POST['repeat_end_month']);
+            $end_d = intval($_POST['repeat_end_day']);
+            $end = mktime((int)$_POST['fhour'],(int)$_POST['fminute'],0,$end_m,$end_d,$end_y);
+            $now = time();
+            $type = Database::escape_string($_POST['repeat_type']);
+        
+        	if($end > $now 
+                && in_array($type,array('daily','weekly','monthlyByDate','monthlyByDay','monthlyByDayR','yearly')))
+            {
+        	   $sql = "INSERT INTO $t_agenda_repeat (cal_id, cal_type, cal_end)" .
+                    " VALUES ($last_id,'$type',$end)";
+               $res = Database::query($sql,__FILE__,__LINE__);
+            }
+        }
+    }
 	return $last_id;
 }
 
@@ -1108,7 +1158,17 @@ function display_student_links()
 function get_agenda_item($id)
 {
 	global $TABLEAGENDA;
-	$id=(int)addslashes($_GET['id']);
+    $t_agenda_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
+    $item = array();
+	if(empty($id))
+    {
+        $id=(int)addslashes($_GET['id']);
+    }
+    else
+    {
+    	$id = (int) $id;
+    }
+    if(empty($id)){return $item;}
 	$sql 					= "SELECT * FROM ".$TABLEAGENDA." WHERE id='".$id."'";
 	$result					= api_sql_query($sql,__FILE__,__LINE__);
 	$entry_to_edit 			= Database::fetch_array($result);
@@ -1126,7 +1186,20 @@ function get_agenda_item($id)
 	{
 		$_SESSION['allow_individual_calendar']="show";
 	}
-	//echo "<br />IN get_agenda_item".$_SESSION['allow_individual_calendar'];
+    $item['repeat'] = false;
+    $sql = "SELECT * FROM $t_agenda_repeat WHERE cal_id = $id";
+    $res = Database::query($sql,__FILE__,__LINE__);
+    if(Database::num_rows($res)>0)
+    {
+        //this event is repetitive
+        $row = Database::fetch_array($res);
+        $item['repeat'] = true;
+        $item['repeat_type'] = $row['cal_type'];
+        $item['repeat_end'] = $row['cal_end'];
+        $item['repeat_frequency'] = $row['cal_frequency']; //unused in 1.8.5 RC1 - will be used later to say if once every 2 or 3 weeks, for example
+        $item['repeat_days'] = $row['cal_days']; //unused in 1.8.5 RC1 - will be used later
+    }
+    //TODO - add management of repeat exceptions
 	return $item;
 }
 /**
@@ -1470,7 +1543,12 @@ function display_agenda_items()
 	$export_icon_low = api_get_path('WEB_IMG_PATH').'export_low_fade.png';
 	$export_icon_high = api_get_path('WEB_IMG_PATH').'export_high_fade.png';
 	while ($myrow=Database::fetch_array($result))
-{
+    {
+    	$repeat = false;
+        if(is_repeated_event($myrow['id']))
+        {
+            $repeat = true;
+        }    	
 	echo "<table class=\"data_table\">\n";
 /*--------------------------------------------------
 		display: the month bar
@@ -1589,7 +1667,7 @@ function display_agenda_items()
 			$image_visibility="invisible";
 		}
 		echo 	'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$_GET['origin'].'&amp;action=showhide&amp;id='.$myrow['id'].'" title="'.get_lang("langVisible").'">',
-				"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" alt=\"".get_lang("Visible")."\" /></a>";
+				'<img src="../img/'.$image_visibility.'.gif" border="0" alt="'.get_lang("Visible").'" /></a>';
 		echo '</td>';	
 	}
 	echo '</tr>';
@@ -1646,7 +1724,9 @@ echo '<tr class="row_even">';
 /*--------------------------------------------------
 	display: jump-to-top icon
   --------------------------------------------------*/
-	echo $td_colspan;
+	echo '<tr>';
+    echo $td_colspan;
+    if($repeat){echo get_lang('RepeatedEvent');}
 	echo "<a href=\"#top\"><img src=\"../img/top.gif\" border=\"0\" alt=\"to top\" align=\"right\" /></a></td></tr>";
 	echo "</table><br /><br />";
 } // end while ($myrow=Database::fetch_array($result))
@@ -1872,6 +1952,7 @@ function show_add_form($id = '')
 		$end_year	= date('Y');
 		$end_hours	= 17;
 		$end_minutes= '00';
+        $repeat = false;
 	}
 	else
 	{
@@ -1895,6 +1976,7 @@ function show_add_form($id = '')
 		$content=$form_elements['content'];
 		$id=$form_elements['id'];
 		$to=$form_elements['to'];
+        $repeat = $form_elements['repeat'];
 	}
 
 
@@ -1916,6 +1998,7 @@ function show_add_form($id = '')
 			// the invisible fields
 			$action			= $_POST['action'];
 			$id				= $_POST['id'];
+            $repeat         = !empty($_POST['repeat'])?true:false;
 		}
 
 
@@ -2236,7 +2319,7 @@ function show_add_form($id = '')
 	</tr>
 
 	<tr>
-		<td colspan="7">
+		<td colspan="3">
 
 			<?php
 			require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
@@ -2278,15 +2361,80 @@ function show_add_form($id = '')
 	<?php
 	   //if ($_SESSION['addedresource'])
 	   echo "\t<tr>\n";
-	   echo "\t\t<td colspan=\"7\">\n";
+	   echo "\t\t<td colspan=\"3\">\n";
 	   echo display_resources(0);
 	   $test=$_SESSION['addedresource'];
 	   echo "\t\t</td>\n\t</tr>\n";
 	   /* END ADDED BY UGENT, Patrick Cool, march 2004 */
 	?>
+    <tr>
+      <td><label for="repeat"><?php echo get_lang('RepeatedEvent');?></label><input type="checkbox" name="repeat" <?php echo ($repeat?'checked="checked"':'');?>/></td>
+      <td colspan="2" />
+    </tr>
+    <tr>
+      <td><label for="repeat_type"><?php echo get_lang('RepeatType');?></label>
+        <select name="repeat_type">
+          <option value="daily"><?php echo get_lang('RepeatDaily');?></option>
+          <option value="weekly"><?php echo get_lang('RepeatWeekly');?></option>
+          <option value="monthlyByDate"><?php echo get_lang('RepeatMonthlyByDate');?></option>
+          <!--option value="monthlyByDay"><?php echo get_lang('RepeatMonthlyByDay');?></option>
+          <option value="monthlyByDayR"><?php echo get_lang('RepeatMonthlyByDayR');?></option-->
+          <option value="yearly"><?php echo get_lang('RepeatYearly');?></option>
+        </select>
+      </td>
+      <td colspan="2" />
+    </tr>
+    <tr>
+      <td><label for="repeat_end_day"><?php echo get_lang('RepeatEnd');?></label>
+            <select name="repeat_end_day">
+                <?php
+                    // small loop for filling all the dates
+                    // 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
+                    echo "\n";
+                    foreach (range(1, 31) as $i)
+                    {
+                        // values have to have double digits
+                        $value = ($i <= 9 ? '0'.$i : $i );
+                        // the current day is indicated with [] around the date
+                        if ($value==$end_day)
+                            { echo "\t\t\t\t <option value=\"".$value."\" selected> ".$i." </option>\n";}
+                        else
+                            { echo "\t\t\t\t <option value=\"".$value."\">".$i."</option>\n"; }
+                        }?>
+                </select>
 
+                <!-- month: january -> december -->
+                <select name="repeat_end_month">
+                    <?php
+                    echo "\n";
+                    foreach (range(1, 12) as $i)
+                    {
+                        // values have to have double digits
+                        $value = ($i <= 9 ? '0'.$i : $i );
+                        if ($value==$end_month+1)
+                            { echo "\t\t\t\t ",'<option value="',$value,'" selected="selected">',$MonthsLong[$i-1],"</option>\n"; }
+                        else
+                            { echo "\t\t\t\t ",'<option value="',$value,'">',$MonthsLong[$i-1],"</option>\n"; }
+                        }?>
+                </select>
+
+                <select name="repeat_end_year">
+                    <option value="<?php echo ($end_year-1) ?>"><?php echo ($end_year-1) ?></option>
+                    <option value="<?php echo $end_year ?>" selected> <?php echo $end_year ?> </option>
+                    <?php
+                    echo "\n";
+                    for ($i=1; $i<=5; $i++)
+                    {
+                        $value=$end_year+$i;
+                        echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
+                    } ?>
+            </select>
+            <a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')"><img src="../img/calendar_select.gif" border="0" /></a>
+      </td>
+      <td colspan="2" />      
+    </tr>
 	<tr>
-		<td colspan="7">
+		<td colspan="3">
 			<input type="submit" name="submit_event" value="<?php echo get_lang('Ok'); ?>" onclick="selectAll(this.form.elements[5],true)" />
 		</td>
 	</tr>
@@ -2875,12 +3023,13 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 /**
  * Get repeated events of a course between two dates (timespan of a day).
  * Returns an array containing the events
- * @param	string	Course database name
+ * @param   string  Course info array (as returned by api_get_course_info())
  * @param	int		UNIX timestamp of span start. Defaults 0, later transformed into today's start
  * @param	int		UNIX timestamp. Defaults to 0, later transformed into today's end
+ * @param   array   A set of parameters to alter the SQL query
  * @return	array	[int] => [parent_event_id,start_date,end_date,title,description]
  */
-function get_repeated_events_day_view($course_db,$course_db,$start=0,$end=0)
+function get_repeated_events_day_view($course_info,$start=0,$end=0,$params)
 {
 	$events = array();
 	//initialise all values
@@ -2904,15 +3053,21 @@ function get_repeated_events_day_view($course_db,$course_db,$start=0,$end=0)
 	}
 	//$db_end = date('Y-m-d H:i:s',$end);
 	
-	$t_cal = Database::get_course_table(TABLE_AGENDA,$course_db);
-	$t_cal_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_db);
+	$t_cal = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
+	$t_cal_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_info['dbName']);
+    $t_ip = Database::get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
 	$sql = "SELECT c.id, c.title, c.content, " .
 			" UNIX_TIMESTAMP(c.start_date) as orig_start, UNIX_TIMESTAMP(c.end_date) as orig_end, " .
 			" cr.cal_type, cr.cal_end " .
-			" FROM $t_cal c, $t_cal_repeat cr " .
+			" FROM $t_cal c, $t_cal_repeat cr, $t_ip as item_property " .
 			" WHERE cr.cal_end >= $end " .
-			" AND cr.cal_id = c.id" .
-			" AND c.start_date <= $db_start";
+			" AND cr.cal_id = c.id " .
+            " AND item_property.ref = c.id ".
+            " AND item_property.tool = '".TOOL_CALENDAR_EVENT."' ".
+			" AND c.start_date <= '$db_start' "
+            .(!empty($params['conditions'])?$params['conditions']:'')
+            .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
+            .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	if(Database::num_rows($res)>0)
 	{
@@ -2934,7 +3089,7 @@ function get_repeated_events_day_view($course_db,$course_db,$start=0,$end=0)
 					$span = $orig_end - $orig_start; //total seconds between start and stop of original event
 					$current_start =$start + $int_time; //unixtimestamp start of today's event 
 					$current_stop = $start+$int_time+$span; //unixtimestamp stop of today's event
-					$events[] = array($row['id'],$current_start,$current_stop,$row['title'],$row['content']);
+					$events[] = array($course_info['id'],$row['id'],$current_start,$current_stop,$row['title'],$row['content']);
 					break;
 				case 'weekly':
 					$time_orig = date('Y/n/W/j/N/G/i/s',$orig_start);
@@ -2945,7 +3100,7 @@ function get_repeated_events_day_view($course_db,$course_db,$start=0,$end=0)
 					{ //if the event is after the original (at least one week) and the day of the week is the same
 					  $time_orig_end = date('Y/n/W/j/N/G/i/s',$orig_end);
 					  list($y_orig_e,$m_orig_e,$w_orig_e,$d_orig_e,$dw_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
-					  $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+					  $events[] = array($course_info['id'],$row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
 					}
 					break;
 				case 'monthlyByDate':
@@ -2957,7 +3112,7 @@ function get_repeated_events_day_view($course_db,$course_db,$start=0,$end=0)
 					{
 					  $time_orig_end = date('Y/n/j/G/i/s',$orig_end);
 					  list($y_orig_e,$m_orig_e,$d_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
-					  $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+					  $events[] = array($course_info['id'],$row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
 					}
 					break;
 				case 'monthlyByDayR':
@@ -2975,7 +3130,7 @@ function get_repeated_events_day_view($course_db,$course_db,$start=0,$end=0)
 					{
 					  $time_orig_end = date('Y/n/j/G/i/s',$orig_end);
 					  list($y_orig_e,$m_orig_e,$d_orig_e,$dy_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
-					  $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+					  $events[] = array($course_info['id'],$row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
 					}
 					break;
 				default:
@@ -2988,12 +3143,13 @@ function get_repeated_events_day_view($course_db,$course_db,$start=0,$end=0)
 /**
  * Get repeated events of a course between two dates (timespan of a week).
  * Returns an array containing the events
- * @param	string	Course database name
+ * @param	string	Course info array (as returned by api_get_course_info())
  * @param	int		UNIX timestamp of span start. Defaults 0, later transformed into today's start
  * @param	int		UNIX timestamp. Defaults to 0, later transformed into today's end
+ * @param   array   A set of parameters to alter the SQL query
  * @return	array	[int] => [parent_event_id,start_date,end_date,title,description]
  */
-function get_repeated_events_week_view($course_db,$course_db,$start=0,$end=0)
+function get_repeated_events_week_view($course_info,$start=0,$end=0,$params)
 {
 	$events = array();
 	//initialise all values
@@ -3021,15 +3177,21 @@ function get_repeated_events_week_view($course_db,$course_db,$start=0,$end=0)
 	}
 	//$db_end = date('Y-m-d H:i:s',$end);
 	
-	$t_cal = Database::get_course_table(TABLE_AGENDA,$course_db);
-	$t_cal_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_db);
-	$sql = "SELECT c.id, c.title, c.content, " .
-			" UNIX_TIMESTAMP(c.start_date) as orig_start, UNIX_TIMESTAMP(c.end_date) as orig_end, " .
-			" cr.cal_type, cr.cal_end " .
-			" FROM $t_cal c, $t_cal_repeat cr " .
-			" WHERE cr.cal_end >= $end " .
-			" AND cr.cal_id = c.id" .
-			" AND c.start_date <= $db_start";
+	$t_cal = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
+	$t_cal_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_info['dbName']);
+    $t_ip = Database::get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
+    $sql = "SELECT c.id, c.title, c.content, " .
+            " UNIX_TIMESTAMP(c.start_date) as orig_start, UNIX_TIMESTAMP(c.end_date) as orig_end, " .
+            " cr.cal_type, cr.cal_end " .
+            " FROM $t_cal c, $t_cal_repeat cr, $t_ip as item_property " .
+            " WHERE cr.cal_end >= $end " .
+            " AND cr.cal_id = c.id " .
+            " AND item_property.ref = c.id ".
+            " AND item_property.tool = '".TOOL_CALENDAR_EVENT."' ".
+            " AND c.start_date <= '$db_start' "
+            .(!empty($params['conditions'])?$params['conditions']:'')
+            .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
+            .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	if(Database::num_rows($res)>0)
 	{
@@ -3050,7 +3212,7 @@ function get_repeated_events_week_view($course_db,$course_db,$start=0,$end=0)
 					{
 						$current_start = $start + ($i*86400) + $int_time; //unixtimestamp start of today's event 
 						$current_stop = $start + ($i*86400) + $int_time + $span; //unixtimestamp stop of today's event
-						$events[] = array($row['id'],$current_start,$current_stop,$row['title'],$row['content']);
+						$events[] = array($course_info['id'],$row['id'],$current_start,$current_stop,$row['title'],$row['content']);
 					}
 					break;
 				case 'weekly':
@@ -3062,7 +3224,7 @@ function get_repeated_events_week_view($course_db,$course_db,$start=0,$end=0)
 					{ //if the event is after the original (at least one week) and the day of the week is the same
 					  $time_orig_end = date('Y/n/W/j/N/G/i/s',$orig_end);
 					  list($y_orig_e,$m_orig_e,$w_orig_e,$d_orig_e,$dw_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
-					  $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+					  $events[] = array($course_info['id'],$row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
 					}
 					break;
 				case 'monthlyByDate':
@@ -3075,7 +3237,7 @@ function get_repeated_events_week_view($course_db,$course_db,$start=0,$end=0)
 					{ //if the event is after the original (at least one month) and the original event's day is between the first day of the week and the last day of the week
 					  $time_orig_end = date('Y/n/j/G/i/s',$orig_end);
 					  list($y_orig_e,$m_orig_e,$d_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
-					  $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+					  $events[] = array($course_info['id'],$row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
 					}
 					break;
 				case 'monthlyByDayR':
@@ -3094,7 +3256,7 @@ function get_repeated_events_week_view($course_db,$course_db,$start=0,$end=0)
 					{
 					  $time_orig_end = date('Y/n/j/G/i/s',$orig_end);
 					  list($y_orig_e,$m_orig_e,$d_orig_e,$dy_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
-					  $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+					  $events[] = array($course_info['id'],$row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
 					}
 					break;
 				default:
@@ -3107,12 +3269,13 @@ function get_repeated_events_week_view($course_db,$course_db,$start=0,$end=0)
 /**
  * Get repeated events of a course between two dates (timespan of a month).
  * Returns an array containing the events
- * @param	string	Course database name
+ * @param   string  Course info array (as returned by api_get_course_info())
  * @param	int		UNIX timestamp of span start. Defaults 0, later transformed into today's start
  * @param	int		UNIX timestamp. Defaults to 0, later transformed into today's end
+ * @param   array   A set of parameters to alter the SQL query
  * @return	array	[int] => [parent_event_id,start_date,end_date,title,description]
  */
-function get_repeated_events_month_view($course_db,$course_db,$start=0,$end=0)
+function get_repeated_events_month_view($course_info,$start=0,$end=0,$params)
 {
 	$events = array();
 	//initialise all values
@@ -3143,15 +3306,21 @@ function get_repeated_events_month_view($course_db,$course_db,$start=0,$end=0)
 	}
 	//$db_end = date('Y-m-d H:i:s',$end);
 	
-	$t_cal = Database::get_course_table(TABLE_AGENDA,$course_db);
-	$t_cal_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_db);
-	$sql = "SELECT c.id, c.title, c.content, " .
-			" UNIX_TIMESTAMP(c.start_date) as orig_start, UNIX_TIMESTAMP(c.end_date) as orig_end, " .
-			" cr.cal_type, cr.cal_end " .
-			" FROM $t_cal c, $t_cal_repeat cr " .
-			" WHERE cr.cal_end >= $end " .
-			" AND cr.cal_id = c.id" .
-			" AND c.start_date <= $db_start";
+	$t_cal = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
+	$t_cal_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_info['dbName']);
+    $t_ip = Database::get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
+    $sql = "SELECT c.id, c.title, c.content, " .
+            " UNIX_TIMESTAMP(c.start_date) as orig_start, UNIX_TIMESTAMP(c.end_date) as orig_end, " .
+            " cr.cal_type, cr.cal_end " .
+            " FROM $t_cal c, $t_cal_repeat cr, $t_ip as item_property " .
+            " WHERE cr.cal_end >= $end " .
+            " AND cr.cal_id = c.id " .
+            " AND item_property.ref = c.id ".
+            " AND item_property.tool = '".TOOL_CALENDAR_EVENT."' ".
+            " AND c.start_date <= '$db_start' "
+            .(!empty($params['conditions'])?$params['conditions']:'')
+            .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
+            .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	if(Database::num_rows($res)>0)
 	{
@@ -3173,7 +3342,7 @@ function get_repeated_events_month_view($course_db,$course_db,$start=0,$end=0)
 					{
 						$current_start = $start + ($i*86400) + $int_time; //unixtimestamp start of today's event 
 						$current_stop = $start + ($i*86400) + $int_time + $span; //unixtimestamp stop of today's event
-						$events[] = array($row['id'],$current_start,$current_stop,$row['title'],$row['content']);
+						$events[] = array($course_info['id'],$row['id'],$current_start,$current_stop,$row['title'],$row['content']);
 					}
 					break;
 				case 'weekly':
@@ -3227,7 +3396,7 @@ function get_repeated_events_month_view($course_db,$course_db,$start=0,$end=0)
                           	if($start<$i && $i<$end)
                             {
                                list($y_repeat,$m_repeat,$d_repeat,$h_repeat,$n_repeat,$s_repeat) = split('/',date('Y/m/j/H/i/s',$i));
-                               $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+                               $events[] = array($course_info['id'],$row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
                             }
                           }
 						}
@@ -3243,7 +3412,7 @@ function get_repeated_events_month_view($course_db,$course_db,$start=0,$end=0)
 					{ //if the event is after the original (at least one month) and the original event's day is between the first day of the week and the last day of the week
 					  $time_orig_end = date('Y/n/j/G/i/s',$orig_end);
 					  list($y_orig_e,$m_orig_e,$d_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
-					  $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+					  $events[] = array($course_info['id'],$row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
 					}
 					break;
 				case 'monthlyByDayR':
@@ -3262,7 +3431,7 @@ function get_repeated_events_month_view($course_db,$course_db,$start=0,$end=0)
 					{
 					  $time_orig_end = date('Y/n/j/G/i/s',$orig_end);
 					  list($y_orig_e,$m_orig_e,$d_orig_e,$dy_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
-					  $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+					  $events[] = array($course_info['id'],$row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
 					}
 					break;
 				default:
@@ -3271,5 +3440,28 @@ function get_repeated_events_month_view($course_db,$course_db,$start=0,$end=0)
 		}
 	}
 	return $events;
+}
+/**
+ * Tells if an agenda item is repeated
+ * @param   string  Course database
+ * @param   int     The agenda item
+ * @return  boolean True if repeated, false otherwise
+ */
+function is_repeated_event($id,$course=null)
+{
+	if(empty($course))
+    {
+    	$course_info = api_get_course_info();
+        $course = $course_info['dbName']; 
+    }
+    $id = (int) $id;
+	$t_agenda_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT,$course);
+    $sql = "SELECT * FROM $t_agenda_repeat WHERE cal_id = $id";
+    $res = Database::query($sql,__FILE__,__LINE__);
+    if(Database::num_rows($res)>0)
+    {
+    	return true;
+    }
+    return false;
 }
 ?>

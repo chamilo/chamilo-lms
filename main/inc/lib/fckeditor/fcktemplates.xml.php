@@ -48,15 +48,14 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 		imagejpeg($im, api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'.$a_template['id'].'.jpg');
 		*/
 		//echo '<Template title="'.htmlentities($a_template['title']).'" image="'.api_get_path(WEB_CODE_PATH).'upload/template_thumbnails/'.$a_template['id'].'.jpg">';
-		echo '<Template title="'.htmlentities($a_template['title']).'" >';
-			echo '<Description>'.htmlentities($a_template['description']).'</Description>';
-			echo '<Html>';			
+		echo '<Template title="'.mb_convert_encoding($a_template['title'],'UTF-8',$charset).'" >';
+			echo '<Description>'.mb_convert_encoding($a_template['description'],'UTF-8',$charset).'</Description>';
+			echo '<Html>';		 	
 			echo htmlentities(file_get_contents(api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$document_path));			
 			echo '</Html>';
 		echo '</Template>';			
 	}	
-?>
-    
+?>    
 <Template title="<?php echo get_lang('TemplateTitleCourseTitle'); ?>" >
     <Description><?php echo get_lang('TemplateTitleCourseTitleDescription'); ?></Description>
     <Html>

@@ -16,22 +16,20 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 ?>
 <Templates imagesBasePath="">	
 <?php
-	//Get all personnal templates in the database ?????
-	/*	 
+	//Get all personnal templates in the database 	
 	$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);	
-	echo $sql = 'SELECT id, title, description, ref_doc FROM '.$table_template.' WHERE course_code="'.api_get_course_id().'" AND user_id="'.api_get_user_id().'"';	
-	$result_template = api_sql_query($sql,__FILE__,__LINE__);	
-	*/
- /*
+	$sql = 'SELECT id, title, description, ref_doc FROM '.$table_template.' WHERE course_code="'.api_get_course_id().'" AND user_id="'.api_get_user_id().'"';	
+	$result_template = api_sql_query($sql,__FILE__,__LINE__);
+	 
+	$course = api_get_course_info();
+	$table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);	
 	while($a_template = Database::fetch_array($result_template))
 	{
-		$document_id = $a_template['ref_doc'];		
-		$course = api_get_course_info();
-		$table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);		
+		$document_id = $a_template['ref_doc'];				
 		$sql_document_path = 'SELECT path FROM '.$table_document.' WHERE id="'.$document_id.'"';		
 		$result_document_path = api_sql_query($sql_document_path,__FILE__,__LINE__);
 		$document_path = Database::result($result_document_path,0,0);
-		
+		/*		
 		$width = 100;
 		$height = 90;
 		
@@ -46,19 +44,19 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 		{
 			imagettftext($im, 10, 0, 10, $y, $text_color, $ttfont, $a_part_of_title);
 			$y+=20;
-		}
-		
+		}		
 		imagejpeg($im, api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'.$a_template['id'].'.jpg');
-		
-		echo '<Template title="'.htmlentities($a_template['title']).'" image="'.api_get_path(WEB_CODE_PATH).'upload/template_thumbnails/'.$a_template['id'].'.jpg">';
+		*/
+		//echo '<Template title="'.htmlentities($a_template['title']).'" image="'.api_get_path(WEB_CODE_PATH).'upload/template_thumbnails/'.$a_template['id'].'.jpg">';
+		echo '<Template title="'.htmlentities($a_template['title']).'" >';
 			echo '<Description>'.htmlentities($a_template['description']).'</Description>';
 			echo '<Html>';			
 			echo htmlentities(file_get_contents(api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$document_path));			
 			echo '</Html>';
 		echo '</Template>';			
-	}
-	*/
-	?>    
+	}	
+?>
+    
 <Template title="<?php echo get_lang('TemplateTitleCourseTitle'); ?>" >
     <Description><?php echo get_lang('TemplateTitleCourseTitleDescription'); ?></Description>
     <Html>

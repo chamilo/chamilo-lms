@@ -274,14 +274,14 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 									"#F7BDE2");
 	?>
 		<tr>
-				<td width="50%" valign="top">
+				<td valign="top" align="left">
 					<div style="width:100%;">
 						<div style="height:11px; width:11px; background-color:<?php echo $hotspot_colors[$answerId]; ?>; float:left; margin:3px;"></div>
 						<div><?php echo $answer ?></div>
 					</div>
 				</td>
-				<td width="25%" valign="top"><?php echo $answerId; ?></td>
-				<td width="25%" valign="top">
+				<td valign="top" align="left"><?php echo $answerId; ?></td>
+				<td valign="top" align="left">
 					<?php $studentChoice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $studentChoice; ?>
 				</td>
 		</tr>
@@ -707,7 +707,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			?>
 			<tr>
 				<td valign="top" align="left">
-					<table style="border: 1px solid #4271b5;border-bottom:none" width="730">
+					<table style="border: 1px solid #4271b5;border-bottom:none" width="556">
 					<?php 
 					error_log('la');
 					for($answerId=1;$answerId <= $nbrAnswers;$answerId++)

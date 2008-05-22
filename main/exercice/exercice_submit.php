@@ -33,7 +33,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 15251 2008-05-08 20:28:28Z yannoo $
+* 	@version $Id: exercice_submit.php 15358 2008-05-22 08:47:39Z elixir_inter $
 */
 
 
@@ -558,7 +558,7 @@ else
 	  </td>
 	 </tr>
 	 <tr>
-	  <td><br/>
+	  <td>
 		 <!-- <input type='submit' name='buttonCancel' value=".get_lang('Cancel')." />
 	   &nbsp;&nbsp; //-->
 		 <input type='submit' name='submit' value='";

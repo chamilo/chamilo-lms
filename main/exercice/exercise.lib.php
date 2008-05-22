@@ -23,7 +23,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 15352 2008-05-21 20:42:25Z elixir_inter $
+* 	@version $Id: exercise.lib.php 15358 2008-05-22 08:47:39Z elixir_inter $
 */
 
 
@@ -274,7 +274,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 		$objAnswerTmp=new Answer($questionId);
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 
-		$answer_list = '<div style="padding: 10px; margin-left: -8px; border: 1px solid #4271b5; height: 620px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><ol>';
+		$answer_list = '<div style="padding: 10px; margin-left: 0px; border: 1px solid #4271b5; height: 481px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><ol>';
 		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 		{
 			$answer_list .= '<li>'.$objAnswerTmp->selectAnswer($answerId).'</li>';
@@ -415,7 +415,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 						}
 						// -->
 						</script>";
-		$s .= '<tr><td valign="top" colspan="2" width="100%"><table><tr><td width="735">'."
+		$s .= '<tr><td valign="top" colspan="2" width="100%"><table><tr><td width="570">'."
 					<script language=\"JavaScript\" type=\"text/javascript\">
 						<!--
 						// Version check based upon the values entered above in \"Globals\"

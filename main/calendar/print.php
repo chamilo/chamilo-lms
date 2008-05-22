@@ -1,4 +1,8 @@
 <?php
+/**
+ * See copyright information in the Dokeos root directory, dokeos_license.txt
+ * @package dokeos.calendar
+ */
 // name of the language file that needs to be included
 $language_file = 'agenda';
 $id=$_GET['id'];
@@ -15,7 +19,7 @@ else
 }
 
 // setting the global file that gets the general configuration, the databases, the languages, ...
-include('../inc/global.inc.php');
+require('../inc/global.inc.php');
 
 
 
@@ -42,7 +46,7 @@ $result			= api_sql_query($sql,__FILE__,__LINE__);
 <br /><br />
 
 <?php
-while($row=mysql_fetch_array($result))
+while($row=Database::fetch_array($result))
 {
 	$row['content'] = $row['content'];
 	$row['content'] = make_clickable($row['content']);

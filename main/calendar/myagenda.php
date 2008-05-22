@@ -1,9 +1,9 @@
-<?php
+<?php //$id: $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
@@ -16,7 +16,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 	@author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	@author: Toon Van Hoecke <toon.vanhoecke@ugent.be>, Ghent University
@@ -27,6 +27,8 @@
 ==============================================================================
 	version info:
 	-------------
+	-> version 2.3 : Yannick Warnier, yannick.warnier@dokeos.com 2008
+	Added repeated events
 	-> version 2.2 : Patrick Cool, patrick.cool@ugent.be, november 2004
 	Personal Agenda added. The user can add personal agenda items. The items
 	are stored in a dokeos_user database because it is not course or platform
@@ -64,10 +66,11 @@ $language_file = 'agenda';
 // we are not inside a course, so we reset the course id
 $cidReset = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...
-require ('../inc/global.inc.php');
+require('../inc/global.inc.php');
 $this_section = SECTION_MYAGENDA;
 api_block_anonymous_users();
 require_once(api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+require_once('agenda.inc.php');
 require_once('myagenda.inc.php');
 // setting the name of the tool
 $nameTools = get_lang('MyAgenda');
@@ -86,6 +89,7 @@ if (!empty ($course_path))
 $htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" language=\"javascript\"></script>";
 // showing the header
 Display::display_header(get_lang('MyAgenda'));
+
 /* ==============================================================================
   						SETTING SOME VARIABLES
 ============================================================================== */
@@ -134,44 +138,44 @@ if ($_SESSION['view'])
 	{
 		// 3.a Month view
 		case "month" :
-			$proces = "month_view";
+			$process = "month_view";
 			break;
 			// 3.a Week view
 		case "week" :
-			$proces = "week_view";
+			$process = "week_view";
 			break;
 			// 3.a Day view
 		case "day" :
-			$proces = "day_view";
+			$process = "day_view";
 			break;
 			// 3.a Personal view
 		case "personal" :
-			$proces = "personal_view";
+			$process = "personal_view";
 			break;
 	}
 }
 // 4. add personal agenda
 if (!empty($_GET['action']) && $_GET['action'] == "add_personal_agenda_item" and !$_POST['Submit'])
 {
-	$proces = "add_personal_agenda_item";
+	$process = "add_personal_agenda_item";
 }
 if (!empty($_GET['action']) && $_GET['action'] == "add_personal_agenda_item" and $_POST['Submit'])
 {
-	$proces = "store_personal_agenda_item";
+	$process = "store_personal_agenda_item";
 }
 // 5. edit personal agenda
 if (!empty($_GET['action']) && $_GET['action'] == "edit_personal_agenda_item" and !$_POST['Submit'])
 {
-	$proces = "edit_personal_agenda_item";
+	$process = "edit_personal_agenda_item";
 }
 if (!empty($_GET['action']) && $_GET['action'] == "edit_personal_agenda_item" and $_POST['Submit'])
 {
-	$proces = "store_personal_agenda_item";
+	$process = "store_personal_agenda_item";
 }
 // 6. delete personal agenda
 if (!empty($_GET['action']) && $_GET['action'] == "delete" AND $_GET['id'])
 {
-	$proces = "delete_personal_agenda_item";
+	$process = "delete_personal_agenda_item";
 }
 /* ==============================================================================
   						OUTPUT
@@ -213,12 +217,12 @@ if (isset ($_user['user_id']))
 	echo "<tr>";
 	// output: the small calendar item on the left and the view / add links
 	echo "<td width=\"220\" valign=\"top\">";
-	$agendaitems = get_agendaitems($courses_dbs, $month, $year);
+	$agendaitems = get_myagendaitems($courses_dbs, $month, $year);
 	if (get_setting('allow_personal_agenda') == 'true')
 	{
 		$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 	}
-	display_minimonthcalendar($agendaitems, $month, $year, $monthName);
+	display_myminimonthcalendar($agendaitems, $month, $year, $monthName);
 	echo "\n<ul id=\"agenda_select\">\n";
 	echo "\t<li><a href=\"".api_get_self()."?action=view&amp;view=month\"><img src=\"../img/calendar_month.gif\" border=\"0\" alt=\"".get_lang('MonthView')."\" /> ".get_lang('MonthView')."</a></li>\n";
 	echo "\t<li><a href=\"".api_get_self()."?action=view&amp;view=week\"><img src=\"../img/calendar_week.gif\" border=\"0\" alt=\"".get_lang('WeekView')."\" /> ".get_lang('WeekView')."</a></li>\n";
@@ -235,15 +239,15 @@ if (isset ($_user['user_id']))
 	echo "<td width=\"20\">&nbsp;</td>";
 	// the main area: day, week, month view
 	echo "<td valign=\"top\">";
-	switch ($proces)
+	switch ($process)
 	{
 		case "month_view" :
-			$agendaitems = get_agendaitems($courses_dbs, $month, $year);
+			$agendaitems = get_myagendaitems($courses_dbs, $month, $year);
 			if (get_setting("allow_personal_agenda") == "true")
 			{
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 			}
-			display_monthcalendar($agendaitems, $month, $year, array(), $monthName);
+			display_mymonthcalendar($agendaitems, $month, $year, array(), $monthName);
 			break;
 		case "week_view" :
 			$agendaitems = get_week_agendaitems($courses_dbs, $month, $year, $week);
@@ -265,7 +269,7 @@ if (isset ($_user['user_id']))
 			show_personal_agenda();
 			break;
 		case "add_personal_agenda_item" :
-			show_new_item_form();
+			show_new_personal_item_form();
 			break;
 		case "store_personal_agenda_item" :
 			store_personal_item($_POST['frm_day'], $_POST['frm_month'], $_POST['frm_year'], $_POST['frm_hour'], $_POST['frm_minute'], $_POST['frm_title'], $_POST['frm_content'], (int)$_GET['id']);
@@ -280,7 +284,7 @@ if (isset ($_user['user_id']))
 			show_personal_agenda();
 			break;
 		case "edit_personal_agenda_item" :
-			show_new_item_form((int)$_GET['id']);
+			show_new_personal_item_form((int)$_GET['id']);
 			break;
 		case "delete_personal_agenda_item" :
 			delete_personal_agenda((int)$_GET['id']);

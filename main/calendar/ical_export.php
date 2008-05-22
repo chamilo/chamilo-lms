@@ -2,6 +2,7 @@
 /**
  * This file exclusively export calendar items to iCal or similar formats
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * See copyright information in the Dokeos root directory, dokeos_license.txt
  */
 /**
  * Initialisation

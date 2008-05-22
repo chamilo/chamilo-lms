@@ -49,13 +49,14 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 		unlink($this->base_work_dir.'/'.$this->file_path);
 		unlink($this->base_work_dir.'/'.$this->created_dir.'/'.$this->file_name.'.html');
 		
-		// set the charset if necessary
+		// the file is utf8 encoded and it seems to make problems with special quotes. 
+		// then we htmlentities that, we replace these quotes and html_entity_decode that in good charset
 		$charset = api_get_setting('platform_charset');
-		if(strcasecmp($charset,'utf-8')!==0)
-		{
-			$content = utf8_decode($content);
-			$content = str_replace('utf-8',$charset,$content);
-		}	
+		$content = htmlentities($content,ENT_COMPAT,'utf-8'); 
+		$content = str_replace('&rsquo;','\'',$content);
+		$content = mb_convert_encoding($content, $charset, 'utf-8');
+		$content = str_replace('utf-8',$charset,$content);
+		$content = html_entity_decode($content);
 		
 		// set the path to pictures to absolute (so that it can be modified in fckeditor)
 		$content = preg_replace("|src=\"([^\"]*)|i", "src=\"".api_get_path(REL_COURSE_PATH).$_course['path'].'/document'.$this->created_dir."/\\1", $content);

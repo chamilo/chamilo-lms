@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 15356 2008-05-22 05:21:09Z yannoo $
+<?php //$Id: agenda.inc.php 15360 2008-05-22 18:07:51Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -2870,7 +2870,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 	return $agendaitems;
 }
 /**
- * Get repeated events of a course between two dates (timespan of a month, a week, a day).
+ * Get repeated events of a course between two dates (timespan of a day).
  * Returns an array containing the events
  * @param	string	Course database name
  * @param	int		UNIX timestamp of span start. Defaults 0, later transformed into today's start
@@ -2933,6 +2933,18 @@ function get_repeated_events_day_view($course_db,$course_db,$start=0,$end=0)
 					$current_stop = $start+$int_time+$span; //unixtimestamp stop of today's event
 					$events[] = array($row['id'],$current_start,$current_stop,$row['title'],$row['content']);
 					break;
+				case 'weekly':
+					$time_orig = date('Y/n/W/j/N/G/i/s',$orig_start);
+					list($y_orig,$m_orig,$w_orig,$d_orig,$dw_orig,$h_orig,$n_orig,$s_orig) = split('/',$time_orig);
+					$time_now = date('Y/n/W/j/N/G/i/s',$end);
+					list($y_now,$m_now,$w_now,$d_now,$dw_now,$h_now,$n_now,$s_now) = split('/',$time_now);
+					if((($y_now>$y_orig) OR (($y_now == $y_orig) && ($w_now>$w_orig))) && ($dw_orig == $dw_now))
+					{ //if the event is after the original (at least one week) and the day of the week is the same
+					  $time_orig_end = date('Y/n/W/j/N/G/i/s',$orig_end);
+					  list($y_orig_e,$m_orig_e,$w_orig_e,$d_orig_e,$dw_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
+					  $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+					}
+					break;
 				case 'monthlyByDate':
 					$time_orig = date('Y/n/j/G/i/s',$orig_start);
 					list($y_orig,$m_orig,$d_orig,$h_orig,$n_orig,$s_orig) = split('/',$time_orig);
@@ -2946,27 +2958,304 @@ function get_repeated_events_day_view($course_db,$course_db,$start=0,$end=0)
 					}
 					break;
 				case 'monthlyByDayR':
+					//not implemented yet
 					break;
 				case 'monthlyByDay':
-					break;
-				case 'weekly':
-					$time_orig = date('Y/n/W/j/N/G/i/s',$orig_start);
-					list($y_orig,$m_orig,$w_orig,$d_orig,$dw_orig,$h_orig,$n_orig,$s_orig) = split('/',$time_orig);
-					$time_now = date('Y/n/W/j/N/G/i/s',$end);
-					list($y_now,$m_now,$w_now,$d_now,$dw_now,$h_now,$n_now,$s_now) = split('/',$time_now);
-					if((($y_now>$y_orig) OR (($y_now == $y_orig) && ($w_now>$w_orig))) && ($dw_orig == $dw_now))
-					{ //if the event is after the original (at least one week) and the day of the week is the same
-					  $time_orig_end = date('Y/n/W/j/N/G/i/s',$orig_end);
-					  list($y_orig_e,$m_orig_e,$w_orig_e,$d_orig_e,$dw_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
-					  $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
-					}
+					//not implemented yet
 					break;
 				case 'yearly':
 					$time_orig = date('Y/n/j/z/G/i/s',$orig_start);
 					list($y_orig,$m_orig,$d_orig,$dy_orig,$h_orig,$n_orig,$s_orig) = split('/',$time_orig);
 					$time_now = date('Y/n/j/z/G/i/s',$end);
 					list($y_now,$m_now,$d_now,$dy_now,$h_now,$n_now,$s_now) = split('/',$time_now);
-					if((($y_now>$y_orig) OR (($y_now == $y_orig) && ($m_now>$m_orig))) && ($dy_orig == $dy_now))
+					if(($y_now>$y_orig) && ($dy_orig == $dy_now))
+					{
+					  $time_orig_end = date('Y/n/j/G/i/s',$orig_end);
+					  list($y_orig_e,$m_orig_e,$d_orig_e,$dy_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
+					  $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+	return $events;
+}
+/**
+ * Get repeated events of a course between two dates (timespan of a week).
+ * Returns an array containing the events
+ * @param	string	Course database name
+ * @param	int		UNIX timestamp of span start. Defaults 0, later transformed into today's start
+ * @param	int		UNIX timestamp. Defaults to 0, later transformed into today's end
+ * @return	array	[int] => [parent_event_id,start_date,end_date,title,description]
+ */
+function get_repeated_events_week_view($course_db,$course_db,$start=0,$end=0)
+{
+	$events = array();
+	//initialise all values
+	$y=0;
+	$m=0;
+	$d=0;
+	if($start == 0 or $end == 0)
+	{
+		$time = time();
+		$dw = date('w',$time);
+		$week_start = $time - (($dw-1)*86400);
+		$y = date('Y',$week_start);
+		$m = date('m',$week_start);
+		$d = date('j',$week_start);
+		$w = date('W',$week_start);
+	}
+	if($start==0)
+	{
+		$start = mktime(0,0,0,$m,$d,$y);
+	}
+	$db_start = date('Y-m-d H:i:s',$start);
+	if($end==0)
+	{
+		$end = $start+(86400*7)-1; //start of week, more 7 days, minus 1 second to get back to the previoyus day
+	}
+	//$db_end = date('Y-m-d H:i:s',$end);
+	
+	$t_cal = Database::get_course_table(TABLE_AGENDA,$course_db);
+	$t_cal_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_db);
+	$sql = "SELECT c.id, c.title, c.content, " .
+			" UNIX_TIMESTAMP(c.start_date) as orig_start, UNIX_TIMESTAMP(c.end_date) as orig_end, " .
+			" cr.cal_type, cr.cal_end " .
+			" FROM $t_cal c, $t_cal_repeat cr " .
+			" WHERE cr.cal_end >= $end " .
+			" AND cr.cal_id = c.id" .
+			" AND c.start_date <= $db_start";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	if(Database::num_rows($res)>0)
+	{
+		while($row = Database::fetch_array($res))
+		{
+			$orig_start = $row['orig_start'];
+			$orig_end = $row['orig_end'];
+			$repeat_type = $row['cal_type'];
+			switch($repeat_type)
+			{
+				case 'daily':
+					$time_orig_h = date('H',$orig_start);
+					$time_orig_m = date('i',$orig_start);
+					$time_orig_s = date('s',$orig_start);
+					$int_time = (($time_orig_h*60)+$time_orig_m)*60+$time_orig_s; //time in seconds since 00:00:00
+					$span = $orig_end - $orig_start; //total seconds between start and stop of original event
+					for($i=0;$i<7;$i++)
+					{
+						$current_start = $start + ($i*86400) + $int_time; //unixtimestamp start of today's event 
+						$current_stop = $start + ($i*86400) + $int_time + $span; //unixtimestamp stop of today's event
+						$events[] = array($row['id'],$current_start,$current_stop,$row['title'],$row['content']);
+					}
+					break;
+				case 'weekly':
+					$time_orig = date('Y/n/W/j/N/G/i/s',$orig_start);
+					list($y_orig,$m_orig,$w_orig,$d_orig,$dw_orig,$h_orig,$n_orig,$s_orig) = split('/',$time_orig);
+					$time_now = date('Y/n/W/j/N/G/i/s',$end);
+					list($y_now,$m_now,$w_now,$d_now,$dw_now,$h_now,$n_now,$s_now) = split('/',$time_now);
+					if((($y_now>$y_orig) OR (($y_now == $y_orig) && ($w_now>$w_orig))))
+					{ //if the event is after the original (at least one week) and the day of the week is the same
+					  $time_orig_end = date('Y/n/W/j/N/G/i/s',$orig_end);
+					  list($y_orig_e,$m_orig_e,$w_orig_e,$d_orig_e,$dw_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
+					  $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+					}
+					break;
+				case 'monthlyByDate':
+					$time_orig = date('Y/n/W/j/G/i/s',$orig_start);
+					list($y_orig,$m_orig,$w_orig,$d_orig,$h_orig,$n_orig,$s_orig) = split('/',$time_orig);
+					$time_now = date('Y/n/W/j/G/i/s',$end);
+					list($y_now,$m_now,$w_now,$d_now,$h_now,$n_now,$s_now) = split('/',$time_now);
+					$event_repetition_time = mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now); 
+					if((($y_now>$y_orig) OR (($y_now == $y_orig) && ($m_now>$m_orig))) && ($start<$event_repetition_time && $event_repetition_time<$end))
+					{ //if the event is after the original (at least one month) and the original event's day is between the first day of the week and the last day of the week
+					  $time_orig_end = date('Y/n/j/G/i/s',$orig_end);
+					  list($y_orig_e,$m_orig_e,$d_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
+					  $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+					}
+					break;
+				case 'monthlyByDayR':
+					//not implemented yet
+					break;
+				case 'monthlyByDay':
+					//not implemented yet
+					break;
+				case 'yearly':
+					$time_orig = date('Y/n/j/z/G/i/s',$orig_start);
+					list($y_orig,$m_orig,$d_orig,$dy_orig,$h_orig,$n_orig,$s_orig) = split('/',$time_orig);
+					$time_now = date('Y/n/j/z/G/i/s',$end);
+					list($y_now,$m_now,$d_now,$dy_now,$h_now,$n_now,$s_now) = split('/',$time_now);
+					$event_repetition_time = mktime($h_orig,$n_orig,$s_orig,$m_orig,$d_orig,$y_now); 
+					if((($y_now>$y_orig) && ($start<$event_repetition_time && $event_repetition_time>$end)))
+					{
+					  $time_orig_end = date('Y/n/j/G/i/s',$orig_end);
+					  list($y_orig_e,$m_orig_e,$d_orig_e,$dy_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
+					  $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+	return $events;
+}
+/**
+ * Get repeated events of a course between two dates (timespan of a month).
+ * Returns an array containing the events
+ * @param	string	Course database name
+ * @param	int		UNIX timestamp of span start. Defaults 0, later transformed into today's start
+ * @param	int		UNIX timestamp. Defaults to 0, later transformed into today's end
+ * @return	array	[int] => [parent_event_id,start_date,end_date,title,description]
+ */
+function get_repeated_events_month_view($course_db,$course_db,$start=0,$end=0)
+{
+	$events = array();
+	//initialise all values
+	$y=0;
+	$m=0;
+	$d=0;
+	if($start == 0 or $end == 0)
+	{
+		$time = time();
+		$y = date('Y');
+		$m = date('m');
+	}
+	if($start==0)
+	{
+		$start = mktime(0,0,0,$m,1,$y);
+	}
+	$db_start = date('Y-m-d H:i:s',$start);
+	if($end==0)
+	{
+		if($m==12)
+		{
+			$end = mktime(0,0,0,1,1,$y+1)-1; //start of next month, minus 1 second to get back to the previoyus day
+		}
+		else
+		{
+			$end = mktime(0,0,0,$m+1,1,$y)-1;
+		}
+	}
+	//$db_end = date('Y-m-d H:i:s',$end);
+	
+	$t_cal = Database::get_course_table(TABLE_AGENDA,$course_db);
+	$t_cal_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_db);
+	$sql = "SELECT c.id, c.title, c.content, " .
+			" UNIX_TIMESTAMP(c.start_date) as orig_start, UNIX_TIMESTAMP(c.end_date) as orig_end, " .
+			" cr.cal_type, cr.cal_end " .
+			" FROM $t_cal c, $t_cal_repeat cr " .
+			" WHERE cr.cal_end >= $end " .
+			" AND cr.cal_id = c.id" .
+			" AND c.start_date <= $db_start";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	if(Database::num_rows($res)>0)
+	{
+		while($row = Database::fetch_array($res))
+		{
+			$orig_start = $row['orig_start'];
+			$orig_end = $row['orig_end'];
+			$repeat_type = $row['cal_type'];
+			switch($repeat_type)
+			{
+				case 'daily':
+					$time_orig_h = date('H',$orig_start);
+					$time_orig_m = date('i',$orig_start);
+					$time_orig_s = date('s',$orig_start);
+					$month_last_day = date('d',$end);
+					$int_time = (($time_orig_h*60)+$time_orig_m)*60+$time_orig_s; //time in seconds since 00:00:00
+					$span = $orig_end - $orig_start; //total seconds between start and stop of original event
+					for($i=0;$i<$month_last_day;$i++)
+					{
+						$current_start = $start + ($i*86400) + $int_time; //unixtimestamp start of today's event 
+						$current_stop = $start + ($i*86400) + $int_time + $span; //unixtimestamp stop of today's event
+						$events[] = array($row['id'],$current_start,$current_stop,$row['title'],$row['content']);
+					}
+					break;
+				case 'weekly':
+					//A weekly repeated event is very difficult to catch in a month view,
+					//because weeks start before or at the same time as the first day of the month
+					//The same can be said for the end of the month.
+					// The idea is thus to get all possible events by enlarging the scope of
+					// the month to get complete weeks covering the complete month, and then take out
+					// the events that start before the 1st ($start) or after the last day of the month ($end) 
+					$time_orig = date('Y/n/W/j/N/G/i/s',$orig_start);
+					list($y_orig,$m_orig,$w_orig,$d_orig,$dw_orig,$h_orig,$n_orig,$s_orig) = split('/',$time_orig);
+                    $time_orig_end = date('Y/n/W/j/N/G/i/s',$orig_end);
+                    list($y_orig_e,$m_orig_e,$w_orig_e,$d_orig_e,$dw_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
+
+					$time_now = date('Y/n/W/j/N/G/i/s',$end);
+					list($y_now,$m_now,$w_now,$d_now,$dw_now,$h_now,$n_now,$s_now) = split('/',$time_now);
+
+					$month_first_week = date('W',$start);
+					$month_last_week = date('W',$end);
+
+					if(($y_now>$y_orig) OR (($y_now == $y_orig) && ($w_now>$w_orig)))
+					{ //if the event is after the original (at least one week) and the day of the week is the same
+						for($i=$month_first_week;$i<=$month_last_week;$i++)
+						{
+						  //the "day of the week" of repetition is the same as the $dw_orig,
+                          //so to get the "day of the month" from the "day of the week", we have
+                          //to get the first "day of the week" for this week and add the number
+                          //of days (in seconds) to reach the $dw_orig
+                          //example: the first week spans between the 28th of April (Monday) to the
+                          // 4th of May (Sunday). The event occurs on the 2nd day of each week.
+                          // This means the event occurs on 29/4, 6/5, 13/5, 20/5 and 27/5.
+                          // We want to get all of these, and then reject 29/4 because it is out
+                          // of the month itself.
+                          
+                          //First, to get the start time of the first day of the month view (even if
+                          // the day is from the past month), we get the month start date (1/5) and
+                          // see which day of the week it is, and subtract the number of days necessary
+                          // to get back to the first day of the week.
+                          $month_first_day_weekday = date('N',$start);
+                          $first_week_start = $start - (($month_first_day_weekday-1)*86400); 
+                          
+                          //Second, we add the week day of the original event, so that we have an
+                          // absolute time that represents the first repetition of the event in
+                          // our 4- or 5-weeks timespan
+                          $first_event_repeat_start = $first_week_start + (($dw_orig-1)*86400) + ($h_orig*3600) + ($n_orig*60) + $s_orig;
+
+                          //Third, we start looping through the repetitions and see if they are between
+                          // $start and $end
+					      for($i = $first_event_repeat_start; $i<=$end; $i+=604800)
+                          {
+                          	if($start<$i && $i<$end)
+                            {
+                               list($y_repeat,$m_repeat,$d_repeat,$h_repeat,$n_repeat,$s_repeat) = split('/',date('Y/m/j/H/i/s',$i));
+                               $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+                            }
+                          }
+						}
+					}
+					break;
+				case 'monthlyByDate':
+					$time_orig = date('Y/n/W/j/G/i/s',$orig_start);
+					list($y_orig,$m_orig,$w_orig,$d_orig,$h_orig,$n_orig,$s_orig) = split('/',$time_orig);
+					$time_now = date('Y/n/W/j/G/i/s',$end);
+					list($y_now,$m_now,$w_now,$d_now,$h_now,$n_now,$s_now) = split('/',$time_now);
+					$event_repetition_time = mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now); 
+					if(($y_now>$y_orig) OR (($y_now == $y_orig) && ($m_now>$m_orig)))
+					{ //if the event is after the original (at least one month) and the original event's day is between the first day of the week and the last day of the week
+					  $time_orig_end = date('Y/n/j/G/i/s',$orig_end);
+					  list($y_orig_e,$m_orig_e,$d_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);
+					  $events[] = array($row['id'],mktime($h_orig,$n_orig,$s_orig,$m_now,$d_orig,$y_now),mktime($h_orig_e,$n_orig_e,$s_orig_e,$m_now,$d_orig_e,$y_now),$row['title'],$row['content']);
+					}
+					break;
+				case 'monthlyByDayR':
+					//not implemented yet
+					break;
+				case 'monthlyByDay':
+					//not implemented yet
+					break;
+				case 'yearly':
+					$time_orig = date('Y/n/j/z/G/i/s',$orig_start);
+					list($y_orig,$m_orig,$d_orig,$dy_orig,$h_orig,$n_orig,$s_orig) = split('/',$time_orig);
+					$time_now = date('Y/n/j/z/G/i/s',$end);
+					list($y_now,$m_now,$d_now,$dy_now,$h_now,$n_now,$s_now) = split('/',$time_now);
+					$event_repetition_time = mktime($h_orig,$n_orig,$s_orig,$m_orig,$d_orig,$y_now); 
+					if((($y_now>$y_orig) && ($start<$event_repetition_time && $event_repetition_time>$end)))
 					{
 					  $time_orig_end = date('Y/n/j/G/i/s',$orig_end);
 					  list($y_orig_e,$m_orig_e,$d_orig_e,$dy_orig_e,$h_orig_e,$n_orig_e,$s_orig_e) = split('/',$time_orig_end);

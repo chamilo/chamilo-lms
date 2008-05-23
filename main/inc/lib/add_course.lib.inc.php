@@ -1512,7 +1512,7 @@ function fill_course_repository($courseRepository)
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);
 	$web_code_path = api_get_path(WEB_CODE_PATH);
 
-	$doc_html = file(api_get_path(SYS_CODE_PATH).'document/example_document.html');
+	/*doc_html = file(api_get_path(SYS_CODE_PATH).'document/example_document.html');
 
 	$fp = fopen($sys_course_path.$courseRepository.'/document/example_document.html', 'w');
 
@@ -1523,7 +1523,7 @@ function fill_course_repository($courseRepository)
 		fputs($fp, $enreg);
 	}
 	fclose($fp);
-
+    */
 	$default_document_array=array();
 
 	if(api_get_setting('example_material_course_creation')<>'false')
@@ -1833,10 +1833,10 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 			Documents
 		-----------------------------------------------------------
 		*/
-		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/example_document.html','example_document.html','file','3367')", __FILE__, __LINE__);
+		//api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/example_document.html','example_document.html','file','3367')", __FILE__, __LINE__);
 		//we need to add the document properties too!
-		$example_doc_id = Database :: get_last_insert_id();
-		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,1)", __FILE__, __LINE__);
+		//$example_doc_id = Database :: get_last_insert_id();
+		//api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,1)", __FILE__, __LINE__);
 
 		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images','".get_lang('Images')."','folder','0')", __FILE__, __LINE__);
 		$example_doc_id = Database :: get_last_insert_id();

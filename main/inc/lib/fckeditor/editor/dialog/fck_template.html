@@ -52,23 +52,16 @@
 				text-align:right;
 				color:000;
 				text-decoration: none;
-	 			font-weight :normal;
-				
-			}	
-			
-			
-			
+	 			font-weight :normal;				
+			}			
 		</style>
 		<script src="common/fck_dialog_common.js" type="text/javascript"></script>
 		<script language="javascript">
-
 var oEditor		= window.parent.InnerDialogLoaded() ;
 var FCK			= oEditor.FCK ;
 var FCKLang		= oEditor.FCKLang ;
-var FCKConfig	= oEditor.FCKConfig ;
-			
-var Size = window.parent.WindowSize;
-			
+var FCKConfig	= oEditor.FCKConfig ;			
+var Size = window.parent.WindowSize;			
 window.onload = function()
 {
 	// Set the right box height (browser dependent).
@@ -76,9 +69,7 @@ window.onload = function()
 
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage(document) ;
-
 	window.parent.SetAutoSize( true ) ;
-
 	LoadTemplatesXml() ;
 }
 
@@ -96,8 +87,8 @@ function LoadTemplatesXml()
 		oXml.LoadUrl( FCKConfig.TemplatesXmlPath ) ;
 
 		// Get the Images Base Path.
-		var oAtt = oXml.SelectSingleNode( 'Templates/@imagesBasePath' ) ;
-		var sImagesBasePath = oAtt ? oAtt.value : '' ;
+		//var oAtt = oXml.SelectSingleNode( 'Templates/@imagesBasePath' ) ;
+		//var sImagesBasePath = oAtt ? oAtt.value : '' ;
 
 		// Get the "Template" nodes defined in the XML file.
 		var aTplNodes = oXml.SelectNodes( 'Templates/Template' ) ;
@@ -132,10 +123,8 @@ function LoadTemplatesXml()
 				alert( 'No HTML defined for template index ' + i + '. Please review the "' + FCKConfig.TemplatesXmlPath + '" file.' ) ;
 				continue ;
 			}
-
 			FCK._Templates[ FCK._Templates.length ] = oTemplate ;
 		}
-
 		GetE('eLoading').style.display = 'none' ;
 	}
 
@@ -145,7 +134,7 @@ function LoadTemplatesXml()
 	{
 		for ( var i = 0 ; i < FCK._Templates.length ; i++ )
 		{
-			var oTemplate = FCK._Templates[i] ;
+			var oTemplate = FCK._Templates[i];
 
 			var oItemDiv = GetE('eList').appendChild( document.createElement( 'DIV' ) ) ;
 			oItemDiv.TplIndex = i ;

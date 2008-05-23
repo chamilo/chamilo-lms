@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 15371 2008-05-23 07:40:03Z yannoo $
+<?php //$Id: agenda.php 15372 2008-05-23 10:29:42Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -298,11 +298,16 @@ if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') &&
 {
 	switch ($_GET['action'])
 	{
-		case "add":
-
-			if ($_POST['submit_event'])
+		case 'add':
+            if(!empty($_POST['ical_submit']))
+            {
+                $course_info = api_get_course_info();
+                agenda_import_ical($course_info,$_FILES['ical_import']);            	
+                display_agenda_items();
+            }
+			elseif ($_POST['submit_event'])
 			{
-			     $course_info = api_get_course_info();
+		     $course_info = api_get_course_info();
 			    $event_start    = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
                 $event_stop     = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
 				$id = agenda_add_item($course_info,$_POST['title'],$_POST['content'],$event_start,$event_stop,$_POST['selectedform']);
@@ -312,7 +317,7 @@ if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') &&
                     $end_m = intval($_POST['repeat_end_month']);
                     $end_d = intval($_POST['repeat_end_day']);
                     $end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
-                    agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,$event_start,$event_stop,$_POST['selectedform']);
+                    $res = agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,$event_start,$event_stop,$_POST['selectedform']);
                 }
 				display_agenda_items();
 			}

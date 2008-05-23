@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 15371 2008-05-23 07:40:03Z yannoo $
+<?php //$Id: agenda.inc.php 15372 2008-05-23 10:29:42Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -2061,16 +2061,20 @@ function show_add_form($id = '')
 ?>
 
 <!-- START OF THE FORM  -->
-<form action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
+<form enctype="multipart/form-data" action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
 <input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
 <input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%" id="newedit_form">
 	<!-- the title -->
 	<tr class="title">
-		<td colspan="3">
+		<td>
 		<span style="font-weight: bold;"><?php echo (isset($id) AND $id<>'')?get_lang('ModifyCalendarItem'):get_lang("AddCalendarItem"); ?></span>
 		</td>
+        <td colspan="2" align="right">
+        <label for="ical_import"><?php echo get_lang('ICalFileImport');?></label>
+        <input type="file" name="ical_import"/><input type="submit" name="ical_submit" value="<?php echo get_lang('Ok');?>"/>
+        </td>
 	</tr>
 
 	<!--  the select specific users / send to all form -->
@@ -3834,18 +3838,47 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest)
 {
 	$t_agenda   = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
     $t_agenda_r = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_info['dbName']);
-    $sql = "SELECT title, content, UNIX_TIMESTAMP(start_date) as sd, UNIX_TIMESTAMP(end_date) as ed FROM $t_agenda WHERE id = $orig_id";
+    //$sql = "SELECT title, content, UNIX_TIMESTAMP(start_date) as sd, UNIX_TIMESTAMP(end_date) as ed FROM $t_agenda WHERE id = $orig_id";
+    $sql = "SELECT title, content, start_date as sd, end_date as ed FROM $t_agenda WHERE id = $orig_id";
     $res = Database::query($sql,__FILE__,__LINE__);
     if(Database::num_rows($res)!==1){return false;}
     $row = Database::fetch_array($res);
-    $orig_start = $row['sd'];
-    $orig_end   = $row['ed'];
+    //$orig_start = $row['sd'];
+    $orig_start = mktime(substr($row['sd'],11,2),substr($row['sd'],14,2),substr($row['sd'],17,2),substr($row['sd'],5,2),substr($row['sd'],8,2),substr($row['sd'],0,4));
+    //$orig_end   = $row['ed'];
+    $orig_end   = mktime(substr($row['ed'],11,2),substr($row['ed'],14,2),substr($row['ed'],17,2),substr($row['ed'],5,2),substr($row['ed'],8,2),substr($row['ed'],0,4));
+    $diff = $orig_end - $orig_start;
     $orig_title = $row['title'];
     $orig_content = $row['content'];
     $now = time();
     $type = Database::escape_string($type);
     $end = (int) $end;
-
+    if(1<=$end && $end<=500)
+    {
+    	//we assume that, with this type of value, the user actually gives a count of repetitions
+        //and that he wants us to calculate the end date with that (particularly in case of imports from ical)
+        switch($type)
+        {
+            case 'daily':
+                $end = $orig_start + (86400*$end);
+                break;
+            case 'weekly':
+                $end = add_week($orig_start,$end);
+                break;
+            case 'monthlyByDate':
+                $end = add_month($orig_start,$end);
+                break;
+            case 'monthlyByDay':
+                //TODO
+                break;
+            case 'monthlyByDayR':
+                //TODO
+                break;
+            case 'yearly':
+                $end = add_year($orig_start,$end);
+                break;
+        }
+    }
     if($end > $now 
         && in_array($type,array('daily','weekly','monthlyByDate','monthlyByDay','monthlyByDayR','yearly')))
     {
@@ -3855,25 +3888,23 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest)
         switch($type)
         {
             case 'daily':
-                for($i = $orig_start + 86400, $j = $orig_end + 86400; ($i <= $end); $i += 86400, $j += 86400)
+                for($i = $orig_start + 86400; ($i <= $end); $i += 86400)
                 {
-                    agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $i), date('Y-m-d H:i:s', $j), $orig_dest, $orig_id);
+                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $i), date('Y-m-d H:i:s', $i+$diff), $orig_dest, $orig_id);
                 }
                 break;
             case 'weekly':
-                for($i = $orig_start + 604800, $j = $orig_end + 604800; ($i <= $end); $i += 604800, $j += 604800)
+                for($i = $orig_start + 604800; ($i <= $end); $i += 604800)
                 {
-                    agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $i), date('Y-m-d H:i:s', $j), $orig_dest, $orig_id);
+                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $i), date('Y-m-d H:i:s', $i+$diff), $orig_dest, $orig_id);
                 }
                 break;
             case 'monthlyByDate':
                 $next_start = add_month($orig_start);
-                $next_end   = add_month($orig_end);
                 while($next_start <= $end)
                 {
-                    agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_end), $orig_dest, $orig_id);
+                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_start+$diff), $orig_dest, $orig_id);
                     $next_start = add_month($next_start);
-                    $next_end   = add_month($next_end);
                 }
                 break;
             case 'monthlyByDay':
@@ -3884,16 +3915,74 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest)
                 break;
             case 'yearly':
                 $next_start = add_year($orig_start);
-                $next_end   = add_year($orig_end);
                 while($next_start <= $end)
                 {
-                    agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_end), $orig_dest, $orig_id);
+                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_start+$diff), $orig_dest, $orig_id);
                     $next_start = add_year($next_start);
-                    $next_end   = add_year($next_end);
                 }
                 break;
         }
     }
 	return true;
+}
+/**
+ * Import an iCal file into the database
+ * @param   array   Course info
+ * @return  boolean True on success, false otherwise
+ */
+function agenda_import_ical($course_info,$file)
+{
+	require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+    $charset = api_get_setting('platform_charset');
+    $filepath = api_get_path(GARBAGE_PATH).$file['name'];
+    if(!@move_uploaded_file($file['tmp_name'],$filepath))
+    {
+    	error_log('Problem moving uploaded file: '.$file['error'].' in '.__FILE__.' line '.__LINE__);
+    	return false;
+    }
+    require_once (api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php');
+    $ical = new vcalendar();
+    $ical->setConfig( 'directory', dirname($filepath) );
+    $ical->setConfig( 'filename', basename($filepath) );
+    $ical->parse();
+    //we need to recover: summary, description, dtstart, dtend, organizer, attendee, location (=course name), 
+    // rrule
+    $ve = $ical->getComponent(0);
+    //print_r($ve);
+    $ttitle = $ve->getProperty('summary');
+    //print_r($ttitle);
+    $title = mb_convert_encoding($ttitle,$charset,'UTF-8');
+    $tdesc = $ve->getProperty('description');
+    $desc = mb_convert_encoding($tdesc,$charset,'UTF-8');
+    $ts = $ve->getProperty('dtstart');
+    $start_date = $ts['year'].'-'.$ts['month'].'-'.$ts['day'].' '.$ts['hour'].':'.$ts['min'].':'.$ts['sec'];
+    $ts = $ve->getProperty('dtend');
+    $end_date = $ts['year'].'-'.$ts['month'].'-'.$ts['day'].' '.$ts['hour'].':'.$ts['min'].':'.$ts['sec'];
+    //echo $start_date.' - '.$end_date;
+    $organizer = $ve->getProperty('organizer');
+    $attendee = $ve->getProperty('attendee');
+    $course_name = $ve->getProperty('location');
+    //insert the event in our database
+    $id = agenda_add_item($course_info,$title,$desc,$start_date,$end_date,$_POST['selectedform']);
+    
+    $repeat = $ve->getProperty('rrule');
+    if(is_array($repeat) && !empty($repeat['FREQ']))
+    {
+    	$trans = array('DAILY'=>'daily','WEEKLY'=>'weekly','MONTHLY'=>'monthlyByDate','YEARLY'=>'yearly');
+        $freq = $trans[$repeat['FREQ']];
+        $interval = $repeat['INTERVAL'];
+        if(isset($repeat['UNTIL']) && is_array($repeat['UNTIL']))
+        {
+            $until = mktime(23,59,59,$repeat['UNTIL']['month'],$repeat['UNTIL']['day'],$repeat['UNTIL']['year']);
+            $res = agenda_add_repeat_item($course_info,$id,$freq,$until,$_POST['selectedform']);
+        }
+        //TODO: deal with count
+        if(!empty($repeat['COUNT']))
+        {
+            $count = $repeat['COUNT'];
+            $res = agenda_add_repeat_item($course_info,$id,$freq,$count,$_POST['selectedform']);            
+        }
+    }
+    return true;
 }
 ?>

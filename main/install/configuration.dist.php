@@ -86,10 +86,10 @@ $_configuration['user_personal_database']   			='{DATABASE_PERSONAL}';
 //   Directory settings
 //============================================================================
 
-// URL to the root of your Dokeos installation, example: http://www.mydokeos.com
+// URL to the root of your Dokeos installation, example: http://www.mydokeos.com/
 $_configuration['root_web'] 							= '{ROOT_WEB}';
 
-// Path to the webroot of system, example: /var/www
+// Path to the webroot of system, example: /var/www/
 $_configuration['root_sys'] 							= '{ROOT_SYS}';
 
 // Path from your WWW-root to the root of your Dokeos installation, example: dokeos (this means dokeos is installed in /var/www/dokeos/

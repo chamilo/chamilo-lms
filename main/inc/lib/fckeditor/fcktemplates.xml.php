@@ -62,18 +62,31 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
         <![CDATA[
            	<head>
             	<?php echo $css ?>
+            	<style type="text/css">
+            	.gris_title
+            	{
+            		color: silver;
+            	}            	
+            	h1
+            	{
+            		text-align: right;
+            	}
+				</style>
+  
             </head>
-            <body style="direction: ltr;">
+            <body>
 			<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 			<tbody>
 			<tr>
+			
 			<td style="vertical-align: middle; width: 50%;" colspan="1" rowspan="1">
-			<h1 style="text-align: right;">TITULUS 1<br>
-			<span style="color: silver;">TITULUS 2</span><br>
-			</h1>
+				<h1>TITULUS 1<br>
+				<span class="gris_title">TITULUS 2</span><br>
+				</h1>
 			</td>
+			
 			<td style="width: 50%;">
-			<img style="width: 100px; height: 100px;" alt="dokeos logo" src="<?php echo $default_course_dir.'images/logo_dokeos.png';?>"></td>
+				<img style="width: 100px; height: 100px;" alt="dokeos logo" src="<?php echo $default_course_dir.'images/logo_dokeos.png';?>"></td>
 			</tr>
 			</tbody>
 			</table>
@@ -90,29 +103,40 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 	<Html>
 	    <![CDATA[
 	            <head>
-	               <?php echo $css ?>
+	               <?php echo $css ?>	              
 	            </head>
-	            <body style="direction: ltr;">
+	            <body>
 				<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 				<tbody>
 				<tr>
 				<td style="vertical-align: top; width: 66%;">						
 				<h3>Lorem ipsum dolor sit amet</h3>
 				<ul>
-				<li>consectetur adipisicing elit</li><li>sed do eiusmod tempor incididunt</li>
-				<li>ut labore et dolore magna aliqua</li></ul>
-				<h3>Ut enim ad minim veniam</h3>
-				<ul><li>quis nostrud exercitation ullamco</li>
-				<li>laboris nisi ut aliquip ex ea commodo consequat</li>
-				<li>Excepteur sint occaecat cupidatat non proident</li></ul>
-				<h3>Sed ut perspiciatis unde omnis</h3>
-				<ul><li>iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam</li>
-				<li>eaque ipsa quae ab illo inventore veritatis</li>
-				<li>et quasi architecto beatae vitae dicta sunt explicabo.&nbsp;</li></ul>
+					<li>consectetur adipisicing elit</li>
+					<li>sed do eiusmod tempor incididunt</li>
+					<li>ut labore et dolore magna aliqua</li>
+				</ul>
+				
+				<h3>Ut enim ad minim veniam</h3>							
+				<ul>
+					<li>quis nostrud exercitation ullamco</li>
+					<li>laboris nisi ut aliquip ex ea commodo consequat</li>
+					<li>Excepteur sint occaecat cupidatat non proident</li>
+				</ul>
+				
+				<h3>Sed ut perspiciatis unde omnis</h3>				
+				<ul>
+					<li>iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam</li>
+					<li>eaque ipsa quae ab illo inventore veritatis</li>
+					<li>et quasi architecto beatae vitae dicta sunt explicabo.&nbsp;</li>
+				</ul>
+				
 				</td>
 				<td style="background: transparent url(<?php echo $img_dir.'postit.png'; ?>) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; width: 33%; text-align: center; vertical-align: bottom;">
-				<h3>Ut enim ad minima</h3>Veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.<br>
-				<h3><img style="width: 180px; height: 144px;" alt="trainer" src="<?php echo $default_course_dir;?>images/trainer/trainer_smile.png"><br></h3>
+				<h3>Ut enim ad minima</h3>
+				Veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.<br>
+				<h3>
+				<img style="width: 180px; height: 144px;" alt="trainer" src="<?php echo $default_course_dir.'images/trainer/trainer_smile.png';?>"><br></h3>
 				</td>
 				</tr>
 				</tbody>
@@ -130,8 +154,14 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 		<![CDATA[
 				<head>
                    <?php echo $css ?>
+                   <style type="text/css">	            
+	            	.text
+	            	{	            	
+	            		font-weight: normal;
+	            	}
+					</style>
                 </head>                    
-                <body style="direction: ltr;">
+                <body>
 					<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 					<tbody>
 					<tr>
@@ -142,11 +172,12 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 					<tr>
 					<td style="width: 25%;"></td>
 					<td style="background: transparent url(<?php echo $img_dir.'faded_grey.png'; ?>) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: right; font-weight: bold;" colspan="1" rowspan="1">
-					<span style="color: silver;"></span><span style="font-weight: normal;"><br>
-					Lorem
-					ipsum dolor sit amet, consectetuer adipiscing elit. Duis pellentesque.</span>
+					<span class="text">
+					<br>
+					Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis pellentesque.</span>
 					</td>
-					<td style="width: 25%; font-weight: bold;"><img style="width: 180px; height: 241px;" alt="trainer" src="<?php echo $default_course_dir;?>images/trainer/trainer_case.png"></td>
+					<td style="width: 25%; font-weight: bold;">
+					<img style="width: 180px; height: 241px;" alt="trainer" src="<?php echo $default_course_dir.'images/trainer/trainer_case.png';?>"></td>
 					</tr>
 					</tbody>
 					</table>
@@ -164,9 +195,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 	<![CDATA[
 			<head>
 	           <?php echo $css ?>
-		    </head>
-		    
-		    <body style="direction: ltr;">
+	       </head>		    
+		    <body>
 				<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 				<tbody>
 				<tr>
@@ -208,12 +238,12 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 			<head>
 	           <?php echo $css ?>
 		    </head>
-			<body style="direction: ltr;">
+			<body>
 				<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; height: 400px; width: 720px;" border="0" cellpadding="15" cellspacing="6">
 				<tbody>
 				<tr>
 				<td></td>
-				<td style="vertical-align: top;" colspan="1" rowspan="4">&nbsp;<img style="width: 180px; height: 294px;" alt="Trainer" src="<?php echo $default_course_dir;?>images/trainer/trainer_join_hands.png"><br>
+				<td style="vertical-align: top;" colspan="1" rowspan="4">&nbsp;<img style="width: 180px; height: 294px;" alt="Trainer" src="<?php echo $default_course_dir.'images/trainer/trainer_join_hands.png';?>"><br>
 				</td>
 				<td></td>
 				</tr>
@@ -305,7 +335,7 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
             <?php echo $css ?>        
             </head>
             
-            <body style="direction: ltr;">
+            <body>
             	<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">				
 				<tr>
 					<td style="height: 10%; width: 33%;"></td> 
@@ -335,19 +365,22 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 	                   <?php echo $css ?>
 				    </head>
 				    
-					<body style="direction: ltr;">
+					<body>
 					<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 					<tbody>
 					<tr>
-					<td style="background: transparent url(<?php echo $img_dir.'faded_grey.png'; ?>) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; height: 33%; width: 33%;"><br>
+					<td style="background: transparent url(<?php echo $img_dir.'faded_grey.png'; ?>) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; height: 33%; width: 33%;">
+					<br>
 					Etiam
 					lacinia stibulum ante.
 					Convallis
 					ut.&nbsp;Cras dui magna.</td>
-					<td colspan="1" rowspan="3"><img style="width: 350px; height: 267px;" alt="Alaska chart" src="<?php echo $default_course_dir;?>images/diagrams/alaska_chart.png"></td>
+					<td colspan="1" rowspan="3">
+						<img style="width: 350px; height: 267px;" alt="Alaska chart" src="<?php echo $default_course_dir.'images/diagrams/alaska_chart.png';?>"></td>
 					</tr>
 					<tr>
-					<td colspan="1" rowspan="1"><img style="width: 300px; height: 199px;" alt="trainer" src="<?php echo $default_course_dir;?>images/trainer/trainer_points_right.png"></td>
+					<td colspan="1" rowspan="1">
+					<img style="width: 300px; height: 199px;" alt="trainer" src="<?php echo $default_course_dir.'images/trainer/trainer_points_right.png';?>"></td>
 					</tr>
 					<tr>
 					</tr>
@@ -369,7 +402,7 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 					<head>
 	                   <?php echo $css ?>
 				    </head>
-					<body style="direction: ltr;">
+					<body>
 						<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 						<tbody>
 						<tr>
@@ -402,7 +435,7 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 	               <?php echo $css ?>                    
 			    </head>	
 			    
-			    <body style="direction: ltr;">
+			    <body>
 					<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 					<tbody>
 					<tr>
@@ -442,9 +475,17 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 		<Html>
 			<![CDATA[
 				<head>
-	               <?php echo $css ?>                    
-			    </head>		    
-			    <body style="direction: ltr;">
+	               <?php echo $css ?>
+	               <style>
+	               .title
+	               {
+	               	color: white; font-weight: bold;
+	               }
+	               </style>                    
+			    </head>
+			    	
+			    	    
+			    <body>
 				<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="8" cellspacing="6">
 				<tbody>
 				<tr>
@@ -454,34 +495,39 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 				</tr>			
 				<tr>
 					<td style="height: 5%; width: 45%; vertical-align: top; background-color: rgb(153, 153, 153); text-align: center;">
-						<span style="color: white; font-weight: bold;">Lorem ipsum</span>
+						<span class="title">Lorem ipsum</span>
 					</td>
 						
-					<td style="height: 5%; width: 10%;"></td>
-					
+					<td style="height: 5%; width: 10%;"></td>					
 					<td style="height: 5%; vertical-align: top; background-color: rgb(153, 153, 153); text-align: center;">
-						<span style="color: white; font-weight: bold;">Sed ut perspiciatis</span>
+						<span class="title">Sed ut perspiciatis</span>
 					</td>
 				</tr>
 					<tr>
 						<td style="background-color: rgb(204, 204, 255); width: 45%; vertical-align: top;">
 							<ul>
-								<li>dolor sit amet</li><li>consectetur adipisicing elit</li>
-								<li>sed do eiusmod tempor&nbsp;</li><li>adipisci velit, sed quia non numquam</li>
+								<li>dolor sit amet</li>
+								<li>consectetur adipisicing elit</li>
+								<li>sed do eiusmod tempor&nbsp;</li>
+								<li>adipisci velit, sed quia non numquam</li>
 								<li>eius modi tempora incidunt ut labore et dolore magnam</li>
 							</ul>
 				</td>			
 				<td style="width: 10%;"></td>
 				<td style="background-color: rgb(204, 204, 255); width: 45%; vertical-align: top;">
-					<ul><li>ut enim ad minim veniam</li>
+					<ul>
+					<li>ut enim ad minim veniam</li>
 					<li>quis nostrud exercitation</li><li>ullamco laboris nisi ut</li>
 					<li> Quis autem vel eum iure reprehenderit qui in ea</li>
 					<li>voluptate velit esse quam nihil molestiae consequatur,</li>
-					</ul></td></tr>
+					</ul>
+					</td>
+					</tr>
 					<tr align="center">
 					<td style="height: 10%; vertical-align: top;" colspan="3" rowspan="1">
 					<img style="width: 250px; height: 76px;" alt="arrow" src="<?php echo $default_course_dir.'images/diagrams/bottom_arrow.png';?>">&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
-				</td></tr>			
+				</td>
+				</tr>			
 				</tbody>
 				</table>
 				<p><br>
@@ -501,7 +547,7 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
                <?php echo $css ?>                    
 		    </head>
 		    
-		    <body style="direction: ltr;">
+		    <body>
 				<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 				<tbody>
 				<tr>
@@ -548,26 +594,34 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 	<Html>
 		<![CDATA[
 			<head>
-               <?php echo $css ?>                    
+               <?php echo $css ?> 
+				<style>
+				.title
+				{				
+					font-weight: bold; text-align: center; 	
+				}			
+				</style>                
 		    </head>	
 		    
-		    <body style="direction: ltr;">
+		    <body>
 				<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="8" cellspacing="5">
 				<tbody>
-				<tr>
-					<td style="vertical-align: top; font-weight: bold; text-align: center; height: 3%; background-color: rgb(224, 224, 224);">Lorem ipsum</td>
-					<td style="font-weight: bold; text-align: center; height: 3%;"></td>
-					<td style="vertical-align: top; font-weight: bold; text-align: center; height: 3%; background-color: rgb(237, 237, 237);">Perspiciatis</td>
-					<td style="font-weight: bold; text-align: center; height: 3%;"></td>
-					<td style="vertical-align: top; font-weight: bold; text-align: center; height: 3%; background-color: rgb(245, 245, 245);">Nemo enim</td>
+				<tr class="title">				
+					<td style="vertical-align: top; height: 3%; background-color: rgb(224, 224, 224);">Lorem ipsum</td>
+					<td style="height: 3%;"></td>
+					<td style="vertical-align: top; height: 3%; background-color: rgb(237, 237, 237);">Perspiciatis</td>
+					<td style="height: 3%;"></td>
+					<td style="vertical-align: top; height: 3%; background-color: rgb(245, 245, 245);">Nemo enim</td>
 				</tr>
 				
 				<tr>
 					<td style="vertical-align: top; width: 30%; background-color: rgb(224, 224, 224);">
-						<ul><li>dolor sit amet</li>
+						<ul>
+						<li>dolor sit amet</li>
 						<li>consectetur</li>
 						<li>adipisicing elit</li>
-					</ul><br>
+					</ul>
+					<br>
 					</td>
 					<td>
 						<img style="width: 32px; height: 32px;" alt="arrow" src="<?php echo $default_course_dir.'/images/small/arrow.png';?>">
@@ -586,7 +640,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 					
 					<td style="vertical-align: top; background-color: rgb(245, 245, 245); width: 30%;">
 						<ul>
-							<li>neque porro</li><li>quisquam est</li>
+							<li>neque porro</li>
+							<li>quisquam est</li>
 							<li>qui dolorem&nbsp;&nbsp;</li>
 						</ul>
 						<br><br>
@@ -612,7 +667,7 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 			<head>
                <?php echo $css ?>                    
 		    </head>
-		    <body style="direction: ltr;">
+		    <body>
 				<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 				<tbody>
 				<tr>
@@ -650,46 +705,60 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 		<![CDATA[
 				<head>
                    <?php echo $css ?>
+                   <style type="text/css">
+				.title
+				{
+					font-weight: bold; text-align: center;
+				}
+				
+				.items
+				{
+					text-align: right;
+				}	
+  				
+
+					</style>
+  
 			    </head>
 			    <body>
 			    <br />
 			   <h2>A table</h2>
 				<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px;" border="1" cellpadding="5" cellspacing="0">
 				<tbody>
-				<tr>
-				<td style="font-weight: bold; text-align: center;">Country</td>
-				<td style="font-weight: bold; text-align: center;">2005</td>
-				<td style="font-weight: bold; text-align: center;">2006</td>
-				<td style="font-weight: bold; text-align: center;">2007</td>
-				<td style="font-weight: bold; text-align: center;">2008</td>
+				<tr class="title">
+					<td>Country</td>
+					<td>2005</td>
+					<td>2006</td>
+					<td>2007</td>
+					<td>2008</td>
 				</tr>
-				<tr>
-				<td style="text-align: right;">Bermuda</td>
-				<td style="text-align: right;">10,40</td>
-				<td style="text-align: right;">8,95</td>
-				<td style="text-align: right;">9,19</td>
-				<td style="text-align: right;">9,76</td>
+				<tr class="items">
+					<td>Bermuda</td>
+					<td>10,40</td>
+					<td>8,95</td>
+					<td>9,19</td>
+					<td>9,76</td>
 				</tr>
-				<tr>
-				<td style="text-align: right;">Canada</td>
-				<td style="text-align: right;">18,39</td>
-				<td style="text-align: right;">17,52</td>
-				<td style="text-align: right;">16,57</td>
-				<td style="text-align: right;">16,60</td>
+				<tr class="items">
+				<td>Canada</td>
+					<td>18,39</td>
+					<td>17,52</td>
+					<td>16,57</td>
+					<td>16,60</td>
 				</tr>
-				<tr>
-				<td style="text-align: right;">Greenland</td>
-				<td style="text-align: right;">0,10</td>
-				<td style="text-align: right;">0,10</td>
-				<td style="text-align: right;">0,05</td>
-				<td style="text-align: right;">0,05</td>
+				<tr class="items">
+				<td>Greenland</td>
+					<td>0,10</td>
+					<td>0,10</td>
+					<td>0,05</td>
+					<td>0,05</td>
 				</tr>
-				<tr>
-				<td style="text-align: right;">Mexico</td>
-				<td style="text-align: right;">3,38</td>
-				<td style="text-align: right;">3,63</td>
-				<td style="text-align: right;">3,63</td>
-				<td style="text-align: right;">3,54</td>
+				<tr class="items">
+				<td>Mexico</td>
+					<td>3,38</td>
+					<td >3,63</td>
+					<td>3,63</td>
+					<td>3,54</td>
 				</tr>
 				</tbody>
 				</table>
@@ -709,7 +778,7 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 			<head>
                <?php echo $css ?>                    
 		    </head>
-                   <body style="direction: ltr;">
+                   <body>
 					<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 					<tbody>
 					<tr>
@@ -727,10 +796,12 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 					
 					<br>
 					</td>
-					<td colspan="1" rowspan="3"><br><img style="width: 300px; height: 341px; float: right;" alt="image" src="<?php echo $default_course_dir;?>images/diagrams/head_olfactory_nerve.png"><br></td>
+					<td colspan="1" rowspan="3"><br>
+						<img style="width: 300px; height: 341px; float: right;" alt="image" src="<?php echo $default_course_dir.'images/diagrams/head_olfactory_nerve.png';?>"><br></td>
 					</tr>
 					<tr>
-					<td colspan="1" rowspan="1"><img style="width: 180px; height: 271px;" alt="trainer" src="<?php echo $default_course_dir;?>images/trainer/trainer_glasses.png"><br></td>
+					<td colspan="1" rowspan="1">
+						<img style="width: 180px; height: 271px;" alt="trainer" src="<?php echo $default_course_dir.'images/trainer/trainer_glasses.png';?>"><br></td>
 					</tr>
 					<tr>
 					</tr>
@@ -739,10 +810,7 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 					<p><br>
 					<br>
 					</p>
-					</body>
-					
-					
-			    
+					</body>					
 		]]>
 	</Html>
 </Template>
@@ -755,7 +823,7 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
             	<?php echo $css ?>
 			</head>
 			
-			<body style="direction: ltr;">
+			<body>
 			<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 			<tbody>
 			<tr>
@@ -784,17 +852,17 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 			<h3><br>
 			</h3>
 			<h3>Lorem ipsum dolor sit amet</h3>
-			<ul>
-			<li>consectetur adipisicing elit</li>
-			<li>sed do eiusmod tempor incididunt</li>
-			<li>ut labore et dolore magna aliqua</li>
-			</ul>
+				<ul>
+				<li>consectetur adipisicing elit</li>
+				<li>sed do eiusmod tempor incididunt</li>
+				<li>ut labore et dolore magna aliqua</li>
+				</ul>
 			<h3>Ut enim ad minim veniam</h3>
-			<ul>
-			<li>quis nostrud exercitation ullamco</li>
-			<li>laboris nisi ut aliquip ex ea commodo consequat</li>
-			<li>Excepteur sint occaecat cupidatat non proident</li>
-			</ul>
+				<ul>
+				<li>quis nostrud exercitation ullamco</li>
+				<li>laboris nisi ut aliquip ex ea commodo consequat</li>
+				<li>Excepteur sint occaecat cupidatat non proident</li>
+				</ul>
 			</td>
 			</tr>
 			</tbody>
@@ -815,7 +883,7 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 			<head>
                <?php echo $css ?>                    
 		    </head>				    
-		    <body style="direction: ltr;">
+		    <body>
 		    <center>
 				<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 100%; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 				<tbody>

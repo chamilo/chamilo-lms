@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 15185 2008-04-30 03:55:19Z yannoo $
+<?php //$Id: agenda.php 15371 2008-05-23 07:40:03Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -302,7 +302,18 @@ if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') &&
 
 			if ($_POST['submit_event'])
 			{
-				store_new_agenda_item();
+			     $course_info = api_get_course_info();
+			    $event_start    = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
+                $event_stop     = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
+				$id = agenda_add_item($course_info,$_POST['title'],$_POST['content'],$event_start,$event_stop,$_POST['selectedform']);
+                if(!empty($_POST['repeat']))
+                {
+                	$end_y = intval($_POST['repeat_end_year']);
+                    $end_m = intval($_POST['repeat_end_month']);
+                    $end_d = intval($_POST['repeat_end_day']);
+                    $end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
+                    agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,$event_start,$event_stop,$_POST['selectedform']);
+                }
 				display_agenda_items();
 			}
 			else
@@ -344,7 +355,6 @@ if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') &&
 	}
 }
 
-
 // this is for students and whenever the courseaministrator has not chosen any action. It is in fact the default behaviour
 if (!$_GET['action'] OR $_GET['action']=="showall"  OR $_GET['action']=="showcurrent" OR $_GET['action']=="view")
 {
@@ -352,10 +362,17 @@ if (!$_GET['action'] OR $_GET['action']=="showall"  OR $_GET['action']=="showcur
 	{
 		if (!$_SESSION['view'] OR $_SESSION['view'] <> 'month')
 		{
-			display_agenda_items();
+            if(!empty($_GET['agenda_id']))
+            {
+                 display_one_agenda_item((int)$_GET['agenda_id']);   
+            }
+            else
+            {
+			     display_agenda_items();
+            }
 		}
-		else 
-		{
+        else
+        {
 			display_monthcalendar($select_month, $select_year);
 		}
 	}

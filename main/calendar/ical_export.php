@@ -45,7 +45,6 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 		$ical->setProperty( 'method', 'PUBLISH' );
 		$ical->setConfig('url',api_get_path(WEB_PATH));
 		$vevent = new vevent();
-		$vevent->setProperty( 'summary', mb_convert_encoding($ai['title'],'UTF-8',$charset));
 		switch($_GET['class'])
 		{
 			case 'public':
@@ -67,6 +66,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 			case 'personal':
 				require_once (api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php');
 				$ai = get_personal_agenda_item($_GET['id']);
+                $vevent->setProperty( 'summary', mb_convert_encoding($ai['title'],'UTF-8',$charset));
 				if(empty($ai['date'])){header('location:'.$_SERVER['REFERER_URI']);}
 				list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['date']);
 				$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
@@ -96,7 +96,8 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 				$TABLE_ITEM_PROPERTY 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 				require_once (api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php');
 				$ai = get_agenda_item($_GET['id']);
-				if(empty($ai['start_date'])){header('location:'.$_SERVER['REFERER_URI']);}
+		        $vevent->setProperty( 'summary', mb_convert_encoding($ai['title'],'UTF-8',$charset));
+        		if(empty($ai['start_date'])){header('location:'.$_SERVER['REFERER_URI']);}
 				list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['start_date']);
 				$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
 				if(empty($ai['end_date']))
@@ -116,6 +117,13 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 				//$vevent->setProperty('attendee',$user['mail']);
 				$course = api_get_course_info();
 				$vevent->setProperty('location', $course['name']); // property name - case independent
+                if($ai['repeat'])
+                {
+                	$trans = array('daily'=>'DAILY','weekly'=>'WEEKLY','monthlyByDate'=>'MONTHLY','yearly'=>'YEARLY');
+                    $freq = $trans[$ai['repeat_type']];
+                    list($e_y,$e_m,$e_d) = split('/',date('Y/m/d',$ai['repeat_end']));
+                	$vevent->setProperty('rrule',array('FREQ'=>$freq,'UNTIL'=>array('year'=>$e_y,'month'=>$e_m,'day'=>$e_d),'INTERVAL'=>'1'));
+                }
 				//$vevent->setProperty( 'rrule', array( 'FREQ' => 'WEEKLY', 'count' => 4));// occurs also four next weeks
 				$ical->setConfig('filename',$y.$m.$d.$h.$M.$s.'-'.rand(1,1000).'.ics');
 				$ical->setComponent ($vevent); // add event to calendar

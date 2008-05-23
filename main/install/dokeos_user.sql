@@ -16,6 +16,7 @@ CREATE TABLE personal_agenda (
   `date` datetime default NULL,
   enddate datetime default NULL,
   course varchar(255),
+  parent_event_id int null,
   UNIQUE KEY id (id)
 );
 CREATE TABLE personal_agenda_repeat (
@@ -26,7 +27,6 @@ CREATE TABLE personal_agenda_repeat (
   cal_days CHAR(7),
   PRIMARY KEY (cal_id)
 );
-
 CREATE TABLE personal_agenda_repeat_not (
   cal_id INT NOT NULL,
   cal_date INT NOT NULL,

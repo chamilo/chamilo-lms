@@ -15,8 +15,9 @@ function loadCSS($css_name)
 function s($var)
 {
 	global $charset;
-    //return str_replace('&','&amp;',mb_convert_encoding(get_lang($var),'UTF-8',$charset));
-    return htmlentities(get_lang($var), ENT_NOQUOTES, $charset);    
+    $search = array('&','<','>');
+    $replace = array ('&amp;','&amp;lt;','&amp;gt;');
+    return str_replace($search,$replace,mb_convert_encoding(get_lang($var),'UTF-8',$charset));
 }
 /**
  * Transforms a string into XML-usable code
@@ -24,8 +25,9 @@ function s($var)
 function s2($var)
 {
 	global $charset;
-    //return str_replace('&','&amp;',mb_convert_encoding($var,'UTF-8',$charset));
-    return htmlentities($var, ENT_NOQUOTES, $charset);        
+    $search = array('&','<','>');
+    $replace = array ('&amp;','&amp;lt;','&amp;gt;');
+    return str_replace($search,$replace,mb_convert_encoding($var,'UTF-8',$charset));
 }
 $css = loadCSS(api_get_setting('stylesheets'));
 $img_dir = api_get_path(WEB_IMG_PATH);

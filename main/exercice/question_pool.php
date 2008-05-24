@@ -10,21 +10,15 @@
     of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
 
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+    Contact: Dokeos, Rue du Corbeau, 108, B-1030 Brussels - Belgium, info@dokeos.com
 */
-
-
 /**
 *	Question Pool
 * 	This script allows administrators to manage questions and add them into their exercises.
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 13476 2007-10-12 11:38:16Z elixir_inter $
+* 	@version $Id: question_pool.php 15385 2008-05-24 02:59:51Z yannoo $
 */
 
 // name of the language file that needs to be included
@@ -36,8 +30,6 @@ include('answer.class.php');
 
 include('../inc/global.inc.php');
 
-
-
 $this_section=SECTION_COURSES;
 
 $is_allowedToEdit=api_is_allowed_to_edit();
@@ -48,16 +40,19 @@ $TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 if ( empty ( $delete ) ) {
-    $delete = $_GET['delete'];
+    $delete = intval($_GET['delete']);
 }
 if ( empty ( $recup ) ) {
-    $recup = $_GET['recup'];
+    $recup = intval($_GET['recup']);
 }
 if ( empty ( $fromExercise ) ) {
-    $fromExercise = $_GET['fromExercise'];
+    $fromExercise = intval($_GET['fromExercise']);
 }
 if(isset($_GET['exerciseId'])){
-	$exerciseId = $_GET['exerciseId'];
+	$exerciseId = intval($_GET['exerciseId']);
+}
+if(!empty($_GET['page'])){
+	$page = intval($_GET['page']);
 }
 
 // maximum number of questions on a same page
@@ -68,6 +63,18 @@ $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 // picture path
 $picturePath=$documentPath.'/images';
+
+
+if(!($objExcercise instanceOf Exercise) && !empty($fromExercise))
+{
+    $objExercise = new Exercise();
+    $objExercise->read($fromExercise);
+}
+if(!($objExcercise instanceOf Exercise) && !empty($exerciseId))
+{
+    $objExercise = new Exercise();
+    $objExercise->read($exerciseId);
+}
 
 if($is_allowedToEdit)
 {
@@ -98,6 +105,11 @@ if($is_allowedToEdit)
 		// destruction of the Question object
 		unset($objQuestionTmp);
 
+        if(!$objExcercise instanceOf Exercise)
+        {
+        	$objExercise = new Exercise();
+            $objExercise->read($fromExercise);
+        }
 		// adds the question ID represented by $recup into the list of questions for the current exercise
 		$objExercise->addToList($recup);
 
@@ -136,7 +148,7 @@ if($is_allowedToEdit)
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 
 	// shows a list-box allowing to filter questions
-	while($row=mysql_fetch_array($result))
+	while($row=Database::fetch_array($result))
 	{
 ?>
 
@@ -172,156 +184,85 @@ if($is_allowedToEdit)
 	}
 	
 	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$nbrQuestions=Database::num_rows($result);
 
-	$nbrQuestions=mysql_num_rows($result);
-?>
-
-<tr>
-  <td colspan="<?php echo $fromExercise?2:3; ?>">
-	<table border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tr>
-	  <td>
-
-<?php
-	if($fromExercise)
+    echo '<tr>',
+      '<td colspan="',($fromExercise?2:3),'">',
+    	'<table border="0" cellpadding="0" cellspacing="0" width="100%">',
+    	'<tr>',
+    	  '<td>';
+	if(!empty($fromExercise))
 	{
-?>
-
-		<a href="admin.php?exerciseId=<?php echo $fromExercise; ?>">&lt;&lt; <?php echo get_lang('GoBackToEx'); ?></a>
-
-<?php
+		echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">&lt;&lt;',get_lang('GoBackToEx'),'</a>';
 	}
 	else
 	{
-?>
-
-		<a href="admin.php?newQuestion=yes"><?php echo get_lang('NewQu'); ?></a>
-
-<?php
+		echo '<a href="admin.php?',api_get_cidreq(),'&newQuestion=yes">',get_lang('NewQu'),'</a>';
 	}
-?>
-
-	  </td>
-	  <td align="right">
-
-<?php
-	if($page)
+	echo '</td>',
+	 '<td align="right">';
+	if(!empty($page))
 	{
-?>
-
-	<a href="<?php echo api_get_self(); ?>?exerciseId=<?php echo $exerciseId; ?>&fromExercise=<?php echo $fromExercise; ?>&page=<?php echo ($page-1); ?>">&lt;&lt; <?php echo get_lang('PreviousPage'); ?></a> |
-
-<?php
+	   echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page-1),'">&lt;&lt; ',get_lang('PreviousPage'),'</a> |';
 	}
 	elseif($nbrQuestions > $limitQuestPage)
 	{
-?>
-
-	&lt;&lt; <?php echo get_lang('PreviousPage'); ?> |
-
-<?php
+	   echo '&lt;&lt; ',get_lang('PreviousPage'),' |';
 	}
 
 	if($nbrQuestions > $limitQuestPage)
 	{
-?>
-
-	<a href="<?php echo api_get_self(); ?>?exerciseId=<?php echo $exerciseId; ?>&fromExercise=<?php echo $fromExercise; ?>&page=<?php echo ($page+1); ?>"><?php echo get_lang('NextPage'); ?> &gt;&gt;</a>
-
-<?php
+    	echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page+1),'">',get_lang('NextPage'),' &gt;&gt;</a>';
 	}
 	elseif($page)
 	{
-?>
-
-	<?php echo get_lang('NextPage'); ?> &gt;&gt;
-
-<?php
+	   echo '  ',get_lang('NextPage'),' &gt;&gt;';
 	}
-?>
-
-	  </td>
+    echo '</td>
 	</tr>
 	</table>
   </td>
 </tr>
-<tr bgcolor="#E6E6E6">
+<tr bgcolor="#e6e6e6">';
 
-<?php
-	if($fromExercise)
+	if(!empty($fromExercise))
 	{
-?>
-
-  <th><?php echo get_lang('Question'); ?></th>
-  <th><?php echo get_lang('Reuse'); ?></th>
-
-<?php
+        echo '<th>',get_lang('Question'),'</th>',
+            '<th>',get_lang('Reuse'),'</th>';
 	}
 	else
 	{
-?>
-
-  <td width="60%" align="center"><?php echo get_lang('Question'); ?></td>
-  <td width="20%" align="center"><?php echo get_lang('Modify'); ?></td>
-  <td width="20%" align="center"><?php echo get_lang('Delete'); ?></td>
-
-<?php
+        echo '<td width="60%" align="center">',get_lang('Question'),'</td>',
+            '<td width="20%" align="center">',get_lang('Modify'),'</td>',
+            '<td width="20%" align="center">',get_lang('Delete'),'</td>';
 	}
-?>
-
-</tr>
-
-<?php
+    echo '</tr>';
 	$i=1;
 
-	while($row=mysql_fetch_array($result))
+	while ($row = Database::fetch_array($result))
 	{
-		// if we come from the exercise administration to get a question, doesn't show the question already used by that exercise
-		if(!$fromExercise || !$objExercise->isInList($row[id]))
+		// if we come from the exercise administration to get a question, 
+        // don't show the questions already used by that exercise
+		if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (!$objExercise->isInList($row['id'])))
 		{
-?>
-
-<tr <?php if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"'; ?>>
-  <td><a href="admin.php?editQuestion=<?php echo $row[id]; ?>&fromExercise=<?php echo $fromExercise; ?>"><?php echo $row[question]; ?></a></td>
-  <td>
-
-<?php
-			if(!$fromExercise)
+            echo '<tr ',($i%2==0?'class="row_odd"':'class="row_even"'),'>';
+            echo '  <td><a href="admin.php?',api_get_cidreq(),'&editQuestion=',$row['id'],'&fromExercise=',$fromExercise,'">',$row['question'],'</a></td>';
+            echo '  <td>';
+			if (empty($fromExercise))
 			{
-?>
-
-	<a href="admin.php?editQuestion=<?php echo $row[id]; ?>"><img src="../img/edit.gif" border="0" alt="<?php echo get_lang('Modify'); ?>"></a>
-
-<?php
+                echo '<a href="admin.php?',api_get_cidreq(),'?editQuestion=',$row['id'],'"><img src="../img/edit.gif" border="0" alt="',get_lang('Modify'),'"></a>',
+                    '</td>',
+                    '<td align="center">',
+                    '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&delete=',$row['id'],'" onclick="javascript:if(!confirm(\'',addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)),'\')) return false;"><img src="../img/delete.gif" border="0" alt="',get_lang('Delete'),'"></a>',
+                    '</td>';
 			}
 			else
 			{
-?>
-
-	<a href="<?php echo $phpSelf; ?>?recup=<?php echo $row[id]; ?>&fromExercise=<?php echo $fromExercise; ?>"><img src="../img/view_more_stats.gif" border="0" alt="<?php echo get_lang('Reuse'); ?>"></a>
-
-<?php
+                echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" alt="',get_lang('Reuse'),'"></a>';
+                echo '</td>';
 			}
-?>
+            echo '</tr>';
 
-  </td>
-
-<?php
-			if(!$fromExercise)
-			{
-?>
-
-  <td align="center">
-    <a href="<?php echo api_get_self(); ?>?exerciseId=<?php echo $exerciseId; ?>&delete=<?php echo $row[id]; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo get_lang('Delete'); ?>"></a>
-  </td>
-
-<?php
-			}
-?>
-
-</tr>
-
-<?php
 			// skips the last question, that is only used to know if we have or not to create a link "Next page"
 			if($i == $limitQuestPage)
 			{
@@ -334,20 +275,12 @@ if($is_allowedToEdit)
 
 	if(!$nbrQuestions)
 	{
-?>
-
-<tr>
-  <td colspan="<?php echo $fromExercise?2:3; ?>"><?php echo get_lang('NoQuestion'); ?></td>
-</tr>
-
-<?php
+        echo '<tr>',
+            '<td colspan="',($fromExercise?2:3),'">',get_lang('NoQuestion'),'</td>',
+            '</tr>';
 	}
-?>
-
-</table>
-</form>
-
-<?php
+    echo '</table>',
+        '</form>';
 	Display::display_footer();
 }
 // if not admin of course

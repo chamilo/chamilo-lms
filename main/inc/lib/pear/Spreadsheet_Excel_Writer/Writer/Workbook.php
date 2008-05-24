@@ -375,7 +375,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
      */
     function &addValidator()
     {
-        include_once 'Spreadsheet/Excel/Writer/Validator.php';
+        include_once(api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer/Validator.php');
         /* FIXME: check for successful inclusion*/
         $valid = new Spreadsheet_Excel_Writer_Validator($this->_parser);
         return $valid;

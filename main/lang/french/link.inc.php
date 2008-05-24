@@ -37,22 +37,7 @@ $langCsvFileLine1 = "... - 1e ligne = ";
 $langCsvLinesFailed = "ligne(s) échouée(s) (pas de \'URL\' ou pas de \'title\'). ";
 $langCsvLinesOld = "lien(s) mis à jour (même \'URL\' et \'category\'). ";
 $langCsvLinesNew = "nouveau(x) lien(s).";
-$langCsvExplain = "
-Le fichier doit se présenter comme ci-dessous, avec des noms de colonnes en anglais:
-<blockquote><pre>
-<b>URL</b>;category;<b>title</b>;description;
-<b>http://www.aaa.org/...</b>;Important links;<b>Name 1</b>;Description 1;
-<b>http://www.bbb.net/...</b>;;<b>Name 2</b>;\"Description 2\";
-</pre></blockquote>
-Si \'URL\' et \'category\' sont ceux d\'un lien existant, il est mis à jour. 
-Dans tous les autres cas, un nouveau lien est créé.<br><br>
-Gras = obligatoire. 
-L\'ordre des champs est sans importance, majuscules et minuscules sont permis. 
-Champs non connus sont ajoutés à \'description\'.
-Séparez les valeurs avec des virgules ou des point-virgules.
-Les valeurs peuvent se trouver entre guillemets, mais pas les noms de colonne.
-Certains [b]tags HTML[/b] sont reconnus dans le champ \'description\'.
-";
+$langCsvExplain = "Le fichier doit se présenter comme ci-dessous, avec des noms de colonnes en anglais:<blockquote><pre><b>URL</b>;category;<b>title</b>;description;<b>http://www.aaa.org/...</b>;Important links;<b>Name 1</b>;Description 1;<b>http://www.bbb.net/...</b>;;<b>Name 2</b>;\"Description 2\";</pre></blockquote>Si \'URL\' et \'category\' sont ceux d\'un lien existant, il est mis à jour. Dans tous les autres cas, un nouveau lien est créé.<br><br>Gras = obligatoire. L\'ordre des champs est sans importance, majuscules et minuscules sont permis. Champs non connus sont ajoutés à \'description\'.Séparez les valeurs avec des virgules ou des point-virgules.Les valeurs peuvent se trouver entre guillemets, mais pas les noms de colonne.Certains [b]tags HTML[/b] sont reconnus dans le champ \'description\'.";
 $langLinkUpdated = "Les données du lien ont été mises à jour";
 $langAll_Link_Deleted = "Tous les liens ont été supprimés";
 $langOnHomepage = "Sur la page d\'accueil";

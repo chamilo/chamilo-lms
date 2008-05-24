@@ -21,10 +21,7 @@ $langAdminLogin = "login dell\'Amministratore";
 $langAdminPass = "password dell\'Amministratore (<font color=\"red\">puoi cambiarla</font>)";
 $langEducationManager = "Responsabile didattico";
 $langCampusName = "Il nome del vostro campus";
-$langDBSettingIntro = "				Lo script d\'installazione creerà il database principale. 
-				In seguito il sistema avrà la necessità di creare un database per ogni corso.
-				In caso non vi sia concesso di creare più di un database selezionate l\'opzione \"Unico database\" sottostante
-			: la piattaforma verrà installata nella versione con database singolo.";
+$langDBSettingIntro = "				Lo script d\'installazione creerà il database principale. 				In seguito il sistema avrà la necessità di creare un database per ogni corso.				In caso non vi sia concesso di creare più di un database selezionate l\'opzione \"Unico database\" sottostante			: la piattaforma verrà installata nella versione con database singolo.";
 $langStep1 = "Passo 1 di 6 ";
 $langStep2 = "Passo 2 di 6 ";
 $langStep3 = "Passo 3 di 6 ";

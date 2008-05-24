@@ -36,13 +36,7 @@ $langCsvFileLine1 = "... -第一行=";
 $langCsvLinesFailed = "导入链接到行失败(无网址或标题).";
 $langCsvLinesOld = "现有链接已更新(相同网址与分类).";
 $langCsvLinesNew = "新链接已创建.";
-$langCsvExplain = "文件的特征是:  
-<BLOCKQUOTE><PRE><B>URL</B>;category;<B>title</B>;description;
-<B>http://www.aaa.org/...</B>;Important links;<B>Name 1</B>;Description 1;
-<B>http://www.bbb.net/...</B>;;<B>Name 2</B>;\"Description 2\";
-</PRE></BLOCKQUOTE>如果网页或分类与已经存在的那些链接相同，它的标题和描述已经升级，在其他的情况下新链接已经被创建。
-<BR><BR>粗体=强制，其他领域需添加附加描述。分隔符为：逗号或分号。有的[b]HTML 标签[/b]   
-可以导入到这些描述中.";
+$langCsvExplain = "文件的特征是:  <BLOCKQUOTE><PRE><B>URL</B>;category;<B>title</B>;description;<B>http://www.aaa.org/...</B>;Important links;<B>Name 1</B>;Description 1;<B>http://www.bbb.net/...</B>;;<B>Name 2</B>;\"Description 2\";</PRE></BLOCKQUOTE>如果网页或分类与已经存在的那些链接相同，它的标题和描述已经升级，在其他的情况下新链接已经被创建。<BR><BR>粗体=强制，其他领域需添加附加描述。分隔符为：逗号或分号。有的[b]HTML 标签[/b]   可以导入到这些描述中.";
 $langLinkUpdated = "链接已更新";
 $langAll_Link_Deleted = "链接已经被删除";
 $langOnHomepage = "在主页上显示链接";

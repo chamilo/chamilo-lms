@@ -92,7 +92,6 @@ $ForumSearch = "Buscar en los foros";
 $SearchTerm  = "Palabra a buscar";
 $ForumSearchResults = "resultados de la búsqueda en los foros";
 $ForumSearchInformation = "Puede buscar varias palabras usando el signo +";
-$YouWillBeNotifiedOfNewPosts = "Los nuevos mensajes le serán notificados por correo electrónico
-";
+$YouWillBeNotifiedOfNewPosts = "Los nuevos mensajes le serán notificados por correo electrónico";
 $YouWillNoLongerBeNotifiedOfNewPosts = "Los nuevos mensajes ya no se le notificarán por correo electrónico";
 ?>

@@ -2,10 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langInvalidId = "Vstop ni uspel. Napačno uporabniško ime ali geslo";
-$langWelcome = "Prosto dosegljivi tečaji so spodaj. Ostali tečaji zahtevajo
-uporabniško ime in geslo, ki ga lahko dobiš s klikom na opcijo \\\'registracija\\\'. Učitelji
-lahko tvorijo spletne tečajev s klikom na registracijo in z izbiro
-\\\'Tvori spletno stran tečaja (učitelji)\\\'.";
+$langWelcome = "Prosto dosegljivi tečaji so spodaj. Ostali tečaji zahtevajouporabniško ime in geslo, ki ga lahko dobiš s klikom na opcijo \\\'registracija\\\'. Učiteljilahko tvorijo spletne tečajev s klikom na registracijo in z izbiro\\\'Tvori spletno stran tečaja (učitelji)\\\'.";
 $langPass = "Geslo";
 $langEnter = "Vstop";
 $langReg = "Registracija";

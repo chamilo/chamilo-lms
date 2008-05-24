@@ -10,9 +10,7 @@ $langUpdateImage = "Pakeisti nuotrauką";
 $langImageWrong = "Failo dydis turi buti mažesnis negu";
 $langAddImage = "Nuotrauka";
 $langCourseManager = "Dėstytojas";
-$password_request = "Jūsų paprašė pakeisti slaptažodį į pradinį.
-Jei jūs neprašėte, ignoruokite šį laišką.
-Kad pakeisti slaptažodį į pradinį, spauskite ant nuorodos.";
+$password_request = "Jūsų paprašė pakeisti slaptažodį į pradinį.Jei jūs neprašėte, ignoruokite šį laišką.Kad pakeisti slaptažodį į pradinį, spauskite ant nuorodos.";
 $YourPasswordHasBeenEmailed = "Jūsų slaptažodis išiūstas el.paštu.";
 $lang_enter_email_and_well_send_you_password = "Įveskite el.pašto adresą, kurį naudojote registruodamiesi, slaptažodis bus atsiųstas jums į šią pašto dėžutę.";
 $langLogin = "Prisijungti";
@@ -38,11 +36,7 @@ $langGiveAdmin = "Padaryti administratoriumi";
 $langUserNumber = "numeris";
 $langDownloadUserList = "Įkėlimo sąrašas";
 $langSend = "Siųsti";
-$langUserAddExplanation = "every line of file to send will necessarily an only
-		include 5 fields: <b>First nameLast name
-		LoginPassword
-		Email</b> separated by tabs and in this order.
-		Users will receive email confirmation with login/password.";
+$langUserAddExplanation = "every line of file to send will necessarily an only		include 5 fields: <b>First nameLast name		LoginPassword		Email</b> separated by tabs and in this order.		Users will receive email confirmation with login/password.";
 $langUserMany = "Importuoti vartotojų sąrašą iš CSV / XML failų";
 $langOneByOne = "Įrašyti vartotoją rankiniu būdu";
 $langNow = "dabar";
@@ -80,9 +74,7 @@ $langFormula = "Pagarbiai";
 $langProblem = "Iškilus problemoms, susisiekite su mumis.";
 $langIs = "yra";
 $langAddress = "The address of ";
-$langSettings = "with the following settings :
-
-Username :";
+$langSettings = "with the following settings :Username :";
 $langYouAreReg = "Jūs užregistruotas";
 $langDear = "Gerbiamasis (-oji)";
 $langYourReg = "Jūs užregistruotas";

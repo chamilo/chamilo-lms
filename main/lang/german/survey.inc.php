@@ -90,8 +90,7 @@ $SurveyUpdatedSuccesfully = "Die Umfrage wurde erfolgreich aktualisiert";
 $OrReturnToSurveyOverview = "oder kehren Sie zum Überblick der Umfrage zurück";
 $QuestionAdded = "Die Frage wurde hinzugefügt";
 $QuestionUpdated = "Die Frage wurde aktualisiert";
-$SaveQuestion = "Frage speichern
-";
+$SaveQuestion = "Frage speichern";
 $RemoveAnswer = "Antwort löschen";
 $AddAnswer = "Anwort hinzufügen";
 $DisplayAnswersHorVert = "Anzeige";

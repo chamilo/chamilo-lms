@@ -3,13 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langTool = "Metadata";
 $langClickKw = "Click a keyword in the tree to select or deselect it.";
-$langKwHelp = "<br/>
-Click \'+\' button to open, \'-\' button to close, \'++\' button to open all, \'--\' button to close all.<br/>
-<br/>
-Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/>
-Alt-click \'+\' re-selects the previously selected keywords.<br/>
-<br/>
-Alt-click keyword negates the keyword.<br/>";
+$langKwHelp = "<br/>Click \'+\' button to open, \'-\' button to close, \'++\' button to open all, \'--\' button to close all.<br/><br/>Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/>Alt-click \'+\' re-selects the previously selected keywords.<br/><br/>Alt-click keyword negates the keyword.<br/>";
 $langAdvanced = "Advanced";
 $langSearch = "Search";
 $langSearchCrit = "Use the area below for descriptive words, one word per line!";

@@ -211,8 +211,7 @@ $langAnnouncementUpdated = "L\'avviso è stato aggiornato";
 $langAnnouncementDeleted = "L\'avviso è stato eliminato";
 $langContent = "Contenuto";
 $PermissionsForNewFiles = "Permessi per i nuovi file";
-$PermissionsForNewFilesComment = "La possibilità di definire permessi per ogni nuovo file creato migliora la sicurezza nei confronti di attacchi eseguiti caricando nel portale dei file pericolosi. I permessi 0550 (in formato Linux) permettono una protezione abbastanza elevata.<br/>
-Se usi Oogie-Woogie assicurati che l\'utente che lancia OpenOffice abbia i permessi di scrittura nella cartella del corso.";
+$PermissionsForNewFilesComment = "La possibilità di definire permessi per ogni nuovo file creato migliora la sicurezza nei confronti di attacchi eseguiti caricando nel portale dei file pericolosi. I permessi 0550 (in formato Linux) permettono una protezione abbastanza elevata.<br/>Se usi Oogie-Woogie assicurati che l\'utente che lancia OpenOffice abbia i permessi di scrittura nella cartella del corso.";
 $langStudent = "Corsista";
 $Guest = "Ospite";
 $langLoginAsThisUserColumnName = "Entra come";
@@ -464,8 +463,7 @@ $langActiveExtensions = "Attiva il servizio";
 $langVisioconf = "Videoconferenza";
 $langVisioconfDescription = "Dokeos Live Conferencing® è uno strumento di videoconferenza che offre: slideshow, lavagna bianca, audio e video in duplex, chat. Permette un uso 1-a-1, 1-a-molti, molti-a-molti.";
 $langPpt2lp = "Oogie-Woogie Rapid e-learning";
-$langPpt2lpDescription = "Oogie-Woogie è uno strumento di rapid e-learning che permette di trasformare una presentazione o un documento (ad esempio nei formati ppt o doc) in un percorso didattico in standard SCORM con pochi click.
-<br/>Dopo la conversione, alle singole pagine potrà essere aggiunto un commento audio.<br/>L\'ambiente \'composizione\' ti permette di completare il percorso con test, compiti da eseguire, collegamenti a forum.<br/>Ogni singolo elemento sarà monitorato e la traccia potrà essere esaminata dal docente nella sezione Report per una ulteriore valutazione.";
+$langPpt2lpDescription = "Oogie-Woogie è uno strumento di rapid e-learning che permette di trasformare una presentazione o un documento (ad esempio nei formati ppt o doc) in un percorso didattico in standard SCORM con pochi click.<br/>Dopo la conversione, alle singole pagine potrà essere aggiunto un commento audio.<br/>L\'ambiente \'composizione\' ti permette di completare il percorso con test, compiti da eseguire, collegamenti a forum.<br/>Ogni singolo elemento sarà monitorato e la traccia potrà essere esaminata dal docente nella sezione Report per una ulteriore valutazione.";
 $langBandWidthStatistics = "Statistiche sulla larghezza di banda";
 $langBandWidthStatisticsDescription = "MRTG ti permette di ottenere statistiche avanzate sull\'uso del server nelle ultime 24 ore.";
 $ServerStatistics = "Statistiche del server";
@@ -496,9 +494,7 @@ $ErrorsWhenImportingFile = "Errore nell\'importazione del file";
 $ServiceActivated = "Servizio attivato";
 $ActivateExtension = "Attiva i servizi";
 $InvalidExtension = "Estensione non valida";
-$VersionCheckExplanation = "Per attivare il controllo automatico della versione è necessario registrare il campus su dokeos.com. L\'informazione trasmessa cliccando sul pulsante sarà usata solo internamente al sistema e i dati verranno pubblicati in modo aggregato (numero totale di piattaforme installate, corsi totali, studenti totali...) Vedi <a href=\"http://www.dokeos.com/stats/\"> http://www.dokeos.com/stats/</a>. La registrazione implica la comparsa del nome del campus nell\'elenco internazionale (<a href=\"http://www.dokeos.com/community.php\">http://www.dokeos.com/community.php</a>.
-Se non vuoi che il nome del campus compaia nell\'elenco devi indicarlo nel pulsante qui sotto.
-Non ci sono altri moduli da riempire, si tratta solo di cliccare sul pulsante.";
+$VersionCheckExplanation = "Per attivare il controllo automatico della versione è necessario registrare il campus su dokeos.com. L\'informazione trasmessa cliccando sul pulsante sarà usata solo internamente al sistema e i dati verranno pubblicati in modo aggregato (numero totale di piattaforme installate, corsi totali, studenti totali...) Vedi <a href=\"http://www.dokeos.com/stats/\"> http://www.dokeos.com/stats/</a>. La registrazione implica la comparsa del nome del campus nell\'elenco internazionale (<a href=\"http://www.dokeos.com/community.php\">http://www.dokeos.com/community.php</a>.Se non vuoi che il nome del campus compaia nell\'elenco devi indicarlo nel pulsante qui sotto.Non ci sono altri moduli da riempire, si tratta solo di cliccare sul pulsante.";
 $AfterApproval = "Dopo l\'approvazione";
 $StudentViewEnabledTitle = "Abilita la vista studente";
 $StudentViewEnabledComment = "Abilita la possibilità - da parte dei docente o dell\'amministratore - di vedere il corso come è visto da un corsista";
@@ -639,8 +635,7 @@ $Whitelist = "Lista bianca";
 $UploadExtensionsBlacklist = "Lista nera - configurazione";
 $UploadExtensionsWhitelist = "Lista bianca - configurazione";
 $UploadExtensionsBlacklistComment = "La lista nera è usata per filtrare i files con determinate estensioni, rimuovendoli o rinominandoli. Le estensioni devono essere descritte senza il punto (.) e i diversi elementi devono essere separati da un punto e virgola (;), ad esempio: exe;com;bat;scr;php. Sono accettati files senza estensioni e le maiuscole o le minuscole non sono significative.";
-$UploadExtensionsWhitelistComment = "La lista bianca è usata per consentire il caricamento di files che abbiano SOLO determinate estensioni, rimuovendo o rinominando gli altri. Il grado di sicurezza è maggiore ma piuttosto restrittivo.
-Le estensioni devono essere descritte senza il punto (.) e i diversi elementi devono essere separati da un punto e virgola (;), ad esempio: htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw. Sono accettati files senza estensioni e le maiuscole o le minuscole non sono significative.";
+$UploadExtensionsWhitelistComment = "La lista bianca è usata per consentire il caricamento di files che abbiano SOLO determinate estensioni, rimuovendo o rinominando gli altri. Il grado di sicurezza è maggiore ma piuttosto restrittivo.Le estensioni devono essere descritte senza il punto (.) e i diversi elementi devono essere separati da un punto e virgola (;), ad esempio: htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw. Sono accettati files senza estensioni e le maiuscole o le minuscole non sono significative.";
 $UploadExtensionsSkip = "Comportamento del filtro (rimuovi/rinomina)";
 $UploadExtensionsSkipComment = "Se scegli Rimuovi, i files non saranno caricati. Se decidi di rinominare le estensioni dei files saranno sostituite da quelle assegnate in fase di configurazione. Attenzione: rinominare non garantisce la protezione e può creare conflitti tra files con lo stesso nome ma diversa estensione.";
 $UploadExtensionsReplaceBy = "Sostituzione dell\'estensione";
@@ -695,8 +690,7 @@ $GradebookActivationComment = "Attivando il registro degli esami hai la possibil
 $UserTheme = "Aspetto (foglio di stile)";
 $UserThemeSelection = "Aspetto scelto dall\'utente";
 $UserThemeSelectionComment = "Permetti agli utenti di scegliere nel profilo l\'aspetto grafico (tema): Dokeos apparirà diverso solo a loro. La scelta sarà inefficace nel caso in cui il gestore abbia scelto un aspetto specifico per una certa sezione del corso.";
-$AllowurlfopenIsSetToOff = "Il settaggio \"allow_url_fopen\" di PHP è disattivato, per cui la registrazione non può funzionare correttamente. 
-Per attivarlo deve essere cambiato il file php.in di PHP oppre php_admin_value nel server Apache.";
+$AllowurlfopenIsSetToOff = "Il settaggio \"allow_url_fopen\" di PHP è disattivato, per cui la registrazione non può funzionare correttamente. Per attivarlo deve essere cambiato il file php.in di PHP oppre php_admin_value nel server Apache.";
 $VisioHost = "URL o IP del server di videoconferenza";
 $VisioPort = "Porta del server di videoconferenza";
 $VisioPassword = "Password del server di videoconferenza";
@@ -766,11 +760,9 @@ $LDAPVersionComment = "Seleziona la versione del server LDAP che intendi impiega
 $LDAPVersion2 = "LDAP 2";
 $LDAPVersion3 = "LDAP 3";
 $LDAPFilledTutorFieldTitle = "Campo di identificazione docente";
-$LDAPFilledTutorFieldComment = "Il campo verrà analizzato all\'atto dell\'inserimento di un nuovo utente. Se vuoi che l\'utente sia considerato come semplice utente (corsista) lascia vuoto il campo, altrimenti l\'utente sarà considerato un docente.
-Il campo può essere modificato cambiando il codice (per maggiori informazioni leggi la <a href=\"../../documentation/installation_guide.html\">installation guide</a>).";
+$LDAPFilledTutorFieldComment = "Il campo verrà analizzato all\'atto dell\'inserimento di un nuovo utente. Se vuoi che l\'utente sia considerato come semplice utente (corsista) lascia vuoto il campo, altrimenti l\'utente sarà considerato un docente.Il campo può essere modificato cambiando il codice (per maggiori informazioni leggi la <a href=\"../../documentation/installation_guide.html\">installation guide</a>).";
 $LDAPAuthenticationLoginTitle = "Login di autentificazione";
-$LDAPAuthenticationLoginComment = "Se impieghi un server LDAP che non supporta o consente accessi anonimi, scrivi nel campo il login di accesso da usare. Non includere \"cn=\".
-Nel caso di accesso anonimo lascia vuoto.";
+$LDAPAuthenticationLoginComment = "Se impieghi un server LDAP che non supporta o consente accessi anonimi, scrivi nel campo il login di accesso da usare. Non includere \"cn=\".Nel caso di accesso anonimo lascia vuoto.";
 $LDAPAuthenticationPasswordTitle = "Password di autentificazione";
 $LDAPAuthenticationPasswordComment = "Se impieghi un server LDAP che non supporta o consente l\'accesso anonimo, scrivi nel campo la password da impiegare al login.";
 $LDAPImport = "Importazione LDAP";
@@ -820,6 +812,5 @@ $NameStylesheet = "Nome del foglio di stile";
 $UploadNewStylesheet = "Nuovo foglio di stile";
 $StylesheetAdded = "Il nuovo foglio di stile è stato aggiunto";
 $LDAPFilledTutorFieldValueTitle = "Valore dell\'identificativo di un docente";
-$LDAPFilledTutorFieldValueComment = "Se il campo è lasciato vuoto, un utente è considerato docente solo se il rispettivo sottocampo LDAP lo definisce tale ( ad esempio campo \"memberof\" e  valore da cercare  \"CN=G_TRAINER,OU=Trainer\").
-Se il campo è marcato un utente è considerato docente se il valore assegnato si trova tra i sotto-elementi del campo docente.";
+$LDAPFilledTutorFieldValueComment = "Se il campo è lasciato vuoto, un utente è considerato docente solo se il rispettivo sottocampo LDAP lo definisce tale ( ad esempio campo \"memberof\" e  valore da cercare  \"CN=G_TRAINER,OU=Trainer\").Se il campo è marcato un utente è considerato docente se il valore assegnato si trova tra i sotto-elementi del campo docente.";
 ?>

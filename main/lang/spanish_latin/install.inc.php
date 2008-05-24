@@ -21,8 +21,7 @@ $langAdminLogin = "Nombre de usuario del Administrador ";
 $langAdminPass = "Contraseña del Administrador (<font color=\"red\">debería de cambiarla</font>)";
 $langEducationManager = "Administrador de Educación";
 $langCampusName = "El nombre de su Campus";
-$langDBSettingIntro = "
-				El guión de instalación creará la BD principal de Claroline. Por favor tenga presente que Claroline necesita crear varias bases de datos. Si Ud tiene permisos para crear una sola base de por su servicio de alojamiento del sitio, Claroline no podrá trabajar.";
+$langDBSettingIntro = "				El guión de instalación creará la BD principal de Claroline. Por favor tenga presente que Claroline necesita crear varias bases de datos. Si Ud tiene permisos para crear una sola base de por su servicio de alojamiento del sitio, Claroline no podrá trabajar.";
 $langStep1 = "Paso 1 de 6 ";
 $langStep2 = "Paso 2 de 6 ";
 $langStep3 = "Paso 3 de 6 ";

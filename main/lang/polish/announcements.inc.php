@@ -34,8 +34,7 @@ $langPleaseSelectUsers  = "Musisz wybra&#263; u&#380;ytkowników.";
 $Teachersubject = "Wiadomo¶æ wys³ana do studentów ";
 $langMessages  = "Wiadomosci";
 $langMessageToSelectedUsers  = "Og³oszenie do wybranych u¿ytkowników (przez e-mail)";
-$langIntroText  = "&#379;eby przes&#322;a&#263; wiadomo&#347;&#263;, wybieraj grupy u&#380;ytkowników (oznaczone liter&#261; G)
- lub pojedynczych u&#380;ytkowników (oznaczeni liter&#261; U).";
+$langIntroText  = "&#379;eby przes&#322;a&#263; wiadomo&#347;&#263;, wybieraj grupy u&#380;ytkowników (oznaczone liter&#261; G) lub pojedynczych u&#380;ytkowników (oznaczeni liter&#261; U).";
 $langDown = "dó&#322;";
 $langMsgSent = "Wiadomo&#347;&#263; zosta&#322;a wys&#322;ana do wybranych u&#380;ytkowników";
 $langSelUser = "wybranych u¿ytkowników kursu";

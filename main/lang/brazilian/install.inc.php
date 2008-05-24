@@ -81,8 +81,7 @@ $ConfigSettingsInfo = "Os seguintes valores serão registados no arquivo de confi
 $DokeosInstallation = "Instalação do Dokeos";
 $InstallDokeos = "Instalar Dokeos";
 $GoToYourNewlyCreatedPortal = "Ir para o seu novo portal.";
-$FirstUseTip = "Quando acessar ao campus pela primeira vez, a melhor maneira para compreender/explorar é registrar-se com a opção \"Criar cursos\" e seguir as indicações.
-";
+$FirstUseTip = "Quando acessar ao campus pela primeira vez, a melhor maneira para compreender/explorar é registrar-se com a opção \"Criar cursos\" e seguir as indicações.";
 $Version_ = "Versão";
 $UpdateFromDokeosVersion = "Atualizar a partir do Dokeos";
 $WelcomToTheDokeosInstaller = "Bem-Vindo à instalação do Dokeos";

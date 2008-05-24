@@ -27,19 +27,13 @@ $langGiveAdmin = "Gán quyền admin";
 $langUserNumber = "số lượng";
 $langDownloadUserList = "Danh sách Upload";
 $langSend = "Gửi";
-$langUserAddExplanation = "every line of file to send will necessarily an only
-		include 5 fields: <b>Last Name���First Name���
-		Login���Password�
-		��Email</b> separated by tabs and in this order.
-		Users will recieve email confirmation with login/password.";
+$langUserAddExplanation = "every line of file to send will necessarily an only		include 5 fields: <b>Last Name���First Name���		Login���Password�		��Email</b> separated by tabs and in this order.		Users will recieve email confirmation with login/password.";
 $langUserMany = "Import users list through textfile";
 $langOneByOne = "Sau khi đăng ký";
 $langNow = "now";
 $langTutor = "Giáo viên";
 $langTitular = "Tác giả";
-$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Hiệu chỉnh danh sách khoá học</big><br><br>
-Đánh dấu vào khoá học bạn chọn.<br>
-Ngược lại xoá đánh dáu trên ô đã chọn.<br> Sau đó bấm OK tại cuối danh sách";
+$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Hiệu chỉnh danh sách khoá học</big><br><br>Đánh dấu vào khoá học bạn chọn.<br>Ngược lại xoá đánh dáu trên ô đã chọn.<br> Sau đó bấm OK tại cuối danh sách";
 $langStudent = "học sinh";
 $langAddAU = "Thêm user";
 $langAddedU = "đã được thêm. Sẽ gửi thông báo bằng email ";

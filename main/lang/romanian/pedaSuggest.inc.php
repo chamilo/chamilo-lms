@@ -20,8 +20,6 @@ $HumanAndTechnicalResources = "Resurse umane si tehnice";
 $HumanAndTechnicalResourcesQuestions = "Sunt profesori, tutori, serviciu de asistenta tehnica, asistenti sociali, sali de calculatoare?";
 $HumanAndTechnicalResourcesInformation = "Scurta descriere a diferitelor persoane de contact si dispozitivelor tehnice disponibile.";
 $Assessment  = "Evaluare";
-$AssessmentQuestions = "Cum vor fi utilizatorii evaluati? Exista si alte strategii suplimentare pentru o intelegere cat mai buna a acestui subiect de discutie?
-
- ";
+$AssessmentQuestions = "Cum vor fi utilizatorii evaluati? Exista si alte strategii suplimentare pentru o intelegere cat mai buna a acestui subiect de discutie? ";
 $AssessmentInformation = "Exemple de intrebari la examen. Crieteriu de succes. Indicatii si trucuri.";
 ?>

@@ -85,10 +85,8 @@ $AddedResources = "&#52392;&#48512;";
 $lang_modify_resource = "&#51088;&#47308; &#49688;&#51221;/&#52628;&#44032;";
 $lang_resource = "&#51088;&#47308;";
 $lang_resources = "&#51088;&#47308;";
-$langNameOfLang['arabic'] = "arabic
-";
-$langNameOfLang['bulgarian']
- = "bulgarian";
+$langNameOfLang['arabic'] = "arabic";
+$langNameOfLang['bulgarian'] = "bulgarian";
 $langNameOfLang['catalan'] = "catalan";
 $langNameOfLang['croatian'] = "croatian";
 $langNameOfLang['danish'] = "danish";

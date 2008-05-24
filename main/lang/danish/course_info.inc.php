@@ -64,8 +64,7 @@ $langSubscription = "Kursustilmelding";
 $langCourseAccess = "Kursusadgang";
 $langConfirmBackup = "Ønsker du at tage en sikkerhedskopi af dit kursus";
 $langCreateSite = "Opret en kursusside";
-$langRestoreDescription = "Dit kursus er i filarkivet, som du kan vælge nedenfor.<br><br>
-Når du har klikket på \"Genetabler\", vil din arkivfil blive pakket ud, og kurset vil blive genskabt.";
+$langRestoreDescription = "Dit kursus er i filarkivet, som du kan vælge nedenfor.<br><br>Når du har klikket på \"Genetabler\", vil din arkivfil blive pakket ud, og kurset vil blive genskabt.";
 $langRestoreNotice = "Dette script tillader ikke automatisk genopretning af deltagerlisten, men data fra \"deltagerlisten.csv\" er gemt på en måde, således at administrator kan arbejde med disse manuelt.";
 $langAvailableArchives = "Tilgængelig arkivliste";
 $langNoArchive = "Der er ikke valgt et arkiv";

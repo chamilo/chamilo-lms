@@ -30,8 +30,7 @@ $Users = "Usuaris";
 $IntroductionTextAdd = "Afegeixi una pàgina que conté el text d\'introducció a aquest capítol.";
 $CourseDescriptionAdd = "Afegeixi una pàgina que conté la descripció de curs a aquest capítol.";
 $GroupsAdd = "Afegeixi la pàgina de Grups a aquest capítol.";
-$UsersAdd = "Afegeixi la pàgina d\'Usuaris a aquest capítol.
-";
+$UsersAdd = "Afegeixi la pàgina d\'Usuaris a aquest capítol.";
 $ExportableCourseResources = "Recursos de curs exportables";
 $DokeosRelatedCourseMaterial = "Dokeos relacionava recursos de curs";
 $LinkTarget = "Destí d\'enllaç";

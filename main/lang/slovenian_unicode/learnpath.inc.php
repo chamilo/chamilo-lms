@@ -174,8 +174,7 @@ $CreateANewForum = "Ustvari nov forum";
 $LinkAdd = "Dodaj povezavo";
 $WoogieConversionPowerPoint = "Woogie : pretvorba datotek oblike MS Word";
 $WelcomeWoogieSubtitle = "Pretvorba Word datotek v učno pot";
-$WelcomeWoogieConverter = "
-Dobrodošli v pretvorniku Woogie<ul type=\\\"1\\\"><li>Izberite datoteko .doc, .sxw, .odt<li>Naložite jo v Woogie. Datoteka bo pretvorjena v SCORM učno pot.<li>Nato boste imeli možnost dodati zvočne komentarje na vsako izmed strani, vstaviti vaje in druge aktivnosti med stranmi. </ul>";
+$WelcomeWoogieConverter = "Dobrodošli v pretvorniku Woogie<ul type=\\\"1\\\"><li>Izberite datoteko .doc, .sxw, .odt<li>Naložite jo v Woogie. Datoteka bo pretvorjena v SCORM učno pot.<li>Nato boste imeli možnost dodati zvočne komentarje na vsako izmed strani, vstaviti vaje in druge aktivnosti med stranmi. </ul>";
 $WoogieError = "Napaka med pretvorbo Word dokumenta. Preverite, da v imena datotek ne vsebujejo posebnih zankov, ...";
 $WordConvert = "Pretvorba Word datotek";
 $Order = "Urejenost";
@@ -193,4 +192,5 @@ $OogieConversionFailed = "Pretvorba ni uspela. <br />Nekateri dokumenti so preko
 $OogieUnknownError = "Pretvorba iz neznanega razloga ni uspela.<br />Prosimo, da se za podrobnejšo informacijo brnete na upravitelja platforme.";
 $OogieBadExtension = "Vaša datoteka nima ustrezne končnice.";
 $WoogieBadExtension = "Prosimo, da nalagate zgolj besedilne dokumente. Končnica datotek naj bo .doc, .docx ali .odt";
+$ShowAudioRecorder = "Prikaži avdio snemalnik";
 ?>

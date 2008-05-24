@@ -77,8 +77,7 @@ $langDisplay = "Mostrar";
 $langNewChapter = "Novo módulo";
 $langNewStep = "Paso novo";
 $langPrerequisites = "Requisitos";
-$langEditPrerequisites = " 	
-Editar os requisitos do item actual";
+$langEditPrerequisites = " 	Editar os requisitos do item actual";
 $langTitleManipulateChapter = "Manipular o módulo actual";
 $langTitleManipulateModule = "Manipular o módulo actual";
 $langTitleManipulateDocument = "Manipular o documento actual";
@@ -87,11 +86,9 @@ $langTitleManipulateQuiz = "Manipular o exercicio actual";
 $langTitleManipulateStudentPublication = "Manipular a actual publicación de estudante";
 $langEnterDataNewChapter = "Introduza os datos do novo capítulo";
 $langEnterDataNewModule = "Introduza os datos do novo módulo";
-$langCreateNewStep = " 	
-Crear un novo paso :";
+$langCreateNewStep = " 	Crear un novo paso :";
 $langNewDocument = "Novo documento";
-$langUseAnExistingResource = " 	
-Ou use un recurso xa existente :";
+$langUseAnExistingResource = " 	Ou use un recurso xa existente :";
 $langParent = "Principal";
 $langPosition = "Posición";
 $langNewChapterCreated = "Creouse o capítulo novo. Agora pode engadir outro capítulo ou un paso.";
@@ -103,8 +100,7 @@ $langItemRemoved = "Eliminouse o elemento";
 $langLearnPathAdded = "Creouse a súa rota de aprendizaxe e engadiuse ao menú da esquerda. Agora pódelle engadir módulos e pasos á súa rota de aprendizaxe. O uso de capítulos é opcional e permite unha estrutura máis ordenada.";
 $langConverting = "Convertendo...";
 $langPpt2lpError = "Erro durante a conversión do PowerPoint. Verifique se hai caracteres especiais no nome do seu PowerPoint.";
-$langBuild = " 	
-Construír";
+$langBuild = " 	Construír";
 $langViewModeEmbedded = "Vista: embebida";
 $langViewModeFullScreen = "Modo de visión: pantalla chea";
 $langShowDebug = "Mostrar debub";

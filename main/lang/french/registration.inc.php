@@ -3,9 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShouldBeCSVFormat = "Le fichier devrait être au format CSV. N\'ajoutez pas d\'espaces. La structure devrait être exactement :";
 $langTracking = "Suivi";
-$langEnter2passToChange = "La saisie du nouveau mot de passe ainsi que sa confirmation sont nécessaires en cas de modification de votre mot de passe. <br />
-Dans tous les autres cas, laissez ces deux champs vides.
-";
+$langEnter2passToChange = "La saisie du nouveau mot de passe ainsi que sa confirmation sont nécessaires en cas de modification de votre mot de passe. <br />Dans tous les autres cas, laissez ces deux champs vides.";
 $langAuthInfo = "Paramètres de connexion";
 $langDelImage = "Supprimer la photo";
 $langUpdateImage = "Changer de photo";
@@ -44,10 +42,7 @@ $langOneByOne = "Ajouter manuellement un utilisateur";
 $langNow = "actuellement";
 $langTutor = "Coach";
 $langTitular = "Responsable";
-$langAddHereSomeCourses = "<font size=2 face=\'arial, helvetica\'><big>Mes espaces de cours</big><br><br>
-			Cochez les espaces de cours auxquels vous souhaitez participer et décochez ceux auxquels vous
-			ne voulez plus participer (les espaces de cours dont vous êtes responsable
-			ne peuvent être décochés). Cliquez ensuite sur Ok en bas de la liste.";
+$langAddHereSomeCourses = "<font size=2 face=\'arial, helvetica\'><big>Mes espaces de cours</big><br><br>			Cochez les espaces de cours auxquels vous souhaitez participer et décochez ceux auxquels vous			ne voulez plus participer (les espaces de cours dont vous êtes responsable			ne peuvent être décochés). Cliquez ensuite sur Ok en bas de la liste.";
 $langStudent = "apprenant";
 $langImportUserList = "Importer une liste d\'utilisateurs";
 $langAddAU = "Ajouter des utilisateurs";
@@ -62,8 +57,7 @@ $langInC = "dans cet espace de cours";
 $langRole = "Descriptif";
 $UserPicture = "Photo";
 $langProfileReg = "Votre nouveau profil a été enregistré";
-$langEmailWrong = "L\'adresse email que vous avez introduite n\'est pas complète
-ou contient certains caractères non valides";
+$langEmailWrong = "L\'adresse email que vous avez introduite n\'est pas complèteou contient certains caractères non valides";
 $langUserTaken = "Le login que vous avez choisi est déjà pris";
 $langFields = "Vous n\'avez pas rempli tous les champs";
 $langAgain = "Veuillez réessayer ...";
@@ -80,20 +74,13 @@ $langFormula = "Cordialement";
 $langProblem = "En cas de problème, n\'hésitez pas à prendre contact avec nous";
 $langIs = "est";
 $langAddress = "L\'adresse de";
-$langSettings = "avec les paramètres suivants :
-
-Login :";
+$langSettings = "avec les paramètres suivants :Login :";
 $langYouAreReg = "Vous êtes inscrit(e) sur";
 $langDear = "Cher(ère)";
 $langYourReg = "Votre inscription sur";
-$langUserFree = "Le login que vous avez choisi est déjà pris.
-Utilisez le bouton de retour en arrière de votre navigateur
-et choisissez-en un autre.";
-$langEmptyFields = "Vous n\'avez pas rempli tous les champs.
-Utilisez le bouton de retour en arrière de votre navigateur et recommencez.";
-$langPassTwice = "Vous n\'avez pas tapé deux fois le même mot de passe.
-Utilisez le bouton de retour en arrière de votre navigateur
-et recommencez.";
+$langUserFree = "Le login que vous avez choisi est déjà pris.Utilisez le bouton de retour en arrière de votre navigateuret choisissez-en un autre.";
+$langEmptyFields = "Vous n\'avez pas rempli tous les champs.Utilisez le bouton de retour en arrière de votre navigateur et recommencez.";
+$langPassTwice = "Vous n\'avez pas tapé deux fois le même mot de passe.Utilisez le bouton de retour en arrière de votre navigateuret recommencez.";
 $langRegAdmin = "Créer des espaces de cours";
 $langRegStudent = "M\'inscrire à des espaces de cours";
 $langConfirmation = "Confirmation";

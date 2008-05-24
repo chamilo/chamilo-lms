@@ -67,8 +67,7 @@ $langAnd = "a";
 $langChoice = "Vá&#353; výb&#283;r";
 $langFinish = "Konec";
 $langCancel = "Zru&#353;it";
-$langNotAllowed = "Nepovolený vstup, nebo p&#345;ekro&#269;ená doba ne&#269;inosti.
-Prosím p&#345;ihla&#353;te se znovu.";
+$langNotAllowed = "Nepovolený vstup, nebo p&#345;ekro&#269;ená doba ne&#269;inosti.Prosím p&#345;ihla&#353;te se znovu.";
 $langNotLogged = "Nejste p&#345;ihlá&#353;ený(á) do kurzu";
 $langManager = "Manager";
 $langOptional = "Volitelné";
@@ -98,8 +97,7 @@ $lang_resource = "Zdroj";
 $lang_resources = "Zdroje";
 $langNameOfLang['arabic'] = "arabsky";
 $langNameOfLang['brazilian'] = "brazilsky";
-$langNameOfLang['bulgarian']
- = "bulharsky";
+$langNameOfLang['bulgarian'] = "bulharsky";
 $langNameOfLang['catalan'] = "katalánsky";
 $langNameOfLang['croatian'] = "chorvatsky";
 $langNameOfLang['danish'] = "dánsky";

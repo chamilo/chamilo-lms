@@ -21,10 +21,7 @@ $langAdminLogin = "Administratörens användare";
 $langAdminPass = "Administratörens lösenord  (<font color=\"red\">du vill kanske ändra detta sedan</font>)";
 $langEducationManager = "Utbildningsansvarig";
 $langCampusName = "Ditt campus-namn";
-$langDBSettingIntro = "
-				Installationsscriptet kommer att skapa huvuddatabasen för claroline. Var snäll och notera att Claroline 
-				behöver skapa många databaser. Om du bara är tillåten för en  
-				DB för din webbsajt av din Värdservice, kommer Claroline inte att fungera.";
+$langDBSettingIntro = "				Installationsscriptet kommer att skapa huvuddatabasen för claroline. Var snäll och notera att Claroline 				behöver skapa många databaser. Om du bara är tillåten för en  				DB för din webbsajt av din Värdservice, kommer Claroline inte att fungera.";
 $langStep1 = "Steg 1 av 6 ";
 $langStep2 = "Steg 2 av 6 ";
 $langStep3 = "Steg 3 av 6 ";

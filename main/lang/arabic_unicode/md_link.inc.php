@@ -20,19 +20,7 @@ $langCoverage = "التصنيف";
 $langCoverageTip = "categoryname, cfr. Links";
 $langKwNote = "إذا قمت بتغيير لغة الشرح . لا تقم بتغيير الكلمات المفتاحية في نفس الوقت ";
 $langClickKw = "انقر على الكلمة المفتاحية من الشجرة لتحديدها أو إلغاء تحديدها ";
-$langKwHelp = "
-<br/>
-Click \\\'+\\\' button to open, \\\'-\\\' button to close, \\\'++\\\' button to open all, \\\'--\\\' button to close all.<br/>
-<br/>
-Clear all selected keywords by closing the tree and opening it again with the \\\'+\\\' button.<br/>
-Alt-click \\\'+\\\' searches the original keywords in the tree.<br/>
-<br/>
-Alt-click keyword selects a keyword without broader terms or
-deselects a keyword with broader terms.<br/>
-<br/>
-If you change the description language, do not add keywords at the same time.<br/>
-<br/>
-";
+$langKwHelp = "<br/>Click \\\'+\\\' button to open, \\\'-\\\' button to close, \\\'++\\\' button to open all, \\\'--\\\' button to close all.<br/><br/>Clear all selected keywords by closing the tree and opening it again with the \\\'+\\\' button.<br/>Alt-click \\\'+\\\' searches the original keywords in the tree.<br/><br/>Alt-click keyword selects a keyword without broader terms ordeselects a keyword with broader terms.<br/><br/>If you change the description language, do not add keywords at the same time.<br/><br/>";
 $langLocation = "URL/URI";
 $langLocationTip = "انقر لفتح كائن ";
 $langStore = "خزن";

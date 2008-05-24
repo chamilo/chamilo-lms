@@ -124,9 +124,7 @@ $langDefault = "Standaardwaarden *";
 $langDefComment = "* Door te klikken op de knop \"Standaardwaarden\", zullen de vorige waarden vervangen worden.";
 $langScoreGet = "De cijfers in het zwart = aantal punten gescoord";
 $langShowScor = "Toon evaluatie aan student: ";
-$langStep1 = "Welkom bij de assistent voor de aanmaak van meerkeuzevragen.
-            U wordt verder geleid.
-						Druk op volgende om door te gaan.";
+$langStep1 = "Welkom bij de assistent voor de aanmaak van meerkeuzevragen.            U wordt verder geleid.						Druk op volgende om door te gaan.";
 $langStep2 = "Titel van de oefening en beschrijving toevoegen/wijzigen. Druk op volgende wanneer u klaar bent.";
 $langTake = "neem";
 $langAmong = "uit";

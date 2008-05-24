@@ -56,10 +56,7 @@ $CheckDatabaseConnection = "P&#257;rbaud&#299;t datub&#257;zes savienojuma esam&
 $PrintOverview = "R&#257;d&#299;t p&#257;rskatu";
 $Installing = "Instal&#275;t";
 $Step = "Solis";
-$ServerRequirements = "Servera vajadz&#299;bas 
- 
- 
-";
+$ServerRequirements = "Servera vajadz&#299;bas   ";
 $PHPVersion = "PHP versija";
 $support = "atbalsts";
 $PHPVersionOK = "PHP versija ir OK";

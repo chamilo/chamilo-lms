@@ -3,9 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShouldBeCSVFormat = "Le fichier devrait être au format CSV. N\'ajoutez pas d\'espaces. La structure devrait être exactement :";
 $langTracking = "Suivi";
-$langEnter2passToChange = "La saisie du nouveau mot de passe ainsi que sa confirmation sont nécessaires en cas de modification de votre mot de passe. <br />
-Dans tous les autres cas, laissez ces deux champs vides.
-";
+$langEnter2passToChange = "La saisie du nouveau mot de passe ainsi que sa confirmation sont nécessaires en cas de modification de votre mot de passe. <br />Dans tous les autres cas, laissez ces deux champs vides.";
 $langAuthInfo = "Paramètres de connexion";
 $langDelImage = "Supprimer la photo";
 $langUpdateImage = "Changer de photo";
@@ -38,20 +36,13 @@ $langGiveAdmin = "Rendre responsable";
 $langUserNumber = "nombre";
 $langDownloadUserList = "Envoyer la liste";
 $langSend = "Envoyer";
-$langUserAddExplanation = "Chaque ligne du fichier à envoyer
-		contiendra nécessairement et uniquement les
-		5 champs <b>First name���Last name��� Login���Password� ��Email</b> séparés par des tabulations
-		et présentés dans cet ordre. Les membres recevront
-		par email identifiant et mot de passe.";
+$langUserAddExplanation = "Chaque ligne du fichier à envoyer		contiendra nécessairement et uniquement les		5 champs <b>First name���Last name��� Login���Password� ��Email</b> séparés par des tabulations		et présentés dans cet ordre. Les membres recevront		par email identifiant et mot de passe.";
 $langUserMany = "Importer une liste de membres via un fichier CSV / XML";
 $langOneByOne = "Ajouter manuellement un utilisateur";
 $langNow = "actuellement";
 $langTutor = "Coach";
 $langTitular = "Responsable";
-$langAddHereSomeCourses = "<font size=2 face=\'arial, helvetica\'><big>Mes cours</big><br><br>
-			Cochez les cours auxquels vous souhaitez participer et décochez ceux auxquels vous
-			ne voulez plus participer (les cours dont vous êtes responsable
-			ne peuvent être décochés). Cliquez ensuite sur Ok en bas de la liste.";
+$langAddHereSomeCourses = "<font size=2 face=\'arial, helvetica\'><big>Mes cours</big><br><br>			Cochez les cours auxquels vous souhaitez participer et décochez ceux auxquels vous			ne voulez plus participer (les cours dont vous êtes responsable			ne peuvent être décochés). Cliquez ensuite sur Ok en bas de la liste.";
 $langStudent = "apprenant";
 $langImportUserList = "Importer une liste d\'utilisateurs";
 $langAddAU = "Ajouter des membres";
@@ -66,8 +57,7 @@ $langInC = "dans ce cours";
 $langRole = "Descriptif";
 $UserPicture = "Photo";
 $langProfileReg = "Votre nouveau profil a été enregistré";
-$langEmailWrong = "L\'adresse email que vous avez introduite n\'est pas complète
-ou contient certains caractères non valides";
+$langEmailWrong = "L\'adresse email que vous avez introduite n\'est pas complèteou contient certains caractères non valides";
 $langUserTaken = "L\'identifiant que vous avez choisi est déjà pris";
 $langFields = "Vous n\'avez pas rempli tous les champs";
 $langAgain = "Veuillez réessayer ...";
@@ -90,14 +80,9 @@ Identifiant :";
 $langYouAreReg = "Vous êtes inscrit(e) sur";
 $langDear = "Cher(ère)";
 $langYourReg = "Votre inscription sur";
-$langUserFree = "L\'identifiant que vous avez choisi est déjà pris.
-Utilisez le bouton de retour en arrière de votre navigateur
-et choisissez-en un autre.";
-$langEmptyFields = "Vous n\'avez pas rempli tous les champs.
-Utilisez le bouton de retour en arrière de votre navigateur et recommencez.";
-$langPassTwice = "Vous n\'avez pas tapé deux fois le même mot de passe.
-Utilisez le bouton de retour en arrière de votre navigateur
-et recommencez.";
+$langUserFree = "L\'identifiant que vous avez choisi est déjà pris.Utilisez le bouton de retour en arrière de votre navigateuret choisissez-en un autre.";
+$langEmptyFields = "Vous n\'avez pas rempli tous les champs.Utilisez le bouton de retour en arrière de votre navigateur et recommencez.";
+$langPassTwice = "Vous n\'avez pas tapé deux fois le même mot de passe.Utilisez le bouton de retour en arrière de votre navigateuret recommencez.";
 $langRegAdmin = "Créer des cours";
 $langRegStudent = "M\'inscrire à des cours";
 $langConfirmation = "Confirmation";

@@ -34,8 +34,7 @@ $langPleaseSelectUsers  = "Você precisa selecionar alguns usuários.";
 $Teachersubject = "Mensagem enviada para os seus estudantes ";
 $langMessages  = "Mensagens";
 $langMessageToSelectedUsers  = "Mensagens para usuários selecionados";
-$langIntroText  = "Para enviar uma mensagem, selecione grupos de usuários (marcados com um G na frente)
- ou usuários individuais da lista à esquerda.";
+$langIntroText  = "Para enviar uma mensagem, selecione grupos de usuários (marcados com um G na frente) ou usuários individuais da lista à esquerda.";
 $langDown = "abaixo";
 $langMsgSent = "A mensagem foi enviada para os estudantes selecionados";
 $langSelUser = "usuarios selecionados do site";

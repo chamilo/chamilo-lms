@@ -111,8 +111,7 @@ $Options = "選項";
 $WelcomeOogieConverter = "歡迎使用投映版轉換器。<ul type=\\\"1\\\"><li>在你的電腦中搜尋 .ppt 或 .odp 檔<li>上傳至 Oogie，文件便會轉換為 Scorm 學習路徑。<li>這時你便可以在每頁投映片中加上聲音或文字旁白。";
 $ConvertToLP = "轉換為學習路徑";
 $Content = "內容";
-$Validate = "核准
-";
+$Validate = "核准";
 $AdvancedSettings = "進階設定";
 $AdvancedSettings = "進階設定";
 $File = "檔案";

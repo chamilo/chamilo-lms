@@ -2,8 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $GeneralDescription = "Descripción general";
-$GeneralDescriptionQuestions = "¿ Cuál es el papel y función del curso en el programa ? ¿ Se requieren actividades previas ? ¿ Qué relación tiene este curso con otros ? 
-";
+$GeneralDescriptionQuestions = "¿ Cuál es el papel y función del curso en el programa ? ¿ Se requieren actividades previas ? ¿ Qué relación tiene este curso con otros ? ";
 $GeneralDescriptionInformation = "Descripción del curso (número de horas, código, lugar donde se desarrolla...). Profesor (nombre, apellidos, despacho, teléfono, e-mail...).";
 $Objectives = "Objetivos";
 $ObjectivesInformation = "Presentación de los objetivos globales y específicos del curso";

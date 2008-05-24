@@ -2,9 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langInvalidId = "Neuspjela prijava - neispravno korisni&#269;ko ime ili zaporka.";
-$langWelcome = "Dostupni kolegiji su navedeni niže. Ostali kolegiji iziskuju korisni&#269;ko ime i zaporku,
-koje stvarate izborom opcije \'Prijava\'.
-Predava&#269;i izra&#273;uju kolegije na isti na&#269;in, ali potom odabiru \'Izrada kolegija\'.";
+$langWelcome = "Dostupni kolegiji su navedeni niže. Ostali kolegiji iziskuju korisni&#269;ko ime i zaporku,koje stvarate izborom opcije \'Prijava\'.Predava&#269;i izra&#273;uju kolegije na isti na&#269;in, ali potom odabiru \'Izrada kolegija\'.";
 $langPass = "Zaporka";
 $langEnter = "Ulaz";
 $langReg = "Prijava";

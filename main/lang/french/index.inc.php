@@ -2,9 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langInvalidId = "Ce login n\'est pas valide.";
-$langWelcome = "espaces de cours sont en libre accès ci-dessous. Les autres espaces de cours existants
-nécessitent un login et un mot de passe que l\'on peut
-obtenir en cliquant sur la mention \'inscription\'. Les responsables des espaces de cours peuvent créer de nouveaux espaces de cours.";
+$langWelcome = "espaces de cours sont en libre accès ci-dessous. Les autres espaces de cours existantsnécessitent un login et un mot de passe que l\'on peutobtenir en cliquant sur la mention \'inscription\'. Les responsables des espaces de cours peuvent créer de nouveaux espaces de cours.";
 $langPass = "Mot de passe";
 $langEnter = "Entrer";
 $langReg = "Inscription";

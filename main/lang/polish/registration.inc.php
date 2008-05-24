@@ -35,18 +35,13 @@ $langGiveAdmin = "Nadaj uprawnienia administratora";
 $langUserNumber = "ilo&#347;&#263;";
 $langDownloadUserList = "Za³aduj listê";
 $langSend = "Wy&#347;lij";
-$langUserAddExplanation = "Ka¿da linia pliku powinna zawieraæ jedynie 5 pól: 
-		<b>Nazwisko   Imiê   
-		Nazwa u¿ytkownika   Has³o 
-		  E-mail</b> oddzielone tabulatorem i dok³adnie w takim porz±dku.
-		U¿ytkownicy mog± otrzymaæ email z potwierdzeniem nazwy u¿ytkownika i has³a.";
+$langUserAddExplanation = "Ka¿da linia pliku powinna zawieraæ jedynie 5 pól: 		<b>Nazwisko   Imiê   		Nazwa u¿ytkownika   Has³o 		  E-mail</b> oddzielone tabulatorem i dok³adnie w takim porz±dku.		U¿ytkownicy mog± otrzymaæ email z potwierdzeniem nazwy u¿ytkownika i has³a.";
 $langUserMany = "Importuj u&#380;ytkowników z pliku tekstowego";
 $langOneByOne = "R&#281;czne dodawanie u&#380;ytkownika";
 $langNow = "teraz";
 $langTutor = "Prowadz&#261;cy";
 $langTitular = "Autor";
-$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Modyfikuj list&#281; kursów</big><br><br>
-Zaznacz kursy na które chcesz si&#281; zapisa&#263;. Odznacz kursy z których chcesz zrezygnowa&#263;, potem kliknij OK na dole listy.";
+$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Modyfikuj list&#281; kursów</big><br><br>Zaznacz kursy na które chcesz si&#281; zapisa&#263;. Odznacz kursy z których chcesz zrezygnowa&#263;, potem kliknij OK na dole listy.";
 $langStudent = "student";
 $langImportUserList = "Importuj list&#281; u&#380;ytkowników";
 $langAddAU = "Dodaj u&#380;ytkownika";
@@ -77,8 +72,7 @@ $langFormula = "Z powa&#380;aniem";
 $langProblem = "W przypadku wyst&#261;pienia trudno&#347;ci, skontaktuj si&#281; z nami.";
 $langIs = "jest";
 $langAddress = "Adres ";
-$langSettings = "z nast&#281;puj&#261;cymi ustawieniami: 
-Username:";
+$langSettings = "z nast&#281;puj&#261;cymi ustawieniami: Username:";
 $langYouAreReg = "Jeste&#347; zarejestrowany jako";
 $langDear = "Szanowna/y";
 $langYourReg = "Twoja rejestracja";

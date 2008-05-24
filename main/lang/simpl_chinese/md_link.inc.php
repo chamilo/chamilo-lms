@@ -20,10 +20,7 @@ $langCoverage = "分类";
 $langCoverageTip = "分类名称, cfr. 链接";
 $langKwNote = "如果您改变简介语言, 请不要同时添加关键字.";
 $langClickKw = "在子目录中点击关键字选择或取消选择它.";
-$langKwHelp = "<br/> 点击 \'+\' 按钮打开, \'-\' 按钮关闭, \'++\' 按钮打开所有, \'--\' 按钮关闭所有.<br/> <br/> 通过关闭子目录取消对所有关键字的选择,再次打开点按钮 \'+\'.<br/> Alt-click \'+\' 在子目录中寻找原始关键字.<br/> <br/> Alt-click 
-关键词 选择不含broader terms的关键词或放弃选择含broader terms的关键词.<br/> <br/>  
-如果您改变了简介语言, 请不要同时加上关键字.<br/> <br/> 
-";
+$langKwHelp = "<br/> 点击 \'+\' 按钮打开, \'-\' 按钮关闭, \'++\' 按钮打开所有, \'--\' 按钮关闭所有.<br/> <br/> 通过关闭子目录取消对所有关键字的选择,再次打开点按钮 \'+\'.<br/> Alt-click \'+\' 在子目录中寻找原始关键字.<br/> <br/> Alt-click 关键词 选择不含broader terms的关键词或放弃选择含broader terms的关键词.<br/> <br/>  如果您改变了简介语言, 请不要同时加上关键字.<br/> <br/> ";
 $langLocation = "网址";
 $langLocationTip = "点击打开对象";
 $langStore = "保存";

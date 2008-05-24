@@ -129,8 +129,7 @@ $lang_resource = "Resurs";
 $lang_resources = "Resursi";
 $langNameOfLang['arabic'] = "arabic";
 $langNameOfLang['brazilian'] = "brazilian";
-$langNameOfLang['bulgarian']
- = "bulgarian";
+$langNameOfLang['bulgarian'] = "bulgarian";
 $langNameOfLang['catalan'] = "catalan";
 $langNameOfLang['croatian'] = "croatian";
 $langNameOfLang['danish'] = "danish";

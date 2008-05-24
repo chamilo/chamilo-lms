@@ -2,8 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $test = "test";
-$WCAGImage = "Obrázok
-";
+$WCAGImage = "Obrázok";
 $WCAGLabel = "Názov obrázku";
 $WCAGLink = "Link";
 $WCAGLinkLabel = "Názov linku";

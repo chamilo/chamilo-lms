@@ -23,8 +23,7 @@ $langCourseName = "Name of course";
 $langSubscribe = "Subscribe";
 $langSee = "Go to";
 $langLastVisits = "My latest visits";
-$langIfYouWantToAddManyUsers = "If you want to add a list of users in
-			your course, please contact your web administrator.";
+$langIfYouWantToAddManyUsers = "If you want to add a list of users in			your course, please contact your web administrator.";
 $langPassTooEasy = "this password  is too simple. Use a pass like this ";
 $langGroupUserManagement = "Groups management";
 $langAddedToCourse = "has been registered to your course";
@@ -37,11 +36,7 @@ $langGiveAdmin = "Make admin";
 $langUserNumber = "number";
 $langDownloadUserList = "Upload the list";
 $langSend = "Send";
-$langUserAddExplanation = "every line of file to send will necessarily an only
-		include 5 fields: <b>First name   Last name   
-		Login   Password 
-		  Email</b> separated by tabs and in this order.
-		Users will receive email confirmation with login/password.";
+$langUserAddExplanation = "every line of file to send will necessarily an only		include 5 fields: <b>First name   Last name   		Login   Password 		  Email</b> separated by tabs and in this order.		Users will receive email confirmation with login/password.";
 $langUserMany = "Import a user list through a CSV / XML file";
 $langOneByOne = "Add user manually";
 $langNow = "now";

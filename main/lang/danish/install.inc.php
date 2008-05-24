@@ -21,10 +21,7 @@ $langAdminLogin = "Administrator login";
 $langAdminPass = "Administrator adgangskode";
 $langEducationManager = "Undervisningsansvarlig";
 $langCampusName = "Dit universitets navn";
-$langDBSettingIntro = "
-				Install script opretter claroline hoved DB. Venligst bemærk at Claroline 
-				har brug for at oprette mange DBs (medmindre du har valgt \"En\" forneden). If you are allowed only one 
-				DB for your website by your Hosting Services, Claroline will not work.";
+$langDBSettingIntro = "				Install script opretter claroline hoved DB. Venligst bemærk at Claroline 				har brug for at oprette mange DBs (medmindre du har valgt \"En\" forneden). If you are allowed only one 				DB for your website by your Hosting Services, Claroline will not work.";
 $langStep1 = "Trin 1 af 6 ";
 $langStep2 = "Trin 2 af 6 ";
 $langStep3 = "Trin 3 af 6 ";

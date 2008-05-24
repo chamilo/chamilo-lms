@@ -20,8 +20,7 @@ $langCoverage = "ครอบคลุม Coverage";
 $langCoverageTip = "ตัวอย่างปริญญาของ for example bachelor of xxx: yyy";
 $langKwNote = "If you change the description language, do not add keywords at the same time.";
 $langClickKw = "Click a keyword in the tree to select or deselect it.";
-$langKwHelp = "<br/>คลิกปุ่มบวก \'+\' เพื่อเปิด,ลบ \'-\' เพื่อปิด, \'++\' button to open all, \'--\' button to close all..<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/> Alt-click \'+\' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/> 
-";
+$langKwHelp = "<br/>คลิกปุ่มบวก \'+\' เพื่อเปิด,ลบ \'-\' เพื่อปิด, \'++\' button to open all, \'--\' button to close all..<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/> Alt-click \'+\' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/> ";
 $langRights = "ใช้สิทธิ์ Usage Rights";
 $langRightsTip = "อธิบายความ describe in words";
 $langVersion = "รุ่น Version";

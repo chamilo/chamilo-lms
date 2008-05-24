@@ -93,8 +93,7 @@ $lang_resource = "Resource";
 $lang_resources = "Resource";
 $langNameOfLang['arabic'] = "arab";
 $langNameOfLang['brazilian'] = "brrazil";
-$langNameOfLang['bulgarian']
- = "bulgaria";
+$langNameOfLang['bulgarian'] = "bulgaria";
 $langNameOfLang['catalan'] = "catalan";
 $langNameOfLang['croatian'] = "kroasia";
 $langNameOfLang['danish'] = "denmark";

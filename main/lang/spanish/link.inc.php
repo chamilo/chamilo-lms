@@ -18,8 +18,7 @@ $langCategoryMod = "Modificar categoría";
 $langCategoryModded = "La categoría se ha modificado";
 $langCategoryDel = "Borrar categoría";
 $langCategoryDeleted = "Se ha eliminado la categoría y todos sus enlaces.";
-$langCategoryDelconfirm = "Cuando borre una categoría, también se borrarán todos
-los enlaces dentro de la misma.\\ ¿Seguro que quiere eliminar esta categoría y todos sus enlaces?";
+$langCategoryDelconfirm = "Cuando borre una categoría, también se borrarán todoslos enlaces dentro de la misma.\\ ¿Seguro que quiere eliminar esta categoría y todos sus enlaces?";
 $langAllCategoryDel = "Borrar todas las categorías y sus enlaces";
 $langGiveURL = "Por favor, ponga la URL";
 $langGiveCategoryName = "Por favor, ponga un nombre para la categoría";
@@ -38,14 +37,7 @@ $langCsvFileLine1 = "... - línea 1 =";
 $langCsvLinesFailed = "línea(s) erróneas al importar un enlace (falta la URL o el título).";
 $langCsvLinesOld = "enlace/s existente/s actualizados (igual URL y categoría)";
 $langCsvLinesNew = "nuevo enlace(s) creado.";
-$langCsvExplain = "El fichero se debe presentar así: <blockquote><pre>
-<b>URL</b>;category;<b>title</b>;description;
-<b>http://www.aaa.org/...</b>;Enlaces importantes;<b>Nombre 1</b>;Descripción 1;
-<b>http://www.bbb.net/...</b>;;<b>Nombre 2</b>;\"Description 2\";</pre></blockquote>
-Si la \'URL\' y la \'categoría\' pertenecen a un enlace ya existente, éste será actualizado. En el resto de los casos un nuevo enlace será creado.<br><br>
-Negrita = obligatorio. 
-El orden de los campos no tiene importancia, mayúsculas y minúsculas están permitidas. Los campos desconocidos serán añadidos a la \'descripción\'. Separadores: comas o puntos y comas. Los valores podrán encontrarse entre comillas, pero no los nombres de columna.
-Algunas [b]etiquetas HTML[/b] serán importadas en el campo \'descripción\'.";
+$langCsvExplain = "El fichero se debe presentar así: <blockquote><pre><b>URL</b>;category;<b>title</b>;description;<b>http://www.aaa.org/...</b>;Enlaces importantes;<b>Nombre 1</b>;Descripción 1;<b>http://www.bbb.net/...</b>;;<b>Nombre 2</b>;\"Description 2\";</pre></blockquote>Si la \'URL\' y la \'categoría\' pertenecen a un enlace ya existente, éste será actualizado. En el resto de los casos un nuevo enlace será creado.<br><br>Negrita = obligatorio. El orden de los campos no tiene importancia, mayúsculas y minúsculas están permitidas. Los campos desconocidos serán añadidos a la \'descripción\'. Separadores: comas o puntos y comas. Los valores podrán encontrarse entre comillas, pero no los nombres de columna.Algunas [b]etiquetas HTML[/b] serán importadas en el campo \'descripción\'.";
 $langLinkUpdated = "El enlace ha sido actualizado";
 $langAll_Link_Deleted = "El enlace ha sido borrado";
 $langOnHomepage = "¿ Mostrar el enlace en la página principal del curso";

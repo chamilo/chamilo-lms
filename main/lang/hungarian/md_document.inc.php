@@ -20,21 +20,7 @@ $langCoverage = "Terjedelem";
 $langCoverageTip = "például xxx kandidátusa";
 $langKwNote = "Ha megváltoztatja a leírás nyelvét, ne adjon hozzá ezzel egy id&#337;ben kulcsszavakat.";
 $langClickKw = "Kattintson a kulcsszóra a fa struktúrában a kiválasztáshoz/kijelölés megsz&#369;ntetéséhez.";
-$langKwHelp = "<p>
-<br>Kattintson a \'+\' gombra a megnyitáshoz, , a \'-\' gombra a bezéréshoz, a \'++\' gombra 
-az összes kinyitásához, a \'--\' gombra az összes bezárásához.
-<br>
-<br>A kulcsszavak kijelölésének megsz&#369;ntetéséhez zérja be teljesen a fastruktúrát 
-és nyissa ki újra a \'+\' gombbal.
-<br>Alt gomb lenyomása közben a \'+\' gombra kattintva kereshet&#337;k az eredeti kulcsszavak 
-a fában.
-<br>
-<br>Alt gomb lenyomása közbeni kattintással lehet kiválastrani a kulcsszavakat anélkül, 
-hogy b&#337;vítenénk a kifejezéseket, vagy megsz&#369;ntetni a kulcsszó kijelölését a fogalmak 
-b&#337;vítésével. </p>
-<p>
-<br>Ha megváltoztatja a leírás nyelvét, nem adjon hozzá kulcsszavakat vele egyid&#337;ben.
-<br></p>";
+$langKwHelp = "<p><br>Kattintson a \'+\' gombra a megnyitáshoz, , a \'-\' gombra a bezéréshoz, a \'++\' gombra az összes kinyitásához, a \'--\' gombra az összes bezárásához.<br><br>A kulcsszavak kijelölésének megsz&#369;ntetéséhez zérja be teljesen a fastruktúrát és nyissa ki újra a \'+\' gombbal.<br>Alt gomb lenyomása közben a \'+\' gombra kattintva kereshet&#337;k az eredeti kulcsszavak a fában.<br><br>Alt gomb lenyomása közbeni kattintással lehet kiválastrani a kulcsszavakat anélkül, hogy b&#337;vítenénk a kifejezéseket, vagy megsz&#369;ntetni a kulcsszó kijelölését a fogalmak b&#337;vítésével. </p><p><br>Ha megváltoztatja a leírás nyelvét, nem adjon hozzá kulcsszavakat vele egyid&#337;ben.<br></p>";
 $langRights = "Használati jogok";
 $langRightsTip = "leírás szavakkal";
 $langVersion = "Verzió";

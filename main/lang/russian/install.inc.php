@@ -1,12 +1,10 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langStatDB              = "База для отслеживания действий пользователей.  Полезна в том случае, если 
-вы используете отдельно центральную базу и отслеживание пользователей";
+$langStatDB              = "База для отслеживания действий пользователей.  Полезна в том случае, если вы используете отдельно центральную базу и отслеживание пользователей";
 $langEnableTracking      = "Активировать отслеживание действий пользователей";
 $langInstituteShortName  = "Сокращенное название учреждения";
-$langWarningResponsible  = "Используйте этот скрипт, предварительно сделав backup. Мы не несем ответственности 
-за любую проблему, которая вызовет потерю ваших данных.";
+$langWarningResponsible  = "Используйте этот скрипт, предварительно сделав backup. Мы не несем ответственности за любую проблему, которая вызовет потерю ваших данных.";
 $langEG = "например";
 $langDBHost = "База данных сервера";
 $langDBLogin = "База данных пользователя";
@@ -22,10 +20,7 @@ $langAdminLogin = "Имя пользователя администратора";
 $langAdminPass = "Пароль администратора";
 $langEducationManager = "Ответственный за содержание";
 $langCampusName = "Название кампуса";
-$langDBSettingIntro = "
-				Install script will create claroline main DB. Please note that Claroline
-				will need to create many DBs. If you are allowed only one
-				DB for your website by your Hosting Services, Claroline will not work.";
+$langDBSettingIntro = "				Install script will create claroline main DB. Please note that Claroline				will need to create many DBs. If you are allowed only one				DB for your website by your Hosting Services, Claroline will not work.";
 $langStep1 = "Этап 1 из 6 ";
 $langStep2 = "Этап 2 из 6 ";
 $langStep3 = "Этап 3 из 6 ";

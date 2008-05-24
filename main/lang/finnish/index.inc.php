@@ -19,8 +19,7 @@ $langUp  = "edellinen taso";
 $langCatList  = "Koulutusalat";
 $langCourseList  = "Kurssit";
 $langHelptwo = "Apua";
-$langInvalidForSelfRegistration = "Kirjautuminen epäonnistui - jos et ole vielä rekisteröitynyt, tee se
-<a href=claroline/auth/inscription.php>rekisteröintilomake</a>";
+$langInvalidForSelfRegistration = "Kirjautuminen epäonnistui - jos et ole vielä rekisteröitynyt, tee se<a href=claroline/auth/inscription.php>rekisteröintilomake</a>";
 $langSubCat = "aihealueet";
 $langMenuGeneral = "Yleiset";
 $langMenuUser = "Käyttäjä";

@@ -64,8 +64,7 @@ $langSubscription = "Subscription";
 $langCourseAccess = "Course access";
 $langConfirmBackup = "Do you really want to backup the course area?";
 $langCreateSite = "Create a course area";
-$langRestoreDescription = "The course is in an archive file which you can select below.<br><br>
-Once you click on \"Restore\", the archive will be uncompressed and the course recreated.";
+$langRestoreDescription = "The course is in an archive file which you can select below.<br><br>Once you click on \"Restore\", the archive will be uncompressed and the course recreated.";
 $langRestoreNotice = "This script doesn\'t allow yet to automatically restore users, but data saved in \"users.csv\" are sufficient for the administrator to do it manually.";
 $langAvailableArchives = "Available archives list";
 $langNoArchive = "No archive has been selected";

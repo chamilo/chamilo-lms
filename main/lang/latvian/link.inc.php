@@ -36,10 +36,7 @@ $langCsvFileLine1 = "... - line 1 =";
 $langCsvLinesFailed = "rind&#257;(s) netika veikta importa proced&#363;ra (nav URL vai nosaukuma)";
 $langCsvLinesOld = "esoš&#257;s hipersaites tika atjaunotas/papildin&#257;tas (vien&#257;di URL un kategorija)";
 $langCsvLinesNew = "jauna(s) hipersaite(s) tika izveidota(s).";
-$langCsvExplain = "Failam j&#257;izskat&#257;s š&#257;di: <blockquote><pre>
-<b>URL</b>;category;<b>title</b>;description;
-<b>http://www.aaa.org/...</b>;Important links;<b>Name 1</b>;Description 1;
-<b>http://www.bbb.net/...</b>;;<b>Name 2</b>;\"Description 2\"; </pre></blockquote> Ja URL un kategorija ir vien&#257;das ar k&#257;du jau agr&#257;k pievienotu hipersaites objektu, tad t&#257; virsraksts un apraksts tiks atjaunoti. Visos citos gad&#299;jumos jauns ieraksts tiks izveidots.<br><br> Bold = nav oblig&#257;ti. Lauki var atrasties jebkur&#257; sec&#299;b&#257;, nosaukumi ar lielajiem vai mazajiem burtiem. Papildus lauki tiek pievienoti aprakstam. Atdal&#299;t&#257;js: komats vai semikols. V&#275;rt&#299;bas, pret&#275;ji lauku nosaukumiem, var tikt ievietotas p&#275;di&#326;&#257;s. Daži [b]HTML tagi[/b] var tikt import&#275;ti apraksta lauk&#257;.";
+$langCsvExplain = "Failam j&#257;izskat&#257;s š&#257;di: <blockquote><pre><b>URL</b>;category;<b>title</b>;description;<b>http://www.aaa.org/...</b>;Important links;<b>Name 1</b>;Description 1;<b>http://www.bbb.net/...</b>;;<b>Name 2</b>;\"Description 2\"; </pre></blockquote> Ja URL un kategorija ir vien&#257;das ar k&#257;du jau agr&#257;k pievienotu hipersaites objektu, tad t&#257; virsraksts un apraksts tiks atjaunoti. Visos citos gad&#299;jumos jauns ieraksts tiks izveidots.<br><br> Bold = nav oblig&#257;ti. Lauki var atrasties jebkur&#257; sec&#299;b&#257;, nosaukumi ar lielajiem vai mazajiem burtiem. Papildus lauki tiek pievienoti aprakstam. Atdal&#299;t&#257;js: komats vai semikols. V&#275;rt&#299;bas, pret&#275;ji lauku nosaukumiem, var tikt ievietotas p&#275;di&#326;&#257;s. Daži [b]HTML tagi[/b] var tikt import&#275;ti apraksta lauk&#257;.";
 $langLinkUpdated = "Hipersaite tika atjaunota";
 $langAll_Link_Deleted = "Hipersaite tika dz&#275;sta";
 $langOnHomepage = "R&#257;d&#299;t hipersaiti s&#257;kumlap&#257;";

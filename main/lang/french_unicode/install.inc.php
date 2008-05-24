@@ -50,8 +50,7 @@ $langUserDB = "Base de données Utilisateur";
 $langInstallationLanguage = "Langue d\'installation";
 $ReadThoroughly = "A lire attentivement";
 $DokeosNeedFollowingOnServer = "Pour que Dokeos puisse fonctionner, le serveur doit être équipé de:";
-$WarningExistingDokeosInstallationDetected = "Attention !
-Une installation de dokeos existe déja sur votre système.";
+$WarningExistingDokeosInstallationDetected = "Attention !Une installation de dokeos existe déja sur votre système.";
 $NewInstallation = "Nouvelle installation";
 $CheckDatabaseConnection = "Vérification de la connection à la base de données";
 $PrintOverview = "Récapitulatif";

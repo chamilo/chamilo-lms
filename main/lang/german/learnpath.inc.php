@@ -152,8 +152,7 @@ $langNoItemsInLp = "Im Augenblick gibt es keine Schritte im Lernpfad. Auf \"Fort
 $FirstPosition = "Erste Stelle";
 $NewQuiz = "Neues Quiz";
 $CreateTheForum = "Forum hinzufügen";
-$AddLpIntro = "<strong>Willkommen</strong> zum Dokeos Lernpfad Erstellungstool
-";
+$AddLpIntro = "<strong>Willkommen</strong> zum Dokeos Lernpfad Erstellungstool";
 $AddLpIntro = "<strong>Willkommen</strong> zum Dokeos Lernpfad Erstellungstool.<br />Sie können Ihren Lernpfad Schritt für Schritt erstellen.  Die Struktur Ihres Lernpfads erscheint links in dem Menu.";
 $AddLpToStart = "Beginnen Sie damit, Ihrem Lernpfad einen Titel zu geben";
 $CreateTheLink = "Link importieren";
@@ -193,4 +192,5 @@ $OogieConversionFailed = "Die Konvertierung ist fehlgeschlagen. <br/>Einige Doku
 $OogieUnknownError = "Die Konvertierung ist aus unbekanntem Grund fehlgeschlagen. <br/>Kontaktieren Sie den Administrator, um weitere Informationen einzuholen.";
 $OogieBadExtension = "Die Datei hat eine falsche Endung.";
 $WoogieBadExtension = "Bitte nur Text Dokumente hochladen. Dateinamen sollten enden mit .doc, .docx oder .odt";
+$ShowAudioRecorder = "Audio Recorder anzeigen";
 ?>

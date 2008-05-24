@@ -35,8 +35,7 @@ $langAgendaText = "Organisation des groupes. Prise de contact.";
 $langMicro = "Micro-trottoir";
 $langGoogle = "Moteur de recherche généraliste performant";
 $langIntroductionText = "Bienvenue dans ce cours";
-$langIntroductionTwo = "Cette page est un espace de publication. Elle permet à chaque membre ou groupe de membres d\'envoyer un document (Word, Excel, HTML... ) afin de le rendre accessible aux autres membres ainsi qu\'au responsable.
-Si vous passez par votre espace de groupe pour publier le document (option publier), l\'outil Travaux fera un simple lien vers le document là où il se trouve dans votre répertoire de groupe sans le déplacer.";
+$langIntroductionTwo = "Cette page est un espace de publication. Elle permet à chaque membre ou groupe de membres d\'envoyer un document (Word, Excel, HTML... ) afin de le rendre accessible aux autres membres ainsi qu\'au responsable.Si vous passez par votre espace de groupe pour publier le document (option publier), l\'outil Travaux fera un simple lien vers le document là où il se trouve dans votre répertoire de groupe sans le déplacer.";
 $langCourseDescription = "Ecrivez ici la description qui apparaîtra dans le catalogue des cours (Le contenu de ce champ ne s\'affiche actuellement nulle part et ne se trouve ici qu\'en préparation à une version prochaine de Dokeos).";
 $langProfessor = "Responsables de ce cours";
 $langAnnouncementEx = "Ceci est un exemple d\'annonce.";

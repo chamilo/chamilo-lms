@@ -64,8 +64,7 @@ $langSubscription = "Pendaftaran";
 $langCourseAccess = "Akses mata kuliah";
 $langConfirmBackup = "Apakah anda benar-benar ingin mem-backup mata kuliah ini";
 $langCreateSite = "Buat situs mata kuliah";
-$langRestoreDescription = "Mata Kuliah dalam file arsip yang dapat anda pilih di bawah ini<br><br>
-Ketika anda klik pada \"Restore\", arsip akan di-uncompessed dan mata kuliah dibuat.";
+$langRestoreDescription = "Mata Kuliah dalam file arsip yang dapat anda pilih di bawah ini<br><br>Ketika anda klik pada \"Restore\", arsip akan di-uncompessed dan mata kuliah dibuat.";
 $langRestoreNotice = "Script ini tidak memungkinkan untuk secara otomatis me-restore user, tapi data disimpan dalam \"users.csv\" nanti dapat digunakan oleh administrator untuk me-restore-nya secara manual.";
 $langAvailableArchives = "Daftar arsip tersedia";
 $langNoArchive = "Tidak ada arsip yang dipilih";

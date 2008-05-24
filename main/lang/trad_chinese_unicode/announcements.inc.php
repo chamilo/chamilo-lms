@@ -45,8 +45,7 @@ $langMsg = "消息";
 $langYes = "確定";
 $MsgText = "訊息";
 $AnnouncementDeletedAll = "所有公告已被刪除";
-$AnnouncementMoved = "公告已被移動
-";
+$AnnouncementMoved = "公告已被移動";
 $NoAnnouncements = "沒有公告";
 $SelectEverybody = "選所有人";
 $SelectedUsersGroups = "已選組別";

@@ -57,8 +57,7 @@ $ChangeSettings = "Modifier les valeurs";
 $Course = "Cours:";
 $CourseLanguage = "Langue:";
 $ConfirmClearWhiteboard = "Confirmez l\'effacement du tableau";
-$ShouldWitheboardBeClearedBeforeNewImage = "Le tableau doit-il être effacé avant ajout d\'une dia?
-";
+$ShouldWitheboardBeClearedBeforeNewImage = "Le tableau doit-il être effacé avant ajout d\'une dia?";
 $DontAskMeAgain = "Ne plus me demander";
 $EditSettings = "Editer les valeurs";
 $ShowConfirmationBeforeClearingWhiteboard = "Demander confirmation avant d\'effacer le tableau";

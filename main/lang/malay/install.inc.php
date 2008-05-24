@@ -20,10 +20,7 @@ $langAdminLogin = "Administrator login";
 $langAdminPass = "Administrator password";
 $langEducationManager = "Education manager";
 $langCampusName = "Your campus\' name";
-$langDBSettingIntro = "
-				Install script will create claroline main DB. Please note that Claroline 
-				will need to create many DBs (unless you select option \"One\" below). If you are allowed only one 
-				DB for your website by your Hosting Services, Claroline will not work.";
+$langDBSettingIntro = "				Install script will create claroline main DB. Please note that Claroline 				will need to create many DBs (unless you select option \"One\" below). If you are allowed only one 				DB for your website by your Hosting Services, Claroline will not work.";
 $langStep1 = "Step 1 of 6 ";
 $langStep2 = "Step 2 of 6 ";
 $langStep3 = "Step 3 of 6 ";

@@ -21,8 +21,7 @@ $langAdminLogin = "Login Administrator";
 $langAdminPass = "Password Administrator  (<font color=\"red\">anda dapat merubahnya</font>)";
 $langEducationManager = "Pengelola";
 $langCampusName = "Nama kampus";
-$langDBSettingIntro = "
-				Skrip Instalasi akan membuat DB utama. Software akan butuh membuat banyak DB (kecuali anda pilih  \"One\" di bawah ini). Jika anda hanya diijinkan satu DB untuk situs anda oleh Hosting Services, Software tidak dapat bekerja.";
+$langDBSettingIntro = "				Skrip Instalasi akan membuat DB utama. Software akan butuh membuat banyak DB (kecuali anda pilih  \"One\" di bawah ini). Jika anda hanya diijinkan satu DB untuk situs anda oleh Hosting Services, Software tidak dapat bekerja.";
 $langStep1 = "Langkah 1 dari 6 ";
 $langStep2 = "Langkah 2 dari 6 ";
 $langStep3 = "Langkah 3 dari 6 ";

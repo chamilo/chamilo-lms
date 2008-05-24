@@ -21,9 +21,7 @@ $langAdminLogin = "Administrator login";
 $langAdminPass = "Administrator password";
 $langEducationManager = "Verwalter der Lernplattform";
 $langCampusName = "Der Name Ihrer Lernplattform";
-$langDBSettingIntro = "
-                                Installatioonprozess erstellt die Datenbank. Claroline legt mehrere Datenbanken an
-                                 (außer wenn Sie die Option \"One\" wählen). Bei vielen Providern können nur eine begrenzte Anzhal von mySQL-Datenbanken angelegt werden";
+$langDBSettingIntro = "                                Installatioonprozess erstellt die Datenbank. Claroline legt mehrere Datenbanken an                                 (außer wenn Sie die Option \"One\" wählen). Bei vielen Providern können nur eine begrenzte Anzhal von mySQL-Datenbanken angelegt werden";
 $langStep1 = "Schritt 1 von 6 ";
 $langStep2 = "Schritt 2 von 6 ";
 $langStep3 = "Schritt 3 von 6 ";

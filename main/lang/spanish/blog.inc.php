@@ -13,8 +13,7 @@ $MemberManager = "Administración de usuarios";
 $PostFullText = "Texto";
 $ReadPost = "Leer este artículo";
 $Home = "Principal";
-$FirstPostText = "¡ Este es el primer artículo en el blog ! En adelante, todos los usuarios suscritos a este blog pueden participar
-";
+$FirstPostText = "¡ Este es el primer artículo en el blog ! En adelante, todos los usuarios suscritos a este blog pueden participar";
 $NewComment = "Añadir un comentario";
 $ReplyToThisComment = "Contestar a este comentario";
 $ManageTasks = "Administrar tareas";

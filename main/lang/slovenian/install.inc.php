@@ -21,9 +21,7 @@ $langAdminLogin = "Uporabniško ime admin.";
 $langAdminPass = "Geslo administratorja (<font color=\"red\">verjetno ga želite spremeniti</font>)";
 $langEducationManager = "Upravnik izobraževanja";
 $langCampusName = "Ime portala";
-$langDBSettingIntro = "Namestitveni skript bo tvoril glavno podatkovno bazo Dokeos/Claroline. Dokeos/Claroline  mora tvoriti
-				veè podatkovnih baz (DB) (v kolikor spodaj ne izbereš opcije \"Ena\" ). Èe administrator sistema dovoli 
-				za vašo spletno stran le eno DB, Dokeos/Claroline ne bo delovala.";
+$langDBSettingIntro = "Namestitveni skript bo tvoril glavno podatkovno bazo Dokeos/Claroline. Dokeos/Claroline  mora tvoriti				veè podatkovnih baz (DB) (v kolikor spodaj ne izbereš opcije \"Ena\" ). Èe administrator sistema dovoli 				za vašo spletno stran le eno DB, Dokeos/Claroline ne bo delovala.";
 $langStep1 = "Korak 1 od 6 ";
 $langStep2 = "Korak 2 od 6 ";
 $langStep3 = "Korak 3 od 6 ";
@@ -108,8 +106,7 @@ $NoWritePermissionPleaseReadInstallGuide = "Nekatere datoteke ali mape nimajo pr
 $DBServerDoesntWorkOrLoginPassIsWrong = "Strežnik podatkovne baze ne deluje ali pa je geslo/uporabniško ime napaèno";
 $PleaseCheckTheseValues = "Preverite, prosim, te vrednosti";
 $PleaseGoBackToStep = "Prodim, pojdite nazaj na korak";
-$DBSettingUpgradeIntro = "Postopek bo obnovil in nadgradil Dokeos podatkovne baze. V postopku nadgraditve bodo uporabljene podatkovne baze in nastavitve, kot so podane spodaj. 
-Strogo priporo&#269;amo, da izvedete popolno arhivsko kopijo vaših podatkovnih baz, predenj nadaljujete spostopkom nadgrajevanja. ";
+$DBSettingUpgradeIntro = "Postopek bo obnovil in nadgradil Dokeos podatkovne baze. V postopku nadgraditve bodo uporabljene podatkovne baze in nastavitve, kot so podane spodaj. Strogo priporo&#269;amo, da izvedete popolno arhivsko kopijo vaših podatkovnih baz, predenj nadaljujete spostopkom nadgrajevanja. ";
 $ExtensionMBStringNotAvailable = "MBString razširitev ni na voljo";
 $ExtensionMySQLNotAvailable = "MySQL razširitev ni na voljo";
 $DokeosArtLicense = "Galeriji slik in drugih medijskih datotek Dokeos-a vsebujejo slike iz galerij Nuvola, Crystal Clear in Tango. Druge slike in medijske datoteke, kot so diagrami, Flash animacije so sposojene iz Wikimedia in gradiv Ali Pakdel-a ter Denis Hoa z njihovim privoljenjem in pod licenco BY-SA Creative Commons. Podrobnosti o licencah lahko najdete na <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>. Povezava na celotno besedilo pogojev uporabe se nahaja na dnu podane strani.";

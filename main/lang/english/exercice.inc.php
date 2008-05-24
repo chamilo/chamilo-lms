@@ -18,8 +18,7 @@ $langStudentResults = "Students\' scores";
 $langExerciseType = "Test type";
 $langExerciseName = "Test name";
 $langExerciseDescription = "Test description + image or audio or video";
-$langSimpleExercise = "All questions on one page
-";
+$langSimpleExercise = "All questions on one page";
 $langSequentialExercise = "One question per page (sequential)";
 $langRandomQuestions = "Random questions";
 $langGiveExerciseName = "Please give the test name";

@@ -66,8 +66,7 @@ $langQuestionList = "Lista pyta&#324; w te&#347;cie";
 $langMoveUp = "Przenie&#347; wy&#380;ej";
 $langMoveDown = "Przenie&#347; ni&#380;ej";
 $langGetExistingQuestion = "Pobierz pytanie z innego testu";
-$langFinishTest = "Test ko&#324;cowy
-";
+$langFinishTest = "Test ko&#324;cowy";
 $langQuestionPool = "Pula pyta&#324;";
 $langOrphanQuestions = "Pytania bez przydzia&#322;u";
 $langNoQuestion = "Nie ma pyta&#324;";

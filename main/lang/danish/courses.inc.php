@@ -8,8 +8,7 @@ $lang_course_not_available                  = "Kurset er ikke tilgængeligt eller
 $lang_enroll                                = "Tilmeld";
 $lang_enroll_to_a_new_course                = "Tilmelding til et nyt kursus";
 $lang_my_present_course_list                = "Min kursusoversigt";
-$lang_no_course_to_enroll_in_this_category  = "Der er ikke muligt at tilmelde sig kurser i denne kategori
-";
+$lang_no_course_to_enroll_in_this_category  = "Der er ikke muligt at tilmelde sig kurser i denne kategori";
 $lang_or_search_from_the_course_code        = "Eller søg efter kursuskoden";
 $lang_search                                = "Søg";
 $lang_select_course_among_categories        = "Vælg kursus mellem kategorierne";

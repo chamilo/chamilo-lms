@@ -13,13 +13,11 @@ $MemberManager = "Membromastrumado";
 $PostFullText = "Teksto";
 $ReadPost = "Legi &#265;i tiun artikolon";
 $Home = "Komenco";
-$FirstPostText = "&#264;i tio estas unua artikolo en &#265;i tiu blogo!
-&#264;iu ali&#285;intao por tiu blogo povas partopreni.";
+$FirstPostText = "&#264;i tio estas unua artikolo en &#265;i tiu blogo!&#264;iu ali&#285;intao por tiu blogo povas partopreni.";
 $NewComment = "Aldoni komenton";
 $ReplyToThisComment = "Aldoni komenton al &#265;i tiu komento";
 $ManageTasks = "Tekstomastrumado en &#265;i tiu blogo";
-$ManageMembers = "Enskribi / malenstribi uzanton por &#265;i tiu blogo
-";
+$ManageMembers = "Enskribi / malenstribi uzanton por &#265;i tiu blogo";
 $Register = "Enskribi en &#265;i tiun blogon";
 $UnRegister = "Malenskribi sin el &#265;i tiu blogo";
 $SubscribeMembers = "Enskribi uzantojn";

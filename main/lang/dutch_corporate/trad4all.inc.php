@@ -415,8 +415,7 @@ $AccessToFaq = "Toegang tot de FAQ (veelgestelde vragen)";
 $Faq = "Veelgestelde vraag (FAQ)";
 $RemindInactivesLearnersSince = "Waarschuw gebruikers inactief sinds 7 dagen";
 $RemindInactiveLearnersMailSubject = "Inactiviteit op %s";
-$RemindInactiveLearnersMailContent = "Beste gebruiker,<br /><br /> u arnot actief op demo.dokeos.com sinds meer dan %s dagen.
-";
+$RemindInactiveLearnersMailContent = "Beste gebruiker,<br /><br /> u arnot actief op demo.dokeos.com sinds meer dan %s dagen.";
 $UploadMaxSize = "Maximum uploadvolume";
 $Unknown = "Onbekend";
 $MoveUp = "Naar boven";

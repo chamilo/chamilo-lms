@@ -91,8 +91,7 @@ $lang_resource = "&#928;&#972;&#961;&#959;&#962;";
 $lang_resources = "&#928;&#972;&#961;&#959;&#953;";
 $langNameOfLang['arabic'] = "αραβικά";
 $langNameOfLang['brazilian'] = "Βραζιλιάνικα";
-$langNameOfLang['bulgarian']
- = "βουλγαρικά";
+$langNameOfLang['bulgarian'] = "βουλγαρικά";
 $langNameOfLang['croatian'] = "κροατικά";
 $langNameOfLang['danish'] = "δανικά";
 $langNameOfLang['dutch'] = "ολλανδικά";

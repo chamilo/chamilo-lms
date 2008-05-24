@@ -236,8 +236,7 @@ $No = "Ne";
 $ShowToolShortcutsTitle = "Pre&#269;aci do alata";
 $ShowToolShortcutsComment = "Prikaži pre&#269;ace do alata u banneru";
 $ShowStudentViewTitle = "Prikaz za studente";
-$ShowStudentViewComment = "Omogu&#263;i prikaz za studente?
-Ova mogu&#263;nost dopušta predava&#269;u da vidi ono što može vidjeti student.";
+$ShowStudentViewComment = "Omogu&#263;i prikaz za studente?Ova mogu&#263;nost dopušta predava&#269;u da vidi ono što može vidjeti student.";
 $AllowGroupCategories = "Kategorije skupina";
 $AllowGroupCategoriesComment = "Omogu&#263;i nadzorniku kolegija da izradi kategorije u modulu skupine?";
 $PlatformLanguageComment = "Možete odrediti jezike platforme na razli&#269;itim dijelovima nadzora platforme:  <a href=\"languages.php\">Jezici platforme Dokeos</a>";

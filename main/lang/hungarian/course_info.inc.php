@@ -64,8 +64,7 @@ $langSubscription = "Feliratkozás";
 $langCourseAccess = "Kurzus elérés";
 $langConfirmBackup = "Valóban akar biztonsági másolatot készíteni a kurzusról ?";
 $langCreateSite = "Kurzus létrehozása";
-$langRestoreDescription = "A kurzus egy acrhív file-ban található, lenn tudja kiválasztani.<br><br>
-Ha a \"Visszaállít\"-ra kattint, az archív kicsomagolódik és a kurzus vissza lesz állítva.";
+$langRestoreDescription = "A kurzus egy acrhív file-ban található, lenn tudja kiválasztani.<br><br>Ha a \"Visszaállít\"-ra kattint, az archív kicsomagolódik és a kurzus vissza lesz állítva.";
 $langRestoreNotice = "A szkript jelenleg nem támogatja a felhasználók visszaállítását, de a\"users.csv\"-ben elmentett adatok elegendõek ahhoz, hogy az adminisztrátor kézzel visszaállítsa õket.";
 $langAvailableArchives = "Elérhet&#337; archívumok listája";
 $langNoArchive = "Nincs archív kiválasztva";

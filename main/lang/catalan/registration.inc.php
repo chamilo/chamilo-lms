@@ -18,8 +18,7 @@ $langIfYouWantToAddManyUsers = "Si vols afegir una llista d\'usuaris en el teu c
 $langPassTooEasy = "aquest password és massa simple. Utilitza un password com aquest ";
 $langGroupUserManagement = "Gestió de grups";
 $langAddedToCourse = "ja es troba enregistrat al campus però no en aquest curs. S\'ha fet ara. ";
-$langUserAlreadyRegistered = "Ja existeix un/a usuari/a amb el mateix nom/cognom enregistrat
-			en aquest curs. No pots enregistrar-lo/a dues vegades.";
+$langUserAlreadyRegistered = "Ja existeix un/a usuari/a amb el mateix nom/cognom enregistrat			en aquest curs. No pots enregistrar-lo/a dues vegades.";
 $langBackUser = "Retorna a llista d\'usuaris";
 $langUserOneByOneExplanation = "Ell o (ella) rebrà confirmació per e-mail amb nom d\'usuari i password";
 $langGiveTutor = "Fes tutor";
@@ -28,19 +27,13 @@ $langGiveAdmin = "Fes admin";
 $langUserNumber = "número";
 $langDownloadUserList = "Puja llista";
 $langSend = "Envia";
-$langUserAddExplanation = "cada linia de fitxer a enviar ha d\'incloure de forma necessaria i
-		única 5 camps: <b>Nom   Cognom   
-		Usuari   Password 
-		  E-mail</b> separats per tabuladors i en aquest ordre.
-		Els usuaris rebran un e-mail de confirmació amb els seus nom d\'usuari/password.";
+$langUserAddExplanation = "cada linia de fitxer a enviar ha d\'incloure de forma necessaria i		única 5 camps: <b>Nom   Cognom   		Usuari   Password 		  E-mail</b> separats per tabuladors i en aquest ordre.		Els usuaris rebran un e-mail de confirmació amb els seus nom d\'usuari/password.";
 $langUserMany = "Importa llista d\'usuaris a través d\'un fitxer de text";
 $langOneByOne = "Afegeix un usuari manualment";
 $langNow = "ara";
 $langTutor = "Tutor";
 $langTitular = "Autor";
-$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Modifica llistat de cursos</big><br><br>
-Selecciona els cursos que vols seguir.<br>
-Deselecciona els que ja no vols seguir.<br> I punxa sobre D\'acord a sota de la llista";
+$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Modifica llistat de cursos</big><br><br>Selecciona els cursos que vols seguir.<br>Deselecciona els que ja no vols seguir.<br> I punxa sobre D\'acord a sota de la llista";
 $langStudent = "estudiant";
 $langAddAU = "Afegeix un usuari";
 $langAddedU = "ha estat afegit. S\'ha enviat un e-mail per donar-li el seu nom d\'usuari ";

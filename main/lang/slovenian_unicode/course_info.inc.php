@@ -64,8 +64,7 @@ $langSubscription = "Prijava";
 $langCourseAccess = "Dostop do tečaja";
 $langConfirmBackup = "Ali resnično želiš tvoriti rezervno kopijo tečaja";
 $langCreateSite = "Tvori spletno stran tečaja";
-$langRestoreDescription = "Tečaj je v arhivski datoteki, ki jo lahko spodaj izbereš.<br><br>
-Po kliku na \"Obnovi\", se bo arhivska datoteka dekompresirala in tečaj bo obnovljen.";
+$langRestoreDescription = "Tečaj je v arhivski datoteki, ki jo lahko spodaj izbereš.<br><br>Po kliku na \"Obnovi\", se bo arhivska datoteka dekompresirala in tečaj bo obnovljen.";
 $langRestoreNotice = "Ta skript ne omogoča avtomatičnega obnavljanja uporabnikov, vendar podatki, shranjeni v \"users.csv\" zadoščajo administratorju za ročno obnovitev.";
 $langAvailableArchives = "Seznam dostopnih arhivov";
 $langNoArchive = "Arhiv ni bil izbran";

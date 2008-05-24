@@ -187,8 +187,7 @@ $ClickNumber = "Número de clics";
 $HotspotGiveAnswers = "Por favor, responda";
 $Addlimits = "Engadir límites";
 $AreYouSure = "Está seguro";
-$StudentScore = " 	
-Puntuación do estudante/s";
+$StudentScore = " 	Puntuación do estudante/s";
 $backtoTesthome = "Volver á páxina principal do exercicio";
 $Feedback = "Feedback";
 $MarkIsUpdated = "A nota foi actualizada";

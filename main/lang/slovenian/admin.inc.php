@@ -383,8 +383,7 @@ $UserListHasBeenExported = "Seznam teËajnikov je bil izvoûen.";
 $ClickHereToDownloadTheFile = "Kliknite tukaj za prepis datoteke s platforme.";
 $administratorTelephoneTitle = "Upravitelj platforme: Telefon";
 $administratorTelephoneComment = "Telefonska ötevilka upravitelja platforme";
-$SendMailToNewUser = "Poölji sporoËilo novemu uporabniku
-";
+$SendMailToNewUser = "Poölji sporoËilo novemu uporabniku";
 $ExtendedProfileTitle = "Razöirjen profil";
 $ExtendedProfileComment = "Z omogoËeno nastavitvijo (\'True\'), uporabnik lahko izpolni (opcija) öe naslednja vnosna polja: \'Moje kvalifikacije\', \'Kaj lahko uËim\' in \'Osebna interesna podroËja\'";
 $Classes = "Razredi";
@@ -462,11 +461,9 @@ $langConfigureExtensions = "Nastavitev razöiritev";
 $langConfigureExtensions = "Nastavitev storitev";
 $langActiveExtensions = "Aktiviraj to storitev";
 $langVisioconf = "Visio-konferenca";
-$langVisioconfDescription = "Dokeos Live ConferencingÆ je standardno orodje, namenjeno videokonferencam, in ponuja: prikaz diapozitivov, belo tablo (whiteboard) za risanje in pisanje, dvosmeren avdio in video prenos, klepet. Zahteva le FlashÆ predvajalnik in dovoljuje uporabo treh razliËnih naËinov interakcije : ena-na-ena, ena-na-veË in veË-z-veËimi.
-";
+$langVisioconfDescription = "Dokeos Live ConferencingÆ je standardno orodje, namenjeno videokonferencam, in ponuja: prikaz diapozitivov, belo tablo (whiteboard) za risanje in pisanje, dvosmeren avdio in video prenos, klepet. Zahteva le FlashÆ predvajalnik in dovoljuje uporabo treh razliËnih naËinov interakcije : ena-na-ena, ena-na-veË in veË-z-veËimi.";
 $langPpt2lp = "Oogie-Woogie pretvornik";
-$langPpt2lpDescription = "Oogie-WoogieÆ je orodje za hitro izdelovanje/pretvorbo uËnih vsebin. OmogoËa pretvorbo predstavitev, izdelanih z MS PowerpointÆ, MS WordÆ dokumentov in njihovih OpenOfficeÆ ekvivalentov v SCORMÆ zdruûljive e-teËaje. Po izvedeni pretvorbi, lahko preko urejevalnika orodja UËne poti dodajate zvok posameznim stranem, dodate nove strani, teste, vaje, pa tudi interakcijske aktivnosti, kot so forumi, objave teËajnikov, ... . Pri tem spremenjene vsebine ostanejo SCORM zdruûljive. Sistem zdruûuje moË pretvorbe dokumentov OpenOffice in MS-Office + RED5 streûnika podatkovnega toka za snemanje zvoka + Dokeos orodij za upravljanje z uËnimi potmi.
-";
+$langPpt2lpDescription = "Oogie-WoogieÆ je orodje za hitro izdelovanje/pretvorbo uËnih vsebin. OmogoËa pretvorbo predstavitev, izdelanih z MS PowerpointÆ, MS WordÆ dokumentov in njihovih OpenOfficeÆ ekvivalentov v SCORMÆ zdruûljive e-teËaje. Po izvedeni pretvorbi, lahko preko urejevalnika orodja UËne poti dodajate zvok posameznim stranem, dodate nove strani, teste, vaje, pa tudi interakcijske aktivnosti, kot so forumi, objave teËajnikov, ... . Pri tem spremenjene vsebine ostanejo SCORM zdruûljive. Sistem zdruûuje moË pretvorbe dokumentov OpenOffice in MS-Office + RED5 streûnika podatkovnega toka za snemanje zvoka + Dokeos orodij za upravljanje z uËnimi potmi.";
 $langBandWidthStatistics = "Statistika izrabe pasovne öirine";
 $langBandWidthStatisticsDescription = "MRTG omogoËa vpogled na napredno statistiko stanja streûnika v zadnjih 24-tih urah.";
 $ServerStatistics = "Statistike streûnika";
@@ -689,8 +686,7 @@ $OpenIdAuthenticationComment = "OmogoËi OpenID URL bazirajoËo avtentifikacijo (p
 $VersionCheckEnabled = "Preverjanje verzije omogoËeno";
 $InstallDirAccessibleSecurityThreat = "Namestitvena mapa main/install vaöega Dokeos sistema je öe vedno dostopna spletnim uporabnikom. To lahko predstavlja varnostno groûnjo sistemu. PriporoËamo, da mapo odstranite ali spremenite dostopne pravice, da spletni uporabniki ne bodo imeli moûnosti dostopa do namestitvenih datotek vsebovanih v tej mapi.";
 $GradebookActivation = "Aktivacija orodja redovalnice";
-$GradebookActivationComment = "OmogoËanje orodja redovalnice dodaja moûnost povezovanja uËnih ciljev z ocenami. V primeru, da redovalnice ne potrebujete in je orodje aktivirano, le to lahko vnaöa nepotrebno kompleksnost in nepreglednost v uporabiöki vmesnik.
-éelite aktivirati to orodje ?";
+$GradebookActivationComment = "OmogoËanje orodja redovalnice dodaja moûnost povezovanja uËnih ciljev z ocenami. V primeru, da redovalnice ne potrebujete in je orodje aktivirano, le to lahko vnaöa nepotrebno kompleksnost in nepreglednost v uporabiöki vmesnik.éelite aktivirati to orodje ?";
 $UserTheme = "Tema (predloga)";
 $UserThemeSelection = "Uporabnikova izbira teme";
 $UserThemeSelectionComment = "Dovoljuje uporabniku uporabo izbrane teme v njegovem profilu. Izbira teme menja izgled Dokeos platforme za posameznika, pri tem pa privzete teme portala ne spremeni. V primeru, da ima posamezen teËaj ali posamezna seja nastavljeno specifiËno temo, ta tema prevlada nad uporabnikovo izbrano temo.";
@@ -732,14 +728,7 @@ $FieldPossibleValues = "Moûne vrednosti";
 $FieldPossibleValuesComment = "Le za ponavljajoËa se polja, loËena s podpiËçjem (;)";
 $FieldTypeDate = "Datum";
 $FieldTypeDatetime = "Datum in Ëas";
-$UserFieldsAddHelp = "Dodajanje uporabniökih polj je preprosto:<br />
-- izberite besedo, identifikator, ki ga sestavljajo male Ërke<br />
-- izberite tip,<br />
-- izberite besedilo, ki se bo prikazalo uporabniku (Ëe boste uporabili besedo, ki predstavlja Dokeos jezikovno spremenljivko, kot sta npr. BirthDate ali UserSex, se bo ta avtomatiËno prevedla v poljuben jezik),<br />
-- v primeru, da izberete tip z veËkratnimi vrednostmi odgovorov (izbirni gumbi, izbira, veËkratna izbira), podajte vse moûnosti izbire (v primeru rabe jezikovnih spremenljivk Dokeos, bo priölo do avtomatiËnega prevoda), loËene z znakom za podpiËje,<br />
-- za besedilne tipe lahko podate privzete vrednosti.
-<br /><br />
-Na koncu dodajte polje in izberite enega od naËinov vidnosti in spremenljivosti. Spremenljivo polje, ki ni vidno, je neuporabno. ";
+$UserFieldsAddHelp = "Dodajanje uporabniökih polj je preprosto:<br />- izberite besedo, identifikator, ki ga sestavljajo male Ërke<br />- izberite tip,<br />- izberite besedilo, ki se bo prikazalo uporabniku (Ëe boste uporabili besedo, ki predstavlja Dokeos jezikovno spremenljivko, kot sta npr. BirthDate ali UserSex, se bo ta avtomatiËno prevedla v poljuben jezik),<br />- v primeru, da izberete tip z veËkratnimi vrednostmi odgovorov (izbirni gumbi, izbira, veËkratna izbira), podajte vse moûnosti izbire (v primeru rabe jezikovnih spremenljivk Dokeos, bo priölo do avtomatiËnega prevoda), loËene z znakom za podpiËje,<br />- za besedilne tipe lahko podate privzete vrednosti.<br /><br />Na koncu dodajte polje in izberite enega od naËinov vidnosti in spremenljivosti. Spremenljivo polje, ki ni vidno, je neuporabno. ";
 $AllowCourseThemeTitle = "Dovoli teme teËaja";
 $AllowCourseThemeComment = "Dovoljenje za izbiranje teme teËaja omogoËa izbiro poljubne teme izmed tistih, ki so dosegljive znotraj Dokeos. Ko uporabnik vstopi v teËaj, je izbrana tema teËaja prioritetna uporabnikovi temi in privzeti temi platforme.";
 $DisplayMiniMonthCalendarTitle = "Prikaûi koledarËek v orodju Agende";

@@ -123,8 +123,7 @@ $lang_modify_resource = "Modyfikuj / Dodaj zasoby";
 $lang_resource = "Zasób";
 $lang_resources = "Zasoby";
 $langNameOfLang['arabic'] = "arabski";
-$langNameOfLang['bulgarian']
- = "bu&#322;garski";
+$langNameOfLang['bulgarian'] = "bu&#322;garski";
 $langNameOfLang['catalan'] = "katalo&#324;ski";
 $langNameOfLang['croatian'] = "chorwacki";
 $langNameOfLang['danish'] = "du&#324;ski";

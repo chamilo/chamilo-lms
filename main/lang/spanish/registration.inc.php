@@ -36,19 +36,13 @@ $langGiveAdmin = "Ser administrador";
 $langUserNumber = "número";
 $langDownloadUserList = "Subir lista";
 $langSend = "Enviar";
-$langUserAddExplanation = "Cada linea del archivo que envíe necesariamente tiene que incluir
-todos y cada uno de estos 5 campos (y ninguno más):  <b>Nombre   Apellidos   
-		Nombre de usuario   Contraseña 
-		  Correo Electrónico</b> separadas por tabuladores y en óste orden.
-		Los usuarios recibirán un correo de confirmación son su nombre de usuario y contraseña.";
+$langUserAddExplanation = "Cada linea del archivo que envíe necesariamente tiene que incluirtodos y cada uno de estos 5 campos (y ninguno más):  <b>Nombre   Apellidos   		Nombre de usuario   Contraseña 		  Correo Electrónico</b> separadas por tabuladores y en óste orden.		Los usuarios recibirán un correo de confirmación son su nombre de usuario y contraseña.";
 $langUserMany = "Importar lista de usuarios a través de un fichero .txt";
 $langOneByOne = "Añadir un usuario de forma manual";
 $langNow = "ahora";
 $langTutor = "Tutor";
 $langTitular = "Autor";
-$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Modificar lista de cursos</big><br><br>
-Seleccione los cursos en los que quiere inscribirse.<br>
-Quite la selección de los cursos en los que no desea seguir inscrito.<br> Luego haga clic en el botón Ok de la lista";
+$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Modificar lista de cursos</big><br><br>Seleccione los cursos en los que quiere inscribirse.<br>Quite la selección de los cursos en los que no desea seguir inscrito.<br> Luego haga clic en el botón Ok de la lista";
 $langStudent = "estudiante";
 $langImportUserList = "Importar una lista de usuarios";
 $langAddAU = "Añadir un usuario";
@@ -63,8 +57,7 @@ $langInC = "en este curso";
 $langRole = "Descripción";
 $UserPicture = "Foto";
 $langProfileReg = "Su nuevo perfil de usuario ha sido guardado";
-$langEmailWrong = "La dirección de correo electrónico que ha escrito está incompleta o
-contiene caracteres no válidos";
+$langEmailWrong = "La dirección de correo electrónico que ha escrito está incompleta ocontiene caracteres no válidos";
 $langUserTaken = "El nombre de usuario que ha elegido ya existe";
 $langFields = "No ha rellenado todos los campos";
 $langAgain = "¡ Comience de nuevo !";
@@ -87,12 +80,9 @@ Nombre de usuario:";
 $langYouAreReg = "Usted ha sido inscrito en";
 $langDear = "Estimado/a";
 $langYourReg = "Su registro en";
-$langUserFree = "El nombre de usuario que eligió ya existe.
-Use el botón de \'Atrás\' de su navegador y elija uno diferente.";
-$langEmptyFields = "No ha llenado todos los campos.
-Use el botón de \'Atrás\' de su navegador y vuelva a intentarlo.";
-$langPassTwice = "No ha escrito la misma contraseña en las dos ocasiones.
-Use el botón de \'Atrás\' de su navegador y vuelva a intentarlo.";
+$langUserFree = "El nombre de usuario que eligió ya existe.Use el botón de \'Atrás\' de su navegador y elija uno diferente.";
+$langEmptyFields = "No ha llenado todos los campos.Use el botón de \'Atrás\' de su navegador y vuelva a intentarlo.";
+$langPassTwice = "No ha escrito la misma contraseña en las dos ocasiones.Use el botón de \'Atrás\' de su navegador y vuelva a intentarlo.";
 $langRegAdmin = "Profesor (crear un curso)";
 $langRegStudent = "Estudiante (inscribirme en un curso)";
 $langConfirmation = "Confirme la contraseña";

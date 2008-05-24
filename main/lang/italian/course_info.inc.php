@@ -64,11 +64,8 @@ $langSubscription = "Iscrizione";
 $langCourseAccess = "Accesso al corso";
 $langConfirmBackup = "Volete veramente archiviare il corso?";
 $langCreateSite = "Crea un sito del corso";
-$langRestoreDescription = "Il corso è un file di archivio che si può selezionare dall\'elenco sottostante.<br><br>
-Premendo il tasto \"Ripristina\", l\'archivio verrà scompattato ricreando così il corso.";
-$langRestoreNotice = "Questa procedura non consente ancora di ripristinare automaticamente 
-l\'iscrizione degli utenti, ma i dati salvati in \"users.csv\" 
-sono sufficienti per consentire all\'Amministratore di effettuarne manualmente il ripristino.";
+$langRestoreDescription = "Il corso è un file di archivio che si può selezionare dall\'elenco sottostante.<br><br>Premendo il tasto \"Ripristina\", l\'archivio verrà scompattato ricreando così il corso.";
+$langRestoreNotice = "Questa procedura non consente ancora di ripristinare automaticamente l\'iscrizione degli utenti, ma i dati salvati in \"users.csv\" sono sufficienti per consentire all\'Amministratore di effettuarne manualmente il ripristino.";
 $langAvailableArchives = "Elenco degli archivi disponibili";
 $langNoArchive = "Non è stato selezionato alcun archivio";
 $langArchiveNotFound = "L\'archivio non è stato trovato";

@@ -129,8 +129,7 @@ $lang_resource = "Recurso";
 $lang_resources = "Recursos";
 $langNameOfLang['arabic'] = "árabe";
 $langNameOfLang['brazilian'] = "brasileño";
-$langNameOfLang['bulgarian']
- = "búlgaro";
+$langNameOfLang['bulgarian'] = "búlgaro";
 $langNameOfLang['catalan'] = "catalán";
 $langNameOfLang['croatian'] = "croata";
 $langNameOfLang['danish'] = "danés";
@@ -431,8 +430,7 @@ $SessionPast = "Pasada";
 $SessionActive = "Activa";
 $SessionFuture = "Todavía no ha comenzado";
 $DateFormatLongWithoutDay = "%d %B %Y";
-$InvalidDirectoryPleaseCreateAnImagesFolder = "Carpeta no válida: por favor cree una carpeta que se llame <i>images</i> en la herramienta documentos, para poder enviar a ella las imagenes que suba.
-";
+$InvalidDirectoryPleaseCreateAnImagesFolder = "Carpeta no válida: por favor cree una carpeta que se llame <i>images</i> en la herramienta documentos, para poder enviar a ella las imagenes que suba.";
 $UsersConnectedToMySessions = "Ver todos los usuarios conectados a mis sesiones";
 $DearUser = "Estimado usuario";
 $YourRegistrationData = "Estos son sus datos de acceso";

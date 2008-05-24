@@ -211,8 +211,7 @@ $langAnnouncementUpdated = "Announcement has been updated";
 $langAnnouncementDeleted = "Announcement has been deleted";
 $langContent = "Content";
 $PermissionsForNewFiles = "Permissions for new files";
-$PermissionsForNewFilesComment = "The ability to define the permissions settings to assign to every newly created file lets you improve security against attacks by hackers uploading dangerous content to your portal. The default setting (0550) should be enough to give your server a reasonable protection level. The given format uses the UNIX terminology of Owner-Group-Others with Read-Write-Execute permissions.
-If you use Oogie, take care that the user who launch OpenOffice can write files in the course folder.";
+$PermissionsForNewFilesComment = "The ability to define the permissions settings to assign to every newly created file lets you improve security against attacks by hackers uploading dangerous content to your portal. The default setting (0550) should be enough to give your server a reasonable protection level. The given format uses the UNIX terminology of Owner-Group-Others with Read-Write-Execute permissions.If you use Oogie, take care that the user who launch OpenOffice can write files in the course folder.";
 $langStudent = "Student";
 $Guest = "Guest";
 $langLoginAsThisUserColumnName = "Login as";
@@ -538,8 +537,7 @@ $SubscribeUserIfNotAllreadySubscribed = "Subscribe user if he has\'nt allready s
 $UnsubscribeUserIfSubscriptionIsNotInFile = "Unsubscribe user if subscription is not in file";
 $DeleteSelectedSessions = "Delete selected sessions";
 $CourseListInSession = "Course list in this session";
-$UnsubscribeCoursesFromSession = "Unsubscribe selected courses from this session
-";
+$UnsubscribeCoursesFromSession = "Unsubscribe selected courses from this session";
 $NbUsers = "Users";
 $SubscribeUsersToSession = "Subscribe users to this session";
 $UserListInPlatform = "User list in the platform";

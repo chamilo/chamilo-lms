@@ -23,8 +23,7 @@ $langGroupMembers = "Gruppmedlemmar";
 $langEditGroup = "Redigera denna grupp";
 $Optional = "(frivillig)";
 $langGroupSettingsModified = "Gruppinställningar har modifierats";
-$langGroupTooMuchMembers = "Antal föreslagna överstiger max. som är tillåtet (du kan modifiera de nedan). 
-				Gruppsammansättningen har not inte ändrats";
+$langGroupTooMuchMembers = "Antal föreslagna överstiger max. som är tillåtet (du kan modifiera de nedan). 				Gruppsammansättningen har not inte ändrats";
 $langGroupTutor = "Lärare";
 $langGroupNoTutor = "(ingen)";
 $langGroupNone = "(ingen)";

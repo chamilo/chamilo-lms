@@ -8,8 +8,7 @@ $Objectives = "Objektiviteter";
 $ObjectivesInformation = "Presentation av det globala och detaljerade mål för kursen.";
 $ObjectivesQuestions = "Vad kommer användarna att kunna efter kursen? Vad inbjuds de att göra under kursen?";
 $Topics = "Ämnen";
-$TopicsInformation = "Lista på ämnen som ingår i kursen. Hur viktigt är varje ämne.
-Svårighetsnivå. Struktur och intern avhängighet av olika delar.";
+$TopicsInformation = "Lista på ämnen som ingår i kursen. Hur viktigt är varje ämne.Svårighetsnivå. Struktur och intern avhängighet av olika delar.";
 $TopicsQuestions = "Hur fortskrider kursen? var skall användarna fästa speciell uppmärksamhet? Är det identifierade problem med förståelsen av olika kapitel? Hur mycket tid skall avsättas till de olika kurserna?";
 $Methodology = "Metod";
 $MethodologyQuestions = "Vilken metod och aktiviteter kan hjälpa till att nå målen i kursen? Isåfall, vilket schema?";

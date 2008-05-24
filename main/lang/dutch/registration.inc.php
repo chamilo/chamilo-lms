@@ -10,10 +10,7 @@ $langUpdateImage = "Wijzig foto";
 $langImageWrong = "De bestandsgrootte voor de foto moet kleiner zijn dan";
 $langAddImage = "Foto";
 $langCourseManager = "Cursusbeheerder";
-$password_request = "U heeft gevraagd om uw wachtwoord op te sturen.
-Indien u dit niet gedaan heeft, negeer deze mail.
-
-Om uw wachtwoord te resetten, klik op de resetlink.";
+$password_request = "U heeft gevraagd om uw wachtwoord op te sturen.Indien u dit niet gedaan heeft, negeer deze mail.Om uw wachtwoord te resetten, klik op de resetlink.";
 $YourPasswordHasBeenEmailed = "Uw wachtwoord werd u doorgestuurd per e-mail.";
 $lang_enter_email_and_well_send_you_password = "Geef het e-mailadres waarmee u registreerde en wij sturen u een nieuw wachtwoord.";
 $langLogin = "Inloggen";
@@ -39,16 +36,13 @@ $langGiveAdmin = "Tot beheerder benoemen";
 $langUserNumber = "aantal";
 $langDownloadUserList = "Lijst opsturen";
 $langSend = "Opsturen";
-$langUserAddExplanation = "Elke lijn van het bestand dat opgestuurd wordt, moet uit exact deze 5 velden bestaan: <b>Naam   Voornaam   
-		Gebruikersnaam   Wachtwoord 
-		  E-mail</b> door tabs gescheiden en in deze volgorde. De gebruikers zullen hun gebruikersnaam en wachtwoord per e-mail krijgen.";
+$langUserAddExplanation = "Elke lijn van het bestand dat opgestuurd wordt, moet uit exact deze 5 velden bestaan: <b>Naam   Voornaam   		Gebruikersnaam   Wachtwoord 		  E-mail</b> door tabs gescheiden en in deze volgorde. De gebruikers zullen hun gebruikersnaam en wachtwoord per e-mail krijgen.";
 $langUserMany = "Gebruikerslijst importeren via een tekstbestand";
 $langOneByOne = "Gebruiker manueel toevoegen";
 $langNow = "nu";
 $langTutor = "Begeleider (groepen)";
 $langTitular = "Lesgevers";
-$langAddHereSomeCourses = "<font size=2 face=\'arial, helvetica\'><big>Mijn cursussen</big><br /><br />
-Duid de cursussen aan die u wenst te volgen en degene die u niet meer wenst te volgen (niet mogelijk voor de cursussen waarvan u beheerder bent). Klik dan op \'Ok\' onder de lijst.";
+$langAddHereSomeCourses = "<font size=2 face=\'arial, helvetica\'><big>Mijn cursussen</big><br /><br />Duid de cursussen aan die u wenst te volgen en degene die u niet meer wenst te volgen (niet mogelijk voor de cursussen waarvan u beheerder bent). Klik dan op \'Ok\' onder de lijst.";
 $langStudent = "student";
 $langImportUserList = "Importeer een lijst van gebruikers";
 $langAddAU = "Gebruikers toevoegen";

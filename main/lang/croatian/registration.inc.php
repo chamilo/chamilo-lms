@@ -42,9 +42,7 @@ $langOneByOne = "Ru&#269;no dodaj korisnika";
 $langNow = "sad";
 $langTutor = "Tutor";
 $langTitular = "Autor";
-$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Izmijeni popis kolegija</big><br><br>
-Prijavite predmete koje želite pratiti.<br>
-Odjavite one koje više ne želite pratiti.<br> Tada kliknite U redu na dnu popisa";
+$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Izmijeni popis kolegija</big><br><br>Prijavite predmete koje želite pratiti.<br>Odjavite one koje više ne želite pratiti.<br> Tada kliknite U redu na dnu popisa";
 $langStudent = "student";
 $langImportUserList = "Prijenos popisa korisnika";
 $langAddAU = "Dodaj korisnika";

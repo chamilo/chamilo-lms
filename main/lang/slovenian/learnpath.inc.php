@@ -174,8 +174,7 @@ $CreateANewForum = "Ustvari nov forum";
 $LinkAdd = "Dodaj povezavo";
 $WoogieConversionPowerPoint = "Woogie : pretvorba datotek oblike MS Word";
 $WelcomeWoogieSubtitle = "Pretvorba Word datotek v uËno pot";
-$WelcomeWoogieConverter = "
-Dobrodoöli v pretvorniku Woogie<ul type=\\\"1\\\"><li>Izberite datoteko .doc, .sxw, .odt<li>Naloûite jo v Woogie. Datoteka bo pretvorjena v SCORM uËno pot.<li>Nato boste imeli moûnost dodati zvoËne komentarje na vsako izmed strani, vstaviti vaje in druge aktivnosti med stranmi. </ul>";
+$WelcomeWoogieConverter = "Dobrodoöli v pretvorniku Woogie<ul type=\\\"1\\\"><li>Izberite datoteko .doc, .sxw, .odt<li>Naloûite jo v Woogie. Datoteka bo pretvorjena v SCORM uËno pot.<li>Nato boste imeli moûnost dodati zvoËne komentarje na vsako izmed strani, vstaviti vaje in druge aktivnosti med stranmi. </ul>";
 $WoogieError = "Napaka med pretvorbo Word dokumenta. Preverite, da v imena datotek ne vsebujejo posebnih zankov, ...";
 $WordConvert = "Pretvorba Word datotek";
 $Order = "Urejenost";
@@ -189,10 +188,9 @@ $SplitStepsPerPage = "Korak na stran";
 $SplitStepsPerChapter = "Korak na poglavje";
 $TakeSlideName = "Uporabi imena diapozitivov za imena korakov uËne poti";
 $CannotConnectToOpenOffice = "Poveza s pretvornikom dokumentov ni uspela. Prosimo, da se za reöitev problema obrnete na upravitelja platforme.";
-$OogieConversionFailed = "Pretvorba ni uspela. <br />
-Nekateri dokumenti so prekompleksni, da bi se jih dalo avtomatiËçno pretvoriti.";
-$OogieUnknownError = "Pretvorba iz neznanega razloga ni uspela.<br />
-Prosimo, da se za podrobnejöo informacijo brnete na upravitelja platforme.";
+$OogieConversionFailed = "Pretvorba ni uspela. <br />Nekateri dokumenti so prekompleksni, da bi se jih dalo avtomatiËçno pretvoriti.";
+$OogieUnknownError = "Pretvorba iz neznanega razloga ni uspela.<br />Prosimo, da se za podrobnejöo informacijo brnete na upravitelja platforme.";
 $OogieBadExtension = "Vaöa datoteka nima ustrezne konËnice.";
 $WoogieBadExtension = "Prosimo, da nalagate zgolj besedilne dokumente s konËnicami .doc, .docx ali .odt";
+$ShowAudioRecorder = "Prikaûi snemalnik zvoka";
 ?>

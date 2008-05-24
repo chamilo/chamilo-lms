@@ -334,8 +334,7 @@ $NotAllowedToUnsubscribe = "ไม่อนุญาต";
 $AddDummyContentToCourse = "เพิ่มผังรายการเนื้อหา(ตัวอย่าง)ในรายวิชา";
 $DummyCourseCreator = "สร้างผังรายการเนื้อหาวิชา";
 $DummyCourseDescription = "จะเป็นการเพิ่มผังรายการเนื้อหา(ตัวอย่าง)เข้าไปในรายวิชา : เพื่อทดสอบดูเท่านั้น";
-$AvailablePlugins = "นี่คือรายการโปรแกรมเสริม(plugins)ที่มีติดตั้งอยู่ในระบบ 
-คุณสามารถทำการโอนไฟล์ลงมาติดตั้งเพิ่มเติมได้จาก<a href=\"http://www.dokeos.com/extensions/index.php?section=plugins\">http://www.dokeos.com/extensions/index.php?section=plugins</a>";
+$AvailablePlugins = "นี่คือรายการโปรแกรมเสริม(plugins)ที่มีติดตั้งอยู่ในระบบ คุณสามารถทำการโอนไฟล์ลงมาติดตั้งเพิ่มเติมได้จาก<a href=\"http://www.dokeos.com/extensions/index.php?section=plugins\">http://www.dokeos.com/extensions/index.php?section=plugins</a>";
 $CreateVirtualCourse = "สร้างรายวิชาเสมือน";
 $DisplayListVirtualCourses = "แสดงรายชื่อรายวิชาเสมือน";
 $LinkedToRealCourseCode = "เชื่อมสู่รหัสวิชาจริง : Linked to real course code";

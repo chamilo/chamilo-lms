@@ -626,11 +626,8 @@ $UploadExtensionsReplaceByComment = "Enter the extension that you want to use to
 $Remove = "Flyt";
 $Rename = "Omdøb";
 $ShowNumberOfCoursesComment = "Vis antallet af kurser under hver kategori i kategorioversigten på startsiden";
-$EphorusDescription = "Start using the Ephorus anti plagiarism service in Dokeos.
-With Ephorus, you will prevent internet plagiarism without any additional effort.
-You can use our unique open standard webservice to build your own integration or you can use one of our Dokeos-integration modules. ";
-$EphorusLeadersInAntiPlagiarism = "Leaders in 
-anti plagiarism ";
+$EphorusDescription = "Start using the Ephorus anti plagiarism service in Dokeos.With Ephorus, you will prevent internet plagiarism without any additional effort.You can use our unique open standard webservice to build your own integration or you can use one of our Dokeos-integration modules. ";
+$EphorusLeadersInAntiPlagiarism = "Leaders in anti plagiarism ";
 $EphorusClickHereForInformationsAndPrices = "Klik her for flere oplysninger og priser";
 $NameOfTheSession = "Navn på session";
 $NoSessionsForThisUser = "Denne bruger er (ikke) tilmeldt en session";

@@ -36,8 +36,7 @@ $langCsvFileLine1 = "... - 1a linio = ";
 $langCsvLinesFailed = "linio(j) ne importitaj (ne \'URL\' a&#365; ne \'titolo\'). ";
 $langCsvLinesOld = "ekzistanta(j) ligilo(j) modifitaj (sama \'URL\' kaj \'kategorio\'). ";
 $langCsvLinesNew = "nova(j) ligilo(j) kreita(j).";
-$langCsvExplain = "La dosiero aspektu jene, kun anglalingva kolumnonomoj: <blockquote><pre> <b>URL</b>;category;<b>title</b>;description; <b>http://www.aaa.org/...</b>;Important links;<b>Name 1</b>;Description 1; <b>http://www.bbb.net/...</b>;;<b>Name 2</b>;\"Description 2\"; </pre></blockquote> Kiam  jam ekzistas ligilo kun sama \'URL\' kaj \'category\', tiam \'title\' kaj \'description\' estas modifataj. En &#265;iuj aliaj kazoj nova ligilo estas farata.<br><br> Grase = devigate. La sekvanta linio estas libera, anka&#365; la usklado. Kromaj kampoj estas aldonataj &#265;e  \'description\'. Apartigi kolumnojn per komo a&#365; punktokomo. Enhavo povas aperi inter citiloj, kampnomoj ne. Kelkaj [b]HTML tags[/b] estas rekonataj en la kampo \'description\'. 
-";
+$langCsvExplain = "La dosiero aspektu jene, kun anglalingva kolumnonomoj: <blockquote><pre> <b>URL</b>;category;<b>title</b>;description; <b>http://www.aaa.org/...</b>;Important links;<b>Name 1</b>;Description 1; <b>http://www.bbb.net/...</b>;;<b>Name 2</b>;\"Description 2\"; </pre></blockquote> Kiam  jam ekzistas ligilo kun sama \'URL\' kaj \'category\', tiam \'title\' kaj \'description\' estas modifataj. En &#265;iuj aliaj kazoj nova ligilo estas farata.<br><br> Grase = devigate. La sekvanta linio estas libera, anka&#365; la usklado. Kromaj kampoj estas aldonataj &#265;e  \'description\'. Apartigi kolumnojn per komo a&#365; punktokomo. Enhavo povas aperi inter citiloj, kampnomoj ne. Kelkaj [b]HTML tags[/b] estas rekonataj en la kampo \'description\'. ";
 $langLinkUpdated = "La ligilo estas &#285;isdatigita ";
 $langAll_Link_Deleted = "Ligilo estas forigita ";
 $langOnHomepage = "En startpa&#285;o ";

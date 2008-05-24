@@ -23,8 +23,7 @@ $langGroupMembers = "Anggota Group";
 $langEditGroup = "Edit group ini";
 $Optional = "(optional)";
 $langGroupSettingsModified = "Seting Group diubah";
-$langGroupTooMuchMembers = "Jumlah yang diusulkan melebihi jumlah max yang anda ijinkan (anda dapat mengubahnya di bawah ini). 
-				Komoposisi Group belum diubah";
+$langGroupTooMuchMembers = "Jumlah yang diusulkan melebihi jumlah max yang anda ijinkan (anda dapat mengubahnya di bawah ini). 				Komoposisi Group belum diubah";
 $langGroupTutor = "Tutor";
 $langGroupNoTutor = "(tidak ada)";
 $langGroupNone = "(tidak ada)";

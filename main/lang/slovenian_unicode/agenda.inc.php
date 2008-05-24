@@ -53,4 +53,15 @@ $CopiedAsAnnouncement = "Kopirano kot obvestilo";
 $NewAnnouncement = "Novo obvestilo";
 $AddAnnouncement = "Dodano kot obvestilo";
 $UpcomingEvent = "Prihajajoč dogodek";
+$ListView = "Prikaži kot seznam";
+$RepeatedEvent = "Ponovljiv dogodek";
+$RepeatType = "Vrsta ponovljivosti";
+$RepeatDaily = "Dnevni";
+$RepeatWeekly = "Tedenski";
+$RepeatMonthlyByDate = "Mesečni, po datumu";
+$RepeatMonthlyByDay = "Mesečni, po dnevih";
+$RepeatMonthlyByDayR = "Mesečni, po dnevih, omejen";
+$RepeatYearly = "Letni";
+$RepeatEnd = "Datum konca ponovitev";
+$RepeatedEventViewOriginalEvent = "Poglej začetni dogodek";
 ?>

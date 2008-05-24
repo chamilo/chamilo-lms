@@ -23,8 +23,7 @@ $langGroupMembers = "Membros do grupo";
 $langEditGroup = "Alterar este grupo";
 $Optional = "(opcional)";
 $langGroupSettingsModified = "Características do grupo modificadas";
-$langGroupTooMuchMembers = "O número proposto ultrapassa o máximo autorizado (pode modificá-lo em baixo). 
-				A composição do grupo não foi modificada";
+$langGroupTooMuchMembers = "O número proposto ultrapassa o máximo autorizado (pode modificá-lo em baixo). 				A composição do grupo não foi modificada";
 $langGroupTutor = "Orientador do grupo";
 $langGroupNoTutor = "(nenhum)";
 $langGroupNone = "(nenhum)";

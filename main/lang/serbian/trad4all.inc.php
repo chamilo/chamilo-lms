@@ -49,10 +49,8 @@ $langDelete = "Obriši";
 $langInvisible = "Napravi nevidljivim";
 $langSave = "Snimi";
 $langMove = "Premesti";
-$Help = "Pomo&#263;
-";
-$langOk = "OK
-";
+$Help = "Pomo&#263;";
+$langOk = "OK";
 $langAdd = "Dodaj";
 $langAddIntro = "Dodaj uvodni tekst";
 $langBackList = "Vrati se na listu";
@@ -93,8 +91,7 @@ $lang_resource = "Resurs";
 $lang_resources = "Resursi";
 $langNameOfLang['arabic'] = "arapski";
 $langNameOfLang['brazilian'] = "brazilski";
-$langNameOfLang['bulgarian']
- = "bugarski";
+$langNameOfLang['bulgarian'] = "bugarski";
 $langNameOfLang['catalan'] = "katalonski";
 $langNameOfLang['croatian'] = "hrvatski";
 $langNameOfLang['danish'] = "danski";

@@ -64,8 +64,7 @@ $langSubscription = "Inschrijvingen";
 $langCourseAccess = "Cursustoegang";
 $langConfirmBackup = "Wilt u de cursussite echt back-uppen?";
 $langCreateSite = "Cursussite aanmaken";
-$langRestoreDescription = "De cursus bevindt zich in een archiefbestand dat u hieronder kunt selecteren.<br /><br />
-Wanneer u op \"Herstel\" drukt, zal het archief gedecomprimeerd worden en de cursus heraangemaakt.";
+$langRestoreDescription = "De cursus bevindt zich in een archiefbestand dat u hieronder kunt selecteren.<br /><br />Wanneer u op \"Herstel\" drukt, zal het archief gedecomprimeerd worden en de cursus heraangemaakt.";
 $langRestoreNotice = "Dit script laat niet toe om automatisch gebruikers te herstellen, maar gegevens die bewaard zijn in \"users.csv\" volstaan voor de administrator om het manueel te doen.";
 $langAvailableArchives = "Beschikbare archievenlijst";
 $langNoArchive = "Geen archief geselecteerd.";

@@ -12,9 +12,7 @@ $langUnsubscription = "Avsluta prenumeration";
 $langPrivOpen = "Privat åtkomst, registrering öppen";
 $langPrivate = "Privat åtkomst, registrering stängd (sajt tillgänglig bara för personer på <a href=../user/user.php>Användarlistan</a>)";
 $langForbidden = "Inte tillåtet";
-$langConfTip = "Som standard kommer din kurs att kunna nås av alla så länge som det är registrerade användare. I händelse av att du har något konfidentiellt, 
-det enklaste är att öppna registrering under
-en vecka, och be studenterna att de registrerar sig själva, därefter stänga registreringen och kontrollera användarlistan efter obehöriga.";
+$langConfTip = "Som standard kommer din kurs att kunna nås av alla så länge som det är registrerade användare. I händelse av att du har något konfidentiellt, det enklaste är att öppna registrering underen vecka, och be studenterna att de registrerar sig själva, därefter stänga registreringen och kontrollera användarlistan efter obehöriga.";
 $langOpenToTheWorld = "Öppen - åtkomst tillåten för hela världen";
 $OpenToThePlatform = "Öppen - access tillåten för alla registrerade på plattformen";
 $langOpenToThePlatform = "Öppen - åtkomst tillåten för användare registrerade på plattformen.";
@@ -66,8 +64,7 @@ $langSubscription = "Prenumeration";
 $langCourseAccess = "Kursaccess";
 $langConfirmBackup = "Vill du verkligen göra en backup på kursen";
 $langCreateSite = "Skapa kurswebbsajt";
-$langRestoreDescription = "Kursen finns i en arkivfil som du kan välja nedan.<br><br>När du lickat på \"Återskapa\", kommer arkivet packas upp och kursen återskapas.
-";
+$langRestoreDescription = "Kursen finns i en arkivfil som du kan välja nedan.<br><br>När du lickat på \"Återskapa\", kommer arkivet packas upp och kursen återskapas.";
 $langRestoreNotice = "Detta skript tillåter ännu inte automatisk användaråterställande men informationen kan sparas i \"users.csv\" och det är tillräckligt för administratören skall kunna använda den manuellt.";
 $langAvailableArchives = "Lista över tillgängliga arkiv";
 $langNoArchive = "Inget arkiv har valts";

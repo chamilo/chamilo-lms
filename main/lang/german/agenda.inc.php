@@ -53,4 +53,16 @@ $CopiedAsAnnouncement = "Als Ankündigung kopiert";
 $NewAnnouncement = "Neue Ankündigung";
 $AddAnnouncement = "Als Ankündigung hinzugefügt";
 $UpcomingEvent = "Bevorstehendes Ereignis";
+$ListView = "Als Liste anzeigen";
+$RepeatedEvent = "Wiederholendes Ereignis";
+$RepeatType = "Typ wiederholen";
+$RepeatDaily = "Täglich";
+$RepeatWeekly = "Wöchentlich";
+$RepeatMonthlyByDate = "Monatlich, nach Datum";
+$RepeatMonthlyByDay = "Monatlich, nach Tag";
+$RepeatMonthlyByDayR = "Monatlich, nach Tag, eingeschränkt";
+$RepeatYearly = "Jährlich";
+$RepeatEnd = "Enddatum für Wiederholungen";
+$RepeatedEventViewOriginalEvent = "Ursprüngliches Ereignis";
+$ICalFileImport = "iCal/ics Datei importieren";
 ?>

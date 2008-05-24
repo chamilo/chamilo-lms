@@ -2,9 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langInvalidId = "Cet identifiant n\'est pas valide.";
-$langWelcome = "cours sont en libre accès ci-dessous. Les autres cours existants
-nécessitent un identifiant et un mot de passe que l\'on peut
-obtenir en cliquant sur la mention \'inscription\'. Les responsables de cours peuvent  créer de nouveaux cours.";
+$langWelcome = "cours sont en libre accès ci-dessous. Les autres cours existantsnécessitent un identifiant et un mot de passe que l\'on peutobtenir en cliquant sur la mention \'inscription\'. Les responsables de cours peuvent  créer de nouveaux cours.";
 $langPass = "Mot de passe";
 $langEnter = "Entrer";
 $langReg = "Inscription";

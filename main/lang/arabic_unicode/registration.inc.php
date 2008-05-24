@@ -10,10 +10,7 @@ $langUpdateImage = "تغيير صورة";
 $langImageWrong = "يجب أن يكون حجم الملف أقل من ";
 $langAddImage = "صورة";
 $langCourseManager = "مدرس ";
-$password_request = "
-لقد طلبت تغيير كلمة السر الخاصة بك 
-إذا لم تقم بطلبها فقط تجاهل هذا البريد الإلكتروني 
-لتغيير كلمة السر الخاصة بك انقر فوق رابط تغيير كلمة السر. ";
+$password_request = "لقد طلبت تغيير كلمة السر الخاصة بك إذا لم تقم بطلبها فقط تجاهل هذا البريد الإلكتروني لتغيير كلمة السر الخاصة بك انقر فوق رابط تغيير كلمة السر. ";
 $YourPasswordHasBeenEmailed = "لقد تم إرسال كلمة المرور الخاصة بك إلى بريدك الإلكتروني ";
 $lang_enter_email_and_well_send_you_password = "ادخل عنوان بريدك الإلكتروني الذي قمت بادخاله أثناء التسجيل حتى يتم إرسال كلمة المرور الجديدة إليه ";
 $langLogin = "تسجيل الدخول";
@@ -39,11 +36,7 @@ $langGiveAdmin = "اجعل مدير ";
 $langUserNumber = "رقم ";
 $langDownloadUserList = "تحميل قائمة ";
 $langSend = "أرسل";
-$langUserAddExplanation = "every line of file to send will necessarily an only
-		include 5 fields: <b>First name   Last name   
-		Login   Password 
-		  Email</b> separated by tabs and in this order.
-		Users will receive email confirmation with login/password.";
+$langUserAddExplanation = "every line of file to send will necessarily an only		include 5 fields: <b>First name   Last name   		Login   Password 		  Email</b> separated by tabs and in this order.		Users will receive email confirmation with login/password.";
 $langUserMany = "استورد قائمة مستخدمين عبر ملف CSV / XML ";
 $langOneByOne = "أضف مستخدم يدويا ";
 $langNow = "الآن ";
@@ -81,9 +74,7 @@ $langFormula = "المخلص";
 $langProblem = "في حال حصول أي مشكلة , اتصل بنا ";
 $langIs = "is";
 $langAddress = "عنوان الـ ";
-$langSettings = "بالإعدادات التالية : 
-
- :اسم المستخدم ";
+$langSettings = "بالإعدادات التالية :  :اسم المستخدم ";
 $langYouAreReg = "أنت مسجب في ";
 $langDear = "عزيزي ";
 $langYourReg = "تسجيلك في ";

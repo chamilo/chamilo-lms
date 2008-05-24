@@ -142,8 +142,7 @@ $AdditonalUsers = "További felhasználók";
 $AdditonalUsersComment = "További kurzuson kívüli felhasználók meghívása a felmérésre - e-mail címek megadása , vagy ; elválasztással.";
 $MailTitle = "Az e-mail címe";
 $MailText = "Az e-mail szövege";
-$UseLinkSyntax = "A kiválasztott felhasználók email-ben üzenetet kapnak a fenti szöveggel és egy egyedi hivatkozással, amin elérhetik az &#369;rlapot. Ha ezt a hivatkozást a szövegébe szeretné elhelyezni, a következ&#337;t írja a kívánt helyre: **link** (csillag csillag link csillag csillag). 
-Ekkor ez a szöveg automatikusan kicserél&#337;dik a kérd&#337;ív címére. Ha ezt nem teszi meg, a hivatkozás a levele végére fog kerülni.";
+$UseLinkSyntax = "A kiválasztott felhasználók email-ben üzenetet kapnak a fenti szöveggel és egy egyedi hivatkozással, amin elérhetik az &#369;rlapot. Ha ezt a hivatkozást a szövegébe szeretné elhelyezni, a következ&#337;t írja a kívánt helyre: **link** (csillag csillag link csillag csillag). Ekkor ez a szöveg automatikusan kicserél&#337;dik a kérd&#337;ív címére. Ha ezt nem teszi meg, a hivatkozás a levele végére fog kerülni.";
 $DetailedReportByUser = "Részletes jelentés - felhasználó";
 $DetailedReportByQuestion = "Részletes jelentés - kérdés";
 $ComparativeReportDetail = "Ebben a jelentésben két kérdést hasonlíthat össze.";

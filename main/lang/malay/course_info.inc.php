@@ -11,9 +11,7 @@ $langPublic = "Capaian Umum (Subjek boleh dicapai tanpa proses <i>login</i>)";
 $langPrivOpen = "Capaian Peribadi, Pendaftaran Terbuka";
 $langPrivate = "Capaian terhad (Subjek hanya boleh dicapai oleh pengguna berikut sahaja <a href=../user/user.php>Senarai Pengguna</a>)";
 $langForbidden = "Tidak dibenarkan";
-$langConfTip = "Secara lalai, subjek anda hanya boleh diakses jika anda pengguna berdaftar. Jika anda inginkan kerahsian,
-cara terbaik ialah membuka pendaftaran
-selama seminggu, dan arahkan Pelajar anda untuk mendaftar sendiri, kemudian tutup Pendaftaran dan periksa samada terdapat Pengguna yang tidak dikenali.";
+$langConfTip = "Secara lalai, subjek anda hanya boleh diakses jika anda pengguna berdaftar. Jika anda inginkan kerahsian,cara terbaik ialah membuka pendaftaranselama seminggu, dan arahkan Pelajar anda untuk mendaftar sendiri, kemudian tutup Pendaftaran dan periksa samada terdapat Pengguna yang tidak dikenali.";
 $langTipLang  = "Sila pilih bahasa yang anda kehendaki untuk Laman Subjek.";
 $langVid = "Video";
 $langWork = "Tugasan";
@@ -62,8 +60,7 @@ $langSubscription = "Langganan";
 $langCourseAccess = "Capaian Subjek";
 $langConfirmBackup = "Anda pasti untuk backup subjek ";
 $langCreateSite = "Bila Laman Subjek";
-$langRestoreDescription = "The course is in an archive file which you can select below.<br><br>
-When you have clicked on \"Restore\", the archive will be uncompessed and the course recreated.";
+$langRestoreDescription = "The course is in an archive file which you can select below.<br><br>When you have clicked on \"Restore\", the archive will be uncompessed and the course recreated.";
 $langRestoreNotice = "This script doesn\'t allow yet to automatically restore users, but data saved in \"users.csv\" are sufficient so as for the administrator to be able to make that work manually.";
 $langAvailableArchives = "Available archive list";
 $langNoArchive = "Tiada arkib yang dipilih";

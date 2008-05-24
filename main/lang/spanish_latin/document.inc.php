@@ -73,8 +73,7 @@ $ShowCourseQuotaUse = "Mostrar tamaño del curso en el servidor";
 $CourseCurrentlyUses = "Este curso actualmente utiliza";
 $MaximumAllowedQuota = "Su límite de espacio de almacenamiento es";
 $PercentageQuotaInUse = "Porcentaje de espacio en uso";
-$PercentageQuotaFree = "Porcentaje de espacio libre
-";
+$PercentageQuotaFree = "Porcentaje de espacio libre";
 $CurrentDirectory = "Directorio actual";
 $UplUploadDocument = "Enviar un documento";
 $UplNoFileUploaded = "Ningún archivo ha sido enviado";
@@ -92,8 +91,7 @@ $UplZipCorrupt = "¡ No se puede extraer el archivo zip (¿ archivo corrupto ?) !"
 $UplAlreadyExists = "¡ ya existe !";
 $UplFileSavedAs = "Archivo guardado como";
 $UplFileOverwritten = "fue sobreescrito";
-$CannotCreateDir = "¡ No se puede crear el directorio !
-";
+$CannotCreateDir = "¡ No se puede crear el directorio !";
 $UplUpload = "Enviar";
 $UplWhatIfFileExists = "Si ya existe el archivo:";
 $UplDoNothing = "Hacer nada";
@@ -110,10 +108,7 @@ $fileModified = "El archivo ha sido modificado";
 $DocumentsOverview = "Sumario del documento";
 $ViewSlideshow = "Ver presentación de imágenes";
 $Options = "Opciones";
-$WelcomeOogieConverter = "Bienvenido al conversor de PowerPoint Oogie<br>
-1. Explore su disco duro y busque cualquier archivo con las extensiones *.ppt u *.odp<br>
-2. Envíelo a Oogie. Este lo transformará en un Itinerario de aprendizaje Scorm.<br>
-3. Ud. ahora podrá añadir comentarios de audio en cada diapositiva e insertar test entre diapositivas para la evaluación.";
+$WelcomeOogieConverter = "Bienvenido al conversor de PowerPoint Oogie<br>1. Explore su disco duro y busque cualquier archivo con las extensiones *.ppt u *.odp<br>2. Envíelo a Oogie. Este lo transformará en un Itinerario de aprendizaje Scorm.<br>3. Ud. ahora podrá añadir comentarios de audio en cada diapositiva e insertar test entre diapositivas para la evaluación.";
 $ConvertToLP = "Convertir a un Itinerario de aprendizaje";
 $Content = "Contenido";
 ?>

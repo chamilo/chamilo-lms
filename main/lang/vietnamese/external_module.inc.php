@@ -2,8 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langLinkSite = "Liên kết tới 1 site";
-$langSubTitle = "Bạn có thể tạo 1 liên kết tới bất cứ 1 địa chỉ URL hợp lệ nào, liên kết này sẽ đặt tại
-trang chủ của khoá học .<br><font color=Blue><small>Chú ý cách làm nhanh : đi tới trang có địa chỉ cần liên kết, copy địa chỉ URL trong trình duyệt và đưa vào ô Link dưới đây </small></font>";
+$langSubTitle = "Bạn có thể tạo 1 liên kết tới bất cứ 1 địa chỉ URL hợp lệ nào, liên kết này sẽ đặt tạitrang chủ của khoá học .<br><font color=Blue><small>Chú ý cách làm nhanh : đi tới trang có địa chỉ cần liên kết, copy địa chỉ URL trong trình duyệt và đưa vào ô Link dưới đây </small></font>";
 $langAddPage            = "Thêm trang";
 $langSendPage           = "Trang gửi đi";
 $langCouldNot           = "File không thể gửi";

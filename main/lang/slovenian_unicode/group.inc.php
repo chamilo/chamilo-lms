@@ -23,8 +23,7 @@ $langGroupMembers = "Člani skupine";
 $langEditGroup = "Uredi to skupino";
 $Optional = "(opcija)";
 $langGroupSettingsModified = "Lastnosti skupine spremenjene";
-$langGroupTooMuchMembers = "Število predlaganih presega največje dovoljeno (lahko ga spodaj spremeniš). 
-				Sestava skupine ni bila spremenjena";
+$langGroupTooMuchMembers = "Število predlaganih presega največje dovoljeno (lahko ga spodaj spremeniš). 				Sestava skupine ni bila spremenjena";
 $langGroupTutor = "Tutor";
 $langGroupNoTutor = "(nihče)";
 $langGroupNone = "(nihče)";

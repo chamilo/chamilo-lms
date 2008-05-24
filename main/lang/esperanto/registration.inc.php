@@ -74,8 +74,7 @@ $langFormula = "Altestime ";
 $langProblem = "Kaze de problemoj vi povas kontakti&#285;i kun ni. ";
 $langIs = "estas ";
 $langAddress = "La adreso de ";
-$langSettings = "kun jenaj parametroj:
-Uzulnomo: ";
+$langSettings = "kun jenaj parametroj:Uzulnomo: ";
 $langYouAreReg = "Vi registrigxis por ";
 $langDear = "Kara ";
 $langYourReg = "Via registri&#285;o je ";

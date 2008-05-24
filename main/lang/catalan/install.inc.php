@@ -4,8 +4,7 @@ for more information: see languages.txt in the lang folder.
 $langStatDB              = "Rastreig de BD. Útil només si hi ha vàries BD";
 $langEnableTracking      = "Permís de rastreig";
 $langInstituteShortName  = "Nom curt de la institució";
-$langWarningResponsible  = "Utilitza aquest script només després de fer una còpia de seguretat.
-			   Claroline i el seu equip no es fa responsable de les dades perdudes o corrumpudes";
+$langWarningResponsible  = "Utilitza aquest script només després de fer una còpia de seguretat.			   Claroline i el seu equip no es fa responsable de les dades perdudes o corrumpudes";
 $langEG = "ex:";
 $langDBHost = "Servidor de la Base de dades";
 $langDBLogin = "Usuari de la Base de dades";
@@ -21,10 +20,7 @@ $langAdminLogin = "Login de l\'administrator";
 $langAdminPass = "Password de l\'administrator";
 $langEducationManager = "Cap d\'estudis";
 $langCampusName = "El nom del teu campus";
-$langDBSettingIntro = "
-			Les rutines d\'instalació crearan la BD principal de Claroline. Si us plau, recorda que Claroline
-			necessitara crear diverses BD\'s. Si només tens accés a una BD en el teu lloc web per
-			part dels teus serveis d\'allotjament informàtic, Claroline no funcionarà!";
+$langDBSettingIntro = "			Les rutines d\'instalació crearan la BD principal de Claroline. Si us plau, recorda que Claroline			necessitara crear diverses BD\'s. Si només tens accés a una BD en el teu lloc web per			part dels teus serveis d\'allotjament informàtic, Claroline no funcionarà!";
 $langStep1 = "Pas 1 de 6 ";
 $langStep2 = "Pas 2 de 6 ";
 $langStep3 = "Pas 3 de 6 ";

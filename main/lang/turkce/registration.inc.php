@@ -36,19 +36,13 @@ $langGiveAdmin = "Yönetici yap";
 $langUserNumber = "numara";
 $langDownloadUserList = "Listeyi yükle";
 $langSend = "Gönder";
-$langUserAddExplanation = "gönderilecek dosyadaki her satýr þu 5 alaný kapsamak zorundadýr: 
-		<b>Adý   Soyadý   
-		Kullanýcý adý   Þifresi 
-		  Epostasý</b>  tab ile ayrýlmýþ ve bu sýrada olþmalýdýr.
-		Kullanýcýlar, kullanýcý adý ve þifrelerinin gönderildiði bir eposta teyidi alacaklardýr.";
+$langUserAddExplanation = "gönderilecek dosyadaki her satýr þu 5 alaný kapsamak zorundadýr: 		<b>Adý   Soyadý   		Kullanýcý adý   Þifresi 		  Epostasý</b>  tab ile ayrýlmýþ ve bu sýrada olþmalýdýr.		Kullanýcýlar, kullanýcý adý ve þifrelerinin gönderildiði bir eposta teyidi alacaklardýr.";
 $langUserMany = "metin dosyasýndan kullanýcý aktar";
 $langOneByOne = "Kullanýcý ekle";
 $langNow = "þimdi";
 $langTutor = "Eðitmen";
 $langTitular = "Yazar";
-$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Ders listesini deðiþtir</big><br><br>
-Almak istediðiniz dersleri þeçiniz.<br>
-Ýstemediðiniz dersleri iptal ediniz.<br> Sonra listenin altýndaki tamam tuþunu týklayýnýz";
+$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Ders listesini deðiþtir</big><br><br>Almak istediðiniz dersleri þeçiniz.<br>Ýstemediðiniz dersleri iptal ediniz.<br> Sonra listenin altýndaki tamam tuþunu týklayýnýz";
 $langStudent = "öðrenci";
 $langImportUserList = "Kullan&#305;c&#305;lar&#305;n listesi içeri al";
 $langAddAU = "Kullanýcý ekle";

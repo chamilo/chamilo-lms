@@ -2,175 +2,19 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Forumi pomo&#263;";
-$langForContent = "Forum je pisani i asinkroni diskusijski alat.
-Kako email omoguæava jedan - prema - jedan dijalog, forumi omoguæavaju javni ili polu-javni dijalog.
-</p><p> Tehnièki gledano, studenti trebaju samo svoj preglednik da bi koristili Claroline forume. .</P><p>Da bi organizirali forume, kliknite na\'Upravljanje\'. Diskusija je organizirana u setovima i podsetovima kako slijedi: </p><p><b>Kategorija > Forum > Tema > Odgovor</b></p> Da bi struktuirali vaše studentske diskusije, potrebno je, prije svega, organizirati kategorije i forume, ostavljajuæi teme i odgovore studentima da sami stvaraju. Prema standardnim postavkama forumi sadrže samo kategoriju \'Javno\', primjer foruma i rimjer jedne teme.</p><p> Prvo što morate uèiniti je izbrisati primjer teme i tako modificirate prvo ime foruma. Tada, možete stvoriti u kategoriji
-\'javno\'druge forume, po grupama ili po temama, kako bi upotpunili zahtjeve nastavnog predmeta.</p><p>Ne miješajte kategorije i forume i nemojte zaboraviti da prazna kategorija (bez foruma) nije vidljiva studentima.</p><p> Opis foruma može sadržavati popis èlanova, definiranje ciljeva, zadaæa, tema ...";
+$langForContent = "Forum je pisani i asinkroni diskusijski alat.Kako email omoguæava jedan - prema - jedan dijalog, forumi omoguæavaju javni ili polu-javni dijalog.</p><p> Tehnièki gledano, studenti trebaju samo svoj preglednik da bi koristili Claroline forume. .</P><p>Da bi organizirali forume, kliknite na\'Upravljanje\'. Diskusija je organizirana u setovima i podsetovima kako slijedi: </p><p><b>Kategorija > Forum > Tema > Odgovor</b></p> Da bi struktuirali vaše studentske diskusije, potrebno je, prije svega, organizirati kategorije i forume, ostavljajuæi teme i odgovore studentima da sami stvaraju. Prema standardnim postavkama forumi sadrže samo kategoriju \'Javno\', primjer foruma i rimjer jedne teme.</p><p> Prvo što morate uèiniti je izbrisati primjer teme i tako modificirate prvo ime foruma. Tada, možete stvoriti u kategoriji\'javno\'druge forume, po grupama ili po temama, kako bi upotpunili zahtjeve nastavnog predmeta.</p><p>Ne miješajte kategorije i forume i nemojte zaboraviti da prazna kategorija (bez foruma) nije vidljiva studentima.</p><p> Opis foruma može sadržavati popis èlanova, definiranje ciljeva, zadaæa, tema ...";
 $langHDropbox = "Pretinac";
 $langDropboxContent = "<p>Pretinac je alat upravljanja sadržajem namijenjen razmjeni podataka peer-to-peer. Prihva&#263;ene su datoteke svih vrsta: Word, Excel, PDF, itd. Upravlja verzijama tako što izbjegava uništenje dokumenta ako postoji drugi dokument istoga naziva.</p> <p>Pretinac prikazuje datoteke koje su vam poslane (mapa primitaka) i datoteke koje ste vi poslali drugim &#269;lanovima kolegija (mapa pošiljaka).</p> <p>Ako popis primljenih ili poslanih datoteka postane predug, možete izbrisati sve ili odre&#273;ene datoteke s popisa. Sama datoteka nije izbrisana dok god je druga strana može vidjeti.</p> <p> Za slanje dokumenta više no jednoj osobi, pritisnite CTRL i kliknite u okvir višestrukog odabira. Okvir višestrukog odabira je polje s popisom &#269;lanova.</p>";
 $langHHome = "Pomo&#263; za Po&#269;etnu stranicu";
-$langHomeContent = "Radi olakšanja, alati claroline sadrže standardne ulazne postavke. 
-U svakom alatu je jednostavan primjer kako bi brzo shvatili kako radi. Na Vama je da modificirate ili izbrišete primjer. Primjerice, na oèetnoj stranici vašeg predmeta je kratak uvodni tekst koji glasi:
-\'Ovo je uvodni tekst za vaš predmet. Kako bi ga zamjenili sa vlastitm tekstom kliknite ispod na promjeni.\' Kliknite na promjeni, dodaj i Ok. Ovo je vrlo jednostavno.svaki alat ima istu logiku: dodaj, obriši, promjeni, što je logika dinamiènih web stranica.</p><p> Kada prvi put kreirate svoju web stranicu, veæina alata je aktivna. Na vama je da deaktivirate one alate za koje smatrate da vam nisu potrebni.Tada morate kliknuti na \'deaktiviraj\'. Tada alat odlazi  dolje na sivi dio vaše Poèetne stranica i ostaje nevidljiv za studente. Svakako, možete ga ponovno aktivirati, i tada on ostaje onovno vidljiv studentima.</p><p> Možete dodati svoje vlastite stranice na vašu Poèetnu stranicu. Te stranice moraju biti HTML formatu (koji se može stvoriti koristeæi Word procesor ili Web composer). Koristite \'uèitane stranice i linkove za Poèetnu stranicu\' kako bi poslali stranice na server. Standardno zaglavlje na vašoj web stranici æe automatski biti spojen sa novim dokumentom. Ukoliko želite link (vezu) sa svoje Poèetne stranice ka postojeæim stranicama ili stranicama koje postoje bilo gdje na Webu (èak i unutar vaše vlastite stranice), koristite \'Dodaj link na poèetnu stranicu\' Stranice koje ste dodali na Poèetnu stranicu mogu se deaktivirati, a zatim i borisati, kada su standardni alati deaktivirani, ali ne i izbrisani.</p><p> Jednom kada je vaša web stranica spremna, odite na \'Promjeni predmetne informacije\' i odluèite koju razinu pouzdanosti želite.
- Prema standardnim postavkama, Vaš predmet je skriven (zato što radite na njemu).</p>";
+$langHomeContent = "Radi olakšanja, alati claroline sadrže standardne ulazne postavke. U svakom alatu je jednostavan primjer kako bi brzo shvatili kako radi. Na Vama je da modificirate ili izbrišete primjer. Primjerice, na oèetnoj stranici vašeg predmeta je kratak uvodni tekst koji glasi:\'Ovo je uvodni tekst za vaš predmet. Kako bi ga zamjenili sa vlastitm tekstom kliknite ispod na promjeni.\' Kliknite na promjeni, dodaj i Ok. Ovo je vrlo jednostavno.svaki alat ima istu logiku: dodaj, obriši, promjeni, što je logika dinamiènih web stranica.</p><p> Kada prvi put kreirate svoju web stranicu, veæina alata je aktivna. Na vama je da deaktivirate one alate za koje smatrate da vam nisu potrebni.Tada morate kliknuti na \'deaktiviraj\'. Tada alat odlazi  dolje na sivi dio vaše Poèetne stranica i ostaje nevidljiv za studente. Svakako, možete ga ponovno aktivirati, i tada on ostaje onovno vidljiv studentima.</p><p> Možete dodati svoje vlastite stranice na vašu Poèetnu stranicu. Te stranice moraju biti HTML formatu (koji se može stvoriti koristeæi Word procesor ili Web composer). Koristite \'uèitane stranice i linkove za Poèetnu stranicu\' kako bi poslali stranice na server. Standardno zaglavlje na vašoj web stranici æe automatski biti spojen sa novim dokumentom. Ukoliko želite link (vezu) sa svoje Poèetne stranice ka postojeæim stranicama ili stranicama koje postoje bilo gdje na Webu (èak i unutar vaše vlastite stranice), koristite \'Dodaj link na poèetnu stranicu\' Stranice koje ste dodali na Poèetnu stranicu mogu se deaktivirati, a zatim i borisati, kada su standardni alati deaktivirani, ali ne i izbrisani.</p><p> Jednom kada je vaša web stranica spremna, odite na \'Promjeni predmetne informacije\' i odluèite koju razinu pouzdanosti želite. Prema standardnim postavkama, Vaš predmet je skriven (zato što radite na njemu).</p>";
 $langHOnline = "Pomo&#263; za Sustav konferncija uživo";
 $langOnlineContent = "<br><span style=\\\"font-weight: bold;\\\">Uvod</span><br> <br> <div style=\\\"margin-left: 40px;\\\">Konferencijski sustav Dokeos online omogu&#263;uje vam da pou&#269;avate, informirate ili okupite istovremeno do 500 ljudi na jednostavan i brz na&#269;in.<br> </div> <ul> <ul> <li><b>zvu&#269;na veza uživo:</b> predava&#269;ev glas uživo se prenosi sudionicima,<br> </li> <li><b>projekcija:</b> sudionici prate prezentaciju formata Power Point ili PDF,<br> </li> <li><b>interakcija:</b> sudionici postavljaju pitanja putem chata.</li> </ul> </ul> <span style=\\\"font-weight: bold;\\\"></span><span style=\\\"font-weight: bold;\\\"><br> Student / sudionik</span><br> <br> <div style=\\\"margin-left: 40px;\\\">Za sudjelovanje u konferenciji potrebno vam je:<br> </div> <br> <div style=\\\"margin-left: 40px;\\\">1. Zvu&#269;nici (ili slušalice) povezani s vašim osobnim ra&#269;unalom<br> <br> <a href=\\\"http://www.logitech.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 58px;\\\" alt=\\\"speakers\\\" src=\\\"../img/speaker.gif\\\"></a><br> <br> 2. Winamp Media player<br> <br> <a href=\\\"http://www.winamp.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 27px;\\\" alt=\\\"Winamp\\\" src=\\\"../img/winamp.gif\\\"></a><br> <br> Mac : koristite <a href=\\\"http://www.quicktime.com\\\">Quicktime</a><br> Linux : koristite <a href=\\\"http://www.xmms.org/\\\">XMMS</a> <br> <br>   3. Acrobat PDF reader ili Word ili PowerPoint, ovisno o formatu predava&#269;eve projekcije<br> <br> <a href=\\\"http://www.acrobat.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 31px;\\\" alt=\\\"acrobat reader\\\" src=\\\"../img/acroread.gif\\\"></a><br> </div> <br> <span style=\\\"font-weight: bold;\\\"><br> Predava&#269;</span><br> <br> <div style=\\\"margin-left: 40px;\\\">Za predavanje potrebno vam je:<br> </div> <br> <div style=\\\"margin-left: 40px;\\\">1. Slušalice s mikrofonom<br> <br> <a href=\\\"http://www.logitech.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 87px;\\\" alt=\\\"Headset\\\" src=\\\"../img/headset.gif\\\"></a><br> Savjetujemo da koristite <a href=\\\"http://www.logitech.com/\\\">Logitech</a> USB za bolju kakvo&#263;u prijenosa.<br> <br> 2. Winamp<br> <br> <a href=\\\"http://www.winamp.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 27px;\\\" alt=\\\"Winamp\\\" src=\\\"../img/winamp.gif\\\"></a><br> <br> 3. SHOUTcast DSP dodatak za Winamp 2.x <br> <br> <a href=\\\"http://www.shoutcast.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 24px;\\\" alt=\\\"Shoutcast\\\" src=\\\"../img/shoutcast.gif\\\"></a><br> <br> Slijedite upute na <a href=\\\"http://www.shoutcast.com\\\">www.shoutcast.com</a> o tome kako instalirati i postaviti Shoutcast Winamp DSP dodatak. <br> </div> <br> <span style=\\\"font-weight: bold;\\\"><br> Kako održati konferenciju?<br> <br> </span> <div style=\\\"margin-left: 40px;\\\">Izradite kolegij Dokeos > U&#273;ite u njega > Prikažite i potom u&#273;ite u alat Konferencija > Uredite (ikona olovke na vrhu lijevo) postavke > u&#269;itajte svoje projekcijske slike (formata PDF, PowerPoint ili koji jest) > upišite uvodni tekst > upišite URL vašeg prijenosa uživo prema podacima koje ste dobili od vašeg tehni&#269;kog nadzornika.<span style=\\\"font-weight: bold;\\\"></span><br> <span style=\\\"font-weight: bold;\\\"></span></div> <div style=\\\"margin-left: 40px;\\\"><img style=\\\"width: 256px; height: 182px;\\\" alt=\\\"conference config\\\" src=\\\"../img/conf_screen_conf.gif\\\"><br> Ne zaboravite nazna&#269;iti to&#269;an nadnevak sastanka, vrijeme i druge smjernice svojim sudionicima prije svega. <br> <br> <span style=\\\"font-weight: bold;\\\">Savjet</span> : 10 minuta prije po&#269;etka konferencije, upišite kratku poruku u chat da obavijestite sudionike kako ste ondje i da pomognete s mogu&#263;im problemima sa zvukom. <br> </div> <br> <br> <span style=\\\"font-weight: bold;\\\">Poslužitelj prijenosa</span><br> <br> <div style=\\\"margin-left: 40px;\\\">Kako biste održali konferenciju uživo, treba vam poslužitelj prijenosa i vjerojatno tehni&#269;ki nadzornik da vam pomogne s uporabom poslužitelja. On &#263;e vam dati URL koji morate upisati u polje obrasca za prijenos uživo kad budete ure&#273;ivalipostavke konferencije.<br> <br> <small><a href=\\\"http://www.dokeos.com/hosting.php#streaming\\\"><img style=\\\"border: 0px solid ; width: 258px; height: 103px;\\\" alt=\\\"dokeos streaming\\\" src=\\\"../img/streaming.jpg\\\"><br> dokeos streaming</a></small><br> <br> U&#269;ini sam: instalirajte, podesite i nadzirite <a href=\\\"http://www.shoutcast.com\\\">Shoutcast</a> ili <a href=\\\"http://developer.apple.com/darwin/projects/streaming/\\\">Apple Darwin</a>. <br> <br> Ili se obratite Dokeosu. Možemo vam pomo&#263;i da organizirate svoju konferenciju, pripomognete predava&#269;u i iznajmite jeftino mjesto za prijenos na našim poslužiteljima : <a href=\\\"http://www.dokeos.com/hosting.php#streaming\\\">http://www.dokeos.com/hosting.php</a><br> <br> <br>";
 $langHClar = "Pomo&#263; za sustav Dokeos";
 $langHDoc = "Pomo&#263; za dokumente";
-$langDocContent = "<p> Alati dokumenata su slièni FileManageru na vašoj radnoj površini raèunala.</p><p> Možete uèitati dokumente bilo kojeg tipa (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, itd.). Pritom je važno da studenti imaju takoðer odgovarajuæi software kako bi mogli èitati dokumente.
- Neke datoteke mogu sadržavati viruse, a Vaša je odgovornost da ne uèitavate zaražene virusom datoteke. Zbog mjere opreza preporuèa se provjeriti dokumente antivirusnim programom prije nihovog oèitavanja.
- </p>
-<p>Dokumenti su postavljeni prema abecednom poretku.<br><b> Tip : </b>Ukoliko ih želite složiti nekim drugim redosljedom, numerirajte ih oznakama: 01, 02, 03...</p>
-<p>Možete :</p>
-<h4>Uèitajte dokument</h4>
-<ul>
-  <li>Odaberite datoteku na vašem raèunalu koristeæi opciju Biraj 
-<input
- type=submit value=Browse name=submit2>
-	desno na tvom ekranu.</li>
-		<li>
-			Uèitavanje datoteke poèinjete pritiskom na opciju Uèitaj <input type=submit value=Uèitavanje name=submit2>..
-		</li>
-	</ul>
-	<h4>
-		Preimenujte dokument (direktorij)
-	</h4>
-	<ul>
-		<li>
-			Klikom na <img src=../dokument/img/renommer.gif width=20 height=20 align=baseline> 
-			opciju u Preimenuj koloni
-		</li>
-		<li>
-			Utipkajte novo ime u polje (gore lijevo)
-		</li>
-		<li>
-			Potvrdite to klikom na <input type=submit value=Ok name=submit24>.
-		</li>
-	</ul>
-		<h4>
-			Obrišite dokument (ili folder)
-		</h4>
-		<ul>
-			<li>
-				Klikom na <img src=../img/delete.gif width=20 height=20> 
-				u koloni \'obriši\'.
-			</li>
-		</ul>
-		<h4>
-			Napravite dokument (ili direktorij) nevidljiv za studente
-		</h4>
-		<ul>
-			<li>
-				Klikom na <img src=../img/visible.gif width=20 height=20>
-				kolonu \'Vidljiv/nevidljiv\'.
-			</li>
-			<li>
-				Dokument (ili direktorij) još uvijek postoji ali nije više vidljiv za studente.
-			</li>
-			<li>
-				Da bi te ga ponovo uèinili vidljivim, kliknite na 
-				<img src=../document/../img/invisible.gif width=24 height=20> 
-				kolonu \'Vidljiv/nevidljiv\'
-			</li>
-		</ul>
-		<h4>
-			Dodavanje ili promjena primjedbu u dokumentu (ili direktoriju)
-		</h4>
-		<ul>
-			<li>
-				klikom na <img src=../document/../img/comment.gif width=20 height=20> u koloni \'Primjedba\'
-			</li>
-			<li>
-				Utipkajte novi komentar u odgovarajuæe polje (gore desno).
-			</li>
-			<li>
-				Potvrdite to klikom na  <input type=submit value=OK name=submit2>
-			.</li>
-		</ul>
-		<p>
-		Da bi izbrisali primjedbu, kliknite na <img src=../document/../img/comment.gif width=20 height=20>, 
-		obrišite staru primjedbu u polju i kliknite 
-		<input type=submit value=OK name=submit22>.
-		<hr>
-		<p>
-			Možete organizirati svoj  sadržaj popunjevanjem. Za to:
-		</p>
-		<h4>
-			<b>
-				Stvorite folder
-			</b>
-		</h4>
-		<ul>
-			<li>
-				Klikom na 
-				<img src=../document/../img/dossier.gif width=20 height=20>
-				\'Stvaranje foldera\' (na vrhu lijevo)
-			</li>
-			<li>
-				Utipkajte ime vašeg novog direktorija u odgovarajuæe polje (gore lijevo)
-			</li>
-			<li>
-				Potvrdite to klikom na <input type=submit value=OK name=submit23>
-			</li>
-		</ul>
-		<h4>
-			Pomaknite dokument (ili folder)
-		</h4>
-		<ul>
-			<li>
-				Klikom na opciju <img src=../document/../img/deplacer.gif width=34 height=16> 
-				u koloni \'Pomakni\'
-			</li>
-			<li>
-				Izaberite folder u koji želite premjestiti dokumet (ili folder) u odgovarajuæi omièuæi izbornik (gore lijevo) (napomena: rijeè \'korijen\' znaæi da ne možete iæi više od ove razine u stablu dokumenata na serveru).
-			</li>
-			<li>
-				Potvrdite to klikom na <input type=submit value=OK name=submit232>
-			</li>
-		</ul>
-<centar>
-<p>";
+$langDocContent = "<p> Alati dokumenata su slièni FileManageru na vašoj radnoj površini raèunala.</p><p> Možete uèitati dokumente bilo kojeg tipa (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, itd.). Pritom je važno da studenti imaju takoðer odgovarajuæi software kako bi mogli èitati dokumente. Neke datoteke mogu sadržavati viruse, a Vaša je odgovornost da ne uèitavate zaražene virusom datoteke. Zbog mjere opreza preporuèa se provjeriti dokumente antivirusnim programom prije nihovog oèitavanja. </p><p>Dokumenti su postavljeni prema abecednom poretku.<br><b> Tip : </b>Ukoliko ih želite složiti nekim drugim redosljedom, numerirajte ih oznakama: 01, 02, 03...</p><p>Možete :</p><h4>Uèitajte dokument</h4><ul>  <li>Odaberite datoteku na vašem raèunalu koristeæi opciju Biraj <input type=submit value=Browse name=submit2>	desno na tvom ekranu.</li>		<li>			Uèitavanje datoteke poèinjete pritiskom na opciju Uèitaj <input type=submit value=Uèitavanje name=submit2>..		</li>	</ul>	<h4>		Preimenujte dokument (direktorij)	</h4>	<ul>		<li>			Klikom na <img src=../dokument/img/renommer.gif width=20 height=20 align=baseline> 			opciju u Preimenuj koloni		</li>		<li>			Utipkajte novo ime u polje (gore lijevo)		</li>		<li>			Potvrdite to klikom na <input type=submit value=Ok name=submit24>.		</li>	</ul>		<h4>			Obrišite dokument (ili folder)		</h4>		<ul>			<li>				Klikom na <img src=../img/delete.gif width=20 height=20> 				u koloni \'obriši\'.			</li>		</ul>		<h4>			Napravite dokument (ili direktorij) nevidljiv za studente		</h4>		<ul>			<li>				Klikom na <img src=../img/visible.gif width=20 height=20>				kolonu \'Vidljiv/nevidljiv\'.			</li>			<li>				Dokument (ili direktorij) još uvijek postoji ali nije više vidljiv za studente.			</li>			<li>				Da bi te ga ponovo uèinili vidljivim, kliknite na 				<img src=../document/../img/invisible.gif width=24 height=20> 				kolonu \'Vidljiv/nevidljiv\'			</li>		</ul>		<h4>			Dodavanje ili promjena primjedbu u dokumentu (ili direktoriju)		</h4>		<ul>			<li>				klikom na <img src=../document/../img/comment.gif width=20 height=20> u koloni \'Primjedba\'			</li>			<li>				Utipkajte novi komentar u odgovarajuæe polje (gore desno).			</li>			<li>				Potvrdite to klikom na  <input type=submit value=OK name=submit2>			.</li>		</ul>		<p>		Da bi izbrisali primjedbu, kliknite na <img src=../document/../img/comment.gif width=20 height=20>, 		obrišite staru primjedbu u polju i kliknite 		<input type=submit value=OK name=submit22>.		<hr>		<p>			Možete organizirati svoj  sadržaj popunjevanjem. Za to:		</p>		<h4>			<b>				Stvorite folder			</b>		</h4>		<ul>			<li>				Klikom na 				<img src=../document/../img/dossier.gif width=20 height=20>				\'Stvaranje foldera\' (na vrhu lijevo)			</li>			<li>				Utipkajte ime vašeg novog direktorija u odgovarajuæe polje (gore lijevo)			</li>			<li>				Potvrdite to klikom na <input type=submit value=OK name=submit23>			</li>		</ul>		<h4>			Pomaknite dokument (ili folder)		</h4>		<ul>			<li>				Klikom na opciju <img src=../document/../img/deplacer.gif width=34 height=16> 				u koloni \'Pomakni\'			</li>			<li>				Izaberite folder u koji želite premjestiti dokumet (ili folder) u odgovarajuæi omièuæi izbornik (gore lijevo) (napomena: rijeè \'korijen\' znaæi da ne možete iæi više od ove razine u stablu dokumenata na serveru).			</li>			<li>				Potvrdite to klikom na <input type=submit value=OK name=submit232>			</li>		</ul><centar><p>";
 $langHUser = "Pomo&#263; korisnicima";
-$langUserContent = "<b>Uloge</b><p>Uloge nemaju raèunalno povezanu funkciju.
- Oni ne daju prava za upravljanje sustavom. Oni samo ukazuju ljudima tko je tko. Možete ih mjenjati klikom na  \'promjeni\' ispod \'uloge\', i tada možete utipkati bilo što: profesor, asistent, student,
- posjetitelj, struènjak...</P><hr>
-<b>Admin prava</b>
-<p>Admin prava, s druge strane, korespondiraju sa tehnièkom autorizacijom za mjenjanje sadržaja i organiziranja predmente web stranice. Trenutno, možete samo birati izmeðu davanja svih admin prava ili davanja ni jednog prava
-.</P><p> Da bi dozvolili asistentu, primjerice, da administrira stranicu, morate ga prijaviti na predmetu ili biti sigurni da je on veæ prijavljen, tada kliknite na \'promjeni\' ispod \'admin prava\', zatim kliknite na \'sva\', i zatim \'Ok\'.</P><hr>
-<b>Suradnik</b>
-<p>Kako bi postavili u zaglavlje predmente web stranice ime 
- suradnik, koristite alat \'Promjeni predmetne infomacije\' (naranðasti alati). Ova modifikacija ne registrira vašeg suradnika kao korisnika na predmetu.
- Polje \'Nastavnici\' je potpuno neovisan od Korisnièke liste.</p><hr>
-<b>Dodaj korisnika</b>
-<p>Kako bi dodali korisnika na vaš predmet, popunite polje i  potvrdite. Osoba \'e primiti obavijest putem emaila o prijavi i svom korisni;kom imenu i zaporki.</p>";
-$langGroupContent = "<p><b>Uvod</b></p>
-<p>Ovaj alat omoguæava stvaranje i upravljanje radnim grupama. Prilikom stvranja (kreiranja) grupe, grupe su prazne. Postoji mnogo naèina za njihovo popunjavanje:
-<ul><li>automatsko (\'Popuni grupe\'),</li>
-<li>ruèno (\'Dodaj\'),</li>
-<li>studentsko samoprijavljivanje  (Grupne postavke: \'Samoprijavljivanje dozvoljeno...\').</li>
-</ul>
-Ova tri naèina se mogu kombinirati. Možete, primjerice, èitati studente da se prvo samostalno prijavljuju.
-Tada otkrijete da se neki od njih nisu prijavili i odluèite tada popuniti grupu automatski kako bi je upotpunili.
-Takoðer, možete dodati svakoj grupi da stvara èlanstva po principu jedan po jedan student prije ili poslije samoprijavljivanja ili automatskog popunjavanja.</p>
-<p>Grupno popunjavanje, bilo automatsko ili ruèno, radi samo ukoliko su studenti veæ prijavljeni na predmetu (ne miješajte prijavu za nastavni predmet i prijavu za grupu).
-Studentski popis je vidljiv na izboniku  <b>Korisnici</b> . </p><hr noshade size=1>
-<p><b>Stvaranje grupa</b></p>
-<p>Da bi stvorili novu grupu, kliknite na  \'Stvori novu grupu(e)\' i odredite broj grupa koje želite stvoriti Maksimalni broj èlanova nije odreðen, ali predlažemo da izaberete jedan broj. Ukoliko ostavite polje maksimalnog broja grupe, maksimalni broj grupe je neodreðen.</p><hr noshade size=1>
-<p><b>Grupne postavke</b></p>
-<p>Možete odrediti opæe grupne postavke koje vrijede za sve grupe.
-<b>Studentima je dozvoljeno samostalno prijavljivanje u grupe</b>: 
-<p>Možete stvoriti praznu grupu, a studenti se mogu samostalno prijavljuju.
-Ukoliko ste definirali maksimalni broj èlanova grupe, pune grupe ne prihvaæaju nove èlanove.
-Ova metoda je dobra za nastavnike koji ne znaju studentsku listu prilikom stvaranja grupe.</p>
-<b>Outils</b>:</p>
-<p>Svaka grupa posjeduje ili forum (privatni ili javni) ili podruèje Dokumenata (zajednièke datoteka) ili najèešæe oboje.</p>
-<hr noshade size=1>
-<p><b>Ruèno dodavanje</b></p>
-<p>Jednom kada je grupa stvorena (Stvori grupe), na dnu stranice možete vidjeti popis grupa sa nizom informacija i funkcija
-<ul><li><b>Uredi</b> da bi promjenili ruèno ime grue, opis, tutora, listu èlanova 
-.</li>
-<li><b>Obriši</b> obrišite grupu.</li></ul>
-<hr noshade size=1>";
+$langUserContent = "<b>Uloge</b><p>Uloge nemaju raèunalno povezanu funkciju. Oni ne daju prava za upravljanje sustavom. Oni samo ukazuju ljudima tko je tko. Možete ih mjenjati klikom na  \'promjeni\' ispod \'uloge\', i tada možete utipkati bilo što: profesor, asistent, student, posjetitelj, struènjak...</P><hr><b>Admin prava</b><p>Admin prava, s druge strane, korespondiraju sa tehnièkom autorizacijom za mjenjanje sadržaja i organiziranja predmente web stranice. Trenutno, možete samo birati izmeðu davanja svih admin prava ili davanja ni jednog prava.</P><p> Da bi dozvolili asistentu, primjerice, da administrira stranicu, morate ga prijaviti na predmetu ili biti sigurni da je on veæ prijavljen, tada kliknite na \'promjeni\' ispod \'admin prava\', zatim kliknite na \'sva\', i zatim \'Ok\'.</P><hr><b>Suradnik</b><p>Kako bi postavili u zaglavlje predmente web stranice ime  suradnik, koristite alat \'Promjeni predmetne infomacije\' (naranðasti alati). Ova modifikacija ne registrira vašeg suradnika kao korisnika na predmetu. Polje \'Nastavnici\' je potpuno neovisan od Korisnièke liste.</p><hr><b>Dodaj korisnika</b><p>Kako bi dodali korisnika na vaš predmet, popunite polje i  potvrdite. Osoba \'e primiti obavijest putem emaila o prijavi i svom korisni;kom imenu i zaporki.</p>";
+$langGroupContent = "<p><b>Uvod</b></p><p>Ovaj alat omoguæava stvaranje i upravljanje radnim grupama. Prilikom stvranja (kreiranja) grupe, grupe su prazne. Postoji mnogo naèina za njihovo popunjavanje:<ul><li>automatsko (\'Popuni grupe\'),</li><li>ruèno (\'Dodaj\'),</li><li>studentsko samoprijavljivanje  (Grupne postavke: \'Samoprijavljivanje dozvoljeno...\').</li></ul>Ova tri naèina se mogu kombinirati. Možete, primjerice, èitati studente da se prvo samostalno prijavljuju.Tada otkrijete da se neki od njih nisu prijavili i odluèite tada popuniti grupu automatski kako bi je upotpunili.Takoðer, možete dodati svakoj grupi da stvara èlanstva po principu jedan po jedan student prije ili poslije samoprijavljivanja ili automatskog popunjavanja.</p><p>Grupno popunjavanje, bilo automatsko ili ruèno, radi samo ukoliko su studenti veæ prijavljeni na predmetu (ne miješajte prijavu za nastavni predmet i prijavu za grupu).Studentski popis je vidljiv na izboniku  <b>Korisnici</b> . </p><hr noshade size=1><p><b>Stvaranje grupa</b></p><p>Da bi stvorili novu grupu, kliknite na  \'Stvori novu grupu(e)\' i odredite broj grupa koje želite stvoriti Maksimalni broj èlanova nije odreðen, ali predlažemo da izaberete jedan broj. Ukoliko ostavite polje maksimalnog broja grupe, maksimalni broj grupe je neodreðen.</p><hr noshade size=1><p><b>Grupne postavke</b></p><p>Možete odrediti opæe grupne postavke koje vrijede za sve grupe.<b>Studentima je dozvoljeno samostalno prijavljivanje u grupe</b>: <p>Možete stvoriti praznu grupu, a studenti se mogu samostalno prijavljuju.Ukoliko ste definirali maksimalni broj èlanova grupe, pune grupe ne prihvaæaju nove èlanove.Ova metoda je dobra za nastavnike koji ne znaju studentsku listu prilikom stvaranja grupe.</p><b>Outils</b>:</p><p>Svaka grupa posjeduje ili forum (privatni ili javni) ili podruèje Dokumenata (zajednièke datoteka) ili najèešæe oboje.</p><hr noshade size=1><p><b>Ruèno dodavanje</b></p><p>Jednom kada je grupa stvorena (Stvori grupe), na dnu stranice možete vidjeti popis grupa sa nizom informacija i funkcija<ul><li><b>Uredi</b> da bi promjenili ruèno ime grue, opis, tutora, listu èlanova .</li><li><b>Obriši</b> obrišite grupu.</li></ul><hr noshade size=1>";
 $langHExercise = "Pomo&#263; za vježbe";
 $langExerciseContent = "<p>Alat vježbi omogu&#263;uje vam da izradite vježbe s brojem pitanja po vašoj želji.<br><br> Postoje razli&#269;ite vrste odgovora koje su dostupne za izradu vaših pitanja :<br><br> <ul> <li>Višestruki izbor(Jedan odgovor)</li> <li>Višestruki izbor (Više odgovora)</li> <li>Povezivanje</li> <li>Popunjavanje praznina</li> </ul> U vježbi je prikupljen odre&#273;eni broj pitanja.</p> <hr> <b>Izrada vježbe</b> <p>Kako biste izradili vježbu, pritisnite na \"Nova vježba\".<br><br> Upišite naziv vježbe, kao i njezin neobvezni opis.<br><br> Možete dodati i zvu&#269;nu ili vizualnu datoteku, za razumijevanje govora i sli&#269;no. Vi odlu&#269;ujete o veli&#269;ini tih datoteka kako bi ih bilo što jednostavnije prenositi kroz mrežu. Primjerice, radije koristite datoteke .mp3 nego datoteke .wav, jer se bolje komprimiraju i manjih su veli&#269;ina. <br> <br> Tako&#273;er možete birati izme&#273;u dvije vrste vježbi:<br><br> <ul> <li>Pitanja na jednoj stranici</li> <li>Jedno pitanje po stranici (nizovi)</li> </ul> i ozna&#269;iti želite li da se pitanja biraju nasumi&#269;no tijekom rješavanja vježbe.<br><br> Potom spremite svoju vježbu. Po&#273;ite na upravljanje pitanjima.</p> <hr> <b>Dodavanje pitanja</b> <p>Sad možete dodati pitanje u prethodno izra&#273;enu vježbu. Opis nije obvezan, kao ni slika koju možete povezati sa svojim pitanjem.</p> <hr> <b>Višestruki izbor</b> <p>Kako biste izradili Pitanje s jednim ili više to&#269;nih odogvora:<br><br> <ul> <li>Odredite odgovore za svoje pitanje. Odgovor možete dodati ili izbrisati pritiskom na desnu tipku</li> <li>Ozna&#269;ite lijevi okvir za to&#269;an/to&#269;ne odgovor/e</li> <li>Dodajte neobveznu opasku. Korisnik &#263;e je vidjeti tek nakon što odgovori na pitanje</li> <li>Odredite bodove za svako pitanje. Bodujete pozitivnim ili negativnim znamenkama ili nulom.</li> <li>Spremite odgovore</li> </ul></p> <hr> <b>Popunjavanje praznina</b> <p>Ovdje vam je omogu&#263;ena izrada teksta s prazninama. Cilj je da korisnik ponudi rije&#269;i koje ste uklonili iz teksta.<br><br> Kako biste uklonili rije&#269; iz teksta, i time izradili prazninu, zadanu rije&#269; ozna&#269;ite zagradama [ovako].<br><br> Kad je tekst upisan i praznine odre&#273;ene, možete dodati opasku koju &#263;e student vidjeti kad odgovori na pitanje.<br><br> Spremite tekst, i prije&#263;i &#263;ete na novi korak koji &#263;e vam omogu&#263;iti da bodujete svaku prazninu. Primjerice, vrijedi li cijelo pitanje 10 bodova, a vi imate pet praznina, svaku prazninu možete bodovati s dva boda.</p> <hr> <b>Povezivanje</b> <p>Ovu vrstu odgovora odabirete kako biste izradili pitanje u kojem &#263;e korisnik morati povezati elemente iz cjeline 1 s elementima iz cjeline 2.<br><br> Tako&#273;er možete tražiti od korisnika da elemente razvrsta po odre&#273;enom redoslijedu.<br><br> Prvo odredite mogu&#263;nosti izme&#273;u kojih &#263;e korisnik mo&#263;i odabrati to&#269;an odgovor. Zatim odaberite pitanja koja &#263;e morati biti povezana s jednom od prethodno odre&#273;enih mogu&#263;nosti. Na kraju, pomo&#263;u padaju&#263;eg izbornika povežite elemente iz prve cjeline s onima iz druge.<br><br> Opaska: Više elemenata iz prve cjeline može upu&#263;ivati na jedan element u drugoj cjelini.<br><br> Odredite bodove za svako to&#269;no povezivanje i spremite svoj odgovor.</p> <hr> <b>Izmjene vježbi</b> <p>Kako biste izmijenili vježbu, vodite se istim na&#269;elima kao i pri izradi. Samo kliknite na sliku<img src=\\\"../img/edit.gif\\\" border=\\\"0\\\" align=\\\"absmiddle\\\"> pored vježbe koju želite izmijeniti, i slijedite gornje upute.</p> <hr> <b>Brisanje vježbe</b> <p>Kako biste izbrisali vježbu, kliknite na sliku <img src=\\\"../img/delete.gif\\\" border=\\\"0\\\" align=\\\"absmiddle\\\"> pored vježbe koju želite izbrisati.</p> <hr> <b>Aktiviranje vježbe</b> <p>Kako biste pokrenuli vježbu, morate je aktivirati pritiskom na sliku <img src=\\\"../img/invisible.gif\\\" border=\\\"0\\\" align=\\\"absmiddle\\\"> pored naziva vježbe.</p> <hr> <b>Pokretanje vježbe</b> <p>Svoju vježbu možete testirati pritiskom na njezin naziv u popisu vježbi.</p> <hr> <b>Nasumi&#269;na pitanja</b> <p>U trenutku izrade/izmjene vježbe možete odlu&#269;iti želite li da se pitanja pojavljuju nasumi&#269;nim odabirom izme&#273;u svih pitanja te vježbe.<br><br> Aktiviranjem ove mogu&#263;nosti, svaki put kada korisnici pokrenu vježbu pitanja &#263;e se pojavljivati drugim redoslijedom.<br><br> Imate li velik broj pitanja, možete odlu&#269;iti da se nasumi&#269;no pojavljuje samo odre&#273;eni broj pitanja od svih pitanja u toj vježbi.</p> <hr> <b>Zbirka pitanja</b> <p>Kad izbrišete vježbu, pitanja u njoj ostaju pohranjena u bazi podataka i možete ih ponovno upotrijebiti u novoj vježbi putem zbirke pitanja.<br><br> Zbirka pitanja tako&#273;er omogu&#263;uje ponovnu uporabu istoga pitanja u više vježbi.<br><br> Prema izvornim postavkama, sva su pitanja vašeg kolegija skrivena. Pitanja povezana s odre&#273;enom vježbom možete pokazati odabirom \"Filtriraj\" u padaju&#263;em izborniku.<br><br> Dodatna pitanja su ona koja ne pripadaju nijednoj vježbi.</p> Dodavanje pitanja <hr> <b>Vježbe HotPotatoes</b> <p>Mogu&#263;e je prenijeti vježbe HotPotatoes u portal Dokeos, u alat Vježbe. Rezultati tih vježbi pohranjuju se na isti na&#269;in kao i oni vježbi Dokeos. Rezultate možete pretražiti u alatu Pra&#263;enje korisnika. U slu&#269;aju pojedina&#269;nih vježbi, preporu&#269;amo uporabu formata html ili htm, a ako vježba sadrži slike najprikladniji je na&#269;in u&#269;itavanje datoteke zip.</p> <p>Opaska: Vježbe HotPotatoes možete dodati i kao korak na putu u&#269;enja.</p> <b>Metoda prijenosa</b> <ul> <li>Odaberite datoteku na svom ra&#269;unalu uporabom tipke Pregledaj <input type=submit value=Pregledaj name=submit2>na desnoj strani zaslona.</li> <li> Pokrenite prijenos pritiskom na tipku Prijenos <input type=submit value=Prijenos name=submit2>. </li> <li>Vježbu možete otvoriti pritiskom na njezin naziv. </li> </ul> <br> <b>Korisna poveznica</b><br> <ul> <li>Po&#269;etna stranica programa Hot Potatoes: <a href=\\\"http://web.uvic.ca/hrd/halfbaked/\\\">http://web.uvic.ca/hrd/halfbaked/</a></li> </li> </ul> ";
 $langHPath = "Pomo&#263; za put u&#269;enja";

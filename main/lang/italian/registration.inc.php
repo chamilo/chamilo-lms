@@ -12,8 +12,7 @@ $langAddImage = "Immagine";
 $langCourseManager = "Gestore del corso";
 $password_request = "Hai chiesto di modificare la password. Se non lo hai fatto ignora questo messaggio. Per effettuare la modifica clicca sul collegamento di reset.";
 $YourPasswordHasBeenEmailed = "La password è stata inviata via e-mail.";
-$lang_enter_email_and_well_send_you_password = "Inserisci qui sotto l\'indirizzo e-mail usato per l\'iscrizione,<br>
-la password ti sarà inviata via posta elettronica.";
+$lang_enter_email_and_well_send_you_password = "Inserisci qui sotto l\'indirizzo e-mail usato per l\'iscrizione,<br>la password ti sarà inviata via posta elettronica.";
 $langLogin = "Accesso";
 $langAction = "Azione";
 $langPreserved = "Conservato";
@@ -28,8 +27,7 @@ $langIfYouWantToAddManyUsers = "Per aggiungere un elenco di utenti al corso è ne
 $langPassTooEasy = "la password è troppo semplice. Usane una come ";
 $langGroupUserManagement = "Gestione gruppi";
 $langAddedToCourse = "è iscritto al campus ma non a questo corso. Ora è iscritto al corso.";
-$langUserAlreadyRegistered = "Un utente con lo stesso nome / cognome è già iscritto
-			al corso. Non è possibile iscriverlo due volte.";
+$langUserAlreadyRegistered = "Un utente con lo stesso nome / cognome è già iscritto			al corso. Non è possibile iscriverlo due volte.";
 $langBackUser = "<< elenco degli utenti";
 $langUserOneByOneExplanation = "Una e-mail di conferma con \'Nome utente\' e \'Password\' verrà inviata a:";
 $langGiveTutor = "Rendi tutor";
@@ -38,19 +36,13 @@ $langGiveAdmin = "Rendi amministratore";
 $langUserNumber = "numero";
 $langDownloadUserList = "Carica l\'elenco";
 $langSend = "Invia";
-$langUserAddExplanation = "ogni riga del documento da trasmettere deve necessariamente includere
-		solo i 5 campi <b>Nome   Cognome   
-		Nome utente   Password 
-		  Email</b> separati da tabulazioni e nell\'ordine esatto.
-		Gli utenti riceveranno un\'e-mail di conferma con Nome Utente/Password.";
+$langUserAddExplanation = "ogni riga del documento da trasmettere deve necessariamente includere		solo i 5 campi <b>Nome   Cognome   		Nome utente   Password 		  Email</b> separati da tabulazioni e nell\'ordine esatto.		Gli utenti riceveranno un\'e-mail di conferma con Nome Utente/Password.";
 $langUserMany = "Importa gli utenti da un elenco su un documento di testo CSV / XML";
 $langOneByOne = "Aggiungi manualmente un utente";
 $langNow = "adesso";
 $langTutor = "Tutor";
 $langTitular = "Autore";
-$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Modifica l\'elenco dei corsi</big><br><br>
-Segna i corsi che intendi seguire.<br>
-Cancella il segno da quelli che non intendi più seguire.<br> Infine premi su \'Conferma\' alla fine dell\'elenco";
+$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Modifica l\'elenco dei corsi</big><br><br>Segna i corsi che intendi seguire.<br>Cancella il segno da quelli che non intendi più seguire.<br> Infine premi su \'Conferma\' alla fine dell\'elenco";
 $langStudent = "Corsista";
 $langImportUserList = "Importa un elenco di utenti";
 $langAddAU = "Aggiungi un utente";

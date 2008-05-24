@@ -42,6 +42,5 @@ $langTotalMDEs = "Total de entradas de metadatos (MD) de enlaces";
 $langMainMD = "Abrir la página principal de entradas de metadatos (MDE)";
 $langOrElse = "Seleccionar una categoría de enlaces";
 $langWarningDups = "¡ - los nombres de categoría duplicados serán retirados de la lista !";
-$langSLC = "Trabajar con la categoría de enlace nombrada
-";
+$langSLC = "Trabajar con la categoría de enlace nombrada";
 ?>

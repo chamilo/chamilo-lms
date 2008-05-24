@@ -2,10 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langInvalidId = "Vstop ni uspel. Napaèno uporabniško ime ali geslo";
-$langWelcome = "Prosto dosegljivi teèaji so spodaj. Ostali teèaji zahtevajo
-uporabniško ime in geslo, ki ga lahko dobiš s klikom na opcijo \'registracija\'. Uèitelji
-lahko tvorijo spletne teèajev s klikom na registracijo in z izbiro
-\'Tvori spletno stran teèaja (uèitelji)\'.";
+$langWelcome = "Prosto dosegljivi teèaji so spodaj. Ostali teèaji zahtevajouporabniško ime in geslo, ki ga lahko dobiš s klikom na opcijo \'registracija\'. Uèiteljilahko tvorijo spletne teèajev s klikom na registracijo in z izbiro\'Tvori spletno stran teèaja (uèitelji)\'.";
 $langPass = "Geslo";
 $langEnter = "Vstop";
 $langReg = "Registracija";

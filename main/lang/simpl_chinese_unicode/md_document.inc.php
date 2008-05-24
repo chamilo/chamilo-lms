@@ -20,9 +20,7 @@ $langCoverage = "覆盖";
 $langCoverageTip = "例如文理学士的xxx: yyy";
 $langKwNote = "如果您改变了描述语言，请不要同时加上关键字。";
 $langClickKw = "点击子目录下关键字选择或不选择它。";
-$langKwHelp = "点击 
-\\\'+\\\'按钮打开，\\\'-\\\'按钮关闭，\\\'++\\\'按钮打开所有，\\\'--\\\'按钮关闭所有，<BR><BR>通过关闭子目录取消对所有关键字的选择，再次打开点按钮\\\'+\\\'。<BR>按alt单击\\\'+\\\'在子目录中寻找原始关键字，<BR><BR>按alt单击选择一个没有broader 
-terms 的关键字，或不选择它，<BR><BR>time. 如果您改变了描述语言，请不要同时加上关键字.<BR>";
+$langKwHelp = "点击 \\\'+\\\'按钮打开，\\\'-\\\'按钮关闭，\\\'++\\\'按钮打开所有，\\\'--\\\'按钮关闭所有，<BR><BR>通过关闭子目录取消对所有关键字的选择，再次打开点按钮\\\'+\\\'。<BR>按alt单击\\\'+\\\'在子目录中寻找原始关键字，<BR><BR>按alt单击选择一个没有broader terms 的关键字，或不选择它，<BR><BR>time. 如果您改变了描述语言，请不要同时加上关键字.<BR>";
 $langRights = "使用权限";
 $langRightsTip = "描述";
 $langVersion = "版本";
@@ -41,10 +39,7 @@ $langConfirmDelete = "你确定要删除所有元数据吗？";
 $langCourseKwds = "此文档包含课程关键字";
 $langSearch = "搜索";
 $langSearchCrit = "每行一字！";
-$langStatuses = ":草稿:草稿,,
-         终稿:终稿,, 
-         已修改:已修改,, 
-         无用:无用";
+$langStatuses = ":草稿:草稿,,         终稿:终稿,,          已修改:已修改,,          无用:无用";
 $langCosts = ":否:免费,, 是:要收费";
 $langCopyrights = ":是:有版权,, 否:无版权";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";

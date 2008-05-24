@@ -64,8 +64,7 @@ $langNumberOfUsers = "Número d\'usuaris";
 $langMaximum = "màxim";
 $langMaximumOfParticipants = "Número màxim de membres";
 $langParticipants = "Membres";
-$langFirstLetterClass = "Primera lletra (nom de l\'aula)
-	 ";
+$langFirstLetterClass = "Primera lletra (nom de l\'aula)	 ";
 $langFirstLetterUser = "Primera lletra (cognoms)";
 $langFirstLetterCourse = "Primera lletra (codi)";
 $langModifyUserInfo = "Modificar la informació d\'un usuari";
@@ -81,8 +80,7 @@ $langPleaseEnterCourseCode = "Si us plau, introduïu el codi del curs!";
 $langPleaseEnterTitularName = "Si us plau, introduïu el nom i cognoms del professorat!";
 $langPleaseEnterCourseTitle = "Si us plau, introduïu el títol del curs!";
 $langAcceptedPictureFormats = "Els formats acceptats són: .JPG, .PNG i .GIF!";
-$langLoginAlreadyTaken = "Aquest nom d\'usuari ja està en ús!
-	";
+$langLoginAlreadyTaken = "Aquest nom d\'usuari ja està en ús!	";
 $langImportUserListXMLCSV = "Importar llistat d\'usuaris des d\'un arxiu XML/CSV";
 $langExportUserListXMLCSV = "Exportar llistat d\'usuaris a un fitxer XML/CSV";
 $langOnlyUsersFromCourse = "Només usuaris del curs";
@@ -200,9 +198,7 @@ $langVisualCode = "Codi visual";
 $langAddCourse = "Crear un curs";
 $langAdminManageVirtualCourses = "Administrar cursos virtuals";
 $langAdminCreateVirtualCourse = "Crear un curs virtual";
-$langAdminCreateVirtualCourseExplanation = "El curs virtual compartirà enmagatzament (directori i base de dades) amb un curs \'real\' exsitent
-
-";
+$langAdminCreateVirtualCourseExplanation = "El curs virtual compartirà enmagatzament (directori i base de dades) amb un curs \'real\' exsitent";
 $langRealCourseCode = "Codi del curs real";
 $langCourseCreationSucceeded = "El curs ha estat creat satisfactoriament";
 $langYourDokeosUses = "La seva instal·lació Dokeos utilitza actualment";
@@ -246,16 +242,13 @@ $emailAdministratorComment = " L\'adreça de correu electrònic de l\'Administrado
 $administratorSurnameTitle = "Administrador de la plataforma: cognom";
 $administratorSurnameComment = "Els cognoms de l\'administrador de la plataforma (apareixen al costat esquerre del peu)";
 $administratorNameTitle = "Administrador de plataforma: Primer nom";
-$administratorNameComment = " El Nom de Fonts de l\'Administrador de Plataforma (apareix en el títol a
-peu de pàgina a l\'esquerra)";
+$administratorNameComment = " El Nom de Fonts de l\'Administrador de Plataforma (apareix en el títol apeu de pàgina a l\'esquerra)";
 $ShowAdministratorDataTitle = "Informació de l\'administardor de la plataforma a peu de pàgina";
-$ShowAdministratorDataComment = " Mostri la Informació de l\'Administrador de Plataforma en el títol a peu
-de pàgina?";
+$ShowAdministratorDataComment = " Mostri la Informació de l\'Administrador de Plataforma en el títol a peude pàgina?";
 $HomepageViewTitle = "Vista de la pàgina principal";
 $HomepageViewComment = " Com vol la pàgina inicial d\'un curs per assemblar-se?";
 $HomepageViewDefault = "Esquema de dues columnes. Les eines desactivades queden inactives";
-$HomepageViewFixed = "Tres presentacions de columna. Les eines inactives
-s\'encanudeixen fora (Les icones es queden al seu lloc)";
+$HomepageViewFixed = "Tres presentacions de columna. Les eines inactivess\'encanudeixen fora (Les icones es queden al seu lloc)";
 $Yes = "Si";
 $No = "No";
 $ShowToolShortcutsTitle = "Accès directe a eines";
@@ -263,8 +256,7 @@ $ShowToolShortcutsComment = "Mostri les dreceres d\'eines a la bandera|pancarta?
 $ShowStudentViewTitle = "Vista d\'estudiants";
 $ShowStudentViewComment = "Permetre Visualització d\'Estudiant?<br>Aquesta opció permet al professor veure el portal en mode estudiant.";
 $AllowGroupCategories = "Categories de grup";
-$AllowGroupCategoriesComment = " Permeti administradors de curs crear categories en el mòdul de grup?
-	 ";
+$AllowGroupCategoriesComment = " Permeti administradors de curs crear categories en el mòdul de grup?	 ";
 $PlatformLanguageComment = "Pot determinar les llengües de plataformes en una part diferent de l\'administració de plataformes, és a dir: Plataforma de <a href=\"languages.php\">Dokeos Languages</a>";
 $PlatformLanguageTitle = "Llenguatge de la plataforma";
 $ProductionServer = "Servidor de producció";
@@ -273,8 +265,7 @@ $ShowOnlineTitle = "Usuaris connectats";
 $AsPlatformLanguage = "Com a idioma de la plataforma";
 $ShowOnlineComment = "Mostrar el número de persones en línia?";
 $AllowNameChangeTitle = "Permetre el canvi de nom al perfil?";
-$AllowNameChangeComment = "Està l\'usuari permès canviar el seu nom i cognom a ell?
-";
+$AllowNameChangeComment = "Està l\'usuari permès canviar el seu nom i cognom a ell?";
 $DefaultDocumentQuotumTitle = "Quota per defecte dels documents";
 $DefaultDocumentQuotumComment = " Què és el quotum d\'omissió|rebel·lia per a l\'eina de documents? Pot invalidar la quota per a cursos específics completament: els Cursos de > d\'administració de plataformes > modifiquen";
 $ProfileChangesTitle = "Perfil";
@@ -384,8 +375,7 @@ $DropboxAllowJustUploadComment = " Permeti als professors i a estudiant carregar
 $DropboxAllowStudentToStudentTitle = "Compartició de fitxers: usuari <-> usuari";
 $DropboxAllowStudentToStudentComment = " Permeti estudiants per enviar documents a uns altres estudiants (igual 2 igual, canvi|intercanvi de P2P). Els estudiants podrien utilitzar això per a menys documents pertinents també (mp3, solucions...). Si impossibilita això llavors l\'estudiant només pot enviar documents als professors";
 $DropboxAllowMailingTitle = "Droprox: permès l\'enviament de correu";
-$DropboxAllowMailingComment = " Amb la funcionalitat de publitramesa pot enviar un document personal a
-cada estudiant";
+$DropboxAllowMailingComment = " Amb la funcionalitat de publitramesa pot enviar un document personal acada estudiant";
 $PermissionsForNewDirs = "Permisos per a directoris nous";
 $UserListHasBeenExported = "La llista d\'usuaris ha estat exportada";
 $ClickHereToDownloadTheFile = "Cliqueu aquí per descarregar el fitxer";
@@ -396,8 +386,7 @@ $ExtendedProfileTitle = "Perfil extès";
 $ExtendedProfileComment = "Si aquesta escena es posa a \'Veritable\', un usuari pot substituir després de (opcional) camps: \'Les meves competències, \'Els meus diplomes, \'puc ensenyar\' i \'La meva àrea oberta personal\'";
 $Classes = "Classes";
 $UserUnsubscribed = "L\'usuari ha estat exclòs";
-$CannotUnsubscribeUserFromCourse  = "L\'usuari no pot ser insubscrit des de curs. Aquest usuari és un
-administrador de curs.";
+$CannotUnsubscribeUserFromCourse  = "L\'usuari no pot ser insubscrit des de curs. Aquest usuari és unadministrador de curs.";
 $InvalidStartDate = "La data inicial es donada com a invàlida";
 $InvalidEndDate = " La data final es donada com a invàlida";
 $DateFormatLabel = "(d/m/a h:m)";
@@ -432,8 +421,7 @@ $ShowNavigationMenuTitle = "Mostrar el menú de navegació del curs";
 $ShowNavigationMenuComment = "Mostrar un menú de navegació que facilita l\'accés a diferents parts del curs";
 $ShowIconsInNavigationsMenuTitle = "Mostrar les imatges en el menú de navegació";
 $SeeAllRolesAllLocationsForSpecificRight = "Vegi tots els papers i localitzacions per|per a específic bé|a la dreta";
-$SeeAllRightsAllRolesForSpecificLocation = "Vegi tots els papers i drets per a localització específica
-";
+$SeeAllRightsAllRolesForSpecificLocation = "Vegi tots els papers i drets per a localització específica";
 $ClassesUnsubscribed = "Les classes seleccionades eren insubscrites des dels cursos seleccionats";
 $ClassesSubscribed = "Les classes seleccionades eren subscrites als cursos seleccionats";
 $RoleId = "Paper ID";
@@ -504,10 +492,7 @@ $ErrorsWhenImportingFile = "Errors en importar el fitxer";
 $ServiceActivated = "Servei activat";
 $ActivateExtension = "Serveis activats";
 $InvalidExtension = "Servei no vàlid";
-$VersionCheckExplanation = "Per tal d\'activar la verificació automàtica de les versions, heu d\'enregistrar el vostre portal a Dokeos.com. Les dades que ens transmeteu, en haver clicat el botó, són reservades per a usos interns; només es faran públiques les dades estadístiques globals (nombre total de plataformes Dokeos, de cursos, d\'estudiants ...)
-Vegeu <a href=\"http://www.dokeos.com/stats/\">http://www.dokeos.com/stats/</a>.
-Després d\'enregistrar la vostra plataforma Dokeos, apareixerà també en la nostra llista internacional (<a href=\"http://www.dokeos.com/community.php\">http://www.dokeos.com/community.php</a>).
-Si no hi voleu aparèixer, marqueu el quadre de sota. Per enregistrar-vos, res més simple: cliqueu només el botó ! ";
+$VersionCheckExplanation = "Per tal d\'activar la verificació automàtica de les versions, heu d\'enregistrar el vostre portal a Dokeos.com. Les dades que ens transmeteu, en haver clicat el botó, són reservades per a usos interns; només es faran públiques les dades estadístiques globals (nombre total de plataformes Dokeos, de cursos, d\'estudiants ...)Vegeu <a href=\"http://www.dokeos.com/stats/\">http://www.dokeos.com/stats/</a>.Després d\'enregistrar la vostra plataforma Dokeos, apareixerà també en la nostra llista internacional (<a href=\"http://www.dokeos.com/community.php\">http://www.dokeos.com/community.php</a>).Si no hi voleu aparèixer, marqueu el quadre de sota. Per enregistrar-vos, res més simple: cliqueu només el botó ! ";
 $AfterApproval = "Després de ser aprobat";
 $StudentViewEnabledTitle = "Activar la vista estudiant";
 $StudentViewEnabledComment = "Activar la vista estudiant, que permet als tutors o als administrador veure el curs tal i com ho veuria un alumne";
@@ -631,8 +616,7 @@ $AllowEmailEditorTitle = "Activar l\'editor de correus-e en línia";
 $AllowEmailEditorTitle = "Activar l\'editor de correus-e en línia";
 $AllowEmailEditorComment = "Si aquesta opció està activa, clicar sobre una direcció de correu-e obrirà un editor en línia";
 $AddCSVHeader = "Afegir la línia de capçalera del CSV ?";
-$YesAddCSVHeader = "Sí, afegir les capçaleres CSV
-Aquesta línia defineix tots els camps i es necessita quan vulgui importar l\'arxiu en una altra plataforma Dokeos";
+$YesAddCSVHeader = "Sí, afegir les capçaleres CSVAquesta línia defineix tots els camps i es necessita quan vulgui importar l\'arxiu en una altra plataforma Dokeos";
 $DeleteSelectedSessions = "Eliminar les sessions seleccionades";
 $ListOfUsersSubscribedToCourse = "Llistat d\'usuaris subscrits al curs";
 $NumberOfCourses = "Número de Cursos";

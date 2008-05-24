@@ -45,8 +45,7 @@ $FileToUpload = "Op te laden bestand";
 $ContentMaker = "Auteur van de inhoud";
 $ContentProximity = "Situatie van het leerpad";
 $UploadLocalFileFromGarbageDir = "Lokaal bestand uit de main/garbage folder opladen";
-$ThisItemIsNotExportable = "Dit item is momenteel niet SCORM compatibel. Het kan dus 
-niet geëxporteerd worden.";
+$ThisItemIsNotExportable = "Dit item is momenteel niet SCORM compatibel. Het kan dus niet geëxporteerd worden.";
 $MoveCurrentChapter = "Verplaats het huidige hoofdstuk";
 $GenericScorm = "Generische Scorm";
 $UnknownPackageFormat = "Het pakket kan niet worden herkend. Zorg er voor dat het correct is aangemaakt en geen fouten bevat. Problemen komen mogelijk door een eigen ZIP formaat of het uploaden van grote bestanden. Gebruik minimale zip-opties indien u niet zeker bent van de ZIP.";

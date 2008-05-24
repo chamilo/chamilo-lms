@@ -60,14 +60,12 @@ $langSameForAll = "เหมือนกันหมด";
 $langNoLimit = "ไม่จำกัด";
 $langPleaseEnterValidNumber = "เลือกหมายเลขกลุ่มที่คุณต้องการ";
 $langCreateGroupsFromVirtualCourses = "สร้างกลุ่มจากชื่อผู้ใช้จาก virtual courses";
-$langCreateGroupsFromVirtualCoursesInfo = "วิชานี้คือการรวมกันของวิชาจริงและวิชาเสมือนหนึ่งและหลายวิชา. ถ้าคุณกดปุ่มดังต่อไปนี้, ระบบจะสร้างกลุ่มใหม่ให้เสมือนเป็นวิชาจริง.ผู้เรียนทุกคนจะ๔กรับรวมเป็นสมาชิกของกลุ่มนี้ด้วย.
-This course is a combination of a real course and one or more virtual courses. If you press following button, new groups will be created according to these (virtual) courses. All students will be subscribed to the groups.";
+$langCreateGroupsFromVirtualCoursesInfo = "วิชานี้คือการรวมกันของวิชาจริงและวิชาเสมือนหนึ่งและหลายวิชา. ถ้าคุณกดปุ่มดังต่อไปนี้, ระบบจะสร้างกลุ่มใหม่ให้เสมือนเป็นวิชาจริง.ผู้เรียนทุกคนจะ๔กรับรวมเป็นสมาชิกของกลุ่มนี้ด้วย.This course is a combination of a real course and one or more virtual courses. If you press following button, new groups will be created according to these (virtual) courses. All students will be subscribed to the groups.";
 $langNoGroupsAvailable = "ยังไม่มีกลุ่มที่เข้าใช้งานได้";
 $langGroupsFromVirtualCourses = "วิขาเสมือนVirtual courses";
 $NotAvailable = "ยังใช้ไม่ได้";
 $AddCategory = "เพิ่มประเภท";
-$CreateSubgroups = "สร้างกลุ่มย่อย
-";
+$CreateSubgroups = "สร้างกลุ่มย่อย";
 $CreateSubgroupsInfo = "This option allows you to create new groups based on an existing group. Provide the desired number of groups and choose an existing group. The given number of groups will be created and all members of the existing group will be subscribed in those new groups. The existing group remains unchanged.";
 $CreateNumberOfGroups = "สร้าง";
 $WithUsersFrom = "กลุ่มและสมาชิกจาก";

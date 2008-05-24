@@ -284,8 +284,7 @@ $AllowRegistrationAsTeacherComment = "Kan men registreren als cursusbeheerder?";
 $PlatformLanguage = "Platformtaal";
 $Tuning = "Afstemmen";
 $SplitUsersUploadDirectory = "Splits de gebruikers\' uploadfolder";
-$SplitUsersUploadDirectoryComment = "Op intensief gebruikte portalen met veel geregistreerde gebruikers die afbeeldingen uploaden in de uploadfolder (main/upload/users/), kan het voorkomen dat het bestandssysteem het aantal bestanden niet meer aankan (deze fout werd gemeld op een Debian server met meer dan 36000 bestanden in één directory). Deze optie wijzigen, zorgt ervoor dat de gebruikersfolders worden verdeeld over 9 subfolders in de uploadfolder. Deze optie heeft geen invloed op de gebruikersfolders op de schijf, maar heeft effect op de Dokeos code. Als u deze optie wijzigt, moet u de nieuwe folders aanmaken en de huidige folders handmatig verplaatsen. Let op dat u bij het aanmaken en verplaatsen van deze folders,  u de folders van gebruikers moet plaatsen in de folders met dezelfde naam. Indien u niet zeker bent van deze optie, kan u ze beter niet activeren.
-";
+$SplitUsersUploadDirectoryComment = "Op intensief gebruikte portalen met veel geregistreerde gebruikers die afbeeldingen uploaden in de uploadfolder (main/upload/users/), kan het voorkomen dat het bestandssysteem het aantal bestanden niet meer aankan (deze fout werd gemeld op een Debian server met meer dan 36000 bestanden in één directory). Deze optie wijzigen, zorgt ervoor dat de gebruikersfolders worden verdeeld over 9 subfolders in de uploadfolder. Deze optie heeft geen invloed op de gebruikersfolders op de schijf, maar heeft effect op de Dokeos code. Als u deze optie wijzigt, moet u de nieuwe folders aanmaken en de huidige folders handmatig verplaatsen. Let op dat u bij het aanmaken en verplaatsen van deze folders,  u de folders van gebruikers moet plaatsen in de folders met dezelfde naam. Indien u niet zeker bent van deze optie, kan u ze beter niet activeren.";
 $CourseQuota = "Cursusquotum";
 $EditNotice = "Wijzig melding";
 $General = "algemeen";
@@ -636,11 +635,9 @@ $Whitelist = "Whitelist";
 $UploadExtensionsBlacklist = "Blacklist - instellingen";
 $UploadExtensionsWhitelist = "Whistelist - instellingen";
 $UploadExtensionsBlacklistComment = "De blacklist wordt gebruikt om file-extensies om te geven die moeten worden gefilterd door ze te verwijderen (of te hernoemen). De extensies moeten  worden ingegeven zonder het voorafgaande punt (.) en worden gescheiden door middel van punt-komma (;). Bijvoorbeeld: exe;com;bat;scr;php. Bestanden zonder extensie worden aanvaard. Hoofdlettergebruik speelt geen rol.";
-$UploadExtensionsWhitelistComment = "De whitelist wordt gebruikt om extensies te filteren (verwijderen of hernoemen) die niet in de whitelist voorkomen. Deze vorm wordt algemeen als veiliger beschouwd, maar is veel gerestricteerder. De extensies moeten worden ingegeven zonder het punt (.) en gescheiden door een punt-komma (;). Bijvoorbeeld: htm;html;txt;doc;xls;ppt
-Bestanden zonder extensie worden aanvaard. Hoofdlettergebruik speelt geen rol.";
+$UploadExtensionsWhitelistComment = "De whitelist wordt gebruikt om extensies te filteren (verwijderen of hernoemen) die niet in de whitelist voorkomen. Deze vorm wordt algemeen als veiliger beschouwd, maar is veel gerestricteerder. De extensies moeten worden ingegeven zonder het punt (.) en gescheiden door een punt-komma (;). Bijvoorbeeld: htm;html;txt;doc;xls;pptBestanden zonder extensie worden aanvaard. Hoofdlettergebruik speelt geen rol.";
 $UploadExtensionsSkip = "Filtergedrag (sla over/hernoem)";
-$UploadExtensionsSkipComment = "Indien u kiest om over te slaan, worden bestanden, gefilterd door de blacklist of whitelist, niet geüpload naar het systeem.
-Als u kiest om te hernoemen, wordt de extensies vervangen door diegene die is opgegeven in het systeem. Let op dat hernoemen geen echte beveiliging biedt en ook dat het uploaden van bestanden met dezelfde naam, maar met andere extensie kan leiden tot fouten.";
+$UploadExtensionsSkipComment = "Indien u kiest om over te slaan, worden bestanden, gefilterd door de blacklist of whitelist, niet geüpload naar het systeem.Als u kiest om te hernoemen, wordt de extensies vervangen door diegene die is opgegeven in het systeem. Let op dat hernoemen geen echte beveiliging biedt en ook dat het uploaden van bestanden met dezelfde naam, maar met andere extensie kan leiden tot fouten.";
 $UploadExtensionsReplaceBy = "Vervangende extensie";
 $UploadExtensionsReplaceByComment = "Geef de extensie die u wil gebruiken om de gevaarlijke extensie, gedetecteer door de filter te vervangen. Enkel nodig indien u een filter door vervanging selecteerde.";
 $Remove = "Verwijder";
@@ -722,8 +719,7 @@ $GradebookScoreDisplayCustom = "Aangepaste score weergave";
 $GradebookScoreDisplayCustomComment = "Selecteer deze optie om aangepaste score weergave te activeren.";
 $TabsGradebookEnableCustom = "Activeer aangepaste scores";
 $AddUserFields = "Gebruikersveld toevoegen";
-$FieldPossibleValues = "Mogelijke waarden
-";
+$FieldPossibleValues = "Mogelijke waarden";
 $FieldTypeDate = "Datum";
 $FieldTypeDatetime = "Datum en tijd";
 $DisplayMiniMonthCalendarTitle = "Kleine maandkalender weergeven in de agenda functionaliteit";

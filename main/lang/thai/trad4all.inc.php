@@ -93,8 +93,7 @@ $lang_resource = "ข้อมูล";
 $lang_resources = "แหล่งข้อมูล";
 $langNameOfLang['arabic'] = "อาหรับ";
 $langNameOfLang['brazilian'] = "บราซิล";
-$langNameOfLang['bulgarian']
- = "บัลกาเรีย";
+$langNameOfLang['bulgarian'] = "บัลกาเรีย";
 $langNameOfLang['catalan'] = "กาตาโลเนีย";
 $langNameOfLang['croatian'] = "โครเอเชีย";
 $langNameOfLang['danish'] = "เดนมาร์ก";

@@ -4,8 +4,7 @@ for more information: see languages.txt in the lang folder.
 $langStatDB              = "Base de datos de seguimiento. Úsela sólo si hay varias bases de datos.";
 $langEnableTracking      = "Permitir seguimiento";
 $langInstituteShortName  = "Acrónimo de la organización";
-$langWarningResponsible  = "Use este script únicamente tras haber hecho una copia de seguridad. El equipo de
-Dokeos no es resposable si Vd. pierde o deteriora sus datos.";
+$langWarningResponsible  = "Use este script únicamente tras haber hecho una copia de seguridad. El equipo deDokeos no es resposable si Vd. pierde o deteriora sus datos.";
 $langAllowSelfRegProf  = "Permitir que los propios usuarios puedan registrarse como creadores de cursos";
 $langEG = "ej.";
 $langDBHost = "Servidor de base de datos";
@@ -110,8 +109,7 @@ $PleaseGoBackToStep = "Por favor, vuelva al Paso";
 $DBSettingUpgradeIntro = "El programa de actualización recuperará y actualizará las bases de datos de Dokeos. Para realizar esto, el programa utilizará las bases de datos y la configuración definidas debajo. ¡ Debido a que nuestro software funciona en una amplia gama de sistemas y no ha sido posible probarlo en todos, le recomendamos encarecidamente que realice una copia completa de sus bases de datos antes de proceder a la actualización ! ";
 $ExtensionMBStringNotAvailable = "Extensión MBString no disponible";
 $ExtensionMySQLNotAvailable = "Extensión MySQL no disponible";
-$DokeosArtLicense = "Las imágenes y las galerías de medios de Dokeos utilizan imágenes e iconos de Nuvola, Crystal Clear y Tango. Otras imágenes y medios, como diagramas y animaciones flash, se han tomado prestadas de Wikimedia y de los cursos de Ali Pakdel y de Denis Hoa con su consentimiento y publicadas bajo licencia BY-SA Creative Commons. Puede encontrar los detalles de la licencia en 
-<a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">la web de CC</a>, donde un enlace al pie de la página le dará acceso al texto completo de la licencia.";
+$DokeosArtLicense = "Las imágenes y las galerías de medios de Dokeos utilizan imágenes e iconos de Nuvola, Crystal Clear y Tango. Otras imágenes y medios, como diagramas y animaciones flash, se han tomado prestadas de Wikimedia y de los cursos de Ali Pakdel y de Denis Hoa con su consentimiento y publicadas bajo licencia BY-SA Creative Commons. Puede encontrar los detalles de la licencia en <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">la web de CC</a>, donde un enlace al pie de la página le dará acceso al texto completo de la licencia.";
 $PleasGoBackToStep1 = "Por favor, vuelva al paso 1";
 $OptionalParameters = "Parámetros opcionales";
 ?>

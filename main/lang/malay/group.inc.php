@@ -23,8 +23,7 @@ $langGroupMembers = "Ahli Kumpulan";
 $langEditGroup = "Ubahsuai kumpulan ini";
 $Optional = "(pilihan)";
 $langGroupSettingsModified = "<i>Setting</i> kumpulan diubahsuai";
-$langGroupTooMuchMembers = "Number proposed exceeds max. that you allowed (you can modify it below). 
-				Group composition has not been modified";
+$langGroupTooMuchMembers = "Number proposed exceeds max. that you allowed (you can modify it below). 				Group composition has not been modified";
 $langGroupTutor = "Jurutera Pengajar/Tutor";
 $langGroupNoTutor = "(tiada)";
 $langGroupNone = "(tiada)";

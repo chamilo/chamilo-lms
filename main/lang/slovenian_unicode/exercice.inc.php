@@ -180,9 +180,7 @@ $langHotspotWeightingError = "Podati morate pozitivno (>0) utež za vsako izmed 
 $langHotspotValidateError1 = "Vprašanje zahteva popoln odgovor (";
 $langHotspotValidateError2 = "klikov je potrebnih na sliki) predenj si lahko ogledate rezultate.";
 $langHotspotRequired = "Opis in utež sta zahtevana za vsako izmed vročih točk. Komentar je opcijski.";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Vročo točko ustvarimo: izberemo obliko poleg barve, nato narišemo vročo točko.</div><div style=\\\"padding:2px 3px;\\\">&bull; Premik vroče točke: izberemo barvo, kliknemo drugo želeno mesto na sliki in narišemo vročo točko.</div><div style=\\\"padding:2px 3px;\\\">&bull; Dodajanje vroče točke: kliknemo na gumb [+vroča točka].</div><div style=\\\"padding:2px 3px;\\\">&bull; Zapiranje poligonske oblike: desni klik in izberemo \\\"Zapri poligon\\\".</div>
-
-";
+$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Vročo točko ustvarimo: izberemo obliko poleg barve, nato narišemo vročo točko.</div><div style=\\\"padding:2px 3px;\\\">&bull; Premik vroče točke: izberemo barvo, kliknemo drugo želeno mesto na sliki in narišemo vročo točko.</div><div style=\\\"padding:2px 3px;\\\">&bull; Dodajanje vroče točke: kliknemo na gumb [+vroča točka].</div><div style=\\\"padding:2px 3px;\\\">&bull; Zapiranje poligonske oblike: desni klik in izberemo \\\"Zapri poligon\\\".</div>";
 $Fault = "Nepravilno";
 $Hotspot = "Vroča točka";
 $ClickNumber = "Klikni številko";

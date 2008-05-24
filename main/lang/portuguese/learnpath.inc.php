@@ -192,4 +192,5 @@ $OogieConversionFailed = "A conversão falhou. <br />Alguns documentos são demasi
 $OogieUnknownError = "A conversão falhou por uma razão desconhecida. <br />Por favor contacte com o administrador da plataforma para obter mais informações.";
 $OogieBadExtension = "O ficheiro não tem uma extensão correcta";
 $WoogieBadExtension = "Por favor envie somente documentos de texto. A extensão deve ser só .doc, .docx ou .odt";
+$ShowAudioRecorder = "Mostrar gravador de áudio";
 ?>

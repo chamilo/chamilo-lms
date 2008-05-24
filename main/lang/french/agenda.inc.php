@@ -53,4 +53,16 @@ $CopiedAsAnnouncement = "Copié comme annonce";
 $NewAnnouncement = "Nouvelle annonce";
 $AddAnnouncement = "Ajouter comme une annonce";
 $UpcomingEvent = "Prochain évènement";
+$ListView = "Vue liste";
+$RepeatedEvent = "Évènement à répétition";
+$RepeatType = "Type de répétition";
+$RepeatDaily = "Chaque jour";
+$RepeatWeekly = "Chaque semaine";
+$RepeatMonthlyByDate = "Chaque mois, par date";
+$RepeatMonthlyByDay = "Chaque mois, par jour";
+$RepeatMonthlyByDayR = "Chaque mois, par jour, restreint";
+$RepeatYearly = "Chaque année";
+$RepeatEnd = "Fin de la répétition";
+$RepeatedEventViewOriginalEvent = "Voir l\'évènement initial";
+$ICalFileImport = "Importer un fichier iCal/ics";
 ?>

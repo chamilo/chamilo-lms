@@ -23,8 +23,7 @@ $langGroupMembers = "Csoporttagok";
 $langEditGroup = "A csoport szerkesztése";
 $Optional = "(opcionális)";
 $langGroupSettingsModified = "A csoport beállításai módosultak";
-$langGroupTooMuchMembers = "A javasolt szám nagyobb, mint a maximum engedélyezett (lent megváltoztatja). 
-				A csoportok összetétele nem változott.";
+$langGroupTooMuchMembers = "A javasolt szám nagyobb, mint a maximum engedélyezett (lent megváltoztatja). 				A csoportok összetétele nem változott.";
 $langGroupTutor = "Oktató";
 $langGroupNoTutor = "(nincs)";
 $langGroupNone = "(nincs)";

@@ -36,13 +36,7 @@ $langCsvFileLine1 = " 	... - línea 1 =";
 $langCsvLinesFailed = "falla al importar el enlace (no hay URL o título)";
 $langCsvLinesOld = "los enlaces existentes se han actualizado";
 $langCsvLinesNew = "nuevo(s) enlace(s) creados";
-$langCsvExplain = "El archivo debe presentar el siguiente formato: 
-URL;categoría;título;descripción;
-http://www.aaa.org/...;Enlaces importantes;Nombre 1;Descripción 1;
-http://www.bbb.net/...;;Nombre 2;\"Descripción 2\";
-Si la \'URL\' y la \'categoría\' pertenecen a un enlace ya existente, éste será actualizado. En el resto de los casos un nuevo enlace será creado.
-
-Negrita = obligatorio. El orden de los campos no tiene importancia, mayúsculas y minúsculas están permitidas. Los campos desconocidos serán añadidos a la \'descripción\'. Separadores: comas o puntos y comas. Los valores podrán encontrarse entre comillas, pero no los nombres de columna. Algunas [b]etiquetas HTML[/b] serán importadas en el campo \'descripción\'. ";
+$langCsvExplain = "El archivo debe presentar el siguiente formato: URL;categoría;título;descripción;http://www.aaa.org/...;Enlaces importantes;Nombre 1;Descripción 1;http://www.bbb.net/...;;Nombre 2;\"Descripción 2\";Si la \'URL\' y la \'categoría\' pertenecen a un enlace ya existente, éste será actualizado. En el resto de los casos un nuevo enlace será creado.Negrita = obligatorio. El orden de los campos no tiene importancia, mayúsculas y minúsculas están permitidas. Los campos desconocidos serán añadidos a la \'descripción\'. Separadores: comas o puntos y comas. Los valores podrán encontrarse entre comillas, pero no los nombres de columna. Algunas [b]etiquetas HTML[/b] serán importadas en el campo \'descripción\'. ";
 $langLinkUpdated = "El enlace ha sido actualizado";
 $langAll_Link_Deleted = "El enlace ha sido eliminado";
 $langOnHomepage = "Mostrar el enlace en la página de inicio";

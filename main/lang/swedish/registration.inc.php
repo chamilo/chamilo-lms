@@ -42,9 +42,7 @@ $langOneByOne = "Lägg till användare manuellt";
 $langNow = "nu";
 $langTutor = "Lärare";
 $langTitular = "Titel";
-$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Ändra i kurslistan</big><br><br>
-Markera de kurser som du önskar följa.
-Avmarkera de kurser som du inte önska följa längre. Klicka därefter på Ok längst ner i kurslistan";
+$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Ändra i kurslistan</big><br><br>Markera de kurser som du önskar följa.Avmarkera de kurser som du inte önska följa längre. Klicka därefter på Ok längst ner i kurslistan";
 $langStudent = "elev";
 $langImportUserList = "Importera en lista på användare";
 $langAddAU = "Lägg till en användare";

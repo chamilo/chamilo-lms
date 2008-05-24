@@ -29,8 +29,7 @@ $langOrElse = "Seleccione un directorio SCORM o su identificador";
 $langWorkWith = "Trabaje con un directorio SCORM";
 $langSDI = "... Directorio SCORM con SD-id (dividir el manifest o dejarlo vacío)";
 $langRoot = "raíz";
-$langSplitData = "Dividir el manifest, y #MDe, si cualquiera:
-";
+$langSplitData = "Dividir el manifest, y #MDe, si cualquiera:";
 $langMffNotOk = "El reemplazo del archivo manifest no ha sido posible";
 $langMffOk = "El fichero manifest ha sido reemplazado";
 $langMffFileNotFound = "El nuevo fichero manifest no puede ser abierto (ej., vacío, demasiado grande)";

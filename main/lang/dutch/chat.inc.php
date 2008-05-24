@@ -21,8 +21,7 @@ $langOnlyCheckForImportantQuestion = "Gelieve deze optie enkel aan te vinken ind
 $langQuestion = "vraag";
 $langClearList = "Wissen";
 $langWhiteBoard = "Bord";
-$langTextEditorDefault = "<h2>Tekstverwerker</h2>
-Voeg hier tekst, afbeeldingen, links... toe. Deelnemers aan deze onlineconferentie zien uw wijzigingen live.";
+$langTextEditorDefault = "<h2>Tekstverwerker</h2>Voeg hier tekst, afbeeldingen, links... toe. Deelnemers aan deze onlineconferentie zien uw wijzigingen live.";
 $langStreaming = "Streaming";
 $langStreamURL = "Stream-URL";
 $langStreamType = "Type stream";

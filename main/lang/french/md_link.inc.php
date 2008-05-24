@@ -11,8 +11,7 @@ $langTool = "Liens Metadata";
 $langNoScript = "Le script n\'est pas permis dans votre navigateur, svp ignorer l\'écran au-dessous de ce texte, il ne fonctionnera pas...";
 $langLanguageTip = "Langue utilisée pour cet Objet d\'Apprentissage";
 $langIdentifier = "Login";
-$langIdentifierTip = "seule identification pour cet objet d\'apprentissage, composée de lettres, chiffres, _-.()\\\'!*
-";
+$langIdentifierTip = "seule identification pour cet objet d\'apprentissage, composée de lettres, chiffres, _-.()\\\'!*";
 $langTitleTip = "titre ou nom, et langage de ce titre ou nom";
 $langDescriptionTip = "description, commentaires et langue utilisés pour décrire cet Objet d\'Apprentissage";
 $langKeyword = "Mots clés";
@@ -21,8 +20,7 @@ $langCoverage = "Catégorie";
 $langCoverageTip = "Nom de catégorie";
 $langKwNote = "Si vous modifiez la langue utilisée pour la description, n\'ajoutez pas de mot-clé en même temps";
 $langClickKw = "Cliquez sur un mot-clé dans l\'arborescence pour le sélectionner ou le désélectionner.";
-$langKwHelp = "<br/> Cliquez sur le bouton + pour ouvrir, sur le bouton - pour fermer, sur le bouton ++ pour les ouvrir tous.<br/> <br/> Effacez tous les mots-clés en fermant l\'arborescence et pour l\'ouvrir, encore le bouton +. <br/>Alt-clic + recherche les mots-clés initiaux dans l\'arborescence.<br/> <br/> Alt-click mot-clé choisit un mot-clé sans  limite plus large ou désélectionne un mot-clé avec des  limites plus larges.<br/> <br/> Si vous changez le langage de description, n\'ajoutez pas de mots-clés en même temps.<br/> <br/>
-";
+$langKwHelp = "<br/> Cliquez sur le bouton + pour ouvrir, sur le bouton - pour fermer, sur le bouton ++ pour les ouvrir tous.<br/> <br/> Effacez tous les mots-clés en fermant l\'arborescence et pour l\'ouvrir, encore le bouton +. <br/>Alt-clic + recherche les mots-clés initiaux dans l\'arborescence.<br/> <br/> Alt-click mot-clé choisit un mot-clé sans  limite plus large ou désélectionne un mot-clé avec des  limites plus larges.<br/> <br/> Si vous changez le langage de description, n\'ajoutez pas de mots-clés en même temps.<br/> <br/>";
 $langLocation = "Adresse URL";
 $langLocationTip = "Cliquez pour ouvrir l\'objet";
 $langStore = "Mettre en mémoire";

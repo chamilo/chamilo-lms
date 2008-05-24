@@ -40,8 +40,7 @@ $langScormStudentColumn = "Utilizatori";
 $langScormTitleColumn = "Lectie/Pas";
 $langScormStatusColumn = "Situatie";
 $langScormScoreColumn = "Punctaj";
-$langScormTimeColumn = "Timp
-";
+$langScormTimeColumn = "Timp";
 $langScormNeverOpened = "Acest curs nu a fost deschis niciodata de catre utilizator.";
 $langWorkTitle = "Titlu";
 $langWorkAuthors = "Autori";
@@ -59,8 +58,7 @@ $langLast31days = "In ultimile 31 de zile";
 $langLast7days = "In ultimile 7 zile";
 $langThisday = "Ziua aceasta";
 $langLogins = "Logari";
-$langLoginsExplaination = "Aici este lista ultimelor dvs. logari cu uneltele vizitate in timpul acestor sesiuni.
-";
+$langLoginsExplaination = "Aici este lista ultimelor dvs. logari cu uneltele vizitate in timpul acestor sesiuni.";
 $langExercicesResults = "Rezultatele testelor terminate";
 $langVisits = "vizitari";
 $langAt = "la";
@@ -116,8 +114,7 @@ $langBrowsers = "Browsers ";
 $langReferers = "Mentiuni";
 $langAccessExplain = "(Cand un utilizator deschide indexul unui portal)";
 $langTotalPlatformAccess = "Total";
-$langTotalPlatformLogin = "Total
-";
+$langTotalPlatformLogin = "Total";
 $langMultipleLogins = "Conturi cu acelasi <i>Nume de utilizator</i>";
 $langMultipleUsernameAndPassword = "Conturi cu acelasi <i>Nume de utilizator</i> SI aceasi <i>Parola</i>";
 $langMultipleEmails = "Conturi cu acelasi <i>Email</i>";

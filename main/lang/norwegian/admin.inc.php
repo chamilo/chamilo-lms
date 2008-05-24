@@ -5,6 +5,7 @@ $AdminBy  = "Administreres av";
 $AdministrationTools  = "Administrasjon";
 $State  = "Systemstatus";
 $Statistiques  = "Statistikk";
+$VisioHostLocal = "Videokonferanse host";
 $langUsed       = "brukt";
 $langPresent   = "Ok";
 $langMissing    = "mangler";

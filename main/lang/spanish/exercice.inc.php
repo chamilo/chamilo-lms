@@ -39,8 +39,7 @@ $langMatching = "Relacionar";
 $langAddPicture = "Añadir imagen (.GIF, .JPG o .PNG)";
 $langReplacePicture = "Reemplazar la imagen";
 $langDeletePicture = "Borrar la imagen";
-$langQuestionDescription = "Texto, imagen, audio o video adicionales
-";
+$langQuestionDescription = "Texto, imagen, audio o video adicionales";
 $langGiveQuestion = "Por favor, escriba la pregunta";
 $langWeightingForEachBlank = "Por favor, otorgue una puntuación a cada espacio en blanco";
 $langUseTagForBlank = "use corchetes [...] para definir uno o más espacios en blanco";
@@ -157,8 +156,7 @@ $langModifyAnswers = "modificar las respuestas";
 $langForExercise = "para el ejercicio";
 $langUseExistantQuestion = "Usar una pregunta existente";
 $freeAnswer = "Respuesta abierta";
-$notCorrectedYet = "Esta respuesta aún no ha sido corregida. Mientras tanto, su puntuación en ella será cero, afectando a la puntuación total.
-";
+$notCorrectedYet = "Esta respuesta aún no ha sido corregida. Mientras tanto, su puntuación en ella será cero, afectando a la puntuación total.";
 $adminHP = "Administración Hot Potatoes";
 $NewQu = "Nueva pregunta";
 $NoImage = "Seleccione una imagen";
@@ -240,5 +238,5 @@ $ExportWithUserFields = "Incluir los campos de usuario en la exportación";
 $ExportWithoutUserFields = "Excluir los campos de usuario de la exportación";
 $DisableResults = "No mostrar los resultados a los alumnos";
 $EnableResults = "Mostrar los resultados a los alumnos";
-$ValidateAnswer = "Verificar respuestas";
+$ValidateAnswer = "Aceptar";
 ?>

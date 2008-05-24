@@ -21,10 +21,7 @@ $langAdminLogin = "Yönetici kullan&#305;c&#305; ad&#305;";
 $langAdminPass = "Yönetici parolas&#305; (<font color=\"red\">bunu de&#287;i&#351;tirmek isteyebilirsiniz</font>)";
 $langEducationManager = "E&#287;itim yöneticisi";
 $langCampusName = "Kampüsünüzün ad&#305;";
-$langDBSettingIntro = "
-				Install script will create claroline main DB. Please note that Claroline 
-				will need to create many DBs. If you are allowed only one 
-				DB for your website by your Hosting Services, Claroline will not work.";
+$langDBSettingIntro = "				Install script will create claroline main DB. Please note that Claroline 				will need to create many DBs. If you are allowed only one 				DB for your website by your Hosting Services, Claroline will not work.";
 $langStep1 = "Basamak 1 / 6 ";
 $langStep2 = "Basamak 2 / 6 ";
 $langStep3 = "Basamak 3 / 6 ";

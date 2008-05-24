@@ -8,8 +8,7 @@ $AddCalendarItem = "P&#345;idej novou polo&#382;ku do agendy";
 $Day = "Den";
 $Month = "M&#283;síc";
 $Year = "Rok";
-$Hour = "Hodina
-";
+$Hour = "Hodina";
 $Minutes = "Minuta";
 $Detail = "Detail";
 $EditSuccess = "Polo&#382;ka agendy byla zm&#283;n&#283;na";

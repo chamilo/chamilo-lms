@@ -20,8 +20,7 @@ $lang_show_hide = "Arata / ascunde";
 $langLearnpathMystatus = "Statusul meu";
 $langLearnpathCompstatus = "completat";
 $langLearnpathIncomplete = "incomplet";
-$langLearnpathPassed = "aprobat
-";
+$langLearnpathPassed = "aprobat";
 $langLearnpathFailed = "esuat";
 $langLearnpathPrevious = "Anterior";
 $langLearnpathNext = "Urmator";
@@ -96,8 +95,7 @@ $langNewStudentPublicationCreated = "Noua publicatie a studentului a fost creata
 $langNewModuleCreated = "Noul modul a fost creat. Acum puteti sa-i adaugati un nou capitol sau pas.";
 $langNewExerciseCreated = "Noul exercitiu a fost creat.";
 $langItemRemoved = "Obiectul a fost inlaturat";
-$langLearnPathAdded = "Calea dumneavoastra de invatare a fost creata cu succes si a fost adaugata la meniul din partea stanga. Puteti acum sa adaugati module si pasii caii de invatare. 
-Folosirea capitolelor este optionala pentru o structura mai subtila.";
+$langLearnPathAdded = "Calea dumneavoastra de invatare a fost creata cu succes si a fost adaugata la meniul din partea stanga. Puteti acum sa adaugati module si pasii caii de invatare. Folosirea capitolelor este optionala pentru o structura mai subtila.";
 $langConverting = "Convertire...";
 $langPpt2lpError = "Eroare in timpul conversiei PowerPoint";
 $langBuild = "Construieste";
@@ -132,16 +130,14 @@ $langCreateTheDocument = "Creaza documentul";
 $langMoveTheCurrentDocument = "Muta documentul actual";
 $langEditTheCurrentDocument = "Editeaza documentul actual";
 $langWarning = "Atentie !";
-$langWarningEditingDocument = "Cand modificati un document in Calea de Invatare, noua versiune a documentului nu va inlocui versiunea 
-anterioara ci va si salvat ca un document nou. Daca doriti sa modificati document definitiv, puteti face aceasta cu unealta document.";
+$langWarningEditingDocument = "Cand modificati un document in Calea de Invatare, noua versiune a documentului nu va inlocui versiunea anterioara ci va si salvat ca un document nou. Daca doriti sa modificati document definitiv, puteti face aceasta cu unealta document.";
 $langDirectory = "Director";
 $langCreateTheExercise = "Creaza exercitiul";
 $langMoveTheCurrentExercise = "Muta exercitiul curent";
 $langEditCurrentExecice = "Editeaza exercitiul actual";
 $langUploadScorm = "Importa SCORM si AICC";
 $langPowerPointConvert = "Conversie PowerPoint";
-$langLPCreatedToContinue = "Pentru a continua puteti adauga un modul, capitol 
-sau pas caii de invatare din meniul din partea dreapta.";
+$langLPCreatedToContinue = "Pentru a continua puteti adauga un modul, capitol sau pas caii de invatare din meniul din partea dreapta.";
 $langLPCreatedAddChapterStep = "Puteti adauga un modul, capitol sau pas caii de invatare din meniul din partea dreapta.";
 $langPrerequisitesAdded = "Cerintele premergatoare ale pasului curent au fost adaugate.";
 $langAddEditPrerequisites = "Adauga/modifica cerinte premergatoare";

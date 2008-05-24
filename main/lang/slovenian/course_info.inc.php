@@ -64,8 +64,7 @@ $langSubscription = "Prijava";
 $langCourseAccess = "Dostop do teèaja";
 $langConfirmBackup = "Ali resnièno želiš tvoriti rezervno kopijo teèaja";
 $langCreateSite = "Tvori spletno stran teèaja";
-$langRestoreDescription = "Teèaj je v arhivski datoteki, ki jo lahko spodaj izbereš.<br><br>
-Po kliku na \"Obnovi\", se bo arhivska datoteka dekompresirala in teèaj bo obnovljen.";
+$langRestoreDescription = "Teèaj je v arhivski datoteki, ki jo lahko spodaj izbereš.<br><br>Po kliku na \"Obnovi\", se bo arhivska datoteka dekompresirala in teèaj bo obnovljen.";
 $langRestoreNotice = "Ta skript ne omogoèa avtomatiènega obnavljanja uporabnikov, vendar podatki, shranjeni v \"users.csv\" zadošèajo administratorju za roèno obnovitev.";
 $langAvailableArchives = "Seznam dostopnih arhivov";
 $langNoArchive = "Arhiv ni bil izbran";

@@ -11,10 +11,8 @@ $langMissingImagesDetected = "Detectades imatges perdudes";
 $langPublish = "Publicar";
 $langScormcontentstudent = "Això és un curs de format Scorm. Si li agradaria jugar-hi, faci clic aquí : <Input type=button name=scormbutton value=\'Launch it ! onclick=\'openscorm()\'> ";
 $langScormcontent = "Aquest és un Scorm content<br><input type=button name=scormbutton value=\'Launch it ! onclick=\'openscorm()\'> ";
-$langDownloadAndZipEnd = "Arxiu de cremalleres carregat i incondensat
-";
-$langZipNoPhp = "L\'arxiu de cremalleres no pot contenir arxius de .PHP
-";
+$langDownloadAndZipEnd = "Arxiu de cremalleres carregat i incondensat";
+$langZipNoPhp = "L\'arxiu de cremalleres no pot contenir arxius de .PHP";
 $langGroupForumLink = "Grup del fòrum";
 $langGroupSpace = "Àrea del grup";
 $langNotScormContent = "Això no és un arxiu de CREMALLERA de scorm!";
@@ -31,8 +29,7 @@ $langNewDir = "Nom de la nova carpeta";
 $langTo = "a";
 $langNoSpace = "El carregar ha fallat. No hi ha prou espai de discs en el seu guia";
 $langDownloadEnd = "El carregar és acabat";
-$langFileExists = "El Camí d\'impossible.<br>A d\'Operació|Funcionament amb aquest
-nom ja existeix.";
+$langFileExists = "El Camí d\'impossible.<br>A d\'Operació|Funcionament amb aquestnom ja existeix.";
 $langDocCopied = "Document copiat";
 $langDocDeleted = "Camí d\'Aprenentatge|Saber de format Scorm suprimit";
 $langElRen = "EI rebateja ???";
@@ -42,8 +39,7 @@ $langComMod = "Comentari modificat????";
 $langRename = "Renombrar";
 $langCopy = "Copiar";
 $langNameDir = "Nom del nou directori";
-$langDownloadFile = "Carregui IMS o curs de cremalleres Scorm Learning Path
-";
+$langDownloadFile = "Carregui IMS o curs de cremalleres Scorm Learning Path";
 $learning_path_access = "clic \'crear camí d\'aprenentatge|saber\' a delete/modify/show/hide/create/add un camí d\'aprenentatge|saber ";
 $langRoot = "arrel";
 $langBuilder = "Constructor de Camí d\'aprenentatge|saber";

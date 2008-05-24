@@ -125,8 +125,7 @@ $lang_resource = "Avots";
 $lang_resources = "Avoti";
 $langNameOfLang['arabic'] = "ar&#257;bu";
 $langNameOfLang['brazilian'] = "braz&#299;&#316;u";
-$langNameOfLang['bulgarian']
- = "bulg&#257;ru";
+$langNameOfLang['bulgarian'] = "bulg&#257;ru";
 $langNameOfLang['catalan'] = "kataloniešu";
 $langNameOfLang['croatian'] = "horv&#257;tu";
 $langNameOfLang['danish'] = "d&#257;&#326;u";

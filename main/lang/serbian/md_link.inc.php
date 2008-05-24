@@ -20,8 +20,7 @@ $langCoverage = "Kategorija";
 $langCoverageTip = "ime kategorije, cfr. Linkovi";
 $langKwNote = "Ako promenite jezik opisa ne dodajte klju&#269;ne re&#269;i u isto vreme. ";
 $langClickKw = "Kliknite ne klju&#269;nu re&#269; na drvetu da je selektujete ili deselektujete. ";
-$langKwHelp = "<br/>Kliknite na \'+\' dugme da biste otvorili, \'-\' dugme da biste zatvorili, \'++\' dugme da otvorite sve, \'--\' dugme da zatvorite sve.<br/><br/>O&#269;istite sve selektovane klju&#269;ne re&#269;i zatvaranjem drveta i otvaranjem ponovo sa \'+\' dugmetom.<br/><br/>Alt-click \'+\' traži originalne klju&#269;ne re&#269;i u drvetu.<br/><br/>Alt-click klju&#269;na re&#269; selektuje klju&#269;nu re&#269; bez širih termina ili deselktuje klju&#269;nu re&#269; sa širim terminima.<br/><br/>Ako promenite jezik opisa ne dodajte klju&#269;ne re&#269;i u isto vreme.<br/>
-";
+$langKwHelp = "<br/>Kliknite na \'+\' dugme da biste otvorili, \'-\' dugme da biste zatvorili, \'++\' dugme da otvorite sve, \'--\' dugme da zatvorite sve.<br/><br/>O&#269;istite sve selektovane klju&#269;ne re&#269;i zatvaranjem drveta i otvaranjem ponovo sa \'+\' dugmetom.<br/><br/>Alt-click \'+\' traži originalne klju&#269;ne re&#269;i u drvetu.<br/><br/>Alt-click klju&#269;na re&#269; selektuje klju&#269;nu re&#269; bez širih termina ili deselktuje klju&#269;nu re&#269; sa širim terminima.<br/><br/>Ako promenite jezik opisa ne dodajte klju&#269;ne re&#269;i u isto vreme.<br/>";
 $langLocation = "URL/URI ";
 $langLocationTip = "kliknite da otvorite objekat ";
 $langStore = "Sa&#269;uvaj ";

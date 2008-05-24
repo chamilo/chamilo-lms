@@ -23,8 +23,7 @@ $langGroupMembers = "Grup üyeleri";
 $langEditGroup = "Bu grubu düzenle";
 $Optional = "(seçimlik)";
 $langGroupSettingsModified = "Grup ayarlarý deðiþtirildi";
-$langGroupTooMuchMembers = "Number proposed exceeds max. that you allowed (you can modify it below). 
-				Group composition has not been modified";
+$langGroupTooMuchMembers = "Number proposed exceeds max. that you allowed (you can modify it below). 				Group composition has not been modified";
 $langGroupTutor = "Yetkili";
 $langGroupNoTutor = "(yok)";
 $langGroupNone = "(yok)";

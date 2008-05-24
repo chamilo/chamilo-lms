@@ -34,8 +34,7 @@ $langPleaseSelectUsers  = "Anda Mesti memilih beberapa user.";
 $Teachersubject = "Pesan dikirm ke siswa anda.";
 $langMessages  = "Pesan-pesan";
 $langMessageToSelectedUsers  = "Pesan ke user terpilih";
-$langIntroText  = "Untuk mengirim pesan, pilih group user (ditandai dengan huruf G di muka)
- atau user tunggal dari daftar di kiri.";
+$langIntroText  = "Untuk mengirim pesan, pilih group user (ditandai dengan huruf G di muka) atau user tunggal dari daftar di kiri.";
 $langDown = "turun";
 $langMsgSent = "Pesan telah dikirim ke siswa yang dipilih";
 $langSelUser = "user pilihan situs ini";

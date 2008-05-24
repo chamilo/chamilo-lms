@@ -11,9 +11,7 @@ $langPublic = "Truy cập không cần login";
 $langPrivOpen = "Truy cập có điều kiện hạn chế, đăng ký tự do";
 $langPrivate = "Truy cập chỉ với <a href=../user/user.php>danh sách user</a>)";
 $langForbidden = "Không có quyền";
-$langConfTip = "By default, you course is only accessible to you as its only registered user. If you want some confidentiality,
-the simplest way is to open registration during
-one week, ask the students to register themselves, then close registration and check for possible intruders in the user list.";
+$langConfTip = "By default, you course is only accessible to you as its only registered user. If you want some confidentiality,the simplest way is to open registration duringone week, ask the students to register themselves, then close registration and check for possible intruders in the user list.";
 $langTipLang  = "This language will be valid for every visitor of your course\'s website.";
 $langVid = "Video";
 $langWork = "Bài viết của học sinh";
@@ -62,8 +60,7 @@ $langSubscription = "Subscription";
 $langCourseAccess = "Course access";
 $langConfirmBackup = "Do you really want to backup the course";
 $langCreateSite = "Tạo một Website cho khoá học mới ";
-$langRestoreDescription = "The course is in an archive file which you can select below.<br><br>
-When you have clicked on \"Restore\", the archive will be uncompessed and the course recreated.";
+$langRestoreDescription = "The course is in an archive file which you can select below.<br><br>When you have clicked on \"Restore\", the archive will be uncompessed and the course recreated.";
 $langRestoreNotice = "This script doesn\'t allow yet to automatically restore users, but data saved in \"users.csv\" are sufficient so as for the administrator to be able to make that work manually.";
 $langAvailableArchives = "Available archive list";
 $langNoArchive = "No archive has been selected";

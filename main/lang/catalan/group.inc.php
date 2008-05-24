@@ -23,8 +23,7 @@ $langGroupMembers = "Membres del grup";
 $langEditGroup = "Edita aquest grup";
 $Optional = "(opcional)";
 $langGroupSettingsModified = "Especificacions del grup modificades";
-$langGroupTooMuchMembers = "Nombre proposat excedeix el màxim que has permés (pots modificar-ho a sota).
-				La composició del grup no ha estat modificada";
+$langGroupTooMuchMembers = "Nombre proposat excedeix el màxim que has permés (pots modificar-ho a sota).				La composició del grup no ha estat modificada";
 $langGroupTutor = "Tutor";
 $langGroupNoTutor = "(cap)";
 $langGroupNone = "(cap)";

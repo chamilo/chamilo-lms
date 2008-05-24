@@ -77,8 +77,7 @@ $langNewStep = "Langkah/step baru";
 $langPrerequisites = "Prasyarat";
 $langEditPrerequisites = "Edit prasyarat pada item ini";
 $langTitleManipulateChapter = "Ubah bab ini";
-$langTitleManipulateModule = "Ubah modul ini
-";
+$langTitleManipulateModule = "Ubah modul ini";
 $langTitleManipulateDocument = "Ubah dokumen ini";
 $langTitleManipulateLink = "Ubah link ini";
 $langTitleManipulateQuiz = "Ubah latihan ini";

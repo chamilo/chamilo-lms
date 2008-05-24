@@ -20,15 +20,7 @@ $langCoverage = "Categoría";
 $langCoverageTip = "nombre de categoría";
 $langKwNote = "Si ud cambia el idioma de descripción, no añada palabras clave al mismo tiempo";
 $langClickKw = "Haga clic en una palabra clave del árbol para seleccionarla o deseleccionarla.";
-$langKwHelp = "<br/>Haga clic en el botón \'+\' para abrir, en el botón \'-\' para cerrar, en el botón \'++\' para abrir todo, en el botón \'--\' para cerrarlo todo.
-<br/><br/>
-Deseleccione todas las palabras clave cerrando el árbol y abriéndolo de nuevo con el botón \'+\'.
-Alt-clic \'+\' busca las palabras claves originales en el árbol.
-<br/><br/>
-Alt-clic selecciona las palabras clave una a una, con o sin términos más amplios.
-<br/><br/>
-Si cambia de idioma de descripción, no podrá añadir palabras clave al mismo tiempo.
-<br/> <br/>";
+$langKwHelp = "<br/>Haga clic en el botón \'+\' para abrir, en el botón \'-\' para cerrar, en el botón \'++\' para abrir todo, en el botón \'--\' para cerrarlo todo.<br/><br/>Deseleccione todas las palabras clave cerrando el árbol y abriéndolo de nuevo con el botón \'+\'.Alt-clic \'+\' busca las palabras claves originales en el árbol.<br/><br/>Alt-clic selecciona las palabras clave una a una, con o sin términos más amplios.<br/><br/>Si cambia de idioma de descripción, no podrá añadir palabras clave al mismo tiempo.<br/> <br/>";
 $langLocation = "URL/URI";
 $langLocationTip = "haga clic para abrir el objeto";
 $langStore = "Almacenar";

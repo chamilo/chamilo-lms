@@ -37,13 +37,7 @@ $langCsvFileLine1 = "... -第一行=";
 $langCsvLinesFailed = "匯入鏈接到行失敗（無網址或標題）。";
 $langCsvLinesOld = "現有鏈接已更新（相同網址與分類）。";
 $langCsvLinesNew = "鏈接已創建。";
-$langCsvExplain = "檔案的特徵是︰  
-<BLOCKQUOTE><PRE><B>URL</B>;category;<B>title</B>;description;
-<B>http://www.aaa.org/...</B>;Important links;<B>Name 1</B>;Description 1;
-<B>http://www.bbb.net/...</B>;;<B>Name 2</B>;\"Description 2\";
-</PRE></BLOCKQUOTE>如果網頁或分類與已經存在的那些鏈接相同，它的標題和描述已經升級，在其他的情況下新鏈接已經被創建。
-<BR><BR>粗體=強製，其他領域需添加附加描述。分隔符為︰逗號或分號。有的[b]HTML 標籤[/b]   
-可以匯入到這些描述中。";
+$langCsvExplain = "檔案的特徵是︰  <BLOCKQUOTE><PRE><B>URL</B>;category;<B>title</B>;description;<B>http://www.aaa.org/...</B>;Important links;<B>Name 1</B>;Description 1;<B>http://www.bbb.net/...</B>;;<B>Name 2</B>;\"Description 2\";</PRE></BLOCKQUOTE>如果網頁或分類與已經存在的那些鏈接相同，它的標題和描述已經升級，在其他的情況下新鏈接已經被創建。<BR><BR>粗體=強製，其他領域需添加附加描述。分隔符為︰逗號或分號。有的[b]HTML 標籤[/b]   可以匯入到這些描述中。";
 $langLinkUpdated = "鏈接已更新";
 $langAll_Link_Deleted = "鏈接已刪除";
 $langOnHomepage = "主頁中顯示";

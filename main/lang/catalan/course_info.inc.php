@@ -12,9 +12,7 @@ $langUnsubscription = "Anular la inscripció";
 $langPrivOpen = "Accés privat, enregistrament obert";
 $langPrivate = "Accés privat, enregistrament tancat (lloc accessible només a gent de la <a href=../user/user.php>llista d\'usuaris</a>)";
 $langForbidden = "No és permés";
-$langConfTip = "Per dedfecte, el teu curs només és accessible per tu perquè ets l\'únic usuari enregistrat. Si vols una mica de confidencialitat,
-la manera més simple és obrir l\'enregistrament durant
-una setmana, demanar als estudiants que s\'enregistrin ells sols, llavors tancar l\'enregistrament i buscar els possibles intrussos en la llista d\'usuaris.";
+$langConfTip = "Per dedfecte, el teu curs només és accessible per tu perquè ets l\'únic usuari enregistrat. Si vols una mica de confidencialitat,la manera més simple és obrir l\'enregistrament durantuna setmana, demanar als estudiants que s\'enregistrin ells sols, llavors tancar l\'enregistrament i buscar els possibles intrussos en la llista d\'usuaris.";
 $langOpenToTheWorld = "Obert a tothom";
 $OpenToThePlatform = "Obert - accés autoritzat als usuaris enregistrats de la plataforma";
 $langOpenToThePlatform = "Obert a la plataforma";
@@ -66,10 +64,8 @@ $langSubscription = "Subscripció";
 $langCourseAccess = "Accés al curs";
 $langConfirmBackup = "Vol realment fer una copia de seguretat del curs";
 $langCreateSite = "Crear el lloc web del curs";
-$langRestoreDescription = "El curs és a l\'arxiu que vosté pot seleccionar a sota.<br><br>
-Quan voste faci clic a \"Restaurar\", l\'arxiu sera descomprimit i el curs tornat a fer.";
-$langRestoreNotice = "Aquest script no permet encara restaurar usuaris, però les dades gravades a \"users.csv\"
-son suficients com perquè l\'administrador sigui capas de fer aquest treball manualment.";
+$langRestoreDescription = "El curs és a l\'arxiu que vosté pot seleccionar a sota.<br><br>Quan voste faci clic a \"Restaurar\", l\'arxiu sera descomprimit i el curs tornat a fer.";
+$langRestoreNotice = "Aquest script no permet encara restaurar usuaris, però les dades gravades a \"users.csv\"son suficients com perquè l\'administrador sigui capas de fer aquest treball manualment.";
 $langAvailableArchives = "Llista d\'arxius disponibles";
 $langNoArchive = "Cap arxiu ha sigut seleccionat";
 $langArchiveNotFound = "L\'arxiu no ha sigut trobat";

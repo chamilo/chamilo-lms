@@ -129,8 +129,7 @@ $lang_resource = "Forrás";
 $lang_resources = "Források";
 $langNameOfLang['arabic'] = "arab";
 $langNameOfLang['brazilian'] = "brazil";
-$langNameOfLang['bulgarian']
- = "bolgár";
+$langNameOfLang['bulgarian'] = "bolgár";
 $langNameOfLang['catalan'] = "katalán";
 $langNameOfLang['croatian'] = "horvát";
 $langNameOfLang['danish'] = "dán";

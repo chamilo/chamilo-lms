@@ -65,10 +65,7 @@ $lang_prereq_deleted_error = "Ha sido eliminado";
 $lang_none = "NINGUNO";
 $lang_forum_opened = "El foro seleccionado se ha abierto en una nueva ventana";
 $lang_link_opened = "El enlace seleccionado se ha abierto en una nueva ventana";
-$lang_short_help = "Para añadir un capítulo, click en el símbolo +
-Para añadir una nueva descripción / título, click en el lápiz
-Para añadir prerrequisitos, click en el ícono con dos documentos
-Usted puede visualizar lo que los alumnos verán con la herramienta de Vista del Alumno";
+$lang_short_help = "Para añadir un capítulo, click en el símbolo +Para añadir una nueva descripción / título, click en el lápizPara añadir prerrequisitos, click en el ícono con dos documentosUsted puede visualizar lo que los alumnos verán con la herramienta de Vista del Alumno";
 $lang_prereq_not_complete = "pre-requisitos no completados.";
 $lang_author = "Autor";
 $lang_date = "Fecha";

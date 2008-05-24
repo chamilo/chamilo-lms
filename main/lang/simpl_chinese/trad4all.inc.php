@@ -127,8 +127,7 @@ $lang_resource = "资源";
 $lang_resources = "资源";
 $langNameOfLang['arabic'] = "阿拉伯语";
 $langNameOfLang['brazilian'] = "巴西语";
-$langNameOfLang['bulgarian']
- = "保加利亚语";
+$langNameOfLang['bulgarian'] = "保加利亚语";
 $langNameOfLang['catalan'] = "伐伦西亚语";
 $langNameOfLang['croatian'] = "克罗地亚语";
 $langNameOfLang['danish'] = "丹麦语";

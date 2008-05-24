@@ -62,8 +62,7 @@ $lang_assign_learnpath_items_to = "asigne estos elementos a un módulo del itiner
 $lang_edit_learnpath_item = "Editar una descripción/título adicional del elemento";
 $lang_add_prereq = "Añadir/editar prerrequisitos a este elemento";
 $lang_delete_learnpath_item = "Eliminar elemento";
-$lang_learnpath_item_edited = "El elemento del itinerario de aprendizaje ha sido modificado
-";
+$lang_learnpath_item_edited = "El elemento del itinerario de aprendizaje ha sido modificado";
 $lang_prereq_deleted_error = "¡ Ha sido eliminado !";
 $lang_none = "Ninguno";
 $lang_forum_opened = "El foro seleccionado ha sido abierto en una nueva ventana.";
@@ -193,4 +192,5 @@ $OogieConversionFailed = "Conversión fallida. <br />Algunos documentos son demas
 $OogieUnknownError = "La conversión ha fallado por una razón desconocida. <br /> Contacte a su administrador para más información.";
 $OogieBadExtension = "El archivo no tiene una extensión correcta.";
 $WoogieBadExtension = "Por favor, envíe sólo documentos de texto. La extensión del archivo debe ser .doc, .docx o bien .odt";
+$ShowAudioRecorder = "Mostrar el grabador de audio";
 ?>

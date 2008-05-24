@@ -37,8 +37,7 @@ $langMessageToSelectedUsers  = "Mesaje catre utilizatorii alesi";
 $langIntroText  = "Pentru a trimite un mesaj, alege grupuri de utilizatori (marcat cu G in fata) sau un singur utilizator din partea stanga a listei.";
 $langDown = "jos";
 $langMsgSent = "Mesajul a fost trimis catre studenti alesi";
-$langSelUser = "userii selectati ai site-ului
-";
+$langSelUser = "userii selectati ai site-ului";
 $langMessageToSelectedGroups = "Mesaj catre grupurile alese";
 $langGrouplist = "lista grup";
 $langSelectedGroups = "grupuri selectate";

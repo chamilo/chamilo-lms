@@ -2,10 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langInvalidId = "Login failed - incorrect username or password.";
-$langWelcome = "courses are freely available below. Other  courses require
-a username and a password, which you can obtain by clicking on \'registration\'. Teachers
-can create course areas by clicking on registration too, but selecting then
-\'Create course areas\'.";
+$langWelcome = "courses are freely available below. Other  courses requirea username and a password, which you can obtain by clicking on \'registration\'. Teacherscan create course areas by clicking on registration too, but selecting then\'Create course areas\'.";
 $langPass = "Password";
 $langEnter = "Enter";
 $langReg = "Registration";
@@ -31,8 +28,7 @@ $EussMenu = "menu";
 $Opinio = "Opinion";
 $Intranet = "Intranet";
 $Englin = "English";
-$langInvalidForSelfRegistration = "Login failed - if you are not registered, you can do so using
- the <a href=claroline/auth/inscription.php>registration form</a>";
+$langInvalidForSelfRegistration = "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>";
 $langSubCat = "sub-categories";
 $langMenuGeneral = "General";
 $langMenuUser = "User";

@@ -6,15 +6,13 @@ $AdministrationTools  = "Administración";
 $State  = "Estado del sistema";
 $Statistiques  = "Estadísticas";
 $VisioHostLocal = "Host para la videoconferencia";
-$VisioRTMPIsWeb = "El protocolo de la videoconferencia funciona en modo web (la mayoría de las veces no es así)
-";
+$VisioRTMPIsWeb = "El protocolo de la videoconferencia funciona en modo web (la mayoría de las veces no es así)";
 $ShowBackLinkOnTopOfCourseTreeComment = "Mostrar un enlace  para volver a la jerarquía del curso. De todos modos, un enlace siempre estará disponible al final de la lista.";
 $langUsed       = "usada";
 $langPresent   = "Aceptar";
 $langMissing    = "falta";
 $langExist      = "existe";
-$ShowBackLinkOnTopOfCourseTree = "Mostrar un enlace para volver atrás encima del árbol de las categorías/cursos
-";
+$ShowBackLinkOnTopOfCourseTree = "Mostrar un enlace para volver atrás encima del árbol de las categorías/cursos";
 $ShowNumberOfCourses = "Mostrar el número de cursos";
 $DisplayTeacherInCourselistTitle = "Mostrar al profesor en el título del curso";
 $DisplayTeacherInCourselistComment = "Mostrar el nombre de cada profesor en cada uno de los cursos del listado";
@@ -280,8 +278,7 @@ $DefaultGroupQuotumComment = "¿ Cuál es la cuota de espacio por defecto en el se
 $AllowLostPasswordTitle = "Olvidé mi contraseña";
 $AllowLostPasswordComment = "¿ Cuando un usuario ha perdido su contraseña, puede pedir que el sistema se la envíe automáticamente ?";
 $AllowRegistrationTitle = "Registro";
-$AllowRegistrationComment = "¿ Está permitido que los nuevos usuarios puedan registrarse por sí mismos ? ¿ Pueden los usuarios crear cuentas nuevas ?
-";
+$AllowRegistrationComment = "¿ Está permitido que los nuevos usuarios puedan registrarse por sí mismos ? ¿ Pueden los usuarios crear cuentas nuevas ?";
 $AllowRegistrationAsTeacherTitle = "Registro como profesor";
 $AllowRegistrationAsTeacherComment = "¿ Alguien puede registrarse como profesor (y poder crear cursos) ?";
 $PlatformLanguage = "Idioma de la plataforma";
@@ -373,14 +370,11 @@ $ClassName = "Nombre de la clase";
 $DropboxMaxFilesizeTitle = "Buzón de tareas: tamaño máximo de los documentos";
 $DropboxMaxFilesizeComment = "¿ Qué tamaño (en bytes) puede tener un documento ?";
 $DropboxAllowOverwriteTitle = "Buzón de tareas: los documentos se sobreescribirán";
-$DropboxAllowOverwriteComment = "¿ Puede sobreescribirse el documento original cuando un estudiante o profesor sube un documento con el mismo nombre de otro que ya existe ? Si responde sí, perderá la posibilidad de conservar sucesivas versiones
-";
+$DropboxAllowOverwriteComment = "¿ Puede sobreescribirse el documento original cuando un estudiante o profesor sube un documento con el mismo nombre de otro que ya existe ? Si responde sí, perderá la posibilidad de conservar sucesivas versiones";
 $DropboxAllowJustUploadTitle = "¿ Buzón de tareas: subir al propio buzón ?";
-$DropboxAllowJustUploadComment = "Permitir a los profesores y a los estudiantes subir documentos en su propia sección del buzón de tareas sin enviarlos a nadie más (=enviarse un documento a uno mismo)
-";
+$DropboxAllowJustUploadComment = "Permitir a los profesores y a los estudiantes subir documentos en su propia sección del buzón de tareas sin enviarlos a nadie más (=enviarse un documento a uno mismo)";
 $DropboxAllowStudentToStudentTitle = "Buzón de tareas: estudiante <-> estudiante";
-$DropboxAllowStudentToStudentComment = "Permitir a los estudiantes enviar documentos a otros estudiantes (peer to peer, intercambio P2P). Tenga en cuenta que los estudiantes pueden usar esta funcionalidad para enviarse documentos poco relevantes (mp3, soluciones,...). Si deshabilita esta opción los estudiantes sólo podrán enviar documentos a sus profesores
-";
+$DropboxAllowStudentToStudentComment = "Permitir a los estudiantes enviar documentos a otros estudiantes (peer to peer, intercambio P2P). Tenga en cuenta que los estudiantes pueden usar esta funcionalidad para enviarse documentos poco relevantes (mp3, soluciones,...). Si deshabilita esta opción los estudiantes sólo podrán enviar documentos a sus profesores";
 $DropboxAllowMailingTitle = "Buzón de tareas: permitir el envío por correo";
 $DropboxAllowMailingComment = "Con la funcionalidad de envío por correo, Vd. puede enviar un documento personal a cada estudiante";
 $PermissionsForNewDirs = "Permisos para los nuevos directorios";
@@ -469,9 +463,7 @@ $langActiveExtensions = "Activar los servicios";
 $langVisioconf = "Videoconferencia";
 $langVisioconfDescription = "Dokeos Live Conferencing® es una herramienta estándar de videoconferencia que ofrece: mostrar diapositivas, pizarra para dibujar y escribir, audio/video duplex, chat. Tan solo requiere Flash® player, permitiendo tres modos: uno a uno, uno a muchos, y muchos a muchos.";
 $langPpt2lp = "Oogie-Woogie Itinerarios de aprendizaje";
-$langPpt2lpDescription = "Oogie-Woogie es una herramienta para generar rápidamente secuencias de aprendizaje.
-Permite convertir presentaciones Powerpoint y documentos Word, así como sus equivalentes de Openoffice en cursos tipo SCORM. 
-Tras la conversión, el documento será administrable por  la herramienta Itinerarios de aprendizaje de Dokeos. Podrá añadir diapositivas, audio, ejercicios entre las diapositivas o actividades como foros de discusión y el envío de tareas. Al ser un curso SCORM permite el informe y el seguimiento a los estudiantes. El sistema combina el poder de Openoffice como herramienta de conversión de documentos MS-Office + el servidor streamming RED5 para la grabación de audio + la herramienta de administración de itinerarios de aprendizaje de Dokeos.";
+$langPpt2lpDescription = "Oogie-Woogie es una herramienta para generar rápidamente secuencias de aprendizaje.Permite convertir presentaciones Powerpoint y documentos Word, así como sus equivalentes de Openoffice en cursos tipo SCORM. Tras la conversión, el documento será administrable por  la herramienta Itinerarios de aprendizaje de Dokeos. Podrá añadir diapositivas, audio, ejercicios entre las diapositivas o actividades como foros de discusión y el envío de tareas. Al ser un curso SCORM permite el informe y el seguimiento a los estudiantes. El sistema combina el poder de Openoffice como herramienta de conversión de documentos MS-Office + el servidor streamming RED5 para la grabación de audio + la herramienta de administración de itinerarios de aprendizaje de Dokeos.";
 $langBandWidthStatistics = "Estadísticas del tráfico";
 $langBandWidthStatisticsDescription = "MRTG le permite consultar estadísticas detalladas del estado del servidor en las últimas 24 horas.";
 $ServerStatistics = "Estadísticas del servidor";
@@ -505,8 +497,7 @@ $InvalidExtension = "Extensión no válida";
 $VersionCheckExplanation = "Para habilitar la comprobación automática de la versión debe registrar su portal en dokeos.com. La información obtenida al hacer clic en este botón sólo es para uso interno y sólo los datos añadidos estarán disponibles públicamente (número total de usuarios del portal, número total de cursos, número total de estudiantes,...) (ver <a href=\"http://www.dokeos.com/stats/\">http://www.dokeos.com/stats/</a>). Cuando se registre, también aparecerá en esta lista mundial (<a href=\"http://www.dokeos.com/community.php\">http://www.dokeos.com/community.php</a>. Si no quiere aparecer en esta lista, debe marcar la casilla inferior. El registro es tan fácil como hacer clic sobre este botón: <br />";
 $AfterApproval = "Después de ser aprobado";
 $StudentViewEnabledTitle = "Activar la Vista de estudiante";
-$StudentViewEnabledComment = "Habilitar la Vista de estudiante, que permite que un profesor o un administrador pueda ver un curso como lo vería un estudiante
-";
+$StudentViewEnabledComment = "Habilitar la Vista de estudiante, que permite que un profesor o un administrador pueda ver un curso como lo vería un estudiante";
 $TimeLimitWhosonlineTitle = "Límite de tiempo de Usuarios en línea";
 $TimeLimitWhosonlineComment = "Este límite de tiempo define cuantos segundos han de pasar despúes de la última acción de un usuario para seguir considerándolo *en línea*";
 $ExampleMaterialCourseCreationTitle = "Material de ejemplo para la creación de un curso";
@@ -620,8 +611,7 @@ $HideDLTTMarkup = "Ocultar las marcas DLTT";
 $ListOfCoursesOfSession = "Lista de cursos de la sesión";
 $UnsubscribeSelectedUsersFromSession = "Cancelar las inscripción de los usuarios seleccionados en la sesión";
 $ShowDifferentCourseLanguageComment = "Mostrar el idioma de cada curso, después de su título, en la lista los cursos de la página principal";
-$ShowEmptyCourseCategoriesComment = "Mostrar las categorías de cursos en la página principal, aunque estén vacías
-";
+$ShowEmptyCourseCategoriesComment = "Mostrar las categorías de cursos en la página principal, aunque estén vacías";
 $ShowEmptyCourseCategories = "Mostrar las categorías de cursos vacías";
 $XMLNotValid = "El documento XML no es válido";
 $ForTheSession = "para la sesión";
@@ -723,8 +713,7 @@ $FieldTypeSelect = "Desplegable";
 $FieldTypeSelectMultiple = "Desplegable con elección múltiple";
 $FieldAdded = "El campo ha sido añadido";
 $GradebookScoreDisplayColoring = "Coloreado de puntuaciones";
-$GradebookScoreDisplayColoringComment = "Seleccione la casilla para habilitar el coloreado de las puntuaciones (por ejemplo, tendrá que definir qué puntuaciones serán marcadas en rojo)
-";
+$GradebookScoreDisplayColoringComment = "Seleccione la casilla para habilitar el coloreado de las puntuaciones (por ejemplo, tendrá que definir qué puntuaciones serán marcadas en rojo)";
 $TabsGradebookEnableColoring = "Habilitar el coloreado de las puntuaciones";
 $GradebookScoreDisplayCustom = "Personalización de la presentación de las puntuaciones";
 $GradebookScoreDisplayCustomComment = "Marque la casilla para activar la personalización de las puntuaciones (seleccione el nivel que se asociará a cada puntuación)";

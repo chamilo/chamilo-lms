@@ -21,8 +21,7 @@ $langCopyFinished = "复制完成";
 $langFullRecycle = "完全循环";
 $langRecycleCourse = "课程循环";
 $langRecycleFinished = "已完成循环";
-$langRecycleWarning = "警告: 使用这个工具可以删除课程的某一部分. 此动作不能撤销. 建议在使用这个循环工具时做一个<A 
-href=\"create_backup.php\">备份</A>.";
+$langRecycleWarning = "警告: 使用这个工具可以删除课程的某一部分. 此动作不能撤销. 建议在使用这个循环工具时做一个<A href=\"create_backup.php\">备份</A>.";
 $langSameFilename = "如果导入的文件与现有文件重名采取什么方法?";
 $langSameFilenameSkip = "跳过同名文件";
 $langSameFilenameRename = "重命名文件（如：file.pdf 重命名成file_1.dbf）";

@@ -10,8 +10,7 @@ $langUpdateImage = "Schimba imaginea";
 $langImageWrong = "Fisierul trebuie sa fie mai mic de";
 $langAddImage = "Imagine";
 $langCourseManager = "Profesor";
-$password_request = "Ai solicitat resetarea parolei. Daca nu ai facut aceasta solicitare ignora acest email. 
-Pentru a reseta parola click pe link.";
+$password_request = "Ai solicitat resetarea parolei. Daca nu ai facut aceasta solicitare ignora acest email. Pentru a reseta parola click pe link.";
 $YourPasswordHasBeenEmailed = "Parola ti-a fost trimisa pe email.";
 $lang_enter_email_and_well_send_you_password = "Introdu adresa de email pe care ai folosit-o la inregistrare si iti vom trimite parola. ";
 $langLogin = "Log In";
@@ -43,10 +42,7 @@ $langOneByOne = "Adauga manual utilizatori";
 $langNow = "acum";
 $langTutor = "Tutore";
 $langTitular = "Autor";
-$langAddHereSomeCourses = "Modifica lista cursurilor<br>
-Verificace cursuri vrei sa urmezi. <br>
-Debifeaza cursurile pe care nu vrei sa le mai urmezi.<br>
-La final apasa pe butonul OK aflat in partea de jos a listei.";
+$langAddHereSomeCourses = "Modifica lista cursurilor<br>Verificace cursuri vrei sa urmezi. <br>Debifeaza cursurile pe care nu vrei sa le mai urmezi.<br>La final apasa pe butonul OK aflat in partea de jos a listei.";
 $langStudent = "student";
 $langImportUserList = "Importa o lista de utilizatori";
 $langAddAU = "Adauga un utilizator";
@@ -135,8 +131,6 @@ $CorrespondsToAccount = "Aceasta adresa de e-mail corespunde urmatorului cont de
 $CorrespondsToAccounts = "Aceasta adresa de e-mail corespunde urmatoarelor conturi de utilizator.";
 $AccountExternalAuthSource = "Dokeos nu poate indeplini cererea automat deoarece contul are o sursa externa de autentificare. Va rugam luati masurile adecvate si anuntati utilizatorul.";
 $AccountsExternalAuthSource = "Dokeos nu poate indeplini cererea automat deoarece cel putin un cont are o sursa externa de autentificare. Va rugam luati masurile adecvate pentru toti utilizatorii(inclusiv pe aceia cu autentificare locala la platforma) si anuntati utilizatorul.";
-$RequestSentToPlatformAdmin = "Dokeos nu poate indeplini cererea automat pentru acest tip de cont. Cererea 
-dumneavoastra a fost trimisa administratorului platformei, care va 
-lua masurile adecvate si va va anunta raspunsul.";
+$RequestSentToPlatformAdmin = "Dokeos nu poate indeplini cererea automat pentru acest tip de cont. Cererea dumneavoastra a fost trimisa administratorului platformei, care va lua masurile adecvate si va va anunta raspunsul.";
 $langphone = "Telefon";
 ?>

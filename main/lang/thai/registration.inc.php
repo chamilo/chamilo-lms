@@ -74,8 +74,7 @@ $langFormula = "ด้วยความขอบคุณ";
 $langProblem = "กรณีที่มีปัญหา โปรดติดต่อเรา";
 $langIs = "คือ";
 $langAddress = "ที่อยู่ ";
-$langSettings = "ตามที่ให้ข้อมูล:
-ชื่อผู้ใช้:";
+$langSettings = "ตามที่ให้ข้อมูล:ชื่อผู้ใช้:";
 $langYouAreReg = "ท่านลงทะเบียนด้วย";
 $langDear = "สวัสดี คุณ";
 $langYourReg = "ท่านลงทะเบียนวันที่";

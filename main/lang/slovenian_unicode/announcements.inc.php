@@ -34,8 +34,7 @@ $langPleaseSelectUsers  = "Izbrati je potrebno nekaj uporabnikov.";
 $Teachersubject = "Sporočilo odposlano vašim uporabnikom ";
 $langMessages  = "Sporočila";
 $langMessageToSelectedUsers  = "Sporočila izbranim uporabnikom";
-$langIntroText  = "Za pošiljanje sporočila, izberite skupino uporabnikov (označenih z G)
- ali posamezne uporabnike s seznama na levi.";
+$langIntroText  = "Za pošiljanje sporočila, izberite skupino uporabnikov (označenih z G) ali posamezne uporabnike s seznama na levi.";
 $langDown = "dol";
 $langMsgSent = "Sporočilo je bilo odposlano izbranim uporabnikom";
 $langSelUser = "izbranim uporabnikom te strani";

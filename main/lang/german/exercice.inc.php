@@ -49,8 +49,7 @@ $langLessAnswers = "- Antwort";
 $langMoreElements = "+ Element";
 $langLessElements = "- Element";
 $langTypeTextBelow = "Setzen Sie den Text ein";
-$langDefaultTextInBlanks = "In Deutschland ist [deutsch] die Amtssprache.
-In Frankreich ist es [französisch], und in Großbritanien ist es [englisch].";
+$langDefaultTextInBlanks = "In Deutschland ist [deutsch] die Amtssprache.In Frankreich ist es [französisch], und in Großbritanien ist es [englisch].";
 $langDefaultMatchingOptA = "reich";
 $langDefaultMatchingOptB = "sieht gut aus";
 $langDefaultMakeCorrespond1 = "Dein Vater ist";
@@ -134,9 +133,7 @@ $langHotPotatoesTests = "HotPotatoes-Tests importieren";
 $langDownloadFile = "HotPotatoes (HTML- oder ZIP-Format) hochladen";
 $langDownloadImg = "Bilddatei hochladen";
 $langDownloadEnd = "Das Hochladen der HTML-Datei(en) ist abgeschlossen.";
-$langNoSpace = "Das Hochladen ist fehlgeschlagen.
-<br>
-Nicht genügend freier Speicherplatz in Ihrem Verzeichnis.";
+$langNoSpace = "Das Hochladen ist fehlgeschlagen.<br>Nicht genügend freier Speicherplatz in Ihrem Verzeichnis.";
 $langZipNoPhp = "Die ZIP-Datei darf keine PHP-Dateien enthalten.";
 $langNoImg = "Test ohne Abbildungen";
 $langImgNote_st = "<br> Sie müssen noch immer hochladen";
@@ -209,8 +206,7 @@ $NotAttempted = "Nicht versucht";
 $AddElem = "+ Element";
 $DelElem = "- Element";
 $PlusAnswer = "+ Antwort";
-$LessAnswer = "- Antwort
-";
+$LessAnswer = "- Antwort";
 $YourScore = "Ihr Ergebniss";
 $Attempted = "Versucht ";
 $AssignMarks = "Eine Markierung zuweisen";

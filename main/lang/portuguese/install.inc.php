@@ -77,8 +77,7 @@ $ExtensionLDAPNotAvailable = "Extensões LDAP não disponíveis";
 $ExtensionGDNotAvailable = "Extensão GD não disponível";
 $DokeosLicenseInfo = "Dokeos é um software distribuído sob a GNU Licença Pública Geral (GPL)";
 $IAccept = "Aceito";
-$ConfigSettingsInfo = "Os seguintes valores serão registados no ficheiro de configuração
-<b>main/inc/conf/configuration.php</b>:";
+$ConfigSettingsInfo = "Os seguintes valores serão registados no ficheiro de configuração<b>main/inc/conf/configuration.php</b>:";
 $DokeosInstallation = "Instalação do Dokeos";
 $InstallDokeos = "Instalar Dokeos";
 $GoToYourNewlyCreatedPortal = "Ir para o portal do curso acabado de criar.";

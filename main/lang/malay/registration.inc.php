@@ -14,8 +14,7 @@ $langCourseName = "Nama of subjek";
 $langSubscribe = "Melanggan";
 $langSee = "Pergi ke";
 $langLastVisits = "Lawatan terakhir";
-$langIfYouWantToAddManyUsers = "Jika anda ingin mendaftarkan ramai Pengguna 
-			untuk mengikuti Subjek anda,sila hubungi Pentadbir Sistem.";
+$langIfYouWantToAddManyUsers = "Jika anda ingin mendaftarkan ramai Pengguna 			untuk mengikuti Subjek anda,sila hubungi Pentadbir Sistem.";
 $langPassTooEasy = "Katalaluan terlalu ringkas.Gunakan katalaluan seperti berikut";
 $langGroupUserManagement = "Alat Bantu Kumpulan";
 $langAddedToCourse = "telah didaftarkan dalam Subjek anda";
@@ -28,18 +27,13 @@ $langGiveAdmin = "Jadikan sebagai Pentadbir";
 $langUserNumber = "Bilangan";
 $langDownloadUserList = "Senarai Muatnaik";
 $langSend = "Hantar";
-$langUserAddExplanation = "setiap baris fail yang ingin dihantar hanya memerlukan 5 medan iaitu: <b>Nama Bapa   Nama Anda   
-		ID Pengguna   Katalaluan 
-		  Email</b> dipisahkan dengan tab mengikut turutan ini..
-		Pengguna akan menerima email pengesahan beserta ID Pengguna dan Katalaluan.";
+$langUserAddExplanation = "setiap baris fail yang ingin dihantar hanya memerlukan 5 medan iaitu: <b>Nama Bapa   Nama Anda   		ID Pengguna   Katalaluan 		  Email</b> dipisahkan dengan tab mengikut turutan ini..		Pengguna akan menerima email pengesahan beserta ID Pengguna dan Katalaluan.";
 $langUserMany = "Import senarai Pengguna menggunakan fail teks";
 $langOneByOne = "Tambah Pengguna secara manual";
 $langNow = "sekarang";
 $langTutor = "Tutor";
 $langTitular = "Penulis";
-$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Ubahsuai Senarai Subjek</big><br><br>
-Pilih Subjek yang ingin diikuti.<br>
-Tanda Subjek yang anda tidak ingin ikuti.<br> Kemudian klik OK pada bahagian bawah senarainya tersebut";
+$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Ubahsuai Senarai Subjek</big><br><br>Pilih Subjek yang ingin diikuti.<br>Tanda Subjek yang anda tidak ingin ikuti.<br> Kemudian klik OK pada bahagian bawah senarainya tersebut";
 $langStudent = "Pelajar";
 $langAddAU = "Tambah Ahli";
 $langAddedU = "telah ditambah. Email akan dihantar untuk memberikan ID Pengguna kepada Pelajar tersebut ";

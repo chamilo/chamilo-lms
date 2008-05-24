@@ -12,8 +12,7 @@ $langKwCacheProblem = "Der Cache für Schlüsselwörter kann nicht geöffnet werden"
 $langCourseKwds = "Schlüsselwörter für Kurs";
 $langKwdsInMD = "In MD benutzte Schlüsselwörter";
 $langKwdRefs = "Schlüsselwörter Verweise";
-$langNonCourseKwds = "Nicht zum Kurs gehörende Schlüsselwörter
-";
+$langNonCourseKwds = "Nicht zum Kurs gehörende Schlüsselwörter";
 $langKwdsUse = "Kurs Schlüsselwörter (fett = nicht benutzt)";
 $langTotalMDEs = "Gesamtzahl der MD Einträge:";
 ?>

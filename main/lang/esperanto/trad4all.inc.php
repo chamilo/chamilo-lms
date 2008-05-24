@@ -93,8 +93,7 @@ $lang_resource = "Materialo ";
 $lang_resources = "Materialoj ";
 $langNameOfLang['arabic'] = "araba";
 $langNameOfLang['brazilian'] = "Brazila";
-$langNameOfLang['bulgarian']
- = "bulgara";
+$langNameOfLang['bulgarian'] = "bulgara";
 $langNameOfLang['catalan'] = "kataluna";
 $langNameOfLang['croatian'] = "kroata";
 $langNameOfLang['danish'] = "dana";

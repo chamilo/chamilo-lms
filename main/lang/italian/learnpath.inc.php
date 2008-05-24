@@ -192,4 +192,5 @@ $OogieConversionFailed = "Conversione fallita.<br />Alcuni documenti sono troppo
 $OogieUnknownError = "Conversione fallita per un motivo non precisato.<br />Contatta l\'amministratore per ottenere informazioni più approfondite.";
 $OogieBadExtension = "L\'estensione del file non è consentita.";
 $WoogieBadExtension = "Carica solo documenti .doc, .docx o .odt provenienti da un elaboratore di testi.";
+$ShowAudioRecorder = "Mostra il registratore audio";
 ?>

@@ -2,10 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langInvalidId = "Accés invàlid.<BR>Si no estàs enregistrat, utilitza el <a href=\'claroline/auth/inscription.php\'>formulari per enregistrar-te</a></font color>";
-$langWelcome = "cursos son lliurement accessibles a sota. Altres cursos requereixen
-un nom d\'usuari i un password, que pots obtenir en fer click sobre \'Enregistrament\'. Els professors
-poden crear llocs web de cursos en fer click sobre \'Enregistrament\' també, però seleccionant llavors
-\'Professor.";
+$langWelcome = "cursos son lliurement accessibles a sota. Altres cursos requereixenun nom d\'usuari i un password, que pots obtenir en fer click sobre \'Enregistrament\'. Els professorspoden crear llocs web de cursos en fer click sobre \'Enregistrament\' també, però seleccionant llavors\'Professor.";
 $langPass = "Password";
 $langEnter = "Entrar";
 $langReg = "Enregistrar un alumne";

@@ -20,17 +20,7 @@ $langCoverage = "Doelgebied";
 $langCoverageTip = "bv. Bachelor in xxx";
 $langKwNote = "Als u de taal van de beschrijving wil veranderen, voeg niet tegelijk nieuwe sleutelwoorden toe.";
 $langClickKw = "Klik om een sleutelwoord te kiezen of te annuleren.";
-$langKwHelp = "<br/>
-Klik \'+\' om te openen, \'&minus;\' om te sluiten, \'++\' om alles te openen, \'&minus;&minus;\' om alles te sluiten.<br/>
-<br/>
-Sluit de boomstructuur en open hem met \'+\' om eerdere keuzes te annuleren.<br/>
-Open hem met Alt-klik \'+\' om de originele sleutelwoorden terug te zetten.<br/>
-<br/>
-Alt-klik sleutelwoord selecteert het sleutelwoord zonder omvattende concepten en 
-annuleert een keuze met omvattende concepten.<br/>
-<br/>
-Als u de taal van de beschrijving wil veranderen, voeg niet tegelijk nieuwe sleutelwoorden toe.<br/>
-<br/>";
+$langKwHelp = "<br/>Klik \'+\' om te openen, \'&minus;\' om te sluiten, \'++\' om alles te openen, \'&minus;&minus;\' om alles te sluiten.<br/><br/>Sluit de boomstructuur en open hem met \'+\' om eerdere keuzes te annuleren.<br/>Open hem met Alt-klik \'+\' om de originele sleutelwoorden terug te zetten.<br/><br/>Alt-klik sleutelwoord selecteert het sleutelwoord zonder omvattende concepten en annuleert een keuze met omvattende concepten.<br/><br/>Als u de taal van de beschrijving wil veranderen, voeg niet tegelijk nieuwe sleutelwoorden toe.<br/><br/>";
 $langRights = "Gebruiksvoorwaarden";
 $langRightsTip = "omschrijf met woorden";
 $langVersion = "Versie";
@@ -49,40 +39,9 @@ $langConfirmDelete = "Wil u *echt* alle metadata verwijderen?";
 $langCourseKwds = "Dit document bevat de sleutelwoorden van de cursus";
 $langSearch = "Zoek";
 $langSearchCrit = "Eén woord per regel!";
-$langStatuses = ":draft:kladversie,, 
-     final:finale versie,, 
-     revised:herziene versie,, 
-     unavailable:niet beschikbaar";
+$langStatuses = ":draft:kladversie,,      final:finale versie,,      revised:herziene versie,,      unavailable:niet beschikbaar";
 $langCosts = ":no:gratis,, yes:tegen betaling";
 $langCopyrights = ":yes:copyright,, no:geen copyright";
-$langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, 
-text/plain;utf-8:text/plain;utf-8,, 
-text/html;iso-8859-1:text/html;iso-8859-1,, 
-text/html;utf-8:text/html;utf-8,, 
-inode/directory:Folder,, 
-application/msword:MsWord,, 
-application/octet-stream:Octet stream,, 
-application/pdf:PDF,, 
-application/postscript:PostScript,, 
-application/rtf:RTF,, 
-application/vnd.ms-excel:MsExcel,, 
-application/vnd.ms-powerpoint:MsPowerpoint,, 
-application/xml;iso-8859-1:XML;iso-8859-1,, 
-application/xml;utf-8:XML;utf-8,, 
-application/zip:ZIP";
-$langLngResTypes = ":exercise:oefening,, 
-     simulation:simulatie,, 
-     questionnaire:enquête,, 
-     diagram:diagram,, 
-     figure:figuur,, 
-     graph:grafiek,, 
-     index:index,, 
-     slide:dia,, 
-     table:tabel,, 
-     narrative text:vertellende tekst,, 
-     exam:examen,, 
-     experiment:experiment,, 
-     problem statement:probleemstelling,, 
-     self assessment:zelftest,, 
-     lecture:voordracht";
+$langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
+$langLngResTypes = ":exercise:oefening,,      simulation:simulatie,,      questionnaire:enquête,,      diagram:diagram,,      figure:figuur,,      graph:grafiek,,      index:index,,      slide:dia,,      table:tabel,,      narrative text:vertellende tekst,,      exam:examen,,      experiment:experiment,,      problem statement:probleemstelling,,      self assessment:zelftest,,      lecture:voordracht";
 ?>

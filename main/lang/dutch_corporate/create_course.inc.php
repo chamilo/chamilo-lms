@@ -3,9 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Begeleider(s)";
 $langExplanation = "Wanneer u op OK klikt, worden de modulepagina\'s aangemaakt met o.a. de onderdelen: forum, links, oefeningen, agenda en cursusmateriaal. Met uw log-in kan u de inhoud later wijzigen.";
-$langEmpty = "U hebt niet alle velden ingevuld.<br />
-Gebruik de terugknop en herbegin.<br />
-Als u uw modulecode niet kent, kunt u de modulelijst raadplegen.";
+$langEmpty = "U hebt niet alle velden ingevuld.<br />Gebruik de terugknop en herbegin.<br />Als u uw modulecode niet kent, kunt u de modulelijst raadplegen.";
 $langCodeTaken = "Deze modulecode is al in gebruik. Gebruik de terugknop en herbegin.";
 $langFormula = "Vriendelijke groeten, uw begeleider";
 $langMessage = "Wanneer u het testforum verwijdert, zal ook elk onderwerp hierin verwijderd worden.";
@@ -34,10 +32,8 @@ $langAgendaTitle = "Dinsdag 11 december 14u00 : cursus filosofie (1) - Locaal : 
 $langAgendaText = "Algemene inleiding tot de filosofie en verklaring van de cursuswerking";
 $langMicro = "Micro-trottoir";
 $langGoogle = "Handige zoekmachine";
-$langIntroductionText = "Dit is de inleidingstekst van deze module. 
-Beheerders kunnen deze wijzigen door op het potloodicoontje onderaan te klikken.";
-$langIntroductionTwo = "Hier kunnen gebruikers documenten plaatsen. Via deze pagina is het mogelijk documenten uit te wisselen tussen gebruikers, groepen en begeleiders.
-Als u via de groepsruimte een document publiceert (optie = publiceren), zal een verwijzing aangemaakt worden naar uw document, zonder dit te verplaatsen.";
+$langIntroductionText = "Dit is de inleidingstekst van deze module. Beheerders kunnen deze wijzigen door op het potloodicoontje onderaan te klikken.";
+$langIntroductionTwo = "Hier kunnen gebruikers documenten plaatsen. Via deze pagina is het mogelijk documenten uit te wisselen tussen gebruikers, groepen en begeleiders.Als u via de groepsruimte een document publiceert (optie = publiceren), zal een verwijzing aangemaakt worden naar uw document, zonder dit te verplaatsen.";
 $langCourseDescription = "Geef hier een korte beschrijving voor de module. Deze zal verschijnen in de modulelijst.";
 $langProfessor = "Lesgever";
 $langAnnouncementEx = "Dit is een voorbeeld van een mededeling.";

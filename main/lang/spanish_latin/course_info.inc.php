@@ -64,8 +64,7 @@ $langSubscription = "Subscripción";
 $langCourseAccess = "Accso al curso";
 $langConfirmBackup = "Realmente desea hacer una copia de resguardo del curso";
 $langCreateSite = "Crear un curso";
-$langRestoreDescription = "El curso está en un archivo que puedes seleccionar de abajo.<br><br>
-Cuando hagas clic en \"Restaurar\", el archivo se descomprimirá y el curso se creará de nuevo.";
+$langRestoreDescription = "El curso está en un archivo que puedes seleccionar de abajo.<br><br>Cuando hagas clic en \"Restaurar\", el archivo se descomprimirá y el curso se creará de nuevo.";
 $langRestoreNotice = "Este script no permite automáticamente restaurar los usuarios, pero los datos guardados de los \"usuarios.csv\" son suficientes para el administrador.";
 $langAvailableArchives = "Lista de archivos disponible";
 $langNoArchive = "No ha seleccionado ningún archivo";
@@ -93,11 +92,7 @@ $AllowUserEditAnnouncementActivate = "Permitir la edición por los usuarios";
 $AllowUserEditAnnouncementDeactivate = "Desactivar la edición por los usuarios";
 $OrInTime = "o dentro";
 $CourseRegistrationPassword = "Contraseña de registro en el curso";
-$langDescriptionDeleteCourse = "Haga clic en este enlace para eliminar cualquier rastro del curso en el servidor...
-<br><br>
-¡ Esta funcionalidad debe ser usada con extrema precaución !";
-$langDescriptionCopyCourse = "Dokeos introduce la posibilidad de copiar, en parte o completamente, un curso en otro que inicialmente debe estar vacío.
-<br><br>
-La única condición es tener un curso que contenga algunos documentos, anuncios, foros... y un segundo curso que no contenga los elementos del primero !";
+$langDescriptionDeleteCourse = "Haga clic en este enlace para eliminar cualquier rastro del curso en el servidor...<br><br>¡ Esta funcionalidad debe ser usada con extrema precaución !";
+$langDescriptionCopyCourse = "Dokeos introduce la posibilidad de copiar, en parte o completamente, un curso en otro que inicialmente debe estar vacío.<br><br>La única condición es tener un curso que contenga algunos documentos, anuncios, foros... y un segundo curso que no contenga los elementos del primero !";
 $DescriptionRecycleCourse = "Esta herramienta vacía el curso de los elementos seleccionados, o todo el conjunto de los elementos que contiene. Quita los documentos, los foros, enlaces… Este procedimiento puede realizarse al final de una formación, o de un año académico. ¡ Por supuesto, antes de “reciclar”, debe tener la precaución de realizar una copia de seguridad completa de su curso!";
 ?>

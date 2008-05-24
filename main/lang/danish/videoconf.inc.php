@@ -29,8 +29,7 @@ $YesNo = "Ja/Nej";
 $Numeric1To10 = "Numerisk 1-10";
 $Poll = "Afstemning";
 $YouHaveToBecomeModeratorOfThisRoomToStartPolls = "Du skal være moderator af konferencen for at kunne oprette afstemninger";
-$YourVoteHasBeenSent = "Din stemme er afsendt
-";
+$YourVoteHasBeenSent = "Din stemme er afsendt";
 $YouAlreadyVotedForThisPoll = "Du har allerede givet din stemme i afstemningen";
 $VoteButton = "Stem!";
 $YourAnswer = "Dit svar:";

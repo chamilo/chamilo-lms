@@ -127,4 +127,16 @@ $RemoveAsTemplate = "Retirar tabela modelo";
 $ReadOnly = "Só leitura";
 $ReadOnlyFile = "Ficheiro só de leitura";
 $FileNotFound = "O ficheiro não foi encontrado";
+$TemplateTitleFirstPage = "Primeira página";
+$TemplateTitleDedicatory = "Dedicação";
+$TemplateTitlePreface = "Prefácio do curso";
+$TemplateTitlePrefaceDescription = "Prefácio";
+$TemplateTitleIntroduction = "Introdução";
+$TemplateTitlePlan = "Plano";
+$TemplateTitleProduction = "Produção";
+$TemplateTitleLeftImage = "Imagem à esquerda";
+$TemplateTitleLeftImageDescription = "Imagem à esquerda";
+$TemplateTitleBibliography = "Bibliografia";
+$TemplateTitleEvaluation = "Avaliação";
+$TemplateTitleEvaluationDescription = "Avaliação";
 ?>

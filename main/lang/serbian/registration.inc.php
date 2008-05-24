@@ -73,8 +73,7 @@ $langFormula = "Srda&#269;no Vaši";
 $langProblem = "U slu&#269;aju problema kontaktirajte nas.";
 $langIs = "je";
 $langAddress = "Adresa";
-$langSettings = "Sa slede&#263;im podešavanjema:
-Korisni&#269;ko ime:";
+$langSettings = "Sa slede&#263;im podešavanjema:Korisni&#269;ko ime:";
 $langYouAreReg = "Prijavljeni ste na";
 $langDear = "Poštovani";
 $langYourReg = "Vaša prijava na";

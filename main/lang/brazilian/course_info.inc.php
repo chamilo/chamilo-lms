@@ -64,8 +64,7 @@ $langSubscription = "Inscrição";
 $langCourseAccess = "Acesso ao curso";
 $langConfirmBackup = "Você realmente quer fazer backup dessa área de curso?";
 $langCreateSite = "Criar uma área de curso";
-$langRestoreDescription = "O curso está em um arquivo de backup que você pode selecionar abaixo.<br><br>
-Assim que você clicar em \"Restaur\", o arquivo irá ser descompactado e o curso será recriado.";
+$langRestoreDescription = "O curso está em um arquivo de backup que você pode selecionar abaixo.<br><br>Assim que você clicar em \"Restaur\", o arquivo irá ser descompactado e o curso será recriado.";
 $langRestoreNotice = "Esse script não permite ainda a restauração automática dos usuários, mas os dados salvos no \"users.csv\" são suficientes para que o adminitrador possa fazê-lo manualmente.";
 $langAvailableArchives = "Lista de arquivos disponíveis";
 $langNoArchive = "Nenhum arquivo foi selecionado";

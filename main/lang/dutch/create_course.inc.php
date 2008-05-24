@@ -3,9 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Lesgever(s)";
 $langExplanation = "Wanneer u op OK klikt, wordt een cursuspagina aangemaakt met o.a. de onderdelen: forum, links, oefeningen, agenda en cursusmateriaal. Met uw log-in kan u de inhoud later wijzigen.";
-$langEmpty = "U hebt niet alle velden ingevuld.<br />
-Gebruik de terugknop en herbegin.<br />
-Als u uw cursuscode niet kent, kunt u de cursuslijst raadplegen.";
+$langEmpty = "U hebt niet alle velden ingevuld.<br />Gebruik de terugknop en herbegin.<br />Als u uw cursuscode niet kent, kunt u de cursuslijst raadplegen.";
 $langCodeTaken = "Deze cursuscode is al in gebruik. Gebruik de terugknop en herbegin.";
 $langFormula = "Vriendelijke groeten, uw lesgever";
 $langMessage = "Wanneer u het testforum verwijdert, zal ook elk onderwerp hierin verwijderd worden.";
@@ -35,8 +33,7 @@ $langAgendaText = "Algemene inleiding tot de filosofie en verklaring van de curs
 $langMicro = "Micro-trottoir";
 $langGoogle = "Handige zoekmachine";
 $langIntroductionText = "Dit is de inleidingstekst van deze cursus. Cursusbeheerders kunnen deze wijzigen door op het potloodicoontje onderaan te klikken.";
-$langIntroductionTwo = "Hier kunnen studenten documenten plaatsen. Via deze pagina is het mogelijk documenten uit te wisselen tussen studenten, studentengroepen en lesgevers.
-Als u via de groepsruimte een document publiceert (optie = publiceren), zal een verwijzing aangemaakt worden naar uw document, zonder dit te verplaatsen.";
+$langIntroductionTwo = "Hier kunnen studenten documenten plaatsen. Via deze pagina is het mogelijk documenten uit te wisselen tussen studenten, studentengroepen en lesgevers.Als u via de groepsruimte een document publiceert (optie = publiceren), zal een verwijzing aangemaakt worden naar uw document, zonder dit te verplaatsen.";
 $langCourseDescription = "Geef hier een korte beschrijving voor de cursus. Deze zal verschijnen in de cursuslijst.";
 $langProfessor = "Lesgever";
 $langAnnouncementEx = "Dit is een voorbeeld van een mededeling.";

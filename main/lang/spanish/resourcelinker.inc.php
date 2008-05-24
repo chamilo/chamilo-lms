@@ -37,8 +37,7 @@ $LinkTarget = "Destino del enlace";
 $SameWindow = "En la misma ventana";
 $NewWindow = "En una nueva ventana";
 $StepDeleted1 = "Este";
-$StepDeleted2 = "el elemento fue suprimido en esta herramienta.
-";
+$StepDeleted2 = "el elemento fue suprimido en esta herramienta.";
 $Modify = "modificar";
 $Chapter = "Capítulo";
 $NoAgendaItems = "No hay eventos en la Agenda";

@@ -349,8 +349,7 @@ $NotAllowedToUnsubscribe = "Tiltott";
 $AddDummyContentToCourse = "Adjon hozzá a kurzushoz néhány (példa) tartalmat.";
 $DummyCourseCreator = "Minta kurzus tartalom létrehozása";
 $DummyCourseDescription = "Ez a funkció példa tartalommal tölti meg a kurzust. Ezek a példa elemek kipróbálási, tesztelési szándékkal kerültek feltöltésre.";
-$AvailablePlugins = "Ezek a rendszerén érzékelt beépül&#337; modulok. Letölthet további modulokat a 
-<a href=\"http://www.dokeos.com/extensions/index.php?section=plugins\">http://www.dokeos.com/extensions/index.php?section=plugins</a>címr&#337;l.";
+$AvailablePlugins = "Ezek a rendszerén érzékelt beépül&#337; modulok. Letölthet további modulokat a <a href=\"http://www.dokeos.com/extensions/index.php?section=plugins\">http://www.dokeos.com/extensions/index.php?section=plugins</a>címr&#337;l.";
 $CreateVirtualCourse = "Virtuális kurzus létrehozása";
 $DisplayListVirtualCourses = "Virtuális kurzusok megtekintése";
 $LinkedToRealCourseCode = "Kapcsolva valódi kurzushoz";

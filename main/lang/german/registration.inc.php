@@ -23,8 +23,7 @@ $langCourseName = "Name des Kurses";
 $langSubscribe = "Eintragen";
 $langSee = "Gehe zu";
 $langLastVisits = "Meine letzten Besuche";
-$langIfYouWantToAddManyUsers = "Wenn Sie eine Liste von Teilnehmer/innen hinzufügen wollen,
-                        nehmen Sie bitte mit dem Administrator Kontakt auf.";
+$langIfYouWantToAddManyUsers = "Wenn Sie eine Liste von Teilnehmer/innen hinzufügen wollen,                        nehmen Sie bitte mit dem Administrator Kontakt auf.";
 $langPassTooEasy = "dieses Passwort ist zu einfach. Benutzen Sie ein Passwort wie dieses ";
 $langGroupUserManagement = "Gruppenverwaltung";
 $langAddedToCourse = "hat Ihren Kurs belegt";
@@ -37,18 +36,13 @@ $langGiveAdmin = "Erstelle Admin";
 $langUserNumber = "Nummer";
 $langDownloadUserList = "Upload der Liste";
 $langSend = "Senden";
-$langUserAddExplanation = "Jede Zeile der Datei darf nur genau 5 Felder enthalten: <b>Nachname   Vorname   
-                Login   Passwort 
-                  Email</b> getrennt durch Tabulatoren und in dieser Reihenfolge.
-                Die Teilnehmer/innen erhalten eine Bestätigung durch E-Mail mit Login-Daten und Passwort.";
+$langUserAddExplanation = "Jede Zeile der Datei darf nur genau 5 Felder enthalten: <b>Nachname   Vorname                   Login   Passwort                   Email</b> getrennt durch Tabulatoren und in dieser Reihenfolge.                Die Teilnehmer/innen erhalten eine Bestätigung durch E-Mail mit Login-Daten und Passwort.";
 $langUserMany = "Teilnehmerliste durch Textdatei einfügen";
 $langOneByOne = "Teilnehmer manuell eintragen";
 $langNow = "jetzt";
 $langTutor = "Tutor";
 $langTitular = "Autor/in";
-$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Kursliste bearbeiten</big><br/><br/>
-Markieren Sie die Kurse, die Sie belegen wollen.<br>
-Löschen Sie die Markierung für Kurse, die Sie nicht mehr belegen wollen.<br> Klicken Sie dann auf den OK Button auf der Liste.";
+$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Kursliste bearbeiten</big><br/><br/>Markieren Sie die Kurse, die Sie belegen wollen.<br>Löschen Sie die Markierung für Kurse, die Sie nicht mehr belegen wollen.<br> Klicken Sie dann auf den OK Button auf der Liste.";
 $langStudent = "Teilnehmer/in";
 $langImportUserList = "Liste mit Teilnehmern importieren";
 $langAddAU = "Benutzer hinzufügen";

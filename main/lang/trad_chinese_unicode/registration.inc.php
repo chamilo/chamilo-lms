@@ -42,9 +42,7 @@ $langOneByOne = "手工添加用戶";
 $langNow = "現下";
 $langTutor = "教師";
 $langTitular = "必選";
-$langAddHereSomeCourses = "<FONT face=\"Arial, Helvetica\" 
-size=2><BIG>更新我的課程</BIG><BR><BR>選擇你要參與的課程，<BR>反選你要退出的課程，<BR>然後點擊清單下面確定按鈕. 
-</FONT>";
+$langAddHereSomeCourses = "<FONT face=\"Arial, Helvetica\" size=2><BIG>更新我的課程</BIG><BR><BR>選擇你要參與的課程，<BR>反選你要退出的課程，<BR>然後點擊清單下面確定按鈕. </FONT>";
 $langStudent = "學生";
 $langImportUserList = "匯入用戶清單";
 $langAddAU = "添加一個用戶";

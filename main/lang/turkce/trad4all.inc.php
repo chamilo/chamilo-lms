@@ -93,8 +93,7 @@ $lang_resource = "Kaynak";
 $lang_resources = "Kaynak";
 $langNameOfLang['arabic'] = "Arapça";
 $langNameOfLang['brazilian'] = "Portekizce(Brezilya)";
-$langNameOfLang['bulgarian']
- = "Bulgarca";
+$langNameOfLang['bulgarian'] = "Bulgarca";
 $langNameOfLang['catalan'] = "Katalanca";
 $langNameOfLang['croatian'] = "H&#305;rvatça";
 $langNameOfLang['danish'] = "danish";

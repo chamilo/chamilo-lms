@@ -13,8 +13,7 @@ $langScormAccess = "แผนการเรียน เนื้อหาวิชาตามรูปแบบมาตรฐานของ Scorm ";
 $langLinksDetails = "การเชื่อมโยงสู่ระบบ ของผู้ใช้";
 $langWorksDetails = "การโอนย้ายไฟล์ขึ้นสู่ระบบของผู้ใช้ ในนามของผู้เขียน";
 $langLoginsDetails = "คลิกที่ชื่อเดือน เพื่อดูรายละเอียด ";
-$langDocumentsDetails = "การดาวน์โหลดข้อมูลโดยผู้ใช้
-";
+$langDocumentsDetails = "การดาวน์โหลดข้อมูลโดยผู้ใช้";
 $langExercicesDetails = "ผลคะแนนการทดสอบ";
 $langBackToList = "ย้อนไปดูรายชื่อ";
 $langDetails = "รายละเอียด";

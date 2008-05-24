@@ -2,10 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langInvalidId = "<small>Không đăng nhập được.Nếu bạn chưa phải thành viên, hãy <a href=claroline/auth/inscription.php>đăng ký ở đây</a></small></font color>";
-$langWelcome = "courses are freely available below. Other  courses require
-a username and a password, which you can obtain by clicking on \'registration\'. Professors
-can create course websites clicking on registration too, but selecting then
-\'Create course sites (professors)\'.";
+$langWelcome = "courses are freely available below. Other  courses requirea username and a password, which you can obtain by clicking on \'registration\'. Professorscan create course websites clicking on registration too, but selecting then\'Create course sites (professors)\'.";
 $langPass = "Password";
 $langEnter = "Enter";
 $langReg = "Đăng ký";

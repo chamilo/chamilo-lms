@@ -129,8 +129,7 @@ $lang_resource = "Recurso";
 $lang_resources = "Recursos";
 $langNameOfLang['arabic'] = "árabe";
 $langNameOfLang['brazilian'] = "brasileiro";
-$langNameOfLang['bulgarian']
- = "búlgaro";
+$langNameOfLang['bulgarian'] = "búlgaro";
 $langNameOfLang['catalan'] = "catalão";
 $langNameOfLang['croatian'] = "croata";
 $langNameOfLang['danish'] = "dinamarquês";
@@ -460,9 +459,7 @@ $UplGenericError = "O envio do ficheiro não se realizou. Por favor, tente de nov
 $MyGradebook = "Meu Livro de Classificações";
 $Gradebook = "Livro de Classificações";
 $OpenIDWhatIs = "O que é o OpenID?";
-$OpenIDDescription = "OpenID elimina a necessidade de ter vários nomes de utilizadores em diferentes sítios web, simplificando a experiência do utilizador na Internet. Pode escolher o provedor de OpenID que melhor satisfaça as suas necessidades e, o que é mais importante, aquele em que tenha mais confiança. Ainda que mude de provedor, poderá conservar o seu OpenID. A boa notícia é que OpenID é uma tecnologia não proprietária e completamente gratuita. Para as empresas, isto significa um menor custo de administração de contas e senhas. OpenID reduz a frustração do utilizador permitindo que os utilizadores tenham o controle do seu acesso.
-
-<br /><br /><a href=\"http://openid.net/what/\">Para saber mais...</a>";
+$OpenIDDescription = "OpenID elimina a necessidade de ter vários nomes de utilizadores em diferentes sítios web, simplificando a experiência do utilizador na Internet. Pode escolher o provedor de OpenID que melhor satisfaça as suas necessidades e, o que é mais importante, aquele em que tenha mais confiança. Ainda que mude de provedor, poderá conservar o seu OpenID. A boa notícia é que OpenID é uma tecnologia não proprietária e completamente gratuita. Para as empresas, isto significa um menor custo de administração de contas e senhas. OpenID reduz a frustração do utilizador permitindo que os utilizadores tenham o controle do seu acesso.<br /><br /><a href=\"http://openid.net/what/\">Para saber mais...</a>";
 $NoManager = "Sem administrador";
 $ExportiCal = "Exportar em formato iCal";
 $ExportiCalPublic = "Exportar em formato iCal como evento público";

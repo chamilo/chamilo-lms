@@ -45,8 +45,7 @@ $langStudentsNotInThisGroups  = "Membres non inscrits à ce groupe";
 $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Un utilisateur peut être inscrit dans";
 $langQtyOfUserCanSubscribe_PartAfterNumber  = "groupes";
 $langGroupLimit = "Limite";
-$langStudentRegAllowed = "Les utilisateurs <b>sont autorisés</b> 
-			à s\'inscrire eux-mêmes dans les groupes";
+$langStudentRegAllowed = "Les utilisateurs <b>sont autorisés</b> 			à s\'inscrire eux-mêmes dans les groupes";
 $langGroupAllowStudentUnregistration = "Les utilisateurs sont autorisés à annuler leur inscription dans les groupes.";
 $langAllGroups = "Tous les groupes";
 $langStudentUnsubscribe = "Me désincrire de ce groupe";

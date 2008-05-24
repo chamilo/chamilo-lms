@@ -477,8 +477,7 @@ $ErrorsWhenImportingFile = "匯入檔案時發生錯誤";
 $ServiceActivated = "服務生效";
 $ActivateExtension = "啟用服務";
 $InvalidExtension = "無效的擴充套件";
-$VersionCheckExplanation = "要啟動自動版本偵測，你的學校須在 dokeos.com 註冊。按這按鈕後送出的料只會作內部用途，也只有總數資料方會被公開(如：學校總數、課程總數、學員總數等)。(瀏覽<a href=\"http://www.dokeos.com/stats/\">http://www.dokeos.com/stats/</a>.)註冊後你會在我們的全球學校名單中出現  (<a href=\"http://www.dokeos.com/community.php\">http://www.dokeos.com/community.php</a>)如果你不想在名單中出現請勾選下面的格子。註冊十分簡易：請按這按鈕：<br />
-";
+$VersionCheckExplanation = "要啟動自動版本偵測，你的學校須在 dokeos.com 註冊。按這按鈕後送出的料只會作內部用途，也只有總數資料方會被公開(如：學校總數、課程總數、學員總數等)。(瀏覽<a href=\"http://www.dokeos.com/stats/\">http://www.dokeos.com/stats/</a>.)註冊後你會在我們的全球學校名單中出現  (<a href=\"http://www.dokeos.com/community.php\">http://www.dokeos.com/community.php</a>)如果你不想在名單中出現請勾選下面的格子。註冊十分簡易：請按這按鈕：<br />";
 $AfterApproval = "核准之後";
 $StudentViewEnabledTitle = "允許學員界面";
 $StudentViewEnabledComment = "允許學員界面，讓教師或管理員預覽學員能看到的界面 ";

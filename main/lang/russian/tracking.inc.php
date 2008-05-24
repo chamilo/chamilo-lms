@@ -2,8 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langToolName = "Статистика";
-$TrackingDisabled = "Система статистики и отслеживания действий пользователей дезактивирована 
-администратором системы.";
+$TrackingDisabled = "Система статистики и отслеживания действий пользователей дезактивирована администратором системы.";
 $langShowNone = "Скрыть все";
 $langCourseStats = "Статистика по курсу";
 $langToolsAccess = "Доступ к средства";
@@ -109,8 +108,7 @@ $langAccessExplain = "Когда пользователь заходит на кампус";
 $langTotalPlatformAccess = "Всего";
 $langTotalPlatformLogin = "Всего";
 $langMultipleLogins = "Аккаунты одного <i>пользователя</i>";
-$langMultipleUsernameAndPassword = "Аккаунты с тем же <i>именем пользователя</i> и 
-<i>паролем</i>";
+$langMultipleUsernameAndPassword = "Аккаунты с тем же <i>именем пользователя</i> и <i>паролем</i>";
 $langMultipleEmails = "Аккаунты с тем же <i>Email</i>";
 $langCourseWithoutProf = "Курсы без преподавателя";
 $langCourseWithoutAccess = "Неиспользуемые курсы";

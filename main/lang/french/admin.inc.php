@@ -211,8 +211,7 @@ $langAnnouncementUpdated = "La news a été mise à jour";
 $langAnnouncementDeleted = "La news a été effacée";
 $langContent = "Contenu";
 $PermissionsForNewFiles = "Permissions des nouveaux fichiers";
-$PermissionsForNewFilesComment = "La possibilité de définir les permissions allouées aux nouveaux fichiers vous permet d\'augmenter la sécurité contre les attaques de pirates envoyant des contenus dangereux sur votre serveur. La valeur par défaut (0550) devrait être suffisante pour garantir un bon niveau de protection. Le format donné utilise la terminologie UNIX de Propriétaire-Groupe-Autres et de leurs permissions en Lecture-Écriture-Exécution.
-Attention, si vous utilisez Oogie, veillez à ce que l\'utilisateur qui lance OpenOffice ait les droits en écriture sur les dossiers du cours.";
+$PermissionsForNewFilesComment = "La possibilité de définir les permissions allouées aux nouveaux fichiers vous permet d\'augmenter la sécurité contre les attaques de pirates envoyant des contenus dangereux sur votre serveur. La valeur par défaut (0550) devrait être suffisante pour garantir un bon niveau de protection. Le format donné utilise la terminologie UNIX de Propriétaire-Groupe-Autres et de leurs permissions en Lecture-Écriture-Exécution.Attention, si vous utilisez Oogie, veillez à ce que l\'utilisateur qui lance OpenOffice ait les droits en écriture sur les dossiers du cours.";
 $langStudent = "Apprenant";
 $Guest = "Invité";
 $langLoginAsThisUserColumnName = "S\'authentifier en tant que";
@@ -390,10 +389,8 @@ $ExtendedProfileComment = "Si \"Oui\" est coché, l\'utilisateur pourra compléter
 $Classes = "Classes";
 $UserUnsubscribed = "L\'utilisateur est maintenant désinscrit";
 $CannotUnsubscribeUserFromCourse  = "L\'utilisateur ne peut pas être désinscrit: il est responsable de ce cours";
-$InvalidStartDate = "Date de départ invalide. <br />
-Veuillez vérifier.";
-$InvalidEndDate = "Date de fin invalide. <br />
-Veuillez vérifier.";
+$InvalidStartDate = "Date de départ invalide. <br />Veuillez vérifier.";
+$InvalidEndDate = "Date de fin invalide. <br />Veuillez vérifier.";
 $DateFormatLabel = "(JJ/MM/AA hh:mm)";
 $HomePageFilesNotWritable = "Les fichiers de la page d\'accueil sont en lecture seule !";
 $PleaseEnterNoticeText = "SVP, entrez le texte de la note";

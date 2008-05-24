@@ -51,8 +51,7 @@ $langFac = "Categoria";
 $langTargetFac = "Questa è la Facoltà, Dipartimento o Scuola presso cui il corso è tenuto";
 $langMax = "max. 12 caratteri, es. <i>RISUM21</i>";
 $langDoubt = "In caso di dubbio sulla denominazione esatta o sul codice del corso, consulta il, ";
-$langProgram = "Programma del corso</a>. Se non esiste un codice appropriato, puoi inventarne uno. 
-Ad esempio <i>INNOVAZ01</i> se si tratta di un corso di formazione sulla gestione dell\'innovazione";
+$langProgram = "Programma del corso</a>. Se non esiste un codice appropriato, puoi inventarne uno. Ad esempio <i>INNOVAZ01</i> se si tratta di un corso di formazione sulla gestione dell\'innovazione";
 $langScormtool = "Percorsi didattici";
 $langScormbuildertool = "Creatore di percorsi SCORM";
 $langPathbuildertool = "Creatore di percorsi didattici";

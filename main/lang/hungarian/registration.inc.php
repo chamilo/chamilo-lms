@@ -39,11 +39,7 @@ $langGiveAdmin = "Adminisztrátor létrehozása";
 $langUserNumber = "szám";
 $langDownloadUserList = "Lista feltöltése";
 $langSend = "Küldés";
-$langUserAddExplanation = "az elküldendõ file minden sora szükgségképpen csak és maximum
-		5 mezõt tartalmaz: <b>Keresztnév   Vezetéknév   
-		Login   Jelszó 
-		  Email</b> tab-okkal elválasztva ebben a sorrendben.
-		A felhasználók e-mail-es megerõsítést fognak kapni login-nal és jelszóval.";
+$langUserAddExplanation = "az elküldendõ file minden sora szükgségképpen csak és maximum		5 mezõt tartalmaz: <b>Keresztnév   Vezetéknév   		Login   Jelszó 		  Email</b> tab-okkal elválasztva ebben a sorrendben.		A felhasználók e-mail-es megerõsítést fognak kapni login-nal és jelszóval.";
 $langUserMany = "Felhasználói lista importálása CSV / XML file-ból";
 $langOneByOne = "Felhasználó kézi hozzáadása";
 $langNow = "most";
@@ -81,9 +77,7 @@ $langFormula = "Üdvözlettel";
 $langProblem = "Probléma esetén kérem lépjen velünk kapcsolatba.";
 $langIs = "elnevezés&#369; portál az alábbi URL-en érhet&#337; el";
 $langAddress = "Az";
-$langSettings = "az alábbi beállításokkal:
-
-Felhasználói név:";
+$langSettings = "az alábbi beállításokkal:Felhasználói név:";
 $langYouAreReg = "Ön regisztrációra került az alábbi elnevezés&#369; oktatási portálon:";
 $langDear = "Kedves";
 $langYourReg = "A regisztációja";

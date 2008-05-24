@@ -255,12 +255,10 @@ $No = "Não";
 $ShowToolShortcutsTitle = "Atalhos das Ferramentas";
 $ShowToolShortcutsComment = "Mostrar os atalhos das ferramentas no painel?";
 $ShowStudentViewTitle = "Visão do Estudante";
-$ShowStudentViewComment = "Habilitar Visão do Estudante?<br>Este recurso permite ao professor visualizar o que os estudantes irão ver.
-";
+$ShowStudentViewComment = "Habilitar Visão do Estudante?<br>Este recurso permite ao professor visualizar o que os estudantes irão ver.";
 $AllowGroupCategories = "Permitir categorias de Grupo";
 $AllowGroupCategoriesComment = "Permitir ao administrador do curso criar categorias no módulo do grupo ?";
-$PlatformLanguageComment = "Pode determinar a língua da plataforma num outro lugar da administração da plataforma, a saber: <a href=\"languages.php\">Línguas da Plataforma Dokeos</a>
-";
+$PlatformLanguageComment = "Pode determinar a língua da plataforma num outro lugar da administração da plataforma, a saber: <a href=\"languages.php\">Línguas da Plataforma Dokeos</a>";
 $PlatformLanguageTitle = "Língua da Plataforma";
 $ProductionServer = "Servidor de Produção";
 $TestServer = "Servidor de Teste";

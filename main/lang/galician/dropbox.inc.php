@@ -122,8 +122,7 @@ $mailingNonMailingError = "Un correo non pode ser sobrescrito por un non-correo 
 $MailingSelectNoOther = "O correo non se pode combinar con outros recipientes";
 $mailingJustUploadSelectNoOther = "O envío ao mín mesmo non se pode combinar con outros recipientes ";
 $NoFilesHere = "Aquí non hai ficheiros";
-$NoFilesHere = " 	
-Aquí non hai arquivos";
+$NoFilesHere = " 	Aquí non hai arquivos";
 $NewDropboxFileUploaded = "Enviouse un novo arquivo ó buzón de ficheiros";
 $NewDropboxFileUploadedContent = "Enviouse un novo arquivo ó buzón de ficheiros do teu curso";
 ?>

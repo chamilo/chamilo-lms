@@ -9,9 +9,7 @@ $ObjectivesInformation = "Presentazione degli obiettivi generali e specifici del
 $ObjectivesQuestions = "Cosa saranno in grado di fare i corsisti alla fine del corso? Cosa dovranno produrre durante il corso?";
 $Topics = "Contenuti";
 $TopicsInformation = "Presentazione degli argomenti del corso, dell\'elenco dei contenuti, del loro livello di importanza e di difficoltà, della sequenza didattica e del collegamento tra le diverse parti";
-$TopicsQuestions = "Quale sarà la sequenza degli argomenti? A quali punti si dovrà prestare una particolare attenzione?  Ci sono difficoltà di comprensione bene identificate? Quanto tempo bisognerà dedicare alle diverse parti del corso?
-
-";
+$TopicsQuestions = "Quale sarà la sequenza degli argomenti? A quali punti si dovrà prestare una particolare attenzione?  Ci sono difficoltà di comprensione bene identificate? Quanto tempo bisognerà dedicare alle diverse parti del corso?";
 $Methodology = "Metodologia";
 $MethodologyQuestions = "Quali metodi e attività favoriranno il raggiungimento degli obiettivi prefissati?  Qual è il calendario delle attività?";
 $MethodologyInformation = "Presentazione delle attività previste (seminari, presentazioni tenute dagli studenti, esercitazioni pratiche, laboratori, visite, raccolta di informazioni ...).";

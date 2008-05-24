@@ -28,8 +28,7 @@ $EussMenu = "meniu";
 $Opinio = "Opinie";
 $Intranet = "Intranet";
 $Englin = "Engleza";
-$langInvalidForSelfRegistration = "Autentificare esuata - daca nu esti inregistrat(a), te poti inregistra folosind 
-<a href=claroline/auth/inscription.php>formularul de inregistrare</a>";
+$langInvalidForSelfRegistration = "Autentificare esuata - daca nu esti inregistrat(a), te poti inregistra folosind <a href=claroline/auth/inscription.php>formularul de inregistrare</a>";
 $langSubCat = "subcategorii";
 $langMenuGeneral = "General";
 $langMenuUser = "Utilizator";

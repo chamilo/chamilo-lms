@@ -64,8 +64,7 @@ $langSubscription = "Zapisy";
 $langCourseAccess = "Dost&#281;p do kursu";
 $langConfirmBackup = "Czy na pewno chcesz archiwizowa&#263; kurs?";
 $langCreateSite = "Tworzenie kursu";
-$langRestoreDescription = "Kursy zapisane w plikach archiwalnym, które mo&#380;esz wybra&#263; poni&#378;ej.<br><br>
-Kiedy klikniesz \"Przywó&#263;\", archium zostanie rozpakowane a kurs przywrócowny na nowo.";
+$langRestoreDescription = "Kursy zapisane w plikach archiwalnym, które mo&#380;esz wybra&#263; poni&#378;ej.<br><br>Kiedy klikniesz \"Przywó&#263;\", archium zostanie rozpakowane a kurs przywrócowny na nowo.";
 $langRestoreNotice = "Skrypt nie mo&#380;e automatycznie przywróci&#263; u&#380;ytkowników, ale dane zapisane w pliku \"users.csv\" s&#261; wystarczajace dla administratora do wykonania tej czynno&#347;ci r&#281;cznie.";
 $langAvailableArchives = "Dost&#281;pna lista plików archiwalnych";
 $langNoArchive = "Nie wskazano archiwum";

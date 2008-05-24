@@ -39,11 +39,7 @@ $langGiveAdmin = "Naredi administratorja";
 $langUserNumber = "število";
 $langDownloadUserList = "Uvozi seznam";
 $langSend = "Pošlji";
-$langUserAddExplanation = "vsaka vrstica datoteke mora imeti natančno 5 polj:
-		<b>Priimek   Ime   
-		uporabniško_ime   geslo 
-		  elektronski_naslov</b>, v tem vrstnem redu in ločenih s TAB.
-		Uporabniki bodo dobili po e-pošti potrditev z uporabniškim imenom in geslom.";
+$langUserAddExplanation = "vsaka vrstica datoteke mora imeti natančno 5 polj:		<b>Priimek   Ime   		uporabniško_ime   geslo 		  elektronski_naslov</b>, v tem vrstnem redu in ločenih s TAB.		Uporabniki bodo dobili po e-pošti potrditev z uporabniškim imenom in geslom.";
 $langUserMany = "Vnos seznama uporabnikov iz CSV / XML datoteke";
 $langOneByOne = "Uporabnika dodaj ročno";
 $langNow = "sedaj";

@@ -37,21 +37,7 @@ $langCsvFileLine1 = "... - linija 1 = ";
 $langCsvLinesFailed = "linijos/ų importavimas nepavyko (nėra URL arba antraštės). ";
 $langCsvLinesOld = "atnaujinta egzistuojanti nuoroda (tas pats URL arba kategorija). ";
 $langCsvLinesNew = "sukurta nauja nuoroda/os.";
-$langCsvExplain = "
-Failo turinys turi būti toks:
-<blockquote><pre>
-<b>URL</b>;kategorija;<b>antraštė</b>;apibūdinimas;
-<b>http://www.aaa.org/...</b>;Svarbios nuorodos;<b>Vardas 1</b>;Apibūdinimas 1;
-<b>http://www.bbb.net/...</b>;;<b>Vardas 2</b>;\"Apibūdinimas 2\";
-</pre></blockquote>
-Jei kategorija ir URL yra vienodi kaip ir egzistuojančiame įraše, jo antraštė ir apibūdinimas bus atnaujinti.
-Kitaip bus sukurta nauja nuoroda.<br><br>
-Paryškintas = būtinas. 
-Laukai gali būti bet kokio eiliškumo, vardai mažosiomis ar didžiosiomis raidėmis. 
-Papildomi laukai pridedami prie apibūdinimo. 
-Skyriklis: kablelis arba kabliataškis. Reikšmės gali būti kabutėse, bet ne laukų vardai. 
-Kai kurie [b]HTML tagai[/b] gali taip pat būti importuoti į apibūdinimo laukelį.
-";
+$langCsvExplain = "Failo turinys turi būti toks:<blockquote><pre><b>URL</b>;kategorija;<b>antraštė</b>;apibūdinimas;<b>http://www.aaa.org/...</b>;Svarbios nuorodos;<b>Vardas 1</b>;Apibūdinimas 1;<b>http://www.bbb.net/...</b>;;<b>Vardas 2</b>;\"Apibūdinimas 2\";</pre></blockquote>Jei kategorija ir URL yra vienodi kaip ir egzistuojančiame įraše, jo antraštė ir apibūdinimas bus atnaujinti.Kitaip bus sukurta nauja nuoroda.<br><br>Paryškintas = būtinas. Laukai gali būti bet kokio eiliškumo, vardai mažosiomis ar didžiosiomis raidėmis. Papildomi laukai pridedami prie apibūdinimo. Skyriklis: kablelis arba kabliataškis. Reikšmės gali būti kabutėse, bet ne laukų vardai. Kai kurie [b]HTML tagai[/b] gali taip pat būti importuoti į apibūdinimo laukelį.";
 $langLinkUpdated = "Nuoroda atnaujinta";
 $langAll_Link_Deleted = "Nuoroda ištrinta";
 $langOnHomepage = "Rodyti namų puslapio nuorodą";

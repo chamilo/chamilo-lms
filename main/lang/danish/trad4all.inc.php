@@ -128,8 +128,7 @@ $lang_resource = "Ressource";
 $lang_resources = "Ressourcer";
 $langNameOfLang['arabic'] = "arabisk";
 $langNameOfLang['brazilian'] = "brasiliensk";
-$langNameOfLang['bulgarian']
- = "bulgarsk";
+$langNameOfLang['bulgarian'] = "bulgarsk";
 $langNameOfLang['catalan'] = "catalan";
 $langNameOfLang['croatian'] = "kroatisk";
 $langNameOfLang['danish'] = "dansk";
@@ -337,8 +336,7 @@ $MoveTo = "Flyt til";
 $Delete = "Slet";
 $MoveFileTo = "Flyt fil/dokument til ";
 $Save = "Gem";
-$Error = "Fejl
-";
+$Error = "Fejl";
 $Anonymous = "Anonym";
 $NoSearchResults = "Ingen søgeresultater";
 $h = "t";
@@ -447,9 +445,7 @@ $AccessToFaq = "Gå til ofte stillede spørgsmål";
 $Faq = "Ofte stillede spørgsmål";
 $RemindInactivesLearnersSince = "Påmind inaktive brugere siden";
 $RemindInactiveLearnersMailSubject = "Inaktivitet er på %";
-$RemindInactiveLearnersMailContent = "Kære bruger,
-
-Du har ikke været % aktiv i % dage.";
+$RemindInactiveLearnersMailContent = "Kære bruger,Du har ikke været % aktiv i % dage.";
 $OpenIdAuthentication = "OpenID authentication";
 $UploadMaxSize = "Max størrelse ved upload";
 $Unknown = "Ukendt";
@@ -462,8 +458,6 @@ $UplGenericError = "Filen, som du har forsøgt at uploade, kunne ikke uploades. P
 $MyGradebook = "Mine karakterer";
 $Gradebook = "Karakterer";
 $OpenIDWhatIs = "Hvad er OpenID?";
-$OpenIDDescription = "OpenID eliminates the need for multiple usernames across different websites, simplifying your online experience. You get to choose the OpenID Provider that best meets your needs and most importantly that you trust. At the same time, your OpenID can stay with you, no matter which Provider you move to. And best of all, the OpenID technology is not proprietary and is completely free. For businesses, this means a lower cost of password and account management, while drawing new web traffic. OpenID lowers user frustration by letting users have control of their login.
-
-Read on... ";
+$OpenIDDescription = "OpenID eliminates the need for multiple usernames across different websites, simplifying your online experience. You get to choose the OpenID Provider that best meets your needs and most importantly that you trust. At the same time, your OpenID can stay with you, no matter which Provider you move to. And best of all, the OpenID technology is not proprietary and is completely free. For businesses, this means a lower cost of password and account management, while drawing new web traffic. OpenID lowers user frustration by letting users have control of their login.Read on... ";
 $NoManager = "Ingen administrator";
 ?>

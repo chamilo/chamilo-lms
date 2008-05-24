@@ -29,8 +29,7 @@ $langNewDir = "Nome della nuova cartella";
 $langTo = "verso";
 $langNoSpace = "Caricamento non effettuato. Spazio insufficiente nella cartella";
 $langDownloadEnd = "Caricamento effettuato";
-$langFileExists = "Non &egrave possibile effettuare l\'operazione.
-<br>Esiste gi&agrave un elemento con questo nome.";
+$langFileExists = "Non &egrave possibile effettuare l\'operazione.<br>Esiste gi&agrave un elemento con questo nome.";
 $langDocCopied = "Documento copiato";
 $langDocDeleted = "Percorso SCORM eliminato";
 $langElRen = "Elemento rinominato";

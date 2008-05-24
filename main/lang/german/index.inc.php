@@ -2,8 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langInvalidId = "Login ist ungültig; Benutzername / Passwort sind inkorrekt.";
-$langWelcome = "Die unten aufgeführten Kurse sind frei zugänglich. Andere Kurse setzen ein Login und Passwort voraus.
-Diese können Sie durch anklicken von \'Registrierung\' erhalten. Die Trainer/innen können neue Kurse anlegen, wenn sie auf \'Einschreiben\' klicken. Sie müssen nur anschliessend den Punkt \'Kurswebsite anlegen (Trainer/in)\' auswählen.";
+$langWelcome = "Die unten aufgeführten Kurse sind frei zugänglich. Andere Kurse setzen ein Login und Passwort voraus.Diese können Sie durch anklicken von \'Registrierung\' erhalten. Die Trainer/innen können neue Kurse anlegen, wenn sie auf \'Einschreiben\' klicken. Sie müssen nur anschliessend den Punkt \'Kurswebsite anlegen (Trainer/in)\' auswählen.";
 $langPass = "Passwort";
 $langEnter = "Eingabe";
 $langReg = "Einschreibung";

@@ -211,8 +211,7 @@ $langAnnouncementUpdated = "Ankündigung wurde aktualisiert";
 $langAnnouncementDeleted = "Ankündigung wurde gelöscht";
 $langContent = "Inhalt";
 $PermissionsForNewFiles = "Berechtigung für neue Dateien";
-$PermissionsForNewFilesComment = "Die Möglichkeit, Berechtigungen für alle neu erstellten Dateien zu definieren, erhöht die Sicherheit gegen Hacker-Angriffe, falls gefährlicher Inhalt auf ihr Portal hochgeladen wird. Die vordefinierten Einstellungen (0550) sollten genügen, um ihrem Server einen vernünftigen Schutz zu geben. Das Format benutzt die UNIX Begriffe von \"Owner-Group-Others\" und \"Read-Write-Execute\" Berechtigung.
-Sollten Sie Oogie einsetzen, so beachten Sie bitte, daß der User, unter dem der ooo-Server läuft, auch Schreibberechtigung im Kursverzeichnis hat.";
+$PermissionsForNewFilesComment = "Die Möglichkeit, Berechtigungen für alle neu erstellten Dateien zu definieren, erhöht die Sicherheit gegen Hacker-Angriffe, falls gefährlicher Inhalt auf ihr Portal hochgeladen wird. Die vordefinierten Einstellungen (0550) sollten genügen, um ihrem Server einen vernünftigen Schutz zu geben. Das Format benutzt die UNIX Begriffe von \"Owner-Group-Others\" und \"Read-Write-Execute\" Berechtigung.Sollten Sie Oogie einsetzen, so beachten Sie bitte, daß der User, unter dem der ooo-Server läuft, auch Schreibberechtigung im Kursverzeichnis hat.";
 $langStudent = "Teilnehmer";
 $Guest = "Gast";
 $langLoginAsThisUserColumnName = "Login als";
@@ -495,8 +494,7 @@ $ErrorsWhenImportingFile = "Fehler bei Datei Import";
 $ServiceActivated = "Dienst ist aktiviert";
 $ActivateExtension = "Aktive Erweiterungen";
 $InvalidExtension = "Ungültige Erweiterung";
-$VersionCheckExplanation = "Um die automatische Versionsbenachrichtigung zu nutzen, muss man seine Dokeos-Installation bei dokeos.com registrieren. Die weitergegebene Information nach Klicken dieses Buttons dient lediglich internen Zwecken und lediglich Gesamtinformationen werden öffentlich verfügbar sein (Anzahl Campus Installationen insgesamt, Anzahl Kurse insgesamt, Anzahl Studenten insgesamt, usw) (vgl. <a href=\"http://www.dokeos.com/stats/\"> http://www.dokeos.com/stats/</a>. Nach der Registrierung erscheint Ihre Installation auch auf der Worldwide List (<a href=\"http://www.dokeos.com/community.php\">http://www.dokeos.com/community.php</a>. 
-Wenn Ihre Installation dort nicht erscheinen soll, markieren Sie bitte die nachfolgende Checkbox .  Die Registrierung ist ganz einfach: Sie klicken lediglich auf diesen Button:<br />";
+$VersionCheckExplanation = "Um die automatische Versionsbenachrichtigung zu nutzen, muss man seine Dokeos-Installation bei dokeos.com registrieren. Die weitergegebene Information nach Klicken dieses Buttons dient lediglich internen Zwecken und lediglich Gesamtinformationen werden öffentlich verfügbar sein (Anzahl Campus Installationen insgesamt, Anzahl Kurse insgesamt, Anzahl Studenten insgesamt, usw) (vgl. <a href=\"http://www.dokeos.com/stats/\"> http://www.dokeos.com/stats/</a>. Nach der Registrierung erscheint Ihre Installation auch auf der Worldwide List (<a href=\"http://www.dokeos.com/community.php\">http://www.dokeos.com/community.php</a>. Wenn Ihre Installation dort nicht erscheinen soll, markieren Sie bitte die nachfolgende Checkbox .  Die Registrierung ist ganz einfach: Sie klicken lediglich auf diesen Button:<br />";
 $AfterApproval = "Nach Genehmigung";
 $StudentViewEnabledTitle = "Studenten Ansicht  aktivieren";
 $StudentViewEnabledComment = "Studenten Ansicht aktivieren ermöglicht einem Lehrer oder Admin, den Kurs aus Sicht eines Studenten zu betrachten";

@@ -10,8 +10,7 @@ $langUpdateImage = "Cambiar fotografía";
 $langImageWrong = "El archivo debe tener un tamaño menor de";
 $langAddImage = "Agregar fotografía";
 $langCourseManager = "Administrador del Curso";
-$password_request = "Ha solicitado restablecer su contraseña. Si no lo ha solicitado, simplemente ignore este mensaje.
-Para generar una nueva contraseña haga click sobre el link \"restablecer\". ";
+$password_request = "Ha solicitado restablecer su contraseña. Si no lo ha solicitado, simplemente ignore este mensaje.Para generar una nueva contraseña haga click sobre el link \"restablecer\". ";
 $YourPasswordHasBeenEmailed = "Su contraseña le ha sido enviada a través de e-mail.";
 $lang_enter_email_and_well_send_you_password = "Introduzca la dirección e-mail que usted usó para registrarse y nosotros le enviaremos su contraseña.";
 $langLogin = "Ingreso";

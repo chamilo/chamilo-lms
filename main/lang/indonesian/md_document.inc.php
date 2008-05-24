@@ -11,8 +11,7 @@ $langNoScript = "Skrip tidak dihidupkan di browser anda, silahkan abaikan layar 
 $langPressAgain = "Tekan \'Simpan\' kembali ...";
 $langLanguageTip = "bahasa yang digunakan untuk membuat obyek pembelajaran";
 $langIdentifier = "Pengenal/identifier";
-$langIdentifierTip = "identifikasi unik untuk obyek pembelajaran ini, terdiri dari huruf, angka,  _-.()\'!*
-";
+$langIdentifierTip = "identifikasi unik untuk obyek pembelajaran ini, terdiri dari huruf, angka,  _-.()\'!*";
 $langTitleTip = "judul atau nama, dan bahasa judul atau nama";
 $langDescriptionTip = "deskripsi atau komentar, dan bahasa digunakan untk mendeskripsikan obyek pembelajaran ini";
 $langKeyword = "Kata Kunci";

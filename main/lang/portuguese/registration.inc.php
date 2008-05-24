@@ -36,20 +36,13 @@ $langGiveAdmin = "Ser administrador";
 $langUserNumber = "número";
 $langDownloadUserList = "Transferir ficheiro com a lista";
 $langSend = "Enviar";
-$langUserAddExplanation = "Cada linha do ficheiro que enviar tem que conter obrigatoriamente os 5 campos seguintes (e mais nenhum), sem qualquer omissão:
-  <b>Primeiro nome   Último nome   
-		Nome de utilizador   Senha 
-		  Correio Electrónico</b> separados por tabuladores e nesta ordem.
-Os utilizadores receberão uma mensagem de confirmação com o seu nome de utilizador e a sua senha através do correio electrónico indicado.";
+$langUserAddExplanation = "Cada linha do ficheiro que enviar tem que conter obrigatoriamente os 5 campos seguintes (e mais nenhum), sem qualquer omissão:  <b>Primeiro nome   Último nome   		Nome de utilizador   Senha 		  Correio Electrónico</b> separados por tabuladores e nesta ordem.Os utilizadores receberão uma mensagem de confirmação com o seu nome de utilizador e a sua senha através do correio electrónico indicado.";
 $langUserMany = "Importar lista de utilizadores contida num ficheiro CSV /XML";
 $langOneByOne = "Acrescentar um utilizador de forma manual";
 $langNow = "agora";
 $langTutor = "Orientador";
 $langTitular = "Autor";
-$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Alterar a lista de cursos</big><br><br>
-Escolha os cursos em que deseja inscrever-se.<br>
-Apague a marca de selecção dos cursos em que não deseja continuar inscrito.<br>
-Depois carregue no botão \'Validar\' da lista";
+$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Alterar a lista de cursos</big><br><br>Escolha os cursos em que deseja inscrever-se.<br>Apague a marca de selecção dos cursos em que não deseja continuar inscrito.<br>Depois carregue no botão \'Validar\' da lista";
 $langStudent = "estudante";
 $langImportUserList = "Importar lista de Utilizadores";
 $langAddAU = "Acrescentar um utilizador";
@@ -75,26 +68,19 @@ $langIsReg = "As mudanças que efectuou foram guardadas com sucesso";
 $langNowGoCreateYourCourse = "agora pode criar o seu curso";
 $langNowGoChooseYourCourses = "agora pode escolher na lista os cursos a que deseja aceder.";
 $langMailHasBeenSent = "Foi enviado um email com o nome de utilizador e senha para guardar e recordar.";
-$langPersonalSettings = "Os seus dados pessoais foram registados e foi enviada uma mensagem à sua caixa de correio electrónico para lhe lembrar o seu nome de utilizador e a sua senha.</p>
-Escolha na lista os cursos a que deseja aceder.";
+$langPersonalSettings = "Os seus dados pessoais foram registados e foi enviada uma mensagem à sua caixa de correio electrónico para lhe lembrar o seu nome de utilizador e a sua senha.</p>Escolha na lista os cursos a que deseja aceder.";
 $langManager = "Administrador";
 $langFormula = "Com os melhores cumprimentos";
 $langProblem = "Caso tenha algum problema, não hesite em nos contactar.";
 $langIs = "é";
 $langAddress = "A morada de";
-$langSettings = "com os seguintes parâmetros:
-
-
-Nome de utilizador:";
+$langSettings = "com os seguintes parâmetros:Nome de utilizador:";
 $langYouAreReg = "Foi inscrito em";
 $langDear = "Caro(a)";
 $langYourReg = "A sua inscrição em";
-$langUserFree = "O nome de utilizador que escolheu já está a ser usado por outro utilizador.
-Utilize o botão de Regressar do seu navegador e escolha outro diferente.";
-$langEmptyFields = "Não preencheu todos os campos.
-Utilize o botão de Regressar do seu navegador e tente de novo.";
-$langPassTwice = "Não escreveu a mesma senha as duas vezes.
-Utilize o botão de Regressar do seu navegador e tente de novo.";
+$langUserFree = "O nome de utilizador que escolheu já está a ser usado por outro utilizador.Utilize o botão de Regressar do seu navegador e escolha outro diferente.";
+$langEmptyFields = "Não preencheu todos os campos.Utilize o botão de Regressar do seu navegador e tente de novo.";
+$langPassTwice = "Não escreveu a mesma senha as duas vezes.Utilize o botão de Regressar do seu navegador e tente de novo.";
 $langRegAdmin = "Criar cursos (professor)";
 $langRegStudent = "Inscrever-se em cursos (estudante)";
 $langConfirmation = "Confirmação";

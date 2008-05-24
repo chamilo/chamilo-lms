@@ -14,8 +14,7 @@ $exercise_status_2 = "Pulse aquí para enviar as súas respostas á pregunta";
 $exercise_status_3 = "Estatus: Pregunta terminada";
 $showUserPoints = "Mostrar/Ocultar os clics";
 $showHotspots = "Mostrar/Ocultar hotspots";
-$labelPolyMenu = " 	
-Pechar polígono";
+$labelPolyMenu = " 	Pechar polígono";
 $triesleft = "Intentos restantes";
 $exeFinished = "Identificáronse todas as respostas. Agora pode reasignar as súas respostas ou pulsar para enviar.";
 $nextAnswer = "Agora faga clic en: &done=done";

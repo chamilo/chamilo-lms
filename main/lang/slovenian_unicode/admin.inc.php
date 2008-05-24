@@ -383,8 +383,7 @@ $UserListHasBeenExported = "Seznam tečajnikov je bil izvožen.";
 $ClickHereToDownloadTheFile = "Kliknite tukaj za prepis datoteke s platforme.";
 $administratorTelephoneTitle = "Upravitelj platforme: Telefon";
 $administratorTelephoneComment = "Telefonska številka upravitelja platforme";
-$SendMailToNewUser = "Pošlji sporočilo novemu uporabniku
-";
+$SendMailToNewUser = "Pošlji sporočilo novemu uporabniku";
 $ExtendedProfileTitle = "Razširjen profil";
 $ExtendedProfileComment = "Z omogočeno nastavitvijo (\'True\'), uporabnik lahko izpolni (opcija) še naslednja vnosna polja: \'Moje kvalifikacije\', \'Kaj lahko učim\' in \'Osebna interesna področja\'";
 $Classes = "Razredi";
@@ -462,8 +461,7 @@ $langConfigureExtensions = "Nastavitev storitev";
 $langConfigureExtensions = "Nastavitev storitev";
 $langActiveExtensions = "Aktiviraj to storitev";
 $langVisioconf = "Visio-konferenca";
-$langVisioconfDescription = "Dokeos Live Conferencing® je standardno orodje, namenjeno videokonferencam, in ponuja: prikaz diapozitivov, belo tablo (whiteboard) za risanje in pisanje, dvosmeren avdio in video prenos, klepet. Zahteva le Flash® predvajalnik in dovoljuje uporabo treh različnih načinov interakcije : ena-na-ena, ena-na-več in več-z-večimi.
-";
+$langVisioconfDescription = "Dokeos Live Conferencing® je standardno orodje, namenjeno videokonferencam, in ponuja: prikaz diapozitivov, belo tablo (whiteboard) za risanje in pisanje, dvosmeren avdio in video prenos, klepet. Zahteva le Flash® predvajalnik in dovoljuje uporabo treh različnih načinov interakcije : ena-na-ena, ena-na-več in več-z-večimi.";
 $langPpt2lp = "Oogie-Woogie pretvornik";
 $langPpt2lpDescription = "Oogie-Woogie je orodje za hitro izdelovanje/pretvorbo učnih vsebin. Omogoča pretvorbo predstavitev, izdelanih z MS Powerpoint, MS Word dokumentov in njihovih OpenOffice ekvivalentov v SCORM združljive e-tečaje. Po izvedeni pretvorbi, lahko preko urejevalnika orodja Učne poti dodajate zvok posameznim stranem, dodate nove strani, teste, vaje, pa tudi interakcijske aktivnosti, kot so forumi, objave tečajnikov, ... . Pri tem spremenjene vsebine ostanejo SCORM združljive. Sistem združuje moč pretvorbe dokumentov OpenOffice in MS-Office + RED5 strežnika podatkovnega toka za snemanje zvoka + Dokeos orodij za upravljanje z učnimi potmi.";
 $langBandWidthStatistics = "Statistika izrabe pasovne širine";
@@ -688,8 +686,7 @@ $OpenIdAuthenticationComment = "Omogoči OpenID URL bazirajočo avtentifikacijo 
 $VersionCheckEnabled = "Preverjanje verzije omogočeno";
 $InstallDirAccessibleSecurityThreat = "Namestitvena mapa main/install vašega Dokeos sistema je še vedno dostopna spletnim uporabnikom. To lahko predstavlja varnostno grožnjo sistemu. Priporočamo, da mapo odstranite ali spremenite dostopne pravice, da spletni uporabniki ne bodo imeli možnosti dostopa do namestitvenih datotek vsebovanih v tej mapi.";
 $GradebookActivation = "Aktivacija orodja redovalnice";
-$GradebookActivationComment = "Omogočanje orodja redovalnice dodaja možnost povezovanja učnih ciljev z ocenami. V primeru, da redovalnice ne potrebujete in je orodje aktivirano, le to lahko vnaša nepotrebno kompleksnost in nepreglednost v uporabiški vmesnik.
-Želite aktivirati to orodje ?";
+$GradebookActivationComment = "Omogočanje orodja redovalnice dodaja možnost povezovanja učnih ciljev z ocenami. V primeru, da redovalnice ne potrebujete in je orodje aktivirano, le to lahko vnaša nepotrebno kompleksnost in nepreglednost v uporabiški vmesnik.Želite aktivirati to orodje ?";
 $UserTheme = "Tema (predloga)";
 $UserThemeSelection = "Uporabnikova izbira teme";
 $UserThemeSelectionComment = "Dovoljuje uporabniku uporabo izbrane teme v njegovem profilu. Izbira teme menja izgled Dokeos platforme za posameznika, pri tem pa privzete teme portala ne spremeni. V primeru, da ima posamezen tečaj ali posamezna seja nastavljeno specifično temo, ta tema prevlada nad uporabnikovo izbrano temo.";

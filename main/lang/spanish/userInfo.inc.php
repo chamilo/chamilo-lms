@@ -30,6 +30,5 @@ $langUserInfo = "información del usuario";
 $langUnregister = "Sin registrar";
 $langAddAUser = "Añadir usuarios";
 $UsersUnsubscribed = "Los usuarios seleccionados han sido dados de baja del curso";
-$ThisStudentIsSubscribeThroughASession = "Este estudiante está inscrito en este curso mediante una sesión. No puede editar su información
-";
+$ThisStudentIsSubscribeThroughASession = "Este estudiante está inscrito en este curso mediante una sesión. No puede editar su información";
 ?>

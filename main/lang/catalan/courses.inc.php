@@ -23,8 +23,7 @@ $langAdministrationTools  = "Eines d\'administració";
 $lang_back_to_parent_category               = "Tornar a la categoria superior";
 $lang_back_to_course_selection              = "Tornar a la selecció del curs";
 $lang_up  = "Tronar a la categoria superior";
-$langCatList  = "Categories
-";
+$langCatList  = "Categories";
 $langCourseList  = "Cursos";
 $Subscribe = "Inscriure";
 $AlreadySubscribed = "Ja està inscrit";

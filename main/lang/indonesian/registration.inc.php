@@ -32,23 +32,17 @@ $langBackUser = "Kembali ke daftar user";
 $langUserOneByOneExplanation = "Dia akan menerima email konfirmasi berisi nama login and password";
 $langGiveTutor = "Jadikan tutor";
 $langRemoveRight = "Hapus hak ini";
-$langGiveAdmin = "Jadi
-an admin";
+$langGiveAdmin = "Jadian admin";
 $langUserNumber = "jumlah";
 $langDownloadUserList = "Upload daftar";
 $langSend = "Kirim";
-$langUserAddExplanation = "setiap baris file yang akan dikirim musti berisi 5 field: <b>Nama Belakang    Nama  Depan   
-		Nama Login   Password 
-		  Email</b> dipisahkan oleh tab dan dalam urutan tsb.
-		User akan menerima email konfirmasi berisi nama login/password.";
+$langUserAddExplanation = "setiap baris file yang akan dikirim musti berisi 5 field: <b>Nama Belakang    Nama  Depan   		Nama Login   Password 		  Email</b> dipisahkan oleh tab dan dalam urutan tsb.		User akan menerima email konfirmasi berisi nama login/password.";
 $langUserMany = "Import daftar user melalui file teks";
 $langOneByOne = "Tambah user secara manual";
 $langNow = "sekarang";
 $langTutor = "Tutor";
 $langTitular = "Pengarang";
-$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Ubah daftar mata kuliah</big><br><br>
-Periksa mata kuliah-mata kuliah yang akan diikuti.<br>
-Hilangkan tanda conteng pada mata kuliah yang tidak ingin diikuti lagi.<br> Kemudian klik Ok pada bagian bawah daftar";
+$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Ubah daftar mata kuliah</big><br><br>Periksa mata kuliah-mata kuliah yang akan diikuti.<br>Hilangkan tanda conteng pada mata kuliah yang tidak ingin diikuti lagi.<br> Kemudian klik Ok pada bagian bawah daftar";
 $langStudent = "siswa";
 $langImportUserList = "Import daftar user";
 $langAddAU = "Tambah user";

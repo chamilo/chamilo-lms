@@ -19,11 +19,9 @@ $dropbox_lang["description"]  = "備註";
 $dropbox_lang["sendTo"]  = "送給";
 $dropbox_lang["receivedTitle"]  = "收到的檔案";
 $dropbox_lang["sentTitle"]  = "送出的檔案";
-$dropbox_lang["confirmDelete"]  = "這只會從你的清單上移除此資料登記項
-";
+$dropbox_lang["confirmDelete"]  = "這只會從你的清單上移除此資料登記項";
 $dropbox_lang["all"]  = "所有文件";
-$dropbox_lang["workDelete"]  = "從清單上移除資料登記項
-";
+$dropbox_lang["workDelete"]  = "從清單上移除資料登記項";
 $dropbox_lang["sentBy"]  = "寄出者";
 $dropbox_lang["sentTo"]  = "收件人";
 $dropbox_lang["sentOn"]  = "在";

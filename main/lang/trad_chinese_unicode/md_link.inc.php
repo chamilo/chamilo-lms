@@ -20,10 +20,7 @@ $langCoverage = "分類";
 $langCoverageTip = "分類名稱，cfr. 鏈接";
 $langKwNote = "如果您更改簡介語言，請不要同時添加關鍵字。";
 $langClickKw = "在次目錄中點擊關鍵字選擇或取消選擇它。";
-$langKwHelp = "<br/> 點擊 \\\'+\\\' 按鈕打開, \\\'-\\\' 按鈕關閉, \\\'++\\\' 按鈕打開所有, \\\'--\\\' 按鈕關閉所有.<br/> <br/> 透過關閉次目錄取消對所有關鍵字的選擇,再次打開點按鈕 \\\'+\\\'.<br/> Alt-click \\\'+\\\' 在次目錄中尋找原始關鍵字.<br/> <br/> Alt-click 
-關鍵詞 選擇不含broader terms的關鍵詞或放棄選擇含broader terms的關鍵詞.<br/> <br/>  
-如果您改變了簡介語言, 請不要同時加上關鍵字.<br/> <br/> 
-";
+$langKwHelp = "<br/> 點擊 \\\'+\\\' 按鈕打開, \\\'-\\\' 按鈕關閉, \\\'++\\\' 按鈕打開所有, \\\'--\\\' 按鈕關閉所有.<br/> <br/> 透過關閉次目錄取消對所有關鍵字的選擇,再次打開點按鈕 \\\'+\\\'.<br/> Alt-click \\\'+\\\' 在次目錄中尋找原始關鍵字.<br/> <br/> Alt-click 關鍵詞 選擇不含broader terms的關鍵詞或放棄選擇含broader terms的關鍵詞.<br/> <br/>  如果您改變了簡介語言, 請不要同時加上關鍵字.<br/> <br/> ";
 $langLocation = "網址";
 $langLocationTip = "點擊打開對象";
 $langStore = "儲存";

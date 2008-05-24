@@ -22,8 +22,7 @@ $langGroupDescription = "Kuvaus";
 $langGroupMembers = "Ryhm‰n j‰senet";
 $langEditGroup = "Muokkaa t‰t‰ ryhm‰‰";
 $Optional = "(valinnainen)";
-$langGroupSettingsModified = "Ryhm‰asetuksia muutettu
-";
+$langGroupSettingsModified = "Ryhm‰asetuksia muutettu";
 $langGroupTooMuchMembers = "Ehdottamasi m‰‰r‰ ylitt‰‰ maksinin, jonka olet m‰‰ritellyt (voit muuttaa sit‰ alla). Ryhm‰‰ ei muodostettu.";
 $langGroupTutor = "Tutor";
 $langGroupNoTutor = "(ei ole)";

@@ -61,8 +61,7 @@ $dropbox_lang["mailingFileRecipNotFound"]  = "ningún estudiante con";
 $dropbox_lang["mailingFileRecipDup"]  = "varios usuarios tienen";
 $dropbox_lang["mailingFileIsFor"]  = "es para";
 $dropbox_lang["mailingFileSentTo"]  = "enviado a";
-$dropbox_lang["mailingFileNotRegistered"]  = "(no inscrito en este curso)
-";
+$dropbox_lang["mailingFileNotRegistered"]  = "(no inscrito en este curso)";
 $dropbox_lang["mailingNothingFor"]  = "Nada para";
 $dropbox_lang["justUploadInSelect"]  = "---Transferir a mí mismo---";
 $dropbox_lang["justUploadInList"]  = "Enviado por";

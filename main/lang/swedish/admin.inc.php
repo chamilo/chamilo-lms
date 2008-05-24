@@ -378,8 +378,7 @@ $DropboxAllowStudentToStudentComment = "Tillåt studenter att skicka dokument til
 $DropboxAllowMailingTitle = "Inlämningsmapp: Tillåt e-post";
 $DropboxAllowMailingComment = "Med e-postfunktionen kan du skicka varje student ett personligt meddelande";
 $PermissionsForNewDirs = "Behörigheter för nya mappar";
-$PermissionsForNewDirsComment = "Möjligheten att sätta rättighetsnivån på varje nyskapad mapp kan hjälpa dig att förbättra säkerheten mot hackare som vill ladda upp skadligt material till din kursportal.
-Standardinställningen för rättigheter (0770) bör vara tillräcklig för en rimlig säkerhet. Om du vill ändra den ska formatet följa de sätt att skriva rättigheter som finns i UNIX, Ägare-Grupp-övriga med rättighetsvärden för läsning(4), skrivning(2),exekvering(1). Använd inledande nolla. Värdet 0770 ger alltså fullständiga rättigheter för ägaren och gruppen och inga rättigheter för övriga.";
+$PermissionsForNewDirsComment = "Möjligheten att sätta rättighetsnivån på varje nyskapad mapp kan hjälpa dig att förbättra säkerheten mot hackare som vill ladda upp skadligt material till din kursportal.Standardinställningen för rättigheter (0770) bör vara tillräcklig för en rimlig säkerhet. Om du vill ändra den ska formatet följa de sätt att skriva rättigheter som finns i UNIX, Ägare-Grupp-övriga med rättighetsvärden för läsning(4), skrivning(2),exekvering(1). Använd inledande nolla. Värdet 0770 ger alltså fullständiga rättigheter för ägaren och gruppen och inga rättigheter för övriga.";
 $UserListHasBeenExported = "Användarlistan har exporterats.";
 $ClickHereToDownloadTheFile = "Klicka här för att ladda ner filen.";
 $administratorTelephoneTitle = "Plattformsadministratör: Telefon";
@@ -495,8 +494,7 @@ $ErrorsWhenImportingFile = "Fel vid filimportering";
 $ServiceActivated = "Tjänst aktiverad";
 $ActivateExtension = "Aktiva tjänster";
 $InvalidExtension = "Ogiltigt tillägg";
-$VersionCheckExplanation = "För att kunna aktivera automatisk versionskontroll måste man registrera sin kursportal på dokeos.com
-Informationen som skickas när du aktiverar med knappen används bara för internt bruk. Endast sammanslagna data kommer att visas upp (totalt antal kursportaler, totalt antal dokeoskurser, totalt antal studenter, osv) på <a href=\"http://www.dokeos.com/stats/\">dokeos.com/stats</a>.  När du registrerar din portal kommer den också att bli synlig i listan med <a href=\"http://www.dokeos.com/community.php\">dokeosportaler i världen</a>. Om du inte vill visa upp din portal där måste du markera valet nedanför. Hur man registrerar sin portal? Det är enkelt, klicka bara på knappen:<br />";
+$VersionCheckExplanation = "För att kunna aktivera automatisk versionskontroll måste man registrera sin kursportal på dokeos.comInformationen som skickas när du aktiverar med knappen används bara för internt bruk. Endast sammanslagna data kommer att visas upp (totalt antal kursportaler, totalt antal dokeoskurser, totalt antal studenter, osv) på <a href=\"http://www.dokeos.com/stats/\">dokeos.com/stats</a>.  När du registrerar din portal kommer den också att bli synlig i listan med <a href=\"http://www.dokeos.com/community.php\">dokeosportaler i världen</a>. Om du inte vill visa upp din portal där måste du markera valet nedanför. Hur man registrerar sin portal? Det är enkelt, klicka bara på knappen:<br />";
 $AfterApproval = "Efter godkännande";
 $StudentViewEnabledTitle = "Aktivera studentvy";
 $StudentViewEnabledComment = "Aktiverar den vy som studenter har, så att administratör eller lärare kan se hur en kurs ser ut för en student";
@@ -636,13 +634,10 @@ $Blacklist = "Svartlista";
 $Whitelist = "Vitlista";
 $UploadExtensionsBlacklist = "Svartlista -inställningar";
 $UploadExtensionsWhitelist = "Vitlista -inställningar";
-$UploadExtensionsBlacklistComment = "Svartlistan används för att ta bort (eller namnändra) alla filer med filändelse från listan. Filändelserna ska skrivas in utan föregående punkt (.) och separeras med semikolon (;) exempel: exe;com;bat;scr;php 
-Filer utan ändelse accepteras. Stora eller små bokstäver spelar ingen roll.";
-$UploadExtensionsWhitelistComment = "Vitlistan används för att ta bort (eller namnändra) alla filer som INTE har en filändelse från listan. Vitlistan räknas som säkrare, men mycket mer strikt filtermetod än svartlistan. Filändelserna ska skrivas in utan föregående punkt (.) och separeras med semikolon (;) exempel: htm;html;txt;doc;sxw;xls;jpg;jpeg;gif;png; 
-Filer utan ändelse accepteras. Stora eller små bokstäver spelar ingen roll.";
+$UploadExtensionsBlacklistComment = "Svartlistan används för att ta bort (eller namnändra) alla filer med filändelse från listan. Filändelserna ska skrivas in utan föregående punkt (.) och separeras med semikolon (;) exempel: exe;com;bat;scr;php Filer utan ändelse accepteras. Stora eller små bokstäver spelar ingen roll.";
+$UploadExtensionsWhitelistComment = "Vitlistan används för att ta bort (eller namnändra) alla filer som INTE har en filändelse från listan. Vitlistan räknas som säkrare, men mycket mer strikt filtermetod än svartlistan. Filändelserna ska skrivas in utan föregående punkt (.) och separeras med semikolon (;) exempel: htm;html;txt;doc;sxw;xls;jpg;jpeg;gif;png; Filer utan ändelse accepteras. Stora eller små bokstäver spelar ingen roll.";
 $UploadExtensionsSkip = "Filtreringsmetod (tabort/namnändra)";
-$UploadExtensionsSkipComment = "Om du väljer \"tabort\", kommer filtreringen med svart- eller vitlistan innebära att filen inte uppladdas till systemet.
-Om du väljer \"namnändra\" kommer den att uppladdas och byter filändelse till det som är angivet i filändringsinställningen. OBS! Namnändring är inget garanterat skydd och kan ge filkrockar om filer med samma namn och olika filändelser berörs.";
+$UploadExtensionsSkipComment = "Om du väljer \"tabort\", kommer filtreringen med svart- eller vitlistan innebära att filen inte uppladdas till systemet.Om du väljer \"namnändra\" kommer den att uppladdas och byter filändelse till det som är angivet i filändringsinställningen. OBS! Namnändring är inget garanterat skydd och kan ge filkrockar om filer med samma namn och olika filändelser berörs.";
 $UploadExtensionsReplaceBy = "Filändringsinställning";
 $UploadExtensionsReplaceByComment = "Skriv in den filändelse som ska användas för att ersätta en skadlig filändelse enligt svart- eller vitlistans filtrering. Detta behövs bara om du valt alternativet \"namnändra\" som filändringsmetod.";
 $Remove = "Tabort";
@@ -725,8 +720,7 @@ $DisplayUpcomingEventsComment = "Inställningen aktiverar eller inaktiverar visni
 $LDAPConnectionError = "Fel vid LDAP-uppkoppling";
 $LDAP = "LDAP";
 $LDAPEnableTitle = "Aktivera LDAP";
-$LDAPEnableComment = "Med LDAP aktiverat kan användare använda sitt LDAP-konto som inloggning till Dokeos.
-För att kunna använda en LDAP-server måste du först konfigurera inställningarna nedan i enlighet med installationsguiden, sedan aktivera LDAP-användning. Om du inte vet vad LDAP är ber vi dig lämna den inaktiverad.";
+$LDAPEnableComment = "Med LDAP aktiverat kan användare använda sitt LDAP-konto som inloggning till Dokeos.För att kunna använda en LDAP-server måste du först konfigurera inställningarna nedan i enlighet med installationsguiden, sedan aktivera LDAP-användning. Om du inte vet vad LDAP är ber vi dig lämna den inaktiverad.";
 $LDAPMainServerAddressTitle = "Adress till huvudserver för LDAP";
 $LDAPMainServerAddressComment = "IP-adressen eller URL till huvudserver för LDAP.";
 $LDAPMainServerPortTitle = "LDAP-port på huvudservern";

@@ -2,8 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $dropbox_lang["help"]  = "مساعدة";
-$dropbox_lang["aliensNotAllowed"]  = "فقط المسجلين في المقرر يستطيعون استخدام الـ .
- أنت غير مسجل في هذا المقرر.dropbox";
+$dropbox_lang["aliensNotAllowed"]  = "فقط المسجلين في المقرر يستطيعون استخدام الـ . أنت غير مسجل في هذا المقرر.dropbox";
 $dropbox_lang["dropbox"]  = "صندوق التجميع";
 $dropbox_lang["queryError"]  = "خطأ في استفسار قاعدة البيانات. رجاءاً، اتصل بمدير نظامك.";
 $dropbox_lang["generalError"]  = "هناك خطأ حدث. رجاءاً اتصل بمدير نظامك.";
@@ -45,8 +44,7 @@ $dropbox_lang["mailingAsUsername"]  = "إرسال";
 $dropbox_lang["mailingInSelect"]  = "---إرسال---";
 $dropbox_lang["mailingSelectNoOther"]  = "الإرسال لا يمكن أن يرتبط بمستقبلين آخرين";
 $dropbox_lang["mailingNonMailingError"]  = "الإرسال لا يمكن أن يكتَب بغير إرسال والعكس بالعكس";
-$dropbox_lang["mailingExamine"]  = "اختبار إرسال ملف 
-zip";
+$dropbox_lang["mailingExamine"]  = "اختبار إرسال ملف zip";
 $dropbox_lang["mailingNotYetSent"]  = "ملفات محتوى الإرسال لم يتم إرسالها بعد";
 $dropbox_lang["mailingSend"]  = "ارسل ملفات محتويات";
 $dropbox_lang["mailingConfirmSend"]  = "ارسل ملفات المحتوى إلى وجهات فردية";

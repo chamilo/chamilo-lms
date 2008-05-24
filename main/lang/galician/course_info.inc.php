@@ -12,10 +12,7 @@ $langUnsubscription = "Desinscribir";
 $langPrivOpen = "Acceso privado, inscrición aberta";
 $langPrivate = "Acceso privado, inscrición fechada (web reservada ás persoas que aparecen na lista <a href=../user/user.php>usuarios</a>)";
 $langForbidden = "Non estás rexistrado como responsable neste curso";
-$langConfTip = "Por defecto, o seu curso soamente é accesible
-para vostede, vostede é o único usuario. Se vostede desexa un mínimo de confidencialidade, o más simple é abrir
-a inscripción durante unha semana, pedir ós estudiantes que se inscriban eles mesmos,
-despois pechar a inscripción e verificar na lista dos usuarios os eventuais intrusos.";
+$langConfTip = "Por defecto, o seu curso soamente é accesiblepara vostede, vostede é o único usuario. Se vostede desexa un mínimo de confidencialidade, o más simple é abrira inscripción durante unha semana, pedir ós estudiantes que se inscriban eles mesmos,despois pechar a inscripción e verificar na lista dos usuarios os eventuais intrusos.";
 $langOpenToTheWorld = "Aberto - acceso permitido para todo o mundo";
 $OpenToThePlatform = "Aberto - acceso permitido para os usuarios rexistrados na plataforma";
 $langOpenToThePlatform = "Aberto - acceso permitido para usuarios rexistrados na plataforma";
@@ -67,8 +64,7 @@ $langSubscription = "Subscrición";
 $langCourseAccess = "Acceso ó curso";
 $langConfirmBackup = "Realmente queres facer un backup do curso?";
 $langCreateSite = "Crear un curso";
-$langRestoreDescription = "O curso está nun arquivo que podes seleccionar de abaixo.<br><br>
-Cando fagas clic en \"Restaurar\", o arquivo descomprimirase e o curso crearase novamente.";
+$langRestoreDescription = "O curso está nun arquivo que podes seleccionar de abaixo.<br><br>Cando fagas clic en \"Restaurar\", o arquivo descomprimirase e o curso crearase novamente.";
 $langRestoreNotice = "Este script non che permite automaticamente restaura-los usuarios, pero os datos gardados dos \"usuarios.csv\" son suficientes para o administrador.";
 $langAvailableArchives = "Lista de ficheiros dispoñible";
 $langNoArchive = "Non se seleccionou ningún ficheiro";

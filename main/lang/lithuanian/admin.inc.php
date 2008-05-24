@@ -211,8 +211,7 @@ $langAnnouncementUpdated = "Pranešimas atnaujintas";
 $langAnnouncementDeleted = "Pranešimas ištrintas";
 $langContent = "Turinys";
 $PermissionsForNewFiles = "Permissions for new files";
-$PermissionsForNewFilesComment = "The ability to define the permissions settings to assign to every newly created file lets you improve security against attacks by hackers uploading dangerous content to your portal. The default setting (0550) should be enough to give your server a reasonable protection level. The given format uses the UNIX terminology of Owner-Group-Others with Read-Write-Execute permissions.
-If you use Oogie, take care that the user who launch OpenOffice can write files in the course folder.";
+$PermissionsForNewFilesComment = "The ability to define the permissions settings to assign to every newly created file lets you improve security against attacks by hackers uploading dangerous content to your portal. The default setting (0550) should be enough to give your server a reasonable protection level. The given format uses the UNIX terminology of Owner-Group-Others with Read-Write-Execute permissions.If you use Oogie, take care that the user who launch OpenOffice can write files in the course folder.";
 $langStudent = "Studentas";
 $langLoginAsThisUserColumnName = "Prisijungti kaip";
 $langLoginAsThisUser = "Prisijungti";
@@ -537,8 +536,7 @@ $SubscribeUserIfNotAllreadySubscribed = "Užregistruoti vartotoją, jei jis dar 
 $UnsubscribeUserIfSubscriptionIsNotInFile = "Išregistruoti vartotoją";
 $DeleteSelectedSessions = "Delete selected sessions";
 $CourseListInSession = "Kursų sąrašas šioje sesijoje";
-$UnsubscribeCoursesFromSession = "Išregistruoti išrinktus kursus iš šios sesijos
-";
+$UnsubscribeCoursesFromSession = "Išregistruoti išrinktus kursus iš šios sesijos";
 $NbUsers = "Vartotojai";
 $SubscribeUsersToSession = "Užregistruoti vartotojus šioje sesijoje";
 $UserListInPlatform = "Vartotojų sąrašas sistemoje";

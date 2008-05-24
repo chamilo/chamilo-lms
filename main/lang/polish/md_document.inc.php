@@ -20,8 +20,7 @@ $langCoverage = "Zasi&#281;g";
 $langCoverageTip = "na przyk&#322;ad magister z dziedziny xxx: rok rrr";
 $langKwNote = "Je&#347;li zmieniono j&#281;zyk opisu, nie dodawa&#263; w tym samym czasie s&#322;ów kluczowych";
 $langClickKw = "Kliknij na s&#322;owo kluczowe w drzewie, aby je zaznaczy&#263; lub odznaczy&#263;. ";
-$langKwHelp = "<br/> Kliknij przycisk \'+\' aby otworzy&#263;, przycisk \'-\' aby zamkn&#261;&#263;, przycisk \'++\' aby otworzy&#263; wszystkie,  przycisk \'--\' aby zamkn&#261;&#263; wszystkie.<br/> <br/> Wyczy&#347;&#263; wszystkie zaznaczone s&#322;owa kluczowe poprzez zamkni&#281;cie drzewa oraz otworzenie go ponowne za pomoc&#261; przycisku \'+\'.<br/> 
-Klikni&#281;cie \'+\' trzymaj&#261;c Alt pozwala znale&#378;&#263; oryginalne s&#322;owa kluczowe w drzewie.<br/> <br/> Klikni&#281;cie na s&#322;owo kluczowe trzymaj&#261;c Alt, zaznacza to s&#322;owo bez szerszych okre&#347;le&#324; lub odznacza s&#322;owo z szerszymi okre&#347;leniami.<br/> <br/> Je&#347;li zmieniasz j&#281;zyk opisu, nie dodawaj w tym samym czasie s&#322;ów kluczowych.<br/> <br/>";
+$langKwHelp = "<br/> Kliknij przycisk \'+\' aby otworzy&#263;, przycisk \'-\' aby zamkn&#261;&#263;, przycisk \'++\' aby otworzy&#263; wszystkie,  przycisk \'--\' aby zamkn&#261;&#263; wszystkie.<br/> <br/> Wyczy&#347;&#263; wszystkie zaznaczone s&#322;owa kluczowe poprzez zamkni&#281;cie drzewa oraz otworzenie go ponowne za pomoc&#261; przycisku \'+\'.<br/> Klikni&#281;cie \'+\' trzymaj&#261;c Alt pozwala znale&#378;&#263; oryginalne s&#322;owa kluczowe w drzewie.<br/> <br/> Klikni&#281;cie na s&#322;owo kluczowe trzymaj&#261;c Alt, zaznacza to s&#322;owo bez szerszych okre&#347;le&#324; lub odznacza s&#322;owo z szerszymi okre&#347;leniami.<br/> <br/> Je&#347;li zmieniasz j&#281;zyk opisu, nie dodawaj w tym samym czasie s&#322;ów kluczowych.<br/> <br/>";
 $langRights = "Prawa U&#380;ytkowania";
 $langRightsTip = "opisz w s&#322;owach";
 $langVersion = "Wersja";

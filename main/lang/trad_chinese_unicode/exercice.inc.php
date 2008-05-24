@@ -186,8 +186,7 @@ $Hotspot = "圖像區";
 $ClickNumber = "按數字";
 $HotspotGiveAnswers = "請填寫答案";
 $Addlimits = "加入限制";
-$AreYouSure = "你肯定嗎？
-";
+$AreYouSure = "你肯定嗎？";
 $StudentScore = "學員分數";
 $backtoTesthome = "回到測驗主頁";
 $Feedback = "回饋";

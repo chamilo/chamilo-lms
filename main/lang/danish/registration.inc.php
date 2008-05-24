@@ -27,8 +27,7 @@ $langIfYouWantToAddManyUsers = "Hvis du ønsker at tilføje en hel liste af deltag
 $langPassTooEasy = "denne adgangskode er for simpel og let at gætte for andre. Brug en adgangskode som denne ";
 $langGroupUserManagement = "Gruppestyring";
 $langAddedToCourse = "er blevet registreret på dit kursus";
-$langUserAlreadyRegistered = "En deltager med samme fornavn/efternavn er allerede registreret
-			 på dette kursus.";
+$langUserAlreadyRegistered = "En deltager med samme fornavn/efternavn er allerede registreret			 på dette kursus.";
 $langBackUser = "Tilbage til deltagerlisten";
 $langUserOneByOneExplanation = "Deltagerne vil modtage en bekræftende e-mail med brugernavn og adgangskode";
 $langGiveTutor = "Giv instruktorrettighed";
@@ -37,17 +36,13 @@ $langGiveAdmin = "Giv administrationsrettighed";
 $langUserNumber = "antal";
 $langDownloadUserList = "Opload liste";
 $langSend = "Send";
-$langUserAddExplanation = "hver linie i filen, som sendes, vil indeholde 5 felter: <b>Fornavn   Efternavn    Brugernavn   Adgangskode 
-		  E-mail</b> adskilt med tabulator og i denne rækkefølge.
-		Deltagerne modtager en bekræftende e-mail med login/adgangskode.";
+$langUserAddExplanation = "hver linie i filen, som sendes, vil indeholde 5 felter: <b>Fornavn   Efternavn    Brugernavn   Adgangskode 		  E-mail</b> adskilt med tabulator og i denne rækkefølge.		Deltagerne modtager en bekræftende e-mail med login/adgangskode.";
 $langUserMany = "Importere deltagerlisten ved hjælp af CSV/XML-fil";
 $langOneByOne = "Tilføj deltagerne manuelt";
 $langNow = "nu";
 $langTutor = "Instruktor";
 $langTitular = "Ophavsmand";
-$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Ændre kursusoversigten</big><br><br>
-Sæt kryds ved de kurser, som du ønsker at følge.<br>
-Fjern afkrydsning på de kurser, du ikke længere ønsker at følge.<br> Klik derefter OK nederst i denne oversigt";
+$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Ændre kursusoversigten</big><br><br>Sæt kryds ved de kurser, som du ønsker at følge.<br>Fjern afkrydsning på de kurser, du ikke længere ønsker at følge.<br> Klik derefter OK nederst i denne oversigt";
 $langStudent = "Deltager";
 $langImportUserList = "Importer en liste af deltagere";
 $langAddAU = "Tilføj en kursusdeltager";
@@ -73,8 +68,7 @@ $langIsReg = "Dine ændringer er registreret";
 $langNowGoCreateYourCourse = "Du kan nu oprette dine kursussider";
 $langNowGoChooseYourCourses = "Vælg nu de kurser på kursusoversigten, som du ønsker adgang til. Klik på kursussidernes titel for at få adgang til siden.";
 $langMailHasBeenSent = "Der er afsendt en e-mail til dig med dit brugernavn og adgangskode";
-$langPersonalSettings = "Dine personlige oplysninger er registreret og en e-mail er afsendt til den e-mailadresse, du har oplyst. 
-<i>Husk at der er forskel på store og små bogstaver (case sensitive)</i>, når du skal logge dig på.</p>";
+$langPersonalSettings = "Dine personlige oplysninger er registreret og en e-mail er afsendt til den e-mailadresse, du har oplyst. <i>Husk at der er forskel på store og små bogstaver (case sensitive)</i>, når du skal logge dig på.</p>";
 $langManager = "Support";
 $langFormula = "Med venlig hilsen";
 $langProblem = "Du er velkommen til at kontakte os i tilfælde af problemer.";

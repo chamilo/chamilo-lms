@@ -101,8 +101,7 @@ $lang_resource = "Resursa";
 $lang_resources = "Resurse";
 $langNameOfLang['arabic'] = "araba";
 $langNameOfLang['brazilian'] = "brazilian";
-$langNameOfLang['bulgarian']
- = "bulgarian";
+$langNameOfLang['bulgarian'] = "bulgarian";
 $langNameOfLang['catalan'] = "catalan";
 $langNameOfLang['croatian'] = "croatian";
 $langNameOfLang['danish'] = "danish";
@@ -286,8 +285,7 @@ $InThisCourse = "In acest curs";
 $ThisFieldIsRequired = "camp obligatoriu";
 $AllowedHTMLTags = "Taguri HTML permise";
 $FormHasErrorsPleaseComplete = "Formularul contine date incorecte sau incomplete. Va rugam sa verificati datele introduse.";
-$StartDateShouldBeBeforeEndDate = "Prima data ar trebui sa fie inainte de data finala
-";
+$StartDateShouldBeBeforeEndDate = "Prima data ar trebui sa fie inainte de data finala";
 $InvalidDate = "Data invalida";
 $OnlyLettersAndNumbersAllowed = "Numai litere si numere sunt permise";
 $langBasicOverview = "Privire de ansamblu de baza";
@@ -296,14 +294,12 @@ $UserRole = "Rol";
 $ViewRight = "Vezi drepturile";
 $EditRight = "Editeaza";
 $DeleteRight = "Stergere";
-$OverviewCourseRights = "Privire de ansamblu cu privire la roluri si 
-drepturi";
+$OverviewCourseRights = "Privire de ansamblu cu privire la roluri si drepturi";
 $SeeAllRightsAllLocationsForSpecificRole = "Focalizare pe rol";
 $SeeAllRolesAllLocationsForSpecificRight = "Focalizare pe drept";
 $langAdvanced = "Avansat";
 $RightValueModified = "Valoarea a fost modificata.";
-$course_rights = "Privire de ansamblu cu privire la roluri si 
-drepturi";
+$course_rights = "Privire de ansamblu cu privire la roluri si drepturi";
 $Visio_conference = "Visioconferinta";
 $CourseAdminRoleDescription = "Administratorul cursului";
 $Download = "Descarca";

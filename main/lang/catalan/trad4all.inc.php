@@ -91,8 +91,7 @@ $lang_resource = "Recurs";
 $lang_resources = "Recursos";
 $langNameOfLang['arabic'] = "Àrab";
 $langNameOfLang['brazilian'] = "Portugués Brazil";
-$langNameOfLang['bulgarian']
- = "Bulgar";
+$langNameOfLang['bulgarian'] = "Bulgar";
 $langNameOfLang['catalan'] = "Català";
 $langNameOfLang['croatian'] = "Croat";
 $langNameOfLang['danish'] = "Danès";
@@ -116,8 +115,7 @@ $Close = "Tanca";
 $langPlatform = "Plataforma basada en";
 $localLangName = "idioma";
 $email = "e-mail";
-$langCourseCodeAlreadyExists = "Trist, però aquell codi de curs ja existeix. Si us plau esculli\'n un altre.
-";
+$langCourseCodeAlreadyExists = "Trist, però aquell codi de curs ja existeix. Si us plau esculli\'n un altre.";
 $Statistics = "Estadístiques";
 $langPrevious = "previ";
 $Courses = "Cursos";
@@ -255,7 +253,6 @@ $Everyone = "Cadasqú";
 $SelectGroupsUsers = "Seleccionar grups/usuaris";
 $Student = "Alumne";
 $Teacher = "Professor";
-$Send2All = "No seleccionava un usuari / grup. L\'element és visible per a tots els usuaris
-";
+$Send2All = "No seleccionava un usuari / grup. L\'element és visible per a tots els usuaris";
 $wiki = "Wiki";
 ?>

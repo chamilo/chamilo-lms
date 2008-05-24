@@ -643,9 +643,7 @@ $UploadExtensionsReplaceByComment = "Introduza a extensión que queira usar para 
 $Remove = "Eliminar";
 $Rename = "Renombrar";
 $ShowNumberOfCoursesComment = "Mostrar o número de cursos de cada categoría, nas categorías de cursos da páxina principal";
-$EphorusDescription = "Comezar a usar en Dokeos o servizo antiplaxio de Ephorus.
-Con Ephorus, previrá o plaxio de Internet sen ningún esforzo adicional.
-Pode utilizar o noso servizo web estándar para construír a súa propia integración ou utilizar un dos módulos da integración de Dokeos.";
+$EphorusDescription = "Comezar a usar en Dokeos o servizo antiplaxio de Ephorus.Con Ephorus, previrá o plaxio de Internet sen ningún esforzo adicional.Pode utilizar o noso servizo web estándar para construír a súa propia integración ou utilizar un dos módulos da integración de Dokeos.";
 $EphorusLeadersInAntiPlagiarism = "Líderes en antiplaxio";
 $EphorusClickHereForInformationsAndPrices = "Faga clic aquí para máis información e prezos";
 $NameOfTheSession = "Nome da sesión";
@@ -656,8 +654,7 @@ $ShowTabsTitle = "Pestanas na cabeceira";
 $ShowTabsComment = "Seleccione as etiquetas que desexa na cabeceira. As etiquetas non seleccionadas aparecerán no menú do lado dereito da páxina principal do campus e na páxina dos cursos, no caso de ser necesario que aparezan.";
 $DefaultForumViewTitle = "Vista do foro por defecto";
 $DefaultForumViewComment = "Cal debería ser a opción por defecto cando se crea un foro.  Calquera administrador de curso pode, sen embargo, escoller unha vista diferente para cada foro de xeito individual. ";
-$TabsMyCourses = " 	
-Pestaña Os meus cursos";
+$TabsMyCourses = " 	Pestaña Os meus cursos";
 $TabsCampusHomepage = "Separador da páxina de inicio do Campus";
 $TabsReporting = "Pestana Informes";
 $TabsPlatformAdministration = "Separador da Administración da Plataforma";

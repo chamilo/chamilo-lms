@@ -28,8 +28,7 @@ $langLinkSite = "Ajouter un lien sur la page d\\\'accueil";
 $langCourse = "Le cours ";
 $langHasDel = "a été supprimé";
 $langBackHome = "Retour à la page d\'accueil de ";
-$langByDel = "En supprimant ce cours, vous supprimerez tous les documents
-qu\'il contient et désinscrirez tous les membres qui y sont inscrits. <p>Voulez-vous réellement supprimer ce cours";
+$langByDel = "En supprimant ce cours, vous supprimerez tous les documentsqu\'il contient et désinscrirez tous les membres qui y sont inscrits. <p>Voulez-vous réellement supprimer ce cours";
 $langY = "OUI";
 $langN = "NON";
 $langDepartmentUrl  = "URL du département";
@@ -65,8 +64,7 @@ $langSubscription = "Inscription";
 $langCourseAccess = "Accès à ce cours";
 $langConfirmBackup = "Voulez-vous vraiment archiver ce cours";
 $langCreateSite = "Créer un cours";
-$langRestoreDescription = "Ce cours se trouve dans une archive que vous pouvez sélectionner ci-dessous.<br><br>
-Lorsque vous aurez cliqué sur \"Restaurer\", l\'archive sera décompressée et le cours recréé.";
+$langRestoreDescription = "Ce cours se trouve dans une archive que vous pouvez sélectionner ci-dessous.<br><br>Lorsque vous aurez cliqué sur \"Restaurer\", l\'archive sera décompressée et le cours recréé.";
 $langRestoreNotice = "Ce script ne permet pas encore la restauration automatique des utilisateurs, mais les données sauvegardées dans le fichier \"users.csv\" sont suffisantes pour que l\'administrateur puisse effectuer cette opération manuellement.";
 $langAvailableArchives = "Liste des archives disponibles";
 $langNoArchive = "Aucune archive n\'a été sélectionnée";

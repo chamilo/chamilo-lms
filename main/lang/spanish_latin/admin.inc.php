@@ -349,8 +349,7 @@ $AllowedToUnsubscribe = "Permitido";
 $NotAllowedToUnsubscribe = "Denegado";
 $AddDummyContentToCourse = "Agregue algún contenido (de ejemplo) para este curso";
 $DummyCourseCreator = "Crear contenido para curso dummy";
-$DummyCourseDescription = "Esto añadirá algún contenido de muestra (ejemplo) a este curso.
-Sólo se hace para propósitos de prueba.";
+$DummyCourseDescription = "Esto añadirá algún contenido de muestra (ejemplo) a este curso.Sólo se hace para propósitos de prueba.";
 $AvailablePlugins = "Estos son las extensiones (plugins) que han sido encontrados en su sistema. Usted puede obtener extensiones (plugins) adicionales en <a href=\"http://www.dokeos.com/extensions/index.php?section=plugins\">http://www.dokeos.com/extensions/index.php?section=plugins</a>";
 $CreateVirtualCourse = "Crear un curso virtual";
 $DisplayListVirtualCourses = "Mostrar lista de cursos virtuales";
@@ -369,8 +368,7 @@ $ClassName = "Nombre de la clase";
 $DropboxMaxFilesizeTitle = "Máximo tamaño de un documento del baúl de tareas";
 $DropboxMaxFilesizeComment = "¿Qué tan grande (en bytes) puede ser un documento del baúl de tareas?";
 $DropboxAllowOverwriteTitle = "Baúl de tareas: Los documentos pueden sobreescribirse";
-$DropboxAllowOverwriteComment = "¿Puede el documento original sobreescribirse cuando un estudiante o profesor sube un documento con el nombre de un documento que ya existe?
-Si responde afirmativamente entonces perderá el mecanismo de versiones";
+$DropboxAllowOverwriteComment = "¿Puede el documento original sobreescribirse cuando un estudiante o profesor sube un documento con el nombre de un documento que ya existe?Si responde afirmativamente entonces perderá el mecanismo de versiones";
 $DropboxAllowJustUploadTitle = "Baúl de tareas: ¿Subir al baúl propio?";
 $DropboxAllowJustUploadComment = "Se permite a estudiantes y profesores subir documentos a su propio baúl de tareas sin enviar copia a nadie más";
 $DropboxAllowStudentToStudentTitle = "Baúl de tareas: Estudiante a Estudiante";

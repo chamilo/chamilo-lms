@@ -71,8 +71,7 @@ $dropbox_lang["showFeedback"] = "&#54588;&#46300;&#48177; &#48372;&#44592;";
 $dropbox_lang["backList"] = "dropbox&#47196; &#46028;&#50500;&#44032;&#44592;";
 $dropbox_lang["filingFolders"] = "Filing (folders) ";
 $dropbox_lang["filingRefile"] = "Refile";
-$dropbox_lang["filingSelected"] = "selected
-";
+$dropbox_lang["filingSelected"] = "selected";
 $dropbox_lang["filingOtherAs"] = "non-selected as";
 $dropbox_lang["filingName"] = "&#51060;&#47492;";
 ?>

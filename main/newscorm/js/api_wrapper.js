@@ -431,7 +431,7 @@ function checkAnswers(interrupted)
 	var scoreMax = 0;
 	for(var i=0; i<questions.length;i++)
 	{
-		if(questions[i]){
+		if(questions[i] != undefined && questions[i] != null){
 			var idQuestion = questions[i];
 			var type = questions_types[idQuestion];
 			var interactionScore = 0;

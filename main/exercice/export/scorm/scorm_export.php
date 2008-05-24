@@ -579,11 +579,13 @@ class ScormSection
     function export_questions()
     {
         $js = $html = "";
+        $js_id = 0;
         foreach ($this->exercise->selectQuestionList() as $q)
         {
-        	list($jstmp,$htmltmp)= export_question($q, false);
+        	list($jstmp,$htmltmp)= export_question($q, false, $js_id);
         	$js .= $jstmp."\n";
         	$html .= $htmltmp."\n";
+            ++$js_id;
         }
         return array($js,$html);
     }
@@ -617,8 +619,9 @@ function export_exercise($exerciseId, $standalone=true)
  * 
  * @param int The question ID
  * @param bool standalone (ie including XML tag, DTD declaration, etc)
+ * @param int  The JavaScript ID for this question. Due to the nature of interactions, we must have a natural sequence for questions in the generated JavaScript.
  */
-function export_question($questionId, $standalone=true)
+function export_question($questionId, $standalone=true, $js_id)
 {
     $question = new ScormQuestion();
     $qst = $question->read($questionId);
@@ -627,6 +630,7 @@ function export_question($questionId, $standalone=true)
         return '';
     }
     $question->id = $qst->id;
+    $question->js_id = $js_id;
     $question->type = $qst->type;
     $question->question = $qst->question;
     $question->description = $qst->description;

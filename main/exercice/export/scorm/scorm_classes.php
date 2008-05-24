@@ -52,27 +52,35 @@ class ScormQuestion extends Question
 		{
 			case MCUA :
 				$this->answer = new ScormAnswerMultipleChoice($this->id, false);
+                $this->answer->questionJSId = $this->js_id;
 				break; 
 			case MCMA :
 				$this->answer = new ScormAnswerMultipleChoice($this->id, true);	
+                $this->answer->questionJSId = $this->js_id;
 				break;
 			case TF :
 				$this->answer = new ScormAnswerTrueFalse($this->id); 
+                $this->answer->questionJSId = $this->js_id;
 				break;
 			case FIB :
 				$this->answer = new ScormAnswerFillInBlanks($this->id); 
+                $this->answer->questionJSId = $this->js_id;
 				break;
 			case MATCHING :
 				$this->answer = new ScormAnswerMatching($this->id); 
+                $this->answer->questionJSId = $this->js_id;
 				break;
 			case FREE_ANSWER :
 				$this->answer = new ScormAnswerFree($this->id); 
+                $this->answer->questionJSId = $this->js_id;
 				break;
 			case HOTSPOT:
 				$this->answer = new ScormAnswerHotspot($this->id); 
+                $this->answer->questionJSId = $this->js_id;
 				break;
 			default :
 				$this->answer = null;
+                $this->answer->questionJSId = $this->js_id;
 				break;
 		}
 
@@ -128,13 +136,13 @@ class ScormQuestion extends Question
     {
     	//$id = $this->id;
     	$w = $this->selectWeighting();
-    	$s = 'questions.push('.$this->id.');'."\n";
+    	$s = 'questions.push('.$this->js_id.');'."\n";
     	if($this->type == FREE_ANSWER or $this->type == HOTSPOT)
     	{ //put the max score to 0 to avoid discounting the points of
     	  //non-exported quiz types in the SCORM
     		$w=0;
     	}
-    	$s .= 'questions_score_max['.$this->id.'] = '.$w.";\n";
+    	$s .= 'questions_score_max['.$this->js_id.'] = '.$w.";\n";
     	return $s;
     }
 }
@@ -154,8 +162,8 @@ class ScormAnswerMultipleChoice extends Answer
     	$js   = '';
     	$html = '<tr><td colspan="2"><table width="100%">' . "\n";
 		$type = $this->getQuestionType();
-		$jstmpw = 'questions_answers_ponderation['.$this->questionId.'] = new Array();'."\n";
-		$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][0] = 0;'."\n";
+		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
+		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
         if ($type == MCMA)
         {
         	//$questionTypeLang = get_lang('MultipleChoiceMultipleAnswers');
@@ -164,7 +172,7 @@ class ScormAnswerMultipleChoice extends Answer
         	$jstmpc = '';
 			foreach( $this->answer as $i => $answer )
 			{
-				$identifier = 'question_'.$this->questionId.'_multiple_'.$i;
+				$identifier = 'question_'.$this->questionJSId.'_multiple_'.$i;
 				$html .=	
 		    		'<tr>' . "\n" 
 				.	'<td align="center" width="5%">' . "\n"
@@ -179,12 +187,12 @@ class ScormAnswerMultipleChoice extends Answer
 		    	{
 		    		$jstmpc .= $i.',';
 		    	}
-		    	$jstmpw .= 'questions_answers_ponderation['.$this->questionId.']['.$i.'] = '.$this->weighting[$i].";\n";
+		    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$this->weighting[$i].";\n";
 		    	$id++;
 			}
-			$js .= 'questions_answers['.$this->questionId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
-	    	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
-	    	$js .= 'questions_types['.$this->questionId.'] = \'mcma\';'."\n";
+			$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
+	    	$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
+	    	$js .= 'questions_types['.$this->questionJSId.'] = \'mcma\';'."\n";
 	    	$js .= $jstmpw;
         }
         else
@@ -195,7 +203,7 @@ class ScormAnswerMultipleChoice extends Answer
         	$jstmpc = '';
 			foreach( $this->answer as $i => $answer )
 			{			
-	        	$identifier = 'question_'.$this->questionId.'_unique_'.$i;
+	        	$identifier = 'question_'.$this->questionJSId.'_unique_'.$i;
 				$html .=	
 		    		'<tr>' . "\n" 
 				.	'<td align="center" width="5%">' . "\n"
@@ -210,12 +218,12 @@ class ScormAnswerMultipleChoice extends Answer
 		    	{
 		    		$jstmpc .= $i;
 		    	}
-		    	$jstmpw .= 'questions_answers_ponderation['.$this->questionId.']['.$i.'] = '.$this->weighting[$i].";\n";
+		    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$this->weighting[$i].";\n";
 		    	$id++;
 			}
-			$js .= 'questions_answers['.$this->questionId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
-	    	$js .= 'questions_answers_correct['.$this->questionId.'] = '.$jstmpc.';'."\n";
-	    	$js .= 'questions_types['.$this->questionId.'] = \'mcua\';'."\n";
+			$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
+	    	$js .= 'questions_answers_correct['.$this->questionJSId.'] = '.$jstmpc.';'."\n";
+	    	$js .= 'questions_types['.$this->questionJSId.'] = \'mcua\';'."\n";
 			$js .= $jstmpw;
         }
 		$html .= '</table></td></tr>' . "\n";
@@ -238,7 +246,7 @@ class ScormAnswerTrueFalse extends Answer
     {
     	$js = '';
     	$html = '<tr><td colspan="2"><table width="100%">';
-		$identifier = 'question_'.$this->questionId.'_tf';
+		$identifier = 'question_'.$this->questionJSId.'_tf';
 		$identifier_true  = $identifier.'_true';
 		$identifier_false = $identifier.'_false';
 		$html .=	
@@ -262,19 +270,19 @@ class ScormAnswerTrueFalse extends Answer
 		.	'</td>' . "\n"
 		.	'</tr>' . "\n\n";
 		$html .= '</table></td></tr>' . "\n";
-		$js .= 'questions_answers['.$this->questionId.'] = new Array(\'true\',\'false\');'."\n";
-    	$js .= 'questions_types['.$this->questionId.'] = \'tf\';'."\n";
+		$js .= 'questions_answers['.$this->questionJSId.'] = new Array(\'true\',\'false\');'."\n";
+    	$js .= 'questions_types['.$this->questionJSId.'] = \'tf\';'."\n";
 		if($this->response == 'TRUE')
 		{
-	    	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array(\'true\');'."\n";
+	    	$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array(\'true\');'."\n";
 		}
 		else
 		{
-	    	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array(\'false\');'."\n";
+	    	$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array(\'false\');'."\n";
 		}
-		$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'] = new Array();'."\n";
-		$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][0] = 0;'."\n";
-    	$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][1] = '.$this->weighting[1].";\n";
+		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
+		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
+    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = '.$this->weighting[1].";\n";
     	$js .= $jstmpw;
         return array($js,$html);
     }
@@ -315,17 +323,17 @@ class ScormAnswerFillInBlanks extends Answer
 		$i=1;
 		$jstmp = '';
 		$jstmpc = '';
-		$jstmpw = 'questions_answers_ponderation['.$this->questionId.'] = new Array();'."\n";
-		$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][0] = 0;'."\n";
+		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
+		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
 		$startlocations=strpos($answer,'[');
 		$endlocations=strpos($answer,']');
 		while($startlocations !== false && $endlocations !== false)
 		{
 			$texstring=substr($answer,$startlocations,($endlocations-$startlocations)+1);
-			$answer = substr_replace($answer,'<input type="text" name="question_'.$this->questionId.'_fib_'.$i.'" id="question_'.$this->questionId.'_fib_'.$i.'" size="10" value="" />',$startlocations,($endlocations-$startlocations)+1);
+			$answer = substr_replace($answer,'<input type="text" name="question_'.$this->questionJSId.'_fib_'.$i.'" id="question_'.$this->questionJSId.'_fib_'.$i.'" size="10" value="" />',$startlocations,($endlocations-$startlocations)+1);
 			$jstmp .= $i.',';
 			$jstmpc .= "'".htmlentities(substr($texstring,1,-1),ENT_QUOTES,$charset)."',";			
-	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionId.']['.$i.'] = '.$weights[$i-1].";\n";
+	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$weights[$i-1].";\n";
 			$i++;
 			$startlocations=strpos($answer,'[');
 			$endlocations=strpos($answer,']');
@@ -337,9 +345,9 @@ class ScormAnswerFillInBlanks extends Answer
 	    		.	'</td>' . "\n"
 	    		.	'</tr>' . "\n";
 		$html .= '</table></td></tr>' . "\n";
-		$js .= 'questions_answers['.$this->questionId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
-    	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
-    	$js .= 'questions_types['.$this->questionId.'] = \'fib\';'."\n";
+		$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
+    	$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
+    	$js .= 'questions_types['.$this->questionJSId.'] = \'fib\';'."\n";
     	$js .= $jstmpw;
         return array($js,$html);
     }
@@ -372,12 +380,12 @@ class ScormAnswerMatching extends Answer
 		$cpt1='A';
 		$cpt2=1;
 		$Select=array();
-		$qId = $this->questionId;
+		$qId = $this->questionJSId;
 		$s = '';
 		$jstmp = '';
 		$jstmpc = '';
-			$jstmpw = 'questions_answers_ponderation['.$this->questionId.'] = new Array();'."\n";
-			$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][0] = 0;'."\n";
+			$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
+			$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
 		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 		{
 			$identifier = 'question_'.$qId.'_matching_';
@@ -436,9 +444,9 @@ class ScormAnswerMatching extends Answer
 				}  // end if()
 			}
 		}
-		$js .= 'questions_answers['.$this->questionId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
-    	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
-    	$js .= 'questions_types['.$this->questionId.'] = \'matching\';'."\n";
+		$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
+    	$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
+    	$js .= 'questions_types['.$this->questionJSId.'] = \'matching\';'."\n";
     	$js .= $jstmpw;
 		$html .= $s;
 		$html .= '</table></td></tr>' . "\n";
@@ -460,7 +468,7 @@ class ScormAnswerFree extends Answer
      */
     function export()
     {
-    	$qId = $this->questionId;
+    	$qId = $this->questionJSId;
     	$js = '';
     	$html = '<tr><td colspan="2"><table width="100%">' . "\n";
 		// some javascript must be added for that kind of questions
@@ -472,12 +480,12 @@ class ScormAnswerFree extends Answer
 		$html .= '</table></td></tr>' . "\n";
 		// currently the free answers cannot be displayed, so ignore the textarea
 		$html = '<tr><td colspan="2">'.get_lang('ThisItemIsNotExportable').'</td></tr>';
-		$js .= 'questions_answers['.$this->questionId.'] = new Array();'."\n";
-    	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array();'."\n";
-    	$js .= 'questions_types['.$this->questionId.'] = \'free\';'."\n";
-		$jstmpw = 'questions_answers_ponderation['.$this->questionId.'] = new Array();'."\n";
-		$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][0] = 0;'."\n";
-    	$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][1] = 0'.";\n";
+		$js .= 'questions_answers['.$this->questionJSId.'] = new Array();'."\n";
+    	$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array();'."\n";
+    	$js .= 'questions_types['.$this->questionJSId.'] = \'free\';'."\n";
+		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
+		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
+    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0'.";\n";
     	$js .= $jstmpw;
         return array($js,$html);
     }
@@ -613,23 +621,23 @@ class ScormAnswerHotspot extends Answer
 					</script>";
 			//because this header closes so many times the <script> tag, we have to reopen our own
 			$header .= '<script type="text/javascript" language="javascript">'."\n";
-			$header .= 'questions_answers['.$this->questionId.'] = new Array();'."\n";
-    		$header .= 'questions_answers_correct['.$this->questionId.'] = new Array();'."\n";
-    		$header .= 'questions_types['.$this->questionId.'] = \'hotspot\';'."\n";
-			$jstmpw = 'questions_answers_ponderation['.$this->questionId.'] = new Array();'."\n";
-			$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][0] = 0;'."\n";
-	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][1] = 0'.";\n";
+			$header .= 'questions_answers['.$this->questionJSId.'] = new Array();'."\n";
+    		$header .= 'questions_answers_correct['.$this->questionJSId.'] = new Array();'."\n";
+    		$header .= 'questions_types['.$this->questionJSId.'] = \'hotspot\';'."\n";
+			$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
+			$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
+	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0'.";\n";
 	    	$header .= $jstmpw;
 		}
 		else
 		{
 			$header = '';
-			$header .= 'questions_answers['.$this->questionId.'] = new Array();'."\n";
-    		$header .= 'questions_answers_correct['.$this->questionId.'] = new Array();'."\n";
-    		$header .= 'questions_types['.$this->questionId.'] = \'hotspot\';'."\n";
-			$jstmpw = 'questions_answers_ponderation['.$this->questionId.'] = new Array();'."\n";
-			$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][0] = 0;'."\n";
-	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][1] = 0;'."\n";
+			$header .= 'questions_answers['.$this->questionJSId.'] = new Array();'."\n";
+    		$header .= 'questions_answers_correct['.$this->questionJSId.'] = new Array();'."\n";
+    		$header .= 'questions_types['.$this->questionJSId.'] = \'hotspot\';'."\n";
+			$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
+			$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
+	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0;'."\n";
 	    	$header .= $jstmpw;
 		}
 		return $header;
@@ -691,8 +699,8 @@ class ScormAnswerHotspot extends Answer
 
 						// Check to see if the version meets the requirements for playback
 						if (hasReqestedVersion) {  // if we've detected an acceptable version
-						    var oeTags = '<object type=\"application/x-shockwave-flash\"".' data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_user.swf?modifyAnswers='.$this->questionId."&amp;canClick:".$canClick."\" width=\"380\" height=\"470\">'
-										+ '<param name=\"movie\"".' value="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_user.swf?modifyAnswers='.$this->questionId."&amp;canClick:".$canClick."\" \/>'
+						    var oeTags = '<object type=\"application/x-shockwave-flash\"".' data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_user.swf?modifyAnswers='.$this->questionJSId."&amp;canClick:".$canClick."\" width=\"380\" height=\"470\">'
+										+ '<param name=\"movie\"".' value="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_user.swf?modifyAnswers='.$this->questionJSId."&amp;canClick:".$canClick."\" \/>'
 										+ '<\/object>';
 						    document.write(oeTags);   // embed the Flash Content SWF when all tests are passed
 						} else {  // flash is too old or we can't detect the plugin

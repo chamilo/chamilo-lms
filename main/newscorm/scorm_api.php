@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 15340 2008-05-20 19:27:23Z yannoo $ 
+<?php // $Id: scorm_api.php 15386 2008-05-24 05:13:09Z yannoo $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -450,9 +450,10 @@ function LMSSetValue(param, val) {
 		if(myres = param.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency)(.*)/))
 		{
 			elem_id = myres[1];
-			if(elem_id > interactions.length)
+			if(elem_id > interactions.length) //interactions setting should start at 0
 			{
 				G_LastError = G_InvalidArgumentError;
+                G_LastErrorString = 'Invalid argument (interactions)';
 				return_value = false;
 			}
 			else
@@ -515,9 +516,10 @@ function LMSSetValue(param, val) {
 			if(myres = param.match(/cmi.objectives.(\d+).(id|score|status)(.*)/))
 			{
 				obj_id = myres[1];
-				if(obj_id > item_objectives.length)
+				if(obj_id > item_objectives.length) //objectives setting should start at 0
 				{
 					G_LastError = G_InvalidArgumentError;
+                    G_LastErrorString = 'Invalid argument (objectives)';
 					return_value = false;
 				}
 				else

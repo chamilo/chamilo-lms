@@ -56,8 +56,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 		echo '</Template>';			
 	}	
 ?>    
-<Template title="<?php echo get_lang('TemplateTitleCourseTitle'); ?>" >
-    <Description><?php echo get_lang('TemplateTitleCourseTitleDescription'); ?></Description>
+<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleCourseTitle'),'UTF-8',$charset); ?>" >
+    <Description><?php echo mb_convert_encoding(get_lang('TemplateTitleCourseTitleDescription'),'UTF-8',$charset); ?></Description>
     <Html>
         <![CDATA[
            	<head>
@@ -98,8 +98,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
     </Html>
 </Template>
      
-	<Template title="<?php echo get_lang('TemplateTitleCheckList'); ?>" >
-	<Description><?php echo get_lang('TemplateTitleCheckListDescription'); ?></Description>
+	<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleCheckList'),'UTF-8',$charset); ?>" >
+	<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleCheckListDescription'),'UTF-8',$charset); ?></Description>
 	<Html>
 	    <![CDATA[
 	            <head>
@@ -148,8 +148,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 	    ]]>
 	</Html>
 	</Template>
-    <Template title="<?php echo get_lang('TemplateTitleTeacher'); ?>" >
-	<Description><?php echo get_lang('TemplateTitleTeacherDescription'); ?></Description>
+    <Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleTeacher'),'UTF-8',$charset); ?>" >
+	<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleTeacherDescription'),'UTF-8',$charset); ?></Description>
 	<Html>
 		<![CDATA[
 				<head>
@@ -189,8 +189,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 	</Html>
 </Template>
      
-	<Template title="<?php echo get_lang('TemplateTitleLeftList'); ?>" >
-	<Description><?php echo get_lang('TemplateTitleListLeftListDescription'); ?></Description>
+	<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleLeftList'),'UTF-8',$charset); ?>" >
+	<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleListLeftListDescription'),'UTF-8',$charset); ?></Description>
 	<Html>
 	<![CDATA[
 			<head>
@@ -231,8 +231,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 	</Html>
 	</Template>
 	
-	<Template title="<?php echo get_lang('TemplateTitleLeftRightList'); ?>" >
-	<Description><?php echo get_lang('TemplateTitleLeftRightListDescription'); ?></Description>
+	<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleLeftRightList'),'UTF-8',$charset); ?>" >
+	<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleLeftRightListDescription'),'UTF-8',$charset); ?></Description>
 	<Html>
 	<![CDATA[
 			<head>
@@ -284,8 +284,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 	</Html>
 	</Template>
 	
-	<Template title="<?php echo get_lang('TemplateTitleRightList'); ?>" >
-	<Description><?php echo get_lang('TemplateTitleRightListDescription'); ?></Description>
+	<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleRightList'),'UTF-8',$charset); ?>" >
+	<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleRightListDescription'),'UTF-8',$charset); ?></Description>
 	<Html>
 	<![CDATA[
 			<head>
@@ -327,8 +327,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 	</Html>
 	</Template>
     
-	<Template title="<?php echo get_lang('TemplateTitleComparison'); ?>" >
-	<Description><?php echo get_lang('TemplateTitleComparisonDescription'); ?></Description>
+	<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleComparison'),'UTF-8',$charset); ?>" >
+	<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleComparisonDescription'),'UTF-8',$charset); ?></Description>
 	<Html>
 		<![CDATA[
 			<head>
@@ -357,8 +357,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 </Template>
 	
 	
-	<Template title="<?php echo get_lang('TemplateTitleDiagram'); ?>" >
-		<Description><?php echo get_lang('TemplateTitleDiagramDescription'); ?></Description>
+	<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleDiagram'),'UTF-8',$charset); ?>" >
+		<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleDiagramDescription'),'UTF-8',$charset); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -395,8 +395,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 	</Template>
 	
 	
-	<Template title="<?php echo get_lang('TemplateTitleDesc'); ?>">
-		<Description><?php echo get_lang('TemplateTitleDescDescription'); ?></Description>
+	<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleDesc'),'UTF-8',$charset); ?>">
+		<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleDescDescription'),'UTF-8',$charset); ?></Description>
 		<Html>
 			<![CDATA[
 					<head>
@@ -427,8 +427,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 	</Template>
 	
 	
-	<Template title="<?php echo get_lang('TemplateTitleObjectives'); ?>">
-		<Description><?php echo get_lang('TemplateTitleObjectivesDescription'); ?></Description>
+	<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleObjectives'),'UTF-8',$charset); ?>">
+		<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleObjectivesDescription'),'UTF-8',$charset); ?></Description>
 		<Html>
 			<![CDATA[
 				<head>
@@ -470,8 +470,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 		</Html>
 	</Template>
 	
-	<Template title="<?php echo get_lang('TemplateTitleCycle'); ?>">
-		<Description><?php echo get_lang('TemplateTitleCycleDescription'); ?></Description>
+	<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleCycle'),'UTF-8',$charset); ?>">
+		<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleCycleDescription'),'UTF-8',$charset); ?></Description>
 		<Html>
 			<![CDATA[
 				<head>
@@ -539,8 +539,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 		</Html>
 	</Template>
 
-	<Template title="<?php echo get_lang('TemplateTitleLearnerWonder'); ?>">
-	<Description><?php echo get_lang('TemplateTitleLearnerWonderDescription'); ?></Description>
+	<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleLearnerWonder'),'UTF-8',$charset); ?>">
+	<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleLearnerWonderDescription'),'UTF-8',$charset); ?></Description>
 	<Html>
 		<![CDATA[
 			<head>
@@ -589,8 +589,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 
 
 
-	<Template title="<?php echo get_lang('TemplateTitleTimeline'); ?>">
-	<Description><?php echo get_lang('TemplateTitleTimelineDescription'); ?></Description>
+	<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleTimeline'),'UTF-8',$charset); ?>">
+	<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleTimelineDescription'),'UTF-8',$charset); ?></Description>
 	<Html>
 		<![CDATA[
 			<head>
@@ -660,8 +660,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 
 
 
-	<Template title="<?php echo get_lang('TemplateTitleStopAndThink'); ?>">
-	<Description><?php echo get_lang('TemplateTitleStopAndThinkDescription'); ?></Description>
+	<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleStopAndThink'),'UTF-8',$charset); ?>">
+	<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleStopAndThinkDescription'),'UTF-8',$charset); ?></Description>
 	<Html>
 		<![CDATA[
 			<head>
@@ -699,8 +699,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 
 
 
-<Template title="<?php echo get_lang('TemplateTitleTable'); ?>" >
-	<Description><?php echo get_lang('TemplateTitleTableDescription'); ?></Description>
+<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleTable'),'UTF-8',$charset); ?>" >
+	<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleTableDescription'),'UTF-8',$charset); ?></Description>
 	<Html>
 		<![CDATA[
 				<head>
@@ -771,8 +771,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 
 
 
-<Template title="<?php echo get_lang('TemplateTitleAudio'); ?>" >
-	<Description><?php echo get_lang('TemplateTitleAudioDescription'); ?></Description>
+<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleAudio'),'UTF-8',$charset); ?>" >
+	<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleAudioDescription'),'UTF-8',$charset); ?></Description>
 	<Html>
 		<![CDATA[
 			<head>
@@ -815,8 +815,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 	</Html>
 </Template>
 
-<Template title="<?php echo get_lang('TemplateTitleVideo'); ?>">
-	<Description><?php echo get_lang('TemplateTitleVideoDescription'); ?></Description>
+<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleVideo'),'UTF-8',$charset); ?>">
+	<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleVideoDescription'),'UTF-8',$charset); ?></Description>
 	<Html>
 		<![CDATA[
 			<head>
@@ -876,8 +876,8 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 		]]>
 	</Html>
 </Template>
-<Template title="<?php echo get_lang('TemplateTitleFlash'); ?>">
-	<Description><?php echo get_lang('TemplateTitleFlashDescription'); ?></Description>
+<Template title="<?php echo mb_convert_encoding(get_lang('TemplateTitleFlash'),'UTF-8',$charset); ?>">
+	<Description><?php echo mb_convert_encoding(get_lang('TemplateTitleFlashDescription'),'UTF-8',$charset); ?></Description>
 	<Html>
 		<![CDATA[
 			<head>

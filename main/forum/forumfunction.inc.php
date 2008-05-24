@@ -1085,7 +1085,7 @@ function get_forums($id='')
 	// **************** GETTING ALL THE FORUMS ************************* //
 	
 	$session_condition = isset($_SESSION['id_session']) ? 'AND forum.session_id IN (0,'.intval($_SESSION['id_session']).')' : '';
-	
+	$forum_list = array();
 	if ($id=='')
 	{
 		//-------------- Student -----------------//

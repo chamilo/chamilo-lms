@@ -33,7 +33,7 @@
 	<li>OpenID authentication support</li>
 	<li>Possibility to import Word documents</li>
 	<li>Possibility to import docx and pptx documents (new MS-Office format)</li>
-	<li>Grades, evaluations and success certificates available thanks to full integration of the gradebook extension</li>
+	<li>Grades, evaluations and success certificates available thanks to the integration of the gradebook extension. Activating this module will clash with a gradebook extension installation made previously</li>
 	<li>Coloured icons added to courses list in administration panel to show access permissions</li>
 	<li>Logout button now shows the username of the current user</li>
 	<li>Student view re-activated and fully-functional</li>
@@ -58,12 +58,21 @@
 			<li>You still need to activate LDAP by uncommenting two lines in configuration.php</li>
 	    </ul>
 	</li>
-    <li>new stylesheets can be added through the platform administration interface</li>
+    <li>New stylesheets can be added through the platform administration interface</li>
     <li>Notification by email has been improved in the forum. You can now indicate that you want to be informed of messages on the forum level or on the thread level, even if you did not participate in the discussion yet. </li>
     <li>The platform administrator can decide to display the courses that are not open on the login page. When these courses are displayed on the campus startpage then the user that is logged in can quickly subscribe to this course.</li>
-    <li>When creating a new group you can decide to create a public or private or forum or no forum at all. These are settings of the group category. </li>
-    <li>fora of the group are also displayed in the group space</li>
-    <li>surveys that are not on invitation but open to all (or certain) members of the course are now also possible</li>
+    <li>When creating a new group you can decide to create a public or private forum or no forum at all. These are group category settings.</li>
+    <li>Group forum is also displayed in the group space</li>
+    <li>Surveys that are not based on invitation but open to all (or certain) members of the course are now available</li>
+    <li>Agenda
+    	<ul>
+    		<li>iCal import and export of course events, with a choice of public, private or confidential markers</li>
+    		<li>Repetitive course events can be created (and exported to iCal). Repetitions types supported are: daily, weekly, monthly by date (e.g. the 5th of each month) and yearly by date</li>
+   		</ul>
+	</li>
+	<li>Document templates have been greatly improved to speed-up custom course content creation</li>
+	<li>Audiorecorder (depending on streaming server) now records sounds in the document/audio directory, making them easily reusable by the course admin</li>
+	<li>Audiorecorder is not loaded by default (took too long) and you can load it with a simple click</li>
     </ul>
 <br />
 <h3>Debugging</h3>
@@ -80,6 +89,12 @@
     <li>Performance improvement in the user list of the platform administration </li>
 	<li>Bugfix: group tutors were not migrated from 1.6 to 1.8</li>
 </ul>
+<br />
+<h3>Known issues</h3>
+<ul>
+    <li>Audiorecorder takes a few seconds to write the audio file back to the document directory, so the page shouldn't be changed too quickly after recording a sound track</li>
+</ul>
+<hr style="width: 100%; height: 2px;" />
 	
 <h1>Dokeos 1.8.4 - September 2007</h1>
 <h3>Release notes - summary</h3>

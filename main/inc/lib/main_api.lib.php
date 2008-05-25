@@ -1406,6 +1406,19 @@ function api_display_tool_view_option()
 		//return '';
 		$is_framed = true;
 	}
+    // Uncomment to remove student view link from document view page
+    if(strpos($_SERVER['REQUEST_URI'],'newscorm/lp_header.php')!==false)
+    {
+    	if(empty($_GET['lp_id']))
+        {
+        	return '';
+        }
+        $sourceurl = substr($_SERVER['REQUEST_URI'],0,strpos($_SERVER['REQUEST_URI'],'?'));
+        $sourceurl = str_replace('newscorm/lp_header.php','newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.intval($_GET['lp_id']).'&isStudentView='.($_SESSION['studentview']=='studentview'?'false':'true'),$sourceurl);
+        //showinframes doesn't handle student view anyway...
+        //return '';
+        $is_framed = true;
+    }
 
 	// check if the $_SERVER['REQUEST_URI'] contains already url parameters (thus a questionmark)
 	if(!$is_framed)
@@ -1643,44 +1656,70 @@ function api_not_allowed($print_headers = false)
 	$home_url = api_get_path(WEB_PATH);
 	$user = api_get_user_id();
 	$course = api_get_course_id();
-	if(isset($user) && !isset($course) && empty($_GET['cidReq']))
+	if((isset($user) && !api_is_anonymous()) 
+		&& (!isset($course) || $course==-1) 
+		&& empty($_GET['cidReq']))
 	{//if the access is not authorized and there is some login information 
 	 // but the cidReq is not found, assume we are missing course data and send the user
-	 // to the user_portal
-		if(!headers_sent())
-		{
-			header('location: '.$home_url.'user_portal.php');
-		}else{
-			echo '<div align="center">';
-			Display :: display_error_message('<p>'.get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br/>',false);
-			echo '</div>';
-		}
+	 // to the user_portal			
+	 	if(!headers_sent() or $print_headers){Display::display_header('');}
+		echo '<div align="center">';
+		Display :: display_error_message(get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$_SERVER['HTTP_REFERRER'].'">'.get_lang('BackToPreviousPage').'</a><br/>',false);
+		echo '</div>';
+		if($print_headers){Display::display_footer();}
 		die();
 	}
-	elseif(!empty($_SERVER['REQUEST_URI']) && !empty($_GET['cidReq'])){
+	elseif(!empty($_SERVER['REQUEST_URI']) && !empty($_GET['cidReq']))
+	{
 		//only display form and return to the previous URL if there was a course ID included
-		include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');$form = new FormValidator('formLogin','post',api_get_self().'?'.$_SERVER['QUERY_STRING']);
-		$form->addElement('static',null,null,'Username');
-		$form->addElement('text','login','',array('size'=>15));
-		$form->addElement('static',null,null,'Password');
-		$form->addElement('password','password','',array('size'=>15));
-		$form->addElement('submit','submitAuth',get_lang('Ok'));
-		$test = $form->return_form();
-		if(!headers_sent() or $print_headers){Display::display_header('');}
-		echo '<div align="center">';
-		Display :: display_error_message('<p>'.get_lang('NotAllowed').'<br/><br/>'.get_lang('PleaseLoginAgainFromFormBelow').'<br/>'.$test,false);
-		echo '</div>';
-		$_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
-		if($print_headers){Display::display_footer();}
-		die();
-	}else{
-		//if no course ID was included in the requested URL, redirect to homepage
-		if($print_headers){Display::display_header('');}
-		echo '<div align="center">';
-		Display :: display_error_message('<p>'.get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br/>',false);
-		echo '</div>';
-		if($print_headers){Display::display_footer();}
-		die();
+		if(!empty($user) && !api_is_anonymous())
+		{
+			if(!headers_sent() or $print_headers){Display::display_header('');}
+			echo '<div align="center">';
+			Display :: display_error_message(get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$_SERVER['HTTP_REFERRER'].'">'.get_lang('BackToPreviousPage').'</a><br/>',false);
+			echo '</div>';
+			if($print_headers){Display::display_footer();}
+			die();			
+		}
+		else
+		{
+			include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');$form = new FormValidator('formLogin','post',api_get_self().'?'.$_SERVER['QUERY_STRING']);
+			$form->addElement('static',null,null,'Username');
+			$form->addElement('text','login','',array('size'=>15));
+			$form->addElement('static',null,null,'Password');
+			$form->addElement('password','password','',array('size'=>15));
+			$form->addElement('submit','submitAuth',get_lang('Ok'));
+			$test = $form->return_form();
+			if(!headers_sent() or $print_headers){Display::display_header('');}
+			echo '<div align="center">';
+			Display :: display_error_message(get_lang('NotAllowed').'<br/><br/>'.get_lang('PleaseLoginAgainFromFormBelow').'<br/>'.$test,false);
+			echo '</div>';
+			$_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
+			if($print_headers){Display::display_footer();}
+			die();
+		}
+	}
+	else
+	{
+		if(!empty($user) && !api_is_anonymous())
+		{
+			if(!headers_sent() or $print_headers){Display::display_header('');}
+			echo '<div align="center">';
+			Display :: display_error_message(get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$_SERVER['HTTP_REFERRER'].'">'.get_lang('BackToPreviousPage').'</a><br/>',false);
+			echo '</div>';
+			if($print_headers){Display::display_footer();}
+			die();			
+		}
+		else
+		{
+			//if no course ID was included in the requested URL, redirect to homepage
+			if($print_headers){Display::display_header('');}
+			echo '<div align="center">';
+			Display :: display_error_message(get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br/>',false);
+			echo '</div>';
+			if($print_headers){Display::display_footer();}
+			die();
+		}
 	}
 }
 

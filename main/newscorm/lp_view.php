@@ -174,7 +174,7 @@ else
 	$_SESSION['loaded_lp_view'] = true;
 	?>
 	<frameset rows="130,*">
-		<frame id="header" src="lp_header.php" border="0" frameborder="0" scrolling="no" />
+		<frame id="header" src="lp_header.php<?php echo (!empty($_GET['lp_id'])?'?lp_id='.intval($_GET['lp_id']):'');?>" border="0" frameborder="0" scrolling="no" />
 		<frameset cols="270,*">
 			<frameset rows="<?php echo($displayAudioRecorder?'60,':'');?>600,70,80,*">
 				<?php

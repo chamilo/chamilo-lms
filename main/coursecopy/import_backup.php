@@ -1,4 +1,4 @@
-<?php // $Id: import_backup.php 15429 2008-05-26 20:34:37Z yannoo $
+<?php // $Id: import_backup.php 15430 2008-05-26 20:46:31Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -120,24 +120,27 @@ if(  (isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (
 		$cr = new CourseRestorer($course);
 		$cr->set_file_option($_POST['same_file_name_option']);
 		$cr->restore();
-		echo get_lang('ImportFinished');
+		Display::display_normal_message(get_lang('ImportFinished').
+                '<a class="bottom-link" href="../course_home/course_home.php?'.api_get_cidreq().'">&gt;&gt; '.get_lang('CourseHomepage').'</a>',false);
 	}
 	else
 	{
 		if(!$error){
-			echo get_lang('NoResourcesInBackupFile');
+			Display::display_warning_message(get_lang('NoResourcesInBackupFile').
+                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&gt;&gt; '.get_lang('TryAgain').'</a>',false);
 		}
 		elseif ($filename === false)
         {
-            echo get_lang('ArchivesDirectoryNotWriteableContactAdmin');
+            Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin').
+                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&gt;&gt; '.get_lang('TryAgain').'</a>',false);
         }
         else
         {
-			echo ucfirst(get_lang('UploadError'));
+			Display::display_error_message(ucfirst(get_lang('UploadError')).
+                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&gt;&gt; '.get_lang('TryAgain').'</a>',false);
 		}
 	}
 	CourseArchiver::clean_backup_dir();
-	echo '<p><a href="../course_home/course_home.php">&lt;&lt; '.get_lang('CourseHomepage').'</a></p>';
 }
 elseif (isset($_POST['import_option']) && $_POST['import_option'] == 'select_items')
 {
@@ -158,13 +161,13 @@ elseif (isset($_POST['import_option']) && $_POST['import_option'] == 'select_ite
 	}
     elseif ($filename === false)
     {
-    	echo get_lang('ArchivesDirectoryNotWriteableContactAdmin');
-        echo '<p><a href="import_backup.php">&lt;&lt; '.get_lang('TryAgain').'</a></p>';
+    	Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin').
+                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&gt;&gt; '.get_lang('TryAgain').'</a>',false);
     }
 	else
 	{
-		echo get_lang('NoResourcesInBackupFile');	
-		echo '<p><a href="../course_home/course_home.php">&lt;&lt; '.get_lang('CourseHomepage').'</a></p>';
+		Display::display_warning_message(get_lang('NoResourcesInBackupFile').	
+                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&gt;&gt; '.get_lang('TryAgain').'</a>',false);
 	}
 }
 else

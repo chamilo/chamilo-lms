@@ -1,10 +1,10 @@
 <?php
-// $Id: CourseArchiver.class.php 15428 2008-05-26 20:30:11Z yannoo $
+// $Id: CourseArchiver.class.php 15429 2008-05-26 20:34:37Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
@@ -19,7 +19,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -189,24 +189,24 @@ class CourseArchiver
 		$tmp_dir_name = 'CourseArchiver_'.uniqid('');
 		$unzip_dir = api_get_path(SYS_ARCHIVE_PATH).''.$tmp_dir_name;
 		mkdirr($unzip_dir,0755);
-		copy(api_get_path(SYS_ARCHIVE_PATH).''.$filename,$unzip_dir.'/backup.zip');
+		@copy(api_get_path(SYS_ARCHIVE_PATH).''.$filename,$unzip_dir.'/backup.zip');
 		// unzip the archive
 		$zip = new PclZip($unzip_dir.'/backup.zip');
-		chdir($unzip_dir);
+		@chdir($unzip_dir);
 		$zip->extract();
 		// remove the archive-file
 		if($delete)
 		{
-			unlink(api_get_path(SYS_ARCHIVE_PATH).''.$filename);
+			@unlink(api_get_path(SYS_ARCHIVE_PATH).''.$filename);
 		}
 		// read the course
 		if(!is_file('course_info.dat'))
 		{
 			return new Course();
 		}
-		$fp = fopen('course_info.dat', "r");
-		$contents = fread($fp, filesize('course_info.dat'));
-		fclose($fp);
+		$fp = @fopen('course_info.dat', "r");
+		$contents = @fread($fp, filesize('course_info.dat'));
+		@fclose($fp);
 		$course = unserialize(base64_decode($contents));
 		if( get_class($course) != 'Course')
 		{

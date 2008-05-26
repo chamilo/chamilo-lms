@@ -1,10 +1,10 @@
 <?php
-// $Id: CourseSelectForm.class.php 14323 2008-02-20 02:25:29Z yannoo $
+// $Id: CourseSelectForm.class.php 15429 2008-05-26 20:34:37Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
 	
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
@@ -19,7 +19,7 @@
 	
 	See the GNU General Public License for more details.
 	
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ============================================================================== 
 */
@@ -118,18 +118,18 @@ class CourseSelectForm
 						break;
 					default :
 						echo ' <img id="img_'.$type.'" src="../img/1.gif" onclick="javascript:exp('."'$type'".');" >';
-						echo ' <b  onclick="javascript:exp('."'$type'".');" >'.$resource_titles[$type].'</b><br/>';
+						echo ' <b  onclick="javascript:exp('."'$type'".');" >'.$resource_titles[$type].'</b><br />';
 						echo '<div id="div_'.$type.'">';
 						echo '<blockquote>';
 						echo "[<a href=\"#\" onclick=\"javascript:setCheckbox('$type',true);\" >".get_lang('All')."</a> - <a href=\"#\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>]";
-						echo '<br/>';
+						echo '<br />';
 						foreach ($resources as $id => $resource)
 						{
 							echo '<input type="checkbox" name="resource['.$type.']['.$id.']" id="resource['.$type.']['.$id.']"/>';
 							echo ' <label for="resource['.$type.']['.$id.']">';
 							$resource->show();
 							echo '</label>';
-							echo '<br/>';
+							echo '<br />';
 							echo "\n";
 						}
 						echo '</blockquote>';
@@ -146,7 +146,7 @@ class CourseSelectForm
 				echo '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
 			}
 		}
-		echo '<br/><input type="submit" value="'.get_lang('Ok').'" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')"/>';
+		echo '<br /><input type="submit" value="'.get_lang('Ok').'" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')"/>';
 		
 		CourseSelectForm :: display_hidden_quiz_questions($course);
 		CourseSelectForm :: display_hidden_scorm_directories($course);

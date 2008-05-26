@@ -1,9 +1,9 @@
-<?php // $Id: import_backup.php 15428 2008-05-26 20:30:11Z yannoo $
+<?php // $Id: import_backup.php 15429 2008-05-26 20:34:37Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
 	
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
@@ -18,7 +18,7 @@
 	
 	See the GNU General Public License for more details.
 	
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ============================================================================== 
 */
@@ -173,7 +173,7 @@ else
 	$backups = CourseArchiver::get_available_backups($is_platformAdmin?null:$user['user_id']);
 	$backups_available = (count($backups)>0);
 	
-	echo get_lang('SelectBackupFile').'<br/><br/>';
+	echo get_lang('SelectBackupFile').'<br /><br />';
 	
 	include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 	$form = new FormValidator('import_backup_form','POST','import_backup.php', '','multipart/form-data');
@@ -185,7 +185,7 @@ else
 	
 	$form->addElement('radio', 'backup_type', '', get_lang('LocalFile'), 'local', 'id="bt_local" class="checkbox" onclick="javascript:document.import_backup_form.backup_server.disabled=true;document.import_backup_form.backup.disabled=false;"');
 	$form->addElement('file', 'backup', '', 'style="margin-left: 50px;"');
-	$form->addElement('html', '<br/>');
+	$form->addElement('html', '<br />');
 	
 	if( $backups_available ){
 		$form->addElement('radio', 'backup_type', '', get_lang('ServerFile'), 'server', 'id="bt_server" class="checkbox" onclick="javascript:document.import_backup_form.backup_server.disabled=false;document.import_backup_form.backup.disabled=true;"');
@@ -202,20 +202,20 @@ else
 		$form->addElement('radio', '', '', '<i>'.get_lang('NoBackupsAvailable').'</i>', '', 'disabled="true"');
 	}
 	
-	$form->addElement('html', '<br/><br/>');
+	$form->addElement('html', '<br /><br />');
 	
 	$form->addElement('radio', 'import_option', '', get_lang('ImportFullBackup'), 'full_backup', 'id="import_option_1" class="checkbox"');
 	$form->addElement('radio', 'import_option', '', get_lang('LetMeSelectItems'), 'select_items', 'id="import_option_2" class="checkbox"');
 	
-	$form->addElement('html', '<br/><br/>');
+	$form->addElement('html', '<br /><br />');
 	
 	$form->addElement('html', get_lang('SameFilename'));
-	$form->addElement('html', '<br/><br/>');
+	$form->addElement('html', '<br /><br />');
 	$form->addElement('radio', 'same_file_name_option', '', get_lang('SameFilenameSkip'), FILE_SKIP, 'id="same_file_name_option_1" class="checkbox"');
 	$form->addElement('radio', 'same_file_name_option', '', get_lang('SameFilenameRename'), FILE_RENAME, 'id="same_file_name_option_2" class="checkbox"');
 	$form->addElement('radio', 'same_file_name_option', '', get_lang('SameFilenameOverwrite'), FILE_OVERWRITE, 'id="same_file_name_option_3" class="checkbox"');
 	
-	$form->addElement('html', '<br/>');
+	$form->addElement('html', '<br />');
 	$form->addElement('submit', null, get_lang('ImportBackup'));
 	
 	$values['backup_type'] = 'local';

@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseArchiver.class.php 15180 2008-04-29 22:40:16Z yannoo $
+// $Id: CourseArchiver.class.php 15428 2008-05-26 20:30:11Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -70,7 +70,7 @@ class CourseArchiver
 		$zip_dir = api_get_path(SYS_ARCHIVE_PATH).'';
 		$user = api_get_user_info();
 		$zip_file = $user['user_id'].'_'.$course->code.'_'.date("YmdHis").'.zip';
-		
+		$php_errormsg = '';
 		$res = @mkdir($backup_dir, 0755);
 		if($res == false)
 		{
@@ -168,8 +168,13 @@ class CourseArchiver
 	function import_uploaded_file($file)
 	{
 		$new_filename = uniqid('').'.zip';
-		move_uploaded_file($file,api_get_path(SYS_ARCHIVE_PATH).''.$new_filename);
-		return $new_filename;
+        $new_dir = api_get_path(SYS_ARCHIVE_PATH);
+        if(is_dir($new_dir) && is_writable($new_dir))
+        {
+		  move_uploaded_file($file,api_get_path(SYS_ARCHIVE_PATH).''.$new_filename);
+          return $new_filename;
+        }
+        return false;
 	}
 	/**
 	 * Read a course-object from a zip-file

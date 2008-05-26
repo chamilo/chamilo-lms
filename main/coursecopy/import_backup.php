@@ -1,4 +1,4 @@
-<?php // $Id: import_backup.php 13315 2007-09-27 08:17:12Z yannoo $
+<?php // $Id: import_backup.php 15428 2008-05-26 20:30:11Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -97,15 +97,25 @@ if(  (isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (
 		{
 			if($_FILES['backup']['error']==0){
 				$filename = CourseArchiver::import_uploaded_file($_FILES['backup']['tmp_name']);
-				$delete_file = true;
+				if ($filename === false)
+                {
+                	$error = true;
+                }
+                else
+                {
+                    $delete_file = true;
+                }
 			}
 			else{
 				$error=true;
 			}
 		}
-		$course = CourseArchiver::read_course($filename,$delete_file);
+        if(!$error)
+        {
+		  $course = CourseArchiver::read_course($filename,$delete_file);
+        }
 	}
-	if( $course->has_resources())
+	if(!$error && $course->has_resources())
 	{
 		$cr = new CourseRestorer($course);
 		$cr->set_file_option($_POST['same_file_name_option']);
@@ -117,14 +127,19 @@ if(  (isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (
 		if(!$error){
 			echo get_lang('NoResourcesInBackupFile');
 		}
-		else{
-			echo get_lang('UploadError');
+		elseif ($filename === false)
+        {
+            echo get_lang('ArchivesDirectoryNotWriteableContactAdmin');
+        }
+        else
+        {
+			echo ucfirst(get_lang('UploadError'));
 		}
 	}
 	CourseArchiver::clean_backup_dir();
 	echo '<p><a href="../course_home/course_home.php">&lt;&lt; '.get_lang('CourseHomepage').'</a></p>';
 }
-elseif( isset($_POST['import_option']) && $_POST['import_option'] == 'select_items')
+elseif (isset($_POST['import_option']) && $_POST['import_option'] == 'select_items')
 {
 	if( $_POST['backup_type'] == 'server')
 	{
@@ -137,10 +152,15 @@ elseif( isset($_POST['import_option']) && $_POST['import_option'] == 'select_ite
 		$delete_file = true;
 	}
 	$course = CourseArchiver::read_course($filename,$delete_file);
-	if( $course->has_resources())
+	if ($course->has_resources() && ($filename !== false))
 	{
 		CourseSelectForm::display_form($course,array('same_file_name_option'=>$_POST['same_file_name_option']));
 	}
+    elseif ($filename === false)
+    {
+    	echo get_lang('ArchivesDirectoryNotWriteableContactAdmin');
+        echo '<p><a href="import_backup.php">&lt;&lt; '.get_lang('TryAgain').'</a></p>';
+    }
 	else
 	{
 		echo get_lang('NoResourcesInBackupFile');	

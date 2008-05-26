@@ -5662,6 +5662,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	function display_item_form($item_type, $title = '', $action = 'add', $id = 0, $extra_info = 'new')
 	{
 		global $_course;
+		global $charset;
 		
 		$tbl_lp_item = Database::get_course_table('lp_item');
 		
@@ -5719,8 +5720,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		$form = new FormValidator('form','POST',api_get_self()."?".$_SERVER["QUERY_STRING"]);
 		
-		$defaults["title"]=html_entity_decode($item_title);
-		$defaults["description"]=html_entity_decode($item_description);
+		$defaults["title"]=mb_convert_encoding($item_title,$charset,$this->encoding);
+		$defaults["description"]=mb_convert_encoding($item_description,$charset,$this->encoding); 
 
 
 		$form->addElement('html',$return);
@@ -5820,7 +5821,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			}
 			$renderer = $form->defaultRenderer();
 			$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}','content_lp');
-			$form->addElement('html_editor','content_lp','<a style="cursor:pointer" onclick="launch_templates()"><img src="'.api_get_path(WEB_IMG_PATH).'templates.gif" /></a>');
+			$form->addElement('html_editor','content_lp','');
 			//$form->addElement('html_editor','content_lp','');
 			$defaults["content_lp"]=file_get_contents($item_path);
 		}

@@ -65,19 +65,25 @@ if(!empty($path_to_lzx)){
 		 "<param name=\"scale\" value=\"noscale\">".
 		 "<param name=\"salign\" value=\"LT\">".
 		 "<param name=\"menu\" value=\"false\"></object>",$path_to_lzx,$path_to_lzx);
-	
-	echo '<script type="text/javascript">
-
-	function show_audiorecorder()
+	if(!$audio_recorder_studentview)
 	{
-		document.getElementById("audiorecorder_frame").innerHTML = "'.addslashes($recorder_content).'";
-		document.getElementById("show_audiorecorder_div").style.display="none";
-	}
-
-	</script>
-	';
+		echo '<script type="text/javascript">
 	
-	echo '<div id="show_audiorecorder_div"><a style="cursor:pointer" onclick="show_audiorecorder()">'.get_lang('ShowAudioRecorder').'</a></div>';
-	echo '<div id="audiorecorder_frame"></div>';
+		function show_audiorecorder()
+		{
+			document.getElementById("audiorecorder_frame").innerHTML = "'.addslashes($recorder_content).'";
+			document.getElementById("show_audiorecorder_div").style.display="none";
+		}
+	
+		</script>
+		';
+		
+		echo '<div id="show_audiorecorder_div"><a style="cursor:pointer" onclick="show_audiorecorder()">'.get_lang('ShowAudioRecorder').'</a></div>';
+		echo '<div id="audiorecorder_frame"></div>';
+	}
+	else
+	{
+		echo $recorder_content;
+	}
 }
 ?>

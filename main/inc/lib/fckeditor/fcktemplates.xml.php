@@ -5,8 +5,8 @@ echo '<?xml version="1.0" encoding="utf-8" ?>';
 $IMConfig['base_url'] = $_configuration['root_web'].'main/img/gallery/';
 function loadCSS($css_name)
 {
-	$template_css = ' <style type="text/css">'.file_get_contents(api_get_path(SYS_PATH).'main/css/'.$css_name.'/default.css').'</style>';
-	$template_css = str_replace('images/',api_get_path(WEB_PATH).'main/css/'.$css_name.'/images/',$template_css);
+	$template_css = ' <style type="text/css">'.str_replace('../../img/',api_get_path(REL_CODE_PATH).'img/',file_get_contents(api_get_path(SYS_PATH).'main/css/'.$css_name.'/default.css')).'</style>';
+	$template_css = str_replace('images/',api_get_path(REL_CODE_PATH).'css/'.$css_name.'/images/',$template_css);
 	return $template_css;
 }
 /**
@@ -30,8 +30,8 @@ function s2($var)
     return str_replace($search,$replace,mb_convert_encoding($var,'UTF-8',$charset));
 }
 $css = loadCSS(api_get_setting('stylesheets'));
-$img_dir = api_get_path(WEB_IMG_PATH);
-$default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
+$img_dir = api_get_path(REL_CODE_PATH).'img/';
+$default_course_dir = api_get_path(REL_CODE_PATH).'default_course_document/';
 //<Templates imagesBasePath="fck_template/images/">
 ?>
 <Templates imagesBasePath="">	
@@ -67,7 +67,7 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 		}		
 		imagejpeg($im, api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'.$a_template['id'].'.jpg');
 		*/
-		//echo '<Template title="'.htmlentities($a_template['title']).'" image="'.api_get_path(WEB_CODE_PATH).'upload/template_thumbnails/'.$a_template['id'].'.jpg">';
+		//echo '<Template title="'.htmlentities($a_template['title']).'" image="'.api_get_path(REL_CODE_PATH).'upload/template_thumbnails/'.$a_template['id'].'.jpg">';
 		echo '<Template title="'.s2($a_template['title']).'" >';
 			echo '<Description>'.s2($a_template['description']).'</Description>';
 			echo '<Html>';		 	
@@ -807,10 +807,10 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 					<div align="center">
 					<span style="text-align: center;">
                         <object width="90" height="25" align="" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" id="test">
-                            <param name="movie" value="<?php echo api_get_path(WEB_CODE_PATH) ?>inc/lib/mp3player/player_mp3.swf?autostart=true&mp3file=<?php echo $default_course_dir;?>audio/ListeningComprehension.mp3" />
+                            <param name="movie" value="<?php echo api_get_path(REL_CODE_PATH) ?>inc/lib/mp3player/player_mp3.swf?autostart=true&mp3file=<?php echo $default_course_dir;?>audio/ListeningComprehension.mp3" />
                             <param name="quality" value="high" />
                             <param name="bgcolor" value="#FFFFFF" /> 
-                            <embed width="90" height="25" align="" src="<?php echo api_get_path(WEB_CODE_PATH) ?>inc/lib/mp3player/player_mp3.swf?autostart=true&mp3file=<?php echo $default_course_dir;?>audio/ListeningComprehension.mp3" quality="high" bgcolor="#FFFFFF" name="Streaming" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>
+                            <embed width="90" height="25" align="" src="<?php echo api_get_path(REL_CODE_PATH) ?>inc/lib/mp3player/player_mp3.swf?autostart=true&mp3file=<?php echo $default_course_dir;?>audio/ListeningComprehension.mp3" quality="high" bgcolor="#FFFFFF" name="Streaming" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>
                           </object>
                     </span></div>     
 					
@@ -852,7 +852,7 @@ $default_course_dir = api_get_path(WEB_CODE_PATH).'default_course_document/';
 			          	if(strpos($_SERVER['HTTP_USER_AGENT'],'Gecko')!==false)
 			          	{
 			          	?>
-			            	<img src="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/fckeditor/editor/css/images/flv.gif?flv=<?php echo api_get_path(WEB_CODE_PATH) ?>default_course_document/video/example.flv&endflv" />
+			            	<img src="<?php echo api_get_path(REL_CODE_PATH) ?>inc/lib/fckeditor/editor/css/images/flv.gif?flv=<?php echo api_get_path(REL_CODE_PATH) ?>default_course_document/video/example.flv&endflv" />
 			          	<?php
 			          	}
 			          	else

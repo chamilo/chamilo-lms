@@ -1,5 +1,5 @@
 <?php //$id: $
-/*
+/* 
 ==============================================================================
 	Dokeos - elearning and course management software
 
@@ -1557,18 +1557,33 @@ function fill_course_repository($courseRepository)
 		}
 
 		$handle = opendir($img_code_path);
-
-		foreach($pictures_array as $key => $value){
-
-			if($value["dir"]!=""){
+	
+		foreach($pictures_array as $key => $value)
+		{
+			if($value["dir"]!="")
+			{
 				mkdir($course_documents_folder_images.$value["dir"],$perm);
 			}
-			if($value["file"]!=""){
+			if($value["file"]!="")
+			{
 				copy($img_code_path.$value["file"],$course_documents_folder_images.$value["file"]);
 				chmod($course_documents_folder_images.$value["file"],$perm_file);
 			}
-
 		}
+		
+		//trainer thumbnails fix
+		
+		$path_thumb=mkdir($course_documents_folder_images.'trainer/.thumbs',$perm);				
+		$handle = opendir($img_code_path.'trainer/.thumbs/');		
+		
+		while (false !== ($file = readdir($handle))) 
+		{
+			if (is_file($img_code_path.'trainer/.thumbs/'.$file))
+			{
+		        copy($img_code_path.'trainer/.thumbs/'.$file,$course_documents_folder_images.'trainer/.thumbs/'.$file);
+				chmod($course_documents_folder_images.'trainer/.thumbs/'.$file,$perm_file);
+			}		
+		}		
 
 		$default_document_array['images']=$pictures_array;
 

@@ -23,7 +23,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 15358 2008-05-22 08:47:39Z elixir_inter $
+* 	@version $Id: exercise.lib.php 15412 2008-05-26 13:56:24Z elixir_inter $
 */
 
 
@@ -48,8 +48,6 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			$questionName=$objQuestionTmp->selectTitle();
 			$questionDescription=$objQuestionTmp->selectDescription();
 
-			$s="<tr>
-			  <td valign='top' colspan='2'>&nbsp;";
 			$questionName=api_parse_tex($questionName);
 			$s.=$questionName;
 			$s.="</td>
@@ -283,10 +281,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 
 		if(!$onlyAnswers)
 		{
-			$s="<tr>
-			  <td valign='top' colspan='2'>&nbsp;";
-			$questionName=api_parse_tex($questionName);
-			$s.=$questionName;
+			$s=$questionName;
 			$s.="</td>
 			</tr>
 			<tr>

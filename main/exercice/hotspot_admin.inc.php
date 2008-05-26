@@ -285,7 +285,7 @@ if($modifyAnswers)
 ?>
 
 <h3>
-  <?php echo $langQuestion.": ".$questionName; ?>
+  <?php echo $langQuestion.": ".$questionName.' <img src="../img/info3.gif" title="'.strip_tags(get_lang('HotspotChoose')).'" alt="'.strip_tags(get_lang('HotspotChoose')).'" />'; ?>
 </h3>
 <?php
 	if(!empty($msgErr))
@@ -293,11 +293,10 @@ if($modifyAnswers)
 		Display::display_normal_message($msgErr); //main API
 	}
 	
-	Display::display_normal_message(stripslashes(get_lang('HotspotChoose')), false);
 ?>
 
 <form method="post" action="<?php echo api_get_self(); ?>?hotspotadmin=<?php echo $modifyAnswers; ?>" name="frm_exercise">
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<table border="0" cellpadding="0" cellspacing="2" width="100%">
 
 	<tr>
 		<td colspan="2" valign="bottom">
@@ -308,7 +307,7 @@ if($modifyAnswers)
 		</td>
 	</tr>
 	<tr>
-		<td valign="top" style="border:1px solid #4271b5;border-top:none; border-right:none; border-bottom:none">			
+		<td valign="top" style="border:1px solid #4271b5;border-top:none;border-bottom:none;border-right:none;" >			
 				<input type="hidden" name="formSent" value="1" />
 				<input type="hidden" name="nbrAnswers" value="<?php echo $nbrAnswers; ?>" />
 				<table class="data_table">
@@ -343,12 +342,6 @@ if($modifyAnswers)
 					?>
 
 				</table>
-			<table cellpadding="0" cellspacing="0">
-				<tr>
-					<td style="text-align:center; vertical-align:top; width:20px;">*</td>
-					<td style="width:auto;"><?php echo get_lang('HotspotRequired'); ?></td>
-				</tr>
-			</table>
 		</td>	
 	</tr>
 	<tr>

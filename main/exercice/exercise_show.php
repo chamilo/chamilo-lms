@@ -385,10 +385,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				}?>
 
   <tr bgcolor="#E6E6E6">
-    <td colspan="2" > <?php echo get_lang("Question").' '.($counter); ?> </td>
-  </tr>
-  <tr>
-    <td colspan="2"><?php echo $questionName; ?> </td>
+    <td colspan="2" > <?php echo get_lang("Question").' '.($counter).' : '.$questionName; ?> </td>
   </tr>
    <tr>
     <td colspan="2"><?php echo $questionDescription; ?> </td>
@@ -690,12 +687,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 		?>
 
 		<table width="355" border="0" cellspacing="0" cellpadding="0">
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
-			<tr>
-			<td><i><?php echo get_lang("Answer"); ?></i> </td>
-			</tr>
+		
 			<tr>
 			<td>&nbsp;</td>
 			</tr>
@@ -709,7 +701,6 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				<td valign="top" align="left">
 					<table style="border: 1px solid #4271b5;border-bottom:none" width="556">
 					<?php 
-					error_log('la');
 					for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 					{
 						$answer=$objAnswerTmp->selectAnswer($answerId);
@@ -843,14 +834,14 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 						}
 						}?>
 
-  </td><tr><td></td><td align="right"><b><?php echo get_lang('Score')." : $questionScore/$questionWeighting"; ?></b></td>
+  </td><tr><td align="left"><b><?php echo get_lang('Score')." : $questionScore/$questionWeighting"; ?></b><br /><br /></td>
   </tr>
 	<?php  unset($objAnswerTmp);
 		$i++;
 $totalWeighting+=$questionWeighting;
 		}
 ?>
-<tr><td></td><td align=right><b><?php
+<tr><td align="left"><b><?php
 			//$query = "update ".$TBL_TRACK_EXERCICES." set exe_result = $totalScore where exe_id = '$id'";
 			//api_sql_query($query,__FILE__,__LINE__);
 			echo '<br/>'.get_lang('YourTotalScore')." ";
@@ -864,8 +855,8 @@ $totalWeighting+=$questionWeighting;
 				}
                   ?> !</b>
 	</td></tr>
-	<tr><td></td>
-		<td align="right">
+	<tr>
+		<td align="left">
 		<br />
 		<?php $strids = implode(",",$arrid);
 			$marksid = implode(",",$arrmarks);

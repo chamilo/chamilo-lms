@@ -33,7 +33,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 15358 2008-05-22 08:47:39Z elixir_inter $
+* 	@version $Id: exercice_submit.php 15412 2008-05-26 13:56:24Z elixir_inter $
 */
 
 
@@ -537,9 +537,8 @@ else
 		 <td width='3%' bgcolor='#e6e6e6'><img src=\"".api_get_path(WEB_IMG_PATH)."test.gif\" align=\"absmiddle\"></td>
 		 <td valign='middle' bgcolor='#e6e6e6'>
 			".get_lang('Question')." ";
-		$s.=$i;
+		$s.=$i.' : ';
 		if($exerciseType == 2) $s.=' / '.$nbrQuestions;
-		$s.='</td></tr>';
 	
 		echo $s;
 	

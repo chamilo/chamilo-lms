@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 15352 2008-05-21 20:42:25Z elixir_inter $
+* 	@version $Id: exercise_result.php 15412 2008-05-26 13:56:24Z elixir_inter $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -274,17 +274,17 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 									"#F7BDE2");
 	?>
 		<tr>
-				<td width="25%" valign="top">
+				<td valign="top">
 					<div style="float:left; padding-left:5px;">
 						<div style="display:inline; float:left; width:80px;"><?php echo $answer ?></div>
 						<div style="height:11px; width:11px; background-color:<?php echo $hotspot_colors[$answerId]; ?>; display:inline; float:left; margin-top:3px;"></div>
 					</div>
 				</td>
-				<td width="25%" valign="top"><?php echo $answerId; ?></td>
-				<td width="25%" valign="top">
+				<td valign="top"><?php echo $answerId; ?></td>
+				<td valign="top">
 					<?php $studentChoice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $studentChoice; ?>
 				</td>
-				<td width="25%" valign="top">
+				<td valign="top">
 					<?php echo stripslashes($answerComment); ?>
 				</td>
 		</tr>
@@ -357,13 +357,11 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			<table width="100%" border="0" cellpadding="3" cellspacing="2">
 			<tr bgcolor="#E6E6E6">
 			<td colspan="<?php echo $colspan; ?>">
-				<?php echo get_lang("Question").' '.($counter); ?>
+				<?php echo get_lang("Question").' '.($counter).' : '.$questionName; ?>
 			</td>
 			</tr>
 			<tr>
 			<td colspan="<?php echo $colspan; ?>">
-				<?php echo $questionName; ?>
-				<br />
 				<i>
 				<?php echo $questionDescription; ?>
 				</i>
@@ -417,15 +415,15 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			?>
 				<tr>
 					<td valign="top" colspan="2">
-						<table width="100%" border="0">
+						<table width="556" border="0">
 							<tr>
-								<td width="25%" valign="top">
+								<td width="40%" valign="top">
 									<i><?php echo get_lang("CorrectAnswer"); ?></i><br /><br />
 								</td>
-								<td width="25%" valign="top">
+								<td width="15%" valign="top">
 									<i><?php echo get_lang("ClickNumber"); ?></i><br /><br />
 								</td>
-								<td width="25%" valign="top">
+								<td width="20%" valign="top">
 									<i><?php echo get_lang('HotspotHit'); ?></i><br /><br />
 								</td>
 								<td width="25%" valign="top">
@@ -747,7 +745,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			}
 		?>
 			<tr>
-			<td colspan="<?php echo $colspan; ?>" align="right">
+			<td colspan="<?php echo $colspan; ?>" align="left">
 				<b>
 				<?php
 				if($questionScore==-1){ 
@@ -756,7 +754,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				else{
 					echo get_lang('Score')." : $questionScore/$questionWeighting";
 				}
-				?></b>
+				?></b><br /><br />
 			</td>
 			</tr>
 			</table>
@@ -839,7 +837,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			if ($origin != 'learnpath')
 			{
 			?>
-			<input type="submit" value="<?php echo get_lang('Ok'); ?>" />
+			<input type="submit" value="<?php echo get_lang('Finish'); ?>" />
 			<?php
 			}
 			?>

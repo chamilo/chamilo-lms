@@ -1398,7 +1398,6 @@ class learnpathItem{
 	 */
 	function parse_HTML_attributes($attrString,$wanted=array())
 	{
-		//error_log('Entering parse_HTML_attributes',0);
 	    $attributes = array();
 	    $regs = array();
 	    $reduced = false;
@@ -1406,17 +1405,30 @@ class learnpathItem{
 	    {
 	    	$reduced = true;
 	    }
-	    //error_log('launching preg_match',0);
 	    try {
+	    	
+	       //Find all occurences of something that looks like a URL
+           // The structure of this regexp is:
+           // (find protocol) then 
+           // (optionally find some kind of space 1 or more times) then
+           // find (either an equal sign or a bracket) followed by an optional space
+           // followed by some text without quotes (between quotes itself or not)
+           // then possible closing brackets if we were in the opening bracket case
+           // OR something like @import() 
 	    	$res = preg_match_all(
-	            "/(((([A-Za-z_:])([A-Za-z0-9_:\\.-]|[^\\x00-\\x7F])*)" .
-	            "([ \\n\\t\\r]+)?(" .
-	              "(=([ \\n\\t\\r]+)?(\"[^\"]*\"|'[^']*'|[^ \\n\\t\\r]*))" .
-	              "|" .
-	              "(\\(([ \\n\\t\\r]+)?(\"[^\"]*\"|'[^']*'|[^ \\n\\t\\r]*)\\))" .
-	            "))" .
-	            "|" .
-	            "(@import([ \\n\\t\\r]+)?(\"[^\"]*\"|'[^']*'|[^ \\n\\t\\r]*)))?/", 
+                '/(((([A-Za-z_:])([A-Za-z0-9_:\.-]*))' .
+//	            '/(((([A-Za-z_:])([A-Za-z0-9_:\.-]|[^\x00-\x7F])*)' . -> seems to be taking too much
+//                '/(((([A-Za-z_:])([^\x00-\x7F])*)' . -> takes only last letter of parameter name 
+	            '([ \n\t\r]+)?(' .
+//	              '(=([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+))' . -> doesn't restrict close enough to the url itself
+                  '(=([ \n\t\r]+)?("[^"\)]+"|\'[^\'\)]+\'|[^ \n\t\r\)]+))' .
+	              '|' .
+//	              '(\(([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)\))' . -> doesn't restrict close enough to the url itself
+                  '(\(([ \n\t\r]+)?("[^"\)]+"|\'[^\'\)]+\'|[^ \n\t\r\)]+)\))' .
+	            '))' .
+	            '|' .
+//	            '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))?/', -> takes a lot (like 100's of thousands of empty possibilities) 
+                '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))/', 
 	            $attrString, 
 	            $regs
 	       );
@@ -1424,9 +1436,7 @@ class learnpathItem{
 		} catch (Exception $e) {
     		error_log('Caught exception: '. $e->getMessage(),0) ;
 		}
-
 	    if ($res) {
-	       	//error_log('preg_match ok',0);
 	        for ($i = 0; $i < count($regs[1]); $i++) {
 	            $name  = trim($regs[3][$i]);
 	            $check = trim($regs[0][$i]);
@@ -1458,7 +1468,6 @@ class learnpathItem{
 	    }else{
 	    	error_log('preg_match did not find anything',0);
 	    }
-	    //error_log('Exiting parse_HTML_attributes() - found '.print_r($attributes,true),0);
 	    return $attributes;
 	}
     /**

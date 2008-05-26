@@ -64,4 +64,5 @@ $RepeatMonthlyByDayR = "Mesečni, po dnevih, omejen";
 $RepeatYearly = "Letni";
 $RepeatEnd = "Datum konca ponovitev";
 $RepeatedEventViewOriginalEvent = "Poglej začetni dogodek";
+$ICalFileImport = "Uvozi iCal/ics datoteko";
 ?>

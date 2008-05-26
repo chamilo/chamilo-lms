@@ -22,7 +22,7 @@ $langFullRecycle = "Riazzera completamente";
 $langRecycleCourse = "Riazzera il corso";
 $langRecycleFinished = "Il corso è stato riazzerato";
 $langRecycleWarning = "Attenzione! usando questo strumento cancellerai alcune parti del corso. Non è possibili ripristinare la situazione iniziale. Ti consigliamo di fare un <a href=\"create_backup.php\">backup</a> prima di riazzerare il corso.";
-$langSameFilename = "Il nome del file esite già";
+$langSameFilename = "Il nome del file esiste già";
 $langSameFilenameSkip = "Ignora i file con lo stesso nome";
 $langSameFilenameRename = "Rinomina i file con lo stesso nome";
 $langSameFilenameOverwrite = "Sovrascrivi i file con lo stesso nome";

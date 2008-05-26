@@ -45,4 +45,5 @@ $ToolIntro = "Tool introduction";
 $UploadError = "Upload failed, please check maximum file size limits and folder rights.";
 $DocumentsWillBeAddedToo = "Documents will be added too";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "If you want to export a learning path containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests.";
+$ArchivesDirectoryNotWriteableContactAdmin = "The archives directory, used by this tool, is not writeable. Please contact your platform administrator.";
 ?>

@@ -29,6 +29,6 @@ $langGroupUserManagement = "Gestione gruppi";
 $langUserInfo = "informazioni sull\'utente";
 $langUnregister = "Cancella l\'iscrizione";
 $langAddAUser = "Aggiungi utenti";
-$UsersUnsubscribed = "Glii utenti selezionati sono stati cancellati dal corso";
+$UsersUnsubscribed = "Gli utenti selezionati sono stati cancellati dal corso";
 $ThisStudentIsSubscribeThroughASession = "Il corsista è iscritto al corso tramite una sessione. Non si possono modificare queste informazioni";
 ?>

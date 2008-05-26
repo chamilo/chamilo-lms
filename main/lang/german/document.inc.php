@@ -207,4 +207,6 @@ $TemplateTitleLearnerWonderDescription = "Beschreibung Student wundert sich ";
 $TemplateTitleTimeline = "Zeitlablauf des Abschnitts";
 $TemplateTitleTimelineDescription = "3 LIsten mit einem relationalen Pfeil";
 $TemplateTitleStopAndThink = "Stop und denke nach!";
+$TemplateTitleListLeftListDescription = "Liste links mit einem Lehrer";
+$TemplateTitleStopAndThinkDescription = "Layout zum Anhalten und Nachdenken";
 ?>

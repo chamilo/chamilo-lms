@@ -207,4 +207,6 @@ $TemplateTitleLearnerWonderDescription = "Opis Tečajnik se sprašuje";
 $TemplateTitleTimeline = "Časovnica";
 $TemplateTitleTimelineDescription = "3 seznami z relacijskimi povezavami";
 $TemplateTitleStopAndThink = "Zaustavi se in premisli";
+$TemplateTitleListLeftListDescription = "Seznam na levi z inštruktorjem";
+$TemplateTitleStopAndThinkDescription = "Prodloga vzpodbude k zaustavitvi in razmisleku";
 ?>

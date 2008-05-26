@@ -207,4 +207,6 @@ $TemplateTitleLearnerWonderDescription = "Learner wonder description";
 $TemplateTitleTimeline = "Phase timeline";
 $TemplateTitleTimelineDescription = "3 lists with an relational arrow";
 $TemplateTitleStopAndThink = "Stop and think";
+$TemplateTitleListLeftListDescription = "Left list with an instructor";
+$TemplateTitleStopAndThinkDescription = "Layout encouraging to stop and think";
 ?>

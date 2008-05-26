@@ -1,5 +1,5 @@
-<?php // $Id: document.php 15178 2008-04-29 18:35:20Z yannoo $
-
+<?php // $Id: document.php 15427 2008-05-26 20:09:58Z juliomontoya $
+ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -511,11 +511,12 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		
 	}
 	
-	elseif(isset($_GET['add_as_template']) && isset($_POST['create_template'])){
-		
-		$document_id_for_template = intval($_GET['add_as_template']);
-		$title = $_POST['template_title'];
-		$description = $_POST['template_description'];
+	elseif(isset($_GET['add_as_template']) && isset($_POST['create_template']))
+	{		
+		$document_id_for_template = intval(Database::escape_string($_GET['add_as_template']));    
+			
+		$title=Security::remove_XSS($_POST['template_title']);				
+		$description = Security::remove_XSS($_POST['template_description']);		
 		$course_code = api_get_course_id();
 		$user_id = api_get_user_id();
 		

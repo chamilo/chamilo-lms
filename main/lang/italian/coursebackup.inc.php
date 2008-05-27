@@ -45,4 +45,5 @@ $ToolIntro = "Strumento Introduzione";
 $UploadError = "Caricamento fallito, controlla la dimensione dei file e i diritti di scrittura.";
 $DocumentsWillBeAddedToo = "Saranno aggiunti anche i documenti ";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Seleziona i test in elenco per includerli nella esportazione del percorso didattico";
+$ArchivesDirectoryNotWriteableContactAdmin = "La directory di archiviazione, usata dalla funzione, non è scrivibile. Se necessario, contatta l\'amministratore di sistema.";
 ?>

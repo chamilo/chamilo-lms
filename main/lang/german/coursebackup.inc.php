@@ -45,4 +45,5 @@ $ToolIntro = "Tool Einleitung";
 $UploadError = "Upload ist fehlgeschlagen, bitte maximale Dateigröße und Schreibrechte für Verzeichnisse prüfen";
 $DocumentsWillBeAddedToo = "Dokmente werden ebenfalls hinzugefügt";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Beim Exportieren eines Lernpfads mit einem Test, muss man sicher stellen, dass zugehörige Tests im Export inbegriffen sind, daher müssen diese aus der Liste der Tests ausgewählt werden.";
+$ArchivesDirectoryNotWriteableContactAdmin = "Das Verzeichnis des Archivs, das von diesem Tool benutzt wird, ist nicht beschreibbar. Bitte den Plattform Administrator benachrichtigen.";
 ?>

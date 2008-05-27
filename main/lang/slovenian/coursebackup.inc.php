@@ -45,4 +45,5 @@ $ToolIntro = "Predstavitev orodja";
 $UploadError = "Nalaganje je bilo neuspešno. Preverite najveèjo dovoljeno dolžino datoteke in pravice za dostop do mape, kamor nalagate.";
 $DocumentsWillBeAddedToo = "Pripadajaèi dokumenti bodo tudi dodani";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "V primeru, da želite izvoziti uèno pot, ki vsebuje teste/vaje, morate zagotoviti, da so ustrezni testi/vaje vkljuèeni v izvoz; izberete jih iz seznama testov.";
+$ArchivesDirectoryNotWriteableContactAdmin = "Arhivska mapa, ki jo uporablja to orodje, ne omogoèa pisalnega dostopa. Prosim da se obrnete na upravitelja platforme.";
 ?>

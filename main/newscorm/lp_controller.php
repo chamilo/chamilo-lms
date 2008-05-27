@@ -10,11 +10,14 @@
  */
 $debug = 0;
 if($debug>0) error_log('New LP -+- Entered lp_controller.php -+-',0);
-// name of the language file that needs to be included 
-if($_GET['action'] == 'export')
-{ //only needed on export
-	$language_file[] = 'hotspot';
-	$language_file[] = 'exercice';
+// name of the language file that needs to be included
+if (isset($_GET['action']))
+{ 
+	if($_GET['action'] == 'export')
+	{ //only needed on export
+		$language_file[] = 'hotspot';
+		$language_file[] = 'exercice';
+	}
 }
 $language_file[] = "course_home";
 $language_file[] = "scormdocument";
@@ -370,7 +373,7 @@ switch($_REQUEST['action'])
 				require('lp_edit_item.php');
 			}
 			else
-			{
+			{ 
 				require('lp_admin_view.php');
 			}
 		}

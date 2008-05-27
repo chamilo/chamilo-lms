@@ -22,20 +22,20 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 14272 2008-02-08 13:02:50Z elixir_inter $
+* 	@version $Id: question.class.php 15463 2008-05-27 16:45:11Z juliomontoya $
 */
 
 
 if(!class_exists('Question')):
 
 // answer types
-define(UNIQUE_ANSWER,	1);
-define(MULTIPLE_ANSWER,	2);
-define(FILL_IN_BLANKS,	3);
-define(MATCHING,		4);
-define(FREE_ANSWER,     5);
-define(HOT_SPOT, 		6);
-define(HOT_SPOT_ORDER, 	7);
+define('UNIQUE_ANSWER',	1);
+define('MULTIPLE_ANSWER',	2);
+define('FILL_IN_BLANKS',	3);
+define('MATCHING',		4);
+define('FREE_ANSWER',     5);
+define('HOT_SPOT', 		6);
+define('HOT_SPOT_ORDER', 	7);
 
 
 
@@ -868,8 +868,5 @@ abstract class Question
 
 	}
 }
-
 endif;
-
-
 ?>

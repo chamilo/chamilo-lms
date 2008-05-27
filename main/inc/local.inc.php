@@ -1,28 +1,28 @@
 <?php
 /*
-==============================================================================
+============================================================================== 
 	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2005 Dokeos S.A.
+	
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003-2005 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Hugues Peeters
 	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
 	Copyright (c) Patrick Cool
-
+	
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-
+	
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-
+	
 	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
-==============================================================================
+============================================================================== 
 */
 /**
 ==============================================================================
@@ -168,6 +168,7 @@ $cidReq = isset($cidReq) ? Database::escape_string($cidReq) : '';
 $cidReq = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : $cidReq;
 
 $cidReset = isset($cidReset) ? Database::escape_string($cidReset) : '';
+
 // $cidReset can be set in URL-parameter
 $cidReset = isset($_GET["cidReq"])&&$_GET["cidReq"]!=$_SESSION['_cid'] ? Database::escape_string($_GET["cidReq"]) : $cidReset;
 
@@ -190,12 +191,10 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout))
 {
     // uid is in session => login already done, continue with this value
     $_user['user_id'] = $_SESSION['_user']['user_id'];
-
-
 }
 else
 {
-    unset($_user['user_id']); // uid not in session ? prevent any hacking
+	if (isset($_user['user_id'])){	unset($_user['user_id']); }
 
     if(isset($_POST['login']) && isset($_POST['password'])) // $login && $password are given to log in
     {
@@ -305,7 +304,15 @@ else
     	    }
     	    else
     	    {
-    	    	header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login').$param);
+    	    	if (isset($param))
+    	    	{    	    	
+    	    		header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login').$param);
+    	    	}
+    	    	else
+    	    	{
+    	    		header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login'));
+    	    	}
+    	    	
     	    }
         }
         else // login failed, mysql_num_rows($result) <= 0
@@ -902,7 +909,11 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 }
 else // continue with the previous values
 {
-    $_courseUser          = $_SESSION ['_courseUser'     ];
+	if (isset($_SESSION ['_courseUser']))
+	{
+    	$_courseUser          = $_SESSION ['_courseUser'];
+	}
+    	
     $is_courseMember      = $_SESSION ['is_courseMember' ];
     $is_courseAdmin       = $_SESSION ['is_courseAdmin'  ];
     //$is_courseAllowed     = $_SESSION ['is_courseAllowed']; //deprecated
@@ -950,16 +961,28 @@ else
 }
 //set variable according to student_view_enabled choices
 if (api_get_setting('student_view_enabled') == "true")
-{
-	if ($_GET['isStudentView'] == 'true' and !empty($_SESSION['studentview']))
+{	
+	if (isset($_GET['isStudentView']))
 	{
-		// switching to studentview
-		$_SESSION['studentview'] = 'studentview';
-	}
-	elseif ($_GET['isStudentView'] == 'false' and !empty($_SESSION['studentview']))
-	{
-		//switching to teacherview
-		$_SESSION['studentview'] = 'teacherview';
+		if ($_GET['isStudentView'] == 'true') 
+		{
+			if (isset($_SESSION['studentview']))
+			{
+				if (!empty($_SESSION['studentview']))
+					// switching to studentview
+					$_SESSION['studentview'] = 'studentview';
+			}
+
+		}
+		elseif ($_GET['isStudentView'] == 'false')
+		{
+			if (isset($_SESSION['studentview']))
+			{
+				if (!empty($_SESSION['studentview']))
+					// switching to teacherview
+					$_SESSION['studentview'] = 'teacherview';
+			}		
+		}		
 	}
 	elseif (!empty($_SESSION['studentview']))
 	{
@@ -969,7 +992,7 @@ if (api_get_setting('student_view_enabled') == "true")
 	{
 		// We are in teacherview here
 		$_SESSION['studentview'] = 'teacherview';
-	}
+	}	
 }
 
 if(isset($_cid))

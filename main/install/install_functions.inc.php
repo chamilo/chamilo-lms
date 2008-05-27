@@ -581,45 +581,52 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 		//First, attempt to set writing permissions if we don't have them yet
 		//0xxx is an octal number, this is the required format
 		$notwritable = array();
+        $curdir = getcwd();
 		if(!is_writable('../inc/conf'))
 		{
-			$notwritable[]='../inc/conf';
+			$notwritable[] = realpath($curdir.'/../inc/conf');
 			@chmod('../inc/conf',$perm);
 		}
 
 		if(!is_writable('../garbage'))
 		{
-			$notwritable[]='../garbage';
+			$notwritable[] = realpath($curdir.'/../garbage');
 			@chmod('../garbage',$perm);
 		}
 
 		if(!is_writable('../upload'))
 		{
-			$notwritable[]='../upload';
+			$notwritable[] = realpath($curdir.'/../upload');
 			@chmod('../upload', $perm);
 		}
 
+        if(!is_writable('../default_course_document/images/'))
+        {
+            $notwritable[] = realpath($curdir.'/../default_course_document/images/');
+            @chmod('../default_course_document/images/', $perm);
+        }
+
 		if(!is_writable('../../archive'))
 		{
-			$notwritable[]='../../archive';
+			$notwritable[] = realpath($curdir.'/../../archive');
 			@chmod('../../archive',$perm);
 		}
 
 		if(!is_writable('../../courses'))
 		{
-			$notwritable[]='../../courses';
+			$notwritable[] = realpath($curdir.'/../../courses');
 			@chmod('../../courses',$perm);
 		}
 
 		if(!is_writable('../../home'))
 		{
-			$notwritable[]='../../home';
+			$notwritable[] = realpath($curdir.'/../../home');
 			@chmod('../../home',$perm);
 		}
 
 		if(file_exists('../inc/conf/configuration.php') && !is_writable('../inc/conf/configuration.php'))
 		{
-			$notwritable[]='../inc/conf/configuration.php';
+			$notwritable[]= realpath($curdir.'/../inc/conf/configuration.php');
 			@chmod('../inc/conf/configuration.php',$perm_file);
 		}
 

@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 15082 2008-04-25 03:35:07Z yannoo $
+*  	@version $Id: work.php 15462 2008-05-27 16:34:55Z juliomontoya $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -90,9 +90,6 @@ $language_file = array (
 	'admin'
 );
 
-// Section (for the tabs)
-$this_section = SECTION_COURSES;
-
 // @todo why is this needed?
 //session
 if (isset ($_GET['id_session'])) {
@@ -124,6 +121,10 @@ function updateDocumentTitle(value){
 -----------------------------------------------------------
 */
 require ('../inc/global.inc.php');
+
+// Section (for the tabs)
+$this_section = SECTION_COURSES;
+
 
 require_once (api_get_path(LIBRARY_PATH) . "course.lib.php");
 require_once (api_get_path(LIBRARY_PATH) . "debug.lib.inc.php");

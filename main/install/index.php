@@ -70,10 +70,13 @@ elseif ( isset($_SESSION['install_language']) && $_SESSION['install_language'] )
 $charset = '';
 //force ISO-8859-15 for European languages. Leave Apache determine the encoding for others (HTML declaring UTF-8)
 $euro_langs = array('english','french','french_KM','french_corporate','french_org','dutch','spanish','german','italian','greek','danish','swedish','norwegian','polish','galician','catalan','czech','finnish');
-if(in_array($install_language,$euro_langs))
+if (isset($install_language))
 {
-	$charset = 'ISO-8859-15';
-	header('Content-Type: text/html; charset='. $charset);
+	if(in_array($install_language,$euro_langs))
+	{
+		$charset = 'ISO-8859-15';
+		header('Content-Type: text/html; charset='. $charset);
+	}
 }
 
 require_once('install_upgrade.lib.php'); //also defines constants

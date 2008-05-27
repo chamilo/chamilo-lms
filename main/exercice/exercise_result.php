@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 15412 2008-05-26 13:56:24Z elixir_inter $
+* 	@version $Id: exercise_result.php 15438 2008-05-27 06:46:30Z elixir_inter $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -736,7 +736,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				<tr>
 					<td colspan="2">
 						<i><?php echo get_lang('Hotspot'); ?></i><br /><br />
-						<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo $questionId ?>&exe_id=&from_db=0" width="556" height="481">
+						<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo $questionId ?>&exe_id=&from_db=0" width="556" height="421">
 							<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo $questionId ?>&exe_id=&from_db=0" />
 						</object>
 					</td>

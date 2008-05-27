@@ -334,6 +334,8 @@ class learnpath {
      */
     function add_item($parent, $previous, $type = 'dokeos_chapter', $id, $title, $description, $prerequisites=0)
     {
+    	global $charset;
+    	
     	if($this->debug>0){error_log('New LP - In learnpath::add_item('.$parent.','.$previous.','.$type.','.$id.','.$title.')',0);}
     	
     	$tbl_lp_item = Database::get_course_table('lp_item');
@@ -341,8 +343,9 @@ class learnpath {
     	$previous = intval($previous);
     	$type = $this->escape_string($type);
     	$id = intval($id);
-    	$title = $this->escape_string(htmlentities($title));
-    	$description = $this->escape_string(htmlentities($description));
+    	
+    	$title = $this->escape_string(mb_convert_encoding($title,$this->encoding,$charset));
+    	$description = $this->escape_string(mb_convert_encoding($description,$this->encoding,$charset)); 
     	
     	$sql_count = "
     		SELECT COUNT(id) AS num
@@ -3967,6 +3970,7 @@ class learnpath {
 	 */
 	function overview()
 	{
+		global $charset;
 		$return = '';
 		
 		$tbl_lp_item = Database::get_course_table('lp_item');
@@ -3984,10 +3988,7 @@ class learnpath {
 		while($row = Database::fetch_array($result))
 		{
 				
-			if($this->encoding!=$mycharset)
-			{
-				$row['title'] = mb_convert_encoding($row['title'], $mycharset,$this->encoding);
-			}			
+			$row['title'] = mb_convert_encoding($row['title'], $mycharset,$this->encoding);
 			
 			$arrLP[] = array(
 			'id' => $row['id'],
@@ -4020,7 +4021,8 @@ class learnpath {
 			
 			for($i = 0; $i < count($arrLP); $i++)
 			{
-				$title = stripslashes($arrLP[$i]['title']);
+				$title=$arrLP[$i]['title'];
+				
 				if($arrLP[$i]['description'] == '')
 					$arrLP[$i]['description'] = '&nbsp;';
 				
@@ -4070,7 +4072,7 @@ class learnpath {
 							$return .= '</a>' . "\n";
 						}
 						
-						$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $title . '\');">';
+						$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . addslashes($title). '\');">';
 							$return .= '<img alt="" src="../img/delete.gif" title="' . get_lang('_delete_learnpath_module') . '" />';
 						$return .= '</a>' . "\n";
 						
@@ -4359,7 +4361,6 @@ class learnpath {
 		{
 			$tbl_lp_item	= Database::get_course_table('lp_item');
 			$tbl_doc		= Database::get_course_table(TABLE_DOCUMENT);
-			
 			$sql = "
 				SELECT
 					lp.*
@@ -4381,7 +4382,7 @@ class learnpath {
 				if($this->encoding=='UTF-8')
 				{
 					$row['title'] = utf8_decode($row['title']);
-				}
+				}				
 				
 				$return .= '<p class="lp_title">' . stripslashes($row['title']) . '</p>';
 				//$return .= '<p class="lp_text">' . ((trim($row['description']) == '') ? 'no description' : stripslashes($row['description'])) . '</p>';
@@ -4418,7 +4419,7 @@ class learnpath {
 	function display_edit_item($item_id)
 	{
 		global $_course; //will disappear
-		
+	
 		$return = '';
 		
 		if(is_numeric($item_id))
@@ -4625,6 +4626,7 @@ class learnpath {
 	 */
 	function display_quiz_form($action = 'add', $id = 0, $extra_info = '')
 	{
+		global $charset;
 		
 		$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 		$tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -4731,7 +4733,7 @@ class learnpath {
 									{
 										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 										{
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 										}
 										else
 										{
@@ -4741,7 +4743,7 @@ class learnpath {
 									else
 									{
 										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 									}
 								}
 								if (is_array($arrLP))
@@ -4775,7 +4777,7 @@ class learnpath {
 										else
 											$selected = '';
 										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '"</option>';
 									}
 								}
 								
@@ -4814,7 +4816,7 @@ class learnpath {
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
 									$s_selected_position=0;
-								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+								$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 								
 							}
 						}
@@ -4890,6 +4892,7 @@ class learnpath {
  */
 	function display_hotpotatoes_form($action = 'add', $id = 0, $extra_info = '')
 	{
+		global $charset;
 		$uploadPath = DIR_HOTPOTATOES; //defined in main_api
 		$tbl_lp_item = Database::get_course_table('lp_item');
 
@@ -4919,7 +4922,10 @@ class learnpath {
 			$item_title			= '';
 			$item_description	= '';
 		}
-
+				
+		$item_title=mb_convert_encoding($item_title,$charset,$this->encoding);
+		$item_description=mb_convert_encoding($item_description,$charset,$this->encoding);
+		
 		$return = '<div style="margin:3px 12px;">';
 
 			if($id != 0 && is_array($extra_info))
@@ -4996,7 +5002,7 @@ class learnpath {
 									{
 										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 										{
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 										}
 										else
 										{
@@ -5006,7 +5012,7 @@ class learnpath {
 									else
 									{
 										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 									}
 								}
 
@@ -5038,7 +5044,7 @@ class learnpath {
 										else
 											$selected = '';
 
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '"</option>';
 									}
 								}
 
@@ -5075,7 +5081,7 @@ class learnpath {
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
 									$s_selected_position=0;
-								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+								$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 
 							}
 						}
@@ -5156,6 +5162,7 @@ class learnpath {
 	 */
 	function display_forum_form($action = 'add', $id = 0, $extra_info = '')
 	{
+		global $charset;
 		
 		$tbl_lp_item = Database::get_course_table('lp_item');
 		$tbl_forum = Database::get_course_table(TABLE_FORUM);
@@ -5183,6 +5190,9 @@ class learnpath {
 			$item_title			= '';
 			$item_description 	= '';
 		}
+		
+		$item_title=mb_convert_encoding($item_title,$charset,$this->encoding);
+		$item_description=mb_convert_encoding($item_description,$charset,$this->encoding);
 				
 		$return = '<div style="margin:3px 12px;">';
 			
@@ -5216,10 +5226,8 @@ class learnpath {
 					'prerequisite' => $row['prerequisite']);
 			}
 			
-			$this->tree_array($arrLP);
-			
+			$this->tree_array($arrLP);			
 			$arrLP = $this->arrMenu;
-			
 			unset($this->arrMenu);
 			
 			if($action == 'add')
@@ -5250,7 +5258,7 @@ class learnpath {
 									{
 										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 										{
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 										}
 										else
 										{
@@ -5260,7 +5268,7 @@ class learnpath {
 									else
 									{
 										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 									}
 								}
 								
@@ -5292,7 +5300,7 @@ class learnpath {
 										else
 											$selected = '';
 										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '"</option>';
 									}
 								}
 								
@@ -5336,7 +5344,7 @@ class learnpath {
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
 									$s_selected_position=0;
-								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+								$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 								
 							}
 						}
@@ -5397,7 +5405,8 @@ class learnpath {
 	}
 	
 function display_thread_form($action = 'add', $id = 0, $extra_info = '')
-	{
+{
+	global $charset;
 		echo '
 		<style>
 	
@@ -5436,7 +5445,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$item_title			= '';
 			$item_description	= '';
 		}
-				
+		$item_title=mb_convert_encoding($item_title,$charset,$this->encoding);
+		$item_description=mb_convert_encoding($item_description,$charset,$this->encoding);
+		
 		$return = '<div style="margin:3px 12px;">';
 			
 			if($id != 0 && is_array($extra_info))
@@ -5503,7 +5514,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 									{
 										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 										{
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 										}
 										else
 										{
@@ -5513,7 +5524,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 									else
 									{
 										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 									}
 								}
 								
@@ -5545,7 +5556,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 										else
 											$selected = '';
 										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '"</option>';
 									}
 								}
 								
@@ -5589,7 +5600,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
 									$s_selected_position=0;
-								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+								$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 								
 							}
 						}
@@ -5663,13 +5674,13 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	{
 		global $_course;
 		global $charset;
-		
+				
 		$tbl_lp_item = Database::get_course_table('lp_item');
-		
+	
 		if($id != 0 && is_array($extra_info))
 		{
-			$item_title			= stripslashes($extra_info['title']);
-			$item_description	= stripslashes($extra_info['description']);
+			$item_title			= $extra_info['title'];
+			$item_description	= $extra_info['description'];
 			$item_path = api_get_path(WEB_COURSE_PATH) . $_course['path'].'/scorm/'.$this->path.'/'.stripslashes($extra_info['path']);
 		}
 		else
@@ -5677,7 +5688,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$item_title			= '';
 			$item_description	= '';
 		}
-	
+		
 		$return = '<div style="margin:10px 12px;">';
 			
 		if($id != 0 && is_array($extra_info))
@@ -5693,10 +5704,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		if($item_type == 'module')
 			$sql .= " AND parent_item_id = 0";
 		
-		$result = api_sql_query($sql, __FILE__, __LINE__);
-		
+		$result = api_sql_query($sql, __FILE__, __LINE__);		
 		$arrLP = array();
-		
+				
 		while($row = Database::fetch_array($result))
 		{
 			$arrLP[] = array(
@@ -5710,19 +5720,17 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				'next_item_id' => $row['next_item_id'],
 				'display_order' => $row['display_order']);
 		}
-		
+				
 		$this->tree_array($arrLP);		
 		$arrLP = $this->arrMenu;		
-		unset($this->arrMenu);		
+		unset($this->arrMenu);
+			
 		$return .= '<p class="lp_title">' . $title . '</p>' . "\n";
-
-		require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-		
+		require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');		
 		$form = new FormValidator('form','POST',api_get_self()."?".$_SERVER["QUERY_STRING"]);
 		
 		$defaults["title"]=mb_convert_encoding($item_title,$charset,$this->encoding);
 		$defaults["description"]=mb_convert_encoding($item_description,$charset,$this->encoding); 
-
 
 		$form->addElement('html',$return);
 					
@@ -5735,20 +5743,26 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		{
 			for($i = 0; $i < count($arrLP); $i++)
 			{
-				if($action != 'add'){
-					if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)){
-						$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+				if($action != 'add')
+				{
+					if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
+					{
+						$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
-						if($parent == $arrLP[$i]['id']){
+						if($parent == $arrLP[$i]['id'])
+						{
 							$s_selected_parent=$arrHide[$arrLP[$i]['id']];
 						}
 					}
 				}
-				else{
-					if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir'){
-						$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+				else
+				{
+					if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
+					{
+						$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
-						if($parent == $arrLP[$i]['id']){
+						if($parent == $arrLP[$i]['id'])
+						{
 							$s_selected_parent=$arrHide[$arrLP[$i]['id']];
 						}
 					}
@@ -5757,14 +5771,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			
 			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent")." :", '', 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;" onchange="load_cbo(this.value);"');
 
-			foreach($arrHide as $key => $value){
+			foreach($arrHide as $key => $value)
+			{
 				$parent_select->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 			}
-			$parent_select -> setSelected($s_selected_parent);
-			
-			
+			$parent_select -> setSelected($s_selected_parent);			
 		}
-		
 		if(is_array($arrLP)) { reset($arrLP); }
 		
 		$arrHide=array();
@@ -5777,9 +5789,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 					$s_selected_position=$arrLP[$i]['id'];
 				elseif($action == 'add')
-					$s_selected_position=$arrLP[$i]['id'];
-				
-				$arrHide[$arrLP[$i]['id']]['value']=get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title']));
+					$s_selected_position=$arrLP[$i]['id'];				
+
+				$arrHide[$arrLP[$i]['id']]['value']=get_lang("After").' "' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 				
 			}
 		}
@@ -5787,10 +5799,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$position = &$form->addElement('select', 'previous', get_lang("Position")." :", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
 		
 		$position->addOption(get_lang('FirstPosition'),0,'style="padding-left:'.$value['padding'].'px;"');
-		foreach($arrHide as $key => $value){
+		
+		foreach($arrHide as $key => $value)
+		{
 			$position->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 		}
+		
 		if(!empty($s_selected_position)) { $position->setSelected($s_selected_position); }
+		
 		if(is_array($arrLP)) { reset($arrLP); }
 		
 		if($action != 'move')
@@ -5810,8 +5826,6 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$form->addElement('hidden', 'parent', '0');
 		}		
 
-		
-
 		$extension = pathinfo($item_path, PATHINFO_EXTENSION);
 		if(($item_type=='asset' || $item_type=='sco') && ($extension == 'html' || $extension == 'htm'))
 		{
@@ -5826,13 +5840,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$defaults["content_lp"]=file_get_contents($item_path);
 		}
 
-		
-		
 		$form->addElement('hidden', 'type', 'dokeos_'.$item_type);
-		$form->addElement('hidden', 'post_time', time());
-			
-		
-		
+		$form->addElement('hidden', 'post_time', time());		
 		$form->setDefaults($defaults);
 		$form->addElement('html','</div>');
 		return $form->return_form();
@@ -5849,7 +5858,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 */
 	function display_document_form($action = 'add', $id = 0, $extra_info = 'new')
 	{
-		
+		global $charset;
 		echo '
 		<style>
 	        div.row div.formw { 	              
@@ -6008,9 +6017,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 			
 			$form = new FormValidator('form','POST',api_get_self()."?".$_SERVER["QUERY_STRING"]);
+			$defaults["title"]=mb_convert_encoding($item_title,$charset,$this->encoding);
+			$defaults["description"]=mb_convert_encoding($item_description,$charset,$this->encoding);			
 			
-			$defaults["title"]=html_entity_decode($item_title);
-			$defaults["description"]=html_entity_decode($item_description);			
 		
 			$form->addElement('html',$return);
 						
@@ -6023,7 +6032,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			{
 				if($action != 'add'){
 					if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)){
-						$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+						$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
 						if($parent == $arrLP[$i]['id']){
 							$s_selected_parent=$arrHide[$arrLP[$i]['id']];
@@ -6032,7 +6041,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				}
 				else{
 					if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir'){
-						$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+						$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
 						if($parent == $arrLP[$i]['id']){
 							$s_selected_parent=$arrHide[$arrLP[$i]['id']];
@@ -6064,7 +6073,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					elseif($action == 'add')
 						$s_selected_position=$arrLP[$i]['id'];
 					
-					$arrHide[$arrLP[$i]['id']]['value']=get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])).'"';
+					$arrHide[$arrLP[$i]['id']]['value']=get_lang("After").' "' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding).'"';
 					
 				}
 			}
@@ -6072,7 +6081,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$position = &$form->addElement('select', 'previous', get_lang("Position")." :", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 			$position->addOption(get_lang("FirstPosition"),0,'style="padding-left:3px;"');
 			
-			foreach($arrHide as $key => $value){
+			foreach($arrHide as $key => $value)
+			{
 				$position->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 			}
 			$position -> setSelected($s_selected_position);
@@ -6111,7 +6121,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 						elseif($action == 'add')
 							$s_selected_position=$arrLP[$i]['id'];
 						
-						$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+						$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 						
 					}
 				}
@@ -6206,6 +6216,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 */
 	function display_link_form($action = 'add', $id = 0, $extra_info = '')
 	{
+		global $charset;
 		$tbl_lp_item = Database::get_course_table('lp_item');
 		$tbl_link = Database::get_course_table(TABLE_LINK);
 		
@@ -6228,6 +6239,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$row = Database::fetch_array($result);
 			
 			$item_title = $row['title'];
+			
 			$item_description = $row['description'];
 			$item_url = $row['url'];
 		}
@@ -6236,6 +6248,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$item_title			= '';
 			$item_description	= '';
 		}
+		$item_title=mb_convert_encoding($item_title,$charset,$this->encoding);
+		$item_description=mb_convert_encoding($item_description,$charset,$this->encoding);
 				
 		$return = '<div style="margin:3px 12px;">';
 			
@@ -6269,10 +6283,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					'prerequisite' => $row['prerequisite']);
 			}
 			
-			$this->tree_array($arrLP);
-			
-			$arrLP = $this->arrMenu;
-			
+			$this->tree_array($arrLP);			
+			$arrLP = $this->arrMenu;			
 			unset($this->arrMenu);
 			
 			if($action == 'add')
@@ -6303,7 +6315,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 									{
 										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 										{
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 										}
 										else
 										{
@@ -6313,7 +6325,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 									else
 									{
 										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 									}
 								}
 								
@@ -6345,7 +6357,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 										else
 											$selected = '';
 										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '"</option>';
 									}
 								}
 								
@@ -6395,7 +6407,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
 									$s_selected_position=0;
-								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+								$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 								
 							}
 						}
@@ -6405,8 +6417,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 							
-							foreach($arrHide as $key => $value){
-								if($key==$s_selected_position && $action == 'add'){
+							foreach($arrHide as $key => $value)
+							{
+								if($key==$s_selected_position && $action == 'add')
+								{
 									$return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
 								}
 								elseif($key==$id_prerequisite && $action == 'edit'){
@@ -6466,6 +6480,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 */
 	function display_student_publication_form($action = 'add', $id = 0, $extra_info = '')
 	{
+		global $charset;
+		
 		$tbl_lp_item = Database::get_course_table('lp_item');
 		$tbl_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 		
@@ -6492,7 +6508,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		{
 			$item_title			= '';
 		}
-				
+		
+		$item_title=mb_convert_encoding($item_title,$charset,$this->encoding);			
 		$return = '<div style="margin:3px 12px;">';
 			
 			if($id != 0 && is_array($extra_info))
@@ -6525,10 +6542,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					'prerequisite' => $row['prerequisite']);
 			}
 			
-			$this->tree_array($arrLP);
-			
-			$arrLP = $this->arrMenu;
-			
+			$this->tree_array($arrLP);			
+			$arrLP = $this->arrMenu;			
 			unset($this->arrMenu);
 			
 			if($action == 'add')
@@ -6559,7 +6574,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 									{
 										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 										{
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 										}
 										else
 										{
@@ -6569,7 +6584,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 									else
 									{
 										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding). '</option>';
 									}
 								}
 								if(is_array($arrLP))
@@ -6603,7 +6618,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 										else
 											$selected = '';
 										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '"</option>';
 									}
 								}
 								
@@ -6641,7 +6656,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
 									$s_selected_position=0;
-								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+								$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 								
 							}
 						}
@@ -6765,6 +6780,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		
 		$s_title=Database::result($result,0,0);
+		$s_title=mb_convert_encoding($s_title,$charset,$this->encoding);
 		
 		$return .= '<p class="lp_title">' . $lang . '</p>';
 		
@@ -6894,14 +6910,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	function display_move_item($item_id)
 	{
 		global $_course; //will disappear
-		
+		global $charset;
 		$return = '';
 		
 		if(is_numeric($item_id))
 		{
 			$tbl_lp_item = Database::get_course_table('lp_item');
 			
-			$sql = "
+			 $sql = "
 				SELECT *
 				FROM " . $tbl_lp_item . "
 				WHERE id = " . $item_id;
@@ -7028,6 +7044,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 */
 	function display_item_prerequisites_form($item_id)
 	{
+		global $charset;
 		$tbl_lp_item = Database::get_course_table('lp_item');
 		
 		/* current prerequisite */
@@ -7072,7 +7089,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$arrLP[] = array(
 				'id' => $row['id'],
 				'item_type' => $row['item_type'],
-				'title' => $row['title'],
+				'title' => mb_convert_encoding($row['title'],$charset,$this->encoding),
 				'ref'   => $row['ref'],
 				'description' => $row['description'],
 				'parent_item_id' => $row['parent_item_id'],
@@ -7088,12 +7105,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				$preq_mastery = $row['mastery_score'];
 				$preq_max = $row['max_score'];
 			}
-		}
-		
-		$this->tree_array($arrLP);
-		
-		$arrLP = $this->arrMenu;
-		
+		}		
+		$this->tree_array($arrLP);		
+		$arrLP = $this->arrMenu;		
 		unset($this->arrMenu);
 		
 		for($i = 0; $i < count($arrLP); $i++)
@@ -7104,7 +7118,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_QUIZ && $arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . '>';
 			$return .= '<input' . (($arrLP[$i]['id'] == $preq_id) ? ' checked="checked" ' : '') . (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ') . 'id="id' . $arrLP[$i]['id'] . '" name="prerequisites" style="margin-left:' . $arrLP[$i]['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $arrLP[$i]['id'] . '" />';
 			$return .= '<img alt="" src="../img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:5px;" title="" />';
-			$return .= '<label for="id' . $arrLP[$i]['id'] . '">' . stripslashes($arrLP[$i]['title']) . '</label>';
+			$return .= '<label for="id' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</label>';
 			$return .= '</td>';
 			//$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . ' />';
 			

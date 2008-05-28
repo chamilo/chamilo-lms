@@ -474,4 +474,5 @@ $MinDays = "dagen";
 $MinHours = "uren";
 $MinMinutes = "minuten";
 $HomeDirectory = "Home";
+$Step = "Stap";
 ?>

@@ -643,6 +643,11 @@ class learnpathItem{
 												else
 													$files_list[] = array($mp3file,'local','rel');
 											}
+                                            elseif(strpos($source, 'flv=')===0)
+                                            {
+                                                $files_list[] = array(substr($source, 4, strpos($source , '.flv')),'local','abs');
+                                                continue; //skipping anything else to avoid two entries (while the others can have sub-files in their url, flv's can't)
+                                            }
 										}
 										if(strpos($source,'://') > 0)
 										{
@@ -665,7 +670,7 @@ class learnpathItem{
 														if(count($in_files_list)>0)
 														{
 															$files_list = array_merge($files_list,$in_files_list);
-														} 
+														}
 													}
 													else
 													{

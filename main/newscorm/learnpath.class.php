@@ -7703,12 +7703,20 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		 			 			$my_dep->setAttribute('xml:base','');
 	
 			 					//$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
-								
-								$file_path = realpath(api_get_path(SYS_PATH).$doc_info[0]);
-								$file_path = str_replace('//','/',$file_path);
+                                //the next lines fix a bug when using the "subdir" mode of Dokeos, whereas
+                                //an image path would be constructed as /var/www/subdir/subdir/img/foo.bar 
+                                $abs_img_path_without_subdir = $doc_info[0];
+                                $relp = api_get_path(REL_PATH); //the url-append config param
+                                $pos = strpos($abs_img_path_without_subdir,$relp);
+                                if($pos===0)
+                                {
+                                	$abs_img_path_without_subdir = '/'.substr($abs_img_path_without_subdir,strlen($relp));
+                                }
+								//$file_path = realpath(api_get_path(SYS_PATH).$doc_info[0]);
+								$file_path = realpath(api_get_path(SYS_PATH).$abs_img_path_without_subdir);
+                                $file_path = str_replace('//','/',$file_path);
 								//prepare the current directory path (until just under 'document') with a trailing slash
 								$cur_path = substr($current_course_path,-1)=='/'?$current_course_path:$current_course_path.'/';
-								
 								//check if the current document is in that path
 								if(strstr($file_path,$cur_path) !== false)
 								{
@@ -7764,7 +7772,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			 					}
 			 					else if (empty($file_path))
 			 					{
-			 						/*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH),api_get_path(REL_PATH)));
+                                    /*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH),api_get_path(REL_PATH)));
 			 						if(strpos($document_root,-1)=='/')
 			 						{
 			 							$document_root = substr(0, -1, $document_root);
@@ -8135,7 +8143,6 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 	$root->appendChild($organizations);
 	 	$root->appendChild($resources);
 		$xmldoc->appendChild($root);
-
 		//todo: add a readme file here, with a short description and a link to the Reload player
 		//then add the file to the zip, then destroy the file (this is done automatically)
 		// http://www.reload.ac.uk/scormplayer.html - once done, don't forget to close FS#138
@@ -8157,6 +8164,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				foreach($link_updates[$file_path] as $old_new)
 				{
 					//error_log('Replacing '.$old_new['orig'].' by '.$old_new['dest'].' in '.$file_path,0);
+                    //this is an ugly hack that allows .flv files to be found by the flv player that
+                    // will be added in document/main/inc/lib/flv_player/flv_player.swf and that needs
+                    // to find the flv to play in document/main/, so we replace main/ in the flv path by
+                    // ../../.. to return from inc/lib/flv_player to the document/main path
+                    if(substr($old_new['dest'],-3)=='flv' && substr($old_new['dest'],0,5)=='main/')
+                    {
+                        $old_new['dest'] = str_replace('main/','../../../',$old_new['dest']);	
+                    }
 					$string = str_replace($old_new['orig'],$old_new['dest'],$string);
 				}
 				file_put_contents($dest_file,$string);
@@ -8182,6 +8197,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				foreach($link_updates[$file_path] as $old_new)
 				{
 					//error_log('Replacing '.$old_new['orig'].' by '.$old_new['dest'].' in '.$file_path,0);
+                    //this is an ugly hack that allows .flv files to be found by the flv player that
+                    // will be added in document/main/inc/lib/flv_player/flv_player.swf and that needs
+                    // to find the flv to play in document/main/, so we replace main/ in the flv path by
+                    // ../../.. to return from inc/lib/flv_player to the document/main path
+                    if(substr($old_new['dest'],-3)=='flv' && substr($old_new['dest'],0,5)=='main/')
+                    {
+                        $old_new['dest'] = str_replace('main/','../../../',$old_new['dest']);   
+                    }
 					$string = str_replace($old_new['orig'],$old_new['dest'],$string);
 				}
 				file_put_contents($dest_file,$string);

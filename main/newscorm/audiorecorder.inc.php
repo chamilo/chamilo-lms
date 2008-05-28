@@ -65,7 +65,7 @@ if(!empty($path_to_lzx)){
 		 "<param name=\"scale\" value=\"noscale\">".
 		 "<param name=\"salign\" value=\"LT\">".
 		 "<param name=\"menu\" value=\"false\"></object>",$path_to_lzx,$path_to_lzx);
-	if(!$audio_recorder_studentview)
+	if($audio_recorder_studentview=='false')
 	{
 		echo '<script type="text/javascript">
 	

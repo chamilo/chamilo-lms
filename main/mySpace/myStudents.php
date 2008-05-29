@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 15252 2008-05-08 21:51:28Z yannoo $
+<?php //$Id: myStudents.php 15494 2008-05-29 22:26:36Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -174,11 +174,11 @@ $course_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATI
 
 if(isset($_GET["user_id"]) && $_GET["user_id"]!="")
 {
-	$i_user_id=$_GET["user_id"];
+	$i_user_id=(int)$_GET["user_id"];
 }
 else
 {
-	$i_user_id = $_user['user_id'];
+	$i_user_id =$_user['user_id'];
 }
 
 if(!empty($_GET['student']))
@@ -432,6 +432,16 @@ if(!empty($_GET['student']))
 										?>
 								
 								</tr>
+                                <?php
+                                            if(!empty($_GET['student']) && !empty($_GET['course']))
+                                            {   //only show link to connection details if course and student were defined in the URL
+                                                echo '<tr>';
+                                                echo '<td class="noLink none">';
+                                                echo '<img align="absbottom" src="../img/statistics.gif">&nbsp; <strong> <a href="access_details.php?student='.$_GET['student'].'&course='.$_GET['course'].'">'.get_lang('AccessDetails').'</a> </strong>';
+                                                echo '</td>';
+                                                echo '</tr>';
+                                            }
+                                ?>
 							</table>
 						</td>
 					</tr>

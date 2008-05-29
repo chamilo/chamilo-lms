@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 15220 2008-05-06 20:13:19Z juliomontoya $
+<?php //$Id: announcements.php 15493 2008-05-29 16:42:12Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -872,7 +872,7 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 					$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
 
 					// the user is member of several groups => display personal announcements AND his group announcements AND the general announcements
-					if (is_array($group_memberships))
+					if (is_array($group_memberships) && count($group_memberships)>0)
 					{
 						$sql="SELECT
 							announcement.*, toolitemproperties.*
@@ -1226,7 +1226,7 @@ if (isset($message) && $message == true)
 	}
 	else  //STUDENT
 	{
-		if (is_array($group_memberships))
+        if (is_array($group_memberships) && count($group_memberships)>0)
 		{
 
 			$sql="SELECT

@@ -1173,17 +1173,18 @@ function get_lang($variable, $notrans = 'DLTT')
 		return $ot.'get_lang(?)'.$ct;
 	global $language_interface, $language_files;
 	//language file specified in tool
+    $langpath = api_get_path(SYS_CODE_PATH).'lang/';
 	if (isset ($language_files))
 	{
 		if (!is_array($language_files))
 		{
-			include (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/".$language_files.".inc.php");
+			@include ($langpath.$language_interface.'/'.$language_files.'.inc.php');
 		}
 		else
 		{
 			foreach ($language_files as $index => $language_file)
 			{
-				include (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/".$language_file.".inc.php");
+				@include ($langpath.$language_interface.'/'.$language_file.'.inc.php');
 			}
 		}
 	}

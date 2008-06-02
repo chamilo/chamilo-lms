@@ -110,7 +110,10 @@ class OpenofficePresentation extends OpenofficeDocument {
 		foreach($files as $file){
 			
 			list($slide_name,$file_name) = explode('||',$file); // '||' is used as separator between slide name (with accents) and file name (without accents)
-			$slide_name = utf8_decode($slide_name); //filename has been written in java, so unicode
+			$slide_name = htmlentities($slide_name,ENT_COMPAT,'utf-8'); 
+			$slide_name = str_replace('&rsquo;','\'',$slide_name);
+			$slide_name = mb_convert_encoding($slide_name, api_get_setting('platform_charset'), 'utf-8');
+			$slide_name = html_entity_decode($slide_name);
 			
 			$did = add_document($_course, $this->created_dir.'/'.urlencode($file_name), 'file', filesize($this->base_work_dir.$this->created_dir.'/'.$file_name), $slide_name);
 			if ($did)

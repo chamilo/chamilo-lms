@@ -102,7 +102,7 @@ else if ($action == "upload")
 	}
 
 	/*==== file upload ====*/
-	$newPath = handle_uploaded_document($_course,$_FILES['Filedata'],$coursePath,VIDEOCONF_UPLOAD_PATH,$user_id,0,NULL,'',0,'rename',false);
+	$newPath = $_FILES['Filedata']['name'];
 	if($debug>0) error_log($newPath);
 
 	/*==== extension extraction ====*/

@@ -39,23 +39,22 @@ abstract class OpenofficeDocument extends learnpath {
     	$this->file_name = remove_accents($this->file_name);
 		$this->file_name = replace_dangerous_char($this->file_name,'strict');	
 		$this->file_name = strtolower($this->file_name);
-		
-		$this->file_path = $this->file_name.'.'.pathinfo($file['name'],PATHINFO_EXTENSION);
-		
-		
-		
-		$dir_name = '/'.$this->file_name;
-		
-	
-		//create the directory
-		$this->base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-		
+
 		$visio_dir = ($action_after_conversion=='add_docs_to_visio')?VIDEOCONF_UPLOAD_PATH:'';
 		
-		$this->created_dir = create_unexisting_directory($_course,$_user['user_id'],0,0,$this->base_work_dir,$visio_dir.$dir_name);
+		$this->file_path = $visio_dir.'/'.$this->file_name.'.'.pathinfo($file['name'],PATHINFO_EXTENSION);
 
+		$dir_name = $visio_dir.'/'.$this->file_name;
 		
+	
+		//create the directory		
+		$this->base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+		
+		
+		$this->created_dir = create_unexisting_directory($_course,$_user['user_id'],0,0,$this->base_work_dir,$dir_name);
+
 		move_uploaded_file($file['tmp_name'],$this->base_work_dir.'/'.$this->file_path);
+
 
 		$perm = api_get_setting('permissions_for_new_files');
 		
@@ -80,7 +79,7 @@ abstract class OpenofficeDocument extends learnpath {
 
 		// to allow openoffice to manipulate docs.
 		chmod ($this->base_work_dir.$this->created_dir,0777);
-		chmod($this->base_work_dir.'/'.$this->file_path,0777);
+		chmod ($this->base_work_dir.'/'.$this->file_path,0777);
 		
 		$locale = 'en_US.UTF-8'; // TODO : improve it because we're not sure this locale is present everywhere
 		putenv('LC_ALL='.$locale);

@@ -166,7 +166,7 @@ Display :: display_header($tool_name);
 api_display_tool_title($tool_name);
 if ($_POST['formSent'])
 {
-	if(empty($_POST['import_file']['tmp_name']))
+	if(empty($_FILES['import_file']['tmp_name']))
 	{
 		$error_message = get_lang('UplUploadFailed');
 		Display :: display_error_message($error_message, false);

@@ -1,4 +1,4 @@
-<?php // $Id: document.php 15427 2008-05-26 20:09:58Z juliomontoya $
+<?php // $Id: document.php 15508 2008-06-03 10:02:45Z elixir_inter $
  
 /*
 ==============================================================================
@@ -724,7 +724,7 @@ if (count($row)==5)
 	$column_order[]=4;			
 }
 
-$table = new SortableTableFromArrayConfig($sortable_data,2,100,'tablename',$column_show,$column_order,'ASC');
+$table = new SortableTableFromArrayConfig($sortable_data,2,20,'tablename',$column_show,$column_order,'ASC');
  
 $query_vars['curdirpath'] = $curdirpath;
 

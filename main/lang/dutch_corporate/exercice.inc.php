@@ -231,4 +231,12 @@ $ClickLinkToViewComment = "Klik op onderstaande link om uw account te openen, en
 $Regards = "Hoogachtend";
 $AttemptVCCLong = "Uw poging voor de toets %s is door de begeleider gelezen/becommentarieerd/gecorrigeerd. Klik op onderstaande link om uw account te openen en uw toets te bekijken. ";
 $DearStudentEmailIntroduction = "Beste cursist,";
+$ExerciseFinished = "De oefening is afgelopen.";
+$ResultsEnabled = "Resultaten zijn geactiveerd voor cursisten";
+$ResultsDisabled = "Resultaten zijn gedesactiveerd voor cursisten";
+$ExportWithUserFields = "Neem de velden van de gebruikers mee in de export";
+$ExportWithoutUserFields = "Neem de velden van de gebruikers niet mee in de export";
+$DisableResults = "Resultaten niet weergeven aan de cursisten";
+$EnableResults = "Resultaten weergeven aan de cursisten";
+$ValidateAnswer = "Antwoorden valideren";
 ?>

@@ -23,7 +23,6 @@ $CreateNewPoll = "Opret ny afstemning";
 $Question = "Spørgsmål:";
 $PollType = "Afstemningstype:";
 $Create = "Opret";
-$Cancel = "Fortryd";
 $InfoConnectedUsersGetNotifiedOfThisPoll = "Info: Alle deltagere i konferencen vil modtage en besked om den nye afstemning";
 $YesNo = "Ja/Nej";
 $Numeric1To10 = "Numerisk 1-10";

@@ -106,5 +106,4 @@ $fileModified = "แก้ไขไฟล์แล้ว";
 $DocumentsOverview = "เอกสารแนะนำ";
 $ViewSlideshow = "ดูภาพสไลด์";
 $Options = "เลือกกำหนดตั้งค่า";
-$Content = "เนื้อหา";
 ?>

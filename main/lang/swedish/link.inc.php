@@ -43,5 +43,4 @@ $langAll_Link_Deleted = "Länken är raderad";
 $langOnHomepage = "Visa länk på hemsidan";
 $langShowLinkOnHomepage = "Visa denna länk som en ikon på kursens hemsida";
 $langCsvImport = "CSV import";
-$Category = "Kategori";
 ?>

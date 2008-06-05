@@ -106,5 +106,4 @@ $fileModified = "Fails tika p&#257;rveidots";
 $DocumentsOverview = "dokumentu p&#257;rskats";
 $ViewSlideshow = "Skat&#299;t att&#275;lu prezent&#257;ciju";
 $Options = "Iesp&#275;jas";
-$Content = "Saturs";
 ?>

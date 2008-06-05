@@ -44,4 +44,6 @@ $langCreateBackupInfo = "Biztonsági mentés készítése kurzusáról. Megadhatja, hog
 $ToolIntro = "Eszközismertet&#337;";
 $UploadError = "Sikertelen feltöltés. Kérjük, ellen&#337;rizze a fájlnagyság limitjét és a mappa jogosultságait!";
 $DocumentsWillBeAddedToo = "Dokumentumok szintén hozzá lesznek adva";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Ha tesztet tartalmazó tanösvényt szeretne exportálni, gy&#337;z&#337;djön meg róla, hogy a kívánt teszteket tartalmazza az exportálás. Ehhez ki kell jelölnie a teszteket a listából.";
+$ArchivesDirectoryNotWriteableContactAdmin = "Az archíválás célkönyvtára nem írható. Lépjen kapcsolatba a rendszergazdával.";
 ?>

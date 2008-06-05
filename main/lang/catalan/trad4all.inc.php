@@ -255,4 +255,5 @@ $Student = "Alumne";
 $Teacher = "Professor";
 $Send2All = "No seleccionava un usuari / grup. L\'element és visible per a tots els usuaris";
 $wiki = "Wiki";
+$Category = "Categoria";
 ?>

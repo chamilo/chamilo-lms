@@ -23,7 +23,6 @@ $CreateNewPoll = "Új szavazás létrehozása ehhez a szobához";
 $Question = "Kérdés:";
 $PollType = "Szavazástípus:";
 $Create = "Létrehoz";
-$Cancel = "Mégsem";
 $InfoConnectedUsersGetNotifiedOfThisPoll = "Infó: a szobában tartózkodó összes felhasználó értesítés kap az új szavazásról.";
 $YesNo = "Igen/Nem";
 $Numeric1To10 = "Numerikus érték (1-10)";

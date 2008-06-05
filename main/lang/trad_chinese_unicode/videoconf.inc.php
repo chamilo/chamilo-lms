@@ -23,7 +23,6 @@ $CreateNewPoll = "在本會議室建立新投票 ";
 $Question = "問題";
 $PollType = "投票類型";
 $Create = "創建";
-$Cancel = "取消";
 $InfoConnectedUsersGetNotifiedOfThisPoll = "資訊：每個已連到本會議室的使用者都會收到新投票的通知";
 $YesNo = "是 / 否";
 $Numeric1To10 = "數字 1 - 10";

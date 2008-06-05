@@ -12,7 +12,6 @@ $langAddCat  = "добавить раздел";
 $langAdd  = "Добавить";
 $langValid  = "Подтвердить";
 $langBackAndForget  = "Отменить";
-$Content = "Содержание (суть)";
 $CourseDescriptionUpdated = "Описание курса обновлено";
 $CourseDescriptionDeleted = "Описание курса удалено";
 $CourseDescriptionIntro = "Для того, чтобы создать описание курса, щелкните на заголовок и заполните необходимые поля формы.<br><br> Затем щелкните ОК и заполните другой заголовок.";

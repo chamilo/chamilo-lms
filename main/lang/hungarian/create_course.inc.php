@@ -2,10 +2,10 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langProfessors = "Vezet&#337;k";
-$langExplanation = "Amint az OK-re kattint, létrejön a tárgy honlapja fórummal, naptárral, dokumentum szerkeszt&#337;vel és az egyéb eszközökkel. A loginja segítségével, ami egyben a kurzus létrehozó login, igényei szerint testreszabhatja a kurzust.";
+$langExplanation = "Amint az OK-re kattint, létrejön az új kurzus honlapja fórummal, naptárral, dokumentum szerkeszt&#337;vel és az egyéb eszközökkel. A kurzus létrehozójaként vagy adminisztrátoraként kés&#337;bb igényei szerint testreszabhatja a kurzust.";
 $langEmpty = "Néhány mezõt üresen hagyott.<br>Használja a <b>Vissza</b> gombot a böngészõjén és próbálja újra.<br>Ha a kurzus kódot kihagyja, olvassa el a Kurzus Programot";
 $langCodeTaken = "Ez a kód már foglalt.  <br>Használja a <b>Vissza</b> gombot a böngészõjén és próbálja újra";
-$langFormula = "&#336;szinte híve";
+$langFormula = "Üdvözlettel";
 $langMessage = "Amikor eltávolítja a teszt fórumot, az összes üzenet is elvész abban a fórumban.";
 $langExerciceEx = "Példa teszt";
 $langAntique = "Irónia";
@@ -99,4 +99,5 @@ $ExampleForumCategory = "Példa fórum kategória";
 $ExampleForum = "Példa fórum";
 $ExampleThread = "Példa szál";
 $ExampleThreadContent = "Példa tartalom";
+$IntroductionWiki = "A Wiki szó a WikiWikiWeb rövidítése. a WikiWiki szó Havaii eredet&#369;, azt jelenti, hogy \"gyorsan\".  A wiki oldalakat az emberek közösen írhatják, szerkeszthetik. Ha valaki valamit rosszul tud, más kijavíthatja. Mások újabb részletekkel egészíthetik azt ki. Ezért az oldal tartalma id&#337;vel egyre jobb és jobb lehet.";
 ?>

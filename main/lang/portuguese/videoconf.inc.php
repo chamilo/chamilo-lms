@@ -23,7 +23,6 @@ $CreateNewPoll = "Criar uma nova sondagem para esta sala";
 $Question = "Questão:";
 $PollType = "Tipo de sondagem:";
 $Create = "Criar";
-$Cancel = "Anular";
 $InfoConnectedUsersGetNotifiedOfThisPoll = "Informação: todos os utilizadores conectados nesta sala obterão uma notificação desta nova sondagem.";
 $YesNo = "Sim/Não";
 $Numeric1To10 = "Numérica 1-10";

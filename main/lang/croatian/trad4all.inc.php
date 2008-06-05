@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$Title = "Naslov";
+$By = "Od";
 $UsersOnline = "Aktivnih korisnika";
 $Remove = "Ukloni";
 $Description = "Opis";
@@ -25,6 +27,21 @@ $TheListIsEmpty = "Popis prazan.";
 $langCourseCreate = "Izradi okruženje kolegija";
 $langTodo = "U&#269;initi";
 $UserName = "Korisni&#269;ko ime ";
+$Hide = "Sakrij";
+$langArchive = "Arhiva";
+$langCourseCode = "Šifra kolegija";
+$langNoDescription = "Bez opisa";
+$langOfficialCode = "Službena šifra";
+$FirstName = "Ime";
+$LastName = "Prezime";
+$langEmail = "Elektroni&#269;ka pošta";
+$UploadFile = "Prijenos datoteke";
+$Code = "Šifra";
+$Update = "Ažuriraj";
+$Back = "Nazad";
+$AdvancedSearch = "Napredno pretraživanje";
+$Open = "Otvori";
+$TrueFalse = "To&#269;no / Neto&#269;no";
 $iso639_2_code = "HR";
 $iso639_1_code = "HR";
 $charset = "iso-1250";
@@ -118,6 +135,7 @@ $email = "elektroni&#269;ka pošta";
 $langCourseCodeAlreadyExists = "Žao nam je, ali ta je šifra kolegija ve&#263; u uporabi. Molimo odaberite drugu.";
 $Statistics = "Statistika";
 $langPrevious = "prethodni";
+$DestDirectoryDoesntExist = "Odabrana mapa ne postoji";
 $Courses = "kolegiji";
 $In = "u";
 $langShowAll = "Prikaži sve";
@@ -273,4 +291,18 @@ $EndTimeWindow = "Završi";
 $AccessNotAllowed = "Pristup ovoj stranici nije dopušten";
 $InThisCourse = "U ovom kolegiju";
 $ThisFieldIsRequired = "Obvezno polje";
+$ViewRight = "Pogled";
+$EditRight = "Uredi";
+$DeleteRight = "Izbriši";
+$FileUpload = "Prijenos datoteke";
+$Uploading = "U&#269;itavanje....";
+$File_upload = "Prijenos datoteke";
+$Unknown = "Nepoznat";
+$Course = "Kolegij";
+$FilesUpload = "dokumenti";
+$FileUpload = "dokument";
+$UserSex = "Spol";
+$GroupWiki = "Wiki";
+$ExportToPDF = "Prenesi datoteku u formatu PDF";
+$BackToPreviousPage = "Povratak na prethodnu stranicu";
 ?>

@@ -12,5 +12,4 @@ $langAddCat  = "agregar categoría";
 $langAdd  = "Agregar";
 $langValid  = "Validar";
 $langBackAndForget  = "Volver y descartar";
-$Content = "Contenido";
 ?>

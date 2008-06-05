@@ -430,6 +430,7 @@ $SessionFuture = "Ej påbörjat";
 $DateFormatLongWithoutDay = "%d %B %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Mappfel: Skapa en mapp med namn <i>images</i> i dokumentverktyget så att bilder kan uppladdas till den mappen";
 $UsersConnectedToMySessions = "Visa alla användare kopplade till mina perioder";
+$Category = "Kategori";
 $DearUser = "Kära användare";
 $ResetLink = "Klicka här för att förnya lösenordet";
 $VisibilityChanged = "Synligheten har ändrats";
@@ -468,4 +469,5 @@ $MinDays = "dagar";
 $MinHours = "timmar";
 $MinMinutes = "minuter";
 $HomeDirectory = "hem";
+$Course = "Kurs";
 ?>

@@ -41,8 +41,7 @@ $langCsvExplain = "Il file deve avere la struttura: <blockquote><pre> <b>URL</b>
 $langLinkUpdated = "Il collegamento è stato aggiornato";
 $langAll_Link_Deleted = "Il collegamento è stato eliminato";
 $langOnHomepage = "Mostra il collegamento sulla pagina iniziale";
-$langShowLinkOnHomepage = "Mosta il collegamento come nuova voce sulla pagina iniziale del corso";
+$langShowLinkOnHomepage = "Mostra il collegamento come nuova voce sulla pagina iniziale del corso";
 $langCsvImport = "Importa un file .csv";
-$Category = "Categoria";
 $General = "Generale";
 ?>

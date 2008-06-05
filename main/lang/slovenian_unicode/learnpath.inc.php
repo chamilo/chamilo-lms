@@ -153,7 +153,6 @@ $FirstPosition = "Na prvo mesto";
 $NewQuiz = "Nova vaja";
 $CreateTheForum = "Dodaj forum";
 $AddLpIntro = "<strong>Dobrodošli</strong> v Dokeos avtorsko orodje za kreiranje učnih poti.<br /> Orodje omogoča kreiranje učnih poti korak za korakom. Struktura učne je ves čas vidna in dosegljiva v meniju na levi strani.";
-$AddLpIntro = "<strong>Dobrodošli</strong> v Dokeos avtorsko orodje za kreiranje učnih poti.<br /> Orodje omogoča kreiranje učnih poti korak za korakom. Struktura učne je ves čas vidna in dosegljiva v meniju na levi strani.";
 $AddLpToStart = "Za začetek, vnesite naslov vaše učne poti";
 $CreateTheLink = "Uvozi povezavo";
 $MoveCurrentLink = "Premakni trenutno povezavo";

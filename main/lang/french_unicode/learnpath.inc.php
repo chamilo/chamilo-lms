@@ -152,7 +152,6 @@ $langNoItemsInLp = "Il n\'y a pas d\'étapes dans ce parcours pour le moment.  C
 $FirstPosition = "Première position";
 $NewQuiz = "Nouveau test";
 $CreateTheForum = "Ajouter le forum";
-$AddLpIntro = "<strong>Binevenue</strong> dans ";
 $AddLpIntro = "<strong>Bienvenue</strong> dans l\'outil de création de parcours de Dokeos.<br />Vous pourrez créer votre parcours étape par étape. La structure de votre parcours apparaîtra dans le menu sur la gauche";
 $AddLpToStart = "Pour commencer, choisissez un titre pour votre parcours";
 $CreateTheLink = "Importer un lien";

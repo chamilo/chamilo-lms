@@ -101,4 +101,7 @@ $QuizEmailAlertDeactivate = "Desactiveer waarschuwing via email wanneer een gebr
 $AllowUserImageForum = "Foto gebruiker in forum";
 $AllowUserImageForumActivate = "Foto gebruiker in forum weergeven";
 $AllowUserImageForumDeactivate = "Foto gebruiker in forum verbergen";
+$AllowLearningPathTheme = "stijlblad voor leerpad toelaten";
+$AllowLearningPathThemeAllow = "Toegelaten";
+$AllowLearningPathThemeDisallow = "Niet toegelaten";
 ?>

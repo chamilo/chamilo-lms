@@ -301,5 +301,6 @@ $year = "rok";
 $Day = "dzie&#324;";
 $Days = "Dni";
 $EmailText = "tre&#347;&#263; listu";
+$Category = "Kategoria";
 $MainNavigation = "Menu g&#322;ówne";
 ?>

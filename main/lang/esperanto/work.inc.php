@@ -30,5 +30,8 @@ $langCurrentDir = "aktuala dosierujo ";
 $UploadADocument = "al&#349;uti dokumenton";
 $EditToolOptions = "&#349;an&#285;i modulajn opciojn ";
 $DocumentDeleted = "La dokumento forigitas.";
+$SendMailBody = "Uzulo enpo&#349;tigis dokumenton en la publikigilon de via kurso";
+$DirDelete = "Forigi dosierujon";
+$ValidateChanges = "Validigi &#349;an&#285;ojn";
 $FolderUpdated = "Dosierujo &#285;isdatigitas.";
 ?>

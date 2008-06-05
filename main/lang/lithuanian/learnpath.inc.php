@@ -153,7 +153,6 @@ $FirstPosition = "Pirma pozicija";
 $NewQuiz = "Naujas testas";
 $CreateTheForum = "Įdėti forumą";
 $AddLpIntro = "Čia žingsnis po žingsnio galite sukurti teorinę medžiagą jūsų kurse.";
-$AddLpIntro = "Čia žingsnis po žingsnio galite sukurti teorinę medžiagą jūsų kurse.";
 $AddLpToStart = "Įrašykite antraštę";
 $CreateTheLink = "Importuoti nuorodą";
 $MoveCurrentLink = "Perkelti šią nuorodą";

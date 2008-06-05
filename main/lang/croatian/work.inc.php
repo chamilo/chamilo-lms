@@ -29,4 +29,8 @@ $langDirCr = "Izradi mapu";
 $langCurrentDir = "trenutna mapa";
 $UploadADocument = "U&#269;itaj dokument";
 $EditToolOptions = "Uredi mogu&#263;nosti alata";
+$DocumentDeleted = "Dokument izbrisan";
+$DirDelete = "Izbriši mapu";
+$ValidateChanges = "Potvrdi izmjene";
+$FolderUpdated = "Mapa je ažurirana";
 ?>

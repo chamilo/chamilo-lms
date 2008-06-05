@@ -9,7 +9,6 @@ $Portrait = "Stående";
 $Landscape = "Liggande";
 $DeleteAll = "Ta bort alla";
 $ViewResult = "Visa resultat";
-$Course = "Kurs";
 $AddStudent = "Lägg till användare";
 $Location = "Plats";
 $FileType = "Filtyp";

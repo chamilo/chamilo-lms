@@ -12,7 +12,6 @@ $langAddCat  = "afegeix categoria";
 $langAdd  = "Afegeix";
 $langValid  = "Valida";
 $langBackAndForget  = "Retrocededix i oblida";
-$Content = "Contingut";
 $CourseDescriptionUpdated = "La descripció dels curs ha estat actualitzada";
 $CourseDescriptionDeleted = "La descripció del curs ha estat esborrada";
 $CourseDescriptionIntro = "Per crear una descripció del curs, cliqueu sobre un apartat i ompliu els camps del formulari associat. <br> <br> Cliqueu desprès a Validar i ompliu un altre apartat.";

@@ -23,7 +23,6 @@ $CreateNewPoll = "انشاء استبيان جديد لهذه الغرفة";
 $Question = "سؤال:";
 $PollType = "نوع الاستبيان";
 $Create = "إنشاء";
-$Cancel = "إلغاء";
 $InfoConnectedUsersGetNotifiedOfThisPoll = "معلومة: كل مستخدم متصل في هذه الغرفة سيحصل على اشعار لهذه الاستبانة الجديدة .";
 $YesNo = "نعم / لا";
 $Numeric1To10 = "الأعداد واحد الى عشرة";

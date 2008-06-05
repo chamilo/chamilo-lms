@@ -43,6 +43,5 @@ $langAll_Link_Deleted = "Link apagado com sucesso";
 $langOnHomepage = "Na homepage";
 $langShowLinkOnHomepage = "Mostrar esse link como um ícone na homepage do curso";
 $langCsvImport = "Importação CSV";
-$Category = "Pasta/Categoria";
 $General = "Geral";
 ?>

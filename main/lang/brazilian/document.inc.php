@@ -110,7 +110,6 @@ $ViewSlideshow = "Visualizar imagens em slideshow";
 $Options = "Opções";
 $WelcomeOogieConverter = "Bem-vindo ao conversor Oogie PowerPoint.<ul type=\\\"1\\\"><li> Pesquise em seus computador e selecione um arquivo .ppt ou .odp<li>Carregue-o para Oogie. Transforme numa Rota de Aprendizagem Scorm.<li>Depois pode-se acrescentar comentários em áudio para cada tela e inserir exercícios para avaliação.";
 $ConvertToLP = "Converter para Rota de Aprendizagem";
-$Content = "Conteúdo";
 $Validate = "Validar";
 $AdvancedSettings = "Configurações avançadas";
 $AdvancedSettings = "Configurações avançadas";

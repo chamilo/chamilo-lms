@@ -153,4 +153,8 @@ $UsersUnsubscribed = "De geselecteerde gebruikers zijn uitgeschreven uit de curs
 $SystemUnableToSendEmailContact = "Het systeem kon het email contact niet verzenden";
 $OpenIDCouldNotBeFoundPleaseRegister = "Deze OpenID bestaat niet in onze database. Gelieve u te registreren voor een nieuwe account. Bent u bij ons reeds geregistreerd, gelieve dan uw profiel aan te passen, en deze OpenID toe te voegen";
 $UsernameMaxXCharacters = "De gebruikersnaam mag slechts maximum %s tekens lang zijn ";
+$PictureUploaded = "Uw afbeelding werd geüploaded";
+$ProductionUploaded = "Het bestand van uw productie is geüploaded.";
+$FolderUpdated = "De folder werd geüpdated.";
+$UsersRegistered = "Deze gebruikers werden ingeschreven in de cursus";
 ?>

@@ -53,7 +53,6 @@ $InViMod = "Catégorie rendue invisible";
 $ViMod = "Catégorie rendue visible";
 $ViewResult = "Visualisation des résultats";
 $NoUser = "Aucun utilisateur";
-$Course = "Cours";
 $NoResultsInEvaluation = "Aucun résultat pour cette évaluation pour le moment";
 $AddStudent = "Ajout utilisateurs";
 $ImportResult = "Importer des résultats";
@@ -102,6 +101,5 @@ $ResultsPerUser = "Résultats par utilisateur";
 $TotalUser = "Total de l\'utilisateur";
 $AverageTotal = "Total moyen";
 $Evaluation = "Évaluation";
-$Category = "Catégorie";
 $EvaluationAverage = "Moyenne de l\'évaluation";
 ?>

@@ -23,7 +23,6 @@ $CreateNewPoll = "Neue Umfrage für diesen Raum anlegen";
 $Question = "Frage:";
 $PollType = "Umfragetyp:";
 $Create = "Anlegen";
-$Cancel = "Abbrechen";
 $InfoConnectedUsersGetNotifiedOfThisPoll = "Information: Jeder verbundene Benutzer in diesem Raum wird eine Benachrichtigung zu dieser neuen Umfrage erhalten";
 $YesNo = "Ja/Nein";
 $Numeric1To10 = "Numerisch 1-10";

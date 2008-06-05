@@ -53,7 +53,6 @@ $InViMod = "Category made invisible";
 $ViMod = "Category made visible";
 $ViewResult = "View results";
 $NoUser = "No user";
-$Course = "Course";
 $NoResultsInEvaluation = "No results in evaluation for now";
 $AddStudent = "Add users";
 $ImportResult = "Import result set";
@@ -102,6 +101,5 @@ $ResultsPerUser = "Results per user";
 $TotalUser = "Total for user";
 $AverageTotal = "Average total";
 $Evaluation = "Evaluation";
-$Category = "Category";
 $EvaluationAverage = "Evaluation average";
 ?>

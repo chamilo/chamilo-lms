@@ -214,4 +214,7 @@ $NoUsersInCourseTracking = "Tu boste našli sledenje za uporabnike, vpisane v ta
 $AvgTimeSpentInTheCourse = "Povprečje časa porabljenega v tečaju";
 $RemindInactiveUser = "Opozori neaktivne uporabnike";
 $FirstLogin = "Prva povezava";
+$AccessDetails = "Podrobnosti dostopa";
+$DateAndTimeOfAccess = "Datum in čas dostopa";
+$Duration = "Trajanje";
 ?>

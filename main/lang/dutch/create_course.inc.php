@@ -99,4 +99,5 @@ $ExampleForumCategory = "Voorbeeld forumcategorie";
 $ExampleForum = "Voorbeeldforum";
 $ExampleThread = "Voorbeelddiscussie";
 $ExampleThreadContent = "Voorbeeldinhoud";
+$IntroductionWiki = "Het woord Wiki is een afkorting van WikiWikiWeb, een woord dat komt van het Hawaiaans en snel of snelheid betekent. In een wiki kunnen mensen samen aan paginas schrijven. Als een bepaald iemand iets verkeerds schrijft dan kan een andere persoon dit corrigeren en eventueel ook iets nieuws toevoegen aan de pagina. Hierdoor wordt de inhoud telkens beter als er iets gewijzigd wordt. ";
 ?>

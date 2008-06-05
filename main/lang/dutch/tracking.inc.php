@@ -214,4 +214,7 @@ $NoUsersInCourseTracking = "Hier vind je de opvolging voor jouw studenten, inges
 $AvgTimeSpentInTheCourse = "Gemiddeld gespendeerde tijd in een cursus";
 $RemindInactiveUser = "Inactieve gebruiker herinneren";
 $FirstLogin = "Eerste login";
+$AccessDetails = "Toegangsdetails";
+$DateAndTimeOfAccess = "Datum en tijd van toegang";
+$Duration = "Duur";
 ?>

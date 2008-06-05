@@ -43,5 +43,5 @@ $langAll_Link_Deleted = "Link is verwijderd.";
 $langOnHomepage = "Toon link op modulehoofdpagina";
 $langShowLinkOnHomepage = "Toon deze link als een icoon op de hoofdpagina van de module";
 $langCsvImport = "CSV-bestand importeren";
-$Category = "Categorie";
+$General = "Algemeen";
 ?>

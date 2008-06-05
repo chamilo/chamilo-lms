@@ -165,7 +165,6 @@ $Languages = "Jazyky";
 $Privacy = "Súkromie";
 $OpenInNewWindow = "Otvori&#357; v novom okne";
 $Plugins = "Pluginy";
-$AdvancedSearch = "rozšírené vyhladávanie";
 $CourseUsage = "Štatistika kurzu";
 $NoClassesForThisUser = "Tento užívate&#318; nie je zaradený v žiadnej triede.";
 $Learnpath = "U&#269;ebná osnova";
@@ -186,7 +185,6 @@ $DropboxMaxFilesizeTitle = "Schránka na dokumenty: Maximálna ve&#318;kos&#357; d
 $DropboxAllowJustUploadComment = "Umožní u&#269;itelom a študentom uloži&#357; dokumenty do svojho vlastného prie&#269;inku na ukladanie súborov bez toho aby ho videli ostatný (=posla&#357; súbor sám sebe)";
 $PleaseEnterLinkName = "Prosím zadajte názov odkazu";
 $LoginAs = "Prihlási&#357; sa ako";
-$CampusHomepage = "Domovská stránka portálu";
 $langphone = "Telefón";
 $NextStep = "&#270;alší krok";
 $Confirm = "Potvrdi&#357;";

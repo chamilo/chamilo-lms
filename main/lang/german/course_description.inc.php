@@ -12,7 +12,6 @@ $langAddCat  = "Kategorie hinzufügen";
 $langAdd  = "hinzufügen";
 $langValid  = "gültig";
 $langBackAndForget  = "Zurück und vergessen";
-$Content = "Inhalt";
 $CourseDescriptionUpdated = "Die Kursbeschreibung wurde aktualisiert";
 $CourseDescriptionDeleted = "Die Kursbeschreibung wurde gelöscht";
 $CourseDescriptionIntro = "Um eine Kursbeschreibung zu erstellen, klicken Sie auf ein Thema oder füllen Sie das richtige Formular Feld aus.<br/><br/>Klicken Sie dann OK und füllen ein weiteres Thema aus.";

@@ -53,4 +53,16 @@ $CopiedAsAnnouncement = "Átmásolás felhívásként";
 $NewAnnouncement = "Új felhívás";
 $AddAnnouncement = "Hozzáadás felhívásként";
 $UpcomingEvent = "Következ&#337; esemény";
+$ListView = "Megtekintés listaként";
+$RepeatedEvent = "Megismétl&#337;dött esemény";
+$RepeatType = "Ismétl&#337;dés típusa";
+$RepeatDaily = "Naponta";
+$RepeatWeekly = "Hetente";
+$RepeatMonthlyByDate = "Havonta, adott dátumkor";
+$RepeatMonthlyByDay = "Havonta, adott napon";
+$RepeatMonthlyByDayR = "Havonta adott napon, korlátozva";
+$RepeatYearly = "Évente";
+$RepeatEnd = "Ismétl&#337;dés és dátum";
+$RepeatedEventViewOriginalEvent = "Eredeti esemény megtekintése";
+$ICalFileImport = "iCal/ics állomány importálása";
 ?>

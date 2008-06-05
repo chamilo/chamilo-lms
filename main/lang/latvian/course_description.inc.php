@@ -12,7 +12,6 @@ $langAddCat  = "pievienot noda&#316;ai";
 $langAdd  = "Pievienot";
 $langValid  = "Der&#299;gs";
 $langBackAndForget  = "Atpaka&#316; un dz&#275;st";
-$Content = "Saturs";
 $CourseDescriptionUpdated = "Kursa apraksts papildin&#257;ts";
 $CourseDescriptionDeleted = "Kursa apraksts izdz&#275;sts";
 ?>

@@ -282,7 +282,6 @@ $LinkName = "Tekst linka";
 $LinkURL = "URL linka";
 $OpenInNewWindow = "Otvori u novom prozoru";
 $Plugins = "Plugins";
-$AdvancedSearch = "Napredno pretraživanje";
 $Info = "Informacije";
 $UserAdded = "Korisnik je dodat";
 $NoSearchResults = "Nema takvih rezultata";

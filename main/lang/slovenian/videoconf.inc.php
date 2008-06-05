@@ -23,7 +23,6 @@ $CreateNewPoll = "Kreiraj novo glasovanje za to sobo";
 $Question = "Vprašanje:";
 $PollType = "Vrsta glasovanja:";
 $Create = "Ustvari";
-$Cancel = "Preklièi";
 $InfoConnectedUsersGetNotifiedOfThisPoll = "Informacija : Vsak povezan uporabnik v tej sobi bo dobil obvestilo o novem glasovanju.";
 $YesNo = "Da/Ne";
 $Numeric1To10 = "Numerièno 1-10";

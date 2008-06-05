@@ -152,7 +152,6 @@ $langNoItemsInLp = "Trenutni ni elementov v tekoèi uèni poti. Klinite \"Napredno
 $FirstPosition = "Na prvo mesto";
 $NewQuiz = "Nova vaja";
 $CreateTheForum = "Dodaj forum";
-$AddLpIntro = "<strong>Dobrodošli</strong> v Dokeos avtorsko orodje za kreiranje uènih poti";
 $AddLpIntro = "<strong>Dobrodošli</strong> v Dokeos avtorsko orodje za kreiranje uènih poti.<br /> Orodje omogoèa kreiranje uènih poti korak za korakom. Struktura uène je ves èas vidna in dosegljiva v meniju na levi strani.";
 $AddLpToStart = "Za zaèetek, vnesite naslov vaše uène poti";
 $CreateTheLink = "Uvozi povezavo";

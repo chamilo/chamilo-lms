@@ -12,7 +12,6 @@ $langAddCat  = "Tilføj kategori";
 $langAdd  = "Tilføj";
 $langValid  = "Godkend";
 $langBackAndForget  = "Glem og tilbage";
-$Content = "Indhold";
 $CourseDescriptionUpdated = "Kursusbeskrivelsen er blevet ændret";
 $CourseDescriptionDeleted = "Kursusbeskrivelsen af slettet";
 $CourseDescriptionIntro = "For at oprette en kursusbeskrivelse skal du klikke på en overskrift/et emne og udfylde feltet med indhold. <br><br> Klik efterfølgende på OK og gå videre til næste overskrift/emne";

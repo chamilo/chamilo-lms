@@ -12,7 +12,6 @@ $langAddCat  = "kategori ekle";
 $langAdd  = "Ekle";
 $langValid  = "Geçerli";
 $langBackAndForget  = "Ýptal";
-$Content = "&#304;çerik";
 $CourseDescriptionUpdated = "Ders tan&#305;m&#305; güncellendi";
 $CourseDescriptionDeleted = "Ders tan&#305;m&#305; silindi";
 $CourseDescriptionIntro = "Bir ders tan&#305;m&#305; olu&#351;turmak için ba&#351;l&#305;&#287;a t&#305;klay&#305;p do&#287;ru form alan&#305;n&#305; doldurun.<br><br> Daha sonra Tamam\'a t&#305;klay&#305;p ba&#351;ka bir ba&#351;l&#305;&#287;&#305; doldurun.";

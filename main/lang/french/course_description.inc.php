@@ -12,7 +12,6 @@ $langAddCat  = "Ajouter une catégorie";
 $langAdd  = "Ajouter";
 $langValid  = "Enregistrer";
 $langBackAndForget  = "Abandonner";
-$Content = "Contenu";
 $CourseDescriptionUpdated = "La description  a été mise à jour";
 $CourseDescriptionDeleted = "La description a été supprimée";
 $CourseDescriptionIntro = "Pour créer une description, cliquez sur une rubrique au choix et remplissez le champs du formulaire associé.<br><br>Cliquez ensuite sur Valider et remplissez une autre rubrique de votre choix.";

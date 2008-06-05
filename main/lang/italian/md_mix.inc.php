@@ -14,5 +14,5 @@ $langKwdsInMD = "parole chiave impiegate dei Metadati";
 $langKwdRefs = "Parole chiave di riferimento";
 $langNonCourseKwds = "Parole chiave non del corso";
 $langKwdsUse = "Parole chiave del corso (grassetto = non impiegate)";
-$langTotalMDEs = "Numero titale di metadati immessi:";
+$langTotalMDEs = "Numero totale di metadati immessi:";
 ?>

@@ -431,6 +431,7 @@ $SessionFuture = "Aínda non principiou";
 $DateFormatLongWithoutDay = "%d %B %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Carpeta non válida: por favor cree unha carpeta co nome images na ferramenta documentos, para poder aloxar nela as imaxes que suba";
 $UsersConnectedToMySessions = "Ver todos os usuarios conectados ás miñas sesións";
+$Category = "Categoría";
 $DearUser = "Estimado usuario";
 $YourRegistrationData = "Estes son os seus datos de acceso";
 $ResetLink = "Pulse no seguinte enlace para rexenerar o seu contrasinal";

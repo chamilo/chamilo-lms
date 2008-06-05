@@ -295,7 +295,6 @@ $LinkName = "Text odkazu (Link-u)";
 $LinkURL = "URL odkazu (Link-u)";
 $OpenInNewWindow = "Otev&#345;ít v novém okn&#283;";
 $Plugins = "Dopl&#328;ky";
-$AdvancedSearch = "rozší&#345;ené hledání";
 $Info = "informace";
 $UserAdded = "Uživatel byl p&#345;idán";
 $NoSearchResults = "Žádné výsledky hledání";

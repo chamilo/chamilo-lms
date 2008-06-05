@@ -392,6 +392,7 @@ $SessionFuture = "Not yet begun";
 $DateFormatLongWithoutDay = "%B %d, %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder";
 $UsersConnectedToMySessions = "See all users connected to my sessions";
+$Category = "Category";
 $DearUser = "Dear user";
 $YourRegistrationData = "Your registration data";
 $ResetLink = "Click here to recover your password";

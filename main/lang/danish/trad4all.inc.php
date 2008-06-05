@@ -431,6 +431,7 @@ $SessionFuture = "Endnu ikke begyndt";
 $DateFormatLongWithoutDay = "%B %d, %Y ";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Ugyldig mappe: Opret venligst en mappe med navne images i dit dokumentværktøj. Billeder kan uploades til den mappe.";
 $UsersConnectedToMySessions = "Se alle brugere på mine sessioner";
+$Category = "Kategori";
 $DearUser = "Kære bruger";
 $YourRegistrationData = "Dine tilmeldingsoplysninger";
 $ResetLink = "Klik her for at genskabe dit adgangskode";

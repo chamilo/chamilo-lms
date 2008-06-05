@@ -152,7 +152,6 @@ $langNoItemsInLp = "En este momento no hay items en el itinerario de aprendizaje
 $FirstPosition = "Primera posición";
 $NewQuiz = "Nuevo ejercicio";
 $CreateTheForum = "Añadir el foro";
-$AddLpIntro = "<strong>Bienvenido</strong> a la herramienta de autor de Dokeos: Itinerarios de aprendizaje.";
 $AddLpIntro = "<strong>Bienvenido</strong> a la herramienta de autor de Dokeos: Itinerarios de aprendizaje.<br />Podrá crear su itinerario de aprendizaje paso a paso. La estructura de su itinerario de aprendizaje aparecerá en el menú izquierdo.";
 $AddLpToStart = "Para comenzar, de un título a su itinerario de aprendizaje";
 $CreateTheLink = "Importar un enlace";

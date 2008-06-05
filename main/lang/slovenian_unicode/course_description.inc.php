@@ -12,7 +12,6 @@ $langAddCat  = "Dodaj kategorijo";
 $langAdd  = "Dodaj";
 $langValid  = "Uveljavi";
 $langBackAndForget  = "Prekliči";
-$Content = "Vsebina";
 $CourseDescriptionUpdated = "Opis tečaja je bil ažuriran";
 $CourseDescriptionDeleted = "Opis tečaja je bil odstranjen";
 $CourseDescriptionIntro = "Da bi opisali tečaj, kliknite na ustrezen naslov in vnesite želene podatke v vnosna polja.<br /><br />Zaključite s klikom na OK, nato ponovite za naslednji želen naslov.";

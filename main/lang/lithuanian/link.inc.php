@@ -43,5 +43,4 @@ $langAll_Link_Deleted = "Nuoroda ištrinta";
 $langOnHomepage = "Rodyti namų puslapio nuorodą";
 $langShowLinkOnHomepage = "Rodyti šią nuorodą kaip ikonėlę kurso namų puslapyje";
 $langCsvImport = "CSV failo importas";
-$Category = "Category";
 ?>

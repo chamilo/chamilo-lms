@@ -23,7 +23,6 @@ $CreateNewPoll = "Skapa ny omröstning för rummet";
 $Question = "Fråga:";
 $PollType = "Omröstningstyp:";
 $Create = "Skapa";
-$Cancel = "Avbryt";
 $InfoConnectedUsersGetNotifiedOfThisPoll = "Info: Alla uppkopplade användare i rummet får ett meddelande om den nya omröstningen.";
 $YesNo = "Ja/Nej";
 $Numeric1To10 = "Numerisk 1-10";

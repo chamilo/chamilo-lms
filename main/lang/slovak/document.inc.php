@@ -41,5 +41,4 @@ $UplRenameLong = "Prepísa&#357; už uložený súbor, ak existuje";
 $UploadTo = "Nahra&#357; do";
 $fileModified = "Súbor bol modifikovaný";
 $Options = "Možnosti";
-$Content = "Obsah";
 ?>

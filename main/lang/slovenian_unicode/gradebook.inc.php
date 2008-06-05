@@ -53,7 +53,6 @@ $InViMod = "Kategorija je vidna";
 $ViMod = "Kategorija je nevidna";
 $ViewResult = "Poglej rezultate";
 $NoUser = "Ni tečajnikov";
-$Course = "Tečaj";
 $NoResultsInEvaluation = "Trenutno v ocenjevanju ni rezultatov";
 $AddStudent = "Dodaj tečajnike";
 $ImportResult = "Uvozi rezultate";
@@ -102,6 +101,5 @@ $ResultsPerUser = "Rezultati po uporabnikih";
 $TotalUser = "Zbir za uporabnika";
 $AverageTotal = "Povprečje zbirov";
 $Evaluation = "Ocenjevanje";
-$Category = "Kategorija";
 $EvaluationAverage = "Povprečje ocenjevanja";
 ?>

@@ -152,7 +152,6 @@ $langNoItemsInLp = "There are no items in the learning path for this moment. Cli
 $FirstPosition = "First position";
 $NewQuiz = "New test";
 $CreateTheForum = "Add the forum";
-$AddLpIntro = "<strong>Welcome</strong> to Dokeos Learning path authoring tool";
 $AddLpIntro = "<strong>Welcome</strong> to Dokeos Learning path authoring tool.<br />You will be able to create your learning path step by step. The structure of your learning path will appear in a menu on the left.";
 $AddLpToStart = "To start, give a title to your learning path";
 $CreateTheLink = "Import a link";

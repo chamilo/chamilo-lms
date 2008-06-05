@@ -311,4 +311,6 @@ $InCourse = "en la kurso";
 $UserOnlineListSession = "&#348;altitaj uzantoj - Sesio";
 $From = "de";
 $To = "al";
+$Category = "Kategorio";
+$UserAge = "A&#285;o";
 ?>

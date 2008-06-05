@@ -12,4 +12,6 @@ $langAddCat  = "Dodaj kategoriju";
 $langAdd  = "Dodaj";
 $langValid  = "Prihvati";
 $langBackAndForget  = "Odustani";
+$CourseDescriptionUpdated = "Opis kolegija je ažuriran";
+$CourseDescriptionDeleted = "Opis kolegija je izbrisan";
 ?>

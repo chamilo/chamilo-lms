@@ -43,5 +43,4 @@ $langAll_Link_Deleted = "鏈接已刪除";
 $langOnHomepage = "主頁中顯示";
 $langShowLinkOnHomepage = "在課程主頁將鏈接顯示為一個圖示";
 $langCsvImport = "匯入-CSV";
-$Category = "分類";
 ?>

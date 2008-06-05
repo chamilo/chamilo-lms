@@ -1,6 +1,25 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$Wiki = "Wiki";
+$StartPage = "Startpagina";
+$EditThisPage = "Deze pagina wijzigen";
+$ShowPageHistory = "Geschiedenis";
+$RecentChanges = "Recenten aanpassingen";
+$AllPages = "Alle paginas";
+$AddNew = "Nieuwe pagina toevoegen";
+$ChangesStored = "Uw wijzigingen zijn opgeslagen.";
+$NewWikiSaved = "De nieuwe wiki startpagina is bewaard. U kunt het bekijken op: ";
+$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"\'.api_get_path(WEB_IMG_PATH).\'wiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Mr. Dokeos\" /></p> <p align=\"center\">Om te beginnen wijzig deze pagina</p>";
+$CourseWikiPages = "Wiki paginas van de cursus";
+$GroupWikiPages = "Wiki paginas van de groep";
+$NoWikiPageTitle = "Uw wijzigingen werde bewaard. U dient nog een titel te geven aan de pagina";
+$WikiPageTitleExist = "Deze paginatitel bestaad reeds, om de inhoud te wijzigen klik hier: ";
+$WikiDiffAddedLine = "De lijn werd toegevoegd";
+$WikiDiffDeletedLine = "De lijn werd verwijderd";
+$WikiDiffMovedLine = "De lijn werd verplaatst";
+$WikiDiffUnchangedLine = "Lijn zonder wijzigingen";
+$DifferencesNew = "wijzigingen in versie";
 $DifferencesOld = "oude versie van";
 $Differences = "Verschillen";
 $MostRecentVersion = "Laatst geselecteerde versie";

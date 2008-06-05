@@ -23,7 +23,6 @@ $CreateNewPoll = "Create a new poll for this room";
 $Question = "Question:";
 $PollType = "Polltype:";
 $Create = "Create";
-$Cancel = "Cancel";
 $InfoConnectedUsersGetNotifiedOfThisPoll = "Info: Every connected User in this room will get a notification of this new Poll.";
 $YesNo = "Yes/No";
 $Numeric1To10 = "Numeric 1-10";

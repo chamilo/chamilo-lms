@@ -44,9 +44,12 @@ $AddPersonalCalendarItem = "Dodaj osobni element u raspored";
 $ModifyPersonalCalendarItem = "Izmijeni osobni element u rasporedu";
 $PeronalAgendaItemAdded = "Vaš osobni elemnt uspješno je dodan u raspored";
 $PeronalAgendaItemEdited = "Vaš osobni element uspješno je izmijenjen u rasporedu";
-$PeronalAgendaItemDeleted = "Vaš osobni elemnt uspješno je izbrisan iz rasporeda";
+$PeronalAgendaItemDeleted = "Vaš osobni element uspješno je izbrisan iz rasporeda";
 $ViewPersonalItem = "Prikaži osobne elemente";
 $UserGroupFilter = "Filtar prema grupama/korisnicima";
 $ShowAll = "Prikaži sve";
 $Print = "Tiskanje";
+$RepeatDaily = "Dnevno";
+$RepeatWeekly = "Tjedno";
+$RepeatYearly = "Godišnje";
 ?>

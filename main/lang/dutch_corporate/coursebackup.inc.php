@@ -44,4 +44,6 @@ $langCreateBackupInfo = "Creëer een back-upbestand van deze module. U kan zelf a
 $ToolIntro = "Introductietekst";
 $UploadError = "Het uploaden is mislukt. Controleer de maximum bestandsgrootte en de folderrechten.";
 $DocumentsWillBeAddedToo = "Documenten worden ook toegevoegd";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Als u een leerpad dat een oefening bevat wenst te exporteren dan dient u ervoor te zorgen dat deze oefeningen ook in de export zitten. U dient deze dus te selecteren in de lijst met oefeningen";
+$ArchivesDirectoryNotWriteableContactAdmin = "De archievenfolder die door deze functionaliteit gebruikt word is niet schrijfbaar. Gelieve contact op te nemen met uw platform beheerder. ";
 ?>

@@ -325,6 +325,7 @@ $Clicks = "按下";
 $SearchResults = "搜尋結果 ";
 $SessionFuture = "尚未開始";
 $UsersConnectedToMySessions = "檢視所有連結到我的學期的使用者";
+$Category = "類別";
 $DearUser = "親愛的使用者";
 $YourRegistrationData = "你的註冊資料";
 $ResetLink = "按這裏取回密碼";

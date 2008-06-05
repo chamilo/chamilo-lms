@@ -153,7 +153,6 @@ $FirstPosition = "Première position";
 $NewQuiz = "Nouveau test";
 $CreateTheForum = "Ajouter le forum";
 $AddLpIntro = "<strong>Bienvenue</strong> dans l\'outil auteur de Dokeos.<br />Vous pourrez créer votre cours étape par étape. La table des matières de votre cours apparaîtra dans le menu de gauche";
-$AddLpIntro = "<strong>Bienvenue</strong> dans l\'outil auteur de Dokeos.<br />Vous pourrez créer votre cours étape par étape. La table des matières de votre cours apparaîtra dans le menu de gauche";
 $AddLpToStart = "Pour commencer, choisissez un nom pour votre cours";
 $CreateTheLink = "Importer un lien";
 $MoveCurrentLink = "Déplacer le lien";

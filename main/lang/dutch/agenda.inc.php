@@ -52,4 +52,17 @@ $Print = "Afdrukken";
 $CopiedAsAnnouncement = "Gekopieerd als aankondiging";
 $NewAnnouncement = "Nieuwe aankondiging";
 $AddAnnouncement = "Toevoegen als aankondiging";
+$UpcomingEvent = "Komende gebeurtenis";
+$ListView = "Als lijst weergeven";
+$RepeatedEvent = "Herhaalde gebeurtenis";
+$RepeatType = "Herhaaltype";
+$RepeatDaily = "Dagelijks";
+$RepeatWeekly = "Wekelijks";
+$RepeatMonthlyByDate = "Maandelijks, op datum";
+$RepeatMonthlyByDay = "Maandelijks, per dag";
+$RepeatMonthlyByDayR = "Maandelijks, per dag, beperkt";
+$RepeatYearly = "Jaarlijks";
+$RepeatEnd = "Einddatum voor de herhaling";
+$RepeatedEventViewOriginalEvent = "Bekijk de originele gebeurtenis";
+$ICalFileImport = "Importeer iCal/ics bestand";
 ?>

@@ -152,7 +152,6 @@ $langNoItemsInLp = "Neste momento non existen elementos na rota de aprendizaxe. 
 $FirstPosition = "Primeira posición";
 $NewQuiz = "Novo cuestionario";
 $CreateTheForum = "Engadir o foro";
-$AddLpIntro = "<strong>Reciba a benvida</strong> á ferramenta de creación de Rotas de Aprendizaxe de Dokeos";
 $AddLpIntro = "<strong>Reciba a benvida</strong> á ferramenta de creación de Rotas de Aprendizaxe de Dokeos.<br />Poderá crear a súa rota de aprendizaxe paso a paso. A estrutura da súa rota de aprendizaxe mostraráse nun menú á esquerda.";
 $AddLpToStart = "Para comezar, delle un título á rota de aprendizaxe";
 $CreateTheLink = "Importar unha ligazón";

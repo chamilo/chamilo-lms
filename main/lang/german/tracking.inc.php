@@ -214,4 +214,7 @@ $NoUsersInCourseTracking = "Hier finden sich die Informationen für Ihre Studente
 $AvgTimeSpentInTheCourse = "Durchschnittliche Zeit, die in einem Kurs verbracht wurde";
 $RemindInactiveUser = "Erinnerung an inaktiven Benutzer";
 $FirstLogin = "Erstes Login";
+$AccessDetails = "Details zum Zugang";
+$DateAndTimeOfAccess = "Fatum und Uhrzeit des Zugangs";
+$Duration = "Dauer";
 ?>

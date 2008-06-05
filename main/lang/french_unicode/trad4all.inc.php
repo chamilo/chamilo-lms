@@ -431,6 +431,7 @@ $SessionFuture = "A venir";
 $DateFormatLongWithoutDay = "%d %B %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Répertoire invalide: Veuillez créer un répertoire nommé \"images\" dans votre outil documents pour que les images puissent y être envoyées";
 $UsersConnectedToMySessions = "Voir les utilisateurs connectés à mes sessions";
+$Category = "Catégorie";
 $DearUser = "Cher utilisateur";
 $YourRegistrationData = "Vos accès au portail";
 $ResetLink = "Cliquez ici pour réinitialiser votre mot de passe";

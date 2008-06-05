@@ -12,5 +12,4 @@ $langAddCat  = "p&#345;idat kategorii";
 $langAdd  = "P&#345;idat";
 $langValid  = "Platný";
 $langBackAndForget  = "Zp&#283;t a zapomenout";
-$Content = "Obsah";
 ?>

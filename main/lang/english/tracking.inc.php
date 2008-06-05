@@ -214,4 +214,7 @@ $NoUsersInCourseTracking = "Here you will find the tracking for your students su
 $AvgTimeSpentInTheCourse = "Average time spent in course";
 $RemindInactiveUser = "Remind inactive user";
 $FirstLogin = "First connection";
+$AccessDetails = "Access details";
+$DateAndTimeOfAccess = "Date and time of access";
+$Duration = "Duration";
 ?>

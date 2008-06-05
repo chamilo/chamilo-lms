@@ -110,7 +110,6 @@ $ViewSlideshow = "Poglej projekcijo slik";
 $Options = "Opcije";
 $WelcomeOogieConverter = "Dobrodošli v OOgie, pretvornik za datoteke v PowerPoint obliki <ul type=\\\"1\\\"><li>Prebrskajte za datotekami .ppt ali .odp</li><li>Naložite jih v Oogie. Ta jih bo pretvoril v Scorm obliko učne poti.</li><li>Po naložitvi imate možnost vsakemu diapozitivu dodati zvočne (avdio) komentarje, besedilo, oziroma vprašanja za sprotno preverjanje.</li>";
 $ConvertToLP = "Pretvori v Učno pot";
-$Content = "Vsebina";
 $Validate = "Validiraj";
 $AdvancedSettings = "Napredne nastavitve";
 $AdvancedSettings = "Napredne nastavitve";

@@ -432,6 +432,7 @@ $SessionFuture = "لم يبدأ بعد ";
 $DateFormatLongWithoutDay = "%B %d, %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "مجلد غير صالح : فضلا قم بإنشاء مجلد باسم images في أداة المستندات حتى يتم تحميل الصور إلى هذا المجلد";
 $UsersConnectedToMySessions = "مشاهدة جميع المستخدمين المتصلين بجلستي ";
+$Category = "الفئة";
 $DearUser = "عزيزي المستخدم";
 $YourRegistrationData = "بيانات التسجيل الخاصة بك";
 $ResetLink = "اضغط هنا لاستعادة كلمة المرور الخاصة بك";

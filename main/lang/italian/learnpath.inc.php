@@ -152,7 +152,6 @@ $langNoItemsInLp = "Non ci sono elementi nel percorso didattico, per ora. Clicca
 $FirstPosition = "Prima posizione";
 $NewQuiz = "Nuova domanda";
 $CreateTheForum = "Crea il Forum";
-$AddLpIntro = "<strong>Benvenuti</strong> al sistema autore di percorsi didattici di Dokeos";
 $AddLpIntro = "<strong>Benvenuti</strong> al sistema autore di percorsi didattici di Dokeos. Puoi creare il percorso elemento per elemento. A sinistra vedrai la struttura del percorso.";
 $AddLpToStart = "Per iniziare, indica il Titolo del percorso didattico";
 $CreateTheLink = "Importa un Collegamento";

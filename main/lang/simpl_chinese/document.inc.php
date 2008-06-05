@@ -107,5 +107,4 @@ $fileModified = "文件已修改";
 $DocumentsOverview = "查看文档";
 $ViewSlideshow = "以幻灯片形式查看图像";
 $Options = "选项";
-$Content = "内容";
 ?>

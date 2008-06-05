@@ -16,7 +16,7 @@ $langPrintVers = "Versione stampabile";
 $langLocalPath = "percorso locale corrispondente";
 $langAdminEmail = "e-mail dell\'Amministratore";
 $langAdminName = "Nome dell\'amministratore";
-$langAdminSurname = "Cognome dell\'amminstratore";
+$langAdminSurname = "Cognome dell\'amministratore";
 $langAdminLogin = "login dell\'Amministratore";
 $langAdminPass = "password dell\'Amministratore (<font color=\"red\">puoi cambiarla</font>)";
 $langEducationManager = "Responsabile didattico";

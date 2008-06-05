@@ -110,7 +110,6 @@ $ViewSlideshow = "Presentazione immagini";
 $Options = "Opzioni";
 $WelcomeOogieConverter = "Benvenuti in Oogie, strumento di conversione di presentazioni<br>1. Esplora il tuo disco rigido e cerca un file .ppt o .odp<br>2. Caricalo su Oogie: verrà trasformato in pacchetto SCORM<br>3. Naviga nel pacchetto: potrai aggiungere in ogni pagina commenti audio ed inserire pagine con test.";
 $ConvertToLP = "Converti in percorso didattico";
-$Content = "Contenuto";
 $Validate = "Valida";
 $AdvancedSettings = "Configurazione avanzata";
 $AdvancedSettings = "Configurazione avanzata";

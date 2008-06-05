@@ -151,7 +151,6 @@ $langNoLinksAvailable = "沒有鏈接";
 $langNoItemsInLp = "學習路徑沒有項目，點擊\"創建\"來添加項目。";
 $NewQuiz = "新測驗";
 $CreateTheForum = "加入這討論區";
-$AddLpIntro = "<strong>歡迎</strong>使用學習路徑撰寫工具";
 $AddLpIntro = "<strong>歡迎</strong>使用學習路徑撰寫工具。<br />你可以按部就班地創建你的學習路徑。學習路徑的結構會在左面的選單中出現。";
 $AddLpToStart = "開始撰寫學習路徑，請填寫標題";
 $CreateTheLink = "匯入連結";

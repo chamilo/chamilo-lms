@@ -110,7 +110,6 @@ $ViewSlideshow = "Galerie d\'images";
 $Options = "Options";
 $WelcomeOogieConverter = "Bienvenue dans le convertisseur de Power Point Oogie<ul type=\\\"1\\\"><li>Choisissez un fichier .ppt ou .odp<li>Envoyez ce fichier à Oogie. Il sera converti en cours SCORM<li>Vous pourrez ensuite ajouter des commentaires audio sur chaque diapo et insérer tests et activités entres les dias</ul>";
 $ConvertToLP = "Convertir en cours";
-$Content = "Contenu";
 $Validate = "Valider";
 $AdvancedSettings = "Options avancées";
 $AdvancedSettings = "Options avancées";

@@ -12,7 +12,6 @@ $langAddCat  = "įrašyti kategoriją";
 $langAdd  = "Įrašyti";
 $langValid  = "Galiojantis";
 $langBackAndForget  = "Back and forget";
-$Content = "Turinys";
 $CourseDescriptionUpdated = "Kurso aprašymas atnaujintas";
 $CourseDescriptionDeleted = "Kurso aprašymas ištrintas";
 $CourseDescriptionIntro = "Kad sukurti kurso aprašymą, spustelėkite ant ikonos, teisingai užpildykite formą.";

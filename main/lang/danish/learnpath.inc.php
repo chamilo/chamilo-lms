@@ -152,7 +152,6 @@ $langNoItemsInLp = "Der er ingen elementer i læringsstien pt. Klik på \"Opbyg\" 
 $FirstPosition = "Første";
 $NewQuiz = "Ny øvelse";
 $CreateTheForum = "Tilføj forummet";
-$AddLpIntro = "Her kan du oprette en læringssti, som giver dig mulighed for at strukturere materialet på kursussiden til deltagerne";
 $AddLpIntro = "Læringsstien struktur vil kunne ses i menuen til venstre. Læringsstien kan løbende ændres.";
 $AddLpToStart = "Til at starte med skal du angive en titel til læringsstien";
 $CreateTheLink = "Importer et link";

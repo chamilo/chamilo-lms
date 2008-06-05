@@ -29,4 +29,5 @@ $langGroupUserManagement = "Upravljanje skupinom";
 $langUserInfo = "podatci o korisniku";
 $langUnregister = "Odjavi";
 $langAddAUser = "Dodaj korisnike";
+$UsersUnsubscribed = "Odabrani korisnici su ispisani sa kolegija";
 ?>

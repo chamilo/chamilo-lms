@@ -431,6 +431,7 @@ $SessionFuture = "Еще не начато";
 $DateFormatLongWithoutDay = "%B %d, %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Недействительная папка: пожалуйста, создайте папку с именем изображений в Ваших инструментах документа, для того, чтобы изображения могли бы быть загружены в эту папку";
 $UsersConnectedToMySessions = "Видеть всех пользователей, подсоединенных к моим сессиям";
+$Category = "Раздел";
 $DearUser = "Уважаемый пользователь";
 $YourRegistrationData = "Дата Вашей регистрации";
 $ResetLink = "Щелкнуть здесь, чтобы восстановить Ваш пароль";

@@ -12,5 +12,4 @@ $langAddCat  = "Aldoni kategoriojn ";
 $langAdd  = "Aldoni";
 $langValid  = "En ordo ";
 $langBackAndForget  = "Nuligi ";
-$Content = "Enhavo";
 ?>

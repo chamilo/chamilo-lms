@@ -110,7 +110,6 @@ $ViewSlideshow = "Veure presentació de les imatges";
 $Options = "Opcions";
 $WelcomeOogieConverter = "Benvingut en el convertidor de PowerPoint Oogie <ul type=\\\"1\\\"><li>Trieu u fitxer .ppt o .odp<li>Envieu aquest fitxer a Oogie. Serà convertit en Itinerari SCORM<li>Podeu, a més, afegir comentaris audio en cada diapositiva i, entre elles, exercicis i activitats</ul>";
 $ConvertToLP = "Convertir en Itinerari formatiu";
-$Content = "Contingut";
 $Validate = "Validar";
 $AdvancedSettings = "Configuracions avançades";
 $AdvancedSettings = "Configuracions avançades";

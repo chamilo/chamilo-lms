@@ -43,5 +43,4 @@ $langAll_Link_Deleted = "Ссылка удалена";
 $langOnHomepage = "Показывать ссылку на домашней странице";
 $langShowLinkOnHomepage = "Показывать эту ссылку в виде иконки на домашней странице курса";
 $langCsvImport = "CSV импорт";
-$Category = "Раздел";
 ?>

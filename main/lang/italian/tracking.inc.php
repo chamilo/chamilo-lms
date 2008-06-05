@@ -214,4 +214,7 @@ $NoUsersInCourseTracking = "In questa sezione troverai le statistiche degli uten
 $AvgTimeSpentInTheCourse = "Tempo medio impiegato nel corso";
 $RemindInactiveUser = "Richiama l\'utente inattivo";
 $FirstLogin = "Primo accesso";
+$AccessDetails = "Accessi in dettaglio";
+$DateAndTimeOfAccess = "Data e ora di accesso";
+$Duration = "Durata";
 ?>

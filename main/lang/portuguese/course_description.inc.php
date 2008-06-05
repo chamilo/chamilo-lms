@@ -12,7 +12,6 @@ $langAddCat  = "Acrescentar Categoria";
 $langAdd  = "Acrescentar";
 $langValid  = "Validar";
 $langBackAndForget  = "Voltar atrás sem guardar alterações";
-$Content = "Conteúdo";
 $CourseDescriptionUpdated = "A descrição do curso foi actualizada";
 $CourseDescriptionDeleted = "A descrição do curso foi apagada";
 $CourseDescriptionIntro = "Para criar uma descrição do curso, clicar na respectiva rubrica e preencher o campo correcto associado.<br><br> Clicar OK e preencher uma nova rubrica.";

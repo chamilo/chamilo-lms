@@ -216,10 +216,12 @@ function prepare_course_repository($courseRepository, $courseId)
 	umask(0);
 	$perm = api_get_setting('permissions_for_new_directories');
 	$perm = octdec(!empty($perm)?$perm:'0770');
+    $perm_file = api_get_setting('permissions_for_new_files');
+    $perm_file = octdec(!empty($perm_file)?$perm_file:'0660');
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository, $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images", $perm);
-		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images/gallery/", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images/gallery/", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/audio", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/flash", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/video", $perm);
@@ -229,9 +231,9 @@ function prepare_course_repository($courseRepository, $courseId)
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/scorm", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/temp", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload", $perm);
-		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/forum", $perm);
-		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/test", $perm);
-		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/blog", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/forum", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/test", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/blog", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/work", $perm);
 
 	//create .htaccess in dropbox
@@ -255,8 +257,11 @@ function prepare_course_repository($courseRepository, $courseId)
 
 	include(\"../../main/course_home/course_home.php\");
 	?>");
-	fwrite($fd, "$string");
-	$fd = fopen(api_get_path(SYS_COURSE_PATH).$courseRepository . "/group/index.html", "w");
+	fwrite($fd,$string);
+    $perm_file = api_get_setting('permissions_for_new_files');
+    $perm_file = octdec(!empty($perm_file)?$perm_file:'0660');
+    @chmod(api_get_path(SYS_COURSE_PATH).$courseRepository . '/index.php',$perm_file);
+	$fd = fopen(api_get_path(SYS_COURSE_PATH).$courseRepository . '/group/index.html', 'w');
 	$string = "<html></html>";
 	fwrite($fd, "$string");
 	return 0;

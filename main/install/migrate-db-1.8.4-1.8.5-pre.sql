@@ -146,7 +146,7 @@ ALTER TABLE quiz ADD results_disabled TINYINT UNSIGNED NOT NULL DEFAULT 0;
 CREATE TABLE blog_attachment ( id int unsigned NOT NULL auto_increment, path varchar(255) NOT NULL COMMENT 'the real filename', comment text, size int NOT NULL default '0', post_id int NOT NULL, filename varchar(255) NOT NULL COMMENT 'the user s file name', blog_id int NOT NULL, comment_id int NOT NULL default '0', PRIMARY KEY  (id));
 CREATE TABLE forum_attachment (id int NOT NULL auto_increment, path varchar(255) NOT NULL, comment text, size int NOT NULL default 0, post_id int NOT NULL, filename varchar(255) NOT NULL, PRIMARY KEY (id));
 ALTER TABLE group_category ADD forum_state TINYINT DEFAULT 0 AFTER announcements_state;
-UPDATE tool SET category='interaction', admin='0', visibility='1' WHERE name='survey';
+UPDATE tool SET category='interaction', admin='0', visibility='0' WHERE name='survey';
 CREATE TABLE  forum_notification (user_id int(11) , forum_id varchar(11), thread_id varchar(11), post_id varchar(11), KEY user_id (user_id), KEY forum_id (forum_id));
 ALTER TABLE quiz ADD access_condition text DEFAULT NULL;
 ALTER TABLE survey ADD access_condition text DEFAULT NULL;

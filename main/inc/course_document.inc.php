@@ -323,7 +323,7 @@ function OpenFile( fileUrl, type )
 		}
 	}
 	SetUrl( fileUrl ) ;
-	window.close() ;
+	//window.close() ;
 }
 //-->
 </SCRIPT>

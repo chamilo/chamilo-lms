@@ -38,6 +38,7 @@ include('../../../../../inc/global.inc.php');
 				</tr>
 			</table>
 		  </div>
+          <div id="divExtra2" style="overflow:auto; height:160px;" >
 		  <?php 
 		  
 		  $sType = "Flash";
@@ -45,6 +46,7 @@ include('../../../../../inc/global.inc.php');
 		  include(api_get_path(INCLUDE_PATH).'course_document.inc.php');
 		  
 		  ?>
+          </div>
 		</div>
 		<div id="divExtra"> <!--added by shiv -->
 			<table cellSpacing="1" cellPadding="1" width="100%" border="0">

@@ -106,4 +106,6 @@ $fileModified = "Datoteka je izmijenjena";
 $DocumentsOverview = "pregled dokumenata";
 $ViewSlideshow = "Pregled projekcije slika";
 $Options = "Mogu&#263;nosti";
+$TemplateTitleLeftImage = "Slika lijevo";
+$TemplateTitleLeftImageDescription = "Slika lijevo";
 ?>

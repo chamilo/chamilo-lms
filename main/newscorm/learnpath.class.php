@@ -2444,17 +2444,17 @@ class learnpath {
     {
 		if($this->debug>0){error_log('New LP - In learnpath::get_html_toc()',0);}
     	$list = $this->get_toc();
+        $mych = api_get_setting('platform_charset'); 
     	
     	//echo $this->current;
     	//$parent = $this->items[$this->current]->get_parent();
     	//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
     	$html.= '<div class="inner_lp_toc">'."\n" ;
-    	$html.= '<div class="scorm_title">&nbsp;&nbsp;&nbsp;&nbsp;'.$this->get_name().'</div>';
+    	$html.= '<div class="scorm_title">&nbsp;&nbsp;&nbsp;&nbsp;'.mb_convert_encoding($this->get_name(),$this->encoding,$mych).'</div>';
     	
     	// build, display
     	if(api_is_allowed_to_edit())
     	{
-    		$mych = api_get_setting('platform_charset'); 
     		$html.="<p>&nbsp;&nbsp;&nbsp;&nbsp;<a  target='_parent' href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."' style= target='_parent'>".mb_convert_encoding(get_lang("Build"),$this->encoding,$mych)."</a>&nbsp;&#124;&nbsp;<a href='lp_controller.php?".api_get_cidreq()."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".mb_convert_encoding(get_lang("BasicOverview"),$this->encoding,$mych)."</a>&nbsp;&#124;&nbsp;".mb_convert_encoding(get_lang("Display"),$this->encoding,$mych)."</p>";
 			unset($mych);
     	}

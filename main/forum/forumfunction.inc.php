@@ -290,7 +290,8 @@ function show_add_forum_form($inputvalues=array())
 	$form->addRule('forum_title', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addRule('forum_category', get_lang('ThisFieldIsRequired'), 'required');
 
-
+	global $charset;
+	
 	// settings the defaults
 	if (!is_array($inputvalues))
 	{
@@ -309,7 +310,7 @@ function show_add_forum_form($inputvalues=array())
 	else  // the default values when editing = the data in the table
 	{
 		$defaults['forum_id']=$inputvalues['forum_id'];
-		$defaults['forum_title']=prepare4display($inputvalues['forum_title']);
+		$defaults['forum_title']=prepare4display(html_entity_decode($inputvalues['forum_title'],ENT_QUOTES,$charset));
 		$defaults['forum_comment']=prepare4display($inputvalues['forum_comment']);
 		$defaults['forum_category']=$inputvalues['forum_category'];
 		$defaults['allow_anonymous_group']['allow_anonymous']=$inputvalues['allow_anonymous'];
@@ -361,10 +362,11 @@ function show_edit_forumcategory_form($inputvalues=array())
 	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'));
 	$form->addElement('submit', 'SubmitEditForumCategory', 'OK');
-
+	global $charset;
 	// setting the default values
 	$defaultvalues['forum_category_id']=$inputvalues['cat_id'];
-	$defaultvalues['forum_category_title']=prepare4display($inputvalues['cat_title']);
+
+	$defaultvalues['forum_category_title']=prepare4display(html_entity_decode($inputvalues['cat_title'],ENT_QUOTES,$charset));
 	$defaultvalues['forum_category_comment']=prepare4display($inputvalues['cat_comment']);
 	$form->setDefaults($defaultvalues);
 
@@ -406,7 +408,7 @@ function store_forumcategory($values)
 	$row=Database::fetch_array($result);
 	$new_max=$row['sort_max']+1;
 	
-	$clean_cat_title=Security::remove_XSS(Database::escape_string(htmlspecialchars($values['forum_category_title'])));
+	$clean_cat_title=Security::remove_XSS(Database::escape_string($values['forum_category_title']));
 
 	if (isset($values['forum_category_id']))
 	{ // storing an edit
@@ -1733,6 +1735,7 @@ function show_add_post_form($action='', $id='', $form_values='')
 	global $current_forum;
 	global $_user;
 	global $origin;
+	global $charset; 
 
 	// initiate the object
 	$form = new FormValidator('thread', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post']).'&action='.Security::remove_XSS($_GET['action']).'&origin='.$origin);
@@ -1795,7 +1798,7 @@ function show_add_post_form($action='', $id='', $form_values='')
 
 		// if we are replying or are quoting then we display a default title.
  		$values=get_post_information($_GET['post']); // note: this has to be cleaned first
-		$defaults['post_title']=get_lang('ReplyShort').$values['post_title'];
+		$defaults['post_title']=get_lang('ReplyShort').html_entity_decode($values['post_title'],ENT_QUOTES,$charset);
 		// When we are quoting a message then we have to put that message into the wysiwyg editor.
 		// note: the style has to be hardcoded here because using class="quote" didn't work
 		if($action=='quote')
@@ -2014,9 +2017,9 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	}
 
 	$form->addElement('submit', 'SubmitPost', get_lang('Ok'));
-
+	global $charset;
 	// setting the default values for the form elements
-	$defaults['post_title']=prepare4display($current_post['post_title']);
+	$defaults['post_title']=prepare4display(html_entity_decode($current_post['post_title'],ENT_QUOTES,$charset));
 	$defaults['post_text']=prepare4display($current_post['post_text']);
 	if ($current_post['post_notification']==1)
 	{

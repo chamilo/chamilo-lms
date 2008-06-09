@@ -1,12 +1,13 @@
 <?php //$id:$
 /**
- * Defines the AICC class, which is meant to contain the aicc items (nuclear elements)
- * @package dokeos.learnpath.aicc
- * @author	Yannick Warnier <ywarnier@beeznest.org>
+ * Defines the OpenOfficeDocument class, which is meant as a mother class
+ * to help in the conversion of Office documents to learning paths
+ * @package dokeos.learnpath.openofficedocument
+ * @author	Eric Marguin <eric.marguin@dokeos.com>
  * @license	GNU/GPL - See Dokeos license directory for details
  */
 /**
- * Defines the "aicc" child of class "learnpath"
+ * Defines the "OpenofficeDocument" child of class "learnpath"
  * @package dokeos.learnpath.aicc
  */
 

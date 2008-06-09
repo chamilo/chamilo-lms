@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006-2008 Dokeos S.A.
+	Copyright (c) 2006-2008 Dokeos SPRL
 	Copyright (c) 2006 Ghent University (UGent)
 	Copyright (c) various contributors
 
@@ -17,7 +17,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -914,7 +914,7 @@ function store_add_dropbox()
 
 	// note: I think we could better migrate everything from here on to separate functions: store_new_dropbox, store_new_mailing, store_just_upload
 
-	if ( $dropbox_overwrite)  // RH: Mailing: adapted
+	if ($dropbox_overwrite)  // RH: Mailing: adapted
 	{
 		$dropbox_person = new Dropbox_Person( $_user['user_id'], api_is_course_admin(), api_is_course_tutor());
 
@@ -962,15 +962,20 @@ function store_add_dropbox()
 		}
 	}
 
-
 	@move_uploaded_file( $dropbox_filetmpname, dropbox_cnf("sysPath") . '/' . $dropbox_filename);
 	
 	$b_send_mail = api_get_course_setting('email_alert_on_new_doc_dropbox');
-	if($b_send_mail){
-		foreach($new_work_recipients as $recipient_id){
+	
+	if($b_send_mail)
+	{
+		foreach($new_work_recipients as $recipient_id)
+		{
 			include_once(api_get_path(LIBRARY_PATH) . 'usermanager.lib.php');
 			$recipent_temp=UserManager :: get_user_info_by_id($recipient_id);
-			api_mail($recipent_temp['lastname'].' '.$recipent_temp['firstname'],$recipent_temp['email'],get_lang('NewDropboxFileUploaded'),get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator'),get_setting('administratorName')." ".get_setting('administratorSurname'),get_setting('emailAdministrator'));
+			api_mail($recipent_temp['lastname'].' '.$recipent_temp['firstname'],$recipent_temp['email'],
+				get_lang('NewDropboxFileUploaded'),
+				get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".$_user['firstName']." ".$_user['lastName']."\n".  get_lang('Email') ." : ".$_user['mail'], $_user['firstName']." ".$_user['lastName'],$_user['mail']);
+				//get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator'),get_setting('administratorName')." ".get_setting('administratorSurname'),get_setting('emailAdministrator'));
 		}
 	}
 	

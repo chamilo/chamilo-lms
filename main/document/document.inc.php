@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 14914 2008-04-16 05:02:08Z yannoo $
+<?php // $Id: document.inc.php 15525 2008-06-09 06:24:20Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -259,15 +259,17 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$
 	if ($is_read_only)
 	{
 		$modify_icons = '<img src="../img/edit_na.gif" border="0" title="'.get_lang('Modify').'" alt="" />';		
+        $modify_icons .= '&nbsp;<img src="../img/delete_na.gif" border="0" title="'.get_lang('Delete').'" alt="" />';
+        $modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_na.gif" border="0" title="'.get_lang('Move').'" alt="" />';
+        $modify_icons .= '&nbsp;<img src="../img/'.$visibility_icon.'_na.gif" border="0" title="'.get_lang('Visible').'" alt="" />';
 	}
 	else
 	{
 		$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
-	}
-	
-	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';
-	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$req_gid.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
-	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
+        $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';
+        $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$req_gid.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
+        $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
+	}	
 	
 	if($type == 'file' && pathinfo($path,PATHINFO_EXTENSION)=='html')
 	{

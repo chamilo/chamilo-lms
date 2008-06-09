@@ -1,4 +1,4 @@
-<?php // $Id: document.php 15508 2008-06-03 10:02:45Z elixir_inter $
+<?php // $Id: document.php 15525 2008-06-09 06:24:20Z yannoo $
  
 /*
 ==============================================================================
@@ -224,7 +224,7 @@ if (isset($_GET['action']) && $_GET['action']=="download")
 	if(!DocumentManager::get_document_id($_course,$_GET['id']))
 	{
 		//file not found!
-		header("HTTP/1.0 404 Not Found");
+		header('HTTP/1.0 404 Not Found');
 		$error404 = '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">';
 		$error404 .= '<html><head>';
 		$error404 .= '<title>404 Not Found</title>';
@@ -253,8 +253,8 @@ if(isset($_GET['action']) && $_GET['action']=="downloadfolder")
 //-------------------------------------------------------------------//
 
 // slideshow inititalisation
-$_SESSION["image_files_only"]="";
-$image_files_only="";
+$_SESSION['image_files_only']='';
+$image_files_only='';
 
 /*
 -----------------------------------------------------------
@@ -286,7 +286,7 @@ for ($i=0; $i<$array_len;$i++)
 	$dir_acum.=$dir_array[$i].'/';
 }
 
-Display::display_header('',"Doc");
+Display::display_header('','Doc');
 $is_allowed_to_edit  = api_is_allowed_to_edit();
 
 /*
@@ -567,7 +567,7 @@ echo(build_directory_selector($folders,$curdirpath,(isset($group_properties['dir
 ?>
 </div>
 	<?php
-	echo "<div id=\"doc_links\">";
+	echo '<div id="doc_links">';
 
 
 	/* GO TO PARENT DIRECTORY */
@@ -577,7 +577,7 @@ echo(build_directory_selector($folders,$curdirpath,(isset($group_properties['dir
 	?>
 		 <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo urlencode((dirname($curdirpath)=='\\')?'/':dirname($curdirpath)).$req_gid ?>">
 				<img src="../img/folder_up.gif" border="0" align="absbottom" hspace="5" alt="" />
-				<?php echo get_lang("Up"); ?></a>&nbsp;
+				<?php echo get_lang('Up'); ?></a>&nbsp;
 	<?php
 	}
 
@@ -664,7 +664,7 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 		if ($is_allowed_to_edit || $group_member_with_upload_rights)
 		{
 			$is_template = (isset($id['is_template'])?$id['is_template']:false);
-			// if readonly, check if it the owner of the file ?
+			// if readonly, check if it the owner of the file or if the user is an admin
 			if ($id['insert_user_id'] == $_user['user_id'] || api_is_platform_admin())
 			{
 				$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key, $is_template,0);

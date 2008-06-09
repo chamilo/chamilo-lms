@@ -769,7 +769,19 @@ switch($_REQUEST['action'])
 		}
 		require('lp_message.php');
 		break;	
-		
+	case 'return_to_course_homepage':
+        if(!$lp_found){ error_log('New LP - No learnpath given for stats',0); require('lp_list.php'); }
+        else{
+            $_SESSION['oLP']->save_current();
+            $_SESSION['oLP']->save_last();
+            //declare variables to be used in lp_stats.php
+            $lp_id = $_SESSION['oLP']->get_id();
+            $list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
+            $user_id = api_get_user_id();
+            $stats_charset = $_SESSION['oLP']->encoding;
+            header('location: ../course_home/course_home.php?'.api_get_cidreq());
+        }
+        break;        
 	default:
 		if($debug>0) error_log('New LP - default action triggered',0);
 		//$_SESSION['refresh'] = 1;

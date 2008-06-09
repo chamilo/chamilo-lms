@@ -58,9 +58,8 @@ if($show_link)
 $interbreadcrumb[] = array("url"=>"./lp_controller.php?action=view&lp_id=".$path_id,'name'=>$path_name);
 $noPHP_SELF = true;
 $lp_theme_css=$_SESSION['oLP']->get_theme();
-Display::display_header($nameTools,"Path", null);
-
+include('../inc/reduced_header.inc.php');
+echo '<a class="link" href="./lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();">'.get_lang('CourseHomepageLink').'</a>';
 ?>
-</div>
 </body>
 </html>

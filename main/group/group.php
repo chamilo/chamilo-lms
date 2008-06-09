@@ -3,7 +3,7 @@
 ===============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
@@ -43,14 +43,14 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = "group";
+$language_file = 'group';
 include ('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
 // notice for unauthorized people.
 api_protect_course_script(true); 
  
-$nameTools = get_lang("GroupManagement");
+$nameTools = get_lang('GroupManagement');
 
 /*
 -----------------------------------------------------------
@@ -67,7 +67,7 @@ if( api_get_setting('allow_group_categories') == 'false')
 	$cat_table = Database::get_course_table(TABLE_GROUP_CATEGORY);
 	$sql = "SELECT * FROM $cat_table WHERE id = '".DEFAULT_GROUP_CATEGORY."'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	$num = mysql_num_rows($res);
+	$num = Database::num_rows($res);
 	if($num == 0)
 	{
 		api_sql_query("INSERT INTO ".$cat_table." ( id , title , description , forum_state , max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) VALUES ('2', '".lang2db($DefaultGroupCategory)."', '', '1', '8', '0', '0', '0', '0');");
@@ -84,7 +84,7 @@ if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath')
 	event_access_tool(TOOL_GROUP);
 	if (! $is_allowed_in_course) api_not_allowed(true);
 }
-Display::display_header(get_lang("Groups"));
+Display::display_header(get_lang('Groups'));
 
 /*
 -----------------------------------------------------------
@@ -135,21 +135,21 @@ if (api_is_allowed_to_edit())
 				if( is_array($_POST['group']))
 				{
 					GroupManager :: delete_groups($_POST['group']);
-					Display :: display_normal_message(get_lang("SelectedGroupsDeleted"));
+					Display :: display_normal_message(get_lang('SelectedGroupsDeleted'));
 				}
 				break;
 			case 'empty_selected' :
 				if( is_array($_POST['group']))
 				{
-				GroupManager :: unsubscribe_all_users($_POST['group']);
-				Display :: display_normal_message(get_lang("SelectedGroupsEmptied"));
+                    GroupManager :: unsubscribe_all_users($_POST['group']);
+                    Display :: display_normal_message(get_lang('SelectedGroupsEmptied'));
 				}
 				break;
 			case 'fill_selected' :
 				if( is_array($_POST['group']))
 				{
-				GroupManager :: fill_groups($_POST['group']);
-				Display :: display_normal_message(get_lang("SelectedGroupsFilled"));
+                    GroupManager :: fill_groups($_POST['group']);
+                    Display :: display_normal_message(get_lang('SelectedGroupsFilled'));
 				}
 				break;
 		}

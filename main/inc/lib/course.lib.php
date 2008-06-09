@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Roan Embrechts, Vrije Universiteit Brussel
 	Copyright (c) Bart Mollet, Hogeschool Gent
@@ -19,7 +19,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -1079,9 +1079,12 @@ class CourseManager
 		
 		$where = array();
 		
-		$sql = 'SELECT DISTINCT user.user_id
-				FROM '.$table_users.' as user';
-		
+		$sql = 'SELECT DISTINCT user.user_id ';
+        if ( $session_id == 0 ) {
+        	$sql .= ', course_rel_user.role, course_rel_user.tutor_id ';
+        }		
+        $sql .= ' FROM '.$table_users.' as user ';
+
 		if(api_get_setting('use_session_mode')=='true' && $with_session)
 		{
 			$table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -1114,9 +1117,13 @@ class CourseManager
 		while($user = Database::fetch_array($rs))
 		{
 			$user_infos = Database :: get_user_info_from_id($user['user_id']);
-			$user_infos["status"] = $user["status"];
-			$user_infos["role"] = $user["role"];
-			$user_infos["tutor_id"] = $user["tutor_id"];
+			//$user_infos['status'] = $user['status'];
+            if ( isset($user['role']) ) {
+                $user_infos['role'] = $user['role'];
+            }
+            if ( isset($user['tutor_id']) ) {
+                $user_infos['tutor_id'] = $user['tutor_id'];
+            }                
 			$a_users[$user['user_id']] = $user_infos; 
 		}	
 		

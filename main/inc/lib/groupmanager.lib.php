@@ -700,7 +700,7 @@ class GroupManager
 		$group_table = Database :: get_course_table(TABLE_GROUP);
 		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
 		$complete_user_list = CourseManager :: get_real_and_linked_user_list($_course['sysCode']);
-		$number_groups_per_user = ($groups_per_user == GROUP_PER_MEMBER_NO_LIMIT ? INFINITE : $groups_per_user);
+        $number_groups_per_user = ($groups_per_user == GROUP_PER_MEMBER_NO_LIMIT ? INFINITE : $groups_per_user);
 		/*
 		 * Retrieve all the groups where enrollment is still allowed
 		 * (reverse) ordered by the number of place available
@@ -715,7 +715,7 @@ class GroupManager
 				ORDER BY nbPlaces DESC";
 		$sql_result = api_sql_query($sql,__FILE__,__LINE__);
 		$group_available_place = array ();
-		while ($group = mysql_fetch_array($sql_result, MYSQL_ASSOC))
+		while ($group = Database::fetch_array($sql_result, 'ASSOC'))
 		{
 			$group_available_place[$group['gid']] = $group['nbPlaces'];
 		}
@@ -725,10 +725,11 @@ class GroupManager
 		 */
 		for ($i = 0; $i < count($complete_user_list); $i ++)
 		{
+			
 			//find # of groups the user is enrolled in
 			$number_of_groups = GroupManager :: user_in_number_of_groups($complete_user_list[$i]["user_id"],$category['id']);
 			//add # of groups to user list
-			$complete_user_list[$i]["number_groups_left"] = $number_groups_per_user - $number_of_groups;
+			$complete_user_list[$i]['number_groups_left'] = $number_groups_per_user - $number_of_groups;
 		}
 		//first sort by user_id to filter out duplicates
 		$complete_user_list = TableSort :: sort_table($complete_user_list, 'user_id');
@@ -739,23 +740,25 @@ class GroupManager
 		$userToken = array ();
 		foreach ($complete_user_list as $this_user)
 		{
-			if ($this_user["number_groups_left"] > 0)
+			
+			if ($this_user['number_groups_left'] > 0)
 			{
-				$userToken[$this_user["user_id"]] = $this_user["number_groups_left"];
+				$userToken[$this_user['user_id']] = $this_user['number_groups_left'];
 			}
 		}
 		/*
 		 * Retrieve the present state of the users repartion in groups
 		 */
-		$sql = "SELECT user_id uid, group_id gid FROM ".$group_user_table."";
+		$sql = "SELECT user_id uid, group_id gid FROM ".$group_user_table;
 		$result = api_sql_query($sql,__FILE__,__LINE__);
-		while ($member = mysql_fetch_array($result, MYSQL_ASSOC))
+		while ($member = Database::fetch_array($result, 'ASSOC'))
 		{
-			$groupUser[$member[gid]][] = $member[uid];
+			$groupUser[$member['gid']][] = $member['uid'];
 		}
 		$changed = true;
 		while ($changed)
 		{
+			
 			$changed = false;
 			reset($group_available_place);
 			arsort($group_available_place);
@@ -767,6 +770,7 @@ class GroupManager
 				{
 					if (GroupManager :: can_user_subscribe($user_id, $group_id))
 					{
+						
 						GroupManager :: subscribe_users($user_id, $group_id);
 						$group_available_place[$group_id]--;
 						$userToken[$user_id]--;

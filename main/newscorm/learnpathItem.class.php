@@ -645,7 +645,28 @@ class learnpathItem{
 											}
                                             elseif(strpos($source, 'flv=')===0)
                                             {
-                                                $files_list[] = array(substr($source, 4, strpos($source , '.flv')),'local','abs');
+                                            	$source = substr($source, 4);
+                                                if(strpos($source, '&')>0)
+                                                {
+                                                	$source = substr($source,0,strpos($source, '&'));
+                                                }
+                                            	if(strpos($source,'://')>0)
+                                                {
+                                                    if(strpos($source,api_get_path(WEB_PATH))!==false)
+                                                    {
+                                                        //we found the current portal url
+                                                        $files_list[] = array($source,'local','url');
+                                                    }
+                                                    else
+                                                    {
+                                                        //we didn't find any trace of current portal
+                                                        $files_list[] = array($source,'remote','url');
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    $files_list[] = array($source,'local','abs');
+                                                }
                                                 continue; //skipping anything else to avoid two entries (while the others can have sub-files in their url, flv's can't)
                                             }
 										}

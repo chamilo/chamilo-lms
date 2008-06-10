@@ -7657,7 +7657,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		 			$my_dep->setAttribute('adlcp:scormtype','asset');
 		 			$my_dep_file = $xmldoc->createElement('file');
 		 			//check type of URL
-		 			//error_log('Now dealing with '.$doc_info[0].' of type '.$doc_info[1].'-'.$doc_info[2],0);
+		 			error_log(__LINE__.'Now dealing with '.$doc_info[0].' of type '.$doc_info[1].'-'.$doc_info[2],0);
 		 			if($doc_info[1] == 'remote')
 		 			{ //remote file. Save url as is
 		 				$my_dep_file->setAttribute('href',$doc_info[0]);
@@ -7674,9 +7674,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			 					if(strstr($file_path,$main_path) !== false)
 			 					{//the calculated real path is really inside the dokeos root path
 			 						//reduce file path to what's under the DocumentRoot
-			 						$file_path = substr($file_path,strlen($root_path));
+			 						$file_path = substr($file_path,strlen($root_path)-1);
 			 						//echo $file_path;echo '<br><br>';
-			 						//error_log('Reduced path: '.$file_path,0);
+			 						error_log(__LINE__.'Reduced url path: '.$file_path,0);
 			 						$zip_files_abs[] = $file_path;
 			 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);
 					 				$my_dep_file->setAttribute('href',$file_path);
@@ -7718,6 +7718,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 								//$file_path = realpath(api_get_path(SYS_PATH).$doc_info[0]);
 								$file_path = realpath(api_get_path(SYS_PATH).$abs_img_path_without_subdir);
                                 $file_path = str_replace('//','/',$file_path);
+                                error_log(__LINE__.'Abs path: '.$file_path,0);
 								//prepare the current directory path (until just under 'document') with a trailing slash
 								$cur_path = substr($current_course_path,-1)=='/'?$current_course_path:$current_course_path.'/';
 								//check if the current document is in that path
@@ -7996,7 +7997,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			 			$my_dep->setAttribute('adlcp:scormtype','asset');
 			 			$my_dep_file = $xmldoc->createElement('file');
 			 			//check type of URL
-			 			//error_log('Now dealing with '.$doc_info[0].' of type '.$doc_info[1].'-'.$doc_info[2],0);
+			 			error_log(__LINE__.'Now dealing with '.$doc_info[0].' of type '.$doc_info[1].'-'.$doc_info[2],0);
 			 			if($doc_info[1] == 'remote')
 			 			{ //remote file. Save url as is
 			 				$my_dep_file->setAttribute('href',$doc_info[0]);
@@ -8154,7 +8155,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		foreach($zip_files as $file_path)
 		{
 			if(empty($file_path)){continue;}
-			//error_log('getting document from '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' removing '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/',0);
+            error_log(__LINE__.'getting document from '.$sys_course_path.$_course['path'].'/'.$file_path.' removing '.$sys_course_path.$_course['path'].'/',0);
 			$dest_file = $garbage_path.$temp_dir_short.'/'.$file_path;
 			$this->create_path($dest_file);
 			//error_log('copy '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' to '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,0);
@@ -8183,8 +8184,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		foreach($zip_files_abs as $file_path)
 		{
 			if(empty($file_path)){continue;}
-			if(!is_file($main_path.$file_path) || !is_readable($main_path.$file_path)){continue;}
-			//error_log('getting document from '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' removing '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/',0);
+			error_log(__LINE__.'checking existence of '.$main_path.$file_path.'',0);
+            if(!is_file($main_path.$file_path) || !is_readable($main_path.$file_path)){continue;}
+			error_log(__LINE__.'getting document from '.$main_path.$file_path.' removing '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/',0);
 			$dest_file = $garbage_path.$temp_dir_short.'/document/'.$file_path;
 			$this->create_path($dest_file);
 			//error_log('Created path '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/document/'.$file_path,0);

@@ -15,6 +15,8 @@ abstract class OpenofficeDocument extends learnpath {
 	
 
 	public $first_item = 0;
+    public $original_charset = 'utf-8';
+    public $original_locale = 'en_US.UTF-8';
 
 	/**
 	 * Class constructor. Based on the parent constructor.
@@ -82,7 +84,7 @@ abstract class OpenofficeDocument extends learnpath {
 		chmod ($this->base_work_dir.$this->created_dir,0777);
 		chmod ($this->base_work_dir.'/'.$this->file_path,0777);
 		
-		$locale = 'en_US.UTF-8'; // TODO : improve it because we're not sure this locale is present everywhere
+		$locale = $this->original_locale; // TODO : improve it because we're not sure this locale is present everywhere
 		putenv('LC_ALL='.$locale);
 		$shell = exec($cmd, $files, $return);
 		if($return != 0) { //if the java application returns an error code

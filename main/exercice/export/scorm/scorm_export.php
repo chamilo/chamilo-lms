@@ -103,7 +103,7 @@ class ScormAssessmentItem
 			$css .= '</style>'."\n";
 			$css .= '<style type="text/css" media="print">'."\n";
 			$css .= '/*<![CDATA[*/'."\n";
-			$css .= '@import "'.api_get_path(WEB_PATH).'main/css/default/print.css";'."\n";
+			$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/print.css";'."\n";
 			$css .= '/*]]>*/'."\n";
 			$css .= '</style>'."\n";
 			return $css;
@@ -492,10 +492,17 @@ class ScormSection
             	*/
             	var my_button = document.getElementById(\'dokeos_scorm_submit\');
             	addEvent(my_button,\'click\',doQuit,false);
+                addEvent(my_button,\'click\',disableButton,false);
             	//addEvent(my_button,\'click\',checkAnswers,false);
             	//addEvent(my_button,\'change\',checkAnswers,false);
             	addEvent(window,\'unload\',unloadPage,false);
-            }'."\n";
+            }
+            /** Disables the submit button on SCORM result submission **/
+            function disableButton() {
+              var mybtn = document.getElementById(\'dokeos_scorm_submit\');
+              mybtn.setAttribute(\'disabled\',\'disabled\');
+            }
+            '."\n";
 		
 		$js .= '';
 		//$js .= 'addEvent(window,\'load\',loadPage,false);'."\n";

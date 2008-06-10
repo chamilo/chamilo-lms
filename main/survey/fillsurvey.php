@@ -1,20 +1,22 @@
 <?php
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2004-2008 Dokeos SPRL
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
+==============================================================================
 */
 
 /**
@@ -50,6 +52,17 @@ require ('../inc/global.inc.php');
 require_once('survey.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 
+
+// breadcrumbs
+if (!empty($_user))
+{
+	$interbreadcrumb[] = array ("url" => 'survey_list.php', 'name' => get_lang('SurveyList'));
+}
+
+
+// Header
+Display :: display_header(get_lang('Survey'));
+
 // getting all the course information
 $_course = CourseManager::get_course_information($_GET['course']);
 
@@ -60,15 +73,6 @@ $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUEST
 $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 $table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION, $_course['db_name']);
-
-// breadcrumbs
-if (!empty($_user))
-{
-	$interbreadcrumb[] = array ("url" => 'survey_list.php', 'name' => get_lang('SurveyList'));
-}
-
-// Header
-Display :: display_header(get_lang('Survey'));
 
 // first we check if the needed parameters are present
 if (!isset($_GET['course']) OR !isset($_GET['invitationcode']))

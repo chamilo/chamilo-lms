@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 15493 2008-05-29 16:42:12Z yannoo $
+<?php //$Id: announcements.php 15535 2008-06-10 17:29:54Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1149,7 +1149,7 @@ if (isset($message) && $message == true)
 
 			if (isset($_SESSION['user']))
 			{
-				if (is_array($group_memberships))
+				if (is_array($group_memberships) && count($group_memberships)>0)
 				{
 					$sql="SELECT
 						announcement.*, toolitemproperties.*
@@ -1225,10 +1225,10 @@ if (isset($message) && $message == true)
 
 	}
 	else  //STUDENT
-	{
+	{   
         if (is_array($group_memberships) && count($group_memberships)>0)
 		{
-
+			
 			$sql="SELECT
 				announcement.*, toolitemproperties.*
 				FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties

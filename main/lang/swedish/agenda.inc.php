@@ -53,4 +53,16 @@ $CopiedAsAnnouncement = "Kopierad som tillkännagivande";
 $NewAnnouncement = "Nytt tillkännagivande";
 $AddAnnouncement = "Lägg till som ett tillkännagivande";
 $UpcomingEvent = "Kommande händelser";
+$ListView = "Visa som lista";
+$RepeatedEvent = "Återkommande händelse";
+$RepeatType = "Typ av upprepning";
+$RepeatDaily = "Dagligen";
+$RepeatWeekly = "Veckovis";
+$RepeatMonthlyByDate = "Månadsvis (datum)";
+$RepeatMonthlyByDay = "Månadsvis (dag)";
+$RepeatMonthlyByDayR = "Månadsvis (begränsad dag)";
+$RepeatYearly = "Årsvis";
+$RepeatEnd = "Slutdatum för upprepning";
+$RepeatedEventViewOriginalEvent = "Visa ursprunglig händelse";
+$ICalFileImport = "Importera iCal/ics fil";
 ?>

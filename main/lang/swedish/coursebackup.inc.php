@@ -44,4 +44,6 @@ $langCreateBackupInfo = "Gör en säkerhetskopia från denna kurs. Du kan välja kur
 $ToolIntro = "Verktygsintroduktion";
 $UploadError = "Misslyckades med filuppladdning. Kontrollera maximalt accepterad filstorlek och rättigheter för mappen på servern";
 $DocumentsWillBeAddedToo = "Dokument kommer också att läggas till";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Om du vill exportera ett kursmoment som innehåller ett test måste du vara noga med att välja de test som ska vara med i exporten i listan över test.";
+$ArchivesDirectoryNotWriteableContactAdmin = "Arkivmappen som verktyget använder är inte skrivbar. Kontakta administratören för din lärplattform.";
 ?>

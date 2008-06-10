@@ -32,6 +32,7 @@ $Role = "Roll";
 $Rate = "Gradera";
 $Roles = "Roller";
 $AddTask = "Lägg till ny uppgift";
+$AddTasks = "Lägg till ny händelse";
 $AssignTask = "Tilldela uppgift";
 $AssignTasks = "Tilldela uppgifter";
 $EditTask = "Ändra i uppgiften";

@@ -36,7 +36,14 @@ foreach ($_SESSION['_course'] as $key => $val)
 printf('</courseobject>');
 
 printf('<userobject>');
-foreach ($_SESSION['_user'] as $key => $val) if ($key != "auth_source") printf('<%s>%s</%s>',$key,utf8_encode($val),$key);
+foreach ($_SESSION['_user'] as $key => $val) 
+	if ($key != "auth_source") 
+	{
+		if (( $key == "lastName" || $key == "firstName" ) && strlen($val) == 0)
+			$val = "undefined";
+		printf('<%s>%s</%s>',$key,utf8_encode($val),$key);
+	}
+
 printf('<sid>%s</sid>', session_id());
 $isadmin =((CourseManager::get_user_in_course_status($_SESSION['_user']['user_id'], $_SESSION['_course']['sysCode']) == COURSEMANAGER)||
 		api_is_platform_admin() || 

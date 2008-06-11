@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2006 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2004 Denes Nagy
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
@@ -18,7 +18,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1000 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**

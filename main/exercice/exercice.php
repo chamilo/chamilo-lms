@@ -691,17 +691,18 @@ if($show == 'test'){
 	<td align="center"><?php
 		$eid = $row['id'];
 	$uid= api_get_user_id();
-	$qry = "select * from $TBL_TRACK_EXERCICES where exe_exo_id = $eid and exe_user_id = $uid and exe_cours_id = '".api_get_course_id()."'";	
+    //this query might be improved later on by ordering by the new "tms" field rather than by exe_id
+	$qry = "select * from $TBL_TRACK_EXERCICES where exe_exo_id = $eid and exe_user_id = $uid and exe_cours_id = '".api_get_course_id()."' ORDER BY exe_id DESC";	
 	$qryres = api_sql_query($qry);
 	$num = Database::num_rows($qryres);
-	$row = Database::fetch_array($qryres);
-	$percentage = 0;
-	if($row['exe_weighting'] != 0)
-	{
-		$percentage = ($row['exe_result']/$row['exe_weighting'])*100;
-	}
-	if ($num>0)
-	{
+    if($num>0)
+    {
+    	$row = Database::fetch_array($qryres);
+    	$percentage = 0;
+    	if($row['exe_weighting'] != 0)
+    	{
+    		$percentage = ($row['exe_result']/$row['exe_weighting'])*100;
+    	}
 		echo get_lang('Attempted').' ('.get_lang('Score').':';
 		printf("%1.2f\n",$percentage);
 		echo " %)";

@@ -25,7 +25,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey_list.php 15249 2008-05-08 19:40:37Z juliomontoya $
+* 	@version $Id: survey_list.php 15555 2008-06-11 20:39:15Z juliomontoya $
 *
 * 	@todo use quickforms for the forms
 */
@@ -64,11 +64,11 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 }
 else
 {
-	$tool_name = get_lang('SurveyList');
+	$tool_name = get_lang('SurveyList'); 
 }
 
 // Header
-Display :: display_header($tool_name);
+Display :: display_header($tool_name,'Survey');
 //api_display_tool_title($tool_name);
 
 // Action handling: searching

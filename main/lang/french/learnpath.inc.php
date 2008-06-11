@@ -175,7 +175,7 @@ $WoogieConversionPowerPoint = "Woogie : conversion Word (BETA)";
 $WelcomeWoogieSubtitle = "Un convertisseur de documents Word en cours";
 $WelcomeWoogieConverter = "Bienvenue dans le convertisseur de Word Woogie<ul type=\\\"1\\\"><li>Choisissez un fichier .doc, docx, .sxw ou.odt<li>Envoyez ce fichier à Woogie. Il sera converti en cours<li>Vous pourrez ensuite ajouter des commentaires audio sur chaque page et insérer tests et activités entres les pages</ul>";
 $WoogieError = "Erreur durant la conversion du document. Vérifiez qu\'il n\'y a pas de caractères spéciaux dans le nom de votre document ou contactez votre administrateur système.";
-$WordConvert = "Conversion Word (BETA)";
+$WordConvert = "Conversion Word";
 $Order = "Ordre";
 $InteractionID = "ID interaction";
 $TimeFinished = "Temps (terminé à...)";

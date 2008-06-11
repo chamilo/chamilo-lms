@@ -4699,11 +4699,11 @@ class learnpath {
 			unset($this->arrMenu);
 			
 			if($action == 'add')
-				$return .= '<p class="lp_title">'.get_lang("CreateTheExercise").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("CreateTheExercise").'&nbsp;:</p>' . "\n";
 			elseif($action == 'move')
-				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentExercise").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentExercise").'&nbsp;:</p>' . "\n";
 			else
-				$return .= '<p class="lp_title">'.get_lang("EditCurrentExecice").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("EditCurrentExecice").'&nbsp;:</p>' . "\n";
 			
 			if(isset($_GET['edit']) && $_GET['edit'] == 'true')
 			{
@@ -4721,7 +4721,7 @@ class learnpath {
 				
 					$return .= "\t\t" . '<tr>' . "\n";
 					
-						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").' :</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").'&nbsp;:</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
 							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
@@ -4762,12 +4762,12 @@ class learnpath {
 									
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").' :</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").'&nbsp;:</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
 							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
 							
-								$return .= "\t\t\t\t\t" . '<option class="top" value="0">First position</option>';
+								$return .= "\t\t\t\t\t" . '<option class="top" value="0">'.get_lang('FirstPosition').'</option>';
 								
 								for($i = 0; $i < count($arrLP); $i++)
 								{
@@ -4794,7 +4794,7 @@ class learnpath {
 					{
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").'&nbsp;:</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
@@ -4826,7 +4826,7 @@ class learnpath {
 						
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-						$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").'&nbsp;:</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 							
 							foreach($arrHide as $key => $value){
@@ -4856,7 +4856,7 @@ class learnpath {
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="OK" /></td>' . "\n";
+						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang('Ok').'" /></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 				
@@ -4968,11 +4968,11 @@ class learnpath {
 			unset($this->arrMenu);
 
 			if($action == 'add')
-				$return .= '<p class="lp_title">'.get_lang("CreateTheExercise").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("CreateTheExercise").'&nbsp;:</p>' . "\n";
 			elseif($action == 'move')
-				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentExercise").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentExercise").'&nbsp;:</p>' . "\n";
 			else
-				$return .= '<p class="lp_title">'.get_lang("EditCurrentExecice").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("EditCurrentExecice").'&nbsp;:</p>' . "\n";
 
 			if(isset($_GET['edit']) && $_GET['edit'] == 'true')
 			{
@@ -5034,7 +5034,7 @@ class learnpath {
 
 							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
 
-								$return .= "\t\t\t\t\t" . '<option class="top" value="0">First position</option>';
+								$return .= "\t\t\t\t\t" . '<option class="top" value="0">'.get_lang('FirstPosition').'</option>';
 
 								for($i = 0; $i < count($arrLP); $i++)
 								{
@@ -5121,7 +5121,7 @@ class learnpath {
 
 					$return .= "\t\t" . '<tr>' . "\n";
 
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="OK" /></td>' . "\n";
+						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang('Ok').'" /></td>' . "\n";
 
 					$return .= "\t\t" . '</tr>' . "\n";
 
@@ -5234,11 +5234,11 @@ class learnpath {
 			unset($this->arrMenu);
 			
 			if($action == 'add')
-				$return .= '<p class="lp_title">'.get_lang("CreateTheForum").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("CreateTheForum").'&nbsp;:</p>' . "\n";
 			elseif($action == 'move')
-				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentForum").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentForum").'&nbsp;:</p>' . "\n";
 			else
-				$return .= '<p class="lp_title">'.get_lang("EditCurrentForum").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("EditCurrentForum").'&nbsp;:</p>' . "\n";
 			
 			$return .= '<form method="POST">' . "\n";
 			
@@ -5246,7 +5246,7 @@ class learnpath {
 				
 					$return .= "\t\t" . '<tr>' . "\n";
 					
-						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").' :</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").'&nbsp;:</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
 							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
@@ -5285,12 +5285,12 @@ class learnpath {
 									
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").' :</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").'&nbsp;:</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
 							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
 							
-								$return .= "\t\t\t\t\t" . '<option class="top" value="0">First position</option>';
+								$return .= "\t\t\t\t\t" . '<option class="top" value="0">'.get_lang('FirstPosition').'</option>';
 								
 								for($i = 0; $i < count($arrLP); $i++)
 								{
@@ -5317,7 +5317,7 @@ class learnpath {
 					{
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").'&nbsp;:</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
@@ -5354,7 +5354,7 @@ class learnpath {
 						
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'&nbsp;:</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 							
 							foreach($arrHide as $key => $value){
@@ -5377,7 +5377,7 @@ class learnpath {
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="OK" /></td>' . "\n";
+						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang('Ok').'" /></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 				
@@ -5490,11 +5490,11 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			unset($this->arrMenu);
 			
 			if($action == 'add')
-				$return .= '<p class="lp_title">'.get_lang("CreateTheForum").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("CreateTheForum").'&nbsp;:</p>' . "\n";
 			elseif($action == 'move')
-				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentForum").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentForum").'&nbsp;:</p>' . "\n";
 			else
-				$return .= '<p class="lp_title">'.get_lang("EditCurrentForum").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("EditCurrentForum").'&nbsp;:</p>' . "\n";
 			
 			$return .= '<form method="POST">' . "\n";
 			
@@ -5502,7 +5502,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				
 					$return .= "\t\t" . '<tr>' . "\n";
 					
-						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").' :</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").'&nbsp;:</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
 							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
@@ -5541,12 +5541,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 									
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").' :</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").'&nbsp;:</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
 							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
 							
-								$return .= "\t\t\t\t\t" . '<option class="top" value="0">First position</option>';
+								$return .= "\t\t\t\t\t" . '<option class="top" value="0">'.get_lang('FirstPosition').'</option>';
 								
 								for($i = 0; $i < count($arrLP); $i++)
 								{
@@ -5573,7 +5573,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					{
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").'&nbsp;:</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
@@ -5610,7 +5610,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 						
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").'&nbsp;:</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 							
 							foreach($arrHide as $key => $value){
@@ -5633,7 +5633,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="OK" /></td>' . "\n";
+						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang('Ok').'" /></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 				
@@ -5772,7 +5772,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				}
 			}
 			
-			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent")." :", '', 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;" onchange="load_cbo(this.value);"');
+			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent")."&nbsp;:", '', 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;" onchange="load_cbo(this.value);"');
 
 			foreach($arrHide as $key => $value)
 			{
@@ -5799,7 +5799,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			}
 		}
 		
-		$position = &$form->addElement('select', 'previous', get_lang("Position")." :", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
+		$position = &$form->addElement('select', 'previous', get_lang("Position")."&nbsp;:", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
 		
 		$position->addOption(get_lang('FirstPosition'),0,'style="padding-left:'.$value['padding'].'px;"');
 		
@@ -5814,7 +5814,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		if($action != 'move')
 		{
-			$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
+			$form->addElement('text','title', get_lang('Title').'&nbsp;:','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 			//$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"  style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 		}
 		else
@@ -5989,15 +5989,15 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			
 			if($action == 'add')
 			{
-				$return .= '<p class="lp_title">'.get_lang("CreateTheDocument").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("CreateTheDocument").'&nbsp;:</p>' . "\n";
 			}
 			elseif($action == 'move')
 			{
-				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentDocument").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentDocument").'&nbsp;:</p>' . "\n";
 			}
 			else
 			{
-				$return .= '<p class="lp_title">'.get_lang("EditTheCurrentDocument").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("EditTheCurrentDocument").'&nbsp;:</p>' . "\n";
 			}
 
 			$return .= '</div>';
@@ -6052,7 +6052,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					}
 				}
 			}
-			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent")." :", '', 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;" onchange="load_cbo(this.value);"');
+			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent")."&nbsp;:", '', 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;" onchange="load_cbo(this.value);"');
 
 			foreach($arrHide as $key => $value)
 			{
@@ -6081,7 +6081,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				}
 			}
 			
-			$position = &$form->addElement('select', 'previous', get_lang("Position")." :", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
+			$position = &$form->addElement('select', 'previous', get_lang("Position")."&nbsp;:", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 			$position->addOption(get_lang("FirstPosition"),0,'style="padding-left:3px;"');
 			
 			foreach($arrHide as $key => $value)
@@ -6096,7 +6096,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			
 			if($action != 'move')
 			{
-				$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:295px;"');
+				$form->addElement('text','title', get_lang('Title').'&nbsp;:','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:295px;"');
 
 				
 				$id_prerequisite=0;
@@ -6110,7 +6110,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					}
 				}
 
-				$select_prerequisites=$form->addElement('select', 'prerequisites', get_lang('Prerequisites').' :', '', 'id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
+				$select_prerequisites=$form->addElement('select', 'prerequisites', get_lang('Prerequisites').'&nbsp;:', '', 'id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
 				$select_prerequisites->addOption(get_lang("NoPrerequisites"),0,'style="padding-left:3px;"');
 				
 				$arrHide=array();
@@ -6291,11 +6291,11 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			unset($this->arrMenu);
 			
 			if($action == 'add')
-				$return .= '<p class="lp_title">'.get_lang("CreateTheLink").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("CreateTheLink").'&nbsp;:</p>' . "\n";
 			elseif($action == 'move')
-				$return .= '<p class="lp_title">'.get_lang("MoveCurrentLink").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("MoveCurrentLink").'&nbsp;:</p>' . "\n";
 			else
-				$return .= '<p class="lp_title">'.get_lang("EditCurrentLink").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("EditCurrentLink").'&nbsp;:</p>' . "\n";
 			
 			$return .= '<form method="POST">' . "\n";
 			
@@ -6550,11 +6550,11 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			unset($this->arrMenu);
 			
 			if($action == 'add')
-				$return .= '<p class="lp_title">'.get_lang("Student_publication").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("Student_publication").'&nbsp;:</p>' . "\n";
 			elseif($action == 'move')
-				$return .= '<p class="lp_title">'.get_lang("MoveCurrentStudentPublication").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("MoveCurrentStudentPublication").'&nbsp;:</p>' . "\n";
 			else
-				$return .= '<p class="lp_title">'.get_lang("EditCurrentStudentPublication").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("EditCurrentStudentPublication").'&nbsp;:</p>' . "\n";
 			
 			$return .= '<form method="POST">' . "\n";
 			
@@ -7009,21 +7009,21 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td class="label"><label for="idTitle">Title:</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idTitle">Title&nbsp;:</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input"><input class="small_form" id="idTitle" name="title" type="text" value="' . $data['title'] . '" /></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td class="label"><label for="idDescription">Description:</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idDescription">Description&nbsp;:</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input"><textarea class="small_form" id="idDescription" name="description" rows="4">' . $data['description'] . '</textarea></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 					
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button small_form" name="submit_button" type="submit" value="OK" /></td>' . "\n";
+						$return .= "\t\t\t" . '<td colspan="2"><input class="button small_form" name="submit_button" type="submit" value="'.get_lang('Ok').'" /></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 					

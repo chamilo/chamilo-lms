@@ -40,7 +40,7 @@ foreach ($_SESSION['_user'] as $key => $val)
 	if ($key != "auth_source") 
 	{
 		if (( $key == "lastName" || $key == "firstName" ) && strlen($val) == 0)
-			$val = "undefined";
+			$val = get_lang('Unknown');
 		printf('<%s>%s</%s>',$key,utf8_encode($val),$key);
 	}
 

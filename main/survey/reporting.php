@@ -1,26 +1,30 @@
 <?php
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2008 Dokeos SPRL
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-    Contact:
-		Dokeos
-		Rue du Corbeau, 108
-		B-1030 Brussels - Belgium
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
 
 /**
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 15331 2008-05-20 15:48:35Z juliomontoya $
+* 	@version $Id: reporting.php 15556 2008-06-11 20:53:01Z juliomontoya $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -139,7 +143,7 @@ else
 }
 
 // Displaying the header
-Display::display_header($tool_name);
+Display::display_header($tool_name,'Survey');
 
 // Action handling
 SurveyUtil::handle_reporting_actions();

@@ -1,27 +1,29 @@
 <?php
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2008 Dokeos SPRL
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
-
 /**
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 15331 2008-05-20 15:48:35Z juliomontoya $
+* 	@version $Id: question.php 15556 2008-06-11 20:53:01Z juliomontoya $
 */
 
 // name of the language file that needs to be included
@@ -79,7 +81,7 @@ $possible_types = array('yesno', 'multiplechoice', 'multipleresponse', 'open', '
 // checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types))
 {
-	Display::display_header($tool_name);
+	Display::display_header($tool_name,'Survey');
 	Display :: display_error_message(get_lang('TypeDoesNotExist'), false);
 	Display :: display_footer();
 }
@@ -88,7 +90,7 @@ if (!in_array($_GET['type'], $possible_types))
 if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types))
 {
 	// Displaying the header
-	Display::display_header($tool_name);
+	Display::display_header($tool_name,'Survey');
 	
 
 	$error_message='';	

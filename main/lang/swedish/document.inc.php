@@ -128,6 +128,12 @@ $ReadOnlyFile = "Filen kan bara läsas, inte ändras";
 $FileNotFound = "Filen hittades inte";
 $TemplateTitleFirstPage = "Förstasidan";
 $TemplateTitleFirstPageDescription = "Det är som en omslagssida i din kurs";
+$TemplateTitleDedicatory = "Dedikation";
+$TemplateTitleDedicatoryDescription = "Skapa en egen dedikation";
+$TemplateTitlePreface = "Kursförord";
+$TemplateTitlePrefaceDescription = "Förord";
 $TemplateTitleIntroduction = "Introduktion";
 $TemplateTitleIntroductionDescription = "Skriv in introduktionstexten";
+$TemplateTitlePlan = "Planering";
+$TemplateTitlePlanDescription = "Listar innehållet";
 ?>

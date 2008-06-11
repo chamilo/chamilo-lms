@@ -46,4 +46,5 @@ $langClarContent2 = "Apagar conteúdo";
 $langHGroups = "Grupos";
 $langGroupsContent = "Conteúdo dos grupos";
 $langGuide = "Manual";
+$HSurvey = "Ajuda Questionário";
 ?>

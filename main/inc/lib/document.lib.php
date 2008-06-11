@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 	
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) Roan Embrechts, Vrije Universiteit Brussel
 	
@@ -17,7 +17,7 @@
 	
 	See the GNU General Public License for more details.
 	
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -692,7 +692,7 @@ class DocumentManager
 		{
 			if (get_setting('permanently_remove_deleted_files') == 'true') //deleted files are *really* deleted
 			{
-				$what_to_delete_sql = "SELECT id FROM ".$TABLE_DOCUMENT." WHERE path='".$path."' OR path LIKE '".$path."/%'";
+				$what_to_delete_sql = "SELECT id FROM ".$TABLE_DOCUMENT." WHERE path='".$path."' OR path LIKE BINARY '".$path."/%'";
 				//get all id's of documents that are deleted
 				$what_to_delete_result = api_sql_query($what_to_delete_sql, __FILE__, __LINE__);
 
@@ -739,39 +739,58 @@ class DocumentManager
 				if (api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'delete', api_get_user_id()))
 				{
 					//echo('item_property_update OK');
-					if (rename($base_work_dir.$path, $base_work_dir.$new_path))
-					{
-						//echo('rename OK');
-						$sql = "UPDATE $TABLE_DOCUMENT set path='".$new_path."' WHERE id='".$document_id."'";
-						if (api_sql_query($sql, __FILE__, __LINE__))
-						{
-							//if it is a folder it can contain files
-							$sql = "SELECT id,path FROM ".$TABLE_DOCUMENT." WHERE path LIKE '".$path."/%'";
-							$result = api_sql_query($sql, __FILE__, __LINE__);
-							if ($result && Database::num_rows($result) > 0)
-							{
-								while ($deleted_items = Database::fetch_array($result,'ASSOC'))
-								{
-									//echo('to delete also: id '.$deleted_items['id']);
-									api_item_property_update($_course, TOOL_DOCUMENT, $deleted_items['id'], 'delete', api_get_user_id());
-									//Change path of subfolders and documents in database
-									$old_item_path = $deleted_items['path'];
-									$new_item_path = $new_path.substr($old_item_path, strlen($path));
-									$sql = "UPDATE $TABLE_DOCUMENT set path = '".$new_item_path."' WHERE id = ".$deleted_items['id'];
-									api_sql_query($sql, __FILE__, __LINE__);
-								}
-							}
-							//echo('dbase update OK');
-							return true;
-						}
-					}
-				}
-				else
-				{
-					return false;
+					if (is_file($base_work_dir.$path))
+                    {
+                        if(rename($base_work_dir.$path, $base_work_dir.$new_path))
+    					{
+    						$sql = "UPDATE $TABLE_DOCUMENT set path='".$new_path."' WHERE id='".$document_id."'";
+    						if (api_sql_query($sql, __FILE__, __LINE__))
+    						{
+    							//if it is a folder it can contain files
+    							$sql = "SELECT id,path FROM ".$TABLE_DOCUMENT." WHERE path LIKE BINARY '".$path."/%'";
+    							$result = api_sql_query($sql, __FILE__, __LINE__);
+    							if ($result && Database::num_rows($result) > 0)
+    							{
+    								while ($deleted_items = Database::fetch_array($result,'ASSOC'))
+    								{
+    									//echo('to delete also: id '.$deleted_items['id']);
+    									api_item_property_update($_course, TOOL_DOCUMENT, $deleted_items['id'], 'delete', api_get_user_id());
+    									//Change path of subfolders and documents in database
+    									$old_item_path = $deleted_items['path'];
+    									$new_item_path = $new_path.substr($old_item_path, strlen($path));
+    									$sql = "UPDATE $TABLE_DOCUMENT set path = '".$new_item_path."' WHERE id = ".$deleted_items['id'];
+    									api_sql_query($sql, __FILE__, __LINE__);
+    								}
+    							}
+    							return true;
+    						}
+    					}
+                        else
+                        {
+                        	//Couldn't rename - file permissions problem?
+                            error_log(__FILE__.' '.__LINE__.': Error renaming '.$base_work_dir.$path.' to '.$base_work_dir.$new_path.'. This is probably due to file permissions',0);
+                        }
+                    }
+                    else
+                    {
+                    	//The file or directory isn't there anymore (on the filesystem)
+                        // This means it has been removed externally. To prevent a
+                        // blocking error from happening, we drop the related items from the
+                        // item_property and the document table.
+                        error_log(__FILE__.' '.__LINE__.': System inconsistency detected. The file or directory '.$base_work_dir.$path.' seems to have been removed from the filesystem independently from the web platform. To restore consistency, the elements using the same path will be removed from the database',0);
+                        $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE path='".$path."' OR path LIKE BINARY '".$path."/%'";
+                        $res = Database::query($sql,__FILE__,__LINE__);
+                        while ( $row = Database::fetch_array($res) ) {
+                        	$sqlipd = "DELETE FROM $TABLE_ITEMPROPERTY WHERE ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
+                            $resipd = Database::query($sqlipd,__FILE__,__LINE__);
+                            $sqldd = "DELETE FROM $TABLE_DOCUMENT WHERE id = ".$row['id'];
+                            $resdd = Database::query($sqldd,__FILE__,__LINE__); 
+                        }
+                    }
 				}
 			}
 		}
+        return false;
 	}
 
 	/**

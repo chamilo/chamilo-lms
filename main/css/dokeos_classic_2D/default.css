@@ -212,6 +212,14 @@ a.invisible:visited {
 	margin: 0;
 }
 
+
+#top_corner
+{
+	
+}
+
+
+
 #institution {
 	float: left;
 	font-weight: bold;
@@ -425,6 +433,12 @@ a.invisible:visited {
 	clear:both;
 	border-top:thin solid;
 	padding-top:2px;
+}
+
+
+#bottom_corner
+{
+	
 }
 
 
@@ -2178,3 +2192,5 @@ input.forms	{
 ------------------------------------------------------------------------------
 */
 #show_audiorecorder_div{background:#F0F0F0; border:1px solid #999999; font-weight:bold; padding:2px; width:350px;}
+
+

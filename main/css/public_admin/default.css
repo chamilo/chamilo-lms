@@ -203,6 +203,10 @@ input[text] {font-size: 12px; }
 	margin: 0;
 	font-weight: bold;
 }
+#top_corner
+{
+	
+}
 #institution {
 	float: left;
 	font-weight: bold;
@@ -405,6 +409,12 @@ input[text] {font-size: 12px; }
 #footer a{
 	color:#f1d40d;
 
+}
+
+
+#bottom_corner
+{
+	
 }
 /*****************************************************
  *  NAVIGATION MENU                                  *
@@ -1563,3 +1573,9 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 ------------------------------------------------------------------------------
 */
 #show_audiorecorder_div{background:#F0F0F0; border:1px solid #999999; font-weight:bold; padding:2px; width:350px;}
+
+
+
+
+
+

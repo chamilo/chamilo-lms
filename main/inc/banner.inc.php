@@ -10,7 +10,7 @@
 ?>
 <div id="header">  <!-- header section start -->
 <div id="header1"> <!-- top of banner with institution name/hompage link -->
-
+<div id="top_corner"></div> 
 <div id="institution">
 <a href="<?php echo api_get_path(WEB_PATH);?>index.php" target="_top"><?php echo api_get_setting('siteName') ?></a>
 -

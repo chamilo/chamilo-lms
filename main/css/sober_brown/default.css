@@ -204,6 +204,12 @@ input[text] {font-size: 12px; }
 	margin: 0;
 	font-weight: bold;
 }
+
+#top_corner
+{
+	
+}
+
 #institution {
 	float: left;
 	font-weight: bold;
@@ -399,9 +405,12 @@ input[text] {font-size: 12px; }
 	float: right;
 }
 #footer a{
-
 	color:#ffffff;
+}
 
+#bottom_corner
+{
+	
 }
 /*****************************************************
  *  NAVIGATION MENU                                  *
@@ -1607,6 +1616,31 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 ------------------------------------------------------------------------------
 */
 #show_audiorecorder_div{background:#F0F0F0; border:1px solid #999999; font-weight:bold; padding:2px; width:350px;}
+
+
+
+#top_corner
+{
+	display:none;
+	position: relative;
+	float:right;
+	width:317px;
+	height:100px;
+	background: transparent;
+	background-image: url("images/top_corner.png");
+}
+
+#bottom_corner
+{
+	display:none; 
+	position: relative;
+	top:-15px;
+	float:right;
+	width:317px;
+	height:80px; 
+	background: transparent url("images/bottom_corner.png") no-repeat top right;
+	padding: 15px 0px 0px 0px;
+}
 
 
 

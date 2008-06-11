@@ -31,10 +31,12 @@ if(api_get_setting('show_navigation_menu') != 'false')
 </div> <!-- end of #main" started at the end of banner.inc.php -->
 
 <div id="footer"> <!-- start of #footer section -->
+<div id="bottom_corner"></div> 
  <div class="copyright">
   <?php global $_configuration; ?>
   <?php echo get_lang("Platform") ?> <a href="http://www.dokeos.com">Dokeos <?php echo $_configuration['dokeos_version']; ?></a> &copy; <?php echo date('Y'); ?>
  </div>
+
 <?php
 /*
 -----------------------------------------------------------------------------
@@ -49,6 +51,8 @@ api_plugin('footer');
   	echo get_lang("Manager") ?> : <?php echo Display::encrypted_mailto_link(get_setting('emailAdministrator'),get_setting('administratorName')." ".get_setting('administratorSurname'));
 	}
   ?>&nbsp;
+  
+
 </div> <!-- end of #footer -->
 
 </div> <!-- end of #outerframe opened in header.inc.php -->

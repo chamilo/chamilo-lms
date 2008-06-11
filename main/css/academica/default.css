@@ -191,6 +191,12 @@ ul {
 	visibility: hidden;
 }
 
+
+#top_corner
+{
+
+}
+
 #institution {
 	margin: 0 0 0 3.9em;
 }
@@ -207,7 +213,7 @@ ul {
 	float: right;
 	clear: right;
 	margin: .5em 0 0 0;
-	padding: 0;;
+	padding: 0;
 	text-align: right;
 }
 
@@ -403,6 +409,12 @@ ul {
 	clear: right;
 	margin: 0 2em 0 0;
 }
+
+#bottom_corner
+{
+	
+}
+
 
 /*
 ==============================================================================
@@ -1606,3 +1618,4 @@ div.system_announcement {
 ------------------------------------------------------------------------------
 */
 #show_audiorecorder_div{background:#F0F0F0; border:1px solid #999999; font-weight:bold; padding:2px; width:350px;}
+

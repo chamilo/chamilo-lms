@@ -116,7 +116,7 @@ elseif(!empty($tmp_version))
 	$my_old_version = $tmp_version;
 }
 $new_version = '1.8.5';
-$new_version_stable = false;
+$new_version_stable = true;
 /*
 ==============================================================================
 		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT

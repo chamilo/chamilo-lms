@@ -319,7 +319,7 @@ class ScormSection
 		$css .= '</style>'."\n";
 		$css .= '<style type="text/css" media="print">'."\n";
 		$css .= '/*<![CDATA[*/'."\n";
-		$css .= '@import "'.api_get_path(WEB_PATH).'main/css/default/print.css";'."\n";
+		$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/print.css";'."\n";
 		$css .= '/*]]>*/'."\n";
 		$css .= '</style>'."\n";
 		return $css;

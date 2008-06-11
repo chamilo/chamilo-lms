@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 15372 2008-05-23 10:29:42Z yannoo $
+<?php //$Id: agenda.inc.php 15546 2008-06-11 04:50:51Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1419,7 +1419,7 @@ function display_agenda_items()
 		if (!empty($_SESSION['user']))
 		{
 			$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_SESSION['user']);
-			if (is_array($group_memberships))
+			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
 				$sql="SELECT
 					agenda.*, toolitemproperties.*
@@ -2512,7 +2512,7 @@ function get_agendaitems($month, $year)
 	else
 	{
 		//echo "GEEN course admin";
-		if (is_array($group_memberships))
+		if (is_array($group_memberships) && count($group_memberships)>0)
 		{
 			$sqlquery = "SELECT
 							agenda.*, item_property.*
@@ -2865,7 +2865,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 		else
 		{
 			//echo "GEEN course admin";
-			if (is_array($group_memberships))
+			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
 				$sqlquery = "SELECT
 													agenda.*, item_property.*
@@ -2992,7 +2992,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 		else
 		{
 			//echo "GEEN course admin";
-			if (is_array($group_memberships))
+			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
 				$sqlquery = "SELECT
 													a.*, i.*

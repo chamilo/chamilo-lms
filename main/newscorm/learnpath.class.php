@@ -8176,6 +8176,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
                     {
                         $old_new['dest'] = str_replace('main/','../../../',$old_new['dest']);	
                     }
+                    elseif(substr($old_new['dest'],-3)=='flv' && substr($old_new['dest'],0,6)=='video/')
+                    {
+                        $old_new['dest'] = str_replace('video/','../../../../video/',$old_new['dest']);   
+                    }
 					$string = str_replace($old_new['orig'],$old_new['dest'],$string);
 				}
 				file_put_contents($dest_file,$string);

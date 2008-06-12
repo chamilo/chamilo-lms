@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 15174 2008-04-29 18:00:04Z yannoo $
+// $Id: add_course.php 15568 2008-06-12 05:23:42Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -100,10 +100,10 @@ $form->setDefaults($values);
 if($form->validate())
 {
 	$course_values = $form->exportValues();
-	$wanted_code = Security::remove_XSS($course_values['wanted_code']);
-	$tutor_name = Security::remove_XSS($course_values['tutor_name']);
+	$wanted_code = $course_values['wanted_code'];
+	$tutor_name = $course_values['tutor_name'];
 	$category_code = $course_values['category_code'];
-	$title = Security::remove_XSS($course_values['title']);
+	$title = $course_values['title'];
 	$course_language = $course_values['course_language'];
 	
 	if(trim($wanted_code) == ''){

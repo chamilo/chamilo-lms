@@ -1,7 +1,7 @@
 <?php //$id:$
 /**
  * Defines the AICC class, which is meant to contain the aicc items (nuclear elements)
- * @package dokeos.learnpath.aicc
+ * @package dokeos.learnpath
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  * @license	GNU/GPL - See Dokeos license directory for details
  */

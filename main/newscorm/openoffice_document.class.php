@@ -2,7 +2,7 @@
 /**
  * Defines the OpenOfficeDocument class, which is meant as a mother class
  * to help in the conversion of Office documents to learning paths
- * @package dokeos.learnpath.openofficedocument
+ * @package dokeos.learnpath
  * @author	Eric Marguin <eric.marguin@dokeos.com>
  * @license	GNU/GPL - See Dokeos license directory for details
  */

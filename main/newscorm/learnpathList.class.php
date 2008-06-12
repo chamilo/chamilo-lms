@@ -1,7 +1,7 @@
 <?php //$id:$
 /**
  * File containing the declaration of the learnpathList class.
- * @package	dokeos.learningpath
+ * @package	dokeos.learnpath
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  */
 /**

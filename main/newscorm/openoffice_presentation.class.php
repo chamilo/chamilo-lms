@@ -3,7 +3,7 @@
  * Defines the OpenOfficeDocument class, which is meant as a conversion
  * tool from Office presentations (.ppt, .sxi, .odp, .pptx) to
  * learning paths
- * @package dokeos.learnpath.openofficedocument
+ * @package dokeos.learnpath
  * @author  Eric Marguin <eric.marguin@dokeos.com>
  * @license GNU/GPL - See Dokeos license directory for details
  */

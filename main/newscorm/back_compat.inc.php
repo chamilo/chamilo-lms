@@ -4,6 +4,7 @@
  * version 1.6.3 and 1.8 of Dokeos by loading libraries in a different way.
  * The switch is now deprecated and this file will be renamed later on to
  * something like lp_includes.inc.php
+ * @package dokeos.learnpath
  */
 require_once('../inc/global.inc.php');
 require_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');

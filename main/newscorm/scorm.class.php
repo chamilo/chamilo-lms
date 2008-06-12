@@ -6,7 +6,7 @@
  */
 /**
  * Defines the "scorm" child of class "learnpath"
- * @package dokeos.learnpath.scorm
+ * @package dokeos.learnpath
  */
 require_once('scormItem.class.php');
 require_once('scormMetadata.class.php');

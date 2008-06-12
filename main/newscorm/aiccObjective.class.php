@@ -1,7 +1,7 @@
 <?php //$id:$
 /**
  * Container for the aiccResource class that deals with elemens from AICC Objectives file 
- * @package	scorm.learnpath
+ * @package	dokeos.learnpath
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  * @license	GNU/GPL - See Dokeos license directory for details
  */

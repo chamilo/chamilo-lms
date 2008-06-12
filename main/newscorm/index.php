@@ -1,7 +1,7 @@
 <?php //$id: $
 /**
- * Script ...
- * @package 
+ * Redirection script
+ * @package dokeos.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**

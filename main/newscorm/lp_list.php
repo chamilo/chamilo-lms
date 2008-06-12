@@ -107,11 +107,11 @@ if(api_is_allowed_to_edit())
 		'</a>' .
 		str_repeat('&nbsp;',3).
 		'<a href="../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/file_zip.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("UploadScorm").'</a>';
-		if(api_get_setting('service_ppt2lp','active')==true)
+		if (api_get_setting('service_ppt2lp', 'active') == 'true')
 		{
 			echo  str_repeat('&nbsp;',3).'<a href="../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/powerpoint.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("PowerPointConvert").'</a>';
        		echo  str_repeat('&nbsp;',3).'<a href="../upload/upload_word.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/word.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("WordConvert").'</a>';
-       }
+        }
 			
        
 }

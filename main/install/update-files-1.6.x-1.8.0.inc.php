@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.6.x-1.8.0.inc.php 13195 2007-09-23 20:29:09Z yannoo $
+<?php //$Id: update-files-1.6.x-1.8.0.inc.php 15578 2008-06-12 22:30:58Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -44,6 +44,7 @@
 require_once("../inc/lib/main_api.lib.php");
 require_once("../inc/lib/fileUpload.lib.php");
 require_once('../inc/lib/database.lib.php');
+require_once('install_upgrade.lib.php');
 
 /*
 ==============================================================================
@@ -54,7 +55,7 @@ function insert_db($db_name, $folder_name, $text){
 
 	$_course['dbName'] = $db_name;
 	
-	$doc_id = add_document($_course, '/'.$folder_name, 'folder', 0, ucfirst($text));
+	$doc_id = add_document_180($_course, '/'.$folder_name, 'folder', 0, ucfirst($text));
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', 1);
 	
 }

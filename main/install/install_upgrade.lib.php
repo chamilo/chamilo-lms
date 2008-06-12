@@ -514,6 +514,33 @@ function directory_to_array($directory)
 	}
 	return $array_items;
 }
-
+/**
+ * Adds a new document to the database - specific to version 1.8.0
+ *
+ * @param array $_course
+ * @param string $path
+ * @param string $filetype
+ * @param int $filesize
+ * @param string $title
+ * @return id if inserted document
+ */
+function add_document_180($_course,$path,$filetype,$filesize,$title,$comment=NULL)
+{
+    $table_document = Database::get_course_table(TABLE_DOCUMENT,$_course['dbName']);
+    $sql="INSERT INTO $table_document
+    (`path`,`filetype`,`size`,`title`, `comment`)
+    VALUES ('$path','$filetype','$filesize','".
+    Database::escape_string($title)."', '$comment')";
+    if(api_sql_query($sql,__FILE__,__LINE__))
+    {
+        //display_message("Added to database (id ".mysql_insert_id().")!");
+        return mysql_insert_id();
+    }
+    else
+    {
+        //display_error("The uploaded file could not be added to the database (".mysql_error().")!");
+        return false;
+    }
+}
 
 ?>

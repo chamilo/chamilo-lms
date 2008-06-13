@@ -185,7 +185,7 @@ To take advantage of Dokeos <span style="font-weight: bold;">Videoconferencing</
 
   <li>Open your web browser (Internet Explorer, Firefox...) and type
     <span style="font-weight: bold;">http://localhost/dokeos/</span> if you install locally or
-    <span style="font-weight: bold;">http://www.mydomain.com/dokeos/</span> if you install remotely</li>
+    <span style="font-weight: bold;">http://www.domain.com/dokeos/</span> if you install remotely</li>
 
   <li>Follow the web installation process. You can accept all default
 values. Consider changing the admin password to remember it.&nbsp;</li>
@@ -814,7 +814,7 @@ on the same topic.
  <br />
 <br />
 <br />
-You may&nbsp;want to take advantage of the audio recorder. For this :<br />
+You may&nbsp;want to take advantage of the audio recorder. To do this :<br />
 
 
 <ul>
@@ -835,15 +835,15 @@ mkdir /etc/dokeos/; sudo gedit /etc/dokeos/videoconference-config.xml)</li>
 
   
 <div class="code">
-<pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br />  &lt;videoconference-config&gt;<br />    &lt;server-keys&gt;<br />      &lt;server-key host="dokeos.domaine.com_" key="PaSSw0rd" /&gt;<br />      &lt;server-key host="www.domaine.com_dokeos_" key="p4ssWoRD" /&gt;<br />    &lt;/server-keys&gt;<br />    &lt;moderator-check-on-whiteboard&gt;false&lt;/moderator-check-on-whiteboard&gt;<br />    &lt;video-streams-dir&gt;/opt/dokeos/recorded-streams&lt;/video-streams-dir&gt;<br />    &lt;vod-streams-dir&gt;/opt/dokeos/vod-streams&lt;/vod-streams-dir&gt;<br />  &lt;/videoconference-config&gt;</pre>
+<pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br />  &lt;videoconference-config&gt;<br />    &lt;server-keys&gt;<br />      &lt;server-key host="dokeos.domain.com_" key="PaSSw0rd" /&gt;<br />      &lt;server-key host="www.domain.com_dokeos_" key="p4ssWoRD" /&gt;<br />    &lt;/server-keys&gt;<br />    &lt;moderator-check-on-whiteboard&gt;false&lt;/moderator-check-on-whiteboard&gt;<br />    &lt;video-streams-dir&gt;/opt/dokeos/recorded-streams&lt;/video-streams-dir&gt;<br />    &lt;vod-streams-dir&gt;/opt/dokeos/vod-streams&lt;/vod-streams-dir&gt;<br />  &lt;/videoconference-config&gt;</pre>
 </div>
 In this file, you will have to put at least one server-key line per
 portal. In this above example we authorize portals installed at the
 URLs:
 
 <ul>
-  <li>http://dokeos.domaine.com/</li>
-  <li>http://www.domaine.com/dokeos/</li>
+  <li>http://dokeos.domain.com/</li>
+  <li>http://www.domain.com/dokeos/</li>
 </ul>
 
 

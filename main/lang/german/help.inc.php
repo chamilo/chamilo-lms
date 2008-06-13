@@ -46,4 +46,5 @@ $langClarContent2 = "Inhalt von ??? 2 ";
 $langHGroups = "Hilfe - Gruppen";
 $langGroupsContent = "Inhalt von Gruppen";
 $langGuide = "Führer";
+$HSurvey = "Umfrage Hilfe";
 ?>

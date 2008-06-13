@@ -809,4 +809,5 @@ $UploadNewStylesheet = "New stylesheet file";
 $StylesheetAdded = "The stylesheet has been added";
 $LDAPFilledTutorFieldValueTitle = "Tutor identification value";
 $LDAPFilledTutorFieldValueComment = "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a teacher. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a teacher. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\".";
+$IsNotWritable = "is not writeable";
 ?>

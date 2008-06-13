@@ -809,4 +809,5 @@ $UploadNewStylesheet = "Fichier de la nouvelle feuille de style";
 $StylesheetAdded = "La feuille de style a été ajoutée";
 $LDAPFilledTutorFieldValueTitle = "Valeur d\'identification d\'un enseignant";
 $LDAPFilledTutorFieldValueComment = "Lorsque la vérification du champ enseignant est faite sur le champ donné ci-dessus, la valeur donnée ci-dessous doit se trouver dans les sous-éléments du champ donné pour que l\'utilisateur soit considéré comme un enseignant. Si vous laissez ce champ vide, la seule condition est que le sous-élément défini par le champ enseignant ci-dessus existe pour l\'utilisateur LDAP pour qu\'il soit considéré comme un enseignant. Par exemple, le champ pourrait être \"memberof\" et la valeur à trouver \"CN=G_TRAINER,OU=Trainer\".";
+$IsNotWritable = "n\'est pas inscriptible";
 ?>

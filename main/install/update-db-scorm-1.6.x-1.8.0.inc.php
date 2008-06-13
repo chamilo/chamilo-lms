@@ -150,10 +150,12 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
 	
 
 	//MIGRATING LEARNPATH CHAPTERS
+    $sql_lp_chap = "ALTER TABLE $lp_chap ADD INDEX ( parent_chapter_id, display_order )";
+    $res_lp_chap = api_sql_query($sql_lp_chap,__FILE__,__LINE__); 
 
 	$sql_lp_chap = "SELECT * FROM $lp_chap ORDER BY parent_chapter_id, display_order";
 	//echo "$sql_lp_chap<br />\n";
-	$res_lp_chap = api_sql_query($sql_lp_chap);	
+	$res_lp_chap = api_sql_query($sql_lp_chap,__FILE__,__LINE__);	
 	while($row = Database::fetch_array($res_lp_chap))
 	{
 		//echo "Treating chapter id : ".$row['id']."<br />\n";
@@ -259,6 +261,8 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
 		
 	);
 	//MIGRATING LEARNPATH ITEMS
+    $sql_lp_item = "ALTER TABLE $lp_item ADD INDEX ( chapter_id, display_order)";
+    $res_lp_item = api_sql_query($sql_lp_item,__FILE__,__LINE__);   
 	$sql_lp_item = "SELECT * FROM $lp_item ORDER BY chapter_id, display_order";
 	//echo "$sql_lp_item<br />\n";
 	$res_lp_item = api_sql_query($sql_lp_item,__FILE__,__LINE__);	
@@ -327,6 +331,8 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
 	}
 	//echo "<pre>lp_items:".print_r($lp_items,true)."</pre>\n";
 	// complete next_item_id field by going through the new table and looking at parent_id and display_order
+    $order_sql = "ALTER TABLE $my_new_lp_item ADD INDEX (lp_id, parent_item_id, display_order)";
+    $order_res = api_sql_query($order_sql,__FILE__,__LINE__);
 	$order_sql = "SELECT * FROM $my_new_lp_item ORDER by lp_id ASC, parent_item_id ASC, display_order ASC";
 	//echo "$order_sql<br />\n";
 	$order_res = api_sql_query($order_sql,__FILE__,__LINE__);
@@ -379,6 +385,10 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
 	//echo "</pre>\n";
 	
 	//MIGRATING THE learnpath_user TABLE (results)
+    $mysql = "ALTER TABLE $my_new_lp_item_view ADD INDEX (lp_view_id)";
+    $myres = api_sql_query($mysql,__FILE__,__LINE__);
+    $sql_lp_user = "ALTER TABLE $lp_user ADD INDEX (user_id, learnpath_id, learnpath_item_id)";
+    $res_lp_user = api_sql_query($sql_lp_user,__FILE__,__LINE__);
 	$sql_lp_user = "SELECT * FROM $lp_user ORDER BY user_id, learnpath_id, learnpath_item_id";
 	//echo "$sql_lp_user<br />\n";
 	$res_lp_user = api_sql_query($sql_lp_user,__FILE__,__LINE__);
@@ -455,8 +465,8 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
 			$res_ins_iv = api_sql_query($sql_ins_iv,__FILE__,__LINE__);
 		}
         //UPDATE THE LP_VIEW progress
-        $sql = "SELECT count(distinct(lp_item_id)) FROM $my_new_lp_item_view WHERE lp_view_id = ".$lp_view." AND status IN ('passed','completed','succeeded','browsed','failed')";
-        $myres = api_sql_query($sql,__FILE__,__LINE__);
+        $mysql = "SELECT count(distinct(lp_item_id)) FROM $my_new_lp_item_view WHERE lp_view_id = ".$lp_view." AND status IN ('passed','completed','succeeded','browsed','failed')";
+        $myres = api_sql_query($mysql,__FILE__,__LINE__);
         $myrow = Database::fetch_array($myres);
         $completed = $myrow[0];
         $mylpid = $lp_ids[$row['learnpath_id']];

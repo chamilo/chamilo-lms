@@ -76,7 +76,7 @@ If you want to save time, trouble and money, you can alternatively have your Dok
 
   <li><a href="#7._Oogie_PowerPoint__Impress_conversion">Oogie PowerPoint / Impress conversion</a></li>
 
-  <li><a href="#8._Videoconferencing_and_audio-recorder">Videoconferencing and audio-recorder</a></li>
+  <li><a href="#8._Videoconferencing_and_audio-recorder">Videoconferencing and audio recorder</a></li>
 
   <li><a href="#9._Mathematical_formulas">Mathematical formulas with LaTeX</a></li>
 
@@ -786,7 +786,7 @@ See below : Videoconferencing<br />
 		  
 <hr style="width: 100%; height: 2px;" />
 
-<h2><a name="8._Videoconferencing_and_audio-recorder"></a>8. Videoconferencing and audio-recorder</h2>
+<h2><a name="8._Videoconferencing_and_audio-recorder"></a>8. Videoconferencing and audio recorder</h2>
 
 <i>This part is optional, only organisations wanting to use the videoconference feature might want to read this.</i><br />
 
@@ -814,16 +814,21 @@ on the same topic.
  <br />
 <br />
 <br />
-You may&nbsp;want to take advantage of the audio recorder. To do this :<br />
+You may&nbsp;want to take advantage of the audio recorder and of the videoconferencing. To do this :<br />
 
 
 <ul>
 
   <li>Download and install <a href="http://osflash.org/red5">RED5 Open Source Flash server version 0.6</a> (you will find Linux packages and a Windows installer on the RED 5 website)</li>
 
-  <li>Download <a href="http://www.dokeos.com/maven/repository/com/dokeos/dokeos-recorder/2.0.0-SNAPSHOT/dokeos-recorder-2.0.0-SNAPSHOT.war">Dokeos RED5 webapplication</a></li>
+  <li>Download <a href="http://www.dokeos.com/maven/repository/com/dokeos/dokeos-recorder/2.0.0-M2/dokeos-recorder-2.0.0-M2.war">Dokeos-recorder RED5 application</a></li>
 
   <li>Rename it to "dokeos-recorder.war" and copy it into the <span style="font-style: italic;">webapps</span> directory of your RED5 installation.&nbsp;Windows : Target directory can be C:/Program Files/Red5/webapps/ .
+Linux with Nautilus or through a shell : cp dokeos-recorder.war /usr/lib/red5/webapps (when RED5 is installed using Debian package)</li>
+
+  <li>Download <a href="http://www.dokeos.com/maven/repository/com/dokeos/dokeos-videoconf/2.0.0-M2/dokeos-videoconf-2.0.0-M2.war">Dokeos-videoconf RED5 application</a></li>
+
+  <li>Rename it to "dokeos-videoconf.war" and copy it into the <span style="font-style: italic;">webapps</span> directory of your RED5 installation.&nbsp;Windows : Target directory can be C:/Program Files/Red5/webapps/ .
 Linux with Nautilus or through a shell : cp dokeos-recorder.war /usr/lib/red5/webapps</li>
 
   <li>Create an XML configuration file for Red5 (e.g. Linux: sudo
@@ -854,8 +859,7 @@ The "_" at the end of each URL really matters, don't forget it.<br />
 
 Restart Red5 to reload the configuration file and the new application using, on Ubuntu or Debian:
 <div class="code">
-/etc/init.d/red5 stop
-/etc/init.d/red5 start
+/etc/init.d/red5 restart
 </div>
 
 	
@@ -882,7 +886,7 @@ You will be asked for 4 things
 
 		<li>the password (which you have configured in your red5 configuration file</li>
 
-		<li>whether you want to use rtmpt or not (useful to pass through firewalls but slower)</li>
+		<li>whether you want to use rtmpt or not (useful to pass through firewalls but slower). In order to use this option, you will have to configure red5 to make it listening on the port 80. See <a href="http://www.dokeos.com/wiki/index.php/Installing_videoconference_2.0">http://www.dokeos.com/wiki/index.php/Installing_videoconference_2.0</a></li>
 
 	
 </ul>

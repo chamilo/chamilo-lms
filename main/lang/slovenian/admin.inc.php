@@ -809,4 +809,5 @@ $UploadNewStylesheet = "Datoteka z novim stilom";
 $StylesheetAdded = "Stil je bil dodan";
 $LDAPFilledTutorFieldValueTitle = "Identifikacijska vrednost tutorja";
 $LDAPFilledTutorFieldValueComment = "Vrednost zgornjega tutorjevega polja mora biti znotraj enega od podelementov tutorjevih polj, da se uporabnika smatra kot uèitelja. Èe to polje pustite prazno, je edini pogoj, da se uporabnika LDAP smatra kot uèitelja obstoj ustreznega polja. Na primer: polje je lahko \"memberof\", vrednost ki jo išèemo pa \"CN=G_TRAINER,OU=Trainer\".";
+$IsNotWritable = "je zgolj bralnega tipa";
 ?>

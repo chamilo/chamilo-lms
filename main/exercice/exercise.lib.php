@@ -23,7 +23,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 15412 2008-05-26 13:56:24Z elixir_inter $
+* 	@version $Id: exercise.lib.php 15602 2008-06-18 08:52:24Z pcool $
 */
 
 
@@ -99,7 +99,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			$oFCKeditor->Value	= '' ;
 
 			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".Database::escape_string($_SESSION["_course"]["language"])."'";
 			$result_sql=api_sql_query($sql);
 			$isocode_language=mysql_result($result_sql,0,0);
 			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;

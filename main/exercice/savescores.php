@@ -22,7 +22,7 @@
 *	Saving the scores.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: savescores.php 15312 2008-05-19 01:15:03Z yannoo $
+* 	@version $Id: savescores.php 15602 2008-06-18 08:52:24Z pcool $
 */
 
 // name of the language file that needs to be included
@@ -55,8 +55,8 @@ $tbl_learnpath_user 	= Database::get_course_table(TABLE_LEARNPATH_USER);
 $TABLE_LP_ITEM_VIEW 	= Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $_cid = api_get_course_id();
-$test = mysql_real_escape_string($_REQUEST['test']);
-$score = mysql_real_escape_string($_REQUEST['score']);
+$test = $_REQUEST['test'];
+$score = $_REQUEST['score'];
 $origin = $_REQUEST['origin'];
 $jscript2run = '';
 
@@ -95,7 +95,13 @@ function save_scores($file, $score)
 	$sql = "INSERT INTO $TABLETRACK_HOTPOTATOES ".
 	"(exe_name, exe_user_id, exe_date,exe_cours_id,exe_result,exe_weighting)" .
 	"VALUES" .
-	"('$file',$user_id,'$date','$_cid','$score','$weighting')";
+	"(
+	'".Database::escape_string($file)."',
+	'".Database::escape_string($user_id)."',
+	'".Database::escape_string($date)."',
+	'".Database::escape_string($_cid)."',
+	'".Database::escape_string($score)."',
+	'".Database::escape_string($weighting)."')";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 
 	if ($origin == 'learnpath')

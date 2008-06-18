@@ -97,11 +97,11 @@ if ( empty ( $origin ) )
 }
 if ( empty ( $learnpath_id ) )
 {
-    $learnpath_id       = mysql_real_escape_string($_REQUEST['learnpath_id']);
+    $learnpath_id       = $_REQUEST['learnpath_id'];
 }
 if ( empty ( $learnpath_item_id ) )
 {
-    $learnpath_item_id  = mysql_real_escape_string($_REQUEST['learnpath_item_id']);
+    $learnpath_item_id  = $_REQUEST['learnpath_item_id'];
 }
 if ( empty ( $formSent ) )
 {
@@ -120,11 +120,11 @@ if ( empty ( $choice ) ) {
 }
 if ( empty ( $questionNum ) )
 {
-    $questionNum    = mysql_real_escape_string($_REQUEST['questionNum']);
+    $questionNum    = $_REQUEST['questionNum'];
 }
 if ( empty ( $nbrQuestions ) )
 {
-    $nbrQuestions   = mysql_real_escape_string($_REQUEST['nbrQuestions']);
+    $nbrQuestions   = $_REQUEST['nbrQuestions'];
 }
 if ( empty ( $questionList ) )
 {

@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 15463 2008-05-27 16:45:11Z juliomontoya $
+* 	@version $Id: question.class.php 15602 2008-06-18 08:52:24Z pcool $
 */
 
 
@@ -103,7 +103,7 @@ abstract class Question
 		$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
 		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-		$sql="SELECT question,description,ponderation,position,type,picture FROM $TBL_QUESTIONS WHERE id='$id'";
+		$sql="SELECT question,description,ponderation,position,type,picture FROM $TBL_QUESTIONS WHERE id='".Database::escape_string($id)."'";
 
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
@@ -298,7 +298,7 @@ abstract class Question
 			if(!in_array($this->type,array(UNIQUE_ANSWER,MULTIPLE_ANSWER)) || !in_array($type,array(UNIQUE_ANSWER,MULTIPLE_ANSWER)))
 			{
 				// removes old answers
-				$sql="DELETE FROM $TBL_REPONSES WHERE question_id='".$this->id."'";
+				$sql="DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($this->id)."'";
 				api_sql_query($sql,__FILE__,__LINE__);
 			}
 
@@ -472,7 +472,7 @@ abstract class Question
 			$Extension=$picture[sizeof($picture)-1];
 			$picture='quiz-'.$questionId.'.'.$Extension;
 
-			$sql="UPDATE $TBL_QUESTIONS SET picture='$picture' WHERE id='$questionId'";
+			$sql="UPDATE $TBL_QUESTIONS SET picture='".Database::escape_string($picture)."' WHERE id='".Database::escape_string($questionId)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			return @copy($picturePath.'/'.$this->picture,$picturePath.'/'.$picture)?true:false;
@@ -559,19 +559,33 @@ abstract class Question
 		// question already exists
 		if($id)
 		{
-			$sql="UPDATE $TBL_QUESTIONS SET question='$question',description='$description',ponderation='$weighting',position='$position',type='$type',picture='$picture' WHERE id='$id'";
+			$sql="UPDATE $TBL_QUESTIONS SET 
+					question 	='".Database::escape_string($question)."',
+					description	='".Database::escape_string($description)."',
+					ponderation	='".Database::escape_string($weighting)."',
+					position	='".Database::escape_string($position)."',
+					type		='".Database::escape_string($type)."',
+					picture		='".Database::escape_string($picture)."' 
+				WHERE id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
 		// creates a new question
 		else
 		{
-			$sql="SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question WHERE question.id=test_question.question_id AND test_question.exercice_id='$exerciseId'";
+			$sql="SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question WHERE question.id=test_question.question_id AND test_question.exercice_id='".Database::escape_string($exerciseId)."'";
 			$result=api_sql_query($sql);
 			$current_position=mysql_result($result,0,0);
 			$this -> updatePosition($current_position+1);
 			$position = $this -> position;
 			
-			$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type,picture) VALUES('$question','$description','$weighting','$position','$type','$picture')";
+			$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type,picture) VALUES(
+					'".Database::escape_string($question)."',
+					'".Database::escape_string($description)."',
+					'".Database::escape_string($weighting)."',
+					'".Database::escape_string($position)."',
+					'".Database::escape_string($type)."',
+					'".Database::escape_string($picture)."'
+					)";
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			$this->id=mysql_insert_id();
@@ -580,7 +594,7 @@ abstract class Question
 			if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
 				$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
-				$sql="INSERT INTO $TBL_ANSWERS (`id` , `question_id` , `answer` , `correct` , `comment` , `ponderation` , `position` , `hotspot_coordinates` , `hotspot_type` ) VALUES ('1', '$this->id', '', NULL , '', NULL , '1', '0;0|0|0', 'square')";
+				$sql="INSERT INTO $TBL_ANSWERS (`id` , `question_id` , `answer` , `correct` , `comment` , `ponderation` , `position` , `hotspot_coordinates` , `hotspot_type` ) VALUES ('1', '".Database::escape_string($this->id)."', '', NULL , '', NULL , '1', '0;0|0|0', 'square')";
 				api_sql_query($sql,__FILE__,__LINE__);
 			}
 		}
@@ -617,7 +631,7 @@ abstract class Question
 		{
 			$this->exerciseList[]=$exerciseId;
 
-			$sql="INSERT INTO $TBL_EXERCICE_QUESTION(question_id,exercice_id) VALUES('$id','$exerciseId')";
+			$sql="INSERT INTO $TBL_EXERCICE_QUESTION(question_id,exercice_id) VALUES('".Database::escape_string($id)."','".Database::escape_string($exerciseId)."')";
 
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
@@ -649,7 +663,7 @@ abstract class Question
 			// deletes the position in the array containing the wanted exercise ID
 			unset($this->exerciseList[$pos]);
 
-			$sql="DELETE FROM $TBL_EXERCICE_QUESTION WHERE question_id='$id' AND exercice_id='$exerciseId'";
+			$sql="DELETE FROM $TBL_EXERCICE_QUESTION WHERE question_id='".Database::escape_string($id)."' AND exercice_id='".Database::escape_string($exerciseId)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			return true;
@@ -673,13 +687,13 @@ abstract class Question
 		// if the question must be removed from all exercises
 		if(!$deleteFromEx)
 		{
-			$sql="DELETE FROM $TBL_EXERCICE_QUESTION WHERE question_id='$id'";
+			$sql="DELETE FROM $TBL_EXERCICE_QUESTION WHERE question_id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 
-			$sql="DELETE FROM $TBL_QUESTIONS WHERE id='$id'";
+			$sql="DELETE FROM $TBL_QUESTIONS WHERE id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 
-			$sql="DELETE FROM $TBL_REPONSES WHERE question_id='$id'";
+			$sql="DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			$this->removePicture();
@@ -710,7 +724,7 @@ abstract class Question
 		$position=$this->position;
 		$type=$this->type;
 
-		$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type) VALUES('$question','$description','$weighting','$position','$type')";
+		$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type) VALUES('".Database::escape_string($question)."','".Database::escape_string($description)."','".Database::escape_string($weighting)."','".Database::escape_string($position)."','".Database::escape_string($type)."')";
 		api_sql_query($sql,__FILE__,__LINE__);
 
 		$id=mysql_insert_id();

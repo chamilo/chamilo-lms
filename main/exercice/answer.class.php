@@ -23,7 +23,7 @@
 *	5 arrays are created to receive the attributes of each answer belonging to a specified question
 * 	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer.class.php 13732 2007-11-21 15:19:33Z yannoo $
+* 	@version $Id: answer.class.php 15602 2008-06-18 08:52:24Z pcool $
 */
 
 
@@ -112,7 +112,7 @@ class Answer
 		$questionId=$this->questionId;
 		//$answerType=$this->selectType();
 
-		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type FROM $TBL_ANSWER WHERE question_id='$questionId' ORDER BY position";
+		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type FROM $TBL_ANSWER WHERE question_id='".Database::escape_string($questionId)."' ORDER BY position";
 
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
@@ -143,11 +143,13 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 	function readOrderedBy($field,$order=ASC)
 	{
 		global $_course;
-		$field = mysql_real_escape_string($field);
-		if(empty($field)){
+		$field = Database::escape_string($field);
+		if(empty($field))
+		{
 			$field = 'position';
 		}
-		if($order != 'ASC' and $order!='DESC'){
+		if($order != 'ASC' and $order!='DESC')
+		{
 			$order = 'ASC';
 		}
 		$TBL_ANSWER = Database::get_course_table('quiz_answer');
@@ -157,7 +159,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 
 		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type " .
 				"FROM $TBL_ANSWER " .
-				"WHERE question_id='$questionId' " .
+				"WHERE question_id='".Database::escape_string($questionId)."' " .
 				"ORDER BY $field $order";
 
 		$result=api_sql_query($sql,__FILE__,__LINE__);
@@ -260,7 +262,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 	 function getQuestionType()
 	 {
 	 	$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-	 	$sql = "SELECT * FROM $TBL_QUESTIONS WHERE id = '".$this->questionId."'";
+	 	$sql = "SELECT * FROM $TBL_QUESTIONS WHERE id = '".Database::escape_string($this->questionId)."'";
 	 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	 	if(Database::num_rows($res)<=0){
 	 		return null;
@@ -385,12 +387,12 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 		$questionId=$this->questionId;
 
 		$sql = "UPDATE $TBL_REPONSES SET " .
-				"`answer` = '$answer', " .
-				"`comment` = '$comment', " .
-				"`ponderation` = '$weighting', " .
-				"`position` = '$position' " .
-				"WHERE `id` =$position " .
-				"AND `question_id` =$questionId";
+				"answer = '".Database::escape_string($answer)."', " .
+				"comment = '".Database::escape_string($comment)."', " .
+				"ponderation = '".Database::escape_string($weighting)."', " .
+				"position = '".Database::escape_string($position)."' " .
+				"WHERE id = '".Database::escape_string($position)."' " .
+				"AND question_i` = '".Database::escape_string($questionId)."'";
 
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
@@ -407,7 +409,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 		$questionId=$this->questionId;
 
 		// removes old answers before inserting of new ones
-		$sql="DELETE FROM $TBL_REPONSES WHERE question_id='$questionId'";
+		$sql="DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($questionId)."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 
 		// inserts new answers into data base
@@ -417,13 +419,13 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 
 		for($i=1;$i <= $this->new_nbrAnswers;$i++)
 		{
-			$answer=addslashes($this->new_answer[$i]);
-			$correct=$this->new_correct[$i];
-			$comment=addslashes($this->new_comment[$i]);
-			$weighting=$this->new_weighting[$i];
-			$position=$this->new_position[$i];
-			$hotspot_coordinates=$this->new_hotspot_coordinates[$i];
-			$hotspot_type=$this->new_hotspot_type[$i];
+			$answer					= Database::escape_string($this->new_answer[$i]);
+			$correct				= Database::escape_string($this->new_correct[$i]);
+			$comment				= Database::escape_string($this->new_comment[$i]);
+			$weighting				= Database::escape_string($this->new_weighting[$i]);
+			$position				= Database::escape_string($this->new_position[$i]);
+			$hotspot_coordinates	= Database::escape_string($this->new_hotspot_coordinates[$i]);
+			$hotspot_type			= Database::escape_string($this->new_hotspot_type[$i]);
 
 			$sql.="('$i','$questionId','$answer','$correct','$comment',
 					'$weighting','$position','$hotspot_coordinates','$hotspot_type'),";
@@ -468,13 +470,13 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 
 			for($i=1;$i <= $this->nbrAnswers;$i++)
 			{
-				$answer=addslashes($this->answer[$i]);
-				$correct=$this->correct[$i];
-				$comment=addslashes($this->comment[$i]);
-				$weighting=$this->weighting[$i];
-				$position=$this->position[$i];
-				$hotspot_coordinates=$this->hotspot_coordinates[$i];
-				$hotspot_type=$this->hotspot_type[$i];
+				$answer					= Database::escape_string($this->answer[$i]);
+				$correct				= Database::escape_string($this->correct[$i]);
+				$comment				= Database::escape_string($this->comment[$i]);
+				$weighting				= Database::escape_string($this->weighting[$i]);
+				$position				= Database::escape_string($this->position[$i]);
+				$hotspot_coordinates	= Database::escape_string($this->hotspot_coordinates[$i]);
+				$hotspot_type			= Database::escape_string($this->hotspot_type[$i]);
 
 				$sql.="('$i','$newQuestionId','$answer','$correct','$comment'," .
 						"'$weighting','$position','$hotspot_coordinates','$hotspot_type'),";

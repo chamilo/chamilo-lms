@@ -61,7 +61,7 @@ if ($_GET['type'] == "poly")
 	}
 	$hotspot_coordinates = substr($hotspot_coordinates,0,-2);
 }
-$sql = "UPDATE `$TBL_ANSWER` SET `hotspot_coordinates` = '$hotspot_coordinates',`hotspot_type` = '$hotspot_type' WHERE `id` =$answerId AND `question_id` =$questionId LIMIT 1 ;";
+$sql = "UPDATE `$TBL_ANSWER` SET hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',hotspot_type = '".Database::escape_string($hotspot_type)."' WHERE id = '".Database::escape_string($answerId)."' AND question_id ='".Database::escape_string($questionId)."' LIMIT 1 ;";
 $result = api_sql_query($sql,__FILE__,__LINE__);
 echo "done=done";
 ?>

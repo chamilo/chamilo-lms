@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 15438 2008-05-27 06:46:30Z elixir_inter $
+* 	@version $Id: exercise_result.php 15602 2008-06-18 08:52:24Z pcool $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -92,10 +92,10 @@ if ( empty ( $origin ) ) {
      $origin = $_REQUEST['origin'];
 }
 if ( empty ( $learnpath_id ) ) {
-     $learnpath_id       = mysql_real_escape_string($_REQUEST['learnpath_id']);
+     $learnpath_id       = $_REQUEST['learnpath_id'];
 }
 if ( empty ( $learnpath_item_id ) ) {
-     $learnpath_item_id  = mysql_real_escape_string($_REQUEST['learnpath_item_id']);
+     $learnpath_item_id  = $_REQUEST['learnpath_item_id'];
 }
 if ( empty ( $formSent ) ) {
     $formSent       = $_REQUEST['formSent'];
@@ -110,10 +110,10 @@ if ( empty ( $choice ) ) {
     $choice = $_REQUEST['choice'];
 }
 if ( empty ( $questionNum ) ) {
-   $questionNum    = mysql_real_escape_string($_REQUEST['questionNum']);
+   $questionNum    = $_REQUEST['questionNum'];
 }
 if ( empty ( $nbrQuestions ) ) {
-    $nbrQuestions   = mysql_real_escape_string($_REQUEST['nbrQuestions']);
+    $nbrQuestions   = $_REQUEST['nbrQuestions'];
 }
 if ( empty ( $questionList ) ) {
     $questionList = $_SESSION['questionList'];
@@ -696,7 +696,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 					$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 					// Save into db
 					$sql = "INSERT INTO $tbl_track_e_hotspot (`hotspot_user_id` , `hotspot_course_code` , `hotspot_exe_id` , `hotspot_question_id` , `hotspot_answer_id` , `hotspot_correct` , `hotspot_coordinate` ) 
-							VALUES ('".$_user['user_id']."', '".$_course['id']."', '$exeId', '$questionId', '$answerId', '$studentChoice', '".$_SESSION['exerciseResultCoordinates'][$questionId][$answerId]."')";
+							VALUES ('".Database::escape_string($_user['user_id'])."', '".Database::escape_string($_course['id'])."', '".Database::escape_string($exeId)."', '".Database::escape_string($questionId)."', '".Database::escape_string($answerId)."', '".Database::escape_string($studentChoice)."', '".Database::escape_string($_SESSION['exerciseResultCoordinates'][$questionId][$answerId])."')";
 				
 					$result = api_sql_query($sql,__FILE__,__LINE__);
 					
@@ -791,7 +791,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 						$val = $arr1[1][0];
 					$val=addslashes($val);
 					$val=strip_tags($val);
-					$sql = "select position from $table_ans where question_id=$questionId and answer='$val' AND correct=0";
+					$sql = "select position from $table_ans where question_id='".Database::escape_string($questionId)."' and answer='".Database::escape_string($val)."' AND correct=0";
 					$res = api_sql_query($sql, __FILE__, __LINE__);
 					$answer = mysql_result($res,0,"position");				
 					
@@ -806,7 +806,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			}
 			elseif ($answerType==UNIQUE_ANSWER)
 			{
-				$sql = "select id from $table_ans where question_id=$questionId and position=$choice";
+				$sql = "select id from $table_ans where question_id='".Database::escape_string($questionId)."' and position='".Database::escape_string($choice)."'";
 				$res = api_sql_query($sql, __FILE__, __LINE__);
 				$answer = mysql_result($res,0,"id");
 				exercise_attempt($questionScore,$answer,$quesId,$exeId,0);

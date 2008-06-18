@@ -22,7 +22,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 14786 2008-04-08 14:11:46Z elixir_inter $
+* 	@version $Id: exercise.class.php 15602 2008-06-18 08:52:24Z pcool $
 */
 
 
@@ -75,7 +75,7 @@ class Exercise
 	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
     	#$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
-		$sql="SELECT title,description,sound,type,random,active, results_disabled FROM $TBL_EXERCICES WHERE id='$id'";
+		$sql="SELECT title,description,sound,type,random,active, results_disabled FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
 		// if the exercise has been found
@@ -90,7 +90,7 @@ class Exercise
 			$this->active=$object->active;
 			$this->results_disabled =$object->results_disabled;
 
-			$sql="SELECT question_id,position FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='$id' ORDER BY position";
+			$sql="SELECT question_id,position FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY position";
 			$result=api_sql_query($sql,__FILE__,__LINE__);
 
 			// fills the array with the question ID for this exercise
@@ -445,13 +445,30 @@ class Exercise
 		// exercise already exists
 		if($id)
 		{
-			$sql="UPDATE $TBL_EXERCICES SET title='$exercise',description='$description',sound='$sound',type='$type',random='$random',active='$active',results_disabled='$results_disabled' WHERE id='$id'";
+			$sql="UPDATE $TBL_EXERCICES SET 
+						title='".Database::escape_string($exercise)."',
+						description='".Database::escape_string($description)."',
+						sound='".Database::escape_string($sound)."',
+						type='".Database::escape_string($type)."',
+						random='".Database::escape_string($random)."',
+						active='".Database::escape_string($active)."',
+						results_disabled='".Database::escape_string($results_disabled)."' 
+					WHERE id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
 		// creates a new exercise
 		else
 		{
-			$sql="INSERT INTO $TBL_EXERCICES(title,description,sound,type,random,active, results_disabled) VALUES('$exercise','$description','$sound','$type','$random','$active',$results_disabled)";
+			$sql="INSERT INTO $TBL_EXERCICES(title,description,sound,type,random,active, results_disabled) 
+					VALUES(
+						'".Database::escape_string($exercise)."',
+						'".Database::escape_string($description)."',
+						'".Database::escape_string($sound)."',
+						'".Database::escape_string($type)."',
+						'".Database::escape_string($random)."',
+						'".Database::escape_string($active)."',
+						'".Database::escape_string($results_disabled)."'
+						)";
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			$this->id=mysql_insert_id();
@@ -460,7 +477,7 @@ class Exercise
 		// updates the question position
 		foreach($this->questionList as $position=>$questionId)
 		{
-			$sql="UPDATE $TBL_QUESTIONS SET position='$position' WHERE id='$questionId'";
+			$sql="UPDATE $TBL_QUESTIONS SET position='".Database::escape_string($position)."' WHERE id='".Database::escape_string($questionId)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
 	}
@@ -615,7 +632,7 @@ class Exercise
 	 */
 	function delete(){
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-		$sql="UPDATE $TBL_EXERCICES SET active='-1' WHERE id='".$this->id."'";
+		$sql="UPDATE $TBL_EXERCICES SET active='-1' WHERE id='".Database::escape_string($this->id)."'";
 		api_sql_query($sql);
 	}
 

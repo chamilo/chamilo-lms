@@ -18,7 +18,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 15385 2008-05-24 02:59:51Z yannoo $
+* 	@version $Id: question_pool.php 15602 2008-06-18 08:52:24Z pcool $
 */
 
 // name of the language file that needs to be included
@@ -144,7 +144,7 @@ if($is_allowedToEdit)
 	<option value="-1" <?php if($exerciseId == -1) echo 'selected="selected"'; ?>>-- <?php echo get_lang('OrphanQuestions'); ?> --</option>
 
 <?php 
-	$sql="SELECT id,title FROM $TBL_EXERCICES WHERE id<>'$fromExercise' AND active<>'-1' ORDER BY id";
+	$sql="SELECT id,title FROM $TBL_EXERCICES WHERE id<>'".Database::escape_string($fromExercise)."' AND active<>'-1' ORDER BY id";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 
 	// shows a list-box allowing to filter questions
@@ -168,7 +168,7 @@ if($is_allowedToEdit)
 	// if we have selected an exercise in the list-box 'Filter'
 	if($exerciseId > 0)
 	{
-		$sql="SELECT id,question,type FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='$exerciseId' ORDER BY position";
+		$sql="SELECT id,question,type FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($exerciseId)."' ORDER BY position";
 	}
 	// if we have selected the option 'Orphan questions' in the list-box 'Filter'
 	elseif($exerciseId == -1)

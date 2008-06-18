@@ -157,11 +157,13 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 		$keyexp = explode('_',$key);
 		if ($keyexp[0] == "marks")
 		{
-			$sql = "select question from $TBL_QUESTIONS where id = '$keyexp[1]'";
+			$sql = "SELECT question from $TBL_QUESTIONS where id = '".Database::escape_string($keyexp[1])."'";
 			$result =api_sql_query($sql, __FILE__, __LINE__);
 			$ques_name = mysql_result($result,0,"question");
 
-			$query = "update $TBL_TRACK_ATTEMPT set marks = '$v' where question_id = $keyexp[1] and exe_id=$id";
+			$query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '".Database::escape_string($v)."' 
+						WHERE question_id = '".Database::escape_string($keyexp[1])."' 
+						AND exe_id='".Database::escape_string($id)."'";
 			api_sql_query($query, __FILE__, __LINE__);
 
 			$qry = 'SELECT sum(marks) as tot
@@ -171,13 +173,15 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 			$res = api_sql_query($qry,__FILE__,__LINE__);
 			$tot = mysql_result($res,0,'tot');
 
-			$totquery = "update $TBL_TRACK_EXERCICES set exe_result = $tot where exe_Id=$id";
+			$totquery = "update $TBL_TRACK_EXERCICES set exe_result = '".Database::escape_string($tot)."' where exe_Id='".Database::escape_string($id)."'";
 			api_sql_query($totquery, __FILE__, __LINE__);
 
 		}
 		else
 		{
-		  $query = "update $TBL_TRACK_ATTEMPT set teacher_comment = '$v' where question_id = $keyexp[1] and exe_id = $id ";
+		  $query = "UPDATE $TBL_TRACK_ATTEMPT SET teacher_comment = '".Database::escape_string($v)."' 
+		  			WHERE question_id = '".Database::escape_string($keyexp[1])."' 
+		  			AND exe_id = '".Database::escape_string($id)."'";
 		   api_sql_query($query, __FILE__, __LINE__);
 		}
 
@@ -194,7 +198,7 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 		$tot += $row ['marks'];
 	}
 
-	$totquery = "update $TBL_TRACK_EXERCICES set exe_result = $tot where exe_Id=$id";
+	$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".Database::escape_string($tot)."' WHERE exe_Id='".Database::escape_string($id)."'";
 
 	api_sql_query($totquery, __FILE__, __LINE__);
 	$subject = get_lang('ExamSheetVCC');
@@ -459,7 +463,7 @@ if($is_allowedToEdit)
 					break;
 				case 'enable':  // enables an exercise
 					$newVisibilityStatus = "1"; //"visible"
-                    $query = "SELECT id FROM $TBL_DOCUMENT WHERE path='$file'";
+                    $query = "SELECT id FROM $TBL_DOCUMENT WHERE path='".Database::escape_string($file)."'";
                     $res = api_sql_query($query,__FILE__,__LINE__);
                     $row = Database::fetch_array($res, 'ASSOC');
                     api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'visible', $_user['user_id']);
@@ -468,7 +472,7 @@ if($is_allowedToEdit)
 							break;
 				case 'disable': // disables an exercise
 					$newVisibilityStatus = "0"; //"invisible"
-                    $query = "SELECT id FROM $TBL_DOCUMENT WHERE path='$file'";
+                    $query = "SELECT id FROM $TBL_DOCUMENT WHERE path='".Database::escape_string($file)."'";
                     $res = api_sql_query($query,__FILE__,__LINE__);
                     $row = Database::fetch_array($res, 'ASSOC');
                     api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'invisible', $_user['user_id']);
@@ -483,14 +487,14 @@ if($is_allowedToEdit)
 
 	if($show == 'test')
 	{
-		$sql="SELECT id,title,type,active,description, results_disabled FROM $TBL_EXERCICES WHERE active<>'-1' ORDER BY title LIMIT $from,".($limitExPage+1);
+		$sql="SELECT id,title,type,active,description, results_disabled FROM $TBL_EXERCICES WHERE active<>'-1' ORDER BY title LIMIT ".(int)$from.",".(int)($limitExPage+1);
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 	}
 }
 // only for students
 elseif($show == 'test')
 {
-	$sql="SELECT id,title,type,description, results_disabled FROM $TBL_EXERCICES WHERE active='1' ORDER BY title LIMIT $from,".($limitExPage+1);
+	$sql="SELECT id,title,type,description, results_disabled FROM $TBL_EXERCICES WHERE active='1' ORDER BY title LIMIT ".(int)$from.",".(int)($limitExPage+1);
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 }
 
@@ -519,13 +523,13 @@ if($show == 'test'){
 	$res = api_sql_query ("SELECT *
 					FROM $TBL_DOCUMENT
 					WHERE
-					path LIKE '".$uploadPath."/%/%'",__FILE__,__LINE__);
+					path LIKE '".Database::escape_string($uploadPath)."/%/%'",__FILE__,__LINE__);
 	$nbrTests = Database::num_rows($res);
 	$res = api_sql_query ("SELECT *
 					FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
 					WHERE  d.id = ip.ref
 					AND ip.tool = '".TOOL_DOCUMENT."'
-					AND d.path LIKE '".$uploadPath."/%/%'
+					AND d.path LIKE '".Database::escape_string($uploadPath)."/%/%'
 					AND ip.visibility='1'", __FILE__,__LINE__);
 	$nbrActiveTests = Database::num_rows($res);
 
@@ -633,7 +637,7 @@ if($show == 'test'){
 		  </td>
 		  <td width="8%" align="center"> <?php
 		  $exid = $row['id'];
-		  $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '$exid'";
+		  $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '".Database::escape_string($exid)."'";
 		  $sqlresult =api_sql_query($sqlquery);
 		  $rowi = mysql_result($sqlresult,0);
 		  echo $rowi.' '.strtolower(get_lang(($rowi>1?'Questions':'Question'))).'</td>';
@@ -683,7 +687,7 @@ if($show == 'test'){
     </table></td>
 	 <td align="center"> <?php
   $exid = $row['id'];
-  $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '$exid'";
+  $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '".Database::escape_string($exid)."'";
   $sqlresult =api_sql_query($sqlquery);
   $rowi = mysql_result($sqlresult,0);
   echo ($rowi>1?get_lang('Questions'):get_lang('Question')); ?> </td>
@@ -692,7 +696,7 @@ if($show == 'test'){
 		$eid = $row['id'];
 	$uid= api_get_user_id();
     //this query might be improved later on by ordering by the new "tms" field rather than by exe_id
-	$qry = "select * from $TBL_TRACK_EXERCICES where exe_exo_id = $eid and exe_user_id = $uid and exe_cours_id = '".api_get_course_id()."' ORDER BY exe_id DESC";	
+	$qry = "select * from $TBL_TRACK_EXERCICES where exe_exo_id = '".Database::escape_string($eid)."' and exe_user_id = '".Database::escape_string($uid)."' and exe_cours_id = '".api_get_course_id()."' ORDER BY exe_id DESC";	
 	$qryres = api_sql_query($qry);
 	$num = Database::num_rows($qryres);
     if($num>0)
@@ -753,7 +757,7 @@ if($show == 'test'){
 				FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
 							WHERE   d.id = ip.ref AND ip.tool = '".TOOL_DOCUMENT."' AND
 							 (d.path LIKE '%htm%')
-							AND   d.path  LIKE '".$uploadPath."/%/%' LIMIT $from,$to"; // only .htm or .html files listed
+							AND   d.path  LIKE '".Database::escape_string($uploadPath)."/%/%' LIMIT ".(int)$from.",".(int)$to; // only .htm or .html files listed
 		}
 		else
 		{
@@ -761,7 +765,7 @@ if($show == 'test'){
 				FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
 								WHERE d.id = ip.ref AND ip.tool = '".TOOL_DOCUMENT."' AND
 								 (d.path LIKE '%htm%')
-								AND   d.path  LIKE '".$uploadPath."/%/%' AND ip.visibility='1' LIMIT $from,$to";
+								AND   d.path  LIKE '".Database::escape_string($uploadPath)."/%/%' AND ip.visibility='1' LIMIT ".(int)$from.",".(int)$to;
 		}
 
 		$result = api_sql_query ($sql,__FILE__,__LINE__);
@@ -938,13 +942,13 @@ if($_configuration['tracking_enabled'])
 			$sql="SELECT CONCAT(lastname,' ',firstname),ce.title, te.exe_result ,
 						te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id,email
 				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
-				  WHERE te.exe_exo_id = ce.id AND user_id=te.exe_user_id AND te.exe_cours_id='$_cid'
+				  WHERE te.exe_exo_id = ce.id AND user_id=te.exe_user_id AND te.exe_cours_id='".Database::escape_string($_cid)."'
 				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
 			$hpsql="SELECT CONCAT(tu.lastname,' ',tu.firstname), tth.exe_name,
 						tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date)
 					FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-					WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '".$_cid."'
+					WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = ".Database::escape_string($_cid)."'
 					ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
 
 		}
@@ -952,12 +956,12 @@ if($_configuration['tracking_enabled'])
 		{ // get only this user's results
 			  $sql="SELECT '',ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id
 				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te
-				  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".$_user['user_id']."' AND te.exe_cours_id='$_cid'  AND results_disabled=0
+				  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".$_user['user_id']."' AND te.exe_cours_id=".Database::escape_string($_cid)."'  AND results_disabled=0
 				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
 			$hpsql="SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)
 					FROM $TBL_TRACK_HOTPOTATOES
-					WHERE exe_user_id = '".$_user['user_id']."' AND exe_cours_id = '".$_cid."'
+					WHERE exe_user_id = '".$_user['user_id']."' AND exe_cours_id = ".Database::escape_string($_cid)."'
 					ORDER BY exe_cours_id ASC, exe_date ASC";
 
 		}

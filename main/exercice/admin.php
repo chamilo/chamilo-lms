@@ -60,7 +60,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 15333 2008-05-20 17:07:26Z elixir_inter $
+* 	@version $Id: admin.php 15602 2008-06-18 08:52:24Z pcool $
 */
 
 
@@ -115,7 +115,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 // get vars from GET
 if ( empty ( $exerciseId ) )
 {
-    $exerciseId = mysql_real_escape_string($_GET['exerciseId']);
+    $exerciseId = $_GET['exerciseId'];
 }
 if ( empty ( $newQuestion ) )
 {

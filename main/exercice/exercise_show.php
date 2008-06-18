@@ -73,10 +73,10 @@ if ( empty ( $origin ) )
     $origin = $_REQUEST['origin'];
 }
 if ( empty ( $learnpath_id ) ) {
-    $learnpath_id       = mysql_real_escape_string($_REQUEST['learnpath_id']);
+    $learnpath_id       = $_REQUEST['learnpath_id'];
 }
 if ( empty ( $learnpath_item_id ) ) {
-    $learnpath_item_id  = mysql_real_escape_string($_REQUEST['learnpath_item_id']);
+    $learnpath_item_id  = $_REQUEST['learnpath_item_id'];
 }
 if ( empty ( $formSent ) ) {
     $formSent= $_REQUEST['formSent'];
@@ -91,10 +91,10 @@ if ( empty ( $choice ) ) {
     $choice = $_REQUEST['choice'];
 }
 if ( empty ( $questionNum ) ) {
-    $questionNum    = mysql_real_escape_string($_REQUEST['questionNum']);
+    $questionNum    = $_REQUEST['questionNum'];
 }
 if ( empty ( $nbrQuestions ) ) {
-    $nbrQuestions   = mysql_real_escape_string($_REQUEST['nbrQuestions']);
+    $nbrQuestions   = $_REQUEST['nbrQuestions'];
 }
 if ( empty ( $questionList ) ) {
     $questionList = $_SESSION['questionList'];
@@ -181,15 +181,33 @@ function getFCK(vals,marksid){
 </script>
 <?php
 
-//functions
+/**
+ * Enter description here...
+ *
+ * @param unknown_type $id
+ * @param unknown_type $question_id
+ * @return unknown
+ */
 function get_comments($id,$question_id)
 	{
 	global $TBL_TRACK_ATTEMPT;
-	$sql = "select teacher_comment from ".$TBL_TRACK_ATTEMPT." where exe_id=$id and question_id = '$question_id' order by question_id";
+	$sql = "select teacher_comment from ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id and question_id)."' = '".Database::escape_string($question_id)."' order by question_id";
 	$sqlres = api_sql_query($sql, __FILE__, __LINE__);
 	$comm = mysql_result($sqlres,0,"teacher_comment");
 	return $comm;
 	}
+/**
+ * Enter description here...
+ *
+ * @param unknown_type $answerType
+ * @param unknown_type $studentChoice
+ * @param unknown_type $answer
+ * @param unknown_type $answerComment
+ * @param unknown_type $answerCorrect
+ * @param unknown_type $id
+ * @param unknown_type $questionId
+ * @param unknown_type $ans
+ */
 function display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$ans)
 {
 	?>
@@ -214,6 +232,13 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 	</tr>
 	<?php
 }
+/**
+ * Enter description here...
+ *
+ * @param unknown_type $answer
+ * @param unknown_type $id
+ * @param unknown_type $questionId
+ */
 function display_fill_in_blanks_answer($answer,$id,$questionId)
 {
 
@@ -232,7 +257,13 @@ function display_fill_in_blanks_answer($answer,$id,$questionId)
 		</tr>
 	<?php }
 }
-
+/**
+ * Enter description here...
+ *
+ * @param unknown_type $answer
+ * @param unknown_type $id
+ * @param unknown_type $questionId
+ */
 function display_free_answer($answer,$id,$questionId)
 {
 	?>
@@ -254,7 +285,14 @@ function display_free_answer($answer,$id,$questionId)
 		</tr>
 	<?php
 }
-
+/**
+ * Enter description here...
+ *
+ * @param unknown_type $answerId
+ * @param unknown_type $answer
+ * @param unknown_type $studentChoice
+ * @param unknown_type $answerComment
+ */
 function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment)
 {
 	//global $hotspot_colors;
@@ -300,7 +338,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
   <tr>
     <td colspan="2">
 	<?php
-		$sql_test_name='SELECT title, description FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.$id.'"';
+		$sql_test_name='SELECT title, description FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($id).'"';
 		$result=api_sql_query($sql_test_name);
 		$test=mysql_result($result,0,0);
 		$exerciseTitle=api_parse_tex($test);
@@ -311,7 +349,7 @@ $query = "select * from ".$TBL_TRACK_ATTEMPT." as attempts
 						INNER JOIN ".$TBL_TRACK_EXERCICES." as stats_exercices ON stats_exercices.exe_id=attempts.exe_id 
 						INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id
 						INNER JOIN ".$TBL_QUESTIONS." as questions ON questions.id=quizz_rel_questions.question_id    
-					WHERE attempts.exe_id='$id' $user_restriction
+					WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
 					GROUP BY questions.position, attempts.question_id";
 
 $result =api_sql_query($query, __FILE__, __LINE__);
@@ -420,7 +458,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 						$answerComment=$objAnswerTmp->selectComment($answerId);
 						$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 						$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-						$queryans = "select * from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
+						$queryans = "select * from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 						$resultans = api_sql_query($queryans, __FILE__, __LINE__);
 						while ($row = mysql_fetch_array($resultans))
 								{
@@ -473,7 +511,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				$answerComment=$objAnswerTmp->selectComment($answerId);
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-				$queryans = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
+				$queryans = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 				$resultans = api_sql_query($queryans, __FILE__, __LINE__);
 				$choice = mysql_result($resultans,0,"answer");
 				$studentChoice=($choice == $answerId)?1:0;
@@ -554,7 +592,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 						{
 							break;
 						}
-					$queryfill = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
+					$queryfill = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 					$resfill = api_sql_query($queryfill, __FILE__, __LINE__);
 					$str=mysql_result($resfill,0,"answer");
 					preg_match_all ('#\[([^[/]*)/#', $str, $arr);
@@ -600,7 +638,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
-			$query = "select answer, marks from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
+			$query = "select answer, marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 			$resq=api_sql_query($query);
 			$choice = mysql_result($resq,0,"answer");
 			$questionScore = mysql_result($resq,0,"marks");
@@ -625,7 +663,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 		$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 		$TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 		
-		$sql_select_answer = 'SELECT id, answer, correct, position FROM '.$table_ans.' WHERE question_id="'.$questionId.'" AND correct<>0';
+		$sql_select_answer = 'SELECT id, answer, correct, position FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct<>0';
 		$res_answers = api_sql_query($sql_select_answer, __FILE__, __LINE__);
 		
 		echo '<table width="355" height="71" border="0">';
@@ -652,9 +690,9 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 						ON answers.position = track_e_attempt.answer
 						AND track_e_attempt.question_id=answers.question_id
 					WHERE answers.correct = 0
-					AND track_e_attempt.exe_id = "'.$id.'"
-					AND track_e_attempt.question_id = "'.$questionId.'" 
-					AND track_e_attempt.position="'.$i_answer_position.'"';
+					AND track_e_attempt.exe_id = "'.Database::escape_string($id).'"
+					AND track_e_attempt.question_id = "'.Database::escape_string($questionId).'" 
+					AND track_e_attempt.position="'.Database::escape_string($i_answer_position).'"';
 			
 			
 			$res_user_answer = api_sql_query($sql_user_answer, __FILE__, __LINE__);
@@ -709,14 +747,14 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 						$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
 						
 						$TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-						$query = "select hotspot_correct from ".$TBL_TRACK_HOTSPOT." where hotspot_exe_id = $id and hotspot_question_id= $questionId AND hotspot_answer_id=$answerId";
+						$query = "select hotspot_correct from ".$TBL_TRACK_HOTSPOT." where hotspot_exe_id = '".Database::escape_string($id)."' and hotspot_question_id= '".Database::escape_string($questionId)."' AND hotspot_answer_id='".Database::escape_string($answerId)."'";
 						$resq=api_sql_query($query);
 						$choice = mysql_result($resq,0,"hotspot_correct");
 						display_hotspot_answer($answerId,$answer,$choice,$answerComment);
 		
 						$i++;
 				 	}
-				 	$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
+				 	$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 					$resfree = api_sql_query($queryfree, __FILE__, __LINE__);
 					$questionScore= mysql_result($resfree,0,"marks");
 					$totalScore+=$questionScore;

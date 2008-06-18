@@ -89,7 +89,7 @@ class ExerciseResult
     	$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$sql="SELECT q.id, q.question, q.ponderation, q.position, q.type, q.picture " .
 			" FROM $TBL_EXERCISE_QUESTION eq, $TBL_QUESTIONS q " .
-			" WHERE eq.question_id=q.id AND eq.exercice_id='$e_id' " .
+			" WHERE eq.question_id=q.id AND eq.exercice_id='".Database::escape_string($e_id)."' " .
 			" ORDER BY q.position";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
@@ -142,12 +142,12 @@ class ExerciseResult
 			  $sql="SELECT '',ce.title, te.exe_result , te.exe_weighting, " .
 			  		"UNIX_TIMESTAMP(te.exe_date),te.exe_id
 				  FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te
-				  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".$user_id."' AND te.exe_cours_id='$cid'
+				  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".Database::escape_string($user_id)."' AND te.exe_cours_id='".Database::escape_string($cid)."'
 				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
 			$hpsql="SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)
 					FROM $TBL_TRACK_HOTPOTATOES
-					WHERE exe_user_id = '".$user_id."' AND exe_cours_id = '".$cid."'
+					WHERE exe_user_id = '".Database::escape_string($user_id)."' AND exe_cours_id = '".Database::escape_string($cid)."'
 					ORDER BY exe_cours_id ASC, exe_date ASC";
 
 		}

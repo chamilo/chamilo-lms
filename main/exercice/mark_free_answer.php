@@ -66,7 +66,7 @@ $debug=0;
 if($debug>0){echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";var_dump($_POST);}
 
 // general parameters passed via POST/GET
-$my_course_code = mysql_real_escape_string($_GET['cid']);
+$my_course_code = $_GET['cid'];
 if(!empty($_REQUEST['exe'])){
 	$my_exe = $_REQUEST['exe'];
 }else{
@@ -123,7 +123,7 @@ if($action == 'mark'){
 			#$tbl_learnpath_user = Database::get_course_table('learnpath_user');
 			#global $origin, $tbl_learnpath_user, $learnpath_id, $learnpath_item_id;
 			$sql = "SELECT * FROM $exercise_table
-				WHERE exe_user_id = '$my_usr' AND exe_cours_id = '$my_cid' AND exe_exo_id = '$my_exe'
+				WHERE exe_user_id = '".Database::escape_string($my_usr)."' AND exe_cours_id = '".Database::escape_string($my_cid)."' AND exe_exo_id = '".Database::escape_string($my_exe)."'
 				ORDER BY exe_date DESC";
 			#echo $sql;
 			$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -142,21 +142,21 @@ if($action == 'mark'){
 				$reallyNow = time();
 				$sql = "INSERT INTO $exercise_table
 						  (
-						   `exe_user_id`,
-						   `exe_cours_id`,
-						   `exe_exo_id`,
-						   `exe_result`,
-						   `exe_weighting`,
-						   `exe_date`
+						   exe_user_id,
+						   exe_cours_id,
+						   exe_exo_id,
+						   exe_result,
+						   exe_weighting,
+						   exe_date
 						  )
 
 						  VALUES
 						  (
-						  ".$my_usr.",
-						   '".$my_cid."',
-						   '".$my_exe."',
-						   '".$my_score."',
-						   '".$obj_question->selectWeighting()."',
+						   '".Database::escape_string($my_usr)."',
+						   '".Database::escape_string($my_cid)."',
+						   '".Database::escape_string($my_exe)."',
+						   '".Database::escape_string($my_score)."',
+						   '".Database::escape_string($obj_question->selectWeighting())."',
 						   FROM_UNIXTIME(".$reallyNow.")
 						  )";
 				#if ($origin == 'learnpath')
@@ -175,7 +175,7 @@ if($action == 'mark'){
 			//return 0;
 		}
 	}else{
-		$my_msg .= " There might have been a problem with the total score being too big...<br />\n";
+		$my_msg .= get_lang('TotalScoreTooBig');
 	}
 }
 

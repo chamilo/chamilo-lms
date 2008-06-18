@@ -22,7 +22,7 @@
 *	This script allows to manage answers. It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer_admin.inc.php 13301 2007-09-27 03:47:39Z yannoo $
+* 	@version $Id: answer_admin.inc.php 15602 2008-06-18 08:52:24Z pcool $
 */
 
 
@@ -1155,7 +1155,7 @@ if($modifyAnswers)
 			?>
 			<h3>
 			<?php echo $questionName;?></h3><?php
-			$sql = "select description from `".$TBL_QUESTIONS."` where id = '$questionId'";
+			$sql = "select description from `".$TBL_QUESTIONS."` where id = '".Database::escape_string($questionId)."'";
 			$res = api_sql_query($sql,_FILE_,_LINE_);
 			?>
 			&nbsp; &nbsp; &nbsp;

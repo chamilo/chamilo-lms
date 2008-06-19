@@ -517,8 +517,8 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 				<td class="requirements-value">'.check_writable('garbage/').'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">dokeos/main/upload/</td>
-				<td class="requirements-value">'.check_writable('upload/').'</td>
+				<td class="requirements-item">dokeos/main/upload/users/</td>
+				<td class="requirements-value">'.check_writable('upload/users/').'</td>
 			</tr>
 			<tr>
 				<td class="requirements-item">dokeos/main/default_course_document/images/</td>

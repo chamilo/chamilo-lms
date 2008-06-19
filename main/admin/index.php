@@ -1,4 +1,4 @@
-<?php // $Id: index.php 15344 2008-05-20 22:47:40Z juliomontoya $
+<?php // $Id: index.php 15605 2008-06-19 22:18:32Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -134,6 +134,12 @@ $keyword_url = Security::remove_XSS((empty($_GET['keyword'])?'':$_GET['keyword']
   <?php if(!empty($phpMyAdminPath)): ?>
   <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang("AdminDatabases"); ?></a><br />(<?php echo get_lang("DBManagementOnlyForServerAdmin"); ?>)</li>
   <?php endif; ?>
+  <?php 
+  if(!empty($_configuration['multiple_access_urls']))
+  {
+  	echo '	<li><a href="access_urls.php">'.get_lang('ConfigureMultipleAccessURLs').'</a></li>';
+  }
+  ?>
  </ul>
 </div>
 
@@ -240,7 +246,7 @@ if(api_is_platform_admin()){
   <li>
   <?php
   //try to display a maximum before we check the dokeos version and all that
-  	session_write_close(); //close session to avoid blocking concurrent access
+  	//session_write_close(); //close session to avoid blocking concurrent access
 	flush(); //send data to client as much as allowed by the web server
 	//ob_flush();
 	echo get_lang('VersionCheck').': '.version_check();

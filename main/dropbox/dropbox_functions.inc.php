@@ -1232,18 +1232,10 @@ function zip_download_alternative($files)
 
 	$temp_zip_dir = api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/";
 
-	// Step 1: create the overview file and add it to the zip
-	$overview_file_content=generate_html_overview($files, array('filename'), array('title'));
-	$overview_file=$temp_zip_dir.'overview'.$_user['firstname'].$_user['lastname'].'.html';
-	$handle=fopen($overview_file,'w');
-	fwrite($handle,$overview_file_content);
-	// todo: find a different solution for this because even 2 seconds is no guarantee.
-	sleep(2);
-
 	// Step 2: we copy all the original dropbox files to the temp folder and change their name into the original name
 	foreach ($files as $key=>$value)
 	{
-		$value['title']=check_file_name($value['title']);
+		$value['title']=check_file_name(strtolower($value['title']));
 		$files[$value['filename']]['title']=$value['title'];
 		copy(api_get_path(SYS_COURSE_PATH).$_course['path']."/dropbox/".$value['filename'], api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/".$value['title']);
 	}
@@ -1255,6 +1247,14 @@ function zip_download_alternative($files)
 	{
 		$zip_folder->add(api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/".$value['title'],PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_COURSE_PATH).$_course['path']."/temp");
 	}
+	
+	// Step 1: create the overview file and add it to the zip
+	$overview_file_content=generate_html_overview($files, array('filename'), array('title'));
+	$overview_file=$temp_zip_dir.'overview'.$_user['firstname'].$_user['lastname'].'.html';
+	$handle=fopen($overview_file,'w');
+	fwrite($handle,$overview_file_content);
+	// todo: find a different solution for this because even 2 seconds is no guarantee.
+	sleep(2);	
 
 	// Step 4: we add the overview file
 	$zip_folder->add($overview_file,PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_COURSE_PATH).$_course['path']."/temp");

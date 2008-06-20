@@ -3,7 +3,7 @@
 ============================================================================== 
 	Dokeos - elearning and course management software
 	
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) Istvan Mandak
 	
 	For a full list of contributors, see "credits.txt".
@@ -16,7 +16,7 @@
 	
 	See the GNU General Public License for more details.
 	
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ============================================================================== 
 */
@@ -32,27 +32,29 @@
 ============================================================================== 
 */
 /**
- * Enter description here...
+ * Insert a login reference for the current user into the track_e_online stats table.
  *
- * @param unknown_type $uid
- * @param unknown_type $statistics_database
- * 
- * @todo the second parameter is of no use. 
+ * @param int user id
+ * @return void
  */
-function LoginCheck($uid,$statistics_database)
+function LoginCheck($uid)
 {
 	global $_course;
-	
+	$uid = (int) $uid;
 	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	if ($uid!="")
+	if (!empty($uid))
 	{
-		LoginDelete($uid,$statistics_database);
-		$login_ip = $_SERVER['REMOTE_ADDR'];
+		LoginDelete($uid);
+        $login_ip = '';
+        if(!empty($_SERVER['REMOTE_ADDR']))
+        {
+		  $login_ip = Database::escape_string($_SERVER['REMOTE_ADDR']);
+        }
 		$reallyNow = time();
 		$login_date = date("Y-m-d H:i:s",$reallyNow);	
 		// if the $_course array exists this means we are in a course and we have to store this in the who's online table also
 		// to have the x users in this course feature working
-		if ($_course)
+		if (is_array($_course) && count($_course)>0 && !empty($_course['id']))
 		{
 			$query = "INSERT INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, course) VALUES ($uid,$uid,'$login_date','$login_ip', '".$_course['id']."')";								
 		}
@@ -66,24 +68,29 @@ function LoginCheck($uid,$statistics_database)
 }
 
 /**
- * Enter description here...
- *
- * @param unknown_type $uid
- * 
- * @todo the name is not very clear. I would expect that it deletes a login from the tracking info or even it deletes a user.
+ * Remove all login records from the track_e_online stats table, for the given user ID.
+ * @param int User ID
+ * @return void
  */
 function LoginDelete($user_id)
 {
 	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$query = "DELETE FROM ".$online_table ." WHERE login_user_id = '".mysql_real_escape_string($user_id)."'";
+    $user_id = (int) $user_id;
+	$query = "DELETE FROM ".$online_table ." WHERE login_user_id = '".$user_id."'";
 	@api_sql_query($query,__FILE__,__LINE__);
 }
 
 /**
-* @todo remove parameter $statistics_database which is no longer necessary
-*/
-function WhoIsOnline($uid,$statistics_database,$valid)
+ * Gives a list of people online now (and in the last $valid minutes)
+ * @param   int User ID - useless
+ * @param   string      Statistics database name - useless
+ * @param   int         Number of minutes to account logins for
+ * @return  array       For each line, a list of user IDs and login dates, or FALSE on error or empty results
+ * @todo remove parameter $statistics_database which is no longer necessary
+ */
+function WhoIsOnline($uid=0,$statistics_database='',$valid)
 {				
+	$valid = (int) $valid;
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW()  ";	
 	$result = @api_sql_query($query,__FILE__,__LINE__);							
@@ -94,7 +101,7 @@ function WhoIsOnline($uid,$statistics_database,$valid)
 		$validtime = mktime(date("H"),date("i")-$valid,date("s"),date("m"),date("d"),date("Y"));
 		$rarray = array();
 		
-		while(list($login_user_id,$login_date)= mysql_fetch_row($result))
+		while(list($login_user_id,$login_date)= Database::fetch_row($result))
 		{	
 			$barray = array();
 			array_push($barray,$login_user_id);
@@ -114,8 +121,6 @@ function WhoIsOnline($uid,$statistics_database,$valid)
 			{
 				array_push($rarray,$barray);
 			}
-			//echo $dbtime.":".$rtime.">".$validtime."<BR>";
-			//echo "$login_user_id.":".$login_date.";";
 		}					
 		return $rarray;
 	}
@@ -125,16 +130,21 @@ function WhoIsOnline($uid,$statistics_database,$valid)
 	}
 }
 
+/**
+ * Gets the full user name for a given user ID
+ * @param   int User ID
+ * @return  string  The full username, elements separated by an HTML space
+ */
 function GetFullUserName($uid)
 {
+	$uid = (int) $uid;
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
-	$safe_uid = Database::escape_string($uid);
-	$query = "SELECT firstname,lastname FROM ".$user_table." WHERE user_id='$safe_uid'";
+	$query = "SELECT firstname,lastname FROM ".$user_table." WHERE user_id='$uid'";
 	$result = @api_sql_query($query,__FILE__,__LINE__);
 	if (count($result)>0)
 	{
 		$str = "";
-		while(list($firstname,$lastname)= mysql_fetch_array($result))
+		while(list($firstname,$lastname)= Database::fetch_array($result))
 		{
 			$str = $lastname."&nbsp;".$firstname;
 			return $str;
@@ -142,57 +152,12 @@ function GetFullUserName($uid)
 		
 	}
 }
-		
-function GetURL($path)
-{
-	$str = "";	
-	$url = explode('/',$path);			
-	for($i=0;$i < sizeof($url)-2; $i++)
-	{ 
-		if($i==sizeof($url)-3)
-			{$str = $str.$url[$i]; }
-		else
-		{
-			$str = $str.$url[$i]."/"; 
-		}
-	}
-	return $str;
-}		
 
-// picture? 
-function IsValidUser($uid)
-{
-	$user_table = Database::get_main_table(TABLE_MAIN_USER);
-	
-	$query = "SELECT `picture_uri`  FROM ".$user_table." WHERE `user_id`='$uid'";	
-	$result = @api_sql_query($query,__FILE__,__LINE__);
-	
-	if (count($result)>0)
-	{
-		while(list($picture_uri)= mysql_fetch_array($result))
-		{
-			if (count($picture_uri)>0)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-	}
-	else
-	{
-		return false;
-	}
-}
-	
-function ClearURL($path)
-{
-	$url = explode('?id=',$path);
-		return $url[0];
-}
-
+/**
+ * Gets a list of chat calls made by others to the current user (info kept in main.user table)
+ * @param   none - taken from global space
+ * @return  string  An HTML-formatted message
+ */
 function chatcall() {
 
 	global $_user, $_cid;
@@ -204,7 +169,7 @@ function chatcall() {
 	$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$sql="select chatcall_user_id, chatcall_date from $track_user_table where ( user_id = '".$_user['user_id']."' )";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$row=mysql_fetch_array($result);
+	$row=Database::fetch_array($result);
 
 	$login_date=$row['chatcall_date'];
 	$hour = substr($login_date,11,2);
@@ -244,9 +209,14 @@ function chatcall() {
 
 /**
 * Returns a list (array) of users who are online and in this course.
+* @param    int User ID
+* @param    int Number of minutes
+* @param    string  Course code (could be empty, but then the function returns false)
+* @return   array   Each line gives a user id and a login time
 */
-function who_is_online_in_this_course($uid, $valid, $coursecode)
+function who_is_online_in_this_course($uid, $valid, $coursecode=null)
 {				
+	if(empty($coursecode)) return false;
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$coursecode = Database::escape_string($coursecode);
 	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() ";	
@@ -277,8 +247,6 @@ function who_is_online_in_this_course($uid, $valid, $coursecode)
 			{
 				array_push($rarray,$barray);
 			}
-			//echo $dbtime.":".$rtime.">".$validtime."<BR>";
-			//echo "$login_user_id.":".$login_date.";";
 		}					
 		return $rarray;
 	}
@@ -287,5 +255,3 @@ function who_is_online_in_this_course($uid, $valid, $coursecode)
 		return false;
 	}
 }
-
-?>

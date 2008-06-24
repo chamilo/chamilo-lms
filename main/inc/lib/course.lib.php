@@ -956,6 +956,16 @@ class CourseManager
 					{
 						return true;
 					}
+					else
+                    {
+                            $sql = 'SELECT 1 FROM '.Database
+::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.intval($_SESSION['id_session']).' AND id_coach='.$user_id;
+                            $rs = api_sql_query($sql, __FILE__, __LINE__);
+                            if(Database::num_rows($rs)>0)
+                            {
+                                    return true;
+                            }
+                    }
 				}
 			}
 			else

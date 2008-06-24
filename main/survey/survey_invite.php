@@ -144,7 +144,7 @@ if ($form->validate())
 {
 	$values = $form->exportValues();
 	// save the invitation mail
-	SurveyUtil::save_invite_mail($values['mail_text'], $values['resend_to_all']);
+	SurveyUtil::save_invite_mail($values['mail_text'], !empty($survey_data['invite_mail']));
 	// saving the invitations for the course users
 	$count_course_users = SurveyUtil::save_invitations($values['course_users'], $values['mail_title'], $values['mail_text'], $values['resend_to_all'], $values['send_mail']);
 	// saving the invitations for the additional users

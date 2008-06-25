@@ -23,7 +23,7 @@
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 15250 2008-05-08 19:51:09Z juliomontoya $
+* 	@version $Id: survey.lib.php 15616 2008-06-25 10:21:57Z elixir_inter $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -102,6 +102,17 @@ class survey_manager
 			$shared_survey_id = survey_manager::store_shared_survey($values);
 		}*/		
 		$shared_survey_id=0;
+		
+		// check if the code doesn't soon exists in this language
+		$sql = 'SELECT 1 FROM '.$table_survey.' WHERE code="'.Database::escape_string($values['survey_code']).'" AND lang="'.Database::escape_string($values['survey_language']).'"';
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		if(Database::num_rows($rs)>0)
+		{
+			$return['message'] = 'ThisSurveyCodeSoonExistsInThisLanguage';
+			$return['type'] = 'error';
+			$return['id']	= isset($values['survey_id']) ? $values['survey_id'] : 0;
+			return $return;
+		}
 
 		if (!$values['survey_id'] OR !is_numeric($values['survey_id']))
 		{

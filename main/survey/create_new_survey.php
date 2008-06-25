@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: create_new_survey.php 15331 2008-05-20 15:48:35Z juliomontoya $
+* 	@version $Id: create_new_survey.php 15616 2008-06-25 10:21:57Z elixir_inter $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -181,6 +181,17 @@ if( $form->validate() )
 		survey_manager::get_complete_survey_structure($return['id']);
 	}
 	*/
+	if($return['type'] == 'error')
+	{
+		// Displaying the header
+		Display::display_header($tool_name);
+		
+		// display the error
+		Display::display_error_message(get_lang($return['message']), false);
+		
+		// display the form
+		$form->display();
+	}
 	if ($config['survey']['debug'])
 	{
 		// displaying a feedback message

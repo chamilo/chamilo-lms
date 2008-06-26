@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 15169 2008-04-29 06:27:22Z yannoo $
+<?php // $Id: usermanager.lib.php 15626 2008-06-26 15:26:29Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -898,6 +898,27 @@ class UserManager
 		}
 		return $fields;
 	}
+	
+	/**
+	 * Get the list of options attached to an extra field
+	 * @param string $fieldname the name of the field
+	 * @return array the list of options
+	 */
+	function get_extra_field_options($field_name)
+	{
+		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
+		$t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
+		
+		$sql = 'SELECT options.* 
+				FROM '.$t_ufo.' options 
+				INNER JOIN '.$t_uf.' fields
+					ON fields.id = options.field_id
+					AND fields.field_variable="'.Database::escape_string($field_name).'"';
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		return api_store_result($rs);
+	}
+	
+	
 	/**
 	 * Get the number of extra fields currently recorded
 	 * @param	boolean	Optional switch. true (default) returns all fields, false returns only visible fields

@@ -140,7 +140,7 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
 
 if ($_user['user_id'] && isset($_cid))
 {
-	if (api_is_course_admin() && api_get_setting('student_view_enabled') == 'true')
+	if ((api_is_course_admin() || api_is_platform_admin()) && api_get_setting('student_view_enabled') == 'true')
 	{
 		echo '<li>| ';
 		api_display_tool_view_option();

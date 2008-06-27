@@ -1474,7 +1474,9 @@ function get_last_tool_access($tool, $course_code='', $user_id='')
 
 	$sql="SELECT access_date FROM $table_last_access WHERE access_user_id='".Database::escape_string($user_id)."'
 				AND access_cours_code='".Database::escape_string($course_code)."'
-				AND access_tool='".Database::escape_string($tool)."'";
+				AND access_tool='".Database::escape_string($tool)."'
+				ORDER BY access_date DESC
+				LIMIT 1";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$row=mysql_fetch_array($result);
 	return $row['access_date'];

@@ -23,7 +23,7 @@
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 15616 2008-06-25 10:21:57Z elixir_inter $
+* 	@version $Id: survey.lib.php 15640 2008-06-27 14:17:54Z elixir_inter $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -3490,7 +3490,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function save_invite_mail($mailtext, $reminder=0)
+	function save_invite_mail($mailtext, $mail_subject, $reminder=0)
 	{
 		// Database table definition
 		$table_survey 					= Database :: get_course_table(TABLE_SURVEY);
@@ -3505,7 +3505,7 @@ class SurveyUtil {
 			$mail_field = 'reminder_mail';
 		}
 	
-		$sql = "UPDATE $table_survey SET $mail_field = '".Database::escape_string($mailtext)."' WHERE survey_id = '".Database::escape_string($_GET['survey_id'])."'";
+		$sql = "UPDATE $table_survey SET mail_subject='".Database::escape_string($mail_subject)."', $mail_field = '".Database::escape_string($mailtext)."' WHERE survey_id = '".Database::escape_string($_GET['survey_id'])."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 	}
 	

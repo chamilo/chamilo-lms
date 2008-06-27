@@ -1371,6 +1371,7 @@ function update_Db_course($courseDbName)
 			  answered int NOT NULL,
 			  invite_mail text NOT NULL,
 			  reminder_mail text NOT NULL,
+			  mail_subject VARCHAR( 255 ) NOT NULL,
 			  anonymous enum('0','1') NOT NULL default '0',
 			  access_condition TEXT DEFAULT NULL,
 			  PRIMARY KEY  (survey_id)

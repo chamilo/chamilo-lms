@@ -20,3 +20,4 @@
 
 -- xxCOURSExx
 ALTER TABLE lp ADD theme varchar(255) not null default '';
+ALTER TABLE survey ADD mail_subject VARCHAR( 255 ) NOT NULL AFTER reminder_mail ;

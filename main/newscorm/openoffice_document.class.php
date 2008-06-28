@@ -63,11 +63,11 @@ abstract class OpenofficeDocument extends learnpath {
 		
 		
 		$classpath = '-cp .:jodconverter-2.2.1.jar:jodconverter-cli-2.2.1.jar';
-		if(strpos($_ENV['OS'],'Windows') !== false)
+		if(isset($_ENV['OS']) && strpos($_ENV['OS'],'Windows') !== false)
 		{
 			$classpath = str_replace(':',';',$classpath);
 		}
-		if(strpos($_ENV['OS'],'Windows') !== false)
+		if(isset($_ENV['OS']) && strpos($_ENV['OS'],'Windows') !== false)
 		{
 			$cmd = 'cd '.str_replace('/','\\',api_get_path(SYS_PATH).'main/inc/lib/ppt2png ').$classpath.' DokeosConverter';
 		}

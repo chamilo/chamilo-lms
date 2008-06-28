@@ -12,7 +12,11 @@ $use_anonymous = true;
 require_once('back_compat.inc.php');
 $course_dir  = api_get_course_path().'/scorm';
 $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_dir;
-$current_dir = replace_dangerous_char(trim($_POST['current_dir']),'strict');
+if ( empty($_POST['current_dir']) ) {
+	$current_dir = '';
+} else {
+    $current_dir = replace_dangerous_char(trim($_POST['current_dir']),'strict');
+}
 $uncompress  = 1;
 
 //error_log('New LP - lp_upload.php',0);

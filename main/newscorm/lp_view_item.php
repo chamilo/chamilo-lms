@@ -80,9 +80,8 @@ $tbl_lp = Database::get_course_table('lp');
 $tbl_lp_item = Database::get_course_table('lp_item');
 $tbl_lp_view = Database::get_course_table('lp_view');
 
-$isStudentView  = (int) $_REQUEST['isStudentView'];
+$isStudentView  = (empty($_REQUEST['isStudentView'])?0:(int) $_REQUEST['isStudentView']);
 $learnpath_id   = (int) $_REQUEST['lp_id'];
-$submit			= $_POST['submit_button'];
 /*
 $chapter_id     = $_GET['chapter_id'];
 $title          = $_POST['title'];

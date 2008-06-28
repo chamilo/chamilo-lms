@@ -120,6 +120,8 @@ $s_style_error="border-width: 1px;
 
 //Display::display_normal_message($message);
 
+$alt_text = '';
+$attribute_list = '';
 echo '<div style="'.$s_style.'"><div style="float:left; margin-right:10px;"><img src="'.api_get_path(WEB_IMG_PATH)."message_normal.gif".'" alt="'.$alt_text.'" '.$attribute_list.'  /></div><div style="margin-left: 43px">'.$message.'</div></div>';
 
 if(!empty($errorMessage)){

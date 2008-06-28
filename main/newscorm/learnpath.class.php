@@ -1368,6 +1368,9 @@ class learnpath {
     {
 		if($this->debug>0){error_log('New LP - In learnpath::first()',0);}
 		//test if the last_item_seen exists and is not a dir
+        if ( count($this->ordered_items) == 0 ) {
+        	$this->index = 0;
+        }
     	if(!empty($this->last_item_seen)
     		&& !empty($this->items[$this->last_item_seen])
     		&& $this->items[$this->last_item_seen]->get_type() != 'dir'
@@ -3997,6 +4000,10 @@ class learnpath {
 			'parent_item_id' => $row['parent_item_id'],
 			'previous_item_id' => $row['previous_item_id'],
 			'next_item_id' => $row['next_item_id'],
+            'max_score' => $row['max_score'],
+            'min_score' => $row['min_score'],
+            'mastery_score' => $row['mastery_score'],
+            'prerequisite' => $row['prerequisite'],
 			'display_order' => $row['display_order']);		
 		}
 		 
@@ -4144,6 +4151,9 @@ class learnpath {
 				'parent_item_id' => $row['parent_item_id'],
 				'previous_item_id' => $row['previous_item_id'],
 				'next_item_id' => $row['next_item_id'],
+                'max_score' => $row['max_score'],
+                'min_score' => $row['min_score'],
+                'mastery_score' => $row['mastery_score'],
 				'display_order' => $row['display_order']);
 		}
 
@@ -4688,6 +4698,9 @@ class learnpath {
 					'previous_item_id' => $row['previous_item_id'],
 					'next_item_id' => $row['next_item_id'],
 					'display_order' => $row['display_order'],
+                    'max_score' => $row['max_score'],
+                    'min_score' => $row['min_score'],
+                    'mastery_score' => $row['mastery_score'],
 					'prerequisite' => $row['prerequisite']);
 			}
 			
@@ -4957,6 +4970,9 @@ class learnpath {
 					'previous_item_id' => $row['previous_item_id'],
 					'next_item_id' => $row['next_item_id'],
 					'display_order' => $row['display_order'],
+                    'max_score' => $row['max_score'],
+                    'min_score' => $row['min_score'],
+                    'mastery_score' => $row['mastery_score'],
 					'prerequisite' => $row['prerequisite']);
 			}
 
@@ -5225,6 +5241,9 @@ class learnpath {
 					'previous_item_id' => $row['previous_item_id'],
 					'next_item_id' => $row['next_item_id'],
 					'display_order' => $row['display_order'],
+                    'max_score' => $row['max_score'],
+                    'min_score' => $row['min_score'],
+                    'mastery_score' => $row['mastery_score'],
 					'prerequisite' => $row['prerequisite']);
 			}
 			
@@ -5479,6 +5498,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					'previous_item_id' => $row['previous_item_id'],
 					'next_item_id' => $row['next_item_id'],
 					'display_order' => $row['display_order'],
+                    'max_score' => $row['max_score'],
+                    'min_score' => $row['min_score'],
+                    'mastery_score' => $row['mastery_score'],
 					'prerequisite' => $row['prerequisite']);
 			}
 			
@@ -5720,6 +5742,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				'parent_item_id' => $row['parent_item_id'],
 				'previous_item_id' => $row['previous_item_id'],
 				'next_item_id' => $row['next_item_id'],
+                'max_score' => $row['max_score'],
+                'min_score' => $row['min_score'],
+                'mastery_score' => $row['mastery_score'],
+                'prerequisite' => $row['prerequisite'],
 				'display_order' => $row['display_order']);
 		}
 				
@@ -5977,6 +6003,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					'previous_item_id' => $row['previous_item_id'],
 					'next_item_id' => $row['next_item_id'],
 					'display_order' => $row['display_order'],
+                    'max_score' => $row['max_score'],
+                    'min_score' => $row['min_score'],
+                    'mastery_score' => $row['mastery_score'],
 					'prerequisite' => $row['prerequisite']);
 			}
 			
@@ -6282,6 +6311,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					'previous_item_id' => $row['previous_item_id'],
 					'next_item_id' => $row['next_item_id'],
 					'display_order' => $row['display_order'],
+                    'max_score' => $row['max_score'],
+                    'min_score' => $row['min_score'],
+                    'mastery_score' => $row['mastery_score'],
 					'prerequisite' => $row['prerequisite']);
 			}
 			
@@ -6541,6 +6573,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					'previous_item_id' => $row['previous_item_id'],
 					'next_item_id' => $row['next_item_id'],
 					'display_order' => $row['display_order'],
+                    'max_score' => $row['max_score'],
+                    'min_score' => $row['min_score'],
+                    'mastery_score' => $row['mastery_score'],
 					'prerequisite' => $row['prerequisite']);
 			}
 			
@@ -7100,6 +7135,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				'max_score' => $row['max_score'],
 				'min_score' => $row['min_score'],
 				'mastery_score' => $row['mastery_score'],
+                'prerequisite' => $row['prerequisite'],
 				'next_item_id' => $row['next_item_id'],
 				'display_order' => $row['display_order']);
 			if($row['ref'] == $preq_id)

@@ -3912,7 +3912,7 @@ class learnpath {
 						$tmp[] = $array[$i]['parent_item_id'];
 						$depth++;
 					}
-					
+					$preq = (empty($array[$i]['prerequisite'])?'':$array[$i]['prerequisite']);
 					$this->arrMenu[] = array(
 						'id' => $array[$i]['id'],
 						'item_type' => $array[$i]['item_type'],
@@ -3926,7 +3926,7 @@ class learnpath {
 						'max_score' => $array[$i]['max_score'],
 						'mastery_score' => $array[$i]['mastery_score'],
 						'display_order' => $array[$i]['display_order'],
-						'prerequisite' => $array[$i]['prerequisite'],
+						'prerequisite' => $preq,
 						'depth' => $depth
 						);
 					

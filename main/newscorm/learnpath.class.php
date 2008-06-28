@@ -1858,7 +1858,7 @@ class learnpath {
     			return null;
     		}
     	}
-    	if(!$progress)
+    	if(empty($progress))
     	{
     		$progress = '0';
     	}
@@ -1928,7 +1928,7 @@ class learnpath {
     	}  
 	    	
 		//if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar()',0);}
-    	if(is_object($this) && ($percentage=='-1' OR $text_add==''))
+    	if(isset($this) && is_object($this) && ($percentage=='-1' OR $text_add==''))
     	{
     		list ($percentage, $text_add) = $this->get_progress_bar_text($mode);
     	}
@@ -2445,11 +2445,10 @@ class learnpath {
 		if($this->debug>0){error_log('New LP - In learnpath::get_html_toc()',0);}
     	$list = $this->get_toc();
         $mych = api_get_setting('platform_charset'); 
-    	
     	//echo $this->current;
     	//$parent = $this->items[$this->current]->get_parent();
     	//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
-    	$html.= '<div class="inner_lp_toc">'."\n" ;
+    	$html = '<div class="inner_lp_toc">'."\n" ;
     	$html.= '<div class="scorm_title">&nbsp;&nbsp;&nbsp;&nbsp;'.mb_convert_encoding($this->get_name(),$this->encoding,$mych).'</div>';
     	
     	// build, display
@@ -2627,7 +2626,7 @@ class learnpath {
     		$lp_item_type = $row['litype'];
     		$lp_item_path = $row['lipath'];
     		$lp_item_params = $row['liparams'];
-    		if(empty($lp_item_params))
+    		if(empty($lp_item_params) && strpos($lp_item_path,'?')!==false)
     		{
     			list($lp_item_path,$lp_item_params) = explode('?',$lp_item_path);
     		}

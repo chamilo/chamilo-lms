@@ -59,7 +59,7 @@ $htmlHeadXtra[] =
 
 function confirmation(name)
 {
-	if (confirm(\" ".trim(get_lang('AreYouSureToDelete'))." ?\"))
+	if (confirm(\" ".trim(get_lang('AreYouSureToDelete'))." \"+name+\"?\"))
 		{return true;}
 	else
 		{return false;}
@@ -92,7 +92,7 @@ if(api_is_allowed_to_edit())
     DIALOG BOX SECTION
     --------------------------------------*/
 
-  if ($dialog_box)
+  if (!empty($dialog_box))
   {
     Display::display_normal_message($dialog_box);
   }
@@ -130,7 +130,7 @@ if ($curDirName) // if the $curDirName is empty, we're in the root point and we 
   <?php
 }
 */
-if ($curDirPath)
+if (!empty($curDirPath))
 {
   if(substr($curDirPath,1,1)=='/'){
   	$tmpcurDirPath=substr($curDirPath,1,strlen($curDirPath));
@@ -191,8 +191,8 @@ if (is_array($flat_list))
 		$image='<img src="../img/kcmdf.gif" border="0" align="absmiddle" alt="scorm">'."\n";
 	    $dsp_line =	'<tr align="center" class="'.$oddclass.'">'."\n" .
         	'<td align="left" valign="top">' .
-			'<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_lp.'" '.$style.'>' .
-			$image . '</a></div><a href="'.$url_start_lp.'" '.$style.'>' . $name . '</a>' .
+			'<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_lp.'">' .
+			$image . '</a></div><a href="'.$url_start_lp.'">' . $name . '</a>' .
 			"</td>\n";
 	    //$dsp_desc='<td>'.$details['lp_desc'].'</td>'."\n";
 	    $dsp_desc = '';
@@ -236,8 +236,6 @@ if (is_array($flat_list))
 	    if($is_allowed_to_edit)
 	    {
 		    $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">&nbsp;&nbsp;<img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'"></a></td>'."\n";
-			$fileExtension=explode('.',$dspFileName);
-			$fileExtension=strtolower($fileExtension[sizeof($fileExtension)-1]);
 
 			/* export */
 			//export not available for normal lps yet
@@ -267,7 +265,7 @@ if (is_array($flat_list))
 			
 			/* DELETE COMMAND */
 			$dsp_delete = "<a href=\"lp_controller.php?".api_get_cidreq()."&action=delete&lp_id=$id\" " .
-			"onClick=\"return confirmation('".addslashes($dspFileName)."');\">" .
+			"onClick=\"return confirmation('".addslashes($name)."');\">" .
 			"<img src=\"../img/delete.gif\" border=\"0\" title=\"".get_lang('_delete_learnpath')."\" />" .
 			"</a>";
 
@@ -378,7 +376,7 @@ if (is_array($flat_list))
 	    	}
 	    }	// end if($is_allowedToEdit)
 	    //echo $dsp_line.$dsp_desc.$dsp_export.$dsp_edit.$dsp_delete.$dsp_visible;
-	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_force_commit.$dsp_debug.$dsp_delete.$dsp_close.$dsp_order;
+	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_debug.$dsp_delete.$dsp_order;
 	    //echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_force_commit.$dsp_delete;
 	    echo	"</tr>\n";
 		$current ++; //counter for number of elements treated

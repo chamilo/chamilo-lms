@@ -69,6 +69,7 @@ if(!empty($_REQUEST['dialog_box'])){
 }
 
 $lp_controller_touched = 1;
+$lp_found = false;
 
 if(isset($_SESSION['lpobject']))
 {
@@ -76,7 +77,7 @@ if(isset($_SESSION['lpobject']))
 	$oLP = unserialize($_SESSION['lpobject']);
 	if(is_object($oLP)){
 		if($debug>0) error_log('New LP - oLP is object',0);
-		if($myrefresh == 1 OR $oLP->cc != api_get_course_id()){
+		if($myrefresh == 1 OR (empty($oLP->cc)) OR $oLP->cc != api_get_course_id()){
 			if($debug>0) error_log('New LP - Course has changed, discard lp object',0);
 			if($myrefresh == 1){$myrefresh_id = $oLP->get_id();}
 			$oLP = null;
@@ -159,7 +160,7 @@ $fck_attribute['Height'] = '950';
 $fck_attribute['ToolbarSet'] = 'Full';
 $fck_attribute['Config']['FullPage'] = true;
 
-if($_GET['isStudentView'] == 'true')
+if(isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true')
 {
 	if($_REQUEST['action'] != 'list' AND $_REQUEST['action'] != 'view')
 	{
@@ -174,7 +175,8 @@ if($_GET['isStudentView'] == 'true')
 	}
 }
 
-switch($_REQUEST['action'])
+$action = (!empty($_REQUEST['action'])?$_REQUEST['action']:'');
+switch($action)
 {
 	case 'add_item':
 		
@@ -684,7 +686,10 @@ switch($_REQUEST['action'])
 		else
 		{
 			if($debug > 0){error_log('New LP - Trying to set current item to ' . $_REQUEST['item_id'], 0);}
-			$_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
+			if ( !empty($_REQUEST['item_id']) )
+            {
+                $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
+            }
 			require('lp_view.php');
 		}
 		break;		

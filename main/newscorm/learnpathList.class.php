@@ -70,7 +70,6 @@ class learnpathList {
     			'lp_maker'	=> stripslashes($row['content_maker']),
     			'lp_proximity' => $row['content_local'],
     			'lp_encoding' => $row['default_encoding'],
-    			'lp_progress' => $row['progress'],
     			'lp_visibility' => $vis,
     			'lp_published'	=> $pub,
     			'lp_prevent_reinit' => $row['prevent_reinit'],

@@ -23,6 +23,7 @@ $language_file = "learnpath";
 require_once('back_compat.inc.php');
 require_once('learnpath.class.php');
 require_once('scorm.class.php');
+if(empty($debug)){$debug=0;}
 $error = '';
 $display_mode = '';
 if(isset($_SESSION['lpobject'])){

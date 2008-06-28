@@ -118,7 +118,7 @@ if (!empty($mycourseid) && $mycourseid != -1)
 	}
 }
 
-if ($lp_theme_log){
+if (!empty($lp_theme_log)){
 	$my_style=$platform_theme;
 }
 
@@ -136,7 +136,7 @@ if ($scorm_css_header)
 		$scormfs_css='scormfs.css';		
 	}	
 		
-	if($display_mode == 'fullscreen')
+	if(!empty($display_mode) && $display_mode == 'fullscreen')
 	{	
 		$htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
 							/*<![CDATA[*/

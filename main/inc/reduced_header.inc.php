@@ -123,7 +123,7 @@ if (!empty($lp_theme_log)){
 }
 
 // Sets the css reference it is call from lp_nav.php, lp_toc.php, lp_message, lp_log.php
-if ($scorm_css_header) 
+if (!empty($scorm_css_header)) 
 {	
 	if (!empty($my_style)) 
 	{

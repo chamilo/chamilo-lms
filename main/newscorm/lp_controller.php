@@ -91,8 +91,8 @@ if(isset($_SESSION['lpobject']))
 }
 if($debug>0) error_log('New LP - Passed data remains check',0);
 
-if($lp_found == false 
-	|| ($_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])
+if($lp_found == false
+	|| (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])
 	)
 {
 	if($debug>0) error_log('New LP - oLP is not object, has changed or refresh been asked, getting new',0);		

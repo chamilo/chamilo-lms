@@ -3385,7 +3385,7 @@ class learnpath {
     function set_encoding($enc='ISO-8859-1'){
 		if($this->debug>0){error_log('New LP - In learnpath::set_encoding()',0);}
     	$enc = strtoupper($enc);
-	 	$encodings = array('UTF-8','ISO-8859-1','ISO-8859-15','SHIFT-JIS');
+	 	$encodings = array('UTF-8','ISO-8859-1','ISO-8859-15','cp1251','cp1252','KOI8-R','BIG5','GB2312','Shift_JIS','EUC-JP','');
 		if(in_array($enc,$encodings)){
 		 	$lp = $this->get_id();
 		 	if($lp!=0){

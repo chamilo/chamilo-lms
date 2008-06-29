@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 15105 2008-04-25 08:38:20Z elixir_inter $
+<?php // $Id: user_edit.php 15652 2008-06-29 17:20:01Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -398,23 +398,23 @@ if( $form->validate())
 }
 
 Display::display_header($tool_name);
-//api_display_tool_title($tool_name);
-// Show the users picture
-if (strlen($user_data['picture_uri']) > 0)
-{
-	$picture_url = api_get_path(WEB_CODE_PATH).'upload/users/'.$user_data['picture_uri'];
-}
-else
-{
-	$picture_url = api_get_path(WEB_CODE_PATH)."img/unknown.jpg";
-}
-$image_size = @getimagesize($picture_url);
-$img_attributes = 'src="'.$picture_url.'?rand='.time().'" '
-	.'alt="'.$user_data['lastname'].' '.$user_data['firstname'].'" '
-	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
-if ($image_size[0] > 200) //limit display width to 300px
-	$img_attributes .= 'width="200" ';
+
+//  USER PICTURE
+$image_path = UserManager::get_user_picture_path_by_id($user_id,'web');
+$image_dir = $image_path['dir'];
+$image = $image_path['file'];
+$image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'img/unknown.jpg');
+$image_size = @getimagesize($image_file);
+
+$img_attributes = 'src="'.$image_file.'?rand='.time().'" '
+    .'alt="'.$user_data['lastname'].' '.$user_data['firstname'].'" '
+    .'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
+
+if ($image_size[0] > 300) //limit display width to 300px
+    $img_attributes .= 'width="300" ';
+
 echo '<img '.$img_attributes.'/>';
+
 // Display form
 $form->display();
 /*

@@ -3495,8 +3495,6 @@ class learnpath {
      */
     function set_theme($name=''){
 		if($this->debug>0){error_log('New LP - In learnpath::set_theme()',0);}
-    	if(empty($name))return false;
-    	
     	$this->theme = $this->escape_string($name);
 		$lp_table = Database::get_course_table('lp');
 		$lp_id = $this->get_id();

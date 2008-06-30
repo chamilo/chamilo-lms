@@ -1,10 +1,10 @@
 <?php
-// $Id: inscription.php 14212 2008-01-31 02:09:57Z yannoo $
+// $Id: inscription.php 15661 2008-06-30 20:57:38Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -20,7 +20,8 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
 ==============================================================================
 */
 /**
@@ -97,6 +98,12 @@ $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
 if (CHECK_PASS_EASY_TO_FIND)
 	$form->addRule('password1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
+
+//	PHONE
+$form->addElement('text', 'phone', get_lang('Phone'), array('size' => 40));
+if (api_get_setting('registration', 'phone') == 'true')
+	$form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
+
 //	LANGUAGE
 if (get_setting('registration', 'language') == 'true')
 {
@@ -108,6 +115,11 @@ if (get_setting('allow_registration_as_teacher') <> 'false')
 	$form->addElement('radio', 'status', get_lang('Status'), get_lang('RegStudent'), STUDENT);
 	$form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER);
 }
+
+
+
+
+
 //	EXTENDED FIELDS
 if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mycomptetences') == 'true')
 {
@@ -162,6 +174,12 @@ if(!empty($_GET['email']))
 {
 	$defaults['email'] = Security::remove_XSS($_GET['email']);
 }
+
+if(!empty($_GET['phone']))
+{
+	$defaults['phone'] = Security::remove_XSS($_GET['phone']);
+}
+
 if (api_get_setting('openid_authentication')=='true' && !empty($_GET['openid']))
 {
 	$defaults['openid'] = Security::remove_XSS($_GET['openid']);	
@@ -183,7 +201,7 @@ if ($form->validate())
 	}
 
 	// creating a new user
-	$user_id = UserManager::create_user($values['firstname'],$values['lastname'],$values['status'],$values['email'],$values['username'],$values['pass1'],$values['official_code'], $values['language']);
+	$user_id = UserManager::create_user($values['firstname'],$values['lastname'],$values['status'],$values['email'],$values['username'],$values['pass1'],$values['official_code'], $values['language'],$values['phone']);
 
 
 

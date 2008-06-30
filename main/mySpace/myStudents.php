@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 15662 2008-06-30 21:29:25Z juliomontoya $
+<?php //$Id: myStudents.php 15663 2008-06-30 22:06:41Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -22,7 +22,7 @@
 */
  
  // name of the language file that needs to be included 
-$language_file = array ('registration', 'index', 'tracking', 'exercice');
+$language_file = array ('registration', 'index', 'tracking', 'exercice','admin');
  $cidReset=true;
  include ('../inc/global.inc.php');
 
@@ -78,18 +78,23 @@ $csv_content = array();
  }
  else
  {
- 	$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+ 	$interbreadcrumb[] = array ('url' => '../admin/index.php', 'name' => get_lang('PlatformAdmin'));
  	
- 	if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0){
- 		if(isset($_GET['id_session']) && intval($_GET['id_session'])!=0){
- 		$interbreadcrumb[] = array ("url" => "student.php?id_coach=".$_GET['id_coach']."&id_session=".$_GET['id_session'], "name" => get_lang("CoachStudents"));
+ 	if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0)
+ 	{
+ 		if(isset($_GET['id_session']) && intval($_GET['id_session'])!=0)
+ 		{ 
+ 			$interbreadcrumb[] = array ("url" => "student.php?id_coach=".$_GET['id_coach']."&id_session=".$_GET['id_session'], "name" => get_lang("CoachStudents"));
  		}
- 		else{
+ 		else
+ 		{
  			$interbreadcrumb[] = array ("url" => "student.php?id_coach=".$_GET['id_coach'], "name" => get_lang("CoachStudents"));
  		}
  	}
- 	else{
- 		$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
+ 	else
+ 	{ 
+ 		$interbreadcrumb[] = array ('url' => '../admin/user_list.php', 'name' => get_lang('UserList'));
+ 		
  	}
  }
  

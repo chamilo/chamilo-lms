@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 15660 2008-06-30 18:50:43Z juliomontoya $
+<?php //$Id: myStudents.php 15662 2008-06-30 21:29:25Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -334,6 +334,22 @@ if(!empty($_GET['student']))
 											else
 											{
 												echo get_lang('NoTel');
+											} 
+										?>
+									</td>
+								</tr>
+								<tr>
+									<td class="none">
+										<?php
+											echo get_lang('OfficialCode').' : ';
+											
+											if(!empty($a_infosUser['official_code']))
+											{
+												echo $a_infosUser['official_code'];
+											}
+											else 
+											{ 
+												echo get_lang('NoOfficialCode');
 											} 
 										?>
 									</td>
@@ -774,9 +790,9 @@ if(!empty($_GET['student']))
 			$csv_content[] = array(get_lang('Exercices'),get_lang('Score'),get_lang('Attempts'));
 						
 			$a_infosCours = CourseManager :: get_course_information($_GET['course']);			
-			$t_tool = Database::get_course_table(TABLE_TOOL_LIST,$a_infosCours['db_name']);
+			$t_tool = Database::get_course_table(TABLE_TOOL_LIST,$a_infosCours['db_name']);									
+			$sql='SELECT visibility FROM '.$t_tool.' WHERE name="quiz"';			
 										
-			$sql='SELECT visibility FROM '.$t_tool.' WHERE name="quiz"'; 
 			$resultVisibilityQuizz = api_sql_query($sql,__FILE__,__LINE__);
 			$t_quiz = Database::get_course_table(TABLE_QUIZ_TEST,$a_infosCours['db_name']);
 			

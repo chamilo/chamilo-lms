@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 15494 2008-05-29 22:26:36Z yannoo $
+<?php //$Id: myStudents.php 15660 2008-06-30 18:50:43Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -772,10 +772,11 @@ if(!empty($_GET['student']))
 			<?php
 			$csv_content[] = array();
 			$csv_content[] = array(get_lang('Exercices'),get_lang('Score'),get_lang('Attempts'));
-			
-			$a_infosCours = CourseManager :: get_course_information($_GET['course']);
-
-			$sql='SELECT visibility FROM '.$a_infosCours['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz"';
+						
+			$a_infosCours = CourseManager :: get_course_information($_GET['course']);			
+			$t_tool = Database::get_course_table(TABLE_TOOL_LIST,$a_infosCours['db_name']);
+										
+			$sql='SELECT visibility FROM '.$t_tool.' WHERE name="quiz"'; 
 			$resultVisibilityQuizz = api_sql_query($sql,__FILE__,__LINE__);
 			$t_quiz = Database::get_course_table(TABLE_QUIZ_TEST,$a_infosCours['db_name']);
 			

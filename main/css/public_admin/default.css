@@ -790,6 +790,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 dl.upload_option {margin: 1em 0; padding: 0;}
 .upload_option dt {font-weight:bold; margin:0;}
 .upload_option dd {margin:0;}
+.document_owner {text-align: right;}
 
 /**********************************************
  *  DROPBOX MODULE                            *

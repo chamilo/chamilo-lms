@@ -589,7 +589,7 @@ td .menu {
 	font-style: italic ;
 	font-weight: normal;	
 }
-
+.document_owner {text-align: right;}
 /*
 ==============================================================================
     FORM STYLES

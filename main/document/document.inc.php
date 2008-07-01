@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 15525 2008-06-09 06:24:20Z yannoo $
+<?php // $Id: document.inc.php 15673 2008-07-01 15:16:49Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -384,4 +384,28 @@ function get_titles_of_path($path)
 	}
 	return $path_displayed;
 }
+
+
+
+/**
+* This function displays the name of the user and makes the link tothe user tool.
+*
+* @param $user_id 
+* @param $name
+* @return a link to the userInfo.php
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @version february 2006, dokeos 1.8
+*/
+function display_user_link($user_id, $name)
+{	
+	if ($user_id<>0)
+	{
+		return '<a href="../user/userInfo.php?uInfo='.$user_id.'">'.$name.'</a>';
+	}
+	else
+	{
+		return get_lang('Anonymous');
+	}
+}
+
 ?>

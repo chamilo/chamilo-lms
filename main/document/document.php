@@ -1,4 +1,4 @@
-<?php // $Id: document.php 15525 2008-06-09 06:24:20Z yannoo $
+<?php // $Id: document.php 15673 2008-07-01 15:16:49Z juliomontoya $
  
 /*
 ==============================================================================
@@ -70,6 +70,8 @@ $language_file[] = 'slideshow';
 require("../inc/global.inc.php");
 $this_section=SECTION_COURSES;
 require('document.inc.php');
+
+require('../inc/lib/usermanager.lib.php');
 
 api_protect_course_script(true);
 
@@ -623,6 +625,7 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 	//create a sortable table with our data
 	$sortable_data = array();
 	
+	
 	while (list ($key, $id) = each($docs_and_folders))
 	{
 		$row = array ();
@@ -647,9 +650,23 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 			$row[] = $id['path'];			
 		}
 		//icons
-		$row[]= build_document_icon_tag($id['filetype'],$id['path']); 
+		$row[]= build_document_icon_tag($id['filetype'],$id['path']);
+		
+		// Show the Owner of the file only in groups				
+		$user_link='';	
+			
+		if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='')
+		{
+			if (!empty($id['insert_user_id']))
+			{
+				$user_info=UserManager::get_user_info_by_id($id['insert_user_id']);		
+				$user_name=$user_info['firstname'].' '.$user_info['lastname'];
+				$user_link='<div class="document_owner">'.get_lang('Owner').': '.display_user_link($id['insert_user_id'],$user_name).'</div>';
+			}
+		}
+		
 		//document title with hyperlink
-		$row[] = create_document_link($http_www,$document_name,$id['path'],$id['filetype'],$size,$id['visibility']).'<br />'.$invisibility_span_open.nl2br(htmlspecialchars($id['comment'],ENT_QUOTES,$charset)).$invisibility_span_close;
+		$row[] = create_document_link($http_www,$document_name,$id['path'],$id['filetype'],$size,$id['visibility']).'<br />'.$invisibility_span_open.nl2br(htmlspecialchars($id['comment'],ENT_QUOTES,$charset)).$invisibility_span_close.$user_link;
 		//comments => display comment under the document name
 		//$row[] = $invisibility_span_open.nl2br(htmlspecialchars($id['comment'])).$invisibility_span_close;
 		$display_size = format_file_size($size);

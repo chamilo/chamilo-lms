@@ -1,10 +1,10 @@
 <?php
-// $Id: add_course.php 15568 2008-06-12 05:23:42Z yannoo $
+// $Id: add_course.php 15674 2008-07-01 16:04:43Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2005 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) 2005 Bart Mollet, Hogeschool Gent
@@ -19,8 +19,8 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com 
 ==============================================================================
 */
 /**
@@ -34,6 +34,9 @@
 
 // name of the language file that needs to be included 
 $language_file = "create_course";
+
+//delete the globals["_cid"] we don't need it here 
+$cidReset = true; // Flag forcing the 'current course' reset
 
 // including the global file
 include ('../inc/global.inc.php');
@@ -52,6 +55,7 @@ include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(CONFIGURATION_PATH).'course_info.conf.php');
 
+$interbreadcrumb[] = array('url'=>api_get_path(WEB_PATH).'user_portal.php', 'name'=> get_lang('MyCourses'));
 // Displaying the header
 $tool_name = get_lang('CreateSite');
 Display :: display_header($tool_name);

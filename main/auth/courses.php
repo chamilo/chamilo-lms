@@ -1,9 +1,9 @@
-<?php // $Id: courses.php 14406 2008-02-27 21:53:15Z yannoo $
+<?php // $Id: courses.php 15674 2008-07-01 16:04:43Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -18,7 +18,8 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com 
 ==============================================================================
 */
 /**
@@ -36,6 +37,9 @@
 */
 // name of the language file that needs to be included
 $language_file = 'courses';
+
+//delete the globals["_cid"] we don't need it here 
+$cidReset = true; // Flag forcing the 'current course' reset
 
 // including the global file
 include('../inc/global.inc.php');
@@ -63,6 +67,7 @@ $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
 $safe = array();
 $safe['action'] = '';
 $actions = array('sortmycourses','createcoursecategory','subscribe','deletecoursecategory','unsubscribe');
+
 if(in_array(htmlentities($_GET['action']),$actions))
 {
 	$safe['action'] = htmlentities($_GET['action']);
@@ -71,7 +76,7 @@ if(in_array(htmlentities($_GET['action']),$actions))
 // title of the page
 if ($safe['action'] == 'sortmycourses' OR !isset($safe['action']))
 {
-	$nameTools = get_lang("SortMyCourses");
+	$nameTools = get_lang('SortMyCourses');
 }
 if ($safe['action'] == 'createcoursecategory')
 {
@@ -79,11 +84,20 @@ if ($safe['action'] == 'createcoursecategory')
 }
 if ($safe['action'] == 'subscribe')
 {
-	$nameTools = get_lang("SubscribeToCourse");
+	$nameTools = get_lang('SubscribeToCourse');
 }
 
+
 // breadcrumbs
-$interbreadcrumb[] = array('name'=> get_lang('CourseManagement'), 'url'=>'courses.php');
+$interbreadcrumb[] = array('url'=>api_get_path(WEB_PATH).'user_portal.php', 'name'=> get_lang('MyCourses'));
+if (empty($nameTools))
+{
+	$nameTools=get_lang('CourseManagement');
+}
+else
+{
+	$interbreadcrumb[] = array('url'=>api_get_path(WEB_PATH).'main/auth/courses.php', 'name'=> get_lang('CourseManagement'));
+}
 
 // Displaying the header
 Display::display_header($nameTools);

@@ -483,7 +483,19 @@ function Ok()
 	}
 	else			// Creating a new link.
 	{
-		oLink = oEditor.FCK.CreateLink( sUri ) ;
+		// DELETED LINE ---------->        	oLink = oEditor.FCK.CreateLink( sUri ) ;
+		// INSERTED BY MEMOR:
+		FCK.ExecuteNamedCommand( 'CreateLink', sUri ) ;			  
+		// Look for the just created link.
+		var oLinks = oEditor.FCK.EditorDocument.links ;		   
+		for ( i = 0 ; i < oLinks.length ; i++ )
+		{
+			if ( oLinks[i].href.match(sUri))
+			{
+				var oLink = oLinks[i];
+			}
+		}
+		// END INSERTED BY MEMOR
 		if ( ! oLink )
 			return true ;
 	}

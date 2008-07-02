@@ -668,8 +668,122 @@ class DocumentManager
 				return false;
 			}
 		}
-	}
+	}	
+	/**
+	 * This check if a document has the readonly property checked, then see if the user
+	 * is the owner of this file, if all this is true then return true.
+	 * 
+	 * @param array  $_course
+	 * @param int    $user_id id of the current user
+	 * @param string $file path stored in the database
+	 * @param int    $document_id in case you dont have the file path ,insert the id of the file here and leave $file in blank ''
+	 * @return boolean true/false	 
+	 **/
+	function check_readonly($_course,$user_id,$file,$document_id='',$to_delete=false)
+	{
+		if(!(!empty($document_id) && is_numeric($document_id)))
+		{			
+			$document_id = DocumentManager::get_document_id($_course, $file);
+		}		
+		
+		$TABLE_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
+		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+		
+		if ($to_delete)
+		{
+			if (DocumentManager::is_folder($_course, $document_id))
+			{
+				if (!empty($file))
+				{
+					$path=$file;
+					$what_to_check_sql = "SELECT td.id, readonly, tp.insert_user_id  FROM ".$TABLE_DOCUMENT." td , $TABLE_PROPERTY tp WHERE tp.ref= td.id and (path='".$path."' OR path LIKE BINARY '".$path."/%' ) ";
+					//get all id's of documents that are deleted
+					$what_to_check_result = api_sql_query($what_to_check_sql, __FILE__, __LINE__);
+					
+					if ($what_to_check_result && Database::num_rows($what_to_check_result) != 0)
+					{
+						// file with readonly set to 1 exist?
+						$readonly_set=false;
+						while ($row = Database::fetch_array($what_to_check_result))
+						{
+							//query to delete from item_property table		
+							//echo $row['id']; echo "<br>";
+							if ($row['readonly']==1)					
+							{					
+								if (!($row['insert_user_id'] == $user_id))
+								{			 					
+									$readonly_set=true;
+									break;
+								}	
+								
+							}
+						}
+				
+						if ($readonly_set)
+						{
+							return true;
+						}
+					}
+				} 
+				return false;			
+			}
+		}
+				
+				
+		
+		if (!empty($document_id))
+		{	
+			$sql= 'SELECT a.insert_user_id, b.readonly FROM '.$TABLE_PROPERTY.' a,'.$TABLE_DOCUMENT.' b WHERE a.ref = b.id and a.ref='.$document_id.' LIMIT 1';
+			$resultans   =  api_sql_query($sql, __FILE__, __LINE__);
+			$doc_details =  Database ::fetch_array($resultans,'ASSOC');
+		
+			if($doc_details['readonly']==1)
+			{							
+				if ( $doc_details['insert_user_id'] == $user_id || api_is_platform_admin() ) 
+				{		
+						return false;						
+				}
+				else
+				{	
+					return true;				
+				}			
+			}
+			
 
+				
+			
+			
+		
+		
+		}
+		return false;
+	}
+	
+	/**
+	 * This check if a document is a folder or not	 
+	 * @param array  $_course
+	 * @param int    $document_id of the item
+	 * @return boolean true/false	 
+	 **/
+	function is_folder($_course, $document_id)
+	{	
+		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+		//if (!empty($document_id))
+		
+		$resultans   =  api_sql_query('SELECT filetype FROM '.$TABLE_DOCUMENT.' WHERE id='.$document_id.'', __FILE__, __LINE__);		
+		$result=  Database ::fetch_array($resultans,'ASSOC');
+		if ($result['filetype']=='folder')
+		{
+			return true;			
+		}
+		else
+		{
+			return false;
+		}
+				
+		
+	}
+	
 	/**
 	 * This deletes a document by changing visibility to 2, renaming it to filename_DELETED_#id
 	 * Files/folders that are inside a deleted folder get visibility 2
@@ -695,7 +809,7 @@ class DocumentManager
 				$what_to_delete_sql = "SELECT id FROM ".$TABLE_DOCUMENT." WHERE path='".$path."' OR path LIKE BINARY '".$path."/%'";
 				//get all id's of documents that are deleted
 				$what_to_delete_result = api_sql_query($what_to_delete_sql, __FILE__, __LINE__);
-
+							
 				if ($what_to_delete_result && Database::num_rows($what_to_delete_result) != 0)
 				{
 					//needed to deleted medadata
@@ -737,13 +851,14 @@ class DocumentManager
 			else //set visibility to 2 and rename file/folder to qsdqsd_DELETED_#id
 			{
 				if (api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'delete', api_get_user_id()))
-				{
+				{	
 					//echo('item_property_update OK');
-					if (is_file($base_work_dir.$path))
+					if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path) )
                     {
                         if(rename($base_work_dir.$path, $base_work_dir.$new_path))
-    					{
-    						$sql = "UPDATE $TABLE_DOCUMENT set path='".$new_path."' WHERE id='".$document_id."'";
+    					{	
+    						 $sql = "UPDATE $TABLE_DOCUMENT set path='".$new_path."' WHERE id='".$document_id."'";
+    						
     						if (api_sql_query($sql, __FILE__, __LINE__))
     						{
     							//if it is a folder it can contain files
@@ -756,8 +871,17 @@ class DocumentManager
     									//echo('to delete also: id '.$deleted_items['id']);
     									api_item_property_update($_course, TOOL_DOCUMENT, $deleted_items['id'], 'delete', api_get_user_id());
     									//Change path of subfolders and documents in database
-    									$old_item_path = $deleted_items['path'];
+    									$old_item_path = $deleted_items['path'];    									
     									$new_item_path = $new_path.substr($old_item_path, strlen($path));
+    									/*/
+    									 * trying to fix this bug FS#2681
+    									echo $base_work_dir.$old_item_path;
+    									echo "<br>";
+    									echo $base_work_dir.$new_item_path;
+    									echo "<br>";echo "<br>";
+										rename($base_work_dir.$old_item_path, $base_work_dir.$new_item_path);
+										*/
+    									
     									$sql = "UPDATE $TABLE_DOCUMENT set path = '".$new_item_path."' WHERE id = ".$deleted_items['id'];
     									api_sql_query($sql, __FILE__, __LINE__);
     								}
@@ -767,12 +891,12 @@ class DocumentManager
     					}
                         else
                         {
-                        	//Couldn't rename - file permissions problem?
+                        	//Couldn't rename - file permissions problem?                        
                             error_log(__FILE__.' '.__LINE__.': Error renaming '.$base_work_dir.$path.' to '.$base_work_dir.$new_path.'. This is probably due to file permissions',0);
                         }
                     }
                     else
-                    {
+                    {	//echo $base_work_dir.$path;
                     	//The file or directory isn't there anymore (on the filesystem)
                         // This means it has been removed externally. To prevent a
                         // blocking error from happening, we drop the related items from the
@@ -780,7 +904,8 @@ class DocumentManager
                         error_log(__FILE__.' '.__LINE__.': System inconsistency detected. The file or directory '.$base_work_dir.$path.' seems to have been removed from the filesystem independently from the web platform. To restore consistency, the elements using the same path will be removed from the database',0);
                         $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE path='".$path."' OR path LIKE BINARY '".$path."/%'";
                         $res = Database::query($sql,__FILE__,__LINE__);
-                        while ( $row = Database::fetch_array($res) ) {
+                        while ( $row = Database::fetch_array($res) ) 
+                        {
                         	$sqlipd = "DELETE FROM $TABLE_ITEMPROPERTY WHERE ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
                             $resipd = Database::query($sqlipd,__FILE__,__LINE__);
                             $sqldd = "DELETE FROM $TABLE_DOCUMENT WHERE id = ".$row['id'];

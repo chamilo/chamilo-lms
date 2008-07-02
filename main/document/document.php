@@ -1,4 +1,4 @@
-<?php // $Id: document.php 15673 2008-07-01 15:16:49Z juliomontoya $
+<?php // $Id: document.php 15716 2008-07-02 23:10:47Z juliomontoya $
  
 /*
 ==============================================================================
@@ -69,7 +69,9 @@ $language_file[] = 'slideshow';
 
 require("../inc/global.inc.php");
 $this_section=SECTION_COURSES;
+
 require('document.inc.php');
+
 
 require('../inc/lib/usermanager.lib.php');
 
@@ -187,7 +189,7 @@ include_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 include_once(api_get_path(LIBRARY_PATH) . 'tablesort.lib.php');
 include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 
-
+ 
 //-----------------------------------------------------------
 //check the path
 //if the path is not found (no document id), set the path to /
@@ -333,16 +335,34 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 	  ======================================*/
 
 	if (isset($_GET['move']) && $_GET['move']!='')
-	{
+	{ 	
+		if (!$is_allowed_to_edit)
+		{
+			if(DocumentManager::check_readonly($_course,$_user['user_id'],$_GET['move']))
+			{
+				api_not_allowed();	 
+			}
+		}
+		
 		if(DocumentManager::get_document_id($_course,$_GET['move']))
 		{
 			$folders = DocumentManager::get_all_document_folders($_course,$to_group_id,$is_allowed_to_edit || $group_member_with_upload_rights);
 			Display::display_normal_message(build_move_to_selector($folders,$_GET['curdirpath'],$_GET['move'],$group_properties['directory']),false);
 		}
+		
+		
 	}
-
+ 	
 	if (isset($_POST['move_to']) && isset($_POST['move_file']))
 	{
+		if (!$is_allowed_to_edit)
+		{
+			if(DocumentManager::check_readonly($_course,$_user['user_id'],$_GET['move']))
+			{
+				api_not_allowed();	
+			}
+		}
+		
 		include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 		//this is needed for the update_db_info function
 		//$dbTable = $_course['dbNameGlu']."document";
@@ -368,6 +388,8 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		{
 			Display::display_error_message(get_lang('Impossible'));
 		}
+		
+		
 	}
 
 	/*======================================
@@ -375,16 +397,28 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 	  ======================================*/
 
 	if ( isset($_GET['delete']) )
-	{
+	{		
+		if (!$is_allowed_to_edit)
+		{
+			if(DocumentManager::check_readonly($_course,$_user['user_id'],$_GET['delete'],'',true))
+			{
+				api_not_allowed();
+			}
+		} 
+							
 		include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
+		 
 		if(DocumentManager::delete_document($_course,$_GET['delete'],$base_work_dir))
 		{
 			Display::display_confirmation_message(get_lang('DocDeleted'));
 		}
 		else
-		{
+		{	
+			
 			Display::display_error_message(get_lang('DocDeleteError'));
 		}
+		
+		
 	}
 
 	if( isset($_POST['action']))
@@ -392,6 +426,19 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		switch($_POST['action'])
 		{
 			case 'delete':
+			
+				foreach($_POST['path'] as $index => $path)
+				{
+					if (!$is_allowed_to_edit)
+					{
+						if(DocumentManager::check_readonly($_course,$_user['user_id'],$path))
+						{
+							Display::display_error_message(get_lang('CantDeleteReadonlyFiles'));
+							break 2;
+						}
+					}
+				}
+			
 				foreach($_POST['path'] as $index => $path)
 				{
 					DocumentManager::delete_document($_course,$path,$base_work_dir);
@@ -465,7 +512,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 	  ======================================*/
 
 	if ((isset($_GET['set_invisible']) && !empty($_GET['set_invisible'])) || (isset($_GET['set_visible']) && !empty($_GET['set_visible'])) AND $_GET['set_visible']<>'*' AND $_GET['set_invisible']<>'*')
-	{
+	{		
 		//make visible or invisible?
 		if(isset($_GET['set_visible']))
 		{
@@ -476,7 +523,16 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		{
 			$update_id = $_GET['set_invisible'];
 			$visibility_command = 'invisible';
+		} 
+		
+		if (!$is_allowed_to_edit)	
+		{	
+			if(DocumentManager::check_readonly($_course,$_user['user_id'],'',$update_id))
+			{
+				api_not_allowed(); 
+			} 
 		}
+		
 		//update item_property to change visibility
 		if(api_item_property_update($_course, TOOL_DOCUMENT, $update_id, $visibility_command, $_user['user_id']))
 		{
@@ -494,8 +550,8 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 	   	  TEMPLATE ACTION
 	  ======================================*/
 	
-	if(isset($_GET['add_as_template']) && !isset($_POST['create_template'])){
-		
+	if(isset($_GET['add_as_template']) && !isset($_POST['create_template']))
+	{		
 		$document_id_for_template = intval($_GET['add_as_template']);
 		
 		//create the form that asks for the directory name
@@ -509,10 +565,8 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		$new_folder_text .= '<input type="submit" name="create_template" value="'.get_lang('Ok').'" />';
 		$new_folder_text .= '</form>';
 		//show the form
-		Display::display_normal_message($new_folder_text,false);
-		
-	}
-	
+		Display::display_normal_message($new_folder_text,false);		
+	}	
 	elseif(isset($_GET['add_as_template']) && isset($_POST['create_template']))
 	{		
 		$document_id_for_template = intval(Database::escape_string($_GET['add_as_template']));    
@@ -522,30 +576,23 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		$course_code = api_get_course_id();
 		$user_id = api_get_user_id();
 		
-		if(!is_file(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/')){
+		if(!is_file(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'))
+		{
 			mkdir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/',0777);
 		}
 		
-		DocumentManager::set_document_as_template($title, $description, $document_id_for_template, $course_code, $user_id);
-		
-		Display::display_confirmation_message(get_lang('DocumentSetAsTemplate'));
-		
+		DocumentManager::set_document_as_template($title, $description, $document_id_for_template, $course_code, $user_id);		
+		Display::display_confirmation_message(get_lang('DocumentSetAsTemplate'));		
 	}
-	
-	
-	if(isset($_GET['remove_as_template'])){
 		
+	if(isset($_GET['remove_as_template']))
+	{		
 		$document_id_for_template = intval($_GET['remove_as_template']);
 		$course_code = api_get_course_id();
-		$user_id = api_get_user_id();
-		
-		DocumentManager::unset_document_as_template($document_id_for_template, $course_code, $user_id);
-		
-		Display::display_confirmation_message(get_lang('DocumentUnsetAsTemplate'));
-		
-	}
-	
-	
+		$user_id = api_get_user_id();		
+		DocumentManager::unset_document_as_template($document_id_for_template, $course_code, $user_id);		
+		Display::display_confirmation_message(get_lang('DocumentUnsetAsTemplate'));		
+	}	
 } // END is allowed to edit
 
 /*
@@ -661,7 +708,7 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 			{
 				$user_info=UserManager::get_user_info_by_id($id['insert_user_id']);		
 				$user_name=$user_info['firstname'].' '.$user_info['lastname'];
-				$user_link='<div class="document_owner">'.get_lang('Owner').': '.display_user_link($id['insert_user_id'],$user_name).'</div>';
+				$user_link='<div class="document_owner">'.get_lang('Owner').': '.display_user_link_document($id['insert_user_id'],$user_name).'</div>';
 			}
 		}
 		

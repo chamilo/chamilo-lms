@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 15673 2008-07-01 15:16:49Z juliomontoya $
+<?php // $Id: document.inc.php 15716 2008-07-02 23:10:47Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -395,8 +395,8 @@ function get_titles_of_path($path)
 * @return a link to the userInfo.php
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
-*/
-function display_user_link($user_id, $name)
+*/ 
+function display_user_link_document($user_id, $name)
 {	
 	if ($user_id<>0)
 	{

@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 15550 2008-06-11 17:24:32Z juliomontoya $
+<?php // $Id: edit_document.php 15716 2008-07-02 23:10:47Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -174,7 +174,21 @@ if(!$is_allowedToEdit)
 	api_not_allowed(true);
 }
 
+
+$user_id = api_get_user_id();
 event_access_tool(TOOL_DOCUMENT);
+
+if (!is_allowed_to_edit())
+{
+	if(DocumentManager::check_readonly($_course,$user_id,$file))
+	{	
+		api_not_allowed();	
+	}
+
+}
+
+
+
 
 /*
 ==============================================================================
@@ -445,7 +459,7 @@ if($is_allowedToEdit)
 				}				
 			}
 			else
-			{	
+			{				
 				$filepath.$filename.'.'.$extension;
 				$file_size = filesize($filepath.$filename.'.'.$extension);
 				$document_id = DocumentManager::get_document_id($_course,$file);
@@ -454,6 +468,21 @@ if($is_allowedToEdit)
 				{
 					update_existing_document($_course, $document_id,$file_size,$read_only_flag);
 				}
+				
+				if (empty($document_id)) //or if is folder
+				{	
+					$folder=$_POST['file_path'];
+					$document_id = DocumentManager::get_document_id($_course,$folder);
+										
+					if (DocumentManager::is_folder($_course, $document_id))
+					{
+						if($document_id)
+						{
+							update_existing_document($_course, $document_id,$file_size,$read_only_flag);
+						}		
+					}					
+				}
+				
 				
 			}
 		}

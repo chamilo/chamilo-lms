@@ -33,7 +33,7 @@
 */
 /**
  * Insert a login reference for the current user into the track_e_online stats table.
- *
+ * This table keeps trace of the last login. Nothing else matters (we don't keep traces of anything older)
  * @param int user id
  * @return void
  */
@@ -44,7 +44,6 @@ function LoginCheck($uid)
 	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	if (!empty($uid))
 	{
-		LoginDelete($uid);
         $login_ip = '';
         if(!empty($_SERVER['REMOTE_ADDR']))
         {
@@ -56,11 +55,11 @@ function LoginCheck($uid)
 		// to have the x users in this course feature working
 		if (is_array($_course) && count($_course)>0 && !empty($_course['id']))
 		{
-			$query = "INSERT INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, course) VALUES ($uid,$uid,'$login_date','$login_ip', '".$_course['id']."')";								
+            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, course) VALUES ($uid,$uid,'$login_date','$login_ip', '".$_course['id']."')";
 		}
 		else
 		{
-			$query = "INSERT INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip) VALUES ($uid,$uid,'$login_date','$login_ip')";								
+            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip) VALUES ($uid,$uid,'$login_date','$login_ip')";        	
 		}
 
 		@api_sql_query($query,__FILE__,__LINE__);

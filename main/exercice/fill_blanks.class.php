@@ -1,20 +1,23 @@
 <?php
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2004-2008 Dokeos SPRL
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
 
 
@@ -35,18 +38,20 @@ if(!class_exists('FillBlanks')):
  *	extending the class question
  *
  *	@author Eric Marguin
+ * 	@author Julio Montoya multiple fill in blank option added
  *	@package dokeos.exercise
  **/
 
-class FillBlanks extends Question {
-
+class FillBlanks extends Question 
+{
 	static $typePicture = 'fill_in_blanks.gif';
 	static $explanationLangVar = 'FillBlanks';
 
 	/**
 	 * Constructor
 	 */
-	function FillBlanks(){
+	function FillBlanks()
+	{
 		parent::question();
 		$this -> type = FILL_IN_BLANKS;
 	}
@@ -55,21 +60,35 @@ class FillBlanks extends Question {
 	 * function which redifines Question::createAnswersForm
 	 * @param the formvalidator instance
 	 */
-	function createAnswersForm ($form) {
-
-
-
+	function createAnswersForm ($form) 
+	{
 		$defaults = array();
 
 		if(!empty($this->id))
 		{
 			$objAnswer = new answer($this->id);
-			$a_answer = explode('::', $objAnswer->selectAnswer(1));
+			
+			// the question is encoded like this
+		    // [A] B [C] D [E] F::10,10,10@1
+		    // number 1 before the "@" means that is a multiple fill in blank question
+		    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
+		    // means that is a normal fill blank question		
+			    
+			$is_set_multiple = explode('@', $objAnswer->selectAnswer(1));			
+			if ($is_set_multiple[1]) 
+			{
+				$defaults['multiple_answer']=1;	
+			}
+			else
+			{
+				$defaults['multiple_answer']=0;	
+			}			
+			$a_answer = explode('::', $is_set_multiple[0]);
 			$defaults['answer'] = $a_answer[0];
 			$a_weightings = explode(',',$a_answer[1]);
 		}
 		else
-		{
+		{						
 			$defaults['answer'] = get_lang('DefaultTextInBlanks');
 		}
 
@@ -103,7 +122,6 @@ class FillBlanks extends Question {
 			foreach($a_weightings as $i=>$weighting)
 			{
 				echo 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
-
 			}
 		}
 		echo '}
@@ -118,10 +136,13 @@ class FillBlanks extends Question {
 		$form -> addElement ('textarea', 'answer',get_lang('Answer'),'id="answer" cols="65" rows="6" onkeyup="updateBlanks(this)"');
 		$form -> addRule ('answer',get_lang('GiveText'),'required');
 		$form -> addRule ('answer',get_lang('DefineBlanks'),'regex','/\[.*\]/');
-
-
+ 
+		//added multiple answers
+		$form -> addElement ('checkbox','multiple_answer','', get_lang('FillInBlankMultiple'));
+		
 		$form -> addElement('html','<div id="blanks_weighting"></div>');
 
+		
 		$form -> setDefaults($defaults);
 
 	}
@@ -140,9 +161,11 @@ class FillBlanks extends Question {
 
 		// get the blanks weightings
 		$nb = preg_match_all('/\[[^\]]*\]/', $answer, $blanks);
-		if(isset($_GET['editQuestion'])){
+		if(isset($_GET['editQuestion']))
+		{
 			$this -> weighting = 0;
 		}
+		
 		if($nb>0)
 		{
 			$answer .= '::';
@@ -153,6 +176,9 @@ class FillBlanks extends Question {
 			}
 			$answer = substr($answer,0,-1);
 		}
+		$is_multiple = $form -> getSubmitValue('multiple_answer');
+		$answer.='@'.$is_multiple;
+		
 		$this -> save();
         $objAnswer = new answer($this->id);
         $objAnswer->createAnswer($answer,0,'',0,'');

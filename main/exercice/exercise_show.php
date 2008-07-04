@@ -1,27 +1,30 @@
 <?php
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2004-2008 Dokeos SPRL
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
 
 
 /**
 *
 *	@package dokeos.exercise
-* 	@author
+* 	@author Julio Montoya multiple fill in blank option added
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 *
 * 	@todo remove the debug code and use the general debug library
@@ -391,6 +394,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$questionList[] = $row['question_id'];
 			$exerciseResult[] = $row['answer'];
 			}
+
 		foreach($questionList as $questionId)
 			{
 				$counter++;
@@ -405,7 +409,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				$quesId =$objQuestionTmp->selectId(); //added by priya saini
 
 				// destruction of the Question object
-					unset($objQuestionTmp);
+				unset($objQuestionTmp);
 
 
 
@@ -551,74 +555,162 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
+			
 			for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
-				{
+			{
 				$answer=$objAnswerTmp->selectAnswer($answerId);
 				$answerComment=$objAnswerTmp->selectComment($answerId);
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-				list($answer,$answerWeighting)=explode('::',$answer);
+				
+			    // the question is encoded like this
+			    // [A] B [C] D [E] F::10,10,10@1
+			    // number 1 before the "@" means that is a multiple fill in blank question
+			    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
+			    // means that is a normal fill blank question			    
+				$multiple=explode('@',$answer);
+				
+				// is multiple fill blank or not								
+				$multiple_answer_set=false;				
+				if ($multiple[1]==1)
+				{
+					$multiple_answer_set=true;
+				}										
+				
+				list($answer,$answerWeighting)=explode('::',$multiple[0]);				
+				
 				// splits weightings that are joined with a comma
 				$answerWeighting=explode(',',$answerWeighting);
 				// we save the answer because it will be modified
 			    $temp=$answer;
+		
 				// TeX parsing
 				// 1. find everything between the [tex] and [/tex] tags
 				$startlocations=strpos($temp,'[tex]');
 				$endlocations=strpos($temp,'[/tex]');
 				if($startlocations !== false && $endlocations !== false)
-					{
+				{
 					$texstring=substr($temp,$startlocations,$endlocations-$startlocations+6);
 					// 2. replace this by {texcode}
 					$temp=str_replace($texstring,'{texcode}',$temp);
-					}
+				}
 				$j=0;
 				// the loop will stop at the end of the text
 				$i=0;
-				while(1)
+				//normal fill in blank
+				if (!$multiple_answer_set)
+				{
+					while(1)
 					{
-					// quits the loop if there are no more blanks
-					if(($pos = strpos($temp,'[')) === false)
+						// quits the loop if there are no more blanks
+						if(($pos = strpos($temp,'[')) === false)
 						{
-						// adds the end of the text
-						 $answer.=$temp;
-						// TeX parsing
-						$texstring = api_parse_tex($texstring);
-						break;
+							// adds the end of the text
+							$answer.=$temp;				
+							// TeX parsing
+							$texstring = api_parse_tex($texstring);
+							break;
 						}
-				    $temp=substr($temp,$pos+1);
-				// quits the loop if there are no more blanks
-					if(($pos = strpos($temp,']')) === false)
+					    $temp=substr($temp,$pos+1);
+						// quits the loop if there are no more blanks
+						if(($pos = strpos($temp,']')) === false)
 						{
 							break;
 						}
-					$queryfill = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-					$resfill = api_sql_query($queryfill, __FILE__, __LINE__);
-					$str=mysql_result($resfill,0,"answer");
-					preg_match_all ('#\[([^[/]*)/#', $str, $arr);
-					$choice = $arr[1];
-					$choice[$j]=trim($choice[$j]);
-				// if the word entered by the student IS the same as the one defined by the professor
-					if(strtolower(substr($temp,0,$pos)) == stripslashes(strtolower($choice[$j])))
+						
+						$queryfill = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
+						$resfill = api_sql_query($queryfill, __FILE__, __LINE__);
+						$str=mysql_result($resfill,0,"answer");
+						preg_match_all ('#\[([^[/]*)/#', $str, $arr);
+													
+						$choice = $arr[1];
+						$choice[$j]=trim($choice[$j]);
+						// if the word entered by the student IS the same as the one defined by the professor
+						if(strtolower(substr($temp,0,$pos)) == stripslashes(strtolower($choice[$j])))
 						{
-					// gives the related weighting to the student
-						$questionScore+=$answerWeighting[$j];
-						// increments total score
-						$totalScore+=$answerWeighting[$j];
+							// gives the related weighting to the student
+							$questionScore+=$answerWeighting[$j];
+							// increments total score
+							$totalScore+=$answerWeighting[$j];
 						}
-					// else if the word entered by the student IS NOT the same as the one defined by the professor
-					$j++;
-					$temp=substr($temp,$pos+1);
-					$i=$i+1;
-				} $answer = $str;
+						// else if the word entered by the student IS NOT the same as the one defined by the professor
+						$j++;
+						$temp=substr($temp,$pos+1);
+						$i=$i+1;
+					}
+					$answer = $str;
+				}
+				else
+				{	//multiple fill in blank	
+					while(1)
+					{
+						// quits the loop if there are no more blanks
+						if(($pos = strpos($temp,'[')) === false)
+						{
+							// adds the end of the text
+							$answer.=$temp;
+							// TeX parsing
+							$texstring = api_parse_tex($texstring);
+							//$answer=str_replace("{texcode}",$texstring,$answer);
+							break;
+						}
+						// adds the piece of text that is before the blank and ended by [
+						$real_text[]=substr($temp,0,$pos+1);
+						$answer.=substr($temp,0,$pos+1);					
+						$temp=substr($temp,$pos+1);
+
+						// quits the loop if there are no more blanks
+						if(($pos = strpos($temp,']')) === false)
+						{
+							// adds the end of the text
+							//$answer.=$temp;
+							break;
+						}
+
+						$queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
+						$resfill = api_sql_query($queryfill, __FILE__, __LINE__);
+						$str=mysql_result($resfill,0,"answer");
+						preg_match_all ('#\[([^[/]*)/#', $str, $arr);
+						$choice = $arr[1];
+						
+						$choice[$j]=trim($choice[$j]);					
+						$user_tags[]=stripslashes(strtolower($choice[$j]));
+						$correct_tags[]=strtolower(substr($temp,0,$pos));	
+						
+						$j++;
+						$temp=substr($temp,$pos+1);
+						$i=$i+1;
+					}
+					/*
+					echo "<pre>";
+					print_r($user_tags);
+					echo "<br>";
+					print_r($correct_tags);
+					print_r($answerWeighting);					
+					echo "</pre>";
+					*/
+					$answer='';
+					for($i=0;$i<count($correct_tags);$i++)
+					{		 							
+						if (in_array($user_tags[$i],$correct_tags))
+						{
+							// gives the related weighting to the student
+							$questionScore+=$answerWeighting[$i];
+							// increments total score
+							$totalScore+=$answerWeighting[$i];
+						}					
+					}
+					$answer = $str;	
+				} 
+				//echo $questionScore."-".$totalScore;
+				
 ?>
 			<tr>
-			<td> <?php display_fill_in_blanks_answer($answer,$id,$questionId); ?> </td>
+			<td> <?php  display_fill_in_blanks_answer($answer,$id,$questionId); ?> </td>
 			</tr><?php
 		$i++;
-
-
-		}?>
+		}
+		?>
 			</table>
 	<?php  }
 		elseif($answerType == FREE_ANSWER)

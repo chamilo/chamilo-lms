@@ -1,20 +1,23 @@
 <?php
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2008 Dokeos SPRL
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-    Contact:
-		Dokeos
-		Rue du Corbeau, 108
-		B-1030 Brussels - Belgium
-		info@dokeos.com
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
 /**
 *	Exercise result
@@ -25,7 +28,8 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 15602 2008-06-18 08:52:24Z pcool $
+* 	@author Julio Montoya multiple fill in blank option added
+* 	@version $Id: exercise_result.php 15719 2008-07-04 00:50:44Z juliomontoya $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -486,10 +490,25 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 										break;
 				// for fill in the blanks
-				case FILL_IN_BLANKS :	// splits text and weightings that are joined with the character '::'
-
-										list($answer,$answerWeighting)=explode('::',$answer);
-
+				case FILL_IN_BLANKS :	
+									
+							    		// the question is encoded like this
+									    // [A] B [C] D [E] F::10,10,10@1
+									    // number 1 before the "@" means that is a multiple fill in blank question
+									    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
+									    // means that is a normal fill blank question				
+								
+										$multiple_answer_array =explode('@',$answer);	
+										// is multiple fill blank or not
+										$multiple_answer_set=false;
+										if ($multiple_answer_array[1]==1)
+										{
+											$multiple_answer_set=true;											
+										}
+									
+										// splits text and weightings that are joined with the character '::'
+										list($answer,$answerWeighting)=explode('::',$multiple_answer_array[0]);
+										
 										// splits weightings that are joined with a comma
 										$answerWeighting=explode(',',$answerWeighting);
 
@@ -499,31 +518,141 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 										// TeX parsing
 										// 1. find everything between the [tex] and [/tex] tags
-										 $startlocations=strpos($temp,'[tex]');
+										$startlocations=strpos($temp,'[tex]');
 										$endlocations=strpos($temp,'[/tex]');
 
 										if($startlocations !== false && $endlocations !== false)
 										{
-
 											$texstring=substr($temp,$startlocations,$endlocations-$startlocations+6);
 											// 2. replace this by {texcode}
 											$temp=str_replace($texstring,'{texcode}',$temp);
 										}
 
 										$answer='';
-
-
 										$j=0;
-
+										
+										$user_tags[]=array();
+										$correct_tags[]=array();
+										$real_text=array();
 										// the loop will stop at the end of the text
 										while(1)
 										{
-
 											// quits the loop if there are no more blanks
 											if(($pos = strpos($temp,'[')) === false)
 											{
 												// adds the end of the text
-												 $answer.=$temp;
+												$answer.=$temp;
+												// TeX parsing
+												$texstring = api_parse_tex($texstring);
+												$answer=str_replace("{texcode}",$texstring,$answer);
+												break;
+											}
+											// adds the piece of text that is before the blank and ended by [
+											$real_text[]=substr($temp,0,$pos+1);
+											$answer.=substr($temp,0,$pos+1);
+										
+											
+											$temp=substr($temp,$pos+1);
+
+											// quits the loop if there are no more blanks
+											if(($pos = strpos($temp,']')) === false)
+											{
+												// adds the end of the text
+												$answer.=$temp;
+												break;
+											}
+
+											$choice[$j]=trim($choice[$j]);
+											$user_tags[]=stripslashes(strtolower($choice[$j]));
+											$correct_tags[]=strtolower(substr($temp,0,$pos));											
+											$j++;
+											$temp=substr($temp,$pos+1);
+										}
+										/*
+										echo $answer;								
+										echo "<pre>";									
+										print_r($user_tags);
+										echo "<br>";
+										print_r($correct_tags);
+										print_r($real_text);
+										echo "</pre>";				
+
+										*/
+																			
+										$answer='';			
+										$real_correct_tags = $correct_tags;							
+										$chosen_list=array();
+										
+										for($i=1;$i<count($real_correct_tags);$i++)
+										{							
+											if ($i==1)
+											{
+												$answer.=$real_text[0];
+											}
+											
+											if (!$multiple_answer_set)
+											{						
+												if ($correct_tags[$i]==$user_tags[$i])
+												{
+													// gives the related weighting to the student
+													$questionScore+=$answerWeighting[$i-1]; 
+													// increments total score
+													$totalScore+=$answerWeighting[$i-1];
+													// adds the word in green at the end of the string
+													$answer.=stripslashes($correct_tags[$i]); 
+												}
+												// else if the word entered by the student IS NOT the same as the one defined by the professor											
+												elseif(!empty($user_tags[$i]))
+												{
+													// adds the word in red at the end of the string, and strikes it
+													$answer.='<font color="red"><s>'.stripslashes($user_tags[$i]).'</s></font>'; 
+												}
+												else
+												{
+													// adds a tabulation if no word has been typed by the student
+													$answer.='&nbsp;&nbsp;&nbsp;';
+												}												
+											} 
+											else
+											{ 	// multiple fill in blank magic
+												if (in_array($user_tags[$i],$correct_tags))
+												{
+													$chosen_list[]=$user_tags[$i];													
+													$correct_tags=array_diff($correct_tags,$chosen_list);
+																	
+													// gives the related weighting to the student												
+													$questionScore+=$answerWeighting[$i-1];
+													// increments total score
+													$totalScore+=$answerWeighting[$i-1];
+													// adds the word in green at the end of the string
+													$answer.=stripslashes($user_tags[$i]);
+												}													// else if the word entered by the student IS NOT the same as the one defined by the professor											
+												elseif(!empty($user_tags[$i]))
+												{
+													// adds the word in red at the end of the string, and strikes it
+													$answer.='<font color="red"><s>'.stripslashes($user_tags[$i]).'</s></font>'; 
+												}
+												else
+												{
+													// adds a tabulation if no word has been typed by the student
+													$answer.='&nbsp;&nbsp;&nbsp;';
+												}												
+											}
+											// adds the correct word, followed by ] to close the blank
+											$answer.=' / <font color="green"><b>'.$real_correct_tags[$i].'</b></font>]';
+											$answer.=$real_text[$i];
+										} 
+										
+										/*
+										$answer='';
+										// the loop will stop at the end of the text
+										while(1)
+										{
+											// quits the loop if there are no more blanks
+											if(($pos = strpos($temp,'[')) === false)
+											{
+												// adds the end of the text
+												$answer.=$temp;
 												// TeX parsing
 												$texstring = api_parse_tex($texstring);
 												$answer=str_replace("{texcode}",$texstring,$answer);
@@ -537,28 +666,35 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 											// quits the loop if there are no more blanks
 											if(($pos = strpos($temp,']')) === false)
 											{
-
 												// adds the end of the text
 												$answer.=$temp;
 												break;
 											}
 
 											$choice[$j]=trim($choice[$j]);
-
-											// if the word entered by the student IS the same as the one defined by the professor
-											if(strtolower(substr($temp,0,$pos)) == stripslashes(strtolower($choice[$j])))
+											
+											if (!$multiple_answer_set)
 											{
-												// gives the related weighting to the student
-												$questionScore+=$answerWeighting[$j];
-
-												// increments total score
-												$totalScore+=$answerWeighting[$j];
-
-												// adds the word in green at the end of the string
-												$answer.=stripslashes($choice[$j]);
+												// if the word entered by the student IS the same as the one defined by the professor
+												if(strtolower(substr($temp,0,$pos)) == stripslashes(strtolower($choice[$j])))
+												{
+													// gives the related weighting to the student
+													$questionScore+=$answerWeighting[$j];
+	
+													// increments total score
+													$totalScore+=$answerWeighting[$j];
+	
+													// adds the word in green at the end of the string
+													$answer.=stripslashes($choice[$j]);
+												}
 											}
-											// else if the word entered by the student IS NOT the same as the one defined by the professor
-											elseif(!empty($choice[$j]))
+											else 
+											{
+												
+											}										
+											
+											// else if the word entered by the student IS NOT the same as the one defined by the professor											
+											if(!empty($choice[$j]))
 											{
 												// adds the word in red at the end of the string, and strikes it
 												$answer.='<font color="red"><s>'.stripslashes($choice[$j]).'</s></font>';
@@ -576,6 +712,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 											$temp=substr($temp,$pos+1);
 										}
+										*/
 
 										break;
 				// for free answer

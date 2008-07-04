@@ -1,20 +1,23 @@
 <?php
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2008 Dokeos SPRL
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-    Contact:
-		Dokeos
-		Rue du Corbeau, 108
-		B-1030 Brussels - Belgium
-		info@dokeos.com
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
 /**
 *	Exercise submission
@@ -33,7 +36,8 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 15412 2008-05-26 13:56:24Z elixir_inter $
+* 	@author Julio Montoya multiple fill in blank option added
+* 	@version $Id: exercice_submit.php 15719 2008-07-04 00:50:44Z juliomontoya $
 */
 
 
@@ -124,7 +128,8 @@ if($buttonCancel)
 	exit();
 }
 
-if ($origin=='builder') {
+if ($origin=='builder') 
+{
 	/*******************************/
 	/* Clears the exercise session */
 	/*******************************/
@@ -150,7 +155,7 @@ if($formSent)
 
     // if the user has answered at least one question
     if(is_array($choice))
-    {
+    {	
         if($debug>0){echo str_repeat('&nbsp;',0).'$choice is an array'."<br />\n";}
 
         if($exerciseType == 1)
@@ -190,7 +195,7 @@ if($formSent)
 
     // if it is the last question (only for a sequential exercise)
     if($exerciseType == 1 || $questionNum >= $nbrQuestions)
-    {
+    {	
         if($debug>0){echo str_repeat('&nbsp;',0).'Redirecting to exercise_result.php - Remove debug option to let this happen'."<br />\n";}
 		 // goes to the script that will show the result of the exercise
         header("Location: exercise_result.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
@@ -206,7 +211,7 @@ if(!isset($_SESSION['objExercise']) || $origin == 'learnpath' || $_SESSION['objE
     // construction of Exercise
     $objExercise=new Exercise();
     unset($_SESSION['questionList']);
-
+	
     // if the specified exercise doesn't exist or is disabled
     if(!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !$is_allowedToEdit && ($origin != 'learnpath') ))
     {
@@ -444,7 +449,7 @@ else
 	$number_of_hotspot_questions = 0;
 	$onsubmit = '';
 	$i=0;
-	
+
 	foreach($questionList as $questionId)
 	{
 		$i++;

@@ -13,6 +13,7 @@
 -- This first part is for the main database
 -- xxMAINxx
 INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('registration', 'phone', 'textfield', 'User', 'false', 'RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment', NULL, 'Phone');
+ALTER TABLE php_session CHANGE session_value session_value MEDIUMTEXT NOT NULL;
 
 -- xxSTATSxx
 

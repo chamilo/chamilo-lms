@@ -318,7 +318,7 @@ CREATE TABLE php_session (
   session_name varchar(10) NOT NULL default '',
   session_time int(11) NOT NULL default '0',
   session_start int(11) NOT NULL default '0',
-  session_value text NOT NULL,
+  session_value mediumtext NOT NULL,
   PRIMARY KEY  (session_id)
 );
 

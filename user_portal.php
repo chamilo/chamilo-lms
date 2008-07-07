@@ -767,7 +767,7 @@ $announcement = isset($_GET['announcement']) ? $_GET['announcement'] : -1;
 $visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
 SystemAnnouncementManager :: display_announcements($visibility, $announcement);
 
-if (!empty ($_GET['include']) && !strstr($_GET['include'], '/') && strstr($_GET['include'], '.html'))
+if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/'))
 {
 	include ('./home/'.$_GET['include']);
 	$pageIncluded = true;

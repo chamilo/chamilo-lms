@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 15169 2008-04-29 06:27:22Z yannoo $
+<?php // $Id: profile.php 15740 2008-07-07 09:30:44Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -45,7 +45,7 @@ $cidReset = true;
 require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $this_section = SECTION_MYPROFILE;
-
+ 
 api_block_anonymous_users();
 
 $htmlHeadXtra[] = '<script type="text/javascript">
@@ -272,6 +272,7 @@ if (is_profile_editable() && api_get_setting('profile', 'password') == 'true')
 
 // EXTRA FIELDS
 $extra = UserManager::get_extra_fields(0,50,5,'ASC');
+$extra_data = UserManager::get_extra_user_data(api_get_user_id(),true);
 foreach($extra as $id => $field_details)
 {
 	if($field_details[6] == 0)
@@ -332,6 +333,46 @@ foreach($extra as $id => $field_details)
 			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			$form->applyFilter('theme', 'trim');
 			break;
+		case USER_FIELD_TYPE_DOUBLE_SELECT:
+			foreach ($field_details[8] as $key=>$element)
+			{
+				if ($element[2][0] == '*')
+				{
+					$values['*'][$element[0]] = str_replace('*','',$element[2]);
+				}
+				else 
+				{
+					$values[0][$element[0]] = $element[2];
+				}
+			}
+			
+			$group='';
+			$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1],'',$values[0],'');
+			$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*','',$values['*'],'');
+			$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+
+			// recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
+			if (key_exists('extra_'.$field_details[1], $extra_data))
+			{
+				// exploding all the selected values (of both select forms)
+				$selected_values = explode(';',$extra_data['extra_'.$field_details[1]]);
+				$extra_data['extra_'.$field_details[1]]  =array();
+				
+				// looping through the selected values and assigning the selected values to either the first or second select form
+				foreach ($selected_values as $key=>$selected_value)
+				{
+					if (key_exists($selected_value,$values[0]))
+					{
+						$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
+					}
+					else 
+					{
+						$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
+					}
+				}
+			}
+			break;
 	}
 }
 
@@ -345,10 +386,6 @@ else
 	$form->freeze();
 }
 
-/*
- * Set initial values for all fields.
- */
-$extra_data = UserManager::get_extra_user_data(api_get_user_id(),true);
 $user_data = array_merge($user_data,$extra_data);
 $form->setDefaults($user_data);
 
@@ -622,7 +659,7 @@ elseif ($form->validate())
 		}
 		else
 		{
-			$sql .= " $key = '".addslashes($value)."',";
+			$sql .= " $key = '".Database::escape_string($value)."',";
 		}
 	}
 
@@ -630,11 +667,11 @@ elseif ($form->validate())
 	{
 		if ($userPasswordCrypted)
 		{
-			$sql .= " password = MD5('".addslashes($password)."')";
+			$sql .= " password = MD5('".Database::escape_string($password)."')";
 		}
 		else
 		{
-			$sql .= " password = '".addslashes($password)."'";
+			$sql .= " password = '".Database::escape_string($password)."'";
 		}
 	}
 	else // remove trailing , from the query we have so far
@@ -669,7 +706,7 @@ Display :: display_header(get_lang('ModifyProfile'));
 
 if (!empty($file_deleted))
 {
-	Display :: display_normal_message(get_lang('FileDeleted'),false);
+	Display :: display_confirmation_message(get_lang('FileDeleted'),false);
 }
 elseif (!empty($update_success))
 {
@@ -685,7 +722,7 @@ elseif (!empty($update_success))
 		$message.='<br />'.get_lang('ProductionUploaded');
 	}
 		
-	Display :: display_normal_message($message,false);	
+	Display :: display_confirmation_message($message,false);	
 }
 
 if(!empty($warning_msg))

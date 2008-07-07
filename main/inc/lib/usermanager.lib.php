@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 15626 2008-06-26 15:26:29Z elixir_inter $
+<?php // $Id: usermanager.lib.php 15740 2008-07-07 09:30:44Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -38,6 +38,8 @@ define('USER_FIELD_TYPE_SELECT',4);
 define('USER_FIELD_TYPE_SELECT_MULTIPLE',5);
 define('USER_FIELD_TYPE_DATE',6);
 define('USER_FIELD_TYPE_DATETIME',7);
+define('USER_FIELD_TYPE_DOUBLE_SELECT',8);
+define('USER_FIELD_TYPE_DIVIDER',9);
 
 class UserManager
 {
@@ -981,9 +983,44 @@ class UserManager
 			//echo "false - failed" ;
 			return false;
 		}
-		if(!empty($fieldoptions) && in_array($fieldtype,array(USER_FIELD_TYPE_RADIO,USER_FIELD_TYPE_SELECT,USER_FIELD_TYPE_SELECT_MULTIPLE)))
+		
+		if(!empty($fieldoptions) && in_array($fieldtype,array(USER_FIELD_TYPE_RADIO,USER_FIELD_TYPE_SELECT,USER_FIELD_TYPE_SELECT_MULTIPLE,USER_FIELD_TYPE_DOUBLE_SELECT)))
 		{
-			$list = split(';',$fieldoptions);
+			//echo 'storing the options';
+			if($fieldtype == USER_FIELD_TYPE_DOUBLE_SELECT)
+			{
+				//echo 'double select';
+				$twolist = explode('|', $fieldoptions);
+				$counter = 0;
+				//echo $fieldoptions;
+				//print_r($twolist);
+				foreach ($twolist as $individual_list)
+				{
+					$splitted_individual_list = split(';',$individual_list);
+					foreach	($splitted_individual_list as $individual_list_option)				
+					{
+						//echo 'counter:'.$counter; 
+						if ($counter == 0)
+						{
+							$list[] = $individual_list_option;
+						}
+						else 
+						{
+							$list[] = str_repeat('*',$counter).$individual_list_option;
+						}
+					}
+					$counter++;
+				}
+				/*
+				echo '<pre>';
+				print_r($list);
+				echo '</pre>';
+				*/
+			}
+			else 
+			{
+				$list = split(';',$fieldoptions);
+			}
 			foreach($list as $option)
 			{
 				$option = Database::escape_string($option);

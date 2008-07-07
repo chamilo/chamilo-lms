@@ -1,4 +1,4 @@
-<?php // $Id: user_fields_add.php 14874 2008-04-13 19:25:19Z yannoo $
+<?php // $Id: user_fields_add.php 15740 2008-07-07 09:30:44Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -69,6 +69,8 @@ $types[USER_FIELD_TYPE_SELECT] = get_lang('FieldTypeSelect');
 $types[USER_FIELD_TYPE_SELECT_MULTIPLE] = get_lang('FieldTypeSelectMultiple');
 $types[USER_FIELD_TYPE_DATE] = get_lang('FieldTypeDate');
 $types[USER_FIELD_TYPE_DATETIME] = get_lang('FieldTypeDatetime');
+$types[USER_FIELD_TYPE_DOUBLE_SELECT] 	= get_lang('FieldTypeDoubleSelect');
+$types[USER_FIELD_TYPE_DIVIDER] 		= get_lang('FieldTypeDivider');
 $form->addElement('select','fieldtype',get_lang('FieldType'),$types);
 $form->addRule('fieltype', get_lang('ThisFieldIsRequired'), 'required');
 // Field display name

@@ -1,9 +1,9 @@
-<?php // $Id: user_edit.php 15737 2008-07-07 06:42:28Z yannoo $
+<?php // $Id: user_edit.php 15743 2008-07-07 23:14:48Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -19,7 +19,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -298,15 +298,23 @@ if( $form->validate())
 	$picture = $picture_element->getValue();
 	$picture_uri = '';
 	
+    //get the picture directory
+    $picture_paths = UserManager::get_user_picture_path_by_id($user_id,'system',true);
+    $picture_location = $picture_paths['dir'];
+    
 	if (strlen($picture['name']) > 0)
 	{
 		$picture_uri = uniqid('').'_'.replace_dangerous_char($picture['name']);
-		$picture_location = api_get_path(SYS_CODE_PATH).'upload/users/'.$picture_uri;
+        if(!file_exists($picture_location))
+        {
+        	mkpath($picture_location);
+        }
+		$picture_location .= $picture_uri;
 		move_uploaded_file($picture['tmp_name'], $picture_location);
 	}
 	elseif(isset($user['delete_picture']))
 	{
-		@unlink('../upload/users/'.$user_data['picture_uri']);
+		@unlink($picture_location.$user_data['picture_uri']);
 	}
 	
 	if (strlen($picture['name']) == 0){

@@ -1,4 +1,4 @@
-<?php # $Id: fileManage.lib.php 15278 2008-05-13 22:43:40Z yannoo $
+<?php # $Id: fileManage.lib.php 15744 2008-07-07 23:43:28Z yannoo $
 
 /* vim: set expandtab tabstop=4 shiftwidth=4:
 ===============================================================================
@@ -542,6 +542,9 @@ function mkpath($path, $verbose = false, $mode = "herit")
 		echo "<UL>";
 	}
 
+    $perm = api_get_setting('permissions_for_new_directories');
+    $perm = octdec(!empty($perm)?$perm:'0770');
+
 	for($i=1;$i < sizeof($dirs);$i++)
 	{
 		$path.='/'.$dirs[$i];
@@ -553,7 +556,7 @@ function mkpath($path, $verbose = false, $mode = "herit")
 
 		if(!is_dir($path))
 		{
-			$ret=mkdir($path,0770);
+			$ret=mkdir($path,$perm);
 
 			if($ret)
 			{

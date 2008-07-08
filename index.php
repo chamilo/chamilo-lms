@@ -16,11 +16,11 @@
 		B-1030 Brussels - Belgium
 		Contact: info@dokeos.com
 */
-
+  
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 15173 2008-04-29 17:29:11Z yannoo $
+* 	@version $Id: index.php 15748 2008-07-08 21:10:31Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -177,7 +177,7 @@ else
 
 // Including the page for the news
 $page_included = false;
-if (!empty ($_GET['include']) && !strstr($_GET['include'], '/') && !strstr($_GET['include'], '\\') && strstr($_GET['include'], '.html'))
+if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['include']))
 {
 	include ('./home/'.$_GET['include']);
 	$page_included = true;

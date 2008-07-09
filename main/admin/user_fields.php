@@ -180,6 +180,7 @@ if(1)
 	$table->set_column_filter(6, 'modify_visibility');
 	$table->set_column_filter(7, 'modify_changeability');
 	$table->set_column_filter(8, 'edit_filter');
+	$table->set_column_filter(2, 'type_filter');
 	$table->display();
 }
 
@@ -200,6 +201,32 @@ function get_extra_fields($f,$n,$o,$d)
 {
 	return UserManager::get_extra_fields($f,$n,$o,$d);
 }
+
+/**
+ * This functions translates the id of the form type into a human readable description
+ *
+ * @param integer $type the id of the form type
+ * @return string the huma readable description of the field type (text, date, select drop-down, ...)
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version July 2008
+ * @since Dokeos 1.8.6
+ */
+function type_filter($type)
+{
+	$types[USER_FIELD_TYPE_TEXT]  				= get_lang('FieldTypeText');
+	$types[USER_FIELD_TYPE_TEXTAREA] 			= get_lang('FieldTypeTextarea');
+	$types[USER_FIELD_TYPE_RADIO] 				= get_lang('FieldTypeRadio');
+	$types[USER_FIELD_TYPE_SELECT] 				= get_lang('FieldTypeSelect');
+	$types[USER_FIELD_TYPE_SELECT_MULTIPLE] 	= get_lang('FieldTypeSelectMultiple');
+	$types[USER_FIELD_TYPE_DATE] 				= get_lang('FieldTypeDate');
+	$types[USER_FIELD_TYPE_DATETIME] 			= get_lang('FieldTypeDatetime');
+	$types[USER_FIELD_TYPE_DOUBLE_SELECT] 		= get_lang('FieldTypeDoubleSelect');
+	$types[USER_FIELD_TYPE_DIVIDER] 			= get_lang('FieldTypeDivider');	
+	
+	return $types[$type];
+}
+
 /**
  * Modify the display order field into up and down arrows
  *
@@ -243,7 +270,7 @@ function order_filter($field_order,$url_params,$row)
  */
 function modify_visibility($visibility,$url_params,$row)
 {
-	return ($visibility?'<a href="'.api_get_self().'?action=hide_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'right.gif" alt="'.get_lang('Hide').'" /></a>':'<a href="'.api_get_self().'?action=show_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'wrong.gif" alt="'.get_lang('Show').'" /></a>');
+	return ($visibility?'<a href="'.api_get_self().'?action=hide_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'visible.gif" alt="'.get_lang('Hide').'" /></a>':'<a href="'.api_get_self().'?action=show_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'invisible.gif" alt="'.get_lang('Show').'" /></a>');
 }
 /**
  * Modify the changeability field to show links and icons

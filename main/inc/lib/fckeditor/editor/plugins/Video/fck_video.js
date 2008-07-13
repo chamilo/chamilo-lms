@@ -38,7 +38,7 @@ var sAgent = navigator.userAgent.toLowerCase() ;
 var is_ie = (sAgent.indexOf("msie") != -1); // FCKBrowserInfo.IsIE
 var is_gecko = !is_ie; // FCKBrowserInfo.IsGecko
 
-function window_onload()
+window.onload = function()
 {
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage(document) ;

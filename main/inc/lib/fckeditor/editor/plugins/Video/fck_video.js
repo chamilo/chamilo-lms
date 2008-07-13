@@ -4,6 +4,9 @@ var FCKLang		= oEditor.FCKLang ;
 var FCKConfig	= oEditor.FCKConfig ;
 var flv_url = "";
 
+// Set the language direction.
+window.document.dir = oEditor.FCKLang.Dir ;
+
 // Set the dialog tabs.
 window.parent.AddTab( 'Upload', FCKLang.DlgVideoUpload ) ;
 window.parent.AddTab( 'Info', FCKLang.DlgVideoTab ) ;
@@ -14,8 +17,9 @@ var oMedia = null;
 // Function called when a dialog tag is selected.
 function OnDialogTabChange( tabCode )
 {
+	ShowE('divInfo'		, ( tabCode == 'Info' ) ) ;
 	ShowE('divUpload'	, ( tabCode == 'Upload' ) ) ;
-	ShowE('divInfo'		, ( tabCode == 'Info' ) );
+	
 }
 
 // Get the selected Video embed (if available).
@@ -29,13 +33,18 @@ if ( oFakeImage )
 	else
 		oFakeImage = null ;
 }
+var sAgent = navigator.userAgent.toLowerCase() ;
 
-window.onload = function()
+var is_ie = (sAgent.indexOf("msie") != -1); // FCKBrowserInfo.IsIE
+var is_gecko = !is_ie; // FCKBrowserInfo.IsGecko
+
+function window_onload()
 {
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage(document) ;
 
 	window.parent.SetSelectedTab( 'Upload' ) ;
+
 	// Load the selected element information (if any).
 	LoadSelection() ;
 
@@ -50,24 +59,46 @@ window.onload = function()
 
 	// Activate the "OK" button.
 	//window.parent.SetOkButton( true ) ;
+
+
 }
+
+
+/**
+ * Get the selected element
+ */
+function getSelectedMovie(){
+	var oSel = null;
+
+	// explorer..
+	if (is_ie){
+		oSel = FCK.Selection.GetSelectedElement( 'OBJECT' );
+	}
+	
+	// gecko
+	else if (is_gecko){
+		var o = FCK.EditorWindow.getSelection() ;
+
+		if ((o != null) && (o.anchorNode.tagName == 'OBJECT')){
+			oSel = o.anchorNode;
+		}
+	}
+	
+	// other
+	else {
+		alert ("Browser Not Supported");
+	}
+
+	return oSel;
+}
+
 
 function LoadSelection()
 {
 	if ( ! oEmbed ) return ;
 
-	//var sUrl = GetAttribute( oEmbed, 'src', '' ) ;
-
 	GetE('txtUrl').value    = GetAttribute( oEmbed, 'src', '' ) ;
 	GetE('controller').value    = 'true' ;
-	//GetE('txtWidth').value  = GetAttribute( oEmbed, 'width', '' ) ;
-	//GetE('txtHeight').value = GetAttribute( oEmbed, 'height', '' ) ;
-
-	// Get Advances Attributes
-	//GetE('txtAttId').value		= oEmbed.id ;
-	//GetE('chkAutoPlay').checked	= GetAttribute( oEmbed, 'play', 'true' ) == 'true' ;
-	//GetE('chkLoop').checked		= GetAttribute( oEmbed, 'loop', 'true' ) == 'true' ;
-
 	UpdatePreview() ;
 }
 
@@ -106,8 +137,6 @@ function Ok()
 		var e = (oMedia || new Media()) ;
 		updateMovie(e);
 		FCK.InsertHtml(e.getOuterHTML()) ;	
-		var sAgent = navigator.userAgent.toLowerCase() ;
-		var is_ie = (sAgent.indexOf("msie") != -1);
 		if ( !oFakeImage && !is_ie )
 		{
 			oFakeImage	= oEditor.FCKDocumentProcessors_CreateFakeImage( 'FCK__Video_flv', oMedia ) ;
@@ -129,7 +158,6 @@ function Ok()
 			oEditor.FCKUndo.SaveUndoStep() ;
 		UpdateEmbed( oEmbed ) ;		
 	}
-	
 
 	
 	oEditor.FCKFlashProcessor.RefreshView( oFakeImage, oEmbed ) ;
@@ -139,38 +167,10 @@ function Ok()
 
 function UpdateEmbed( e )
 {
-	//SetAttribute( e, 'type'			, 'application/x-shockwave-flash' ) ;
-	//SetAttribute( e, 'pluginspage'	, 'http://www.macromedia.com/go/getflashplayer' ) ;
 
 	SetAttribute( e, "controller", 'true' ) ;
 
 	e.src = GetE('txtUrl').value ;
-	//SetAttribute( e, "width" , GetE('txtWidth').value ) ;
-	//SetAttribute( e, "height", GetE('txtHeight').value ) ;
-	
-	// Advances Attributes
-
-	//SetAttribute( e, 'id'	, GetE('txtAttId').value ) ;
-	//SetAttribute( e, 'scale', GetE('cmbScale').value ) ;
-	
-	//SetAttribute( e, 'play', GetE('chkAutoPlay').checked ? 'true' : 'false' ) ;
-	//SetAttribute( e, 'loop', GetE('chkLoop').checked ? 'true' : 'false' ) ;
-	//SetAttribute( e, 'menu', GetE('chkMenu').checked ? 'true' : 'false' ) ;
-
-	//SetAttribute( e, 'title'	, GetE('txtAttTitle').value ) ;
-
-	/*
-	if ( oEditor.FCKBrowserInfo.IsIE )
-	{
-		SetAttribute( e, 'className', GetE('txtAttClasses').value ) ;
-		e.style.cssText = GetE('txtAttStyle').value ;
-	}
-	else
-	{
-		SetAttribute( e, 'class', GetE('txtAttClasses').value ) ;
-		SetAttribute( e, 'style', GetE('txtAttStyle').value ) ;
-	}
-	*/
 }
 
 function UpdatePreview()
@@ -185,8 +185,6 @@ function UpdatePreview()
 		window.parent.SetSelectedTab( 'Info' ) ;
 	}
 }
-
-// <embed id="ePreview" src="fck_flash/claims.swf" width="100%" height="100%" style="visibility:hidden" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
 
 function BrowseServer()
 {
@@ -212,69 +210,16 @@ function SetUrl( url, width, height )
 
 }
 
-function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
-{
-	switch ( errorNumber )
-	{
-		case 0 :	// No errors
-			//alert( 'Your file has been successfully uploaded' ) ;
-			break ;
-		case 1 :	// Custom error
-			alert( customMsg ) ;
-			return ;
-		case 101 :	// Custom warning
-			alert( customMsg ) ;
-			break ;
-		case 201 :
-			alert( 'A file with the same name is already available. The uploaded file has been renamed to "' + fileName + '"' ) ;
-			break ;
-		case 202 :
-			alert( 'Invalid file type' ) ;
-			window.location.href=FCKConfig.PluginsPath + 'Video/fck_video.php';
-			return ;
-		case 203 :
-			alert( "Security error. You probably don't have enough permissions to upload. Please check your server." ) ;
-			window.location.href=FCKConfig.PluginsPath + 'Video/fck_video.php';
-			return ;
-		default :
-			alert( 'Error on file upload. Error number: ' + errorNumber ) ;
-			window.location.href=FCKConfig.PluginsPath + 'Video/fck_video.php';
-			return ;
-	}
 
-	SetUrl( fileUrl ) ;
-	GetE('frmUpload').reset() ;
-}
 
-var oUploadAllowedExtRegex	= new RegExp( FCKConfig.VideoUploadAllowedExtensions, 'i' ) ;
-var oUploadDeniedExtRegex	= new RegExp( FCKConfig.VideoUploadDeniedExtensions, 'i' ) ;
 
-function CheckUpload()
-{
-	var sFile = GetE('txtUploadFile').value ;
-	
-	if ( sFile.length == 0 )
-	{
-		alert( 'Please select a file to upload' ) ;
-		return false ;
-	}
-	
-	alert("ici "+oUploadAllowedExtRegex.test( sFile ));
-	
-	if ( ( FCKConfig.VideoUploadAllowedExtensions.length > 0 && !oUploadAllowedExtRegex.test( sFile ) ) ||
-		( FCKConfig.VideoUploadDeniedExtensions.length > 0 && oUploadDeniedExtRegex.test( sFile ) ) )
-	{
-		OnUploadCompleted( 202 ) ;
-		return false ;
-	}
-	
-	return true ;
-}
 
+/*
 function OnSizeChanged( dimension, value ) 
 {	
 	UpdatePreview() ;
 }
+*/
 
 function updateMovie(e){
 	e.url = GetE('txtUrl').value;
@@ -314,7 +259,7 @@ var Media = function (o){
 };
 
 /**
- * Toma los datos de un elemento.
+ * Take one element's data
  */ 
 Media.prototype.setObjectElement = function (e){
 	if (!e) return ;
@@ -356,7 +301,7 @@ Media.prototype.setObjectElement = function (e){
 
 
 /**
- * Devuelve el codigo HTML externo del elemento
+ * Return the outer HTML code of the element
  */
 Media.prototype.getOuterHTML = function (objectId){
 	var s;
@@ -371,12 +316,71 @@ Media.prototype.getOuterHTML = function (objectId){
  * Devuelve el codigo HTML interno del elemento
  */
 Media.prototype.getInnerHTML = function (objectId){
-	var s = '<object type="application/x-shockwave-flash" data="'+getObjData(this.url)+'" height="240" width="320">\r\n<param name="movie" value="'+getObjData(this.url)+'">\r\n\t<param name="FlashVars" value="flv='+getVideoUrl()+'&autoplay=1&width=320&amp;height=240" /></object>\r\n';
-
+	var s = '<object type="application/x-shockwave-flash" data="'+getObjData(this.url)+'" height="240" width="320">\r\n<param name="movie" value="'+getObjData(this.url)+'">\r\n\t<param name="FlashVars" value="flv='+getVideoUrl()+'&autoplay=1&width=320&amp;height=240" /><embed src="'+getObjData(this.url)+'" quality="high" bgcolor="#FFFFFF"  width="90" height="25" name="Streaming" align="" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed></object>\r\n';
+	//var s = '<object type="application/x-shockwave-flash" data="'+getObjData(this.url)+'" height="240" width="320">\r\n<param name="movie" value="'+getObjData(this.url)+'">\r\n\t<param name="FlashVars" value="flv='+getVideoUrl()+'&autoplay=1&width=320&amp;height=240" /></object>\r\n';
 	return s;
 };
 
 
 Media.prototype.createAttribute = function(n,v){
 	return ' '+n+'="'+v+'" ';
+}
+
+
+function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
+{
+	switch ( errorNumber )
+	{
+		case 0 :	// No errors
+			//alert( 'Your file has been successfully uploaded' ) ;
+			break ;
+		case 1 :	// Custom error
+			alert( customMsg ) ;
+			return ;
+		case 101 :	// Custom warning
+			alert( customMsg ) ;
+			break ;
+		case 201 :
+			alert( 'A file with the same name is already available. The uploaded file has been renamed to "' + fileName + '"' ) ;
+			break ;
+		case 202 :
+			alert( 'Invalid file type' ) ;
+			window.location.href=FCKConfig.PluginsPath + 'Video/fck_video.php';
+			return ;
+		case 203 :
+			alert( "Security error. You probably don't have enough permissions to upload. Please check your server." ) ;
+			window.location.href=FCKConfig.PluginsPath + 'Video/fck_video.php';
+			return ;
+		default :
+			alert( 'Error on file upload. Error number: ' + errorNumber ) ;
+			window.location.href=FCKConfig.PluginsPath + 'Video/fck_video.php';
+			return ;
+	}
+
+	SetUrl( fileUrl ) ;
+	GetE('frmUpload').reset() ;
+}
+
+var oUploadAllowedExtRegex	= new RegExp( FCKConfig.VideoUploadAllowedExtensions, 'i' ) ;
+var oUploadDeniedExtRegex	= new RegExp( FCKConfig.VideoUploadDeniedExtensions, 'i' ) ;
+
+function CheckUpload()
+{
+	var sFile = GetE('txtUploadFile').value ;
+	if ( sFile.length == 0 )
+	{
+		alert( 'Please select a file to upload' ) ;
+		return false ;
+	}
+	
+	//alert("ici "+oUploadAllowedExtRegex.test( sFile ));
+	
+	if ( ( FCKConfig.VideoUploadAllowedExtensions.length > 0 && !oUploadAllowedExtRegex.test( sFile ) ) ||
+		( FCKConfig.VideoUploadDeniedExtensions.length > 0 && oUploadDeniedExtRegex.test( sFile ) ) )
+	{
+		OnUploadCompleted( 202 ) ;
+		return false ;
+	}
+	
+	return true ;
 }

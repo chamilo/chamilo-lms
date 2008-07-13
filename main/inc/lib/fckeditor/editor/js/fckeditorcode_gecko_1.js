@@ -726,21 +726,57 @@ var FCKDocumentProcessors_CreateFakeImage=function(A,B){
 var FCKFlashProcessor=new Object();
 FCKFlashProcessor.ProcessDocument=function(A)
 {
-	var treatedNodes = new Array();
-	//first check for <OBJECT> tags, as objects include embed and we check embeds 
-	//later on (they won't be taken if the parent object has been treated, thanks
-	//to the treatedNodes array!
+	//Treating <embed> tags first is a dirty hack. Because <embed> tags are enclosed into <object> tags,
+	// and because we treat <object> tags afterwards, we can do whatever we want here with embed tags
+	// inside the <object> tag and then remove the object tag when we get to it to "clean" it.
+	var B=A.getElementsByTagName('EMBED');
+	var C;
+	var i=B.length-1;
+	while (i>=0&&(C=B[i--])){
+	  if(C.parentNode && C.parentNode != null)
+	  {
+	  	//check if the parent of this <embed> tag is an <object> tag. If so, just leave the process
+	  	//to the code in the next section, that treats objects specifically
+	  	if(C.parentNode.nodeName.toString().toLowerCase() == 'object') continue;
+		if (C.src.endsWith('.swf',true)){
+			var D=C.cloneNode(true);
+			if (FCKBrowserInfo.IsIE){
+				D.setAttribute('scale',C.getAttribute('scale'));
+				D.setAttribute('play',C.getAttribute('play'));
+				D.setAttribute('loop',C.getAttribute('loop'));
+				D.setAttribute('menu',C.getAttribute('menu'));
+			};
+			var E=FCKDocumentProcessors_CreateFakeImage('FCK__Flash',D);
+			E.setAttribute('_fckflash','true',0);
+			FCKFlashProcessor.RefreshView(E,C);
+			C.parentNode.insertBefore(E,C);
+			C.parentNode.removeChild(C);
+		}
+		else if (C.src.search('/\.flv&/') || C.src.search('/\.avi&/') || C.src.search('/\.mpg&/') || C.src.search('/\.mpeg&/') || C.src.search('/\.mov&/') || C.src.search('/\.wmv&/') || C.src.search('/\.rm&/')){
+			var D=C.cloneNode(true);
+			if (FCKBrowserInfo.IsIE){
+				D.setAttribute('scale',C.getAttribute('scale'));
+				D.setAttribute('play',C.getAttribute('play'));
+				D.setAttribute('loop',C.getAttribute('loop'));
+				D.setAttribute('menu',C.getAttribute('menu'));
+			};
+			var E=FCKDocumentProcessors_CreateFakeImage('FCK__Video',D);
+			E.setAttribute('_fckVideo','true',0);
+			FCKFlashProcessor.RefreshView(E,C);
+			C.parentNode.insertBefore(E,C);
+			C.parentNode.removeChild(C);
+		};
+	  };
+	};
 	var B=A.getElementsByTagName('OBJECT');
 	var C;
 	var i=B.length-1;
 	while (i>=0&&(C=B[i--])){
-	  //check if this node isn't the child of another "embed" or "object" node that has already been treated
-	  for (myNode in treatedNodes) { if (C.parentNode && C.parentNode == myNode) continue; }
-
 		//look for the <param name="movie" ...> child
 		var F;
 		var j=C.childNodes.length-1;
-		while (j>=0 && (F=C.childNodes[j--])){
+		var treated = false;
+		while (j>=0 && (F=C.childNodes[j--]) && treated == false){
 		  if(C.parentNode && C.parentNode!=null && F.name && F.name.toString() == 'movie')
 		  {
 		    if(F.value.toString()!='' && F.value.toString().length>1)
@@ -760,7 +796,7 @@ FCKFlashProcessor.ProcessDocument=function(A)
 					FCKFlashProcessor.RefreshView(E,C);
 					C.parentNode.insertBefore(E,C);
 					C.parentNode.removeChild(C);
-					treatedNodes.push(C);
+					treated = true;
 				}else if (Fval.search('/\.avi&/') || Fval.search('/\.mpg&/') || Fval.search('/\.mpeg&/') || Fval.search('/\.mov&/') || Fval.search('/\.wmv&/') || Fval.search('/\.rm&/')){
 					var D=F.cloneNode(true);
 					if (FCKBrowserInfo.IsIE){
@@ -775,7 +811,7 @@ FCKFlashProcessor.ProcessDocument=function(A)
 					FCKFlashProcessor.RefreshView(E,C);
 					C.parentNode.insertBefore(E,C);
 					C.parentNode.removeChild(C);
-					treatedNodes.push(C);
+					treated = true;
 				};
 		    }
 		  }
@@ -798,7 +834,7 @@ FCKFlashProcessor.ProcessDocument=function(A)
 					FCKFlashProcessor.RefreshView(E,C);
 					C.parentNode.insertBefore(E,C);
 					C.parentNode.removeChild(C);
-					treatedNodes.push(C);
+					treated = true;
 				}else if (Fval.search('/\.flv&/')) {
 					var D=F.cloneNode(true);
 					if (FCKBrowserInfo.IsIE){
@@ -813,7 +849,7 @@ FCKFlashProcessor.ProcessDocument=function(A)
 					FCKFlashProcessor.RefreshView(E,C);
 					C.parentNode.insertBefore(E,C);
 					C.parentNode.removeChild(C);
-					treatedNodes.push(C);
+					treated = true;
 				}else if ( Fval.search('/\.avi&/') || Fval.search('/\.mpg&/') || Fval.search('/\.mpeg&/') || Fval.search('/\.mov&/') || Fval.search('/\.wmv&/') || Fval.search('/\.rm&/')){
 					var D=F.cloneNode(true);
 					if (FCKBrowserInfo.IsIE){
@@ -828,51 +864,11 @@ FCKFlashProcessor.ProcessDocument=function(A)
 					FCKFlashProcessor.RefreshView(E,C);
 					C.parentNode.insertBefore(E,C);
 					C.parentNode.removeChild(C);
-					treatedNodes.push(C);
+					treated = true;
 				};
 		    }
 		  }
 		}
-	};
-	var B=A.getElementsByTagName('EMBED');
-	var C;
-	var i=B.length-1;
-	while (i>=0&&(C=B[i--])){
-	  //check if this node isn't the child of another "embed" or "object" node that has already been treated
-	  for (myNode in treatedNodes) { if (C.parentNode && C.parentNode == myNode) continue; }
-	  if(C.parentNode && C.parentNode != null)
-	  {
-		if (C.src.endsWith('.swf',true)){
-			var D=C.cloneNode(true);
-			if (FCKBrowserInfo.IsIE){
-				D.setAttribute('scale',C.getAttribute('scale'));
-				D.setAttribute('play',C.getAttribute('play'));
-				D.setAttribute('loop',C.getAttribute('loop'));
-				D.setAttribute('menu',C.getAttribute('menu'));
-			};
-			var E=FCKDocumentProcessors_CreateFakeImage('FCK__Flash',D);
-			E.setAttribute('_fckflash','true',0);
-			FCKFlashProcessor.RefreshView(E,C);
-			C.parentNode.insertBefore(E,C);
-			C.parentNode.removeChild(C);
-			treatedNodes.push(C);
-		}
-		else if (C.src.search('/\.flv&/') || C.src.search('/\.avi&/') || C.src.search('/\.mpg&/') || C.src.search('/\.mpeg&/') || C.src.search('/\.mov&/') || C.src.search('/\.wmv&/') || C.src.search('/\.rm&/')){
-			var D=C.cloneNode(true);
-			if (FCKBrowserInfo.IsIE){
-				D.setAttribute('scale',C.getAttribute('scale'));
-				D.setAttribute('play',C.getAttribute('play'));
-				D.setAttribute('loop',C.getAttribute('loop'));
-				D.setAttribute('menu',C.getAttribute('menu'));
-			};
-			var E=FCKDocumentProcessors_CreateFakeImage('FCK__Video',D);
-			E.setAttribute('_fckVideo','true',0);
-			FCKFlashProcessor.RefreshView(E,C);
-			C.parentNode.insertBefore(E,C);
-			C.parentNode.removeChild(C);
-			treatedNodes.push(C);
-		};
-	  };
 	};
 };
 FCKFlashProcessor.RefreshView=function(A,B){

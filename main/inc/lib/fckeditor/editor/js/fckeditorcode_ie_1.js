@@ -30,45 +30,19 @@ var FCKDocumentProcessors_CreateFakeImage=function(A,B){var C=FCK.EditorDocument
 
 var FCKFlashProcessor=new Object();
 FCKFlashProcessor.ProcessDocument=function(A){
+	//Treating <embed> tags first is a dirty hack. Because <embed> tags are enclosed into <object> tags,
+	// and because we treat <object> tags afterwards, we can do whatever we want here with embed tags
+	// inside the <object> tag and then remove the object tag when we get to it to "clean" it.
 	var B=A.getElementsByTagName('EMBED');
 	var C;
 	var i=B.length-1;
 	while (i>=0&&(C=B[i--])){
+	  if(C.parentNode && C.parentNode != null)
+	  {
+	  	//check if the parent of this <embed> tag is an <object> tag. If so, just leave the process
+	  	//to the code in the next section, that treats objects specifically
+	  	if(C.parentNode.nodeName.toString().toLowerCase() == 'object') continue;
 		if (C.src.endsWith('.swf',true)){
-			var D=C.cloneNode(true);
-			if(FCKBrowserInfo.IsIE){
-				D.setAttribute('scale',C.getAttribute('scale'));
-				D.setAttribute('play',C.getAttribute('play'));
-				D.setAttribute('loop',C.getAttribute('loop'));
-				D.setAttribute('menu',C.getAttribute('menu'));
-			};
-
-		var E=FCKDocumentProcessors_CreateFakeImage(A='FCK__Flash',D);
-
-		E.setAttribute('_fckflash','true',0);
-		FCKFlashProcessor.RefreshView(E,C);
-		C.parentNode.insertBefore(E,C);
-		C.parentNode.removeChild(C);
-		};
-
-		if (C.src.endsWith('.avi',true) || C.src.endsWith('.mpg',true) || C.src.endsWith('.mpeg',true) || C.src.endsWith('.mov',true) || C.src.endsWith('.wmv',true) || C.src.endsWith('.rm',true) ){ //added by shiv
-			var D=C.cloneNode(true);
-			if(FCKBrowserInfo.IsIE){
-				D.setAttribute('scale',C.getAttribute('scale'));
-				D.setAttribute('play',C.getAttribute('play'));
-				D.setAttribute('loop',C.getAttribute('loop'));
-				D.setAttribute('menu',C.getAttribute('menu'));
-			};
-
-		var E=FCKDocumentProcessors_CreateFakeImage(A='FCK__Video',D);
-
-		E.setAttribute('_fckVideo','true',0);
-		FCKFlashProcessor.RefreshView(E,C);
-		C.parentNode.insertBefore(E,C);
-		C.parentNode.removeChild(C);
-		};
-		
-		if (C.src.endsWith('.mp3',true)){
 			var D=C.cloneNode(true);
 			if (FCKBrowserInfo.IsIE){
 				D.setAttribute('scale',C.getAttribute('scale'));
@@ -76,17 +50,130 @@ FCKFlashProcessor.ProcessDocument=function(A){
 				D.setAttribute('loop',C.getAttribute('loop'));
 				D.setAttribute('menu',C.getAttribute('menu'));
 			};
-
-			var E=FCKDocumentProcessors_CreateFakeImage('FCK__MP3',D);
-
-			E.setAttribute('_fckmp3','true',0);
+			var E=FCKDocumentProcessors_CreateFakeImage('FCK__Flash',D);
+			E.setAttribute('_fckflash','true',0);
+			FCKFlashProcessor.RefreshView(E,C);
+			C.parentNode.insertBefore(E,C);
+			C.parentNode.removeChild(C);
+		}
+		else if (C.src.search('/\.flv&/') || C.src.search('/\.avi&/') || C.src.search('/\.mpg&/') || C.src.search('/\.mpeg&/') || C.src.search('/\.mov&/') || C.src.search('/\.wmv&/') || C.src.search('/\.rm&/')){
+			var D=C.cloneNode(true);
+			if (FCKBrowserInfo.IsIE){
+				D.setAttribute('scale',C.getAttribute('scale'));
+				D.setAttribute('play',C.getAttribute('play'));
+				D.setAttribute('loop',C.getAttribute('loop'));
+				D.setAttribute('menu',C.getAttribute('menu'));
+			};
+			var E=FCKDocumentProcessors_CreateFakeImage('FCK__Video',D);
+			E.setAttribute('_fckVideo','true',0);
 			FCKFlashProcessor.RefreshView(E,C);
 			C.parentNode.insertBefore(E,C);
 			C.parentNode.removeChild(C);
 		};
-		
+	  };
 	};
-
+	var B=A.getElementsByTagName('OBJECT');
+	var C;
+	var i=B.length-1;
+	while (i>=0&&(C=B[i--])){
+		//look for the <param name="movie" ...> child
+		var F;
+		var j=C.childNodes.length-1;
+		var treated = false;
+		while (j>=0 && (F=C.childNodes[j--]) && treated == false){
+		  if(C.parentNode && C.parentNode!=null && F.name && F.name.toString() == 'movie')
+		  {
+		    if(F.value.toString()!='' && F.value.toString().length>1)
+		    {
+		    	//we have found an attribute <param name="movie" ...>
+		    	var Fval = F.value.toString();
+				if (Fval.endsWith('.mp3',true)){
+					var D=C.cloneNode(true);
+					if (FCKBrowserInfo.IsIE){
+						D.setAttribute('scale',C.getAttribute('scale'));
+						D.setAttribute('play',C.getAttribute('play'));
+						D.setAttribute('loop',C.getAttribute('loop'));
+						D.setAttribute('menu',C.getAttribute('menu'));
+					};
+					var E=FCKDocumentProcessors_CreateFakeImage('FCK__MP3',D);
+					E.setAttribute('_fckmp3','true',0);
+					FCKFlashProcessor.RefreshView(E,C);
+					C.parentNode.insertBefore(E,C);
+					C.parentNode.removeChild(C);
+					treated = true;
+				}else if (Fval.search('/\.avi&/') || Fval.search('/\.mpg&/') || Fval.search('/\.mpeg&/') || Fval.search('/\.mov&/') || Fval.search('/\.wmv&/') || Fval.search('/\.rm&/')){
+					var D=C.cloneNode(true);
+					if (FCKBrowserInfo.IsIE){
+						D.setAttribute('scale',C.getAttribute('scale'));
+						D.setAttribute('play',C.getAttribute('play'));
+						D.setAttribute('loop',C.getAttribute('loop'));
+						D.setAttribute('menu',C.getAttribute('menu'));
+					};
+		
+					var E=FCKDocumentProcessors_CreateFakeImage('FCK__Video',D);
+					E.setAttribute('_fckVideo','true',0);
+					FCKFlashProcessor.RefreshView(E,C);
+					C.parentNode.insertBefore(E,C);
+					C.parentNode.removeChild(C);
+					treated = true;
+				};
+		    }
+		  }
+		  else if(C.parentNode && C.parentNode!=null && F.name && F.name.toString() == 'FlashVars')
+		  {
+		    if(F.value.toString().length>1)
+		    {
+		    	//we have found an attribute <param name="FlashVars" ...>
+		    	var Fval = F.value.toString();
+				if (Fval.endsWith('.mp3',true)){
+					var D=C.cloneNode(true);
+					if (FCKBrowserInfo.IsIE){
+						D.setAttribute('scale',C.getAttribute('scale'));
+						D.setAttribute('play',C.getAttribute('play'));
+						D.setAttribute('loop',C.getAttribute('loop'));
+						D.setAttribute('menu',C.getAttribute('menu'));
+					};
+					var E=FCKDocumentProcessors_CreateFakeImage('FCK__MP3',D);
+					E.setAttribute('_fckmp3','true',0);
+					FCKFlashProcessor.RefreshView(E,C);
+					C.parentNode.insertBefore(E,C);
+					C.parentNode.removeChild(C);
+					treated = true;
+				}else if (Fval.search('/\.flv&/')) {
+					var D=C.cloneNode(true);
+					if (FCKBrowserInfo.IsIE){
+						D.setAttribute('scale',C.getAttribute('scale'));
+						D.setAttribute('play',C.getAttribute('play'));
+						D.setAttribute('loop',C.getAttribute('loop'));
+						D.setAttribute('menu',C.getAttribute('menu'));
+					};
+		
+					var E=FCKDocumentProcessors_CreateFakeImage('FCK__Video_flv',D);
+					E.setAttribute('_fckVideo','true',0);
+					FCKFlashProcessor.RefreshView(E,C);
+					C.parentNode.insertBefore(E,C);
+					C.parentNode.removeChild(C);
+					treated = true;
+				}else if ( Fval.search('/\.avi&/') || Fval.search('/\.mpg&/') || Fval.search('/\.mpeg&/') || Fval.search('/\.mov&/') || Fval.search('/\.wmv&/') || Fval.search('/\.rm&/')){
+					var D=C.cloneNode(true);
+					if (FCKBrowserInfo.IsIE){
+						D.setAttribute('scale',C.getAttribute('scale'));
+						D.setAttribute('play',C.getAttribute('play'));
+						D.setAttribute('loop',C.getAttribute('loop'));
+						D.setAttribute('menu',C.getAttribute('menu'));
+					};
+		
+					var E=FCKDocumentProcessors_CreateFakeImage('FCK__Video',D);
+					E.setAttribute('_fckVideo','true',0);
+					FCKFlashProcessor.RefreshView(E,C);
+					C.parentNode.insertBefore(E,C);
+					C.parentNode.removeChild(C);
+					treated = true;
+				};
+		    }
+		  }
+		}
+	};
 };
 
 FCKFlashProcessor.RefreshView=function(A,B){

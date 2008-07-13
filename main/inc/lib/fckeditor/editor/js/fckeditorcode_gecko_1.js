@@ -784,7 +784,7 @@ FCKFlashProcessor.ProcessDocument=function(A)
 		    	//we have found an attribute <param name="movie" ...>
 		    	var Fval = F.value.toString();
 				if (Fval.endsWith('.mp3',true)){
-					var D=F.cloneNode(true);
+					var D=C.cloneNode(true);
 					if (FCKBrowserInfo.IsIE){
 						D.setAttribute('scale',C.getAttribute('scale'));
 						D.setAttribute('play',C.getAttribute('play'));
@@ -798,7 +798,7 @@ FCKFlashProcessor.ProcessDocument=function(A)
 					C.parentNode.removeChild(C);
 					treated = true;
 				}else if (Fval.search('/\.avi&/') || Fval.search('/\.mpg&/') || Fval.search('/\.mpeg&/') || Fval.search('/\.mov&/') || Fval.search('/\.wmv&/') || Fval.search('/\.rm&/')){
-					var D=F.cloneNode(true);
+					var D=C.cloneNode(true);
 					if (FCKBrowserInfo.IsIE){
 						D.setAttribute('scale',C.getAttribute('scale'));
 						D.setAttribute('play',C.getAttribute('play'));
@@ -819,10 +819,10 @@ FCKFlashProcessor.ProcessDocument=function(A)
 		  {
 		    if(F.value.toString().length>1)
 		    {
-		    	//we have found an attribute <param name="movie" ...>
+		    	//we have found an attribute <param name="FlashVars" ...>
 		    	var Fval = F.value.toString();
 				if (Fval.endsWith('.mp3',true)){
-					var D=F.cloneNode(true);
+					var D=C.cloneNode(true);
 					if (FCKBrowserInfo.IsIE){
 						D.setAttribute('scale',C.getAttribute('scale'));
 						D.setAttribute('play',C.getAttribute('play'));
@@ -836,7 +836,7 @@ FCKFlashProcessor.ProcessDocument=function(A)
 					C.parentNode.removeChild(C);
 					treated = true;
 				}else if (Fval.search('/\.flv&/')) {
-					var D=F.cloneNode(true);
+					var D=C.cloneNode(true);
 					if (FCKBrowserInfo.IsIE){
 						D.setAttribute('scale',C.getAttribute('scale'));
 						D.setAttribute('play',C.getAttribute('play'));
@@ -851,7 +851,7 @@ FCKFlashProcessor.ProcessDocument=function(A)
 					C.parentNode.removeChild(C);
 					treated = true;
 				}else if ( Fval.search('/\.avi&/') || Fval.search('/\.mpg&/') || Fval.search('/\.mpeg&/') || Fval.search('/\.mov&/') || Fval.search('/\.wmv&/') || Fval.search('/\.rm&/')){
-					var D=F.cloneNode(true);
+					var D=C.cloneNode(true);
 					if (FCKBrowserInfo.IsIE){
 						D.setAttribute('scale',C.getAttribute('scale'));
 						D.setAttribute('play',C.getAttribute('play'));

@@ -9,10 +9,12 @@ window.document.dir = oEditor.FCKLang.Dir ;
 
 // Set the dialog tabs.
 window.parent.AddTab( 'Upload', FCKLang.DlgMP3Upload ) ;
-
 window.parent.AddTab( 'Info', FCKLang.DlgMP3Tab ) ;
 
 
+var oMedia = null;
+
+// Function called when a dialog tag is selected.
 function OnDialogTabChange( tabCode )
 {
 	ShowE('divInfo'		, ( tabCode == 'Info' ) ) ;
@@ -25,8 +27,6 @@ var sAgent = navigator.userAgent.toLowerCase() ;
 
 var is_ie = (sAgent.indexOf("msie") != -1); // FCKBrowserInfo.IsIE
 var is_gecko = !is_ie; // FCKBrowserInfo.IsGecko
-
-var oMedia = null;
 
 function window_onload()
 {
@@ -56,7 +56,7 @@ function window_onload()
 
 
 /**
- * obtiene el elemento seleccionado
+ * Get the selected element
  */
 function getSelectedMovie(){
 	var oSel = null;
@@ -86,11 +86,6 @@ function getSelectedMovie(){
 
 function LoadSelection()
 {
-	/*
-	if ( ! oMedia ) return ;
-
-	GetE('mpUrl').value    = GetAttribute( oMedia, 'data', '' ) ; //
-	updatePreview() ;*/
 
 	oMedia = new Media();
 	oMedia.setObjectElement(getSelectedMovie());
@@ -138,7 +133,7 @@ function Ok()
 }
 
 /**
- * Obtiene los datos del form y actualiza el objeto..
+ * Get data from form and insert
  */
 function updateMovie(e){
 	e.url = GetE('mpUrl').value;
@@ -203,7 +198,7 @@ var Media = function (o){
 };
 
 /**
- * Toma los datos de un elemento.
+ * Take one element's data
  */ 
 Media.prototype.setObjectElement = function (e){
 	if (!e) return ;
@@ -245,7 +240,7 @@ Media.prototype.setObjectElement = function (e){
 
 
 /**
- * Devuelve el codigo HTML externo del elemento
+ * Return the outer HTML code of the element
  */
 Media.prototype.getOuterHTML = function (objectId){
 	var s;
@@ -260,7 +255,7 @@ Media.prototype.getOuterHTML = function (objectId){
  * Devuelve el codigo HTML interno del elemento
  */
 Media.prototype.getInnerHTML = function (objectId){
-	var s = '<OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" WIDTH="90" HEIGHT="25" id="test" ALIGN=""><PARAM NAME=movie VALUE="'+getObjData(this.url)+'?autostart='+getAutostart()+'&mp3file='+getSoundUrl()+'"> <PARAM NAME=quality VALUE=high> <PARAM NAME=bgcolor VALUE=#FFFFFF> <EMBED src="'+getObjData(this.url)+'?autostart='+getAutostart()+'&mp3file='+getSoundUrl()+'" quality=high bgcolor=#FFFFFF  WIDTH="90" HEIGHT="25" NAME="Streaming" ALIGN=""TYPE="application/x-shockwave-flash" PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"></EMBED></OBJECT>';
+	var s = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="90" height="25" id="test" align=""><param name="movie" value="'+getObjData(this.url)+'?autostart='+getAutostart()+'&mp3file='+getSoundUrl()+'"> <param name="quality" value="high"> <param name="bgcolor" value="#FFFFFF"> <embed src="'+getObjData(this.url)+'?autostart='+getAutostart()+'&mp3file='+getSoundUrl()+'" quality="high" bgcolor="#FFFFFF"  width="90" height="25" name="Streaming" align="" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed></object>';
 	return s;
 };
 
@@ -301,8 +296,6 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 	}
 	
 	SetUrl( fileUrl ) ;
-	//SetAutostart(GetE('autostart').value);
-	
 	GetE('frmUpload').reset() ;
 	// Reset the interface elements.
 	//document.getElementById('eUploadMessage').innerHTML = 'Upload' ;

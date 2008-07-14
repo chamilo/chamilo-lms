@@ -646,7 +646,7 @@ if (($dirList = index_and_sort_dir($baseWorkDir)))  // fileManage.lib
 		$pathValue = substr($pathValue, $bwdL);
 		$specifics .= '<option value="' . $pathValue . '"' .
 		    ($pathValue == $workWith ? ' selected' : '') . '>' .
-		    str_repeat('&nbsp;&nbsp', substr_count($pathValue, '/')) . '>' .
+		    str_repeat('&nbsp;&nbsp;', substr_count($pathValue, '/')) . '>' .
 		    basename($pathValue) . '</option>' . "\n";
 	}
 }

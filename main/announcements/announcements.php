@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 15535 2008-06-10 17:29:54Z juliomontoya $
+<?php //$Id: announcements.php 15773 2008-07-14 02:41:37Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1086,7 +1086,7 @@ if (isset($message) && $message == true)
 		if($surveyid){
 			$content_to_modify='<br /><a href="'.api_get_path(WEB_CODE_PATH).'/survey/#page#?temp=#temp#&surveyid=#sid#&uid=#uid#&mail=#mail#&db_name=#db_name">'.get_lang('ClickHereToOpenSurvey').'</a><br />
 											'.get_lang('OrCopyPasteUrl').' <br />
-											'.api_get_path(WEB_CODE_PATH).'/survey/#page#?temp=#temp#&surveyid=#sid#&uid=#uid#&mail=#mail#&db_name=#db_name&nbsp';
+											'.api_get_path(WEB_CODE_PATH).'/survey/#page#?temp=#temp#&surveyid=#sid#&uid=#uid#&mail=#mail#&db_name=#db_name&nbsp;';
 		}
 	            //api_disp_html_area('newContent',$content_to_modify,'250px');
 	            

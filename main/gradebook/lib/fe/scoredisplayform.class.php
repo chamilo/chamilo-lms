@@ -51,7 +51,7 @@ class ScoreDisplayForm extends FormValidator
 			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
 			</div>
 			<div class="formw">
-			<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	'.get_lang('Below').'&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{element} % '.get_lang('WillColorRed').'
+			<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	'.get_lang('Below').'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{element} % '.get_lang('WillColorRed').'
 			</div>
 			</div>';	
 
@@ -92,10 +92,10 @@ class ScoreDisplayForm extends FormValidator
 				$elementTemplateTwoLabel = 
 				'<div id=' . $counter . ' style="display: '.(($counter<=$nr_items)?'inline':'none').';" class="row">
 				<p><!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
-				<div class="formw"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<b>'.get_lang('And').'</b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{element} % =';	
+				<div class="formw"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<b>'.get_lang('And').'</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{element} % =';	
 
 				$elementTemplateTwoLabel2 =
-				'<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->&nbsp{element}
+				'<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->&nbsp;{element}
 				<a href="javascript:minItem(' . ($counter) . ')"><img style="display: '.(($counter>=$nr_items && $counter!=1)?'inline':'none').';" id="min-' . $counter . '" src="../img/gradebook_remove.gif" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></img></a>			
 				<a href="javascript:plusItem(' . ($counter+1) . ')"><img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="plus-' . ($counter+1) . '" src="../img/gradebook_add.gif" alt="'.get_lang('Add').'" title="'.get_lang('Add').'"></img></a>
 				</div></p></div>';

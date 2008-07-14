@@ -99,7 +99,7 @@ if (isset ($_GET['selectcat']))
 		'url' => 'gradebook_flatview.php?selecteval=' . $_GET['selectcat'],
 		'name' => get_lang('FlatView'
 	));
-	$backto= '<a href=gradebook_flatview.php?selectcat=' . $_GET['selectcat'] . '><img src=../img/lp_leftarrow.gif alt=' . get_lang('BackToOverview') . ' align=absmiddle/> ' . get_lang('BackToOverview') . '</a>&nbsp&nbsp';
+	$backto= '<a href=gradebook_flatview.php?selectcat=' . $_GET['selectcat'] . '><img src=../img/lp_leftarrow.gif alt=' . get_lang('BackToOverview') . ' align=absmiddle/> ' . get_lang('BackToOverview') . '</a>&nbsp;&nbsp;';
 
 }
 if (isset ($_GET['selecteval']))
@@ -108,7 +108,7 @@ if (isset ($_GET['selecteval']))
 		'url' => 'gradebook_view_result.php?selecteval=' . $_GET['selecteval'],
 		'name' => get_lang('ViewResult'
 	));
-	$backto= '<a href=gradebook_view_result.php?selecteval=' . $_GET['selecteval'] . '><img src=../img/lp_leftarrow.gif alt=' . get_lang('BackToEvaluation') . ' align=absmiddle/> ' . get_lang('BackToEvaluation') . '</a>&nbsp&nbsp';
+	$backto= '<a href=gradebook_view_result.php?selecteval=' . $_GET['selecteval'] . '><img src=../img/lp_leftarrow.gif alt=' . get_lang('BackToEvaluation') . ' align=absmiddle/> ' . get_lang('BackToEvaluation') . '</a>&nbsp;&nbsp;';
 }
 $backto .= '<a href="' . api_get_self() . '?exportpdf=&userid='.$_GET['userid'].'&selectcat=' . $category[0]->get_id() . '" target="_blank"><img src=../img/calendar_up.gif alt=' . get_lang('ExportPDF') . '/> ' . get_lang('ExportPDF') . '</a>';
 

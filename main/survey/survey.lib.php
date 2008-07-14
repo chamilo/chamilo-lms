@@ -23,7 +23,7 @@
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 15640 2008-06-27 14:17:54Z elixir_inter $
+* 	@version $Id: survey.lib.php 15774 2008-07-14 02:46:42Z yannoo $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1065,7 +1065,7 @@ class question
 		*/
 
 		$this->html .='		<tr>
-								<td colspan="">&nbsp</td>
+								<td colspan="">&nbsp;</td>
 							</tr>';
 		return $this->html;
 	}
@@ -1269,7 +1269,7 @@ class yesno extends question
 		$this->html .= '		<td>&nbsp;</td>';
 		$this->html .= '	</tr>';
 		$this->html .='		<tr>
-								<td colspan="">&nbsp</td>
+								<td colspan="">&nbsp;</td>
 							</tr>';
 
 		// The options
@@ -1361,7 +1361,7 @@ class multiplechoice extends question
 		$this->html .= '		<td>&nbsp;</td>';
 		$this->html .= '	</tr>';
 		$this->html .='		<tr>
-								<td colspan="">&nbsp</td>
+								<td colspan="">&nbsp;</td>
 							</tr>';
 
 		// The Options
@@ -1455,7 +1455,7 @@ class multipleresponse extends question
 		$this->html .= '		<td>&nbsp;</td>';
 		$this->html .= '	</tr>';
 		$this->html .='		<tr>
-								<td colspan="">&nbsp</td>
+								<td colspan="">&nbsp;</td>
 							</tr>';
 
 

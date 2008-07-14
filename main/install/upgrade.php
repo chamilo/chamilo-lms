@@ -125,7 +125,7 @@ class Page_Language extends HTML_QuickForm_Page
 		$this->_formBuilt = true;
 		$this->addElement('select', 'install_language', get_lang('InstallationLanguage'), get_language_folder_list());
 		$buttons[0] = & HTML_QuickForm :: createElement('submit', $this->getButtonName('next'), get_lang('Next').' >>');
-		$this->addGroup($buttons, 'buttons', '', '&nbsp', false);
+		$this->addGroup($buttons, 'buttons', '', '&nbsp;', false);
 		$this->setDefaultAction('next');
 	}
 }
@@ -222,7 +222,7 @@ class Page_Requirements extends HTML_QuickForm_Page
 		$this->_formBuilt = true;
 		$this->addElement('radio', 'installation_type', get_lang('InstallType'), get_lang('NewInstall'), 'new');
 		$update_group[0] = & HTML_QuickForm :: createElement('radio', 'installation_type', null, 'Update from Dokeos '.implode('|', $updateFromVersion).'', 'update');
-		//$this->addGroup($update_group, 'update_group', '', '&nbsp', false);
+		//$this->addGroup($update_group, 'update_group', '', '&nbsp;', false);
 		$prevnext[] = & $this->createElement('submit', $this->getButtonName('back'), '<< '.get_lang('Previous'));
 		$prevnext[] = & $this->createElement('submit', $this->getButtonName('next'), get_lang('Next').' >>');
 		$not_writable = $this->get_not_writable_folders();

@@ -1,4 +1,4 @@
-<?php # $Id: fileManage.lib.php 15744 2008-07-07 23:43:28Z yannoo $
+<?php # $Id: fileManage.lib.php 15774 2008-07-14 02:46:42Z yannoo $
 
 /* vim: set expandtab tabstop=4 shiftwidth=4:
 ===============================================================================
@@ -501,7 +501,7 @@ function form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir)
 
 			for ($h=0; $h<$depth; $h++)
 			{
-				$tab .= "&nbsp;&nbsp";
+				$tab .= "&nbsp;&nbsp;";
 			}
 			$dialogBox .= "<option value=\"$pathValue\">$tab>$dirname\n";
 		}

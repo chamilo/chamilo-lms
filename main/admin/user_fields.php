@@ -118,6 +118,8 @@ if(1)
 					}
 					break;
 				case 'movedown' :
+					if (api_is_platform_admin() && !empty($_GET['field_id']))
+					{					
 						if (move_user_field('movedown', $_GET['field_id']))
 						{
 							Display :: display_confirmation_message(get_lang('FieldMovedDown'));
@@ -126,6 +128,20 @@ if(1)
 						{
 							Display :: display_error_message(get_lang('CannotMoveField'));
 						}					
+					}				
+					break;
+				case 'delete':
+					if (api_is_platform_admin() && !empty($_GET['field_id']))
+					{
+						if (delete_user_fields($_GET['field_id']))
+						{
+							Display :: display_confirmation_message(get_lang('FieldDeleted'));
+						}
+						else 
+						{
+							Display :: display_error_message(get_lang('CannotDeleteField'));
+						}
+					}
 					break;
 			}
 			Security::clear_token();
@@ -279,14 +295,16 @@ function modify_visibility($visibility,$url_params,$row)
  * @param	array	The results row
  * @return	string	The link
  */
-function modify_changeability($visibility,$url_params,$row)
+function modify_changeability($changeability,$url_params,$row)
 {
-	return ($visibility?'<a href="'.api_get_self().'?action=freeze_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'right.gif" alt="'.get_lang('MakeUnchangeable').'" /></a>':'<a href="'.api_get_self().'?action=thaw_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'wrong.gif" alt="'.get_lang('MakeChangeable').'" /></a>');
+	return ($changeability?'<a href="'.api_get_self().'?action=freeze_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'right.gif" alt="'.get_lang('MakeUnchangeable').'" /></a>':'<a href="'.api_get_self().'?action=thaw_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'wrong.gif" alt="'.get_lang('MakeChangeable').'" /></a>');
 }
 
-function edit_filter()
+function edit_filter($id,$url_params,$row)
 {
-	
+	$return = '<a href="user_fields_add.php?action=edit&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>';
+	$return .= ' <a href="'.api_get_self().'?action=delete&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
+	return $return; 
 }
 /**
  * Move a user defined field up or down
@@ -346,5 +364,45 @@ function move_user_field($direction,$field_id)
 	api_sql_query($sql2,__FILE__,__LINE__);
 	
 	return true;
+}
+
+/**
+ * Delete a user field (and also the options and values entered by the users)
+ *
+ * @param integer $field_id the id of the field that has to be deleted
+ * @return boolean true if the field has been deleted, false if the field could not be deleted (for whatever reason)
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version July 2008
+ * @since Dokeos 1.8.6
+ */
+function delete_user_fields($field_id)
+{
+	// Database table definitions
+	$table_user_field 			= Database::get_main_table(TABLE_MAIN_USER_FIELD);
+	$table_user_field_options	= Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
+	$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+		
+	// delete the fields
+	$sql = "DELETE FROM $table_user_field WHERE id = '".Database::escape_string($field_id)."'";
+	$result = api_sql_query($sql,__FILE__,__LINE__);
+	if (Database::affected_rows() == 1)
+	{
+		// delete the field options
+		$sql = "DELETE FROM $table_user_field_options WHERE field_id = '".Database::escape_string($field_id)."'";
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		
+		// delete the field values
+		$sql = "DELETE FROM $table_user_field_values WHERE field_id = '".Database::escape_string($field_id)."'";
+		$result = api_sql_query($sql,__FILE__,__LINE__);	
+		
+		// field was deleted so we return true
+		return true;
+	}
+	else 
+	{
+		// the field was not deleted so we return false
+		return false; 
+	}
 }
 ?>

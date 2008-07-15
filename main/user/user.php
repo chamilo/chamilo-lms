@@ -39,6 +39,7 @@
 *	@todo convert normal table display to display function (refactor virtual course display function)
 *	@todo display table functions need support for align and valign (e.g. to center text in cells) (this is now possible)
 *	@author Roan Embrechts, refactoring + virtual courses support
+*	@author Julio Montoya Armas Several fixes
 *	@package dokeos.user
 ==============================================================================
 */
@@ -381,7 +382,7 @@ $is_allowed_to_track = ($is_courseAdmin || $is_courseTutor) && $_configuration['
 */
 Display::display_introduction_section(TOOL_USER, $is_allowed);
 
- if( api_is_allowed_to_edit())
+if( api_is_allowed_to_edit())
 {
 	echo "<div align=\"right\">";
 	echo '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('excel.gif', get_lang('ExportAsCSV')).'&nbsp;'.get_lang('ExportAsCSV').'</a> | ';
@@ -394,6 +395,18 @@ Display::display_introduction_section(TOOL_USER, $is_allowed);
 	}
 	echo "</div>";
 }
+/*
+if (1) // platform setting api_get_setting('subscribe_user_by_coach')
+{
+	if (!api_is_allowed_to_edit() && $is_courseTutor) 
+	{
+		echo "<div align=\"right\">";
+		echo '<a href="subscribe_user.php?'.api_get_cidreq().'">'.Display::return_icon('add_user_big.gif',get_lang("SubscribeUserToCourse")).'&nbsp;'.get_lang("SubscribeUserToCourse").'</a>';
+		echo "</div>";
+	}
+}*/
+
+
 /*
 --------------------------------------
 	DISPLAY USERS LIST
@@ -432,23 +445,25 @@ function get_number_of_users()
 		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true);
 	}
 
-	foreach($a_course_users as $user_id=>$o_course_user){
-
-		if( (isset ($_GET['keyword']) && search_keyword($o_course_user['firstname'],$o_course_user['lastname'],$o_course_user['username'],$o_course_user['official_code'],$_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])){
+	foreach($a_course_users as $user_id=>$o_course_user)
+	{
+		if( (isset ($_GET['keyword']) && search_keyword($o_course_user['firstname'],$o_course_user['lastname'],$o_course_user['username'],$o_course_user['official_code'],$_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword']))
+		{
 			$counter++;			
 		}
 	}
-
 	return $counter;
 	
 }
 
-function search_keyword($firstname,$lastname,$username,$official_code,$keyword){
-
-	if(strripos($firstname,$keyword)!==false || strripos($lastname,$keyword)!==false || strripos($username,$keyword)!==false || strripos($official_code,$keyword)!==false){
+function search_keyword($firstname,$lastname,$username,$official_code,$keyword)
+{
+	if(strripos($firstname,$keyword)!==false || strripos($lastname,$keyword)!==false || strripos($username,$keyword)!==false || strripos($official_code,$keyword)!==false)
+	{
 		return true;
 	}
-	else{
+	else
+	{
 		return false;
 	}
 
@@ -468,22 +483,22 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	// order by
 	switch($column)
 	{
-		case 1 : $order_by = 'ORDER BY user.firstname';break;
-		case 2:  $order_by = 'ORDER BY user.lastname';break;
-		case 5:  $order_by = 'ORDER BY user.official_code';break;
-		default : $order_by = 'ORDER BY user.lastname';break;
+		case 1 :  $order_by = 'ORDER BY user.firstname';break;
+		case 2 :  $order_by = 'ORDER BY user.lastname';break;
+		case 5 :  $order_by = 'ORDER BY user.official_code';break;
+		default:  $order_by = 'ORDER BY user.lastname';break;
 	}
 	$order_by .= ' '.$direction;
 
-	if(!empty($_SESSION["id_session"])){
-		
+	if(!empty($_SESSION["id_session"]))
+	{		
 		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session'], $limit, $order_by);
 	}
 	else
 	{		
 		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, 0, $limit, $order_by);
 	}
-		
+	
 	foreach($a_course_users as $user_id=>$o_course_user)
 	{
 		if( (isset ($_GET['keyword']) && search_keyword($o_course_user['firstname'],$o_course_user['lastname'],$o_course_user['username'],$o_course_user['official_code'],$_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])){
@@ -503,19 +518,27 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				$temp[] = $o_course_user['official_code'];
 				
 				
-
+	/*			// deprecated feature
 				if(isset($o_course_user['tutor_id']) && $o_course_user['tutor_id']==1)
+				{
 					$temp[] = get_lang('Tutor');
+				}
 				else
+				{
 					$temp[] = '-';
+				}
+	*/			
 				if(isset($o_course_user['status']) && $o_course_user['status']==1)
+				{
 					$temp[] = get_lang('CourseManager');
+				}
 				else
+				{
 					$temp[] = '-';
+				}
 					
 				$temp[] = $o_course_user['active'];
-				$temp[] = $user_id;
-				
+				$temp[] = $user_id;				
 			}
 			else
 			{
@@ -629,10 +652,11 @@ $table->set_header($header_nr++, get_lang('OfficialCode'));
 
 if( api_is_allowed_to_edit())
 {
-	$table->set_header($header_nr++, get_lang('Tutor'),false);
+	// deprecated feature 
+	// $table->set_header($header_nr++, get_lang('Tutor'),false);
 	$table->set_header($header_nr++, get_lang('CourseManager'),false);
 	$table->set_header($header_nr++, get_lang('Active'),false);
-	$table->set_column_filter(8,'active_filter');
+	$table->set_column_filter(7,'active_filter');
 }
 
 //actions column

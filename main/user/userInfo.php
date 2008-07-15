@@ -1,4 +1,4 @@
-<?php // $Id: userInfo.php 14725 2008-04-02 15:31:22Z elixir_inter $
+<?php // $Id: userInfo.php 15793 2008-07-15 22:13:13Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -32,6 +32,7 @@
 *	(3) display
 *	@author original author (unknown, probably thomas,hugues,moosh)
 *	@author Roan Embrechts, minor modification: virtual courses support
+*	@author Julio Montoya Armas Several fixes
 *	@package dokeos.user
 ==============================================================================
 */
@@ -41,14 +42,16 @@
 	   INIT SECTION
 ==============================================================================
 */
-$editMainUserInfo = $_REQUEST['editMainUserInfo'];
-$uInfo = strval(intval($_REQUEST['uInfo']));
+
 // name of the language file that needs to be included
 $language_file = array ('registration', 'userInfo');
 
 include ("../inc/global.inc.php");
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+
+$editMainUserInfo = Security::remove_XSS($_REQUEST['editMainUserInfo']);
+$uInfo = $editMainUserInfo; 
 $this_section = SECTION_COURSES;
 
 $nameTools = get_lang("Users");
@@ -71,7 +74,6 @@ if ($origin != 'learnpath')
 else
 {
 ?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH);?>css/default.css" /> <?php
-
 }
 
 $currentCourse = $currentCourseID;
@@ -100,6 +102,7 @@ $courseCode = $currentCourseID = $_course['sysCode'];
 $tbl_coursUser = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 $userIdViewer = $_user['user_id']; // id fo the user currently online
+
 //$userIdViewed = $_GET['userIdViewed']; // Id of the user we want to view
 
 $allowedToEditContent = ($userIdViewer == $userIdViewed) || $is_platformAdmin;
@@ -122,7 +125,6 @@ include ("userInfoLib.php");
 */
 
 $displayMode = "viewContentList";
-
 $removeDef =  Security::remove_XSS($_GET['removeDef']); 
 $editDef = Security::remove_XSS($_GET['editDef']); 
 $moveUpDef = Security::remove_XSS($_GET['moveUpDef']); 
@@ -175,18 +177,43 @@ if ($allowedToEditDef)
 		$userIdViewed = strval(intval($_GET['editMainUserInfo']));
 		$displayMode = "viewMainInfoEdit";
 	}
-	elseif (!empty($_GET['submitMainUserInfo']))
-	{
-		$userIdViewed = strval(intval($_GET['submitMainUserInfo']));
-
-		$promoteCourseAdmin ? $userProperties['status'] = 1 : $userProperties['status'] = 5;
-		$promoteTutor ? $userProperties['tutor'] = 1 : $userProperties['tutor'] = 0;
-
-		$userProperties['role'] = $role;
-
-		update_user_course_properties($userIdViewed, $courseCode, $userProperties);
-
-		$displayMode = "viewContentList";
+	elseif (!empty($_POST['submitMainUserInfo']))
+	{	
+		if (isset ($_POST['submitMainUserInfo']))
+		{
+			$userIdViewed = strval(intval($_POST['submitMainUserInfo']));
+			//is teacher		
+			$promoteCourseAdmin=$_POST['promoteCourseAdmin'];			
+			$userProperties['status'] = 5; 	
+			if ($promoteCourseAdmin)
+			{
+				$userProperties['status'] = 1;
+			}				 	
+			
+			/* deprecated feature
+			 
+			// is coach
+			if (isset ($_POST['promoteTutor']))
+			{
+				$promoteTutor=$_POST['promoteTutor'];
+				$userProperties['tutor'] = 0;
+				if ($promoteTutor)
+				{
+					$userProperties['tutor'] = 1;
+				}							
+			}
+			*/
+			// role is a string
+			if (isset ($_POST['role']))
+			{
+				$role=$_POST['role'];	 
+				$userProperties['role'] = $role;
+			}			
+				
+			update_user_course_properties($userIdViewed, $courseCode, $userProperties);
+			
+			$displayMode = "viewContentList";
+		}	
 	}
 }
 
@@ -195,14 +222,16 @@ if ($allowedToEditDef)
 if ($allowedToEditContent)
 {
 	if (isset($_POST['submitContent']))
-	{
+	{		
 		if ($_POST['cntId']) // submit a content change
 		{
 			edit_cat_content($_POST['catId'], $userIdViewed, $_POST['content'], $_SERVER['REMOTE_ADDR']);
+	
 		}
 		else // submit a totally new content
 		{
 			fill_new_cat_content($_POST['catId'], $userIdViewed, $_POST['content'], $_SERVER['REMOTE_ADDR']);
+	
 		}
 
 		$displayMode = "viewContentList";
@@ -210,7 +239,7 @@ if ($allowedToEditContent)
 	elseif (!empty($_GET['editContent']))
 	{
 		$displayMode = "viewContentEdit";
-
+	
 		$userIdViewed = $userIdViewed;
 	}
 }
@@ -320,20 +349,20 @@ elseif ($displayMode == "viewMainInfoEdit")
 		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);						
 		echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';			
 		 
-
+		//"<td>", get_lang('Tutor'), "</td>\n",
 		echo "<form action=\"".api_get_self()."\" method=\"post\">\n",
 				"<input type=\"hidden\" name=\"submitMainUserInfo\" value=\"$userIdViewed\" />\n",
 				"<table width=\"80%\" border=\"0\">",
 					"<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
 						"<td align=\"left\">", get_lang('Name'), "</td>\n",
-						"<td align=\"left\">", get_lang('Role'), "</td>\n",
-						"<td>", get_lang('Tutor'), "</td>\n",
+						"<td align=\"left\">", get_lang('Role'), "</td>\n",						
 						"<td>", get_lang('CourseManager'), "</td>\n",
 					"</tr>\n",
 					"<tr align=\"center\">",
 						"<td align=\"left\"><b>", htmlize($mainUserInfo['firstName']), " ", htmlize($mainUserInfo['lastName']), "</b></td>\n",
-						"<td align=\"left\"><input type=\"text\" name =\"role\" value=\"", $mainUserInfo['role'], "\" maxlength=\"40\" /></td>",
-						"<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, " /></td>";
+						"<td align=\"left\"><input type=\"text\" name =\"role\" value=\"", $mainUserInfo['role'], "\" maxlength=\"40\" /></td>";
+						//deprecated feature
+						//"<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, " /></td>";
 
 		if (!($is_courseAdmin && $_user['user_id'] == $userIdViewed))
 		{
@@ -374,9 +403,9 @@ elseif ($displayMode == "viewContentList") // default display
 		//not supported yet: editing users of virtual courses
 		$allowedToEditDef = false;
 	}
-
+	
 	$mainUserInfo = get_main_user_info($userIdViewed, $courseCode);
-
+	
 	if ($mainUserInfo)
 	{
 		
@@ -385,15 +414,15 @@ elseif ($displayMode == "viewContentList") // default display
 		
 		//DISPLAY TABLE HEADING
 		if ($origin == 'learnpath') { $allowedToEditDef=false; $is_allowedToTrack=false; }
+		//"<td>",get_lang('Tutor'),"</td>\n",
 		echo	"<table width=\"80%\" border=\"0\">",
 
 				"<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
 				"<td align=\"left\">",get_lang('Name'),"</td>\n",
-				"<td align=\"left\">",get_lang('Description'),"</td>\n",
-				"<td>",get_lang('Tutor'),"</td>\n",
+				"<td align=\"left\">",get_lang('Role'),"</td>\n",				
 				"<td>",get_lang('CourseManager'),"</td>\n",
 				($allowedToEditDef?"<td>".get_lang('Edit')."</td>\n":""),
-                                ($is_allowedToTrack?"<td>".get_lang('Tracking')."</td>\n":""),
+                ($is_allowedToTrack?"<td>".get_lang('Tracking')."</td>\n":""),
 				"</tr>\n",
 
 				"<tr align=\"center\">\n",
@@ -402,6 +431,7 @@ elseif ($displayMode == "viewContentList") // default display
 				"<td  align=\"left\">",htmlize($mainUserInfo['role']),"</td>";
 
 		//DISPLAY TABLE CONTENT
+				/* deprecated feature
 				if ($mainUserInfo['tutor_id'] == 1)
 				{
 					echo "<td>",get_lang('Tutor'),"</td>\n";
@@ -410,6 +440,7 @@ elseif ($displayMode == "viewContentList") // default display
 				{
 					echo "<td> - </td>\n";
 				}
+				*/
 
 				if ($mainUserInfo['status'] == 1)
 				{
@@ -430,7 +461,7 @@ elseif ($displayMode == "viewContentList") // default display
 				}
                                 if ($is_allowedToTrack)
                                 {
-                                        echo	"<td>",
+                                   echo	"<td>",
 							"<a href=\"../mySpace/myStudents.php?".api_get_cidreq()."&origin=user_course&student=$userIdViewed&details=true&course=".$_course['id']."\">",
 							"<img border=\"0\" alt=\"".get_lang('Tracking')." : $userIdViewed\" src=\"../img/statistics.gif\" />",
 							"</a>",

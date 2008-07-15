@@ -28,8 +28,8 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercise_result.php 15719 2008-07-04 00:50:44Z juliomontoya $
+* 	@author Julio Montoya Armas switchable fill in blank option added
+* 	@version $Id: exercise_result.php 15792 2008-07-15 17:06:47Z juliomontoya $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -494,26 +494,28 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 									
 							    		// the question is encoded like this
 									    // [A] B [C] D [E] F::10,10,10@1
-									    // number 1 before the "@" means that is a multiple fill in blank question
+									    // number 1 before the "@" means that is a switchable fill in blank question
 									    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
 									    // means that is a normal fill blank question				
-								
-										$multiple_answer_array =explode('@',$answer);	
-										// is multiple fill blank or not
-										$multiple_answer_set=false;
-										if ($multiple_answer_array[1]==1)
+
+										// first we explode the "::"
+										$pre_array = explode('::', $answer);	
+				
+										// is switchable fill blank or not			
+										$is_set_switchable = explode('@', $pre_array[1]);
+										
+										$switchable_answer_set=false;
+										if ($is_set_switchable[1]==1)
 										{
-											$multiple_answer_set=true;											
-										}
-									
-										// splits text and weightings that are joined with the character '::'
-										list($answer,$answerWeighting)=explode('::',$multiple_answer_array[0]);
+											$switchable_answer_set=true;
+										}								
+														
+										$answer = $pre_array[0];
 										
 										// splits weightings that are joined with a comma
-										$answerWeighting=explode(',',$answerWeighting);
+										$answerWeighting = explode(',',$is_set_switchable[0]);				
 
 										// we save the answer because it will be modified
-
 										$temp=$answer;
 
 										// TeX parsing
@@ -590,7 +592,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 												$answer.=$real_text[0];
 											}
 											
-											if (!$multiple_answer_set)
+											if (!$switchable_answer_set)
 											{						
 												if ($correct_tags[$i]==$user_tags[$i])
 												{
@@ -673,7 +675,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 											$choice[$j]=trim($choice[$j]);
 											
-											if (!$multiple_answer_set)
+											if (!$switchable_answer_set)
 											{
 												// if the word entered by the student IS the same as the one defined by the professor
 												if(strtolower(substr($temp,0,$pos)) == stripslashes(strtolower($choice[$j])))

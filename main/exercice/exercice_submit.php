@@ -36,8 +36,8 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 15719 2008-07-04 00:50:44Z juliomontoya $
+* 	@author Julio Montoya Armas switchable fill in blank option added
+* 	@version $Id: exercice_submit.php 15792 2008-07-15 17:06:47Z juliomontoya $
 */
 
 

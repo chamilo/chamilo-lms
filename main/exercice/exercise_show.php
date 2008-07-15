@@ -24,7 +24,7 @@
 /**
 *
 *	@package dokeos.exercise
-* 	@author Julio Montoya multiple fill in blank option added
+* 	@author Julio Montoya Armas switchable fill in blank option added
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 *
 * 	@todo remove the debug code and use the general debug library
@@ -567,22 +567,27 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				
 			    // the question is encoded like this
 			    // [A] B [C] D [E] F::10,10,10@1
-			    // number 1 before the "@" means that is a multiple fill in blank question
+			    // number 1 before the "@" means that is a switchable fill in blank question
 			    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
-			    // means that is a normal fill blank question			    
-				$multiple=explode('@',$answer);
+			    // means that is a normal fill blank question
+
+				$pre_array = explode('::', $answer);	
 				
-				// is multiple fill blank or not								
-				$multiple_answer_set=false;				
-				if ($multiple[1]==1)
+				// is switchable fill blank or not			
+				$is_set_switchable = explode('@', $pre_array[1]);
+				$switchable_answer_set=false;
+				if ($is_set_switchable[1]==1)
 				{
-					$multiple_answer_set=true;
-				}										
-				
-				list($answer,$answerWeighting)=explode('::',$multiple[0]);				
+					$switchable_answer_set=true;
+				}								
+								
+				$answer = $pre_array[0];
 				
 				// splits weightings that are joined with a comma
-				$answerWeighting=explode(',',$answerWeighting);
+				$answerWeighting = explode(',',$is_set_switchable[0]);			
+				//list($answer,$answerWeighting)=explode('::',$multiple[0]);				
+				
+				//$answerWeighting=explode(',',$answerWeighting);
 				// we save the answer because it will be modified
 			    $temp=$answer;
 		
@@ -600,7 +605,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				// the loop will stop at the end of the text
 				$i=0;
 				//normal fill in blank
-				if (!$multiple_answer_set)
+				if (!$switchable_answer_set)
 				{
 					while(1)
 					{

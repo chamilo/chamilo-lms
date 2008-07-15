@@ -25,6 +25,7 @@
 *	File containing the FillBlanks class.
 *	@package dokeos.exercise
 * 	@author Eric Marguin
+* 	@author Julio Montoya Armas switchable fill in blank option added
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
@@ -70,22 +71,24 @@ class FillBlanks extends Question
 			
 			// the question is encoded like this
 		    // [A] B [C] D [E] F::10,10,10@1
-		    // number 1 before the "@" means that is a multiple fill in blank question
+		    // number 1 before the "@" means that is a switchable fill in blank question
 		    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
 		    // means that is a normal fill blank question		
-			    
-			$is_set_multiple = explode('@', $objAnswer->selectAnswer(1));			
-			if ($is_set_multiple[1]) 
+
+			$pre_array = explode('::', $objAnswer->selectAnswer(1));
+	
+			$is_set_switchable = explode('@', $pre_array[1]);			
+			if ($is_set_switchable[1]) 
 			{
 				$defaults['multiple_answer']=1;	
 			}
 			else
 			{
 				$defaults['multiple_answer']=0;	
-			}			
-			$a_answer = explode('::', $is_set_multiple[0]);
-			$defaults['answer'] = $a_answer[0];
-			$a_weightings = explode(',',$a_answer[1]);
+			}
+			
+			$defaults['answer'] = $pre_array[0];
+			$a_weightings = explode(',',$is_set_switchable[0]);
 		}
 		else
 		{						

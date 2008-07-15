@@ -632,6 +632,7 @@ function update_Db_course($courseDbName)
 		CREATE TABLE `".$TABLEQUIZQUESTION . "` (
 		question_id mediumint unsigned NOT NULL,
 		exercice_id mediumint unsigned NOT NULL,
+		question_order mediumint unsigned NOT NULL default 1,
 		PRIMARY KEY (question_id,exercice_id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
@@ -1993,7 +1994,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		$html=addslashes('<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.lang2db(get_lang('Antique')).'</td></tr></table>');
 		api_sql_query('INSERT INTO `'.$TABLEQUIZ . '` (title, description, type, random, active, results_disabled ) VALUES ("'.lang2db(get_lang('ExerciceEx')) . '", "'.$html.'", "1", "0", "1", "0")', __FILE__, __LINE__);
 		api_sql_query("INSERT INTO `".$TABLEQUIZQUESTIONLIST . "` VALUES ( '1', '".lang2db(get_lang('SocraticIrony')) . "', '".lang2db(get_lang('ManyAnswers')) . "', '10', '1', '2','')", __FILE__, __LINE__);
-		api_sql_query("INSERT INTO `".$TABLEQUIZQUESTION . "` VALUES ( '1', '1')", __FILE__, __LINE__);
+		api_sql_query("INSERT INTO `".$TABLEQUIZQUESTION . "` VALUES ( '1','1','1')", __FILE__, __LINE__);
 
 
 		/*

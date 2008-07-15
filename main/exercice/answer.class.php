@@ -23,7 +23,7 @@
 *	5 arrays are created to receive the attributes of each answer belonging to a specified question
 * 	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer.class.php 15602 2008-06-18 08:52:24Z pcool $
+* 	@version $Id: answer.class.php 15791 2008-07-15 16:03:52Z juliomontoya $
 */
 
 
@@ -108,11 +108,12 @@ class Answer
 	{
 		global $_course;
 		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
-
+		
 		$questionId=$this->questionId;
 		//$answerType=$this->selectType();
 
-		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type FROM $TBL_ANSWER WHERE question_id='".Database::escape_string($questionId)."' ORDER BY position";
+		$sql="SELECT answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type FROM
+		      $TBL_ANSWER WHERE question_id ='".Database::escape_string($questionId)."' ORDER BY position";
 
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
@@ -126,7 +127,7 @@ class Answer
 			$this->comment[$i]=$object->comment;
 			$this->weighting[$i]=$object->ponderation;
 			$this->position[$i]=$object->position;
-$this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
+			$this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 			$this->hotspot_type[$i]=$object->hotspot_type;
 
 			$i++;
@@ -158,8 +159,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 		//$answerType=$this->selectType();
 
 		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type " .
-				"FROM $TBL_ANSWER " .
-				"WHERE question_id='".Database::escape_string($questionId)."' " .
+				"FROM $TBL_ANSWER question_id='".Database::escape_string($questionId)."' " .
 				"ORDER BY $field $order";
 
 		$result=api_sql_query($sql,__FILE__,__LINE__);

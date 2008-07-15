@@ -1,20 +1,23 @@
 <?php
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2004-2008 Dokeos SPRL
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
 
 
@@ -22,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 15602 2008-06-18 08:52:24Z pcool $
+* 	@version $Id: exercise.class.php 15791 2008-07-15 16:03:52Z juliomontoya $
 */
 
 
@@ -67,7 +70,7 @@ class Exercise
 	 * @return - boolean - true if exercise exists, otherwise false
 	 */
 	function read($id)
-	{
+	{ 
 		global $_course;
 
 	    $TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -90,7 +93,7 @@ class Exercise
 			$this->active=$object->active;
 			$this->results_disabled =$object->results_disabled;
 
-			$sql="SELECT question_id,position FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY position";
+			$sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY question_order";
 			$result=api_sql_query($sql,__FILE__,__LINE__);
 
 			// fills the array with the question ID for this exercise
@@ -98,12 +101,12 @@ class Exercise
 			while($object=Database::fetch_object($result))
 			{
 				// makes sure that the question position is unique
-				while(isset($this->questionList[$object->position]))
+				while(isset($this->questionList[$object->question_order]))
 				{
-					$object->position++;
+					$object->question_order++;
 				}
 
-				$this->questionList[$object->position]=$object->question_id;
+				$this->questionList[$object->question_order]=$object->question_id;
 			}
 			return true;
 		}
@@ -431,7 +434,8 @@ class Exercise
 	function save()
 	{
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);        
+        $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);        
 
 		$id=$this->id;
 		$exercise=addslashes($this->exercise);
@@ -476,9 +480,11 @@ class Exercise
 
 		// updates the question position
 		foreach($this->questionList as $position=>$questionId)
-		{
-			$sql="UPDATE $TBL_QUESTIONS SET position='".Database::escape_string($position)."' WHERE id='".Database::escape_string($questionId)."'";
-			api_sql_query($sql,__FILE__,__LINE__);
+		{ 
+			//$sql="UPDATE $TBL_QUESTIONS SET position='".Database::escape_string($position)."' WHERE id='".Database::escape_string($questionId)."'";
+			$sql="UPDATE $TBL_QUIZ_QUESTION SET question_order='".Database::escape_string($position)."' " .
+				 "WHERE question_id='".Database::escape_string($questionId)."' and exercice_id='".Database::escape_string($id)."'";
+			api_sql_query($sql,__FILE__,__LINE__); 
 		}
 	}
 
@@ -489,36 +495,42 @@ class Exercise
 	 * @param - integer $id - question ID to move up
 	 */
 	function moveUp($id)
-	{
+	{	
 		foreach($this->questionList as $position=>$questionId)
 		{
 			// if question ID found
 			if($questionId == $id)
-			{
+			{									
 				// position of question in the array
-				$pos1=$position;
+				$pos1=$position; //1
 
 				prev($this->questionList);
-
+				prev($this->questionList);
+												
 				// position of previous question in the array
 				$pos2=key($this->questionList);
-
+				
+				//if the cursor of the array hit the end 
+				// then we must reset the array to get the previous key
+				if($pos2===NULL)
+				{					
+					end($this->questionList);
+					prev($this->questionList);
+					$pos2=key($this->questionList);
+				}
+				
 				// error, can't move question
 				if(!$pos2)
-				{
-					return;
+				{						
+					//echo 'cant move!';
+					$pos2=key($this->questionList); 
+					reset($this->questionList);
 				}
-
 				$id2=$this->questionList[$pos2];
-
 				// exits foreach()
 				break;
 			}
-
-			// goes to next question
-			next($this->questionList);
 		}
-
 		// permutes questions in the array
 		$temp=$this->questionList[$pos2];
 		$this->questionList[$pos2]=$this->questionList[$pos1];
@@ -541,7 +553,7 @@ class Exercise
 				// position of question in the array
 				$pos1=$position;
 
-				next($this->questionList);
+				//next($this->questionList);
 
 				// position of next question in the array
 				$pos2=key($this->questionList);
@@ -549,6 +561,7 @@ class Exercise
 				// error, can't move question
 				if(!$pos2)
 				{
+					//echo 'cant move!';
 					return;
 				}
 
@@ -557,15 +570,12 @@ class Exercise
 				// exits foreach()
 				break;
 			}
-
-			// goes to next question
-			next($this->questionList);
 		}
-
 		// permutes questions in the array
 		$temp=$this->questionList[$pos2];
 		$this->questionList[$pos2]=$this->questionList[$pos1];
 		$this->questionList[$pos1]=$temp;
+
 	}
 
 	/**

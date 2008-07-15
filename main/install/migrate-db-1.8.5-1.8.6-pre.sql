@@ -22,3 +22,4 @@ ALTER TABLE php_session CHANGE session_value session_value MEDIUMTEXT NOT NULL;
 -- xxCOURSExx
 ALTER TABLE lp ADD theme varchar(255) not null default '';
 ALTER TABLE survey ADD mail_subject VARCHAR( 255 ) NOT NULL AFTER reminder_mail ;
+ALTER TABLE quiz_rel_question ADD question_order mediumint unsigned NOT NULL default 1;

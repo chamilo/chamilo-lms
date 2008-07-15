@@ -353,10 +353,13 @@ $query = "select * from ".$TBL_TRACK_ATTEMPT." as attempts
 						INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id
 						INNER JOIN ".$TBL_QUESTIONS." as questions ON questions.id=quizz_rel_questions.question_id    
 					WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
-					GROUP BY questions.position, attempts.question_id";
+					GROUP BY quizz_rel_questions.question_order, attempts.question_id"; 
+					//GROUP BY questions.position, attempts.question_id";
+			
 
 $result =api_sql_query($query, __FILE__, __LINE__);
-?>
+
+?> 
 	
 	<table>
 		<tr>
@@ -394,7 +397,6 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$questionList[] = $row['question_id'];
 			$exerciseResult[] = $row['answer'];
 			}
-
 		foreach($questionList as $questionId)
 			{
 				$counter++;

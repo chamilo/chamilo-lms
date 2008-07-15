@@ -18,7 +18,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 15602 2008-06-18 08:52:24Z pcool $
+* 	@version $Id: question_pool.php 15791 2008-07-15 16:03:52Z juliomontoya $
 */
 
 // name of the language file that needs to be included
@@ -156,7 +156,7 @@ if($is_allowedToEdit)
 
 <?php
 	}
-?>
+?> 
 
     </select> <input type="submit" value="<?php echo get_lang('Ok'); ?>">
   </td>
@@ -168,8 +168,8 @@ if($is_allowedToEdit)
 	// if we have selected an exercise in the list-box 'Filter'
 	if($exerciseId > 0)
 	{
-		$sql="SELECT id,question,type FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($exerciseId)."' ORDER BY position";
-	}
+		$sql="SELECT id,question,type FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($exerciseId)."' ORDER BY question_order";
+	} 
 	// if we have selected the option 'Orphan questions' in the list-box 'Filter'
 	elseif($exerciseId == -1)
 	{
@@ -185,6 +185,7 @@ if($is_allowedToEdit)
 	
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$nbrQuestions=Database::num_rows($result);
+	
 
     echo '<tr>',
       '<td colspan="',($fromExercise?2:3),'">',
@@ -201,6 +202,7 @@ if($is_allowedToEdit)
 	}
 	echo '</td>',
 	 '<td align="right">';
+	 
 	if(!empty($page))
 	{
 	   echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page-1),'">&lt;&lt; ',get_lang('PreviousPage'),'</a> |';
@@ -240,11 +242,11 @@ if($is_allowedToEdit)
 	$i=1;
 
 	while ($row = Database::fetch_array($result))
-	{
+	{		
 		// if we come from the exercise administration to get a question, 
         // don't show the questions already used by that exercise
 		if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (!$objExercise->isInList($row['id'])))
-		{
+		{	
             echo '<tr ',($i%2==0?'class="row_odd"':'class="row_even"'),'>';
             echo '  <td><a href="admin.php?',api_get_cidreq(),'&editQuestion=',$row['id'],'&fromExercise=',$fromExercise,'">',$row['question'],'</a></td>';
             echo '  <td>';

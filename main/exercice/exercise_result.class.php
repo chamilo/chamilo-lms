@@ -90,10 +90,10 @@ class ExerciseResult
 		$return = array();
     	$TBL_EXERCISE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     	$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-		$sql="SELECT q.id, q.question, q.ponderation, q.position, q.type, q.picture " .
+		$sql="SELECT q.id, q.question, q.ponderation, eq.question_order, q.type, q.picture " .
 			" FROM $TBL_EXERCISE_QUESTION eq, $TBL_QUESTIONS q " .
 			" WHERE eq.question_id=q.id AND eq.exercice_id='".Database::escape_string($e_id)."' " .
-			" ORDER BY q.position";
+			" ORDER BY eq.question_order";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
 		// fills the array with the question ID for this exercise

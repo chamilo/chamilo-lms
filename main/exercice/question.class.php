@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 15602 2008-06-18 08:52:24Z pcool $
+* 	@version $Id: question.class.php 15797 2008-07-16 22:04:57Z yannoo $
 */
 
 
@@ -764,7 +764,7 @@ abstract class Question
 	 * A subclass can redifine this function to add fields...
 	 * @param FormValidator $form the formvalidator instance (by reference)
 	 */
-	function createForm (&$form) {
+	function createForm (&$form,$fck_config=0) {
 
 		echo '	<style>
 					div.row div.label{ width: 10%; }
@@ -790,6 +790,12 @@ abstract class Question
 		$fck_attribute['ToolbarSet'] = 'TestComment';
 		$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
 		$fck_attribute['Config']['FlashUploadPath'] = 'upload/test/';
+		
+		if(is_array($fck_config)){
+			$fck_attribute = array_merge($fck_attribute,$fck_config);
+		}
+		
+		
 		if(!api_is_allowed_to_edit()) $fck_attribute['Config']['UserStatus'] = 'student';
 
 		$form->add_html_editor('questionDescription', get_lang('QuestionDescription'), false);

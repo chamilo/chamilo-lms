@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 15791 2008-07-15 16:03:52Z juliomontoya $
+* 	@version $Id: exercise.class.php 15797 2008-07-16 22:04:57Z yannoo $
 */
 
 
@@ -676,7 +676,7 @@ class Exercise
 		$form -> addGroup($random,null,get_lang('RandomQuestions').' : ','<br />');*/
 
 		// submit
-		$form -> addElement('submit', 'submitExercise', get_lang('Ok'));
+		$form -> addElement('submit', 'submitExercise', get_lang('QuestCreate'));
 
 		// rules
 		$form -> addRule ('exerciseTitle', get_lang('GiveExerciseName'), 'required');

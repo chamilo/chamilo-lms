@@ -24,7 +24,7 @@
 * 	It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_admin.inc.php 15797 2008-07-16 22:04:57Z yannoo $
+* 	@version $Id: question_admin.inc.php 15798 2008-07-16 22:07:13Z yannoo $
 */
 
 /*
@@ -87,7 +87,7 @@ if(is_object($objQuestion))
 	 * FORM CREATION
 	 *********************/
 
-	$objQuestion -> createForm ($form,array('height'=>150));
+	$objQuestion -> createForm ($form,array('Height'=>150));
 
 	$objQuestion -> createAnswersForm ($form);
 

@@ -141,7 +141,7 @@ class FillBlanks extends Question
 		$form -> addRule ('answer',get_lang('DefineBlanks'),'regex','/\[.*\]/');
  
 		//added multiple answers
-		$form -> addElement ('checkbox','multiple_answer','', get_lang('FillInBlankMultiple'));
+		$form -> addElement ('checkbox','multiple_answer','', get_lang('FillInBlankSwitchable'));
 		
 		$form -> addElement('html','<div id="blanks_weighting"></div>');
 

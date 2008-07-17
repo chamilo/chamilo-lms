@@ -346,15 +346,15 @@ else
 	$tbl_blogs_tasks_rel_user = Database :: get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 
 	$sql = "
-							SELECT COUNT(*) as `number`
+							SELECT COUNT(*) as number
 							FROM ".$tbl_blogs_tasks_rel_user."
 							WHERE
-								`blog_id` = ".$blog_id." AND
-								`user_id` = ".api_get_user_id()." AND
-								`task_id` = ".$task_id;
+								blog_id = ".$blog_id." AND
+								user_id = ".api_get_user_id()." AND
+								task_id = ".$task_id;
 
 	$result = api_sql_query($sql, __LINE__, __FILE__);
-	$row = mysql_fetch_array($result, MYSQL_ASSOC);
+	$row = Database::fetch_array($result);
 
 	if ($row['number'] == 1)
 		$user_task = true;
@@ -373,13 +373,13 @@ switch ($current_page)
 		}
 		break;
 	case 'view_post' :
-		Blog :: display_post($blog_id, mysql_real_escape_string((int)$_GET['post_id']));
+		Blog :: display_post($blog_id, Database::escape_string((int)$_GET['post_id']));
 		break;
 	case 'edit_post' :
 		$task_id = (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
 
 		if (api_is_allowed('BLOG_'.$blog_id, 'article_edit', $task_id))
-			Blog :: display_form_edit_post($blog_id, mysql_real_escape_string((int)$_GET['post_id']));
+			Blog :: display_form_edit_post($blog_id, Database::escape_string((int)$_GET['post_id']));
 		else
 			api_not_allowed();
 
@@ -411,11 +411,11 @@ switch ($current_page)
 			}
 			if ($_GET['do'] == 'edit')
 			{
-				Blog :: display_edit_task_form($blog_id, mysql_real_escape_string($_GET['task_id']));
+				Blog :: display_edit_task_form($blog_id, Database::escape_string($_GET['task_id']));
 			}
 			if ($_GET['do'] == 'edit_assignment')
 			{
-				Blog :: display_edit_assigned_task_form($blog_id, mysql_real_escape_string((int)$_GET['assignment_id']));
+				Blog :: display_edit_assigned_task_form($blog_id, Database::escape_string((int)$_GET['assignment_id']));
 			}
 			Blog :: display_task_list($blog_id);
 			echo '<br /><br />';
@@ -434,19 +434,19 @@ switch ($current_page)
 		break;
 	case 'execute_task' :
 		if (isset ($_GET['post_id']))
-			Blog :: display_post($blog_id, mysql_real_escape_string((int)$_GET['post_id']));
+			Blog :: display_post($blog_id, Database::escape_string((int)$_GET['post_id']));
 		else
-			Blog :: display_select_task_post($blog_id, mysql_real_escape_string((int)$_GET['task_id']));
+			Blog :: display_select_task_post($blog_id, Database::escape_string((int)$_GET['task_id']));
 
 		break;
 	case 'view_search_result' :
-		Blog :: display_search_results($blog_id, mysql_real_escape_string($_GET['q']));
+		Blog :: display_search_results($blog_id, Database::escape_string($_GET['q']));
 		break;
 	case '' :
 	default :
 		if (isset ($_GET['filter']) && !empty ($_GET['filter']))
 		{
-			Blog :: display_day_results($blog_id, mysql_real_escape_string($_GET['filter']));
+			Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
 		}
 		else
 		{

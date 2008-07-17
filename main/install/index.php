@@ -537,7 +537,7 @@ elseif($_POST['step5'])
 
 	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
 	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
-	<?php echo get_lang('DBPassword').' : '.$dbPassForm; ?><br />
+	<?php echo get_lang('DBPassword').' : '.str_repeat('*',strlen($dbPassForm)); ?><br />
 	<?php if(!empty($dbPrefixForm)) echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br />'; ?>
 	<?php echo get_lang('MainDB').' : <b>'.$dbNameForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br />
 	<?php 

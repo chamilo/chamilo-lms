@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 15740 2008-07-07 09:30:44Z pcool $
+<?php // $Id: usermanager.lib.php 15807 2008-07-17 14:10:59Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -881,7 +881,7 @@ class UserManager
 					7=>$rowf['field_changeable'],
 					8=>array()
 				);
-				$sqlo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowf['id'];
+				$sqlo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowf['id']." ORDER BY option_order ASC";
 				$reso = api_sql_query($sqlo,__FILE__,__LINE__);
 				if(Database::num_rows($reso)>0)
 				{

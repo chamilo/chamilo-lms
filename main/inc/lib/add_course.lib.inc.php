@@ -591,6 +591,7 @@ function update_Db_course($courseDbName)
 		active tinyint NOT NULL default 0,
 		results_disabled TINYINT UNSIGNED NOT NULL DEFAULT 0,
 		access_condition TEXT DEFAULT NULL,
+		max_attempt int NOT NULL default 0,
 		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);

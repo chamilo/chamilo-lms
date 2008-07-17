@@ -1,4 +1,4 @@
-<?php // $Id: Quiz.class.php 3305 2005-02-03 12:44:01Z bmol $
+<?php // $Id: Quiz.class.php 15802 2008-07-17 04:52:13Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -60,6 +60,8 @@ class Quiz extends Resource
 	 * Questions
 	 */
 	var $question_ids;
+	
+	var $attempts;
 	/**
 	 * Create a new Quiz
 	 * @param string $title
@@ -68,7 +70,7 @@ class Quiz extends Resource
 	 * @param int $type
 	 * @param int $active
 	 */
-	function Quiz($id,$title,$description,$random,$type,$active,$media)
+	function Quiz($id,$title,$description,$random,$type,$active,$media,$attempts=0)
 	{
 		parent::Resource($id,RESOURCE_QUIZ);
 		$this->title = $title;
@@ -77,6 +79,7 @@ class Quiz extends Resource
 		$this->quiz_type = $type;
 		$this->active = $active;
 		$this->media = $media;
+		$this->attempts = $attempts;
 		$this->question_ids = array();
 	}
 	/**

@@ -1,4 +1,4 @@
-<?php // $Id: CourseRestorer.class.php 15301 2008-05-16 03:21:42Z yannoo $
+<?php // $Id: CourseRestorer.class.php 15802 2008-07-17 04:52:13Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -600,7 +600,7 @@ class CourseRestorer
 						$doc = str_replace('/audio/', '', $doc->path);
 					}
 				}
-				$sql = "INSERT INTO ".$table_qui." SET title = '".Database::escape_string($quiz->title)."', description = '".Database::escape_string($quiz->description)."', type = '".$quiz->quiz_type."', random = '".$quiz->random."', active = '".$quiz->active."', sound = '".Database::escape_string($doc)."' ";
+				$sql = "INSERT INTO ".$table_qui." SET title = '".Database::escape_string($quiz->title)."', description = '".Database::escape_string($quiz->description)."', type = '".$quiz->quiz_type."', random = '".$quiz->random."', active = '".$quiz->active."', sound = '".Database::escape_string($doc)."', max_attempt = '".$quiz->attempts."' ";
 				api_sql_query($sql, __FILE__, __LINE__);
 				$new_id = Database::get_last_insert_id();
 				$this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;

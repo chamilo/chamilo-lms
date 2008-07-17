@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 15797 2008-07-16 22:04:57Z yannoo $
+* 	@version $Id: exercise.class.php 15802 2008-07-17 04:52:13Z yannoo $
 */
 
 
@@ -41,6 +41,7 @@ class Exercise
 	var $random;
 	var $active;
 	var $timeLimit;
+	var $attempts;
 
 	var $questionList;  // array with the list of this exercise's questions
 
@@ -78,7 +79,7 @@ class Exercise
 	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
     	#$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
-		$sql="SELECT title,description,sound,type,random,active, results_disabled FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
+		$sql="SELECT title,description,sound,type,random,active, results_disabled, max_attempt FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
 		// if the exercise has been found
@@ -92,7 +93,7 @@ class Exercise
 			$this->random=$object->random;
 			$this->active=$object->active;
 			$this->results_disabled =$object->results_disabled;
-
+			$this->attempts = $object->max_attempt;
 			$sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY question_order";
 			$result=api_sql_query($sql,__FILE__,__LINE__);
 
@@ -135,6 +136,11 @@ class Exercise
 	function selectTitle()
 	{
 		return $this->exercise;
+	}
+	
+	function selectAttempts()
+	{
+		return $this->attempts;
 	}
 	/**
 	 * returns the time limit
@@ -311,6 +317,11 @@ class Exercise
 	{
 		$this->exercise=$title;
 	}
+	
+	function updateAttempts($title)
+	{
+		$this->attempts=$title;
+	}
 
 	/**
 	 * changes the exercise description
@@ -442,6 +453,7 @@ class Exercise
 		$description=addslashes($this->description);
 		$sound=addslashes($this->sound);
 		$type=$this->type;
+		$attempts=$this->attempts;
 		$random=$this->random;
 		$active=$this->active;
 		$results_disabled = intval($this->results_disabled);
@@ -456,14 +468,15 @@ class Exercise
 						type='".Database::escape_string($type)."',
 						random='".Database::escape_string($random)."',
 						active='".Database::escape_string($active)."',
-						results_disabled='".Database::escape_string($results_disabled)."' 
+						max_attempt='".Database::escape_string($attempts)."', " .
+						"results_disabled='".Database::escape_string($results_disabled)."'
 					WHERE id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
 		// creates a new exercise
 		else
 		{
-			$sql="INSERT INTO $TBL_EXERCICES(title,description,sound,type,random,active, results_disabled) 
+			$sql="INSERT INTO $TBL_EXERCICES(title,description,sound,type,random,active, results_disabled, max_attempt) 
 					VALUES(
 						'".Database::escape_string($exercise)."',
 						'".Database::escape_string($description)."',
@@ -471,7 +484,8 @@ class Exercise
 						'".Database::escape_string($type)."',
 						'".Database::escape_string($random)."',
 						'".Database::escape_string($active)."',
-						'".Database::escape_string($results_disabled)."'
+						'".Database::escape_string($results_disabled)."',
+						'".Database::escape_string($attempts)."'
 						)";
 			api_sql_query($sql,__FILE__,__LINE__);
 
@@ -674,17 +688,19 @@ class Exercise
 		/*$random = array();
 		$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
 		$form -> addGroup($random,null,get_lang('RandomQuestions').' : ','<br />');*/
-
+		$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));
 		// submit
-		$form -> addElement('submit', 'submitExercise', get_lang('QuestCreate'));
+		$form -> addElement('submit', 'submitExercise', get_lang('Ok'));
 
 		// rules
 		$form -> addRule ('exerciseTitle', get_lang('GiveExerciseName'), 'required');
+		$form -> addRule ('exerciseAttempts', get_lang('Numeric'), 'numeric');
 
 		// defaults
 		$defaults = array();
 		if($this -> id > 0)
 		{
+			$defaults['exerciseAttempts'] = $this -> selectAttempts();
 			$defaults['exerciseType'] = $this -> selectType();
 			$defaults['exerciseTitle'] = $this -> selectTitle();
 			$defaults['exerciseDescription'] = $this -> selectDescription();
@@ -692,6 +708,7 @@ class Exercise
 		}
 		else{
 			$defaults['exerciseType'] = 1;
+			$defaults['exerciseAttempts'] = 0;
 			//$defaults['randomQuestions'] = 0;
 			$defaults['exerciseDescription'] = '';
 		}
@@ -708,7 +725,7 @@ class Exercise
 	 */
 	function processCreation($form)
 	{
-
+		$this -> updateAttempts($form -> getSubmitValue('exerciseAttempts'));
 		$this -> updateTitle($form -> getSubmitValue('exerciseTitle'));
 		$this -> updateDescription($form -> getSubmitValue('exerciseDescription'));
 		$this -> updateType($form -> getSubmitValue('exerciseType'));

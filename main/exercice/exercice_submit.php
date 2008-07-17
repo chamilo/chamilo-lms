@@ -36,8 +36,8 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercice_submit.php 15799 2008-07-17 00:14:02Z yannoo $
+* 	@author Julio Montoya multiple fill in blank option added
+* 	@version $Id: exercice_submit.php 15802 2008-07-17 04:52:13Z yannoo $
 */
 
 
@@ -235,7 +235,8 @@ if(!is_object($objExercise))
 	header('Location: exercice.php');
 	exit();
 }
-
+$quizID = $objExercise->selectId();
+$exerciseAttempts=$objExercise->selectAttempts();
 $exerciseTitle=$objExercise->selectTitle();
 $exerciseDescription=$objExercise->selectDescription();
 $exerciseDescription=stripslashes($exerciseDescription);
@@ -431,6 +432,24 @@ else
 
 echo "<h3>".$exerciseTitle."</h3>";
 
+if( $exerciseAttempts > 0 && !$is_allowed_to_edit ){
+	$user_id = api_get_user_id();
+	$sql = 'SELECT count(*)
+			FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES).'
+			WHERE exe_exo_id = '.$quizID.' '.
+			'and exe_user_id = '.$user_id.'
+			';
+	$aquery = api_sql_query($sql, __FILE__, __LINE__);
+	$attempt = Database::fetch_array($aquery);
+	
+	if( true ){ 
+		Display::display_warning_message(sprintf(get_lang('ReachedMaxAttempts'),$exerciseTitle,$exerciseAttempts));
+	    Display::display_footer();	
+	    exit;
+	}
+}	
+
+
 if(!empty($error))
 {
 	Display::display_error_message($error,false);
@@ -487,7 +506,7 @@ else
 	}
 	$s="<p>$exerciseDescription</p>";
 	
-	if($exerciseType==2){
+	if($origin == 'learnpath' && $exerciseType==2){
 		$s2 = "&exerciseId=".$exerciseId;
 	}
 	$s.=" <form method='post' action='".api_get_self()."?autocomplete=off".$s2."' name='frm_exercise' $onsubmit>

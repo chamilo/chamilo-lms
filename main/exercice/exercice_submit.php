@@ -37,7 +37,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercice_submit.php 15792 2008-07-15 17:06:47Z juliomontoya $
+* 	@version $Id: exercice_submit.php 15799 2008-07-17 00:14:02Z yannoo $
 */
 
 
@@ -487,7 +487,7 @@ else
 	}
 	$s="<p>$exerciseDescription</p>";
 	
-	if($origin == 'learnpath' && $exerciseType==2){
+	if($exerciseType==2){
 		$s2 = "&exerciseId=".$exerciseId;
 	}
 	$s.=" <form method='post' action='".api_get_self()."?autocomplete=off".$s2."' name='frm_exercise' $onsubmit>

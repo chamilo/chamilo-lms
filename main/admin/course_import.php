@@ -1,10 +1,9 @@
-<?php
-
-// $Id: course_import.php 8216 2006-03-15 16:33:13Z turboke $
+<?php // $Id: course_import.php 8216 2006-03-15 16:33:13Z turboke $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
+	Copyright (c) 2008 Dokeos SPRL
 	Copyright (c) 2005 Bart Mollet <bart.mollet@hogent.be>
 
 	For a full list of contributors, see "credits.txt".
@@ -17,7 +16,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -30,17 +29,19 @@
 /**
  * validate the imported data
  */
-function validate_data($courses)
-{
+function validate_data($courses) {
+	global $_configuration;	
+	$dbnamelength = strlen($_configuration['db_prefix']);
+	//Ensure the prefix + database name do not get over 40 characters
+	$maxlength = 40 - $dbnamelength;
+
 	$errors = array ();
 	$coursecodes = array ();
-	foreach ($courses as $index => $course)
-	{
+	foreach ($courses as $index => $course) {
 		$course['line'] = $index +1;
 		//1. check if mandatory fields are set
 		$mandatory_fields = array ('Code', 'Title', 'CourseCategory', 'Teacher');
-		foreach ($mandatory_fields as $key => $field)
-		{
+		foreach ($mandatory_fields as $key => $field) {
 			if (!isset ($course[$field]) || strlen($course[$field]) == 0)
 			{
 				$course['error'] = get_lang($field.'Mandatory');
@@ -48,27 +49,21 @@ function validate_data($courses)
 			}
 		}
 		//2. check if code isn't in use
-		if (isset ($course['Code']) && strlen($course['Code']) != 0)
-		{
+		if (isset ($course['Code']) && strlen($course['Code']) != 0) {
 			//2.1 check if code allready used in this CVS-file
-			if (isset ($coursecodes[$course['Code']]))
-			{
+			if (isset ($coursecodes[$course['Code']])) {
 				$course['error'] = get_lang('CodeTwiceInFile');
 				$errors[] = $course;
-			}
-			elseif(strlen($course['Code']) > 20)
-			{
+			} elseif (strlen(($course['Code']) > $maxlength)) {
 				$course['error'] = get_lang('Max');
 				$errors[] = $course;
 			}
 			//2.3 check if code allready used in DB
-			else
-			{
+			else {
 				$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-				$sql = "SELECT * FROM $course_table WHERE code = '".mysql_real_escape_string($course['Code'])."'";
+				$sql = "SELECT * FROM $course_table WHERE code = '".Database::escape_string($course['Code'])."'";
 				$res = api_sql_query($sql, __FILE__, __LINE__);
-				if (mysql_num_rows($res) > 0)
-				{
+				if (Database::num_rows($res) > 0) {
 					$course['error'] = get_lang('CodeExists');
 					$errors[] = $course;
 				}

@@ -731,11 +731,21 @@ function display_database_parameter($install_type, $parameter_name, $form_field_
 	}
 	else
 	{
-		if ( $form_field_name == 'dbPassForm' ) {
-			echo '<td><input type="password" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'."</td>\n";
+		if ($form_field_name=='dbPassForm') { 
+			$inputtype = 'password';
 		} else {
-			echo '<td><input type="text" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'."</td>\n";
+			$inputtype = 'text';
 		}
+		
+		//Slightly limit the length of the database prefix to avoid
+		//having to cut down the databases names later on
+		if ($form_field_name=='dbPrefixForm') { 
+			$maxlength = '15';
+		} else {
+			$maxlength = MAX_FORM_FIELD_LENGTH;
+		}
+
+		echo '<td><input type="'.$inputtype.'" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.$maxlength.'" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'."</td>\n";
 		echo "<td>$extra_notice</td>\n";
 	}
 	echo "</tr>\n";

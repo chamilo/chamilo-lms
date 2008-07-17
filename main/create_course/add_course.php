@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 15674 2008-07-01 16:04:43Z juliomontoya $
+// $Id: add_course.php 15801 2008-07-17 04:23:35Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -20,7 +20,7 @@
 	See the GNU General Public License for more details.
 
 	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com 
+	Mail: info@dokeos.com
 ==============================================================================
 */
 /**
@@ -73,6 +73,11 @@ if (!api_is_allowed_to_create_course())
 $table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 
+global $_configuration;
+$dbnamelength = strlen($_configuration['db_prefix']);
+//Ensure the database prefix + database name do not get over 40 characters
+$maxlength = 40 - $dbnamelength;
+
 // Build the form
 $categories = array();
 $form = new FormValidator('add_course');
@@ -81,8 +86,8 @@ $form->addElement('static',null,null,get_lang('Ex'));
 $categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), $categories);
 CourseManager::select_and_sort_categories($categories_select);
 $form->addElement('static',null,null, get_lang('TargetFac'));
-$form->add_textfield('wanted_code', get_lang('Code'),false,array('size'=>'20','maxlength'=>20));
-$form->addRule('wanted_code',get_lang('Max'),'maxlength',20);
+$form->add_textfield('wanted_code', get_lang('Code'),false,array('size'=>'$maxlength','maxlength'=>$maxlength));
+$form->addRule('wanted_code',get_lang('Max'),'maxlength',$maxlength);
 $titular= &$form->add_textfield('tutor_name', get_lang('Professors'),true,array('size'=>'60'));
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
 $form->addElement('submit', null, get_lang('Ok'));
@@ -111,7 +116,7 @@ if($form->validate())
 	$course_language = $course_values['course_language'];
 	
 	if(trim($wanted_code) == ''){
-		$wanted_code = generate_course_code(substr($title,0,20));
+		$wanted_code = generate_course_code(substr($title,0,$maxlength));
 	}
 	
 	$keys = define_course_keys($wanted_code, "", $_configuration['db_prefix']);

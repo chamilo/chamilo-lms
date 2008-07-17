@@ -1,10 +1,10 @@
 <?php
-// $Id: course_add.php 14291 2008-02-14 08:17:23Z elixir_inter $
+// $Id: course_add.php 15801 2008-07-17 04:23:35Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -20,7 +20,8 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels
+		 Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -68,11 +69,17 @@ while($obj = mysql_fetch_object($res))
 {
 		$teachers[$obj->user_id] = $obj->lastname.' '.$obj->firstname;
 }
+
+global $_configuration;
+$dbnamelength = strlen($_configuration['db_prefix']);
+//Ensure the database prefix + database name do not get over 40 characters
+$maxlength = 40 - $dbnamelength;
+
 // Build the form
 $form = new FormValidator('update_course');
 $form->add_textfield( 'visual_code', get_lang('CourseCode'),false,array('size'=>'20','maxlength'=>20));
 $form->applyFilter('visual_code','strtoupper');
-$form->addRule('wanted_code',get_lang('Max'),'maxlength',20);
+$form->addRule('wanted_code',get_lang('Max'),'maxlength',$maxlength);
 $form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers);
 $form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'multiple=multiple size=5');
 $form->add_textfield('title', get_lang('Title'),true, array ('size' => '60'));
@@ -131,7 +138,7 @@ if( $form->validate())
 		$department_url = 'http://'.$department_url;
 	}
 	if(trim($code) == ''){
-		$code = generate_course_code(substr($title,0,20));
+		$code = generate_course_code(substr($title,0,$maxlength));
 	}
 	$keys = define_course_keys($code, "", $_configuration['db_prefix']);
 	if (sizeof($keys))

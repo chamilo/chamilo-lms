@@ -54,16 +54,17 @@ if(isset($_GET['id_session']))
 	$_SESSION['id_session'] = $_GET['id_session'];
 }
 
-require_once (api_get_path(LIBRARY_PATH)."/display.lib.php");
-require_once (api_get_path(LIBRARY_PATH)."/text.lib.php");
-require_once (api_get_path(LIBRARY_PATH)."/blog.lib.php");
-require_once (api_get_path(LIBRARY_PATH)."/fckeditor.lib.php");
+$lib_path = api_get_path(LIBRARY_PATH);
+require_once ($lib_path.'/display.lib.php');
+require_once ($lib_path.'/text.lib.php');
+require_once ($lib_path.'/blog.lib.php');
+require_once ($lib_path.'/fckeditor.lib.php');
 $blog_table_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 
-$nameTools = get_lang("Blogs");
-$DaysShort = array (get_lang("SundayShort"), get_lang("MondayShort"), get_lang("TuesdayShort"), get_lang("WednesdayShort"), get_lang("ThursdayShort"), get_lang("FridayShort"), get_lang("SaturdayShort"));
-$DaysLong = array (get_lang("SundayLong"), get_lang("MondayLong"), get_lang("TuesdayLong"), get_lang("WednesdayLong"), get_lang("ThursdayLong"), get_lang("FridayLong"), get_lang("SaturdayLong"));
-$MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
+$nameTools = get_lang('Blogs');
+$DaysShort = array (get_lang('SundayShort'), get_lang('MondayShort'), get_lang('TuesdayShort'), get_lang('WednesdayShort'), get_lang('ThursdayShort'), get_lang('FridayShort'), get_lang('SaturdayShort'));
+$DaysLong = array (get_lang('SundayLong'), get_lang('MondayLong'), get_lang('TuesdayLong'), get_lang('WednesdayLong'), get_lang('ThursdayLong'), get_lang('FridayLong'), get_lang('SaturdayLong'));
+$MonthsLong = array (get_lang('JanuaryLong'), get_lang('FebruaryLong'), get_lang('MarchLong'), get_lang('AprilLong'), get_lang('MayLong'), get_lang('JuneLong'), get_lang('JulyLong'), get_lang('AugustLong'), get_lang('SeptemberLong'), get_lang('OctoberLong'), get_lang('NovemberLong'), get_lang('DecemberLong'));
 
 $current_page = $_GET['action'];
 
@@ -192,56 +193,55 @@ if ($_GET['action'] == 'view_post')
 	DISPLAY
 ==============================================================================
 */
-$htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" language=\"javascript\"></script>";
+$htmlHeadXtra[] = '<script src="tbl_change.js" type="text/javascript" language="javascript"></script>';
 
 // Set bredcrumb
 switch ($current_page)
 {
-	case "new_post" :
+	case 'new_post' :
 		$nameTools = get_lang('NewPost');
-		$interbreadcrumb[] = array ("url" => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
-		Display :: display_header($nameTools, 'blogs');
+		$interbreadcrumb[] = array ('url' => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
+		Display :: display_header($nameTools, 'Blogs');
 		break;
-	case "manage_tasks" :
+	case 'manage_tasks' :
 		$nameTools = get_lang('TaskManager');
-		$interbreadcrumb[] = array ("url" => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
-		Display :: display_header($nameTools, 'blogs');
+		$interbreadcrumb[] = array ('url' => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
+		Display :: display_header($nameTools, 'Blogs');
 		break;
-	case "manage_members" :
+	case 'manage_members' :
 		$nameTools = get_lang('MemberManager');
-		$interbreadcrumb[] = array ("url" => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
-		Display :: display_header($nameTools, 'blogs');
+		$interbreadcrumb[] = array ('url' => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
+		Display :: display_header($nameTools, 'Blogs');
 		break;
-	case "manage_rights" :
+	case 'manage_rights' :
 		$nameTools = get_lang('RightsManager');
-		$interbreadcrumb[] = array ("url" => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
-		Display :: display_header($nameTools, 'blogs');
+		$interbreadcrumb[] = array ('url' => "blog.php?blog_id=$blog_id", 'name' => Blog :: get_blog_title($blog_id));
+		Display :: display_header($nameTools, 'Blogs');
 		break;
-	case "view_search_result" :
+	case 'view_search_result' :
 		$nameTools = get_lang('SearchResults');
-		$interbreadcrumb[] = array ("url" => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
-		Display :: display_header($nameTools, 'blogs');
+		$interbreadcrumb[] = array ('url' => "blog.php?blog_id=$blog_id", 'name' => Blog :: get_blog_title($blog_id));
+		Display :: display_header($nameTools, 'Blogs');
 		break;
-	case "execute_task" :
+	case 'execute_task' :
 		$nameTools = get_lang('ExecuteThisTask');
-		$interbreadcrumb[] = array ("url" => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
-		Display :: display_header($nameTools, 'blogs');
+		$interbreadcrumb[] = array ('url' => "blog.php?blog_id=$blog_id", 'name' => Blog :: get_blog_title($blog_id));
+		Display :: display_header($nameTools, 'Blogs');
 		break;
 	default :
 		$nameTools = Blog :: get_blog_title($blog_id);
-		Display :: display_header($nameTools, 'blogs');
+		Display :: display_header($nameTools, 'Blogs');
 }
 
 //Display::display_header($nameTools,'Blogs');
 ?>
-<span class="blog_title"><?php echo Blog::get_blog_title($blog_id) ?></span><br />
-<span class="blog_subtitle"><?php echo Blog::get_blog_subtitle($blog_id) ?></span>
+<span class="blog_title"><?php echo Blog::get_blog_title($blog_id); ?></span><br />
+<span class="blog_subtitle"><?php echo Blog::get_blog_subtitle($blog_id); ?></span>
 <br /><br />
 <table width="100%">
 <tr>
 	<td width="220" class="blog_left" valign="top">
 		<?php
-
 
 $month = (int)$_GET['month'] ? (int)$_GET['month'] : (int) date('m');
 $year = (int)$_GET['year'] ? (int)$_GET['year'] : date('Y');

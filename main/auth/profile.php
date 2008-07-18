@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 15740 2008-07-07 09:30:44Z pcool $
+<?php // $Id: profile.php 15822 2008-07-18 12:35:27Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -372,6 +372,9 @@ foreach($extra as $id => $field_details)
 					}
 				}
 			}
+			break;
+		case USER_FIELD_TYPE_DIVIDER:
+			$form->addElement('static',$field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
 			break;
 	}
 }

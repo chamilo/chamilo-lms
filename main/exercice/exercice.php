@@ -143,6 +143,14 @@ a.invisible:hover
 -->
 </style>';
 
+if($_GET['delete']=='delete' && ($is_allowedToEdit || api_is_coach()) && !empty($_GET['did'])){
+	$sql='DELETE FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES).' WHERE exe_id = '.(int)$_GET['did'];
+	api_sql_query ($sql,__FILE__,__LINE__); 	
+	header('Location: exercice.php?cidReq='.htmlentities($_GET['cidReq']).'&show=result');
+	exit;
+}
+
+
 if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || $is_tutor))
 {
 	$id  = $_GET['exeid'];
@@ -965,7 +973,7 @@ if($_configuration['tracking_enabled'])
 					ORDER BY exe_cours_id ASC, exe_date ASC";
 
 		}
-
+		
 		$results=getManyResultsXCol($sql,7);
 		$hpresults=getManyResultsXCol($hpsql,5);
 
@@ -974,7 +982,8 @@ if($_configuration['tracking_enabled'])
 		//Print the results of tests
 		if(is_array($results))
 		{
-			for($i = 0; $i < sizeof($results); $i++)
+			$sizeof = sizeof($results);
+			for($i = 0; $i < $sizeof; $i++)
 			{
 				$id = $results[$i][5];
 				$mailid = $results[$i][6];
@@ -993,7 +1002,7 @@ if($_configuration['tracking_enabled'])
 				echo '<td>'.$test.'</td>';
 				echo '<td>'.format_locale_date(get_lang('dateTimeFormatLong'),$results[$i][4]).'</td>';
 		  		echo '<td>'.round(($res/($results[$i][3]!=0?$results[$i][3]:1))*100).'% ('.$res.' / '.$results[$i][3].')</td>';
-				echo '<td>'.(($is_allowedToEdit||$is_tutor)?"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang("Edit")."</a>":"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>").'</td>';
+				echo '<td>'.(($is_allowedToEdit||$is_tutor)?"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang('Edit').'</a>'.' - '.'<a href="exercice.php?cidReq='.htmlentities($_GET['cidReq']).'&show=result&delete=delete&did='.$id.'" onclick="javascript:if(!confirm(\'Are you sure you want to delete the attempt of the user '.$user.' with date '.$dt.'? if you delete it there is no recovery \')) return false;">'.get_lang('Delete').'</a>':"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show').'</a>').'</td>';
 				echo '</tr>';
 			}
 		}
@@ -1004,7 +1013,8 @@ if($_configuration['tracking_enabled'])
 		// Print the Result of Hotpotatoes Tests
 		if(is_array($hpresults))
 		{
-			for($i = 0; $i < sizeof($hpresults); $i++)
+			$sizeof = sizeof($hpresults);
+			for($i = 0; $i < $sizeof; $i++)
 			{
 				$title = GetQuizName($hpresults[$i][1],$documentPath);
 				if ($title =='')

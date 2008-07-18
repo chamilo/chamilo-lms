@@ -90,7 +90,8 @@ if (isset ($_REQUEST['register']))
 
 	if (is_array($user_id_temp))
 	{
-		for ($j=0; $j<count($user_id_temp);$j++)
+		$counter = count($user_id_temp);
+		for ($j=0; $j<$counter;$j++)
 		{
 			if 	($user_id_temp[$j]==$_GET['user_id']) 
 			{	
@@ -120,9 +121,14 @@ if (isset ($_POST['action']))
 			{
 				foreach ($_POST['user'] as $index => $user_id)
 				{	
-					$user_id=Database::escape_string($user_id);					
-					$is_suscribe[]=CourseManager :: subscribe_user($user_id, $_course['sysCode']);										
-					$is_suscribe_user_id[]=$user_id;					
+					$user_id=Database::escape_string($user_id);	
+					if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher')
+					{			
+						$is_suscribe[]=CourseManager :: subscribe_user($user_id, $_course['sysCode'],COURSEMANAGER);
+					} else {
+						$is_suscribe[]=CourseManager :: subscribe_user($user_id, $_course['sysCode']);
+					}										
+						$is_suscribe_user_id[]=$user_id;					
 				}
 			}
 			

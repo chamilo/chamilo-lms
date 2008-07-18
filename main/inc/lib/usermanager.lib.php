@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 15807 2008-07-17 14:10:59Z pcool $
+<?php // $Id: usermanager.lib.php 15821 2008-07-18 12:15:35Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -685,7 +685,9 @@ class UserManager
 		unlink($production_path['dir'].$user_id.'/'.$production);
 	}
 	/**
-	 * Update an extra field
+	 * Update an extra field. This function is called when a user changes his/her profile
+	 * and by consequence fills or edits his/her extra fields. 
+	 * 
 	 * @param	integer	Field ID
 	 * @param	array	Database columns and their new value
 	 * @return	boolean	true if field updated, false otherwise
@@ -986,14 +988,10 @@ class UserManager
 		
 		if(!empty($fieldoptions) && in_array($fieldtype,array(USER_FIELD_TYPE_RADIO,USER_FIELD_TYPE_SELECT,USER_FIELD_TYPE_SELECT_MULTIPLE,USER_FIELD_TYPE_DOUBLE_SELECT)))
 		{
-			//echo 'storing the options';
 			if($fieldtype == USER_FIELD_TYPE_DOUBLE_SELECT)
 			{
-				//echo 'double select';
 				$twolist = explode('|', $fieldoptions);
 				$counter = 0;
-				//echo $fieldoptions;
-				//print_r($twolist);
 				foreach ($twolist as $individual_list)
 				{
 					$splitted_individual_list = split(';',$individual_list);
@@ -1011,11 +1009,6 @@ class UserManager
 					}
 					$counter++;
 				}
-				/*
-				echo '<pre>';
-				print_r($list);
-				echo '</pre>';
-				*/
 			}
 			else 
 			{
@@ -1052,6 +1045,131 @@ class UserManager
 		}
 		return $return;
 	}
+	
+	/**
+	  * Save the changes in the definition of the extra user profile field
+	  * The function is called after you (as admin) decide to store the changes you have made to one of the fields you defined
+	  * 
+	  * There is quite some logic in this field
+	  * 1.  store the changes to the field (tupe, name, label, default text)
+	  * 2.  remove the options and the choices of the users from the database that no longer occur in the form field 'possible values'. We should only remove
+	  * 	the options (and choices) that do no longer have to appear. We cannot remove all options and choices because if you remove them all 
+	  * 	and simply re-add them all then all the user who have already filled this form will loose their selected value. 
+	  * 3.	we add the options that are newly added
+	  * 
+	  * @example 	current options are a;b;c and the user changes this to a;b;x (removing c and adding x)
+	  * 			we first remove c (and also the entry in the option_value table for the users who have chosen this)
+	  * 			we then add x
+	  * 			a and b are neither removed nor added
+	  * 
+	  * @param 	integer $fieldid		the id of the field we are editing
+	  * @param	string	$fieldvarname	the internal variable name of the field
+	  * @param	int		$fieldtype		the type of the field
+	  * @param	string	$fieldtitle		the title of the field
+	  * @param	string	$fielddefault	the default value of the field
+	  * @param	string	$fieldoptions	Optional comma-separated list of options to provide for select and radio
+	  * @return boolean true
+	  * 
+	  * 
+	  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+	  * @version July 2008
+	  * @since Dokeos 1.8.6
+	  */
+	function save_extra_field_changes($fieldid, $fieldvarname, $fieldtype, $fieldtitle, $fielddefault, $fieldoptions='')
+	{		
+		// database table definition
+		$table_field 				= Database::get_main_table(TABLE_MAIN_USER_FIELD);
+		$table_field_options		= Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
+		$table_field_options_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+		
+		// we first update the field definition with the new values
+		$time = time();
+		$sql = "UPDATE $table_field
+					                SET field_type = '".Database::escape_string($fieldtype)."',
+					                field_variable = '".Database::escape_string($fieldvarname)."',
+					                field_display_text = '".Database::escape_string($fieldtitle)."',
+					                field_default_value = '".Database::escape_string($fielddefault)."',
+					                tms = FROM_UNIXTIME($time)
+					                WHERE field_id = '".Database::escape_string($fieldid)."'";
+		//$result = api_sql_query($sql,__FILE__,__LINE__);
+
+		// we create an array with all the options (will be used later in the script)
+		if($fieldtype == USER_FIELD_TYPE_DOUBLE_SELECT)
+		{
+			$twolist = explode('|', $fieldoptions);
+			$counter = 0;
+			foreach ($twolist as $individual_list)
+			{
+				$splitted_individual_list = split(';',$individual_list);
+				foreach	($splitted_individual_list as $individual_list_option)				
+				{
+					//echo 'counter:'.$counter; 
+					if ($counter == 0)
+					{
+						$list[] = trim($individual_list_option);
+					}
+					else 
+					{
+						$list[] = str_repeat('*',$counter).trim($individual_list_option);
+					}
+				}
+				$counter++;
+			}
+		}
+		else 
+		{
+			$templist = split(';',$fieldoptions);
+			$list = array_map('trim', $templist);
+		}		
+
+		// Remove all the field options (and also the choices of the user) that are NOT in the new list of options
+		$sql = "SELECT * FROM $table_field_options WHERE option_value NOT IN ('".implode("','", $list)."') AND field_id = '".Database::escape_string($fieldid)."'";
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		while ($row = Database::fetch_array($result))
+		{
+			// deleting the option
+			$sql_delete_option = "DELETE FROM $table_field_options WHERE id='".Database::escape_string($row['id'])."'";
+			$result_delete_option = api_sql_query($sql_delete_option,__FILE__,__LINE__);
+			$return['deleted_options']++;
+			
+			// deleting the answer of the user who has chosen this option
+			$sql_delete_option_value = "DELETE FROM $table_field_options_values WHERE field_id = '".Database::escape_string($fieldid)."' AND field_value = '".Database::escape_string($row['option_value'])."'";
+			$result_delete_option_value = api_sql_query($sql_delete_option_value,__FILE__,__LINE__);
+			$return['deleted_option_values'] = $return['deleted_option_values'] + Database::affected_rows();
+		}
+		
+		// we now try to find the field options that are newly added
+		$sql = "SELECT * FROM $table_field_options WHERE field_id = '".Database::escape_string($fieldid)."'";
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		while ($row = Database::fetch_array($result))
+		{
+			// we remove every option that is already in the database from the $list
+			if (in_array(trim($row['option_display_text']),$list))
+			{
+				$key = array_search(trim($row['option_display_text']),$list);
+				unset($list[$key]);
+				echo 'unset '.$key.$list[$key];
+			}
+		}
+		
+		// we store the new field options in the database
+		foreach ($list as $key=>$option)
+		{
+			$sql = "SELECT MAX(option_order) FROM $table_field_options WHERE field_id = '".Database::escape_string($fieldid)."'";
+			$res = api_sql_query($sql,__FILE__,__LINE__);
+			$max = 1;
+			if(Database::num_rows($res)>0)
+			{
+				$row = Database::fetch_array($res);
+				$max = $row[0]+1;
+			}
+			$time = time();
+			$sql = "INSERT INTO $table_field_options (field_id,option_value,option_display_text,option_order,tms) VALUES ('".Database::escape_string($fieldid)."','".Database::escape_string($option)."','".Database::escape_string($option)."',$max,FROM_UNIXTIME($time))";				
+			$result = api_sql_query($sql,__FILE__,__LINE__);
+		}
+		return true;
+	}	
+	
 	/**
 	 * Check if a field is available
 	 * @param	string	the wanted username
@@ -1116,6 +1234,37 @@ class UserManager
 		}
 		
 		return $extra_data;
+	}
+	
+	/**
+	 * Get all the extra field information of a certain field (also the options)
+	 *
+	 * @param integer $field_id the id of the field we want to know everything of
+	 * @return array $return containing all th information about the extra profile field 
+	 * 
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+	 * @version July 2008
+	 * @since Dokeos 1.8.6
+	 */
+	function get_extra_field_information($field_id)
+	{
+		// database table definition
+		$table_field 			= Database::get_main_table(TABLE_MAIN_USER_FIELD);
+		$table_field_options	= Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
+		
+		// all the information of the field
+		$sql = "SELECT * FROM $table_field WHERE id='".Database::escape_string($field_id)."'";
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$return = Database::fetch_array($result);
+		
+		// all the options of the field
+		$sql = "SELECT * FROM $table_field_options WHERE field_id='".Database::escape_string($field_id)."' ORDER BY option_order ASC";
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		while ($row = Database::fetch_array($result))
+		{
+			$return['options'][$row['id']] = $row;
+		}		
+		return $return;
 	}
 	
 	/**

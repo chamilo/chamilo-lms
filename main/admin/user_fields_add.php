@@ -1,4 +1,4 @@
-<?php // $Id: user_fields_add.php 15740 2008-07-07 09:30:44Z pcool $
+<?php // $Id: user_fields_add.php 15821 2008-07-18 12:15:35Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -53,6 +53,7 @@ $tool_name = get_lang('AddUserFields');
 // Create the form
 $form = new FormValidator('user_fields_add');
 // Field variable name
+$form->addElement('hidden','fieldid',(int)$_GET['field_id']);
 $form->addElement('text','fieldlabel',get_lang('FieldLabel'));
 $form->applyFilter('fieldlabel','html_filter');
 $form->applyFilter('fieldlabel','trim');
@@ -72,7 +73,7 @@ $types[USER_FIELD_TYPE_DATETIME] = get_lang('FieldTypeDatetime');
 $types[USER_FIELD_TYPE_DOUBLE_SELECT] 	= get_lang('FieldTypeDoubleSelect');
 $types[USER_FIELD_TYPE_DIVIDER] 		= get_lang('FieldTypeDivider');
 $form->addElement('select','fieldtype',get_lang('FieldType'),$types);
-$form->addRule('fieltype', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('fieldtype', get_lang('ThisFieldIsRequired'), 'required');
 // Field display name
 $form->addElement('text','fieldtitle',get_lang('FieldTitle'));
 $form->applyFilter('fieldtitle','html_filter');
@@ -85,8 +86,29 @@ $form->applyFilter('fieldoptions','trim');
 $form->addElement('text','fielddefaultvalue',get_lang('FieldDefaultValue'));
 $form->applyFilter('fielddefaultvalue','trim');
 
-// Set default values
+// Set default values (only not empty when editing)
 $defaults = array();
+if (is_numeric($_GET['field_id']))
+{
+	$form_information = UserManager::get_extra_field_information((int)$_GET['field_id']);
+	$defaults['fieldtitle'] = $form_information['field_display_text'];
+	$defaults['fieldlabel'] = $form_information['field_variable'];
+	$defaults['fieldtype'] = $form_information['field_type'];
+	$count = 0;
+	// we have to concatenate the options
+	foreach ($form_information['options'] as $option_id=>$option)
+	{
+		if ($count<>0)
+		{
+			$defaults['fieldoptions'] = $defaults['fieldoptions'].'; '.$option['option_display_text'];
+		}
+		else 
+		{
+			$defaults['fieldoptions'] = $option['option_display_text'];
+		}
+		$count++;
+	}
+}
 $form->setDefaults($defaults);
 // Submit button
 $form->addElement('submit', 'submit', get_lang('Add'));
@@ -102,8 +124,16 @@ if( $form->validate())
 		$fieldtitle = $field['fieldtitle'];
 		$fielddefault = $field['fielddefaultvalue'];
 		$fieldoptions = $field['fieldoptions']; //comma-separated list of options
-	
+		if (is_numeric($field['fieldid']) AND !empty($field['fieldid']))
+		{
+			UserManager:: save_extra_field_changes($field['fieldid'],$fieldlabel,$fieldtype,$fieldtitle,$fielddefault,$fieldoptions);
+			$message = get_lang('FieldEdited');
+		}
+		else 
+		{
 		$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault,$fieldoptions);
+			$message = get_lang('FieldAdded');
+		}
 		Security::clear_token();
 		header('Location: user_fields.php?action=show_message&message='.urlencode(get_lang('FieldAdded')));
 		exit ();
@@ -119,7 +149,8 @@ if( $form->validate())
 // Display form
 Display::display_header($tool_name);
 //api_display_tool_title($tool_name);
-if(!empty($_GET['message'])){
+if(!empty($_GET['message']))
+{
 	Display::display_normal_message($_GET['message']);
 }
 //else

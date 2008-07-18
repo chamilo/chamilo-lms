@@ -175,9 +175,9 @@ if(1)
 
 	// Create a sortable table with user-data
 	$parameters['sec_token'] = Security::get_token();
-	$column_show = array(1,1,1,1,1,1,1,1,0);
-	$column_order = array(1,2,3,4,5,6,7,8,9);
-	$extra_fields = UserManager::get_extra_fields(0,50,5,'ASC');
+	$column_show = array(1,1,1,1,1,1,1,1,0,0);
+	$column_order = array(1,2,3,4,5,6,7,8,9,10);
+	$extra_fields = UserManager::get_extra_fields(0,100,5,'ASC');
 	$number_of_extra_fields = count($extra_fields);
 
  
@@ -395,6 +395,18 @@ function delete_user_fields($field_id)
 		// delete the field values
 		$sql = "DELETE FROM $table_user_field_values WHERE field_id = '".Database::escape_string($field_id)."'";
 		$result = api_sql_query($sql,__FILE__,__LINE__);	
+		
+		// recalculate the field_order because the value is used to show/hide the up/down icon
+		// and the field_order value cannot be bigger than the number of fields
+		$sql = "SELECT * FROM $table_user_field ORDER BY field_order ASC";
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$i = 1;
+		while($row = Database::fetch_array($result))
+		{
+			$sql_reorder = "UPDATE $table_user_field SET field_order = '".Database::escape_string($i)."' WHERE id = '".Database::escape_string($row['id'])."'";
+			$result_reorder = api_sql_query($sql_reorder,__FILE__,__LINE__);
+			$i++;
+		}
 		
 		// field was deleted so we return true
 		return true;

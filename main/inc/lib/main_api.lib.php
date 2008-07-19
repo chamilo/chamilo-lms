@@ -1881,13 +1881,18 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 /**
 *	Displays a form (drop down menu) so the user can select his/her preferred language.
 *	The form works with or without javascript
+*   @param  boolean Hide form if only one language available (defaults to false = show the box anyway)
+*   @return void Display the box directly
 */
-function api_display_language_form()
+function api_display_language_form($hide_if_no_choice=false)
 {
 	$platformLanguage = api_get_setting('platformLanguage');
 	$dirname = api_get_path(SYS_PATH)."main/lang/"; // this line is probably no longer needed
 	// retrieve a complete list of all the languages.
 	$language_list = api_get_languages();
+    if (count($language_list['name'])<=1 && $hide_if_no_choice == true) {
+    	return; //don't show any form
+    }
 	// the the current language of the user so that his/her language occurs as selected in the dropdown menu
 	if(isset($_SESSION['user_language_choice']))
 	{

@@ -23,6 +23,7 @@
 */
 /*
  * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
+ * Somes fixes by Julio Montoya
  */
 ob_start();
  $nameTools= 'Sessions';
@@ -106,8 +107,6 @@ if($nb_sessions > 0)
 			<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
 			<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
 		  </div>';
-		  
-		  
 	$table = new SortableTable('tracking', 'count_sessions_coached');
 	$table -> set_header(0, get_lang('Title'));
 	$table -> set_header(1, get_lang('Status'));

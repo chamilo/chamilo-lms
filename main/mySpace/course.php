@@ -5,7 +5,7 @@
  ob_start();
  $nameTools= 'Cours';
  // name of the language file that needs to be included 
-$language_file = array ('registration', 'index','trad4all', 'tracking');
+$language_file = array ('admin','registration', 'index','trad4all', 'tracking');
  $cidReset=true;
  require ('../inc/global.inc.php');
  require_once (api_get_path(LIBRARY_PATH).'tracking.lib.php');
@@ -13,7 +13,8 @@ $language_file = array ('registration', 'index','trad4all', 'tracking');
  require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
  
  $this_section = "session_my_space";
- 
+ $id_session = intval($_GET['id_session']);
+
  api_block_anonymous_users();
  $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
  
@@ -33,15 +34,30 @@ $language_file = array ('registration', 'index','trad4all', 'tracking');
  	 $interbreadcrumb[] = array ("url" => "teachers.php", "name" => get_lang('Teachers'));
  }
  
- Display :: display_header($nameTools);
-
-
 
 function count_courses()
 {
 	global $nb_courses;
 	return $nb_courses;
 }
+ //checking if the current coach is the admin coach
+$show_import_icon=false;
+
+if(!api_is_platform_admin())
+{
+	$sql = 'SELECT id_coach FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
+	$rs = api_sql_query($sql,__FILE__,__LINE__);
+	if(Database::result($rs,0,0)!=$_user['user_id'])	
+	{
+		api_not_allowed(true);  
+	}
+	else
+	{
+		$show_import_icon=true;	
+	}
+}
+
+ Display :: display_header($nameTools);
 
 
 // Database Table Definitions 
@@ -52,7 +68,25 @@ $tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
  
-$id_session = intval($_GET['id_session']);
+if (isset($_GET['action']))
+{
+	if ($_GET['action']=='show_message') 
+	{
+		Display :: display_normal_message(stripslashes($_GET['message']),false);
+	}
+	
+	if ($_GET['action']=='error_message') 
+	{
+		Display :: display_error_message(stripslashes($_GET['message']),false);
+	}
+}			
+
+if ($show_import_icon)
+{
+	echo "<div align=\"right\">";
+	echo '<a href="user_import.php?id_session='.$id_session.'&action=export&amp;type=xml">'.Display::return_icon('excel.gif', get_lang('ImportUserListXMLCSV')).'&nbsp;'.get_lang('ImportUserListXMLCSV').'</a>';
+	echo "</div>";
+}
 
 $a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id'], $id_session);
 $nb_courses = count($a_courses);
@@ -77,8 +111,6 @@ $csv_content[] = array(
 				get_lang('AvgAssignments')
 				);
 
-
-	
 foreach($a_courses as $course_code)
 {
 	$nb_students_in_course = 0;

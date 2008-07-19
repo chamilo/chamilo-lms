@@ -26,13 +26,15 @@
 <p>Dokeos 1.8.6 is a major debugging release but includes interesting new features as well.&nbsp;</p>
 <h3>New Features</h3>
 <ul>
-  <li>Improvements to the profiling tool (previously called "User fields") to improve presentation and flexibility</li>
+  <li>Improvements to the profiling tool (previously called "User fields") to improve presentation and flexibility, and allow edition</li>
   <li>Added new authorized charsets for learning path tool</li>
   <li>Official code available in My Reporting (FS#2640)</li>
   <li>Added possibility to switch fill-in-the-blanks answers (FS#2683)</li>
   <li>Added more answers by default to multiple-answers type questions creation (FS#2676)</li>
   <li>Now hiding database password field with *** in install/upgrade procedure (FS#2680)</li>
   <li>Added attempts limit to tests</li>
+  <li>Hide language form if only one language available</li>
+  <li>Added possibility for the course teacher and tutor to delete quiz attempts by users</li>
 </ul>
 <br />
 <h3>Debugging</h3>
@@ -56,6 +58,7 @@
   <li>Removed possible risk of having a database code too large for the course.db_name field (FS#2426)</li>
   <li>Added missing online help for blogs (FS#811)</li>
   <li>Fixed bug showing whole article as link in blog (FS#811)</li>
+  <li>Fixed bug whereby the course permissions were not updated when using the multiple-action mode in course users list</li>
 </ul>
 <br />
 <h3>Known issues</h3>

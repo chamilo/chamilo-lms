@@ -559,8 +559,8 @@ VALUES
 ('extendedprofile_registrationrequired', 'myteach', 'checkbox','User','false', 'ExtendedProfileRegistrationRequiredTitle','ExtendedProfileRegistrationRequiredComment', NULL, 'MyTeach'),
 ('extendedprofile_registrationrequired', 'mypersonalopenarea', 'checkbox','User','false', 'ExtendedProfileRegistrationRequiredTitle','ExtendedProfileRegistrationRequiredComment', NULL, 'MyPersonalOpenArea'),
 ('ldap_filled_tutor_field_value', NULL, 'textfield', 'LDAP', '', 'LDAPFilledTutorFieldValueTitle', 'LDAPFilledTutorFieldValueComment', NULL, ''),
-('registration','phone','textfield','User','false','RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment',NULL,'Phone');
-
+('registration','phone','textfield','User','false','RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment',NULL,'Phone'),
+('add_users_by_coach',NULL,'radio','Platform','false','AddUsersByCoachTitle','AddUsersByCoachComment',NULL,NULL);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -698,7 +698,9 @@ VALUES
 ('ldap_version', '2', 'LDAPVersion2'),
 ('ldap_version', '3', 'LDAPVersion3'),
 ('visio_use_rtmpt','true','Yes'),
-('visio_use_rtmpt','false','No');
+('visio_use_rtmpt','false','No'),
+('add_users_by_coach', 'true', 'Yes'),
+('add_users_by_coach', 'false', 'No');
 
 UNLOCK TABLES;
 

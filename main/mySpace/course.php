@@ -43,21 +43,24 @@ function count_courses()
  //checking if the current coach is the admin coach
 $show_import_icon=false;
 
-if(!api_is_platform_admin())
+if (api_get_setting('add_users_by_coach')=='true')
 {
-	$sql = 'SELECT id_coach FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = api_sql_query($sql,__FILE__,__LINE__);
-	if(Database::result($rs,0,0)!=$_user['user_id'])	
+	if(!api_is_platform_admin())
 	{
-		api_not_allowed(true);  
-	}
-	else
-	{
-		$show_import_icon=true;	
+		$sql = 'SELECT id_coach FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
+		$rs = api_sql_query($sql,__FILE__,__LINE__);
+		if(Database::result($rs,0,0)!=$_user['user_id'])	
+		{
+			api_not_allowed(true);  
+		}
+		else
+		{
+			$show_import_icon=true;	
+		}
 	}
 }
 
- Display :: display_header($nameTools);
+Display :: display_header($nameTools);
 
 
 // Database Table Definitions 

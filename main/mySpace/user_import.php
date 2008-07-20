@@ -239,7 +239,7 @@ function get_user_creator($users,$CourseList, $id_session)
 		{	
 			if ($creator_id != api_get_user_id())
 			{
-				$user['error'] = get_lang('UserAlreadyRegisterByOtherCreator');
+				$user['error'] = get_lang('UserAlreadyRegisteredByOtherCreator');
 				$errors[] = $user;
 			}
 		}	
@@ -579,22 +579,29 @@ if (!api_is_coach())
 }
 */
 //checking if the current coach is the admin coach
-if(!api_is_platform_admin())
+if (api_get_setting('add_users_by_coach')=='true')
 {
-	if (isset($_REQUEST['id_session']))
+	if(!api_is_platform_admin())
 	{
-		$id_session=$_REQUEST['id_session'];
-		$sql = 'SELECT id_coach FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-		$rs = api_sql_query($sql,__FILE__,__LINE__);
-		if(mysql_result($rs,0,0)!=$_user['user_id'])	
+		if (isset($_REQUEST['id_session']))
 		{
-			api_not_allowed(true);  
+			$id_session=$_REQUEST['id_session'];
+			$sql = 'SELECT id_coach FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
+			$rs = api_sql_query($sql,__FILE__,__LINE__);
+			if(mysql_result($rs,0,0)!=$_user['user_id'])	
+			{
+				api_not_allowed(true);  
+			}
 		}
+		else
+		{
+				api_not_allowed(true);  
+		}	
 	}
-	else
-	{
-			api_not_allowed(true);  
-	}	
+}
+else
+{
+	api_not_allowed(true);  
 }
 
 set_time_limit(0);
@@ -642,7 +649,7 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0)
 				header('Location: course.php?id_session='.$id_session.'&action=error_message&message='.urlencode(get_lang('NoSessionId')));
 			}
 		}
-	} 
+	}
 	else
 	{
 		header('Location: course.php?id_session='.$id_session.'&action=error_message&message='.urlencode(get_lang('NoUsersRead')));

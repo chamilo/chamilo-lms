@@ -77,7 +77,9 @@ class FillBlanks extends Question
 
 			$pre_array = explode('::', $objAnswer->selectAnswer(1));
 	
-			$is_set_switchable = explode('@', $pre_array[1]);			
+			//make sure we only take the last bit to find special marks
+			$sz = count($pre_array);
+			$is_set_switchable = explode('@', $pre_array[$sz-1]);			
 			if ($is_set_switchable[1]) 
 			{
 				$defaults['multiple_answer']=1;	
@@ -87,7 +89,11 @@ class FillBlanks extends Question
 				$defaults['multiple_answer']=0;	
 			}
 			
-			$defaults['answer'] = $pre_array[0];
+			//take the complete string except after the last '::'
+			$defaults['answer'] = '';
+			for($i=0;$i<($sz-1);$i++) {
+				$defaults['answer'] .= $pre_array[$i];
+			}
 			$a_weightings = explode(',',$is_set_switchable[0]);
 		}
 		else

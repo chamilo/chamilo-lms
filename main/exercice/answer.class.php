@@ -23,7 +23,7 @@
 *	5 arrays are created to receive the attributes of each answer belonging to a specified question
 * 	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer.class.php 15791 2008-07-15 16:03:52Z juliomontoya $
+* 	@version $Id: answer.class.php 15832 2008-07-21 08:02:02Z yannoo $
 */
 
 
@@ -159,7 +159,7 @@ class Answer
 		//$answerType=$this->selectType();
 
 		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type " .
-				"FROM $TBL_ANSWER question_id='".Database::escape_string($questionId)."' " .
+				"FROM $TBL_ANSWER WHERE question_id='".Database::escape_string($questionId)."' " .
 				"ORDER BY $field $order";
 
 		$result=api_sql_query($sql,__FILE__,__LINE__);

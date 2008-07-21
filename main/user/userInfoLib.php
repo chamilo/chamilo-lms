@@ -264,11 +264,12 @@ function update_user_course_properties($user_id, $course_code, $properties)
     }
     
     	//feature deprecated   tutor_id      	= '".Database::escape_string($properties['tutor'])."'
-    		$sql = "UPDATE $tbl_coursUser
-    						SET 	".$sqlChangeStatus."	           
-	                        role      		= '".Database::escape_string($properties['role'])."'	                                                     
-	                        WHERE   user_id	    	= '".$user_id."'
-	                        AND     course_code		= '".$course_code."'";
+    	$sql = "UPDATE $tbl_coursUser
+    					SET 	".$sqlChangeStatus."	           
+	                    role      		= '".Database::escape_string($properties['role'])."',
+	                    tutor_id      	= '".Database::escape_string($properties['tutor'])."' 	                                                     
+	                    WHERE   user_id	    	= '".$user_id."'
+	                    AND     course_code		= '".$course_code."'";
 	                        
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 

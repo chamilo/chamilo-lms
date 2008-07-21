@@ -1085,14 +1085,23 @@ class CourseManager
 	{		
 		$session_id = intval($session_id);
 		$a_users = array();		
-		$table_users = Database :: get_main_table(TABLE_MAIN_USER);
-		
+		$table_users = Database :: get_main_table(TABLE_MAIN_USER);		
 		$where = array();
 		
-		$sql = 'SELECT DISTINCT user.user_id ';
-        if ( $session_id == 0 ) {
+		if ( $session_id == 0 ) 
+        {
+			$sql = 'SELECT DISTINCT course_rel_user.status, user.user_id ';
+		}
+		else
+		{
+			$sql = 'SELECT DISTINCT user.user_id ';
+		}
+		
+        if ( $session_id == 0 ) 
+        {
         	$sql .= ', course_rel_user.role, course_rel_user.tutor_id ';
-        }		
+        }	
+        	
         $sql .= ' FROM '.$table_users.' as user ';
 
 		if(api_get_setting('use_session_mode')=='true' && $with_session)
@@ -1121,17 +1130,20 @@ class CourseManager
 				  
 		$sql .= ' '.$order_by;
 		$sql .= ' '.$limit;
-
+	 
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		
 		while($user = Database::fetch_array($rs))
 		{
-			$user_infos = Database :: get_user_info_from_id($user['user_id']);
-			//$user_infos['status'] = $user['status'];
-            if ( isset($user['role']) ) {
+			$user_infos = Database :: get_user_info_from_id($user['user_id']);					
+			$user_infos['status'] = $user['status'];
+			//$user['status']=$user_infos['status'] ; 
+            if ( isset($user['role']) ) 
+            {
                 $user_infos['role'] = $user['role'];
             }
-            if ( isset($user['tutor_id']) ) {
+            if ( isset($user['tutor_id']) ) 
+            {
                 $user_infos['tutor_id'] = $user['tutor_id'];
             }                
 			$a_users[$user['user_id']] = $user_infos; 

@@ -518,7 +518,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				$temp[] = $o_course_user['official_code'];
 				
 				
-	/*			// deprecated feature
+				// deprecated feature
 				if(isset($o_course_user['tutor_id']) && $o_course_user['tutor_id']==1)
 				{
 					$temp[] = get_lang('Tutor');
@@ -527,7 +527,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				{
 					$temp[] = '-';
 				}
-	*/			
+				
 				if(isset($o_course_user['status']) && $o_course_user['status']==1)
 				{
 					$temp[] = get_lang('CourseManager');
@@ -653,10 +653,10 @@ $table->set_header($header_nr++, get_lang('OfficialCode'));
 if( api_is_allowed_to_edit())
 {
 	// deprecated feature 
-	// $table->set_header($header_nr++, get_lang('Tutor'),false);
+	$table->set_header($header_nr++, get_lang('Tutor'),false);
 	$table->set_header($header_nr++, get_lang('CourseManager'),false);
 	$table->set_header($header_nr++, get_lang('Active'),false);
-	$table->set_column_filter(7,'active_filter');
+	$table->set_column_filter(8,'active_filter');
 }
 
 //actions column

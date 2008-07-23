@@ -37,7 +37,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 15831 2008-07-21 07:57:34Z yannoo $
+* 	@version $Id: exercice_submit.php 15841 2008-07-23 23:02:52Z dperales $
 */
 
 
@@ -432,7 +432,7 @@ else
 
 echo "<h3>".$exerciseTitle."</h3>";
 
-if( $exerciseAttempts > 0 && !api_is_allowed_to_edit() ){
+if( $exerciseAttempts > 0){
 	$user_id = api_get_user_id();
 	$course_code = api_get_course_id();
 	$sql = 'SELECT count(*)
@@ -444,11 +444,19 @@ if( $exerciseAttempts > 0 && !api_is_allowed_to_edit() ){
 	$attempt = Database::fetch_array($aquery);
 	
 	if( $attempt[0] >= $exerciseAttempts ){ 
-		Display::display_warning_message(sprintf(get_lang('ReachedMaxAttempts'),$exerciseTitle,$exerciseAttempts));
-	    Display::display_footer();	
-	    exit;
+		if(!api_is_allowed_to_edit()){
+			Display::display_warning_message(sprintf(get_lang('ReachedMaxAttempts'),$exerciseTitle,$exerciseAttempts));
+		    Display::display_footer();	
+		    exit;
+		} else {
+			Display::display_warning_message(sprintf(get_lang('ReachedMaxAttemptsAdmin'),$exerciseTitle,$exerciseAttempts));			
+		}
 	}
+	
+	
 }	
+
+
 
 
 if(!empty($error))

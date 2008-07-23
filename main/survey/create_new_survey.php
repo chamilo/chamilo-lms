@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: create_new_survey.php 15616 2008-06-25 10:21:57Z elixir_inter $
+* 	@version $Id: create_new_survey.php 15840 2008-07-23 22:59:44Z dperales $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -150,6 +150,27 @@ $fck_attribute['Height'] = '200';
 $form->addElement('checkbox', 'anonymous', get_lang('Anonymous'));
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'));
+
+$surveytypes[0] = get_lang('Normal');
+$surveytypes[1] = get_lang('Conditional');
+if ($_GET['action'] == 'add'){
+	$form->addElement('select', 'survey_type', get_lang('SelectType'), $surveytypes);
+	
+	$sql = 'SELECT survey_id,title FROM '.$table_survey.' WHERE type = 1';
+	$rs = api_sql_query($sql,__FILE__,__LINE__);
+	$list_surveys[0] = '';
+	while($row = Database::fetch_array($rs,NUM)){
+		$list_surveys[$row[0]] = $row[1];
+	}
+	
+	if(count($list_surveys)>1)$form->addElement('select', 'parent_id', get_lang('ParentId'), $list_surveys);
+}
+
+if ($survey_data['type']==1 || $_GET['action'] == 'add' ){
+	$form->addElement('checkbox', 'one_question_page', get_lang('OneQuestionPerPage'));
+	$form->addElement('checkbox', 'shuffle', get_lang('ActivateShuffle'));
+}
+
 $form->addElement('submit', 'submit_survey', get_lang('Ok'));
 
 // setting the rules

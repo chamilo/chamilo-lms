@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 15556 2008-06-11 20:53:01Z juliomontoya $
+* 	@version $Id: question.php 15840 2008-07-23 22:59:44Z dperales $
 */
 
 // name of the language file that needs to be included
@@ -53,12 +53,24 @@ $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUEST
 $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 
+
+
 // getting the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
 $urlname = substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
 if (strlen(strip_tags($survey_data['title'])) > 40)
 {
 	$urlname .= '...';
+}
+
+if($survey_data['type']==1){
+	$sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_GROUP).' WHERE survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
+	$rs = api_sql_query($sql,__FILE__,__LINE__);
+	$row = Database::fetch_array($rs,NUM);
+	if($row==false) {
+		header('Location: survey.php?survey_id='.(int)$_GET['survey_id'].'&message='.'YouNeedToCreateGroups');
+		exit;	
+	}
 }
 
 // breadcrumbs
@@ -99,7 +111,7 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types))
 	{	
 		$error_message=$_SESSION['temp_sys_message'];
 		unset($_SESSION['temp_sys_message']);				
-		if ($error_message=='PleaseEnterAQuestion' || $error_message=='PleasFillAllAnswer')
+		if ($error_message=='PleaseEnterAQuestion' || $error_message=='PleasFillAllAnswer'|| $error_message=='PleaseChooseACondition'|| $error_message=='ChooseDifferentCategories')
 		{
 			Display::display_error_message(get_lang($error_message), true);			
 		}		

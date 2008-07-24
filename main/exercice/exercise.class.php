@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 15802 2008-07-17 04:52:13Z yannoo $
+* 	@version $Id: exercise.class.php 15845 2008-07-24 19:21:23Z dperales $
 */
 
 
@@ -138,6 +138,11 @@ class Exercise
 		return $this->exercise;
 	}
 	
+	/**
+	 * returns the number of attempts setted
+	 *
+	 * @return - numeric - exercise attempts
+	 */
 	function selectAttempts()
 	{
 		return $this->attempts;
@@ -318,9 +323,14 @@ class Exercise
 		$this->exercise=$title;
 	}
 	
-	function updateAttempts($title)
+	/**
+	 * changes the exercise max attempts
+	 *
+	 * @param - numeric $attempts - exercise max attempts
+	 */
+	function updateAttempts($attempts)
 	{
-		$this->attempts=$title;
+		$this->attempts=$attempts;
 	}
 
 	/**

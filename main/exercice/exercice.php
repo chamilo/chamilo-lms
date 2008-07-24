@@ -1,4 +1,3 @@
-<?php
 /*
     DOKEOS - elearning and course management software
 
@@ -1002,7 +1001,7 @@ if($_configuration['tracking_enabled'])
 				echo '<td>'.$test.'</td>';
 				echo '<td>'.format_locale_date(get_lang('dateTimeFormatLong'),$results[$i][4]).'</td>';
 		  		echo '<td>'.round(($res/($results[$i][3]!=0?$results[$i][3]:1))*100).'% ('.$res.' / '.$results[$i][3].')</td>';
-				echo '<td>'.(($is_allowedToEdit||$is_tutor)?"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang('Edit').'</a>'.' - '.'<a href="exercice.php?cidReq='.htmlentities($_GET['cidReq']).'&show=result&delete=delete&did='.$id.'" onclick="javascript:if(!confirm(\'Are you sure you want to delete the attempt of the user '.$user.' with date '.$dt.'? if you delete it there is no recovery \')) return false;">'.get_lang('Delete').'</a>':"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show').'</a>').'</td>';
+				echo '<td>'.(($is_allowedToEdit||$is_tutor)?"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang('Edit').'</a>'.' - '.'<a href="exercice.php?cidReq='.htmlentities($_GET['cidReq']).'&show=result&delete=delete&did='.$id.'" onclick="javascript:if(!confirm(\''.sptrinf(get_lang('DeleteAttempt'),$user,$dt).'\')) return false;">'.get_lang('Delete').'</a>':"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show').'</a>').'</td>';
 				echo '</tr>';
 			}
 		}

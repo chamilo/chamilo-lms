@@ -23,7 +23,7 @@
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 15840 2008-07-23 22:59:44Z dperales $
+* 	@version $Id: survey.lib.php 15846 2008-07-24 20:29:41Z dperales $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -77,11 +77,11 @@ class survey_manager
 		$return['survey_share'] 		= $return['is_shared'];
 		$return['survey_introduction'] 	= $return['intro'];
 		$return['survey_thanks'] 		= $return['surveythanks'];
-		$return['survey_type'] 		= $return['type'];
-		$return['one_question_page'] 		= $return['one_question_page'];
+		$return['survey_type'] 		= $return['survey_type'];
+		$return['one_question_per_page'] 		= $return['one_question_per_page'];
 		$return['shuffle'] 		= $return['shuffle'];
 		$return['parent_id'] 		= $return['parent_id'];
-		$return['version'] 		= $return['version'];
+		$return['survey_version'] 		= $return['survey_version'];
 		return $return;
 	}
 
@@ -107,19 +107,20 @@ class survey_manager
 		}*/		
 		$shared_survey_id=0;
 		
-		// check if the code doesn't soon exists in this language
-		$sql = 'SELECT 1 FROM '.$table_survey.' WHERE code="'.Database::escape_string($values['survey_code']).'" AND lang="'.Database::escape_string($values['survey_language']).'"';
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
-		if(Database::num_rows($rs)>0)
-		{
-			$return['message'] = 'ThisSurveyCodeSoonExistsInThisLanguage';
-			$return['type'] = 'error';
-			$return['id']	= isset($values['survey_id']) ? $values['survey_id'] : 0;
-			return $return;
-		}
-
 		if (!$values['survey_id'] OR !is_numeric($values['survey_id']))
 		{
+			
+			// check if the code doesn't soon exists in this language
+			$sql = 'SELECT 1 FROM '.$table_survey.' WHERE code="'.Database::escape_string($values['survey_code']).'" AND lang="'.Database::escape_string($values['survey_language']).'"';
+			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			if(Database::num_rows($rs)>0)
+			{
+				$return['message'] = 'ThisSurveyCodeSoonExistsInThisLanguage';
+				$return['type'] = 'error';
+				$return['id']	= isset($values['survey_id']) ? $values['survey_id'] : 0;
+				return $return;
+			}
+
 			if ($values['anonymous']=='')
 			{
 				$values['anonymous']=0;
@@ -128,40 +129,40 @@ class survey_manager
 			$additional['columns'] = '';
 			$additional['values'] = '';
 			if($values['survey_type']==1){
-				$additional['columns'] = ', type';
+				$additional['columns'] = ', survey_type';
 				$additional['values'] .= ",'1'";
 
 				$additional['columns'] .= ', shuffle';
 				$additional['values'] .= ",'".Database::escape_string($values['shuffle'])."'";
 
-				$additional['columns'] .= ', one_question_page';
-				$additional['values'] .= ",'".Database::escape_string($values['one_question_page'])."'";
+				$additional['columns'] .= ', one_question_per_page';
+				$additional['values'] .= ",'".Database::escape_string($values['one_question_per_page'])."'";
 
 				$additional['columns'] .= ', parent_id';
 				$additional['values'] .= ",'".Database::escape_string($values['parent_id'])."'";
 
 				// logic for versioning surveys
 				if(!empty($values['parent_id'])){
-					$additional['columns'] .= ', version';
-					$sql = 'SELECT version FROM '.$table_survey.' WHERE parent_id = '.$values['parent_id'].' ORDER BY version DESC LIMIT 1';
+					$additional['columns'] .= ', survey_version';
+					$sql = 'SELECT survey_version FROM '.$table_survey.' WHERE parent_id = '.$values['parent_id'].' ORDER BY survey_version DESC LIMIT 1';
 					$rs = api_sql_query($sql,__FILE__,__LINE__);
-					$row = Database::fetch_array($rs,ASSOC);
-					if($row==false) {
-						$sql = 'SELECT version FROM '.$table_survey.' WHERE survey_id = '.$values['parent_id'];
+					if(Database::num_rows($rs)===0) {
+						$sql = 'SELECT survey_version FROM '.$table_survey.' WHERE survey_id = '.$values['parent_id'];
 						$rs = api_sql_query($sql,__FILE__,__LINE__);
 						$getversion = Database::fetch_array($rs,ASSOC);
-						if(empty($getversion['version'])){
-							$additional['values'] .= ",'".++$getversion['version']."'";
+						if(empty($getversion['survey_version'])){
+							$additional['values'] .= ",'".++$getversion['survey_version']."'";
 						} else {
-							$additional['values'] .= ",'".$getversion['version'].".1'";							 
+							$additional['values'] .= ",'".$getversion['survey_version'].".1'";							 
 						}
 					} else {
-						if(strpos($row['version'], '.')===false){
-							$additional['values'] .= ",'".($row['version']+1)."'";
+						if(strpos($row['survey_version'], '.')===false){
+							$row['survey_version'] = $row['survey_version'] + 1;
+							$additional['values'] .= ",'".$row['survey_version']."'";
 						} else {
-							$getlast= split('\.',$row['version']);
+							$getlast= split('\.',$row['survey_version']);
 							$lastversion = array_pop($getlast);
-							$lastversion++;
+							$lastversion = $lastversion + 1;
 							$insertnewversion = implode('.',$getlast).'.'.$lastversion;
 							$additional['values'] .= ",'".$insertnewversion."'";
 						}
@@ -205,10 +206,9 @@ class survey_manager
 			}
 			
 			$additionalsets = ", shuffle = '".Database::escape_string($values['shuffle'])."'";
-			$additionalsets .= ", one_question_page = '".Database::escape_string($values['one_question_page'])."'";
+			$additionalsets .= ", one_question_per_page = '".Database::escape_string($values['one_question_per_page'])."'";
 			
 			$sql = "UPDATE $table_survey SET
-							code 			= '".Database::escape_string($values['survey_code'])."',
 							title 			= '".Database::escape_string($values['survey_title'])."',
 							subtitle 		= '".Database::escape_string($values['survey_subtitle'])."',
 							author 			= '".Database::escape_string($_user['user_id'])."',
@@ -328,7 +328,9 @@ class survey_manager
 
 		//get groups
 		$sql = "SELECT * from $table_survey_group WHERE survey_id='".$parent_survey."'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);		
+		$res = api_sql_query($sql, __FILE__, __LINE__);	
+		if(Database::num_rows($res)===0) return true;
+			
 		while($row = Database::fetch_array($res,ASSOC)){
 			$sql1 = 'INSERT INTO '.$table_survey_group.' (name,description,survey_id) VALUES (\''.Database::escape_string($row['name']).'\',\''.Database::escape_string($row['description']).'\',\''.$new_survey_id.'\')';
 			$res1 = api_sql_query($sql1, __FILE__, __LINE__);		
@@ -339,9 +341,9 @@ class survey_manager
 		$sql = "SELECT * FROM $table_survey_question WHERE survey_id='".$parent_survey."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		while($row = Database::fetch_array($res,ASSOC)){
-			$sql2 = 'INSERT INTO '.$table_survey_question.' (survey_id,survey_question,survey_question_comment,type,display,sort,shared_question_id,max_value,cond_group_basic,cond_group_sec1,cond_group_sec2) VALUES '.
+			$sql2 = 'INSERT INTO '.$table_survey_question.' (survey_id,survey_question,survey_question_comment,type,display,sort,shared_question_id,max_value,survey_group_pri,survey_group_sec1,survey_group_sec2) VALUES '.
 			'(\''.$new_survey_id.'\',\''.Database::escape_string($row['survey_question']).'\',\''.Database::escape_string($row['survey_comment']).'\',\''.$row['type'].'\',\''.$row['display'].'\',\''.$row['sort'].'\',\''.$row['shared_question_id'].'\',\''.$row['max_value'].
-			'\',\''.$group_id[$row['cond_group_basic']].'\',\''.$group_id[$row['cond_group_sec1']].'\',\''.$group_id[$row['cond_group_sec2']].'\')';
+			'\',\''.$group_id[$row['survey_group_pri']].'\',\''.$group_id[$row['survey_group_sec1']].'\',\''.$group_id[$row['survey_group_sec2']].'\')';
 			$res2 = api_sql_query($sql2, __FILE__, __LINE__);
 			$question_id[$row['question_id']] = Database::insert_id();		
 		}
@@ -519,12 +521,12 @@ class survey_manager
 	    $return['shared_question_id']	= $row['shared_question_id'];
 	    $return['maximum_score']		= $row['max_value'];
  		
-  		if($row['cond_group_basic']!=0){
-  			$return['assigned'] = $row['cond_group_basic'];
+  		if($row['survey_group_pri']!=0){
+  			$return['assigned'] = $row['survey_group_pri'];
 	 		$return['choose'] = 1;
    		} else {
- 	 		$return['assigned1'] = $row['cond_group_sec1'];
-  			$return['assigned2'] = $row['cond_group_sec2'];
+ 	 		$return['assigned1'] = $row['survey_group_sec1'];
+  			$return['assigned2'] = $row['survey_group_sec2'];
 	 		$return['choose'] = 2;
   		}
  		
@@ -669,13 +671,12 @@ class survey_manager
 					$additional['value'] = '';
 					if($_POST['choose']==1)
 					{
-						$additional['column'] = ',cond_group_basic';	
+						$additional['column'] = ',survey_group_pri';	
 						$additional['value'] = ",'".Database::escape_string($_POST['assigned'])."'";	
 					} elseif($_POST['choose']==2) {
-						$additional['column'] = ',cond_group_sec1, cond_group_sec2';	
+						$additional['column'] = ',survey_group_sec1, survey_group_sec2';	
 						$additional['value'] = ",'".Database::escape_string($_POST['assigned1'])."'".",'".Database::escape_string($_POST['assigned2'])."'";	
 					}
-
 		
 					// adding the question to the survey_question table
 					$sql = "INSERT INTO $tbl_survey_question (survey_id,survey_question,survey_question_comment,type,display, sort, shared_question_id, max_value".$additional['column'].") VALUES (
@@ -700,9 +701,9 @@ class survey_manager
 					$additionalsets = '';
 					
 					if($_POST['choose']==1){
-						$additionalsets = ',cond_group_basic = \''.Database::escape_string($_POST['assigned']).'\', cond_group_sec1 = \'0\', cond_group_sec2 = \'0\' ';	
+						$additionalsets = ',survey_group_pri = \''.Database::escape_string($_POST['assigned']).'\', survey_group_sec1 = \'0\', survey_group_sec2 = \'0\' ';	
 					} elseif($_POST['choose']==2) {
-						$additionalsets = ',cond_group_basic = \'0\', cond_group_sec1 = \''.Database::escape_string($_POST['assigned1']).'\', cond_group_sec2 = \''.Database::escape_string($_POST['assigned2']).'\' ';		
+						$additionalsets = ',survey_group_pri = \'0\', survey_group_sec1 = \''.Database::escape_string($_POST['assigned1']).'\', survey_group_sec2 = \''.Database::escape_string($_POST['assigned2']).'\' ';		
 					}
 					
 					$setadditionals = $additional['set'][1].$additional['set'][2].$additional['set'][3];
@@ -1246,7 +1247,7 @@ class question
 			$this->html .='	<tr><td colspan="">	
 			<fieldset style="border:1px solid black"><legend>'.get_lang('Condition').'</legend>
 
-			<b>'.get_lang('Basic').'</b><br />
+			<b>'.get_lang('Primary').'</b><br />
 			'.'<input type="radio" name="choose" value="1" '.(($form_content['choose']==1)?'checked':'').
 			'><select name="assigned">'.$grouplist.'</select><br />';
 			

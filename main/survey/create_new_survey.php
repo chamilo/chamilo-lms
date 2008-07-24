@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: create_new_survey.php 15840 2008-07-23 22:59:44Z dperales $
+* 	@version $Id: create_new_survey.php 15846 2008-07-24 20:29:41Z dperales $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -125,7 +125,13 @@ if ($_GET['action'] == 'edit' AND isset($_GET['survey_id']) AND is_numeric($_GET
 {
 	$form->addElement('hidden', 'survey_id');
 }
-$form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '40'));
+
+$survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '40'));
+if ($_GET['action'] == 'edit') {
+	$survey_code->freeze();
+	$form->applyFilter('survey_code', 'strtoupper');
+} 
+
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '100';
 $fck_attribute['ToolbarSet'] = 'Survey';
@@ -156,25 +162,28 @@ $surveytypes[1] = get_lang('Conditional');
 if ($_GET['action'] == 'add'){
 	$form->addElement('select', 'survey_type', get_lang('SelectType'), $surveytypes);
 	
-	$sql = 'SELECT survey_id,title FROM '.$table_survey.' WHERE type = 1';
+	$sql = 'SELECT survey_id,title FROM '.$table_survey.' WHERE survey_type = 1 AND author = '.$_SESSION['_user']['user_id'];
 	$rs = api_sql_query($sql,__FILE__,__LINE__);
-	$list_surveys[0] = '';
-	while($row = Database::fetch_array($rs,NUM)){
-		$list_surveys[$row[0]] = $row[1];
+	if(Database::num_rows($rs)>0){
+		$list_surveys[0] = '';
+		while($row = Database::fetch_array($rs,NUM)){
+			$list_surveys[$row[0]] = $row[1];
+		}
+		$form->addElement('select', 'parent_id', get_lang('ParentSurvey'), $list_surveys);
 	}
-	
-	if(count($list_surveys)>1)$form->addElement('select', 'parent_id', get_lang('ParentId'), $list_surveys);
 }
 
-if ($survey_data['type']==1 || $_GET['action'] == 'add' ){
-	$form->addElement('checkbox', 'one_question_page', get_lang('OneQuestionPerPage'));
+if ($survey_data['survey_type']==1 || $_GET['action'] == 'add' ){
+	$form->addElement('checkbox', 'one_question_per_page', get_lang('OneQuestionPerPage'));
 	$form->addElement('checkbox', 'shuffle', get_lang('ActivateShuffle'));
 }
 
 $form->addElement('submit', 'submit_survey', get_lang('Ok'));
 
 // setting the rules
-$form->addRule('survey_code', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+if ($_GET['action'] == 'add'){
+	$form->addRule('survey_code', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+}
 $form->addRule('survey_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('start_date', get_lang('InvalidDate'), 'date');
 $form->addRule('end_date', get_lang('InvalidDate'), 'date');

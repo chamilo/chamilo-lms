@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 15840 2008-07-23 22:59:44Z dperales $
+* 	@version $Id: question.php 15846 2008-07-24 20:29:41Z dperales $
 */
 
 // name of the language file that needs to be included
@@ -63,11 +63,10 @@ if (strlen(strip_tags($survey_data['title'])) > 40)
 	$urlname .= '...';
 }
 
-if($survey_data['type']==1){
+if($survey_data['survey_type']==1){
 	$sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_GROUP).' WHERE survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
 	$rs = api_sql_query($sql,__FILE__,__LINE__);
-	$row = Database::fetch_array($rs,NUM);
-	if($row==false) {
+	if(Database::num_rows($rs)===0) {
 		header('Location: survey.php?survey_id='.(int)$_GET['survey_id'].'&message='.'YouNeedToCreateGroups');
 		exit;	
 	}

@@ -21,7 +21,7 @@ Tel. +32 (2) 211 34 56
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 15840 2008-07-23 22:59:44Z dperales $
+* 	@version $Id: survey.php 15846 2008-07-24 20:29:41Z dperales $
 *
 * 	@todo use quickforms for the forms
 */
@@ -61,13 +61,13 @@ $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Surv
 // getting the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
 $tool_name = substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
-
+$is_survey_type_1 = ($survey_data['survey_type']==1)?true:false;
 if (strlen(strip_tags($survey_data['title'])) > 40)
 {
 	$tool_name .= '...';
 }
 
-if(($_GET['action']=='addgroup')||($_GET['action']=='deletegroup')){
+if($is_survey_type_1 && ($_GET['action']=='addgroup')||($_GET['action']=='deletegroup')){
 	$table_survey_group = Database::get_course_table(TABLE_SURVEY_GROUP);
 	$_POST['name'] = trim($_POST['name']);
 	if(($_GET['action']=='addgroup')){
@@ -126,7 +126,7 @@ if (isset($_GET['message']))
 		Display::display_warning_message(get_lang($_GET['message']), false);
 	}
 }
-if(!empty($survey_data['version'])) echo '<b>'.get_lang('Version').': '.$survey_data['version'].'</b>';
+if(!empty($survey_data['survey_version'])) echo '<b>'.get_lang('Version').': '.$survey_data['survey_version'].'</b>';
 // We exit here is the first or last question is a pagebreak (which causes errors)
 SurveyUtil::check_first_last_question($_GET['survey_id']);
 
@@ -161,7 +161,7 @@ echo '		<th>'.get_lang('Title').'</th>';
 echo '		<th>'.get_lang('Type').'</th>';
 echo '		<th>'.get_lang('NumberOfOptions').'</th>';
 echo '		<th width="100">'.get_lang('Modify').'</th>';
-if($survey_data['type']==1) echo '<th width="100">'.get_lang('Condition').'</th>';
+if($is_survey_type_1) echo '<th width="100">'.get_lang('Condition').'</th>';
 echo '	</tr>';
 // Displaying the table contents with all the questions
 $question_counter = 1;
@@ -208,12 +208,12 @@ while ($row = mysql_fetch_assoc($result))
 	echo '	</td>';
 	$question_counter++;
 	
-	if($survey_data['type']==1) echo '<td>'.(($survey_data['cond_group_basic']==0)?get_lang('Basic'):get_lang('Secondary')).'</td>';
+	if($is_survey_type_1) echo '<td>'.(($row['survey_group_pri']==0)?get_lang('Secondary'):get_lang('Primary')).'</td>';
 	echo '</tr>'; 
 }
 echo '</table>';
 
-if($survey_data['type']==1)
+if($is_survey_type_1)
 {
 	echo '<br /><br /><b>'.get_lang('ManageGroups').'</b><br /><br />';
 	
@@ -242,7 +242,7 @@ if($survey_data['type']==1)
 		echo	'<input type="submit" value="'.get_lang('Save').'"'.'<input type="button" value="'.get_lang('Cancel').'" onclick="window.location.href = \'survey.php?survey_id='.(int)$_GET['survey_id'].'\';" />';
 	} else {
 		echo	'<input type="text" maxlength="20" name="name" value="" size="10">';
-		echo	'<input type="text" maxlength="150" name="description" value="" size="40">';
+		echo	'<input type="text" maxlength="250" name="description" value="" size="80">';
 		echo	'<input type="submit" value="'.get_lang('Create').'"';	
 	}
 	echo	'</form><br />';
@@ -256,11 +256,11 @@ if($survey_data['type']==1)
 	
 	$sql = 'SELECT id,name,description FROM '.$table_surve_group.' WHERE survey_id = '.Database::escape_string($_GET['survey_id']);
 	$rs = api_sql_query($sql,__FILE__,__LINE__);
-	while($row = Database::fetch_array($rs,NUM)){
-		$grouplist .= '<tr><td>'.$row[1].'</td><td>'.$row[2].'</td><td>'.
-		'<a href="survey.php?survey_id='.(int)$_GET['survey_id'].'&gid='.$row[0].'&action=editgroup">'.
+	while($row = Database::fetch_array($rs,ASSOC)){
+		$grouplist .= '<tr><td>'.$row['name'].'</td><td>'.$row['description'].'</td><td>'.
+		'<a href="survey.php?survey_id='.(int)$_GET['survey_id'].'&gid='.$row['id'].'&action=editgroup">'.
 		Display::return_icon('edit.gif', get_lang('Edit')).'</a> '.
-		'<a href="survey.php?survey_id='.(int)$_GET['survey_id'].'&gid='.$row[0].'&action=deletegroup" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(sprintf(get_lang('DeleteSurveyGroup'),$row[1]).'?',ENT_QUOTES,$charset)).'\')) return false;">'.
+		'<a href="survey.php?survey_id='.(int)$_GET['survey_id'].'&gid='.$row['id'].'&action=deletegroup" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(sprintf(get_lang('DeleteSurveyGroup'),$row['name']).'?',ENT_QUOTES,$charset)).'\')) return false;">'.
 		Display::return_icon('delete.gif', get_lang('Delete')).'</a>'.
 		'</td></tr>';
 	}	

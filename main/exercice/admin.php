@@ -63,7 +63,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 15791 2008-07-15 16:03:52Z juliomontoya $
+* 	@version $Id: admin.php 15842 2008-07-24 16:41:17Z dperales $
 */
 
 
@@ -187,7 +187,7 @@ if($_GET['action'] == 'exportqti2' && !empty($_GET['questionId']))
 	$temp_xml_file = $temp_zip_dir."/qti2export_".$qid.'.xml';
 	file_put_contents($temp_xml_file,$export);
 	$zip_folder=new PclZip($temp_zip_file);	
-	$zip_folder->add($temp_zip_dir, PCLZIP_OPT_REMOVE_PATH, $temp_zip_dir);
+	$zip_folder->add($temp_xml_file, PCLZIP_OPT_REMOVE_ALL_PATH);
 	$name = 'qti2_export_'.$qid.'.zip';
 
 	DocumentManager::file_send_for_download($temp_zip_file,true,$name);

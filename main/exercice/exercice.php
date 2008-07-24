@@ -305,7 +305,7 @@ if($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2')
 	$temp_xml_file = $temp_zip_dir."/qti2export_".$exerciseId.'.xml';
 	file_put_contents($temp_xml_file,$export);
 	$zip_folder=new PclZip($temp_zip_file);	
-	$zip_folder->add($temp_zip_dir, PCLZIP_OPT_REMOVE_PATH, $temp_zip_dir);
+	$zip_folder->add($temp_xml_file, PCLZIP_OPT_REMOVE_ALL_PATH);
 	$name = 'qti2_export_'.$exerciseId.'.zip';
 	
 	//DocumentManager::string_send_for_download($export,true,'qti2export_'.$exerciseId.'.xml');

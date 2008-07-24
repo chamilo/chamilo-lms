@@ -1378,10 +1378,10 @@ function update_Db_course($courseDbName)
 			  anonymous enum('0','1') NOT NULL default '0',
 			  access_condition TEXT DEFAULT NULL,
 			  shuffle bool NOT NULL default '0', 
-			  one_question_page bool NOT NULL default '0', 
-			  version varchar(20) NOT NULL default '', 
+			  one_question_per_page bool NOT NULL default '0', 
+			  survey_version varchar(255) NOT NULL default '', 
 			  parent_id int unsigned NOT NULL, 
-			  type bool NOT NULL default '0', 
+			  survey_type int NOT NULL default '0', 
 			  PRIMARY KEY  (survey_id)
 			)";
 
@@ -1421,9 +1421,9 @@ function update_Db_course($courseDbName)
 			  sort int NOT NULL,
 			  shared_question_id int(11),
 			  max_value int(11),
-			  cond_group_basic int unsigned NOT NULL default '0',
-			  cond_group_sec1 int unsigned NOT NULL default '0',
-			  cond_group_sec2 int unsigned NOT NULL default '0',
+			  survey_group_pri int unsigned NOT NULL default '0',
+			  survey_group_sec1 int unsigned NOT NULL default '0',
+			  survey_group_sec2 int unsigned NOT NULL default '0',
 			  PRIMARY KEY  (question_id)
 			)";
 	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
@@ -1470,7 +1470,7 @@ function update_Db_course($courseDbName)
 	$sql = "CREATE TABLE `".$TABLESURVEYGROUP."` (
 			  id int unsigned NOT NULL auto_increment,
 			  name(20) NOT NULL,
-			  description(200) NOT NULL, 
+			  description(255) NOT NULL, 
 			  survey_id int unsigned NOT NULL,
 			  PRIMARY KEY  (id)
 			)";

@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 15236 2008-05-08 08:15:21Z pcool $
+// $Id: settings.php 15848 2008-07-25 19:13:50Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -532,7 +532,7 @@ function store_plugins()
 		{
 			//$sql = "INSERT into $table_settings_current (variable,category,selected_value) VALUES ('".$form_name_elements['1']."','Plugins','".$form_name_elements['0']."')";
 			//api_sql_query($sql, __LINE__, __FILE__);
-			api_add_setting($form_name_elements['0'],$form_name_elements['1'],null,null,'Plugins',null,null,null,null,$_configuration['access_url'],1);			
+			api_add_setting($form_name_elements['0'],$form_name_elements['1'],null,null,'Plugins',$form_name_elements['0'],null,null,null,$_configuration['access_url'],1);			
 		}
 	}
 }

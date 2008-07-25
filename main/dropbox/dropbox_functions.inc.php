@@ -1079,7 +1079,7 @@ function feedback_form()
 	if ($number_users_who_see_file>1)
 	{
 		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea><br /><input type="submit" name="store_feedback" value="'.get_lang('Ok').'" 
-			onclick="document.form_tablename.attributes.action.value = document.location;document.form_tablename.submit();"/>';
+			onclick="document.form_tablename.attributes.action.value = document.location;"/>';
 	}
 	else
 	{

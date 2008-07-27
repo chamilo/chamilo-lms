@@ -35,4 +35,4 @@ ALTER TABLE survey ADD survey_type int NOT NULL default 0;
 ALTER TABLE survey_question ADD survey_group_pri int unsigned NOT NULL default 0;
 ALTER TABLE survey_question ADD survey_group_sec1 int unsigned NOT NULL default 0;
 ALTER TABLE survey_question ADD survey_group_sec2 int unsigned NOT NULL default 0;
-CREATE TABLE survey_group (  id int unsigned NOT NULL auto_increment, name(20) NOT NULL, description(255) NOT NULL,  survey_id int unsigned NOT NULL, PRIMARY KEY  (id) );
+CREATE TABLE survey_group (  id int unsigned NOT NULL auto_increment, name varchar(20) NOT NULL, description varchar(255) NOT NULL,  survey_id int unsigned NOT NULL, PRIMARY KEY  (id) );

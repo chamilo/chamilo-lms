@@ -1469,8 +1469,8 @@ function update_Db_course($courseDbName)
 
 	$sql = "CREATE TABLE `".$TABLESURVEYGROUP."` (
 			  id int unsigned NOT NULL auto_increment,
-			  name(20) NOT NULL,
-			  description(255) NOT NULL, 
+			  name varchar(20) NOT NULL,
+			  description varchar(255) NOT NULL, 
 			  survey_id int unsigned NOT NULL,
 			  PRIMARY KEY  (id)
 			)";

@@ -141,6 +141,8 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 		}
 		$mylpi->set_core_exit($core_exit);
 		$mylp->save_item($item_id,false);
+	}else{
+		return $objResponse;
 	}
 	
 	$mystatus = $mylpi->get_status(false);

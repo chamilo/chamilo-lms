@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 15792 2008-07-15 17:06:47Z juliomontoya $
+* 	@version $Id: exercise_result.php 15857 2008-07-28 15:00:49Z elixir_julian $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -1016,10 +1016,10 @@ if ($origin != 'learnpath')
 	echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
 	echo '</body></html>';
 }
-$send_email = api_get_course_setting('email_alert_manager_on_new_quiz');
-if ($send_email && count($arrques)>0)
+
+if(count($arrques)>0)
 {
-$mycharset = api_get_setting('platform_charset'); 
+$mycharset = api_get_setting('platform_charset');
 $msg = '<html><head>
 	<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
 	<meta content="text/html; charset='.$mycharset.'" http-equiv="content-type">';
@@ -1077,6 +1077,33 @@ $msg .= '</head>
 	$mail_content = stripslashes($msg1);
 	$student_name = $_SESSION['_user']['firstName'].' '.$_SESSION['_user']['lastName'];
 	$subject = get_lang('OpenQuestionsAttempted');
+	
+	$from = api_get_setting('noreply_email_address');
+	if($from == ''){
+		if(isset($_SESSION['id_session']) && $_SESSION['id_session'] != ''){
+			$sql = 'SELECT user.email,user.lastname,user.firstname FROM '.TABLE_MAIN_SESSION.' as session, '.TABLE_MAIN_USER.' as user 
+					WHERE session.id_coach = user.user_id
+					AND session.id = "'.Database::escape_string($_SESSION['id_session']).'"
+					';
+			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$from = mysql_result($result,0,'email');
+			$from_name = mysql_result($result,0,'firstname').' '.mysql_result($result,0,'lastname');
+		}
+		else{
+			$array = explode(' ',$_SESSION['_course']['titular']);
+			$firstname = $array[1];
+			$lastname = $array[0];
+			$sql = 'SELECT email,lastname,firstname FROM '.TABLE_MAIN_USER.'
+					WHERE firstname = "'.Database::escape_string($firstname).'"
+					AND lastname = "'.Database::escape_string($lastname).'"
+			';
+			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$from = mysql_result($result,0,'email');
+			$from_name = mysql_result($result,0,'firstname').' '.mysql_result($result,0,'lastname');
+		}
+	}
+	
 	api_mail_html($student_name, $to, $subject, $mail_content, $from_name, $from, array('encoding'=>$mycharset,'charset'=>$mycharset));
 }
 ?>
+

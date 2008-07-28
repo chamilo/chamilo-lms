@@ -1,3 +1,4 @@
+<?php
 /*
     DOKEOS - elearning and course management software
 

@@ -1,4 +1,4 @@
-<?php // $Id: document.php 15716 2008-07-02 23:10:47Z juliomontoya $
+<?php // $Id: document.php 15858 2008-07-28 15:07:39Z elixir_inter $
  
 /*
 ==============================================================================
@@ -788,7 +788,9 @@ if (count($row)==5)
 	$column_order[]=4;			
 }
 
-$table = new SortableTableFromArrayConfig($sortable_data,2,20,'tablename',$column_show,$column_order,'ASC');
+$default_column = $is_allowed_to_edit ? 2 : 1;
+$tablename = $is_allowed_to_edit ? 'teacher_table' : 'student_table';
+$table = new SortableTableFromArrayConfig($sortable_data,$default_column,20,$tablename,$column_show,$column_order,'ASC');
  
 $query_vars['curdirpath'] = $curdirpath;
 

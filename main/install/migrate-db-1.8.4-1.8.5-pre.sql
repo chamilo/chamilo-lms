@@ -154,3 +154,4 @@ UPDATE tool SET category='authoring' WHERE name = 'announcement';
 CREATE TABLE calendar_event_repeat (cal_id INT DEFAULT 0 NOT NULL,  cal_type VARCHAR(20),  cal_end INT,  cal_frequency INT DEFAULT 1,  cal_days CHAR(7),  PRIMARY KEY (cal_id));
 CREATE TABLE calendar_event_repeat_not (cal_id INT NOT NULL,  cal_date INT NOT NULL,  PRIMARY KEY ( cal_id, cal_date ));
 ALTER TABLE calendar_event ADD parent_event_id INT NULL;
+ALTER TABLE lp ADD theme varchar(255) not null default '';

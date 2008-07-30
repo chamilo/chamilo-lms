@@ -11,6 +11,7 @@ $tbl_session=Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_course=Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_course_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_session_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $page=intval($_GET['page']);
 $action=$_REQUEST['action'];
@@ -60,12 +61,21 @@ if(!api_is_platform_admin())
 	$where = 'WHERE session_admin_id='.intval($_user['user_id']);
 	$where .= (empty($_POST['keyword']) ? " " : " AND name LIKE '%".addslashes($_POST['keyword'])."%'");
 }
-else
+else{
 	$where .= (empty($_POST['keyword']) ? " " : " WHERE name LIKE '%".addslashes($_POST['keyword'])."%'");
+}
 
-$result=api_sql_query("SELECT id,name,nbr_courses,date_start,date_end 
-						FROM $tbl_session 
-						 $where
+if(trim($where) == ''){
+	$and=" WHERE id_coach=user_id";
+}
+else{
+	$and=" AND id_coach=user_id";
+}
+
+$result=api_sql_query("SELECT id,name,nbr_courses,date_start,date_end, firstname, lastname 
+						FROM $tbl_session, $tbl_user 
+						$where
+						$and
 						ORDER BY $sort 
 						LIMIT $from,".($limit+1),__FILE__,__LINE__);
 
@@ -149,6 +159,7 @@ else
 	  <th><a href="<?php echo api_get_self(); ?>?sort=nbr_courses"><?php echo get_lang('NumberOfCourses'); ?></a></th>
 	  <th><a href="<?php echo api_get_self(); ?>?sort=date_start"><?php echo get_lang('StartDate'); ?></a></th>
 	  <th><a href="<?php echo api_get_self(); ?>?sort=date_end"><?php echo get_lang('EndDate'); ?></a></th>
+	  <th><a href="<?php echo api_get_self(); ?>?sort=coach_name"><?php echo get_lang('Coach'); ?></a></th>
 	  <th><?php echo get_lang('Actions'); ?></th>
 	</tr>
 
@@ -174,6 +185,7 @@ else
 	  <td><a href="session_course_list.php?id_session=<?php echo $enreg['id']; ?>"><?php echo $nb_courses; ?> cours</a></td>
 	  <td><?php echo htmlentities($enreg['date_start'],ENT_QUOTES,$charset); ?></td>
 	  <td><?php echo htmlentities($enreg['date_end'],ENT_QUOTES,$charset); ?></td>
+	  <td><?php echo htmlentities($enreg['firstname'],ENT_QUOTES,$charset).' '.htmlentities($enreg['lastname'],ENT_QUOTES,$charset); ?></td>
 	  <td>
 		<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><img src="../img/add_user_big.gif" border="0" align="absmiddle" title="<?php echo get_lang('SubscribeUsersToSession'); ?>"></a>
 		<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><img src="../img/synthese_view.gif" border="0" align="absmiddle" title="<?php echo get_lang('SubscribeCoursesToSession'); ?>"></a>

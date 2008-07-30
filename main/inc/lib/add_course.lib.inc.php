@@ -1440,6 +1440,7 @@ function update_Db_course($courseDbName)
 	  survey_id int unsigned NOT NULL,
 	  option_text text NOT NULL,
 	  sort int NOT NULL,
+	  value int NOT NULL default '0', 
 	  PRIMARY KEY  (question_option_id)
 	)";
 	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));

@@ -52,17 +52,17 @@ if($action == 'delete')
 	exit();
 }
 
-$limit=20;
+$limit=1;
 $from=$page * $limit;
 
 //if user is crfp admin only list its sessions
 if(!api_is_platform_admin())
 {
 	$where = 'WHERE session_admin_id='.intval($_user['user_id']);
-	$where .= (empty($_POST['keyword']) ? " " : " AND name LIKE '%".addslashes($_POST['keyword'])."%'");
+	$where .= (empty($_REQUEST['keyword']) ? " " : " AND name LIKE '%".addslashes($_REQUEST['keyword'])."%'");
 }
 else{
-	$where .= (empty($_POST['keyword']) ? " " : " WHERE name LIKE '%".addslashes($_POST['keyword'])."%'");
+	$where .= (empty($_REQUEST['keyword']) ? " " : " WHERE name LIKE '%".addslashes($_REQUEST['keyword'])."%'");
 }
 
 if(trim($where) == ''){
@@ -121,7 +121,7 @@ else
 	{
 	?>
 
-	<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Previous'); ?></a>
+	<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Previous'); ?></a>
 
 	<?php
 	}
@@ -138,7 +138,7 @@ else
 	{
 	?>
 
-	<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Next'); ?></a>
+	<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Next'); ?></a>
 
 	<?php
 	}
@@ -213,7 +213,7 @@ else
 	{
 	?>
 
-	<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Previous'); ?></a>
+	<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Previous'); ?></a>
 
 	<?php
 	}
@@ -230,7 +230,7 @@ else
 	{
 	?>
 
-	<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Next'); ?></a>
+	<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Next'); ?></a>
 
 	<?php
 	}

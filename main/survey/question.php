@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 15846 2008-07-24 20:29:41Z dperales $
+* 	@version $Id: question.php 15875 2008-07-30 23:21:03Z juliomontoya $
 */
 
 // name of the language file that needs to be included
@@ -63,7 +63,8 @@ if (strlen(strip_tags($survey_data['title'])) > 40)
 	$urlname .= '...';
 }
 
-if($survey_data['survey_type']==1){
+if($survey_data['survey_type']==1)
+{
 	$sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_GROUP).' WHERE survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
 	$rs = api_sql_query($sql,__FILE__,__LINE__);
 	if(Database::num_rows($rs)===0) {
@@ -87,7 +88,7 @@ if ($_GET['action'] == 'edit')
 }
 
 // the possible question types
-$possible_types = array('yesno', 'multiplechoice', 'multipleresponse', 'open', 'dropdown', 'comment', 'pagebreak', 'percentage', 'score');
+$possible_types = array('personality','yesno', 'multiplechoice', 'multipleresponse', 'open', 'dropdown', 'comment', 'pagebreak', 'percentage', 'score');
 
 // checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types))
@@ -100,10 +101,10 @@ if (!in_array($_GET['type'], $possible_types))
 // displaying the form for adding or editing the question
 if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types))
 {
+	
 	// Displaying the header
 	Display::display_header($tool_name,'Survey');
 	
-
 	$error_message='';	
 	// Displys message if exists					
 	if (isset($_SESSION['temp_sys_message']))
@@ -113,32 +114,48 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types))
 		if ($error_message=='PleaseEnterAQuestion' || $error_message=='PleasFillAllAnswer'|| $error_message=='PleaseChooseACondition'|| $error_message=='ChooseDifferentCategories')
 		{
 			Display::display_error_message(get_lang($error_message), true);			
-		}		
+		} 		
 	}
-	
+	  
 	echo '<img src="../img/'.survey_manager::icon_question($_GET['type']).'" alt="'.get_lang(ucfirst($_GET['type'])).'" title="'.get_lang(ucfirst($_GET['type'])).'" /><br />';
 	echo get_lang(ucfirst($_GET['type']));
 
 	$form = new $_GET['type'];
 
 	// The defaults values for the form
-	$form_content['horizontalvertical'] = 'vertical';
+	$form_content['horizontalvertical'] = 'vertical2';
 	$form_content['answers'] = array('', '');
-		
+	
 	if ($_GET['type'] == 'yesno')
 	{
 		$form_content['answers'][0]=get_lang('Yes');
 		$form_content['answers'][1]=get_lang('No');
 	}
+	
+	if ($_GET['type'] == 'personality')
+	{
+		$form_content['answers'][0]=get_lang('1');
+		$form_content['answers'][1]=get_lang('2');
+		$form_content['answers'][2]=get_lang('3');
+		$form_content['answers'][3]=get_lang('4');
+		$form_content['answers'][4]=get_lang('5');
+		
+		$form_content['values'][0]=0;
+		$form_content['values'][1]=0;
+		$form_content['values'][2]=1;
+		$form_content['values'][3]=2;
+		$form_content['values'][4]=3;	
+	}
+		
 	// We are editing a question
 	if (isset($_GET['question_id']) AND !empty($_GET['question_id']))
 	{
-		$form_content = survey_manager::get_question($_GET['question_id']);
+		echo "aqui".$form_content = survey_manager::get_question($_GET['question_id']);
 	}
 
 	// an action has been performed (for instance adding a possible answer, moving an answer, ...)
 	if ($_POST)
-	{
+	{	
 		$form_content = $_POST;
 		$form_content = $form->handle_action($form_content);
 	}
@@ -147,15 +164,19 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types))
 	{						
 		$form_content['question']=$_SESSION['temp_user_message'];
 		$form_content['answers']=$_SESSION['temp_answers'];
+		$form_content['values']=$_SESSION['temp_values'];
+		
 		unset($_SESSION['temp_user_message']);
-		unset($_SESSION['temp_answers']);								
+		unset($_SESSION['temp_answers']);
+		unset($_SESSION['temp_values']);								
 	}
+	
 	$form->create_form($form_content);
 	$form->render_form();	 
 }
 else
-{
-	$form_content = $_POST;
+{	
+	$form_content = $_POST;	
 	$form = new question();
 	$form->handle_action($form_content);
 }

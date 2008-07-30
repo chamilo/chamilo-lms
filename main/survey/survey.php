@@ -1,27 +1,30 @@
 <?php
 /*
-DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2004-2008 Dokeos SPRL
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-See "documentation/licence.html" more details.
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-Contact:
-Dokeos
-Rue des Palais 44 Paleizenstraat
-B-1030 Brussels - Belgium
-Tel. +32 (2) 211 34 56
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
 
 /**
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 15846 2008-07-24 20:29:41Z dperales $
+* 	@version $Id: survey.php 15875 2008-07-30 23:21:03Z juliomontoya $
 *
 * 	@todo use quickforms for the forms
 */
@@ -67,14 +70,20 @@ if (strlen(strip_tags($survey_data['title'])) > 40)
 	$tool_name .= '...';
 }
 
-if($is_survey_type_1 && ($_GET['action']=='addgroup')||($_GET['action']=='deletegroup')){
+if($is_survey_type_1 && ($_GET['action']=='addgroup')||($_GET['action']=='deletegroup'))
+{
 	$table_survey_group = Database::get_course_table(TABLE_SURVEY_GROUP);
 	$_POST['name'] = trim($_POST['name']);
-	if(($_GET['action']=='addgroup')){
-		if(!empty($_POST['group_id'])){
+	
+	if(($_GET['action']=='addgroup'))
+	{
+		if(!empty($_POST['group_id']))
+		{
 			api_sql_query('UPDATE '.$table_survey_group.' SET description = \''.Database::escape_string($_POST['description']).'\' WHERE id = \''.Database::escape_string($_POST['group_id']).'\'');
 			$sendmsg = 'GroupUpdatedSuccessfully';
-		} elseif(!empty($_POST['name'])){
+		} 
+		elseif(!empty($_POST['name']))
+		{
 			api_sql_query('INSERT INTO '.$table_survey_group.' (name,description,survey_id) values (\''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.Database::escape_string($_GET['survey_id']).'\') ');	
 			$sendmsg = 'GroupCreatedSuccessfully';
 		} else {
@@ -140,18 +149,35 @@ $survey_actions .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_i
 $survey_actions .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
 echo '<div style="float:right;">'.$survey_actions.'</div>';
 
-echo '<div>';
-echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=yesno&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/yesno.gif" /><br />'.get_lang('YesNo').'</a></div>';
-echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multiplechoice&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/mcua.gif" /><br />'.get_lang('MultipleChoice').'</a></div>';
-echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multipleresponse&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/mcma.gif" /><br />'.get_lang('MultipleResponse').'</a></div>';
-echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=open&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/open_answer.gif" /><br />'.get_lang('Open').'</a></div>';
-echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=dropdown&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/dropdown.gif" /><br />'.get_lang('Dropdown').'</a></div>';
-echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=percentage&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/percentagequestion.gif" /><br />'.get_lang('Percentage').'</a></div>';
-echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=score&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/scorequestion.gif" /><br />'.get_lang('Score').'</a></div>';
-echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=comment&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/commentquestion.gif" /><br />'.get_lang('Comment').'</a></div>';
-echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=pagebreak&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/page_end.gif" /><br />'.get_lang('Pagebreak').'</a></div>';
-echo '</div>';
-echo '<div style="clear:both;"></div>';
+//print_r($survey_data);
+
+if ($survey_data['survey_type']==0)
+{	
+	echo '<div>';
+	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=yesno&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/yesno.gif" /><br />'.get_lang('YesNo').'</a></div>';
+	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multiplechoice&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/mcua.gif" /><br />'.get_lang('MultipleChoice').'</a></div>';
+	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multipleresponse&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/mcma.gif" /><br />'.get_lang('MultipleResponse').'</a></div>';
+	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=open&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/open_answer.gif" /><br />'.get_lang('Open').'</a></div>';
+	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=dropdown&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/dropdown.gif" /><br />'.get_lang('Dropdown').'</a></div>';
+	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=percentage&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/percentagequestion.gif" /><br />'.get_lang('Percentage').'</a></div>';
+	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=score&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/scorequestion.gif" /><br />'.get_lang('Score').'</a></div>';
+	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=comment&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/commentquestion.gif" /><br />'.get_lang('Comment').'</a></div>';
+	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=pagebreak&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/page_end.gif" /><br />'.get_lang('Pagebreak').'</a></div>';
+	echo '</div>';
+	echo '<div style="clear:both;"></div>';
+
+}
+else
+{	
+	echo '<div>';
+	//echo '<div style="float:left; text-align:center; margin:5px;"><a href="group.php?'.api_get_cidreq().'&amp;action=add&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/yesno.gif" /><br />'.get_lang('Add groups').'</a></div>';
+	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=personality&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/yesno.gif" /><br />'.get_lang('PersonalityQuestion').'</a></div>';
+	echo '</div>';	 
+	echo '<div style="clear:both;"></div>';	
+}
+
+
+
 
 // Displaying the table header with all the questions
 echo '<table class="data_table">';
@@ -240,7 +266,9 @@ if($is_survey_type_1)
 		echo	'<input type="text" maxlength="150" name="description" value="'.$editedrow['description'].'" size="40">';	
 		echo	'<input type="hidden" name="group_id" value="'.(int)$_GET['gid'].'">';		
 		echo	'<input type="submit" value="'.get_lang('Save').'"'.'<input type="button" value="'.get_lang('Cancel').'" onclick="window.location.href = \'survey.php?survey_id='.(int)$_GET['survey_id'].'\';" />';
-	} else {
+	} 
+	else 
+	{
 		echo	'<input type="text" maxlength="20" name="name" value="" size="10">';
 		echo	'<input type="text" maxlength="250" name="description" value="" size="80">';
 		echo	'<input type="submit" value="'.get_lang('Create').'"';	
@@ -254,7 +282,8 @@ if($is_survey_type_1)
 	echo '		<th width="100">'.get_lang('Modify').'</th>';
 	echo '	</tr>';	
 	
-	$sql = 'SELECT id,name,description FROM '.$table_surve_group.' WHERE survey_id = '.Database::escape_string($_GET['survey_id']);
+	$sql = 'SELECT id,name,description FROM '.$table_surve_group.' WHERE survey_id = '.Database::escape_string($_GET['survey_id']).' ORDER BY name';
+	
 	$rs = api_sql_query($sql,__FILE__,__LINE__);
 	while($row = Database::fetch_array($rs,ASSOC)){
 		$grouplist .= '<tr><td>'.$row['name'].'</td><td>'.$row['description'].'</td><td>'.

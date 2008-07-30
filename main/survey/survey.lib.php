@@ -23,7 +23,8 @@
 /**
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey.lib.php 15846 2008-07-24 20:29:41Z dperales $
+	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
+* 	@version $Id: survey.lib.php 15875 2008-07-30 23:21:03Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -128,7 +129,9 @@ class survey_manager
 			
 			$additional['columns'] = '';
 			$additional['values'] = '';
-			if($values['survey_type']==1){
+			
+			if($values['survey_type']==1)
+			{
 				$additional['columns'] = ', survey_type';
 				$additional['values'] .= ",'1'";
 
@@ -142,7 +145,8 @@ class survey_manager
 				$additional['values'] .= ",'".Database::escape_string($values['parent_id'])."'";
 
 				// logic for versioning surveys
-				if(!empty($values['parent_id'])){
+				if(!empty($values['parent_id']))
+				{
 					$additional['columns'] .= ', survey_version';
 					$sql = 'SELECT survey_version FROM '.$table_survey.' WHERE parent_id = '.$values['parent_id'].' ORDER BY survey_version DESC LIMIT 1';
 					$rs = api_sql_query($sql,__FILE__,__LINE__);
@@ -150,9 +154,12 @@ class survey_manager
 						$sql = 'SELECT survey_version FROM '.$table_survey.' WHERE survey_id = '.$values['parent_id'];
 						$rs = api_sql_query($sql,__FILE__,__LINE__);
 						$getversion = Database::fetch_array($rs,ASSOC);
-						if(empty($getversion['survey_version'])){
+						if(empty($getversion['survey_version']))
+						{
 							$additional['values'] .= ",'".++$getversion['survey_version']."'";
-						} else {
+						} 
+						else 
+						{
 							$additional['values'] .= ",'".$getversion['survey_version'].".1'";							 
 						}
 					} else {
@@ -462,11 +469,13 @@ class survey_manager
 	function icon_question($type)
 	{
 		// the possible question types
-		$possible_types = array('yesno', 'multiplechoice', 'multipleresponse', 'open', 'dropdown', 'comment', 'pagebreak', 'percentage', 'score');
+		$possible_types = array('personality', 'yesno', 'multiplechoice', 'multipleresponse', 'open', 'dropdown', 'comment', 'pagebreak', 'percentage', 'score');
 
 		// the images array
-		$icon_question = array(
+		$icon_question = array
+				(
 				'yesno' 			=> 'yesno.gif',
+				'personality' 			=> 'yesno.gif',
 				'multiplechoice' 	=> 'mcua.gif',
 				'multipleresponse' 	=> 'mcma.gif',
 				'open' 				=> 'open_answer.gif',
@@ -521,10 +530,13 @@ class survey_manager
 	    $return['shared_question_id']	= $row['shared_question_id'];
 	    $return['maximum_score']		= $row['max_value'];
  		
-  		if($row['survey_group_pri']!=0){
+  		if($row['survey_group_pri']!=0)
+  		{
   			$return['assigned'] = $row['survey_group_pri'];
 	 		$return['choose'] = 1;
-   		} else {
+   		} 
+   		else 
+   		{
  	 		$return['assigned1'] = $row['survey_group_sec1'];
   			$return['assigned2'] = $row['survey_group_sec2'];
 	 		$return['choose'] = 2;
@@ -537,6 +549,9 @@ class survey_manager
 		{
 			/** @todo this should be renamed to options instead of answers */
 			$return['answers'][] = $row['option_text'];
+			
+			$return['values'][] = $row['value'];
+			
 			/** @todo this can be done more elegantly (used in reporting) */
 			$return['answersid'][] = $row['question_option_id'];
 		}
@@ -581,7 +596,7 @@ class survey_manager
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = Database::fetch_array($result,'ASSOC'))
 		{
-			$return[$row['question_id']]['answers'][] = $row['option_text'];
+			$return[$row['question_id']]['answers'][] = $row['option_text'];			
 		}
 
 		return $return;
@@ -598,8 +613,8 @@ class survey_manager
 	 */
 	 
 	function save_question($form_content)
-	{	
-	global $survey_data;
+	{			
+		global $survey_data;
 	
 		if (strlen($form_content['question'])>1)
 		{		//checks lenght of the question	
@@ -607,7 +622,8 @@ class survey_manager
 			
 			if ($survey_data['survey_type'] == 1)
 			{
-				if (empty($form_content['choose'])){
+				if (empty($form_content['choose']))
+				{
 					$return_message = 'PleaseChooseACondition';	 
 					return $return_message;	
 				}
@@ -616,8 +632,7 @@ class survey_manager
 				{
 					$return_message = 'ChooseDifferentCategories';	 
 					return $return_message;	
-				}
-				
+				}				
 			}
 					
 			if ($form_content['type'] != 'percentage')
@@ -669,11 +684,14 @@ class survey_manager
 					//some variables defined for survey-test type
 					$additional['column'] = '';
 					$additional['value'] = '';
+					
 					if($_POST['choose']==1)
 					{
 						$additional['column'] = ',survey_group_pri';	
 						$additional['value'] = ",'".Database::escape_string($_POST['assigned'])."'";	
-					} elseif($_POST['choose']==2) {
+					} 
+					elseif($_POST['choose']==2) 
+					{
 						$additional['column'] = ',survey_group_sec1, survey_group_sec2';	
 						$additional['value'] = ",'".Database::escape_string($_POST['assigned1'])."'".",'".Database::escape_string($_POST['assigned2'])."'";	
 					}
@@ -700,9 +718,12 @@ class survey_manager
 				{
 					$additionalsets = '';
 					
-					if($_POST['choose']==1){
+					if($_POST['choose']==1)
+					{
 						$additionalsets = ',survey_group_pri = \''.Database::escape_string($_POST['assigned']).'\', survey_group_sec1 = \'0\', survey_group_sec2 = \'0\' ';	
-					} elseif($_POST['choose']==2) {
+					} 
+					elseif($_POST['choose']==2) 
+					{
 						$additionalsets = ',survey_group_pri = \'0\', survey_group_sec1 = \''.Database::escape_string($_POST['assigned1']).'\', survey_group_sec2 = \''.Database::escape_string($_POST['assigned2']).'\' ';		
 					}
 					
@@ -841,7 +862,7 @@ class survey_manager
 		$sql2 = "UPDATE $table_survey_question SET sort = '".Database::escape_string($question_sort_one)."' WHERE question_id='".Database::escape_string($question_id_two)."'";
 		$result = api_sql_query($sql2, __FILE__, __LINE__);
 	}
-
+  
 
 	/**
 	 * This function deletes all the questions of a given survey
@@ -942,7 +963,6 @@ class survey_manager
 	 *
 	 * @param array $form_content
 	 * @return
-	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 *
@@ -974,19 +994,24 @@ class survey_manager
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 		}
 
-		$counter=1;		
+		$counter=1;
 		if(is_array($form_content['answers']))
 		{
-			foreach ($form_content['answers'] as $key=>$answer)
+			
+			//foreach ($form_content['answers'] as $key=>$answer)			{
+			for ($i=0;$i<count($form_content['answers']);$i++)
 			{
-				$sql = "INSERT INTO $table_survey_question_option (question_id, survey_id, option_text, sort) VALUES (
+				echo $sql = "INSERT INTO $table_survey_question_option (question_id, survey_id, option_text, value,sort) VALUES (
 								'".Database::escape_string($form_content['question_id'])."',
 								'".Database::escape_string($form_content['survey_id'])."',
-								'".Database::escape_string($answer)."',
-								'".Database::escape_string($counter)."')";
+								'".Database::escape_string($form_content['answers'][$i])."',
+								'".Database::escape_string($form_content['values'][$i])."',
+								'".Database::escape_string($counter)."')"; 
 				$result = api_sql_query($sql, __FILE__, __LINE__);
 				$counter++;
+				echo "<br>";
 			}
+			
 		}
 	}
 
@@ -1226,10 +1251,11 @@ class question
 		if($survey_data['survey_type']==1)
 		{
 			$table_surve_group = Database::get_course_table(TABLE_SURVEY_GROUP);
-			$sql = 'SELECT id,name FROM '.$table_surve_group.' WHERE survey_id = '.(int)$_GET['survey_id'];
+			$sql = 'SELECT id,name FROM '.$table_surve_group.' WHERE survey_id = '.(int)$_GET['survey_id'].' ORDER BY name';
 			$rs = api_sql_query($sql,__FILE__,__LINE__);
 			
-			while($row = Database::fetch_array($rs,NUM)){
+			while($row = Database::fetch_array($rs,NUM))
+			{
 				$glist .= '<option value="'.$row[0].'" >'.$row[1].'</option>';
 			}	
 			
@@ -1340,11 +1366,11 @@ class question
 		{					
 			$message = survey_manager::save_question($form_content);
 									
-			if ($message == 'QuestionAdded' || $message == 'QuestionUpdated' ) {
+			if ($message == 'QuestionAdded' || $message == 'QuestionUpdated' ) 
+			{
 				
 				$sql='SELECT COUNT(*) FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION).' WHERE survey_id = '.(int)$_GET['survey_id'];
-				$res = Database :: fetch_array (api_sql_query($sql, __FILE__, __LINE__));
-				
+				$res = Database :: fetch_array (api_sql_query($sql, __FILE__, __LINE__));				
 				
 				if ($config['survey']['debug'])
 				{								
@@ -1358,10 +1384,12 @@ class question
 			}
 			else 
 			{			
-				if ($message == 'PleaseEnterAQuestion' || $message=='PleasFillAllAnswer'|| $message=='PleaseChooseACondition'|| $message=='ChooseDifferentCategories'){							
+				if ($message == 'PleaseEnterAQuestion' || $message=='PleasFillAllAnswer'|| $message=='PleaseChooseACondition'|| $message=='ChooseDifferentCategories')
+				{							
 					$_SESSION['temp_user_message']=$form_content['question'];
 					$_SESSION['temp_sys_message']=$message;
-					$_SESSION['temp_answers']=$form_content['answers'];																						
+					$_SESSION['temp_answers']=$form_content['answers'];
+					$_SESSION['temp_values']=$form_content['values'];																								
 					header('location:question.php?'.api_get_cidreq().'&question_id='.Security::remove_XSS($_GET['question_id']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&action='.Security::remove_XSS($_GET['action']).'&type='.Security::remove_XSS($_GET['type']).'');																  										
 				}
 				
@@ -1607,6 +1635,126 @@ class multiplechoice extends question
 	 * @param unknown_type $form_content
 	 *
 	 * @todo it would make more sense to consider yesno as a special case of multiplechoice and not the other way around
+	 *
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @version January 2007
+	 */
+	function render_question($form_content, $answers=array())
+	{
+		$question = new yesno();
+		$question->render_question($form_content, $answers);
+	}
+}
+
+
+class personality extends question
+{
+	/**
+	 * This function creates the form elements for the multiple response questions
+	 *
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @version January 2007
+	 */
+	function create_form($form_content)
+	{
+		$this->html = parent::create_form($form_content);
+		$this->html .= '	<tr>';
+		$this->html .= '		<td colspan="2"><strong>'.get_lang('DisplayAnswersHorVert').'</strong></td>';
+		$this->html .= '	</tr>';
+		// Horizontal or vertical
+		$this->html .= '	<tr>';
+		$this->html .= '		<td align="right" valign="top">&nbsp;</td>';
+		$this->html .= '		<td>';
+		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
+		
+		if ($form_content['horizontalvertical'] == 'horizontal')
+		{
+			$this->html .= 'checked="checked"';
+		}
+		
+		$this->html .= '/>'.get_lang('Horizontal').'</label><br />';
+    	$this->html .= '		  <input name="horizontalvertical" type="radio" value="vertical" ';
+    	
+		if ($form_content['horizontalvertical'] == 'vertical')
+		{
+			$this->html .= 'checked="checked"';
+		}
+		
+    	$this->html .= ' />'.get_lang('Vertical').'</label>';		$this->html .= '		</td>';
+		$this->html .= '		<td>&nbsp;</td>';
+		$this->html .= '	</tr>';
+		$this->html .='		<tr>
+								<td colspan="">&nbsp;</td>
+							</tr>';
+
+		// The options
+		$this->html .= '	<tr>';
+		$this->html .= '		<td colspan="3"><strong>'.get_lang('AnswerOptions').'</strong></td>';
+		$this->html .= '	</tr>';
+		$total_number_of_answers = count($form_content['answers']);
+		
+		
+		$question_values=array();
+		
+		// values of question options				 
+		foreach ($form_content['values'] as $key=>$value)
+		{
+			$question_values [] = '<input size="3" type="text" id="values['.$key.']" name="values['.$key.']" value="'.$value.'" />';	
+		}
+		
+		$count=0;
+		
+		foreach ($form_content['answers'] as $key=>$value)
+		{
+			$this->html .= '	<tr>';
+			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
+			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
+			$this->html .= '		<td width="500">'.api_return_html_area('answers['.$key.']', html_entity_decode(stripslashes($form_content['answers'][$key]))).'</td>';
+			$this->html .= '		<td>';
+			
+			if ($total_number_of_answers> 2)
+			{
+				$this->html .=$question_values[$count];				
+			}
+			
+			if ($key<$total_number_of_answers-1)
+			{
+				$this->html .= '		<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
+			}
+			else
+			{
+				$this->html .= '		<img src="../img/spacer.gif" alt="'.get_lang('Empty').'" title="'.get_lang('Empty').'" />';
+			}
+			
+			if ($key>0)
+			{
+				$this->html .= '		<input type="image" src="../img/up.gif"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
+			}
+			else
+			{
+				$this->html .= '		<img src="../img/spacer.gif" alt="'.get_lang('Empty').'" title="'.get_lang('Empty').'" />';
+			}
+			
+			if ($total_number_of_answers> 2)
+			{			
+				//$this->html .= '<input type="image" src="../img/delete.gif"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
+			}
+			$this->html .= ' 		</td>';
+			$this->html .= '	</tr>';
+			$count++;
+		}
+		
+	
+			
+		
+		// The buttons for adding or removing
+		//$this->html .= parent :: add_remove_buttons($form_content);
+	}
+
+	/**
+	 * Render the multiple response question type
+	 *
+	 * @param unknown_type $form_content
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007

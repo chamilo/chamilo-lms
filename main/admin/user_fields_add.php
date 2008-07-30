@@ -1,4 +1,4 @@
-<?php // $Id: user_fields_add.php 15821 2008-07-18 12:15:35Z pcool $
+<?php // $Id: user_fields_add.php 15870 2008-07-30 13:38:51Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -48,8 +48,14 @@ $table_uf_val 	= Database :: get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'user_fields.php', 'name' => get_lang('UserFields'));
-
-$tool_name = get_lang('AddUserFields');
+if ($_GET['action']<>'edit')
+{
+	$tool_name = get_lang('AddUserFields');
+}
+else 
+{
+	$tool_name = get_lang('EditUserFields');
+}
 // Create the form
 $form = new FormValidator('user_fields_add');
 // Field variable name
@@ -82,6 +88,10 @@ $form->addRule('fieldtitle', get_lang('ThisFieldIsRequired'), 'required');
 // Field options
 $form->addElement('text','fieldoptions',get_lang('FieldPossibleValues').' <img src="../img/info3.gif" height="16" width="16" alt="'.get_lang('FieldPossibleValuesComment').'" title="'.get_lang('FieldPossibleValuesComment').'">');
 $form->applyFilter('fieldoptions','trim');
+if (is_numeric($_GET['field_id']))
+{
+	$form->addElement('static', 'option_reorder', '', '<a href="user_fields_options.php?field_id='.Security::remove_XSS($_GET['field_id']).'">'.get_lang('ReorderOptions').'</a>');
+}
 // Field default value
 $form->addElement('text','fielddefaultvalue',get_lang('FieldDefaultValue'));
 $form->applyFilter('fielddefaultvalue','trim');

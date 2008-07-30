@@ -53,7 +53,7 @@ $table_userfields_values 	= Database :: get_main_table(TABLE_MAIN_USER_FIELD_VAL
 // breadcrumbs
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'user_fields.php', 'name' => get_lang('UserFields'));
-$interbreadcrumb[] = array ('url' => 'user_fields_add.php?action=edit&field_id='.Security::remove_XSS($_GET['field_id']).'&amp;sec_token='.Security::get_token(), 'name' => get_lang('EditUserFields'));
+$interbreadcrumb[] = array ('url' => 'user_fields_add.php?action=edit&field_id='.Security::remove_XSS($_GET['field_id']).'&amp;sec_token='.$_SESSION['sec_token'], 'name' => get_lang('EditUserFields'));
 
 // name of the tools
 $tool_name = get_lang('UserFieldsSortOptions');

@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 15875 2008-07-30 23:21:03Z juliomontoya $
+* 	@version $Id: question.php 15880 2008-07-31 19:58:31Z yannoo $
 */
 
 // name of the language file that needs to be included
@@ -65,7 +65,7 @@ if (strlen(strip_tags($survey_data['title'])) > 40)
 
 if($survey_data['survey_type']==1)
 {
-	$sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_GROUP).' WHERE survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
+	$sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP).' WHERE survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
 	$rs = api_sql_query($sql,__FILE__,__LINE__);
 	if(Database::num_rows($rs)===0) {
 		header('Location: survey.php?survey_id='.(int)$_GET['survey_id'].'&message='.'YouNeedToCreateGroups');

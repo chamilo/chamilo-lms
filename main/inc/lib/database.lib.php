@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 15839 2008-07-23 22:58:07Z dperales $
+<?php // $Id: database.lib.php 15880 2008-07-31 19:58:31Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -169,7 +169,7 @@ define('TABLE_SURVEY_QUESTION', 'survey_question');
 define('TABLE_SURVEY_QUESTION_OPTION', 'survey_question_option');
 define('TABLE_SURVEY_INVITATION', 'survey_invitation');
 define('TABLE_SURVEY_ANSWER', 'survey_answer');
-define('TABLE_SURVEY_GROUP','survey_group');
+define('TABLE_SURVEY_QUESTION_GROUP','survey_group');
 
 /*
 ==============================================================================

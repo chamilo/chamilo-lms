@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 15878 2008-07-31 12:58:51Z elixir_inter $
+* 	@version $Id: survey.lib.php 15880 2008-07-31 19:58:31Z yannoo $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -305,7 +305,7 @@ class survey_manager
 	{
 		// Database table definitions
 		$table_survey 		= Database :: get_course_table(TABLE_SURVEY);
-		$table_survey_group = Database :: get_course_table(TABLE_SURVEY_GROUP);
+		$table_survey_question_group = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 		if ($shared)
 		{
 			$table_survey 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY);
@@ -316,7 +316,7 @@ class survey_manager
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		
 		// deleting groups of this survey
-		$sql = "DELETE from $table_survey_group WHERE survey_id='".Database::escape_string($survey_id)."'";
+		$sql = "DELETE from $table_survey_question_group WHERE survey_id='".Database::escape_string($survey_id)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 		// deleting the questions of the survey
@@ -329,17 +329,17 @@ class survey_manager
 	{
 		// Database table definitions
 		$table_survey 		= Database :: get_course_table(TABLE_SURVEY);
-		$table_survey_group = Database :: get_course_table(TABLE_SURVEY_GROUP);
+		$table_survey_question_group = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 		$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_options = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
 		//get groups
-		$sql = "SELECT * from $table_survey_group WHERE survey_id='".$parent_survey."'";
+		$sql = "SELECT * from $table_survey_question_group WHERE survey_id='".$parent_survey."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);	
 		if(Database::num_rows($res)===0) return true;
 			
 		while($row = Database::fetch_array($res,ASSOC)){
-			$sql1 = 'INSERT INTO '.$table_survey_group.' (name,description,survey_id) VALUES (\''.Database::escape_string($row['name']).'\',\''.Database::escape_string($row['description']).'\',\''.$new_survey_id.'\')';
+			$sql1 = 'INSERT INTO '.$table_survey_question_group.' (name,description,survey_id) VALUES (\''.Database::escape_string($row['name']).'\',\''.Database::escape_string($row['description']).'\',\''.$new_survey_id.'\')';
 			$res1 = api_sql_query($sql1, __FILE__, __LINE__);		
 			$group_id[$row['id']] = Database::insert_id();
 		}
@@ -1249,8 +1249,8 @@ class question
 
 		if($survey_data['survey_type']==1)
 		{
-			$table_surve_group = Database::get_course_table(TABLE_SURVEY_GROUP);
-			$sql = 'SELECT id,name FROM '.$table_surve_group.' WHERE survey_id = '.(int)$_GET['survey_id'].' ORDER BY name';
+			$table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
+			$sql = 'SELECT id,name FROM '.$table_survey_question_group.' WHERE survey_id = '.(int)$_GET['survey_id'].' ORDER BY name';
 			$rs = api_sql_query($sql,__FILE__,__LINE__);
 			
 			while($row = Database::fetch_array($rs,NUM))

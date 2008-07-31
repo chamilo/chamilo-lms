@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 15875 2008-07-30 23:21:03Z juliomontoya $
+* 	@version $Id: survey.php 15880 2008-07-31 19:58:31Z yannoo $
 *
 * 	@todo use quickforms for the forms
 */
@@ -53,10 +53,10 @@ if (!api_is_allowed_to_edit())
 $table_survey 					= Database :: get_course_table(TABLE_SURVEY);
 $table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_survey_question_group    = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 $user_info 						= Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
-$table_survey_question_group	= Database :: get_main_table(TABLE_SURVEY_QUESTION_GROUP);
 
 // breadcrumbs
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('SurveyList'));
@@ -72,19 +72,18 @@ if (strlen(strip_tags($survey_data['title'])) > 40)
 
 if($is_survey_type_1 && ($_GET['action']=='addgroup')||($_GET['action']=='deletegroup'))
 {
-	$table_survey_group = Database::get_course_table(TABLE_SURVEY_GROUP);
 	$_POST['name'] = trim($_POST['name']);
 	
 	if(($_GET['action']=='addgroup'))
 	{
 		if(!empty($_POST['group_id']))
 		{
-			api_sql_query('UPDATE '.$table_survey_group.' SET description = \''.Database::escape_string($_POST['description']).'\' WHERE id = \''.Database::escape_string($_POST['group_id']).'\'');
+			api_sql_query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\' WHERE id = \''.Database::escape_string($_POST['group_id']).'\'');
 			$sendmsg = 'GroupUpdatedSuccessfully';
 		} 
 		elseif(!empty($_POST['name']))
 		{
-			api_sql_query('INSERT INTO '.$table_survey_group.' (name,description,survey_id) values (\''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.Database::escape_string($_GET['survey_id']).'\') ');	
+			api_sql_query('INSERT INTO '.$table_survey_question_group.' (name,description,survey_id) values (\''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.Database::escape_string($_GET['survey_id']).'\') ');	
 			$sendmsg = 'GroupCreatedSuccessfully';
 		} else {
 			$sendmsg = 'GroupNeedName';
@@ -92,7 +91,7 @@ if($is_survey_type_1 && ($_GET['action']=='addgroup')||($_GET['action']=='delete
 	}	
 		
 	if($_GET['action']=='deletegroup'){
-		api_sql_query('DELETE FROM '.$table_survey_group.' WHERE id = '.Database::escape_string($_GET['gid']).' and survey_id = '.Database::escape_string($_GET['survey_id']));
+		api_sql_query('DELETE FROM '.$table_survey_question_group.' WHERE id = '.Database::escape_string($_GET['gid']).' and survey_id = '.Database::escape_string($_GET['survey_id']));
 		$sendmsg = 'GroupDeletedSuccessfully';	
 	}
 	
@@ -187,10 +186,21 @@ echo '		<th>'.get_lang('Title').'</th>';
 echo '		<th>'.get_lang('Type').'</th>';
 echo '		<th>'.get_lang('NumberOfOptions').'</th>';
 echo '		<th width="100">'.get_lang('Modify').'</th>';
-if($is_survey_type_1) echo '<th width="100">'.get_lang('Condition').'</th>';
+if($is_survey_type_1)
+{ 
+	echo '<th width="100">'.get_lang('Condition').'</th>';
+    echo '<th width="40">'.get_lang('Group').'</th>';
+}
 echo '	</tr>';
 // Displaying the table contents with all the questions
 $question_counter = 1;
+$sql = "SELECT * FROM $table_survey_question_group WHERE survey_id = '".(int)$_GET['survey_id']."' ORDER BY id";
+$result = api_sql_query($sql, __FILE__, __LINE__);
+$groups = array();
+while($row = Database::fetch_array($result))
+{
+    $groups[$row['id']] = $row['name'];
+}
 $sql = "SELECT survey_question.*, count(survey_question_option.question_option_id) as number_of_options
 			FROM $table_survey_question survey_question
 			LEFT JOIN $table_survey_question_option survey_question_option 
@@ -199,8 +209,8 @@ $sql = "SELECT survey_question.*, count(survey_question_option.question_option_i
 			GROUP BY survey_question.question_id
 			ORDER BY survey_question.sort ASC";
 $result = api_sql_query($sql, __FILE__, __LINE__);
-$question_counter_max = mysql_num_rows($result);
-while ($row = mysql_fetch_assoc($result))
+$question_counter_max = Database::num_rows($result);
+while ($row = Database::fetch_array($result,'ASSOC'))
 {
 	echo '<tr>';
 	echo '	<td>'.$question_counter.'</td>';
@@ -234,7 +244,11 @@ while ($row = mysql_fetch_assoc($result))
 	echo '	</td>';
 	$question_counter++;
 	
-	if($is_survey_type_1) echo '<td>'.(($row['survey_group_pri']==0)?get_lang('Secondary'):get_lang('Primary')).'</td>';
+	if($is_survey_type_1)
+    {
+    	echo '<td>'.(($row['survey_group_pri']==0)?get_lang('Secondary'):get_lang('Primary')).'</td>';
+        echo '<td>'.(($row['survey_group_pri']==0)?$groups[$row['survey_group_sec1']].'-'.$groups[$row['survey_group_sec2']]:$groups[$row['survey_group_pri']]).'</td>';
+    }
 	echo '</tr>'; 
 }
 echo '</table>';
@@ -253,14 +267,12 @@ if($is_survey_type_1)
 	
 	echo '<table border="0"><tr><td width="100">'.get_lang('Name').'</td><td>'.get_lang('Description').'</td></tr></table>';
 	
-	$table_surve_group = Database::get_course_table(TABLE_SURVEY_GROUP);
-
 	echo '<form action="survey.php?action=addgroup&survey_id='.(int)$_GET['survey_id'].'" method="post">';
 	if($_GET['action']=='editgroup')
 	{	
-		$sql = 'SELECT name,description FROM '.$table_surve_group.' WHERE id = '.(int)$_GET['gid'].' AND survey_id = '.Database::escape_string($_GET['survey_id']).' limit 1';
+		$sql = 'SELECT name,description FROM '.$table_survey_question_group.' WHERE id = '.(int)$_GET['gid'].' AND survey_id = '.Database::escape_string($_GET['survey_id']).' limit 1';
 		$rs = api_sql_query($sql,__FILE__,__LINE__);
-		$editedrow = Database::fetch_array($rs,ASSOC);
+		$editedrow = Database::fetch_array($rs,'ASSOC');
 	
 		echo	'<input type="text" maxlength="20" name="name" value="'.$editedrow['name'].'" size="10" disabled>';
 		echo	'<input type="text" maxlength="150" name="description" value="'.$editedrow['description'].'" size="40">';	
@@ -282,7 +294,7 @@ if($is_survey_type_1)
 	echo '		<th width="100">'.get_lang('Modify').'</th>';
 	echo '	</tr>';	
 	
-	$sql = 'SELECT id,name,description FROM '.$table_surve_group.' WHERE survey_id = '.Database::escape_string($_GET['survey_id']).' ORDER BY name';
+	$sql = 'SELECT id,name,description FROM '.$table_survey_question_group.' WHERE survey_id = '.Database::escape_string($_GET['survey_id']).' ORDER BY name';
 	
 	$rs = api_sql_query($sql,__FILE__,__LINE__);
 	while($row = Database::fetch_array($rs,ASSOC)){

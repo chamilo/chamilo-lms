@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 15877 2008-07-31 12:55:34Z elixir_inter $
+* 	@version $Id: survey.lib.php 15878 2008-07-31 12:58:51Z elixir_inter $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1009,7 +1009,6 @@ class survey_manager
 								'".Database::escape_string($counter)."')"; 
 				$result = api_sql_query($sql, __FILE__, __LINE__);
 				$counter++;
-				echo "<br>";
 			}
 			
 		}

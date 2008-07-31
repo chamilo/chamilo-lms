@@ -314,8 +314,8 @@ class SystemAnnouncementManager
 		$lang = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
 		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang)
 												VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$lang.")";
-		if ($send_mail<>'0')
-		{
+		if ($send_mail==1)
+		{	
 			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);	
 		}		
 		return api_sql_query($sql,__FILE__,__LINE__);
@@ -365,7 +365,7 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		$sql = "UPDATE ".$db_table." SET lang=$lang,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
 		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' WHERE id='".$id."'";
 		
-		if ($send_mail<>'0')
+		if ($send_mail==1)
 		{
 			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);	
 		}

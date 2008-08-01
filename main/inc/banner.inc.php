@@ -14,7 +14,17 @@
 <div id="institution">
 <a href="<?php echo api_get_path(WEB_PATH);?>index.php" target="_top"><?php echo api_get_setting('siteName') ?></a>
 -
-<a href="<?php echo api_get_setting('InstitutionUrl') ?>" target="_top"><?php echo api_get_setting('Institution') ?></a>
+<?php
+$iurl = api_get_setting('InstitutionUrl');
+if (empty($iurl))
+{
+	echo api_get_setting('Institution');
+}
+else
+{
+	echo '<a href="'.$iurl.'" target="_top">'.api_get_setting('Institution').'</a>';
+}
+?>
 </div>
 
 <?php

@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 15880 2008-07-31 19:58:31Z yannoo $
+* 	@version $Id: survey.lib.php 15882 2008-08-01 05:50:33Z yannoo $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -78,7 +78,7 @@ class survey_manager
 		$return['survey_share'] 		= $return['is_shared'];
 		$return['survey_introduction'] 	= $return['intro'];
 		$return['survey_thanks'] 		= $return['surveythanks'];
-		$return['survey_type'] 		= $return['survey_type'];
+		$return['survey_type'] 		    = $return['survey_type'];
 		$return['one_question_per_page'] 		= $return['one_question_per_page'];
 		$return['shuffle'] 		= $return['shuffle'];
 		$return['parent_id'] 		= $return['parent_id'];

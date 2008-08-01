@@ -181,7 +181,9 @@ if($_POST['formSent'])
 		if(!$exists)
 		{
 			api_sql_query("INSERT INTO $tbl_session_rel_course(id_session,course_code, id_coach) VALUES('$id_session','$enreg_course','$id_coach')",__FILE__,__LINE__);
-
+			
+			//We add in the existing courses table the current course, to not try to add another time the current course
+			$existingCourses[]=array('course_code'=>$enreg_course);
 
 			$nbr_users=0;
 			foreach($UserList as $enreg_user)

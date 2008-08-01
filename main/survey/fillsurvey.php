@@ -210,23 +210,21 @@ if (count($_POST)>0)
 			}
 		}
 	}
-	elseif ($survey_data['survey_type']==='1')	
+	elseif ($survey_data['survey_type']==='1')	//conditional/personality-test type surveys
     {
 		// getting all the types of the question (because of the special treatment of the score question type		
 		
 		$shuffle='';
-		/*
 		if ($survey_data['shuffle']=='1')
 		{
-			$shuffle= ' BY RAND() '	;
+			$shuffle= ' ORDER BY RAND() '	;
 		}
-		*/
-				
 		$sql = "SELECT * FROM $table_survey_question
 				WHERE survey_id = '".Database::escape_string($survey_invitation['survey_id'])."'
-				AND survey_group_pri='0' ORDER BY RAND()
+				AND survey_group_pri='0' $shuffle
 				";
-		$result = api_sql_query($sql, __FILE__, __LINE__);		
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+        // there is only one question type for conditional surveys		
 		while ($row = Database::fetch_array($result,'ASSOC'))
 		{
 			$types[$row['question_id']] = $row['type'];
@@ -235,18 +233,20 @@ if (count($_POST)>0)
 		// looping through all the post values
 		foreach ($_POST as $key=>$value)
 		{
-			// if the post value key contains the string 'question' then it is an answer on a question
+			// if the post value key contains the string 'question' then it is an answer to a question
 			if (strstr($key,'question'))
 			{	
 				// finding the question id by removing 'question'
 				$survey_question_id = str_replace('question', '',$key);				
 				// we select the correct answer and the puntuacion
-				$sql = "SELECT value FROM $table_survey_question_option WHERE question_option_id='".Database::escape_string($value)."'";
+				$sql = "SELECT value FROM $table_survey_question_option " .
+                        " WHERE question_option_id='".Database::escape_string($value)."'";
 				$result = api_sql_query($sql, __FILE__, __LINE__);
 				$row = Database::fetch_array($result,'ASSOC');
-				$option_value = $row['value'];			
-				//$option_value = 0;			
+				$option_value = $row['value'];
+				//$option_value = 0;
 				$survey_question_answer = $value;
+                //we save the answer after making sure that a possible previous attempt is deleted
 				SurveyUtil::remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id);
 				SurveyUtil::store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $value, $option_value, $survey_data);
 				//SurveyUtil::store_answer($user,$survey_id,$question_id, $option_id, $option_value, $survey_data);				
@@ -293,6 +293,7 @@ if (isset($_POST['finish_survey']))
 {	
 	echo '<div id="survey_content" class="survey_content"><strong>'.get_lang('SurveyFinished').'</strong> <br />'.$survey_data['survey_thanks'].'</div>';
 	survey_manager::update_survey_answered($survey_data['survey_id'], $survey_invitation['user'], $survey_invitation['survey_code']);
+    $_SESSION['paged_questios'] = array();
 	Display :: display_footer();
 	exit;
 }
@@ -308,28 +309,37 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 	// as long as there is no pagebreak fount we keep adding questions to the page
 	$questions_displayed = array();
 	$counter = 0;
+    $paged_questions = array();
 	
 	// if non-conditional survey
 	if ($survey_data['survey_type']==='0')
 	{
-		$sql = "SELECT * FROM $table_survey_question
-				WHERE survey_id = '".Database::escape_string($survey_invitation['survey_id'])."'
-				ORDER BY sort ASC";
-		$result = api_sql_query($sql, __FILE__, __LINE__);		
-
-		while ($row = Database::fetch_array($result,'ASSOC'))
-		{
-			if($row['type'] == 'pagebreak')
-			{
-				$counter++;
-			}
-			else
-			{
-				// ids from question of the current survey
-				$paged_questions[$counter][] = $row['question_id']; 
-			}
-		}
-		
+		if(empty($_SESSION['paged_questions']))
+        {
+    		$sql = "SELECT * FROM $table_survey_question
+    				WHERE survey_id = '".Database::escape_string($survey_invitation['survey_id'])."'
+    				ORDER BY sort ASC";
+    		$result = api_sql_query($sql, __FILE__, __LINE__);		
+    
+    		while ($row = Database::fetch_array($result,'ASSOC'))
+    		{
+    			if($row['type'] == 'pagebreak')
+    			{
+    				$counter++;
+    			}
+    			else
+    			{
+    				// ids from question of the current survey
+    				$paged_questions[$counter][] = $row['question_id']; 
+    			}
+    		}
+            $_SESSION['paged_questions'] = $paged_questions;
+        }
+        else
+        {
+        	$paged_questions = $_SESSION['paged_questions'];
+        }
+        
 		if (key_exists($_GET['show'],$paged_questions))
 		{
 			
@@ -378,41 +388,42 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 				
 		if (isset($_POST['personality']))
 		{
-			// I have to calculate the results to get the 3 groups the most near to the personality of the user
-			$paged_group_questions=array();	
-			
+			// Compute the results to get the 3 groups nearest to the user's personality			
 			if ($shuffle=='')
 				$order = 'BY sort ASC ';				
 			else
 				$order = $shuffle;
-				
-			$sql = "SELECT * FROM $table_survey_question
+			
+            // get all the questions from the primary groups
+			/*
+            $sql = "SELECT * FROM $table_survey_question
 				 	 WHERE survey_id = '".$my_survey_id."' 
 				 	 AND survey_group_sec1='0' AND survey_group_sec2='0'  
 				 	 ORDER $order ";
 				 	 
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			//echo "<br>";
 			
+            //Place each question in $page_group_questions[]
 			while ($row = Database::fetch_array($result,'ASSOC'))
-			{			
+			{
 				$paged_group_questions[] = $row['question_id'];
-				$paged_group[] = $row['survey_group_pri'];							
-			}			
+				//$paged_group[] = $row['survey_group_pri'];
+			}
+            */
+            
 			$answer_list=array();
-			//echo "<br>";	print_r($paged_group_questions); print_r($paged_group);	
-			
-			// current user results		
-			$results=array();						
+
+			// get current user results
+			$results=array();
 			$sql = "SELECT survey_group_pri, user, SUM(value) as value
 					FROM $table_survey_answer as survey_answer INNER JOIN $table_survey_question as survey_question 
 					ON  (survey_question.question_id = survey_answer.question_id)
 					WHERE survey_answer.survey_id='".$my_survey_id."' AND
 					survey_answer.user='".$current_user."'
 					GROUP BY survey_group_pri
-					ORDER BY survey_group_pri						
+					ORDER BY survey_group_pri
 					";
-														
+			
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			while ($row = Database::fetch_array($result))
 			{		
@@ -423,7 +434,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 			
 			//echo "<br>";print_r($results);	echo "<br>";
 			
-			// total calculations 
+			// get the total score for each group of questions
 			$totals=array();			
 			$sql = "SELECT SUM(temp.value) as value, temp.survey_group_pri FROM 
 					(SELECT MAX(value) as value,  survey_group_pri, survey_question.question_id 
@@ -446,6 +457,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 			
 			$final_results=array();
 			
+            //get a percentage score for each group
 			for ($i=0; $i< count($totals);$i++)
 			{
 				for ($j=0; $j< count($results);$j++)
@@ -459,7 +471,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 				}				
 			}
 							
-			// ordering 
+			// sort the results by score (getting a list of group IDs by score into $groups)
 			arsort($final_results);
 			$groups=array_keys($final_results);
 			/*
@@ -518,6 +530,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 			*/
 			
 			//i.e 70% - 70% -70% 70%  $equal_count =3
+            // Count the number of scores equal to the first
 			while(1)
 			{
 				if ($result[$i]['value']  == $result[$i+1]['value'])
@@ -530,10 +543,10 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 				}
 				$i++;	
 			}
-			
+            // if we have only 3 or less equal scores (i.e. 0,1 or 2 equalities), then we can use the three first groups
 			if ($equal_count<4)
 			{
-			
+				//if there is one or less score equalities
 				if 	($equal_count==0 || $equal_count==1 )
 				{	
 					//i.e 70% - 70% -0% - 0% 	-	$equal_count = 0 we only get the first 2 options	
@@ -549,7 +562,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
                     //i.e. 70% - 70% - 70%
 					elseif ( ($result[1]['value']  == $result[2]['value'])  &&  ($result[2]['value'] == $result[3]['value']) )
 					{
-						$group_cant=-1;				
+						$group_cant=1;				
 					}
 					else
 					{	// by default we choose the highest 3
@@ -558,6 +571,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 				} 
 				else
 				{
+					//if there are two score equalities
 					$group_cant=$equal_count;
 				}				
 				// conditional_status 
@@ -607,43 +621,54 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 					echo $combi;
                     echo '</pre>';
 					*/
-					// create the new select with the questions								
-					$sql = "SELECT * FROM $table_survey_question
-								 WHERE survey_id = '".$my_survey_id."' 
-							  	 AND ($secondary )
-								 ORDER BY sort ASC";						 				 
-					$result = api_sql_query($sql, __FILE__, __LINE__);		
-					$counter=0;	
-					while ($row = Database::fetch_array($result,'ASSOC'))
-					{
-						if ($survey_data['one_question_per_page']==0)
-						{
-							$paged_questions[$counter][] = $row['question_id'];
-							$counter++; 
-						}
-						else
-						
-							if($row['type'] == 'pagebreak')
-							{
-								$counter++;
-							}
-							else
-							{
-								// ids from question of the current survey
-								$paged_questions[$counter][] = $row['question_id']; 
-							}					
-					}			
-					
+					// create the new select with the questions from the secondary phase
+                    
+                    if(empty($_SESSION['page_questions_sec']))
+                    {
+    					$sql = "SELECT * FROM $table_survey_question
+    								 WHERE survey_id = '".$my_survey_id."'
+    							  	 AND ($secondary )
+    								 ORDER BY sort ASC";
+    					$result = api_sql_query($sql, __FILE__, __LINE__);
+    					$counter=0;
+    					while ($row = Database::fetch_array($result,'ASSOC'))
+    					{
+    						if ($survey_data['one_question_per_page']==1)
+    						{
+    							$paged_questions_sec[$counter][] = $row['question_id'];
+    							$counter++; 
+    						}
+    						else
+    						
+    							if($row['type'] == 'pagebreak')
+    							{
+    								$counter++;
+    							}
+    							else
+    							{
+    								// ids from question of the current survey
+    								$paged_questions_sec[$counter][] = $row['question_id']; 
+    							}					
+    					}
+                        $_SESSION['paged_questions_sec'] = $paged_questions_sec;			
+                    }
+                    else
+                    {	
+                    	$paged_questions_sec = $_SESSION['paged_questions_sec'];
+                    }
+                    $paged_questions = $_SESSION['paged_questions']; //for the sake of pages counting 
+                    //$paged_questions = $paged_questions_sec; //for the sake of pages counting coming up at display time...
+                    	
 					if ($shuffle=='') 
 						$shuffle=' BY survey_question.sort, survey_question_option.sort ASC ';	
 							
-					$val=0;
+					//$val=0;
 					
 					
-					if ($survey_data['one_question_per_page']==0)
-					{
-						$val=$_POST['personality'];
-					}			
+					//if ($survey_data['one_question_per_page']==0)
+					//{
+						$val=(int)$_POST['personality'];
+					//}			
 								
 					$sql = "SELECT survey_question.survey_group_sec1, survey_question.survey_group_sec2, survey_question.survey_group_pri,				
 							survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
@@ -652,7 +677,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 							LEFT JOIN $table_survey_question_option survey_question_option
 							ON survey_question.question_id = survey_question_option.question_id
 							WHERE survey_question.survey_id = '".$my_survey_id."'
-							AND survey_question.question_id IN (".implode(',',$paged_questions[$val]).")
+							AND survey_question.question_id IN (".implode(',',$paged_questions_sec[$val]).")
 							ORDER  $shuffle ";
 								
 					$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -704,47 +729,54 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 			if ($shuffle=='') 
 				$order_sql=' BY question_id ';
 						 
-			$sql = "SELECT * FROM $table_survey_question
-						 WHERE survey_id = '".Database::escape_string($survey_invitation['survey_id'])."' 
-					  	 AND survey_group_sec1='0' AND survey_group_sec2='0'  
-						 ORDER ".$order_sql." ";
-			//echo "<br>";echo "<br>";
-			$result = api_sql_query($sql, __FILE__, __LINE__);					
-			$counter=0;			
-			while ($row = Database::fetch_array($result,'ASSOC'))
-			{
-				if ($survey_data['one_question_per_page']==0)
-				{
-					
-					$paged_questions[$counter][] = $row['question_id'];
-					$counter++; 
-				}
-				else 
-				{				
-					if($row['type'] == 'pagebreak')
-					{
-						$counter++;
-					}
-					else
-					{
-						// ids from question of the current survey
-						$paged_questions[$counter][] = $row['question_id']; 
-					}
-				}
-			} 
-		
-			
+            if(empty($_SESSION['paged_questions']))
+            {
+    			$sql = "SELECT * FROM $table_survey_question
+    						 WHERE survey_id = '".Database::escape_string($survey_invitation['survey_id'])."' 
+    					  	 AND survey_group_sec1='0' AND survey_group_sec2='0'  
+    						 ORDER ".$order_sql." ";
+    			//echo "<br>";echo "<br>";
+    			$result = api_sql_query($sql, __FILE__, __LINE__);					
+    			$counter=0;			
+    			while ($row = Database::fetch_array($result,'ASSOC'))
+    			{
+    				if ($survey_data['one_question_per_page']==1)
+    				{
+    					
+    					$paged_questions[$counter][] = $row['question_id'];
+    					$counter++; 
+    				}
+    				else 
+    				{				
+    					if($row['type'] == 'pagebreak')
+    					{
+    						$counter++;
+    					}
+    					else
+    					{
+    						// ids from question of the current survey
+    						$paged_questions[$counter][] = $row['question_id']; 
+    					}
+    				}
+    			}
+                $_SESSION['paged_questions'] = $paged_questions; 
+            }
+            else
+            {
+            	$paged_questions = $_SESSION['paged_questions'];
+            }
+            //print_r($paged_questions);
 			//if (key_exists($_GET['show'],$paged_questions))
 			//{		
 			$order_sql= $shuffle;
 			if ($shuffle=='') 
 				$order_sql=' BY survey_question.sort, survey_question_option.sort ASC ';
 			
-			$val=0;
-			if ($survey_data['one_question_per_page']==0)
-			{
+			//$val=0;
+			//if ($survey_data['one_question_per_page']==0)
+			//{
 				$val=$_GET['show'];
-			}
+			//}
 			
 			$sql = "SELECT survey_question.survey_group_sec1, survey_question.survey_group_sec2, survey_question.survey_group_pri,				
 					survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
@@ -755,7 +787,6 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 					WHERE survey_question.survey_id = '".Database::escape_string($survey_invitation['survey_id'])."'
 					AND survey_question.question_id IN (".implode(',',$paged_questions[$val]).")  
 					ORDER $order_sql ";	
-	
 			
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$question_counter_max = Database::num_rows($result);
@@ -791,7 +822,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 	}
     else //in case it's another type than 0 or 1
     {
-        die(get_lang('ErrorSurveyTypeUnknown'));
+        echo get_lang('ErrorSurveyTypeUnknown');
     }
 }
 
@@ -839,9 +870,9 @@ if(isset($questions) && is_array($questions))
 	}
 }
 
-if ($survey_data['survey_type']==0)
+if ($survey_data['survey_type']==='0')
 {	
-	if (($show < $numberofpages) || !$_GET['show'])
+	if (($show < $numberofpages) || !$_GET['show']) //$show = $_GET['show']+1
 	{
 		//echo '<a href="'.api_get_self().'?survey_id='.$survey_invitation['survey_id'].'&amp;show='.$limit.'">NEXT</a>';
 		echo '<input type="submit" name="next_survey_page" value="'.get_lang('Next').' >> " />';
@@ -852,33 +883,40 @@ if ($survey_data['survey_type']==0)
 		echo '<input type="submit" name="finish_survey" value="'.get_lang('FinishSurvey').' >> " />';
 	}
 }
-else
+elseif ($survey_data['survey_type']==='1') //conditional/personality-test type survey
 { 
 	$numberofpages=count($paged_questions);
-	//echo $show.' / '.$numberofpages;echo "<br />";
+    if(!empty($paged_questions_sec) && count($paged_questions_sec)>0)
+    { //in case we're in the second phase, also sum the second group questions
+    	$numberofpages+=count($paged_questions_sec);
+    }
+	//echo $show.' / '.$numberofpages."<br />";
 	
-	if (($show < $numberofpages) || !$_GET['show'])
+	if (($show < $numberofpages) || !$_GET['show']) //$show = $_GET['show']+1
 	{
 		echo '<input type="submit" name="next_survey_page" value="'.get_lang('Next').' >> " />';
 				
-		if ($survey_data['one_question_per_page']==1 && $show!=0)
-		{			
+		/* YW - Commented because I don't believe this is right in any case 
+        if ($survey_data['one_question_per_page']==0 && $show!=0)
+		*/
+        if($personality>0)
+        {			
 			echo '<input type="hidden" name="personality" value="'.$personality.'">';
 		}
 	}	
 		
 	if ($show >= $numberofpages && $_GET['show'] )
 	{ 		
-		if ($survey_data['one_question_per_page']==0)
-		{	
-			echo '<input type="hidden" name="personality" value="'.$personality.'">';
-		}					
+		//if ($survey_data['one_question_per_page']==0)
+		//{	
+		echo '<input type="hidden" name="personality" value="'.$personality.'">';
+		//}					
 		$numberofpages=count($paged_questions);
 		
-		echo $personality.' / '.$numberofpages;
-		echo "<br />"; 
+		//echo $personality.' / '.$numberofpages;
+		//echo "<br />"; 
 		
-		if ($personality >  $numberofpages  -1 )
+		if ($personality >  count($paged_questions_sec)  -1 )
 		{
 			echo '<input type="submit" name="finish_survey" value="'.get_lang('FinishSurvey').' >> " />';
 		}

@@ -37,7 +37,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 15845 2008-07-24 19:21:23Z dperales $
+* 	@version $Id: exercice_submit.php 15887 2008-08-01 13:55:25Z elixir_julian $
 */
 
 
@@ -526,6 +526,7 @@ else
 	 <input type='hidden' name='origin' value='".$origin."' />
 	 <input type='hidden' name='learnpath_id' value='".$learnpath_id."' />
 	 <input type='hidden' name='learnpath_item_id' value='".$learnpath_item_id."' />
+	 <input type='hidden' name='exerciseId' value='".$exerciseId."' />
 	<table width='100%' border='0' cellpadding='1' cellspacing='0'>
 	 <tr>
 	  <td>

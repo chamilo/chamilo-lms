@@ -296,10 +296,10 @@ else{
 
 ?>
 
-<div style="text-align: center;">
+<div style="text-align: left;">
 	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>
 </div>
-<br>
+<br><br>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page'] ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1" />

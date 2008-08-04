@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 15892 2008-08-04 05:15:36Z yannoo $
+* 	@version $Id: exercise_result.php 15893 2008-08-04 05:37:18Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -506,7 +506,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 										$is_set_switchable = explode('@', $pre_array[$last]);
 										
 										$switchable_answer_set=false;
-										if ($is_set_switchable[1]==1)
+										if (isset($is_set_switchable[1]) && $is_set_switchable[1]==1)
 										{
 											$switchable_answer_set=true;
 										}								
@@ -575,16 +575,6 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 											$j++;
 											$temp=substr($temp,$pos+1);
 										}
-										/*
-										echo $answer;								
-										echo "<pre>";									
-										print_r($user_tags);
-										echo "<br>";
-										print_r($correct_tags);
-										print_r($real_text);
-										echo "</pre>";				
-
-										*/
 																			
 										$answer='';			
 										$real_correct_tags = $correct_tags;							
@@ -621,7 +611,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 												}												
 											} 
 											else
-											{ 	// multiple fill in blank magic
+											{ 	// switchable fill in the blanks
 												if (in_array($user_tags[$i],$correct_tags))
 												{
 													$chosen_list[]=$user_tags[$i];													
@@ -649,77 +639,6 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 											$answer.=' / <font color="green"><b>'.$real_correct_tags[$i].'</b></font>]';
 											$answer.=$real_text[$i];
 										} 
-										
-										/*
-										$answer='';
-										// the loop will stop at the end of the text
-										while(1)
-										{
-											// quits the loop if there are no more blanks
-											if(($pos = strpos($temp,'[')) === false)
-											{
-												// adds the end of the text
-												$answer.=$temp;
-												// TeX parsing
-												$texstring = api_parse_tex($texstring);
-												$answer=str_replace("{texcode}",$texstring,$answer);
-												break;
-											}
-
-											// adds the piece of text that is before the blank and ended by [
-											$answer.=substr($temp,0,$pos+1);
-											$temp=substr($temp,$pos+1);
-
-											// quits the loop if there are no more blanks
-											if(($pos = strpos($temp,']')) === false)
-											{
-												// adds the end of the text
-												$answer.=$temp;
-												break;
-											}
-
-											$choice[$j]=trim($choice[$j]);
-											
-											if (!$switchable_answer_set)
-											{
-												// if the word entered by the student IS the same as the one defined by the professor
-												if(strtolower(substr($temp,0,$pos)) == stripslashes(strtolower($choice[$j])))
-												{
-													// gives the related weighting to the student
-													$questionScore+=$answerWeighting[$j];
-	
-													// increments total score
-													$totalScore+=$answerWeighting[$j];
-	
-													// adds the word in green at the end of the string
-													$answer.=stripslashes($choice[$j]);
-												}
-											}
-											else 
-											{
-												
-											}										
-											
-											// else if the word entered by the student IS NOT the same as the one defined by the professor											
-											if(!empty($choice[$j]))
-											{
-												// adds the word in red at the end of the string, and strikes it
-												$answer.='<font color="red"><s>'.stripslashes($choice[$j]).'</s></font>';
-											}
-											else
-											{
-												// adds a tabulation if no word has been typed by the student
-												$answer.='&nbsp;&nbsp;&nbsp;';
-											}
-
-											// adds the correct word, followed by ] to close the blank
-											$answer.=' / <font color="green"><b>'.substr($temp,0,$pos).'</b></font>]';
-
-											$j++;
-
-											$temp=substr($temp,$pos+1);
-										}
-										*/
 
 										break;
 				// for free answer

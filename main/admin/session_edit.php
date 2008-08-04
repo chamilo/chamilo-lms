@@ -25,7 +25,7 @@ $tool_name = get_lang('EditSession');
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
 
-$result=api_sql_query("SELECT name,date_start,date_end,id_coach, session_admin_id FROM $tbl_session WHERE id='$id'",__FILE__,__LINE__);
+$result=api_sql_query("SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end FROM $tbl_session WHERE id='$id'",__FILE__,__LINE__);
 
 if(!$infos=mysql_fetch_array($result))
 {
@@ -54,7 +54,9 @@ if($_POST['formSent'])
 	$month_end=intval($_POST['month_end']);
 	$day_end=intval($_POST['day_end']);
 	$id_coach=intval($_POST['id_coach']);
-
+	$nb_days_access_before = intval($_POST['nb_days_access_before']);
+	$nb_days_access_after = intval($_POST['nb_days_access_after']);
+	
 	if(empty($_POST['nolimit'])){
 		$date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
 		$date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
@@ -84,7 +86,9 @@ if($_POST['formSent'])
 					   SET name='".addslashes($name)."',
 						   date_start='$date_start',
 						   date_end='$date_end',
-						   id_coach='$id_coach'
+						   id_coach='$id_coach',
+						   nb_days_access_before_beginning = ".$nb_days_access_before.",
+						   nb_days_access_after_end = ".$nb_days_access_after." 
 					   WHERE id='$id'",__FILE__,__LINE__);
 			header('Location: resume_session.php?id_session='.$id);
 			exit();
@@ -294,6 +298,34 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 
   </select>
   </td>
+</tr>
+<tr>
+	<td>
+		&nbsp;
+	</td>
+	<td>
+		<a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('DefineSessionOptions') ?></a>
+		<div style="display: 
+			<?php 
+				if($formSent){
+					if($nb_days_access_before!=0 || $nb_days_access_after!=0) 
+						echo 'block'; 
+					else echo 'none';
+				}
+				else{
+					if($infos['nb_days_access_before_beginning']!=0 || $infos['nb_days_access_after_end']!=0)
+						echo 'block'; 
+					else
+						echo 'none';
+				}
+			?>
+				;" id="options">
+			<br>
+			<input type="text" name="nb_days_access_before" value="<?php if($formSent) echo htmlentities($nb_days_access_before,ENT_QUOTES,$charset); else echo htmlentities($infos['nb_days_access_before_beginning'],ENT_QUOTES,$charset); ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysBefore') ?><br>
+			<input type="text" name="nb_days_access_after" value="<?php if($formSent) echo htmlentities($nb_days_access_after,ENT_QUOTES,$charset); else echo htmlentities($infos['nb_days_access_after_end'],ENT_QUOTES,$charset); ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysAfter') ?>
+			<br>
+		</div>
+	</td>
 </tr>
 <tr>
   <td>&nbsp;</td>

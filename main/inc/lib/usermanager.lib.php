@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 15821 2008-07-18 12:15:35Z pcool $
+<?php // $Id: usermanager.lib.php 15899 2008-08-04 13:03:05Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1328,12 +1328,16 @@ class UserManager
 		$sessions = array_merge($sessions , api_store_result($result));
 	
 		// get the list of sessions where the user is subscribed as coach in a course
-		$sessions_sql = "SELECT DISTINCT id, name, date_start, date_end
+		$sessions_sql = "SELECT DISTINCT id, name, date_start, date_end, DATE_SUB(date_start, INTERVAL nb_days_access_before_beginning DAY), ADDDATE(date_end, INTERVAL nb_days_access_after_end DAY)
 								FROM $tbl_session as session
 								INNER JOIN $tbl_session_course as session_rel_course
 									ON session_rel_course.id_coach = $user_id
-								AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00')
+								AND 
+									( CURDATE() >= DATE_SUB(date_start, INTERVAL nb_days_access_before_beginning DAY) AND
+									  CURDATE() <= ADDDATE(date_end, INTERVAL nb_days_access_after_end DAY) OR 
+									  date_start='0000-00-00')
 								ORDER BY date_start, date_end, name";
+		
 		$result = api_sql_query($sessions_sql,__FILE__,__LINE__);
 	
 		$session_is_coach = api_store_result($result);

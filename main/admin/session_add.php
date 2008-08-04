@@ -70,6 +70,9 @@ $tool_name = get_lang('AddSession');
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
 
+$nb_days_acess_before = 0;
+$nb_days_acess_after = 0;
+
 if($_POST['formSent'])
 {
 	$formSent=1;
@@ -81,6 +84,8 @@ if($_POST['formSent'])
 	$year_end=intval($_POST['year_end']);
 	$month_end=intval($_POST['month_end']);
 	$day_end=intval($_POST['day_end']);
+	$nb_days_acess_before = intval($_POST['nb_days_acess_before']);
+	$nb_days_acess_after = intval($_POST['nb_days_acess_after']);
 	
 	$sql = 'SELECT user_id FROM '.$tbl_user.' WHERE username="'.Database::escape_string($_POST['coach_username']).'"';
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
@@ -106,7 +111,7 @@ if($_POST['formSent'])
 			$errorMsg = get_lang('SessionNameSoonExists');
 		}
 		else {
-			api_sql_query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id) VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).")",__FILE__,__LINE__);
+			api_sql_query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end) VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")",__FILE__,__LINE__);
 			$id_session=mysql_insert_id();
 
 			header('Location: add_courses_to_session.php?id_session='.$id_session.'&add=true');
@@ -326,6 +331,20 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 
   </select>
   </td>
+</tr>
+<tr>
+	<td>
+		&nbsp;
+	</td>
+	<td>
+		<a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('DefineSessionOptions') ?></a>
+		<div style="display: <?php if($formSent && ($nb_days_acess_before!=0 || $nb_days_acess_after!=0)) echo 'block'; else echo 'none'; ?>;" id="options">
+			<br>
+			<input type="text" name="nb_days_acess_before" value="<?php echo $nb_days_acess_before; ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysBefore') ?><br>
+			<input type="text" name="nb_days_acess_after" value="<?php echo $nb_days_acess_after; ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysAfter') ?>
+			<br>
+		</div>
+	</td>
 </tr>
 <tr>
   <td>&nbsp;</td>

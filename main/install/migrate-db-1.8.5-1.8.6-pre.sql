@@ -12,6 +12,8 @@
 --
 -- This first part is for the main database
 -- xxMAINxx
+ALTER TABLE settings_current ADD INDEX unique_setting (variable,subkey,category);
+ALTER TABLE settings_options ADD INDEX unique_setting_option (variable,value);
 INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('registration', 'phone', 'textfield', 'User', 'false', 'RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment', NULL, 'Phone');
 ALTER TABLE php_session CHANGE session_value session_value MEDIUMTEXT NOT NULL;
 INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('add_users_by_coach',NULL,'radio','Platform','false','AddUsersByCoachTitle','AddUsersByCoachComment',NULL,NULL);

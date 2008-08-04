@@ -67,6 +67,11 @@ $tool_name=get_lang('SubscribeUsersToSession');
 
 $id_session=intval($_GET['id_session']);
 
+$add_type = 'unique';
+if(isset($_GET['add_type']) && $_GET['add_type']!=''){
+	$add_type = $_GET['add_type'];
+}
+
 if(!api_is_platform_admin())
 {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
@@ -226,10 +231,10 @@ Display::display_header($tool_name);
 api_display_tool_title($tool_name);
 
 $nosessionUsersList = $sessionUsersList = array();
-$sql = 'SELECT COUNT(1) FROM '.$tbl_user;
+/*$sql = 'SELECT COUNT(1) FROM '.$tbl_user;
 $rs = api_sql_query($sql, __FILE__, __LINE__);
-$count_courses = mysql_result($rs, 0, 0);
-$ajax_search = $count_courses > 100 ? true : false;
+$count_courses = mysql_result($rs, 0, 0);*/
+$ajax_search = $add_type == 'unique' ? true : false;
 
 if($ajax_search)
 {
@@ -269,10 +274,21 @@ else
 }
 
 
-
+if($add_type == 'multiple'){
+	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$_GET['add'].'&add_type=unique">'.get_lang('SessionAddTypeUnique').'</a>';
+	$link_add_type_multiple = get_lang('SessionAddTypeMultiple');
+}
+else{
+	$link_add_type_unique = get_lang('SessionAddTypeUnique');
+	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$_GET['add'].'&add_type=multiple">'.get_lang('SessionAddTypeMultiple').'</a>';
+}
 
 
 ?>
+
+<div style="text-align: center;">
+	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>
+</div>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page'] ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1" />

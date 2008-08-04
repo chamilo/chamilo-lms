@@ -335,6 +335,8 @@ CREATE TABLE session (
   nbr_classes mediumint(8) unsigned NOT NULL default '0',
   date_start date NOT NULL default '0000-00-00',
   date_end date NOT NULL default '0000-00-00',
+  nb_days_access_before_beginning TINYINT UNSIGNED NULL default '0',
+  nb_days_access_after_end TINYINT UNSIGNED NULL default '0',
   session_admin_id INT UNSIGNED NOT NULL,
   PRIMARY KEY  (id),
   INDEX (session_admin_id),

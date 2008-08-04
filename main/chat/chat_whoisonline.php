@@ -58,11 +58,11 @@ if (!empty($course))
 	
 	if(!isset($_SESSION['id_session']))
 	{
-		$query="SELECT t1.user_id,username,firstname,lastname,picture_uri,t3.status FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_course_user t3 WHERE t1.user_id=t2.user_id AND t3.user_id=t2.user_id AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' ORDER BY username";
+		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,t3.status FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_course_user t3 WHERE t1.user_id=t2.user_id AND t3.user_id=t2.user_id AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' ORDER BY username";
 	}
 	else
 	{
-		$query="SELECT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session_course_user t3 WHERE t1.user_id=t2.user_id AND t3.id_user=t2.user_id AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' ORDER BY username";
+		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session_course_user t3 WHERE t1.user_id=t2.user_id AND t3.id_user=t2.user_id AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' ORDER BY username";
 	}
 	
 	$result=api_sql_query($query,__FILE__,__LINE__);

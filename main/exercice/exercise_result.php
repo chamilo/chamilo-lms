@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 15857 2008-07-28 15:00:49Z elixir_julian $
+* 	@version $Id: exercise_result.php 15891 2008-08-04 05:11:02Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -501,8 +501,9 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 										// first we explode the "::"
 										$pre_array = explode('::', $answer);	
 				
-										// is switchable fill blank or not			
-										$is_set_switchable = explode('@', $pre_array[1]);
+										// is switchable fill blank or not
+                                        $last = count($pre_array)-1;		
+										$is_set_switchable = explode('@', $pre_array[$last]);
 										
 										$switchable_answer_set=false;
 										if ($is_set_switchable[1]==1)

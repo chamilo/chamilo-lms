@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 15891 2008-08-04 05:11:02Z yannoo $
+* 	@version $Id: exercise_result.php 15892 2008-08-04 05:15:36Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -510,8 +510,12 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 										{
 											$switchable_answer_set=true;
 										}								
-														
-										$answer = $pre_array[0];
+										
+                                        $answer = '';
+                                        for ($k=0; $k<$last; $k++)
+                                        {
+										  $answer .= $pre_array[$k];
+                                        }
 										
 										// splits weightings that are joined with a comma
 										$answerWeighting = explode(',',$is_set_switchable[0]);				

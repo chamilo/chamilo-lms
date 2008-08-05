@@ -40,7 +40,7 @@ if ($_GET['type'] == "square" || $_GET['type'] == "circle")
 	$hotspot_type = $_GET['type'];
 	$hotspot_coordinates = $_GET['x'].";".$_GET['y']."|".$_GET['width']."|".$_GET['height'];
 }
-if ($_GET['type'] == "poly")
+if ($_GET['type'] == "poly" || $_GET['type'] == "delineation")
 {
 	$hotspot_type = $_GET['type'];
 	$tmp_coord = explode(",",$_GET['co']);

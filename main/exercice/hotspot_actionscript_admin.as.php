@@ -84,6 +84,12 @@ for($i=1;$i <= $nbrAnswers;$i++)
 	{
 		$output .= "&hotspot_".$i."_type=poly";
 	}
+	
+	// Delineation
+	if ($answers['hotspot_type'][$i] == 'delineation')
+	{
+		$output .= "&hotspot_".$i."_type=delineation";
+	}
 
 	// This is a good answer, count + 1 for nmbr of clicks
 	if ($answers['weighting'][$i] > 0)

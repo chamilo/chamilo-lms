@@ -78,6 +78,12 @@ while ($hotspot = mysql_fetch_array($result))
 	{
 		$output .= "&hotspot_".$hotspot['id']."_type=poly";
 	}
+	
+	// Delineation
+	if ($hotspot['hotspot_type'] == 'delineation')
+	{
+		$output .= "&hotspot_".$hotspot['id']."_type=delineation";
+	}
 
 	$output .= "&hotspot_".$hotspot['id']."_coord=".$hotspot['hotspot_coordinates']."";
 

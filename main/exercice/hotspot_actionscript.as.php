@@ -74,6 +74,11 @@ while ($hotspot = mysql_fetch_assoc($result))
 	{
 		$output .= "&hotspot_".$hotspot['id']."_type=poly";
 	}
+	// Delineation
+	if ($hotspot['hotspot_type'] == 'delineation')
+	{
+		$output .= "&hotspot_".$hotspot['id']."_type=delineation";
+	}
 
 	// This is a good answer, count + 1 for nmbr of clicks
 	if ($hotspot['hotspot_type'] > 0)

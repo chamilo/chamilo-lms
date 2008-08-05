@@ -31,7 +31,6 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 {
 	exit();
 }
-
 $modifyAnswers = $_GET['hotspotadmin'];
 
 if(!is_object($objQuestion))
@@ -155,7 +154,6 @@ if($submitAnswers || $buttonBack)
 			{
 				$questionWeighting+=$weighting[$i];
 			}
-
 			// creates answer
 			$objAnswer->createAnswer($reponse[$i], '',$comment[$i],$weighting[$i],$i,$hotspot_coordinates[$i],$hotspot_type[$i]);
         }  // end for()

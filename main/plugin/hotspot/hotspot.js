@@ -57,3 +57,9 @@ function savePolyHotspot(question_id, hotspot_id, coordinates)
 	document.frm_exercise["hotspot_coordinates["+hotspot_id+"]"].value = coordinates;
 	document.frm_exercise["hotspot_type["+hotspot_id+"]"].value = "poly";
 }
+
+function saveDelineationHotspot(question_id, hotspot_id, coordinates)
+{
+	document.frm_exercise["hotspot_coordinates["+hotspot_id+"]"].value = coordinates;
+	document.frm_exercise["hotspot_type["+hotspot_id+"]"].value = "delineation";
+}

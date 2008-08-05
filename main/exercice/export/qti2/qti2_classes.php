@@ -405,6 +405,10 @@ class ImsAnswerHotspot extends Answer
         			$type = 'poly';
 					$coords = str_replace(array(';','|'),array(',',','),$answer['hotspot_coord']);
         			break;
+        		 case 'delineation' :
+        			$type = 'delineation';
+					$coords = str_replace(array(';','|'),array(',',','),$answer['hotspot_coord']);
+        			break;
         	}
             $text .= '        <hotspotChoice shape="'.$type.'" coords="'.$coords.'" identifier="'.$key.'"/>'."\n";
         }

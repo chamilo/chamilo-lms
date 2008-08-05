@@ -63,7 +63,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 15842 2008-07-24 16:41:17Z dperales $
+* 	@version $Id: admin.php 15917 2008-08-05 14:44:11Z elixir_inter $
 */
 
 
@@ -461,6 +461,7 @@ if(!empty($description))
 }
 echo '<br /><br />';
 
+
 if($newQuestion || $editQuestion)
 {
 	// statement management
@@ -469,6 +470,7 @@ if($newQuestion || $editQuestion)
 	<?php
 	include('question_admin.inc.php');
 }
+
 if(isset($_GET['hotspotadmin']))
 {
 	include('hotspot_admin.inc.php');

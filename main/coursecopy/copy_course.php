@@ -1,5 +1,5 @@
 <?php
-// $Id: copy_course.php 15281 2008-05-13 23:10:40Z yannoo $
+// $Id: copy_course.php 15909 2008-08-05 08:42:48Z elixir_julian $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -107,7 +107,7 @@ else
 	{
 		$sql .= ' AND cu.status=1 ';
 	}
-	$sql .= ' AND target_course_code IS NULL AND cu.user_id = '.$user_info['user_id'].' AND c.code != '."'".$course_info['sysCode']."'".' ';
+	$sql .= ' AND target_course_code IS NULL AND cu.user_id = '.$user_info['user_id'].' AND c.code != '."'".$course_info['sysCode']."'".' ORDER BY title ASC';
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	if( mysql_num_rows($res) == 0)
 	{

@@ -18,7 +18,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: date.php 9612 2006-10-20 11:56:44Z bmol $
+// $Id: date.php 15921 2008-08-05 22:53:45Z yannoo $
 
 require_once 'HTML/QuickForm/group.php';
 require_once 'HTML/QuickForm/select.php';
@@ -72,7 +72,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         'language'         => 'en',
         'format'           => 'dMY',
         'minYear'          => 2001,
-        'maxYear'          => 2010,
+        'maxYear'          => 2090,
         'addEmptyOption'   => false,
         'emptyOptionValue' => '',
         'emptyOptionText'  => '&nbsp;',

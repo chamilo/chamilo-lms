@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 15845 2008-07-24 19:21:23Z dperales $
+* 	@version $Id: exercise.class.php 15916 2008-08-05 14:33:49Z elixir_julian $
 */
 
 
@@ -42,6 +42,7 @@ class Exercise
 	var $active;
 	var $timeLimit;
 	var $attempts;
+	var $nbRandomQuestions;
 
 	var $questionList;  // array with the list of this exercise's questions
 
@@ -79,7 +80,7 @@ class Exercise
 	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
     	#$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
-		$sql="SELECT title,description,sound,type,random,active, results_disabled, max_attempt FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
+		$sql="SELECT title,description,sound,type,random,active, results_disabled, max_attempt,nb_random_questions FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
 		// if the exercise has been found
@@ -94,6 +95,7 @@ class Exercise
 			$this->active=$object->active;
 			$this->results_disabled =$object->results_disabled;
 			$this->attempts = $object->max_attempt;
+			$this->nbRandomQuestions = $object->nb_random_questions;
 			$sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY question_order";
 			$result=api_sql_query($sql,__FILE__,__LINE__);
 
@@ -186,6 +188,11 @@ class Exercise
 	function selectType()
 	{
 		return $this->type;
+	}
+	
+	function selectNbRandomQuestions()
+	{
+		return $this->nbRandomQuestions;
 	}
 
 	/**
@@ -404,6 +411,11 @@ class Exercise
 	{
 		$this->type=$type;
 	}
+	
+	function updateNbRandomQuestions($nb_random_questions)
+	{
+		$this->nbRandomQuestions = $nb_random_questions;
+	}
 
 	/**
 	 * sets to 0 if questions are not selected randomly
@@ -467,6 +479,7 @@ class Exercise
 		$random=$this->random;
 		$active=$this->active;
 		$results_disabled = intval($this->results_disabled);
+		$nb_random_questions = intval($this->nbRandomQuestions);
 
 		// exercise already exists
 		if($id)
@@ -479,14 +492,15 @@ class Exercise
 						random='".Database::escape_string($random)."',
 						active='".Database::escape_string($active)."',
 						max_attempt='".Database::escape_string($attempts)."', " .
-						"results_disabled='".Database::escape_string($results_disabled)."'
+						"results_disabled='".Database::escape_string($results_disabled)."',
+						nb_random_questions = '".Database::escape_string($nb_random_questions)."' 
 					WHERE id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
 		// creates a new exercise
 		else
 		{
-			$sql="INSERT INTO $TBL_EXERCICES(title,description,sound,type,random,active, results_disabled, max_attempt) 
+			$sql="INSERT INTO $TBL_EXERCICES(title,description,sound,type,random,active, results_disabled, max_attempt, nb_random_questions) 
 					VALUES(
 						'".Database::escape_string($exercise)."',
 						'".Database::escape_string($description)."',
@@ -495,7 +509,8 @@ class Exercise
 						'".Database::escape_string($random)."',
 						'".Database::escape_string($active)."',
 						'".Database::escape_string($results_disabled)."',
-						'".Database::escape_string($attempts)."'
+						'".Database::escape_string($attempts)."',
+						'".Database::escape_string($nb_random_questions)."'
 						)";
 			api_sql_query($sql,__FILE__,__LINE__);
 
@@ -699,6 +714,17 @@ class Exercise
 		$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
 		$form -> addGroup($random,null,get_lang('RandomQuestions').' : ','<br />');*/
 		$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));
+		
+		$form -> addElement('html','<div class="row">
+<div class="label">&nbsp;</div>
+<div class="formw">
+	<a href="javascript://" onclick="if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}"><img src="../img/add_na.gif" alt="" />'.get_lang('AdvancedParameters').'</a>
+</div>
+</div>');
+		$form -> addElement('html','<div id="options" style="display: none;">');
+		$form -> addElement('text', 'nbRandomQuestions', get_lang('RandomQuestionsToDisplay').' : ',array('size'=>'3'));
+		$form -> addElement('html','</div>');
+		
 		// submit
 		$form -> addElement('submit', 'submitExercise', get_lang('Ok'));
 
@@ -710,6 +736,7 @@ class Exercise
 		$defaults = array();
 		if($this -> id > 0)
 		{
+			$defaults['nbRandomQuestions'] = $this -> selectNbRandomQuestions();
 			$defaults['exerciseAttempts'] = $this -> selectAttempts();
 			$defaults['exerciseType'] = $this -> selectType();
 			$defaults['exerciseTitle'] = $this -> selectTitle();
@@ -718,6 +745,7 @@ class Exercise
 		}
 		else{
 			$defaults['exerciseType'] = 1;
+			$defaults['nbRandomQuestions'] = 0;
 			$defaults['exerciseAttempts'] = 0;
 			//$defaults['randomQuestions'] = 0;
 			$defaults['exerciseDescription'] = '';
@@ -740,6 +768,7 @@ class Exercise
 		$this -> updateDescription($form -> getSubmitValue('exerciseDescription'));
 		$this -> updateType($form -> getSubmitValue('exerciseType'));
 		$this -> setRandom($form -> getSubmitValue('randomQuestions'));
+		$this -> updateNbRandomQuestions($form -> getSubmitValue('nbRandomQuestions'));
 		$this -> save();
 
 	}

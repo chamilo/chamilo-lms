@@ -220,7 +220,7 @@ function get_number_of_users()
 		$sql = "SELECT 	u.user_id  
 							FROM $user_table u
 							LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
-							WHERE cu.user_id IS NULL AND u.status='1'
+							WHERE cu.user_id IS NULL
 							";
 	}
 	else
@@ -228,7 +228,7 @@ function get_number_of_users()
 		$sql = "SELECT 	u.user_id  
 							FROM $user_table u
 							LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
-							WHERE cu.user_id IS NULL AND u.status='5'
+							WHERE cu.user_id IS NULL
 							";
 	}
 	
@@ -261,7 +261,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 					u.user_id   AS col6
 				FROM $user_table u
 				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
-				WHERE u.status='1' and cu.user_id IS NULL
+				WHERE cu.user_id IS NULL
 				";
 	}
 	else
@@ -276,7 +276,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 					u.user_id   AS col6 
 				FROM $user_table u
 				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
-				WHERE u.status='5' and cu.user_id IS NULL
+				WHERE cu.user_id IS NULL
 				";
 	}
 	if (isset ($_REQUEST['keyword']))

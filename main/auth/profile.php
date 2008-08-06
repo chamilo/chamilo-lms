@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 15822 2008-07-18 12:35:27Z pcool $
+<?php // $Id: profile.php 15932 2008-08-06 19:59:11Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -436,9 +436,8 @@ function upload_user_image($user_id)
 	$image_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
 	$image_repository = $image_path['dir'];
 	$existing_image = $image_path['file'];
-
-	$file_extension = explode('.', $_FILES['picture']['name']);
-	$file_extension = strtolower($file_extension[sizeof($file_extension) - 1]);
+  	$file_extension = explode('.', $_FILES['picture']['name']);
+	$file_extension = strtolower($file_extension[count($file_extension) - 1]);
 
 	if (!file_exists($image_repository))
 	{

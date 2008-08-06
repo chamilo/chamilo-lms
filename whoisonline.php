@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 14958 2008-04-20 18:17:02Z yannoo $
+<?php // $Id: whoisonline.php 15932 2008-08-06 19:59:11Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -78,14 +78,9 @@ function display_user_list($user_list, $_plugins)
 			$user_info = api_get_user_info($uid);
 			$table_row = array();
 			$url = '?id='.$uid.$course_url;
-			if(strlen($user_info['picture_uri']) > 0)
-			{
-				$table_row[] = '<span style="display:none;">1</span><a href="'.$url.'"><img src="'.api_get_path(WEB_CODE_PATH).'upload/users/'.$user_info['picture_uri'].'" alt="'.htmlentities($user_info['firstName'],ENT_QUOTES,$charset).'" width="40" border="0"/></a>';
-			}
-			else
-			{
-				$table_row[] = '<span style="display:none;">0</span>';
-			}
+            $image_array=UserManager::get_user_picture_path_by_id($uid,'web',false,true);                      
+            $table_row[] = '<a href="'.$url.'"><img src="'.$image_array['dir'].$image_array['file'].'" border="1" height="100"></a>';
+                     
 			$table_row[] = '<a href="'.$url.'">'.$user_info['firstName'].'</a>';
 			$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';
 			if (api_get_setting("show_email_addresses") == "true")
@@ -193,9 +188,9 @@ function display_productions($user_id)
 {
 	global $clarolineRepositoryWeb, $disabled_output;
 	$sysdir_array = UserManager::get_user_picture_path_by_id($user_id,'system');
-	$sysdir = $sysdir_array['dir'];
+	$sysdir = $sysdir_array['dir'].$user_id.'/';
 	$webdir_array = UserManager::get_user_picture_path_by_id($user_id,'web');
-	$webdir = $webdir_array['dir'];
+	$webdir = $webdir_array['dir'].$user_id.'/';
 	if( !is_dir($sysdir))
 	{
 		mkpath($sysdir);

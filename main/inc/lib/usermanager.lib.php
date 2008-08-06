@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 15899 2008-08-04 13:03:05Z elixir_julian $
+<?php // $Id: usermanager.lib.php 15932 2008-08-06 19:59:11Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -663,7 +663,7 @@ class UserManager
 	
 			while ($file = readdir($handle))
 			{
-				if ($file == '.' || $file == '..' || $file == '.htaccess')
+				if ($file == '.' || $file == '..' || $file == '.htaccess' || is_dir($production_repository.$file))
 					continue; // skip current/parent directory and .htaccess
 	
 				$productions[] = $file;

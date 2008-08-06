@@ -30,7 +30,6 @@ ALTER TABLE lp ADD theme varchar(255) not null default '';
 ALTER TABLE survey ADD mail_subject VARCHAR( 255 ) NOT NULL AFTER reminder_mail ;
 ALTER TABLE quiz_rel_question ADD question_order mediumint unsigned NOT NULL default 1;
 ALTER TABLE quiz ADD max_attempt int NOT NULL default 0;
-ALTER TABLE quiz ADD nb_random_questions TINYINT NULL DEFAULT '0';
 ALTER TABLE survey ADD one_question_per_page bool NOT NULL default 0;
 ALTER TABLE survey ADD shuffle bool NOT NULL default 0;
 ALTER TABLE survey ADD survey_version varchar(255) NOT NULL default '';
@@ -42,4 +41,3 @@ ALTER TABLE survey_question ADD survey_group_sec2 int unsigned NOT NULL default 
 CREATE TABLE survey_group (  id int unsigned NOT NULL auto_increment, name varchar(20) NOT NULL, description varchar(255) NOT NULL,  survey_id int unsigned NOT NULL, PRIMARY KEY  (id) );
 ALTER TABLE survey_question_option ADD value int NOT NULL default 0;
 UPDATE tool SET category = 'interaction' WHERE name = 'forum';
-

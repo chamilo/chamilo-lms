@@ -1381,8 +1381,8 @@ function update_Db_course($courseDbName)
 			  one_question_per_page bool NOT NULL default '0', 
 			  survey_version varchar(255) NOT NULL default '', 
 			  parent_id int unsigned NOT NULL, 
-			  survey_type int NOT NULL default '0',
-			  show_form_profile int NOT NULL default '0',
+			  survey_type int NOT NULL default 0,
+			  show_form_profile int NOT NULL default 0,
 			  form_fields TEXT NOT NULL,			  		
 			  PRIMARY KEY  (survey_id)
 			)";

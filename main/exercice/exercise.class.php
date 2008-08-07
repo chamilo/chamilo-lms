@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 15938 2008-08-07 08:50:05Z elixir_julian $
+* 	@version $Id: exercise.class.php 15939 2008-08-07 09:01:09Z elixir_julian $
 */
 
 
@@ -265,15 +265,17 @@ class Exercise
 		$alreadyChosen = array();
 		
 		for($i=0; $i < $this->random; $i++)
-		{			
-			do
-			{
-				$rand=rand(1,$nbQuestions);
+		{	
+			if($i < $nbQuestions){
+				do
+				{
+					$rand=rand(1,$nbQuestions);
+				}
+				while(in_array($rand,$alreadyChosen));
+				
+				$alreadyChosen[]=$rand;
+				$randQuestionList[$rand] = $this->questionList[$rand];
 			}
-			while(in_array($rand,$alreadyChosen));
-			
-			$alreadyChosen[]=$rand;
-			$randQuestionList[$rand] = $this->questionList[$rand];		
 		}
 
 		return $randQuestionList;

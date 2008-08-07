@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 15942 2008-08-07 09:46:26Z elixir_julian $
+* 	@version $Id: exercise.class.php 15944 2008-08-07 13:47:39Z elixir_julian $
 */
 
 
@@ -674,13 +674,22 @@ class Exercise
 		$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),'1');
 		$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
 		$form -> addGroup($radios, null, get_lang('ExerciseType').' : ', '<br />');
-
+		
+		$form -> addElement('html','<div class="row">
+			<div class="label">&nbsp;</div>
+			<div class="formw">
+				<a href="javascript://" onclick="if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}"><img src="../img/add_na.gif" alt="" />'.get_lang('AdvancedParameters').'</a>
+			</div>
+			</div>');
 		// random
+		$form -> addElement('html','<div id="options" style="display: none;">');
 		$random = array();
 		$random[] = FormValidator :: createElement ('static', 'help','help','<span style="font-style: italic;">'.get_lang('RandomQuestionsHelp').'</span>');
 		$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
 		$form -> addGroup($random,null,get_lang('RandomQuestions').' : ','<br />');
 		$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));
+		$form -> addElement('html','</div>');
+		
 		// submit
 		$form -> addElement('submit', 'submitExercise', get_lang('Ok'));
 

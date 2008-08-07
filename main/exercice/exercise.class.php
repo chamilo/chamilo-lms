@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 15930 2008-08-06 09:21:32Z elixir_julian $
+* 	@version $Id: exercise.class.php 15938 2008-08-07 08:50:05Z elixir_julian $
 */
 
 
@@ -196,7 +196,12 @@ class Exercise
 	 */
 	function isRandom()
 	{
-		return $this->random;
+		if($this->random > 0){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	/**
 	 * Same as isRandom() but has a name applied to values different than 0 or 1
@@ -247,54 +252,28 @@ class Exercise
 	 *					 without randomizing, otherwise, returns the list with questions selected randomly
      */
 	function selectRandomList()
-	{
-		// if the exercise is not a random exercise, or if there are not at least 2 questions
-		if(!$this->random || $this->selectNbrQuestions() < 2)
+	{		
+		$nbQuestions = $this->selectNbrQuestions();
+		
+		//Not a random exercise, or if there are not at least 2 questions
+		if($this->random == 0 || $nbQuestions < 2)
 		{
 			return $this->questionList;
 		}
-
-		// takes all questions
-		if($this->random == -1 || $this->random >= $this->selectNbrQuestions())
-		{
-			$draws=$this->selectNbrQuestions();
-		}
-		else
-		{
-			$draws=$this->random;
-		}
-
-		srand((double)microtime()*1000000);
-
-		$randQuestionList=array();
-		$alreadyChosed=array();
-
-		// loop for the number of draws
-		for($i=0;$i < $draws;$i++)
-		{
-			// selects a question randomly
+		
+		$randQuestionList = array();
+		$alreadyChosen = array();
+		
+		for($i=0; $i < $this->random; $i++)
+		{			
 			do
 			{
-				$rand=rand(0,$this->selectNbrQuestions()-1);
+				$rand=rand(1,$nbQuestions);
 			}
-			// if the question has already been selected, continues in the loop
-			while(in_array($rand,$alreadyChosed));
-
-			$alreadyChosed[]=$rand;
-
-			$j=0;
-
-			foreach($this->questionList as $key=>$val)
-			{
-				// if we have found the question chosed above
-				if($j == $rand)
-				{
-					$randQuestionList[$key]=$val;
-					break;
-				}
-
-				$j++;
-			}
+			while(in_array($rand,$alreadyChosen));
+			
+			$alreadyChosen[]=$rand;
+			$randQuestionList[$rand] = $this->questionList[$rand];		
 		}
 
 		return $randQuestionList;
@@ -695,9 +674,9 @@ class Exercise
 		$form -> addGroup($radios, null, get_lang('ExerciseType').' : ', '<br />');
 
 		// random
-		/*$random = array();
+		$random = array();
 		$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
-		$form -> addGroup($random,null,get_lang('RandomQuestions').' : ','<br />');*/
+		$form -> addGroup($random,null,get_lang('RandomQuestions').' : ','<br />');
 		$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));
 		// submit
 		$form -> addElement('submit', 'submitExercise', get_lang('Ok'));
@@ -714,12 +693,12 @@ class Exercise
 			$defaults['exerciseType'] = $this -> selectType();
 			$defaults['exerciseTitle'] = $this -> selectTitle();
 			$defaults['exerciseDescription'] = $this -> selectDescription();
-			//$defaults['randomQuestions'] = $this -> isRandom();
+			$defaults['randomQuestions'] = $this -> random;
 		}
 		else{
 			$defaults['exerciseType'] = 1;
 			$defaults['exerciseAttempts'] = 0;
-			//$defaults['randomQuestions'] = 0;
+			$defaults['randomQuestions'] = 0;
 			$defaults['exerciseDescription'] = '';
 		}
 

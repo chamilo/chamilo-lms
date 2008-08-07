@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 15884 2008-08-01 08:02:10Z yannoo $
+* 	@version $Id: survey.lib.php 15947 2008-08-07 16:12:49Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -80,6 +80,10 @@ class survey_manager
 		$return['survey_thanks'] 		= $return['surveythanks'];
 		$return['survey_type'] 		    = $return['survey_type'];
 		$return['one_question_per_page']= $return['one_question_per_page'];
+		
+		$return['show_form_profile']	= $return['show_form_profile'];
+		$return['input_name_list']		= $return['input_name_list'];
+		
 		$return['shuffle'] 		= $return['shuffle'];
 		$return['parent_id'] 		= $return['parent_id'];
 		$return['survey_version'] 		= $return['survey_version'];
@@ -109,8 +113,7 @@ class survey_manager
 		$shared_survey_id=0;
 		
 		if (!$values['survey_id'] OR !is_numeric($values['survey_id']))
-		{
-			
+		{			
 			// check if the code doesn't soon exists in this language
 			$sql = 'SELECT 1 FROM '.$table_survey.' WHERE code="'.Database::escape_string($values['survey_code']).'" AND lang="'.Database::escape_string($values['survey_language']).'"';
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
@@ -130,6 +133,45 @@ class survey_manager
 			$additional['columns'] = '';
 			$additional['values'] = '';
 			
+			if ($values['anonymous']==0)
+			{
+				// input_name_list
+				$additional['columns'] .= ', show_form_profile';
+				$additional['values'] .= ",'".Database::escape_string($values['show_form_profile'])."'";
+				  
+				if ($values['show_form_profile']==1)
+				{
+					// input_name_list
+					$fields=explode(',',$values['input_name_list']);				
+					$field_values='';				
+					foreach ($fields as $field )
+					{
+						if ($field!='')
+						{
+							if ($values[$field]=='')
+								$values[$field]=0;
+							$field_values.= $field.':'.$values[$field].'@';
+						}			
+					}				
+					$additional['columns'] .= ', form_fields';
+					$additional['values'] .= ",'".Database::escape_string($field_values)."'";
+				}
+				else
+				{
+					$additional['columns'] .= ', form_fields';
+					$additional['values'] .= ",''";			
+				}
+			}
+			else
+			{
+				// input_name_list
+				$additional['columns'] .= ', show_form_profile';
+				$additional['values'] .= ",'0'";
+				
+				$additional['columns'] .= ', form_fields';
+				$additional['values'] .= ",''";		
+			}
+			
 			if($values['survey_type']==1)
 			{
 				$additional['columns'] = ', survey_type';
@@ -143,7 +185,7 @@ class survey_manager
 
 				$additional['columns'] .= ', parent_id';
 				$additional['values'] .= ",'".Database::escape_string($values['parent_id'])."'";
-
+				
 				// logic for versioning surveys
 				if(!empty($values['parent_id']))
 				{
@@ -162,7 +204,9 @@ class survey_manager
 						{
 							$additional['values'] .= ",'".$getversion['survey_version'].".1'";							 
 						}
-					} else {
+					}
+					else
+					{
 						if(strpos($row['survey_version'], '.')===false){
 							$row['survey_version'] = $row['survey_version'] + 1;
 							$additional['values'] .= ",'".$row['survey_version']."'";
@@ -206,7 +250,7 @@ class survey_manager
 			$return['id']	= $survey_id;
 		}
 		else
-		{
+		{ 
 			if ($values['anonymous']=='')
 			{
 				$values['anonymous']=0;
@@ -214,6 +258,37 @@ class survey_manager
 			
 			$additionalsets = ", shuffle = '".Database::escape_string($values['shuffle'])."'";
 			$additionalsets .= ", one_question_per_page = '".Database::escape_string($values['one_question_per_page'])."'";
+			
+			if ($values['anonymous']==0)
+			{
+						
+				$additionalsets .= ", show_form_profile = '".Database::escape_string($values['show_form_profile'])."'";
+				if ($values['show_form_profile']==1)
+				{
+					$fields=explode(',',$values['input_name_list']);				
+					$field_values='';
+					foreach ($fields as $field )
+					{	
+						if ($field!='')
+						{
+							if ($values[$field]=='')
+								$values[$field]=0;
+							$field_values.= $field.':'.$values[$field].'@';
+						}					
+					}				
+					$additionalsets .= ", form_fields = '".Database::escape_string($field_values)."'";
+				}
+				else
+				{
+					$additionalsets .= ", form_fields = '' ";
+				}
+			}
+			else
+			{
+				$additionalsets .= ", show_form_profile = '0'";
+				$additionalsets .= ", form_fields = '' ";
+			}
+			
 			
 			$sql = "UPDATE $table_survey SET
 							title 			= '".Database::escape_string($values['survey_title'])."',
@@ -996,8 +1071,7 @@ class survey_manager
 
 		$counter=1;
 		if(is_array($form_content['answers']))
-		{
-			
+		{			
 			//foreach ($form_content['answers'] as $key=>$answer)			{
 			for ($i=0;$i<count($form_content['answers']);$i++)
 			{
@@ -4361,6 +4435,248 @@ class SurveyUtil {
 			echo '</tr>';
 		}
 		echo '</table>';
-	}	
+	}
+	/**
+	 * Creates a multi array with the user fields that we can show. We look the visibility with the api_get_setting function
+	 * The username is always NOT able to change it. 
+	 * @author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification
+	 * @return array[value_name][name] 
+	 * 		   array[value_name][visibilty] 
+	 *  
+	 */
+	function make_field_list()
+	{				
+		//	LAST NAME and FIRST NAME
+		$field_list_array=array();		
+		$field_list_array['lastname']['name']=get_lang('Lastname');
+		$field_list_array['firstname']['name']=get_lang('Firstname');			
+		
+		if (api_get_setting('profile', 'name') !== 'true')
+		{
+			$field_list_array['firstname']['visibility']=0; 
+			$field_list_array['lastname']['visibility']=0;
+		}
+		else
+		{
+			$field_list_array['firstname']['visibility']=1; 
+			$field_list_array['lastname']['visibility']=1;
+		}
+		
+		$field_list_array['username']['name']=get_lang('Username');
+		$field_list_array['username']['visibility']=0; 
+		
+
+		//	OFFICIAL CODE		
+		$field_list_array['official_code']['name']=get_lang('OfficialCode');
+		
+		if (api_get_setting('profile', 'officialcode') !== 'true')
+		{ 
+			$field_list_array['official_code']['visibility']=1; 			
+		}
+		else
+		{
+			$field_list_array['official_code']['visibility']=0; 				
+		}
+		
+		// EMAIL
+		$field_list_array['email']['name']=get_lang('Email');		
+		if (api_get_setting('profile', 'email') !== 'true')
+		{ 
+			$field_list_array['email']['visibility']=1; 			
+		}
+		else
+		{
+			$field_list_array['email']['visibility']=0; 				
+		}
+				
+		// OPENID URL		
+		//$field_list_array[]='openid_authentication';
+		/*
+		if(is_profile_editable() && api_get_setting('openid_authentication')=='true')
+		{
+			$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));
+			if (api_get_setting('profile', 'openid') !== 'true')
+				$form->freeze('openid');
+			$form->applyFilter('openid', 'trim');
+			//if (api_get_setting('registration', 'openid') == 'true')
+			//	$form->addRule('openid', get_lang('ThisFieldIsRequired'), 'required');
+		}*/
+		
+		// PHONE
+		$field_list_array['phone']['name']=get_lang('Phone');
+		if (api_get_setting('profile', 'phone') !== 'true')
+		{ 
+			$field_list_array['phone']['visibility']=0;
+		}
+		else
+		{
+			$field_list_array['phone']['visibility']=1;		
+		}
+		//	LANGUAGE
+		$field_list_array['language']['name']=get_lang('Language');
+		if (api_get_setting('profile', 'language') !== 'true')
+		{ 
+			$field_list_array['language']['visibility']=0;
+		}
+		else
+		{
+			$field_list_array['language']['visibility']=1;		
+		}
+		
+
+		// EXTRA FIELDS
+		$extra = UserManager::get_extra_fields(0,50,5,'ASC');
+		$extra_data = UserManager::get_extra_user_data(api_get_user_id(),true);
+		foreach($extra as $id => $field_details)
+		{
+			if($field_details[6] == 0)
+			{
+				continue;
+			}
+			switch($field_details[2])
+			{
+				case USER_FIELD_TYPE_TEXT:
+				
+				
+					$field_list_array['extra_'.$field_details[1]]['name']=$field_details[3];
+					if ($field_details[7] == 0)
+					{ 
+						$field_list_array['extra_'.$field_details[1]]['visibility']=0;
+					}
+					else
+					{
+						$field_list_array['extra_'.$field_details[1]]['visibility']=1;		
+					}
+					
+					break;
+				case USER_FIELD_TYPE_TEXTAREA:
+				
+					$field_list_array['extra_'.$field_details[1]]['name']=$field_details[3];
+					if ($field_details[7] == 0)
+					{ 
+						$field_list_array['extra_'.$field_details[1]]['visibility']=0;
+					}
+					else
+					{
+						$field_list_array['extra_'.$field_details[1]]['visibility']=1;		
+					}					
+					break;
+				case USER_FIELD_TYPE_RADIO:
+				
+					$field_list_array['extra_'.$field_details[1]]['name']=$field_details[3];
+					if ($field_details[7] == 0)
+					{ 
+						$field_list_array['extra_'.$field_details[1]]['visibility']=0;
+					}
+					else
+					{
+						$field_list_array['extra_'.$field_details[1]]['visibility']=1;		
+					}
+					break;
+				case USER_FIELD_TYPE_SELECT:
+					$field_list_array['extra_'.$field_details[1]]['name']=$field_details[3];
+					if ($field_details[7] == 0)
+					{ 
+						$field_list_array['extra_'.$field_details[1]]['visibility']=0;
+					}
+					else
+					{
+						$field_list_array['extra_'.$field_details[1]]['visibility']=1;		
+					}						
+					break;
+				case USER_FIELD_TYPE_SELECT_MULTIPLE:
+				
+					$field_list_array['extra_'.$field_details[1]]['name']=$field_details[3];
+					if ($field_details[7] == 0)
+					{ 
+						$field_list_array['extra_'.$field_details[1]]['visibility']=0;
+					}
+					else
+					{
+						$field_list_array['extra_'.$field_details[1]]['visibility']=1;		
+					}					
+					break;
+				case USER_FIELD_TYPE_DATE:
+				
+					$field_list_array['extra_'.$field_details[1]]['name']=$field_details[3];
+					if ($field_details[7] == 0)
+					{ 
+						$field_list_array['extra_'.$field_details[1]]['visibility']=0;
+					}
+					else
+					{
+						$field_list_array['extra_'.$field_details[1]]['visibility']=1;		
+					}					
+					break;
+				case USER_FIELD_TYPE_DATETIME:
+				
+					$field_list_array['extra_'.$field_details[1]]['name']=$field_details[3];
+					if ($field_details[7] == 0)
+					{ 
+						$field_list_array['extra_'.$field_details[1]]['visibility']=0;
+					}
+					else
+					{
+						$field_list_array['extra_'.$field_details[1]]['visibility']=1;		
+					}					
+					break;
+				case USER_FIELD_TYPE_DOUBLE_SELECT:
+				
+					$field_list_array['extra_'.$field_details[1]]['name']=$field_details[3];
+					if ($field_details[7] == 0)
+					{ 
+						$field_list_array['extra_'.$field_details[1]]['visibility']=0;
+					}
+					else
+					{
+						$field_list_array['extra_'.$field_details[1]]['visibility']=1;		
+					}
+					/*
+					foreach ($field_details[8] as $key=>$element)
+					{
+						if ($element[2][0] == '*')
+						{
+							$values['*'][$element[0]] = str_replace('*','',$element[2]);
+						}
+						else 
+						{
+							$values[0][$element[0]] = $element[2];
+						}
+					}
+					
+					$group='';
+					$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1],'',$values[0],'');
+					$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*','',$values['*'],'');
+					$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
+					if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+		
+					// recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
+					if (key_exists('extra_'.$field_details[1], $extra_data))
+					{
+						// exploding all the selected values (of both select forms)
+						$selected_values = explode(';',$extra_data['extra_'.$field_details[1]]);
+						$extra_data['extra_'.$field_details[1]]  =array();
+						
+						// looping through the selected values and assigning the selected values to either the first or second select form
+						foreach ($selected_values as $key=>$selected_value)
+						{
+							if (key_exists($selected_value,$values[0]))
+							{
+								$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
+							}
+							else 
+							{
+								$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
+							}
+						}
+					}*/
+					break;
+				case USER_FIELD_TYPE_DIVIDER:
+					//$form->addElement('static',$field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
+					break;
+			}
+		}
+		return $field_list_array;
+	}
 }
 ?>

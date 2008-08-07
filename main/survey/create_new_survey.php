@@ -24,9 +24,10 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: create_new_survey.php 15846 2008-07-24 20:29:41Z dperales $
+*	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
+* 	@version $Id: create_new_survey.php 15947 2008-08-07 16:12:49Z juliomontoya $
 *
-* 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
+* 	TODO only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
 
 // name of the language file that needs to be included
@@ -78,7 +79,7 @@ if ($_GET['action'] == 'add')
 	$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('SurveyList'));
 	$tool_name = get_lang('CreateNewSurvey');
 }
-if ($_GET['action'] == 'edit' AND is_numeric($_GET['survey_id']))
+if ($_GET['action'] == 'edit' && is_numeric($_GET['survey_id']))
 {
 	$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('SurveyList'));
 	$interbreadcrumb[] = array ("url" => "survey.php?survey_id=".$_GET['survey_id'], "name" => $urlname);
@@ -148,7 +149,7 @@ $form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form
 
 //$group='';
 //$group[] =& HTML_QuickForm::createElement('radio', 'survey_share',null, get_lang('Yes'),$form_share_value);
-/** @todo maybe it is better to change this into false instead see line 95 in survey.lib.php */
+/** TODO maybe it is better to change this into false instead see line 95 in survey.lib.php */
 //$group[] =& HTML_QuickForm::createElement('radio', 'survey_share',null, get_lang('No'),0);
 
 $fck_attribute['Height'] = '200';
@@ -159,29 +160,80 @@ $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'));
 
 $surveytypes[0] = get_lang('Normal');
 $surveytypes[1] = get_lang('Conditional');
-if ($_GET['action'] == 'add'){
-	$form->addElement('select', 'survey_type', get_lang('SelectType'), $surveytypes);
-	
+
+if ($_GET['action'] == 'add')
+{
+	$form->addElement('select', 'survey_type', get_lang('SelectType'), $surveytypes);	
 	$sql = 'SELECT survey_id,title FROM '.$table_survey.' WHERE survey_type = 1 AND author = '.$_SESSION['_user']['user_id'];
 	$rs = api_sql_query($sql,__FILE__,__LINE__);
-	if(Database::num_rows($rs)>0){
+	if(Database::num_rows($rs)>0)
+	{
 		$list_surveys[0] = '';
-		while($row = Database::fetch_array($rs,NUM)){
+		while($row = Database::fetch_array($rs,NUM))
+		{
 			$list_surveys[$row[0]] = $row[1];
 		}
 		$form->addElement('select', 'parent_id', get_lang('ParentSurvey'), $list_surveys);
 	}
 }
 
-if ($survey_data['survey_type']==1 || $_GET['action'] == 'add' ){
+if ($survey_data['survey_type']==1 || $_GET['action'] == 'add' )
+{
 	$form->addElement('checkbox', 'one_question_per_page', get_lang('OneQuestionPerPage'));
 	$form->addElement('checkbox', 'shuffle', get_lang('ActivateShuffle'));
 }
 
+if ($survey_data['anonymous']==0  )
+{
+	$form->addElement('checkbox', 'show_form_profile', get_lang('ShowFormProfile'));
+}
+
+if ($_GET['action'] == 'edit' && is_numeric($_GET['survey_id']) )
+{
+	if ($survey_data['show_form_profile']==1 && $survey_data['anonymous']==0  )
+	{
+		$field_list=SurveyUtil::make_field_list();
+		if (is_array ($field_list))
+		{
+			//TODO hide and show the list in a fancy DIV 
+			//$form->addElement('html', '<a href=javascript>'.get_lang('ViewFields').'</a> <div id="fields"  style="display: none;" >');
+
+			foreach ($field_list  as $key=> $field)
+			{
+				if ($field['visibility']==1)
+				{
+					$form->addElement('checkbox', 'profile_'.$key, ' ','&nbsp;&nbsp;'.$field['name'] );				
+					$input_name_list.= 'profile_'.$key.',';
+				}
+			}
+			// necesary to know the fields
+			$form->addElement('hidden', 'input_name_list', $input_name_list );
+			
+			//set defaults form fields		
+			if ($survey_data['form_fields'])
+			{
+				$form_fields=explode('@',$survey_data['form_fields']);
+				foreach($form_fields as $field)
+				{
+					$field_value=explode(':',$field);
+					if ($field_value[0]!='' && $field_value[1]!= '')
+					{
+						$defaults[$field_value[0]]=$field_value[1];
+					}
+				}
+			}
+			//$form->addElement('html', '</div>');
+		}	
+	}
+
+}
+
 $form->addElement('submit', 'submit_survey', get_lang('Ok'));
 
+
 // setting the rules
-if ($_GET['action'] == 'add'){
+if ($_GET['action'] == 'add')
+{
 	$form->addRule('survey_code', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 }
 $form->addRule('survey_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');

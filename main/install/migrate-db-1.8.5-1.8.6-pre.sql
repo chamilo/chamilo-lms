@@ -41,3 +41,5 @@ ALTER TABLE survey_question ADD survey_group_sec2 int unsigned NOT NULL default 
 CREATE TABLE survey_group (  id int unsigned NOT NULL auto_increment, name varchar(20) NOT NULL, description varchar(255) NOT NULL,  survey_id int unsigned NOT NULL, PRIMARY KEY  (id) );
 ALTER TABLE survey_question_option ADD value int NOT NULL default 0;
 UPDATE tool SET category = 'interaction' WHERE name = 'forum';
+ALTER TABLE survey ADD show_form_profile int NOT NULL default 0;
+ALTER TABLE survey ADD form_fields TEXT NOT NULL;

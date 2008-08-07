@@ -25,7 +25,8 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey_list.php 15555 2008-06-11 20:39:15Z juliomontoya $
+*	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
+* 	@version $Id: survey_list.php 15947 2008-08-07 16:12:49Z juliomontoya $
 *
 * 	@todo use quickforms for the forms
 */
@@ -66,6 +67,7 @@ else
 {
 	$tool_name = get_lang('SurveyList'); 
 }
+
 
 // Header
 Display :: display_header($tool_name,'Survey');

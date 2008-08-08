@@ -1,4 +1,4 @@
-<?php // $Id: update-db-1.8.4-1.8.5.inc.php 14753 2008-04-03 22:20:25Z juliomontoya $
+<?php // $Id: update-db-1.8.4-1.8.5.inc.php 15952 2008-08-08 03:56:21Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -250,7 +250,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		else
 		{
 			mysql_select_db($dbNameForm);
-			$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
+			$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
 			if($res===false){die('Error while querying the courses list in update_db.inc.php');}
 

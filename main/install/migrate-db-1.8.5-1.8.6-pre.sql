@@ -20,6 +20,7 @@ INSERT INTO settings_current (variable, subkey,type,category,selected_value,titl
 INSERT INTO settings_options (variable, value, display_text) VALUES ('add_users_by_coach', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('add_users_by_coach', 'false', 'No');
 ALTER TABLE session ADD nb_days_access_before_beginning TINYINT NULL DEFAULT '0' AFTER date_end , ADD nb_days_access_after_end TINYINT NULL DEFAULT '0' AFTER nb_days_access_before_beginning ;
+ALTER TABLE course_rel_user ADD INDEX (user_id);
 
 -- xxSTATSxx
 

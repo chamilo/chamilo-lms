@@ -13,6 +13,57 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+--
+-- Table structure for table user
+--
+
+DROP TABLE IF EXISTS user;
+CREATE TABLE user (
+  user_id int(10) unsigned NOT NULL auto_increment,
+  lastname varchar(60) default NULL,
+  firstname varchar(60) default NULL,
+  username varchar(20) NOT NULL default '',
+  password varchar(50) NOT NULL default '',
+  auth_source varchar(50) default 'platform',
+  email varchar(100) default NULL,
+  status tinyint(4) NOT NULL default '5',
+  official_code varchar(40) default NULL,
+  phone varchar(30) default NULL,
+  picture_uri varchar(250) default NULL,
+  creator_id int(10) unsigned default NULL,
+  competences text,
+  diplomas text,
+  openarea text,
+  teach text,
+  productions varchar(250) default NULL,
+  chatcall_user_id int(10) unsigned NOT NULL default '0',
+  chatcall_date datetime NOT NULL default '0000-00-00 00:00:00',
+  chatcall_text varchar(50) NOT NULL default '',
+  language varchar(40) default NULL,
+  registration_date datetime NOT NULL default '0000-00-00 00:00:00',
+  expiration_date datetime NOT NULL default '0000-00-00 00:00:00',
+  active tinyint unsigned NOT NULL default 1,
+  openid varchar(255) DEFAULT NULL,
+  theme varchar(255) DEFAULT NULL,
+  hr_dept_id smallint unsigned NOT NULL default 0,
+  PRIMARY KEY  (user_id),
+  UNIQUE KEY username (username)
+);
+ALTER TABLE user ADD INDEX (status);
+
+--
+-- Dumping data for table user
+--
+
+/*!40000 ALTER TABLE user DISABLE KEYS */;
+LOCK TABLES user WRITE;
+INSERT INTO user (lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active,openid) VALUES ('{ADMINLASTNAME}','{ADMINFIRSTNAME}','{ADMINLOGIN}','{ADMINPASSWORD}','{PLATFORM_AUTH_SOURCE}','{ADMINEMAIL}',1,'ADMIN',1,NOW(),'0000-00-00 00:00:00','1',NULL);
+-- Insert anonymous user
+INSERT INTO user (lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active,openid) VALUES ('Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', 1, NOW(), '0000-00-00 00:00:00', 1,NULL);
+UNLOCK TABLES;
+/*!40000 ALTER TABLE user ENABLE KEYS */;
+
 --
 -- Table structure for table admin
 --
@@ -237,6 +288,7 @@ CREATE TABLE course_rel_user (
   user_course_cat int(11) default '0',
   PRIMARY KEY  (course_code,user_id)
 );
+ALTER TABLE course_rel_user ADD INDEX (user_id);
 
 --
 -- Dumping data for table course_rel_user
@@ -739,57 +791,6 @@ CREATE TABLE sys_announcement (
 LOCK TABLES sys_announcement WRITE;
 UNLOCK TABLES;
 /*!40000 ALTER TABLE sys_announcement ENABLE KEYS */;
-
---
--- Table structure for table user
---
-
-DROP TABLE IF EXISTS user;
-CREATE TABLE user (
-  user_id int(10) unsigned NOT NULL auto_increment,
-  lastname varchar(60) default NULL,
-  firstname varchar(60) default NULL,
-  username varchar(20) NOT NULL default '',
-  password varchar(50) NOT NULL default '',
-  auth_source varchar(50) default 'platform',
-  email varchar(100) default NULL,
-  status tinyint(4) NOT NULL default '5',
-  official_code varchar(40) default NULL,
-  phone varchar(30) default NULL,
-  picture_uri varchar(250) default NULL,
-  creator_id int(10) unsigned default NULL,
-  competences text,
-  diplomas text,
-  openarea text,
-  teach text,
-  productions varchar(250) default NULL,
-  chatcall_user_id int(10) unsigned NOT NULL default '0',
-  chatcall_date datetime NOT NULL default '0000-00-00 00:00:00',
-  chatcall_text varchar(50) NOT NULL default '',
-  language varchar(40) default NULL,
-  registration_date datetime NOT NULL default '0000-00-00 00:00:00',
-  expiration_date datetime NOT NULL default '0000-00-00 00:00:00',
-  active tinyint unsigned NOT NULL default 1,
-  openid varchar(255) DEFAULT NULL,
-  theme varchar(255) DEFAULT NULL,
-  hr_dept_id smallint unsigned NOT NULL default 0,
-  PRIMARY KEY  (user_id),
-  UNIQUE KEY username (username)
-);
-ALTER TABLE user ADD INDEX (status);
-
---
--- Dumping data for table user
---
-
-
-/*!40000 ALTER TABLE user DISABLE KEYS */;
-LOCK TABLES user WRITE;
-INSERT INTO user (lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active,openid) VALUES ('{ADMINLASTNAME}','{ADMINFIRSTNAME}','{ADMINLOGIN}','{ADMINPASSWORD}','{PLATFORM_AUTH_SOURCE}','{ADMINEMAIL}',1,'ADMIN',1,NOW(),'0000-00-00 00:00:00','1',NULL);
--- Insert anonymous user
-INSERT INTO user (lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active,openid) VALUES ('Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', 1, NOW(), '0000-00-00 00:00:00', 1,NULL);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE user ENABLE KEYS */;
 
 -- 
 -- Table structure for shared_survey

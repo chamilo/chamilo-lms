@@ -84,7 +84,6 @@ for($i=1;$i <= $nbrAnswers;$i++)
 	{
 		$output .= "&hotspot_".$i."_type=poly";
 	}
-	
 	// Delineation
 	if ($answers['hotspot_type'][$i] == 'delineation')
 	{

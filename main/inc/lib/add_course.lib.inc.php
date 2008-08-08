@@ -624,7 +624,7 @@ function update_Db_course($courseDbName)
 		ponderation smallint default NULL,
 		position mediumint unsigned NOT NULL default 1,
 	    hotspot_coordinates tinytext,
-	    hotspot_type enum('square','circle','poly') default NULL,
+	    hotspot_type enum('square','circle','poly','delineation') default NULL,
 		PRIMARY KEY (id, question_id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);

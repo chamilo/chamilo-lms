@@ -44,3 +44,4 @@ ALTER TABLE survey_question_option ADD value int NOT NULL default 0;
 UPDATE tool SET category = 'interaction' WHERE name = 'forum';
 ALTER TABLE survey ADD show_form_profile int NOT NULL default 0;
 ALTER TABLE survey ADD form_fields TEXT NOT NULL;
+ALTER TABLE quiz_answer CHANGE hotspot_type hotspot_type ENUM( 'square', 'circle', 'poly', 'delineation' ) NULL DEFAULT NULL;

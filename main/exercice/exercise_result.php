@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 15957 2008-08-08 08:23:59Z elixir_inter $
+* 	@version $Id: exercise_result.php 15967 2008-08-10 06:40:40Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -601,13 +601,13 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 										break;
 				// for fill in the blanks
-				case FILL_IN_BLANKS :	
+				case FILL_IN_BLANKS :
 									
 							    		// the question is encoded like this
 									    // [A] B [C] D [E] F::10,10,10@1
 									    // number 1 before the "@" means that is a switchable fill in blank question
 									    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
-									    // means that is a normal fill blank question				
+									    // means that is a normal fill blank question			
 
 										// first we explode the "::"
 										$pre_array = explode('::', $answer);	
@@ -649,51 +649,53 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 										$answer='';
 										$j=0;
 										
-										$user_tags[]=array();
-										$correct_tags[]=array();
+                                        //initialise answer tags
+										$user_tags=array();
+										$correct_tags=array();
 										$real_text=array();
 										// the loop will stop at the end of the text
 										while(1)
 										{
-											// quits the loop if there are no more blanks
+											// quits the loop if there are no more blanks (detect '[')
 											if(($pos = strpos($temp,'[')) === false)
 											{
 												// adds the end of the text
-												$answer.=$temp;
-												// TeX parsing
+												$answer=$temp;
+												// TeX parsing - replacement of texcode tags
 												$texstring = api_parse_tex($texstring);
 												$answer=str_replace("{texcode}",$texstring,$answer);
-												break;
+                                                $real_text[] = $answer;
+												break; //no more "blanks", quit the loop
 											}
-											// adds the piece of text that is before the blank and ended by [
-											$real_text[]=substr($temp,0,$pos+1);
+											// adds the piece of text that is before the blank 
+                                            //and ends with '[' into a general storage array
+                                            $real_text[]=substr($temp,0,$pos+1);
 											$answer.=substr($temp,0,$pos+1);
-										
-											
+											//take the string remaining (after the last "[" we found)
 											$temp=substr($temp,$pos+1);
-
-											// quits the loop if there are no more blanks
+											// quit the loop if there are no more blanks, and update $pos to the position of next ']'
 											if(($pos = strpos($temp,']')) === false)
 											{
 												// adds the end of the text
 												$answer.=$temp;
 												break;
 											}
-
 											$choice[$j]=trim($choice[$j]);
 											$user_tags[]=stripslashes(strtolower($choice[$j]));
-											$correct_tags[]=strtolower(substr($temp,0,$pos));											
+											//put the contents of the [] answer tag into correct_tags[]
+                                            $correct_tags[]=strtolower(substr($temp,0,$pos));
 											$j++;
 											$temp=substr($temp,$pos+1);
+                                            //$answer .= ']';
 										}
 																			
 										$answer='';			
 										$real_correct_tags = $correct_tags;							
 										$chosen_list=array();
 										
-										for($i=1;$i<count($real_correct_tags);$i++)
-										{							
-											if ($i==1)
+										for($i=0;$i<count($real_correct_tags);$i++)
+										{
+											if ($i==0)
 											{
 												$answer.=$real_text[0];
 											}
@@ -703,9 +705,9 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 												if ($correct_tags[$i]==$user_tags[$i])
 												{
 													// gives the related weighting to the student
-													$questionScore+=$answerWeighting[$i-1]; 
+													$questionScore+=$answerWeighting[$i]; 
 													// increments total score
-													$totalScore+=$answerWeighting[$i-1];
+													$totalScore+=$answerWeighting[$i];
 													// adds the word in green at the end of the string
 													$answer.=stripslashes($correct_tags[$i]); 
 												}
@@ -729,9 +731,9 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 													$correct_tags=array_diff($correct_tags,$chosen_list);
 																	
 													// gives the related weighting to the student												
-													$questionScore+=$answerWeighting[$i-1];
+													$questionScore+=$answerWeighting[$i];
 													// increments total score
-													$totalScore+=$answerWeighting[$i-1];
+													$totalScore+=$answerWeighting[$i];
 													// adds the word in green at the end of the string
 													$answer.=stripslashes($user_tags[$i]);
 												}													// else if the word entered by the student IS NOT the same as the one defined by the professor											
@@ -748,7 +750,9 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 											}
 											// adds the correct word, followed by ] to close the blank
 											$answer.=' / <font color="green"><b>'.$real_correct_tags[$i].'</b></font>]';
-											$answer.=$real_text[$i];
+											if ( isset( $real_text[$i+1] ) ) {
+                                                $answer.=$real_text[$i+1];
+                                            }
 										} 
 
 										break;

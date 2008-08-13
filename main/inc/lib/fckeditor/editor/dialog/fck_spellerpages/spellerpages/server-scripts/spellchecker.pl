@@ -12,10 +12,10 @@ my @textinputs = param( 'textinputs[]' ); # array
 my $aspell_cmd = '"C:\Program Files\Aspell\bin\aspell.exe"';	# by FredCK (for Windows)
 my $lang = 'en_US';
 # my $aspell_opts = "-a --lang=$lang --encoding=utf-8";			# by FredCK
-my $aspell_opts = "-a --lang=$lang --encoding=utf-8 -H";		# by FredCK
+my $aspell_opts = "-a --lang=$lang --encoding=utf-8 -H --rem-sgml-check=alt";		# by FredCK
 my $input_separator = "A";
 
-# set the 'wordtext' JavaScript variable to the submitted text. 
+# set the 'wordtext' JavaScript variable to the submitted text.
 sub printTextVar {
 	for( my $i = 0; $i <= $#textinputs; $i++ ) {
 	        print "textinputs[$i] = decodeURIComponent('" . escapeQuote( $textinputs[$i] ) . "')\n";
@@ -54,10 +54,12 @@ sub printCheckerResults {
 	my( $fh, $tmpfilename ) = tempfile( DIR => $dir );
 
 	# temp file was created properly?
-	
+
 	# open temp file, add the submitted text.
 	for( my $i = 0; $i <= $#textinputs; $i++ ) {
 		$text = url_decode( $textinputs[$i] );
+		# Strip all tags for the text. (by FredCK - #339 / #681)
+		$text =~ s/<[^>]+>/ /g;
 		@lines = split( /\n/, $text );
 		print $fh "\%\n"; # exit terse mode
 		print $fh "^$input_separator\n";
@@ -66,7 +68,7 @@ sub printCheckerResults {
 			# use carat on each line to escape possible aspell commands
 			print $fh "^$line\n";
 		}
-		
+
 	}
 	# exec aspell command
 	my $cmd = "$aspell_cmd $aspell_opts < $tmpfilename 2>&1";
@@ -81,7 +83,7 @@ sub printCheckerResults {
 			$textInputIdx++;
 			printTextIdxDecl( $textInputIdx );
 			$wordIdx = 0;
-	
+
 		} elsif( $ret =~ /^(&|#)/ ) {
 			my @tokens = split( " ", $ret, 5 );
 			printWordsElem( $textInputIdx, $wordIdx, $tokens[1] );
@@ -158,7 +160,7 @@ function init_spell() {
 		if (parent.frames.length) {
 			parent.init_spell( wordWindowObj );
 		} else {
-			error = "This page was loaded outside of a frameset. "; 
+			error = "This page was loaded outside of a frameset. ";
 			error += "It might not display properly";
 			alert( error );
 		}
@@ -177,4 +179,3 @@ wordWindowObj.writeBody();
 </body>
 </html>
 EOF
-

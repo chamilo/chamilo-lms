@@ -1,27 +1,31 @@
-<?php 
+<?php
 /*
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: commands.php
- * 	This is the File Manager Connector for PHP.
- * 
- * File Authors:
- * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * This is the File Manager Connector for PHP.
  */
 
 function GetFolders( $resourceType, $currentFolder )
 {
 	// Map the virtual path to the local server path.
-	$sServerDir = ServerMapFolder( $resourceType, $currentFolder ) ;
+	$sServerDir = ServerMapFolder( $resourceType, $currentFolder, 'GetFolders' ) ;
 
 	// Array that will hold the folders names.
 	$aFolders	= array() ;
@@ -38,11 +42,9 @@ function GetFolders( $resourceType, $currentFolder )
 
 	// Open the "Folders" node.
 	echo "<Folders>" ;
-	
 	natcasesort( $aFolders ) ;
 	foreach ( $aFolders as $sFolder )
 		echo $sFolder ;
-
 	// Close the "Folders" node.
 	echo "</Folders>" ;
 }
@@ -50,7 +52,7 @@ function GetFolders( $resourceType, $currentFolder )
 function GetFoldersAndFiles( $resourceType, $currentFolder )
 {
 	// Map the virtual path to the local server path.
-	$sServerDir = ServerMapFolder( $resourceType, $currentFolder ) ;
+	$sServerDir = ServerMapFolder( $resourceType, $currentFolder, 'GetFoldersAndFiles' ) ;
 
 	// Arrays that will hold the folders and files names.
 	$aFolders	= array() ;
@@ -66,7 +68,10 @@ function GetFoldersAndFiles( $resourceType, $currentFolder )
 				$aFolders[] = '<Folder name="' . ConvertToXmlAttribute( $sFile ) . '" />' ;
 			else
 			{
-				$iFileSize = filesize( $sServerDir . $sFile ) ;
+				$iFileSize = @filesize( $sServerDir . $sFile ) ;
+				if ( !$iFileSize ) {
+					$iFileSize = 0 ;
+				}
 				if ( $iFileSize > 0 )
 				{
 					$iFileSize = round( $iFileSize / 1024 ) ;
@@ -99,19 +104,23 @@ function GetFoldersAndFiles( $resourceType, $currentFolder )
 
 function CreateFolder( $resourceType, $currentFolder )
 {
+	if (!isset($_GET)) {
+		global $_GET;
+	}
 	$sErrorNumber	= '0' ;
 	$sErrorMsg		= '' ;
 
 	if ( isset( $_GET['NewFolderName'] ) )
 	{
 		$sNewFolderName = $_GET['NewFolderName'] ;
+		$sNewFolderName = SanitizeFolderName( $sNewFolderName ) ;
 
 		if ( strpos( $sNewFolderName, '..' ) !== FALSE )
 			$sErrorNumber = '102' ;		// Invalid folder name.
 		else
 		{
 			// Map the virtual path to the local server path of the current folder.
-			$sServerDir = ServerMapFolder( $resourceType, $currentFolder ) ;
+			$sServerDir = ServerMapFolder( $resourceType, $currentFolder, 'CreateFolder' ) ;
 
 			if ( is_writable( $sServerDir ) )
 			{
@@ -144,33 +153,52 @@ function CreateFolder( $resourceType, $currentFolder )
 	echo '<Error number="' . $sErrorNumber . '" originalDescription="' . ConvertToXmlAttribute( $sErrorMsg ) . '" />' ;
 }
 
-function FileUpload( $resourceType, $currentFolder )
+function FileUpload( $resourceType, $currentFolder, $sCommand )
 {
+	if (!isset($_FILES)) {
+		global $_FILES;
+	}
 	$sErrorNumber = '0' ;
 	$sFileName = '' ;
 
 	if ( isset( $_FILES['NewFile'] ) && !is_null( $_FILES['NewFile']['tmp_name'] ) )
 	{
+		global $Config ;
+
 		$oFile = $_FILES['NewFile'] ;
 
 		// Map the virtual path to the local server path.
-		$sServerDir = ServerMapFolder( $resourceType, $currentFolder ) ;
+		$sServerDir = ServerMapFolder( $resourceType, $currentFolder, $sCommand ) ;
 
 		// Get the uploaded file name.
 		$sFileName = $oFile['name'] ;
+		$sFileName = SanitizeFileName( $sFileName ) ;
+
 		$sOriginalFileName = $sFileName ;
+
+		// Get the extension.
 		$sExtension = substr( $sFileName, ( strrpos($sFileName, '.') + 1 ) ) ;
 		$sExtension = strtolower( $sExtension ) ;
 
-		global $Config ;
+		if ( isset( $Config['SecureImageUploads'] ) )
+		{
+			if ( ( $isImageValid = IsImageValid( $oFile['tmp_name'], $sExtension ) ) === false )
+			{
+				$sErrorNumber = '202' ;
+			}
+		}
 
-		$arAllowed	= $Config['AllowedExtensions'][$resourceType] ;
-		$arDenied	= $Config['DeniedExtensions'][$resourceType] ;
+		if ( isset( $Config['HtmlExtensions'] ) )
+		{
+			if ( !IsHtmlExtension( $sExtension, $Config['HtmlExtensions'] ) &&
+				( $detectHtml = DetectHtml( $oFile['tmp_name'] ) ) === true )
+			{
+				$sErrorNumber = '202' ;
+			}
+		}
 
-		$perm = api_get_setting('permissions_for_new_files');
-		$perm = octdec(!empty($perm)?$perm:'0660');
-
-		if ( ( count($arAllowed) == 0 || in_array( $sExtension, $arAllowed ) ) && ( count($arDenied) == 0 || !in_array( $sExtension, $arDenied ) ) )
+		// Check if it is an allowed extension.
+		if ( !$sErrorNumber && IsAllowedExt( $sExtension, $resourceType ) )
 		{
 			$iCounter = 0 ;
 
@@ -190,12 +218,39 @@ function FileUpload( $resourceType, $currentFolder )
 
 					if ( is_file( $sFilePath ) )
 					{
+						if ( isset( $Config['ChmodOnUpload'] ) && !$Config['ChmodOnUpload'] )
+						{
+							break ;
+						}
+
+						$permissions = 0777;
+
+						if ( isset( $Config['ChmodOnUpload'] ) && $Config['ChmodOnUpload'] )
+						{
+							$permissions = $Config['ChmodOnUpload'] ;
+						}
+
 						$oldumask = umask(0) ;
-						chmod( $sFilePath, $perm ) ;
+						chmod( $sFilePath, $permissions ) ;
 						umask( $oldumask ) ;
 					}
 
 					break ;
+				}
+			}
+
+			if ( file_exists( $sFilePath ) )
+			{
+				//previous checks failed, try once again
+				if ( isset( $isImageValid ) && $isImageValid === -1 && IsImageValid( $sFilePath, $sExtension ) === false )
+				{
+					@unlink( $sFilePath ) ;
+					$sErrorNumber = '202' ;
+				}
+				else if ( isset( $detectHtml ) && $detectHtml === -1 && DetectHtml( $sFilePath ) === true )
+				{
+					@unlink( $sFilePath ) ;
+					$sErrorNumber = '202' ;
 				}
 			}
 		}
@@ -205,9 +260,11 @@ function FileUpload( $resourceType, $currentFolder )
 	else
 		$sErrorNumber = '202' ;
 
-	echo '<script type="text/javascript">' ;
-	echo 'window.parent.frames["frmUpload"].OnUploadCompleted(' . $sErrorNumber . ',"' . str_replace( '"', '\\"', $sFileName ) . '") ;' ;
-	echo '</script>' ;
+
+	$sFileUrl = CombinePaths( GetResourceTypePath( $resourceType, $sCommand ) , $currentFolder ) ;
+	$sFileUrl = CombinePaths( $sFileUrl, $sFileName ) ;
+
+	SendUploadResults( $sErrorNumber, $sFileUrl, $sFileName ) ;
 
 	exit ;
 }

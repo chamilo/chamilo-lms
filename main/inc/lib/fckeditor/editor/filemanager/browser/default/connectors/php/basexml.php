@@ -1,25 +1,32 @@
-<?php 
+<?php
 /*
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: basexml.php
- * 	This is the File Manager Connector for ASP.
- * 
- * File Authors:
- * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * These functions define the base of the XML response sent by the PHP
+ * connector.
  */
 
 function SetXmlHeaders()
 {
+	ob_end_clean() ;
+
 	// Prevent the browser from caching the result.
 	// Date in the past
 	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT') ;
@@ -32,21 +39,23 @@ function SetXmlHeaders()
 	header('Pragma: no-cache') ;
 
 	// Set the response format.
-	header( 'Content-Type:text/xml; charset=utf-8' ) ;
+	header( 'Content-Type: text/xml; charset=utf-8' ) ;
 }
 
 function CreateXmlHeader( $command, $resourceType, $currentFolder )
 {
-	SetXmlHeaders() ;
-	
+	SetXmlHeaders() ; 
+
 	// Create the XML document header.
 	echo '<?xml version="1.0" encoding="utf-8" ?>' ;
 
 	// Create the main "Connector" node.
 	echo '<Connector command="' . $command . '" resourceType="' . $resourceType . '">' ;
-	
+
 	// Add the current folder node.
-	echo '<CurrentFolder path="' . ConvertToXmlAttribute( $currentFolder ) . '" url="' . ConvertToXmlAttribute( GetUrlFromPath( $resourceType, $currentFolder ) ) . '" />' ;
+	echo '<CurrentFolder path="' . ConvertToXmlAttribute( $currentFolder ) . '" url="'. ConvertToXmlAttribute( GetUrlFromPath( $resourceType, $currentFolder, $command ) ) .'" />' ;
+
+	$GLOBALS['HeaderSent'] = true ;
 }
 
 function CreateXmlFooter()
@@ -56,13 +65,29 @@ function CreateXmlFooter()
 
 function SendError( $number, $text )
 {
-	SetXmlHeaders() ;
-	
-	// Create the XML document header
-	echo '<?xml version="1.0" encoding="utf-8" ?>' ;
-	
-	echo '<Connector><Error number="' . $number . '" text="' . htmlspecialchars( $text ) . '" /></Connector>' ;
-	
+	if ( isset( $GLOBALS['HeaderSent'] ) && $GLOBALS['HeaderSent'] )
+	{
+		SendErrorNode( $number, $text ) ;
+		CreateXmlFooter() ;
+	}
+	else
+	{
+		SetXmlHeaders() ;
+
+		// Create the XML document header
+		echo '<?xml version="1.0" encoding="utf-8" ?>' ;
+
+		echo '<Connector>' ;
+
+		SendErrorNode( $number, $text ) ;
+
+		echo '</Connector>' ;
+	}
 	exit ;
+}
+
+function SendErrorNode(  $number, $text )
+{
+	echo '<Error number="' . $number . '" text="' . htmlspecialchars( $text ) . '" />' ;
 }
 ?>

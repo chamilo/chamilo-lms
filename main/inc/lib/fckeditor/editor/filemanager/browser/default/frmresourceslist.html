@@ -1,87 +1,84 @@
-<!--
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: frmresourceslist.html
- * 	This page shows all resources available in a folder in the File Browser.
- * 
- * File Authors:
- * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
--->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * This page shows all resources available in a folder in the File Browser.
+-->
 <html>
-	<head>
-		<link href="browser.css" type="text/css" rel="stylesheet">
-		<script type="text/javascript" src="js/common.js"></script>
-		<script language="javascript">
+<head>
+	<title>Resources</title>
+	<link href="browser.css" type="text/css" rel="stylesheet">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript">
 
 var oListManager = new Object() ;
 
-oListManager.Init = function()
-{
-	this.Table = document.getElementById('tableFiles') ;
-}
-
 oListManager.Clear = function()
 {
-	// Remove all other rows available.
-	while ( this.Table.rows.length > 0 )
-		this.Table.deleteRow(0) ;
+	document.body.innerHTML = '' ;
 }
 
-oListManager.AddFolder = function( folderName, folderPath )
+function ProtectPath(path)
 {
-	// Create the new row.
-	var oRow = this.Table.insertRow(-1) ;
-
-	// Build the link to view the folder.
-	var sLink = '<a href="#" onclick="OpenFolder(\'' + folderPath + '\');return false;">' ;
-
-	// Add the folder icon cell.
-	var oCell = oRow.insertCell(-1) ;
-	oCell.width = 16 ;
-	oCell.innerHTML = sLink + '<img alt="" src="images/Folder.gif" width="16" height="16" border="0"></a>' ;
-
-	// Add the folder name cell.
-	oCell = oRow.insertCell(-1) ;
-	oCell.noWrap = true ;
-	oCell.colSpan = 2 ;
-	oCell.innerHTML = '&nbsp;' + sLink + folderName + '</a>' ;
+	path = path.replace( /\\/g, '\\\\') ;
+	path = path.replace( /'/g, '\\\'') ;
+	return path ;
 }
 
-oListManager.AddFile = function( fileName, fileUrl, fileSize )
+oListManager.GetFolderRowHtml = function( folderName, folderPath )
 {
-	// Create the new row.
-	var oRow = this.Table.insertRow(-1) ;
-
 	// Build the link to view the folder.
-	var sLink = '<a href="#" onclick="OpenFile(\'' + fileUrl + '\');return false;">' ;
+	var sLink = '<a href="#" onclick="OpenFolder(\'' + ProtectPath( folderPath ) + '\');return false;">' ;
+
+	return '<tr>' +
+			'<td width="16">' +
+				sLink +
+				'<img alt="" src="images/Folder.gif" width="16" height="16" border="0"><\/a>' +
+			'<\/td><td nowrap colspan="2">&nbsp;' +
+				sLink +
+				folderName +
+				'<\/a>' +
+		'<\/td><\/tr>' ;
+}
+
+oListManager.GetFileRowHtml = function( fileName, fileUrl, fileSize )
+{
+	// Build the link to view the folder.
+	var sLink = '<a href="#" onclick="OpenFile(\'' + ProtectPath( fileUrl ) + '\');return false;">' ;
 
 	// Get the file icon.
 	var sIcon = oIcons.GetIcon( fileName ) ;
 
-	// Add the file icon cell.
-	var oCell = oRow.insertCell(-1) ;
-	oCell.width = 16 ;
-	oCell.innerHTML = sLink + '<img alt="" src="images/icons/' + sIcon + '.gif" width="16" height="16" border="0"></a>' ;
-
-	// Add the file name cell.
-	oCell = oRow.insertCell(-1) ;
-	oCell.innerHTML = '&nbsp;' + sLink + fileName + '</a>' ;
-	
-	// Add the file size cell.
-	oCell = oRow.insertCell(-1) ;
-	oCell.noWrap = true ;
-	oCell.align = 'right' ;
-	oCell.innerHTML = '&nbsp;' + fileSize + ' KB' ;
+	return '<tr>' +
+			'<td width="16">' +
+				sLink +
+				'<img alt="" src="images/icons/' + sIcon + '.gif" width="16" height="16" border="0"><\/a>' +
+			'<\/td><td>&nbsp;' +
+				sLink +
+				fileName +
+				'<\/a>' +
+			'<\/td><td align="right" nowrap>&nbsp;' +
+				fileSize +
+				' KB' +
+		'<\/td><\/tr>' ;
 }
 
 function OpenFolder( folderPath )
@@ -92,7 +89,8 @@ function OpenFolder( folderPath )
 
 function OpenFile( fileUrl )
 {
-	window.top.opener.SetUrl( fileUrl ) ;
+	
+	window.top.opener.SetUrl( encodeURI( fileUrl ).replace( '#', '%23' ) ) ;	
 	window.top.close() ;
 	window.top.opener.focus() ;
 }
@@ -101,7 +99,7 @@ function LoadResources( resourceType, folderPath )
 {
 	oListManager.Clear() ;
 	oConnector.ResourceType = resourceType ;
-	oConnector.CurrentFolder = folderPath
+	oConnector.CurrentFolder = folderPath ;
 	oConnector.SendCommand( 'GetFoldersAndFiles', null, GetFoldersAndFilesCallBack ) ;
 }
 
@@ -116,37 +114,57 @@ function GetFoldersAndFilesCallBack( fckXml )
 		return ;
 
 	// Get the current folder path.
-	var oNode = fckXml.SelectSingleNode( 'Connector/CurrentFolder' ) ;
-	var sCurrentFolderPath	= oNode.attributes.getNamedItem('path').value ;
-	var sCurrentFolderUrl	= oNode.attributes.getNamedItem('url').value ;
+	var oFolderNode = fckXml.SelectSingleNode( 'Connector/CurrentFolder' ) ;
+	if ( oFolderNode == null )
+	{
+		alert( 'The server didn\'t reply with a proper XML data. Please check your configuration.' ) ;
+		return ;
+	}
+	var sCurrentFolderPath	= oFolderNode.attributes.getNamedItem('path').value ;
+	var sCurrentFolderUrl	= oFolderNode.attributes.getNamedItem('url').value ;
 
-	// Add the Folders.	
-	var oNodes = fckXml.SelectNodes( 'Connector/Folders/Folder' ) ;
+//	var dTimer = new Date() ;
+
+	var oHtml = new StringBuilder( '<table id="tableFiles" cellspacing="1" cellpadding="0" width="100%" border="0">' ) ;
+
+	// Add the Folders.
+	var oNodes ;
+	oNodes = fckXml.SelectNodes( 'Connector/Folders/Folder' ) ;
 	for ( var i = 0 ; i < oNodes.length ; i++ )
 	{
 		var sFolderName = oNodes[i].attributes.getNamedItem('name').value ;
-		oListManager.AddFolder( sFolderName, sCurrentFolderPath + sFolderName + "/" ) ;
+		oHtml.Append( oListManager.GetFolderRowHtml( sFolderName, sCurrentFolderPath + sFolderName + "/" ) ) ;
 	}
-	
-	// Add the Files.	
-	var oNodes = fckXml.SelectNodes( 'Connector/Files/File' ) ;
-	for ( var i = 0 ; i < oNodes.length ; i++ )
+
+	// Add the Files.
+	oNodes = fckXml.SelectNodes( 'Connector/Files/File' ) ;
+	for ( var j = 0 ; j < oNodes.length ; j++ )
 	{
-		var sFileName = oNodes[i].attributes.getNamedItem('name').value ;
-		var sFileSize = oNodes[i].attributes.getNamedItem('size').value ;
-		oListManager.AddFile( sFileName, sCurrentFolderUrl + sFileName, sFileSize ) ;
+		var oNode = oNodes[j] ;
+		var sFileName = oNode.attributes.getNamedItem('name').value ;
+		var sFileSize = oNode.attributes.getNamedItem('size').value ;
+
+		// Get the optional "url" attribute. If not available, build the url.
+		var oFileUrlAtt = oNodes[j].attributes.getNamedItem('url') ;
+		var sFileUrl = oFileUrlAtt != null ? oFileUrlAtt.value : sCurrentFolderUrl + sFileName ;
+
+		oHtml.Append( oListManager.GetFileRowHtml( sFileName, sFileUrl, sFileSize ) ) ;
 	}
+
+	oHtml.Append( '<\/table>' ) ;
+
+	document.body.innerHTML = oHtml.ToString() ;
+
+//	window.top.document.title = 'Finished processing in ' + ( ( ( new Date() ) - dTimer ) / 1000 ) + ' seconds' ;
+
 }
 
 window.onload = function()
 {
-	oListManager.Init() ;
 	window.top.IsLoadedResourcesList = true ;
 }
-		</script>
-	</head>
-	<body class="FileArea" bottomMargin="10" leftMargin="10" topMargin="10" rightMargin="10">
-		<table id="tableFiles" cellSpacing="1" cellPadding="0" width="100%" border="0">
-		</table>
-	</body>
+	</script>
+</head>
+<body class="FileArea">
+</body>
 </html>

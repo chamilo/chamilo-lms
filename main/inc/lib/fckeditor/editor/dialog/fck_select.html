@@ -1,21 +1,25 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <!--
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: fck_select.html
- * 	Select dialog window.
- * 
- * File Authors:
- * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Select dialog window.
 -->
 <html>
 	<head>
@@ -26,12 +30,13 @@
 		<script type="text/javascript" src="fck_select/fck_select.js"></script>
 		<script type="text/javascript">
 
-var oEditor = window.parent.InnerDialogLoaded() ;
+var dialog	= window.parent ;
+var oEditor = dialog.InnerDialogLoaded() ;
 
 // Gets the document DOM
 var oDOM = oEditor.FCK.EditorDocument ;
 
-var oActiveEl = oEditor.FCKSelection.GetSelectedElement() ;
+var oActiveEl = dialog.Selection.GetSelectedElement() ;
 
 var oListText ;
 var oListValue ;
@@ -44,6 +49,10 @@ window.onload = function()
 	oListText	= document.getElementById( 'cmbText' ) ;
 	oListValue	= document.getElementById( 'cmbValue' ) ;
 
+	// Fix the lists widths. (Bug #970)
+	oListText.style.width = oListText.offsetWidth ;
+	oListValue.style.width = oListValue.offsetWidth ;
+
 	if ( oActiveEl && oActiveEl.tagName == 'SELECT' )
 	{
 		GetE('txtName').value		= oActiveEl.name ;
@@ -54,7 +63,7 @@ window.onload = function()
 		// Load the actual options
 		for ( var i = 0 ; i < oActiveEl.options.length ; i++ )
 		{
-			var sText	= oActiveEl.options[i].innerHTML ;
+			var sText	= HTMLDecode( oActiveEl.options[i].innerHTML ) ;
 			var sValue	= oActiveEl.options[i].value ;
 
 			AddComboOption( oListText, sText, sText ) ;
@@ -64,22 +73,21 @@ window.onload = function()
 	else
 		oActiveEl = null ;
 
-	window.parent.SetOkButton( true ) ;
+	dialog.SetOkButton( true ) ;
+	dialog.SetAutoSize( true ) ;
+	SelectField( 'txtName' ) ;
 }
 
 function Ok()
 {
+	oEditor.FCKUndo.SaveUndoStep() ;
+
 	var sSize = GetE('txtLines').value ;
 	if ( sSize == null || isNaN( sSize ) || sSize <= 1 )
 		sSize = '' ;
 
-	if ( !oActiveEl )
-	{
-		oActiveEl = oEditor.FCK.EditorDocument.createElement( 'SELECT' ) ;
-		oActiveEl = oEditor.FCK.InsertElementAndGetIt( oActiveEl ) ;
-	}
+	oActiveEl = CreateNamedElement( oEditor, oActiveEl, 'SELECT', {name: GetE('txtName').value} ) ;
 
-	SetAttribute( oActiveEl, 'name'	, GetE('txtName').value ) ;
 	SetAttribute( oActiveEl, 'size'	, sSize ) ;
 	oActiveEl.multiple = ( sSize.length > 0 && GetE('chkMultiple').checked ) ;
 
@@ -108,7 +116,7 @@ function Ok()
 
 		</script>
 	</head>
-	<body style='OVERFLOW: hidden' scroll='no'>
+	<body style="overflow: hidden">
 		<table width="100%" height="100%">
 			<tr>
 				<td>

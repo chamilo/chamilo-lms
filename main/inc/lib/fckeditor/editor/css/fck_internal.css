@@ -1,28 +1,46 @@
 /*
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: fck_internal.css
- * 	This CSS Style Sheet defines rules used by the editor for its internal use.
- * 
- * File Authors:
- * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * This CSS Style Sheet defines rules used by the editor for its internal use.
  */
 
-TABLE.FCK__ShowTableBorders, TABLE.FCK__ShowTableBorders TD, TABLE.FCK__ShowTableBorders TH
+/* #########
+ *  WARNING
+ * #########
+ * When changing this file, the minified version of it must be updated in the
+ * fckeditor.html file (see FCK_InternalCSS).
+ */
+
+/* Fix to allow putting the caret at the end of the content in Firefox if
+   clicking below the content. */
+html
+{
+	min-height: 100%;
+}
+
+table.FCK__ShowTableBorders, table.FCK__ShowTableBorders td, table.FCK__ShowTableBorders th
 {
 	border: #d3d3d3 1px solid;
 }
 
-FORM
+form
 {
 	border: 1px dotted #FF0000;
 	padding: 2px;
@@ -30,7 +48,7 @@ FORM
 
 .FCK__Flash
 {
-	border: darkgray 1px solid;
+	border: #a9a9a9 1px solid;
 	background-position: center center;
 	background-image: url(images/fck_flashlogo.gif);
 	background-repeat: no-repeat;
@@ -38,14 +56,46 @@ FORM
 	height: 80px;
 }
 
+.FCK__UnknownObject
+{
+	border: #a9a9a9 1px solid;
+	background-position: center center;
+	background-image: url(images/fck_plugin.gif);
+	background-repeat: no-repeat;
+	width: 80px;
+	height: 80px;
+}
 
+/* Empty anchors images */
 .FCK__Anchor
 {
+	border: 1px dotted #00F;
 	background-position: center center;
 	background-image: url(images/fck_anchor.gif);
 	background-repeat: no-repeat;
 	width: 16px;
 	height: 15px;
+	vertical-align: middle;
+}
+
+/* Anchors with content */
+.FCK__AnchorC
+{
+	border: 1px dotted #00F;
+	background-position: 1px center;
+	background-image: url(images/fck_anchor.gif);
+	background-repeat: no-repeat;
+	padding-left: 18px;
+}
+
+/* Any anchor for non-IE, if we combine it with the previous rule IE ignores all. */
+a[name]
+{
+	border: 1px dotted #00F;
+	background-position: 0 center;
+	background-image: url(images/fck_anchor.gif);
+	background-repeat: no-repeat;
+	padding-left: 18px;
 }
 
 .FCK__PageBreak
@@ -64,41 +114,92 @@ FORM
 	height: 5px;
 }
 
-input[type="hidden"]
+/* Hidden fields */
+.FCK__InputHidden
 {
-	display: inline;
-	width:20px;
-	height:20px;
-	border:1px dotted #FF0000 ;
-	background-image: url(behaviors/hiddenfield.gif);
+	width: 19px;
+	height: 18px;
+	background-image: url(images/fck_hiddenfield.gif);
 	background-repeat: no-repeat;
-}
-
-input[type="hidden"]:after
-{
-	padding-left: 20px;
-	content: "" ;
-}
-
-.FCK__Video
-{
-	border: darkgray 1px solid;
+	vertical-align: text-bottom;
 	background-position: center center;
-	background-image: url(images/video.gif);
-	background-repeat: no-repeat;
-	width: 80px;
-	height: 80px;
 }
 
-.FCK__Video_flv
+.FCK__ShowBlocks p,
+.FCK__ShowBlocks div,
+.FCK__ShowBlocks pre,
+.FCK__ShowBlocks address,
+.FCK__ShowBlocks blockquote,
+.FCK__ShowBlocks h1,
+.FCK__ShowBlocks h2,
+.FCK__ShowBlocks h3,
+.FCK__ShowBlocks h4,
+.FCK__ShowBlocks h5,
+.FCK__ShowBlocks h6
 {
-	border: darkgray 1px solid;
-	background-position: center center;
-	background-image: url(images/flv.gif);
 	background-repeat: no-repeat;
-	width: 320px;
-	height: 240px;
+	border: 1px dotted gray;
+	padding-top: 8px;
+	padding-left: 8px;
 }
+
+.FCK__ShowBlocks p
+{
+	background-image: url(images/block_p.png);
+}
+
+.FCK__ShowBlocks div
+{
+	background-image: url(images/block_div.png);
+}
+
+.FCK__ShowBlocks pre
+{
+	background-image: url(images/block_pre.png);
+}
+
+.FCK__ShowBlocks address
+{
+	background-image: url(images/block_address.png);
+}
+
+.FCK__ShowBlocks blockquote
+{
+	background-image: url(images/block_blockquote.png);
+}
+
+.FCK__ShowBlocks h1
+{
+	background-image: url(images/block_h1.png);
+}
+
+.FCK__ShowBlocks h2
+{
+	background-image: url(images/block_h2.png);
+}
+
+.FCK__ShowBlocks h3
+{
+	background-image: url(images/block_h3.png);
+}
+
+.FCK__ShowBlocks h4
+{
+	background-image: url(images/block_h4.png);
+}
+
+.FCK__ShowBlocks h5
+{
+	background-image: url(images/block_h5.png);
+}
+
+.FCK__ShowBlocks h6
+{
+	background-image: url(images/block_h6.png);
+}
+/* This is the MP3 fckeditor image 
+   Added by Julio Montoya
+*/
 
 .FCK__MP3
 {

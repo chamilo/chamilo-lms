@@ -1,21 +1,25 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!--
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: fck_flash.html
- * 	Flash Properties dialog window.
- * 
- * File Authors:
- * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Flash Properties dialog window.
 -->
 <html>
 	<head>
@@ -24,7 +28,11 @@
 		<meta content="noindex, nofollow" name="robots">
 		<script src="common/fck_dialog_common.js" type="text/javascript"></script>
 		<script src="fck_flash/fck_flash.js" type="text/javascript"></script>
-		<link href="common/fck_dialog_common.css" type="text/css" rel="stylesheet">
+		<script type="text/javascript">
+
+document.write( FCKTools.GetStyleHtml( GetCommonDialogCss() ) ) ;
+
+		</script>
 	</head>
 	<body scroll="no" style="OVERFLOW: hidden">
 		<div id="divInfo">
@@ -51,12 +59,12 @@
 							<TR>
 								<TD nowrap>
 									<span fckLang="DlgImgWidth">Width</span><br>
-									<input id="txtWidth" class="FCK__FieldNumeric" type="text" size="3">
+									<input id="txtWidth" onkeypress="return IsDigit(event);" type="text" size="3">
 								</TD>
 								<TD>&nbsp;</TD>
 								<TD>
 									<span fckLang="DlgImgHeight">Height</span><br>
-									<input id="txtHeight" class="FCK__FieldNumeric" type="text" size="3">
+									<input id="txtHeight" onkeypress="return IsDigit(event);" type="text" size="3">
 								</TD>
 							</TR>
 						</table>
@@ -72,7 +80,7 @@
 											<td><span fckLang="DlgImgPreview">Preview</span></td>
 										</tr>
 										<tr>
-											<td id="ePreviewCell" valign="top" class="FlashPreviewArea"><iframe src="fck_flash/fck_flash_preview.html" frameborder="no" marginheight="0" marginwidth="0"></iframe></td>
+											<td id="ePreviewCell" valign="top" class="FlashPreviewArea"><iframe src="fck_flash/fck_flash_preview.html" frameborder="0" marginheight="0" marginwidth="0"></iframe></td>
 										</tr>
 									</table>
 								</td>
@@ -88,7 +96,9 @@
 				<input id="txtUploadFile" style="WIDTH: 100%" type="file" size="40" name="NewFile" /><br />
 				<br />
 				<input id="btnUpload" type="submit" value="Send it to the Server" fckLang="DlgLnkBtnUpload" />
-				<iframe name="UploadWindow" style="DISPLAY: none" src="../fckblank.html"></iframe> 
+				<script type="text/javascript">
+					document.write( '<iframe name="UploadWindow" style="DISPLAY: none" src="' + FCKTools.GetVoidUrl() + '"><\/iframe>' ) ;
+				</script>
 			</form>
 		</div>
 		<div id="divAdvanced" style="DISPLAY: none">

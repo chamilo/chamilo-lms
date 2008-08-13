@@ -802,8 +802,7 @@ $default_course_dir = api_get_path(REL_CODE_PATH).'default_course_document/';
 					<table style="background: transparent url(<?php echo $img_dir.'faded_blue_horizontal.png'; ?>) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 					<tbody>
 					<tr>
-					<td>
-					
+					<td>					
 					<div align="center">
 					<span style="text-align: center;">
                         <object width="90" height="25" align="" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" id="test">
@@ -848,24 +847,36 @@ $default_course_dir = api_get_path(REL_CODE_PATH).'default_course_document/';
 			<tbody>
 			<tr>
 			<td style="width: 50%; vertical-align: top;">
-			     	<?php
-			          	if(strpos($_SERVER['HTTP_USER_AGENT'],'Gecko')!==false)
-			          	{
-			          	?>
-			            	<img src="<?php echo api_get_path(REL_CODE_PATH) ?>inc/lib/fckeditor/editor/css/images/flv.gif?flv=<?php echo api_get_path(REL_CODE_PATH) ?>default_course_document/video/example.flv&endflv" />
-			          	<?php
-			          	}
-			          	else
-			          	{
-			          	?>
-			          	<object type="application/x-shockwave-flash" data="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/flv_player/player_flv_mini.swf" height="240" width="320">
-				          		<param name="movie" value="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/flv_player/player_flv_mini.swf" />
-				          		<param name="FlashVars" value="flv=<?php echo api_get_path(REL_PATH) ?>main/default_course_document/video/example.flv&autoplay=1&width=320&amp;height=240" />
-				          </object>
-				        <style type="text/css">body{}</style>				          	
-			          	<?php
-			          	}
-			          	?>
+			                
+        <div style="border-style: none; overflow: hidden; height: 200px; width: 300px; background-color: rgb(220, 220, 220); background-image: url(<?php echo api_get_path(REL_PATH) ?>main/inc/lib/fckeditor/editor/plugins/flvPlayer/flvPlayer.gif); background-repeat: no-repeat; background-position: center center;"><script src="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/fckeditor/editor/plugins/flvPlayer/swfobject.js" type="text/javascript"></script>
+        <div id="player810625"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.
+        <div id="player810625-config" style="overflow: hidden; display: none; visibility: hidden; width: 0px; height: 0px;">url=<?php echo api_get_path(REL_PATH) ?>main/<?php echo api_get_path(REL_CODE_PATH) ?>default_course_document/video/example.flv width=400 height=200 loop=false play=false downloadable=false fullscreen=true displayNavigation=true displayDigits=true align=left dispPlaylist=none playlistThumbs=false</div>
+
+        </div>
+        <script type="text/javascript">
+	var s1 = new SWFObject("<?php echo api_get_path(REL_PATH) ?>main/inc/lib/fckeditor/editor/plugins/flvPlayer/mediaplayer.swf","single","400","200","7");
+	s1.addVariable("width","400");
+	s1.addVariable("height","200");
+	s1.addVariable("autostart","false");
+	s1.addVariable("file","<?php echo api_get_path(REL_CODE_PATH) ?>default_course_document/video/example.flv");
+s1.addVariable("repeat","false");
+	s1.addVariable("image","");
+	s1.addVariable("showdownload","false");
+	s1.addVariable("link","<?php echo api_get_path(REL_CODE_PATH) ?>default_course_document/video/example.flv");
+	s1.addParam("allowfullscreen","true");
+	s1.addVariable("showdigits","true");
+	s1.addVariable("shownavigation","true");
+	s1.addVariable("logo","");
+	s1.write("player810625");
+</script></div>
+			        
+			        
+			        
+			        
+			        
+			        
+			
+			 
 			          	
 			</td>
 			<td style="background: transparent url(../main/img/faded_grey.png) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 50%;">

@@ -1,22 +1,26 @@
-<!--
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: fck_colorselector.html
- * 	Color Selection dialog window.
- * 
- * File Authors:
- * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
--->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<!--
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Color Selection dialog window.
+-->
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -30,18 +34,19 @@
 			#btnClear		{ width: 75px ; height: 22px ; margin-bottom: 6px ; }
 			.ColorCell		{ height: 15px ; width: 15px ; }
 		</style>
+		<script src="common/fck_dialog_common.js" type="text/javascript"></script>
 		<script type="text/javascript">
-		
+
 var oEditor = window.parent.InnerDialogLoaded() ;
 
 function OnLoad()
 {
 	// First of all, translate the dialog box texts
 	oEditor.FCKLanguageManager.TranslatePage(document) ;
-	
+
 	CreateColorTable() ;
-	
-	window.parent.SetOkButton( true ) ;	
+
+	window.parent.SetOkButton( true ) ;
 	window.parent.SetAutoSize( true ) ;
 }
 
@@ -56,17 +61,17 @@ function CreateColorTable()
 	// This function combines two ranges of three values from the color array into a row.
 	function AppendColorRow( rangeA, rangeB )
 	{
-		for ( var i = rangeA ; i < rangeA + 3 ; i++ ) 
-		{ 
-			var oRow = oTable.insertRow(-1) ; 
+		for ( var i = rangeA ; i < rangeA + 3 ; i++ )
+		{
+			var oRow = oTable.insertRow(-1) ;
 
-			for ( var j = rangeB ; j < rangeB + 3 ; j++ ) 
-			{ 
-				for ( var n = 0 ; n < 6 ; n++ ) 
-				{ 
-					AppendColorCell( oRow, '#' + aColors[j] + aColors[n] + aColors[i] ) ; 
-				} 
-			} 
+			for ( var j = rangeB ; j < rangeB + 3 ; j++ )
+			{
+				for ( var n = 0 ; n < 6 ; n++ )
+				{
+					AppendColorCell( oRow, '#' + aColors[j] + aColors[n] + aColors[i] ) ;
+				}
+			}
 		}
 	}
 
@@ -76,13 +81,13 @@ function CreateColorTable()
 		var oCell = targetRow.insertCell(-1) ;
 		oCell.className = 'ColorCell' ;
 		oCell.bgColor = color ;
-		
+
 		oCell.onmouseover = function()
 		{
 			document.getElementById('hicolor').style.backgroundColor = this.bgColor ;
 			document.getElementById('hicolortext').innerHTML = this.bgColor ;
 		}
-		
+
 		oCell.onclick = function()
 		{
 			document.getElementById('selhicolor').style.backgroundColor = this.bgColor ;
@@ -97,17 +102,17 @@ function CreateColorTable()
 
 	// Create the last row.
 	var oRow = oTable.insertRow(-1) ;
-	
+
 	// Create the gray scale colors cells.
 	for ( var n = 0 ; n < 6 ; n++ )
 	{
-		AppendColorCell( oRow, '#' + aColors[n] + aColors[n] + aColors[n] ) ; 
+		AppendColorCell( oRow, '#' + aColors[n] + aColors[n] + aColors[n] ) ;
 	}
-	
+
 	// Fill the row with black cells.
 	for ( var i = 0 ; i < 12 ; i++ )
 	{
-		AppendColorCell( oRow, '#000000' ) ; 
+		AppendColorCell( oRow, '#000000' ) ;
 	}
 }
 
@@ -131,8 +136,8 @@ function UpdateColor()
 
 function Ok()
 {
-	if ( typeof(window.parent.dialogArguments.CustomValue) == 'function' )
-		window.parent.dialogArguments.CustomValue( document.getElementById('selcolor').value ) ;
+	if ( typeof(window.parent.Args().CustomValue) == 'function' )
+		window.parent.Args().CustomValue( document.getElementById('selcolor').value ) ;
 
 	return true ;
 }

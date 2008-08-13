@@ -19,6 +19,7 @@
  */
 error_log('enter in upload');
 include('../../../../../../global.inc.php');
+
 include_once(api_get_path(INCLUDE_PATH)."lib/fileUpload.lib.php");
 
 require('config.php') ;
@@ -105,8 +106,7 @@ if(isset($_SESSION["_course"]["sysCode"])){
 	else{
 		$sServerDir = $currentCourseRepositorySys.'upload/';
 		$sserverWebath=$currentCourseRepositoryWeb.'upload/';
-	}
-	
+	}	
 }
 else
 { // not in a course
@@ -161,9 +161,10 @@ if ( is_file( $sServerDir.$sFileName ) )
 }
 
 //If we are in a course and if it's a teacher who did the upload, we record the uploaded file in database
-if(isset($_SESSION["_course"]["sysCode"]) && api_is_allowed_to_edit()){
+if(isset($_SESSION["_course"]["sysCode"]) && api_is_allowed_to_edit())
+{
 	
-	$document_name= strtr($sFileName,"ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ","aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
+	$document_name= strtr($sFileName,"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½","aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
 	$document_name=preg_replace('/[^\w\._]/', '_', $document_name);
 	$document_size=$oFile["size"];
 	

@@ -1,20 +1,24 @@
 ﻿/*
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: fck_select.js
- * 	Scripts for the fck_select.html page.
- * 
- * File Authors:
- * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Scripts for the fck_select.html page.
  */
 
 function Select( combo )
@@ -57,10 +61,10 @@ function Modify()
 	var oTxtText	= document.getElementById( "txtText" ) ;
 	var oTxtValue	= document.getElementById( "txtValue" ) ;
 
-	oListText.options[ iIndex ].innerHTML	= oTxtText.value ;
+	oListText.options[ iIndex ].innerHTML	= HTMLEncode( oTxtText.value ) ;
 	oListText.options[ iIndex ].value		= oTxtText.value ;
 
-	oListValue.options[ iIndex ].innerHTML	= oTxtValue.value ;
+	oListValue.options[ iIndex ].innerHTML	= HTMLEncode( oTxtValue.value ) ;
 	oListValue.options[ iIndex ].value		= oTxtValue.value ;
 
 	oTxtText.value	= '' ;
@@ -104,14 +108,14 @@ function ChangeOptionPosition( combo, steps )
 	if ( iFinalIndex < 0 )
 		iFinalIndex = 0 ;
 
-	if ( iFinalIndex > ( combo.options.lenght - 1 ) )
-		iFinalIndex = combo.options.lenght - 1 ;
+	if ( iFinalIndex > ( combo.options.length - 1 ) )
+		iFinalIndex = combo.options.length - 1 ;
 
 	if ( iActualIndex == iFinalIndex )
 		return ;
 
 	var oOption = combo.options[ iActualIndex ] ;
-	var sText	= oOption.innerHTML ;
+	var sText	= HTMLDecode( oOption.innerHTML ) ;
 	var sValue	= oOption.value ;
 
 	combo.remove( iActualIndex ) ;
@@ -158,8 +162,33 @@ function AddComboOption( combo, optionText, optionValue, documentObject, index )
 	else
 		combo.options.add( oOption ) ;
 
-	oOption.innerHTML = optionText.length > 0 ? optionText : '&nbsp;' ;
+	oOption.innerHTML = optionText.length > 0 ? HTMLEncode( optionText ) : '&nbsp;' ;
 	oOption.value     = optionValue ;
 
 	return oOption ;
+}
+
+function HTMLEncode( text )
+{
+	if ( !text )
+		return '' ;
+
+	text = text.replace( /&/g, '&amp;' ) ;
+	text = text.replace( /</g, '&lt;' ) ;
+	text = text.replace( />/g, '&gt;' ) ;
+
+	return text ;
+}
+
+
+function HTMLDecode( text )
+{
+	if ( !text )
+		return '' ;
+
+	text = text.replace( /&gt;/g, '>' ) ;
+	text = text.replace( /&lt;/g, '<' ) ;
+	text = text.replace( /&amp;/g, '&' ) ;
+
+	return text ;
 }

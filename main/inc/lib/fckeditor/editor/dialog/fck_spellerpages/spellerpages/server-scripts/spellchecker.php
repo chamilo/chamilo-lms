@@ -1,17 +1,20 @@
 <?php
 header('Content-type: text/html; charset=utf-8');
 
-//$spellercss = '/speller/spellerStyle.css';	// by FredCK
-$spellercss = '../spellerStyle.css';			// by FredCK
-//$word_win_src = '/speller/wordWindow.js';		// by FredCK
-$word_win_src = '../wordWindow.js';				// by FredCK
-$textinputs = $_POST['textinputs']; # array
-//$aspell_prog = 'aspell';									// by FredCK (for Linux)
-$aspell_prog = '"C:\Program Files\Aspell\bin\aspell.exe"';	// by FredCK (for Windows)
-$lang = 'en_US';
-//$aspell_opts = "-a --lang=$lang --encoding=utf-8";	// by FredCK
-$aspell_opts = "-a --lang=$lang --encoding=utf-8 -H";	// by FredCK
-$tempfiledir = "./";
+// The following variables values must reflect your installation needs.
+
+$aspell_prog	= '"C:\Program Files\Aspell\bin\aspell.exe"';	// by FredCK (for Windows)
+//$aspell_prog	= 'aspell';										// by FredCK (for Linux)
+
+$lang			= 'en_US';
+$aspell_opts	= "-a --lang=$lang --encoding=utf-8 -H --rem-sgml-check=alt";		// by FredCK
+
+$tempfiledir	= "./";
+
+$spellercss		= '../spellerStyle.css';						// by FredCK
+$word_win_src	= '../wordWindow.js';							// by FredCK
+
+$textinputs		= $_POST['textinputs']; # array
 $input_separator = "A";
 
 # set the JavaScript variable to the submitted text.
@@ -59,7 +62,7 @@ function escape_quote( $str ) {
 
 # handle a server-side error.
 function error_handler( $err ) {
-	echo "error = '" . escape_quote( $err ) . "';\n";
+	echo "error = '" . preg_replace( "/['\\\\]/", "\\\\$0", $err ) . "';\n";
 }
 
 ## get the list of misspelled words. Put the results in the javascript words array
@@ -79,6 +82,10 @@ function print_checker_results() {
 	if( $fh = fopen( $tempfile, 'w' )) {
 		for( $i = 0; $i < count( $textinputs ); $i++ ) {
 			$text = urldecode( $textinputs[$i] );
+
+			// Strip all tags for the text. (by FredCK - #339 / #681)
+			$text = preg_replace( "/<[^>]+>/", " ", $text ) ;
+
 			$lines = explode( "\n", $text );
 			fwrite ( $fh, "%\n" ); # exit terse mode
 			fwrite ( $fh, "^$input_separator\n" );
@@ -190,4 +197,3 @@ wordWindowObj.writeBody();
 
 </body>
 </html>
-

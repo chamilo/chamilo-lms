@@ -1,36 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"
+   "http://www.w3.org/TR/html4/frameset.dtd">
 <!--
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: browser.html
- * 	This page compose the File Browser dialog frameset.
- * 
- * File Authors:
- * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * This page compose the File Browser dialog frameset.
 -->
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 	<head>
 		<title>FCKeditor - Resources Browser</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<link href="browser.css" type="text/css" rel="stylesheet">
 		<script type="text/javascript" src="js/fckxml.js"></script>
-		<script language="javascript">
+		<script type="text/javascript">
+// Automatically detect the correct document.domain (#1919).
+(function()
+{
+	var d = document.domain ;
+
+	while ( true )
+	{
+		// Test if we can access a parent property.
+		try
+		{
+			var test = window.opener.document.domain ;
+			break ;
+		}
+		catch( e )
+		{}
+
+		// Remove a domain part: www.mytest.example.com => mytest.example.com => example.com ...
+		d = d.replace( /.*?(?:\.|$)/, '' ) ;
+
+		if ( d.length == 0 )
+			break ;		// It was not able to detect the domain.
+
+		try
+		{
+			document.domain = d ;
+		}
+		catch (e)
+		{
+			break ;
+		}
+	}
+})() ;
 
 function GetUrlParam( paramName )
 {
 	var oRegex = new RegExp( '[\?&]' + paramName + '=([^&]+)', 'i' ) ;
 	var oMatch = oRegex.exec( window.top.location.search ) ;
-	
+
 	if ( oMatch && oMatch.length > 1 )
-		return oMatch[1] ;
+		return decodeURIComponent( oMatch[1] ) ;
 	else
 		return '' ;
 }
@@ -48,7 +86,7 @@ oConnector.ConnectorUrl = sConnUrl + ( sConnUrl.indexOf('?') != -1 ? '&' : '?' )
 
 var sServerPath = GetUrlParam( 'ServerPath' ) ;
 if ( sServerPath.length > 0 )
-	oConnector.ConnectorUrl += 'ServerPath=' + escape( sServerPath ) + '&' ;
+	oConnector.ConnectorUrl += 'ServerPath=' + encodeURIComponent( sServerPath ) + '&' ;
 
 oConnector.ResourceType		= GetUrlParam( 'Type' ) ;
 oConnector.ShowAllTypes		= ( oConnector.ResourceType.length == 0 ) ;
@@ -60,27 +98,32 @@ oConnector.SendCommand = function( command, params, callBackFunction )
 {
 	var sUrl = this.ConnectorUrl + 'Command=' + command ;
 	sUrl += '&Type=' + this.ResourceType ;
-	sUrl += '&CurrentFolder=' + escape( this.CurrentFolder ) ;
-	
+	sUrl += '&CurrentFolder=' + encodeURIComponent( this.CurrentFolder ) ;
+
 	if ( params ) sUrl += '&' + params ;
 
-	var oXML = new FCKXml() ;
+	// Add a random salt to avoid getting a cached version of the command execution
+	sUrl += '&uuid=' + new Date().getTime() ;
 	
+	var oXML = new FCKXml() ;
+
 	if ( callBackFunction )
 		oXML.LoadUrl( sUrl, callBackFunction ) ;	// Asynchronous load.
 	else
 		return oXML.LoadUrl( sUrl ) ;
+
+	return null ;
 }
 
 oConnector.CheckError = function( responseXml )
 {
-	var iErrorNumber = 0
+	var iErrorNumber = 0 ;
 	var oErrorNode = responseXml.SelectSingleNode( 'Connector/Error' ) ;
-	
+
 	if ( oErrorNode )
 	{
-		iErrorNumber = parseInt( oErrorNode.attributes.getNamedItem('number').value ) ;
-		
+		iErrorNumber = parseInt( oErrorNode.attributes.getNamedItem('number').value, 10 ) ;
+
 		switch ( iErrorNumber )
 		{
 			case 0 :
@@ -110,10 +153,10 @@ oConnector.CheckError = function( responseXml )
 
 var oIcons = new Object() ;
 
-oIcons.AvailableIconsArray = [ 
+oIcons.AvailableIconsArray = [
 	'ai','avi','bmp','cs','dll','doc','exe','fla','gif','htm','html','jpg','js',
-	'mdb','mp3','pdf','ppt','rdp','swf','swt','txt','vsd','xls','xml','zip' ] ;
-	
+	'mdb','mp3','pdf','png','ppt','rdp','swf','swt','txt','vsd','xls','xml','zip' ] ;
+
 oIcons.AvailableIcons = new Object() ;
 
 for ( var i = 0 ; i < oIcons.AvailableIconsArray.length ; i++ )
@@ -128,20 +171,29 @@ oIcons.GetIcon = function( fileName )
 	else
 		return 'default.icon' ;
 }
+
+function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
+{
+	if (errorNumber == "1")
+		window.frames['frmUpload'].OnUploadCompleted( errorNumber, customMsg ) ;
+	else
+		window.frames['frmUpload'].OnUploadCompleted( errorNumber, fileName ) ;
+}
+
 		</script>
 	</head>
-	<frameset cols="150,*" class="Frame" framespacing="3" bordercolor="#f1f1e3" frameborder="yes">
+	<frameset cols="150,*" class="Frame" framespacing="3" bordercolor="#f1f1e3" frameborder="1">
 		<frameset rows="50,*" framespacing="0">
-			<frame src="frmresourcetype.php" scrolling="no" frameborder="no">
-			<frame name="frmFolders" src="frmfolders.html" scrolling="auto" frameborder="yes">
+			<frame src="frmresourcetype.html" scrolling="no" frameborder="0">
+			<frame name="frmFolders" src="frmfolders.html" scrolling="auto" frameborder="1">
 		</frameset>
 		<frameset rows="50,*,50" framespacing="0">
-			<frame name="frmActualFolder" src="frmactualfolder.html" scrolling="no" frameborder="no">
-			<frame name="frmResourcesList" src="frmresourceslist.html" scrolling="auto" frameborder="yes">
-			<frameset cols="150,*,0" framespacing="0" frameborder="no">
-				<frame name="frmCreateFolder" src="frmcreatefolder.html" scrolling="no" frameborder="no">
-				<frame name="frmUpload" src="frmupload.html" scrolling="no" frameborder="no">
-				<frame name="frmUploadWorker" src="../../../fckblank.html" scrolling="no" frameborder="no">
+			<frame name="frmActualFolder" src="frmactualfolder.html" scrolling="no" frameborder="0">
+			<frame name="frmResourcesList" src="frmresourceslist.html" scrolling="auto" frameborder="1">
+			<frameset cols="150,*,0" framespacing="0" frameborder="0">
+				<frame name="frmCreateFolder" src="frmcreatefolder.html" scrolling="no" frameborder="0">
+				<frame name="frmUpload" src="frmupload.html" scrolling="no" frameborder="0">
+				<frame name="frmUploadWorker" src="javascript:void(0)" scrolling="no" frameborder="0">
 			</frameset>
 		</frameset>
 	</frameset>

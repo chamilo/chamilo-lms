@@ -1,272 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!--
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: fckdialog.html
- * 	This page is used by all dialog box as the container.
- * 
- * File Authors:
- * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
- *	    Julio Montoya Armas (template's changes)	
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * This page is used by all dialog box as the container.
 -->
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+		<title></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="robots" content="noindex, nofollow" />
 		<script type="text/javascript">
+// <![CDATA[
 
-// On some Gecko browsers (probably over slow connections) the
-// "dialogArguments" are not set so we must get it from the opener window.
-			
-if ( !window.dialogArguments ) 
+// Domain relaxation logic.
+
+/*
+(function()
 {
-	window.dialogArguments = window.parent.InnerDialogLoaded() ;
+	var d = document.domain ;
+
+	while ( true )
+	{
+		// Test if we can access a parent property.
+		try
+		{
+			var parentDomain = ( Args().TopWindow || E ).document.domain ;
+
+			if ( document.domain != parentDomain )
+				document.domain = parentDomain ;
+
+			break ;
+		}
+		catch( e ) {}
+
+		// Remove a domain part: www.mytest.example.com => mytest.example.com => example.com ...
+		d = d.replace( /.*?(?:\.|$)/, '' ) ;
+
+		if ( d.length == 0 )
+			break ;		// It was not able to detect the domain.
+
+		document.domain = d ;
+	}
+})() ;
+*/
+var E=window.parent.InnerDialogLoaded() ;
+var F=E
+//var E = frameElement._DialogArguments.Editor ;
+
+// It seems referencing to frameElement._DialogArguments directly would lead to memory leaks in IE.
+// So let's use functions to access its members instead.
+function Args()
+{
+	return F ; 
+	//return frameElement._DialogArguments ;
 }
-			
+
+E=E.Editor;
+var FCK				= E.FCK ;
+var FCKTools		= E.FCKTools ;
+var FCKDomTools		= E.FCKDomTools ;
+var FCKDialog		= E.FCKDialog ;
+var FCKBrowserInfo	= E.FCKBrowserInfo ;
+var FCKConfig		= E.FCKConfig ;
+
+// Steal the focus so that the caret would no longer stay in the editor iframe.
+window.focus() ;
+
 // Dialog's size
-var WindowSize= '850px';
-			
-// Sets the Skin CSS
-document.write( '<link href="' + window.dialogArguments.Editor.FCKConfig.SkinPath + 'fck_dialog.css" type="text/css" rel="stylesheet">' ) ;
+var WindowSize= '870px'; //850
 
 // Sets the language direction.
-window.document.dir = window.dialogArguments.Editor.FCKLang.Dir ;
+var langDir = document.documentElement.dir = E.FCKLang.Dir ;
 
-var sTitle = window.dialogArguments.Title ;
-document.write( '<title>' + sTitle + '<\/title>' ) ;
+// For IE6-, the fck_dialog_ie6.js is loaded, used to fix limitations in the browser.
+if ( FCKBrowserInfo.IsIE && !FCKBrowserInfo.IsIE7 )
+	document.write( '<' + 'script type="text/javascript" src="' + FCKConfig.SkinPath + 'fck_dialog_ie6.js"><' + '\/script>' ) ;
+	
+FCKTools.RegisterDollarFunction( window ) ;
 
-function LoadInnerDialog()
+// Sets the Skin CSS
+document.write( '<link href="' + FCKConfig.SkinPath + 'fck_dialog.css" type="text/css" rel="stylesheet">' ) ;
+
+
+// The business logic of the dialog, dealing with operational things like
+// dialog open/dialog close/enable/disable/etc.
+(function()
 {
-	if ( window.onresize )
-		window.onresize() ;
-
-	// First of all, translate the dialog box contents.
-	window.dialogArguments.Editor.FCKLanguageManager.TranslatePage( document ) ;
-	window.frames["frmMain"].document.location.href = window.dialogArguments.Page ;
-}
-
-function InnerDialogLoaded()
-{
-	var oInnerDoc = document.getElementById('frmMain').contentWindow.document ;
-
-	// Set the language direction.
-	oInnerDoc.dir = window.dialogArguments.Editor.FCKLang.Dir ;
-
-	// Sets the Skin CSS.
-	oInnerDoc.write( '<link href="' + window.dialogArguments.Editor.FCKConfig.SkinPath + 'fck_dialog.css" type="text/css" rel="stylesheet">' ) ;
-
-	SetOnKeyDown( oInnerDoc ) ;
-	DisableContextMenu( oInnerDoc ) ;
-
-	return window.dialogArguments.Editor ;
-}
-			
-
-function SetOkButton( showIt )
-{
-	document.getElementById('btnOk').style.visibility = ( showIt ? '' : 'hidden' ) ;
-}
-
-var bAutoSize = false ;
-
-function SetAutoSize( autoSize )
-{
-	bAutoSize = autoSize ;
-	RefreshSize() ;
-}
-
-function RefreshSize()
-{
-	if ( bAutoSize )
+	window.Init = function()
 	{
-		var oInnerDoc = document.getElementById('frmMain').contentWindow.document ;
-
-		var iFrameHeight ;
-		if ( document.all )
-			iFrameHeight = oInnerDoc.body.offsetHeight ;
-		else
-			iFrameHeight = document.getElementById('frmMain').contentWindow.innerHeight ;
-
-		var iInnerHeight = oInnerDoc.body.scrollHeight ;
-
-		var iDiff = iInnerHeight - iFrameHeight ;
-
-		if ( iDiff > 0 )
-		{
-			if ( document.all ) 
-			{
-				window.dialogHeight = ( parseInt( window.dialogHeight ) + iDiff ) + 20 + 'px' ;
-			}
-			else
-			{
-				window.resizeBy( 0, iDiff+20 ) ;
-			}
-		}
-	}
-}
-
-// Object that holds all available tabs.
-var oTabs = new Object() ;
-
-function TabDiv_OnClick()
-{
-	SetSelectedTab( this.TabCode ) ;
-}
-
-function AddTab( tabCode, tabText, startHidden )
-{
-	if ( typeof( oTabs[ tabCode ] ) != 'undefined' )
-		return ;
-
-	var eTabsRow = document.getElementById( 'Tabs' ) ;
-
-	var oCell = eTabsRow.insertCell(  eTabsRow.cells.length - 1 ) ;
-	oCell.noWrap = true ;
-
-	var oDiv = document.createElement( 'DIV' ) ;
-	oDiv.className = 'PopupTab' ;
-	oDiv.innerHTML = tabText ;
-	oDiv.TabCode = tabCode ;
-	oDiv.onclick = TabDiv_OnClick ;
-
-	if ( startHidden )
-		oDiv.style.display = 'none' ;
-
-	eTabsRow = document.getElementById( 'TabsRow' ) ;
-
-	oCell.appendChild( oDiv ) ;
-
-	if ( eTabsRow.style.display == 'none' )
+		LoadInnerDialog() ;
+		FCKTools.DisableSelection( document.body ) ;
+		// Make the title area draggable.
+		var titleElement = $( 'header' ) ;
+	} ;
+	
+	
+	window.LoadInnerDialog = function()
 	{
-		var eTitleArea = document.getElementById( 'TitleArea' ) ;
-		eTitleArea.className = 'PopupTitleSimple' ;
-
-		oDiv.className = 'PopupTabSelected' ;
-		eTabsRow.style.display = '' ;
-
-		if ( ! window.dialogArguments.Editor.FCKBrowserInfo.IsIE )
+		if ( window.onresize )
 			window.onresize() ;
-	}
 
-	oTabs[ tabCode ] = oDiv ;
-	oTabs[ tabCode ].Index = oTabs.length - 1 ;
-}
+		// First of all, translate the dialog box contents.
+		//E.FCKLanguageManager.TranslatePage( document ) ;
 
-function SetSelectedTab( tabCode )
-{
-	for ( var sCode in oTabs )
+		// Create the IFRAME that holds the dialog contents.
+		
+		window.frames["frmMain"].document.location.href =Args().Page;
+		//$( 'innerContents' ).innerHTML = '<iframe id="frmMain" src="' + Args().Page + '" name="frmMain" frameborder="0" width="100%" height="100%" scrolling="auto" style="visibility: hidden;" allowtransparency="true"><\/iframe>' ;
+	} ;
+	
+	window.InnerDialogLoaded = function()
 	{
-		if ( sCode == tabCode )
-			oTabs[sCode].className = 'PopupTabSelected' ;
-		else
-			oTabs[sCode].className = 'PopupTab' ;
-	}
+		// If the dialog has been closed before the iframe is loaded, do nothing.
+		if ( !frameElement.parentNode )
+			return null ;
 
-	if ( typeof( window.frames["frmMain"].OnDialogTabChange ) == 'function' )
-		window.frames["frmMain"].OnDialogTabChange( tabCode ) ;
-}
+		var frmMain = $('frmMain') ;
+		var innerWindow = frmMain.contentWindow ;
+		var innerDoc = innerWindow.document ;
 
-function SetTabVisibility( tabCode, isVisible )
-{
-	var oTab = oTabs[ tabCode ] ;
-	oTab.style.display = isVisible ? '' : 'none' ;
 
-	if ( ! isVisible && oTab.className == 'PopupTabSelected' )
-	{
-		for ( var sCode in oTabs )
-		{
-			if ( oTabs[sCode].style.display != 'none' )
-			{
-				SetSelectedTab( sCode ) ;
-				break ;
-			}
-		}
-	}
-}
+		return E ;
+	} ;
 
-function SetOnKeyDown( targetDocument )
-{
-	targetDocument.onkeydown = function ( e )
-	{
-		e = e || event || this.parentWindow.event ;
-		switch ( e.keyCode )
-		{
-			case 13 :		// ENTER
-				var oTarget = e.srcElement || e.target ;
-				if ( oTarget.tagName == 'TEXTAREA' ) return ;
-				Ok() ;
-				return false ;
-			case 27 :		// ESC
-				Cancel() ;
-				return false ;
-				break ;
-		}
-		return true ;
-	}
-}
-SetOnKeyDown( document ) ;
 
-function DisableContextMenu( targetDocument )
-{
-	if ( window.dialogArguments.Editor.FCKBrowserInfo.IsIE ) return ;
+})() ;
 
-	// Disable Right-Click
-	var oOnContextMenu = function( e )
-	{
-		var sTagName = e.target.tagName ;
-		if ( ! ( ( sTagName == "INPUT" && e.target.type == "text" ) || sTagName == "TEXTAREA" ) )
-			e.preventDefault() ;
-	}
-	targetDocument.addEventListener( 'contextmenu', oOnContextMenu, true ) ;
-}
-DisableContextMenu( document ) ;
-
-if ( ! window.dialogArguments.Editor.FCKBrowserInfo.IsIE )
-{
-	window.onresize = function()
-	{
-		var oFrame = document.getElementById("frmMain") ;
-
-		if ( ! oFrame )
-		return ;
-
-		oFrame.height = 0 ;
-
-		var oCell = document.getElementById("FrameCell") ;
-		var iHeight = oCell.offsetHeight ;
-
-		oFrame.height = iHeight - 2 ;
-	}
-}
-
-if ( window.dialogArguments.Editor.FCKBrowserInfo.IsIE )
-{
-	function Window_OnBeforeUnload()
-	{
-		for ( var t in oTabs )
-			oTabs[t] = null ;
-
-		window.dialogArguments.Editor = null ;
-	}
-	window.attachEvent( "onbeforeunload", Window_OnBeforeUnload ) ;
-}
-	</script>
+// ]]>
+		</script>
 	</head>
-	<body onload="LoadInnerDialog();" class="PopupBody">
+		
+	<body onload="Init();" class="PopupBody">
 		<table height="100%" cellspacing="0" cellpadding="0" width="100%" border="0">
 			<tr>
 				<td id="TitleArea" class="PopupTitleSimple">
 					<script type="text/javascript">
-						document.write( sTitle ) ;
+						document.write( Args().Title ) ;
 					</script>
 				</td>
 			</tr>	

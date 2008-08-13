@@ -1,39 +1,43 @@
 /*
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: fck_flash.js
- * 	Scripts related to the Flash dialog window (see fck_flash.html).
- * 
- * File Authors:
- * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Scripts related to the Flash dialog window (see fck_flash.html).
  */
 
-var oEditor		= window.parent.InnerDialogLoaded() ;
+var dialog		= window.parent ;
+var oEditor		= dialog.InnerDialogLoaded() ;
 var FCK			= oEditor.FCK ;
 var FCKLang		= oEditor.FCKLang ;
 var FCKConfig	= oEditor.FCKConfig ;
+var FCKTools	= oEditor.FCKTools ;
 
 //#### Dialog Tabs
 
 // Set the dialog tabs.
+dialog.AddTab( 'Info', oEditor.FCKLang.DlgInfoTab ) ;
+
 if ( FCKConfig.FlashUpload )
-	window.parent.AddTab( 'Upload', FCKLang.DlgLnkUpload ) ;
+	dialog.AddTab( 'Upload', FCKLang.DlgLnkUpload ) ;
 
-if(FCKConfig.UserStatus=="teacher")
-	window.parent.AddTab( 'Info', oEditor.FCKLang.DlgInfoTab ) ;
-
-
-//if ( !FCKConfig.FlashDlgHideAdvanced )
-//	window.parent.AddTab( 'Advanced', oEditor.FCKLang.DlgAdvancedTag ) ;
+if ( !FCKConfig.FlashDlgHideAdvanced )
+	dialog.AddTab( 'Advanced', oEditor.FCKLang.DlgAdvancedTag ) ;
 
 // Function called when a dialog tag is selected.
 function OnDialogTabChange( tabCode )
@@ -44,7 +48,7 @@ function OnDialogTabChange( tabCode )
 }
 
 // Get the selected flash embed (if available).
-var oFakeImage = FCK.Selection.GetSelectedElement() ;
+var oFakeImage = dialog.Selection.GetSelectedElement() ;
 var oEmbed ;
 
 if ( oFakeImage )
@@ -60,7 +64,6 @@ window.onload = function()
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage(document) ;
 
-	window.parent.SetSelectedTab( 'Upload' ) ;
 	// Load the selected element information (if any).
 	LoadSelection() ;
 
@@ -68,27 +71,20 @@ window.onload = function()
 	GetE('tdBrowse').style.display = FCKConfig.FlashBrowser	? '' : 'none' ;
 
 	// Set the actual uploader URL.
-	if ( FCKConfig.FlashUpload ){
-		GetE('frmUpload').action = FCKConfig.FlashUploadURL+"&uploadPath="+FCKConfig.FlashUploadPath ;
-	}
+	if ( FCKConfig.FlashUpload )
+		GetE('frmUpload').action = FCKConfig.FlashUploadURL ;
 
-	window.parent.SetAutoSize( true ) ;
+	dialog.SetAutoSize( true ) ;
 
-	window.parent.resizeTo(450,550);
-	
 	// Activate the "OK" button.
-	//window.parent.SetOkButton( true ) ;
+	dialog.SetOkButton( true ) ;
 
-	//window.parent.SetSelectedTab( 'Upload' ) ;
-	
-	//BrowseServer();
+	SelectField( 'txtUrl' ) ;
 }
 
 function LoadSelection()
 {
 	if ( ! oEmbed ) return ;
-
-	var sUrl = GetAttribute( oEmbed, 'src', '' ) ;
 
 	GetE('txtUrl').value    = GetAttribute( oEmbed, 'src', '' ) ;
 	GetE('txtWidth').value  = GetAttribute( oEmbed, 'width', '' ) ;
@@ -100,7 +96,7 @@ function LoadSelection()
 	GetE('chkLoop').checked		= GetAttribute( oEmbed, 'loop', 'true' ) == 'true' ;
 	GetE('chkMenu').checked		= GetAttribute( oEmbed, 'menu', 'true' ) == 'true' ;
 	GetE('cmbScale').value		= GetAttribute( oEmbed, 'scale', '' ).toLowerCase() ;
-	
+
 	GetE('txtAttTitle').value		= oEmbed.title ;
 
 	if ( oEditor.FCKBrowserInfo.IsIE )
@@ -111,7 +107,7 @@ function LoadSelection()
 	else
 	{
 		GetE('txtAttClasses').value = oEmbed.getAttribute('class',2) || '' ;
-		GetE('txtAttStyle').value = oEmbed.getAttribute('style',2) ;
+		GetE('txtAttStyle').value = oEmbed.getAttribute('style',2) || '' ;
 	}
 
 	UpdatePreview() ;
@@ -122,7 +118,7 @@ function Ok()
 {
 	if ( GetE('txtUrl').value.length == 0 )
 	{
-		window.parent.SetSelectedTab( 'Info' ) ;
+		dialog.SetSelectedTab( 'Info' ) ;
 		GetE('txtUrl').focus() ;
 
 		alert( oEditor.FCKLang.DlgAlertUrl ) ;
@@ -130,24 +126,23 @@ function Ok()
 		return false ;
 	}
 
+	oEditor.FCKUndo.SaveUndoStep() ;
 	if ( !oEmbed )
 	{
 		oEmbed		= FCK.EditorDocument.createElement( 'EMBED' ) ;
 		oFakeImage  = null ;
 	}
 	UpdateEmbed( oEmbed ) ;
-	
+
 	if ( !oFakeImage )
 	{
-		oFakeImage	= oEditor.FCKDocumentProcessors_CreateFakeImage( 'FCK__Flash', oEmbed ) ;
+		oFakeImage	= oEditor.FCKDocumentProcessor_CreateFakeImage( 'FCK__Flash', oEmbed ) ;
 		oFakeImage.setAttribute( '_fckflash', 'true', 0 ) ;
-		oFakeImage	= FCK.InsertElementAndGetIt( oFakeImage ) ;
+		oFakeImage	= FCK.InsertElement( oFakeImage ) ;
 	}
-	else
-		oEditor.FCKUndo.SaveUndoStep() ;
-	
-	oEditor.FCKFlashProcessor.RefreshView( oFakeImage, oEmbed ) ;
-	window.parent.close();
+
+	oEditor.FCKEmbedAndObjectProcessor.RefreshView( oFakeImage, oEmbed ) ;
+
 	return true ;
 }
 
@@ -156,15 +151,15 @@ function UpdateEmbed( e )
 	SetAttribute( e, 'type'			, 'application/x-shockwave-flash' ) ;
 	SetAttribute( e, 'pluginspage'	, 'http://www.macromedia.com/go/getflashplayer' ) ;
 
-	e.src = GetE('txtUrl').value ;
+	SetAttribute( e, 'src', GetE('txtUrl').value ) ;
 	SetAttribute( e, "width" , GetE('txtWidth').value ) ;
 	SetAttribute( e, "height", GetE('txtHeight').value ) ;
-	
+
 	// Advances Attributes
 
 	SetAttribute( e, 'id'	, GetE('txtAttId').value ) ;
 	SetAttribute( e, 'scale', GetE('cmbScale').value ) ;
-	
+
 	SetAttribute( e, 'play', GetE('chkAutoPlay').checked ? 'true' : 'false' ) ;
 	SetAttribute( e, 'loop', GetE('chkLoop').checked ? 'true' : 'false' ) ;
 	SetAttribute( e, 'menu', GetE('chkMenu').checked ? 'true' : 'false' ) ;
@@ -188,7 +183,7 @@ var ePreview ;
 function SetPreviewElement( previewEl )
 {
 	ePreview = previewEl ;
-	
+
 	if ( GetE('txtUrl').value.length > 0 )
 		UpdatePreview() ;
 }
@@ -197,63 +192,58 @@ function UpdatePreview()
 {
 	if ( !ePreview )
 		return ;
-		
-	//while ( ePreview.firstChild )
-		//ePreview.removeChild( ePreview.firstChild ) ;
+
+	while ( ePreview.firstChild )
+		ePreview.removeChild( ePreview.firstChild ) ;
 
 	if ( GetE('txtUrl').value.length == 0 )
 		ePreview.innerHTML = '&nbsp;' ;
 	else
 	{
-		//window.parent.SetSelectedTab( 'Info' ) ;
 		var oDoc	= ePreview.ownerDocument || ePreview.document ;
 		var e		= oDoc.createElement( 'EMBED' ) ;
-		
-		e.src		= GetE('txtUrl').value ;
-		e.type		= 'application/x-shockwave-flash' ;
-		e.width		= '100%' ;
-		e.height	= '100%' ;
-		
+
+		SetAttribute( e, 'src', GetE('txtUrl').value ) ;
+		SetAttribute( e, 'type', 'application/x-shockwave-flash' ) ;
+		SetAttribute( e, 'width', '100%' ) ;
+		SetAttribute( e, 'height', '100%' ) ;
+
 		ePreview.appendChild( e ) ;
 	}
 }
 
+// <embed id="ePreview" src="fck_flash/claims.swf" width="100%" height="100%" style="visibility:hidden" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
 
 function BrowseServer()
-{
+{	
 	OpenFileBrowser( FCKConfig.FlashBrowserURL, FCKConfig.FlashBrowserWindowWidth, FCKConfig.FlashBrowserWindowHeight ) ;
 }
 
 function SetUrl( url, width, height )
 {
 	GetE('txtUrl').value = url ;
-	
+
 	if ( width )
 		GetE('txtWidth').value = width ;
-		
-	if ( height ) 
+
+	if ( height )
 		GetE('txtHeight').value = height ;
 
 	UpdatePreview() ;
 
-	//window.parent.SetSelectedTab( 'Info' ) ;
-	//Ok();
-	//window.parent.close();
-
+	dialog.SetSelectedTab( 'Info' ) ;
 }
 
 function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 {
+	// Remove animation
+	window.parent.Throbber.Hide() ;
+	GetE( 'divUpload' ).style.display  = '' ;
+
 	switch ( errorNumber )
 	{
 		case 0 :	// No errors
-			//alert( 'Your file has been successfully uploaded' ) ;
-			if(document.getElementById("dynamic_div")){
-				document.getElementById("dynamic_div").style.display="none";
-			}
-			else if(document.getElementById("dynamic_div_container")){
-				document.getElementById("dynamic_div_container").style.display="none";
-			}
+			alert( 'Your file has been successfully uploaded' ) ;
 			break ;
 		case 1 :	// Custom error
 			alert( customMsg ) ;
@@ -266,15 +256,15 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 			break ;
 		case 202 :
 			alert( 'Invalid file type' ) ;
-			window.location.href=FCKConfig.BasePath + 'dialog/fck_flash.php';
 			return ;
 		case 203 :
 			alert( "Security error. You probably don't have enough permissions to upload. Please check your server." ) ;
-			window.location.href=FCKConfig.BasePath + 'dialog/fck_flash.php';
 			return ;
+		case 500 :
+			alert( 'The connector is disabled' ) ;
+			break ;
 		default :
 			alert( 'Error on file upload. Error number: ' + errorNumber ) ;
-			window.location.href=FCKConfig.BasePath + 'dialog/fck_flash.php';
 			return ;
 	}
 
@@ -288,19 +278,23 @@ var oUploadDeniedExtRegex	= new RegExp( FCKConfig.FlashUploadDeniedExtensions, '
 function CheckUpload()
 {
 	var sFile = GetE('txtUploadFile').value ;
-	
+
 	if ( sFile.length == 0 )
 	{
 		alert( 'Please select a file to upload' ) ;
 		return false ;
 	}
-	
+
 	if ( ( FCKConfig.FlashUploadAllowedExtensions.length > 0 && !oUploadAllowedExtRegex.test( sFile ) ) ||
 		( FCKConfig.FlashUploadDeniedExtensions.length > 0 && oUploadDeniedExtRegex.test( sFile ) ) )
 	{
 		OnUploadCompleted( 202 ) ;
 		return false ;
 	}
-	
+
+	// Show animation
+	window.parent.Throbber.Show( 100 ) ;
+	GetE( 'divUpload' ).style.display  = 'none' ;
+
 	return true ;
 }

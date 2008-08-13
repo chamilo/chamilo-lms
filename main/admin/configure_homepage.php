@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 15084 2008-04-25 03:57:05Z yannoo $
+<?php // $Id: configure_homepage.php 15986 2008-08-13 18:12:25Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -731,9 +731,12 @@ switch($action){
 			
 			<?php
 			    //api_disp_html_area('link_html',isset($_POST['link_html'])?$_POST['link_html']:$link_html,'400px');
-				if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+				if (api_get_setting('wcag_anysurfer_public_pages')=='true') 
+				{
 					echo WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html);
-				} else {
+				} 
+				else 
+				{
 					$oFCKeditor = new FCKeditor('link_html') ;
 					$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
 					$oFCKeditor->Height		= '400';
@@ -816,12 +819,15 @@ switch($action){
 		  <td>
 		
 		<?php
-		if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+		if (api_get_setting('wcag_anysurfer_public_pages')=='true') 
+		{
 			// Print WCAG-specific HTML editor
 			echo '<script type="text/javascript" src="'.api_get_path(REL_PATH).'main/inc/lib/fckeditor/editor/plugins/ImageManagerStandalone/generic_dialog_common.js'.'" />';
 			echo WCAG_Rendering::create_xhtml($open);
 			
-		} else {
+		} 
+		else 
+		{
 			$open=str_replace('{rel_path}',api_get_path(REL_PATH),$open);
 			$oFCKeditor = new FCKeditor($name) ;
 			$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
@@ -836,14 +842,29 @@ switch($action){
 			$result_sql=api_sql_query($sql,__FILE__,__LINE__);
 			$isocode_language=Database::result($result_sql,0,0);
 			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-			$upload_path = api_get_path(REL_PATH)."main/upload/";
 			
+			//FCKeditor Configuration for the default_course_document
+			$default_course_path= api_get_path(REL_PATH).'main/default_course_document/';
+			$upload_path = api_get_path(REL_PATH).'main/default_course_document/'; 
+				
+			$oFCKeditor->Config['CreateDocumentDir'] = $upload_path;
+			$oFCKeditor->Config['CreateDocumentWebDir'] = $upload_path;
+
+			//for images
+			$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
+			$oFCKeditor->Config['ImageUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
+	
+			//for flash
+			$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
+			$oFCKeditor->Config['FlashUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
+			$oFCKeditor->Config['MediaBrowserURL'] = $oFCKeditor->Config['FlashBrowserURL'];
+		
 			//for MP3
-			$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+			$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
 			$oFCKeditor->Config['MP3UploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
 	
 			//for video
-			$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+			$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
 			$oFCKeditor->Config['VideoUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
 			
 			echo $oFCKeditor->CreateHtml();

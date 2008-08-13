@@ -1,0 +1,156 @@
+2006-12-21  Thierry Bothorel
+
+	* Classes/ImageManager.php (1.4, Release-20061221): Bug fix:
+	missing include declaration Transform.php (PHP Fatal error:
+	Undefined class name 'image_transform' in ImageManager.php on line
+	436)
+
+2006-12-21  Thierry Bothorel
+
+	* Classes/ImageManager.php (1.3): Moved and extended contrain to
+	config size on upload to ImageManager.php (Paul
+	Moers<mail@saulmade.nl>)
+
+2006-12-21  Thierry Bothorel
+
+	* fckplugin.js (1.4, Release-20061221): Bug fix: When picking
+	another image in the manager and confirming, the image in the
+	editorArea changed, but the src attribute didn't. The attribute
+	'_fcksavedurl' needed to be set too. (Paul Moers<mail@saulmade.nl>)
+
+2006-12-20  Thierry Bothorel
+
+	* Classes/ImageEditor.php (1.3, Release-20061221,
+	Release-20061220): Bug fix: "PHP Notice:  Undefined property:
+	forcedNewName" if "allow_overwrite" is true in config.inc.php (Alan
+	Pinstein <apinstein@showcasere.com>).
+
+2006-12-20  Thierry Bothorel
+
+	* editorFrame.php (1.7, Release-20061221, Release-20061220): Bug
+	fix: watermarks trying to be loaded even if there are none defined
+	in config.inc.php (Undefined offset:  0) (Alan Pinstein
+	<apinstein@showcasere.com>).
+
+2006-12-19  Thierry Bothorel
+
+	* Classes/IM.php (1.2, Release-20061221, Release-20061220): Escape
+	shell arguments for ImageMagick driver (to prevent security
+	issues). (Alan Pinstein <apinstein@showcasere.com>)
+
+2006-12-19  Thierry Bothorel
+
+	* Classes/IM.php (1.1): initial Commit = Saulmade 20060620 version
+
+2006-12-19  Thierry Bothorel
+
+	* editorFrame.php (1.6): Bug fix: PHP warning when opening an image
+	for editing. (Alan Pinstein <apinstein@showcasere.com>
+
+2006-12-18  Thierry Bothorel
+
+	* editorFrame.php (1.5): Bug fix: "Editor hangs on any rotating"
+	and "editor displays ghost image overlay" if watermark images are
+	defined in config.inc.php AND any of these images are missing in
+	the destination folder.
+
+2006-12-17  Thierry Bothorel
+
+	* fckplugin.js (1.3, Release-20061220, Release-20061217): Restoring
+	Wei Zhuo Id
+
+2006-12-17  Thierry Bothorel
+
+	* manager.php (1.4, Release-20061221, Release-20061220,
+	Release-20061217): window upgraded to 900pix wide to display all
+	content with non english strings and FF 1.5.0.8
+
+2006-12-17  Thierry Bothorel
+
+	* config.inc.php (1.4, Release-20061221, Release-20061220,
+	Release-20061217): clean-up for release
+
+2006-12-17  Thierry Bothorel
+
+	* assets/editorFrame.js (1.2): File erroneously comitted
+
+2006-12-17  Thierry Bothorel
+
+	* editor.php (1.3, Release-20061221, Release-20061220,
+	Release-20061217): Bug fix: editor hangs displaying 'rotating' if
+	no rotate setting entered. Added default '0' angle value.
+
+2006-12-17  Thierry Bothorel
+
+	* editorFrame.php (1.4, Release-20061217): Bug fix: "tools not
+	displayed if action = flip".  "tools_flip block" does not exist
+
+2006-12-17  Thierry Bothorel
+
+	* assets/editorFrame.js (1.1, Saulmade-20060620): initial Commit =
+	Saulmade 20060620 version
+
+2006-12-17  Thierry Bothorel
+
+	* lang/fr.js (1.2, Release-20061221, Release-20061220,
+	Release-20061217): Added missing french translations
+
+2006-12-17  Thierry Bothorel
+
+	* lang/fr.js (1.1, Saulmade-20060620): initial Commit = Saulmade
+	20060620 version
+
+2006-12-17  Thierry Bothorel
+
+	* config.inc.php (1.3): Added a default "imageManager.png"
+	watermark image in /img/watermark/ so that at least on example
+	being provided with this plugin.
+
+2006-12-17  Thierry Bothorel
+
+	* img/watermark/imageManager.png (1.2, Release-20061221,
+	Release-20061220, Release-20061217), img/watermark/imageManager.png
+	(1.1): Ajout de l'image watermark par défaut (pour qu'il y ait au
+	moins un exemple dans le plugin à l'installation)
+
+2006-12-17  Thierry Bothorel
+
+	* editorFrame.php (1.3): - Bug fix: "syntax error, unexpected $end"
+	(no space after "php" in "<?php}") - Added ";" at the end of some
+	tiny php code insertions.
+
+2006-12-16  Thierry Bothorel
+
+	* manager.php (1.3): Bug fix: window too small with FF 1.5.08,
+	especially with non english strings
+
+2006-12-16  Thierry Bothorel
+
+	* config.inc.php (1.2), editorFrame.php (1.2), fckplugin.js (1.2),
+	images.php (1.2, Release-20061221, Release-20061220,
+	Release-20061217), manager.php (1.2), thumbs.php (1.2,
+	Release-20061221, Release-20061220, Release-20061217),
+	Classes/Files.php (1.2, Release-20061221, Release-20061220,
+	Release-20061217), Classes/ImageEditor.php (1.2, Release-20061217),
+	Classes/ImageManager.php (1.2, Release-20061220, Release-20061217),
+	Classes/Thumbnail.php (1.2, Release-20061221, Release-20061220,
+	Release-20061217), Classes/api.watermark.php (1.2,
+	Release-20061221, Release-20061220, Release-20061217) (utags:
+	Short-open-tag-off): Bug fix: plugin does not work with "php
+	short_open_tag=off"
+
+2006-12-16  Thierry Bothorel
+
+	* editor.php (1.2, Short-open-tag-off): - Bug fix: plugin does not
+	work with "php short_open_tag=off" - Bug fix: dirname($img) is not
+	valid with "php register_globals = Off" -> dirname($_GET['img'])
+
+2006-12-16  Thierry Bothorel
+
+	* config.inc.php (1.1), editor.php (1.1), editorFrame.php (1.1),
+	fckplugin.js (1.1), images.php (1.1), manager.php (1.1), thumbs.php
+	(1.1), Classes/Files.php (1.1), Classes/ImageEditor.php (1.1),
+	Classes/ImageManager.php (1.1), Classes/Thumbnail.php (1.1),
+	Classes/api.watermark.php (1.1) (utags: Saulmade-20060620): initial
+	Commit = Saulmade 20060620 version
+

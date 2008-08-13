@@ -2,7 +2,7 @@
  * Functions for the ImageEditor interface, used by editor.php only	
  * @author $Author: Wei Zhuo $
  * @author $Author: Frédéric Klee <fklee@isuisse.com> $ - constraints toggle and check
- * @author $Author: Paul Moers <mail@saulmade.nl> $ - watermarking and replace code + several small enhancements <http://fckplugins.saulmade.nl>
+ * @author $Author: Paul Moers <mail@saulmade.nl> $ - watermarking and replace code + several small enhancements <http://www.saulmade.nl/FCKeditor/FCKPlugins.php>
  * @version $Id: editor.js 2006-04-09 $
  * @package ImageManager
  */

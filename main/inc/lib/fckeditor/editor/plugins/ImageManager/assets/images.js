@@ -48,7 +48,7 @@
 		var topDoc = window.top.document;
 		
 		var obj = topDoc.getElementById('f_file');  obj.value = filename;
-		var obj = topDoc.getElementById('f_url');  obj.value = filename;
+		var obj = topDoc.getElementById('f_url');  obj.value = filename;		
 		var obj = topDoc.getElementById('f_width');  obj.value = width;
 		var obj = topDoc.getElementById('f_width'); obj.value = width;
 		var obj = topDoc.getElementById('f_height'); obj.value = height;

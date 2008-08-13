@@ -2,7 +2,7 @@
 
 // LANG: "sv", ENCODING: UTF-8
 // Author: Erik Dalén, <dalen@jpl.se>
-// Updated for FCKeditor by: Paul Moers, http://fckplugins.saulmade.nl
+// Updated for FCKeditor by: Paul Moers, http://www.saulmade.nl/FCKeditor/FCKPlugins.php
 
 // FOR TRANSLATORS:
 //

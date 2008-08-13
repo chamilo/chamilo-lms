@@ -1,9 +1,9 @@
 <?php
 /**
  * Image Editor. Editing tools, crop, rotate, scale and save.
- * @author $Author: Wei Zhuo $
- * @author $Author: Paul Moers <mail@saulmade.nl> $ - watermarking and replace code + several small enhancements <http://fckplugins.saulmade.nl>
- * @version $Id: ImageEditor.php 27 2004-04-01 08:31:57Z Wei Zhuo $
+ * @author Wei Zhuo
+ * @author Paul Moers <mail@saulmade.nl> - watermarking and replace code + several small enhancements <http://www.saulmade.nl/FCKeditor/FCKPlugins.php>
+ * @version $Id: ImageEditor.php,v 1.3 2006/12/20 18:34:11 thierrybo Exp $
  * @package ImageManager
  */
 
@@ -11,8 +11,8 @@ require_once('Transform.php');
 
 /**
  * Handles the basic image editing capbabilities.
- * @author $Author: Wei Zhuo $
- * @version $Id: ImageEditor.php 27 2004-04-01 08:31:57Z Wei Zhuo $
+ * @author Wei Zhuo
+ * @version $Id: ImageEditor.php,v 1.3 2006/12/20 18:34:11 thierrybo Exp $
  * @package ImageManager
  * @subpackage Editor
  */
@@ -140,9 +140,10 @@ class ImageEditor
 
 				// 'ImageManager.php' handled the uploaded file, it's now on the server.
 				// If maximum size is specified, constrain image to it.
-				if ($this->manager->config['maxWidth'] > 0 && $this->manager->config['maxHeight'] > 0 && ($img->img_x > $this->manager->config['maxWidth'] || $img->img_y > $this->manager->config['maxHeight']))
+				$dimensionsIndex = isset($_REQUEST['uploadSize']) ? $_REQUEST['uploadSize'] : 0;
+				if ($this->manager->config['maxWidth'][$dimensionsIndex] > 0 && $this->manager->config['maxHeight'][$dimensionsIndex] > 0 && ($img->img_x > $this->manager->config['maxWidth'][$dimensionsIndex] || $img->img_y > $this->manager->config['maxHeight'][$dimensionsIndex]))
 				{
-					$percentage = min($this->manager->config['maxWidth']/$img->img_x, $this->manager->config['maxHeight']/$img->img_y);
+					$percentage = min($this->manager->config['maxWidth'][$dimensionsIndex]/$img->img_x, $this->manager->config['maxHeight'][$dimensionsIndex]/$img->img_y);
 					$img->scale($percentage);
 				}
 
@@ -243,18 +244,18 @@ class ImageEditor
 						//get unique filename just returns the filename, so
 						//we need to make the relative path again.
 						$newSaveFile = $this->makeRelative($relative, $newName);
-
-						// forced new name?
-						if ($oldSaveFile != $newSaveFile)
-						{
-							$this->forcedNewName = $newName;
-						}
-						else
-						{
-							$this->forcedNewName = false;
-						}
 					}
 
+					// forced new name?
+					if ($oldSaveFile != $newSaveFile)
+					{
+						$this->forcedNewName = $newName;
+					}
+					else
+					{
+						$this->forcedNewName = false;
+					}
+						
 					$newSaveFullpath = $this->manager->getFullPath($newSaveFile);
 					$img->save($newSaveFullpath, $values[0], $quality);
 					if(is_file($newSaveFullpath))

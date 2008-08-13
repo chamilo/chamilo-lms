@@ -2,7 +2,7 @@
 
 // LANG: "de", ENCODING: UTF-8
 // Author: Udo Schmal (gocher), http://www.schaffrath-neuemedien.de/, udo.schmal@t-online.de
-// Updated for FCKeditor by: Paul Moers, http://fckplugins.saulmade.nl
+// Updated for FCKeditor by: Paul Moers, http://www.saulmade.nl/FCKeditor/FCKPlugins.php
 
 // FOR TRANSLATORS:
 //

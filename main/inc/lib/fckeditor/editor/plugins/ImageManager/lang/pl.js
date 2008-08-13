@@ -2,7 +2,7 @@
 
 // LANG: "fr", ENCODING: UTF-8
 // Author: Krzysztof Kotowicz, http://www.eskot.krakow.pl/portfolio/, koto@webworkers.pl
-// Updated for FCKeditor by: Paul Moers, http://fckplugins.saulmade.nl
+// Updated for FCKeditor by: Paul Moers, http://www.saulmade.nl/FCKeditor/FCKPlugins.php
 
 // FOR TRANSLATORS:
 //

@@ -1,9 +1,9 @@
-<?php
+<?
 /**
  * Image Manager configuration file.
- * @author $Author: Wei Zhuo $
- * @author $Author: Paul Moers <mail@saulmade.nl> $ - watermarking and replace code + several small enhancements <http://fckplugins.saulmade.nl>
- * @version $Id: config.inc.php 27 2004-04-01 08:31:57Z Wei Zhuo $
+ * @author Wei Zhuo
+ * @author Paul Moers <mail@saulmade.nl> - watermarking and replace code + several small enhancements <http://fckplugins.saulmade.nl>
+ * @version $Id: config.inc.php,v 1.4 2006/12/17 14:53:50 thierrybo Exp $
  * @package ImageManager
  */
 
@@ -30,23 +30,27 @@ $language_file = array('document');
 include ('../../../../../../inc/global.inc.php');
 
 //The user is in a course
-if(isset($_SESSION["_course"]["sysCode"])){
-	if(api_is_allowed_to_edit()){
+if(isset($_SESSION["_course"]["sysCode"]))
+{
+	if(api_is_allowed_to_edit())
+	{
 		$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).$_SESSION["_course"]["path"]."/document/images/";
 		$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).$_SESSION["_course"]["path"]."/document/images/";
 	}
-	elseif(isset($_GET['uploadPath']) && $_GET['uploadPath']!=""){
+	elseif(isset($_GET['uploadPath']) && $_GET['uploadPath']!="")
+	{
 		$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).$_SESSION["_course"]["path"]."/".$_GET['uploadPath'];
 		$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).$_SESSION["_course"]["path"]."/".$_GET['uploadPath'];
 	}
-	else{
+	else
+	{
 		$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).$_SESSION["_course"]["path"]."/upload/";
 		$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).$_SESSION["_course"]["path"]."/upload/";
 	}
 }
-
 //Out of any course (admin)
-else{
+else
+{
 	$IMConfig['base_dir'] = $_configuration['root_sys'].'main/default_course_document/images/';
 	$IMConfig['base_url'] = $_configuration['root_web'].'main/default_course_document/images/';
 }
@@ -135,6 +139,15 @@ $IMConfig['allow_upload'] = true;
 /*
   Possible values: true, false
 
+  TRUE - Allow the user to edit images.
+
+  FALSE - No editing allowed.
+*/
+$IMConfig['allow_edit'] = true;
+
+/*
+  Possible values: true, false
+
   TRUE - Allow the replacement of the image with a newly uploaded image in the editor dialog.
 
   FALSE - No replacing allowed.
@@ -182,10 +195,15 @@ $IMConfig['watermarks'] = array	(
 
 /*
 	To limit the width and height for uploaded files, specify the maximum pixeldimensions.
-	Setting either zero or empty will allow any size.
+	Specify more widthxheight sets by copying both lines and increasing the number in the second brackets.
+	If only one set is specified, no select list will show and this set will be used by default.
+	Setting the single set its values to either zero or empty will allow any size.
 */
-$IMConfig['maxWidth'] = 333;
-$IMConfig['maxHeight'] = 333;
+$IMConfig['maxWidth'][0] = 333;
+$IMConfig['maxHeight'][0] = 333;
+$IMConfig['maxWidth'][1] = 100;
+$IMConfig['maxHeight'][1] = 180;
+
 
 /*
  Possible values: true, false

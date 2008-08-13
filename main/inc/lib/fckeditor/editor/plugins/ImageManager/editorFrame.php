@@ -1,9 +1,9 @@
 <?php
 	/**
 	 * The frame that contains the image to be edited.
-	 * @author $Author: Wei Zhuo $
-	 * @author $Author: Paul Moers <mail@saulmade.nl> $ - watermarking and replace code + several small enhancements <http://fckplugins.saulmade.nl>
-	 * @version $Id: editorFrame.php 26 2004-03-31 02:35:21Z Wei Zhuo $
+	 * @author Wei Zhuo
+	 * @author Paul Moers <mail@saulmade.nl> - watermarking and replace code + several small enhancements <http://www.saulmade.nl/FCKeditor/FCKPlugins.php>
+	 * @version $Id: editorFrame.php,v 1.7 2006/12/20 18:19:28 thierrybo Exp $
 	 * @package ImageManager
 	 */
 
@@ -49,7 +49,7 @@
 <script type="text/javascript">
 // <![CDATA[
 
-	var processedAction = "<?php echo $_GET['action']; ?>";
+	var processedAction = "<?php echo (isset($_GET['action']) ? $_GET['action'] : ''); ?>";
 
 	if (processedAction == 'replace' && parent.old)
 	{
@@ -181,6 +181,10 @@
 	// show action buttons and current action's controls - were hidden during processing
 	if (processedAction != '')
 	{
+		if ('flip' == processedAction)
+		{
+			processedAction = 'rotate';
+		}
 		var tools = parent.document.getElementById('tools_' + processedAction);
 		tools.style.display = 'block';
 		var buttons = parent.document.getElementById('buttons');
@@ -198,7 +202,7 @@
 	{
 		$watermarkInfo = @getImageSize($IMConfig['base_dir'] . $watermark);
 		// populate
-		if ($watermarkInfo[0] < $imageInfo[width] && $watermarkInfo[1] < $imageInfo[height])
+		if ($watermarkInfo[0] < $imageInfo['width'] && $watermarkInfo[1] < $imageInfo['height'] && $watermarkInfo[0] != '')
 		{
 			$pos = strrpos(basename($watermark), ".");
 			$filename = substr(basename($watermark), 0, $pos);
@@ -252,7 +256,9 @@
 <?php if(count($imageInfo) > 0 && is_file($imageInfo['fullpath'])) { ?>
 
 		<div id="background" name="background" style="margin: auto; width: <?php echo $imageInfo['width']; ?>px; height: <?php echo $imageInfo['height']; ?>px; background-image: url(<?php echo $imageInfo['src']; ?>);">
-			<img name="floater" id="floater" style="width: 150px; height: 150px; behavior: url('assets/pngbehavior.htc'); position: absolute" src="<?php echo  $IMConfig['base_url'] . $IMConfig['watermarks'][0]; ?>" />
+		<?php if (count($IMConfig['watermarks']) > 0) { ?>
+			<img name="floater" id="floater" style="width: 150px; height: 150px; behavior: url('assets/pngbehavior.htc'); position: absolute" src="<?php echo $IMConfig['base_url'] . $IMConfig['watermarks'][0]; ?>" />
+		<?php } ?>
 		</div>
 
 		<span id="imgCanvas" name="imgCanvas" class="crop" style="display: none;"><img src="<?php echo $imageInfo['src']; ?>" <?php echo $imageInfo['dimensions']; ?> alt="" id="theImage" name="theImage" /></span>

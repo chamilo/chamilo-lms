@@ -1,7 +1,9 @@
+var dialog		= window.parent ;
 var oEditor = window.parent.InnerDialogLoaded() ;
 var FCK		= oEditor.FCK ;
 var FCKLang		= oEditor.FCKLang ;
 var FCKConfig	= oEditor.FCKConfig ;
+var FCKTools	= oEditor.FCKTools ;
 var mp3_url="";
 
 // Set the language direction.
@@ -9,24 +11,32 @@ window.document.dir = oEditor.FCKLang.Dir ;
 
 // Set the dialog tabs.
 window.parent.AddTab( 'Upload', FCKLang.DlgMP3Upload ) ;
+
 window.parent.AddTab( 'Info', FCKLang.DlgMP3Tab ) ;
 
-
-var oMedia = null;
-
-// Function called when a dialog tag is selected.
 function OnDialogTabChange( tabCode )
 {
 	ShowE('divInfo'		, ( tabCode == 'Info' ) ) ;
-	ShowE('divUpload'	, ( tabCode == 'Upload' ) ) ;
-	
+	ShowE('divUpload'	, ( tabCode == 'Upload' ) ) ;	
 }
 
-
 var sAgent = navigator.userAgent.toLowerCase() ;
-
 var is_ie = (sAgent.indexOf("msie") != -1); // FCKBrowserInfo.IsIE
 var is_gecko = !is_ie; // FCKBrowserInfo.IsGecko
+var oMedia = null;
+
+
+// Get the selected flash embed (if available).
+var oFakeImage = dialog.Selection.GetSelectedElement() ;
+var oEmbed ;
+
+if ( oFakeImage )
+{
+	if ( oFakeImage.tagName == 'IMG' && oFakeImage.getAttribute('_fckflash') )
+		oEmbed = FCK.GetRealElement( oFakeImage ) ;
+	else
+		oFakeImage = null ;
+}
 
 function window_onload()
 {
@@ -42,7 +52,8 @@ function window_onload()
 	GetE('tdBrowse').style.display = FCKConfig.MP3Browser ? '' : 'none' ;
 
 	// Set the actual uploader URL.
-	if ( FCKConfig.MP3Upload ){
+	if ( FCKConfig.MP3Upload )
+	{
 		GetE('frmUpload').action = FCKConfig.MP3UploadURL ;
 	}
 
@@ -50,33 +61,35 @@ function window_onload()
 
 	// Activate the "OK" button.
 	//window.parent.SetOkButton( true ) ;
-
-
 }
 
 
 /**
- * Get the selected element
+ * obtiene el elemento seleccionado
  */
-function getSelectedMovie(){
+function getSelectedMovie()
+{
 	var oSel = null;
-
 	// explorer..
-	if (is_ie){
+	if (is_ie)
+	{
 		oSel = FCK.Selection.GetSelectedElement( 'OBJECT' );
 	}
 	
 	// gecko
-	else if (is_gecko){
+	else if (is_gecko)
+	{
 		var o = FCK.EditorWindow.getSelection() ;
 
-		if ((o != null) && (o.anchorNode.tagName == 'OBJECT')){
+		if ((o != null) && (o.anchorNode.tagName == 'OBJECT'))
+		{
 			oSel = o.anchorNode;
 		}
 	}
 	
 	// other
-	else {
+	else
+	{
 		alert ("Browser Not Supported");
 	}
 
@@ -86,7 +99,6 @@ function getSelectedMovie(){
 
 function LoadSelection()
 {
-
 	oMedia = new Media();
 	oMedia.setObjectElement(getSelectedMovie());
 	GetE('mpUrl').value    	= getObjUrl(oMedia.url);
@@ -106,41 +118,54 @@ function Ok()
 
 	var e = (oMedia || new Media()) ;
 
-	if(!is_ie){
-		if ( !oMedia )
-		{
-			var oFakeImage  = null ;
-		}
-
-		if ( !oFakeImage )
-		{
-			oFakeImage	= oEditor.FCKDocumentProcessors_CreateFakeImage( 'FCK__MP3', e ) ;
-			oFakeImage.setAttribute( '_fckmp3', 'true', 0 ) ;
-			oFakeImage	= FCK.InsertElementAndGetIt( oFakeImage ) ;
-		}
-		else
-			oEditor.FCKUndo.SaveUndoStep() ;
-		
-		oEditor.FCKFlashProcessor.RefreshView( oFakeImage, oMedia ) ;
+	//if(!is_ie){
+	if ( !oMedia )
+	{
+		var oFakeImage  = null ;		
 	}
+		
+	if ( !oEmbed )
+	{
+		oEmbed		= FCK.EditorDocument.createElement( 'embed' ) ;			
+		oFakeImage  = null ;
+	}
+	
+	UpdateEmbed( oEmbed ) ;
+
+	if ( !oFakeImage )
+	{
+		oFakeImage	= oEditor.FCKDocumentProcessor_CreateFakeImage( 'FCK__MP3', oEmbed ) ;
+		oFakeImage.setAttribute( '_fckmp3', 'true', 0 ) ; 
+		oFakeImage	= FCK.InsertElement( oFakeImage ) ;
+	}
+	oEditor.FCKEmbedAndObjectProcessor.RefreshView( oFakeImage, oEmbed ) ;	
+	//}
 
 	updateMovie(e) ;
-
 	FCK.InsertHtml(e.getOuterHTML()) ;
-
-
 	return true ;
 }
 
+function UpdateEmbed( e )
+{
+	SetAttribute( e, 'type'	, 'application/x-shockwave-flash' ) ;	
+	SetAttribute( e, 'quality'	, 'high' ) ;
+	SetAttribute( e, 'name'	, 'Streaming' ) ;
+	SetAttribute( e, 'width'	, '90' ) ;
+	SetAttribute( e, 'height'	, '25' ) ;
+	SetAttribute( e, 'pluginspage'	, 'http://www.macromedia.com/go/getflashplayer' ) ;
+	SetAttribute( e, 'src', getObjData(GetE('mpUrl').value)+'?autostart='+getAutostart()+'&mp3file='+getSoundUrl()) ;
+}
+
 /**
- * Get data from form and insert
+ * Obtiene los datos del form y actualiza el objeto..
  */
-function updateMovie(e){
+function updateMovie(e)
+{
 	e.url = GetE('mpUrl').value;
 }
 
 var ePreview ;
-
 function SetPreviewElement( previewEl )
 {
 	ePreview = previewEl ;
@@ -149,16 +174,15 @@ function SetPreviewElement( previewEl )
 		updatePreview() ;
 }
 
-function updatePreview(){
+function updatePreview()
+{
 	if ( GetE('mpUrl').value.length == 0 ){
 		return;
 	}
 	else {
 		window.parent.SetSelectedTab( 'Info' ) ;
-
 	}
 }
-
 
 function BrowseServer()
 {
@@ -181,28 +205,27 @@ function BrowseServer()
 
 function SetUrl( url )
 {
-	document.getElementById('mpUrl').value = url ;
-	updatePreview() ;
+	document.getElementById('mpUrl').value = url ;	 
+	updatePreview(); 
 	Ok();
-	window.parent.close();
+	window.parent.Cancel();
 }
 
-
-var Media = function (o){
+var Media = function (o)
+{
 	this.url = '';
 	this.width = '';
-	this.height = '';
-	
+	this.height = '';	
 	if (o) 
 		this.setObjectElement(o);
 };
 
 /**
- * Take one element's data
+ * Toma los datos de un elemento.
  */ 
-Media.prototype.setObjectElement = function (e){
-	if (!e) return ;
-	
+Media.prototype.setObjectElement = function (e)
+{
+	if (!e) return ;	
 	this.width = GetAttribute( e, 'width', this.width );
 	this.height = GetAttribute( e, 'height', this.height );
 	this.url = GetAttribute( e, 'data', this.url );	
@@ -212,7 +235,8 @@ Media.prototype.setObjectElement = function (e){
 			var paramName = GetAttribute(e.childNodes[i], 'name', '').toLowerCase();
 			var paramValue = GetAttribute(e.childNodes[i], 'value', '');
 			
-			switch (paramName){
+			switch (paramName)
+			{
 				case 'movie':
 					this.url = paramValue;
 					break;
@@ -237,33 +261,28 @@ Media.prototype.setObjectElement = function (e){
 };
 
 
-
-
 /**
- * Return the outer HTML code of the element
+ * Devuelve el codigo HTML externo del elemento
  */
 Media.prototype.getOuterHTML = function (objectId){
 	var s;
-
-  s= this.getInnerHTML(objectId);
-  
-  return s;
+ 	s= this.getInnerHTML(objectId);  
+ 	return s;
 };
-
 
 /**
  * Devuelve el codigo HTML interno del elemento
  */
-Media.prototype.getInnerHTML = function (objectId){
-	var s = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="90" height="25" id="test" align=""><param name="movie" value="'+getObjData(this.url)+'?autostart='+getAutostart()+'&mp3file='+getSoundUrl()+'"> <param name="quality" value="high"> <param name="bgcolor" value="#FFFFFF"> <embed src="'+getObjData(this.url)+'?autostart='+getAutostart()+'&mp3file='+getSoundUrl()+'" quality="high" bgcolor="#FFFFFF"  width="90" height="25" name="Streaming" align="" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed></object>';
-	return s;
+Media.prototype.getInnerHTML = function (objectId)
+{
+	//var s = '<OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" WIDTH="90" HEIGHT="25" id="test" ALIGN=""><PARAM NAME=movie VALUE="'+getObjData(this.url)+'?autostart='+getAutostart()+'&mp3file='+getSoundUrl()+'"> <PARAM NAME=quality VALUE=high> <PARAM NAME=bgcolor VALUE=#FFFFFF> <EMBED src="'+getObjData(this.url)+'?autostart='+getAutostart()+'&mp3file='+getSoundUrl()+'" quality=high bgcolor=#FFFFFF  WIDTH="90" HEIGHT="25" NAME="Streaming" ALIGN=""TYPE="application/x-shockwave-flash" PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"></EMBED></OBJECT>';
+	var s=''; return s;
 };
 
-
-Media.prototype.createAttribute = function(n,v){
+Media.prototype.createAttribute = function(n,v)
+{
 	return ' '+n+'="'+v+'" ';
 }
-
 
 function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 {
@@ -296,6 +315,8 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 	}
 	
 	SetUrl( fileUrl ) ;
+	//SetAutostart(GetE('autostart').value);
+	
 	GetE('frmUpload').reset() ;
 	// Reset the interface elements.
 	//document.getElementById('eUploadMessage').innerHTML = 'Upload' ;
@@ -321,43 +342,60 @@ function CheckUpload()
 		OnUploadCompleted( 202 ) ;
 		return false ;
 	}
-
 	//document.getElementById('eUploadMessage').innerHTML = 'Upload in progress, please wait...' ;
-	document.getElementById('btnUpload').disabled = true ;
-	
+	document.getElementById('btnUpload').disabled = true ;	
 	return true ;
 }
 
-function getObjData(mpUrl){ // to create data attribute for object
-		var url=mpUrl;		
-		var configBasePath = FCKConfig.BasePath;
-		var cor_indx=configBasePath.indexOf("inc/")+4;
-		var objdata = configBasePath.substring(0, cor_indx)+"lib/mp3player/player_mp3.swf";
-		
-		setSoundUrl(GetE('mpUrl').value);
-		
+function getObjData(mpUrl)
+{ 		// to create data attribute for object
+		var url=mpUrl; 		
+		//var configBasePath = FCKConfig.BasePath;
+		//var cor_indx=configBasePath.indexOf("inc/")+4;		
+		//configBasePath.substring(0, cor_indx)+"lib/mp3player/player_mp3.swf";					
+		var objdata = rel_path+'inc/lib/mp3player/player_mp3.swf'; // real_path variable is defined in fck_mp3.php  
+		setSoundUrl(GetE('mpUrl').value);				
 		return objdata;
 }
 
-function setSoundUrl(url){
+function setSoundUrl(url)
+{
+	var pos= url.indexOf('audio');	
+	var end=url.length;	
+	var string_audio = url.substring(pos, end );  // i.e    -->>    audio/listeningaudio.mp3
+	if (pos==-1) //// is in the main/upload 
+	{
+		url = string_audio; 
+	}
+	else
+	{		
+		if (FCKConfig.CreateDocumentDir == '/') 
+		{
+			url = string_audio; 	
+		}
+		else
+		{
+			url = FCKConfig.CreateDocumentDir + string_audio; // // FCKConfig.CreateDocumentDir variable is defined in create_document.php
+		}
+		
+	}	 
 	mp3_url=url;
 }
 
-function getSoundUrl(){
+function getSoundUrl()
+{		
 	return mp3_url;
 }
-
 
 function getAutostart()
 {
 	return GetE('autostart').checked;
 }
 
-
-function getObjUrl(mpUrl2){ // to get source url
+function getObjUrl(mpUrl2)
+{ // to get source url
 		var url2=mpUrl2;
-		var cor_indx2 = url2.indexOf("son=")+4;
-		
+		var cor_indx2 = url2.indexOf("son=")+4;		
 		var objdata2 = url2.substring(cor_indx2, mpUrl2.length);
 		return objdata2;
 }

@@ -1,8 +1,9 @@
 // I18N constants
 
 // LANG: "fr", ENCODING: UTF-8
-// Author: ?
-// Updated for FCKeditor by: Paul Moers, http://fckplugins.saulmade.nl
+// Author: Thierry Bothorel (update)
+// $Id: fr.js,v 1.2 2006/12/17 11:46:48 thierrybo Exp $
+// Updated for FCKeditor by: Paul Moers, http://www.saulmade.nl/FCKeditor/FCKPlugins.php
 
 // FOR TRANSLATORS:
 //
@@ -86,19 +87,19 @@ ImageManager.I18N = {
 	"Padding:"										: "Espacement:",
 	"Border:"										: "Bordure:",
 	"Upload:"										: "Télétransmission:",
-	"File name was changed into "		: "File name was changed into ", // not translated yet
-	"start x coordinate"							: "start x coordinate", // not translated yet
-	"start y coordinate"							: "start y coordinate", // not translated yet
+	"File name was changed into "		: "Le nom du fichier a été changé en ",
+	"start x coordinate"							: "début coordonnée x",
+	"start y coordinate"							: "début coordonnée y",
 	"height"											: "hauteur",
 	"width"											: "longueur",
 	"angle"											: "angle",
 	"opacity"										: "opacité",
-	"diagonal length"							: "diagonal length", // not translated yet
-	"Watermarking is disabled."			: "Watermarking is disabled.", // not translated yet
-	"No watermarks were found or all watermarks are to big for the target image."		: "No watermarks were found or all watermarks are to big for the target image.", // not translated yet
+	"diagonal length"							: "longueur diagonale",
+	"Watermarking is disabled."			: "Filigranes désactivés.",
+	"No watermarks were found or all watermarks are to big for the target image."		: "Aucun filigrane trouvé ou tous les filigranes sont trop grands pour cette image.",
 	"Please delete all files/folders inside the folder you wish to delete first."				: "Veuillez tout d'abord supprimer tous les fichiers et répertoires contenus",
 	"Invalid folder name, please choose another folder name."									: "Nom de répertoire invalide, veuillez choisir un autre nom",
 	"GIF format is not supported, image editing not supported."								: "Format GIF non supporté, édition d'image non supportée",
-	"Please do not close the window while uploading a new image! If you do, the original image gets deleted!" : "Please do not close the window while uploading a new image! If you do, the original image gets deleted!", // not translated yet
-	"Error: Couldn't update editor window.\nAny image that was edited and saved will still be visible as the old version!\nPlease save and reload the editor content." : "Error: Couldn't update editor window.\nAny image that was edited and saved will still be visible as the old version!\nPlease save and reload the editor content." // not translated yet
+	"Please do not close the window while uploading a new image! If you do, the original image gets deleted!" : "Ne FERMEZ PAS CETTE FENETRE pendant l'envoi d'une nouvelle image sinon l'image originale sera quand même supprimée !",
+	"Error: Couldn't update editor window.\nAny image that was edited and saved will still be visible as the old version!\nPlease save and reload the editor content." : "Erreur: Impossible d'actualiser la fenêtre de l'éditeur.\nL'image qui a été éditée et sauvegardée apparaitra toujours comme non modifiée !\nVeuillez sauvegarder et recharger le contenu de l'éditeur."
 };

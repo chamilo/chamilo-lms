@@ -25,7 +25,7 @@
 // | Authors: Peter Bowyer <peter@mapledesign.co.uk>                      |
 // +----------------------------------------------------------------------+
 //
-// $Id: IM.php 26 2004-03-31 02:35:21Z Wei Zhuo $
+// $Id: IM.php,v 1.2 2006/12/19 21:14:36 thierrybo Exp $
 //
 // Image Transformation interface using command line ImageMagick
 //
@@ -79,10 +79,14 @@ Class Image_Transform_Driver_IM extends Image_Transform
      */
     function _resize($new_x, $new_y)
     {
+		// prevent illegal data
+		if (!is_numeric($new_x)) die("new X must be numeric");
+		if (!is_numeric($new_y)) die("new Y must be numeric");
+
         /*if (isset($this->command['resize'])) {
             return PEAR::raiseError("You cannot scale or resize an image more than once without calling save or display", true);
         }*/
-        $this->command['resize'] = "-geometry ${new_x}x${new_y}!";
+        $this->command['resize'] = "-geometry {$new_x}x{$new_y}!";
 
         $this->new_x = $new_x;
         $this->new_y = $new_y;
@@ -98,6 +102,10 @@ Class Image_Transform_Driver_IM extends Image_Transform
      */
     function crop($crop_x, $crop_y, $crop_width, $crop_height) 
     {
+		if (!is_numeric($crop_x)) die("crop_x must be numeric");
+		if (!is_numeric($crop_y)) die("crop_y must be numeric");
+		if (!is_numeric($crop_width)) die("crop_width must be numeric");
+		if (!is_numeric($crop_height)) die("crop_height must be numeric");
         $this->command['crop'] = "-crop {$crop_width}x{$crop_height}+{$crop_x}+{$crop_y}";
     }
 
@@ -122,6 +130,7 @@ Class Image_Transform_Driver_IM extends Image_Transform
      */
     function rotate($angle, $options=null)
     {
+        if (!is_numeric($angle)) die("angle must be numeric");
         if ('-' == $angle{0}) {
             $angle = 360 - substr($angle, 1);
         }
@@ -164,6 +173,13 @@ Class Image_Transform_Driver_IM extends Image_Transform
          } else {
             $key = 'text';
          }
+		 // test input params
+         if (!is_numeric($x)) die("x must be numeric");
+         if (!is_numeric($y)) die("y must be numeric");
+         // escape others
+         $font = escapeshellarg($font);
+         $color = escapeshellarg($color);
+         $text = escapeshellarg($text);
          $this->command[$key] = "-font $font -fill $color -draw 'text $x,$y \"$text\"'";
          // Producing error: gs: not found gs: not found convert: Postscript delegate failed [No such file or directory].
     } // End addText
@@ -176,6 +192,7 @@ Class Image_Transform_Driver_IM extends Image_Transform
      * @return none
      */
     function gamma($outputgamma=1.0) {
+        if (!is_numeric($outputgamma)) die("outputgamma must be numeric");
         $this->command['gamma'] = "-gamma $outputgamma";
     }
 
@@ -190,6 +207,7 @@ Class Image_Transform_Driver_IM extends Image_Transform
      */
     function save($filename, $type='', $quality = 85)
     {
+        if (!is_numeric($quality)) die("quality must be numeric");
         $type == '' ? $this->type : $type;
         $cmd = '' . IMAGE_TRANSFORM_LIB_PATH . 'convert ';
 		$cmd .= implode(' ', $this->command) . " -quality $quality ";
@@ -210,6 +228,7 @@ Class Image_Transform_Driver_IM extends Image_Transform
      */
     function display($type = '', $quality = 75)
     {
+        if (!is_numeric($quality)) die("quality must be numeric");
         if ($type == '') {
             header('Content-type: image/' . $this->type);
             passthru(IMAGE_TRANSFORM_LIB_PATH . 'convert ' . implode(' ', $this->command) . " -quality $quality "  . escapeshellarg($this->image) . ' ' . strtoupper($this->type) . ":-");

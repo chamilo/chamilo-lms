@@ -3,14 +3,15 @@
  * On the fly Thumbnail generation.
  * Creates thumbnails given by thumbs.php?img=/relative/path/to/image.jpg
  * relative to the base_dir given in config.inc.php
- * @author $Author: Wei Zhuo $
- * @version $Id: thumbs.php 26 2004-03-31 02:35:21Z Wei Zhuo $
+ * @author Wei Zhuo
+ * @version $Id: thumbs.php,v 1.2 2006/12/16 21:38:13 thierrybo Exp $
  * @package ImageManager
  */
- 
+
 require_once('config.inc.php');
 require_once('Classes/ImageManager.php');
 require_once('Classes/Thumbnail.php');
+
 //check for img parameter in the url
 if(!isset($_GET['img']))
 	exit();

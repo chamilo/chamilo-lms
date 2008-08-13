@@ -9,6 +9,11 @@ include('../../../../../../inc/global.inc.php');
 		<title>Audio Properties</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta content="noindex, nofollow" name="robots">
+		<script type="text/javascript">
+		/*<![CDATA[*/		
+		var rel_path = "<?php  echo api_get_path(REL_CODE_PATH); ?>";
+		/*]]>*/
+		</script>
 		<script src="../../dialog/common/fck_dialog_common.js" type="text/javascript"></script>
 		<script src="fck_mp3.js" type="text/javascript"></script>
 		<link href="../../dialog/common/fck_dialog_common.css" type="text/css" rel="stylesheet">
@@ -35,42 +40,32 @@ include('../../../../../../inc/global.inc.php');
 			</table>
 		  </div>
 		  <?php
-
 		  $sType = "MP3";
 		  if(isset($_course["sysCode"]))
 		  {
 		 	 include(api_get_path(INCLUDE_PATH).'course_document.inc.php');
-		  }
-		  
+		  }		  
 		  ?>
 		</div>
-		<div id="divUpload" style="DISPLAY: none">
-		
-		<?php
-		
+		<div id="divUpload" style="DISPLAY: none">		
+		<?php		
 			include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-			$form = new FormValidator('frmUpload','POST','','UploadWindow','id="frmUpload" enctype="multipart/form-data" onSubmit="return CheckUpload();"');
-			
-			$form->addElement('html','<table cellspacing="1" cellpadding="1" border="0" width="90%" align="center">');
-			
+			$form = new FormValidator('frmUpload','POST','','UploadWindow','id="frmUpload" enctype="multipart/form-data" onSubmit="return CheckUpload();"');			
+			$form->addElement('html','<table cellspacing="1" cellpadding="1" border="0" width="90%" align="center">');			
 			$form->addElement('html','<tr><td>');
 			$form->addElement('file','NewFile','','id="txtUploadFile" style="WIDTH: 100%" size="40"');
-			$form->addElement('html','</td></tr>');
-			
+			$form->addElement('html','</td></tr>');			
 			$form->addElement('html','<tr><td>');
 			$renderer = & $form->defaultRenderer();
 			$renderer->setElementTemplate('<div style="margin-left:-4px;">{element} {label}</div>', 'autostart');
 			$form->addElement('checkbox','autostart',get_lang('FckMp3Autostart'), '', 'id="autostart"');
-			$form->addElement('html','</td></tr>');
-			
+			$form->addElement('html','</td></tr>');			
 			$form->addElement('html','<tr><td>');
 			$form->addElement('submit','','Send it to the Server','id="btnUpload" fckLang="DlgLnkBtnUpload"');
-			$form->addElement('html','</td></tr></table>');
-			
+			$form->addElement('html','</td></tr></table>');			
 			$form->addElement('html','<iframe name="UploadWindow" style="DISPLAY: none" src="../fckblank.html"></iframe>');
 			
-			$form->add_real_progress_bar('fckMP3','NewFile');
-			
+			$form->add_real_progress_bar('fckMP3','NewFile');			
 			$form->display();			
 		?>		
 		</div>

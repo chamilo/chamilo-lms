@@ -1,9 +1,9 @@
 <?php
 /**
  * The PHP Image Editor user interface.
- * @author $Author: Wei Zhuo $
- * @author $Author: Paul Moers <mail@saulmade.nl> $ - watermarking and replace code + several small enhancements <http://fckplugins.saulmade.nl>
- * @version $Id: editor.php 26 2004-03-31 02:35:21Z Wei Zhuo $
+ * @author Wei Zhuo
+ * @author Paul Moers <mail@saulmade.nl> - watermarking and replace code + several small enhancements <http://www.saulmade.nl/FCKeditor/FCKPlugins.php>
+ * @version $Id: editor.php,v 1.3 2006/12/17 13:53:34 thierrybo Exp $
  * @package ImageManager
  */
 
@@ -13,10 +13,6 @@ require_once('Classes/ImageEditor.php');
 
 $manager = new ImageManager($IMConfig);
 $editor = new ImageEditor($manager, $IMConfig);
-
-$img_url = Security::remove_XSS($_GET['img']);
-//@TODO: the following path should be checked using the Security::check_rel_path() method but for this we need to know under which dir this path lives
-$img_dir = dirname($_GET['img']); 
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -83,9 +79,20 @@ $img_dir = dirname($_GET['img']);
 		<table>
 		<tr>
 			<td>
-				<form action="editorFrame.php?img=<?php echo $img_url; ?>&action=replace" target='editor' id="uploadForm" method="post" enctype="multipart/form-data">
+				<form action="editorFrame.php?img=<?php echo $_GET['img']?>&action=replace" target='editor' id="uploadForm" method="post" enctype="multipart/form-data">
 					&nbsp;<input type="file" name="upload" id="upload"/>
-					<input type="hidden" name="dir" id="dir" value="<?php echo $img_dir; ?>" />
+					<input type="hidden" name="dir" id="dir" value="<?php echo dirname($_GET['img'])?>" />
+					&nbsp;
+<? if (count($IMConfig['maxWidth']) > 1){ ?>
+					<label for="uploadSize" style="white-space: nowrap;">Upload Size</label>
+					<select name="uploadSize" id="uploadSize">
+	<? for ($i = 0; $i < count($IMConfig['maxWidth']); $i++){ ?>
+						<option value="<?=$i?>"><?=$IMConfig['maxWidth'][$i] . " x " . $IMConfig['maxHeight'][$i]?></option>
+	<? } ?>
+				<span style="padding-left: 5px;">
+					(max width x height dimensions)
+				</span>
+<? } ?>
 				</form>
 			</td>
 			<td>
@@ -193,7 +200,7 @@ $img_dir = dirname($_GET['img']);
               <option value="90">Rotate 90 &deg; CW</option>
               <option value="-90">Rotate 90 &deg; CCW</option>
          </select>
-			<label for="ra">Angle:</label><input type="text" id="ra" class="textInput" />
+			<label for="ra">Angle:</label><input type="text" id="ra" class="textInput" value="0"/>
 			<img src="img/div.gif" height="30" width="2" class="div" alt="|" />
 		</div>	
 		<a href="javascript: editor.doSubmit('rotate');" class="buttons" title="OK"><img src="img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
@@ -292,7 +299,7 @@ $img_dir = dirname($_GET['img']);
 </div>
 <div id="contents">
 <div id="messages" style="display: none;"><span id="message"></span><img SRC="img/dots.gif" width="22" height="12" alt="..." /></div>
-<iframe src="editorFrame.php?img=<?php if(isset($_GET['img'])) echo rawurlencode(htmlentities($_GET['img'])); ?>" name="editor" id="editor" scrolling="auto" title="Image Editor" frameborder="0"></iframe>
+<iframe src="editorFrame.php?img=<?php if(isset($_GET['img'])) echo rawurlencode($_GET['img']); ?>" name="editor" id="editor" scrolling="auto" title="Image Editor" frameborder="0"></iframe>
 </div>
 <div id="bottom"></div>
 </body>

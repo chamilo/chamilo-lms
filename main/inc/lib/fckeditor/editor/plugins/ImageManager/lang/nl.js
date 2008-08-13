@@ -1,8 +1,8 @@
 // I18N constants
 
 // LANG: "nl", ENCODING: UTF-8
-// Author: Paul Moers, http://fckplugins.saulmade.nl
-// Updated for FCKeditor by: Paul Moers, http://fckplugins.saulmade.nl
+// Author: Paul Moers, http://www.saulmade.nl/FCKeditor/FCKPlugins.php
+// Updated for FCKeditor by: Paul Moers, http://www.saulmade.nl/FCKeditor/FCKPlugins.php
 
 // FOR TRANSLATORS:
 //

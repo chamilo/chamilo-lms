@@ -8,6 +8,7 @@
 // PHP image manager http://www.zhuo.org/htmlarea/
 // ================================================
 // Revision: 1.0                   Date: 06/03/2005
+// $Id: fckplugin.js,v 1.4 2006/12/21 20:47:55 thierrybo Exp $
 // ================================================
 
 
@@ -23,9 +24,6 @@
 
 // ================================================
 
-
-
-
 	var FCKImageManager = function(name) {  
 		this.Name = name;		
 	}  
@@ -34,10 +32,10 @@
 		return FCK_TRISTATE_OFF;  
 	}  
 	 
-	FCKCommands.RegisterCommand('ImageManager', new FCKImageManager('ImageManager')) ;
-	  
+	FCKCommands.RegisterCommand('ImageManager', new FCKImageManager('ImageManager')) ;  
+	 
 	// Create the toolbar button. 
-	var oImageManagerItem = new FCKToolbarButton( 'ImageManager', FCKLang["DlgImageManagerTitle"], null, null, false, true ) ; 
+	var oImageManagerItem = new FCKToolbarButton( 'ImageManager', "ImageManager", null, null, false, true ) ; 
 	oImageManagerItem.IconPath = FCKConfig.PluginsPath + 'ImageManager/icon.gif' ; 
 	FCKToolbarItems.RegisterItem( 'ImageManager', oImageManagerItem ) ;
 	
@@ -47,6 +45,7 @@
 
     // Open the Placeholder dialog on double click.
     function ImageManager_doubleClick (img) {
+
 		if ( img.tagName == 'IMG' ) FCKCommands.GetCommand( 'ImageManager' ).Execute() ;
 	}
 
@@ -61,11 +60,13 @@
 			var sElm = FCKSelection.GetParentElement();
 		}
 		
-		if (sElm != null && sElm.nodeName.toLowerCase() == 'img') var im = sElm;  // is current cell a image ?			
+		if (sElm != null && sElm.nodeName.toLowerCase() == 'img') 
+			var im = sElm;  // is current cell a image ?			
 	
-		if (im) { // selected object is image
-			wArgs.f_url		= im.src ? im.src : '';
-			wArgs.f_alt		= im.alt ? im.alt : '';
+		if (im) 
+		{ // selected object is image
+			wArgs.f_url		= im.src ? im.src : '';			
+			wArgs.f_alt		= im.alt ? im.alt : '';			
 			wArgs.f_title 	= im.title ? im.title : '';
 			wArgs.f_width 	= im.style.width  ? im.style.width  : im.width;
 			wArgs.f_height 	= im.style.height ? im.style.height : im.height;
@@ -102,7 +103,6 @@ function setAttrib(element, name, value, fixval) { // set element attributes
 function ImageManager()
 {
 	//var tt = ImageManager.I18N;	
-	
 };
 
 
@@ -133,9 +133,9 @@ ImageManager.prototype.insert = function(outparam)
 	// show image manager
 	else
 	{
-		var manager = FCKConfig.PluginsPath+'ImageManager/manager.php?uploadPath='+FCKConfig.IMUploadPath;
+	
+		var manager = FCKConfig.PluginsPath+'ImageManager/manager.php?base_url_alt='+FCKConfig.CreateDocumentDir;
 
-		
 		Dialog(manager, function(param) {
 
 			if (!param) return false; // user must have pressed cancel
@@ -147,7 +147,9 @@ ImageManager.prototype.insert = function(outparam)
 			}
 
 			// set image attributes				
-			setAttrib(im, 'src', param.f_url, true);				
+			setAttrib(im, "_fcksavedurl", param.f_url_alt , true);						
+			//setAttrib(im, 'src', param.f_url_alt, true);				
+			setAttrib(im, 'src', param.f_url_alt, true);
 			setAttrib(im, 'alt', param.f_alt, true);
 			setAttrib(im, 'title', param.f_title, true);
 			setAttrib(im, 'align', param.f_align, true);
@@ -174,7 +176,7 @@ ImageManager.prototype.insert = function(outparam)
 // Version 3.0 developed by Mihai Bazon.
 //   http://dynarch.com/mishoo
 //
-// $Id: dialog.js 26 2004-03-31 02:35:21Z Wei Zhuo $
+// Id: dialog.js 26 2004-03-31 02:35:21Z Wei Zhuo 
 
 // Though "Dialog" looks like an object, it isn't really an object.  Instead
 // it's just namespace for protecting global symbols.

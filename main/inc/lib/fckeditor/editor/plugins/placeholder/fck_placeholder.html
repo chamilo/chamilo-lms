@@ -1,30 +1,36 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!--
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: fck_placeholder.html
- * 	Placeholder Plugin.
- * 
- * File Authors:
- * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Placeholder Plugin.
 -->
 <html>
 	<head>
 		<title>Placeholder Properties</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta content="noindex, nofollow" name="robots">
+		<script src="../../dialog/common/fck_dialog_common.js" type="text/javascript"></script>
 		<script language="javascript">
 
-var oEditor = window.parent.InnerDialogLoaded() ;
+var dialog = window.parent ;
+var oEditor = dialog.InnerDialogLoaded() ;
 var FCKLang = oEditor.FCKLang ;
 var FCKPlaceholders = oEditor.FCKPlaceholders ;
 
@@ -32,14 +38,17 @@ window.onload = function ()
 {
 	// First of all, translate the dialog box texts
 	oEditor.FCKLanguageManager.TranslatePage( document ) ;
-	
+
 	LoadSelected() ;
-	
+
 	// Show the "Ok" button.
-	window.parent.SetOkButton( true ) ;	
+	dialog.SetOkButton( true ) ;
+
+	// Select text field on load.
+	SelectField( 'txtName' ) ;
 }
 
-var eSelected = oEditor.FCKSelection.GetSelectedElement() ;
+var eSelected = dialog.Selection.GetSelectedElement() ;
 
 function LoadSelected()
 {
@@ -55,7 +64,7 @@ function LoadSelected()
 function Ok()
 {
 	var sValue = document.getElementById('txtName').value ;
-	
+
 	if ( eSelected && eSelected._fckplaceholder == sValue )
 		return true ;
 
@@ -64,7 +73,7 @@ function Ok()
 		alert( FCKLang.PlaceholderErrNoName ) ;
 		return false ;
 	}
-	
+
 	if ( FCKPlaceholders.Exist( sValue ) )
 	{
 		alert( FCKLang.PlaceholderErrNameInUse ) ;

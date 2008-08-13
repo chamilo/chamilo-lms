@@ -1,8 +1,8 @@
 <?php
 /**
  * File Utilities.
- * @author $Author: Wei Zhuo $
- * @version $Id: Files.php 26 2004-03-31 02:35:21Z Wei Zhuo $
+ * @author Wei Zhuo
+ * @version $Id: Files.php,v 1.2 2006/12/16 21:38:13 thierrybo Exp $
  * @package ImageManager
  */
 
@@ -13,8 +13,8 @@ define('FILE_COPY_OK', 103);
 
 /**
  * File Utilities
- * @author $Author: Wei Zhuo $
- * @version $Id: Files.php 26 2004-03-31 02:35:21Z Wei Zhuo $
+ * @author Wei Zhuo
+ * @version $Id: Files.php,v 1.2 2006/12/16 21:38:13 thierrybo Exp $
  * @package ImageManager
  * @subpackage files
  */
@@ -34,11 +34,6 @@ class Files
 	 */
 	function copyFile($source, $destination_dir, $destination_file, $unique=true) 
 	{
-		
-		$destination_file=utf8_decode($destination_file);
-		$destination_file= strtr($destination_file,"ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ","aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
-		$destination_file=Files::escape($destination_file);
-		
 		if(!(file_exists($source) && is_file($source))) 
 			return FILE_ERROR_NO_SOURCE;
 
@@ -83,10 +78,8 @@ class Files
 	 */
 	function createFolder($newFolder) 
 	{
-		$perm = api_get_setting('permissions_for_new_directories');
-		$perm = octdec(!empty($perm)?$perm:'0770');
-		mkdir ($newFolder, $perm);
-		return chmod($newFolder, $perm);
+		mkdir ($newFolder, 0777);
+		return chmod($newFolder, 0777);
 	}
 
 

@@ -1,7 +1,7 @@
 /**
  * Javascript used by the editorFrame.php, it basically initializes the frame.
  * @author $Author: Wei Zhuo $
- * @author $Author: Paul Moers <mail@saulmade.nl> $ - watermarking and replace code + several small enhancements <http://fckplugins.saulmade.nl>
+ * @author $Author: Paul Moers <mail@saulmade.nl> $ - watermarking and replace code + several small enhancements <http://www.saulmade.nl/FCKeditor/FCKPlugins.php>
  * @version $Id: editorFrame.js 26 2004-03-31 02:35:21Z Wei Zhuo $
  * @package ImageManager
  */

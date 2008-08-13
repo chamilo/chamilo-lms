@@ -1,8 +1,9 @@
 <?php
 /**
  * Watermarking API
- * @author $Author: Brian Vaughn $ http://boynamedbri.com/  -  http://portfolio.boynamedbri.com/ -  @ devshed http://www.devshed.com/c/a/PHP/Dynamic-Watermarking-with-PHP/
- * @author $Author: Paul Moers <mail@saulmade.nl> $ - small changes to place the watermark on a given coordinate and to only handle watermark area
+ * @author Brian Vaughn http://boynamedbri.com/  -  http://portfolio.boynamedbri.com/ -  @ devshed http://www.devshed.com/c/a/PHP/Dynamic-Watermarking-with-PHP/
+ * @author Paul Moers <mail@saulmade.nl> - small changes to place the watermark on a given coordinate and to only handle watermark area
+ * @version $Id: api.watermark.php,v 1.2 2006/12/16 21:38:13 thierrybo Exp $
  * @package ImageManager
  */
 

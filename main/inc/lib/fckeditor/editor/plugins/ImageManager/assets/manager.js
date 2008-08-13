@@ -47,6 +47,8 @@
 			if (param["f_url"].indexOf("/") != 0) param["f_url"] = '/'+param["f_url"];
 
 			document.getElementById("f_url").value = param["f_url"];
+			document.getElementById("f_url_alt").value = param["f_url_alt"];
+			
 			document.getElementById("f_alt").value = param["f_alt"];
 			document.getElementById("f_border").value = param["f_border"];
 			document.getElementById("f_vert").value = param["f_vert"];
@@ -89,10 +91,23 @@
 		{
 			var id = fields[i];
 			var el = document.getElementById(id);
+			
 			if(id == "f_url" && el.value.indexOf('://') < 0 )
-				param[id] = makeURL(base_url,el.value);
-			else
+			{
+				param[id] = makeURL(base_url_alt,el.value);				
+				var str = el.value;
+				var str2 = str;		
+				var len = str.length;			
+				if(str.substring(0,1) == '/')
+				{					
+					str2 = str2.substring(1,len);
+				}						
+				param['f_url_alt']=base_url+str2;				
+			}
+			else 
+			{
 				param[id] = el.value;
+			}
 		}
 		__dlg_close(param);
 		return false;

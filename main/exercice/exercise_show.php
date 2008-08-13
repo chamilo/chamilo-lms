@@ -756,13 +756,20 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 	
 	elseif($answerType == MATCHING)
 	{
-
-		$objAnswerTmp=new Answer($questionId);
-		
+		$objAnswerTmp=new Answer($questionId);		
 		$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 		$TBL_TRACK_ATTEMPT= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 		
-		$sql_select_answer = 'SELECT id, answer, correct, position FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct<>0';
+		$sql_select_answer = 'SELECT id, answer, correct, position FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct<>0';		
+		$sql_answer = 'SELECT position, answer FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct=0';
+		$res_answer = api_sql_query($sql_answer, __FILE__, __LINE__);
+		// getting the real answer
+		$real_list =array();		
+		while($real_answer = mysql_fetch_array($res_answer))
+		{			
+			$real_list[$real_answer['position']]= $real_answer['answer'];
+		}	
+		
 		$res_answers = api_sql_query($sql_select_answer, __FILE__, __LINE__);
 		
 		echo '<table width="355" height="71" border="0">';
@@ -775,14 +782,16 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 		
 		$questionScore=0;
 		
-		while($a_answers = mysql_fetch_array($res_answers)){
-			
+		while($a_answers = mysql_fetch_array($res_answers))
+		{			
 			$i_answer_id = $a_answers['id']; //3
 			$s_answer_label = $a_answers['answer'];  // your dady - you mother
+			
 			$i_answer_correct_answer = $a_answers['correct']; //1 - 2
+			
 			$i_answer_position = $a_answers['position']; // 3 - 4
 			
-			echo $sql_user_answer = 
+			 $sql_user_answer = 
 					'SELECT answers.answer 
 					FROM '.$TBL_TRACK_ATTEMPT.' as track_e_attempt 
 					INNER JOIN '.$table_ans.' as answers 
@@ -797,21 +806,25 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$res_user_answer = api_sql_query($sql_user_answer, __FILE__, __LINE__);
 			$s_user_answer = mysql_result($res_user_answer,0,0); //  rich - good looking
 			
-			$s_correct_answer = $s_answer_label; // your ddady - your mother
+			//$s_correct_answer = $s_answer_label; // your ddady - your mother
+			$s_correct_answer = $real_list[$i_answer_correct_answer];
 			
 			$i_answerWeighting=$objAnswerTmp->selectWeighting($i_answer_id);
 			
-			if($s_user_answer == $s_correct_answer) // rich == your ddady?? wrong
+			//if($s_user_answer == $s_correct_answer) // rich == your ddady?? wrong
+			//echo $s_user_answer.' - '.$real_list[$i_answer_correct_answer];
+			
+			if($s_user_answer == $real_list[$i_answer_correct_answer]) // rich == your ddady?? wrong
 			{
 				$questionScore+=$i_answerWeighting;
 				$totalScore+=$i_answerWeighting;
 			}
-			else{
+			else
+			{
 				$s_user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$s_user_answer.'</span>';
-			}
-			
+			}			
 			echo '<tr>';
-			echo '<td>'.$s_answer_label.'</td><td>'.$s_user_answer.' / <span style="color: #008000;">'.$s_correct_answer.'</span></td>';
+			echo '<td>'.$s_answer_label.'</td><td>'.$s_user_answer.' / <b><span style="color: #008000;">'.$s_correct_answer.'</span></b></td>';
 			echo '</tr>';
 			
 		}

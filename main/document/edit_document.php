@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 15716 2008-07-02 23:10:47Z juliomontoya $
+<?php // $Id: edit_document.php 15984 2008-08-13 17:24:24Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -94,6 +94,7 @@ $fck_attribute['ToolbarSet'] = 'Full';
 $fck_attribute['Config']['FullPage'] = true;
 
 
+
 /*
 ------------------------------------------------------------------------------
 	Constants & Variables
@@ -113,6 +114,17 @@ $baseServUrl = $_configuration['url_append']."/";
 $courseDir   = $_course['path']."/document";
 $baseWorkDir = $baseServDir.$courseDir;
 $group_document = false;
+
+$doc_tree= explode('/', $file);
+$count_dir = count($doc_tree) -2; // "2" because at the begin and end there are 2 "/"
+$relative_url='';
+for($i=0;$i<($count_dir);$i++)
+{
+	$relative_url.='../';	
+}
+$fck_attribute['Config']['InDocument'] = true;
+$fck_attribute['Config']['CreateDocumentDir'] = $relative_url;
+$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
 
 $use_document_title = (get_setting('use_document_title')=='true')?true:false;
 $noPHP_SELF=true;

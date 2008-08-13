@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 15797 2008-07-16 22:04:57Z yannoo $
+* 	@version $Id: question.class.php 15984 2008-08-13 17:24:24Z juliomontoya $
 */
 
 
@@ -790,6 +790,12 @@ abstract class Question
 		$fck_attribute['ToolbarSet'] = 'TestComment';
 		$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
 		$fck_attribute['Config']['FlashUploadPath'] = 'upload/test/';
+		
+		$fck_attribute['Config']['InDocument'] = false;		
+		$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+		
+		
+		
 		
 		if(is_array($fck_config)){
 			$fck_attribute = array_merge($fck_attribute,$fck_config);

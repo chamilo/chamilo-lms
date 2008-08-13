@@ -760,7 +760,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 		$objAnswerTmp=new Answer($questionId);
 		
 		$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-		$TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+		$TBL_TRACK_ATTEMPT= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 		
 		$sql_select_answer = 'SELECT id, answer, correct, position FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct<>0';
 		$res_answers = api_sql_query($sql_select_answer, __FILE__, __LINE__);
@@ -777,12 +777,12 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 		
 		while($a_answers = mysql_fetch_array($res_answers)){
 			
-			$i_answer_id = $a_answers['id'];
-			$s_answer_label = $a_answers['answer'];
-			$i_answer_correct_answer = $a_answers['correct'];
-			$i_answer_position = $a_answers['position'];
+			$i_answer_id = $a_answers['id']; //3
+			$s_answer_label = $a_answers['answer'];  // your dady - you mother
+			$i_answer_correct_answer = $a_answers['correct']; //1 - 2
+			$i_answer_position = $a_answers['position']; // 3 - 4
 			
-			$sql_user_answer = 
+			echo $sql_user_answer = 
 					'SELECT answers.answer 
 					FROM '.$TBL_TRACK_ATTEMPT.' as track_e_attempt 
 					INNER JOIN '.$table_ans.' as answers 
@@ -795,13 +795,14 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			
 			
 			$res_user_answer = api_sql_query($sql_user_answer, __FILE__, __LINE__);
-			$s_user_answer = mysql_result($res_user_answer,0,0);
+			$s_user_answer = mysql_result($res_user_answer,0,0); //  rich - good looking
 			
-			$s_correct_answer = $s_answer_label;
+			$s_correct_answer = $s_answer_label; // your ddady - your mother
 			
 			$i_answerWeighting=$objAnswerTmp->selectWeighting($i_answer_id);
 			
-			if($s_user_answer == $s_correct_answer){
+			if($s_user_answer == $s_correct_answer) // rich == your ddady?? wrong
+			{
 				$questionScore+=$i_answerWeighting;
 				$totalScore+=$i_answerWeighting;
 			}
@@ -898,6 +899,9 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 								$fck_attribute['Height'] = '150';
 								$fck_attribute['ToolbarSet'] = 'Comment';
 								$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
+								$fck_attribute['Config']['InDocument'] = false;		
+								$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+		
 								$$questionId = new FormValidator('frmcomments'.$questionId,'post','');
 								$renderer =& $$questionId->defaultRenderer();
 								$renderer->setFormTemplate(

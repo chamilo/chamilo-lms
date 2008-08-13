@@ -1331,6 +1331,11 @@ class Blog
 									$result_sql=api_sql_query($sql);
 									$isocode_language=mysql_result($result_sql,0,0);
 									$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+									
+									$oFCKeditor->Config['InDocument'] = false;		
+									$oFCKeditor->Config['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+		 
+		
 
 									$oFCKeditor->Create() ;
 			echo '			 <br /></td>
@@ -1405,6 +1410,11 @@ class Blog
 								$result_sql=api_sql_query($sql);
 								$isocode_language=mysql_result($result_sql,0,0);
 								$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+								
+								$oFCKeditor->Config['InDocument'] = false;		
+								$oFCKeditor->Config['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+		
+		
 
 								$oFCKeditor->Create() ;
 		echo '			 <br /></td>
@@ -2447,7 +2457,12 @@ class Blog
 									$result_sql=api_sql_query($sql);
 									$isocode_language=mysql_result($result_sql,0,0);
 									$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-
+									
+									$oFCKeditor->Config['InDocument'] = false;		
+									$oFCKeditor->Config['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+		
+		
+									
 									$oFCKeditor->Create() ;
 		echo '			 <br /></td>
 						</tr>

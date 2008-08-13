@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 13970 2007-12-05 16:56:20Z yannoo $
+<?php // $Id: course_home.php 15984 2008-08-13 17:24:24Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -195,6 +195,9 @@ $reqdate="&reqdate=$temps";
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Full';
+
+$fck_attribute['Config']['InDocument'] = false;
+$fck_attribute['Config']['CreateDocumentDir'] = 'document/';
 
 
 Display::display_introduction_section(TOOL_COURSE_HOMEPAGE);

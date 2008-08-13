@@ -77,6 +77,9 @@ $fck_attribute['ToolbarSet'] = 'Middle';
 $fck_attribute['Config']['IMUploadPath'] = 'upload/forum/';
 $fck_attribute['Config']['FlashUploadPath'] = 'upload/forum/';
 
+$fck_attribute['Config']['InDocument'] = false;		
+$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+
 // including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');

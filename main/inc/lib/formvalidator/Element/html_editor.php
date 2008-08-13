@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 15169 2008-04-29 06:27:22Z yannoo $
+// $Id: html_editor.php 15984 2008-08-13 17:24:24Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -66,68 +66,77 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		//We get the optionnals config parameters in $fck_attribute array
 		$this -> fck_editor->Config = !empty($fck_attribute['Config']) ? $fck_attribute['Config'] : array();
 		
-
-		
-		
 		
 		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 		
 		//We are in a course
-		if(isset($_SESSION["_course"]["language"])){
+		if(isset($_SESSION["_course"]["language"]))
+		{
 			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
 		}
 		
 		//Else, we get the current session language
-		elseif(isset($_SESSION["_user"]["language"])){
+		elseif(isset($_SESSION["_user"]["language"]))
+		{
 			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
-		}
-		
+		}		
 		//Else we get the default platform language
-		else{
+		else
+		{
 			$platform_language=api_get_setting("platformLanguage");
 			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='$platform_language'";
 		}
 		
 		$result_sql=api_sql_query($sql);
 		$isocode_language=mysql_result($result_sql,0,0);
-		$this -> fck_editor->Config['DefaultLanguage'] = $isocode_language;
-		
-		
-		if(isset($_SESSION['_course']) && $_SESSION['_course']['path']!=''){
-			$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
-
-		}else{
-			$upload_path = api_get_path(REL_PATH)."main/upload/";
-		}
-		
+		$this -> fck_editor->Config['DefaultLanguage'] = $isocode_language;		
 		$this -> fck_editor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-
 		$this -> fck_editor->ToolbarSet = $fck_attribute['ToolbarSet'] ;
-		
-		$this -> fck_editor->Config['LinkBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Connector=connectors/php/connector.php&ServerPath=$upload_path";
-		
 		$this -> fck_editor->Config['EditorAreaCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/course.css';
+			
 		
-		//for image
-		$this -> fck_editor->Config['ImageBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Image&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-
-		$this -> fck_editor->Config['ImageUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Image&ServerPath=$upload_path" ;
+		//FCKeditor Configuration for documents		
+		if(isset($_SESSION['_course']) && $_SESSION['_course']['path']!='')
+		{		
+			$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
+		}
+		else 
+		{
+			$upload_path = api_get_path(REL_PATH).'main/default_course_document/';
+		}		 
+	
+		// if we don't find the CreateDocumentWebDir set we change it with th absolute path http://www.dok..
+		if ($this -> fck_editor->Config['CreateDocumentWebDir']=='' )
+		{			
+			$this -> fck_editor->Config['CreateDocumentWebDir']=api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';							
+		};
+		
+		// if we don't find the CreateDocumentWebDir set we change it with th absolute path http://www.dok..
+		if ($this -> fck_editor->Config['CreateDocumentDir']== '')
+		{			
+			$this -> fck_editor->Config['CreateDocumentDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';				
+		};
+						
+		
+		//for images
+		$this -> fck_editor->Config['ImageBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+		$this -> fck_editor->Config['ImageUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
 
 		//for flash
 		$this -> fck_editor->Config['FlashBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-
 		$this -> fck_editor->Config['FlashUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
-
+		$this -> fck_editor->Config['MediaBrowserURL'] = 	$this -> fck_editor->Config['FlashBrowserURL'];
+		
 		//for MP3
 		$this -> fck_editor->Config['MP3BrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-
 		$this -> fck_editor->Config['MP3UploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
 
-		//for other media
+		//for Videos
 		$this -> fck_editor->Config['VideoBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-
 		$this -> fck_editor->Config['VideoUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
-		
+
+		//link		
+		$this -> fck_editor->Config['LinkBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
 	}
 	/**
 	 * Check if the browser supports FCKeditor

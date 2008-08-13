@@ -65,6 +65,9 @@ class UniqueAnswer extends Question {
 		$fck_attribute['ToolbarSet'] = 'Test';
 		$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
 		$fck_attribute['Config']['FlashUploadPath'] = 'upload/test/';
+		$fck_attribute['Config']['InDocument'] = false;		
+		$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+		
 		//this line define how many question by default appear when creating a choice question
 		$nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 4;
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));

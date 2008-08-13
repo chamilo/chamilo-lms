@@ -1,4 +1,4 @@
-<?php // $Id: index.php 15189 2008-04-30 14:58:34Z elixir_inter $
+<?php // $Id: index.php 15984 2008-08-13 17:24:24Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -156,7 +156,13 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 		
 		$fck_attribute['Width'] = '100%';
 		$fck_attribute['Height'] = '225';
-		$fck_attribute['ToolbarSet'] = 'Middle';
+		$fck_attribute['ToolbarSet'] = 'Middle';  
+		
+		
+		$fck_attribute['Config']['InDocument'] = false;
+		$fck_attribute['Config']['CreateDocumentDir'] = '../../'; 
+		$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
+
 		
 		echo '
 		<style>

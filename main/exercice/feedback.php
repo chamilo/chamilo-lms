@@ -65,6 +65,11 @@ Display::display_header($nameTools,"Exercise");
 	$fck_attribute['Height'] = '200';
 	$fck_attribute['ToolbarSet'] = 'Small';
 	$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
+			$fck_attribute['Config']['InDocument'] = false;		
+		$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+		
+		
+		
 	$form = new FormValidator('feedbackform','post',api_get_self()."?modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion);
 	$obj_registration_form = new HTML_QuickForm('frmRegistration', 'POST');
 $renderer =& $obj_registration_form->defaultRenderer();

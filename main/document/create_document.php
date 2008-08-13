@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 15322 2008-05-19 16:31:13Z juliomontoya $
+// $Id: create_document.php 15984 2008-08-13 17:24:24Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -64,7 +64,7 @@ function InnerDialogLoaded()
 		//document.getElementById(\'content___Frame\').width=\'70%\'; 		
 		//window.frames[0].FCKToolbarItems.GetItem("Template").Click;
 	}
-
+	
 	function FCKeditor_OnComplete( editorInstance )
 	{
 		editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
@@ -171,7 +171,6 @@ $fck_attribute['Config']['FullPage'] = true;
 -----------------------------------------------------------
 */
 $dir = isset($_GET['dir']) ? $_GET['dir'] : $_POST['dir']; // please do not modify this dirname formatting
-
 /*
 ==============================================================================
 		MAIN CODE
@@ -197,14 +196,35 @@ if ($dir[strlen($dir) - 1] != '/')
 	$dir .= '/';
 }
 
+// Configuration for the FCKEDITOR
+$doc_tree= explode('/', $dir);
+$count_dir = count($doc_tree) -2; // "2" because at the begin and end there are 2 "/"
+$relative_url='';
+
+for($i=0;$i<($count_dir);$i++)
+{
+	$relative_url.='../';	
+}
+
+// we do this in order to avoid the condition in html_editor.php ==> if ($this -> fck_editor->Config['CreateDocumentWebDir']=='' || $this -> fck_editor->Config['CreateDocumentDir']== '')
+if ($relative_url== '')
+{
+	$relative_url = '/';
+}
+$fck_attribute['Config']['InDocument'] = true;
+$fck_attribute['Config']['CreateDocumentDir'] = $relative_url;
+$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
+
 $filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document'.$dir;
 
 if (!is_dir($filepath))
 {
 	$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/';
-
 	$dir = '/';
 }
+
+
+//------------
 
 /**************************************************/
 $to_group_id = 0;
@@ -220,8 +240,7 @@ if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != '')
 	if ('/'.$path[1] != $group['directory'])
 	{
 		api_not_allowed(true);
-	}
-	
+	}	
 }
 $interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GET['dir']).$req_gid, "name" => get_lang('Documents'));
 

@@ -65,6 +65,11 @@ $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Middle';
 $fck_attribute['Config']['IMUploadPath'] = 'upload/forum/';
 $fck_attribute['Config']['FlashUploadPath'] = 'upload/forum/';
+
+$fck_attribute['Config']['InDocument'] = false;		
+$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+
+		
 if(!api_is_allowed_to_edit())
 {
 	$fck_attribute['Config']['UserStatus'] = 'student';

@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 15372 2008-05-23 10:29:42Z yannoo $
+<?php //$Id: agenda.php 15984 2008-08-13 17:24:24Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -289,6 +289,23 @@ if (empty($_GET['origin']) or $_GET['origin']!='learnpath')
 $fck_attribute['Width'] = '600';
 $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Middle';
+
+$fck_attribute['Config']['CreateDocumentDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
+$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
+
+
+if(isset($_SESSION['_course']) && $_SESSION['_course']['path']!='')
+{
+	$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
+}
+else 
+{
+	$upload_path = api_get_path(REL_PATH).'main/default_course_document/';
+}
+		
+ 
+		
+
 
 
 // THE RIGHT PART

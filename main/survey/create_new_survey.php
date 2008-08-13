@@ -25,9 +25,9 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 15947 2008-08-07 16:12:49Z juliomontoya $
+* 	@version $Id: create_new_survey.php 15984 2008-08-13 17:24:24Z juliomontoya $
 *
-* 	TODO only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
+* 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
 
 // name of the language file that needs to be included

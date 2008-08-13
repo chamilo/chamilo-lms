@@ -951,26 +951,26 @@ if($_configuration['tracking_enabled'])
 						te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id,email
 				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
 				  WHERE te.exe_exo_id = ce.id AND user_id=te.exe_user_id AND te.exe_cours_id='".Database::escape_string($_cid)."'
-				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
+				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
 			$hpsql="SELECT CONCAT(tu.lastname,' ',tu.firstname), tth.exe_name,
 						tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date)
 					FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-					WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = ".Database::escape_string($_cid)."'
-					ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
+					WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '".Database::escape_string($_cid)."'
+					ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
 
 		}
 		else
 		{ // get only this user's results
 			  $sql="SELECT '',ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id
 				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te
-				  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".$_user['user_id']."' AND te.exe_cours_id=".Database::escape_string($_cid)."'  AND results_disabled=0
-				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
+				  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".$_user['user_id']."' AND te.exe_cours_id='".Database::escape_string($_cid)."'  AND results_disabled=0
+				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
 			$hpsql="SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)
 					FROM $TBL_TRACK_HOTPOTATOES
-					WHERE exe_user_id = '".$_user['user_id']."' AND exe_cours_id = ".Database::escape_string($_cid)."'
-					ORDER BY exe_cours_id ASC, exe_date ASC";
+					WHERE exe_user_id = '".$_user['user_id']."' AND exe_cours_id = '".Database::escape_string($_cid)."'
+					ORDER BY exe_cours_id ASC, exe_date DESC";
 
 		}
 		

@@ -149,14 +149,15 @@ foreach ($list as $my_item_id)
 		$qry_order = 'ASC';
 	}
 	//prepare statement to go through each attempt
+	
 	if (!empty ($view)) 
 	{
-		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, " .
+		 $sql = "SELECT iv.status as mystatus, v.view_count as mycount, " .
 				"iv.score as myscore, iv.total_time as mytime, i.id as myid, " .
 				"i.title as mytitle, i.max_score as mymaxscore, " .
 				"iv.max_score as myviewmaxscore, " .
 				"i.item_type as item_type, iv.view_count as iv_view_count, " .
-				"iv.id as iv_id, path as path ".
+				"iv.id as iv_id, path as path, i.parameters".
 				" FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v ".
 				" WHERE i.id = iv.lp_item_id ".
 				" AND i.id = $my_item_id ".
@@ -165,13 +166,15 @@ foreach ($list as $my_item_id)
 				" AND v.user_id = ".$user_id." ".
 				" AND v.view_count = $view ".
 				" ORDER BY iv.view_count $qry_order ";
-	} else {
+	} 
+	else 
+	{
 		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, " .
 				"iv.score as myscore, iv.total_time as mytime, i.id as myid, " .
 				"i.title as mytitle, i.max_score as mymaxscore, " .
 				"iv.max_score as myviewmaxscore, " .
 				"i.item_type as item_type, iv.view_count as iv_view_count, " .
-				"iv.id as iv_id, path as path ".
+				"iv.id as iv_id, path as path, i.parameters".
 				" FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v ".	
 				" WHERE i.id = iv.lp_item_id ".
 				" AND i.id = $my_item_id ".
@@ -180,10 +183,11 @@ foreach ($list as $my_item_id)
 				" AND v.user_id = ".$user_id." ".
 				" ORDER BY iv.view_count $qry_order ";
 	}
+	
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	$num = Database :: num_rows($result);
 	$time_for_total = 'NaN';
-	if (($extend_this OR $extend_all) && $num > 0) 
+	if (($extend_this || $extend_all) && $num > 0) 
 	{
 		$row = Database :: fetch_array($result);
 
@@ -258,7 +262,8 @@ foreach ($list as $my_item_id)
 				}
 				
 			}
-			else{
+			else
+			{
 				$correct_test_link='-';
 			}
 			//new attempt
@@ -293,12 +298,16 @@ foreach ($list as $my_item_id)
 			$time = learnpathItem :: get_scorm_time('js', $row['mytime']);
 			$type;
 			$scoIdentifier = $row['myid'];
-			if ($score == 0) {
+			if ($score == 0) 
+			{
 				$maxscore = 0;
-			} else {
+			} 
+			else
+			{
 				if($row['item_type'] == 'sco')
 				{
-		    		if(!empty($row['myviewmaxscore']) and $row['myviewmaxscore']>0)
+					
+		    		if(!empty($row['myviewmaxscore']) && $row['myviewmaxscore']>0)
 		    		{
 		    			$maxscore=$row['myviewmaxscore'];
 		    		}
@@ -309,11 +318,17 @@ foreach ($list as $my_item_id)
 		    		else
 		    		{
 						$maxscore = $row['mymaxscore'];
-		    		}
+		    		}	    		
 				}
 				else
 				{
-					$maxscore = $row['mymaxscore'];
+					// the parameters value is fill with the random value from the table QUIZ is empty or has a value that indicates the quantity of random questions			
+					if ($row['parameters'] != '' && $row['parameters']!=0 )  
+					{
+						$maxscore = $row['myviewmaxscore'];
+					}
+					else
+						$maxscore = $row['mymaxscore'];
 				}
 			}
 			//Remove "NaN" if any (@todo: locate the source of these NaN)
@@ -326,7 +341,9 @@ foreach ($list as $my_item_id)
 			$mylanglist = array ('completed' => 'ScormCompstatus', 'incomplete' => 'ScormIncomplete', 'failed' => 'ScormFailed', 'passed' => 'ScormPassed', 'browsed' => 'ScormBrowsed', 'not attempted' => 'ScormNotAttempted',);
 			$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);
 			//$my_lesson_status = get_lang($mylanglist[$lesson_status]);
-			if ($row['item_type'] != 'dokeos_chapter') {
+			
+			if ($row['item_type'] != 'dokeos_chapter') 
+			{
 				$output .= "<tr class='$oddclass'>\n"."<td></td>\n"."<td>$extend_attempt_link</td>\n".'<td colspan="3">'.htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset).' '.$row['iv_view_count']."</td>\n"
 				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
 				.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n".'<td colspan="2"><div class="mystatus" align="center">'. ($score == 0 ? '-' : ($maxscore==0?$score:$score.'/'.$maxscore))."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$time."</div></td><td></td>\n"."</tr>\n";
@@ -362,7 +379,9 @@ foreach ($list as $my_item_id)
 				}
 			}
 		} while ($row = Database :: fetch_array($result));
-	} elseif($num>0) {
+	}
+	elseif($num>0) 
+	{
 		$row = Database :: fetch_array($result);
 
 		//check if there are interactions below
@@ -391,9 +410,12 @@ foreach ($list as $my_item_id)
 		if ($inter_num > 1) {
 			$extend_link = '<a href="'.api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix.'"><img src="../img/invisible.gif" alt="extend_view" border="0"></a>';
 		}
-		if (($counter % 2) == 0) {
+		if (($counter % 2) == 0) 
+		{
 			$oddclass = "row_odd";
-		} else {
+		} 
+		else 
+		{
 			$oddclass = "row_even";
 		}
 		$lesson_status = $row['mystatus'];
@@ -416,7 +438,7 @@ foreach ($list as $my_item_id)
 			$maxscore = 0;
 		} 
 		else 
-		{
+		{	
 				if($row['item_type'] == 'sco')
 				{
 		    		if(!empty($row['myviewmaxscore']) and $row['myviewmaxscore']>0)
@@ -434,8 +456,15 @@ foreach ($list as $my_item_id)
 				}
 				else
 				{
-					$maxscore = $row['mymaxscore'];
-				}
+					// the parameters value is fill with the random value from the table QUIZ is empty or has a value that indicates the quantity of random questions			
+					if ($row['parameters'] != '' && $row['parameters']!=0 )  
+					{
+						$maxscore = $row['myviewmaxscore'];
+					}
+					else
+						$maxscore = $row['mymaxscore'];
+				}			
+				
 		}
 		if (empty ($title)) 
 		{

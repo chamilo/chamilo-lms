@@ -416,21 +416,31 @@ class learnpath {
     	$id = $this->escape_string($id);
     	
     	if($type == 'quiz')
-    	{
-    		$sql = 'SELECT SUM(ponderation)
+    	{  
+    		$sql = 'SELECT SUM(ponderation) 
 					FROM '.Database :: get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
 					INNER JOIN  '.Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
-						ON quiz_question.id = quiz_rel_question.question_id
-						AND quiz_rel_question.exercice_id = '.$id;
-			$rsQuiz = api_sql_query($sql, __FILE__, __LINE__);
+					ON quiz_question.id = quiz_rel_question.question_id
+					AND quiz_rel_question.exercice_id = '.$id;
+					
+			$rsQuiz = api_sql_query($sql, __FILE__, __LINE__);			
 			$max_score = Database::result($rsQuiz, 0, 0);
+				
+			$sql = 'SELECT random 
+					FROM '.Database :: get_course_table(TABLE_QUIZ_TEST).' as quiz				
+					WHERE  quiz.id = '.$id;					
+			
+			$rsQuizRand = api_sql_query($sql, __FILE__, __LINE__);			
+			$random = Database::result($rsQuizRand, 0, 0);					
     	}
     	else
     	{
     		$max_score = 100;
+    		$random='';
     	}
 		
-		if($prerequisites!=0){
+		if($prerequisites!=0)
+		{
 			$sql_ins = "
 	    		INSERT INTO " . $tbl_lp_item . " (
 	    			lp_id,
@@ -443,8 +453,10 @@ class learnpath {
 	    			parent_item_id,
 	    			previous_item_id,
 	    			next_item_id,
-	    			display_order, 
+	    			display_order,
+	    			parameters,		 
 					prerequisite
+							
 	    		) VALUES (
 	    			" . $this->get_id() . ",
 	    			'" . $type . "',
@@ -457,11 +469,12 @@ class learnpath {
 	    			" . $previous . ",
 	    			" . $next . ",
 	    			" . ($display_order + 1) . ",
+	    			" .$random.",	    			
 	    			" . $prerequisites . "
 	    		)";
-		}
-		
-		else{
+		}		
+		else
+		{
 	    	//insert new item
 	    	$sql_ins = "
 	    		INSERT INTO " . $tbl_lp_item . " (
@@ -475,6 +488,7 @@ class learnpath {
 	    			parent_item_id,
 	    			previous_item_id,
 	    			next_item_id,
+	    			parameters,	
 	    			display_order
 	    		) VALUES (
 	    			" . $this->get_id() . ",
@@ -487,6 +501,7 @@ class learnpath {
 	    			" . $parent . ",
 	    			" . $previous . ",
 	    			" . $next . ",
+	    			" .$random.",	    	
 	    			" . ($display_order + 1) . "
 	    		)";
 		}
@@ -2358,7 +2373,8 @@ class learnpath {
      * @param	integer	Parent ID of the items to look for
      * @return	mixed	Ordered list of item IDs or false on error
      */
-    function get_flat_ordered_items_list($lp,$parent=0){
+    function get_flat_ordered_items_list($lp,$parent=0)
+    {
 		//if($this->debug>0){error_log('New LP - In learnpath::get_flat_ordered_items_list('.$lp.','.$parent.')',0);}
     	$list = array();
     	if(empty($lp)){return false;}

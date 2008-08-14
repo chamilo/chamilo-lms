@@ -1,16 +1,23 @@
 <?php
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2004-2008 Dokeos SPRL
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-    Contact: Dokeos, Rue du Corbeau, 108, B-1030 Brussels - Belgium, info@dokeos.com
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
 /**
 *	Question Pool
@@ -18,7 +25,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 15791 2008-07-15 16:03:52Z juliomontoya $
+* 	@version $Id: question_pool.php 15999 2008-08-14 17:33:35Z juliomontoya $
 */
 
 // name of the language file that needs to be included
@@ -182,11 +189,10 @@ if($is_allowedToEdit)
 		// forces the value to 0
 		$exerciseId=0;
 	}
-	
+
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$nbrQuestions=Database::num_rows($result);
 	
-
     echo '<tr>',
       '<td colspan="',($fromExercise?2:3),'">',
     	'<table border="0" cellpadding="0" cellspacing="0" width="100%">',
@@ -240,12 +246,21 @@ if($is_allowedToEdit)
 	}
     echo '</tr>';
 	$i=1;
-
+	//print_r($objExercise->questionList);
 	while ($row = Database::fetch_array($result))
 	{		
 		// if we come from the exercise administration to get a question, 
         // don't show the questions already used by that exercise
-		if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (!$objExercise->isInList($row['id'])))
+        
+        /*if (!$fromExercise) {echo '1'; }   
+        if (!isset($objExercise)){echo '2';}    
+        if (!($objExercise instanceOf Exercise)){echo '3';}    
+        if (!$objExercise->isInList($row['id'])) {echo '4';}        
+        */
+        
+        // original recipe - 
+      //if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (!$objExercise->isInList($row['id'])))
+		if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (is_array($objExercise->questionList)) )
 		{	
             echo '<tr ',($i%2==0?'class="row_odd"':'class="row_even"'),'>';
             echo '  <td><a href="admin.php?',api_get_cidreq(),'&editQuestion=',$row['id'],'&fromExercise=',$fromExercise,'">',$row['question'],'</a></td>';

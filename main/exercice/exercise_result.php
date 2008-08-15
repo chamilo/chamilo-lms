@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 15967 2008-08-10 06:40:40Z yannoo $
+* 	@version $Id: exercise_result.php 16000 2008-08-15 04:26:07Z juliomontoya $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -438,6 +438,9 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		$counter++;
 		// gets the student choice for this question
 		$choice=$exerciseResult[$questionId];
+		
+		//print_r($choice); echo "<br>";
+		
 		// creates a temporary Question object
 
 		$objQuestionTmp = Question :: read($questionId);
@@ -950,12 +953,20 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				$choice = 0;
 			}
 			if ($answerType==MULTIPLE_ANSWER )
-			{
-				$reply = array_keys($choice);
-				for ($i=0;$i<sizeof($reply);$i++)
+			{				
+				if ($choice != 0)
 				{
-					$ans = $reply[$i];
-					exercise_attempt($questionScore,$ans,$quesId,$exeId,$i);
+					$reply = array_keys($choice);
+							
+					for ($i=0;$i<sizeof($reply);$i++)
+					{
+						$ans = $reply[$i];
+						exercise_attempt($questionScore,$ans,$quesId,$exeId,$i);
+					}
+				}
+				else
+				{
+					exercise_attempt($questionScore, 0 ,$quesId,$exeId,0);
 				}
 			}
 			elseif ($answerType==MATCHING)

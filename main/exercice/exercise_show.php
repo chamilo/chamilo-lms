@@ -348,7 +348,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		$exerciseDexcription=mysql_result($result,0,1);
 
 $user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($_user['user_id'])." ";
-$query = "select * from ".$TBL_TRACK_ATTEMPT." as attempts  
+$query = "select attempts.question_id, answer  from ".$TBL_TRACK_ATTEMPT." as attempts  
 						INNER JOIN ".$TBL_TRACK_EXERCICES." as stats_exercices ON stats_exercices.exe_id=attempts.exe_id 
 						INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id
 						INNER JOIN ".$TBL_QUESTIONS." as questions ON questions.id=quizz_rel_questions.question_id    
@@ -356,7 +356,6 @@ $query = "select * from ".$TBL_TRACK_ATTEMPT." as attempts
 					GROUP BY quizz_rel_questions.question_order, attempts.question_id"; 
 					//GROUP BY questions.position, attempts.question_id";
 			
-
 $result =api_sql_query($query, __FILE__, __LINE__);
 
 ?> 
@@ -397,6 +396,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$questionList[] = $row['question_id'];
 			$exerciseResult[] = $row['answer'];
 			}
+		//echo '<pre>';print_R($questionList);
 		foreach($questionList as $questionId)
 			{
 				$counter++;

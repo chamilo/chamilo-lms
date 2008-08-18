@@ -421,22 +421,13 @@ class learnpath {
 					FROM '.Database :: get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
 					INNER JOIN  '.Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
 					ON quiz_question.id = quiz_rel_question.question_id
-					AND quiz_rel_question.exercice_id = '.$id;
-					
+					AND quiz_rel_question.exercice_id = '.$id;					
 			$rsQuiz = api_sql_query($sql, __FILE__, __LINE__);			
 			$max_score = Database::result($rsQuiz, 0, 0);
-				
-			$sql = 'SELECT random 
-					FROM '.Database :: get_course_table(TABLE_QUIZ_TEST).' as quiz				
-					WHERE  quiz.id = '.$id;					
-			
-			$rsQuizRand = api_sql_query($sql, __FILE__, __LINE__);			
-			$random = Database::result($rsQuizRand, 0, 0);					
     	}
     	else
     	{
-    		$max_score = 100;
-    		$random='';
+    		$max_score = 100;    		
     	}
 		
 		if($prerequisites!=0)
@@ -453,8 +444,7 @@ class learnpath {
 	    			parent_item_id,
 	    			previous_item_id,
 	    			next_item_id,
-	    			display_order,
-	    			parameters,		 
+	    			display_order,	    			 
 					prerequisite
 							
 	    		) VALUES (
@@ -468,8 +458,7 @@ class learnpath {
 	    			" . $parent . ",
 	    			" . $previous . ",
 	    			" . $next . ",
-	    			" . ($display_order + 1) . ",
-	    			" .$random.",	    			
+	    			" . ($display_order + 1) . ",	    				    			
 	    			" . $prerequisites . "
 	    		)";
 		}		
@@ -487,8 +476,7 @@ class learnpath {
 					max_score,
 	    			parent_item_id,
 	    			previous_item_id,
-	    			next_item_id,
-	    			parameters,	
+	    			next_item_id,	    				
 	    			display_order
 	    		) VALUES (
 	    			" . $this->get_id() . ",
@@ -501,7 +489,6 @@ class learnpath {
 	    			" . $parent . ",
 	    			" . $previous . ",
 	    			" . $next . ",
-	    			" .$random.",	    	
 	    			" . ($display_order + 1) . "
 	    		)";
 		}

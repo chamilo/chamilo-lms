@@ -140,6 +140,8 @@ if($export_csv)
 						   );
 }
 
+$TBL_QUIZ = Database :: get_course_table('quiz');
+
 foreach ($list as $my_item_id) 
 {
 	$extend_this = 0;
@@ -157,14 +159,15 @@ foreach ($list as $my_item_id)
 				"i.title as mytitle, i.max_score as mymaxscore, " .
 				"iv.max_score as myviewmaxscore, " .
 				"i.item_type as item_type, iv.view_count as iv_view_count, " .
-				"iv.id as iv_id, path as path, i.parameters".
-				" FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v ".
+				"iv.id as iv_id, path as path, q.random".
+				" FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v, $TBL_QUIZ as q".
 				" WHERE i.id = iv.lp_item_id ".
 				" AND i.id = $my_item_id ".
 				" AND iv.lp_view_id = v.id ".
 				" AND i.lp_id = $lp_id ".
 				" AND v.user_id = ".$user_id." ".
 				" AND v.view_count = $view ".
+				" AND q.id = path ".
 				" ORDER BY iv.view_count $qry_order ";
 	} 
 	else 
@@ -174,13 +177,14 @@ foreach ($list as $my_item_id)
 				"i.title as mytitle, i.max_score as mymaxscore, " .
 				"iv.max_score as myviewmaxscore, " .
 				"i.item_type as item_type, iv.view_count as iv_view_count, " .
-				"iv.id as iv_id, path as path, i.parameters".
-				" FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v ".	
+				"iv.id as iv_id, path as path, q.random".
+				" FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v, $TBL_QUIZ as q".	
 				" WHERE i.id = iv.lp_item_id ".
 				" AND i.id = $my_item_id ".
 				" AND iv.lp_view_id = v.id ".
 				" AND i.lp_id = $lp_id ".
 				" AND v.user_id = ".$user_id." ".
+				" AND q.id = path ".
 				" ORDER BY iv.view_count $qry_order ";
 	}
 	
@@ -322,8 +326,8 @@ foreach ($list as $my_item_id)
 				}
 				else
 				{
-					// the parameters value is fill with the random value from the table QUIZ is empty or has a value that indicates the quantity of random questions			
-					if ($row['parameters'] != '' && $row['parameters']!=0 )  
+					// random value from the table QUIZ is empty or has a value that indicates the quantity of random questions			
+					if ($row['random'] != '' && $row['random']!=0 )  
 					{
 						$maxscore = $row['myviewmaxscore'];
 					}
@@ -456,8 +460,8 @@ foreach ($list as $my_item_id)
 				}
 				else
 				{
-					// the parameters value is fill with the random value from the table QUIZ is empty or has a value that indicates the quantity of random questions			
-					if ($row['parameters'] != '' && $row['parameters']!=0 )  
+					// random value from the table QUIZ is empty or has a value that indicates the quantity of random questions			
+					if ($row['random'] != '' && $row['random']!=0 )  
 					{
 						$maxscore = $row['myviewmaxscore'];
 					}

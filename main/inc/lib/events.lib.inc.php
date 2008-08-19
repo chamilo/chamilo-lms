@@ -1,4 +1,4 @@
-<?php // $Id: events.lib.inc.php 15073 2008-04-24 22:46:42Z yannoo $
+<?php // $Id: events.lib.inc.php 16025 2008-08-19 18:29:30Z juliomontoya $
 /* See license terms in /dokeos_license.txt */
 /**
 ============================================================================== 
@@ -413,23 +413,44 @@ function event_link($link_id)
 }
 
 /**
+ * @param exeid ( id of the exercise)
  * @param exo_id ( id in courseDb exercices table )
  * @param result ( score @ exercice )
  * @param weighting ( higher score )
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
+ * @author Julio Montoya <gugli100@gmail.com>
  * @desc Record result of user when an exercice was done
 */
-function event_exercice($exo_id, $score, $weighting)
+function update_event_exercice($exeid,$exo_id, $score, $weighting)
 {
-	global $_configuration, $_user, $_cid;
-	$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-	
-	// if tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled'])
+	if ($exeid!='')
 	{
-		return 0;
+		$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);	
+		$reallyNow = time();
+		$sql = "UPDATE $TABLETRACK_EXERCICES SET				
+				   exe_exo_id 	= 	'".$exo_id."',
+				   exe_result	=	  '".$score."',
+				   exe_weighting = '".$weighting."',
+				   exe_date= FROM_UNIXTIME(".$reallyNow.")
+				 WHERE exe_id = '".$exeid."'";	
+		$res = @api_sql_query($sql,__FILE__,__LINE__);
+		return $res;
 	}
+	else 
+		return false;
+}
 
+/**
+ * This function creates an empty Exercise in STATISTIC_TRACK_E_EXERCICES table.
+ * After that in exercise_result.php we call the update_event_exercice() to update the exercise
+ * @return $id the last id registered
+ * @author Julio Montoya <gugli100@gmail.com>
+ * @desc Record result of user when an exercice was done
+*/
+function create_event_exercice()
+{
+	global $_user, $_cid;
+	$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);		
 	$reallyNow = time();
 	if ($_user['user_id'])
 	{
@@ -442,25 +463,19 @@ function event_exercice($exo_id, $score, $weighting)
 	$sql = "INSERT INTO $TABLETRACK_EXERCICES
 			  (
 			   exe_user_id,
-			   exe_cours_id,
-			   exe_exo_id,
-			   exe_result,
-			   exe_weighting,
-			   exe_date
-			  )
-	
+			   exe_cours_id	
+			  )	
 			  VALUES
 			  (
 			  ".$user_id.",
-			   '".$_cid."',
-			   '".$exo_id."',
-			   '".$score."',
-			   '".$weighting."',
-			   FROM_UNIXTIME(".$reallyNow.")
+			   '".$_cid."'
 			  )";
 	$res = @api_sql_query($sql,__FILE__,__LINE__);
-	return $res;
+	$id= Database::get_last_insert_id();
+	return $id;
 }
+
+
 
 /**
  * Record an event for this attempt at answering an exercise

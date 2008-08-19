@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 16000 2008-08-15 04:26:07Z juliomontoya $
+* 	@version $Id: exercise_result.php 16025 2008-08-19 18:29:30Z juliomontoya $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -427,10 +427,20 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 
 	// added by Priya Saini
-	$sql = "select max(exe_Id) as id from ".$TBL_TRACK_EXERCICES;
-	$res = api_sql_query($sql, __FILE__, __LINE__);
-	$exeId =mysql_result($res,0,"id");
-	$exeId=$exeId+1;
+	//$sql = "select max(exe_Id) as id from ".$TBL_TRACK_EXERCICES;
+	
+	/*
+		$sql = "select max(exe_Id) as id from ".$TBL_TRACK_ATTEMPT;	
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$exeId =mysql_result($res,0,"id");	 
+		$exeId=$exeId+1;
+	*/
+	
+	if($_configuration['tracking_enabled'])
+	{
+		// Create an empty exercise  
+		$exeId= create_event_exercice();
+	}	 
 	
 	$counter=0;
 	foreach($questionList as $questionId)
@@ -1046,9 +1056,8 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 if($_configuration['tracking_enabled'])
 {
-	//include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
-	event_exercice($objExercise->selectId(),$totalScore,$totalWeighting,$answer,$question_id);
-
+	//	Updates the empty exercise  
+	update_event_exercice($exeId, $objExercise->selectId(),$totalScore,$totalWeighting,$answer,$question_id);
 }
 
 if($objExercise->results_disabled)

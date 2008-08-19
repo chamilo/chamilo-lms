@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 15984 2008-08-13 17:24:24Z juliomontoya $
+* 	@version $Id: exercise.class.php 16026 2008-08-19 22:01:00Z juliomontoya $
 */
 
 
@@ -489,7 +489,8 @@ class Exercise
 			//$sql="UPDATE $TBL_QUESTIONS SET position='".Database::escape_string($position)."' WHERE id='".Database::escape_string($questionId)."'";
 			$sql="UPDATE $TBL_QUIZ_QUESTION SET question_order='".Database::escape_string($position)."' " .
 				 "WHERE question_id='".Database::escape_string($questionId)."' and exercice_id='".Database::escape_string($id)."'";
-			api_sql_query($sql,__FILE__,__LINE__); 
+			api_sql_query($sql,__FILE__,__LINE__);
+		
 		}
 	}
 
@@ -497,31 +498,37 @@ class Exercise
 	 * moves a question up in the list
 	 *
 	 * @author - Olivier Brouckaert
+ 	 * @author - Julio Montoya (rewrote the code)
 	 * @param - integer $id - question ID to move up
 	 */
 	function moveUp($id)
 	{	
-		foreach($this->questionList as $position=>$questionId)
-		{
+		// there is a bug with some version of PHP with the key and prev functions
+		// the script commented was tested in dev.dokeos.com with no success
+		// Instead of using prev and next this was change with arrays.
+		/*
+		foreach($this->questionList as $position=>$questionId)		
+		{			
 			// if question ID found
 			if($questionId == $id)
-			{									
+			{							
 				// position of question in the array
-				$pos1=$position; //1
-
-				prev($this->questionList);
-				prev($this->questionList);
-												
-				// position of previous question in the array
-				$pos2=key($this->questionList);
+				echo $pos1=$position; //1
+				echo "<br>";	
 				
+				prev($this->questionList);				
+				prev($this->questionList);			
+												
+				// position of previous question in the array				
+				$pos2=key($this->questionList);			
 				//if the cursor of the array hit the end 
-				// then we must reset the array to get the previous key
-				if($pos2===NULL)
+				// then we must reset the array to get the previous key			
+								
+				if($pos2===null)
 				{					
 					end($this->questionList);
 					prev($this->questionList);
-					$pos2=key($this->questionList);
+					$pos2=key($this->questionList);					
 				}
 				
 				// error, can't move question
@@ -535,6 +542,36 @@ class Exercise
 				// exits foreach()
 				break;
 			}
+			$i++;
+		}
+		*/	
+		$question_list =array();		
+		foreach($this->questionList as $position=>$questionId)		
+		{
+			$question_list[]=	$questionId;
+		}		
+		$len=count($question_list);
+		$orderlist=array_keys($this->questionList);		
+		for($i=0;$i<$len;$i++)		
+		{			
+			$questionId = $question_list[$i];			
+			if($questionId == $id)
+			{							
+				// position of question in the array
+				$pos1=$orderlist[$i];		
+				$pos2=$orderlist[$i-1];		
+				if($pos2===null)
+				{		
+					$pos2 =		$orderlist[$len-1];							
+				}				
+				// error, can't move question
+				if(!$pos2)
+				{
+					$pos2=$orderlist[0];	
+					$i=0;			
+				}		
+				break;
+			}			
 		}
 		// permutes questions in the array
 		$temp=$this->questionList[$pos2];
@@ -550,6 +587,11 @@ class Exercise
 	 */
 	function moveDown($id)
 	{
+		// there is a bug with some version of PHP with the key and prev functions
+		// the script commented was tested in dev.dokeos.com with no success
+		// Instead of using prev and next this was change with arrays.
+		
+		/*
 		foreach($this->questionList as $position=>$questionId)
 		{
 			// if question ID found
@@ -576,11 +618,35 @@ class Exercise
 				break;
 			}
 		}
+		*/
+		
+		$question_list =array();		
+		foreach($this->questionList as $position=>$questionId)		
+		{
+			$question_list[]=	$questionId;
+		}		
+		$len=count($question_list);
+		$orderlist=array_keys($this->questionList);
+				
+		for($i=0;$i<$len;$i++)		
+		{
+			$questionId = $question_list[$i];				
+			if($questionId == $id)
+			{
+				$pos1=$orderlist[$i+1];					
+				$pos2 =$orderlist[$i];			
+				if(!$pos2)
+				{
+					//echo 'cant move!';					
+				} 
+				break;
+			}			
+		}
+			
 		// permutes questions in the array
 		$temp=$this->questionList[$pos2];
 		$this->questionList[$pos2]=$this->questionList[$pos1];
 		$this->questionList[$pos1]=$temp;
-
 	}
 
 	/**

@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 15932 2008-08-06 19:59:11Z yannoo $
+<?php // $Id: whoisonline.php 16023 2008-08-19 11:02:48Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -155,21 +155,21 @@ function display_individual_user($user_id)
 		echo '</div>';
 		if ($user_object->competences)
 		{
-			echo '<dt><strong>'.get_lang('Competences').'</strong></dt>';
+			echo '<dt><strong>'.get_lang('MyCompetences').'</strong></dt>';
 			echo '<dd>'.$user_object->competences.'</dd>';
 		}
 		if ($user_object->diplomas)
 		{
-			echo '<dt><strong>'.get_lang('Diplomas').'</strong></dt>';
+			echo '<dt><strong>'.get_lang('MyDiplomas').'</strong></dt>';
 			echo '<dd>'.$user_object->diplomas.'</dd>';
 		}
 		if ($user_object->teach) {
-			echo '<dt><strong>'.get_lang('Teach').'</strong></dt>';
+			echo '<dt><strong>'.get_lang('MyTeach').'</strong></dt>';
 			echo '<dd>'.$user_object->teach.'</dd>';;
 		}
 		display_productions($user_object->user_id);
 		if ($user_object->openarea) {
-			echo '<dt><strong>'.get_lang('Openarea').'</strong></dt>';
+			echo '<dt><strong>'.get_lang('MyPersonalOpenArea').'</strong></dt>';
 			echo '<dd>'.$user_object->openarea.'</dd>';
 		}
 	}

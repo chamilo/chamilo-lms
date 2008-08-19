@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 14846 2008-04-11 13:05:49Z pcool $
+// $Id: tool_navigation_menu.inc.php 16022 2008-08-19 10:10:45Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -168,21 +168,22 @@ function show_navigation_menu()
 		}
 		function swap_menu()
 		{
-			toolnavlist = document.getElementById('toolnavlist');
-			center = document.getElementById('center');
-			swap_menu_link = document.getElementById('swap_menu_link');
-			if(toolnavlist.style.display == 'none')
+			toolnavlist_el = document.getElementById('toolnavlist');
+			center_el = document.getElementById('center');
+			swap_menu_link_el = document.getElementById('swap_menu_link');
+			
+			if(toolnavlist_el.style.display == 'none')
 			{
-				toolnavlist.style.display = '';
-				center.style.margin = '0 190px 0 0';
-				swap_menu_link.innerHTML = '<?php echo get_lang('Hide'); ?> &raquo;&raquo;';
+				toolnavlist_el.style.display = '';
+				center_el.style.margin = '0 190px 0 0';
+				swap_menu_link_el.innerHTML = '<?php echo get_lang('Hide'); ?> &raquo;&raquo;';
 				createCookie('dokeos_menu_state',1,10);
 			}
 			else
 			{
-				toolnavlist.style.display = 'none';
-				center.style.margin = '0 0 0 0';
-				swap_menu_link.innerHTML = '&laquo;&laquo; <?php echo get_lang('Show'); ?>';
+				toolnavlist_el.style.display = 'none';
+				center_el.style.margin = '0 0 0 0';
+				swap_menu_link_el.innerHTML = '&laquo;&laquo; <?php echo get_lang('Show'); ?>';
 				createCookie('dokeos_menu_state',0,10);
 			}
 		}

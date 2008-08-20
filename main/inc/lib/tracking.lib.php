@@ -30,6 +30,7 @@
 *	Include/require it in your code to use its functionality.
 *
 *	@package dokeos.library
+*	@author Julio Montoya <gugli100@gmail.com> (Score average fixes) 
 ==============================================================================
 */
 
@@ -272,15 +273,31 @@ class Tracking {
 			return null;
 		}
 	}
-
+	/**
+	 * This function gets:
+	 * 1. The score average from all SCORM Test items in all LP in a course-> All the answers / All the max score.     
+	 * 2. The score average from all Tests (quiz) in all LP in a course-> All the answers / All the max score.
+	 * 3. And finally it will return the average between 1. and 2.
+	 * This function does not take the results of a Test out of a LP
+	 * 
+	 * @param User id
+	 * @param Course id
+	 * @return string value (number %) Which represents a round integer explain in got in 3.
+	 */
 	function get_avg_student_score($student_id, $course_code) {
 		
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		
+		$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+		$tbl_stats_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+		
+	
 		$course = CourseManager :: get_course_information($course_code);
 		if(!empty($course['db_name']))
 		{
+			$tbl_quiz_questions= Database :: get_course_table(TABLE_QUIZ_QUESTION,$course['db_name']);		
 			$lp_table = Database :: get_course_table(TABLE_LP_MAIN,$course['db_name']);
 			$lp_item_table = Database  :: get_course_table(TABLE_LP_ITEM,$course['db_name']);
 			$lp_view_table = Database  :: get_course_table(TABLE_LP_VIEW,$course['db_name']);
@@ -293,13 +310,13 @@ class Tracking {
 			$lp_scorm_weighting_total = 0;
 			
 			if(Database::num_rows($sql_result_lp)>0){
-				//Scorm
+				//Scorm test
 				while($a_learnpath = Database::fetch_array($sql_result_lp)){
 					$sql = 'SELECT id, max_score 
 							FROM '.$lp_item_table.' AS lp_item
 							WHERE lp_id='.$a_learnpath['id'].'
 							AND item_type="sco" LIMIT 1';
-					
+				
 					$rs_lp_item_id_scorm = api_sql_query($sql, __FILE__, __LINE__);
 					
 					if(Database::num_rows($rs_lp_item_id_scorm)>0){
@@ -324,17 +341,28 @@ class Tracking {
 						}
 					}
 				}
+				//mysql_data_seek() moves the internal row pointer of the MySQL result associated with the specified result identifier to point to the specified row number. 
+				//The next call to a MySQL fetch function, such as mysql_fetch_assoc(), would return that row. 
 				mysql_data_seek($sql_result_lp,0);
-				//Quizz in LP
+				
+				//Quizz in a LP
 				while($a_learnpath = Database::fetch_array($sql_result_lp)){
-					
-					$sql = 'SELECT id as item_id, max_score 
+					//we got the maxscore this is wrong			
+					/*
+					echo $sql = 'SELECT id as item_id, max_score 
 							FROM '.$lp_item_table.' AS lp_item
 							WHERE lp_id='.$a_learnpath['id'].'
 							AND item_type="quiz"';
-	
-					$rsItems = api_sql_query($sql, __FILE__, __LINE__);
+					*/
 					
+					//Path is the exercise id
+					$sql = 'SELECT path, id as item_id, max_score 
+					FROM '.$lp_item_table.' AS lp_item
+					WHERE lp_id='.$a_learnpath['id'].'
+					AND item_type="quiz"';	
+					
+					$rsItems = api_sql_query($sql, __FILE__, __LINE__);
+				
 					//We get the last view id of this LP
 					$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';	
 					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
@@ -345,6 +373,7 @@ class Tracking {
 					{
 						while($item = Database :: fetch_array($rsItems, 'ASSOC'))
 						{
+							// we take the score from a LP because we have lp_view_id
 							$sql = 'SELECT score as student_score 
 									FROM '.$lp_item_view_table.' as lp_view_item
 									WHERE lp_view_item.lp_item_id = '.$item['item_id'].'
@@ -352,14 +381,43 @@ class Tracking {
 									';
 		
 							$rsScores = api_sql_query($sql, __FILE__, __LINE__);
+							
+							// Real max score - this was implemented because of the random exercises							
+					 		$sql_last_attempt = 'SELECT exe_id FROM '. $tbl_stats_exercices. ' ' .
+					 							'WHERE exe_exo_id="' .$item['path']. '" AND exe_user_id="' . $student_id . '" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
+							
+							$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
+							$num = Database :: num_rows($resultLastAttempt);				
+							if ($num > 0){								
+								if ($num > 1){
+									while ($rowLA = Database :: fetch_row($resultLastAttempt)) {
+										$id_last_attempt = $rowLA[0];						
+									}
+								} else {
+									$id_last_attempt = Database :: result($resultLastAttempt, 0, 0);
+							
+								}
+							}	
+							$sql = "SELECT SUM(t.ponderation) as maxscore from ( SELECT distinct question_id, marks,ponderation FROM $tbl_stats_attempts as at " .
+						  	"INNER JOIN  $tbl_quiz_questions as q  on(q.id = at.question_id) where exe_id ='$id_last_attempt' ) as t";																
+							$result = api_sql_query($sql, __FILE__, __LINE__);
+							$row_max_score = Database :: fetch_array($result);							
+							$maxscore = $row_max_score['maxscore'];							
+							if ($maxscore=='')
+							{
+								$maxscore = $item['max_score'];
+							}
+							
 							if(Database::num_rows($rsScores)>0)
 							{
 								$total_score += Database::result($rsScores, 0, 0);
-								$total_weighting += $item['max_score'];
+															
+								//echo $total_weighting += $item['max_score'];
+								$total_weighting += $maxscore;
 								
 								if($total_weighting>0)
 								{
-									$lp_scorm_score_total += ($total_score/$total_weighting)*100;
+									$lp_scorm_score_total += ($total_score/$total_weighting)*100;									
 									$lp_scorm_weighting_total+=100;
 								}
 							}					
@@ -375,8 +433,7 @@ class Tracking {
 			if($lp_scorm_weighting_total>0)
 			{
 				$pourcentageScore = round(($totalScore * 100) / $lp_scorm_weighting_total);
-			}
-	
+			}	
 			return $pourcentageScore;
 		}
 		else

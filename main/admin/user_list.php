@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 15137 2008-04-26 01:34:17Z yannoo $
+<?php // $Id: user_list.php 16037 2008-08-21 10:13:53Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -69,6 +69,8 @@ function courses_of_user($arg)
 	$objResponse->addAssign("user".$arg,"innerHTML", $newContent);
 	$objResponse->addReplace("coursesofuser".$arg,"alt", $newContent);
 	$objResponse->addReplace("coursesofuser".$arg,"title", $newContent);
+	
+	$objResponse->addAssign("user".$arg,"style.display", "block");
         
 	//return the  xajaxResponse object
 	return $objResponse;
@@ -370,7 +372,7 @@ function modify_filter($user_id,$url_params,$row)
 	$result .= '<span id="tooltip">
 				<span class="toolbox">
 				<a style="position: relative;" class="tooltipLinkInner" href="#">
-				<img src="../img/courses.gif" id="coursesofuser'.$user_id.'" onmouseover="xajax_courses_of_user('.$user_id.');" style="vertical-align:middle;"/>
+				<img src="../img/courses.gif" id="coursesofuser'.$user_id.'" onmouseout="document.getElementById(\'user'.$user_id.'\').style.display=\'none\'" onmouseover="xajax_courses_of_user('.$user_id.');" style="vertical-align:middle;"/>
 				<span id="user'.$user_id.'" style="margin-left: -100px; border:1px solid black; width: 200px; background-color:white; z-index:99; padding: 3px; display: none; margin-right:inherit;">
 				<div style="text-align:center;"><img src="../img/anim-loader.gif" height="20" /></div>
 				</span></a></span></span>';	

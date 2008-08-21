@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 15947 2008-08-07 16:12:49Z juliomontoya $
+* 	@version $Id: survey.lib.php 16042 2008-08-21 16:47:15Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -113,7 +113,7 @@ class survey_manager
 		$shared_survey_id=0;
 		
 		if (!$values['survey_id'] OR !is_numeric($values['survey_id']))
-		{			
+		{	
 			// check if the code doesn't soon exists in this language
 			$sql = 'SELECT 1 FROM '.$table_survey.' WHERE code="'.Database::escape_string($values['survey_code']).'" AND lang="'.Database::escape_string($values['survey_language']).'"';
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
@@ -174,7 +174,7 @@ class survey_manager
 			
 			if($values['survey_type']==1)
 			{
-				$additional['columns'] = ', survey_type';
+				$additional['columns'] .= ', survey_type';
 				$additional['values'] .= ",'1'";
 
 				$additional['columns'] .= ', shuffle';

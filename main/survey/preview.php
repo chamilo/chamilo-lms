@@ -23,6 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
+*	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modifications 
 * 	@version $Id: survey_list.php 10680 2007-01-11 21:26:23Z pcool $
 *
 * 	@todo use quickforms for the forms
@@ -73,7 +74,7 @@ Display :: display_header(get_lang('SurveyPreview'));
 SurveyUtil::check_first_last_question($_GET['survey_id'], false);
 
 // only a course admin is allowed to preview a survey: you are NOT a course admin => error message
-if (!api_is_allowed_to_edit())
+if (!api_is_allowed_to_edit(false,true))
 {
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 }

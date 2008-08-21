@@ -26,7 +26,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey_list.php 15947 2008-08-07 16:12:49Z juliomontoya $
+* 	@version $Id: survey_list.php 16046 2008-08-21 22:24:17Z juliomontoya $
 *
 * 	@todo use quickforms for the forms
 */
@@ -43,7 +43,7 @@ require_once('survey.lib.php');
 require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
-if (!api_is_allowed_to_edit())
+if (!api_is_allowed_to_edit(false,true)) //coach can see this 
 {
 	Display :: display_header(get_lang('SurveyList'));
 	SurveyUtil::survey_list_user($_user['user_id']);
@@ -137,13 +137,15 @@ if ($_POST['action'])
 	}
 }
 
-
-// Action links
-echo '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.get_lang('CreateNewSurvey').'</a> | ';
+if (!api_is_course_coach())
+{
+	// Action links
+	echo '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.get_lang('CreateNewSurvey').'</a> | ';
+}
 //echo '<a href="survey_all_courses.php">'.get_lang('CreateExistingSurvey').'</a> | ';
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.get_lang('Search').'</a>';
 
-// Main content
+//Main content
 SurveyUtil::display_survey_list();
 
 // Footer

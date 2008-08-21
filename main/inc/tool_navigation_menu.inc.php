@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 16022 2008-08-19 10:10:45Z elixir_inter $
+// $Id: tool_navigation_menu.inc.php 16040 2008-08-21 13:48:58Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -187,7 +187,7 @@ function show_navigation_menu()
 				createCookie('dokeos_menu_state',0,10);
 			}
 		}
-		document.write('<a href="#" id="swap_menu_link" onclick="swap_menu();" style="float:right;"><?php echo get_lang('Hide'); ?> &raquo;&raquo;<\/a>');
+		document.write('<a href="#" id="swap_menu_link" onclick="swap_menu();"><?php echo get_lang('Hide'); ?> &raquo;&raquo;<\/a>');
 		/* ]]> */
 		</script>
 		<?php

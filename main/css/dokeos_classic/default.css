@@ -439,6 +439,9 @@ input[text] {font-size: 12px; }
 
 
 /* --- course navigation menu as a definition list  --- */
+#swap_menu_link {
+  float: left;
+}
 #toolnavbox {
 	margin: 0 0 0 10px;
 	padding: 0;

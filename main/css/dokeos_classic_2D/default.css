@@ -543,7 +543,9 @@ this lets the navigation menu appear to the left:
     course navigation menu as a definition list
 ------------------------------------------------------------------------------
 */
-
+#swap_menu_link {
+  float: left;
+}
 #toolnavbox {
 	border: 1px solid #4271b5;
 	float: left;

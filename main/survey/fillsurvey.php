@@ -135,7 +135,8 @@ else
 
 // getting the survey information
 $survey_data = survey_manager :: get_survey($survey_invitation['survey_id']);
-
+//echo '<pre>';print_r($survey_data);echo '</pre>';
+//echo $survey_data['form_fields'];echo '-<br>-';echo $survey_data['show_form_profile'];
 $survey_data['survey_id'] = $survey_invitation['survey_id'];
 //print_r($survey_data);
 // storing the answers
@@ -296,7 +297,7 @@ if ($user_id == 0)
 }
 $user_data = UserManager :: get_user_info_by_id($user_id);
 
-if ($survey_data['form_fields'] && $survey_data['anonymous'] == 0 && is_array($user_data)) 
+if ($survey_data['form_fields']!='' && $survey_data['anonymous'] == 0 && is_array($user_data)) 
 {
 	//echo "<pre>"; print_r($survey_invitation);
 	$form_fields = explode('@', $survey_data['form_fields']);
@@ -1209,8 +1210,12 @@ elseif ($survey_data['survey_type'] === '1') //conditional/personality-test type
 				echo '<input type="hidden" name="personality" value="' . $personality . '">';
 				echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' >> " />';
 			}
-		}
-			
+		}			
+	}
+	// this is the case when the show_profile_form is true but there are not form_fields 
+	elseif ($survey_data['form_fields'] == '') 
+	{
+		echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' >> " />';
 	}
 }
 echo '</form>';

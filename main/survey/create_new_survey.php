@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 15984 2008-08-13 17:24:24Z juliomontoya $
+* 	@version $Id: create_new_survey.php 16047 2008-08-21 22:52:00Z juliomontoya $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -158,12 +158,25 @@ $form->addElement('checkbox', 'anonymous', get_lang('Anonymous'));
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'));
 
+
+/*
+// Aditional Parameters
+$form -> addElement('html','<div class="row">
+<div class="label">&nbsp;</div>
+<div class="formw">
+	<a href="javascript://" onclick="if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}"><img src="../img/add_na.gif" alt="" />'.get_lang('AdvancedParameters').'</a>
+</div>
+</div>');*/
+
+// Personality/Conditional Test Options
 $surveytypes[0] = get_lang('Normal');
 $surveytypes[1] = get_lang('Conditional');
 
 if ($_GET['action'] == 'add')
 {
-	$form->addElement('select', 'survey_type', get_lang('SelectType'), $surveytypes);	
+	$form->addElement('select', 'survey_type', get_lang('SelectType'), $surveytypes, array('onchange' => 'if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}'));	
+	$form -> addElement('html','<div id="options" style="display: none;">');
+		
 	$sql = 'SELECT survey_id,title FROM '.$table_survey.' WHERE survey_type = 1 AND author = '.$_SESSION['_user']['user_id'];
 	$rs = api_sql_query($sql,__FILE__,__LINE__);
 	if(Database::num_rows($rs)>0)
@@ -176,7 +189,18 @@ if ($_GET['action'] == 'add')
 		$form->addElement('select', 'parent_id', get_lang('ParentSurvey'), $list_surveys);
 	}
 }
-
+else
+{
+	// Aditional Parameters
+	$form -> addElement('html','<div class="row">
+	<div class="label">&nbsp;</div>
+	<div class="formw">
+		<a href="javascript://" onclick="if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}"><img src="../img/add_na.gif" alt="" />'.get_lang('AdvancedParameters').'</a>
+	</div>
+	</div>');
+	$form -> addElement('html','<div id="options" style="display: none;">');
+}
+ 
 if ($survey_data['survey_type']==1 || $_GET['action'] == 'add' )
 {
 	$form->addElement('checkbox', 'one_question_per_page', get_lang('OneQuestionPerPage'));
@@ -187,6 +211,9 @@ if ($survey_data['anonymous']==0  )
 {
 	$form->addElement('checkbox', 'show_form_profile', get_lang('ShowFormProfile'));
 }
+
+
+
 
 if ($_GET['action'] == 'edit' && is_numeric($_GET['survey_id']) )
 {
@@ -225,8 +252,9 @@ if ($_GET['action'] == 'edit' && is_numeric($_GET['survey_id']) )
 			//$form->addElement('html', '</div>');
 		}	
 	}
-
 }
+
+$form -> addElement('html','</div>');
 
 $form->addElement('submit', 'submit_survey', get_lang('Ok'));
 

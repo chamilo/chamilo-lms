@@ -98,7 +98,7 @@ if ($survey_invitation['answered'] == 1)
 {
 	Display :: display_error_message(get_lang('YouAlreadyFilledThisSurvey'), false);
 	Display :: display_footer();
-	exit;
+	exit();
 }
 
 // checking if there is another survey with this code.
@@ -502,26 +502,33 @@ if ($survey_data['form_fields'] && $survey_data['anonymous'] == 0 && is_array($u
 	if ($form->validate()) 
 	{
 		$user_data = $form->exportValues();
-		$extras = array ();
-		// build SQL query
-		$sql = "UPDATE $table_user SET";
-		foreach ($user_data as $key => $value) {
-			if (substr($key, 0, 6) == 'extra_') //an extra field
+		if (is_array($user_data))
+		{
+			if (count($user_data)>0)
+			{
+				$extras = array ();
+				// build SQL query
+				$sql = "UPDATE $table_user SET";
+				foreach ($user_data as $key => $value) 
 				{
-				$extras[substr($key, 6)] = $value;
-			} else {
-				$sql .= " $key = '" . Database :: escape_string($value) . "',";
+					if (substr($key, 0, 6) == 'extra_') //an extra field
+						{
+						$extras[substr($key, 6)] = $value;
+					} else {
+						$sql .= " $key = '" . Database :: escape_string($value) . "',";
+					}
+				}
+				// remove trailing , from the query we have so far
+				$sql = rtrim($sql, ',');
+				$sql .= " WHERE user_id  = '" . $user_id . "'";
+				api_sql_query($sql, __FILE__, __LINE__);
+				//update the extra fields
+				foreach ($extras as $key => $value) {
+					$myres = UserManager :: update_extra_field_value($user_id, $key, $value);
+				}
+				echo '<div id="survey_content" class="survey_content">' . get_lang('InformationUpdated') . ' ' . get_lang('PleaseFillSurvey') . '</div>';
 			}
 		}
-		// remove trailing , from the query we have so far
-		$sql = rtrim($sql, ',');
-		$sql .= " WHERE user_id  = '" . $user_id . "'";
-		api_sql_query($sql, __FILE__, __LINE__);
-		//update the extra fields
-		foreach ($extras as $key => $value) {
-			$myres = UserManager :: update_extra_field_value($user_id, $key, $value);
-		}
-		echo '<div id="survey_content" class="survey_content">' . get_lang('InformationUpdated') . ' ' . get_lang('PleaseFillSurvey') . '</div>';
 		//$_GET['show_form']=0;
 		//$show_form=0; 
 		$_GET['show']=0;
@@ -539,7 +546,7 @@ if ($survey_data['form_fields'] && $survey_data['anonymous'] == 0 && is_array($u
 		//we unset the sessions
 		unset($_SESSION['paged_questions']);
 		unset($_SESSION['page_questions_sec']);
-		$paged_questions_sec=array();
+		$paged_questions_sec=array();		
 		$form->display();
 	}
 }

@@ -37,7 +37,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 15887 2008-08-01 13:55:25Z elixir_julian $
+* 	@version $Id: exercice_submit.php 16062 2008-08-25 15:38:33Z juliomontoya $
 */
 
 
@@ -572,7 +572,7 @@ else
 		 <td valign='middle' bgcolor='#e6e6e6'>
 			".get_lang('Question')." ";
 		$s.=$i.' : ';
-		if($exerciseType == 2) $s.=' / '.$nbrQuestions;
+		if($exerciseType == 2) $s.=' / '.$nbrQuestions.' ';
 	
 		echo $s;
 	

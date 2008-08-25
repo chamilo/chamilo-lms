@@ -282,6 +282,33 @@ function show_add_forum_form($inputvalues=array())
 	$group[] =& HTML_QuickForm::createElement('radio', 'public_private_group_forum', null, get_lang('Private'), 'private');
 	$form->addGroup($group, 'public_private_group_forum_group', get_lang('PublicPrivateGroupForum'), '&nbsp;');
 
+	// Forum image		
+	$form->add_progress_bar();
+	if( strlen($inputvalues['forum_image']) > 0)
+	{
+		
+		$show_preview_image='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$inputvalues['forum_image'].'>';
+		$div = '<div class="row">
+		<div class="label">'.get_lang('UpdateImage').'</div>
+		<div class="formw">	
+		'.$show_preview_image.'
+		</div>
+		</div>';	
+	
+		$form->addElement('html', $div .'<br/>');	
+	
+		$form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
+	}
+	else
+	{
+		$form->addElement('file', 'picture', ($inputvalues['forum_image'] != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
+	}
+	
+	$form->addRule('picture', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));
+
+
+
+
 
 	// The OK button
 	$form->addElement('submit', 'SubmitForum', 'OK');
@@ -431,6 +458,32 @@ function store_forumcategory($values)
 }
 
 /**
+* This function delete the forum image if exists
+*
+* @param int forum id
+* @return boolean true if success
+*
+* @author Julio Montoya <gugli100@gmail.com>, Dokeos
+* @version february 2006, dokeos 1.8
+*/
+function delete_forum_image($forum_id)
+{	
+	$table_forums = Database::get_course_table(TABLE_FORUM);	echo '<br>';
+	$sql="SELECT forum_image FROM $table_forums WHERE forum_id = '".$forum_id."' ";
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$row=Database::fetch_array($result); 	
+	if ($row['forum_image']!='')
+	{
+		$del_file = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$row['forum_image'];
+		return @unlink($del_file);	
+	}
+	else
+	{
+		return false;
+	}
+			
+}
+/**
 * This function stores the forum in the database. The new forum is added to the end.
 *
 * @param
@@ -453,14 +506,74 @@ function store_forum($values)
 	$new_max=$row['sort_max']+1;
 	$session_id = isset($_SESSION['id_session']) ? $_SESSION['id_session'] : 0;
 	
-	$clean_title=Security::remove_XSS(Database::escape_string(htmlspecialchars($values['forum_title'])));
+	$clean_title=Security::remove_XSS(Database::escape_string(htmlspecialchars($values['forum_title'])));	
 	
+	$image_moved=false;	
+	if(!empty($_FILES['picture']['name']))
+	{
+		$upload_ok = process_uploaded_file($_FILES['picture']);
+		$has_attachment=true;
+	}
+	else
+	{
+		$image_moved=true;
+	}
+		
+	// remove existing picture if asked
+	if ($values['remove_picture'])
+	{	
+		delete_forum_image($values['forum_id']);		
+	}	
+	
+	
+	if($upload_ok)
+	{			
+		if ($has_attachment)
+		{			
+			$courseDir   = $_course['path'].'/upload/forum/images';
+			$sys_course_path = api_get_path(SYS_COURSE_PATH);		
+			$updir = $sys_course_path.$courseDir;
+						
+			// Try to add an extension to the file if it hasn't one
+			$new_file_name = add_ext_on_mime(stripslashes($_FILES['picture']['name']), $_FILES['picture']['type']);	
+		
+			// user's file name
+			$file_name =$_FILES['picture']['name'];
+						
+			if (!filter_extension($new_file_name)) 
+			{
+				//Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+				$image_moved=false;							
+			}
+			else
+			{				
+				$file_extension = explode('.', $_FILES['picture']['name']);
+				$file_extension = strtolower($file_extension[sizeof($file_extension) - 1]);					
+				$new_file_name = uniqid('').'.'.$file_extension;						
+				$new_path=$updir.'/'.$new_file_name;
+				$result= @move_uploaded_file($_FILES['picture']['tmp_name'], $new_path);								
+				// Storing the attachments if any
+				if ($result)
+				{	
+					$image_moved=true;				
+				}			
+			}			 
+		}
+	}
+		
 	if (isset($values['forum_id']))
 	{
-	
-	// storing an edit
-		$sql="UPDATE ".$table_forums." SET
+		$sql_image='';
+		if ($image_moved)
+		{
+			$sql_image=" forum_image='".Database::escape_string($new_file_name)."', ";			
+			delete_forum_image($values['forum_id']);	
+		}
+
+		// storing an edit
+		 $sql="UPDATE ".$table_forums." SET
 					forum_title='".$clean_title."',
+					".$sql_image."
 					forum_comment='".Database::escape_string($values['forum_comment'])."',
 					forum_category='".Database::escape_string($values['forum_category'])."',
 					allow_anonymous='".Database::escape_string($values['allow_anonymous_group']['allow_anonymous'])."',
@@ -476,10 +589,17 @@ function store_forum($values)
 		$return_message=get_lang('ForumEdited');
 	}
 	else
-	{
+	{	
+		$sql_image='';
+		if ($image_moved)
+		{
+			$sql_image="'".$new_file_name."', ";
+		}
+		
 		$sql="INSERT INTO ".$table_forums."
-					(forum_title, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order, session_id)
-					VALUES ('".$clean_title."',
+					(forum_title, forum_image, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order, session_id)
+					VALUES ('".$clean_title."', 
+						".$sql_image."
 						'".Database::escape_string($values['forum_comment'])."',
 						'".Database::escape_string($values['forum_category'])."',
 						'".Database::escape_string($values['allow_anonymous_group']['allow_anonymous'])."',
@@ -497,6 +617,7 @@ function store_forum($values)
 		api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", api_get_user_id());
 		$return_message=get_lang('ForumAdded');
 	}
+	
 	return $return_message;
 }
 
@@ -2016,6 +2137,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 		$values = $form->exportValues();
 	}
 
+
 	$form->addElement('submit', 'SubmitPost', get_lang('Ok'));
 	global $charset;
 	// setting the default values for the form elements
@@ -2144,9 +2266,9 @@ function display_user_image($user_id,$name)
 	else
 	{
 		return $link.'<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  title="'.$name.'"  /></a>';
-	}
-	
+	}	
 }
+
 
 
 /**

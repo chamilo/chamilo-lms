@@ -202,7 +202,7 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' )
 	{
 		foreach ($forum_categories_list as $forum_category_key => $forum_category)
 		{
-			echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"5\">";
+			echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
 			echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display($forum_category['cat_title']).'</a><br />';
 			
 			if ($forum_category['cat_comment']<>'' AND trim($forum_category['cat_comment'])<>'&nbsp;')
@@ -225,7 +225,8 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' )
 		
 			// step 4: the interim headers (for the forum)
 			echo "\t<tr class=\"forum_header\">\n";
-			echo "\t\t<td colspan='2'>".get_lang('Forum')."</td>\n";
+			
+			echo "\t\t<td colspan='3'>".get_lang('Forum')."</td>\n";
 			echo "\t\t<td>".get_lang('Topics')."</td>\n";
 			echo "\t\t<td>".get_lang('Posts')."</td>\n";
 			echo "\t\t<td>".get_lang('LastPosts')."</td>\n";
@@ -317,11 +318,23 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' )
 					
 					//echo '<hr>';
 		
+		
+				
+					
 					if ($show_forum)
 					{
 						$form_count++;
 						echo "\t<tr class=\"forum\">\n";
+						
+						// Showing the image
+						echo "\t\t<td width=\"150\">"; 
+						echo '<img src="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$forum['forum_image'].'">';
+						echo "</td>\n";
+					
+					
 						echo "\t\t<td width=\"20\">";
+						
+											
 						if ($forum['forum_of_group']!=='0')
 						{
 							if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']]))
@@ -334,14 +347,17 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' )
 							}
 						}
 						else
-						{
+						{	
+								
 							if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']]))
 							{
 								echo icon('../img/forum.gif');
+								
 							}
 							else
 							{
 								echo icon('../img/forum.gif');
+								
 							}
 		
 						}

@@ -490,6 +490,7 @@ function update_Db_course($courseDbName)
 		 forum_order int default NULL,
 		 locked int NOT NULL default 0,
 		 session_id int NOT NULL default 0,
+		 forum_image varchar(255) NOT NULL default '',
 		 PRIMARY KEY (forum_id)
 		) TYPE=MyISAM";
 

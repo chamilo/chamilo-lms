@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 16026 2008-08-19 22:01:00Z juliomontoya $
+* 	@version $Id: exercise.class.php 16072 2008-08-26 18:11:13Z juliomontoya $
 */
 
 
@@ -755,13 +755,42 @@ class Exercise
 				<a href="javascript://" onclick="if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}"><img src="../img/add_na.gif" alt="" />'.get_lang('AdvancedParameters').'</a>
 			</div>
 			</div>');
-		// random
+			
+		// Random questions
 		$form -> addElement('html','<div id="options" style="display: none;">');
 		$random = array();
+		
+		$option=array();
+		
+		$option[0]=get_lang('DoNotRandomize');
+		
+		$count_list=10;
+		if ($this->id>0)
+		{
+			$count_list = $this->selectNbrQuestions();
+		}
+		for($i=1 ; $i<=$count_list; ++$i)
+		{
+			$option[$i] = $i;  // fill the array with A, B, C.....
+		}
+		
+		$attempt_option=array();
+		$attempt_option[0]=get_lang('Infinite');
+		
+		for($i=1 ; $i<=10; ++$i)
+		{
+			$attempt_option[$i] = $i;  // fill the array with A, B, C.....
+		}		
 		$random[] = FormValidator :: createElement ('static', 'help','help','<span style="font-style: italic;">'.get_lang('RandomQuestionsHelp').'</span>');
-		$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
+		$random[] = FormValidator :: createElement ('select', 'randomQuestions',null,$option); 
+		
+		//$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
 		$form -> addGroup($random,null,get_lang('RandomQuestions').' : ','<br />');
-		$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));
+		
+		// Exercise attempts
+		//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));		
+		$form -> addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts').' : ',$attempt_option); 
+		
 		$form -> addElement('html','</div>');
 		
 		// submit
@@ -775,22 +804,28 @@ class Exercise
 		$defaults = array();
 		if($this -> id > 0)
 		{
-			$defaults['exerciseAttempts'] = $this -> selectAttempts();
+			if ($this -> random > $this->selectNbrQuestions())
+			{
+				$defaults['randomQuestions'] =  $this->selectNbrQuestions();
+			}
+			else
+			{			
+				$defaults['randomQuestions'] = $this -> random;
+			}
+			
 			$defaults['exerciseType'] = $this -> selectType();
 			$defaults['exerciseTitle'] = $this -> selectTitle();
 			$defaults['exerciseDescription'] = $this -> selectDescription();
-			$defaults['randomQuestions'] = $this -> random;
+			$defaults['exerciseAttempts'] = $this->selectAttempts();			
 		}
-		else{
+		else
+		{
 			$defaults['exerciseType'] = 1;
 			$defaults['exerciseAttempts'] = 0;
 			$defaults['randomQuestions'] = 0;
 			$defaults['exerciseDescription'] = '';
 		}
-
 		$form -> setDefaults($defaults);
-
-
 	}
 
 

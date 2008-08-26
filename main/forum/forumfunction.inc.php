@@ -67,7 +67,9 @@
  * touch the code
  * 							-- Patrick Cool <patrick.cool@UGent.be>
  **************************************************************************
- */
+ *
+ * @author Julio Montoya <gugli100@gmail.com>, Dokeos Several fixes 
+*/ 
 require_once(api_get_path(INCLUDE_PATH).'/lib/mail.lib.inc.php');
 require_once(api_get_path(INCLUDE_PATH).'/conf/mail.conf.php');
 require_once(api_get_path(INCLUDE_PATH).'/lib/usermanager.lib.php');
@@ -80,7 +82,7 @@ get_notifications_of_user();
 * @param
 * @return
 *
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University* 
 * @version february 2006, dokeos 1.8
 */
 function handle_forum_and_forumcategories()
@@ -289,21 +291,17 @@ function show_add_forum_form($inputvalues=array())
 		
 		$show_preview_image='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$inputvalues['forum_image'].'>';
 		$div = '<div class="row">
-		<div class="label">'.get_lang('UpdateImage').'</div>
+		<div class="label">'.get_lang('PreviewImage').'</div>
 		<div class="formw">	
 		'.$show_preview_image.'
 		</div>
 		</div>';	
 	
 		$form->addElement('html', $div .'<br/>');	
-	
 		$form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
 	}
-	else
-	{
-		$form->addElement('file', 'picture', ($inputvalues['forum_image'] != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
-	}
 	
+	$form->addElement('file', 'picture', ($inputvalues['forum_image'] != '' ? get_lang('UpdateImage') : get_lang('AddImage')));	
 	$form->addRule('picture', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));
 
 

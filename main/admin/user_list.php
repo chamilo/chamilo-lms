@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 16037 2008-08-21 10:13:53Z elixir_inter $
+<?php // $Id: user_list.php 16070 2008-08-26 15:25:28Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -60,7 +60,9 @@ function courses_of_user($arg)
     else
     {
     	$newContent .= '- '.get_lang('None').' -<br />';
-    }    
+    }   
+    $newContent = mb_convert_encoding($newContent,'utf-8',api_get_setting('platform_charset'));
+     
 	// Instantiate the xajaxResponse object
 	$objResponse = new xajaxResponse();
         
@@ -82,7 +84,6 @@ function empty_courses_of_user($arg)
     $newContent = '';    
 	// Instantiate the xajaxResponse object
 	$objResponse = new xajaxResponse();
-        
 	// add a command to the response to assign the innerHTML attribute of
 	// the element with id="SomeElementId" to whatever the new content is
 	$objResponse->addAssign("user".$arg,"innerHTML", $newContent);
@@ -98,6 +99,11 @@ $htmlHeadXtra[] = '		<style>
 		.tooltipLinkInner {
 			color:blue;
 			text-decoration:none;												
+		}
+		
+		/* fix for ie6 */
+		#tooltip .toolbox a:hover {
+			background:transparent;
 		}
 		
 		#tooltip .toolbox a:hover span {

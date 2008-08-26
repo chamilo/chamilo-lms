@@ -162,3 +162,10 @@ vertical-align: top;
 .scormpage .footer{
 clear: both;
 }
+
+.preview_image 
+{	
+	text-align: right;
+	margin-right: 5px;
+	padding-left: 15px;	 
+}

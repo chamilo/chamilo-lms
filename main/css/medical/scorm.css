@@ -174,3 +174,9 @@
 clear: both;
 }
 
+.preview_image 
+{	
+	text-align: right;
+	margin-right: 5px;
+}
+

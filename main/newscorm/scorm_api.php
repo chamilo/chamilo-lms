@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 15386 2008-05-24 05:13:09Z yannoo $ 
+<?php // $Id: scorm_api.php 16074 2008-08-26 23:20:21Z juliomontoya $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -922,8 +922,8 @@ function update_progress_bar(nbr_complete, nbr_total, mode)
 		var pr_full  = myframe.document.getElementById('progress_img_full');
 		
 		var pr_empty = myframe.document.getElementById('progress_img_empty');
-		pr_full.width = percentage;
-		pr_empty.width = 100-percentage;
+		pr_full.width = percentage*1.5;
+		pr_empty.width = (100-percentage)*1.5;
 		var mytext = '';
 		switch(mode){
 			case 'abs':

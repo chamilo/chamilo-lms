@@ -19,11 +19,12 @@ if (isset($_GET['action']))
 		$language_file[] = 'exercice';
 	}
 }
-$language_file[] = "course_home";
-$language_file[] = "scormdocument";
-$language_file[] = "scorm";
-$language_file[] = "learnpath";
+$language_file[] = 'course_home';
+$language_file[] = 'scormdocument';
+$language_file[] = 'scorm';
+$language_file[] = 'learnpath';
 $language_file[] = 'resourcelinker';
+$language_file[] = 'registration';
 
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
@@ -89,6 +90,7 @@ if(isset($_SESSION['lpobject']))
 		}
 	}
 }
+
 if($debug>0) error_log('New LP - Passed data remains check',0);
 
 if($lp_found == false
@@ -556,7 +558,7 @@ switch($action)
 		if(!api_is_allowed_to_edit())
 		{
 			api_not_allowed(true);
-		}
+		}		
 		if($debug>0) error_log('New LP - edit action triggered',0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for edit',0); require('lp_list.php'); }
 		else{
@@ -573,10 +575,20 @@ switch($action)
 		else{
 			$_SESSION['refresh'] = 1;
 			$_SESSION['oLP']->set_name($_REQUEST['lp_name']);
+			$_SESSION['oLP']->set_author($_REQUEST['lp_author']);
 			$_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);
 			$_SESSION['oLP']->set_maker($_REQUEST['lp_maker']);
-			$_SESSION['oLP']->set_proximity($_REQUEST['lp_proximity']);
-			$_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);				
+			$_SESSION['oLP']->set_proximity($_REQUEST['lp_proximity']);			
+			$_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);
+			
+			if ($_REQUEST['remove_picture'])
+			{	
+				$_SESSION['oLP']->delete_lp_image();		
+			}			
+			
+			if ($_FILES['lp_preview_image']['size']>0)
+				$_SESSION['oLP']->upload_image($_FILES['lp_preview_image']);
+			
 			require('lp_list.php');
 		}	
 		break;

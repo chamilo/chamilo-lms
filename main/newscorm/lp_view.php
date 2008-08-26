@@ -131,7 +131,7 @@ $_setting['show_navigation_menu'] = false;
 
 $scorm_css_header=true; 	
 $lp_theme_css=$_SESSION['oLP']->get_theme(); //sets the css theme of the LP this call is also use at the frames (toc, nav, message)
-	
+ 
 if($_SESSION['oLP']->mode == 'fullscreen')
 {
 	$htmlHeadXtra[] = "<script>window.open('$src','content_name','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";	
@@ -175,14 +175,16 @@ else
 	$_SESSION['loaded_lp_view'] = true;
 	?>
 		<frameset cols="270,*">
-			<frameset rows="20,<?php echo($displayAudioRecorder?'60,':'');?>600,70,80,*">
+			<frameset rows="20,<?php echo($displayAudioRecorder?'60,':'');?>200,600,80,*">
                 <frame id="header" src="lp_header.php"  border="0" frameborder="0" scrolling="no"/>
-				<?php
+				<?php 
 				if($displayAudioRecorder) //if audio recorder is required (set a few lines above)
 					echo '<frame id="audiorecorder_id" name="audiorecorder_name" src="display_audiorecorder.php" border="0" frameborder="0" scrolling="no"/>';
-				?>				
+				?>
+				
+				<frame id="nav_id" name="nav_name" class="lp_nav" src="lp_nav.php" border="0" frameborder="0" />				
 				<frame id="toc_id" name="toc_name" class="lp_toc" src="lp_toc.php" border="0" frameborder="0" scrolling="no"/>
-				<frame id="nav_id" name="nav_name" class="lp_nav" src="lp_nav.php" border="0" frameborder="0" />
+			
 				<frame id="message_id" name="message_name" class="message" src="lp_message.php" border="0" frameborder="0" />
 				<frame id="lp_log_id" name="lp_log_name" class="lp_log" src="lp_log.php" border="0" frameborder="0" />
 			</frameset>

@@ -46,3 +46,6 @@ ALTER TABLE survey ADD show_form_profile int NOT NULL default 0;
 ALTER TABLE survey ADD form_fields TEXT NOT NULL;
 ALTER TABLE quiz_answer CHANGE hotspot_type hotspot_type ENUM( 'square', 'circle', 'poly', 'delineation' ) NULL DEFAULT NULL;
 ALTER TABLE forum_forum ADD forum_image varchar(255) NOT NULL default '';
+ALTER TABLE lp ADD preview_image varchar(255) NOT NULL default '';
+ALTER TABLE lp ADD author varchar(255) NOT NULL default '';
+

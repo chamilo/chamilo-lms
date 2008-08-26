@@ -43,6 +43,7 @@ foreach($encodings as $encoding){
 //Origin
 $origin_select = &$form->addElement('select', 'lp_maker', get_lang('Origin'));
 $lp_orig = $_SESSION['oLP']->get_maker();
+
 include('content_makers.inc.php');
 foreach($content_origins as $origin){
 	if($lp_orig == $origin){
@@ -78,16 +79,44 @@ if (api_get_setting('allow_course_theme') == 'true')
 	}	
 }
 
+//Author
+$form -> addElement('text', 'lp_author', ucfirst(get_lang('Author')));
+
+
+
+// LP image		
+
+$form->add_progress_bar();
+if( strlen($_SESSION['oLP']->get_preview_image() ) > 0)
+{
+	$show_preview_image='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
+	$div = '<div class="row">
+	<div class="label">'.get_lang('ImagePreview').'</div>
+	<div class="formw">	
+	'.$show_preview_image.'
+	</div>
+	</div>';	
+	
+	$form->addElement('html', $div .'<br/>');	
+	$form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
+}
+
+$form->addElement('file', 'lp_preview_image', ($_SESSION['oLP']->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
+
+$form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));
+
+
+
 
 //default values
 $content_proximity_select -> setSelected($s_selected_proximity);
 $origin_select -> setSelected($s_selected_origin);
 $encoding_select -> setSelected($s_selected_encoding);
-$defaults["lp_name"]=$_SESSION['oLP']->get_name();
+$defaults['lp_name']=$_SESSION['oLP']->get_name();
+$defaults['lp_author']=$_SESSION['oLP']->get_author();
 
 //Submit button
 $form->addElement('submit', 'Submit', get_lang('Ok'));
-
 
 //Hidden fields
 $form->addElement('hidden', 'action', 'update_lp');

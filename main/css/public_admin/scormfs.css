@@ -21,7 +21,7 @@
 }
 
 .lp_navigation_elem{
-	padding-left: 60px;
+	padding-left: 15px;
 	padding-top: 0px;
 }
 /*.scormpage .menu */
@@ -76,4 +76,11 @@
 }
 .scormpage .footer{
 	clear: both;
+}
+
+.preview_image 
+{	 
+	text-align: right;
+	margin-right: 5px;
+	padding-left: 15px;	
 }

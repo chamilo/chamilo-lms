@@ -37,7 +37,8 @@ class learnpath {
 	var $name; //learnpath name (they generally have one)
 	var $ordered_items = array(); //list of the learnpath items in the order they are to be read
 	var $path = ''; //path inside the scorm directory (if scorm)
-	var $theme; // the current theme of the learning path  
+	var $theme; // the current theme of the learning path
+	var $preview_image; // the current image of the learning path  
 	
 	// Tells if all the items of the learnpath can be tried again. Defaults to "no" (=1)
 	var $prevent_reinit = 1;
@@ -130,6 +131,9 @@ class learnpath {
     			$this->scorm_debug = $row['debug'];
 	   			$this->js_lib = $row['js_lib'];
 	   			$this->path = $row['path'];
+	   			$this->preview_image= $row['preview_image'];
+	   			$this->author= $row['author'];
+	   			
 	   			if($this->type == 2){
     				if($row['force_commit'] == 1){
     					$this->force_commit = true;
@@ -1578,23 +1582,15 @@ class learnpath {
 		if($this->debug>0){error_log('New LP - In learnpath::get_navigation_bar()',0);}
 
     	//TODO find a good value for the following variables
-
     	$file = '';
-
     	$openDir = '';
-
     	$edoceo = '';
-
     	$time = 0;
-
     	$navbar = '';
-
     	$RequestUri = '';
-
 		$mycurrentitemid = $this->get_current_item_id();
-
-		if($this->mode == 'fullscreen'){
-
+		if($this->mode == 'fullscreen')
+		{
 			$navbar = '<table cellpadding="0" cellspacing="0" align="left">'."\n".
 
     			  '  <tr> '."\n" .
@@ -1609,7 +1605,7 @@ class learnpath {
 
     			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="'.get_lang('ScormNext').'"></a>&nbsp;'."\n" .
 
-				  '        <a href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode"><img border="0" src="../img/view_choose.gif" title="'.get_lang('ScormExitFullScreen').'"></a>'."\n" .
+				  //'        <a href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode"><img border="0" src="../img/view_choose.gif" title="'.get_lang('ScormExitFullScreen').'"></a>'."\n" .
 
 				  //'        <a href="lp_controller.php?action=list" target="_top" title="learnpaths list"><img border="0" src="../img/exit.png" title="Exit"></a>'."\n" .
 
@@ -1639,7 +1635,7 @@ class learnpath {
 
     			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="'.get_lang('ScormNext').'"></a>&nbsp;'."\n" .
 
-				  '        <a href="lp_controller.php?action=mode&mode=fullscreen" target="_top" title="fullscreen"><img border="0" src="../img/view_fullscreen.gif" width="18" height="18" title="'.get_lang('ScormFullScreen').'"></a>'."\n" .
+				 // '        <a href="lp_controller.php?action=mode&mode=fullscreen" target="_top" title="fullscreen"><img border="0" src="../img/view_fullscreen.gif" width="18" height="18" title="'.get_lang('ScormFullScreen').'"></a>'."\n" .
 
 				  '      </div>'."\n" .
 
@@ -1938,24 +1934,29 @@ class learnpath {
     		list ($percentage, $text_add) = $this->get_progress_bar_text($mode);
     	}
     	$text = $percentage.$text_add;
+    	
+    	//Default progress bar config
+    	$factor=1.5;
+    	$progress_height='16';    	
     	$size = str_replace('%','',$percentage);
+    	   	
     	$output = '' 
-    	//.htmlentities(get_lang('ScormCompstatus'),ENT_QUOTES,'ISO-8859-1')."<br />"
+    	//.htmlentities(get_lang('ScormCompstatus'),ENT_QUOTES,'ISO-8859-1')."<br />"    	
 	    .'<table border="0" cellpadding="0" cellspacing="0"><tr><td>'
-	    .'<img id="progress_img_limit_left" src="'.$css_path.'bar_1.gif" width="1" height="12">'
-	    .'<img id="progress_img_full" src="'.$css_path.'bar_1u.gif" width="'.$size.'px" height="12" id="full_portion">'
-	    .'<img id="progress_img_limit_middle" src="'.$css_path.'bar_1m.gif" width="1" height="12">';
+	    .'<img id="progress_img_limit_left" src="'.$css_path.'bar_1.gif" width="1" height="'.$progress_height.'">'
+	    .'<img id="progress_img_full" src="'.$css_path.'bar_1u.gif" width="'.$size*$factor.'px" height="'.$progress_height.'" id="full_portion">'
+	    .'<img id="progress_img_limit_middle" src="'.$css_path.'bar_1m.gif" width="1" height="'.$progress_height.'">';
 	    
 	    if($percentage <= 98)
-	    {
-	    	$output .= '<img id="progress_img_empty" src="'.$css_path.'bar_1r.gif" width="'.(100-$size).'px" height="12" id="empty_portion">';
+	    {	
+	    	$output .= '<img id="progress_img_empty" src="'.$css_path.'bar_1r.gif" width="'.(100-$size)*$factor.'px" height="'.$progress_height.'" id="empty_portion">';
 	    }
 	    else
 	    {
-	    	$output .= '<img id="progress_img_empty" src="'.$css_path.'bar_1r.gif" width="0" height="12" id="empty_portion">';
+	    	$output .= '<img id="progress_img_empty" src="'.$css_path.'bar_1r.gif" width="0" height="'.$progress_height.'" id="empty_portion">';
 	    }
 	    
-	    $output .= '<img id="progress_bar_img_limit_right" src="'.$css_path.'bar_1.gif" width="1" height="12"></td></tr></table>'
+	    $output .= '<img id="progress_bar_img_limit_right" src="'.$css_path.'bar_1.gif" width="1" height="'.$progress_height.'"></td></tr></table>'
 	    .'<div class="progresstext" id="progress_text">'.$text.'</div>';
 	    return $output;
     }
@@ -2029,6 +2030,28 @@ class learnpath {
 	{
 		if($this->debug>0){error_log('New LP - In learnpath::get_theme()',0);}
 		if(!empty($this->theme)){return $this->theme;}else{return '';}
+	}
+	
+	
+	/**
+     * Gets the learnpath image
+     * @return	string	Web URL of the LP image
+     */
+    function get_preview_image()
+	{
+		if($this->debug>0){error_log('New LP - In learnpath::get_preview_image()',0);}
+		if(!empty($this->preview_image)){return $this->preview_image;}else{return '';}
+	}
+	
+	
+	/**
+     * Gets the learnpath author
+     * @return	string	LP's author
+     */
+    function get_author()
+	{
+		if($this->debug>0){error_log('New LP - In learnpath::get_author()',0);}
+		if(!empty($this->author)){return $this->author;}else{return '';}
 	}
 	
 	/**
@@ -3491,7 +3514,7 @@ class learnpath {
 
     }
     
-       /**
+     /**
      * Sets the theme of the LP (local/remote) (and save)
      * @param	string	Optional string giving the new theme of this learnpath
      * @return bool returns true if theme name is not empty
@@ -3507,6 +3530,40 @@ class learnpath {
 		$res = api_sql_query($sql, __FILE__, __LINE__);
     	return true;
     }    
+
+  /**
+     * Sets the image of a LP (local/remote) (and save)
+     * @param	string	Optional string giving the new image of this learnpath
+     * @return bool returns true if theme name is not empty
+     */
+    function set_preview_image($name=''){
+		if($this->debug>0){error_log('New LP - In learnpath::set_preview_image()',0);}
+    	$this->preview_image = $this->escape_string($name);
+		$lp_table = Database::get_course_table('lp');
+		$lp_id = $this->get_id(); 
+		$sql = "UPDATE $lp_table SET preview_image = '".$this->preview_image."' WHERE id = '$lp_id'";
+		if($this->debug>2){error_log('New LP - lp updated with new preview image : '.$this->preview_image,0);}
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+    	return true;
+    }  
+    
+    
+     /**
+     * Sets the author of a LP (local/remote) (and save)
+     * @param	string	Optional string giving the new author of this learnpath
+     * @return bool returns true if author's name is not empty
+     */
+    function set_author($name=''){
+		if($this->debug>0){error_log('New LP - In learnpath::set_author()',0);}
+    	$this->author = $this->escape_string($name);
+		$lp_table = Database::get_course_table('lp');
+		$lp_id = $this->get_id(); 
+		$sql = "UPDATE $lp_table SET author = '".$this->author."' WHERE id = '$lp_id'";
+		if($this->debug>2){error_log('New LP - lp updated with new preview author : '.$this->author,0);}
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+    	return true;
+    }  
+    
 
     /**
      * Sets the location/proximity of the LP (local/remote) (and save)
@@ -8352,5 +8409,79 @@ EOD;
 			}
 		}
 	}
+	/**
+	 * 
+	 */
+	function delete_lp_image()
+	{
+		$img = $this->get_preview_image();
+		if ($img!='')
+		{
+			$del_file = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$img;
+			$this->set_preview_image('');
+			return @unlink($del_file);	
+		}
+		else
+		{
+			return false;
+		}
+		
+	}
+	
+	/**
+	 * 
+	 */
+	function upload_image($image_array)
+	{		
+		$image_moved=false;	
+		if(!empty($image_array['name']))
+		{
+			$upload_ok = process_uploaded_file($image_array);
+			$has_attachment=true;
+		}
+		else
+		{
+			$image_moved=true;
+		}
+			
+		if($upload_ok)
+		{			
+			if ($has_attachment)
+			{		
+				$courseDir   = api_get_course_path().'/upload/learning_path/images'; 
+				$sys_course_path = api_get_path(SYS_COURSE_PATH);		
+				$updir = $sys_course_path.$courseDir;
+							
+				// Try to add an extension to the file if it hasn't one
+				$new_file_name = add_ext_on_mime(stripslashes($image_array['name']), $image_array['type']);	
+			
+				// user's file name
+				$file_name =$image_array['name'];
+							
+				if (!filter_extension($new_file_name)) 
+				{
+					//Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+					$image_moved=false;							
+				}
+				else
+				{				
+					$file_extension = explode('.', $image_array['name']);
+					$file_extension = strtolower($file_extension[sizeof($file_extension) - 1]);					
+					$new_file_name = uniqid('').'.'.$file_extension;						
+					$new_path=$updir.'/'.$new_file_name;
+					$result= @move_uploaded_file($image_array['tmp_name'], $new_path);								
+					// Storing the attachments if any
+					if ($result)
+					{	
+						$image_moved=true;	
+						$this->set_preview_image($new_file_name);
+						return true;		
+					}			
+				}			 
+			}			
+		}
+		return false;
+	}
+	
 }
 ?>

@@ -75,7 +75,8 @@ class learnpathList {
     			'lp_prevent_reinit' => $row['prevent_reinit'],
     			'lp_scorm_debug' => $row['debug'],
     			'lp_display_order' => $row['display_order'],
-    			);
+    			'lp_preview_image' => stripslashes($row['preview_image'])
+    			); 
     		$names[$row['name']]=$row['id'];
        	}
        	$this->alpha_list = asort($names);

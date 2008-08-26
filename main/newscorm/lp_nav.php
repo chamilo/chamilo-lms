@@ -42,8 +42,7 @@ if(isset($_SESSION['lpobject']))
 		//error_log('New LP - in lp_nav.php - SESSION[lpobject] is not object - dying',0);
 		die('Could not instanciate lp object');
 	}	
-	$display_mode = $_SESSION['oLP']->mode;
-		
+	$display_mode = $_SESSION['oLP']->mode;		
 	$scorm_css_header=true;
 	$lp_theme_css=$_SESSION['oLP']->get_theme();	
 	
@@ -57,16 +56,37 @@ if(isset($_SESSION['lpobject']))
 	else 
 	{
 		$lp_theme_css=$my_style;
-	}
+	} 
 	
 	$progress_bar = $_SESSION['oLP']->get_progress_bar();
 	$navigation_bar = $_SESSION['oLP']->get_navigation_bar();}
 session_write_close();
 ?>
 <body>
+
+<?
+$html='<div class="preview_image">'."\n";		
+if ($_SESSION['oLP']->get_preview_image()!='')
+	$html .='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
+	
+if ($_SESSION['oLP']->get_author()!='')
+{    	
+	$html .='<br />'.get_lang('Author').':  '.$_SESSION['oLP']->get_author();
+}    	
+$html .='</div>';
+echo $html;
+?>	
 	<div class="lp_navigation_elem">
-	  <?php echo $progress_bar; ?>
-	  <?php echo $navigation_bar; ?>
+		<table>
+			<tr valign="middle">
+			<td>
+				<?php echo $progress_bar; ?>
+			</td>
+			<td>
+				<?php echo $navigation_bar; ?>
+			 </td>
+			</tr>
+		</table>
 	</div>
 </body>
 </html>

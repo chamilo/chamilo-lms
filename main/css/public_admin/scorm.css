@@ -126,14 +126,14 @@
 }
 
 .lp_navigation_elem{
-	padding-left: 60px;
+	padding-left: 15px;
 	padding-top: 0px;
 }
 /*.scormpage .menu */
 .lp_navigation_elem .progresstext{
-	margin-top: -12px;
-	margin-left: 4em;
-	font-size: smaller;
+	margin-top: -15px;
+	margin-left: 5em;
+	font-size: normal;
 }
 
 /*.scormpage .menu */
@@ -173,4 +173,11 @@
 }
 .scormpage .footer{
 	clear: both;	
+}
+
+.preview_image 
+{	
+	text-align: right;
+	margin-right: 5px;
+	padding-left: 15px;	 
 }

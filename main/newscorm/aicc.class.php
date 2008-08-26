@@ -587,6 +587,42 @@ class aicc extends learnpath {
 	 	}
 	 }
 	 
+	 /**
+	 * Sets the image LP in the database
+	 * @param	string	Theme setting
+	 */
+	 function set_preview_image($preview_image=''){
+		if($this->debug>0){error_log('In aicc::set_preview_image('.$preview_image.') method',0);}
+	 	$lp = $this->get_id();
+	 	if($lp!=0){
+	 		$tbl_lp = Database::get_course_table('lp');
+	 		$sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' WHERE id = ".$lp;
+	 		$res = api_sql_query($sql);
+	 		return $res;
+	 	}else{
+	 		return false;
+	 	}
+	 }
+	 
+		/**
+	 * Sets the Author LP in the database
+	 * @param	string	Theme setting
+	 */
+	 function set_author($author=''){
+		if($this->debug>0){error_log('In aicc::set_author('.$author.') method',0);}
+	 	$lp = $this->get_id();
+	 	if($lp!=0){
+	 		$tbl_lp = Database::get_course_table('lp');
+	 		$sql = "UPDATE $tbl_lp SET author = '$author' WHERE id = ".$lp;
+	 		$res = api_sql_query($sql);
+	 		return $res;
+	 	}else{
+	 		return false;
+	 	}
+	 }
+	 
+	 
+	 
 	/**
 	 * Sets the content maker setting in the database
 	 * @param	string	Proximity setting

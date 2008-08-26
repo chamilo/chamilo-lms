@@ -976,7 +976,10 @@ function update_Db_course($courseDbName)
 		"prevent_reinit tinyint		unsigned not null default 1," . //stores the default behaviour regarding items re-initialisation when viewed a second time after success
 		"js_lib         tinytext    not null default ''," . //the JavaScript library to load for this lp
 		"debug 			tinyint		unsigned not null default 0," . //stores the default behaviour regarding items re-initialisation when viewed a second time after success
-		"theme 		varchar(255)    not null default '' " . //stores the theme of the LP 			
+		"theme 		varchar(255)    not null default '', " . //stores the theme of the LP 
+		"preview_image	varchar(255)    not null default '', " . //stores the theme of the LP
+		"author 		varchar(255)    not null default '' " . //stores the theme of the LP
+					
 		")";
 	if(!api_sql_query($sql, __FILE__, __LINE__))
 	{

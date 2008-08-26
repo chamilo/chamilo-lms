@@ -719,6 +719,43 @@ class scorm extends learnpath {
 	 	}
 	 }
 	 
+	 	 /**
+	 * Sets the image setting in the database
+	 * @param	string preview_image setting
+	 */
+	 function set_preview_image($preview_image=''){
+		if($this->debug>0){error_log('In scorm::set_theme('.$preview_image.') method',0);}
+	 	$lp = $this->get_id();
+	 	if($lp!=0){
+	 		$tbl_lp = Database::get_course_table('lp');
+	 		$sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' WHERE id = ".$lp;
+	 		$res = api_sql_query($sql);
+	 		return $res;
+	 	}else{
+	 		return false;
+	 	}
+	 }
+	 
+	 
+	 /**
+	 * Sets the author  setting in the database
+	 * @param	string preview_image setting
+	 */
+	 function set_author($author=''){
+		if($this->debug>0){error_log('In scorm::set_author('.$author.') method',0);}
+	 	$lp = $this->get_id();
+	 	if($lp!=0){
+	 		$tbl_lp = Database::get_course_table('lp');
+	 		$sql = "UPDATE $tbl_lp SET author = '$author' WHERE id = ".$lp;
+	 		$res = api_sql_query($sql);
+	 		return $res;
+	 	}else{
+	 		return false;
+	 	}
+	 }
+	 
+	 
+	 
 	 
 	/**
 	 * Sets the content maker setting in the database

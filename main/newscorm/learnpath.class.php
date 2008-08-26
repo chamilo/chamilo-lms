@@ -561,6 +561,8 @@ class learnpath {
 		//if($this->debug>0){error_log('New LP - In learnpath::add_lp()',0);}
     	//TODO
     	$tbl_lp = Database::get_course_table('lp');
+    	//get the global charset
+    	global $charset;
     	//check course code exists
     	//check lp_name doesn't exist, otherwise append something
     	$i = 0;
@@ -608,7 +610,7 @@ class learnpath {
     					"default_encoding,display_order,content_maker," .
     					"content_local,js_lib) " .
     					"VALUES ($type,'$name','$description','','embedded'," .
-    					"'UTF-8','$dsp','Dokeos'," .
+    					"'$charset','$dsp','Dokeos'," .
     					"'local','')";
     			//if($this->debug>2){error_log('New LP - Inserting new lp '.$sql_insert,0);}
     			$res_insert = api_sql_query($sql_insert, __FILE__, __LINE__);
@@ -6172,7 +6174,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			
 			foreach($arrHide as $key => $value)
 			{
-				$position->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
+				$position->addOption(mb_convert_encoding($value['value'],$charset,$this->encoding),$key,'style="padding-left:'.$value['padding'].'px;"');
 			}
 			$position -> setSelected($s_selected_position);
 			if(is_array($arrLP))

@@ -561,8 +561,6 @@ class learnpath {
 		//if($this->debug>0){error_log('New LP - In learnpath::add_lp()',0);}
     	//TODO
     	$tbl_lp = Database::get_course_table('lp');
-    	//get the global charset
-    	global $charset;
     	//check course code exists
     	//check lp_name doesn't exist, otherwise append something
     	$i = 0;
@@ -610,7 +608,7 @@ class learnpath {
     					"default_encoding,display_order,content_maker," .
     					"content_local,js_lib) " .
     					"VALUES ($type,'$name','$description','','embedded'," .
-    					"'$charset','$dsp','Dokeos'," .
+    					"'UTF-8','$dsp','Dokeos'," .
     					"'local','')";
     			//if($this->debug>2){error_log('New LP - Inserting new lp '.$sql_insert,0);}
     			$res_insert = api_sql_query($sql_insert, __FILE__, __LINE__);
@@ -3534,7 +3532,7 @@ class learnpath {
     }    
 
   /**
-     * Sets the image of a LP (local/remote) (and save)
+     * Sets the image of an LP (and save)
      * @param	string	Optional string giving the new image of this learnpath
      * @return bool returns true if theme name is not empty
      */
@@ -3551,7 +3549,7 @@ class learnpath {
     
     
      /**
-     * Sets the author of a LP (local/remote) (and save)
+     * Sets the author of a LP (and save)
      * @param	string	Optional string giving the new author of this learnpath
      * @return bool returns true if author's name is not empty
      */
@@ -4362,9 +4360,10 @@ class learnpath {
 	}
 	
 	/**
-	 * Enter description here...
+	 * Edit a document based on $_POST and $_GET parameters 'dir' and 'path'
 	 *
-	 * @param array $_course
+	 * @param 	array $_course array
+	 * @return 	void
 	 */
 	function edit_document($_course)
 	{
@@ -4689,12 +4688,12 @@ class learnpath {
 	}
 	
 	/**
-	 * Enter description here...
+	 * Return HTML form to add/edit a quiz
 	 *
-	 * @param unknown_type $action
-	 * @param unknown_type $id
-	 * @param unknown_type $extra_info
-	 * @return unknown
+	 * @param	string	Action (add/edit)
+	 * @param	integer	Item ID if already exists
+	 * @param	mixed	Extra information (quiz ID if integer)
+	 * @return	string	HTML form
 	 */
 	function display_quiz_form($action = 'add', $id = 0, $extra_info = '')
 	{
@@ -5231,12 +5230,12 @@ class learnpath {
 
 	
 /**
-	 * Enter description here...
+	 * Return the form to display the forum edit/add option
 	 *
-	 * @param unknown_type $action
-	 * @param unknown_type $id
-	 * @param unknown_type $extra_info
-	 * @return unknown
+	 * @param	string	Action (add/edit)
+	 * @param	integer	ID of the lp_item if already exists
+	 * @param	mixed	Forum ID or title
+	 * @return	string	HTML form
 	 */
 	function display_forum_form($action = 'add', $id = 0, $extra_info = '')
 	{
@@ -5485,9 +5484,16 @@ class learnpath {
 		return $return;
 	}
 	
-function display_thread_form($action = 'add', $id = 0, $extra_info = '')
-{
-	global $charset;
+	/**
+	 * Return HTML form to add/edit forum threads
+	 * @param	string	Action (add/edit)
+	 * @param	integer	Item ID if already exists in learning path
+	 * @param	mixed	Extra information (thread ID if integer)
+	 * @return 	string	HTML form
+	 */
+	function display_thread_form($action = 'add', $id = 0, $extra_info = '')
+	{
+		global $charset;
 		echo '
 		<style>
 	
@@ -5745,14 +5751,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	}
 	
 	/**
-	 * Enter description here...
+	 * Return the HTML form to display an item (generally a section/module item)
 	 *
-	 * @param unknown_type $item_type
-	 * @param unknown_type $title
-	 * @param unknown_type $action
-	 * @param unknown_type $id
-	 * @param unknown_type $extra_info
-	 * @return unknown
+	 * @param	string	Item type (module/dokeos_module)
+	 * @param	string	Title (optional, only when creating)
+	 * @param	string	Action ('add'/'edit')
+	 * @param	integer	lp_item ID
+	 * @param	mixed	Extra info
+	 * @return	string 	HTML form
 	 */
 	function display_item_form($item_type, $title = '', $action = 'add', $id = 0, $extra_info = 'new')
 	{
@@ -5937,12 +5943,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	
 	
 	/**
-	 * Enter description here...
+	 * Returns the form to update or create a document
 	 *
-	 * @param unknown_type $action
-	 * @param unknown_type $id
-	 * @param unknown_type $extra_info
-	 * @return unknown
+	 * @param	string	Action (add/edit)
+	 * @param	integer	ID of the lp_item (if already exists)
+	 * @param	mixed	Integer if document ID, string if info ('new')
+	 * @return	string	HTML form
 	 */
 	function display_document_form($action = 'add', $id = 0, $extra_info = 'new')
 	{
@@ -6174,7 +6180,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			
 			foreach($arrHide as $key => $value)
 			{
-				$position->addOption(mb_convert_encoding($value['value'],$charset,$this->encoding),$key,'style="padding-left:'.$value['padding'].'px;"');
+				$position->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 			}
 			$position -> setSelected($s_selected_position);
 			if(is_array($arrLP))
@@ -6299,11 +6305,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	}
 	
 	/**
-	 * Enter description here...
+	 * Return HTML form to add/edit a link item
 	 *
-	 * @param unknown_type $action
-	 * @param unknown_type $id
-	 * @param unknown_type $extra_info
+	 * @param string	Action (add/edit)
+	 * @param integer	Item ID if exists
+	 * @param mixed		Extra info
+	 * @return	string	HTML form
 	 */
 	function display_link_form($action = 'add', $id = 0, $extra_info = '')
 	{
@@ -6565,12 +6572,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	}
 	
 	/**
-	 * Enter description here...
+	 * Return HTML form to add/edit a student publication (work)
 	 *
-	 * @param unknown_type $action
-	 * @param unknown_type $id
-	 * @param unknown_type $extra_info
-	 * @return unknown
+	 * @param	string	Action (add/edit)
+	 * @param	integer	Item ID if already exists
+	 * @param	mixed	Extra info (work ID if integer)
+	 * @return	string	HTML form
 	 */
 	function display_student_publication_form($action = 'add', $id = 0, $extra_info = '')
 	{
@@ -6952,12 +6959,13 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				parent_item_id = 0
 			ORDER BY display_order ASC";
 		$res_zero = api_sql_query($sql_zero, __FILE__, __LINE__);
-		
+
+		global $charset;		
 		$i = 0;
-		
+
 		while($row_zero = Database::fetch_array($res_zero))
 		{
-			$return .= 'child_name[0][' . $i . '] = "'.get_lang("After").' \"' . $row_zero['title'] . '\"";' . "\n";
+			$return .= 'child_name[0][' . $i . '] = "'.get_lang("After").' \"' . mb_convert_encoding($row_zero['title'],$charset,$this->encoding) . '\"";' . "\n";
 			$return .= 'child_value[0][' . $i++ . '] = "' . $row_zero['id'] . '";' . "\n";
 		}
 		
@@ -6986,7 +6994,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			
 			while($row_parent = Database::fetch_array($res_parent))
 			{
-				$return .= 'child_name[' . $row['id'] . '][' . $i . '] = "'.get_lang("After").' \"' . $row_parent['title'] . '\"";' . "\n";
+				$return .= 'child_name[' . $row['id'] . '][' . $i . '] = "'.get_lang("After").' \"' . mb_convert_encoding($row_parent['title'],$charset,$this->encoding) . '\"";' . "\n";
 				$return .= 'child_value[' . $row['id'] . '][' . $i++ . '] = "' . $row_parent['id'] . '";' . "\n";
 			}
 			
@@ -6999,10 +7007,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	}
 	
 	/**
-	 * Enter description here...
+	 * Display the form to allow moving an item
 	 *
-	 * @param unknown_type $item_id
-	 * @return unknown
+	 * @param	integer		Item ID
+	 * @return	string		HTML form
 	 */
 	function display_move_item($item_id)
 	{
@@ -7134,10 +7142,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	}
 	
 	/**
-	 * Enter description here...
+	 * Return HTML form to allow prerequisites selection
 	 *
-	 * @param unknown_type $item_id
-	 * @return unknown
+	 * @param	integer Item ID
+	 * @return	string	HTML form
 	 */
 	function display_item_prerequisites_form($item_id)
 	{
@@ -7307,7 +7315,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			}
 			
 		}
-		$return .=$this->write_resources_tree('', $resources_sorted);
+		$return .=$this->write_resources_tree($resources_sorted);
 		
 		$return .='</div>';
 
@@ -7318,7 +7326,16 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		return $return;
 	}
 	
-	function write_resources_tree($return, $resources_sorted, $num=0){
+	/**
+	 * Generate and return an HTML list of resources based on a given array.
+	 * 
+	 * This list is used to show the course creator a list of available resources to choose from
+	 * when creating a learning path.
+	 * @param	array	Array of elements to add to the list
+	 * @param	integer Enables the tree display by shifting the new elements a certain distance to the right
+	 * @return	string	The HTML list
+	 */
+	function write_resources_tree($resources_sorted, $num=0){
 		
 		include_once(api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
 		
@@ -7330,7 +7347,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				if(is_int($resource['id']))
 				{ // it's a folder
 					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_'.$resource["id"].'" onclick="testResources(\''.$resource["id"].'\',\'img_'.$resource["id"].'\')"><img alt="" src="../img/lp_folder.gif" title="" align="absmiddle" />&nbsp;<span onclick="testResources(\''.$resource["id"].'\',\'img_'.$resource["id"].'\')" style="cursor: pointer;" >'.$key.'</span></div><div style="display: none;" id="'.$resource['id'].'">';
-					$return = $this->write_resources_tree($return, $resource['files'], $num+1);
+					$return .= $this->write_resources_tree($resource['files'], $num+1);
 					$return .= "</div></div>\r\n";
 				}
 				else
@@ -7478,6 +7495,11 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		return $return;
 	}
 	
+	/**
+	 * Creates a list with all the forums in it
+	 *
+	 * @return string
+	 */
 	function get_forums()
 	{
 		include ('../forum/forumfunction.inc.php');
@@ -8412,7 +8434,8 @@ EOD;
 		}
 	}
 	/**
-	 * 
+	 * Delete the image relative to this learning path. No parameter. Only works on instanciated object.
+	 * @return	boolean	The results of the unlink function, or false if there was no image to start with
 	 */
 	function delete_lp_image()
 	{
@@ -8431,7 +8454,9 @@ EOD;
 	}
 	
 	/**
-	 * 
+	 * Uploads a new image to the learning path image upload directory
+	 * @param	array	The image array, coming from the $_FILES superglobal
+	 * @return	boolean	True on success, false on error
 	 */
 	function upload_image($image_array)
 	{		

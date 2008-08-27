@@ -174,10 +174,10 @@ else
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
 	$_SESSION['loaded_lp_view'] = true;	
 	$audio_record_width='';	
-	if ($displayAudioRecorder || $_SESSION['oLP']->get_preview_image()!='')
+	if (1 || $_SESSION['oLP']->get_preview_image()!='')
 	{		
-		if ($displayAudioRecorder)
-			$audio_record_width='220,';
+		if (1)
+			$audio_record_width='170,';
 		else
 			$audio_record_width='120,';
 	}
@@ -187,12 +187,12 @@ else
 	}	
 	?>
 		<frameset cols="270,*">
-			<frameset rows="30,<?php echo $audio_record_width; ?>50,20,*,20">
+			<frameset rows="20,<?php echo $audio_record_width; ?>50,20,*,20">
                 <frame id="header" src="lp_header.php"  border="0" frameborder="0" scrolling="no"/>
 				<?php 
-				if ($displayAudioRecorder || $_SESSION['oLP']->get_preview_image()!='')
+				if (1 || $_SESSION['oLP']->get_preview_image()!='')
 				{
-					if($displayAudioRecorder) //if audio recorder is required (set a few lines above)
+					if(1) //if audio recorder is required (set a few lines above)
 						echo '<frame id="audiorecorder_id" name="audiorecorder_name" src="display_audiorecorder.php?show_audio=1" border="0" frameborder="0" scrolling="no"/>';
 					else
 						echo '<frame id="audiorecorder_id" name="audiorecorder_name" src="display_audiorecorder.php?show_audio=0" border="0" frameborder="0" scrolling="no"/>';

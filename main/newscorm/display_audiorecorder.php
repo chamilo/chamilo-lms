@@ -38,13 +38,12 @@ $html='';
 
 if ($_GET['show_audio'])
 {	
-	$html='<div id="preview_image">'."\n";		
+	echo '<div id="preview_image">'."\n";		
 	if ($_SESSION['oLP']->get_preview_image()!='')
-		$html .='<img alt="'.$_SESSION['oLP']->get_author().'" src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
-	else
-		$html .=Display::display_icon('unknown.jpg',$_SESSION['oLP']->get_author());
-	$html .='</div>';
-	echo $html;		
+		echo '<img alt="'.$_SESSION['oLP']->get_author().'" src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
+	else 
+		 echo Display::display_icon('unknown.jpg',$_SESSION['oLP']->get_author());
+	echo '</div>';		
 	
 	echo '<div id="audiorecorder">	';
 	$audio_recorder_studentview = 'true';
@@ -57,13 +56,12 @@ if ($_GET['show_audio'])
 }
 else
 {
-	$html='<div id="preview_image">'."\n";		
+	echo '<div id="preview_image">'."\n";		
 	if ($_SESSION['oLP']->get_preview_image()!='')
-		$html .='<img alt="'.$_SESSION['oLP']->get_author().'" src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
+		echo '<img alt="'.$_SESSION['oLP']->get_author().'" src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
 	else
-		$html .=Display::display_icon('unknown.jpg',$_SESSION['oLP']->get_author());
-	$html .='</div>'; 
-	echo $html;	
+		echo Display::display_icon('unknown.jpg',$_SESSION['oLP']->get_author());
+	echo '</div>';		
 }
 
 echo '</body></html>';

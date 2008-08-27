@@ -172,20 +172,36 @@ else
 		$audio_recorder_studentview = false;
 	}
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
-	$_SESSION['loaded_lp_view'] = true;
+	$_SESSION['loaded_lp_view'] = true;	
+	$audio_record_width='';	
+	if ($displayAudioRecorder || $_SESSION['oLP']->get_preview_image()!='')
+	{		
+		if ($displayAudioRecorder)
+			$audio_record_width='220,';
+		else
+			$audio_record_width='120,';
+	}
+	else
+	{
+		$audio_record_width='';
+	}	
 	?>
 		<frameset cols="270,*">
-			<frameset rows="20,<?php echo($displayAudioRecorder?'60,':'');?>200,600,80,*">
+			<frameset rows="30,<?php echo $audio_record_width; ?>50,20,*,20">
                 <frame id="header" src="lp_header.php"  border="0" frameborder="0" scrolling="no"/>
 				<?php 
-				if($displayAudioRecorder) //if audio recorder is required (set a few lines above)
-					echo '<frame id="audiorecorder_id" name="audiorecorder_name" src="display_audiorecorder.php" border="0" frameborder="0" scrolling="no"/>';
+				if ($displayAudioRecorder || $_SESSION['oLP']->get_preview_image()!='')
+				{
+					if($displayAudioRecorder) //if audio recorder is required (set a few lines above)
+						echo '<frame id="audiorecorder_id" name="audiorecorder_name" src="display_audiorecorder.php?show_audio=1" border="0" frameborder="0" scrolling="no"/>';
+					else
+						echo '<frame id="audiorecorder_id" name="audiorecorder_name" src="display_audiorecorder.php?show_audio=0" border="0" frameborder="0" scrolling="no"/>';
+				}
 				?>
 				
-				<frame id="nav_id" name="nav_name" class="lp_nav" src="lp_nav.php" border="0" frameborder="0" />				
-				<frame id="toc_id" name="toc_name" class="lp_toc" src="lp_toc.php" border="0" frameborder="0" scrolling="no"/>
-			
-				<frame id="message_id" name="message_name" class="message" src="lp_message.php" border="0" frameborder="0" />
+				<frame id="nav_id" name="nav_name" class="lp_nav" src="lp_nav.php" border="0" frameborder="0" />
+				<frame id="message_id" name="message_name" class="message" src="lp_message.php" border="0" frameborder="0" />				
+				<frame id="toc_id" name="toc_name" class="lp_toc" src="lp_toc.php" border="0" frameborder="0" scrolling="no"/>												
 				<frame id="lp_log_id" name="lp_log_name" class="lp_log" src="lp_log.php" border="0" frameborder="0" />
 			</frameset>
 			<frame id="content_id" name="content_name" src="<?php echo $src; ?>" border="0" frameborder="0">

@@ -64,18 +64,7 @@ session_write_close();
 ?>
 <body>
 
-<?
-$html='<div class="preview_image">'."\n";		
-if ($_SESSION['oLP']->get_preview_image()!='')
-	$html .='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
 	
-if ($_SESSION['oLP']->get_author()!='')
-{    	
-	$html .='<br />'.get_lang('Author').':  '.$_SESSION['oLP']->get_author();
-}    	
-$html .='</div>';
-echo $html;
-?>	
 	<div class="lp_navigation_elem">
 		<table>
 			<tr valign="middle">

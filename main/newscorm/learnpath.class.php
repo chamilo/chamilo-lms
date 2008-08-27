@@ -2478,12 +2478,12 @@ class learnpath {
     	//$parent = $this->items[$this->current]->get_parent();
     	//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
     	$html = '<div class="inner_lp_toc">'."\n" ;
-    	$html.= '<div class="scorm_title">&nbsp;&nbsp;&nbsp;&nbsp;'.mb_convert_encoding($this->get_name(),$this->encoding,$mych).'</div>';
+    	$html.= '<div class="scorm_title"><div class="scorm_title_text">'.mb_convert_encoding($this->get_name(),$this->encoding,$mych).'</div></div>';
     	
     	// build, display
     	if(api_is_allowed_to_edit())
     	{
-    		$html.="<p>&nbsp;&nbsp;&nbsp;&nbsp;<a  target='_parent' href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."' style= target='_parent'>".mb_convert_encoding(get_lang("Build"),$this->encoding,$mych)."</a>&nbsp;&#124;&nbsp;<a href='lp_controller.php?".api_get_cidreq()."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".mb_convert_encoding(get_lang("BasicOverview"),$this->encoding,$mych)."</a>&nbsp;&#124;&nbsp;".mb_convert_encoding(get_lang("Display"),$this->encoding,$mych)."</p>";
+    		$html.='<div class="scorm_title_text"><br />'."<a  target='_parent' href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."' style= target='_parent'>".mb_convert_encoding(get_lang("Build"),$this->encoding,$mych)."</a>&nbsp;&#124;&nbsp;<a href='lp_controller.php?".api_get_cidreq()."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".mb_convert_encoding(get_lang("BasicOverview"),$this->encoding,$mych)."</a>&nbsp;&#124;&nbsp;".mb_convert_encoding(get_lang("Display"),$this->encoding,$mych).'<br /><br /></div>';
 			unset($mych);
     	}
     	//		" onchange=\"javascript:document.getElementById('toc_$parent').focus();\">\n";

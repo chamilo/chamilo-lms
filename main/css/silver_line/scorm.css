@@ -84,7 +84,10 @@ text-decoration: none;
 	font-size: 12px;	
 	color: #FFF;	
 }
-
+.inner_lp_toc .scorm_title_text
+{
+	margin-left: 10px;
+}
 
 
 .inner_lp_toc .scorm_status_img{

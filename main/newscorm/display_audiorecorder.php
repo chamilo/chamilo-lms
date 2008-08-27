@@ -10,8 +10,7 @@
  * Script
  */
 //flag to allow for anonymous user - needs to be set before global.inc.php
-$use_anonymous = true;
-
+$use_anonymous = true;	
 require_once('back_compat.inc.php');
 require_once('learnpath.class.php');
 require_once('scorm.class.php');
@@ -28,20 +27,44 @@ if(isset($_SESSION['lpobject']))
 }
 $charset = $_SESSION['oLP']->encoding;
 
+$lp_theme_css=$_SESSION['oLP']->get_theme();
+$scorm_css_header=true;
+include_once('../inc/reduced_header.inc.php');
+
+
 echo '<html>
-		<body>';
+		<body>';	
+$html='';
 
-echo '<div id="audiorecorder">	';
+if ($_GET['show_audio'])
+{	
+	$html='<div id="preview_image">'."\n";		
+	if ($_SESSION['oLP']->get_preview_image()!='')
+		$html .='<img alt="'.$_SESSION['oLP']->get_author().'" src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
+	else
+		$html .=Display::display_icon('unknown.jpg',$_SESSION['oLP']->get_author());
+	$html .='</div>';
+	echo $html;		
 	
-
-$audio_recorder_studentview = 'true';
-
-
-$audio_recorder_item_id = $_SESSION['oLP']->current;
-if(api_get_setting('service_visio','active')=='true'){
-	include('audiorecorder.inc.php');
+	echo '<div id="audiorecorder">	';
+	$audio_recorder_studentview = 'true';
+	$audio_recorder_item_id = $_SESSION['oLP']->current;
+	if(api_get_setting('service_visio','active')=='true'){
+		include('audiorecorder.inc.php');
+	}
+	echo '</div>';
+	// end of audiorecorder include
 }
-// end of audiorecorder include
+else
+{
+	$html='<div id="preview_image">'."\n";		
+	if ($_SESSION['oLP']->get_preview_image()!='')
+		$html .='<img alt="'.$_SESSION['oLP']->get_author().'" src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
+	else
+		$html .=Display::display_icon('unknown.jpg',$_SESSION['oLP']->get_author());
+	$html .='</div>'; 
+	echo $html;	
+}
 
-echo '</div></body></html>';
+echo '</body></html>';
 ?>

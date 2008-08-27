@@ -100,7 +100,10 @@ border-left: 15px #FFF solid;
 	color: #fff;	
 }
 
-
+.inner_lp_toc .scorm_title_text
+{
+	margin-left: 10px;
+}
 .inner_lp_toc .scorm_status_img{
 	margin:0px;
 	margin-left: -10px;

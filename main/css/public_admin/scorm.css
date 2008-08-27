@@ -21,7 +21,7 @@
 .inner_lp_toc{
 	overflow: auto;
 	background-color: white;
-	height: 325px;
+	height: 600px;
 	width: 90%;
 	border-right: 1px #999999 solid;
 	border-left: 15px #FFF solid;
@@ -96,12 +96,15 @@
 .inner_lp_toc .scorm_title
 {
 	font-weight: bold;
-	background:#305582;	
-
+	background:#305582;
 	font-size: 12px;
 	color: #fff;	
 }
 
+.inner_lp_toc .scorm_title_text
+{
+	margin-left: 10px;
+}
 
 .inner_lp_toc .scorm_status_img{
 	margin:0px;
@@ -175,9 +178,12 @@
 	clear: both;	
 }
 
-.preview_image 
-{	
-	text-align: right;
-	margin-right: 5px;
-	padding-left: 15px;	 
+#preview_image 
+{		
+	padding-left: 17px;	 
+}
+
+#msg_div_id{
+	padding-left: 17px;
+	padding-top: 4px;
 }

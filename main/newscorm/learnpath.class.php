@@ -1912,9 +1912,10 @@ class learnpath {
      * @param	string	Mode in which we want the values
      * @param	integer	Progress value to display (optional but mandatory if used in abstract context)
      * @param	string	Text to display near the progress value (optional but mandatory in abstract context)
+     * @param	boolean true if it comes from a Diplay LP view
      * @return	string	HTML string containing the progress bar
      */
-    function get_progress_bar($mode='',$percentage=-1,$text_add='')
+    function get_progress_bar($mode='',$percentage=-1,$text_add='',$from_lp=false)
     {
     	global $lp_theme_css;
     	
@@ -1937,7 +1938,10 @@ class learnpath {
     	
     	//Default progress bar config
     	$factor=1.5;
-    	$progress_height='16';    	
+    	if ($from_lp)
+    		$progress_height='25';   
+    	else
+    		$progress_height='16';
     	$size = str_replace('%','',$percentage);
     	   	
     	$output = '' 

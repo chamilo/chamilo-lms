@@ -96,9 +96,9 @@
 .inner_lp_toc .scorm_title
 {
 	font-weight: bold;
-	background:#305582;
-	font-size: 12px;
-	color: #fff;	
+	background:#ccc;
+	font-size: 14px;
+	color: #444;	
 }
 
 .inner_lp_toc .scorm_title_text
@@ -134,7 +134,7 @@
 }
 /*.scormpage .menu */
 .lp_navigation_elem .progresstext{
-	margin-top: -15px;
+	margin-top: -20px;
 	margin-left: 5em;
 	font-size: normal;
 }
@@ -180,7 +180,7 @@
 
 #preview_image 
 {		
-	padding-left: 17px;	 
+	text-align:center;	
 }
 
 #msg_div_id{

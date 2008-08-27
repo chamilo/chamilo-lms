@@ -58,7 +58,9 @@ if(isset($_SESSION['lpobject']))
 		$lp_theme_css=$my_style;
 	} 
 	
-	$progress_bar = $_SESSION['oLP']->get_progress_bar();
+	//$progress_bar = $_SESSION['oLP']->get_progress_bar();
+	$progress_bar = $_SESSION['oLP']->get_progress_bar('',-1,'',true);
+	
 	$navigation_bar = $_SESSION['oLP']->get_navigation_bar();}
 session_write_close();
 ?>

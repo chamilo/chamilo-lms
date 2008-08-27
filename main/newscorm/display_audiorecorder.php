@@ -31,38 +31,17 @@ $lp_theme_css=$_SESSION['oLP']->get_theme();
 $scorm_css_header=true;
 include_once('../inc/reduced_header.inc.php');
 
-
 echo '<html>
 		<body>';	
-$html='';
-
-if ($_GET['show_audio'])
-{	
-	echo '<div id="preview_image">'."\n";		
-	if ($_SESSION['oLP']->get_preview_image()!='')
-		echo '<img alt="'.$_SESSION['oLP']->get_author().'" src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
-	else 
-		 echo Display::display_icon('unknown.jpg',$_SESSION['oLP']->get_author());
-	echo '</div>';		
 	
-	echo '<div id="audiorecorder">	';
-	$audio_recorder_studentview = 'true';
-	$audio_recorder_item_id = $_SESSION['oLP']->current;
-	if(api_get_setting('service_visio','active')=='true'){
-		include('audiorecorder.inc.php');
-	}
-	echo '</div>';
-	// end of audiorecorder include
-}
-else
-{
-	echo '<div id="preview_image">'."\n";		
-	if ($_SESSION['oLP']->get_preview_image()!='')
-		echo '<img alt="'.$_SESSION['oLP']->get_author().'" src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
-	else
-		echo Display::display_icon('unknown.jpg',$_SESSION['oLP']->get_author());
-	echo '</div>';		
-}
+		echo '<div id="audiorecorder">	';
+		$audio_recorder_studentview = 'true';
+		$audio_recorder_item_id = $_SESSION['oLP']->current;
+		if(api_get_setting('service_visio','active')=='true'){
+			include('audiorecorder.inc.php');
+		}
+		echo '</div>';
+		// end of audiorecorder include
 
 echo '</body></html>';
 ?>

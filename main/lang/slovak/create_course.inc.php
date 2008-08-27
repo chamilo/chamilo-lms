@@ -6,7 +6,6 @@ $langExplanation = "Kliknutím na OK sa vytvorí stránka z agendou, fórom, menežér
 $langEmpty = "Nevyplnili ste niektore polí&#269;ka.<br>Pomocou gombíka  <b>Spä&#357;</b> vo vašom prehliada&#269;i sa vrá&#357;te a skúste to znovu.<br>If you ignore your course code, see the Course Program";
 $langAgenda = "Agenda";
 $langVideo = "Video";
-$langWorks = "Publikácie študentov";
 $langCourseProgram = "Program kurzu";
 $langAnnouncements = "Oznámenia";
 $langLinkSite = "Prida&#357; odkaz";

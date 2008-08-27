@@ -91,7 +91,6 @@ $langYourAccountParam = "Estes são o seu nome de utilizador e a sua senha";
 $langLoginRequest = "Pedido do nome de utilizador";
 $langDefineHeadings = "Definir cabeçalhos";
 $langCourseAdministratorOnly = "Reservado a professores";
-$langWorks = "Trabalhos";
 $langLostPassword = "Senha perdida";
 $langAdminOfCourse = "Administrador do curso";
 $langSimpleUserOfCourse = "Utilizador do curso";

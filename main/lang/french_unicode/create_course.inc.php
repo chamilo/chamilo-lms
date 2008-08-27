@@ -23,7 +23,6 @@ $langContradiction = "Utiliser le principe de non-contradiction pour amener son 
 $langNotFalse = "Cette réponse n\'est pas fausse. Il est exact que la mise en évidence de l\'ignorance de l\'interlocuteur se fait en mettant en évidence les contradictions auxquelles abouttisent ses thèses.";
 $langAgenda = "Agenda";
 $langVideo = "Video";
-$langWorks = "Travaux";
 $langCourseProgram = "Cahier des charges";
 $langAnnouncements = "Annonces";
 $langAddPageHome = "Déposer page et lier à page d\'accueil";

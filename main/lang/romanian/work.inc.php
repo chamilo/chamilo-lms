@@ -22,7 +22,6 @@ $lang_doc_unvisible = "Fisierele dumneavoastra sunt vizibile doar profesorului a
 $langDelLk = "Sterge linkul";
 $langMustBeRegisteredUser = "Numai utilizatorii inregistrati la acest curs pot publica documente.";
 $langListDel = "Sterge lista";
-$langWork = "Lucrari";
 $langNameDir = "Redenumeste directorul";
 $langFileExists = "Fisierul exista";
 $langDirCr = "Creaza directorul";

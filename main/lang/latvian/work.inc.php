@@ -22,7 +22,6 @@ $lang_doc_unvisible = "J&#363;su fails ir redzams tikai š&#299; kursa doc&#275;t
 $langDelLk = "Dz&#275;st saiti";
 $langMustBeRegisteredUser = "Tikai re&#291;istr&#275;tie lietot&#257;ji var public&#275;t dokumentus šai kurs&#257;.";
 $langListDel = "Dz&#275;st sarakstu";
-$langWork = "Darbs";
 $langNameDir = "P&#257;rsaukt mapi";
 $langFileExists = "T&#257;ds fails jau eksist&#275;";
 $langDirCr = "Izveidot mapi";

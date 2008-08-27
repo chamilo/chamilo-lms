@@ -22,7 +22,6 @@ $lang_doc_unvisible = "Seu arquivo está visível apenas para o(s) professor(es) e
 $langDelLk = "Deletar Link";
 $langMustBeRegisteredUser = "Apenas usuários registrados neste curso podem publicar documentos.";
 $langListDel = "Deletar lista";
-$langWork = "Atividade";
 $langNameDir = "Renomear Diretório";
 $langFileExists = "Arquivo já existe";
 $langDirCr = "Criar Diretório";

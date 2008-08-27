@@ -40,5 +40,4 @@ $langConfirmation = "確認";
 $langPass = "パスワード";
 $langSurname = "名前";
 $langRegistration = "登録";
-$langWorks = "学生作成文書";
 ?>

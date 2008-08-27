@@ -67,7 +67,7 @@ $ErrorContactPlatformAdmin = "Pojavila se je neznana napaka. Prosimo, da kontakt
 $CourseRegistrationCodeIncorrect = "Koda tečaja ni pravilna";
 $CourseRequiresPassword = "Tečaj zahteva geslo";
 $SubmitRegistrationCode = "Izroči registracijsk kodo";
-$CourseCategoryDeleted = "Kategorija tačaja je bila odstranjena";
+$CourseCategoryDeleted = "Kategorija tečaja je bila odstranjena";
 $CategorySortingDone = "Razvrščanje kategorije je končano";
 $CourseCategoryEditStored = "Kategorija je bila ažurirana";
 ?>

@@ -177,4 +177,6 @@ $PeopleAnswered = "pessoas que responderam";
 $AnonymousSurveyCannotKnowWhoAnswered = "Este inquérito é anónimo. Não pode ver quem respondeu.";
 $IllegalSurveyId = "Número de questionário desconhecido";
 $SurveyQuestionMoved = "A questão foi movida";
+$IdenticalSurveycodeWarning = "O código do questionário já existe. Isso pode significar que o questionário existe noutro idioma. As pessoas convidadas a responder ao questionário poderão escolher entre diferentes idiomas.";
+$ThisSurveyCodeSoonExistsInThisLanguage = "O código do questionário já existe neste idioma";
 ?>

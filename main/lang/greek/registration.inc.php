@@ -71,6 +71,5 @@ $langConfirmation = "επιβεβαίωση";
 $langPass = "Συνθηματικό";
 $langSurname = "Όνομα";
 $langRegistration = "Εγγραφή";
-$langWorks = "Εργασίες Μαθητών";
 $langEdit = "Διόρθωση";
 ?>

@@ -21,7 +21,6 @@ $langContradiction = "Utilizar o principio de non contradicción para levar ó int
 $langNotFalse = "Esta resposta non é falsa. É exacto que a posta en evidencia da ignorancia do interlocutor realízase poñendo en evidencia as contradiccións en que desembocan as sús teses.";
 $langAgenda = "Axenda";
 $langVideo = "Vídeo";
-$langWorks = "Traballos";
 $langCourseProgram = "Programa do curso";
 $langAnnouncements = "Anuncios";
 $langAddPageHome = "Introducir unha páxina e enlazala coa páxina principal";
@@ -99,4 +98,5 @@ $ExampleForumCategory = "Exemplo de Categoría de Foro";
 $ExampleForum = "Foro de exemplo";
 $ExampleThread = "Mensaxe de exemplo";
 $ExampleThreadContent = "Contido de exemplo";
+$IntroductionWiki = " 	A palabra Wiki é unha abreviatura de WikiWikiWeb. Wikiwiki é unha palabra Hawaiana que significa rápido ou veloz. Nun Wiki os seus usuarios poden escribir páxinas conxuntamente. Se unha persoa escribe algo mal, a seguinte pode corrixir isto. Esta última persoa tamén pode engadir novos elementos á páxina. Así a páxina vai mellorando con sucesivos cambios que quedan rexistrados nun historial.";
 ?>

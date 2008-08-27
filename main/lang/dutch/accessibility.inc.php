@@ -8,6 +8,7 @@ $WCAGLabel = "Label van een afbeelding";
 $WCAGLink = "Link";
 $WCAGLinkLabel = "Afbeelding van een link";
 $errorNoLabel = "Geen label op de afbeelding";
+$AllLanguages = "Al talen";
 $WCAGEditor = "WCAG Opmaker";
 $WCAGGoMenu = "Ga naar het menu";
 $WCAGGoContent = "Ga naar de inhoud";

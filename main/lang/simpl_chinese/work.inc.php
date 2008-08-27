@@ -22,7 +22,6 @@ $lang_doc_unvisible = "文件只对这门课程的教师可见, 因此对你是不可见的.";
 $langDelLk = "删除链接";
 $langMustBeRegisteredUser = "只有此课程的注册用户可以发布文档.";
 $langListDel = "删除列表";
-$langWork = "工作";
 $langNameDir = "重命名目录";
 $langFileExists = "文件已存在";
 $langDirCr = "新建目录";

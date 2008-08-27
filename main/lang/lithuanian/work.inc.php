@@ -22,7 +22,6 @@ $lang_doc_unvisible = "Jūsų failas matomas tik dėstytojui ir nebus matomas ju
 $langDelLk = "Ištrinti nuorodą";
 $langMustBeRegisteredUser = "Tik kurso registruoti vartotojai gali publikuoti dokumentus.";
 $langListDel = "Ištrinti sąrašą";
-$langWork = "Veikti";
 $langNameDir = "Pervadinti katalogą";
 $langFileExists = "Toks failas jau yra";
 $langDirCr = "Sukurti katalogą";

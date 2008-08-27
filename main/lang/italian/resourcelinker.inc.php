@@ -17,7 +17,6 @@ $CourseResources = "Risorse per il corso";
 $ExternalLink = "Collegamento esterno";
 $DropboxAdd = "Aggiungi sezione Scambio files";
 $AddAssignmentPage = "Aggiungi pagina per il caricamento degli elaborati dei corsisti.";
-$Assignments = "Contributi";
 $Exercise = "Test";
 $Link = "Collegamento";
 $AdValvas = "Avvisi";

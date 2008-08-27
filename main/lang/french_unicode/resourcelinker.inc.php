@@ -17,7 +17,6 @@ $CourseResources = "Ressources du cours";
 $ExternalLink = "Lien externe";
 $DropboxAdd = "Ajouter le partage de fichiers à ce module.";
 $AddAssignmentPage = "Ajouter un lien vers Travaux dans ce module.";
-$Assignments = "Travaux";
 $Exercise = "Tests";
 $Link = "Liens";
 $AdValvas = "Annonces";

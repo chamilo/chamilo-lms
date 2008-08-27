@@ -76,7 +76,6 @@ $langSurname = "Имя";
 $langRegistration = "Регистрация";
 $langYourAccountParam = "Вот ваши параметры подключения";
 $langLoginRequest = "Просьба имени пользователя";
-$langWorks = "Работы студентов";
 $langAdminOfCourse = "администратор";
 $langSimpleUserOfCourse = "пользователь";
 $langIsTutor = "тьютор";

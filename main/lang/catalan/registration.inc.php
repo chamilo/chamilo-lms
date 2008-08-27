@@ -73,7 +73,6 @@ $langSurname = "Cognom";
 $langRegistration = "Enregistrament";
 $langYourAccountParam = "Aquest és el teu nom d\'usuari/pasword";
 $langLoginRequest = "Petició de conexió";
-$langWorks = "Treballs dels estudiants";
 $langAdminOfCourse = "administrador";
 $langSimpleUserOfCourse = "normal";
 $langIsTutor = "tutor";

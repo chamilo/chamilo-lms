@@ -239,4 +239,13 @@ $ExportWithoutUserFields = "Excluir los campos de usuario de la exportación";
 $DisableResults = "No mostrar los resultados a los alumnos";
 $EnableResults = "Mostrar los resultados a los alumnos";
 $ValidateAnswer = "Aceptar";
+$FillInBlankSwitchable = "Una respuesta puede ser correcta para cualquiera de las opciones en blanco.";
+$ReachedMaxAttempts = "No puede repetir el ejercicio  \'%s debido\' a que ya ha realizado el máximo de %s intentos permitidos";
+$AdvancedParameters = "Parámetros avanzados";
+$RandomQuestionsToDisplay = "Número de preguntas aleatorias a mostrar";
+$RandomQuestionsHelp = "Número de preguntas aleatorias a mostrar; deje el valor 0 para mantener las preguntas en el orden original";
+$RandomQuestionsHelp = "Número de preguntas que serán seleccionadas al azar. Seleccione 0 para no cambiar el orden y no realizar una selección. <br /> Escoja el número de preguntas que desea barajar.";
+$ExerciseAttempts = "Número máximo de intentos";
+$DoNotRandomize = "No desordenar";
+$Infinite = "Infinito";
 ?>

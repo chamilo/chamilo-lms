@@ -21,7 +21,6 @@ $langContradiction = "A Nem Ellentmondás szabály használata, mellyel beszélgetõ-
 $langNotFalse = "Ez a válasz nem hamis. Ez a beszélgetõ-partner tudatlanságának felfedése azáltal, hogy megmutatjuk az egymásnak ellentmondó következtetéseket, amelyek az érvelésébõl erednek.";
 $langAgenda = "Naptár";
 $langVideo = "Video";
-$langWorks = "Beadványok";
 $langCourseProgram = "Kurzus program";
 $langAnnouncements = "Hirdetmények";
 $langAddPageHome = "Oldal feltöltése és link a fõoldalra";

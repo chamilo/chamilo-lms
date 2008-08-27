@@ -77,7 +77,6 @@ $langSurname = "Nama Anda";
 $langRegistration = "Pendaftaran Pengguna Baru";
 $langYourAccountParam = "Berikut ialah Maklumat Login anda:";
 $langLoginRequest = "Permintaan untuk Login";
-$langWorks = "Tugasan";
 $langAdminOfCourse = "Pentadbir";
 $langSimpleUserOfCourse = "normal";
 $langIsTutor = "tutor";

@@ -22,7 +22,6 @@ $lang_doc_unvisible = "Vaš fajl je vidljiv za predava&#269;e kursa i samim tim n
 $langDelLk = "Obriši link";
 $langMustBeRegisteredUser = "Samo polaznici prijavljeni na ovaj kurs mogu da objave dokumenta.";
 $langListDel = "Obriši listu";
-$langWork = "Rad";
 $langNameDir = "Preimenuj direktorijum";
 $langFileExists = "Fajl ve&#263; postoji";
 $langDirCr = "Kreiraj direktorijum";

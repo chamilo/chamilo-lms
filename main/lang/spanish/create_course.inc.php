@@ -21,7 +21,6 @@ $langContradiction = "Utilizar el principio de no contradicción para llevar al i
 $langNotFalse = "Esta respuesta no es falsa. Es exacto que la puesta en evidencia de la ignorancia del interlocutor se realiza poniendo en evidencia las contradicciones en que desembocan sus tesis.";
 $langAgenda = "Agenda";
 $langVideo = "Video";
-$langWorks = "Trabajos";
 $langCourseProgram = "Programa del curso";
 $langAnnouncements = "Anuncios";
 $langAddPageHome = "Enviar una página y enlazarla con la página principal";

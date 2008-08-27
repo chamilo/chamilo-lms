@@ -91,7 +91,6 @@ $langYourAccountParam = "Tio &#265;i estas la necesa informo por ensaluti al ";
 $langLoginRequest = "Ensaluta peto ";
 $langDefineHeadings = "Difini Aldonan Informon ";
 $langCourseAdministratorOnly = "Nur por kursmastrumanto ";
-$langWorks = "Studentaj publika&#309;oj ";
 $langAdminOfCourse = "Kursadministranto ";
 $langSimpleUserOfCourse = "Uzulo de &#265;i-kurso ";
 $langIsTutor = "Guvernanto ";

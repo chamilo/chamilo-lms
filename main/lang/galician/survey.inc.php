@@ -168,7 +168,15 @@ $HaveAnswered = "Contestou";
 $WereInvited = "foron invitados";
 $PagebreakNotFirst = "O separador de páxina non pode estar ao comezo";
 $PagebreakNotLast = "O separador de páxina non pode estar ao final";
+$SurveyNotAvailableAnymore = "Sentímolo pero esta enquisa xa non está dispoñible. Agradecémoslle o seu interese.";
 $DuplicateSurvey = " 	Duplicar a enquisa";
 $EmptySurvey = " 	Baleirar a enquisa";
 $SurveyEmptied = " 	As respostas á enquisa foron eliminadas";
+$SurveyNotAvailableYet = "Esta enquisa aínda non está dispoñible. Inténteo máis tarde. Grazas.";
+$PeopleAnswered = "Persoas que responderon";
+$AnonymousSurveyCannotKnowWhoAnswered = "Esta enquisa é anónima. Vd. non pode ver quen respondeu.";
+$IllegalSurveyId = "Identificador de enquisa descoñecido";
+$SurveyQuestionMoved = "Moveuse a pregunta";
+$IdenticalSurveycodeWarning = "Este código da enquisa xa existe. Probablemente isto sexa debido a que a enquisa tamén existe noutros idiomas. Os usuarios poderán elixir entre diferentes idiomas.";
+$ThisSurveyCodeSoonExistsInThisLanguage = "Este código de enquisa xa existe neste idioma";
 ?>

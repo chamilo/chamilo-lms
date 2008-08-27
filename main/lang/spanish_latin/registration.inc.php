@@ -91,7 +91,6 @@ $langYourAccountParam = "Estos son su Usuario y Contraseña de su cuenta";
 $langLoginRequest = "Información de ingreso";
 $langDefineHeadings = "Definir encabezados";
 $langCourseAdministratorOnly = "Sólo profesores";
-$langWorks = "Documentos de estudiantes";
 $langAdminOfCourse = "Administrador del curso";
 $langSimpleUserOfCourse = "Usuario del curso";
 $langIsTutor = "Tutor";

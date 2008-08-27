@@ -46,4 +46,6 @@ $langClarContent2 = "Maak inhoud leeg";
 $langHGroups = "Groepen";
 $langGroupsContent = "Inhoud van de groepen";
 $langGuide = "Handleiding";
+$HSurvey = "Help onderzoek";
+$SurveyContent = "<p>Goede feedback krijgen op uw cursus is altijd een grote zorg, is het niet? U zal de specifieke onderzoekstool waarmee u feedback van gebruikers kan zoeken zeker waarderen.</p><p><b>Een nieuwe enquête maken</b></p><p>Klik op de link \"nieuwe enquête maken\" en vul de velden \"enquête code\" en \"enquête titel\" in. Met behulp van de kalender, kan u de duur van de enquête instellen. Het invullen van de tekstvelden \"enquête introductie\" en \"enquête dankwoord\" is een goede manier van werken. U voegt er een duidelijke maar persoonlijke boodschap aan toe.</p><p><b>Vragen aan de enquête toevoegen</b></p><p>Wanneer de enquête gecreëerd is, kan u vragen toevoegen. De \"enquête\"-tool heeft meerdere types van vragen: open/gesloten, percentage, meerkeuzevragen,... U vindt ongetwijfeld wat u zoekt voor uw feedback noden.</p><p><b>De enquête voorvertonen</b></p><p>";
 ?>

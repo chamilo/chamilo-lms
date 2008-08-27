@@ -22,7 +22,6 @@ $lang_doc_unvisible = "Az ön fájlja  csak a kurzus tanárai számára látható, így 
 $langDelLk = "Hivatkozás törlése";
 $langMustBeRegisteredUser = "Csak regisztrált felhasználók tudnak feltölteni dokumentumokat.";
 $langListDel = "Lista törlése";
-$langWork = "Beadványok";
 $langNameDir = "Mappa átnevezése";
 $langFileExists = "A fájl már létezik.";
 $langDirCr = "Mappa létrehozása";

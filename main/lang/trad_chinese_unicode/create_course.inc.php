@@ -21,7 +21,6 @@ $langContradiction = "使用這個法則或者反駁來迫使迫使對方進入�
 $langNotFalse = "這個答案是正確的，這個事實上揭露了談話者的無知，使用對立的結論來引導它的前提。";
 $langAgenda = "日程安排";
 $langVideo = "視頻";
-$langWorks = "作業論文";
 $langCourseProgram = "教學大綱";
 $langAnnouncements = "公告通知";
 $langAddPageHome = "上傳網頁和鏈接";

@@ -17,7 +17,6 @@ $CourseResources = "Resursi kursa";
 $ExternalLink = "Externi link";
 $DropboxAdd = "Dodaj Dropbox stranicu u ovo poglavlje.";
 $AddAssignmentPage = "Dodaj stranicu Publikacije studenata u ovo poglavlje.";
-$Assignments = "Publikacije studenata ";
 $Exercise = "Testovi";
 $Link = "Link ";
 $AdValvas = "Obaveštenja";

@@ -92,7 +92,6 @@ $langYourAccountParam = "Detta är lösenord och inloggningsnamn för ditt konto";
 $langLoginRequest = "Inloggningsförfrågan";
 $langDefineHeadings = "Definiera överskrifter";
 $langCourseAdministratorOnly = "Lärare enbart";
-$langWorks = "Elevarbeten";
 $langLostPassword = "Glömt lösenord";
 $langAdminOfCourse = "admin";
 $langSimpleUserOfCourse = "normal";

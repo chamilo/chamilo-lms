@@ -91,7 +91,6 @@ $langYourAccountParam = "這是你的帳戶和登錄密碼";
 $langLoginRequest = "需要登錄";
 $langDefineHeadings = "定義標題";
 $langCourseAdministratorOnly = "僅教師使用";
-$langWorks = "作業論文";
 $langLostPassword = "找回密碼";
 $langAdminOfCourse = "課程管理員";
 $langSimpleUserOfCourse = "課程用戶";

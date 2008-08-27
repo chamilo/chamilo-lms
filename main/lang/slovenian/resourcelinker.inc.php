@@ -17,7 +17,6 @@ $CourseResources = "Teèajevi resursi";
 $ExternalLink = "Zunanja povezava";
 $DropboxAdd = "Dodaj nabiralnikovo stran temu poglavju.";
 $AddAssignmentPage = "Dodaj stran za prenos(upload) naloge temu poglavju.";
-$Assignments = "Zadolžitve";
 $Exercise = "Testi";
 $Link = "Povezava";
 $AdValvas = "Obvestila";

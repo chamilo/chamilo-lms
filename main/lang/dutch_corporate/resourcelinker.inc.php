@@ -17,7 +17,6 @@ $CourseResources = "Cursusmateriaal";
 $ExternalLink = "Externe link";
 $DropboxAdd = "Voeg de dropboxpagina toe aan dit hoofdstuk.";
 $AddAssignmentPage = "Voeg de geüploade gebruikerspublicaties toe aan dit hoofdstuk.";
-$Assignments = "Gebruikerspublicaties";
 $Exercise = "Oefening";
 $Link = "Link";
 $AdValvas = "Ad valvas";

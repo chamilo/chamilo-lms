@@ -5,7 +5,6 @@ $select = "Sélectionner";
 $square = "Rectangle";
 $circle = "Ellipse";
 $poly = "Polygone";
-$delineation = "Délinéation";
 $status1 = "Dessinez une zone cliquable.";
 $status2_poly = "Faites un clic droit pour fermer le polygone.";
 $status2_other = "Relâchez le bouton de la souris pour sauvegarder la zone cliquable.";
@@ -16,8 +15,8 @@ $exercise_status_3 = "Statut : Question terminée";
 $showUserPoints = "Montrer/cacher les clics";
 $showHotspots = "Montrer/cacher les zones cliquables";
 $labelPolyMenu = "Fermer le polygone";
-$labelDelineationMenu = "Fermer la délinéation";
 $triesleft = "Essais restants";
 $exeFinished = "Toutes les réponses ont été remplies. Modifiez vos choix ou envoyez vos réponses";
 $nextAnswer = "Cliquez maintenant sur : &done=done";
+$delineation = "Délinéation";
 ?>

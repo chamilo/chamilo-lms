@@ -17,7 +17,6 @@ $CourseResources = "Kursmaterialo ";
 $ExternalLink = "Ekstera ligilo ";
 $DropboxAdd = "Aldoni la demetujan pa&#285;on al &#265;i-&#265;apitro. ";
 $AddAssignmentPage = "Aldoni la al&#349;utitan studentan publika&#309;on al &#265;i-&#265;apitro. ";
-$Assignments = "Studentaj publika&#309;oj ";
 $Exercise = "Ekzerco ";
 $Link = "Ligilo";
 $AdValvas = "Publikigejo ";

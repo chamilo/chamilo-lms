@@ -92,7 +92,6 @@ $langYourAccountParam = "Dit is de nodige informatie om in te loggen op ";
 $langLoginRequest = "Log-inverzoek";
 $langDefineHeadings = "Definieer aanvullende informatie";
 $langCourseAdministratorOnly = "Enkel voor beheerders";
-$langWorks = "Gebruikerspublicaties";
 $langLostPassword = "Wachtwoord vergeten";
 $langAdminOfCourse = "Beheerder";
 $langSimpleUserOfCourse = "Gebruiker van deze module";

@@ -80,5 +80,13 @@ $InvalidMaxNumberOfMembers = "Molim upišite valjan broj kao najve&#263;i broj &#
 $CategoryOrderChanged = "Redoslijed kategorija je preina&#269;en";
 $Wiki = "Skupina wiki";
 $CategoryCreated = "Kategorija izra&#273;ena";
+$GroupTutors = "Tutori";
+$GroupWork = "Studentski radovi";
+$GroupCalendar = "Raspored";
+$GroupAnnouncements = "Obavijesti";
+$NoCategoriesDefined = "Kategorija nije definirana";
+$GroupsFromClasses = "Skupine iz istih razreda";
+$GroupsFromClassesInfo = "Odabir ove opcije omogu&#269;ava stvaranje skupine temeljene na razredima upisanih u vaš kolegij";
 $Group = "Skupina";
+$ForumOfGroup = "Forum skupine:";
 ?>

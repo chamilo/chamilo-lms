@@ -17,7 +17,6 @@ $CourseResources = "Kursunterlagen";
 $ExternalLink = "Externer Link";
 $DropboxAdd = "Die Dropbox-Seite diesem Kapitel hinzufügen.";
 $AddAssignmentPage = "Die Anwenderunterlagen diesem Kapitel hinzufügen.";
-$Assignments = "Unterlagen der Teilnehmer/innen";
 $Exercise = "Übungen";
 $Link = "Links";
 $AdValvas = "Anzeigen";

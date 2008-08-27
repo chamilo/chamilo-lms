@@ -77,7 +77,6 @@ $langSurname = "Tên";
 $langRegistration = "Đăng ký";
 $langYourAccountParam = "Đây là tên đăng nhập và mật khẩu của bạn";
 $langLoginRequest = "Cần thiết Login ";
-$langWorks = "Bài làm";
 $langAdminOfCourse = "admin";
 $langSimpleUserOfCourse = "normal";
 $langIsTutor = "giáo viên";

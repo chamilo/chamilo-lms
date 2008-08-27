@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 $Remove = "移動";
 $Description = "&#35500;&#26126;";
 $Links = "リンク";
+$langWorks = "学生作成文書";
 $Forums = "会議室";
 $langExercices = "演習問題";
 $langCreateDir = "ディレクトリを作る";
@@ -11,6 +12,7 @@ $Name = "名称";
 $langComment = "コメント";
 $langVisible = "見えるようにする/見えないようにする";
 $Language = "&#35328;&#35486;";
+$Assignments = "Assignments";
 $Forum = "Forum";
 $langCode = "コース番号";
 $langUp = "Up";

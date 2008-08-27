@@ -21,7 +21,6 @@ $langContradiction = "Use the Principle of Non Contradiction to force one\\\'s i
 $langNotFalse = "This answer is not false. It is true that the revelation of the interlocutor\\\'s ignorance means showing the contradictory conclusions where lead his premisses.";
 $langAgenda = "Agenda";
 $langVideo = "Video";
-$langWorks = "Objave teèajnikov";
 $langCourseProgram = "Program teèaja";
 $langAnnouncements = "Obvestila";
 $langAddPageHome = "Prenesi (Upload) stran in poveži na domaèo stran";

@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 $Remove = "Xoá";
 $Description = "Mô tả tóm tắt";
 $Links = "Liên kết";
+$langWorks = "Bài làm";
 $Forums = "Diễn đ� n";
 $langExercices = "B� i tập";
 $langCreateDir = "Tạo thư mục";
@@ -14,6 +15,7 @@ $langGroup = "Group";
 $langEdit = "Edit";
 $langGroupForum = "Forum";
 $Language = "Language";
+$Assignments = "Assignments";
 $Forum = "Forum";
 $langCode = "Mã khoá học";
 $langUp = "Up";

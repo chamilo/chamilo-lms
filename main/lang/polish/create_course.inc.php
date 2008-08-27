@@ -21,7 +21,6 @@ $langContradiction = "U&#380;ycie zasady podwójnego zaprzeczenia w celu doprowad
 $langNotFalse = "Ta odpowied&#378; nie jest z&#322;a. To prawda, &#380;e odkrycie ignorancji rozmówcy oznacza pokazanie sprzecznych wniosków, które wynikaj&#261; z jego przes&#322;anek.";
 $langAgenda = "Terminarz";
 $langVideo = "Wideo";
-$langWorks = "Prace studentów";
 $langCourseProgram = "Program kursu";
 $langAnnouncements = "Og&#322;oszenia";
 $langAddPageHome = "Za³aduj stronê i odno¶nik na stronie g³ównej";

@@ -555,8 +555,6 @@ $VideoClassroomUrl = "Chemin vers l\'application Classe virtuelle";
 $ReconfigureExtension = "Reconfigurer l\'extension";
 $ServiceReconfigured = "Service reconfiguré";
 $ChooseNewsLanguage = "Choix d\'une nouvelle langue";
-$AllLanguages = "toutes les langues";
-$MyTextHere = "votre texte ici";
 $Ajax_course_tracking_refresh = "Calcul du temps passé dans un espace de cours";
 $Ajax_course_tracking_refresh_comment = "Cette option permet de calculer en temps réel le temps qu\'un utilisateur passe dans un espace de cours. La valeur à remplir dans ce champ est l\'intervalle de rafraîchissement en secondes. Pour désactiver cette option, laissez la valeur 0 dans ce champ.";
 $EditLink = "Modifier le lien";
@@ -810,4 +808,9 @@ $StylesheetAdded = "La feuille de style a été ajoutée";
 $LDAPFilledTutorFieldValueTitle = "Valeur d\'identification d\'un enseignant";
 $LDAPFilledTutorFieldValueComment = "Lorsque la vérification du champ enseignant est faite sur le champ donné ci-dessus, la valeur donnée ci-dessous doit se trouver dans les sous-éléments du champ donné pour que l\'utilisateur soit considéré comme un enseignant. Si vous laissez ce champ vide, la seule condition est que le sous-élément défini par le champ enseignant ci-dessus existe pour l\'utilisateur LDAP pour qu\'il soit considéré comme un enseignant. Par exemple, le champ pourrait être \"memberof\" et la valeur à trouver \"CN=G_TRAINER,OU=Trainer\".";
 $IsNotWritable = "n\'est pas inscriptible";
+$DefineSessionOptions = "Définir les délais d\'accès au coach";
+$DaysBefore = "jours avant";
+$DaysAfter = "jours après";
+$SessionAddTypeUnique = "Inscription unique";
+$SessionAddTypeMultiple = "Inscription multiple";
 ?>

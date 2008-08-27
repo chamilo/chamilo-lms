@@ -8,6 +8,7 @@ $WCAGLabel = "Billede-mærke";
 $WCAGLink = "Link";
 $WCAGLinkLabel = "Link-mærke";
 $errorNoLabel = "Billedet har ikke et mærke";
+$AllLanguages = "Alle sprog";
 $WCAGEditor = "WCAG Editor ";
 $WCAGGoMenu = "Gå til menu";
 $WCAGGoContent = "Gå til indhold";

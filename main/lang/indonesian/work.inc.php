@@ -22,7 +22,6 @@ $lang_doc_unvisible = "File anda hanya nampak untuk pengajar dan karenanya tidak
 $langDelLk = "Hapus link";
 $langMustBeRegisteredUser = "Hanya user yang terdaftar pada mata kuliah ini yang dapat mempublikasi dokumen.";
 $langListDel = "Hapus daftar";
-$langWork = "Kerja";
 $langNameDir = "Ganti nama direktori";
 $langFileExists = "File sudah ada sebelumnya";
 $langDirCr = "Buat direktori";

@@ -42,4 +42,8 @@ $langBackup = "Pri&#269;uvni primjerak";
 $langImportBackupInfo = "Prijenos pri&#269;uvnoga primjerka. Možete postaviti datoteku pri&#269;uvnoga primjerka sa svojeg lokalnog ure&#273;aja ili upotrijebiti datoteku pri&#269;uvnoga primjerka dostupnu na serveru.";
 $langCreateBackupInfo = "Izradi pri&#269;uvni primjerak kolegija. Možete odabrati koje &#263;ete sadržaje kolegija umetnuti u datoteku pri&#269;uvnoga primjerka.";
 $ToolIntro = "Predstavljanje alata";
+$UploadError = "U&#269;itavanje nije uspjelo. Molim provjerite maksimalnu dozvoljenu veli&#269;inu datoteke te prava mape.";
+$DocumentsWillBeAddedToo = "Dokumenti &#263;e biti dodani";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Ako želiti prenijeti Put u&#269;enja koji sadrži test, morate odabrati odgovaraju&#263;i test sa liste svih testova.";
+$ArchivesDirectoryNotWriteableContactAdmin = "U datoteku arhiviranja koju koristi ovaj alat se ne može pisati. Molim kontaktirajte upravitelja sustava.";
 ?>

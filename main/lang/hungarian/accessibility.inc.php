@@ -8,6 +8,7 @@ $WCAGLabel = "Kép cimke";
 $WCAGLink = "Hivatkozás";
 $WCAGLinkLabel = "Hivatkozás cimke";
 $errorNoLabel = "A képen nincs cimke.";
+$AllLanguages = "az összes nyelv";
 $WCAGEditor = "WCAG Szerkeszt&#337;";
 $WCAGGoMenu = "Ugrás a menühöz";
 $WCAGGoContent = "Ugrás a tartalomhoz";

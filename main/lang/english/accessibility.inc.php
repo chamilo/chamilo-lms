@@ -8,6 +8,7 @@ $WCAGLabel = "Image label";
 $WCAGLink = "Link";
 $WCAGLinkLabel = "Link label ";
 $errorNoLabel = "No label on the picture.";
+$AllLanguages = "all languages";
 $WCAGEditor = "WCAG Editor";
 $WCAGGoMenu = "Goto menu";
 $WCAGGoContent = "Goto content";

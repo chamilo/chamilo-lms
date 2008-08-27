@@ -49,6 +49,7 @@ $ViewPersonalItem = "Se personlige aftaler";
 $UserGroupFilter = "Filtrer på grupper/brugere";
 $ShowAll = "Vis alle";
 $Print = "Udskriv";
+$MyTextHere = "min tekst her";
 $CopiedAsAnnouncement = "Kopieret som meddelelse";
 $NewAnnouncement = "Ny meddelelse";
 $AddAnnouncement = "tilføj som en meddelelse";

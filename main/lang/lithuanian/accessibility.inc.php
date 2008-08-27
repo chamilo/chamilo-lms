@@ -19,6 +19,7 @@ $WCAGLabel = "Paveikslėlio pavadinimas";
 $WCAGLink = "Nuoroda";
 $WCAGLinkLabel = "Nuorodos pavadinimas ";
 $errorNoLabel = "Paveikslėlis neturi pavadinimo.";
+$AllLanguages = "visos kalbos";
 $WCAGEditor = "WCAG teksto redaktorius";
 $WCAGGoMenu = "Meniu";
 $WCAGGoContent = "Turinys";

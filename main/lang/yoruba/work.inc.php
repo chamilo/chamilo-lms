@@ -2,5 +2,4 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Ohun elo";
-$langWork = "Ise";
 ?>

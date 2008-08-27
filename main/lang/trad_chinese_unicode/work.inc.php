@@ -22,7 +22,6 @@ $lang_doc_unvisible = "作業只對這門課程的教師可見, 因此對你是�
 $langDelLk = "刪除鏈接";
 $langMustBeRegisteredUser = "只有此課程的註冊用戶可以上傳作業。";
 $langListDel = "刪除清單";
-$langWork = "工作";
 $langNameDir = "重命名目錄";
 $langFileExists = "檔案已存在";
 $langDirCr = "新建目錄";

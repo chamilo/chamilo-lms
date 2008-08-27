@@ -21,7 +21,6 @@ $langContradiction = "Utilizeaza principiul non-contradictiei pentru a forta int
 $langNotFalse = "Acest raspuns nu este fals. Este adevarat ca dezvaluirea ignorantei interlocutorului inseamna a arata conditiile contradictorii determinate de premisele sale.";
 $langAgenda = "Agenda";
 $langVideo = "Video";
-$langWorks = "Publicatiile studentilor";
 $langCourseProgram = "Programul cursului";
 $langAnnouncements = "Anunturi";
 $langAddPageHome = "Trimite pe server pagina si link-ul catre Pagina Principala.";

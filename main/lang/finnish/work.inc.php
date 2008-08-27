@@ -22,7 +22,6 @@ $lang_doc_unvisible = "Lähettämäsi tiedosto on ainoastaan kurssin opettajan näht
 $langDelLk = "Poista linkki";
 $langMustBeRegisteredUser = "Ainoastaan kurssin rekisteröityneet käyttäjät voivat julkaista dokumentteja.";
 $langListDel = "Poista lista";
-$langWork = "Työt";
 $langNameDir = "Nimeä hakemisto uudelleen";
 $langFileExists = "Tiedosto on jo olemassa";
 $langDirCr = "Luo hakemisto";

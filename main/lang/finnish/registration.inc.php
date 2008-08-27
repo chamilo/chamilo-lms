@@ -54,7 +54,6 @@ $langSurname = "Etunimi";
 $langRegistration = "Rekisteröinti";
 $langDefineHeadings = "Määrittele otsikot";
 $langCourseAdministratorOnly = "vain opettaja";
-$langWorks = "Oppilaiden tehtävät";
 $langAdminOfCourse = "Kurssin ylläpitäjä";
 $langSimpleUserOfCourse = "Kurssin opiskelija";
 $langIsTutor = "Tutor";

@@ -8,6 +8,7 @@ $WCAGLabel = "oznaka slike";
 $WCAGLink = "povezava";
 $WCAGLinkLabel = "oznaka povezave";
 $errorNoLabel = "Slika je brez oznake.";
+$AllLanguages = "vsi jeziki";
 $WCAGEditor = "WCAG Urejevalnik";
 $WCAGGoMenu = "Pojdi na izbiro";
 $WCAGGoContent = "Pojdi na vsebino";

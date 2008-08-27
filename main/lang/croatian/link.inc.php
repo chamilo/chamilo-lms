@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$LinkMoved = "Poveznica je premještena";
 $langLinkName = "Ime poveznice";
 $langLinkAdd = "Dodaj poveznicu";
 $langLinkAdded = "Poveznica je dodana.";
@@ -42,4 +43,5 @@ $langAll_Link_Deleted = "Poveznica izbrisana";
 $langOnHomepage = "Prikaži poveznicu na po&#269;etnoj stranici";
 $langShowLinkOnHomepage = "Prikaži poveznicu kao ikonu na po&#269;etnoj stranici kolegija";
 $langCsvImport = "Prijenos CSV";
+$General = "Op&#263;enito";
 ?>

@@ -22,7 +22,6 @@ $lang_doc_unvisible = "Váš soubor je viditelný pouze pro u&#269;itele kurzu a pr
 $langDelLk = "Vymazat odkaz";
 $langMustBeRegisteredUser = "Jen registovaný uživatelé tohoto kurzu smí publikovat dokumenty.";
 $langListDel = "Vymazat seznam";
-$langWork = "Práce";
 $langNameDir = "P&#345;emenuj složku";
 $langFileExists = "Soubor již existuje";
 $langDirCr = "Vytvo&#345;it složku";

@@ -14,4 +14,5 @@ $langValid  = "Prihvati";
 $langBackAndForget  = "Odustani";
 $CourseDescriptionUpdated = "Opis kolegija je ažuriran";
 $CourseDescriptionDeleted = "Opis kolegija je izbrisan";
+$CourseDescriptionIntro = "Za unos opisa te&#269;aja, odaberite (klik) naslov i popunite odgovaraju&#263;a polja.<br><br> Odaberite OK i po potrebi odaberite slijede&#263;i naslov.";
 ?>

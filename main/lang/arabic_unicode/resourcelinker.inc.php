@@ -17,7 +17,6 @@ $CourseResources = "مصادر المقرر ";
 $ExternalLink = "روابط خاريجة ";
 $DropboxAdd = "أضف صندوق مشاركات إلى هذا الفصل ";
 $AddAssignmentPage = "أضف صفحة نشرات الطلاب إلى هذا الفصل ";
-$Assignments = "نشرات الطلاب ";
 $Exercise = "اختبارات ";
 $Link = "رابط ";
 $AdValvas = "إعلانات ";

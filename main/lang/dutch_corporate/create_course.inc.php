@@ -21,7 +21,6 @@ $langContradiction = "Het principe van tegenstrijdigheid gebruiken om de gesprek
 $langNotFalse = "Dit antwoord is niet onjuist. Het is waar dat het tonen van de onwetendheid van zijn gesprekspartner gebeurt dankzij het tonen van de tegenstrijdige conclusies van zijn veronderstellingen.";
 $langAgenda = "Agenda";
 $langVideo = "Video";
-$langWorks = "Gebruikerspublicaties";
 $langCourseProgram = "Takenprogramma";
 $langAnnouncements = "Aankondigingen";
 $langAddPageHome = "Pagina uploaden en linken met startpagina";

@@ -91,7 +91,6 @@ $langYourAccountParam = "นี่คือข้อมูลของคุณที่จะใช้ติดต่อกับ";
 $langLoginRequest = "ต้องเข้าสู่ระบบ";
 $langDefineHeadings = "นิยามหัวเรื่อง";
 $langCourseAdministratorOnly = "ผู้สอนเท่านั้น";
-$langWorks = "การส่งผลงาน/การบ้านของผู้เรียน";
 $langAdminOfCourse = "ผู้บริหารรายวิชา";
 $langSimpleUserOfCourse = "ผู้ใช้ในรายวิชา";
 $langIsTutor = "ผู้ช่วยสอน";

@@ -22,7 +22,6 @@ $lang_doc_unvisible = "O ficheiro só será visível pelo professor deste curso e p
 $langDelLk = "Apagar ligação";
 $langMustBeRegisteredUser = "Só os utilizadores deste curso podem publicar documentos.";
 $langListDel = "A lista foi apagada completamente";
-$langWork = "Trabalho";
 $langNameDir = "Nome do novo directório";
 $langFileExists = "Não é possível realizar esta operação.<br>Já existe um elemento com o mesmo nome.";
 $langDirCr = "Directório criado";

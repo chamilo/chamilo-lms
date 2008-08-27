@@ -535,7 +535,6 @@ $VideoClassroomUrl = "課室實時會議路徑";
 $ReconfigureExtension = "重設擴充套件";
 $ServiceReconfigured = "服務已重設";
 $ChooseNewsLanguage = "選擇新語言";
-$AllLanguages = "所有語言";
 $Ajax_course_tracking_refresh = "課程使用總時間";
 $Ajax_course_tracking_refresh_comment = "這選項用以計算學員用於課程的總時間,以秒為計算單位。要取消這項功能把設定值保留為 0 。";
 $EditLink = "編輯連結";

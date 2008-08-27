@@ -433,7 +433,6 @@ $Active = "Akt&#299;vs";
 $NbUsers = "Lietot&#257;ji";
 $UserOnHost = "Lietot&#257;ja v&#257;rds";
 $WCAGContent = "Teksts";
-$AllLanguages = "Visas valodas";
 $CannotDeleteUser = "Tu nevari dz&#275;st šo lietot&#257;ju";
 $UserNameTooLong = "Lietot&#257;ja v&#257;rds ir par garu";
 $UnknownUser = "Nezin&#257;ms lietot&#257;js";

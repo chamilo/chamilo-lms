@@ -94,7 +94,6 @@ $langYourAccountParam = "Ezeket az információkat a következ&#337; oldallal kapcs
 $langLoginRequest = "Login kérés";
 $langDefineHeadings = "Címsorok létrehozása";
 $langCourseAdministratorOnly = "Csak tanár";
-$langWorks = "Beadandók";
 $langLostPassword = "Elfelejtett jelszó";
 $langAdminOfCourse = "Kurzus adminisztrátor";
 $langSimpleUserOfCourse = "Kurzus felhasználója";

@@ -88,7 +88,6 @@ $langYourAccountParam = "这是你的帐户和登录密码";
 $langLoginRequest = "需要登录";
 $langDefineHeadings = "定义标题";
 $langCourseAdministratorOnly = "仅教师使用";
-$langWorks = "作业论文";
 $langLostPassword = "找回密码";
 $langAdminOfCourse = "课程管理员";
 $langSimpleUserOfCourse = "课程用户";

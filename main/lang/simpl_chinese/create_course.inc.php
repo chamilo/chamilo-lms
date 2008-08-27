@@ -21,7 +21,6 @@ $langContradiction = "使用这个法则或者反驳来迫使迫使对方进入一个死逻辑循环.";
 $langNotFalse = "这个答案是正确的. 这个事实上揭露了谈话者的无知, 使用对立的结论来引导它的前提.";
 $langAgenda = "我的日程";
 $langVideo = "视频";
-$langWorks = "作业论文";
 $langCourseProgram = "课程大纲";
 $langAnnouncements = "公告通知";
 $langAddPageHome = "上传网页和链接";

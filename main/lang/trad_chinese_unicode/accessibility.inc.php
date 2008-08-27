@@ -5,6 +5,7 @@ $langClarContent = "<p><b>教師</b></p> <p>IILearn 是一個基於Web的教學�
 $test = "測試";
 $WCAGImage = "圖像";
 $WCAGLink = "連結";
+$AllLanguages = "所有語言";
 $WCAGEditor = "WCAG 編輯器";
 $WCAGGoMenu = "前往選單";
 $WCAGGoContent = "前往內容";

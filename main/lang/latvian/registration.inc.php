@@ -89,7 +89,6 @@ $langYourAccountParam = "Š&#299; ir inform&#257;cija, k&#257; Jums piesl&#275;gt
 $langLoginRequest = "Autoriz&#275;šan&#257;s piepras&#299;jums";
 $langDefineHeadings = "Defin&#275;t virsrakstus";
 $langCourseAdministratorOnly = "tikai doc&#275;t&#257;jam";
-$langWorks = "Studentu publik&#257;cijas";
 $langLostPassword = "Parole pazudusi";
 $langAdminOfCourse = "Kursa administrators";
 $langSimpleUserOfCourse = "Kursa lietot&#257;js";

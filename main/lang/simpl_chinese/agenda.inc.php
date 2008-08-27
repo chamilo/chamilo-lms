@@ -49,4 +49,5 @@ $ViewPersonalItem = "浏览个人议项";
 $UserGroupFilter = "组/用户过滤";
 $ShowAll = "显示所有";
 $Print = "打印";
+$MyTextHere = "&#25105;&#30340;&#25991;&#26412;";
 ?>

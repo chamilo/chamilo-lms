@@ -93,7 +93,6 @@ $langYourAccountParam = "Voici les paramètres qui vous permettront de vous conn
 $langLoginRequest = "Demande de login";
 $langDefineHeadings = "Définir les intitulés";
 $langCourseAdministratorOnly = "Réservé au responsable";
-$langWorks = "Travaux";
 $langLostPassword = "Mot de passe perdu";
 $langAdminOfCourse = "admin";
 $langSimpleUserOfCourse = "normal";

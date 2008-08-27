@@ -13,7 +13,6 @@ $langSocraticIrony = "Sarkastisk&#257; ironija ir...";
 $langManyAnswers = "(vair&#257;kas atbildes var b&#363;t pareizas)";
 $langAgenda = "Pl&#257;not&#257;js";
 $langVideo = "Video";
-$langWorks = "Studentu publik&#257;cijas";
 $langCourseProgram = "Kursa programma";
 $langAnnouncements = "Pazi&#326;ojumi";
 $langAddPageHome = "Augšupiel&#257;d&#275;t lapu un vietni M&#257;jas lap&#257;";

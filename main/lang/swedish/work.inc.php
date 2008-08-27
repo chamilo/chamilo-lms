@@ -22,7 +22,6 @@ $lang_doc_unvisible = "Ditt dokument är bara synligt för läraren(na) i denna kur
 $langDelLk = "Radera länk";
 $langMustBeRegisteredUser = "Bara registrerade användare i denna kurs kan publicera dokument.";
 $langListDel = "Radera lista";
-$langWork = "Arbete";
 $langNameDir = "Döp om arkiv";
 $langFileExists = "Filen existerar redan";
 $langDirCr = "Skapa arkiv";

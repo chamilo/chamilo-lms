@@ -239,4 +239,5 @@ $ExportWithoutUserFields = "Izkljuèi uporabniška polja iz izvoza";
 $DisableResults = "Ne prikaži rezultatov teèajnikom";
 $EnableResults = "Prikaži rezultate teèajnikom";
 $ValidateAnswer = "Uveljavi odgovore";
+$FillInBlankSwitchable = "Veèkratni odgovori z možnostjo prostega vnosa";
 ?>

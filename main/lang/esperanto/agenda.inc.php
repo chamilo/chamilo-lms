@@ -49,4 +49,5 @@ $ViewPersonalItem = "Pririgardi personan agendon ";
 $UserGroupFilter = "Filtri grupojn/ uzulojn ";
 $ShowAll = "Vidigi &#265;ion ";
 $Print = "Presi";
+$MyTextHere = "Jen mia teksto";
 ?>

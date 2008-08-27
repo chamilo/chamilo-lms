@@ -21,7 +21,6 @@ $langContradiction = "Koristiti princip povla&#273;ivanja da prisilite sagovorni
 $langNotFalse = "Ovaj odgovor nije neta&#269;an. Istina je da otkri&#263;e sagovornikovog neznanja zna&#269;i pokazivanje kontradiktornosti zaklju&#269;aka kuda vode njegove permise. ";
 $langAgenda = "Agenda";
 $langVideo = "Video";
-$langWorks = "Publikacije polaznika";
 $langCourseProgram = "Program kursa";
 $langAnnouncements = "Obaveštenja";
 $langAddPageHome = "U&#269;itaj stranicu i napravi link ka po&#269;etnoj stranici.";

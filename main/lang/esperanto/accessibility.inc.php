@@ -8,6 +8,7 @@ $WCAGLabel = "Etikedo de bildo";
 $WCAGLink = "Ligo";
 $WCAGLinkLabel = "Titolo de ligo";
 $errorNoLabel = "Mankas etiketo &#265;e la bildo";
+$AllLanguages = "&#264;iuj lingvoj";
 $WCAGEditor = "Redaktilo WCAG";
 $WCAGGoMenu = "Iri al la menuo";
 $WCAGGoContent = "Iri al la enhavo";

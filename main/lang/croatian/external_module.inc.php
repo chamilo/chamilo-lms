@@ -21,4 +21,8 @@ $langNoLinkName = "Molim upišite ime poveznice";
 $langEditLink = "Uredi poveznicu po&#269;etne stranice kolegija";
 $langChangePress = "Preina&#269;i i pritisni U redu";
 $langLinkChanged = "Poveznica po&#269;etne stranice kolegija preina&#269;ena. Upotrijebite gornji izbornik za povratak na po&#269;etnu stranicu.";
+$NoLinkName = "Poveznica nema naziv";
+$NoLinkURL = "Poveznica nema URL";
+$LinkChanged = "Poveznica je izmijenjena";
+$OkSentLink = "Poveznica je poslana";
 ?>

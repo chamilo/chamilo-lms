@@ -21,7 +21,6 @@ $langContradiction = "Käyttämällä myöntämisen periaatetta pakotetaan puhekumppan
 $langNotFalse = "Tämä vastaus ei ole väärin. On totta, että puhekumppanin tietämättömyys paljastaminen tarkoittaa kieltävien johtopäätelmien näyttämistä, jotka johtuvat hänen lähtökohdistaan.";
 $langAgenda = "Kalenteri";
 $langVideo = "Video";
-$langWorks = "Tehtäväpalautus";
 $langCourseProgram = "Kurssiohjelma";
 $langAnnouncements = "Ajankohtaista";
 $langAddPageHome = "Lisää sivu ja linkki kotisivulle";

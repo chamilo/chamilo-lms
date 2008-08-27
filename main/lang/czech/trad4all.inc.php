@@ -6,6 +6,7 @@ $UsersOnline = "U&#382;ivatel online";
 $Remove = "Odstranit";
 $Description = "Popis";
 $Links = "Odkazy";
+$langWorks = "Publikace student&#367;";
 $Forums = "Fóra";
 $langExercices = "Testy";
 $langCreateDir = "Vytvo&#345;it složku";

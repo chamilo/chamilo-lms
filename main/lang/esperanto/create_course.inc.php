@@ -21,7 +21,6 @@ $langContradiction = "Uzi la principon de antagonismo por kapti sian interparola
 $langNotFalse = "Tiu respondo ne estas mal&#285;usta. Estas vere, ke la montro de la nescio de la interparolanto okazas danke al la montro de la malakordaj konkludoj de liaj supozoj. ";
 $langAgenda = "Agendo ";
 $langVideo = "Vidbendo ";
-$langWorks = "Studentaj publika&#309;oj ";
 $langCourseProgram = "Taskprogramo ";
 $langAnnouncements = "Anoncoj ";
 $langAddPageHome = "Al&#349;uti pa&#285;on kaj ligi al startprogramo ";

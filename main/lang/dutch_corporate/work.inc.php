@@ -22,7 +22,6 @@ $lang_doc_unvisible = "Uw begeleider heeft er voor gekozen het document enkel zi
 $langDelLk = "Link verwijderen";
 $langMustBeRegisteredUser = "U moet geregistreerd zijn voor deze module om werk te kunnen publiceren.";
 $langListDel = "Verwijder lijst";
-$langWork = "Gebruikerspublicaties";
 $langNameDir = "Map hernoemen";
 $langFileExists = "Map bestaat reeds";
 $langDirCr = "Map aanmaken";

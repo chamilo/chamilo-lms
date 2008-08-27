@@ -17,7 +17,6 @@ $CourseResources = "Recursos do curso";
 $ExternalLink = "Link externo";
 $DropboxAdd = "Adicionar página de dropbox a esse capítulo.";
 $AddAssignmentPage = "Adicionar a página de envio de tarefas a esse capítulo.";
-$Assignments = "Tarefas";
 $Exercise = "Exercício";
 $Link = "Link";
 $AdValvas = "Ad Valvas";

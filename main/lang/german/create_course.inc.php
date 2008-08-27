@@ -21,7 +21,6 @@ $langContradiction = "Ein Widerspruchsprinzip um seinen Gegenüber in die Ecke zu
 $langNotFalse = "Die Antwort ist nicht falsch. Es ist wahr, dass das Aufzeigen der Unwissenheit des Gegners bedeuten kann, dass seine Gegensätzlichen Rückschlüsse darauf begründet waren.";
 $langAgenda = "Agenda";
 $langVideo = "Video";
-$langWorks = "Arbeiten von Kursteilnehmern";
 $langCourseProgram = "Kursprogramm";
 $langAnnouncements = "Ankündigungen";
 $langAddPageHome = "Upload-Seite und Link zur Homepage";

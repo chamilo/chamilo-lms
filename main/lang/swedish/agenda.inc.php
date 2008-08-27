@@ -49,6 +49,7 @@ $ViewPersonalItem = "Visa personliga objekt";
 $UserGroupFilter = "Filter på grupper/användare";
 $ShowAll = "Visa allt";
 $Print = "Skriv ut";
+$MyTextHere = "min text här";
 $CopiedAsAnnouncement = "Kopierad som tillkännagivande";
 $NewAnnouncement = "Nytt tillkännagivande";
 $AddAnnouncement = "Lägg till som ett tillkännagivande";

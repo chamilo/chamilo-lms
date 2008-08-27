@@ -49,6 +49,7 @@ $ViewPersonalItem = "Visualizza l\'agenda personale";
 $UserGroupFilter = "Filtra sulla base dei gruppi/utenti";
 $ShowAll = "Mostra tutto";
 $Print = "Stampa";
+$MyTextHere = "Scrivi il testo";
 $CopiedAsAnnouncement = "Copiato come avviso ";
 $NewAnnouncement = " Nuovo avviso";
 $AddAnnouncement = "Aggiungi come avviso ";

@@ -17,7 +17,6 @@ $CourseResources = "Kurso resursai";
 $ExternalLink = "Išorinė nuoroda";
 $DropboxAdd = "Įdėti failų saugyklos puslapį į šį skyrių.";
 $AddAssignmentPage = "Įdėti studentų publikacijas į šį skyrių.";
-$Assignments = "Studentų publikacijos";
 $Exercise = "Testai";
 $Link = "Nuorodos";
 $AdValvas = "Pranešimai";

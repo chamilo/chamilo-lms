@@ -54,7 +54,7 @@ $FinishSurvey = "Terminar la encuesta";
 $QuestionsAdded = "Las preguntas son añadidas";
 $DeleteSurvey = "Eliminar encuesta";
 $SurveyCode = "Código de la encuesta";
-$SurveyList = "Lista de encuestas";
+$SurveyList = "Encuestas";
 $SurveyAttached = "Encuesta adjuntada";
 $QuestionType = "Tipo de pregunta";
 $QuestionByType = "Preguntas por tipo";
@@ -177,4 +177,6 @@ $PeopleAnswered = "Personas que han respondido";
 $AnonymousSurveyCannotKnowWhoAnswered = "Esta encuesta es anónima. Vd. no puede ver quien ha respondido.";
 $IllegalSurveyId = "Identificador de encuesta desconocido";
 $SurveyQuestionMoved = "La pregunta ha sido movida";
+$IdenticalSurveycodeWarning = "Este código de la encuesta ya existe. Probablemente esto sea debido a que la encuesta también existe en otros idiomas. Los usuarios podrán elegir entre diferentes idiomas.";
+$ThisSurveyCodeSoonExistsInThisLanguage = "Este código de encuesta ya existe en este idioma";
 ?>

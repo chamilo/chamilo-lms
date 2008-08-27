@@ -91,7 +91,6 @@ $langYourAccountParam = "هذه هي معلوماتك للإتصال إلى ";
 $langLoginRequest = "طلب تسجيل الدخول ";
 $langDefineHeadings = "Define Headings";
 $langCourseAdministratorOnly = "مدرسين فقط ";
-$langWorks = "نشرات الطلاب ";
 $langLostPassword = "فقدت كلمة المرور ";
 $langAdminOfCourse = "مدير المقرر ";
 $langSimpleUserOfCourse = "مستخدم المقرر ";

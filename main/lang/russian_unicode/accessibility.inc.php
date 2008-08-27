@@ -8,6 +8,7 @@ $WCAGLabel = "Подпись изображения";
 $WCAGLink = "Ссылка";
 $WCAGLinkLabel = "Подпись ссылки";
 $errorNoLabel = "Нет подписи рисунка";
+$AllLanguages = "все языки";
 $WCAGEditor = "Редактор WCAG";
 $WCAGGoMenu = "Перейти к меню";
 $WCAGGoContent = "Перейти к содержанию";

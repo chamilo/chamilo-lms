@@ -96,7 +96,6 @@ $langYourAccountParam = "To so vaše informacije za dostop do";
 $langLoginRequest = "Zahteva po prijavi";
 $langDefineHeadings = "Definiraj naslove";
 $langCourseAdministratorOnly = "le uèitelj";
-$langWorks = "Objave teèajnikov";
 $langLostPassword = "Izgubljeno geslo";
 $langAdminOfCourse = "Upravitelj teèaja";
 $langSimpleUserOfCourse = "Uporabnik teèaja";

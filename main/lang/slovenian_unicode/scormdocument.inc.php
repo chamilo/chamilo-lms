@@ -9,7 +9,7 @@ $langEditDocument = "Uredi";
 $langCreateDocument = "Kreiraj dokument";
 $langMissingImagesDetected = "Manjkajo slike";
 $langPublish = "Objavi";
-$langScormcontentstudent = "Tole je Scorm oblika tačaja. Če ga želiš zagnati, klikni tule : <input type=button name=scormbutton value=\\\'Zaženi ga !\\\' onclick=\\\'openscorm()\\\'>";
+$langScormcontentstudent = "Tole je Scorm oblika tečaja. Če ga želite zagnati, kliknite tule: <input type=button name=scormbutton value=\\\'Zaženi ga!\\\' onclick=\\\'openscorm()\\\'>";
 $langScormcontent = "Tole je Scorm vsebina<br><input type=button name=scormbutton value=\\\'Zaženi jo !\\\' onclick=\\\'openscorm()\\\'>";
 $langDownloadAndZipEnd = " Zip datoteka prenešena in de-komprimirana";
 $langZipNoPhp = "ZIP datoteka ne sme vsebovati .PHP datoteke";

@@ -17,7 +17,6 @@ $CourseResources = "課程資源";
 $ExternalLink = "外部連結";
 $DropboxAdd = "在本章節加入投遞箱";
 $AddAssignmentPage = "在本章節加入課業工具 ";
-$Assignments = "課業";
 $Exercise = "測驗";
 $Link = "連結";
 $AdValvas = "公告";

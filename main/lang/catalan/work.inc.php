@@ -22,7 +22,6 @@ $lang_doc_unvisible = "L\'arxiu només és visible per al professor d\'aquest curs
 $langDelLk = "Esborrar enllaç";
 $langMustBeRegisteredUser = "Només els usuaris inscrits en aquest curs poden publicar documents";
 $langListDel = "Eliminar llista";
-$langWork = "Activitat";
 $langNameDir = "Canviar nom al directori";
 $langFileExists = "L\'arxiu ja existeix";
 $langDirCr = "Crear directori";

@@ -61,4 +61,5 @@ $langCreateDoc = "Izradi dokument";
 $langOrganiseDocuments = "Organiziraj dokumente";
 $langUncompress = "Dekomprimiraj";
 $ExportShort = "Brzi prijenos";
+$progress = "Status napredovanja";
 ?>

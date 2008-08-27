@@ -555,8 +555,6 @@ $VideoClassroomUrl = "Pad naar de live conferentie klas";
 $ReconfigureExtension = "Herconfigureer extensie";
 $ServiceReconfigured = "Herconfigureren van de service";
 $ChooseNewsLanguage = "Kiezen nieuws taal";
-$AllLanguages = "Al talen";
-$MyTextHere = "Mijn tekst hier";
 $Ajax_course_tracking_refresh = "Totale tijd doorgebracht in een cursus";
 $Ajax_course_tracking_refresh_comment = "Met deze optie is het mogelijk om in real time te berekenen hoeveel tijd een gebruiker spendeert binnen  een module. Je kan hier de vernieuwingstijd in seconden opgeven. Om deze optie uit te schakelen, volstaat het om een waarde 0 in te voeren in het veld.";
 $EditLink = "Wijzig deze link";
@@ -761,4 +759,6 @@ $VisioUseRtmptTitle = "Gebruik het rtmpt protocol";
 $VisioUseRtmptComment = "Het rmtpt protocol maakt het mogelijk om de videoconferentiesoftware te gebruik vanachter een firewall door de communicatie over poort 80 te laten lopen. Dit zal echter de stream vertragen. Het is dus aangeraden om dit enkel te gebruiken als dit noodzakelijk is. ";
 $LDAPFilledTutorFieldValueTitle = "Begeleider identificatie waarde";
 $LDAPFilledTutorFieldValueComment = "Als een check wordt gedaan op het hierboven gegeven begeleiderveld, dan dient deze waarde in een van de begeleider subvelden te vinden zijn voordat de gebruiker beschouwd wordt als lesgever. Als u dit veld leeg laat dan is de enige voorwaarde dat dit veld bestaat voor deze LDAP gebruiker om beschouwd te worden als lesgever. Als voorbeeld kan het veld bijvoorbeeld zijn \"memberof\" en de waarde waarop gezocht dient te worden zou kunnen zijn \"CN=G_TRAINER,OU=Trainer\".";
+$IsNotWritable = "is niet schrijfbaar";
+$CannotMakeFieldChangeable = "Het veld kan niet aanpasbaar gemaakt worden.";
 ?>

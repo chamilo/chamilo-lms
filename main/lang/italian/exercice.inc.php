@@ -239,4 +239,9 @@ $ExportWithoutUserFields = "Escludi i campi utente dall\'esportazione";
 $DisableResults = "Non mostrare i risultati ai corsisti";
 $EnableResults = "Mostra i risultati ai corsisti";
 $ValidateAnswer = "Convalida le risposte";
+$FillInBlankSwitchable = "Risposta multipla considerata corretta se parzialmente in bianco";
+$ReachedMaxAttempts = "Non puoi ripetere il test %s in quanto hai già effettuato i %s tentativi consentiti";
+$AdvancedParameters = "Parametri avanzati";
+$RandomQuestionsToDisplay = "Numero di domande casuali da mostrare";
+$RandomQuestionsHelp = "Numero di domande casuali da mostrare: metti 0 (zero) per tutte nell\'ordine originale";
 ?>

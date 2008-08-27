@@ -49,6 +49,7 @@ $ViewPersonalItem = "View personal items";
 $UserGroupFilter = "Filter on groups/users";
 $ShowAll = "Show All";
 $Print = "Print";
+$MyTextHere = "my text here";
 $CopiedAsAnnouncement = "Copied as announcement";
 $NewAnnouncement = "New announcement";
 $AddAnnouncement = "Add as an announcement";

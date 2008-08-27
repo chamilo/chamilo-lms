@@ -21,7 +21,6 @@ $langContradiction = "Use the Principle of Non Contradiction to force one\'s int
 $langNotFalse = "This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses. ";
 $langAgenda = "&#51068;&#51221;";
 $langVideo = "&#48708;&#46356;&#50724;";
-$langWorks = "&#54617;&#49373; &#52636;&#54032;";
 $langCourseProgram = "&#44284;&#51221; &#54532;&#47196;&#44536;&#47016;";
 $langAnnouncements = "&#44277;&#51648;&#49324;&#54637;";
 $langAddPageHome = "&#54168;&#51060;&#51648;&#47484; &#50629;&#47196;&#46300;&#54616;&#44256; &#54856;&#54168;&#51060;&#51648;&#50640; &#47553;&#53356;";

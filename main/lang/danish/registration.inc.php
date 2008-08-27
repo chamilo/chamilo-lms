@@ -91,7 +91,6 @@ $langYourAccountParam = "Dette er dine login-informationer, som skal anvendes, n
 $langLoginRequest = "Login-forespørgsel til";
 $langDefineHeadings = "Stil spørgsmål til deltagerne via deltagerlisten";
 $langCourseAdministratorOnly = "kun underviser";
-$langWorks = "Afleveringer";
 $langLostPassword = "Glemt adgangskode";
 $langAdminOfCourse = "Kursusadministration";
 $langSimpleUserOfCourse = "Deltager på kursusside";

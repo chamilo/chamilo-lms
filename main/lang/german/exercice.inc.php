@@ -239,4 +239,9 @@ $ExportWithoutUserFields = "Benutzer Felder beim Export ausschließen";
 $DisableResults = "Studenten die Ergebnisse nicht anzeigen";
 $EnableResults = "Studenten die Ergebnisse anzeigen";
 $ValidateAnswer = "Antworten validieren";
+$FillInBlankSwitchable = "Mehrfach Antworten zum Ausfüllen";
+$ReachedMaxAttempts = "Der Test  \'%s\' kann nicht gemacht werden, weil das Maximum von %s Versuchen bereits erreicht wurde.";
+$AdvancedParameters = "Weitere Parameter";
+$RandomQuestionsToDisplay = "ANzahl der angezeigten Zufallsfragen";
+$RandomQuestionsHelp = "Anzahl der angezeiigten Zufallsfragen; mit 0 werden alle Fragen in der richtigen Reihenfolge angezeigt";
 ?>

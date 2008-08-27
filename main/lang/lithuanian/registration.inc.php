@@ -91,7 +91,6 @@ $langYourAccountParam = "This is your information to connect to";
 $langLoginRequest = "Prisijungimo reikalavimas";
 $langDefineHeadings = "Define Headings";
 $langCourseAdministratorOnly = "tik dėstytojas";
-$langWorks = "Studentų publikacijos";
 $langLostPassword = "Prarastas slaptažodis";
 $langAdminOfCourse = "Kurso vadovas";
 $langSimpleUserOfCourse = "Kurso vartotojas";

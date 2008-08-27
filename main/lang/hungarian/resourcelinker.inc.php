@@ -17,7 +17,6 @@ $CourseResources = "Kurzus erõforrás";
 $ExternalLink = "Külsõ hivatkozás";
 $DropboxAdd = "Fájl Posta oldalának csatolása ehhez a fejezethez";
 $AddAssignmentPage = "A \'Hallgatói publikációk\' oldal csatolása ehhez a fejezethez.";
-$Assignments = "Hallgatói publikációk";
 $Exercise = "Teszt";
 $Link = "Link";
 $AdValvas = "Hirdetmény";

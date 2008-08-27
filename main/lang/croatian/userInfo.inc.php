@@ -30,4 +30,5 @@ $langUserInfo = "podatci o korisniku";
 $langUnregister = "Odjavi";
 $langAddAUser = "Dodaj korisnike";
 $UsersUnsubscribed = "Odabrani korisnici su ispisani sa kolegija";
+$ThisStudentIsSubscribeThroughASession = "Ovaj student je upisan u kolegij putem sesije. Ne možete mijenjati odabrane podatke.";
 ?>

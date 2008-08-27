@@ -47,4 +47,5 @@ $langHGroups = "Hilfe - Gruppen";
 $langGroupsContent = "Inhalt von Gruppen";
 $langGuide = "Führer";
 $HSurvey = "Umfrage Hilfe";
+$HBlogs = "Blog Hilfe";
 ?>

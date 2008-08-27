@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$langWorks = "作业论文";
 $langExercices = "测验";
 $langComment = "摘要";
 $langVisible = "显示/隐藏";

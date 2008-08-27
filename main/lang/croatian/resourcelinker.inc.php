@@ -17,7 +17,6 @@ $CourseResources = "Resursi kolegija";
 $ExternalLink = "Vanjska poveznica";
 $DropboxAdd = "Dodaj stranicu Pretinac ovome poglavlju.";
 $AddAssignmentPage = "Dodaj stranicu Studentski radovi ovome poglavlju.";
-$Assignments = "Studentski radovi";
 $Exercise = "Vježbe";
 $Link = "Poveznica";
 $AdValvas = "Obavijesti";
@@ -55,4 +54,5 @@ $ForumAddNewTopic = "Forum: dodaj novu temu";
 $ForumEditTopic = "Forum: uredi temu";
 $ExerciseAnswers = "Vježba: odgovori";
 $ForumReply = "Forum: odgovor";
+$AgendaSortChronologicallyDown = "Sortiraj Raspored kronološki (silazno)";
 ?>

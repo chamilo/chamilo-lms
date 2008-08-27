@@ -239,4 +239,13 @@ $ExportWithoutUserFields = "Exclure champs utilisateurs de l\'export";
 $DisableResults = "Ne pas montrer les résultats aux apprenants";
 $EnableResults = "Montrer les résultats aux apprenants";
 $ValidateAnswer = "Valider les réponses";
+$FillInBlankSwitchable = "Permettre la permutation entre les réponses";
+$ReachedMaxAttempts = "Désolé, vous ne pouvez pas tenter le test \'%s\' car vous avez déjà atteint la limite de %s tentatives.";
+$AdvancedParameters = "Paramètres avancés";
+$RandomQuestionsToDisplay = "Nombre de questions à afficher aléatoirement";
+$RandomQuestionsHelp = "Nombre de questions aléatoires à afficher; laisser ce champ à 0 pour avoir les questions dans l\'ordre";
+$RandomQuestionsHelp = "Nombre de questions qui seront tirées aléatoirement parmis les questions du test. Choisissez 0 pour ne pas les tirer aléatoirement. <br/>Choisissez le nombre total de questions pour toutes les désordonner.";
+$ExerciseAttempts = "Nombre maximum de tentatives";
+$DoNotRandomize = "Ne pas changer l\'ordre";
+$Infinite = "Infini";
 ?>

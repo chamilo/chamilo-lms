@@ -21,7 +21,6 @@ $langContradiction = "Usar o princípio da Não Contradição para forçar o interloc
 $langNotFalse = "Essa resposta não está errada. É correto assumir que a revelação da ignorância de um interlocutor consiste em mostrar as conclusões contraditórias que movem suas premissas.";
 $langAgenda = "Agenda";
 $langVideo = "Vídeo";
-$langWorks = "Publicações dos alunos";
 $langCourseProgram = "Programa do curso";
 $langAnnouncements = "Comunicados";
 $langAddPageHome = "Enviar página e link para a Homepage";

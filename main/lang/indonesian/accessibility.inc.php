@@ -8,6 +8,7 @@ $WCAGLabel = "Label gambar";
 $WCAGLink = "Tautan";
 $WCAGLinkLabel = "Label tautan";
 $errorNoLabel = "Tak ada label di gambar.";
+$AllLanguages = "semua bahasa";
 $WCAGEditor = "Pengedit WCAG";
 $WCAGGoMenu = "Ke menu";
 $WCAGGoContent = "Ke isi";

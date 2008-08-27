@@ -49,6 +49,7 @@ $ViewPersonalItem = "Persönliche Agenda ansehen";
 $UserGroupFilter = "Filter für Gruppen/Nutzer";
 $ShowAll = "Alle zeigen";
 $Print = "Drucken";
+$MyTextHere = "mein Text folgt hier ";
 $CopiedAsAnnouncement = "Als Ankündigung kopiert";
 $NewAnnouncement = "Neue Ankündigung";
 $AddAnnouncement = "Als Ankündigung hinzugefügt";

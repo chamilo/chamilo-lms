@@ -92,7 +92,6 @@ $langYourAccountParam = "Este é o teu nome de usuario e contrasinal";
 $langLoginRequest = "Petición do nome de usuario";
 $langDefineHeadings = "Definir encabezados";
 $langCourseAdministratorOnly = "Só profesores";
-$langWorks = "Tarefas";
 $langLostPassword = "Contrasinal perdido";
 $langAdminOfCourse = "Administrador do curso";
 $langSimpleUserOfCourse = "Usuario do curso";
@@ -153,4 +152,8 @@ $UsersUnsubscribed = "Os usuarios seleccionados foron dados de baixa no curso";
 $SystemUnableToSendEmailContact = "O sistema non puido enviar o correo electrónico";
 $OpenIDCouldNotBeFoundPleaseRegister = "Este OpenID non se encontra na nosa base de datos. Por favor, rexístrese para obter unha conta. Se xa ten unha conta con nós, edite o seu perfil na mesma para engadir este OpenID";
 $UsernameMaxXCharacters = "O nome de usuario pode ter como máximo unha lonxitude de %s caracteres";
+$PictureUploaded = "A súa imaxe foi enviada";
+$ProductionUploaded = "Enviouse o seu traballo";
+$FolderUpdated = "Cartafol actualizado";
+$UsersRegistered = "Rexistráronse os seguintes usuarios";
 ?>

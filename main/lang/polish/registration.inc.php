@@ -89,7 +89,6 @@ $langYourAccountParam = "To jest Twoja nazwa u&#380;ytkownika i has&#322;o";
 $langLoginRequest = "Wymagana nazwa u&#380;ytkownika";
 $langDefineHeadings = "Definiuj nag&#322;ówki";
 $langCourseAdministratorOnly = "tylko dla nauczycieli";
-$langWorks = "Prace Studentów";
 $langAdminOfCourse = "Administrator kursu";
 $langSimpleUserOfCourse = "U&#380;ytkownik kursu";
 $langIsTutor = "Wychowawca (opiekun)";

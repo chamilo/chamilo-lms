@@ -177,4 +177,6 @@ $PeopleAnswered = "oseb je odgovorilo";
 $AnonymousSurveyCannotKnowWhoAnswered = "Ta vprašalnik je anonimen. Ne morete videti, kdo je odgovarjal.";
 $IllegalSurveyId = "Neznan ID vprašalnika";
 $SurveyQuestionMoved = "Vprašanje je bilo prestavljeno";
+$IdenticalSurveycodeWarning = "Ta koda vprašalnika že obstaja. Verjetno to pomeni, da vprašalnik že obstaja v nekem drugem jeziku. Če je temu tako, bodo pozvan osebe lahko pri odgovarjanju na vprašanja izbirale med jezikovnimi variantami vprašalnika.";
+$ThisSurveyCodeSoonExistsInThisLanguage = "Ta koda vprašalnika bo kmalu obstajala v tej jezikovni varianti.";
 ?>

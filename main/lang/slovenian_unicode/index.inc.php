@@ -28,7 +28,7 @@ $EussMenu = "izbira";
 $Opinio = "Mnenje";
 $Intranet = "Intranet";
 $Englin = "English";
-$langInvalidForSelfRegistration = "Vstop ni uspel - če nisi registriran, lahko to storiš s pomočjo <a href=claroline/auth/inscription.php>registracijskega obrazca</a>";
+$langInvalidForSelfRegistration = "Vstop ni uspel - če nisi registriran, lahko to storiš s pomočjo <a href=main/auth/inscription.php>registracijskega obrazca</a>";
 $langSubCat = "podkategorijah";
 $langMenuGeneral = "Splošno";
 $langMenuUser = "Uporabnik";

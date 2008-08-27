@@ -22,7 +22,6 @@ $lang_doc_unvisible = "Dosyan&#305;z sadece ders yetkilisi taraf&#305;ndan görül
 $langDelLk = "Ba&#287;lant&#305; sil";
 $langMustBeRegisteredUser = "Sadece bu dersin kay&#305;tl&#305; kullan&#305;c&#305;lar&#305; dosya gönderebilir.";
 $langListDel = "Listeyi sil";
-$langWork = "Ö&#287;renci çal&#305;&#351;mas&#305;";
 $langNameDir = "Klasörü yeniden isimlendir";
 $langFileExists = "Dosya zaten mevcut.";
 $langDirCr = "Klasör olu&#351;tur";

@@ -92,7 +92,6 @@ $langYourAccountParam = "Ba&#287;lant&#305;da kullan&#305;lacak bilgileriniz";
 $langLoginRequest = "Giri&#351; iste&#287;i";
 $langDefineHeadings = "Ba&#351;l&#305;klar&#305; Tan&#305;mla";
 $langCourseAdministratorOnly = "sadece ö&#287;retmen";
-$langWorks = "Öðrenci belgeleri";
 $langAdminOfCourse = "Ders Yetkilisi";
 $langSimpleUserOfCourse = "Ders kullan&#305;c&#305;s&#305;";
 $langIsTutor = "Özel Ders";

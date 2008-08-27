@@ -91,7 +91,6 @@ $langYourAccountParam = "Acestea sunt informatiile tale pentru a te conecta la";
 $langLoginRequest = "Cerere de autentificare";
 $langDefineHeadings = "Defineste antete";
 $langCourseAdministratorOnly = "doar petru profesori";
-$langWorks = "Publicatiile studentului";
 $langAdminOfCourse = "Administratorul cursului";
 $langSimpleUserOfCourse = "Utilizatorul cursului";
 $langIsTutor = "Tutore";

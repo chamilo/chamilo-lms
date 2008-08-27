@@ -40,5 +40,4 @@ $langConfirmation = "澄千";
 $langPass = "パスワ〖ド";
 $langSurname = "叹涟";
 $langRegistration = "判峡";
-$langWorks = "池栏侯喇矢今";
 ?>

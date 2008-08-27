@@ -92,7 +92,6 @@ $langYourAccountParam = "Ini account Login-Password anda";
 $langLoginRequest = "Permohonan Login";
 $langDefineHeadings = "Definisikan Kolom Tambahan";
 $langCourseAdministratorOnly = "hanya untuk pengajar";
-$langWorks = "Tugas-tugas";
 $langAdminOfCourse = "admin";
 $langSimpleUserOfCourse = "normal";
 $langIsTutor = "tutor";

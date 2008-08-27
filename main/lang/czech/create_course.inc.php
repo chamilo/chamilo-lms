@@ -21,7 +21,6 @@ $langContradiction = "Použitím Principu bez proti&#345;e&#269;ení zaženete ú&#26
 $langNotFalse = "Odpov&#283;d není špatná. Je pravda že odhalení nev&#283;domosti ú&#269;astníka rozmluvy znamená poukázání na protich&#367;dné záv&#283;ry kam vedl své p&#345;edpoklady.";
 $langAgenda = "Agenda";
 $langVideo = "Video";
-$langWorks = "Publikace student&#367;";
 $langCourseProgram = "Program kurzu";
 $langAnnouncements = "Oznámení";
 $langAddPageHome = "Nahrát stránku a spoj(link) s Domácí stránkou";

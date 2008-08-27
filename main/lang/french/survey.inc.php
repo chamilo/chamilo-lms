@@ -177,4 +177,6 @@ $PeopleAnswered = "personnes ont répondu";
 $AnonymousSurveyCannotKnowWhoAnswered = "Cette enquête est anonyme. Vous ne pouvez pas voir qui a répondu.";
 $IllegalSurveyId = "Numéro d\'enquête inconnu";
 $SurveyQuestionMoved = "La question a été déplacée";
+$IdenticalSurveycodeWarning = "Ce code d\'enquête existe déjà. Cela signifie probablement que l\'enquête existe également dans d\'autres langues. Les invités choisiront donc la langue dans laquelle sera l\'enquête.";
+$ThisSurveyCodeSoonExistsInThisLanguage = "Ce code d\'enquête existe déjà dans cette langue";
 ?>

@@ -8,6 +8,7 @@ $WCAGLabel = "Att&#275;la apraksts";
 $WCAGLink = "Saite";
 $WCAGLinkLabel = "Saites apraksts";
 $errorNoLabel = "Šim att&#275;lam nav apraksta.";
+$AllLanguages = "Visas valodas";
 $WCAGEditor = "WCAG redaktors";
 $WCAGGoMenu = "Iet uz izv&#275;li";
 ?>

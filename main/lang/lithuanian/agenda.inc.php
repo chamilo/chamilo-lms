@@ -49,6 +49,7 @@ $ViewPersonalItem = "Rodyti privačius įrašus";
 $UserGroupFilter = "Filtruoti pagal grupes/įrašus";
 $ShowAll = "Rodyti viską";
 $Print = "Spausdinti";
+$MyTextHere = "mano tekstas čia";
 $CopiedAsAnnouncement = "Copied as announcement";
 $NewAnnouncement = "New announcement";
 $AddAnnouncement = "Add as an announcement";

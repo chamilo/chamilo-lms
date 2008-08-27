@@ -22,7 +22,6 @@ $lang_doc_unvisible = "Via instruisto tamen preferis videbligi la dokumenton nur
 $langDelLk = "forigi ligilon ";
 $langMustBeRegisteredUser = "Vi registri&#285;u je &#265;i-kurso por rajti publikigi verkon. ";
 $langListDel = "Forigu liston ";
-$langWork = "Studentaj publika&#309;oj ";
 $langNameDir = "renomi dosierujon ";
 $langFileExists = "dosiero jam ekzistas ";
 $langDirCr = "krei dosierujon";

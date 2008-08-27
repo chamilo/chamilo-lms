@@ -46,4 +46,6 @@ $langClarContent2 = "Maak inhoud leeg";
 $langHGroups = "Groepen";
 $langGroupsContent = "Inhoud van de groepen";
 $langGuide = "Handleiding";
+$HSurvey = "Help onderzoek";
+$SurveyContent = "<p>Goede feedback krijgen op uw cursus is altijd een grote zorg, is het niet? U zal de specifieke onderzoekstool waarmee u feedback van gebruikers kan zoeken zeker waarderen.</p><p><b>Een nieuw onderzoek maken</b></p><p>Klik op de link \"nieuw onderzoek maken\" en vul de velden \"Onderzoekscode\" en \"Onderzoekstitel\" in.";
 ?>

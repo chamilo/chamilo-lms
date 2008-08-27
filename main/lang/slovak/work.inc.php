@@ -22,7 +22,6 @@ $lang_doc_unvisible = "Váš súbor je vidite&#318;ný iba pre u&#269;ite&#318;ov to
 $langDelLk = "Zmaza&#357; odkaz";
 $langMustBeRegisteredUser = "Len registrovaný užívatelia tohto kurzu môžu publikova&#357; dokumenty.";
 $langListDel = "Zmaza&#357; zoznam";
-$langWork = "Práca";
 $langNameDir = "Premenova&#357; prie&#269;inok";
 $langFileExists = "Súbor už existuje";
 $langDirCr = "Vytvori&#357; prie&#269;inok";

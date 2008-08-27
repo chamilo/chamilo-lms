@@ -98,4 +98,10 @@ $DescriptionRecycleCourse = "Esta ferramenta baleira o curso dos elementos selec
 $QuizEmailAlert = "Avisar mediante un correo electrónico cando se envíe un novo exercicio";
 $QuizEmailAlertActivate = "Activar o aviso por correo electrónico de que se enviaron as respostas dun exercicio";
 $QuizEmailAlertDeactivate = "Desactivar o aviso por correo electrónico de que se enviaron as respostas dun exercicio";
+$AllowUserImageForum = "Imaxe dos usuarios no foro";
+$AllowUserImageForumActivate = "Mostra as imaxes dos usuarios no foro";
+$AllowUserImageForumDeactivate = "Oculta as imaxes dos usuarios no foro";
+$AllowLearningPathTheme = "Permitir temas en Itinerarios de aprendizaxe";
+$AllowLearningPathThemeAllow = "Permitido";
+$AllowLearningPathThemeDisallow = "Non permitido";
 ?>

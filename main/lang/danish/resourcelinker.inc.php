@@ -17,7 +17,6 @@ $CourseResources = "Ressourcer på kursussiden";
 $ExternalLink = "Eksternt link";
 $DropboxAdd = "Tilføj Dueslaget til dette kapitel";
 $AddAssignmentPage = "Tilføj værktøjet Afleveringer til dette kapitel";
-$Assignments = "Afleveringer";
 $Exercise = "Øvelser";
 $Link = "Links";
 $AdValvas = "Meddelelser";

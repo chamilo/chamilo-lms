@@ -91,7 +91,6 @@ $langYourAccountParam = "Это Ваша информация, чтобы под
 $langLoginRequest = "Просьба о регистрации";
 $langDefineHeadings = "Определить заголовки (рубрики)";
 $langCourseAdministratorOnly = "только для преподавателя";
-$langWorks = "Задания";
 $langLostPassword = "Потерян пароль";
 $langAdminOfCourse = "Администратор курса";
 $langSimpleUserOfCourse = "Пользователь курса";

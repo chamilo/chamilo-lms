@@ -98,4 +98,10 @@ $DescriptionRecycleCourse = "Это опция позволяет удалять
 $QuizEmailAlert = "Уведомление по почте о представлении на рассмотрение короткого теста (экзамена)";
 $QuizEmailAlertActivate = "Активировать отправку по почте, когда пользователь представляет на рассмотрение следующие ответы на короткие тесты";
 $QuizEmailAlertDeactivate = "Не активировать отправку по почте, когда пользователь представляет на рассмотрение следующие ответы на короткие тесты";
+$AllowUserImageForum = "Фото пользователя на форуме";
+$AllowUserImageForumActivate = "Воспроизвести фотографии пользователя на форуме";
+$AllowUserImageForumDeactivate = "Скрыть фотографии пользователя на форуме";
+$AllowLearningPathTheme = "Разрешить учебный план темы";
+$AllowLearningPathThemeAllow = "Разрешено";
+$AllowLearningPathThemeDisallow = "Запрещено";
 ?>

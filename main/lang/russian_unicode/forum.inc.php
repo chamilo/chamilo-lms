@@ -82,4 +82,14 @@ $MakeVisible = "Сделать видимым";
 $DeleteCompleteThread = "Удалить тему полностью со всеми ее связями?";
 $PostDeletedSpecial = "Специальный удалитель почтовых сообщений";
 $ThreadDeleted = "Удаленные темы";
+$NextMessage = "Следующее сообщение";
+$PrevMessage = "Предыдущее сообщение";
+$FirstMessage = "Первое сообщение";
+$LastMessage = "Последнее сообщение";
+$ForumSearch = "Поиск на Форуме";
+$SearchTerm  = "Поиск термина";
+$ForumSearchResults = "Результаты поиска на форуме";
+$ForumSearchInformation = "Ваш поиск по разнообразным словам, используя знак + (плюс)";
+$YouWillBeNotifiedOfNewPosts = "Вы будете извещены о новых почтовых сообщениях по эл. почте ";
+$YouWillNoLongerBeNotifiedOfNewPosts = "Вам больше не будете извещаться о новых почтовых сообщениях по эл. почте";
 ?>

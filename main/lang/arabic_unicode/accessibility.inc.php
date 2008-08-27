@@ -8,6 +8,7 @@ $WCAGLabel = "  عنوان الصورة ";
 $WCAGLink = " الرابط ";
 $WCAGLinkLabel = " عنوان الرابط ";
 $errorNoLabel = " لا علامة على الصورة ";
+$AllLanguages = " جميع اللغات";
 $WCAGEditor = " WCAG محرر ";
 $WCAGGoMenu = " الذهاب للقائمة ";
 $WCAGGoContent = " الذهاب للمحتوى ";

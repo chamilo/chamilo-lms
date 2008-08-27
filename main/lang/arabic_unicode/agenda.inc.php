@@ -49,6 +49,7 @@ $ViewPersonalItem = "معاينة الأحداث الشخصية ";
 $UserGroupFilter = "مرشح (فلتر) على المجموعات  / المستخدمين ";
 $ShowAll = "أظهر الكل";
 $Print = "طباعة";
+$MyTextHere = " هنا نصي";
 $CopiedAsAnnouncement = "إعلان تم نسخه";
 $NewAnnouncement = "إعلان جديد";
 $AddAnnouncement = "أضف كإعلان";

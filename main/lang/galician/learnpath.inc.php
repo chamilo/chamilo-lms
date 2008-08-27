@@ -185,4 +185,11 @@ $LatencyTimeSpent = "Tempo empregado";
 $Result = "Resultado";
 $SplitStepsPerPage = "Un paso por páxina";
 $SplitStepsPerChapter = "Un capítulo por paso";
+$TakeSlideName = "Usar os nomes das diapositivas para os elementos do itinerario de aprendizaxe";
+$CannotConnectToOpenOffice = "A conexión co conversor de documentos fallou. Póñase en contacto co administrador da súa plataforma para solucionar o problema.";
+$OogieConversionFailed = "Conversión fallida. <br />Algúns documentos son demasiado complexos para o seu tratamento automático mediante o conversor de documentos.<br />En sucesivas versións irase ampliando esta capacidade.";
+$OogieUnknownError = " 	A conversión fallou por unha razón descoñecida. <br />Contacte ao seu administrador para máis información.";
+$OogieBadExtension = "O arquivo non ten unha extensión correcta.";
+$WoogieBadExtension = " Por favor, envíe só documentos de texto. A extensión do arquivo debe ser .doc, .docx ou ben .odt";
+$ShowAudioRecorder = "Mostrar o gravador de audio";
 ?>

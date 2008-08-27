@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $GeneralDescription = "Opis";
-$GeneralDescriptionQuestions = "Vloga in mesto tačaja v programu. Ali tečaj zahteva kakšno določeno predznanje? Ali tečaj zahteva od tečajnika predhoden obisk katerega od preostalih tečajev? Kakšne so povezave tečaja z drugimi tečaji oz. drugimi vsebinami (korelacije) ?";
+$GeneralDescriptionQuestions = "Vloga in mesto tečaja v programu. Ali tečaj zahteva kakšno določeno predznanje? Ali tečaj zahteva od tečajnika predhoden obisk katerega od preostalih tečajev? Kakšne so povezave tečaja z drugimi tečaji oz. drugimi vsebinami (korelacije) ?";
 $GeneralDescriptionInformation = "Opisuje tečaj (število ur, uradna koda tečaja, lokacija izvedbe, številka učilnice ...) in izvajalca tečaja oz. učitelja (priimek, ime, kje je dosegljiv, telefonska številka, e-poštni naslov ...).";
 $Objectives = "Cilji";
 $ObjectivesInformation = "Predstavitev splošnih in specifičnih ciljev tečaja.";

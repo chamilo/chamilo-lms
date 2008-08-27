@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 $Remove = "&#x0423;&#x0434;&#x0430;&#x043B;&#x0438;&#x0442;&#x044C;";
 $Description = "Описание";
 $Links = "Ссылки";
+$langWorks = "Задания";
 $Forums = "Форумы";
 $langExercices = "Тесты";
 $langCreateDir = "Создать папку";
@@ -14,6 +15,7 @@ $langGroup = "зТХРРБ";
 $langEdit = "тЕДБЛФЙТПЧБФШ";
 $langGroupForum = "жПТХН";
 $Language = "&#1103;&#1079;&#1099;&#1082;";
+$Assignments = "Assignments";
 $Forum = "Forum";
 $langCode = "лПД ЛХТУБ";
 $langUp = "вверх";

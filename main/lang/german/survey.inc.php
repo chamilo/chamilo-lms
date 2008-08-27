@@ -177,4 +177,6 @@ $PeopleAnswered = "Leute haben geantwortet";
 $AnonymousSurveyCannotKnowWhoAnswered = "Dies ist eine anonyme Umfrage. Man kann nicht sehen, wer geantwortet hat.";
 $IllegalSurveyId = "Unbekannte Umfrage ID";
 $SurveyQuestionMoved = "Die Frage wurde verschoben";
+$IdenticalSurveycodeWarning = "Dieser Umfrage Code existiert bereits.  Das bedeutet vermutlich, dass die Umfrage bereits in einer anderen Sprache existiert. Eingeladene Teilnehmer werden unter verschiedenen Sprachen auswählen.";
+$ThisSurveyCodeSoonExistsInThisLanguage = "Diesen Umfrage Code wird es demnächst in dieser Sprache geben.";
 ?>

@@ -22,7 +22,6 @@ $lang_doc_unvisible = "Vaša datoteka je vidna le za vodjo(e) teèaja in za vas ta
 $langDelLk = "Odstrani povezavo";
 $langMustBeRegisteredUser = "Le registrirani uporabniki tega teèaja lahko objavijo dokumente.";
 $langListDel = "Odstrani seznam";
-$langWork = "Izdelek";
 $langNameDir = "Preimenuj mapo";
 $langFileExists = "Datoteka že obstaja";
 $langDirCr = "Ustvari mapo";

@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 $Remove = "Padam";
 $Description = "Penerangan";
 $Links = "Pautan";
+$langWorks = "Tugasan";
 $Forums = "Forum";
 $langExercices = "Latihan";
 $langCreateDir = "Bina Direktori";
@@ -14,6 +15,7 @@ $langGroup = "Kumpulan";
 $langEdit = "Ubahsuai";
 $langGroupForum = "Forum";
 $Language = "Bahasa";
+$Assignments = "Assignments";
 $Forum = "Forum";
 $langCode = "Kod Subjek";
 $langUp = "Atas";

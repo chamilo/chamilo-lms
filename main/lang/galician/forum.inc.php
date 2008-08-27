@@ -82,4 +82,14 @@ $MakeVisible = "Facer visible";
 $DeleteCompleteThread = "Eliminar o tema por completo?";
 $PostDeletedSpecial = "Mensaxe de aviso eliminada";
 $ThreadDeleted = "Tema eliminado";
+$NextMessage = "Mensaxe seguinte";
+$PrevMessage = "Mensaxe anterior";
+$FirstMessage = "Primeira mensaxe";
+$LastMessage = "Última mensaxe";
+$ForumSearch = "Buscar nos foros";
+$SearchTerm  = "Palabra a buscar";
+$ForumSearchResults = "resultados da procura nos foros";
+$ForumSearchInformation = "Pode buscar varias palabras usando o signo +";
+$YouWillBeNotifiedOfNewPosts = "As novas mensaxes seranlle notificadas por correo electrónico ";
+$YouWillNoLongerBeNotifiedOfNewPosts = "As novas mensaxes xa non se lle notificarán por correo electrónico";
 ?>

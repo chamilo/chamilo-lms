@@ -17,7 +17,6 @@ $CourseResources = "Recursos del curso";
 $ExternalLink = "Enlace externo";
 $DropboxAdd = "Añadir el Buzón de tareas a este módulo.";
 $AddAssignmentPage = "Añadir la herramienta Trabajos a este módulo.";
-$Assignments = "Trabajos";
 $Exercise = "Ejercicios";
 $Link = "Enlace";
 $AdValvas = "Añadir anuncio";

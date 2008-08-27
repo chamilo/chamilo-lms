@@ -22,7 +22,6 @@ $lang_doc_unvisible = "Prowadz&#261;cy mo&#380;e zdecydowa&#263;, &#380;e Twoje 
 $langDelLk = "Usu&#324; Link";
 $langMustBeRegisteredUser = "Tylko zarejestrowani u&#380;ytkownicy tego kursu mog&#261; publikowa&#263; dokumenty.";
 $langListDel = "Skasuj liste";
-$langWork = "Praca";
 $langNameDir = "Przemianuj katalog";
 $langFileExists = "Plik ju&#380; istnieje";
 $langDirCr = "Stwórz katalog";

@@ -3,6 +3,18 @@ for more information: see languages.txt in the lang folder.
 */
 $langToolName = "Pra&#263;enje";
 $TrackingDisabled = "Nadzornik sustava onemogu&#263;io je pra&#263;enje.";
+$InactivesStudents = "Neaktivni student";
+$AverageTimeSpentOnThePlatform = "Prosje&#269;no vrijeme provedeno na portalu";
+$AverageCoursePerStudent = "Prosje&#269;ni broj kolegija po studentu";
+$AverageProgressInLearnpath = "Prosje&#269;no napredovanje u SCORM kolegijima";
+$AverageResultsToTheExercices = "Prosje&#269;ni broj bodova na testu";
+$SeeStudentList = "Pregledaj popis studenata";
+$NbActiveSessions = "Aktivne sesije";
+$NbPastSessions = "Prošle sesije";
+$NbFutureSessions = "Budu&#263;e sesije";
+$NbStudentPerSession = "Broj korisnika po sesiji";
+$NbCoursesPerSession = "Broj kolegija po sesiji";
+$SeeSessionList = "Pregled liste sesija";
 $langShowNone = "Ne prikazuj";
 $langCourseStats = "Statistika kolegija";
 $langToolsAccess = "Pristup alatima";
@@ -131,4 +143,13 @@ $SynthesisView = "Sinteti&#269;ki prikaz";
 $Visited = "Posje&#263;eno";
 $FirstAccess = "Prvi pristup";
 $LastAccess = "Posljednji pristup";
+$NoLearningPath = "Ne postoji SCORM kolegij";
+$SessionCourses = "Sesija kolegija";
+$NoUsersInCourseTracking = "Ovdje &#263;ete na&#263;i statistiku pra&#263;enja ovog kolegija za vaše studente";
+$AvgTimeSpentInTheCourse = "Prosje&#269;no vrijeme provedeno na kolegiju";
+$RemindInactiveUser = "Upozori neaktivnog korisnika";
+$FirstLogin = "Prvo povezivanje";
+$AccessDetails = "Detalji pristupa";
+$DateAndTimeOfAccess = "Nadnevak i vrijeme pristupa";
+$Duration = "Trajanje";
 ?>

@@ -177,4 +177,6 @@ $PeopleAnswered = "Persone che hanno risposto";
 $AnonymousSurveyCannotKnowWhoAnswered = "Il questionario è anonimo. Non è possibile conoscere il nome di chi ha risposto.";
 $IllegalSurveyId = "Identificativo di questionario inesistente";
 $SurveyQuestionMoved = "Il test è stato spostato";
+$IdenticalSurveycodeWarning = "Il codice del questionario è già esistente. Forse esiste in altre lingue: invita l\'utente a scegliere la lingua.";
+$ThisSurveyCodeSoonExistsInThisLanguage = "Codice di questionario già esistente in questa lingua";
 ?>

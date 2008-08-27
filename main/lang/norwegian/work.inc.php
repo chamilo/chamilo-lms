@@ -22,7 +22,6 @@ $lang_doc_unvisible = "Filen din er kun synlig for lærer(e) på dette kurset og e
 $langDelLk = "Slett lenke";
 $langMustBeRegisteredUser = "Bare registrerte brukere av dette kurset kan publisere dokumenter";
 $langListDel = "Slett liste";
-$langWork = "Arbeid";
 $langNameDir = "Gi mappe nytt navn";
 $langFileExists = "Filen finnes allerede";
 $langDirCr = "Opprett mappe";

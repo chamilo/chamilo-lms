@@ -90,7 +90,6 @@ $langYourAccountParam = "Ovo je vaša informacija za povezivanje na";
 $langLoginRequest = "Zahtev za korisni&#269;kim imenom";
 $langDefineHeadings = "Definiši naslove";
 $langCourseAdministratorOnly = "samo predava&#269;";
-$langWorks = "Publikacije polaznika";
 $langAdminOfCourse = "Administrator kursa";
 $langSimpleUserOfCourse = "Korisnik kursa";
 $langIsTutor = "Mentor";

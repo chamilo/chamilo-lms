@@ -8,6 +8,7 @@ $WCAGLabel = "Descrizione dell\'immagine";
 $WCAGLink = "Collegamento";
 $WCAGLinkLabel = "Descrizione del collegamento";
 $errorNoLabel = "L\'immagine non ha una descrizione";
+$AllLanguages = "Tutte le lingue";
 $WCAGEditor = "Editor Accessibile";
 $WCAGGoMenu = "Vai al menù";
 $WCAGGoContent = "Vai al contenuto";

@@ -34,4 +34,5 @@ $OrFile = "Ili datoteka";
 $langCallSent = "Poziv za chat je poslan. Pri&#269;ekajte odobrenje sugovornika.";
 $langChatDenied = "Sugovornik je odbio poziv.";
 $Send = "Pošalji";
+$Connected = "Povezan";
 ?>

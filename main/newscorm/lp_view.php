@@ -178,12 +178,12 @@ else
 	if ($displayAudioRecorder)
 		$audio_record_width='120,';
 	else
-		$audio_record_width='120,';
+		$audio_record_width='';
 
 	
 	?>
 	<frameset cols="270,*">
-		<frameset rows="30,120,<?php echo $audio_record_width; ?>50,500,*,20">
+		<frameset rows="30,120,<?php echo $audio_record_width; ?>60,20,500,20">
             <frame id="header" src="lp_header.php"  border="0" frameborder="0" scrolling="no"/>                
             <frame id="author_image" name="author_image" class="lp_author_image" src="lp_author_image.php" border="0" frameborder="0" />
 			<?php 

@@ -235,6 +235,7 @@ function prepare_course_repository($courseRepository, $courseId)
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/forum/images", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/test", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/blog", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/learning_path", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/learning_path/images", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/work", $perm);
 

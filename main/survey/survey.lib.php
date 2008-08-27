@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 16046 2008-08-21 22:24:17Z juliomontoya $
+* 	@version $Id: survey.lib.php 16077 2008-08-27 08:18:04Z elixir_julian $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -2508,6 +2508,10 @@ class SurveyUtil {
 			{
 				$name = $person['firstname'].' '.$person['lastname'];
 				$id = $person['user_id'];
+				if($id == ''){
+					$id = $person['invited_user'];
+					$name = $person['invited_user'];
+				}
 			}
 			else 
 			{

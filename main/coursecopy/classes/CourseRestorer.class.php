@@ -1,4 +1,4 @@
-<?php // $Id: CourseRestorer.class.php 15802 2008-07-17 04:52:13Z yannoo $
+<?php // $Id: CourseRestorer.class.php 16101 2008-08-28 08:52:29Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -656,7 +656,15 @@ class CourseRestorer
 			$table_ans = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_SURVEY] as $id => $survey)
-			{
+			{	
+				
+				$sql_check =   'SELECT survey_id FROM '.$table_sur.'
+								WHERE code = "'.Database::escape_string($survey->code).'"
+								AND lang="'.Database::escape_string($survey->lang).'"
+								';
+				
+				$result_check = api_sql_query($sql_check, __FILE__, __LINE__);
+				
 				$doc = '';
 				$sql = "INSERT INTO ".$table_sur." " .
 						"SET code = '".Database::escape_string($survey->code)."', " .
@@ -675,24 +683,146 @@ class CourseRestorer
 						"answered = '0', " .
 						"invite_mail = '".Database::escape_string($survey->invite_mail)."', " .
 						"reminder_mail = '".Database::escape_string($survey->reminder_mail)."'";
-				api_sql_query($sql, __FILE__, __LINE__);
-				$new_id = Database::get_last_insert_id();
-				$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
-				foreach ($survey->question_ids as $index => $question_id)
+				
+				//An existing survey exists with the same code and the same language
+				if(Database::num_rows($result_check) == 1)
 				{
-					$qid = $this->restore_survey_question($question_id);
-					$sql = "UPDATE ".$table_que." " .
-							"SET survey_id = ".$new_id." WHERE " .
-							"question_id = ".$qid."";
-					api_sql_query($sql, __FILE__, __LINE__);
-					$sql = "UPDATE ".$table_ans." ".
-							"SET survey_id = ".$new_id." WHERE " .
-							"question_id = ".$qid."";
-					api_sql_query($sql, __FILE__, __LINE__);
+										
+					switch ($this->file_option) {
+						
+						case FILE_SKIP:
+							//Do nothing
+							break;
+							
+						case FILE_RENAME:
+							
+							$survey_code = $survey->code.'_';
+							$i=1;
+							$temp_survey_code = $survey_code.$i;
+							while (!$this->is_survey_code_available($temp_survey_code))
+							{
+								$temp_survey_code = $survey_code.++$i;
+							}
+							$survey_code = $temp_survey_code;
+							
+							$sql = "INSERT INTO ".$table_sur." " .
+									"SET code = '".Database::escape_string($survey_code)."', " .
+									"title = '".Database::escape_string($survey->title)."', " .
+									"subtitle = '".Database::escape_string($survey->subtitle)."', " .
+									"author = '".Database::escape_string($survey->author)."', " .
+									"lang = '".Database::escape_string($survey->lang)."', " .
+									"avail_from = '".Database::escape_string($survey->avail_from)."', " .
+									"avail_till = '".Database::escape_string($survey->avail_till)."', " .
+									"is_shared = '".Database::escape_string($survey->is_shared)."', " .
+									"template = '".Database::escape_string($survey->template)."', " .
+									"intro = '".Database::escape_string($survey->intro)."', " .
+									"surveythanks = '".Database::escape_string($survey->surveythanks)."', " .
+									"creation_date = '".Database::escape_string($survey->creation_date)."', " .
+									"invited = '0', " .
+									"answered = '0', " .
+									"invite_mail = '".Database::escape_string($survey->invite_mail)."', " .
+									"reminder_mail = '".Database::escape_string($survey->reminder_mail)."'";
+							
+							//Insert the new source survey
+							api_sql_query($sql, __FILE__, __LINE__);
+							
+							$new_id = Database::get_last_insert_id();
+							$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
+							foreach ($survey->question_ids as $index => $question_id)
+							{
+								$qid = $this->restore_survey_question($question_id);
+								$sql = "UPDATE ".$table_que." " .
+										"SET survey_id = ".$new_id." WHERE " .
+										"question_id = ".$qid."";
+								api_sql_query($sql, __FILE__, __LINE__);
+								$sql = "UPDATE ".$table_ans." ".
+										"SET survey_id = ".$new_id." WHERE " .
+										"question_id = ".$qid."";
+								api_sql_query($sql, __FILE__, __LINE__);
+							}
+							
+							break;
+							
+						case FILE_OVERWRITE:
+														
+							// Delete the existing survey with the same code and language and import the one of the source course
+							
+							// getting the information of the survey (used for when the survey is shared)
+							require_once(api_get_path(SYS_CODE_PATH).'survey/survey.lib.php');
+							
+							$sql_select_existing_survey = "SELECT * FROM $table_sur WHERE survey_id='".Database::escape_string(mysql_result($result_check,0,0))."'";
+							$result = api_sql_query($sql_select_existing_survey, __FILE__, __LINE__);
+							$survey_data = Database::fetch_array($result,'ASSOC');
+							
+							// if the survey is shared => also delete the shared content
+							if (is_numeric($survey_data['survey_share']))
+							{
+								survey_manager::delete_survey($survey_data['survey_share'], true,$this->course->destination_db);
+							}
+							$return = survey_manager :: delete_survey($survey_data['survey_id'],false,$this->course->destination_db);
+							
+							//Insert the new source survey
+							api_sql_query($sql, __FILE__, __LINE__);
+							
+							$new_id = Database::get_last_insert_id();
+							$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
+							foreach ($survey->question_ids as $index => $question_id)
+							{
+								$qid = $this->restore_survey_question($question_id);
+								$sql = "UPDATE ".$table_que." " .
+										"SET survey_id = ".$new_id." WHERE " .
+										"question_id = ".$qid."";
+								api_sql_query($sql, __FILE__, __LINE__);
+								$sql = "UPDATE ".$table_ans." ".
+										"SET survey_id = ".$new_id." WHERE " .
+										"question_id = ".$qid."";
+								api_sql_query($sql, __FILE__, __LINE__);
+							}
+							
+							break;
+							
+						default:
+							break;
+					}
+					
+					
 				}
+				//No existing survey with the same language and the same code, we just copy the survey
+				else
+				{
+					api_sql_query($sql, __FILE__, __LINE__);
+					$new_id = Database::get_last_insert_id();
+					$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
+					foreach ($survey->question_ids as $index => $question_id)
+					{
+						$qid = $this->restore_survey_question($question_id);
+						$sql = "UPDATE ".$table_que." " .
+								"SET survey_id = ".$new_id." WHERE " .
+								"question_id = ".$qid."";
+						api_sql_query($sql, __FILE__, __LINE__);
+						$sql = "UPDATE ".$table_ans." ".
+								"SET survey_id = ".$new_id." WHERE " .
+								"question_id = ".$qid."";
+						api_sql_query($sql, __FILE__, __LINE__);
+					}
+				}
+				
 			}
 		}
 	}
+	
+	/**
+	 * Check availability of a survey code
+	 */
+	function is_survey_code_available($survey_code){
+		
+		$table_sur = Database :: get_course_table(TABLE_SURVEY, $this->course->destination_db);
+		$sql = "SELECT * FROM $table_sur WHERE code='".Database::escape_string($survey_code)."'";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		if(Database::num_rows($result) > 0) return false; else return true;
+		
+	}
+	
 	/**
 	 * Restore survey-questions
 	 */

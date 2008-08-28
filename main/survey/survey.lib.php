@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 16077 2008-08-27 08:18:04Z elixir_julian $
+* 	@version $Id: survey.lib.php 16101 2008-08-28 08:52:29Z elixir_julian $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -376,11 +376,11 @@ class survey_manager
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function delete_survey($survey_id, $shared=false)
+	function delete_survey($survey_id, $shared=false, $course_code = '')
 	{
 		// Database table definitions
-		$table_survey 		= Database :: get_course_table(TABLE_SURVEY);
-		$table_survey_question_group = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
+		$table_survey 		= Database :: get_course_table(TABLE_SURVEY,$course_code);
+		$table_survey_question_group = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP,$course_code);
 		if ($shared)
 		{
 			$table_survey 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY);

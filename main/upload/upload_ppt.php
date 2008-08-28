@@ -167,7 +167,7 @@ $form -> addElement ('checkbox', 'take_slide_name','', get_lang('TakeSlideName')
 if(api_get_setting('search_enabled')=='true')
 {
   $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
-  $form -> addElement ('text', 'terms', get_lang('SearchFeatureDocumentTagsIfIndexing'));
+  $form -> addElement ('text', 'terms', get_lang('SearchFeatureDocumentTagsIfIndexing').': ');
   $form -> addElement ('html', get_lang('SearchFeatureDocumentLanguage').': '. api_get_languages_combo()); 
 }
 $form -> addElement ('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');

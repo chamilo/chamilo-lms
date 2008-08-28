@@ -103,6 +103,7 @@ define('WEB_LIBRARY_PATH','WEB_LIBRARY_PATH');
 
 //CONSTANTS defining all tools, using the english version
 define('TOOL_DOCUMENT', 'document');
+define('TOOL_THUMBNAIL', 'thumbnail');
 define('TOOL_HOTPOTATOES', 'hotpotatoes');
 define('TOOL_CALENDAR_EVENT', 'calendar_event');
 define('TOOL_LINK', 'link');
@@ -1878,6 +1879,49 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 		Language Dropdown
 ==============================================================================
 */
+/**
+*	Displays a combobox so the user can select his/her preferred language.
+*   @param string The desired name= value for the select
+*   @return string
+*/
+
+function api_get_languages_combo($name="language") {
+    $ret = "";
+
+	$platformLanguage = api_get_setting('platformLanguage');
+    
+    /* retrieve a complete list of all the languages. */
+	$language_list = api_get_languages();
+
+    if (count($language_list['name']) < 2) {
+    	return $ret; 
+    }
+
+	/* the the current language of the user so that his/her language occurs as
+     * selected in the dropdown menu */
+	if(isset($_SESSION['user_language_choice']))
+		$default = $_SESSION['user_language_choice'];
+    else
+		$default = $platformLanguage;
+	
+    $languages = $language_list['name'];
+	$folder = $language_list['folder']; 
+    
+    $ret .= '<select name="'.$name.'">';
+	foreach ($languages as $key => $value) {
+		if ($folder[$key] == $default)
+            $selected = ' selected="selected"';
+        else
+            $selected = '';
+
+        $ret .= sprintf('<option value=%s" %s>%s</option>'."\n",
+                    $folder[$key], $selected, $value);
+	}
+	$ret .= '</select>';
+
+    return $ret;
+}
+
 /**
 *	Displays a form (drop down menu) so the user can select his/her preferred language.
 *	The form works with or without javascript

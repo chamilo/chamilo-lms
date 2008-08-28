@@ -114,22 +114,34 @@ public class OogieDocumentConverter extends AbstractDokeosDocumentConverter {
 				XDrawPage page = (XDrawPage) UnoRuntime.queryInterface(
 						com.sun.star.drawing.XDrawPage.class, pages
 								.getByIndex(i));
+				// get all the page shapes
 				XShapes xShapes = (XShapes)UnoRuntime.queryInterface(XShapes.class, page);
 				int top = 0;
 				String slidename = "";
+				String slidebody = "";
+				String shapetext = "";
 				for (int j = 0; j < xShapes.getCount(); j++) {
 					XShape firstXshape = (XShape)UnoRuntime.queryInterface(XShape.class, xShapes.getByIndex(j));
 					Point pos = firstXshape.getPosition();
-					if(pos.Y < top || top==0)
+
+					XText xText = (XText)UnoRuntime.queryInterface( XText.class, firstXshape );
+					if(xText!=null && xText.getString().length()>0)
 					{
-						XText xText = (XText)UnoRuntime.queryInterface( XText.class, firstXshape );
-						if(xText!=null && xText.getString().length()>0)
+						shapetext = xText.getString();
+						// concatening all shape texts to later use
+						slidebody += " " + shapetext;
+
+						// get the top shape
+						if(pos.Y < top || top==0)
 						{
 							top = pos.Y;
-							slidename = xText.getString();
+							slidename = shapetext;
 						}
 					}
 				}
+
+				// remove unwanted chars
+				slidebody = slidebody.replaceAll("\n", " ");
 
 				String slidenameDisplayed = "";
 				if(slidename.trim().length()==0)
@@ -213,7 +225,7 @@ public class OogieDocumentConverter extends AbstractDokeosDocumentConverter {
 				xFilter.filter(loadProps);
 				if(slidenameDisplayed=="")
 					slidenameDisplayed = xPageName.getName();
-				System.out.println(slidenameDisplayed+"||"+xPageName.getName()+".png");
+				System.out.println(slidenameDisplayed+"||"+xPageName.getName()+".png"+"||"+slidebody);
 				
 			}
 			

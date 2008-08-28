@@ -865,16 +865,27 @@ class learnpath {
     	$res_upd = api_sql_query($sql_upd,__FILE__,__LINE__);
     	//now update all following items with new display order
     	$sql_all = "UPDATE $lp_item SET display_order = display_order-1 WHERE lp_id = $lp AND parent_item_id = $parent AND display_order > $display";
-    	$res_all = api_sql_query($sql_all,__FILE__,__LINE__);
+        $res_all = api_sql_query($sql_all,__FILE__,__LINE__);
+        // remove from search engine if enabled
+        if (api_get_setting('search_enabled') == 'true') {
+          require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
+          $di = new DokeosIndexer();
+          $di->remove_document($row['search_did']);
+        }
     }
 
     /**
      * Updates an item's content in place
      * @param	integer	Element ID
-	 * @param	string	New content
+	 * @param	integer	Parent item ID
+	 * @param	integer Previous item ID
+	 * @param   string	Item title
+	 * @param   string  Item description
+	 * @param   string  Prerequisites (optional)
+	 * @param   string  Indexing terms (optional)
      * @return	boolean	True on success, false on error
      */
-    function edit_item($id, $parent, $previous, $title, $description, $prerequisites=0)
+    function edit_item($id, $parent, $previous, $title, $description, $prerequisites=0, $terms=NULL)
     {
     	if($this->debug > 0){error_log('New LP - In learnpath::edit_item()', 0);}
 
@@ -889,6 +900,19 @@ class learnpath {
     	$res_select = api_sql_query($sql_select, __FILE__, __LINE__);
     	$row_select = Database::fetch_array($res_select);
     	
+        $terms_update_sql='';
+        if (!is_null($terms)) {
+          //TODO: validate csv string
+          $terms_update_sql = ", terms = '". $this->escape_string(htmlentities($terms)) . "'";
+
+          // save it to search engine
+          if (api_get_setting('search_enabled') == 'true') {
+            require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
+            $di = new DokeosIndexer();
+            $di->update_terms($row_select['search_did'], explode(',', $terms));
+          }
+        }
+
     	$same_parent	= ($row_select['parent_item_id'] == $parent) ? true : false;
     	$same_previous	= ($row_select['previous_item_id'] == $previous) ? true : false;
     	
@@ -901,6 +925,7 @@ class learnpath {
     				title = '" . $this->escape_string(htmlentities($title)) . "',
 					prerequisite = '".$prerequisites."',
     				description = '" . $this->escape_string(htmlentities($description)) . "'
+                    ". $terms_update_sql . "
     			WHERE id = " . $id;
     		$res_update = api_sql_query($sql_update, __FILE__, __LINE__);
     	}
@@ -1018,6 +1043,7 @@ class learnpath {
 	    			previous_item_id = " . $previous . ",
 	    			next_item_id = " . $new_next . ",
 	    			display_order = " . $new_order . "
+                    ". $terms_update_sql . "	
 	    		WHERE id = " . $id;
     		$res_update_next = api_sql_query($sql_update, __FILE__, __LINE__);
     		//echo '<p>' . $sql_update . '</p>';
@@ -6003,6 +6029,7 @@ class learnpath {
 		{
 			$item_title			= stripslashes($extra_info['title']);
 			$item_description	= stripslashes($extra_info['description']);	
+            $item_terms         = stripslashes($extra_info['terms']);        
 			if(empty($item_title))
 			{				
 				$path_parts = pathinfo($extra_info['path']);
@@ -6210,7 +6237,11 @@ class learnpath {
 
 				$select_prerequisites=$form->addElement('select', 'prerequisites', get_lang('Prerequisites').'&nbsp;:', '', 'id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
 				$select_prerequisites->addOption(get_lang("NoPrerequisites"),0,'style="padding-left:3px;"');
-				
+
+                //add terms field
+                $terms = $form->addElement('text','terms', get_lang('SearchFeatureTerms').'&nbsp;:','id="idTerms" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:295px;"');
+                $terms->setValue($item_terms); 
+
 				$arrHide=array();
 
 				for($i = 0; $i < count($arrLP); $i++)

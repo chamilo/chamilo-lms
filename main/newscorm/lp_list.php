@@ -73,6 +73,11 @@ if (! $is_allowed_in_course) api_not_allowed();
 /**
  * Display
  */
+/* Require the search widget and prepare the header with its stuff */
+if (api_get_setting('search_enabled') == 'true') {
+  require api_get_path(LIBRARY_PATH).'search/search_widget.php';
+  search_widget_prepare(&$htmlHeadXtra);
+}
 Display::display_header($nameTools,"Path");
 //api_display_tool_title($nameTools);
 
@@ -385,6 +390,11 @@ if (is_array($flat_list))
 }// end if ( is_array($flat_list)
 echo "</table>";
 echo "<br/><br/>";
+
+/* search widget */
+if (api_get_setting('search_enabled') == 'true')
+    search_widget_show();
+
 /*
 ==============================================================================
   FOOTER

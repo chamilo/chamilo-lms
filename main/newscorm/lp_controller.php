@@ -366,7 +366,7 @@ switch($action)
 			
 			if(isset($_POST['submit_button']) && !empty($_POST['title']))
 			{
-				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
+				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites'], $_POST['terms']);
 				
 				if(isset($_POST['content_lp']))
 				{
@@ -803,6 +803,12 @@ switch($action)
             header('location: ../course_home/course_home.php?'.api_get_cidreq());
         }
         break;        
+    case 'search':
+        /* Include the search script, it's smart enough to know when we are
+         * searching or not
+         */
+        require 'lp_list_search.php';
+        break;
 	default:
 		if($debug>0) error_log('New LP - default action triggered',0);
 		//$_SESSION['refresh'] = 1;

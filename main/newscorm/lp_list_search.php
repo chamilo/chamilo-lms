@@ -40,14 +40,14 @@ search_widget_prepare(&$htmlHeadXtra);
 
 Display::display_header(null,'Path');
 
-if (api_get_setting('search_enabled') === 'true') {
-    Display::display_error_message(get_lang("
-    Search is not enabled in Dokeos. Contact your administrator.
-    "));
+if (api_get_setting('search_enabled') !== 'true') {
+    Display::display_error_message(get_lang('SearchFeatureNotEnabledComment'));
     Display::display_footer();
 }
-/* else... */
-search_widget_show();
+else
+{
+    search_widget_show();
+}
 
 
 /**
@@ -63,13 +63,13 @@ function get_course_table($course_code, $table) {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $sql = "SELECT 
-                `course`.`db_name`, `course_category`.`code`
+                $course_table.db_name, $course_cat_table.code
             FROM $course_table
             LEFT JOIN $course_cat_table
             ON 
-                `course`.`category_code` =  `course_category`.`code`
+                $course_table.category_code =  $course_cat_table.code
             WHERE 
-                `course`.`code` = '$course_code'
+                $course_table.code = '$course_code'
             LIMIT 1";
     $res = api_sql_query($sql, __FILE__, __LINE__);
     $result = Database::fetch_array($res);
@@ -154,15 +154,7 @@ if ($count > 0) {
 }
 
 if (count($blocks) < 1) {
-    Display::display_normal_message(get_lang("
-    To search the learning path db, use the following syntax:<br/>
-    &nbsp;&nbsp;&nbsp;<i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>
-    For example:<br/>
-    &nbsp;&nbsp;&nbsp;<i>car tag:truck -ferrari +ford \"high consume\".</i><br/>
-    This will show all the results for the word 'car' tagged as 'truck', not
-    including the word 'ferrari' but including the word 'ford' and the exact
-    phrase 'high consume'.
-    "), FALSE);
+    Display::display_normal_message(get_lang('SearchFeatureSearchExplanation'), FALSE);
 }
 else
 {
@@ -173,7 +165,7 @@ function to_img($i) {
     return sprintf('<img src="%s"/>', $i);
 }
 function to_link($i) {
-    return sprintf('<a href="%s">%s</a>', $i, get_lang("View learning path"));
+    return sprintf('<a href="%s">%s</a>', $i, get_lang('ViewLearningPath'));
 }
 
     $s = new SortableTableFromArray($blocks);

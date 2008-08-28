@@ -156,13 +156,13 @@ if (!empty($curDirPath))
 /* CURRENT DIRECTORY */
 
 echo	'<tr>';
-echo	'<th>'.get_lang("Name").'</th>'."\n" .
-		'<th>'.get_lang("Progress")."</th>\n";
+echo	'<th>'.get_lang('Name').'</th>'."\n" .
+		'<th>'.get_lang('Progress')."</th>\n";
 if (api_is_allowed_to_edit())
 {
-  echo '<th>'.get_lang("Description")."</th>\n" .
-  		'<th>'.get_lang("ExportShort")."</th>\n" .
-		'<th>'.get_lang("Modify")."</th>\n" .
+  echo '<th>'.get_lang('Description')."</th>\n" .
+  		'<th>'.get_lang('ExportShort')."</th>\n" .
+		'<th>'.get_lang('Modify')."</th>\n" .
 		'<th>'.get_lang('Move')."</th>\n";
 }
 

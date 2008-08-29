@@ -177,9 +177,17 @@
 	clear: both;	
 }
 
-#author_name
+#image_preview
 {
 	padding-left: 17px;
+}
+
+#author_name
+{
+	padding-left: 5px;
+	padding-top: 5px;
+	font-size: 11px;
+	color:#888;
 }
 
 #msg_div_id{

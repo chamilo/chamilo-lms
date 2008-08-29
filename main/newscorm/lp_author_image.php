@@ -1,11 +1,8 @@
 <?php //$id: $
 /**
- * Script that displays the header frame for lp_view.php
+ * Script that displays the author name and image 
  * @package dokeos.learnpath
- * @author 
- */
-/**
- * Script
+ * @author Julio Montoya Armas <gugli100@gmail.com>
  */
 
 $use_anonymous = true;	
@@ -33,18 +30,19 @@ include_once('../inc/reduced_header.inc.php');
 echo '<html>
 		<body>';
 		$image = '../img/lp_author_background.gif';
-		echo '<div id="author_name">';
+		echo '<div id="image_preview">';
 		echo '<table STYLE="width:250px;height:110px;background-image: url('.$image.');">';
-		echo '<tr><td align="center">';
-		
-		if ($_SESSION['oLP']->get_preview_image()!='')
-			echo '<img alt="'.$_SESSION['oLP']->get_author().'" src="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'">';
-		else
-			echo Display::display_icon('unknown_250_100.jpg',$_SESSION['oLP']->get_author());	
-		echo '</td></tr>';	
-		echo '</table>';		
-		echo '<br />';		
-		echo $_SESSION['oLP']->get_author();
+			echo '<tr><td align="center">';		
+			if ($_SESSION['oLP']->get_preview_image()!='')
+				echo '<img alt="'.$_SESSION['oLP']->get_author().'" src="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'">';
+			else
+				echo Display::display_icon('unknown_250_100.jpg',$_SESSION['oLP']->get_author());	
+			echo '</td></tr>';	
+			echo '</table>';
+			echo '<div id="author_name">';	
+			
+			echo $_SESSION['oLP']->get_author();
+			echo '</div>';	
 		echo '</div>';		
 ?>
 </body>

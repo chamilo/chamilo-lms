@@ -1963,7 +1963,7 @@ class learnpath {
     	$text = $percentage.$text_add;
     	
     	//Default progress bar config
-    	$factor=1.5;
+    	$factor=1.4;
     	if ($from_lp)
     		$progress_height='25';   
     	else
@@ -8489,7 +8489,7 @@ EOD;
 	}
 	
 	/**
-	 * Uploads a new image to the learning path image upload directory
+	 * Uploads an author image to the upload/learning_path/images directory
 	 * @param	array	The image array, coming from the $_FILES superglobal
 	 * @return	boolean	True on success, false on error
 	 */
@@ -8512,14 +8512,16 @@ EOD;
 			{		
 				$courseDir   = api_get_course_path().'/upload/learning_path/images'; 
 				$sys_course_path = api_get_path(SYS_COURSE_PATH);		
-				$updir = $sys_course_path.$courseDir;
-							
+				$updir = $sys_course_path.$courseDir;							
 				// Try to add an extension to the file if it hasn't one
 				$new_file_name = add_ext_on_mime(stripslashes($image_array['name']), $image_array['type']);	
 			
-				// user's file name
-				$file_name =$image_array['name'];
 							
+				
+				
+				
+				
+										
 				if (!filter_extension($new_file_name)) 
 				{
 					//Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
@@ -8531,14 +8533,50 @@ EOD;
 					$file_extension = strtolower($file_extension[sizeof($file_extension) - 1]);					
 					$new_file_name = uniqid('').'.'.$file_extension;						
 					$new_path=$updir.'/'.$new_file_name;
-					$result= @move_uploaded_file($image_array['tmp_name'], $new_path);								
+					
+					//$result= @move_uploaded_file($image_array['tmp_name'], $new_path);
+					
+						// resize the image
+				include_once (api_get_path(LIBRARY_PATH).'image.lib.php');		
+				$temp = new image($image_array['tmp_name']);
+				$picture_infos=getimagesize($image_array['tmp_name']); // $picture_infos[0]-> width
+				if ($picture_infos[0]>240)
+					$thumbwidth=240;
+				else
+					$thumbwidth=$picture_infos[0];
+					
+				if ($picture_infos[1]>100)
+					$new_height=100;
+				else
+					$new_height = $picture_infos[1];
+				
+					
+				//$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
+				
+				$temp->resize($thumbwidth,$new_height,0);
+				$type=$picture_infos[2];
+			
+			    switch ($type) {
+			            case 2 : $temp->send_image('JPG',$new_path);
+			            break;
+			            case 3 : $temp->send_image('PNG',$new_path);
+			            break;
+			            case 1 : $temp->send_image('GIF',$new_path);
+			            break;
+			    }
+			    
+			    
+					
+												
 					// Storing the attachments if any
-					if ($result)
+					if (1)
 					{	
 						$image_moved=true;	
 						$this->set_preview_image($new_file_name);
-						return true;		
-					}			
+						//return true;		
+					}
+	
+						
 				}			 
 			}			
 		}

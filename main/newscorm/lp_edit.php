@@ -96,12 +96,19 @@ if( strlen($_SESSION['oLP']->get_preview_image() ) > 0)
 	'.$show_preview_image.'
 	</div>
 	</div>';	
-	
 	$form->addElement('html', $div .'<br/>');	
 	$form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
+	
 }
 
 $form->addElement('file', 'lp_preview_image', ($_SESSION['oLP']->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
+
+	$div = '<div class="row">
+	<div class="label"></div>
+	<div class="formw">	'.get_lang('ImageWillResizeMsg').'
+	</div>
+	</div>';
+$form->addElement('html', $div);
 
 $form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));
 

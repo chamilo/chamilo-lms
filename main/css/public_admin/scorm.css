@@ -178,9 +178,9 @@
 	clear: both;	
 }
 
-#preview_image 
-{		
-	text-align:center;	
+#author_name
+{
+	padding-left: 17px;
 }
 
 #msg_div_id{

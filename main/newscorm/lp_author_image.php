@@ -40,7 +40,7 @@ echo '<html>
 		if ($_SESSION['oLP']->get_preview_image()!='')
 			echo '<img alt="'.$_SESSION['oLP']->get_author().'" src="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'">';
 		else
-			echo Display::display_icon('unknown_250_110.jpg',$_SESSION['oLP']->get_author());		
+			echo Display::display_icon('unknown_250_100.jpg',$_SESSION['oLP']->get_author());		
 	
 		
 		echo '</td></tr>';	

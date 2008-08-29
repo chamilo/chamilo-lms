@@ -185,16 +185,17 @@ function getFCK(vals,marksid){
 <?php
 
 /**
- * Enter description here...
+ * This function gets the comments of an exercise
  *
- * @param unknown_type $id
- * @param unknown_type $question_id
- * @return unknown
+ * @param int $id
+ * @param int $question_id
+ * @return str the comment
  */
 function get_comments($id,$question_id)
 	{
 	global $TBL_TRACK_ATTEMPT;
-	$sql = "select teacher_comment from ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id and question_id)."' = '".Database::escape_string($question_id)."' order by question_id";
+	//$sql = "select teacher_comment from ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id and question_id)."' = '".Database::escape_string($question_id)."' order by question_id";
+	$sql = "select teacher_comment from ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id)."' and question_id = '".Database::escape_string($question_id)."' order by question_id";
 	$sqlres = api_sql_query($sql, __FILE__, __LINE__);
 	$comm = mysql_result($sqlres,0,"teacher_comment");
 	return $comm;

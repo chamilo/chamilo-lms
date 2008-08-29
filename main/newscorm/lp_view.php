@@ -183,7 +183,7 @@ else
 	
 	?>
 	<frameset cols="270,*">
-		<frameset rows="57,240,<?php echo $audio_record_width; ?>60,20,500,20">
+		<frameset rows="58,240,<?php echo $audio_record_width; ?>70,30,500,20">
             <frame id="header" src="lp_header.php"  border="0" frameborder="0" scrolling="no"/>                
             <frame id="author_image" name="author_image" class="lp_author_image" src="lp_author_image.php" border="0" frameborder="0" />
 			<?php 

@@ -1625,11 +1625,11 @@ class learnpath {
 
     			  '      <div class="buttons">'."\n" .
 
-     			  '        <a href="lp_controller.php?action=stats" onclick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="'.get_lang('ScormMystatus').'"></a>&nbsp;'."\n" .
+     			  '        <a href="lp_controller.php?action=stats" onclick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="'.get_lang('ScormMystatus').'"></a>'."\n" .
 
-    			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="'.get_lang('ScormPrevious').'"></a>&nbsp;'."\n" .
+    			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="'.get_lang('ScormPrevious').'"></a>'."\n" .
 
-    			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="'.get_lang('ScormNext').'"></a>&nbsp;'."\n" .
+    			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="'.get_lang('ScormNext').'"></a>'."\n" .
 
 				  //'        <a href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode"><img border="0" src="../img/view_choose.gif" title="'.get_lang('ScormExitFullScreen').'"></a>'."\n" .
 
@@ -1655,11 +1655,11 @@ class learnpath {
 
     			  '      <div class="buttons">'."\n" .
 
-    			  '        <a href="lp_controller.php?action=stats" onclick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="'.get_lang('ScormMystatus').'"></a>&nbsp;'."\n" .
+    			  '        <a href="lp_controller.php?action=stats" onclick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="'.get_lang('ScormMystatus').'"></a>'."\n" .
 
-    			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="'.get_lang('ScormPrevious').'"></a>&nbsp;'."\n" .
+    			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="'.get_lang('ScormPrevious').'"></a>'."\n" .
 
-    			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="'.get_lang('ScormNext').'"></a>&nbsp;'."\n" .
+    			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="'.get_lang('ScormNext').'"></a>'."\n" .
 
 				 // '        <a href="lp_controller.php?action=mode&mode=fullscreen" target="_top" title="fullscreen"><img border="0" src="../img/view_fullscreen.gif" width="18" height="18" title="'.get_lang('ScormFullScreen').'"></a>'."\n" .
 
@@ -1963,9 +1963,10 @@ class learnpath {
     	$text = $percentage.$text_add;
     	
     	//Default progress bar config
-    	$factor=1.4;
+    	// times that will be greater or shorter
+    	$factor=1.2; 
     	if ($from_lp)
-    		$progress_height='25';   
+    		$progress_height='26';   
     	else
     		$progress_height='16';
     	$size = str_replace('%','',$percentage);
@@ -8516,12 +8517,7 @@ EOD;
 				// Try to add an extension to the file if it hasn't one
 				$new_file_name = add_ext_on_mime(stripslashes($image_array['name']), $image_array['type']);	
 			
-							
-				
-				
-				
-				
-										
+						
 				if (!filter_extension($new_file_name)) 
 				{
 					//Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));

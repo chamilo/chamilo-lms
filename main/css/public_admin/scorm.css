@@ -21,11 +21,10 @@
 .inner_lp_toc{
 	overflow: auto;
 	background-color: white;
-	height: 530px;
+	height: 330px;
 	width: 90%;
 	border-right: 1px #999999 solid;
 	border-left: 15px #FFF solid;
-
 }
 .inner_lp_toc .scorm_item{
 
@@ -135,13 +134,13 @@
 /*.scormpage .menu */
 .lp_navigation_elem .progresstext{
 	margin-top: -20px;
-	margin-left: 5em;
+	margin-left: 4em;
 	font-size: normal;
 }
 
 /*.scormpage .menu */
 .lp_navigation_elem .buttons{
-	margin-left: 5px;
+	margin-left: 0px;
 	margin-right: 0em;
 	margin-top: 0.4em;
 }

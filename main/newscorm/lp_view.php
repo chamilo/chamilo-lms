@@ -183,14 +183,14 @@ else
 	
 	?>
 	<frameset cols="270,*">
-		<frameset rows="58,240,<?php echo $audio_record_width; ?>70,30,500,20">
+		<frameset rows="60,240,<?php echo $audio_record_width; ?>70,30,500,20">
             <frame id="header" src="lp_header.php"  border="0" frameborder="0" scrolling="no"/>                
-            <frame id="author_image" name="author_image" class="lp_author_image" src="lp_author_image.php" border="0" frameborder="0" />
+            <frame id="author_image" name="author_image" class="lp_author_image" src="lp_author_image.php" border="0" frameborder="0" scrolling="no" />
 			<?php 
 			if($displayAudioRecorder) //if audio recorder is required (set a few lines above)
 				echo '<frame id="audiorecorder_id" name="audiorecorder_name" src="display_audiorecorder.php" border="0" frameborder="0" scrolling="no"/>';				
 			?>				
-			<frame id="nav_id" name="nav_name" class="lp_nav" src="lp_nav.php" border="0" frameborder="0" />
+			<frame id="nav_id" name="nav_name" class="lp_nav" src="lp_nav.php" border="0" frameborder="0" scrolling="no" />
 			<frame id="message_id" name="message_name" class="message" src="lp_message.php" border="0" frameborder="0" />				
 			<frame id="toc_id" name="toc_name" class="lp_toc" src="lp_toc.php" border="0" frameborder="0" scrolling="no"/>												
 			<frame id="lp_log_id" name="lp_log_name" class="lp_log" src="lp_log.php" border="0" frameborder="0" />

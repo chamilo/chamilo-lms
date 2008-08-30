@@ -46,7 +46,7 @@ if (api_get_setting('search_enabled') !== 'true') {
 }
 else
 {
-    search_widget_show();
+    search_widget_show(empty($search_action)?null:'index.php');
 }
 
 
@@ -158,15 +158,12 @@ if (count($blocks) < 1) {
 }
 else
 {
-?>
-
-<?php
-function to_img($i) {
-    return sprintf('<img src="%s"/>', $i);
-}
-function to_link($i) {
-    return sprintf('<a href="%s">%s</a>', $i, get_lang('ViewLearningPath'));
-}
+    function to_img($i) {
+        return sprintf('<img src="%s"/>', $i);
+    }
+    function to_link($i) {
+        return sprintf('<a href="%s">%s</a>', $i, get_lang('ViewLearningPath'));
+    }
 
     $s = new SortableTableFromArray($blocks);
     $s->additional_parameters = array(

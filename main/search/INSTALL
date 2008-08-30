@@ -1,0 +1,15 @@
+INSTALL
+
+On Debian Lenny
+  Base install
+    apt-get  install php5-xapian
+    (you need version 1.x of Xapian here - check xapian.org for older Deb/Ub)
+    two bugs:
+      http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=493944
+      http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=493941
+    on dokeos root:
+      mkdir xapiandb
+      chmod 777 xapiandb (or equivalent)
+  Useful xapian development tools
+    apt-get install xapian-doc xapian-tools
+    (See delve command)

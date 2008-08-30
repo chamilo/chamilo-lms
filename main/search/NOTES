@@ -1,0 +1,29 @@
+Development information
+
+  Compiling the modified OogieDocumentConverter.java(note target):
+    javac -cp .:commons-cli-1.0.jar:commons-io-1.3.1.jar:edtftpj-1.5.2.jar:java_uno_accessbridge.jar:java_uno.jar:jodconverter-2.2.1.jar:jodconverter-cli-2.2.1.jar:juh-2.3.0.jar:jurt-2.3.0.jar:jut.jar:oogie.jar:ridl-2.3.0.jar:ridl.jar:slf4j-api-1.4.3.jar:slf4j-jdk14-1.4.3.jar:unoil-2.3.0.jar:xstream-1.2.2.jar -sourcepath commons-cli-1.0.jar:commons-io-1.3.1.jar:edtftpj-1.5.2.jar:java_uno_accessbridge.jar:java_uno.jar:jodconverter-2.2.1.jar:jodconverter-cli-2.2.1.jar:juh-2.3.0.jar:jurt-2.3.0.jar:jut.jar:oogie.jar:ridl-2.3.0.jar:ridl.jar:slf4j-api-1.4.3.jar:slf4j-jdk14-1.4.3.jar:unoil-2.3.0.jar:xstream-1.2.2.jar -target 1.5 OogieDocumentConverter.java
+
+  Debugging help:
+    error_log('info: id = <'. $id .'>');
+    Display::display_normal_message(print_r($arrLP,1));
+
+  DB modifications:
+    ALTER TABLE `lp_item` ADD `terms` TEXT NULL ;
+    ALTER TABLE `lp_item` ADD `search_did` INT(10) NULL
+    -- on every course, so it's pending(TODO):
+       -- script to generate it for all courses depending of the type of dokeos intalation(one db or many)
+       -- create it when a course is created
+
+  About search:
+    Xapian support two main ways of search: probabilistic and boolean.
+    - Probabilistic: search in all index_text() info indexed to xapian
+    - Boolean: search in xapian terms(doc have the term or not), depending on prefix
+
+  About terms:
+    It's assumed that terms(tags) have only 1 word and are stored at a CVS string in dokeos DB
+    Prefixs:
+      Each term in xapian DB would have a prefix depending of the tipe of term. 
+      Here is the actual propossed list:
+      - 'T': tags(free tagging), stored in db
+      - 'F': filetype(form source), not stored in db only one term
+      - 'C': course id

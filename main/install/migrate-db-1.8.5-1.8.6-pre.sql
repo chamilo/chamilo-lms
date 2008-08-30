@@ -48,4 +48,5 @@ ALTER TABLE quiz_answer CHANGE hotspot_type hotspot_type ENUM( 'square', 'circle
 ALTER TABLE forum_forum ADD forum_image varchar(255) NOT NULL default '';
 ALTER TABLE lp ADD preview_image varchar(255) NOT NULL default '';
 ALTER TABLE lp ADD author varchar(255) NOT NULL default '';
-
+ALTER TABLE lp_item ADD terms TEXT NULL;
+ALTER TABLE lp_item search_did INT NULL;

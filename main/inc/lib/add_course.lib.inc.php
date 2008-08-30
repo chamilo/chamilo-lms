@@ -281,61 +281,61 @@ function update_Db_course($courseDbName)
 
 	$courseDbName = $_configuration['table_prefix'].$courseDbName.$_configuration['db_glue'];
 
-	$tbl_course_homepage 		= $courseDbName . "tool";
-	$TABLEINTROS 				= $courseDbName . "tool_intro";
+	$tbl_course_homepage 		= $courseDbName . 'tool';
+	$TABLEINTROS 				= $courseDbName . 'tool_intro';
 
 	// Group tool
-	$TABLEGROUPS 				= $courseDbName . "group_info";
-	$TABLEGROUPCATEGORIES 		= $courseDbName . "group_category";
-	$TABLEGROUPUSER 			= $courseDbName . "group_rel_user";
-	$TABLEGROUPTUTOR 			= $courseDbName . "group_rel_tutor";
+	$TABLEGROUPS 				= $courseDbName . 'group_info';
+	$TABLEGROUPCATEGORIES 		= $courseDbName . 'group_category';
+	$TABLEGROUPUSER 			= $courseDbName . 'group_rel_user';
+	$TABLEGROUPTUTOR 			= $courseDbName . 'group_rel_tutor';
 
-	$TABLEITEMPROPERTY 			= $courseDbName . "item_property";
+	$TABLEITEMPROPERTY 			= $courseDbName . 'item_property';
 
-	$TABLETOOLUSERINFOCONTENT 	= $courseDbName . "userinfo_content";
-	$TABLETOOLUSERINFODEF 		= $courseDbName . "userinfo_def";
+	$TABLETOOLUSERINFOCONTENT 	= $courseDbName . 'userinfo_content';
+	$TABLETOOLUSERINFODEF 		= $courseDbName . 'userinfo_def';
 
-	$TABLETOOLCOURSEDESC		= $courseDbName . "course_description";
-	$TABLETOOLAGENDA 			= $courseDbName . "calendar_event";
-	$TABLETOOLAGENDAREPEAT		= $courseDbName . "calendar_event_repeat";
-	$TABLETOOLAGENDAREPEATNOT	= $courseDbName . "calendar_event_repeat_not";
+	$TABLETOOLCOURSEDESC		= $courseDbName . 'course_description';
+	$TABLETOOLAGENDA 			= $courseDbName . 'calendar_event';
+	$TABLETOOLAGENDAREPEAT		= $courseDbName . 'calendar_event_repeat';
+	$TABLETOOLAGENDAREPEATNOT	= $courseDbName . 'calendar_event_repeat_not';
 
 	// Announcements
-	$TABLETOOLANNOUNCEMENTS 	= $courseDbName . "announcement";
+	$TABLETOOLANNOUNCEMENTS 	= $courseDbName . 'announcement';
 
 	// Resourcelinker
-	$TABLEADDEDRESOURCES 		= $courseDbName . "resource";
+	$TABLEADDEDRESOURCES 		= $courseDbName . 'resource';
 
 	// Student Publication
-	$TABLETOOLWORKS 			= $courseDbName . "student_publication";
+	$TABLETOOLWORKS 			= $courseDbName . 'student_publication';
 
 	// Document
-	$TABLETOOLDOCUMENT 			= $courseDbName . "document";
+	$TABLETOOLDOCUMENT 			= $courseDbName . 'document';
 
 	// Forum
-	$TABLETOOLFORUMCATEGORY 	= $courseDbName . "forum_category";
-	$TABLETOOLFORUM 			= $courseDbName . "forum_forum";
-	$TABLETOOLFORUMTHREAD 		= $courseDbName . "forum_thread";
-	$TABLETOOLFORUMPOST 		= $courseDbName . "forum_post";
-	$TABLETOOLFORUMMAILCUE 		= $courseDbName . "forum_mailcue";
-	$TABLETOOLFORUMATTACHMENT	= $courseDbName . "forum_attachment";
+	$TABLETOOLFORUMCATEGORY 	= $courseDbName . 'forum_category';
+	$TABLETOOLFORUM 			= $courseDbName . 'forum_forum';
+	$TABLETOOLFORUMTHREAD 		= $courseDbName . 'forum_thread';
+	$TABLETOOLFORUMPOST 		= $courseDbName . 'forum_post';
+	$TABLETOOLFORUMMAILCUE 		= $courseDbName . 'forum_mailcue';
+	$TABLETOOLFORUMATTACHMENT	= $courseDbName . 'forum_attachment';
 	$TABLETOOLFORUMNOTIFICATION = $courseDbName . 'forum_notification';
 
 	// Link
-	$TABLETOOLLINK 				= $courseDbName . "link";
-	$TABLETOOLLINKCATEGORIES 	= $courseDbName . "link_category";
+	$TABLETOOLLINK 				= $courseDbName . 'link';
+	$TABLETOOLLINKCATEGORIES 	= $courseDbName . 'link_category';
 
-	$TABLETOOLONLINECONNECTED 	= $courseDbName . "online_connected";
-	$TABLETOOLONLINELINK 		= $courseDbName . "online_link";
+	$TABLETOOLONLINECONNECTED 	= $courseDbName . 'online_connected';
+	$TABLETOOLONLINELINK 		= $courseDbName . 'online_link';
 
 	// Chat
-	$TABLETOOLCHATCONNECTED 	= $courseDbName . "chat_connected";
+	$TABLETOOLCHATCONNECTED 	= $courseDbName . 'chat_connected';
 
 	// Quiz (a.k.a. exercises)
-	$TABLEQUIZ 					= $courseDbName . "quiz";
-	$TABLEQUIZQUESTION 			= $courseDbName . "quiz_rel_question";
-	$TABLEQUIZQUESTIONLIST 		= $courseDbName . "quiz_question";
-	$TABLEQUIZANSWERSLIST 		= $courseDbName . "quiz_answer";
+	$TABLEQUIZ 					= $courseDbName . 'quiz';
+	$TABLEQUIZQUESTION 			= $courseDbName . 'quiz_rel_question';
+	$TABLEQUIZQUESTIONLIST 		= $courseDbName . 'quiz_question';
+	$TABLEQUIZANSWERSLIST 		= $courseDbName . 'quiz_answer';
 
 	// Dropbox
 	$TABLETOOLDROPBOXPOST 		= $courseDbName . 'dropbox_post';
@@ -345,18 +345,18 @@ function update_Db_course($courseDbName)
 	$TABLETOOLDROPBOXFEEDBACK 	= $courseDbName . 'dropbox_feedback';
 
 	// Learning Path
-	$TABLELEARNPATHITEMS 		= $courseDbName . "learnpath_item";
-	$TABLELEARNPATHCHAPTERS 	= $courseDbName . "learnpath_chapter";
-	$TABLELEARNPATHMAIN 		= $courseDbName . "learnpath_main";
-	$TABLELEARNPATHUSERS 		= $courseDbName . "learnpath_user";
+	$TABLELEARNPATHITEMS 		= $courseDbName . 'learnpath_item';
+	$TABLELEARNPATHCHAPTERS 	= $courseDbName . 'learnpath_chapter';
+	$TABLELEARNPATHMAIN 		= $courseDbName . 'learnpath_main';
+	$TABLELEARNPATHUSERS 		= $courseDbName . 'learnpath_user';
 
 	// New Learning path
-	$TABLELP					= $courseDbName . "lp";
-	$TABLELPITEM				= $courseDbName . "lp_item";
-	$TABLELPVIEW				= $courseDbName . "lp_view";
-	$TABLELPITEMVIEW			= $courseDbName . "lp_item_view";
-	$TABLELPIVINTERACTION		= $courseDbName . "lp_iv_interaction";
-	$TABLELPIVOBJECTIVE			= $courseDbName . "lp_iv_objective";
+	$TABLELP					= $courseDbName . 'lp';
+	$TABLELPITEM				= $courseDbName . 'lp_item';
+	$TABLELPVIEW				= $courseDbName . 'lp_view';
+	$TABLELPITEMVIEW			= $courseDbName . 'lp_item_view';
+	$TABLELPIVINTERACTION		= $courseDbName . 'lp_iv_interaction';
+	$TABLELPIVOBJECTIVE			= $courseDbName . 'lp_iv_objective';
 
 	// Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
 	$tbl_blogs					= $courseDbName . 'blog';
@@ -391,7 +391,7 @@ function update_Db_course($courseDbName)
 	$TABLEAUDIORECORDER = $courseDbName.'audiorecorder';
 
 	// Course settings
-	$TABLESETTING = $courseDbName . "course_setting";
+	$TABLESETTING = $courseDbName . 'course_setting';
 
 	/*
 	-----------------------------------------------------------
@@ -1029,7 +1029,9 @@ function update_Db_course($courseDbName)
 		"prerequisite  text  null default null," . //prerequisites in AICC scripting language as defined in the SCORM norm (allow logical operators)
 		"parameters  text  null," . //prerequisites in AICC scripting language as defined in the SCORM norm (allow logical operators)
 		"launch_data 	text	not null default ''," . //data from imsmanifest <item>
-		"max_time_allowed char(13) NULL default '')"; //data from imsmanifest <adlcp:maxtimeallowed>
+		"max_time_allowed char(13) NULL default '')," . //data from imsmanifest <adlcp:maxtimeallowed>
+        "terms TEXT NULL," . // contains the indexing tags (search engine)
+        "search_did INT NULL"; // contains the internal search-engine id of this element
 	if(!api_sql_query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);

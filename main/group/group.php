@@ -70,7 +70,7 @@ if( api_get_setting('allow_group_categories') == 'false')
 	$num = Database::num_rows($res);
 	if($num == 0)
 	{
-		api_sql_query("INSERT INTO ".$cat_table." ( id , title , description , forum_state , max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) VALUES ('2', '".lang2db($DefaultGroupCategory)."', '', '1', '8', '0', '0', '0', '0');");
+		api_sql_query("INSERT INTO ".$cat_table." ( id , title , description , forum_state , wiki_state, max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) VALUES ('2', '".lang2db($DefaultGroupCategory)."', '', '1', '1', '8', '0', '0', '0', '0');");
 	}
 }
 
@@ -278,7 +278,8 @@ foreach ($group_cats as $index => $category)
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_DOCUMENTS) ||
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_CALENDAR) ||
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_ANNOUNCEMENT) ||
-					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_WORK))
+					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_WORK) ||
+					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_WIKI))
 			{
 				$group_name = '<a href="group_space.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gidReq='.$this_group['id'].'">'.stripslashes($this_group['name']).'</a>';
 				if ($_SESSION['_user']['user_id'] && $_SESSION['_user']['user_id'] == $this_group['id_tutor'])

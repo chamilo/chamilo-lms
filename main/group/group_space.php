@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 14826 2008-04-10 08:10:19Z pcool $
+<?php //$Id: group_space.php 16179 2008-08-31 20:20:23Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -188,6 +188,12 @@ if (api_is_allowed_to_edit() OR GroupManager :: is_user_in_group($_SESSION['_use
 		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../announcements/announcements.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('valves.gif')."&nbsp;".get_lang("GroupAnnouncements")."</a></div>";
 	}
 
+	if ( $current_group['wiki_state'] != TOOL_NOT_AVAILABLE)
+	{
+		//link to the wiki area of this group
+		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../wiki/index.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('wiki.gif')."&nbsp;".get_lang("GroupWiki")."</a></div>"; 
+	}
+
 	echo '<b>'.get_lang("Tools").':</b>';
 	if (!empty($tools))
 	{
@@ -229,6 +235,14 @@ else
 		//link to a group-specific part of announcements
 		$tools .= "<a href=\"../announcements/announcements.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."&amp;group=".$current_group['id']."\">".Display::return_icon('valves.gif')."&nbsp;".get_lang("GroupAnnouncements")."</a><br/>";
 	}
+	
+	if ( $current_group['wiki_state'] == TOOL_PUBLIC )
+	{
+		//link to the wiki area of this group
+		$tools .= "<a href=\"../wiki/index.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('wiki.gif')."&nbsp;".get_lang('GroupWiki')."</a><br/>";
+	}
+		
+	
 	echo '<b>'.get_lang("Tools").':</b>';
 	if (!empty($tools))
 	{

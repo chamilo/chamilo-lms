@@ -1,5 +1,5 @@
 <?php
-// $Id: group_category.php 14826 2008-04-10 08:10:19Z pcool $
+// $Id: group_category.php 16179 2008-08-31 20:20:23Z herodoto $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -81,7 +81,7 @@ if (get_setting('allow_group_categories') == 'true')
 	{
 		$nameTools = get_lang('AddCategory');
 		// default values for new category
-		$category = array ('groups_per_user' => 1, 'doc_state' => TOOL_PRIVATE, 'work_state' => TOOL_PRIVATE, 'calendar_state' => TOOL_PRIVATE, 'announcements_state' => TOOL_PRIVATE, 'max_student' => 0);
+		$category = array ('groups_per_user' => 1, 'doc_state' => TOOL_PRIVATE, 'work_state' => TOOL_PRIVATE, 'wiki_state' => TOOL_PRIVATE, 'calendar_state' => TOOL_PRIVATE, 'announcements_state' => TOOL_PRIVATE, 'max_student' => 0);
 	}
 }
 else
@@ -100,6 +100,14 @@ if (isset ($_GET['id']))
 }
 else
 {
+    //Checks if the field was created in the table Category. It creates it if is neccesary
+    $table_category = Database :: get_course_table(GROUP_CATEGORY_TABLE);
+	if (mysql_query("SELECT wiki_state FROM $table_category") == FALSE)
+    {
+    	mysql_query("ALTER TABLE $table_category ADD `wiki_state` tinyint(3) UNSIGNED NOT NULL default '1';");
+    }
+	
+	
 	// Create a new category
 	$action = 'add_category';
 	$form = new FormValidator('group_category');
@@ -169,6 +177,11 @@ $form->addElement('radio', 'forum_state', get_lang('GroupForum'), get_lang('NotA
 $form->addElement('radio', 'forum_state', null, get_lang('Public'), TOOL_PUBLIC);
 $form->addElement('radio', 'forum_state', null, get_lang('Private'), TOOL_PRIVATE);
 
+// Wiki Settings
+$form->addElement('radio', 'wiki_state', get_lang('GroupWiki'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE); 
+$form->addElement('radio', 'wiki_state', null, get_lang('Public'), TOOL_PUBLIC);
+$form->addElement('radio', 'wiki_state', null, get_lang('Private'), TOOL_PRIVATE);
+
 // Submit
 $form->addElement('submit', 'submit', get_lang('Ok'));
 // If form validates -> save data
@@ -188,12 +201,12 @@ if ($form->validate())
 	switch ($values['action'])
 	{
 		case 'update_settings' :
-			GroupManager :: update_category($values['id'], $values['title'], $values['description'], $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'], $self_reg_allowed, $self_unreg_allowed, $max_member, $values['groups_per_user']);
+			GroupManager :: update_category($values['id'], $values['title'], $values['description'], $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'], $values['wiki_state'], $self_reg_allowed, $self_unreg_allowed, $max_member, $values['groups_per_user']);
 			$msg = urlencode(get_lang("GroupPropertiesModified"));
 			header('Location: group.php?action=show_msg&msg='.$msg.'&category='.$values['id']);
 			break;
 		case 'add_category' :
-			GroupManager :: create_category($values['title'], $values['description'], $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'], $self_reg_allowed, $self_unreg_allowed, $max_member, $values['groups_per_user']);
+			GroupManager :: create_category($values['title'], $values['description'], $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'], $values['wiki_state'], $self_reg_allowed, $self_unreg_allowed, $max_member, $values['groups_per_user']);
 			$msg = urlencode(get_lang("CategoryCreated"));
 			header('Location: group.php?action=show_msg&msg='.$msg);
 			break;

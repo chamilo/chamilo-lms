@@ -1029,9 +1029,9 @@ function update_Db_course($courseDbName)
 		"prerequisite  text  null default null," . //prerequisites in AICC scripting language as defined in the SCORM norm (allow logical operators)
 		"parameters  text  null," . //prerequisites in AICC scripting language as defined in the SCORM norm (allow logical operators)
 		"launch_data 	text	not null default ''," . //data from imsmanifest <item>
-		"max_time_allowed char(13) NULL default '')," . //data from imsmanifest <adlcp:maxtimeallowed>
+		"max_time_allowed char(13) NULL default ''," . //data from imsmanifest <adlcp:maxtimeallowed>
         "terms TEXT NULL," . // contains the indexing tags (search engine)
-        "search_did INT NULL"; // contains the internal search-engine id of this element
+        "search_did INT NULL)"; // contains the internal search-engine id of this element
 	if(!api_sql_query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);

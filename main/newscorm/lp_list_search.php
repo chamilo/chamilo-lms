@@ -146,7 +146,7 @@ if ($count > 0) {
             /* Get the image path */
             $img_path = str_replace ('.png.html', '_thumb.png', $row['path']);
             $doc_id = $row['id'];
-            $title = get_lang('Title').': '.$row['name'].'<br /><br />'.$row['title'].(empty($row['author'])?'':'<br /><br />'.get_lang('Author').': '.$row['author']);
+            $title = get_lang('Title').': '.'<b>'.$row['name'].'</b><br /><br />'.$row['title'].(empty($row['author'])?'':'<br /><br />'.get_lang('Author').': '.$row['author']);
 
             $href = sprintf($link_format, $course_id, $lp_id, $doc_id);
 

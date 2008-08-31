@@ -6239,9 +6239,12 @@ class learnpath {
 				$select_prerequisites=$form->addElement('select', 'prerequisites', get_lang('Prerequisites').'&nbsp;:', '', 'id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
 				$select_prerequisites->addOption(get_lang("NoPrerequisites"),0,'style="padding-left:3px;"');
 
-                //add terms field
-                $terms = $form->addElement('text','terms', get_lang('SearchFeatureTerms').'&nbsp;:','id="idTerms" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:295px;"');
-                $terms->setValue($item_terms); 
+                if ( api_get_setting('search_enabled') === 'true' )
+                {
+                    //add terms field
+                    $terms = $form->addElement('text','terms', get_lang('SearchFeatureTerms').'&nbsp;:','id="idTerms" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:295px;"');
+                    $terms->setValue($item_terms); 
+                }
 
 				$arrHide=array();
 

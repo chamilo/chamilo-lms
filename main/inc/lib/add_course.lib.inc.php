@@ -387,6 +387,9 @@ function update_Db_course($courseDbName)
 	$TABLESURVEYANSWER			= $courseDbName . 'survey_answer';
 	$TABLESURVEYGROUP			= $courseDbName . 'survey_group';
 
+	// Wiki
+	$TABLETOOLWIKI = $courseDbName.'wiki';
+
 	// audiorecorder
 	$TABLEAUDIORECORDER = $courseDbName.'audiorecorder';
 
@@ -780,6 +783,44 @@ function update_Db_course($courseDbName)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
 
+/*
+	-----------------------------------------------------------
+		Wiki 
+	-----------------------------------------------------------
+	*/
+	
+	$sql = "CREATE TABLE `".$TABLETOOLWIKI . "` (
+		id int (11) NOT NULL auto_increment,
+		reflink varchar(250) NOT NULL default 'index',
+		title text NOT NULL,
+		content text NOT NULL,
+		user_id int(11) NOT NULL default '0',
+		group_id INT(11) DEFAULT NULL,
+		timestamp timestamp(14) NOT NULL,		
+		addlock int(11) NOT NULL default '1',
+		editlock int(11) NOT NULL default '0',
+		visibility int(11) NOT NULL default '1',	
+		notify int(11) NOT NULL default '0',		
+		addlock_disc int(11) NOT NULL default '1',		
+		visibility_disc int(11) NOT NULL default '1',
+		ratinglock_disc int(11) NOT NULL default '1',
+		notify_disc int(11) NOT NULL default '0',
+		assignment int(11) NOT NULL default '0',		
+		startdate_assig datetime NOT NULL default '0000-00-00 00:00:00',
+		enddate_assig datetime  NOT NULL default '0000-00-00 00:00:00',	 
+		delayedsubmit int(11) NOT NULL default '0',	
+		comment text NOT NULL,
+		progress text NOT NULL,
+		score int(11) NULL default '0',
+		version INT(11) DEFAULT NULL,
+		hits INT(11) DEFAULT NULL,
+		linksto text NOT NULL,
+		user_ip varchar(39) COLLATE utf8_general_ci NOT NULL,		
+		PRIMARY KEY (id)
+		)";
+	api_sql_query($sql, __FILE__, __LINE__);
+
+
 	/*
 	-----------------------------------------------------------
 		Online
@@ -825,6 +866,7 @@ function update_Db_course($courseDbName)
 		calendar_state tinyint unsigned NOT NULL default 0,
 		work_state tinyint unsigned NOT NULL default 0,
 		announcements_state tinyint unsigned NOT NULL default 0,
+		wiki_state tinyint unsigned NOT NULL default 1,
 		secret_directory varchar(255) default NULL,
 		self_registration_allowed tinyint unsigned NOT NULL default '0',
 		self_unregistration_allowed tinyint unsigned NOT NULL default '0',
@@ -840,6 +882,7 @@ function update_Db_course($courseDbName)
 		work_state tinyint unsigned NOT NULL default 1,
 		announcements_state tinyint unsigned NOT NULL default 1,
 		forum_state tinyint unsigned NOT NULL default 0,
+		wiki_state tinyint unsigned NOT NULL default 1,
 		max_student smallint unsigned NOT NULL default 8,
 		self_reg_allowed tinyint unsigned NOT NULL default 0,
 		self_unreg_allowed tinyint unsigned NOT NULL default 0,
@@ -1760,6 +1803,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	$TABLETOOLWORKS = $courseDbName . "student_publication";
 	$TABLETOOLWORKSUSER = $courseDbName . "stud_pub_rel_user";
 	$TABLETOOLDOCUMENT = $courseDbName . "document";
+	$TABLETOOLWIKI = $courseDbName . "wiki";
 
 	$TABLETOOLLINK = $courseDbName . "link";
 
@@ -1815,7 +1859,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_CHAT . "','chat/chat.php','chat.gif','".string2binary(api_get_setting('course_create_active_tools', 'chat')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_STUDENTPUBLICATION . "','work/work.php','works.gif','".string2binary(api_get_setting('course_create_active_tools', 'student_publications')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_SURVEY."','survey/survey_list.php','survey.gif','1','0','','NO','_self','interaction')");	
-
+	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_WIKI ."','wiki/index.php','wiki.gif','".string2binary(api_get_setting('course_create_active_tools', 'wiki')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
 
 	if(api_get_setting('service_visio','active')=='true')
 	{
@@ -2012,7 +2056,10 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		$intro_text='<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="middle" align="left"><img src="'.api_get_path(WEB_IMG_PATH).'mr_dokeos.png" alt="mr. Dokeos" title="mr. Dokeos" /></td><td valign="middle" align="left">'.lang2db(get_lang('IntroductionText')).'</td></tr></table>';
 		api_sql_query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_COURSE_HOMEPAGE . "','".$intro_text. "')", __FILE__, __LINE__);
 		api_sql_query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_STUDENTPUBLICATION . "','".lang2db(get_lang('IntroductionTwo')) . "')", __FILE__, __LINE__);
-	
+		
+		//wiki intro
+		$intro_wiki='<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"></td><td valign="top" align="left">'.lang2db(get_lang('IntroductionWiki')).'</td></tr></table>';
+		api_sql_query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_WIKI . "','".$intro_wiki. "')",__FILE__,__LINE__); 
 		
 		/*
 		-----------------------------------------------------------

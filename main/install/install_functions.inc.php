@@ -536,6 +536,10 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 				<td class="requirements-item">dokeos/home/</td>
 				<td class="requirements-value">'.check_writable('../home/').'</td>
 			</tr>
+            <tr>
+                <td class="requirements-item">dokeos/searchdb/</td>
+                <td class="requirements-value">'.check_writable('../searchdb/').'</td>
+            </tr>
 			';
 	echo '</table>';
 	echo '	</div>';

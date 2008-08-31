@@ -66,6 +66,7 @@ define("GROUP_TOOL_DOCUMENTS", "1");
 define("GROUP_TOOL_CALENDAR","2");
 define("GROUP_TOOL_ANNOUNCEMENT","3");
 define("GROUP_TOOL_WORK","4");
+define("GROUP_TOOL_WIKI", "5");
 
 /**
  * Fixed id's for group categories
@@ -159,7 +160,7 @@ class GroupManager
 		{
 			$places = $category['max_student'];
 		}
-		$sql = "INSERT INTO ".$table_group." SET category_id='".$category_id."', max_student = '".$places."', doc_state = '".$category['doc_state']."', calendar_state = '".$category['calendar_state']."', work_state = '".$category['work_state']."', announcements_state = '".$category['announcements_state']."', self_registration_allowed = '".$category['self_reg_allowed']."',  self_unregistration_allowed = '".$category['self_unreg_allowed']."'";
+		$sql = "INSERT INTO ".$table_group." SET category_id='".$category_id."', max_student = '".$places."', doc_state = '".$category['doc_state']."', calendar_state = '".$category['calendar_state']."', work_state = '".$category['work_state']."', announcements_state = '".$category['announcements_state']."', wiki_state = '".$category['wiki_state']."', self_registration_allowed = '".$category['self_reg_allowed']."',  self_unregistration_allowed = '".$category['self_unreg_allowed']."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 		$lastId = mysql_insert_id();
 		/*$secret_directory = uniqid("")."_team_".$lastId;
@@ -385,6 +386,7 @@ class GroupManager
 		$result['work_state'] = $db_object->work_state;
 		$result['calendar_state'] = $db_object->calendar_state;
 		$result['announcements_state'] = $db_object->announcements_state;
+		$result['wiki_state'] = $db_object->wiki_state;
 		$result['directory'] = $db_object->secret_directory;
 		$result['self_registration_allowed'] = $db_object->self_registration_allowed;
 		$result['self_unregistration_allowed'] = $db_object->self_unregistration_allowed;
@@ -402,7 +404,7 @@ class GroupManager
 	 * @param bool $self_unregistration_allowed
 	 * @return bool TRUE if properties are successfully changed.
 	 */
-	function set_group_properties($group_id, $name, $description, $maximum_number_of_students, $doc_state, $work_state, $calendar_state, $announcements_state, $self_registration_allowed, $self_unregistration_allowed)
+	function set_group_properties($group_id, $name, $description, $maximum_number_of_students, $doc_state, $work_state, $calendar_state, $announcements_state, $wiki_state, $self_registration_allowed, $self_unregistration_allowed)
 	{
 		$table_group = Database :: get_course_table(TABLE_GROUP);
 		//$table_forum = Database :: get_course_table(TABLE_FORUM);
@@ -412,6 +414,7 @@ class GroupManager
 					work_state = '".$work_state."',
 					calendar_state = '".$calendar_state."',
 					announcements_state = '".$announcements_state."',
+					wiki_state = '".$wiki_state."',
 					description='".trim($description)."',
 					max_student=".$maximum_number_of_students.",
 					self_registration_allowed='".$self_registration_allowed."',
@@ -539,7 +542,7 @@ class GroupManager
 	 * @param int $max_number_of_students
 	 * @param int $groups_per_user
 	 */
-	function create_category($title, $description, $doc_state, $work_state, $calendar_state, $announcements_state, $forum_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user)
+	function create_category($title, $description, $doc_state, $work_state, $calendar_state, $announcements_state, $forum_state, $wiki_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user)
 	{
 		$table_group_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "SELECT MAX(display_order)+1 as new_order FROM $table_group_category ";
@@ -558,6 +561,7 @@ class GroupManager
 					calendar_state = '".$calendar_state."',
               		announcements_state = '".$announcements_state."',  
               		forum_state = '".Database::escape_string($forum_state)."',
+					wiki_state = '".$wiki_state."',
 					groups_per_user   = ".$groups_per_user.",
 					self_reg_allowed = '".$self_registration_allowed."',
 					self_unreg_allowed = '".$self_unregistration_allowed."',
@@ -583,7 +587,7 @@ class GroupManager
 	 * @param int $max_number_of_students
 	 * @param int $groups_per_user
 	 */
-	function update_category($id, $title, $description, $doc_state, $work_state, $calendar_state, $announcements_state, $forum_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user)
+	function update_category($id, $title, $description, $doc_state, $work_state, $calendar_state, $announcements_state, $forum_state, $wiki_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user)
 	{
 		$table_group_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "UPDATE ".$table_group_category."
@@ -593,7 +597,8 @@ class GroupManager
 				work_state = '".$work_state."',
             	calendar_state = '".$calendar_state."',
             	announcements_state = '".$announcements_state."',
-            	forum_state = '".Database::escape_string($forum_state)."', 
+            	forum_state = '".Database::escape_string($forum_state)."',
+				wiki_state = '".$wiki_state."',
 				groups_per_user   = ".$groups_per_user.",
 				self_reg_allowed = '".$self_registration_allowed."',
 				self_unreg_allowed = '".$self_unregistration_allowed."',
@@ -1337,7 +1342,10 @@ class GroupManager
 				break;
 			case GROUP_TOOL_WORK :
 				$state_key = 'work_state';
-				break;	
+				break;
+			case GROUP_TOOL_WIKI :
+				$state_key = 'wiki_state';
+				break; 
 			default:
 				return false;
 		}

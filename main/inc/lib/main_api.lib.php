@@ -135,6 +135,7 @@ define('TOOL_VISIO','visio');
 define('TOOL_VISIO_CONFERENCE','visio_conference');
 define('TOOL_VISIO_CLASSROOM','visio_classroom');
 define('TOOL_SURVEY','survey');
+define('TOOL_WIKI','wiki');
 
 // CONSTANTS defining dokeos sections
 define('SECTION_CAMPUS', 'mycampus');

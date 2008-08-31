@@ -1,0 +1,179 @@
+/*
+==============================================================================
+	WIKI STYLES
+==============================================================================
+*/
+
+.wikiTitle h1{
+	color: Black;
+	background: none;
+	font-size: 200%;
+	font-weight: bold;
+	/*font-weight: normal;*/
+		border-bottom: 2px solid #aaaaaa;
+	}
+	.wiki2xhtml a.wikiEdit{
+		color: #0000FF;
+	}
+	.diff{
+		font-family: monospace;
+		padding: 5px;
+		margin: 5px;
+		border:solid 2px #aaaaaa;
+	}
+	.diffEqual{
+		background-color: #FFFFFF;
+	}
+	.diffMoved{
+		background-color: #FFFFAA;
+	}
+	.diffAdded{
+		background-color: #CCFFCC;
+	}
+	.diffDeleted{
+        background-color: #FFAAAA;
+	}
+	
+	.diffAddedTex{
+		background-color: #CCFFCC;
+		text-decoration:underline;
+	}
+	
+	.diffDeletedTex{
+        background-color: #FFAAAA;
+		text-decoration:line-through;		
+	}
+	
+	#wikititle {
+		font-family: Verdana, Arial, Helvetica, sans-serif;
+		font-size: 100%;
+		font-weight: bold;
+		background-color: #EFEFEF;
+		border-bottom-width: 2px;
+		border-bottom-style: solid;
+		border-bottom-color: #ccc;
+		padding: 3px;
+		padding-top:5px;
+	}
+	#wikititle input {
+		border: 1px solid #333;
+		padding-left: 3px;
+	}
+	#wikicontent {
+		padding-top:5px;
+		min-height:300px;		
+	}		
+	
+	#menuwiki {
+		background-color: #FFFFFF;
+		border-bottom-width: 1px;
+		border-bottom-style: solid;
+		border-bottom-color: #ccc;
+	}
+	#menuwiki li{
+		display: inline;
+	}
+	#menuwiki a:link{
+
+	}
+	#menuwiki a:hover{
+
+	}
+	.fwiki1{
+	    font-size:larger;
+	    font-style:italic;
+	    font-weight:bold;
+	    background-color:#DAFFD9;
+	}
+	.fwiki2{
+	    font-size:smaller;
+	    background-color:#FFF;
+	}
+
+	.message {
+		color: #CCCCCC
+	}
+	.wiki_warning{
+		color: #FF0000;
+		font-weight:bold;
+	}
+	a.new_wiki_link{
+		color: #FF0000;
+		border-bottom: 1px dotted #cccccc;		   
+				
+	}
+
+	a.wiki_link{	
+		border-bottom: 1px dotted #cccccc;	
+		
+	}  
+		
+	#main_navigation{
+		height: 20px;
+		margin: 0;
+		padding-left: 10px;
+		background-color:#ccc;
+	}
+	#tabnav{
+		height: 20px;
+		margin: 0;
+		padding-left: 10px;
+
+	}
+	#tabnav_content	{
+		margin: 0;
+		padding-left: 10px;
+		padding-right: 10px;
+		padding-bottom: 10px;
+		padding-top: 4px;
+		border: 1px solid #ccc;
+	}
+
+	#tabnav li	{
+		margin: 0;
+		padding: 0;
+  		display: inline;
+  		list-style-type: none;
+  	}
+
+	#tabnav a:link, #tabnav a:visited {
+		float: left;
+		background: #fff;
+		font-size: 10px;
+		line-height: 14px;
+		font-weight: bold;
+		padding: 2px 10px 2px 10px;
+		margin-right: 4px;
+		border: 1px solid #ccc;
+		border-bottom: 1px solid #f3f3f3;
+		text-decoration: none;
+		color: #666;
+	}
+
+#tabnav a:link.active, #tabnav a:visited.active
+	{
+		border-bottom: 2px solid #f3f3f3;
+		background: #f3f3f3;
+		color: #000;
+	}
+
+#tabnav a:link.right, #tabnav a:visited.right
+	{
+		border-bottom: 1px solid #f3f3f3;
+		background: #f3f3f3;
+		color: #666;
+		margin-left: 100px;
+	}
+
+#tabnav a:link.rightactive, #tabnav a:visited.rightactive
+	{
+		border-bottom: 1px solid #fff;
+		background: #fff;
+		color: #000;
+		margin-left: 170px;
+	}
+
+#tabnav a:hover
+	{
+		background: #fff;
+	}

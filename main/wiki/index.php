@@ -722,7 +722,7 @@ if ($_GET['action']=='edit')
 			{			
 				if ($row['content']=='' AND $row['title']=='' AND $page='index')
 				{				 
-					$content=get_lang('DefaultContent');
+					$content=sprintf(get_lang('DefaultContent'),api_get_path(WEB_IMG_PATH));
 					$title=get_lang('DefaultTitle');
 				}
 				else
@@ -1840,7 +1840,8 @@ function display_wiki_entry()
 	// if both are empty and we are displaying the index page then we display the default text.
 	if ($row['content']=='' AND $row['title']=='' AND $page='index')
 	{
-		$content=get_lang('DefaultContent');		
+		
+		$content=sprintf(get_lang('DefaultContent'),api_get_path(WEB_IMG_PATH));
 		$title=get_lang('DefaultTitle');	
 			
 	}

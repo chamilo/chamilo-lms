@@ -118,6 +118,8 @@ if ($count > 0) {
         foreach ($result->terms as $term) {
             $tags .= trim($term['name'], 'T') . ", ";
         }
+        //remove trailing comma
+        $tags = substr($tags,0,-2);
 
         
         $lp_table = get_course_table($course_id, TABLE_LP_ITEM);

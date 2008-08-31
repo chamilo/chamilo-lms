@@ -68,7 +68,7 @@ class OpenofficePresentation extends OpenofficeDocument {
             $image = $this->base_work_dir.$this->created_dir .'/'. $file_name;
             // calculate thumbnail size
             list($width, $height) = getimagesize($image);
-            $thumb_width = 200;
+            $thumb_width = 300;
             $thumb_height = floor( $height * ($thumb_width / $width ) );
             // load
             $thumb = imagecreatetruecolor($thumb_width, $thumb_height);

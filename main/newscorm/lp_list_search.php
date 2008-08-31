@@ -38,6 +38,8 @@ $htmlHeadXtra[] = '
 
 search_widget_prepare(&$htmlHeadXtra);
 
+event_access_tool(TOOL_LEARNPATH);
+$interbreadcrumb[]= array ("url"=>"./lp_controller.php?action=list", "name"=> get_lang(ucfirst(TOOL_LEARNPATH)));
 Display::display_header(null,'Path');
 
 if (api_get_setting('search_enabled') !== 'true') {
@@ -122,16 +124,20 @@ if ($count > 0) {
         $tags = substr($tags,0,-2);
 
         
-        $lp_table = get_course_table($course_id, TABLE_LP_ITEM);
+        $lpi_table = get_course_table($course_id, TABLE_LP_ITEM);
+        $lp_table = get_course_table($course_id, TABLE_LP_MAIN);
         $doc_table = get_course_table($course_id, TABLE_DOCUMENT);
         $sql = "SELECT 
-                    $doc_table.title, $doc_table.path, $lp_table.id
-                FROM $lp_table INNER JOIN $doc_table 
-                    ON $lp_table.path = $doc_table.id  
+                    $doc_table.title, $doc_table.path, $lpi_table.id, 
+                    $lp_table.name, $lp_table.author
+                FROM $lp_table, $lpi_table INNER JOIN $doc_table 
+                    ON $lpi_table.path = $doc_table.id 
                     WHERE 
-                        $lp_table.lp_id = $lp_id 
+                        $lpi_table.lp_id = $lp_id 
                     AND 
-                        $doc_table.id = $doc_id 
+                        $doc_table.id = $doc_id
+                    AND 
+                        $lp_table.id = $lpi_table.lp_id
                 LIMIT 1";
 
         $dk_result = api_sql_query ($sql);
@@ -140,13 +146,13 @@ if ($count > 0) {
             /* Get the image path */
             $img_path = str_replace ('.png.html', '_thumb.png', $row['path']);
             $doc_id = $row['id'];
-            $title = $row['title'];
+            $title = get_lang('Title').': '.$row['name'].'<br /><br />'.$row['title'].(empty($row['author'])?'':'<br /><br />'.get_lang('Author').': '.$row['author']);
 
             $href = sprintf($link_format, $course_id, $lp_id, $doc_id);
 
             /* Fill the result array */
             $blocks[] = array(
-                api_get_path(WEB_COURSE_PATH).api_get_course_path($course_id)."/document/".$img_path, 
+                '<a href="'.$href.'"><img src="'.api_get_path(WEB_COURSE_PATH).api_get_course_path($course_id)."/document/".$img_path.'"></a>', //put a link to the learning path item directly on the image 
                 $title, 
                 $tags,
                 $href
@@ -160,9 +166,6 @@ if (count($blocks) < 1) {
 }
 else
 {
-    function to_img($i) {
-        return sprintf('<img src="%s"/>', $i);
-    }
     function to_link($i) {
         return sprintf('<a href="%s">%s</a>', $i, get_lang('ViewLearningPath'));
     }
@@ -173,11 +176,10 @@ else
                 'query' => $_REQUEST['query'],
                 'tags' => $_REQUEST['tags'],
                 );
-    $s->set_header(0, get_lang('Preview'));
+    $s->set_header(0, get_lang('Preview'),false,array('width="300px"'));
     $s->set_header(1, get_lang('Title'));
     $s->set_header(2, get_lang('Tags'));
     $s->set_header(3, get_lang('Learning path'));
-    $s->set_column_filter(0,'to_img');
     $s->set_column_filter(3,'to_link');
     $s->display();
 }

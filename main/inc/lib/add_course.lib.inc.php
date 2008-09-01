@@ -818,7 +818,8 @@ function update_Db_course($courseDbName)
 		user_ip varchar(39) NOT NULL,		
 		PRIMARY KEY (id)
 		)";
-
+	api_sql_query($sql, __FILE__, __LINE__);
+	
 	/*
 	-----------------------------------------------------------
 		Online

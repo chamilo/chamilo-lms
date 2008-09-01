@@ -192,4 +192,10 @@ $OogieUnknownError = "The conversion failed for an unknown reason.<br />Please c
 $OogieBadExtension = "Please upload presentations only. Filename should end with .ppt or .odp";
 $WoogieBadExtension = "Please upload text documents only. Filename should end with .doc, .docx or .odt";
 $ShowAudioRecorder = "Show audio recorder";
+$SearchFeatureNotEnabledComment = "The full-text search feature is not enabled in Dokeos. Please contact the Dokeos administrator.";
+$SearchFeatureSearchExplanation = "To search the learning path database, please use the following syntax:<br/>        <i>term tag:tag_name -exclude +include \\\"exact phrase\\\"</i><br/>     For example:<br/>        <i>car tag:truck -ferrari +ford \\\"high consumption\\\".</i><br/>     This will show all the results for the word \'car\' tagged as \'truck\', not     including the word \'ferrari\' but including the word \'ford\' and the exact     phrase \'high consumption\'.";
+$ViewLearningPath = "View learning path";
+$SearchFeatureDoIndexDocument = "Index document text?";
+$SearchFeatureDocumentTagsIfIndexing = "Tags to add to the document, if indexing";
+$SearchFeatureDocumentLanguage = "Document language for indexation";
 ?>

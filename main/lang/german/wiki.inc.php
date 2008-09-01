@@ -10,7 +10,7 @@ $AllPages = "Alle Seiten";
 $AddNew = "Neue Seite hinzufügen";
 $ChangesStored = "Ihre Änderungen wurden gespeichert";
 $NewWikiSaved = "Der neue Wiki Eintrag wurde gespeichert. Sie können ihn ansehen durch Klick auf: ";
-$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"\'.api_get_path(WEB_IMG_PATH).\'wiki/wcollaborative.png\" alt=\"mr. Dokeos\" title=\"mr. Dokeos\" /></p> <p align=\"center\">Beginnen Sie, indem Sie diese Seite bearbeiten</p>";
+$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"mr. Dokeos\" title=\"mr. Dokeos\" /></p> <p align=\"center\">Beginnen Sie, indem Sie diese Seite bearbeiten</p> ";
 $CourseWikiPages = "Wiki Seiten für Kurse";
 $GroupWikiPages = "Wiki Seiten für Gruppen";
 $NoWikiPageTitle = "Ihre Änderungen wurden gespeichert. Sie müssen der Seite einen Titel geben";

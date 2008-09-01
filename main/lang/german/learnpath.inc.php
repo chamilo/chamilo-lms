@@ -192,4 +192,8 @@ $OogieUnknownError = "Die Konvertierung ist aus unbekanntem Grund fehlgeschlagen
 $OogieBadExtension = "Die Datei hat eine falsche Endung.";
 $WoogieBadExtension = "Bitte nur Text Dokumente hochladen. Dateinamen sollten enden mit .doc, .docx oder .odt";
 $ShowAudioRecorder = "Audio Recorder anzeigen";
+$ViewLearningPath = "Lernpfad anschauen";
+$SearchFeatureDoIndexDocument = "Dokumenttext indizieren?";
+$SearchFeatureDocumentTagsIfIndexing = "Zum Dokument beim Indizieren hinzuzufügende Tags ";
+$SearchFeatureDocumentLanguage = "Dokumentsprache für Indizierung";
 ?>

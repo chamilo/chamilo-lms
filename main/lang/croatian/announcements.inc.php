@@ -49,5 +49,5 @@ $AnnouncementMoved = "Sve obavijesti premještene";
 $NoAnnouncements = "Nema obavijesti";
 $SelectEverybody = "Odaberi sve";
 $SelectedUsersGroups = "odabrani korisnik skupine";
-$LearnerMessage = "Poruka u&#269;enika";
+$LearnerMessage = "Poruka studenta";
 ?>

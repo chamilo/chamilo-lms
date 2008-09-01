@@ -18,4 +18,6 @@ $labelPolyMenu = "Chiudi il poligono";
 $triesleft = "Tentativi rimasti";
 $exeFinished = "Tutte le risposte sono state fornite. Ora puoi risistemare le scelte o fare click per inviare la risposta";
 $nextAnswer = "Ora clicca su &done=done";
+$delineation = "Delimita";
+$labelDelineationMenu = "Chiudi la delimitazione";
 ?>

@@ -10,7 +10,7 @@ $AllPages = "Vse strani";
 $AddNew = "Dodaj novo stran";
 $ChangesStored = "Spremembe so bile shranjene";
 $NewWikiSaved = "Nov vnos v Wiki je bil shranjen. Vidite ga lahko s klikom na :";
-$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"\'.api_get_path(WEB_IMG_PATH).\'wiki/wcollaborative.png\" alt=\"mr. Dokeos\" title=\"mr. Dokeos\" /></p> <p align=\"center\">Za začetek pričnite z urejanjem te strani</p>";
+$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"mr. Dokeos\" title=\"mr. Dokeos\" /></p> <p align=\"center\">Za začetek pričnite z urejanjem te strani</p> ";
 $CourseWikiPages = "Wiki strani tečaja";
 $GroupWikiPages = "Wiki strani skupin";
 $NoWikiPageTitle = "Tvoje spremembe so bile shranjene. Vpisati morate ime strani.";

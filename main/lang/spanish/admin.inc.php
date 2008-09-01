@@ -833,4 +833,6 @@ $DaysBefore = "Días antes";
 $DaysAfter = "días después";
 $SessionAddTypeUnique = "Registro individual";
 $SessionAddTypeMultiple = "Registro múltiple";
+$EnableSearchTitle = "Funcionalidad de búsqueda de texto completo";
+$EnableSearchComment = "Seleccione \"Sí\" para habilitar esta funcionalidad. Esta utilidad depende de la extensión Xapian para PHP, por lo que no funcionará si esta extensión no está instalada en su servidor, como mínimo la versión 1.x";
 ?>

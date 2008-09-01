@@ -244,4 +244,8 @@ $ReachedMaxAttempts = "Non puoi ripetere il test %s in quanto hai già effettuato
 $AdvancedParameters = "Parametri avanzati";
 $RandomQuestionsToDisplay = "Numero di domande casuali da mostrare";
 $RandomQuestionsHelp = "Numero di domande casuali da mostrare: metti 0 (zero) per tutte nell\'ordine originale";
+$RandomQuestionsHelp = "Numero di quesiti da scegliere a caso tra quelli presenti nel test.<br /> Indica 0 (zero) per presentarli tutti nel loro ordine, il loro numero totale per presentarli tutti in ordine casuale.";
+$ExerciseAttempts = "Numero massimo di tentativi";
+$DoNotRandomize = "Non cambiare l\'ordine";
+$Infinite = "Illimitate";
 ?>

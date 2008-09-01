@@ -833,4 +833,6 @@ $DaysBefore = "days before";
 $DaysAfter = "days after";
 $SessionAddTypeUnique = "Single registration";
 $SessionAddTypeMultiple = "Multiple registration";
+$EnableSearchTitle = "Full-text search feature";
+$EnableSearchComment = "Select \"Yes\" to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum.";
 ?>

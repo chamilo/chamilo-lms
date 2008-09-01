@@ -19,4 +19,5 @@ $triesleft = "Essais restants";
 $exeFinished = "Toutes les réponses ont été remplies. Modifiez vos choix ou envoyez vos réponses";
 $nextAnswer = "Cliquez maintenant sur : &done=done";
 $delineation = "Délinéation";
+$labelDelineationMenu = "Fermer la délinéation";
 ?>

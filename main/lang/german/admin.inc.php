@@ -833,4 +833,5 @@ $DaysBefore = "Tage vor";
 $DaysAfter = "Tage nach";
 $SessionAddTypeUnique = "Einzelne Anmeldung";
 $SessionAddTypeMultiple = "Mehrfach Anmeldung";
+$EnableSearchTitle = "Volltextsuche Funktion";
 ?>

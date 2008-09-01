@@ -813,4 +813,6 @@ $DaysBefore = "jours avant";
 $DaysAfter = "jours après";
 $SessionAddTypeUnique = "Inscription unique";
 $SessionAddTypeMultiple = "Inscription multiple";
+$EnableSearchTitle = "Fonctionnalité de recherche full-text";
+$EnableSearchComment = "Sélectionnez \"Oui\" pour activer la fonctionnalité de recherche et d\'indexation full-text. Cette fonctionnalité nécessite l\'installation sur votre serveur de l\'extension Xapian pour PHP, en version 1.x ou supérieure. Cette fonctionnalité ne fonctionnera pas si ce pré-requis n\'est pas rempli.";
 ?>

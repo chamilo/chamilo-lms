@@ -19,4 +19,5 @@ $triesleft = "Attempts left";
 $exeFinished = "All answers done. You can now rearrange the hotspots or click button below image to submit";
 $nextAnswer = "Now click on: &done=done";
 $delineation = "Delineation";
+$labelDelineationMenu = "Close delineation";
 ?>

@@ -10,7 +10,7 @@ $AllPages = "Az összes oldal";
 $AddNew = "Új oldal hozzáadása";
 $ChangesStored = "A módosításait a rendszer elmentette";
 $NewWikiSaved = "Az új wiki oldal létrejött. Megnézheti, ha ide kattint:";
-$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"\'.api_get_path(WEB_IMG_PATH).\'wiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Mr. Dokeos\" /></p> <p align=\"center\">Kezdésként módosítsa ezt az oldalt</p>";
+$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Mr. Dokeos\" /></p> <p align=\"center\">Kezdï¿½skï¿½nt mï¿½dosï¿½tsa ezt az oldalt</p> ";
 $CourseWikiPages = "Kurzus wiki oldalak";
 $GroupWikiPages = "Csoport Wiki oldalak";
 $NoWikiPageTitle = "A módosításait a rendszer elmentette, de az oldalnak még nevet kell adnia";

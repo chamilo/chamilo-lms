@@ -244,4 +244,7 @@ $ReachedMaxAttempts = "Der Test  \'%s\' kann nicht gemacht werden, weil das Maxi
 $AdvancedParameters = "Weitere Parameter";
 $RandomQuestionsToDisplay = "ANzahl der angezeigten Zufallsfragen";
 $RandomQuestionsHelp = "Anzahl der angezeiigten Zufallsfragen; mit 0 werden alle Fragen in der richtigen Reihenfolge angezeigt";
+$ExerciseAttempts = "Maximum Anzahl von Versuchen";
+$DoNotRandomize = "ohne Zufallsgenerator";
+$Infinite = "endlos";
 ?>

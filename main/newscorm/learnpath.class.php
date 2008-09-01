@@ -8534,47 +8534,48 @@ EOD;
 					$new_path=$updir.'/'.$new_file_name;
 					
 					//$result= @move_uploaded_file($image_array['tmp_name'], $new_path);
+						
+					// resize the image
+					include_once (api_get_path(LIBRARY_PATH).'image.lib.php');		
+					$temp = new image($image_array['tmp_name']);
+					$picture_infos=getimagesize($image_array['tmp_name']); // $picture_infos[0]-> width
+					if ($picture_infos[0]>240)
+						$thumbwidth=240;
+					else
+						$thumbwidth=$picture_infos[0];
+						
+					if ($picture_infos[1]>100)
+						$new_height=100;
+					else
+						$new_height = $picture_infos[1];
 					
-						// resize the image
-				include_once (api_get_path(LIBRARY_PATH).'image.lib.php');		
-				$temp = new image($image_array['tmp_name']);
-				$picture_infos=getimagesize($image_array['tmp_name']); // $picture_infos[0]-> width
-				if ($picture_infos[0]>240)
-					$thumbwidth=240;
-				else
-					$thumbwidth=$picture_infos[0];
+						
+					//$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
 					
-				if ($picture_infos[1]>100)
-					$new_height=100;
-				else
-					$new_height = $picture_infos[1];
-				
+					$temp->resize($thumbwidth,$new_height,0);
+					$type=$picture_infos[2];
+					$result=false;
 					
-				//$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
-				
-				$temp->resize($thumbwidth,$new_height,0);
-				$type=$picture_infos[2];
-			
-			    switch ($type) {
-			            case 2 : $temp->send_image('JPG',$new_path);
-			            break;
-			            case 3 : $temp->send_image('PNG',$new_path);
-			            break;
-			            case 1 : $temp->send_image('GIF',$new_path);
-			            break;
-			    }
-			    
-			    
-					
-												
-					// Storing the attachments if any
-					if (1)
+				    switch ($type) 
+				    {
+				            case 2 : 
+				            	$result=$temp->send_image('JPG',$new_path);
+				            break;
+				            case 3 : 
+				            	$result=$temp->send_image('PNG',$new_path);
+				            break;
+				            case 1 : 
+				            	$result=$temp->send_image('GIF',$new_path);
+				            break;
+				    }
+				    						
+					// Storing the image filename
+					if ($result)
 					{	
 						$image_moved=true;	
 						$this->set_preview_image($new_file_name);
-						//return true;		
-					}
-	
+						return true;		
+					}	
 						
 				}			 
 			}			

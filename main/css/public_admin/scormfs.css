@@ -78,9 +78,15 @@
 	clear: both;
 }
 
-.preview_image 
-{	 
-	text-align: right;
-	margin-right: 5px;
-	padding-left: 15px;	
+#image_preview
+{
+	padding-left: 17px;
+}
+
+#author_name
+{
+	padding-left: 5px;
+	padding-top: 5px;
+	font-size: 11px;
+	color:#888;
 }

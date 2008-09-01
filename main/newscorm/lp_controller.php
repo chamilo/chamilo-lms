@@ -569,13 +569,18 @@ switch($action)
 	case 'update_lp':
 		if(!api_is_allowed_to_edit()){
 			api_not_allowed(true);
-		}
+		}  
 		if($debug>0) error_log('New LP - update_lp action triggered',0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for edit',0); require('lp_list.php'); }
 		else{
 			$_SESSION['refresh'] = 1;
 			$_SESSION['oLP']->set_name($_REQUEST['lp_name']);
-			$_SESSION['oLP']->set_author($_REQUEST['lp_author']);
+			$author=	$_REQUEST['lp_author'];					
+			//fixing the author name (no body or html tags)	
+			$len = strpos($author,'</p>')-strpos($author,'<p>');			
+			$author_fixed=substr($author,strpos($author,'<p>'), $len+4);
+						
+			$_SESSION['oLP']->set_author($author_fixed);
 			$_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);
 			$_SESSION['oLP']->set_maker($_REQUEST['lp_maker']);
 			$_SESSION['oLP']->set_proximity($_REQUEST['lp_proximity']);			

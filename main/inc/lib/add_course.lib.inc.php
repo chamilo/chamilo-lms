@@ -790,36 +790,34 @@ function update_Db_course($courseDbName)
 	*/
 	
 	$sql = "CREATE TABLE `".$TABLETOOLWIKI . "` (
-		id int (11) NOT NULL auto_increment,
+		id int NOT NULL auto_increment,
 		reflink varchar(250) NOT NULL default 'index',
 		title text NOT NULL,
 		content text NOT NULL,
-		user_id int(11) NOT NULL default '0',
-		group_id INT(11) DEFAULT NULL,
+		user_id int NOT NULL default 0,
+		group_id INT DEFAULT NULL,
 		timestamp timestamp(14) NOT NULL,		
-		addlock int(11) NOT NULL default '1',
-		editlock int(11) NOT NULL default '0',
-		visibility int(11) NOT NULL default '1',	
-		notify int(11) NOT NULL default '0',		
-		addlock_disc int(11) NOT NULL default '1',		
-		visibility_disc int(11) NOT NULL default '1',
-		ratinglock_disc int(11) NOT NULL default '1',
-		notify_disc int(11) NOT NULL default '0',
-		assignment int(11) NOT NULL default '0',		
+		addlock int NOT NULL default 1,
+		editlock int NOT NULL default 0,
+		visibility int NOT NULL default 1,	
+		notify int NOT NULL default 0,		
+		addlock_disc int NOT NULL default 1,		
+		visibility_disc int NOT NULL default 1,
+		ratinglock_disc int NOT NULL default 1,
+		notify_disc int NOT NULL default 0,
+		assignment int NOT NULL default 0,		
 		startdate_assig datetime NOT NULL default '0000-00-00 00:00:00',
 		enddate_assig datetime  NOT NULL default '0000-00-00 00:00:00',	 
-		delayedsubmit int(11) NOT NULL default '0',	
+		delayedsubmit int NOT NULL default 0,	
 		comment text NOT NULL,
 		progress text NOT NULL,
-		score int(11) NULL default '0',
-		version INT(11) DEFAULT NULL,
-		hits INT(11) DEFAULT NULL,
+		score int NULL default 0,
+		version int DEFAULT NULL,
+		hits int DEFAULT NULL,
 		linksto text NOT NULL,
-		user_ip varchar(39) COLLATE utf8_general_ci NOT NULL,		
+		user_ip varchar(39) NOT NULL,		
 		PRIMARY KEY (id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
-
 
 	/*
 	-----------------------------------------------------------

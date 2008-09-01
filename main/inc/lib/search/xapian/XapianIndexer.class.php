@@ -117,7 +117,8 @@ abstract class XapianIndexer {
 
             /* free-form ignoring ids, indexes title and content */
             foreach ($chunk->data as $key => $value) {
-                if ($key != 'ids')
+                //if text is empty, we don't index (because it triggers a Xapian error)
+                if ($key != 'ids' && !empty($value))
                     $this->indexer->index_text($value, 1);
             }
             

@@ -100,7 +100,7 @@ if ($survey_data['invited'] > 0)
 // building the form for publishing the survey
 $form = new FormValidator('publish_form','post', api_get_self().'?survey_id='.$_GET['survey_id']);
 // Course users
-$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], true, $_SESSION['id_session']);
+$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], true, $_SESSION['id_session'], '', 'ORDER BY lastname');
 $possible_users = array ();
 foreach ($complete_user_list as $index => $user)
 {

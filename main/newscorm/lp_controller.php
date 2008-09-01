@@ -575,10 +575,10 @@ switch($action)
 		else{
 			$_SESSION['refresh'] = 1;
 			$_SESSION['oLP']->set_name($_REQUEST['lp_name']);
-			 $author=	$_REQUEST['lp_author'];					
+			$author=	$_REQUEST['lp_author'];					
 			//fixing the author name (no body or html tags)		
-			$len = strripos($author,'</p>')-strpos($author,'<p>');			
-			$author_fixed=substr($author,strpos($author,'<p>'), $len+4);
+			$len = strripos($author,'</p>')-stripos($author,'<p>');			
+			$author_fixed=substr($author,stripos($author,'<p>'), $len+4);
 						
 			$_SESSION['oLP']->set_author($author_fixed);
 			$_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);

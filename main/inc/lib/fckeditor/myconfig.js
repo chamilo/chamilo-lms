@@ -68,6 +68,18 @@ FCKConfig.ToolbarSets["Survey"] = [
 	['FontSize','Bold','Italic','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Table','-','ImageManager','Source']
 ] ;
 
+FCKConfig.ToolbarSets["Wiki"] = [
+	['Templates','Cut','Copy','Paste'],	
+	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+	['Link','Unlink','Anchor'],
+	['ImageManager','flvPlayer','Flash','EmbedMovies','MP3','Table','Rule','Smiley','SpecialChar'],
+	['FontFormat','FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
+	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],	
+	['OrderedList','UnorderedList','-','Outdent','Indent'],
+	['TextColor','BGColor'],['Source']
+] ;
+
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;
 
 /*

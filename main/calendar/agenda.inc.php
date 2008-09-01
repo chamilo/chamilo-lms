@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 15984 2008-08-13 17:24:24Z juliomontoya $
+<?php //$Id: agenda.inc.php 16190 2008-09-01 09:10:55Z vanpouckesven $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -517,13 +517,13 @@ echo "\n<table id=\"recipient_list\" style=\"display: none;\">\n";
 	// the buttons for adding or removing groups/users
 	echo "\n\t\t<td valign=\"middle\">\n";
 	echo "\t\t<input type=\"button\" ",
-				"onclick=\"move(this.form.elements[2],this.form.elements[5])\" ",
+				"onclick=\"move(this.form.elements[4],this.form.elements[7])\" ",
 				"value=\"   &gt;&gt;   \" />",
 
 				"\n\t\t<p>&nbsp;</p>",
 
 				"\n\t\t<input type=\"button\" ",
-				"onclick=\"move(this.form.elements[5],this.form.elements[2])\" ",
+				"onclick=\"move(this.form.elements[7],this.form.elements[4])\" ",
 				"value=\"   &lt;&lt;   \" />";
 	echo "\t\t</td>\n";
 	echo "\n\t\t<td>\n";
@@ -639,13 +639,13 @@ function store_new_agenda_item()
 					        (title,content, start_date, end_date)
 					        VALUES
 					        ('".$title."','".$content."', '".$start_date."','".$end_date."')";
-	
+	echo($sql);
 	$result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
 	$last_id=Database::insert_id();
 	
 	// store in last_tooledit (first the groups, then the users
 	$to=$_POST['selectedform'];
-	
+
 	if ((!is_null($to))or (!empty($_SESSION['toolgroup']))) // !is_null($to): when no user is selected we send it to everyone
 	{
 		$send_to=separate_users_groups($to);
@@ -2509,7 +2509,7 @@ function show_add_form($id = '')
     ?>
 	<tr>
 		<td colspan="3">
-			<input type="submit" name="submit_event" value="<?php echo get_lang('Ok'); ?>" onclick="selectAll(this.form.elements[5],true)" />
+			<input type="submit" name="submit_event" value="<?php echo get_lang('Ok'); ?>" onclick="selectAll(this.form.elements[7],true)" />
 		</td>
 	</tr>
 </table>

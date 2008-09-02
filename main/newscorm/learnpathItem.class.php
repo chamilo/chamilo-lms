@@ -1889,6 +1889,7 @@ class learnpathItem{
         $terms_update_sql='';
         //TODO: validate csv string
         $terms_update_sql = "UPDATE $lp_item SET terms = '". Database::escape_string(htmlentities($new_terms_string)) . "' WHERE id=".$this->get_id();
+        $res = api_sql_query($terms_update_sql,__FILE__,__LINE__);
 
         // save it to search engine
         if (api_get_setting('search_enabled') == 'true') {

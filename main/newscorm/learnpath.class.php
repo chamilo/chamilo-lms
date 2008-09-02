@@ -3567,7 +3567,19 @@ class learnpath {
     	return true;
 
     }
-    
+    /**
+     * Set index terms for all items in this path
+     * @param   string  Comma-separated list of terms
+     * @return  boolean False on error, true otherwise
+     */
+    function set_terms($terms) {
+        if ( empty($terms) ) return false;
+        
+        foreach ( $this->items as $item ) {
+            $item->set_terms($terms);
+        }
+        return true;
+    }    
      /**
      * Sets the theme of the LP (local/remote) (and save)
      * @param	string	Optional string giving the new theme of this learnpath

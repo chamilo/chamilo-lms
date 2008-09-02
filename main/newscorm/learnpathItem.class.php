@@ -989,6 +989,20 @@ class learnpathItem{
 		return $scorm_time;
     }
     /**
+     * Returns search index's internal ID
+     * @return  int     The indexing engine's internal ID for this lp-item
+     */
+    function get_search_id() {
+        return $this->search_did;
+    }
+    /**
+     * Returns index terms
+     * @return  string  Comma-separated list of index terms
+     */
+    function get_terms() {
+        return $this->terms;
+    }
+    /**
      * Returns the item's title
      * @return	string	Title
      */

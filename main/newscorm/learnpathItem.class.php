@@ -53,6 +53,8 @@ class learnpathItem{
 	var $title;
 	var $type; // this attribute can contain chapter|link|student_publication|module|quiz|document|forum|thread
 	var $view_id;
+    var $terms;
+    var $search_did;
 	
 	var $debug = 0; //logging param
     /**
@@ -98,7 +100,9 @@ class learnpathItem{
     	if(isset($row['launch_data'])){
     		$this->launch_data = $row['launch_data'];
     	}
-		$this->save_on_close = true;
+        $this->terms = $row['terms'];
+        $this->search_did = $row['search_did']; 
+   		$this->save_on_close = true;
 		$this->db_id = $id;
 		
 		//error_log('New LP - End of learnpathItem constructor for item '.$id,0);

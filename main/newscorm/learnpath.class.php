@@ -1324,6 +1324,29 @@ class learnpath {
     }
 
     /**
+     * Get the index terms shared between all items of this path
+     * @return  string  String of terms, split by a simple comma
+     */
+    function get_common_index_terms()
+    {
+        $terms = array();
+        $i = 0;
+        foreach ( $this->items as $item ) {
+            $i_terms = split(',',$item->terms);
+            if ( $i == 0 ) { $terms = $i_terms; continue; }
+            foreach($terms as $term)
+            {
+                if ( !in_array($term,$i_terms) )
+                {
+                    $terms = array_diff($terms,array($term)); //remove term from terms array because it is not in the current item's terms (so it is not common to all)
+                }
+            }
+        }
+        $s = implode(',',$terms);
+        return $s;
+    }
+
+    /**
 
      * Gets the number of items currently completed
 

@@ -88,6 +88,7 @@ method="get">
         foreach ($dktags as $tag)
         {
             $tag = trim($tag['name'], 'T ');
+            $tag = str_replace(' ', '_', $tag);
             $color = "";
             if ($filter) {
                 if (array_search($tag, $post_tags) !== FALSE)
@@ -98,7 +99,11 @@ method="get">
                 <?php echo $tag ?></span>
             <script type="text/javascript">
                 $('#<?php echo $tag ?>').click(function waaa (e) {
-                    $('#<?php echo $tag ?>').toggleClass('lighttagcolor');
+                    if ( $('.lighttagcolor').size() < 3) {
+                        $('#<?php echo $tag ?>').toggleClass('lighttagcolor');
+                    } else {
+                        $('#<?php echo $tag ?>').removeClass('lighttagcolor');
+                    }
                 });
             </script>
             <?php

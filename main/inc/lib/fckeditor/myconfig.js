@@ -71,7 +71,7 @@ FCKConfig.ToolbarSets["Survey"] = [
 FCKConfig.ToolbarSets["Wiki"] = [
 	['Templates','Cut','Copy','Paste'],	
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-	['Link','Unlink','Anchor'],
+	['Wikilink','Link','Unlink','Anchor'],
 	['ImageManager','flvPlayer','Flash','EmbedMovies','MP3','Table','Rule','Smiley','SpecialChar'],
 	['FontFormat','FontName','FontSize'],
 	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
@@ -90,4 +90,6 @@ FCKConfig.Plugins.Add("MP3", "en", sOtherPluginPath ) ;
 FCKConfig.Plugins.Add('ImageManager','en') ; 
 FCKConfig.Plugins.Add('flvPlayer','en') ; 
 FCKConfig.Plugins.Add("Flash", "en");  
-FCKConfig.Plugins.Add('fckEmbedMovies');  
+FCKConfig.Plugins.Add('fckEmbedMovies');
+FCKConfig.Plugins.Add("wikilink", "en,es", sOtherPluginPath ) ; // support to english, spanish
+

@@ -1877,7 +1877,7 @@ class learnpathItem{
      * @return  boolean False on error, true otherwise
      */
     function set_terms($terms) {
-        $lp_item = Database::get_course_table(TABLE_LEARNPATH_ITEM);
+        $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
         $a_terms = split(',',$terms);
         $i_terms = split(',',$this->get_terms());

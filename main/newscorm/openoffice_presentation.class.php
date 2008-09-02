@@ -138,7 +138,8 @@ class OpenofficePresentation extends OpenofficeDocument {
                 $tbl_lp_item = Database::get_course_table('lp_item');
                 $sql_update = "
                   UPDATE " . $tbl_lp_item . "
-                  SET search_did = " . $did . "
+                  SET search_did = " . $did . ",
+                  terms = '".Database::escape_string($_POST['terms'])."'
                   WHERE id = " . $previous;
                 api_sql_query($sql_update, __FILE__, __LINE__);
               }

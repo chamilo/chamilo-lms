@@ -1880,8 +1880,11 @@ class learnpathItem{
         $lp_item = Database::get_course_table(TABLE_LEARNPATH_ITEM);
         require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
         $a_terms = split(',',$terms);
-        $i_terms = $this->get_terms();
-        $new_terms = array_merge($a_terms,$i_terms);            
+        $i_terms = split(',',$this->get_terms());
+        foreach ( $i_terms as $term ) {
+            if ( !in_array($term,$a_terms) ) { array_push($a_terms,$term); }
+        }
+        $new_terms = $a_terms;
         $new_terms_string = implode(',',$new_terms);
         $terms_update_sql='';
         //TODO: validate csv string

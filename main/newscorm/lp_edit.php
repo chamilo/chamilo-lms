@@ -113,6 +113,12 @@ $form->addElement('html', $div);
 
 $form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));
 
+// Search terms (only if search is activated)
+if (api_get_setting('search_enabled') == 'true')
+{
+    $form -> addElement('text', 'lp_terms', get_lang('SearchFeatureTerms'));
+    $defaults['lp_terms'] = $_SESSION['oLP']->get_common_index_terms();
+}
 
 //default values
 $content_proximity_select -> setSelected($s_selected_proximity);

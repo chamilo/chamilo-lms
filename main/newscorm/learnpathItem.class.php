@@ -1872,6 +1872,29 @@ class learnpathItem{
      	return false;
     }
     /**
+     * Sets new index terms for item
+     * @param   string  Comma-separated list of terms
+     * @return  boolean False on error, true otherwise
+     */
+    function set_terms($terms) {
+        $lp_item = Database::get_course_table(TABLE_LEARNPATH_ITEM);
+        require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
+        $a_terms = split(',',$terms);
+        $i_terms = $this->get_terms();
+        $new_terms = array_merge($a_terms,$i_terms);            
+        $new_terms_string = implode(',',$new_terms);
+        $terms_update_sql='';
+        //TODO: validate csv string
+        $terms_update_sql = "UPDATE $lp_item SET terms = '". Database::escape_string(htmlentities($new_terms_string)) . "' WHERE id=".$this->get_id();
+
+        // save it to search engine
+        if (api_get_setting('search_enabled') == 'true') {
+            $di = new DokeosIndexer();
+            $di->update_terms($this->get_search_id(), $new_terms);
+        }
+        return true;
+    }
+    /**
      * Sets the item viewing time in a usable form, given that SCORM packages often give it as 00:00:00.0000
      * @param	string	Time as given by SCORM
      */

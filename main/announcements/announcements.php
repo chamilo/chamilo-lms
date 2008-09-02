@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 15773 2008-07-14 02:41:37Z yannoo $
+<?php //$Id: announcements.php 16224 2008-09-02 14:16:13Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -320,7 +320,7 @@ echo "<a name=\"top\"></a>";
 			  ACTION HANDLING
 =============================================*/
 
-if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()))
+if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()))
 {
 	/*
 	-----------------------------------------------------------
@@ -494,7 +494,7 @@ if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announc
 		Submit announcement
 	-----------------------------------------------------------
 	*/
-	if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()))
+	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()))
 	{
 
 		$emailTitle=(!empty($_POST['emailTitle'])?$_POST['emailTitle']:'');
@@ -522,7 +522,7 @@ if (api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announc
 			else //insert mode
 			{
 				if(!$surveyid){
-					$result = api_sql_query("SELECT MAX(display_order) FROM $tbl_announcement",__FILE__,__LINE__);
+					$result = api_sql_query("SELECT MAX(display_order) FROM $tbl_announcement WHERE session_id=".intval($_SESSION['id_session'])." OR session_id=0",__FILE__,__LINE__);
 	
 					list($orderMax) = Database::fetch_row($result);
 					$order = $orderMax + 1;
@@ -693,7 +693,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 									  		   Morgen is er geen les, de les wordt geschrapt wegens vergadering (newContent)
 							    */
 
-								$emailsubjbericht = api_is_allowed_to_edit() ? get_lang('professorMessage') : get_lang('LearnerMessage');
+								$emailsubjbericht = api_is_allowed_to_edit(false,true) ? get_lang('professorMessage') : get_lang('LearnerMessage');
 								$emailSubject = $emailsubjbericht. " - ".$_course['official_code'];
 								$emailSubject = $emailTitle;
 
@@ -849,7 +849,7 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
       /*======================================================================
                               DISPLAY LEFT COLUMN
       ======================================================================*/
-		if(api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ) // check teacher status
+		if(api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ) // check teacher status
 		{
 	      	if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
 				{
@@ -860,6 +860,7 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 							WHERE announcement.id = toolitemproperties.ref
 							AND toolitemproperties.tool='announcement'
 							AND toolitemproperties.visibility<>'2'
+							AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
 							GROUP BY toolitemproperties.ref
 							ORDER BY display_order DESC
 							LIMIT 0,$maximum";
@@ -882,6 +883,7 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 							AND toolitemproperties.visibility='1'
 							AND	( toolitemproperties.to_user_id='".$_user['user_id']."'" .
 								"OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+							AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
 							GROUP BY toolitemproperties.ref
 							ORDER BY display_order DESC
 							LIMIT 0,$maximum";
@@ -899,6 +901,7 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 								AND toolitemproperties.tool='announcement'
 								AND toolitemproperties.visibility='1'
 								AND ( toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0')
+								AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
 								GROUP BY toolitemproperties.ref
 								ORDER BY display_order DESC
 								LIMIT 0,$maximum";
@@ -913,6 +916,7 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 								AND toolitemproperties.tool='announcement'
 								AND toolitemproperties.visibility='1'
 								AND toolitemproperties.to_group_id='0'
+								AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
 								GROUP BY toolitemproperties.ref
 								ORDER BY display_order DESC
 								LIMIT 0,$maximum";
@@ -931,13 +935,13 @@ $announcement_number = Database::num_rows($result);
 ----------------------------------------------------*/
 if(!$surveyid)
 {
-		if ((api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath'))
+		if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath'))
 		{
 
 			echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'><img src=\"../img/announce_add.gif\"> ".get_lang("AddAnnouncement")."</a><br/>";
 			
 		}
-		if (api_is_allowed_to_edit() && $announcement_number > 1)
+		if (api_is_allowed_to_edit(false,true) && $announcement_number > 1)
 		{
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\"><img src=\"../img/valves_delete.gif\"/> ".get_lang("AnnouncementDeleteAll")."</a>\n";
 		}	// if announcementNumber > 1
@@ -1142,7 +1146,7 @@ if (isset($message) && $message == true)
 		//$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
 		$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_user['user_id']);
 
-		if (api_is_allowed_to_edit() )
+		if (api_is_allowed_to_edit(false,true) )
 		{
 			// A.1. you are a course admin with a USER filter
 			// => see only the messages of this specific user + the messages of the group (s)he is member of.
@@ -1157,6 +1161,7 @@ if (isset($message) && $message == true)
 						WHERE announcement.id = toolitemproperties.ref
 						AND toolitemproperties.tool='announcement'
 						AND	(toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+						AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
 						ORDER BY display_order DESC";
 
 				}
@@ -1169,6 +1174,7 @@ if (isset($message) && $message == true)
 						AND toolitemproperties.tool='announcement'
 						AND (toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id='0')
 						AND toolitemproperties.visibility='1'
+						AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
 						ORDER BY display_order DESC";
 
 				}
@@ -1184,6 +1190,7 @@ if (isset($message) && $message == true)
 					WHERE announcement.id = toolitemproperties.ref
 					AND toolitemproperties.tool='announcement'
 					AND (toolitemproperties.to_group_id=$group_id OR toolitemproperties.to_group_id='0')
+					AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
 					GROUP BY toolitemproperties.ref
 					ORDER BY display_order DESC";
 			}
@@ -1203,6 +1210,7 @@ if (isset($message) && $message == true)
 						WHERE announcement.id = toolitemproperties.ref
 						AND toolitemproperties.tool='announcement'
 						AND toolitemproperties.visibility='1'
+						AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
 						GROUP BY toolitemproperties.ref
 						ORDER BY display_order DESC";
 				}
@@ -1217,6 +1225,7 @@ if (isset($message) && $message == true)
 						WHERE announcement.id = toolitemproperties.ref
 						AND toolitemproperties.tool='announcement'
 						AND (toolitemproperties.visibility='0' or toolitemproperties.visibility='1')
+						AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
 						GROUP BY toolitemproperties.ref
 						ORDER BY display_order DESC";
 
@@ -1250,6 +1259,7 @@ if (isset($message) && $message == true)
 					AND toolitemproperties.tool='announcement'
 					AND (toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0')
 					AND toolitemproperties.visibility='1'
+					AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
 					ORDER BY display_order DESC";
 
 			}
@@ -1261,7 +1271,8 @@ if (isset($message) && $message == true)
 					WHERE announcement.id = toolitemproperties.ref
 					AND toolitemproperties.tool='announcement'
 					AND toolitemproperties.to_group_id='0'
-					AND toolitemproperties.visibility='1'";
+					AND toolitemproperties.visibility='1'
+					AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")";
 
 			}
 		}
@@ -1412,7 +1423,7 @@ if (isset($message) && $message == true)
 				echo   "<br />";
 
 
-				if(api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()))
+				if(api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()))
 				{
 					/*=====================================================================
 												SHOW MOD/DEL/VIS FUNCTIONS
@@ -1423,7 +1434,7 @@ if (isset($message) && $message == true)
 							"</a></td>";
 
 
-					if (api_is_allowed_to_edit()) echo "<td valign=\"top\"><a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">",
+					if (api_is_allowed_to_edit(false,true)) echo "<td valign=\"top\"><a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">",
 							"<img src=\"../img/delete.gif\" title=\"",get_lang('Delete'),"\" border=\"0\" align=\"absmiddle\">",
 							"</a></td>";
 

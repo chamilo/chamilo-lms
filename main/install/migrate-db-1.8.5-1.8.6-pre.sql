@@ -54,3 +54,5 @@ CREATE TABLE wiki (id int NOT NULL auto_increment, reflink varchar(250) NOT NULL
 INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('wiki','wiki/index.php','wiki.gif',0,'1','squaregrey.gif',0,'_self','interaction');
 ALTER TABLE group_category ADD COLUMN wiki_state tinyint unsigned NOT NULL default 1;
 ALTER TABLE group_info ADD COLUMN wiki_state enum('0','1','2') NOT NULL default '0';
+ALTER TABLE announcement ADD session_id SMALLINT UNSIGNED NOT NULL;
+ALTER TABLE announcement ADD INDEX ( session_id ) ;

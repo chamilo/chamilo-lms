@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 16222 2008-09-02 09:07:00Z vanpouckesven $
+<?php //$Id: announcements.inc.php 16224 2008-09-02 14:16:13Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -658,7 +658,7 @@ function store_advalvas_item($emailTitle,$newContent, $order, $to)
 	global $tbl_item_property;
 
 	// store in the table announcement
-	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order'";
+	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
 	$result = api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
 	$last_id= Database::get_last_insert_id();
 
@@ -705,7 +705,7 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 	global $tbl_item_property;
 
 	// store in the table announcement
-	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order'";
+	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
 	$result = api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
 	$last_id= Database::get_last_insert_id();
 

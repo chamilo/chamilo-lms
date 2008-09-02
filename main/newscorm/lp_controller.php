@@ -577,8 +577,13 @@ switch($action)
 			$_SESSION['oLP']->set_name($_REQUEST['lp_name']);
 			$author=	$_REQUEST['lp_author'];					
 			//fixing the author name (no body or html tags)		
-			$len = strripos($author,'</p>')-stripos($author,'<p>');			
-			$author_fixed=substr($author,stripos($author,'<p>'), $len+4);
+            if( stripos($author) != 0 ) {
+                $len = strripos($author,'</p>')-stripos($author,'<p>');                 
+                $author_fixed=substr($author,stripos($author,'<p>'), $len+4);
+            } else {
+                $len = strripos($author,'</body>')-stripos($author,'<body>'); 
+                $author_fixed=substr($author,stripos($author,'<body>'), $len+7);
+            }
 						
 			$_SESSION['oLP']->set_author($author_fixed);
 			$_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);

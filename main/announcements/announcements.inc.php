@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 15247 2008-05-08 19:07:01Z juliomontoya $
+<?php //$Id: announcements.inc.php 16222 2008-09-02 09:07:00Z vanpouckesven $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -93,6 +93,9 @@ function show_to_form($to_already_selected)
 {
 	$user_list=get_course_users();
 	$group_list=get_course_groups();
+
+	if ($to_already_selected == "")
+          $to_already_selected = array();
 
 	echo "\n<table id=\"recipient_list\" style=\"display: none;\">\n";
 	echo "\t<tr>\n";

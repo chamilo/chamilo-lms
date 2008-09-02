@@ -3574,6 +3574,7 @@ class learnpath {
      */
     function set_terms($terms) {
         if ( empty($terms) ) return false;
+        if ( trim($terms) == trim($this->get_common_index_terms()) ) return false; //indexing is costly, don't re-index if no change
         
         foreach ( $this->items as $item ) {
             $item->set_terms($terms);

@@ -58,3 +58,5 @@ ALTER TABLE announcement ADD session_id SMALLINT UNSIGNED NOT NULL;
 ALTER TABLE announcement ADD INDEX ( session_id ) ;
 ALTER TABLE forum_category ADD session_id SMALLINT UNSIGNED NOT NULL ;
 ALTER TABLE forum_category ADD INDEX ( session_id ) ;
+ALTER TABLE student_publication ADD session_id SMALLINT UNSIGNED NOT NULL default 0 ;
+ALTER TABLE student_publication ADD INDEX ( session_id ) ;

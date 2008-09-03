@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 15462 2008-05-27 16:34:55Z juliomontoya $
+*  	@version $Id: work.php 16235 2008-09-03 14:14:21Z elixir_inter $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -329,7 +329,7 @@ else
 //stats
 event_access_tool(TOOL_STUDENTPUBLICATION);
 
-$is_allowed_to_edit = api_is_allowed_to_edit(); //has to come after display_tool_view_option();
+$is_allowed_to_edit = api_is_allowed_to_edit(false,true); //has to come after display_tool_view_option();
 //api_display_tool_title($tool_name);
 
 /*
@@ -365,7 +365,7 @@ Display :: display_introduction_section(TOOL_STUDENTPUBLICATION);
 	COMMANDS SECTION (reserved for course administrator)
 -----------------------------------------------------------
 */
-if (api_is_allowed_to_edit()) 
+if (api_is_allowed_to_edit(false,true)) 
 {
 	/*-------------------------------------------
 				DELETE WORK COMMAND
@@ -517,7 +517,8 @@ if (api_is_allowed_to_edit())
 								   accepted		= '1',
 								   filetype 	= 'folder',
 								   post_group_id = '0',
-								   sent_date	= NOW()";
+								   sent_date	= NOW(),
+								   session_id   = ".intval($_SESSION['id_session']);
 
 			api_sql_query($sql_add_publication, __FILE__, __LINE__);
 			
@@ -761,7 +762,8 @@ if ($_POST['submitWork'] && $is_course_member && $check)
 										   active		= '" . $active . "',
 										   accepted		= '" . (!$uploadvisibledisabled) . "',
 										   post_group_id = '" . $post_group_id . "',
-										   sent_date	=  ' ".$current_date ."' ";
+										   sent_date	=  ' ".$current_date ."',
+										   session_id=".intval($_SESSION['id_session']);
 
 			api_sql_query($sql_add_publication, __FILE__, __LINE__);
 
@@ -801,7 +803,8 @@ if ($_POST['submitWork'] && $is_course_member && $check)
 				            title       = '" . $title . "',
 				            description = '" . $description . "',
 				            author      = '" . $authors . "',
-				            sent_date     = NOW()";
+				            sent_date     = NOW(),
+							session_id=".intval($_SESSION['id_session']);
 
 		api_sql_query($sql, __FILE__, __LINE__);
 

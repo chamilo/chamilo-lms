@@ -55,12 +55,15 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 		$display_output .= "&nbsp;&nbsp;<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") .'</a>&nbsp;&nbsp;&nbsp;&nbsp;';			
 	}
 	
-	if (! $always_show_tool_options && api_is_allowed_to_edit() )
+	if (! $always_show_tool_options && api_is_allowed_to_edit(false,true) )
 	{
 		// Create dir
 		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.Security::remove_XSS($_GET['origin']).'"><img src="../img/folder_new.gif" border="0"alt ="'.get_lang('CreateDir').'" /> '.get_lang('CreateDir').' </a>&nbsp;&nbsp;';
-		// Options
-		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".Security::remove_XSS($_GET['origin'])."&amp;display_tool_options=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a>&nbsp;&nbsp;";							
+		
+		
+		if(api_is_allowed_to_edit()) // the coach can't edit options of the tool
+			// Options
+			$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".Security::remove_XSS($_GET['origin'])."&amp;display_tool_options=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a>&nbsp;&nbsp;";							
 	}
 
 	if ($display_output != "")
@@ -84,7 +87,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cur_dir_path,$cur_dir_path_url)
 {
 	global $charset, $group_properties;
-	$is_allowed_to_edit = api_is_allowed_to_edit();
+	$is_allowed_to_edit = api_is_allowed_to_edit(false,true);
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 	if (! $is_allowed_to_edit) return;
@@ -232,7 +235,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	// Database table names
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-	$is_allowed_to_edit = api_is_allowed_to_edit();
+	$is_allowed_to_edit = api_is_allowed_to_edit(false,true);
 	$user_id = api_get_user_id();
 	$publications_list = array();
 	$sort_params = array();
@@ -265,20 +268,24 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	{
 		$sub_course_dir='';
 	}
-
+	
+	$session_condition =  intval($_SESSION['id_session'])!=0 ?"AND session_id IN (0,".intval($_SESSION['id_session']).")" : "";
 	//Get list from database
 	if($is_allowed_to_edit)
 	{
+		
 		$sql_get_publications_list = 	"SELECT * " .
 										"FROM  ".$work_table." " .
 										"WHERE url LIKE BINARY '$sub_course_dir%' " .
 										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .
+										$session_condition.
 		                 				"ORDER BY id";
 		                 				
 		$sql_get_publications_num = 	"SELECT count(*) " .
 										"FROM  ".$work_table." " .
 										"WHERE url LIKE BINARY '$sub_course_dir%' " .
 										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .
+										$session_condition.
 		                 				"ORDER BY id";
 		                 				
 	}
@@ -295,12 +302,14 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$subdirs_query = "WHERE url NOT LIKE '$sub_course_dir%/%' AND url LIKE '$sub_course_dir%'";
 		}
 		
-		$sql_get_publications_list =	"SELECT * FROM  $work_table $group_query $subdirs_query ORDER BY id";
+		
+		$sql_get_publications_list = "SELECT * FROM  $work_table $group_query $subdirs_query AND session_id IN (0,".intval($_SESSION['id_session']).") ORDER BY id";
 		
 		$sql_get_publications_num = "SELECT count(url) " .
 										"FROM  ".$work_table." " .
 										"WHERE url LIKE BINARY '$sub_course_dir%' " .
 										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .
+										$session_condition.
 		                 				"ORDER BY id";
 		                 				
 	}
@@ -389,11 +398,16 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
         /*$sql_select_directory= "SELECT sent_date FROM ".$work_table." WHERE " .
 							   "url LIKE BINARY '".$mydir_temp."' AND filetype = 'folder'";
 							   
-		*/					   
+		*/		
+		$session_condition =  intval($_SESSION['id_session'])!=0 ?"AND work.session_id IN (0,".intval($_SESSION['id_session']).")" : "";		   
 		$sql_select_directory= "SELECT prop.lastedit_date, author FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE " .
-							   	    "work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' ";													   
+							   	    "work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $session_condition";													   
 		$result=api_sql_query($sql_select_directory,__FILE__,__LINE__);
 		$row=Database::fetch_array($result);
+		
+		if(!$row) // the folder belongs to another session
+			continue;
+			
 		$direc_date= $row['lastedit_date']; //directory's date
 		$author= $row['author']; //directory's author
 			

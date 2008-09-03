@@ -445,7 +445,7 @@ function store_forumcategory($values)
 	}
 	else
 	{
-		$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order) VALUES ('".$clean_cat_title."','".Database::escape_string($values['forum_category_comment'])."','".Database::escape_string($new_max)."')";
+		$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order, session_id) VALUES ('".$clean_cat_title."','".Database::escape_string($values['forum_category_comment'])."','".Database::escape_string($new_max)."',".intval($_SESSION['id_session']).")";
 		api_sql_query($sql,__FILE__,__LINE__);
 		$last_id=Database::get_last_insert_id();
 		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $last_id,"ForumCategoryAdded", api_get_user_id());
@@ -1110,19 +1110,23 @@ function get_forum_categories($id='')
 	$table_categories		= Database :: get_course_table(TABLE_FORUM_CATEGORY);
 	$table_item_property	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
+	$session_condition = isset($_SESSION['id_session']) ? 'AND forum_categories.session_id IN (0,'.intval($_SESSION['id_session']).')' : '';
+
 	if ($id=='')
 	{
 		$sql="SELECT * FROM".$table_categories." forum_categories, ".$table_item_property." item_properties
 					WHERE forum_categories.cat_id=item_properties.ref
 					AND item_properties.visibility=1
 					AND item_properties.tool='".TOOL_FORUM_CATEGORY."'
+					$session_condition
 					ORDER BY forum_categories.cat_order ASC";
-		if (is_allowed_to_edit())
+		if (is_allowed_to_edit(false,true))
 		{
 			$sql="SELECT * FROM".$table_categories." forum_categories, ".$table_item_property." item_properties
 					WHERE forum_categories.cat_id=item_properties.ref
 					AND item_properties.visibility<>2
 					AND item_properties.tool='".TOOL_FORUM_CATEGORY."'
+					$session_condition
 					ORDER BY forum_categories.cat_order ASC";
 		}
 	}
@@ -1132,11 +1136,18 @@ function get_forum_categories($id='')
 				WHERE forum_categories.cat_id=item_properties.ref
 				AND item_properties.tool='".TOOL_FORUM_CATEGORY."'
 				AND forum_categories.cat_id='".Database::escape_string($id)."'
+				$session_condition
 				ORDER BY forum_categories.cat_order ASC";
 	}
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	while ($row=Database::fetch_array($result))
 	{
+		if($row['session_id']>0)
+		{
+			$sql_session = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$row['session_id'];
+			$rs_session = api_sql_query($sql_session,__FILE__,__LINE__);
+			$row['session_name'] = mysql_result($rs_session,0,0);
+		}
 		if ($id=='')
 		{
 			$forum_categories_list[$row['cat_id']]=$row;
@@ -1169,7 +1180,7 @@ function get_forums_in_category($cat_id)
 				AND item_properties.visibility=1
 				AND item_properties.tool='".TOOL_FORUM."'
 				ORDER BY forum.forum_order ASC";
-	if (is_allowed_to_edit())
+	if (is_allowed_to_edit(false,true))
 	{
 		$sql="SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
 				WHERE forum.forum_category='".Database::escape_string($cat_id)."'
@@ -1233,7 +1244,7 @@ function get_forums($id='')
 				GROUP BY threads.forum_id";
 
 		//-------------- Course Admin  -----------------//
-		if (is_allowed_to_edit())
+		if (is_allowed_to_edit(false,true))
 		{
 			// select all the forum information of all forums (that are not deleted)
 			$sql="SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
@@ -1287,6 +1298,12 @@ function get_forums($id='')
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	while ($row=Database::fetch_array($result))
 	{
+		if($row['session_id']>0)
+		{
+			$sql_session = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$row['session_id'];
+			$rs_session = api_sql_query($sql_session,__FILE__,__LINE__);
+			$row['session_name'] = mysql_result($rs_session,0,0);
+		}
 		if ($id=='')
 		{
 			$forum_list[$row['forum_id']]=$row;
@@ -1334,7 +1351,7 @@ function get_forums($id='')
 		{
 			foreach ($forum_list as $key=>$value)
 			{
-				$last_post_info_of_forum=get_last_post_information($key,is_allowed_to_edit());
+				$last_post_info_of_forum=get_last_post_information($key,is_allowed_to_edit(false,true));
 				$forum_list[$key]['last_post_id']=$last_post_info_of_forum['last_post_id'];
 				$forum_list[$key]['last_poster_id']=$last_post_info_of_forum['last_poster_id'];
 				$forum_list[$key]['last_post_date']=$last_post_info_of_forum['last_post_date'];
@@ -1350,7 +1367,7 @@ function get_forums($id='')
 	}
 	else
 	{
-		$last_post_info_of_forum=get_last_post_information($id,is_allowed_to_edit());
+		$last_post_info_of_forum=get_last_post_information($id,is_allowed_to_edit(false,true));
 		$forum_list['last_post_id']=$last_post_info_of_forum['last_post_id'];
 		$forum_list['last_poster_id']=$last_post_info_of_forum['last_poster_id'];
 		$forum_list['last_post_date']=$last_post_info_of_forum['last_post_date'];
@@ -1456,7 +1473,7 @@ function get_threads($forum_id)
 				ON post.poster_id= last_poster_users.user_id
 			WHERE thread.forum_id='".Database::escape_string($forum_id)."'
 			ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
-	if (is_allowed_to_edit())
+	if (is_allowed_to_edit(false,true))
 	{
 		// important note: 	it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement
 		//					because we also have thread.* in it. This is because thread has a field locked and post also has the same field
@@ -1500,7 +1517,7 @@ function get_posts($thread_id)
 	global $table_users;
 
 	// note: change these SQL so that only the relevant fields of the user table are used
-	if (api_is_allowed_to_edit())
+	if (api_is_allowed_to_edit(false,true))
 	{
 		$sql = "SELECT * FROM $table_posts posts
 				LEFT JOIN  $table_users users
@@ -1706,7 +1723,7 @@ function store_thread($values)
 	
 		$post_date=date('Y-m-d H:i:s');
 	
-		if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit())
+		if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit(false,true))
 		{
 			$visible=0; // the post is not approved yet.
 		}
@@ -1805,7 +1822,7 @@ function store_thread($values)
 			$message.='<br />';
 		}
 
-		if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit())
+		if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit(false,true))
 		{
 			$message.=get_lang('MessageHasToBeApproved').'<br />';
 			$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
@@ -1878,12 +1895,12 @@ function show_add_post_form($action='', $id='', $form_values='')
 		$form->addElement('checkbox', 'post_notification', '', get_lang('NotifyByEmail').' ('.$_user['mail'].')');
 	}
 
-	if ($forum_setting['allow_sticky'] AND api_is_allowed_to_edit() AND $action=='newthread')
+	if ($forum_setting['allow_sticky'] AND api_is_allowed_to_edit(false,true) AND $action=='newthread')
 	{
 		$form->addElement('checkbox', 'thread_sticky', '', get_lang('StickyPost'));
 	}
 
-	if ($current_forum['allow_attachments']=='1' OR api_is_allowed_to_edit())
+	if ($current_forum['allow_attachments']=='1' OR api_is_allowed_to_edit(false,true))
 	{
 		//$form->add_resource_button();
 		$values = $form->exportValues();
@@ -1970,7 +1987,7 @@ function store_reply($values)
 	global $origin;
 
 	$post_date=date('Y-m-d H:i:s');
-	if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit())
+	if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit(false,true))
 	{
 		$visible=0; // the post is not approved yet.
 	}
@@ -2051,7 +2068,7 @@ function store_reply($values)
 		
 		
 
-		if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit())
+		if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit(false,true))
 		{
 			$message.='<br />'.get_lang('MessageHasToBeApproved').'<br />';
 		}
@@ -2117,7 +2134,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	{
 		$form->addElement('checkbox', 'post_notification', '', get_lang('NotifyByEmail').' ('.$current_post['email'].')');
 	}
-	if ($forum_setting['allow_sticky'] and api_is_allowed_to_edit() and $current_post['post_parent_id']==0) // the sticky checkbox only appears when it is the first post of a thread
+	if ($forum_setting['allow_sticky'] and api_is_allowed_to_edit(false,true) and $current_post['post_parent_id']==0) // the sticky checkbox only appears when it is the first post of a thread
 	{
 		$form->addElement('checkbox', 'thread_sticky', '', get_lang('StickyPost'));
 		if ($current_thread['thread_sticky']==1)
@@ -2125,7 +2142,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 			$defaults['thread_sticky']=true;
 		}
 	}
-	if ($current_forum['allow_attachments']=='1' OR api_is_allowed_to_edit())
+	if ($current_forum['allow_attachments']=='1' OR api_is_allowed_to_edit(false,true))
 	{
 		if (empty($form_values) AND !$_POST['SubmitPost'])
 		{
@@ -2394,7 +2411,7 @@ function get_post_topics_of_forum($forum_id)
 	global $table_item_property;
 
 	$sql="SELECT count(*) as number_of_posts FROM $table_posts WHERE forum_id='".$forum_id."'";
-	if (api_is_allowed_to_edit())
+	if (api_is_allowed_to_edit(false,true))
 	{
 		$sql="SELECT count(*) as number_of_posts
 				FROM $table_posts posts, $table_threads threads, $table_item_property item_property
@@ -2422,7 +2439,7 @@ function get_post_topics_of_forum($forum_id)
 	$number_of_posts=$row['number_of_posts'];
 
 	// we could loop through the result array and count the number of different group_ids but I have chosen to use a second sql statement
-	if (api_is_allowed_to_edit())
+	if (api_is_allowed_to_edit(false,true))
 	{
 		$sql="SELECT count(*) as number_of_topics
 				FROM $table_threads threads, $table_item_property item_property
@@ -3036,7 +3053,7 @@ function display_forum_search_results($search_term)
 			3. thread is visible (to do)
 			4. post is visible
 		*/
-		if (!api_is_allowed_to_edit())
+		if (!api_is_allowed_to_edit(false,true))
 		{
 			if ($forum_categories_list[$row['forum_id']['forum_category']]['visibility'] == '1'  AND $forum_list[$row['forum_id']]['visibility'] == '1' AND $row['visible'] == '1')
 			{
@@ -3190,7 +3207,7 @@ function get_forums_of_group($group_id)
 			GROUP BY threads.forum_id";
 
 	//-------------- Course Admin  -----------------//
-	if (is_allowed_to_edit())
+	if (is_allowed_to_edit(false,true))
 	{
 		// select all the forum information of all forums (that are not deleted)
 		$sql="SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
@@ -3250,7 +3267,7 @@ function get_forums_of_group($group_id)
 	{
 		foreach ($forum_list as $key=>$value)
 		{
-			$last_post_info_of_forum=get_last_post_information($key,is_allowed_to_edit());
+			$last_post_info_of_forum=get_last_post_information($key,is_allowed_to_edit(false,true));
 			$forum_list[$key]['last_post_id']=$last_post_info_of_forum['last_post_id'];
 			$forum_list[$key]['last_poster_id']=$last_post_info_of_forum['last_poster_id'];
 			$forum_list[$key]['last_post_date']=$last_post_info_of_forum['last_post_date'];

@@ -79,7 +79,7 @@ $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Middle';
 $fck_attribute['Config']['IMUploadPath'] = 'upload/forum/';
 $fck_attribute['Config']['FlashUploadPath'] = 'upload/forum/';
-if(!api_is_allowed_to_edit())
+if(!api_is_allowed_to_edit(false,true))
 {
 	$fck_attribute['Config']['UserStatus'] = 'student';
 }
@@ -119,7 +119,7 @@ $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
 */
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (!api_is_allowed_to_edit() AND $current_forum_category['visibility']==0)
+if (!api_is_allowed_to_edit(false,true) AND $current_forum_category['visibility']==0)
 {
 	forum_not_allowed_here();
 }
@@ -129,7 +129,7 @@ if (!api_is_allowed_to_edit() AND $current_forum_category['visibility']==0)
 	ACTIONS
 ------------------------------------------------------------------------------------------------------
 */
-if (api_is_allowed_to_edit())
+if (api_is_allowed_to_edit(false,true))
 {
 	handle_forum_and_forumcategories();
 }
@@ -173,7 +173,7 @@ $groups_of_user=GroupManager::get_group_ids($_course['dbName'], $_user['user_id'
 -----------------------------------------------------------
 */
 echo '<span style="float:right;">'.search_link().'</span>';
-if (api_is_allowed_to_edit())
+if (api_is_allowed_to_edit(false,true))
 {
 	//echo '<a href="'.api_get_self().'?forumcategory='.$_GET['forumcategory'].'&amp;action=add&amp;content=forumcategory">'.get_lang('AddForumCategory').'</a> | ';
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=add&amp;content=forum">'.Display::return_icon('forum_new.gif').' '.get_lang('AddForum').'</a>';
@@ -190,7 +190,7 @@ if (api_is_allowed_to_edit())
 	echo '<span class="forum_title">'.prepare4display($forum_category['cat_title']).'</span><br />';
 	echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
 	echo "</th>\n";
-	if (api_is_allowed_to_edit())
+	if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($_SESSION['id_session'])!=0))
 	{
 		
 		echo '<th style="padding: 5px; vertical-align: top;" align="center" >';			
@@ -232,7 +232,7 @@ foreach ($forum_list as $key=>$forum)
 		// SHOULD WE SHOW THIS PARTICULAR FORUM
 		// you are teacher => show forum
 
-		if (api_is_allowed_to_edit())
+		if (api_is_allowed_to_edit(false,true))
 		{
 			//echo 'teacher';
 			$show_forum=true;
@@ -306,7 +306,13 @@ foreach ($forum_list as $key=>$forum)
 				}
 			}
 			echo "</td>\n";
-			echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search']))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).'</a><br />'.prepare4display($forum['forum_comment'])."</td>\n";
+			if((!isset($_SESSION['id_session']) || $_SESSION['id_session']==0) && !empty($forum['session_name']))
+			{
+				$session_displayed = ' ('.$forum['session_name'].')';
+			}
+			else
+				$session_displayed = '';
+			echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search']))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).$session_displayed.'</a><br />'.prepare4display($forum['forum_comment'])."</td>\n";
 			//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 			// the number of topics and posts
 			echo "\t\t<td>".$forum['number_of_threads']."</td>\n";
@@ -329,7 +335,7 @@ foreach ($forum_list as $key=>$forum)
 			}
 			echo "</td>\n";
 			echo "\t\t<td NOWRAP align='center'>";
-			if (api_is_allowed_to_edit())
+			if (api_is_allowed_to_edit(false,true) && !($forum['session_id']==0 && intval($_SESSION['id_session'])!=0))
 			{
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForum"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";

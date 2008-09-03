@@ -139,7 +139,7 @@ if($origin=='learnpath')
 */
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (!api_is_allowed_to_edit() AND ($current_forum['visibility']==0 OR $current_thread['visibility']==0))
+if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR $current_thread['visibility']==0))
 {
 	forum_not_allowed_here();
 }
@@ -149,11 +149,11 @@ if (!api_is_allowed_to_edit() AND ($current_forum['visibility']==0 OR $current_t
 	Actions
 -----------------------------------------------------------
 */
-if ($_GET['action']=='delete' AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit())
+if ($_GET['action']=='delete' AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true))
 {
 	$message=delete_post($_GET['id']); // note: this has to be cleaned first
 }
-if (($_GET['action']=='invisible' OR $_GET['action']=='visible') AND isset($_GET['id']) AND api_is_allowed_to_edit())
+if (($_GET['action']=='invisible' OR $_GET['action']=='visible') AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true))
 {
 	$message=approve_post($_GET['id'],$_GET['action']); // note: this has to be cleaned first
 }
@@ -195,7 +195,7 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 	echo '</div>';
 	// the reply to thread link should only appear when the forum_category is not locked AND the forum is not locked AND the thread is not locked.
 	// if one of the three levels is locked then the link should not be displayed
-	if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit())
+	if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true))
 	{
 		// The link should only appear when the user is logged in or when anonymous posts are allowed.
 		if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id']))
@@ -204,7 +204,7 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 			echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread&origin='.$origin.'">'.get_lang('ReplyToThread').'</a>';
 			
 			//new thread link
-			if (api_is_allowed_to_edit() OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1))
+			if (api_is_allowed_to_edit(false,true) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1))
 			{
 				if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1)
 				{

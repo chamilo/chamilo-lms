@@ -474,9 +474,12 @@ function update_Db_course($courseDbName)
 		 cat_comment text,
 		 cat_order int NOT NULL default 0,
 		 locked int NOT NULL default 0,
+		 session_id smallint unsigned NOT NULL default 0,
 		 PRIMARY KEY (cat_id)
 		) TYPE=MyISAM";
 
+	api_sql_query($sql, __FILE__, __LINE__);
+	$sql = "ALTER TABLE `".$TABLETOOLFORUMCATEGORY . "` ADD INDEX ( session_id ) ";
 	api_sql_query($sql, __FILE__, __LINE__);
 
 	// Forum
@@ -2084,7 +2087,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 			Forum tool
 		-----------------------------------------------------------
 		*/
-		api_sql_query("INSERT INTO `$TABLEFORUMCATEGORIES` VALUES (1,'".lang2db(get_lang('ExampleForumCategory'))."', '', 1, 0)", __FILE__, __LINE__);
+		api_sql_query("INSERT INTO `$TABLEFORUMCATEGORIES` VALUES (1,'".lang2db(get_lang('ExampleForumCategory'))."', '', 1, 0, 0)", __FILE__, __LINE__);
 		$insert_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('forum_category',1,NOW(),NOW(),$insert_id,'ForumCategoryAdded',1,0,NULL,1)", __FILE__, __LINE__);
 

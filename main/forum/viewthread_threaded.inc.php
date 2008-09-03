@@ -222,11 +222,11 @@ echo display_user_link($rows[$display_post_id]['user_id'], $name).'<br />';
 echo $rows[$display_post_id]['post_date'].'<br /><br />';
 // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
 // The course admin him/herself can do this off course always
-if (($current_forum['allow_edit']==1 AND $rows[$display_post_id]['user_id']==$_user['user_id']) or api_is_allowed_to_edit())
+if (($current_forum['allow_edit']==1 AND $rows[$display_post_id]['user_id']==$_user['user_id']) or api_is_allowed_to_edit(false,true))
 {
 	echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$rows[$display_post_id]['post_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
 }
-if (api_is_allowed_to_edit())
+if (api_is_allowed_to_edit(false,true))
 {
 	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=delete&amp;content=post&amp;id=".$rows[$display_post_id]['post_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeletePost"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>\n";
 	display_visible_invisible_icon('post', $rows[$display_post_id]['post_id'], $rows[$display_post_id]['visible'],array('forum'=>Security::remove_XSS($_GET['forum']),'thread'=>Security::remove_XSS($_GET['thread']), 'post'=>Security::remove_XSS($_GET['post']) ));
@@ -235,7 +235,7 @@ if (api_is_allowed_to_edit())
 }
 echo '<br /><br />';
 //if (($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0) OR api_is_allowed_to_edit())
-if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit())
+if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true))
 {
 	if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id']))
 	{

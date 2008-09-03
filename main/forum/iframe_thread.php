@@ -79,7 +79,7 @@ $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Middle';
 $fck_attribute['Config']['IMUploadPath'] = 'upload/forum/';
 $fck_attribute['Config']['FlashUploadPath'] = 'upload/forum/';
-if(!api_is_allowed_to_edit()) $fck_attribute['Config']['UserStatus'] = 'student';
+if(!api_is_allowed_to_edit(false,true)) $fck_attribute['Config']['UserStatus'] = 'student';
 
 
 $nameTools=get_lang('Forum');
@@ -132,7 +132,7 @@ $current_forum_category=get_forumcategory_information($current_forum['forum_cate
 */
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (!api_is_allowed_to_edit() AND ($current_forum['visibility']==0 OR $current_thread['visibility']==0))
+if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR $current_thread['visibility']==0))
 {
 	forum_not_allowed_here();
 }

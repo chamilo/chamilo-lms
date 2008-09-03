@@ -123,22 +123,22 @@ if($origin=='learnpath')
 -----------------------------------------------------------
 */
 // Change visibility of a forum or a forum category
-if (($_GET['action']=='invisible' OR $_GET['action']=='visible') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit())
+if (($_GET['action']=='invisible' OR $_GET['action']=='visible') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true))
 {
 	$message=change_visibility($_GET['content'], $_GET['id'],$_GET['action']);// note: this has to be cleaned first
 }
 // locking and unlocking
-if (($_GET['action']=='lock' OR $_GET['action']=='unlock') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit())
+if (($_GET['action']=='lock' OR $_GET['action']=='unlock') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true))
 {
 	$message=change_lock_status($_GET['content'], $_GET['id'],$_GET['action']);// note: this has to be cleaned first
 }
 // deleting
-if ($_GET['action']=='delete'  AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit())
+if ($_GET['action']=='delete'  AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true))
 {
 	$message=delete_forum_forumcategory_thread($_GET['content'],$_GET['id']); // note: this has to be cleaned first
 }
 // moving
-if ($_GET['action']=='move' and isset($_GET['thread']) AND api_is_allowed_to_edit())
+if ($_GET['action']=='move' and isset($_GET['thread']) AND api_is_allowed_to_edit(false,true))
 {
 	$message=move_thread_form();
 }
@@ -156,7 +156,7 @@ if ($_GET['action'] == 'notify' AND isset($_GET['content']) AND isset($_GET['id'
 */
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (!api_is_allowed_to_edit() AND ($current_forum_category['visibility']==0 OR $current_forum['visibility']==0))
+if (!api_is_allowed_to_edit(false,true) AND ($current_forum_category['visibility']==0 OR $current_forum['visibility']==0))
 {
 	forum_not_allowed_here();
 }
@@ -183,7 +183,7 @@ echo '<span style="float:right;">'.search_link().'</span>';
 // 1. the course admin is here
 // 2. the course member is here and new threads are allowed
 // 3. a visitor is here and new threads AND allowed AND  anonymous posts are allowed
-if (api_is_allowed_to_edit() OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1))
+if (api_is_allowed_to_edit(false,true) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1))
 {
 	if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1)
 	{
@@ -247,7 +247,7 @@ if(is_array($threads))
 	foreach ($threads as $row)
 	{
 		// thread who have no replies yet and the only post is invisible should not be displayed to students.
-		if (api_is_allowed_to_edit() OR  !($row['thread_replies']=='0' AND $row['visible']=='0'))
+		if (api_is_allowed_to_edit(false,true) OR  !($row['thread_replies']=='0' AND $row['visible']=='0'))
 		{
 			if($counter%2==0)
 			{
@@ -305,7 +305,7 @@ if(is_array($threads))
 			}
 			
 			// if the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread
-			if (($row['visible']=='1' OR api_is_allowed_to_edit()) && $origin!='learnpath')
+			if (($row['visible']=='1' OR api_is_allowed_to_edit(false,true)) && $origin!='learnpath')
 			{
 				$last_post=$row['thread_date']." ".get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name);
 			}
@@ -327,7 +327,7 @@ if(is_array($threads))
 			}
 			echo "\t\t<td>".$last_post."</td>\n";
 			echo "\t\t<td>";			
-			if (api_is_allowed_to_edit())
+			if (api_is_allowed_to_edit(false,true))
 			{
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;action=delete&amp;content=thread&amp;id=".$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteCompleteThread"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 				display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array("forum"=>$_GET['forum'],'origin'=>$origin));

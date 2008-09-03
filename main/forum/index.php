@@ -75,7 +75,7 @@ $fck_attribute['Config']['FlashUploadPath'] = 'upload/forum/';
 $fck_attribute['Config']['InDocument'] = false;		
 $fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
 
-if(!api_is_allowed_to_edit()) $fck_attribute['Config']['UserStatus'] = 'student';
+if(!api_is_allowed_to_edit(false,true)) $fck_attribute['Config']['UserStatus'] = 'student';
 
 //error_reporting(E_ALL);
 /*
@@ -112,7 +112,7 @@ Display::display_introduction_section(TOOL_FORUM);
 	ACTIONS
 ------------------------------------------------------------------------------------------------------
 */
-if (api_is_allowed_to_edit())
+if (api_is_allowed_to_edit(false,true))
 {
 	$fck_attribute['ToolbarSet'] = 'ForumLight';
 	handle_forum_and_forumcategories();
@@ -181,7 +181,7 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' )
 	*/
 	//if (api_is_allowed_to_edit() and !$_GET['action'])
 	echo '<span style="float:right;">'.search_link().'</span>';
-	if (api_is_allowed_to_edit())
+	if (api_is_allowed_to_edit(false,true))
 	{
 		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forumcategory"> '.Display::return_icon('forum_category_new.gif').' '.get_lang('AddForumCategory').'</a> ';
 		if (is_array($forum_categories_list))
@@ -202,8 +202,15 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' )
 	{
 		foreach ($forum_categories_list as $forum_category_key => $forum_category)
 		{
+			if((!isset($_SESSION['id_session']) || $_SESSION['id_session']==0) && !empty($forum_category['session_name']))
+			{
+				$session_displayed = ' ('.$forum_category['session_name'].')';
+			}
+			else
+				$session_displayed = '';
+			
 			echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
-			echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display($forum_category['cat_title']).'</a><br />';
+			echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display($forum_category['cat_title']).$session_displayed.'</a><br />';
 			
 			if ($forum_category['cat_comment']<>'' AND trim($forum_category['cat_comment'])<>'&nbsp;')
 			{  
@@ -212,7 +219,8 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' )
 			echo "</th>\n";
 			
 			echo '<th style="padding: 5px; vertical-align: top;" align="center" >';
-			if (api_is_allowed_to_edit())
+			if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($_SESSION['id_session'])!=0))
+			
 			{
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=edit&amp;content=forumcategory&amp;id=".prepare4display($forum_category['cat_id'])."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&amp;content=forumcategory&amp;id=".prepare4display($forum_category['cat_id'])."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
@@ -270,7 +278,7 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' )
 					// SHOULD WE SHOW THIS PARTICULAR FORUM
 					// you are teacher => show forum
 		
-					if (api_is_allowed_to_edit())
+					if (api_is_allowed_to_edit(false,true))
 					{
 						//echo 'teacher';
 						$show_forum=true;
@@ -371,8 +379,15 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' )
 						{
 							$forum_title_group_addition='';
 						}
-		
-						echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".prepare4display($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">".prepare4display($forum['forum_title']).'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
+						
+						if((!isset($_SESSION['id_session']) || $_SESSION['id_session']==0) && !empty($forum['session_name']))
+						{
+							$session_displayed = ' ('.$forum['session_name'].')';
+						}
+						else
+							$session_displayed = '';
+							
+						echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".prepare4display($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
 						//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 						// the number of topics and posts
 						echo "\t\t<td>".$forum['number_of_threads']."</td>\n";
@@ -398,7 +413,7 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' )
 		
 		
 						echo "\t\t<td NOWRAP align='center'>";
-						if (api_is_allowed_to_edit())
+						if (api_is_allowed_to_edit(false,true) && !($forum['session_id']==0 && intval($_SESSION['id_session'])!=0))
 						{
 							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForum"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
@@ -424,7 +439,7 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' )
 			
 			if (count($forum_list)==0)
 			{
-				echo "\t<tr><td>".get_lang('NoForumInThisCategory')."</td>".(api_is_allowed_to_edit()?'<td colspan="5"></td>':'<td colspan="4"></td>')."</tr>\n";
+				echo "\t<tr><td>".get_lang('NoForumInThisCategory')."</td>".(api_is_allowed_to_edit(false,true)?'<td colspan="5"></td>':'<td colspan="4"></td>')."</tr>\n";
 			}
 		}
 	}

@@ -6,26 +6,25 @@
 */
 
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-
 $show_description_field = false; //for now
 $nameTools = get_lang("Doc");
 event_access_tool(TOOL_LEARNPATH);
-
 if (! $is_allowed_in_course) api_not_allowed();
-
 $interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_lang("_learning_path"));
 $interbreadcrumb[]= array ("url"=>api_get_self()."?action=admin_view&lp_id=$learnpath_id", "name" => $_SESSION['oLP']->get_name());
-
 Display::display_header(null,'Path');
 
 //Page subtitle
-echo '<h4>'.get_lang('_edit_learnpath').'</h4>';
+echo '<span style="font-weight: bold;padding-left:8px;">'.get_lang('_edit_learnpath').'</span>';
 
 $fck_attribute['Width'] = '400px';
 $fck_attribute['Height'] = '150px';
 $fck_attribute['ToolbarSet'] = 'Comment';
 
+
+
 $defaults=array();
+
 $form = new FormValidator('form1', 'post', 'lp_controller.php');
 
 //Title
@@ -133,8 +132,14 @@ $form->addElement('submit', 'Submit', get_lang('Ok'));
 //Hidden fields
 $form->addElement('hidden', 'action', 'update_lp');
 $form->addElement('hidden', 'lp_id', $_SESSION['oLP']->get_id());
-
 $form->setDefaults($defaults);
-$form -> display();
+echo '<div style="padding-left:100px; padding-top:-10px;">';
+
+echo '<table style="border="0" cellspacing="0" cellpadding="0"><tr><td width="530px"><br /><br /><br /><div style="width:530px;"></div>';
+	$form -> display();
+echo '</td><td valign="top">';
+echo Display::display_icon('help_course_authoring.png','');
+echo '</td></tr></table>';
+echo '</div>';
 Display::display_footer();
 ?>

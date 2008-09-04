@@ -210,6 +210,8 @@ input[text] {font-size: 12px; }
 #institution {
 	float: left;
 	font-weight: bold;
+	padding-left:17px;
+	
 }
 #my_courses {
 	float: right;
@@ -942,7 +944,7 @@ div.admin_section {
 	margin: 10px 20px;
 }
 div.admin_section h4 {
-  margin: 0;
+    margin: 0;
 	border-bottom: 1px solid gray;
 	width: 100%;
 }

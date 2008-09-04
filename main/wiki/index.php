@@ -116,7 +116,8 @@ api_display_tool_title($tool_name.$add_group_to_title);
 */
 //the page we are dealing with
 if (!isset($_GET['title'])){
-	$index='index';
+	//$index='index'; // surplus? check to do
+	$page='index';
 }
 else
 {
@@ -1811,7 +1812,7 @@ function display_wiki_entry()
 {
 	global $tbl_wiki;
 	global $groupfilter;
-	global $page;		
+	//global $page;		 // surplus? check to do
    
 	$_clean['group_id']=(int)$_SESSION['_gid']; 
 	if ($_GET['view'])
@@ -1820,10 +1821,12 @@ function display_wiki_entry()
 		$filter=" AND id='".$_clean['view']."'";
 	}	
 	
-    if (empty($page))
-	{
-		$page='index';	
-	}
+	////  surplus? check to do. Say around line 120
+    //if (empty($page))
+	//{
+	//	$page='index';	
+	//}
+	/////
 
 	//first, check page visibility in the first page version
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';

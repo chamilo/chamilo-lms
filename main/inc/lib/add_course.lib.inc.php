@@ -1448,11 +1448,14 @@ function update_Db_course($courseDbName)
 			  parent_id int unsigned NOT NULL, 
 			  survey_type int NOT NULL default 0,
 			  show_form_profile int NOT NULL default 0,
-			  form_fields TEXT NOT NULL,			  		
+			  form_fields TEXT NOT NULL,	
+			  session_id SMALLINT unsigned NOT NULL default 0,		  		
 			  PRIMARY KEY  (survey_id)
 			)";
 
 	$result = api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error($sql));
+	$sql = "ALTER TABLE `".$TABLESURVEY."` ADD INDEX ( session_id )";
+	api_sql_query($sql,__FILE__,__LINE__);
 	/*
 	if(!api_sql_query($sql))
 	{

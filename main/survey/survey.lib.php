@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 16101 2008-08-28 08:52:29Z elixir_julian $
+* 	@version $Id: survey.lib.php 16249 2008-09-05 15:46:31Z elixir_inter $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -221,7 +221,7 @@ class survey_manager
 				}
 			}
 			
-			$sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, avail_from, avail_till, is_shared, template, intro, surveythanks, creation_date, anonymous".$additional['columns'].") VALUES (
+			$sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, avail_from, avail_till, is_shared, template, intro, surveythanks, creation_date, anonymous".$additional['columns'].", session_id) VALUES (
 						'".Database::escape_string($values['survey_code'])."',
 						'".Database::escape_string($values['survey_title'])."',
 						'".Database::escape_string($values['survey_subtitle'])."',
@@ -234,7 +234,8 @@ class survey_manager
 						'".Database::escape_string($values['survey_introduction'])."',
 						'".Database::escape_string($values['survey_thanks'])."',
 						'".date('Y-m-d H:i:s')."',
-						'".Database::escape_string($values['anonymous'])."'".$additional['values']."
+						'".Database::escape_string($values['anonymous'])."'".$additional['values'].",
+						".intval($_SESSION['id_session'])."
 						)";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$survey_id = Database::insert_id();
@@ -4229,7 +4230,7 @@ class SurveyUtil {
 		$table->set_header(10, get_lang('Modify'), false,'width="120"');
 		$table->set_column_filter(9, 'anonymous_filter');
 		$table->set_column_filter(10, 'modify_filter');
-		if (!api_is_course_coach())
+		if (api_is_allowed_to_edit(false,true))
 			$table->set_form_actions(array ('delete' => get_lang('DeleteSurvey')));
 		$table->display();	
 	}
@@ -4248,10 +4249,10 @@ class SurveyUtil {
 	{
 		global $charset;
 		$survey_id = Security::remove_XSS($survey_id);
-		if (!api_is_course_coach())
+		if (!api_is_course_coach(false,true))
 			$return = '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 		
-		if (!api_is_course_coach())
+		if (!api_is_course_coach(false,true))
 			$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 		//$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
 		//$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif', get_lang('Add')).'</a>';
@@ -4259,7 +4260,7 @@ class SurveyUtil {
 		$return .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('survey_publish.gif', get_lang('Publish')).'</a>';
 		$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('empty.gif', get_lang('EmptySurvey')).'</a>';
 		
-		if (!api_is_course_coach())
+		if (!api_is_course_coach(false,true))
 			$return .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
 		return $return;
 	}
@@ -4363,6 +4364,9 @@ class SurveyUtil {
 		{
 			$search_restriction = ' AND '.$search_restriction;
 		}
+		
+		$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND survey.session_id IN(0,'.intval($_SESSION['id_session']).') '; 
+		
 		//IF(is_shared<>0,'V','-')	 					AS col6,
 		$sql = "SELECT
 					survey.survey_id							AS col0,
@@ -4380,6 +4384,7 @@ class SurveyUtil {
 				 LEFT JOIN $table_survey_question survey_question ON survey.survey_id = survey_question.survey_id
 	             , $table_user user
 	             WHERE survey.author = user.user_id
+				$session_condition
 	             $search_restriction
 	             ";
 		$sql .= " GROUP BY survey.survey_id";

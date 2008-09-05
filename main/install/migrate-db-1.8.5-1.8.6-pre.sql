@@ -64,3 +64,5 @@ ALTER TABLE calendar_event ADD session_id SMALLINT UNSIGNED NOT NULL default 0 ;
 ALTER TABLE calendar_event ADD INDEX ( session_id ) ;
 ALTER TABLE group_info ADD session_id SMALLINT UNSIGNED NOT NULL DEFAULT 0;
 ALTER TABLE group_info ADD INDEX ( session_id ) ;
+ALTER TABLE survey ADD session_id SMALLINT UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE survey ADD INDEX ( session_id ) ;

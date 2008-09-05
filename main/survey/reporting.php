@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 15556 2008-06-11 20:53:01Z juliomontoya $
+* 	@version $Id: reporting.php 16249 2008-09-05 15:46:31Z elixir_inter $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -91,7 +91,7 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 SurveyUtil::check_parameters();
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
-if (!api_is_allowed_to_edit())
+if (!api_is_allowed_to_edit(false,true))
 {
 	Display :: display_header(get_lang('Survey'));
 	Display :: display_error_message(get_lang('NotAllowed'), false);

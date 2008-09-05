@@ -881,8 +881,10 @@ function update_Db_course($courseDbName)
 		secret_directory varchar(255) default NULL,
 		self_registration_allowed tinyint unsigned NOT NULL default '0',
 		self_unregistration_allowed tinyint unsigned NOT NULL default '0',
+		session_id smallint unsigned NOT NULL default 0,
 		PRIMARY KEY (id)
 		)", __FILE__, __LINE__);
+	api_sql_query("ALTER TABLE `".$TABLEGROUPS . "` ADD INDEX ( session_id )", __FILE__,__LINE__);
 
 	api_sql_query("CREATE TABLE `".$TABLEGROUPCATEGORIES . "` (
 		id int unsigned NOT NULL auto_increment,

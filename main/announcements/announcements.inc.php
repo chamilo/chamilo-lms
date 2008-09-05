@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 16224 2008-09-02 14:16:13Z elixir_inter $
+<?php //$Id: announcements.inc.php 16248 2008-09-05 13:30:55Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -286,7 +286,7 @@ function get_course_users()
 */
 function get_course_groups()
 {
-	$new_group_list = CourseManager::get_group_list_of_course(api_get_course_id());
+	$new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), intval($_SESSION['id_session']));
 	return $new_group_list;
 }
 

@@ -123,7 +123,7 @@ if (isset ($_GET['action']))
 /*
  * Group-admin functions
  */
-if (api_is_allowed_to_edit())
+if (api_is_allowed_to_edit(false,true))
 {
 
 	// Post-actions
@@ -230,7 +230,7 @@ foreach ($group_cats as $index => $category)
 		}
 		$group_list = GroupManager :: get_group_list($category['id']);
 		echo ' ('.count($group_list).' '.get_lang('ExistingGroups').')';
-		if (api_is_allowed_to_edit())
+		if (api_is_allowed_to_edit(false,true))
 		{
 			echo '<a href="group_category.php?'.api_get_cidreq().'&id='.$category['id'].'"  title="'.get_lang('Edit').'"><img src="../img/edit.gif" alt="'.get_lang('Edit').'"/></a> ';
 			echo '<a href="group.php?'.api_get_cidreq().'&action=delete_category&amp;id='.$category['id'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;" title="'.get_lang('Delete').'"><img src="../img/delete.gif"  alt="'.get_lang('Delete').'"/></a> ';
@@ -266,13 +266,13 @@ foreach ($group_cats as $index => $category)
 			// create a new table-row
 			$row = array ();
 			// checkbox
-			if (api_is_allowed_to_edit() && count($group_list) > 1)
+			if (api_is_allowed_to_edit(false,true) && count($group_list) > 1)
 			{
 				$row[] = $this_group['id'];
 			}
 
 			// group name
-			if (api_is_allowed_to_edit() || 
+			if (api_is_allowed_to_edit(false,true) || 
 					in_array($_user['user_id'],$tutorsids_of_group) || 
 					$this_group['is_member'] || 
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_DOCUMENTS) ||
@@ -290,6 +290,10 @@ foreach ($group_cats as $index => $category)
 				{
 					$group_name .= ' ('.get_lang('MyGroup').')';
 				}
+				if(api_is_allowed_to_edit() && !empty($this_group['session_name']))
+				{
+					$group_name .= ' ('.$this_group['session_name'].')';
+				}
 				$row[] = $group_name.'<br/>'.stripslashes(trim($this_group['description']));
 			}
 			else
@@ -297,7 +301,7 @@ foreach ($group_cats as $index => $category)
 				$row[] = $this_group['name'].'<br/>'.stripslashes(trim($this_group['description']));
 			}
 			// self-registration / unregistration
-			if (!api_is_allowed_to_edit())
+			if (!api_is_allowed_to_edit(false,true))
 			{
 				if (GroupManager :: is_self_registration_allowed($_user['user_id'], $this_group['id']))
 				{
@@ -329,7 +333,7 @@ foreach ($group_cats as $index => $category)
 			$tutor_info = substr($tutor_info,0,strlen($tutor_info)-2);
 			$row[] = $tutor_info;
 			// edit-links
-			if (api_is_allowed_to_edit())
+			if (api_is_allowed_to_edit(false,true))
 			{
 				$edit_actions = '<a href="group_edit.php?'.api_get_cidreq().'&gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'"><img src="../img/edit.gif" alt="'.get_lang('Edit').'"/></a>&nbsp;';
 				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=delete_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;" title="'.get_lang('Delete').'"><img src="../img/delete.gif" alt="'.get_lang('Delete').'"/></a>&nbsp;';
@@ -351,19 +355,19 @@ foreach ($group_cats as $index => $category)
 		$table = new SortableTableFromArray($group_data, 1);
 		$table->set_additional_parameters(array('category'=>$_GET['category']));
 		$column = 0;
-		if (api_is_allowed_to_edit() and count($group_list) > 1)
+		if (api_is_allowed_to_edit(false,true) and count($group_list) > 1)
 		{
 			$table->set_header($column++,'', false);
 		}
 		$table->set_header($column++,get_lang('ExistingGroups'));
-		if (!api_is_allowed_to_edit()) // If self-registration allowed
+		if (!api_is_allowed_to_edit(false,true)) // If self-registration allowed
 		{
 			$table->set_header($column++,get_lang('GroupSelfRegistration'));
 		}
 		$table->set_header($column++,get_lang('Registered'));
 		$table->set_header($column++,get_lang('Max'));
 		$table->set_header($column++,get_lang('GroupTutor'));
-		if (api_is_allowed_to_edit()) // only for course administrator
+		if (api_is_allowed_to_edit(false,true)) // only for course administrator
 		{
 			$table->set_header($column++,get_lang('Modify'), false);
 			$form_actions = array();

@@ -65,7 +65,7 @@ $current_group = GroupManager :: get_group_properties($_SESSION['_gid']);
 $nameTools = get_lang('EditGroup');
 $interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang('GroupManagement'));
 
-if (!api_is_allowed_to_edit())
+if (!api_is_allowed_to_edit(false,true))
 {
 	api_not_allowed(true);
 }

@@ -62,3 +62,5 @@ ALTER TABLE student_publication ADD session_id SMALLINT UNSIGNED NOT NULL defaul
 ALTER TABLE student_publication ADD INDEX ( session_id ) ;
 ALTER TABLE calendar_event ADD session_id SMALLINT UNSIGNED NOT NULL default 0 ;
 ALTER TABLE calendar_event ADD INDEX ( session_id ) ;
+ALTER TABLE group_info ADD session_id SMALLINT UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE group_info ADD INDEX ( session_id ) ;

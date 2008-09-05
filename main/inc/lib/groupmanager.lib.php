@@ -109,6 +109,9 @@ class GroupManager
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER, $course_db);
+		
+		$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' g.session_id IN (0,'.intval($_SESSION['id_session']).') ';
+		
 		$sql = "SELECT  g.id ,
 						g.name ,
 						g.description ,
@@ -117,6 +120,7 @@ class GroupManager
 						g.secret_directory,
 						g.self_registration_allowed,
 						g.self_unregistration_allowed,
+						g.session_id,
 						ug.user_id is_member,
 						COUNT(ug2.id) number_of_members
 					FROM ".$table_group." `g`
@@ -124,8 +128,14 @@ class GroupManager
 					ON `ug`.`group_id` = `g`.`id` AND `ug`.`user_id` = '".$_user['user_id']."'
 					LEFT JOIN ".$table_group_user." `ug2`
 					ON `ug2`.`group_id` = `g`.`id`";
-		if ($category != null)
+					
+		if ($category != null){
 			$sql .= " WHERE `g`.`category_id` = '".$category."' ";
+			$sql .= 'AND '.$session_condition;
+		}
+		else if(!empty($session_condition))
+			$sql .= 'WHERE '.$session_condition;
+			
 		$sql .= " GROUP BY `g`.`id` ORDER BY UPPER(g.name)";
 		$groupList = api_sql_query($sql,__FILE__,__LINE__);
 		$groups = array ();
@@ -136,6 +146,12 @@ class GroupManager
 				$sql = "SELECT title FROM $table_course WHERE code = '".$thisGroup['name']."'";
 				$obj = mysql_fetch_object(api_sql_query($sql,__FILE__,__LINE__));
 				$thisGroup['name'] = $obj->title;
+			}
+			if($thisGroup['session_id']!=0)
+			{
+				$sql_session = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$thisGroup['session_id'];
+				$rs_session = api_sql_query($sql_session,__FILE__,__LINE__);
+				$thisGroup['session_name'] = Database::result($rs_session,0,0);
 			}
 			$groups[] = $thisGroup;
 		}
@@ -160,7 +176,7 @@ class GroupManager
 		{
 			$places = $category['max_student'];
 		}
-		$sql = "INSERT INTO ".$table_group." SET category_id='".$category_id."', max_student = '".$places."', doc_state = '".$category['doc_state']."', calendar_state = '".$category['calendar_state']."', work_state = '".$category['work_state']."', announcements_state = '".$category['announcements_state']."', wiki_state = '".$category['wiki_state']."', self_registration_allowed = '".$category['self_reg_allowed']."',  self_unregistration_allowed = '".$category['self_unreg_allowed']."'";
+		$sql = "INSERT INTO ".$table_group." SET category_id='".$category_id."', max_student = '".$places."', doc_state = '".$category['doc_state']."', calendar_state = '".$category['calendar_state']."', work_state = '".$category['work_state']."', announcements_state = '".$category['announcements_state']."', wiki_state = '".$category['wiki_state']."', self_registration_allowed = '".$category['self_reg_allowed']."',  self_unregistration_allowed = '".$category['self_unreg_allowed']."', session_id=".intval($_SESSION['id_session']);
 		api_sql_query($sql,__FILE__,__LINE__);
 		$lastId = mysql_insert_id();
 		/*$secret_directory = uniqid("")."_team_".$lastId;
@@ -1358,7 +1374,7 @@ class GroupManager
 		{
 			return true;
 		}
-		elseif (api_is_allowed_to_edit())
+		elseif (api_is_allowed_to_edit(false,true))
 		{
 			return true;
 		}

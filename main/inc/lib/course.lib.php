@@ -1331,16 +1331,19 @@ class CourseManager
 	==============================================================================
 	*/
 
-	function get_group_list_of_course($course_code)
+	function get_group_list_of_course($course_code, $session_id=0)
 	{
 		$course_info = Database :: get_course_info($course_code);
 		$database_name = $course_info['db_name'];
 		$group_table = Database :: get_course_table(TABLE_GROUP, $database_name);
 		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER, $database_name);
 
+		$session_condition = $session_id==0 ? '' : ' WHERE g.session_id IN(0,'.intval($session_id).')';
+
 		$sql = "SELECT g.id, g.name, COUNT(gu.id) userNb
 								FROM $group_table AS g LEFT JOIN $group_user_table gu
 								ON g.id = gu.group_id
+								$session_condition
 								GROUP BY g.id
 								ORDER BY g.name";
 

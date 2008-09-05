@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 16247 2008-09-05 10:10:13Z elixir_inter $
+<?php //$Id: agenda.inc.php 16248 2008-09-05 13:30:55Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -486,20 +486,9 @@ return $users;
 */
 function get_course_groups()
 {
-	global $tbl_group;
-	global $tbl_groupUser;
 	$group_list = array();
 	
-	$sql = "SELECT g.id, g.name, COUNT(gu.id) userNb
-			        FROM ".$tbl_group." AS g LEFT JOIN ".$tbl_groupUser." gu
-			        ON g.id = gu.group_id
-			        GROUP BY g.id";
-	
-	$result = api_sql_query($sql,__FILE__,__LINE__) or die(Database::error());
-	while ($group_data = Database::fetch_array($result))
-	{
-		$group_list [$group_data['id']] = $group_data;
-	}
+	$group_list = CourseManager::get_group_list_of_course(api_get_course_id(), intval($_SESSION['id_session']));
 	return $group_list;
 }
 

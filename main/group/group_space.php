@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 16179 2008-08-31 20:20:23Z herodoto $
+<?php //$Id: group_space.php 16248 2008-09-05 13:30:55Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -95,7 +95,7 @@ if ($_GET['selfUnReg'] && GroupManager :: is_self_unregistration_allowed($_SESSI
 /*
  * Edit the group
  */
-if (api_is_allowed_to_edit() or GroupManager :: is_tutor($_user['user_id']))
+if (api_is_allowed_to_edit(false,true) or GroupManager :: is_tutor($_user['user_id']))
 {
 	echo "<a href=\"group_edit.php?origin=$origin\">".get_lang("EditGroup")."</a><br/><br/>";
 }
@@ -153,7 +153,7 @@ if (!empty($current_group['description']))
  * Group Tools
  */
 // If the user is subscribed to the group or the user is a tutor of the group then
-if (api_is_allowed_to_edit() OR GroupManager :: is_user_in_group($_SESSION['_user']['user_id'], $current_group['id']))
+if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SESSION['_user']['user_id'], $current_group['id']))
 {
 	$tools = '';
 	$forums_of_groups = get_forums_of_group($current_group['id']);
@@ -161,7 +161,7 @@ if (api_is_allowed_to_edit() OR GroupManager :: is_user_in_group($_SESSION['_use
 	{
 		foreach ($forums_of_groups as $key => $value)
 		{
-			if($value['forum_group_public_private'] == 'public' || ($user_subscribe_to_current_group && $value['forum_group_public_private'] == 'private') || $user_is_tutor || api_is_allowed_to_edit())
+			if($value['forum_group_public_private'] == 'public' || ($user_subscribe_to_current_group && $value['forum_group_public_private'] == 'private') || $user_is_tutor || api_is_allowed_to_edit(false,true))
 			{
 				$tools.= Display::return_icon('forum.gif') . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.$value['forum_title'].'</a><br />';
 			}

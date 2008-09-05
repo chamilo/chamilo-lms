@@ -1,5 +1,5 @@
 <?php
-// $Id: group_category.php 16179 2008-08-31 20:20:23Z herodoto $
+// $Id: group_category.php 16248 2008-09-05 13:30:55Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -40,7 +40,7 @@ $this_section = SECTION_COURSES;
 require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-if (!api_is_allowed_to_edit() || !(isset ($_GET['id']) || isset ($_POST['id']) || isset ($_GET['action']) || isset ($_POST['action'])))
+if (!api_is_allowed_to_edit(false,true) || !(isset ($_GET['id']) || isset ($_POST['id']) || isset ($_GET['action']) || isset ($_POST['action'])))
 {
 	api_not_allowed();
 }

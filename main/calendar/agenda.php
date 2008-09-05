@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 15984 2008-08-13 17:24:24Z juliomontoya $
+<?php //$Id: agenda.php 16247 2008-09-05 10:10:13Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -218,7 +218,7 @@ $tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USE
   			ACCESS RIGHTS
 ============================================================================== */
 // permission stuff - also used by loading from global in agenda.inc.php
-$is_allowed_to_edit = is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous());
+$is_allowed_to_edit = api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous());
 
 /* ==============================================================================
   			TITLE
@@ -276,7 +276,7 @@ if (empty($_GET['origin']) or $_GET['origin']!='learnpath')
 	}
 	// the links for adding, filtering, showall, ...
 	echo '<ul id="agenda_select">';
-	if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
+	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 	{
 		display_courseadmin_links();
 	}
@@ -311,7 +311,7 @@ else
 // THE RIGHT PART
 echo "<td valign=\"top\">";
 
-if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
+if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 {
 	switch ($_GET['action'])
 	{

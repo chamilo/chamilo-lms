@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 16190 2008-09-01 09:10:55Z vanpouckesven $
+<?php //$Id: agenda.inc.php 16247 2008-09-05 10:10:13Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -78,7 +78,10 @@ function get_calendar_items($month, $year)
 
 	$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
     $repeats = array();
-	if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
+	
+	$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND agenda.session_id IN (0,'.intval($_SESSION['id_session']).') ';
+	
+	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 	{
 		$sql="SELECT
 			DISTINCT agenda.*, toolitemproperties.*
@@ -87,6 +90,7 @@ function get_calendar_items($month, $year)
 			" AND MONTH(agenda.start_date)='".$month."' AND YEAR(agenda.start_date)='".$year."'
 			AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 			AND toolitemproperties.visibility='1'
+			$session_condition
 			GROUP BY agenda.id ".
 			"ORDER BY  start_date ";
 	}
@@ -103,8 +107,9 @@ function get_calendar_items($month, $year)
 				" AND MONTH(agenda.start_date)='".$month."'
 				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 				AND	( toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-				AND toolitemproperties.visibility='1'"
-				."ORDER BY  start_date ";
+				AND toolitemproperties.visibility='1'
+				$session_condition
+				ORDER BY  start_date ";
 		}
 		else
 		{
@@ -115,8 +120,9 @@ function get_calendar_items($month, $year)
 				" AND MONTH(agenda.start_date)='".$month."'
 				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 				AND ( toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0')
-				AND toolitemproperties.visibility='1' ".
-				"ORDER BY  start_date ";
+				AND toolitemproperties.visibility='1'
+				$session_condition
+				ORDER BY  start_date ";
 		}
 	}
 	$result=api_sql_query($sql,__FILE__,__LINE__);
@@ -1277,7 +1283,7 @@ function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 function delete_agenda_item($id)
 {
 	global $_course;
-	if (is_allowed_to_edit()  OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
+	if (api_is_allowed_to_edit(false,true)  OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 	{
 		if (!empty($_GET['id']) && isset($_GET['action']) && $_GET['action']=="delete")
 		{
@@ -1332,7 +1338,7 @@ function showhide_agenda_item($id)
 	  ==================================================*/
 	//  and $_GET['isStudentView']<>"false" is added to prevent that the visibility is changed after you do the following:
 	// change visibility -> studentview -> course manager view
-	if ((is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) and $_GET['isStudentView']<>"false")
+	if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) and $_GET['isStudentView']<>"false")
 	{
 		if (isset($_GET['id'])&&$_GET['id']&&isset($_GET['action'])&&$_GET['action']=="showhide")
 		{
@@ -1412,7 +1418,10 @@ function display_agenda_items()
 	//echo "user:".$_SESSION['user']."group: ".$_SESSION['group'];
 	// A. you are a course admin
 	//if ($is_courseAdmin)
-	if (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
+	
+	$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND agenda.session_id IN (0,'.intval($_SESSION['id_session']).') ';
+	
+	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 	{
 		// A.1. you are a course admin with a USER filter
 		// => see only the messages of this specific user + the messages of the group (s)he is member of.
@@ -1428,6 +1437,7 @@ function display_agenda_items()
 					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 					AND	( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 					AND toolitemproperties.visibility='1'
+					$session_condition
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
 			else
@@ -1439,6 +1449,7 @@ function display_agenda_items()
 					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 					AND ( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id='0')
 					AND toolitemproperties.visibility='1'
+					$session_condition
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
 		}
@@ -1453,6 +1464,7 @@ function display_agenda_items()
 				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 				AND ( toolitemproperties.to_group_id=$group_id OR toolitemproperties.to_group_id='0')
 				AND toolitemproperties.visibility='1'
+				$session_condition
 				GROUP BY toolitemproperties.ref
 				ORDER BY start_date ".$_SESSION['sort'];
 		}
@@ -1469,6 +1481,7 @@ function display_agenda_items()
 					WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
 					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 					AND toolitemproperties.visibility='1'
+					$session_condition
 					GROUP BY toolitemproperties.ref
 					ORDER BY start_date ".$_SESSION['sort'];
 
@@ -1483,6 +1496,7 @@ function display_agenda_items()
 					WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
 					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 					AND ( toolitemproperties.visibility='0' or toolitemproperties.visibility='1')
+					$session_condition
 					GROUP BY toolitemproperties.ref
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
@@ -1502,6 +1516,7 @@ function display_agenda_items()
 				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 				AND	( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 				AND toolitemproperties.visibility='1'
+				$session_condition
 				ORDER BY start_date ".$_SESSION['sort'];
 		}
 		else
@@ -1515,6 +1530,7 @@ function display_agenda_items()
 					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 					AND ( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id='0')
 					AND toolitemproperties.visibility='1'
+					$session_condition
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
 			else
@@ -1526,6 +1542,7 @@ function display_agenda_items()
 					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 					AND toolitemproperties.to_group_id='0'
 					AND toolitemproperties.visibility='1'
+					$session_condition
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
 		}
@@ -1621,7 +1638,7 @@ function display_agenda_items()
     	echo $sent_to_form;
     	echo "</th>";
     
-    	if (!$is_repeated && (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())))
+    	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())))
     	{
     		echo '<th>'.get_lang('Modify');	
     		echo '</th></tr>';
@@ -1649,7 +1666,7 @@ function display_agenda_items()
          --------------------------------------------------*/
     
     	
-    	if (!$is_repeated && (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())))
+    	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())))
     	{
     		echo '<td align="center">';
     		// edit
@@ -1677,7 +1694,7 @@ function display_agenda_items()
     
         echo '<tr class="row_even">';
     	
-    	if (!$is_repeated && (is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())))
+    	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())))
     	{
     		$td_colspan= '<td colspan="3">';
     	}
@@ -1916,7 +1933,7 @@ function display_one_agenda_item($agenda_id)
 		DISPLAY: edit delete button (course admin only)
 	  --------------------------------------------------*/
 	echo '<tr><td colspan="2">';
-	if (!$repeat && is_allowed_to_edit())
+	if (!$repeat && api_is_allowed_to_edit(false,true))
 		{
 		// edit
 		echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=edit&amp;id=".$myrow['id']."\">",
@@ -2531,7 +2548,7 @@ function get_agendaitems($month, $year)
 
 	$group_memberships = GroupManager :: get_group_ids(Database::get_current_course_database(), $_user['user_id']);
 	// if the user is administrator of that course we show all the agenda items
-	if (api_is_allowed_to_edit())
+	if (api_is_allowed_to_edit(false,true))
 	{
 		//echo "course admin";
 		$sqlquery = "SELECT
@@ -2616,7 +2633,7 @@ function display_upcoming_events()
 
 	$group_memberships = GroupManager :: get_group_ids($mycourse['dbName'], $myuser['user_id']);
 	// if the user is administrator of that course we show all the agenda items
-	if (api_is_allowed_to_edit())
+	if (api_is_allowed_to_edit(false,true))
 	{
 		//echo "course admin";
 		$sqlquery = "SELECT
@@ -3823,9 +3840,9 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     
     // store in the table calendar_event
     $sql = "INSERT INTO ".$t_agenda."
-                            (title,content, start_date, end_date".(!empty($parent_id)?',parent_event_id':'').")
+                            (title,content, start_date, end_date".(!empty($parent_id)?',parent_event_id':'').", session_id)
                             VALUES
-                            ('".$title."','".$content."', '".$start_date."','".$end_date."'".(!empty($parent_id)?','.((int)$parent_id):'').")";
+                            ('".$title."','".$content."', '".$start_date."','".$end_date."'".(!empty($parent_id)?','.((int)$parent_id):'').", ".intval($_SESSION['id_session']).")";
     
     $result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
     $last_id=Database::insert_id();

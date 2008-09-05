@@ -701,8 +701,11 @@ function update_Db_course($courseDbName)
 		start_date datetime NOT NULL default '0000-00-00 00:00:00',
 		end_date datetime NOT NULL default '0000-00-00 00:00:00',
         parent_event_id INT NULL,
+		session_id SMALLINT unsigned NOT NULL default 0,
 		PRIMARY KEY (id)
 		)";
+	api_sql_query($sql, __FILE__, __LINE__);
+	$sql = "ALTER TABLE `".$TABLETOOLAGENDA . "` ADD INDEX ( session_id ) ;";
 	api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
@@ -2016,7 +2019,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 			Agenda tool
 		-----------------------------------------------------------
 		*/
-		api_sql_query("INSERT INTO `".$TABLETOOLAGENDA . "` VALUES ( NULL, '".lang2db(get_lang('AgendaCreationTitle')) . "', '".lang2db(get_lang('AgendaCreationContenu')) . "', now(), now(), NULL)", __FILE__, __LINE__);
+		api_sql_query("INSERT INTO `".$TABLETOOLAGENDA . "` VALUES ( NULL, '".lang2db(get_lang('AgendaCreationTitle')) . "', '".lang2db(get_lang('AgendaCreationContenu')) . "', now(), now(), NULL, 0)", __FILE__, __LINE__);
 		//we need to add the item properties too!
 		$insert_id = Database :: get_last_insert_id();
 		$sql = "INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_CALENDAR_EVENT . "',1,NOW(),NOW(),$insert_id,'AgendaAdded',1,0,NULL,1)";

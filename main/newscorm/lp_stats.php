@@ -52,12 +52,11 @@ if(!isset($origin))
 if($origin != 'tracking')
 {
 	if (!empty ($stats_charset)) {
-		$charset_lang = $stats_charset;
+		$lp_charset = $stats_charset;
 	} else {
-		$charset_lang = api_get_setting('platform_charset');
+		$lp_charset = api_get_setting('platform_charset');
 	}
-	$dokeos_charset = api_get_setting('platform_charset');
-	$charset = $charset_lang;
+	$charset = $lp_charset;
 	$w = $tablewidth -20;
 	$htmlHeadXtra[] = ''.'<style type="text/css" media="screen, projection">
 		/*<![CDATA[*/
@@ -67,6 +66,22 @@ if($origin != 'tracking')
 	include_once ('../inc/reduced_header.inc.php');
 	echo '<body>';
 }
+else
+{
+    //Get learning path's encoding
+    $TBL_LP = Database :: get_course_table(TABLE_LP_MAIN);
+    $sql = "SELECT default_encoding FROM $TBL_LP " .
+                "WHERE id = '".(int)$_GET['lp_id']."'";
+    $res = api_sql_query($sql, __FILE__, __LINE__);
+    if (Database :: num_rows($res) > 0)
+    {
+        $row = Database::fetch_array($res);
+        $lp_charset = $row['default_encoding'];
+    }
+}
+
+// The dokeos interface's encoding
+$dokeos_charset = api_get_setting('platform_charset');
 
 //if display in fullscreen required
 if (strcmp($_GET["fs"], "true") == 0) 
@@ -236,7 +251,7 @@ foreach ($list as $my_item_id) {
 				$correct_test_link = '-';
 			}
 			//new attempt
-			$output .= "<tr class='$oddclass'>\n" . "<td>$extend_link</td>\n" . '<td colspan="4" class="content"><div class="mystatus">' . htmlentities($title, ENT_QUOTES, $charset_lang) . "</div></td>\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td><td class="content"></td>' . "\n" . "</tr>\n";
+			$output .= "<tr class='$oddclass'>\n" . "<td>$extend_link</td>\n" . '<td colspan="4" class="content"><div class="mystatus">' . htmlentities($title, ENT_QUOTES, $lp_charset) . "</div></td>\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td><td class="content"></td>' . "\n" . "</tr>\n";
 		}
 
 		$counter++;
@@ -318,7 +333,7 @@ foreach ($list as $my_item_id) {
 
 			if ($row['item_type'] != 'dokeos_chapter') {
 				$output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . "<td>$extend_attempt_link</td>\n" . '<td colspan="3">' . htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $row['iv_view_count'] . "</td>\n"
-				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
+				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
 				 . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . ($score == 0 ? '-' : ($maxscore == 0 ? $score : $score . '/' . $maxscore)) . "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $time . "</div></td><td></td>\n" . "</tr>\n";
 			}
 
@@ -332,7 +347,7 @@ foreach ($list as $my_item_id) {
 						$oddclass = "row_even";
 					}
 					$output .= "<tr class='$oddclass'>\n" . '<td></td>' . "\n" . '<td></td>' . "\n" . '<td>&nbsp;</td>' . "\n" . '<td>' . $interaction['order_id'] . '</td>' . "\n" . '<td>' . $interaction['id'] . '</td>' . "\n"
-					//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
+					//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
 					 . '<td colspan="2">' . $interaction['type'] . "</td>\n"
 					//.'<td>'.$interaction['correct_responses']."</td>\n"
 					 . '<td>' . urldecode($interaction['student_response']) . "</td>\n" . '<td>' . $interaction['result'] . "</td>\n" . '<td>' . $interaction['latency'] . "</td>\n" . '<td>' . $interaction['time'] . "</td>\n<td></td>\n</tr>\n";
@@ -520,8 +535,8 @@ foreach ($list as $my_item_id) {
 				$correct_test_link = '-';
 			}
 
-			$output .= "<tr class='$oddclass'>\n" . "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' . htmlentities($title, ENT_QUOTES, $charset_lang) . '</div></td>' . "\n"
-			//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
+			$output .= "<tr class='$oddclass'>\n" . "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' . htmlentities($title, ENT_QUOTES, $lp_charset) . '</div></td>' . "\n"
+			//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
 			 . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . ($score == 0 ? '-' : ($maxscore == 0 ? $score : $score . '/' . $maxscore)) . "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $time . "</div></td><td>$correct_test_link</td>\n" . "</tr>\n";
 
 			if ($export_csv) {
@@ -545,7 +560,7 @@ foreach ($list as $my_item_id) {
 					$oddclass = "row_even";
 				}
 				$output .= "<tr class='$oddclass'>\n" . '<td></td>' . "\n" . '<td></td>' . "\n" . '<td>&nbsp;</td>' . "\n" . '<td>' . $interaction['order_id'] . '</td>' . "\n" . '<td>' . $interaction['id'] . '</td>' . "\n"
-				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
+				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
 				 . '<td colspan="2">' . $interaction['type'] . "</td>\n"
 				//.'<td>'.$interaction['correct_responses']."</td>\n"
 				 . '<td>' . urldecode($interaction['student_response']) . "</td>\n" . '<td>' . $interaction['result'] . "</td>\n" . '<td>' . $interaction['latency'] . "</td>\n" . '<td>' . $interaction['time'] . "</td>\n<td></td>\n</tr>\n";
@@ -601,7 +616,7 @@ if (($counter % 2) == 0) {
 }
 
 $output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . '<td colspan="4"><div class="mystatus"><i>' . htmlentities(get_lang('AccomplishedStepsTotal'), ENT_QUOTES, $dokeos_charset) . "</i></div></td>\n"
-//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
+//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
  . '<td colspan="2"></td>' . "\n" . '<td colspan="2"><div class="mystatus" align="center">' . $final_score . "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $total_time . '</div></td><td></td>' . "\n" . "</tr>\n";
 
 $output .= "</table></td></tr></table>";

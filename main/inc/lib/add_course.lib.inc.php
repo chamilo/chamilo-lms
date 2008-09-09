@@ -388,7 +388,9 @@ function update_Db_course($courseDbName)
 	$TABLESURVEYGROUP			= $courseDbName . 'survey_group';
 
 	// Wiki
-	$TABLETOOLWIKI = $courseDbName.'wiki';
+	$TABLETOOLWIKI 				= $courseDbName	. 'wiki';		
+	$TABLEWIKIDISCUSS			= $courseDbName . 'wiki_discuss';
+	$TABLEWIKIMAILCUE			= $courseDbName . 'wiki_mailcue';
 
 	// audiorecorder
 	$TABLEAUDIORECORDER = $courseDbName.'audiorecorder';
@@ -807,19 +809,17 @@ function update_Db_course($courseDbName)
 		title text NOT NULL,
 		content text NOT NULL,
 		user_id int NOT NULL default 0,
-		group_id INT DEFAULT NULL,
+		group_id int DEFAULT NULL,
 		timestamp timestamp(14) NOT NULL,		
 		addlock int NOT NULL default 1,
 		editlock int NOT NULL default 0,
-		visibility int NOT NULL default 1,	
-		notify int NOT NULL default 0,		
-		addlock_disc int NOT NULL default 1,		
+		visibility int NOT NULL default 1,		
+		addlock_disc int NOT NULL default 1,
 		visibility_disc int NOT NULL default 1,
-		ratinglock_disc int NOT NULL default 1,
-		notify_disc int NOT NULL default 0,
-		assignment int NOT NULL default 0,		
+		ratinglock_disc int NOT NULL default 1,	
+		assignment int NOT NULL default 0,	
 		startdate_assig datetime NOT NULL default '0000-00-00 00:00:00',
-		enddate_assig datetime  NOT NULL default '0000-00-00 00:00:00',	 
+		enddate_assig datetime  NOT NULL default '0000-00-00 00:00:00',
 		delayedsubmit int NOT NULL default 0,	
 		comment text NOT NULL,
 		progress text NOT NULL,
@@ -831,6 +831,32 @@ function update_Db_course($courseDbName)
 		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
+		
+	//
+	
+	$sql = "CREATE TABLE `".$TABLEWIKIDISCUSS . "` (
+		id int NOT NULL auto_increment,
+		publication_id int NOT NULL default 0,
+		userc_id int NOT NULL default 0,
+		comment text NOT NULL,
+		p_score varchar(255) default NULL,
+		timestamp timestamp(14) NOT NULL,		
+		PRIMARY KEY (id)
+		)";
+	api_sql_query($sql, __FILE__, __LINE__);
+				
+	//
+	
+	$sql = "CREATE TABLE `".$TABLEWIKIMAILCUE . "` (
+		id int NOT NULL,
+		user_id int NOT NULL,
+		type text NOT NULL,
+		group_id int DEFAULT NULL,
+		KEY (id)
+		)";
+	api_sql_query($sql, __FILE__, __LINE__);	
+	
+	
 	
 	/*
 	-----------------------------------------------------------

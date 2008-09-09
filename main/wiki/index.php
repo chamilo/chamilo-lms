@@ -33,7 +33,8 @@ require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'text.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php'); 
 require_once (api_get_path(LIBRARY_PATH).'security.lib.php'); 
-
+require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
+require_once(api_get_path(INCLUDE_PATH).'conf/mail.conf.php');
 
 
 /*
@@ -51,6 +52,8 @@ $htmlHeadXtra[] ='<link rel="stylesheet" type="text/css" href="'.api_get_path(WE
 -----------------------------------------------------------
 */
 $tbl_wiki = Database::get_course_table(TABLE_WIKI);
+$tbl_wiki_discuss = Database::get_course_table(TABLE_WIKI_DISCUSS);
+$tbl_wiki_mailcue = Database::get_course_table(TABLE_WIKI_MAILCUE);
 
 /*
 -----------------------------------------------------------
@@ -125,21 +128,8 @@ else
 }
 
 // some titles are not allowed
-//$not_allowed_titles=array("Index", "RecentChanges","AllPages", "Categories"); //not used for now
+//$not_allowed_titles=array("Index", "RecentChanges","AllPages", "Categories"); //not used for now	
 
-	
-//SANITY CHECK FOR NOTIFY BY EMAIL Juan Carlos Raña
-$tbl_wiki_mailcue 	= "`".$_course['dbNameGlu']."wiki_mailcue`";
-
-if (api_sql_query("SELECT * FROM $tbl_wiki_mailcue")==false)
-{		  
-	$sql="CREATE TABLE ".$tbl_wiki_mailcue." (
-	  id int(11) NOT NULL,
-	  user_id int(11) NOT NULL,	 	 
-	  PRIMARY KEY  (id)
-	) TYPE=MyISAM;"; 
-	$result=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
-}
 
 /*
 -----------------------------------------------------------
@@ -381,6 +371,8 @@ if ($_GET['action']=='delete')
 			////
 			//here to do: delete discussion and mailcue too
 			///
+			
+			check_emailcue(0, 'E');
 			
 	  		Display::display_confirmation_message(get_lang('WikiPageDeleted')); 
 		}
@@ -855,7 +847,7 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 				
 				echo $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;					
 				echo '</a>';				
-				echo ' ('.get_lang('Version').' '.$row['version'].')'; //juan carlos crudo
+				echo ' ('.get_lang('Version').' '.$row['version'].')';
 				echo ' ... ';				
 				if ($row['user_id']<>0)
 				{
@@ -976,9 +968,18 @@ if ($_GET['action']=='recentchanges')
 
 	$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' ORDER BY timestamp DESC LIMIT 0,10'; // last 10
 	$result=api_sql_query($sql,__LINE__,__FILE__);
-	
+		
+	if (check_notify_all())
+	{
+		$notify_all= '<img src="../img/wiki/send_mail_checked.gif" alt="'.get_lang('FullNotifyByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotNotifyChanges').'</font>';
+	}
+	else
+	{	 
+		$notify_all= '<img src="../img/wiki/send_mail.gif" alt="'.get_lang('FullCancelNotifyByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotifyChanges').'</font>';
+	}	
+		
 	echo  '<br>'; 
-	echo '<b>'.get_lang('RecentChanges').'</b><br>'; 
+	echo '<b>'.get_lang('RecentChanges').'</b> <a href="index.php?action=recentchanges&amp;actionpage=notify_all&amp;title='.$page.'">'.$notify_all.'</a><br>'; 
     echo  '<hr>';	
 	echo '<ul>';
 	
@@ -1132,25 +1133,8 @@ if ($_GET['action']=='discuss')
 	$row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version	
 	$id=$row['id'];
 	$wuid=$row['user_id'];
-	$userinfo=Database::get_user_info_from_id($row['user_id']);	
-	
-	//Sanity check
-	$tbl_wiki_discuss 	= $_course['dbNameGlu']."wiki_discuss";	
-	if (api_sql_query("SELECT * FROM `$tbl_wiki_discuss`")==false)
-	{
+	$userinfo=Database::get_user_info_from_id($row['user_id']);
 		
-		$sql="CREATE TABLE `$tbl_wiki_discuss` (
-		  `id` int(11) NOT NULL auto_increment,
-		  `publication_id` int(11) NOT NULL default '0',
-		  `userc_id` int(11) NOT NULL default '0',	 
-		  `comment` text NOT NULL,
-		  `p_score` varchar(255) default NULL,
-		  `timestamp` timestamp(14) NOT NULL,
-		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;"; 
-		
-		$result=api_sql_query($sql) or die(mysql_error());
-	}
 
 	//check discuss visibility.  Show discussion to students if isn't hidden. Show page to all teachers if is hidden. 
 	if (check_visibility_discuss())
@@ -1197,18 +1181,18 @@ if ($_GET['action']=='discuss')
 		{
 			$ratinglock_disc= '<img src="../img/wiki/rating.gif" alt="'.get_lang('UnlockRatingDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('LockRatingDiscuss').'</font>';
 		}	     	
-	}		
-	
-	//check notify by email		
-	if (check_notify_discuss())
+	}
+
+	//check notify by email
+	if (check_notify_discuss($page))
 	{
-	 	$notify_disc= '<img src="../img/wiki/send_mail_checked.gif" alt="'.get_lang('NotifyDiscussByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotifyDiscussChanges').'</font>';
+		$notify_disc= '<img src="../img/wiki/send_mail_checked.gif" alt="'.get_lang('NotifyDiscussByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotifyDiscussChanges').'</font>';
 	}
 	else
 	{	 
 	   $notify_disc= '<img src="../img/wiki/send_mail.gif" alt="'.get_lang('CancelNotifyDiscussByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotNotifyDiscussChanges').'</font>';
 	}	
-	
+
     //mode assignment: previous to show  page type
 	if(stripslashes($row['assignment'])==1)
 	{
@@ -1276,25 +1260,28 @@ if ($_GET['action']=='discuss')
 				<?php
 				if ($_POST['Submit'])
 				{
-					$sql="INSERT INTO `$tbl_wiki_discuss` (publication_id, userc_id, comment, p_score) VALUES ('".$id."','".api_get_user_id()."','".$_POST['comment']."','".$_POST['rating']."')";
-					$result=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());					
+					$sql="INSERT INTO $tbl_wiki_discuss (publication_id, userc_id, comment, p_score) VALUES ('".$id."','".api_get_user_id()."','".$_POST['comment']."','".$_POST['rating']."')";
+					$result=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
+					
+					check_emailcue($id, 'D');
+										
 				}
 			}//end discuss lock
 			
 			echo '<hr noshade size="1">';
 			$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 			
-			$sql="SELECT * FROM `$tbl_wiki_discuss` reviews, $user_table user  WHERE reviews.publication_id='".$id."' AND user.user_id='".$wuid."' ORDER BY id DESC";
+			$sql="SELECT * FROM $tbl_wiki_discuss reviews, $user_table user  WHERE reviews.publication_id='".$id."' AND user.user_id='".$wuid."' ORDER BY id DESC";
 			$result=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
 			
 			$countWPost = Database::num_rows($result); 
 			echo get_lang('NumComments').": ".$countWPost; //comment's numbers 
 			
-			$sql="SELECT SUM(p_score) as sumWPost FROM `$tbl_wiki_discuss` WHERE publication_id='".$id."' AND NOT p_score='-' ORDER BY id DESC"; 
+			$sql="SELECT SUM(p_score) as sumWPost FROM $tbl_wiki_discuss WHERE publication_id='".$id."' AND NOT p_score='-' ORDER BY id DESC"; 
 			$result2=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
 			$row2=Database::fetch_array($result2);
 			
-			$sql="SELECT * FROM `$tbl_wiki_discuss` WHERE publication_id='".$id."' AND NOT p_score='-'"; 
+			$sql="SELECT * FROM $tbl_wiki_discuss WHERE publication_id='".$id."' AND NOT p_score='-'"; 
 			$result3=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
 			$countWPost_score= Database::num_rows($result3);
 			
@@ -1308,7 +1295,7 @@ if ($_GET['action']=='discuss')
 				api_sql_query($sql,__FILE__,__LINE__); 
 	
 			echo '<hr noshade size="1">';
-			echo '<div style="overflow:auto; height:170px;">';
+			//echo '<div style="overflow:auto; height:170px;">';
 			
 			while ($row=Database::fetch_array($result))
 			{	
@@ -1389,7 +1376,7 @@ if ($_GET['action']=='discuss')
 			echo '<hr noshade size="1">';
 			
 			}	
-		    echo"</div>";			
+		  //  echo"</div>";			
 		}
 		else
 		{
@@ -1573,7 +1560,7 @@ function make_wiki_link_clickable($input)
 			else 
 			{				
 						
-				$input_array[$key]='<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.strtolower(str_replace(' ','',$link)).'&group_id='.$_clean['group_id'].'" class="wiki_link">'.$title.$titleg_ex.'</a>'; // juan esto recoge la posibilidad de que el titulo sea diferente a la url			
+				$input_array[$key]='<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.strtolower(str_replace(' ','',$link)).'&group_id='.$_clean['group_id'].'" class="wiki_link">'.$title.$titleg_ex.'</a>';
 			}
 			unset($input_array[$key-1]);
 			unset($input_array[$key+1]);
@@ -1630,6 +1617,9 @@ function save_wiki()
 	$result=api_sql_query($sql);	
     $Id = Database::insert_id();		
 	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id());
+	
+	check_emailcue($_clean['reflink'], 'P');
+	
 	return get_lang('ChangesStored');
 }
 
@@ -1732,6 +1722,8 @@ function save_new_wiki()
 		   $Id = Database::insert_id();	
 		   api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id());
 		  
+		   check_emailcue(0, 'A');
+		   
 		   return get_lang('NewWikiSaved').'<a href="index.php?action=showpage&amp;title='.$_clean['reflink'].'&group_id='.$group_id.'">'.$_POST['title'].'</a>'; 
 		   
 		} 
@@ -1895,7 +1887,7 @@ function display_wiki_entry()
 	}		
 	
 	//Button notify page
-	if (check_notify_page())
+	if (check_notify_page($page))
 	{
 		$notify_page= '<img src="../img/wiki/send_mail_checked.gif" alt="'.get_lang('NotifyByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotNotifyChanges').'</font>';
 	}
@@ -2337,7 +2329,7 @@ function check_ratinglock_discuss()
 			$status_ratinglock_disc=1; 
 		}       
 		
-		$sql='UPDATE '.$tbl_wiki.' SET ratinglock_disc="'.Database::escape_string($status_ratinglock_disc).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter; //juan carlos da valor de visible o no a todos los registros de la pagina, no solo al primero como antes		
+		$sql='UPDATE '.$tbl_wiki.' SET ratinglock_disc="'.Database::escape_string($status_ratinglock_disc).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter; //Visibility. Value to all,not only for the first	
 	    api_sql_query($sql,__FILE__,__LINE__); 
 		
 	  	//Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
@@ -2364,47 +2356,58 @@ function check_ratinglock_discuss()
  * Notify page changes
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
-function check_notify_page()
+ 
+function check_notify_page($reflink)
 {
 	global $tbl_wiki;
-	global $page;
 	global $groupfilter;	
 	global $tbl_wiki_mailcue;
-
-	$_clean['group_id']=(int)$_SESSION['_gid'];
 	
-	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
+	$_clean['group_id']=(int)$_SESSION['_gid'];
+	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.$reflink.'" AND '.$groupfilter.' ORDER BY id ASC';
 	$result=api_sql_query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
-				
-	$status_notify=$row['notify'];
-	$id=$row['id'];
-								
+	
+	$id=$row['id'];		
+		
+	$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="P"';
+	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$row=Database::fetch_array($result);
+			
+	$idm=$row['id'];
+	
+	if (empty($idm))	
+	{ 
+		$status_notify=0;
+	}
+	else
+	{
+		$status_notify=1;
+	}	
+			
 	//change status
-	if ($_GET['actionpage']=='notify') 
+	if ($_GET['actionpage']=='notify')
 	{	
-		if ($row['notify']==0)				
-	    {
-	    	$status_notify=1;				 
+		
+		if ($status_notify==0)
+	    {		
+		   	  
+			$sql="INSERT INTO ".$tbl_wiki_mailcue." (id, user_id, type, group_id) VALUES ('".$id."','".api_get_user_id()."','P','".$_clean['group_id']."')";
+			api_sql_query($sql,__FILE__,__LINE__);		
+			
+	    	$status_notify=1;			
 	    }
 	    else
-		{
-		    $status_notify=0;	
-	    }    
-	
-	    $sql='UPDATE '.$tbl_wiki.' SET notify="'.Database::escape_string($status_notify).'" WHERE id="'.$id.'"';			   
-	    api_sql_query($sql,__FILE__,__LINE__); 	
-  
-    	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
-		$result=api_sql_query($sql,__LINE__,__FILE__);
-		$row=Database::fetch_array($result); 
-	  
-		$sql="INSERT INTO ".$tbl_wiki_mailcue." (id, user_id) VALUES ('".$id."','".api_get_user_id()."')"; 
-		$result=api_sql_query($sql);		
+		{					
+		    $sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="P"'; //$_clean['group_id'] not necessary
+			api_sql_query($sql,__FILE__,__LINE__);
+			
+		    $status_notify=0;				
+	    } 			
 	}	
-	
+		
 	//show status
-	if ($row['notify']==0 || ($row['content']=='' AND $row['title']=='' AND $page='index'))
+	if ($status_notify==0)
 	{
 		return false;
 	}
@@ -2413,54 +2416,137 @@ function check_notify_page()
 		return true;				
 	}
 }
-
 
 
 /**
  * Notify discussion changes
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
-function check_notify_discuss()
+function check_notify_discuss($reflink)
 {
 	global $tbl_wiki;
-	global $page;
 	global $groupfilter;	
-	global $tbl_wiki_mailcue;
-
-	$_clean['group_id']=(int)$_SESSION['_gid'];
+	global $tbl_wiki_mailcue;	
 	
-	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
+	$_clean['group_id']=(int)$_SESSION['_gid'];
+	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.$reflink.'" AND '.$groupfilter.' ORDER BY id ASC';
 	$result=api_sql_query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
-				
-	$status_notify_disc=$row['notify_disc'];
-	$id=$row['id'];	//need ? check. to do	
-								
-	///change status
-	if ($_GET['actionpage']=='notify_disc') 
+	
+	$id=$row['id'];	
+			
+	$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="D"';
+	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$row=Database::fetch_array($result);
+			
+	$idm=$row['id'];
+		
+	if (empty($idm))	
+	{ 	
+		$status_notify_disc=0;
+		
+	}
+	else
+	{
+		$status_notify_disc=1;
+	}	
+			
+	//change status
+	if ($_GET['actionpage']=='notify_disc')
 	{	
-		if ($row['notify_disc']=="0")				
-	    {
-			$status_notify_disc="1";				 
+		
+		if ($status_notify_disc==0)
+	    {	
+		
+			if (!$_POST['Submit'])
+			{	  
+								
+				$sql="INSERT INTO ".$tbl_wiki_mailcue." (id, user_id, type, group_id) VALUES ('".$id."','".api_get_user_id()."','D','".$_clean['group_id']."')";
+				api_sql_query($sql,__FILE__,__LINE__);		
+				
+				$status_notify_disc=1;
+			}
+			else
+			{
+				$status_notify_disc=0;
+			}			
 	    }
 	    else
-		{
-		    $status_notify_disc="0";	
-	    }          
-    	
-	    $sql='UPDATE '.$tbl_wiki.' SET notify_disc="'.Database::escape_string($status_notify_disc).'" WHERE id="'.$id.'"';			   
-	    api_sql_query($sql,__FILE__,__LINE__); 		
-  
-		$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
-		$result=api_sql_query($sql,__LINE__,__FILE__);
-		$row=Database::fetch_array($result); 
-	  
-		$sql="INSERT INTO ".$tbl_wiki_mailcue." (id, user_id) VALUES ('".$id."','".api_get_user_id()."')"; 
-		$result=api_sql_query($sql);		
+		{	
+			if (!$_POST['Submit'])
+			{				
+				$sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="D"'; //$_clean['group_id'] not necessary
+				api_sql_query($sql,__FILE__,__LINE__);
+				
+				$status_notify_disc=0;
+			}
+			else
+			{
+				$status_notify_disc=1;
+			}					
+	    } 			
 	}	
-	
+		
 	//show status
-	if ($row['notify_disc']=="0" || ($row['content']=='' AND $row['title']=='' AND $page='index'))
+	if ($status_notify_disc==0)
+	{				
+		return false;
+	}
+	else
+	{
+		return true;					
+	}
+}
+
+
+/**
+ * Notify all changes
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
+ */
+ 
+function check_notify_all()
+{
+	global $tbl_wiki_mailcue;
+	
+	$_clean['group_id']=(int)$_SESSION['_gid'];	
+		
+	$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE user_id="'.api_get_user_id().'" AND type="F" AND group_id="'.$_clean['group_id'].'"';
+	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$row=Database::fetch_array($result);
+			
+	$idm=$row['user_id'];
+	
+	if (empty($idm))
+	{ 
+		$status_notify_all=0;	
+	}
+	else
+	{
+		$status_notify_all=1;
+	}	
+			
+	//change status
+	if ($_GET['actionpage']=='notify_all')
+	{	
+		
+		if ($status_notify_all==0)
+	    {	
+			$sql="INSERT INTO ".$tbl_wiki_mailcue." (user_id, type, group_id) VALUES ('".api_get_user_id()."','F','".$_clean['group_id']."')";
+			api_sql_query($sql,__FILE__,__LINE__);		
+			
+			$status_notify_all=1;				
+	    }
+	    else
+		{								
+			$sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE user_id="'.api_get_user_id().'" AND type="F" AND group_id="'.$_clean['group_id'].'"';
+			api_sql_query($sql,__FILE__,__LINE__);
+		
+			$status_notify_all=0;			
+	    } 					
+	}	
+		
+	//show status
+	if ($status_notify_all==0)
 	{
 		return false;
 	}
@@ -2470,17 +2556,92 @@ function check_notify_discuss()
 	}
 }
 
+
 /**
- * Function check emailcue
- * TO DO
+ * Function check emailcue and send email when a page change
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
  
- 
-/**
- * Function send email when a page change
- * TO DO
- */
- 
+function check_emailcue($id_or_ref, $type)
+{
+	global $tbl_wiki;
+	global $groupfilter;	
+	global $tbl_wiki_mailcue;
+	global $_course;		
+
+    $_clean['group_id']=(int)$_SESSION['_gid'];
+	
+	$group_properties  = GroupManager :: get_group_properties($_clean['group_id']);	
+	$group_name= $group_properties['name'];
+
+	if ($type=='P')
+	{
+	//if modifying a wiki page
+		$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.$id_or_ref.'" AND '.$groupfilter.' ORDER BY id ASC';
+		$result=api_sql_query($sql,__LINE__,__FILE__);
+		$row=Database::fetch_array($result);
+		
+		$id=$row['id']; 
+		
+		$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="'.$type.'" OR type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full
+		
+		$result=api_sql_query($sql,__LINE__,__FILE__);
+		
+	    $emailtext=get_lang('EmailWikipageModified');
+	
+	
+	}
+	elseif ($type=='D')
+	{
+	//if added a post to discuss
+		$id=$id_or_ref;
+		$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="'.$type.'" OR type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full
+		$result=api_sql_query($sql,__LINE__,__FILE__);
+		
+		$emailtext=get_lang('EmailWikiPageDiscAdded');
+	}
+	elseif($type=='A')
+	{
+	//for added pages
+		$id=0;
+		$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full
+		$result=api_sql_query($sql,__LINE__,__FILE__);
+	
+		$emailtext=get_lang('EmailWikiPageAdded');
+			
+	}
+	elseif($type=='E')
+	{
+		$id=0;
+		$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=wiki
+		$result=api_sql_query($sql,__LINE__,__FILE__);
+				
+		$emailtext=get_lang('EmailWikipageDedeleted');
+	}			
+	
+	//TODO: if visibility off turn notify off ?	
+	
+	//make and send email	
+	
+	while ($row=Database::fetch_array($result))
+	{		
+		if(empty($charset)){$charset='ISO-8859-1';}
+		$headers = 'Content-Type: text/html; charset='. $charset;
+		$userinfo=Database::get_user_info_from_id($row['user_id']);	
+		$name_to=$userinfo['firstname'].' '.$userinfo['lastname'];
+		$email_to=$userinfo['email'];
+		$sender_name=get_setting('emailAdministrator');
+		$sender_email=get_setting('emailAdministrator');
+		$email_subject = get_lang('EmailWikiChanges').' - '.$_course['official_code'];
+		$email_body= get_lang('DearUser').' '.$userinfo['firstname'].' '.$userinfo['lastname'].',<br><br>\n\r';
+		$email_body .= $emailtext.' <strong>'.$_course['name'].' - '.$group_name.'</strong><br><br><br>\n';
+		$email_body .= '<font size="-2">'.get_lang('EmailWikiChangesExt_1').': '.get_lang('NotifyChanges').'<br>\n';
+		$email_body .= get_lang('EmailWikiChangesExt_2').': '.get_lang('NotNotifyChanges').'</font><br>\n';
+
+		api_mail_html($name_to, $email_to, $email_subject, $email_body, $sender_name, $sender_email, $headers);
+	}	
+	
+}  
 
 
 /**

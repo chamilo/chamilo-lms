@@ -681,6 +681,7 @@ if ($_GET['action']=='edit')
 	$result=api_sql_query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version				
 
+
 	//Only teachers and platform admin can edit the index page. Only teachers and platform admin can edit an assignment teacher
 	if(($row['reflink']=='index' || $row['reflink']=='' || $row['assignment']==1) && (!api_is_allowed_to_edit() || !api_is_platform_admin()))
 	{
@@ -690,17 +691,7 @@ if ($_GET['action']=='edit')
 	}
     else
 	{	
-		$PassEdit=false;
-		
-		if(stripslashes($row['assignment'])==1)
-		{
-		    Display::display_normal_message(get_lang('EditAssignmentWarning'));
-			$icon_assignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDescExtra').'" />';
-		}
-		elseif(stripslashes($row['assignment'])==2)
-		{
-			$icon_assignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWorkExtra').'" />';
-		}
+		$PassEdit=false;		
        
 	    //check if is a wiki group
 		if($_clean['group_id']!==0)
@@ -719,6 +710,33 @@ if ($_GET['action']=='edit')
 		{
 		    $PassEdit=true;
 		}
+		 
+		// check if is a assignment
+		if(stripslashes($row['assignment'])==1)
+		{
+		    Display::display_normal_message(get_lang('EditAssignmentWarning'));
+			$icon_assignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDescExtra').'" />';
+		}
+		elseif(stripslashes($row['assignment'])==2)
+		{			
+			$icon_assignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWorkExtra').'" />';
+			if((api_get_user_id()==$row['user_id'])==false)
+			{
+			    if(api_is_allowed_to_edit() || api_is_platform_admin())
+				{
+					$PassEdit=true;
+				}
+				else
+				{
+					Display::display_warning_message(get_lang('LockByTeacher'));
+					$PassEdit=false;
+				}
+			}
+			else
+			{
+				$PassEdit=true;				
+			}			
+		}		 	 
 		 
 	 	if($PassEdit) //show editor if edit is allowed
 		 {
@@ -750,7 +768,7 @@ if ($_GET['action']=='edit')
 	            echo '<br/>'; 	
 				//if(api_is_allowed_to_edit() || api_is_platform_admin()) //off for now
 				//{ 
-				echo get_lang('Comments').':&nbsp;&nbsp;<input type="text" name="comment" value="'.stripslashes($row['comment']).'">&nbsp;&nbsp;&nbsp;'; 
+				echo get_lang('Comments').':&nbsp;&nbsp;<input type="text" name="comment">&nbsp;&nbsp;&nbsp;';											 
 				//}												
 								
 				echo '<INPUT TYPE="hidden" NAME="assignment" VALUE="'.stripslashes($row['assignment']).'"/>';
@@ -1186,8 +1204,8 @@ if ($_GET['action']=='discuss')
 	//check add rating lock. Show/Hide list to rating for all student
 	if (check_ratinglock_discuss())
 	{
-		//Mode assignment: check. TODO
-		if(($row['assignment']==2 && $row['ratinglock_disc']==0 && (api_get_user_id()==$row['user_id']))==false)		
+		//Mode assignment: only the teacher can assign scoring
+		if(($row['assignment']==2 && $row['ratinglock_disc']==0 && (api_get_user_id()==$row['user_id']))==false)			
 	    {		
 	 		$ratinglock_disc= '<img src="../img/wiki/rating_na.gif" alt="'.get_lang('LockRatingDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('UnlockRatingDiscuss').'</font>';
 		}
@@ -1598,6 +1616,8 @@ function save_wiki()
 
 	global $tbl_wiki;	
 	
+	// NOTE: visibility, visibility_disc and ratinglock_disc changes are not made here, but through the interce buttons
+	
 	// cleaning the variables
 
 	$_clean['reflink']=Database::escape_string($_POST['reflink']);
@@ -1611,9 +1631,8 @@ function save_wiki()
     $_clean['enddate_assig']=Database::escape_string($_POST['enddate_assig']);
 	$_clean['delayedsubmit']=Database::escape_string($_POST['delayedsubmit']);		
 	$_clean['version']=Database::escape_string($_POST['version'])+1;	
-	$_clean['linksto'] = links_to($_clean['content']); //and check links content
+	$_clean['linksto'] = links_to($_clean['content']); //and check links content	
 	
-
 
 	if (isset($_SESSION['_gid']))
     {
@@ -1683,16 +1702,26 @@ function save_new_wiki()
 	$_clean['title']=Database::escape_string($_POST['title']);		    
 	$_clean['content']= html_entity_decode(Database::escape_string(stripslashes(urldecode($_POST['content']))));
 	
-	if($_clean['assignment']==2) // for automatic assignment. Identifies the user as a creator, not the teacher who created
+	if($_clean['assignment']==2) //config by default for individual assignment (students)
 	{	 
 	
-	 	$_clean['user_id']=(int)Database::escape_string($assig_user_id);
+	 	$_clean['user_id']=(int)Database::escape_string($assig_user_id);//Identifies the user as a creator, not the teacher who created
+		
+		$_clean['visibility']=0;
+		$_clean['visibility_disc']=0;
+		$_clean['ratinglock_disc']=0;
+		
 	}
 	else
 	{
-	 	$_clean['user_id']=(int)Database::escape_string(api_get_user_id());	
+	 	$_clean['user_id']=(int)Database::escape_string(api_get_user_id());
+		
+		$_clean['visibility']=1;
+		$_clean['visibility_disc']=1;
+		$_clean['ratinglock_disc']=1;		
+		
 	}	
-	
+
 	$_clean['comment']=Database::escape_string($_POST['comment']);
 	$_clean['progress']=Database::escape_string($_POST['progress']);	
 	$_clean['startdate_assig']=Database::escape_string($_POST['startdate_assig']);
@@ -1731,11 +1760,11 @@ function save_new_wiki()
 		{ 
 			if ($_clean['group_id']) 
 		    {	 
-				$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
+				$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
 		    }
 		    else
 		    {	    
-				$sql="INSERT INTO ".$tbl_wiki." (reflink, title,content, user_id, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
+				$sql="INSERT INTO ".$tbl_wiki." (reflink, title,content, user_id, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
 		    }  
 			   
 		   $result=api_sql_query($sql,__LINE__,__FILE__);
@@ -1790,7 +1819,7 @@ function display_new_wiki_form()
 			//echo'<div style="border:groove">';			
 			//echo '&nbsp;'.get_lang('StartDate').': <INPUT TYPE="text" NAME="startdate_assig" VALUE="0000-00-00 00:00:00">(yyyy-mm-dd hh:mm:ss)'; //by now turned off
 			//echo '&nbsp;'.get_lang('EndDate').': <INPUT TYPE="text" NAME="enddate_assig" VALUE="0000-00-00 00:00:00">(yyyy-mm-dd hh:mm:ss)'; //by now turned off				
-		    //echo '<br>&nbsp;'.get_lang('AllowLaterSends').'&nbsp;<INPUT TYPE="checkbox" NAME="delayedsubmit" VALUE="0">'; //               
+		    //echo '<br>&nbsp;'.get_lang('AllowLaterSends').'&nbsp;<INPUT TYPE="checkbox" NAME="delayedsubmit" VALUE="0">'; //by now turned off		
 			//echo'</div>';		
 		} 
 	}
@@ -2538,6 +2567,7 @@ function check_notify_discuss($reflink)
  
 function check_notify_all()
 {
+
 	global $tbl_wiki_mailcue;
 	
 	$_clean['group_id']=(int)$_SESSION['_gid'];	
@@ -2604,75 +2634,116 @@ function check_emailcue($id_or_ref, $type)
     $_clean['group_id']=(int)$_SESSION['_gid'];
 	
 	$group_properties  = GroupManager :: get_group_properties($_clean['group_id']);	
-	$group_name= $group_properties['name'];
+	$group_name= $group_properties['name'];		
 
+    $allow_send_mail=false; //define the variable to below
+	
 	if ($type=='P')
 	{
-	//if modifying a wiki page
-		$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.$id_or_ref.'" AND '.$groupfilter.' ORDER BY id ASC';
+	//if modifying a wiki page		
+	 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.$id_or_ref.'" AND '.$groupfilter.' ORDER BY id ASC'; //id_or_ref is reflink from tblwiki
+		
 		$result=api_sql_query($sql,__LINE__,__FILE__);
 		$row=Database::fetch_array($result);
 		
-		$id=$row['id']; 
+		$id=$row['id'];
+		$email_page_name=$row['title'];
+				
+		if ($row['visibility']==1)
+		{
+			$allow_send_mail=true; //if visibility off - notify off	
 		
-		$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="'.$type.'" OR type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full
-		
-		$result=api_sql_query($sql,__LINE__,__FILE__);
-		
-	    $emailtext=get_lang('EmailWikipageModified');
-	
+			$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="'.$type.'" OR type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full.		
+			$result=api_sql_query($sql,__LINE__,__FILE__);
+			
+			$emailtext=get_lang('EmailWikipageModified').' <strong>'.$email_page_name.'</strong> '.get_lang('OfWiki');
+		}
 	
 	}
 	elseif ($type=='D')
 	{
 	//if added a post to discuss
-		$id=$id_or_ref;
-		$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="'.$type.'" OR type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full
-		$result=api_sql_query($sql,__LINE__,__FILE__);
+	
+		$id=$id_or_ref; //$id_or_ref is id from tblwiki
 		
-		$emailtext=get_lang('EmailWikiPageDiscAdded');
+		$sql='SELECT * FROM '.$tbl_wiki.'WHERE id="'.$id.'" ORDER BY id ASC';
+		
+		$result=api_sql_query($sql,__LINE__,__FILE__);
+		$row=Database::fetch_array($result);
+		
+		$email_page_name=$row['title'];
+		
+		if ($row['visibility_disc']==1)
+		{
+			$allow_send_mail=true; //if visibility off - notify off				
+				
+			$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="'.$type.'" OR type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full
+			$result=api_sql_query($sql,__LINE__,__FILE__);			
+			
+			$emailtext=get_lang('EmailWikiPageDiscAdded').' <strong>'.$email_page_name.'</strong> '.get_lang('OfWiki');
+		}
 	}
 	elseif($type=='A')
 	{
 	//for added pages
-		$id=0;
+		$id=0; //for tbl_wiki_mailcue
+	
+		$sql='SELECT * FROM '.$tbl_wiki.' ORDER BY id DESC'; //the added is always the last
+		
+		$result=api_sql_query($sql,__LINE__,__FILE__);
+		$row=Database::fetch_array($result);
+		
+		$email_page_name=$row['title'];
+		
+		if(!$row['assignment']==0)	
+		{
+			$email_assignment=get_lang('AssignmentDescExtra').' ('.get_lang('AssignmentMode').')';				
+		}
+			
+	
+		$allow_send_mail=true;
+		
 		$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full
 		$result=api_sql_query($sql,__LINE__,__FILE__);
 	
-		$emailtext=get_lang('EmailWikiPageAdded');
-			
+		$emailtext=get_lang('EmailWikiPageAdded').' <strong>'.$email_page_name.'</strong> '.get_lang('In').' '. get_lang('Wiki');
 	}
 	elseif($type=='E')
 	{
 		$id=0;
+		
+		$allow_send_mail=true;
+		
 		$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=wiki
 		$result=api_sql_query($sql,__LINE__,__FILE__);
 				
 		$emailtext=get_lang('EmailWikipageDedeleted');
 	}			
 	
-	//TODO: if visibility off turn notify off ?	
-	
-	//make and send email	
-	
-	while ($row=Database::fetch_array($result))
-	{		
-		if(empty($charset)){$charset='ISO-8859-1';}
-		$headers = 'Content-Type: text/html; charset='. $charset;
-		$userinfo=Database::get_user_info_from_id($row['user_id']);	
-		$name_to=$userinfo['firstname'].' '.$userinfo['lastname'];
-		$email_to=$userinfo['email'];
-		$sender_name=get_setting('emailAdministrator');
-		$sender_email=get_setting('emailAdministrator');
-		$email_subject = get_lang('EmailWikiChanges').' - '.$_course['official_code'];
-		$email_body= get_lang('DearUser').' '.$userinfo['firstname'].' '.$userinfo['lastname'].',<br><br>\n\r';
-		$email_body .= $emailtext.' <strong>'.$_course['name'].' - '.$group_name.'</strong><br><br><br>\n';
-		$email_body .= '<font size="-2">'.get_lang('EmailWikiChangesExt_1').': <strong>'.get_lang('NotifyChanges').'</strong><br>\n';
-		$email_body .= get_lang('EmailWikiChangesExt_2').': <strong>'.get_lang('NotNotifyChanges').'</strong></font><br>\n';
-
-		api_mail_html($name_to, $email_to, $email_subject, $email_body, $sender_name, $sender_email, $headers);
-	}	
-	
+		
+	///make and send email		
+		
+	if ($allow_send_mail)
+	{	
+		while ($row=Database::fetch_array($result))
+		{		
+			if(empty($charset)){$charset='ISO-8859-1';}
+			$headers = 'Content-Type: text/html; charset='. $charset;
+			$userinfo=Database::get_user_info_from_id($row['user_id']);	//$row['user_id'] obtained from tbl_wiki_mailcue
+			$name_to=$userinfo['firstname'].' '.$userinfo['lastname'];
+			$email_to=$userinfo['email'];
+			$sender_name=get_setting('emailAdministrator');
+			$sender_email=get_setting('emailAdministrator');
+			$email_subject = get_lang('EmailWikiChanges').' - '.$_course['official_code'];
+			$email_body= get_lang('DearUser').' '.$userinfo['firstname'].' '.$userinfo['lastname'].',<br><br>';
+			$email_body .= $emailtext.' <strong>'.$_course['name'].' - '.$group_name.'</strong><br><br><br>';
+			$email_body .= $email_assignment.'<br><br><br>';			
+			$email_body .= '<font size="-2">'.get_lang('EmailWikiChangesExt_1').': <strong>'.get_lang('NotifyChanges').'</strong><br>';
+			$email_body .= get_lang('EmailWikiChangesExt_2').': <strong>'.get_lang('NotNotifyChanges').'</strong></font><br>';
+				
+			api_mail_html($name_to, $email_to, $email_subject, $email_body, $sender_name, $sender_email, $headers);
+		}	
+	}
 }  
 
 

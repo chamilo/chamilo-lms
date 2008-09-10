@@ -109,7 +109,6 @@ class GroupManager
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER, $course_db);
-		
 		$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' g.session_id IN (0,'.intval($_SESSION['id_session']).') ';
 		
 		$sql = "SELECT  g.id ,
@@ -131,7 +130,8 @@ class GroupManager
 					
 		if ($category != null){
 			$sql .= " WHERE `g`.`category_id` = '".$category."' ";
-			$sql .= 'AND '.$session_condition;
+			if(!empty($session_condition))
+				$sql .= 'AND '.$session_condition;
 		}
 		else if(!empty($session_condition))
 			$sql .= 'WHERE '.$session_condition;

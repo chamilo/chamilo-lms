@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 16224 2008-09-02 14:16:13Z elixir_inter $
+<?php //$Id: announcements.php 16308 2008-09-11 09:40:47Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -330,7 +330,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	// $_GET['isStudentView']<>"false" is added to prevent that the visibility
 	// is changed after you do the following:
 	// change visibility -> studentview -> course manager view
-	if (isset($_GET['isStudentView']) && $_GET['isStudentView']!='false')
+	if (!isset($_GET['isStudentView']) || $_GET['isStudentView']!='false')
 	{
 		if (isset($_GET['id']) AND $_GET['id'] AND isset($_GET['action']) AND $_GET['action']=="showhide")
 		{

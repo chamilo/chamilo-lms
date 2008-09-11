@@ -12,8 +12,11 @@
  * @package dokeos.learnpath.openofficedocument
  */
 require_once('openoffice_document.class.php');
-require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
-require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
+if(api_get_setting('search_enabled')==='true') //the true condition here should be if xapian module is installed
+{
+    require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
+    require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
+}
 
 class OpenofficePresentation extends OpenofficeDocument {
 	
@@ -108,7 +111,7 @@ class OpenofficePresentation extends OpenofficeDocument {
 				}
 			}
             // code for text indexing
-            if (isset($_POST['index_document']) && $_POST['index_document']) {
+            if (isset($_POST['index_document']) && $_POST['index_document'] && api_get_setting('search_enabled')==='true') {
               //Display::display_normal_message(print_r($_POST));
               $di = new DokeosIndexer();
               isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';

@@ -2794,14 +2794,29 @@ function auto_add_page_users($assignment_type)
 {
 	global $assig_user_id; //need to identify end reflinks	
 
-    //extract course members
-	if(!empty($_SESSION["id_session"])){
-		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
+	$_clean['group_id']=(int)$_SESSION['_gid'];	
+	
+	
+	if($_clean['group_id']==0)   
+  	{	
+  		//extract course members
+		if(!empty($_SESSION["id_session"])){
+			$a_users_to_add = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
+		}
+		else
+		{
+			$a_users_to_add = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true);
+		}
 	}
 	else
-	{
-		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true);
-	}
+	{ 
+		//extract group members
+		$subscribed_users = GroupManager :: get_subscribed_users($_clean['group_id']);
+		$subscribed_tutors = GroupManager :: get_subscribed_tutors($_clean['group_id']);
+		$a_users_to_add=array_merge($subscribed_users, $subscribed_tutors);//TODO: check if one tutor subscribed -> filter duplicates
+		
+	}    
+
 	
 	$all_students_pages = array();
 
@@ -2829,27 +2844,50 @@ function auto_add_page_users($assignment_type)
 	//first: teacher name, photo, and assignment description (original content)	
     $content_orig_A='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Teacher').': '.$userinfo['firstname'].$userinfo['lastname'].'</div><br/><div>';
 	$content_orig_B='<h1>'.get_lang('AssignmentDescription').'</h1></div><br/>'.$_POST['content'];
+	
     //Second: student list (names, photo and links to their works).
 	//Third: Create Students work pages.
-   	foreach($a_course_users as $user_id=>$o_course_user)
+	
+   	foreach($a_users_to_add as $user_id=>$o_user_to_add)
 	{					  
-		if($o_course_user['user_id'] != api_get_user_id()) //except that puts the task
+		if($o_user_to_add['user_id'] != api_get_user_id()) //except that puts the task
 		{
-									 		 
-			$assig_user_id= $o_course_user['user_id']; //identifies each page as created by the student, not by teacher		
+											 		 
+			$assig_user_id= $o_user_to_add['user_id']; //identifies each page as created by the student, not by teacher		
 			$image_path = UserManager::get_user_picture_path_by_id($assig_user_id,'web',false, true);
 			$image_repository = $image_path['dir'];
 			$existing_image = $image_path['file'];
-			$name= $o_course_user['lastname'].', '.$o_course_user['firstname'];
-			$photo= '<img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="40" height="50" align="bottom" title="'.$name.'"  />';			
+			$name= $o_user_to_add['lastname'].', '.$o_user_to_add['firstname'];
+			$photo= '<img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="40" height="50" align="bottom" title="'.$name.'"  />';
+			
+			$is_tutor_of_group = GroupManager :: is_tutor_of_group($assig_user_id,$_clean['group_id']); //student is tutor			
+			$is_tutor_and_member = (GroupManager :: is_tutor_of_group($assig_user_id,$_clean['group_id']) && GroupManager :: is_subscribed($assig_user_id, $_clean['group_id'])); //student is tutor and member		
+			
+			if($is_tutor_and_member)
+			{
+				$status_in_group=get_lang('GroupTutorAndMember');
+				
+			}
+			else
+			{
+				if($is_tutor_of_group)
+				{
+					$status_in_group=get_lang('GroupTutor');
+				}
+				else
+				{
+					$status_in_group=" "; //get_lang('GroupOrdinaryMember')
+				}
+			}					
 			
 			if($assignment_type==1)
 			{			 
 				$_POST['title']= $title_orig;
 				$_POST['comment']=get_lang('AssignmentFirstComToStudent');				
 				$_POST['content']='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Student').': '.$name.'</div>[['.$link2teacher.' | '.get_lang('AssignmentLinktoTeacherPage').']] '.$content_orig_B;	
+				
 			   //AssignmentLinktoTeacherPage	        
-			 	$all_students_pages[] = '<li>'.$o_course_user['lastname'].', '.$o_course_user['firstname'].' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] </li>';
+			 	$all_students_pages[] = '<li>'.$o_user_to_add['lastname'].', '.$o_user_to_add['firstname'].' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
 				
 				$_POST['assignment']=2;
 				
@@ -2860,12 +2898,12 @@ function auto_add_page_users($assignment_type)
 	}//end foreach for each user
 	
 	
-	foreach($a_course_users as $user_id=>$o_course_user)
+	foreach($a_users_to_add as $user_id=>$o_user_to_add)
 	{
 			
-		if($o_course_user['user_id'] == api_get_user_id())
+		if($o_user_to_add['user_id'] == api_get_user_id())
 		{		
-			$assig_user_id=$o_course_user['user_id'];			
+			$assig_user_id=$o_user_to_add['user_id'];			
 			if($assignment_type==1)			
 			 {					 
 				$_POST['title']= $title_orig;	

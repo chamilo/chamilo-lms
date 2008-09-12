@@ -1808,20 +1808,17 @@ function display_new_wiki_form()
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin())
 	{	
-		//by now only on wiki course
-		$_clean['group_id']=(int)$_SESSION['_gid'];
-		if($_clean['group_id']==0)
-		{
+	
+		$_clean['group_id']=(int)$_SESSION['_gid']; // TODO: check if delete ?
+		
 			echo '&nbsp;&nbsp;&nbsp;<img src="../img/wiki/assignment.gif" />&nbsp;'.get_lang('DefineAssignmentPage').'&nbsp;<INPUT TYPE="checkbox" NAME="assignment" VALUE="1">'; // 1= teacher 2 =student
 			
-			//by now turned off
-			
+			//by now turned off			
 			//echo'<div style="border:groove">';			
 			//echo '&nbsp;'.get_lang('StartDate').': <INPUT TYPE="text" NAME="startdate_assig" VALUE="0000-00-00 00:00:00">(yyyy-mm-dd hh:mm:ss)'; //by now turned off
 			//echo '&nbsp;'.get_lang('EndDate').': <INPUT TYPE="text" NAME="enddate_assig" VALUE="0000-00-00 00:00:00">(yyyy-mm-dd hh:mm:ss)'; //by now turned off				
 		    //echo '<br>&nbsp;'.get_lang('AllowLaterSends').'&nbsp;<INPUT TYPE="checkbox" NAME="delayedsubmit" VALUE="0">'; //by now turned off		
-			//echo'</div>';		
-		} 
+			//echo'</div>';			
 	}
 	echo '<br></div>';
 	echo '<div id="wikicontent">';
@@ -2656,7 +2653,7 @@ function check_emailcue($id_or_ref, $type)
 			$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="'.$type.'" OR type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full.		
 			$result=api_sql_query($sql,__LINE__,__FILE__);
 			
-			$emailtext=get_lang('EmailWikipageModified').' <strong>'.$email_page_name.'</strong> '.get_lang('OfWiki');
+			$emailtext=get_lang('EmailWikipageModified').' <strong>'.$email_page_name.'</strong> '.get_lang('Wiki');
 		}
 	
 	}
@@ -2680,7 +2677,7 @@ function check_emailcue($id_or_ref, $type)
 			$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="'.$type.'" OR type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full
 			$result=api_sql_query($sql,__LINE__,__FILE__);			
 			
-			$emailtext=get_lang('EmailWikiPageDiscAdded').' <strong>'.$email_page_name.'</strong> '.get_lang('OfWiki');
+			$emailtext=get_lang('EmailWikiPageDiscAdded').' <strong>'.$email_page_name.'</strong> '.get_lang('Wiki');
 		}
 	}
 	elseif($type=='A')
@@ -2695,13 +2692,19 @@ function check_emailcue($id_or_ref, $type)
 		
 		$email_page_name=$row['title'];
 		
-		if(!$row['assignment']==0)	
+		if($row['assignment']==0)	
 		{
-			$email_assignment=get_lang('AssignmentDescExtra').' ('.get_lang('AssignmentMode').')';				
+			$allow_send_mail=true;
 		}
-			
-	
-		$allow_send_mail=true;
+		elseif($row['assignment']==1)	
+		{
+			$email_assignment=get_lang('AssignmentDescExtra').' ('.get_lang('AssignmentMode').')';
+			$allow_send_mail=true;
+		}
+		elseif($row['assignment']==2)		
+		{
+			$allow_send_mail=false; //Mode tasks: avoids notifications to all users about all users
+		}		
 		
 		$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full
 		$result=api_sql_query($sql,__LINE__,__FILE__);

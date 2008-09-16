@@ -21,6 +21,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('add_users_
 INSERT INTO settings_options (variable, value, display_text) VALUES ('add_users_by_coach', 'false', 'No');
 ALTER TABLE session ADD nb_days_access_before_beginning TINYINT NULL DEFAULT '0' AFTER date_end , ADD nb_days_access_after_end TINYINT NULL DEFAULT '0' AFTER nb_days_access_before_beginning ;
 ALTER TABLE course_rel_user ADD INDEX (user_id);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools', 'wiki', 'checkbox', 'Tools', 'true', 'CourseCreateActiveToolsTitle', 'CourseCreateActiveToolsComment', NULL, 'Wiki', 1, 0);
 
 -- xxSTATSxx
 
@@ -68,4 +69,3 @@ ALTER TABLE survey ADD session_id SMALLINT UNSIGNED NOT NULL DEFAULT 0;
 ALTER TABLE survey ADD INDEX ( session_id ) ;
 CREATE TABLE wiki_discuss (id int NOT NULL auto_increment, publication_id int NOT NULL default 0, userc_id int NOT NULL default 0, comment text NOT NULL, p_score varchar(255) default NULL, timestamp timestamp(14) NOT NULL, PRIMARY KEY  (id) );
 CREATE TABLE wiki_mailcue (id int NOT NULL, user_id int NOT NULL, type text NOT NULL, group_id int DEFAULT NULL, KEY  (id) );
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools', 'wiki', 'checkbox', 'Tools', 'true', 'CourseCreateActiveToolsTitle', 'CourseCreateActiveToolsComment', NULL, 'Wiki', 1, 0);

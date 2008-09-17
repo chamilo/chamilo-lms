@@ -2660,6 +2660,21 @@ function check_emailcue($id_or_ref, $type)
 		
 		$id=$row['id'];
 		$email_page_name=$row['title'];
+	
+		//Who is the author?
+		$userinfo=	Database::get_user_info_from_id($row['user_id']);		
+		$email_user_author= get_lang('EditedBy').': '.$userinfo['firstname'].' '.$userinfo['lastname'];		
+		
+		//When ?		
+		$year = substr($row['timestamp'], 0, 4);
+		$month = substr($row['timestamp'], 5, 2);
+		$day = substr($row['timestamp'], 8, 2);
+		$hours=substr($row['timestamp'], 11,2);
+		$minutes=substr($row['timestamp'], 14,2);
+		$seconds=substr($row['timestamp'], 17,2);
+		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;		
+		
+			
 				
 		if ($row['visibility']==1)
 		{
@@ -2683,7 +2698,21 @@ function check_emailcue($id_or_ref, $type)
 		$result=api_sql_query($sql,__LINE__,__FILE__);
 		$row=Database::fetch_array($result);
 		
-		$email_page_name=$row['title'];
+		$email_page_name=$row['title'];		
+		
+		//Who is the author?
+		$userinfo=	Database::get_user_info_from_id($row['user_id']);		
+		$email_user_author= get_lang('AddedBy').': '.$userinfo['firstname'].' '.$userinfo['lastname'];		
+		
+		//When ?		
+		$year = substr($row['timestamp'], 0, 4);
+		$month = substr($row['timestamp'], 5, 2);
+		$day = substr($row['timestamp'], 8, 2);
+		$hours=substr($row['timestamp'], 11,2);
+		$minutes=substr($row['timestamp'], 14,2);
+		$seconds=substr($row['timestamp'], 17,2);
+		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;
+		
 		
 		if ($row['visibility_disc']==1)
 		{
@@ -2706,6 +2735,20 @@ function check_emailcue($id_or_ref, $type)
 		$row=Database::fetch_array($result);
 		
 		$email_page_name=$row['title'];
+		
+		//Who is the author?
+		$userinfo=	Database::get_user_info_from_id($row['user_id']);		
+		$email_user_author= get_lang('AddedBy').': '.$userinfo['firstname'].' '.$userinfo['lastname'];		
+		
+		//When ?		
+		$year = substr($row['timestamp'], 0, 4);
+		$month = substr($row['timestamp'], 5, 2);
+		$day = substr($row['timestamp'], 8, 2);
+		$hours=substr($row['timestamp'], 11,2);
+		$minutes=substr($row['timestamp'], 14,2);
+		$seconds=substr($row['timestamp'], 17,2);
+		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;		
+		
 		
 		if($row['assignment']==0)	
 		{
@@ -2732,6 +2775,15 @@ function check_emailcue($id_or_ref, $type)
 		
 		$allow_send_mail=true;
 		
+		//Who is the author?
+		$userinfo=	Database::get_user_info_from_id(api_get_user_id());	//current user
+		$email_user_author= get_lang('DeletedBy').': '.$userinfo['firstname'].' '.$userinfo['lastname'];		
+		
+		
+		//When ?		
+		$today = date('r');		//current time
+		$email_date_changes=$today;	
+		
 		$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=wiki
 		$result=api_sql_query($sql,__LINE__,__FILE__);
 				
@@ -2754,11 +2806,11 @@ function check_emailcue($id_or_ref, $type)
 			$sender_email=get_setting('emailAdministrator');
 			$email_subject = get_lang('EmailWikiChanges').' - '.$_course['official_code'];
 			$email_body= get_lang('DearUser').' '.$userinfo['firstname'].' '.$userinfo['lastname'].',<br><br>';
-			$email_body .= $emailtext.' <strong>'.$_course['name'].' - '.$group_name.'</strong><br><br><br>';
-			$email_body .= $email_assignment.'<br><br><br>';			
+			$email_body .= $emailtext.' <strong>'.$_course['name'].' - '.$group_name.'</strong><br><br><br>';						
+			$email_body .= $email_user_author.' ('.$email_date_changes.')<br><br><br>';		
+			$email_body .= $email_assignment.'<br><br><br>';					
 			$email_body .= '<font size="-2">'.get_lang('EmailWikiChangesExt_1').': <strong>'.get_lang('NotifyChanges').'</strong><br>';
 			$email_body .= get_lang('EmailWikiChangesExt_2').': <strong>'.get_lang('NotNotifyChanges').'</strong></font><br>';
-				
 			api_mail_html($name_to, $email_to, $email_subject, $email_body, $sender_name, $sender_email, $headers);
 		}	
 	}

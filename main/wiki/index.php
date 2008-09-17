@@ -1190,8 +1190,16 @@ if ($_GET['action']=='discuss')
 		
 	//check add messages lock.
 	if (check_addlock_discuss())
-	{	
-	 	$addlock_disc= '<img src="../img/wiki/lock.gif" alt="'.get_lang('LockDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('UnlockDiscuss').'</font>';	 
+	{		
+		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
+		{	
+	 		$addlock_disc= '<img src="../img/wiki/lock.gif" alt="'.get_lang('LockDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('UnlockDiscuss').'</font>';
+		}
+		else
+		{
+		 	$addlock_disc= '<img src="../img/wiki/lock.gif" alt="'.get_lang('LockDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('PageLocked').'</font>';
+		}
+		 
 	}
 	else
 	{			  
@@ -1207,14 +1215,14 @@ if ($_GET['action']=='discuss')
 		//Mode assignment: only the teacher can assign scoring
 		if(($row['assignment']==2 && $row['ratinglock_disc']==0 && (api_get_user_id()==$row['user_id']))==false)			
 	    {		
-	 		$ratinglock_disc= '<img src="../img/wiki/rating_na.gif" alt="'.get_lang('LockRatingDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('UnlockRatingDiscuss').'</font>';
+	 		$ratinglock_disc= '<img src="../img/wiki/rating_na.gif" alt="'.get_lang('LockRatingDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('LockRatingDiscuss').'</font>';
 		}
 	}
 	else
 	{			  
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
 		{
-			$ratinglock_disc= '<img src="../img/wiki/rating.gif" alt="'.get_lang('UnlockRatingDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('LockRatingDiscuss').'</font>';
+			$ratinglock_disc= '<img src="../img/wiki/rating.gif" alt="'.get_lang('UnlockRatingDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('UnlockRatingDiscuss').'</font>';
 		}	     	
 	}
 
@@ -1913,15 +1921,22 @@ function display_wiki_entry()
 	
 	//Button lock page
 	if (check_protect_page())
-	{
-	 	$protect_page= '<img src="../img/wiki/lock.gif" alt="'.get_lang('PageLockedExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('PageUnlocked').'</font>';
+	{	
+		if(api_is_allowed_to_edit() || api_is_platform_admin())
+		{
+	 		$protect_page= '<img src="../img/wiki/lock.gif" alt="'.get_lang('PageLockedExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('UnlockPage').'</font>';
+		}
+		else
+		{
+			$protect_page= '<img src="../img/wiki/lock.gif" alt="'.get_lang('PageLockedExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('PageLocked').'</font>';
+		}
 	}
 	else
 	{					  
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
 	   	{
-	   		$protect_page= '<img src="../img/wiki/unlock.gif" alt="'.get_lang('PageUnlockedExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('PageLocked').'</font>';
-	   	} 	     	
+	   		$protect_page= '<img src="../img/wiki/unlock.gif" alt="'.get_lang('PageUnlockedExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('LockPage').'</font>';
+	   	}   	
 	}	
 
 	//Button visibility page
@@ -2876,7 +2891,7 @@ function auto_add_page_users($assignment_type)
 				}
 				else
 				{
-					$status_in_group=" "; //get_lang('GroupOrdinaryMember')
+					$status_in_group=" "; //get_lang('GroupStandardMember')
 				}
 			}					
 			

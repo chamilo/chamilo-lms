@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 15932 2008-08-06 19:59:11Z yannoo $
+<?php // $Id: usermanager.lib.php 16393 2008-09-18 12:59:30Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1319,7 +1319,7 @@ class UserManager
 		$sessions_sql = "SELECT DISTINCT id, name, date_start, date_end
 								FROM $tbl_session_user, $tbl_session
 								WHERE id_session=id AND id_user=$user_id
-								AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00')
+								AND (date_start <= CURDATE() AND date_end >= CURDATE() OR date_start='0000-00-00')
 								ORDER BY date_start, date_end, name";
 		$result = api_sql_query($sessions_sql,__FILE__,__LINE__);
 	
@@ -1348,7 +1348,7 @@ class UserManager
 		$sessions_sql = "SELECT DISTINCT id, name, date_start, date_end
 								FROM $tbl_session as session
 								WHERE session.id_coach = $user_id
-								AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00')
+								AND (date_start <= CURDATE() AND date_end >= CURDATE() OR date_start='0000-00-00')
 								ORDER BY date_start, date_end, name";
 		$result = api_sql_query($sessions_sql,__FILE__,__LINE__);
 	

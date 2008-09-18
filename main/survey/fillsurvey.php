@@ -721,17 +721,16 @@ if (isset ($_GET['show']) || isset ($_POST['personality']))
 			echo '</pre>';
 			*/
 			$result = array ();
-
+			$count_result=0;
 			foreach ($final_results as $key => $sub_result) {
 				$result[] = array (
 					'group' => $key,
 					'value' => $sub_result
 				);
+				$count_result++;
 			}
 
-			$i = 0;
-			$group_cant = 0;
-			$equal_count = 0;
+
 			/*
 			//i.e 70% - 70% -70% 70%  $equal_count =3
 			while(1)
@@ -771,21 +770,36 @@ if (isset ($_GET['show']) || isset ($_POST['personality']))
 			*/
 
 			//i.e 70% - 70% -70% 70%  $equal_count =3
-			// Count the number of scores equal to the first
-			while (1) 
-			{
-				if ($result[$i]['value'] == $result[$i +1]['value']) 
-				{
-					$equal_count++;
-				} 
-				else 
-				{
-					break;
-				}
-				$i++;
-			}
 			
-			// if we have only 3 or less equal scores (i.e. 0,1 or 2 equalities), then we can use the three first groups
+			$i = 0;
+			$group_cant = 0;
+			$equal_count = 0;			
+			// this is the case if the user does not select any question			
+			if ($count_result>0)
+			{	
+				// Count the number of scores equal to the first
+				while (1) 
+				{
+					if ($result[$i]['value'] == $result[$i +1]['value']) 
+					{
+						$equal_count++;
+					} 
+					else 
+					{
+						break;
+					}
+					$i++;				
+				}
+			}
+			else
+			{
+				//we force the exit of the survey undeterminated
+				$equal_count=10;
+			}
+			//echo '<pre>';
+			//print_r($result);
+			
+			// if we have only 3 or less equal scores (i.e. 0, 1 or 2 equalities), then we can use the three first groups
 			if ($equal_count < 4) 
 			{
 				//if there is one or less score equalities
@@ -818,18 +832,20 @@ if (isset ($_GET['show']) || isset ($_POST['personality']))
 						// by default we choose the highest 3
 						$group_cant = 2;
 					}
-				} else 
+				}
+				else 
 				{
 					//if there are two score equalities
 					$group_cant = $equal_count;
 				}
-				//TODO
+				
+				//@todo
 				// conditional_status 
 				// 0 no determinado 
 				// 1 determinado 
 				// 2 un solo valor
 				// 3 valores iguales
-
+				
 				if ($group_cant > 0) 
 				{
 					//echo '$equal_count'.$group_cant;
@@ -858,15 +874,16 @@ if (isset ($_GET['show']) || isset ($_POST['personality']))
 							}
 						}
 					}
-					/*
+					
 					echo '<pre>';
 					echo "Pair of Groups <br /><br />";
 					echo $combi;
-					echo '</pre>';*/
-					
-					// create the new select with the questions from the secondary phase
-					if (empty ($_SESSION['page_questions_sec'])) 
+					echo '</pre>';
+				
+					// create the new select with the questions from the secondary phase					
+					if (empty($_SESSION['page_questions_sec']) && !is_array($_SESSION['page_questions_sec']) && count($_SESSION['page_questions_sec']==0)) 
 					{
+						
 						$sql = "SELECT * FROM $table_survey_question
 								WHERE survey_id = '" . $my_survey_id . "'
 							  	AND ($secondary )
@@ -893,9 +910,10 @@ if (isset ($_GET['show']) || isset ($_POST['personality']))
 					} 
 					else 
 					{
-						$paged_questions_sec = $_SESSION['paged_questions_sec'];
+						$paged_questions_sec = $_SESSION['paged_questions_sec']; 
 					}
-
+					//print_r($paged_questions_sec);
+					
 					$paged_questions = $_SESSION['paged_questions']; //for the sake of pages counting 
 					//$paged_questions = $paged_questions_sec; //for the sake of pages counting coming up at display time...
 

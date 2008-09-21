@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 16393 2008-09-18 12:59:30Z elixir_julian $
+<?php // $Id: usermanager.lib.php 16400 2008-09-21 17:26:13Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1331,8 +1331,9 @@ class UserManager
 		$sessions_sql = "SELECT DISTINCT id, name, date_start, date_end, DATE_SUB(date_start, INTERVAL nb_days_access_before_beginning DAY), ADDDATE(date_end, INTERVAL nb_days_access_after_end DAY)
 								FROM $tbl_session as session
 								INNER JOIN $tbl_session_course as session_rel_course
-									ON session_rel_course.id_coach = $user_id
-								AND 
+									ON session_rel_course.id_session = session.id
+									AND session_rel_course.id_coach = $user_id
+								WHERE 
 									( CURDATE() >= DATE_SUB(date_start, INTERVAL nb_days_access_before_beginning DAY) AND
 									  CURDATE() <= ADDDATE(date_end, INTERVAL nb_days_access_after_end DAY) OR 
 									  date_start='0000-00-00')

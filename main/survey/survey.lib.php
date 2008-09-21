@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 16249 2008-09-05 15:46:31Z elixir_inter $
+* 	@version $Id: survey.lib.php 16401 2008-09-21 17:45:28Z elixir_inter $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -4101,10 +4101,15 @@ class SurveyUtil {
 	{
 		// Database table definition
 		$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION);
-	
-		// Selecting all the invitations of this survey
-		$sql = "SELECT user FROM $table_survey_invitation WHERE survey_code='".Database::escape_string($survey_code)."'";
-	
+	 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+	 	
+        // Selecting all the invitations of this survey
+        $sql = "SELECT user 
+                FROM $table_survey_invitation as table_invitation
+                INNER JOIN $table_user as table_user
+                        ON table_invitation.user = table_user.user_id
+                WHERE survey_code='".Database::escape_string($survey_code)."' ORDER BY lastname, firstname";	
+		
 		$defaults = array();
 		$defaults['course_users'] = array();
 		$defaults['additional_users'] = '';

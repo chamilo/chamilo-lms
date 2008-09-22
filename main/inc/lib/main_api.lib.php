@@ -2802,7 +2802,11 @@ function api_is_course_visible_for_user( $userid = null, $cid = null ) {
     }
     if( empty ($userid) or strval(intval($userid)) != $userid )
     {
-        return false;
+        if ( api_is_anonymous() ) {
+        	$userid = api_get_anonymous_id();
+        } else {
+            return false;
+        }
     }
     $cid = Database::escape_string($cid);
     global $is_platformAdmin;

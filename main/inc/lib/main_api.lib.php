@@ -2826,7 +2826,7 @@ function api_is_course_visible_for_user( $userid = null, $cid = null ) {
 
     if (Database::num_rows($result) > 0) {
         $visibility = Database::fetch_array($result);
-        $visibility = $visibility[0]['visibility'];
+        $visibility = $visibility['visibility'];
     }
 
     if (api_get_setting('use_session_mode') != 'true') {

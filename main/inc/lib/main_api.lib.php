@@ -2828,7 +2828,16 @@ function api_is_course_visible_for_user( $userid = null, $cid = null ) {
         $visibility = Database::fetch_array($result);
         $visibility = $visibility['visibility'];
     }
-
+    else
+    {
+        $visibility = 0;
+    }
+    //shortcut permissions in case the visibility is "open to the world"
+    if($visibility === COURSE_VISIBILITY_OPEN_WORLD)
+    {
+        return true;
+    }
+    
     if (api_get_setting('use_session_mode') != 'true') {
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         

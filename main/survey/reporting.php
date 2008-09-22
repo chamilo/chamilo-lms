@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 16249 2008-09-05 15:46:31Z elixir_inter $
+* 	@version $Id: reporting.php 16409 2008-09-22 13:51:15Z elixir_inter $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -59,7 +59,7 @@ if ($_POST['export_report'])
 
 			header('Content-type: application/octet-stream');
 			header('Content-Type: application/force-download');
-			header('Content-length: '.$len);
+			
 			if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT']))
 			{
 				header('Content-Disposition: filename= '.$filename);

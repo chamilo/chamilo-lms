@@ -26,7 +26,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey_list.php 16249 2008-09-05 15:46:31Z elixir_inter $
+* 	@version $Id: survey_list.php 16410 2008-09-22 17:43:07Z juliomontoya $
 *
 * 	@todo use quickforms for the forms
 */
@@ -43,7 +43,7 @@ require_once('survey.lib.php');
 require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
-if (!api_is_allowed_to_edit(false,true)) //users only see a list of surveys
+if (!api_is_allowed_to_edit(false,true)) //coach can see this 
 {
 	Display :: display_header(get_lang('SurveyList'));
 	SurveyUtil::survey_list_user($_user['user_id']);
@@ -137,7 +137,7 @@ if ($_POST['action'])
 	}
 }
 
-if (api_is_allowed_to_edit(false,true))
+if (!api_is_course_coach())
 {
 	// Action links
 	echo '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.get_lang('CreateNewSurvey').'</a> | ';
@@ -145,8 +145,11 @@ if (api_is_allowed_to_edit(false,true))
 //echo '<a href="survey_all_courses.php">'.get_lang('CreateExistingSurvey').'</a> | ';
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.get_lang('Search').'</a>';
 
-//Main content
-SurveyUtil::display_survey_list();
+//Load main content
+if (api_is_course_coach())
+	SurveyUtil::display_survey_list_for_coach();
+else
+	SurveyUtil::display_survey_list();
 
 // Footer
 Display :: display_footer();
@@ -164,7 +167,27 @@ function modify_filter($survey_id)
 {
 	return SurveyUtil::modify_filter($survey_id);
 }
+
+function get_number_of_surveys_for_coach()
+{
+	return SurveyUtil::get_number_of_surveys_for_coach();
+}
+function get_survey_data_for_coach($from, $number_of_items, $column, $direction)
+{
+	return SurveyUtil::get_survey_data_for_coach($from, $number_of_items, $column, $direction);
+}
+
+
+function modify_filter_for_coach($survey_id)
+{
+	return SurveyUtil::modify_filter_for_coach($survey_id);
+}
+
 function anonymous_filter($anonymous)
 {
 	return SurveyUtil::anonymous_filter($anonymous);
 }
+
+
+
+

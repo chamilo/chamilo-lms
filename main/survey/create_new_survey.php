@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 16249 2008-09-05 15:46:31Z elixir_inter $
+* 	@version $Id: create_new_survey.php 16410 2008-09-22 17:43:07Z juliomontoya $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -172,22 +172,20 @@ $form -> addElement('html','<div class="row">
 $surveytypes[0] = get_lang('Normal');
 $surveytypes[1] = get_lang('Conditional');
 
+
 if ($_GET['action'] == 'add')
 {
 	$form->addElement('select', 'survey_type', get_lang('SelectType'), $surveytypes, array('onchange' => 'if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}'));	
 	$form -> addElement('html','<div id="options" style="display: none;">');
 		
-	$sql = 'SELECT survey_id,title FROM '.$table_survey.' WHERE survey_type = 1 AND author = '.$_SESSION['_user']['user_id'];
-	$rs = api_sql_query($sql,__FILE__,__LINE__);
-	if(Database::num_rows($rs)>0)
-	{
-		$list_surveys[0] = '';
-		while($row = Database::fetch_array($rs,NUM))
-		{
-			$list_surveys[$row[0]] = $row[1];
-		}
-		$form->addElement('select', 'parent_id', get_lang('ParentSurvey'), $list_surveys);
-	}
+	require_once(api_get_path(LIBRARY_PATH).'surveymanager.lib.php');
+	$survey_tree = new SurveyTree();
+	
+	$list_surveys = $survey_tree->createList($survey_tree->surveylist);	
+	$list_surveys[0]=''; 
+	$form->addElement('select', 'parent_id', get_lang('ParentSurvey'), $list_surveys);
+	$defaults['parent_id']=0;
+
 }
 else
 {
@@ -268,7 +266,7 @@ $form->addRule('survey_title', '<div class="required">'.get_lang('ThisFieldIsReq
 $form->addRule('start_date', get_lang('InvalidDate'), 'date');
 $form->addRule('end_date', get_lang('InvalidDate'), 'date');
 $form->addRule(array ('start_date', 'end_date'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
-
+	
 // setting the default values
 $form->setDefaults($defaults);
 

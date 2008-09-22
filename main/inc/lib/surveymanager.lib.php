@@ -1900,11 +1900,390 @@ function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGU
 			$answers[] = $row;
 
 		return $answers;
-
 	}
+}
 
+/**
+ * 
+ * Manage the "versioning" of a conditional survey
+ * 
+ * */
+class SurveyTree
+{
+	var $surveylist;	 
+	var $plainsurveylist;
+	var $numbersurveys;
+	
+	/**
+	 * Sets the surveylist and the plainsurveylist
+	 */
+	function __construct()
+    {        
+        // Database table definitions
+		$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
+		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+		$table_user 			= Database :: get_main_table(TABLE_MAIN_USER);
+	
+		// searching
+		$search_restriction = SurveyUtil::survey_search_restriction();
+		if ($search_restriction)
+		{
+			$search_restriction = ' AND '.$search_restriction;
+		}
+		$sql = "SELECT survey.survey_id , survey.parent_id, survey_version, survey.code as name
+		FROM $table_survey survey 
+		LEFT JOIN  $table_survey_question  survey_question 
+		ON survey.survey_id = survey_question.survey_id , $table_user user 
+		WHERE survey.author = user.user_id 
+		GROUP BY survey.survey_id";
+		
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$surveys_parents = array ();			
+		$refs = array();
+		$list = array();
+		$last=array();		
+		$plain_array=array();
+					
+		while ($survey = Database::fetch_array($res,'ASSOC'))
+		{
+			$plain_array[$survey['survey_id']]=$survey;
+			$surveys_parents[]=$survey['survey_version'];			
+			$thisref = &$refs[ $survey['survey_id'] ];		
+			$thisref['parent_id'] = $survey['parent_id'];
+			$thisref['name'] = $survey['name'];
+			$thisref['id'] = $survey['survey_id'];
+			$thisref['survey_version'] = $survey['survey_version'];						
+			if ($survey['parent_id'] == 0) 
+			{
+				$list[ $survey['survey_id'] ] = &$thisref;					
+			} 
+			else 
+			{
+				$refs[ $survey['parent_id'] ]['children'][ $survey['survey_id'] ] = &$thisref;				
+			}			
+		}			
+        $this->surveylist = $list;
+        $this->plainsurveylist = $plain_array;         
+    }
+    /* 
+    function read_children($space=array(),$i=0)
+	{			
+		foreach ( $this->surveylist  as $key=>$node)
+		{
+			if (is_array($node['children']))
+			{				
+				if (($node['parent_id']==0))
+				{					
+					//echo '1<br>';		
+				}
+				else
+				{
+					$space[]='2>'; 
+				}
+				
+				//if have children										
+				for ($j=0;$j<count($space);$j++)
+				{
+					//echo $space[$j]; echo 'dd<br>';
+				}
+				//echo $node['name']; echo '3<br>';
+				read_children($node['children'],$space,$i);										
+			}
+			else
+			{				
+				
+				for ($j=0;$j<count($space);$j++)
+				{
+					echo $space[$j]; echo '4<br>';
+				}				
+				echo $node['name']; echo '5<br>';
+				
+			}
+		}		
+	}
+	*/
+	/*
+	if (($key==$id))
+			{
+				echo $node['name']; echo '<br>';
+				//$node['children']=array();
+				return $node['children']; 
+			}
+			else
+			{ 
+				if (is_array($node['children']))
+				{	
+					return SurveyTree::get_children($node['children'],$id);
+				}
+				else
+				{
+					//return SurveyTree::get_children($node, $id);
+				}
+			}	
+	 */
 
+	/**
+	 * This function gets all the children of a given survey id
+	 *
+	 * @param  array the list where we are going to search the children
+	 * @param  id the id of the survey
+	 * @return array the children of a given survey id
+	 *
+	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos 
+	 * @version September 2008
+	 */
+	function get_children($list,$id)
+	{			
+		$result=array();
+		foreach ($list as $key=>$node)
+		{
+			if ($key==$id)
+			{
+				$result = $node['children'];						
+				break;																							
+			}			
+			if (is_array($node['children']))
+			{		
+				//echo $key; echo '--<br>';					
+				$re=SurveyTree::get_children($node['children'],$id);
+				if (!empty($re))
+				{
+					$result=$re;
+				}																									
+			}
+			else
+			{		
+				//echo $key; echo '-<br>';				
+			}			
+		}
+		return $result;
+	}
+		
+	/**
+	 * This function gets the parent id of a survey
+	 *
+	 * @param  int survey id
+	 * @return int survey parent id
+	 *
+	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos 
+	 * @version September 2008
+	 */
+	function getParentId($id)
+	{	
+		$node = $this->plainsurveylist[$id];
+		if (is_array($node)&& !empty($node['parent_id']))
+			return $node['parent_id'];
+		else
+			return -1;			
+	}
+	
+	/**
+	 * This function gets all the siblings of a given survey id
+	 *
+	 * @param  array the list where we are going to search the children
+	 * @param  id the id of the survey
+	 * @return array the children of a given survey id
+	 *
+	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos 
+	 * @version September 2008
+	 */
+	function nextSibling($id)
+    {
+		$result=array();
+		$parent_id = SurveyTree::getParentId($id);			
+		$siblings  = SurveyTree::get_children($this->surveylist ,$parent_id);
+		//print_r($siblings);  
+		if (count($siblings) > 1) 
+		{			
+			// $key> $id means that the siblings are order 1 2 3 and we suppose that you can't change that order 
+			foreach ($siblings as $key=>$bro)
+			{
+				if ($key> $id && $key != $id)
+				{
+					$result[$key]=($bro);
+				}					
+			}				
+		}
+		return $result;		
+    }
+    
+	/**
+	 * 
+	 * This function shows the last sibling from a given list of surveys
+	 * @param  id of the survey
+	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos 
+	 * @version September 2008
+	 * 
+	 */
+	function lastSibling($id)
+    {	
+		$result=array();
+		$parent_id = SurveyTree::getParentId($id);			
+		$siblings  = SurveyTree::get_children($this->surveylist ,$parent_id);
+		//print_r($siblings);  
+		if (count($siblings) > 1) 
+		{			
+			// $key> $id means that the siblings are order 1 2 3 and we suppose that you can't change that order
+			$i=0; 
+			foreach ($siblings as $key=>$bro)
+			{
+				if ($key> $id && $key != $id&& $i==count($siblings)-1)
+				{
+					$result[$key]=($bro);
+				}		
+				$i++;			
+			}				
+		}
+		return $result;		
+    }
+    
+    
+	/**
+	 * 
+	 * This function shows the last children of a branch 
+	 * @param  list of nodes
+	 * @return array of the lastest node
+	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos 
+	 * @version September 2008
+	 * 
+	 */
+	function get_last_children_from_branch($list)
+	{	
+		$result=array();		
+		foreach ($list as $key=>$node)
+		{			 
+			//echo 'frist<br>'; echo $key;
+			//print_r($node);
+			if ($node['parent_id']!=0)
+			{				
+				$list_bros = SurveyTree::lastSibling($key);				
+				//echo '   list_bro <br>';	
+				//print_r($list_bros);
+				if (is_array($list_bros) && !empty($list_bros))					
+				{
+					foreach	($list_bros as $bro)
+					{					
+						//echo '0';						
+						if (is_array($bro['children']))
+						{
+							//print_r($bro['children']);							
+							return $result[]=SurveyTree::get_last_children_from_branch($bro['children']);
+						}
+						else
+						{	
+							//echo 'esl';		
+							$result=$bro;
+							//print_r($bro);
+							return $result;
+						}
+					}
+				}
+				else
+				{
+					//SurveyTree::get_last_children_from_branch($list_bros);
+					//echo 'sss';
+					//if if (is_array($node['children']))
+					$children = SurveyTree::get_children($node,$key);
+					//return $result[]=SurveyTree::get_last_children_from_branch($node);
+					if (is_array($node['children']))
+					{
+						return $result[]=SurveyTree::get_last_children_from_branch($node['children']);
+					}
+					else											
+					{					
+						//return $result[]=SurveyTree::get_last_children_from_branch($node['children']);					
+						return $result[]=$node;						
+					}
+		
+				}
+			}
+			else
+			{
+				//print_r($key);print_r($node['children']);
+				if (is_array($node['children']))
+				{
+					$result[]=SurveyTree::get_last_children_from_branch($node['children']);
+				}
+				else	
+				{
+					$result[]=$node;					
+				}
+			}	
+		}
+		return $result;
+	}
+	/*
+*
+	 * 
+	 * This function show the last children of list 
+	 * @param  id
+	 * @param  array 
+	 * @return array of the lastest node
+	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos 
+	 * @version September 2008
+	 * 
 
-
+	 
+	function get_last_children($id,$last)
+	{		
+		foreach ( $this->_list as $key=>$node)
+		{
+			if (($node['parent_id']==$id))
+			{
+				$last=$node['name']; echo '<br>';				
+			}
+			else
+			{
+				if (is_array($node['children']))
+				{
+					return $last = get_last_children($node['children'],$id);	
+				}			
+			}	
+		}
+		return $last;
+	}
+	*/
+	/**
+	 * This function creates a list of all surveys id 
+	 * @param  list of nodes
+	 * @return array with the structure survey_id => survey_name 
+	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos 
+	 * @version September 2008
+	 * 
+	 */
+	function createList($list)
+	{
+		$result=array();				
+		foreach ($list as $key=>$node)
+		{			
+			if (is_array($node['children']))
+			{		
+				//echo $key; echo '--<br>';
+				//print_r($node);
+				//echo '<br>';
+				$result[$key]= $node['name'];		
+				$re=SurveyTree::createList($node['children']);
+				if (!empty($re))
+				{				
+					if (is_array($re))
+						foreach ($re as $key=>$r)
+						{						
+							$result[$key]=''.$r;
+						}
+					else				
+					{
+						$result[]=$re;
+					}
+					
+				}																									
+			}
+			else
+			{		
+				//echo $key; echo '-<br>';
+				$result[$key]=$node['name'];			
+			}			
+		}			
+		return $result;
+	}	
 }
 ?>

@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 16401 2008-09-21 17:45:28Z elixir_inter $
+* 	@version $Id: survey.lib.php 16410 2008-09-22 17:43:07Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -33,7 +33,6 @@ $config['survey']['debug'] = false;
 require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 class survey_manager
 {
-
 	/******************************************************************************************************
 											SURVEY FUNCTIONS
 	 *****************************************************************************************************/
@@ -205,16 +204,26 @@ class survey_manager
 							$additional['values'] .= ",'".$getversion['survey_version'].".1'";							 
 						}
 					}
-					else
-					{
-						if(strpos($row['survey_version'], '.')===false){
-							$row['survey_version'] = $row['survey_version'] + 1;
-							$additional['values'] .= ",'".$row['survey_version']."'";
-						} else {
-							$getlast= split('\.',$row['survey_version']);
+					else 
+					{	
+						$row = Database::fetch_array($rs,ASSOC);			
+						$pos = strpos($row['survey_version']);
+						if($pos===false)
+						{ 
+							//$new_version= substr($row['survey_version'],$pos, count())
+							echo $row['survey_version'] = $row['survey_version'] + 1; 
+							echo $additional['values'] .= ",'".$row['survey_version']."'";
+						} 
+						else 
+						{
+							$getlast= split('\.',$row['survey_version']);						
 							$lastversion = array_pop($getlast);
 							$lastversion = $lastversion + 1;
-							$insertnewversion = implode('.',$getlast).'.'.$lastversion;
+							$add=implode('.',$getlast);
+							if ($add!='')
+								$insertnewversion = $add.'.'.$lastversion;
+							else
+								$insertnewversion = $lastversion;
 							$additional['values'] .= ",'".$insertnewversion."'";
 						}
 					}
@@ -4241,6 +4250,38 @@ class SurveyUtil {
 	}
 	
 	
+	function display_survey_list_for_coach()
+	{
+		$parameters = array();
+		if ($_GET['do_search'])
+		{
+			$message = get_lang('DisplaySearchResults').'<br />';
+			$message .= '<a href="'.api_get_self().'">'.get_lang('DisplayAll').'</a>';
+			Display::display_normal_message($message, false);
+		}
+	
+		// Create a sortable table with survey-data
+		$table = new SortableTable('surveys', 'get_number_of_surveys_for_coach', 'get_survey_data_for_coach',2);
+		$table->set_additional_parameters($parameters);
+		$table->set_header(0, '', false);
+		$table->set_header(1, get_lang('SurveyName'));
+		$table->set_header(2, get_lang('SurveyCode'));
+		$table->set_header(3, get_lang('NumberOfQuestions'));
+		$table->set_header(4, get_lang('Author'));
+		$table->set_header(5, get_lang('Language'));
+		//$table->set_header(6, get_lang('Shared'));
+		$table->set_header(6, get_lang('AvailableFrom'));
+		$table->set_header(7, get_lang('AvailableUntill'));
+		$table->set_header(8, get_lang('Invite'));
+		$table->set_header(9, get_lang('Anonymous'));
+		$table->set_header(10, get_lang('Modify'), false,'width="120"');
+		$table->set_column_filter(9, 'anonymous_filter');
+		$table->set_column_filter(10, 'modify_filter_for_coach');	
+		$table->display();
+	}
+	
+	
+	
 	/**
 	 * This function changes the modify column of the sortable table
 	 *
@@ -4253,22 +4294,36 @@ class SurveyUtil {
 	function modify_filter($survey_id)
 	{
 		global $charset;
-		$survey_id = Security::remove_XSS($survey_id);
-		if (!api_is_course_coach(false,true))
-			$return = '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-		
-		if (!api_is_course_coach(false,true))
-			$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+		$survey_id = Security::remove_XSS($survey_id);		
+		$return = '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+		$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 		//$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
 		//$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif', get_lang('Add')).'</a>';
 		$return .= '<a href="preview.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('preview.gif', get_lang('Preview')).'</a>';
 		$return .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('survey_publish.gif', get_lang('Publish')).'</a>';
 		$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('empty.gif', get_lang('EmptySurvey')).'</a>';
-		
-		if (!api_is_course_coach(false,true))
-			$return .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
+		$return .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
 		return $return;
 	}
+	
+	
+	function modify_filter_for_coach($survey_id)
+	{
+		global $charset;
+		$survey_id = Security::remove_XSS($survey_id);		
+	//	$return = '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+		//$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+		//$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
+		//$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif', get_lang('Add')).'</a>';
+		$return .= '<a href="preview.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('preview.gif', get_lang('Preview')).'</a>';
+		$return .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('survey_publish.gif', get_lang('Publish')).'</a>';
+		$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('empty.gif', get_lang('EmptySurvey')).'</a>';
+		//$return .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
+		return $return;
+	}
+	
+	
+	
 	/**
 	 * Returns "yes" when given parameter is one, "no" for any other value
 	 * @param	integer	Whether anonymous or not
@@ -4342,8 +4397,30 @@ class SurveyUtil {
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$obj = Database::fetch_object($res);
 		return $obj->total_number_of_items;
-	
 	}
+	
+	function get_number_of_surveys_for_coach()
+	{
+		/*global $table_survey;	
+		$search_restriction = SurveyUtil::survey_search_restriction();
+		if ($search_restriction)
+		{
+			$search_restriction = 'WHERE '.$search_restriction;
+		}	
+		$sql = "SELECT count(survey_id) AS total_number_of_items FROM ".$table_survey.' '.$search_restriction;
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$obj = Database::fetch_object($res);
+		return $obj->total_number_of_items;
+		*/
+		
+		//ugly fix	
+		require_once(api_get_path(LIBRARY_PATH).'surveymanager.lib.php');
+		$survey_tree = new SurveyTree();			
+		return count($survey_tree->get_last_children_from_branch($survey_tree->surveylist));
+		
+			
+	}
+	
 	
 	/**
 	 * This function gets all the survey data that is to be displayed in the sortable table
@@ -4368,9 +4445,7 @@ class SurveyUtil {
 		if ($search_restriction)
 		{
 			$search_restriction = ' AND '.$search_restriction;
-		}
-		
-		$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND survey.session_id IN(0,'.intval($_SESSION['id_session']).') '; 
+		}		
 		
 		//IF(is_shared<>0,'V','-')	 					AS col6,
 		$sql = "SELECT
@@ -4389,7 +4464,6 @@ class SurveyUtil {
 				 LEFT JOIN $table_survey_question survey_question ON survey.survey_id = survey_question.survey_id
 	             , $table_user user
 	             WHERE survey.author = user.user_id
-				$session_condition
 	             $search_restriction
 	             ";
 		$sql .= " GROUP BY survey.survey_id";
@@ -4403,6 +4477,60 @@ class SurveyUtil {
 		}
 		return $surveys;
 	}
+	
+	function get_survey_data_for_coach($from, $number_of_items, $column, $direction)
+	{
+		//echo '<pre>';		
+		//echo '----------------';
+		require_once(api_get_path(LIBRARY_PATH).'surveymanager.lib.php');
+		$survey_tree = new SurveyTree();
+		$last_version_surveys = $survey_tree->get_last_children_from_branch($survey_tree->surveylist);
+		//echo '----------------';
+		//print_r($last_version_surveys);		
+		$list=array();
+		foreach($last_version_surveys as $survey)
+		{
+			$list[]=$survey['id'];
+		}
+		$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
+		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+		$table_user 			= Database :: get_main_table(TABLE_MAIN_USER);
+
+		//print_r($survey_tree->surveylist);
+		
+		//IF(is_shared<>0,'V','-')	 					AS col6,
+		$sql = "SELECT
+					survey.survey_id							AS col0,
+	                survey.title	AS col1,
+					survey.code									AS col2,
+					count(survey_question.question_id)			AS col3,
+	                CONCAT(user.firstname, ' ', user.lastname)	AS col4,
+	                survey.lang									AS col5,	                
+					survey.avail_from							AS col6,
+	                survey.avail_till							AS col7,
+	                CONCAT('<a href=\"survey_invitation.php?view=answered&amp;survey_id=',survey.survey_id,'\">',survey.answered,'</a> / <a href=\"survey_invitation.php?view=invited&amp;survey_id=',survey.survey_id,'\">',survey.invited, '</a>')	AS col8,
+	                survey.anonymous							AS col9,
+	                survey.survey_id							AS col10
+	             FROM $table_survey survey
+				 LEFT JOIN $table_survey_question survey_question ON survey.survey_id = survey_question.survey_id
+	             , $table_user user
+	             WHERE survey.author = user.user_id AND survey.survey_id IN (".implode(',',$list).")
+	             $search_restriction
+	             ";
+		$sql .= " GROUP BY survey.survey_id";
+		$sql .= " ORDER BY col$column $direction ";
+		$sql .= " LIMIT $from,$number_of_items";
+	
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$surveys = array ();
+		while ($survey = Database::fetch_array($res))
+		{
+			$surveys[] = $survey;
+		}
+		return $surveys;
+	}
+	
+	
 	
 	/**
 	 * Display all the active surveys for the given course user
@@ -4699,4 +4827,5 @@ class SurveyUtil {
 		return $field_list_array;
 	}
 }
+
 ?>

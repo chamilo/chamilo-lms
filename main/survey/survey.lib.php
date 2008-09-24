@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 16410 2008-09-22 17:43:07Z juliomontoya $
+* 	@version $Id: survey.lib.php 16411 2008-09-24 11:52:07Z elixir_inter $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -3217,6 +3217,7 @@ class SurveyUtil {
 				// we do not show comment and pagebreak question types
 				if ($row['type'] <> 'comment' AND $row['type'] <> 'pagebreak')
 				{
+					$row['option_text'] = str_replace(array("\r","\n"),array('',''),$row['option_text']);
 					$return .= html_entity_decode(strip_tags($row['option_text'])).';';
 					$possible_answers[$row['question_id']][$row['question_option_id']] =$row['question_option_id'];
 					$possible_answers_type[$row['question_id']] = $row['type'];

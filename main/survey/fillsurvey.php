@@ -874,12 +874,12 @@ if (isset ($_GET['show']) || isset ($_POST['personality']))
 							}
 						}
 					}
-					
+					/*
 					echo '<pre>';
 					echo "Pair of Groups <br /><br />";
 					echo $combi;
 					echo '</pre>';
-				
+					*/
 					// create the new select with the questions from the secondary phase					
 					if (empty($_SESSION['page_questions_sec']) && !is_array($_SESSION['page_questions_sec']) && count($_SESSION['page_questions_sec']==0)) 
 					{

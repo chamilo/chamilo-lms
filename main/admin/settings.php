@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 15849 2008-07-27 04:35:17Z yannoo $
+// $Id: settings.php 16418 2008-09-26 18:27:24Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -7,6 +7,7 @@
 	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University
 	Copyright (c) Patrick Cool, Ghent University
+	Copyright (c) Julio Montoya, Dokeos
 	Copyright (c) Roan Embrechts, Vrije Universiteit Brussel
 	Copyright (c) Bart Mollet, Hogeschool Gent
 
@@ -31,6 +32,7 @@
 *
 * @author Patrick Cool
 * @since Dokeos 1.6
+* @author Julio Montoya - Multiple URL site
 * @package dokeos.admin
 ==============================================================================
 */
@@ -81,7 +83,41 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 	$renderer->setHeaderTemplate('<div class="settingtitle">{header}</div>'."\n");
 	$renderer->setElementTemplate('<div class="settingcomment">{label}</div>'."\n".'<div class="settingvalue">{element}</div>'."\n");
 	$my_category = mysql_real_escape_string($_GET['category']);
-	$settings = api_get_settings($my_category,'group',$_configuration['access_url']);
+	
+	if ($_configuration['access_url']==1)
+	{
+		$settings = api_get_settings($my_category,'group',$_configuration['access_url']);
+	}
+	else
+	{
+		$url_info = api_get_access_url($_configuration['access_url']);
+		if ($url_info['active']==1)
+		{
+			//the default settings of Dokeos
+			$settings = api_get_settings($my_category,'group',1,0);		
+			//the settings that are changeable from a particular site 
+			$settings_by_access = api_get_settings($my_category,'group',$_configuration['access_url'],1);			
+			//echo '<pre>';
+			//print_r($settings_by_access);
+			$settings_by_access_list=array();
+			foreach($settings_by_access as $row)
+			{
+				if (empty($row['variable']))
+					$row['variable']=0;
+				if (empty($row['subkey']))
+					$row['subkey']=0;
+				if (empty($row['category']))
+					$row['category']=0;
+				// one more validation if is changeable
+				if ($row['access_url_changeable']==1)
+					$settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ]	[ $row['category'] ]  = $row;
+				else
+					$settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ]	[ $row['category'] ]  = array();
+			}	
+		}
+	}
+
+	//print_r($settings_by_access_list);echo '</pre>';
 	//$sqlsettings = "SELECT DISTINCT * FROM $table_settings_current WHERE category='$my_category' GROUP BY variable ORDER BY id ASC";
 	//$resultsettings = api_sql_query($sqlsettings, __FILE__, __LINE__);
 	//while ($row = mysql_fetch_array($resultsettings))
@@ -89,14 +125,44 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 	foreach($settings as $row)
 	{
 		$form->addElement('header', null, get_lang($row['title']));
+		$hideme=array();
+		$hide_element=false;
+		if ($_configuration['access_url']!=1)
+		{
+			if ($row['access_url_changeable']==0)
+			{
+				//we hide the element in other cases (checkbox, radiobutton) we 'freeze' the element
+				$hide_element=true;
+				$hideme=array('disabled');
+			}
+			elseif($url_info['active']==1)
+			{
+				// we show the elements 
+				if (empty($row['variable']))
+					$row['variable']=0;
+				if (empty($row['subkey']))
+					$row['subkey']=0;
+				if (empty($row['category']))
+					$row['category']=0;
+					
+				if (is_array ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ]	[ $row['category'] ]))
+				{
+					// we are sure that the other site have a selected value 
+					if ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ]	[ $row['category'] ]['selected_value']!='')											
+						$row['selected_value']	=$settings_by_access_list[$row['variable']] [$row['subkey']]	[ $row['category'] ]['selected_value'];
+				}
+				// there is no else because we load the default $row['selected_value'] of the main Dokeos site
+			}	
+		}	
+				
 		switch ($row['type'])
 		{
-			case 'textfield' :
-				$form->addElement('text', $row['variable'], get_lang($row['comment']));
+			case 'textfield' :						
+				$form->addElement('text', $row['variable'], get_lang($row['comment']),$hideme);
 				$default_values[$row['variable']] = $row['selected_value'];
 				break;
 			case 'textarea' :
-				$form->addElement('textarea', $row['variable'], get_lang($row['comment']));
+				$form->addElement('textarea', $row['variable'], get_lang($row['comment']),$hideme);
 				$default_values[$row['variable']] = $row['selected_value'];
 				break;
 			case 'radio' :
@@ -104,28 +170,34 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 				$group = array ();
 				foreach ($values as $key => $value)
 				{
-					$group[] = $form->createElement('radio', $row['variable'], '', get_lang($value['display_text']), $value['value']);
+					$element = & $form->createElement('radio', $row['variable'], '', get_lang($value['display_text']), $value['value']);
+					if ($hide_element)
+						$element->freeze();
+					$group[] = $element; 
 				}
+				
 				$form->addGroup($group, $row['variable'], get_lang($row['comment']), '<br />', false);
 				$default_values[$row['variable']] = $row['selected_value'];
 				break;
 			case 'checkbox';
 				$sql = "SELECT * FROM settings_current WHERE variable='".$row['variable']."'";
 				$result = api_sql_query($sql, __FILE__, __LINE__);
-				$group = array ();
+				$group = array ();	
 				while ($rowkeys = mysql_fetch_array($result))
 				{
 					$element = & $form->createElement('checkbox', $rowkeys['subkey'], '', get_lang($rowkeys['subkeytext']));
 					if ($rowkeys['selected_value'] == 'true' && ! $form->isSubmitted())
 					{
-						$element->setChecked(true);
+						$element->setChecked(true); 
 					}
+					if ($hide_element)
+						$element->freeze();
 					$group[] = $element;
 				}
 				$form->addGroup($group, $row['variable'], get_lang($row['comment']), '<br />'."\n");
 				break;
 			case "link" :
-				$form->addElement('static', null, get_lang($row['comment']), get_lang('CurrentValue').' : '.$row['selected_value']);
+				$form->addElement('static', null, get_lang($row['comment']), get_lang('CurrentValue').' : '.$row['selected_value'],$hideme);
 		}
 	}
 	$form->addElement('submit', null, get_lang('Ok'));
@@ -194,6 +266,7 @@ if (isset ($_GET['category']))
 	switch ($_GET['category'])
 	{
 		// displaying the extensions: plugins
+		// this will be available to all the sites (access_urls)
 		case 'Plugins' :
 			handle_plugins();
 			break;
@@ -395,13 +468,29 @@ function display_plugin_cell($location, $plugin_info, $current_plugin, $active_p
 */
 function handle_stylesheets()
 {
+	global $_configuration;
 	// Current style
 	$currentstyle = api_get_setting('stylesheets');
-
-	// uploading a new stylesheet
-	echo '<a href="" id="stylesheetuploadlink" onclick="document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\';return false; ">'.get_lang('UploadNewStylesheet').'</a>';
+	$is_style_changeable=false;
+	
+	if ($_configuration['access_url']!=1)
+	{
+		$style_info = api_get_settings('stylesheets','',1,0);
+		$url_info = api_get_access_url($_configuration['access_url']);	 
+		if ($style_info[0]['access_url_changeable']==1 && $url_info['active']==1)
+		{
+			$is_style_changeable=true;			
+			echo '<a href="" id="stylesheetuploadlink" onclick="document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\';return false; ">'.get_lang('UploadNewStylesheet').'</a>';
+		} 
+	}
+	else
+	{
+		$is_style_changeable=true;
+		echo '<a href="" id="stylesheetuploadlink" onclick="document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\';return false; ">'.get_lang('UploadNewStylesheet').'</a>';
+	}	
+		
 	$form = new FormValidator('stylesheet_upload','post','settings.php?category=stylesheets&showuploadform=true');
-	$form->addElement('text','name_stylesheet',get_lang('NameStylesheet'),array('size' => '40', 'maxlength' => '40'));
+	$form->addElement('text','name_stylesheet',get_lang('NameStylesheet'),array('size' => '40', 'maxlength' => '40'));	
 	$form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
 	$allowed_file_types = array ('css');
@@ -432,7 +521,18 @@ function handle_stylesheets()
 			{
 				echo '<div id="newstylesheetform" style="display: none;">';
 			}
-			$form->display();
+				// uploading a new stylesheet
+			if ($_configuration['access_url']==1)
+			{
+				$form->display();	
+			}
+			else
+			{
+				if ($is_style_changeable)
+				{
+					$form->display();				
+				}
+			}
 			echo '</div>';
 		}
 	}
@@ -464,8 +564,14 @@ function handle_stylesheets()
 						$selected = '';
 					}
 					$show_name=ucwords(str_replace('_',' ', $style_dir));
-					echo "<input type=\"radio\" name=\"style\" value=\"".$style_dir."\" ".$selected." onClick=\"parent.preview.location='style_preview.php?style=".$style_dir."';\"/>";
-					echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
+					
+					if ($is_style_changeable)
+					{					
+						echo "<input type=\"radio\" name=\"style\" value=\"".$style_dir."\" ".$selected." onClick=\"parent.preview.location='style_preview.php?style=".$style_dir."';\"/>";
+						echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
+					}
+					else
+						echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
 					//echo '<div id="Layer'.$counter.'" style="position:relative; width:687px; z-index:2; visibility: hidden;">';
 					//echo '<a href="#" onClick="MM_showHideLayers(\'Layer'.$counter.'\',\'\',\'hide\')">'.get_lang('Close').'</a>';
 					//echo '<iframe src="style_preview.php?style='.$file.'" width="100%" style="float:right;"></iframe></div>';
@@ -476,7 +582,10 @@ function handle_stylesheets()
 		}
 		@closedir($handle);
 	}
-	echo '<input type="submit" name="submit_stylesheets" value="'.get_lang('Ok').'" /></form>';
+	if ($is_style_changeable)
+	{	
+		echo '<input type="submit" name="submit_stylesheets" value="'.get_lang('Ok').'" /></form>';
+	}
 }
 
 /**
@@ -577,7 +686,8 @@ function store_stylesheets()
 
 		api_sql_query($sql, __LINE__, __FILE__);
 		*/
-		api_set_setting('stylesheets',$style,null,'stylesheets');
+		
+		api_set_setting('stylesheets',$style,null,'stylesheets',$_configuration['access_url']);
 	}
 
 	return true;

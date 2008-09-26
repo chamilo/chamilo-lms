@@ -6,6 +6,7 @@
 	Copyright (c) 2004-2008 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) Julio Montoya
 	Copyright (c) Hugues Peeters
 	Copyright (c) Christophe Gesche
 	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
@@ -306,20 +307,41 @@ function api_is_self_registration_allowed()
 */
 function api_get_path($path_type)
 {
-	global $_configuration;
-
+	global $_configuration;	
+	if ($_configuration['access_url']==1 || $_configuration['access_url']=='')
+	{
+		//by default we call the $_configuration['root_web'] we don't query to the DB
+		//$url_info= api_get_access_url(1);
+		//$root_web = $url_info['url'];		
+		$root_web = $_configuration['root_web'];
+	}
+	else
+	{
+		//we look into the DB the function api_get_access_url 
+		//this funcion have a problem because we can't called to the Database:: functions
+		$url_info= api_get_access_url($_configuration['access_url']);		
+		if ($url_info['active']==1)
+		{
+			$root_web = $url_info['url'];
+		}
+		else
+		{
+			$root_web = $_configuration['root_web'];
+		}
+	}
+	 
 	switch ($path_type)
 	{
 		case WEB_PATH :
 			// example: http://www.mydokeos.com/ or http://www.mydokeos.com/portal/ if you're using
 			// a subdirectory of your document root for Dokeos
-			if(substr($_configuration['root_web'],-1) == '/')
+			if(substr($root_web,-1) == '/')
 			{
-				return $_configuration['root_web'];
+				return $root_web;
 			}
 			else
 			{
-				return $_configuration['root_web'].'/';
+				return $root_web.'/';
 			}
 			break;
 
@@ -349,7 +371,7 @@ function api_get_path($path_type)
 
 		case WEB_COURSE_PATH :
 			// example: http://www.mydokeos.com/courses/
-			return $_configuration['root_web'].$_configuration['course_folder'];
+			return $root_web.$_configuration['course_folder'];
 			break;
 
 		case SYS_COURSE_PATH :
@@ -367,7 +389,8 @@ function api_get_path($path_type)
 			break;
 		case WEB_CODE_PATH :
 			// example: http://www.mydokeos.com/main/
-			return $GLOBALS['clarolineRepositoryWeb'];
+			//return $GLOBALS['clarolineRepositoryWeb']; // this was changed
+			return $root_web.$_configuration['code_append'];
 			break;
 		case SYS_CODE_PATH :
 			// example: /var/www/dokeos/main/
@@ -1288,7 +1311,7 @@ function api_is_coach()
 	global $_user;
 	global $sessionIsCoach;
 
-	$sql = "SELECT DISTINCT id, name, date_start, date_end
+	 $sql = "SELECT DISTINCT id, name, date_start, date_end
 							FROM session
 							INNER JOIN session_rel_course
 								ON session_rel_course.id_coach = '".mysql_real_escape_string($_user['user_id'])."'
@@ -2433,48 +2456,91 @@ function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1)
 	else
 	{
 		$select .= " AND access_url = 1 ";
-	}
+	}	
 	$res = api_sql_query($select,__FILE__,__LINE__);
 	if(Database::num_rows($res)>0)
-	{ //found item for this access_url
+	{   //found item for this access_url
 		$row = Database::fetch_array($res);
-		$update = "UPDATE $t_settings SET selected_value = '$value' WHERE id = ".$row['id'];
+		$update = "UPDATE $t_settings SET selected_value = '$value' WHERE id = ".$row['id'] ;
 		$res = api_sql_query($update,__FILE__,__LINE__); 	
 	}
 	else
 	{ //item not found for this access_url, we have to check if the whole thing is missing 
 	  //(in which case we ignore the insert) or if there *is* a record but just for access_url=1
-		$select = "SELECT * FROM $t_settings WHERE variable = '$var' AND access_url = 1 ";
-		if(!empty($subvar))
+		$select = "SELECT * FROM $t_settings WHERE variable = '$var' AND access_url = '1' ";
+		if ($access_url==1)
 		{
-			$select .= " AND subkey = '$subvar'";
-		}
-		if(!empty($cat))
-		{
-			$select .= " AND category = '$cat'";
-		}
-		$res = api_sql_query($select,__FILE__,__LINE__);
-		if(Database::num_rows($select)>0)
-		{ //we have a setting for access_url 1, but none for the current one, so create one
-			$row = Database::fetch_array($res);
-			$insert = "INSERT INTO $t_settings " .
-					"(variable,subkey," .
-					"type,category," .
-					"selected_value,title," .
-					"comment,scope," .
-					"subkeytext,access_url)" .
-					" VALUES " .
-					"('".$row['variable']."',".(!empty($row['subkey'])?"'".$row['subkey']."'":"NULL")."," .
-					"'".$row['type']."','".$row['category']."'," .
-					"'$value','".$row['title']."'," .
-					"".(!empty($row['comment'])?"'".$row['comment']."'":"NULL").",'".(!empty($row['scope'])?"'".$row['scope']."'":"NULL")."'," .
-					"'".(!empty($row['subkeytext'])?"'".$row['subkeytext']."'":"NULL")."',$access_url)";
-			$res = api_sql_query($insert,__FILE__,__LINE__);
+			if(!empty($subvar))
+			{
+				$select .= " AND subkey = '$subvar'";
+			}
+			if(!empty($cat))
+			{
+				$select .= " AND category = '$cat'";
+			}	
+			$res = api_sql_query($select,__FILE__,__LINE__);
+			if(Database::num_rows($select)>0)
+			{ //we have a setting for access_url 1, but none for the current one, so create one
+				$row = Database::fetch_array($res);
+				echo $insert = "INSERT INTO $t_settings " .
+						"(variable,subkey," .
+						"type,category," .
+						"selected_value,title," .
+						"comment,scope," .
+						"subkeytext,access_url)" .
+						" VALUES " .
+						"('".$row['variable']."',".(!empty($row['subkey'])?"'".$row['subkey']."'":"NULL")."," .
+						"'".$row['type']."','".$row['category']."'," .
+						"'$value','".$row['title']."'," .
+						"".(!empty($row['comment'])?"'".$row['comment']."'":"NULL").",'".(!empty($row['scope'])?"'".$row['scope']."'":"NULL")."'," .
+						"'".(!empty($row['subkeytext'])?"'".$row['subkeytext']."'":"NULL")."',$access_url)";
+				$res = api_sql_query($insert,__FILE__,__LINE__);
+			}
+			else
+			{ // this setting does not exist
+				error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all',0);
+			}
 		}
 		else
-		{ // this setting does not exist
-			error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all',0);
-		}
+		{	
+			// other access url 
+			if(!empty($subvar))
+			{
+				$select .= " AND subkey = '$subvar'";
+			}
+			if(!empty($cat))
+			{
+				$select .= " AND category = '$cat'";
+			}
+			$res = api_sql_query($select,__FILE__,__LINE__);
+						
+			if(Database::num_rows($res)>0)
+			{ //we have a setting for access_url 1, but none for the current one, so create one				
+				$row = Database::fetch_array($res);
+				if ($row['access_url_changeable']==1)
+				{
+					$insert = "INSERT INTO $t_settings " .
+							"(variable,subkey," .
+							"type,category," .
+							"selected_value,title," .
+							"comment,scope," .
+							"subkeytext,access_url, access_url_changeable)" .
+							" VALUES " .
+							"('".$row['variable']."',".
+							(!empty($row['subkey'])?"'".$row['subkey']."'":"NULL")."," .
+							"'".$row['type']."','".$row['category']."'," .
+							"'$value','".$row['title']."'," .
+							"".(!empty($row['comment'])?"'".$row['comment']."'":"NULL").",".
+							(!empty($row['scope'])?"'".$row['scope']."'":"NULL")."," .
+							"'".(!empty($row['subkeytext'])?"'".$row['subkeytext']."'":"NULL")."',$access_url,".$row['access_url_changeable'].")";
+					$res = api_sql_query($insert,__FILE__,__LINE__);
+				}
+			}
+			else
+			{ // this setting does not exist
+				error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all. The access_url is: '.$access_url.' ',0);
+			}			
+		}	
 	}
 }
 /**
@@ -2526,6 +2592,28 @@ function api_get_access_urls($from=0,$to=1000000,$order='url',$direction='ASC')
 	}
 	return $result;
 }
+
+/**
+ * Get the access url info in an array
+ * @param 	id of the access url 
+ * @return	array Array with all the info (url, description, active, created_by, tms) from the access_url table 
+ * @author 	Julio Montoya Armas
+ */
+function api_get_access_url($id)
+{
+	global $_configuration;
+	$result = array();
+	// calling the Database:: library dont work this is handmade
+	//$table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+	$table='access_url';
+	$database = $_configuration['main_database'];
+	$table_access_url =  "`".$database."`.`".$table."`";	
+	$sql = "SELECT url, description, active, created_by, tms FROM $table_access_url WHERE id = '$id' ";	
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$result = @mysql_fetch_array($res);
+	return $result;
+}
+
 /**
  * Adds an access URL into the database
  * @param	string	URL
@@ -2571,14 +2659,20 @@ function api_add_access_url($u,$d='',$a=1)
  * @param	int		Access URL's ID. Optional. Uses 1 by default, which is the unique URL
  * @return	array	Array of database results for the current settings of the current access URL
  */
-function api_get_settings($cat=null,$ordering='list',$access_url=1)
+function api_get_settings($cat=null,$ordering='list',$access_url=1,$url_changeable=0)
 {
 	$results = array();
 	$t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 	$access_url = (int) $access_url;
+	
+	$url_changeable_where='';
+	if ($url_changeable==1)
+	{
+		$url_changeable_where= " AND access_url_changeable= '1' "; 
+	}	
 	if(empty($access_url)){$access_url=1;}
 	$sql = "SELECT id, variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable " .
-			" FROM $t_cs WHERE access_url = $access_url ";
+			" FROM $t_cs WHERE access_url = $access_url  $url_changeable_where ";
 	if(!empty($cat))
 	{
 		$cat = Database::escape_string($cat);
@@ -2591,7 +2685,7 @@ function api_get_settings($cat=null,$ordering='list',$access_url=1)
 	else
 	{
 		$sql .= " ORDER BY 1,2 ASC";
-	}
+	} 
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	if($res === false){return $results;}
 	$results = api_store_result($res);

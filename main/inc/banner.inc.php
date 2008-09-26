@@ -553,20 +553,21 @@ function get_tabs()
 	if(api_is_allowed_to_create_course() || $_user['status']==DRH)
 	{
 		// Link to my space
-		$navigation['session_my_space']['url'] = api_get_path(WEB_PATH).'main/mySpace/';
+		$navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/';
 		$navigation['session_my_space']['title'] = get_lang('MySpace');
 	}
 	else
 	{
 		// Link to my progress
-		$navigation['session_my_progress']['url'] = api_get_path(WEB_PATH).'main/auth/my_progress.php';
+		$navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH).'auth/my_progress.php';
 		$navigation['session_my_progress']['title'] = get_lang('MyProgress');
 	}
 
 	// Platform administration
 	if (api_is_platform_admin(true))
 	{
-		$navigation['platform_admin']['url'] = $rootAdminWeb;
+		//$navigation['platform_admin']['url'] = $rootAdminWeb;
+		$navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/';
 		$navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
 	}
 

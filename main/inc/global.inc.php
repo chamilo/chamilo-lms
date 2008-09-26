@@ -180,19 +180,103 @@ else
 
 //$sql="SELECT * FROM settings_current";
 //$result=mysql_query($sql) or die(mysql_error());
-$result = api_get_settings(null,'list',$_configuration['access_url']);
-//while ($row=mysql_fetch_array($result))
-foreach($result as $row)
-{
-	if ($row['subkey']==NULL)
+// access_url == 1 is the default dokeos location
+if ($_configuration['access_url']!=1)
+{	
+	$url_info = api_get_access_url($_configuration['access_url']);	
+	if ($url_info['active']==1)
 	{
-		$_setting[$row['variable']]=$row['selected_value'];
-	}
-	else
-	{
-		$_setting[$row['variable']][$row['subkey']]=$row['selected_value'];
+		$settings_by_access = api_get_settings(null,'list',$_configuration['access_url'],1);
+		foreach($settings_by_access as $row)
+		{
+			if (empty($row['variable']))
+				$row['variable']=0;
+			if (empty($row['subkey']))
+				$row['subkey']=0;
+			if (empty($row['category']))
+				$row['category']=0;					
+			$settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ]	[ $row['category'] ] = $row;		
+		}
 	}
 }
+
+//echo '<pre>';print_r($result_other_site);
+$result = api_get_settings(null,'list',1);
+
+//while ($row=mysql_fetch_array($result))
+foreach($result as $row)
+{	
+	if ($_configuration['access_url']!=1)
+	{
+		if ($url_info['active']==1)
+		{
+			if (empty($row['variable']))
+				$var=0;
+			else
+				$var=$row['variable'];
+				
+			if (empty($row['subkey']))
+				$subkey=0;
+			else
+				$subkey=$row['subkey'];
+				
+			if (empty($row['category']))
+				$category=0;
+			else
+				$category=$row['category'];	
+		}
+		
+		if ($row['access_url_changeable']==1 && $url_info['active']==1)
+		{		
+			if ($settings_by_access_list[ $var ] [ $subkey ] [$category ]['selected_value'] !='')
+			{
+				if ($row['subkey']==NULL)
+				{
+					$_setting[$row['variable']]= $settings_by_access_list[ $var ] [ $subkey ] [$category ]['selected_value'];
+				}
+				else
+				{
+					$_setting[$row['variable']][$row['subkey']]=$settings_by_access_list[ $var ] [ $subkey ] [$category ]['selected_value'];
+				}
+			}
+			else
+			{
+				if ($row['subkey']==NULL)
+				{
+					$_setting[$row['variable']]=$row['selected_value'];
+				}
+				else
+				{
+					$_setting[$row['variable']][$row['subkey']]=$row['selected_value'];
+				}
+			}
+		}
+		else
+		{
+			if ($row['subkey']==NULL)
+			{
+				$_setting[$row['variable']]=$row['selected_value'];
+			}
+			else
+			{
+				$_setting[$row['variable']][$row['subkey']]=$row['selected_value'];
+			}
+		}
+		
+	}
+	else
+	{			
+		if ($row['subkey']==NULL)
+		{
+			$_setting[$row['variable']]=$row['selected_value'];
+		}
+		else
+		{
+			$_setting[$row['variable']][$row['subkey']]=$row['selected_value'];
+		}		
+	}	
+}
+//echo '<pre>';print_r($_setting);echo '</pre>';
 // we have to store the settings for the plugins differently because it expects an array
 //$sql="SELECT * FROM settings_current WHERE category='plugins'";
 //$result=mysql_query($sql) or die(mysql_error());

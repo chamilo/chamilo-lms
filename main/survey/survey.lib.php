@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 16411 2008-09-24 11:52:07Z elixir_inter $
+* 	@version $Id: survey.lib.php 16415 2008-09-26 15:21:25Z elixir_inter $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -3154,7 +3154,7 @@ class SurveyUtil {
 		$sql = "SELECT questions.question_id, questions.type, questions.survey_question, count(options.question_option_id) as number_of_options
 				FROM $table_survey_question questions LEFT JOIN $table_survey_question_option options
 				ON questions.question_id = options.question_id "
-				." AND questions.survey_id = '".Database::escape_string($_GET['survey_id'])."'
+				." WHERE questions.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 				GROUP BY questions.question_id "
 				." ORDER BY questions.sort ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -3377,7 +3377,7 @@ class SurveyUtil {
 		$sql = "SELECT questions.question_id, questions.type, questions.survey_question, count(options.question_option_id) as number_of_options
 				FROM $table_survey_question questions LEFT JOIN $table_survey_question_option options
 				ON questions.question_id = options.question_id "
-				." AND questions.survey_id = '".Database::escape_string($_GET['survey_id'])."'
+				." WHERE questions.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 				GROUP BY questions.question_id "
 				." ORDER BY questions.sort ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);

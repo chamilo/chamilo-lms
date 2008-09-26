@@ -1215,14 +1215,14 @@ if ($_GET['action']=='discuss')
 		//Mode assignment: only the teacher can assign scoring
 		if(($row['assignment']==2 && $row['ratinglock_disc']==0 && (api_get_user_id()==$row['user_id']))==false)			
 	    {		
-	 		$ratinglock_disc= '<img src="../img/wiki/rating_na.gif" alt="'.get_lang('LockRatingDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('LockRatingDiscuss').'</font>';
+	 		$ratinglock_disc= '<img src="../img/wiki/rating_na.gif" alt="'.get_lang('LockRatingDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('UnlockRatingDiscuss').'</font>';
 		}
 	}
 	else
 	{			  
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
 		{
-			$ratinglock_disc= '<img src="../img/wiki/rating.gif" alt="'.get_lang('UnlockRatingDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('UnlockRatingDiscuss').'</font>';
+			$ratinglock_disc= '<img src="../img/wiki/rating.gif" alt="'.get_lang('UnlockRatingDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('LockRatingDiscuss').'</font>';
 		}	     	
 	}
 

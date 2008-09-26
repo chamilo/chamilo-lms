@@ -1113,7 +1113,8 @@ function update_Db_course($courseDbName)
 		"launch_data 	text	not null default ''," . //data from imsmanifest <item>
 		"max_time_allowed char(13) NULL default ''," . //data from imsmanifest <adlcp:maxtimeallowed>
         "terms TEXT NULL," . // contains the indexing tags (search engine)
-        "search_did INT NULL)"; // contains the internal search-engine id of this element
+        "search_did INT NULL,".// contains the internal search-engine id of this element
+        "audio VARCHAR(250))"; // contains the audio file that goes with the learning path step
 	if(!api_sql_query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);

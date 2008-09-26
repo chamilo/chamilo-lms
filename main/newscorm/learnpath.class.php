@@ -543,6 +543,30 @@ class learnpath {
 	    	
     	}
     	
+		// upload audio
+		if (!empty($_FILES['mp3']['tmp_name']))
+		{
+			// create the audio folder if it does not exist yet
+			global $_course;
+			$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/';
+			if(!is_dir($filepath.'audio'))
+			{
+				$perm = api_get_setting('permissions_for_new_directories');
+				$perm = octdec(!empty($perm)?$perm:'0770');
+				mkdir($filepath.'audio2',$perm);
+				$audio_id=add_document($_course,'/audio','folder',0,'audio');
+				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id());				
+			}
+			
+			// upload the file in the documents tool			
+			include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
+			handle_uploaded_document($_course, $_FILES['mp3'],api_get_path('SYS_COURSE_PATH').$_course['path'].'/document','/audio',api_get_user_id(),'','','','','',false);			
+			
+			// store the mp3 file in the lp_item table
+			$sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($_FILES['mp3']['name'])."' WHERE id = '".Database::escape_string($new_item_id)."'";
+			api_sql_query($sql_insert_audio, __FILE__, __LINE__);
+		}		
+
     	return $new_item_id;
     }
    
@@ -4379,7 +4403,6 @@ class learnpath {
 		// for flv player : to prevent edition problem with firefox, we have to use a strange tip (don't blame me please)
 		$content = str_replace('</body>','<style type="text/css">body{}</style></body>',$content);
 		
-		
 		if(!file_exists($filepath . $filename))
 		{
 			if($fp = @fopen($filepath . $filename, 'w'))
@@ -6181,7 +6204,7 @@ class learnpath {
 			*/
 			require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 			
-			$form = new FormValidator('form','POST',api_get_self()."?".$_SERVER["QUERY_STRING"]);
+			$form = new FormValidator('form','POST',api_get_self()."?".$_SERVER["QUERY_STRING"],'','enctype="multipart/form-data"');
 			$defaults["title"]=mb_convert_encoding($item_title,$charset,$this->encoding);
 			$defaults["description"]=mb_convert_encoding($item_description,$charset,$this->encoding);			
 			
@@ -6275,6 +6298,10 @@ class learnpath {
 				$select_prerequisites=$form->addElement('select', 'prerequisites', get_lang('Prerequisites').'&nbsp;:', '', 'id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
 				$select_prerequisites->addOption(get_lang("NoPrerequisites"),0,'style="padding-left:3px;"');
 
+				// form element for uploading an mp3 file
+				$form->addElement('file','mp3',get_lang('File'),'id="mp3" size="45"');
+				$form->addRule('file', 'The extension of the Song file should be *.mp3', 'filename', '/^.*\.mp3$/');
+				
                 if ( api_get_setting('search_enabled') === 'true' )
                 {
                     //add terms field

@@ -2834,10 +2834,8 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 	{
 		$groupPart = '';
 		$groupPath ='';
-	}			   
-			   
-	require_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');  
-	require_once (api_get_path(LIBRARY_PATH).'document.lib.php');
+	}
+	
 	$exportDir = api_get_path(SYS_COURSE_PATH).api_get_course_path(). '/document'.$groupPath;
 	$exportFile = replace_dangerous_char( $wikiTitle, 'strict' ) . $groupPart;
 	

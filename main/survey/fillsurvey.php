@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-*	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
+*	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code as well
 * 	@version $Id: survey_list.php 10680 2007-01-11 21:26:23Z pcool $
 *
 * 	@todo use quickforms for the forms
@@ -695,7 +695,7 @@ if (isset ($_GET['show']) || isset ($_POST['personality']))
 				$list['group'] = $row['survey_group_pri'];
 				$totals[] = $list;
 			}
-			//print_r($totals);
+			//echo '<pre>'; print_r($totals);
 
 			$final_results = array ();
 
@@ -1040,44 +1040,56 @@ if (isset ($_GET['show']) || isset ($_POST['personality']))
 			$val = $_GET['show'];
 			//}
 			//echo '<pre>';print_r($paged_questions);echo $val;
-			$sql = "SELECT survey_question.survey_group_sec1, survey_question.survey_group_sec2, survey_question.survey_group_pri,				
-					survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
-					survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
-					FROM $table_survey_question survey_question
-					LEFT JOIN $table_survey_question_option survey_question_option
-					ON survey_question.question_id = survey_question_option.question_id
-					WHERE survey_question.survey_id = '" . Database :: escape_string($survey_invitation['survey_id']) . "'
-					AND survey_question.question_id IN (" . implode(',', $paged_questions[$val]) . ")  
-					ORDER $order_sql ";
-
-			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$question_counter_max = Database :: num_rows($result);
-			$counter = 0;
-			$limit = 0;
-			$questions = array ();
-
-			while ($row = Database :: fetch_array($result, 'ASSOC'))
+			
+			$result=null;
+			if ($val!='')
 			{
-				// if the type is not a pagebreak we store it in the $questions array
-				if ($row['type'] <> 'pagebreak')
+				$imploded= implode(',', $paged_questions[$val]);
+				if ($imploded!=''){ 
+					// the answers are always in the same order NO shuffle
+					$order_sql = ' BY survey_question.sort, survey_question_option.sort ASC ';
+					$sql = "SELECT survey_question.survey_group_sec1, survey_question.survey_group_sec2, survey_question.survey_group_pri,				
+							survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
+							survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
+							FROM $table_survey_question survey_question
+							LEFT JOIN $table_survey_question_option survey_question_option
+							ON survey_question.question_id = survey_question_option.question_id
+							WHERE survey_question.survey_id = '" . Database :: escape_string($survey_invitation['survey_id']) . "'
+							AND survey_question.question_id IN (" .$imploded. ")  
+							ORDER $order_sql ";	
+					$result = api_sql_query($sql, __FILE__, __LINE__);
+					$question_counter_max = Database :: num_rows($result);				
+				}
+			}
+			
+			if (!is_null($result))
+			{
+				$counter = 0;
+				$limit = 0;
+				$questions = array ();
+				while ($row = Database :: fetch_array($result, 'ASSOC'))
 				{
-					$questions[$row['sort']]['question_id'] = $row['question_id'];
-					$questions[$row['sort']]['survey_id'] = $row['survey_id'];
-					$questions[$row['sort']]['survey_question'] = $row['survey_question'];
-					$questions[$row['sort']]['display'] = $row['display'];
-					$questions[$row['sort']]['type'] = $row['type'];
-					$questions[$row['sort']]['options'][$row['question_option_id']] = $row['option_text'];
-					$questions[$row['sort']]['maximum_score'] = $row['max_value'];
-					// personality params					
-					$questions[$row['sort']]['survey_group_sec1'] = $row['survey_group_sec1'];
-					$questions[$row['sort']]['survey_group_sec2'] = $row['survey_group_sec2'];
-					$questions[$row['sort']]['survey_group_pri'] = $row['survey_group_pri'];
+					// if the type is not a pagebreak we store it in the $questions array
+					if ($row['type'] <> 'pagebreak')
+					{
+						$questions[$row['sort']]['question_id'] = $row['question_id'];
+						$questions[$row['sort']]['survey_id'] = $row['survey_id'];
+						$questions[$row['sort']]['survey_question'] = $row['survey_question'];
+						$questions[$row['sort']]['display'] = $row['display'];
+						$questions[$row['sort']]['type'] = $row['type'];
+						$questions[$row['sort']]['options'][$row['question_option_id']] = $row['option_text'];
+						$questions[$row['sort']]['maximum_score'] = $row['max_value'];
+						// personality params					
+						$questions[$row['sort']]['survey_group_sec1'] = $row['survey_group_sec1'];
+						$questions[$row['sort']]['survey_group_sec2'] = $row['survey_group_sec2'];
+						$questions[$row['sort']]['survey_group_pri'] = $row['survey_group_pri'];
+					}
+					// if the type is a pagebreak we are finished loading the questions for this page
+					else {
+						break;
+					}
+					$counter++;
 				}
-				// if the type is a pagebreak we are finished loading the questions for this page
-				else {
-					break;
-				}
-				$counter++;
 			}
 		}
 	} 
@@ -1188,8 +1200,8 @@ elseif ($survey_data['survey_type'] === '1') //conditional/personality-test type
 		echo 'num pages:'.$numberofpages;echo "<br>";
 		echo 'show :'.$show;echo "<br>";
 		echo 'personality :'.$personality;
-		echo "<br>";*/		
-		
+		echo "<br>";		
+		*/
 		//echo $show.' / '.$numberofpages."<br />";
 		if ($personality ==0)
 		if ( ($show <= $numberofpages) || !$_GET['show'] ) //$show = $_GET['show']+1
@@ -1250,9 +1262,13 @@ elseif ($survey_data['survey_type'] === '1') //conditional/personality-test type
 		}		
 	}
 	// this is the case when the show_profile_form is true but there are not form_fields 
-	elseif ($survey_data['form_fields'] == '') 
-	{
+	elseif ($survey_data['form_fields'] == '')	
+	{				
 		echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' >> " />';
+	}	
+	elseif(!is_array($user_data))
+	{	// if the user is not registered in the platform we do not show the form to update his information
+		echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' >> " />'; 
 	}
 }
 echo '</form>';

@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 16032 2008-08-20 17:22:01Z juliomontoya $
+<?php //$Id: myStudents.php 16422 2008-09-29 09:08:56Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -568,14 +568,15 @@ if(!empty($_GET['student']))
 							<?php echo get_lang('Time'); ?>
 						</th>
 						<th>
+							<?php echo get_lang('Progress'); ?>
+						</th>
+						<th>
 							<?php 
 							echo get_lang('Score');
 							Display :: display_icon('info3.gif',get_lang('LPTestScore') , array ('style' => 'margin-bottom:-5px;')); 
 							?>
 						</th>
-						<th>
-							<?php echo get_lang('Progress'); ?>
-						</th>
+						
 						<th>
 							<?php echo get_lang('LastConnexion'); ?>
 						</th>
@@ -775,11 +776,13 @@ if(!empty($_GET['student']))
 						<?php echo api_time_to_hms($total_time) ?>
 						</td>
 						<td align="right">
-							<?php echo $total_weighting>0 ? $score.'%' : '-' ?>
-						</td>
-						<td align="right">
 							<?php echo $progress ?>
 						</td>
+						
+						<td align="right">
+							<?php echo $total_weighting>0 ? $score.'%' : '-' ?>
+						</td>
+						
 						<td align="center">
 							<?php if($start_time!='' && $start_time>0) echo format_locale_date(get_lang('DateFormatLongWithoutDay'),$start_time); else echo '-'; ?>
 						</td>

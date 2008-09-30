@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 16415 2008-09-26 15:21:25Z elixir_inter $
+* 	@version $Id: survey.lib.php 16426 2008-09-30 22:04:45Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -211,8 +211,8 @@ class survey_manager
 						if($pos===false)
 						{ 
 							//$new_version= substr($row['survey_version'],$pos, count())
-							echo $row['survey_version'] = $row['survey_version'] + 1; 
-							echo $additional['values'] .= ",'".$row['survey_version']."'";
+							$row['survey_version'] = $row['survey_version'] + 1; 
+							$additional['values'] .= ",'".$row['survey_version']."'";
 						} 
 						else 
 						{
@@ -444,8 +444,8 @@ class survey_manager
 		$sql = "SELECT * FROM $table_survey_options WHERE  survey_id='".$parent_survey."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		while($row = Database::fetch_array($res,ASSOC)){
-			$sql3 = 'INSERT INTO '.$table_survey_options.' (question_id,survey_id,option_text,sort) VALUES ('.
-			"'".$question_id[$row['question_id']]."','".$new_survey_id."','".Database::escape_string($row['option_text'])."','".$row['sort']."')";
+			$sql3 = 'INSERT INTO '.$table_survey_options.' (question_id,survey_id,option_text,sort,value) VALUES ('.
+			"'".$question_id[$row['question_id']]."','".$new_survey_id."','".Database::escape_string($row['option_text'])."','".$row['sort']."','".$row['value']."')";
 			$res3 = api_sql_query($sql3, __FILE__, __LINE__);		
 		}
 		return true;
@@ -4493,6 +4493,15 @@ class SurveyUtil {
 		{
 			$list[]=$survey['id'];
 		}
+		if (count($list)>0)
+		{
+			$list_condition = " AND survey.survey_id IN (".implode(',',$list).") ";
+		}
+		else
+		{
+			$list_condition ='';
+		}
+		
 		$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
 		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_user 			= Database :: get_main_table(TABLE_MAIN_USER);
@@ -4515,13 +4524,13 @@ class SurveyUtil {
 	             FROM $table_survey survey
 				 LEFT JOIN $table_survey_question survey_question ON survey.survey_id = survey_question.survey_id
 	             , $table_user user
-	             WHERE survey.author = user.user_id AND survey.survey_id IN (".implode(',',$list).")
+	             WHERE survey.author = user.user_id $list_condition 
 	             $search_restriction
 	             ";
-		$sql .= " GROUP BY survey.survey_id";
+		$sql .= " GROUP BY survey.survey_id ";
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
-	
+		
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$surveys = array ();
 		while ($survey = Database::fetch_array($res))

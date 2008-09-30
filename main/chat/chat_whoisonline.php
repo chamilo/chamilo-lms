@@ -56,7 +56,9 @@ if (!empty($course))
 	$isAllowed=(empty($pseudoUser) || !$_cid)?false:true;
 	$isMaster=$is_courseAdmin?true:false;
 		
-	$date_inter=date('Y-m-d H:i:s',time()-60);  
+	$date_inter=date('Y-m-d H:i:s',time()-60); 
+	
+	$Users = array(); 
 	
 	if(!isset($_SESSION['id_session']))
 	{
@@ -69,19 +71,22 @@ if (!empty($course))
 		// select learners
 		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session_course_user t3 WHERE t1.user_id=t2.user_id AND t3.id_user=t2.user_id AND t3.id_session = '".$_SESSION['id_session']."' AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' ORDER BY username";
 		$result=api_sql_query($query,__FILE__,__LINE__);
-		$Users=api_store_result($result);
+		while($learner = Database::fetch_array($result))
+		{
+			$Users[$learner['user_id']] = $learner;
+		}
 		
 		// select session coach
 		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session t3 WHERE t1.user_id=t2.user_id AND t3.id_coach=t2.user_id AND t3.id = '".$_SESSION['id_session']."' AND t2.last_connection>'".$date_inter."' ORDER BY username";
 		$result=api_sql_query($query,__FILE__,__LINE__);
 		if($coach = Database::fetch_array($result))
-			$Users[] = $coach;
+			$Users[$coach['user_id']] = $coach;
 		
 		// select session course coach
 		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session_course t3 WHERE t1.user_id=t2.user_id AND t3.id_coach=t2.user_id AND t3.id_session = '".$_SESSION['id_session']."' AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' ORDER BY username";
 		$result=api_sql_query($query,__FILE__,__LINE__);
 		if($coach = Database::fetch_array($result))
-			$Users[] = $coach;
+			$Users[$coach['user_id']] = $coach;
 		
 	}
 	

@@ -388,7 +388,8 @@ function update_Db_course($courseDbName)
 	$TABLESURVEYGROUP			= $courseDbName . 'survey_group';
 
 	// Wiki
-	$TABLETOOLWIKI 				= $courseDbName	. 'wiki';		
+	$TABLETOOLWIKI 				= $courseDbName	. 'wiki';
+	$TABLEWIKICONF				= $courseDbName	. 'wiki_conf';
 	$TABLEWIKIDISCUSS			= $courseDbName . 'wiki_discuss';
 	$TABLEWIKIMAILCUE			= $courseDbName . 'wiki_mailcue';
 
@@ -820,26 +821,32 @@ function update_Db_course($courseDbName)
 		assignment int NOT NULL default 0,	
 		startdate_assig datetime NOT NULL default '0000-00-00 00:00:00',
 		enddate_assig datetime  NOT NULL default '0000-00-00 00:00:00',
-		delayedsubmit int NOT NULL default 0,	
+		delayedsubmit int NOT NULL default 0,
 		comment text NOT NULL,
 		progress text NOT NULL,
 		score int NULL default 0,
 		version int default NULL,
-		hits int default NULL,
-		linksto text NOT NULL,
-		lastversion int default NULL,
-		tag text NOT NULL,
+		hits int default 0,
+		linksto text NOT NULL,	
+		tag text NOT NULL,		
+		user_ip varchar(39) NOT NULL,		
+		PRIMARY KEY (id)
+		)";
+	api_sql_query($sql, __FILE__, __LINE__);
+		
+	//
+	$sql = "CREATE TABLE `".$TABLEWIKICONF . "` (
+		id int NOT NULL auto_increment,		
 		feedback1 text NOT NULL,
 		feedback2 text NOT NULL,
 		feedback3 text NOT NULL,
 		max_size int default NULL,
 		max_text int default NULL,
 		allow_attachments int default NULL,
-		user_ip varchar(39) NOT NULL,		
 		PRIMARY KEY (id)
-		)";
+		)";	
 	api_sql_query($sql, __FILE__, __LINE__);
-		
+	
 	//
 	
 	$sql = "CREATE TABLE `".$TABLEWIKIDISCUSS . "` (

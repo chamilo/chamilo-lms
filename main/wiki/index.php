@@ -441,7 +441,7 @@ if ($_GET['action']=='wanted')
 	$allpages=api_sql_query($sql,__FILE__,__LINE__);	
 	while ($row=Database::fetch_array($allpages))
 	{	
-		//$row['linksto']= str_replace("\n".$row["reflink"]."\n", "\n", $row["linksto"]); //remove self reference. TODO check		 
+		//$row['linksto']= str_replace("\n".$row["reflink"]."\n", "\n", $row["linksto"]); //remove self reference. TODO check
 		$rf = explode(" ", trim($row["linksto"]));//wanted pages without /n only blank " "  			
 		$refs = array_merge($refs, $rf);
 		if ($n++ > 299)
@@ -453,14 +453,18 @@ if ($_GET['action']=='wanted')
 	
 	//sort linksto. Find linksto into reflink. If not found ->page is wanted
 	natcasesort($refs);
+	echo '<ul>';
 	foreach($refs as $v)
 	{
 		if(!in_array($v, $pages))
-		{		
-			$wanted[] = $v;		
-			echo $v.'<br>'; //TODO: link to page and  convert reflink to title			
+		{	
+			if (trim($v)!=="")
+			{							
+				echo '<li>'.str_replace('_',' ',$v).'</li>';
+			}					
 		}	
 	}
+	echo '</ul>';
 }
 
 /////////////////////// Orphaned pages /////////////////////// Juan Carlos Raña Trabado
@@ -489,7 +493,7 @@ if ($_GET['action']=='orphaned')
 	$allpages=api_sql_query($sql,__FILE__,__LINE__);	
 	while ($row=Database::fetch_array($allpages))
 	{			
-		//$row['linksto']= str_replace("\n".$row["reflink"]."\n", "\n", $row["linksto"]); //remove self reference. TODO check				 
+		//$row['linksto']= str_replace("\n".$row["reflink"]."\n", "\n", $row["linksto"]); //remove self reference. TODO check
 		$rf = explode("\n", trim($row["linksto"]));			     			    
 		
 		$refs = array_merge($refs, $rf);
@@ -697,7 +701,7 @@ if ($_GET['action']=='links')
 	{	
 	      
 		$sql='SELECT * FROM '.$tbl_wiki.' WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.'';		
-		$result=api_sql_query($sql,__FILE__,__LINE__); //necessary for pages with compound name
+		$result=api_sql_query($sql,__FILE__,__LINE__); //necessary for pages with compound name. TODO: check if necessay after have fixed wanted pages with _
 						
 		$row=Database::fetch_array($result);	
 		echo $LinksPagesFrom.': <a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a>';	
@@ -1706,7 +1710,7 @@ function links_to($input)
 			unset($input_array[$key-1]);
 			unset($input_array[$key+1]);
 			
-			$all_links[]= Database::escape_string(str_replace(' ','',$link)).' ';	//remove blank spaces within the links. But to remove links at the end add a blank space				
+			$all_links[]= Database::escape_string(str_replace(' ','_',$link)).' ';	//replace blank spaces by _ within the links. But to remove links at the end add a blank space
 		}
 
     }
@@ -1775,14 +1779,14 @@ function make_wiki_link_clickable($input)
 			
 		
 			// note: checkreflink checks if the link is still free. If it is not used then it returns true, if it is used, then it returns false. Now the title may be different
-			if (checktitle(strtolower(str_replace(' ','',$link))))
+			if (checktitle(strtolower(str_replace(' ','_',$link))))
 			{			
 				$input_array[$key]='<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq='.$_course[id].'&action=addnew&amp;title='.urldecode($link).'&group_id='.$_clean['group_id'].'" class="new_wiki_link">'.$title.$titleg_ex.'</a>';		
 			}
 			else 
 			{				
 						
-				$input_array[$key]='<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.strtolower(str_replace(' ','',$link)).'&group_id='.$_clean['group_id'].'" class="wiki_link">'.$title.$titleg_ex.'</a>';
+				$input_array[$key]='<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.strtolower(str_replace(' ','_',$link)).'&group_id='.$_clean['group_id'].'" class="wiki_link">'.$title.$titleg_ex.'</a>';
 			}
 			unset($input_array[$key-1]);
 			unset($input_array[$key+1]);
@@ -1879,11 +1883,11 @@ function save_new_wiki()
 			
 	if($_clean['assignment']==2 || $_clean['assignment']==1) // Unlike ordinary pages of pages of assignments. Allow create a ordinary page although there is a assignment with the same name
 	{
-		$_clean['reflink']=Database::escape_string(str_replace(' ','',$_POST['title']."_uass".$assig_user_id));			
+		$_clean['reflink']=Database::escape_string(str_replace(' ','_',$_POST['title']."_uass".$assig_user_id));			
     }
 	else
 	{		
-	 	$_clean['reflink']=Database::escape_string(str_replace(' ','',$_POST['title']));			
+	 	$_clean['reflink']=Database::escape_string(str_replace(' ','_',$_POST['title']));			
 	}	
 
 	$_clean['title']=Database::escape_string($_POST['title']);		    

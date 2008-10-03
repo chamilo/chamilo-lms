@@ -187,7 +187,7 @@ if ($_POST['SaveWikiNew'])
 	}
 	else
 	{	 
-	   $_clean['assignment']=Database::escape_string($_POST['assignment']); //Juan Carlos Raña for mode assignment
+	   $_clean['assignment']=Database::escape_string($_POST['assignment']); // for mode assignment
 	   if ($_clean['assignment']==1)
 	   {	  
 	      	auto_add_page_users($_clean['assignment']);
@@ -288,7 +288,7 @@ echo '<li><a href="index.php?cidReq='.$_course[id].'&action=recentchanges&group_
 echo '<li><a href="index.php?action=deletewiki&amp;title='.$page.'"'.is_active_navigation_tab('deletewiki').'"><img src="../img/wiki/wdeletewiki.png" title="'.get_lang('DeleteWiki').'" align="absmiddle"/></a></li>';
 
 //menu more
-//echo '<li><a href="index.php?action=more&amp;title='.$page.'"'.is_active_navigation_tab('more').'"><img src="../img/wiki/wmore.png" title="'.get_lang('More').'" align="absmiddle"/></a></li>'; // by now turn off
+echo '<li><a href="index.php?action=more&amp;title='.$page.'"'.is_active_navigation_tab('more').'"><img src="../img/wiki/wmore.png" title="'.get_lang('More').'" align="absmiddle"/></a></li>';
 
 //menu add page
 echo '<li><a href="index.php?cidReq='.$_course[id].'&action=addnew&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('addnew').'><img src="../img/wiki/wadd.png" title="'.get_lang('AddNew').'" align="absmiddle"/></a></li>';
@@ -341,18 +341,197 @@ echo "<div id='mainwiki'>";
 
 if ($_GET['action']=='more')
 {
-	echo  '<br>'; 
+	echo '<br>'; 
 	echo '<b>'.get_lang('More').'</b><br>'; 
-    echo  '<hr>';
+    echo '<hr>';
+	echo '<ul>';
 	if(api_is_allowed_to_edit() || api_is_platform_admin())
 	{
-	//TODO
+	//TODO: config area and private stats
 	
 	}
-
-	//TODO
+	
+    //Submenu Orphaned pages	
+	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=orphaned&group_id='.$_clean['group_id'].'">'.get_lang('OrphanedPages').'</a></li>';
+	
+	//Submenu Wanted pages
+	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=wanted&group_id='.$_clean['group_id'].'">'.get_lang('WantedPages').'</a></li>';
+	
+	//Submenu Most visited pages
+	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mvisited&group_id='.$_clean['group_id'].'">'.get_lang('MostVisitedPages').'</a></li>';
+	
+	//Submenu Most changed pages
+	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mostchanged&group_id='.$_clean['group_id'].'">'.get_lang('MostChangedPages').'</a></li>';	
+	
+	//Submenu active users
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mactiveusers&group_id='.$_clean['group_id'].'">'.get_lang('MostActiveUsers').'</a></li>';//TODO	
+				
+    echo '</ul>';	
 }
 
+/////////////////////// Most active users /////////////////////// Juan Carlos Raña Trabado
+if ($_GET['action']=='mactiveusers')
+{
+	echo '<br>';
+	echo '<b>'.get_lang('MostActiveUsers').'</b><br>'; 
+	echo '<hr>';
+	//TODO
+
+}
+
+/////////////////////// Most changed pages /////////////////////// Juan Carlos Raña Trabado
+
+if ($_GET['action']=='mostchanged')
+{
+	echo '<br>';
+	echo '<b>'.get_lang('MostChanges').'</b><br>'; 
+	echo '<hr>';
+	
+	$sql='SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink ORDER BY MAX DESC, reflink LIMIT 10'; //first ten users
+	$allpages=api_sql_query($sql,__FILE__,__LINE__);	
+	echo '<ul>';	
+	while ($row=Database::fetch_array($allpages))
+	{	
+		echo '<li><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($row['reflink']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a> '.get_lang('With').' '.$row['MAX'].' '.get_lang('Changes').'</li>';	//TODO:check if hidden and assignment mode
+	}
+	echo '</ul>';		
+	
+}
+
+/////////////////////// Most visited pages /////////////////////// Juan Carlos Raña Trabado
+
+if ($_GET['action']=='mvisited')
+{
+	echo '<br>';
+	echo '<b>'.get_lang('MostVisitedPages').'</b><br>'; 
+	echo '<hr>';	
+	
+	$sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink ORDER BY tsum DESC, reflink LIMIT 10'; //first ten pages
+	$allpages=api_sql_query($sql,__FILE__,__LINE__);
+	echo '<ul>';	
+	while ($row=Database::fetch_array($allpages))
+	{
+		echo '<li><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($row['reflink']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a> '.get_lang('With').' '.$row['tsum'].' '.get_lang('Visits').'</li>';	//TODO:check if hidden and assignment mode
+	}
+	echo '</ul>';
+}
+
+/////////////////////// Wanted pages /////////////////////// Juan Carlos Raña Trabado
+
+if ($_GET['action']=='wanted')
+{
+	echo  '<br>';
+	echo '<b>'.get_lang('WantedPages').'</b><br>'; 
+	echo  '<hr>';
+	$pages = array();
+	$refs = array();
+	$orphaned = array();
+	$sort_wanted=array();
+
+	//get name pages
+	$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink ORDER BY reflink ASC';
+	$allpages=api_sql_query($sql,__FILE__,__LINE__);	
+	while ($row=Database::fetch_array($allpages))
+	{
+		$pages[] = $row['reflink'];
+	}
+	
+	//get name refs in last pages and make a unique list
+	$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE '.$groupfilter.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink)';
+	$allpages=api_sql_query($sql,__FILE__,__LINE__);	
+	while ($row=Database::fetch_array($allpages))
+	{	
+		//$row['linksto']= str_replace("\n".$row["reflink"]."\n", "\n", $row["linksto"]); //remove self reference. TODO check		 
+		$rf = explode(" ", trim($row["linksto"]));//wanted pages without /n only blank " "  			
+		$refs = array_merge($refs, $rf);
+		if ($n++ > 299)
+		{
+			$refs = array_unique($refs);
+			$n=0;
+		} // (clean-up only every 300th loop). Thanks to Erfurt Wiki		
+	}
+	
+	//sort linksto. Find linksto into reflink. If not found ->page is wanted
+	natcasesort($refs);
+	foreach($refs as $v)
+	{
+		if(!in_array($v, $pages))
+		{		
+			$wanted[] = $v;		
+			echo $v.'<br>'; //TODO: link to page and  convert reflink to title			
+		}	
+	}
+}
+
+/////////////////////// Orphaned pages /////////////////////// Juan Carlos Raña Trabado
+
+if ($_GET['action']=='orphaned')
+{
+	echo '<br>';
+	echo '<b>'.get_lang('OrphanedPages').'</b><br>'; 
+	echo '<hr>';	
+		
+	$pages = array();
+   	$refs = array();
+  	$orphaned = array();
+	$sort_orphaned=array();
+	
+	//get name pages	
+	$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink ORDER BY reflink ASC';
+	$allpages=api_sql_query($sql,__FILE__,__LINE__);	
+	while ($row=Database::fetch_array($allpages))
+	{			   
+		$pages[] = $row['reflink'];
+	}
+	
+	//get name refs in last pages and make a unique list	
+	$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE '.$groupfilter.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink)';
+	$allpages=api_sql_query($sql,__FILE__,__LINE__);	
+	while ($row=Database::fetch_array($allpages))
+	{			
+		//$row['linksto']= str_replace("\n".$row["reflink"]."\n", "\n", $row["linksto"]); //remove self reference. TODO check				 
+		$rf = explode("\n", trim($row["linksto"]));			     			    
+		
+		$refs = array_merge($refs, $rf);
+		if ($n++ > 299)
+		{
+			$refs = array_unique($refs);
+			$n=0;
+		} // (clean-up only every 300th loop). Thanks to Erfurt Wiki				
+	}
+			
+	//search each name of list linksto into list reflink
+	foreach($pages as $v)
+	{
+		if(!in_array($v, $refs))
+		{		
+			$orphaned[] = $v;		
+		}	
+	}
+	
+	//change reflink by title
+	foreach($orphaned as $vshow)
+	{
+		$sql='SELECT  *  FROM   '.$tbl_wiki.' WHERE '.$groupfilter.' AND reflink="'.$vshow.'" GROUP BY reflink';
+		$allpages=api_sql_query($sql,__FILE__,__LINE__);
+		
+		echo '<ul>';
+		while ($row=Database::fetch_array($allpages))
+		{
+			//$sort_orphaned[]=$row['title']; //TODO: check to delete this line	
+			echo '<li><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($row['reflink']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a></li>';	//TODO:check if hidden and assignment mode
+		}
+		echo '</ul>';
+	}
+	
+	//sort titles //TODO: check to delete this line	
+	//natcasesort($sort_orphaned);//TODO: check to delete this line	
+	//foreach($sort_orphaned as $vshow_so)//TODO: check to delete this line	
+	//{
+		//echo $vshow_so.'<br>'; //TODO: link to page	//TODO: check to delete this line			
+	//}//TODO: check to delete this line	
+	
+}
 
 /////////////////////// delete current page /////////////////////// Juan Carlos Raña Trabado
 
@@ -1881,6 +2060,14 @@ function display_wiki_entry()
 	$sql="SELECT * FROM ".$tbl_wiki."WHERE reflink='".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))."' AND $groupfilter $filter ORDER BY id DESC";
 		$result=api_sql_query($sql,__LINE__,__FILE__);
 		$row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version	
+
+
+	//update visits 
+	if($row['id'])
+	{
+		$sql='UPDATE '.$tbl_wiki.' SET hits=(hits+1) WHERE id='.$row['id'].'';
+		api_sql_query($sql,__FILE__,__LINE__);
+	}
 
 
 	// if both are empty and we are displaying the index page then we display the default text.

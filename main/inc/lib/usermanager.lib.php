@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 16400 2008-09-21 17:26:13Z elixir_inter $
+<?php // $Id: usermanager.lib.php 16444 2008-10-06 18:14:14Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1220,6 +1220,70 @@ class UserManager
 					if($row['type'] ==  USER_FIELD_TYPE_SELECT_MULTIPLE)
 					{
 						$fval = split(';',$rowu['fval']);
+					}					
+				}
+				if($prefix)
+				{
+					if ($row['type'] ==  USER_FIELD_TYPE_RADIO)
+					{
+						$extra_data['extra_'.$row['fvar']]['extra_'.$row['fvar']] = $fval;
+					}
+					else
+					{
+						$extra_data['extra_'.$row['fvar']] = $fval;
+					} 
+				}
+				else
+				{
+					if ($row['type'] ==  USER_FIELD_TYPE_RADIO)
+					{
+						$extra_data['extra_'.$row['fvar']]['extra_'.$row['fvar']] = $fval;
+					}
+					else
+					{
+						$extra_data[$row['fvar']] = $fval;
+					} 
+				}
+			}
+		}
+		
+		return $extra_data;
+	}	
+	
+	function get_extra_user_data_by_field($user_id, $field_variable, $prefix=false, $all_visibility = true, $splitmultiple=false)
+	{
+		$extra_data = array();
+		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+		$user_id = Database::escape_string($user_id);
+		$sql = "SELECT f.id as id, f.field_variable as fvar, f.field_type as type FROM $t_uf f ";
+		
+		$sql.=" WHERE f.field_variable = '$field_variable' ";
+		
+		if($all_visibility == false)
+		{
+			$sql .= " AND f.field_visible = 1 ";
+		}
+			
+		$sql .= " ORDER BY f.field_order";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		if(Database::num_rows($res)>0)
+		{
+			while($row = Database::fetch_array($res))
+			{
+				$sqlu = "SELECT field_value as fval " .
+						" FROM $t_ufv " .
+						" WHERE field_id=".$row['id']."" .
+						" AND user_id=".$user_id;
+				$resu = api_sql_query($sqlu,__FILE__,__LINE__);
+				$fval = '';
+				if(Database::num_rows($resu)>0)
+				{
+					$rowu = Database::fetch_array($resu);
+					$fval = $rowu['fval'];
+					if($row['type'] ==  USER_FIELD_TYPE_SELECT_MULTIPLE)
+					{
+						$fval = split(';',$rowu['fval']);
 					}
 				}
 				if($prefix)
@@ -1231,19 +1295,49 @@ class UserManager
 					$extra_data[$row['fvar']] = $fval; 
 				}
 			}
-		}
-		
+		}		
 		return $extra_data;
 	}
+	
+	
+	
 	
 	/**
 	 * Get all the extra field information of a certain field (also the options)
 	 *
-	 * @param integer $field_id the id of the field we want to know everything of
+	 * @param integer $field_name the name of the field we want to know everything of
 	 * @return array $return containing all th information about the extra profile field 
-	 * 
-	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
-	 * @version July 2008
+	 * @author Julio Montoya
+	 * @since Dokeos 1.8.6
+	 */
+	function get_extra_field_information_by_name($field_variable)
+	{
+		// database table definition
+		$table_field 			= Database::get_main_table(TABLE_MAIN_USER_FIELD);
+		$table_field_options	= Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
+		
+		// all the information of the field
+		$sql = "SELECT * FROM $table_field WHERE field_variable='".Database::escape_string($field_variable)."'";
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$return = Database::fetch_array($result);
+		
+		// all the options of the field
+		$sql = "SELECT * FROM $table_field_options WHERE field_variable='".Database::escape_string($field_variable)."' ORDER BY option_order ASC";
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		while ($row = Database::fetch_array($result))
+		{
+			$return['options'][$row['id']] = $row;
+		}		
+		return $return;
+	}
+	
+	
+	/**
+	 * Get all the extra field information of a certain field (also the options)
+	 *
+	 * @param integer $field_name the name of the field we want to know everything of
+	 * @return array $return containing all th information about the extra profile field 
+	 * @author Julio Montoya
 	 * @since Dokeos 1.8.6
 	 */
 	function get_extra_field_information($field_id)
@@ -1266,6 +1360,8 @@ class UserManager
 		}		
 		return $return;
 	}
+	
+	
 	
 	/**
 	 * Gives a list of [session_id-course_code] => [status] for the current user.

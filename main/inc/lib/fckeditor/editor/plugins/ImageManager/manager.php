@@ -145,7 +145,7 @@
 			<td><input type="text" id="f_border" class="smallWidth" value="" /></td>
 		</tr>
 		<tr> 
-<? if (count($IMConfig['maxWidth']) > 1 && $IMConfig['allow_upload']){ ?>
+<?php if (count($IMConfig['maxWidth']) > 1 && $IMConfig['allow_upload']){ ?>
 			<td align="right"><label for="uploadSize" style="white-space: nowrap;">Upload Size</label></td>
 			<td>
 				<table cellpadding="0" cellspacing="0">
@@ -165,9 +165,9 @@
 			</td>
 			<td></td>
 			<td align="right">
-<? }else{ ?>
+<?php }else{ ?>
 			<td colspan="4" align="right">
-<? } ?>
+<?php } ?>
 				<input type="hidden" id="orginal_width" />
 				<input type="hidden" id="orginal_height" />
 				<input type="checkbox" id="constrain_prop" checked="checked" onclick="javascript:toggleConstrains(this);" />

@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Image Manager configuration file.
  * @author Wei Zhuo

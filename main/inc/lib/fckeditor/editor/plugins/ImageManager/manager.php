@@ -152,9 +152,9 @@
 				<tr>
 					<td>
 						<select name="uploadSize" id="uploadSize">
-						<? for ($i = 0; $i < count($IMConfig['maxWidth']); $i++){ ?>
+						<?php for ($i = 0; $i < count($IMConfig['maxWidth']); $i++){ ?>
 								<option value="<?=$i?>"><?=$IMConfig['maxWidth'][$i] . " x " . $IMConfig['maxHeight'][$i]?></option>
-						<? } ?>
+						<?php } ?>
 						</select>
 					</td>
 					<td style="padding-left: 5px;">

@@ -2033,7 +2033,7 @@ class learnpathItem{
 	     					"WHERE lp_iv_id = $lp_iv_id " .
 	     					//"AND order_id = $index";
 							//also check for the objective ID as it must be unique for this SCO view
-	     					"AND objective_id = '".$objective[0]."'";
+	     					"AND objective_id = '".Database::escape_string($objective[0])."'";
 	     			$iva_res = api_sql_query($iva_sql,__FILE__,__LINE__);
 					//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
 	     			if(Database::num_rows($iva_res)>0){
@@ -2041,11 +2041,11 @@ class learnpathItem{
 	     				$iva_row = Database::fetch_array($iva_res);
 	     				$iva_id = $iva_row[0];
 	     				$ivau_sql = "UPDATE $iva_table " .
-	     					"SET objective_id = '".$objective[0]."'," .
-	     					"status = '".$objective[1]."'," .
-	     					"score_raw = '".$objective[2]."'," .
-	     					"score_min = '".$objective[4]."'," .
-	     					"score_max = '".$objective[3]."' " .
+	     					"SET objective_id = '".Database::escape_string($objective[0])."'," .
+	     					"status = '".Database::escape_string($objective[1])."'," .
+	     					"score_raw = '".Database::escape_string($objective[2])."'," .
+	     					"score_min = '".Database::escape_string($objective[4])."'," .
+	     					"score_max = '".Database::escape_string($objective[3])."' " .
 	     					"WHERE id = $iva_id";
 	     				$ivau_res = api_sql_query($ivau_sql,__FILE__,__LINE__);
 	     				//error_log($ivau_sql,0);
@@ -2054,8 +2054,8 @@ class learnpathItem{
 	     				$ivai_sql = "INSERT INTO $iva_table " .
 	     						"(lp_iv_id, order_id, objective_id, status, score_raw, score_min, score_max )" .
 	     						"VALUES" .
-	     						"(".$lp_iv_id.", ".$index.",'".$objective[0]."','".$objective[1]."'," .
-	     						"'".$objective[2]."','".$objective[4]."','".$objective[3]."')";
+	     						"(".$lp_iv_id.", ".$index.",'".Database::escape_string($objective[0])."','".Database::escape_string($objective[1])."'," .
+	     						"'".Database::escape_string($objective[2])."','".Database::escape_string($objective[4])."','".Database::escape_string($objective[3])."')";
 	     				$ivai_res = api_sql_query($ivai_sql,__FILE__,__LINE__);
 	     				//error_log($ivai_sql);
 	     			}

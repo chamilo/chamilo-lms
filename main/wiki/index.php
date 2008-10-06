@@ -1720,12 +1720,25 @@ function links_to($input)
 	
 }
 
+/*
+detect and add style to external links
+author Juan Carlos Raña Trabado
+**/
+function detect_external_link($input)
+{
+	$exlink='<a href=';
+	$exlinkStyle='<a class="wiki_link_ext" href=';	
+	$output=str_replace($exlink, $exlinkStyle, $input);		
+	return $output;
+}
 
-/**
+/*
 * This function allows users to have [link to a title]-style links like in most regular wikis.
 * It is true that the adding of links is probably the most anoying part of Wiki for the people
 * who know something about the wiki syntax.
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+* Improvements [[]] and [[ | ]]by Juan Carlos Raña
+* Improvements internal wiki style and mark group by Juan Carlos Raña
 **/
 function make_wiki_link_clickable($input)
 {
@@ -2231,8 +2244,8 @@ function display_wiki_entry()
 			echo '<span style="float:right;"><img src="../img/wiki/wzip_save.gif" alt="'.get_lang('Export2ZIP').'" onclick="alert(\'This is not implemented yet but it will be in the near future\')"/></span>'; //TODO	
 			
 			echo '</div>';	
-			echo '<div id="wikicontent">'.make_wiki_link_clickable(stripslashes($content)).'</div>';		
-			
+			echo '<div id="wikicontent">'. make_wiki_link_clickable(detect_external_link(stripslashes($content))).'</div>';
+
 	}//end filter visibility
 } // end function display_wiki_entry
 

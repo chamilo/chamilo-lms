@@ -103,10 +103,12 @@
 				
 	}
 
-	a.wiki_link{	
+	a.wiki_link{
 		border-bottom: 1px dotted #cccccc;	
-		
-	}  
+	}
+	
+	a.wiki_link_ext{
+	 background: url(ext.png) center right no-repeat; padding-right: 14px; }		   
 		
 	#main_navigation{
 		height: 20px;

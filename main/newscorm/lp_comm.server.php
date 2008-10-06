@@ -233,8 +233,8 @@ function save_objectives($lp_id,$user_id,$view_id,$item_id,$objectives=array())
 		foreach($objectives as $index=>$objective){
 			//error_log(__FILE__.' '.__LINE__.' '.$objectives[$index][0],0);
 			$mylpi->add_objective($index,$objectives[$index]);
-			$mylpi->write_objectives_to_db();
 		}
+        $mylpi->write_objectives_to_db();
 	}
 	return $objResponse;
 }

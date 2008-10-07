@@ -4543,7 +4543,7 @@ class learnpath {
 				if($this->encoding=='UTF-8')
 				{
 					$row['title'] = utf8_decode($row['title']);
-				}				
+				}		
 				
 				$return .= '<p class="lp_title">' . stripslashes($row['title']) . '</p>';
 				//$return .= '<p class="lp_text">' . ((trim($row['description']) == '') ? 'no description' : stripslashes($row['description'])) . '</p>';
@@ -4594,7 +4594,7 @@ class learnpath {
 			
 			$res = api_sql_query($sql, __FILE__, __LINE__);
 			$row = Database::fetch_array($res);
-
+			
 			switch($row['item_type'])
 			{
 				case 'dokeos_chapter': case 'dir' : case 'asset' : case 'sco' :
@@ -4624,6 +4624,7 @@ class learnpath {
 							lp.id = " . $item_id;
 					$res_step = api_sql_query($sql_step, __FILE__, __LINE__);
 					$row_step = Database::fetch_array($res_step);
+					
 					
 					$return .= $this->display_manipulate($item_id, $row['item_type']);
 					$return .= $this->display_document_form('edit', $item_id, $row_step);
@@ -4817,7 +4818,9 @@ class learnpath {
 			$item_title			= '';
 			$item_description	= '';
 		}
-				
+		
+		$item_title = mb_convert_encoding($item_title,$charset,$this->encoding);
+		
 		$return = '<div style="margin:3px 12px;">';
 			
 			if($id != 0 && is_array($extra_info))
@@ -6088,6 +6091,7 @@ class learnpath {
 		if($id != 0 && is_array($extra_info))
 		{
 			$item_title			= stripslashes($extra_info['title']);
+			
 			$item_description	= stripslashes($extra_info['description']);	
             $item_terms         = stripslashes($extra_info['terms']);        
 			if(empty($item_title))
@@ -6130,7 +6134,7 @@ class learnpath {
 			$item_title			= '';
 			$item_description	= '';
 		}
-			
+		
 		$return = '<div style="margin:3px 12px;">';
 			
 			if($id != 0 && is_array($extra_info))
@@ -6205,9 +6209,14 @@ class learnpath {
 			require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 			
 			$form = new FormValidator('form','POST',api_get_self()."?".$_SERVER["QUERY_STRING"],'','enctype="multipart/form-data"');
-			$defaults["title"]=mb_convert_encoding($item_title,$charset,$this->encoding);
-			$defaults["description"]=mb_convert_encoding($item_description,$charset,$this->encoding);			
 			
+			$defaults["title"] = html_entity_decode($item_title);
+            $defaults["title"]=mb_convert_encoding($defaults["title"],$charset,$this->encoding);
+            if(empty($defaults["title"]))
+            {
+                    $defaults["title"] = html_entity_decode($item_title);
+            }
+			$defaults["description"]=mb_convert_encoding($item_description,$charset,$this->encoding);
 		
 			$form->addElement('html',$return);
 						

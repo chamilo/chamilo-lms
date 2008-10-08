@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseSelectForm.class.php 15429 2008-05-26 20:34:37Z yannoo $
+// $Id: CourseSelectForm.class.php 16451 2008-10-08 07:57:29Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -89,6 +89,16 @@ class CourseSelectForm
 			}
 		</script>		
 		<?php
+
+		//get destination course title
+		if(!empty($hidden_fields['destination_course']))
+		{
+			require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+			$course_infos = CourseManager::get_course_information($hidden_fields['destination_course']);
+			echo '<h3>';
+			echo get_lang('DestinationCourse').' : '.$course_infos['title'];
+			echo '</h3>';
+		}
 
 		echo '<p>';
 		echo get_lang('SelectResources');

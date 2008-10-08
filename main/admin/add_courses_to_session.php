@@ -88,6 +88,10 @@ function search_courses($needle)
 	$return = '';
 	if(!empty($needle))
 	{
+		// xajax send utf8 datas... datas in db can be non-utf8 datas
+		$charset = api_get_setting('platform_charset');
+		$needle = mb_convert_encoding($needle, $charset, 'utf-8');
+		
 		// search users where username or firstname or lastname begins likes $needle
 		$sql = 'SELECT course.code, course.visual_code, course.title, session_rel_course.id_session
 				FROM '.$tbl_course.' course

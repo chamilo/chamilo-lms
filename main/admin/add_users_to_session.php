@@ -89,8 +89,14 @@ function search_users($needle)
 	
 	$xajax_response = new XajaxResponse();
 	$return = '';
+				
 	if(!empty($needle))
 	{
+		
+		// xajax send utf8 datas... datas in db can be non-utf8 datas
+		$charset = api_get_setting('platform_charset');
+		$needle = mb_convert_encoding($needle, $charset, 'utf-8');
+		
 		// search users where username or firstname or lastname begins likes $needle
 		$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
 				WHERE (username LIKE "'.$needle.'%"
@@ -98,12 +104,11 @@ function search_users($needle)
 				OR lastname LIKE "'.$needle.'%")
 				ORDER BY lastname, firstname, username
 				LIMIT 10';
-				
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		
 		while($user = Database :: fetch_array($rs))
 		{
-			$return .= '<a href="#" onclick="add_user_to_session(\''.$user['user_id'].'\',\''.$user['firstname'].' '.$user['lastname'].' ('.$user['username'].')'.'\')">'.$user['firstname'].' '.$user['lastname'].' ('.$user['username'].')</a><br />';
+			$return .= '<a href="#" onclick="add_user_to_session(\''.$user['user_id'].'\',\''.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')'.'\')">'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</a><br />';
 		}
 	}
 	$xajax_response -> addAssign('ajax_list_users','innerHTML',utf8_encode($return));

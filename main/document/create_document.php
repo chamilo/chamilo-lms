@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 15984 2008-08-13 17:24:24Z juliomontoya $
+// $Id: create_document.php 16447 2008-10-08 00:47:01Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -286,6 +286,7 @@ function document_exists($filename)
 	$filename = replace_dangerous_char($filename);
 	return !file_exists($filepath.$filename.'.html');
 }
+
 // Change the default renderer for the filename-field to display the dir and extension
 $renderer = & $form->defaultRenderer();
 //$filename_template = str_replace('{element}', "<tt>$display_dir</tt> {element} <tt>.html</tt>", $renderer->_elementTemplate);
@@ -308,8 +309,8 @@ else
 {		
 	//$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles" id="filename"  onblur="check_if_still_empty()"');
 	// replace the 	add_textfield with this 
-	$group[]=$form->createElement('text','filename',get_lang('FileName'),'class="input_titles" id="filename"  onblur="check_if_still_empty()"');
-	//$form->applyFilter('filename','trim');		
+	$group[]=$form->createElement('text','filename',get_lang('FileName'),'class="input_titles" id="filename"  onblur="check_if_still_empty()"');		
+	$form->applyFilter('filename','trim');	
 	//$form->addRule('filename', get_lang('ThisFieldIsRequired'), 'required');				
 	//$form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
 }
@@ -328,7 +329,7 @@ if (api_get_setting('use_document_title') == 'true')
 {			
 	$form->addGroupRule('filename_group', array(
 	  'title' => array(
-	    array(get_lang('ThisFieldIsRequired'), 'required'),
+	    array(get_lang('ThisFieldIsRequired'), 'required'),	   
 	    array(get_lang('FileExists'),'callback', 'document_exists')
 	    )
 	));
@@ -336,11 +337,11 @@ if (api_get_setting('use_document_title') == 'true')
 else
 {
 	$form->addGroupRule('filename_group', array(
-	  'filename' => array(
-	    array(get_lang('ThisFieldIsRequired'), 'required'),
+	  'filename' => array(	   	    
+		array(get_lang('ThisFieldIsRequired'), 'required'),
 	    array(get_lang('FileExists'),'callback', 'document_exists')
 	    )
-	));
+	));		
 }
 
 $form->addElement('submit', 'submit', get_lang('Ok'));

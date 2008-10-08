@@ -60,7 +60,7 @@ $tbl_class_rel_user					= Database::get_main_table(TABLE_MAIN_CLASS_USER);
 
 $id_session = $_GET['id_session'];
 
-$sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id
+$sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end
 		FROM '.$tbl_session.'
 		LEFT JOIN '.$tbl_user.'
 			ON id_coach = user_id
@@ -146,6 +146,29 @@ api_display_tool_title($tool_name);
 		 ?>
 	</td>
 </tr>
+
+<!-- show nb_days_before and nb_days_after only if they are different from 0 -->
+<?php if(intval($session['nb_days_access_before_beginning'])!=0) : ?>
+<tr>
+	<td>
+		<?php echo ucfirst(get_lang('DaysBefore')) ?> :
+	</td>
+	<td>
+		<?php echo intval($session['nb_days_access_before_beginning']) ?>
+	</td>
+</tr>
+<?php endif; ?>
+
+<?php if(intval($session['nb_days_access_after_end'])!=0) : ?>
+<tr>
+	<td>
+		<?php echo ucfirst(get_lang('DaysAfter')) ?> :
+	</td>
+	<td>
+		<?php echo intval($session['nb_days_access_after_end']) ?>
+	</td>
+</tr>
+<?php endif; ?>
 </table>
 
 <br />

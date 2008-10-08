@@ -49,7 +49,7 @@ function search_coachs($needle)
 		
 		while($user = Database :: fetch_array($rs))
 		{
-			$return .= '<a href="#" onclick="fill_coach_field(\''.$user['username'].'\')">'.$user['firstname'].' '.$user['lastname'].' ('.$user['username'].')</a><br />';
+			$return .= '<a href="#" onclick="fill_coach_field(\''.$user['username'].'\')">'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</a><br />';
 		}
 	}
 	$xajax_response -> addAssign('ajax_list_coachs','innerHTML',utf8_encode($return));

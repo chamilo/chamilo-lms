@@ -1,9 +1,10 @@
+//TODO : make the language file work
 
 FCKCommands.RegisterCommand(
 	'EmbedMovies',
 	new FCKDialogCommand(
 		'EmbedMovies',
-		FCKLang["DlgEmbedMoviesDlgTitle"],
+		'Embed movies',
 		FCKPlugins.Items['fckEmbedMovies'].Path + 'fck_embedmovies.html',
 		450,
 		370

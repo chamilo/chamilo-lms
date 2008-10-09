@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 16025 2008-08-19 18:29:30Z juliomontoya $
+* 	@version $Id: exercise_result.php 16475 2008-10-09 10:07:27Z elixir_julian $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -338,7 +338,21 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 	<td width="45%" style="border-bottom: 1px solid #4171B5;">
 		<?php
 		$answerComment=api_parse_tex($answerComment);
-		if($studentChoice) echo nl2br(make_clickable(stripslashes($answerComment))); else echo '&nbsp;'; ?>
+		if($studentChoice)
+		{
+			if(!$answerCorrect)
+			{
+				echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable(stripslashes($answerComment))).'</span>';
+			}
+			else{
+				echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable(stripslashes($answerComment))).'</span>';
+			}
+		}
+		else
+		{
+			echo '&nbsp;';
+		} 
+		?>
 	</td>
 	</tr>
 	<?php

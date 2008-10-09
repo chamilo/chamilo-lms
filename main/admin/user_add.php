@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 15105 2008-04-25 08:38:20Z elixir_inter $
+<?php // $Id: user_add.php 16479 2008-10-09 17:31:44Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -347,13 +347,16 @@ if( $form->validate())
 		}
 		else
 		{
-			$tok = Security::get_token();
-			header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserAdded').'&sec_token='.$tok));
+			$tok = Security::get_token();		
+			header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserAdded')).'&sec_token='.$tok);
 			exit ();
 		}
 	}
-}else{
-	if(isset($_POST['submit'])){
+}
+else
+{
+	if(isset($_POST['submit']))
+	{
 		Security::clear_token();
 	}
 	$token = Security::get_token();

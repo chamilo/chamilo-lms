@@ -347,7 +347,7 @@ if ($_GET['action']=='more')
 	echo '<ul>';
 	if(api_is_allowed_to_edit() || api_is_platform_admin())
 	{
-	//TODO: config area and private stats
+		//TODO: config area and private stats
 	
 	}
 	
@@ -363,20 +363,135 @@ if ($_GET['action']=='more')
 	//Submenu Most changed pages
 	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mostchanged&group_id='.$_clean['group_id'].'">'.get_lang('MostChangedPages').'</a></li>';	
 	
-	//Submenu active users
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mactiveusers&group_id='.$_clean['group_id'].'">'.get_lang('MostActiveUsers').'</a></li>';//TODO	
-				
+	//Submenu Most linked pages
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mostlinked&group_id='.$_clean['group_id'].'">'.get_lang('MostLinkedPages').'</a></li>';//TODO
+	
+	//Submenu Dead end pages
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=deadend&group_id='.$_clean['group_id'].'">'.get_lang('DeadEndPages').'</a></li>';//TODO	
+	
+	//Submenu Most new pages (not versions)
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mnew&group_id='.$_clean['group_id'].'">'.get_lang('MostNewPages').'</a></li>';//TODO
+	
+	//Submenu Most long pages
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mnew&group_id='.$_clean['group_id'].'">'.get_lang('MostLongPages').'</a></li>';//TODO
+	
+	//Submenu Protected pages
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=protected&group_id='.$_clean['group_id'].'">'.get_lang('ProtectedPages').'</a></li>';//TODO
+	
+	//Submenu Hidden pages
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=hidden&group_id='.$_clean['group_id'].'">'.get_lang('HiddenPages').'</a></li>';//TODO	
+	
+	//Submenu Most discuss pages
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mdiscuss&group_id='.$_clean['group_id'].'">'.get_lang('MostDiscussPages').'</a></li>';//TODO	
+	
+	//Submenu Best scored pages
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mscored&group_id='.$_clean['group_id'].'">'.get_lang('BestScoredPages').'</a></li>';//TODO	
+	
+	//Submenu Pages with more progress
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mprogress&group_id='.$_clean['group_id'].'">'.get_lang('MProgressPages').'</a></li>';//TODO	
+	
+	//Submenu Most active users
+	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mactiveusers&group_id='.$_clean['group_id'].'">'.get_lang('MostActiveUsers').'</a></li>';
+		
+	//Submenu Most active users in discuss
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mactiveusers&group_id='.$_clean['group_id'].'">'.get_lang('MostDiscussUsers').'</a></li>';//TODO
+	
+	//Submenu Individual assignments
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=assignments&group_id='.$_clean['group_id'].'">'.get_lang('Assignments').'</a></li>';//TODO
+	
+	//Submenu Delayed assignments
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=delayed&group_id='.$_clean['group_id'].'">'.get_lang('DelayedAssignments').'</a></li>';//TODO
+	
+	//Submenu Random page
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mrandom&group_id='.$_clean['group_id'].'">'.get_lang('RandomPage').'</a></li>';//TODO
+			
     echo '</ul>';	
 }
 
 /////////////////////// Most active users /////////////////////// Juan Carlos Raña Trabado
+
 if ($_GET['action']=='mactiveusers')
 {
 	echo '<br>';
 	echo '<b>'.get_lang('MostActiveUsers').'</b><br>'; 
-	echo '<hr>';
-	//TODO
+	echo '<hr>';	
+	
+	$sql='SELECT *, COUNT(*) AS NEDIT FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY user_id ORDER BY NEDIT DESC LIMIT 10'; //first ten users with more versions
+	$allpages=api_sql_query($sql,__FILE__,__LINE__);		
+	
+	echo '<ul>';	
+	while ($row=Database::fetch_array($allpages))
+	{		
+		$userinfo=Database::get_user_info_from_id($row['user_id']);		
+		echo '<li><a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a> -> '.$row['NEDIT'].' <a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=usercontrib&user_id='.urlencode($row['user_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.get_lang('Contributions').'</a></li>';
+	}
+	echo '</ul>';
+	
+}
 
+/////////////////////// User contributions /////////////////////// Juan Carlos Raña Trabado
+
+if ($_GET['action']=='usercontrib')
+{
+	$userinfo=Database::get_user_info_from_id($_GET['user_id']);
+	echo '<br>';
+	echo '<b>'.get_lang('UserContributions').': '.$userinfo['lastname'].', '.$userinfo['firstname'].'</b><br>';
+	echo '<hr>';	
+		
+	
+	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
+	{
+		$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND user_id="'.$_GET['user_id'].'" ORDER BY reflink,version ASC';		
+	}
+	else
+	{
+		$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND user_id="'.$_GET['user_id'].'" AND visibility=1 ORDER BY reflink,version ASC';	
+	}	
+	
+	$allpages=api_sql_query($sql,__FILE__,__LINE__);
+	
+	echo '<ul>';	
+	while ($row=Database::fetch_array($allpages))
+	{		
+		//fix assignment icon		
+		if($row['assignment']==1)
+		{
+			$ShowAssignment='<img src="../img/wiki/assignment.gif" />';
+		}
+		elseif ($row['assignment']==2)
+		{
+			$ShowAssignment='<img src="../img/wiki/works.gif" />'; 
+		}
+		elseif ($row['assignment']==0)
+		{	
+			$ShowAssignment='<img src="../img/wiki/trans.gif" />';			
+		}
+		
+		//fix time
+		$year = substr($row['timestamp'], 0, 4);
+		$month = substr($row['timestamp'], 5, 2);
+		$day = substr($row['timestamp'], 8, 2);
+		$hours=substr($row['timestamp'], 11,2);
+		$minutes=substr($row['timestamp'], 14,2);
+		$seconds=substr($row['timestamp'], 17,2);
+				
+		//fix comment
+		$comment=$row['comment'];
+		if (!empty($comment))
+		{ 
+			$showcomment= ' ... '.get_lang('Comments').':  <input name="comment" value="'.$row['comment'].'"  readonly="readonly" width="5"/>';
+		}	
+		else
+		{
+			$showcomment= ' ... '. get_lang('Comments').':  <input name="comment" value="---"  readonly="readonly" width="5"/>';
+		}
+	
+		echo '<li>'.$day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds.' ... '.$ShowAssignment.'<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($row['reflink']).'&amp;view='.$row['id'].'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].' </a>('.get_lang('Version').' '.$row['version'].') ... '.get_lang('Progress').': '.$row['progress'].'%'.$showcomment.'</li>';		
+		
+		
+	}
+	echo '</ul>';	
+	
 }
 
 /////////////////////// Most changed pages /////////////////////// Juan Carlos Raña Trabado
@@ -384,15 +499,38 @@ if ($_GET['action']=='mactiveusers')
 if ($_GET['action']=='mostchanged')
 {
 	echo '<br>';
-	echo '<b>'.get_lang('MostChanges').'</b><br>'; 
+	echo '<b>'.get_lang('MostChangesPages').'</b><br>'; 
 	echo '<hr>';
 	
-	$sql='SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink ORDER BY MAX DESC, reflink LIMIT 10'; //first ten users
+	
+	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
+	{
+		$sql='SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink ORDER BY MAX DESC, reflink LIMIT 10'; //first ten users
+	}
+	else
+	{	
+		$sql='SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND visibility=1 GROUP BY reflink ORDER BY MAX DESC, reflink LIMIT 10';//first ten users
+	}	
+	
 	$allpages=api_sql_query($sql,__FILE__,__LINE__);	
 	echo '<ul>';	
 	while ($row=Database::fetch_array($allpages))
 	{	
-		echo '<li><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($row['reflink']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a> '.get_lang('With').' '.$row['MAX'].' '.get_lang('Changes').'</li>';	//TODO:check if hidden and assignment mode
+		//fix assignment icon		
+		if($row['assignment']==1)
+		{
+			$ShowAssignment='<img src="../img/wiki/assignment.gif" />';
+		}
+		elseif ($row['assignment']==2)
+		{
+			$ShowAssignment='<img src="../img/wiki/works.gif" />'; 
+		}
+		elseif ($row['assignment']==0)
+		{	
+			$ShowAssignment='<img src="../img/wiki/trans.gif" />';			
+		}	
+	
+		echo '<li>'.$ShowAssignment.'<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($row['reflink']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a> '.get_lang('With').' '.$row['MAX'].' '.get_lang('Changes').'</li>';	//TODO:check if hidden and assignment mode
 	}
 	echo '</ul>';		
 	
@@ -405,13 +543,36 @@ if ($_GET['action']=='mvisited')
 	echo '<br>';
 	echo '<b>'.get_lang('MostVisitedPages').'</b><br>'; 
 	echo '<hr>';	
+		
 	
-	$sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink ORDER BY tsum DESC, reflink LIMIT 10'; //first ten pages
+		if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
+		{
+			$sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink ORDER BY tsum DESC, reflink LIMIT 10'; //first ten pages	
+		}
+		else
+		{			
+			$sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND visibility=1 GROUP BY reflink ORDER BY tsum DESC, reflink LIMIT 10'; //first ten pages
+		}		
+	
 	$allpages=api_sql_query($sql,__FILE__,__LINE__);
 	echo '<ul>';	
 	while ($row=Database::fetch_array($allpages))
 	{
-		echo '<li><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($row['reflink']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a> '.get_lang('With').' '.$row['tsum'].' '.get_lang('Visits').'</li>';	//TODO:check if hidden and assignment mode
+		//fix assignment icon		
+		if($row['assignment']==1)
+		{
+			$ShowAssignment='<img src="../img/wiki/assignment.gif" />';
+		}
+		elseif ($row['assignment']==2)
+		{
+			$ShowAssignment='<img src="../img/wiki/works.gif" />'; 
+		}
+		elseif ($row['assignment']==0)
+		{	
+			$ShowAssignment='<img src="../img/wiki/trans.gif" />';			
+		}	
+	
+		echo '<li>'.$ShowAssignment.'<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($row['reflink']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a> '.get_lang('With').' '.$row['tsum'].' '.get_lang('Visits').'</li>';	//TODO:check if hidden and assignment mode
 	}
 	echo '</ul>';
 }
@@ -494,7 +655,7 @@ if ($_GET['action']=='orphaned')
 	while ($row=Database::fetch_array($allpages))
 	{			
 		//$row['linksto']= str_replace("\n".$row["reflink"]."\n", "\n", $row["linksto"]); //remove self reference. TODO check
-		$rf = explode("\n", trim($row["linksto"]));			     			    
+		$rf = explode(" ", trim($row["linksto"]));	//TODO: check fix replace explode("\n", trim($row["linksto"])) with  explode(" ", trim($row["linksto"]))	    
 		
 		$refs = array_merge($refs, $rf);
 		if ($n++ > 299)
@@ -503,27 +664,50 @@ if ($_GET['action']=='orphaned')
 			$n=0;
 		} // (clean-up only every 300th loop). Thanks to Erfurt Wiki				
 	}
-			
+
 	//search each name of list linksto into list reflink
 	foreach($pages as $v)
 	{
 		if(!in_array($v, $refs))
 		{		
-			$orphaned[] = $v;		
+			$orphaned[] = $v;	
 		}	
 	}
 	
 	//change reflink by title
 	foreach($orphaned as $vshow)
-	{
-		$sql='SELECT  *  FROM   '.$tbl_wiki.' WHERE '.$groupfilter.' AND reflink="'.$vshow.'" GROUP BY reflink';
-		$allpages=api_sql_query($sql,__FILE__,__LINE__);
+	{		
+		if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
+		{
+			$sql='SELECT  *  FROM   '.$tbl_wiki.' WHERE '.$groupfilter.' AND reflink="'.$vshow.'" GROUP BY reflink';	
+		}
+		else
+		{
+			$sql='SELECT  *  FROM   '.$tbl_wiki.' WHERE '.$groupfilter.' AND reflink="'.$vshow.'" AND visibility=1 GROUP BY reflink';		
+		}			
+		
+		$allpages=api_sql_query($sql,__FILE__,__LINE__);		
 		
 		echo '<ul>';
 		while ($row=Database::fetch_array($allpages))
 		{
 			//$sort_orphaned[]=$row['title']; //TODO: check to delete this line	
-			echo '<li><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($row['reflink']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a></li>';	//TODO:check if hidden and assignment mode
+			
+			//fix assignment icon		
+			if($row['assignment']==1)
+			{
+				$ShowAssignment='<img src="../img/wiki/assignment.gif" />';
+			}
+			elseif ($row['assignment']==2)
+			{
+				$ShowAssignment='<img src="../img/wiki/works.gif" />'; 
+			}
+			elseif ($row['assignment']==0)
+			{	
+				$ShowAssignment='<img src="../img/wiki/trans.gif" />';			
+			}			
+			
+			echo '<li>'.$ShowAssignment.'<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($row['reflink']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a></li>';
 		}
 		echo '</ul>';
 	}
@@ -704,15 +888,16 @@ if ($_GET['action']=='links')
 		$result=api_sql_query($sql,__FILE__,__LINE__); //necessary for pages with compound name. TODO: check if necessay after have fixed wanted pages with _
 						
 		$row=Database::fetch_array($result);	
-		echo $LinksPagesFrom.': <a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a>';	
-			
+		echo $LinksPagesFrom.': <a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a>';
 
 		if ($page==get_lang('DefaultTitle'))
 		{
 			$page='index';
 		}		
 	
-		$sql="SELECT * FROM ".$tbl_wiki." WHERE  ".$groupfilter." AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))."%' GROUP BY reflink ORDER BY title ASC";		
+		$sql="SELECT * FROM ".$tbl_wiki." WHERE  ".$groupfilter." AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' GROUP BY reflink ORDER BY title ASC"; //add blank space after like '%" " %' to identify each word
+		
+				
 		$result=api_sql_query($sql,__LINE__,__FILE__);
 	
 		//show result	
@@ -1726,6 +1911,7 @@ author Juan Carlos Raña Trabado
 **/
 function detect_external_link($input)
 {
+
 	$exlink='<a href=';
 	$exlinkStyle='<a class="wiki_link_ext" href=';	
 	$output=str_replace($exlink, $exlinkStyle, $input);		
@@ -3104,10 +3290,10 @@ function auto_add_page_users($assignment_type)
 		$photo= '<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  width="40" height="50" align="top"  title="'.$name.'"  />';
 	}			 
 	
-	//teacher assignement title
+	//teacher assignment title
 	$title_orig=$_POST['title'];
 	
-	//teacher assignement reflink
+	//teacher assignment reflink
 	$link2teacher=$_POST['title']= $title_orig."_uass".api_get_user_id();
 	
 	//first: teacher name, photo, and assignment description (original content)	

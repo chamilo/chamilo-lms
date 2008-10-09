@@ -544,12 +544,12 @@ if ($_GET['action']=='mvisited')
 	echo '<hr>';	
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
-	{
-		$sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink ORDER BY tsum DESC, reflink';
+	{	
+		$sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink'; // warning GROUP BY reflink don't return the last version, always the first id				
 	}
 	else
 	{			
-		$sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND visibility=1 GROUP BY reflink ORDER BY tsum DESC, reflink';
+		$sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND visibility=1 GROUP BY reflink'; // warning GROUP BY reflink don't return the last version, always the first id
 	}		
 	
 	$allpages=api_sql_query($sql,__FILE__,__LINE__);
@@ -560,17 +560,6 @@ if ($_GET['action']=='mvisited')
 		$row = array ();
 		while ($obj = mysql_fetch_object($allpages))
 		{
-			//get author
-			$userinfo=Database::get_user_info_from_id($obj->user_id);
-			
-			//get time
-			$year 	 = substr($obj->timestamp, 0, 4);
-			$month	 = substr($obj->timestamp, 5, 2);
-			$day 	 = substr($obj->timestamp, 8, 2);
-			$hours   = substr($obj->timestamp, 11,2);
-			$minutes = substr($obj->timestamp, 14,2);
-			$seconds = substr($obj->timestamp, 17,2);			
-			
 			//get type assignment icon		
 			if($obj->assignment==1)
 			{
@@ -588,19 +577,15 @@ if ($_GET['action']=='mvisited')
 			$row = array ();
 			$row[] =$ShowAssignment;
 			$row[] = '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';			
-			$row[] ='<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>';
-			$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;
 			$row[] = $obj->tsum;			
 			$rows[] = $row;
 		}
 	
-		$table = new SortableTableFromArrayConfig($rows,4,10,'MostVisitedPages_table','','','DESC');
+		$table = new SortableTableFromArrayConfig($rows,2,10,'MostVisitedPages_table','','','DESC');
 		$table->set_additional_parameters(array('cidReq' =>$_GET['cidReq'],'action'=>$_GET['action'],'group_id'=>Security::remove_XSS($_GET['group_id'])));		
 		$table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
-		$table->set_header(1,get_lang('Title'), true);
-		$table->set_header(2,get_lang('Author'), true);
-		$table->set_header(3,get_lang('Date'), true);
-		$table->set_header(4,get_lang('Visits'), true);
+		$table->set_header(1,get_lang('Title'), true);	
+		$table->set_header(2,get_lang('Visits'), true);
 		$table->display();
 	}	
 }
@@ -619,7 +604,8 @@ if ($_GET['action']=='wanted')
 
 	//get name pages
 	$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink ORDER BY reflink ASC';
-	$allpages=api_sql_query($sql,__FILE__,__LINE__);	
+	$allpages=api_sql_query($sql,__FILE__,__LINE__);
+		
 	while ($row=Database::fetch_array($allpages))
 	{
 		$pages[] = $row['reflink'];
@@ -798,103 +784,110 @@ if ($_GET['action']=='deletewiki')
 
 
 /////////////////////// search pages /////////////////////// Juan Carlos Raña Trabado
+//// 1 Searchpages: input search
 
 if ($_GET['action']=='searchpages')
 {
     echo '<br>'; 
     echo '<b>'.$SearchPages.'</b>'; 
     echo '<hr>';
-	
+		
 	if (!$_POST['Skeyword'])
 	{	
-		echo '<form id="fsearch" method="POST" action="index.php?action=searchpages">';		
+		echo '<form id="fsearch" method="POST" action="index.php?action=showsearchpages">';		
 		echo '<input type="text" name="Skeyword" >';
 		echo '<input type="submit" value="'.get_lang('Search').'"/></br></br>';	
 		echo '<input type="checkbox" name="Scontent" value="1"> '.get_lang('AlsoSearchContent');
 		echo '</form>';		
 	}
+}
+
+//// 2 SearchPages: find and show pages
+
+if ($_GET['action']=='showsearchpages')
+{
+	echo '<br>'; 
+    echo '<b>'.$Search.'</b>: '.$_POST['Skeyword']; //TODO: post is lost when a table has some pages
+    echo '<hr>';
+	
+	$_clean['group_id']=(int)$_SESSION['_gid'];	
+	
+	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
+	{
+		if($_POST['Scontent']=="1")
+		{
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND title LIKE '%".$_POST['Skeyword']."%' OR content LIKE '%".$_POST['Skeyword']."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink)";// warning don't use group by reflink because don't return the last version			
+		}
+		else
+		{
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND title LIKE '%".$_POST['Skeyword']."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink)";// warning don't use group by reflink because don't return the last version
+		}
+	}
 	else
 	{	
 		if($_POST['Scontent']=="1")
 		{
-			$sql="SELECT * FROM ".$tbl_wiki." WHERE  ".$groupfilter." AND title LIKE '%".$_POST['Skeyword']."%' OR content LIKE '%".$_POST['Skeyword']."%' GROUP BY reflink ORDER BY title ASC";
+		
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND visibility=1 AND title LIKE '%".$_POST['Skeyword']."%' OR content LIKE '%".$_POST['Skeyword']."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink)";// warning don't use group by reflink because don't return the last version				
 		}
 		else
 		{
-			$sql="SELECT * FROM ".$tbl_wiki." WHERE  ".$groupfilter." AND title LIKE '%".$_POST['Skeyword']."%' GROUP BY reflink ORDER BY title ASC";
-		}
-
-		//show result	
-		$_clean['group_id']=(int)$_SESSION['_gid'];		
-		$result=api_sql_query($sql,__LINE__,__FILE__);	
-		
-		echo '<ul>';
-				
-		while ($row=Database::fetch_array($result))
-		{	
-			$userinfo=Database::get_user_info_from_id($row['user_id']);			
-			
-			//Show page to students if not is hidden. Show page to all teachers if is hidden. Mode assignments: show pages to student only if student it the author
-			if($row['visibility']==1 || api_is_allowed_to_edit() || api_is_platform_admin() || ($row['assignment']==2 && $row['visibility']==0 && (api_get_user_id()==$row['user_id'])))
-			{							
-				$year = substr($row['timestamp'], 0, 4);
-				$month = substr($row['timestamp'], 5, 2);
-				$day = substr($row['timestamp'], 8, 2);
-				$hours=substr($row['timestamp'], 11,2);
-				$minutes=substr($row['timestamp'], 14,2);
-				$seconds=substr($row['timestamp'], 17,2);
-				
-				//show teacher assignment
-				if($row['assignment']==1)
-				{
-				    //teachers assigment pages only list for teachers	
-				 	if(api_is_allowed_to_edit() || api_is_platform_admin())
-					{
-						$ShowAssignment='<img src="../img/wiki/assignment.gif" />';
-						echo '<li>';
-						echo '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$row['reflink'].'&group_id='.$_clean['group_id'].'">'.$ShowAssignment.$row['title'].'</a>';
-						
-						echo '...'.$userinfo['lastname'].', '.$userinfo['firstname']; 						
-						echo '...'.$day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds.'</li>'; 
-												 
-					 }
-			    }
-				//show student assignment
-				if ($row['assignment']==2)
-				{	
-				    //student assignment pages only list for each student author and for teachers
-					if ($row['user_id']==(int)api_get_user_id() || api_is_allowed_to_edit() || api_is_platform_admin())
-					{
-						$ShowAssignment='<img src="../img/wiki/works.gif" />';	
-						echo '<li>';
-						echo '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$row['reflink'].'&group_id='.$_clean['group_id'].'">'.$ShowAssignment.$row['title'].'</a>';
-									
-						echo '...'.$userinfo['lastname'].', '.$userinfo['firstname']; 								   
-						echo '...'.$day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds.'</li>';											
-					}
-				}
-				//show  wiki pages standard
-				if ($row['assignment']==0)
-				{
-					$ShowAssignment='<img src="../img/wiki/trans.gif" />';	
-				  	echo '<li>';
-					echo '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$row['reflink'].'&group_id='.$_clean['group_id'].'">'.$ShowAssignment.$row['title'].'</a>';
-				   
-					if ($row['user_id']<>0)
-					{
-						echo '...'.$userinfo['lastname'].', '.$userinfo['firstname']; 
-					}
-					else
-					{
-						echo  get_lang('Anonymous').' ('.$row[user_ip].')'; 
-					}		   
-					echo '...'.$day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds.'</li>'; 				
-				}			 
-			}
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND visibility=1 AND title LIKE '%".$_POST['Skeyword']."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink)";// warning don't use group by reflink because don't return the last version
 		}		
-		echo '</ul>';			
-	} 	
-}
+	}
+			
+	$result=api_sql_query($sql,__LINE__,__FILE__);				
+	
+	//show table
+	if (mysql_num_rows($result) > 0)
+	{
+		$row = array ();
+		while ($obj = mysql_fetch_object($result))
+		{
+			//get author
+			$userinfo=Database::get_user_info_from_id($obj->user_id);
+			
+			//get time
+			$year 	 = substr($obj->timestamp, 0, 4);
+			$month	 = substr($obj->timestamp, 5, 2);
+			$day 	 = substr($obj->timestamp, 8, 2);
+			$hours   = substr($obj->timestamp, 11,2);
+			$minutes = substr($obj->timestamp, 14,2);
+			$seconds = substr($obj->timestamp, 17,2);			
+			
+			//get type assignment icon		
+			if($obj->assignment==1)
+			{
+				$ShowAssignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDesc').'" />';
+			}
+			elseif ($obj->assignment==2)
+			{
+				$ShowAssignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWork').'" />';
+			}
+			elseif ($obj->assignment==0)
+			{	
+				$ShowAssignment='<img src="../img/wiki/trans.gif" />';			
+			}		
+		
+			$row = array ();				
+			$row[] =$ShowAssignment;
+			$row[] = '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';				
+			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';				
+			$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;				
+			$rows[] = $row;
+		}
+	
+		$table = new SortableTableFromArrayConfig($rows,1,10,'SearchPages_table','','','ASC');				
+		$table->set_additional_parameters(array('cidReq' =>$_GET['cidReq'],'action'=>$_GET['action'],'group_id'=>Security::remove_XSS($_GET['group_id'])));		
+		
+		$table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));			
+		$table->set_header(1,get_lang('Title'), true);		
+		$table->set_header(2,get_lang('Author'), true);
+		$table->set_header(3,get_lang('Date'), true);
+		
+		$table->display();
+	}		
+} 	
 
 
 ///////////////////////  What links here. Show pages that have linked this page /////////////////////// Juan Carlos Raña Trabado
@@ -1493,65 +1486,74 @@ if ($_GET['action']=='recentchanges')
 
 
 if ($_GET['action']=='allpages')
-{
+{	
+	echo '<br>';
+	echo '<b>'.get_lang('AllPages').'</b>'; 
+   	echo '<hr>';
+	
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 
-	$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' GROUP BY reflink ORDER BY title ASC'; //tasks grouped by reflink instead of tilte, because there may be pages with the same name but with different reflink. This is true of the tasks
-	
-	$result=api_sql_query($sql,__LINE__,__FILE__);
-	
-	echo  '<br>';
-	echo '<b>'.get_lang('AllPages').'</b>'; 
-   	echo '<hr>'; 
-	
-	echo '<ul>';
-	
-	while ($row=Database::fetch_array($result))
+
+
+	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
+	{	
+		$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE '.$groupfilter.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink)'; // warning don't use group by reflink because don't return the last version
+	}
+	else
+	{	
+		$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE '.$groupfilter.' AND visibility=1 AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink)'; // warning don't use group by reflink because don't return the last version				
+	}		
+
+	$allpages=api_sql_query($sql,__LINE__,__FILE__);	
+
+	//show table
+	if (mysql_num_rows($allpages) > 0)
 	{
-		$userinfo=Database::get_user_info_from_id($row['user_id']);			
-			
-		$year = substr($row['timestamp'], 0, 4);
-		$month = substr($row['timestamp'], 5, 2);
-		$day = substr($row['timestamp'], 8, 2);
-		$hours=substr($row['timestamp'], 11,2);
-		$minutes=substr($row['timestamp'], 14,2);
-		$seconds=substr($row['timestamp'], 17,2);
-			
-		$url_enc=urlencode($row['reflink']);	
-			
-		//Show page to students if isn't hidden. Show page to all teachers if is hidden. Mode assignments: If is hidden, show pages to student only if student is the author
-		if($row['visibility']==1 || api_is_allowed_to_edit() || api_is_platform_admin() || ($row['assignment']==2 && $row['visibility']==0 && (api_get_user_id()==$row['user_id'])))
+		$row = array ();
+		while ($obj = mysql_fetch_object($allpages))
 		{
-			if($row['assignment']==1)
-			{
-				if(api_is_allowed_to_edit() || api_is_platform_admin()) //Mode assignments: show pages assignment (task) only for teachers
-			 	{
-				 	$ShowAssignment='<img src="../img/wiki/assignment.gif" />';
-					 echo '<li><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$url_enc.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$ShowAssignment.$row['title'].'</a> ('.get_lang('AssignmentDesc').' '.$userinfo['firstname'].' '.$userinfo['lastname'].' )</li>';
-			   	}
-			}
+			//get author
+			$userinfo=Database::get_user_info_from_id($obj->user_id);
 			
-			if ($row['assignment']==2)
-			{	
-				//Mode assignments: show pages assignment (works) only for teachers. Also show pages to student only if student is the author.
-				if ($row['user_id']==(int)api_get_user_id() || api_is_allowed_to_edit() || api_is_platform_admin())
-				{
-				  $ShowAssignment='<img src="../img/wiki/works.gif" />';						 
-				  echo '<li><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$url_enc.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$ShowAssignment.$row['title'].'</a> ('.get_lang('AssignmentWork').' '.$userinfo['firstname'].' '.$userinfo['lastname'].' )</li>';
-				 }
-			}			
-			if ($row['assignment']==0)
+			//get time
+			$year 	 = substr($obj->timestamp, 0, 4);
+			$month	 = substr($obj->timestamp, 5, 2);
+			$day 	 = substr($obj->timestamp, 8, 2);
+			$hours   = substr($obj->timestamp, 11,2);
+			$minutes = substr($obj->timestamp, 14,2);
+			$seconds = substr($obj->timestamp, 17,2);			
+			
+			//get type assignment icon		
+			if($obj->assignment==1)
 			{
-			  	$ShowAssignment='<img src="../img/wiki/trans.gif" />';			
-			   	echo '<li><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$url_enc.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$ShowAssignment.$row['title'].'</a></li>';
-			}					
+				$ShowAssignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDesc').'" />';
+			}
+			elseif ($obj->assignment==2)
+			{
+				$ShowAssignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWork').'" />';
+			}
+			elseif ($obj->assignment==0)
+			{	
+				$ShowAssignment='<img src="../img/wiki/trans.gif" />';			
+			}		
+		
+			$row = array ();
+			$row[] =$ShowAssignment;
+			$row[] = '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
+			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';	
+			$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;					
+			$rows[] = $row;
 		}
-	}	
-	echo '</ul>';
+	
+		$table = new SortableTableFromArrayConfig($rows,1,10,'AllPages_table','','','ASC');
+		$table->set_additional_parameters(array('cidReq' =>$_GET['cidReq'],'action'=>$_GET['action'],'group_id'=>Security::remove_XSS($_GET['group_id'])));		
+		$table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
+		$table->set_header(1,get_lang('Title'), true);
+		$table->set_header(2,get_lang('Author'), true);
+		$table->set_header(3,get_lang('Date'), true);		
+		$table->display();
+	}
 }
-
-
-
 
 /////////////////////// discuss pages ///////////////////////
 

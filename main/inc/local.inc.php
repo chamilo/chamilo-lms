@@ -825,21 +825,10 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 			        	$_courseUser['role'] = 'Professor';
 			            $is_courseMember     = true;
 			            $is_courseTutor      = true;
+			            $is_courseAdmin = false;
 			            $is_courseCoach      = true;
 			            $is_sessionAdmin     = false;
-			            
-			            $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-			            
-			            $sql="SELECT status FROM ".$tbl_user." WHERE user_id = ".$_user['user_id']."";
-	
-			  			$result=api_sql_query($sql);
-			  			if(mysql_result($result,0,0)==1){
-			  				$is_courseAdmin = true;
-			  			}
-			  			else{
-			  				$is_courseAdmin = false;
-			  			}	           
-	
+			                 
 			            api_session_register('_courseUser');
 			        }
 			        else

@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 16410 2008-09-22 17:43:07Z juliomontoya $
+* 	@version $Id: create_new_survey.php 16486 2008-10-10 13:32:05Z elixir_inter $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -56,12 +56,16 @@ $table_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_course_survey_rel 	= Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
-if (!api_is_allowed_to_edit(false,true))
+// if user is not teacher or if he's a coach trying to access an element out of his session
+if (!api_is_allowed_to_edit())
 {
-	Display :: display_header();
-	Display :: display_error_message(get_lang('NotAllowed'), false);
-	Display :: display_footer();
-	exit;
+	if(!api_is_course_coach() || (!empty($_GET['survey_id']) && !api_is_element_in_the_session(TOOL_SURVEY,intval($_GET['survey_id']))))
+	{
+		Display :: display_header();
+		Display :: display_error_message(get_lang('NotAllowed'), false);
+		Display :: display_footer();
+		exit;
+	}
 }
 
 // getting the survey information

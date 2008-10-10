@@ -26,7 +26,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey_list.php 16485 2008-10-10 12:49:22Z elixir_inter $
+* 	@version $Id: survey_list.php 16486 2008-10-10 13:32:05Z elixir_inter $
 *
 * 	@todo use quickforms for the forms
 */
@@ -85,6 +85,11 @@ if (isset($_GET['action']) AND $_GET['action'] == 'delete' AND isset($_GET['surv
 {
 	// getting the information of the survey (used for when the survey is shared)
 	$survey_data = survey_manager::get_survey($_GET['survey_id']);
+	if(api_is_course_coach() && intval($_SESSION['id_session']) != $survey_data['session_id'])
+	{ // the coach can't delete a survey not belonging to his session
+		api_not_allowed();
+		exit;
+	}
 	// if the survey is shared => also delete the shared content
 	if (is_numeric($survey_data['survey_share']))
 	{
@@ -103,6 +108,11 @@ if (isset($_GET['action']) AND $_GET['action'] == 'delete' AND isset($_GET['surv
 
 if(isset($_GET['action']) && $_GET['action'] == 'empty')
 {
+	if(!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_SURVEY,intval($_GET['survey_id']))))
+	{// the coach can't empty a survey not belonging to his session
+		api_not_allowed();
+		exit;
+	}
 	$return = survey_manager::empty_survey(intval($_GET['survey_id']));
 	if ($return)
 	{

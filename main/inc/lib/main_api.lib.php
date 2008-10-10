@@ -3097,4 +3097,41 @@ function api_is_course_visible_for_user( $userid = null, $cid = null ) {
 
     return $is_allowed_in_course;
 }
+
+/**
+ * Returns whether an element (forum, message, survey ...) belongs to a session or not
+ * @param String the tool of the element
+ * @param int the element id in database
+ * @param int the session_id to compare with element session id
+ * @return boolean true if the element is in the session, false else
+ */
+function api_is_element_in_the_session($tool, $element_id, $session_id=null)
+{
+	if(is_null($session_id))
+	{
+		$session_id = intval($_SESSION['id_session']);
+	}
+	
+	// get informations to build query depending of the tool
+	switch ($tool)
+	{
+		case TOOL_SURVEY : 
+			$table_tool = Database::get_course_table(TABLE_SURVEY);
+			$key_field = 'survey_id';
+			break;
+		default: return false;
+	}
+	
+	
+	$sql = 'SELECT session_id FROM '.$table_tool.' WHERE '.$key_field.'='.intval($element_id);
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	if($element_session_id = Database::result($rs, 0, 0))
+	{
+		if($element_session_id == intval($session_id))
+		{ // element belongs to the session
+			return true;
+		}
+	}
+	return false;
+}
 ?>

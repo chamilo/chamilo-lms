@@ -26,7 +26,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey_list.php 16410 2008-09-22 17:43:07Z juliomontoya $
+* 	@version $Id: survey_list.php 16485 2008-10-10 12:49:22Z elixir_inter $
 *
 * 	@todo use quickforms for the forms
 */
@@ -50,6 +50,8 @@ if (!api_is_allowed_to_edit(false,true)) //coach can see this
 	Display :: display_footer();
 	exit;
 }
+
+$extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey');
 
 // Database table definitions
 $table_survey 			= Database :: get_course_table(TABLE_SURVEY);
@@ -136,8 +138,8 @@ if ($_POST['action'])
 		Display :: display_error_message(get_lang('NoSurveysSelected'), false);
 	}
 }
-
-if (!api_is_course_coach())
+echo $extended_rights_for_coachs;
+if (!api_is_course_coach() || $extend_rights_for_coachs=='true')
 {
 	// Action links
 	echo '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.get_lang('CreateNewSurvey').'</a> | ';
@@ -146,7 +148,7 @@ if (!api_is_course_coach())
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.get_lang('Search').'</a>';
 
 //Load main content
-if (api_is_course_coach())
+if (api_is_course_coach() && $extend_rights_for_coachs=='false')
 	SurveyUtil::display_survey_list_for_coach();
 else
 	SurveyUtil::display_survey_list();

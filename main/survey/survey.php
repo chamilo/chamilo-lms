@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 16410 2008-09-22 17:43:07Z juliomontoya $
+* 	@version $Id: survey.php 16485 2008-10-10 12:49:22Z elixir_inter $
 *
 * 	@todo use quickforms for the forms
 */
@@ -42,7 +42,8 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 // coach can't view this page
-if (!api_is_allowed_to_edit(false,true) || api_is_course_coach() )
+$extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey');
+if (!api_is_allowed_to_edit(false,true) || (api_is_course_coach() && $extend_rights_for_coachs=='false'))
 {
 	Display :: display_header(get_lang('Survey'));
 	Display :: display_error_message(get_lang('NotAllowed'), false);

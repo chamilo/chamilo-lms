@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 16247 2008-09-05 10:10:13Z elixir_inter $
+<?php //$Id: agenda.php 16490 2008-10-10 14:29:52Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -345,34 +345,50 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			break;
 
 		case "edit":
-			if ($_POST['submit_event'])
-			{
-					store_edited_agenda_item();
-					display_agenda_items();
+			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id']) ) ) )
+			{ // a coach can only delete an element belonging to his session
+				if ($_POST['submit_event'])
+				{
+						store_edited_agenda_item();
+						display_agenda_items();
+				}
+				else
+				{
+						$id=(int)$_GET['id'];
+						show_add_form($id);
+				}
 			}
 			else
 			{
-					$id=(int)$_GET['id'];
-					show_add_form($id);
+				display_agenda_items();
 			}
 			break;
 
 		case "delete":
 			$id=(int)$_GET['id'];
-			delete_agenda_item($id);
-			display_agenda_items();
+			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) )
+			{ // a coach can only delete an element belonging to his session
+				delete_agenda_item($id);
+			}
+				display_agenda_items();
 			break;
 
 		case "showhide":
 			$id=(int)$_GET['id'];
-			showhide_agenda_item($id);
+			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) )
+			{ // a coach can only delete an element belonging to his session
+				showhide_agenda_item($id);
+			}
 			display_agenda_items();
 			break;
 		case "announce": //copying the agenda item into an announcement
 			$id=(int)$_GET['id'];
-			$ann_id = store_agenda_item_as_announcement($id);
-			$tool_group_link = (isset($_SESSION['toolgroup'])?'&toolgroup='.$_SESSION['toolgroup']:'');
-			Display::display_normal_message(get_lang('CopiedAsAnnouncement').'<a href="../announcements/announcements.php?id='.$ann_id.$tool_group_link.'">'.get_lang('NewAnnouncement').'</a>', false);
+			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) )
+			{ // a coach can only delete an element belonging to his session
+				$ann_id = store_agenda_item_as_announcement($id);
+				$tool_group_link = (isset($_SESSION['toolgroup'])?'&toolgroup='.$_SESSION['toolgroup']:'');
+				Display::display_normal_message(get_lang('CopiedAsAnnouncement').'<a href="../announcements/announcements.php?id='.$ann_id.$tool_group_link.'">'.get_lang('NewAnnouncement').'</a>', false);
+			}
 			display_agenda_items();
 	}
 }

@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 16481 2008-10-09 20:34:26Z yannoo $
+<?php //$Id: agenda.inc.php 16490 2008-10-10 14:29:52Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1628,8 +1628,11 @@ function display_agenda_items()
     
     	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())))
     	{
-    		echo '<th>'.get_lang('Modify');	
-    		echo '</th></tr>';
+    		if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) )
+			{ // a coach can only delete an element belonging to his session
+	    		echo '<th>'.get_lang('Modify');	
+	    		echo '</th></tr>';
+			}
     	}
     	
         /*--------------------------------------------------
@@ -1656,27 +1659,30 @@ function display_agenda_items()
     	
     	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())))
     	{
-    		echo '<td align="center">';
-    		// edit
-    		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$_GET['origin'].'&amp;action=edit&amp;id='.$myrow['id'].'" title="'.get_lang("ModifyCalendarItem").'">';
-    		echo "<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang("ModifyCalendarItem")."\" /></a>";
-    		
-    		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\">";
-    		echo "<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang("Delete")."\"/></a>";
-    		 	 
-    		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$_GET['origin'].'&amp;action=announce&amp;id='.$myrow['id'].'" title="'.get_lang("AddAnnouncement").'">';				
-    		echo "<img src=\"../img/announce_add.gif\" border=\"0\" alt=\"".get_lang("AddAnnouncement")."\"/></a>";
-    		if ($myrow['visibility']==1)
-    		{
-    			$image_visibility="visible";
-    		}
-    		else
-    		{
-    			$image_visibility="invisible";
-    		}
-    		echo 	'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$_GET['origin'].'&amp;action=showhide&amp;id='.$myrow['id'].'" title="'.get_lang("langVisible").'">',
-    				'<img src="../img/'.$image_visibility.'.gif" border="0" alt="'.get_lang("Visible").'" /></a>';
-    		echo '</td>';	
+    		if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) )
+			{ // a coach can only delete an element belonging to his session
+	    		echo '<td align="center">';
+	    		// edit
+	    		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$_GET['origin'].'&amp;action=edit&amp;id='.$myrow['id'].'" title="'.get_lang("ModifyCalendarItem").'">';
+	    		echo "<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang("ModifyCalendarItem")."\" /></a>";
+	    		
+	    		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\">";
+	    		echo "<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang("Delete")."\"/></a>";
+	    		 	 
+	    		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$_GET['origin'].'&amp;action=announce&amp;id='.$myrow['id'].'" title="'.get_lang("AddAnnouncement").'">';				
+	    		echo "<img src=\"../img/announce_add.gif\" border=\"0\" alt=\"".get_lang("AddAnnouncement")."\"/></a>";
+	    		if ($myrow['visibility']==1)
+	    		{
+	    			$image_visibility="visible";
+	    		}
+	    		else
+	    		{
+	    			$image_visibility="invisible";
+	    		}
+	    		echo 	'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$_GET['origin'].'&amp;action=showhide&amp;id='.$myrow['id'].'" title="'.get_lang("langVisible").'">',
+	    				'<img src="../img/'.$image_visibility.'.gif" border="0" alt="'.get_lang("Visible").'" /></a>';
+	    		echo '</td>';	
+			}
     	}
     	echo '</tr>';
     
@@ -1684,7 +1690,14 @@ function display_agenda_items()
     	
     	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())))
     	{
-    		$td_colspan= '<td colspan="3">';
+    		if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) )
+			{ // a coach can only delete an element belonging to his session
+    			$td_colspan= '<td colspan="3">';
+			}
+			else
+			{
+				$td_colspan= '<td colspan="2">';
+			}
     	}
     	else
     	{

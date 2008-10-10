@@ -137,8 +137,8 @@ function choose_image($file_name)
 /**
  * Transform the file size in a human readable format.
  *
- * @param  - $file_size (int) - Size of the file in bytes
- * @return - A human readable representation of the file size
+ * @param  int      Size of the file in bytes
+ * @return string A human readable representation of the file size
  */
 function format_file_size($file_size)
 {

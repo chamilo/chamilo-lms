@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 16070 2008-08-26 15:25:28Z elixir_inter $
+<?php // $Id: user_list.php 16483 2008-10-10 03:07:53Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -133,14 +133,15 @@ api_protect_admin_script();
 function login_user($user_id)
 {	
 	//init ---------------------------------------------------------------------
-	global $uidReset, $loginFailed, $_configuration;
+    //Load $_user to be sure we clean it before logging in
+	global $uidReset, $loginFailed, $_configuration, $_user;
 
 	$main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$main_admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 	$track_e_login_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
 	//logic --------------------------------------------------------------------
-	//unset($_user['user_id']); // uid not in session ? prevent any hacking
+	unset($_user['user_id']); // uid not in session ? prevent any hacking
 	if (!isset ($user_id))
 	{
 		$uidReset = true;
@@ -210,6 +211,7 @@ function login_user($user_id)
 			$_user['official_code'] = $user_data['official_code'];
 			$_user['picture_uri'] 	= $user_data['picture_uri'];
 			$_user['user_id']		= $user_data['user_id'];
+            $_user['status']        = $user_data['status'];
 
 			$is_platformAdmin = (bool) (!is_null($user_data['is_admin']));
 			$is_allowedCreateCourse = (bool) ($user_data['status'] == 1);

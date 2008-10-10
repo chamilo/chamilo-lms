@@ -3119,6 +3119,10 @@ function api_is_element_in_the_session($tool, $element_id, $session_id=null)
 			$table_tool = Database::get_course_table(TABLE_SURVEY);
 			$key_field = 'survey_id';
 			break;
+		case TOOL_ANNOUNCEMENT : 
+			$table_tool = Database::get_course_table(TABLE_ANNOUNCEMENT);
+			$key_field = 'id';
+			break;
 		default: return false;
 	}
 	

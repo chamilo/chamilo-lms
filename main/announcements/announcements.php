@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 16308 2008-09-11 09:40:47Z elixir_inter $
+<?php //$Id: announcements.php 16488 2008-10-10 14:15:54Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -335,8 +335,11 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		if (isset($_GET['id']) AND $_GET['id'] AND isset($_GET['action']) AND $_GET['action']=="showhide")
 		{
 			$id=intval(addslashes($_GET['id']));
-			change_visibility(TOOL_ANNOUNCEMENT,$id);
-			$message = get_lang("Visible");
+			if(!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id))
+			{
+				change_visibility(TOOL_ANNOUNCEMENT,$id);
+				$message = get_lang("Visible");
+			}
 		}
 	}
 
@@ -349,17 +352,22 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	{
 		//api_sql_query("DELETE FROM  $tbl_announcement WHERE id='$delete'",__FILE__,__LINE__);
 		$id=intval(addslashes($_GET['id']));
+		
+		if(!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id))
+		{
 
-		// tooledit : visibility = 2 : only visibile for platform administrator
-		api_sql_query("UPDATE $tbl_item_property SET visibility='2' WHERE tool='".TOOL_ANNOUNCEMENT."' and ref='".$id."'",__FILE__,__LINE__);
-
-		delete_added_resource("Ad_Valvas", $delete);
-
-		$id = null;
-		$emailTitle = null;
-		$newContent = null;
-
-		$message = get_lang("AnnouncementDeleted");
+			// tooledit : visibility = 2 : only visibile for platform administrator
+			api_sql_query("UPDATE $tbl_item_property SET visibility='2' WHERE tool='".TOOL_ANNOUNCEMENT."' and ref='".$id."'",__FILE__,__LINE__);
+	
+			delete_added_resource("Ad_Valvas", $delete);
+	
+			$id = null;
+			$emailTitle = null;
+			$newContent = null;
+	
+			$message = get_lang("AnnouncementDeleted");
+			
+		}
 	}
 
 	/*
@@ -371,16 +379,18 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	{
 
 		//api_sql_query("DELETE FROM $tbl_announcement",__FILE__,__LINE__);
-
-		api_sql_query("UPDATE $tbl_item_property SET visibility='2' WHERE tool='".TOOL_ANNOUNCEMENT."'",__FILE__,__LINE__);
-
-		delete_all_resources_type("Ad_Valvas");
-
-		$id = null;
-		$emailTitle = null;
-		$newContent = null;
-
-		$message = get_lang("AnnouncementDeletedAll");
+		if(api_is_allowed_to_edit())
+		{
+			api_sql_query("UPDATE $tbl_item_property SET visibility='2' WHERE tool='".TOOL_ANNOUNCEMENT."'",__FILE__,__LINE__);
+	
+			delete_all_resources_type("Ad_Valvas");
+	
+			$id = null;
+			$emailTitle = null;
+			$newContent = null;
+	
+			$message = get_lang("AnnouncementDeletedAll");
+		}
 	}
 
 	/*
@@ -394,34 +404,38 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 		// RETRIEVE THE CONTENT OF THE ANNOUNCEMENT TO MODIFY
 		$id = intval(addslashes($_GET['id']));
-		$sql="SELECT * FROM  $tbl_announcement WHERE id='$id'";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
-		$myrow = Database::fetch_array($result);
-
-		if ($myrow)
+		
+		if(!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id))
 		{
-			$announcement_to_modify 	= $myrow['id'];
-			$content_to_modify 		= $myrow['content'];
-
-			$title_to_modify 			= $myrow['title'];
-
-			if ($originalresource!=="no") // and !addresources)
+			$sql="SELECT * FROM  $tbl_announcement WHERE id='$id'";
+			$result = api_sql_query($sql,__FILE__,__LINE__);
+			$myrow = Database::fetch_array($result);
+	
+			if ($myrow)
 			{
-				//unset_session_resources();
-				edit_added_resources("Ad_Valvas", $announcement_to_modify);
-				$to=load_edit_users("announcement", $announcement_to_modify);
+				$announcement_to_modify 	= $myrow['id'];
+				$content_to_modify 		= $myrow['content'];
+	
+				$title_to_modify 			= $myrow['title'];
+	
+				if ($originalresource!=="no") // and !addresources)
+				{
+					//unset_session_resources();
+					edit_added_resources("Ad_Valvas", $announcement_to_modify);
+					$to=load_edit_users("announcement", $announcement_to_modify);
+				}
+	
+				$display_announcement_list = false;
 			}
-
-			$display_announcement_list = false;
-		}
-
-		if ($to=="everyone" OR !empty($_SESSION['toolgroup']))
-		{
-			$_SESSION['select_groupusers']="hide";
-		}
-		else
-		{
-			$_SESSION['select_groupusers']="show";
+	
+			if ($to=="everyone" OR !empty($_SESSION['toolgroup']))
+			{
+				$_SESSION['select_groupusers']="hide";
+			}
+			else
+			{
+				$_SESSION['select_groupusers']="show";
+			}
 		}
 
 	}
@@ -941,7 +955,7 @@ if(!$surveyid)
 			echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'><img src=\"../img/announce_add.gif\"> ".get_lang("AddAnnouncement")."</a><br/>";
 			
 		}
-		if (api_is_allowed_to_edit(false,true) && $announcement_number > 1)
+		if (api_is_allowed_to_edit() && $announcement_number > 1)
 		{
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\"><img src=\"../img/valves_delete.gif\"/> ".get_lang("AnnouncementDeleteAll")."</a>\n";
 		}	// if announcementNumber > 1
@@ -1146,7 +1160,7 @@ if (isset($message) && $message == true)
 		//$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
 		$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_user['user_id']);
 
-		if (api_is_allowed_to_edit(false,true) )
+		if (api_is_allowed_to_edit(false,true))
 		{
 			// A.1. you are a course admin with a USER filter
 			// => see only the messages of this specific user + the messages of the group (s)he is member of.
@@ -1422,9 +1436,10 @@ if (isset($message) && $message == true)
 
 				echo   "<br />";
 
-
-				if(api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()))
+				// we can edit if : we are the teacher OR the element belongs to the session we are coaching OR the option to allow users to edit is on
+				if(api_is_allowed_to_edit() OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id'])) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()))
 				{
+					
 					/*=====================================================================
 												SHOW MOD/DEL/VIS FUNCTIONS
 					=====================================================================*/

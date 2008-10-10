@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 16483 2008-10-10 03:07:53Z yannoo $
+<?php // $Id: user_list.php 16496 2008-10-10 22:34:23Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -549,7 +549,7 @@ else
 					}
 					else
 					{
-						Display :: display_error_message(get_lang('CannotDeleteUser'));
+						Display :: display_error_message(get_lang('CannotDeleteUserBecauseOwnsCourse'));
 					}
 					break;
 				case 'lock' :

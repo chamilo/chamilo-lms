@@ -616,7 +616,9 @@ VALUES
 ('extendedprofile_registrationrequired', 'mypersonalopenarea', 'checkbox','User','false', 'ExtendedProfileRegistrationRequiredTitle','ExtendedProfileRegistrationRequiredComment', NULL, 'MyPersonalOpenArea'),
 ('ldap_filled_tutor_field_value', NULL, 'textfield', 'LDAP', '', 'LDAPFilledTutorFieldValueTitle', 'LDAPFilledTutorFieldValueComment', NULL, ''),
 ('registration','phone','textfield','User','false','RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment',NULL,'Phone'),
-('add_users_by_coach',NULL,'radio','Platform','false','AddUsersByCoachTitle','AddUsersByCoachComment',NULL,NULL),
+('add_users_by_coach',NULL,'radio','Security','false','AddUsersByCoachTitle','AddUsersByCoachComment',NULL,NULL),
+('extend_rights_for_coach',NULL,'radio','Security','false','ExtendRightsForCoachTitle','ExtendRightsForCoachComment',NULL,NULL),
+('extend_rights_for_coach_on_survey',NULL,'radio','Security','true','ExtendRightsForCoachOnSurveyTitle','ExtendRightsForCoachOnSurveyComment',NULL,NULL),
 ('course_create_active_tools','wiki','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Wiki');
 
 UNLOCK TABLES;
@@ -759,7 +761,11 @@ VALUES
 ('visio_use_rtmpt','true','Yes'),
 ('visio_use_rtmpt','false','No'),
 ('add_users_by_coach', 'true', 'Yes'),
-('add_users_by_coach', 'false', 'No');
+('add_users_by_coach', 'false', 'No'),
+('extend_rights_for_coach', 'true', 'Yes'),
+('extend_rights_for_coach', 'false', 'No'),
+('extend_rights_for_coach_on_survey', 'true', 'Yes'),
+('extend_rights_for_coach_on_survey', 'false', 'No');
 
 UNLOCK TABLES;
 

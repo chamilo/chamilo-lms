@@ -16,12 +16,18 @@ ALTER TABLE settings_current ADD INDEX unique_setting (variable,subkey,category)
 ALTER TABLE settings_options ADD INDEX unique_setting_option (variable,value);
 INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('registration', 'phone', 'textfield', 'User', 'false', 'RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment', NULL, 'Phone');
 ALTER TABLE php_session CHANGE session_value session_value MEDIUMTEXT NOT NULL;
-INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('add_users_by_coach',NULL,'radio','Platform','false','AddUsersByCoachTitle','AddUsersByCoachComment',NULL,NULL);
+INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('add_users_by_coach',NULL,'radio','Security','false','AddUsersByCoachTitle','AddUsersByCoachComment',NULL,NULL);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('add_users_by_coach', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('add_users_by_coach', 'false', 'No');
 ALTER TABLE session ADD nb_days_access_before_beginning TINYINT NULL DEFAULT '0' AFTER date_end , ADD nb_days_access_after_end TINYINT NULL DEFAULT '0' AFTER nb_days_access_before_beginning ;
 ALTER TABLE course_rel_user ADD INDEX (user_id);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools', 'wiki', 'checkbox', 'Tools', 'true', 'CourseCreateActiveToolsTitle', 'CourseCreateActiveToolsComment', NULL, 'Wiki', 1, 0);
+INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('extend_rights_for_coach',NULL,'radio','Security','false','AddUsersByCoachTitle','AddUsersByCoachComment',NULL,NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES (''extend_rights_for_coach', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES (''extend_rights_for_coach', 'false', 'No');
+INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('extend_rights_for_coach_on_surveys',NULL,'radio','Security','false','AddUsersByCoachTitle','AddUsersByCoachComment',NULL,NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('extend_rights_for_coach_on_surveys', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('extend_rights_for_coach_on_surveys', 'false', 'No');
 
 -- xxSTATSxx
 

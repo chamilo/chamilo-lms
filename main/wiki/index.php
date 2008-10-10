@@ -1,4 +1,5 @@
-<?php 
+<?php
+ 
 /*
 ==============================================================================
 		INIT SECTION
@@ -33,8 +34,8 @@ require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'text.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php'); 
 require_once (api_get_path(LIBRARY_PATH).'security.lib.php'); 
-require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
-require_once(api_get_path(INCLUDE_PATH).'conf/mail.conf.php');
+require_once (api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
+require_once (api_get_path(INCLUDE_PATH).'conf/mail.conf.php');
 require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
 /*
 -----------------------------------------------------------
@@ -1389,9 +1390,6 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 if ($_GET['action']=='recentchanges')
 {
 	$_clean['group_id']=(int)$_SESSION['_gid'];
-
-	$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' ORDER BY timestamp DESC LIMIT 0,10'; // last 10
-	$result=api_sql_query($sql,__LINE__,__FILE__);
 		
 	if (check_notify_all())
 	{
@@ -1402,84 +1400,73 @@ if ($_GET['action']=='recentchanges')
 		$notify_all= '<img src="../img/wiki/send_mail.gif" alt="'.get_lang('FullCancelNotifyByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotifyChanges').'</font>';
 	}	
 		
-	echo  '<br>'; 
+	echo '<br>'; 
 	echo '<b>'.get_lang('RecentChanges').'</b> <a href="index.php?action=recentchanges&amp;actionpage=notify_all&amp;title='.$page.'">'.$notify_all.'</a><br>'; 
-    echo  '<hr>';	
-	echo '<ul>';
+    echo '<hr>';	
+	echo '<ul>';		
 	
-	$group_id=Security::remove_XSS($_GET['group_id']);
-	while ($row=Database::fetch_array($result))
-	{
-		$userinfo=Database::get_user_info_from_id($row['user_id']);
-		
-	    $year = substr($row['timestamp'], 0, 4);
-		$month = substr($row['timestamp'], 5, 2);
-		$day = substr($row['timestamp'], 8, 2);
-		$hours=substr($row['timestamp'], 11,2);
-		$minutes=substr($row['timestamp'], 14,2);
-		$seconds=substr($row['timestamp'], 17,2);
-				
-		$url_enc=urlencode($row['reflink']);
-	
-		//Show page to students if isn't hidden. Show page to all teachers if is hidden. Mode assignments: If is hidden, show pages to student only if student is the author
-		if($row['visibility']==1 || api_is_allowed_to_edit() || api_is_platform_admin() || ($row['assignment']==2 && $row['visibility']==0 && (api_get_user_id()==$row['user_id'])))
-		{		
-			if($row['assignment']==1)
-			{
-				if(api_is_allowed_to_edit() || api_is_platform_admin()) //Mode assignments: show pages assignment (task) only for teachers
-				{
-					$ShowAssignment='<img src="../img/wiki/assignment.gif" />';		
-					 
-					if ($row['version']==1) $flag=get_lang('AddedBy');
-                    if ($row['version']>1)  $flag=get_lang('EditedBy');					 			 			 
-				
-					echo '<li><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&amp;title='.$url_enc.'&amp;view='.$row['id'].'&group_id='.$group_id.'">'; 		   
-					echo $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;
-					echo '</a> ... '.$ShowAssignment.'<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&amp;title='.$url_enc.'&group_id='.$group_id.'">'.$row['title'].'</a> ...'.$flag.' <a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a></li>';  				
-		    	}
-			}		
-
-			if($row['assignment']==2)
-			{
-				if ($row['user_id']==(int)api_get_user_id() || api_is_allowed_to_edit() || api_is_platform_admin()) //Mode assignments: show pages assignment (works) only for teachers. Also show pages to student only if student is the author. 
-				{
-					 $ShowAssignment='<img src="../img/wiki/works.gif" />';
-					 
-					  if ($row['version']==1) $flag=get_lang('AddedBy');
-                      if ($row['version']>1)  $flag=get_lang('EditedBy');
-					
-					 echo '<li><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&amp;title='.$url_enc.'&amp;view='.$row['id'].'&group_id='.$group_id.'">'; 		   
-					 echo $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;				
-					 echo '</a> ... '.$ShowAssignment.'<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&amp;title='.$url_enc.'&group_id='.$group_id.'">'.$row['title'].'</a> ...'.$flag.' <a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a></li>';  					
-		    	}
-			}	
-
-			if($row['assignment']==0)
-			{
-				
-				$ShowAssignment='<img src="../img/wiki/trans.gif" />';	 
-				
-				if ($row['version']==1) $flag=get_lang('AddedBy');
-                if ($row['version']>1)  $flag=get_lang('EditedBy');
-				 
-				echo '<li><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&amp;title='.$url_enc.'&amp;view='.$row['id'].'&group_id='.$group_id.'">'; 		   
-				echo $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;
-				if ($row['user_id']<>0) 
-				{
-					echo '</a> ... '.$ShowAssignment.'<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&amp;title='.$url_enc.'&amp;view='.$row['id'].'&group_id='.$group_id.'">'.$row['title'].'</a> ...'.$flag.' <a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a></li>';
-				}
-				else
-				{
-					echo '</a> ... <a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&amp;title='.$url_enc.'&group_id='.$group_id.'">'.$row['title'].'</a> ... '.$flag.' '.get_lang('Anonymous').' ('.$row['user_ip'].')</a></li>'; 						
-				}			    
-			}					
-		}
-			
-		//print_r($userinfo);
+	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
+	{	
+		$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' ORDER BY timestamp DESC';		
 	}
-	echo '</ul>';
-}
+	else
+	{	
+		$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' AND visibility=1 ORDER BY timestamp DESC';					
+	}		
 
+	$allpages=api_sql_query($sql,__LINE__,__FILE__);
+
+	//show table
+	if (mysql_num_rows($allpages) > 0)
+	{
+		$row = array ();
+		while ($obj = mysql_fetch_object($allpages))
+		{
+			//get author
+			$userinfo=Database::get_user_info_from_id($obj->user_id);
+			
+			//get time
+			$year 	 = substr($obj->timestamp, 0, 4);
+			$month	 = substr($obj->timestamp, 5, 2);
+			$day 	 = substr($obj->timestamp, 8, 2);
+			$hours   = substr($obj->timestamp, 11,2);
+			$minutes = substr($obj->timestamp, 14,2);
+			$seconds = substr($obj->timestamp, 17,2);			
+			
+			//get type assignment icon		
+			if($obj->assignment==1)
+			{
+				$ShowAssignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDesc').'" />';
+			}
+			elseif ($obj->assignment==2)
+			{
+				$ShowAssignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWork').'" />';
+			}
+			elseif ($obj->assignment==0)
+			{	
+				$ShowAssignment='<img src="../img/wiki/trans.gif" />';			
+			}		
+		
+			$row = array ();
+			$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.':'.$minutes.":".$seconds;
+			$row[] =$ShowAssignment;
+			$row[] = '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&amp;view='.$obj->id.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
+			$row[] =$obj->version>1 ? get_lang('EditedBy') : get_lang('AddedBy');	
+			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';	
+			$rows[] = $row;
+		}
+	
+		$table = new SortableTableFromArrayConfig($rows,0,10,'RecentPages_table','','','DESC');
+		$table->set_additional_parameters(array('cidReq' =>$_GET['cidReq'],'action'=>$_GET['action'],'group_id'=>Security::remove_XSS($_GET['group_id'])));		
+		$table->set_header(0,get_lang('Date'), true, array ('style' => 'width:175px;'));		
+		$table->set_header(1,get_lang('Type'), true, array ('style' => 'width:30px;'));
+		$table->set_header(2,get_lang('Title'), true);		
+		$table->set_header(3,get_lang('Actions'), true, array ('style' => 'width:80px;'));
+		$table->set_header(4,get_lang('Author'), true);
+		
+		$table->display();
+	}
+}
 
 
 /////////////////////// all pages ///////////////////////

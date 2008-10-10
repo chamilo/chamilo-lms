@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 15743 2008-07-07 23:14:48Z yannoo $
+<?php // $Id: user_edit.php 16495 2008-10-10 22:13:15Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -405,7 +405,8 @@ if( $form->validate())
 		$emailbody .= "\n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
 		@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
 	}
-	header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')));
+	$tok = Security::get_token();		
+	header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')).'&sec_token='.$tok);
 	exit();
 }
 

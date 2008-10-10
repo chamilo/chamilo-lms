@@ -3127,6 +3127,10 @@ function api_is_element_in_the_session($tool, $element_id, $session_id=null)
 			$table_tool = Database::get_course_table(TABLE_AGENDA);
 			$key_field = 'id';
 			break;
+		case TOOL_GROUP :
+			$table_tool = Database::get_course_table(TABLE_GROUP);
+			$key_field = 'id';
+			break;
 		default: return false;
 	}
 	

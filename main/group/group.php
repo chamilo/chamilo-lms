@@ -272,7 +272,7 @@ foreach ($group_cats as $index => $category)
 			}
 
 			// group name
-			if (api_is_allowed_to_edit(false,true) || 
+			if ((api_is_allowed_to_edit(false,true) || 
 					in_array($_user['user_id'],$tutorsids_of_group) || 
 					$this_group['is_member'] || 
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_DOCUMENTS) ||
@@ -280,7 +280,9 @@ foreach ($group_cats as $index => $category)
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_ANNOUNCEMENT) ||
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_WORK) ||
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_WIKI))
+					&& !(api_is_course_coach() && intval($this_group['session_id'])!=intval($_SESSION['id_session'])))
 			{
+				
 				$group_name = '<a href="group_space.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gidReq='.$this_group['id'].'">'.stripslashes($this_group['name']).'</a>';
 				if ($_SESSION['_user']['user_id'] && $_SESSION['_user']['user_id'] == $this_group['id_tutor'])
 				{
@@ -333,7 +335,7 @@ foreach ($group_cats as $index => $category)
 			$tutor_info = substr($tutor_info,0,strlen($tutor_info)-2);
 			$row[] = $tutor_info;
 			// edit-links
-			if (api_is_allowed_to_edit(false,true))
+			if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && intval($this_group['session_id'])!=intval($_SESSION['id_session'])))
 			{
 				$edit_actions = '<a href="group_edit.php?'.api_get_cidreq().'&gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'"><img src="../img/edit.gif" alt="'.get_lang('Edit').'"/></a>&nbsp;';
 				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=delete_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;" title="'.get_lang('Delete').'"><img src="../img/delete.gif" alt="'.get_lang('Delete').'"/></a>&nbsp;';

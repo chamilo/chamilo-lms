@@ -351,6 +351,22 @@ class GroupManager
 		$forum_topic_table 		= Database :: get_course_table(TABLE_FORUM_POST, $course_db);
 		
 		$group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
+		
+		if(api_is_course_coach())
+		{ //a coach can only delete courses from his session
+			for($i=0 ; $i<count($group_ids) ; $i++)
+			{
+				if(!api_is_element_in_the_session(TOOL_GROUP,$group_ids[$i]))
+				{
+					array_splice($group_ids,$i,1);
+					$i--;
+				}
+			}
+			if(count($group_ids)==0)
+				return 0;
+		}
+		
+		
 		// define repository for deleted element
 		$group_garbage = api_get_path(GARBAGE_PATH).$course['path']."/group/";
 		$perm = api_get_setting('permissions_for_new_directories');
@@ -359,7 +375,7 @@ class GroupManager
 			FileManager :: mkdirs($group_garbage, $perm);
 		// Unsubscribe all users
 		GroupManager :: unsubscribe_all_users($group_ids);
-		$sql = 'SELECT id, secret_directory FROM '.$group_table.' WHERE id IN ('.implode(' , ', $group_ids).')';
+		$sql = 'SELECT id, secret_directory, session_id FROM '.$group_table.' WHERE id IN ('.implode(' , ', $group_ids).')';
 		$db_result = api_sql_query($sql,__FILE__,__LINE__);
 		$forum_ids = array ();
 		while ($group = mysql_fetch_object($db_result))
@@ -714,6 +730,21 @@ class GroupManager
 	function fill_groups($group_ids)
 	{
 		$group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
+		
+		if(api_is_course_coach())
+		{
+			for($i=0 ; $i<count($group_ids) ; $i++)
+			{
+				if(!api_is_element_in_the_session(TOOL_GROUP,$group_ids[$i]))
+				{
+					array_splice($group_ids,$i,1);
+					$i--;
+				}
+			}
+			if(count($group_ids)==0)
+				return false;
+		}
+		
 		global $_course;
 		$category = GroupManager :: get_category_from_group($group_ids[0]);
 		$groups_per_user = $category['groups_per_user'];
@@ -1054,6 +1085,23 @@ class GroupManager
 		$group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
 		if( count($group_ids) > 0)
 		{
+			
+			if(api_is_course_coach())
+			{
+				for($i=0 ; $i<count($group_ids) ; $i++)
+				{
+					if(!api_is_element_in_the_session(TOOL_GROUP,$group_ids[$i]))
+					{
+						array_splice($group_ids,$i,1);
+						$i--;
+					}
+				}
+				if(count($group_ids)==0)
+				{
+					return false;
+				}
+			}
+			
 			$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 			$sql = 'DELETE FROM '.$table_group_user.' WHERE group_id IN ('.implode(',', $group_ids).')';
 			$result = api_sql_query($sql,__FILE__,__LINE__);

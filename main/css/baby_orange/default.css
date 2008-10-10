@@ -146,7 +146,32 @@ ul {
 	width:80%;
 	margin:.8em 0;
 }
-
+.sessions_list {
+    line-height: 20px; margin-top: 20px;
+}
+.sessions_list_inactive {
+    line-height: 20px;
+}
+.session_box {
+	font: bold 110% sans, sans-serif, arial;
+	text-transform: capitalize;
+	text-align: left;
+	background: transparent url("images/thindivider.jpg") no-repeat 20% 100%;
+	height: 2.8em;
+	border-top:2px solid #5F5700;
+	padding-top:0.5em;
+	color: #5F5700;
+	width:80%;
+	margin:.8em 0;
+	margin-bottom: 10px;
+}
+.session_box_title {
+}
+.session_box_coach {
+}
+.session_course_item {
+    padding: 0px; margin: 0px;
+}
 /*
 ==============================================================================
 	HEADER STYLES

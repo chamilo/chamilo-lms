@@ -1,4 +1,4 @@
-<?php // $Id: document.php 15858 2008-07-28 15:07:39Z elixir_inter $
+<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
  
 /*
 ==============================================================================
@@ -680,8 +680,9 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 		//if the item is invisible, wrap it in a span with class invisible
 		$invisibility_span_open = ($id['visibility']==0)?'<span class="invisible">':'';
 		$invisibility_span_close = ($id['visibility']==0)?'</span>':'';
-		//size (or total size of a directory)
+		//size (or total size of a directory)		
 		$size = $id['filetype']=='folder' ? get_total_folder_size($id['path'],$is_allowed_to_edit) : $id['size'];
+		
 		//get the title or the basename depending on what we're using
 		if ($use_document_title=='true' AND $id['title']<>'')
 		{
@@ -739,7 +740,8 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 			}			
 			$row[] = $edit_icons;
 		}
-		$row[]=$last_edit_date;
+		$row[] = $last_edit_date;
+		$row[] = $size;
 		$sortable_data[] = $row;
 	}
 	//*******************************************************************************************
@@ -768,24 +770,20 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights)
 }
 $column_show[]=0;
 
-
 $column_order=array();
 
-if (count($row)==7)
+if ( count($row) == 8 )
 {
 	$column_order[]=1;
 	$column_order[]=2;
-	$column_order[]=3;
+	$column_order[]=7;
 	$column_order[]=6;
 	$column_order[]=5;
-}
-
-if (count($row)==5)
-{
+} else if ( count($row) == 6 ) {
 	$column_order[]=1;
 	$column_order[]=2;
-	$column_order[]=4;
-	$column_order[]=4;			
+	$column_order[]=7;
+	$column_order[]=4;	
 }
 
 $default_column = $is_allowed_to_edit ? 2 : 1;

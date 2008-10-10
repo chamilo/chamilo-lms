@@ -798,9 +798,17 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 		        	$_courseUser['role'] = 'Professor';
 		            $is_courseMember     = true;
 		            $is_courseTutor      = true;
-		            $is_courseAdmin      = false;
 		            $is_courseCoach      = true;
 		            $is_sessionAdmin     = false;
+		            
+		            if(api_get_setting('extend_rights_for_coach')=='true')
+		            {
+		            	$is_courseAdmin = true;
+		            }
+		            else
+		            {
+		            	$is_courseAdmin = false;
+		            }
 	
 		            api_session_register('_courseUser');
 		        }
@@ -825,9 +833,17 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 			        	$_courseUser['role'] = 'Professor';
 			            $is_courseMember     = true;
 			            $is_courseTutor      = true;
-			            $is_courseAdmin = false;
 			            $is_courseCoach      = true;
 			            $is_sessionAdmin     = false;
+			            
+			            if(api_get_setting('extend_rights_for_coach')=='true')
+			            {
+			            	$is_courseAdmin = true;
+			            }
+			            else
+			            {
+			            	$is_courseAdmin = false;
+			            }
 			                 
 			            api_session_register('_courseUser');
 			        }

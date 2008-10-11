@@ -232,7 +232,6 @@ function get_personal_course_list($user_id)
 
 	$personal_course_list = array ();
 
-
 	//Courses in which we suscribed out of any session
 	$personal_course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i,
 										course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort,
@@ -439,12 +438,15 @@ function get_logged_user_course_html($my_course)
 
 	// Table definitions
 	//$statistic_database = Database::get_statistic_database();
+	$main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
+	$tbl_session 			= Database :: get_main_table(TABLE_MAIN_SESSION);
 	$course_database = $my_course['db'];
 	$course_tool_table 			= Database :: get_course_table(TABLE_TOOL_LIST, $course_database);
 	$tool_edit_table 			= Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_database);
 	$course_group_user_table 	= Database :: get_course_table(TOOL_USER, $course_database);
-
+		
 	$user_id = api_get_user_id();
+	$session_id = $my_course['id_session'];
 	$course_system_code = $my_course['k'];
 	$course_visual_code = $my_course['c'];
 	$course_title = $my_course['i'];
@@ -456,6 +458,7 @@ function get_logged_user_course_html($my_course)
 	$course_id = isset($course_info['course_id'])?$course_info['course_id']:null;
 	$course_visibility = $course_access_settings['visibility'];
 	$user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_system_code);
+	
 	//function logic - act on the data
 	$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($my_course['k']);
 	if ($is_virtual_course)
@@ -610,15 +613,31 @@ function get_logged_user_course_html($my_course)
 		$active = false;
 		if(!empty($my_course['session_name']))
 		{
-			$session = $my_course['session_name'];
-			if($my_course['date_start']=='0000-00-00')
-			{
-				$session .= ' - '.get_lang('WithoutTimeLimits');
+			
+			// Request for the name of the general coach
+			$sql = 'SELECT lastname, firstname
+			FROM '.$tbl_session.' ts
+			LEFT JOIN '.$main_user_table .' tu
+			ON ts.id_coach = tu.user_id
+			WHERE ts.id='.(int) $my_course['id_session']. ' LIMIT 1';
+
+			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			$sessioncoach = api_store_result($rs);
+			$sessioncoach = $sessioncoach[0];
+		
+			$session = array();
+			$session['title'] = $my_course['session_name'];
+			if ( $my_course['date_start']=='0000-00-00' ) {
+				$session['dates'] = get_lang('WithoutTimeLimits');
+				if ( api_get_setting('show_session_coach') === 'true' ) {
+					$session['coach'] = get_lang('GeneralCoach').': '.$sessioncoach['lastname'].' '.$sessioncoach['firstname'];
+				}
 				$active = true;
-			}
-			else
-			{
-				$session .= ' - '.get_lang('From').' '.$my_course['date_start'].' '.get_lang('To').' '.$my_course['date_end'];
+			} else {
+				$session ['dates'] = ' - '.get_lang('From').' '.$my_course['date_start'].' '.get_lang('To').' '.$my_course['date_end'];
+				if ( api_get_setting('show_session_coach') === 'true' ) {
+					$session['coach'] = get_lang('GeneralCoach').': '.$sessioncoach['lastname'].' '.$sessioncoach['firstname'];
+				}
 				$active = ($date_start <= $now && $date_end >= $now)?true:false;
 			}
 		}
@@ -887,13 +906,11 @@ else
 	} //end while mycourse...
 }
 
-if (is_array($list))
-{
+if ( is_array($list) ) {
 	//Courses whithout sessions
 	$old_user_category = 0;
-	foreach($list as $key=>$value)
-	{
-		if($value[2]==0){
+	foreach($list as $key=>$value) {
+		if ( empty($value[2]) ) { //if out of any session
 
 			$userdefined_categories = get_user_course_categories();
 			echo "<ul>\n";
@@ -904,7 +921,9 @@ if (is_array($list))
 				{
 					echo "\n</ul>";
 				}
-				echo "\n\n\t<ul class=\"user_course_category\"><li>".$userdefined_categories[$value[0]]."</li></ul>\n";
+				echo "\n\n\t<ul class=\"user_course_category\">" .
+						"<li>".$userdefined_categories[$value[0]]."</li>" .
+					 "</ul>\n";
 				if ($key<>0 OR $value[0]<>0) // there are courses in the previous category
 				{
 					echo "<ul>";
@@ -913,38 +932,41 @@ if (is_array($list))
 
 			}
 			echo $value[1];
-
 			echo "</ul>\n";
-
 		}
-
 	}
 
 
 	$listActives = $listInactives = $listCourses = array();
-	foreach($list as $key=>$value){
-		if($value['active'])
+	foreach ( $list as $key=>$value ) {
+		if ( $value['active'] ) { //if the session is still active (as told by get_logged_user_course_html())
 			$listActives[] = $value;
-		else if(!empty($value[2]))
+		} else if ( !empty($value[2]) ) { //if there is a session but it is not active
 			$listInactives[] = $value;
+		}
 	}
 	$old_user_category = 0;
 	$userdefined_categories = get_user_course_categories();
 
-	if(count($listActives)>0 && $display_actives){
-		echo "<ul style=\"line-height: 20px; margin-top: 20px;\">\n";
+	if ( count($listActives)>0 && $display_actives ) { //if it is worth showing a session section
+		echo '<ul class="sessions_list">', "\n";
 
 		foreach ($listActives as $key => $value)
 		{
-			if(!empty($value[2])){
-				if((isset($old_session) && $old_session != $value[2]) or ((!isset($old_session)) && isset($value[2]))){
+			if (!empty($value[2])) {
+				if ((isset($old_session) && $old_session != $value[2]) or ((!isset($old_session)) && isset($value[2]))) {
 					$old_session = $value[2];
-					if($key != 0){
-						echo "\n</ul>";
+					if ($key != 0) {
+						echo '</ul>';
 					}
-					echo "\n\n\t<ul class=\"user_course_category\" style=\"margin-bottom: 10px;\"><li>".$value[3]."</li></ul>\n";
+					echo '<ul class="session_box">' .
+							'<li class="session_box_title">'.$value[3]['title'].' - '.$value[3]['dates'].'</li>';
+					if ( !empty($value[3]['coach']) ) {
+						echo '<li class="session_box_coach">'.$value[3]['coach'].'</li>';
+					}
+					echo "</ul>\n";
 
-					echo "<ul style=\"padding: 0px; margin: 0px;\">";
+					echo '<ul class="session_course_item">';
 				}
 			}
 			echo $value[1];
@@ -956,7 +978,7 @@ if (is_array($list))
 	}
 
 	if(count($listInactives)>0 && !$display_actives){
-		echo "<ul style=\"line-height: 20px;\">";
+		echo '<ul class="sessions_list_inactive">';
 
 		foreach ($listInactives as $key => $value)
 		{
@@ -964,11 +986,16 @@ if (is_array($list))
 				if($old_session != $value[2]){
 					$old_session = $value[2];
 					if($key != 0){
-						echo "\n</ul>";
+						echo '</ul>';
 					}
-				echo "\n\n\t<ul class=\"user_course_category\"><li>".$value[3]."</li></ul>\n";
+					echo '<ul class="session_box">' .
+							'<li class="session_box_title">'.$value[3]['title'].' - '.$value[3]['dates'].'</li>';
+					if ( !empty($value[3]['coach']) ) {
+						echo '<li class="session_box_coach">'.$value[3]['coach'].'</li>';
+					}
+					echo "</ul>\n";
 
-				echo "<ul>";
+				echo '<ul>';
 
 				}
 			}
@@ -979,7 +1006,7 @@ if (is_array($list))
 		echo "\n</ul><br /><br />\n";
 	}
 }
-echo "</div>"; // end of content section
+echo '</div>'; // end of content section
 // Register whether full admin or null admin course
 // by course through an array dbname x user status
 api_session_register('status');

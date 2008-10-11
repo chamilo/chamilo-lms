@@ -68,4 +68,10 @@ $ShowLinksPages = "Prikaži strani, ki vsebuejo povezavo na to stran";
 $MoreWikiOptions = "Več Wiki možnosti";
 $DefaultTitle = "Domov";
 $DiscussNotAvailable = "Diskusija ni na voljo";
+$Print = "Natisni";
+$Version = "Verzija";
+$EditPage = "Uredi";
+$AddedBy = "Dodal(a)";
+$EditedBy = "uredil(a)";
+$DeletedBy = "odstranil(a)";
 ?>

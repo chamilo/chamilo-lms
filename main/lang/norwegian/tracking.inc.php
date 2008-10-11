@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$langToolName = "Statestikk";
 $langShowNone = "Vis ingen";
 $langCourseStats = "Kursstatistikk";
 $langToolsAccess = "Adgang til verktøyene";

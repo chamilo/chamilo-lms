@@ -562,4 +562,6 @@ $GroupWiki = "Wiki";
 $ExportToPDF = "Exporter en PDF";
 $CommentAdded = "Votre commentaire a été ajouté";
 $BackToPreviousPage = "Retour à la page précédente";
+$NoOfficialCode = "Pas de code oficiel";
+$Owner = "Propriétaire";
 ?>

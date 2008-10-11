@@ -12,4 +12,7 @@ $langAddCat  = "legg til kategori";
 $langAdd  = "Legg til";
 $langValid  = "Gyldig";
 $langBackAndForget  = "Glem og tilbake";
+$CourseDescriptionUpdated = "Kursbeskrivelsen ble oppdatert";
+$CourseDescriptionDeleted = "Kursbeskrivelsen ble slettet";
+$CourseDescriptionIntro = "Opprett en kursbeskrivelse ved å klikke på et kurs og fylle ut de ønskede skjema-feltet. Klikk deretter OK.";
 ?>

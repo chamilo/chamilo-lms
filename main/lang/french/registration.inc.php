@@ -155,4 +155,12 @@ $PictureUploaded = "Votre photo a été importée";
 $ProductionUploaded = "Votre production a été importée";
 $FolderUpdated = "Dosier mis à jour";
 $UsersRegistered = "Ces utilisateurs ont été inscrits à l\'espace de cours";
+$UserAlreadyRegisterByOtherCreator = "Utilisateur déjà enregistré par un autre coach.";
+$UserCreatedPlatform = "Utilisateur ajouté au campus virtuel";
+$UserInSession = "Utilisateur inscrit dans cette session";
+$UserNotAdded = "Utilisateur non ajouté.";
+$NoSessionId = "La session n\'a pas pu être identifiée";
+$NoUsersRead = "Veuillez vérifier le format de votre fichier XML/CSV";
+$UserImportFileMessage = "Si des noms d\'utilisateurs ont été oubliés dans le fichier XML/CSV, leur prénom et leur nom seront utilisés pour créer un nouvel utilisateur. Par exemple, Hugues Dupond deviendra hdupond";
+$UserAlreadyRegisteredByOtherCreator = "Cet utilisateur a déjà été enregistré par un autre coach.";
 ?>

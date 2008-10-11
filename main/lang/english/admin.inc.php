@@ -835,4 +835,14 @@ $SessionAddTypeUnique = "Single registration";
 $SessionAddTypeMultiple = "Multiple registration";
 $EnableSearchTitle = "Full-text search feature";
 $EnableSearchComment = "Select \"Yes\" to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum.";
+$SearchASession = "Find a session";
+$ActiveSession = "Session session";
+$AddUrl = "Add Url";
+$ShowSessionCoachTitle = "Show session coach";
+$ShowSessionCoachComment = "Show the global session coach name in session title box on the courses list page";
+$ExtendRightsForCoachTitle = "Extend rights for coach";
+$ExtendRightsForCoachComment = "Activate this option will give the coachs the same permissions as the teacher on authoring tools";
+$ExtendRightsForCoachOnSurveyComment = "Activate this option will allow the coachs to create and edit surveys";
+$ExtendRightsForCoachOnSurveyTitle = "Extend rights for coachs on surveys";
+$CannotDeleteUserBecauseOwnsCourse = "This user cannot be deleted because he is still teacher in a course. You can either remove his teacher status from these courses and then delete his account, or disable his account instead of deleting it.";
 ?>

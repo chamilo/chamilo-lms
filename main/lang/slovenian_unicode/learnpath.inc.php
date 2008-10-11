@@ -192,4 +192,5 @@ $OogieUnknownError = "Pretvorba iz neznanega razloga ni uspela.<br />Prosimo, da
 $OogieBadExtension = "Vaša datoteka nima ustrezne končnice.";
 $WoogieBadExtension = "Prosimo, da nalagate zgolj besedilne dokumente. Končnica datotek naj bo .doc, .docx ali .odt";
 $ShowAudioRecorder = "Prikaži avdio snemalnik";
+$ViewLearningPath = "Poglej učno pot";
 ?>

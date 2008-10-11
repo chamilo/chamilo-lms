@@ -11,10 +11,10 @@ $lang_new_document = "Aggiunti nuovi documenti";
 $lang_new_exercise = "Disponibili nuovi esercizi";
 $lang_update_link = "Aggiornato un collegamento esistente";
 $lang_new_link = "Aggiunto un nuovo collegamento";
-$lang_new_forum_topic = "Nuovo argomento aggiunto";
+$lang_new_forum_topic = "Aggiunto nuovo argomento";
 $lang_new_groupforum_topic = "Nuovo argomento aggiunto al forum del gruppo";
 $lang_new_dropbox_file = "Ricevuto un nuovo file";
 $lang_update_dropbox_file = "il file nella tua sezione Scambio file è stato aggiornato";
 $ForumCategoryAdded = "Categoria di Forum aggiunta";
-$LearnpathAdded = "Percorso didattico aggiunto";
+$LearnpathAdded = "Aggiunto nuovo Modulo didattico";
 ?>

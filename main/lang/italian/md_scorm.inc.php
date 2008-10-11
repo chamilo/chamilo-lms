@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $nameTools = "variabili non utilizzate";
-$langMdCallingTool = "Percorsi Scorm";
+$langMdCallingTool = "Moduli Scorm";
 $langTool = "Operazioni metadata Scorm";
 $langNotInDB = "non ci sono informazioni nel Database";
 $langManifestSyntax = "(errore di sintassi nel manifest...)";
@@ -29,7 +29,7 @@ $langOrElse = "Seleziona una cartella Scorm o un suo identificatore";
 $langWorkWith = "Lavora con le cartelle Scorm";
 $langSDI = "...Cartella Scorm con SD-id (dividi il manifest o lascialo vuoto)";
 $langRoot = "root";
-$langSplitData = "Dividi il manifest e il n° De, se ce ne sono";
+$langSplitData = "Dividi il manifest e il #MDe, se ce ne sono";
 $langMffNotOk = "Non è stato possibile sostituire il file manifest";
 $langMffOk = "Il file manifest è stato sostituito";
 $langMffFileNotFound = "Il nuovo manifest non può essere aperto (vuoto? molto grande)...";

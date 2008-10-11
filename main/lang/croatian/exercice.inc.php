@@ -240,4 +240,8 @@ $DisableResults = "Nemoj prikazati rezultate polaznicima";
 $EnableResults = "Prikaži rezultate polaznicima";
 $ValidateAnswer = "Potvrdi odgovore";
 $FillInBlankSwitchable = "Višestruki odgovor, popunite praznine";
+$RandomQuestionsHelp = "Broj pitanja koji &#263;e biti slu&#269;ajno odabrani iz postoje&#263;e liste pitanja. Odaberite 0 ukoliko ne želite odabrati pitanja slu&#269;ajnim odabirom.<br />Upišite ukupni broj pitanja ukoliko želite sva pitanja odabrati slu&#269;ajnim odabirom.";
+$ExerciseAttempts = "Maksimalni broj pokušaja";
+$DoNotRandomize = "Nemoj odabrati slu&#269;ajno";
+$Infinite = "Beskona&#269;an";
 ?>

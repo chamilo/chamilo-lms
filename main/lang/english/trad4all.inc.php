@@ -564,4 +564,6 @@ $CommentAdded = "You comment has been added";
 $BackToPreviousPage = "Back to previous page";
 $NoOfficialCode = "No Official Code";
 $Owner = "Owner";
+$With = "with";
+$GeneralCoach = "General coach";
 ?>

@@ -46,4 +46,5 @@ $UploadError = "l\'import n\'a pas fonctionné, veuillez vérifier les limites de 
 $DocumentsWillBeAddedToo = "Les documents seront également ajoutés";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Si vous désirez exporter un parcours d\'apprentissage contenant des exercices, il est nécessaire d\'inclure ces exercices dans l\'export en les sélectionnant dans la liste des exercices.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Le répertoire d\'archives, utilisé par cet outil, ne dispose pas des accès en écriture attendus. Veuillez contacter l\'administrateur de la plateforme à ce sujet.";
+$DestinationCourse = "Cours de destination";
 ?>

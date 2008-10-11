@@ -68,4 +68,14 @@ $ShowLinksPages = "Prikaži stranice koje imaju poveznice na ovu stranicu";
 $MoreWikiOptions = "Dodatne Wiki mogu&#263;nosti";
 $DefaultTitle = "Po&#269;etna stranica";
 $DiscussNotAvailable = "Rasprava nije mogu&#263;a";
+$Print = "Ispiši";
+$Version = "Verzija";
+$EditPage = "Uredi";
+$AddedBy = "dodao(la)";
+$EditedBy = "uredio(la)";
+$DeletedBy = "obrisao(la)";
+$WikiStandardMode = "Wiki oblik rada";
+$GroupTutorAndMember = "Tutor i &#269;lan skupine";
+$GroupTutor = "Tutor skupine";
+$GroupStandardMember = "&#268;lan skupine";
 ?>

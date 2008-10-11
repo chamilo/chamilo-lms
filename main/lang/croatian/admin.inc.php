@@ -418,6 +418,7 @@ $ShowOnlineCourse = "Prikaži broj aktivnih korisnika u ovom kolegiju";
 $ShowNavigationMenuTitle = "Prikaži kolegij u navigacijskom meniju";
 $ShowIconsInNavigationsMenuTitle = "Prikaži ikone u navigacijskom meniju?";
 $RoleType = "Vrsta";
+$Plugin = "Plugin";
 $YourVersionIs = "Vaša verzija je";
 $NextStep = "Sljede&#263;i korak";
 $keyword = "Klju&#269;na rije&#269;";

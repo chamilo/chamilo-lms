@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $ResourceAdded = "Risorsa aggiunta";
-$LearningPath = "Percorsi didattici";
+$LearningPath = "Moduli didattici";
 $LevelUp = "sali di un livello";
 $AddIt = "Aggiungi";
 $MainCategory = "categoria principale";

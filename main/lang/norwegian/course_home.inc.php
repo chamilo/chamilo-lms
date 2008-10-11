@@ -15,4 +15,12 @@ $langCombinedCourse = "Kombinert kurs";
 $ToolIsNowVisible = "Verktøyet er nå synlig";
 $ToolIsNowHidden = "Verktøyet er nå usynlig";
 $EditLink = "Rediger lenke";
+$Blog_management = "Blog administrasjon";
+$Forum = "Forum";
+$Course_maintenance = "Kurs vedlikehold";
+$GreyIcons = "Verktøykasse";
+$Interaction = "Samhandling";
+$Administration = "Administrasjon";
+$IntroductionTextUpdated = "Introduksjonstekseten er oppdatert";
+$IntroductionTextDeleted = "Introduksjonsteksten er slettet";
 ?>

@@ -14,7 +14,7 @@ $langEvents = "Eventi";
 $langAnnouncements = "Avvisi";
 $langDocuments  = "Documenti";
 $langTests = "Test";
-$langLearnpaths = "Percorsi didattici";
+$langLearnpaths = "Moduli didattici";
 $langCopyCourse = "Copia il corso";
 $langSelectItemsToCopy = "Seleziona gli elementi da copiare";
 $langCopyFinished = "La copia è conclusa";
@@ -44,6 +44,7 @@ $langCreateBackupInfo = "Crea la copia di backup del corso";
 $ToolIntro = "Strumento Introduzione";
 $UploadError = "Caricamento fallito, controlla la dimensione dei file e i diritti di scrittura.";
 $DocumentsWillBeAddedToo = "Saranno aggiunti anche i documenti ";
-$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Seleziona i test in elenco per includerli nella esportazione del percorso didattico";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Seleziona i test in elenco per includerli nella esportazione del modulo didattico";
 $ArchivesDirectoryNotWriteableContactAdmin = "La directory di archiviazione, usata dalla funzione, non è scrivibile. Se necessario, contatta l\'amministratore di sistema.";
+$DestinationCourse = "Corso di destinazione";
 ?>

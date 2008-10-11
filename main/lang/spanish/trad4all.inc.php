@@ -564,4 +564,6 @@ $CommentAdded = "Comentario agregado";
 $BackToPreviousPage = "Volver a la página anterior";
 $NoOfficialCode = "No Código oficial";
 $Owner = "Propietario";
+$With = "con";
+$GeneralCoach = "Coach general";
 ?>

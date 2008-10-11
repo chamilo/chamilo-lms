@@ -619,7 +619,8 @@ VALUES
 ('add_users_by_coach',NULL,'radio','Security','false','AddUsersByCoachTitle','AddUsersByCoachComment',NULL,NULL),
 ('extend_rights_for_coach',NULL,'radio','Security','false','ExtendRightsForCoachTitle','ExtendRightsForCoachComment',NULL,NULL),
 ('extend_rights_for_coach_on_survey',NULL,'radio','Security','true','ExtendRightsForCoachOnSurveyTitle','ExtendRightsForCoachOnSurveyComment',NULL,NULL),
-('course_create_active_tools','wiki','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Wiki');
+('course_create_active_tools','wiki','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Wiki'),
+('show_session_coach', NULL, 'radio','Platform','false', 'ShowSessionCoachTitle','ShowSessionCoachComment', NULL, NULL);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -765,7 +766,9 @@ VALUES
 ('extend_rights_for_coach', 'true', 'Yes'),
 ('extend_rights_for_coach', 'false', 'No'),
 ('extend_rights_for_coach_on_survey', 'true', 'Yes'),
-('extend_rights_for_coach_on_survey', 'false', 'No');
+('extend_rights_for_coach_on_survey', 'false', 'No'),
+('show_session_coach', 'true', 'Yes'),
+('show_session_coach', 'false', 'No');
 
 UNLOCK TABLES;
 

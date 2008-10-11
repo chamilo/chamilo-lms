@@ -28,6 +28,9 @@ INSERT INTO settings_options (variable, value, display_text) VALUES (''extend_ri
 INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('extend_rights_for_coach_on_surveys',NULL,'radio','Security','false','AddUsersByCoachTitle','AddUsersByCoachComment',NULL,NULL);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('extend_rights_for_coach_on_surveys', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('extend_rights_for_coach_on_surveys', 'false', 'No');
+INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('show_session_coach',NULL,'radio','Platform','false','ShowSessionCoachTitle','ShowSessionCoachComment',NULL,NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_session_coach', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_session_coach', 'false', 'No');
 
 -- xxSTATSxx
 

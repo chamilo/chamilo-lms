@@ -377,8 +377,9 @@ class DocumentManager
 			$content_type = DocumentManager :: file_get_mime_type($filename);
 			header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 			header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-			header('Cache-Control: no-cache, must-revalidate');
-			header('Pragma: no-cache');
+            // Commented to avoid double caching declaration when playing with IE and HTTPS
+			//header('Cache-Control: no-cache, must-revalidate');
+			//header('Pragma: no-cache');
 			header('Content-type: '.$content_type);
 			header('Content-Length: '.$len);
 			$user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);

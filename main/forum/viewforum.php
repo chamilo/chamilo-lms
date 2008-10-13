@@ -161,7 +161,6 @@ if (!api_is_allowed_to_edit(false,true) AND ($current_forum_category['visibility
 	forum_not_allowed_here();
 }
 
-
 /*
 -----------------------------------------------------------
 	Display the action messages
@@ -326,8 +325,8 @@ if(is_array($threads))
 				$last_post=$last_post_row['post_date']." ".get_lang('By').' '.$name;
 			}
 			echo "\t\t<td>".$last_post."</td>\n";
-			echo "\t\t<td>";			
-			if (api_is_allowed_to_edit(false,true))
+			echo "\t\t<td>";	
+			if (api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))
 			{
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;action=delete&amp;content=thread&amp;id=".$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteCompleteThread"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 				display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array("forum"=>$_GET['forum'],'origin'=>$origin));

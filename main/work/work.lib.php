@@ -400,7 +400,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 							   
 		*/		
 		$session_condition =  intval($_SESSION['id_session'])!=0 ?"AND work.session_id IN (0,".intval($_SESSION['id_session']).")" : "";		   
-		$sql_select_directory= "SELECT prop.lastedit_date, author FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE " .
+		$sql_select_directory= "SELECT prop.lastedit_date, author, work.session_id FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE " .
 							   	    "work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $session_condition";													   
 		$result=api_sql_query($sql_select_directory,__FILE__,__LINE__);
 		$row=Database::fetch_array($result);
@@ -410,6 +410,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			
 		$direc_date= $row['lastedit_date']; //directory's date
 		$author= $row['author']; //directory's author
+		$folder_session_id = $row['session_id'];
 			
 		$mydir = $my_sub_dir.$dir;	
 			
@@ -494,8 +495,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		{
 			$row[]='';			
 		}	
-		
-		if( $is_allowed_to_edit)
+		if( $is_allowed_to_edit && !(api_is_course_coach() && $folder_session_id!=$_SESSION['id_session']))
 		{
 			$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
 				'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';						
@@ -540,7 +540,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$row[]= display_user_link($user_id,$work->author);// $work->author;			
 			$row[]= date_to_str_ago($work->sent_date).'<br><span class="dropbox_date">'.$work->sent_date.'</span>';
 			
-			if( $is_allowed_to_edit)
+			if( $is_allowed_to_edit  && !(api_is_course_coach() && $work->session_id!=$_SESSION['id_session']))
 			{
 				$action = '';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
@@ -785,14 +785,25 @@ function del_dir($base_work_dir,$dir)
 	if (!$check || !is_dir($base_work_dir.$dir)) return -1;
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql = "DELETE FROM $table WHERE url LIKE BINARY 'work/".$dir."/%'";
+	if(api_is_course_coach())
+	{
+		$sql .= ' AND session_id='.intval($_SESSION['id_session']);
+	}
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	
 	//delete from DB the directories
 	$sql = "DELETE FROM $table WHERE filetype = 'folder' AND url LIKE BINARY '/".$dir."%'";
+	if(api_is_course_coach())
+	{
+		$sql .= ' AND session_id='.intval($_SESSION['id_session']);
+	}
 	$res = api_sql_query($sql,__FILE__,__LINE__);	
-		
-	require_once(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
-	my_delete($base_work_dir.$dir);
+	
+	if(Database::affected_rows()>0)
+	{
+		require_once(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
+		my_delete($base_work_dir.$dir);
+	}
 }
 /**
  * Get the path of a document in the student_publication table (path relative to the course directory)

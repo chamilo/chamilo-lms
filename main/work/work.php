@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 16235 2008-09-03 14:14:21Z elixir_inter $
+*  	@version $Id: work.php 16503 2008-10-13 07:39:37Z elixir_inter $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -376,11 +376,21 @@ if (api_is_allowed_to_edit(false,true))
 		{
 			$queryString1 = "SELECT url FROM " . $work_table . "";
 			$queryString2 = "DELETE FROM  " . $work_table . "";
+			if(api_is_course_coach())
+			{
+				$queryString1 .= ' WHERE session_id='.intval($_SESSION['id_session']);
+				$queryString2 .= ' WHERE session_id='.intval($_SESSION['id_session']);
+			}
 		} 
 		else
 		{
 			$queryString1 = "SELECT url FROM  " . $work_table . "  WHERE id = '$delete'";
 			$queryString2 = "DELETE FROM  " . $work_table . "  WHERE id='$delete'";
+			if(api_is_course_coach())
+			{
+				$queryString1 .= ' AND session_id='.intval($_SESSION['id_session']);
+				$queryString2 .= ' AND session_id='.intval($_SESSION['id_session']);
+			}
 		}
 
 		$result1 = api_sql_query($queryString1, __FILE__, __LINE__);
@@ -434,6 +444,11 @@ if (api_is_allowed_to_edit(false,true))
 
 			$sql = "UPDATE  " . $work_table . "
 						        SET accepted = 0";
+			
+			if(api_is_course_coach())
+			{
+				$sql .= ' WHERE session_id='.intval($_SESSION['id_session']);
+			}
 
 			api_sql_query($sql, __FILE__, __LINE__);
 		} 
@@ -442,6 +457,10 @@ if (api_is_allowed_to_edit(false,true))
 			$sql = "UPDATE  " . $work_table . "
 						        SET accepted = 0
 								WHERE id = '" . $make_invisible . "'";
+			if(api_is_course_coach())
+			{
+				$sql .= ' AND session_id='.intval($_SESSION['id_session']);
+			}
 
 			api_sql_query($sql, __FILE__, __LINE__);
 		}				
@@ -462,6 +481,10 @@ if (api_is_allowed_to_edit(false,true))
 
 			$sql = "UPDATE  " . $work_table . "
 						        SET accepted = 1";
+			if(api_is_course_coach())
+			{
+				$sql .= ' WHERE session_id='.intval($_SESSION['id_session']);
+			}
 
 			api_sql_query($sql, __FILE__, __LINE__);
 
@@ -471,6 +494,10 @@ if (api_is_allowed_to_edit(false,true))
 			$sql = "UPDATE  " . $work_table . "
 						        SET accepted = 1
 								WHERE id = '" . $make_visible . "'";
+			if(api_is_course_coach())
+			{
+				$sql .= ' AND session_id='.intval($_SESSION['id_session']);
+			}
 
 			api_sql_query($sql, __FILE__, __LINE__);
 		}

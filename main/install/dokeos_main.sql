@@ -247,7 +247,8 @@ INSERT INTO course_module VALUES
 (21,'blog','blog/blog.php','blog.gif',1,2,'basic'),
 (22,'blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'),
 (23,'course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'),
-(24,'survey','survey/survey_list.php','survey.gif',2,1,'courseadmin');
+(24,'survey','survey/survey_list.php','survey.gif',2,1,'basic'),
+(25,'wiki','wiki/index.php','wiki.gif',2,3,'basic');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE course_module ENABLE KEYS */;
 

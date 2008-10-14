@@ -2263,7 +2263,13 @@ function api_parse_tex($textext)
  */
 function api_time_to_hms($seconds)
 {
-
+  
+  //if seconds = -1, it means we have wrong datas in the db
+  if($seconds==-1)
+  {
+  	  return get_lang('Unknown').Display :: return_icon('info2.gif',get_lang('WrongDatasForTimeSpentOnThePlatform'));
+  }
+  
   //How many hours ?
   $hours = floor($seconds / 3600);
 

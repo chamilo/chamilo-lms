@@ -46,11 +46,13 @@ class Tracking {
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
 		$sql = 'SELECT login_date, logout_date FROM ' . $tbl_track_login . ' 
-						WHERE login_user_id = ' . intval($user_id).' AND logout_date IS NOT NULL';
+						WHERE login_user_id = ' . intval($user_id);;
 
 		$rs = api_sql_query($sql,__FILE__,__LINE__);
 
 		$nb_seconds = 0;
+		
+		$wrong_logout_dates = false;
 
 		while ($a_connections = Database::fetch_array($rs)) {
 
@@ -59,12 +61,26 @@ class Tracking {
 
 			$i_timestamp_login_date = strtotime($s_login_date);
 			$i_timestamp_logout_date = strtotime($s_logout_date);
-
-			$nb_seconds += ($i_timestamp_logout_date - $i_timestamp_login_date);
+			
+			if($i_timestamp_logout_date>0)
+			{
+				$nb_seconds += ($i_timestamp_logout_date - $i_timestamp_login_date);
+			}
+			else
+			{ // there are wrong datas in db, then we can't give a wrong time
+				$wrong_logout_dates = true;
+			}
 
 		}
-
-		return $nb_seconds;
+		
+		if($nb_seconds>0 || !$wrong_logout_dates)
+		{
+			return $nb_seconds;
+		}
+		else
+		{
+			return -1; //-1 means we have wrong datas in the db
+		}
 	}
 
 	/**

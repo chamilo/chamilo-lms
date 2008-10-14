@@ -1,4 +1,0 @@
-This line is the same.
-This line is different in 1.txt
-This line is the same.
-This line is new in 3.txt

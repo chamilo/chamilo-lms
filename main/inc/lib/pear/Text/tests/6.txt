@@ -1,7 +1,0 @@
-This is a test.
-Adding random text to simulate files.
-Inserting a line.
-Various Content.
-Replacing content.
-Testing similarities and renderer.
-Append content.

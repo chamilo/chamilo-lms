@@ -210,8 +210,8 @@ CREATE TABLE course_module (
   name varchar(100) NOT NULL,
   link varchar(255) NOT NULL,
   image varchar(100) default NULL,
-  row int(10) unsigned NOT NULL default '0',
-  column int(10) unsigned NOT NULL default '0',
+  `row` int(10) unsigned NOT NULL default '0',
+  `column` int(10) unsigned NOT NULL default '0',
   position varchar(20) NOT NULL default 'basic',
   PRIMARY KEY  (id)
 );

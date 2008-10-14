@@ -905,89 +905,94 @@ if ($_GET['action']=='links')
     }
 	else
 	{	
-	      
+	
 		$sql='SELECT * FROM '.$tbl_wiki.' WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.'';		
-		$result=api_sql_query($sql,__FILE__,__LINE__); //necessary for pages with compound name. TODO: check if necessay after have fixed wanted pages with _
-						
-		$row=Database::fetch_array($result);	
-		echo $LinksPagesFrom.': <a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a>';
-
-		if ($page==get_lang('DefaultTitle'))
-		{
-			$page='index';
-		}		
-	
-		$sql="SELECT * FROM ".$tbl_wiki." WHERE  ".$groupfilter." AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' GROUP BY reflink ORDER BY title ASC"; //add blank space after like '%" " %' to identify each word
+		$result=api_sql_query($sql,__FILE__,__LINE__);	
+		$row=Database::fetch_array($result);		
 		
-				
-		$result=api_sql_query($sql,__LINE__,__FILE__);
-	
-		//show result	
+		//get type assignment icon
 		
-		echo '<ul>';				
-			
-		while ($row=Database::fetch_array($result))
-		{    
-			$userinfo=Database::get_user_info_from_id($row['user_id']);				
-		
-			//Show page to students if not is hidden, but the author can see. Show page to all teachers if is hidden. Mode assignments: show pages to student only if student is the author				
-			if($row['visibility']==1 || api_is_allowed_to_edit() || api_is_platform_admin() || ($row['assignment']==2 && $row['visibility']==0 && (api_get_user_id()==$row['user_id'])))
-			{										
-				$year = substr($row['timestamp'], 0, 4);
-				$month = substr($row['timestamp'], 5, 2);
-				$day = substr($row['timestamp'], 8, 2);
-				$hours=substr($row['timestamp'], 11,2);
-				$minutes=substr($row['timestamp'], 14,2);
-				$seconds=substr($row['timestamp'], 17,2);					
-				
-				//Description assignments visible for all teachers
 				if($row['assignment']==1)
-				{						
-					if(api_is_allowed_to_edit() || api_is_platform_admin())
-					{
-						$ShowAssignment='<img src="../img/wiki/assignment.gif" />';
-						echo '<li>';
-						echo '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$row['reflink'].'&group_id='.$_clean['group_id'].'">'.$ShowAssignment.$row['title'].'</a>';						
-						echo '...'.$userinfo['lastname'].', '.$userinfo['firstname']; 							   
-						echo '...'.$day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds.'</li>'; 										 
-					 }
-				}
-				
-				//Work on the assignments visible for each student
-				if ($row['assignment']==2)
-				{	
-					if ($row['user_id']==(int)api_get_user_id() || api_is_allowed_to_edit() || api_is_platform_admin())
-					{
-						$ShowAssignment='<img src="../img/wiki/works.gif" />';	
-						echo '<li>';
-						echo '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$row['reflink'].'&group_id='.$_clean['group_id'].'">'.$ShowAssignment.$row['title'].'</a>';
-						echo '...'.$userinfo['lastname'].', '.$userinfo['firstname']; 							   
-						echo '...'.$day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds.'</li>';												
-					}
-				}
-				
-				//show  wiki pages standard
-				if ($row['assignment']==0)
 				{
-					$ShowAssignment='<img src="../img/wiki/trans.gif" />';	
-				 	echo '<li>';
-				   	echo '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$row['reflink'].'&group_id='.$_clean['group_id'].'">'.$ShowAssignment.$row['title'].'</a>';
-					
-					if ($row['user_id']<>0)
-					{
-						echo '...'.$userinfo['lastname'].', '.$userinfo['firstname']; 
-					}
-					else
-					{
-						echo  get_lang('Anonymous').' ('.$row[user_ip].')'; 
-					}
-							   
-					echo '...'.$day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds.'</li>'; 				
-				}	 
-			}		
+					$ShowAssignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDesc').'" />';
+				}
+				elseif ($row['assignment']==2)
+				{
+					$ShowAssignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWork').'" />';
+				}
+				elseif ($row['assignment']==0)
+				{	
+					$ShowAssignment='<img src="../img/wiki/trans.gif" />';			
+				}		
+				
+		//fix index to reflink Main page (see linksto)
+		if ($page=='index')
+		{	
+			$page=str_replace(' ','_',get_lang('DefaultTitle'));
+		}		
+				
+		echo $LinksPagesFrom.': '.$ShowAssignment.'<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a>';
+		
+		//table
+		
+		if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
+		{				
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink)"; //add blank space after like '%" " %' to identify each word. 						
 		}
-					
-		echo '</ul>';	
+		else
+		{	
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND visibility=1 AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink)"; //add blank space after like '%" " %' to identify each word		
+		}		
+
+		$allpages=api_sql_query($sql,__LINE__,__FILE__);	
+	
+		//show table
+		if (mysql_num_rows($allpages) > 0)
+		{
+			$row = array ();
+			while ($obj = mysql_fetch_object($allpages))
+			{
+				//get author
+				$userinfo=Database::get_user_info_from_id($obj->user_id);
+				
+				//get time
+				$year 	 = substr($obj->timestamp, 0, 4);
+				$month	 = substr($obj->timestamp, 5, 2);
+				$day 	 = substr($obj->timestamp, 8, 2);
+				$hours   = substr($obj->timestamp, 11,2);
+				$minutes = substr($obj->timestamp, 14,2);
+				$seconds = substr($obj->timestamp, 17,2);			
+				
+				//get type assignment icon		
+				if($obj->assignment==1)
+				{
+					$ShowAssignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDesc').'" />';
+				}
+				elseif ($obj->assignment==2)
+				{
+					$ShowAssignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWork').'" />';
+				}
+				elseif ($obj->assignment==0)
+				{	
+					$ShowAssignment='<img src="../img/wiki/trans.gif" />';			
+				}		
+			
+				$row = array ();
+				$row[] =$ShowAssignment;
+				$row[] = '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
+				$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';	
+				$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;					
+				$rows[] = $row;
+			}
+		
+			$table = new SortableTableFromArrayConfig($rows,1,10,'AllPages_table','','','ASC');
+			$table->set_additional_parameters(array('cidReq' =>$_GET['cidReq'],'action'=>$_GET['action'],'group_id'=>Security::remove_XSS($_GET['group_id'])));		
+			$table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
+			$table->set_header(1,get_lang('Title'), true);
+			$table->set_header(2,get_lang('Author'), true);
+			$table->set_header(3,get_lang('Date'), true);		
+			$table->display();
+		}		
 	} 
 }
 
@@ -1403,7 +1408,6 @@ if ($_GET['action']=='recentchanges')
 	echo '<br>'; 
 	echo '<b>'.get_lang('RecentChanges').'</b> <a href="index.php?action=recentchanges&amp;actionpage=notify_all&amp;title='.$page.'">'.$notify_all.'</a><br>'; 
     echo '<hr>';	
-	echo '<ul>';		
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
 	{	
@@ -1479,7 +1483,6 @@ if ($_GET['action']=='allpages')
    	echo '<hr>';
 	
 	$_clean['group_id']=(int)$_SESSION['_gid'];
-
 
 
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden

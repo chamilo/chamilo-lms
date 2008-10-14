@@ -925,13 +925,20 @@ if ($_GET['action']=='links')
 					$ShowAssignment='<img src="../img/wiki/trans.gif" />';			
 				}		
 				
-		//fix index to reflink Main page (see linksto)
+		//fix Title to reflink (link Main Page)
+		
+		if ($page==get_lang('DefaultTitle'))
+		{
+			$page='index';
+		}		
+				
+		echo $LinksPagesFrom.': '.$ShowAssignment.'<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a>';
+		
+		//fix index to title Main page into linksto
 		if ($page=='index')
 		{	
 			$page=str_replace(' ','_',get_lang('DefaultTitle'));
 		}		
-				
-		echo $LinksPagesFrom.': '.$ShowAssignment.'<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a>';
 		
 		//table
 		

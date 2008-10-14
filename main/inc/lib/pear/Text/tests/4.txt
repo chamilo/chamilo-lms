@@ -1,0 +1,3 @@
+This line is the same.
+This line is different in 4.txt
+This line is the same.

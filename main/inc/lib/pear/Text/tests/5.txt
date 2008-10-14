@@ -1,0 +1,5 @@
+This is a test.
+Adding random text to simulate files.
+Various Content.
+More Content.
+Testing diff and renderer.

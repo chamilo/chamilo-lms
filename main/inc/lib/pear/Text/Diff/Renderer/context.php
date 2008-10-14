@@ -4,7 +4,7 @@
  *
  * This class renders the diff in classic "context diff" format.
  *
- * $Horde: framework/Text_Diff/Diff/Renderer/context.php,v 1.5 2008/01/04 10:07:51 jan Exp $
+ * $Horde: framework/Text_Diff/Diff/Renderer/context.php,v 1.3.2.3 2008/01/04 10:37:27 jan Exp $
  *
  * Copyright 2004-2008 The Horde Project (http://www.horde.org/)
  *

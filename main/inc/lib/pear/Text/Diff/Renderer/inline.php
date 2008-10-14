@@ -2,7 +2,7 @@
 /**
  * "Inline" diff renderer.
  *
- * $Horde: framework/Text_Diff/Diff/Renderer/inline.php,v 1.21 2008/01/04 10:07:51 jan Exp $
+ * $Horde: framework/Text_Diff/Diff/Renderer/inline.php,v 1.4.10.14 2008/01/04 10:37:27 jan Exp $
  *
  * Copyright 2004-2008 The Horde Project (http://www.horde.org/)
  *

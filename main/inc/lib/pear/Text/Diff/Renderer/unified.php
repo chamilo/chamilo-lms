@@ -4,7 +4,7 @@
  *
  * This class renders the diff in classic "unified diff" format.
  *
- * $Horde: framework/Text_Diff/Diff/Renderer/unified.php,v 1.10 2008/01/04 10:07:51 jan Exp $
+ * $Horde: framework/Text_Diff/Diff/Renderer/unified.php,v 1.3.10.6 2008/01/04 10:37:27 jan Exp $
  *
  * Copyright 2004-2008 The Horde Project (http://www.horde.org/)
  *

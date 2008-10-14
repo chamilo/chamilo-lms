@@ -10,7 +10,7 @@
  * echo $renderer->render($diff);
  * </code>
  *
- * $Horde: framework/Text_Diff/Diff/Engine/string.php,v 1.7 2008/01/04 10:07:50 jan Exp $
+ * $Horde: framework/Text_Diff/Diff/Engine/string.php,v 1.5.2.5 2008/09/10 08:31:58 jan Exp $
  *
  * Copyright 2005 Örjan Persson <o@42mm.org>
  * Copyright 2005-2008 The Horde Project (http://www.horde.org/)
@@ -48,17 +48,20 @@ class Text_Diff_Engine_string {
             $unified = strpos($diff, '---');
             if ($context === $unified) {
                 return PEAR::raiseError('Type of diff could not be detected');
-            } elseif ($context === false || $context === false) {
+            } elseif ($context === false || $unified === false) {
                 $mode = $context !== false ? 'context' : 'unified';
             } else {
                 $mode = $context < $unified ? 'context' : 'unified';
             }
         }
 
-        // split by new line and remove the diff header
+        // Split by new line and remove the diff header, if there is one.
         $diff = explode("\n", $diff);
-        array_shift($diff);
-        array_shift($diff);
+        if (($mode == 'context' && strpos($diff[0], '***') === 0) ||
+            ($mode == 'unified' && strpos($diff[0], '---') === 0)) {
+            array_shift($diff);
+            array_shift($diff);
+        }
 
         if ($mode == 'context') {
             return $this->parseContextDiff($diff);
@@ -85,7 +88,7 @@ class Text_Diff_Engine_string {
                 do {
                     $diff1[] = substr($diff[$i], 1);
                 } while (++$i < $end && substr($diff[$i], 0, 1) == ' ');
-                $edits[] = &new Text_Diff_Op_copy($diff1);
+                $edits[] = new Text_Diff_Op_copy($diff1);
                 break;
 
             case '+':
@@ -93,7 +96,7 @@ class Text_Diff_Engine_string {
                 do {
                     $diff1[] = substr($diff[$i], 1);
                 } while (++$i < $end && substr($diff[$i], 0, 1) == '+');
-                $edits[] = &new Text_Diff_Op_add($diff1);
+                $edits[] = new Text_Diff_Op_add($diff1);
                 break;
 
             case '-':
@@ -107,9 +110,9 @@ class Text_Diff_Engine_string {
                     $diff2[] = substr($diff[$i++], 1);
                 }
                 if (count($diff2) == 0) {
-                    $edits[] = &new Text_Diff_Op_delete($diff1);
+                    $edits[] = new Text_Diff_Op_delete($diff1);
                 } else {
-                    $edits[] = &new Text_Diff_Op_change($diff1, $diff2);
+                    $edits[] = new Text_Diff_Op_change($diff1, $diff2);
                 }
                 break;
 
@@ -175,7 +178,7 @@ class Text_Diff_Engine_string {
                 $array[] = substr($diff[$j++], 2);
             }
             if (count($array) > 0) {
-                $edits[] = &new Text_Diff_Op_copy($array);
+                $edits[] = new Text_Diff_Op_copy($array);
             }
 
             if ($i < $max_i) {
@@ -189,21 +192,21 @@ class Text_Diff_Engine_string {
                             $diff2[] = substr($diff[$j++], 2);
                         }
                     } while (++$i < $max_i && substr($diff[$i], 0, 1) == '!');
-                    $edits[] = &new Text_Diff_Op_change($diff1, $diff2);
+                    $edits[] = new Text_Diff_Op_change($diff1, $diff2);
                     break;
 
                 case '+':
                     do {
                         $diff1[] = substr($diff[$i], 2);
                     } while (++$i < $max_i && substr($diff[$i], 0, 1) == '+');
-                    $edits[] = &new Text_Diff_Op_add($diff1);
+                    $edits[] = new Text_Diff_Op_add($diff1);
                     break;
 
                 case '-':
                     do {
                         $diff1[] = substr($diff[$i], 2);
                     } while (++$i < $max_i && substr($diff[$i], 0, 1) == '-');
-                    $edits[] = &new Text_Diff_Op_delete($diff1);
+                    $edits[] = new Text_Diff_Op_delete($diff1);
                     break;
                 }
             }
@@ -215,14 +218,14 @@ class Text_Diff_Engine_string {
                     do {
                         $diff2[] = substr($diff[$j++], 2);
                     } while ($j < $max_j && substr($diff[$j], 0, 1) == '+');
-                    $edits[] = &new Text_Diff_Op_add($diff2);
+                    $edits[] = new Text_Diff_Op_add($diff2);
                     break;
 
                 case '-':
                     do {
                         $diff2[] = substr($diff[$j++], 2);
                     } while ($j < $max_j && substr($diff[$j], 0, 1) == '-');
-                    $edits[] = &new Text_Diff_Op_delete($diff2);
+                    $edits[] = new Text_Diff_Op_delete($diff2);
                     break;
                 }
             }

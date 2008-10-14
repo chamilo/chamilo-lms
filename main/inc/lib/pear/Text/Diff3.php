@@ -2,7 +2,7 @@
 /**
  * A class for computing three way diffs.
  *
- * $Horde: framework/Text_Diff/Diff3.php,v 1.8 2008/01/04 10:07:50 jan Exp $
+ * $Horde: framework/Text_Diff/Diff3.php,v 1.2.10.6 2008/01/04 10:37:26 jan Exp $
  *
  * Copyright 2007-2008 The Horde Project (http://www.horde.org/)
  *

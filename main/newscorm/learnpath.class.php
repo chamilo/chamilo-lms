@@ -553,17 +553,21 @@ class learnpath {
 			{
 				$perm = api_get_setting('permissions_for_new_directories');
 				$perm = octdec(!empty($perm)?$perm:'0770');
-				mkdir($filepath.'audio2',$perm);
+				mkdir($filepath.'audio',$perm);
 				$audio_id=add_document($_course,'/audio','folder',0,'audio');
 				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id());				
 			}
 			
 			// upload the file in the documents tool			
 			include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-			handle_uploaded_document($_course, $_FILES['mp3'],api_get_path('SYS_COURSE_PATH').$_course['path'].'/document','/audio',api_get_user_id(),'','','','','',false);			
+			$file_path = handle_uploaded_document($_course, $_FILES['mp3'],api_get_path('SYS_COURSE_PATH').$_course['path'].'/document','/audio',api_get_user_id(),'','','','','',false);			
+			
+			// getting the filename only
+			$file_components = explode('/',$file_path);
+			$file = $file_components[count($file_components)-1];
 			
 			// store the mp3 file in the lp_item table
-			$sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($_FILES['mp3']['name'])."' WHERE id = '".Database::escape_string($new_item_id)."'";
+			$sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."' WHERE id = '".Database::escape_string($new_item_id)."'";
 			api_sql_query($sql_insert_audio, __FILE__, __LINE__);
 		}		
 
@@ -1979,6 +1983,32 @@ class learnpath {
     	}
     	return $progress;
     }
+	
+	function get_mediaplayer()
+	{
+		global $_course;
+		
+		// Database table definition
+		$tbl_lp_item	= Database::get_course_table('lp_item');
+		
+		// getting all the information about the item
+		$sql = "SELECT * FROM " . $tbl_lp_item . " as lp WHERE lp.id = '" . $_SESSION['oLP']->current."'";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$row= mysql_fetch_assoc($result);
+		
+		// the mp3 player	
+		$output .= '<div id="container"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>';
+		$output .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
+		$output .= '<script type="text/javascript">
+						var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
+						s1.addParam("allowscriptaccess","always");
+						s1.addParam("flashvars","file=../../courses/'.$_course['path'].'/document/audio/'.$row['audio'].'&image=preview.jpg&autostart=true");
+						s1.write("container");
+					</script>';
+		return $output;		
+	}
+
+	
     /**
      * Gets a progress bar for the learnpath by counting the number of items in it and the number of items
      * completed so far.
@@ -2036,6 +2066,8 @@ class learnpath {
 	    
 	    $output .= '<img id="progress_bar_img_limit_right" src="'.$css_path.'bar_1.gif" width="1" height="'.$progress_height.'"></td></tr></table>'
 	    .'<div class="progresstext" id="progress_text">'.$text.'</div>';
+		
+					
 	    return $output;
     }
     /**
@@ -4076,7 +4108,8 @@ class learnpath {
 						'mastery_score' => $array[$i]['mastery_score'],
 						'display_order' => $array[$i]['display_order'],
 						'prerequisite' => $preq,
-						'depth' => $depth
+						'depth' => $depth,
+						'audio' => $array[$i]['audio']
 						);
 					
 					$this->create_tree_array($array, $array[$i]['id'], $depth, $tmp);
@@ -4121,7 +4154,7 @@ class learnpath {
 	 */
 	function overview()
 	{
-		global $charset;
+		global $charset, $_course;
 		$return = '';
 		
 		$tbl_lp_item = Database::get_course_table('lp_item');
@@ -4153,7 +4186,9 @@ class learnpath {
             'min_score' => $row['min_score'],
             'mastery_score' => $row['mastery_score'],
             'prerequisite' => $row['prerequisite'],
-			'display_order' => $row['display_order']);		
+			'display_order' 	=> $row['display_order'],
+			'audio'				=> $row['audio']
+			);		
 		}
 		 
 		$this->tree_array($arrLP);		
@@ -4161,7 +4196,20 @@ class learnpath {
 		unset($this->arrMenu);	 
 		
 		if(api_is_allowed_to_edit())
-			$return .= '<p><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=build&amp;lp_id=' . $this->lp_id . '">'.get_lang("Advanced").'</a>&nbsp;&#124;&nbsp;'.get_lang("BasicOverview").'&nbsp;&#124;&nbsp;<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$this->lp_id.'">'.get_lang("Display").'</a></p>';
+		{
+			$return .= '<p>';
+			$return = '<span style="float:right;"><a href="'.api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'&amp;updateaudio=true">'.get_lang('UpdateAllAudioFragments').'</a></span>';
+			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=build&amp;lp_id=' . $this->lp_id . '">'.get_lang("Advanced").'</a>'."\n";
+			$return .= '&nbsp;&#124;&nbsp;'.get_lang("BasicOverview").'&nbsp;&#124;&nbsp;';
+			$return .= '<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$this->lp_id.'">'.get_lang("Display").'</a></p>';
+		}
+		
+		// we need to start a form when we want to update all the mp3 files
+		if ($_GET['updateaudio'] == 'true' AND count($arrLP) <> 0)
+		{
+			$return .= '<form action="'.api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';	
+			$return .= Display::display_warning_message(get_lang('LeaveEmptyToKeepCurrentFile'));
+		}
 		
 		$return .= '<table class="data_table">' . "\n";
 		
@@ -4169,6 +4217,7 @@ class learnpath {
 			
 				$return .= "\t" . '<th width="75%">'.get_lang("Title").'</th>' . "\n";
 				//$return .= "\t" . '<th>'.get_lang("Description").'</th>' . "\n";
+				$return .= "\t" . '<th>'.get_lang("Audio").'</th>' . "\n";
 				$return .= "\t" . '<th>'.get_lang("Move").'</th>' . "\n";
 				$return .= "\t" . '<th>'.get_lang("Actions").'</th>' . "\n";
 			
@@ -4187,6 +4236,36 @@ class learnpath {
 					
 					$return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:3px;" />' . $title . '</td>' . "\n";
 					//$return .= "\t\t" . '<td>' . stripslashes($arrLP[$i]['description']) . '</td>' . "\n";
+					
+					// The audio column
+					$return .= "\t\t" . '<td>';
+					if (!$_GET['updateaudio'] OR $_GET['updateaudio'] <> 'true')
+					{
+						if (!empty($arrLP[$i]['audio']))
+						{
+							$return .= '<span id="container'.$i.'"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</span>';
+							$return .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
+							$return .= '<script type="text/javascript">
+											var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
+											s1.addParam("allowscriptaccess","always");
+											s1.addParam("flashvars","file=../../courses/'.$_course['path'].'/document/audio/'.$arrLP[$i]['audio'].'&image=preview.jpg");
+											s1.write("container'.$i.'");
+										</script>';	
+						}
+						else 
+						{
+							$return .= ' - ';
+						}
+					}
+					else 
+					{
+						$return .= ' <input type="file" name="mp3file'.$arrLP[$i]['id'].'" id="mp3file" />';
+						if (!empty($arrLP[$i]['audio']))
+						{
+							$return .= '<input type="checkbox" name="removemp3'.$arrLP[$i]['id'].'" id="checkbox'.$arrLP[$i]['id'].'" />'.get_lang('RemoveAudio');
+						}
+					}
+					$return .= '</td>' . "\n";
 					
 					if(api_is_allowed_to_edit())
 					{
@@ -4243,7 +4322,19 @@ class learnpath {
 					$return .= "\t\t" . '<td colspan="4">'.get_lang("NoItemsInLp").'</td>' . "\n";
 				$return .= "\t" . '</tr>' . "\n";
 			}		
+		// we need to close the form when we are updating the mp3 files
+		if ($_GET['updateaudio'] == 'true')
+		{
+			$return .= '<tr><th></th><th><input type="submit" name="save_audio" id="save_audio" value="'.get_lang('SaveAudio').'" /></th><th></th><th></th></tr>';	
+		}				
 		$return .= '</table>' . "\n";		
+		
+		// we need to close the form when we are updating the mp3 files
+		if ($_GET['updateaudio'] == 'true' AND count($arrLP) <> 0)
+		{
+			$return .= '</form>';	
+		}		
+			
 		return $return;
 	}
 	
@@ -6308,7 +6399,7 @@ class learnpath {
 				$select_prerequisites->addOption(get_lang("NoPrerequisites"),0,'style="padding-left:3px;"');
 
 				// form element for uploading an mp3 file
-				$form->addElement('file','mp3',get_lang('File'),'id="mp3" size="45"');
+				$form->addElement('file','mp3',get_lang('UploadMp3audio'),'id="mp3" size="33"');
 				$form->addRule('file', 'The extension of the Song file should be *.mp3', 'filename', '/^.*\.mp3$/');
 				
                 if ( api_get_setting('search_enabled') === 'true' )
@@ -6939,8 +7030,8 @@ class learnpath {
 	 */
 	function display_manipulate($item_id, $item_type = TOOL_DOCUMENT)
 	{
-		global $charset; 
-		$return = '<div class="lp_manipulate"><table border="0" width="100%"><tr><td valign="top" width="400">';
+		global $charset, $_course; 
+		$return = '<div class="lp_manipulate"><table border="0" width="100%"><tr><td valign="top" width="550">';
 		
 		switch($item_type)
 		{
@@ -6987,17 +7078,31 @@ class learnpath {
 		
 		$sql = "
 			SELECT
-				title 
+				 * 
 			FROM " . $tbl_lp_item . " as lp
 			WHERE
 				lp.id = " . $item_id;
 
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		
-		$s_title=Database::result($result,0,0);
+		$row= mysql_fetch_assoc($result);
+		$s_title = $row['title'];
 		$s_title=mb_convert_encoding($s_title,$charset,$this->encoding);
 		
 		$return .= '<p class="lp_title">' . $lang . '</p>';
+		
+				// we display an audio player if needed
+		if (!empty($row['audio']))
+		{
+			$return .= '<div style="float: right;" id="container"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>';
+			$return .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
+			$return .= '<script type="text/javascript">
+							var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
+							s1.addParam("allowscriptaccess","always");
+							s1.addParam("flashvars","file=../../courses/'.$_course['path'].'/document/audio/'.$row['audio'].'&image=preview.jpg&autostart=true");
+							s1.write("container");
+						</script>';
+		}
 		
 		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Edit the current item"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="Edit the current item" /> '.get_lang("Edit").'</a>';
 		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="Move the current item" /> '.get_lang("Move").'</a>';

@@ -228,10 +228,10 @@ if(api_is_allowed_to_edit())
     <tr>
       <td valign='bottom'>
         <a href='".api_get_self()."?action=add'>",
-	"<img src='../img/scormbuilder.gif' border=\"0\" align=\"absmiddle\" alt='scormbuilder'>".get_lang('_add_learnpath')."</a>
+	"<img src='../img/scormbuilder.gif' border=\"0\" align=\"absmiddle\" alt='scormbuilder' />".get_lang('_add_learnpath')."</a>
       </td>",
       "<td valign='bottom'>&nbsp;&nbsp;&nbsp;<a href='".api_get_self()."?createDir=$cmdCurDirPath'>",
-      "<img src=\"../img/dossier.gif\" border=\"0\" align=\"absmiddle\">",
+      "<img src=\"../img/dossier.gif\" border=\"0\" align=\"absmiddle\" />",
 	"",get_lang("CreateDir"),"</a>
       </td>
     </tr>
@@ -330,7 +330,7 @@ if ($fileList)
 
     if (file_exists($indexRoute1)) {
       $urlFileName = api_get_self().'?'.api_get_cidreq().'&openDir='.$cmdFileName.'&indexRoute=index.htm';
-      $image="<img src=\"./../img/scorm_logo.gif\" border=\"0\" align=\"absmiddle\" alt='scorm'>";
+      $image="<img src=\"./../img/scorm_logo.gif\" border=\"0\" align=\"absmiddle\" alt='scorm' />";
     } elseif (file_exists($indexRoute2)) {
       $urlFileName = api_get_self().'?'.api_get_cidreq().'&openDir='.$cmdFileName.'&indexRoute=index.html';
       $image="<img src=\"./../img/scorm_logo.gif\" border=\"0\" align=\"absmiddle\" alt='scorm'>";

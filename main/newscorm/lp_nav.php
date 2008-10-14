@@ -61,7 +61,9 @@ if(isset($_SESSION['lpobject']))
 	//$progress_bar = $_SESSION['oLP']->get_progress_bar(); 
 	$progress_bar = $_SESSION['oLP']->get_progress_bar('',-1,'',true);
 	
-	$navigation_bar = $_SESSION['oLP']->get_navigation_bar();}
+	$navigation_bar = $_SESSION['oLP']->get_navigation_bar();	
+	$mediaplayer = $_SESSION['oLP']->get_mediaplayer();
+}
 session_write_close();
 ?>
 <body>
@@ -70,12 +72,11 @@ session_write_close();
 	<div class="lp_navigation_elem">
 		<table>
 			<tr valign="middle">
-			<td>
-				<?php echo $progress_bar; ?>
-			</td>
-			<td>
-				<?php echo $navigation_bar; ?>
-			 </td>
+				<td><?php echo $progress_bar; ?></td>
+				<td><?php echo $navigation_bar; ?></td>
+			</tr>
+			<tr>
+				<td colspan="2"><?php echo $mediaplayer; ?></td>
 			</tr>
 		</table>
 	</div>

@@ -199,6 +199,65 @@ switch($_GET['action'])
 		break;
 }
 
+// POST action handling (uploading mp3, deleting mp3)
+if ($_POST['save_audio'])
+{
+	// deleting the audio fragments
+	foreach ($_POST as $key=>$value)
+	{
+		if (substr($key,0,9) == 'removemp3')
+		{
+			$lp_items_to_remove_audio[] = str_ireplace('removemp3','',$key);
+			
+			// removing the audio from the learning path item
+			$tbl_lp_item = Database::get_course_table('lp_item');
+			$in = implode(',',$lp_items_to_remove_audio);
+		}
+	}
+	if (count($lp_items_to_remove_audio)>0)
+	{
+		$sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE id IN (".$in.")";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+	}
+	
+	// uploading the audio files
+	foreach ($_FILES as $key=>$value)
+	{
+		if (substr($key,0,7) == 'mp3file' AND !empty($_FILES[$key]['tmp_name']))
+		{
+			// the id of the learning path item
+			$lp_item_id = str_ireplace('mp3file','',$key);
+			
+			// create the audio folder if it does not exist yet
+			global $_course;
+			$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/';
+			if(!is_dir($filepath.'audio'))
+			{
+				$perm = api_get_setting('permissions_for_new_directories');
+				$perm = octdec(!empty($perm)?$perm:'0770');
+				mkdir($filepath.'audio',$perm);
+				$audio_id=add_document($_course,'/audio','folder',0,'audio');
+				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id());				
+			}
+			// upload the file in the documents tool			
+			include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
+			$file_path = handle_uploaded_document($_course, $_FILES[$key],api_get_path('SYS_COURSE_PATH').$_course['path'].'/document','/audio',api_get_user_id(),'','','','','',false);			
+			
+			// getting the filename only
+			$file_components = explode('/',$file_path);
+			$file = $file_components[count($file_components)-1];
+			
+			// store the mp3 file in the lp_item table
+			$tbl_lp_item = Database::get_course_table('lp_item');
+			$sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."' WHERE id = '".Database::escape_string($lp_item_id)."'";
+			api_sql_query($sql_insert_audio, __FILE__, __LINE__);			
+			
+		}
+	}
+	
+	Display::display_confirmation_message(get_lang('ChangesStored'));
+}
+
 echo $_SESSION['oLP']->overview();
 
 /*

@@ -67,7 +67,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 				require_once (api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php');
 				$ai = get_personal_agenda_item($_GET['id']);
                 $vevent->setProperty( 'summary', mb_convert_encoding($ai['title'],'UTF-8',$charset));
-				if(empty($ai['date'])){header('location:'.$_SERVER['REFERER_URI']);}
+				if(empty($ai['date'])){header('location:'.$_SERVER['HTTP_REFERER']);}
 				list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['date']);
 				$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
 				if(empty($ai['enddate']))
@@ -97,7 +97,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 				require_once (api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php');
 				$ai = get_agenda_item($_GET['id']);
 		        $vevent->setProperty( 'summary', mb_convert_encoding($ai['title'],'UTF-8',$charset));
-        		if(empty($ai['start_date'])){header('location:'.$_SERVER['REFERER_URI']);}
+        		if(empty($ai['start_date'])){header('location:'.$_SERVER['HTTP_REFERER']);}
 				list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['start_date']);
 				$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
 				if(empty($ai['end_date']))
@@ -130,14 +130,14 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 				$ical->returnCalendar();
 				break;
 			default:
-				header('location:'.$_SERVER['REFERER_URI']);
+				header('location:'.$_SERVER['HTTP_REFERER']);
 				die();	
 		}
 	}
 }
 else
 {
-	header('location:'.$_SERVER['REFERER_URI']);
+	header('location:'.$_SERVER['HTTP_REFERER']);
 	die();	
 }
 ?>

@@ -217,4 +217,5 @@ $FirstLogin = "Premier login";
 $AccessDetails = "Détails d\'accès";
 $DateAndTimeOfAccess = "Date et heure d\'accès";
 $Duration = "Durée";
+$WrongDatasForTimeSpentOnThePlatform = "Les données de suivi à propos de cet apprenant ont été enregistrées à une époque où le calcul du temps sur la plateforme était impossible.";
 ?>

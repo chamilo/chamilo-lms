@@ -217,4 +217,5 @@ $FirstLogin = "First connection";
 $AccessDetails = "Access details";
 $DateAndTimeOfAccess = "Date and time of access";
 $Duration = "Duration";
+$WrongDatasForTimeSpentOnThePlatform = "The datas about this user were registered when the calculation of time spent on the platform wasn\'t possible.";
 ?>

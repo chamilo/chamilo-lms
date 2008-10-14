@@ -838,4 +838,11 @@ $EnableSearchComment = "Selezionando \"Sì\" sarà abilitata la ricerca testuale l
 $SearchASession = "Trova una sessione";
 $ActiveSession = "Attivazione della sessione";
 $AddUrl = "Aggiungi URL";
+$ShowSessionCoachTitle = "Mostra il tutor della sessione";
+$ShowSessionCoachComment = "Mostra nell\'intestazione il nome del tutor globale della sessione nell\'elenco dei corsi ";
+$ExtendRightsForCoachTitle = "Diritti estesi per il tutor";
+$ExtendRightsForCoachComment = "Attivando l\'opzione il tutor avrà gli stessi diritti del docente nell\'uso degli strumenti di produzione di contenuto";
+$ExtendRightsForCoachOnSurveyComment = "Attivando l\'opzione il tutor potrà creare e modificare i questionari";
+$ExtendRightsForCoachOnSurveyTitle = "Diritti estesi per il tutor sui questionari";
+$CannotDeleteUserBecauseOwnsCourse = "L\'utente non può essere eliminato in quanto è ancora docente in un corso. Per eliminare l\'account devi prima cancellare il suo stato di docente nei corsi, oppure puoi sospendere l\'account anziché eliminarlo.";
 ?>

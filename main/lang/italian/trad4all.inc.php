@@ -565,4 +565,5 @@ $BackToPreviousPage = "Torna alla pagina precedente";
 $NoOfficialCode = "Nessun codice ufficiale";
 $Owner = "Proprietario";
 $With = "con";
+$GeneralCoach = "Tutor globale";
 ?>

@@ -116,45 +116,62 @@ function Ok()
 		return false ;
 	}
 
-	var e = (oMedia || new Media()) ;
-
-	//if(!is_ie){
-	if ( !oMedia )
-	{
-		var oFakeImage  = null ;		
-	}
+	var oFakeImage  = null ;
 		
-	if ( !oEmbed )
-	{
-		oEmbed		= FCK.EditorDocument.createElement( 'embed' ) ;			
-		oFakeImage  = null ;
-	}
+	oEmbed = FCK.EditorDocument.createElement('embed');
+	UpdateEmbed(oEmbed);
 	
-	UpdateEmbed( oEmbed ) ;
-
-	if ( !oFakeImage )
-	{
-		oFakeImage	= oEditor.FCKDocumentProcessor_CreateFakeImage( 'FCK__MP3', oEmbed ) ;
-		oFakeImage.setAttribute( '_fckmp3', 'true', 0 ) ; 
-		oFakeImage	= FCK.InsertElement( oFakeImage ) ;
-	}
-	oEditor.FCKEmbedAndObjectProcessor.RefreshView( oFakeImage, oEmbed ) ;	
-	//}
-
-	updateMovie(e) ;
-	FCK.InsertHtml(e.getOuterHTML()) ;
+	//oObject = FCK.EditorDocument.createElement('object');
+	//oObject.appendChild(oEmbed);	
+	
+	/*SetAttribute(oObject, 'classid', 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000');
+	SetAttribute(oObject, 'codebase', 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#6,0,0,0');
+	SetAttribute(oObject, 'width', '300');
+	SetAttribute(oObject, 'height', '20');
+	
+	oParamBgcolor = FCK.EditorDocument.createElement('param');
+	SetAttribute(oParamBgcolor, 'value', '#FFFFFF');
+	SetAttribute(oParamBgcolor, 'name', 'bgcolor');
+	oObject.appendChild(oParamBgcolor);
+	
+	oParamMovie = FCK.EditorDocument.createElement('param');
+	SetAttribute(oParamMovie, 'value', getObjData(GetE('mpUrl').value));
+	SetAttribute(oParamMovie, 'name', 'movie');
+	oObject.appendChild(oParamMovie);
+	
+	oParamWAllowfullscreen = FCK.EditorDocument.createElement('param');
+	SetAttribute(oParamWAllowfullscreen, 'value', 'false');
+	SetAttribute(oParamWAllowfullscreen, 'name', 'allowfullscreen');
+	oObject.appendChild(oParamWAllowfullscreen);
+	
+	oParamScriptAccess = FCK.EditorDocument.createElement('param');
+	SetAttribute(oParamScriptAccess, 'value', 'always');
+	SetAttribute(oParamScriptAccess, 'name', 'allowscriptaccess');
+	oObject.appendChild(oParamScriptAccess);
+	
+	oParamSRC = FCK.EditorDocument.createElement('param');
+	SetAttribute(oParamSRC, 'value', 'file='+getSoundUrl()+'&autostart='+getAutostart());
+	SetAttribute(oParamSRC, 'name', 'flashvars');
+	oObject.appendChild(oParamSRC);*/
+	
+	oFakeImage	= oEditor.FCKDocumentProcessor_CreateFakeImage( 'FCK__MP3', oEmbed ) ;
+	oFakeImage.setAttribute( '_fckmp3', 'true', 0 ) ;
+	oFakeImage	= FCK.InsertElement( oFakeImage ) ;
+	
 	return true ;
 }
 
 function UpdateEmbed( e )
 {
-	SetAttribute( e, 'type'	, 'application/x-shockwave-flash' ) ;	
-	SetAttribute( e, 'quality'	, 'high' ) ;
-	SetAttribute( e, 'name'	, 'Streaming' ) ;
-	SetAttribute( e, 'width'	, '90' ) ;
-	SetAttribute( e, 'height'	, '25' ) ;
-	SetAttribute( e, 'pluginspage'	, 'http://www.macromedia.com/go/getflashplayer' ) ;
-	SetAttribute( e, 'src', getObjData(GetE('mpUrl').value)+'?autostart='+getAutostart()+'&mp3file='+getSoundUrl()) ;
+	SetAttribute( e, 'type'	, 'application/x-shockwave-flash' );
+	SetAttribute( e, 'pluginspage'	, 'http://www.macromedia.com/go/getflashplayer' );
+	SetAttribute( e, 'width'	, '300' );
+	SetAttribute( e, 'height'	, '20' );
+	SetAttribute( e, 'bgcolor'	, '#FFFFFF' );
+	SetAttribute( e, 'src', getObjData(GetE('mpUrl').value));
+	SetAttribute( e, 'allowfullscreen', 'false' );
+	SetAttribute( e, 'allowscriptaccess', 'always' );
+	SetAttribute( e, 'flashvars', 'file='+getSoundUrl()+'&autostart='+getAutostart());
 }
 
 /**
@@ -353,8 +370,8 @@ function getObjData(mpUrl)
 		//var configBasePath = FCKConfig.BasePath;
 		//var cor_indx=configBasePath.indexOf("inc/")+4;		
 		//configBasePath.substring(0, cor_indx)+"lib/mp3player/player_mp3.swf";					
-		var objdata = rel_path+'inc/lib/mp3player/player_mp3.swf'; // real_path variable is defined in fck_mp3.php  
-		setSoundUrl(GetE('mpUrl').value);				
+		var objdata = rel_path+'inc/lib/mediaplayer/player.swf'; // real_path variable is defined in fck_mp3.php  
+		setSoundUrl(GetE('mpUrl').value);
 		return objdata;
 }
 

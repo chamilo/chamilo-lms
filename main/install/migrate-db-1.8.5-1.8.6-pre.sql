@@ -22,10 +22,10 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('add_users_
 ALTER TABLE session ADD nb_days_access_before_beginning TINYINT NULL DEFAULT '0' AFTER date_end , ADD nb_days_access_after_end TINYINT NULL DEFAULT '0' AFTER nb_days_access_before_beginning ;
 ALTER TABLE course_rel_user ADD INDEX (user_id);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools', 'wiki', 'checkbox', 'Tools', 'true', 'CourseCreateActiveToolsTitle', 'CourseCreateActiveToolsComment', NULL, 'Wiki', 1, 0);
-INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('extend_rights_for_coach',NULL,'radio','Security','false','AddUsersByCoachTitle','AddUsersByCoachComment',NULL,NULL);
-INSERT INTO settings_options (variable, value, display_text) VALUES (''extend_rights_for_coach', 'true', 'Yes');
-INSERT INTO settings_options (variable, value, display_text) VALUES (''extend_rights_for_coach', 'false', 'No');
-INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('extend_rights_for_coach_on_surveys',NULL,'radio','Security','false','AddUsersByCoachTitle','AddUsersByCoachComment',NULL,NULL);
+INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('extend_rights_for_coach',NULL,'radio','Security','false','ExtendRightsForCoachTitle','ExtendRightsForCoachComment',NULL,NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('extend_rights_for_coach', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('extend_rights_for_coach', 'false', 'No');
+INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('extend_rights_for_coach_on_surveys',NULL,'radio','Security','false','ExtendRightsForCoachOnSurveyTitle','ExtendRightsForCoachOnSurveyComment',NULL,NULL);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('extend_rights_for_coach_on_surveys', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('extend_rights_for_coach_on_surveys', 'false', 'No');
 INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('show_session_coach',NULL,'radio','Platform','false','ShowSessionCoachTitle','ShowSessionCoachComment',NULL,NULL);
@@ -37,6 +37,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('show_sessi
 -- xxUSERxx
 
 -- xxCOURSExx
+ALTER TABLE course_settings ADD INDEX unique_setting (variable,subkey,category);
 ALTER TABLE lp ADD theme varchar(255) not null default '';
 ALTER TABLE survey ADD mail_subject VARCHAR( 255 ) NOT NULL AFTER reminder_mail ;
 ALTER TABLE quiz_rel_question ADD question_order mediumint unsigned NOT NULL default 1;

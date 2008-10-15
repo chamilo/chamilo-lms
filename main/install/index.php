@@ -116,7 +116,7 @@ elseif(!empty($dokeos_version)) //variable coming from installedVersion, normall
 	$my_old_version = $dokeos_version;
 }
 
-$new_version = '1.8.5';
+$new_version = '1.8.6';
 $new_version_stable = true;
 /*
 ==============================================================================
@@ -614,7 +614,7 @@ elseif($_POST['step6'])
 	//STEP 6 : INSTALLATION PROCESS
 	if($installType == 'update')
 	{
-		if(empty($my_old_version)){$my_old_version='1.8.4';} //we guess
+		if(empty($my_old_version)){$my_old_version='1.8.5';} //we guess
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
         error_log('Starting migration process from '.$my_old_version.' ('.time().')',0);
@@ -644,7 +644,7 @@ elseif($_POST['step6'])
 				include('update-db-1.8.4-1.8.5.inc.php');
                 include('update-files-1.8.4-1.8.5.inc.php');
 			case '1.8.5':
-				//include('update-db-1.8.5-1.8.6.inc.php');
+				include('update-db-1.8.5-1.8.6.inc.php');
                 include('update-files-1.8.5-1.8.6.inc.php'); 
             default:
                 

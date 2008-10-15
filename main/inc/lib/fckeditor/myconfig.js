@@ -72,7 +72,7 @@ FCKConfig.ToolbarSets["Wiki"] = [
 	['Templates','Cut','Copy','Paste'],	
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 	['Wikilink','Link','Unlink','Anchor'],
-	['ImageManager','flvPlayer','Flash','EmbedMovies','MP3','Table','Rule','Smiley','SpecialChar'],
+	['ImageManager','imgmapPopup','flvPlayer','Flash','EmbedMovies','MP3','Table','Rule','Smiley','SpecialChar'],
 	['FontFormat','FontName','FontSize'],
 	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],	
@@ -92,4 +92,4 @@ FCKConfig.Plugins.Add('flvPlayer','en') ;
 FCKConfig.Plugins.Add("Flash", "en");  
 FCKConfig.Plugins.Add('fckEmbedMovies');
 FCKConfig.Plugins.Add("wikilink", "en,es", sOtherPluginPath ) ; // support to english, spanish
-
+FCKConfig.Plugins.Add("imgmap", "en,es", sOtherPluginPath );

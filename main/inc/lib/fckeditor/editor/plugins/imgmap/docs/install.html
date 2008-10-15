@@ -1,0 +1,103 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Image Maps plugin</title>
+<link href="styles.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h1>Image Maps Plugin for FCKeditor</h1>
+
+<h2>Introduction</h2>
+<p>This is a dialog-based plugin to handle insertion and modification of image map areas in <a href="http://www.fckeditor.net">FCKeditor</a></p>
+<h3 id="contact">Authors:</h3>
+<p><a href="mailto:licenses@maschek.hu">Adam Maschek</a></p>
+<p><a href="mailto:amla70@gmail.com">Alfonso Mart&iacute;nez de Lizarrondo</a></p>
+<h3>Sponsored by:</h3>
+<p><a href="http://www.claromentis.com">claromentis.com</a></p>
+<h3>Version history: </h3>
+<ul>
+  <li>0.3: 29/10/2007. First version.</li>
+  <li>0.4: 14/12/2007. Public release based on imgmap 2.0beta3.</li>
+</ul>
+<h3>Website:</h3>
+<p>Visit <a href="http://martinezdelizarrondo.com/imagemaps/">a demo of this plugin</a> or <a href="http://www.maschek.hu/imagemap/">a demo of the imgmap code</a> </p>
+
+<h3>Known bugs:</h3>
+<p>None :-P </p>
+<h2>Installation</h2>
+<h3>1. Copying the files</h3>
+<p>Extract the contents of the zip in you plugins directory, so it ends up like
+    this<br>
+    <img src="installation.png" alt="Screenshot of installation" width="304" height="290"  longdesc="#install"></p>
+<pre id="install">
+editor\
+	...
+	js\
+	lang\
+	plugins\
+		...
+		imgmap\
+			excanvas.js
+			fckplugin.js
+			imgmap.js
+			css\
+			docs\
+			images\
+			jscripts\
+			lang\
+		...
+	skins\
+</pre>
+<h3>2. Adding it to FCKeditor</h3>
+<p>Now add in your <em>fckconfig.js</em> or custom js configuration
+file the following line:
+<code>FCKConfig.Plugins.Add( 'imgmap', 'en') ;</code></p>
+<h3>3. Adding it to the toolbarset</h3>
+<p>Add the button <strong>'imgmapPopup'</strong> (case sensitive) to your toolbarset:
+<code>FCKConfig.ToolbarSets[&quot;Basic&quot;] = [<br>
+  ['Bold','Italic','-','OrderedList','UnorderedList','-','Link','Unlink'],<br>
+['Link','Unlink','Anchor'],<br>
+['Image','imgmapPopup'],<br>
+['FitWindow','-','About']<br>
+] ;</code></p>
+<h3 id="configure">4. Configure the plugin</h3>
+<p>Currently the plugin doesn't have any option to configure. </p>
+<h3>5. Use it</h3>
+<p align="right">Now empty the cache of your browser and reload the editor, the
+  new button 
+  <img src="../images/editor_Icon.gif" alt="Insert Image map" width="16" height="16"> should
+  be ready to use when you select an image. </p>
+<h2>Final notes</h2>
+<p>This plugin uses the <a href="http://www.maschek.hu/imagemap/index">imgmap</a> code that it's available under a dual GPL/Commercial
+  license. You should check <a href="http://www.maschek.hu/imagemap/license">which
+  license is the right one for you.</a> </p>
+<p> Your help is always welcome supporting this project. Donations can be made
+  via the PayPal network using your PayPal account or any of the usual credit
+  cards. The security of the payment is provided by PayPal. To initiate a donation
+  just click on the buttons below that will take you to the PayPal website. <br>
+Any amounts are appreciated, thank you for your help! </p>
+
+<p class="nobottom">Donate to Adam: </p>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" >
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+">
+</form>
+<p class="nobottom">Donate to Alfonso:</p>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+">
+</form>
+<h2>Disclaimers</h2>
+<p>FCKeditor is  &copy; FredCK.com</p>
+<p>The core imgmap code is  &copy; Adam Maschek </p>
+</body>
+</html>

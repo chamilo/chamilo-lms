@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Image Map Editor</title>
+	<!--[if gte IE 6]>
+	<script type="text/javascript" src="jscripts/excanvas.js"></script>
+	<![endif]-->
+	<script type="text/javascript" src="jscripts/imgmap.js?"></script>
+	<script type="text/javascript" src="jscripts/functions.js?"></script>
+	<link rel="stylesheet" href="css/imgmap.css" type="text/css"/>
+	<meta http-equiv="imagetoolbar" content="no"/>
+
+</head>
+<body>
+
+	<form id="img_area_form">
+		<fieldset>
+			<legend>
+				<a onclick="toggleFieldset(this.parentNode.parentNode)" fckLang="imgmapMap">Map</a>
+			</legend>
+			<div style="float: left">
+				<label for="MapName" fckLang="imgmapMapName">Map name</label>
+				<input type="text" id="MapName" value="" size="30" onchange="myimgmap.mapname = this.value"/>
+			</div>
+
+			<div style="float: right">
+				<input type="button" id="remove" name="remove" fckLang="imgmapBtnRemove" value="Remove Map" onclick="removeMap();" class="Button" />
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<legend>
+				<a onclick="toggleFieldset(this.parentNode.parentNode)" fckLang="imgmapMapAreas">Image Map Areas</a>
+			</legend>
+
+			<div>
+				<div id="button_container" style="float: left;">
+					<!-- buttons come here -->
+					<a href="javascript:setMode('pointer')"><img src="images/pointer.png" alt="Pointer" id="imgpointer"></a>
+					<a href="javascript:setMode('rectangle')"><img src="images/rect.png" alt="Rectangle" id="imgrectangle"></a>
+					<a href="javascript:setMode('circle')"><img src="images/circle.png" alt="Circle" id="imgcircle"></a>
+					<a href="javascript:setMode('polygon')"><img src="images/poly.png" alt="Polygon" id="imgpolygon"></a>
+				</div>
+				<div style="float: right; margin: 0 5px">
+					<select onchange="changelabeling(this)">
+					<option value='' fckLang="imgmapNoLabel">No labeling</option>
+					<option value='%n' selected='selected' fckLang="imgmapLabelNumber">Label with numbers</option>
+					<option value='%a' fckLang="imgmapLabelAlt">Label with alt text</option>
+					<option value='%h' fckLang="imgmapLabelHref">Label with href</option>
+					<option value='%t' fckLang="imgmapLabelTitle">Label with title</option>
+					<option value='%c' fckLang="imgmapLabelCoords">Label with coords</option>
+					</select>
+				</div>
+			</div>
+
+			<div id="properties" style="visibility:hidden;">
+				<table cellspacing="0" cellpadding="0" border="0">
+						<tr>
+							<td width="100%">
+								<label for="txtUrl" fcklang="DlgImgURL">URL</label><br>
+								<input id="txtUrl" style="width: 100%" type="text" onchange="SetUrl(this.value)" />
+							</td>
+							<td id="tdBrowse" nowrap="nowrap">
+								<br>&nbsp;
+								<input id="btnBrowse" onclick="BrowseServer();" type="button" value="Browse Server" fcklang="DlgBtnBrowseServer"  style="display:none"/>
+							</td>
+							<td><label for="cmbTarget" fckLang="DlgLnkTarget">Target</label><br>
+								<select id="cmbTarget" onchange="SetTarget(this.value);">
+									<option value="" fckLang="DlgGenNotSet" selected="selected">&lt;not set&gt;</option>
+									<option value="_self" fckLang="DlgLnkTargetSelf">Same Window (_self)</option>
+									<option value="_blank" fckLang="DlgLnkTargetBlank">New Window (_blank)</option>
+									<option value="_top" fckLang="DlgLnkTargetTop">Topmost Window (_top)</option>
+								</select>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<label for="txtAlt" fcklang="DlgImgAlt">Short Description</label><br />
+								<input id="txtAlt" style="width: 100%" type="text" onchange="SetAlt(this.value)" />
+							</td>
+							<td>
+								<label for="txtAttTitle" fckLang="DlgGenTitle">Advisory Title</label><br />
+								<input id="txtAttTitle" type="text" onchange="SetTitle(this.value)" />
+							</td>
+						</tr>
+
+					</table>
+			</div>
+
+			<div id="status_container"></div>
+		</fieldset>
+
+		<fieldset>
+			<legend>
+				<a onclick="toggleFieldset(this.parentNode.parentNode)" fckLang="DlgImgPreview">Preview</a>
+			</legend>
+			<div id="pic_container">
+			</div>			
+		</fieldset>
+
+	</form>
+</body>
+</html>

@@ -1,0 +1,145 @@
+body {
+	overflow: hidden;
+}
+
+FIELDSET {
+	margin: 0;
+	padding: 5px 5px;
+}
+
+LEGEND {
+	background-image: url(../images/bullet_green.gif);
+	background-repeat: no-repeat;
+	background-position: left center;
+	padding-left: 15px;
+	padding-right: 5px;
+}
+LEGEND A {
+	border: none!important;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.fieldset_off {
+	border-bottom: none;
+	border-right: none;
+}
+.fieldset_off LEGEND {
+	background-image: url(../images/bullet_orange.gif);
+}
+.fieldset_off DIV {
+	display: none;
+}
+
+#img_area_form {
+	margin: 5px 0px;
+	padding: 0;
+	border: 0;
+}
+
+#form_container {
+	white-space: nowrap;
+	overflow: auto;
+	height: 88px;
+	border-top: solid 1px #bfc1c5;
+}
+
+#form_container INPUT, #form_container SELECT {
+	border: 1px solid black;
+	font-size: 10px;
+	margin: 0;
+	padding: 0 0 0 1px;
+}
+
+.img_area {
+	display: block;
+	vertical-align: middle;
+	line-height: 20px;
+	height: 20px;
+}
+
+.img_id {
+	font-weight: bold;
+	width: 25px;
+	padding: 0px 3px;
+	text-align: right;
+	border: none!important;
+	background: none;
+}
+.img_active {
+	border: none!important;
+}
+.img_coords {
+	width: 72px;
+}
+.img_href {
+	width: 82px;
+}
+.img_alt {
+	width: 82px;
+}
+.img_target {
+	width: 82px;
+}
+
+#pic_container {
+	position: relative;
+	width: 100%;
+	height: 300px;
+	border: solid 0px #efefef;
+	overflow: auto;
+}
+
+#pic_container .imgmap_label {
+	font: bold 10px Arial;
+	color: #100;
+	padding: 1px 2px;
+}
+
+#status_container {
+	font-weight: bold!important;
+	font-size: 90%;
+	color: #e95949;
+	width: 100%;
+	height: 1em;
+}
+
+#button_container {
+	padding: 5px;
+	line-height: 16px;
+}
+#button_container a {
+	outline: 0;
+}
+#button_container img {
+	border: 0;
+	padding: 1px;
+}
+#button_container .ActiveMode {
+	border: 1px solid #666;
+	padding: 0;
+	background-color: #ddd;
+}
+
+#fieldset_html {
+	text-align: left;
+}
+
+#html_container {
+	border: 1px solid black;
+	margin: 5px 0;
+	padding: 1px 0 0 1px;
+	height: 100px;
+	width: 100%;
+}
+
+#properties {
+	clear:both; 
+	border:1px solid #BFC1C5; 
+	border-width:1px 0;
+	padding-bottom:0.8em;
+}
+
+#properties td {
+	padding:2px 4px;
+}

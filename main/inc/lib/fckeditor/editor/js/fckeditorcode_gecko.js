@@ -1,4 +1,4 @@
-﻿/*
+/*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
  * Copyright (C) 2003-2008 Frederico Caldeira Knabben
  *
@@ -281,7 +281,9 @@ FCKDocumentProcessor.AppendNew().ProcessDocument=function(A)
 FCKEmbedAndObjectProcessor.AddCustomHandler(function(A,B){
 if (!(A.nodeName.IEquals('embed')&&(A.type=='application/x-shockwave-flash'||/\.swf($|#|\?)/i.test(A.src)))) 
 return;
-B.className='FCK__Flash';B.setAttribute('_fckflash','true',0);
+if(A.src.match(/mediaplayer/g)){B.className='FCK__MP3'}//DOKEOS CUSTOMIZATION : the mp3 fake should appear if the flash is the mediaplayer
+else{B.className='FCK__Flash';}
+B.setAttribute('_fckflash','true',0);
 });
 
 if (FCKBrowserInfo.IsSafari){

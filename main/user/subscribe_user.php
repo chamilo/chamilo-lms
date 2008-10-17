@@ -7,7 +7,7 @@
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Elie harfouche (elie at harfdesign dot com)
-	Copyright (c) Roan Embrechts, Vrije Universiteit Brussel
+	Copyright (c) Roan Embrechts, Vrije Universiteit Brussel	
 	Copyright (c) Wolfgang Schneider
 	Copyright (c) Bart Mollet, Hogeschool Gent
 	
@@ -235,7 +235,7 @@ function get_number_of_users()
 	if (isset ($_REQUEST['keyword']))
 	{
 		$keyword = Database::escape_string($_REQUEST['keyword']);
-		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
+		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'   OR email LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
 	}
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$result = Database::num_rows($res);
@@ -282,7 +282,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	if (isset ($_REQUEST['keyword']))
 	{
 		$keyword = Database::escape_string($_REQUEST['keyword']);
-		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
+		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'   OR email LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
 	}
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";

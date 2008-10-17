@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 16422 2008-09-29 09:08:56Z elixir_julian $
+<?php //$Id: myStudents.php 16554 2008-10-17 08:29:59Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -780,7 +780,7 @@ if(!empty($_GET['student']))
 						</td>
 						
 						<td align="right">
-							<?php echo $total_weighting>0 ? $score.'%' : '-' ?>
+							<?php echo ($total_weighting>0 && $progress!='0%') ? $score.'%' : '-' ?>
 						</td>
 						
 						<td align="center">

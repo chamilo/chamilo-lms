@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 15984 2008-08-13 17:24:24Z juliomontoya $
+<?php // $Id: edit_document.php 16553 2008-10-17 07:31:11Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -591,7 +591,7 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_
 	{
 		if (empty($readonly) && $readonly==0)
 		{	
-			$form->addElement('submit','submit',get_lang('Ok'));	
+			$form->addElement('submit','submit',get_lang('SaveDocument'));	
 			$_SESSION['showedit']=1;
 			$form->add_html_editor('texte','',false,true);
 		}			
@@ -616,7 +616,7 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_
 			$checked->setChecked(true);
 		}
 	}		
-	$form->addElement('submit','submit',get_lang('Ok'));
+	$form->addElement('submit','submit',get_lang('SaveDocument'));
 			
 	$defaults['filename'] = $filename;
 	$defaults['extension'] = $extension;

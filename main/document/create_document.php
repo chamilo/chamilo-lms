@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 16447 2008-10-08 00:47:01Z yannoo $
+// $Id: create_document.php 16553 2008-10-17 07:31:11Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -344,14 +344,14 @@ else
 	));		
 }
 
-$form->addElement('submit', 'submit', get_lang('Ok'));
+$form->addElement('submit', 'submit', get_lang('SaveDocument'));
 
 // HTML-editor
 $form->add_html_editor('content','', false, false);
 // Comment-field
 
 //$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));
-$form->addElement('submit', 'submit', get_lang('Ok'));
+$form->addElement('submit', 'submit', get_lang('SaveDocument'));
 $form->setDefaults($default);
 
 // HTML

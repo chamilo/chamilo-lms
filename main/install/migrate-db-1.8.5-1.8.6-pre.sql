@@ -31,6 +31,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('extend_rig
 INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('show_session_coach',NULL,'radio','Platform','false','ShowSessionCoachTitle','ShowSessionCoachComment',NULL,NULL);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_session_coach', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_session_coach', 'false', 'No');
+INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES ('wiki','wiki/index.php','wiki.gif',2,3,'basic');
 
 -- xxSTATSxx
 

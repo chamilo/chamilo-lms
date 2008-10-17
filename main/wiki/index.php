@@ -2039,7 +2039,7 @@ function save_wiki()
 
 	$_clean['reflink']=Database::escape_string($_POST['reflink']);
 	$_clean['title']=Database::escape_string($_POST['title']);
-	$_clean['content']= html_entity_decode(Database::escape_string(stripslashes(urldecode($_POST['content']))));
+	$_clean['content']= html_entity_decode(Database::escape_string(stripslashes($_POST['content'])));
 	$_clean['user_id']=(int)Database::escape_string(api_get_user_id());
 	$_clean['assignment']=Database::escape_string($_POST['assignment']);
     $_clean['comment']=Database::escape_string($_POST['comment']);	
@@ -2117,7 +2117,7 @@ function save_new_wiki()
 	}	
 
 	$_clean['title']=Database::escape_string($_POST['title']);		    
-	$_clean['content']= html_entity_decode(Database::escape_string(stripslashes(urldecode($_POST['content']))));
+	$_clean['content']= html_entity_decode(Database::escape_string(stripslashes($_POST['content'])));
 	
 	if($_clean['assignment']==2) //config by default for individual assignment (students)
 	{	 

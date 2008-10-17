@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 16553 2008-10-17 07:31:11Z elixir_inter $
+<?php // $Id: edit_document.php 16555 2008-10-17 10:29:14Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -411,12 +411,11 @@ if($is_allowedToEdit)
 						//if flv player, change absolute paht temporarely to prevent from erasing it in the following lines
 						$texte = str_replace('flv=h','flv=h|',$texte);
 						$texte = str_replace('flv=/','flv=/|',$texte);
-						$path_to_remove=api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir;
-						$texte=str_replace($path_to_remove,'./',$texte);
-						$texte=str_replace('mp3player.swf?son='.urlencode($path_to_remove),'mp3player.swf?son=.%2F',$texte);
-						// for flv player : change back the url to absolute
-						$texte = str_replace('flv=h|','flv=h',$texte);
-						$texte = str_replace('flv=/|','flv=/',$texte);
+						
+						// change the path of mp3 to absolute
+						$texte = preg_replace("|(flashvars=\"file=)([\./]*)|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$texte);
+						
+						
 						fputs($fp,$texte);						
 						fclose($fp);			
 						$perm = api_get_setting('permissions_for_new_directories');

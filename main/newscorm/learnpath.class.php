@@ -4479,16 +4479,12 @@ class learnpath {
 		$filename = $tmp_filename . '.html';
 		
 		$content = stripslashes(text_filter($content));
-		
-		//if flv player, change absolute paht temporarely to prevent from erasing it in the following lines
-		$content = str_replace('flv=h','flv=h|',$content);
-		$content = str_replace('flv=/','flv=/|',$content);		
-		
+			
 		$content = str_replace(api_get_path('WEB_COURSE_PATH'), api_get_path(REL_PATH).'courses/', $content);
 		
-		// for flv player : change back the url to absolute
-		$content = str_replace('flv=h|','flv=h',$content);
-		$content = str_replace('flv=/|','flv=/',$content);
+		// change the path of mp3 to absolute
+		$content = preg_replace("|(flashvars=\"file=)([\./]*)|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$content);
+		
 		
 		
 		// for flv player : to prevent edition problem with firefox, we have to use a strange tip (don't blame me please)
@@ -4591,6 +4587,9 @@ class learnpath {
 			$content = text_filter($content);
 			$content = str_replace(api_get_path('WEB_COURSE_PATH'), $_configuration['url_append'].'/courses/', $content);
 			
+			// change the path of mp3 to absolute
+			$content = preg_replace("|(flashvars=\"file=)([\./]*)|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$content);
+						
 			fputs($fp, $content);
 			fclose($fp);
 		}

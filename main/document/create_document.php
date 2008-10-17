@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 16553 2008-10-17 07:31:11Z elixir_inter $
+// $Id: create_document.php 16555 2008-10-17 10:29:14Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -397,17 +397,11 @@ if ($form->validate())
 		
 		$content = str_replace(api_get_path('WEB_COURSE_PATH'), $_configuration['url_append'].'/courses/', $texte);
 		
-		// replace fake by flv player if needed	(fake is present only in templates)	
-		$content = str_replace('<img src="'.api_get_path(REL_PATH).'main/inc/lib/fckeditor/editor/css/images/flv.gif?flv=',
-							   '<object type="application/x-shockwave-flash" data="'.api_get_path(REL_PATH).'main/inc/lib/flv_player/player_flv_mini.swf" height="240" width="320">
-					          		<param name="movie" value="'.api_get_path(REL_PATH).'main/inc/lib/flv_player/player_flv_mini.swf" />
-					          		<param name="FlashVars" value="flv=',$content);
 		
-		$content = str_replace('&amp;endflv" alt="" />','&autoplay=1" /></object><style type="text/css">body{}</style>',$content);
-
-		$texte = str_replace('mp3player.swf?son='.urlencode($path_to_remove), 'mp3player.swf?son=.%2F', $texte);
-		
-		
+		// change the path of mp3 to absolute
+		$content = preg_replace("|(flashvars=\"file=)([\./]*)|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$content);
+		 
+		 
 		fputs($fp, $content);
 
 		fclose($fp);

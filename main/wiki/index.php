@@ -344,24 +344,36 @@ if ($_GET['action']=='more')
 	echo '<br>'; 
 	echo '<b>'.get_lang('More').'</b><br>'; 
     echo '<hr>';
-	echo '<ul>';
+	
 	if(api_is_allowed_to_edit() || api_is_platform_admin())
 	{
 		//TODO: config area and private stats
 	
 	}
 	
-    //Submenu Orphaned pages	
-	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=orphaned&group_id='.$_clean['group_id'].'">'.get_lang('OrphanedPages').'</a></li>';
-	
-	//Submenu Wanted pages
-	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=wanted&group_id='.$_clean['group_id'].'">'.get_lang('WantedPages').'</a></li>';
-	
-	//Submenu Most visited pages
-	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mvisited&group_id='.$_clean['group_id'].'">'.get_lang('MostVisitedPages').'</a></li>';
-	
-	//Submenu Most changed pages
-	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mostchanged&group_id='.$_clean['group_id'].'">'.get_lang('MostChangedPages').'</a></li>';	
+	echo '<table border="0">';
+    echo '<tr>';
+    echo '<td>';
+	echo '<ul>'; 
+		//Submenu Most active users
+		echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mactiveusers&group_id='.$_clean['group_id'].'">'.get_lang('MostActiveUsers').'</a></li>';
+		//Submenu Most visited pages
+		echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mvisited&group_id='.$_clean['group_id'].'">'.get_lang('MostVisitedPages').'</a></li>';	
+		//Submenu Most changed pages
+		echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mostchanged&group_id='.$_clean['group_id'].'">'.get_lang('MostChangedPages').'</a></li>';
+	echo '</ul>';
+	echo '</td>';
+  	echo '<td>';
+  	echo '<ul>';   
+	   //Submenu Orphaned pages	
+		echo '<li><a href="index.php?cidReq='.$_course[id].'&action=orphaned&group_id='.$_clean['group_id'].'">'.get_lang('OrphanedPages').'</a></li>';	
+		//Submenu Wanted pages
+		echo '<li><a href="index.php?cidReq='.$_course[id].'&action=wanted&group_id='.$_clean['group_id'].'">'.get_lang('WantedPages').'</a></li>';   
+	echo '</ul>';
+   	echo'</td>';
+  	echo '</tr>';
+	echo '</table>';
+		
 	
 	//Submenu Most linked pages
 	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mostlinked&group_id='.$_clean['group_id'].'">'.get_lang('MostLinkedPages').'</a></li>';//TODO
@@ -389,9 +401,6 @@ if ($_GET['action']=='more')
 	
 	//Submenu Pages with more progress
 	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mprogress&group_id='.$_clean['group_id'].'">'.get_lang('MProgressPages').'</a></li>';//TODO	
-	
-	//Submenu Most active users
-	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mactiveusers&group_id='.$_clean['group_id'].'">'.get_lang('MostActiveUsers').'</a></li>';
 		
 	//Submenu Most active users in discuss
 	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mactiveusers&group_id='.$_clean['group_id'].'">'.get_lang('MostDiscussUsers').'</a></li>';//TODO
@@ -404,8 +413,7 @@ if ($_GET['action']=='more')
 	
 	//Submenu Random page
 	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mrandom&group_id='.$_clean['group_id'].'">'.get_lang('RandomPage').'</a></li>';//TODO
-			
-    echo '</ul>';	
+
 }
 
 /////////////////////// Most active users /////////////////////// Juan Carlos Raña Trabado
@@ -416,82 +424,120 @@ if ($_GET['action']=='mactiveusers')
 	echo '<b>'.get_lang('MostActiveUsers').'</b><br>'; 
 	echo '<hr>';	
 	
-	$sql='SELECT *, COUNT(*) AS NEDIT FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY user_id ORDER BY NEDIT DESC LIMIT 10'; //first ten users with more versions
+	$sql='SELECT *, COUNT(*) AS NUM_EDIT FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY user_id';
 	$allpages=api_sql_query($sql,__FILE__,__LINE__);		
+
+	//show table
+	if (mysql_num_rows($allpages) > 0)
+	{
+		$row = array ();
+		while ($obj = mysql_fetch_object($allpages))
+		{
+			$userinfo=Database::get_user_info_from_id($obj->user_id);
+			$row = array ();
+						
+			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=usercontrib&user_id='.urlencode($row['user_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'"></a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';				
+			$row[] ='<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=usercontrib&user_id='.urlencode($obj->user_id).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->NUM_EDIT.'</a>';				
+			$rows[] = $row;
+		}
 	
-	echo '<ul>';	
-	while ($row=Database::fetch_array($allpages))
-	{		
-		$userinfo=Database::get_user_info_from_id($row['user_id']);		
-		echo '<li><a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a> -> '.$row['NEDIT'].' <a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=usercontrib&user_id='.urlencode($row['user_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.get_lang('Contributions').'</a></li>';
-	}
-	echo '</ul>';
-	
+		$table = new SortableTableFromArrayConfig($rows,1,10,'MostActiveUsersA_table','','','DESC');
+		$table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'group_id'=>Security::remove_XSS($_GET['group_id'])));		
+		$table->set_header(0,get_lang('Author'), true, array ('style' => 'width:30px;'));
+		$table->set_header(1,get_lang('Contributions'), true);
+		$table->display();
+	}			
 }
+
 
 /////////////////////// User contributions /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='usercontrib')
 {
-	$userinfo=Database::get_user_info_from_id($_GET['user_id']);
+	$userinfo=Database::get_user_info_from_id(Security::remove_XSS($_GET['user_id']));
 	echo '<br>';
-	echo '<b>'.get_lang('UserContributions').': '.$userinfo['lastname'].', '.$userinfo['firstname'].'</b><br>';
+	echo '<b>'.get_lang('UserContributions').': <a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=usercontrib&user_id='.urlencode($row['user_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'"></a></b><br>';	
 	echo '<hr>';	
 		
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
 	{
-		$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND user_id="'.$_GET['user_id'].'" ORDER BY reflink,version ASC';		
+		$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND user_id="'.Security::remove_XSS($_GET['user_id']).'"';		
 	}
 	else
 	{
-		$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND user_id="'.$_GET['user_id'].'" AND visibility=1 ORDER BY reflink,version ASC';	
+		$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND user_id="'.Security::remove_XSS($_GET['user_id']).'" AND visibility=1';	
 	}	
 	
 	$allpages=api_sql_query($sql,__FILE__,__LINE__);
-	
-	echo '<ul>';	
-	while ($row=Database::fetch_array($allpages))
-	{		
-		//fix assignment icon		
-		if($row['assignment']==1)
-		{
-			$ShowAssignment='<img src="../img/wiki/assignment.gif" />';
-		}
-		elseif ($row['assignment']==2)
-		{
-			$ShowAssignment='<img src="../img/wiki/works.gif" />'; 
-		}
-		elseif ($row['assignment']==0)
-		{	
-			$ShowAssignment='<img src="../img/wiki/trans.gif" />';			
-		}
 		
-		//fix time
-		$year = substr($row['timestamp'], 0, 4);
-		$month = substr($row['timestamp'], 5, 2);
-		$day = substr($row['timestamp'], 8, 2);
-		$hours=substr($row['timestamp'], 11,2);
-		$minutes=substr($row['timestamp'], 14,2);
-		$seconds=substr($row['timestamp'], 17,2);
+	//show table
+	if (mysql_num_rows($allpages) > 0)
+	{
+		$row = array ();
+		while ($obj = mysql_fetch_object($allpages))
+		{
+			//get author
+			$userinfo=Database::get_user_info_from_id($obj->user_id);
+			
+			//get time
+			$year 	 = substr($obj->timestamp, 0, 4);
+			$month	 = substr($obj->timestamp, 5, 2);
+			$day 	 = substr($obj->timestamp, 8, 2);
+			$hours   = substr($obj->timestamp, 11,2);
+			$minutes = substr($obj->timestamp, 14,2);
+			$seconds = substr($obj->timestamp, 17,2);			
+			
+			//get type assignment icon		
+			if($obj->assignment==1)
+			{
+				$ShowAssignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDesc').'" />';
+			}
+			elseif ($obj->assignment==2)
+			{
+				$ShowAssignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWork').'" />';
+			}
+			elseif ($obj->assignment==0)
+			{	
+				$ShowAssignment='<img src="../img/wiki/trans.gif" />';			
+			}		
+		
+			$row = array ();
+			$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;	
+			$row[] =$ShowAssignment;
+			
+			$row[] = '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&view='.$obj->id.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
+			$row[] =$obj->version;	
+			$row[] =$obj->comment;		
+			//$row[] =strlen($obj->comment)>30 ? substr($obj->comment,0,30).'...' : $obj->comment;		
+			$row[] =$obj->progress.' %';
+			$row[] =$obj->score;	
+			//if(api_is_allowed_to_edit() || api_is_platform_admin())
+			//{
+				//$row[] =$obj->user_ip;
+			//}
+			
+			$rows[] = $row;			
+					
+		}
+	
+		$table = new SortableTableFromArrayConfig($rows,2,10,'UsersContributions_table','','','ASC');
+		$table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'user_id'=>Security::remove_XSS($_GET['user_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));	
+		
+		$table->set_header(0,get_lang('Date'), true, array ('style' => 'width:175px;'));			
+		$table->set_header(1,get_lang('Type'), true, array ('style' => 'width:30px;'));
+		$table->set_header(2,get_lang('Title'), true, array ('style' => 'width:200px;'));
+		$table->set_header(3,get_lang('Version'), true, array ('style' => 'width:30px;'));
+		$table->set_header(4,get_lang('Comment'), true, array ('style' => 'width:200px;'));
+		$table->set_header(5,get_lang('Progress'), true, array ('style' => 'width:30px;'));
+		$table->set_header(6,get_lang('Rating'), true, array ('style' => 'width:30px;'));		
+		//if(api_is_allowed_to_edit() || api_is_platform_admin())
+		//{
+			//$table->set_header(7,get_lang('IP'), true, array ('style' => 'width:30px;'));
+		//}
 				
-		//fix comment
-		$comment=$row['comment'];
-		if (!empty($comment))
-		{ 
-			$showcomment= ' ... '.get_lang('Comments').':  <input name="comment" value="'.$row['comment'].'"  readonly="readonly" width="5"/>';
-		}	
-		else
-		{
-			$showcomment= ' ... '. get_lang('Comments').':  <input name="comment" value="---"  readonly="readonly" width="5"/>';
-		}
-	
-		echo '<li>'.$day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds.' ... '.$ShowAssignment.'<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($row['reflink']).'&amp;view='.$row['id'].'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].' </a>('.get_lang('Version').' '.$row['version'].') ... '.get_lang('Progress').': '.$row['progress'].'%'.$showcomment.'</li>';		
-		
-		
-	}
-	echo '</ul>';	
-	
+		$table->display();
+	}	
 }
 
 /////////////////////// Most changed pages /////////////////////// Juan Carlos Raña Trabado
@@ -505,35 +551,50 @@ if ($_GET['action']=='mostchanged')
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
 	{
-		$sql='SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink ORDER BY MAX DESC, reflink LIMIT 10'; //first ten users
+		$sql='SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink';
 	}
 	else
 	{	
-		$sql='SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND visibility=1 GROUP BY reflink ORDER BY MAX DESC, reflink LIMIT 10';//first ten users
+		$sql='SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND visibility=1 GROUP BY reflink';
 	}	
 	
-	$allpages=api_sql_query($sql,__FILE__,__LINE__);	
-	echo '<ul>';	
-	while ($row=Database::fetch_array($allpages))
-	{	
-		//fix assignment icon		
-		if($row['assignment']==1)
+	$allpages=api_sql_query($sql,__FILE__,__LINE__);
+		
+	//show table
+	if (mysql_num_rows($allpages) > 0)
+	{
+		$row = array ();
+		while ($obj = mysql_fetch_object($allpages))
 		{
-			$ShowAssignment='<img src="../img/wiki/assignment.gif" />';
+			//get type assignment icon		
+			if($obj->assignment==1)
+			{
+				$ShowAssignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDesc').'" />';
+			}
+			elseif ($obj->assignment==2)
+			{
+				$ShowAssignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWork').'" />';
+			}
+			elseif ($obj->assignment==0)
+			{	
+				$ShowAssignment='<img src="../img/wiki/trans.gif" />';			
+			}		
+		
+			$row = array ();
+			$row[] =$ShowAssignment;
+			$row[] = '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';			
+			$row[] = $obj->MAX;			
+			$rows[] = $row;
 		}
-		elseif ($row['assignment']==2)
-		{
-			$ShowAssignment='<img src="../img/wiki/works.gif" />'; 
-		}
-		elseif ($row['assignment']==0)
-		{	
-			$ShowAssignment='<img src="../img/wiki/trans.gif" />';			
-		}	
 	
-		echo '<li>'.$ShowAssignment.'<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($row['reflink']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a> '.get_lang('With').' '.$row['MAX'].' '.get_lang('Changes').'</li>';	//TODO:check if hidden and assignment mode
-	}
-	echo '</ul>';		
-	
+		$table = new SortableTableFromArrayConfig($rows,2,10,'MostChangedPages_table','','','DESC');
+		$table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+		$table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
+		$table->set_header(1,get_lang('Title'), true);	
+		$table->set_header(2,get_lang('Changes'), true);
+		$table->display();
+	}	
+		
 }
 
 /////////////////////// Most visited pages /////////////////////// Juan Carlos Raña Trabado
@@ -546,11 +607,11 @@ if ($_GET['action']=='mvisited')
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
 	{	
-		$sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink'; // warning GROUP BY reflink don't return the last version, always the first id				
+		$sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink';
 	}
 	else
 	{			
-		$sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND visibility=1 GROUP BY reflink'; // warning GROUP BY reflink don't return the last version, always the first id
+		$sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND visibility=1 GROUP BY reflink';
 	}		
 	
 	$allpages=api_sql_query($sql,__FILE__,__LINE__);
@@ -583,7 +644,7 @@ if ($_GET['action']=='mvisited')
 		}
 	
 		$table = new SortableTableFromArrayConfig($rows,2,10,'MostVisitedPages_table','','','DESC');
-		$table->set_additional_parameters(array('cidReq' =>$_GET['cidReq'],'action'=>$_GET['action'],'group_id'=>Security::remove_XSS($_GET['group_id'])));		
+		$table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'group_id'=>Security::remove_XSS($_GET['group_id'])));		
 		$table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
 		$table->set_header(1,get_lang('Title'), true);	
 		$table->set_header(2,get_lang('Visits'), true);
@@ -599,8 +660,7 @@ if ($_GET['action']=='wanted')
 	echo '<b>'.get_lang('WantedPages').'</b><br>'; 
 	echo  '<hr>';
 	$pages = array();
-	$refs = array();
-	$orphaned = array();
+	$refs = array();	
 	$sort_wanted=array();
 
 	//get name pages
@@ -635,8 +695,8 @@ if ($_GET['action']=='wanted')
 		if(!in_array($v, $pages))
 		{	
 			if (trim($v)!=="")
-			{							
-				echo '<li>'.str_replace('_',' ',$v).'</li>';
+			{			
+				 echo   '<li><a href=http://localhost/dokeos185svn/main/wiki/index.php?cidReq=&action=addnew&title='.urlencode(str_replace('_',' ',$v)).'&group_id='.Security::remove_XSS($_GET['group_id']).' class="new_wiki_link">'.str_replace('_',' ',$v).'</a></li>';					
 			}					
 		}	
 	}
@@ -654,7 +714,6 @@ if ($_GET['action']=='orphaned')
 	$pages = array();
    	$refs = array();
   	$orphaned = array();
-	$sort_orphaned=array();
 	
 	//get name pages	
 	$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink ORDER BY reflink ASC';
@@ -670,7 +729,7 @@ if ($_GET['action']=='orphaned')
 	while ($row=Database::fetch_array($allpages))
 	{			
 		//$row['linksto']= str_replace("\n".$row["reflink"]."\n", "\n", $row["linksto"]); //remove self reference. TODO check
-		$rf = explode(" ", trim($row["linksto"]));	//TODO: check fix replace explode("\n", trim($row["linksto"])) with  explode(" ", trim($row["linksto"]))	    
+		$rf = explode(" ", trim($row["linksto"]));	//fix replace explode("\n", trim($row["linksto"])) with  explode(" ", trim($row["linksto"]))	    
 		
 		$refs = array_merge($refs, $rf);
 		if ($n++ > 299)
@@ -706,8 +765,6 @@ if ($_GET['action']=='orphaned')
 		echo '<ul>';
 		while ($row=Database::fetch_array($allpages))
 		{
-			//$sort_orphaned[]=$row['title']; //TODO: check to delete this line	
-			
 			//fix assignment icon		
 			if($row['assignment']==1)
 			{
@@ -727,13 +784,6 @@ if ($_GET['action']=='orphaned')
 		echo '</ul>';
 	}
 	
-	//sort titles //TODO: check to delete this line	
-	//natcasesort($sort_orphaned);//TODO: check to delete this line	
-	//foreach($sort_orphaned as $vshow_so)//TODO: check to delete this line	
-	//{
-		//echo $vshow_so.'<br>'; //TODO: link to page	//TODO: check to delete this line			
-	//}//TODO: check to delete this line	
-	
 }
 
 /////////////////////// delete current page /////////////////////// Juan Carlos Raña Trabado
@@ -745,7 +795,13 @@ if ($_GET['action']=='delete')
 	{
 	    echo '<br>'; 
 	    echo '<b>'.get_lang('DeletePageHistory').'</b>'; 
-	    echo '<hr>';   
+	    echo '<hr>';
+		   
+		if($page=="index")
+		{		
+			Display::display_warning_message(get_lang('WarningDeleteMainPage'),false);
+		}		
+		
 		$message = get_lang('ConfirmDeletePage')."</p>"."<p>"."<a href=\"index.php\">".get_lang("No")."</a>"."&nbsp;&nbsp;|&nbsp;&nbsp;"."<a href=\"".api_get_self()."?action=delete&amp;title=".$page."&amp;delete=yes\">".get_lang("Yes")."</a>"."</p>";
 		
 		if (!isset ($_GET['delete']))
@@ -993,7 +1049,7 @@ if ($_GET['action']=='links')
 			}
 		
 			$table = new SortableTableFromArrayConfig($rows,1,10,'AllPages_table','','','ASC');
-			$table->set_additional_parameters(array('cidReq' =>$_GET['cidReq'],'action'=>$_GET['action'],'group_id'=>Security::remove_XSS($_GET['group_id'])));		
+			$table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'group_id'=>Security::remove_XSS($_GET['group_id'])));		
 			$table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
 			$table->set_header(1,get_lang('Title'), true);
 			$table->set_header(2,get_lang('Author'), true);
@@ -1030,28 +1086,17 @@ if ($_GET['action']=='addnew')
 	}
 	else
 	{  
-		if(GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid']))
-		{
-			if(api_is_allowed_to_edit() || api_is_platform_admin() || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid']))
-			{					
-				echo '<br>'; 
-				echo '<b>'.get_lang('AddNew').'</b>'; 
-				echo '<hr>'; 
-				display_new_wiki_form();
-				
-			}
-			else
-			{
-				Display::display_normal_message(get_lang('OnlyAddPagesGroupMembers')); 
-			}
+		if(api_is_allowed_to_edit() || api_is_platform_admin() || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid']) || Security::remove_XSS($_GET['group_id'])==0)
+		{					
+			echo '<br>'; 
+			echo '<b>'.get_lang('AddNew').'</b>'; 
+			echo '<hr>'; 
+			display_new_wiki_form();		
 		}
 		else
-		{ 		
-			 echo '<br>'; 
-			 echo '<b>'.get_lang('AddNew').'</b>'; 		 
-			 echo '<hr>'; 
-			 display_new_wiki_form(); 
-		}
+		{
+			Display::display_normal_message(get_lang('OnlyAddPagesGroupMembers')); 
+		}		
 	} 
 }
 
@@ -1468,7 +1513,7 @@ if ($_GET['action']=='recentchanges')
 		}
 	
 		$table = new SortableTableFromArrayConfig($rows,0,10,'RecentPages_table','','','DESC');
-		$table->set_additional_parameters(array('cidReq' =>$_GET['cidReq'],'action'=>$_GET['action'],'group_id'=>Security::remove_XSS($_GET['group_id'])));		
+		$table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'group_id'=>Security::remove_XSS($_GET['group_id'])));		
 		$table->set_header(0,get_lang('Date'), true, array ('style' => 'width:175px;'));		
 		$table->set_header(1,get_lang('Type'), true, array ('style' => 'width:30px;'));
 		$table->set_header(2,get_lang('Title'), true);		
@@ -1543,7 +1588,7 @@ if ($_GET['action']=='allpages')
 		}
 	
 		$table = new SortableTableFromArrayConfig($rows,1,10,'AllPages_table','','','ASC');
-		$table->set_additional_parameters(array('cidReq' =>$_GET['cidReq'],'action'=>$_GET['action'],'group_id'=>Security::remove_XSS($_GET['group_id'])));		
+		$table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'group_id'=>Security::remove_XSS($_GET['group_id'])));		
 		$table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
 		$table->set_header(1,get_lang('Title'), true);
 		$table->set_header(2,get_lang('Author'), true);
@@ -2454,7 +2499,7 @@ function display_wiki_entry()
 		
 		//export to zip			
 
-			echo '<span style="float:right;"><img src="../img/wiki/wzip_save.gif" alt="'.get_lang('Export2ZIP').'" onclick="alert(\'This is not implemented yet but it will be in the near future\')"/></span>'; //TODO	
+			//echo '<span style="float:right;"><img src="../img/wiki/wzip_save.gif" alt="'.get_lang('Export2ZIP').'" onclick="alert(\'This is not implemented yet but it will be in the near future\')"/></span>'; //TODO	
 			
 			echo '</div>';	
 			echo '<div id="wikicontent">'. make_wiki_link_clickable(detect_external_link(stripslashes($content))).'</div>';
@@ -3295,8 +3340,13 @@ function auto_add_page_users($assignment_type)
 		//extract group members
 		$subscribed_users = GroupManager :: get_subscribed_users($_clean['group_id']);
 		$subscribed_tutors = GroupManager :: get_subscribed_tutors($_clean['group_id']);
-		$a_users_to_add=array_merge($subscribed_users, $subscribed_tutors);//TODO: check if one tutor subscribed -> filter duplicates
-		
+		$a_users_to_add_with_duplicates=array_merge($subscribed_users, $subscribed_tutors);
+	
+		//remove duplicates
+		$a_users_to_add = $a_users_to_add_with_duplicates;
+		array_walk($a_users_to_add, create_function('&$value,$key', '$value = json_encode($value);'));
+		$a_users_to_add = array_unique($a_users_to_add);
+		array_walk($a_users_to_add, create_function('&$value,$key', '$value = json_decode($value, true);'));	
 	}    
 
 	

@@ -207,10 +207,16 @@ class CourseManager
 		if(!empty($startwith))
 		{
 			$sql .= "WHERE LIKE title '".Database::escape_string($startwith)."%' ";
+			if ($visibility !== -1 && $visibility == strval(intval($visibility)) ) {
+				$sql .= " AND visibility = $visibility ";
+			}
 		}
 		else
 		{
 			$sql .= "WHERE 1 ";
+			if ($visibility !== -1 && $visibility == strval(intval($visibility)) ) {
+				$sql .= " AND visibility = $visibility "; 
+			}	
 		}
 		if(!empty($orderby))
 		{

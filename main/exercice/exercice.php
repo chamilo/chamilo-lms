@@ -898,8 +898,6 @@ if($_configuration['tracking_enabled'])
 
 	if($show == 'result')
 	{
-
-
 		// the form
 		if(api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach())
 		{
@@ -1036,45 +1034,45 @@ if($_configuration['tracking_enabled'])
 				{
 					//get all results (ourself and the others) as an admin should see them
 					//AND exe_user_id <> $_user['user_id']  clause has been removed
-					$sql="SELECT CONCAT(`lastname`,' ',`firstname`),`ce`.`title`, `te`.`exe_result` ,
-								`te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`),`te`.`exe_Id`,email
+					$sql="SELECT CONCAT(lastname,' ',firstname),ce.title, te.exe_result ,
+								te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_Id,email
 						  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
-						  WHERE `te`.`exe_exo_id` = `ce`.`id` AND `user_id`=`te`.`exe_user_id` AND `te`.`exe_cours_id`='$_cid'";
+						  WHERE te.exe_exo_id = ce.id AND user_id=te.exe_user_id AND te.exe_cours_id='$_cid'";
 		
 		
 					switch ($_GET['column']) {
 		    			case 'username':
 							if ($_GET['direction'] == '' || $_GET['direction'] == 0)
 							{
-		        				$sql .= " order by lastname ASC, firstname ASC,`ce`.`title` ASC, `te`.`exe_date` ASC";
+		        				$sql .= " order by lastname ASC, firstname ASC,ce.title ASC, te.exe_date ASC";
 							}
 							else
 							{
-								$sql .= " order by lastname DESC, firstname ASC, `ce`.`title` ASC, `te`.`exe_date` ASC";
+								$sql .= " order by lastname DESC, firstname ASC, ce.title ASC, te.exe_date ASC";
 							}
 							break;
 		    			case 'exercisename':
 							if ($_GET['direction'] == '' || $_GET['direction'] == 0)
 							{
-		        				$sql .= " order by `ce`.`title` ASC, `te`.`exe_date` ASC, lastname ASC, firstname ASC";
+		        				$sql .= " order by ce.title ASC, te.exe_date ASC, lastname ASC, firstname ASC";
 							}
 							else
 							{
-								$sql .= " order by `ce`.`title` DESC, `te`.`exe_date` ASC, lastname ASC, firstname ASC";
+								$sql .= " order by ce.title DESC, te.exe_date ASC, lastname ASC, firstname ASC";
 							}
 		        			break;
 		    			case 'date':
 							if ($_GET['direction'] == '' || $_GET['direction'] == 0)
 							{
-		        				$sql .= " order by `te`.`exe_date` ASC,`ce`.`title` ASC, lastname ASC, firstname ASC";
+		        				$sql .= " order by te.exe_date ASC,ce.title ASC, lastname ASC, firstname ASC";
 							}
 							else
 							{
-								$sql .= " order by `te`.`exe_date` DESC,`ce`.`title` ASC, lastname ASC, firstname ASC";
+								$sql .= " order by te.exe_date DESC,ce.title ASC, lastname ASC, firstname ASC";
 							}
 							break;
 						case '':
-							$sql .= " ORDER BY `te`.`exe_cours_id` ASC, `ce`.`title` ASC, `te`.`exe_date`ASC";
+							$sql .= " ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_dateASC";
 							break;
 					}
 					$hpsql="SELECT CONCAT(tu.lastname,' ',tu.firstname), tth.exe_name,
@@ -1118,33 +1116,34 @@ if($_configuration['tracking_enabled'])
 					}
 				}
 				else
-				{ // get only this user's results
-					$sql="SELECT '',`ce`.`title`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`),`te`.`exe_Id`
+				{// get only this user's results
+					$_uid = api_get_user_id();
+					$sql="SELECT '',ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id
 						  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te
-						  WHERE `te`.`exe_exo_id` = `ce`.`id` AND `te`.`exe_user_id`='".$_uid."' AND `te`.`exe_cours_id`='$_cid'";
+						  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".$_uid."' AND te.exe_cours_id='$_cid'";
 					switch ($_GET['column']) {
 		    			case 'exercisename':
 							if ($_GET['direction'] == '' || $_GET['direction'] == 0)
 							{
-		        				$sql .= " order by `ce`.`title` ASC, `te`.`exe_date` ASC";
+		        				$sql .= " order by ce.title ASC, te.exe_date ASC";
 							}
 							else
 							{
-								$sql .= " order by `ce`.`title` DESC, `te`.`exe_date` ASC";
+								$sql .= " order by ce.title DESC, te.exe_date ASC";
 							}
 		        			break;
 		    			case 'date':
 							if ($_GET['direction'] == '' || $_GET['direction'] == 0)
 							{
-		        				$sql .= " order by `te`.`exe_date` ASC,`ce`.`title` ASC";
+		        				$sql .= " order by te.exe_date ASC,ce.title ASC";
 							}
 							else
 							{
-								$sql .= " order by `te`.`exe_date` DESC,`ce`.`title` ASC";
+								$sql .= " order by te.exe_date DESC,ce.title ASC";
 							}
 							break;
 						case '':
-							$sql .= " ORDER BY `te`.`exe_cours_id` ASC, `ce`.`title` ASC, `te`.`exe_date` ASC";
+							$sql .= " ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 							break;
 					}
 					$hpsql="SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)
@@ -1177,7 +1176,6 @@ if($_configuration['tracking_enabled'])
 					}
 					//echo $sql;
 		}
-		
 		$results=getManyResultsXCol($sql,7);
 		$hpresults=getManyResultsXCol($hpsql,5);
 

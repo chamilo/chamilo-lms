@@ -209,7 +209,7 @@ function onAddArea(id) {
 	updateAreaValues() ;
 
 	currentAreaId = id ;
-	$( 'txtUrl' ).value = '' ;
+	$( 'txtUrl' ).value = 'http://' ;//Juan Carlos Raña add default protocol
 	$( 'cmbTarget' ).value = '' ;
 	$( 'txtAlt' ).value = '' ;
 	$( 'txtAttTitle' ).value = '' ;

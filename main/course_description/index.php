@@ -1,4 +1,4 @@
-<?php // $Id: index.php 15984 2008-08-13 17:24:24Z juliomontoya $
+<?php // $Id: index.php 16580 2008-10-21 20:05:18Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -55,8 +55,8 @@ include_once(api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php');
 -----------------------------------------------------------
 */
 
-//$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('CourseProgram'));
-
+$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('CourseProgram'));
+ 
 if(isset($_GET['description_id']) && $_GET['description_id']==1) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('GeneralDescription'));
 if(isset($_GET['description_id']) && $_GET['description_id']==2) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Objectives'));
 if(isset($_GET['description_id']) && $_GET['description_id']==3) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Topics'));
@@ -68,7 +68,7 @@ if(isset($_GET['description_id']) && $_GET['description_id']==8) $interbreadcrum
 
 api_protect_course_script();
 $nameTools = get_lang('CourseProgram');
-Display :: display_header($nameTools, 'Description');
+Display :: display_header();
 //api_display_tool_title($nameTools);
 
 

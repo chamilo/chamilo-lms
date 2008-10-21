@@ -38,7 +38,7 @@ INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES 
 -- xxUSERxx
 
 -- xxCOURSExx
-ALTER TABLE course_settings ADD INDEX unique_setting (variable,subkey,category);
+ALTER TABLE course_setting ADD INDEX unique_setting (variable,subkey,category);
 ALTER TABLE lp ADD theme varchar(255) not null default '';
 ALTER TABLE survey ADD mail_subject VARCHAR( 255 ) NOT NULL AFTER reminder_mail ;
 ALTER TABLE quiz_rel_question ADD question_order mediumint unsigned NOT NULL default 1;

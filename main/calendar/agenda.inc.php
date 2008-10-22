@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 16490 2008-10-10 14:29:52Z elixir_inter $
+<?php //$Id: agenda.inc.php 16581 2008-10-22 05:52:18Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -634,8 +634,8 @@ function store_new_agenda_item()
 					        (title,content, start_date, end_date)
 					        VALUES
 					        ('".$title."','".$content."', '".$start_date."','".$end_date."')";
-	$result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
-	$last_id=Database::insert_id();
+	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$last_id = Database::insert_id();
 	
 	// store in last_tooledit (first the groups, then the users
 	$to=$_POST['selectedform'];

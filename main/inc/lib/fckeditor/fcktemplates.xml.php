@@ -76,6 +76,17 @@ $default_course_dir = api_get_path(REL_CODE_PATH).'default_course_document/';
 		echo '</Template>';			
 	}	
 ?>    
+<Template title="<?php echo s('Empty'); ?>" >
+    <Description></Description>
+    <Html>
+        <![CDATA[
+        	<head>
+            	<?php echo $css ?>
+            </head>
+        ]]>    
+    </Html>
+</Template>
+        	
 <Template title="<?php echo s('TemplateTitleCourseTitle'); ?>" >
     <Description><?php echo s('TemplateTitleCourseTitleDescription'); ?></Description>
     <Html>

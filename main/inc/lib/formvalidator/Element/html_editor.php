@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 15984 2008-08-13 17:24:24Z juliomontoya $
+// $Id: html_editor.php 16594 2008-10-22 17:28:53Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -92,9 +92,9 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		$this -> fck_editor->Config['DefaultLanguage'] = $isocode_language;		
 		$this -> fck_editor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 		$this -> fck_editor->ToolbarSet = $fck_attribute['ToolbarSet'] ;
-		$this -> fck_editor->Config['EditorAreaCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/course.css';
-			
-		
+		// css should be dokeos ones
+		$this -> fck_editor->Config['EditorAreaCSS'] = $this -> fck_editor->Config['ToolbarComboPreviewCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/default.css';
+
 		//FCKeditor Configuration for documents		
 		if(isset($_SESSION['_course']) && $_SESSION['_course']['path']!='')
 		{		
@@ -155,6 +155,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 	function toHtml()
 	{
 		$value = $this->getValue();
+		
 		if ($this->fullPage)
 		{
 			if (strlen(trim($value)) == 0)

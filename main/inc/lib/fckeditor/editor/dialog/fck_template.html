@@ -71,6 +71,9 @@ window.onload = function()
 	oEditor.FCKLanguageManager.TranslatePage(document) ;
 	//window.parent.SetAutoSize( true ) ;
 	LoadTemplatesXml() ;
+	
+	// select first by default (Dokeos customization)
+	SelectTemplate( 0 ) ;
 }
 
 function LoadTemplatesXml()

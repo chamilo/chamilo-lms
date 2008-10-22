@@ -41,7 +41,7 @@ FCKConfig.ToolbarSets["Announcements"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Full"] = [
-	['PasteWord','Link','Anchor','-','ImageManager','flvPlayer','Flash','EmbedMovies','MP3','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
+	['PasteWord','Link','Anchor','-','ImageManager','flvPlayer','Flash','EmbedMovies','MP3','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontFormat','FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
 ] ;
 
 FCKConfig.ToolbarSets["Comment"] = [
@@ -93,3 +93,6 @@ FCKConfig.Plugins.Add("Flash", "en");
 FCKConfig.Plugins.Add('fckEmbedMovies');
 FCKConfig.Plugins.Add("wikilink", "en,es", sOtherPluginPath ) ; // support to english, spanish
 FCKConfig.Plugins.Add("imgmap", "en,es", sOtherPluginPath );
+
+// reduce format list
+FCKConfig.FontFormats	= 'p;h1;h2;h3' ;

@@ -2488,7 +2488,7 @@ function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1)
 			if(Database::num_rows($select)>0)
 			{ //we have a setting for access_url 1, but none for the current one, so create one
 				$row = Database::fetch_array($res);
-				echo $insert = "INSERT INTO $t_settings " .
+				$insert = "INSERT INTO $t_settings " .
 						"(variable,subkey," .
 						"type,category," .
 						"selected_value,title," .

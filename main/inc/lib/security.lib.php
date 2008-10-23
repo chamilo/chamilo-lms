@@ -185,7 +185,7 @@ class Security{
 	function get_ua()
 	{
 		$_SESSION['sec_ua_seed'] = uniqid(rand(),TRUE);
-		$_SESSION['sec_ua'] = $_SERVER['HTTTP_USER_AGENT'].$_SESSION['sec_ua_seed'];
+		$_SESSION['sec_ua'] = $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed'];
 	}
 	/** 
 	 * This function filters a variable to the type given, with the options given

@@ -1135,6 +1135,18 @@ function get_setting($variable, $key = NULL)
 	return api_get_setting($variable, $key);
 }
 
+/**
+ * Gets the current Dokeos (not PHP/cookie) session ID, if active
+ * @return  int     O if no active session, the session ID otherwise
+ */
+function api_get_session_id()
+{
+	if (empty($_SESSION['id_session'])) {
+		return 0;
+	} else {
+		return (int) $_SESSION['id_session'];
+	}
+}
 
 /**
 * Returns the value of a setting from the web-adjustable admin config settings.

@@ -1147,7 +1147,29 @@ function api_get_session_id()
 		return (int) $_SESSION['id_session'];
 	}
 }
-
+/**
+ * Gets the current or given session name
+ * @param   int     Session ID (optional)
+ * @return  string  The session name, or null if unfound
+ */
+function api_get_session_name($session_id)
+{
+    if (empty($session_id))
+    {
+        $session_id = api_get_session_id();
+        if (empty($session_id)) {return null;}
+    }
+    $t = Database::get_main_table(TABLE_MAIN_SESSION);
+    $s = "SELECT name FROM $t WHERE id = ".(int)$session_id;
+    $r = api_sql_query($s,__FILE__,__LINE__);
+    $c = Database::num_rows($r);
+    if ($c > 0) {
+        //technically, there can be only one, but anyway we take the first
+        $rec = Database::fetch_array($r);
+        return $rec['name'];
+    }
+    return null;
+}
 /**
 * Returns the value of a setting from the web-adjustable admin config settings.
 *

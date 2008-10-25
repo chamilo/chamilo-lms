@@ -491,11 +491,11 @@ if ($_GET['action']=='usercontrib')
 			//get type assignment icon		
 			if($obj->assignment==1)
 			{
-				$ShowAssignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDesc').'" />';
+				$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 			}
 			elseif ($obj->assignment==2)
 			{
-				$ShowAssignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWork').'" />';
+				$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
 			}
 			elseif ($obj->assignment==0)
 			{	
@@ -569,11 +569,11 @@ if ($_GET['action']=='mostchanged')
 			//get type assignment icon		
 			if($obj->assignment==1)
 			{
-				$ShowAssignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDesc').'" />';
+				$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 			}
 			elseif ($obj->assignment==2)
 			{
-				$ShowAssignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWork').'" />';
+				$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentWork').'" />';
 			}
 			elseif ($obj->assignment==0)
 			{	
@@ -625,11 +625,11 @@ if ($_GET['action']=='mvisited')
 			//get type assignment icon		
 			if($obj->assignment==1)
 			{
-				$ShowAssignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDesc').'" />';
+				$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 			}
 			elseif ($obj->assignment==2)
 			{
-				$ShowAssignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWork').'" />';
+				$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
 			}
 			elseif ($obj->assignment==0)
 			{	
@@ -915,11 +915,11 @@ if ($_GET['action']=='showsearchpages')
 			//get type assignment icon		
 			if($obj->assignment==1)
 			{
-				$ShowAssignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDesc').'" />';
+				$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 			}
 			elseif ($obj->assignment==2)
 			{
-				$ShowAssignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWork').'" />';
+				$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
 			}
 			elseif ($obj->assignment==0)
 			{	
@@ -970,11 +970,11 @@ if ($_GET['action']=='links')
 		
 				if($row['assignment']==1)
 				{
-					$ShowAssignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDesc').'" />';
+					$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 				}
 				elseif ($row['assignment']==2)
 				{
-					$ShowAssignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWork').'" />';
+					$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
 				}
 				elseif ($row['assignment']==0)
 				{	
@@ -1029,11 +1029,11 @@ if ($_GET['action']=='links')
 				//get type assignment icon		
 				if($obj->assignment==1)
 				{
-					$ShowAssignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDesc').'" />';
+					$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 				}
 				elseif ($obj->assignment==2)
 				{
-					$ShowAssignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWork').'" />';
+					$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
 				}
 				elseif ($obj->assignment==0)
 				{	
@@ -1162,11 +1162,11 @@ if ($_GET['action']=='edit')
 		if(stripslashes($row['assignment'])==1)
 		{
 		    Display::display_normal_message(get_lang('EditAssignmentWarning'));
-			$icon_assignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDescExtra').'" />';
+			$icon_assignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
 		}
 		elseif(stripslashes($row['assignment'])==2)
 		{			
-			$icon_assignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWorkExtra').'" />';
+			$icon_assignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
 			if((api_get_user_id()==$row['user_id'])==false)
 			{
 			    if(api_is_allowed_to_edit() || api_is_platform_admin())
@@ -1268,11 +1268,11 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 		
 	    if($KeyAssignment==1)
 		{		   
-			$icon_assignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDescExtra').'" />';
+			$icon_assignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
 		}
 		elseif($KeyAssignment==2)
 		{
-			$icon_assignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWorkExtra').'" />';
+			$icon_assignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
 		}	
 	
 	
@@ -1450,11 +1450,11 @@ if ($_GET['action']=='recentchanges')
 		
 	if (check_notify_all())
 	{
-		$notify_all= '<img src="../img/wiki/send_mail_checked.gif" alt="'.get_lang('FullNotifyByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotNotifyChanges').'</font>';
+		$notify_all= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('FullNotifyByEmail').'" alt="'.get_lang('FullNotifyByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotNotifyChanges').'</font>';
 	}
 	else
 	{	 
-		$notify_all= '<img src="../img/wiki/send_mail.gif" alt="'.get_lang('FullCancelNotifyByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotifyChanges').'</font>';
+		$notify_all= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('FullCancelNotifyByEmail').'" alt="'.get_lang('FullCancelNotifyByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotifyChanges').'</font>';
 	}	
 		
 	echo '<br>'; 
@@ -1492,11 +1492,11 @@ if ($_GET['action']=='recentchanges')
 			//get type assignment icon		
 			if($obj->assignment==1)
 			{
-				$ShowAssignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDesc').'" />';
+				$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 			}
 			elseif ($obj->assignment==2)
 			{
-				$ShowAssignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWork').'" />';
+				$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
 			}
 			elseif ($obj->assignment==0)
 			{	
@@ -1568,11 +1568,11 @@ if ($_GET['action']=='allpages')
 			//get type assignment icon		
 			if($obj->assignment==1)
 			{
-				$ShowAssignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDesc').'" />';
+				$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 			}
 			elseif ($obj->assignment==2)
 			{
-				$ShowAssignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWork').'" />';
+				$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
 			}
 			elseif ($obj->assignment==0)
 			{	
@@ -1617,14 +1617,14 @@ if ($_GET['action']=='discuss')
 	    //Mode assignments: If is hidden, show pages to student only if student is the author
 	 	if(($row['assignment']==2 && $row['visibility_disc']==0 && (api_get_user_id()==$row['user_id']))==false)	
 	    {	
-	 		$visibility_disc= '<img src="../img/wiki/invisible.gif" alt="'.get_lang('HideDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('ShowDiscuss').'</font>';
+	 		$visibility_disc= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HideDiscussExtra').'" alt="'.get_lang('HideDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('ShowDiscuss').'</font>';
 	    }
 	}
 	else
 	{			  
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
 		{
-			$visibility_disc= '<img src="../img/wiki/visible.gif" alt="'.get_lang('ShowDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('HideDiscuss').'</font>';
+			$visibility_disc= '<img src="../img/wiki/visible.gif" title="'.get_lang('ShowDiscussExtra').'" alt="'.get_lang('ShowDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('HideDiscuss').'</font>';
 		}	     	
 	}	
 		
@@ -1633,11 +1633,11 @@ if ($_GET['action']=='discuss')
 	{		
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
 		{	
-	 		$addlock_disc= '<img src="../img/wiki/lock.gif" alt="'.get_lang('LockDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('UnlockDiscuss').'</font>';
+	 		$addlock_disc= '<img src="../img/wiki/lock.gif" title="'.get_lang('LockDiscussExtra').'" alt="'.get_lang('LockDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('UnlockDiscuss').'</font>';
 		}
 		else
 		{
-		 	$addlock_disc= '<img src="../img/wiki/lock.gif" alt="'.get_lang('LockDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('PageLocked').'</font>';
+		 	$addlock_disc= '<img src="../img/wiki/lock.gif" title="'.get_lang('LockDiscussExtra').'" alt="'.get_lang('LockDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('PageLocked').'</font>';
 		}
 		 
 	}
@@ -1645,7 +1645,7 @@ if ($_GET['action']=='discuss')
 	{			  
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
 		{
-			$addlock_disc= '<img src="../img/wiki/unlock.gif" alt="'.get_lang('UnlockDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('LockDiscuss').'</font>';
+			$addlock_disc= '<img src="../img/wiki/unlock.gif" title="'.get_lang('UnlockDiscussExtra').'" alt="'.get_lang('UnlockDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('LockDiscuss').'</font>';
 		}	     	
 	}		
 	
@@ -1655,35 +1655,35 @@ if ($_GET['action']=='discuss')
 		//Mode assignment: only the teacher can assign scoring
 		if(($row['assignment']==2 && $row['ratinglock_disc']==0 && (api_get_user_id()==$row['user_id']))==false)			
 	    {		
-	 		$ratinglock_disc= '<img src="../img/wiki/rating_na.gif" alt="'.get_lang('LockRatingDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('UnlockRatingDiscuss').'</font>';
+	 		$ratinglock_disc= '<img src="../img/wiki/rating_na.gif" title="'.get_lang('LockRatingDiscussExtra').'" alt="'.get_lang('LockRatingDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('UnlockRatingDiscuss').'</font>';
 		}
 	}
 	else
 	{			  
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
 		{
-			$ratinglock_disc= '<img src="../img/wiki/rating.gif" alt="'.get_lang('UnlockRatingDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('LockRatingDiscuss').'</font>';
+			$ratinglock_disc= '<img src="../img/wiki/rating.gif" title="'.get_lang('UnlockRatingDiscussExtra').'" alt="'.get_lang('UnlockRatingDiscussExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('LockRatingDiscuss').'</font>';
 		}	     	
 	}
 
 	//check notify by email
 	if (check_notify_discuss($page))
 	{
-		$notify_disc= '<img src="../img/wiki/send_mail.gif" alt="'.get_lang('CancelNotifyDiscussByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotifyDiscussChanges').'</font>';
+		$notify_disc= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('CancelNotifyDiscussByEmail').'" alt="'.get_lang('CancelNotifyDiscussByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotifyDiscussChanges').'</font>';
 	}
 	else
 	{	 
-	   $notify_disc= '<img src="../img/wiki/send_mail_checked.gif" alt="'.get_lang('NotifyDiscussByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotNotifyDiscussChanges').'</font>';
+	   $notify_disc= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('NotifyDiscussByEmail').'" alt="'.get_lang('NotifyDiscussByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotNotifyDiscussChanges').'</font>';
 	}	
 
     //mode assignment: previous to show  page type
 	if(stripslashes($row['assignment'])==1)
 	{
-		$icon_assignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDescExtra').'" />';
+		$icon_assignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
 	}
 	elseif(stripslashes($row['assignment'])==2)
 	{
-		$icon_assignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWorkExtra').'" />';
+		$icon_assignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
 	}	
 	
 	
@@ -2430,14 +2430,14 @@ function display_wiki_entry()
 	{
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
 		{
-	 		$protect_addnewpage= '<img src="../img/wiki/lockadd.gif" alt="'.get_lang('AddOptionProtected').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('ShowAddOption').'</font>';
+	 		$protect_addnewpage= '<img src="../img/wiki/lockadd.gif" title="'.get_lang('AddOptionProtected').'" alt="'.get_lang('AddOptionProtected').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('ShowAddOption').'</font>';
 	    }
 	}
 	else
 	{			  
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
 		{
-			$protect_addnewpage= '<img src="../img/wiki/unlockadd.gif" alt="'.get_lang('AddOptionUnprotected').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('HideAddOption').'</font>';
+			$protect_addnewpage= '<img src="../img/wiki/unlockadd.gif" title="'.get_lang('AddOptionUnprotected').'" alt="'.get_lang('AddOptionUnprotected').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('HideAddOption').'</font>';
 		}	     	
 	}
 	
@@ -2446,18 +2446,18 @@ function display_wiki_entry()
 	{	
 		if(api_is_allowed_to_edit() || api_is_platform_admin())
 		{
-	 		$protect_page= '<img src="../img/wiki/lock.gif" alt="'.get_lang('PageLockedExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('UnlockPage').'</font>';
+	 		$protect_page= '<img src="../img/wiki/lock.gif" title="'.get_lang('PageLockedExtra').'" alt="'.get_lang('PageLockedExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('UnlockPage').'</font>';
 		}
 		else
 		{
-			$protect_page= '<img src="../img/wiki/lock.gif" alt="'.get_lang('PageLockedExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('PageLocked').'</font>';
+			$protect_page= '<img src="../img/wiki/lock.gif" title="'.get_lang('PageLockedExtra').'" alt="'.get_lang('PageLockedExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('PageLocked').'</font>';
 		}
 	}
 	else
 	{					  
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
 	   	{
-	   		$protect_page= '<img src="../img/wiki/unlock.gif" alt="'.get_lang('PageUnlockedExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('LockPage').'</font>';
+	   		$protect_page= '<img src="../img/wiki/unlock.gif" title="'.get_lang('PageUnlockedExtra').'" alt="'.get_lang('PageUnlockedExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('LockPage').'</font>';
 	   	}   	
 	}	
 
@@ -2467,35 +2467,35 @@ function display_wiki_entry()
 		//This hides the icon eye closed to users of work they can see yours
 		if(($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id']))==false)
 	  	{	  
-	 		$visibility_page= '<img src="../img/wiki/invisible.gif" alt="'.get_lang('HidePageExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('ShowPage').'</font>';
+	 		$visibility_page= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HidePageExtra').'" alt="'.get_lang('HidePageExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('ShowPage').'</font>';
 	    }
 	}
 	else
 	{			  
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
 		{
-			$visibility_page= '<img src="../img/wiki/visible.gif" alt="'.get_lang('ShowPageExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('HidePage').'</font>';
+			$visibility_page= '<img src="../img/wiki/visible.gif" title="'.get_lang('ShowPageExtra').'" alt="'.get_lang('ShowPageExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('HidePage').'</font>';
 		}	     	
 	}		
 	
 	//Button notify page
 	if (check_notify_page($page))
 	{
-		$notify_page= '<img src="../img/wiki/send_mail_checked.gif" alt="'.get_lang('NotifyByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotNotifyChanges').'</font>';
+		$notify_page= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('NotifyByEmail').'" alt="'.get_lang('NotifyByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotNotifyChanges').'</font>';
 	}
 	else
 	{	 
-		$notify_page= '<img src="../img/wiki/send_mail.gif" alt="'.get_lang('CancelNotifyByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotifyChanges').'</font>';
+		$notify_page= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('CancelNotifyByEmail').'" alt="'.get_lang('CancelNotifyByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotifyChanges').'</font>';
 	}	
 
 	//assignment mode: for identify page type
 	if(stripslashes($row['assignment'])==1)
 	{
-		$icon_assignment='<img src="../img/wiki/assignment.gif" alt="'.get_lang('AssignmentDescExtra').'" />';
+		$icon_assignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
 	}
 	elseif(stripslashes($row['assignment'])==2)
 	{
-		$icon_assignment='<img src="../img/wiki/works.gif" alt="'.get_lang('AssignmentWorkExtra').'" />';
+		$icon_assignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
 	}	
 		
 	//Show page. Show page to all users if isn't hide page. Mode assignments: if studen is the author, can view
@@ -2523,7 +2523,7 @@ function display_wiki_entry()
 		echo '<form name="form_export2PDF" method="post" action="export_html2pdf.php" target="_blank, fullscreen">'; // also with  export_tcpdf.php
 		echo '<input type=hidden name="titlePDF" value="'.htmlentities($title).'">';
 		echo '<input type=hidden name="contentPDF" value="'.htmlentities($content).'">';
-		echo '<input type="image" src="../img/wiki/wexport2pdf.gif" border ="0" alt="'.get_lang('ExportToPDF').'">';
+		echo '<input type="image" src="../img/wiki/wexport2pdf.gif" border ="0" title="'.get_lang('ExportToPDF').'" alt="'.get_lang('ExportToPDF').'">';
 		echo '</form>';
 		echo '</span>';
 		
@@ -2535,7 +2535,7 @@ function display_wiki_entry()
 			echo '<input type=hidden name="export2DOC" value="export2doc">';
 			echo '<input type=hidden name="titleDOC" value="'.htmlentities($title).'">';
 			echo '<input type=hidden name="contentDOC" value="'.htmlentities($content).'">';
-			echo '<input type="image" src="../img/wiki/wexport2doc.png" border ="0" alt="'.get_lang('ExportToDocArea').'">';
+			echo '<input type="image" src="../img/wiki/wexport2doc.png" border ="0" title="'.get_lang('ExportToDocArea').'" alt="'.get_lang('ExportToDocArea').'">';
 			echo '</form>';
 			echo '</span>';	
 		}
@@ -2554,7 +2554,7 @@ function display_wiki_entry()
         </script>
 		<?php				
 		echo '<span style="float:right;">';
-		echo '<img src="../img/wiki/wprint.gif" alt="'.get_lang('Print').'" onclick="goprint()">';
+		echo '<img src="../img/wiki/wprint.gif" title="'.get_lang('Print').'" alt="'.get_lang('Print').'" onclick="goprint()">';
 		echo '</span>';
 		
 		//export to zip			

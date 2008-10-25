@@ -1983,12 +1983,72 @@ author Juan Carlos Raña Trabado
 **/
 function detect_external_link($input)
 {
-
 	$exlink='<a href=';
 	$exlinkStyle='<a class="wiki_link_ext" href=';	
 	$output=str_replace($exlink, $exlinkStyle, $input);		
 	return $output;
 }
+
+/*
+detect and add style to anchor links
+author Juan Carlos Raña Trabado
+**/
+function detect_anchor_link($input)
+{
+	$anchorlink='<a href="#';
+	$anchorlinkStyle='<a class="wiki_anchor_link" href="#';	
+	$output=str_replace($anchorlink, $anchorlinkStyle, $input);		
+	return $output;
+}
+
+/*
+detect and add style to mail links
+author Juan Carlos Raña Trabado
+**/
+function detect_mail_link($input)
+{
+	$maillink='<a href="mailto';
+	$maillinkStyle='<a class="wiki_mail_link" href="mailto';	
+	$output=str_replace($maillink, $maillinkStyle, $input);		
+	return $output;
+}
+
+/*
+detect and add style to ftp links
+author Juan Carlos Raña Trabado
+**/
+function detect_ftp_link($input)
+{
+	$ftplink='<a href="ftp';
+	$ftplinkStyle='<a class="wiki_ftp_link" href="ftp';	
+	$output=str_replace($ftplink, $ftplinkStyle, $input);		
+	return $output;
+}
+
+/*
+detect and add style to news links
+author Juan Carlos Raña Trabado
+**/
+function detect_news_link($input)
+{
+	$newslink='<a href="news';
+	$newslinkStyle='<a class="wiki_news_link" href="news';	
+	$output=str_replace($newslink, $newslinkStyle, $input);		
+	return $output;
+}
+
+/*
+detect and add style to irc links
+author Juan Carlos Raña Trabado
+**/
+function detect_irc_link($input)
+{
+	$irclink='<a href="irc';
+	$irclinkStyle='<a class="wiki_irc_link" href="irc';	
+	$output=str_replace($irclink, $irclinkStyle, $input);		
+	return $output;
+}
+
 
 /*
 * This function allows users to have [link to a title]-style links like in most regular wikis.
@@ -2502,7 +2562,7 @@ function display_wiki_entry()
 			//echo '<span style="float:right;"><img src="../img/wiki/wzip_save.gif" alt="'.get_lang('Export2ZIP').'" onclick="alert(\'This is not implemented yet but it will be in the near future\')"/></span>'; //TODO	
 			
 			echo '</div>';	
-			echo '<div id="wikicontent">'. make_wiki_link_clickable(detect_external_link(stripslashes($content))).'</div>';
+			echo '<div id="wikicontent">'. make_wiki_link_clickable(detect_external_link(detect_anchor_link(detect_mail_link(detect_ftp_link(detect_irc_link(detect_news_link(stripslashes($content)))))))).'</div>';
 
 	}//end filter visibility
 } // end function display_wiki_entry
@@ -3299,7 +3359,7 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 	}
 	
 	$exportDir = api_get_path(SYS_COURSE_PATH).api_get_course_path(). '/document'.$groupPath;
-	$exportFile = replace_dangerous_char( $wikiTitle, 'strict' ) . $groupPart;
+	$exportFile = replace_dangerous_char(replace_accents($wikiTitle), 'strict' ) . $groupPart;
 	
 	$i = 1;
 	while ( file_exists($exportDir . '/' .$exportFile.'_'.$i.'.html') ) $i++; //only export last version, but in new export new version in document area

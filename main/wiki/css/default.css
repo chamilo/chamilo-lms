@@ -108,8 +108,20 @@
 	}
 	
 	a.wiki_link_ext{
-	 background: url(ext.png) center right no-repeat; padding-right: 14px; }		   
-		
+	 background: url(ext.png) center right no-repeat; padding-right: 14px; }
+	 
+	a.wiki_mail_link{
+	 background: url(email.gif) center right no-repeat; padding-right: 18px; }
+	 
+	a.wiki_news_link{
+	 background: url(news.png) center right no-repeat; padding-right: 18px; }
+	 
+	a.wiki_ftp_link{
+	 background: url(ftp.gif) center right no-repeat; padding-right: 18px; } 
+	 
+	a.wiki_irc_link{
+	 background: url(irc.gif) center right no-repeat; padding-right: 18px; }
+	 
 	#main_navigation{
 		height: 20px;
 		margin: 0;

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 16243 2008-09-05 00:07:26Z yannoo $
+<?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -114,11 +114,6 @@ $keyword_url = Security::remove_XSS((empty($_GET['keyword'])?'':$_GET['keyword']
 <li><a href="course_import.php"><?php echo get_lang('AddCourse').' CSV'; ?></a></li>
 <!--<li><a href="course_virtual.php"><?php //echo get_lang('AdminManageVirtualCourses') ?></a></li>-->
 <li><a href="course_category.php"><?php echo get_lang("AdminCategories"); ?></a></li>
-<?php
-if ( api_get_setting('use_session_mode') !== 'true' ) {
-    echo '<li><a href="subscribe_class2course.php">'.get_lang('AddClassesToACourse').'</a></li>';
-}
-?>
 <li><a href="subscribe_user2course.php"><?php echo get_lang('AddUsersToACourse'); ?></a></li>
 <li><a href="course_user_import.php"><?php echo get_lang('AddUsersToACourse').' CSV'; ?></a></li>
 </ul>
@@ -192,6 +187,7 @@ else if(api_is_platform_admin())
 <li><a href="class_add.php"><?php echo get_lang('AddClasses'); ?></a></li>
 <li><a href="class_import.php"><?php echo get_lang('ImportClassListCSV'); ?></a></li>
 <li><a href="class_user_import.php"><?php echo get_lang('AddUsersToAClass'); ?> CSV</a></li>
+<li><a href="subscribe_class2course.php"><?php echo get_lang('AddClassesToACourse'); ?></a></li>
 </ul>
 <br />
 <br />

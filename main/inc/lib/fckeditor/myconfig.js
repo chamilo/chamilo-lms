@@ -69,15 +69,15 @@ FCKConfig.ToolbarSets["Survey"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Wiki"] = [
-	['Templates','Cut','Copy','Paste'],	
+	['Templates','Cut','Copy','Paste','PasteText','PasteWord'],	
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 	['Wikilink','Link','Unlink','Anchor'],
-	['ImageManager','imgmapPopup','flvPlayer','Flash','EmbedMovies','MP3','Table','Rule','Smiley','SpecialChar'],
+	['ImageManager','imgmapPopup','flvPlayer','Flash','EmbedMovies','MP3','Table','Rule','Smiley','SpecialChar','googlemaps'],
 	['FontFormat','FontName','FontSize'],
 	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],	
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
-	['TextColor','BGColor'],['Source']
+	['TextColor','BGColor'],['FitWindow']
 ] ;
 
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;
@@ -93,6 +93,8 @@ FCKConfig.Plugins.Add("Flash", "en");
 FCKConfig.Plugins.Add('fckEmbedMovies');
 FCKConfig.Plugins.Add("wikilink", "en,es", sOtherPluginPath ) ; // support to english, spanish
 FCKConfig.Plugins.Add("imgmap", "en,es", sOtherPluginPath );
+FCKConfig.Plugins.Add("googlemaps", "en,es", sOtherPluginPath ) ;
+FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSy5hTGQdsosYD3dz6faZHVrO-02A';//This key is for http://localhost. You must get one for each server where you want to use the plugin, just get the key for free here after agreeing to the Terms of Use of the GoogleMaps API: http://www.google.com/apis/maps/signup.html. If you leave an empty string then the toolbar icon won't be shown 
 
 // reduce format list
 FCKConfig.FontFormats	= 'p;h1;h2;h3' ;

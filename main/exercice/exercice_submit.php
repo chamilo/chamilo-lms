@@ -37,7 +37,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 16062 2008-08-25 15:38:33Z juliomontoya $
+* 	@version $Id: exercice_submit.php 16633 2008-10-27 22:58:34Z yannoo $
 */
 
 
@@ -49,7 +49,7 @@ include('exercise.lib.php');
 
 // debug var. Set to 0 to hide all debug display. Set to 1 to display debug messages.
 $debug = 0;
-
+/*
 // answer types
 define('UNIQUE_ANSWER',		1);
 define('MULTIPLE_ANSWER',	2);
@@ -58,7 +58,7 @@ define('MATCHING',			4);
 define('FREE_ANSWER', 		5);
 define('HOT_SPOT', 			6);
 define('HOT_SPOT_ORDER', 	7);
-
+*/
 // name of the language file that needs to be included
 $language_file='exercice';
 

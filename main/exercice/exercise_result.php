@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 16475 2008-10-09 10:07:27Z elixir_julian $
+* 	@version $Id: exercise_result.php 16633 2008-10-27 22:58:34Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -50,7 +50,7 @@ if($_GET['origin']=='learnpath')
 	require_once ('../newscorm/aicc.class.php');
 	require_once ('../newscorm/aiccItem.class.php');
 }
-
+/*
 // answer types
 define('UNIQUE_ANSWER',	1);
 define('MULTIPLE_ANSWER',	2);
@@ -59,7 +59,7 @@ define('MATCHING',		4);
 define('FREE_ANSWER', 5);
 define('HOT_SPOT', 6);
 define('HOT_SPOT_ORDER', 	7);
-
+*/
 global $_cid;
 // name of the language file that needs to be included
 $language_file='exercice';

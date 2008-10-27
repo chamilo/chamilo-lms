@@ -1,4 +1,4 @@
-<?php // $Id: Course.class.php 12645 2007-06-18 20:46:16Z elixir_inter $
+<?php // $Id: Course.class.php 16630 2008-10-27 19:11:45Z ivantcholakov $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -59,15 +59,15 @@ class Course
 				if( $resource->links_to($resource_to_check) )
 				{
 					return true;	
-				}	
-			}	
-			if( $type == RESOURCE_LEARNPATH && get_class($resource)=='Learnpath')
-			{
-				if($resource->has_item($resource_to_check))
+				}
+				if( $type == RESOURCE_LEARNPATH && get_class($resource)=='Learnpath')
 				{
-					return true;	
-				}	
-			}
+					if($resource->has_item($resource_to_check))
+					{
+						return true;	
+					}	
+				}
+			}	
 		}
 		return false;
 	}

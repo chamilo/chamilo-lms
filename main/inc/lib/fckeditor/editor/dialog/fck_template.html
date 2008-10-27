@@ -73,7 +73,8 @@ window.onload = function()
 	LoadTemplatesXml() ;
 	
 	// select first by default (Dokeos customization)
-	SelectTemplate( 0 ) ;
+	if(window.top.load_default_template==true)
+		SelectTemplate(0);
 }
 
 function LoadTemplatesXml()

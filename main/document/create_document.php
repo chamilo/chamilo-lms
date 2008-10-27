@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 16555 2008-10-17 10:29:14Z elixir_inter $
+// $Id: create_document.php 16628 2008-10-27 16:01:12Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -49,14 +49,15 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[]='<script>
 	
 function InnerDialogLoaded()
-{		
-	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);	
+{
+	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
 	return B.ClickFrame();
 };	
 
 	var temp=false;
 	var temp2=false;
 	var use_document_title='.api_get_setting('use_document_title').';
+	var load_default_template = true;
 
 	function launch_templates()
 	{		
@@ -68,7 +69,7 @@ function InnerDialogLoaded()
 	function FCKeditor_OnComplete( editorInstance )
 	{
 		editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
-		document.getElementById(\'frmModel\').innerHTML = "<iframe height=950px; width=97%; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
+		document.getElementById(\'frmModel\').innerHTML = "<iframe height=950px; width=97%; id=\"template_iframe\" frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
 	}
 
 	function check_for_title()

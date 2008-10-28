@@ -4483,7 +4483,7 @@ class learnpath {
 		$content = str_replace(api_get_path('WEB_COURSE_PATH'), api_get_path(REL_PATH).'courses/', $content);
 		
 		// change the path of mp3 to absolute
-		$content = preg_replace("|(flashvars=\"file=)([\./]*)|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$content);
+		$content = preg_replace("|(flashvars=\"file=)(\.+/)+|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$content);
 		
 		
 		
@@ -4588,7 +4588,7 @@ class learnpath {
 			$content = str_replace(api_get_path('WEB_COURSE_PATH'), $_configuration['url_append'].'/courses/', $content);
 			
 			// change the path of mp3 to absolute
-			$content = preg_replace("|(flashvars=\"file=)([\./]*)|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$content);
+			$content = preg_replace("|(flashvars=\"file=)(\.+/)+|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$content);
 						
 			fputs($fp, $content);
 			fclose($fp);

@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 16555 2008-10-17 10:29:14Z elixir_inter $
+<?php // $Id: edit_document.php 16635 2008-10-28 10:12:46Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -413,7 +413,7 @@ if($is_allowedToEdit)
 						$texte = str_replace('flv=/','flv=/|',$texte);
 						
 						// change the path of mp3 to absolute
-						$texte = preg_replace("|(flashvars=\"file=)([\./]*)|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$texte);
+						$texte = preg_replace("|(flashvars=\"file=)(\.+/)+|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$texte);
 						
 						
 						fputs($fp,$texte);						

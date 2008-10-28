@@ -41,7 +41,7 @@ FCKConfig.ToolbarSets["Announcements"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Full"] = [
-	['PasteWord','Link','Anchor','-','ImageManager','flvPlayer','Flash','EmbedMovies','MP3','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontFormat','FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
+	['PasteWord','Link','Anchor','-','ImageManager','flvPlayer','Flash','EmbedMovies','MP3','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontFormat','Style','FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
 ] ;
 
 FCKConfig.ToolbarSets["Comment"] = [
@@ -97,4 +97,4 @@ FCKConfig.Plugins.Add("googlemaps", "en,es", sOtherPluginPath ) ;
 FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSy5hTGQdsosYD3dz6faZHVrO-02A';//This key is for http://localhost. You must get one for each server where you want to use the plugin, just get the key for free here after agreeing to the Terms of Use of the GoogleMaps API: http://www.google.com/apis/maps/signup.html. If you leave an empty string then the toolbar icon won't be shown 
 
 // reduce format list
-FCKConfig.FontFormats	= 'p;h1;h2;h3' ;
+FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5' ;

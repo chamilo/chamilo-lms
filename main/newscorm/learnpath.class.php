@@ -4483,9 +4483,11 @@ class learnpath {
 		$content = str_replace(api_get_path('WEB_COURSE_PATH'), api_get_path(REL_PATH).'courses/', $content);
 		
 		// change the path of mp3 to absolute
+		// first regexp deals with ../../../ urls
 		$content = preg_replace("|(flashvars=\"file=)(\.+/)+|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$content);
-		
-		
+		//second regexp deals with audio/ urls
+		$content = preg_replace("|(flashvars=\"file=)([^/]+)/|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/$2/',$content);		 
+				
 		
 		// for flv player : to prevent edition problem with firefox, we have to use a strange tip (don't blame me please)
 		$content = str_replace('</body>','<style type="text/css">body{}</style></body>',$content);
@@ -4588,8 +4590,11 @@ class learnpath {
 			$content = str_replace(api_get_path('WEB_COURSE_PATH'), $_configuration['url_append'].'/courses/', $content);
 			
 			// change the path of mp3 to absolute
+			// first regexp deals with ../../../ urls
 			$content = preg_replace("|(flashvars=\"file=)(\.+/)+|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$content);
-						
+			//second regexp deals with audio/ urls
+			$content = preg_replace("|(flashvars=\"file=)([^/]+)/|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/$2/',$content);		 
+									
 			fputs($fp, $content);
 			fclose($fp);
 		}

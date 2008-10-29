@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 16635 2008-10-28 10:12:46Z elixir_inter $
+// $Id: create_document.php 16639 2008-10-29 08:39:49Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -400,8 +400,10 @@ if ($form->validate())
 		
 		
 		// change the path of mp3 to absolute
+		// first regexp deals with ../../../ urls
 		$content = preg_replace("|(flashvars=\"file=)(\.+/)+|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$content);
-		 
+		//second regexp deals with audio/ urls
+		$content = preg_replace("|(flashvars=\"file=)([^/]+)/|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/$2/',$content);		 
 		 
 		fputs($fp, $content);
 

@@ -20,10 +20,11 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 15825 2008-07-19 17:24:48Z yannoo $
+* 	@version $Id: index.php 16649 2008-10-31 20:59:09Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
+
 
 // only this script should have this constant defined. This is used to activate the javascript that
 // gives the login name automatic focus in header.inc.html.

@@ -16,11 +16,11 @@
 		B-1030 Brussels - Belgium
 		Contact: info@dokeos.com
 */
- 
+
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 16651 2008-10-31 21:36:39Z dperales $
+* 	@version $Id: index.php 16652 2008-10-31 21:37:21Z dperales $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */

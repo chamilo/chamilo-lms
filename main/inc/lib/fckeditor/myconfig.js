@@ -69,15 +69,12 @@ FCKConfig.ToolbarSets["Survey"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Wiki"] = [
-	['Templates','Cut','Copy','Paste','PasteText','PasteWord'],	
-	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-	['Wikilink','Link','Unlink','Anchor'],
-	['ImageManager','imgmapPopup','flvPlayer','Flash','EmbedMovies','MP3','Table','Rule','Smiley','SpecialChar','googlemaps'],
+	['NewPage','Templates','Save','Print','PageBreak','ShowBlocks','-','Cut','Copy','Paste','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
+	['Wikilink','Link','Unlink','Anchor','-','ImageManager','imgmapPopup','flvPlayer','Flash','EmbedMovies','MP3','Table','Rule','Smiley','SpecialChar','googlemaps'],
 	['FontFormat','FontName','FontSize'],
-	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
-	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],	
-	['OrderedList','UnorderedList','-','Outdent','Indent'],
-	['TextColor','BGColor'],['FitWindow']
+	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['FitWindow']
+	
 ] ;
 
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;

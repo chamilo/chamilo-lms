@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 16649 2008-10-31 20:59:09Z yannoo $
+* 	@version $Id: index.php 16650 2008-10-31 21:34:04Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -37,7 +37,6 @@ $language_file = array ('courses', 'index');
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore  */
 // maybe we should change this into an api function? an example: Coursemanager::unset();
 $cidReset = true;
-
 
 
 /*

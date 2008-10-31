@@ -1238,7 +1238,8 @@ if ($_GET['action']=='edit')
 				<option value="100">100</option>   
 				</select> %';	
 				echo '<br/><br/>'; 
-				echo '<input type="submit" name="SaveWikiChange" value="'.get_lang('langSave').'">';
+				echo '<input type="hidden" NAME="SaveWikiChange" value="'.get_lang('langSave').'">'; //for save icon
+				//echo '<input type="submit" name="SaveWikiChange" value="'.get_lang('langSave').'">';//for save button
 				echo '</form>';				
 				echo '</div>';			
 			} 	
@@ -2362,7 +2363,8 @@ function display_new_wiki_form()
 	   <option value="100">100</option>   
 	   </select>&nbsp;%';
 	echo '<br/><br/>'; 
-	echo '<input type="submit" name="SaveWikiNew" value="'.get_lang('langSave').'" onClick="return Send(this.form)">'; 
+	echo '<input type="hidden" name="SaveWikiNew" value="'.get_lang('langSave').'">'; //for save icon
+	//echo '<input type="submit" name="SaveWikiNew" value="'.get_lang('langSave').'" onClick="return Send(this.form)">'; 	//for button icon
 	echo '</div>';
 	echo '</form>';
 }

@@ -1,4 +1,4 @@
-<?php // $Id: compare_db.php 10527 2006-12-19 11:01:20Z yannoo $
+<?php // $Id: compare_db.php 16653 2008-11-03 22:49:07Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -50,6 +50,8 @@ $prefix_new = 'dokeos180_';
 $bases_new=array($prefix_new.'dokeos_main',$prefix_new.'dokeos_stats',$prefix_new.'dokeos_user','z'.$prefix_new.'COURSE',$prefix_new.'dokeos_scorm');
 $db_new = mysql_connect($sql_server_new,$sql_user_new,$sql_pass_new) or die(mysql_error());
 
+// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
+@mysql_query("set session sql_mode='';", $db_new);
 
 $sql_server_old='localhost';
 $sql_user_old='root';
@@ -57,6 +59,9 @@ $sql_pass_old='';
 $prefix_old = 'dokeos160_';
 $bases_old=array($prefix_old.'dokeos_main',$prefix_old.'dokeos_stats',$prefix_old.'dokeos_user',$prefix_old.'COURSE',$prefix_old.'dokeos_scorm');
 $db_old = mysql_connect($sql_server_old,$sql_user_old,$sql_pass_old) or die(mysql_error());
+
+// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
+@mysql_query("set session sql_mode='';", $db_old);
 
 $field_details = array(0=>'Field',1=>'Type',2=>'Null',3=>'Key',4=>'Default',5=>'Extra');
 

@@ -1,4 +1,4 @@
-<?php // $Id: update-db-1.8.4-1.8.5.inc.php 15952 2008-08-08 03:56:21Z yannoo $
+<?php // $Id: update-db-1.8.4-1.8.5.inc.php 16653 2008-11-03 22:49:07Z ivantcholakov $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -93,6 +93,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		exit ();
 	}
 
+	// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
+	@mysql_query("set session sql_mode='';");
 
 	$dblistres = mysql_list_dbs();
 	$dblist = array();

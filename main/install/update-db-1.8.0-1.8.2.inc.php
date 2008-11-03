@@ -111,6 +111,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		exit ();
 	}
 
+	// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
+	@mysql_query("set session sql_mode='';");
 
 	$dblistres = mysql_list_dbs();
 	$dblist = array();

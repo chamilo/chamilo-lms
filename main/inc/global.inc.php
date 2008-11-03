@@ -146,9 +146,11 @@ if (! $_configuration['db_host'])
 	die($error_message_db_problem);
 }
 
-
 unset($error_message_db_problem);
 unset($error_message_not_installed);
+
+// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
+api_sql_query("set session sql_mode='';", __FILE__, __LINE__);
 
 $selectResult = mysql_select_db($_configuration['main_database'],$dokeos_database_connection) or die ('<center>WARNING ! SYSTEM UNABLE TO SELECT THE MAIN DOKEOS DATABASE</center>');
 

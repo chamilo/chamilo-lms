@@ -271,6 +271,10 @@ function get_config_param($param,$updatePath='')
 function get_config_param_from_db($host,$login,$pass,$db_name,$param='')
 {
 	$mydb = mysql_connect($host,$login,$pass);
+
+	// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
+	@mysql_query("set session sql_mode='';");
+
 	$myconnect = mysql_select_db($db_name);
 	$sql = "SELECT * FROM settings_current WHERE variable = '$param'";
 	$res = mysql_query($sql);
@@ -1146,6 +1150,9 @@ function test_db_connect ($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbFo
 	{
 		if(mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm) !== false)
 		{
+			// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
+			@mysql_query("set session sql_mode='';");
+
 			$multipleDbCheck = @mysql_query("CREATE DATABASE ".$dbPrefixForm."test_dokeos_connection");
 			if($multipleDbCheck !== false)
 			{

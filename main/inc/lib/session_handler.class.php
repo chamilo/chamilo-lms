@@ -1,4 +1,4 @@
-<?php // $Id: session_handler.class.php 10684 2007-01-11 22:39:42Z yannoo $
+<?php // $Id: session_handler.class.php 16653 2008-11-03 22:49:07Z ivantcholakov $
 /*
 ===============================================================================
 	Dokeos - elearning and course management software
@@ -61,6 +61,9 @@ class session_handler
 		if(!$this->idConnexion)
 		{
 			$this->idConnexion=@mysql_connect($this->connexion['server'],$this->connexion['login'],$this->connexion['password'],true);
+
+			// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
+			@mysql_query("set session sql_mode='';", $this->idConnexion);
 		}
 
 		return $this->idConnexion?true:false;

@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 16633 2008-10-27 22:58:34Z yannoo $
+* 	@version $Id: exercise_result.php 16657 2008-11-04 18:06:45Z dperales $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -125,6 +125,16 @@ if ( empty ( $questionList ) ) {
 if ( empty ( $objExercise ) ) {
     $objExercise = $_SESSION['objExercise'];
 }
+if ( empty ( $exerciseType ) ) {
+    $exerciseType = $_REQUEST['exerciseType'];
+}
+$_configuration['live_exercise_tracking'] = true;
+if($_configuration['live_exercise_tracking']) define('ENABLED_LIVE_EXERCISE_TRACKING',1);
+
+if($_configuration['live_exercise_tracking'] == true && $exerciseType == 1){
+	$_configuration['live_exercise_tracking'] = false;
+}
+
 $main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
 $main_admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 $courseName = $_SESSION['_course']['name'];
@@ -453,7 +463,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 	if($_configuration['tracking_enabled'])
 	{
 		// Create an empty exercise  
-		$exeId= create_event_exercice();
+		$exeId= create_event_exercice($objExercise->selectId());
 	}	 
 	
 	$counter=0;

@@ -1,4 +1,4 @@
-<?php // $Id: events.lib.inc.php 16025 2008-08-19 18:29:30Z juliomontoya $
+<?php // $Id: events.lib.inc.php 16657 2008-11-04 18:06:45Z dperales $
 /* See license terms in /dokeos_license.txt */
 /**
 ============================================================================== 
@@ -431,7 +431,7 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting)
 				   exe_exo_id 	= 	'".$exo_id."',
 				   exe_result	=	  '".$score."',
 				   exe_weighting = '".$weighting."',
-				   exe_date= FROM_UNIXTIME(".$reallyNow.")
+				   exe_date= FROM_UNIXTIME(".$reallyNow."),status = '', data_tracking=''
 				 WHERE exe_id = '".$exeid."'";	
 		$res = @api_sql_query($sql,__FILE__,__LINE__);
 		return $res;
@@ -447,9 +447,9 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting)
  * @author Julio Montoya <gugli100@gmail.com>
  * @desc Record result of user when an exercice was done
 */
-function create_event_exercice()
+function create_event_exercice($exo_id)
 {
-	global $_user, $_cid;
+	global $_user, $_cid, $_configuration;
 	$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);		
 	$reallyNow = time();
 	if ($_user['user_id'])
@@ -460,6 +460,19 @@ function create_event_exercice()
 		{
 		$user_id = "NULL";
 	}
+	
+	if(defined('ENABLED_LIVE_EXERCISE_TRACKING')){
+		$condition = ' WHERE ' .
+				'exe_exo_id =   '."'".$exo_id."'".' AND ' .
+				'exe_user_id =  '."'".api_get_user_id()."'".' AND ' .
+				'exe_cours_id = '."'".$_cid."'".' AND ' .
+				'status = '."'incomplete'".' AND '.
+				'session_id = '."'".api_get_session_id()."'";
+		$sql = api_sql_query('SELECT exe_id FROM '.$TABLETRACK_EXERCICES.$condition,__FILE__,__LINE__);	
+		$row = mysql_fetch_array($sql);
+		return $row['exe_id'];
+	}
+	
 	$sql = "INSERT INTO $TABLETRACK_EXERCICES
 			  (
 			   exe_user_id,
@@ -506,6 +519,13 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 	{
 		$user_id = "NULL";
 	}
+	
+	if($_configuration['live_exercise_tracking']==true){
+			$sql = "UPDATE $TBL_TRACK_ATTEMPT
+			SET marks = '".$score."'
+			WHERE  exe_id = '".$exeId."' AND question_id = '".$quesId."'".' AND answer ='."'".$answer."'";
+
+	} else {	
 	$sql = "INSERT INTO $TBL_TRACK_ATTEMPT  
 			  (
 			   exe_id,
@@ -528,6 +548,21 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 			   '".$j."',
 			   FROM_UNIXTIME(".$reallyNow.")
 			  )";
+	}
+			  
+	if(defined('ENABLED_LIVE_EXERCISE_TRACKING')){
+		$TBL_RECORDING = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+		$recording_changes = 'INSERT INTO '.$TBL_RECORDING.' ' .
+		'(exe_id,
+		question_id,
+		marks,
+		insert_date,
+		author) 
+		VALUES
+		('."'$exeId','".$quesId."','$score','".date('Y-m-d H:i:s')."',''".')';
+		api_sql_query($recording_changes,__FILE__,__LINE__);
+	}		 
+			  
 	$res = @api_sql_query($sql,__FILE__,__LINE__);
 	return $res;
 }

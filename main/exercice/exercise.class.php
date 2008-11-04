@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 16072 2008-08-26 18:11:13Z juliomontoya $
+* 	@version $Id: exercise.class.php 16657 2008-11-04 18:06:45Z dperales $
 */
 
 
@@ -42,6 +42,8 @@ class Exercise
 	var $active;
 	var $timeLimit;
 	var $attempts;
+	var $end_time;
+    var $start_time;
 
 	var $questionList;  // array with the list of this exercise's questions
 
@@ -79,7 +81,7 @@ class Exercise
 	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
     	#$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
-		$sql="SELECT title,description,sound,type,random,active, results_disabled, max_attempt FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
+		$sql="SELECT title,description,sound,type,random,active, results_disabled, max_attempt,start_time,end_time FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
 		// if the exercise has been found
@@ -94,6 +96,8 @@ class Exercise
 			$this->active=$object->active;
 			$this->results_disabled =$object->results_disabled;
 			$this->attempts = $object->max_attempt;
+			$this->end_time = $object->end_time;
+            $this->start_time = $object->start_time;
 			$sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY question_order";
 			$result=api_sql_query($sql,__FILE__,__LINE__);
 
@@ -109,6 +113,21 @@ class Exercise
 
 				$this->questionList[$object->question_order]=$object->question_id;
 			}
+			
+			if($this->random==1){
+          		shuffle($this->questionList);
+          	}
+       	    global $_configuration;
+            global $questionList;
+            //overload questions list with recorded questions list
+            //load questions only for exercises of type 'one question per page'
+            //this is needed only is there is no questions   
+            //
+            if($this->type == 2 && $_configuration['live_exercise_tracking']==true && $_SERVER['REQUEST_METHOD']!='POST')
+	        {
+            	if(!empty($_SESSION['questionList']))$this->questionList = $questionList;
+            }
+
 			return true;
 		}
 
@@ -253,6 +272,7 @@ class Exercise
      */
 	function selectRandomList()
 	{		
+		return $this->questionList;	
 		$nbQuestions = $this->selectNbrQuestions();
 		
 		//Not a random exercise, or if there are not at least 2 questions
@@ -260,7 +280,7 @@ class Exercise
 		{
 			return $this->questionList;
 		}
-		
+
 		$randQuestionList = array();
 		$alreadyChosen = array();
 		
@@ -448,11 +468,13 @@ class Exercise
 		$random=$this->random;
 		$active=$this->active;
 		$results_disabled = intval($this->results_disabled);
-
+        $start_time = Database::escape_string($this->start_time);
+        $end_time = Database::escape_string($this->end_time);
 		// exercise already exists
 		if($id)
 		{
 			$sql="UPDATE $TBL_EXERCICES SET 
+						start_time='$start_time',end_time='$end_time', 
 						title='".Database::escape_string($exercise)."',
 						description='".Database::escape_string($description)."',
 						sound='".Database::escape_string($sound)."',
@@ -467,8 +489,9 @@ class Exercise
 		// creates a new exercise
 		else
 		{
-			$sql="INSERT INTO $TBL_EXERCICES(title,description,sound,type,random,active, results_disabled, max_attempt) 
+			$sql="INSERT INTO $TBL_EXERCICES(start_time,end_time,title,description,sound,type,random,active, results_disabled, max_attempt) 
 					VALUES(
+						'$start_time','$end_time',
 						'".Database::escape_string($exercise)."',
 						'".Database::escape_string($description)."',
 						'".Database::escape_string($sound)."',
@@ -760,36 +783,27 @@ class Exercise
 		$form -> addElement('html','<div id="options" style="display: none;">');
 		$random = array();
 		
-		$option=array();
-		
+		$max = ($this->id > 0) ? $this->selectNbrQuestions() : 10 ;
+		$option = range(0,$max);
 		$option[0]=get_lang('DoNotRandomize');
-		
-		$count_list=10;
-		if ($this->id>0)
-		{
-			$count_list = $this->selectNbrQuestions();
-		}
-		for($i=1 ; $i<=$count_list; ++$i)
-		{
-			$option[$i] = $i;  // fill the array with A, B, C.....
-		}
-		
-		$attempt_option=array();
-		$attempt_option[0]=get_lang('Infinite');
-		
-		for($i=1 ; $i<=10; ++$i)
-		{
-			$attempt_option[$i] = $i;  // fill the array with A, B, C.....
-		}		
+
 		$random[] = FormValidator :: createElement ('static', 'help','help','<span style="font-style: italic;">'.get_lang('RandomQuestionsHelp').'</span>');
 		$random[] = FormValidator :: createElement ('select', 'randomQuestions',null,$option); 
 		
 		//$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
 		$form -> addGroup($random,null,get_lang('RandomQuestions').' : ','<br />');
 		
+		$attempt_option=range(0,10);
+        $attempt_option[0]=get_lang('Infinite');
+        
+        $form -> addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts').' : ',$attempt_option);
+
+        $form -> addElement('checkbox', 'enabletimelimit',null ,get_lang('EnableTimeLimits'));
+        $form -> addElement('date', 'start_time', get_lang('ExeStartTime'), array('language'=>'es','format' => 'dMYHi'));
+        $form -> addElement('date', 'end_time', get_lang('ExeEndTime'), array('language'=>'es','format' => 'dMYHi'));
+
 		// Exercise attempts
 		//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));		
-		$form -> addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts').' : ',$attempt_option); 
 		
 		$form -> addElement('html','</div>');
 		
@@ -799,6 +813,9 @@ class Exercise
 		// rules
 		$form -> addRule ('exerciseTitle', get_lang('GiveExerciseName'), 'required');
 		$form -> addRule ('exerciseAttempts', get_lang('Numeric'), 'numeric');
+        $form -> addRule (array('start_time','end_time'), get_lang('DateValidation'), 'comparedate');
+        $form -> addRule ('start_time', get_lang('Dateinconsistent'), 'errordate');
+        $form -> addRule ('end_time', get_lang('Dateinconsistent'), 'errordate');
 
 		// defaults
 		$defaults = array();
@@ -816,7 +833,13 @@ class Exercise
 			$defaults['exerciseType'] = $this -> selectType();
 			$defaults['exerciseTitle'] = $this -> selectTitle();
 			$defaults['exerciseDescription'] = $this -> selectDescription();
-			$defaults['exerciseAttempts'] = $this->selectAttempts();			
+			$defaults['exerciseAttempts'] = $this->selectAttempts();	
+			
+  			if(($this -> start_time!='0000-00-00 00:00:00')||($this -> end_time!='0000-00-00 00:00:00'))
+            	$defaults['enabletimelimit'] = 1;
+		    
+		    $defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00')? $this -> start_time : date('Y-m-d 12:00:00');
+            $defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00')?$this -> end_time : date('Y-m-d 12:00:00');					
 		}
 		else
 		{
@@ -824,6 +847,9 @@ class Exercise
 			$defaults['exerciseAttempts'] = 0;
 			$defaults['randomQuestions'] = 0;
 			$defaults['exerciseDescription'] = '';
+			
+			$defaults['start_time'] = date('Y-m-d 12:00:00');
+			$defaults['end_time'] = date('Y-m-d 12:00:00');
 		}
 		$form -> setDefaults($defaults);
 	}
@@ -840,8 +866,22 @@ class Exercise
 		$this -> updateDescription($form -> getSubmitValue('exerciseDescription'));
 		$this -> updateType($form -> getSubmitValue('exerciseType'));
 		$this -> setRandom($form -> getSubmitValue('randomQuestions'));
-		$this -> save();
 
+		if($form -> getSubmitValue('enabletimelimit')==1)
+        {
+           $start_time = $form -> getSubmitValue('start_time');
+           $start_time = $start_time['Y'].'-'.$start_time['M'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00';
+           $end_time = $form -> getSubmitValue('end_time');
+           $end_time = $end_time['Y'].'-'.$end_time['M'].'-'.$end_time['d'].' '.$end_time['H'].':'.$end_time['i'].':00';
+           $this -> start_time = $start_time;
+           $this -> end_time = $end_time;
+        }
+          else
+  		{
+           $this -> start_time = '0000-00-00 00:00:00';
+           $this -> end_time = '0000-00-00 00:00:00';
+        }
+        $this -> save();
 	}
 }
 

@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 16432 2008-10-03 12:05:39Z herodoto $
+<?php // $Id: database.lib.php 16657 2008-11-04 18:06:45Z dperales $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -64,6 +64,7 @@ define('TABLE_STATISTIC_TRACK_E_HOTPOTATOES', 'track_e_hotpotatoes');
 define('TABLE_STATISTIC_TRACK_E_COURSE_ACCESS', 'track_e_course_access');
 define('TABLE_STATISTIC_TRACK_E_EXERCICES', 'track_e_exercices');
 define('TABLE_STATISTIC_TRACK_E_ATTEMPT', 'track_e_attempt');
+define('TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING', 'track_e_attempt_recording');
 define('TABLE_STATISTIC_TRACK_E_DEFAULT', 'track_e_default');
 define('TABLE_STATISTIC_TRACK_E_UPLOADS','track_e_uploads');
 define('TABLE_STATISTIC_TRACK_E_HOTSPOT','track_e_hotspot');
@@ -87,6 +88,7 @@ define('TABLE_TOOL_LIST', 'tool');
 define('TABLE_TOOL_INTRO', 'tool_intro');
 define('TABLE_SCORMDOC', 'scormdocument');
 define('TABLE_STUDENT_PUBLICATION', 'student_publication');
+define('TABLE_STUDENT_PUBLICATION_ASSIGNMENT', 'student_publication_assignment');
 define('CHAT_CONNECTED_TABLE', 'chat_connected');
 
 //course forum tables

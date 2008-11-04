@@ -308,7 +308,8 @@ function update_Db_course($courseDbName)
 
 	// Student Publication
 	$TABLETOOLWORKS 			= $courseDbName . 'student_publication';
-
+	$TABLETOOLWORKSASS 			= $courseDbName . 'student_publication_assignment';
+	
 	// Document
 	$TABLETOOLDOCUMENT 			= $courseDbName . 'document';
 
@@ -610,6 +611,8 @@ function update_Db_course($courseDbName)
 		results_disabled TINYINT UNSIGNED NOT NULL DEFAULT 0,
 		access_condition TEXT DEFAULT NULL,
 		max_attempt int NOT NULL default 0,
+		start_time datetime NOT NULL default '0000-00-00 00:00:00',
+		end_time datetime NOT NULL default '0000-00-00 00:00:00',
 		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
@@ -764,9 +767,27 @@ function update_Db_course($courseDbName)
 		post_group_id int DEFAULT 0 NOT NULL,
 		sent_date datetime NOT NULL default '0000-00-00 00:00:00',
 		filetype set('file','folder') NOT NULL default 'file',
-		session_id SMALLINT UNSIGNED NOT NULL default 0,
+		has_properties int,
+		view_properties tinyint,
+		qualification INT UNSIGNED NOT NULL,
+ 		date_of_qualification datetime NOT NULL default '0000-00-00 00:00:00',
+ 		parent_id INT UNSIGNED NOT NULL,
+		qualificator_id INT UNSIGNED NOT NULL,
+		session_id INT UNSIGNED NOT NULL default 0,
 		PRIMARY KEY (id)
 		)";
+	api_sql_query($sql, __FILE__, __LINE__);
+	
+	$sql = "	
+        CREATE TABLE `".$TABLETOOLWORKSASS."` (
+        id int NOT NULL auto_increment,
+        expires_on datetime NOT NULL default '0000-00-00 00:00:00',
+        ends_on datetime NOT NULL default '0000-00-00 00:00:00',
+        add_to_calendar tinyint NOT NULL,
+        enable_qualification tinyint NOT NULL,
+        publication_id int NOT NULL,
+        PRIMARY KEY  (id)" .
+        ")";
 	api_sql_query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLWORKS . "` ADD INDEX ( session_id )" ;
 

@@ -229,7 +229,7 @@ function display_user_link($user_id, $name='')
 * @param $dateFormatLong - date format
 * @param $origin - typically empty or 'learnpath'
 */
-function display_student_publications_list($work_dir,$sub_course_dir,$currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin)
+function display_student_publications_list($work_dir,$sub_course_dir,$currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_in_where_query='')
 {
 	global $charset;
 	// Database table names
@@ -277,13 +277,13 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$sql_get_publications_list = 	"SELECT * " .
 										"FROM  ".$work_table." " .
 										"WHERE url LIKE BINARY '$sub_course_dir%' " .
-										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .
+										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.
 										$session_condition.
 		                 				"ORDER BY id";
 		                 				
 		$sql_get_publications_num = 	"SELECT count(*) " .
 										"FROM  ".$work_table." " .
-										"WHERE url LIKE BINARY '$sub_course_dir%' " .
+										"WHERE url LIKE BINARY '$sub_course_dir%' " .$add_in_where_query.
 										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .
 										$session_condition.
 		                 				"ORDER BY id";
@@ -303,12 +303,12 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		}
 		
 		
-		$sql_get_publications_list = "SELECT * FROM  $work_table $group_query $subdirs_query AND session_id IN (0,".intval($_SESSION['id_session']).") ORDER BY id";
+		$sql_get_publications_list = "SELECT * FROM  $work_table $group_query $subdirs_query ".$add_in_where_query." AND session_id IN (0,".intval($_SESSION['id_session']).") ORDER BY id";
 		
 		$sql_get_publications_num = "SELECT count(url) " .
 										"FROM  ".$work_table." " .
 										"WHERE url LIKE BINARY '$sub_course_dir%' " .
-										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .
+										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.
 										$session_condition.
 		                 				"ORDER BY id";
 		                 				
@@ -400,8 +400,8 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 							   
 		*/		
 		$session_condition =  intval($_SESSION['id_session'])!=0 ?"AND work.session_id IN (0,".intval($_SESSION['id_session']).")" : "";		   
-		$sql_select_directory= "SELECT prop.lastedit_date, author, work.session_id FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE " .
-							   	    "work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $session_condition";													   
+	    $sql_select_directory= "SELECT prop.lastedit_date, id, author, has_properties, view_properties, description, qualification,id FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE " .
+ 	                           "work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $session_condition";													   
 		$result=api_sql_query($sql_select_directory,__FILE__,__LINE__);
 		$row=Database::fetch_array($result);
 		
@@ -411,35 +411,145 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$direc_date= $row['lastedit_date']; //directory's date
 		$author= $row['author']; //directory's author
 		$folder_session_id = $row['session_id'];
+		$view_properties=$row['view_properties'];
+		$is_assignment = $row['has_properties'];
+	    $id2=$row['id'];
 			
 		$mydir = $my_sub_dir.$dir;	
 			
 		if ($is_allowed_to_edit) 
-		{				
+		{		
+			
 			$clean_edit_dir=Security :: remove_XSS(Database::escape_string($_GET['edit_dir']));
-				
+						
 			// form edit directory				
 			if(isset($clean_edit_dir) && $clean_edit_dir==$mydir)
 			{	
+				if(!empty($row['has_properties'])){
+					$sql = api_sql_query('SELECT * FROM '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT).' WHERE id = '."'".$row['has_properties']."'".' LIMIT 1',__FILE__,__LINE__);
+					$homework = mysql_fetch_array($sql);
+				}
+			
 				$form_folder = new FormValidator('edit_dir', 'post', api_get_self().'?curdirpath='.$my_sub_dir.'&origin='.$origin.'&edit_dir='.$mydir);
+				//echo $row['view_properties'];
+				//echo $row['has_properties'];
+
 				$group_name[] = FormValidator :: createElement('text','dir_name');
+				$form_folder-> addElement('textarea','description',get_lang('Description'),array('rows'=>5,'cols'=>50));
+				$qualification_input[] = FormValidator :: createElement('text','qualification');
+				$form_folder -> addGroup($qualification_input,'qualification',get_lang('Qualification'),'size="10"');								
+				if($row['view_properties']=='1'){			
+					if($homework['expires_on']!='0000-00-00 00:00:00'){		
+						$there_is_a_expire_date = true;
+						$form_folder -> addGroup(create_group_date_select(),'expires',get_lang('Expires_At'));
+					}
+					if($homework['ends_on']!='0000-00-00 00:00:00'){		
+						$there_is_a_end_date = true;
+						$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('Ends_At'));
+					}
+					$form_folder -> addRule (array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
+				}
+				else
+				{
+						//$form_folder -> addElement('checkbox', 'enableRandom', null, get_lang('MakeRandom'),'1');					
+						$form_folder -> addElement('html','<div class="row">
+	 	                         <div class="label">&nbsp;</div>
+ 	  	                         <div class="formw">
+ 	  	                                 <a href="javascript://" onclick="if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}"><img src="../img/add_na.gif" alt="" />'.get_lang('AdvancedParameters').'</a>
+ 	  	                         </div>
+	  	                         </div>	');
+	  	                         
+	  	                $form_folder -> addElement('html','<div id="options" style="display: none;">');
+									if(empty($default)) $default = date('Y-m-d 12:00:00');
+									
+										$parts = split(' ',$default);
+										list($d_year,$d_month,$d_day) = split('-',$parts[0]);
+										list($d_hour,$d_minute) = split(':',$parts[1]);
+																		
+									if($homework['expires_on']='0000-00-00 00:00:00'){
+										$homework['expires_on']=date("Y-m-d h:i:s");		
+										$there_is_a_expire_date = true;
+										$form_folder -> addElement('checkbox', 'enableRandomExpires', null, get_lang('MakeRandomExpires'),'1');
+										$form_folder -> addGroup(create_group_date_select(),'expires',get_lang('Expires_At'));
+										
+									}
+									if($homework['ends_on']='0000-00-00 00:00:00'){	
+										$homework['ends_on']=date("Y-m-d h:i:s");		
+										$there_is_a_end_date = true;
+										$form_folder -> addElement('checkbox', 'enableRandomEnds', null, get_lang('MakeRandomEnd'),'1');
+										$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('Ends_At'));
+										
+									}	
+									//$form_folder -> addRule ('expires', get_lang('Dateinconsistent'), 'errordate');
+									//$form_folder -> addRule ('ends', get_lang('Dateinconsistent'), 'errordate');
+									$form_folder -> addRule (array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');		
+						
+						$form_folder -> addElement('html','</div>');  		
+				}
+
+				
+
 				$group_name[] = FormValidator :: createElement('submit','submit_edit_dir',get_lang('Ok'));
 				$form_folder -> addGroup($group_name,'my_group');
 				$form_folder -> addGroupRule('my_group',get_lang('ThisFieldIsRequired'),'required');
-				$form_folder -> setDefaults(array('my_group[dir_name]'=>$dir));				
+				
+				$defaults = array('my_group[dir_name]'=>$dir,'description'=>$row['description']);
+				if($there_is_a_end_date == true)
+					$defaults = array_merge($defaults,convert_date_to_array($homework['ends_on'],'ends'));
+				if($there_is_a_expire_date == true)
+					$defaults = array_merge($defaults,convert_date_to_array($homework['expires_on'],'expires'));
+				if(!empty($row['qualification']))
+					$defaults = array_merge($defaults,array('qualification[qualification]'=>$row['qualification']));
+				
+				$form_folder -> setDefaults($defaults);				
 				$display_edit_form=true;		
 					
 				if($form_folder -> validate())
 				{
+					if($there_is_a_end_date == true || $there_is_a_expire_date == true)
+					{		
+						if($row['view_properties']=='1')
+						{
+								$sql_add_publication = "UPDATE ".Database :: get_course_table(TABLE_STUDENT_PUBLICATION)." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+								api_sql_query($sql_add_publication, __FILE__, __LINE__);
+								$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'".',';
+								$ends_query =   ' ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
+								api_sql_query('UPDATE '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT).$expires_query.$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
+						}
+						else if($row['view_properties']=='0')
+						{
+								
+								if ($_POST['enableRandomExpires']=='1')
+								{								
+									$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'";
+									//$ends_query =   ' ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";							
+									api_sql_query('UPDATE '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT).$expires_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
+									$sql_add_publication = "UPDATE ".Database :: get_course_table(TABLE_STUDENT_PUBLICATION)." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+									api_sql_query($sql_add_publication, __FILE__, __LINE__);
+								}
+								if ($_POST['enableRandomEnds']=='1')
+								{								
+									//$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'".',';
+									$ends_query =   ' SET ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";							
+									api_sql_query('UPDATE '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT).$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
+									$sql_add_publication = "UPDATE ".Database :: get_course_table(TABLE_STUDENT_PUBLICATION)." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+									api_sql_query($sql_add_publication, __FILE__, __LINE__);
+								}
+						}
+					
+					}
+					//if($_POST['qualification']['qualification']!='')
+						api_sql_query('UPDATE '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION).' SET description = '."'".Database::escape_string($_POST['description'])."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".' WHERE id = '."'".$row['id']."'",__FILE__,__LINE__);
+								
+					
+					
 					$values = $form_folder -> exportValues();
 					$values = $values['my_group'];					
 					update_dir_name($mydir,$values['dir_name']);
 					$mydir = $my_sub_dir.$values['dir_name'];
 					$dir = $values['dir_name'];
 					$display_edit_form=false;
-								
 				}
-				
 			}
 		}
 		
@@ -479,7 +589,9 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		}
 		else
 		{
-			$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a><br>'.$cant_files.' '.$text_file.$dirtext;				
+			$add_to_name = '';
+			if($view_properties==1) $add_to_name = ' / <span style="color:blue">'.get_lang('Assignment').'</span>';
+			$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;				
 		}
 		
 		if ($count_files!=0)
@@ -499,7 +611,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		{
 			$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
 				'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';						
-			$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  ><img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('DirDelete').'"></a>';
+			$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&delete_dir='.$mydir.'&delete2='.$id2.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  ><img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('DirDelete').'"></a>';
 			$row[] = $action;
 		}
 		else
@@ -533,6 +645,19 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			{
 				$class='';
 			}
+			
+			if(defined('IS_ASSIGNMENT')):
+				$add_string = '';
+	
+				if($work->qualification=='')
+					$qualification_string = ' / <b style="color:orange">'.get_lang('NotRevised').'<b>';
+				else
+					$qualification_string = ' / <b style="color:blue">'.get_lang('Qualification').': '.$work->qualification.'<b>';
+
+				if(defined('ASSIGNMENT_EXPIRES') && (ASSIGNMENT_EXPIRES < convert_date_to_number($work->sent_date))){
+					$add_string = ' <b style="color:red">'.get_lang('Expired').'</b>';
+				}
+			endif;
 			
 			$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));			
 			$row[]= build_document_icon_tag('file',$work->url);			

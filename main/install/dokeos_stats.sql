@@ -104,6 +104,12 @@ CREATE TABLE track_e_exercices (
   KEY exe_cours_id (exe_cours_id)
 );
 
+ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';
+ALTER TABLE track_e_exercices ADD data_tracking text NOT NULL default '';
+ALTER TABLE track_e_exercices ADD start_date datetime NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE track_e_exercices ADD session_id SMALLINT UNSIGNED NOT NULL default 0;
+ALTER TABLE track_e_exercices ADD INDEX ( session_id ) ;
+
 CREATE TABLE track_e_attempt (
   exe_id int default NULL,
   user_id int NOT NULL default 0,
@@ -118,6 +124,15 @@ CREATE TABLE track_e_attempt (
 ALTER TABLE track_e_attempt ADD INDEX (exe_id);
 ALTER TABLE track_e_attempt ADD INDEX (user_id); 
 ALTER TABLE track_e_attempt ADD INDEX (question_id);
+
+CREATE TABLE track_e_attempt_recording (
+exe_id int unsigned NOT NULL, 
+question_id int unsigned NOT NULL,  
+marks int NOT NULL,  
+insert_date datetime NOT NULL default '0000-00-00 00:00:00',  
+author int unsigned NOT NULL,  
+teacher_comment text NOT NULL);
+ALTER TABLE track_e_attempt_recording ADD INDEX (exe_id);
 
 CREATE TABLE track_e_hotpotatoes (
   exe_name VARCHAR( 255 ) NOT NULL ,

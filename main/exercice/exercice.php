@@ -927,100 +927,26 @@ if($_configuration['tracking_enabled'])
 			echo '<br /><br />';		
 		}
 		
-		switch ($_GET['column']) {
-    		case 'username':
-				if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-				{
-        			$urlusername = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=username&direction=1';
-				}
-				else
-				{
-					$urlusername = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=username&direction=0';
-				}
-				$urlexercisename = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=exercisename&direction=0';
-				$urldate = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=date&direction=0';
-        		break;
-    		case 'exercisename':
-				if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-				{
-        			$urlexercisename = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=exercisename&direction=1';
-				}
-				else
-				{
-					$urlexercisename = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=exercisename&direction=0';
-				}
-				$urlusername = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=username&direction=0';
-				$urldate = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=date&direction=0';
-        		break;
-    		case 'date':
-				if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-				{
-        			$urldate = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=date&direction=1';
-				}
-				else
-				{
-					$urldate = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=date&direction=0';
-				}
-				$urlusername = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=username&direction=0';
-				$urlexercisename = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=exercisename&direction=0';
-        		break;
-			case '':
-				$urlusername = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=username&direction=0';
-				$urlexercisename = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=exercisename&direction=0';
-				$urldate = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=date&direction=0';
-				break;
-		}
-		
-		switch ($_GET['column']) {
-		    		case 'username':
-						if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-						{
-		        			$urlusername = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=username&direction=1';
-						}
-						else
-						{
-							$urlusername = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=username&direction=0';
-						}
-						$urlexercisename = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=exercisename&direction=0';
-						$urldate = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=date&direction=0';
-		        		break;
-		    		case 'exercisename':
-						if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-						{
-		        			$urlexercisename = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=exercisename&direction=1';
-						}
-						else
-						{
-							$urlexercisename = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=exercisename&direction=0';
-						}
-						$urlusername = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=username&direction=0';
-						$urldate = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=date&direction=0';
-		        		break;
-		    		case 'date':
-						if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-						{
-		        			$urldate = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=date&direction=1';
-						}
-						else
-						{
-							$urldate = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=date&direction=0';
-						}
-						$urlusername = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=username&direction=0';
-						$urlexercisename = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=exercisename&direction=0';
-		        		break;
-					case '':
-						$urlusername = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=username&direction=0';
-						$urlexercisename = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=exercisename&direction=0';
-						$urldate = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&column=date&direction=0';
-						break;
-				}
-				
-				?>
+		$order_like = (int)$_GET['direction'];
+		if($order_like != 0 && $order_like != 1) $order_like = 0;
+		$new_orientation = $order_like ^ 1;
+		$orientation = array();
+		$orientation[0] = 'ASC'; // default order
+		$orientation[1] = 'DESC';
+		$ordering = $orientation[$order_like];
+
+		$main_url = $_SESSION['checkDokeosURL'].'main/exercice/exercice.php?'.api_get_cidreq().'&show=result&';
+		$urlusername 	 = $main_url.'column=username&direction='.(($_GET['column']=='username') ? $new_orientation : 0);
+		$urlexercisename = $main_url.'column=exercisename&direction='.(($_GET['column']=='exercisename') ? $new_orientation : 0);
+		$urldate 		 = $main_url.'column=date&direction='.(($_GET['column']=='date') ? $new_orientation : 0);
+?>
 		
 				<table class="data_table">
 				 <tr class="row_odd">
 				  <?php if($is_allowedToEdit || $is_tutor): ?>
-				  <th><a href="<?php echo $urlusername; ?>"><?php echo get_lang("User"); ?></a></th><?php endif; ?>
+				  <th><a href="<?php echo $urlusername; ?>"><?php echo get_lang("User"); ?></a></th>
+				  <th><?php echo get_lang('Duration'); ?></th>
+				  <?php endif; ?>
 				  <th><a href="<?php echo $urlexercisename; ?>"><?php echo get_lang("Exercice"); ?></a></th>
 				  <th><a href="<?php echo $urldate; ?>"><?php echo get_lang("Date"); ?></a></th>
 				  <th><?php echo get_lang("Result"); ?></th>
@@ -1030,49 +956,29 @@ if($_configuration['tracking_enabled'])
 		 </tr>
 
 		<?php
+					
 		if($is_allowedToEdit)
 				{
 					//get all results (ourself and the others) as an admin should see them
 					//AND exe_user_id <> $_user['user_id']  clause has been removed
 					$sql="SELECT CONCAT(lastname,' ',firstname),ce.title, te.exe_result ,
-								te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_Id,email
+								te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_Id,email, UNIX_TIMESTAMP(te.start_date)
 						  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
-						  WHERE te.exe_exo_id = ce.id AND user_id=te.exe_user_id AND te.exe_cours_id='$_cid'";
-		
-		
+						  WHERE te.exe_exo_id = ce.id AND  te.status != 'incomplete' AND user_id=te.exe_user_id AND te.exe_cours_id='$_cid'";
+
+
 					switch ($_GET['column']) {
 		    			case 'username':
-							if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-							{
-		        				$sql .= " order by lastname ASC, firstname ASC,ce.title ASC, te.exe_date ASC";
-							}
-							else
-							{
-								$sql .= " order by lastname DESC, firstname ASC, ce.title ASC, te.exe_date ASC";
-							}
+							$sql .= ' order by lastname '.$ordering.', firstname ASC, ce.title ASC, te.exe_date ASC';
 							break;
 		    			case 'exercisename':
-							if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-							{
-		        				$sql .= " order by ce.title ASC, te.exe_date ASC, lastname ASC, firstname ASC";
-							}
-							else
-							{
-								$sql .= " order by ce.title DESC, te.exe_date ASC, lastname ASC, firstname ASC";
-							}
+							$sql .= ' order by ce.title '.$ordering.', te.exe_date ASC, lastname ASC, firstname ASC';
 		        			break;
 		    			case 'date':
-							if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-							{
-		        				$sql .= " order by te.exe_date ASC,ce.title ASC, lastname ASC, firstname ASC";
-							}
-							else
-							{
-								$sql .= " order by te.exe_date DESC,ce.title ASC, lastname ASC, firstname ASC";
-							}
+	        				$sql .= ' order by te.exe_date '.$ordering.',ce.title ASC, lastname ASC, firstname ASC';
 							break;
 						case '':
-							$sql .= " ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_dateASC";
+							$sql .= ' ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC';
 							break;
 					}
 					$hpsql="SELECT CONCAT(tu.lastname,' ',tu.firstname), tth.exe_name,
@@ -1081,37 +987,16 @@ if($_configuration['tracking_enabled'])
 							WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '".$_cid."'";
 					switch ($_GET['column']) {
 		    			case 'username':
-							if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-							{
-		        				$hpsql .= " order by tu.lastname ASC, tu.firstname ASC,tth.exe_date ASC,tth.exe_name ASC";
-							}
-							else
-							{
-								$hpsql .= " order by tu.lastname DESC, tu.firstname ASC, tth.exe_date ASC,tth.exe_name ASC";
-							}
+	        				$hpsql .= ' order by tu.lastname '.$ordering.', tu.firstname ASC,tth.exe_date ASC,tth.exe_name ASC';
 							break;
 		    			case 'exercisename':
-							if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-							{
-		        				$hpsql .= " order by tth.exe_name ASC, tth.exe_date ASC, tu.lastname ASC, tu.firstname ASC";
-							}
-							else
-							{
-								$hpsql .= " order by tth.exe_name DESC, tth.exe_date ASC, tu.lastname ASC, tu.firstname ASC";
-							}
+	        				$hpsql .= ' order by tth.exe_name '.$ordering.', tth.exe_date ASC, tu.lastname ASC, tu.firstname ASC';
 		        			break;
 		    			case 'date':
-							if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-							{
-		        				$hpsql .= " order by tth.exe_date ASC,tth.exe_name ASC, tu.lastname ASC, tu.firstname ASC";
-							}
-							else
-							{
-								$hpsql .= " order by tth.exe_date DESC,tth.exe_name ASC, tu.lastname ASC, tu.firstname ASC";
-							}
+	        				$hpsql .= ' order by tth.exe_date '.$ordering.',tth.exe_name ASC, tu.lastname ASC, tu.firstname ASC';
 							break;
 						case '':
-							$hpsql .= " ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
+							$hpsql .= ' ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC';
 							break;
 					}
 				}
@@ -1120,27 +1005,13 @@ if($_configuration['tracking_enabled'])
 					$_uid = api_get_user_id();
 					$sql="SELECT '',ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id
 						  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te
-						  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".$_uid."' AND te.exe_cours_id='$_cid'";
+						  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".$_uid."'AND te.status != 'incomplete' AND te.exe_cours_id='$_cid'";
 					switch ($_GET['column']) {
 		    			case 'exercisename':
-							if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-							{
-		        				$sql .= " order by ce.title ASC, te.exe_date ASC";
-							}
-							else
-							{
-								$sql .= " order by ce.title DESC, te.exe_date ASC";
-							}
+	        				$sql .= " order by ce.title $ordering, te.exe_date ASC";
 		        			break;
 		    			case 'date':
-							if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-							{
-		        				$sql .= " order by te.exe_date ASC,ce.title ASC";
-							}
-							else
-							{
-								$sql .= " order by te.exe_date DESC,ce.title ASC";
-							}
+	        				$sql .= " order by te.exe_date $ordering,ce.title ASC";
 							break;
 						case '':
 							$sql .= " ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
@@ -1151,24 +1022,10 @@ if($_configuration['tracking_enabled'])
 							WHERE exe_user_id = '".$_uid."' AND exe_cours_id = '".$_cid."'";
 					switch ($_GET['column']) {
 		    			case 'exercisename':
-							if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-							{
-		        				$hpsql .= " order by exe_name ASC, exe_date ASC";
-							}
-							else
-							{
-								$hpsql .= " order by exe_name DESC, exe_date ASC";
-							}
+	        				$hpsql .= " order by exe_name $ordering, exe_date ASC";
 		        			break;
 		    			case 'date':
-							if ($_GET['direction'] == '' || $_GET['direction'] == 0)
-							{
-		        				$hpsql .= " order by exe_date ASC,exe_name ASC";
-							}
-							else
-							{
-								$hpsql .= " order by exe_date DESC,exe_name ASC";
-							}
+	        				$hpsql .= " order by exe_date $ordering,exe_name ASC";
 							break;
 						case '':
 							$hpsql .= " ORDER BY exe_cours_id ASC, exe_date ASC";
@@ -1176,7 +1033,7 @@ if($_configuration['tracking_enabled'])
 					}
 					//echo $sql;
 		}
-		$results=getManyResultsXCol($sql,7);
+		$results=getManyResultsXCol($sql,8);
 		$hpresults=getManyResultsXCol($hpsql,5);
 
 		$NoTestRes = 0;
@@ -1199,12 +1056,20 @@ if($_configuration['tracking_enabled'])
 				if($is_allowedToEdit || $is_tutor)
 				{
 					$user = $results[$i][0];
-					echo '<td>'.$user.'</td>';
+					echo '<td>'.$user.' '.$duration.'</td>';
+					if($results[$i][7] > 1)
+						echo '<td>'.ceil((($results[$i][4] - $results[$i][7])/60)).' '.get_lang('min').'</td>';
 				}
+
 				echo '<td>'.$test.'</td>';
 				echo '<td>'.format_locale_date(get_lang('dateTimeFormatLong'),$results[$i][4]).'</td>';
 		  		echo '<td>'.round(($res/($results[$i][3]!=0?$results[$i][3]:1))*100).'% ('.$res.' / '.$results[$i][3].')</td>';
-				echo '<td>'.(($is_allowedToEdit||$is_tutor)?"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang('Edit').'</a>'.' - '.'<a href="exercice.php?cidReq='.htmlentities($_GET['cidReq']).'&show=result&delete=delete&did='.$id.'" onclick="javascript:if(!confirm(\''.sprintf(get_lang('DeleteAttempt'),$user,$dt).'\')) return false;">'.get_lang('Delete').'</a>':"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show').'</a>').'</td>';
+				echo '<td>'.
+				(($is_allowedToEdit||$is_tutor)?
+				"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang('Edit').'</a>'.' - '.'<a href="exercice.php?cidReq='.htmlentities($_GET['cidReq']).'&show=result&delete=delete&did='.$id.'" onclick="javascript:if(!confirm(\''.sprintf(get_lang('DeleteAttempt'),$user,$dt).'\')) return false;">'.get_lang('Delete').'</a>'
+				.' - <a href="exercice_history.php?cidReq='.htmlentities($_GET['cidReq']).'&exe_id='.$id.'">'.get_lang('ViewHistory').'</a>'
+				:
+				"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show').'</a>').'</td>';
 				echo '</tr>';
 			}
 		}

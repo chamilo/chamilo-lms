@@ -34,7 +34,13 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('show_sessi
 INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES ('wiki','wiki/index.php','wiki.gif',2,3,'basic');
 
 -- xxSTATSxx
-
+ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';
+ALTER TABLE track_e_exercices ADD data_tracking text NOT NULL default '';
+ALTER TABLE track_e_exercices ADD start_date datetime NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE track_e_exercices ADD session_id SMALLINT UNSIGNED NOT NULL default 0;
+ALTER TABLE track_e_exercices ADD INDEX ( session_id ) ;
+CREATE TABLE track_e_attempt_recording (exe_id int unsigned NOT NULL, question_id int unsigned NOT NULL,  marks int NOT NULL,  insert_date datetime NOT NULL default '0000-00-00 00:00:00',  author int unsigned NOT NULL,  teacher_comment text NOT NULL);
+ALTER TABLE track_e_attempt_recording ADD INDEX (exe_id);
 -- xxUSERxx
 
 -- xxCOURSExx
@@ -57,6 +63,8 @@ UPDATE tool SET category = 'interaction' WHERE name = 'forum';
 ALTER TABLE survey ADD show_form_profile int NOT NULL default 0;
 ALTER TABLE survey ADD form_fields TEXT NOT NULL;
 ALTER TABLE quiz_answer CHANGE hotspot_type hotspot_type ENUM( 'square', 'circle', 'poly', 'delineation' ) NULL DEFAULT NULL;
+ALTER TABLE quiz ADD start_time datetime NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE quiz ADD end_time datetime NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE forum_forum ADD forum_image varchar(255) NOT NULL default '';
 ALTER TABLE lp ADD preview_image varchar(255) NOT NULL default '';
 ALTER TABLE lp ADD author varchar(255) NOT NULL default '';
@@ -70,6 +78,12 @@ ALTER TABLE announcement ADD session_id SMALLINT UNSIGNED NOT NULL;
 ALTER TABLE announcement ADD INDEX ( session_id ) ;
 ALTER TABLE forum_category ADD session_id SMALLINT UNSIGNED NOT NULL ;
 ALTER TABLE forum_category ADD INDEX ( session_id ) ;
+CREATE TABLE student_publication_assignment (id int NOT NULL auto_increment, expires_on datetime NOT NULL default '0000-00-00 00:00:00',  ends_on datetime NOT NULL default '0000-00-00 00:00:00',  add_to_calendar tinyint NOT NULL,  enable_qualification tinyint NOT NULL,  publication_id int NOT NULL,  PRIMARY KEY  (id));
+ALTER TABLE student_publication ADD has_properties INT UNSIGNED NOT NULL;
+ALTER TABLE student_publication ADD qualification INT UNSIGNED NOT NULL;
+ALTER TABLE student_publication ADD date_of_qualification datetime NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE student_publication ADD parent_id INT UNSIGNED NOT NULL;
+ALTER TABLE student_publication ADD qualificator_id INT UNSIGNED NOT NULL;
 ALTER TABLE student_publication ADD session_id SMALLINT UNSIGNED NOT NULL default 0 ;
 ALTER TABLE student_publication ADD INDEX ( session_id ) ;
 ALTER TABLE calendar_event ADD session_id SMALLINT UNSIGNED NOT NULL default 0 ;

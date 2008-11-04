@@ -37,7 +37,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 16633 2008-10-27 22:58:34Z yannoo $
+* 	@version $Id: exercice_submit.php 16657 2008-11-04 18:06:45Z dperales $
 */
 
 
@@ -72,6 +72,10 @@ api_protect_course_script(true);
 include_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 
 $is_allowedToEdit=api_is_allowed_to_edit();
+
+$_configuration['live_exercise_tracking'] = true;
+$stat_table =  Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$exercice_attemp_table =  Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -141,6 +145,59 @@ if ($origin=='builder')
 	if(isset($_SESSION['exerciseResultCoordinates']))	{ api_session_unregister('exerciseResultCoordinates');	unset($exerciseResultCoordinates); }
 }
 
+$condition = ' WHERE ' .
+		'exe_exo_id =   '."'".$exerciseId."'".' AND ' .
+		'exe_user_id =  '."'".api_get_user_id()."'".' AND ' .
+		'exe_cours_id = '."'".$_course['id']."'".' AND ' .
+		'status = '."'incomplete'".' AND '.
+		'session_id =   '."'".api_get_session_id()."'";
+
+if(empty($exerciseType)){
+	$TBL_EXERCICES  = Database::get_course_table(TABLE_QUIZ_TEST);
+	$result=api_sql_query("SELECT type FROM $TBL_EXERCICES WHERE id='$exerciseId'",__FILE__,__LINE__);
+	$exercise_row = mysql_fetch_array($result);
+	$exerciseType = $exercise_row['type'];
+}
+
+//search for a 'incomplete' exercise of this user for this exercise for this course and session
+//if exist, try to build and array of answers from the track_e_attempt
+// and load the question list saved too.
+if($_configuration['live_exercise_tracking'] == true){
+	$sql = api_sql_query('SELECT * FROM '.$stat_table.$condition,__FILE__,__LINE__);
+	if(mysql_num_rows($sql) > 0 ){
+		if($exerciseType == 2){
+			$getIncomplete = mysql_fetch_array($sql);
+			$exe_id = $getIncomplete['exe_id'];
+			if($_SERVER['REQUEST_METHOD']!='POST'){
+				$recorded['questionList'] = explode(',',$getIncomplete['data_tracking']);
+	
+				//building the answers array, taking care of handling "multiple answers" behavior.
+				$sql = api_sql_query('SELECT * FROM '.$exercice_attemp_table.' WHERE exe_id = '.$getIncomplete['exe_id'].' ORDER BY tms ASC',__FILE__,__LINE__);
+				while($row = mysql_fetch_array($sql)){
+					if(array_key_exists($row['question_id'],$recorded['exerciseResult'])){
+						if(!is_array($recorded['exerciseResult'][$row['question_id']])){
+							$last_value = $recorded['exerciseResult'][$row['question_id']];
+							$recorded['exerciseResult'][$row['question_id']] = array();
+							$recorded['exerciseResult'][$row['question_id']][$last_value] = 1;
+						}
+						$recorded['exerciseResult'][$row['question_id']][$row['answer']] = 1; 
+					} else {
+						$recorded['exerciseResult'][$row['question_id']] = $row['answer'];
+					}				
+				}
+	
+				$_SESSION['exerciseResult'] = $recorded['exerciseResult'];
+				$exerciseType = 2;
+				$questionNum = count($recorded['exerciseResult']);
+				$questionNum++;
+				$questionList = $_SESSION['questionList'] = $recorded['questionList'];
+			}
+		}
+	}else{
+	 $table_recorded_not_exist = true;
+	}
+}
+
 // if the user has submitted the form
 if($formSent)
 {
@@ -180,6 +237,23 @@ if($formSent)
                 // stores the user answer into the array
                 $exerciseResult[$key]=$choice[$key];
 
+                //saving each question
+                if($_configuration['live_exercise_tracking'] == true && $exerciseType == 2):
+					$nro_question = $questionNum;// - 1; 
+					// for multiple answers
+					if(is_array($choice[$key])){
+						foreach ($choice[$key] as $key_array => $value){
+					 		api_sql_query('INSERT INTO '.$exercice_attemp_table.' (exe_id,user_id,question_id,answer,marks,course_code,position,tms)'.
+											' VALUES '.
+											'('."'".(int)$exe_id."','".api_get_user_id()."','".$questionList[$nro_question]."','".Database::escape_string($key_array)."','','".$_course['id']."','".$position."','".date('Y-m-d H:i:s')."'".')');
+						}
+					} else {
+						api_sql_query('INSERT INTO '.$exercice_attemp_table.' (exe_id,user_id,question_id,answer,marks,course_code,position,tms)'.
+										' VALUES '.
+										'('."'".(int)$exe_id."','".api_get_user_id()."','".$questionList[$nro_question]."','".Database::escape_string($choice[$key])."','','".$_course['id']."','".$position."','".date('Y-m-d H:i:s')."'".')');
+					}
+				endif;
+
                 if (isset($_POST['hotspot']))
                 {
                 	$exerciseResultCoordinates[$key] = $_POST['hotspot'][$key];
@@ -198,7 +272,7 @@ if($formSent)
     {	
         if($debug>0){echo str_repeat('&nbsp;',0).'Redirecting to exercise_result.php - Remove debug option to let this happen'."<br />\n";}
 		 // goes to the script that will show the result of the exercise
-        header("Location: exercise_result.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
+        header("Location: exercise_result.php?exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
         exit();
     }
     if($debug>0){echo str_repeat('&nbsp;',0).'$formSent was set - end'."<br />\n";}
@@ -235,6 +309,9 @@ if(!is_object($objExercise))
 	header('Location: exercice.php');
 	exit();
 }
+
+$Exe_starttime = $objExercise->start_time;
+$Exe_endtime = $objExercise->end_time;
 $quizID = $objExercise->selectId();
 $exerciseAttempts=$objExercise->selectAttempts();
 $exerciseTitle=$objExercise->selectTitle();
@@ -456,7 +533,35 @@ if( $exerciseAttempts > 0){
 	
 }	
 
+if(!function_exists('convert_date_to_number')){
+function convert_date_to_number($default){
+	// 2008-10-12 00:00:00 ---to--> 12345672218 (timestamp)
+	$parts = split(' ',$default);
+	list($d_year,$d_month,$d_day) = split('-',$parts[0]);
+	list($d_hour,$d_minute,$d_second) = split(':',$parts[1]);	
+	return mktime($d_hour, $d_minute, $d_second, $d_month, $d_day, $d_year);
+}
+}
 
+$limit_time_exists = (($Exe_starttime!='0000-00-00 00:00:00')||($Exe_endtime!='0000-00-00 00:00:00'))? true : false; 
+if($limit_time_exists){
+	$exercise_start_time = convert_date_to_number($Exe_starttime);
+	//$exercise_end_time = convert_date_to_number($Exe_endtime);
+	$time_now = convert_date_to_number(date('Y-m-d H:i:s'));
+	$permission_to_start = (($time_now - $exercise_start_time)>0)?true:false;
+	//if($_SERVER['REQUEST_METHOD']!='POST')$exercise_timeover = (($time_now - $exercise_end_time)>0)?true:false;
+	if($permission_to_start == false ){ //|| $exercise_timeover == true 
+    	if(!api_is_allowed_to_edit()){
+    		$message_warning = ($permission_to_start == false)? get_lang('ExerciseNoStartedYet') : get_lang('ReachedTimeLimit') ;
+	    	Display::display_warning_message(sprintf($message_warning,$exerciseTitle,$exerciseAttempts));
+	 	  	Display::display_footer();
+	 	  	exit;
+	    } else {
+			$message_warning = ($permission_to_start == false)? get_lang('ExerciseNoStartedAdmin') : get_lang('ReachedTimeLimitAdmin') ;
+	        Display::display_warning_message(sprintf($message_warning,$exerciseTitle,$exerciseAttempts));
+		}
+	}
+}
 
 
 if(!empty($error))
@@ -611,6 +716,24 @@ else
 	$b=2;
 	echo $s;
 }
+
+	//creating empty exercise if incomplete not exist
+    if($_configuration['live_exercise_tracking'] == true):
+    	//if($questionNum < 2){
+    	if($table_recorded_not_exist){
+    		if($exerciseType == 2){
+			api_sql_query('INSERT INTO '.$stat_table.' ' .
+				'(exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date) ' .
+				'VALUES ' .
+				'('."'$exerciseId','".api_get_user_id()."','".$_course['id']."','incomplete','".api_get_session_id()."','".implode(',',$questionList)."','".date('Y-m-d H:i:s')."'".') ',__FILE__,__LINE__);
+    		} else {
+   			api_sql_query('INSERT INTO '.$stat_table.' ' .
+				'(exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date) ' .
+				'VALUES ' .
+				'('."'$exerciseId','".api_get_user_id()."','".$_course['id']."','incomplete','".api_get_session_id()."','".date('Y-m-d H:i:s')."'".') ',__FILE__,__LINE__);
+    		}
+		}
+	endif;
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display::display_footer();

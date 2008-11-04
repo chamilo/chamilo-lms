@@ -248,7 +248,8 @@ INSERT INTO course_module VALUES
 (22,'blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'),
 (23,'course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'),
 (24,'survey','survey/survey_list.php','survey.gif',2,1,'basic'),
-(25,'wiki','wiki/index.php','wiki.gif',2,3,'basic');
+(25,'wiki','wiki/index.php','wiki.gif',2,3,'basic'),
+(26,'gradebook','gradebook/index.php','gradebook.gif',2,2,'basic');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE course_module ENABLE KEYS */;
 
@@ -621,7 +622,8 @@ VALUES
 ('extend_rights_for_coach',NULL,'radio','Security','false','ExtendRightsForCoachTitle','ExtendRightsForCoachComment',NULL,NULL),
 ('extend_rights_for_coach_on_survey',NULL,'radio','Security','true','ExtendRightsForCoachOnSurveyTitle','ExtendRightsForCoachOnSurveyComment',NULL,NULL),
 ('course_create_active_tools','wiki','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Wiki'),
-('show_session_coach', NULL, 'radio','Platform','false', 'ShowSessionCoachTitle','ShowSessionCoachComment', NULL, NULL);
+('show_session_coach', NULL, 'radio','Platform','false', 'ShowSessionCoachTitle','ShowSessionCoachComment', NULL, NULL),
+('course_create_active_tools','gradebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Gradebook');
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -1002,3 +1004,26 @@ CREATE TABLE access_url(
 	PRIMARY KEY (id)
 );
 INSERT INTO access_url(url,description,active,created_by) VALUES ('http://localhost/','URL 1',1,1);
+ALTER TABLE gradebook_category ADD session_id int DEFAULT NULL;
+CREATE TABLE gradebook_result_log (
+	id int NOT NULL auto_increment,
+	id_result int NOT NULL,
+	user_id int NOT NULL,
+	evaluation_id int NOT NULL,
+	date_log datetime default '0000-00-00 00:00:00',
+	score float unsigned default NULL,
+	PRIMARY KEY(id)
+);
+
+CREATE TABLE gradebook_linkeval_log (
+	id int NOT NULL auto_increment,
+	id_linkeval_log int NOT NULL,
+	name text,
+	description text,
+	date_log datetime default '0000-00-00 00:00:00',
+	weight smallint default NULL,
+	visible tinyint default NULL,
+	type varchar(20) NOT NULL,
+	user_id_log int NOT NULL,
+	PRIMARY KEY  (id)
+);

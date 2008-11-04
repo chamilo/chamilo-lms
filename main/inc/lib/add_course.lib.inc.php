@@ -85,7 +85,7 @@ function generate_course_code($course_title)
 {
 	//$wantedCode = strtr($course_title, "�����������������������������������������������������������", "AAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy");
 	//$wantedCode = substr(str_replace(
-	//	array('�?','À','Â','Ä','Ã','Å','Æ' ,'Ç','É','È','Ê','Ë','�?','Ì','Î','�?','Ĩ','Ó','Ò','Ô','Ö','Õ','Ø' ,'Œ' ,'Ú','Ù','Û','Ü','Ũ','Ÿ','�?','�?','Ñ','ß' ,'à','á','â','ä','ã','å','æ' ,'ç','Š','é','è','ê','ë','ì','í','î','ï','ĩ','ò','ó','ô','ö','õ','ø' ,'œ' ,'ú','ù','û','ü','ũ','ÿ','ý','ñ','š','€'),
+	//	array('Á','À','Â','Ä','Ã','Å','Æ' ,'Ç','É','È','Ê','Ë','Í','Ì','Î','Ï','Ĩ','Ó','Ò','Ô','Ö','Õ','Ø' ,'Œ' ,'Ú','Ù','Û','Ü','Ũ','Ÿ','Ý','Ð','Ñ','ß' ,'à','á','â','ä','ã','å','æ' ,'ç','Š','é','è','ê','ë','ì','í','î','ï','ĩ','ò','ó','ô','ö','õ','ø' ,'œ' ,'ú','ù','û','ü','ũ','ÿ','ý','ñ','š','€'),
 	//	array('A','A','A','A','A','A','Ae','C','E','E','E','E','I','I','I','I','I','O','O','O','O','O','Oe','Oe','U','U','U','U','U','Y','Y','D','N','SS','a','a','a','a','a','a','ae','c','S','e','e','e','e','i','i','i','i','i','o','o','o','o','o','oe','oe','u','u','u','u','u','y','y','n','š','Euro'),
 	//	$course_title)
 	//	,0,20);
@@ -321,6 +321,8 @@ function update_Db_course($courseDbName)
 	$TABLETOOLFORUMMAILCUE 		= $courseDbName . 'forum_mailcue';
 	$TABLETOOLFORUMATTACHMENT	= $courseDbName . 'forum_attachment';
 	$TABLETOOLFORUMNOTIFICATION = $courseDbName . 'forum_notification';
+	$TABLETOOLFORUMQUALIFY      = $courseDbName.'forum_thread_qualify';
+	$TABLETOOLFORUMQUALIFYLOG	= $courseDbName.'forum_thread_qualify_log';
 
 	// Link
 	$TABLETOOLLINK 				= $courseDbName . 'link';
@@ -344,12 +346,6 @@ function update_Db_course($courseDbName)
 	$TABLETOOLDROPBOXPERSON 	= $courseDbName . 'dropbox_person';
 	$TABLETOOLDROPBOXCATEGORY 	= $courseDbName . 'dropbox_category';
 	$TABLETOOLDROPBOXFEEDBACK 	= $courseDbName . 'dropbox_feedback';
-
-	// Learning Path
-	$TABLELEARNPATHITEMS 		= $courseDbName . 'learnpath_item';
-	$TABLELEARNPATHCHAPTERS 	= $courseDbName . 'learnpath_chapter';
-	$TABLELEARNPATHMAIN 		= $courseDbName . 'learnpath_main';
-	$TABLELEARNPATHUSERS 		= $courseDbName . 'learnpath_user';
 
 	// New Learning path
 	$TABLELP					= $courseDbName . 'lp';
@@ -527,6 +523,10 @@ function update_Db_course($courseDbName)
 		 thread_date datetime default '0000-00-00 00:00:00',
 		 thread_sticky tinyint unsigned default 0,
 		 locked int NOT NULL default 0,
+  		 session_id int unsigned default NULL,
+         thread_title_qualify varchar(255) default '',
+         thread_qualify_max int unsigned default 0,
+         thread_close_date datetime default '0000-00-00 00:00:00',
 		 PRIMARY KEY (thread_id)
 		) TYPE=MyISAM";
 
@@ -592,7 +592,34 @@ function update_Db_course($courseDbName)
   				KEY forum_id (forum_id)
 			)";
 	api_sql_query($sql, __FILE__, __LINE__);	
-
+	
+	// Forum thread qualify :Add table forum_thread_qualify
+	$sql = "CREATE TABLE  `".$TABLETOOLFORUMQUALIFY."` (
+			id int unsigned PRIMARY KEY AUTO_INCREMENT,
+			user_id int unsigned NOT NULL,
+  			thread_id int NOT NULL,
+  			qualify int default NULL,
+ 			qualify_user_id int  default NULL,
+ 			qualify_time datetime default '0000-00-00 00:00:00',
+ 			session_id int  default NULL
+			)";
+	api_sql_query($sql, __FILE__, __LINE__);
+	$sql = "ALTER TABLE `".$TABLETOOLFORUMQUALIFY . "` ADD INDEX (user_id, thread_id)";
+	api_sql_query($sql, __FILE__, __LINE__);
+	
+	//Forum thread qualify: Add table forum_thread_qualify_historical
+	$sql = "CREATE TABLE  `".$TABLETOOLFORUMQUALIFYLOG."` (
+			id int unsigned PRIMARY KEY AUTO_INCREMENT,
+			user_id int unsigned NOT NULL,
+  			thread_id int NOT NULL,
+  			qualify int default NULL,
+ 			qualify_user_id int default NULL,
+ 			qualify_time datetime default '0000-00-00 00:00:00',
+ 			session_id int default NULL
+			)";
+	api_sql_query($sql, __FILE__, __LINE__);
+	$sql = "ALTER TABLE `".$TABLETOOLFORUMQUALIFYLOG. "` ADD INDEX (user_id, thread_id)";
+	api_sql_query($sql, __FILE__, __LINE__);
 	/*
 	-----------------------------------------------------------
 		Exercise tool
@@ -706,8 +733,8 @@ function update_Db_course($courseDbName)
 		content text,
 		start_date datetime NOT NULL default '0000-00-00 00:00:00',
 		end_date datetime NOT NULL default '0000-00-00 00:00:00',
-        parent_event_id INT NULL,
-		session_id SMALLINT unsigned NOT NULL default 0,
+    	parent_event_id INT NULL,
+    	session_id int unsigned NOT NULL default 0,
 		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
@@ -1939,6 +1966,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_STUDENTPUBLICATION . "','work/work.php','works.gif','".string2binary(api_get_setting('course_create_active_tools', 'student_publications')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_SURVEY."','survey/survey_list.php','survey.gif','1','0','','NO','_self','interaction')");	
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_WIKI ."','wiki/index.php','wiki.gif','".string2binary(api_get_setting('course_create_active_tools', 'wiki')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
+    api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GRADEBOOK."','gradebook/index.php','gradebook.gif','".string2binary(api_get_setting('course_create_active_tools', 'gradebook'))."','0','','NO','_self','authoring')");   
 
 	if(api_get_setting('service_visio','active')=='true')
 	{
@@ -2152,7 +2180,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		$html=addslashes('<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.lang2db(get_lang('Antique')).'</td></tr></table>');
 		api_sql_query('INSERT INTO `'.$TABLEQUIZ . '` (title, description, type, random, active, results_disabled ) VALUES ("'.lang2db(get_lang('ExerciceEx')) . '", "'.$html.'", "1", "0", "1", "0")', __FILE__, __LINE__);
 		api_sql_query("INSERT INTO `".$TABLEQUIZQUESTIONLIST . "` VALUES ( '1', '".lang2db(get_lang('SocraticIrony')) . "', '".lang2db(get_lang('ManyAnswers')) . "', '10', '1', '2','')", __FILE__, __LINE__);
-		api_sql_query("INSERT INTO `".$TABLEQUIZQUESTION . "` VALUES ( '1','1','1')", __FILE__, __LINE__);
+		api_sql_query("INSERT INTO `".$TABLEQUIZQUESTION . "` (question_id, exercice_id, question_order) VALUES (1,1,1)", __FILE__, __LINE__);
 
 
 		/*
@@ -2168,7 +2196,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		$insert_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_FORUM . "',1,NOW(),NOW(),$insert_id,'ForumAdded',1,0,NULL,1)", __FILE__, __LINE__);
 
-		api_sql_query("INSERT INTO `$TABLEFORUMTHREADS` VALUES (1, '".lang2db(get_lang('ExampleThread'))."', 1, 0, 1, '', 0, 1, NOW(), 0, 0)", __FILE__, __LINE__);
+		api_sql_query("INSERT INTO `$TABLEFORUMTHREADS` (thread_id, thread_title, forum_id, thread_replies, thread_poster_id, thread_poster_name, thread_views, thread_last_post, thread_date, locked, thread_qualify_max) VALUES (1, '".lang2db(get_lang('ExampleThread'))."', 1, 0, 1, '', 0, 1, NOW(), 0, 10)", __FILE__, __LINE__);
 		$insert_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('forum_thread',1,NOW(),NOW(),$insert_id,'ForumThreadAdded',1,0,NULL,1)", __FILE__, __LINE__);
 
@@ -2361,4 +2389,3 @@ function readPropertiesInArchive($archive, $isCompressed = TRUE)
 	rmdir($tmpDirName);
 	return $courseProperties;
 }
-?>

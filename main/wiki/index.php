@@ -811,12 +811,14 @@ if ($_GET['action']=='delete')
 		
 		if ($_GET['delete'] == 'yes')
 		{
-			$sql='DELETE FROM '.$tbl_wiki.' WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id DESC';
-	  		api_sql_query($sql,__FILE__,__LINE__); 
+			$sql='DELETE '.$tbl_wiki_discuss.' FROM '.$tbl_wiki.', '.$tbl_wiki_discuss.' WHERE '.$tbl_wiki.'.reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$tbl_wiki.'.'.$groupfilter.' AND '.$tbl_wiki_discuss.'.publication_id='.$tbl_wiki.'.id';
+			api_sql_query($sql,__FILE__,__LINE__);
 			
-			////
-			//here TODO: delete discussion and mailcue too
-			///
+			$sql='DELETE '.$tbl_wiki_mailcue.' FROM '.$tbl_wiki.', '.$tbl_wiki_mailcue.' WHERE '.$tbl_wiki.'.reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$tbl_wiki.'.'.$groupfilter.' AND '.$tbl_wiki_mailcue.'.id='.$tbl_wiki.'.id';
+			api_sql_query($sql,__FILE__,__LINE__);
+			
+			$sql='DELETE FROM '.$tbl_wiki.' WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.'';
+	  		api_sql_query($sql,__FILE__,__LINE__);		
 			
 			check_emailcue(0, 'E');
 			
@@ -1505,7 +1507,8 @@ if ($_GET['action']=='recentchanges')
 			}		
 		
 			$row = array ();
-			$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.':'.$minutes.":".$seconds;
+			//$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.':'.$minutes.":".$seconds;
+			$row[] = $obj->timestamp; //for order the correct secuence is: year, month, day
 			$row[] =$ShowAssignment;
 			$row[] = '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&amp;view='.$obj->id.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
 			$row[] =$obj->version>1 ? get_lang('EditedBy') : get_lang('AddedBy');	
@@ -1670,11 +1673,12 @@ if ($_GET['action']=='discuss')
 	//check notify by email
 	if (check_notify_discuss($page))
 	{
-		$notify_disc= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('CancelNotifyDiscussByEmail').'" alt="'.get_lang('CancelNotifyDiscussByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotifyDiscussChanges').'</font>';
+		$notify_disc= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('NotifyDiscussByEmail').'" alt="'.get_lang('NotifyDiscussByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotNotifyDiscussChanges').'</font>';
 	}
 	else
-	{	 
-	   $notify_disc= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('NotifyDiscussByEmail').'" alt="'.get_lang('NotifyDiscussByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotNotifyDiscussChanges').'</font>';
+	{	
+	 	$notify_disc= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('CancelNotifyDiscussByEmail').'" alt="'.get_lang('CancelNotifyDiscussByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotifyDiscussChanges').'</font>';
+	   
 	}	
 
     //mode assignment: previous to show  page type
@@ -2190,9 +2194,20 @@ function save_wiki()
 
 function delete_wiki()
 {
-	global $tbl_wiki, $tbl_discuss, $groupfilter;
+
+	global $tbl_wiki, $tbl_wiki_discuss, $tbl_wiki_mailcue, $groupfilter;
+	//identify the first id by group = identify wiki
+	$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' ORDER BY id DESC';
+	$allpages=api_sql_query($sql,__FILE__,__LINE__);
+		
+	while ($row=Database::fetch_array($allpages))	{
+		$id 		= $row['id'];
+		$group_id	= $row['group_id'];
+	}
+
+	api_sql_query('DELETE FROM '.$tbl_wiki_discuss.' WHERE publication_id="'.$id.'"' ,__FILE__,__LINE__);
+	api_sql_query('DELETE FROM '.$tbl_wiki_mailcue.' WHERE group_id="'.$group_id.'"' ,__FILE__,__LINE__);	
 	api_sql_query('DELETE FROM '.$tbl_wiki.' WHERE '.$groupfilter.'',__FILE__,__LINE__);	
-	//TODO: delete discuss and mailcue
 	return get_lang('WikiDeleted');
 }
 
@@ -3478,7 +3493,7 @@ function auto_add_page_users($assignment_type)
 			{			 
 				$_POST['title']= $title_orig;
 				$_POST['comment']=get_lang('AssignmentFirstComToStudent');				
-				$_POST['content']='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Student').': '.$name.'</div>[['.$link2teacher.' | '.get_lang('AssignmentLinktoTeacherPage').']] '.$content_orig_B;	
+				$_POST['content']='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Student').': '.$name.'</div>[['.$link2teacher.' | '.get_lang('AssignmentLinktoTeacherPage').']] '; //If $content_orig_B is added here, the task written by the professor was copied to the page of each student. TODO: config options
 				
 			   //AssignmentLinktoTeacherPage	        
 			 	$all_students_pages[] = '<li>'.$o_user_to_add['lastname'].', '.$o_user_to_add['firstname'].' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';

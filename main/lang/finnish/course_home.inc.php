@@ -15,4 +15,14 @@ $langCombinedCourse = "Yhdistetty kurssi";
 $ToolIsNowVisible = "Työkalu on nyt nähtävillä";
 $ToolIsNowHidden = "Työkalu on nyt piilotettu";
 $EditLink = "Muokkaa linkkiä";
+$Blog_management = "Blogin hallinta";
+$Forum = "Keskustelut";
+$Course_maintenance = "Kurssin ylläpito";
+$TOOL_SURVEY = "Kyselyt";
+$GreyIcons = "Työkalut";
+$Interaction = "Vuorovaikutus";
+$Authoring = "Julkaiseminen";
+$Administration = "Ylläpito";
+$IntroductionTextUpdated = "Esittely teksti on päivitetty";
+$IntroductionTextDeleted = "Esitttely teksti poistettu";
 ?>

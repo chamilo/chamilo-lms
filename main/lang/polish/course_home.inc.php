@@ -13,10 +13,14 @@ $langCourseAdminOnly = "Tylko dla prowadz&#261;cych";
 $PlatformAdminOnly = "Tylko dla Administratorów platformy";
 $ToolIsNowVisible = "To narz&#281;dzie jest widoczne";
 $ToolIsNowHidden = "To narz&#281;dzie jest niewodoczne";
+$EditLink = "Edycja hiper&#322;&#261;cza";
 $Forum = "Fora";
 $Course_maintenance = "Zarz&#261;dzanie kursem";
 $TOOL_SURVEY = "Ankiety";
+$GreyIcons = "Narz&#281;dzia";
 $Interaction = "Tylko dla prowadz&#261;cych";
 $Authoring = "Dost&#281;pne";
 $Administration = "Administracyjne";
+$IntroductionTextUpdated = "Tekst wprowadzaj&#261;cy zosta&#322; zaktualizowany";
+$IntroductionTextDeleted = "Tekst wprowadzaj&#261;cy usuni&#281;ty";
 ?>

@@ -18,4 +18,6 @@ $labelPolyMenu = "Zapri poligon";
 $triesleft = "Preostalih poskusov";
 $exeFinished = "Vsi odgovori so definirani. Sedaj lahko preuredite vroče točke ali kliknite Shrani.";
 $nextAnswer = "Sedaj kliknite na: &done=done";
+$delineation = "Delitev";
+$labelDelineationMenu = "Zapri delitev";
 ?>

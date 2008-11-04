@@ -102,4 +102,5 @@ $TotalUser = "Total for user";
 $AverageTotal = "Average total";
 $Evaluation = "Evaluation";
 $EvaluationAverage = "Evaluation average";
+$EditCategory = "Edit category";
 ?>

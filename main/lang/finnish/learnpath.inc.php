@@ -2,6 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $lang_learning_path = "Oppimispolku";
+$lang_learning_path_builder = "Oppimispolun muokkaus";
 $lang_description = "kuvaus";
 $lang_title = "otsikko";
 $lang_prerequisites = "Ennakkovaatimukset";
@@ -15,4 +16,21 @@ $lang_add_prereqi = "Lisää ennakkovaatimuksia";
 $lang_add_title_and_desc = "Muokaa otsikkoa ja sisältöä";
 $lang_delete = "Poista";
 $lang_add_chapter = "Lisää moduuli";
+$lang_show_hide = "Näytä / piilota";
+$langLearnpathMystatus = "Tilanteeni";
+$langLearnpathCompstatus = "valmis";
+$langLearnpathIncomplete = "kesken";
+$langLearnpathPassed = "hyväksytty";
+$langLearnpathFailed = "hylätty";
+$langLearnpathPrevious = "Edellinen";
+$langLearnpathNext = "Seuraava";
+$langLearnpathRestart = "Aloita alusta";
+$langLearnpathStatus = "Tila";
+$langLearnpathScore = "Tulos";
+$langLearnpathTime = "Aika";
+$langLearnpathVersion = "versio";
+$langLearnpathNoNext = "Tämä on viimeinen askel";
+$lang_add_learnpath = "Lisää oppimispolku";
+$lang_edit_learnpath = "muokkaa oppimispolkua";
+$lang_delete_learnpath = "poista oppimispolku";
 ?>

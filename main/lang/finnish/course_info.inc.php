@@ -14,6 +14,7 @@ $langPrivate = "Yksityinen pääsy, reisteröityminen suljettu (sisäänpääsy vain <a
 $langForbidden = "Ei sallittu";
 $langConfTip = "Oletuksena kurssille on pääsy vain rekisteröityneille henkilöille. Jos halutaan luottamuksellisuutta, niin helpointa on avata rekisteröinti yhden viikon ajaksi, pyytää opiskelijoita rekeisteröitymään ja sitten sulkea rekisteröinti ja tarkistaa mahdolliset tunkeutujat käyttjien listalta.";
 $langOpenToTheWorld = "Avoinna - kaikilla pääsy (myös vierailijat)";
+$OpenToThePlatform = "Avoinna - kaikki rekisteröityneet käyttäjät pääsevät";
 $langOpenToThePlatform = "Avoinna - kaikki ympäristöön rekisteröityneet käyttäjät pääsevät sisälle";
 $langTipLang  = "Tämä kieli on pätee kaikille kurssin sivuston kävijöille.";
 $langVid = "Video";

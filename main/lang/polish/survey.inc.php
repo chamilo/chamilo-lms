@@ -13,5 +13,7 @@ $AdvancedReport = "Zaawansowany raport";
 $CompleteReport = "Kompletny raport";
 $BackToQuestions = "Powrót do pytania";
 $ExportInExcel = "Eksport do Excela";
+$ViewSurvey = "Widok ankiety";
 $ViewQuestions = "Podgl&#261;d pyta&#324;";
+$Yesno = "Tak/Nie";
 ?>

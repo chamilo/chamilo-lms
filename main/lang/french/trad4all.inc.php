@@ -564,4 +564,6 @@ $CommentAdded = "Votre commentaire a été ajouté";
 $BackToPreviousPage = "Retour à la page précédente";
 $NoOfficialCode = "Pas de code oficiel";
 $Owner = "Propriétaire";
+$CategoryDeleted = "La catégorie a été supprimée";
+$CategoryAdded = "Catégorie créée";
 ?>

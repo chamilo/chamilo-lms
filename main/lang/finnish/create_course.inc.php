@@ -64,4 +64,5 @@ $langAddNewCourse = "Lisää uusi kurssialue";
 $langRestoreCourse = "Palauta kurssialue";
 $langOtherProperties = "Muitakin materiaaleja löydetty ";
 $langSysId = "System ID";
+$langVisibility = "Näkyvyys";
 ?>

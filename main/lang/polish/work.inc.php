@@ -32,4 +32,5 @@ $DocumentDeleted = "Dokument zosta&#322; skasowany";
 $SendMailBody = "U&#380;ytkownik opublikowa&#322; dokument w Publikacjach dla twojego kursu.";
 $DirDelete = "Usu&#324; katalog";
 $ValidateChanges = "Sprawd&#378; zmiany";
+$FolderUpdated = "Folder zosta&#322; zauktualizowany";
 ?>

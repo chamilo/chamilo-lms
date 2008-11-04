@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $AdminBy  = "Ylläpito";
 $AdministrationTools  = "Ylläpito";
-$State  = "Syteemin valtio";
+$State  = "Syteemin tila";
 $Statistiques  = "Tilastot";
 $langUsed       = "käytetty";
 $langPresent   = "Ok";

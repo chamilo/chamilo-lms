@@ -102,4 +102,5 @@ $TotalUser = "Zbir za uporabnika";
 $AverageTotal = "Povprečje zbirov";
 $Evaluation = "Ocenjevanje";
 $EvaluationAverage = "Povprečje ocenjevanja";
+$EditCategory = "Uredi kategorijo";
 ?>

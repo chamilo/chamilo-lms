@@ -217,4 +217,5 @@ $FirstLogin = "Prva povezava";
 $AccessDetails = "Podrobnosti dostopa";
 $DateAndTimeOfAccess = "Datum in čas dostopa";
 $Duration = "Trajanje";
+$WrongDatasForTimeSpentOnThePlatform = "Podatki o tem uporabniku so bili zapisani, ko izračun časa, porabljenega na platformi, ni bil možen.";
 ?>

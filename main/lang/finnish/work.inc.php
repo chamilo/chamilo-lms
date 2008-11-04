@@ -28,4 +28,8 @@ $langDirCr = "Luo hakemisto";
 $langCurrentDir = "Nykyinen kansio";
 $UploadADocument = "Tallenna dokumentti";
 $EditToolOptions = "Muokkaa työkaluja";
+$DocumentDeleted = "Tiedosto poistettu";
+$SendMailBody = "Käyttäjä on tehnyt dokumentin kurssisi julkaisu työkalulla.";
+$DirDelete = "Poista hakemisto";
+$FolderUpdated = "Kansio päivitetty";
 ?>

@@ -11,11 +11,11 @@ $lang_click_thumbnails = "Click on one of the thumbnails";
 $lang_set_slideshow_options = "Set Slideshow Options";
 $lang_slideshow_options = "Slideshow Options";
 $lang_no_resizing = "NO RESIZING (default)";
-$lang_exit_slideshow = "Exit Slideshow";
-$SlideShow = "Slideshow";
-$lang_previous_slide = "Previous Slide";
-$lang_next_slide = "Next Slide";
+$lang_exit_slideshow = "Poistu esityksestä";
+$SlideShow = "Esitys";
+$lang_previous_slide = "Edellinen dia";
+$lang_next_slide = "Seuraava dia";
 $lang_image = "Image";
 $lang_of = "of";
-$lang_view_slideshow = "View Slideshow";
+$lang_view_slideshow = "Näytä esitys";
 ?>

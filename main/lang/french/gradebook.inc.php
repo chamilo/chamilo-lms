@@ -102,4 +102,5 @@ $TotalUser = "Total de l\'utilisateur";
 $AverageTotal = "Total moyen";
 $Evaluation = "Évaluation";
 $EvaluationAverage = "Moyenne de l\'évaluation";
+$EditCategory = "Éditer la catégorie";
 ?>

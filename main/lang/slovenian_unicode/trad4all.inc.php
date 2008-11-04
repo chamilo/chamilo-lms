@@ -564,4 +564,9 @@ $CommentAdded = "Tvoj komentar je bil dodan";
 $BackToPreviousPage = "Nazaj na prehodno stran";
 $NoOfficialCode = "Uradna koda ni podana";
 $Owner = "Lastnik";
+$With = "z";
+$GeneralCoach = "Splošen coach";
+$CategoryDeleted = "Kategorija je bila odstranjena";
+$CategoryAdded = "Kategorija je bila dodana";
+$IP = "IP";
 ?>

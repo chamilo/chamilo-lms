@@ -106,4 +106,8 @@ $fileModified = "Plik jest zmodyfikowany";
 $DocumentsOverview = "podgl&#261;d dokumentów";
 $ViewSlideshow = "Poka&#380; obrazki (slajdy)";
 $Options = "Opcje";
+$ReadOnly = "Tylko do odczytu";
+$ReadOnlyFile = "Ten plik jest tylko do odczytu";
+$FileNotFound = "Plik nie istnieje";
+$TemplateTitleResources = "Zasoby";
 ?>

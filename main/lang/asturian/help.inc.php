@@ -1,4 +1,5 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$langAnnouncementsContent = "La ferramienta Tableru d\'anuncies val pa que los profesores dexen recaos nel Tableru d\'anuncies del cursu. Puen avisar a los miembros de qu\'hai un recáu nuevu, de que queda poco pa entragar un trabayu o de que daquién fizo un trabayu d\'especial calidá. Caún los miembros va ver esa novedá n\'entrando cola so cuenta d\'usuariu.<strong>El llistáu de distribución</strong> Les anuncies amás de publicase nel Tableru d\'anuncies puen unviase automáticamente pel corréu ellectrónicu si se tien marcáu\'l caxellu correspondiente. Si namás quier usar el llistáu val con que, en unviándolu lu esborre del Tableru.Amás d\'unviar un corréu a tolos miembros, tamién pue unvialu a otres persones, individual o por grupos si los tien formaos. En calcando la opción, use CTRL+clic pa seleicionar varios ellementos del menú, unvíelos al llistáu y dempués escriba\'l recáu nel campu inferior. En terminando calque Unviar. ";
 ?>

@@ -167,5 +167,5 @@ $UserNotAdded = "Uporabnik ni bil dodan";
 $NoSessionId = "Seja ni bila identificirana.";
 $NoUsersRead = "Prosim preverite vašo XML/CVS datoteko";
 $UserImportFileMessage = "Če v XML/CVS datoteki manjkajo uporabniška imena, se bodo generirala iz imena in priimka, tj. Janez Novak bo dobil uporabniško ime jnovak";
-$UserAlreadyRegisteredByOtherCreator = "Uporabnik je že vpisan s strani drugega couch-a.";
+$UserAlreadyRegisteredByOtherCreator = "Uporabnik je že vpisan s strani drugega coach-a.";
 ?>

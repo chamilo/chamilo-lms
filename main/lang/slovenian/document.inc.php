@@ -208,4 +208,5 @@ $TemplateTitleTimelineDescription = "3 seznami z relacijsko pušèico";
 $TemplateTitleStopAndThink = "Zaustavite se in premislite";
 $TemplateTitleListLeftListDescription = "Seznam na levi z inštruktorjem";
 $TemplateTitleStopAndThinkDescription = "Predloga vzpodbude k zaustavitvi in razmisleku";
+$SaveDocument = "Shrani dokument";
 ?>

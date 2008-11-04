@@ -10,7 +10,7 @@ $AllPages = "Todas las páginas";
 $AddNew = "Añadir una página";
 $ChangesStored = "Sus cambios han sido guardados";
 $NewWikiSaved = "La nueva entrada wiki ha sido guardada. Puede verla haciendo clic en:";
-$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Mr. Dokeos\" /></p> <p align=\"center\">Para comenzar edite esta página</p> ";
+$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Mr. Dokeos\" /></p> <p align=\"center\">Para comenzar edite esta página y borre este texto</p> ";
 $CourseWikiPages = "Páginas Wiki del curso";
 $GroupWikiPages = "Páginas Wiki del grupo";
 $NoWikiPageTitle = "Los cambios no se han guardado. Debe dar un título a esta página";
@@ -146,4 +146,5 @@ $MostActiveUsers = "Usuarios más activos";
 $Contributions = "contribuciones";
 $UserContributions = "Contribuciones del usuario";
 $MostActiveUsers = "Usuarios más activos";
+$WarningDeleteMainPage = "No se recomienda la eliminación de la Página principal del Wiki, ya que es el principal acceso a su estructura jerárquica.<br> Si de todas formas necesita borrarla, no olvide volver a crear esta Página principal pues hasta que no lo haga otros usuarios no podrán añadir nuevas páginas al Wiki.";
 ?>

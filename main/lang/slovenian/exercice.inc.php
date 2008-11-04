@@ -240,4 +240,12 @@ $DisableResults = "Ne prikaži rezultatov teèajnikom";
 $EnableResults = "Prikaži rezultate teèajnikom";
 $ValidateAnswer = "Uveljavi odgovore";
 $FillInBlankSwitchable = "Veèkratni odgovori z možnostjo prostega vnosa";
+$ReachedMaxAttempts = "Testa \'%s ne morete izvajati\', ker bi presegli omejitev števila %s poskusov.";
+$AdvancedParameters = "Napredne nastavitve";
+$RandomQuestionsToDisplay = "Število nakljuènih vprašanj v prikazu";
+$RandomQuestionsHelp = "Število nakljuènih vprašanja v prikazu; pustite 0 za vsa vprašanja v njihovem originalnem vrstnem redu";
+$RandomQuestionsHelp = "Število vprašanj, ki se bo nakljuèno izbralo iz nabora vprašanj vaje oz. testa. Izberite 0 v primeru, da nakljuènosti ne želite.<br />V primeru, da zgolj želite nakljuèen vrstni red vprašanj, vpišite v polje število vseh vprašanj, ki jih vaja oz. test vsebuje.";
+$ExerciseAttempts = "Najveèje število poskusov";
+$DoNotRandomize = "Brez nakljuènosti";
+$Infinite = "Neomejeno";
 ?>

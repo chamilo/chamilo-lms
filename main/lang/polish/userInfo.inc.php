@@ -14,6 +14,7 @@ $langBackToUsersList = "Powrót do listy u&#380;ytkowników";
 $langTracking = "Raportowanie";
 $langCourseManager = "Administrator";
 $langModRight = "zmie&#324; uprawnienia dla";
+$langModRole = "Zmie&#324; rol&#281; na";
 $langRole = "rola/status";
 $langIsNow = "jest odt&#261;d";
 $langInC = "w tym kursie";

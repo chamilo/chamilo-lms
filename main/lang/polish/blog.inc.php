@@ -8,4 +8,5 @@ $Members = "U&#380;ytkownicy";
 $AddTask = "Dodaj nowe zadanie";
 $Color = "Kolor";
 $langTask1 = "Zadanie 1";
+$langWelcome = "Witamy !";
 ?>

@@ -46,4 +46,5 @@ $UploadError = "Nalaganje je bilo neuspešno. Preverite največjo dovoljeno dol�
 $DocumentsWillBeAddedToo = "Pripadajači dokumenti bodo tudi dodani";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "V primeru, da želite izvoziti učno pot, ki vsebuje teste/vaje, morate zagotoviti, da so ustrezni testi/vaje vključeni v izvoz; izberete jih iz seznama testov.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Arhivska mapa, ki jo uporablja to orodje, ne omogoča pisalnega dostopa. Prosim da se obrnete na upravitelja platforme.";
+$DestinationCourse = "Ciljni tečaj";
 ?>

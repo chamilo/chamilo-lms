@@ -3,10 +3,16 @@ for more information: see languages.txt in the lang folder.
 */
 $langTracking = "Seuranta";
 $langEnter2passToChange = "Vaihtaaksesi salasanasi syötä se kaksi kertaa. Muussa tapauksessa jätä kentät tyhjiksi.";
+$langDelImage = "Poista kuva";
 $langUpdateImage = "Vaihda kuva";
+$langImageWrong = "Tiedoston koon pitäisi olla pienempi kuin";
 $langAddImage = "Kuva";
 $langCourseManager = "Opettaja";
+$password_request = "Olet pyytänyt salasanasi uusimista. Jos et ole pyytänyt sitä voit jättää tämän viestin huomiotta.";
 $YourPasswordHasBeenEmailed = "Salasanasi on lähetetty sähköpostiisi";
+$lang_enter_email_and_well_send_you_password = "Syötä sähköpostiosoitteesi jota käytit rekisteröityessäsi niin lähetämme salasanasi sinulle.";
+$langLogin = "Kirjaudu";
+$langAction = "Toiminto";
 $langCourseName = "Kurssin nimi";
 $langBackUser = "Takaisin käyttäjälistaan";
 $langGiveAdmin = "Tee admin";
@@ -79,4 +85,5 @@ $required = "Pakollinen";
 $langOptionalTextFields = "Valinnaiset kentät";
 $langMyProductions = "Oma tuotantoni";
 $langFileDeleted = "Tiedosto on poistettu";
+$MyProgress = "Edistymiseni";
 ?>

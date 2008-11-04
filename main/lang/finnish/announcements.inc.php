@@ -47,4 +47,7 @@ $MsgText = "Viesti";
 $AnnouncementDeletedAll = "Kaikki ilmoitukset on poistettu";
 $AnnouncementMoved = "Ilmoitukset on siirretty";
 $NoAnnouncements = "Ilmoituksia ei ole";
+$SelectEverybody = "Valitse kaikki";
+$SelectedUsersGroups = "valitut käyttäjä ryhmät";
+$LearnerMessage = "Viesti opiskelijalta";
 ?>

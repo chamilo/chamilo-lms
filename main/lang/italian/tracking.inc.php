@@ -217,4 +217,5 @@ $FirstLogin = "Primo accesso";
 $AccessDetails = "Accessi in dettaglio";
 $DateAndTimeOfAccess = "Data e ora di accesso";
 $Duration = "Durata";
+$WrongDatasForTimeSpentOnThePlatform = "I dati di report dell\'utente sono stati memorizzati quando sulla piattaforma non era possibile la registrazione dei tempi d\'accesso.";
 ?>

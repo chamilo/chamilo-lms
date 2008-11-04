@@ -48,4 +48,10 @@ $PeronalAgendaItemDeleted = "Merkintä on poistettu";
 $ViewPersonalItem = "Tarkastele henkilökohtaisia merkintöjä";
 $UserGroupFilter = "Suodatin ryhmisä/kättäjissä";
 $ShowAll = "Näytä kaikki";
+$NewAnnouncement = "Uusi ilmoitus";
+$UpcomingEvent = "Tuleva tapahtuma";
+$RepeatedEvent = "Toistuva tapahtuma";
+$RepeatDaily = "Päivittäin";
+$RepeatWeekly = "Viikottain";
+$RepeatYearly = "Vuosittain";
 ?>

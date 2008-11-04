@@ -10,6 +10,8 @@ $langOuAutreTitre  = "Otsikko";
 $langNewBloc  = "Muu";
 $langAddCat  = "Lisää aihe";
 $langAdd  = "Lisää";
-$langValid  = "voimassaoleva";
+$langValid  = "Voimassaoleva";
 $langBackAndForget  = "Peruuta";
+$CourseDescriptionUpdated = "Kurssin kuvaus on päivitetty";
+$CourseDescriptionDeleted = "Kurssin kuvaus on poistettu";
 ?>

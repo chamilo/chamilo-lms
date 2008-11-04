@@ -208,4 +208,5 @@ $TemplateTitleTimelineDescription = "3 listes et flèches relationnelles";
 $TemplateTitleStopAndThink = "Faisons le point";
 $TemplateTitleListLeftListDescription = "Liste à gauche avec un instructeur";
 $TemplateTitleStopAndThinkDescription = "Présentation invitant à réfléchir";
+$SaveDocument = "Enregistrer le document";
 ?>

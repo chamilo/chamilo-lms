@@ -146,4 +146,5 @@ $MostActiveUsers = "Utenti più attivi";
 $Contributions = "Contributi";
 $UserContributions = "Contributi dell\'utente";
 $MostActiveUsers = "Utenti più attivi";
+$WarningDeleteMainPage = "Non è consigliabile eliminare la pagina iniziale del Wiki, in quanto costituisce la radice della struttura gerarchica delle altre pagine.<br />Se devi eliminarla, abbi l\'avvertenza di ricrearla con lo stesso nome, altrimenti sarà impossibile una corretta gestione del Wiki.";
 ?>

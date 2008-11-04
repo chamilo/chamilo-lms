@@ -566,4 +566,7 @@ $NoOfficialCode = "Nessun codice ufficiale";
 $Owner = "Proprietario";
 $With = "con";
 $GeneralCoach = "Tutor globale";
+$CategoryDeleted = "La categoria è stata eliminata";
+$CategoryAdded = "Categoria aggiunta";
+$IP = "IP";
 ?>

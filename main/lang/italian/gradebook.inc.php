@@ -102,4 +102,5 @@ $TotalUser = "Totale per utente";
 $AverageTotal = "Media complessiva";
 $Evaluation = "Valutazione";
 $EvaluationAverage = "Valutazione media";
+$EditCategory = "Modifica la categoria";
 ?>

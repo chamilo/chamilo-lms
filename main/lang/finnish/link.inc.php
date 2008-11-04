@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$LinkMoved = "Linkki siirretty";
 $langLinkName = "Linkin nimi";
 $langLinkAdd = "Lisää linkki";
 $langLinkAdded = "Linkki on lisätty";
@@ -34,4 +35,5 @@ $langLinkUpdated = "Linkki on päivitetty";
 $langAll_Link_Deleted = "Linkki on poistettu";
 $langOnHomepage = "Näytä linkki kotisivulla";
 $langShowLinkOnHomepage = "Näytä tämä linkki kuvakkeena kurssin etusivulla";
+$General = "Yleinen";
 ?>

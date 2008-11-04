@@ -160,4 +160,12 @@ $PictureUploaded = "Vaša slika je bila naložena";
 $ProductionUploaded = "Vaša produkcijska datoteka je bila naložena";
 $FolderUpdated = "Mapa je bila ažurirana";
 $UsersRegistered = "Ti uporabniki so bili vpisani v teèaj";
+$UserAlreadyRegisterByOtherCreator = "Uporabnik je že vpisan s strani drugega coach-a";
+$UserCreatedPlatform = "Uporabnik dodan v platformo";
+$UserInSession = "Uporabnik dodan v sejo";
+$UserNotAdded = "Uporabnik ni bil dodan";
+$NoSessionId = "Seja ni bila identificirana";
+$NoUsersRead = "Prosim preverite vašo XML/CVS datoteko";
+$UserImportFileMessage = "V primeru, da v XML/CVS datoteki manjkajo uporabniška imena, se bodo ta generirala iz imena in priimka, npr. Janez Novak bo dobil uporabniško ime jnovak";
+$UserAlreadyRegisteredByOtherCreator = "Uporabnik je že vpisan s strani drugega coach-a.";
 ?>

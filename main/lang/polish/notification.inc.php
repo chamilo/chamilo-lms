@@ -15,4 +15,6 @@ $lang_new_forum_topic = "Nowy temat zosta&#322; dodany";
 $lang_new_groupforum_topic = "Nowy temat zosta&#322; dodany do Forum Grupy";
 $lang_new_dropbox_file = "otrzymano nowy plik";
 $lang_update_dropbox_file = "plik w Twojej skrzynce nadawczej zosta&#322; zaktualizowany";
+$ForumCategoryAdded = "Kategoria forum zosta&#322;a dodana";
+$LearnpathAdded = "&#346;cie&#380;ka nauki zosta&#322;a dodana";
 ?>

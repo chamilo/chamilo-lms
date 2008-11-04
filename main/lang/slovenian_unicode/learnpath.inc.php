@@ -192,5 +192,10 @@ $OogieUnknownError = "Pretvorba iz neznanega razloga ni uspela.<br />Prosimo, da
 $OogieBadExtension = "Vaša datoteka nima ustrezne končnice.";
 $WoogieBadExtension = "Prosimo, da nalagate zgolj besedilne dokumente. Končnica datotek naj bo .doc, .docx ali .odt";
 $ShowAudioRecorder = "Prikaži avdio snemalnik";
+$SearchFeatureNotEnabledComment = "Zmožnost iskanja po celotni vsebini ni omogočena. Obrnite se na administratorja platforme.";
+$SearchFeatureSearchExplanation = "Za preiskovanje podatkovne baze učnih poti, uporabite naslednjo sintakso:<br/><br/> ���<i>iskani_izraz tag:ime_zaznamka -izključi +vključi \\\"natančna besedna zveza\\\"</i><br/> Npr.:<br/> ���<i>car tag:truck -ferrari +ford \\\"high consumption\\\".</i><br/><br/> To prikaže vse rezultate za \'car\' ki so zaznamovani kot \'truck\', in ne vsebujejo besedice \'ferrari\' pa vključejejo besedico \'ford\' in besedno zvezo \'high consumption\', kot je zapisan v narekovajih.";
 $ViewLearningPath = "Poglej učno pot";
+$SearchFeatureDoIndexDocument = "Indeksiram vsebino dokumentov?";
+$SearchFeatureDocumentTagsIfIndexing = "Zaznamki, ki se dodajo dokumentu v primeru indeksiranja";
+$SearchFeatureDocumentLanguage = "Jezik dokumenta za indeksiranje";
 ?>

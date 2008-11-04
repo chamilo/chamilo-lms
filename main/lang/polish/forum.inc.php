@@ -1,6 +1,9 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$ForumDeleted = "Forum usuni&#281;te";
+$ForumCategoryDeleted = "Kategoria forum usuni&#281;ta";
+$ForumLocked = "Forum zablokowane";
 $Forum = "Forum";
 $AddForumCategory = "Dodaj now&#261; kategori&#281; forów";
 $AddForum = "Dodaj nowe forum";
@@ -74,4 +77,10 @@ $MoveThread = "Przesu&#324; w&#261;tek";
 $PostVisibilityChanged = "Zmieniona zosta&#322;a widoczno&#347;&#263; posta";
 $PostDeleted = "Post zosta&#322; skasowany";
 $MakeInvisible = "Ukryj";
+$NextMessage = "nast&#281;pna wiadomo&#347;&#263;";
+$PrevMessage = "poprzednia wiadomo&#347;&#263;";
+$FirstMessage = "pierwsza wiadomo&#347;&#263;";
+$LastMessage = "ostatnia wiadomo&#347;&#263;";
+$ForumSearch = "Szukaj w Forum";
+$ForumSearchResults = "Rezultaty wyszukiwania";
 ?>

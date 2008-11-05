@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 16657 2008-11-04 18:06:45Z dperales $
+*  	@version $Id: work.php 16674 2008-11-05 23:19:46Z dperales $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -637,11 +637,12 @@ if (api_is_allowed_to_edit(false,true))
 	{
 
 		function get_date_from_select($prefix){
-	 	    return $_POST[$prefix.'_year'].'-'.$_POST[$prefix.'_month'].'-'.$_POST[$prefix.'_day'].' '.$_POST[$prefix.'_hour'].':'.$_POST[$prefix.'_minute'].':00';
+	 	    return $_POST[$prefix]['Y'].'-'.$_POST[$prefix]['M'].'-'.$_POST[$prefix]['d'].' '.$_POST[$prefix]['H'].':'.$_POST[$prefix]['i'].':00';
+			//return $_POST[$prefix.'_year'].'-'.$_POST[$prefix.'_month'].'-'.$_POST[$prefix.'_day'].' '.$_POST[$prefix.'_hour'].':'.$_POST[$prefix.'_minute'].':00';
   	    }
-        $fexpire= get_date_from_select('expires');
-        $fend =  get_date_from_select('ends');
-
+        $fexpire= get_date_from_select('expires_on');
+        $fend =  get_date_from_select('ends_on');
+		
 
 		//create the directory
 		//needed for directory creation
@@ -693,8 +694,8 @@ if (api_is_allowed_to_edit(false,true))
 			{
 				$TSTDPUBASG=Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 				$sql_add_homework = "INSERT INTO ".$TSTDPUBASG." SET " .			
-								   "expires_on         = '".(($_POST['type1']==1) ? get_date_from_select('expires') : '0000-00-00 00:00:00'). "',
-							        ends_on        = '".(($_POST['type2']==1) ? get_date_from_select('ends') : '0000-00-00 00:00:00')."',
+								   "expires_on         = '".(($_POST['type1']==1) ? $fexpire : '0000-00-00 00:00:00'). "',
+							        ends_on        = '".(($_POST['type2']==1) ? $fend : '0000-00-00 00:00:00')."',
 				                    add_to_calendar  = '".(int)$_POST['add_to_calendar']."',
 				                    enable_qualification = '".(int)$_POST['enable_calification']."',
 				                    publication_id = '".$id."'";
@@ -1197,6 +1198,10 @@ if($is_special > 0):
 	$publication = mysql_fetch_array($sql);
 	$sql = api_sql_query('SELECT * FROM '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT).' WHERE publication_id = '.(string)$publication['id'].' LIMIT 1',__FILE__,__LINE__);
 	$homework = mysql_fetch_array($sql);
+
+	if(!empty($publication['description'])){
+			Display :: display_normal_message($publication['description']);
+	}
 	
 	if($homework['expires_on']!='0000-00-00 00:00:00' || $homework['ends_on']!='0000-00-00 00:00:00'):
 		$time_now = convert_date_to_number(date('Y-m-d H:i:s'));	
@@ -1208,10 +1213,6 @@ if($is_special > 0):
 		if($homework['ends_on']!='0000-00-00 00:00:00' && $difference2 < 0) $has_ended = true;
 		
 		define('ASSIGNMENT_EXPIRES',$time_expires);
-	
-		if(!empty($publication['description'])){
-			Display :: display_normal_message($publication['description']);
-		}
 		
 		if($has_ended) {
 			Display :: display_error_message(get_lang('EndDateAlreadyPassed').' '.$homework['ends_on']);	
@@ -1223,6 +1224,8 @@ if($is_special > 0):
 			Display :: display_normal_message(get_lang('ExpiryDateToSendWorkIs').' '.$homework['expires_on']);
 			display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form);
 		}
+	else:
+		display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form);
 	endif;	
 else:
 	display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form);
@@ -1251,7 +1254,7 @@ if ($is_course_member)
 		require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php');
 		require_once (api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php');
 
-		$form = new FormValidator('form', 'POST', api_get_self() . "?curdirpath=" . Security :: rtrim(remove_XSS($cur_dir_path),'/') . "&origin=$origin", '', 'enctype="multipart/form-data"');
+		$form = new FormValidator('form', 'POST', api_get_self() . "?curdirpath=" . Security :: remove_XSS(rtrim($cur_dir_path,'/')) . "&origin=$origin", '', 'enctype="multipart/form-data"');
 
 		if (!empty ($error_message))
 			Display :: display_error_message($error_message);

@@ -896,6 +896,19 @@ if($show == 'test'){
 if($_configuration['tracking_enabled'])
 {
 
+function convert_date_to_number($default){
+	// 2008-10-12 00:00:00 ---to--> 12345672218 (timestamp)
+	$parts = split(' ',$default);
+	list($d_year,$d_month,$d_day) = split('-',$parts[0]);
+	list($d_hour,$d_minute,$d_second) = split(':',$parts[1]);	
+	return mktime($d_hour, $d_minute, $d_second, $d_month, $d_day, $d_year);
+}
+
+function format_date_result($date){
+	if($date == '0000-00-00 00:00:00') return getlang('NoDate');
+	return substr($date,8,2).'-'.substr($date,5,2).'-'.substr($date,0,4).' '.substr($date,11,2).':'.substr($date,14,4);
+}
+
 	if($show == 'result')
 	{
 		// the form
@@ -962,9 +975,9 @@ if($_configuration['tracking_enabled'])
 					//get all results (ourself and the others) as an admin should see them
 					//AND exe_user_id <> $_user['user_id']  clause has been removed
 					$sql="SELECT CONCAT(lastname,' ',firstname),ce.title, te.exe_result ,
-								te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_Id,email, UNIX_TIMESTAMP(te.start_date)
+								te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_Id,email, UNIX_TIMESTAMP(te.start_date),steps_counter
 						  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
-						  WHERE te.exe_exo_id = ce.id AND  te.status != 'incomplete' AND user_id=te.exe_user_id AND te.exe_cours_id='$_cid'";
+						  WHERE te.exe_exo_id = ce.id AND  te.status != 'incomplete' AND user_id=te.exe_user_id AND te.exe_cours_id='$_cid' ";
 
 
 					switch ($_GET['column']) {
@@ -1031,14 +1044,15 @@ if($_configuration['tracking_enabled'])
 							$hpsql .= " ORDER BY exe_cours_id ASC, exe_date ASC";
 							break;
 					}
-					//echo $sql;
+
 		}
-		$results=getManyResultsXCol($sql,8);
+		$results=getManyResultsXCol($sql,9);
 		$hpresults=getManyResultsXCol($hpsql,5);
 
 		$NoTestRes = 0;
 		$NoHPTestRes = 0;
 		//Print the results of tests
+		$lang_nostartdate = get_lang('NoStartDate').' / ';
 		if(is_array($results))
 		{
 			$sizeof = sizeof($results);
@@ -1053,21 +1067,32 @@ if($_configuration['tracking_enabled'])
 				echo '<tr';
 				if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"';
 				echo '>';
+				
+				$add_start_date = $lang_nostartdate;
 				if($is_allowedToEdit || $is_tutor)
 				{
 					$user = $results[$i][0];
 					echo '<td>'.$user.' '.$duration.'</td>';
-					if($results[$i][7] > 1)
-						echo '<td>'.ceil((($results[$i][4] - $results[$i][7])/60)).' '.get_lang('min').'</td>';
+					echo '<td>';
+					if($results[$i][7] > 1){
+						echo ceil((($results[$i][4] - $results[$i][7])/60)).' '.get_lang('min');
+						if($results[$i][8] > 0)echo ' ( '.$results[$i][8].' '.get_lang('Steps').' )';
+						$add_start_date = format_locale_date('%b %d, %Y %H:%M',$results[$i][7]).' / ';
+					} else {
+						echo get_lang('NoLogOfDuration');
+					}
+					
+					echo '</td>';
 				}
 
 				echo '<td>'.$test.'</td>';
-				echo '<td>'.format_locale_date(get_lang('dateTimeFormatLong'),$results[$i][4]).'</td>';
+				echo '<td>'.$add_start_date.format_locale_date('%b %d, %Y %H:%M',$results[$i][4]).'</td>';//get_lang('dateTimeFormatLong')
 		  		echo '<td>'.round(($res/($results[$i][3]!=0?$results[$i][3]:1))*100).'% ('.$res.' / '.$results[$i][3].')</td>';
+				
 				echo '<td>'.
 				(($is_allowedToEdit||$is_tutor)?
 				"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang('Edit').'</a>'.' - '.'<a href="exercice.php?cidReq='.htmlentities($_GET['cidReq']).'&show=result&delete=delete&did='.$id.'" onclick="javascript:if(!confirm(\''.sprintf(get_lang('DeleteAttempt'),$user,$dt).'\')) return false;">'.get_lang('Delete').'</a>'
-				.' - <a href="exercice_history.php?cidReq='.htmlentities($_GET['cidReq']).'&exe_id='.$id.'">'.get_lang('ViewHistory').'</a>'
+				.' - <a href="exercice_history.php?cidReq='.htmlentities($_GET['cidReq']).'&exe_id='.$id.'">'.get_lang('ViewScoreChangeHistory').'</a>'
 				:
 				"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show').'</a>').'</td>';
 				echo '</tr>';

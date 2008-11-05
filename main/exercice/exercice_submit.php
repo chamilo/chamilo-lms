@@ -37,7 +37,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 16657 2008-11-04 18:06:45Z dperales $
+* 	@version $Id: exercice_submit.php 16674 2008-11-05 23:19:46Z dperales $
 */
 
 
@@ -164,13 +164,18 @@ if(empty($exerciseType)){
 // and load the question list saved too.
 if($_configuration['live_exercise_tracking'] == true){
 	$sql = api_sql_query('SELECT * FROM '.$stat_table.$condition,__FILE__,__LINE__);
+	// if exist log of entry to this exercise 
 	if(mysql_num_rows($sql) > 0 ){
 		if($exerciseType == 2){
 			$getIncomplete = mysql_fetch_array($sql);
 			$exe_id = $getIncomplete['exe_id'];
+			
 			if($_SERVER['REQUEST_METHOD']!='POST'){
+				define('QUESTION_LIST_ALREADY_LOGGED',1);
+				api_sql_query('UPDATE '.$stat_table.' SET steps_counter = steps_counter + 1'.$condition,__FILE__,__LINE__);
 				$recorded['questionList'] = explode(',',$getIncomplete['data_tracking']);
 	
+				//selecting all the answered question from database for
 				//building the answers array, taking care of handling "multiple answers" behavior.
 				$sql = api_sql_query('SELECT * FROM '.$exercice_attemp_table.' WHERE exe_id = '.$getIncomplete['exe_id'].' ORDER BY tms ASC',__FILE__,__LINE__);
 				while($row = mysql_fetch_array($sql)){
@@ -189,8 +194,8 @@ if($_configuration['live_exercise_tracking'] == true){
 				$_SESSION['exerciseResult'] = $recorded['exerciseResult'];
 				$exerciseType = 2;
 				$questionNum = count($recorded['exerciseResult']);
-				$questionNum++;
-				$questionList = $_SESSION['questionList'] = $recorded['questionList'];
+				//$questionNum = $questionList[$questionNum];
+				$questionList = $_SESSION['questionList'] = array_combine(range(1,count($recorded['questionList'])),$recorded['questionList']);
 			}
 		}
 	}else{
@@ -318,14 +323,14 @@ $exerciseTitle=$objExercise->selectTitle();
 $exerciseDescription=$objExercise->selectDescription();
 $exerciseDescription=stripslashes($exerciseDescription);
 $exerciseSound=$objExercise->selectSound();
-$randomQuestions=$objExercise->isRandom();
+//$randomQuestions=$objExercise->isRandom();
 $exerciseType=$objExercise->selectType();
 
 if(!isset($_SESSION['questionList']) || $origin == 'learnpath')
 {
     if($debug>0){echo str_repeat('&nbsp;',0).'$_SESSION[questionList] was unset'."<br />\n";}
     // selects the list of question ID
-    $questionList = ($randomQuestions?$objExercise->selectRandomList():$objExercise->selectQuestionList());
+    $questionList = $objExercise->questionList;//($randomQuestions?$objExercise->selectRandomList():$objExercise->selectQuestionList());
     // saves the question list into the session
     api_session_register('questionList');
     if($debug>0){echo str_repeat('&nbsp;',0).'$_SESSION[questionList] was unset - set now - end'."<br />\n";}
@@ -515,6 +520,7 @@ if( $exerciseAttempts > 0){
 	$sql = 'SELECT count(*)
 			FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES).'
 			WHERE exe_exo_id = '.$quizID.' '.
+			"and status != 'incomplete' ".
 			'and exe_user_id = '.$user_id.' '.
 			"and exe_cours_id = '$course_code'";
 	$aquery = api_sql_query($sql, __FILE__, __LINE__);
@@ -546,14 +552,14 @@ function convert_date_to_number($default){
 $limit_time_exists = (($Exe_starttime!='0000-00-00 00:00:00')||($Exe_endtime!='0000-00-00 00:00:00'))? true : false; 
 if($limit_time_exists){
 	$exercise_start_time = convert_date_to_number($Exe_starttime);
-	//$exercise_end_time = convert_date_to_number($Exe_endtime);
+	$exercise_end_time = convert_date_to_number($Exe_endtime);
 	$time_now = convert_date_to_number(date('Y-m-d H:i:s'));
 	$permission_to_start = (($time_now - $exercise_start_time)>0)?true:false;
-	//if($_SERVER['REQUEST_METHOD']!='POST')$exercise_timeover = (($time_now - $exercise_end_time)>0)?true:false;
-	if($permission_to_start == false ){ //|| $exercise_timeover == true 
+	if($_SERVER['REQUEST_METHOD']!='POST')$exercise_timeover = (($time_now - $exercise_end_time)>0)?true:false;
+	if($permission_to_start == false || $exercise_timeover = true){ //
     	if(!api_is_allowed_to_edit()){
-    		$message_warning = ($permission_to_start == false)? get_lang('ExerciseNoStartedYet') : get_lang('ReachedTimeLimit') ;
-	    	Display::display_warning_message(sprintf($message_warning,$exerciseTitle,$exerciseAttempts));
+    		$message_warning = ($permission_to_start == false)? get_lang('ExerciseNoStartedYet').' %s' : get_lang('ReachedTimeLimit') ;
+	    	Display::display_warning_message(sprintf($message_warning,(($permission_to_start == false)?$Exe_starttime:$Exe_endttime)));
 	 	  	Display::display_footer();
 	 	  	exit;
 	    } else {
@@ -738,4 +744,5 @@ else
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display::display_footer();
 } 
+//var_dump($questionList);
 ?>

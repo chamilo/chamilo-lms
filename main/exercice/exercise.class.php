@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 16657 2008-11-04 18:06:45Z dperales $
+* 	@version $Id: exercise.class.php 16674 2008-11-05 23:19:46Z dperales $
 */
 
 
@@ -75,6 +75,8 @@ class Exercise
 	function read($id)
 	{ 
 		global $_course;
+       	global $_configuration;
+        global $questionList;
 
 	    $TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     	$TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -113,21 +115,19 @@ class Exercise
 
 				$this->questionList[$object->question_order]=$object->question_id;
 			}
-			
-			if($this->random==1){
-          		shuffle($this->questionList);
+
+			if($this->random > 0){
+          		$this->questionList = $this->selectRandomList();
           	}
-       	    global $_configuration;
-            global $questionList;
             //overload questions list with recorded questions list
             //load questions only for exercises of type 'one question per page'
             //this is needed only is there is no questions   
             //
-            if($this->type == 2 && $_configuration['live_exercise_tracking']==true && $_SERVER['REQUEST_METHOD']!='POST')
+            if($this->type == 2 && $_configuration['live_exercise_tracking']==true && $_SERVER['REQUEST_METHOD']!='POST' && defined('QUESTION_LIST_ALREADY_LOGGED'))
 	        {
-            	if(!empty($_SESSION['questionList']))$this->questionList = $questionList;
+            	//if(empty($_SESSION['questionList']))
+            	$this->questionList = $questionList;
             }
-
 			return true;
 		}
 
@@ -272,7 +272,11 @@ class Exercise
      */
 	function selectRandomList()
 	{		
-		return $this->questionList;	
+		$nbQuestions = $this->selectNbrQuestions();
+		$temp_list = $this->questionList;
+		shuffle($temp_list);
+		return array_combine(range(1,$nbQuestions),$temp_list);
+		
 		$nbQuestions = $this->selectNbrQuestions();
 		
 		//Not a random exercise, or if there are not at least 2 questions

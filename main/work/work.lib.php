@@ -219,6 +219,50 @@ function display_user_link($user_id, $name='')
 	}
 }
 
+function convert_date_to_number($default){
+	// 2008-10-12 00:00:00 ---to--> 12345672218 (timestamp)
+	$parts = split(' ',$default);
+	list($d_year,$d_month,$d_day) = split('-',$parts[0]);
+	list($d_hour,$d_minute,$d_second) = split(':',$parts[1]);	
+	return mktime($d_hour, $d_minute, $d_second, $d_month, $d_day, $d_year);
+}
+
+	/*
+	 * converts 1-9 to 01-09
+	 */
+	
+	function two_digits($number){
+		$number = (int)$number;
+		return ($number < 10) ? '0'.$number : $number;
+	}
+
+	/*
+	 * converts 2008-10-06 12:45:00 to -> array($data'year'=>2008,$data'month'=>10 etc...)
+	 */
+
+	function convert_date_to_array($date,$group){
+		$parts = split(' ',$date);
+		list($data[$group.'[year]'],$data[$group.'[month]'],$data[$group.'[day]']) = split('-',$parts[0]);
+		list($data[$group.'[hour]'],$data[$group.'[minute]']) = split(':',$parts[1]);
+		return $data;
+		
+	}
+	
+	function get_date_from_group($group){
+		return $_POST[$group]['year'].'-'.two_digits($_POST[$group]['month']).'-'.two_digits($_POST[$group]['day']).' '.two_digits($_POST[$group]['hour']).':'.two_digits($_POST[$group]['minute']).':00';
+	}
+		
+	function create_group_date_select($prefix=''){
+		$minute = range(10,59);
+		$d_year=date('Y');
+		array_unshift($minute,'00','01','02','03','04','05','06','07','08','09');
+		$group_name[] = FormValidator :: createElement('select',$prefix.'year','',array($d_year=>$d_year,$d_year+1=>$d_year+1));
+		$group_name[] = FormValidator :: createElement('select',$prefix.'month','',array_combine(range(1,12),array('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre')));
+		$group_name[] = FormValidator :: createElement('select',$prefix.'day','',array_combine(range(1,31),range(1,31)));
+		$group_name[] = FormValidator :: createElement('select',$prefix.'hour','',array_combine(range(1,24),range(1,24)));
+		$group_name[] = FormValidator :: createElement('select',$prefix.'minute','',$minute);
+		return $group_name;
+	}
 
 
 /**
@@ -448,10 +492,11 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 						$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('Ends_At'));
 					}
 					$form_folder -> addRule (array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
+				
 				}
 				else
 				{
-						//$form_folder -> addElement('checkbox', 'enableRandom', null, get_lang('MakeRandom'),'1');					
+					//$form_folder -> addElement('checkbox', 'enableRandom', null, get_lang('MakeRandom'),'1');					
 						$form_folder -> addElement('html','<div class="row">
 	 	                         <div class="label">&nbsp;</div>
  	  	                         <div class="formw">
@@ -486,8 +531,6 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 						
 						$form_folder -> addElement('html','</div>');  		
 				}
-
-				
 
 				$group_name[] = FormValidator :: createElement('submit','submit_edit_dir',get_lang('Ok'));
 				$form_folder -> addGroup($group_name,'my_group');
@@ -646,10 +689,9 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				$class='';
 			}
 			
-			if(defined('IS_ASSIGNMENT')):
+			if(true || defined('IS_ASSIGNMENT')):
 				$add_string = '';
-	
-				if($work->qualification=='')
+				if($work->qualificator_id==0)
 					$qualification_string = ' / <b style="color:orange">'.get_lang('NotRevised').'<b>';
 				else
 					$qualification_string = ' / <b style="color:blue">'.get_lang('Qualification').': '.$work->qualification.'<b>';
@@ -662,8 +704,8 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));			
 			$row[]= build_document_icon_tag('file',$work->url);			
 			$row[]= '<a href="'.$currentCourseRepositoryWeb.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;
-			$row[]= display_user_link($user_id,$work->author);// $work->author;			
-			$row[]= date_to_str_ago($work->sent_date).'<br><span class="dropbox_date">'.$work->sent_date.'</span>';
+			$row[]= display_user_link($user_id,$work->author).$qualification_string;// $work->author;			
+			$row[]= date_to_str_ago($work->sent_date).$add_string.'<br><span class="dropbox_date">'.$work->sent_date.'</span>';
 			
 			if( $is_allowed_to_edit  && !(api_is_course_coach() && $work->session_id!=$_SESSION['id_session']))
 			{

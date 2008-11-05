@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 16495 2008-10-10 22:13:15Z yannoo $
+<?php // $Id: user_edit.php 16673 2008-11-05 23:04:48Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -34,7 +34,6 @@ include('../inc/global.inc.php');
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-
 
 $htmlHeadXtra[] = '
 <script language="JavaScript" type="text/JavaScript">
@@ -398,7 +397,8 @@ if( $form->validate())
 		$emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
 		$emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');
 		$emailbody = get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username;
-		if($reset_password != 0 && !$userPasswordCrypted )
+		// Send password by e-mail if it has been modified, even if encrypted in DB (it doesn't make sense to send an e-mail with login info without the password, even if the password is encrypted)
+		if($reset_password > 0)
 		{
 			$emailbody .= "\n".get_lang('Pass')." : ".stripslashes($password);
 		}

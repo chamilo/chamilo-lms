@@ -1076,7 +1076,7 @@ function format_date_result($date){
 					echo '<td>';
 					if($results[$i][7] > 1){
 						echo ceil((($results[$i][4] - $results[$i][7])/60)).' '.get_lang('min');
-						if($results[$i][8] > 0)echo ' ( '.$results[$i][8].' '.get_lang('Steps').' )';
+						if($results[$i][8] > 1)echo ' ( '.$results[$i][8].' '.get_lang('Steps').' )';
 						$add_start_date = format_locale_date('%b %d, %Y %H:%M',$results[$i][7]).' / ';
 					} else {
 						echo get_lang('NoLogOfDuration');

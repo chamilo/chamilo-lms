@@ -40,10 +40,19 @@ $csv_content = array();
 $nameTools= get_lang("MySpace");
 $this_section = "session_my_space";
  
+// access control
 api_block_anonymous_users();
 if(!$export_csv)
 {
 	Display :: display_header($nameTools);
+}
+else
+{
+	if ($_GET['view'] == 'admin' AND $_GET['display'] == 'useroverview')
+	{
+		export_tracking_user_overview();
+		exit;
+	}
 }
  
 // Database table definitions
@@ -180,7 +189,7 @@ if($nb_menu_items>1)
 echo '<div align="left" style="float:left"><h4>'.$title.'</h4></div>
 	  <div align="right">
 		<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-		<a href="'.api_get_self().'?export=csv&view='.$view.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+		<a href="'.api_get_self().'?export=csv&amp;view='.$view.'&amp;display='.Security::remove_XSS($_GET['display']).'">'.'<img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
 	  </div>
 	  <div class="clear"></div>';
 
@@ -594,8 +603,21 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 	}
 }
 
-if(api_is_platform_admin() && $view=='admin'){
+if(api_is_platform_admin() && $view=='admin')
+{
+	echo '<a href="'.api_get_self().'?view=admin&amp;display=coaches">'.get_lang('DisplayCoaches').'</a> | ';
+	echo '<a href="'.api_get_self().'?view=admin&amp;display=useroverview">'.get_lang('DisplayUserOverview').'</a>';
+	if ($_GET['display'] == 'useroverview')
+	{
+		echo ' | <a href="'.api_get_self().'?view=admin&amp;display=useroverview&amp;export=options">'.get_lang('ExportUserOverviewOptions').'</a>';
+	}
 	
+	if ($_GET['display'] === 'useroverview')
+	{
+		display_tracking_user_overview();
+	}
+	else
+	{
 	$tracking_column = isset($_GET['tracking_list_coaches_column']) ? $_GET['tracking_list_coaches_column'] : 0;
 	$tracking_direction = (isset($_GET['tracking_list_coaches_direction']) && in_array(strtoupper($_GET['tracking_list_coaches_direction']),array('ASC','DESC','ASCENDING','DESCENDING','0','1'))) ? $_GET['tracking_list_coaches_direction'] : 'DESC';
 	//prepare array for column order - when impossible, use lastname
@@ -707,7 +729,7 @@ if(api_is_platform_admin() && $view=='admin'){
 	$table -> updateColAttributes(3,array('align'=>'left'));
 	$table -> updateColAttributes(7,array('align'=>'center'));
 	$table -> display();
-	
+	}
 }
 
 // send the csv file if asked
@@ -720,13 +742,420 @@ if($export_csv)
 	Export :: export_table_csv($csv_content, 'reporting_index');
 }
  
- /*
- ==============================================================================
-		FOOTER
- ==============================================================================
- */
+/*
+==============================================================================
+FOOTER
+==============================================================================
+*/
 if(!$export_csv)
 {
 	Display::display_footer();
+}
+
+
+/**
+ * This function exports the table that we see in display_tracking_user_overview()
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version Dokeos 1.8.6
+ * @since October 2008
+ */
+function export_tracking_user_overview()
+{
+	// database table definitions
+	$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+
+	// the values of the sortable table
+	if ($_GET['tracking_user_overview_page_nr'])
+	{
+		$from = $_GET['tracking_user_overview_page_nr'];
+	}
+	else
+	{
+		$from = 0;
+	}
+	if ($_GET['tracking_user_overview_column'])
+	{
+		$orderby = $_GET['tracking_user_overview_column'];
+	}
+	else
+	{
+		$orderby = 0;
+	}
+	if ($_GET['tracking_user_overview_direction'])
+	{
+		$direction = $_GET['tracking_user_overview_direction'];
+	}
+	else
+	{
+		$direction = 'ASC';
+	}
+
+	$user_data = get_user_data_tracking_overview($from, 1000 , $orderby, $direction);
+	
+	// the first line of the csv file with the column headers
+	$csv_row = array();
+	$csv_row[] = get_lang('OfficialCode');
+	$csv_row[] = get_lang('LastName');
+	$csv_row[] = get_lang('FirstName');
+	$csv_row[] = get_lang('LoginName');	
+	$csv_row[] = get_lang('CourseCode');
+	// the additional user defined fields (only those that were selected to be exported)
+	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+	$fields = UserManager::get_extra_fields(0,50,5,'ASC');
+	print_r($fields);
+	foreach ($_SESSION['additional_export_fields'] as $key=>$extra_field_export)
+	{
+		$csv_row[] = $fields[$extra_field_export][3];
+		$field_names_to_be_exported[] = 'extra_'.$fields[$extra_field_export][1];
+	}
+	// ...
+	$csv_content[] = $csv_row;
+	
+	// the other lines (the data)
+	foreach($user_data as $key=>$user)
+	{
+		// getting all the courses of the user
+		$sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".Database::escape_string($user[4])."'";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		while ($row = Database::fetch_row($result))
+		{
+			$csv_row = array();
+			// user official code
+			$csv_row[] = $user[0];
+			// user last name
+			$csv_row[] = $user[1];
+			// user first name
+			$csv_row[] = $user[2];
+			// user login name
+			$csv_row[] = $user[3];
+			// course code
+			$csv_row[] = $row[0];
+			// the additional defined user fields
+			$extra_fields = get_user_overview_export_extra_fields($user[4]);
+			print_r($extra_fields);
+			foreach ($extra_fields as $key=>$value)
+			{
+				//$csv_row[] = $value;
+			}
+			foreach ($field_names_to_be_exported as $key=>$extra_field_export)
+			{
+				$csv_row[] = $extra_fields[$extra_field_export];
+			}
+			// time spent in the course
+			$csv_row[] = api_time_to_hms(Tracking :: get_time_spent_on_the_course ($user[4], $row[0]));
+			// student progress in course
+			$csv_row[] = Tracking :: get_avg_student_progress ($user[4], $row[0]);
+			// student score
+			$csv_row[] = Tracking :: get_avg_student_score ($user[4], $row[0]);
+			// student messages
+			$csv_row[] = Tracking :: count_student_messages ($user[4], $row[0]);
+			// student assignments
+			$csv_row[] = Tracking :: count_student_assignments ($user[4], $row[0]);
+			// student exercises results
+			$exercises_results = exercises_results($user[4], $row[0]);
+			$csv_row[] = $exercises_results['score_obtained'];
+			$csv_row[] = $exercises_results['score_possible'];
+			$csv_row[] = $exercises_results['questions_answered'];
+			$csv_row[] = $exercises_results['percentage'];			
+			// first connection
+			$csv_row[] = Tracking :: get_first_connection_date_on_the_course ($user[4], $row[0]);
+			// last connection
+			$csv_row[] = strip_tags(Tracking :: get_last_connection_date_on_the_course ($user[4], $row[0]));
+
+			$csv_content[] = $csv_row;
+		}
+	}
+	Export :: export_table_csv($csv_content, 'reporting_user_overview');
+}
+
+/**
+ * Display a sortable table that contains an overview off all the reporting progress of all users and all courses the user is subscribed to
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version Dokeos 1.8.6
+ * @since October 2008
+ */
+function display_tracking_user_overview()
+{
+	display_user_overview_export_options();
+
+	$table = new SortableTable('tracking_user_overview', 'get_number_of_users_tracking_overview', 'get_user_data_tracking_overview',1);
+
+	$table->set_header(0, get_lang('OfficialCode'));
+	$table->set_header(1, get_lang('LastName'));
+	$table->set_header(2, get_lang('FirstName'));
+	$table->set_header(3, get_lang('LoginName'));
+	$table->set_header(4, get_lang('CourseInformation'), false);
+	$table->set_column_filter(4, 'course_info_tracking_filter');
+	$table -> display();
+}
+
+/**
+ * get the numer of users of the platform
+ *
+ * @return integer
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version Dokeos 1.8.6
+ * @since October 2008
+ */
+function get_number_of_users_tracking_overview()
+{
+	// database table definition
+	$main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
+
+	// query
+	$sql = 'SELECT user_id FROM '.$main_user_table;
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+
+	// return the number of results
+	return Database::num_rows($result);
+}
+
+/**
+ * get all the data for the sortable table of the reporting progress of all users and all the courses the user is subscribed to.
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version Dokeos 1.8.6
+ * @since October 2008
+ */
+function get_user_data_tracking_overview($from, $number_of_items, $column, $direction)
+{
+	// database table definition
+	$main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
+
+	$sql = "SELECT
+				official_code 	AS col0,
+				lastname 		AS col1,
+				firstname 		AS col2,
+				username		AS col3,
+				user_id 		AS col4
+			FROM 
+				$main_user_table
+			";
+	$sql .= " ORDER BY col$column $direction ";
+	$sql .= " LIMIT $from,$number_of_items";
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$return = array ();
+	while ($user = Database::fetch_row($result))
+	{
+		$return[] = $user;
+	}
+	return $return;
+}
+
+/**
+ * Creates a small table in the last column of the table with the user overview
+ *
+ * @param integer $user_id the id of the user
+ * @param array $url_params additonal url parameters
+ * @param array $row the row information (the other columns)
+ * @return html code
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version Dokeos 1.8.6
+ * @since October 2008
+ */
+function course_info_tracking_filter($user_id,$url_params,$row)
+{
+	// the table header
+	$return .= '<table class="data_table">';
+	$return .= '	<tr>';
+	$return .= '		<th>'.get_lang('Course').'</th>';
+	$return .= '		<th>'.get_lang('AvgTimeSpentInTheCourse').'</th>';
+	$return .= '		<th>'.get_lang('AvgStudentsProgress').'</th>';
+	$return .= '		<th>'.get_lang('AvgStudentsScore').'</th>';
+	$return .= '		<th>'.get_lang('AvgMessages').'</th>';
+	$return .= '		<th>'.get_lang('AvgAssignments').'</th>';
+	$return .= '		<th>'.get_lang('TotalExercisesScoreObtained').'</th>';
+	$return .= '		<th>'.get_lang('TotalExercisesScorePossible').'</th>';
+	$return .= '		<th>'.get_lang('TotalExercisesAnswered').'</th>';
+	$return .= '		<th>'.get_lang('TotalExercisesScorePercentage').'</th>';
+	$return .= '		<th>'.get_lang('FirstLogin').'</th>';
+	$return .= '		<th>'.get_lang('LatestLogin').'</th>';
+	$return .= '	</tr>';
+
+	// database table definition
+	$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+
+	// getting all the courses of the user
+	$sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".Database::escape_string($user_id)."'";
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	while ($row = Database::fetch_row($result))
+	{
+		$return .= '<tr>';
+		// course code
+		$return .= '	<td>'.$row[0].'</td>';
+		// time spent in the course
+		$return .= '	<td>'.api_time_to_hms(Tracking :: get_time_spent_on_the_course ($user_id, $row[0])).'</td>';
+		// student progress in course
+		$return .= '	<td>'.Tracking :: get_avg_student_progress ($user_id, $row[0]).'</td>';
+		// student score
+		$return .= '	<td>'.Tracking :: get_avg_student_score ($user_id, $row[0]).'</td>';
+		// student messages
+		$return .= '	<td>'.Tracking :: count_student_messages ($user_id, $row[0]).'</td>';
+		// student assignments
+		$return .= '	<td>'.Tracking :: count_student_assignments ($user_id, $row[0]).'</td>';
+		// student exercises results (obtained score, maximum score, number of exercises answered, score percentage)
+		$exercises_results = exercises_results($user_id, $row[0]);
+		$return .= '	<td>'.$exercises_results['score_obtained'].'</td>';
+		$return .= '	<td>'.$exercises_results['score_possible'].'</td>';
+		$return .= '	<td>'.$exercises_results['questions_answered'].'</td>';
+		$return .= '	<td>'.$exercises_results['percentage'].'% </td>';
+		// first connection
+		$return .= '	<td>'.Tracking :: get_first_connection_date_on_the_course ($user_id, $row[0]).'</td>';
+		// last connection
+		$return .= '	<td>'.Tracking :: get_last_connection_date_on_the_course ($user_id, $row[0]).'</td>';
+		$return .= '<tr>';
+	}
+	$return .= '</table>';
+	return $return;
+}
+
+
+/**
+ * Get general information about the exercise performance of the user
+ * the total obtained score (all the score on all the questions)
+ * the maximum score that could be obtained
+ * the number of questions answered
+ * the success percentage
+ *
+ * @param integer $user_id the id of the user
+ * @param string $course_code the course code
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version Dokeos 1.8.6
+ * @since November 2008
+ */
+function exercises_results($user_id, $course_code)
+{
+	$sql = 'SELECT exe_result , exe_weighting
+					FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES)."
+					WHERE exe_cours_id = '".Database::escape_string($course_code)."'
+					AND exe_user_id = '".Database::escape_string($user_id)."'";
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	while ($row = Database::fetch_array($result))
+	{
+		$score_obtained += $row['exe_result'];
+		$score_possible += $row['exe_weighting'];
+		$questions_answered ++;
+	}
+	
+	$percentage = round(($score_obtained / $score_possible * 100),2);
+	
+	return array('score_obtained' => $score_obtained, 'score_possible' => $score_possible, 'questions_answered' => $questions_answered, 'percentage' => $percentage);
+}
+
+/**
+ * Displays a form with all the additionally defined user fields of the profile 
+ * and give you the opportunity to include these in the CSV export
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version Dokeos 1.8.6
+ * @since November 2008
+ */
+function display_user_overview_export_options()
+{
+	// include the user manager and formvalidator library
+	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+	require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+
+	if ($_GET['export'] == 'options')
+	{
+		// get all the defined extra fields
+		$extrafields = UserManager::get_extra_fields(0,50,5,'ASC');
+
+		// creating the form with all the defined extra fields
+		$form = new FormValidator('exportextrafields', 'post', api_get_self()."?view=".Security::remove_XSS($_GET['view']).'&display='.Security::remove_XSS($_GET['display']).'&export='.Security::remove_XSS($_GET['export']));
+		foreach ($extrafields as $key=>$extra)
+		{
+			$form->addElement('checkbox', 'extra_export_field'.$extra[0], '', $extra[3]);
+		}
+		$form->addElement('submit', null, get_lang('Ok'));
+		
+		// setting the default values for the form that contains all the extra fields
+		foreach ($_SESSION['additional_export_fields'] as $key => $value)
+		{
+			$defaults['extra_export_field'.$value]=1;
+		}
+		$form->setDefaults($defaults);
+
+		if ($form->validate())
+		{
+			// exporting the form values
+			$values = $form->exportValues();
+
+			// re-initialising the session that contains the additional fields that need to be exported
+			$_SESSION['additional_export_fields'] = array();
+
+			// adding the fields that are checked to the session
+			$message='';
+			foreach ($values as $field_ids => $value)
+			{
+				if ($value == 1 AND strstr($field_ids,'extra_export_field'))
+				{
+					$_SESSION['additional_export_fields'][] = str_replace('extra_export_field','',$field_ids);
+				}
+
+			}
+			
+			// adding the fields that will be also exported to a message string
+			foreach ($_SESSION['additional_export_fields'] as $key=>$extra_field_export)
+			{
+				$message .= '<li>'.$extrafields[$extra_field_export][3].$count.'</li>';
+			}			
+
+			// Displaying a feedback message
+			if (!empty($_SESSION['additional_export_fields']))
+			{
+				Display::display_confirmation_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>',false);
+			}
+			else 
+			{
+				Display::display_confirmation_message(get_lang('NoAdditionalFieldsWillBeExported'),false);
+			}
+			$message = '';
+		}
+		else
+		{
+			$form->display();
+		}
+	}
+	else
+	{
+		if (!empty($_SESSION['additional_export_fields']))
+		{
+			// get all the defined extra fields
+			$extrafields = UserManager::get_extra_fields(0,50,5,'ASC');
+
+			foreach ($_SESSION['additional_export_fields'] as $key=>$extra_field_export)
+			{
+				$message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
+			}
+
+			Display::display_normal_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>',false);
+			$message = '';
+		}
+	}
+}
+
+/**
+ * Get all information that the user with user_id = $user_data has 
+ * entered in the additionally defined profile fields
+ *
+ * @param integer $user_id the id of the user
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version Dokeos 1.8.6
+ * @since November 2008
+ */
+function get_user_overview_export_extra_fields($user_id)
+{
+	// include the user manager
+	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');	
+	
+	$extra_data = UserManager::get_extra_user_data($user_id,true);
+	return $extra_data;
 }
 ?>

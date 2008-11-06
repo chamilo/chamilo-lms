@@ -487,12 +487,12 @@ if ($_GET['action']=='usercontrib')
 			$userinfo=Database::get_user_info_from_id($obj->user_id);
 			
 			//get time
-			$year 	 = substr($obj->timestamp, 0, 4);
-			$month	 = substr($obj->timestamp, 5, 2);
-			$day 	 = substr($obj->timestamp, 8, 2);
-			$hours   = substr($obj->timestamp, 11,2);
-			$minutes = substr($obj->timestamp, 14,2);
-			$seconds = substr($obj->timestamp, 17,2);			
+			$year 	 = substr($obj->dtime, 0, 4);
+			$month	 = substr($obj->dtime, 5, 2);
+			$day 	 = substr($obj->dtime, 8, 2);
+			$hours   = substr($obj->dtime, 11,2);
+			$minutes = substr($obj->dtime, 14,2);
+			$seconds = substr($obj->dtime, 17,2);			
 			
 			//get type assignment icon		
 			if($obj->assignment==1)
@@ -530,7 +530,7 @@ if ($_GET['action']=='usercontrib')
 		$table = new SortableTableFromArrayConfig($rows,2,10,'UsersContributions_table','','','ASC');
 		$table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'user_id'=>Security::remove_XSS($_GET['user_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));	
 		
-		$table->set_header(0,get_lang('Date'), true, array ('style' => 'width:175px;'));			
+		$table->set_header(0,get_lang('Date'), true, array ('style' => 'width:200px;'));			
 		$table->set_header(1,get_lang('Type'), true, array ('style' => 'width:30px;'));
 		$table->set_header(2,get_lang('Title'), true, array ('style' => 'width:200px;'));
 		$table->set_header(3,get_lang('Version'), true, array ('style' => 'width:30px;'));
@@ -913,12 +913,12 @@ if ($_GET['action']=='showsearchpages')
 			$userinfo=Database::get_user_info_from_id($obj->user_id);
 			
 			//get time
-			$year 	 = substr($obj->timestamp, 0, 4);
-			$month	 = substr($obj->timestamp, 5, 2);
-			$day 	 = substr($obj->timestamp, 8, 2);
-			$hours   = substr($obj->timestamp, 11,2);
-			$minutes = substr($obj->timestamp, 14,2);
-			$seconds = substr($obj->timestamp, 17,2);			
+			$year 	 = substr($obj->dtime, 0, 4);
+			$month	 = substr($obj->dtime, 5, 2);
+			$day 	 = substr($obj->dtime, 8, 2);
+			$hours   = substr($obj->dtime, 11,2);
+			$minutes = substr($obj->dtime, 14,2);
+			$seconds = substr($obj->dtime, 17,2);			
 			
 			//get type assignment icon		
 			if($obj->assignment==1)
@@ -1027,12 +1027,12 @@ if ($_GET['action']=='links')
 				$userinfo=Database::get_user_info_from_id($obj->user_id);
 				
 				//get time
-				$year 	 = substr($obj->timestamp, 0, 4);
-				$month	 = substr($obj->timestamp, 5, 2);
-				$day 	 = substr($obj->timestamp, 8, 2);
-				$hours   = substr($obj->timestamp, 11,2);
-				$minutes = substr($obj->timestamp, 14,2);
-				$seconds = substr($obj->timestamp, 17,2);			
+				$year 	 = substr($obj->dtime, 0, 4);
+				$month	 = substr($obj->dtime, 5, 2);
+				$day 	 = substr($obj->dtime, 8, 2);
+				$hours   = substr($obj->dtime, 11,2);
+				$minutes = substr($obj->dtime, 14,2);
+				$seconds = substr($obj->dtime, 17,2);			
 				
 				//get type assignment icon		
 				if($obj->assignment==1)
@@ -1319,12 +1319,12 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 			{
 				$userinfo=Database::get_user_info_from_id($row['user_id']);
 				
-				$year = substr($row['timestamp'], 0, 4);
-				$month = substr($row['timestamp'], 5, 2);
-				$day = substr($row['timestamp'], 8, 2);
-				$hours=substr($row['timestamp'], 11,2);
-				$minutes=substr($row['timestamp'], 14,2);
-				$seconds=substr($row['timestamp'], 17,2);				
+				$year = substr($row['dtime'], 0, 4);
+				$month = substr($row['dtime'], 5, 2);
+				$day = substr($row['dtime'], 8, 2);
+				$hours=substr($row['dtime'], 11,2);
+				$minutes=substr($row['dtime'], 14,2);
+				$seconds=substr($row['dtime'], 17,2);				
 		
 				echo '<li>';
 				($counter==0) ? $oldstyle='style="visibility: hidden;"':$oldstyle='';
@@ -1385,14 +1385,14 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 			{
 				include('diff.inc.php');
 				//title
-				echo '<div id="wikititle">'.stripslashes($version_new['title']).' <font size="-2"><i>('.get_lang('DifferencesNew').'</i> <font style="background-color:#aaaaaa">'.stripslashes($version_new['timestamp']).'</font> <i>'.get_lang('DifferencesOld').'</i> <font style="background-color:#aaaaaa">'.stripslashes($version_old['timestamp']).'</font>) '.get_lang('Legend').':  <span class="diffAdded" >'.get_lang(WikiDiffAddedLine).'</span> <span class="diffDeleted" >'.get_lang(WikiDiffDeletedLine).'</span> <span class="diffMoved" >'.get_lang(WikiDiffMovedLine).'</span></font></div>'; 	
+				echo '<div id="wikititle">'.stripslashes($version_new['title']).' <font size="-2"><i>('.get_lang('DifferencesNew').'</i> <font style="background-color:#aaaaaa">'.stripslashes($version_new['dtime']).'</font> <i>'.get_lang('DifferencesOld').'</i> <font style="background-color:#aaaaaa">'.stripslashes($version_old['dtime']).'</font>) '.get_lang('Legend').':  <span class="diffAdded" >'.get_lang(WikiDiffAddedLine).'</span> <span class="diffDeleted" >'.get_lang(WikiDiffDeletedLine).'</span> <span class="diffMoved" >'.get_lang(WikiDiffMovedLine).'</span></font></div>'; 	
 			}
 			if($_POST['HistoryDifferences2'])
 			{			
 				require_once 'Text/Diff.php';
    				require_once 'Text/Diff/Renderer/inline.php';
 				//title
-				echo '<div id="wikititle">'.stripslashes($version_new['title']).' <font size="-2"><i>('.get_lang('DifferencesNew').'</i> <font style="background-color:#aaaaaa">'.stripslashes($version_new['timestamp']).'</font> <i>'.get_lang('DifferencesOld').'</i> <font style="background-color:#aaaaaa">'.stripslashes($version_old['timestamp']).'</font>) '.get_lang('Legend').':  <span class="diffAddedTex" >'.get_lang(WikiDiffAddedTex).'</span> <span class="diffDeletedTex" >'.get_lang(WikiDiffDeletedTex).'</span></font></div>'; 	
+				echo '<div id="wikititle">'.stripslashes($version_new['title']).' <font size="-2"><i>('.get_lang('DifferencesNew').'</i> <font style="background-color:#aaaaaa">'.stripslashes($version_new['dtime']).'</font> <i>'.get_lang('DifferencesOld').'</i> <font style="background-color:#aaaaaa">'.stripslashes($version_old['dtime']).'</font>) '.get_lang('Legend').':  <span class="diffAddedTex" >'.get_lang(WikiDiffAddedTex).'</span> <span class="diffDeletedTex" >'.get_lang(WikiDiffDeletedTex).'</span></font></div>'; 	
 			}			
 				
 			echo '<div class="diff"><br /><br />';	
@@ -1472,11 +1472,11 @@ if ($_GET['action']=='recentchanges')
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
 	{	
-		$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' ORDER BY timestamp DESC';		
+		$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' ORDER BY dtime DESC';		
 	}
 	else
 	{	
-		$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' AND visibility=1 ORDER BY timestamp DESC';					
+		$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' AND visibility=1 ORDER BY dtime DESC';					
 	}		
 
 	$allpages=api_sql_query($sql,__LINE__,__FILE__);
@@ -1491,12 +1491,12 @@ if ($_GET['action']=='recentchanges')
 			$userinfo=Database::get_user_info_from_id($obj->user_id);
 			
 			//get time
-			$year 	 = substr($obj->timestamp, 0, 4);
-			$month	 = substr($obj->timestamp, 5, 2);
-			$day 	 = substr($obj->timestamp, 8, 2);
-			$hours   = substr($obj->timestamp, 11,2);
-			$minutes = substr($obj->timestamp, 14,2);
-			$seconds = substr($obj->timestamp, 17,2);			
+			$year 	 = substr($obj->dtime, 0, 4);
+			$month	 = substr($obj->dtime, 5, 2);
+			$day 	 = substr($obj->dtime, 8, 2);
+			$hours   = substr($obj->dtime, 11,2);
+			$minutes = substr($obj->dtime, 14,2);
+			$seconds = substr($obj->dtime, 17,2);			
 			
 			//get type assignment icon		
 			if($obj->assignment==1)
@@ -1513,8 +1513,7 @@ if ($_GET['action']=='recentchanges')
 			}		
 		
 			$row = array ();
-			//$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.':'.$minutes.":".$seconds;
-			$row[] = $obj->timestamp; //for order the correct secuence is: year, month, day
+			$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.':'.$minutes.":".$seconds;	
 			$row[] =$ShowAssignment;
 			$row[] = '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&amp;view='.$obj->id.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
 			$row[] =$obj->version>1 ? get_lang('EditedBy') : get_lang('AddedBy');	
@@ -1524,7 +1523,7 @@ if ($_GET['action']=='recentchanges')
 	
 		$table = new SortableTableFromArrayConfig($rows,0,10,'RecentPages_table','','','DESC');
 		$table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'group_id'=>Security::remove_XSS($_GET['group_id'])));		
-		$table->set_header(0,get_lang('Date'), true, array ('style' => 'width:175px;'));		
+		$table->set_header(0,get_lang('Date'), true, array ('style' => 'width:200px;'));		
 		$table->set_header(1,get_lang('Type'), true, array ('style' => 'width:30px;'));
 		$table->set_header(2,get_lang('Title'), true);		
 		$table->set_header(3,get_lang('Actions'), true, array ('style' => 'width:80px;'));
@@ -1568,12 +1567,12 @@ if ($_GET['action']=='allpages')
 			$userinfo=Database::get_user_info_from_id($obj->user_id);
 			
 			//get time
-			$year 	 = substr($obj->timestamp, 0, 4);
-			$month	 = substr($obj->timestamp, 5, 2);
-			$day 	 = substr($obj->timestamp, 8, 2);
-			$hours   = substr($obj->timestamp, 11,2);
-			$minutes = substr($obj->timestamp, 14,2);
-			$seconds = substr($obj->timestamp, 17,2);			
+			$year 	 = substr($obj->dtime, 0, 4);
+			$month	 = substr($obj->dtime, 5, 2);
+			$day 	 = substr($obj->dtime, 8, 2);
+			$hours   = substr($obj->dtime, 11,2);
+			$minutes = substr($obj->dtime, 14,2);
+			$seconds = substr($obj->dtime, 17,2);			
 			
 			//get type assignment icon		
 			if($obj->assignment==1)
@@ -1705,7 +1704,7 @@ if ($_GET['action']=='discuss')
 		if($row['visibility_disc']==1 || api_is_allowed_to_edit() || api_is_platform_admin() || ($row['assignment']==2 && $row['visibility_disc']==0 && (api_get_user_id()==$row['user_id'])))
 	    {													
 		    echo '<div id="wikititle">';
-			echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.$row['title'].'<br/>'.'<a href="index.php?action=discuss&amp;actionpage=addlock_disc&amp;title='.$page.'">'.$addlock_disc.'</a>'.'&nbsp;&nbsp;&nbsp;<a href="index.php?action=discuss&amp;actionpage=visibility_disc&amp;title='.$page.'">'.$visibility_disc.'</a>'.'&nbsp;&nbsp;&nbsp;<a href="index.php?action=discuss&amp;actionpage=ratinglock_disc&amp;title='.$page.'">'.$ratinglock_disc.'</a>&nbsp;&nbsp;&nbsp;<a href="index.php?action=discuss&amp;actionpage=notify_disc&amp;title='.$page.'">'.$notify_disc.'</a>&nbsp;&nbsp;&nbsp;<font size="-2"><i> ('.get_lang('MostRecentVersionBy').'<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['firstname'].' '.$userinfo['lastname'].'</a> '.$row['timestamp'].$countWPost.')'.$avg_WPost_score.' </i></font>'; //TODO: read avg score
+			echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.$row['title'].'<br/>'.'<a href="index.php?action=discuss&amp;actionpage=addlock_disc&amp;title='.$page.'">'.$addlock_disc.'</a>'.'&nbsp;&nbsp;&nbsp;<a href="index.php?action=discuss&amp;actionpage=visibility_disc&amp;title='.$page.'">'.$visibility_disc.'</a>'.'&nbsp;&nbsp;&nbsp;<a href="index.php?action=discuss&amp;actionpage=ratinglock_disc&amp;title='.$page.'">'.$ratinglock_disc.'</a>&nbsp;&nbsp;&nbsp;<a href="index.php?action=discuss&amp;actionpage=notify_disc&amp;title='.$page.'">'.$notify_disc.'</a>&nbsp;&nbsp;&nbsp;<font size="-2"><i> ('.get_lang('MostRecentVersionBy').'<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['firstname'].' '.$userinfo['lastname'].'</a> '.$row['dtime'].$countWPost.')'.$avg_WPost_score.' </i></font>'; //TODO: read avg score
 			echo '</div>';
 	
 			if($row['addlock_disc']==1 || api_is_allowed_to_edit() || api_is_platform_admin()) //show comments but students can't add theirs
@@ -1861,7 +1860,7 @@ if ($_GET['action']=='discuss')
 			echo '<p><table>';
 			echo '<tr>';
 			echo '<td rowspan="2">'.$author_photo.'</td>';
-			echo '<td style=" color:#999999"><a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a> ('.$author_status.') '.$row['timestamp'].' - '.get_lang('Rating').': '.$row['p_score'].' '.$imagerating.' </td>';
+			echo '<td style=" color:#999999"><a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a> ('.$author_status.') '.$row['dtime'].' - '.get_lang('Rating').': '.$row['p_score'].' '.$imagerating.' </td>';
 			echo '</tr>';
 			echo '<tr>';
 			echo '<td>'.$row['comment'].'</td>';
@@ -2165,7 +2164,7 @@ function save_wiki()
 	$_clean['delayedsubmit']=Database::escape_string($_POST['delayedsubmit']);		
 	$_clean['version']=Database::escape_string($_POST['version'])+1;	
 	$_clean['linksto'] = links_to($_clean['content']); //and check links content	
-	
+	$dtime = date( "Y-m-d H:i:s" );
 
 	if (isset($_SESSION['_gid']))
     {
@@ -2178,11 +2177,11 @@ function save_wiki()
 
 	if ($_clean['group_id'])
 	{
-		$sql="INSERT INTO ".$tbl_wiki." (reflink, title,content,user_id, group_id, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
+		$sql="INSERT INTO ".$tbl_wiki." (reflink, title,content,user_id, dtime, group_id, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
 	}
 	else
 	{
-		$sql="INSERT INTO ".$tbl_wiki." (reflink, title,content,user_id, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
+		$sql="INSERT INTO ".$tbl_wiki." (reflink, title,content,user_id, dtime, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
 	}	
 	$result=api_sql_query($sql);	
     $Id = Database::insert_id();		
@@ -2301,14 +2300,15 @@ function save_new_wiki()
 		   return get_lang('WikiPageTitleExist').'<a href="index.php?action=edit&amp;title='.$var.'&group_id='.$group_id.'">'.$_POST['title'].'</a>'; 
 		} 
 		else 
-		{ 
+		{ 	
+			$dtime = date( "Y-m-d H:i:s" );
 			if ($_clean['group_id']) 
 		    {	 
-				$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
+				$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
 		    }
 		    else
 		    {	    
-				$sql="INSERT INTO ".$tbl_wiki." (reflink, title,content, user_id, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
+				$sql="INSERT INTO ".$tbl_wiki." (reflink, title,content, user_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
 		    }  
 			   
 		   $result=api_sql_query($sql,__LINE__,__FILE__);
@@ -3248,12 +3248,12 @@ function check_emailcue($id_or_ref, $type)
 		$email_user_author= get_lang('EditedBy').': '.$userinfo['firstname'].' '.$userinfo['lastname'];		
 		
 		//When ?		
-		$year = substr($row['timestamp'], 0, 4);
-		$month = substr($row['timestamp'], 5, 2);
-		$day = substr($row['timestamp'], 8, 2);
-		$hours=substr($row['timestamp'], 11,2);
-		$minutes=substr($row['timestamp'], 14,2);
-		$seconds=substr($row['timestamp'], 17,2);
+		$year = substr($row['dtime'], 0, 4);
+		$month = substr($row['dtime'], 5, 2);
+		$day = substr($row['dtime'], 8, 2);
+		$hours=substr($row['dtime'], 11,2);
+		$minutes=substr($row['dtime'], 14,2);
+		$seconds=substr($row['dtime'], 17,2);
 		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;		
 		
 			
@@ -3287,12 +3287,12 @@ function check_emailcue($id_or_ref, $type)
 		$email_user_author= get_lang('AddedBy').': '.$userinfo['firstname'].' '.$userinfo['lastname'];		
 		
 		//When ?		
-		$year = substr($row['timestamp'], 0, 4);
-		$month = substr($row['timestamp'], 5, 2);
-		$day = substr($row['timestamp'], 8, 2);
-		$hours=substr($row['timestamp'], 11,2);
-		$minutes=substr($row['timestamp'], 14,2);
-		$seconds=substr($row['timestamp'], 17,2);
+		$year = substr($row['dtime'], 0, 4);
+		$month = substr($row['dtime'], 5, 2);
+		$day = substr($row['dtime'], 8, 2);
+		$hours=substr($row['dtime'], 11,2);
+		$minutes=substr($row['dtime'], 14,2);
+		$seconds=substr($row['dtime'], 17,2);
 		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;
 		
 		
@@ -3323,12 +3323,12 @@ function check_emailcue($id_or_ref, $type)
 		$email_user_author= get_lang('AddedBy').': '.$userinfo['firstname'].' '.$userinfo['lastname'];		
 		
 		//When ?		
-		$year = substr($row['timestamp'], 0, 4);
-		$month = substr($row['timestamp'], 5, 2);
-		$day = substr($row['timestamp'], 8, 2);
-		$hours=substr($row['timestamp'], 11,2);
-		$minutes=substr($row['timestamp'], 14,2);
-		$seconds=substr($row['timestamp'], 17,2);
+		$year = substr($row['dtime'], 0, 4);
+		$month = substr($row['dtime'], 5, 2);
+		$day = substr($row['dtime'], 8, 2);
+		$hours=substr($row['dtime'], 11,2);
+		$minutes=substr($row['dtime'], 14,2);
+		$seconds=substr($row['dtime'], 17,2);
 		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;		
 		
 		

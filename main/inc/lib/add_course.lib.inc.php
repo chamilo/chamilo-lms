@@ -859,7 +859,7 @@ function update_Db_course($courseDbName)
 		content text NOT NULL,
 		user_id int NOT NULL default 0,
 		group_id int DEFAULT NULL,
-		timestamp timestamp(14) NOT NULL,		
+		dtime datetime NOT NULL default '0000-00-00 00:00:00',				
 		addlock int NOT NULL default 1,
 		editlock int NOT NULL default 0,
 		visibility int NOT NULL default 1,		

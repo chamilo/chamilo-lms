@@ -17,7 +17,8 @@ echo $contentPDF; //original
 $htmlbuffer=ob_get_contents();
 //// delete Output-Buffer:
 ob_end_clean();
-$pdf= new HTML2FPDF(); 
+$pdf= new HTML2FPDF();
+//$pdf->DisplayPreferences('FullScreen');
 $pdf->AddPage();
 $pdf->SetAuthor('Wiki Dokeos'); 
 $pdf->SetTitle($titlePDF); 

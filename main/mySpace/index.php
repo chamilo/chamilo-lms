@@ -803,7 +803,6 @@ function export_tracking_user_overview()
 	// the additional user defined fields (only those that were selected to be exported)
 	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 	$fields = UserManager::get_extra_fields(0,50,5,'ASC');
-	print_r($fields);
 	foreach ($_SESSION['additional_export_fields'] as $key=>$extra_field_export)
 	{
 		$csv_row[] = $fields[$extra_field_export][3];
@@ -833,11 +832,6 @@ function export_tracking_user_overview()
 			$csv_row[] = $row[0];
 			// the additional defined user fields
 			$extra_fields = get_user_overview_export_extra_fields($user[4]);
-			print_r($extra_fields);
-			foreach ($extra_fields as $key=>$value)
-			{
-				//$csv_row[] = $value;
-			}
 			foreach ($field_names_to_be_exported as $key=>$extra_field_export)
 			{
 				$csv_row[] = $extra_fields[$extra_field_export];

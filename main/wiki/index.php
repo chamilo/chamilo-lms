@@ -285,7 +285,10 @@ echo '<li><a href="index.php?cidReq='.$_course[id].'&action=allpages&group_id='.
 echo '<li><a href="index.php?cidReq='.$_course[id].'&action=recentchanges&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('recentchanges').'><img src="../img/wiki/wrecentchanges.png" title="'.get_lang('RecentChanges').'" align="absmiddle"/></a></li>';
 
 //menu delete all wiki
-echo '<li><a href="index.php?action=deletewiki&amp;title='.$page.'"'.is_active_navigation_tab('deletewiki').'"><img src="../img/wiki/wdeletewiki.png" title="'.get_lang('DeleteWiki').'" align="absmiddle"/></a></li>';
+if(api_is_allowed_to_edit() || api_is_platform_admin()) 
+{	
+		echo '<li><a href="index.php?action=deletewiki&amp;title='.$page.'"'.is_active_navigation_tab('deletewiki').'"><img src="../img/wiki/wdeletewiki.png" title="'.get_lang('DeleteWiki').'" align="absmiddle"/></a></li>';
+}
 
 //menu more
 echo '<li><a href="index.php?action=more&amp;title='.$page.'"'.is_active_navigation_tab('more').'"><img src="../img/wiki/wmore.png" title="'.get_lang('More').'" align="absmiddle"/></a></li>';
@@ -326,7 +329,10 @@ else
 echo '<li><a href="index.php?action=links&amp;title='.$page.'"'.is_active_navigation_tab('links').'"><img src="../img/wiki/wlinkspages.png" title="'.$ShowLinksPages.'" align="absmiddle"/> '.$LinksPages.'</a></li>';
 
 //menu delete wikipage
-echo '<li><a href="index.php?action=delete&amp;title='.$page.'"'.is_active_navigation_tab('delete').'"><img src="../img/wiki/wdelete.png" title="'.get_lang('DeleteThisPage').'" align="absmiddle"/> '.get_lang('Delete').'</a></li>';
+if(api_is_allowed_to_edit() || api_is_platform_admin()) 
+{
+	echo '<li><a href="index.php?action=delete&amp;title='.$page.'"'.is_active_navigation_tab('delete').'"><img src="../img/wiki/wdelete.png" title="'.get_lang('DeleteThisPage').'" align="absmiddle"/> '.get_lang('Delete').'</a></li>';
+}
 echo '</ul></div>';
 
 /*
@@ -1414,8 +1420,8 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 	        if($_POST['HistoryDifferences2'])
 			{
 					
-				$lines1 = array(stripslashes($version_old['content'])); //it may not be necessary stripslashes. TODO
-				$lines2 = array(stripslashes($version_new['content'])); //it may not be necessary stripslashes. TODO
+				$lines1 = array(strip_tags($version_old['content'])); //without <> tags
+				$lines2 = array(strip_tags($version_new['content'])); //without <> tags
 	
 				$diff = &new Text_Diff($lines1, $lines2);
 	
@@ -1988,8 +1994,8 @@ author Juan Carlos Raña Trabado
 **/
 function detect_external_link($input)
 {
-	$exlink='<a href=';
-	$exlinkStyle='<a class="wiki_link_ext" href=';	
+	$exlink='href=';
+	$exlinkStyle='class="wiki_link_ext" href=';	
 	$output=str_replace($exlink, $exlinkStyle, $input);		
 	return $output;
 }
@@ -2000,8 +2006,8 @@ author Juan Carlos Raña Trabado
 **/
 function detect_anchor_link($input)
 {
-	$anchorlink='<a href="#';
-	$anchorlinkStyle='<a class="wiki_anchor_link" href="#';	
+	$anchorlink='href="#';
+	$anchorlinkStyle='class="wiki_anchor_link" href="#';	
 	$output=str_replace($anchorlink, $anchorlinkStyle, $input);		
 	return $output;
 }
@@ -2012,8 +2018,8 @@ author Juan Carlos Raña Trabado
 **/
 function detect_mail_link($input)
 {
-	$maillink='<a href="mailto';
-	$maillinkStyle='<a class="wiki_mail_link" href="mailto';	
+	$maillink='href="mailto';
+	$maillinkStyle='class="wiki_mail_link" href="mailto';	
 	$output=str_replace($maillink, $maillinkStyle, $input);		
 	return $output;
 }
@@ -2024,8 +2030,8 @@ author Juan Carlos Raña Trabado
 **/
 function detect_ftp_link($input)
 {
-	$ftplink='<a href="ftp';
-	$ftplinkStyle='<a class="wiki_ftp_link" href="ftp';	
+	$ftplink='href="ftp';
+	$ftplinkStyle='class="wiki_ftp_link" href="ftp';	
 	$output=str_replace($ftplink, $ftplinkStyle, $input);		
 	return $output;
 }
@@ -2036,8 +2042,8 @@ author Juan Carlos Raña Trabado
 **/
 function detect_news_link($input)
 {
-	$newslink='<a href="news';
-	$newslinkStyle='<a class="wiki_news_link" href="news';	
+	$newslink='href="news';
+	$newslinkStyle='class="wiki_news_link" href="news';	
 	$output=str_replace($newslink, $newslinkStyle, $input);		
 	return $output;
 }
@@ -2048,8 +2054,8 @@ author Juan Carlos Raña Trabado
 **/
 function detect_irc_link($input)
 {
-	$irclink='<a href="irc';
-	$irclinkStyle='<a class="wiki_irc_link" href="irc';	
+	$irclink='href="irc';
+	$irclinkStyle='class="wiki_irc_link" href="irc';	
 	$output=str_replace($irclink, $irclinkStyle, $input);		
 	return $output;
 }
@@ -2484,14 +2490,14 @@ function display_wiki_entry()
 		//This hides the icon eye closed to users of work they can see yours
 		if(($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id']))==false)
 	  	{	  
-	 		$visibility_page= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HidePageExtra').'" alt="'.get_lang('HidePageExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('ShowPage').'</font>';
+	 		$visibility_page= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HidePageExtra').'" alt="'.get_lang('HidePageExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('Show').'</font>';
 	    }
 	}
 	else
 	{			  
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
 		{
-			$visibility_page= '<img src="../img/wiki/visible.gif" title="'.get_lang('ShowPageExtra').'" alt="'.get_lang('ShowPageExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('HidePage').'</font>';
+			$visibility_page= '<img src="../img/wiki/visible.gif" title="'.get_lang('ShowPageExtra').'" alt="'.get_lang('ShowPageExtra').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('Hide').'</font>';
 		}	     	
 	}		
 	
@@ -2528,7 +2534,7 @@ function display_wiki_entry()
 		
 		if (wiki_exist($title))
 		{ 			
-			echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.stripslashes($title).'<a href="index.php?action=show&amp;actionpage=addlock&amp;title='.$page.'"><br/>'.$protect_addnewpage.'</a>'.'&nbsp;&nbsp;&nbsp;<a href="index.php?action=showpage&amp;actionpage=lock&amp;title='.$page.'">'.$protect_page.'</a>'.'&nbsp;&nbsp;&nbsp;<a href="index.php?action=showpage&amp;actionpage=visibility&amp;title='.$page.'">'.$visibility_page.'</a>'.'&nbsp;&nbsp;&nbsp;<a href="index.php?action=showpage&amp;actionpage=notify&amp;title='.$page.'">'.$notify_page.'</a>'.'&nbsp;&nbsp;&nbsp;'.get_lang('Progress').': '.stripslashes($row['progress']).'%&nbsp;&nbsp;&nbsp;'.get_lang('Rating').': '.stripslashes($row['score']);			
+			echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.stripslashes($title).'<a href="index.php?action=show&amp;actionpage=addlock&amp;title='.$page.'"><br/>'.$protect_addnewpage.'</a>'.'&nbsp;&nbsp;&nbsp;<a href="index.php?action=showpage&amp;actionpage=lock&amp;title='.$page.'">'.$protect_page.'</a>'.'&nbsp;&nbsp;&nbsp;<a href="index.php?action=showpage&amp;actionpage=visibility&amp;title='.$page.'">'.$visibility_page.'</a>'.'&nbsp;&nbsp;&nbsp;<a href="index.php?action=showpage&amp;actionpage=notify&amp;title='.$page.'">'.$notify_page.'</a>'.'&nbsp;&nbsp;&nbsp;'.get_lang('Progress').': '.stripslashes($row['progress']).'%&nbsp;&nbsp;&nbsp;'.get_lang('Rating').': '.stripslashes($row['score']).'&nbsp;&nbsp;&nbsp;'.get_lang('Words').': '.word_count($content);			
 		}
 		else
 		{
@@ -2594,6 +2600,43 @@ if ($_POST['export2DOC'])
 	export2doc($titleDOC,$contentDOC,$groupIdDOC); 
 }
 
+/**
+* This function counted the words in a document. Thanks Adeel Khan
+*/
+
+function word_count($document) {
+
+	$search = array(
+	'@<script[^>]*?>.*?</script>@si',
+	'@<style[^>]*?>.*?</style>@siU',
+	'@<![\s\S]*?--[ \t\n\r]*>@'
+	);
+	
+    $document = preg_replace($search, '', $document);
+
+  	# strip all html tags
+  	$wc = strip_tags($document);
+
+  	# remove 'words' that don't consist of alphanumerical characters or punctuation
+  	$pattern = "#[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]+#";
+  	$wc = trim(preg_replace($pattern, " ", $wc));
+
+  	# remove one-letter 'words' that consist only of punctuation
+  	$wc = trim(preg_replace("#\s*[(\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]\s*#", " ", $wc));
+
+  	# remove superfluous whitespace
+  	$wc = preg_replace("/\s\s+/", " ", $wc);
+
+  	# split string into an array of words
+  	$wc = explode(" ", $wc);
+
+  	# remove empty elements
+  	$wc = array_filter($wc);
+  
+  	# return the number of words
+ 	 return count($wc);
+
+}
 
 /**
  * This function checks if wiki title exist

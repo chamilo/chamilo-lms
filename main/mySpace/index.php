@@ -808,7 +808,17 @@ function export_tracking_user_overview()
 		$csv_row[] = $fields[$extra_field_export][3];
 		$field_names_to_be_exported[] = 'extra_'.$fields[$extra_field_export][1];
 	}
-	// ...
+	$csv_row[] = get_lang('AvgTimeSpentInTheCourse');
+	$csv_row[] = get_lang('AvgStudentsProgress');
+	$csv_row[] = get_lang('AvgStudentsScore');
+	$csv_row[] = get_lang('AvgMessages');
+	$csv_row[] = get_lang('AvgAssignments');
+	$csv_row[] = get_lang('TotalExercisesScoreObtained');
+	$csv_row[] = get_lang('TotalExercisesScorePossible');
+	$csv_row[] = get_lang('TotalExercisesAnswered');
+	$csv_row[] = get_lang('TotalExercisesScorePercentage');
+	$csv_row[] = get_lang('FirstLogin');
+	$csv_row[] = get_lang('LatestLogin');
 	$csv_content[] = $csv_row;
 	
 	// the other lines (the data)

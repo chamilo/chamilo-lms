@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 16657 2008-11-04 18:06:45Z dperales $
+<?php // $Id: database.lib.php 16685 2008-11-06 16:27:42Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -97,6 +97,9 @@ define('TABLE_FORUM','forum_forum');
 define('TABLE_FORUM_THREAD','forum_thread');
 define('TABLE_FORUM_POST','forum_post');
 define('TABLE_FORUM_ATTACHMENT','forum_attachment');
+define('TABLE_FORUM_MAIL_QUEUE','forum_mailcue');
+define('TABLE_FORUM_THREAD_QUALIFY','forum_thread_qualify');
+define('TABLE_FORUM_THREAD_QUALIFY_LOG','forum_thread_qualify_log');
 //course group tables
 define('TABLE_GROUP', 'group_info');
 define('TABLE_GROUP_USER', 'group_rel_user');

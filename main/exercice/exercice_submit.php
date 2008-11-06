@@ -37,7 +37,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 16674 2008-11-05 23:19:46Z dperales $
+* 	@version $Id: exercice_submit.php 16686 2008-11-06 16:31:22Z dperales $
 */
 
 
@@ -556,7 +556,8 @@ if($limit_time_exists){
 	$time_now = convert_date_to_number(date('Y-m-d H:i:s'));
 	$permission_to_start = (($time_now - $exercise_start_time)>0)?true:false;
 	if($_SERVER['REQUEST_METHOD']!='POST')$exercise_timeover = (($time_now - $exercise_end_time)>0)?true:false;
-	if($permission_to_start == false || $exercise_timeover = true){ //
+
+	if($permission_to_start === false || $exercise_timeover == true){ //
     	if(!api_is_allowed_to_edit()){
     		$message_warning = ($permission_to_start == false)? get_lang('ExerciseNoStartedYet').' %s' : get_lang('ReachedTimeLimit') ;
 	    	Display::display_warning_message(sprintf($message_warning,(($permission_to_start == false)?$Exe_starttime:$Exe_endttime)));

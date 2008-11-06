@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 16674 2008-11-05 23:19:46Z dperales $
+* 	@version $Id: exercise.class.php 16686 2008-11-06 16:31:22Z dperales $
 */
 
 
@@ -63,6 +63,8 @@ class Exercise
 		$this->active=1;
 		$this->questionList=array();
 		$this->timeLimit = 0;
+		$this->end_time = '0000-00-00 00:00:00';
+        $this->start_time = '0000-00-00 00:00:00';
 	}
 
 	/**
@@ -115,7 +117,7 @@ class Exercise
 
 				$this->questionList[$object->question_order]=$object->question_id;
 			}
-
+			//var_dump($this->end_time,$object->start_time);
 			if($this->random > 0){
           		$this->questionList = $this->selectRandomList();
           	}
@@ -874,17 +876,16 @@ class Exercise
 		if($form -> getSubmitValue('enabletimelimit')==1)
         {
            $start_time = $form -> getSubmitValue('start_time');
-           $start_time = $start_time['Y'].'-'.$start_time['M'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00';
+           $this->start_time = $start_time['Y'].'-'.$start_time['M'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00';
            $end_time = $form -> getSubmitValue('end_time');
-           $end_time = $end_time['Y'].'-'.$end_time['M'].'-'.$end_time['d'].' '.$end_time['H'].':'.$end_time['i'].':00';
-           $this -> start_time = $start_time;
-           $this -> end_time = $end_time;
+           $this->end_time = $end_time['Y'].'-'.$end_time['M'].'-'.$end_time['d'].' '.$end_time['H'].':'.$end_time['i'].':00';
         }
           else
   		{
-           $this -> start_time = '0000-00-00 00:00:00';
-           $this -> end_time = '0000-00-00 00:00:00';
+           $this->start_time = '0000-00-00 00:00:00';
+           $this->end_time = '0000-00-00 00:00:00';
         }
+        //echo $end_time;exit;
         $this -> save();
 	}
 }

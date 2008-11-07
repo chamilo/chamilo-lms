@@ -584,10 +584,10 @@ function update_Db_course($courseDbName)
 	
 	// Forum notification
 	$sql = "CREATE TABLE  `".$TABLETOOLFORUMNOTIFICATION."` (
-			  user_id int(11),
-			  forum_id varchar(11),
-			  thread_id varchar(11),
-			  post_id varchar(11),
+			  user_id int,
+			  forum_id int,
+			  thread_id int,
+			  post_id int,
 			    KEY user_id (user_id),
   				KEY forum_id (forum_id)
 			)";
@@ -1066,7 +1066,7 @@ function update_Db_course($courseDbName)
 		dest_user_id int unsigned NOT NULL default 0,
 		feedback_date datetime NOT NULL default '0000-00-00 00:00:00',
 		feedback text default '',
-		cat_id int(11) NOT NULL default 0,
+		cat_id int NOT NULL default 0,
 		session_id SMALLINT UNSIGNED NOT NULL,
 		PRIMARY KEY (file_id,dest_user_id)
 		)", __FILE__, __LINE__);
@@ -1560,7 +1560,7 @@ function update_Db_course($courseDbName)
 			  invitation_code varchar(250) NOT NULL,
 			  invitation_date datetime NOT NULL,
 			  reminder_date datetime NOT NULL,
-			  answered int(2) NOT NULL default '0',
+			  answered int NOT NULL default '0',
 			  PRIMARY KEY  (survey_invitation_id)
 			)";
 	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
@@ -1579,8 +1579,8 @@ function update_Db_course($courseDbName)
 			  type varchar(250) NOT NULL,
 			  display varchar(10) NOT NULL,
 			  sort int NOT NULL,
-			  shared_question_id int(11),
-			  max_value int(11),
+			  shared_question_id int,
+			  max_value int,
 			  survey_group_pri int unsigned NOT NULL default '0',
 			  survey_group_sec1 int unsigned NOT NULL default '0',
 			  survey_group_sec2 int unsigned NOT NULL default '0',

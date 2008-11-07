@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006-2008 Dokeos S.A.
+	Copyright (c) 2006-2008 Dokeos SPRL
 	Copyright (c) 2006 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
@@ -16,7 +16,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, 108 rue du Corbeau, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -46,7 +46,7 @@
 $language_file = array('forum','document');
 
 // including the global dokeos file
-require ('../inc/global.inc.php');
+require '../inc/global.inc.php';
 
 // the section (tabs)
 $this_section=SECTION_COURSES;
@@ -64,8 +64,7 @@ $fck_attribute['Config']['FlashUploadPath'] = 'upload/forum/';
 $fck_attribute['Config']['InDocument'] = false;		
 $fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
 
-if(!api_is_allowed_to_edit(false,true))
-{
+if(!api_is_allowed_to_edit(false,true)) {
 	$fck_attribute['Config']['UserStatus'] = 'student';
 }
 
@@ -75,8 +74,7 @@ include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 $nameTools=get_lang('Forum');
 
 $origin = '';
-if(isset($_GET['origin']))
-{
+if(isset($_GET['origin'])) {
 	$origin =  Security::remove_XSS($_GET['origin']);
 	$origin_string = '&origin='.$origin;
 }
@@ -86,8 +84,8 @@ if(isset($_GET['origin']))
 	Including necessary files
 -----------------------------------------------------------
 */
-include('forumconfig.inc.php');
-include('forumfunction.inc.php');
+require 'forumconfig.inc.php';
+require_once 'forumfunction.inc.php';
 
 /*
 ==============================================================================
@@ -122,66 +120,50 @@ $interbreadcrumb[]=array("url" => "reply.php?forum=".Security::remove_XSS($_GET[
 	Resource Linker
 -----------------------------------------------------------
 */
-if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resources'))
-{
+if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resources')) {
 	$_SESSION['formelements']=$_POST;
 	$_SESSION['origin']=$_SERVER['REQUEST_URI'];
 	$_SESSION['breadcrumbs']=$interbreadcrumb;
 	header("Location: ../resourcelinker/resourcelinker.php");
 }
-
-
-
 /*
 -----------------------------------------------------------
 	Header
 -----------------------------------------------------------
 */
-if($origin=='learnpath')
-{
+if($origin=='learnpath') {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
-}
-else
-{
+} else {
 	// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
 	Display :: display_header('');
 	api_display_tool_title($nameTools);
 }
-//echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
-
 /*
 -----------------------------------------------------------
 	Is the user allowed here?
 -----------------------------------------------------------
 */
-// the user is not allowed here if
+// The user is not allowed here if
 // 1. the forumcategory, forum or thread is invisible (visibility==0
 // 2. the forumcategory, forum or thread is locked (locked <>0)
 // 3. if anonymous posts are not allowed
 // The only exception is the course manager
 // I have split this is several pieces for clarity.
 //if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0) OR ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)))
-if (!api_is_allowed_to_edit(false,true) AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0)))
-{
+if (!api_is_allowed_to_edit(false,true) AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0))) {
 	forum_not_allowed_here();
 }
-if (!api_is_allowed_to_edit(false,true) AND ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0))
-{
+if (!api_is_allowed_to_edit(false,true) AND ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)) {
 	forum_not_allowed_here();
 }
-if (!$_user['user_id'] AND $current_forum['allow_anonymous']==0)
-{
+if (!$_user['user_id'] AND $current_forum['allow_anonymous']==0) {
 	forum_not_allowed_here();
 }
-
-
 /*
 -----------------------------------------------------------
 	Display forms / Feedback Messages
 -----------------------------------------------------------
 */
-//handle_forum_and_forumcategories();
-
 /*
 -----------------------------------------------------------
 	Display Forum Category and the Forum information
@@ -194,8 +176,7 @@ echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"2\">"
 
 echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
 
-if (!empty ($current_forum_category['cat_title'])) 
-{
+if (!empty ($current_forum_category['cat_title'])) {
 	echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])." - </span>";
 }
 	
@@ -206,8 +187,8 @@ echo '</table>';
 
 // the form for the reply
 $values=show_add_post_form($_GET['action'], $_GET['post'], $_SESSION['formelements']); // note: this has to be cleaned first
-if (!empty($values) AND $_POST['SubmitPost'])
-{
+
+if (!empty($values) AND $_POST['SubmitPost']) {
 	store_reply($values);
 }
 
@@ -216,11 +197,6 @@ if (!empty($values) AND $_POST['SubmitPost'])
 		FOOTER
 ==============================================================================
 */
-if($origin!='learnpath')
-{
+if($origin!='learnpath') {
 	Display :: display_footer();
 }
-?>
-
-
-

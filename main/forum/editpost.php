@@ -63,7 +63,11 @@ $language_file = 'forum';
 
 // including the global dokeos file
 require ('../inc/global.inc.php');
-
+require_once('../gradebook/lib/gradebook_functions.inc.php');
+require_once('../gradebook/lib/be/gradebookitem.class.php');
+require_once('../gradebook/lib/be/evaluation.class.php');
+require_once('../gradebook/lib/be/abstractlink.class.php');
+require_once('../gradebook/lib/gradebook_functions.inc.php');
 // the section (tabs)
 $this_section=SECTION_COURSES;
 // notice for unauthorized people.
@@ -77,14 +81,11 @@ $fck_attribute['ToolbarSet'] = 'Middle';
 $fck_attribute['Config']['IMUploadPath'] = 'upload/forum/';
 $fck_attribute['Config']['FlashUploadPath'] = 'upload/forum/';
 
-$fck_attribute['Config']['InDocument'] = false;		
-$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
-
 // including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 
-if(!api_is_allowed_to_edit(false,true))
+if(!api_is_allowed_to_edit())
 {
 	$fck_attribute['Config']['UserStatus'] = 'student';
 }
@@ -161,23 +162,22 @@ api_display_tool_title($nameTools);
 // The only exception is the course manager
 // I have split this is several pieces for clarity.
 //if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0) OR ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)))
-if (!api_is_allowed_to_edit(false,true) AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0)))
+if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0)))
 {
 	forum_not_allowed_here();
 }
-if (!api_is_allowed_to_edit(false,true) AND ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0))
+if (!api_is_allowed_to_edit() AND ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0))
 {
 	forum_not_allowed_here();
 }
 if (!$_user['user_id'] AND $current_forum['allow_anonymous']==0)
 {
-	forum_not_allowed_here(false,true);
+	forum_not_allowed_here();
 }
-if (!api_is_allowed_to_edit(false,true) AND $current_forum['allow_edit']==0)
+if (!api_is_allowed_to_edit() AND $current_forum['allow_edit']==0)
 {
 	forum_not_allowed_here();
 }
-
 
 /*
 -----------------------------------------------------------
@@ -185,8 +185,6 @@ if (!api_is_allowed_to_edit(false,true) AND $current_forum['allow_edit']==0)
 -----------------------------------------------------------
 */
 echo "<table class=\"data_table\" width='100%'>\n";
-
-
 // the forum category
 echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"2\">";
 echo '<a href="viewforum.php?forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a><br />';
@@ -200,6 +198,18 @@ $values=show_edit_post_form($current_post, $current_thread, $current_forum, $_SE
 if (!empty($values) and $_POST['SubmitPost'])
 {
 	store_edit_post($values);
+	//add gradebook function
+	$option_chek=$values['thread_qualify_gradebook'];// values 1 or 0
+	//var_dump($values);
+		if($option_chek==1){
+		$id=$values['thread_id'];// last id from 
+		$title_gradebook=$values['calification_notebook_title'];
+		$value_calification=$values['numeric_calification'];
+		$description="";
+		//add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title, 0, $_POST['qualification_value'], Database::escape_string($_POST['description']), "'".date('Y-m-d H:i:s')."'", 1);
+		add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title_gradebook, 0,$value_calification,$description, "'".date('Y-m-d H:i:s')."'",api_get_session_id());
+	}
+	
 }
 
 /*

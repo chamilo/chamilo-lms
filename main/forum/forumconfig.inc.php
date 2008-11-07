@@ -14,11 +14,13 @@
 	Database Variables
 -----------------------------------------------------------
 */
-$table_categories 		= "`".$_course["dbNameGlu"]."forum_category"."`"; 
-$table_forums 			= "`".$_course["dbNameGlu"]."forum_forum"."`"; 
-$table_threads 			= "`".$_course["dbNameGlu"]."forum_thread"."`"; 
-$table_posts 			= "`".$_course["dbNameGlu"]."forum_post"."`"; 
-$table_mailcue			= "`".$_course["dbNameGlu"]."forum_mailcue"."`";
+$table_categories 		= Database :: get_course_table(TABLE_FORUM_CATEGORY);
+$table_forums 			= Database :: get_course_table(TABLE_FORUM);
+$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
+$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
+$table_mailcue			= Database :: get_course_table(TABLE_FORUM_MAIL_QUEUE);
+$table_threads_qualify  = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
+$table_threads_qualify_historical  = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
  
 $forum_table_attachment = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
 $table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -29,11 +31,12 @@ $table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
 	Constants
 -----------------------------------------------------------
 */
-define("TOOL_FORUM_CATEGORY",'forum_category');
-define("TOOL_FORUM",'forum');
-define("TOOL_FORUM_THREAD",'forum_thread');
-define("TOOL_FORUM_POST",'forum_post');
-define("TOOL_FORUM_ATTACH",'forum_attachment');
+define('TOOL_FORUM_CATEGORY','forum_category');
+define('TOOL_FORUM','forum');
+define('TOOL_FORUM_THREAD','forum_thread');
+define('TOOL_FORUM_POST','forum_post');
+define('TOOL_FORUM_ATTACH','forum_attachment');
+define('TOOL_FORUM_THREAD_QUALIFY','forum_thread_qualify');
 /*
 -----------------------------------------------------------
 	Some configuration settings 

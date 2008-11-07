@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006 Dokeos S.A.
+	Copyright (c) 2006 Dokeos SPRL
 	Copyright (c) 2006 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
@@ -16,7 +16,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -58,11 +58,6 @@
 		INIT SECTION
 ==============================================================================
 */
-	include('../inc/global.inc.php');
-	$this_section=SECTION_COURSES;
-	/* ------------	ACCESS RIGHTS ------------ */
-	// notice for unauthorized people.
-	api_protect_course_script(true);
 /*
 -----------------------------------------------------------
 	Language Initialisation
@@ -70,7 +65,12 @@
 */
 // name of the language file that needs to be included
 $language_file = 'forum';
-require ('../inc/global.inc.php');
+$this_section=SECTION_COURSES;
+require_once '../inc/global.inc.php';
+/* ------------	ACCESS RIGHTS ------------ */
+// notice for unauthorized people.
+api_protect_course_script(true);
+
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 
@@ -79,8 +79,9 @@ $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Middle';
 $fck_attribute['Config']['IMUploadPath'] = 'upload/forum/';
 $fck_attribute['Config']['FlashUploadPath'] = 'upload/forum/';
-if(!api_is_allowed_to_edit(false,true)) $fck_attribute['Config']['UserStatus'] = 'student';
-
+if (!api_is_allowed_to_edit(false,true)) {
+	$fck_attribute['Config']['UserStatus'] = 'student';
+}
 
 $nameTools=get_lang('Forum');
 ?>
@@ -104,8 +105,8 @@ $nameTools=get_lang('Forum');
 	Including necessary files
 -----------------------------------------------------------
 */
-include('forumconfig.inc.php');
-include('forumfunction.inc.php');
+require 'forumconfig.inc.php';
+require_once 'forumfunction.inc.php';
 
 
 /*
@@ -132,8 +133,7 @@ $current_forum_category=get_forumcategory_information($current_forum['forum_cate
 */
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR $current_thread['visibility']==0))
-{
+if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR $current_thread['visibility']==0)) {
 	forum_not_allowed_here();
 }
 
@@ -145,24 +145,6 @@ if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR 
 // we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
-/*
-echo "<table width='100%'>\n";
-
-// the forum category
-echo "\t<tr class=\"forum_category\">\n\t\t<td colspan=\"6\">";
-echo '<a href="index.php" '.class_visible_invisible($current_forum_category['visibility']).'>'.$current_forum_category['cat_title'].'</a><br />';
-echo '<span>'.$current_forum_category['cat_comment'].'</span>';
-echo "</td>\n";
-echo "\t</tr>\n";
-
-// the forum
-echo "\t<tr class=\"forum_header\">\n";
-echo "\t\t<td colspan=\"6\"><a href=\"viewforum.php?forum=".$current_forum['forum_id']."\" ".class_visible_invisible($current_forum['visibility']).">".$current_forum['forum_title']."</a><br />";
-echo '<span>'.$current_forum['forum_comment'].'</span>';
-echo "</td>\n";
-echo "\t</tr>\n";
-echo "</table>";
-*/
 
 $sql="SELECT * FROM $table_posts posts, $table_users users
 		WHERE posts.thread_id='".$current_thread['thread_id']."'
@@ -171,16 +153,12 @@ $sql="SELECT * FROM $table_posts posts, $table_users users
 $result=api_sql_query($sql, __FILE__, __LINE__);
 
 echo "<table width=\"100%\" cellspacing=\"5\" border=\"0\">\n";
-while ($row=mysql_fetch_array($result))
-{
+while ($row=Database::fetch_array($result)) {
 	echo "\t<tr>\n";
 	echo "\t\t<td rowspan=\"2\" class=\"forum_message_left\">";
-	if ($row['user_id']=='0')
-	{
+	if ($row['user_id']=='0') {
 		$name=$row['poster_name'];
-	}
-	else
-	{
+	} else {
 		$name=$row['firstname'].' '.$row['lastname'];
 	}
 	echo display_user_link($row['user_id'], $name).'<br />';

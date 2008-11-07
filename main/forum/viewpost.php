@@ -3,9 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006-2008 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-
+	Copyright (c) 2008 Dokeos Latinoamerica SAC
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
 
@@ -21,18 +19,12 @@
 ==============================================================================
 */
 /**
-*	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*	@Copyright Ghent University
-*	@Copyright Patrick Cool
-*
 * 	@package dokeos.forum
 */
 // name of the language file that needs to be included
 $language_file = 'forum';
-
 // including the global dokeos file
 require '../inc/global.inc.php';
-
 // the section (tabs)
 $this_section=SECTION_COURSES;
 
@@ -41,7 +33,7 @@ api_protect_course_script(true);
 
 // including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 //require_once (api_get_path(LIBRARY_PATH).'resourcelinker.lib.php');
 $nameTools=get_lang('Forum');
 
@@ -52,15 +44,17 @@ $nameTools=get_lang('Forum');
 */
 require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
-
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/jquery.js" ></script>';
+$htmlHeadXtra[] = '<script language="javascript">
+										$(document).ready(function(){ $(\'.hide-me\').slideUp() });
+									function hidecontent(content){ $(content).slideToggle(\'normal\'); } 
+									</script>';
 
 //are we in a lp ?
 $origin = '';
 if(isset($_GET['origin'])) {
 	$origin =  Security::remove_XSS($_GET['origin']);
 }
-
-
 /*
 ==============================================================================
 		MAIN DISPLAY SECTION
@@ -77,24 +71,15 @@ if(isset($_GET['origin'])) {
 $current_thread=get_thread_information($_GET['thread']); // note: this has to be validated that it is an existing thread
 $current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
 $current_forum_category=get_forumcategory_information($current_forum['forum_category']);
-
 $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
-
 /*
 -----------------------------------------------------------
 	Header and Breadcrumbs
 -----------------------------------------------------------
 */
-if (!empty($_GET['gradebook'])) {
-		$interbreadcrumb[]= array (
-			'url' => '../gradebook/index.php',
-			'name' => get_lang('Gradebook')
-		);
-}
-if ($origin=='learnpath') {
+if($origin=='learnpath') {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
 } else {
-
 	$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => $nameTools);
 	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
 	$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
@@ -137,14 +122,14 @@ if ($_GET['action']=='move' and isset($_GET['post'])) {
 	Display the action messages
 -----------------------------------------------------------
 */
-if (isset($message)) {
+if (!empty($message)) {
 	Display :: display_confirmation_message(get_lang($message));
 }
 
-if ($message<>'PostDeletedSpecial') { 
-	// in this case the first and only post of the thread is removed
+if ($message<>'PostDeletedSpecial') {// in this case the first and only post of the thread is removed
 	// this increases the number of times the thread has been viewed
 	increase_thread_view($_GET['thread']);
+
 	/*
 	-----------------------------------------------------------
 		Action Links
@@ -166,10 +151,10 @@ if ($message<>'PostDeletedSpecial') {
 			echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread&origin='.$origin.'">'.get_lang('ReplyToThread').'</a>';
 			
 			//new thread link
-			if ((api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1)) {
+			if (api_is_allowed_to_edit(false,true) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1)) {
 				if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
 					echo '&nbsp;&nbsp;'; 
-					echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'">'.Display::return_icon('forumthread_new.gif').' '.get_lang('NewTopic').'</a>';
+					echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.Display::return_icon('forumthread_new.gif').' '.get_lang('NewTopic').'</a>';
 				} else {
 					echo get_lang('ForumLocked');
 				}
@@ -178,13 +163,13 @@ if ($message<>'PostDeletedSpecial') {
 	}
 	// note: this is to prevent that some browsers display the links over the table (FF does it but Opera doesn't)
 	echo '&nbsp;';
+	
 	/*
 	-----------------------------------------------------------
 		Display Forum Category and the Forum information
 	-----------------------------------------------------------
 	*/
-
-	if (!$_SESSION['view'])	{
+	if (!$_SESSION['view']) {
 		$viewmode=$current_forum['default_view'];
 	} else {
 		$viewmode=$_SESSION['view'];
@@ -192,9 +177,9 @@ if ($message<>'PostDeletedSpecial') {
 
 	$viewmode_whitelist=array('flat', 'threaded', 'nested');
 	if (isset($_GET['view']) and in_array($_GET['view'],$viewmode_whitelist)) {
-		$viewmode=$_GET['view'];
+		$viewmode=Database::escape_string($_GET['view']);
 		$_SESSION['view']=$viewmode;
-	}
+	} 
 	if(empty($viewmode)) {
 		$viewmode = 'flat';
 	}
@@ -207,36 +192,24 @@ if ($message<>'PostDeletedSpecial') {
 	// we are getting all the information about the current forum and forum category.
 	// note pcool: I tried to use only one sql statement (and function) for this
 	// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
-	echo "<table class=\"data_table\" width='100%'>\n";
+	echo "<table class=\"data_table\" width=\"100%\">\n";
 
 	// the thread	
 	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";		
 	echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
 	
-	if($origin!='learnpath') {		
+	if($origin!='learnpath')
+	{		
 		echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title']).' - ';				
 	}
 		
-	echo prepare4display($current_forum['forum_title']).'<br />';					
+	echo prepare4display($current_forum['forum_title']).'<br />';						
 	echo "</th>\n";
 	echo "\t</tr>\n";		
 	echo '<span>'.prepare4display($current_thread['thread_comment']).'</span>';	
 	echo "</table>";
-	
-	switch ($viewmode) {
-		case 'flat':
-			include_once('viewthread_flat.inc.php');
-			break;
-		case 'threaded':
-			include_once('viewthread_threaded.inc.php');
-			break;
-		case 'nested':
-			include_once('viewthread_nested.inc.php');
-			break;
-		default:
-			include_once('viewthread_flat.inc.php');
-			break;
-	}
+		
+	include_once('viewpost.inc.php');
 } // if ($message<>'PostDeletedSpecial') // in this case the first and only post of the thread is removed
 
 /*

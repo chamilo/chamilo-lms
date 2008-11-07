@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006-2008 Dokeos S.A.
+	Copyright (c) 2006-2008 Dokeos SPRL
 	Copyright (c) 2006 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
@@ -16,7 +16,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, 108 rue du Corbeau, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -68,6 +68,13 @@ else
 	$display_post_id=$current['post_id'];
 }
 
+//are we in a lp ?
+$origin = '';
+if(isset($_GET['origin']))
+{
+    $origin =  Security::remove_XSS($_GET['origin']);
+}
+
 // --------------------------------------
 // 		Displaying the thread (structure)
 // --------------------------------------
@@ -104,7 +111,7 @@ foreach ($rows as $post)
 		{
 			$class='';
 		}
-		$thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$post['post_id']."\" $class>".prepare4display($post['post_title'])."</a></div>\n";
+		$thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$post['post_id']."&amp;origin=$origin\" $class>".prepare4display($post['post_title'])."</a></div>\n";
 		$prev_next_array[]=$post['post_id'];
 	}	
 }
@@ -131,8 +138,8 @@ $next_img = '<img src="'.api_get_path(WEB_CODE_PATH).'img/next.png"  style="vert
 $first_page_text = '<img src="'.api_get_path(WEB_CODE_PATH).'img/first.png"  style="vertical-align: middle;"/>';
 $last_page_text	 = '<img src="'.api_get_path(WEB_CODE_PATH).'img/last.png"  style="vertical-align: middle;"/>';
 
-$href_prev='"viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$prev_next_array[$prev_id].'"';
-$href_next='"viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$prev_next_array[$next_id].'"';
+$href_prev='"viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$prev_next_array[$prev_id].'&amp;origin='. $origin .'"';
+$href_next='"viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$prev_next_array[$next_id].'&amp;origin='. $origin .'"';
 
 // the last message
 if ($next_id>=$max) 
@@ -217,8 +224,8 @@ else
 {
 	$name=$rows[$display_post_id]['firstname'].' '.$rows[$display_post_id]['lastname'];
 }
-if (api_get_course_setting('allow_user_image_forum')) {echo '<br />'.display_user_image($rows[$display_post_id]['user_id'],$name,false,true).'<br />';	}
-echo display_user_link($rows[$display_post_id]['user_id'], $name).'<br />';
+if (api_get_course_setting('allow_user_image_forum')) {echo '<br />'.display_user_image($rows[$display_post_id]['user_id'],$name, $origin).'<br />';	}
+echo display_user_link($rows[$display_post_id]['user_id'], $name, $origin).'<br />';
 echo $rows[$display_post_id]['post_date'].'<br /><br />';
 // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
 // The course admin him/herself can do this off course always
@@ -233,14 +240,23 @@ if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_f
 	echo "\n";
 	echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=move&amp;post=".$rows[$display_post_id]['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>\n";
 }
+$userinf=api_get_user_info($rows[$display_post_id]['user_id']);
+	if($userinf['status']!='1')
+	{
+		if(api_is_allowed_to_edit())
+		{			
+			$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$rows[$display_post_id]['user_id'],$_GET['thread']);
+			echo "<a href=\"viewpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$rows[$display_post_id]['post_id']."&amp;user=".$rows[$display_post_id]['user_id']."&user_id=".$rows[$display_post_id]['user_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";			
+		}	
+	}
 echo '<br /><br />';
 //if (($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0) OR api_is_allowed_to_edit())
 if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true))
 {
 	if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id']))
 	{
-		echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$rows[$display_post_id]['post_id'].'&amp;action=replymessage">'.get_lang('ReplyToMessage').'</a><br />';
-		echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$rows[$display_post_id]['post_id'].'&amp;action=quote">'.get_lang('QuoteMessage').'</a><br /><br />';
+		echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$rows[$display_post_id]['post_id'].'&amp;action=replymessage&amp;origin='. $origin .'">'.get_lang('ReplyToMessage').'</a><br />';
+		echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$rows[$display_post_id]['post_id'].'&amp;action=quote&amp;origin='. $origin .'">'.get_lang('QuoteMessage').'</a><br /><br />';
 	}
 }
 else 
@@ -349,4 +365,3 @@ function _phorum_recursive_sort($rows, &$threads, $seed=0, $indent=0)
 		}
 	}
 }
-?>

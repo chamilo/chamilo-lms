@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 16409 2008-09-22 13:51:15Z elixir_inter $
+* 	@version $Id: reporting.php 16697 2008-11-07 21:47:40Z yannoo $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -147,7 +147,6 @@ Display::display_header($tool_name,'Survey');
 
 // Action handling
 SurveyUtil::handle_reporting_actions();
-
 if (!$_GET['action'] OR $_GET['action'] == 'overview')
 {
 	$myweb_survey_id = Security::remove_XSS($_GET['survey_id']);
@@ -156,6 +155,7 @@ if (!$_GET['action'] OR $_GET['action'] == 'overview')
 	echo '<b><a href="reporting.php?action=comparativereport&amp;survey_id='.$myweb_survey_id.'">'.get_lang('ComparativeReport').'</a></b><br />'.get_lang('ComparativeReportDetail').'.<br /><br />';
 	echo '<b><a href="reporting.php?action=completereport&amp;survey_id='.$myweb_survey_id.'">'.get_lang('CompleteReport').'</a></b><br />'.get_lang('CompleteReportDetail').'<br /><br />';
 }
+
 
 // Footer
 Display :: display_footer();

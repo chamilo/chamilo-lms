@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 16486 2008-10-10 13:32:05Z elixir_inter $
+* 	@version $Id: survey.lib.php 16697 2008-11-07 21:47:40Z yannoo $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -2391,7 +2391,7 @@ class SurveyUtil {
 		}
 	
 		// $_GET['action']
-		$allowed_actions = array('overview', 'questionreport', 'userreport', 'comparativereport', 'completereport');
+		$allowed_actions = array('overview', 'questionreport', 'userreport', 'comparativereport', 'completereport','deleteuserreport');
 		if (isset($_GET['action']) AND !in_array($_GET['action'], $allowed_actions))
 		{
 			$error = get_lang('ActionNotAllowed');
@@ -2490,7 +2490,41 @@ class SurveyUtil {
 		{
 			SurveyUtil::display_complete_report();
 		}
+		if ($_GET['action'] == 'deleteuserreport')
+		{	
+			SurveyUtil::delete_user_report($_GET['survey_id'],$_GET['user']);	
+			//SurveyUtil::display_user_report(); //Could work but looks a bit clunky
+		}
 	}
+	
+	/**
+	 * This function deletes the report of an user who wants to retake the survey
+	 * @param integer survey_id
+	 * @param integer user_id	 
+	 * @return void
+	 * @author Christian Fasanando Flores <christian.fasanando@dokeos.com>
+	 * @version November 2008
+	 */
+	function delete_user_report($survey_id,$user_id) {
+		$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER);
+		$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION);
+		$table_survey 				= Database :: get_course_table(TABLE_SURVEY);
+		
+		if (!empty($survey_id) && !empty($user_id)) {					
+			// delete data from survey_answer by user_id and survey_id
+			$sql = "DELETE FROM $table_survey_answer WHERE survey_id = '".(int)$survey_id."' AND user = '".(int)$user_id."'";			
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			// update field answered from survey_invitation by user_id and survey_id
+			$sql = "UPDATE $table_survey_invitation SET answered = '0' WHERE survey_code = (SELECT code FROM $table_survey WHERE survey_id = '".(int)$survey_id."') AND user = '".(int)$user_id."'";			
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+		}
+		if($result !== false) {			
+			$message = get_lang('SurveyUserAnswersHaveBeenRemovedSuccessfully').'<br />
+					<a href="reporting.php?action=userreport&survey_id='.Security::remove_XSS($survey_id).'">'.get_lang('GoBack').'</a>';	
+			Display::display_normal_message($message, false);	
+		}
+	}
+	
 	
 	/**
 	 * This function displays the user report which is basically nothing more than a one-page display of all the questions
@@ -2540,7 +2574,7 @@ class SurveyUtil {
 				$name  = $key+1;
 				$id = $person;
 			}
-			echo '<option value="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;user='.$id.'" ';
+			echo '<option value="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;user='.Security::remove_XSS($id).'" ';
 			if ($_GET['user'] == $person)
 			{
 				echo 'selected="selected"';
@@ -2548,12 +2582,12 @@ class SurveyUtil {
 			echo '>'.$name.'</option>';
 		}
 		echo '</select>';
-	
+	    
 		// step 2: displaying the survey and the answer of the selected users
 		if (isset($_GET['user']))
 		{
 			Display::display_normal_message(get_lang('AllQuestionsOnOnePage'), false);
-	
+			echo '<a href="reporting.php?action=deleteuserreport&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;user='.Security::remove_XSS($_GET['user']).'" >'.get_lang('DeleteSurveyByUser').'</a>';
 			// getting all the questions and options
 			$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.max_value, survey_question.sort, survey_question.type,
 							survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort

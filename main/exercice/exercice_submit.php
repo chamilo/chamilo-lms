@@ -37,7 +37,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 16686 2008-11-06 16:31:22Z dperales $
+* 	@version $Id: exercice_submit.php 16694 2008-11-07 16:53:10Z dperales $
 */
 
 
@@ -172,28 +172,17 @@ if($_configuration['live_exercise_tracking'] == true){
 			
 			if($_SERVER['REQUEST_METHOD']!='POST'){
 				define('QUESTION_LIST_ALREADY_LOGGED',1);
-				api_sql_query('UPDATE '.$stat_table.' SET steps_counter = steps_counter + 1'.$condition,__FILE__,__LINE__);
+				api_sql_query('UPDATE '.$stat_table.' SET steps_counter = steps_counter + 1 WHERE exe_id = '.$exe_id,__FILE__,__LINE__);
 				$recorded['questionList'] = explode(',',$getIncomplete['data_tracking']);
-	
-				//selecting all the answered question from database for
-				//building the answers array, taking care of handling "multiple answers" behavior.
+
 				$sql = api_sql_query('SELECT * FROM '.$exercice_attemp_table.' WHERE exe_id = '.$getIncomplete['exe_id'].' ORDER BY tms ASC',__FILE__,__LINE__);
 				while($row = mysql_fetch_array($sql)){
-					if(array_key_exists($row['question_id'],$recorded['exerciseResult'])){
-						if(!is_array($recorded['exerciseResult'][$row['question_id']])){
-							$last_value = $recorded['exerciseResult'][$row['question_id']];
-							$recorded['exerciseResult'][$row['question_id']] = array();
-							$recorded['exerciseResult'][$row['question_id']][$last_value] = 1;
-						}
-						$recorded['exerciseResult'][$row['question_id']][$row['answer']] = 1; 
-					} else {
-						$recorded['exerciseResult'][$row['question_id']] = $row['answer'];
-					}				
+					$recorded['exerciseResult'][$row['question_id']] = 1;
 				}
-	
 				$_SESSION['exerciseResult'] = $recorded['exerciseResult'];
 				$exerciseType = 2;
 				$questionNum = count($recorded['exerciseResult']);
+				$questionNum++;
 				//$questionNum = $questionList[$questionNum];
 				$questionList = $_SESSION['questionList'] = array_combine(range(1,count($recorded['questionList'])),$recorded['questionList']);
 			}
@@ -245,18 +234,370 @@ if($formSent)
                 //saving each question
                 if($_configuration['live_exercise_tracking'] == true && $exerciseType == 2):
 					$nro_question = $questionNum;// - 1; 
-					// for multiple answers
-					if(is_array($choice[$key])){
-						foreach ($choice[$key] as $key_array => $value){
-					 		api_sql_query('INSERT INTO '.$exercice_attemp_table.' (exe_id,user_id,question_id,answer,marks,course_code,position,tms)'.
-											' VALUES '.
-											'('."'".(int)$exe_id."','".api_get_user_id()."','".$questionList[$nro_question]."','".Database::escape_string($key_array)."','','".$_course['id']."','".$position."','".date('Y-m-d H:i:s')."'".')');
-						}
-					} else {
-						api_sql_query('INSERT INTO '.$exercice_attemp_table.' (exe_id,user_id,question_id,answer,marks,course_code,position,tms)'.
-										' VALUES '.
-										'('."'".(int)$exe_id."','".api_get_user_id()."','".$questionList[$nro_question]."','".Database::escape_string($choice[$key])."','','".$_course['id']."','".$position."','".date('Y-m-d H:i:s')."'".')');
+//START of saving and qualifying each question submitted
+//------------------------------------------------------------------------------------------
+//
+	define('ENABLED_LIVE_EXERCISE_TRACKING',1);
+	require_once 'question.class.php';
+	require_once 'answer.class.php';
+	require_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');	
+	$counter=0;
+	$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+	$table_ans 				= Database :: get_course_table(TABLE_QUIZ_ANSWER);
+	//foreach($questionList as $questionId)
+	if(true)
+	{
+		$exeId = $exe_id;
+		$questionId = $key;
+		$counter++;
+		// gets the student choice for this question
+		$choice=$exerciseResult[$questionId];
+		
+		//print_r($choice); echo "<br>";
+		
+		// creates a temporary Question object
+
+		$objQuestionTmp = Question :: read($questionId);
+
+		$questionName=$objQuestionTmp->selectTitle();
+		$questionDescription=$objQuestionTmp->selectDescription();
+		$questionWeighting=$objQuestionTmp->selectWeighting();
+		$answerType=$objQuestionTmp->selectType();
+		$quesId =$objQuestionTmp->selectId(); //added by priya saini
+
+		// destruction of the Question object
+		unset($objQuestionTmp);
+
+		// construction of the Answer object
+		$objAnswerTmp=new Answer($questionId);
+		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
+		$questionScore=0;
+		if($answerType == FREE_ANSWER)
+			$nbrAnswers = 1;
+		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
+		{
+			$answer=$objAnswerTmp->selectAnswer($answerId);
+			$answerComment=$objAnswerTmp->selectComment($answerId);
+			$answerCorrect=$objAnswerTmp->isCorrect($answerId);
+			$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
+
+			switch($answerType)
+			{
+				// for unique answer
+				case UNIQUE_ANSWER :
+										$studentChoice=($choice == $answerId)?1:0;
+
+										if($studentChoice)
+										{
+										  	$questionScore+=$answerWeighting;
+											$totalScore+=$answerWeighting;
+										}
+
+
+										break;
+				// for multiple answers
+				case MULTIPLE_ANSWER :
+
+										$studentChoice=$choice[$answerId];
+
+										if($studentChoice)
+										{
+											$questionScore+=$answerWeighting;
+											$totalScore+=$answerWeighting;
+										}
+
+										break;
+				// for fill in the blanks
+				case FILL_IN_BLANKS :
+									
+							    		// the question is encoded like this
+									    // [A] B [C] D [E] F::10,10,10@1
+									    // number 1 before the "@" means that is a switchable fill in blank question
+									    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
+									    // means that is a normal fill blank question			
+
+										// first we explode the "::"
+										$pre_array = explode('::', $answer);	
+				
+										// is switchable fill blank or not
+                                        $last = count($pre_array)-1;		
+										$is_set_switchable = explode('@', $pre_array[$last]);
+										
+										$switchable_answer_set=false;
+										if (isset($is_set_switchable[1]) && $is_set_switchable[1]==1)
+										{
+											$switchable_answer_set=true;
+										}								
+										
+                                        $answer = '';
+                                        for ($k=0; $k<$last; $k++)
+                                        {
+										  $answer .= $pre_array[$k];
+                                        }
+										
+										// splits weightings that are joined with a comma
+										$answerWeighting = explode(',',$is_set_switchable[0]);				
+
+										// we save the answer because it will be modified
+										$temp=$answer;
+
+										// TeX parsing
+										// 1. find everything between the [tex] and [/tex] tags
+										$startlocations=strpos($temp,'[tex]');
+										$endlocations=strpos($temp,'[/tex]');
+
+										if($startlocations !== false && $endlocations !== false)
+										{
+											$texstring=substr($temp,$startlocations,$endlocations-$startlocations+6);
+											// 2. replace this by {texcode}
+											$temp=str_replace($texstring,'{texcode}',$temp);
+										}
+
+										$answer='';
+										$j=0;
+										
+                                        //initialise answer tags
+										$user_tags=array();
+										$correct_tags=array();
+										$real_text=array();
+										// the loop will stop at the end of the text
+										while(1)
+										{
+											// quits the loop if there are no more blanks (detect '[')
+											if(($pos = strpos($temp,'[')) === false)
+											{
+												// adds the end of the text
+												$answer=$temp;
+												// TeX parsing - replacement of texcode tags
+												$texstring = api_parse_tex($texstring);
+												$answer=str_replace("{texcode}",$texstring,$answer);
+                                                $real_text[] = $answer;
+												break; //no more "blanks", quit the loop
+											}
+											// adds the piece of text that is before the blank 
+                                            //and ends with '[' into a general storage array
+                                            $real_text[]=substr($temp,0,$pos+1);
+											$answer.=substr($temp,0,$pos+1);
+											//take the string remaining (after the last "[" we found)
+											$temp=substr($temp,$pos+1);
+											// quit the loop if there are no more blanks, and update $pos to the position of next ']'
+											if(($pos = strpos($temp,']')) === false)
+											{
+												// adds the end of the text
+												$answer.=$temp;
+												break;
+											}
+											$choice[$j]=trim($choice[$j]);
+											$user_tags[]=stripslashes(strtolower($choice[$j]));
+											//put the contents of the [] answer tag into correct_tags[]
+                                            $correct_tags[]=strtolower(substr($temp,0,$pos));
+											$j++;
+											$temp=substr($temp,$pos+1);
+                                            //$answer .= ']';
+										}
+																			
+										$answer='';			
+										$real_correct_tags = $correct_tags;							
+										$chosen_list=array();
+
+										for($i=0;$i<count($real_correct_tags);$i++)
+										{
+											if ($i==0)
+											{
+												$answer.=$real_text[0];
+											}
+											
+											if (!$switchable_answer_set)
+											{						
+												if ($correct_tags[$i]==$user_tags[$i])
+												{
+													// gives the related weighting to the student
+													$questionScore+=$answerWeighting[$i]; 
+													// increments total score
+													$totalScore+=$answerWeighting[$i];
+													// adds the word in green at the end of the string
+													$answer.=stripslashes($correct_tags[$i]); 
+												}
+												// else if the word entered by the student IS NOT the same as the one defined by the professor											
+												elseif(!empty($user_tags[$i]))
+												{
+													// adds the word in red at the end of the string, and strikes it
+													$answer.='<font color="red"><s>'.stripslashes($user_tags[$i]).'</s></font>'; 
+												}
+												else
+												{
+													// adds a tabulation if no word has been typed by the student
+													$answer.='&nbsp;&nbsp;&nbsp;';
+												}												
+											} 
+											else
+											{ 	// switchable fill in the blanks
+												if (in_array($user_tags[$i],$correct_tags))
+												{
+													$chosen_list[]=$user_tags[$i];													
+													$correct_tags=array_diff($correct_tags,$chosen_list);
+																	
+													// gives the related weighting to the student												
+													$questionScore+=$answerWeighting[$i];
+													// increments total score
+													$totalScore+=$answerWeighting[$i];
+													// adds the word in green at the end of the string
+													$answer.=stripslashes($user_tags[$i]);
+												}													// else if the word entered by the student IS NOT the same as the one defined by the professor											
+												elseif(!empty($user_tags[$i]))
+												{
+													// adds the word in red at the end of the string, and strikes it
+													$answer.='<font color="red"><s>'.stripslashes($user_tags[$i]).'</s></font>'; 
+												}
+												else
+												{
+													// adds a tabulation if no word has been typed by the student
+													$answer.='&nbsp;&nbsp;&nbsp;';
+												}												
+											}
+											// adds the correct word, followed by ] to close the blank
+											$answer.=' / <font color="green"><b>'.$real_correct_tags[$i].'</b></font>]';
+											if ( isset( $real_text[$i+1] ) ) {
+                                                $answer.=$real_text[$i+1];
+                                            }
+										} 
+
+										break;
+				// for free answer
+				case FREE_ANSWER :
+										$studentChoice=$choice;
+
+										if($studentChoice)
+										{
+											//Score is at -1 because the question has'nt been corected
+										  	$questionScore=-1;
+											$totalScore+=0;
+										}
+
+
+										break;
+				// for matching
+				case MATCHING :
+										if($answerCorrect)
+										{
+											if($answerCorrect == $choice[$answerId])
+											{
+												$questionScore+=$answerWeighting;
+												$totalScore+=$answerWeighting;
+												$choice[$answerId]=$matching[$choice[$answerId]];
+											}
+											elseif(!$choice[$answerId])
+											{
+												$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
+											}
+											else
+											{
+												$choice[$answerId]='<font color="red"><s>'.$matching[$choice[$answerId]].'</s></font>';
+											}
+										}
+										else
+										{
+											$matching[$answerId]=$answer;
+										}
+										break;
+				// for hotspot with no order
+				case HOT_SPOT :			$studentChoice=$choice[$answerId];
+
+										if($studentChoice)
+										{
+											$questionScore+=$answerWeighting;
+											$totalScore+=$answerWeighting;
+										}
+
+										break;
+				// for hotspot with fixed order
+				case HOT_SPOT_ORDER :	$studentChoice=$choice['order'][$answerId];
+
+										if($studentChoice == $answerId)
+										{
+											$questionScore+=$answerWeighting;
+											$totalScore+=$answerWeighting;
+											$studentChoice = true;
+										}
+										else
+										{
+											$studentChoice = false;
+										}
+
+										break;
+			} // end switch Answertype
+		} // end for that loops over all answers of the current question
+
+		// destruction of Answer
+		unset($objAnswerTmp);
+
+		$i++;
+
+		$totalWeighting+=$questionWeighting;
+		//added by priya saini
+		if($_configuration['tracking_enabled'])
+		{
+			if(empty($choice)){
+				$choice = 0;
+			}
+			if ($answerType==MULTIPLE_ANSWER )
+			{				
+				if ($choice != 0)
+				{
+					$reply = array_keys($choice);
+							
+					for ($i=0;$i<sizeof($reply);$i++)
+					{
+						$ans = $reply[$i];
+						exercise_attempt($questionScore,$ans,$quesId,$exeId,$i);
 					}
+				}
+				else
+				{
+					exercise_attempt($questionScore, 0 ,$quesId,$exeId,0);
+				}
+			}
+			elseif ($answerType==MATCHING)
+			{
+				$j=sizeof($matching)+1;
+
+				for ($i=0;$i<sizeof($choice);$i++,$j++)
+				{
+					$val = $choice[$j];
+					if (preg_match_all ('#<font color="red"><s>([0-9a-z ]*)</s></font>#', $val, $arr1))
+						$val = $arr1[1][0];
+					$val=addslashes($val);
+					$val=strip_tags($val);
+					$sql = "select position from $table_ans where question_id='".Database::escape_string($questionId)."' and answer='".Database::escape_string($val)."' AND correct=0";
+					$res = api_sql_query($sql, __FILE__, __LINE__);
+					$answer = mysql_result($res,0,"position");				
+					
+					exercise_attempt($questionScore,$answer,$quesId,$exeId,$j);
+
+				}
+			}
+			elseif ($answerType==FREE_ANSWER)
+			{
+				$answer = $choice;
+				exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
+			}
+			elseif ($answerType==UNIQUE_ANSWER)
+			{
+				$sql = "select id from $table_ans where question_id='".Database::escape_string($questionId)."' and position='".Database::escape_string($choice)."'";
+				$res = api_sql_query($sql, __FILE__, __LINE__);
+				$answer = mysql_result($res,0,"id");
+				exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
+			}
+			else
+			{
+				exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
+			}
+		}
+	} // end huge foreach() block that loops over all questions
+		api_sql_query('UPDATE '.$stat_table.' SET exe_result = exe_result + '.(int)$totalScore.',exe_weighting = exe_weighting + '.(int)$totalWeighting.' WHERE exe_id = '.$exe_id,__FILE__,__LINE__);
+//END of saving and qualifying
+//------------------------------------------------------------------------------------------
+//			
 				endif;
 
                 if (isset($_POST['hotspot']))
@@ -271,13 +612,19 @@ if($formSent)
     // the script "exercise_result.php" will take the variable $exerciseResult from the session
     api_session_register('exerciseResult');
     api_session_register('exerciseResultCoordinates');
-
+//var_dump($questionList,$exerciseResult);exit;
     // if it is the last question (only for a sequential exercise)
     if($exerciseType == 1 || $questionNum >= $nbrQuestions)
     {	
         if($debug>0){echo str_repeat('&nbsp;',0).'Redirecting to exercise_result.php - Remove debug option to let this happen'."<br />\n";}
 		 // goes to the script that will show the result of the exercise
-        header("Location: exercise_result.php?exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
+        if($exerciseType == 1){
+        	header("Location: exercise_result.php?exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
+        } else {
+        	//clean incomplete
+        	api_sql_query('UPDATE '.$stat_table.' SET '."status = '', data_tracking='', exe_date = '".date('Y-m-d H:i:s')."'".' WHERE exe_id = '.$exe_id,__FILE__,__LINE__);
+        	header("Location: exercise_show.php?id=$exeId");
+        }
         exit();
     }
     if($debug>0){echo str_repeat('&nbsp;',0).'$formSent was set - end'."<br />\n";}
@@ -745,5 +1092,4 @@ else
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display::display_footer();
 } 
-//var_dump($questionList);
 ?>

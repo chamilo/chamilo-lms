@@ -514,14 +514,14 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 									if($homework['expires_on']='0000-00-00 00:00:00'){
 										$homework['expires_on']=date("Y-m-d h:i:s");		
 										$there_is_a_expire_date = true;
-										$form_folder -> addElement('checkbox', 'enableRandomExpires', null, get_lang('MakeRandomExpires'),'1');
+										$form_folder -> addElement('checkbox', 'enableRandomExpires', null, get_lang('EnableExpireDate'),'1');
 										$form_folder -> addGroup(create_group_date_select(),'expires',get_lang('Expires_At'));
 										
 									}
 									if($homework['ends_on']='0000-00-00 00:00:00'){	
 										$homework['ends_on']=date("Y-m-d h:i:s");		
 										$there_is_a_end_date = true;
-										$form_folder -> addElement('checkbox', 'enableRandomEnds', null, get_lang('MakeRandomEnd'),'1');
+										$form_folder -> addElement('checkbox', 'enableRandomEnds', null, get_lang('EnableEnd'),'1');
 										$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('Ends_At'));
 										
 									}	

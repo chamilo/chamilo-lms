@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 16657 2008-11-04 18:06:45Z dperales $
+* 	@version $Id: exercise_result.php 16694 2008-11-07 16:53:10Z dperales $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -128,7 +128,7 @@ if ( empty ( $objExercise ) ) {
 if ( empty ( $exerciseType ) ) {
     $exerciseType = $_REQUEST['exerciseType'];
 }
-$_configuration['live_exercise_tracking'] = true;
+$_configuration['live_exercise_tracking'] = false;
 if($_configuration['live_exercise_tracking']) define('ENABLED_LIVE_EXERCISE_TRACKING',1);
 
 if($_configuration['live_exercise_tracking'] == true && $exerciseType == 1){

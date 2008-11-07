@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 16674 2008-11-05 23:19:46Z dperales $
+*  	@version $Id: work.php 16694 2008-11-07 16:53:10Z dperales $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -1215,13 +1215,13 @@ if($is_special > 0):
 		define('ASSIGNMENT_EXPIRES',$time_expires);
 		
 		if($has_ended) {
-			Display :: display_error_message(get_lang('EndDateAlreadyPassed').' '.$homework['ends_on']);	
+			Display :: display_error_message(get_lang('EndDateAlreadyEnded').' '.$homework['ends_on']);	
 			display_action_links($cur_dir_path, $always_show_tool_options,true);
 		}elseif($has_expired) {
-			Display :: display_warning_message(get_lang('ExpiryDateAlreadyPassed').' '.$homework['expires_on']);	
+			Display :: display_warning_message(get_lang('ExpireDateAlreadyExpired').' '.$homework['expires_on']);	
 			display_action_links($cur_dir_path, $always_show_tool_options,$always_show_upload_form);
 		} else {
-			Display :: display_normal_message(get_lang('ExpiryDateToSendWorkIs').' '.$homework['expires_on']);
+			Display :: display_normal_message(get_lang('ExpireDateToSendWorkIs').' '.$homework['expires_on']);
 			display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form);
 		}
 	else:

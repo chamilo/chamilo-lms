@@ -1,4 +1,4 @@
-<?php // $Id: events.lib.inc.php 16657 2008-11-04 18:06:45Z dperales $
+<?php // $Id: events.lib.inc.php 16694 2008-11-07 16:53:10Z dperales $
 /* See license terms in /dokeos_license.txt */
 /**
 ============================================================================== 
@@ -520,12 +520,6 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 		$user_id = "NULL";
 	}
 	
-	if($_configuration['live_exercise_tracking']==true){
-			$sql = "UPDATE $TBL_TRACK_ATTEMPT
-			SET marks = '".$score."'
-			WHERE  exe_id = '".$exeId."' AND question_id = '".$quesId."'".' AND answer ='."'".$answer."'";
-
-	} else {	
 	$sql = "INSERT INTO $TBL_TRACK_ATTEMPT  
 			  (
 			   exe_id,
@@ -548,8 +542,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 			   '".$j."',
 			   FROM_UNIXTIME(".$reallyNow.")
 			  )";
-	}
-			  
+
 	if(defined('ENABLED_LIVE_EXERCISE_TRACKING')){
 		$TBL_RECORDING = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 		$recording_changes = 'INSERT INTO '.$TBL_RECORDING.' ' .
@@ -562,7 +555,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 		('."'$exeId','".$quesId."','$score','".date('Y-m-d H:i:s')."',''".')';
 		api_sql_query($recording_changes,__FILE__,__LINE__);
 	}		 
-			  
+	  
 	$res = @api_sql_query($sql,__FILE__,__LINE__);
 	return $res;
 }

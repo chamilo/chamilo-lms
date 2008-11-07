@@ -104,7 +104,7 @@ if ($_SESSION['_gid'] OR $_GET['group_id'])
 }
 else
 {
-	$groupfilter='group_id IS NULL';
+	$groupfilter='group_id=0';
 }
 
 Display::display_header($tool_name, 'Wiki');
@@ -2173,16 +2173,10 @@ function save_wiki()
     if (isset($_GET['group_id']))
     {
  	   	$_clean['group_id']=Database::escape_string($_GET['group_id']);
-    }		
-
-	if ($_clean['group_id'])
-	{
-		$sql="INSERT INTO ".$tbl_wiki." (reflink, title,content,user_id, dtime, group_id, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
-	}
-	else
-	{
-		$sql="INSERT INTO ".$tbl_wiki." (reflink, title,content,user_id, dtime, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
-	}	
+    }
+	
+	$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
+	
 	$result=api_sql_query($sql);	
     $Id = Database::insert_id();		
 	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id());
@@ -2302,14 +2296,8 @@ function save_new_wiki()
 		else 
 		{ 	
 			$dtime = date( "Y-m-d H:i:s" );
-			if ($_clean['group_id']) 
-		    {	 
-				$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
-		    }
-		    else
-		    {	    
-				$sql="INSERT INTO ".$tbl_wiki." (reflink, title,content, user_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
-		    }  
+			 
+			$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
 			   
 		   $result=api_sql_query($sql,__LINE__,__FILE__);
 		   $Id = Database::insert_id();	

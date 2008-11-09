@@ -1,4 +1,4 @@
-<?php // $Id: userInfo.php 15833 2008-07-21 18:57:25Z juliomontoya $
+<?php // $Id: userInfo.php 16701 2008-11-09 17:04:19Z spyroux $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -176,13 +176,13 @@ if ($allowedToEditDef)
 		$userIdViewed = strval(intval($_GET['editMainUserInfo']));
 		$displayMode = "viewMainInfoEdit";
 	}
-	elseif (!empty($_POST['submitMainUserInfo']))
+	elseif (!empty($_REQUEST['submitMainUserInfo']))
 	{	
-		if (isset ($_POST['submitMainUserInfo']))
+		if (isset ($_REQUEST['submitMainUserInfo']))
 		{
-			$userIdViewed = strval(intval($_POST['submitMainUserInfo']));
+			$userIdViewed = strval(intval($_REQUEST['submitMainUserInfo']));
 			//is teacher		
-			$promoteCourseAdmin=$_POST['promoteCourseAdmin'];			
+			$promoteCourseAdmin=$_REQUEST['promoteCourseAdmin'];			
 			$userProperties['status'] = 5; 	
 			if ($promoteCourseAdmin)
 			{
@@ -192,9 +192,9 @@ if ($allowedToEditDef)
 			// deprecated feature
 			 
 			// is coach
-			if (isset ($_POST['promoteTutor']))
+			if (isset ($_REQUEST['promoteTutor']))
 			{
-				$promoteTutor=$_POST['promoteTutor'];
+				$promoteTutor=$_REQUEST['promoteTutor'];
 				$userProperties['tutor'] = 0;
 				if ($promoteTutor)
 				{
@@ -203,9 +203,9 @@ if ($allowedToEditDef)
 			}
 			
 			// role is a string
-			if (isset ($_POST['role']))
+			if (isset ($_REQUEST['role']))
 			{
-				$role=$_POST['role'];	 
+				$role=$_REQUEST['role'];	 
 				$userProperties['role'] = $role;
 			}	  		
 				  

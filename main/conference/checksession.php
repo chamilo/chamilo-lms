@@ -1,5 +1,9 @@
 <?php
 /* See license terms in /dokeos_license.txt */
+
+/* FIX for IE cache when using https */
+session_cache_limiter("none");
+
 /**
  * This script gives information to the videoconference scripts (in OpenLaszlo)
  * to use the right URL and ports for the videoconference.

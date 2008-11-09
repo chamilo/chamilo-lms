@@ -1,5 +1,9 @@
 <?php
 /* See license terms in /dokeos_license.txt */
+
+/* FIX for IE cache when using https */
+session_cache_limiter("none");
+
 /**
 ==============================================================================
 *	This is an interface between Dokeos and Videoconference application
@@ -7,7 +11,7 @@
 ==============================================================================
 */
 /*==== DEBUG ====*/
-$debug=255;
+$debug=0;
 /*==== CONSTANTS ==== */
 define('VIDEOCONF_UPLOAD_PATH', '/videoconf');
 $presentation_extension = array('.ppt', '.odp');

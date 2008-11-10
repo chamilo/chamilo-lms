@@ -13,17 +13,14 @@
 <div id="top_corner"></div> 
 <div id="institution">
 <a href="<?php echo api_get_path(WEB_PATH);?>index.php" target="_top"><?php echo api_get_setting('siteName') ?></a>
--
 <?php
 $iurl = api_get_setting('InstitutionUrl');
-if (empty($iurl))
+$iname = api_get_setting('Institution');
+if (!empty($iname))
 {
-	echo api_get_setting('Institution');
+	echo '-&nbsp;<a href="'.$iurl.'" target="_top">'.$iname.'</a>';
 }
-else
-{
-	echo '<a href="'.$iurl.'" target="_top">'.api_get_setting('Institution').'</a>';
-}
+
 ?>
 </div>
 

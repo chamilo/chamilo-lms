@@ -119,3 +119,4 @@ UPDATE forum_notification SET thread_id=NULL WHERE thread_id='';
 ALTER TABLE forum_notification CHANGE thread_id thread_id INT NULL;
 UPDATE forum_notification SET post_id=NULL WHERE post_id='';
 ALTER TABLE forum_notification CHANGE post_id post_id INT NULL;
+ALTER TABLE quiz_answer CHANGE hotspot_coordinates hotspot_coordinates text;

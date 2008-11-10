@@ -670,7 +670,7 @@ function update_Db_course($courseDbName)
 		comment text default NULL,
 		ponderation smallint default NULL,
 		position mediumint unsigned NOT NULL default 1,
-	    hotspot_coordinates tinytext,
+	    hotspot_coordinates text,
 	    hotspot_type enum('square','circle','poly','delineation') default NULL,
 		PRIMARY KEY (id, question_id)
 		)";

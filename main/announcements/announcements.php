@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 16488 2008-10-10 14:15:54Z elixir_inter $
+<?php //$Id: announcements.php 16702 2008-11-10 13:02:30Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -520,9 +520,14 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		{
 			$id=intval($_POST['id']);
 		}
-
-		if ($submitAnnouncement)
+		
+		if($submitAnnouncement && empty($emailTitle))
 		{
+			$error_message = get_lang('TitleIsRequired');
+			$content_to_modify = $newContent;
+		}
+		else if ($submitAnnouncement)
+		{			
 			
 			if(isset($id)&&$id) // there is an Id => the announcement already exists => update mode
 			{
@@ -821,8 +826,9 @@ if($_REQUEST['publish_survey'])
 <?php
 }
 
-	}	// if $submit Announcement
 
+	}	// if $submit Announcement
+	
 
 
 
@@ -1006,6 +1012,12 @@ if (isset($message) && $message == true)
 	$display_announcement_list = true;
 	$display_form             = false;
 }
+if(!empty($error_message))
+{
+	Display::display_error_message($error_message);
+	$display_announcement_list = false;
+	$display_form             = true;
+}
 
 /*==================================================================================
 		   						DISPLAY FORM
@@ -1094,7 +1106,6 @@ if (isset($message) && $message == true)
 
 				unset($title_to_modify);
 		    	$title_to_modify = null;
-
 
 		if (!isset($announcement_to_modify) ) $announcement_to_modify ="";
 		if (!isset($content_to_modify) ) 		$content_to_modify ="";

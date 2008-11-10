@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 15932 2008-08-06 19:59:11Z yannoo $
+<?php // $Id: profile.php 16704 2008-11-10 15:36:35Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -735,8 +735,14 @@ if(!empty($warning_msg))
 $image_path = UserManager::get_user_picture_path_by_id($_user['user_id'],'web');
 $image_dir = $image_path['dir'];
 $image = $image_path['file'];
-$image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'img/unknown.jpg');
-$image_size = @getimagesize($image_file);
+$image_file = $image_dir.$image;
+if (!empty($image)) {
+    $image_path = UserManager::get_user_picture_path_by_id($_user['user_id'],'system');
+    $image_size = @getimagesize($image_path['dir'].$image_path['file']);
+} else {
+    $image_file = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
+    $image_size = @getimagesize(api_get_path(SYS_CODE_PATH).'img/unknown.jpg');
+} 
 
 $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
 	.'alt="'.$user_data['lastname'].' '.$user_data['firstname'].'" '

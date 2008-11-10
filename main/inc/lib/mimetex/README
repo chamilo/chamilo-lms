@@ -1,11 +1,10 @@
 
  --------------------------------------------------------------------------
- January 15, 2005                                              Version 1.61
+ September 6, 2008                                             Version 1.70
 
                   m i m e T e X   R e a d m e   F i l e
-   (including pre-compiled Windows binary mimetex.exe -- see NOTE below)
 
- Copyright(c) 2002-2005, John Forkosh Associates, Inc. All rights reserved.
+ Copyright(c) 2002-2008, John Forkosh Associates, Inc. All rights reserved.
  --------------------------------------------------------------------------
 
                             by: John Forkosh
@@ -13,19 +12,9 @@
 
           This file is part of mimeTeX, which is free software.
           You may redistribute and/or modify it under the terms
-          of the GNU General Public License, version 2 or later,
+          of the GNU General Public License, version 3 or later,
           as published by the Free Software Foundation. See
                    http://www.gnu.org/licenses/gpl.html
-
-	  ------------------------------------------------------------
-          NOTE for Windows users...
-	  -------------------------------------------------------------
-          This zip file contains pre-compiled binary image mimetex.exe,
-          compiled under Windows 2000 using the MinGW C compiler v3.2.3
-          (see http://www.mingw.org).  It also contains all mimetex
-          source files. The compile command from a DOS-box C> prompt was
-        gcc -static -DAA -DWINDOWS mimetex.c gifsave.c -lm -o mimetex.exe
-	  -------------------------------------------------------------
 
           MimeTeX is discussed and illustrated online at
           its homepage
@@ -102,7 +91,7 @@ III.  COMPILATION AND INSTALLATION
   Your working directory should now contain
        mimetex.zip    your gnu zipped mimeTeX distribution containing...
        README         this file (see mimetex.html for demo/tutorial)
-       LICENSE        GPL license, under which you may use mimeTeX
+       COPYING        GPL license, under which you may use mimeTeX
        mimetex.c      mimeTeX source program and all required functions
        mimetex.h      header file for mimetex.c (and for gfuntype.c)
        gfuntype.c     parses output from  gftype -i  and writes bitmap data
@@ -187,7 +176,11 @@ III.  COMPILATION AND INSTALLATION
 
 IV.  REVISION HISTORY
 ------------------------------------------------------------------------
-  11/30/04  J.Forkosh      version 1.60 (beta) released
+  A more detailed account of mimeTeX's revision history
+  is maintained at  http://www.forkosh.com/mimetexchangelog.html
+  ---
+  09/06/08  J.Forkosh      version 1.70 released.
+  11/30/04  J.Forkosh      version 1.60 released
   10/02/04  J.Forkosh      version 1.50 released on CTAN with various new
                            features and fixes, and updated documentation.
   07/18/04  J.Forkosh      version 1.40 re-released on CTAN with minor
@@ -219,9 +212,5 @@ V.  CONCLUDING REMARKS
   I hope you find mimeTeX useful.  If so, a contribution to your
   country's TeX Users Group, or to the GNU project, is suggested,
   especially if you're a company that's currently profitable.
-  
-  If you also like mimeTeX's source, I'm an independent contractor
-  incorporated in the US as John Forkosh Associates, Inc.  A resume
-  is at www.forkosh.com or email john@forkosh.com
 ========================= END-OF-FILE README ===========================
 

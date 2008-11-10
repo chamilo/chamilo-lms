@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 16023 2008-08-19 11:02:48Z pcool $
+<?php // $Id: whoisonline.php 16703 2008-11-10 15:36:25Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -234,7 +234,7 @@ function display_productions($user_id)
 
 
 // This if statement prevents users accessing the who's online feature when it has been disabled.
-if ((api_get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR (api_get_setting('showonline','users') == 'true' AND $_user['user_id']))
+if ((api_get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR ((api_get_setting('showonline','users') == 'true' OR api_get_setting('showonline','course') == 'true') AND $_user['user_id']))
 {
 	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0)
 	{

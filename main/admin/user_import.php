@@ -1,4 +1,4 @@
-<?php // $Id: user_import.php 14792 2008-04-08 20:57:53Z yannoo $
+<?php // $Id: user_import.php 16708 2008-11-10 22:14:49Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -173,7 +173,7 @@ function save_data($users)
 			$emailbody = get_lang('Dear').$user['FirstName'].' '.$user['LastName'].",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('Settings')." $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path('WEB_PATH')." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";
 			$emailheaders = 'From: '.api_get_setting('administratorName').' '.api_get_setting('administratorSurname').' <'.api_get_setting('emailAdministrator').">\n";
 			$emailheaders .= 'Reply-To: '.api_get_setting('emailAdministrator');
-			@ api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+			@api_send_mail($user['Email'], $emailsubject, $emailbody, $emailheaders);
 		}
 
 	}

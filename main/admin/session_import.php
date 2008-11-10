@@ -1,4 +1,4 @@
-<?php // $Id: session_import.php 15000 2008-04-22 02:32:46Z yannoo $
+<?php // $Id: session_import.php 16708 2008-11-10 22:14:49Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -133,7 +133,7 @@ if($_POST['formSent'])
 
 						if(mysql_affected_rows()>0 && $sendMail)
 						{
-							$emailto='"'.$firstname.' '.$lastname.'" <'.$email.'>';
+							$emailto=$firstname.' '.$lastname.' <'.$email.'>';
 							$emailsubject='['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
 							$emailbody="[NOTE:] ".get_lang('ThisIsAutomaticEmailNoReply').".\n\n".get_lang('langDear')." $firstname $lastname,\n\n".get_lang('langYouAreReg')." ". get_setting('siteName') ." ".get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') ." ". get_lang('langIs') ." ". $serverAddress ."\n\n".get_lang('YouWillSoonReceiveMailFromCoach')."\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');
 							//#287 modifiee par Stephane DEBIEVE - FOREM

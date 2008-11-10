@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 15661 2008-06-30 20:57:38Z juliomontoya $
+// $Id: inscription.php 16708 2008-11-10 22:14:49Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -305,7 +305,7 @@ if ($form->validate())
 			// Lets predefine some variables. Be sure to change the from address!
 			$firstname = $values['firstname'];
 			$lastname = $values['lastname'];
-			$emailto = "\"$firstname $lastname\" <".$values['email'].">";
+			$emailto = $firstname.' '.$lastname.' <'.$values['email'].'>';
 			$emailfromaddr = api_get_setting('emailAdministrator');
 			$emailfromname = api_get_setting('siteName');
 			$emailsubject = "[".get_setting('siteName')."] ".get_lang('YourReg')." ".get_setting('siteName');
@@ -320,7 +320,7 @@ if ($form->validate())
 			$emailheaders .= "Reply-To: ".get_setting('emailAdministrator');
 
 			// Because I predefined all of my variables, this api_send_mail() function looks nice and clean hmm?
-			@ api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+			@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
 		}
 	}
 

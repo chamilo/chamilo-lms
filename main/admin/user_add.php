@@ -1,9 +1,9 @@
-<?php // $Id: user_add.php 16479 2008-10-09 17:31:44Z yannoo $
+<?php // $Id: user_add.php 16708 2008-11-10 22:14:49Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -330,7 +330,7 @@ if( $form->validate())
 		}
 		if (!empty ($email) && $send_mail)
 		{
-			$emailto = '"'.$firstname.' '.$lastname.'" <'.$email.'>';
+			$emailto = $firstname.' '.$lastname.' <'.$email.'>';
 			$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
 			$emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
 			$emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');

@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 16673 2008-11-05 23:04:48Z yannoo $
+<?php // $Id: user_edit.php 16708 2008-11-10 22:14:49Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -392,7 +392,7 @@ if( $form->validate())
 	
 	if (!empty ($email) && $send_mail)
 	{
-		$emailto = '"'.$firstname.' '.$lastname.'" <'.$email.'>';
+		$emailto = $firstname.' '.$lastname.' <'.$email.'>';
 		$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
 		$emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
 		$emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');

@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 15801 2008-07-17 04:23:35Z yannoo $
+// $Id: add_course.php 16709 2008-11-10 22:22:28Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software

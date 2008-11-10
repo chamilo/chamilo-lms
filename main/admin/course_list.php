@@ -1,5 +1,5 @@
 <?php
-// $Id: course_list.php 15245 2008-05-08 16:53:52Z juliomontoya $
+// $Id: course_list.php 16709 2008-11-10 22:22:28Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -174,13 +174,6 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 {
 	// Get all course categories
 	$table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
-	$sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE' ORDER BY tree_pos";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
-	$categories['%'] = get_lang('All');
-	while ($cat = Database::fetch_array($res))
-	{
-		$categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
-	}
 	$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 	$interbreadcrumb[] = array ("url" => 'course_list.php', "name" => get_lang('CourseList'));
 	$tool_name = get_lang('SearchACourse');
@@ -189,7 +182,9 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	$form = new FormValidator('advanced_course_search', 'get');
 	$form->add_textfield('keyword_code', get_lang('CourseCode'), false);
 	$form->add_textfield('keyword_title', get_lang('Title'), false);
-	$form->addElement('select', 'keyword_category', get_lang('CourseFaculty'), $categories);
+	$categories = array();
+	$categories_select = $form->addElement('select', 'keyword_category', get_lang('CourseFaculty'), $categories);
+	CourseManager::select_and_sort_categories($categories_select);
 	$el = & $form->addElement('select_language', 'keyword_language', get_lang('CourseLanguage'));
 	$el->addOption(get_lang('All'), '%');
 	$form->addElement('radio', 'keyword_visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);

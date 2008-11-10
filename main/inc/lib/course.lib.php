@@ -1754,7 +1754,7 @@ class CourseManager
 				ORDER BY code";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		
-		$new_padding = $padding.str_repeat('-',3);
+		$new_padding = $padding.' - ';
 		
 		while ($cat = Database::fetch_array($res))
 		{
@@ -1763,7 +1763,7 @@ class CourseManager
 			$select_element->addOption($padding.'('.$cat['code'].') '.$cat['name'], $cat['code'], $params);
 			if($cat['auth_cat_child'])
 			{
-				CourseManager::select_and_sort_categories($select_element, $cat['code'], $category_selected_code, $new_padding);
+				CourseManager::select_and_sort_categories($select_element, $category_selected_code, $cat['code'], $new_padding);
 			}
 		}
 	}

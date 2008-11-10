@@ -2,22 +2,24 @@
 #define _TEXFONTS
 /****************************************************************************
  *
- * Copyright(c) 2002-2003, John Forkosh Associates, Inc. All rights reserved.
+ * Copyright(c) 2002-2008, John Forkosh Associates, Inc. All rights reserved.
+ *           http://www.forkosh.com   mailto: john@forkosh.com
  * --------------------------------------------------------------------------
  * This file is part of mimeTeX, which is free software. You may redistribute
  * and/or modify it under the terms of the GNU General Public License,
- * version 2 or later, as published by the Free Software Foundation.
+ * version 3 or later, as published by the Free Software Foundation.
  *      MimeTeX is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY, not even the implied warranty of MERCHANTABILITY.
  * See the GNU General Public License for specific details.
  *      By using mimeTeX, you warrant that you have read, understood and
- * agreed to these terms and conditions, and that you are at least 18 years
- * of age and possess the legal right and ability to enter into this
- * agreement and to use mimeTeX in accordance with it.
- *      Your mimeTeX distribution should contain a copy of the GNU General
- * Public License.  If not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA,
- * or point your browser to  http://www.gnu.org/licenses/gpl.html
+ * agreed to these terms and conditions, and that you possess the legal
+ * right and ability to enter into this agreement and to use mimeTeX
+ * in accordance with it.
+ *      Your mimetex.zip distribution file should contain the file COPYING,
+ * an ascii text copy of the GNU General Public License, version 3.
+ * If not, point your browser to  http://www.gnu.org/licenses/
+ * or write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330,  Boston, MA 02111-1307 USA.
  * --------------------------------------------------------------------------
  *
  * Purpose:	chardef structure data for mimetex
@@ -60,6 +62,7 @@
  *				and rsfs fonts.
  * 07/12/03	J.Forkosh	Entirely new set of fonts generated.
  * 10/21/05	J.Forkosh	Compressed fonts generated
+ * 09/06/08	J.Forkosh	mimeTeX version 1.70 released.
  *
  ***************************************************************************/
 
@@ -2347,11 +2350,19 @@ static	chardef  cmr131[] =
          12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
           {  7,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
             "\x1c\xd1\x78\x08\x06\x83\x20\x08\xa2\xf0\x0f" }  },
-      /* --- pixel bitmap for cmr131 char#51 3 --- */
+#if 0
+      /* --- *unmodified* pixel bitmap for cmr131 char#51 3 --- */
       {  51,67804,                      /* character number, location */
          12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
           {  7,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
             "\x9e\x70\x18\x0c\xe2\xc0\xc0\xe0\x71\xcc\x03" }  },
+#else
+      /* --- *modified* pixel bitmap for cmr131 char#51 3 --- */
+      {  51,67804,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbe\x70\x18\x0c\xe2\xc0\xc0\xe0\x71\xcc\x03" }  },
+#endif
       /* --- pixel bitmap for cmr131 char#52 4 --- */
       {  52,68714,                      /* character number, location */
          12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
@@ -2372,16 +2383,29 @@ static	chardef  cmr131[] =
          13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
           {  8,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
             "\x02\xfe\x82\x41\x20\x10\x10\x10\x08\x08\x08\x08\x08" }  },
-      /* --- pixel bitmap for cmr131 char#56 8 --- */
+#if 0
+      /* --- *unmodified* pixel bitmap for cmr131 char#56 8 --- */
       {  56,72414,                      /* character number, location */
          12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
           {  7,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
             "\x3c\x70\x70\xe8\xe2\xe8\xc2\xc1\xa0\x88\x03" }  },
-      /* --- pixel bitmap for cmr131 char#57 9 --- */
+      /* --- *unmodified* pixel bitmap for cmr131 char#57 9 --- */
       {  57,73300,                      /* character number, location */
          12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
           {  7,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
             "\x1c\x51\x28\x18\x14\x73\x81\x40\x50\xc4\x01" }  },
+#else
+      /* --- *modified* pixel bitmap for cmr131 char#56 8 --- */
+      {  56,72414,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3c\x71\x70\xe8\xe2\xe8\xc2\xc1\xa0\x88\x03" }  },
+      /* --- *modified* pixel bitmap for cmr131 char#57 9 --- */
+      {  57,73300,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1c\x51\x30\x18\x14\x73\x81\x40\x50\xc4\x01" }  },
+#endif
       /* --- pixel bitmap for cmr131 char#58 : --- */
       {  58,96040,                      /* character number, location */
           8, 2,    0, 2,      /* topleft row,col, and botleft row,col */
@@ -8240,11 +8264,19 @@ static	chardef  cmmi131[] =
           8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
           {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
             "\xbe\x70\x10\x0c\xc3\xfa\xff" }  },
-      /* --- pixel bitmap for cmmi131 char#51 \3 --- */
+#if 0
+      /* --- *unmodified* pixel bitmap for cmmi131 char#51 \3 --- */
       {  51,100370,                     /* character number, location */
           8, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
           {  7,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
             "\x9e\x70\x18\x0c\xe2\xc0\xc0\xe0\x71\xcc\x03" }  },
+#else
+      /* --- *modified* pixel bitmap for cmmi131 char#51 \3 --- */
+      {  51,100370,                     /* character number, location */
+          8, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbe\x70\x18\x0c\xe2\xc0\xc0\xe0\x71\xcc\x03" }  },
+#endif
       /* --- pixel bitmap for cmmi131 char#52 \4 --- */
       {  52,101285,                     /* character number, location */
           8, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
@@ -8265,16 +8297,29 @@ static	chardef  cmmi131[] =
           9, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
           {  8,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
             "\x02\xfe\x82\x41\x20\x10\x10\x10\x08\x08\x08\x08\x08" }  },
-      /* --- pixel bitmap for cmmi131 char#56 \8 --- */
+#if 0
+      /* --- *unmodified* pixel bitmap for cmmi131 char#56 \8 --- */
       {  56,105005,                     /* character number, location */
          12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
           {  7,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
             "\x3c\x70\x70\xe8\xe2\xe8\xc2\xc1\xa0\x88\x03" }  },
-      /* --- pixel bitmap for cmmi131 char#57 \9 --- */
+      /* --- *unmodified* pixel bitmap for cmmi131 char#57 \9 --- */
       {  57,105896,                     /* character number, location */
           8, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
           {  7,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
             "\x1c\x51\x28\x18\x14\x73\x81\x40\x50\xc4\x01" }  },
+#else
+      /* --- pixel bitmap for cmmi131 char#56 \8 --- */
+      {  56,105005,                     /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3c\x71\x70\xe8\xe2\xe8\xc2\xc1\xa0\x88\x03" }  },
+      /* --- pixel bitmap for cmmi131 char#57 \9 --- */
+      {  57,105896,                     /* character number, location */
+          8, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1c\x51\x30\x18\x14\x73\x81\x40\x50\xc4\x01" }  },
+#endif
       /* --- pixel bitmap for cmmi131 char#58 . --- */
       {  58,112419,                     /* character number, location */
           2, 2,    0, 2,      /* topleft row,col, and botleft row,col */
@@ -8383,13 +8428,23 @@ static	chardef  cmmi131[] =
           { 11,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
             "\xf8\x01\x03\x0c\x60\x00\x03\x18\x60\x00\x83\x18\xc4"
             "\x30\xc3\xfe\x07" }  },
-      /* --- pixel bitmap for cmmi131 char#77 M --- */
+#if 0
+      /* --- *unmodified* pixel bitmap for cmmi131 char#77 M --- */
       {  77,14488,                      /* character number, location */
          12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
           { 20,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
             "\xf8\x80\x0f\x0e\x30\xd0\xc0\x01\x0d\x1a\xd0\x80\x01"
             "\x0d\x19\x88\xc9\x80\x18\x0c\x88\xc5\x80\x38\x0c\x84"
             "\x61\xf0\x99\x1f" }  },
+#else
+      /* --- *modified* pixel bitmap for cmmi131 char#77 M --- */
+      {  77,14488,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 20,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf8\x80\x0f\x0e\x34\xd0\xa0\x01\x0d\x1a\xd0\x90\x01"
+            "\x0d\x19\x88\xc9\x80\x98\x0c\x88\xc5\x80\x38\x0c\x84"
+            "\x61\xf0\x99\x1f" }  },
+#endif
       /* --- pixel bitmap for cmmi131 char#78 N --- */
       {  78,15620,                      /* character number, location */
          12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
@@ -8525,12 +8580,21 @@ static	chardef  cmmi131[] =
           8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
           {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
             "\x38\xa3\xe8\x13\x08\x84\x3c" }  },
-      /* --- pixel bitmap for cmmi131 char#102 f --- */
+#if 0
+      /* --- *unmodified* pixel bitmap for cmmi131 char#102 f --- */
       { 102,34171,                      /* character number, location */
          13, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
           {  9,   17, 3,35, (pixbyte *) /* width,ht, fmt,pixsz,map... */
             "\x62\x71\x11\xf2\x51\x30\x43\x71\x30\xf4\x41\x40\xf2"
             "\x31\x51\x21\x62\x62" }  },
+#else
+      /* --- *modified* pixel bitmap for cmmi131 char#102 f --- */
+      { 102,34171,                      /* character number, location */
+         13, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   17, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x80\x01\x09\x04\x08\x20\xe0\x03\x02\x08\x10\x40\x00"
+            "\x01\x04\x08\x20\x80\x40\x02\x06\x00" }  },
+#endif
       /* --- pixel bitmap for cmmi131 char#103 g --- */
       { 103,35130,                      /* character number, location */
           8, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
@@ -45202,6 +45266,6000 @@ static	chardef  stmary250[] =
           2, 6,  -22, 6,      /* topleft row,col, and botleft row,col */
           {  9,   24, 3,16, (pixbyte *) /* width,ht, fmt,pixsz,map... */
             "\x11\x52\x0f\xe2\x52\x0f\x72\x52" }  },
+      /* --- trailer  --- */
+      { -99, -999,  0,0,0,0, { 0,0,0,0, (pixbyte *)"\0" }  }
+   } ;
+
+
+/* ------------------------------------------------------------------------
+font sizes 0-7 for wncyr10
+------------------------------------------------------------------------ */
+
+/* --- size=0 for .83gf ---
+ * mf '\mode=eighthre;  input wncyr10'
+ * --------------------------------------------------------------------- */
+/* --- fontdef for wncyr83 --- */
+static	chardef  wncyr83[] =
+   {
+      /* --- pixel bitmap for wncyr83 char#0 Nj --- */
+      {   0, 1901,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 11,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe7\x10\x82\x10\xfc\x27\x64\x21\x0a\xf1\x7c" }  },
+      /* --- pixel bitmap for wncyr83 char#1 Lj --- */
+      {   1, 1944,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7e\x90\x40\x02\x79\x26\x9b\x28\xe2\x7c" }  },
+      /* --- pixel bitmap for wncyr83 char#2 Dzh --- */
+      {   2, 1987,                      /* character number, location */
+          8, 0,   -2, 0,      /* topleft row,col, and botleft row,col */
+          {  8,   10, 3,17, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x23\xf5\x11\x41\x18\xf1\x41\x32" }  },
+      /* --- pixel bitmap for wncyr83 char#3 \`E --- */
+      {   3, 2028,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x4f\x94\xfe\x67\x18\x39" }  },
+      /* --- pixel bitmap for wncyr83 char#4 \=I --- */
+      {   4, 2328,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  3,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x97\x24\xe9" }  },
+      /* --- pixel bitmap for wncyr83 char#5 \=E --- */
+      {   5, 2063,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbc\x58\xfe\x79\x28\x72" }  },
+      /* --- pixel bitmap for wncyr83 char#6 Dj --- */
+      {   6, 2351,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7f\x92\x20\xc0\x87\x10\x21\x42\x7f" }  },
+      /* --- pixel bitmap for wncyr83 char#7 \'C --- */
+      {   7, 2384,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbf\x12\x81\x47\x24\x12\xdd" }  },
+      /* --- pixel bitmap for wncyr83 char#8 nj --- */
+      {   8, 3368,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1b\x0a\xfe\x8a\x7b" }  },
+      /* --- pixel bitmap for wncyr83 char#9 lj --- */
+      {   9, 3395,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3e\x14\xf4\x96\xfa" }  },
+      /* --- pixel bitmap for wncyr83 char#10 dzh --- */
+      {  10, 3422,                      /* character number, location */
+          5, 0,   -1, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5b\x29\xf5\x09" }  },
+      /* --- pixel bitmap for wncyr83 char#11 \`e --- */
+      {  11, 3449,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xaf\xff\xe9\x00" }  },
+      /* --- pixel bitmap for wncyr83 char#12 \=\i --- */
+      {  12, 2493,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  3,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x02\x30\x49\x07" }  },
+      /* --- pixel bitmap for wncyr83 char#13 \=e --- */
+      {  13, 3470,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfe\xfe\xec\x00" }  },
+      /* --- pixel bitmap for wncyr83 char#14 dj --- */
+      {  14, 2514,                      /* character number, location */
+          8, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          {  4,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf3\xe2\x2a\xf2\x48" }  },
+      /* --- pixel bitmap for wncyr83 char#15 \'c --- */
+      {  15, 2543,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x83\x9f\xc0\x23\x12\x89\xee" }  },
+      /* --- pixel bitmap for wncyr83 char#16 Yu --- */
+      {  16, 2098,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x8f\x43\x44\x24\x48\x82\x3c\x48\x82\x44\xf4\x38" }  },
+      /* --- pixel bitmap for wncyr83 char#17 Zh --- */
+      {  17, 1850,                      /* character number, location */
+          8,-1,    0,-1,      /* topleft row,col, and botleft row,col */
+          { 13,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe3\x58\x08\x11\x11\xfc\x41\x44\x84\xd0\x10\x1e\xc7" }  },
+      /* --- pixel bitmap for wncyr83 char#18 \u I --- */
+      {  18, 2147,                      /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  9,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfe\x00\x1c\x17\x26\x4a\x90\x20\x45\x86\x8e\x03" }  },
+      /* --- pixel bitmap for wncyr83 char#19 \"E --- */
+      {  19, 2419,                      /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x28\x00\x7f\x42\x62\x3e\xa2\x82\xc2\xff" }  },
+      /* --- pixel bitmap for wncyr83 char#20 (noname) --- */
+      {  20, 2194,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x47\x31\x89\x44\xa1\x60\x10" }  },
+      /* --- pixel bitmap for wncyr83 char#21 (noname) --- */
+      {  21, 2229,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  9,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x38\x50\x10\xf9\x5f\x94\x08\x0a\x1c" }  },
+      /* --- pixel bitmap for wncyr83 char#22 \Dz --- */
+      {  22, 2266,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  4,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9e\x61\x8c\x79" }  },
+      /* --- pixel bitmap for wncyr83 char#23 Ya --- */
+      {  23, 2293,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfc\x42\x42\x7c\x42\x42\x42\xe3" }  },
+      /* --- pixel bitmap for wncyr83 char#24 yu --- */
+      {  24, 3491,                      /* character number, location */
+          5, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbb\xe2\xb1\xb8\x03" }  },
+      /* --- pixel bitmap for wncyr83 char#25 zh --- */
+      {  25, 3335,                      /* character number, location */
+          5, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5d\x15\x67\xdd\x05" }  },
+      /* --- pixel bitmap for wncyr83 char#26 \u\i --- */
+      {  26, 3522,                      /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  6,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\x30\x6b\x92\x35\x03" }  },
+      /* --- pixel bitmap for wncyr83 char#27 \"e --- */
+      {  27, 2574,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xee\x87\xe8\x00" }  },
+      /* --- pixel bitmap for wncyr83 char#28 (noname) --- */
+      {  28, 3553,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  4,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xab\x66\x04" }  },
+      /* --- pixel bitmap for wncyr83 char#29 (noname) --- */
+      {  29, 3574,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  6,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x8c\xf4\x4b\x0c" }  },
+      /* --- pixel bitmap for wncyr83 char#30 \dz --- */
+      {  30, 3595,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  4,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x16\x86\x07" }  },
+      /* --- pixel bitmap for wncyr83 char#31 ya --- */
+      {  31, 3612,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5e\x39\xf5\x01" }  },
+      /* --- pixel bitmap for wncyr83 char#32 \cyddot --- */
+      {  32, 1665,                      /* character number, location */
+          9, 1,    8, 1,      /* topleft row,col, and botleft row,col */
+          {  3,    1, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05" }  },
+      /* --- pixel bitmap for wncyr83 char#33 (noname) --- */
+      {  33, 1051,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  1,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9f" }  },
+      /* --- pixel bitmap for wncyr83 char#34 (noname) --- */
+      {  34, 1676,                      /* character number, location */
+          8, 0,    5, 0,      /* topleft row,col, and botleft row,col */
+          {  3,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x6d\x01" }  },
+      /* --- pixel bitmap for wncyr83 char#35 (noname) --- */
+      {  35, 2460,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x7e\x46\x04\x7c\x84\x84\x84\x7e" }  },
+      /* --- pixel bitmap for wncyr83 char#36 (noname) --- */
+      {  36, 1695,                      /* character number, location */
+          7, 0,    6, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    1, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f" }  },
+      /* --- pixel bitmap for wncyr83 char#37 (noname) --- */
+      {  37, 1072,                      /* character number, location */
+          9, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc2\x5e\xa9\xa2\x40\x51\xa5\xd2\x10" }  },
+      /* --- pixel bitmap for wncyr83 char#38 (noname) --- */
+      {  38, 1704,                      /* character number, location */
+          8, 2,    6, 2,      /* topleft row,col, and botleft row,col */
+          {  2,    2, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06" }  },
+      /* --- pixel bitmap for wncyr83 char#39 (noname) --- */
+      {  39, 1129,                      /* character number, location */
+          8, 1,    5, 1,      /* topleft row,col, and botleft row,col */
+          {  1,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07" }  },
+      /* --- pixel bitmap for wncyr83 char#40 (noname) --- */
+      {  40, 1142,                      /* character number, location */
+          9, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          {  3,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x94\x92\x24\x89\x44" }  },
+      /* --- pixel bitmap for wncyr83 char#41 (noname) --- */
+      {  41, 1175,                      /* character number, location */
+          9, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          {  3,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x91\x48\x92\xa4\x14" }  },
+      /* --- pixel bitmap for wncyr83 char#42 (noname) --- */
+      {  42, 1208,                      /* character number, location */
+          9, 1,    4, 1,      /* topleft row,col, and botleft row,col */
+          {  3,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xba\x2e" }  },
+      /* --- pixel bitmap for wncyr83 char#43 (noname) --- */
+      {  43, 2593,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  5,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe2\x08\xe1\xa5\x7c" }  },
+      /* --- pixel bitmap for wncyr83 char#44 (noname) --- */
+      {  44, 1225,                      /* character number, location */
+          1, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          {  1,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07" }  },
+      /* --- pixel bitmap for wncyr83 char#45 (noname) --- */
+      {  45, 1238,                      /* character number, location */
+          3, 0,    2, 0,      /* topleft row,col, and botleft row,col */
+          {  3,    1, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07" }  },
+      /* --- pixel bitmap for wncyr83 char#46 (noname) --- */
+      {  46, 1247,                      /* character number, location */
+          1, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  1,    1, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x01" }  },
+      /* --- pixel bitmap for wncyr83 char#47 (noname) --- */
+      {  47, 1256,                      /* character number, location */
+          9, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          {  3,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x24\x25\x49\x4a\x02" }  },
+      /* --- pixel bitmap for wncyr83 char#48 (noname) --- */
+      {  48, 1415,                      /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x2e\xc6\x18\xa3\x03" }  },
+      /* --- pixel bitmap for wncyr83 char#49 (noname) --- */
+      {  49, 1446,                      /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  3,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9a\x24\x1d" }  },
+      /* --- pixel bitmap for wncyr83 char#50 (noname) --- */
+      {  50, 1467,                      /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  4,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x96\x88\xa4\x0f" }  },
+      /* --- pixel bitmap for wncyr83 char#51 (noname) --- */
+      {  51, 1492,                      /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x44\x21\x06\xa3\x03" }  },
+      /* --- pixel bitmap for wncyr83 char#52 (noname) --- */
+      {  52, 1517,                      /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xcc\xad\x8f\x10\x07" }  },
+      /* --- pixel bitmap for wncyr83 char#53 (noname) --- */
+      {  53, 1540,                      /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  4,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x17\x71\x98\x06" }  },
+      /* --- pixel bitmap for wncyr83 char#54 (noname) --- */
+      {  54, 1563,                      /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x4c\x84\x17\xa3\x03" }  },
+      /* --- pixel bitmap for wncyr83 char#55 (noname) --- */
+      {  55, 1588,                      /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  4,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9f\x24\x22\x02" }  },
+      /* --- pixel bitmap for wncyr83 char#56 (noname) --- */
+      {  56, 1611,                      /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x44\x29\x17\xa3\x03" }  },
+      /* --- pixel bitmap for wncyr83 char#57 (noname) --- */
+      {  57, 1640,                      /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x2e\x46\x0f\x91\x01" }  },
+      /* --- pixel bitmap for wncyr83 char#58 (noname) --- */
+      {  58, 1287,                      /* character number, location */
+          5, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  1,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x11" }  },
+      /* --- pixel bitmap for wncyr83 char#59 (noname) --- */
+      {  59, 1300,                      /* character number, location */
+          5, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          {  1,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x71" }  },
+      /* --- pixel bitmap for wncyr83 char#60 < --- */
+      {  60, 1715,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xd4\x3d\x47\x01" }  },
+      /* --- pixel bitmap for wncyr83 char#61 (noname) --- */
+      {  61, 2620,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  3,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x93\x74" }  },
+      /* --- pixel bitmap for wncyr83 char#62 > --- */
+      {  62, 1736,                      /* character number, location */
+          5, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc5\x79\x57\x00" }  },
+      /* --- pixel bitmap for wncyr83 char#63 (noname) --- */
+      {  63, 1317,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  3,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xae\x24\x40" }  },
+      /* --- pixel bitmap for wncyr83 char#64 (noname) --- */
+      {  64, 1757,                      /* character number, location */
+          8, 1,    6, 1,      /* topleft row,col, and botleft row,col */
+          {  3,    2, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3d" }  },
+      /* --- pixel bitmap for wncyr83 char#65 A --- */
+      {  65,  768,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x18\x18\x18\x24\x24\x3c\x24\xe7" }  },
+      /* --- pixel bitmap for wncyr83 char#66 B --- */
+      {  66,  799,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7f\xa1\xd0\x27\x16\x0a\x7f" }  },
+      /* --- pixel bitmap for wncyr83 char#67 Ts --- */
+      {  67,   35,                      /* character number, location */
+          8, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          { 10,   12, 3,24, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x23\x20\xf5\x11\x41\x38\x20\xf1\xa0\x81\xa1" }  },
+      /* --- pixel bitmap for wncyr83 char#68 D --- */
+      {  68,   78,                      /* character number, location */
+          8,-2,   -4,-2,      /* topleft row,col, and botleft row,col */
+          { 12,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\x03\x12\x20\x01\x12\x20\x01\x13\x30\xc1\x3f\x04"
+            "\x40\x00\x00\x24\x80" }  },
+      /* --- pixel bitmap for wncyr83 char#69 E --- */
+      {  69,  832,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7f\x42\x62\x3e\xa2\x82\xc2\xff" }  },
+      /* --- pixel bitmap for wncyr83 char#70 F --- */
+      {  70,  867,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\xe2\xa5\xa9\x87\x78" }  },
+      /* --- pixel bitmap for wncyr83 char#71 G --- */
+      {  71,  123,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7f\xa1\x50\x20\x10\x08\x0e" }  },
+      /* --- pixel bitmap for wncyr83 char#72 Kh --- */
+      {  72,  150,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x67\x24\x18\x18\x18\x34\x24\xe7" }  },
+      /* --- pixel bitmap for wncyr83 char#73 I --- */
+      {  73,  183,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  9,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc7\x85\x89\x12\x24\x48\x91\xa1\xe3" }  },
+      /* --- pixel bitmap for wncyr83 char#74 J --- */
+      {  74,  898,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  5,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\x21\x84\x50\x3a" }  },
+      /* --- pixel bitmap for wncyr83 char#75 K --- */
+      {  75,  731,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc7\x42\x22\x1e\x22\x42\xc2\xc7" }  },
+      /* --- pixel bitmap for wncyr83 char#76 L --- */
+      {  76,  226,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7e\x12\x89\x44\x32\x9d\xe6" }  },
+      /* --- pixel bitmap for wncyr83 char#77 M --- */
+      {  77,  263,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x87\x1b\x66\x98\x52\x4a\xc9\x24\xd3\xed" }  },
+      /* --- pixel bitmap for wncyr83 char#78 N --- */
+      {  78,  316,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe7\x42\x42\x7e\x42\x42\x42\xe7" }  },
+      /* --- pixel bitmap for wncyr83 char#79 O --- */
+      {  79,  923,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1c\x51\x30\x18\x0c\x8a\x38" }  },
+      /* --- pixel bitmap for wncyr83 char#80 P --- */
+      {  80,  353,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\xf5\x11\x41\x13\x23" }  },
+      /* --- pixel bitmap for wncyr83 char#81 Ch --- */
+      {  81,  390,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  9,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc7\x05\x09\x12\x44\x0e\x13\x20\xe0" }  },
+      /* --- pixel bitmap for wncyr83 char#82 R --- */
+      {  82,  958,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\xa1\x50\xe8\x13\x08\x0e" }  },
+      /* --- pixel bitmap for wncyr83 char#83 S --- */
+      {  83,  987,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbc\x18\x06\x41\x28\x72" }  },
+      /* --- pixel bitmap for wncyr83 char#84 T --- */
+      {  84,  425,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x91\x91\x10\x10\x10\x10\x7c" }  },
+      /* --- pixel bitmap for wncyr83 char#85 U --- */
+      {  85, 1018,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe7\x24\x24\x34\x18\x18\x0a\x0e" }  },
+      /* --- pixel bitmap for wncyr83 char#86 V --- */
+      {  86,  456,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\xa1\xd0\x27\x16\x0a\x7f" }  },
+      /* --- pixel bitmap for wncyr83 char#87 Shch --- */
+      {  87,  489,                      /* character number, location */
+          8, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          { 14,   12, 3,28, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x14\x13\x20\xf5\x11\x41\x31\x3c\x20\xf1\xe0\xc1"
+            "\xe1" }  },
+      /* --- pixel bitmap for wncyr83 char#88 Sh --- */
+      {  88,  546,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,    8, 3,16, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x14\x13\xf5\x11\x41\x31\x1c" }  },
+      /* --- pixel bitmap for wncyr83 char#89 Y --- */
+      {  89,  597,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 11,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\x17\x90\x80\x7c\x24\x26\x21\x09\xe9\xe7" }  },
+      /* --- pixel bitmap for wncyr83 char#90 Z --- */
+      {  90,  642,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\x11\x88\x07\x04\x06\x7f" }  },
+      /* --- pixel bitmap for wncyr83 char#91 (noname) --- */
+      {  91, 1340,                      /* character number, location */
+          9, 0,   -3, 0,      /* topleft row,col, and botleft row,col */
+          {  3,   12, 3, 8, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x0f\x91\x23" }  },
+      /* --- pixel bitmap for wncyr83 char#92 (noname) --- */
+      {  92, 1770,                      /* character number, location */
+          8, 2,    5, 2,      /* topleft row,col, and botleft row,col */
+          {  3,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x6d\x01" }  },
+      /* --- pixel bitmap for wncyr83 char#93 (noname) --- */
+      {  93, 1371,                      /* character number, location */
+          9, 0,   -3, 0,      /* topleft row,col, and botleft row,col */
+          {  3,   12, 3, 8, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\xf9\x21\x03" }  },
+      /* --- pixel bitmap for wncyr83 char#94 \Cprime --- */
+      {  94,  669,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\x81\xc0\x27\x16\x0a\x7f" }  },
+      /* --- pixel bitmap for wncyr83 char#95 \Cdprime --- */
+      {  95,  698,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x44\x10\x01\x7c\x10\x43\x08\x21\x7e" }  },
+      /* --- pixel bitmap for wncyr83 char#96 (noname) --- */
+      {  96, 1402,                      /* character number, location */
+          8, 1,    5, 1,      /* topleft row,col, and botleft row,col */
+          {  1,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07" }  },
+      /* --- pixel bitmap for wncyr83 char#97 a --- */
+      {  97, 2637,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc6\xa5\xec\x01" }  },
+      /* --- pixel bitmap for wncyr83 char#98 b --- */
+      {  98, 2658,                      /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  6,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5e\xf0\x85\x61\xe8\x01" }  },
+      /* --- pixel bitmap for wncyr83 char#99 ts --- */
+      {  99, 2858,                      /* character number, location */
+          5, 0,   -3, 0,      /* topleft row,col, and botleft row,col */
+          {  6,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9b\xa2\x28\x1f\x04\x80" }  },
+      /* --- pixel bitmap for wncyr83 char#100 d --- */
+      { 100, 2889,                      /* character number, location */
+          5,-2,   -4,-2,      /* topleft row,col, and botleft row,col */
+          { 10,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf8\xc1\x02\x0b\x24\xfc\x11\x04\x80\x80\x02\x00" }  },
+      /* --- pixel bitmap for wncyr83 char#101 e --- */
+      { 101, 2685,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xee\x87\xe8\x00" }  },
+      /* --- pixel bitmap for wncyr83 char#102 f --- */
+      { 102, 2704,                      /* character number, location */
+          8, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          {  6,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0c\x00\xfc\x6d\xd8\xfe\x00\xc0\x00" }  },
+      /* --- pixel bitmap for wncyr83 char#103 g --- */
+      { 103, 2924,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5f\x0a\x71\x00" }  },
+      /* --- pixel bitmap for wncyr83 char#104 kh --- */
+      { 104, 2943,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9b\x10\xb5\x01" }  },
+      /* --- pixel bitmap for wncyr83 char#105 i --- */
+      { 105, 2966,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  6,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xb3\x26\x59\x33" }  },
+      /* --- pixel bitmap for wncyr83 char#106 j --- */
+      { 106, 2739,                      /* character number, location */
+          9,-1,   -2,-1,      /* topleft row,col, and botleft row,col */
+          {  3,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\x60\x92\xe4\x01" }  },
+      /* --- pixel bitmap for wncyr83 char#107 k --- */
+      { 107, 3310,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x57\x19\x7d\x01" }  },
+      /* --- pixel bitmap for wncyr83 char#108 l --- */
+      { 108, 2993,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  6,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3e\x45\x55\x3e" }  },
+      /* --- pixel bitmap for wncyr83 char#109 m --- */
+      { 109, 3018,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x77\x9b\x4d\xf5\x07" }  },
+      /* --- pixel bitmap for wncyr83 char#110 n --- */
+      { 110, 3045,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5b\x39\xb5\x01" }  },
+      /* --- pixel bitmap for wncyr83 char#111 o --- */
+      { 111, 2764,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x2e\xc6\xe8\x00" }  },
+      /* --- pixel bitmap for wncyr83 char#112 p --- */
+      { 112, 3070,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5f\x29\xb5\x01" }  },
+      /* --- pixel bitmap for wncyr83 char#113 ch --- */
+      { 113, 3095,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  6,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xb3\xe4\x41\x30" }  },
+      /* --- pixel bitmap for wncyr83 char#114 r --- */
+      { 114, 2787,                      /* character number, location */
+          5, 0,   -2, 0,      /* topleft row,col, and botleft row,col */
+          {  6,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9f\x28\x8a\x9e\x70\x00" }  },
+      /* --- pixel bitmap for wncyr83 char#115 s --- */
+      { 115, 2814,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3e\x84\xe8\x00" }  },
+      /* --- pixel bitmap for wncyr83 char#116 t --- */
+      { 116, 3116,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbf\x12\xe2\x00" }  },
+      /* --- pixel bitmap for wncyr83 char#117 u --- */
+      { 117, 2833,                      /* character number, location */
+          5, 0,   -2, 0,      /* topleft row,col, and botleft row,col */
+          {  6,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xb3\xc4\x30\x0c\x71\x00" }  },
+      /* --- pixel bitmap for wncyr83 char#118 v --- */
+      { 118, 3137,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x4f\x79\xf9\x01" }  },
+      /* --- pixel bitmap for wncyr83 char#119 shch --- */
+      { 119, 3158,                      /* character number, location */
+          5, 0,   -3, 0,      /* topleft row,col, and botleft row,col */
+          {  9,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xdb\xa4\x48\x91\xf2\x0f\x10\x00\x80" }  },
+      /* --- pixel bitmap for wncyr83 char#120 sh --- */
+      { 120, 3197,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xdb\x52\x52\x52\xff" }  },
+      /* --- pixel bitmap for wncyr83 char#121 y --- */
+      { 121, 3230,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x67\x91\x4f\xf6\x07" }  },
+      /* --- pixel bitmap for wncyr83 char#122 z --- */
+      { 122, 3253,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  4,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x87\x86\x07" }  },
+      /* --- pixel bitmap for wncyr83 char#123 (noname) --- */
+      { 123, 1789,                      /* character number, location */
+          4, 0,    3, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    1, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f" }  },
+      /* --- pixel bitmap for wncyr83 char#124 (noname) --- */
+      { 124, 1798,                      /* character number, location */
+          4, 0,    3, 0,      /* topleft row,col, and botleft row,col */
+          { 12,    1, 3, 2, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0c" }  },
+      /* --- pixel bitmap for wncyr83 char#125 N0 --- */
+      { 125, 1807,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x27\x50\x40\x19\x97\x9c\x71\x4f\xc1\x04" }  },
+      /* --- pixel bitmap for wncyr83 char#126 \cprime --- */
+      { 126, 3270,                      /* character number, location */
+          5, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x47\x78\xf9\x01" }  },
+      /* --- pixel bitmap for wncyr83 char#127 \cdprime --- */
+      { 127, 3289,                      /* character number, location */
+          5, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x47\xc1\x93\x3e" }  },
+      /* --- trailer  --- */
+      { -99, -999,  0,0,0,0, { 0,0,0,0, (pixbyte *)"\0" }  }
+   } ;
+
+
+/* --- size=1 for .100gf ---
+ * mf '\mode=preview; mag=magstep(-17.87427405946994351363); input wncyr10'
+ * --------------------------------------------------------------------- */
+/* --- fontdef for wncyr100 --- */
+static	chardef  wncyr100[] =
+   {
+      /* --- pixel bitmap for wncyr100 char#0 Nj --- */
+      {   0,59858,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe7\x81\x20\x20\x08\x08\x02\xfe\x9f\x20\x28\x08\x0a"
+            "\xc2\xe7\x1f" }  },
+      /* --- pixel bitmap for wncyr100 char#1 Lj --- */
+      {   1,60810,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfe\x01\x22\x80\x08\x20\x02\x8c\x1f\x23\xc8\x08\x1a"
+            "\xc2\xc3\x1f" }  },
+      /* --- pixel bitmap for wncyr100 char#2 Dzh --- */
+      {   2,61855,                      /* character number, location */
+          9, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          {  9,   11, 3,17, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x33\xf6\x11\x51\x19\xf1\x41\x40" }  },
+      /* --- pixel bitmap for wncyr100 char#3 \`E --- */
+      {   3,62779,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3d\x86\x05\xc2\xff\xd1\x61\xa0\x61\x3c\x00" }  },
+      /* --- pixel bitmap for wncyr100 char#4 \=I --- */
+      {   4,71231,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  5,    9, 3, 8, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\xf6\x21\x25" }  },
+      /* --- pixel bitmap for wncyr100 char#5 \=E --- */
+      {   5,63696,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x78\x0d\x0b\xfc\x11\x3f\x9c\x40\xc3\x78\x00" }  },
+      /* --- pixel bitmap for wncyr100 char#6 Dj --- */
+      {   6,72375,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x45\x04\x01\x7c\x10\x62\x08\x21\x84\xfc\x01" }  },
+      /* --- pixel bitmap for wncyr100 char#7 \'C --- */
+      {   7,73706,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 11,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x89\x08\x04\xe0\x03\x11\x08\x41\x08\x42\xb8\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#8 nj --- */
+      {   8,113023,                     /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf7\x08\xe1\x9f\x90\x42\xde\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#9 lj --- */
+      {   9,113961,                     /* character number, location */
+          6, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7f\x48\x90\x33\x69\x72\x3e" }  },
+      /* --- pixel bitmap for wncyr100 char#10 dzh --- */
+      {  10,115018,                     /* character number, location */
+          6, 0,   -2, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe7\x42\x42\x42\x42\xff\x10\x10" }  },
+      /* --- pixel bitmap for wncyr100 char#11 \`e --- */
+      {  11,115930,                     /* character number, location */
+          6, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  5,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xaf\xfe\x1b\x1d" }  },
+      /* --- pixel bitmap for wncyr100 char#12 \=\i --- */
+      {  12,77286,                      /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  3,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x02\x30\x49\x3a" }  },
+      /* --- pixel bitmap for wncyr100 char#13 \=e --- */
+      {  13,116835,                     /* character number, location */
+          6, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  5,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbe\xfe\x1e\x1d" }  },
+      /* --- pixel bitmap for wncyr100 char#14 dj --- */
+      {  14,78276,                      /* character number, location */
+         10, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x86\x3f\x81\xc0\x23\x12\x08\x44\x27\x10\x84\x01" }  },
+      /* --- pixel bitmap for wncyr100 char#15 \'c --- */
+      {  15,79268,                      /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  9,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\xfe\x11\x20\xc0\x87\x10\x21\x42\x84\x9c\x03" }  },
+      /* --- pixel bitmap for wncyr100 char#16 Yu --- */
+      {  16,64812,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 16,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f\x1e\x84\x61\x84\x40\x44\x80\x7c\x80\x44\x80\x84"
+            "\x40\x84\x61\x0f\x1e" }  },
+      /* --- pixel bitmap for wncyr100 char#17 Zh --- */
+      {  17,58538,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 15,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc3\x61\x41\x10\x21\x04\xff\x81\xff\x20\x84\x14\x42"
+            "\x0f\xe1\xc3\x61" }  },
+      /* --- pixel bitmap for wncyr100 char#18 \u I --- */
+      {  18,66271,                      /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfc\x03\x00\x9f\x4f\x30\x84\x42\x24\x04\x42\x22\x14"
+            "\xc2\x20\x9f\x0f" }  },
+      /* --- pixel bitmap for wncyr100 char#19 \"E --- */
+      {  19,75080,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x28\x00\xfc\x13\x26\x4a\x94\x0f\x91\x22\x05\xfd\x03" }  },
+      /* --- pixel bitmap for wncyr100 char#20 (noname) --- */
+      {  20,67192,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f\x13\x4c\x08\x22\x48\x20\x01\x03\x0c\x30\x00" }  },
+      /* --- pixel bitmap for wncyr100 char#21 (noname) --- */
+      {  21,68302,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\x80\x10\x04\x42\x20\xff\x5f\xa0\x04\x82\x10\xf0"
+            "\x00" }  },
+      /* --- pixel bitmap for wncyr100 char#22 \Dz --- */
+      {  22,69326,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7e\x18\x0c\x1c\x08\x86\x1f" }  },
+      /* --- pixel bitmap for wncyr100 char#23 Ya --- */
+      {  23,70576,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\x13\x44\x10\x41\xf0\x21\x84\x10\x42\x8f\x03" }  },
+      /* --- pixel bitmap for wncyr100 char#24 yu --- */
+      {  24,117939,                     /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe7\xc9\x2c\xa1\x87\x32\x9f\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#25 zh --- */
+      {  25,111695,                     /* character number, location */
+          6,-1,    0,-1,      /* topleft row,col, and botleft row,col */
+          { 11,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x73\x16\x11\x7f\x4c\x36\xe2\x38\x02" }  },
+      /* --- pixel bitmap for wncyr100 char#26 \u\i --- */
+      {  26,119406,                     /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7e\x00\xe7\x62\x52\x4a\x46\xe7" }  },
+      /* --- pixel bitmap for wncyr100 char#27 \"e --- */
+      {  27,80013,                      /* character number, location */
+          6, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5e\xf8\x07\xa3\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#28 (noname) --- */
+      {  28,120311,                     /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x47\x32\x89\x82\x41\x00" }  },
+      /* --- pixel bitmap for wncyr100 char#29 (noname) --- */
+      {  29,121411,                     /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3c\x66\xff\x42\x66\x3c" }  },
+      /* --- pixel bitmap for wncyr100 char#30 \dz --- */
+      {  30,122419,                     /* character number, location */
+          6, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  4,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\xc7\x78" }  },
+      /* --- pixel bitmap for wncyr100 char#31 ya --- */
+      {  31,123659,                     /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfc\x42\x7c\x42\x42\xe3" }  },
+      /* --- pixel bitmap for wncyr100 char#32 \cyddot --- */
+      {  32,50709,                      /* character number, location */
+         10, 2,    9, 2,      /* topleft row,col, and botleft row,col */
+          {  4,    1, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09" }  },
+      /* --- pixel bitmap for wncyr100 char#33 (noname) --- */
+      {  33,32200,                      /* character number, location */
+         10, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  1,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x02" }  },
+      /* --- pixel bitmap for wncyr100 char#34 (noname) --- */
+      {  34,51552,                      /* character number, location */
+         10, 1,    6, 1,      /* topleft row,col, and botleft row,col */
+          {  4,    4, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x99\x99" }  },
+      /* --- pixel bitmap for wncyr100 char#35 (noname) --- */
+      {  35,76575,                      /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1c\xfc\xb7\x5c\x42\xf8\x20\x8c\x20\x82\x08\xf3\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#36 (noname) --- */
+      {  36,52228,                      /* character number, location */
+          9, 0,    7, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    2, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x41\x1f" }  },
+      /* --- pixel bitmap for wncyr100 char#37 (noname) --- */
+      {  37,33355,                      /* character number, location */
+         10, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\xe5\x93\x48\x12\x26\x40\x06\x25\x92\x44\x12\x29"
+            "\x18" }  },
+      /* --- pixel bitmap for wncyr100 char#38 (noname) --- */
+      {  38,52771,                      /* character number, location */
+         10, 3,    7, 3,      /* topleft row,col, and botleft row,col */
+          {  3,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x54\x00" }  },
+      /* --- pixel bitmap for wncyr100 char#39 (noname) --- */
+      {  39,33945,                      /* character number, location */
+         10, 2,    6, 2,      /* topleft row,col, and botleft row,col */
+          {  1,    4, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f" }  },
+      /* --- pixel bitmap for wncyr100 char#40 (noname) --- */
+      {  40,34489,                      /* character number, location */
+         10, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          {  4,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x48\x22\x11\x11\x21\x42\x08" }  },
+      /* --- pixel bitmap for wncyr100 char#41 (noname) --- */
+      {  41,35052,                      /* character number, location */
+         10, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          {  4,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x21\x44\x88\x88\x48\x24\x01" }  },
+      /* --- pixel bitmap for wncyr100 char#42 (noname) --- */
+      {  42,35639,                      /* character number, location */
+         10, 1,    4, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x48\xea\x79\x29\x02" }  },
+      /* --- pixel bitmap for wncyr100 char#43 (noname) --- */
+      {  43,80810,                      /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0a\x04\x04\x1f\x04\x7c\x84\x84\xc4\x7e" }  },
+      /* --- pixel bitmap for wncyr100 char#44 (noname) --- */
+      {  44,36188,                      /* character number, location */
+          1, 2,   -3, 2,      /* topleft row,col, and botleft row,col */
+          {  1,    4, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f" }  },
+      /* --- pixel bitmap for wncyr100 char#45 (noname) --- */
+      {  45,36649,                      /* character number, location */
+          4, 0,    3, 0,      /* topleft row,col, and botleft row,col */
+          {  4,    1, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f" }  },
+      /* --- pixel bitmap for wncyr100 char#46 (noname) --- */
+      {  46,37078,                      /* character number, location */
+          1, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  1,    1, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x01" }  },
+      /* --- pixel bitmap for wncyr100 char#47 (noname) --- */
+      {  47,37556,                      /* character number, location */
+         10, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          {  6,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x20\x08\x41\x08\x42\x10\x84\x20\x04\x01" }  },
+      /* --- pixel bitmap for wncyr100 char#48 (noname) --- */
+      {  48,42109,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9e\x14\x86\x61\x18\x4a\x1e" }  },
+      /* --- pixel bitmap for wncyr100 char#49 (noname) --- */
+      {  49,42837,                      /* character number, location */
+          9, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  5,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe4\x10\x42\x08\x21\x1f" }  },
+      /* --- pixel bitmap for wncyr100 char#50 (noname) --- */
+      {  50,43770,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5e\x18\x82\x10\x46\x88\x3f" }  },
+      /* --- pixel bitmap for wncyr100 char#51 (noname) --- */
+      {  51,44758,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5e\x08\x82\x1c\x18\x86\x1e" }  },
+      /* --- pixel bitmap for wncyr100 char#52 (noname) --- */
+      {  52,45634,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x30\x38\x2c\x26\x23\xff\x20\x20\xf8" }  },
+      /* --- pixel bitmap for wncyr100 char#53 (noname) --- */
+      {  53,46622,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7f\x10\x74\x23\x18\x46\x0e" }  },
+      /* --- pixel bitmap for wncyr100 char#54 (noname) --- */
+      {  54,47468,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbc\x10\x7c\x61\x18\x8a\x1c" }  },
+      /* --- pixel bitmap for wncyr100 char#55 (noname) --- */
+      {  55,48316,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x20\x08\x82\x40\x10\x08\x04" }  },
+      /* --- pixel bitmap for wncyr100 char#56 (noname) --- */
+      {  56,49190,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5e\x18\x7a\x5e\x18\x86\x1e" }  },
+      /* --- pixel bitmap for wncyr100 char#57 (noname) --- */
+      {  57,50038,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x8c\x14\x86\xa1\x0f\x42\x0f" }  },
+      /* --- pixel bitmap for wncyr100 char#58 (noname) --- */
+      {  58,38102,                      /* character number, location */
+          6, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  1,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x21" }  },
+      /* --- pixel bitmap for wncyr100 char#59 (noname) --- */
+      {  59,38735,                      /* character number, location */
+          6, 2,   -3, 2,      /* topleft row,col, and botleft row,col */
+          {  1,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe1\x01" }  },
+      /* --- pixel bitmap for wncyr100 char#60 < --- */
+      {  60,53359,                      /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x48\x92\x44\x42\x42\x02" }  },
+      /* --- pixel bitmap for wncyr100 char#61 (noname) --- */
+      {  61,81511,                      /* character number, location */
+          6, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  3,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x93\xa4\x03" }  },
+      /* --- pixel bitmap for wncyr100 char#62 > --- */
+      {  62,53876,                      /* character number, location */
+          6, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x89\x44\x92\x52\x02" }  },
+      /* --- pixel bitmap for wncyr100 char#63 (noname) --- */
+      {  63,39614,                      /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  5,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x2e\x42\x44\x08\x00\x80\x00" }  },
+      /* --- pixel bitmap for wncyr100 char#64 (noname) --- */
+      {  64,54484,                      /* character number, location */
+         10, 1,    7, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe1\xec\x01" }  },
+      /* --- pixel bitmap for wncyr100 char#65 A --- */
+      {  65,23189,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 11,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x20\x80\x02\x14\xa0\x80\x08\x7c\x20\x82\x20\x8f\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#66 B --- */
+      {  66,24525,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x11\x46\x10\x41\xfc\x11\x48\x20\xc1\xff\x01" }  },
+      /* --- pixel bitmap for wncyr100 char#67 Ts --- */
+      {  67, 1061,                      /* character number, location */
+          9, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 3,18, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x33\x20\xf6\x11\x51\x39\xb1\xb1" }  },
+      /* --- pixel bitmap for wncyr100 char#68 D --- */
+      {  68, 2037,                      /* character number, location */
+          9,-2,   -2,-2,      /* topleft row,col, and botleft row,col */
+          { 14,   11, 3,30, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x48\x20\xf4\x61\x31\x30\x52\x31\x81\x41\x5a\x41\x91"
+            "\x21\xb1" }  },
+      /* --- pixel bitmap for wncyr100 char#69 E --- */
+      {  69,25874,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x84\x89\x12\xe5\x43\xa4\x48\x41\xff\x00" }  },
+      /* --- pixel bitmap for wncyr100 char#70 F --- */
+      {  70,26895,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7c\x20\xf0\x99\x1c\x71\x32\x1f\x08\x7c\x00" }  },
+      /* --- pixel bitmap for wncyr100 char#71 G --- */
+      {  71, 3179,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  9,    9, 3,19, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\x21\x42\xf1\x21\x51\xf3\x21\x65\x41" }  },
+      /* --- pixel bitmap for wncyr100 char#72 Kh --- */
+      {  72, 4219,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 11,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xcf\x43\x04\x16\x60\x00\x02\x28\x20\x82\x31\x8f\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#73 I --- */
+      {  73, 5395,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9f\x4f\x30\x84\x42\x24\x04\x42\x22\x14\xc2\x20\x9f"
+            "\x0f" }  },
+      /* --- pixel bitmap for wncyr100 char#74 J --- */
+      {  74,27676,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3c\x04\x41\x10\x04\x45\x0e" }  },
+      /* --- pixel bitmap for wncyr100 char#75 K --- */
+      {  75,22175,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x87\x05\x09\xf1\xe1\x43\x88\x50\xe1\x87\x01" }  },
+      /* --- pixel bitmap for wncyr100 char#76 L --- */
+      {  76, 6243,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfe\x11\x21\x42\xc4\x88\x11\xa3\x43\xc3\x01" }  },
+      /* --- pixel bitmap for wncyr100 char#77 M --- */
+      {  77, 7494,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 14,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f\x3c\x03\x43\xa1\x50\x28\x14\x09\x49\x42\x92\x10"
+            "\x23\xdf\x3e" }  },
+      /* --- pixel bitmap for wncyr100 char#78 N --- */
+      {  78, 8663,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc7\x05\x09\x12\xe4\x4f\x90\x20\x41\xc7\x01" }  },
+      /* --- pixel bitmap for wncyr100 char#79 O --- */
+      {  79,28465,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x78\x18\x26\x50\x80\x01\x06\x28\x90\x61\x78\x00" }  },
+      /* --- pixel bitmap for wncyr100 char#80 P --- */
+      {  80, 9713,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    9, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\xf6\x11\x51\x13\x33" }  },
+      /* --- pixel bitmap for wncyr100 char#81 Ch --- */
+      {  81,10710,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9f\x4f\x20\x04\x42\x20\x0c\x83\x2f\x00\x02\x20\x80"
+            "\x0f" }  },
+      /* --- pixel bitmap for wncyr100 char#82 R --- */
+      {  82,29546,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7f\x82\x82\x82\x7e\x02\x02\x02\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#83 S --- */
+      {  83,30439,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x78\x0d\x0b\x0c\x10\x20\x80\x40\xc3\x78\x00" }  },
+      /* --- pixel bitmap for wncyr100 char#84 T --- */
+      {  84,11755,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    9, 3,19, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\x0f\x21\x31\x31\xf3\x41\x40\x25\x21" }  },
+      /* --- pixel bitmap for wncyr100 char#85 U --- */
+      {  85,31623,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 11,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x87\x27\x0c\x22\x90\x01\x05\x38\x80\x40\x06\x1c\x00" }  },
+      /* --- pixel bitmap for wncyr100 char#86 V --- */
+      {  86,13057,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x10\x4c\x20\xc1\xfc\x11\x48\x20\xc1\xff\x01" }  },
+      /* --- pixel bitmap for wncyr100 char#87 Shch --- */
+      {  87,14500,                      /* character number, location */
+          9, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   11, 3,26, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x24\x23\x20\xf6\x11\x51\x41\x3e\xe0\x21\xe0\x21" }  },
+      /* --- pixel bitmap for wncyr100 char#88 Sh --- */
+      {  88,15933,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,    9, 3,16, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x24\x23\xf6\x11\x51\x41\x1e" }  },
+      /* --- pixel bitmap for wncyr100 char#89 Y --- */
+      {  89,17473,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 15,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f\x78\x02\x08\x01\x84\x00\xc2\x1f\x21\x90\x10\x48"
+            "\x08\x26\xff\x79" }  },
+      /* --- pixel bitmap for wncyr100 char#90 Z --- */
+      {  90,18465,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbf\x20\x10\xe4\x01\x03\xc3\x1f" }  },
+      /* --- pixel bitmap for wncyr100 char#91 (noname) --- */
+      {  91,40253,                      /* character number, location */
+         10, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          {  3,   13, 3, 8, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x0f\xa1\x23" }  },
+      /* --- pixel bitmap for wncyr100 char#92 (noname) --- */
+      {  92,55333,                      /* character number, location */
+         10, 3,    6, 3,      /* topleft row,col, and botleft row,col */
+          {  4,    4, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x99\x99" }  },
+      /* --- pixel bitmap for wncyr100 char#93 (noname) --- */
+      {  93,40901,                      /* character number, location */
+         10, 0,   -3, 0,      /* topleft row,col, and botleft row,col */
+          {  3,   13, 3, 8, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\xfa\x21\x03" }  },
+      /* --- pixel bitmap for wncyr100 char#94 \Cprime --- */
+      {  94,19751,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f\x10\x40\x00\x01\xfc\x11\x48\x20\xc1\xff\x01" }  },
+      /* --- pixel bitmap for wncyr100 char#95 \Cdprime --- */
+      {  95,21205,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 13,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7f\x60\x04\x84\x80\x10\x00\xfe\x40\x20\x08\x04\xc1"
+            "\xf8\x0f" }  },
+      /* --- pixel bitmap for wncyr100 char#96 (noname) --- */
+      {  96,41469,                      /* character number, location */
+         10, 2,    6, 2,      /* topleft row,col, and botleft row,col */
+          {  1,    4, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f" }  },
+      /* --- pixel bitmap for wncyr100 char#97 a --- */
+      {  97,82597,                      /* character number, location */
+          6, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f\x88\x27\x12\xf5\x01" }  },
+      /* --- pixel bitmap for wncyr100 char#98 b --- */
+      {  98,83255,                      /* character number, location */
+          9, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xb0\x10\x7c\x61\x18\x86\x1e" }  },
+      /* --- pixel bitmap for wncyr100 char#99 ts --- */
+      {  99,89898,                      /* character number, location */
+          6, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          { 10,   10, 3,24, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x23\x20\xf3\x11\x41\x38\x20\xf1\xa0\x81\xa1" }  },
+      /* --- pixel bitmap for wncyr100 char#100 d --- */
+      { 100,90812,                      /* character number, location */
+          6,-2,   -4,-2,      /* topleft row,col, and botleft row,col */
+          { 12,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\x03\x12\x20\x01\x12\x30\xc1\x3f\x04\x40\x00\x00"
+            "\x24\x80" }  },
+      /* --- pixel bitmap for wncyr100 char#101 e --- */
+      { 101,83973,                      /* character number, location */
+          6, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5e\xf8\x07\xa3\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#102 f --- */
+      { 102,84510,                      /* character number, location */
+          9, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x18\x00\x00\x7e\x81\x81\x81\x81\x7e\x00\x00\x18" }  },
+      /* --- pixel bitmap for wncyr100 char#103 g --- */
+      { 103,91918,                      /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7f\xa1\x50\x20\x78\x00" }  },
+      /* --- pixel bitmap for wncyr100 char#104 kh --- */
+      { 104,92950,                      /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x67\x1c\x18\x18\x24\xe7" }  },
+      /* --- pixel bitmap for wncyr100 char#105 i --- */
+      { 105,94138,                      /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe7\x62\x52\x4a\x46\xe7" }  },
+      /* --- pixel bitmap for wncyr100 char#106 j --- */
+      { 106,85289,                      /* character number, location */
+         10,-1,   -3,-1,      /* topleft row,col, and botleft row,col */
+          {  4,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x00\x8c\x88\x88\x88\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#107 k --- */
+      { 107,110818,                     /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x67\x91\x47\x26\x3e\x02" }  },
+      /* --- pixel bitmap for wncyr100 char#108 l --- */
+      { 108,94944,                      /* character number, location */
+          6, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbf\x65\x59\xd3\x0e" }  },
+      /* --- pixel bitmap for wncyr100 char#109 m --- */
+      { 109,96209,                      /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  9,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc7\x8d\xa9\x52\xa5\xea\x3a" }  },
+      /* --- pixel bitmap for wncyr100 char#110 n --- */
+      { 110,97382,                      /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe7\x42\x7e\x42\x42\xe7" }  },
+      /* --- pixel bitmap for wncyr100 char#111 o --- */
+      { 111,85950,                      /* character number, location */
+          6, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5e\x18\x86\xa1\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#112 p --- */
+      { 112,98446,                      /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x42\x42\x42\x42\xe7" }  },
+      /* --- pixel bitmap for wncyr100 char#113 ch --- */
+      { 113,99457,                      /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe7\x42\x42\x76\x40\xe0" }  },
+      /* --- pixel bitmap for wncyr100 char#114 r --- */
+      { 114,86998,                      /* character number, location */
+          6, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9f\x28\x8a\xa2\x27\x08\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#115 s --- */
+      { 115,87747,                      /* character number, location */
+          6, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5e\x10\x04\xa1\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#116 t --- */
+      { 116,100492,                     /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x64\x12\x81\xf0\x01" }  },
+      /* --- pixel bitmap for wncyr100 char#117 u --- */
+      { 117,88813,                      /* character number, location */
+          6, 0,   -3, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe7\x24\x24\x34\x18\x18\x08\x08\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#118 v --- */
+      { 118,101758,                     /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  6,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9f\xe8\x8b\xe2\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#119 shch --- */
+      { 119,103215,                     /* character number, location */
+          6, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   10, 3,28, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x13\x13\x20\xf3\x11\x31\x31\x3b\x20\xf1\xd0\xb1"
+            "\xd1" }  },
+      /* --- pixel bitmap for wncyr100 char#120 sh --- */
+      { 120,104658,                     /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 11,    6, 3,16, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x13\x13\xf3\x11\x31\x31\x1b" }  },
+      /* --- pixel bitmap for wncyr100 char#121 y --- */
+      { 121,106206,                     /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x87\x0b\xe4\x91\x48\x22\x7d\x0e" }  },
+      /* --- pixel bitmap for wncyr100 char#122 z --- */
+      { 122,107184,                     /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  6,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x8e\xc4\x81\xe1\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#123 (noname) --- */
+      { 123,55907,                      /* character number, location */
+          4, 0,    3, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    1, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff" }  },
+      /* --- pixel bitmap for wncyr100 char#124 (noname) --- */
+      { 124,56701,                      /* character number, location */
+          4, 0,    3, 0,      /* topleft row,col, and botleft row,col */
+          { 15,    1, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x7f" }  },
+      /* --- pixel bitmap for wncyr100 char#125 N0 --- */
+      { 125,57633,                      /* character number, location */
+          9, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x87\x40\x04\x4c\xc0\x64\x54\x4a\x45\x64\x4e\x06\x43"
+            "\x00" }  },
+      /* --- pixel bitmap for wncyr100 char#126 \cprime --- */
+      { 126,108438,                     /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  6,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x87\xe0\x89\xe2\x07" }  },
+      /* --- pixel bitmap for wncyr100 char#127 \cdprime --- */
+      { 127,109858,                     /* character number, location */
+          6, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f\x09\x79\x88\x88\x7c" }  },
+      /* --- trailer  --- */
+      { -99, -999,  0,0,0,0, { 0,0,0,0, (pixbyte *)"\0" }  }
+   } ;
+
+
+/* --- size=2 for .118gf ---
+ * mf '\mode=preview; mag=magstep(-16.96645799324018499600); input wncyr10'
+ * --------------------------------------------------------------------- */
+/* --- fontdef for wncyr118 --- */
+static	chardef  wncyr118[] =
+   {
+      /* --- pixel bitmap for wncyr118 char#0 Nj --- */
+      {   0,61782,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   11, 3,41, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x15\x60\xf3\x21\x51\x80\x2e\x31\x51\x62\xf1\x21"
+            "\x51\x71\x21\x51\x61\x15\x19\x21" }  },
+      /* --- pixel bitmap for wncyr118 char#1 Lj --- */
+      {   1,62770,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   11, 3,43, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x2a\x50\xf3\x41\x41\x70\x41\x47\x51\x41\x52\x32\x41"
+            "\x63\x12\x41\x65\x51\x51\x22\x48\x21" }  },
+      /* --- pixel bitmap for wncyr118 char#2 Dzh --- */
+      {   2,63853,                      /* character number, location */
+         11, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   14, 3,17, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x15\xf8\x21\x51\x2b\xf2\x51\x51" }  },
+      /* --- pixel bitmap for wncyr118 char#3 \`E --- */
+      {   3,64813,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x79\x38\x4c\x80\xc2\x09\xff\x1f\x7a\x30\x80\x01\x12"
+            "\x0c\x1f\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#4 \=I --- */
+      {   4,73533,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  5,   11, 3, 8, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\xf8\x21\x25" }  },
+      /* --- pixel bitmap for wncyr118 char#5 \=E --- */
+      {   5,65766,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\x64\xb8\x00\x73\xf8\x87\xf0\x07\x2f\x80\x02\x64"
+            "\x10\x7c\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#6 Dj --- */
+      {   6,74681,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x17\x42\x21\x04\x02\xa0\x07\x46\x30\x08\x82\x20"
+            "\x08\x42\xf8\x07" }  },
+      /* --- pixel bitmap for wncyr118 char#7 \'C --- */
+      {   7,76024,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x13\x21\x11\x02\x01\xd0\x03\x23\x10\x04\x41\x10"
+            "\x04\x41\x3c\x0f" }  },
+      /* --- pixel bitmap for wncyr118 char#8 nj --- */
+      {   8,115927,                     /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x77\x10\x81\x08\xfc\x27\x42\x11\xde\x0f" }  },
+      /* --- pixel bitmap for wncyr118 char#9 lj --- */
+      {   9,116869,                     /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfe\x60\x02\x13\x98\xf7\xc4\x23\x9e\x0f" }  },
+      /* --- pixel bitmap for wncyr118 char#10 dzh --- */
+      {  10,117930,                     /* character number, location */
+          7, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x77\x91\x48\x24\x12\xfd\x11\x08" }  },
+      /* --- pixel bitmap for wncyr118 char#11 \`e --- */
+      {  11,118846,                     /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9f\x10\xff\x6f\x0c\x79\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#12 \=\i --- */
+      {  12,79654,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  3,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1b\x80\x49\x92\x0e" }  },
+      /* --- pixel bitmap for wncyr118 char#13 \=e --- */
+      {  13,119751,                     /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7c\xe1\xe7\x1f\x13\xf2\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#14 dj --- */
+      {  14,80648,                      /* character number, location */
+         11, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   14, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\xff\x04\x04\x7c\x8c\x84\x04\x84\x84\x8e\x40\x20"
+            "\x18" }  },
+      /* --- pixel bitmap for wncyr118 char#15 \'c --- */
+      {  15,81712,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\xfe\x11\x20\x40\x87\x11\x21\x42\x84\x08\x39\x07" }  },
+      /* --- pixel bitmap for wncyr118 char#16 Yu --- */
+      {  16,66918,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f\x3c\x10\x0c\x43\x08\x10\x11\x80\x44\x00\xf2\x01"
+            "\x48\x04\x20\x31\xc0\x84\x00\x11\x0c\xf3\xe0\x07" }  },
+      /* --- pixel bitmap for wncyr118 char#17 Zh --- */
+      {  17,60424,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc3\x87\x05\x02\x11\x04\x41\x08\x01\xff\x01\xfe\x03"
+            "\x43\x18\x82\x20\x05\x41\x0f\x82\x0f\x1f\x06" }  },
+      /* --- pixel bitmap for wncyr118 char#18 \u I --- */
+      {  18,68415,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0c\xc6\x60\xf8\x01\x00\x9f\x4f\x30\x04\x42\x28\x44"
+            "\x42\x20\x24\x42\x21\x04\xc2\x20\x9f\x0f" }  },
+      /* --- pixel bitmap for wncyr118 char#19 \"E --- */
+      {  19,77436,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xcc\x60\x06\x00\x00\xf0\x3f\x82\x11\x88\x48\x44\xe0"
+            "\x03\x11\x89\x48\x20\x82\xfd\x0f" }  },
+      /* --- pixel bitmap for wncyr118 char#20 (noname) --- */
+      {  20,69378,                      /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f\x4c\xa0\x04\x82\x10\x08\x81\x10\x90\x00\x09\x50"
+            "\x00\x06\x20\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#21 (noname) --- */
+      {  21,70526,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\x80\x19\x08\x41\x20\x04\xf2\xff\x05\x4a\x20\x08"
+            "\x81\x19\xf0\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#22 \Dz --- */
+      {  22,71584,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbc\xc2\x81\x01\x06\x38\x40\x80\x81\x41\x3f" }  },
+      /* --- pixel bitmap for wncyr118 char#23 Ya --- */
+      {  23,72870,                      /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\x8f\x20\x04\x42\x20\x08\x02\x3f\x18\x82\x20\x08"
+            "\x82\x20\x87\x0f" }  },
+      /* --- pixel bitmap for wncyr118 char#24 yu --- */
+      {  24,120881,                     /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x8f\x43\x44\x24\xc8\x83\x24\x48\x44\x8f\x03" }  },
+      /* --- pixel bitmap for wncyr118 char#25 zh --- */
+      {  25,114597,                     /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x73\x16\x11\x7f\xf8\x23\xa2\x11\xcf\x19" }  },
+      /* --- pixel bitmap for wncyr118 char#26 \u\i --- */
+      {  26,122354,                     /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x66\x66\x3c\x00\xe7\x62\x52\x42\x4a\x46\xe7" }  },
+      /* --- pixel bitmap for wncyr118 char#27 \"e --- */
+      {  27,82489,                      /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x33\x00\x70\xe2\x1f\x04\x22\x07" }  },
+      /* --- pixel bitmap for wncyr118 char#28 (noname) --- */
+      {  28,123271,                     /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc7\xc4\x24\x24\x28\x18\x18" }  },
+      /* --- pixel bitmap for wncyr118 char#29 (noname) --- */
+      {  29,124375,                     /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  9,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x38\xd8\x10\xf9\x5f\x94\x08\x0e" }  },
+      /* --- pixel bitmap for wncyr118 char#30 \dz --- */
+      {  30,125391,                     /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  5,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3e\x04\x07\xe1\x03" }  },
+      /* --- pixel bitmap for wncyr118 char#31 ya --- */
+      {  31,126633,                     /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf8\x44\x44\x78\x44\x44\xe7" }  },
+      /* --- pixel bitmap for wncyr118 char#32 \cyddot --- */
+      {  32,52275,                      /* character number, location */
+         12, 2,   10, 2,      /* topleft row,col, and botleft row,col */
+          {  5,    2, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7b\x03" }  },
+      /* --- pixel bitmap for wncyr118 char#33 (noname) --- */
+      {  33,32986,                      /* character number, location */
+         11, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  2,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x0f\x3c" }  },
+      /* --- pixel bitmap for wncyr118 char#34 (noname) --- */
+      {  34,53148,                      /* character number, location */
+         11, 1,    6, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf3\x2c\x8a\x11" }  },
+      /* --- pixel bitmap for wncyr118 char#35 (noname) --- */
+      {  35,78941,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3e\x80\x00\xff\x93\x20\x08\x80\x3f\x08\x86\x80\x08"
+            "\x88\x80\x08\xe4\x3f" }  },
+      /* --- pixel bitmap for wncyr118 char#36 (noname) --- */
+      {  36,53854,                      /* character number, location */
+         11, 0,    8, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc3\xc3\x7e" }  },
+      /* --- pixel bitmap for wncyr118 char#37 (noname) --- */
+      {  37,34169,                      /* character number, location */
+         12, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x48\x83\xc4\x9f\x08\x11\x11\x14\x81\xa3\x03\x52"
+            "\x20\x11\x22\x42\x44\x04\x45\xe0\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#38 (noname) --- */
+      {  38,54427,                      /* character number, location */
+         11, 4,    8, 4,      /* topleft row,col, and botleft row,col */
+          {  3,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5c\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#39 (noname) --- */
+      {  39,34801,                      /* character number, location */
+         11, 2,    6, 2,      /* topleft row,col, and botleft row,col */
+          {  2,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xaf\x01" }  },
+      /* --- pixel bitmap for wncyr118 char#40 (noname) --- */
+      {  40,35373,                      /* character number, location */
+         12, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          {  5,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x10\x11\x21\x42\x08\x21\x08\x41\x10\x04" }  },
+      /* --- pixel bitmap for wncyr118 char#41 (noname) --- */
+      {  41,35966,                      /* character number, location */
+         12, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          {  5,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x41\x10\x84\x20\x84\x10\x22\x44\x44\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#42 (noname) --- */
+      {  42,36583,                      /* character number, location */
+         12, 1,    5, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\xe2\x73\x3e\x82\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#43 (noname) --- */
+      {  43,83294,                      /* character number, location */
+         12, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  9,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0a\x08\x10\x20\xf0\x83\x00\x1f\xc2\x04\x09\x12\xf6"
+            "\x03" }  },
+      /* --- pixel bitmap for wncyr118 char#44 (noname) --- */
+      {  44,37152,                      /* character number, location */
+          2, 2,   -3, 2,      /* topleft row,col, and botleft row,col */
+          {  2,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xaf\x01" }  },
+      /* --- pixel bitmap for wncyr118 char#45 (noname) --- */
+      {  45,37641,                      /* character number, location */
+          4, 0,    3, 0,      /* topleft row,col, and botleft row,col */
+          {  5,    1, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f" }  },
+      /* --- pixel bitmap for wncyr118 char#46 (noname) --- */
+      {  46,38096,                      /* character number, location */
+          2, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  2,    2, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f" }  },
+      /* --- pixel bitmap for wncyr118 char#47 (noname) --- */
+      {  47,38602,                      /* character number, location */
+         12, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   16, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x40\x20\x08\x04\x81\x40\x10\x08\x02\x81\x20\x10\x04"
+            "\x02" }  },
+      /* --- pixel bitmap for wncyr118 char#48 (noname) --- */
+      {  48,43341,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1c\x51\x30\x18\x0c\x06\x83\x41\x11\x07" }  },
+      /* --- pixel bitmap for wncyr118 char#49 (noname) --- */
+      {  49,44103,                      /* character number, location */
+         11, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  5,   11, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x21\x23\x20\xf7\x21\x25" }  },
+      /* --- pixel bitmap for wncyr118 char#50 (noname) --- */
+      {  50,45066,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1c\x51\x30\x08\x04\x41\x10\x44\xe1\x1f" }  },
+      /* --- pixel bitmap for wncyr118 char#51 (noname) --- */
+      {  51,46088,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9e\x70\x10\x08\xe2\x80\x80\xc1\x11\x07" }  },
+      /* --- pixel bitmap for wncyr118 char#52 (noname) --- */
+      {  52,46996,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x30\x30\x28\x24\x22\x23\xff\x20\x20\x20\xf8" }  },
+      /* --- pixel bitmap for wncyr118 char#53 (noname) --- */
+      {  53,48016,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x22\x8f\x40\xe0\x11\x01\x81\xc1\x90\x07" }  },
+      /* --- pixel bitmap for wncyr118 char#54 (noname) --- */
+      {  54,48892,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x38\xa2\x20\xd0\x19\x05\x83\x41\x11\x07" }  },
+      /* --- pixel bitmap for wncyr118 char#55 (noname) --- */
+      {  55,49776,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x01\xff\x81\x41\x20\x10\x10\x08\x08\x08\x08\x08" }  },
+      /* --- pixel bitmap for wncyr118 char#56 (noname) --- */
+      {  56,50684,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbe\x60\x50\x48\xe3\x88\x82\x41\x11\x07" }  },
+      /* --- pixel bitmap for wncyr118 char#57 (noname) --- */
+      {  57,51568,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1c\x51\x30\x18\x14\x73\x81\xa0\x88\x03" }  },
+      /* --- pixel bitmap for wncyr118 char#58 (noname) --- */
+      {  58,39180,                      /* character number, location */
+          7, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  2,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f\x3c" }  },
+      /* --- pixel bitmap for wncyr118 char#59 (noname) --- */
+      {  59,39843,                      /* character number, location */
+          7, 2,   -3, 2,      /* topleft row,col, and botleft row,col */
+          {  2,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f\xbc\x06" }  },
+      /* --- pixel bitmap for wncyr118 char#60 < --- */
+      {  60,55041,                      /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  9,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x30\x11\x91\x99\x41\x06\x11\x4c" }  },
+      /* --- pixel bitmap for wncyr118 char#61 (noname) --- */
+      {  61,84001,                      /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  3,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x93\x24\x1d" }  },
+      /* --- pixel bitmap for wncyr118 char#62 > --- */
+      {  62,55588,                      /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x19\x44\x30\xc1\xcc\x44\x44\x06" }  },
+      /* --- pixel bitmap for wncyr118 char#63 (noname) --- */
+      {  63,40726,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbe\x20\x18\x82\x60\x00\x00\x00\x06\x03" }  },
+      /* --- pixel bitmap for wncyr118 char#64 (noname) --- */
+      {  64,56226,                      /* character number, location */
+         11, 2,    8, 2,      /* topleft row,col, and botleft row,col */
+          {  5,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x31\x3a" }  },
+      /* --- pixel bitmap for wncyr118 char#65 A --- */
+      {  65,23735,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x20\x00\x05\x50\x00\x05\x88\x80\x08\xf8\x40\x10\x04"
+            "\x21\x20\x8f\x0f" }  },
+      /* --- pixel bitmap for wncyr118 char#66 B --- */
+      {  66,25079,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x23\x18\x81\x08\x44\x00\xfe\x11\x98\x80\x04\x24"
+            "\xd0\x7f\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#67 Ts --- */
+      {  67, 1087,                      /* character number, location */
+         11, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   13, 3,18, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x15\x10\xf8\x21\x51\x3b\xb1\xc1" }  },
+      /* --- pixel bitmap for wncyr118 char#68 D --- */
+      {  68, 2071,                      /* character number, location */
+         11,-1,   -2,-1,      /* topleft row,col, and botleft row,col */
+          { 15,   13, 3,38, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x4a\x10\xf4\x61\x41\x30\xf1\x52\x41\x30\x51\x51\x72"
+            "\x51\x5c\x22\xa1\x11\xd1" }  },
+      /* --- pixel bitmap for wncyr118 char#69 E --- */
+      {  69,26460,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x23\x18\x81\x88\x44\x04\x3e\x10\x91\x88\x04\x22"
+            "\xd8\xff\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#70 F --- */
+      {  70,27513,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf8\x00\x01\x08\xf8\x33\xe2\x10\x8e\x98\x3f\x20\x00"
+            "\x01\x3e\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#71 G --- */
+      {  71, 3221,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   11, 3,19, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0a\x21\x52\xf1\x21\x61\xf5\x21\x75\x50" }  },
+      /* --- pixel bitmap for wncyr118 char#72 Kh --- */
+      {  72, 4291,                      /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\x0f\x61\x40\x04\x50\x00\x06\x80\x00\x28\x80\x08"
+            "\x18\x03\x41\x3c\x78" }  },
+      /* --- pixel bitmap for wncyr118 char#73 I --- */
+      {  73, 5501,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9f\x4f\x30\x04\x42\x28\x44\x42\x20\x24\x42\x21\x04"
+            "\xc2\x20\x9f\x0f" }  },
+      /* --- pixel bitmap for wncyr118 char#74 J --- */
+      {  74,28324,                      /* character number, location */
+         11, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  6,   11, 3,13, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x24\xf7\x41\x11\x31\x23\x22" }  },
+      /* --- pixel bitmap for wncyr118 char#75 K --- */
+      {  75,22687,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f\x26\x10\x41\x08\xc1\x07\x3e\x10\x86\x20\x04\x25"
+            "\xf8\x87\x01" }  },
+      /* --- pixel bitmap for wncyr118 char#76 L --- */
+      {  76, 6357,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 3,30, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x2a\xf2\x41\x41\x20\xf3\x32\x41\x20\x31\x51\x24\x51"
+            "\x23\x45" }  },
+      /* --- pixel bitmap for wncyr118 char#77 M --- */
+      {  77, 7642,                      /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 16,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f\xf0\x0c\x30\x14\x28\x14\x28\x24\x24\x24\x24\x24"
+            "\x24\x44\x22\x44\x22\x84\x21\x9f\xf9" }  },
+      /* --- pixel bitmap for wncyr118 char#78 N --- */
+      {  78, 8853,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 3,26, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x15\xf3\x21\x51\x20\x27\x20\xf3\x21\x51\x25\x15" }  },
+      /* --- pixel bitmap for wncyr118 char#79 O --- */
+      {  79,29143,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 3,31, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x44\x62\x42\x31\x81\x1f\x31\xa1\x02\x82\x11\x81\x32"
+            "\x42\x56\x31" }  },
+      /* --- pixel bitmap for wncyr118 char#80 P --- */
+      {  80, 9937,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\xf8\x21\x51\x25\x15" }  },
+      /* --- pixel bitmap for wncyr118 char#81 Ch --- */
+      {  81,10968,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 3,30, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x25\xf3\x21\x61\x20\x22\x42\x63\x21\x20\xf2\x91"
+            "\x20\x75" }  },
+      /* --- pixel bitmap for wncyr118 char#82 R --- */
+      {  82,30258,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x10\x44\x20\x81\x04\xf1\x43\x00\x01\x04\x10\xf0"
+            "\x01" }  },
+      /* --- pixel bitmap for wncyr118 char#83 S --- */
+      {  83,31183,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\x64\xb8\x00\x03\x18\x80\x00\x04\x20\x80\x02\x64"
+            "\x10\x7c\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#84 T --- */
+      {  84,12045,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 3,19, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\x0f\x21\x41\x41\xf5\x51\x50\x35\x31" }  },
+      /* --- pixel bitmap for wncyr118 char#85 U --- */
+      {  85,32375,                      /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f\x9e\xc0\x20\x08\x84\x01\x11\x40\x01\x38\x00\x02"
+            "\x62\x40\x04\x70\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#86 V --- */
+      {  86,13351,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x20\x18\x81\x08\x44\x10\xfe\x11\x98\x80\x04\x24"
+            "\xd0\x7f\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#87 Shch --- */
+      {  87,14828,                      /* character number, location */
+         11, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   13, 3,28, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x15\x15\x10\xf8\x21\x51\x51\x3e\x03\xe0\x31\xe0"
+            "\x41" }  },
+      /* --- pixel bitmap for wncyr118 char#88 Sh --- */
+      {  88,16299,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   11, 3,18, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x15\x15\xf8\x21\x51\x51\x2e\x03" }  },
+      /* --- pixel bitmap for wncyr118 char#89 Y --- */
+      {  89,17877,                      /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 16,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f\xf0\x04\x20\x04\x20\x04\x20\x04\x20\xfc\x23\x04"
+            "\x26\x04\x24\x04\x24\x04\x22\xff\xf1" }  },
+      /* --- pixel bitmap for wncyr118 char#90 Z --- */
+      {  90,18905,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7f\x02\x05\x04\x08\x8c\x0f\x20\x80\x01\x03\xfd\x01" }  },
+      /* --- pixel bitmap for wncyr118 char#91 (noname) --- */
+      {  91,41393,                      /* character number, location */
+         12, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          {  4,   16, 3, 8, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\x0f\xd1\x34" }  },
+      /* --- pixel bitmap for wncyr118 char#92 (noname) --- */
+      {  92,57101,                      /* character number, location */
+         11, 2,    6, 2,      /* topleft row,col, and botleft row,col */
+          {  6,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x62\x14\xcd\x33" }  },
+      /* --- pixel bitmap for wncyr118 char#93 (noname) --- */
+      {  93,42073,                      /* character number, location */
+         12, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          {  4,   16, 3, 8, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\xfd\x31\x04" }  },
+      /* --- pixel bitmap for wncyr118 char#94 \Cprime --- */
+      {  94,20199,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 3,29, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x60\xf3\x21\x80\x28\x31\x62\xf1\x21\x71\x21\x61"
+            "\x19\x21" }  },
+      /* --- pixel bitmap for wncyr118 char#95 \Cdprime --- */
+      {  95,21685,                      /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 15,   11, 3,35, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x72\x41\x8f\x11\x51\x80\x61\xe8\x71\x62\xf1\x61"
+            "\x71\x61\x61\x59\x21" }  },
+      /* --- pixel bitmap for wncyr118 char#96 (noname) --- */
+      {  96,42673,                      /* character number, location */
+         11, 2,    6, 2,      /* topleft row,col, and botleft row,col */
+          {  2,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xd6\x03" }  },
+      /* --- pixel bitmap for wncyr118 char#97 a --- */
+      {  97,85115,                      /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\x20\x3c\x22\x21\xa1\x7e" }  },
+      /* --- pixel bitmap for wncyr118 char#98 b --- */
+      {  98,85803,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x80\xf0\x06\x03\x3d\x43\x81\x81\x81\x42\x3c" }  },
+      /* --- pixel bitmap for wncyr118 char#99 ts --- */
+      {  99,92620,                      /* character number, location */
+          7, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          {  9,   11, 3,24, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x13\x20\xf4\x11\x31\x37\xb0\xf1\x71\x10\x81" }  },
+      /* --- pixel bitmap for wncyr118 char#100 d --- */
+      { 100,93540,                      /* character number, location */
+          7,-2,   -4,-2,      /* topleft row,col, and botleft row,col */
+          { 13,   11, 3,30, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x47\x20\xf3\x52\x21\x30\x51\x31\x59\x41\xc1\x81\xc1"
+            "\x21\xa1" }  },
+      /* --- pixel bitmap for wncyr118 char#101 e --- */
+      { 101,86555,                      /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9c\xf8\x07\x81\xc8\x01" }  },
+      /* --- pixel bitmap for wncyr118 char#102 f --- */
+      { 102,87120,                      /* character number, location */
+         10, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x30\x00\x00\x80\x73\x31\x06\x18\x60\x80\x31\x3a\x07"
+            "\x00\x00\x30\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#103 g --- */
+      { 103,94678,                      /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbf\x28\x0a\x82\xf0\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#104 kh --- */
+      { 104,95712,                      /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  9,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xef\x50\xe0\x80\x80\x82\xc8\x7b" }  },
+      /* --- pixel bitmap for wncyr118 char#105 i --- */
+      { 105,96906,                      /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe7\x62\x52\x42\x4a\x46\xe7" }  },
+      /* --- pixel bitmap for wncyr118 char#106 j --- */
+      { 106,87911,                      /* character number, location */
+         12,-1,   -3,-1,      /* topleft row,col, and botleft row,col */
+          {  5,   15, 3,17, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x32\xf2\x50\x23\xf7\x41\x04\x11" }  },
+      /* --- pixel bitmap for wncyr118 char#107 k --- */
+      { 107,113718,                     /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x67\x91\xc7\x23\x12\x9f\x01" }  },
+      /* --- pixel bitmap for wncyr118 char#108 l --- */
+      { 108,97742,                      /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfe\x4c\x4c\x4c\x44\x47\xe3" }  },
+      /* --- pixel bitmap for wncyr118 char#109 m --- */
+      { 109,99011,                      /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc7\x8d\x19\x53\xa5\x4a\xd5\x75" }  },
+      /* --- pixel bitmap for wncyr118 char#110 n --- */
+      { 110,100188,                     /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x77\x91\xc8\x27\x12\xdd\x01" }  },
+      /* --- pixel bitmap for wncyr118 char#111 o --- */
+      { 111,88602,                      /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1c\x51\x30\x18\x14\x71\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#112 p --- */
+      { 112,101256,                     /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    7, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\xf4\x11\x31\x13\x13" }  },
+      /* --- pixel bitmap for wncyr118 char#113 ch --- */
+      { 113,102271,                     /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe7\x42\x42\x66\x5c\x40\xe0" }  },
+      /* --- pixel bitmap for wncyr118 char#114 r --- */
+      { 114,89680,                      /* character number, location */
+          7, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3b\x46\x82\x82\x82\x46\x3a\x02\x02\x07" }  },
+      /* --- pixel bitmap for wncyr118 char#115 s --- */
+      { 115,90463,                      /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3c\x41\x20\x10\x10\xf2\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#116 t --- */
+      { 116,103310,                     /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  9,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x23\x46\x84\x00\x01\x02\x1f" }  },
+      /* --- pixel bitmap for wncyr118 char#117 u --- */
+      { 117,91531,                      /* character number, location */
+          7, 0,   -3, 0,      /* topleft row,col, and botleft row,col */
+          { 10,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xcf\x13\x42\x0c\x12\x48\xc0\x00\x03\x04\x10\x3c\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#118 v --- */
+      { 118,104604,                     /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\xa1\xd0\x27\x14\xfe\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#119 shch --- */
+      { 119,106065,                     /* character number, location */
+          7, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   11, 3,30, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x13\x13\x20\xf4\x11\x31\x31\x3b\xe0\x10\xf1\xb1"
+            "\x10\xc1" }  },
+      /* --- pixel bitmap for wncyr118 char#120 sh --- */
+      { 120,107516,                     /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,    7, 3,16, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x13\x13\xf4\x11\x31\x31\x1b" }  },
+      /* --- pixel bitmap for wncyr118 char#121 y --- */
+      { 121,109044,                     /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\x17\x90\x80\x7c\x24\x24\x21\xfd\x1c" }  },
+      /* --- pixel bitmap for wncyr118 char#122 z --- */
+      { 122,110026,                     /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\x11\x88\x07\x0c\xfe\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#123 (noname) --- */
+      { 123,57705,                      /* character number, location */
+          5, 0,    4, 0,      /* topleft row,col, and botleft row,col */
+          {  9,    1, 3, 2, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09" }  },
+      /* --- pixel bitmap for wncyr118 char#124 (noname) --- */
+      { 124,58525,                      /* character number, location */
+          5, 0,    4, 0,      /* topleft row,col, and botleft row,col */
+          { 18,    1, 3, 4, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x04" }  },
+      /* --- pixel bitmap for wncyr118 char#125 N0 --- */
+      { 125,59483,                      /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 14,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\x01\x23\xc0\x08\x50\x62\x94\x00\x25\x40\x8a\x91"
+            "\x02\xc4\x38\x31\x60\x08\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#126 \cprime --- */
+      { 126,111308,                     /* character number, location */
+          7, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\x81\xc0\x27\x14\xfe\x00" }  },
+      /* --- pixel bitmap for wncyr118 char#127 \cdprime --- */
+      { 127,112756,                     /* character number, location */
+          7, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    7, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x44\x10\x01\x7c\x10\x42\x88\x1f" }  },
+      /* --- trailer  --- */
+      { -99, -999,  0,0,0,0, { 0,0,0,0, (pixbyte *)"\0" }  }
+   } ;
+
+
+/* --- size=3 for .131gf ---
+ * mf '\mode=preview; mag=magstep(-16.39322518098640003469); input wncyr10'
+ * --------------------------------------------------------------------- */
+/* --- fontdef for wncyr131 --- */
+static	chardef  wncyr131[] =
+   {
+      /* --- pixel bitmap for wncyr131 char#0 Nj --- */
+      {   0,62020,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 20,   12, 3,45, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x26\x60\xf3\x22\x62\x80\x2e\x02\x42\x62\x52\x10"
+            "\xf2\x22\x62\x62\x22\x62\x52\x16\x2a\x22" }  },
+      /* --- pixel bitmap for wncyr131 char#1 Lj --- */
+      {   1,63014,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 19,   12, 3,53, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3b\xa1\x42\x70\xf2\x42\x42\x70\x42\x47\x62\x42\x42"
+            "\x52\x42\x52\x41\x52\x54\x12\x52\x57\x52\x42\x23\x49"
+            "\x22" }  },
+      /* --- pixel bitmap for wncyr131 char#2 Dzh --- */
+      {   2,64103,                      /* character number, location */
+         12, 0,   -3, 0,      /* topleft row,col, and botleft row,col */
+          { 15,   15, 3,19, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x36\xf9\x22\x72\x2e\x01\xf2\x72\x67" }  },
+      /* --- pixel bitmap for wncyr131 char#3 \`E --- */
+      {   3,65067,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf9\x70\x30\x01\x16\x60\xe0\x9d\xff\x1f\xcc\xc0\x01"
+            "\x16\x60\x02\xc3\x0f" }  },
+      /* --- pixel bitmap for wncyr131 char#4 \=I --- */
+      {   4,73847,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,   12, 3, 8, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\xf9\x22\x26" }  },
+      /* --- pixel bitmap for wncyr131 char#5 \=E --- */
+      {   5,66024,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\xc9\xe0\x06\x68\x80\x7b\xf0\x9f\x83\x3f\x30\x06"
+            "\x68\x80\x0c\x04\x3f" }  },
+      /* --- pixel bitmap for wncyr131 char#6 Dj --- */
+      {   6,74997,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 16,   12, 3,43, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1d\x31\x42\x51\x21\x52\x51\x82\xe2\x24\x84\x41\x73"
+            "\x61\xf2\x62\x71\x62\x61\x47\x13\x26" }  },
+      /* --- pixel bitmap for wncyr131 char#7 \'C --- */
+      {   7,76320,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   12, 3,36, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\x2f\x11\x32\x41\x20\x42\xb2\x13\x73\x31\x20\xf4"
+            "\x42\x51\x10\x25\x24" }  },
+      /* --- pixel bitmap for wncyr131 char#8 nj --- */
+      {   8,116419,                     /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf7\x20\x04\x42\xe0\x3f\x42\x2c\x84\x42\x78\x7f" }  },
+      /* --- pixel bitmap for wncyr131 char#9 lj --- */
+      {   9,117367,                     /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfe\xc0\x04\x4c\xc0\x7c\x4c\xfc\x84\x47\x78\x7e" }  },
+      /* --- pixel bitmap for wncyr131 char#10 dzh --- */
+      {  10,118434,                     /* character number, location */
+          8, 0,   -2, 0,      /* topleft row,col, and botleft row,col */
+          { 10,   10, 3,17, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\x24\xf5\x21\x41\x2a\xf1\x51\x42" }  },
+      /* --- pixel bitmap for wncyr131 char#11 \`e --- */
+      {  11,119354,                     /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3d\x43\xb9\xfd\x8f\x85\x41\x3e" }  },
+      /* --- pixel bitmap for wncyr131 char#12 \=\i --- */
+      {  12,79916,                      /* character number, location */
+         13, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  4,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x66\x00\x70\x44\x44\x44\x0f" }  },
+      /* --- pixel bitmap for wncyr131 char#13 \=e --- */
+      {  13,120273,                     /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbc\xc2\x9d\xbf\xf1\xa1\x82\x7c" }  },
+      /* --- pixel bitmap for wncyr131 char#14 dj --- */
+      {  14,80886,                      /* character number, location */
+         13, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   17, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\x10\xf0\x3f\x01\x04\xd0\xc3\x30\x81\x04\x10\x40"
+            "\x20\x81\x1f\x02\x04\x08\x10\x38\x00" }  },
+      /* --- pixel bitmap for wncyr131 char#15 \'c --- */
+      {  15,81958,                      /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x20\xc0\xff\x08\x40\x00\xfa\x30\x88\x40\x04\x22"
+            "\x10\x81\x08\xe4\x70" }  },
+      /* --- pixel bitmap for wncyr131 char#16 Yu --- */
+      {  16,67206,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 20,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\xf8\xc0\x60\x30\x0c\x03\xc6\x10\x40\x8c\x01\xcc"
+            "\x18\xc0\xfc\x01\xcc\x18\xc0\x0c\x03\xc6\x30\x60\x0c"
+            "\x06\xf3\x83\x0f" }  },
+      /* --- pixel bitmap for wncyr131 char#17 Zh --- */
+      {  17,60652,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 20,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x83\x1f\x6c\x60\x60\x04\x06\x82\x60\x10\x70\xe6\x00"
+            "\xfe\x07\x18\x86\x41\x60\x20\x04\x06\x52\x60\xa0\x07"
+            "\x06\x2e\xf8\x41" }  },
+      /* --- pixel bitmap for wncyr131 char#18 \u I --- */
+      {  18,68709,                      /* character number, location */
+         16, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 16,   16, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x18\x18\x18\x18\xe0\x07\x00\x00\x3f\xfc\x0c\x38\x0c"
+            "\x3c\x0c\x36\x0c\x32\x0c\x31\x8c\x30\x4c\x30\x6c\x30"
+            "\x3c\x30\x1c\x30\x3f\xfc" }  },
+      /* --- pixel bitmap for wncyr131 char#19 \"E --- */
+      {  19,77736,                      /* character number, location */
+         16, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,   16, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x10\x01\x11\x00\x00\x00\xff\xc7\x60\x0c\xc4\x90\x0c"
+            "\xc9\x1f\x0c\xc1\x90\x0c\xc8\x40\x0c\xf6\x7f" }  },
+      /* --- pixel bitmap for wncyr131 char#20 (noname) --- */
+      {  20,69680,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 14,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x38\x03\x8a\x41\x60\x10\x18\x02\x8c\x00\x23\xc0"
+            "\x05\x60\x01\x38\x00\x0c\x00\x01" }  },
+      /* --- pixel bitmap for wncyr131 char#21 (noname) --- */
+      {  21,70830,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe0\x00\x22\x60\x0c\x06\xc3\x60\xfe\xff\xff\x6f\xb0"
+            "\x0c\x06\x63\x40\x04\x70\x00" }  },
+      /* --- pixel bitmap for wncyr131 char#22 \Dz --- */
+      {  22,71890,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbc\x84\x0d\x1a\xf0\xc0\x0f\x3e\xe0\x80\x03\x07\xfa"
+            "\x03" }  },
+      /* --- pixel bitmap for wncyr131 char#23 Ya --- */
+      {  23,73178,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 14,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\x3f\x06\xc3\xc0\x30\x30\x18\x0c\xfc\x03\xc3\x60"
+            "\x30\x18\x0c\x06\x93\xc1\x3c\xfc" }  },
+      /* --- pixel bitmap for wncyr131 char#24 yu --- */
+      {  24,121443,                     /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 13,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x8f\x47\x08\x89\x40\x11\xe8\x03\x45\xa0\x10\x7a\x3c" }  },
+      /* --- pixel bitmap for wncyr131 char#25 zh --- */
+      {  25,115079,                     /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 13,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf3\x59\x08\x11\x11\xfc\x81\x24\x88\xc8\x11\x9f\xcf" }  },
+      /* --- pixel bitmap for wncyr131 char#26 \u\i --- */
+      {  26,122922,                     /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 11,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x8c\x61\x0c\x3e\x00\xf0\x7d\xc2\x10\x85\x20\x04\xa1"
+            "\x08\x43\xbe\x0f" }  },
+      /* --- pixel bitmap for wncyr131 char#27 \"e --- */
+      {  27,82741,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x66\x00\x80\x27\x0a\xfe\x03\x01\x21\x0f" }  },
+      /* --- pixel bitmap for wncyr131 char#28 (noname) --- */
+      {  28,123843,                     /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  9,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x8f\x09\x13\x21\x82\x02\x05\x0a\x08" }  },
+      /* --- pixel bitmap for wncyr131 char#29 (noname) --- */
+      {  29,124953,                     /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x30\x20\x41\xc8\xff\x85\x12\x82\x04\x0c" }  },
+      /* --- pixel bitmap for wncyr131 char#30 \dz --- */
+      {  30,125973,                     /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7e\x18\x38\x10\x18\x7e" }  },
+      /* --- pixel bitmap for wncyr131 char#31 ya --- */
+      {  31,127221,                     /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf8\x13\x42\x08\x3e\x88\x20\x82\xc8\xfb" }  },
+      /* --- pixel bitmap for wncyr131 char#32 \cyddot --- */
+      {  32,52445,                      /* character number, location */
+         13, 2,   11, 2,      /* topleft row,col, and botleft row,col */
+          {  6,    2, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf3\x0c" }  },
+      /* --- pixel bitmap for wncyr131 char#33 (noname) --- */
+      {  33,33058,                      /* character number, location */
+         13, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  2,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\xff\xc0\x03" }  },
+      /* --- pixel bitmap for wncyr131 char#34 (noname) --- */
+      {  34,53318,                      /* character number, location */
+         13, 1,    7, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf3\x2c\x8a\x62\x04" }  },
+      /* --- pixel bitmap for wncyr131 char#35 (noname) --- */
+      {  35,79219,                      /* character number, location */
+         14, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   14, 3,41, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x16\xa2\x9c\x21\x22\x52\x21\x22\x61\x52\xc8\x62\x53"
+            "\x10\xf3\x32\x72\x32\x62\x2b\x21" }  },
+      /* --- pixel bitmap for wncyr131 char#36 (noname) --- */
+      {  36,54028,                      /* character number, location */
+         12, 0,    9, 0,      /* topleft row,col, and botleft row,col */
+          {  9,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x83\x07\xfb\x03" }  },
+      /* --- pixel bitmap for wncyr131 char#37 (noname) --- */
+      {  37,34245,                      /* character number, location */
+         14, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x88\x06\x11\x7f\x44\x08\x11\x41\x44\xa0\x08\x38"
+            "\x71\x40\x14\x88\x08\x22\x42\x88\x08\x22\x02\x45\xc0"
+            "\x01" }  },
+      /* --- pixel bitmap for wncyr131 char#38 (noname) --- */
+      {  38,54601,                      /* character number, location */
+         13, 4,    9, 4,      /* topleft row,col, and botleft row,col */
+          {  4,    4, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x48\x13" }  },
+      /* --- pixel bitmap for wncyr131 char#39 (noname) --- */
+      {  39,34889,                      /* character number, location */
+         13, 2,    7, 2,      /* topleft row,col, and botleft row,col */
+          {  2,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xaf\x05" }  },
+      /* --- pixel bitmap for wncyr131 char#40 (noname) --- */
+      {  40,35463,                      /* character number, location */
+         14, 2,   -5, 2,      /* topleft row,col, and botleft row,col */
+          {  5,   19, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x10\x11\x21\x44\x08\x21\x84\x10\x84\x10\x04\x41" }  },
+      /* --- pixel bitmap for wncyr131 char#41 (noname) --- */
+      {  41,36064,                      /* character number, location */
+         14, 1,   -5, 1,      /* topleft row,col, and botleft row,col */
+          {  5,   19, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x41\x10\x84\x10\x84\x10\x42\x08\x11\x42\x44\x04" }  },
+      /* --- pixel bitmap for wncyr131 char#42 (noname) --- */
+      {  42,36689,                      /* character number, location */
+         14, 1,    6, 1,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x10\x10\xd3\x3c\x3c\xd3\x10\x10" }  },
+      /* --- pixel bitmap for wncyr131 char#43 (noname) --- */
+      {  43,83550,                      /* character number, location */
+         14, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   14, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x14\x00\x00\x02\x10\xf0\x07\x04\x20\x00\x1f\x08\x43"
+            "\x20\x02\x11\x88\x20\xfe\x00" }  },
+      /* --- pixel bitmap for wncyr131 char#44 (noname) --- */
+      {  44,37268,                      /* character number, location */
+          2, 2,   -4, 2,      /* topleft row,col, and botleft row,col */
+          {  2,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xaf\x05" }  },
+      /* --- pixel bitmap for wncyr131 char#45 (noname) --- */
+      {  45,37759,                      /* character number, location */
+          5, 0,    4, 0,      /* topleft row,col, and botleft row,col */
+          {  6,    1, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f" }  },
+      /* --- pixel bitmap for wncyr131 char#46 (noname) --- */
+      {  46,38214,                      /* character number, location */
+          2, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  2,    2, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f" }  },
+      /* --- pixel bitmap for wncyr131 char#47 (noname) --- */
+      {  47,38720,                      /* character number, location */
+         14, 1,   -5, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   19, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x80\x80\x40\x40\x20\x20\x20\x10\x10\x08\x08\x08\x04"
+            "\x04\x04\x02\x02\x01\x01" }  },
+      /* --- pixel bitmap for wncyr131 char#48 (noname) --- */
+      {  48,43487,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   12, 3,19, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x24\x31\x41\x9f\x61\x61\x11\x41\x34\x20" }  },
+      /* --- pixel bitmap for wncyr131 char#49 (noname) --- */
+      {  49,44251,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   12, 3,14, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x31\x34\x30\xf8\x31\x30\x16" }  },
+      /* --- pixel bitmap for wncyr131 char#50 (noname) --- */
+      {  50,45216,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3c\x42\xc3\x83\xc0\x40\x60\x30\x18\x84\x42\x7f" }  },
+      /* --- pixel bitmap for wncyr131 char#51 (noname) --- */
+      {  51,46240,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3e\x41\xc1\xc0\x60\x3c\x60\xc0\xc0\xc3\x63\x3c" }  },
+      /* --- pixel bitmap for wncyr131 char#52 (noname) --- */
+      {  52,47150,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x30\x30\x28\x2c\x24\x22\x23\xff\x20\x20\x20\xf8" }  },
+      /* --- pixel bitmap for wncyr131 char#53 (noname) --- */
+      {  53,48174,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x42\x3e\x1e\x02\x02\x3e\x42\xc0\xc0\xc1\x61\x3e" }  },
+      /* --- pixel bitmap for wncyr131 char#54 (noname) --- */
+      {  54,49052,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x78\x84\x02\x03\x3d\x43\x81\x81\x81\x82\x42\x3c" }  },
+      /* --- pixel bitmap for wncyr131 char#55 (noname) --- */
+      {  55,49940,                      /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,   13, 3,27, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x11\x88\x11\x62\x61\x71\x71\x30\xf2\x41\x40\xf3\x31"
+            "\x51" }  },
+      /* --- pixel bitmap for wncyr131 char#56 (noname) --- */
+      {  56,50850,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3c\xc0\x81\x83\x6e\x3c\x76\xe1\x81\x81\x42\x3c" }  },
+      /* --- pixel bitmap for wncyr131 char#57 (noname) --- */
+      {  57,51736,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3c\x42\x41\x81\x81\xc2\xbc\x80\x80\x40\x21\x1e" }  },
+      /* --- pixel bitmap for wncyr131 char#58 (noname) --- */
+      {  58,39304,                      /* character number, location */
+          8, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  2,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f\xf0" }  },
+      /* --- pixel bitmap for wncyr131 char#59 (noname) --- */
+      {  59,39967,                      /* character number, location */
+          8, 2,   -4, 2,      /* topleft row,col, and botleft row,col */
+          {  2,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f\xf0\x5a" }  },
+      /* --- pixel bitmap for wncyr131 char#60 < --- */
+      {  60,55217,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x20\x62\xc4\x8c\x19\x66\x30\x83\x11\x88" }  },
+      /* --- pixel bitmap for wncyr131 char#61 (noname) --- */
+      {  61,84237,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  4,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x47\x44\x44\xf4" }  },
+      /* --- pixel bitmap for wncyr131 char#62 > --- */
+      {  62,55768,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x11\xc4\x30\xc3\x8c\x99\x99\x98\x08" }  },
+      /* --- pixel bitmap for wncyr131 char#63 (noname) --- */
+      {  63,40852,                      /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbe\x60\x10\x04\x41\x20\x18\x00\x00\x80\xc1\x00" }  },
+      /* --- pixel bitmap for wncyr131 char#64 (noname) --- */
+      {  64,56410,                      /* character number, location */
+         13, 2,    9, 2,      /* topleft row,col, and botleft row,col */
+          {  6,    4, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x61\x28\x79" }  },
+      /* --- pixel bitmap for wncyr131 char#65 A --- */
+      {  65,23777,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x40\x00\x1c\x80\x03\x70\x00\x19\x20\x03\xc2\x40\x18"
+            "\xf8\x83\xc0\x10\x98\x87\x0f" }  },
+      /* --- pixel bitmap for wncyr131 char#66 B --- */
+      {  66,25119,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x87\xc1\x30\x10\x06\xc4\x80\xf8\x07\x83\x63\xc0"
+            "\x0c\x98\x01\x33\xb0\xff\x03" }  },
+      /* --- pixel bitmap for wncyr131 char#67 Ts --- */
+      {  67, 1087,                      /* character number, location */
+         12, 0,   -2, 0,      /* topleft row,col, and botleft row,col */
+          { 16,   14, 3,24, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x36\x10\xf9\x22\x72\x3e\x01\xe0\x11\xe0\x21" }  },
+      /* --- pixel bitmap for wncyr131 char#68 D --- */
+      {  68, 2049,                      /* character number, location */
+         12,-1,   -2,-1,      /* topleft row,col, and botleft row,col */
+          { 17,   14, 3,48, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5b\x10\xf2\x71\x42\x30\xf2\x62\x42\x30\xf1\x61\x52"
+            "\x30\x52\x52\x81\x62\x5e\x22\xc1\x11\xe0\x11" }  },
+      /* --- pixel bitmap for wncyr131 char#69 E --- */
+      {  69,26506,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\xc7\x60\x0c\xc4\x90\x0c\xc9\x1f\x0c\xc1\x90\x0c"
+            "\xc8\x40\x0c\xf6\x7f" }  },
+      /* --- pixel bitmap for wncyr131 char#70 F --- */
+      {  70,27563,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf8\x01\x06\x60\x80\x1f\x66\x36\xc6\x63\x6c\x66\xf8"
+            "\x01\x06\x60\x80\x1f" }  },
+      /* --- pixel bitmap for wncyr131 char#71 G --- */
+      {  71, 3203,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,   12, 3,25, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\x32\x52\x32\x61\x10\xf1\x22\x71\xf5\x22\x86\x62" }  },
+      /* --- pixel bitmap for wncyr131 char#72 Kh --- */
+      {  72, 4277,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 15,   12, 3,42, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x15\x35\x43\x41\x82\x31\xa2\x12\xa4\xc2\xd3\xb2\x12"
+            "\xa1\x23\x81\x42\x71\x62\x36\x36" }  },
+      /* --- pixel bitmap for wncyr131 char#73 I --- */
+      {  73, 5489,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 16,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\xfc\x0c\x38\x0c\x3c\x0c\x36\x0c\x32\x0c\x31\x8c"
+            "\x30\x4c\x30\x6c\x30\x3c\x30\x1c\x30\x3f\xfc" }  },
+      /* --- pixel bitmap for wncyr131 char#74 J --- */
+      {  74,28380,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   12, 3,17, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x26\xf7\x52\x1f\x12\x32\x10\x14\x32" }  },
+      /* --- pixel bitmap for wncyr131 char#75 K --- */
+      {  75,22723,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x98\x81\x31\x10\x06\xc1\x1c\xf8\x01\xc3\x60\x20"
+            "\x0c\x84\x81\x32\xf0\x1f\x04" }  },
+      /* --- pixel bitmap for wncyr131 char#76 L --- */
+      {  76, 6353,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   12, 3,32, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x2c\xf4\x42\x42\x20\xf1\x41\x52\x20\xf1\x32\x52\x24"
+            "\x62\x23\x56" }  },
+      /* --- pixel bitmap for wncyr131 char#77 M --- */
+      {  77, 7642,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 18,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f\xe0\x73\x80\x43\x03\x0d\x0d\x34\x64\xc8\x90\x21"
+            "\x43\x86\x0c\x31\x31\xc4\xc4\x10\x0e\x43\x38\xcc\x47"
+            "\xfc" }  },
+      /* --- pixel bitmap for wncyr131 char#78 N --- */
+      {  78, 8859,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 15,   12, 3,26, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x36\xf3\x22\x72\x20\x2b\x20\xf4\x22\x72\x26\x36" }  },
+      /* --- pixel bitmap for wncyr131 char#79 O --- */
+      {  79,29203,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   12, 3,35, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x45\x62\x52\x32\x72\x21\x91\x1f\x32\x92\xf1\x12\x72"
+            "\x10\x22\x52\x65\x40" }  },
+      /* --- pixel bitmap for wncyr131 char#80 P --- */
+      {  80, 9947,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 15,   12, 3,14, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x01\xf9\x22\x72\x26\x36" }  },
+      /* --- pixel bitmap for wncyr131 char#81 Ch --- */
+      {  81,10982,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 16,   12, 3,34, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x46\xf4\x22\x82\x20\x32\x63\x67\x12\x83\x32\x20"
+            "\xf1\xc2\x20\xa6" }  },
+      /* --- pixel bitmap for wncyr131 char#82 R --- */
+      {  82,30322,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,   12, 3,29, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0a\x42\x52\x10\xf2\x22\x62\x22\x52\x38\x20\xf3\x22"
+            "\x86\x62" }  },
+      /* --- pixel bitmap for wncyr131 char#83 S --- */
+      {  83,31251,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   12, 3,33, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x45\x21\x22\x53\xf1\x12\x81\x0f\x32\xa0\xf1\x12\x81"
+            "\x22\x61\x56\x25" }  },
+      /* --- pixel bitmap for wncyr131 char#84 T --- */
+      {  84,12065,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   12, 3,23, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x32\x32\x0f\x21\x42\x41\xf5\x52\x50\x28\x22" }  },
+      /* --- pixel bitmap for wncyr131 char#85 U --- */
+      {  85,32445,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 15,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f\x7c\x0c\x04\x06\x03\x86\x00\x67\x00\x13\x00\x07"
+            "\x80\x03\x80\x00\x62\x00\x19\x00\x07\x00" }  },
+      /* --- pixel bitmap for wncyr131 char#86 V --- */
+      {  86,13377,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x83\xc1\x30\x30\x06\xc6\xe0\xf8\x0f\x83\x63\xc0"
+            "\x0c\x98\x01\x33\xb0\xff\x03" }  },
+      /* --- pixel bitmap for wncyr131 char#87 Shch --- */
+      {  87,14858,                      /* character number, location */
+         12, 0,   -2, 0,      /* topleft row,col, and botleft row,col */
+          { 22,   14, 3,28, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x25\x26\x10\xf9\x22\x62\x52\x3e\x07\xe0\x71\xe0"
+            "\x81" }  },
+      /* --- pixel bitmap for wncyr131 char#88 Sh --- */
+      {  88,16335,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 21,   12, 3,18, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x25\x26\xf9\x22\x62\x52\x2e\x07" }  },
+      /* --- pixel bitmap for wncyr131 char#89 Y --- */
+      {  89,17919,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 19,   12, 3,44, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x76\xf3\x22\xb2\x20\x28\x52\x42\x53\x32\x20\xf2"
+            "\x22\x72\x22\x20\x22\x62\x32\x2b\x26" }  },
+      /* --- pixel bitmap for wncyr131 char#90 Z --- */
+      {  90,18953,                      /* character number, location */
+         12, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfd\x0c\x14\x30\xc0\x80\xf1\x01\x18\xc0\x00\x07\x1c"
+            "\xd8\x1f" }  },
+      /* --- pixel bitmap for wncyr131 char#91 (noname) --- */
+      {  91,41525,                      /* character number, location */
+         14, 2,   -5, 2,      /* topleft row,col, and botleft row,col */
+          {  4,   19, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\x0f\xe1\x3f\x11\x34" }  },
+      /* --- pixel bitmap for wncyr131 char#92 (noname) --- */
+      {  92,57289,                      /* character number, location */
+         13, 3,    7, 3,      /* topleft row,col, and botleft row,col */
+          {  6,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x62\x14\x45\xf3\x0c" }  },
+      /* --- pixel bitmap for wncyr131 char#93 (noname) --- */
+      {  93,42211,                      /* character number, location */
+         14, 0,   -5, 0,      /* topleft row,col, and botleft row,col */
+          {  4,   19, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\xfe\x31\xf1\x31\x04" }  },
+      /* --- pixel bitmap for wncyr131 char#94 \Cprime --- */
+      {  94,20251,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   12, 3,31, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x70\xf3\x22\x90\x28\x52\x53\x10\xf2\x22\x72\x22"
+            "\x62\x1b\x22" }  },
+      /* --- pixel bitmap for wncyr131 char#95 \Cdprime --- */
+      {  95,21715,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 17,   12, 3,35, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\x82\x42\x9f\x21\x52\x90\x68\x92\x53\x10\xf2\x62"
+            "\x72\x62\x62\x5b\x22" }  },
+      /* --- pixel bitmap for wncyr131 char#96 (noname) --- */
+      {  96,42817,                      /* character number, location */
+         13, 2,    7, 2,      /* topleft row,col, and botleft row,col */
+          {  2,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5a\x0f" }  },
+      /* --- pixel bitmap for wncyr131 char#97 a --- */
+      {  97,85353,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3e\x80\x00\xe1\x33\x24\x68\x50\x7f" }  },
+      /* --- pixel bitmap for wncyr131 char#98 b --- */
+      {  98,86085,                      /* character number, location */
+         13, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  8,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x80\x80\x7c\x02\x01\x3d\x43\x81\x81\x81\x81\x42\x3c" }  },
+      /* --- pixel bitmap for wncyr131 char#99 ts --- */
+      {  99,92950,                      /* character number, location */
+          8, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          { 11,   12, 3,26, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\x24\x10\xf5\x21\x41\x3a\x10\xf1\x91\x10\xe0\x71" }  },
+      /* --- pixel bitmap for wncyr131 char#100 d --- */
+      { 100,93926,                      /* character number, location */
+          8,-2,   -4,-2,      /* topleft row,col, and botleft row,col */
+          { 13,   12, 3,34, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x47\x20\xf3\x52\x21\x30\xf1\x51\x31\x30\x29\x41\xc1"
+            "\x81\xc1\x21\xa1" }  },
+      /* --- pixel bitmap for wncyr131 char#101 e --- */
+      { 101,86843,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3c\x51\xf0\x1f\x08\x08\x79" }  },
+      /* --- pixel bitmap for wncyr131 char#102 f --- */
+      { 102,87412,                      /* character number, location */
+         12, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   16, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x30\xc0\x00\x00\x00\xce\xc9\x14\x63\x80\x01\xc6\x28"
+            "\x93\x73\x00\x00\x00\x03\x0c" }  },
+      /* --- pixel bitmap for wncyr131 char#103 g --- */
+      { 103,95068,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x84\x84\x04\x04\x04\x04\x1f" }  },
+      /* --- pixel bitmap for wncyr131 char#104 kh --- */
+      { 104,96104,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xcf\x21\x81\x03\x0c\x30\x20\xc1\xcc\xf3" }  },
+      /* --- pixel bitmap for wncyr131 char#105 i --- */
+      { 105,97300,                      /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 11,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xdf\x27\x0c\x51\x08\x42\x10\x8a\x30\xe4\xfb" }  },
+      /* --- pixel bitmap for wncyr131 char#106 j --- */
+      { 106,88215,                      /* character number, location */
+         13,-1,   -4,-1,      /* topleft row,col, and botleft row,col */
+          {  5,   17, 3,17, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x32\xf2\x50\x23\xf9\x41\x03\x22" }  },
+      /* --- pixel bitmap for wncyr131 char#107 k --- */
+      { 107,114194,                     /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xcf\x42\x22\x1e\x12\x22\xe2\xcf" }  },
+      /* --- pixel bitmap for wncyr131 char#108 l --- */
+      { 108,98114,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfe\x23\x82\x08\x23\x8c\x30\x72\xc8\xf9" }  },
+      /* --- pixel bitmap for wncyr131 char#109 m --- */
+      { 109,99387,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x87\x37\x8c\x61\x94\xa2\x14\x99\xc8\xe4\xf7" }  },
+      /* --- pixel bitmap for wncyr131 char#110 n --- */
+      { 110,100566,                     /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xcf\x13\x42\x08\x3f\x84\x10\x42\xc8\xf3" }  },
+      /* --- pixel bitmap for wncyr131 char#111 o --- */
+      { 111,88910,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3c\x42\x81\x81\x81\x81\x42\x3c" }  },
+      /* --- pixel bitmap for wncyr131 char#112 p --- */
+      { 112,101638,                     /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    8, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0a\xf5\x21\x41\x24\x24" }  },
+      /* --- pixel bitmap for wncyr131 char#113 ch --- */
+      { 113,102657,                     /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 11,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xdf\x27\x08\x41\x08\x82\x1c\x98\x00\x04\xf8" }  },
+      /* --- pixel bitmap for wncyr131 char#114 r --- */
+      { 114,89992,                      /* character number, location */
+          8, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          {  9,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7b\x0c\x09\x14\x28\x50\xa0\x21\x3d\x02\x04\x08\x38"
+            "\x00" }  },
+      /* --- pixel bitmap for wncyr131 char#115 s --- */
+      { 115,90781,                      /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7c\x41\x20\x10\x08\x08\x79" }  },
+      /* --- pixel bitmap for wncyr131 char#116 t --- */
+      { 116,103700,                     /* character number, location */
+          8, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x87\x18\x22\x08\x20\x80\x00\x02\x3e" }  },
+      /* --- pixel bitmap for wncyr131 char#117 u --- */
+      { 117,91851,                      /* character number, location */
+          8, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          { 11,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x8f\x27\x08\x22\x10\x81\x0c\x28\x40\x01\x04\x20\x80"
+            "\x40\x04\x1e\x00" }  },
+      /* --- pixel bitmap for wncyr131 char#118 v --- */
+      { 118,104996,                     /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\xa1\xd0\x27\x16\x0a\x7f" }  },
+      /* --- pixel bitmap for wncyr131 char#119 shch --- */
+      { 119,106461,                     /* character number, location */
+          8, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   12, 3,26, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x14\x13\x20\xf5\x11\x41\x31\x3c\xe0\xe1\xe0\xe1" }  },
+      /* --- pixel bitmap for wncyr131 char#120 sh --- */
+      { 120,107918,                     /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,    8, 3,16, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x14\x13\xf5\x11\x41\x31\x1c" }  },
+      /* --- pixel bitmap for wncyr131 char#121 y --- */
+      { 121,109478,                     /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\x17\x90\x80\x7c\x24\x26\x21\x09\xe9\xe7" }  },
+      /* --- pixel bitmap for wncyr131 char#122 z --- */
+      { 122,110466,                     /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5f\x08\x7a\x20\x18\x7e" }  },
+      /* --- pixel bitmap for wncyr131 char#123 (noname) --- */
+      { 123,57897,                      /* character number, location */
+          5, 0,    4, 0,      /* topleft row,col, and botleft row,col */
+          { 10,    1, 3, 2, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0a" }  },
+      /* --- pixel bitmap for wncyr131 char#124 (noname) --- */
+      { 124,58717,                      /* character number, location */
+          5, 0,    4, 0,      /* topleft row,col, and botleft row,col */
+          { 20,    1, 3, 4, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x06" }  },
+      /* --- pixel bitmap for wncyr131 char#125 N0 --- */
+      { 125,59675,                      /* character number, location */
+         12, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 15,   12, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f\x02\x8e\x01\x4d\x80\x26\x44\x17\x25\x8b\x90\xc5"
+            "\x89\x03\xc4\x01\xc2\xb8\x61\xc0\x20\x00" }  },
+      /* --- pixel bitmap for wncyr131 char#126 \cprime --- */
+      { 126,111750,                     /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\x81\xc0\x27\x16\x0a\x7f" }  },
+      /* --- pixel bitmap for wncyr131 char#127 \cdprime --- */
+      { 127,113228,                     /* character number, location */
+          8, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x44\x10\x01\x7c\x10\x43\x08\x21\x7e" }  },
+      /* --- trailer  --- */
+      { -99, -999,  0,0,0,0, { 0,0,0,0, (pixbyte *)"\0" }  }
+   } ;
+
+
+/* --- size=4 for .160gf ---
+ * mf '\mode=preview; mag=magstep(-15.29639112828755784636); input wncyr10'
+ * --------------------------------------------------------------------- */
+/* --- fontdef for wncyr160 --- */
+static	chardef  wncyr160[] =
+   {
+      /* --- pixel bitmap for wncyr160 char#0 Nj --- */
+      {   0,62562,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 23,   15, 3,45, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x36\x80\xf5\x22\x72\xa0\x2e\x05\x42\x72\x72\x10"
+            "\xf3\x22\x72\x82\x22\x72\x72\x16\x3b\x32" }  },
+      /* --- pixel bitmap for wncyr160 char#1 Lj --- */
+      {   1,63570,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 23,   15, 3,53, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3d\x70\xf5\x52\x52\x90\x52\x59\x72\x52\x62\x10\xf1"
+            "\x51\x62\x72\x42\x62\x74\x22\x62\x77\x72\x62\x23\x6a"
+            "\x32" }  },
+      /* --- pixel bitmap for wncyr160 char#2 Dzh --- */
+      {   2,64673,                      /* character number, location */
+         15, 1,   -3, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   18, 3,19, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x46\xfc\x22\x82\x2e\x02\xf2\x72\x72" }  },
+      /* --- pixel bitmap for wncyr160 char#3 \`E --- */
+      {   3,65649,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   15, 3,55, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x01\x36\x54\x52\x42\x92\x2f\x11\xb2\x10\x65\x22\x5b"
+            "\x24\x62\x15\x72\xd2\x0f\x11\xb2\x10\x11\x92\x41\x62"
+            "\x77\x52" }  },
+      /* --- pixel bitmap for wncyr160 char#4 \=I --- */
+      {   4,74509,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   15, 3, 8, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\xfc\x32\x38" }  },
+      /* --- pixel bitmap for wncyr160 char#5 \=E --- */
+      {   5,66616,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   15, 3,53, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x56\x31\x42\x54\x22\x92\xf1\x12\xb1\x02\x25\x6a\x52"
+            "\x64\x23\x75\x12\xd0\xf1\x12\xb1\x22\x91\x52\x61\x77"
+            "\x37" }  },
+      /* --- pixel bitmap for wncyr160 char#6 Dj --- */
+      {   6,75665,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 19,   15, 3,61, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x02\x31\x62\x52\x31\x62\x61\x30\xf1\x72\xa0\x72"
+            "\x35\x92\x12\x42\x83\x71\x10\xf3\x72\x82\x72\x81\x82"
+            "\x32\x22\x57\x24\x22" }  },
+      /* --- pixel bitmap for wncyr160 char#7 \'C --- */
+      {   7,77002,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   15, 3,44, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x31\x42\x52\x31\x42\x61\x30\xf1\x52\xa0\x52\x24"
+            "\x94\x42\x20\xf6\x52\x62\x20\x36\x26" }  },
+      /* --- pixel bitmap for wncyr160 char#8 nj --- */
+      {   8,117471,                     /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 16,   10, 3,37, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x24\x50\xf2\x22\x42\x60\x2c\x42\x42\x32\x10\xf2"
+            "\x22\x42\x42\x05\x28\x11" }  },
+      /* --- pixel bitmap for wncyr160 char#9 lj --- */
+      {   9,118429,                     /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfc\x0f\x88\x01\xc4\x00\x62\x80\xf1\xc1\x98\x63\x8c"
+            "\x17\xc6\x0f\x63\xe3\x1f" }  },
+      /* --- pixel bitmap for wncyr160 char#10 dzh --- */
+      {  10,119508,                     /* character number, location */
+         10, 0,   -3, 0,      /* topleft row,col, and botleft row,col */
+          { 12,   13, 3,17, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x25\xf7\x22\x42\x2c\xf2\x52\x52" }  },
+      /* --- pixel bitmap for wncyr160 char#11 \`e --- */
+      {  11,120438,                     /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7d\x0c\x13\x18\xdc\xf9\x3f\x4c\x70\x60\xc3\xf0\x01" }  },
+      /* --- pixel bitmap for wncyr160 char#12 \=\i --- */
+      {  12,80680,                      /* character number, location */
+         16, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,   16, 3,18, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x22\x20\xf3\x64\x20\xf7\x22\x26" }  },
+      /* --- pixel bitmap for wncyr160 char#13 \=e --- */
+      {  13,121361,                     /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf8\x32\x6c\xe0\x0e\x7f\x0e\x3f\x88\x81\x0c\xe3\x03" }  },
+      /* --- pixel bitmap for wncyr160 char#14 dj --- */
+      {  14,81654,                      /* character number, location */
+         15, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   19, 3,55, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\xb2\x9c\x10\xf1\x22\x90\x22\x15\x54\x41\x43\x61"
+            "\x10\xf3\x22\x72\x22\x71\x32\x62\x16\x42\xa2\xa2\xa2"
+            "\x83\x62" }  },
+      /* --- pixel bitmap for wncyr160 char#15 \'c --- */
+      {  15,82738,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   15, 3,34, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\xc2\xab\x30\xf1\x22\xa0\x22\x24\x64\x42\x20\xf6"
+            "\x22\x62\x26\x26" }  },
+      /* --- pixel bitmap for wncyr160 char#16 Yu --- */
+      {  16,67782,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 25,   15, 3,75, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x77\x72\x73\x53\x52\x62\x92\x20\xf1\x22\x52\xb2"
+            "\x10\xf1\x22\x42\xd2\x28\xd2\xf1\x22\x42\xd2\xf1\x22"
+            "\x52\xb2\x10\x22\x62\x92\x42\x73\x53\x36\x77\x52" }  },
+      /* --- pixel bitmap for wncyr160 char#17 Zh --- */
+      {  17,61172,                      /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 24,   15, 3,81, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x66\x66\x82\x83\xf1\x31\x72\x71\x30\x41\x62\x61"
+            "\x92\x42\x42\xca\xc4\x22\x24\x92\x52\x52\x40\xf1\x32"
+            "\x62\x62\x3f\x11\x22\x62\x62\x21\x04\x72\x74\x12\x66"
+            "\x62\x15" }  },
+      /* --- pixel bitmap for wncyr160 char#18 \u I --- */
+      {  18,69303,                      /* character number, location */
+         19, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   19, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x18\x30\x30\x60\x80\x3f\x00\x00\xf0\x83\x9f\x01\x0e"
+            "\x03\x1c\x06\x34\x0c\x64\x18\xcc\x30\x88\x61\x08\xc3"
+            "\x08\x86\x19\x0c\x13\x18\x16\x30\x1c\x60\x38\xc0\xfc"
+            "\xe0\x07" }  },
+      /* --- pixel bitmap for wncyr160 char#19 \"E --- */
+      {  19,78428,                      /* character number, location */
+         19, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   19, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x30\x03\xcc\x00\x00\x00\x00\xff\x1f\x03\xc6\x00\x31"
+            "\x80\x0c\x22\x83\xc0\x30\xf0\x0f\x0c\x03\x83\xc8\x20"
+            "\x32\xc0\x0c\x10\x03\xf6\xff\x01" }  },
+      /* --- pixel bitmap for wncyr160 char#20 (noname) --- */
+      {  20,70292,                      /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 17,   15, 3,59, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\x73\xf1\x32\x81\x21\x32\x71\x82\x61\x82\x51\x93"
+            "\x41\xa2\x41\xa2\x31\xc2\x21\x60\xf1\x62\x11\x70\x73"
+            "\x70\xf1\x72\x82" }  },
+      /* --- pixel bitmap for wncyr160 char#21 (noname) --- */
+      {  21,71456,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   15, 3,59, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x65\xb2\x32\x91\x71\x72\x72\x61\x91\x52\x92\x2f\x1e"
+            "\x03\x01\x12\x92\x11\x22\x92\x51\x91\x62\x72\x71\x71"
+            "\x92\x32\xb5\x62" }  },
+      /* --- pixel bitmap for wncyr160 char#22 \Dz --- */
+      {  22,72528,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   15, 3,41, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x36\x11\x22\x62\x1f\x12\x81\x12\xa4\x97\x77\x94\xa3"
+            "\xa3\x93\x91\x12\x72\x11\x17\x31" }  },
+      /* --- pixel bitmap for wncyr160 char#23 Ya --- */
+      {  23,73828,                      /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 17,   15, 3,44, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x6b\x43\x62\x20\xf3\x32\x82\x20\x43\x62\x89\x72\x62"
+            "\x20\xf3\x42\x72\x21\x32\x72\x34\x66" }  },
+      /* --- pixel bitmap for wncyr160 char#24 yu --- */
+      {  24,122509,                     /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f\x1e\x86\x61\x86\x40\xc6\xc0\xc6\xc0\xfe\xc0\xc6"
+            "\xc0\x86\x61\x86\x61\x1f\x1e" }  },
+      /* --- pixel bitmap for wncyr160 char#25 zh --- */
+      {  25,116115,                     /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 16,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe3\xc7\x82\x41\x84\x21\x98\x19\xf0\x0f\x88\x11\x84"
+            "\x21\x85\xa1\x87\xe1\xe3\xc7" }  },
+      /* --- pixel bitmap for wncyr160 char#26 \u\i --- */
+      {  26,124000,                     /* character number, location */
+         14, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   14, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0c\x86\xc1\xe0\x0f\x00\xf0\xfb\x19\x0e\xc3\x61\x34"
+            "\x4c\x86\xc9\xb0\x18\x0e\xc3\x61\x7e\x3f" }  },
+      /* --- pixel bitmap for wncyr160 char#27 \"e --- */
+      {  27,83529,                      /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xcc\x00\x00\xc0\x63\x4c\xf0\xe0\xff\x03\x06\x18\x70"
+            "\x88\x0f" }  },
+      /* --- pixel bitmap for wncyr160 char#28 (noname) --- */
+      {  28,124933,                     /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 11,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f\x66\x28\x43\x30\x81\x09\x4c\xc0\x01\x0e\x30\x00"
+            "\x01" }  },
+      /* --- pixel bitmap for wncyr160 char#29 (noname) --- */
+      {  29,126047,                     /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe0\x00\x63\x20\x08\x06\xf3\xff\xff\x7f\x83\x45\x10"
+            "\x18\x03\x1c\x00" }  },
+      /* --- pixel bitmap for wncyr160 char#30 \dz --- */
+      {  30,127073,                     /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  7,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfe\xe1\xe0\xe0\xe3\x83\xc1\xa1\x0f" }  },
+      /* --- pixel bitmap for wncyr160 char#31 ya --- */
+      {  31,128325,                     /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,   10, 3,24, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x48\xf2\x22\x42\x20\x46\x20\xf3\x32\x32\x24\x26" }  },
+      /* --- pixel bitmap for wncyr160 char#32 \cyddot --- */
+      {  32,52927,                      /* character number, location */
+         16, 3,   14, 3,      /* topleft row,col, and botleft row,col */
+          {  6,    2, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf3\x0c" }  },
+      /* --- pixel bitmap for wncyr160 char#33 (noname) --- */
+      {  33,33396,                      /* character number, location */
+         15, 3,    0, 3,      /* topleft row,col, and botleft row,col */
+          {  2,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\xff\x03\x3c" }  },
+      /* --- pixel bitmap for wncyr160 char#34 (noname) --- */
+      {  34,53800,                      /* character number, location */
+         15, 1,    9, 1,      /* topleft row,col, and botleft row,col */
+          {  7,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe3\xb1\x50\x18\x0a\x01" }  },
+      /* --- pixel bitmap for wncyr160 char#35 (noname) --- */
+      {  35,79949,                      /* character number, location */
+         17, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 17,   17, 3,51, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x26\x90\xf1\x42\xbe\x3f\x11\x32\x71\x30\xf1\x42\xb0"
+            "\x4b\x62\x82\x10\xf3\x42\x92\x42\x82\x52\x72\x4c\x31" }  },
+      /* --- pixel bitmap for wncyr160 char#36 (noname) --- */
+      {  36,54510,                      /* character number, location */
+         15, 0,   11, 0,      /* topleft row,col, and botleft row,col */
+          { 11,    4, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x1e\xb0\x80\xf8\x03" }  },
+      /* --- pixel bitmap for wncyr160 char#37 (noname) --- */
+      {  37,34585,                      /* character number, location */
+         17, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   18, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1c\x80\x98\x00\x21\x0c\xc3\xd0\x0b\x43\x10\x0c\x21"
+            "\x30\x44\x80\x10\x01\x26\x02\x70\x84\x03\x08\x13\x20"
+            "\x86\x40\x18\x82\x60\x08\x81\x21\x04\x86\x08\x30\x11"
+            "\x80\x03" }  },
+      /* --- pixel bitmap for wncyr160 char#38 (noname) --- */
+      {  38,55087,                      /* character number, location */
+         15, 5,   11, 5,      /* topleft row,col, and botleft row,col */
+          {  4,    4, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xec\x17" }  },
+      /* --- pixel bitmap for wncyr160 char#39 (noname) --- */
+      {  39,35251,                      /* character number, location */
+         15, 3,    9, 3,      /* topleft row,col, and botleft row,col */
+          {  2,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xaf\x05" }  },
+      /* --- pixel bitmap for wncyr160 char#40 (noname) --- */
+      {  40,35825,                      /* character number, location */
+         17, 3,   -6, 3,      /* topleft row,col, and botleft row,col */
+          {  6,   23, 3,34, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x51\x41\x41\x42\x41\x42\x41\x4f\x82\x40\x11\x52\x51"
+            "\x52\x51\x61\x61" }  },
+      /* --- pixel bitmap for wncyr160 char#41 (noname) --- */
+      {  41,36434,                      /* character number, location */
+         17, 1,   -6, 1,      /* topleft row,col, and botleft row,col */
+          {  6,   23, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x81\x40\x30\x08\x06\xc1\x30\x0c\xc3\x30\x0c\xc3\x10"
+            "\x86\x30\x84\x10\x00" }  },
+      /* --- pixel bitmap for wncyr160 char#42 (noname) --- */
+      {  42,37067,                      /* character number, location */
+         17, 2,    7, 2,      /* topleft row,col, and botleft row,col */
+          {  8,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x18\x18\xdb\xff\x3c\x3c\xff\xdb\x18\x18" }  },
+      /* --- pixel bitmap for wncyr160 char#43 (noname) --- */
+      {  43,84344,                      /* character number, location */
+         18, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   18, 3,51, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x11\x41\x91\x21\xa4\x80\xf2\x32\x98\x60\xf2\x32\x90"
+            "\x39\x52\x53\x10\xf2\x32\x72\x32\x63\x32\x53\x2a\x32" }  },
+      /* --- pixel bitmap for wncyr160 char#44 (noname) --- */
+      {  44,37650,                      /* character number, location */
+          2, 3,   -4, 3,      /* topleft row,col, and botleft row,col */
+          {  2,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xaf\x05" }  },
+      /* --- pixel bitmap for wncyr160 char#45 (noname) --- */
+      {  45,38141,                      /* character number, location */
+          6, 0,    4, 0,      /* topleft row,col, and botleft row,col */
+          {  7,    2, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x3f" }  },
+      /* --- pixel bitmap for wncyr160 char#46 (noname) --- */
+      {  46,38598,                      /* character number, location */
+          2, 3,    0, 3,      /* topleft row,col, and botleft row,col */
+          {  2,    2, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f" }  },
+      /* --- pixel bitmap for wncyr160 char#47 (noname) --- */
+      {  47,39104,                      /* character number, location */
+         17, 1,   -6, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   23, 3,55, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x91\xf1\x81\x10\xf2\x71\x20\xf1\x61\x30\xf1\x51"
+            "\x40\xf2\x41\x50\xf1\x31\x60\xf2\x21\x70\xf1\x11\x8f"
+            "\x11\x93" }  },
+      /* --- pixel bitmap for wncyr160 char#48 (noname) --- */
+      {  48,43897,                      /* character number, location */
+         14, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   14, 3,27, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x34\x42\x42\x21\x61\x1f\x72\x62\x11\x61\x22\x42\x44"
+            "\x30" }  },
+      /* --- pixel bitmap for wncyr160 char#49 (noname) --- */
+      {  49,44671,                      /* character number, location */
+         14, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  8,   14, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x41\x35\x30\xfa\x32\x38" }  },
+      /* --- pixel bitmap for wncyr160 char#50 (noname) --- */
+      {  50,45640,                      /* character number, location */
+         14, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   14, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7c\x08\x16\xf0\xc0\x00\x03\x0c\x18\x20\x40\xc0\x80"
+            "\x21\x81\xfe\xfd\x07" }  },
+      /* --- pixel bitmap for wncyr160 char#51 (noname) --- */
+      {  51,46668,                      /* character number, location */
+         14, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   14, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7c\x08\x62\x18\x60\x80\x01\x83\x07\x60\x00\x03\x3c"
+            "\xf0\xc0\x82\xf1\x01" }  },
+      /* --- pixel bitmap for wncyr160 char#52 (noname) --- */
+      {  52,47584,                      /* character number, location */
+         14, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   14, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc0\x80\x03\x0e\x34\xc8\x10\x63\xcc\x30\xff\x03\x03"
+            "\x0c\x30\xc0\xc0\x0f" }  },
+      /* --- pixel bitmap for wncyr160 char#53 (noname) --- */
+      {  53,48612,                      /* character number, location */
+         14, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   14, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\xf9\xa3\x83\x00\x02\xe8\xe1\x98\x41\x00\x03\x3c"
+            "\xf0\x40\x82\xf0\x01" }  },
+      /* --- pixel bitmap for wncyr160 char#54 (noname) --- */
+      {  54,49502,                      /* character number, location */
+         14, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   14, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\x20\x46\x98\x01\x03\xec\x71\xd8\x40\x03\x0f\x2c"
+            "\xb0\x41\x84\xe1\x01" }  },
+      /* --- pixel bitmap for wncyr160 char#55 (noname) --- */
+      {  55,50398,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   15, 3,35, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x11\x90\xf1\x1a\x01\x81\x11\x71\x91\x91\x92\x91\x92"
+            "\x91\x60\xf3\x32\x62" }  },
+      /* --- pixel bitmap for wncyr160 char#56 (noname) --- */
+      {  56,51312,                      /* character number, location */
+         14, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   14, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x78\x10\x22\x90\x40\x0e\x71\x83\x07\x3b\x86\x0d\x3c"
+            "\xf0\xc0\x86\xf1\x01" }  },
+      /* --- pixel bitmap for wncyr160 char#57 (noname) --- */
+      {  57,52208,                      /* character number, location */
+         14, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   14, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x78\x10\x22\xd8\xc0\x03\x0f\x2c\xb0\xe1\x78\x03\x0c"
+            "\x98\x21\xc6\xf0\x00" }  },
+      /* --- pixel bitmap for wncyr160 char#58 (noname) --- */
+      {  58,39696,                      /* character number, location */
+         10, 3,    0, 3,      /* topleft row,col, and botleft row,col */
+          {  2,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f\x00\x0f" }  },
+      /* --- pixel bitmap for wncyr160 char#59 (noname) --- */
+      {  59,40359,                      /* character number, location */
+         10, 3,   -4, 3,      /* topleft row,col, and botleft row,col */
+          {  2,   14, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0f\x00\xaf\x05" }  },
+      /* --- pixel bitmap for wncyr160 char#60 < --- */
+      {  60,55703,                      /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc0\x00\x04\x43\x18\x86\x61\x0c\x8c\x01\xc3\x80\x30"
+            "\x20\x18\x18\x00" }  },
+      /* --- pixel bitmap for wncyr160 char#61 (noname) --- */
+      {  61,85069,                      /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,   10, 3,10, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\x20\xf7\x22\x26" }  },
+      /* --- pixel bitmap for wncyr160 char#62 > --- */
+      {  62,56258,                      /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x60\x30\x08\x0c\x81\x61\x60\x0c\xc6\x18\xc6\x10\x83"
+            "\x00\x06" }  },
+      /* --- pixel bitmap for wncyr160 char#63 (noname) --- */
+      {  63,41244,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfc\x0c\x34\x30\xc0\x80\x01\x01\x02\x08\x30\x00\x00"
+            "\x00\x00\x00\xc0\x00\x03" }  },
+      /* --- pixel bitmap for wncyr160 char#64 (noname) --- */
+      {  64,56904,                      /* character number, location */
+         15, 2,   11, 2,      /* topleft row,col, and botleft row,col */
+          {  8,    4, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x81\x81\x42\x3c" }  },
+      /* --- pixel bitmap for wncyr160 char#65 A --- */
+      {  65,24015,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   15, 3,50, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x72\x70\x64\x60\xf1\x61\x12\x60\xf2\x51\x32\x50"
+            "\x41\x52\x88\x40\xf2\x31\x72\x30\x21\x92\x25\x56" }  },
+      /* --- pixel bitmap for wncyr160 char#66 B --- */
+      {  66,25371,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   15, 3,51, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0c\x52\x62\x52\x71\x30\xf1\x22\x81\x20\xf1\x22\xb0"
+            "\x2b\x42\x82\x10\xf2\x22\x92\x22\x83\x22\x73\x1c\x31" }  },
+      /* --- pixel bitmap for wncyr160 char#67 Ts --- */
+      {  67, 1087,                      /* character number, location */
+         15, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   17, 3,24, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x46\x10\xfc\x22\x82\x3e\x02\xe0\x22\xe0\x21" }  },
+      /* --- pixel bitmap for wncyr160 char#68 D --- */
+      {  68, 2087,                      /* character number, location */
+         15,-1,   -2,-1,      /* topleft row,col, and botleft row,col */
+          { 20,   17, 3,60, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x6d\x10\xf4\x82\x52\x30\xf1\x81\x62\x30\xf1\x72\x62"
+            "\x30\x71\x72\x92\x72\x91\x82\x82\x82\x5e\x03\x31\xe0"
+            "\x12\x11\xe0\x31" }  },
+      /* --- pixel bitmap for wncyr160 char#69 E --- */
+      {  69,26766,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x1f\x03\xc6\x00\x31\x80\x0c\x22\x83\xc0\x30\xf0"
+            "\x0f\x0c\x03\x83\xc8\x20\x32\xc0\x0c\x10\x03\xf6\xff"
+            "\x01" }  },
+      /* --- pixel bitmap for wncyr160 char#70 F --- */
+      {  70,27835,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\x07\xc0\x00\x60\x00\xfe\xc0\x98\x31\x8c\x0d\x86"
+            "\x07\xc3\x83\x61\xc3\x18\x63\x06\xfe\x00\x18\x00\x0c"
+            "\xc0\x1f\x00" }  },
+      /* --- pixel bitmap for wncyr160 char#71 G --- */
+      {  71, 3253,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   15, 3,25, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0d\x32\x72\x32\x81\x10\xf1\x22\x91\xf8\x22\xa7\x72" }  },
+      /* --- pixel bitmap for wncyr160 char#72 Kh --- */
+      {  72, 4333,                      /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 18,   15, 3,58, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x16\x46\x52\x62\x83\x51\xa2\x41\xc2\x21\xe4\xe3\xe0"
+            "\x22\xe0\x11\x12\xd2\x13\xc1\x33\xa1\x52\x91\x72\x72"
+            "\x73\x36\x57" }  },
+      /* --- pixel bitmap for wncyr160 char#73 I --- */
+      {  73, 5557,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\xf8\x19\xe0\x30\xc0\x61\x40\xc3\x40\x86\xc1\x0c"
+            "\x83\x18\x86\x30\x8c\x60\x98\xc1\x30\x81\x61\x01\xc3"
+            "\x01\x86\x03\xcc\x0f\x7e" }  },
+      /* --- pixel bitmap for wncyr160 char#74 J --- */
+      {  74,28670,                      /* character number, location */
+         15, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 10,   15, 3,17, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x37\xfa\x62\x22\x42\x22\x32\x45\x42" }  },
+      /* --- pixel bitmap for wncyr160 char#75 K --- */
+      {  75,22947,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x70\x06\x38\x03\x82\x01\xc1\x40\x60\x18\xf0\x03"
+            "\x98\x07\x0c\x06\x06\x06\x03\x83\x81\xc9\xc0\x64\xc0"
+            "\xff\xc0\x00" }  },
+      /* --- pixel bitmap for wncyr160 char#76 L --- */
+      {  76, 6439,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   15, 3,38, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3d\xf3\x61\x52\x20\xf4\x52\x52\x20\xf1\x51\x62\x23"
+            "\x12\x62\x25\x72\x33\x66" }  },
+      /* --- pixel bitmap for wncyr160 char#77 M --- */
+      {  77, 7742,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 20,   15, 3,72, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\xa5\x23\xa3\x20\xf2\x21\x12\x81\x12\x20\xf1\x21"
+            "\x22\x61\x22\x20\xf1\x21\x32\x41\x32\x20\xf2\x21\x42"
+            "\x21\x42\x20\xf1\x21\x53\x52\x25\x41\x46" }  },
+      /* --- pixel bitmap for wncyr160 char#78 N --- */
+      {  78, 8983,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   15, 3,26, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x46\xf5\x22\x82\x20\x2c\x20\xf5\x22\x82\x26\x46" }  },
+      /* --- pixel bitmap for wncyr160 char#79 O --- */
+      {  79,29499,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   15, 3,43, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x57\x83\x53\x52\x92\x20\xf1\x12\xb2\x1f\x42\xd2\xf1"
+            "\x12\xb2\x10\x22\x92\x53\x53\x87\x52" }  },
+      /* --- pixel bitmap for wncyr160 char#80 P --- */
+      {  80,10083,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   15, 3,14, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x02\xfc\x22\x82\x26\x46" }  },
+      /* --- pixel bitmap for wncyr160 char#81 Ch --- */
+      {  81,11130,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   15, 3,36, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x56\xf5\x22\x92\x20\x32\x73\x53\x42\x12\x75\x32"
+            "\x20\xf3\xd2\x20\xb6" }  },
+      /* --- pixel bitmap for wncyr160 char#82 R --- */
+      {  82,30630,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   15, 3,29, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\x52\x63\x10\xf3\x22\x82\x22\x63\x39\x30\xf5\x22"
+            "\xa6\x82" }  },
+      /* --- pixel bitmap for wncyr160 char#83 S --- */
+      {  83,31567,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   15, 3,41, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x56\x31\x42\x54\x22\x92\xf1\x12\xb1\x0f\x42\xd0\xf1"
+            "\x12\xb1\x22\x91\x52\x61\x77\x37" }  },
+      /* --- pixel bitmap for wncyr160 char#84 T --- */
+      {  84,12223,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   15, 3,25, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x03\x52\x42\x0f\x21\x62\x51\xf8\x72\x60\x48\x32" }  },
+      /* --- pixel bitmap for wncyr160 char#85 U --- */
+      {  85,32771,                      /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 18,   15, 3,57, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x75\x32\x82\x72\x71\x82\x62\x92\x51\xa2\x42\xb2"
+            "\x31\xd2\x11\xe4\x70\xf1\x82\x80\x22\x41\xb2\x32\xb2"
+            "\x22\xd4\xbd" }  },
+      /* --- pixel bitmap for wncyr160 char#86 V --- */
+      {  86,13541,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   15, 3,49, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\x62\x72\x20\xf2\x22\x82\x10\x22\x73\x32\x54\x4b"
+            "\x42\x82\x10\xf2\x22\x92\x22\x83\x22\x73\x1c\x31" }  },
+      /* --- pixel bitmap for wncyr160 char#87 Shch --- */
+      {  87,15034,                      /* character number, location */
+         15, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          { 25,   17, 3,28, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x36\x36\x10\xfc\x22\x72\x72\x3e\x0a\xe0\xa2\xe0"
+            "\xa1" }  },
+      /* --- pixel bitmap for wncyr160 char#88 Sh --- */
+      {  88,16529,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 24,   15, 3,18, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x36\x36\xfc\x22\x72\x72\x2e\x0a" }  },
+      /* --- pixel bitmap for wncyr160 char#89 Y --- */
+      {  89,18105,                      /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 24,   15, 3,52, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x97\xf5\x32\xe0\x12\x20\x3c\x52\x52\x83\x42\x20"
+            "\xf2\x32\xa2\x32\x20\x32\x92\x42\x52\x83\x42\x2e\x37" }  },
+      /* --- pixel bitmap for wncyr160 char#90 Z --- */
+      {  90,19153,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   15, 3,43, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x11\x17\x42\x62\x31\x82\xb2\xb1\xa2\x66\xd2\xc2\x10"
+            "\xf2\xb2\x01\x92\x12\x72\x21\x17\x42" }  },
+      /* --- pixel bitmap for wncyr160 char#91 (noname) --- */
+      {  91,41919,                      /* character number, location */
+         17, 2,   -6, 2,      /* topleft row,col, and botleft row,col */
+          {  5,   23, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x0f\xe1\x4f\x51\x45" }  },
+      /* --- pixel bitmap for wncyr160 char#92 (noname) --- */
+      {  92,57783,                      /* character number, location */
+         15, 4,    9, 4,      /* topleft row,col, and botleft row,col */
+          {  7,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x42\x61\x28\x34\x1e\x03" }  },
+      /* --- pixel bitmap for wncyr160 char#93 (noname) --- */
+      {  93,42613,                      /* character number, location */
+         17, 0,   -6, 0,      /* topleft row,col, and botleft row,col */
+          {  5,   23, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\xfe\x41\xf5\x41\x05" }  },
+      /* --- pixel bitmap for wncyr160 char#94 \Cprime --- */
+      {  94,20459,                      /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   15, 3,35, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x90\xf5\x22\xb0\x2b\x42\x82\x10\xf2\x22\x92\x22"
+            "\x83\x22\x73\x1c\x32" }  },
+      /* --- pixel bitmap for wncyr160 char#95 \Cdprime --- */
+      {  95,21931,                      /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 21,   15, 3,51, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1a\xb2\x52\xb0\xf1\x11\x62\xb1\x72\xb0\xf1\x82\xb0"
+            "\x8b\xa2\x82\x10\xf2\x82\x92\x82\x83\x82\x73\x7c\x37" }  },
+      /* --- pixel bitmap for wncyr160 char#96 (noname) --- */
+      {  96,43227,                      /* character number, location */
+         15, 3,    9, 3,      /* topleft row,col, and botleft row,col */
+          {  2,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5a\x0f" }  },
+      /* --- pixel bitmap for wncyr160 char#97 a --- */
+      {  97,86189,                      /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7c\x30\x06\x60\x00\xc3\x1f\xc3\x0c\x66\xb0\xc2\xe5"
+            "\x1d" }  },
+      /* --- pixel bitmap for wncyr160 char#98 b --- */
+      {  98,86931,                      /* character number, location */
+         15, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 10,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x00\xe2\xef\x9f\x01\x03\xec\x71\xd8\x40\x03\x0f\x3c"
+            "\xf0\xc0\x02\x19\x86\x07" }  },
+      /* --- pixel bitmap for wncyr160 char#99 ts --- */
+      {  99,93866,                      /* character number, location */
+         10, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   14, 3,22, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x25\x10\xf7\x22\x42\x3c\xb2\xc1\xe0\xc1" }  },
+      /* --- pixel bitmap for wncyr160 char#100 d --- */
+      { 100,94824,                      /* character number, location */
+         10,-2,   -4,-2,      /* topleft row,col, and botleft row,col */
+          { 16,   14, 3,44, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5a\x10\xf3\x71\x32\x30\xf1\x62\x32\x30\x61\x42\x82"
+            "\x42\x5d\x32\x92\x31\xb1\x31\xe1\xd1" }  },
+      /* --- pixel bitmap for wncyr160 char#101 e --- */
+      { 101,87697,                      /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x78\x8c\x09\x1e\xfc\x7f\xc0\x00\x03\x0e\xf1\x01" }  },
+      /* --- pixel bitmap for wncyr160 char#102 f --- */
+      { 102,88272,                      /* character number, location */
+         15, 1,   -6, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   21, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x20\x01\x00\x00\x0c\x00\x03\xc0\x00\xfe\x61\x8c\x19"
+            "\x63\xc2\xd0\x30\x3c\x0c\x0b\x43\xc6\x98\x31\x86\x7f"
+            "\x00\x03\xc0\x00\x30\x00\x0c\x00\x00\x20\x01" }  },
+      /* --- pixel bitmap for wncyr160 char#103 g --- */
+      { 103,95976,                      /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 10,   10, 3,19, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0a\x22\x42\xf1\x22\x51\xf4\x22\x66\x40" }  },
+      /* --- pixel bitmap for wncyr160 char#104 kh --- */
+      { 104,97018,                      /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9f\x87\x19\xb8\x00\x07\x60\x00\x0e\xd0\x80\x19\x88"
+            "\xf1\xfd" }  },
+      /* --- pixel bitmap for wncyr160 char#105 i --- */
+      { 105,98222,                      /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbf\x9f\xe1\x30\x1c\x46\xc3\x64\x98\x0c\x8b\xe1\x30"
+            "\x1c\xe6\xf7\x03" }  },
+      /* --- pixel bitmap for wncyr160 char#106 j --- */
+      { 106,89101,                      /* character number, location */
+         16,-1,   -4,-1,      /* topleft row,col, and botleft row,col */
+          {  6,   20, 3,19, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x42\xf3\x60\x24\xfa\x42\x02\x26\x21" }  },
+      /* --- pixel bitmap for wncyr160 char#107 k --- */
+      { 107,115220,                     /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 11,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x66\x10\x43\x98\xc1\x07\x46\x30\x84\xa1\x0c\xff"
+            "\x31" }  },
+      /* --- pixel bitmap for wncyr160 char#108 l --- */
+      { 108,99048,                      /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   10, 3,26, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1b\xf4\x32\x32\x20\x31\x42\x42\x42\x24\x42\x23\x36" }  },
+      /* --- pixel bitmap for wncyr160 char#109 m --- */
+      { 109,100329,                     /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 15,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f\x7c\x0e\x0e\x8f\x86\x46\x43\xa3\x21\xcb\x90\x65"
+            "\xc8\x31\xc4\x98\x6f\x3f" }  },
+      /* --- pixel bitmap for wncyr160 char#110 n --- */
+      { 110,101528,                     /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,   10, 3,26, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x25\xf2\x22\x42\x20\x28\x20\xf3\x22\x42\x25\x25" }  },
+      /* --- pixel bitmap for wncyr160 char#111 o --- */
+      { 111,89802,                      /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x78\x18\x26\xd0\xc0\x03\x0f\x3c\xb0\x40\x86\xe1\x01" }  },
+      /* --- pixel bitmap for wncyr160 char#112 p --- */
+      { 112,102608,                     /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,   10, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0c\xf7\x22\x42\x25\x25" }  },
+      /* --- pixel bitmap for wncyr160 char#113 ch --- */
+      { 113,103635,                     /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   10, 3,30, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x16\xf3\x22\x52\x20\x33\x14\x63\x22\x20\xf1\x92"
+            "\x20\x76" }  },
+      /* --- pixel bitmap for wncyr160 char#114 r --- */
+      { 114,90892,                      /* character number, location */
+         10, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   14, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xef\xc1\x31\x0c\xc6\xc0\x0c\xcc\xc0\x0c\xcc\x60\x1c"
+            "\xc3\x1e\x0c\xc0\x00\x0c\xf0\x03" }  },
+      /* --- pixel bitmap for wncyr160 char#115 s --- */
+      { 115,91689,                      /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf8\x08\x1b\x18\x30\x60\xc0\x00\x03\x04\xf1\x01" }  },
+      /* --- pixel bitmap for wncyr160 char#116 t --- */
+      { 116,104684,                     /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   10, 3,19, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0a\x0f\x21\x32\x31\xf4\x42\x40\x18\x12" }  },
+      /* --- pixel bitmap for wncyr160 char#117 u --- */
+      { 117,92765,                      /* character number, location */
+         10, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   14, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x9f\xc1\x60\x08\x0c\x01\x13\x60\x02\x7c\x00\x07"
+            "\xe0\x00\x08\x00\x01\x10\x30\x03\x3c\x00" }  },
+      /* --- pixel bitmap for wncyr160 char#118 v --- */
+      { 118,105988,                     /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 11,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x61\x38\x83\x19\xcc\x3f\x86\x31\x98\xc1\x0c\xff"
+            "\x0f" }  },
+      /* --- pixel bitmap for wncyr160 char#119 shch --- */
+      { 119,107461,                     /* character number, location */
+         10, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          { 18,   14, 3,38, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x15\x15\x10\xf7\x22\x42\x32\x3e\x03\xe0\x22\x10"
+            "\xf1\xe0\x21\x10\xe0\x31" }  },
+      /* --- pixel bitmap for wncyr160 char#120 sh --- */
+      { 120,108930,                     /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 17,   10, 3,18, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x15\x15\xf7\x22\x42\x32\x2e\x03" }  },
+      /* --- pixel bitmap for wncyr160 char#121 y --- */
+      { 121,110476,                     /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 17,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\xf8\x19\xc0\x30\x80\x61\x00\xc3\x1f\x86\x61\x0c"
+            "\x83\x19\x06\x33\x0c\x67\xfe\xf3\x03" }  },
+      /* --- pixel bitmap for wncyr160 char#122 z --- */
+      { 122,111474,                     /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\xc1\xc0\x40\x3c\x60\xc0\xc0\x61\x3f" }  },
+      /* --- pixel bitmap for wncyr160 char#123 (noname) --- */
+      { 123,58391,                      /* character number, location */
+          7, 0,    6, 0,      /* topleft row,col, and botleft row,col */
+          { 12,    1, 3, 2, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0c" }  },
+      /* --- pixel bitmap for wncyr160 char#124 (noname) --- */
+      { 124,59211,                      /* character number, location */
+          7, 0,    6, 0,      /* topleft row,col, and botleft row,col */
+          { 24,    1, 3, 4, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x0a" }  },
+      /* --- pixel bitmap for wncyr160 char#125 N0 --- */
+      { 125,60169,                      /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 19,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\x38\xc0\xa1\x01\x0e\x01\xd0\x08\x80\x46\x30\x64"
+            "\x42\x22\x13\x13\xb1\x98\x88\x85\x47\x2c\x00\xc2\x01"
+            "\x10\x8e\x8f\x60\x80\x05\x03\x1c\x10\x00" }  },
+      /* --- pixel bitmap for wncyr160 char#126 \cprime --- */
+      { 126,112762,                     /* character number, location */
+         10, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 11,   10, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x60\x00\x03\x18\xc0\x1f\x86\x31\x98\xc1\x0c\xff"
+            "\x0f" }  },
+      /* --- pixel bitmap for wncyr160 char#127 \cdprime --- */
+      { 127,114246,                     /* character number, location */
+         10, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   10, 3,31, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x52\x32\x6f\x11\x42\x60\x56\x72\x32\x10\xf2\x52"
+            "\x42\x39\x12" }  },
+      /* --- trailer  --- */
+      { -99, -999,  0,0,0,0, { 0,0,0,0, (pixbyte *)"\0" }  }
+   } ;
+
+
+/* --- size=5 for .180gf ---
+ * mf '\mode=preview; mag=magstep(-14.65037297372839890542); input wncyr10'
+ * --------------------------------------------------------------------- */
+/* --- fontdef for wncyr180 --- */
+static	chardef  wncyr180[] =
+   {
+      /* --- pixel bitmap for wncyr180 char#0 Nj --- */
+      {   0,63058,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 26,   17, 3,51, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x28\x80\xf6\x32\x82\xb0\x3e\x07\x52\x82\x82\x10"
+            "\xf3\x32\x82\x92\x32\x82\x82\x42\x82\x73\x18\x2d\x33" }  },
+      /* --- pixel bitmap for wncyr180 char#1 Lj --- */
+      {   1,64076,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 26,   17, 3,67, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x4e\x01\x70\xf6\x71\x62\xa0\x62\x6a\x82\x62\x72\x10"
+            "\xf1\x62\x62\x82\x61\x72\x82\x12\x31\x72\x82\x12\x22"
+            "\x72\x72\x25\x82\x63\x33\x6c\x31" }  },
+      /* --- pixel bitmap for wncyr180 char#2 Dzh --- */
+      {   2,65191,                      /* character number, location */
+         17, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   21, 3,19, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x28\xfe\x32\x82\x3e\x04\xf3\x82\x82" }  },
+      /* --- pixel bitmap for wncyr180 char#3 \`E --- */
+      {   3,66177,                      /* character number, location */
+         18, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 16,   19, 3,73, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x01\x45\x62\x12\x52\x43\x82\x32\xa2\x22\xb2\x11\xc2"
+            "\x11\xd2\x75\x22\x5c\x33\x72\x15\x82\x31\xa3\xd2\x0f"
+            "\x11\xc2\x10\x11\xa2\x41\x82\x61\x62\x86\x62" }  },
+      /* --- pixel bitmap for wncyr180 char#4 \=I --- */
+      {   4,75201,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   17, 3, 8, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\xfe\x32\x38" }  },
+      /* --- pixel bitmap for wncyr180 char#5 \=E --- */
+      {   5,67164,                      /* character number, location */
+         18, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 16,   19, 3,69, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x65\x41\x42\x52\x12\x32\x83\x22\xa2\x12\xb2\x12\xc3"
+            "\xd3\x25\x7b\x52\x73\x33\x85\x12\xa1\x32\xd1\xf1\x12"
+            "\xc1\x22\xa1\x42\x81\x62\x61\x96\x42" }  },
+      /* --- pixel bitmap for wncyr180 char#6 Dj --- */
+      {   6,76361,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 21,   17, 3,61, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\x02\x51\x62\x52\x41\x72\x61\x40\xf2\x82\xb0\x82"
+            "\x35\xb2\x12\x51\xa3\x72\x10\xf4\x82\x92\x82\x82\x92"
+            "\x32\x31\x69\x14\x31" }  },
+      /* --- pixel bitmap for wncyr180 char#7 \'C --- */
+      {   7,77704,                      /* character number, location */
+         17, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 18,   17, 3,48, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x41\x42\x61\x41\x42\x71\x30\xf2\x52\xb0\x52\x25"
+            "\x94\x51\x83\x62\x20\xf6\x52\x72\x20\x27\x36" }  },
+      /* --- pixel bitmap for wncyr180 char#8 nj --- */
+      {   8,118769,                     /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 18,   11, 3,39, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x16\x50\xf3\x22\x52\x70\x2e\x01\x10\xf2\x22\x52"
+            "\x52\x22\x52\x42\x16\x19\x21" }  },
+      /* --- pixel bitmap for wncyr180 char#9 lj --- */
+      {   9,119757,                     /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   11, 3,45, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x2b\x40\xf3\x42\x32\x60\x42\x37\x21\x22\x32\x42\x0f"
+            "\x13\x11\x42\x42\x05\x42\x42\x13\x39\x11" }  },
+      /* --- pixel bitmap for wncyr180 char#10 dzh --- */
+      {  10,120870,                     /* character number, location */
+         11, 0,   -3, 0,      /* topleft row,col, and botleft row,col */
+          { 14,   14, 3,17, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x26\xf8\x22\x62\x2e\xf2\x62\x61" }  },
+      /* --- pixel bitmap for wncyr180 char#11 \`e --- */
+      {  11,121830,                     /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7d\x18\x4c\xc0\xc2\x0c\xff\x1f\x3b\x38\xc0\x01\x13"
+            "\x0c\x1f\x00" }  },
+      /* --- pixel bitmap for wncyr180 char#12 \=\i --- */
+      {  12,81380,                      /* character number, location */
+         18, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,   18, 3,20, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x21\x43\x41\x30\xf3\x64\x20\xf8\x22\x26" }  },
+      /* --- pixel bitmap for wncyr180 char#13 \=e --- */
+      {  13,122783,                     /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\x65\xb0\x01\x67\xf8\x87\xf1\x0f\x6e\x80\x06\x64"
+            "\x10\x7c\x00" }  },
+      /* --- pixel bitmap for wncyr180 char#14 dj --- */
+      {  14,82384,                      /* character number, location */
+         17, 2,   -5, 2,      /* topleft row,col, and botleft row,col */
+          { 14,   22, 3,57, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x14\xc2\x9d\x10\xf2\x32\x90\x32\x15\x63\x42\x52\x62"
+            "\x10\xf4\x32\x72\x32\x71\x42\x62\x26\x42\xc1\xc2\xb2"
+            "\xb2\x93\x62" }  },
+      /* --- pixel bitmap for wncyr180 char#15 \'c --- */
+      {  15,83476,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   17, 3,40, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x14\xd2\xac\x30\xf2\x32\xa0\x32\x24\x74\x41\x63\x52"
+            "\x20\xf6\x32\x62\x20\x16\x26" }  },
+      /* --- pixel bitmap for wncyr180 char#16 Yu --- */
+      {  16,68376,                      /* character number, location */
+         18, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 28,   19, 3,103, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\xe0\x17\x67\x63\x53\x63\x72\x92\x53\x62\xb2\x20\xf1"
+            "\x23\x52\xd2\x10\x23\x51\xe0\x11\x10\xf1\x23\x42\xe0"
+            "\x12\x29\xe0\x12\xf2\x23\x42\xe0\x12\xf1\x23\x52\xd2"
+            "\x10\x23\x62\xb2\x43\x72\x92\x37\x63\x53\xe0\x57\x62" }  },
+      /* --- pixel bitmap for wncyr180 char#17 Zh --- */
+      {  17,61656,                      /* character number, location */
+         17, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 27,   17, 3,89, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x69\x67\x83\x84\x31\x83\x81\x62\x73\x81\x71\x73"
+            "\x71\x91\x63\x61\xb3\x33\x33\xeb\xd4\x33\x34\x93\x53"
+            "\x53\x40\xf2\x32\x73\x72\x3f\x11\x22\x73\x72\x21\x04"
+            "\x83\x84\x12\x69\x62\x17" }  },
+      /* --- pixel bitmap for wncyr180 char#18 \u I --- */
+      {  18,69917,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 20,   24, 3,112, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x41\xa1\x40\xf1\x33\x83\x30\x41\xa1\x9a\x50\xf1\xe0"
+            "\x68\x48\x32\xa2\x62\x93\x62\x84\x62\x81\x12\x62\x71"
+            "\x22\x62\x61\x32\x62\x51\x42\x62\x42\x42\x62\x41\x52"
+            "\x62\x31\x62\x62\x21\x72\x62\x11\x82\x64\x82\x63\x92"
+            "\x62\xa2\x38\x48" }  },
+      /* --- pixel bitmap for wncyr180 char#19 \"E --- */
+      {  19,79136,                      /* character number, location */
+         23, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 17,   23, 3,89, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x52\x42\x84\x23\x92\x42\x40\xf2\xe0\x3e\x02\x42\x92"
+            "\x42\xa1\x42\xa2\x32\xb1\x32\x61\x41\x32\x61\x82\x52"
+            "\x89\x82\x52\x50\xf1\x32\x61\x41\x32\xb1\xf1\x32\xa1"
+            "\x10\x32\x83\x1e\x02\x12" }  },
+      /* --- pixel bitmap for wncyr180 char#20 (noname) --- */
+      {  20,70922,                      /* character number, location */
+         17, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   18, 3,69, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x93\x22\xa1\x21\x22\x91\x31\xf1\x32\x81\x40\x32"
+            "\x71\x92\x61\x50\xf1\x42\x51\x60\x52\x41\x60\xf1\x52"
+            "\x31\x70\xf2\x62\x11\x80\xf2\x72\x92" }  },
+      /* --- pixel bitmap for wncyr180 char#21 (noname) --- */
+      {  21,72098,                      /* character number, location */
+         18, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 19,   19, 3,79, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x75\xd2\x32\xb2\x52\x50\xf1\x42\x72\x40\x41\x91\x40"
+            "\xf1\x32\x92\x3f\x1e\x05\x01\x22\x92\x21\xf1\x32\x92"
+            "\x30\x41\x91\x40\xf1\x42\x72\x40\x52\x52\xb2\x32\xd5"
+            "\x72" }  },
+      /* --- pixel bitmap for wncyr180 char#22 \Dz --- */
+      {  22,73186,                      /* character number, location */
+         18, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   19, 3,59, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x35\x31\x32\x42\x11\x22\x72\x12\x82\x1f\x12\x91\x13"
+            "\xb3\xb6\x88\xa4\xb2\xc2\x0f\x21\xa2\x02\x82\x11\x12"
+            "\x52\x21\x36\x30" }  },
+      /* --- pixel bitmap for wncyr180 char#23 Ya --- */
+      {  23,74506,                      /* character number, location */
+         17, 0,   -1, 0,      /* topleft row,col, and botleft row,col */
+          { 19,   18, 3,61, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7c\x52\x72\x72\x82\x30\xf2\x32\x92\x30\x42\x82\x82"
+            "\x72\xa9\x83\x62\x30\xf3\x42\x82\x3f\x11\x32\x82\x31"
+            "\x31\x68\x13\xe0\x11" }  },
+      /* --- pixel bitmap for wncyr180 char#24 yu --- */
+      {  24,123935,                     /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 20,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\xf8\xc0\x60\x30\x0c\x03\xc6\x18\xc0\x8c\x01\xcc"
+            "\x1f\xc0\x8c\x01\xcc\x18\xc0\x0c\x03\xc6\x60\x30\x3f"
+            "\xf8\x00" }  },
+      /* --- pixel bitmap for wncyr180 char#25 zh --- */
+      {  25,117385,                     /* character number, location */
+         11,-1,    0,-1,      /* topleft row,col, and botleft row,col */
+          { 20,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x83\x1f\x6c\x60\x60\x04\x06\x82\x61\x18\xf0\xff\x80"
+            "\xff\x1f\x04\x06\x42\x60\x20\x05\x06\x7a\x60\xe0\x82"
+            "\x1f\x04" }  },
+      /* --- pixel bitmap for wncyr180 char#26 \u\i --- */
+      {  26,125458,                     /* character number, location */
+         17, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 15,   17, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x38\x0e\x1c\x07\x06\x03\xfe\x00\x00\x00\x00\xfc\xf8"
+            "\x19\x38\x0c\x1e\x06\x0d\x43\x86\x11\xc3\x84\x61\xc1"
+            "\xf0\x60\x38\x30\x3f\x7e" }  },
+      /* --- pixel bitmap for wncyr180 char#27 \"e --- */
+      {  27,84273,                      /* character number, location */
+         16, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   16, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x8e\x39\x06\x00\x00\x00\xe0\xc3\x98\xc1\x03\xff\x3f"
+            "\xc0\x00\x03\x18\xc8\x10\x3e" }  },
+      /* --- pixel bitmap for wncyr180 char#28 (noname) --- */
+      {  28,126427,                     /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x9c\x83\x62\x08\x0c\x81\x11\x60\x02\x4c\x80\x07"
+            "\xe0\x00\x0c\x80\x01" }  },
+      /* --- pixel bitmap for wncyr180 char#29 (noname) --- */
+      {  29,127571,                     /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\x80\x19\x08\xc1\x30\xff\xff\xff\x0d\xcb\x30\x08"
+            "\x81\x19\xf0\x00" }  },
+      /* --- pixel bitmap for wncyr180 char#30 \dz --- */
+      {  30,128627,                     /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  8,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbc\xc2\x83\x03\x1f\x7e\xe0\xc0\xc1\x41\x3f" }  },
+      /* --- pixel bitmap for wncyr180 char#31 ya --- */
+      {  31,129913,                     /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 14,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\x3f\x06\xc3\xc0\x30\x30\x18\x0c\xfc\x83\xc1\x60"
+            "\x30\x18\x4c\x06\xe3\xf0\x03" }  },
+      /* --- pixel bitmap for wncyr180 char#32 \cyddot --- */
+      {  32,53401,                      /* character number, location */
+         18, 3,   15, 3,      /* topleft row,col, and botleft row,col */
+          {  8,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc3\xe7\xc3" }  },
+      /* --- pixel bitmap for wncyr180 char#33 (noname) --- */
+      {  33,33660,                      /* character number, location */
+         18, 3,    0, 3,      /* topleft row,col, and botleft row,col */
+          {  3,   18, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfa\xff\x5b\x92\x04\x40\x17" }  },
+      /* --- pixel bitmap for wncyr180 char#34 (noname) --- */
+      {  34,54278,                      /* character number, location */
+         17, 1,    9, 1,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x42\xe7\xc6\x84\x84\x42\x42\x21" }  },
+      /* --- pixel bitmap for wncyr180 char#35 (noname) --- */
+      {  35,80643,                      /* character number, location */
+         19, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 19,   19, 3,61, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x38\x80\xf1\x62\xbe\x02\x31\x52\x72\x21\x52\x81\x20"
+            "\xf2\x62\xb0\x6b\x20\xf1\x62\x82\x10\xf3\x62\x92\x62"
+            "\x82\x72\x72\x5d\x31" }  },
+      /* --- pixel bitmap for wncyr180 char#36 (noname) --- */
+      {  36,54996,                      /* character number, location */
+         16, 0,   13, 0,      /* topleft row,col, and botleft row,col */
+          { 12,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\x7e\xe0\xfe\x07" }  },
+      /* --- pixel bitmap for wncyr180 char#37 (noname) --- */
+      {  37,34857,                      /* character number, location */
+         19, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 20,   20, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x38\x00\x41\x04\x08\xc2\xe1\x30\xe8\x05\x83\x20\x30"
+            "\x08\x02\x83\x10\x30\x88\x00\x42\x08\x40\x44\x00\x38"
+            "\x82\x03\x10\x46\x00\x21\x04\x08\x83\x40\x30\x08\x04"
+            "\x83\x20\x30\x08\x01\x42\x10\x60\x84\x00\x38" }  },
+      /* --- pixel bitmap for wncyr180 char#38 (noname) --- */
+      {  38,55569,                      /* character number, location */
+         17, 6,   13, 6,      /* topleft row,col, and botleft row,col */
+          {  5,    4, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x98\x9b\x01" }  },
+      /* --- pixel bitmap for wncyr180 char#39 (noname) --- */
+      {  39,35535,                      /* character number, location */
+         17, 3,    9, 3,      /* topleft row,col, and botleft row,col */
+          {  3,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xba\x49\x29" }  },
+      /* --- pixel bitmap for wncyr180 char#40 (noname) --- */
+      {  40,36113,                      /* character number, location */
+         19, 2,   -6, 2,      /* topleft row,col, and botleft row,col */
+          {  7,   25, 3,38, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x61\x51\x51\x51\x52\x51\x52\x51\x5f\x82\x50\x11\x62"
+            "\x61\x62\x61\x71\x71\x71" }  },
+      /* --- pixel bitmap for wncyr180 char#41 (noname) --- */
+      {  41,36726,                      /* character number, location */
+         19, 2,   -6, 2,      /* topleft row,col, and botleft row,col */
+          {  7,   25, 3,39, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x01\x71\x71\x71\x62\x61\x62\x61\x10\xf8\x52\x51\x52"
+            "\x51\x52\x51\x51\x51\x51\x62" }  },
+      /* --- pixel bitmap for wncyr180 char#42 (noname) --- */
+      {  42,37363,                      /* character number, location */
+         19, 2,    8, 2,      /* topleft row,col, and botleft row,col */
+          { 10,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x30\xc0\x30\xf3\xed\xfe\xc1\xe0\xdf\xed\x33\xc3\x00"
+            "\x03" }  },
+      /* --- pixel bitmap for wncyr180 char#43 (noname) --- */
+      {  43,85096,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   20, 3,61, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x21\x41\x92\x22\xa1\x21\xb4\x80\xf1\x42\x90\x18\x60"
+            "\xf3\x42\x90\x48\x72\x53\x52\x62\x10\xf2\x42\x72\x42"
+            "\x62\x52\x53\x3a\x31" }  },
+      /* --- pixel bitmap for wncyr180 char#44 (noname) --- */
+      {  44,37956,                      /* character number, location */
+          3, 3,   -5, 3,      /* topleft row,col, and botleft row,col */
+          {  3,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xba\x49\x29" }  },
+      /* --- pixel bitmap for wncyr180 char#45 (noname) --- */
+      {  45,38451,                      /* character number, location */
+          6, 0,    4, 0,      /* topleft row,col, and botleft row,col */
+          {  8,    2, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\xff" }  },
+      /* --- pixel bitmap for wncyr180 char#46 (noname) --- */
+      {  46,38908,                      /* character number, location */
+          3, 3,    0, 3,      /* topleft row,col, and botleft row,col */
+          {  3,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xba\x00" }  },
+      /* --- pixel bitmap for wncyr180 char#47 (noname) --- */
+      {  47,39416,                      /* character number, location */
+         19, 2,   -6, 2,      /* topleft row,col, and botleft row,col */
+          { 10,   25, 3,55, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x91\xf2\x81\x10\xf1\x71\x20\xf2\x61\x30\xf1\x51"
+            "\x40\xf2\x41\x50\xf2\x31\x60\xf1\x21\x70\xf2\x11\x8f"
+            "\x11\x91" }  },
+      /* --- pixel bitmap for wncyr180 char#48 (noname) --- */
+      {  48,44243,                      /* character number, location */
+         17, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   18, 3,39, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x44\x62\x42\x32\x62\x10\xf1\x11\x81\x1f\x82\x82\xf1"
+            "\x12\x62\x10\x22\x42\x64\x40" }  },
+      /* --- pixel bitmap for wncyr180 char#49 (noname) --- */
+      {  49,45033,                      /* character number, location */
+         17, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 10,   17, 3,18, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x42\x64\x42\x22\x40\xfc\x42\x40\x19" }  },
+      /* --- pixel bitmap for wncyr180 char#50 (noname) --- */
+      {  50,46010,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   17, 3,47, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x35\x61\x52\x31\x72\x1f\x11\x92\x02\x82\xf1\xa2\x92"
+            "\x92\x92\x92\x91\xa1\x61\x22\x71\x1a\x1b\x12" }  },
+      /* --- pixel bitmap for wncyr180 char#51 (noname) --- */
+      {  51,47048,                      /* character number, location */
+         17, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   18, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\xc0\x30\x02\x66\x60\x06\x06\x60\x00\x03\x18\xf0"
+            "\x01\x30\x00\x06\xc0\x03\x3c\xc0\x01\x2c\x60\x04\x83"
+            "\x1f" }  },
+      /* --- pixel bitmap for wncyr180 char#52 (noname) --- */
+      {  52,47980,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   17, 3,48, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x72\x30\x63\x84\x81\x12\x71\x22\x61\x32\x52\x32"
+            "\x51\x42\x41\x52\x32\x52\x3c\xf3\x72\x30\x48" }  },
+      /* --- pixel bitmap for wncyr180 char#53 (noname) --- */
+      {  53,49018,                      /* character number, location */
+         17, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   18, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\xc6\x3f\xf4\x40\x00\x04\x40\x00\xe4\xc1\x31\x04"
+            "\x46\x40\x00\x0c\xc0\x00\x3c\xc0\x01\x24\x60\x04\x83"
+            "\x0f" }  },
+      /* --- pixel bitmap for wncyr180 char#54 (noname) --- */
+      {  54,49920,                      /* character number, location */
+         17, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   18, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe0\x01\x61\x08\x46\x60\x06\x20\x00\xf3\xb0\x30\x07"
+            "\x36\x40\x03\x3c\xc0\x03\x2c\xc0\x06\x44\x60\x08\x03"
+            "\x0f" }  },
+      /* --- pixel bitmap for wncyr180 char#55 (noname) --- */
+      {  55,50834,                      /* character number, location */
+         17, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 12,   18, 3,43, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x11\xbb\x1a\x1f\x11\x81\x20\x81\xa1\x40\xf1\x61\x50"
+            "\xf1\x51\x60\x42\xa1\x70\xf4\x32\x71" }  },
+      /* --- pixel bitmap for wncyr180 char#56 (noname) --- */
+      {  56,51754,                      /* character number, location */
+         17, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   18, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\xc0\x30\x00\x24\x40\x02\x64\x40\x1c\x82\x1b\xf0"
+            "\xc0\x3c\x06\x27\xe0\x03\x3c\xc0\x03\x6c\x60\x0c\x83"
+            "\x1f" }  },
+      /* --- pixel bitmap for wncyr180 char#57 (noname) --- */
+      {  57,52664,                      /* character number, location */
+         17, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   18, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\xc0\x30\x06\x22\x60\x03\x34\xc0\x03\x3c\xc0\x02"
+            "\x6c\xe0\x0c\x0d\xcf\x00\x04\x60\x06\x62\x30\x84\x81"
+            "\x07" }  },
+      /* --- pixel bitmap for wncyr180 char#58 (noname) --- */
+      {  58,40012,                      /* character number, location */
+         11, 3,    0, 3,      /* topleft row,col, and botleft row,col */
+          {  3,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xba\x00\x00\xba\x00" }  },
+      /* --- pixel bitmap for wncyr180 char#59 (noname) --- */
+      {  59,40679,                      /* character number, location */
+         11, 3,   -5, 3,      /* topleft row,col, and botleft row,col */
+          {  3,   16, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xba\x00\x00\xba\x49\x29" }  },
+      /* --- pixel bitmap for wncyr180 char#60 < --- */
+      {  60,56185,                      /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 14,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x80\x00\x10\x0c\x83\x60\x18\x04\xc1\x30\x40\x10\x60"
+            "\x18\x30\x08\x10\x0c\x08\x00" }  },
+      /* --- pixel bitmap for wncyr180 char#61 (noname) --- */
+      {  61,85829,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  6,   11, 3,10, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\x20\xf8\x22\x26" }  },
+      /* --- pixel bitmap for wncyr180 char#62 > --- */
+      {  62,56744,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x40\xc0\x20\x40\x30\x60\x18\x20\x08\x30\x0c\x82\x60"
+            "\x18\x04\xc3\x20\x00\x04\x00" }  },
+      /* --- pixel bitmap for wncyr180 char#63 (noname) --- */
+      {  63,41570,                      /* character number, location */
+         17, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  9,   17, 3,37, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x25\x31\x51\x1f\x12\x52\x71\x71\x71\x30\xf3\x41\x40"
+            "\xf2\x90\x41\x73\x71\x41" }  },
+      /* --- pixel bitmap for wncyr180 char#64 (noname) --- */
+      {  64,57394,                      /* character number, location */
+         17, 3,   14, 3,      /* topleft row,col, and botleft row,col */
+          {  8,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x81\xc3\x3c" }  },
+      /* --- pixel bitmap for wncyr180 char#65 A --- */
+      {  65,24189,                      /* character number, location */
+         18, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   18, 3,64, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf2\x82\x80\xf1\x71\x12\x70\x62\x13\x60\xf1\x61\x32"
+            "\x60\xf2\x51\x52\x50\x4a\x40\xf1\x41\x72\x40\xf1\x31"
+            "\x92\x30\x22\x93\x26\x57" }  },
+      /* --- pixel bitmap for wncyr180 char#66 B --- */
+      {  66,25557,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   17, 3,55, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x52\x72\x52\x81\x52\x82\x10\xf1\x32\x91\x10\xf1"
+            "\x32\xb0\x3b\x52\x82\x10\xf3\x32\x92\x32\x82\x42\x73"
+            "\x1d\x30" }  },
+      /* --- pixel bitmap for wncyr180 char#67 Ts --- */
+      {  67, 1087,                      /* character number, location */
+         17, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          { 19,   19, 3,24, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x28\x10\xfe\x32\x82\x4e\x04\xe0\x32\xe0\x42" }  },
+      /* --- pixel bitmap for wncyr180 char#68 D --- */
+      {  68, 2069,                      /* character number, location */
+         17,-1,   -2,-1,      /* topleft row,col, and botleft row,col */
+          { 22,   19, 3,70, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x6e\x01\xa2\x52\x40\xf4\x91\x62\x40\xf1\x82\x62\x40"
+            "\xf1\x81\x72\x40\x72\x72\xb1\x82\xa2\x82\xa1\x92\x92"
+            "\x92\x6e\x05\x32\xe0\x12\x21\xe0\x42" }  },
+      /* --- pixel bitmap for wncyr180 char#69 E --- */
+      {  69,26960,                      /* character number, location */
+         17, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 17,   17, 3,71, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x02\x42\x92\x42\xa1\x42\xa2\x32\xb1\x32\x61\x41"
+            "\x32\x61\x82\x52\x89\x82\x52\x50\xf1\x32\x61\x41\x32"
+            "\xb1\xf1\x32\xa1\x10\x32\x83\x1e\x02\x13" }  },
+      /* --- pixel bitmap for wncyr180 char#70 F --- */
+      {  70,28037,                      /* character number, location */
+         17, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 16,   17, 3,57, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x48\x40\xf2\x72\x70\x48\x62\x32\x32\x32\x42\x42\x1f"
+            "\x22\x52\x52\x12\x42\x42\x32\x32\x32\x68\x40\xf2\x72"
+            "\x70\x48\x42" }  },
+      /* --- pixel bitmap for wncyr180 char#71 G --- */
+      {  71, 3243,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   17, 3,29, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x01\x42\x82\x42\x91\x42\x92\xf1\x32\xa1\xf9\x32"
+            "\xb8\x81" }  },
+      /* --- pixel bitmap for wncyr180 char#72 Kh --- */
+      {  72, 4329,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   17, 3,68, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\x46\x42\x73\x72\x61\x93\x42\xa2\x41\xc2\x21\x70"
+            "\xf1\x73\x80\x82\xe0\x11\x12\xd2\x22\xc1\x33\xa1\x52"
+            "\x91\x72\x72\x73\x53\x82\x36\x57" }  },
+      /* --- pixel bitmap for wncyr180 char#73 I --- */
+      {  73, 5561,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 20,   17, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\xf0\x8f\x01\x18\x18\xc0\x81\x01\x1e\x18\xa0\x81"
+            "\x01\x19\x18\x88\x81\x41\x18\x18\x86\x81\x21\x18\x18"
+            "\x81\x81\x09\x18\x58\x80\x81\x07\x18\x38\x80\x81\x01"
+            "\x18\xff\xf0\x0f" }  },
+      /* --- pixel bitmap for wncyr180 char#74 J --- */
+      {  74,28876,                      /* character number, location */
+         17, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 11,   18, 3,23, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x38\xfb\x72\x2f\x12\x52\x21\x61\x41\x42\x54\x52" }  },
+      /* --- pixel bitmap for wncyr180 char#75 K --- */
+      {  75,23113,                      /* character number, location */
+         17, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 18,   17, 3,63, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x73\x32\x94\xf1\x32\x91\x30\x32\x81\x72\x71\x82"
+            "\x43\x97\xb2\x44\x82\x63\x40\xf2\x32\x82\x30\xf1\x32"
+            "\x82\x21\x32\x9c\x72\x12" }  },
+      /* --- pixel bitmap for wncyr180 char#76 L --- */
+      {  76, 6451,                      /* character number, location */
+         17, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 18,   17, 3,52, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3e\x01\x52\x62\x30\xf2\x61\x62\x30\xf5\x52\x62\x30"
+            "\xf1\x51\x72\x30\x42\x72\x32\x21\x82\x35\x82\x43\x68" }  },
+      /* --- pixel bitmap for wncyr180 char#77 M --- */
+      {  77, 7762,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 23,   17, 3,82, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\xb6\x33\xb3\x30\xf2\x31\x12\x91\x12\x30\xf1\x31"
+            "\x22\x71\x22\x30\xf2\x31\x32\x51\x32\x30\xf1\x31\x42"
+            "\x31\x42\x30\xf2\x31\x52\x11\x52\x30\x23\x52\x62\x37"
+            "\x32\x38" }  },
+      /* --- pixel bitmap for wncyr180 char#78 N --- */
+      {  78, 9021,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   17, 3,26, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x28\xf6\x32\x82\x30\x3c\x30\xf6\x32\x82\x38\x28" }  },
+      /* --- pixel bitmap for wncyr180 char#79 O --- */
+      {  79,29715,                      /* character number, location */
+         18, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 19,   19, 3,61, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x67\xa3\x53\x72\x92\x52\xb2\x20\xf1\x12\xd2\x10\x11"
+            "\xe0\x11\x1f\x52\xe0\x12\xf1\x12\xd2\x10\x22\xb2\x52"
+            "\x92\x73\x53\xa7\x60" }  },
+      /* --- pixel bitmap for wncyr180 char#80 P --- */
+      {  80,10129,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   17, 3,14, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x04\xfe\x32\x82\x38\x28" }  },
+      /* --- pixel bitmap for wncyr180 char#81 Ch --- */
+      {  81,11184,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 20,   17, 3,38, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x48\xf6\x32\xa2\x30\x42\x83\x83\x42\x12\x96\x32"
+            "\x30\xf4\xe0\x12\x30\xc8" }  },
+      /* --- pixel bitmap for wncyr180 char#82 R --- */
+      {  82,30862,                      /* character number, location */
+         17, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 17,   17, 3,37, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0d\x72\x82\x52\x92\x10\xf2\x32\xa2\x32\x92\x42\x82"
+            "\x5a\x40\xf6\x32\xc8\x92" }  },
+      /* --- pixel bitmap for wncyr180 char#83 S --- */
+      {  83,31805,                      /* character number, location */
+         18, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 16,   19, 3,57, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x65\x41\x42\x52\x12\x32\x83\x22\xa2\x12\xb2\x12\xc3"
+            "\xd1\x0f\x42\xe2\xd1\xf1\x12\xc1\x22\xa1\x42\x81\x62"
+            "\x61\x96\x43" }  },
+      /* --- pixel bitmap for wncyr180 char#84 T --- */
+      {  84,12283,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   17, 3,39, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\x02\x22\x52\x52\x21\x62\x61\x12\x62\x62\x0f\x11"
+            "\x72\x71\xf9\x82\x80\x4a\x42" }  },
+      /* --- pixel bitmap for wncyr180 char#85 U --- */
+      {  85,33027,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   17, 3,65, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x75\x22\xa2\x52\x91\x62\x82\x72\x71\x92\x51\xa2"
+            "\x42\xb2\x31\xc2\x22\xd2\x11\xe4\xe0\x12\xe0\x21\xa2"
+            "\x42\xa1\x51\xc1\x31\xe3\xc3" }  },
+      /* --- pixel bitmap for wncyr180 char#86 V --- */
+      {  86,13609,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   17, 3,51, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0d\x62\x72\x52\x82\x10\xf2\x32\x92\x32\x82\x42\x63"
+            "\x5b\x52\x82\x10\xf3\x32\x92\x32\x82\x42\x73\x1d\x32" }  },
+      /* --- pixel bitmap for wncyr180 char#87 Shch --- */
+      {  87,15110,                      /* character number, location */
+         17, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          { 28,   19, 3,28, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x27\x28\x10\xfe\x32\x73\x72\x4e\x0d\xe0\xc2\xe0"
+            "\xd2" }  },
+      /* --- pixel bitmap for wncyr180 char#88 Sh --- */
+      {  88,16617,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 27,   17, 3,18, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x27\x28\xfe\x32\x73\x72\x3e\x0d" }  },
+      /* --- pixel bitmap for wncyr180 char#89 Y --- */
+      {  89,18231,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 25,   17, 3,52, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x98\xf6\x32\xe0\x12\x30\x3b\x62\x62\x82\x52\x30"
+            "\xf3\x32\x92\x42\x30\x32\x82\x52\x62\x73\x52\x3d\x48" }  },
+      /* --- pixel bitmap for wncyr180 char#90 Z --- */
+      {  90,19289,                      /* character number, location */
+         18, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   19, 3,61, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x11\x36\x54\x53\x32\x92\x10\xf1\x11\xa2\x10\xc2\xc2"
+            "\xb3\x77\xe3\xe2\xe1\x10\xf1\xd2\x01\xc3\xc1\x12\xa2"
+            "\x13\x73\x21\x28\x41" }  },
+      /* --- pixel bitmap for wncyr180 char#91 (noname) --- */
+      {  91,42253,                      /* character number, location */
+         19, 2,   -6, 2,      /* topleft row,col, and botleft row,col */
+          {  6,   25, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x0f\xe1\x5f\x71\x56" }  },
+      /* --- pixel bitmap for wncyr180 char#92 (noname) --- */
+      {  92,58269,                      /* character number, location */
+         17, 5,    9, 5,      /* topleft row,col, and botleft row,col */
+          {  8,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x84\x42\x42\x21\x21\x63\xe7\x42" }  },
+      /* --- pixel bitmap for wncyr180 char#93 (noname) --- */
+      {  93,42951,                      /* character number, location */
+         19, 0,   -6, 0,      /* topleft row,col, and botleft row,col */
+          {  6,   25, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\xfe\x51\xf7\x51\x06" }  },
+      /* --- pixel bitmap for wncyr180 char#94 \Cprime --- */
+      {  94,20611,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   17, 3,35, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x80\xf6\x32\xb0\x3b\x52\x82\x10\xf3\x32\x92\x32"
+            "\x82\x42\x73\x1d\x31" }  },
+      /* --- pixel bitmap for wncyr180 char#95 \Cdprime --- */
+      {  95,22089,                      /* character number, location */
+         17, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 22,   17, 3,51, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1b\xb3\x52\xb0\xf2\x11\x72\xb1\x82\xb0\xf1\x92\xb0"
+            "\x9b\xb2\x82\x10\xf3\x92\x92\x92\x82\xa2\x73\x7d\x32" }  },
+      /* --- pixel bitmap for wncyr180 char#96 (noname) --- */
+      {  96,43569,                      /* character number, location */
+         17, 3,    9, 3,      /* topleft row,col, and botleft row,col */
+          {  3,    8, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x94\x92\x5d" }  },
+      /* --- pixel bitmap for wncyr180 char#97 a --- */
+      {  97,86951,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfc\xc0\x30\x00\x0c\x80\x01\x3f\x38\x86\xc1\x18\x98"
+            "\x03\xd3\x70\xf2\x3d" }  },
+      /* --- pixel bitmap for wncyr180 char#98 b --- */
+      {  98,87699,                      /* character number, location */
+         16, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 11,   16, 3,41, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x91\x38\x26\x52\x82\x91\x25\x31\x12\x32\x23\x52\x1f"
+            "\x42\x72\x12\x52\x32\x32\x55\x34" }  },
+      /* --- pixel bitmap for wncyr180 char#99 ts --- */
+      {  99,94714,                      /* character number, location */
+         11, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          { 15,   15, 3,24, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x26\x10\xf8\x22\x62\x3e\xd2\xe1\x10\xf1\xe1" }  },
+      /* --- pixel bitmap for wncyr180 char#100 d --- */
+      { 100,95702,                      /* character number, location */
+         11,-1,   -4,-1,      /* topleft row,col, and botleft row,col */
+          { 16,   15, 3,48, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x4b\x10\xf3\x62\x32\x30\xf1\x61\x42\x30\x52\x42\x81"
+            "\x52\x72\x52\x5d\x22\xa2\x21\xc1\x21\xd2\xe1" }  },
+      /* --- pixel bitmap for wncyr180 char#101 e --- */
+      { 101,88471,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf8\x30\x66\xf0\xc0\xff\x0f\x30\xc0\x00\x06\x32\x84"
+            "\x0f" }  },
+      /* --- pixel bitmap for wncyr180 char#102 f --- */
+      { 102,89050,                      /* character number, location */
+         16, 1,   -6, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   22, 3,69, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x61\x21\x60\xf3\x72\x70\x33\x12\x13\x51\x34\x31\x32"
+            "\x42\x42\x1f\x42\x52\x52\x12\x42\x42\x31\x34\x31\x53"
+            "\x12\x13\x30\xf4\x72\x70\x61\x21\x62" }  },
+      /* --- pixel bitmap for wncyr180 char#103 g --- */
+      { 103,96860,                      /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 3,19, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\x22\x52\xf1\x22\x61\xf5\x22\x77\x40" }  },
+      /* --- pixel bitmap for wncyr180 char#104 kh --- */
+      { 104,97930,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9f\xc7\x19\x98\x00\x0f\x70\x00\x06\xf0\x00\x1d\x88"
+            "\xc1\x30\xdf\x0f" }  },
+      /* --- pixel bitmap for wncyr180 char#105 i --- */
+      { 105,99162,                      /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 15,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x7e\x06\x0e\x83\x87\x41\xc3\x90\x61\xc4\x30\x61"
+            "\x58\x30\x3c\x18\x0e\xcc\x8f\x1f" }  },
+      /* --- pixel bitmap for wncyr180 char#106 j --- */
+      { 106,89893,                      /* character number, location */
+         18,-1,   -5,-1,      /* topleft row,col, and botleft row,col */
+          {  7,   23, 3,25, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x51\x53\x51\x10\xf3\x70\x34\xfc\x52\x02\x22\x24\x22" }  },
+      /* --- pixel bitmap for wncyr180 char#107 k --- */
+      { 107,116462,                     /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 13,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x98\x81\x31\x10\x86\xc1\x1f\xf8\x07\x03\x61\x20"
+            "\x0c\x94\x81\xff\x20" }  },
+      /* --- pixel bitmap for wncyr180 char#108 l --- */
+      { 108,99994,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   11, 3,30, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x2c\xf4\x42\x42\x20\xf1\x41\x52\x20\x32\x52\x24\x62"
+            "\x23\x56" }  },
+      /* --- pixel bitmap for wncyr180 char#109 m --- */
+      { 109,101305,                     /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 17,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f\xf0\x39\xe0\xd0\xa0\xa1\x41\x43\x46\x86\x8c\x0c"
+            "\x19\x19\x62\x31\xc4\x62\x08\xc3\x7c\xe6\x07" }  },
+      /* --- pixel bitmap for wncyr180 char#110 n --- */
+      { 110,102542,                     /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 14,   11, 3,26, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x26\xf3\x22\x62\x20\x2a\x20\xf3\x22\x62\x26\x26" }  },
+      /* --- pixel bitmap for wncyr180 char#111 o --- */
+      { 111,90600,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 3,27, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x44\x62\x42\x32\x62\x1f\x42\x82\x12\x62\x32\x42\x56"
+            "\x32" }  },
+      /* --- pixel bitmap for wncyr180 char#112 p --- */
+      { 112,103652,                     /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 14,   11, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\xf8\x22\x62\x26\x26" }  },
+      /* --- pixel bitmap for wncyr180 char#113 ch --- */
+      { 113,104709,                     /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 15,   11, 3,36, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x36\xf3\x22\x72\x20\x22\x63\x53\x22\x12\x74\x22"
+            "\x20\xf1\xb2\x20\x96" }  },
+      /* --- pixel bitmap for wncyr180 char#114 r --- */
+      { 114,91694,                      /* character number, location */
+         11, 1,   -5, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   16, 3,41, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\x15\x53\x42\x42\x62\x10\xf4\x22\x72\x22\x62\x33"
+            "\x42\x42\x14\x40\xf3\x22\x96\x72" }  },
+      /* --- pixel bitmap for wncyr180 char#115 s --- */
+      { 115,92497,                      /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   11, 3,25, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x36\x32\x42\x12\x7f\x42\x80\x12\x61\x22\x41\x45\x23" }  },
+      /* --- pixel bitmap for wncyr180 char#116 t --- */
+      { 116,105790,                     /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   11, 3,23, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0d\x32\x31\x0f\x11\x42\x31\xf5\x52\x40\x28\x14" }  },
+      /* --- pixel bitmap for wncyr180 char#117 u --- */
+      { 117,93577,                      /* character number, location */
+         11, 1,   -5, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   16, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f\xef\x60\x0c\xc2\x20\x18\x81\x11\xb0\x00\x0b\xf0"
+            "\x00\x06\x60\x00\x02\x20\x30\x01\x1b\xe0\x00" }  },
+      /* --- pixel bitmap for wncyr180 char#118 v --- */
+      { 118,107096,                     /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\xc1\x60\x0c\xc6\x60\x0c\xc3\x7f\x0c\xce\xc0\x0c"
+            "\xcc\x60\xff\x03" }  },
+      /* --- pixel bitmap for wncyr180 char#119 shch --- */
+      { 119,108599,                     /* character number, location */
+         11, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          { 21,   15, 3,36, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x16\x16\x10\xf8\x22\x52\x52\x3e\x06\xe0\x52\xe0"
+            "\x61\x10\xf1\xe0\x61" }  },
+      /* --- pixel bitmap for wncyr180 char#120 sh --- */
+      { 120,110100,                     /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 20,   11, 3,18, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x16\x16\xf8\x22\x52\x52\x2e\x06" }  },
+      /* --- pixel bitmap for wncyr180 char#121 y --- */
+      { 121,111678,                     /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 18,   11, 3,44, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x66\xf3\x22\xa2\x20\x29\x32\x42\x53\x22\x20\xf1"
+            "\x22\x62\x22\x20\x22\x52\x32\x2a\x26" }  },
+      /* --- pixel bitmap for wncyr180 char#122 z --- */
+      { 122,112706,                     /* character number, location */
+         11, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          {  9,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7f\x02\x05\x06\x0c\x8c\x0f\x30\xc0\x81\x83\xfd\x01" }  },
+      /* --- pixel bitmap for wncyr180 char#123 (noname) --- */
+      { 123,58885,                      /* character number, location */
+          7, 0,    6, 0,      /* topleft row,col, and botleft row,col */
+          { 14,    1, 3, 2, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e" }  },
+      /* --- pixel bitmap for wncyr180 char#124 (noname) --- */
+      { 124,59705,                      /* character number, location */
+          7, 0,    6, 0,      /* topleft row,col, and botleft row,col */
+          { 28,    1, 3, 4, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x0e" }  },
+      /* --- pixel bitmap for wncyr180 char#125 N0 --- */
+      { 125,60663,                      /* character number, location */
+         17, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 22,   17, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\x30\x00\x0e\x1a\x80\x83\x00\xa0\x21\x00\x68\x08"
+            "\x00\x32\xc2\x83\x8c\x10\x21\x26\x44\x88\x09\x11\xc2"
+            "\xc2\x86\xb0\x40\x20\x28\x00\x08\x8e\x3f\x02\x03\x80"
+            "\xc0\x00\x2c\x20\x00\x06\x08\x00" }  },
+      /* --- pixel bitmap for wncyr180 char#126 \cprime --- */
+      { 126,114000,                     /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 3,29, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x60\xf3\x22\x80\x29\x32\x53\xf1\x22\x62\x22\x52"
+            "\x1a\x22" }  },
+      /* --- pixel bitmap for wncyr180 char#127 \cdprime --- */
+      { 127,115460,                     /* character number, location */
+         11, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 16,   11, 3,35, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\x72\x42\x8f\x11\x52\x80\x62\xe9\x72\x53\xf1\x62"
+            "\x62\x62\x52\x5a\x22" }  },
+      /* --- trailer  --- */
+      { -99, -999,  0,0,0,0, { 0,0,0,0, (pixbyte *)"\0" }  }
+   } ;
+
+
+/* --- size=6 for .210gf ---
+ * mf '\mode=preview; mag=magstep(-13.80488502080647873125); input wncyr10'
+ * --------------------------------------------------------------------- */
+/* --- fontdef for wncyr210 --- */
+static	chardef  wncyr210[] =
+   {
+      /* --- pixel bitmap for wncyr210 char#0 Nj --- */
+      {   0,63722,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 30,   20, 3,61, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\x39\xc3\x84\xc0\xf6\x33\x93\xc0\x3e\x09\x73\x93"
+            "\x73\x53\x93\x83\x10\xf4\x33\x93\x93\x33\x93\x83\x43"
+            "\x84\x73\x29\x3e\x42" }  },
+      /* --- pixel bitmap for wncyr210 char#1 Lj --- */
+      {   1,64756,                      /* character number, location */
+         20, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 29,   20, 3,79, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x4e\x03\xe0\x12\x63\xb0\xf6\x71\x73\xb0\x71\x7b\xa1"
+            "\x73\x63\x82\x73\x73\x10\xf1\x62\x73\x83\xf1\x61\x83"
+            "\x83\x03\x22\x83\x86\x21\x93\x73\x16\x93\x72\x33\x8e"
+            "\x32" }  },
+      /* --- pixel bitmap for wncyr210 char#2 Dzh --- */
+      {   2,65887,                      /* character number, location */
+         20, 1,   -5, 1,      /* topleft row,col, and botleft row,col */
+          { 22,   25, 3,27, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\x49\xfe\x33\xa3\x30\xf2\x33\xa3\x3e\x08\xf4\xa3"
+            "\x93" }  },
+      /* --- pixel bitmap for wncyr210 char#3 \`E --- */
+      {   3,66887,                      /* character number, location */
+         21, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 19,   22, 3,87, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x01\x46\x82\x12\x62\x63\xa2\x42\xc2\x32\xc3\x21\xe2"
+            "\x21\xe3\xe0\x32\x95\x33\x78\x14\x53\x6b\x93\x24\xa3"
+            "\xe0\x23\xe0\x22\x11\xe3\x11\xe2\x21\xd3\x31\xc2\x51"
+            "\xa2\x72\x62\xb6\x81" }  },
+      /* --- pixel bitmap for wncyr210 char#4 \=I --- */
+      {   4,76003,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   20, 3,14, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\xfe\x43\x40\xf2\x43\x4b" }  },
+      /* --- pixel bitmap for wncyr210 char#5 \=E --- */
+      {   5,67882,                      /* character number, location */
+         21, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 19,   22, 3,87, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x86\x41\x62\x62\x12\x42\xa3\x32\xc2\x23\xc2\x22\xe1"
+            "\x13\xe1\x12\xe0\x23\x35\x83\x18\x74\x63\x54\x9a\xa4"
+            "\x23\xe0\x32\xe0\x33\xe1\x22\xe1\x23\xd1\x32\xc1\x52"
+            "\xa1\x82\x62\xb6\x51" }  },
+      /* --- pixel bitmap for wncyr210 char#6 Dj --- */
+      {   6,77169,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 24,   20, 3,79, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x06\x42\x73\x71\x41\x83\x72\x31\x83\x81\x30\xf2"
+            "\x93\xc0\x93\x35\xd3\x12\x52\xb4\x82\xa3\xa1\x10\xf4"
+            "\x93\xa2\x93\x41\x51\xa3\x33\x32\xa3\x33\x22\x7a\x14"
+            "\x43" }  },
+      /* --- pixel bitmap for wncyr210 char#7 \'C --- */
+      {   7,78530,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 22,   20, 3,58, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\x03\x51\x53\x71\x51\x53\x72\x31\x63\x81\x30\xf2"
+            "\x73\xc0\x73\x35\xb3\x12\x42\xa4\x72\x20\xf8\x73\x82"
+            "\x20\x48\x46" }  },
+      /* --- pixel bitmap for wncyr210 char#8 nj --- */
+      {   8,120039,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 21,   13, 3,45, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x26\x70\xf4\x22\x62\x90\x2e\x03\x42\x62\x62\x10"
+            "\xf2\x22\x62\x72\x22\x62\x62\x16\x2b\x22" }  },
+      /* --- pixel bitmap for wncyr210 char#9 lj --- */
+      {   9,121037,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 20,   13, 3,51, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3c\x50\xf4\x52\x42\x70\x52\x48\x62\x42\x42\x61\x52"
+            "\x55\x21\x52\x55\x12\x52\x52\x14\x62\x42\x32\x59\x21" }  },
+      /* --- pixel bitmap for wncyr210 char#10 dzh --- */
+      {  10,122158,                     /* character number, location */
+         13, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   17, 3,17, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x26\xfa\x22\x62\x2e\xf3\x62\x62" }  },
+      /* --- pixel bitmap for wncyr210 char#11 \`e --- */
+      {  11,123128,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf9\xe0\x60\x04\x90\x00\x06\x9c\xe1\x7f\x0e\xf6\xc0"
+            "\x00\x38\x80\x05\x10\x83\x81\x0f\x00" }  },
+      /* --- pixel bitmap for wncyr210 char#12 \=\i --- */
+      {  12,82272,                      /* character number, location */
+         20, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  6,   20, 3,20, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x21\x43\x41\x30\xf3\x64\x20\xfa\x22\x26" }  },
+      /* --- pixel bitmap for wncyr210 char#13 \=e --- */
+      {  13,124087,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe0\x13\x83\x13\x40\x03\x38\x07\xfe\xc3\xe0\x1c\x78"
+            "\x03\xc0\x00\x12\x40\x0c\x06\x3e\x00" }  },
+      /* --- pixel bitmap for wncyr210 char#14 dj --- */
+      {  14,83280,                      /* character number, location */
+         20, 2,   -6, 2,      /* topleft row,col, and botleft row,col */
+          { 16,   26, 3,71, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x14\xb0\xf1\x32\xbe\x01\x10\xf2\x32\xb0\x32\x25\x72"
+            "\x11\x51\x63\x71\x52\x91\x10\xf5\x32\x92\x32\x91\x42"
+            "\x82\x26\x61\xe2\xe1\xe1\xe1\xd2\xb3\x83" }  },
+      /* --- pixel bitmap for wncyr210 char#15 \'c --- */
+      {  15,84386,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   20, 3,48, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x14\xd0\xf1\x32\xde\x01\x30\xf2\x32\xd0\x32\x36\x72"
+            "\x12\x52\x63\x82\x20\xf8\x32\x92\x20\x16\x56" }  },
+      /* --- pixel bitmap for wncyr210 char#16 Yu --- */
+      {  16,69102,                      /* character number, location */
+         21, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 33,   22, 3,125, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\xe0\x57\x79\x83\x53\x83\xa2\x92\x73\x92\xb2\x63\x83"
+            "\xb3\x20\xf1\x33\x73\xd3\x10\x33\x72\xe0\x12\x10\xf2"
+            "\x33\x63\xe0\x13\x3c\xe0\x13\xf1\x33\x63\xe0\x13\x33"
+            "\x72\xe0\x12\x10\xf1\x33\x73\xd3\x10\x33\x83\xb3\x53"
+            "\x92\xb2\x63\xa2\x92\x49\x83\x53\xe0\xa7\x71" }  },
+      /* --- pixel bitmap for wncyr210 char#17 Zh --- */
+      {  17,62298,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 32,   20, 3,117, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x13\x79\x83\x14\xa3\xa5\x11\x21\x93\xa1\x21\x51\x93"
+            "\xa1\x91\x83\x91\xa1\x83\x82\xb1\x73\x72\xd2\x53\x52"
+            "\xe0\x3e\xe0\x3e\x02\xe3\x53\x63\xb2\x73\x82\x50\xf2"
+            "\x42\x83\x92\x4f\x11\x32\x83\x92\x31\x01\x31\x93\xa1"
+            "\x36\x93\xa5\x13\x79\x83\x14" }  },
+      /* --- pixel bitmap for wncyr210 char#18 \u I --- */
+      {  18,70661,                      /* character number, location */
+         27, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 23,   27, 3,130, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x51\xb1\x50\xf1\x43\x93\x40\x51\xb1\xbb\x60\xf1\xe0"
+            "\x99\x59\x33\xb3\x63\xa4\x30\xf1\x33\x95\x30\x33\x82"
+            "\x13\x63\x72\x23\x30\xf1\x33\x62\x33\x30\x33\x52\x43"
+            "\x63\x42\x53\x30\xf1\x33\x32\x63\x30\x33\x22\x73\x63"
+            "\x12\x83\x30\xf1\x35\x93\x30\x34\xa3\x63\xb3\x39\x59" }  },
+      /* --- pixel bitmap for wncyr210 char#19 \"E --- */
+      {  19,79978,                      /* character number, location */
+         26, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 20,   26, 3,101, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x62\x42\xb4\x33\xb2\x42\x60\xf2\xe0\x6e\x04\x53\x93"
+            "\x20\xf1\x33\xb1\x20\xf1\x33\xc1\x10\x33\x61\x51\x43"
+            "\x61\xa3\x52\xaa\xa3\x52\xa3\x61\xa3\x61\x61\xf1\x33"
+            "\xd1\x33\xc2\x33\xc1\x43\xb2\x43\xa3\x1e\x05\x13" }  },
+      /* --- pixel bitmap for wncyr210 char#20 (noname) --- */
+      {  20,71680,                      /* character number, location */
+         20, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 23,   21, 3,99, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\xa3\x44\xb1\x22\x43\xa2\x23\x33\xa1\x33\x34\x91"
+            "\x60\xf1\x43\x81\x70\x44\x62\x70\xf1\x53\x61\x80\x54"
+            "\x41\xe0\x13\x41\xe0\x13\x32\x90\xf1\x73\x21\xa0\x73"
+            "\x11\xb0\xf1\x84\xb0\x83\xe0\x72\xe0\x71\xd2" }  },
+      /* --- pixel bitmap for wncyr210 char#21 (noname) --- */
+      {  21,72866,                      /* character number, location */
+         21, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 23,   22, 3,87, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x95\xe0\x23\x33\xd2\x72\xb3\x73\xa2\x92\x93\x93\x82"
+            "\xb2\x40\xf1\x33\xb3\x3f\x2e\x09\x01\x23\xb3\x21\xf1"
+            "\x33\xb3\x30\x42\xb2\x83\x93\x92\x92\xa3\x73\xb2\x72"
+            "\xd3\x33\xe0\x25\x90" }  },
+      /* --- pixel bitmap for wncyr210 char#22 \Dz --- */
+      {  22,73964,                      /* character number, location */
+         21, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 14,   22, 3,67, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x45\x31\x32\x51\x12\x22\x73\x21\x92\x1f\x22\xa1\x13"
+            "\xc4\xa8\x79\x78\xa5\x10\xf1\xb3\x0f\x21\xb2\x02\xa1"
+            "\x13\x82\x12\x12\x52\x21\x45\x42" }  },
+      /* --- pixel bitmap for wncyr210 char#23 Ya --- */
+      {  23,75294,                      /* character number, location */
+         20, 0,   -1, 0,      /* topleft row,col, and botleft row,col */
+          { 22,   21, 3,71, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x9d\x63\x73\x83\x83\x30\xf3\x43\x93\x30\x53\x83\x93"
+            "\x73\xca\xa3\x63\x93\x73\x30\xf3\x53\x83\x3f\x11\x43"
+            "\x83\x31\x42\x93\x41\x23\x69\x23\xe0\x33" }  },
+      /* --- pixel bitmap for wncyr210 char#24 yu --- */
+      {  24,125245,                     /* character number, location */
+         13, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 23,   13, 3,67, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\x65\x72\x72\x52\x52\x61\x91\x42\x52\x92\x10\xf1"
+            "\x22\x42\xb2\x28\xb2\xf1\x22\x42\xb2\x22\x52\x92\x32"
+            "\x62\x72\x42\x72\x52\x37\x65\x58" }  },
+      /* --- pixel bitmap for wncyr210 char#25 zh --- */
+      {  25,118639,                     /* character number, location */
+         13, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 22,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x87\x7f\xf8\x01\x03\x8e\xc0\x40\x20\x30\x10\x30\x0c"
+            "\x03\xf0\x3f\x00\xef\x3d\x60\x30\x18\x0c\x0c\x0c\x03"
+            "\x03\xd3\xc0\xc0\x3e\x30\xf0\x86\x7f\x18" }  },
+      /* --- pixel bitmap for wncyr210 char#26 \u\i --- */
+      {  26,126780,                     /* character number, location */
+         19, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   19, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1c\x1c\x0e\x0e\x03\x06\xff\x01\x00\x00\x00\xfc\xf8"
+            "\x19\x30\x0c\x1c\x06\x0d\xc3\x86\x21\xc3\x88\x61\xc2"
+            "\xb0\x61\x58\x30\x1c\x18\x06\xcc\x8f\x1f" }  },
+      /* --- pixel bitmap for wncyr210 char#27 \"e --- */
+      {  27,85195,                      /* character number, location */
+         18, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   18, 3,51, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x23\x33\x10\x91\x20\xf1\xc0\x45\x61\x51\x41\x71"
+            "\x22\x74\x8e\x0f\x22\xa0\x12\xb1\x81\x32\x51\x56\x22" }  },
+      /* --- pixel bitmap for wncyr210 char#28 (noname) --- */
+      {  28,127761,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x38\x03\xc9\x40\x32\x18\x18\x02\x86\x80\x11\xc0"
+            "\x04\xb0\x00\x2c\x00\x0e\x80\x01\x60\x00" }  },
+      /* --- pixel bitmap for wncyr210 char#29 (noname) --- */
+      {  29,128917,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe0\x03\x18\x03\x06\x03\x01\xc1\x80\xf9\xff\xff\xff"
+            "\x1b\xb0\x0c\x18\x04\x04\x06\x03\xc6\x00\x3e\x00" }  },
+      /* --- pixel bitmap for wncyr210 char#30 \dz --- */
+      {  30,129981,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 10,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7c\x19\x36\xd0\x00\x07\xf8\xc1\x1f\x70\x00\x03\x1c"
+            "\x70\x60\xff\x00" }  },
+      /* --- pixel bitmap for wncyr210 char#31 ya --- */
+      {  31,131271,                     /* character number, location */
+         13, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 15,   13, 3,48, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x69\x42\x52\x20\xf2\x32\x62\x20\x42\x52\x87\x72\x42"
+            "\x20\xf1\x42\x52\x2f\x11\x32\x52\x20\x14\x46" }  },
+      /* --- pixel bitmap for wncyr210 char#32 \cyddot --- */
+      {  32,53955,                      /* character number, location */
+         20, 3,   17, 3,      /* topleft row,col, and botleft row,col */
+          { 10,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x86\x1d\x6e\x18" }  },
+      /* --- pixel bitmap for wncyr210 char#33 (noname) --- */
+      {  33,34032,                      /* character number, location */
+         21, 3,    0, 3,      /* topleft row,col, and botleft row,col */
+          {  3,   21, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfa\xff\xff\x92\x24\x01\x80\x2e" }  },
+      /* --- pixel bitmap for wncyr210 char#34 (noname) --- */
+      {  34,54832,                      /* character number, location */
+         20, 1,   11, 1,      /* topleft row,col, and botleft row,col */
+          {  9,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x82\x8e\x1b\x26\x48\x90\xa0\x20\x41\x41\x00" }  },
+      /* --- pixel bitmap for wncyr210 char#35 (noname) --- */
+      {  35,81521,                      /* character number, location */
+         22, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 22,   22, 3,79, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x39\xa0\xf1\x63\xd0\x1e\x03\x52\x33\x72\x42\x43\x82"
+            "\x31\x53\x91\x30\xf2\x63\xd0\x6c\xa3\x83\x83\x93\x73"
+            "\xa2\x10\xf3\x63\xa3\xf1\x63\x93\x10\x63\x74\x5e\x01"
+            "\x41" }  },
+      /* --- pixel bitmap for wncyr210 char#36 (noname) --- */
+      {  36,55554,                      /* character number, location */
+         19, 0,   15, 0,      /* topleft row,col, and botleft row,col */
+          { 14,    4, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\xf8\x01\x3e\x00\xf3\x3f" }  },
+      /* --- pixel bitmap for wncyr210 char#37 (noname) --- */
+      {  37,35233,                      /* character number, location */
+         22, 2,   -2, 2,      /* topleft row,col, and botleft row,col */
+          { 22,   24, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x38\x00\x0c\x11\x80\x63\x0c\x70\x0c\xfe\x1f\x83\x80"
+            "\xc3\x20\x70\x30\x08\x0c\x0c\x82\x03\x83\x70\x80\x11"
+            "\x0e\x40\x84\x01\xe0\x70\x00\x00\x0e\x0e\x80\x41\x04"
+            "\x70\x18\x01\x0e\x83\xc0\xc1\x20\x30\x30\x08\x0e\x0c"
+            "\xc2\x01\x83\x38\xc0\x20\x06\x60\xc4\x01\x10\x31\x00"
+            "\x38" }  },
+      /* --- pixel bitmap for wncyr210 char#38 (noname) --- */
+      {  38,56131,                      /* character number, location */
+         20, 7,   15, 7,      /* topleft row,col, and botleft row,col */
+          {  5,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x98\xbb\x11\x00" }  },
+      /* --- pixel bitmap for wncyr210 char#39 (noname) --- */
+      {  39,35927,                      /* character number, location */
+         20, 3,   11, 3,      /* topleft row,col, and botleft row,col */
+          {  3,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xba\x49\x4a\x01" }  },
+      /* --- pixel bitmap for wncyr210 char#40 (noname) --- */
+      {  40,36507,                      /* character number, location */
+         22, 3,   -8, 3,      /* topleft row,col, and botleft row,col */
+          {  8,   30, 3,54, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x71\x61\x61\x61\x61\x62\x61\x50\xf1\x12\x50\x11\x6f"
+            "\x92\x60\x11\x60\xf1\x12\x50\x21\x72\x71\x81\x81\x81"
+            "\x81" }  },
+      /* --- pixel bitmap for wncyr210 char#41 (noname) --- */
+      {  41,37130,                      /* character number, location */
+         22, 2,   -8, 2,      /* topleft row,col, and botleft row,col */
+          {  8,   30, 3,55, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x01\x81\x81\x81\x81\x72\x71\x20\xf1\x52\x10\x61\x10"
+            "\xf9\x62\x61\x10\xf1\x52\x10\x51\x62\x61\x61\x61\x61"
+            "\x61\x73" }  },
+      /* --- pixel bitmap for wncyr210 char#42 (noname) --- */
+      {  42,37777,                      /* character number, location */
+         22, 2,    9, 2,      /* topleft row,col, and botleft row,col */
+          { 12,   13, 3,35, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf2\x52\x53\x22\x27\x12\x14\x36\x82\x86\x34\x12\x17"
+            "\x22\x23\xf2\x52\x51" }  },
+      /* --- pixel bitmap for wncyr210 char#43 (noname) --- */
+      {  43,86052,                      /* character number, location */
+         23, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 17,   23, 3,63, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x21\x41\xb2\x22\xc1\x21\xd4\xa0\xf2\x42\xba\x70\xf3"
+            "\x42\xb0\x47\xa2\x44\x72\x73\x52\x82\x10\xf3\x42\x92"
+            "\x42\x82\x52\x63\x4b\x41" }  },
+      /* --- pixel bitmap for wncyr210 char#44 (noname) --- */
+      {  44,38374,                      /* character number, location */
+          3, 3,   -6, 3,      /* topleft row,col, and botleft row,col */
+          {  3,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xba\x49\x4a\x01" }  },
+      /* --- pixel bitmap for wncyr210 char#45 (noname) --- */
+      {  45,38871,                      /* character number, location */
+          7, 0,    5, 0,      /* topleft row,col, and botleft row,col */
+          {  9,    2, 3, 4, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x09" }  },
+      /* --- pixel bitmap for wncyr210 char#46 (noname) --- */
+      {  46,39328,                      /* character number, location */
+          3, 3,    0, 3,      /* topleft row,col, and botleft row,col */
+          {  3,    3, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xba\x00" }  },
+      /* --- pixel bitmap for wncyr210 char#47 (noname) --- */
+      {  47,39836,                      /* character number, location */
+         22, 2,   -7, 2,      /* topleft row,col, and botleft row,col */
+          { 12,   29, 3,79, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\xa2\x93\xf1\x92\x10\x83\x92\x93\x20\xf1\x72\x30"
+            "\x63\x30\xf1\x62\x40\x53\x92\x93\x50\xf1\x42\x60\x33"
+            "\x60\xf1\x32\x70\x23\x92\x93\x80\xf1\x12\x93\x9f\x12"
+            "\xa3" }  },
+      /* --- pixel bitmap for wncyr210 char#48 (noname) --- */
+      {  48,44697,                      /* character number, location */
+         20, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 12,   21, 3,43, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x44\x62\x42\x41\x61\x32\x62\x21\x81\x1f\xa2\x82\x11"
+            "\x81\x22\x62\x31\x61\x42\x42\x64\x40" }  },
+      /* --- pixel bitmap for wncyr210 char#49 (noname) --- */
+      {  49,45499,                      /* character number, location */
+         20, 3,    0, 3,      /* topleft row,col, and botleft row,col */
+          { 10,   20, 3,20, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x42\x73\x43\x12\x40\xfe\x42\x40\x42\x4a" }  },
+      /* --- pixel bitmap for wncyr210 char#50 (noname) --- */
+      {  50,46482,                      /* character number, location */
+         20, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 12,   20, 3,57, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x35\x61\x52\x31\x72\x13\x62\x14\x57\x62\x12\x72\xf1"
+            "\x93\x92\x92\x93\x92\x91\xa1\xa1\x61\x31\x71\x21\x71"
+            "\x2a\x1b\x12" }  },
+      /* --- pixel bitmap for wncyr210 char#51 (noname) --- */
+      {  51,47530,                      /* character number, location */
+         20, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   21, 3,61, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x46\x71\x52\x51\x72\x20\xf2\x13\x63\x10\xa2\xb3\xa2"
+            "\x86\xd2\xd3\xc2\xc3\x12\x83\x0f\x14\x73\x03\x82\x21"
+            "\x83\x32\x52\x76\x43" }  },
+      /* --- pixel bitmap for wncyr210 char#52 (noname) --- */
+      {  52,48472,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   20, 3,58, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x92\x30\x83\xa1\x12\x92\x12\x91\x22\x81\x32\x71"
+            "\x42\x62\x42\x61\x52\x51\x62\x41\x72\x32\x72\x3e\xf4"
+            "\x92\x30\x68" }  },
+      /* --- pixel bitmap for wncyr210 char#53 (noname) --- */
+      {  53,49522,                      /* character number, location */
+         20, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 12,   21, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\xe6\x3f\xfe\x21\x02\x02\x20\x00\x02\x20\x0f\x0a"
+            "\x63\x70\x02\x06\xe0\x00\x0e\xe0\x07\x7e\xe0\x07\x1e"
+            "\x60\x02\x43\x18\xf8\x00" }  },
+      /* --- pixel bitmap for wncyr210 char#54 (noname) --- */
+      {  54,50436,                      /* character number, location */
+         20, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 12,   21, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc0\x03\x43\x08\xce\xe0\x06\x60\x00\x02\x30\x0f\x0b"
+            "\x73\x60\x07\x36\xc0\x03\x3c\xc0\x03\x2c\xc0\x06\x6c"
+            "\x60\x04\x82\x30\xf0\x00" }  },
+      /* --- pixel bitmap for wncyr210 char#55 (noname) --- */
+      {  55,51360,                      /* character number, location */
+         20, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 14,   21, 3,53, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x11\xdd\x1c\x21\x91\x21\xa1\x21\x91\xc1\x40\xf1\x81"
+            "\x50\x71\x60\xf1\x62\x60\xf2\x52\x70\xf4\x43\x70\x51"
+            "\x82" }  },
+      /* --- pixel bitmap for wncyr210 char#56 (noname) --- */
+      {  56,52288,                      /* character number, location */
+         20, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   21, 3,71, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x55\x71\x61\xe1\x20\xf1\x11\xa1\x10\x12\x91\x23\x71"
+            "\x44\x42\x55\x11\x85\x97\x52\x35\x32\x64\x22\x83\x0f"
+            "\x22\xa2\x02\xa1\x22\x82\x33\x52\x66\x42" }  },
+      /* --- pixel bitmap for wncyr210 char#57 (noname) --- */
+      {  57,53208,                      /* character number, location */
+         20, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 12,   21, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf0\x80\x10\x04\x62\x60\x03\x34\xc0\x03\x3c\xc0\x03"
+            "\x3c\xc0\x06\x6e\xe0\x0c\x0d\xcf\x00\x04\x60\x00\x76"
+            "\x20\x07\x21\x08\x7c\x00" }  },
+      /* --- pixel bitmap for wncyr210 char#58 (noname) --- */
+      {  58,40440,                      /* character number, location */
+         13, 3,    0, 3,      /* topleft row,col, and botleft row,col */
+          {  3,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xba\x00\x00\x80\x2e" }  },
+      /* --- pixel bitmap for wncyr210 char#59 (noname) --- */
+      {  59,41107,                      /* character number, location */
+         13, 3,   -6, 3,      /* topleft row,col, and botleft row,col */
+          {  3,   19, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xba\x00\x00\x80\x6e\x92\x52\x00" }  },
+      /* --- pixel bitmap for wncyr210 char#60 < --- */
+      {  60,56749,                      /* character number, location */
+         14, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   15, 3,53, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x82\xc3\xa4\x33\x44\x33\x44\x24\x44\x24\x35\x24\x44"
+            "\x24\x55\x24\x64\x24\x64\x24\x64\x33\x64\x33\x73\xd2"
+            "\x53" }  },
+      /* --- pixel bitmap for wncyr210 char#61 (noname) --- */
+      {  61,86795,                      /* character number, location */
+         13, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  6,   13, 3,10, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\x20\xfa\x22\x26" }  },
+      /* --- pixel bitmap for wncyr210 char#62 > --- */
+      {  62,57320,                      /* character number, location */
+         14, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 15,   15, 3,53, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x52\xd3\x73\x34\x63\x34\x64\x24\x64\x24\x64\x25\x54"
+            "\x24\x44\x25\x34\x24\x44\x24\x43\x34\x43\x34\xa3\xc2"
+            "\x83" }  },
+      /* --- pixel bitmap for wncyr210 char#63 (noname) --- */
+      {  63,42000,                      /* character number, location */
+         20, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 11,   20, 3,43, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x36\x32\x52\x12\x72\x0f\x13\x62\x82\x82\x82\x91\x40"
+            "\xf3\x51\x50\xf3\xb0\x51\x93\x91\x50" }  },
+      /* --- pixel bitmap for wncyr210 char#64 (noname) --- */
+      {  64,57982,                      /* character number, location */
+         20, 3,   16, 3,      /* topleft row,col, and botleft row,col */
+          { 10,    4, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x01\x06\x68\x18\x1e" }  },
+      /* --- pixel bitmap for wncyr210 char#65 A --- */
+      {  65,24459,                      /* character number, location */
+         21, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 22,   21, 3,80, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf2\xa2\xa0\xf1\x94\x90\x81\x14\x80\xf1\x81\x23\x80"
+            "\xf1\x71\x43\x70\x62\x44\x60\xf1\x61\x63\x60\x5c\x50"
+            "\xf1\x51\x83\x50\xf1\x41\xa3\x40\x32\xa4\x53\xa4\x37"
+            "\x69" }  },
+      /* --- pixel bitmap for wncyr210 char#66 B --- */
+      {  66,25835,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 19,   20, 3,63, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x02\x63\x73\x30\xf1\x33\x91\x30\xf2\x33\xa1\x20"
+            "\xf1\x33\xd0\x3c\x73\x83\x53\x93\x10\xf4\x33\xa3\x33"
+            "\x93\x43\x83\x2e\x01\x41" }  },
+      /* --- pixel bitmap for wncyr210 char#67 Ts --- */
+      {  67, 1087,                      /* character number, location */
+         20, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          { 23,   22, 3,32, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\x49\x10\xfe\x33\xa3\x40\xf2\x33\xa3\x4e\x08\xe0"
+            "\x72\xe0\x91" }  },
+      /* --- pixel bitmap for wncyr210 char#68 D --- */
+      {  68, 2081,                      /* character number, location */
+         20,-1,   -2,-1,      /* topleft row,col, and botleft row,col */
+          { 26,   22, 3,82, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x8e\x03\xc2\x63\x40\xf4\xb1\x73\x40\xf1\xa2\x73\x40"
+            "\xf1\xa1\x83\x40\xf1\x92\x83\x40\x91\x93\xc2\x93\xc1"
+            "\xa3\xb2\xa3\xb1\xb3\xa2\xb3\x6e\x09\x32\xe0\x52\x21"
+            "\xe0\x91" }  },
+      /* --- pixel bitmap for wncyr210 char#69 E --- */
+      {  69,27250,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 20,   20, 3,83, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x04\x53\x93\x20\xf1\x33\xb1\x20\xf1\x33\xc1\x10"
+            "\x33\x61\x51\x43\x61\xa3\x52\xaa\xa3\x52\xa3\x61\xa3"
+            "\x61\x61\xf1\x33\xd1\x33\xc2\x33\xc1\x43\xb2\x43\xa3"
+            "\x1e\x05\x11" }  },
+      /* --- pixel bitmap for wncyr210 char#70 F --- */
+      {  70,28337,                      /* character number, location */
+         20, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 19,   20, 3,69, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x4b\x40\xf2\x83\x80\x67\x93\x23\x23\x52\x43\x42\x33"
+            "\x43\x43\x1f\x33\x53\x53\x13\x43\x43\x32\x43\x42\x53"
+            "\x23\x23\x97\x60\xf2\x83\x80\x4b\x41" }  },
+      /* --- pixel bitmap for wncyr210 char#71 G --- */
+      {  71, 3267,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 19,   20, 3,31, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x04\x43\x93\x10\xf1\x33\xb1\x10\xf2\x33\xc1\xfb"
+            "\x33\xda\x93" }  },
+      /* --- pixel bitmap for wncyr210 char#72 Kh --- */
+      {  72, 4361,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 22,   20, 3,86, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\x48\x44\x83\x84\x71\xb3\x62\xc3\x51\xd4\x31\xe0"
+            "\x13\x21\xe0\x33\x11\xe0\x34\xa0\xf1\x94\x90\x91\x13"
+            "\xe0\x21\x24\xe1\x43\xd2\x53\xc1\x64\xa1\x84\x81\xa3"
+            "\x73\x94\x38\x59" }  },
+      /* --- pixel bitmap for wncyr210 char#73 I --- */
+      {  73, 5605,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 23,   20, 3,104, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x09\x59\x33\xb3\x63\xa4\x30\xf1\x33\x95\x30\x33\x82"
+            "\x13\x63\x72\x23\x30\xf1\x33\x62\x33\x30\x33\x52\x43"
+            "\x63\x42\x53\x30\xf1\x33\x32\x63\x30\x33\x22\x73\x63"
+            "\x12\x83\x30\xf1\x35\x93\x30\x34\xa3\x63\xb3\x39\x59" }  },
+      /* --- pixel bitmap for wncyr210 char#74 J --- */
+      {  74,29194,                      /* character number, location */
+         20, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   21, 3,31, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x49\xfd\x83\x20\x12\x53\x2f\x14\x43\x20\x12\x43\x42"
+            "\x42\x74\x6f" }  },
+      /* --- pixel bitmap for wncyr210 char#75 K --- */
+      {  75,23369,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 21,   20, 3,77, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\x83\x43\xa5\x33\xa1\x21\x43\xa1\x73\x91\x83\x82"
+            "\x83\x72\x93\x52\xb9\xca\xb3\x63\x93\x82\x50\xf2\x33"
+            "\x92\x40\xf1\x33\x92\x31\x33\xa1\x31\x33\xae\x83\x11" }  },
+      /* --- pixel bitmap for wncyr210 char#76 L --- */
+      {  76, 6535,                      /* character number, location */
+         20, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 21,   20, 3,48, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x4e\x03\xf1\x72\x63\x30\xf9\x71\x73\x30\xf1\x62\x73"
+            "\x3f\x13\x31\x83\x33\x22\x83\x36\x93\x44\x79" }  },
+      /* --- pixel bitmap for wncyr210 char#77 M --- */
+      {  77, 7862,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 27,   20, 3,104, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x07\xd7\x34\xd4\x30\xf2\x31\x13\xb1\x13\x30\xf1\x31"
+            "\x23\x91\x23\x30\xf1\x31\x33\x71\x33\x30\xf2\x31\x43"
+            "\x51\x43\x30\xf1\x31\x53\x31\x53\x30\xf1\x31\x63\x11"
+            "\x63\x30\xf1\x31\x73\x73\x30\x23\x63\x73\x37\x51\x59" }  },
+      /* --- pixel bitmap for wncyr210 char#78 N --- */
+      {  78, 9141,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 22,   20, 3,28, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\x49\xf7\x33\xa3\x30\x3e\x02\x30\xf8\x33\xa3\x39"
+            "\x49" }  },
+      /* --- pixel bitmap for wncyr210 char#79 O --- */
+      {  79,30041,                      /* character number, location */
+         21, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 21,   22, 3,77, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x77\xc3\x53\x92\x92\x72\xb2\x53\xb3\x20\xf1\x13\xd3"
+            "\x10\x12\xe0\x12\x1f\x53\xe0\x13\x12\xe0\x12\x10\xf1"
+            "\x13\xd3\x10\x23\xb3\x52\xb2\x72\x92\x93\x53\xc7\x73" }  },
+      /* --- pixel bitmap for wncyr210 char#80 P --- */
+      {  80,10261,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 22,   20, 3,22, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x08\xfe\x33\xa3\x30\xf2\x33\xa3\x39\x49" }  },
+      /* --- pixel bitmap for wncyr210 char#81 Ch --- */
+      {  81,11328,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 23,   20, 3,42, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\x59\xf7\x33\xb3\x30\x43\x94\x74\x71\x13\x8a\x23"
+            "\xa6\x43\x30\xf5\xe0\x33\x30\xe9" }  },
+      /* --- pixel bitmap for wncyr210 char#82 R --- */
+      {  82,31200,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 19,   20, 3,47, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x01\x73\x83\x53\x93\x43\xa2\x10\xf2\x33\xa3\x33"
+            "\xa2\x43\x93\x43\x83\x5c\x40\xf7\x33\xd9\xa2" }  },
+      /* --- pixel bitmap for wncyr210 char#83 S --- */
+      {  83,32153,                      /* character number, location */
+         21, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 19,   22, 3,79, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x86\x41\x62\x61\x22\x42\x91\x12\x32\xb3\x23\xc2\x22"
+            "\xe1\x13\xe1\x12\xe0\x11\x0f\x53\xe0\x20\x12\xe0\x11"
+            "\x13\xe1\x22\xe1\x23\xc1\x42\xc1\x52\xa1\x82\x62\xb6"
+            "\x5e" }  },
+      /* --- pixel bitmap for wncyr210 char#84 T --- */
+      {  84,12437,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 21,   20, 3,37, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\x05\x22\x63\x62\x10\xf1\x11\x73\x71\x1f\x21\x83"
+            "\x81\xfb\x93\x90\x5b\x53" }  },
+      /* --- pixel bitmap for wncyr210 char#85 U --- */
+      {  85,33387,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 22,   20, 3,85, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x86\x33\xb3\x53\xb2\x73\xa1\x93\x81\xa3\x72\xb3"
+            "\x61\xc4\x42\xd3\x41\xe0\x13\x21\xe0\x23\x12\x80\xf1"
+            "\x94\x90\xa2\xb3\x61\xc3\x52\xc3\x51\xd2\x52\xe2\x32"
+            "\xe0\x24\xe0\x11" }  },
+      /* --- pixel bitmap for wncyr210 char#86 V --- */
+      {  86,13773,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 19,   20, 3,59, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x83\x73\x63\x83\x20\xf3\x33\x93\x10\x33\x83\x53"
+            "\x73\x6c\x73\x83\x53\x93\x10\xf4\x33\xa3\x33\x93\x43"
+            "\x83\x2e\x01\x41" }  },
+      /* --- pixel bitmap for wncyr210 char#87 Shch --- */
+      {  87,15286,                      /* character number, location */
+         20, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          { 33,   22, 3,44, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\x2a\x29\x10\xfe\x33\x84\x83\x40\xf2\x33\x84\x83"
+            "\x4e\x0e\x04\xe0\xe0\x32\xe0\xe0\x51" }  },
+      /* --- pixel bitmap for wncyr210 char#88 Sh --- */
+      {  88,16811,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 32,   20, 3,30, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\x2a\x29\xfe\x33\x84\x83\x30\xf2\x33\x84\x83\x3e"
+            "\x0e\x04" }  },
+      /* --- pixel bitmap for wncyr210 char#89 Y --- */
+      {  89,18443,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 30,   20, 3,66, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\xc9\xf7\x33\xe0\x43\x30\x3d\x83\x63\x84\x63\x63"
+            "\xa3\x53\x63\xb2\x53\x30\xf3\x33\xb3\x43\x30\x33\xa3"
+            "\x53\x63\x84\x63\x3e\x02\x59" }  },
+      /* --- pixel bitmap for wncyr210 char#90 Z --- */
+      {  90,19517,                      /* character number, location */
+         21, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   22, 3,73, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x11\x37\x64\x63\x42\xa2\x32\xa3\x21\xb3\x10\xf1\xd3"
+            "\x10\xc3\xd3\xc3\x98\xe0\x23\xe0\x22\xe0\x13\x10\xf2"
+            "\xe3\x01\xd4\xc3\x12\xb2\x24\x73\x31\x38\x51" }  },
+      /* --- pixel bitmap for wncyr210 char#91 (noname) --- */
+      {  91,42689,                      /* character number, location */
+         22, 3,   -7, 3,      /* topleft row,col, and botleft row,col */
+          {  6,   29, 3,16, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x06\x0f\xe2\x4f\x92\x4f\x16" }  },
+      /* --- pixel bitmap for wncyr210 char#92 (noname) --- */
+      {  92,58861,                      /* character number, location */
+         20, 6,   11, 6,      /* topleft row,col, and botleft row,col */
+          {  9,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\x05\x09\x0a\x12\x24\xc8\xb0\xe3\x82\x00" }  },
+      /* --- pixel bitmap for wncyr210 char#93 (noname) --- */
+      {  93,43395,                      /* character number, location */
+         22, 0,   -7, 0,      /* topleft row,col, and botleft row,col */
+          {  6,   29, 3,16, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x06\xfe\x42\xf9\x42\x0f\x16" }  },
+      /* --- pixel bitmap for wncyr210 char#94 \Cprime --- */
+      {  94,20845,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 19,   20, 3,41, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x09\xa0\xf7\x33\xd0\x3c\x73\x83\x53\x93\x10\xf4\x33"
+            "\xa3\x33\x93\x43\x83\x2e\x01\x40" }  },
+      /* --- pixel bitmap for wncyr210 char#95 \Cdprime --- */
+      {  95,22333,                      /* character number, location */
+         20, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 26,   20, 3,61, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\xc3\x63\xe2\x73\xd0\xf2\x11\x83\xd1\x93\xd0\xf1"
+            "\xa3\xd0\xac\xe3\x83\xc3\x93\x10\xf4\xa3\xa3\xa3\x93"
+            "\xb3\x83\x9e\x01\x42" }  },
+      /* --- pixel bitmap for wncyr210 char#96 (noname) --- */
+      {  96,44021,                      /* character number, location */
+         20, 3,   11, 3,      /* topleft row,col, and botleft row,col */
+          {  3,    9, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x94\x92\xec\x02" }  },
+      /* --- pixel bitmap for wncyr210 char#97 a --- */
+      {  97,87921,                      /* character number, location */
+         13, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 14,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfe\xc0\xe1\x70\x20\x08\x18\x00\x06\xf8\xc1\x61\x18"
+            "\x18\x03\xc6\x80\x39\x60\x1a\x9e\x7c\x1c" }  },
+      /* --- pixel bitmap for wncyr210 char#98 b --- */
+      {  98,88679,                      /* character number, location */
+         19, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 14,   19, 3,53, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xc1\x59\x39\x43\xb2\xc1\xc2\x26\x41\x22\x42\x31\x11"
+            "\x81\x23\x82\x1f\x42\xa2\xf1\x12\x82\x10\x32\x42\x76"
+            "\x42" }  },
+      /* --- pixel bitmap for wncyr210 char#99 ts --- */
+      {  99,95778,                      /* character number, location */
+         13, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   17, 3,28, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x26\x20\xfa\x22\x62\x4e\xe2\xe0\x12\xe0\x11\xe0"
+            "\x21" }  },
+      /* --- pixel bitmap for wncyr210 char#100 d --- */
+      { 100,96748,                      /* character number, location */
+         13,-1,   -4,-1,      /* topleft row,col, and botleft row,col */
+          { 19,   17, 3,62, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5c\x20\xf4\x72\x42\x40\xf1\x71\x52\x40\x62\x52\xa1"
+            "\x62\x40\xf1\x52\x62\x40\x2e\x01\x42\xb2\x32\xd2\x21"
+            "\xe0\x11\x11\xe0\x31" }  },
+      /* --- pixel bitmap for wncyr210 char#101 e --- */
+      { 101,89463,                      /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   13, 3,35, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x45\x61\x51\x41\x71\x22\x74\x8e\x0f\x22\xa0\x12\xb1"
+            "\x81\x32\x51\x56\x22" }  },
+      /* --- pixel bitmap for wncyr210 char#102 f --- */
+      { 102,90048,                      /* character number, location */
+         19, 1,   -7, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   26, 3,81, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x71\x21\x70\xf3\x82\x80\x34\x12\x14\x52\x34\x32"
+            "\x20\xf1\x12\x52\x52\x1f\x42\x62\x62\xf1\x12\x52\x52"
+            "\x10\x22\x34\x32\x54\x12\x14\x30\xf4\x82\x80\xf1\x71"
+            "\x21\x73" }  },
+      /* --- pixel bitmap for wncyr210 char#103 g --- */
+      { 103,97914,                      /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   13, 3,25, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\x32\x52\x32\x61\x10\xf1\x22\x71\xf6\x22\x87\x51" }  },
+      /* --- pixel bitmap for wncyr210 char#104 kh --- */
+      { 104,98990,                      /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x1f\x86\x81\x21\xc0\x04\xe0\x01\x38\x00\x0c\x80"
+            "\x06\xa0\x03\xc4\x80\x60\x30\x38\x1f\x3f" }  },
+      /* --- pixel bitmap for wncyr210 char#105 i --- */
+      { 105,100232,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x7e\x06\x0c\x03\x87\x41\xc3\xb0\x61\xc8\x30\x62"
+            "\x98\x30\x6c\x18\x16\x0c\x07\x86\x01\xf3\xe3\x07" }  },
+      /* --- pixel bitmap for wncyr210 char#106 j --- */
+      { 106,90911,                      /* character number, location */
+         20,-2,   -6,-2,      /* topleft row,col, and botleft row,col */
+          {  8,   26, 3,31, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x61\x63\x61\x10\xf3\x80\x35\xfd\x62\x11\x45\x31\x13"
+            "\x22\x25\x22" }  },
+      /* --- pixel bitmap for wncyr210 char#107 k --- */
+      { 107,117706,                     /* character number, location */
+         13, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 15,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\x70\x0c\x38\x06\x02\x03\x81\x61\xc0\x0f\xe0\x1e"
+            "\x30\x18\x18\x18\x0c\x0c\x06\x16\x03\xff\x0f\x03" }  },
+      /* --- pixel bitmap for wncyr210 char#108 l --- */
+      { 108,101102,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   13, 3,36, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3c\xf2\x52\x42\x20\xf4\x51\x52\x20\x42\x52\x22\x22"
+            "\x52\x25\x62\x33\x56" }  },
+      /* --- pixel bitmap for wncyr210 char#109 m --- */
+      { 109,102423,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1f\xf0\x39\xe0\x70\xc0\xa1\x41\x43\x83\x86\x8c\x0c"
+            "\x19\x19\x32\x32\xc4\x62\x88\xc5\x10\x86\x71\x0c\xf3"
+            "\x99\x1f" }  },
+      /* --- pixel bitmap for wncyr210 char#110 n --- */
+      { 110,103670,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   13, 3,26, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x26\xf4\x22\x62\x20\x2a\x20\xf4\x22\x62\x26\x26" }  },
+      /* --- pixel bitmap for wncyr210 char#111 o --- */
+      { 111,91628,                      /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   13, 3,35, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x46\x72\x42\x51\x81\x32\x82\x1f\x42\xa2\xf1\x12\x82"
+            "\x10\x32\x42\x76\x42" }  },
+      /* --- pixel bitmap for wncyr210 char#112 p --- */
+      { 112,104788,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   13, 3,12, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\xfa\x22\x62\x26\x26" }  },
+      /* --- pixel bitmap for wncyr210 char#113 ch --- */
+      { 113,105853,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   13, 3,34, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x36\xf4\x22\x72\x20\x32\x53\x66\x12\x73\x32\x20"
+            "\xf2\xb2\x20\x96" }  },
+      /* --- pixel bitmap for wncyr210 char#114 r --- */
+      { 114,92730,                      /* character number, location */
+         13, 2,   -6, 2,      /* topleft row,col, and botleft row,col */
+          { 15,   19, 3,49, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x04\x25\x64\x42\x53\x71\x42\x82\x10\xf4\x22\x92\x22"
+            "\x82\x33\x62\x44\x42\x52\x24\x50\xf4\x22\xb6\x92" }  },
+      /* --- pixel bitmap for wncyr210 char#115 s --- */
+      { 115,93543,                      /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   13, 3,33, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x47\x42\x43\x21\x63\x12\x71\x1f\x42\xa0\x12\xb1\x81"
+            "\x32\x51\x56\x24" }  },
+      /* --- pixel bitmap for wncyr210 char#116 t --- */
+      { 116,106938,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   13, 3,25, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x01\x42\x32\x0f\x21\x52\x41\xf6\x62\x50\x38\x20" }  },
+      /* --- pixel bitmap for wncyr210 char#117 u --- */
+      { 117,94631,                      /* character number, location */
+         13, 1,   -6, 1,      /* topleft row,col, and botleft row,col */
+          { 15,   19, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3f\x7c\x06\x1c\x03\x04\x03\x81\x81\x80\x21\xc0\x10"
+            "\xc0\x04\x60\x02\xf0\x01\x70\x00\x38\x00\x08\x00\x04"
+            "\x00\x01\x8e\x00\x27\x80\x1b\x80\x03\x00" }  },
+      /* --- pixel bitmap for wncyr210 char#118 v --- */
+      { 118,108252,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   13, 3,41, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0a\x52\x52\x20\xf2\x22\x62\x10\x22\x43\x49\x42\x62"
+            "\x10\xf2\x22\x72\x22\x62\x1b\x22" }  },
+      /* --- pixel bitmap for wncyr210 char#119 shch --- */
+      { 119,109763,                     /* character number, location */
+         13, 1,   -4, 1,      /* topleft row,col, and botleft row,col */
+          { 23,   17, 3,36, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x25\x26\x20\xfa\x22\x53\x52\x4e\x07\xe0\x72\xe0"
+            "\x82\xe0\x81\xe0\x91" }  },
+      /* --- pixel bitmap for wncyr210 char#120 sh --- */
+      { 120,111276,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 21,   13, 3,18, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x25\x26\xfa\x22\x53\x52\x2e\x07" }  },
+      /* --- pixel bitmap for wncyr210 char#121 y --- */
+      { 121,112866,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 20,   13, 3,50, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x77\x22\xb3\x20\xf3\x22\xb2\x30\x29\x42\x52\x62"
+            "\x32\x30\xf2\x22\x72\x22\x30\x22\x62\x33\x2b\x27" }  },
+      /* --- pixel bitmap for wncyr210 char#122 z --- */
+      { 122,113904,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 11,   13, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfd\x19\x58\x80\x01\x0c\x38\x7c\x00\x0c\xc0\x00\x06"
+            "\x70\x80\x03\xf6\x0f" }  },
+      /* --- pixel bitmap for wncyr210 char#123 (noname) --- */
+      { 123,59481,                      /* character number, location */
+          9, 0,    8, 0,      /* topleft row,col, and botleft row,col */
+          { 16,    1, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\xff" }  },
+      /* --- pixel bitmap for wncyr210 char#124 (noname) --- */
+      { 124,60301,                      /* character number, location */
+          9, 0,    8, 0,      /* topleft row,col, and botleft row,col */
+          { 32,    1, 2, 2, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x00\x20" }  },
+      /* --- pixel bitmap for wncyr210 char#125 N0 --- */
+      { 125,61259,                      /* character number, location */
+         20, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 26,   20, 3,125, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x16\x82\xd3\x74\x80\xf1\x44\x51\x13\x80\x41\x13\x41"
+            "\xe0\x21\x13\x41\x71\x81\x23\x31\x52\x12\x61\x23\x31"
+            "\x42\x32\x10\xf1\x41\x33\x21\x42\x32\x10\x41\x43\x11"
+            "\x42\x32\x51\x43\x11\x55\x20\xf1\x41\x54\xc0\xf1\x41"
+            "\x63\x48\x0f\x13\x11\x72\xc4\x91\xd2\xa1\xc1" }  },
+      /* --- pixel bitmap for wncyr210 char#126 \cprime --- */
+      { 126,115204,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 13,   13, 3,31, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x70\xf4\x22\x90\x29\x42\x62\x10\xf2\x22\x72\x22"
+            "\x62\x1b\x22" }  },
+      /* --- pixel bitmap for wncyr210 char#127 \cdprime --- */
+      { 127,116696,                     /* character number, location */
+         13, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   13, 3,45, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x19\x92\x42\x90\xf1\x11\x52\x91\x62\xe0\x22\xe0\x29"
+            "\x92\x62\x10\xf2\x72\x72\x72\x62\x6b\x23" }  },
+      /* --- trailer  --- */
+      { -99, -999,  0,0,0,0, { 0,0,0,0, (pixbyte *)"\0" }  }
+   } ;
+
+
+/* --- size=7 for .250gf ---
+ * mf '\mode=preview; mag=magstep(-12.84858895680446863032); input wncyr10'
+ * --------------------------------------------------------------------- */
+/* --- fontdef for wncyr250 --- */
+static	chardef  wncyr250[] =
+   {
+      /* --- pixel bitmap for wncyr250 char#0 Nj --- */
+      {   0,64786,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 37,   24, 3,81, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\x4a\xe0\x23\xb4\xe0\x10\xf8\x43\xb3\xe0\x20\x4e"
+            "\x0e\x93\xb3\x94\x73\xb3\xb3\x63\xb3\xb4\x10\xf4\x43"
+            "\xb3\xc4\x43\xb3\xb4\x53\xb3\xb3\x63\xb4\x93\x3b\x4e"
+            "\x03\x55" }  },
+      /* --- pixel bitmap for wncyr250 char#1 Lj --- */
+      {   1,65840,                      /* character number, location */
+         24, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 35,   24, 3,101, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x5e\x07\x90\xf5\x92\x83\xd0\xf3\x91\x93\xd0\x91\x9c"
+            "\xd1\x93\x74\xb1\x93\x84\xa1\x93\x93\x10\xf1\x82\x93"
+            "\x94\x81\xa3\x94\x12\x51\xa3\x98\x32\xa3\x98\x31\xb3"
+            "\x93\x13\x32\xb3\x84\x26\xc3\x74\x44\x9e\x02\x43" }  },
+      /* --- pixel bitmap for wncyr250 char#2 Dzh --- */
+      {   2,66995,                      /* character number, location */
+         24, 1,   -5, 1,      /* topleft row,col, and botleft row,col */
+          { 26,   29, 3,27, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\x4b\xfe\x43\xc3\x40\xf6\x43\xc3\x4e\x0c\xf4\xc3"
+            "\xb1" }  },
+      /* --- pixel bitmap for wncyr250 char#3 \`E --- */
+      {   3,68011,                      /* character number, location */
+         25, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 23,   26, 3,125, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x01\x66\xa2\x32\x63\x75\xa2\x63\xd3\x43\xe3\x32\xe0"
+            "\x13\x31\xe0\x33\x21\xe0\x34\x11\xe0\x43\xe0\x63\xa8"
+            "\x24\x85\x32\x15\x63\x87\x33\xb4\x25\xc4\xe0\x54\xe0"
+            "\x53\x11\xe0\x43\x11\xe0\x34\x11\xe0\x33\x20\xf1\x11"
+            "\xe0\x13\x30\x21\xd3\x71\xb2\xa3\x63\xe6\xa1" }  },
+      /* --- pixel bitmap for wncyr250 char#4 \=I --- */
+      {   4,77289,                      /* character number, location */
+         24, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 11,   24, 3,14, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\xfe\x43\x40\xf6\x43\x4b" }  },
+      /* --- pixel bitmap for wncyr250 char#5 \=E --- */
+      {   5,69026,                      /* character number, location */
+         25, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 23,   26, 3,123, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\xa6\x61\x73\x62\x32\x62\xa5\x43\xd3\x33\xe3\x33\xe0"
+            "\x12\x23\xe0\x31\x14\xe0\x31\x13\xe0\x41\x13\xe0\x54"
+            "\x28\x94\x12\x35\x85\x83\x65\xb3\x36\xc5\x24\xe0\x63"
+            "\xe0\x63\xe0\x41\x14\xe0\x31\x23\xe0\x31\xf1\x33\xe0"
+            "\x11\x10\x43\xd1\x82\xb1\xa3\x63\xe6\x76" }  },
+      /* --- pixel bitmap for wncyr250 char#6 Dj --- */
+      {   6,78489,                      /* character number, location */
+         24, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 27,   24, 3,81, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\x07\x62\x73\x72\x52\x83\x82\x41\x93\x91\x40\xf4"
+            "\xa3\xe0\xa3\x55\xe3\x23\x52\xc3\x11\x91\xc4\xa2\x10"
+            "\xf6\xa3\xc2\xa3\x51\x52\xb3\x43\x41\xc3\x43\x32\x7c"
+            "\x15\x43" }  },
+      /* --- pixel bitmap for wncyr250 char#7 \'C --- */
+      {   7,79890,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 26,   24, 3,62, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\x07\x51\x73\x82\x42\x73\x92\x31\x83\xa1\x30\xf4"
+            "\x93\xe0\x93\x36\xe3\x12\x52\x40\xf1\x94\x82\x30\xf9"
+            "\x93\x92\x30\x5a\x38" }  },
+      /* --- pixel bitmap for wncyr250 char#8 nj --- */
+      {   8,121921,                     /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 26,   15, 3,49, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x37\xb2\x83\xa0\xf4\x32\x82\xb0\x3e\x07\x52\x82"
+            "\x82\x10\xf3\x32\x82\x92\x32\x83\x63\x18\x3c\x30" }  },
+      /* --- pixel bitmap for wncyr250 char#9 lj --- */
+      {   9,122929,                     /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 25,   15, 3,73, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x4e\xd2\x52\xa0\xf2\x71\x52\xa0\xf1\x62\x52\xa0\x62"
+            "\x5a\x82\x52\x72\x23\x22\x52\x86\x22\x52\x86\x21\x62"
+            "\x82\x13\x21\x62\x82\x16\x62\x72\x43\x4c\x33" }  },
+      /* --- pixel bitmap for wncyr250 char#10 dzh --- */
+      {  10,124064,                     /* character number, location */
+         15, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          { 19,   19, 3,19, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x38\xfc\x32\x92\x3e\x05\xf3\x92\x82" }  },
+      /* --- pixel bitmap for wncyr250 char#11 \`e --- */
+      {  11,125042,                     /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   15, 3,55, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x01\x36\x64\x62\x42\xa2\x21\xc1\x21\xc2\x85\x22\x5c"
+            "\x33\x72\x15\x82\x31\xa3\xc2\x11\xc1\x31\xa2\x42\x62"
+            "\x86\x63" }  },
+      /* --- pixel bitmap for wncyr250 char#12 \=\i --- */
+      {  12,83728,                      /* character number, location */
+         24, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  8,   24, 3,26, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x23\x30\xf1\x14\x30\x23\x30\xf4\x85\x30\xfc\x32\x38" }  },
+      /* --- pixel bitmap for wncyr250 char#13 \=e --- */
+      {  13,126011,                     /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   15, 3,55, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x66\x31\x42\x64\x22\xa2\x21\xc1\x12\xc3\x25\x7b\x52"
+            "\x73\x33\x85\x12\xa1\x42\xc1\x21\xc1\x22\xa1\x52\x62"
+            "\x86\x43" }  },
+      /* --- pixel bitmap for wncyr250 char#14 dj --- */
+      {  14,84742,                      /* character number, location */
+         24, 2,   -7, 2,      /* topleft row,col, and botleft row,col */
+          { 19,   31, 3,95, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x15\xd0\xf2\x42\xde\x04\x10\xf3\x42\xd0\x42\x35\x92"
+            "\x12\x52\x73\x82\x63\x92\x52\xb1\x10\xf5\x42\xb2\x42"
+            "\xb1\x10\xf1\x42\xa2\x10\x18\x71\xe0\x32\xe0\x22\xe0"
+            "\x31\xe0\x31\xe0\x22\xe0\x13\xd4\x91" }  },
+      /* --- pixel bitmap for wncyr250 char#15 \'c --- */
+      {  15,85862,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 22,   24, 3,58, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x15\xe0\x20\xf2\x42\xe0\x2e\x04\x40\xf3\x42\xe0\x20"
+            "\x42\x37\xa2\x21\x72\x84\x92\x73\xa2\x30\xf9\x42\xb2"
+            "\x30\x18\x58" }  },
+      /* --- pixel bitmap for wncyr250 char#16 Yu --- */
+      {  16,70266,                      /* character number, location */
+         25, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 38,   26, 3,143, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\xe0\x87\x9a\xa3\x53\xa4\xb3\x93\x83\xb3\xb3\x73\xa3"
+            "\xd3\x63\x94\xd4\x53\x93\xe0\x13\x53\x84\xe0\x14\x43"
+            "\x83\xe0\x33\x10\xf3\x33\x74\xe0\x34\x3e\xe0\x34\xf2"
+            "\x33\x74\xe0\x34\xf1\x33\x84\xe0\x14\x10\x33\x93\xe0"
+            "\x13\x53\x94\xd4\x53\xa3\xd3\x63\xb3\xb3\x74\xb3\x93"
+            "\x5a\xa3\x53\xe0\xe0\x17\x9b" }  },
+      /* --- pixel bitmap for wncyr250 char#17 Zh --- */
+      {  17,63330,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 37,   24, 3,147, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x13\x9b\x93\x15\xc3\xc5\x11\x21\xc3\xc1\x21\x52\xb3"
+            "\xb2\x40\xf1\x51\xb3\xb1\x50\x61\xa3\xa1\xd1\x93\x91"
+            "\xe0\x12\x73\x72\xe0\x33\x53\x53\xe0\x6e\x01\xe0\x75"
+            "\x23\x25\xe0\x43\x63\x63\xe0\x12\x83\x82\xd2\x93\x92"
+            "\x60\xf2\x52\xa3\xa2\x5f\x21\x42\xa3\xa2\x41\x01\x32"
+            "\xb3\xb2\x36\xc3\xc5\x13\x9b\x93\x11" }  },
+      /* --- pixel bitmap for wncyr250 char#18 \u I --- */
+      {  18,71849,                      /* character number, location */
+         33, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 28,   33, 3,164, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x62\xc2\x60\xf1\x54\xa4\x50\x53\xc3\xb1\xe1\xd2\xa2"
+            "\xe0\x38\xa0\xf1\xe0\xeb\x6b\x43\xe3\x40\xf1\x43\xd4"
+            "\x40\x43\xc5\x83\xb2\x13\x40\xf1\x43\xa2\x23\x40\x43"
+            "\x92\x33\x83\x82\x43\x83\x72\x53\x40\xf1\x43\x62\x63"
+            "\x40\x43\x52\x73\x83\x42\x83\x83\x32\x93\x40\xf1\x43"
+            "\x22\xa3\x40\x43\x12\xb3\x85\xc3\x40\xf1\x44\xd3\x40"
+            "\x43\xe3\x4b\x6b" }  },
+      /* --- pixel bitmap for wncyr250 char#19 \"E --- */
+      {  19,81350,                      /* character number, location */
+         32, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 24,   32, 3,131, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x72\x62\x70\xf1\x64\x44\x60\x72\x62\x70\xf3\xe0\xae"
+            "\x08\x63\xb4\x63\xd2\x63\xe1\x63\xe2\x10\xf1\x43\xe0"
+            "\x11\x10\x43\x81\x61\x10\xf1\x43\x81\x80\x43\x72\xcc"
+            "\xc3\x72\x80\xf1\x43\x81\x80\x43\x81\x71\x43\xe0\x21"
+            "\xf2\x43\xe0\x11\x10\x43\xe2\x53\xd3\x53\xb4\x2e\x08"
+            "\x22" }  },
+      /* --- pixel bitmap for wncyr250 char#20 (noname) --- */
+      {  20,72900,                      /* character number, location */
+         24, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 26,   25, 3,103, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x09\xc4\x44\xd2\x12\x43\xe1\x23\x43\xc1\x33\xf1\x43"
+            "\xc1\x60\xf1\x53\xa1\x70\x53\x91\x80\xf1\x63\x81\x80"
+            "\x63\x71\xe0\x23\x61\x90\xf1\x73\x51\xa0\x83\x41\xa0"
+            "\xf1\x83\x31\xb0\xf2\x93\x11\xc0\xf2\xa3\xd0\xb1\xe3" }  },
+      /* --- pixel bitmap for wncyr250 char#21 (noname) --- */
+      {  21,74104,                      /* character number, location */
+         25, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 27,   26, 3,115, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\xb5\xe0\x63\x33\xe0\x33\x53\xe0\x13\x73\x70\xf1\x63"
+            "\x93\x60\x54\x94\x50\xf1\x53\xb3\x50\xf1\x44\xb4\x4f"
+            "\x2e\x0d\x0f\x11\x34\xb4\x31\x44\xb4\x40\xf1\x53\xb3"
+            "\x50\x54\x94\x50\xf1\x63\x93\x60\x73\x73\xe0\x13\x53"
+            "\xe0\x33\x33\xe0\x65\xb2" }  },
+      /* --- pixel bitmap for wncyr250 char#22 \Dz --- */
+      {  22,75222,                      /* character number, location */
+         25, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 17,   26, 3,81, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x56\x41\x42\x62\x12\x31\xa3\x22\xb2\x21\xc2\x1f\x22"
+            "\xd1\x13\xe0\x13\xe6\xc9\x9b\x99\xc6\xe3\x10\xf1\xe3"
+            "\x0f\x21\xe2\x02\xd1\x12\xc2\x13\xb1\x22\x13\x62\x31"
+            "\x56\x54" }  },
+      /* --- pixel bitmap for wncyr250 char#23 Ya --- */
+      {  23,76564,                      /* character number, location */
+         24, 0,   -1, 0,      /* topleft row,col, and botleft row,col */
+          { 27,   25, 3,99, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xbe\x02\x84\x83\xb3\xa3\xa3\xb3\x40\xf3\x54\xb3\x40"
+            "\x63\xb3\xb3\xa3\xc4\x83\xe0\x1c\xe3\x73\xd2\x93\xc2"
+            "\xa3\x40\xf2\x73\xa3\x40\xf1\x64\xa3\x41\x54\xa3\x41"
+            "\x45\xa3\x41\x44\xb3\x51\x24\x8b\x24\xe0\x70" }  },
+      /* --- pixel bitmap for wncyr250 char#24 yu --- */
+      {  24,127205,                     /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 27,   15, 3,75, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x76\x92\x82\x62\x72\x62\xa2\x20\xf1\x32\x52\xc2"
+            "\x10\xf1\x32\x42\xe2\x38\xe2\xf1\x32\x42\xe2\xf1\x32"
+            "\x52\xc2\x10\x32\x62\xa2\x52\x82\x62\x48\x76\x64" }  },
+      /* --- pixel bitmap for wncyr250 char#25 zh --- */
+      {  25,120505,                     /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 25,   15, 3,83, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x03\x59\x57\x73\x74\x31\x73\x71\x71\x63\x62\x72\x53"
+            "\x61\x93\x33\x33\xcb\xc4\x23\x24\x92\x53\x52\x40\xf1"
+            "\x32\x63\x62\x3f\x11\x22\x63\x62\x21\x04\x73\x74\x12"
+            "\x59\x52\x14" }  },
+      /* --- pixel bitmap for wncyr250 char#26 \u\i --- */
+      {  26,128752,                     /* character number, location */
+         23, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 20,   23, 3,102, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\xf2\x44\x44\x40\x51\x81\xa2\x62\xc6\x70\xf1\xe0\x68"
+            "\x48\x32\xa2\x62\x93\x62\x81\x12\x62\x72\x12\x62\x62"
+            "\x22\x62\x52\x32\x62\x42\x42\x62\x32\x52\x62\x22\x62"
+            "\x62\x12\x72\x62\x11\x82\x63\x92\x62\xa2\x38\x48" }  },
+      /* --- pixel bitmap for wncyr250 char#27 \"e --- */
+      {  27,86683,                      /* character number, location */
+         22, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 14,   22, 3,63, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x14\x43\x34\x44\x24\x43\x20\xf3\xe0\x55\x72\x52\x42"
+            "\x72\x22\x91\x21\xa4\xbe\x01\x0f\x22\xc0\x12\xc2\xa1"
+            "\x22\x81\x42\x61\x76\x30" }  },
+      /* --- pixel bitmap for wncyr250 char#28 (noname) --- */
+      {  28,129753,                     /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   15, 3,59, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\x73\x23\x81\x21\x22\x81\x31\x32\x71\x72\x61\x92"
+            "\x51\x92\x42\x92\x41\xb2\x31\x60\xf1\x52\x21\x70\xf2"
+            "\x63\x80\x71\x92" }  },
+      /* --- pixel bitmap for wncyr250 char#29 (noname) --- */
+      {  29,130915,                     /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   15, 3,59, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x74\xc2\x42\xa1\x61\x92\x62\x81\x81\x72\x82\x3f\x1e"
+            "\x04\x01\x22\x82\x21\xf1\x32\x82\x30\x42\x62\x91\x61"
+            "\xa2\x42\xc4\x72" }  },
+      /* --- pixel bitmap for wncyr250 char#30 \dz --- */
+      {  30,131987,                     /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   15, 3,41, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x36\x11\x22\x62\x1f\x12\x81\x12\xa4\x97\x77\x94\xa3"
+            "\xa3\x93\x91\x12\x72\x11\x17\x32" }  },
+      /* --- pixel bitmap for wncyr250 char#31 ya --- */
+      {  31,133287,                     /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 19,   15, 3,56, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x7c\x52\x72\x72\x82\x30\xf1\x32\x92\x30\x42\x82\x82"
+            "\x72\x9a\x82\x72\x30\xf2\x42\x82\x3f\x11\x32\x82\x30"
+            "\x14\x68" }  },
+      /* --- pixel bitmap for wncyr250 char#32 \cyddot --- */
+      {  32,54899,                      /* character number, location */
+         24, 4,   20, 4,      /* topleft row,col, and botleft row,col */
+          { 11,    4, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\x7b\xfc\xe3\x0d\x06" }  },
+      /* --- pixel bitmap for wncyr250 char#33 (noname) --- */
+      {  33,34716,                      /* character number, location */
+         25, 4,    0, 4,      /* topleft row,col, and botleft row,col */
+          {  4,   25, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf6\xff\xff\x6f\x66\x66\x66\x66\x06\x00\x60\xff\x06" }  },
+      /* --- pixel bitmap for wncyr250 char#34 (noname) --- */
+      {  34,55780,                      /* character number, location */
+         24, 1,   13, 1,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\xf3\x78\x9f\x6f\xb1\x10\x08\x81\x10\x88\x40\x08"
+            "\x44\x20\x83\x01" }  },
+      /* --- pixel bitmap for wncyr250 char#35 (noname) --- */
+      {  35,82939,                      /* character number, location */
+         26, 3,    0, 3,      /* topleft row,col, and botleft row,col */
+          { 26,   26, 3,89, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3b\xc0\xf2\x73\xe0\x2e\x07\x52\x53\x92\x51\x63\xa2"
+            "\x41\x63\xb1\x40\xf3\x73\xe0\x20\x7e\xc3\x94\xa3\xa4"
+            "\x93\xb4\x83\xc3\x10\xf3\x73\xc4\x73\xc3\x83\xb4\x83"
+            "\xa4\x93\x94\x6e\x04\x51" }  },
+      /* --- pixel bitmap for wncyr250 char#36 (noname) --- */
+      {  36,56514,                      /* character number, location */
+         23, 1,   17, 1,      /* topleft row,col, and botleft row,col */
+          { 15,    6, 3,21, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x12\x92\x1f\x14\x74\x03\x93\x12\x92\x49\x32" }  },
+      /* --- pixel bitmap for wncyr250 char#37 (noname) --- */
+      {  37,35925,                      /* character number, location */
+         26, 2,   -2, 2,      /* topleft row,col, and botleft row,col */
+          { 27,   28, 3,171, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x34\xe0\x12\x52\x31\xd3\x42\x52\xa3\x51\x61\x12\x65"
+            "\x42\x71\x26\x13\x52\x71\x83\x62\x71\x82\x72\x71\x73"
+            "\x72\x71\x63\x82\x71\x53\xa1\x61\x62\xb2\x51\x53\xc2"
+            "\x31\x53\xe4\x53\xe0\xa2\x64\xe3\x52\x31\xc3\x52\x51"
+            "\xb2\x61\x61\xa3\x52\x71\x83\x62\x71\x73\x72\x71\x72"
+            "\x82\x71\x63\x82\x71\x53\x92\x71\x43\xb1\x61\x52\xc2"
+            "\x51\x43\xd2\x31\x52\xe0\x14\x30" }  },
+      /* --- pixel bitmap for wncyr250 char#38 (noname) --- */
+      {  38,57099,                      /* character number, location */
+         24, 8,   18, 8,      /* topleft row,col, and botleft row,col */
+          {  7,    6, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x60\x38\x8e\x61\x18\x00" }  },
+      /* --- pixel bitmap for wncyr250 char#39 (noname) --- */
+      {  39,36649,                      /* character number, location */
+         24, 4,   13, 4,      /* topleft row,col, and botleft row,col */
+          {  5,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xe6\x7d\x0b\x21\x44\x84\x0c" }  },
+      /* --- pixel bitmap for wncyr250 char#40 (noname) --- */
+      {  40,37235,                      /* character number, location */
+         26, 4,   -8, 4,      /* topleft row,col, and botleft row,col */
+          {  9,   34, 3,62, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x81\x71\x71\x71\x71\x72\x71\x72\x71\x60\xf1\x12\x60"
+            "\x11\x7f\x92\x70\x11\x70\xf1\x12\x60\x21\x82\x81\x82"
+            "\x81\x91\x91\x91\x91" }  },
+      /* --- pixel bitmap for wncyr250 char#41 (noname) --- */
+      {  41,37866,                      /* character number, location */
+         26, 2,   -8, 2,      /* topleft row,col, and botleft row,col */
+          {  9,   34, 3,63, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x01\x91\x91\x91\x91\x82\x81\x82\x81\x20\xf1\x62\x10"
+            "\x71\x10\xf9\x72\x71\x10\xf1\x62\x10\x61\x72\x71\x72"
+            "\x71\x71\x71\x71\x71\x83" }  },
+      /* --- pixel bitmap for wncyr250 char#42 (noname) --- */
+      {  42,38521,                      /* character number, location */
+         26, 3,   11, 3,      /* topleft row,col, and botleft row,col */
+          { 13,   15, 3,47, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf2\x61\x61\x51\x54\x31\x33\x13\x21\x23\x47\x83\x87"
+            "\x43\x21\x23\x13\x31\x34\x51\x51\xf2\x61\x62" }  },
+      /* --- pixel bitmap for wncyr250 char#43 (noname) --- */
+      {  43,87524,                      /* character number, location */
+         27, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 21,   27, 3,73, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x21\x61\xe1\x41\xe0\x12\x22\xc0\xf1\x44\xd0\xf2\x52"
+            "\xec\x90\xf5\x52\xe0\x5c\x92\x83\x82\xa3\x62\xb2\x10"
+            "\xf3\x52\xc2\x52\xb2\x62\xa2\x72\x83\x5e\x50" }  },
+      /* --- pixel bitmap for wncyr250 char#44 (noname) --- */
+      {  44,39130,                      /* character number, location */
+          4, 4,   -7, 4,      /* topleft row,col, and botleft row,col */
+          {  4,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf6\xef\x88\x48\x24\x01" }  },
+      /* --- pixel bitmap for wncyr250 char#45 (noname) --- */
+      {  45,39631,                      /* character number, location */
+          8, 0,    6, 0,      /* topleft row,col, and botleft row,col */
+          { 11,    2, 3, 4, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x0b" }  },
+      /* --- pixel bitmap for wncyr250 char#46 (noname) --- */
+      {  46,40088,                      /* character number, location */
+          4, 4,    0, 4,      /* topleft row,col, and botleft row,col */
+          {  4,    4, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf6\x6f" }  },
+      /* --- pixel bitmap for wncyr250 char#47 (noname) --- */
+      {  47,40598,                      /* character number, location */
+         26, 2,   -9, 2,      /* topleft row,col, and botleft row,col */
+          { 15,   35, 3,95, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\xd2\xc3\xc2\xc3\x10\xf1\xb2\x20\xa3\xc2\xc3\x30"
+            "\xf1\x92\x40\x83\xc2\xc3\x50\xf1\x72\x60\x63\x60\xf1"
+            "\x62\x70\x53\xc2\xc3\x80\xf1\x42\x90\x33\xc2\xc3\xa0"
+            "\xf1\x22\xb0\x13\xc2\xc3\xcf\x12\xd2" }  },
+      /* --- pixel bitmap for wncyr250 char#48 (noname) --- */
+      {  48,45547,                      /* character number, location */
+         23, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 15,   24, 3,55, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x55\x82\x52\x52\x72\x41\x91\x32\x92\x10\xf1\x11\xb1"
+            "\x1f\xa2\xb2\xf1\x12\x92\x10\x21\x91\x42\x72\x52\x52"
+            "\x85\x50" }  },
+      /* --- pixel bitmap for wncyr250 char#49 (noname) --- */
+      {  49,46361,                      /* character number, location */
+         23, 4,    0, 4,      /* topleft row,col, and botleft row,col */
+          { 12,   23, 3,22, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x52\x93\x54\x12\x50\xfe\x52\x50\xf3\x52\x5c" }  },
+      /* --- pixel bitmap for wncyr250 char#50 (noname) --- */
+      {  50,47350,                      /* character number, location */
+         23, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 15,   23, 3,65, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x46\x81\x53\x51\x82\x31\x93\x13\x92\x1f\x14\x83\x12"
+            "\x93\xc3\xc2\xc3\xc2\xc2\xc2\xc2\xc2\xc2\xc2\xc2\x81"
+            "\x31\xa1\x21\xa1\x2d\x1e\x11" }  },
+      /* --- pixel bitmap for wncyr250 char#51 (noname) --- */
+      {  51,48406,                      /* character number, location */
+         23, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 15,   24, 3,67, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x46\x81\x53\x51\x73\x20\xf2\x13\x73\x10\x21\x83\xc2"
+            "\xc3\xc2\xb3\x86\xe3\xd3\xd3\xc4\x12\x84\x0f\x24\x74"
+            "\x11\x93\x21\x83\x42\x53\x76\x52" }  },
+      /* --- pixel bitmap for wncyr250 char#52 (noname) --- */
+      {  52,49358,                      /* character number, location */
+         23, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   23, 3,68, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\xb2\x40\xa3\xd1\x12\xc1\x22\xb2\x22\xb1\x32\xa1"
+            "\x42\x91\x52\x82\x52\x81\x62\x71\x72\x61\x82\x51\x92"
+            "\x42\x92\x4e\x03\xf5\xb2\x40\x7a" }  },
+      /* --- pixel bitmap for wncyr250 char#53 (noname) --- */
+      {  53,50418,                      /* character number, location */
+         23, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 15,   24, 3,69, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x22\x82\x3b\x4a\x58\x50\xf3\x21\xc0\x21\x25\x71\x11"
+            "\x52\x52\x72\x41\x83\xd2\x10\xf2\xc3\x0f\x23\x93\x01"
+            "\xb2\x21\x92\x41\x73\x51\x52\x86\x50" }  },
+      /* --- pixel bitmap for wncyr250 char#54 (noname) --- */
+      {  54,51338,                      /* character number, location */
+         23, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 15,   24, 3,77, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x75\x82\x51\x62\x62\x42\x63\x32\x73\x32\xc3\xc2\xc3"
+            "\x34\x53\x12\x42\x34\x72\x24\x73\x13\x92\x1f\x33\x93"
+            "\xf1\x12\x93\x13\x82\x32\x73\x42\x62\x62\x42\x85\x50" }  },
+      /* --- pixel bitmap for wncyr250 char#55 (noname) --- */
+      {  55,52274,                      /* character number, location */
+         23, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 16,   24, 3,61, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x11\xe0\x1e\x01\x1e\x21\xb1\x21\xc1\x21\xb1\xe1\x40"
+            "\xf1\xa1\x50\x91\xe2\xe1\x70\xf1\x72\x70\xf3\x62\x80"
+            "\xf4\x53\x80\x61\x92" }  },
+      /* --- pixel bitmap for wncyr250 char#56 (noname) --- */
+      {  56,53208,                      /* character number, location */
+         23, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 15,   24, 3,81, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x55\x82\x52\x51\x91\xe0\x11\x10\xf1\x11\xb1\x10\x12"
+            "\xa1\x23\x81\x44\x61\x55\x22\x76\xa6\x72\x25\x52\x54"
+            "\x32\x74\x22\x93\x0f\x32\xb2\x12\x92\x31\x91\x52\x52"
+            "\x85\x52" }  },
+      /* --- pixel bitmap for wncyr250 char#57 (noname) --- */
+      {  57,54140,                      /* character number, location */
+         23, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 15,   24, 3,81, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x55\x82\x51\x62\x71\x43\x72\x32\x83\x1f\x13\x92\x1f"
+            "\x33\x93\x12\x93\x13\x74\x22\x74\x32\x42\x13\x54\x33"
+            "\xc2\x10\xf1\xb3\x10\x13\x72\x33\x62\x42\x62\x61\x52"
+            "\x85\x72" }  },
+      /* --- pixel bitmap for wncyr250 char#58 (noname) --- */
+      {  58,41214,                      /* character number, location */
+         15, 4,    0, 4,      /* topleft row,col, and botleft row,col */
+          {  4,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf6\x6f\x00\x00\x00\x60\xff\x06" }  },
+      /* --- pixel bitmap for wncyr250 char#59 (noname) --- */
+      {  59,41885,                      /* character number, location */
+         15, 4,   -7, 4,      /* topleft row,col, and botleft row,col */
+          {  4,   22, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf6\x6f\x00\x00\x00\x60\xff\x8e\x88\x44\x12" }  },
+      /* --- pixel bitmap for wncyr250 char#60 < --- */
+      {  60,57719,                      /* character number, location */
+         16, 1,   -1, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   17, 3,63, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xa2\xe4\xd3\x53\x63\x53\x54\x44\x54\x44\x54\x44\x45"
+            "\x35\x54\x34\x75\x35\x74\x44\x74\x44\x74\x44\x83\x53"
+            "\x83\x53\x84\xe0\x22\x63" }  },
+      /* --- pixel bitmap for wncyr250 char#61 (noname) --- */
+      {  61,88303,                      /* character number, location */
+         15, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          {  8,   15, 3,10, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x30\xfc\x32\x38" }  },
+      /* --- pixel bitmap for wncyr250 char#62 > --- */
+      {  62,58298,                      /* character number, location */
+         16, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 18,   17, 3,63, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x62\xe0\x24\x83\x53\x83\x53\x84\x44\x74\x44\x74\x44"
+            "\x75\x35\x74\x34\x55\x35\x44\x44\x54\x44\x54\x44\x53"
+            "\x53\x63\x53\xd4\xe2\xa3" }  },
+      /* --- pixel bitmap for wncyr250 char#63 (noname) --- */
+      {  63,42810,                      /* character number, location */
+         24, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 14,   24, 3,55, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x37\x61\x72\x31\x92\x1f\x13\x92\x11\xa2\xb2\xa3\xa2"
+            "\xb2\xc1\x60\xf4\x61\x70\xf3\xe0\x52\x70\xf1\x44\x60"
+            "\x52\x70" }  },
+      /* --- pixel bitmap for wncyr250 char#64 (noname) --- */
+      {  64,58968,                      /* character number, location */
+         24, 4,   19, 4,      /* topleft row,col, and botleft row,col */
+          { 11,    5, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x01\x0c\xa0\x80\x08\x82\x0f" }  },
+      /* --- pixel bitmap for wncyr250 char#65 A --- */
+      {  65,24959,                      /* character number, location */
+         25, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 26,   25, 3,92, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf2\xc2\xc0\xf1\xb4\xb0\xa1\x14\xa0\xf1\xa1\x23\xa0"
+            "\xf2\x91\x43\x90\xf1\x81\x63\x80\x71\x74\x70\xf1\x71"
+            "\x83\x70\x6e\x60\xf1\x61\xa3\x60\xf1\x51\xc3\x50\x41"
+            "\xd4\x81\xe3\x73\xd4\x38\x8a" }  },
+      /* --- pixel bitmap for wncyr250 char#66 B --- */
+      {  66,26377,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 24,   24, 3,79, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x07\x73\xb3\x73\xc2\x73\xd1\x73\xd2\x20\xf2\x43"
+            "\xe1\x20\xf2\x43\xe0\x30\x4e\x01\x93\xa4\x73\xb4\x63"
+            "\xc4\x10\xf4\x43\xd4\x43\xc4\x53\xb4\x63\xa4\x3e\x05"
+            "\x54" }  },
+      /* --- pixel bitmap for wncyr250 char#67 Ts --- */
+      {  67, 1087,                      /* character number, location */
+         24, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          { 27,   26, 3,32, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\x4b\x10\xfe\x43\xc3\x50\xf6\x43\xc3\x5e\x0c\xe0"
+            "\xa3\xe0\xc2" }  },
+      /* --- pixel bitmap for wncyr250 char#68 D --- */
+      {  68, 2163,                      /* character number, location */
+         24, 0,   -2, 0,      /* topleft row,col, and botleft row,col */
+          { 28,   26, 3,92, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x8e\x06\xc2\x73\x40\xf5\xc1\x83\x40\xf2\xb2\x83\x40"
+            "\xf1\xb1\x93\x40\xf1\xa2\x93\x40\xa1\xa3\x40\xf1\x92"
+            "\xa3\x40\x91\xb3\xc2\xb3\xc1\xc3\xb1\xd3\xa3\xb4\x6e"
+            "\x0c\x23\xe0\x63\x12\xe0\xa1" }  },
+      /* --- pixel bitmap for wncyr250 char#69 E --- */
+      {  69,27806,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 24,   24, 3,107, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x0e\x08\x63\xb4\x63\xd2\x63\xe1\x63\xe2\x10\xf1\x43"
+            "\xe0\x11\x10\x43\x81\x61\x10\xf1\x43\x81\x80\x43\x72"
+            "\xcc\xc3\x72\x80\xf1\x43\x81\x80\x43\x81\x71\x43\xe0"
+            "\x21\xf2\x43\xe0\x11\x10\x43\xe2\x53\xd3\x53\xb4\x2e"
+            "\x08\x20" }  },
+      /* --- pixel bitmap for wncyr250 char#70 F --- */
+      {  70,28909,                      /* character number, location */
+         24, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 23,   24, 3,81, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5d\x50\xf3\xa3\xa0\x79\xb4\x23\x24\x73\x43\x43\x53"
+            "\x53\x53\x33\x63\x63\x1f\x34\x63\x64\x13\x63\x63\x33"
+            "\x53\x53\x53\x43\x43\x74\x23\x24\xb9\x70\xf3\xa3\xa0"
+            "\x5d\x52" }  },
+      /* --- pixel bitmap for wncyr250 char#71 G --- */
+      {  71, 3391,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 22,   24, 3,35, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x07\x53\xb3\x53\xc2\x53\xd1\x53\xd2\xf2\x43\xe1"
+            "\xfe\x43\xe0\x1c\xa1" }  },
+      /* --- pixel bitmap for wncyr250 char#72 Kh --- */
+      {  72, 4495,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 26,   24, 3,112, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x19\x68\x64\xa3\xa3\xa2\xb4\x91\xd4\x71\xe0\x13\x62"
+            "\xe0\x23\x51\xe0\x34\x31\xe0\x53\x21\xe0\x75\xe0\x74"
+            "\xc0\xf1\xb4\xb0\xa2\x13\xe0\x61\x24\xe0\x41\x44\xe0"
+            "\x22\x53\xe0\x21\x64\xe1\x84\xc1\xa3\xb2\xb3\xa1\xc4"
+            "\x74\xb5\x39\x7a" }  },
+      /* --- pixel bitmap for wncyr250 char#73 I --- */
+      {  73, 5753,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 28,   24, 3,128, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x0b\x6b\x43\xe3\x40\xf1\x43\xd4\x40\x43\xc5\x83\xb2"
+            "\x13\x40\xf1\x43\xa2\x23\x40\x43\x92\x33\x83\x82\x43"
+            "\x83\x72\x53\x40\xf1\x43\x62\x63\x40\x43\x52\x73\x83"
+            "\x42\x83\x83\x32\x93\x40\xf1\x43\x22\xa3\x40\x43\x12"
+            "\xb3\x85\xc3\x40\xf1\x44\xd3\x40\x43\xe3\x4b\x6b" }  },
+      /* --- pixel bitmap for wncyr250 char#74 J --- */
+      {  74,29782,                      /* character number, location */
+         24, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 17,   25, 3,39, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x6b\xfe\xb3\x30\xf1\xb3\x30\x12\x83\x3f\x14\x73\x33"
+            "\x73\x51\x82\x72\x52\xa5\x84" }  },
+      /* --- pixel bitmap for wncyr250 char#75 K --- */
+      {  75,23849,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 24,   24, 3,97, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\x93\x53\xc5\x43\xc1\x21\x53\xb2\x40\xf1\x43\xb1"
+            "\x50\x43\xa1\xa3\x91\xb3\x72\xc3\x53\xd9\xe0\x13\x25"
+            "\xe3\x63\xc3\x82\xb3\x92\x60\xf2\x43\xa2\x50\xf2\x43"
+            "\xa2\x41\x43\xb2\x31\x43\xce\x02\x93\x18" }  },
+      /* --- pixel bitmap for wncyr250 char#76 L --- */
+      {  76, 6681,                      /* character number, location */
+         24, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 26,   24, 3,64, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x5e\x07\x92\x83\x40\xfa\x91\x93\x40\xf2\x82\x93\x40"
+            "\xf1\x81\xa3\x40\x72\xa3\x52\x42\xa3\x44\x31\xb3\x43"
+            "\x32\xb3\x56\xc3\x64\x9b" }  },
+      /* --- pixel bitmap for wncyr250 char#77 M --- */
+      {  77, 8024,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 32,   24, 3,120, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x08\xe0\x28\x44\xe0\x24\x40\xf2\x41\x13\xe1\x13\x40"
+            "\xf1\x41\x23\xc1\x23\x40\xf2\x41\x33\xa1\x33\x40\xf1"
+            "\x41\x43\x81\x43\x40\xf1\x41\x53\x61\x53\x40\xf2\x41"
+            "\x63\x41\x63\x40\xf1\x41\x73\x21\x73\x40\xf2\x41\x84"
+            "\x83\x40\x33\x82\x93\x49\x52\x5b" }  },
+      /* --- pixel bitmap for wncyr250 char#78 N --- */
+      {  78, 9333,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 26,   24, 3,28, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\x4b\xf9\x43\xc3\x40\x4e\x04\x40\xfa\x43\xc3\x4b"
+            "\x4b" }  },
+      /* --- pixel bitmap for wncyr250 char#79 O --- */
+      {  79,30639,                      /* character number, location */
+         25, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 25,   26, 3,91, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x97\xe0\x23\x53\xc3\x93\x93\xb3\x73\xd3\x54\xd4\x43"
+            "\xe0\x13\x34\xe0\x14\x23\xe0\x33\x1f\x74\xe0\x34\xf1"
+            "\x14\xe0\x14\x10\x23\xe0\x13\x44\xd4\x53\xd3\x73\xb3"
+            "\x93\x93\xc3\x53\xe0\x27\x93" }  },
+      /* --- pixel bitmap for wncyr250 char#80 P --- */
+      {  80,10469,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 26,   24, 3,22, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x0c\xfe\x43\xc3\x40\xf6\x43\xc3\x4b\x4b" }  },
+      /* --- pixel bitmap for wncyr250 char#81 Ch --- */
+      {  81,11552,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 28,   24, 3,50, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\x6b\xf9\x43\xe3\x40\x53\xc4\x94\xa1\x13\xa5\x53"
+            "\x23\xc9\x43\xe5\x63\x40\xf6\xe0\x73\x40\xe0\x3b" }  },
+      /* --- pixel bitmap for wncyr250 char#82 R --- */
+      {  82,31814,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 23,   24, 3,49, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x03\xa3\x94\x73\xb3\x63\xb4\x10\xf4\x43\xc4\x43"
+            "\xb4\x53\xb3\x63\x94\x7d\x60\xf9\x43\xe0\x2b\xc4" }  },
+      /* --- pixel bitmap for wncyr250 char#83 S --- */
+      {  83,32779,                      /* character number, location */
+         25, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 23,   26, 3,105, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\xa6\x61\x73\x62\x32\x62\xa1\x13\x43\xc4\x33\xe3\x33"
+            "\xe0\x12\x23\xe0\x22\x14\xe0\x31\xf1\x13\xe0\x41\x0f"
+            "\x54\xe0\x50\xf1\x13\xe0\x41\x14\xe0\x31\x23\xe0\x21"
+            "\x43\xe0\x11\x43\xe1\x63\xd1\x82\xa2\xa3\x62\xe0\x16"
+            "\x78" }  },
+      /* --- pixel bitmap for wncyr250 char#84 T --- */
+      {  84,12677,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 25,   24, 3,43, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1e\x09\x23\x73\x73\x10\xf1\x11\x93\x91\x12\x93\x92"
+            "\x0f\x21\xa3\xa1\xfe\xb3\xb0\x6d\x63" }  },
+      /* --- pixel bitmap for wncyr250 char#85 U --- */
+      {  85,34055,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 26,   24, 3,119, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x08\xb7\x34\xd4\x63\xe1\x83\xd2\x93\xc1\xb3\xa1\xc3"
+            "\x92\xd3\x81\xe3\x72\xe0\x13\x61\xe0\x33\x41\xe0\x43"
+            "\x32\xe0\x53\x21\xe0\x63\x12\xa0\xf1\xb4\xb0\xc2\xe0"
+            "\x11\x81\xe0\x13\x62\xe0\x13\x61\xe0\x21\x72\xe0\x31"
+            "\x52\xe0\x42\x32\xe0\x74\xe0\x3b" }  },
+      /* --- pixel bitmap for wncyr250 char#86 V --- */
+      {  86,14051,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 24,   24, 3,79, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x04\xa3\x94\x83\xb3\x73\xc3\x20\xf3\x43\xc4\x10"
+            "\x43\xb4\x63\xa4\x73\x94\x8e\x01\x93\xa4\x73\xb4\x63"
+            "\xc4\x10\xf4\x43\xd4\x43\xc4\x53\xb4\x63\xa4\x3e\x05"
+            "\x53" }  },
+      /* --- pixel bitmap for wncyr250 char#87 Shch --- */
+      {  87,15580,                      /* character number, location */
+         24, 1,   -2, 1,      /* topleft row,col, and botleft row,col */
+          { 39,   26, 3,44, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\x3a\x3b\x10\xfe\x43\xa4\xa3\x50\xf6\x43\xa4\xa3"
+            "\x5e\x0e\x0a\xe0\xe0\x83\xe0\xe0\xa2" }  },
+      /* --- pixel bitmap for wncyr250 char#88 Sh --- */
+      {  88,17129,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 38,   24, 3,30, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\x3a\x3b\xfe\x43\xa4\xa3\x40\xf6\x43\xa4\xa3\x4e"
+            "\x0e\x0a" }  },
+      /* --- pixel bitmap for wncyr250 char#89 Y --- */
+      {  89,18785,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 36,   24, 3,74, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\xeb\xf9\x43\xe0\x83\x40\x4e\x01\xa3\x83\xa4\x83"
+            "\x83\xb4\x73\x83\xc4\x63\x40\xf4\x43\xd4\x53\x40\x43"
+            "\xc4\x63\x83\xb4\x73\x83\xa4\x83\x4e\x05\x6b" }  },
+      /* --- pixel bitmap for wncyr250 char#90 Z --- */
+      {  90,19879,                      /* character number, location */
+         25, 2,   -1, 2,      /* topleft row,col, and botleft row,col */
+          { 19,   26, 3,99, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x11\x47\x72\x12\x63\x53\xa2\x42\xb3\x20\xf1\x11\xd3"
+            "\x10\xe0\x13\xe0\x14\xe0\x13\xe0\x13\xe0\x13\xe3\xa9"
+            "\xe0\x43\xe0\x33\xe0\x34\xe0\x23\x10\xf2\xe0\x14\x01"
+            "\xe5\xe3\x12\xc4\x12\xb4\x25\x73\x41\x48\x62" }  },
+      /* --- pixel bitmap for wncyr250 char#91 (noname) --- */
+      {  91,43509,                      /* character number, location */
+         26, 3,   -9, 3,      /* topleft row,col, and botleft row,col */
+          {  8,   35, 3,18, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x08\x0f\xe2\x6f\xe2\x62\x6f\x18" }  },
+      /* --- pixel bitmap for wncyr250 char#92 (noname) --- */
+      {  92,59851,                      /* character number, location */
+         24, 6,   13, 6,      /* topleft row,col, and botleft row,col */
+          { 12,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x18\x4c\x20\x02\x21\x10\x81\x10\x08\x81\xd0\x68\x9f"
+            "\xef\xf1\x0c\x06" }  },
+      /* --- pixel bitmap for wncyr250 char#93 (noname) --- */
+      {  93,44227,                      /* character number, location */
+         26, 0,   -9, 0,      /* topleft row,col, and botleft row,col */
+          {  8,   35, 3,18, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\x08\xfe\x62\xfe\x62\x62\x0f\x18" }  },
+      /* --- pixel bitmap for wncyr250 char#94 \Cprime --- */
+      {  94,21247,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 24,   24, 3,53, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0b\xd0\xf9\x43\xe0\x30\x4e\x01\x93\xa4\x73\xb4\x63"
+            "\xc4\x10\xf4\x43\xd4\x43\xc4\x53\xb4\x63\xa4\x3e\x05"
+            "\x50" }  },
+      /* --- pixel bitmap for wncyr250 char#95 \Cdprime --- */
+      {  95,22799,                      /* character number, location */
+         24, 3,    0, 3,      /* topleft row,col, and botleft row,col */
+          { 30,   24, 3,75, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x02\xe4\x73\xe0\x22\x93\xe0\x2f\x41\xa3\xe0\x20"
+            "\xf2\xb3\xe0\x20\xbe\xe0\x23\x94\xe3\xb3\xd3\xb4\x10"
+            "\xf4\xb3\xc4\xb3\xb4\xc3\xa4\xd3\x94\xae\x04\x54" }  },
+      /* --- pixel bitmap for wncyr250 char#96 (noname) --- */
+      {  96,44865,                      /* character number, location */
+         24, 3,   13, 3,      /* topleft row,col, and botleft row,col */
+          {  5,   11, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x98\x10\x11\x42\x68\xdf\x33" }  },
+      /* --- pixel bitmap for wncyr250 char#97 a --- */
+      {  97,89433,                      /* character number, location */
+         15, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 17,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xfc\x01\x1c\x0c\x38\x30\x20\xc0\x00\x80\x01\x00\x03"
+            "\xf8\x07\x0c\x0c\x06\x18\x04\x30\x0c\x60\x1c\xc0\x38"
+            "\xc0\xd1\x41\x37\x7e\x1c" }  },
+      /* --- pixel bitmap for wncyr250 char#98 b --- */
+      {  98,90201,                      /* character number, location */
+         24, 3,    0, 3,      /* topleft row,col, and botleft row,col */
+          { 15,   24, 3,69, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xf1\xe1\xc2\x5a\x39\x62\xc2\xc0\xf1\x11\xd2\x35\x51"
+            "\x22\x52\x31\x12\x72\x23\x92\x12\xb1\x1f\x42\xb2\x11"
+            "\xb1\x22\x92\x32\x72\x52\x52\x85\x53" }  },
+      /* --- pixel bitmap for wncyr250 char#99 ts --- */
+      {  99,97450,                      /* character number, location */
+         15, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          { 20,   19, 3,32, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x38\x10\xfc\x32\x92\x4e\x05\xe0\x33\xe0\x42\xe0"
+            "\x51\xe0\x61" }  },
+      /* --- pixel bitmap for wncyr250 char#100 d --- */
+      { 100,98454,                      /* character number, location */
+         15,-1,   -4,-1,      /* topleft row,col, and botleft row,col */
+          { 22,   19, 3,80, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x6e\x01\x10\xf1\x92\x52\x40\xf2\x91\x62\x40\xf1\x82"
+            "\x62\x40\xf1\x81\x72\x40\x72\x72\xb1\x82\xa2\x82\x92"
+            "\x92\x6e\x05\x32\xe3\x31\xe0\x22\x22\xe0\x31\x21\xe0"
+            "\x51" }  },
+      /* --- pixel bitmap for wncyr250 char#101 e --- */
+      { 101,90999,                      /* character number, location */
+         15, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 14,   15, 3,45, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x55\x72\x52\x42\x72\x22\x91\x21\xa4\xbe\x01\x0f\x22"
+            "\xc0\x12\xc2\xa1\x22\x81\x42\x61\x76\x3f" }  },
+      /* --- pixel bitmap for wncyr250 char#102 f --- */
+      { 102,91592,                      /* character number, location */
+         24, 2,   -9, 2,      /* topleft row,col, and botleft row,col */
+          { 20,   33, 3,101, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x71\x41\xe0\xd0\xf1\x81\x21\x80\xf4\x92\x90\x34\x22"
+            "\x24\x52\x36\x32\x32\x54\x52\x21\x72\x71\x1f\x62\x72"
+            "\x72\x11\x72\x71\x22\x54\x52\x32\x36\x32\x54\x22\x24"
+            "\x30\xf4\x92\x90\xf1\x81\x21\x80\xe0\xd1\x41\x70" }  },
+      /* --- pixel bitmap for wncyr250 char#103 g --- */
+      { 103,99628,                      /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 16,   15, 3,27, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x01\x42\x82\x42\x91\x10\xf1\x32\xa1\xf8\x32\xb9"
+            "\x72" }  },
+      /* --- pixel bitmap for wncyr250 char#104 kh --- */
+      { 104,100708,                     /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 17,   15, 3,56, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\x36\x43\x53\x72\x51\xa2\x32\xa3\x21\xc2\x11\xe2"
+            "\xe0\x13\xe4\xc1\x22\xb1\x42\x92\x52\x81\x63\x53\x63"
+            "\x36\x47" }  },
+      /* --- pixel bitmap for wncyr250 char#105 i --- */
+      { 105,101958,                     /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 20,   15, 1, 1, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\xff\xf0\x8f\x01\x18\x18\xc0\x81\x01\x1a\x18\xb0\x81"
+            "\x81\x19\x18\x8c\x81\x61\x18\x18\x83\x81\x19\x18\xd8"
+            "\x80\x81\x05\x18\x38\x80\x81\x01\x18\xff\xf0\x0f" }  },
+      /* --- pixel bitmap for wncyr250 char#106 j --- */
+      { 106,92507,                      /* character number, location */
+         24,-2,   -7,-2,      /* topleft row,col, and botleft row,col */
+          { 10,   31, 3,39, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x72\x10\xf1\x64\x72\x10\xf4\xa0\x55\xfe\x82\xf1\x82"
+            "\x11\x65\x42\x13\x32\x36\x32" }  },
+      /* --- pixel bitmap for wncyr250 char#107 k --- */
+      { 107,119562,                     /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 17,   15, 3,59, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x63\x32\x84\x32\x81\x62\x72\x62\x71\x72\x43\x87"
+            "\xa2\x34\x82\x62\x40\xf1\x32\x72\x30\xf1\x32\x72\x21"
+            "\x32\x8c\x62\x11" }  },
+      /* --- pixel bitmap for wncyr250 char#108 l --- */
+      { 108,102840,                     /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   15, 3,40, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x3e\x01\xf2\x62\x52\x30\xf5\x61\x62\x30\xf1\x52\x62"
+            "\x33\x21\x72\x44\x82\x43\x68" }  },
+      /* --- pixel bitmap for wncyr250 char#109 m --- */
+      { 109,104169,                     /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 23,   15, 3,82, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x06\xb6\x33\xb3\x30\xf1\x31\x12\x91\x12\x30\xf1\x31"
+            "\x22\x71\x22\x30\xf2\x31\x32\x51\x32\x30\xf1\x31\x42"
+            "\x31\x42\x30\xf1\x31\x52\x11\x52\x30\x23\x52\x62\x37"
+            "\x32\x38" }  },
+      /* --- pixel bitmap for wncyr250 char#110 n --- */
+      { 110,105438,                     /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 19,   15, 3,26, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x38\xf5\x32\x92\x30\x3d\x30\xf5\x32\x92\x38\x38" }  },
+      /* --- pixel bitmap for wncyr250 char#111 o --- */
+      { 111,93232,                      /* character number, location */
+         15, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 15,   15, 3,43, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x55\x82\x52\x52\x72\x32\x92\x21\xb1\x1f\x42\xb2\x11"
+            "\xb1\x22\x92\x32\x72\x52\x52\x85\x52" }  },
+      /* --- pixel bitmap for wncyr250 char#112 p --- */
+      { 112,106564,                     /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 19,   15, 3,14, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x05\xfc\x32\x92\x38\x38" }  },
+      /* --- pixel bitmap for wncyr250 char#113 ch --- */
+      { 113,107637,                     /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 20,   15, 3,38, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x48\xf5\x32\xa2\x30\x42\x83\x73\x52\x12\x97\x22"
+            "\x30\xf3\xe0\x12\x30\xc8" }  },
+      /* --- pixel bitmap for wncyr250 char#114 r --- */
+      { 114,94342,                      /* character number, location */
+         15, 1,   -7, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   22, 3,61, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x05\x35\x82\x12\x52\x63\x82\x20\xf1\x32\xa2\x10\xf4"
+            "\x32\xb2\xf1\x32\xa2\x10\x33\x82\x52\x12\x43\x62\x35"
+            "\x50\xf5\x32\xd8\xa2" }  },
+      /* --- pixel bitmap for wncyr250 char#115 s --- */
+      { 115,95169,                      /* character number, location */
+         15, 2,    0, 2,      /* topleft row,col, and botleft row,col */
+          { 14,   15, 3,39, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x58\x42\x63\x22\x73\x12\x91\x22\xbf\x42\xc0\x12\xc2"
+            "\xa1\x22\x81\x42\x61\x76\x33" }  },
+      /* --- pixel bitmap for wncyr250 char#116 t --- */
+      { 116,108730,                     /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 16,   15, 3,25, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x04\x52\x52\x0f\x21\x62\x61\xf8\x72\x70\x3a\x32" }  },
+      /* --- pixel bitmap for wncyr250 char#117 u --- */
+      { 117,96289,                      /* character number, location */
+         15, 1,   -7, 1,      /* topleft row,col, and botleft row,col */
+          { 18,   22, 3,85, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x07\x56\x23\x92\x20\xf1\x32\x91\x30\xf1\x42\x71\x40"
+            "\xf1\x52\x51\x50\x53\x32\xb2\x31\xc2\x22\x60\xf1\x72"
+            "\x11\x70\xf1\x82\x80\xf1\x81\x90\x71\xa3\x41\xa3\x31"
+            "\xb3\x22\xc4\xd0" }  },
+      /* --- pixel bitmap for wncyr250 char#118 v --- */
+      { 118,110048,                     /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 17,   15, 3,49, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0d\x72\x73\x20\xf2\x32\x92\x10\x32\x82\x52\x63\x6c"
+            "\x52\x83\x10\xf2\x32\xa2\x32\x92\x42\x83\x1e\x31" }  },
+      /* --- pixel bitmap for wncyr250 char#119 shch --- */
+      { 119,111567,                     /* character number, location */
+         15, 0,   -4, 0,      /* topleft row,col, and botleft row,col */
+          { 28,   19, 3,36, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x27\x28\x10\xfc\x32\x73\x72\x4e\x0d\xe0\xb3\xe0"
+            "\xc2\xe0\xd1\xe0\xe1" }  },
+      /* --- pixel bitmap for wncyr250 char#120 sh --- */
+      { 120,113092,                     /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 27,   15, 3,18, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x27\x28\xfc\x32\x73\x72\x3e\x0d" }  },
+      /* --- pixel bitmap for wncyr250 char#121 y --- */
+      { 121,114694,                     /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 25,   15, 3,52, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x98\xf5\x32\xe0\x12\x30\x3c\x52\x62\x83\x42\x30"
+            "\xf2\x32\xa2\x32\x30\x32\x92\x42\x62\x83\x42\x3e\x38" }  },
+      /* --- pixel bitmap for wncyr250 char#122 z --- */
+      { 122,115742,                     /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 14,   15, 3,43, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x11\x17\x52\x72\x31\x92\xc2\xb2\xa3\x67\xe2\xd2\x10"
+            "\xf2\xc2\x01\xa2\x12\x82\x21\x18\x42" }  },
+      /* --- pixel bitmap for wncyr250 char#123 (noname) --- */
+      { 123,60483,                      /* character number, location */
+         10, 0,    9, 0,      /* topleft row,col, and botleft row,col */
+          { 19,    1, 3, 4, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x0e\x05" }  },
+      /* --- pixel bitmap for wncyr250 char#124 (noname) --- */
+      { 124,61303,                      /* character number, location */
+         10, 0,    9, 0,      /* topleft row,col, and botleft row,col */
+          { 38,    1, 2, 2, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x00\x26" }  },
+      /* --- pixel bitmap for wncyr250 char#125 N0 --- */
+      { 125,62261,                      /* character number, location */
+         24, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 29,   24, 3,165, (pixbyte *)/* width,ht, fmt,pixsz,map... */
+            "\x16\x92\xe0\x14\x74\xe4\x61\x13\xe1\x12\x61\x13\xa0"
+            "\xf1\x41\x13\x51\xe0\x41\x23\x41\x91\x81\x23\x41\x72"
+            "\x12\x61\x33\x31\x71\x31\x61\x33\x31\x62\x32\x51\x42"
+            "\x31\x62\x32\x10\xf1\x41\x43\x21\x62\x32\x10\x41\x53"
+            "\x11\x71\x31\x61\x53\x11\x84\x61\x62\x11\xe0\xf1\x41"
+            "\x64\xe0\x41\x73\x59\x41\x73\xe3\x11\x82\xe5\x82\xe4"
+            "\xa1\xe0\x13\xa1\xe2" }  },
+      /* --- pixel bitmap for wncyr250 char#126 \cprime --- */
+      { 126,117048,                     /* character number, location */
+         15, 0,    0, 0,      /* topleft row,col, and botleft row,col */
+          { 17,   15, 3,35, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x08\x90\xf5\x32\xc0\x3c\x52\x83\x10\xf2\x32\xa2\x32"
+            "\x92\x42\x83\x1e\x32" }  },
+      /* --- pixel bitmap for wncyr250 char#127 \cdprime --- */
+      { 127,118546,                     /* character number, location */
+         15, 1,    0, 1,      /* topleft row,col, and botleft row,col */
+          { 21,   15, 3,51, (pixbyte *) /* width,ht, fmt,pixsz,map... */
+            "\x1a\xb2\x52\xb0\xf1\x11\x62\xb1\x72\xb0\xf1\x82\xb0"
+            "\x8b\xa2\x82\x10\xf2\x82\x92\x82\x83\x82\x73\x6d\x38" }  },
       /* --- trailer  --- */
       { -99, -999,  0,0,0,0, { 0,0,0,0, (pixbyte *)"\0" }  }
    } ;

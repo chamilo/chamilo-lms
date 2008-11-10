@@ -1,20 +1,23 @@
 /****************************************************************************
  *
- * Copyright (c) 2002, John Forkosh Associates, Inc.  All rights reserved.
+ * Copyright(c) 2002-2008, John Forkosh Associates, Inc. All rights reserved.
+ *           http://www.forkosh.com   mailto: john@forkosh.com
  * --------------------------------------------------------------------------
  * This file is part of mimeTeX, which is free software. You may redistribute
  * and/or modify it under the terms of the GNU General Public License,
- * version 2 or later, as published by the Free Software Foundation.
+ * version 3 or later, as published by the Free Software Foundation.
  *      MimeTeX is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY, not even the implied warranty of MERCHANTABILITY.
  * See the GNU General Public License for specific details.
  *      By using mimeTeX, you warrant that you have read, understood and
- * agreed to these terms and conditions, and that you are at least 18 years
- * of age and possess the legal right and ability to enter into this
- * agreement and to use mimeTeX in accordance with it.
- *      Your mimeTeX distribution should contain a copy of the GNU General
- * Public License.  If not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * agreed to these terms and conditions, and that you possess the legal
+ * right and ability to enter into this agreement and to use mimeTeX
+ * in accordance with it.
+ *      Your mimetex.zip distribution file should contain the file COPYING,
+ * an ascii text copy of the GNU General Public License, version 3.
+ * If not, point your browser to  http://www.gnu.org/licenses/
+ * or write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330,  Boston, MA 02111-1307 USA.
  * --------------------------------------------------------------------------
  *
  * Program:	gfuntype  [-g gformat]  [-u isnoname] [-m msglevel]
@@ -55,6 +58,7 @@
  * Revision History:
  * 09/22/02	J.Forkosh	Installation.
  * 10/11/05	J.Forkosh	.gf-style format options added.
+ * 09/06/08	J.Forkosh	mimeTeX version 1.70 released.
  *
  ****************************************************************************/
 
@@ -331,11 +335,14 @@ Allocations and Declarations
 -------------------------------------------------------------------------- */
 /* --- recognized font family names and our corresponding numbers --- */
 static	char *fnames[] =	/*font name from -n switch on command line*/
-	{ "cmr","cmmib","cmmi","cmsy","cmex","bbold","rsfs","stmary", NULL };
+	{ "cmr","cmmib","cmmi","cmsy","cmex","bbold","rsfs",
+	  "stmary","cyr", NULL };
 static	int    fnums[] =	/* corresponding mimetex fontfamily number*/
-	{ CMR10,CMMIB10,CMMI10,CMSY10,CMEX10,BBOLD10,RSFS10,STMARY10,  -1 };
+	{ CMR10,CMMIB10,CMMI10,CMSY10,CMEX10,BBOLD10,RSFS10,
+       STMARY10,  CYR10,    -1 };
 static	int    offsets[] =	/* symtable[ichar].charnum = charnum-offset*/
-	{     0,      0,     0,     0,     0,      0,    65,       0,  -1 };
+	{     0,      0,     0,     0,     0,      0,    65,
+	      0,      0,    -1 };
 /* --- other local declarations --- */
 char	*charname = NULL;	/* character name returned to caller */
 char	flower[99] = "noname";	/* lowercase caller's fontname */

@@ -1,4 +1,4 @@
-/* $Id: gifsave.c,v 1.1 2006/04/05 07:22:17 pcool Exp $ */
+/* $Id: gifsave.c,v 1.2 1998/07/05 16:29:56 sverrehu Exp $ */
 /**************************************************************************
  *
  *  FILE            gifsave.c
@@ -71,8 +71,13 @@ typedef unsigned char Byte;     /* exactly one byte (8 bits) */
 static FILE *OutFile = NULL;    /* file to write to */
 static Byte *OutBuffer = NULL;	/* (added by j.forkosh) */
 static int isCloseOutFile = 0;	/* " */
+#if !defined(MAXGIFSZ)		/* " */
+  #define MAXGIFSZ 131072	/* " max #bytes comprising gif image */
+#endif				/* " */
 int gifSize = 0;		/* " #bytes comprising gif */
-int maxgifSize = 64000;		/* " max #bytes written to OutBuffer */
+int maxgifSize = MAXGIFSZ;	/* " max #bytes written to OutBuffer */
+extern int  iscachecontenttype;	/* " true to cache mime content-type */
+extern char contenttype[2048];	/* " content-type:, etc. buffer */
 
 /* used when writing to a file bitwise */
 static Byte Buffer[256];        /* there must be one more than `needed' */
@@ -193,7 +198,10 @@ Create(const char *filename)
       if ( *filename != '\000' )		/* " */
 	{ if ((OutFile = fopen(filename, "wb")) == NULL)
 	    return GIF_ERRCREATE;
-	  isCloseOutFile = 1; }			/* (added by j.forkosh) */
+	  isCloseOutFile = 1;			/* (added by j.forkosh) */
+          if ( iscachecontenttype )		/* " cache headers in file */
+            if ( *contenttype != '\000' )	/* " have headers in buffer*/
+              fputs(contenttype,OutFile); }	/* " write buffered headers*/
       else					/* " */
 	OutBuffer = (Byte *)filename;		/* " */
     return GIF_OK;

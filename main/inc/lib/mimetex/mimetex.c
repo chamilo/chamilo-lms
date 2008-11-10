@@ -1,10 +1,11 @@
 /****************************************************************************
  *
- * Copyright(c) 2002-2006, John Forkosh Associates, Inc. All rights reserved.
+ * Copyright(c) 2002-2008, John Forkosh Associates, Inc. All rights reserved.
+ *           http://www.forkosh.com   mailto: john@forkosh.com
  * --------------------------------------------------------------------------
  * This file is part of mimeTeX, which is free software. You may redistribute
  * and/or modify it under the terms of the GNU General Public License,
- * version 2 or later, as published by the Free Software Foundation.
+ * version 3 or later, as published by the Free Software Foundation.
  *      MimeTeX is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY, not even the implied warranty of MERCHANTABILITY.
  * See the GNU General Public License for specific details.
@@ -12,10 +13,11 @@
  * agreed to these terms and conditions, and that you possess the legal
  * right and ability to enter into this agreement and to use mimeTeX
  * in accordance with it.
- *      Your mimeTeX distribution should contain a copy of the GNU General
- * Public License.  If not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA,
- * or point your browser to  http://www.gnu.org/licenses/gpl.html
+ *      Your mimetex.zip distribution file should contain the file COPYING,
+ * an ascii text copy of the GNU General Public License, version 3.
+ * If not, point your browser to  http://www.gnu.org/licenses/
+ * or write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330,  Boston, MA 02111-1307 USA.
  * --------------------------------------------------------------------------
  *
  * Purpose:   o	MimeTeX, licensed under the gpl, lets you easily embed
@@ -25,21 +27,29 @@
  *		entirely separate little program that doesn't use TeX or
  *		its fonts in any way.  It's just one cgi that you put in
  *		your site's cgi-bin/ directory, with no other dependencies.
- *		So mimeTeX is very easy to install.  And it's equally easy
- *		to use.  Just place an html <img> tag in your document
+ *		     So mimeTeX is very easy to install.  And it's equally
+ *		easy to use.  Just place an html <img> tag in your document
  *		wherever you want to see the corresponding LaTeX expression.
  *		For example,
  *		 <img src="../cgi-bin/mimetex.cgi?\int_{-\infty}^xe^{-t^2}dt"
  *		  alt="" border=0 align=middle>
  *		immediately generates the corresponding gif image on-the-fly,
  *		displaying the rendered expression wherever you put that
- *		<img> tag.  MimeTeX doesn't need intermediate dvi-to-gif
- *		conversion, and it doesn't clutter up your filesystem with
- *		separate little gif files for each converted expression.
+ *		<img> tag.
+ *		     MimeTeX doesn't need intermediate dvi-to-gif conversion,
+ *		and it doesn't clutter up your filesystem with separate
+ *		little gif files for each converted expression.
+ *		But image caching is available by using mimeTeX's
+ *		-DCACHEPATH=\"path/\" compile option (see below).
  *		There's also no inherent need to repeatedly write the
  *		cumbersome <img> tag illustrated above.  You can write
  *		your own custom tags, or write a wrapper script around
- *		mimeTeX to simplify the necessary notation.
+ *		mimeTeX to simplify the notation.
+ *		     Further discussion about mimeTeX's features and
+ *		usage is available on its homepage,
+ *		  http://www.forkosh.com/mimetex.html
+ *		and similarly in mimetex.html included with your mimetex.zip
+ *		distribution file.
  *
  * Functions:	===================== Raster Functions ======================
  *	PART2	--- raster constructor functions ---
@@ -53,12 +63,14 @@
  *		rastcpy(rp)                           allocate new copy of rp
  *		subrastcpy(sp)                        allocate new copy of sp
  *		rastrot(rp)         new raster rotated right 90 degrees to rp
+ *		rastref(rp,axis)    new raster reflected (axis 1=horz,2=vert)
  *		rastput(target,source,top,left,isopaque)  overlay src on trgt
  *		rastcompose(sp1,sp2,offset2,isalign,isfree) sp2 on top of sp1
  *		rastcat(sp1,sp2,isfree)                  concatanate sp1||sp2
  *		rastack(sp1,sp2,base,space,iscenter,isfree)stack sp2 atop sp1
  *		rastile(tiles,ntiles)      create composite raster from tiles
  *		rastsmash(sp1,sp2,xmin,ymin)      calc #smash pixels sp1||sp2
+ *		rastsmashcheck(term)         check if term is "safe" to smash
  *		--- raster "drawing" functions ---
  *		accent_subraster(accent,width,height)       draw \hat\vec\etc
  *		arrow_subraster(width,height,drctn,isBig)    left/right arrow
@@ -70,6 +82,7 @@
  *		circle_recurse(rp,row0,col0,row1,col1,thickness,theta0,theta1)
  *		bezier_raster(rp,r0,c0,r1,c1,rt,ct)   draw bezier recursively
  *		border_raster(rp,ntop,nbot,isline,isfree)put border around rp
+ *		backspace_raster(rp,nback,pback,minspace,isfree)    neg space
  *		--- raster (and chardef) output functions ---
  *		type_raster(rp,fp)       emit ascii dump of rp on file ptr fp
  *		type_bytemap(bp,grayscale,width,height,fp) dump bytemap on fp
@@ -83,8 +96,9 @@
  *		gftobitmap(rp)        convert .gf-like pixmap to bitmap image
  *		====================== Font Functions =======================
  *		--- font lookup functions ---
- *		get_symdef(symbol)             returns mathchardef for symbol
- *		get_chardef(symdef,size)      returns chardef for symdef,size
+ *		get_symdef(symbol)              return mathchardef for symbol
+ *		get_ligature(expr,family)  return symtable index for ligature
+ *		get_chardef(symdef,size)       return chardef for symdef,size
  *		get_charsubraster(symdef,size)  wrap subraster around chardef
  *		get_symsubraster(symbol,size)    returns subraster for symbol
  *		--- ancillary font functions ---
@@ -102,6 +116,7 @@
  *		mimeprep(expression) preprocessor converts \left( to \(, etc.
  *		strchange(nfirst,from,to)   change nfirst chars of from to to
  *		strreplace(string,from,to,nreplace)  change from to to in str
+ *		strwstr(string,substr,white,sublen)     find substr in string
  *		strtexchr(string,texchr)                find texchr in string
  *		findbraces(expression,command)    find opening { or closing }
  *	PART3	=========== Rasterize an Expression (recursively) ===========
@@ -132,10 +147,12 @@
  *		rastarray(expression,size,basesp,arg1,arg2,arg3)       \array
  *		rastpicture(expression,size,basesp,arg1,arg2,arg3)   \picture
  *		rastline(expression,size,basesp,arg1,arg2,arg3)         \line
+ *		rastrule(expression,size,basesp,arg1,arg2,arg3)         \rule
  *		rastcircle(expression,size,basesp,arg1,arg2,arg3)     \circle
  *		rastbezier(expression,size,basesp,arg1,arg2,arg3)     \bezier
  *		rastraise(expression,size,basesp,arg1,arg2,arg3)    \raisebox
  *		rastrotate(expression,size,basesp,arg1,arg2,arg3)  \rotatebox
+ *		rastreflect(expression,size,basesp,arg1,arg2,arg3)\reflectbox
  *		rastfbox(expression,size,basesp,arg1,arg2,arg3)         \fbox
  *		rastinput(expression,size,basesp,arg1,arg2,arg3)       \input
  *		rastcounter(expression,size,basesp,arg1,arg2,arg3)   \counter
@@ -155,10 +172,23 @@
  *		=== Anti-alias completed raster (lowpass) or symbols (ss) ===
  *		aalowpass(rp,bytemap,grayscale)     lowpass grayscale bytemap
  *		aapnm(rp,bytemap,grayscale)       lowpass based on pnmalias.c
+ *		aapnmlookup(rp,bytemap,grayscale)  aapnm based on aagridnum()
+ *		aapatterns(rp,irow,icol,gridnum,patternum,grayscale) call 19,
+ *		aapattern1124(rp,irow,icol,gridnum,grayscale)antialias pattrn
+ *		aapattern19(rp,irow,icol,gridnum,grayscale) antialias pattern
+ *		aapattern20(rp,irow,icol,gridnum,grayscale) antialias pattern
+ *		aapattern39(rp,irow,icol,gridnum,grayscale) antialias pattern
+ *		aafollowline(rp,irow,icol,direction)       looks for a "turn"
+ *		aagridnum(rp,irow,icol)             calculates gridnum, 0-511
+ *		aapatternnum(gridnum)    looks up pattern#, 1-51, for gridnum
+ *		aalookup(gridnum)     table lookup for all possible 3x3 grids
+ *		aalowpasslookup(rp,bytemap,grayscale)   driver for aalookup()
  *		aasupsamp(rp,aa,sf,grayscale)             or by supersampling
  *		aacolormap(bytemap,nbytes,colors,colormap)make colors,colormap
  *		aaweights(width,height)      builds "canonical" weight matrix
  *		aawtpixel(image,ipixel,weights,rotate) weight image at ipixel
+ *		=== miscellaneous ===
+ *		mimetexsetmsg(newmsglevel,newmsgfp)    set msglevel and msgfp
  *	PART1	========================== Driver ===========================
  *		main(argc,argv) parses math expression and emits mime xbitmap
  *		CreateGifFromEq(expression,gifFileName)  entry pt for win dll
@@ -166,13 +196,13 @@
  *		ismonth(month)          is month current month ("jan"-"dec")?
  *		unescape_url(url,isescape), x2c(what)   xlate %xx url-encoded
  *		logger(fp,msglevel,logvars)        logs environment variables
- *		emitcache(cachefile,maxage,isbuffer) emit cachefile to stdout
+ *		emitcache(cachefile,maxage,valign,isbuffer)    emit cachefile
  *		readcachefile(cachefile,buffer)    read cachefile into buffer
  *		md5str(instr)                      md5 hash library functions
  *		GetPixel(x,y)           callback function for gifsave library
  *
  * Source:	mimetex.c  (needs mimetex.h and texfonts.h to compile,
- *		and also needs gifsave.c if compiled with -DAA or -DGIF)
+ *		and also needs gifsave.c when compiled with -DAA or -DGIF)
  *
  * --------------------------------------------------------------------------
  * Notes      o	See bottom of file for main() driver (and "friends"),
@@ -189,11 +219,13 @@
  *		and with -DAA or -DGIF you'll also need gifsave.c
  *	      o	For gif images, the gifsave.c library by Sverre H. Huseby
  *		<http://shh.thathost.com> slightly modified by me to allow
- *		(a)sending output to stdout and (b)specifying a transparent
- *		background color index, is included with mimeTeX,
- *		and it's documented in mimetex.html#gifsave .
+ *		(a)sending output to stdout or returning it in memory,
+ *		and (b)specifying a transparent background color index,
+ *		is included with mimeTeX, and it's documented in
+ *		mimetex.html#gifsave .
  *	      o	Optional compile-line -D defined symbols are documented
- *		in mimetex.html#options .  They include...
+ *		in mimetex.html#options .  They include (additional -D
+ *		switches are discussed in mimetex.html#options)...
  *		-DAA
  *		    Turns on gif anti-aliasing with default values
  *		    (CENTERWT=32, ADJACENTWT=3, CORNERWT=1)
@@ -205,11 +237,11 @@
  *		    algorithm for anti-aliasing, which is applied to the
  *		    existing set of bitmap fonts.  This lowpass filter
  *		    applies default weights
- *				1   3   1
- *				3  32   3
- *				1   3   1
+ *				1   2   1
+ *				2   8   2
+ *				1   2   1
  *		    to neighboring pixels. The defaults weights are
- *		    CENTERWT=32, ADJACENTWT=3 and CORNERWT=1,
+ *		    CENTERWT=8, ADJACENTWT=2 and CORNERWT=1,
  *		    which you can adjust to control anti-aliasing.
  *		    Lower CENTERWT values will blur/spread out lines
  *		    while higher values will tend to sharpen lines.
@@ -308,6 +340,9 @@
  * 02/01/04	J.Forkosh	Version 1.40 released.
  * 10/02/04	J.Forkosh	Version 1.50 released.
  * 11/30/04	J.Forkosh	Version 1.60 released.
+ * 10/11/05	J.Forkosh	Version 1.64 released.
+ * 11/30/06	J.Forkosh	Version 1.65 released.
+ * 09/06/08	J.Forkosh	Version 1.70 released.
  *
  ****************************************************************************/
 
@@ -368,8 +403,11 @@ header files and macros
 #else
   #define ISSUPERSAMPLING 0
   #ifndef AAALGORITHM
-    #define AAALGORITHM 2		/* default lowpass algorithm */
+    #define AAALGORITHM 3 /*2*/		/* default lowpass algorithm */
   #endif
+#endif
+#ifndef MAXFOLLOW
+  #define MAXFOLLOW 8			/* aafollowline() maxturn default */
 #endif
 
 /* --- set aa (and default gif) if any anti-aliasing options specified --- */
@@ -408,7 +446,9 @@ header files and macros
     #define NOREFMAXLEN 9999		/* default to any length query */
   #endif
 #else
-  #define NOTEXFONTS			/* texfonts not required */
+  #ifndef TEXFONTS
+    #define NOTEXFONTS			/* texfonts not required */
+  #endif
 #endif
 
 /* --- application headers --- */
@@ -422,6 +462,38 @@ header files and macros
   extern int maxgifSize;
 #else					/* or just set dummy values */
   static int gifSize=0, maxgifSize=0;
+#endif
+/* --- gamma correction --- */
+#ifndef GAMMA
+  #define GAMMA 1.25 /*1.75*/ /*2.2*/
+#endif
+#ifndef REVERSEGAMMA
+  #define REVERSEGAMMA 0.5		/* for \reverse white-on-black */
+#endif
+/* --- opaque background (default to transparent) --- */
+#ifndef OPAQUE
+  #define ISTRANSPARENT 1
+#else
+  #define ISTRANSPARENT 0
+#endif
+/* --- internal buffer sizes --- */
+#if !defined(MAXEXPRSZ)
+  #define MAXEXPRSZ (32768-1)		/*max #bytes in input tex expression*/
+#endif
+#if !defined(MAXSUBXSZ)
+  #define MAXSUBXSZ (((MAXEXPRSZ+1)/2)-1)/*max #bytes in input subexpression*/
+#endif
+#if !defined(MAXTOKNSZ)
+  #define MAXTOKNSZ (((MAXSUBXSZ+1)/4)-1) /* max #bytes in input token */
+#endif
+#if !defined(MAXFILESZ)
+  #define MAXFILESZ (65536-1)		/*max #bytes in input (output) file*/
+#endif
+#if !defined(MAXLINESZ)
+  #define MAXLINESZ (4096-1)		/* max #chars in line from file */
+#endif
+#if !defined(MAXGIFSZ)
+  #define MAXGIFSZ 131072		/* max #bytes in output GIF image */
 #endif
 
 /* -------------------------------------------------------------------------
@@ -454,7 +526,7 @@ GLOBAL(int,minadjacent,MINADJACENT);	/* darken if>=adjacent pts black*/
 GLOBAL(int,maxadjacent,MAXADJACENT);	/* darken if<=adjacent pts black */
 GLOBAL(int,weightnum,1);		/* font wt, */
 GLOBAL(int,maxaaparams,4);		/* #entries in table */
-/* --- parameter values by font weight --- */
+/* --- anti-aliasing parameter values by font weight --- */
 #define	aaparameters struct aaparameters_struct /* typedef */
 aaparameters
   { int	centerwt;			/* lowpass matrix center   pixel wt*/
@@ -476,6 +548,9 @@ STATIC aaparameters aaparams[]		/* set params by weight */
   } /* --- end-of-aaparams[] --- */
   #endif
   ;
+/* --- anti-aliasing diagnostics (to help improve algorithm) --- */
+STATIC int patternnumcount0[99], patternnumcount1[99], /*aalookup() counts*/
+	ispatternnumcount = 1;		/* true to accumulate counts */
 
 /* -------------------------------------------------------------------------
 other variables
@@ -506,6 +581,9 @@ other variables
   #else
     #define SMASHMARGIN 3
   #endif
+#endif
+#ifndef SMASHCHECK
+  #define SMASHCHECK 0
 #endif
 /* --- textwidth --- */
 #ifndef TEXTWIDTH
@@ -552,6 +630,16 @@ other variables
 #ifndef TZDELTA
   #define TZDELTA 0
 #endif
+/* --- treat +'s in query string as blanks? --- */
+#ifdef PLUSBLANK			/* + always interpreted as blank */
+  #define ISPLUSBLANK 1
+#else
+  #ifdef PLUSNOTBLANK			/* + never interpreted as blank */
+    #define ISPLUSBLANK 0
+  #else					/* program tries to determine */
+    #define ISPLUSBLANK (-1)
+  #endif
+#endif
 
 /* -------------------------------------------------------------------------
 debugging and logging / error reporting
@@ -586,6 +674,8 @@ control flags and values
 GLOBAL(int,recurlevel,0);		/* inc/decremented in rasterize() */
 GLOBAL(int,scriptlevel,0);		/* inc/decremented in rastlimits() */
 GLOBAL(int,isstring,0);			/*pixmap is ascii string, not raster*/
+GLOBAL(int,isligature,0);		/* true if ligature found */
+GLOBAL(char,*subexprptr,(char *)NULL);	/* ptr within expression to subexpr*/
 /*SHARED(int,imageformat,1);*/		/* image is 1=bitmap, 2=.gf-like */
 GLOBAL(int,isdisplaystyle,1);		/* displaystyle mode (forced if 2) */
 GLOBAL(int,ispreambledollars,0);	/* displaystyle mode set by $$...$$ */
@@ -595,20 +685,31 @@ GLOBAL(int,displaysize,DISPLAYSIZE);	/* use \displaystyle when fontsize>=*/
 GLOBAL(int,shrinkfactor,3);		/* shrinkfactors[fontsize] */
 GLOBAL(double,unitlength,1.0);		/* #pixels per unit (may be <1.0) */
 /*GLOBAL(int,textwidth,TEXTWIDTH);*/	/* #pixels across line */
-GLOBAL(int,iscatspace,1);		/* true to add space in rastcat() */
+GLOBAL(int,isnocatspace,0);		/* >0 to not add space in rastcat()*/
 GLOBAL(int,smashmargin,SMASHMARGIN);	/* minimum "smash" margin */
+GLOBAL(int,mathsmashmargin,SMASHMARGIN); /* needed for \text{if $n-m$ even}*/
 GLOBAL(int,issmashdelta,1);		/* true if smashmargin is a delta */
-GLOBAL(int,blanksignal,(-991234));	/*rastsmash signal right-hand blank*/
-GLOBAL(int,istransparent,1);		/*true to set background transparent*/
+GLOBAL(int,isexplicitsmash,0);		/* true if \smash explicitly given */
+GLOBAL(int,smashcheck,SMASHCHECK);	/* check if terms safe to smash */
+GLOBAL(int,isscripted,0);		/* is (lefthand) term text-scripted*/
+GLOBAL(int,isdelimscript,0);		/* is \right delim text-scripted */
+GLOBAL(int,issmashokay,0);		/*is leading char okay for smashing*/
+#define	BLANKSIGNAL (-991234)		/*rastsmash signal right-hand blank*/
+GLOBAL(int,blanksignal,BLANKSIGNAL);	/*rastsmash signal right-hand blank*/
+GLOBAL(int,blanksymspace,0);		/* extra (or too much) space wanted*/
+GLOBAL(int,istransparent,ISTRANSPARENT);/* true sets background transparent*/
 GLOBAL(int,fgred,FGRED);
   GLOBAL(int,fggreen,FGGREEN);
   GLOBAL(int,fgblue,FGBLUE);		/* fg r,g,b */
 GLOBAL(int,bgred,BGRED);
   GLOBAL(int,bggreen,BGGREEN);
   GLOBAL(int,bgblue,BGBLUE);		/* bg r,g,b */
+GLOBAL(double,gammacorrection,GAMMA);	/* gamma correction */
+GLOBAL(int,isplusblank,ISPLUSBLANK);	/*interpret +'s in query as blanks?*/
 GLOBAL(int,isblackonwhite,ISBLACKONWHITE); /*1=black on white,0=reverse*/
 GLOBAL(char,exprprefix[256],PREFIX);	/* prefix prepended to expressions */
 GLOBAL(int,aaalgorithm,AAALGORITHM);	/* for lp, 1=aalowpass, 2 =aapnm */
+GLOBAL(int,maxfollow,MAXFOLLOW);	/* aafollowline() maxturn parameter*/
 GLOBAL(int,fgalias,1);
   GLOBAL(int,fgonly,0);
   GLOBAL(int,bgalias,0);
@@ -620,8 +721,13 @@ GLOBAL(subraster,*workingbox,(subraster *)NULL); /*working subraster box*/
 GLOBAL(int,isreplaceleft,0);		/* true to replace leftexpression */
 GLOBAL(subraster,*leftexpression,(subraster *)NULL); /*rasterized so far*/
 GLOBAL(mathchardef,*leftsymdef,NULL);	/* mathchardef for preceding symbol*/
+GLOBAL(int,fraccenterline,NOVALUE);	/* baseline for punct. after \frac */
+/*GLOBAL(int,currentcharclass,NOVALUE);*/ /*primarily to check for PUNCTION*/
 GLOBAL(int,iscaching,ISCACHING);	/* true if caching images */
 GLOBAL(char,cachepath[256],CACHEPATH);	/* relative path to cached files */
+GLOBAL(int,isemitcontenttype,1);	/* true to emit mime content-type */
+int	iscachecontenttype = 0;		/* true to cache mime content-type */
+char	contenttype[2048] = "\000";	/* content-type:, etc buffer */
 GLOBAL(char,pathprefix[256],PATHPREFIX); /*prefix for \input,\counter paths*/
 /*GLOBAL(int,iswindows,ISWINDOWS);*/	/* true if compiled for ms windows */
 
@@ -639,6 +745,9 @@ miscellaneous macros
 	{ char *p; while((p=strchr((s),(c)))!=NULL) strcpy(p,p+1); } else
 #define	slower(s)  if ((s)!=NULL)	/* lowercase all chars in s */ \
 	{ char *p=(s); while(*p!='\000'){*p=tolower(*p); p++;} } else
+/*subraster *subrastcpy();*/		/* need global module declaration */
+/*#define spnosmash(sp) if (sp->type==CHARASTER) sp=subrastcpy(sp); \*/
+/*	sp->type=blanksignal*/
 
 /* ---
  * PART2
@@ -982,6 +1091,8 @@ newsp->image = newrp;			/* new raster image we just copied */
 switch ( sp->type )			/* set new raster image type */
   { case STRINGRASTER: case CHARASTER: newsp->type = STRINGRASTER; break;
     case ASCIISTRING:                  newsp->type = ASCIISTRING;  break;
+    case FRACRASTER:                   newsp->type = FRACRASTER;   break;
+    case BLANKSIGNAL:                  newsp->type = blanksignal;  break;
     case IMAGERASTER:  default:        newsp->type = IMAGERASTER;  break; }
 /* --- return copy of sp to caller --- */
 end_of_job:
@@ -995,7 +1106,7 @@ end_of_job:
  * --------------------------------------------------------------------------
  * Arguments:	rp (I)		ptr to raster struct to be rotated
  * --------------------------------------------------------------------------
- * Returns:	( raster * )	ptr to new raster rotated ralative to rp,
+ * Returns:	( raster * )	ptr to new raster rotated relative to rp,
  *				or NULL for any error.
  * --------------------------------------------------------------------------
  * Notes:     o	An underbrace is } rotated 90 degrees clockwise,
@@ -1025,6 +1136,47 @@ if ( (rotated = new_raster(height,width,pixsz)) /* flip width,height */
 	setpixel(rotated,icol,(height-1-irow),value); }
 return ( rotated );			/* return rotated raster to caller */
 } /* --- end-of-function rastrot() --- */
+
+
+/* ==========================================================================
+ * Function:	rastref ( rp, axis )
+ * Purpose:	reflects rp, horizontally about y-axis |_ becomes _| if axis=1
+ *		or vertically about x-axis M becomes W if axis=2.
+ * --------------------------------------------------------------------------
+ * Arguments:	rp (I)		ptr to raster struct to be reflected
+ *		axis (I)	int containing 1 for horizontal reflection,
+ *				or 2 for vertical
+ * --------------------------------------------------------------------------
+ * Returns:	( raster * )	ptr to new raster reflected relative to rp,
+ *				or NULL for any error.
+ * --------------------------------------------------------------------------
+ * Notes:     o
+ * ======================================================================= */
+/* --- entry point --- */
+raster	*rastref ( raster *rp, int axis )
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+raster	*new_raster(), *reflected=NULL;	/* reflected raster back to caller */
+int	height = rp->height, irow,	/* height, row index */
+	width = rp->width, icol,	/* width, column index */
+	pixsz = rp->pixsz;		/* #bits per pixel */
+/* -------------------------------------------------------------------------
+allocate reflected raster and fill it
+-------------------------------------------------------------------------- */
+/* --- allocate reflected raster with same width, height --- */
+if ( axis==1 || axis==2 )		/* first validate axis arg */
+ if ( (reflected = new_raster(width,height,pixsz)) /* same width, height */
+ !=   NULL )				/* check that allocation succeeded */
+  /* --- fill reflected raster --- */
+  for ( irow=0; irow<height; irow++ )	/* for each row of rp */
+    for ( icol=0; icol<width; icol++ ) { /* and each column of rp */
+      int value = getpixel(rp,irow,icol);
+      if ( axis == 1 ) { setpixel(reflected,irow,width-1-icol,value); }
+      if ( axis == 2 ) { setpixel(reflected,height-1-irow,icol,value); } }
+return ( reflected );			/*return reflected raster to caller*/
+} /* --- end-of-function rastref() --- */
 
 
 /* ==========================================================================
@@ -1081,8 +1233,8 @@ else
 	if ( isfatal ) goto end_of_job;		/* abort if error is fatal */
 	else break; }				/*or just go on to next row*/
     if ( tpix >= 0 )				/* bounds check okay */
-     if ( svalue!=0 || isopaque )		/*got dark or opaque source*/
-      setpixel(target,irow+top,icol+left,svalue); /*overlay source on target*/
+     if ( svalue!=0 || isopaque ) {		/*got dark or opaque source*/
+      setpixel(target,irow+top,icol+left,svalue); }/*overlay source on targ*/
     } /* --- end-of-for(icol) --- */
   } /* --- end-of-for(irow) --- */
 /* -------------------------------------------------------------------------
@@ -1228,7 +1380,9 @@ int	height=0, width=0, pixsz=0, base=0; /*concatted sp1||sp2 composite*/
 int	issmash = (smashmargin!=0?1:0),	/* true to "squash" sp1||sp2 */
 	isopaque = (issmash?0:1),	/* not oppaque if smashing */
 	rastsmash(), isblank=0, nsmash=0, /* #cols to smash */
-	oldsmashmargin = smashmargin;	/* save original smashmargin */
+	oldsmashmargin = smashmargin,	/* save original smashmargin */
+	oldblanksymspace = blanksymspace, /* save original blanksymspace */
+	oldnocatspace = isnocatspace;	/* save original isnocatspace */
 mathchardef *symdef1 = sp1->symdef,	/*mathchardef of last left-hand char*/
 	*symdef2 = sp2->symdef;		/* mathchardef of right-hand char */
 int	class1 = (symdef1==NULL?ORDINARY:symdef1->class), /* symdef->class */
@@ -1238,6 +1392,8 @@ int	class1 = (symdef1==NULL?ORDINARY:symdef1->class), /* symdef->class */
 	smash2 = (symdef2!=NULL)&&(class2==ORDINARY||class2==VARIABLE||
 		  class2==OPENING||class2==CLOSING||class2==PUNCTION),
 	space = fontsize/2+1;		/* #cols between sp1 and sp2 */
+int	isfrac = (type1 == FRACRASTER	/* sp1 is a \frac */
+		  && class2 == PUNCTION); /* and sp2 is punctuation */
 /* -------------------------------------------------------------------------
 Initialization
 -------------------------------------------------------------------------- */
@@ -1245,14 +1401,27 @@ Initialization
 if ( !isstring )
   space = max2(2,(symspace[class1][class2] + fontsize-3)); /* space */
 else space = 1;				/* space for ascii string */
-if ( !iscatspace ) space=0;		/* spacing explicitly turned off */
+if ( isnocatspace > 0 ) {		/* spacing explicitly turned off */
+  space = 0;				/* reset space */
+  isnocatspace--; }			/* and decrement isnocatspace flag */
+if ( 0 && sp1->type == BLANKSIGNAL ) space=0; /*implicitly turn off spacing*/
+if ( sp1->type==BLANKSIGNAL && sp2->type==BLANKSIGNAL ) /* both blank */
+  space = 0;				/* no extra space between spaces */
+if ( sp2->type != BLANKSIGNAL )		/* not a blank space signal */
+  if ( blanksymspace != 0 ) {		/* and we have a space adjustment */
+    space = max2(0,space+blanksymspace); /* adjust as much as possible */
+    blanksymspace = 0; }		/* and reset adjustment */
+if ( msgfp!=NULL && msglevel>=999 )	/* display space results */
+  { fprintf(msgfp,"rastcat> space=%d, blanksymspace=%d, isnocatspace=%d\n",
+    space,oldblanksymspace,oldnocatspace);  fflush(msgfp); }
 /* --- determine smash --- */
-if ( !isstring )			/* don't smash strings */
+if ( !isstring && !isfrac )		/* don't smash strings or \frac's */
  if ( issmash ) {			/* raster smash wanted */
    int	maxsmash = rastsmash(sp1,sp2),	/* calculate max smash space */
 	margin = smashmargin;		/* init margin without delta */
    if ( (1 && smash1 && smash2)		/* concatanating two chars */
-   ||   (1 && type1!=IMAGERASTER && type2!=IMAGERASTER) )
+   ||   (1 && type1!=IMAGERASTER && type2!=IMAGERASTER
+	   && type1!=FRACRASTER  && type2!=FRACRASTER ) )
      /*maxsmash = 0;*/			/* turn off smash */
      margin = max2(space-1,0);		/* force small smashmargin */
    else					/* adjust for delta if images */
@@ -1309,7 +1478,9 @@ if ( (sp=new_subraster(width,height,pixsz)) /* allocate new subraster */
 /* sp->type = (!isstring?STRINGRASTER:ASCIISTRING); */  /*concatted string*/
 if ( !isstring )
   sp->type = /*type2;*//*(type1==type2?type2:IMAGERASTER);*/
-	(type2!=CHARASTER? type2 : (type1!=CHARASTER?type1:STRINGRASTER));
+	(type2!=CHARASTER? type2 :
+	(type1!=CHARASTER&&type1!=BLANKSIGNAL
+	 &&type1!=FRACRASTER?type1:IMAGERASTER));
 else
   sp->type = ASCIISTRING;		/* concatted ascii string */
 sp->symdef = symdef2;			/* rightmost char is sp2 */
@@ -1334,8 +1505,15 @@ if ( msgfp!=NULL && msglevel>=9999 )
   { type_raster(sp->image,msgfp);	/* display composite raster */
     fflush(msgfp); }			/* flush msgfp buffer */
 if ( !isstring )
- rastput (rp, sp2->image, base-base2,	/* overlay right-hand */
- max2(0,width1+space-nsmash), isopaque); /* minus any smashed space */
+ { int	fracbase = ( isfrac?		/* baseline for punc after \frac */
+	max2(fraccenterline,base2):base ); /*adjust baseline or use original*/
+   rastput (rp, sp2->image, fracbase-base2, /* overlay right-hand */
+   max2(0,width1+space-nsmash), isopaque); /* minus any smashed space */
+   if ( 1 && type1 == FRACRASTER	/* we're done with \frac image */
+   &&   type2 != FRACRASTER )		/* unless we have \frac\frac */
+     fraccenterline = NOVALUE;		/* so reset centerline signal */
+   if ( fraccenterline != NOVALUE )	/* sp2 is a fraction */
+     fraccenterline += (base-base2); }	/* so adjust its centerline */
 else
  { strcpy((char *)(rp->pixmap)+width1-1+space,(char *)((sp2->image)->pixmap));
    ((char *)(rp->pixmap))[width1+width2+space-2] = '\000'; } /*null-term*/
@@ -1597,7 +1775,7 @@ find minimum separation
 -------------------------------------------------------------------------- */
 for ( irow2=top2; irow2<=bot2; irow2++ ) { /* check each row inside sp2 */
  int margin1, margin2=firstcol2[irow2];	/* #cols to first set pixel */
- if ( margin2 != blanksignal )		/* irow2 not an empty/blank row */
+ if ( margin2 != blanksignal ) {	/* irow2 not an empty/blank row */
   for ( irow1=max2(irow2-smin,top1); ; irow1++ )
    if ( irow1 > min2(irow2+smin,bot1) ) break; /* upper bound check */
    else
@@ -1607,6 +1785,7 @@ for ( irow2=top2; irow2<=bot2; irow2++ ) { /* check each row inside sp2 */
      if ( dy>smashmargin && dx<xmin && smin<9999 ) continue; /* dy alone */
      smin=ds; xmin=dx; ymin=dy;		/* set new min */
      } /* --- end-of-if(margin1!=blanksignal) --- */
+  } /* --- end-of-if(margin2!=blanksignal) --- */
  if ( smin<2 ) goto end_of_job;		/* can't smash */
  } /* --- end-of-for(irow2) --- */
 /*nsmash = min2(xmin,width2);*/		/* permissible smash */
@@ -1627,6 +1806,87 @@ end_of_job:
       fflush(msgfp); }
   return ( nsmash );			/* back with #smash pixels */
 } /* --- end-of-function rastsmash() --- */
+
+
+/* ==========================================================================
+ * Function:	rastsmashcheck ( term )
+ * Purpose:	Check an exponent term to see if its leading symbol
+ *		would make smashing dangerous
+ * --------------------------------------------------------------------------
+ * Arguments:	term (I)	char *  to null-terminated string
+ *				containing right-hand exponent term about to
+ *				be smashed against existing left-hand.
+ * --------------------------------------------------------------------------
+ * Returns:	( int )		1 if it's okay to smash term, or
+ *				0 if smash is dangerous.
+ * --------------------------------------------------------------------------
+ * Notes:     o
+ * ======================================================================= */
+/* --- entry point --- */
+int	rastsmashcheck ( char *term )
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+int	isokay = 0;		/* 1 to signal okay to caller */
+static	char nosmashchars[64] = "-.,="; /* don't smash these leading chars */
+static	char *nosmashstrs[64] = { "\\frac", NULL }; /* or leading strings */
+static	char *grayspace[64] = { "\\tiny", "\\small", "\\normalsize",
+	"\\large", "\\Large", "\\LARGE", "\\huge", "\\Huge", NULL };
+char	*expression = term;	/* local ptr to beginning of expression */
+char	*token = NULL;  int i;	/* token = nosmashstrs[i] or grayspace[i] */
+/* -------------------------------------------------------------------------
+see if smash check enabled
+-------------------------------------------------------------------------- */
+if ( smashcheck < 1 ) {		/* no smash checking wanted */
+  if ( smashcheck >= 0 )	/* -1 means check should always fail */
+    isokay = 1;			/* otherwise (if 0), signal okay to smash */
+  goto end_of_job; }		/* return to caller */
+/* -------------------------------------------------------------------------
+skip leading white and gray space
+-------------------------------------------------------------------------- */
+/* --- first check input --- */
+if ( term == NULL )    goto end_of_job; /* no input so return 0 to caller */
+if ( *term == '\000' ) goto end_of_job; /* ditto for empty string */
+/* --- skip leading white space --- */
+skipwhite(term);		/* skip leading white sapce */
+if ( *term == '\000' ) goto end_of_job; /* nothing but white space */
+/* --- skip leading gray space --- */
+skipgray:
+ for ( i=0; (token=grayspace[i]) != NULL; i++ ) /* check each grayspace */
+  if ( strncmp(term,token,strlen(token)) == 0 ) { /* found grayspace */
+   term += strlen(token);	/* skip past this grayspace token */
+   if ( *term == '\000' ) {	/* nothing left so quit */
+     if ( msgfp!=NULL && msglevel >= 99 ) /* display for debugging */
+       fprintf(msgfp,"rastsmashcheck> only grayspace in %.32s\n",expression);
+     goto end_of_job; }
+   goto skipgray; }		/* restart grayspace check from beginning */
+/* -------------------------------------------------------------------------
+check for leading no-smash single char
+-------------------------------------------------------------------------- */
+/* --- don't smash if term begins with a "nosmash" char --- */
+if ( (token=strchr(nosmashchars,*term)) != NULL ) {
+  if ( msgfp!=NULL && msglevel >= 99 )	/* display for debugging */
+    fprintf(msgfp,"rastsmashcheck> char %.1s found in %.32s\n",token,term);
+  goto end_of_job; }
+/* -------------------------------------------------------------------------
+check for leading no-smash token
+-------------------------------------------------------------------------- */
+for ( i=0; (token=nosmashstrs[i]) != NULL; i++ ) /* check each nosmashstr */
+ if ( strncmp(term,token,strlen(token)) == 0 ) { /* found a nosmashstr */
+  if ( msgfp!=NULL && msglevel >= 99 )	/* display for debugging */
+    fprintf(msgfp,"rastsmashcheck> token %s found in %.32s\n",token,term);
+  goto end_of_job; }		/* so don't smash term */
+/* -------------------------------------------------------------------------
+back to caller
+-------------------------------------------------------------------------- */
+isokay = 1;			/* no problem, so signal okay to smash */
+end_of_job:
+  if ( msgfp!=NULL && msglevel >= 999 )	/* display for debugging */
+    fprintf(msgfp,"rastsmashcheck> returning isokay=%d for \"%.32s\"\n",
+    isokay,(expression==NULL?"<no input>":expression));
+  return ( isokay );		/* back to caller with 1 if okay to smash */
+} /* --- end-of-function rastsmashcheck() --- */
 
 
 /* ==========================================================================
@@ -1779,7 +2039,7 @@ switch ( accent )
 if we constructed accent raster okay, embed it in a subraster and return it
 -------------------------------------------------------------------------- */
 /* --- if all okay, allocate subraster to contain constructed raster --- */
-if ( rp != NULL )			/* accent raster constructed okay */
+if ( rp != NULL ) {			/* accent raster constructed okay */
   if ( (sp=new_subraster(0,0,0))	/* allocate subraster "envelope" */
   ==   NULL )				/* and if we fail to allocate */
     delete_raster(rp);			/* free now-unneeded raster */
@@ -1789,6 +2049,7 @@ if ( rp != NULL )			/* accent raster constructed okay */
       sp->image = rp;			/* raster we just constructed */
       sp->size = (-1);			/* can't set font size here */
       sp->baseline = 0; }		/* can't set baseline here */
+  } /* --- end-of-if(rp!=NULL) --- */
 /* --- return subraster containing desired accent to caller --- */
 return ( sp );				/* return accent or NULL to caller */
 } /* --- end-of-function accent_subraster() --- */
@@ -1848,22 +2109,22 @@ for ( irow=0; irow<height; irow++ )		/* for each row of arrow */
   if ( drctn >= 0 )				/* right arrowhead wanted */
     for ( icol=0; icol<thickness; icol++ )	/* for arrowhead thickness */
      { ipix = ((irow+1)*width - 1) - delta - icol; /* rightmost-delta-icol */
-       if ( ipix >= 0 )				/* bounds check */
+       if ( ipix >= 0 ) {				/* bounds check */
 	if ( pixsz == 1 )			/* have a bitmap */
 	  setlongbit((arrowsp->image)->pixmap,ipix);/*turn on arrowhead bit*/
 	else					/* should have a bytemap */
 	 if ( pixsz == 8 )			/* check pixsz for bytemap */
-	  ((arrowsp->image)->pixmap)[ipix] = pixval; } /*set arrowhead byte*/
+	  ((arrowsp->image)->pixmap)[ipix] = pixval; } }/*set arrowhead byte*/
   /* --- left arrowhead (same as right except for ipix calculation) --- */
   if ( drctn <= 0 )				/* left arrowhead wanted */
     for ( icol=0; icol<thickness; icol++ )	/* for arrowhead thickness */
      { ipix = irow*width + delta + icol;	/* leftmost bit+delta+icol */
-       if ( ipix < npix )			/* bounds check */
+       if ( ipix < npix ) {			/* bounds check */
 	if ( pixsz == 1 )			/* have a bitmap */
 	  setlongbit((arrowsp->image)->pixmap,ipix);/*turn on arrowhead bit*/
 	else					/* should have a bytemap */
 	 if ( pixsz == 8 )			/* check pixsz for bytemap */
-	  ((arrowsp->image)->pixmap)[ipix] = pixval; } /*set arrowhead byte*/
+	  ((arrowsp->image)->pixmap)[ipix] = pixval; } }/*set arrowhead byte*/
   } /* --- end-of-for(irow) --- */
 end_of_job:
   return ( arrowsp );			/*back to caller with arrow or NULL*/
@@ -1924,22 +2185,22 @@ for ( icol=0; icol<width; icol++ )		/* for each col of arrow */
   if ( drctn >= 0 )				/* up arrowhead wanted */
     for ( irow=0; irow<thickness; irow++ )	/* for arrowhead thickness */
      { ipix = (irow+delta)*width + icol;	/* leftmost+icol */
-       if ( ipix < npix )			/* bounds check */
+       if ( ipix < npix ) {			/* bounds check */
 	if ( pixsz == 1 )			/* have a bitmap */
 	  setlongbit((arrowsp->image)->pixmap,ipix);/*turn on arrowhead bit*/
 	else					/* should have a bytemap */
 	 if ( pixsz == 8 )			/* check pixsz for bytemap */
-	  ((arrowsp->image)->pixmap)[ipix] = pixval; } /*set arrowhead byte*/
+	  ((arrowsp->image)->pixmap)[ipix] = pixval; } }/*set arrowhead byte*/
   /* --- down arrowhead (same as up except for ipix calculation) --- */
   if ( drctn <= 0 )				/* down arrowhead wanted */
     for ( irow=0; irow<thickness; irow++ )	/* for arrowhead thickness */
      { ipix = (height-1-delta-irow)*width + icol; /* leftmost + icol */
-       if ( ipix > 0 )				/* bounds check */
+       if ( ipix > 0 ) {			/* bounds check */
 	if ( pixsz == 1 )			/* have a bitmap */
 	  setlongbit((arrowsp->image)->pixmap,ipix);/*turn on arrowhead bit*/
 	else					/* should have a bytemap */
 	 if ( pixsz == 8 )			/* check pixsz for bytemap */
-	  ((arrowsp->image)->pixmap)[ipix] = pixval; } /*set arrowhead byte*/
+	  ((arrowsp->image)->pixmap)[ipix] = pixval; } }/*set arrowhead byte*/
   } /* --- end-of-for(icol) --- */
 end_of_job:
   return ( arrowsp );			/*back to caller with arrow or NULL*/
@@ -1961,7 +2222,8 @@ end_of_job:
  *		height (I)	int containing number of rows for rule
  *		type (I)	int containing 0 for solid rule,
  *				1 for horizontal dashes, 2 for vertical
- *				3 for solid rule with corners removed
+ *				3 for solid rule with corners removed (bevel)
+ *				4 for strut (nothing drawn)
  * --------------------------------------------------------------------------
  * Returns:	( int )		1 if rule drawn okay,
  *				or 0 for any error.
@@ -1981,46 +2243,49 @@ int	irow=0, icol=0;		/* indexes over rp raster */
 int	ipix = 0,		/* raster pixmap[] index */
 	npix = rp->width * rp->height; /* #pixels malloced in rp->pixmap[] */
 int	isfatal = 0;		/* true to abend on out-of-bounds error */
-int	hdash=1, vdash=2;	/* type for horizontal, vertical dashes */
+int	hdash=1, vdash=2,	/* type for horizontal, vertical dashes */
+	bevel=99/*3*/, strut=4;	/* type for bevel (turned off), strut */
 int	dashlen=3, spacelen=2,	/* #pixels for dash followed by space */
 	isdraw=1;		/* true when drawing dash (init for solid) */
 /* -------------------------------------------------------------------------
 Check args
 -------------------------------------------------------------------------- */
-if ( rp == (raster *)NULL )	/* no raster arg supplied */
+if ( rp == (raster *)NULL ) {	/* no raster arg supplied */
   if ( workingbox != (subraster *)NULL )  /* see if we have a workingbox */
     rp = workingbox->image;	/* use workingbox if possible */
-  else return ( 0 );		/* otherwise signal error to caller */
-if ( type == 3 )		/* remove corners of solid box */
+  else return ( 0 ); }		/* otherwise signal error to caller */
+if ( type == bevel )		/* remove corners of solid box */
   if ( width<3 || height<3 ) type=0; /* too small to remove corners */
 /* -------------------------------------------------------------------------
 Fill line/box
 -------------------------------------------------------------------------- */
-for ( irow=top; irow<top+height; irow++ ) /*each scan line*/
+if ( width > 0 )				/* zero width implies strut*/
+ for ( irow=top; irow<top+height; irow++ )	/* for each scan line */
   {
+  if ( type == strut ) isdraw = 0;		/* draw nothing for strut */
   if ( type == vdash )				/*set isdraw for vert dash*/
     isdraw = (((irow-top)%(dashlen+spacelen)) < dashlen);
   ipix = irow*rp->width + left - 1;		/*first pixel preceding icol*/
   for ( icol=left; icol<left+width; icol++ )	/* each pixel in scan line */
     {
-    if ( type == 3 )				/* remove corners of box */
+    if ( type == bevel ) {			/* remove corners of box */
       if ( (irow==top && icol==left)		/* top-left corner */
       ||   (irow==top && icol>=left+width-1)	/* top-right corner */
       ||   (irow>=top+height-1 && icol==left)	/* bottom-left corner */
       ||   (irow>=top+height-1 && icol>=left+width-1) ) /* bottom-right */
-	isdraw = 0;  else isdraw = 1;		/*set isdraw to skip corner*/
+	isdraw = 0;  else isdraw = 1; }		/*set isdraw to skip corner*/
     if ( type == hdash )			/*set isdraw for horiz dash*/
       isdraw = (((icol-left)%(dashlen+spacelen)) < dashlen);
     if ( ++ipix >= npix )			/* bounds check failed */
          if ( isfatal ) goto end_of_job;	/* abort if error is fatal */
          else break;				/*or just go on to next row*/
     else					/*ibit is within rp bounds*/
-      if ( isdraw )				/*and we're drawing this bit*/
+      if ( isdraw ) {				/*and we're drawing this bit*/
 	if ( rp->pixsz == 1 )			/* have a bitmap */
 	  setlongbit(rp->pixmap,ipix);		/* so turn on bit in line */
 	else					/* should have a bytemap */
 	 if ( rp->pixsz == 8 )			/* check pixsz for bytemap */
-	  ((unsigned char *)(rp->pixmap))[ipix] = 255; /* set black byte */
+	  ((unsigned char *)(rp->pixmap))[ipix] = 255; } /* set black byte */
     } /* --- end-of-for(icol) --- */
   } /* --- end-of-for(irow) --- */
 end_of_job:
@@ -2085,17 +2350,17 @@ int	line_recurse(), isrecurse=1; /* true to draw line recursively */
 /* -------------------------------------------------------------------------
 Check args
 -------------------------------------------------------------------------- */
-if ( rp == (raster *)NULL )	/* no raster arg supplied */
+if ( rp == (raster *)NULL ) {	/* no raster arg supplied */
   if ( workingbox != (subraster *)NULL )  /* see if we have a workingbox */
     rp = workingbox->image;	/* use workingbox if possible */
-  else return ( 0 );		/* otherwise signal error to caller */
+  else return ( 0 ); }		/* otherwise signal error to caller */
 /* -------------------------------------------------------------------------
 Initialization
 -------------------------------------------------------------------------- */
-if ( msgfp!=NULL && msglevel>=29 )		/* debugging */
+if ( msgfp!=NULL && msglevel>=29 ) {		/* debugging */
    fprintf(msgfp,"line_raster> row,col0=%d,%d row,col1=%d,%d, thickness=%d\n"
    "\t dy,dx=%3.1f,%3.1f, a=%4.3f, xwidth=%4.3f\n",
-   row0,col0, row1,col1, thickness,  dy,dx, a, xwidth);
+   row0,col0, row1,col1, thickness,  dy,dx, a, xwidth); fflush(msgfp); }
 /* --- check for recursive line drawing --- */
 if ( isrecurse ) {		/* drawing lines recursively */
  for ( irow=0; irow<thickness; irow++ )		/* each line 1 pixel thick */
@@ -2563,11 +2828,11 @@ Allocations and Declarations
 -------------------------------------------------------------------------- */
 raster	*new_raster(), *bp=(raster *)NULL;  /*raster back to caller*/
 int	rastput();		/* overlay rp in new bordered raster */
-int	width  = (rp==NULL?0:rp->width),  /* height of raster */
-	height = (rp==NULL?0:rp->height), /* width  of raster */
-	istopneg=0, isbotneg=0,	/* true if ntop or nbot negative */
+int	width  = (rp==NULL?0:rp->width),  /* width of raster */
+	height = (rp==NULL?0:rp->height), /* height of raster */
+	istopneg=0, isbotneg=0,		/* true if ntop or nbot negative */
 	leftmargin = 0;		/* adjust width to whole number of bytes */
-int	delete_raster();	/* to free input rp if isdelete is true */
+int	delete_raster();		/* free input rp if isfree is true */
 /* -------------------------------------------------------------------------
 Initialization
 -------------------------------------------------------------------------- */
@@ -2627,6 +2892,85 @@ end_of_job:
 
 
 /* ==========================================================================
+ * Function:	backspace_raster ( rp, nback, pback, minspace, isfree )
+ * Purpose:	Allocate a new raster containing a copy of input rp,
+ *		but with trailing nback columns removed.
+ *		If minspace>=0 then (at least) that many columns
+ *		of whitespace will be left in place, regardless of nback.
+ *		If minspace<0 then existing black pixels will be deleted
+ *		as required.
+ * --------------------------------------------------------------------------
+ * Arguments:	rp (I)		raster *  to raster on which a border
+ *				is to be placed
+ *		nback (I)	int containing number of columns to
+ *				backspace (>=0)
+ *		pback (O)	ptr to int returning #pixels actually
+ *				backspaced (or NULL to not use)
+ *		minspace (I)	int containing number of columns
+ *				of whitespace to be left in place
+ *		isfree (I)	int containing true to free rp before return
+ * --------------------------------------------------------------------------
+ * Returns:	( raster * )	ptr to backspaced raster,
+ *				or NULL for any error.
+ * --------------------------------------------------------------------------
+ * Notes:     o	For \! negative space, for \hspace{-10}, etc.
+ * ======================================================================= */
+/* --- entry point --- */
+raster	*backspace_raster ( raster *rp, int nback, int *pback, int minspace,
+	int isfree )
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+raster	*new_raster(), *bp=(raster *)NULL;  /* raster returned to caller */
+int	delete_raster();		/* free input rp if isfree is true */
+int	width  = (rp==NULL?0:rp->width),  /* original width of raster */
+	height = (rp==NULL?0:rp->height), /* height of raster */
+	mback = nback,			/* nback adjusted for minspace */
+	newwidth = width,		/* adjusted width after backspace */
+	icol=0, irow=0;			/* col,row index */
+if ( rp == NULL ) goto end_of_job;	/* no input given */
+/* -------------------------------------------------------------------------
+locate rightmost column of rp containing ink, and determine backspaced width
+-------------------------------------------------------------------------- */
+/* --- locate rightmost column of rp containing ink --- */
+if ( minspace >= 0 )			/* only needed if given minspace */
+ for ( icol=width-1; icol>=0; icol-- )	/* find first non-empty col in row */
+  for ( irow=0; irow<height; irow++ )	/* for each row inside rp */
+   if ( getpixel(rp,irow,icol) != 0 ) {	/* found a set pixel */
+     int whitecols = (width-1) - icol;	/* #cols containing white space */
+     mback = min2(nback,max2(0,whitecols-minspace)); /*leave minspace cols*/
+     goto gotright; }			/* no need to look further */
+/* --- determine width of new backspaced raster --- */
+gotright:				/* found col with ink (or rp empty)*/
+  if ( mback > width ) mback = width;	/* can't backspace before beginning*/
+  newwidth = max2(1,width-mback);	/* #cols in backspaced raster */
+  if ( pback != NULL ) *pback = width-newwidth; /* caller wants #pixels */
+/* -------------------------------------------------------------------------
+allocate new raster and fill it with leftmost cols of rp
+-------------------------------------------------------------------------- */
+/* --- allocate backspaced raster --- */
+if ( (bp=new_raster(newwidth,height,rp->pixsz)) /*allocate backspaced raster*/
+==   (raster *)NULL ) goto end_of_job;	/* and quit if failed */
+/* --- fill new raster --- */
+if ( width-nback > 0 )			/* don't fill 1-pixel wide empty bp*/
+ for ( icol=0; icol<newwidth; icol++ )	/* find first non-empty col in row */
+  for ( irow=0; irow<height; irow++ )	/* for each row inside rp */
+    { int value = getpixel(rp,irow,icol); /* original pixel at irow,icol */
+      setpixel(bp,irow,icol,value); }	/* saved in backspaced raster */
+/* -------------------------------------------------------------------------
+Back to caller with backspaced raster (or null for any error)
+-------------------------------------------------------------------------- */
+end_of_job:
+  if ( msgfp!=NULL && msglevel>=999 ) { fprintf(msgfp, /* diagnostics */
+   "backspace_raster> nback=%d,minspace=%d,mback=%d, width:old=%d,new=%d\n",
+   nback,minspace,mback,width,newwidth); fflush(msgfp); }
+  if ( isfree && bp!=NULL ) delete_raster(rp); /* free original raster */
+  return ( bp );			/* back with backspaced or null ptr*/
+} /* --- end-of-function backspace_raster() --- */
+
+
+/* ==========================================================================
  * Function:	type_raster ( rp, fp )
  * Purpose:	Emit an ascii dump representing rp, on fp.
  * --------------------------------------------------------------------------
@@ -2659,6 +3003,9 @@ initialization
 -------------------------------------------------------------------------- */
 /* --- redirect null fp --- */
 if ( fp == (FILE *)NULL ) fp = stdout;	/* default fp to stdout if null */
+if ( msglevel >= 999 ) { fprintf(fp,	/* debugging diagnostics */
+  "type_raster> width=%d height=%d ...\n",
+  rp->width,rp->height); fflush(fp); }
 /* --- check for ascii string --- */
 if ( isstring				/* pixmap has string, not raster */
 ||   (0 && rp->height==1) )		/* infer input rp is a string */
@@ -3131,11 +3478,11 @@ for ( ibyte=0; ibyte<nbytes; ibyte++ )	/* one byte at a time */
   if ( ibyte < nbytes-1)		/* not the last byte yet */
     {
     if ( !isstr ) fprintf(fp,",");	/* follow hex number with comma */
-    if ( (ibyte+1)%ncols==0 )		/* need new line after every ncols */
+    if ( (ibyte+1)%ncols==0 ) {		/* need new line after every ncols */
       if ( !isstr )			/* for hex numbers format ... */
 	fprintf(fp,"\n%.*s",col1,stub);	/* ...just need newline and stub */
       else				/* for string format... */
-	fprintf(fp,"\"\n%.*s\"",col1,stub); /* ...need closing, opening "s */
+	fprintf(fp,"\"\n%.*s\"",col1,stub); } /*...need closing, opening "s*/
     } /* --- end-of-if(ibyte<nbytes-1) --- */
   } /* --- end-of-for(ibyte) --- */
 if ( isstr ) fprintf(fp,"\"");		/* closing " after last line */
@@ -3254,14 +3601,14 @@ for ( icount=0,bitval=0; icount<ncounts; icount++ )
   {
   int	nbits = (int)(getbyfmt(format,gf->pixmap,icount)); /*#bits to set*/
   if ( isrepeat				/* we're proxessing repeat counts */
-  &&   nbits == repeatcmds[format-2] )	/* and repeat opcode found */
+  &&   nbits == repeatcmds[format-2] ) { /* and repeat opcode found */
    if ( nrepeats == 0 )			/* recursive repeat is error */
     { nrepeats = (int)(getbyfmt(format,gf->pixmap,icount+1));/*repeat count*/
       nbits = (int)(getbyfmt(format,gf->pixmap,icount+2)); /*#bits to set*/
       icount += 2; }			/* bump byte/nibble count */
    else					/* some internal error occurred */
     if ( msgfp!=NULL && msglevel>=1 )	/* report error */
-     fprintf(msgfp,"gftobitmap> found embedded repeat command\n");
+     fprintf(msgfp,"gftobitmap> found embedded repeat command\n"); }
   if ( 0 )
     fprintf(stdout,
     "gftobitmap> icount=%d bitval=%d nbits=%d ibit=%d totbits=%d\n",
@@ -3313,6 +3660,7 @@ mathchardef *get_symdef ( char *symbol )
 Allocations and Declarations
 -------------------------------------------------------------------------- */
 mathchardef *symdefs = symtable;	/* table of mathchardefs */
+int	ligdef=0, get_ligature();	/* or we may have a ligature */
 int	idef = 0,			/* symdefs[] index */
 	bestdef = (-9999);		/*index of shortest matching symdef*/
 int	symlen = strlen(symbol),	/* length of input symbol */
@@ -3342,6 +3690,16 @@ static	char *displaysyms[][2] = {	/*xlate to Big sym for \displaystyle*/
 	{"\\bigvee",	"\\Bigvee"},
 	{NULL, NULL} };
 /* -------------------------------------------------------------------------
+First check for ligature
+-------------------------------------------------------------------------- */
+isligature = 0;				/* init signal for no ligature */
+if ( family == CYR10 )			/*only check for cyrillic ligatures*/
+ if ( (ligdef=get_ligature(subexprptr,family)) /* check for ligature */
+ >=    0  )				/* found a ligature */
+  { bestdef = ligdef;			/* set bestdef for ligature */
+    isligature = 1;			/* signal we found a ligature */
+    goto end_of_job; }			/* so just give it to caller */
+/* -------------------------------------------------------------------------
 If in \displaystyle mode, first xlate int to Bigint, etc.
 -------------------------------------------------------------------------- */
 if ( isdisplaystyle > 1 )		/* we're in \displaystyle mode */
@@ -3364,7 +3722,7 @@ for ( idef=0; ;idef++ )			/* until trailer record found */
   if ( symdefs[idef].symbol == NULL ) break; /* reached end-of-table */
   else					/* check against caller's symbol */
     if ( strncmp(symbol,symdefs[idef].symbol,symlen) == 0 ) /* found match */
-     if (fontnum==0			/* mathmode, so check every match */
+     if ( (fontnum==0||family==CYR10)	/* mathmode, so check every match */
      || (0 && istextmode && (!alphasym	/* text mode and not alpha symbol */
 	|| symdefs[idef].handler!=NULL))   /* or text mode and directive */
      || (symdefs[idef].family==family	/* have correct family */
@@ -3389,12 +3747,70 @@ if ( bestdef < 0 )			/* failed to look up symbol */
       symdef = get_symdef(symbol);	/* repeat lookup with fontnum=0 */
       fontnum = oldfontnum;		/* reset font family */
       return symdef; }			/* caller gets fontnum=0 lookup */
-if ( msgfp!=NULL && msglevel>=999 )	/* debugging output */
-  { fprintf(msgfp,"get_symdef> symbol=%s matches symtable[%d]=%s\n",
-    symbol,bestdef,(bestdef<0?"NotFound":symdefs[bestdef].symbol));
+end_of_job:
+ if ( msgfp!=NULL && msglevel>=999 )	/* debugging output */
+  { fprintf(msgfp,
+    "get_symdef> symbol=%s matches symtable[%d]=%s (isligature=%d)\n",
+    symbol,bestdef,(bestdef<0?"NotFound":symdefs[bestdef].symbol),isligature);
     fflush(msgfp); }
-return ( (bestdef<0? NULL : &(symdefs[bestdef])) ); /*NULL or best symdef[]*/
+ return ( (bestdef<0? NULL : &(symdefs[bestdef])) );/*NULL or best symdef[]*/
 } /* --- end-of-function get_symdef() --- */
+
+
+/* ==========================================================================
+ * Function:	get_ligature ( expression, family )
+ * Purpose:	returns symtable[] index for ligature
+ * --------------------------------------------------------------------------
+ * Arguments:	expression (I)	char *  containing ligature
+ *				whose corresponding mathchardef is wanted
+ *		family (I)	int containing NOVALUE for any family,
+ *				or, e.g., CYR10 for cyrillic, etc.
+ * --------------------------------------------------------------------------
+ * Returns:	( int ) 	symtable[] index defining ligature,
+ *				or -9999 if no ligature found or for any error
+ * --------------------------------------------------------------------------
+ * Notes:     o
+ * ======================================================================= */
+/* --- entry point --- */
+int	get_ligature ( char *expression, int family )
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+mathchardef *symdefs = symtable;	/* table of mathchardefs */
+char	*ligature = expression /*- 1*/,	/* expression ptr */
+	*symbol = NULL;			/* symdefs[idef].symbol */
+int	liglen = strlen(ligature);	/* #chars remaining in expression */
+int	iscyrfam = (family==CYR10);	/* true for cyrillic families */
+int	idef = 0,			/* symdefs[] index */
+	bestdef = (-9999),		/*index of longest matching symdef*/
+	maxlen=(-9999);			/*length of longest matching symdef*/
+/* -------------------------------------------------------------------------
+search symdefs[] in order for first occurrence of symbol
+-------------------------------------------------------------------------- */
+if ( !isstring ) {			/* no ligatures in "string" mode */
+ for ( idef=0; ;idef++ )		/* until trailer record found */
+  if ( (symbol=symdefs[idef].symbol) == NULL ) break; /* end-of-table */
+  else {				/* check against caller's ligature */
+    int symlen = strlen(symbol);	/* #chars in symbol */
+    if ( ( symlen>1 || iscyrfam )	/*ligature >1 char long or cyrillic*/
+    &&   symlen <= liglen		/* and enough remaining chars */
+    &&   ( *symbol!='\\' || iscyrfam )	/* not escaped or cyrillic */
+    &&   symdefs[idef].handler == NULL ) /* and not a handler */
+     if ( strncmp(ligature,symbol,symlen) == 0 ) /* found match */
+      if ( family < 0			/* no family specifies */
+      ||   symdefs[idef].family == family ) /* or have correct family */
+       if ( symlen > maxlen )		/* new longest ligature */
+	{ bestdef = idef;		/* save index of new best match */
+	  maxlen = symlen; }		/* and save its len for next test */
+    } /* --- end-of-if/else(symbol==NULL) --- */
+ if ( msgfp!=NULL && msglevel>=999 )	/* debugging output */
+  { fprintf(msgfp,"get_ligature> ligature=%.4s matches symtable[%d]=%s\n",
+    ligature,bestdef,(bestdef<0?"NotFound":symdefs[bestdef].symbol));
+    fflush(msgfp); }
+ } /* --- end-of-if(!isstring) --- */
+return ( bestdef );			/* -9999 or index of best symdef[] */
+} /* --- end-of-function get_ligature --- */
 
 
 /* ==========================================================================
@@ -3430,7 +3846,7 @@ char	*symptr = NULL;			/* look for 1st alpha of symbol */
 initialization
 -------------------------------------------------------------------------- */
 /* --- check symdef --- */
-if ( symdef == NULL ) return ( NULL );	/* get_symdef() probably failed */
+if ( symdef == NULL ) goto end_of_job;	/* get_symdef() probably failed */
 /* --- get local copy of indexes from symdef --- */
 family = symdef->family;		/* font family containing symbol */
 charnum = symdef->charnum;		/* char# of symbol within font */
@@ -3462,7 +3878,11 @@ find font family in table of fonts[]
 -------------------------------------------------------------------------- */
 /* --- look up font family --- */
 for ( ifont=0; ;ifont++ )		/* until trailer record found */
-  if ( fonts[ifont].family < 0 ) return ( NULL ); /* error, no such family */
+  if ( fonts[ifont].family < 0 ) {	/* error, no such family */
+    if ( msgfp!=NULL && msglevel>=99 ) { /* emit error */
+     fprintf(msgfp,"get_chardef> failed to find font family %d\n",
+     family); fflush(msgfp); }
+    goto end_of_job; }			/* quit if can't find font family*/
   else if ( fonts[ifont].family == family ) break; /* found font family */
 /* --- get local copy of table for this family by size --- */
 fontdef = fonts[ifont].fontdef;		/* font by size */
@@ -3474,7 +3894,11 @@ while ( 1 )				/* find size or closest available */
   if ( fontdef[size] != NULL ) break;	/* found available size */
   else					/* adjust size closer to normal */
     if ( size == NORMALSIZE		/* already normal so no more sizes,*/
-    || sizeinc == 0 ) return ( NULL);	/* or must be supersampling */
+    || sizeinc == 0 ) {			/* or must be supersampling */
+      if ( msgfp!=NULL && msglevel>=99 ) { /* emit error */
+	fprintf(msgfp,"get_chardef> failed to find font size %d\n",
+	size); fflush(msgfp); }
+      goto end_of_job; }		/* quit if can't find desired size */
     else				/*bump size 1 closer to NORMALSIZE*/
       size += sizeinc;			/* see if adjusted size available */
 /* --- ptr to chardef struct --- */
@@ -3489,7 +3913,14 @@ if ( family == CMEX10 )			/* cmex10 needs tweak */
 /* -------------------------------------------------------------------------
 return subraster containing chardef data for symbol in requested size
 -------------------------------------------------------------------------- */
-return ( gfdata );			/*ptr to chardef for symbol in size*/
+end_of_job:
+ if ( msgfp!=NULL && msglevel>=999 )
+  { if (symdef == NULL) fprintf(msgfp,"get_chardef> input symdef==NULL\n");
+    else
+     fprintf(msgfp,"get_chardef> requested symbol=\"%s\" size=%d  %s\n",
+     symdef->symbol,size,(gfdata==NULL?"FAILED":"Succeeded"));
+    fflush(msgfp); }
+ return ( gfdata );			/*ptr to chardef for symbol in size*/
 } /* --- end-of-function get_chardef() --- */
 
 
@@ -3562,8 +3993,10 @@ if ( (gfdata=get_chardef(symdef,size))	/* look up chardef for symdef,size */
   } /* --- end-of-if(sp!=NULL) --- */
 end_of_job:
  if ( msgfp!=NULL && msglevel>=999 )
-  { fprintf(msgfp,"get_charsubraster> requested symbol=\"%s\" baseline=%d\n",
-    symdef->symbol, (sp==NULL?0:sp->baseline)); fflush(msgfp); }
+  { fprintf(msgfp,"get_charsubraster> requested symbol=\"%s\" baseline=%d"
+    " %s %s\n", symdef->symbol, (sp==NULL?0:sp->baseline),
+    (sp==NULL?"FAILED":"Succeeded"), (gfdata==NULL?"(gfdata=NULL)":" "));
+    fflush(msgfp); }
 return ( sp );				/* back to caller */
 } /* --- end-of-function get_charsubraster() --- */
 
@@ -3683,6 +4116,7 @@ int	defheight, bestheight=9999,	/* height of best fit symdef */
 int	iswidth = 0;			/* true if best-fit width desired */
 int	isunesc = 0,			/* true if leading escape removed */
 	issq=0, isoint=0;		/* true for \sqcup,etc, \oint,etc */
+int	iscurly = 0;			/* true for StMary's curly symbols */
 char	*bigint="bigint", *bigoint="bigoint"; /* substitutes for int, oint */
 /* -------------------------------------------------------------------------
 determine if searching height or width, and search symdefs[] for best-fit
@@ -3690,6 +4124,7 @@ determine if searching height or width, and search symdefs[] for best-fit
 /* --- arg checks --- */
 if ( symlen < 1 ) return (sp);		/* no input symbol suplied */
 if ( strcmp(symbol,"e") == 0 ) return(sp); /* e causes segfault??? */
+if ( strstr(symbol,"curly") != NULL ) iscurly=1; /* user wants curly delim */
 /* --- ignore leading escapes for CMEX10 --- */
 if ( 1 )				/* ignore leading escape */
  if ( (family==CMEX10 || family==CMSYEX) ) { /* for CMEX10 or CMSYEX */
@@ -3731,11 +4166,12 @@ for ( idef=0; ;idef++ )			/* until trailer record found */
     if ((symptr=strstr(lcsymbol,unescsymbol)) != NULL) /*found caller's sym*/
      if ( (isoint || strstr(lcsymbol,"oint")==NULL) /* skip unwanted "oint"*/
      &&   (issq || strstr(lcsymbol,"sq")==NULL) ) /* skip unwanted "sq" */
-      if ( (deffam == CMSY10 ?		/* CMSY10 or not CMSY10 */
+      if ( ( deffam == CMSY10 ?		/* CMSY10 or not CMSY10 */
 	  symptr == lcsymbol		/* caller's sym is a prefix */
           && deflen == symlen:		/* and same length */
-	  symptr == lcsymbol		/* caller's sym is a prefix */
-          || symptr == lcsymbol+deflen-symlen) ) /* or a suffix */
+	  (iscurly || strstr(lcsymbol,"curly")==NULL) &&/*not unwanted curly*/
+	  (symptr == lcsymbol		/* caller's sym is a prefix */
+          || symptr == lcsymbol+deflen-symlen) ) ) /* or a suffix */
        for ( size=0; size<=LARGESTSIZE; size++ ) /* check all font sizes */
 	if ( (gfdata=get_chardef(&(symdefs[idef]),size)) != NULL ) /*got one*/
 	  { defheight = gfdata->image.height;	/* height of this character */
@@ -3815,7 +4251,7 @@ int	circle_raster(),		/* ellipse for ()'s in sp->image */
 subraster *uparrow_subraster();		/* up/down arrows */
 int	isprealloc = 1;			/*pre-alloc subraster, except arrow*/
 int	oldsmashmargin = smashmargin,	/* save original smashmargin */
-	wascatspace = iscatspace;	/* save original iscatspace */
+	wasnocatspace = isnocatspace;	/* save original isnocatspace */
 /* -------------------------------------------------------------------------
 initialization
 -------------------------------------------------------------------------- */
@@ -3905,12 +4341,12 @@ if ( (lp=strchr(symbol,'(')) != NULL	/* left ( paren wanted */
    /* --- construct brace from pieces --- */
    if ( isokay ) {			/* we have the pieces */
     /* --- add alignment fillers --- */
-    smashmargin = iscatspace = 0;	/*turn off rastcat smashing,space*/
+    smashmargin=0;  isnocatspace=99;	/*turn off rastcat smashing,space*/
     topsym = (topfill>0?rastcat(new_subraster(topfill,1,1),symtop,3):symtop);
     botsym = (botfill>0?rastcat(new_subraster(botfill,1,1),symbot,3):symbot);
     barsym = (barfill>0?rastcat(new_subraster(barfill,1,1),symbar,3):symbar);
     smashmargin = oldsmashmargin;	/* reset smashmargin */
-    iscatspace = wascatspace;		/* reset iscatspace */
+    isnocatspace = wasnocatspace;	/* reset isnocatspace */
     /* --- #bars needed between top and bot --- */
     nbars = (barht<1?0:max2(0,1+(height-baseht)/barht)); /* #bars needed */
     /* --- stack pieces --- */
@@ -3967,13 +4403,13 @@ else
   /* --- construct brace from pieces --- */
   if ( isokay ) {			/* we have the pieces */
     /* --- add alignment fillers --- */
-    smashmargin = iscatspace = 0;	/*turn off rastcat smashing,space*/
+    smashmargin=0;  isnocatspace=99;	/*turn off rastcat smashing,space*/
     topsym = (topfill>0?rastcat(new_subraster(topfill,1,1),symtop,3):symtop);
     botsym = (botfill>0?rastcat(new_subraster(botfill,1,1),symbot,3):symbot);
     midsym = (midfill>0?rastcat(new_subraster(midfill,1,1),symmid,3):symmid);
     barsym = (barfill>0?rastcat(new_subraster(barfill,1,1),symbar,3):symbar);
     smashmargin = oldsmashmargin;	/* reset smashmargin */
-    iscatspace = wascatspace;		/* reset iscatspace */
+    isnocatspace = wasnocatspace;	/* reset isnocatspace */
     /* --- #bars needed on each side of mid piece --- */
     nbars = (barht<1?0:max2(0,1+(height-baseht)/barht/2)); /*#bars per side*/
     /* --- stack pieces --- */
@@ -4165,6 +4601,8 @@ static	char *prefixes[] =			/*e.g., \big followed by ( */
 	  "\\big",  "\\Big",  "\\bigg",  "\\Bigg",
 	  "\\bigl", "\\Bigl", "\\biggl", "\\Biggl",
 	  "\\bigr", "\\Bigr", "\\biggr", "\\Biggr", NULL };
+static	char *starred[] =			/* may be followed by * */
+	{ "\\hspace",  "\\!",  NULL };
 /* -------------------------------------------------------------------------
 just return the next char if it's not \
 -------------------------------------------------------------------------- */
@@ -4204,12 +4642,19 @@ for ( iprefix=0; prefixes[iprefix] != NULL; iprefix++ ) /* run thru list */
 /* --- every \ must be followed by at least one char, e.g., \[ --- */
 if ( esclen < 1 )				/* \ followed by non-alpha */
   *ptoken++ = *expression++;			/*copy non-alpha, bump ptrs*/
-else {						/* normal alpha \sequence */
-  /* --- respect spaces in text mode, except first space after \escape --- */
+*ptoken = '\000';				/* null-terminate token */
+/* --- check for \hspace* or other starred commands --- */
+for ( iprefix=0; starred[iprefix] != NULL; iprefix++ ) /* run thru list */
+ if ( strcmp(chartoken,starred[iprefix]) == 0 )	/* have an exact match */
+  if ( *expression == '*' )			/* follows by a * */
+   { *ptoken++ = *expression++;			/* copy * and bump ptr */
+     *ptoken = '\000';				/* null-terminate token */
+     break; }					/* stop checking */
+/* --- respect spaces in text mode, except first space after \escape --- */
+if ( esclen >= 1 ) {				/*only for alpha \sequences*/
   if ( istextmode )				/* in \rm or \it text mode */
    if ( isthischar(*expression,WHITEDELIM) )	/* delim follows \sequence */
     expression++; }				/* so flush delim */
-*ptoken = '\000';				/* null-terminate token */
 /* --- back to caller --- */
 end_of_job:
   if ( msgfp!=NULL && msglevel>=999 )
@@ -4284,7 +4729,7 @@ int	isbrace();		/* check for left,right braces */
 int	isanyright = 1;		/* true matches any right with left, (...] */
 int	isleftdot = 0;		/* true if left brace is a \. */
 int	nestlevel = 1;		/* current # of nested braces */
-int	subsz=0 /*, maxsubsz=8192*/; /* #chars in returned subexpr[] buffer*/
+int	subsz=0 /*,maxsubsz=MAXSUBXSZ*/; /*#chars in returned subexpr buffer*/
 /* -------------------------------------------------------------------------
 skip leading whitespace and just return the next char if it's not {
 -------------------------------------------------------------------------- */
@@ -4294,7 +4739,7 @@ if ( expression == NULL ) return(NULL);		/*can't dereference null ptr*/
 skipwhite(expression);				/* leading whitespace gone */
 if ( *expression == '\000' ) return(NULL);	/* nothing left to scan */
 /* --- set maxsubsz --- */
-if ( maxsubsz < 1 ) maxsubsz = 8192;		/* input 0 means unlimited */
+if ( maxsubsz < 1 ) maxsubsz = MAXSUBXSZ-2;	/* input 0 means unlimited */
 /* --- check for escape --- */
 if ( isthischar(*expression,ESCAPE) )		/* expression is escaped */
   gotescape = 1;				/* so set flag accordingly */
@@ -4309,13 +4754,13 @@ if ( gotescape )				/* begins with \ */
       return ( pright );			/*back to caller past \right*/
     } /* --- end-of-if(expression=="\\left") --- */
 /* --- if first char isn't left{ or script, just return it to caller --- */
-if ( !isbrace(expression,left,isescape) )	/* not a left{ */
+if ( !isbrace(expression,left,isescape) ) {	/* not a left{ */
   if ( !isthischar(*expression,SCRIPTS) )	/* and not a script */
     return ( texchar(expression,subexpr) );	/* next char to caller */
   else /* --- kludge for super/subscripts to accommodate texscripts() --- */
     { *subexpr++ = *expression;			/* signal script */
       *subexpr = '\000';			/* null-terminate subexpr */
-      return ( expression ); }			/* leave script in stream */
+      return ( expression ); } }		/* leave script in stream */
 /* --- extract left and find matching right delimiter --- */
 *leftdelim  = *(expression+gotescape);		/* the left( in expression */
 if ( (gotescape && *leftdelim == '.')		/* we have a left \. */
@@ -4333,9 +4778,9 @@ accumulate chars between balanced {}'s, i.e., till nestlevel returns to 0
 /* --- first initialize by bumping past left{ or \{ --- */
 if ( isdelim )   *subexpr++ = *expression++;	/*caller wants { in subexpr*/
   else expression++;				/* always bump past left{ */
-if ( gotescape )				/*need to bump another char*/
+if ( gotescape ) {				/*need to bump another char*/
   if ( isdelim ) *subexpr++ = *expression++;	/* caller wants char, too */
-  else expression++;				/* else just bump past it */
+  else expression++; }				/* else just bump past it */
 /* --- set maximum size for numerical arguments --- */
 if ( 0 )					/* check turned on or off? */
  if ( !isescape && !isdelim )			/*looking for numerical arg*/
@@ -4348,12 +4793,12 @@ while ( 1 )					/*until balanced right} */
     { if ( 0 && (!isescape && !isdelim) )	/*looking for numerical arg,*/
 	{ expression = origexpression;		/* so end-of-string is error*/
 	  subexpr = origsubexpr; }		/* so reset all ptrs */
-      if ( isdelim )				/* generate fake right */
+      if ( isdelim ) {				/* generate fake right */
 	if ( gotescape )			/* need escaped right */
 	  { *subexpr++ = '\\';			/* set escape char */
 	    *subexpr++ = '.'; }			/* and fake \right. */
 	else					/* escape not wanted */
-	    *subexpr++ = *rightdelim;		/* so fake actual right */
+	    *subexpr++ = *rightdelim; }		/* so fake actual right */
       *subexpr = '\000';			/* null-terminate subexpr */
       return ( expression ); }			/* back with final token */
   /* --- check preceding char for escape --- */
@@ -4469,7 +4914,7 @@ if ( pright != (char *)NULL )		/* found matching \right */
 get rightdelim and subexpr between \left...\right
 -------------------------------------------------------------------------- */
 /* --- get delimiter following \right --- */
-if ( rdelim != NULL )			/* caller wants right delim */
+if ( rdelim != NULL ) {			/* caller wants right delim */
  if ( pright == (char *)NULL )		/* assume \right. at end of exprssn*/
   { strcpy(rdelim,".");			/* set default \right. */
     sublen = strlen(expression);	/* use entire remaining expression */
@@ -4477,7 +4922,7 @@ if ( rdelim != NULL )			/* caller wants right delim */
  else					/* have explicit matching \right */
   { skipwhite(pright);			/* interpret \right ) as \right) */
     pright = texchar(pright,rdelim);	/* pull delim from expression */
-    if ( *rdelim == '\000' ) strcpy(rdelim,"."); } /* or set \right. */
+    if ( *rdelim == '\000' ) strcpy(rdelim,"."); } } /* or set \right. */
 /* --- get subexpression between \left...\right --- */
 if ( sublen > 0 )			/* have subexpr */
  if ( subexpr != NULL ) {		/* and caller wants it */
@@ -4597,8 +5042,9 @@ int	gotescape = 0,		/* true if leading char is an escape */
 /* -------------------------------------------------------------------------
 check for brace
 -------------------------------------------------------------------------- */
-/* --- first check for end-of-string --- */
-if ( *expression == '\000' ) return(0);		/* nothing to check */
+/* --- first check for end-of-string or \= ligature --- */
+if ( *expression == '\000'			/* nothing to check */
+||   isligature ) goto end_of_job;		/* have a \= ligature */
 /* --- check leading char for escape --- */
 if ( isthischar(*expression,ESCAPE) )		/* expression is escaped */
   { gotescape = 1;				/* so set flag accordingly */
@@ -4614,7 +5060,11 @@ if ( gotbrace && isthischar(*expression,"{}") )	/*expression has TeX brace*/
 /* -------------------------------------------------------------------------
 back to caller
 -------------------------------------------------------------------------- */
-if ( gotbrace &&				/* found a brace */
+end_of_job:
+ if ( msglevel>=999 && msgfp!=NULL )
+  { fprintf(msgfp,"isbrace> expression=%.8s, gotbrace=%d (isligature=%d)\n",
+    expression,gotbrace,isligature); fflush(msgfp); }
+ if ( gotbrace &&				/* found a brace */
      ( isescape==2 ||				/* escape irrelevant */
        gotescape==isescape )			/* un/escaped as requested */
    ) return ( 1 );  return ( 0 );		/* return 1,0 accordingly */
@@ -4669,7 +5119,7 @@ process preamble if present
 -------------------------------------------------------------------------- */
 /*process_preamble:*/
 if ( (dollar=strchr(expression,'$'))	/* $ signals preceding preamble */
-!=   NULL )				/* found embedded $ */
+!=   NULL ) {				/* found embedded $ */
  if ( (prelen = (int)(dollar-expression)) /*#chars in expression preceding $*/
  > 0 ) {				/* must have preamble preceding $ */
   if ( prelen < 65 ) {			/* too long for a prefix */
@@ -4723,6 +5173,7 @@ if ( (dollar=strchr(expression,'$'))	/* $ signals preceding preamble */
     isdisplaystyle = 2;			/* so set \displaystyle */
   /*goto process_preamble;*/		/*check for preamble after leading $*/
   } /* --- end-of-if/else(prelen>0) --- */
+ } /* --- end-of-if(dollar!=NULL) --- */
 /* -------------------------------------------------------------------------
 back to caller
 -------------------------------------------------------------------------- */
@@ -4758,6 +5209,7 @@ char	*expptr=expression,		/* ptr within expression */
 	*tokptr=NULL,			/*ptr to token found in expression*/
 	*texsubexpr(), argval[8192];	/*parse for macro args after token*/
 char	*strchange();			/* change leading chars of string */
+char	*strwstr();			/*use strwstr() instead of strstr()*/
 char	*findbraces();			/*find left { and right } for \atop*/
 int	idelim=0,			/* left- or right-index */
 	isymbol=0;			/*symbols[],rightcomment[],etc index*/
@@ -4820,6 +5272,19 @@ static	struct { char *html; char *args; char *latex; } symbols[] =
  #ifdef NEWCOMMANDS			/* -DNEWCOMMANDS=\"filename.h\" */
    #include NEWCOMMANDS
  #endif
+   /* ---------------------------------------
+     Cyrillic termchar  mimeTeX equivalent...
+   --------------------------------------- */
+   { "\\\'G",	"embed\\","{\\acute{G}}" },
+   { "\\\'g",	"embed\\","{\\acute{g}}" },
+   { "\\\'K",	"embed\\","{\\acute{K}}" },
+   { "\\\'k",	"embed\\","{\\acute{k}}" },
+   { "\\u U",	"embed\\","{\\breve{U}}" },
+   { "\\u u",	"embed\\","{\\breve{u}}" },
+   /*{ "\\\"E",	"embed\\","{\\ddot{E}}" },*/
+   /*{ "\\\"e",	"embed\\","{\\ddot{e}}" },*/
+   { "\\\"I",	"embed\\","{\\ddot{\\=I}}" },
+   { "\\\"\\i",	"embed\\","{\\ddot{\\=\\i}}" },
    /* ------------------------------------------
    LaTeX Macro  #args,default   template...
    ------------------------------------------ */
@@ -4828,6 +5293,7 @@ static	struct { char *html; char *args; char *latex; } symbols[] =
    { "\\acute", "1",	"{\\stackrel{\\Huge\\acutesym}{#1}}" }, /* \acute */
    { "\\check", "1",	"{\\stackrel{\\Huge\\checksym}{#1}}" }, /* \check */
    { "\\breve", "1",	"{\\stackrel{\\Huge\\brevesym}{#1}}" }, /* \breve */
+   { "\\buildrel","3",	"{\\stackrel{#1}{#3}}" }, /* ignore #2 = \over */
    { "\\overset", NULL,	"\\stackrel" },		/* just an alias */
    { "\\underset", "2",	"\\relstack{#2}{#1}" },	/* reverse args */
    /* ---------------------------------------
@@ -4837,6 +5303,8 @@ static	struct { char *html; char *args; char *latex; } symbols[] =
    { "&amp",	";",	"&" },
    { "&lt",	";",	"<" },
    { "&gt",	";",	">" },
+   { "&#092",	";",	"\\" },		/* backslash */
+   { "&backslash",";",	"\\" },
    { "&nbsp",	";",	"~" },
    { "&iexcl",	";",	"{\\raisebox{-2}{\\rotatebox{180}{!}}}" },
    { "&brvbar",	";",	"|" },
@@ -4858,12 +5326,14 @@ static	struct { char *html; char *args; char *latex; } symbols[] =
    /* ---------------------------------------
     html tag  termchar  LaTeX equivalent...
    --------------------------------------- */
-   { "<br>",	NULL,	"\\\\" },
-   { "<br/>",	NULL,	"\\\\" },
-   { "<Br>",	NULL,	"\\\\" },
-   { "<Br/>",	NULL,	"\\\\" },
-   { "<BR>",	NULL,	"\\\\" },
-   { "<BR/>",	NULL,	"\\\\" },
+   { "<br>",	"embed\\i","\\\\" },
+   { "<br/>",	"embed\\i","\\\\" },
+   /* ---------------------------------------
+    garbage  termchar  LaTeX equivalent...
+   --------------------------------------- */
+   { "< TEX >",	"embed\\i","\000" },
+   { "< / TEX >","embed\\i","\000" },
+   { "<br / >",	"embed\\i","\000" },
    /* ---------------------------------------
      LaTeX   termchar   mimeTeX equivalent...
    --------------------------------------- */
@@ -4949,6 +5419,111 @@ while ( (leftptr=strstr(expptr,leftcomment)) != NULL ) /*found leftcomment*/
     expptr = leftptr+1;			/*resume search after this comment*/
   } /* --- end-of-while(leftptr!=NULL) --- */
 /* -------------------------------------------------------------------------
+run thru table, converting all occurrences of each macro to its expansion
+-------------------------------------------------------------------------- */
+for(isymbol=0; (htmlsym=symbols[isymbol].html) != NULL; isymbol++)
+  {
+  int	htmllen = strlen(htmlsym);	/* length of escape, _without_ ; */
+  int	isalgebra = isalpha((int)(*htmlsym)); /* leading char alphabetic */
+  int	isembedded = 0,			/* true to xlate even if embedded */
+	isstrwstr = 0,			/* true to use strwstr() */
+	wstrlen = 0;			/* length of strwstr() match */
+  char	*aleft="{([<|", *aright="})]>|"; /*left,right delims for alg syntax*/
+  char	embedkeywd[99] = "embed",	/* keyword to signal embedded token*/
+	embedterm = '\000';		/* char immediately after embed */
+  int	embedlen = strlen(embedkeywd);	/* #chars in embedkeywd */
+  char	*args = symbols[isymbol].args,	/* number {}-args, optional []-arg */
+	*htmlterm = args,		/*if *args nonumeric, then html term*/
+	*latexsym = symbols[isymbol].latex; /*latex replacement for htmlsym*/
+  char	abuff[8192];  int iarg,nargs=0;	/* macro expansion params */
+  char	wstrwhite[99];			/* whitespace chars for strwstr() */
+  if ( args != NULL )			/*we have args (or htmlterm) param*/
+   if ( *args != '\000' ) {		/* and it's not an empty string */
+    if ( strchr("0123456789",*args) != NULL ) /* is 1st char #args=0-9 ? */
+     { htmlterm = NULL;			/* if so, then we have no htmlterm */
+       *abuff = *args;  abuff[1] = '\000'; /* #args char in ascii buffer */
+       nargs = atoi(abuff); }		/* interpret #args to numeric */
+    else if ( strncmp(args,embedkeywd,embedlen) == 0 )/*xlate embedded token*/
+     { htmlterm = NULL;			/* if so, then we have no htmlterm */
+       isembedded = 1 ;			/* turn on embedded flag */
+       embedterm = args[embedlen];	/* char immediately after embed */
+       if (strlen(args) > embedlen+1) {	/* have embed,white for strwstr() */
+	isstrwstr = 1;			/* turn on strwtsr flag */
+	strcpy(wstrwhite,args+6); } }	/* and set its whitespace arg */
+    } /* --- end-of-if(*args!='\000') --- */
+  expptr = expression;			/* re-start search at beginning */
+  while ( ( tokptr=(!isstrwstr?strstr(expptr,htmlsym): /* just use strtsr */
+  strwstr(expptr,htmlsym,wstrwhite,&wstrlen)) ) /* or use our strwstr */
+  != NULL )				/* found another sym */
+    { int  toklen = (!isstrwstr?htmllen:wstrlen); /* length of matched sym */
+      char termchar = *(tokptr+toklen),	/* char terminating html sequence */
+           prevchar = (tokptr==expptr?' ':*(tokptr-1)); /*char preceding html*/
+      int  escapelen = toklen;		/* total length of escape sequence */
+      *abuff = '\000';			/* default to empty string */
+      if ( latexsym != NULL )		/* table has .latex xlation */
+       if ( *latexsym != '\000' )	/* and it's not an empty string */
+	strcpy(abuff,latexsym);		/* so get local copy */
+      if ( htmlterm != NULL )		/* sequence may have terminator */
+	escapelen += (isthischar(termchar,htmlterm)?1:0); /*add terminator*/
+      if ( !isembedded )		/* don't xlate embedded sequence */
+       if ( isalpha((int)termchar) )	/*we just have prefix of longer sym*/
+	{ expptr = tokptr+toklen;	/* just resume search after prefix */
+	  continue; }			/* but don't replace it */
+      if ( isembedded )			/* for embedded sequence */
+	if ( !isthischar(embedterm,ESCAPE)  /* don't xlate escaped \token */
+	&&    isthischar(prevchar,ESCAPE) ) /* and we have escaped \token */
+	  { expptr = tokptr+toklen;	/*just resume search after literal*/
+	    continue; }			/* but don't replace it */
+      if ( !isthischar(*htmlsym,ESCAPE)	/* our symbol isn't escaped */
+      &&   isalpha(*htmlsym)		/* and our symbol starts with alpha*/
+      &&   !isthischar(*htmlsym,"&") )	/* and not an &html; special char */
+       if ( tokptr != expression )	/* then if we're past beginning */
+	if ( isthischar(*(tokptr-1),ESCAPE) /*and if inline symbol escaped*/
+	||   (isalpha(*(tokptr-1))) )	/* or if suffix of longer string */
+	  { expptr = tokptr+escapelen;	/*just resume search after literal*/
+	    continue; }			/* but don't replace it */
+      if ( nargs > 0 )			/*substitute #1,#2,... in latexsym*/
+       {
+       char *arg1ptr = tokptr+escapelen;/* nargs begin after macro literal */
+       char *optarg = args+1;		/* ptr 1 char past #args digit 0-9 */
+       expptr = arg1ptr;		/* ptr to beginning of next arg */
+       for ( iarg=1; iarg<=nargs; iarg++ ) /* one #`iarg` arg at a time */
+	{
+	char argsignal[32] = "#1",	/* #1...#9 signals arg replacement */
+	*argsigptr = NULL;		/* ptr to argsignal in abuff[] */
+	/* --- get argument value --- */
+	*argval = '\000';		/* init arg as empty string */
+	skipwhite(expptr);		/* and skip leading white space */
+	if ( iarg==1 && *optarg!='\000'	/* check for optional [arg] */
+	&&   !isalgebra )		/* but not in "algebra syntax" */
+	 { strcpy(argval,optarg);	/* init with default value */
+	   if ( *expptr == '[' )	/* but user gave us [argval] */
+	    expptr = texsubexpr(expptr,argval,0,"[","]",0,0); } /*so get it*/
+	else				/* not optional, so get {argval} */
+	 if ( *expptr != '\000' ) {	/* check that some argval provided */
+	  if ( !isalgebra )		/* only { } delims for latex macro */
+	    expptr = texsubexpr(expptr,argval,0,"{","}",0,0); /*get {argval}*/
+	  else				/*any delim for algebra syntax macro*/
+	   { expptr = texsubexpr(expptr,argval,0,aleft,aright,0,1);
+	     if ( isthischar(*argval,aleft) ) /* have delim-enclosed arg */
+	      if ( *argval != '{' )	/* and it's not { }-enclosed */
+	       { strchange(0,argval,"\\left"); /* insert opening \left, */
+		 strchange(0,argval+strlen(argval)-1,"\\right"); } }/*\right*/
+	   } /* --- end-of-if(*expptr!='\000') --- */
+	/* --- replace #`iarg` in macro with argval --- */
+	sprintf(argsignal,"#%d",iarg);	/* #1...#9 signals argument */
+	while ( (argsigptr=strstr(argval,argsignal)) != NULL ) /* #1...#9 */
+	 strcpy(argsigptr,argsigptr+strlen(argsignal)); /*can't be in argval*/
+	while ( (argsigptr=strstr(abuff,argsignal)) != NULL ) /* #1...#9 */
+	 strchange(strlen(argsignal),argsigptr,argval); /*replaced by argval*/
+	} /* --- end-of-for(iarg) --- */
+       escapelen += ((int)(expptr-arg1ptr)); /* add in length of all args */
+       } /* --- end-of-if(nargs>0) --- */
+      strchange(escapelen,tokptr,abuff); /*replace macro or html symbol*/
+      expptr = tokptr + strlen(abuff); /*resume search after macro / html*/
+    } /* --- end-of-while(tokptr!=NULL) --- */
+  } /* --- end-of-for(isymbol) --- */
+/* -------------------------------------------------------------------------
 convert \left( to \(  and  \right) to \),  etc.
 -------------------------------------------------------------------------- */
 if ( xlateleft )			/* \left...\right xlation wanted */
@@ -4980,96 +5555,6 @@ if ( xlateleft )			/* \left...\right xlation wanted */
       } /* --- end-of-if/else(isthischar()) --- */
     } /* --- end-of-while(tokptr!=NULL) --- */
   } /* --- end-of-for(idelim) --- */
-/* -------------------------------------------------------------------------
-run thru table, converting all occurrences of each macro to its expansion
--------------------------------------------------------------------------- */
-for(isymbol=0; (htmlsym=symbols[isymbol].html) != NULL; isymbol++)
-  {
-  int	htmllen = strlen(htmlsym);	/* length of escape, _without_ ; */
-  int	isalgebra = isalpha((int)(*htmlsym)); /* leading char alphabetic */
-  int	isembedded = 0;			/* true to xlate even if embedded */
-  char	*aleft="{([<|", *aright="})]>|"; /*left,right delims for alg syntax*/
-  char	*args = symbols[isymbol].args,	/* number {}-args, optional []-arg */
-	*htmlterm = args,		/*if *args nonumeric, then html term*/
-	*latexsym = symbols[isymbol].latex; /*latex replacement for htmlsym*/
-  char	abuff[8192];  int iarg,nargs=0;	/* macro expansion params */
-  if ( args != NULL )			/*we have args (or htmlterm) param*/
-   if ( *args != '\000' )		/* and it's not an empty string */
-    if ( strchr("0123456789",*args) != NULL ) /* is 1st char #args=0-9 ? */
-     { htmlterm = NULL;			/* if so, then we have no htmlterm */
-       *abuff = *args;  abuff[1] = '\000'; /* #args char in ascii buffer */
-       nargs = atoi(abuff); }		/* interpret #args to numeric */
-    else if ( strncmp(args,"embed",5) == 0 ) /* xlate even if embedded */
-     { htmlterm = NULL;			/* if so, then we have no htmlterm */
-       isembedded = 1 ; }		/* turn on embedded flag */
-  expptr = expression;			/* re-start search at beginning */
-  while ( (tokptr=strstr(expptr,htmlsym)) != NULL ) /* found another sym */
-    { char termchar = *(tokptr+htmllen), /* char terminating html sequence */
-           prevchar = (tokptr==expptr?' ':*(tokptr-1)); /*char preceding html*/
-      int escapelen = htmllen;		/* total length of escape sequence */
-      *abuff = '\000';			/* default to empty string */
-      if ( latexsym != NULL )		/* table has .latex xlation */
-       if ( *latexsym != '\000' )	/* and it's not an empty string */
-	strcpy(abuff,latexsym);		/* so get local copy */
-      if ( htmlterm != NULL )		/* sequence may have terminator */
-	escapelen += (isthischar(termchar,htmlterm)?1:0); /*add terminator*/
-      if ( !isembedded )		/* don't xlate embedded sequence */
-       if ( isalpha((int)termchar) )	/*we just have prefix of longer sym*/
-	{ expptr = tokptr+htmllen;	/* just resume search after prefix */
-	  continue; }			/* but don't replace it */
-      if ( isembedded )			/* for embedded sequence */
-	if ( isthischar(prevchar,ESCAPE) ) /* don't xlate escaped char */
-	  { expptr = tokptr+htmllen;	/*just resume search after literal*/
-	    continue; }			/* but don't replace it */
-      if ( !isthischar(*htmlsym,ESCAPE)	/* our symbol isn't escaped */
-      &&   isalpha(*htmlsym)		/* and our symbol starts with alpha*/
-      &&   !isthischar(*htmlsym,"&") )	/* and not an &html; special char */
-       if ( tokptr != expression )	/* then if we're past beginning */
-	if ( isthischar(*(tokptr-1),ESCAPE) /*and if inline symbol escaped*/
-	||   (isalpha(*(tokptr-1))) )	/* or if suffix of longer string */
-	  { expptr = tokptr+escapelen;	/*just resume search after literal*/
-	    continue; }			/* but don't replace it */
-      if ( nargs > 0 )			/*substitute #1,#2,... in latexsym*/
-       {
-       char *arg1ptr = tokptr+escapelen;/* nargs begin after macro literal */
-       char *optarg = args+1;		/* ptr 1 char past #args digit 0-9 */
-       expptr = arg1ptr;		/* ptr to beginning of next arg */
-       for ( iarg=1; iarg<=nargs; iarg++ ) /* one #`iarg` arg at a time */
-	{
-	char argsignal[32] = "#1",	/* #1...#9 signals arg replacement */
-	*argsigptr = NULL;		/* ptr to argsignal in abuff[] */
-	/* --- get argument value --- */
-	*argval = '\000';		/* init arg as empty string */
-	skipwhite(expptr);		/* and skip leading white space */
-	if ( iarg==1 && *optarg!='\000'	/* check for optional [arg] */
-	&&   !isalgebra )		/* but not in "algebra syntax" */
-	 { strcpy(argval,optarg);	/* init with default value */
-	   if ( *expptr == '[' )	/* but user gave us [argval] */
-	    expptr = texsubexpr(expptr,argval,0,"[","]",0,0); } /*so get it*/
-	else				/* not optional, so get {argval} */
-	 if ( *expptr != '\000' )	/* check that some argval provided */
-	  if ( !isalgebra )		/* only { } delims for latex macro */
-	    expptr = texsubexpr(expptr,argval,0,"{","}",0,0); /*get {argval}*/
-	  else				/*any delim for algebra syntax macro*/
-	   { expptr = texsubexpr(expptr,argval,0,aleft,aright,0,1);
-	     if ( isthischar(*argval,aleft) ) /* have delim-enclosed arg */
-	      if ( *argval != '{' )	/* and it's not { }-enclosed */
-	       { strchange(0,argval,"\\left"); /* insert opening \left, */
-		 strchange(0,argval+strlen(argval)-1,"\\right"); } /*\right*/
-	   } /* --- end-of-if/else(!isalgebra) --- */
-	/* --- replace #`iarg` in macro with argval --- */
-	sprintf(argsignal,"#%d",iarg);	/* #1...#9 signals argument */
-	while ( (argsigptr=strstr(argval,argsignal)) != NULL ) /* #1...#9 */
-	 strcpy(argsigptr,argsigptr+strlen(argsignal)); /*can't be in argval*/
-	while ( (argsigptr=strstr(abuff,argsignal)) != NULL ) /* #1...#9 */
-	 strchange(strlen(argsignal),argsigptr,argval); /*replaced by argval*/
-	} /* --- end-of-for(iarg) --- */
-       escapelen += ((int)(expptr-arg1ptr)); /* add in length of all args */
-       } /* --- end-of-if(nargs>0) --- */
-      strchange(escapelen,tokptr,abuff); /*replace macro or html symbol*/
-      expptr = tokptr + strlen(abuff); /*resume search after macro / html*/
-    } /* --- end-of-while(tokptr!=NULL) --- */
-  } /* --- end-of-for(isymbol) --- */
 /* -------------------------------------------------------------------------
 run thru table, converting all {a+b\atop c+d} to \atop{a+b}{c+d}
 -------------------------------------------------------------------------- */
@@ -5228,12 +5713,154 @@ return ( nreps );			/* #replacements back to caller */
 
 
 /* ==========================================================================
- * Function:	strtexchr (char *string, char *texchr )
+ * Function:	strwstr (char *string, char *substr, char *white, int *sublen)
+ * Purpose:	Find first substr in string, but wherever substr contains
+ *		a whitespace char (in white), string may contain any number
+ *		(including 0) of whitespace chars. If white contains I or i,
+ *		then match is case-insensitive (and I,i _not_ whitespace).
+ * --------------------------------------------------------------------------
+ * Arguments:	string (I)	char * to null-terminated string in which
+ *				first occurrence of substr will be found
+ *		substr (I)	char * to null-terminated string containing
+ *				"template" that will be searched for
+ *		white (I)	char * to null-terminated string containing
+ *				whitespace chars.  If NULL or empty, then
+ *				"~ \t\n\r\f\v" (WHITEMATH in mimetex.h) used.
+ *				If white contains I or i, then match is
+ *				case-insensitive (and I,i _not_ considered
+ *				whitespace).
+ *		sublen (O)	address of int returning "length" of substr
+ *				found in string (which may be longer or
+ *				shorter than substr itself).
+ * --------------------------------------------------------------------------
+ * Returns:	( char * )	ptr to first char of substr in string
+ *				or NULL if not found or for any error.
+ * --------------------------------------------------------------------------
+ * Notes:     o	Wherever a single whitespace char appears in substr,
+ *		the corresponding position in string may contain any
+ *		number (including 0) of whitespace chars, e.g.,
+ *		string="abc   def" and string="abcdef" both match
+ *		substr="c d" at offset 2 of string.
+ *	      o	If substr="c  d" (two spaces between c and d),
+ *		then string must have at least one space, so now "abcdef"
+ *		doesn't match.  In general, the minimum number of spaces
+ *		in string is the number of spaces in substr minus 1
+ *		(so 1 space in substr permits 0 spaces in string).
+ *	      o	Embedded spaces are counted in sublen, e.g.,
+ *		string="c   d" (three spaces) matches substr="c d"
+ *		with sublen=5 returned.  But string="ab   c   d" will
+ *		also match substr="  c d" returning sublen=5 and
+ *		a ptr to the "c".  That is, the mandatory preceding
+ *		space is _not_ counted as part of the match.
+ *		But all the embedded space is counted.
+ *		(An inconsistent bug/feature is that mandatory
+ *		terminating space is counted.)
+ *	      o	Moreover, string="c   d" matches substr="  c d", i.e.,
+ *		the very beginning of a string is assumed to be preceded
+ *		by "virtual blanks".
+ * ======================================================================= */
+/* --- entry point --- */
+char	*strwstr ( char *string, char *substr, char *white, int *sublen )
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+char	*psubstr=substr, *pstring=string,/*ptr to current char in substr,str*/
+	*pfound = (char *)NULL;		/*ptr to found substr back to caller*/
+char	*pwhite=NULL, whitespace[256];	/* callers white whithout i,I */
+int	iscase = (white==NULL?1:	/* case-sensitive if i,I in white */
+	strchr(white,'i')==NULL && strchr(white,'I')==NULL);
+int	foundlen = 0;			/* length of substr found in string*/
+int	nstrwhite=0, nsubwhite=0,	/* #leading white chars in str,sub */
+	nminwhite=0;			/* #mandatory leading white in str */
+int	nstrchars=0, nsubchars=0,	/* #non-white chars to be matched */
+	isncmp=0;			/*strncmp() or strncasecmp() result*/
+/* -------------------------------------------------------------------------
+Initialization
+-------------------------------------------------------------------------- */
+/* --- set up whitespace --- */
+strcpy(whitespace,WHITEMATH);		/*default if no user input for white*/
+if ( white != NULL )			/*user provided ptr to white string*/
+ if ( *white != '\000' ) {		/*and it's not just an empty string*/
+   strcpy(whitespace,white);		/* so use caller's white spaces */
+   while ( (pwhite=strchr(whitespace,'i')) != NULL ) /* have an embedded i */
+     strcpy(pwhite,pwhite+1);		/* so squeeze it out */
+   while ( (pwhite=strchr(whitespace,'I')) != NULL ) /* have an embedded I */
+     strcpy(pwhite,pwhite+1);		/* so squeeze it out */
+   if ( *whitespace == '\000' )		/* caller's white just had i,I */
+     strcpy(whitespace,WHITEMATH); }	/* so revert back to default */
+/* -------------------------------------------------------------------------
+Find first occurrence of substr in string
+-------------------------------------------------------------------------- */
+if ( string != NULL )			/* caller passed us a string ptr */
+ while ( *pstring != '\000' ) {		/* break when string exhausted */
+  char	*pstrptr = pstring;		/* (re)start at next char in string*/
+  int	leadingwhite = 0;		/* leading whitespace */
+  psubstr = substr;			/* start at beginning of substr */
+  foundlen = 0;				/* reset length of found substr */
+  if ( substr != NULL )			/* caller passed us a substr ptr */
+   while ( *psubstr != '\000' ) {	/*see if pstring begins with substr*/
+    /* --- check for end-of-string before finding match --- */
+    if ( *pstrptr == '\000' )		/* end-of-string without a match */
+      goto nextstrchar;			/* keep trying with next char */
+    /* --- actual amount of whitespace in string and substr --- */
+    nsubwhite = strspn(psubstr,whitespace); /* #leading white chars in sub */
+    nstrwhite = strspn(pstrptr,whitespace); /* #leading white chars in str */
+    nminwhite = max2(0,nsubwhite-1);	/* #mandatory leading white in str */
+    /* --- check for mandatory leading whitespace in string --- */
+    if ( pstrptr != string )		/*not mandatory at start of string*/
+      if ( nstrwhite < nminwhite )	/* too little leading white space */
+	goto nextstrchar;		/* keep trying with next char */
+    /* ---hold on to #whitespace chars in string preceding substr match--- */
+    if ( pstrptr == pstring )		/* whitespace at start of substr */
+      leadingwhite = nstrwhite;		/* save it as leadingwhite */
+    /* --- check for optional whitespace --- */
+    if ( psubstr != substr )		/* always okay at start of substr */
+      if ( nstrwhite>0 && nsubwhite<1 )	/* too much leading white space */
+	goto nextstrchar;		/* keep trying with next char */
+    /* --- skip any leading whitespace in substr and string --- */
+    psubstr += nsubwhite;		/* push past leading sub whitespace*/
+    pstrptr += nstrwhite;		/* push past leading str whitespace*/
+    /* --- now get non-whitespace chars that we have to match --- */
+    nsubchars = strcspn(psubstr,whitespace); /* #non-white chars in sub */
+    nstrchars = strcspn(pstrptr,whitespace); /* #non-white chars in str */
+    if ( nstrchars < nsubchars )	/* too few chars for match */
+      goto nextstrchar;			/* keep trying with next char */
+    /* --- see if next nsubchars are a match --- */
+    isncmp = (iscase? strncmp(pstrptr,psubstr,nsubchars): /*case sensitive*/
+		strncasecmp(pstrptr,psubstr,nsubchars)); /*case insensitive*/
+    if ( isncmp != 0 )			/* no match */
+      goto nextstrchar;			/* keep trying with next char */
+    /* --- push past matched chars --- */
+    psubstr += nsubchars;  pstrptr += nsubchars;  /*nsubchars were matched*/
+    } /* --- end-of-while(*psubstr!='\000') --- */
+  pfound = pstring + leadingwhite;	/* found match starting at pstring */
+  foundlen = (int)(pstrptr-pfound);	/* consisting of this many chars */
+  goto end_of_job;			/* back to caller */
+  /* ---failed to find substr, continue trying with next char in string--- */
+  nextstrchar:				/* continue outer loop */
+    pstring++;				/* bump to next char in string */
+  } /* --- end-of-while(*pstring!='\000') --- */
+/* -------------------------------------------------------------------------
+Back to caller with ptr to first occurrence of substr in string
+-------------------------------------------------------------------------- */
+end_of_job:
+  if ( msglevel>=999 && msgfp!=NULL) {	/* debugging/diagnostic output */
+    fprintf(msgfp,"strwstr> str=\"%.72s\" sub=\"%s\" found at offset %d\n",
+    string,substr,(pfound==NULL?(-1):(int)(pfound-string))); fflush(msgfp); }
+  if ( sublen != NULL )			/*caller wants length of found substr*/
+    *sublen = foundlen;			/* give it to him along with ptr */
+  return ( pfound );			/*ptr to first found substr, or NULL*/
+} /* --- end-of-function strwstr() --- */
+
+
+/* ==========================================================================
+ * Function:	strtexchr ( char *string, char *texchr )
  * Purpose:	Find first texchr in string, but texchr must be followed
  *		by non-alpha
  * --------------------------------------------------------------------------
  * Arguments:	string (I)	char * to null-terminated string in which
- *				firstoccurrence of delim will be found
+ *				first occurrence of delim will be found
  *		texchr (I)	char * to null-terminated string that
  *				will be searched for
  * --------------------------------------------------------------------------
@@ -5255,7 +5882,7 @@ int	texchrlen = (texchr==NULL?0:strlen(texchr)); /* #chars in texchr */
 locate texchr in string
 -------------------------------------------------------------------------- */
 if ( string != (char *)NULL		/* check that we got input string */
-&&   texchrlen > 0 )			/* and a texchr to search for */
+&&   texchrlen > 0 ) {			/* and a texchr to search for */
  while ( (ptexchr=strstr(pstring,texchr)) /* look for texchr in string */
  != (char *)NULL )			/* found it */
   if ( (delim = ptexchr[texchrlen])	/* char immediately after texchr */
@@ -5265,7 +5892,7 @@ if ( string != (char *)NULL		/* check that we got input string */
    ||   0 )				/* other tests to be determined */
     pstring = ptexchr + texchrlen;	/* continue search after texchr */
    else					/* passed all tests */
-    break;				/*so return ptr to texchr to caller*/
+    break; }				/*so return ptr to texchr to caller*/
 return ( ptexchr );			/* ptr to texchar back to caller */
 } /* --- end-of-function strtexchr() --- */
 
@@ -5362,11 +5989,12 @@ subraster *rasterize ( char *expression, int size )
 /* -------------------------------------------------------------------------
 Allocations and Declarations
 -------------------------------------------------------------------------- */
-char	*preamble(), pretext[256];	/* process preamble, if present */
-char	chartoken[8192], *texsubexpr(),	/*get subexpression from expression*/
+char	*preamble(), pretext[512];	/* process preamble, if present */
+char	chartoken[MAXSUBXSZ+1], *texsubexpr(), /*get subexpression from expr*/
 	*subexpr = chartoken;		/* token may be parenthesized expr */
 int	isbrace();			/* check subexpr for braces */
 mathchardef *symdef, *get_symdef();	/*get mathchardef struct for symbol*/
+int	ligdef, get_ligature();		/*get symtable[] index for ligature*/
 int	natoms=0;			/* #atoms/tokens processed so far */
 int	type_raster();			/* display debugging output */
 subraster *rasterize(),			/* recurse */
@@ -5379,6 +6007,10 @@ subraster *get_charsubraster(),		/* character subraster */
 	*sp=NULL, *prevsp=NULL,		/* raster for current, prev char */
 	*expraster = (subraster *)NULL;	/* raster returned to caller */
 int	delete_subraster();		/* free everything before returning*/
+int	family = fontinfo[fontnum].family; /* current font family */
+int	isleftscript = 0,		/* true if left-hand term scripted */
+	wasscripted = 0,		/* true if preceding token scripted*/
+	wasdelimscript = 0;		/* true if preceding delim scripted*/
 /*int	pixsz = 1;*/			/*default #bits per pixel, 1=bitmap*/
 /* --- global values saved/restored at each recursive iteration --- */
 int	wasstring = isstring,		/* initial isstring mode flag */
@@ -5389,6 +6021,8 @@ int	wasstring = isstring,		/* initial isstring mode flag */
 	oldshrinkfactor = shrinkfactor,	/* initial shrinkfactor */
 	oldsmashmargin = smashmargin,	/* initial smashmargin */
 	oldissmashdelta = issmashdelta, /* initial issmashdelta */
+	oldisexplicitsmash = isexplicitsmash, /* initial isexplicitsmash */
+	oldisscripted = isscripted,	/* initial isscripted */
 	*oldworkingparam = workingparam; /* initial working parameter */
 subraster *oldworkingbox = workingbox,	/* initial working box */
 	*oldleftexpression = leftexpression; /*left half rasterized so far*/
@@ -5400,12 +6034,13 @@ initialization
 recurlevel++;				/* wind up one more recursion level*/
 leftexpression = NULL;			/* no leading left half yet */
 isreplaceleft = 0;			/* reset replaceleft flag */
+if(1)fraccenterline = NOVALUE;		/* reset \frac baseline signal */
 /* shrinkfactor = shrinkfactors[max2(0,min2(size,LARGESTSIZE))];*/ /*set sf*/
 shrinkfactor = shrinkfactors[max2(0,min2(size,16))]; /* have 17 sf's */
-if ( msgfp!=NULL && msglevel >= 29 )	/*display expression for debugging*/
- { fprintf(msgfp,
-   "rasterize> recursion level=%d, size=%d,\n\texpression=\"%s\"\n",
-   recurlevel,size,(expression==NULL?"null":expression)); fflush(msgfp); }
+if ( msgfp!=NULL && msglevel >= 9 ) {	/*display expression for debugging*/
+ fprintf(msgfp,
+ "rasterize> recursion#%d, size=%d,\n\texpression=\"%s\"\n",
+ recurlevel,size,(expression==NULL?"<null>":expression)); fflush(msgfp); }
 if ( expression == NULL ) goto end_of_job; /* nothing given to do */
 /* -------------------------------------------------------------------------
 preocess optional $-terminated preamble preceding expression
@@ -5421,16 +6056,31 @@ build up raster one character (or subexpression) at a time
 -------------------------------------------------------------------------- */
 while ( 1 )
   {
+  /* --- kludge for \= cyrillic ligature --- */
+  isligature = 0;			/* no ligature found yet */
+  family = fontinfo[fontnum].family;	/* current font family */
+  if ( family == CYR10 )		/* may have cyrillic \= ligature */
+   if ( (ligdef = get_ligature(expression,family)) /*check for any ligature*/
+   >=    0 )				/* got some ligature */
+    if ( memcmp(symtable[ligdef].symbol,"\\=",2) == 0 ) /* starts with \= */
+     isligature = 1;			/* signal \= ligature */
   /* --- get next character/token or subexpression --- */
+  subexprptr = expression;		/* ptr within expression to subexpr*/
   expression = texsubexpr(expression,chartoken,0,LEFTBRACES,RIGHTBRACES,1,1);
   subexpr = chartoken;			/* "local" copy of chartoken ptr */
   leftsymdef = NULL;			/* no character identified yet */
   sp = NULL;				/* no subraster yet */
   size = fontsize;			/* in case reset by \tiny, etc */
+  /*isleftscript = isdelimscript;*/	/*was preceding term scripted delim*/
+  wasscripted = isscripted;		/* true if preceding token scripted*/
+  wasdelimscript = isdelimscript;	/* preceding \right delim scripted */
+  if(1)isscripted = 0;			/* no subscripted expression yet */
+  isdelimscript = 0;			/* reset \right delim scripted flag*/
   /* --- debugging output --- */
-  if ( msgfp!=NULL && msglevel >= 999 )	/* display chartoken for debugging */
-    { fprintf(msgfp,"rasterize> recursion level=%d, atom#%d = \"%s\"\n",
-      recurlevel,natoms+1,chartoken); fflush(msgfp); }
+  if ( msgfp!=NULL && msglevel >= 9 ) {	/* display chartoken for debugging */
+   fprintf(msgfp,
+   "rasterize> recursion#%d,atom#%d=\"%s\" (isligature=%d,isleftscript=%d)\n",
+   recurlevel,natoms+1,chartoken,isligature,isleftscript); fflush(msgfp); }
   if ( expression == NULL		/* no more tokens */
   &&   *subexpr == '\000' ) break;	/* and this token empty */
   if ( *subexpr == '\000' ) break;	/* enough if just this token empty */
@@ -5441,36 +6091,60 @@ while ( 1 )
   else /* --- single-character atomic token --- */
    if ( !isthischar(*subexpr,SCRIPTS) )	/* scripts handled below */
     {
-    /* --- first look up mathchardef for atomic token in table --- */
-    if ( (leftsymdef=symdef=get_symdef(chartoken)) /*mathchardef for token*/
-    ==  NULL )				/* lookup failed */
-     { char literal[512] = "[?]";	/*display for unrecognized literal*/
-       int  oldfontnum = fontnum;	/* error display in default mode */
-       if ( msgfp!=NULL && msglevel >= 29 ) /* display unrecognized symbol */
+    /* --- first check for opening $ in \text{ if $n-m$ even} --- */
+    if ( istextmode			/* we're in \text mode */
+    &&   *subexpr=='$' && subexpr[1]=='\000' ) { /* and have an opening $ */
+     char *endptr=NULL, mathexpr[MAXSUBXSZ+1]; /* $expression$ in \text{ }*/
+     int  exprlen = 0;			/* length of $expression$ */
+     int  textfontnum = fontnum;	/* current text font number */
+     /*if ( (endptr=strrchr(expression,'$')) != NULL )*/ /*ptr to closing $*/
+     if ( (endptr=strchr(expression,'$')) != NULL ) /* ptr to closing $ */
+       exprlen = (int)(endptr-expression); /* #chars preceding closing $ */
+     else {				/* no closing $ found */
+       exprlen = strlen(expression);	/* just assume entire expression */
+       endptr = expression + (exprlen-1); } /*and push expression to '\000'*/
+     exprlen = min2(exprlen,MAXSUBXSZ);	/* don't overflow mathexpr[] */
+     if ( exprlen > 0 ) {		/* have something between $$ */
+       memcpy(mathexpr,expression,exprlen); /*local copy of math expression*/
+       mathexpr[exprlen] = '\000';	/* null-terminate it */
+       fontnum = 0;			/* set math mode */
+       sp = rasterize(mathexpr,size);	/* and rasterize $expression$ */
+       fontnum = textfontnum; }		/* set back to text mode */
+     expression = endptr+1;		/* push expression past closing $ */
+     } /* --- end-of-if(istextmode&&*subexpr=='$') --- */
+    else
+     /* --- otherwise, look up mathchardef for atomic token in table --- */
+     if ( (leftsymdef=symdef=get_symdef(chartoken)) /*mathchardef for token*/
+     ==  NULL )				/* lookup failed */
+      { char literal[512] = "[?]";	/*display for unrecognized literal*/
+        int  oldfontnum = fontnum;	/* error display in default mode */
+        if ( msgfp!=NULL && msglevel >= 29 ) /* display unrecognized symbol*/
 	 { fprintf(msgfp,"rasterize> get_symdef() failed for \"%s\"\n",
 	   chartoken); fflush(msgfp); }
-       sp = (subraster *)NULL;		/* init to signal failure */
-       if ( warninglevel < 1 ) continue; /* warnings not wanted */
-       fontnum = 0;			/* reset from \mathbb, etc */
-       if ( isthischar(*chartoken,ESCAPE) ) /* we got unrecognized \escape */
-	{ /* --- so display literal {\rm~[\backslash~chartoken?]} ---  */
-	  strcpy(literal,"{\\rm~[\\backslash~"); /* init token */
-	  strcat(literal,chartoken+1);	/* add chars following leading \ */
-	  strcat(literal,"?]}"); }	/* add closing brace */
-       sp = rasterize(literal,size-1);	/* rasterize literal token */
-       fontnum = oldfontnum;		/* reset font family */
-       if ( sp == (subraster *)NULL ) continue; } /*flush if rasterize fails*/
-    else /* --- check if we have special handler to process this token --- */
-     if ( symdef->handler != NULL )	/* have a handler for this token */
-      { int arg1=symdef->charnum, arg2=symdef->family, arg3=symdef->class;
-	if ( (sp = (subraster *)	/* returned void* is subraster* */
-	(*(symdef->handler))(&expression,size,prevsp,arg1,arg2,arg3))== NULL )
-	  continue; }			/* flush token if handler failed */
-     else /* --- no handler, so just get subraster for this character --- */
-      if ( !isstring )			/* rasterizing */
-	{ if ( (sp=get_charsubraster(symdef,size)) /* get subraster */
+        sp = (subraster *)NULL;		/* init to signal failure */
+        if ( warninglevel < 1 ) continue; /* warnings not wanted */
+        fontnum = 0;			/* reset from \mathbb, etc */
+        if ( isthischar(*chartoken,ESCAPE) ) /* we got unrecognized \escape*/
+	 { /* --- so display literal {\rm~[\backslash~chartoken?]} ---  */
+	   strcpy(literal,"{\\rm~[\\backslash~"); /* init token */
+	   strcat(literal,chartoken+1);	/* add chars following leading \ */
+	   strcat(literal,"?]}"); }	/* add closing brace */
+        sp = rasterize(literal,size-1);	/* rasterize literal token */
+        fontnum = oldfontnum;		/* reset font family */
+        if ( sp == (subraster *)NULL ) continue; }/*flush if rasterize fails*/
+     else /* --- check if we have special handler to process this token --- */
+      if ( symdef->handler != NULL )	/* have a handler for this token */
+       { int arg1=symdef->charnum, arg2=symdef->family, arg3=symdef->class;
+         if ( (sp = (subraster *)	/* returned void* is subraster* */
+	 (*(symdef->handler))(&expression,size,prevsp,arg1,arg2,arg3))==NULL)
+	   continue; }			/* flush token if handler failed */
+      else /* --- no handler, so just get subraster for this character --- */
+       if ( !isstring )			/* rasterizing */
+	{ if ( isligature )		/* found a ligature */
+	   expression = subexprptr + strlen(symdef->symbol); /*push past it*/
+	  if ( (sp=get_charsubraster(symdef,size)) /* get subraster */
 	  ==  NULL )  continue; }	/* flush token if failed */
-      else				/* constructing ascii string */
+       else				/* constructing ascii string */
 	{ char *symbol = symdef->symbol; /* symbol for ascii string */
 	  int symlen = (symbol!=NULL?strlen(symbol):0); /*#chars in symbol*/
 	  if ( symlen < 1 ) continue;	/* no symbol for ascii string */
@@ -5481,15 +6155,20 @@ while ( 1 )
 	  sp->baseline = 1;		/* default (should be unused) */
 	  strcpy((char *)((sp->image)->pixmap),symbol); /* copy symbol */
 	  /*((char *)((sp->image)->pixmap))[symlen] = '\000';*/ } /*null*/
-    } /* --- end-of-if/else ... if/else --- */
+    } /* --- end-of-if(!isthischar(*subexpr,SCRIPTS)) --- */
   /* --- handle any super/subscripts following symbol or subexpression --- */
   sp = rastlimits(&expression,size,sp);
+  isleftscript = (wasscripted||wasdelimscript?1:0);/*preceding term scripted*/
   /* --- debugging output --- */
-  if ( msgfp!=NULL && msglevel >= 999 )	/* display raster for debugging */
-    { fprintf(msgfp,"rasterize> recursion level=%d, atom#%d%s\n",
-      recurlevel,natoms+1,(sp==NULL?" = null":"..."));
-      if(sp!=NULL) type_raster(sp->image,msgfp); /* display raster */
-      fflush(msgfp); }			/* flush msgfp buffer */
+  if ( msgfp!=NULL && msglevel >= 9 ) {	/* display raster for debugging */
+   fprintf(msgfp,"rasterize> recursion#%d,atom#%d%s\n",
+   recurlevel,natoms+1,(sp==NULL?" = <null>":"..."));
+   if ( msglevel >= 9 ) fprintf(msgfp,
+    "  isleftscript=%d is/wasscripted=%d,%d is/wasdelimscript=%d,%d\n",
+    isleftscript,isscripted,wasscripted,isdelimscript,wasdelimscript);
+   if ( msglevel >= 99 )
+    if(sp!=NULL) type_raster(sp->image,msgfp); /* display raster */
+   fflush(msgfp); }			/* flush msgfp buffer */
   /* --- accumulate atom or parenthesized subexpression --- */
   if ( natoms < 1			/* nothing previous to concat */
   ||   expraster == NULL		/* or previous was complete error */
@@ -5499,8 +6178,13 @@ while ( 1 )
       expraster = subrastcpy(sp);	/* copy static CHARASTER or left */
       isreplaceleft = 0; }		/* reset replacement flag */
   else					/*we've already built up atoms so...*/
-   if ( sp != NULL )			/* ...if we have a new component */
-    expraster = rastcat(expraster,sp,1); /* concat new one, free previous */
+   if ( sp != NULL ) {			/* ...if we have a new term */
+    int prevsmashmargin = smashmargin;	/* save current smash margin */
+    if ( isleftscript ) {		/* don't smash against scripts */
+     isdelimscript = 0;			/* reset \right delim scripted flag*/
+     if ( !isexplicitsmash ) smashmargin = 0; } /* signal no smash wanted */
+    expraster = rastcat(expraster,sp,1); /* concat new term, free previous */
+    smashmargin = prevsmashmargin; }	/* restore current smash margin */
   delete_subraster(prevsp);		/* free prev (if not a CHARASTER) */
   prevsp = sp;				/* current becomes previous */
   leftexpression = expraster;		/* left half rasterized so far */
@@ -5521,7 +6205,9 @@ end_of_job:
       fflush(msgfp); }			/* flush msgfp buffer */
   /* --- set final raster buffer --- */
   if ( 1 && expraster != (subraster *)NULL ) /* have an expression */
-    { expraster->type = IMAGERASTER;	/* set type to constructed image */
+    { int type = expraster->type;	/* type of constructed image */
+      if ( type != FRACRASTER )		/* leave \frac alone */
+	expraster->type = IMAGERASTER;	/* set type to constructed image */
       if ( istextmode )			/* but in text mode */
         expraster->type = blanksignal;	/* set type to avoid smash */
       expraster->size = fontsize; }	/* set original input font size */
@@ -5534,6 +6220,8 @@ end_of_job:
   shrinkfactor = oldshrinkfactor;	/* shrinkfactor reset */
   smashmargin = oldsmashmargin;		/* smashmargin reset */
   issmashdelta = oldissmashdelta;	/* issmashdelta reset */
+  isexplicitsmash = oldisexplicitsmash;	/* isexplicitsmash reset */
+  isscripted = oldisscripted;		/* isscripted reset */
   workingparam = oldworkingparam;	/* working parameter reset */
   workingbox = oldworkingbox;		/* working box reset */
   leftexpression = oldleftexpression;	/* leftexpression reset */
@@ -5578,8 +6266,8 @@ int	explen = strlen(expression);	/* total #chars, including parens */
 int	isescape = 0,			/* true if parens \escaped */
 	isrightdot = 0,			/* true if right paren is \right. */
 	isleftdot = 0;			/* true if left paren is \left. */
-char	left[16], right[16];		/* parens enclosing expresion */
-char	noparens[8192];			/* get subexpr without parens */
+char	left[32], right[32];		/* parens enclosing expresion */
+char	noparens[MAXSUBXSZ+1];		/* get subexpr without parens */
 subraster *rasterize(), *sp=NULL;	/* rasterize what's between ()'s */
 int	isheight = 1;			/*true=full height, false=baseline*/
 int	height,				/* height of rasterized noparens[] */
@@ -5676,10 +6364,14 @@ Allocations and Declarations
 -------------------------------------------------------------------------- */
 subraster *rastscripts(), *rastdispmath(), /*one of these will do the work*/
 	*rastcat(),			/* may need to concat scripts */
-	*scriptsp = basesp;		/* and this will become the result */
+	*rasterize(),			/* may need to construct dummy base*/
+	*scriptsp = basesp,		/* and this will become the result */
+	*dummybase = basesp;		/* for {}_i construct a dummy base */
 int	isdisplay = (-1);		/* set 1 for displaystyle, else 0 */
 int	oldsmashmargin = smashmargin;	/* save original smashmargin */
 int	type_raster();			/* display debugging output */
+int	delete_subraster();		/* free dummybase, if necessary */
+int	rastsmashcheck();		/* check if okay to smash scripts */
 /* --- to check for \limits or \nolimits preceding scripts --- */
 char	*texchar(), *exprptr=*expression, limtoken[255]; /*check for \limits*/
 int	toklen=0;			/* strlen(limtoken) */
@@ -5690,6 +6382,7 @@ determine whether or not to use displaymath
 -------------------------------------------------------------------------- */
 scriptlevel++;				/* first, increment subscript level*/
 *limtoken = '\000';			/* no token yet */
+isscripted = 0;				/* signal term not (text) scripted */
 if ( msgfp!=NULL && msglevel>=999 )
  { fprintf(msgfp,"rastlimits> scriptlevel#%d exprptr=%.48s\n",
    scriptlevel,(exprptr==NULL?"null":exprptr));  fflush(msgfp); }
@@ -5704,18 +6397,18 @@ if ( *limtoken != '\000' )		/* have token */
   if ( memcmp("\\limits",limtoken,toklen) == 0     /* may be \limits */
   ||   memcmp("\\nolimits",limtoken,toklen) == 0 ) /* or may be \nolimits */
    if ( (tokdef= get_symdef(limtoken))	/* look up token to be sure */
-   !=   NULL )				/* found token in table */
+   !=   NULL ) {			/* found token in table */
     if ( strcmp("\\limits",tokdef->symbol) == 0 )  /* found \limits */
       isdisplay = 1;			/* so explicitly set displaymath */
     else				/* wasn't \limits */
       if ( strcmp("\\nolimits",tokdef->symbol) == 0 ) /* found \nolimits */
-	isdisplay = 0;			/* so explicitly reset displaymath */
+	isdisplay = 0; }		/* so explicitly reset displaymath */
 /* --- see if we found \[no]limits --- */
 if ( isdisplay != (-1) )		/* explicit directive found */
   *expression = exprptr;		/* so bump expression past it */
 else					/* noexplicit directive */
   { isdisplay = 0;			/* init displaymath flag off */
-    if ( isdisplaystyle )		/* we're in displaystyle math mode */
+    if ( isdisplaystyle ) {		/* we're in displaystyle math mode */
       if ( isdisplaystyle >= 5 )	/* and mode irrevocably forced true */
 	{ if ( class!=OPENING && class!=CLOSING ) /*don't force ('s and )'s*/
 	    isdisplay = 1; }		/* set flag if mode forced true */
@@ -5728,24 +6421,39 @@ else					/* noexplicit directive */
 	    isdisplay = 1; }		/* set flag if mode forced true */
        else				/* determine mode from base symbol */
 	if ( class == DISPOPER )	/* it's a displaystyle operator */
-	  isdisplay = 1; }		/* so set flag */
+	  isdisplay = 1; } }		/* so set flag */
 /* -------------------------------------------------------------------------
 dispatch call to create sub/superscripts
 -------------------------------------------------------------------------- */
 if ( isdisplay )			/* scripts above/below base symbol */
   scriptsp = rastdispmath(expression,size,basesp); /* everything all done */
-else					/* scripts alongside base symbol */
-  if ( (scriptsp=rastscripts(expression,size,basesp)) == NULL ) /*no scripts*/
+else {					/* scripts alongside base symbol */
+  if ( dummybase == NULL )		/* no base symbol preceding scripts*/
+    dummybase = rasterize("\\rule0{10}",size); /*guess a typical base symbol*/
+  issmashokay = 1;			/*haven't found a no-smash char yet*/
+  if((scriptsp=rastscripts(expression,size,dummybase)) == NULL) /*no scripts*/
     scriptsp = basesp;			/* so just return unscripted symbol*/
-  else					/* symbols followed by scripts */
+  else {				/* symbols followed by scripts */
+    isscripted = 1;			/*signal current term text-scripted*/
     if ( basesp != NULL )		/* have base symbol */
-     { smashmargin = 0;			/* don't smash script */
+     { /*if(0)smashmargin = 0;*/	/*don't smash script (doesn't work)*/
        /*scriptsp = rastcat(basesp,scriptsp,2);*//*concat scripts to base sym*/
+       /* --- smash (or just concat) script raster against base symbol --- */
+       if ( !issmashokay )		/* don't smash leading - */
+         if ( !isexplicitsmash ) scriptsp->type = blanksignal; /*don't smash*/
        scriptsp = rastcat(basesp,scriptsp,3); /*concat scripts to base sym*/
-       scriptsp->type = IMAGERASTER;	/* flip type of composite object */
-       scriptsp->size = size; }		/* and set font size */
+       if(1) scriptsp->type = IMAGERASTER; /* flip type of composite object */
+       /* --- smash (or just concat) scripted term to stuff to its left --- */
+       issmashokay = 1;			/* okay to smash base expression */
+       if ( 0 && smashcheck > 1 )	/* smashcheck=2 to check base */
+         /* note -- we _don't_ have base expression available to check */
+         issmashokay = rastsmashcheck(*expression); /*check if okay to smash*/
+       if ( !issmashokay )		/* don't smash leading - */
+         if ( !isexplicitsmash ) scriptsp->type = blanksignal; /*don't smash*/
+       scriptsp->size = size; } } }	/* and set font size */
 end_of_job:
   smashmargin = oldsmashmargin;		/* reset original smashmargin */
+  if ( dummybase != basesp ) delete_subraster(dummybase); /*free work area*/
   if ( msgfp!=NULL && msglevel>=99 )
     { fprintf(msgfp,"rastlimits> scriptlevel#%d returning %s\n",
 	scriptlevel,(scriptsp==NULL?"null":"..."));
@@ -5804,6 +6512,7 @@ int	szval = min2(max2(size,0),LARGESTSIZE), /* 0...LARGESTSIZE */
 /*int	istweak = 1;*/			/* true to tweak script positioning */
 int	rastput();			/*put scripts in constructed raster*/
 int	delete_subraster();		/* free work areas */
+int	rastsmashcheck();		/* check if okay to smash scripts */
 int	pixsz = 1;			/*default #bits per pixel, 1=bitmap*/
 /* -------------------------------------------------------------------------
 Obtain subscript and/or superscript expressions, and rasterize them/it
@@ -5823,6 +6532,16 @@ issub  = (subsp != (subraster *)NULL);	/* true if we have subscript */
 issup  = (supsp != (subraster *)NULL);	/* true if we have superscript */
 isboth = (issub && issup);		/* true if we have both */
 if (!issub && !issup) goto end_of_job;	/* quit if we have neither */
+/* --- check for leading no-smash chars (if enabled) --- */
+issmashokay = 0;			/* default, don't smash scripts */
+if ( smashcheck > 0 ) {			/* smash checking wanted */
+ issmashokay = 1;			/*haven't found a no-smash char yet*/
+ if ( issub )				/* got a subscript */
+  issmashokay = rastsmashcheck(subscript); /* check if okay to smash */
+ if ( issmashokay )			/* clean sub, so check sup */
+  if ( issup )				/* got a superscript */
+   issmashokay = rastsmashcheck(supscript); /* check if okay to smash */
+ } /* --- end-of-if(smashcheck>0) --- */
 /* -------------------------------------------------------------------------
 get height, width, baseline of scripts,  and height, baseline of base symbol
 -------------------------------------------------------------------------- */
@@ -5863,14 +6582,14 @@ if ( !issub )				/* we only have a superscript */
 		supht+vabove-bdescend);	/* sup's bot above base symbol bot */
     baseline = height-1; }		/*sup's baseline at bottom of raster*/
 /* --- subscript only --- */
-if ( !issup )				/* we only have a subscript */
+if ( !issup ) {				/* we only have a subscript */
   if ( subht > sdescend )		/*sub can descend below base bot...*/
     { height = subht;			/* ...without extra space on top */
       baseline = height-(sdescend+1);	/* sub's bot below base symbol bot */
       baseline = min2(baseline,max2(baseln-vbelow,0)); }/*top below base top*/
   else					/* sub's top will be below baseln */
     { height = sdescend+1;		/* sub's bot below base symbol bot */
-      baseline = 0; }			/* sub's baseline at top of raster */
+      baseline = 0; } }			/* sub's baseline at top of raster */
 /* -------------------------------------------------------------------------
 construct raster with superscript over subscript
 -------------------------------------------------------------------------- */
@@ -5951,19 +6670,19 @@ if (!issub && !issup) goto end_of_job;	/*return operator alone if neither*/
 stack operator and its script(s)
 -------------------------------------------------------------------------- */
 /* --- stack superscript atop operator --- */
-if ( issup )				/* we have a superscript */
+if ( issup ) {				/* we have a superscript */
  if ( sp == NULL )			/* but no base expression */
   sp = supsp;				/* so just use superscript */
  else					/* have base and superscript */
   if ( (sp=rastack(sp,supsp,1,vspace,1,3)) /* stack supsp atop base sp */
-  ==   NULL ) goto end_of_job;		/* and quit if failed */
+  ==   NULL ) goto end_of_job; }	/* and quit if failed */
 /* --- stack operator+superscript atop subscript --- */
-if ( issub )				/* we have a subscript */
+if ( issub ) {				/* we have a subscript */
  if ( sp == NULL )			/* but no base expression */
   sp = subsp;				/* so just use subscript */
  else					/* have base and subscript */
   if ( (sp=rastack(subsp,sp,2,vspace,1,3)) /* stack sp atop base subsp */
-  ==   NULL ) goto end_of_job;		/* and quit if failed */
+  ==   NULL ) goto end_of_job; }	/* and quit if failed */
 sp->type = IMAGERASTER;			/* flip type of composite object */
 sp->size = size;			/* and set font size */
 /* -------------------------------------------------------------------------
@@ -6011,11 +6730,12 @@ int	family=CMSYEX,			/* get_delim() family */
 	height=0, rheight=0,		/* subexpr, right delim height */
 	margin=(size+1),		/* delim height margin over subexpr*/
 	opmargin=(5);			/* extra margin for \int,\sum,\etc */
-char	/* *texleft(),*/ subexpr[8192];	/* chars between \left...\right */
+char	/* *texleft(),*/ subexpr[MAXSUBXSZ+1];/*chars between \left...\right*/
 char	*texchar(),			/* get delims after \left,\right */
 	ldelim[256]=".", rdelim[256]="."; /* delims following \left,\right */
 char	*strtexchr(), *pleft, *pright;	/*locate \right matching our \left*/
 int	isleftdot=0, isrightdot=0;	/* true if \left. or \right. */
+int	isleftscript=0, isrightscript=0; /* true if delims are scripted */
 int	sublen=0;			/* strlen(subexpr) */
 int	idelim=0;			/* 1=left,2=right */
 /* int	gotldelim = 0; */		/* true if ildelim given by caller */
@@ -6185,7 +6905,8 @@ if ( !isleftdot )			/* if not \left. */
       if ( lheight > rheight )		/* got bigger delim than requested */
 	rheight = lheight-1; }		/* make sure right delim matches */
    /* --- then add on any sub/superscripts attached to \left( --- */
-   lp = rastlimits(&pleft,size,lp); }	/*\left(_a^b and push pleft past b*/
+   lp = rastlimits(&pleft,size,lp);	/*\left(_a^b and push pleft past b*/
+   isleftscript = isscripted; }		/* check if left delim scripted */
 isdisplaystyle = (istextright?0:9);	/* force \displaystyle */
 if ( !isrightdot )			/* and if not \right. */
  { /* --- first get requested \right delimiter --- */
@@ -6194,7 +6915,8 @@ if ( !isrightdot )			/* and if not \right. */
    if ( rp != NULL )			/* if get_delim() succeeded */
      rp->baseline = sp->baseline + ((rp->image)->height - height)/2;
    /* --- then add on any sub/superscripts attached to \right) --- */
-   rp = rastlimits(expression,size,rp); } /*\right)_c^d, expression past d*/
+   rp = rastlimits(expression,size,rp);	/*\right)_c^d, expression past d*/
+   isrightscript = isscripted; }	/* check if right delim scripted */
 isdisplaystyle = wasdisplaystyle;	/* original \displystyle default */
 /* --- check that we got delimiters --- */
 if ( 0 )
@@ -6216,6 +6938,7 @@ if ( sp != NULL )			/* succeeded or ignored \left. */
     sp = rastcat(sp,rp,3);		/* concat sp||rp and free sp,rp */
 /* --- back to caller --- */
 end_of_job:
+  isdelimscript = isrightscript;	/* signal if right delim scripted */
   return ( sp );
 } /* --- end-of-function rastleft() --- */
 
@@ -6291,7 +7014,7 @@ subraster *rasterize(), *sp=NULL, *subsp[32]; /*rasterize \middle subexpr's*/
 char	*exprptr = *expression,		/* local copy of ptr to expression */
 	*texchar(), delim[32][132],	/* delimiters following \middle's */
 	*strtexchr(),			/* locate \middle's */
-	subexpr[8193], *subptr=NULL;	/* subexpression between \middle's */
+	subexpr[MAXSUBXSZ+1], *subptr=NULL;/*subexpression between \middle's*/
 int	height=0, habove=0, hbelow=0;	/* height, above & below baseline */
 int	idelim, ndelims=0,		/* \middle count (max 32) */
 	family = CMSYEX;		/* delims from CMSY10 or CMEX10 */
@@ -6327,13 +7050,13 @@ while ( ndelims < 30 )			/* max of 31 \middle's */
     break;				/* so we have all subexpressions */
   if ( (subptr = strtexchr(exprptr,"\\middle")) /* find next \middle */
   ==   NULL )				/* no more \middle's */
-   { strncpy(subexpr,exprptr,8192);	/* get entire remaining expression */
-     subexpr[8192] = '\000';		/* make sure it's null-terminated */
+   { strncpy(subexpr,exprptr,MAXSUBXSZ); /*get entire remaining expression*/
+     subexpr[MAXSUBXSZ] = '\000';	/* make sure it's null-terminated */
      exprptr += strlen(exprptr); }	/* push exprptr to terminating '\0'*/
   else					/* have another \middle */
    { int sublen = (int)(subptr-exprptr); /* #chars between \delim...\middle*/
-     memcpy(subexpr,exprptr,min2(sublen,8192)); /* get subexpression */
-     subexpr[min2(sublen,8192)] = '\000'; /* and null-terminate it */
+     memcpy(subexpr,exprptr,min2(sublen,MAXSUBXSZ)); /* get subexpression */
+     subexpr[min2(sublen,MAXSUBXSZ)] = '\000'; /* and null-terminate it */
      exprptr += (sublen+strlen("\\middle")); } /* push exprptr past \middle*/
   /* --- rasterize subexpression --- */
   subsp[ndelims] = rasterize(subexpr,size); /* rasterize subexpresion */
@@ -6347,11 +7070,11 @@ if ( ndelims < 1			/* no delims */
 for ( idelim=0; idelim<=ndelims; idelim++ )
   {
   /* --- first add on subexpression preceding delim --- */
-  if ( subsp[idelim] != NULL )		/* have subexpr preceding delim */
+  if ( subsp[idelim] != NULL ) {	/* have subexpr preceding delim */
     if ( sp == NULL )			/* this is first piece */
      { sp = subsp[idelim];		/* so just use it */
        if ( idelim == 0 ) sp = subrastcpy(sp); } /* or copy leftexpression */
-    else sp = rastcat(sp,subsp[idelim],(idelim>0?3:1)); /* or concat it */
+    else sp = rastcat(sp,subsp[idelim],(idelim>0?3:1)); } /* or concat it */
   /* --- now construct delimiter --- */
   if ( *(delim[idelim]) != '\000' )	/* have delimter */
    { subraster *delimsp = get_delim(delim[idelim],height,family);
@@ -6410,7 +7133,7 @@ char	*texsubexpr(),			/* parse expression for... */
 int	argvalue=NOVALUE,		/* atoi(valuearg) */
 	isdelta=0,			/* true if + or - precedes valuearg */
 	valuelen=0;			/* strlen(valuearg) */
-double	strtod();			/*convert ascii {valuearg} to double*/
+double	dblvalue=(-99.), strtod();	/*convert ascii {valuearg} to double*/
 static	int displaystylelevel = (-99);	/* \displaystyle set at recurlevel */
 /* -------------------------------------------------------------------------
 set flag or value
@@ -6435,6 +7158,8 @@ switch ( flag )
       {	bgred=255-bgred; bggreen=255-bggreen; bgblue=255-bgblue; }
     if ( value==2 || value==NOVALUE )
       isblackonwhite = !isblackonwhite;
+    if ( gammacorrection > 0.0001 )	/* have gamma correction */
+      gammacorrection = REVERSEGAMMA;	/* use reverse video gamma instead */
     break;
   case ISSUPER:				/* set supersampling/lowpass flag */
     #ifndef SSFONTS			/* don't have ss fonts loaded */
@@ -6445,6 +7170,7 @@ switch ( flag )
     break;
   case ISFONTSIZE:			/* set fontsize */
   case ISDISPLAYSIZE:			/* set displaysize */
+  case ISCONTENTTYPE:			/*enable/disable content-type lines*/
   case ISSHRINK:			/* set shrinkfactor */
   case ISAAALGORITHM:			/* set anti-aliasing algorithm */
   case ISWEIGHT:			/* set font weight */
@@ -6453,8 +7179,10 @@ switch ( flag )
   case ISCORNERWT:			/* set lowpass corner weight */
   case ISCOLOR:				/* set red(1),green(2),blue(3) */
   case ISSMASH:				/* set (minimum) "smash" margin */
+  case ISGAMMA:				/* set gamma correction */
     if ( value != NOVALUE )		/* passed a fixed value to be set */
-      argvalue = value;			/* set given fixed value */
+      {	argvalue = value;		/* set given fixed int value */
+	dblvalue = (double)value; }	/* or maybe interpreted as double */
     else				/* get value from expression */
       {	*expression = texsubexpr(*expression,valuearg,1023,"{","}",0,0);
 	if ( *valuearg != '\000' )	/* guard against empty string */
@@ -6463,7 +7191,12 @@ switch ( flag )
 	   { isdelta = isthischar(*valuearg,"+-"); /* leading + or - */
 	     if ( memcmp(valuearg,"--",2) == 0 ) /* leading -- signals...*/
 	       { isdelta=0; strcpy(valuearg,valuearg+1); } /* ...not delta */
-	     argvalue = atoi(valuearg); } } /* convert to int */
+	     switch ( flag ) {		/* convert to double or int */
+	      default: argvalue = atoi(valuearg); break; /* convert to int */
+	      case ISGAMMA:
+		dblvalue = strtod(valuearg,NULL); break; } /* or to double */
+	   } /* --- end-of-if(*valuearg!='?') --- */
+      } /* --- end-of-if(value==NOVALUE) --- */
     switch ( flag )
       {
       default: break;
@@ -6493,10 +7226,10 @@ switch ( flag )
 	    ||  (1 && isdisplaystyle==2) /* displaystyle enabled and set */
 	    ||  (0 && isdisplaystyle==0) )/*\textstyle disabled displaystyle*/
 	     if ( displaystylelevel != recurlevel ) /*respect \displaystyle*/
-	      if ( !ispreambledollars )	/* respect $$...$$'s */
+	      if ( !ispreambledollars )	{ /* respect $$...$$'s */
 	       if ( fontsize >= displaysize )
 		isdisplaystyle = 2;	/* forced */
-	       else isdisplaystyle = 1;
+	       else isdisplaystyle = 1; }
 	    /*displaystylelevel = (-99);*/ } /* reset \displaystyle level */
 	else				/* embed font size in expression */
 	  { sprintf(valuearg,"%d",fontsize); /* convert size */
@@ -6509,12 +7242,17 @@ switch ( flag )
 	if ( argvalue != NOVALUE )	/* got a value */
 	    displaysize = (isdelta? displaysize+argvalue : argvalue);
 	break;
+      case ISCONTENTTYPE:		/*enable/disable content-type lines*/
+	if ( argvalue != NOVALUE )	/* got a value */
+	    isemitcontenttype = (argvalue>0?1:0);
+	break;
       case ISSMASH:			/* set (minimum) "smash" margin */
 	if ( argvalue != NOVALUE )	/* got a value */
 	  { smashmargin = argvalue;	/* set value */
 	    if ( arg3 != NOVALUE ) isdelta=arg3; /* hard-coded isdelta */
 	    issmashdelta = (isdelta?1:0); } /* and set delta flag */
 	smashmargin = max2((isdelta?-5:0),min2(smashmargin,32)); /*sanity*/
+	isexplicitsmash = 1;		/* signal explicit \smash directive*/
 	break;
       case ISSHRINK:			/* set shrinkfactor */
 	if ( argvalue != NOVALUE )	/* got a value */
@@ -6522,9 +7260,11 @@ switch ( flag )
 	shrinkfactor = max2(1,min2(shrinkfactor,27)); /* sanity check */
 	break;
       case ISAAALGORITHM:		/* set anti-aliasing algorithm */
-	if ( argvalue != NOVALUE )	/* got a value */
-	  aaalgorithm = argvalue;	/* set algorithm number */
-	aaalgorithm = max2(0,min2(aaalgorithm,3)); /* bounds check */
+	if ( argvalue != NOVALUE ) {	/* got a value */
+	  if ( argvalue >= 0 ) {	/* non-negative to set algorithm */
+	      aaalgorithm = argvalue;	/* set algorithm number */
+	    aaalgorithm = max2(0,min2(aaalgorithm,4)); } /* bounds check */
+	  else maxfollow = abs(argvalue); } /* or maxfollow=abs(negative#) */
 	break;
       case ISWEIGHT:			/* set font weight number */
 	value =	(argvalue==NOVALUE? NOVALUE : /* don't have a value */
@@ -6552,6 +7292,10 @@ switch ( flag )
       case ISCORNERWT:			/* set lowpass corner weight */
 	if ( argvalue != NOVALUE )	/* got a value */
 	  cornerwt = argvalue;		/* set lowpass corner weight */
+	break;
+      case ISGAMMA:			/* set gamma correction */
+	if ( dblvalue >= 0.0 )		/* got a value */
+	  gammacorrection = dblvalue;	/* set gamma correction */
 	break;
       } /* --- end-of-switch() --- */
     break;
@@ -6595,6 +7339,8 @@ return ( NULL );			/*just set value, nothing to display*/
  *		width (I)	int containing #bits/pixels for space width
  *		isfill (I)	int containing true to \hfill complete
  *				expression out to width
+ *				(Kludge: isfill=99 signals \hspace*
+ *				for negative space)
  *		isheight (I)	int containing true (but not NOVALUE)
  *				to treat width arg as height
  * --------------------------------------------------------------------------
@@ -6611,27 +7357,64 @@ subraster *rastspace ( char **expression, int size, subraster *basesp,
 Allocations and Declarations
 -------------------------------------------------------------------------- */
 subraster *new_subraster(), *spacesp=NULL; /* subraster for space */
+raster	*bp=NULL, *backspace_raster();	/* for negative space */
+int	delete_subraster();		/* if fail, free unneeded subraster*/
 int	baseht=1, baseln=0;		/* height,baseline of base symbol */
 int	pixsz = 1;			/*default #bits per pixel, 1=bitmap*/
+int	isstar=0, minspace=0;		/* defaults for negative hspace */
 char	*texsubexpr(), widtharg[256];	/* parse for optional {width} */
 subraster *rasterize(), *rightsp=NULL;	/*rasterize right half of expression*/
 subraster *rastcat();			/* cat rightsp after \hfill */
 /* -------------------------------------------------------------------------
 initialization
 -------------------------------------------------------------------------- */
+if ( isfill > 1 ) { isstar=1; isfill=0; } /* large fill signals \hspace* */
 if ( isfill == NOVALUE ) isfill=0;	/* novalue means false */
 if ( isheight == NOVALUE ) isheight=0;	/* novalue means false */
+minspace = (isstar?(-1):0);		/* reset default minspace */
 /* -------------------------------------------------------------------------
 determine width if not given (e.g., \hspace{width}, \hfill{width})
 -------------------------------------------------------------------------- */
-if ( width <= 0 )			/* width specified in expression */
-  { int widthval;			/* test {width} before using it */
-    width = 1;				/* set default width */
-    *expression = texsubexpr(*expression,widtharg,255,"{","}",0,0);
-    widthval =				/* convert {width} to integer */
-		(int)((unitlength*strtod(widtharg,NULL))+0.5);
-    if ( widthval>=2 && widthval<=600 )	/* sanity check */
-      width = widthval; }		/* replace deafault width */
+if ( width == 0 ) {			/* width specified in expression */
+  double dwidth;  int widthval;		/* test {width} before using it */
+  int minwidth = (isfill||isheight?1:-600); /* \hspace allows negative */
+  /* --- check if optional [minspace] given for negative \hspace --- */
+  if ( *(*expression) == '[' ) {	/* [minspace] if leading char is [ */
+    /* ---parse [minspace], bump expression past it, interpret as double--- */
+    *expression = texsubexpr(*expression,widtharg,127,"[","]",0,0);
+    if ( *widtharg != '\000' )		/* got [minspace] */
+      minspace = iround(unitlength*strtod(widtharg,NULL)); /* in pixels */
+    } /* --- end-of-if(*(*expression)=='[') --- */
+  width = 1;				/* set default width */
+  *expression = texsubexpr(*expression,widtharg,255,"{","}",0,0);
+  dwidth = unitlength*strtod(widtharg,NULL); /* scaled width value */
+  widthval =				/* convert {width} to integer */
+		(int)( dwidth + (dwidth>=0.0?0.5:(-0.5)) );
+  if ( widthval>=minwidth && widthval<=600 ) /* sanity check */
+    width = widthval;			/* replace deafault width */
+  } /* --- end-of-if(width==0) --- */
+/* -------------------------------------------------------------------------
+first check for negative space
+-------------------------------------------------------------------------- */
+if ( width < 0 ) {			/* have negative hspace */
+ if ( leftexpression != (subraster *)NULL ) /* can't backspace */
+  if ( (spacesp=new_subraster(0,0,0))	/* get new subraster for backspace */
+  !=   NULL ) {				/* and if we succeed... */
+   int nback=(-width), pback;		/*#pixels wanted,actually backspaced*/
+   if ( (bp=backspace_raster(leftexpression->image,nback,&pback,minspace,0))
+   !=    NULL ) {			/* and if backspace succeeds... */
+     spacesp->image = bp;		/* save backspaced image */
+     /*spacesp->type = leftexpression->type;*/ /* copy original type */
+     spacesp->type = blanksignal;	/* need to propagate blanks */
+     spacesp->size = leftexpression->size; /* copy original font size */
+     spacesp->baseline = leftexpression->baseline; /* and baseline */
+     blanksymspace += -(nback-pback);	/* wanted more than we got */
+     isreplaceleft = 1; }		/*signal to replace entire expressn*/
+   else {				/* backspace failed */
+     delete_subraster(spacesp);		/* free unneeded envelope */
+     spacesp = (subraster *)NULL; } }	/* and signal failure */
+ goto end_of_job;
+ } /* --- end-of-if(width<0) --- */
 /* -------------------------------------------------------------------------
 see if width is "absolute" or fill width
 -------------------------------------------------------------------------- */
@@ -6659,6 +7442,7 @@ if ( width > 0 )			/*make sure we have positive width*/
  !=   NULL )				/* and if we succeed... */
   { /* --- ...re-init subraster parameters --- */
     spacesp->size = size;		/*propagate base font size forward*/
+    if(1)spacesp->type = blanksignal;	/* need to propagate blanks (???) */
     spacesp->baseline = baseln; }	/* ditto baseline */
 /* -------------------------------------------------------------------------
 concat right half if \hfill-ing
@@ -6668,7 +7452,8 @@ if ( rightsp != NULL )			/* we have a right half after fill */
 	rastcat(spacesp,rightsp,3));	/* or cat right half after space */
     spacesp->type = blanksignal;	/* need to propagate blanks */
     *expression += strlen((*expression)); } /* push expression to its null */
-return ( spacesp );
+end_of_job:
+  return ( spacesp );
 } /* --- end-of-function rastspace() --- */
 
 
@@ -7071,7 +7856,7 @@ subraster *rastfrac ( char **expression, int size, subraster *basesp,
 Allocations and Declarations
 -------------------------------------------------------------------------- */
 char	*texsubexpr(),			/*parse expression for numer,denom*/
-	numer[8192], denom[8192];	/*numer,denom parsed from expression*/
+	numer[MAXSUBXSZ+1], denom[MAXSUBXSZ+1]; /* parsed numer, denom */
 subraster *rasterize(), *numsp=NULL, *densp=NULL; /*rasterize numer, denom*/
 subraster *rastack(), *fracsp=NULL;	/* subraster for numer/denom */
 subraster *new_subraster()/*, *spacesp=NULL*/; /* space for num or den */
@@ -7128,6 +7913,7 @@ width = (fracsp->image)->width;		/*just get width of embedded image*/
 /* --- initialize subraster parameters --- */
 fracsp->size = size;			/* propagate font size forward */
 fracsp->baseline = (numheight+vspace+lineheight)+(size+2);/*default baseline*/
+fracsp->type = FRACRASTER;		/* signal \frac image */
 if ( basesp != (subraster *)NULL )	/* we have base symbol for frac */
   { baseht = (basesp->image)->height; 	/* height of base symbol */
     baseln =  basesp->baseline;		/* and its baseline */
@@ -7135,8 +7921,9 @@ if ( basesp != (subraster *)NULL )	/* we have base symbol for frac */
 /* -------------------------------------------------------------------------
 draw horizontal line between numerator and denominator
 -------------------------------------------------------------------------- */
+fraccenterline = numheight+vspace;	/* signal that we have a \frac */
 if ( isfrac )				/*line for \frac, but not for \atop*/
-  rule_raster(fracsp->image,numheight+vspace,0,width,lineheight,0);
+  rule_raster(fracsp->image,fraccenterline,0,width,lineheight,0);
 /* -------------------------------------------------------------------------
 return final result to caller
 -------------------------------------------------------------------------- */
@@ -7179,8 +7966,8 @@ subraster *rastackrel ( char **expression, int size, subraster *basesp,
 /* -------------------------------------------------------------------------
 Allocations and Declarations
 -------------------------------------------------------------------------- */
-char	*texsubexpr(),			/*parse expression for numer,denom*/
-	upper[8192], lower[8192];	/*upper,lower parsed from expression*/
+char	*texsubexpr(),			/*parse expression for upper,lower*/
+	upper[MAXSUBXSZ+1], lower[MAXSUBXSZ+1];	/* parsed upper, lower */
 subraster *rasterize(), *upsp=NULL, *lowsp=NULL; /* rasterize upper, lower */
 subraster *rastack(), *relsp=NULL;	/* subraster for upper/lower */
 int	upsize  = (base==1? size:size-1), /* font size for upper component */
@@ -7252,9 +8039,9 @@ subraster *rastmathfunc ( char **expression, int size, subraster *basesp,
 Allocations and Declarations
 -------------------------------------------------------------------------- */
 char	*texscripts(),			/* parse expression for _limits */
-	func[4096], limits[8192];	/* func as {\rm func}, limits */
+	func[MAXTOKNSZ+1], limits[MAXSUBXSZ+1]; /*func as {\rm func}, limits*/
 char	*texsubexpr(),			/* parse expression for arg */
-	funcarg[2048];			/* optional func arg */
+	funcarg[MAXTOKNSZ+1];		/* optional func arg */
 subraster *rasterize(), *funcsp=NULL, *limsp=NULL; /*rasterize func,limits*/
 subraster *rastack(), *mathfuncsp=NULL;	/* subraster for mathfunc/limits */
 int	limsize = size-1;		/* font size for limits */
@@ -7358,8 +8145,8 @@ subraster *rastsqrt ( char **expression, int size, subraster *basesp,
 /* -------------------------------------------------------------------------
 Allocations and Declarations
 -------------------------------------------------------------------------- */
-char	*texsubexpr(), subexpr[8192],	/* parse subexpr to be sqrt-ed */
-	rootarg[8192];			/* optional \sqrt[rootarg]{...} */
+char	*texsubexpr(), subexpr[MAXSUBXSZ+1], /*parse subexpr to be sqrt-ed*/
+	rootarg[MAXSUBXSZ+1];		/* optional \sqrt[rootarg]{...} */
 subraster *rasterize(), *subsp=NULL;	/* rasterize subexpr */
 subraster *accent_subraster(), *sqrtsp=NULL, /* subraster with the sqrt */
 	*new_subraster(), *rootsp=NULL;	/* optionally preceded by [rootarg]*/
@@ -7474,9 +8261,9 @@ subraster *rastaccent ( char **expression, int size, subraster *basesp,
 /* -------------------------------------------------------------------------
 Allocations and Declarations
 -------------------------------------------------------------------------- */
-char	*texsubexpr(), subexpr[8192];	/* parse subexpr to be accented */
+char	*texsubexpr(), subexpr[MAXSUBXSZ+1]; /*parse subexpr to be accented*/
 char	*texscripts(), *script=NULL,	/* \under,overbrace allow scripts */
-	subscript[512], supscript[512];	/* scripts parsed from expression */
+	subscript[MAXTOKNSZ+1], supscript[MAXTOKNSZ+1];	/* parsed scripts */
 subraster *rasterize(), *subsp=NULL, *scrsp=NULL; /*rasterize subexpr,script*/
 subraster *rastack(), *accsubsp=NULL;	/* stack accent, subexpr, script */
 subraster *accent_subraster(), *accsp=NULL; /*raster for the accent itself*/
@@ -7585,8 +8372,8 @@ subraster *rastfont ( char **expression, int size, subraster *basesp,
 /* -------------------------------------------------------------------------
 Allocations and Declarations
 -------------------------------------------------------------------------- */
-char	*texsubexpr(), fontchars[8192],	/*parse chars to be rendered in font*/
-	subexpr[8192];			/* turn \cal{AB} into \calA\calB */
+char	*texsubexpr(), fontchars[MAXSUBXSZ+1], /* chars to render in font */
+	subexpr[MAXSUBXSZ+1];		/* turn \cal{AB} into \calA\calB */
 char	*pfchars=fontchars, fchar='\0';	/* run thru fontchars one at a time*/
 char	*name = NULL;			/* fontinfo[ifontnum].name */
 int	family = 0,			/* fontinfo[ifontnum].family */
@@ -7608,6 +8395,8 @@ static	struct {char *name; int class;}
 	{ "\\textit",	-1 },		/*(4) \it,\textit{abc}-->{\it~abc} */
 	{ "\\mathbb",	-1 },		/*(5) \bb,\mathbb{abc}-->{\bb~abc} */
 	{ "\\mathbf",	-1 },		/*(6) \bf,\mathbf{abc}-->{\bf~abc} */
+	{ "\\mathrm",   -1 },		/*(7) \mathrm */
+	{ "\\cyr",      -1 },		/*(8) \cyr */
 	{ NULL,		0 }
     } ; /* --- end-of-fonts[] --- */
 #endif
@@ -7620,7 +8409,8 @@ family = fontinfo[ifontnum].family;	/* font family */
 istext = fontinfo[ifontnum].istext;	/*true in text mode (respect space)*/
 class  = fontinfo[ifontnum].class;	/* font class */
 if ( istext )				/* text (respect blanks) */
-  smashmargin = 0;			/* don't smash internal blanks */
+ { mathsmashmargin = smashmargin;	/* needed for \text{if $n-m$ even} */
+   smashmargin = 0; }			/* don't smash internal blanks */
 /* -------------------------------------------------------------------------
 now convert \font{abc} --> {\font~abc}, or convert ABC to \calA\calB\calC
 -------------------------------------------------------------------------- */
@@ -7706,6 +8496,7 @@ back to caller with chars rendered in font
 -------------------------------------------------------------------------- */
 end_of_job:
   smashmargin = oldsmashmargin;		/* restore smash */
+  mathsmashmargin = SMASHMARGIN;	/* this one probably not necessary */
   if ( istext && fontsp!=NULL )		/* raster contains text mode font */
     fontsp->type = blanksignal;		/* signal nosmash */
   return ( fontsp );			/* chars rendered in font */
@@ -7742,7 +8533,7 @@ subraster *rastbegin ( char **expression, int size, subraster *basesp,
 /* -------------------------------------------------------------------------
 Allocations and Declarations
 -------------------------------------------------------------------------- */
-char	*texsubexpr(), subexpr[8210],	/* \begin{} environment paramaters */
+char	*texsubexpr(), subexpr[MAXSUBXSZ+1], /* \begin{} environment params*/
 	*exprptr=NULL,*begptr=NULL,*endptr=NULL,*braceptr=NULL; /* ptrs */
 char	*begtoken="\\begin{", *endtoken="\\end{"; /*tokens we're looking for*/
 int	strreplace();			/* replace substring in string */
@@ -7755,7 +8546,7 @@ int	envlen=0, sublen=0;		/* #chars in environ, subexpr */
 static	int blevel = 0;			/* \begin...\end nesting level */
 static	char *mdelims[] = { NULL, NULL, NULL, NULL,
 	"()","[]","{}","||","==",	/* for pbBvVmatrix */
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, "{.", NULL, NULL, NULL, NULL, NULL, NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 static	char *environs[] = {		/* types of environments we process*/
 	"eqnarray",			/* 0 eqnarray environment */
@@ -7771,6 +8562,8 @@ static	char *environs[] = {		/* types of environments we process*/
 	"align",			/* 10 align environment */
 	"verbatim",			/* 11 verbatim environment */
 	"picture",			/* 12 picture environment */
+	"cases",			/* 13 cases environment */
+	"equation",			/* 14 for \begin{equation} */
 	NULL };				/* trailer */
 /* -------------------------------------------------------------------------
 determine type of environment we're beginning
@@ -7831,6 +8624,12 @@ switch ( ienviron )
       {	exprptr = texsubexpr(exprptr,subexpr+8,0,"(",")",0,1); /*add on arg*/
 	if ( *(subexpr+8) == '\000' ) goto end_of_job; } /* quit if no arg */
     strcat(subexpr,"{");		/* opening {  after (width,height) */
+    break;
+  case 13:				/* cases */
+    strcat(subexpr,"\\array{ll$");	/* a&b \\ c&d etc */
+    break;
+  case 14:				/* \begin{equation} */
+    strcat(subexpr,"{");		/* just enclose expression in {}'s */
     break;
   } /* --- end-of-switch(ienviron) --- */
 /* -------------------------------------------------------------------------
@@ -7979,9 +8778,9 @@ subraster *rastarray ( char **expression, int size, subraster *basesp,
 /* -------------------------------------------------------------------------
 Allocations and Declarations
 -------------------------------------------------------------------------- */
-char	*texsubexpr(),  subexpr[8210], *exprptr, /* parse array subexpr */
-	 subtok[4096], *subptr=subtok,	/* & or \\ inside { }'s not a delim*/
-	 token[4096],  *tokptr=token,	/* token from subexpr to rasterize */
+char	*texsubexpr(), subexpr[MAXSUBXSZ+1], *exprptr, /*parse array subexpr*/
+	 subtok[MAXTOKNSZ+1], *subptr=subtok, /* &,\\ inside { } not a delim*/
+	 token[MAXTOKNSZ+1],  *tokptr=token, /* subexpr token to rasterize */
 	*preamble(),   *preptr=token;	/*process optional size,lcr preamble*/
 char	*coldelim="&", *rowdelim="\\";	/* need escaped rowdelim */
 int	maxarraysz = 64;		/* max #rows, cols */
@@ -8128,9 +8927,9 @@ while (  *preptr != '\000' )		/* check preamble text for lcr */
   if ( prepcase != 0 )			/* only check upper,lowercase */
    {
    int	ispropagate = (*preptr=='+'?1:0); /* leading + propagates width/ht */
-   if ( ispropagate )			/* set row or col propagation */
+   if ( ispropagate ) {			/* set row or col propagation */
      if ( prepcase == 1 ) colpropagate = 1; /* propagating col values */
-     else if ( prepcase == 2 ) rowpropagate = 1; /* propagating row values */
+     else if ( prepcase == 2 ) rowpropagate = 1; } /*propagating row values*/
    if ( !colpropagate && prepcase == 1 )
       {	colwidth[icol] = 0;		/* reset colwidth */
 	fixcolsize[icol] = 0; }		/* reset width flag */
@@ -8234,11 +9033,11 @@ while ( 1 )				/* scan chars till end */
       tokptr=token; skipwhite(tokptr);	/* skip whitespace after // */
       tokptr = texchar(tokptr,hltoken);	/* extract first char from token */
       hltoklen = strlen(hltoken);	/* length of first char */
-      if ( hltoklen >= minhltoklen )	/*token must be at least \hl or \hd*/
+      if ( hltoklen >= minhltoklen ) {	/*token must be at least \hl or \hd*/
 	if ( memcmp(hlchar,hltoken,hltoklen) == 0 ) /* we have an \hline */
 	   hline[nrows] += 1;		/* bump \hline count for row */
 	else if ( memcmp(hdchar,hltoken,hltoklen) == 0 ) /*we have an \hdash*/
-	   hline[nrows] = (-1);		/* set \hdash flag for row */
+	   hline[nrows] = (-1); }	/* set \hdash flag for row */
       if ( hline[nrows] != 0 )		/* \hline or \hdash prefixes token */
 	{ skipwhite(tokptr);		/* flush whitespace after \hline */
 	  if ( *tokptr == '\000'	/* end-of-expression after \hline */
@@ -8654,7 +9453,7 @@ end_of_job:
  *				string immediately following \line to be
  *				rasterized, and returning ptr immediately
  *				following last character processed.
- *		size (I)	int containing 0-4 default font size
+ *		size (I)	int containing 0-7 default font size
  *		basesp (I)	subraster *  to character (or subexpression)
  *				immediately preceding \line
  *				(unused, but passed for consistency)
@@ -8739,7 +9538,7 @@ if ( msgfp!=NULL && msglevel>=29 )	/* debugging */
   fprintf(msgfp,"rastline> width,height,origin;x,yinc=%d,%d,%d;%g,%g\n",
   width,height,origin,xinc,yinc);
 /* -------------------------------------------------------------------------
-allocate subraster and raster for complete picture
+allocate subraster and raster for line
 -------------------------------------------------------------------------- */
 /* --- sanity check on width,height,thickness args --- */
 if ( width < 1 ||  width > 600
@@ -8771,6 +9570,101 @@ end_of_job:
     *workingparam = origin;		/* return origin corner to caller */
   return ( linesp );			/* return line to caller */
 } /* --- end-of-function rastline() --- */
+
+
+/* ==========================================================================
+ * Function:	rastrule ( expression, size, basesp, arg1, arg2, arg3 )
+ * Purpose:	\rule handler, returns subraster corresponding to rule
+ *		parameters [lift]{width}{height}
+ * --------------------------------------------------------------------------
+ * Arguments:	expression (I/O) char **  to first char of null-terminated
+ *				string immediately following \rule to be
+ *				rasterized, and returning ptr immediately
+ *				following last character processed.
+ *		size (I)	int containing 0-7 default font size
+ *		basesp (I)	subraster *  to character (or subexpression)
+ *				immediately preceding \rule
+ *				(unused, but passed for consistency)
+ *		arg1 (I)	int unused
+ *		arg2 (I)	int unused
+ *		arg3 (I)	int unused
+ * --------------------------------------------------------------------------
+ * Returns:	( subraster * )	ptr to subraster corresponding to rule
+ *				requested, or NULL for any parsing error
+ * --------------------------------------------------------------------------
+ * Notes:     o	Summary of syntax...
+ *		  \rule[lift]{width}{height}
+ *	      o	if [lift] not given, then bottom of rule on baseline
+ *	      o	if width=0 then you get an invisible strut 1 (one) pixel wide
+ * ======================================================================= */
+/* --- entry point --- */
+subraster *rastrule ( char **expression, int size, subraster *basesp,
+			int arg1, int arg2, int arg3 )
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+char	*texsubexpr(), rulexpr[257];	/* rule[lift]{wdth}{hgt} */
+subraster *new_subraster(), *rulesp=NULL; /* subraster for rule */
+int	pixsz = 1;			/* pixels are one bit each */
+int	lift=0, width=0, height=0;	/* default rule parameters */
+double	strtod(), dval;			/* convert ascii params to doubles */
+int	rwidth=0, rheight=0;		/* alloc width, height plus lift */
+int	rule_raster();			/* draw rule in rulesp->image */
+/* -------------------------------------------------------------------------
+Obtain lift,width,height
+-------------------------------------------------------------------------- */
+/* --- check for optional lift arg  --- */
+if ( *(*expression) == '[' )		/*check for []-enclosed optional arg*/
+  { *expression = texsubexpr(*expression,rulexpr,255,"[","]",0,0);
+    dval = (int)(strtod(rulexpr,NULL)+0.5); /* convert [lift] to int */
+    if ( dval <= 99 && dval >= (-99) )	/* sanity check */
+      lift = iround(unitlength*dval); }	/* scale by unitlength and round */
+/* --- parse for width --- */
+*expression = texsubexpr(*expression,rulexpr,255,"{","}",0,0);
+if ( *rulexpr == '\000' ) goto end_of_job; /* quit if args missing */
+dval = (int)(strtod(rulexpr,NULL)+0.5);	/* convert {width} to int */
+if ( dval <= 500 && dval >= 0 )		/* sanity check */
+  width = max2(0,iround(unitlength*dval)); /* scale by unitlength and round*/
+/* --- parse for height --- */
+*expression = texsubexpr(*expression,rulexpr,255,"{","}",0,0);
+if ( *rulexpr == '\000' ) goto end_of_job; /* quit if args missing */
+dval = (int)(strtod(rulexpr,NULL)+0.5);	/* convert {height} to int */
+if ( dval <= 500 && dval > 0 )		/* sanity check */
+  height= max2(1,iround(unitlength*dval)); /* scale by unitlength and round*/
+/* --- raster width,height in pixels --- */
+rwidth  = max2(1,width);		/* raster must be at least 1 pixel*/
+rheight = height + (lift>=0?lift:	/* raster height plus lift */
+  (-lift<height?0:-lift-height+1));	/* may need empty space above rule */
+/* -------------------------------------------------------------------------
+allocate subraster and raster for rule
+-------------------------------------------------------------------------- */
+/* --- sanity check on width,height,thickness args --- */
+if ( rwidth < 1 ||  rwidth > 600
+||  rheight < 1 || rheight > 600 ) goto end_of_job;
+/* --- allocate and initialize subraster for constructed rule --- */
+if ( (rulesp=new_subraster(rwidth,rheight,pixsz)) /* alloc new subraster */
+==   NULL )  goto end_of_job;		/* quit if failed */
+/* --- initialize line subraster parameters --- */
+rulesp->type = IMAGERASTER;		/* image */
+rulesp->symdef = NULL;			/* not applicable for image */
+rulesp->baseline = rheight-1 + (lift>=0?0:lift); /*adjust baseline for lift*/
+rulesp->size = size;			/* size (probably unneeded) */
+/* -------------------------------------------------------------------------
+draw the rule
+-------------------------------------------------------------------------- */
+rule_raster ( rulesp->image,		/* embedded raster image */
+	(-lift<height?0:rheight-height), /* topmost row for top-left corner*/
+	0,				/* leftmost col for top-left corner*/
+	width,				/* rule width */
+	height,				/* rule height */
+	( width>0? 0:4 ) );		/* rule type */
+/* -------------------------------------------------------------------------
+return constructed rule to caller
+-------------------------------------------------------------------------- */
+end_of_job:
+  return ( rulesp );			/* return rule to caller */
+} /* --- end-of-function rastrule() --- */
 
 
 /* ==========================================================================
@@ -9021,9 +9915,9 @@ end_of_job:
  *				string immediately following \raisebox to be
  *				rasterized, and returning ptr immediately
  *				following last character processed.
- *		size (I)	int containing 0-5 default font size
+ *		size (I)	int containing 0-7 default font size
  *		basesp (I)	subraster *  to character (or subexpression)
- *				immediately preceding \rotatebox
+ *				immediately preceding \raisebox
  *				(unused, but passed for consistency)
  *		arg1 (I)	int unused
  *		arg2 (I)	int unused
@@ -9043,7 +9937,7 @@ subraster *rastraise ( char **expression, int size, subraster *basesp,
 /* -------------------------------------------------------------------------
 Allocations and Declarations
 -------------------------------------------------------------------------- */
-char	*texsubexpr(), subexpr[8192], *liftexpr=subexpr; /* args */
+char	*texsubexpr(), subexpr[MAXSUBXSZ+1], *liftexpr=subexpr; /* args */
 subraster *rasterize(), *raisesp=NULL;	/* rasterize subexpr to be raised */
 int	lift=0;				/* amount to raise/lower baseline */
 /* -------------------------------------------------------------------------
@@ -9083,7 +9977,7 @@ end_of_job:
  *				string immediately following \rotatebox to be
  *				rasterized, and returning ptr immediately
  *				following last character processed.
- *		size (I)	int containing 0-5 default font size
+ *		size (I)	int containing 0-7 default font size
  *		basesp (I)	subraster *  to character (or subexpression)
  *				immediately preceding \rotatebox
  *				(unused, but passed for consistency)
@@ -9105,7 +9999,7 @@ subraster *rastrotate ( char **expression, int size, subraster *basesp,
 /* -------------------------------------------------------------------------
 Allocations and Declarations
 -------------------------------------------------------------------------- */
-char	*texsubexpr(), subexpr[8192], *degexpr=subexpr; /* args */
+char	*texsubexpr(), subexpr[MAXSUBXSZ+1], *degexpr=subexpr; /* args */
 subraster *rasterize(), *rotsp=NULL;	/* subraster for rotated subexpr */
 raster	*rastrot(), *rotrp=NULL;	/* rotate subraster->image 90 degs */
 int	delete_raster();		/* delete intermediate rasters */
@@ -9173,17 +10067,96 @@ if ( rotrp != NULL )			/* rotated raster constructed okay */
  { rotsp->type = IMAGERASTER;		/* signal constructed image */
    rotsp->image = rotrp;		/* raster we just constructed */
    /* --- now try to guess pleasing baseline --- */
-   if ( idegrees > 2 )			/* leave unchanged if unrotated */
+   if ( idegrees > 2 ) {		/* leave unchanged if unrotated */
     if ( strlen(subexpr) < 3		/* we rotated a short expression */
     ||   abs(idegrees-180) < 3 )	/* or just turned it upside-down */
       baseline = rotrp->height - 1;	/* so set with nothing descending */
     else				/* rotated a long expression */
-      baseline = (65*(rotrp->height-1))/100; /* roughly center long expr */
+      baseline = (65*(rotrp->height-1))/100; } /* roughly center long expr */
    rotsp->baseline = baseline; }	/* set baseline as calculated above*/
 /* --- return rotated subexpr to caller --- */
 end_of_job:
   return ( rotsp );			/*return rotated subexpr to caller*/
 } /* --- end-of-function rastrotate() --- */
+
+
+/* ==========================================================================
+ * Function:	rastreflect ( expression, size, basesp, arg1, arg2, arg3 )
+ * Purpose:	\reflectbox[axis]{subexpression} handler, returns subraster
+ *		containing subexpression reflected horizontally (i.e., around
+ *		vertical axis, |_ becomes _|) if [axis] not given or axis=1,
+ *		or reflected vertically if axis=2 given.
+ * --------------------------------------------------------------------------
+ * Arguments:	expression (I/O) char **  to first char of null-terminated
+ *				string immediately following \reflectbox to
+ *				be rasterized, and returning ptr immediately
+ *				following last character processed.
+ *		size (I)	int containing 0-7 default font size
+ *		basesp (I)	subraster *  to character (or subexpression)
+ *				immediately preceding \reflectbox
+ *				(unused, but passed for consistency)
+ *		arg1 (I)	int unused
+ *		arg2 (I)	int unused
+ *		arg3 (I)	int unused
+ * --------------------------------------------------------------------------
+ * Returns:	( subraster * )	ptr to subraster corresponding to \reflectbox
+ *				requested, or NULL for any parsing error
+ * --------------------------------------------------------------------------
+ * Notes:     o	Summary of syntax...
+ *		  \reflectbox[axis]{subexpression}
+ *	      o
+ * ======================================================================= */
+/* --- entry point --- */
+subraster *rastreflect ( char **expression, int size, subraster *basesp,
+			int arg1, int arg2, int arg3 )
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+char	*texsubexpr(), subexpr[MAXSUBXSZ+1], *axisexpr=subexpr; /* args */
+subraster *rasterize(), *refsp=NULL;	/* subraster for reflected subexpr */
+raster	*rastref(), *refrp=NULL;	/* reflect subraster->image */
+int	axis = 1;			/* default horizontal reflection */
+int	delete_raster();		/* delete intermediate raster */
+int	baseline=0;			/* baseline of rasterized image */
+/* -------------------------------------------------------------------------
+obtain [axis] argument immediately following \reflectbox command, if given
+-------------------------------------------------------------------------- */
+/* --- check for optional [axis] arg  --- */
+if ( *(*expression) == '[' )		/*check for []-enclosed optional arg*/
+  { *expression = texsubexpr(*expression,axisexpr,255,"[","]",0,0);
+    axis = atoi(axisexpr);		/* convert [axis] to int */
+    if ( axis<1 || axis>2 )		/* check axis input */
+      axis = 1; }			/* back to default if illegal */
+/* -------------------------------------------------------------------------
+obtain {subexpr} argument after optional [axis], and rasterize it
+-------------------------------------------------------------------------- */
+/* --- parse for {subexpr} arg, and bump expression past it --- */
+*expression = texsubexpr(*expression,subexpr,0,"{","}",0,0);
+/* --- rasterize subexpression to be reflected --- */
+if ( (refsp = rasterize(subexpr,size))	/* rasterize subexpression */
+==   NULL ) goto end_of_job;		/* and quit if failed */
+/* --- return unmodified image if no reflection requested --- */
+if ( axis<1 || axis>2 ) goto end_of_job; /* don't bother reflecting image */
+/* --- extract params for image to be reflected --- */
+refrp = refsp->image;			/* unreflected rasterized image */
+baseline = refsp->baseline;		/* and baseline of that image */
+/* -------------------------------------------------------------------------
+reflect image and adjust its parameters
+-------------------------------------------------------------------------- */
+/* --- reflect image --- */
+refrp = rastref(refsp->image,axis);	/* reflect raster image */
+if ( refrp == NULL ) goto end_of_job;	/* failed to reflect image */
+delete_raster(refsp->image);		/* free original raster image */
+refsp->image = refrp;			/*and replace it with reflected one*/
+/* --- adjust parameters --- */
+if ( axis == 2 )			/* for vertical reflection */
+  baseline = refrp->height - 1;		/* set with nothing descending */
+refsp->baseline = baseline;		/* reset baseline of reflected image*/
+/* --- return reflected subexpr to caller --- */
+end_of_job:
+  return ( refsp );			/*back to caller with reflected expr*/
+} /* --- end-of-function rastreflect() --- */
 
 
 /* ==========================================================================
@@ -9217,7 +10190,7 @@ subraster *rastfbox ( char **expression, int size, subraster *basesp,
 /* -------------------------------------------------------------------------
 Allocations and Declarations
 -------------------------------------------------------------------------- */
-char	*texsubexpr(), subexpr[8192], widtharg[512]; /* args */
+char	*texsubexpr(), subexpr[MAXSUBXSZ+1], widtharg[512]; /* args */
 subraster *rasterize(), *framesp=NULL;	/* rasterize subexpr to be framed */
 raster	*border_raster(), *bp=NULL;	/* framed image raster */
 double	strtod();			/* interpret [width][height] */
@@ -9305,11 +10278,11 @@ subraster *rastinput ( char **expression, int size, subraster *basesp,
 /* -------------------------------------------------------------------------
 Allocations and Declarations
 -------------------------------------------------------------------------- */
-char	*texsubexpr(), tag[512]="\000", filename[1024]="\000"; /* args */
+char	*texsubexpr(), tag[1024]="\000", filename[1024]="\000"; /* args */
 subraster *rasterize(), *inputsp=NULL; /* rasterized input image */
 int	status, rastreadfile();	/* read input file */
 int	format=0, npts=0;	/* don't reformat (numerical) input */
-char	subexpr[8192] = "\000",	/* concatanated lines from input file */
+char	subexpr[MAXFILESZ+1] = "\000", /*concatanated lines from input file*/
 	*mimeprep(),		/* preprocess inputted data */
 	*dbltoa(), *reformat=NULL; /* reformat numerical input */
 /* -------------------------------------------------------------------------
@@ -9317,8 +10290,8 @@ obtain [tag]{filename} argument
 -------------------------------------------------------------------------- */
 /* --- parse for optional [tag] or [fmt] arg, bump expression past it --- */
 if ( *(*expression) == '[' )		/* check for []-enclosed value */
-  { char argfld[2048];			/* optional argument field */
-    *expression = texsubexpr(*expression,argfld,2047,"[","]",0,0);
+  { char argfld[MAXTOKNSZ+1];		/* optional argument field */
+    *expression = texsubexpr(*expression,argfld,MAXTOKNSZ,"[","]",0,0);
     if ( (reformat=strstr(argfld,"dtoa")) != NULL ) /*dtoa/dbltoa requested*/
       {	format = 1;			/* signal dtoa()/dbltoa() format */
 	if ( (reformat=strchr(reformat,'=')) != NULL ) /* have dtoa= */
@@ -9386,12 +10359,12 @@ subraster *rastcounter ( char **expression, int size, subraster *basesp,
 Allocations and Declarations
 -------------------------------------------------------------------------- */
 char	*texsubexpr(), filename[1024]="\000", /* counter file */
-	logfile[1024]="\000", tag[512]="\000"; /*optional log file and tag*/
+	logfile[1024]="\000", tag[1024]="\000"; /*optional log file and tag*/
 subraster *rasterize(), *countersp=NULL; /* rasterized counter image */
 FILE	/* *fp=NULL,*/ *logfp=NULL; /* counter and log file pointers */
 int	status=0,rastreadfile(),rastwritefile(), /*read,write counter file*/
 	isstrict = 1;		/* true to only write to existing files */
-char	text[8192] = "1_",	/* only line in counter file without tags */
+char	text[MAXFILESZ] = "1_",	/* only line in counter file without tags */
 	*delim = NULL,		/* delimiter in text */
 	utext[128] = "1_",	/* default delimiter */
 	*udelim = utext+1;	/* underscore delimiter */
@@ -9414,23 +10387,23 @@ first obtain optional [value][logfile] args immediately following \counter
 if ( *(*expression) == '[' )		/* check for []-enclosed value */
   { *expression = texsubexpr(*expression,text,1023,"[","]",0,0);
     if ( *text != '\000' )		/* got counter value (or logfile) */
-     if ( strlen(text) >= 1 )		/* and it's not an empty string */
+     if ( strlen(text) >= 1 ) {		/* and it's not an empty string */
       if ( isthischar(*text,"+-0123456789") ) /* check for leading +-digit */
 	gotvalue = 1;			/* signal we got optional value */
       else				/* not +-digit, so must be logfile */
-	strcpy(logfile,text);		/* so just copy it */
+	strcpy(logfile,text); }		/* so just copy it */
   } /* --- end-of-if(**expression=='[') --- */
 /* --- next check for optional \counter[][logfile] --- */
 if ( *(*expression) == '[' )		/* check for []-enclosed logfile */
   { *expression = texsubexpr(*expression,filename,1023,"[","]",0,0);
     if ( *filename != '\000' )		/* got logfile (or counter value) */
-     if ( strlen(filename) >= 1 )	/* and it's not an empty string */
+     if ( strlen(filename) >= 1 ) {	/* and it's not an empty string */
       if ( !(isthischar(*text,"+-0123456789")) /* not a leading +-digit */
       ||   gotvalue )			/* or we already got counter value */
 	strcpy(logfile,filename);	/* so just copy it */
       else				/* leading +-digit must be value */
 	{ strcpy(text,filename);	/* copy value to text line */
-	  gotvalue = 1; }		/* and signal we got optional value*/
+	  gotvalue = 1; } }		/* and signal we got optional value*/
   } /* --- end-of-if(**expression=='[') --- */
 /* --- evaluate [value] if present --- */
 if ( gotvalue ) {			/*leading +-digit should be in text*/
@@ -9693,7 +10666,7 @@ subraster *rastnoop ( char **expression, int size, subraster *basesp,
 /* -------------------------------------------------------------------------
 Allocations and Declarations
 -------------------------------------------------------------------------- */
-char	*texsubexpr(), subexpr[8192];	/* flush dummy args eaten by \escape*/
+char	*texsubexpr(), subexpr[MAXSUBXSZ+1]; /*dummy args eaten by \escape*/
 subraster *rasterize(), *noopsp=NULL;	/* rasterize subexpr */
 /* --- flush accompanying args if necessary --- */
 if ( nargs != NOVALUE			/* not unspecified */
@@ -9729,20 +10702,22 @@ FILE	*rastopenfile ( char *filename, char *mode )
 Allocations and Declarations
 -------------------------------------------------------------------------- */
 FILE	*fp = (FILE *)NULL /*,*fopen()*/; /*file pointer to opened filename*/
-char	texfile[2048] = "\000",		/* local, edited copy of filename */
+char	texfile[2050] = "\000",		/* local, edited copy of filename */
 	*rasteditfilename(),		/* prepend pathprefix if necessary */
-	amode[128] = "r";		/* test open mode if arg mode=NULL */
+	amode[512] = "r";		/* test open mode if arg mode=NULL */
 int	ismode = 0;			/* true of mode!=NULL */
 /* --------------------------------------------------------------------------
 Check mode and open file
 -------------------------------------------------------------------------- */
 /* --- edit filename --- */
-strcpy(texfile,rasteditfilename(filename)); /*edited copy of input filename*/
+strncpy(texfile,rasteditfilename(filename),2047); /*edited copy of filename*/
+texfile[2047] = '\000';			/* make sure it's null terminated */
 /* --- check mode --- */
 if ( mode != (char *)NULL )		/* caller passed mode arg */
  if ( *mode != '\000' )			/* and it's not an empty string */
   { ismode = 1;				/* so flip mode flag true */
-    strcpy(amode,mode);			/* and replace "r" with caller's */
+    strncpy(amode,mode,254);		/* and replace "r" with caller's */
+    amode[254] = '\000';		/* make sure it's null terminated */
     compress(amode,' '); }		/* remove embedded blanks */
 /* --- open filename or filename.tex --- */
 if ( strlen(texfile) > 1 )		/* make sure we got actual filename*/
@@ -9784,7 +10759,7 @@ char	*rasteditfilename ( char *filename )
 /* -------------------------------------------------------------------------
 Allocations and Declarations
 -------------------------------------------------------------------------- */
-static	char editname[2048];		/*edited filename returned to caller*/
+static	char editname[2050];		/*edited filename returned to caller*/
 char	*strchange();			/* prepend pathprefix if necessary */
 int	strreplace(),			/* remove ../'s and ..\'s */
 	isprefix = (*pathprefix=='\000'?0:1); /* true if paths have prefix */
@@ -9845,10 +10820,10 @@ int	rastreadfile ( char *filename, int islock, char *tag, char *value )
 Allocations and Declarations
 -------------------------------------------------------------------------- */
 FILE	*fp = (FILE *)NULL, *rastopenfile(); /* pointer to opened filename */
-char	texfile[2048] = "\000",		/* local copy of input filename */
-	text[4096];			/* line from input file */
-char	*tagp, tag1[512], tag2[512];	/* left <tag> and right <tag/> */
-int	vallen=0, maxvallen=8000;	/* #chars in value, max allowed */
+char	texfile[1024] = "\000",		/* local copy of input filename */
+	text[MAXLINESZ+1];		/* line from input file */
+char	*tagp, tag1[1024], tag2[1024];	/* left <tag> and right <tag/> */
+int	vallen=0, maxvallen=MAXFILESZ;	/* #chars in value, max allowed */
 int	status = (-1);			/* status returned, 1=okay */
 int	tagnum = 0;			/* tag we're looking for */
 /*int	islock = 1;*/			/* true to lock file */
@@ -9860,7 +10835,8 @@ if ( value == (char *)NULL ) goto end_of_job; /* no output buffer supplied */
 *value = '\000';			/* init buffer with empty string */
 /* --- open filename or filename.tex --- */
 if ( filename != (char *)NULL )		/* make sure we got filename arg */
-  { strcpy(texfile,filename);		/* local copy of filename */
+  { strncpy(texfile,filename,1023);	/* local copy of filename */
+    texfile[1023] = '\000';		/* make sure it's null terminated */
     fp = rastopenfile(texfile,(islock?"r+":"r")); } /* try opening it */
 /* --- check that file opened --- */
 if ( fp == (FILE *)NULL )		/* failed to open file */
@@ -9881,7 +10857,7 @@ if ( tag != (char *)NULL )		/* caller passed tag arg */
 /* --------------------------------------------------------------------------
 Read file, concatnate lines
 -------------------------------------------------------------------------- */
-while ( fgets(text,4090,fp) != (char *)NULL ) { /* read input till eof */
+while ( fgets(text,MAXLINESZ-1,fp) != (char *)NULL ) { /*read input till eof*/
   switch ( tagnum ) {			/* look for left- or right-tag */
     case 0: status = 1; break;		/* no tag to look for */
     case 1:				/* looking for opening left <tag> */
@@ -9939,9 +10915,9 @@ int	rastwritefile( char *filename, char *tag, char *value, int isstrict )
 Allocations and Declarations
 -------------------------------------------------------------------------- */
 FILE	*fp = (FILE *)NULL, *rastopenfile(); /* pointer to opened filename */
-char	texfile[2048] = "\000",		/* local copy of input filename */
-	filebuff[16384] = "\000",	/* entire contents of file */
-	tag1[512], tag2[512],		/* left <tag> and right <tag/> */
+char	texfile[1024] = "\000",		/* local copy of input filename */
+	filebuff[MAXFILESZ+1] = "\000",	/* entire contents of file */
+	tag1[1024], tag2[1024],		/* left <tag> and right <tag/> */
 	*strchange(),			/* put value between <tag>...</tag>*/
 	*timestamp();			/* log modification time */
 int	istag=0, rastreadfile(),	/* read file if tag!=NULL */
@@ -9958,7 +10934,8 @@ if ( filename == (char *)NULL		/* quit if no filename arg supplied*/
 if ( strlen(filename) < 2		/* quit if unreasonable filename */
 ||   *value == '\000' ) goto end_of_job; /* or empty value string supplied */
 /* --- establish filename[.tex] --- */
-strcpy(texfile,filename);		/* local copy of input filename */
+strncpy(texfile,filename,1023);		/* local copy of input filename */
+texfile[1023] = '\000';			/* make sure it's null terminated */
 if ( rastopenfile(texfile,NULL)		/* unchanged or .tex appended */
 ==   (FILE *)NULL )			/* can't open, so write new file */
   { if ( isstrict ) goto end_of_job;	/* fail if new files not permitted */
@@ -10016,7 +10993,7 @@ if ( istag )				/* only replacing tag in file */
    >=   0 )				/* usually <tag> precedes </tag> */
     strchange(flen,tagp1+tlen1,value);	/* change ...'s to value */
    else					/* weirdly, </tag> precedes <tag> */
-    { char fbuff[2048];			/* field buff for <tag>value</tag> */
+    { char fbuff[4096];			/* field buff for <tag>value</tag> */
       if ( (flen = ((int)(tagp1-tagp2))+tlen1) /* strlen(</tag>...<tag>) */
       <=   0 ) goto end_of_job;		/* must be internal error */
       strcpy(fbuff,tag1);		/* set opening <tag> */
@@ -10140,11 +11117,11 @@ for ( idd=1; idd<=modays[month]; idd++ ) /* run through days of month */
   else					/* not today's date */
     strcat(calbuff,aval);		/* so just put in idd */
   /* --- terminate cell --- */
-  if ( idd < modays[month] )		/* not yet end-of-month */
+  if ( idd < modays[month] ) {		/* not yet end-of-month */
    if ( iday < 6 )			/* still have days left in week */
     strcat(calbuff,"&");		/* new cell in same week */
    else					/* reached end-of-week */
-    strcat(calbuff,"\\\\ \\hline");	/* so start new week */
+    strcat(calbuff,"\\\\ \\hline"); }	/* so start new week */
   } /* --- end-of-for(idd) --- */
 strcat(calbuff,"\\\\ \\hline");		/* final underline at end-of-month */
 /* --- return calendar to caller --- */
@@ -10392,7 +11369,7 @@ char	*dbltoa ( double dblval, int npts )
 /* -------------------------------------------------------------------------
 Allocations and Declarations
 ------------------------------------------------------------------------- */
-static	char finval[128];		/* buffer returned to caller */
+static	char finval[256];		/* buffer returned to caller */
 static	char digittbl[32]="0123456789*"; /* table of ascii decimal digits */
 char	*finptr = finval;		/* ptr to next char being converted*/
 double	floor();			/* integer which is glb(double) */
@@ -10557,7 +11534,7 @@ for ( irow=0; irow<rp->height; irow++ )
       &&   bytemap[ipixel] > blackscale ) /* weighted avg > blackscale */
 	bytemap[ipixel] = grayscale-1; } /* so force it entirely black */
   /*--- only anti-alias pixels whose adjacent pixels fall within bounds ---*/
-  if ( !iscenter )			/* apply min/maxadjacent test */
+  if ( !iscenter ) {			/* apply min/maxadjacent test */
    if ( isminmaxwts )			/* min/max refer to adjacent weights*/
     { if ( wadjacent < minadjacent	/* wts of adjacent points too low */
       ||   wadjacent > maxadjacent )	/* or too high */
@@ -10565,7 +11542,7 @@ for ( irow=0; irow<rp->height; irow++ )
    else					/* min/max refer to #adjacent points*/
     { if ( nadjacent < minadjacent	/* too few adjacent points black */
       ||   nadjacent > maxadjacent )	/* or too many */
-	bytemap[ipixel] = 0; }		/* so leave point white */
+	bytemap[ipixel] = 0; } }	/* so leave point white */
   } /* --- end-of-for(irow,icol) --- */
 /* -------------------------------------------------------------------------
 Back to caller with gray-scale anti-aliased bytemap
@@ -10607,6 +11584,7 @@ int	width=rp->width, height=rp->height, /* width, height of raster */
 	icol = 0,        irow = 0,	/* width, height indexes */
 	imap = (-1);			/* pixel index = icol + irow*width */
 int	bgbitval=0, fgbitval=1;		/* background, foreground bitval */
+int	isfirstaa = 1;			/*debugging switch signals 1st pixel*/
 #if 0
 int	totwts=12, wts[9]={1,1,1, 1,4,1, 1,1,1}; /* pnmalias default wts */
 int	totwts=16, wts[9]={1,2,1, 2,4,2, 1,2,1}; /* weights */
@@ -10729,9 +11707,11 @@ for ( irow=0; irow<height; irow++ )
     double aawtval = ((double)aasumval)/((double)totwts); /* weighted val */
     aabyteval= (int)(((double)(grayscale-1))*aawtval+0.5); /*0...grayscale-1*/
     bytemap[imap] = (intbyte)(aabyteval); /* set antialiased pixel */
-    if ( msglevel>=99 && msgfp!=NULL ) fprintf(msgfp,	/* debugging */
-      "aapnm> irow,icol,imap=%d,%d,%d aawtval=%.4f aabyteval=%d\n",
+    if ( msglevel>=99 && msgfp!=NULL ) { fprintf(msgfp, /*diagnostic output*/
+      "%s> irow,icol,imap=%d,%d,%d aawtval=%.4f aabyteval=%d\n",
+      (isfirstaa?"aapnm algorithm":"aapnm"),
       irow,icol,imap, aawtval,aabyteval);
+      isfirstaa = 0; }
     } /* --- end-of-if(isedge) --- */
   } /* --- end-of-for(irow,icol) --- */
 /* -------------------------------------------------------------------------
@@ -10740,6 +11720,1182 @@ Back to caller with gray-scale anti-aliased bytemap
 /*end_of_job:*/
   return ( 1 );
 } /* --- end-of-function aapnm() --- */
+
+
+/* ==========================================================================
+ * Function:	aapnmlookup ( rp, bytemap, grayscale )
+ * Purpose:	calculates a lowpass anti-aliased bytemap
+ *		for rp->bitmap, with each byte 0...grayscale-1,
+ *		based on the pnmalias.c algorithm.
+ *		This version uses aagridnum() and aapatternnum() lookups
+ *		to interpret 3x3 lowpass pixel grids.
+ * --------------------------------------------------------------------------
+ * Arguments:	rp (I)		raster *  to raster whose bitmap
+ *				is to be anti-aliased
+ *		bytemap (O)	intbyte * to bytemap, calculated
+ *				by applying pnm-based filter to rp->bitmap,
+ *				and returned (as you'd expect) in 1-to-1
+ *				addressing correspondence with rp->bitmap
+ *		grayscale (I)	int containing number of grayscales
+ *				to be calculated, 0...grayscale-1
+ *				(should typically be given as 256)
+ * --------------------------------------------------------------------------
+ * Returns:	( int )		1=success, 0=any error
+ * --------------------------------------------------------------------------
+ * Notes:    o	Based on the pnmalias.c algorithm in the netpbm package
+ *		on sourceforge.
+ *	     o	This version uses aagridnum() and aapatternnum() lookups
+ *		to interpret 3x3 lowpass pixel grids.
+ * ======================================================================= */
+/* --- entry point --- */
+int	aapnmlookup (raster *rp, intbyte *bytemap, int grayscale)
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+int	width=rp->width, height=rp->height, /* width, height of raster */
+	icol = 0,        irow = 0,	/* width, height indexes */
+	imap = (-1);			/* pixel index = icol + irow*width */
+int	bgbitval=0, fgbitval=1;		/* background, foreground bitval */
+int	isfirstaa = 1;			/*debugging switch signals 1st pixel*/
+int	aacenterwt=centerwt, aaadjacentwt=adjacentwt, aacornerwt=cornerwt,
+	totwts = centerwt + 4*(adjacentwt+cornerwt); /*pnmalias default wts*/
+int	isfgalias  = fgalias,		/*(1) true to antialias fg bits */
+	isfgonly   = fgonly,		/*(0) true to only antialias fg bits*/
+	isbgalias  = bgalias,		/*(0) true to antialias bg bits */
+	isbgonly   = bgonly;		/*(0) true to only antialias bg bits*/
+int	gridnum=(-1), aagridnum(),	/* grid# for 3x3 grid at irow,icol */
+	patternum=(-1), aapatternnum();	/*pattern#, 1-51, for input gridnum*/
+int	aapatterns();			/* to antialias special patterns */
+/* ---
+ * pattern number data
+ * ------------------- */
+/* --- number of adjacent fg pixels set in pattern --- */
+static	int nadjacents[] = { -1,	/* #adjacent fg pixels for pattern */
+   0,  4,  0,  1,  4,  3,  1,  0,  1,  0,	/*  1-10 */
+   2,  2,  3,  4,  3,  4,  2,  2,  1,  2,	/* 11-20 */
+   1,  2,  1,  2,  0,  1,  3,  2,  3,  2,	/* 21-30 */
+   3,  2,  3,  2,  4,  3,  1,  2,  2,  2,	/* 31-40 */
+   2,  1,  2,  2,  3,  0,  3,  2,  2,  1,  4,	/* 41-51 */
+   -1 } ; /* --- end-of-nadjacents[] --- */
+/* --- number of corner fg pixels set in pattern --- */
+static	int ncorners[] = { -1,		/* #corner fg pixels for pattern */
+   0,  4,  1,  0,  3,  4,  1,  2,  1,  2,	/*  1-10 */
+   0,  0,  3,  2,  3,  2,  4,  4,  2,  1,	/* 11-20 */
+   2,  1,  2,  1,  3,  2,  0,  1,  2,  3,	/* 21-30 */
+   2,  3,  2,  3,  1,  2,  4,  3,  2,  2,	/* 31-40 */
+   2,  3,  2,  2,  1,  4,  1,  2,  2,  3,  0,	/* 41-51 */
+   -1 } ; /* --- end-of-ncorners[] --- */
+/* --- 0,1,2=pattern contains horizontal bg,fg,both edge; -1=no edge --- */
+static	int horzedges[] = { -1,		/* 0,1,2 = horz bg,fg,both edge */
+   0,  1,  0,  0,  1,  1,  0,  0,  0, -1,	/*  1-10 */
+   0, -1,  1,  1,  1, -1,  1, -1,  2,  0,	/* 11-20 */
+  -1, -1, -1,  0, -1, -1, -1, -1,  2,  1,	/* 21-30 */
+  -1, -1, -1,  1, -1, -1, -1, -1,  2, -1,	/* 31-40 */
+  -1,  1,  1, -1, -1, -1,  0,  0, -1, -1, -1,	/* 41-51 */
+   -1 } ; /* --- end-of-horzedges[] --- */
+/* --- 0,1,2=pattern contains vertical bg,fg,both edge; -1=no edge --- */
+static	int vertedges[] = { -1,		/* 0,1,2 = vert bg,fg,both edge */
+   0,  1,  0,  0,  1,  1,  0, -1, -1, -1,	/*  1-10 */
+   0,  0,  1, -1, -1, -1,  1,  1, -1, -1,	/* 11-20 */
+  -1,  0,  0,  0, -1, -1,  0, -1, -1, -1,	/* 21-30 */
+  -1,  1,  1,  1, -1, -1,  1, -1, -1, -1,	/* 31-40 */
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* 41-51 */
+   -1 } ; /* --- end-of-vertedges[] --- */
+/* --- 0,1,2=pattern contains diagonal bg,fg,both edge; -1=no edge --- */
+static	int diagedges[] = { -1,		/* 0,1,2 = diag bg,fg,both edge */
+   0,  1,  0,  0,  1,  1,  0,  0,  0,  0,	/*  1-10 */
+   2, -1,  1,  1,  1,  1,  1, -1,  0,  2,	/* 11-20 */
+   0, -1,  0,  2,  0, -1,  1,  1,  1,  1,	/* 21-30 */
+   1, -1,  1,  2,  1,  1, -1,  1,  2, -1,	/* 31-40 */
+   1,  0, -1,  2,  1,  0,  1, -1,  1, -1,  1,	/* 41-51 */
+   -1 } ; /* --- end-of-diagedges[] --- */
+/* -------------------------------------------------------------------------
+Calculate bytemap as 9-point weighted average over bitmap
+-------------------------------------------------------------------------- */
+for ( irow=0; irow<height; irow++ )
+ for ( icol=0; icol<width; icol++ )
+  {
+  /* --- local allocations and declarations --- */
+  int	bitval=0,			/* value of rp bit at irow,icol */
+	isbgdiag=0, isfgdiag=0,		/*does pixel border a bg or fg edge*/
+	aabyteval=0;			/* antialiased (or unchanged) value*/
+  /* --- get gridnum and center bit value, init aabyteval --- */
+  imap++;				/* first set imap=icol + irow*width*/
+  gridnum = aagridnum(rp,irow,icol);	/*grid# coding 3x3 grid at irow,icol*/
+  bitval = (gridnum&1);			/* center bit set if gridnum odd */
+  aabyteval = (intbyte)(bitval==bgbitval?0:grayscale-1); /* default aa val */
+  bytemap[imap] = (intbyte)(aabyteval);	/* init antialiased pixel */
+  if ( gridnum<0 || gridnum>511 ) continue; /* gridnum out of bounds*/
+  /* --- check if we're antialiasing this pixel --- */
+  if ( (isbgonly && bitval==fgbitval)	/* only antialias background bit */
+  ||   (isfgonly && bitval==bgbitval) )	/* only antialias foreground bit */
+    continue;				/* leave default and do next bit */
+  /* --- look up pattern number, 1-51, corresponding to input gridnum --- */
+  patternum = aapatternnum(gridnum);	/* look up pattern number */
+  if ( patternum<1 || patternum>51 ) continue; /* some internal error */
+  /* --- special pattern number processing --- */
+  if ( (aabyteval = aapatterns(rp,irow,icol,gridnum,patternum,grayscale))
+  >=   0 ) {				/* special processing for pattern */
+    bytemap[imap] = (intbyte)(aabyteval); /* set antialiased pixel */
+    continue; }				/* and continue with next pixel */
+  /* --- check for diagonal edges --- */
+  isbgdiag = ( diagedges[patternum]==2 || /*current pixel borders a bg edge*/
+               diagedges[patternum]==0 );
+  isfgdiag = ( diagedges[patternum]==2 || /*current pixel borders a fg edge*/
+               diagedges[patternum]==1 );
+  /* ---check top/bot left/right edges for corners (added by j.forkosh)--- */
+  if ( 1 ) {				/* true to perform test */
+    int	isbghorz=0, isfghorz=0, isbgvert=0, isfgvert=0, /* horz/vert edges */
+	horzedge=horzedges[patternum], vertedge=vertedges[patternum];
+    isbghorz = (horzedge==2||horzedge==0); /* top or bottom edge is all bg */
+    isfghorz = (horzedge==2||horzedge==1); /* top or bottom edge is all fg */
+    isbgvert = (vertedge==2||vertedge==0); /* left or right edge is all bg */
+    isfgvert = (vertedge==2||vertedge==1); /* left or right edge is all fg */
+    if ( (isbghorz && isbgvert && (bitval==fgbitval))	/* we're at an...*/
+    ||   (isfghorz && isfgvert && (bitval==bgbitval)) )	/*...inside corner */
+	continue;					/* don't antialias */
+    } /* --- end-of-if(1) --- */
+#if 0
+  /* --- check #gaps for checkerboard (added by j.forkosh) --- */
+  if ( 0 ) {				/* true to perform test */
+    int	ngaps=0, mingaps=1,maxgaps=2;	/* count #fg/bg flips (max=4 noop) */
+    if ( nwbitval!=nnbitval ) ngaps++;	/* upper-left =? upper */
+    if ( nnbitval!=nebitval ) ngaps++;	/* upper =? upper-right */
+    if ( nebitval!=eebitval ) ngaps++;	/* upper-right =? right */
+    if ( eebitval!=sebitval ) ngaps++;	/* right =? lower-right */
+    if ( sebitval!=ssbitval ) ngaps++;	/* lower-right =? lower */
+    if ( ssbitval!=swbitval ) ngaps++;	/* lower =? lower-left */
+    if ( swbitval!=wwbitval ) ngaps++;	/* lower-left =? left */
+    if ( wwbitval!=nwbitval ) ngaps++;	/* left =? upper-left */
+    if ( ngaps > 0 ) ngaps /= 2;	/* each gap has 2 bg/fg flips */
+    if ( ngaps<mingaps || ngaps>maxgaps ) continue;
+    } /* --- end-of-if(1) --- */
+#endif
+  /* --- antialias if necessary --- */
+  if ( (isbgalias && isbgdiag)		/* alias pixel surrounding bg */
+  ||   (isfgalias && isfgdiag)		/* alias pixel surrounding fg */
+  ||   (isbgdiag  && isfgdiag) )	/* neighboring fg and bg pixel */
+    {
+    int	aasumval =			/* sum wts[]*bitmap[] */
+	aacenterwt*bitval +		/* apply centerwt to center pixel */
+	aaadjacentwt*nadjacents[patternum] + /* similarly for adjacents */
+	aacornerwt*ncorners[patternum];	/* and corners */
+    double aawtval = ((double)aasumval)/((double)totwts); /* weighted val */
+    aabyteval= (int)(((double)(grayscale-1))*aawtval+0.5); /*0...grayscale-1*/
+    bytemap[imap] = (intbyte)(aabyteval); /* set antialiased pixel */
+    if ( msglevel>=99 && msgfp!=NULL ) { fprintf(msgfp, /*diagnostic output*/
+      "%s> irow,icol,imap=%d,%d,%d aawtval=%.4f aabyteval=%d",
+      (isfirstaa?"aapnmlookup algorithm":"aapnm"),
+      irow,icol,imap, aawtval,aabyteval);
+      if ( msglevel < 100 ) fprintf(msgfp,"\n"); /* no more output */
+      else fprintf(msgfp,", grid#,pattern#=%d,%d\n",gridnum,patternum);
+      isfirstaa = 0; }
+    } /* --- end-of-if(isedge) --- */
+  } /* --- end-of-for(irow,icol) --- */
+/* -------------------------------------------------------------------------
+Back to caller with gray-scale anti-aliased bytemap
+-------------------------------------------------------------------------- */
+/*end_of_job:*/
+  return ( 1 );
+} /* --- end-of-function aapnmlookup() --- */
+
+
+/* ==========================================================================
+ * Function:	aapatterns ( rp, irow, icol, gridnum, patternum, grayscale )
+ * Purpose:	For patterns requireing special processing,
+ *		calculates anti-aliased value for pixel at irow,icol,
+ *		whose surrounding 3x3 pixel grid is coded by gridnum
+ *		(which must correspond to a pattern requiring special
+ *		processing).
+ * --------------------------------------------------------------------------
+ * Arguments:	rp (I)		raster *  to raster whose bitmap
+ *				is to be anti-aliased
+ *		irow (I)	int containing row, 0...height-1,
+ *				of pixel to be antialiased
+ *		icol (I)	int containing col, 0...width-1,
+ *				of pixel to be antialiased
+ *		gridnum (I)	int containing 0...511 corresponding to
+ *				3x3 pixel grid surrounding irow,icol
+ *		patternum (I)	int containing 1...51 pattern# of
+ *				the 3x3 grid surrounding irow,icol
+ *		grayscale (I)	int containing number of grayscales
+ *				to be calculated, 0...grayscale-1
+ *				(should typically be given as 256)
+ * --------------------------------------------------------------------------
+ * Returns:	( int )		0...grayscale-1 for success,
+ *				-1 = error, or no special processing required
+ * --------------------------------------------------------------------------
+ * Notes:    o
+ * ======================================================================= */
+/* --- entry point --- */
+int	aapatterns (raster *rp, int irow, int icol,
+	int gridnum, int patternum, int grayscale)
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+int	aaval = (-1);			/* antialiased value returned */
+int	iscenter = (gridnum&1);		/* true if center pixel set/black */
+int	aapatternnum(),			/* if patternum not supplied */
+	aapattern1124(),		/* routine for patterns #11,24 */
+	aapattern19(),			/* special routine for pattern #19 */
+	aapattern20(),			/* special routine for pattern #20 */
+	aapattern39();			/* special routine for pattern #39 */
+/* -------------------------------------------------------------------------
+special pattern number processing
+-------------------------------------------------------------------------- */
+if ( 1 ) {
+  if ( patternum < 1 )			/* pattern# not supplied by caller */
+    patternum = aapatternnum(gridnum);	/* so look it up ourselves */
+  switch ( patternum ) {
+    default: break;			/* no special processing */
+    case 11:
+    case 24: aaval = aapattern1124(rp,irow,icol,gridnum,grayscale); break;
+    case 19: aaval = aapattern19(rp,irow,icol,gridnum,grayscale); break;
+    case 20: aaval = aapattern20(rp,irow,icol,gridnum,grayscale); break;
+    case 39: aaval = aapattern39(rp,irow,icol,gridnum,grayscale); break;
+    /* case 24: if ( (gridnum&1) == 0 ) aaval=0; break; */
+    case 29: aaval = (iscenter?grayscale-1:0); break; /* no antialiasing */
+    } /* --- end-of-switch(patternum) --- */
+  } /* --- end-of-if() --- */
+return ( aaval );			/* return antialiased val to caller*/
+} /* --- end-of-function aapatterns() --- */
+
+
+/* ==========================================================================
+ * Function:	aapattern1124 ( rp, irow, icol, gridnum, grayscale )
+ * Purpose:	calculates anti-aliased value for pixel at irow,icol,
+ *		whose surrounding 3x3 pixel grid is coded by gridnum
+ *		(which must correspond to pattern #11 or #24).
+ * --------------------------------------------------------------------------
+ * Arguments:	rp (I)		raster *  to raster whose bitmap
+ *				is to be anti-aliased
+ *		irow (I)	int containing row, 0...height-1,
+ *				of pixel to be antialiased
+ *		icol (I)	int containing col, 0...width-1,
+ *				of pixel to be antialiased
+ *		gridnum (I)	int containing 0...511 corresponding to
+ *				3x3 pixel grid surrounding irow,icol
+ *		grayscale (I)	int containing number of grayscales
+ *				to be calculated, 0...grayscale-1
+ *				(should typically be given as 256)
+ * --------------------------------------------------------------------------
+ * Returns:	( int )		0...grayscale-1 for success, -1=any error
+ * --------------------------------------------------------------------------
+ * Notes:    o	Handles the eight gridnum's
+ *		(gridnum/2 shown to eliminate irrelevant low-order bit)
+ *		  ---        ---         -*-          -*-
+ *		  --* = 10   *-- = 18    --* = 72     *-- = 80  (pattern$11)
+ *		  -*-        -*-         ---          ---
+ *
+ *		  ---        ---         -**          **-
+ *		  --* = 11   *-- = 22    --* = 104    *-- = 208 (pattern$24)
+ *		  -**        **-         ---          ---
+ *	     o	For black * center pixel, using grid#10 as an example,
+ *		pixel stays ---      antialiased  ---*
+ *		black if    -***     if part of	  -**
+ *		part of a   -*-      a diagonal	  -*- 
+ *		corner, eg,  *       line, eg,	  *
+ * ======================================================================= */
+/* --- entry point --- */
+int	aapattern1124 (raster *rp, int irow, int icol,
+	int gridnum, int grayscale)
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+int	aaval = (-1);			/* antialiased value returned */
+int	iscenter = gridnum&1;		/* true if pixel at irow,icol black*/
+int	patternum = 24;			/* init for pattern#24 default */
+pixbyte	*bitmap = rp->pixmap;		/* local rp->pixmap ptr */
+int	width=rp->width, height=rp->height; /* width, height of raster */
+int	jrow=irow, jcol=icol;		/* corner or diagonal row,col */
+int	vertcornval=0, horzcornval=0,	/* vertical, horizontal corner bits*/
+	topdiagval=0,  botdiagval=0,	/* upper,lower diagonal pixel bits */
+	cornval=0, diagval=0;		/* vert+horzcorn, top+botdiag */
+int	hdirection=99, vdirection=99,	/* horz,vert corner direction */
+	hturn=99,vturn=99, aafollowline(); /* follow corner till turns */
+/* -------------------------------------------------------------------------
+Check corner and diagonal pixels
+-------------------------------------------------------------------------- */
+if ( 0 ) goto end_of_job;		/* true to turn off pattern1124 */
+switch ( gridnum/2 ) {			/* check pattern#11,24 corner, diag*/
+  default: goto end_of_job;		/* not a pattern#11,24 gridnum */
+  case 10: patternum=11; case 11:
+    hdirection = 2;  vdirection = -1;	/* directions to follow corner */
+    if ( (jrow=irow+2) < height ) {	/* vert corner below center pixel */
+      vertcornval = getlongbit(bitmap,(icol+jrow*width));
+      if ( (icol-1) >= 0 )		/* lower diag left of center */
+        botdiagval = getlongbit(bitmap,((icol-1)+jrow*width)); }
+    if ( (jcol=icol+2) < width ) {	/* horz corner right of center */
+      horzcornval = getlongbit(bitmap,(jcol+irow*width));
+      if ( (irow-1) >= 0 )		/* upper diag above center */
+        topdiagval = getlongbit(bitmap,(jcol+(irow-1)*width)); }
+    break;
+  case 18: patternum=11; case 22:
+    hdirection = -2;  vdirection = -1;	/* directions to follow corner */
+    if ( (jrow=irow+2) < height ) {	/* vert corner below center pixel */
+      vertcornval = getlongbit(bitmap,(icol+jrow*width));
+      if ( (icol+1) < width )		/* lower diag right of center */
+        botdiagval = getlongbit(bitmap,((icol+1)+jrow*width)); }
+    if ( (jcol=icol-2) >= 0 ) {		/* horz corner left of center */
+      horzcornval = getlongbit(bitmap,(jcol+irow*width));
+      if ( (irow-1) >= 0 )		/* upper diag above center */
+        topdiagval = getlongbit(bitmap,(jcol+(irow-1)*width)); }
+    break;
+  case 72: patternum=11; case 104:
+    hdirection = 2;  vdirection = 1;	/* directions to follow corner */
+    if ( (jrow=irow-2) >= 0 ) {		/* vert corner above center pixel */
+      vertcornval = getlongbit(bitmap,(icol+jrow*width));
+      if ( (icol-1) >= 0 )		/* upper diag left of center */
+        topdiagval = getlongbit(bitmap,((icol-1)+jrow*width)); }
+    if ( (jcol=icol+2) < width ) {	/* horz corner right of center */
+      horzcornval = getlongbit(bitmap,(jcol+irow*width));
+      if ( (irow+1) < height )		/* lower diag below center */
+        botdiagval = getlongbit(bitmap,(jcol+(irow+1)*width)); }
+    break;
+  case 80: patternum=11; case 208:
+    hdirection = -2;  vdirection = 1;	/* directions to follow corner */
+    if ( (jrow=irow-2) >= 0 ) {		/* vert corner above center pixel */
+      vertcornval = getlongbit(bitmap,(icol+jrow*width));
+      if ( (icol+1) < width )		/* upper diag right of center */
+        topdiagval = getlongbit(bitmap,((icol+1)+jrow*width)); }
+    if ( (jcol=icol-2) >= 0 ) {		/* horz corner left of center */
+      horzcornval = getlongbit(bitmap,(jcol+irow*width));
+      if ( (irow+1) < height )		/* lower diag below center */
+        botdiagval = getlongbit(bitmap,(jcol+(irow+1)*width)); }
+    break;
+  } /* --- end-of-switch(gridnum/2) --- */
+cornval = vertcornval+horzcornval;	/* 0=no corner bits, 1, 2=both */
+diagval = topdiagval+botdiagval;	/* 0=no diag bits, 1, 2=both */
+/* -------------------------------------------------------------------------
+Handle white center
+-------------------------------------------------------------------------- */
+if ( 1 && !iscenter ) { aaval = (patternum==11?51:64);  goto end_of_job; }
+/* -------------------------------------------------------------------------
+Handle black center
+-------------------------------------------------------------------------- */
+if ( diagval > 1 ) aaval = ( patternum==24? 255:191 );
+else {
+  hturn = aafollowline(rp,irow,icol,hdirection);
+  vturn = aafollowline(rp,irow,icol,vdirection);
+  if ( vturn*hdirection < 0  && hturn*vdirection < 0 )
+       aaval = ( patternum==24? 255:191 );
+  else aaval = grayscale-1; }		/* actual corner */
+/* -------------------------------------------------------------------------
+Back to caller with grayscale antialiased value for pixel at irow,icol
+-------------------------------------------------------------------------- */
+end_of_job:
+  if ( aaval >= 0 )			/* have antialiasing result */
+   if ( msglevel>=99 && msgfp!=NULL ) fprintf(msgfp, /* diagnostic output */
+    "aapattern1124> irow,icol,grid#/2=%d,%d,%d, top,botdiag=%d,%d, "
+    "vert,horzcorn=%d,%d, v,hdir=%d,%d, v,hturn=%d,%d, aaval=%d\n",
+    irow,icol,gridnum/2, topdiagval,botdiagval, vertcornval,horzcornval,
+    vdirection,hdirection, vturn,hturn, aaval);
+  return ( aaval );			/* back with antialiased value */
+} /* --- end-of-function aapattern1124() --- */
+
+
+/* ==========================================================================
+ * Function:	aapattern19 ( rp, irow, icol, gridnum, grayscale )
+ * Purpose:	calculates anti-aliased value for pixel at irow,icol,
+ *		whose surrounding 3x3 pixel grid is coded by gridnum
+ *		(which must correspond to pattern #19).
+ * --------------------------------------------------------------------------
+ * Arguments:	rp (I)		raster *  to raster whose bitmap
+ *				is to be anti-aliased
+ *		irow (I)	int containing row, 0...height-1,
+ *				of pixel to be antialiased
+ *		icol (I)	int containing col, 0...width-1,
+ *				of pixel to be antialiased
+ *		gridnum (I)	int containing 0...511 corresponding to
+ *				3x3 pixel grid surrounding irow,icol
+ *		grayscale (I)	int containing number of grayscales
+ *				to be calculated, 0...grayscale-1
+ *				(should typically be given as 256)
+ * --------------------------------------------------------------------------
+ * Returns:	( int )		0...grayscale-1 for success, -1=any error
+ * --------------------------------------------------------------------------
+ * Notes:    o	Handles the four gridnum's
+ *		(gridnum/2 shown to eliminate irrelevant low-order bit)
+ *		  ---        --*         *--          ***
+ *		  --- = 7    --* = 41    *-- = 148    --- = 224
+ *		  ***        --*         *--          ---
+ * ======================================================================= */
+/* --- entry point --- */
+int	aapattern19 (raster *rp, int irow, int icol,
+	int gridnum, int grayscale)
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+int	aaval = (-1);			/* antialiased value returned */
+int	iscenter = gridnum&1;		/* true if pixel at irow,icol black*/
+int	orientation = 1,		/* 1=vertical, 2=horizontal */
+	jrow=irow, jcol=icol;		/* middle pixel of *** line */
+int	turn1=0,turn2=0, aafollowline(); /* follow *** line till it turns */
+/* -------------------------------------------------------------------------
+Initialization and calculation of antialiased value
+-------------------------------------------------------------------------- */
+/* --- check input -- */
+if ( iscenter ) goto end_of_job;	/* we only antialias white pixels */
+/* --- set params --- */
+switch ( gridnum/2 ) {			/* check pattern#19 orientation */
+  default: goto end_of_job;		/* not a pattern#19 gridnum */
+  case 7:   orientation=2; jrow++; break;
+  case 41:  orientation=1; jcol++; break;
+  case 148: orientation=1; jcol--; break;
+  case 224: orientation=2; jrow--; break;
+  } /* --- end-of-switch(gridnum/2) --- */
+/* --- get turns in both directions --- */
+if ( (turn1 = aafollowline(rp,jrow,jcol,orientation)) == 0 ) goto end_of_job;
+if ( (turn2 = aafollowline(rp,jrow,jcol,-orientation)) == 0) goto end_of_job;
+if ( turn1*turn2 >= 0 ) goto end_of_job; /* both turns in same direction */
+/* --- weight pixel --- */
+aaval = grayscale / ( 3 + min2(abs(turn1),abs(turn2)) );
+/* -------------------------------------------------------------------------
+Back to caller with grayscale antialiased value for pixel at irow,icol
+-------------------------------------------------------------------------- */
+end_of_job:
+  if ( aaval >= 0 )			/* have antialiasing result */
+   if ( msglevel>=99 && msgfp!=NULL ) fprintf(msgfp, /* diagnostic output */
+    "aapattern19> irow,icol,grid#/2=%d,%d,%d, turn+%d,%d=%d,%d, aaval=%d\n",
+    irow,icol,gridnum/2, orientation,-orientation,turn1,turn2, aaval);
+  return ( aaval );			/* back with antialiased value */
+} /* --- end-of-function aapattern19() --- */
+
+
+/* ==========================================================================
+ * Function:	aapattern20 ( rp, irow, icol, gridnum, grayscale )
+ * Purpose:	calculates anti-aliased value for pixel at irow,icol,
+ *		whose surrounding 3x3 pixel grid is coded by gridnum
+ *		(which must correspond to pattern #20).
+ * --------------------------------------------------------------------------
+ * Arguments:	rp (I)		raster *  to raster whose bitmap
+ *				is to be anti-aliased
+ *		irow (I)	int containing row, 0...height-1,
+ *				of pixel to be antialiased
+ *		icol (I)	int containing col, 0...width-1,
+ *				of pixel to be antialiased
+ *		gridnum (I)	int containing 0...511 corresponding to
+ *				3x3 pixel grid surrounding irow,icol
+ *		grayscale (I)	int containing number of grayscales
+ *				to be calculated, 0...grayscale-1
+ *				(should typically be given as 256)
+ * --------------------------------------------------------------------------
+ * Returns:	( int )		0...grayscale-1 for success, -1=any error
+ * --------------------------------------------------------------------------
+ * Notes:    o	Handles the eight gridnum's
+ *		(gridnum/2 shown to eliminate irrelevant low-order bit)
+ *		  ---        ---         --*          -*-      
+ *		  --* = 14   *-- = 19    --* = 42     --* = 73
+ *		  **-        -**         -*-          --*     
+ *
+ *		  -*-        -**         *--          **-      
+ *		  *-- = 84   *-- = 112   *-- = 146    --* = 200
+ *		  *--        ---         -*-          ---     
+ * ======================================================================= */
+/* --- entry point --- */
+int	aapattern20 (raster *rp, int irow, int icol,
+	int gridnum, int grayscale)
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+int	aaval = (-1);			/* antialiased value returned */
+int	iscenter = gridnum&1;		/* true if pixel at irow,icol black*/
+int	direction = 1,			/* direction to follow ** line */
+	jrow1=irow, jcol1=icol,		/* coords of * */
+	jrow2=irow, jcol2=icol;		/* coords of adjacent ** pixel */
+int	turn1=0,turn2=0, aafollowline(); /* follow *,** lines till turns */
+/* -------------------------------------------------------------------------
+Initialization and calculation of antialiased value
+-------------------------------------------------------------------------- */
+/* --- check input -- */
+if ( 1 ) goto end_of_job;		/* don't want this one */
+if ( iscenter ) goto end_of_job;	/* we only antialias white pixels */
+/* --- set params --- */
+switch ( gridnum/2 ) {			/* check pattern#20 orientation */
+  default: goto end_of_job;		/* not a pattern#20 gridnum */
+  case 14:  direction=-2; jcol1++; jrow2++; break;
+  case 19:  direction=2;  jcol1--; jrow2++; break;
+  case 42:  direction=1;  jrow1++; jcol2++; break;
+  case 73:  direction=-1; jrow1--; jcol2++; break;
+  case 84:  direction=-1; jrow1--; jcol2--; break;
+  case 112: direction=2;  jcol1--; jrow2--; break;
+  case 146: direction=1;  jrow1++; jcol2--; break;
+  case 200: direction=-2; jcol1++; jrow2--; break;
+  } /* --- end-of-switch(gridnum/2) --- */
+/* --- get turns in both directions --- */
+if ( (turn1=aafollowline(rp,jrow1,jcol1,-direction)) == 0 ) goto end_of_job;
+if ( (turn2=aafollowline(rp,jrow2,jcol2,direction))  == 0 ) goto end_of_job;
+if ( turn1*turn2 >= 0 ) goto end_of_job; /* both turns in same direction */
+/* --- weight pixel --- */
+aaval = grayscale / ( 3 + min2(abs(turn1),abs(turn2)) );
+/* -------------------------------------------------------------------------
+Back to caller with grayscale antialiased value for pixel at irow,icol
+-------------------------------------------------------------------------- */
+end_of_job:
+  if ( aaval >= 0 )			/* have antialiasing result */
+   if ( msglevel>=99 && msgfp!=NULL ) fprintf(msgfp, /* diagnostic output */
+    "aapattern20> irow,icol,grid#/2=%d,%d,%d, turn%d,%d=%d,%d, aaval=%d\n",
+    irow,icol,gridnum/2, -direction,direction,turn1,turn2, aaval);
+  return ( aaval );			/* back with antialiased value */
+} /* --- end-of-function aapattern20() --- */
+
+
+/* ==========================================================================
+ * Function:	aapattern39 ( rp, irow, icol, gridnum, grayscale )
+ * Purpose:	calculates anti-aliased value for pixel at irow,icol,
+ *		whose surrounding 3x3 pixel grid is coded by gridnum
+ *		(which must correspond to pattern #39).
+ * --------------------------------------------------------------------------
+ * Arguments:	rp (I)		raster *  to raster whose bitmap
+ *				is to be anti-aliased
+ *		irow (I)	int containing row, 0...height-1,
+ *				of pixel to be antialiased
+ *		icol (I)	int containing col, 0...width-1,
+ *				of pixel to be antialiased
+ *		gridnum (I)	int containing 0...511 corresponding to
+ *				3x3 pixel grid surrounding irow,icol
+ *		grayscale (I)	int containing number of grayscales
+ *				to be calculated, 0...grayscale-1
+ *				(should typically be given as 256)
+ * --------------------------------------------------------------------------
+ * Returns:	( int )		0...grayscale-1 for success, -1=any error
+ * --------------------------------------------------------------------------
+ * Notes:    o	Handles the eight gridnum's
+ *		(gridnum/2 shown to eliminate irrelevant low-order bit)
+ *		  ---        ---         --*          -**      
+ *		  --* = 15   *-- = 23    --* = 43     --* = 105
+ *		  ***        ***         -**          --*     
+ *
+ *		  **-        ***         *--          ***      
+ *		  *-- = 212  *-- = 240   *-- = 150    --* = 232
+ *		  *--        ---         **-          ---     
+ * ======================================================================= */
+/* --- entry point --- */
+int	aapattern39 (raster *rp, int irow, int icol,
+	int gridnum, int grayscale)
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+int	aaval = (-1);			/* antialiased value returned */
+int	iscenter = gridnum&1;		/* true if pixel at irow,icol black*/
+int	direction = 1,			/* direction to follow ** line */
+	jrow1=irow, jcol1=icol,		/* coords of * */
+	jrow2=irow, jcol2=icol;		/* coords of adjacent ** pixel */
+int	turn1=0,turn2=0, aafollowline(); /* follow *,** lines till turns */
+/* -------------------------------------------------------------------------
+Initialization and calculation of antialiased value
+-------------------------------------------------------------------------- */
+/* --- check input -- */
+if ( iscenter ) goto end_of_job;	/* we only antialias white pixels */
+/* --- set params --- */
+switch ( gridnum/2 ) {			/* check pattern#39 orientation */
+  default: goto end_of_job;		/* not a pattern#39 gridnum */
+  case 15:  direction=-2; jcol1++; jrow2++; break;
+  case 23:  direction=2;  jcol1--; jrow2++; break;
+  case 43:  direction=1;  jrow1++; jcol2++; break;
+  case 105: direction=-1; jrow1--; jcol2++; break;
+  case 212: direction=-1; jrow1--; jcol2--; break;
+  case 240: direction=2;  jcol1--; jrow2--; break;
+  case 150: direction=1;  jrow1++; jcol2--; break;
+  case 232: direction=-2; jcol1++; jrow2--; break;
+  } /* --- end-of-switch(gridnum/2) --- */
+/* --- get turns directions (tunr1==1 signals inside corner) --- */
+if ( (turn1=aafollowline(rp,jrow1,jcol1,-direction)) == 1 )
+  { aaval=0; goto end_of_job; }
+if ( 1 ) goto end_of_job;  /* stop here for now */
+if ( (turn2=aafollowline(rp,jrow2,jcol2,direction))  == 0 ) goto end_of_job;
+if ( turn1*turn2 >= 0 ) goto end_of_job; /* both turns in same direction */
+/* --- weight pixel --- */
+aaval = grayscale / ( 3 + min2(abs(turn1),abs(turn2)) );
+/* -------------------------------------------------------------------------
+Back to caller with grayscale antialiased value for pixel at irow,icol
+-------------------------------------------------------------------------- */
+end_of_job:
+  if ( aaval >= 0 )			/* have antialiasing result */
+   if ( msglevel>=99 && msgfp!=NULL ) fprintf(msgfp, /* diagnostic output */
+    "aapattern39> irow,icol,grid#/2=%d,%d,%d, turn%d,%d=%d,%d, aaval=%d\n",
+    irow,icol,gridnum/2, -direction,direction,turn1,turn2, aaval);
+  return ( aaval );			/* back with antialiased value */
+} /* --- end-of-function aapattern39() --- */
+
+
+/* ==========================================================================
+ * Function:	aafollowline ( rp, irow, icol, direction )
+ * Purpose:	starting with pixel at irow,icol, moves in
+ *		specified direction looking for a "turn"
+ * --------------------------------------------------------------------------
+ * Arguments:	rp (I)		raster *  to raster containing pixel image
+ *		irow (I)	int containing row, 0...height-1,
+ *				of first pixel
+ *		icol (I)	int containing col, 0...width-1,
+ *				of first pixel
+ *		direction (I)	int containing +1 to follow line up/north
+ *				(decreasing irow), -1 to follow line
+ *				down/south (increasing irow), +2 to follow
+ *				line right/east (increasing icol),
+ *				-2 to follow line left/west (decreasing icol)
+ * --------------------------------------------------------------------------
+ * Returns:	( int )		#rows or #cols traversed prior to turn,
+ *				or 0 if no turn detected (or for any error).
+ *				Sign is + if turn direction is right/east or
+ *				up/north, or is - if left/west or down/south.
+ * --------------------------------------------------------------------------
+ * Notes:     o	Here are some examples illustrating turn detection in
+ *		+2 (right/east) direction.  Turns in other directions
+ *		are detected similarly/symmetrically.  * denotes black
+ *		bits (usually fg), - denotes white bits (usually bg),
+ *		and ? denotes "don't care" bit (won't affect outcome).
+ *		Arrow --> points to start pixel denoted by irow,icol.
+ *
+ *		   *???         -???	turn=0 (no turn) is returned
+ *		-->*???   or -->-???	because the start pixel isn't
+ *		   *???         -???	on an edge to begin with
+ *
+ *		   ----         **--	turn=0 returned because the
+ *		-->***-   or -->***-	line ends abruptly without
+ *		   ----	        ----	turning (even the second case)
+ *
+ *		   ---*         ---*	turn=0 returned because the
+ *		-->***-   or -->****	line forms a Y or T rather
+ *		   ---*	        ---*	than turning
+ *
+ *		   ***-	        ****	turn=+3 returned
+ *		-->***-   or -->***-	(outside corner)
+ *		   ----	        ----
+ *
+ *		   *****        ****-	turn=-4 returned
+ *		-->*****  or -->****-	(inside corner)
+ *		   ----*        ----*
+ *
+ *		   ----*        ----*	turn=+4 returned
+ *		-->****-  or -->*****	(outside or inside corner)
+ *		   -----        -----
+ * ======================================================================= */
+/* --- entry point --- */
+int	aafollowline (raster *rp, int irow, int icol, int direction)
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+pixbyte	*bitmap = rp->pixmap;		/* local rp->pixmap ptr */
+int	width=rp->width, height=rp->height; /* width, height of raster */
+int	drow=0, dcol=0,			/* delta row,col to follow line */
+	jrow=irow, jcol=icol;		/* current row,col following line */
+int	bitval=1,			/* value of rp bit at irow,icol */
+	fgval=1, bgval=0,		/* "fg" is whatever bitval is */
+	bitminus=0, bitplus=0;		/* value of left/down, right/up bit*/
+int	isline=1, isedge=0;		/*isline signals one-pixel wide line*/
+int	turn = 0,			/* detected turn back to caller */
+	maxturn = maxfollow;		/* don't follow more than max pixels*/
+/* -------------------------------------------------------------------------
+Initialization
+-------------------------------------------------------------------------- */
+/* --- check input --- */
+if ( irow<0 || irow>=height		/* irow out-of-bounds */
+||   icol<0 || icol>=width ) goto end_of_job; /* icol out-of-bounds */
+/* --- starting bit -- see if we're following a fg (usual), or bg line --- */
+bitval = getlongbit(bitmap,(icol+irow*width)); /* starting pixel (bg or fg)*/
+fgval = bitval;  bgval = (1-bitval);	/* define "fg" as whatever bitval is*/
+/* --- set drow,dcol corresponding to desired direction --- */
+switch ( direction ) {			/* determine drow,dcol for direction*/
+  default: goto end_of_job;		/* unrecognized direction arg */
+  case  1: drow = (-1); break;		/* follow line up/north */
+  case -1: drow =   1;  break;		/* down/south */
+  case  2: dcol =   1;  break;		/* right/east */
+  case -2: dcol = (-1); break; }	/* left/west */
+/* --- set bitminus and bitplus --- */
+if ( drow == 0 ) {			/* we're following line right/left */
+  if ( irow < height )			/* there's a pixel below current */
+    bitminus = getlongbit(bitmap,(icol+(irow+1)*width)); /* get it */
+  if ( irow > 0 )			/* there's a pixel above current */
+    bitplus = getlongbit(bitmap,(icol+(irow-1)*width)); } /* get it */
+if ( dcol == 0 ) {			/* we're following line up/down */
+  if ( icol < width )			/* there's a pixel to the right */
+    bitplus = getlongbit(bitmap,(icol+1+irow*width)); /* get it */
+  if ( icol > 0 )			/* there's a pixel to the left */
+    bitminus = getlongbit(bitmap,(icol-1+irow*width)); } /* get it */
+/* --- check for lack of line to follow --- */
+if ( bitval == bitplus			/* starting pixel same as above */
+&&   bitval == bitminus )		/* and below (or right and left) */
+  goto end_of_job;			/* so there's no line to follow */
+/* --- set isline and isedge (already initted for isline) --- */
+if ( bitval == bitplus )		/* starting pixel same as above */
+  { isedge = (-1);  isline = 0; }	/* so we're at an edge below */
+if (  bitval == bitminus )		/* starting pixel same as below */
+  { isedge = 1;  isline = 0; }		/* so we're at an edge above */
+/* -------------------------------------------------------------------------
+follow line
+-------------------------------------------------------------------------- */
+while ( 1 ) {				/* until turn found (or max) */
+  /* --- local allocations and declarations --- */
+  int	dbitval=0,			/* value of bit at jrow,jcol */
+	dbitminus=0, dbitplus=0;	/* value of left/down, right/up bit*/
+  /* --- bump pixel count and indexes; check for max or end-of-raster --- */
+  turn++;				/* bump #pixels followed */
+  jrow += drow;  jcol += dcol;		/* indexes of next pixel to check */
+  if ( turn > maxturn			/* already followed max #pixels */
+  ||   jrow<0 || jrow>=height		/* or jrow past end-of-raster */
+  ||   jcol<0 || jcol>=width )		/* or jcol past end-of-raster */
+    { turn = 0;  goto end_of_job; }	/* so quit without finding a turn */
+  /* --- set current bit (dbitval) --- */
+  dbitval = getlongbit(bitmap,(jcol+jrow*width)); /*value of jrow,jcol bit*/
+  /* --- set dbitminus and dbitplus --- */
+  if ( drow == 0 ) {			/* we're following line right/left */
+    if ( irow < height )		/* there's a pixel below current */
+      dbitminus = getlongbit(bitmap,(jcol+(irow+1)*width)); /* get it */
+    if ( irow > 0 )			/* there's a pixel above current */
+      dbitplus = getlongbit(bitmap,(jcol+(irow-1)*width)); } /* get it */
+  if ( dcol == 0 ) {			/* we're following line up/down */
+    if ( icol < width )			/* there's a pixel to the right */
+      dbitplus = getlongbit(bitmap,(icol+1+jrow*width)); /* get it */
+    if ( icol > 0 )			/* there's a pixel to the left */
+      dbitminus = getlongbit(bitmap,(icol-1+jrow*width)); } /* get it */
+  /* --- first check for abrupt end-of-line, or for T or Y --- */
+  if ( isline != 0 )			/* abrupt end or T,Y must be a line*/
+    if ( ( bgval == dbitval		/* end-of-line if pixel flips to bg*/
+           && bgval == dbitplus		/* and bg same as above pixel */
+           && bgval == dbitminus )	/* and below (or right and left) */
+    ||   ( fgval == dbitplus		/* T or Y if fg same as above pixel*/
+           && fgval == dbitminus ) )	/* and below (or right and left) */
+      { turn = 0;  goto end_of_job; }	/* so we're at a T or Y */
+  /* --- check for turning line --- */
+  if ( isline != 0 ) {			/* turning line must be a line */
+    if ( fgval == dbitminus )		/* turning down */
+      { turn = -turn;  goto end_of_job; } /* so return negative turn */
+    else if ( fgval == dbitplus )	/* turning up */
+      goto end_of_job; }		/* so return positive turn */
+  /* --- check for inside corner at edge --- */
+  if ( isedge != 0 ) {			/* inside corner must be a edge */
+    if ( isedge < 0 && fgval == bitminus ) /* corner below */
+      { turn = -turn;  goto end_of_job; } /* so return negative turn */
+    if ( isedge > 0 && fgval == bitplus ) /* corner above */
+      goto end_of_job; }		/* so return positive turn */
+  /* --- check for abrupt end at edge --- */
+  if ( isedge != 0			/* abrupt edge end must be an edge */
+  &&   fgval == dbitval )		/* and line must not end */
+    if ( (isedge < 0 && bgval == bitplus) /* abrupt end above */
+    ||   (isedge > 0 && bgval == bitminus) ) /* or abrupt end below */
+      { turn = 0;  goto end_of_job; }	/* so edge ended abruptly */
+  /* --- check for outside corner at edge --- */
+  if ( isedge != 0			/* outside corner must be a edge */
+  &&   bgval == dbitval ) {		/* and line must end */
+    if ( isedge > 0 ) turn = -turn;	/* outside turn down from edge above*/
+    goto end_of_job; }
+  } /* --- end-of-while(1) --- */
+/* -------------------------------------------------------------------------
+Back to caller with #rows or #cols traversed, and direction of detected turn
+-------------------------------------------------------------------------- */
+end_of_job:
+  if ( msglevel>=99 && msgfp!=NULL )	/* debugging/diagnostic output */
+    fprintf(msgfp,"aafollowline> irow,icol,direction=%d,%d,%d, turn=%d\n",
+    irow,icol,direction,turn);
+  return ( turn );
+} /* --- end-of-function aafollowline() --- */
+
+
+/* ==========================================================================
+ * Function:	aagridnum ( rp, irow, icol )
+ * Purpose:	calculates gridnum, 0-511 (see Notes below),
+ *		for 3x3 grid centered at irow,icol
+ * --------------------------------------------------------------------------
+ * Arguments:	rp (I)		raster *  to raster containing
+ *				bitmap image (to be anti-aliased)
+ *		irow (I)	int containing row, 0...height-1,
+ *				at center of 3x3 grid
+ *		icol (I)	int containing col, 0...width-1,
+ *				at center of 3x3 grid
+ * --------------------------------------------------------------------------
+ * Returns:	( int )		0-511 grid number, or -1=any error
+ * --------------------------------------------------------------------------
+ * Notes:     o	Input gridnum is a 9-bit int, 0-511, coding a 3x3 pixel grid
+ *		whose bit positions (and corresponding values) in gridnum are
+ *		  876     256 128  64
+ *		  504  =   32   1  16
+ *		  321       8   4   2
+ *		Thus, for example (*=pixel set/black, -=pixel not set/white),
+ *		  *--         *--	  -**         (note that 209 is the
+ *		  -*- = 259   *-- = 302   -** = 209    inverse, set<-->unset,
+ *		  --*         ***         ---          of 302)
+ *	      o	A set pixel is considered black, an unset pixel considered
+ *		white.
+ * ======================================================================= */
+/* --- entry point --- */
+int	aagridnum (raster *rp, int irow, int icol)
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+pixbyte	*bitmap = rp->pixmap;		/* local rp->pixmap ptr */
+int	width=rp->width, height=rp->height, /* width, height of raster */
+	imap = icol + irow*width;	/* pixel index = icol + irow*width */
+int	bitval=0,			/* value of rp bit at irow,icol */
+	nnbitval=0, nebitval=0, eebitval=0, sebitval=0,	/*adjacent vals*/
+	ssbitval=0, swbitval=0, wwbitval=0, nwbitval=0,	/*compass pt names*/
+	gridnum = (-1);			/* grid# 0-511 for above 9 bits */
+/* -------------------------------------------------------------------------
+check input
+-------------------------------------------------------------------------- */
+if ( irow<0 || irow>=height		/* irow out-of-bounds */
+||   icol<0 || icol>=width ) goto end_of_job; /* icol out-of-bounds */
+/* -------------------------------------------------------------------------
+get the 9 bits comprising the 3x3 grid centered at irow,icol
+-------------------------------------------------------------------------- */
+/* --- get center bit --- */
+bitval = getlongbit(bitmap,imap);	/* value of rp input bit at imap */
+/* --- get 8 surrounding bits --- */
+if ( irow > 0 )				/* nn (north) bit available */
+   nnbitval = getlongbit(bitmap,imap-width); /* nn bit value */
+if ( irow < height-1 )			/* ss (south) bit available */
+   ssbitval = getlongbit(bitmap,imap+width); /* ss bit value */
+if ( icol > 0 )				/* ww (west) bit available */
+ { wwbitval = getlongbit(bitmap,imap-1); /* ww bit value */
+   if ( irow > 0 )			/* nw bit available */
+     nwbitval = getlongbit(bitmap,imap-width-1); /* nw bit value */
+   if ( irow < height-1 )		/* sw bit available */
+     swbitval = getlongbit(bitmap,imap+width-1); } /* sw bit value */
+if ( icol < width-1 )			/* ee (east) bit available */
+ { eebitval = getlongbit(bitmap,imap+1); /* ee bit value */
+   if ( irow > 0 )			/* ne bit available */
+     nebitval = getlongbit(bitmap,imap-width+1); /* ne bit value */
+   if ( irow < height-1 )		/* se bit available */
+     sebitval = getlongbit(bitmap,imap+width+1); } /* se bit value */
+/* --- set gridnum --- */
+gridnum = 0;				/* clear all bits */
+if (   bitval ) gridnum = 1;		/* set1bit(gridnum,0); */
+if ( nwbitval ) gridnum += 256;		/* set1bit(gridnum,8); */
+if ( nnbitval ) gridnum += 128;		/* set1bit(gridnum,7); */
+if ( nebitval ) gridnum += 64;		/* set1bit(gridnum,6); */
+if ( wwbitval ) gridnum += 32;		/* set1bit(gridnum,5); */
+if ( eebitval ) gridnum += 16;		/* set1bit(gridnum,4); */
+if ( swbitval ) gridnum += 8;		/* set1bit(gridnum,3); */
+if ( ssbitval ) gridnum += 4;		/* set1bit(gridnum,2); */
+if ( sebitval ) gridnum += 2;		/* set1bit(gridnum,1); */
+/* -------------------------------------------------------------------------
+Back to caller with gridnum coding 3x3 grid centered at irow,icol
+-------------------------------------------------------------------------- */
+end_of_job:
+  return ( gridnum );
+} /* --- end-of-function aagridnum() --- */
+
+
+/* ==========================================================================
+ * Function:	aapatternnum ( gridnum )
+ * Purpose:	Looks up the pattern number 1...51
+ *		corresponding to the 3x3 pixel grid coded by gridnum 0=no
+ *		pixels set (white) to 511=all pixels set (black).
+ * --------------------------------------------------------------------------
+ * Arguments:	gridnum (I)	int containing 0-511 coding a 3x3 pixel grid
+ *				(see Notes below)
+ * --------------------------------------------------------------------------
+ * Returns:	( int )		1 to 51, or -1=error
+ * --------------------------------------------------------------------------
+ * Notes:     o	Input gridnum is a 9-bit int, 0-511, coding a 3x3 pixel grid
+ *		whose bit positions (and corresponding values) in gridnum are
+ *		  876     256 128  64
+ *		  504  =   32   1  16
+ *		  321       8   4   2
+ *		Thus, for example (*=pixel set/black, -=pixel not set/white),
+ *		  *--         *--	  -**         (note that 209 is the
+ *		  -*- = 259   *-- = 302   -** = 209    inverse, set<-->unset,
+ *		  --*         ***         ---          of 302)
+ *	      o	A set pixel is considered black, an unset pixel considered
+ *		white.
+ *	      o	Ignoring whether the center pixel is set or unset, and
+ *		taking rotation, reflection and inversion (set<-->unset)
+ *		symmetries into account, there are 32 unique pixel patterns.
+ *		If inversions are listed separately, there are 51 patterns.
+ *	      o	Here are the 51 unique patterns, with ? always denoting the
+ *		undetermined center pixel.  At the upper-left corner of each
+ *		pattern is the "pattern index number" assigned to it in this
+ *		function. At the upper-right is the pattern's multiplicity,
+ *		i.e., the number of different patterns obtained by rotations
+ *		and reflection of the illustrated one.  Inverse patters are
+ *		illustrated immediately beneath the original (the first three
+ *		four-pixel patterns have identical inverses).
+ *		-------------------------------------------------------------
+ *		No pixels set:
+ *		 #1 1 (in this case, 1 signifies that rotation
+ *		  ---  and reflection give no different grids)
+ *		  -?-
+ *		  ---
+ *		Inverse, all eight pixels set
+ *		 #2 1 (the inverse multiplicity is always the same)
+ *		  ***
+ *		  *?*
+ *		  ***
+ *		-------------------------------------------------------------
+ *		One pixel set:
+ *		 #3 4  #4 4
+ *		  *--   -*-
+ *		  -?-   -?-
+ *		  ---   ---
+ *		Inverse, seven pixels set:
+ *		 #5 4  #6 4
+ *		  -**   *-*
+ *		  *?*   *?*
+ *		  ***   ***
+ *		-------------------------------------------------------------
+ *		Two pixels set:
+ *		 #7 8  #8 4  #9 8  10 2  11 4  12 2
+ *		  **-   *-*   *--   *--   -*-   -*-
+ *		  -?-   -?-   -?*   -?-   -?*   -?-
+ *		  ---   ---   ---   --*   ---   -*-
+ *		Inverse, six pixels set:
+ *		#13 8  14 4  15 8  16 2  17 4  18 2
+ *		  --*   -*-   -**   -**   *-*   *-*
+ *		  *?*   *?*   *?-   *?*   *?-   *?*
+ *		  ***   ***   ***   **-   ***   *-*
+ *		-------------------------------------------------------------
+ *		Three pixels set:
+ *		#19 4  20 8  21 8  22 8  23 8  24 4  25 4  26 4  27 4  28 4
+ *		  ***   **-   **-   **-   **-   **-   *-*   *-*   -*-   -*-
+ *		  -?-   -?*   -?-   -?-   -?-   *?-   -?-   -?-   -?*   -?*
+ *		  ---   ---   --*   -*-   *--   ---   --*   -*-   -*-   *--
+ *		Inverse, five pixels set:
+ *		#29 4  30 8  31 8  32 8  33 8  34 4  35 4  36 4  37 4  38 4
+ *		  ---   --*   --*   --*   --*   --*   -*-   -*-   *-*   *-*
+ *		  *?*   *?-   *?*   *?*   *?*   -?*   *?*   *?*   *?-   *?-
+ *		  ***   ***   **-   *-*   -**   ***   **-   *-*   *-*   -**
+ *		-------------------------------------------------------------
+ *		Four pixels set (including inverses):
+ *		#39 8  40 4  41 8  42 8  43 4  44 4  45 8  46 1
+ *		  ***   **-   **-   ***   ***   **-   **-   *-*
+ *		  -?*   -?-   -?*   -?-   -?-   -?*   -?*   -?-
+ *		  ---   -**   *--   --*   -*-   --*   -*-   *-*
+ *
+ *		                  #47 8  48 4  49 4  50 8  51 1
+ *		                    ---   ---   --*   --*   -*-
+ *		                    *?*   *?*   *?-   *?-   *?*
+ *		                    **-   *-*   **-   *-*   -*-
+ * ======================================================================= */
+/* --- entry point --- */
+int	aapatternnum ( int gridnum )
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+int	pattern = (-1);			/*pattern#, 1-51, for input gridnum*/
+/* ---
+ * pattern number corresponding to input gridnum/2 code
+ * ( gridnum/2 strips off gridnum's low bit because it's
+ * the same pattern whether or not center pixel is set )
+ * --- */
+static int patternnum[] = {
+    1, 3, 4, 7, 3, 8, 7,19, 4, 7,11,24, 9,23,20,39,  /*   0- 15 */
+    4, 9,11,20, 7,23,24,39,12,22,27,47,22,48,47,29,  /*  16- 31 */
+    3, 8, 9,23,10,25,21,42, 7,19,20,39,21,42,44,34,  /*  32- 47 */
+    9,26,28,41,21,50,49,30,22,43,45,33,40,32,31,13,  /*  48- 63 */
+    4, 9,12,22, 9,26,22,43,11,20,27,47,28,41,45,33,  /*  64- 79 */
+   11,28,27,45,20,41,47,33,27,45,51,35,45,36,35,14,  /*  80- 95 */
+    7,23,22,48,21,50,40,32,24,39,47,29,49,30,31,13,  /*  96-111 */
+   20,41,45,36,44,38,31,15,47,33,35,14,31,15,16, 5,  /* 112-127 */
+    3,10, 9,21, 8,25,23,42, 9,21,28,49,26,50,41,30,  /* 128-143 */
+    7,21,20,44,19,42,39,34,22,40,45,31,43,32,33,13,  /* 144-159 */
+    8,25,26,50,25,46,50,37,23,42,41,30,50,37,38,17,  /* 160-175 */
+   23,50,41,38,42,37,30,17,48,32,36,15,32,18,15, 6,  /* 176-191 */
+    7,21,22,40,23,50,48,32,20,44,45,31,41,38,36,15,  /* 192-207 */
+   24,49,47,31,39,30,29,13,47,31,35,16,33,15,14, 5,  /* 208-223 */
+   19,42,43,32,42,37,32,18,39,34,33,13,30,17,15, 6,  /* 224-239 */
+   39,30,33,15,34,17,13, 6,29,13,14, 5,13, 6, 5, 2,  /* 240-255 */
+   -1 } ; /* --- end-of-patternnum[] --- */
+/* -------------------------------------------------------------------------
+look up pattern number for gridnum
+-------------------------------------------------------------------------- */
+/* --- first check input --- */
+if ( gridnum<0 || gridnum>511 ) goto end_of_job; /* gridnum out of bounds */
+/* --- look up pattern number, 1-51, corresponding to input gridnum --- */
+pattern = patternnum[gridnum/2];	/* /2 strips off gridnum's low bit */
+if ( pattern<1 || pattern>51 ) pattern = (-1); /* some internal error */
+end_of_job:
+  return ( pattern );			/* back to caller with pattern# */
+} /* --- end-of-function aapatternnum() --- */
+
+
+/* ==========================================================================
+ * Function:	aalookup ( gridnum )
+ * Purpose:	Looks up the grayscale value 0=white to 255=black
+ *		corresponding to the 3x3 pixel grid coded by gridnum 0=no
+ *		pixels set (white) to 511=all pixels set (black).
+ * --------------------------------------------------------------------------
+ * Arguments:	gridnum (I)	int containing 0-511 coding a 3x3 pixel grid
+ * --------------------------------------------------------------------------
+ * Returns:	( int )		0=white to 255=black, or -1=error
+ * --------------------------------------------------------------------------
+ * Notes:     o	Input gridnum is a 9-bit int, 0-511, coding a 3x3 pixel grid
+ *	      o	A set pixel is considered black, an unset pixel considered
+ *		white.  Likewise, the returned grayscale is 255 for black,
+ *		0 for white.  You'd more typically want to use 255-grayscale
+ *		so that 255 is white and 0 is black.
+ *	      o	The returned number is the (lowpass) antialiased grayscale
+ *		for the center pixel (gridnum bit 0) of the grid.
+ * ======================================================================= */
+/* --- entry point --- */
+int	aalookup ( int gridnum )
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+int	grayscale = (-1);		/*returned grayscale, init for error*/
+int	pattern = (-1), aapatternnum();	/*pattern#, 1-51, for input gridnum*/
+int	iscenter = gridnum&1;		/*low-order bit set for center pixel*/
+/* --- gray scales --- */
+#define	WHT 0
+#define	LGT 64
+#define	GRY 128
+#define	DRK 192
+#define	BLK 255
+#if 1
+/* ---
+ * modified aapnm() grayscales (second try)
+ * --- */
+/* --- grayscale for each pattern when center pixel set/black --- */
+static int grayscale1[] = { -1,		/* [0] index not used */
+   BLK,BLK,BLK,BLK,242,230,BLK,BLK,BLK,160,	/*  1-10 */
+/* BLK,BLK,BLK,BLK,242,230,BLK,BLK,BLK,BLK, */	/*  1-10 */
+   BLK,BLK,217,230,217,230,204,BLK,BLK,166,	/* 11-20 */
+   BLK,BLK,BLK,BLK,BLK,BLK,178,166,204,191,	/* 21-30 */
+   204,BLK,204,191,217,204,BLK,191,178,BLK,	/* 31-40 */
+   178,BLK,BLK,178,191,BLK,191,BLK,178,BLK,204,	/* 41-51 */
+   -1 } ; /* --- end-of-grayscale1[] --- */
+/* --- grayscale for each pattern when center pixel not set/white --- */
+static int grayscale0[] = { -1,		/* [0] index not used */
+   WHT,WHT,WHT,WHT,WHT,WHT,WHT,WHT,WHT,WHT,	/*  1-10 */
+    64,WHT,WHT,128,115,128,WHT,WHT,WHT, 64,	/* 11-20 */
+ /* 51,WHT,WHT,128,115,128,WHT,WHT,WHT, 64, */	/* 11-20 */
+   WHT,WHT,WHT, 64,WHT,WHT, 76, 64,102, 89,	/* 21-30 */
+   102,WHT,102,WHT,115,102,WHT, 89, 76,WHT,	/* 31-40 */
+    76,WHT,WHT, 76, 89,WHT, 89,WHT, 76,WHT,102,	/* 41-51 */
+   -1 } ; /* --- end-of-grayscale0[] --- */
+#endif
+#if 0
+/* ---
+ * modified aapnm() grayscales (first try)
+ * --- */
+/* --- grayscale for each pattern when center pixel set/black --- */
+static int grayscale1[] = { -1,		/* [0] index not used */
+   BLK,BLK,BLK,BLK,242,230,GRY,BLK,BLK,BLK,	/*  1-10 */
+/* BLK,BLK,BLK,BLK,242,230,BLK,BLK,BLK,BLK, */	/*  1-10 */
+   BLK,BLK,217,230,217,230,204,BLK,BLK,166,	/* 11-20 */
+   BLK,BLK,BLK,BLK,BLK,BLK,BLK,166,204,191,	/* 21-30 */
+/* BLK,BLK,BLK,BLK,BLK,BLK,178,166,204,191, */	/* 21-30 */
+   204,BLK,204,BLK,217,204,BLK,191,GRY,BLK,	/* 31-40 */
+/* 204,BLK,204,191,217,204,BLK,191,178,BLK, */	/* 31-40 */
+   178,BLK,BLK,178,191,BLK,BLK,BLK,178,BLK,204,	/* 41-51 */
+/* 178,BLK,BLK,178,191,BLK,191,BLK,178,BLK,204, */ /* 41-51 */
+   -1 } ; /* --- end-of-grayscale1[] --- */
+/* --- grayscale for each pattern when center pixel not set/white --- */
+static int grayscale0[] = { -1,		/* [0] index not used */
+   WHT,WHT,WHT,WHT,WHT,WHT,WHT,WHT,WHT,WHT,	/*  1-10 */
+   GRY,WHT,WHT,128,115,128,WHT,WHT,WHT,GRY,	/* 11-20 */
+/*  51,WHT,WHT,128,115,128,WHT,WHT,WHT, 64, */	/* 11-20 */
+   WHT,WHT,WHT,GRY,WHT,WHT, 76, 64,102, 89,	/* 21-30 */
+/* WHT,WHT,WHT, 64,WHT,WHT, 76, 64,102, 89, */	/* 21-30 */
+   102,WHT,102,WHT,115,102,WHT, 89,GRY,WHT,	/* 31-40 */
+/* 102,WHT,102,WHT,115,102,WHT, 89, 76,WHT, */	/* 31-40 */
+    76,WHT,WHT,GRY, 89,WHT, 89,WHT, 76,WHT,102,	/* 41-51 */
+/*  76,WHT,WHT, 76, 89,WHT, 89,WHT, 76,WHT,102, */ /* 41-51 */
+   -1 } ; /* --- end-of-grayscale0[] --- */
+#endif
+#if 0
+/* ---
+ * these grayscales _exactly_ correspond to the aapnm() algorithm
+ * --- */
+/* --- grayscale for each pattern when center pixel set/black --- */
+static int grayscale1[] = { -1,		/* [0] index not used */
+   BLK,BLK,BLK,BLK,242,230,BLK,BLK,BLK,BLK,	/*  1-10 */
+   BLK,BLK,217,230,217,230,204,BLK,BLK,166,	/* 11-20 */
+   BLK,BLK,BLK,BLK,BLK,BLK,178,166,204,191,	/* 21-30 */
+   204,BLK,204,191,217,204,BLK,191,178,BLK,	/* 31-40 */
+   178,BLK,BLK,178,191,BLK,191,BLK,178,BLK,204,	/* 41-51 */
+   -1 } ; /* --- end-of-grayscale1[] --- */
+/* --- grayscale for each pattern when center pixel not set/white --- */
+static int grayscale0[] = { -1,		/* [0] index not used */
+   WHT,WHT,WHT,WHT,WHT,WHT,WHT,WHT,WHT,WHT,	/*  1-10 */
+    51,WHT,WHT,128,115,128,WHT,WHT,WHT, 64,	/* 11-20 */
+   WHT,WHT,WHT, 64,WHT,WHT, 76, 64,102, 89,	/* 21-30 */
+   102,WHT,102,WHT,115,102,WHT, 89, 76,WHT,	/* 31-40 */
+    76,WHT,WHT, 76, 89,WHT, 89,WHT, 76,WHT,102,	/* 41-51 */
+   -1 } ; /* --- end-of-grayscale0[] --- */
+#endif
+/* -------------------------------------------------------------------------
+look up grayscale for gridnum
+-------------------------------------------------------------------------- */
+/* --- first check input --- */
+if ( gridnum<0 || gridnum>511 ) goto end_of_job; /* gridnum out of bounds */
+/* --- look up pattern number, 1-51, corresponding to input gridnum --- */
+pattern = aapatternnum(gridnum);	/* look up pattern number */
+if ( pattern<1 || pattern>51 ) goto end_of_job; /* some internal error */
+if ( ispatternnumcount ) {		/* counts being accumulated */
+  if (iscenter)	patternnumcount1[pattern] += 1;	/* bump diagnostic count */
+  else		patternnumcount0[pattern] += 1; }
+/* --- look up grayscale for this pattern --- */
+grayscale = ( iscenter? grayscale1[pattern] : grayscale0[pattern] );
+end_of_job:
+  return ( grayscale );			/* back to caller with grayscale */
+} /* --- end-of-function aalookup() --- */
+
+
+/* ==========================================================================
+ * Function:	aalowpasslookup ( rp, bytemap, grayscale )
+ * Purpose:	calls aalookup() for each pixel in rp->bitmap
+ *		to create anti-aliased bytemap
+ * --------------------------------------------------------------------------
+ * Arguments:	rp (I)		raster *  to raster whose bitmap
+ *				is to be anti-aliased
+ *		bytemap (O)	intbyte * to bytemap, calculated
+ *				by calling aalookup() for each pixel
+ *				in rp->bitmap
+ *		grayscale (I)	int containing number of grayscales
+ *				to be calculated, 0...grayscale-1
+ *				(should typically be given as 256)
+ * --------------------------------------------------------------------------
+ * Returns:	( int )		1=success, 0=any error
+ * --------------------------------------------------------------------------
+ * Notes:    o
+ * ======================================================================= */
+/* --- entry point --- */
+int	aalowpasslookup (raster *rp, intbyte *bytemap, int grayscale)
+{
+/* -------------------------------------------------------------------------
+Allocations and Declarations
+-------------------------------------------------------------------------- */
+int	width=rp->width, height=rp->height, /* width, height of raster */
+	icol = 0, irow = 0, imap = (-1); /* width, height, bitmap indexes */
+int	bgbitval=0 /*, fgbitval=1*/;	/* background, foreground bitval */
+int	bitval=0,			/* value of rp bit at irow,icol */
+	aabyteval=0;			/* antialiased (or unchanged) value*/
+int	gridnum=0, aagridnum(),		/* grid# for 3x3 grid at irow,icol */
+	aalookup();			/* table look up  antialiased value*/
+/* -------------------------------------------------------------------------
+generate bytemap by table lookup for each pixel of bitmap
+-------------------------------------------------------------------------- */
+for ( irow=0; irow<height; irow++ )
+ for ( icol=0; icol<width; icol++ )
+  {
+  /* --- get gridnum and center bit value, init aabyteval --- */
+  gridnum = aagridnum(rp,irow,icol);	/*grid# coding 3x3 grid at irow,icol*/
+  bitval = (gridnum&1);			/* center bit set if gridnum odd */
+  aabyteval = (intbyte)(bitval==bgbitval?0:grayscale-1); /* default aa val */
+  imap++;				/* first bump bitmap[] index */  
+  bytemap[imap] = (intbyte)(aabyteval);	/* init antialiased pixel */
+  /* --- look up antialiased value for this grid --- */
+  aabyteval = aalookup(gridnum);	/* look up on grid# */
+  if ( aabyteval>=0 && aabyteval<=255 )	/* check for success */
+    bytemap[imap] = (intbyte)(aabyteval); /* init antialiased pixel */
+  } /* --- end-of-for(irow,icol) --- */
+ispatternnumcount = 0;			/* accumulate counts only once */
+/* -------------------------------------------------------------------------
+Back to caller with gray-scale anti-aliased bytemap
+-------------------------------------------------------------------------- */
+/*end_of_job:*/
+  return ( 1 );
+} /* --- end-of-function aalowpasslookup() --- */
 
 
 /* ==========================================================================
@@ -10918,7 +13074,8 @@ end_of_job:
  *				(usually just #rows * #cols)
  *		colors (O)	intbyte *  (to be interpreted as ints)
  *				returning a list of the discrete/different
- *				values in bytemap, in ascending value order
+ *				values in bytemap, in ascending value order,
+ *				and with gamma correction applied
  *		colormap (O)	intbyte *  returning a bytemap "image",
  *				i.e., in one-to-one pixel correspondence
  *				with bytemap, but where the values have been
@@ -10939,7 +13096,8 @@ int	ncolors = 0,			/* #different values in bytemap */
 	igray, grayscale = 256;		/* bytemap contains intbyte's */
 intbyte	*bytevalues = NULL;		/* 1's where bytemap contains value*/
 int	ibyte;				/* bytemap/colormap index */
-int	isscale = 0;			/* true to scale largest val to 255*/
+int	isscale = 0,			/* true to scale largest val to 255*/
+	isgamma = 1;			/* true to apply gamma correction */
 int	maxcolors = 0;			/* maximum ncolors */
 /* -------------------------------------------------------------------------
 Accumulate colors[] from values occurring in bytemap
@@ -10970,6 +13128,20 @@ if ( isscale )				/* only rescale if requested */
     { colors[igray] = min2(grayscale-1,(int)(scalefactor*colors[igray]+0.5));
       if (igray>5) colors[igray] = min2(grayscale-1,colors[igray]+2*igray); }
    } /* --- end-of-if(isscale) --- */
+/* --- apply gamma correction --- */
+if ( isgamma				/* only gamma correct if requested */
+&&   gammacorrection > 0.0001 )		/* and if we have gamma correction */
+ if ( ncolors > 1 )			/* and if not a "blank" raster */
+  if ( colors[ncolors-1] > 0 )		/*and at least one pixel non-white*/
+   {
+   for ( igray=1; igray<ncolors; igray++ ) { /*gamma correct each colors[]*/
+    int	grayval = colors[igray],	/* original 0=white to 255=black */
+	gmax = grayscale-1;		/* should be 255 */
+    double dgray=((double)(gmax-grayval))/((double)gmax); /*0=black 1=white*/
+    dgray = pow(dgray,(1.0/gammacorrection)); /* apply gamma correction */
+    grayval = (int)( gmax*(1.0-dgray) + 0.5 ); /* convert back to grayval */
+    colors[igray] = grayval; }		/* store back in colors[] */
+   } /* --- end-of-if(isgamma) --- */
 /* -------------------------------------------------------------------------
 Construct colormap
 -------------------------------------------------------------------------- */
@@ -11164,6 +13336,33 @@ else					/* center point not black */
 /*end_of_job:*/
   return ( aaimgval );
 } /* --- end-of-function aawtpixel() --- */
+
+
+/* ==========================================================================
+ * Function:	mimetexsetmsg ( newmsglevel, newmsgfp )
+ * Purpose:	Sets msglevel and msgfp, usually called from
+ *		an external driver (i.e., DRIVER not defined
+ *		in this module).
+ * --------------------------------------------------------------------------
+ * Arguments:	newmsglevel (I)	int containing new msglevel
+ *				(unchanged if newmsglevel<0)
+ *		newmsgfp (I)	FILE * containing new msgfp
+ *				(unchanged if newmsgfp=NULL)
+ * --------------------------------------------------------------------------
+ * Returns:	( int )		always 1
+ * --------------------------------------------------------------------------
+ * Notes:     o
+ * ======================================================================= */
+/* --- entry point --- */
+int	mimetexsetmsg ( int newmsglevel, FILE *newmsgfp )
+{
+/* -------------------------------------------------------------------------
+set msglevel and msgfp
+-------------------------------------------------------------------------- */
+if ( newmsglevel >= 0 ) msglevel = newmsglevel;
+if ( newmsgfp != NULL ) msgfp = newmsgfp;
+return ( 1 );
+} /* --- end-of-function mimetexsetmsg() --- */
 #endif /* PART3 */
 
 /* ---
@@ -11287,7 +13486,7 @@ messages
 -------------------------------------------------------------------------- */
 static	char *copyright =		/* copyright, gnu/gpl notice */
  "+-----------------------------------------------------------------------+\n"
- "|mimeTeX vers 1.63, Copyright(c) 2002-2006, John Forkosh Associates, Inc|\n"
+ "|mimeTeX vers 1.70, Copyright(c) 2002-2008, John Forkosh Associates, Inc|\n"
  "+-----------------------------------------------------------------------+\n"
  "| mimeTeX is free software, licensed to you under terms of the GNU/GPL, |\n"
  "|           and comes with absolutely no warranty whatsoever.           |\n"
@@ -11319,7 +13518,7 @@ int	main ( int argc, char *argv[]
 Allocations and Declarations
 -------------------------------------------------------------------------- */
 /* --- expression to be emitted --- */
-static	char exprbuffer[16385] = "f(x)=x^2"; /* expression to be processed */
+static	char exprbuffer[MAXEXPRSZ+1] = "f(x)=x^2"; /* input TeX expression */
 char	*expression = exprbuffer;	/* ptr to expression */
 int	size = NORMALSIZE;		/* default font size */
 char	*query = getenv("QUERY_STRING"); /* getenv("QUERY_STRING") result */
@@ -11360,10 +13559,11 @@ int	norefmaxlen = NOREFMAXLEN;	/*max query_string len if no referer*/
   void	GIF_SetColor(),GIF_SetTransparent(); /* ...gifsave enntry points */
 #endif
 char	*gif_outfile = (char *)NULL,	/* gif output defaults to stdout */
-	gif_buffer[64000] = "\000",	/* or gif written in memory buffer */
+	gif_buffer[MAXGIFSZ] = "\000",	/* or gif written in memory buffer */
 	cachefile[256] = "\000",	/* full path and name to cache file*/
 	*md5str();			/* md5 has of expression */
 int	maxage = 7200;			/* max-age is two hours */
+int	valign = (-9999);		/*Vertical-Align:baseline-(height-1)*/
 /* --- pbm/pgm (-g switch) --- */
 int	ispbmpgm = 0;			/* true to write pbm/pgm file */
 int	type_pbmpgm(), ptype=0;		/* entry point, graphic format */
@@ -11375,6 +13575,7 @@ int	aalowpass(), aapnm(),		/*lowpass filters for anti-aliasing*/
 	grayscale = 256;		/* 0-255 grayscales in 8-bit bytes */
 int	ncolors=2,			/* #colors (2=b&w) */
 	aacolormap();			/* build colormap from bytemap */
+int	ipattern;			/*patternnumcount[] index diagnostic*/
 /* --- messages --- */
 char	logfile[256] = LOGFILE,		/*log queries if msglevel>=LOGLEVEL*/
 	cachelog[256] = CACHELOG;	/* cached image log in cachepath/ */
@@ -11395,15 +13596,31 @@ initialization
 /* --- set global variables --- */
 msgfp = stdout;				/* for comamnd-line mode output */
 isss = issupersampling;			/* set supersampling flag */
+isemitcontenttype = 1;			/* true to emit mime content-type */
+iscachecontenttype = 0;			/* true to cache mime content-type */
+*contenttype = '\000';			/* reset content-type:, etc. cache */
+iscaching = ISCACHING;			/* true if caching images */
+if ( iscaching ) {			/* images are being cached */
+  strcpy(cachepath,CACHEPATH);		/* relative path to cached files */
+  if ( *cachepath == '%' ) {		/* leading % signals cache headers */
+    iscachecontenttype = 1;		/* signal caching mime content-type*/
+    strcpy(cachepath,cachepath+1); } }	/* and squeeze out leading % char */
 gifSize = 0;				/* signal that image not in memory */
+fgred=FGRED; fggreen=FGGREEN; fgblue=FGBLUE; /* default foreground colors */
+bgred=BGRED; bggreen=BGGREEN; bgblue=BGBLUE; /* default background colors */
 shrinkfactor = shrinkfactors[NORMALSIZE]; /* set shrinkfactor */
+for ( ipattern=1; ipattern<=51; ipattern++ )
+ patternnumcount0[ipattern] = patternnumcount1[ipattern] = 0;
 /* ---
  * check QUERY_STRING query for expression overriding command-line arg
  * ------------------------------------------------------------------- */
 if ( query != NULL )			/* check query string from environ */
   if ( strlen(query) >= 1 )		/* caller gave us a query string */
-    { strncpy(expression,query,16384);	/* so use it as expression */
-      expression[16384] = '\000';	/* make sure it's null terminated */
+    { strncpy(expression,query,MAXEXPRSZ); /* so use it as expression */
+      expression[MAXEXPRSZ] = '\000';	/* make sure it's null terminated */
+      if ( 0 )				/*true to remove leading whitespace*/
+        while ( isspace(*expression) && *expression!='\000' )
+          strcpy(expression,expression+1); /* squeeze out white space */
       isquery = 1; }			/* and set isquery flag */
 if ( !isquery )				/* empty query string */
   { char *host = getenv("HTTP_HOST"),	/* additional getenv("") results */
@@ -11467,7 +13684,7 @@ if ( !isquery				/* don't have an html query string */
 	     if ( 1 || *argv[argnum]=='-' ) argnum--; /*next arg is -switch*/
 	     else pbm_outfile = argv[argnum]; break; /*next arg is filename*/
 	case 'm': msglevel = atoi(argv[argnum]);                      break;
-	case 'o': istransparent = 0;                       argnum--;  break;
+	case 'o': istransparent = (istransparent?0:1);     argnum--;  break;
 	case 'q': isqforce = 1;                            argnum--;  break;
 	case 's': size = atoi(argv[argnum]);                          break;
 	} /* --- end-of-switch(flag) --- */
@@ -11498,8 +13715,8 @@ if ( !isquery				/* don't have an html query string */
  &&   infilearg <= 0 )			/* and not given in input file */
   if ( !isquery				/* no conflict if no query_string */
   ||   nswitches > 0 )			/* explicit -switch(es) also given */
-   { strncpy(expression,argv[exprarg],16384); /*expression from command-line*/
-     expression[16384] = '\000';	/* make sure it's null terminated */
+   { strncpy(expression,argv[exprarg],MAXEXPRSZ); /*expr from command-line*/
+     expression[MAXEXPRSZ] = '\000';	/* make sure it's null terminated */
      isquery = 0; }			/* and not from a query_string */
  /* ---
   * or read expression from input file
@@ -11508,13 +13725,20 @@ if ( !isquery				/* don't have an html query string */
   {
   FILE *infile = fopen(argv[infilearg],"r"); /* open input file for read */
   if ( infile != (FILE *)NULL )		/* opened input file successfully */
-   { char instring[2049];		/* line from file */
+   { char instring[MAXLINESZ+1];	/* line from file */
+     int  exprsz = 0;			/* total #bytes read from file */
      isquery = 0;			/* file input, not a query_string */
      *expression = '\000';		/* start expresion as empty string */
-     while ( fgets(instring,2048,infile) != (char *)NULL ) /* read till eof*/
-      strcat(expression,instring);	/* concat line to end of expression*/
+     while ( fgets(instring,MAXLINESZ,infile) != (char *)NULL ) /*till eof*/
+      if ( exprsz + strlen(instring) < MAXEXPRSZ ) { /* have room for line */
+	strcat(expression,instring);	/* concat line to end of expression*/
+	exprsz += strlen(instring); }	/* update expression buffer length */
      fclose ( infile ); }	/*close input file after reading expression*/
   } /* --- end-of-if(infilearg>0) --- */
+ /* ---
+  * xlate +++'s to blanks only if query
+  * ----------------------------------- */
+ if ( !isquery ) isplusblank = 0;	/* don't xlate +++'s to blanks */
  /* ---
   * check if emulating query (for testing)
   * -------------------------------------- */
@@ -11532,7 +13756,7 @@ if ( !isquery				/* don't have an html query string */
 /* ---
  * check for <form> input
  * ---------------------- */
-if ( isquery )				/* must be <form method="get"> */
+if ( isquery ) {				/* must be <form method="get"> */
  if ( !memcmp(expression,"formdata",8) ) /*must be <input name="formdata"> */
   { char *delim=strchr(expression,'=');	/* find equal following formdata */
     if ( delim != (char *)NULL )	/* found unescaped equal sign */
@@ -11542,10 +13766,10 @@ if ( isquery )				/* must be <form method="get"> */
     /*unescape_url(expression,1);*/	/* convert unescaped %xx's to chars */
     unescape_url(expression,0);		/* convert all %xx's to chars */
     unescape_url(expression,0);		/* repeat */
-    msglevel = FORMLEVEL;		/* msglevel for forms */
+    if(0) msglevel = FORMLEVEL;		/* msglevel for forms */
     isformdata = 1; }			/* set flag to signal form data */
  else /* --- query, but not <form> input --- */
-    unescape_url(expression,0);		/* convert _all_ %xx's to chars */
+    unescape_url(expression,0); }	/* convert _all_ %xx's to chars */
 /* ---
  * check queries for embedded prefixes signalling special processing
  * ----------------------------------------------------------------- */
@@ -11575,7 +13799,7 @@ if ( isquery )				/* only log query_string's */
  if ( msglevel >= LOGLEVEL		/* check if logging */
  &&   seclevel <= 5 )			/* and if logging permitted */
   if ( logfile != NULL )		/* if a logfile is given */
-   if ( *logfile != '\000' )		/*and if it's not an empty string*/
+   if ( *logfile != '\000' ) {		/*and if it's not an empty string*/
     if ( (msgfp=fopen(logfile,"a"))	/* open logfile for append */
     !=   NULL )				/* ignore logging if can't open */
      {
@@ -11626,7 +13850,7 @@ if ( isquery )				/* only log query_string's */
 	isqlogging = 1;			/* set query logging flag */
      } /* --- end-of-if(msglevel>=LOGLEVEL) --- */
     else				/* couldn't open logfile */
-     msglevel = 0;			/* can't emit messages */
+     msglevel = 0; }			/* can't emit messages */
 /* ---
  * prepend prefix to submitted expression
  * -------------------------------------- */
@@ -11714,11 +13938,13 @@ if ( isquery )				/* don't cache command-line images */
    strcat(cachefile,".gif");		/* finish with .gif extension */
    gif_outfile = cachefile;		/* signal GIF_Create() to cache */
    /* --- emit mime content-type line --- */
-   if ( 0 )				/* now done in emitcache() */
+   if ( 0 && isemitcontenttype )	/* now done in emitcache() */
     { fprintf( stdout, "Cache-Control: max-age=%d\n",maxage );
+      if ( abs(valign) < 999 )		/* have vertical align */
+        fprintf( stdout, "Vertical-Align: %d\n",valign );
       fprintf( stdout, "Content-type: image/gif\n\n" ); }
    /* --- emit cached image if it already exists --- */
-   if ( emitcache(cachefile,maxage,0) > 0 ) /* cached image emitted */
+   if ( emitcache(cachefile,maxage,valign,0) > 0 ) /* cached image emitted */
     goto end_of_job;			/* so nothing else to do */
    /* --- log caching request --- */
    if ( msglevel >= 1			/* check if logging */
@@ -11761,7 +13987,8 @@ if ( !isdumpimage )			/* don't mix ascii with image dump */
 rasterize expression and put a border around it
 -------------------------------------------------------------------------- */
 /* --- preprocess expression, converting LaTeX constructs for mimeTeX  --- */
-expression = mimeprep(expression);	/* preprocess expression */
+if ( expression != NULL ) {		/* have expression to rasterize */
+  expression = mimeprep(expression); }	/* preprocess expression */
 /* --- double-check that we actually have an expression to rasterize --- */
 if ( expression == NULL )		/* nothing to rasterize */
  { if ( (!isquery||isqlogging) && msgfp!=NULL ) /*emit error if not a query*/
@@ -11780,6 +14007,9 @@ if ( issupersampling )			/* no border needed for gifs */
 else					/* for mime xbitmaps must have... */
   bp = border_raster(sp->image,0,0,0,1); /* image width multiple of 8 bits */
 sp->image = bitmap_raster = bp;		/* global copy for gif,png output */
+if ( sp!=NULL && bp!=NULL ) {		/* have raster */
+  valign = sp->baseline - (bp->height - 1); /* #pixels for Vertical-Align: */
+  if ( abs(valign) > 255 ) valign = (-9999); } /* sanity check */
 if ( ispbmpgm && ptype<2 )		/* -g switch or -g1 switch */
   type_pbmpgm(bp,ptype,pbm_outfile);	/* emit b/w pbm file */
 /* -------------------------------------------------------------------------
@@ -11811,14 +14041,52 @@ if ( isaa )				/* we want anti-aliased bitmap */
      * select anti-aliasing algorithm
      * ------------------------------ */
     if ( !isss )			/* generate bytemap for lowpass */
-     if ( aaalgorithm == 1 )		/* 1 for aalowpass() */
-	{ if ( aalowpass(bp,bytemap_raster,grayscale) /* my lowpass filter */
-	  ==   0 )  isaa = 0; }		/*failed, so turn off anti-aliasing*/
-     else				/* or 2 for aapnm() */
-      if ( aaalgorithm == 2 )		/*2 for netpbm pnmalias.c algorithm*/
-	{ if ( aapnm(bp,bytemap_raster,grayscale) /* pnmalias.c filter */
-	  ==   0 )  isaa = 0; }		/*failed, so turn off anti-aliasing*/
-      else isaa = 0;			/* unrecognized algorithm */
+     switch ( aaalgorithm ) {		/* choose antialiasing algorithm */
+       default: isaa = 0; break;	/* unrecognized algorithm */
+       case 1:				/* 1 for aalowpass() */
+	if ( aalowpass(bp,bytemap_raster,grayscale) /*my own lowpass filter*/
+	==   0 )  isaa = 0;		/*failed, so turn off anti-aliasing*/
+	break;
+       case 2:				/*2 for netpbm pnmalias.c algorithm*/
+	if ( aapnm(bp,bytemap_raster,grayscale) /* pnmalias.c filter */
+	==   0 )  isaa = 0;		/*failed, so turn off anti-aliasing*/
+	break;
+       case 3:				/*3 for aapnm() based on aagridnum()*/
+	if ( aapnmlookup(bp,bytemap_raster,grayscale) /* pnmalias.c filter */
+	==   0 )  isaa = 0;		/*failed, so turn off anti-aliasing*/
+	break;
+       case 4:				/* 4 for aalookup() table lookup */
+	if ( aalowpasslookup(bp,bytemap_raster,grayscale) /* aalookup() */
+	==   0 )  isaa = 0;		/*failed, so turn off anti-aliasing*/
+	break;
+       } /* --- end-of-switch(aaalgorithm) --- */
+    /* ---
+     * emit aalookup() pattern# counts/percents diagnostics
+     * ---------------------------------------------------- */
+    if ( !isquery && msgfp!=NULL && msglevel>=99 ) { /*emit patternnumcounts*/
+     int pcount0=0, pcount1=0;		/* init total w,b center counts */
+     for ( ipattern=1; ipattern<=51; ipattern++ ) { /*each possible pattern*/
+      if ( ipattern > 1 )		/* ignore all-white squares */
+       pcount0 += patternnumcount0[ipattern];  /* bump total white centers */
+      pcount1 += patternnumcount1[ipattern]; } /* bump total black centers */
+     if ( pcount0+pcount1 > 0 )		/* have pcounts (using aalookup) */
+      fprintf(msgfp, "  aalookup() patterns excluding#1 white"
+      " (%%'s are in tenths of a percent)...\n");
+     for ( ipattern=1; ipattern<=51; ipattern++ ) { /*each possible pattern*/
+      int tot = patternnumcount0[ipattern] + patternnumcount1[ipattern];
+      if ( tot > 0 )			/* this pattern occurs in image */
+       fprintf(msgfp,
+       "  pattern#%2d: %7d(%6.2f%%) +%7d(%6.2f%%) =%7d(%6.2f%%)\n",
+       ipattern, patternnumcount0[ipattern],  (ipattern<=1? 999.99:
+       1000.*((double)patternnumcount0[ipattern])/((double)pcount0)),
+       patternnumcount1[ipattern],
+       1000.*((double)patternnumcount1[ipattern])/((double)pcount1),
+       tot,  (ipattern<=1? 999.99:
+       1000.*((double)tot)/((double)(pcount0+pcount1))) ); }
+      if ( pcount0+pcount1 > 0 )	/* true when using aalookup() */
+       fprintf(msgfp,
+       "all patterns: %7d          +%7d          =%7d  total pixels\n",
+       pcount0,pcount1,pcount0+pcount1); }
     /* ---
      * finally, generate colors and colormap
      * ------------------------------------- */
@@ -11884,20 +14152,30 @@ if (  isquery				/* called from browser (usual) */
  ------------------------------------------------------------------------- */
   /* --- don't use memory buffer if outout file given --- */
   if ( gif_outfile != NULL ) isinmemory = 0; /* reset memory buffer flag */
+  /* --- construct contenttype[] buffer containing mime headers --- */
+  if ( 1 ) {				/* always construct buffer */
+    sprintf( contenttype, "Cache-Control: max-age=%d\n", maxage );
+    /*sprintf(contenttype+strlen(contenttype),
+       "Expires: Fri, 31 Oct 2003 23:59:59 GMT\n" );*/
+    /*sprintf(contenttype+strlen(contenttype),
+       "Last-Modified: Wed, 15 Oct 2003 01:01:01 GMT\n");*/
+    if ( abs(valign) < 999 )		/* have Vertical-Align: header info*/
+      sprintf( contenttype+strlen(contenttype),
+       "Vertical-Align: %d\n", valign );
+    sprintf( contenttype+strlen(contenttype),
+      "Content-type: image/gif\n\n" ); }
   /* --- emit mime content-type line --- */
-  if ( !isdumpimage			/* don't mix ascii with image dump */
+  if ( isemitcontenttype		/* content-type lines wanted */
+  &&   !isdumpimage			/* don't mix ascii with image dump */
   &&   !isinmemory			/* done below if in memory */
   &&   !iscaching )			/* done by emitcache() if caching */
-    { fprintf( stdout, "Cache-Control: max-age=%d\n",maxage );
-      /*fprintf( stdout, "Expires: Fri, 31 Oct 2003 23:59:59 GMT\n" );*/
-      /*fprintf( stdout, "Last-Modified: Wed, 15 Oct 2003 01:01:01 GMT\n" );*/
-      fprintf( stdout, "Content-type: image/gif\n\n" ); }
+    { fputs(contenttype,stdout); }	/* emit content-type: header buffer*/
   /* --- write output to memory buffer, possibly for testing --- */
   if ( isinmemory			/* want gif written to memory */
   ||   isdumpbuffer )			/*or dump memory buffer for testing*/
    if ( gif_outfile == NULL )		/* and don't already have a file */
     { *gif_buffer = '\000';		/* init buffer as empty string */
-      memset(gif_buffer,0,4096);	/* zero out buffer */
+      memset(gif_buffer,0,MAXGIFSZ);	/* zero out buffer */
       gif_outfile = gif_buffer;		/* and point outfile to buffer */
       if ( isdumpbuffer )		/* buffer dump test requested */
 	isdumpbuffer = 999; }		/* so signal dumping to buffer */
@@ -11917,8 +14195,9 @@ if (  isquery				/* called from browser (usual) */
 	*gif_outfile = '\000'; }	/* empty string signals buffer */
       else {				/* or */
 	gif_outfile = (char *)NULL;	/* emit images to stdout */
-	fprintf( stdout, "Cache-Control: max-age=%d\n",maxage );
-	fprintf( stdout, "Content-type: image/gif\n\n" ); }
+	if ( isemitcontenttype ) {	/* content-type lines wanted */
+	  fprintf( stdout, "Cache-Control: max-age=%d\n",maxage );
+	  fprintf( stdout, "Content-type: image/gif\n\n" ); } }
     } /* --- end-of-while(1) --- */
   GIF_SetColor(0,bgred,bggreen,bgblue);	/* background white if all 255 */
   if ( !isaa )				/* just b&w if not anti-aliased */
@@ -11953,9 +14232,9 @@ if (  isquery				/* called from browser (usual) */
   ||   msglevel >= 99 ) {		/* or debugging */
   int maxage2 = (isdumpimage?(-1):maxage); /* no headers if dumping image */
    if ( iscaching )			/* caching enabled */
-     emitcache(cachefile,maxage2,0);	/* cached image (hopefully) emitted*/
+     emitcache(cachefile,maxage2,valign,0); /*emit cached image (hopefully)*/
    else if ( isinmemory )		/* or emit image from memory buffer*/
-     emitcache(gif_buffer,maxage2,1); }	/* emitted from memory buffer */
+     emitcache(gif_buffer,maxage2,valign,1); } /*emitted from memory buffer*/
   /* --- for testing, may need to write image buffer to file --- */
   if ( isdumpbuffer > 99 )		/* gif image in memory buffer */
    if ( gifSize > 0 )			/* and it's not an empty buffer */
@@ -12194,13 +14473,80 @@ end_of_job:
  *   ftp://ftp.ncsa.uiuc.edu/Web/httpd/Unix/ncsa_httpd/cgi/ncsa-default.tar.Z
  *	      o	Not quite "verbatim" -- I added the "isescape logic" 4-Dec-03
  *		so unescape_url() can be safely applied to input which may or
- *		may not have been url-encoded.
+ *		may not have been url-encoded.  (Note: currently, all calls
+ *		to unescape_url() pass iescape=0, so it's not used.)
+ *	      o	Added +++'s to blank xlation on 24-Sep-06
+ *	      o	Added ^M,^F,etc to blank xlation 0n 01-Oct-06
  * ======================================================================= */
 /* --- entry point --- */
 int unescape_url(char *url, int isescape) {
     int x=0,y=0,prevescape=0,gotescape=0;
+    int xlateplus = (isplusblank==1?1:0); /* true to xlate plus to blank */
+    int strreplace();			/* replace + with blank, if needed */
     char x2c();
     static char *hex="0123456789ABCDEFabcdef";
+    /* ---
+     * xlate ctrl chars to blanks
+     * -------------------------- */
+    if ( 1 ) {				/* xlate ctrl chars to blanks */
+      char *ctrlchars = "\n\t\v\b\r\f\a\015";
+      int  seglen = strspn(url,ctrlchars); /*initial segment with ctrlchars*/
+      int  urllen = strlen(url);	/* total length of url string */
+      /* --- first, entirely remove ctrlchars from beginning and end --- */
+      if ( seglen > 0 ) {		/*have ctrlchars at start of string*/
+	strcpy(url,url+seglen);		/* squeeze out initial ctrlchars */
+	urllen -= seglen; }		/* string is now shorter */
+      while ( --urllen >= 0 )		/* now remove ctrlchars from end */
+	if ( isthischar(url[urllen],ctrlchars) ) /* ctrlchar at end */
+	  url[urllen] = '\000';		/* re-terminate string before it */
+	else break;			/* or we're done */
+      urllen++;				/* length of url string */
+      /* --- now, replace interior ctrlchars with ~ blanks --- */
+      while ( (seglen=strcspn(url,ctrlchars)) < urllen ) /*found a ctrlchar*/
+	url[seglen] = '~';		/* replace ctrlchar with ~ */
+      } /* --- end-of-if(1) --- */
+    /* ---
+     * xlate +'s to blanks if requested or if deemed necessary
+     * ------------------------------------------------------- */
+    if ( isplusblank == (-1) ) {	/*determine whether or not to xlate*/
+      char *searchfor[] = { " ","%20", "%2B","%2b", "+++","++",
+	"+=+","+-+", NULL };
+      int  isearch = 0,			/* searchfor[] index */
+	   nfound[11] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}; /*#occurrences*/
+      /* --- locate occurrences of searchfor[] strings in url --- */
+      for ( isearch=0; searchfor[isearch] != NULL; isearch++ ) {
+	char *psearch = url;		/* start search at beginning */
+	nfound[isearch] = 0;		/* init #occurrences count */
+	while ( (psearch=strstr(psearch,searchfor[isearch])) != NULL ) {
+	  nfound[isearch] += 1;		/* count another occurrence */
+	  psearch += strlen(searchfor[isearch]); } /*resume search after it*/
+	} /* --- end-of-for(isearch) --- */
+      /* --- apply some common-sense logic --- */
+      if ( nfound[0] + nfound[1] > 0 )	/* we have actual " "s or "%20"s */
+	isplusblank = xlateplus = 0;	/* so +++'s aren't blanks */
+      if ( nfound[2] + nfound[3] > 0 ) { /* we have "%2B" for +++'s */
+        if ( isplusblank != 0 )		/* and haven't disabled xlation */
+	  isplusblank = xlateplus = 1;	/* so +++'s are blanks */
+	else				/* we have _both_ "%20" and "%2b" */
+	  xlateplus = 0; }		/* tough call */
+      if ( nfound[4] + nfound[5] > 0	/* we have multiple ++'s */
+      ||   nfound[6] + nfound[7] > 0 )	/* or we have a +=+ or +-+ */
+	if ( isplusblank != 0 )		/* and haven't disabled xlation */
+	  xlateplus = 1;		/* so xlate +++'s to blanks */
+      } /* --- end-of-if(isplusblank==-1) --- */
+    if ( xlateplus > 0 ) {		/* want +'s xlated to blanks */
+      char *xlateto[] = { ""," "," "," + "," "," "," "," "," " };
+      while ( xlateplus > 0 ) {		/* still have +++'s to xlate */
+	char plusses[99] = "++++++++++++++++++++"; /* longest +++ string */
+	plusses[xlateplus] = '\000';	/* null-terminate +++'s */
+	strreplace(url,plusses,xlateto[xlateplus],0); /* xlate +++'s */
+	xlateplus--;			/* next shorter +++ string */
+	} /* --- end-of-while(xlateplus>0) --- */
+      } /* --- end-of-if(xlateplus) --- */
+    isplusblank = 0;			/* don't iterate this xlation */
+    /* ---
+     * xlate %nn to corresponding char
+     * ------------------------------- */
     for(;url[y];++x,++y) {
 	gotescape = prevescape;
 	prevescape = (url[x]=='\\');
@@ -12268,14 +14614,16 @@ return ( nlogged );			/* back to caller */
 } /* --- end-of-function logger() --- */
 
 /* ==========================================================================
- * Function:	emitcache ( cachefile, maxage, isbuffer )
+ * Function:	emitcache ( cachefile, maxage, valign, isbuffer )
  * Purpose:	dumps bytes from cachefile to stdout
  * --------------------------------------------------------------------------
  * Arguments:	cachefile (I)	pointer to null-terminated char string
  *				containing full path to file to be dumped,
  *				or contains buffer of bytes to be dumped
- *		maxage (I)	int containing maxage. in seconds, for
+ *		maxage (I)	int containing maxage, in seconds, for
  *				http header, or -1 to not emit headers
+ *		valign (I)	int containing Vertical-Align:, in pixels,
+ *				for http header, or <= -999 to not emit
  *		isbuffer (I)	1 if cachefile is buffer of bytes to be
  *				dumped
  * --------------------------------------------------------------------------
@@ -12284,15 +14632,17 @@ return ( nlogged );			/* back to caller */
  * Notes:     o
  * ======================================================================= */
 /* --- entry point --- */
-int	emitcache ( char *cachefile, int maxage, int isbuffer )
+int	emitcache ( char *cachefile, int maxage, int valign, int isbuffer )
 {
 /* -------------------------------------------------------------------------
 Allocations and Declarations
 -------------------------------------------------------------------------- */
 int	nbytes=gifSize, readcachefile(); /* read cache file */
 FILE	*emitptr = stdout;		/* emit cachefile to stdout */
-unsigned char buffer[64000];		/* bytes from cachefile */
+unsigned char buffer[MAXGIFSZ+1];	/* bytes from cachefile */
 unsigned char *buffptr = buffer;	/* ptr to buffer */
+int	isvalign = (abs(valign)<999?1:0); /* true to emit Vertical-Align: */
+int	iscontenttypecached = iscachecontenttype; /*true if headers cached*/
 /* -------------------------------------------------------------------------
 initialization
 -------------------------------------------------------------------------- */
@@ -12300,16 +14650,21 @@ initialization
 if ( emitptr == (FILE *)NULL )		/* failed to open emit file */
   goto end_of_job;			/* so return 0 bytes to caller */
 /* --- read the file if necessary --- */
-if ( isbuffer )				/* cachefile is buffer */
- buffptr = (unsigned char *)cachefile;	/* so reset buffer pointer */
-else					/* cachefile is file name */
- if ( (nbytes = readcachefile(cachefile,buffer)) /* read the file */
- < 1 ) goto end_of_job;			/* quit if file not read */
+if ( isbuffer ) {			/* cachefile is buffer */
+  buffptr = (unsigned char *)cachefile;	/* so reset buffer pointer */
+  iscontenttypecached = 0; }		/* and iscontenttypecached flag */
+else {					/* cachefile is file name */
+  if ( (nbytes = readcachefile(cachefile,buffer)) /* read the file */
+  < 1 ) goto end_of_job; }		/* quit if file not read */
 /* --- first emit http headers if requested --- */
-if ( maxage >= 0 )			/* caller wants http headers */
+if ( isemitcontenttype			/* content-type lines enabled */
+&&   !iscontenttypecached		/* and not in cached image */
+&&   maxage >= 0 )			/* caller wants http headers */
  { /* --- emit mime content-type line --- */
    fprintf( emitptr, "Cache-Control: max-age=%d\n",maxage );
    fprintf( emitptr, "Content-Length: %d\n",nbytes );
+   if ( isvalign )			/* Vertical-Align: header wanted */
+     fprintf( emitptr, "Vertical-Align: %d\n",valign );
    fprintf( emitptr, "Content-type: image/gif\n\n" ); }
 /* -------------------------------------------------------------------------
 set stdout to binary mode (for Windows)
@@ -12362,7 +14717,7 @@ FILE	*cacheptr = fopen(cachefile,"rb"); /*open cachefile for binary read*/
 unsigned char cachebuff[64];		/* bytes from cachefile */
 int	buflen = 32,			/* #bytes we try to read from file */
 	nread = 0,			/* #bytes actually read from file */
-	maxbytes = 64000,		/* max #bytes returned in buffer */
+	maxbytes = MAXGIFSZ,		/* max #bytes returned in buffer */
 	nbytes = 0;			/* total #bytes read */
 /* -------------------------------------------------------------------------
 initialization

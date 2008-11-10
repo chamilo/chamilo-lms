@@ -3,7 +3,7 @@
  January 15, 2005                                              Version 1.61
 
                   m i m e T e X   R e a d m e   F i l e
-    (including pre-compiled Linux binary mimetex.cgi -- see NOTE below)
+   (including pre-compiled Windows binary mimetex.exe -- see NOTE below)
 
  Copyright(c) 2002-2005, John Forkosh Associates, Inc. All rights reserved.
  --------------------------------------------------------------------------
@@ -17,14 +17,14 @@
           as published by the Free Software Foundation. See
                    http://www.gnu.org/licenses/gpl.html
 
+	  ------------------------------------------------------------
+          NOTE for Windows users...
 	  -------------------------------------------------------------
-          NOTE for Linux users...
-	  -------------------------------------------------------------
-          This zip file contains pre-compiled binary image mimetex.cgi,
-          compiled under Debian GNU/Linux running kernel 2.4.29, with gcc
-          3.3.5.  It also contains all mimetex source files. The compile
-          command was
-             gcc -static -DAA mimetex.c gifsave.c -lm -o mimetex.cgi
+          This zip file contains pre-compiled binary image mimetex.exe,
+          compiled under Windows 2000 using the MinGW C compiler v3.2.3
+          (see http://www.mingw.org).  It also contains all mimetex
+          source files. The compile command from a DOS-box C> prompt was
+        gcc -static -DAA -DWINDOWS mimetex.c gifsave.c -lm -o mimetex.exe
 	  -------------------------------------------------------------
 
           MimeTeX is discussed and illustrated online at

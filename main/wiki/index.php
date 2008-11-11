@@ -101,6 +101,21 @@ if ($_SESSION['_gid'] OR $_GET['group_id'])
 	$interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['_gid'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 	$add_group_to_title = ' ('.$group_properties['name'].')';	
 	$groupfilter='group_id="'.$_clean['group_id'].'"';
+	
+	//ensure this tool in groups whe it's private or deactivated
+	if 	($group_properties['wiki_state']==0)
+	{
+		echo api_not_allowed();
+	}
+	elseif ($group_properties['wiki_state']==2)
+	{
+
+		if (!api_is_allowed_to_edit() and !GroupManager :: is_user_in_group($_user['user_id']))	
+		{
+			echo api_not_allowed();
+		}
+	}	
+	
 }
 else
 {
@@ -2583,7 +2598,7 @@ function display_wiki_entry()
 if ($_POST['export2DOC'])
 { 
 	$titleDOC=$_POST['titleDOC'];
-	$contentDOC=$_POST['contentDOC']; //check. TODO
+	$contentDOC=$_POST['contentDOC'];
 	$groupIdDOC=$_clean['group_id'];
 	export2doc($titleDOC,$contentDOC,$groupIdDOC); 
 }

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 16580 2008-10-21 20:05:18Z juliomontoya $
+<?php // $Id: index.php 16712 2008-11-11 21:35:43Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -210,10 +210,14 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 			$title = $description['title'];
 			if ($description['description_id'] == ADD_BLOCK)
 			{
-				$sql = "SELECT MAX(id) FROM $tbl_course_description";
+				$sql = "SELECT id FROM $tbl_course_description WHERE id = ".ADD_BLOCK;
 				$result = api_sql_query($sql, __FILE__, __LINE__);
-				$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$description_id."', title = '".mysql_real_escape_string($title)."', content = '".mysql_real_escape_string($content)."'";
-				api_sql_query($sql, __FILE__, __LINE__);
+                if (Database::num_rows($result)>0){
+                	$sqldel = "DELETE FROM $tbl_course_description WHERE id = ".ADD_BLOCK;
+                    $resultdel = api_sql_query($sqldel,__FILE__,__LINE__);
+                }
+				$sqlins = "INSERT INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string($title)."', content = '".Database::escape_string($content)."'";
+				api_sql_query($sqlins, __FILE__, __LINE__);
 			}
 			else
 			{

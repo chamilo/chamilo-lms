@@ -215,7 +215,7 @@ CREATE TABLE track_e_hotspot (
   hotspot_question_id int(11) NOT NULL,
   hotspot_answer_id int(11) NOT NULL,
   hotspot_correct tinyint(3) unsigned NOT NULL,
-  hotspot_coordinate varchar(50) NOT NULL,
+  hotspot_coordinate text NOT NULL,
   PRIMARY KEY  (hotspot_id),
   KEY hotspot_course_code (hotspot_course_code),
   KEY hotspot_user_id (hotspot_user_id),

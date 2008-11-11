@@ -47,6 +47,7 @@ ALTER TABLE track_e_exercices ADD session_id SMALLINT UNSIGNED NOT NULL default 
 ALTER TABLE track_e_exercices ADD INDEX ( session_id ) ;
 CREATE TABLE track_e_attempt_recording (exe_id int unsigned NOT NULL, question_id int unsigned NOT NULL,  marks int NOT NULL,  insert_date datetime NOT NULL default '0000-00-00 00:00:00',  author int unsigned NOT NULL,  teacher_comment text NOT NULL);
 ALTER TABLE track_e_attempt_recording ADD INDEX (exe_id);
+ALTER TABLE track_e_hotspot CHANGE hotspot_coordinate hotspot_coordinate text NOT NULL;
 -- xxUSERxx
 
 -- xxCOURSExx

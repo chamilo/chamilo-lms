@@ -1,4 +1,5 @@
-<?php // $Id: document.inc.php 15716 2008-07-02 23:10:47Z juliomontoya $
+<?php // $Id: document.inc.php 16725 2008-11-12 15:43:21Z pcool $
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -120,15 +121,6 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 	$form=$form->toHtml();
 
 	return $form;
-}
-
-
-function display_document_options()
-{
-	$message = "<a href=\"quota.php?".api_get_cidreq()."\">".get_lang("ShowCourseQuotaUse")."</a>";
-	echo 	/*"<div id=\"smallmessagebox\">"
-			.*/ "<p>" . $message . "</p>"
-			/*. "</div>"*/;
 }
 
 /**

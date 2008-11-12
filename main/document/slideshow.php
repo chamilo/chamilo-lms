@@ -1,5 +1,5 @@
-<?php
-// $Id: slideshow.php 11766 2007-03-29 08:39:27Z elixir_julian $
+<?php // $Id: slideshow.php 16725 2008-11-12 15:43:21Z pcool $
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -122,81 +122,59 @@ function MM_openBrWindow(theURL,winName,features) { //v2.0
 </script>
 
 
-<p></p>
-<h3 style="margin-top: 0; margin-bottom: 0"><?php echo get_lang('SlideShow'); ?></h3>
-<table width="100%" border="0" cellspacing="0" cellpadding="2">
-  <tr>
-    <td>
+<div class="actions">
 	<?php
+	// previous slide
+	if ($slide > 0)
+	{
+		echo '<a href="slideshow.php?slide_id='.$previous_slide.'&amp;curdirpath='.$pathurl.'">';
+	}
+	echo '&lt;&lt;'.get_lang('_previous_slide');
+	if ($slide > 0)
+	{
+		echo "</a> ";
+	}
 
-if ($slide > 0)
-{
-	echo "<a href='slideshow.php?slide_id=".$previous_slide."&curdirpath=$pathurl'>";
-}
-?>
-	<strong>&lt;&lt; <?php echo get_lang('_previous_slide'); ?></strong>	<?php
+	// divider
+	echo '&nbsp;|&nbsp;';
 
-if ($slide > 0)
-{
-	echo "</a>";
-}
-?>
-	&nbsp;|&nbsp;
-	<?php
-
-if ($slide < $total_slides -1 and $slide_id <> "all")
-{
+	// next slide
+	if ($slide < $total_slides -1 and $slide_id <> "all")
+	{
 	echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'>";
-}
-?>
-	<strong><?php echo get_lang('_next_slide'); ?> &gt;&gt;</strong>
-	<?php
+	}
+	echo get_lang('_next_slide').'&gt;&gt;';
+	if ($slide > 0)
+	{
+		echo "</a> ";
+	}
 
-if ($slide > 0)
-{
-	echo "</a>";
-}
-?>
-	</td>
-    <td>
-	<?php
+	// exit the slideshow
+	echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.get_lang('_exit_slideshow').'</a> ';
 
+	// show thumbnails
+	if ($slide_id <> "all")
+	{
+		echo "<a href='slideshow.php?slide_id=all&curdirpath=".$pathurl."'>".get_lang('_show_thumbnails')."</a> ";
+	}
+	else 
+	{
+		echo get_lang('_show_thumbnails').' '; 
+	}
+
+	$image = $sys_course_path.$_course['path']."/document/".$folder.$image_files_only[$slide];
+	
+	// slideshow options
+	echo '<a href="slideshowoptions.php?curdirpath='.$pathurl.'">'.get_lang('_set_slideshow_options').'</a> ';
+?>
+</div>
+
+<?php
 if ($slide_id <> "all")
 {
 	echo get_lang('_image')." ".$next_slide." ".get_lang('_of')." ".$total_slides;
 }
-?>
-	</td>
-    <td align="right"><a href="document.php?action=exit_slideshow&curdirpath=<?php echo $pathurl;?>"><?php echo get_lang('_exit_slideshow');?></a> </td>
-  </tr>
-  <tr>
-    <td>
-		<?php
-
-if ($slide_id <> "all")
-{
-	echo "<a href='slideshow.php?slide_id=all&curdirpath=".$pathurl."'>".get_lang('_show_thumbnails')."</a>";
-}
-else
-{
-	echo get_lang('_click_thumbnails');
-}
-$image = $sys_course_path.$_course['path']."/document/".$folder.$image_files_only[$slide];
-
-// EXIF DATA, remove "and 0==1" in the if statement if you want to display the EXIT data in a popup
-//if (exif_read_data($image))
-//	{ 
-//	$_SESSION["exif_image"]=$image; 
-//
-// 	echo "| <a href='#'  onClick='MM_openBrWindow('exifinfo.php?image=".$slide."&amp;path=".$path."','exifinfo','scrollbars=yes,resizable=yes,width=500,height=400')'>Show Exif metadata</a>";
-//	}
-?>
-	</td>
-    <td><?php echo htmlspecialchars($image_files_only[$slide]) ?></td>
-    <td align="right"><a href="slideshowoptions.php?curdirpath=<?php echo $pathurl; ?>"><?php echo get_lang('_set_slideshow_options');?></a></td>
-  </tr>
-</table>
-<?php
+echo '<br />'.htmlspecialchars($image_files_only[$slide]);
 
 // =======================================================================
 //				TREATING THE POST DATA FROM SLIDESHOW OPTIONS

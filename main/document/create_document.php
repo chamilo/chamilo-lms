@@ -1,5 +1,5 @@
-<?php
-// $Id: create_document.php 16639 2008-10-29 08:39:49Z elixir_inter $
+<?php // $Id: create_document.php 16725 2008-11-12 15:43:21Z pcool $
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -352,7 +352,7 @@ $form->add_html_editor('content','', false, false);
 // Comment-field
 
 //$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));
-$form->addElement('submit', 'submit', get_lang('SaveDocument'));
+$form->addElement('submit', 'submit', get_lang('CreateTheDocument'));
 $form->setDefaults($default);
 
 // HTML

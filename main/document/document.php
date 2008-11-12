@@ -1,4 +1,4 @@
-<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
+<?php // $Id: document.php 16725 2008-11-12 15:43:21Z pcool $
  
 /*
 ==============================================================================
@@ -319,11 +319,11 @@ if($to_group_id !=0) //add group name after for group documents
 
 if(!empty($_SESSION['_gid']))
 {
-	Display::display_introduction_section(TOOL_DOCUMENT.$_SESSION['_gid']);
+	Display::display_introduction_section(TOOL_DOCUMENT.$_SESSION['_gid'],'left');
 }
 else
 {
-	Display::display_introduction_section(TOOL_DOCUMENT);
+	Display::display_introduction_section(TOOL_DOCUMENT,'left');
 }
 
 /*============================================================================*/
@@ -605,18 +605,17 @@ $docs_and_folders = DocumentManager::get_all_document_data($_course,$curdirpath,
 
 ?>
 
-<div id="folderselector" style="float:left;margin-right:10px;margin-top:5px;">
 <?php
 $folders = DocumentManager::get_all_document_folders($_course,$to_group_id,$is_allowed_to_edit || $group_member_with_upload_rights);
 if($folders===false)
 {
 	$folders = array();
 }
-echo(build_directory_selector($folders,$curdirpath,(isset($group_properties['directory'])?$group_properties['directory']:array()),true));
+
 ?>
-</div>
+
 	<?php
-	echo '<div id="doc_links">';
+	echo '<div class="actions">';
 
 
 	/* GO TO PARENT DIRECTORY */
@@ -643,6 +642,7 @@ echo(build_directory_selector($folders,$curdirpath,(isset($group_properties['dir
 			<!-- create directory -->
 			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><img src="../img/folder_new.gif" border="0" alt ="" /></a>
 			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><?php echo get_lang("CreateDir"); ?></a>&nbsp;
+			<a href="quota.php?<?php echo api_get_cidreq();?>"><?php Display::display_icon('statistics.gif'); ?><?php echo get_lang("ShowCourseQuotaUse"); ?></a>
 		<?php
 	}
 	?>
@@ -657,7 +657,7 @@ echo(build_directory_selector($folders,$curdirpath,(isset($group_properties['dir
 		echo "<a href=\"slideshow.php?".api_get_cidreq()."&curdirpath=".$curdirpathurl."\"><img src=\"../img/images_gallery.gif\" border=\"0\" title=\"".get_lang('ViewSlideshow')."\"/>&nbsp;". get_lang('ViewSlideshow') . "</a>";
 	}
 	echo "</div>";
-
+	echo(build_directory_selector($folders,$curdirpath,(isset($group_properties['directory'])?$group_properties['directory']:array()),true));
 //==============================================================================
 
 if(isset($docs_and_folders) && is_array($docs_and_folders))
@@ -682,7 +682,6 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 		$invisibility_span_close = ($id['visibility']==0)?'</span>':'';
 		//size (or total size of a directory)		
 		$size = $id['filetype']=='folder' ? get_total_folder_size($id['path'],$is_allowed_to_edit) : $id['size'];
-		
 		//get the title or the basename depending on what we're using
 		if ($use_document_title=='true' AND $id['title']<>'')
 		{
@@ -834,19 +833,6 @@ if(!empty($table_footer))
 	echo $table_footer;
 }
 
-/*
-==============================================================================
-		Quota section
-
-		Proposal: perhaps move/add the quota display to another section, e.g. course info
-==============================================================================
-*/
-if ($is_allowed_to_edit) display_document_options();
-
-/*
-==============================================================================
-		Footer
-==============================================================================
-*/
+// footer
 Display::display_footer();
 ?>

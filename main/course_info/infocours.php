@@ -1,5 +1,5 @@
-<?php
-// $Id: infocours.php 14956 2008-04-20 14:21:32Z yannoo $
+<?php // $Id: infocours.php 16724 2008-11-12 15:42:23Z pcool $
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -144,10 +144,11 @@ while ($cat = mysql_fetch_array($res))
 }
 
 
-$linebreak = '<div class="row"><div class="label"></div><div class="formw" style="border-bottom:1px dashed"></div></div>';
+$linebreak = '<div class="row"><div class="label"></div><div class="formw" style="border-bottom:1px dashed grey"></div></div>';
 
 // Build the form
 $form = new FormValidator('update_course');
+$form->addElement('html','<div class="sectiontitle">'.get_lang('CourseSettings').'</div>');
 $visual_code=$form->addElement('text','visual_code', get_lang('Code'));
 	$visual_code->freeze();
 $form->applyFilter('visual_code', 'strtoupper');
@@ -160,9 +161,11 @@ $form->add_textfield('department_name', get_lang('Department'), false, array ('s
 $form->add_textfield('department_url', get_lang('DepartmentUrl'), false, array ('size' => '60'));
 $form->addRule('tutor_name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
-$form->addElement('static', null, null, get_lang("TipLang"));
-$form -> addElement('html',$linebreak);
+$form->addElement('static', null, '&nbsp;', get_lang('TipLang'));
 
+
+
+$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;">'.get_lang('CourseAccess').'</div>');
 $form->addElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
 $form->addElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
 $form->addElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
@@ -177,6 +180,13 @@ $form->addElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('
 $form->addElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
 $form -> addElement('html',$linebreak);
 
+$form->addElement('static', null, null, get_lang("ConfTip"));
+$form->add_textfield('course_registration_password', get_lang('CourseRegistrationPassword'), false, array ('size' => '60'));
+
+
+
+
+$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;">'.get_lang('EmailNotifications').'</div>');
 $form->addElement('radio', 'email_alert_manager_on_new_doc', get_lang('WorkEmailAlert'), get_lang('WorkEmailAlertActivate'), 1);
 $form->addElement('radio', 'email_alert_manager_on_new_doc', null, get_lang('WorkEmailAlertDeactivate'), 0);
 $form -> addElement('html',$linebreak);
@@ -187,8 +197,11 @@ $form -> addElement('html',$linebreak);
 
 $form->addElement('radio', 'email_alert_manager_on_new_quiz', get_lang('QuizEmailAlert'), get_lang('QuizEmailAlertActivate'), 1);
 $form->addElement('radio', 'email_alert_manager_on_new_quiz', null, get_lang('QuizEmailAlertDeactivate'), 0);
-$form -> addElement('html',$linebreak);
 
+
+
+
+$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;">'.get_lang('UserRights').'</div>');
 $form->addElement('radio', 'allow_user_edit_agenda', get_lang('AllowUserEditAgenda'), get_lang('AllowUserEditAgendaActivate'), 1);
 $form->addElement('radio', 'allow_user_edit_agenda', null, get_lang('AllowUserEditAgendaDeactivate'), 0);
 $form -> addElement('html',$linebreak);
@@ -206,6 +219,8 @@ $form -> addElement('html',$linebreak);
 // Course theme picker
 if (api_get_setting('allow_course_theme') == 'true')
 {	
+	$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;">'.get_lang('Theming').'</div><div style="clear:both;"></div>');
+	
 	//Allow Learning path 
 	$form->addElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeAllow'), 1);
 	$form->addElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
@@ -214,7 +229,6 @@ if (api_get_setting('allow_course_theme') == 'true')
 	
 	$form->addElement('select_theme', 'course_theme', get_lang('Theme'));
 	$form->applyFilter('course_theme', 'trim');
-	$form -> addElement('html',$linebreak);
 }
 
 

@@ -1,4 +1,5 @@
 <?php // $Id: activity.php,v 1.5 2006/08/10 14:34:54 pcool Exp $
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -225,7 +226,7 @@ function show_tools_category($course_tool_category)
 				if($toolsRow['visibility'] == '1' && $toolsRow['admin'] !='1')
 				{
 
-					$link['name'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/visible.gif" align="absmiddle" alt="'.get_lang("Deactivate").'"/>';
+					$link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'));
 
 					$link['cmd'] = "hide=yes";
 					$lnk[] = $link;
@@ -233,7 +234,7 @@ function show_tools_category($course_tool_category)
 
 				if($toolsRow['visibility'] == '0' && $toolsRow['admin'] !='1')
 				{
-					$link['name'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/invisible.gif" align="absmiddle" alt="'.get_lang("Activate").'"/>';
+					$link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'));
 					$link['cmd'] = "restore=yes";
 					$lnk[] = $link;
 				}
@@ -290,14 +291,19 @@ function show_tools_category($course_tool_category)
 			else{
 				$toolsRow['link'] = $toolsRow['link'].$qm_or_amp.api_get_cidreq();
 			}
-				if(strpos($toolsRow['name'],'visio_')!==false){
-					echo "\t" . ' &nbsp; <a ' . $class . ' href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">&nbsp;&nbsp;';
+				if(strpos($toolsRow['name'],'visio_')!==false)
+				{
+					$toollink = "\t" . '<a ' . $class . ' href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
 				}
-				else {
-					echo "\t" . ' &nbsp; <a ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">&nbsp;&nbsp;';
+				else 
+				{
+					$toollink = "\t" . '<a ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';
 				}
-					echo '<img src="' . $web_code_path . 'img/' . $toolsRow['image'] . '" align="absmiddle" border="0" alt="' . $toolsRow['image'] . '" /> &nbsp;&nbsp;';
+				echo $toollink;
+				Display::display_icon($toolsRow['image']);
+				echo '</a> ';
 					
+				echo $toollink;	
 					echo ($toolsRow['image'] == 'file_html_na.gif' || $toolsRow['image'] == 'file_html.gif' || $toolsRow['image'] == 'scormbuilder.gif' || $toolsRow['image'] == 'scormbuilder_na.gif' || $toolsRow['image'] == 'blog.gif' || $toolsRow['image'] == 'blog_na.gif' || $toolsRow['image'] == 'external.gif' || $toolsRow['image'] == 'external_na.gif') ? '  '.stripslashes($toolsRow['name']) : '  '.get_lang(ucfirst($toolsRow['name']));
 				echo "\t" . '</a>';
 				echo '</td>';

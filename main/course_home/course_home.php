@@ -1,4 +1,5 @@
-<?php // $Id: course_home.php 15984 2008-08-13 17:24:24Z juliomontoya $
+<?php // $Id: course_home.php 16724 2008-11-12 15:42:23Z pcool $
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -56,20 +57,6 @@
 		INIT SECTION
 ==============================================================================
 */
-
-$htmlHeadXtra[] = "
-		<style type=\"text/css\" media=\"screen, projection\">
-.row{
-width:100%;
-}
-div.row div.label {
-width: 0%;
-}
-		
-div.row div.formw {
-width: 100%;
-}
-		</style>";
 
 // name of the language file that needs to be included
 $language_file[] = "course_home";

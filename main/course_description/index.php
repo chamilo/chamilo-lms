@@ -1,4 +1,5 @@
-<?php // $Id: index.php 16713 2008-11-11 21:37:06Z yannoo $
+<?php // $Id: index.php 16724 2008-11-12 15:42:23Z pcool $
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -164,20 +165,6 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 		$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
 
 		
-		echo '
-		<style>
-		.row{
-			width:100%;
-		}
-		div.row div.label {
-			width: 60px;
-		}
-		
-		div.row div.formw {
-			width: 100%;
-		}
-		</style>';
-		
 		// Build the form
 		$form = new FormValidator('course_description','POST','index.php','','style="width: 100%;"');
 		$form->addElement('hidden', 'description_id');
@@ -237,18 +224,12 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 		{
 			if ($show_peda_suggest)
 			{
-				echo '<dl>';
 				if (isset ($question[$description_id]))
 				{
-					echo '<dt><b>'.get_lang('QuestionPlan').'</b></dt>';
-					echo '<dd>'.$question[$description_id].'</dd>';
+					$message = '<strong>'.get_lang('QuestionPlan').'</strong><br />';
+					$message .= $question[$description_id];
+					Display::display_normal_message($message, false);
 				}
-				if (isset ($information[$description_id]))
-				{
-					//echo '<dt><b>'.get_lang('Info2Say').'</b></dt>';
-					//echo '<dd>'.$information[$description_id].'</dd>';
-				}
-				echo '</dl>';
 			}
 			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 				echo (WCAG_Rendering::editor_header());
@@ -274,9 +255,6 @@ if ($show_description_list)
 	}
 	if (api_is_allowed_to_edit())
 	{
-		echo '<div style="position: relative;width: 500px;">';
-		Display::display_normal_message(get_lang('CourseDescriptionIntro'),false);
-		echo "</div>";
 		$categories = array ();
 		
 		foreach ($default_description_titles as $id => $title)
@@ -286,49 +264,41 @@ if ($show_description_list)
 		$categories[ADD_BLOCK] = get_lang('NewBloc');
 		
 		$i=1;
-		foreach ($categories as $id => $title){
-			if($i==1 || $i==5){
-				echo '<div style="padding-bottom: 5px;margin-bottom: 0px;">';
-			}
-			echo '<div style="float: left;width:150px; text-align:center; margin-right: 5px;">
-	            	<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$id.'"><img src="'.$default_description_icon[$id].'" /><br>'.$title.'</a>
-	        	</div>';
-        	if($i==4 || $i==8){
-				echo '<div style="clear: both"></div></div>';
-			}
+		echo '<div class="actions">';
+		foreach ($categories as $id => $title)
+		{
+			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$id.'"><img src="'.$default_description_icon[$id].'" height="20" /> '.$title.'</a>';
 			$i++;
 		}
-		
-		echo '<br>';
+		echo '</div>';
 	}
 	if (isset($descriptions) && count($descriptions) > 0)
 	{
 		foreach ($descriptions as $id => $description)
 		{
-			echo '<hr noshade="noshade" size="1"/>';
-			echo '<div>';
+			echo '<div class="sectiontitle">';
 			if (api_is_allowed_to_edit())
 			{
-				
 				//delete
 				echo '<a href="'.api_get_self().'?action=delete&amp;description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
 				echo '<img src="../img/delete.gif" alt="'.get_lang("Delete").'" border="0" style="vertical-align:middle;float:right;margin:2px;" />';
 				echo '</a> ';
-				
 				
 				//edit
 				echo '<a href="'.api_get_self().'?action=edit&amp;description_id='.$description->id.'">';
 				echo '<img src="../img/edit.gif" alt="'.get_lang("Edit").'" border="0" style="vertical-align:middle;float:right;margin:2px;" />';
 				echo '</a> ';
 			}
-			echo '<h3>'.$description->title.'</h3>';
+			echo $description->title;
 			echo '</div>';
+			echo '<div class="sectioncomment">';
 			echo text_filter($description->content);
+			echo '</div>';
 		}
 	}
 	else
 	{
-		echo '<br /><em>'.get_lang('ThisCourseDescriptionIsEmpty').'</em>';
+		echo '<em>'.get_lang('ThisCourseDescriptionIsEmpty').'</em>';
 	}
 }
 /*

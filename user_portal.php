@@ -1,9 +1,10 @@
 <?php // $Id: user_portal.php,v 1.10 2006/08/19 09:33:14 yannoo Exp $
+  
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2005 Dokeos SPRL
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -560,7 +561,8 @@ function get_logged_user_course_html($my_course)
 	if ((CONFVAL_showExtractInfo == SCRIPTVAL_InCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both) && $nbDigestEntries > 0)
 	{
 		reset($digest);
-		$result .= '<ul>';
+		$result .= '
+					<ul>';
 		while (list ($key2) = each($digest[$thisCourseSysCode]))
 		{
 			$result .= '<li>';
@@ -772,7 +774,7 @@ if ($maxCourse > 0)
 }
 
 
-echo '<div class="maincontent">'; // start of content for logged in users
+echo '	<div id="maincontent">'; // start of content for logged in users
 
 // Plugins for the my courses main area
 api_plugin('mycourses_main');
@@ -913,7 +915,8 @@ if ( is_array($list) ) {
 		if ( empty($value[2]) ) { //if out of any session
 
 			$userdefined_categories = get_user_course_categories();
-			echo "<ul>\n";
+			echo '	
+	<ul class="courseslist">';
 
 			if ($old_user_category<>$value[0])
 			{
@@ -921,12 +924,10 @@ if ( is_array($list) ) {
 				{
 					echo "\n</ul>";
 				}
-				echo "\n\n\t<ul class=\"user_course_category\">" .
-						"<li>".$userdefined_categories[$value[0]]."</li>" .
-					 "</ul>\n";
+				echo "\n\n\t<ul class=\"user_course_category\"><li>".$userdefined_categories[$value[0]]."</li></ul>\n";
 				if ($key<>0 OR $value[0]<>0) // there are courses in the previous category
 				{
-					echo "<ul>";
+					echo "<ul class=\"courseslist\">";
 				}
 				$old_user_category=$value[0];
 
@@ -948,8 +949,8 @@ if ( is_array($list) ) {
 	$old_user_category = 0;
 	$userdefined_categories = get_user_course_categories();
 
-	if ( count($listActives)>0 && $display_actives ) { //if it is worth showing a session section
-		echo '<ul class="sessions_list">', "\n";
+	if(count($listActives)>0 && $display_actives){
+		echo "<ul class=\"courseslist\">\n";
 
 		foreach ($listActives as $key => $value)
 		{
@@ -1016,7 +1017,7 @@ api_session_register('status');
 		RIGHT MENU
 ==============================================================================
 */
-echo '<div class="menu">';
+echo '	<div class="menu">';
 
 // tabs that are deactivated are added here
 if (!empty($menu_navigation))
@@ -1056,7 +1057,7 @@ echo '</div>';
 // plugins for the my courses menu
 if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu'])){
 
-	echo '<div class="note" style="background: none">';
+	echo '<div class="note">';
 	api_plugin('mycourses_menu');
 	echo '</div>';
 
@@ -1064,10 +1065,6 @@ if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu']))
 
 echo '</div>'; // end of menu
 
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+//footer
 Display :: display_footer();
 ?>

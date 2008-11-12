@@ -1,26 +1,33 @@
-<?php
+<?php // $Id: index.php 16729 2008-11-12 15:53:07Z pcool $
+ 
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-    Contact:
-		Dokeos
-		Rue du Corbeau, 108
-		B-1030 Brussels - Belgium
-		Contact: info@dokeos.com
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
 
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 16652 2008-10-31 21:37:21Z dperales $
+* 	@version $Id: index.php 16729 2008-11-12 15:53:07Z pcool $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -69,7 +76,7 @@ $this_section = SECTION_CAMPUS;
  * 			this can be usefull when you are on an open course and you need to log in to edit something and you immediately want to check how anonymous users
  * 			will see it.
  */
-if (!empty($_GET['logout']))
+if (isset($_GET['action']) && $_GET['action'] == 'logout')
 {
 	logout();
 }
@@ -163,7 +170,7 @@ Display :: display_header('', 'dokeos');
 		MAIN CODE
 ==============================================================================
 */
-echo '<div class="maincontent" id="content">';
+echo '<div id="maincontent">';
 
 // Plugins for loginpage_main AND campushomepage_main
 if (!api_get_user_id())
@@ -408,7 +415,7 @@ function display_anonymous_right_menu()
 		}
 		if(api_number_of_plugins('loginpage_menu') > 0)
 		{
-			echo '<div class="note" style="background: none">';
+			echo '<div class="note">';
 			api_plugin('loginpage_menu');
 			echo '</div>';
 		}
@@ -434,7 +441,7 @@ function display_anonymous_right_menu()
 
 	if ($_user['user_id'] && api_number_of_plugins('campushomepage_menu') > 0)
 	{
-		echo '<div class="note" style="background: none">';
+		echo '<div class="note">';
 		api_plugin('campushomepage_menu');
 		echo '</div>';
 	}
@@ -635,7 +642,7 @@ function display_anonymous_course_list()
 	$thereIsSubCat = false;
 	if (mysql_num_rows($resCats) > 0)
 	{
-		$htmlListCat = "<h4 style=\"margin-top: 0px;\">".get_lang("CatList")."</h4>"."<ul>";
+		$htmlListCat = "<h4>".get_lang("CatList")."</h4>"."<ul>";
 		while ($catLine = mysql_fetch_array($resCats))
 		{
 			if ($catLine['code'] != $category)
@@ -715,7 +722,7 @@ function display_anonymous_course_list()
 		{
 			$courses_list_string .= "<hr size=\"1\" noshade=\"noshade\">\n";
 		}
-		$courses_list_string .= "<h4 style=\"margin-top: 0px;\">".get_lang("CourseList")."</h4>\n"."<ul>\n";
+		$courses_list_string .= "<h4>".get_lang("CourseList")."</h4>\n"."<ul>\n";
 		
 		if (api_get_user_id())
 		{

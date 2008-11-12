@@ -586,7 +586,7 @@ class GroupManager
 		}
 		$sql = "INSERT INTO ".$table_group_category."
 					SET title='".mysql_real_escape_string($title)."',
-					display_order = $obj->new_order,
+					display_order ='".$obj->new_order."',
 					description='".mysql_real_escape_string($description)."',
 					doc_state = '".$doc_state."',
 					work_state = '".$work_state."',
@@ -594,10 +594,10 @@ class GroupManager
               		announcements_state = '".$announcements_state."',  
               		forum_state = '".Database::escape_string($forum_state)."',
 					wiki_state = '".$wiki_state."',
-					groups_per_user   = ".$groups_per_user.",
+					groups_per_user   = '".$groups_per_user."',
 					self_reg_allowed = '".$self_registration_allowed."',
 					self_unreg_allowed = '".$self_unregistration_allowed."',
-					max_student = ".$maximum_number_of_students." ";
+					max_student = '".$maximum_number_of_students."' ";
 		api_sql_query($sql,__FILE__,__LINE__);
 		$id = mysql_insert_id();
 		if ($id == VIRTUAL_COURSE_CATEGORY)

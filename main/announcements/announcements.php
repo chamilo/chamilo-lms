@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 16702 2008-11-10 13:02:30Z elixir_inter $
+<?php //$Id: announcements.php 16721 2008-11-12 15:39:03Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -859,13 +859,7 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 	// The commands below will change these display settings if they need it
 
 
-		if (empty($_GET['origin']) OR $_GET['origin'] !== 'learnpath')
-		{
-			echo "\n\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n";
-			echo "\t<tr>\n";
 
-	    	echo "\t\t<td width=\"20%\" valign=\"top\">\n";
-		}
       /*======================================================================
                               DISPLAY LEFT COLUMN
       ======================================================================*/
@@ -953,20 +947,29 @@ $announcement_number = Database::num_rows($result);
 /*----------------------------------------------------
 				ADD ANNOUNCEMENT / DELETE ALL
 ----------------------------------------------------*/
+echo '<div class="actions">';
 if(!$surveyid)
 {
 		if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath'))
 		{
 
-			echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'><img src=\"../img/announce_add.gif\"> ".get_lang("AddAnnouncement")."</a><br/>";
+			echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('announce_add.gif',get_lang('AddAnnouncement')).get_lang('AddAnnouncement')."</a>";
 			
 		}
 		if (api_is_allowed_to_edit() && $announcement_number > 1)
 		{
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\"><img src=\"../img/valves_delete.gif\"/> ".get_lang("AnnouncementDeleteAll")."</a>\n";
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('valves_delete.gif',get_lang('AnnouncementDeleteAll')).get_lang('AnnouncementDeleteAll')."</a>\n";
 		}	// if announcementNumber > 1
-		echo "<hr noshade size=\"1\">";
 }
+echo '</div>';
+
+		if (empty($_GET['origin']) OR $_GET['origin'] !== 'learnpath')
+		{
+			echo "\n\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n";
+			echo "\t<tr>\n";
+
+	    	echo "\t\t<td width=\"20%\" valign=\"top\">\n";
+		}
 
 /*----------------------------------------------------
 				ANNOUNCEMENTS LIST
@@ -1315,7 +1318,7 @@ if(!empty($error_message))
 
 		if ($num_rows == 0)
 		{
-			echo "<table><tr><td>".get_lang('NoAnnouncements')."</td></tr></table>";
+			echo get_lang('NoAnnouncements');;
 		}
 
 		$iterator = 1;
@@ -1323,7 +1326,7 @@ if(!empty($error_message))
 		$bottomAnnouncement = $announcement_number;
 
 
-		echo "\t\t\t<table width=\"100%\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\"  id=\"agenda_list\">\n";
+		echo "\t\t\t<table width=\"100%\" class=\"data_table\">\n";
 
 		$displayed=array();
 
@@ -1352,15 +1355,11 @@ if(!empty($error_message))
 				// the styles
 				if ($myrow['visibility']=='0')
 				{
-					$style="data_hidden";
-					$stylenotbold="datanotbold_hidden";
-					$text_style="text_hidden";
+					$style='invisible';
 				}
 				else
 				{
-					$style="data";
-					$stylenotbold="datanotbold";
-					$text_style="text";
+					$style = '';
 				}
 
 				echo	"\t\t\t\t<tr class=\"".$style."\">";
@@ -1369,7 +1368,7 @@ if(!empty($error_message))
 				/*===================================================================
 											THE ICONS
 				===================================================================*/
-				echo "\t\t\t\t\t<td>\n";
+				echo "\t\t\t\t\t<th>\n";
 				// anchoring
 				echo "<a name=\"".(int)($myrow["id"])."\"></a>\n";
 				// User or group icon
@@ -1382,32 +1381,32 @@ if(!empty($error_message))
 				{
 					echo "\t\t\t\t\t\t<img alt=\"$alt_mail\" src='../img/email.gif'>\n";
 				}
-				echo "\t\t\t\t\t</td>\n";
+				echo "\t\t\t\t\t</th>\n";
 				/*==================================================================
 											TITLE
 				==================================================================*/
 
-				echo "\t\t\t\t\t<td>".$title."</td>\n";
+				echo "\t\t\t\t\t<th>".$title."</th>\n";
 
 
 				/*==================================================================
 											SENT TO
 				===================================================================*/
 
-				echo "\t\t\t\t\t<td class=\"".$stylenotbold."\">" . get_lang("SentTo") . " : &nbsp; ";
+				echo "\t\t\t\t\t<th>" . get_lang("SentTo") . " : &nbsp; ";
 				$sent_to=sent_to("announcement", $myrow['id']);
 
 				$sent_to_form=sent_to_form($sent_to);
 				$user_info=api_get_user_info($myrow['insert_user_id']);
 				echo '&nbsp;&nbsp;&nbsp;'.get_lang('By').' : &nbsp;'.$user_info['lastName'].'&nbsp;'.$user_info['firstName'];
 				
-				echo "\t\t\t\t\t</td>\n","\t\t\t\t</tr>\n";
+				echo "\t\t\t\t\t</th>\n","\t\t\t\t</tr>\n";
 
 
 				/*=========================================================
 											TITLE
 				=========================================================*/
-				echo "\t\t\t\t<tr>\n",
+				echo "\t\t\t\t<tr class='row_odd'>\n",
 				"\t\t\t\t\t<td class=\"announcements_datum\" colspan=\"3\">",
 
 				get_lang('AnnouncementPublishedOn')," : ",ucfirst(format_locale_date($dateFormatLong,strtotime($last_post_date))),
@@ -1435,7 +1434,7 @@ if(!empty($error_message))
 										RESOURCES
 				========================================================*/
 
-				"<tr>\n",
+				"<tr class='row_odd'>\n",
 				"<td colspan=\"3\">\n";
 
 
@@ -1445,7 +1444,6 @@ if(!empty($error_message))
 					display_added_resources("Ad_Valvas", $myrow["id"]);
 				}
 
-				echo   "<br />";
 
 				// we can edit if : we are the teacher OR the element belongs to the session we are coaching OR the option to allow users to edit is on
 				if(api_is_allowed_to_edit() OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id'])) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()))
@@ -1454,15 +1452,14 @@ if(!empty($error_message))
 					/*=====================================================================
 												SHOW MOD/DEL/VIS FUNCTIONS
 					=====================================================================*/
-					echo "<table><tr>";
-					echo	"<td valign=\"top\"><a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$myrow['id']."\">",
+					echo	"<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$myrow['id']."\">",
 							"<img src=\"../img/edit.gif\" title=\"",get_lang('Modify'),"\" border=\"0\" align=\"absmiddle\">",
-							"</a></td>";
+							"</a>";
 
 
-					if (api_is_allowed_to_edit(false,true)) echo "<td valign=\"top\"><a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">",
+					if (api_is_allowed_to_edit(false,true)) echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">",
 							"<img src=\"../img/delete.gif\" title=\"",get_lang('Delete'),"\" border=\"0\" align=\"absmiddle\">",
-							"</a></td>";
+							"</a>";
 
 							if ($myrow['visibility']==1)
 							{
@@ -1473,8 +1470,8 @@ if(!empty($error_message))
 									$image_visibility="invisible";
 							}
 
-							echo 	"<td valign=\"top\"><a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".(!empty($_GET['origin'])?$_GET['origin']:'')."&action=showhide&id=".$myrow['id']."\">",
-									"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" alt=\"".get_lang('Visible')."\"/></a></td>";
+							echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".(!empty($_GET['origin'])?$_GET['origin']:'')."&action=showhide&id=".$myrow['id']."\">",
+									"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" alt=\"".get_lang('Visible')."\"/></a>";
 
 
 
@@ -1483,21 +1480,19 @@ if(!empty($error_message))
 							if($iterator != 1)
 							{
 
-							echo	"<td valign=\"top\"><a href=\"".api_get_self()."?".api_get_cidreq()."&up=",$myrow["id"],"\">",
+							echo	"<a href=\"".api_get_self()."?".api_get_cidreq()."&up=",$myrow["id"],"\">",
 									"<img src=../img/up.gif border=0 title=\"".get_lang('Up')."\" align=\"absmiddle\">",
-									"</a></td>";
+									"</a>";
 							}
 
 
 							if($iterator < $bottomAnnouncement)
 							{
 
-							echo	"<td valign=\"top\"><a href=\"".api_get_self()."?".api_get_cidreq()."&down=".$myrow["id"]."\">",
+							echo	"<a href=\"".api_get_self()."?".api_get_cidreq()."&down=".$myrow["id"]."\">",
 									"<img src=\"../img/down.gif\" border=\"0\" title=\"".get_lang('Down')."\" align=\"absmiddle\">",
-									"</a></td>";
+									"</a>";
 							}
-
-							echo "</tr></table>";
 
 
 

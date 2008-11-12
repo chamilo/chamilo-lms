@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 16490 2008-10-10 14:29:52Z elixir_inter $
+<?php //$Id: agenda.php 16723 2008-11-12 15:41:34Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -256,6 +256,14 @@ if (empty($select_year) && empty($select_month))
 	$select_month = $today['mon'];
 }
 
+echo '<div class="actions">';
+if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
+{
+	display_courseadmin_links();
+}
+display_student_links();
+echo '</div>';
+
 echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">'
 		. '<tr>';
 
@@ -274,14 +282,6 @@ if (empty($_GET['origin']) or $_GET['origin']!='learnpath')
 	{
 		display_upcoming_events();
 	}
-	// the links for adding, filtering, showall, ...
-	echo '<ul id="agenda_select">';
-	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
-	{
-		display_courseadmin_links();
-	}
-	display_student_links();
-	echo '</ul>';
 	echo '</td>';
 	echo '<td width="20" background="../img/verticalruler.gif">&nbsp;</td>';
 }

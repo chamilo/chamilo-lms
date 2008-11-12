@@ -1,4 +1,4 @@
-<?php //$id: $
+<?php //$Id: myagenda.php 16723 2008-11-12 15:41:34Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -213,6 +213,18 @@ if (isset ($_user['user_id']))
 	// The name of the current Month
 	$monthName = $MonthsLong[$month -1];
 	// Starting the output
+	
+	echo "\n<div class=\"actions\">\n";
+	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=month\"><img src=\"../img/calendar_month.gif\" alt=\"".get_lang('MonthView')."\" /> ".get_lang('MonthView')."</a> \n";
+	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=week\"><img src=\"../img/calendar_week.gif\" alt=\"".get_lang('WeekView')."\" /> ".get_lang('WeekView')."</a> \n";
+	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=day\"><img src=\"../img/calendar_day.gif\" alt=\"".get_lang('DayView')."\" /> ".get_lang('DayView')."</a> \n";
+	if (get_setting('allow_personal_agenda') == 'true')
+	{
+		echo "\t<a href=\"".api_get_self()."?action=add_personal_agenda_item\"><img src=\"../img/calendar_personal_add.gif\" /> ".get_lang("AddPersonalItem")."</a> \n";
+		echo "\t<a href=\"".api_get_self()."?action=view&amp;view=personal\"><img src=\"../img/calendar_personal.gif\" />  ".get_lang("ViewPersonalItem")."</a> \n";
+	}
+	echo "</div>\n\n";	
+	
 	echo "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
 	echo "<tr>";
 	// output: the small calendar item on the left and the view / add links
@@ -223,16 +235,7 @@ if (isset ($_user['user_id']))
 		$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 	}
 	display_myminimonthcalendar($agendaitems, $month, $year, $monthName);
-	echo "\n<ul id=\"agenda_select\">\n";
-	echo "\t<li><a href=\"".api_get_self()."?action=view&amp;view=month\"><img src=\"../img/calendar_month.gif\" border=\"0\" alt=\"".get_lang('MonthView')."\" /> ".get_lang('MonthView')."</a></li>\n";
-	echo "\t<li><a href=\"".api_get_self()."?action=view&amp;view=week\"><img src=\"../img/calendar_week.gif\" border=\"0\" alt=\"".get_lang('WeekView')."\" /> ".get_lang('WeekView')."</a></li>\n";
-	echo "\t<li><a href=\"".api_get_self()."?action=view&amp;view=day\"><img src=\"../img/calendar_day.gif\" border=\"0\" alt=\"".get_lang('DayView')."\" /> ".get_lang('DayView')."</a></li>\n";
-	if (get_setting('allow_personal_agenda') == 'true')
-	{
-		echo "\t<li><a href=\"".api_get_self()."?action=add_personal_agenda_item\"><img src=\"../img/calendar_personal_add.gif\" border=\"0\" /> ".get_lang("AddPersonalItem")."</a></li>\n";
-		echo "\t<li><a href=\"".api_get_self()."?action=view&amp;view=personal\"><img src=\"../img/calendar_personal.gif\" border=\"0\" />  ".get_lang("ViewPersonalItem")."</a></li>\n";
-	}
-	echo "</ul>\n\n";
+
 	echo "</td>";
 	// the divider
 	// OlivierB : the image has a white background, which causes trouble if the portal has another background color. Image should be transparent. ----> echo "<td width=\"20\" background=\"../img/verticalruler.gif\">&nbsp;</td>";

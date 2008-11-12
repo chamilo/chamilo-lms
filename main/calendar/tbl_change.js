@@ -90,7 +90,7 @@ function initCalendar() {
     str = ""
 
     //heading table
-    str += '<table class="calendar"><tr><th class="monthyear" width="50%">';
+    str += '<table class="data_table"><tr><th class="monthyear" width="50%">';
     str += '<a href="javascript:month--; initCalendar();">&laquo;</a> ';
     str += month_names[month];
     str += ' <a href="javascript:month++; initCalendar();">&raquo;</a>';
@@ -100,9 +100,9 @@ function initCalendar() {
     str += ' <a href="javascript:year++; initCalendar();">&raquo;</a>';
     str += '</th></tr></table>';
 
-    str += '<table class="calendar"><tr>';
+    str += '<table class="data_table"><tr>';
     for (i = 0; i < 7; i++) {
-        str += "<th  class='daynames'>" + day_names[i] + "</th>";
+        str += "<td class='weekdays'>" + day_names[i] + "</td>";
     }
     str += "</tr>";
 

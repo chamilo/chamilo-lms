@@ -1,4 +1,27 @@
-<?php
+<?php //$Id: calendar.php 16723 2008-11-12 15:41:34Z pcool $
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003-2005 Ghent University (UGent)
+	Copyright (c) various contributors
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
+*/
+
 // name of the language file that needs to be included
 $language_file = 'agenda';
 // including the claroline global 
@@ -21,54 +44,36 @@ $MonthsLong = array(get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang(
 <head>
 <title>Calendar</title>
 <style type="text/css">
-table.calendar
+@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/<?php echo api_get_setting('stylesheets'); ?>/default.css";
+.data_table th
 {
-	width: 100%;	
-	font-size: 11px;
-	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 10px;
 }
-table.calendar .monthyear
+.data_table td
 {
-	background-color: #4171B5;
-	text-align: center;
-	color: #ffffff;
-}
-table.calendar .daynames
-{
-	background-color: #D3DFF1;
-	text-align: center;
+	font-size: 10px;
+	width: 25px;
+	height: 25px;
 }
 table.calendar td
 {
-	width: 25px;
-	height: 25px;
+
 	background-color: #f5f5f5;	
 	text-align: center;
 }
-table.calendar td.selected
+.data_table td.selected
 {
 	border: 1px solid #ff0000; 
 	background-color: #FFCECE;
 }
-table.calendar td a
+.data_table td a
 {
 	width: 25px;
 	height: 25px;
 	text-decoration: none;
 }
-table.calendar td a:hover
+.data_table td a:hover
 {
-	background-color: #ffff00;
-}
-table.calendar .monthyear a
-{
-	text-align: center;
-	color: #ffffff;
-}
-table.calendar .monthyear a:hover
-{
-	text-align: center;
-	color: #ff0000;
 	background-color: #ffff00;
 }
 </style>

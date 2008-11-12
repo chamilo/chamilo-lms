@@ -1,29 +1,35 @@
-<?php
+<?php // $Id: exercise.lib.php 16726 2008-11-12 15:44:48Z pcool $
+ 
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
-
 
 /**
 *	Exercise library
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 15602 2008-06-18 08:52:24Z pcool $
+* 	@version $Id: exercise.lib.php 16726 2008-11-12 15:44:48Z pcool $
 */
 
 
@@ -49,9 +55,8 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			$questionDescription=$objQuestionTmp->selectDescription();
 
 			$questionName=api_parse_tex($questionName);
-			$s.=$questionName;
-			$s.="</td>
-			</tr>
+			$s.=$questionName.'</div>';
+			$s.="<table class='exercise_options'>
 			<tr>
 			  <td valign='top' colspan='2'>
 				<i>";
@@ -436,7 +441,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 		echo $s;
 
 	}
-	echo "<tr><td colspan='2'>&nbsp;</td></tr>";
+	echo "<tr><td colspan='2'>&nbsp;</td></tr></table>";
 
 	return $nbrAnswers;
 }

@@ -1,9 +1,13 @@
-<?php
+<?php // $Id: question_list_admin.inc.php 16726 2008-11-12 15:44:48Z pcool $
+ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -20,12 +24,11 @@
 ==============================================================================
 */
 
-
 /**
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: question_list_admin.inc.php 15791 2008-07-15 16:03:52Z juliomontoya $
+* 	@version $Id: question_list_admin.inc.php 16726 2008-11-12 15:44:48Z pcool $
 */
 
 
@@ -81,17 +84,19 @@ if($deleteQuestion)
 	// destruction of the Question object
 	unset($objQuestionTmp);
 }
-
+echo '<div class="actionsbig">';
 Question :: display_type_menu ();
+echo '</div></div>';
 ?>
 
 
 <table class="data_table">
-<tr class="row_odd" bgcolor='#e6e6e6'><th><b><?php echo get_lang('Question'); ?></b></th>
-<th><b><?php echo get_lang('Type');?></b></th>
-<th><b><?php echo get_lang('Export'); ?></b></th>
-<th><b><?php echo get_lang('Modify'); ?></b></th>
-</tr>
+	<tr class="row_odd">
+		<th><?php echo get_lang('Question'); ?></th>
+		<th><?php echo get_lang('Type');?></th>
+		<th><?php echo get_lang('Export'); ?></th>
+		<th><?php echo get_lang('Modify'); ?></th>
+	</tr>
 
 <?php
 if($nbrQuestions)

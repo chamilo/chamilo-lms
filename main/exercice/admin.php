@@ -1,9 +1,13 @@
-<?php
+<?php // $Id: admin.php 16726 2008-11-12 15:44:48Z pcool $
+ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -63,7 +67,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 15917 2008-08-05 14:44:11Z elixir_inter $
+* 	@version $Id: admin.php 16726 2008-11-12 15:44:48Z pcool $
 */
 
 
@@ -454,12 +458,16 @@ if(isset($_GET['message']))
 }
 
 $description = $objExercise->selectDescription();
-echo '<h3 style="display:inline">'.$objExercise->selectTitle().'</h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--> <a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
+echo '<div class="sectiontitle">'.$objExercise->selectTitle().'</div>';
 if(!empty($description))
 {
-	echo '<div id="description_box">'.stripslashes($description).'</div>';
+	echo '<div class="sectioncomment">'.stripslashes($description).'</div>';
 }
-echo '<br /><br />';
+
+
+echo '<div class="actions">';
+echo Display::return_icon('search.gif').'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
+echo '</div>';
 
 
 if($newQuestion || $editQuestion)

@@ -1,4 +1,5 @@
 <?php // $Id: index.php,v 1.46 2005/09/26 10:20:25 pcool Exp $
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -145,8 +146,8 @@ $dropbox_unid = md5( uniqid( rand( ), true));
 ==============================================================================
 */
 
-// Tool introduction text
-Display::display_introduction_section(TOOL_DROPBOX);
+// introduction section
+Display::display_introduction_section(TOOL_DROPBOX,'left');
 
 
 /*
@@ -308,13 +309,14 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 
 
 	/* *** Menu Received *** */
+	echo '<div class="actions">';
 	if ($view_dropbox_category_received<>0)
 	{
-		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong><br />';
+		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
 		echo '<img src="../img/folder_up.gif" alt="'.get_lang('up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
 	}
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory"><img src="../img/folder_new.gif" align=\"absmiddle\"/> '.get_lang('AddNewCategory').'</a>';
-
+	echo '</div>';
 
 	// object initialisation
 	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor); // note: are the $is_courseAdmin and $is_courseTutor parameters needed????
@@ -467,14 +469,15 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 	}
 
 	/* *** Menu Sent *** */
+	echo '<div class="actions">';
 	if ($view_dropbox_category_sent<>0)
 	{
-		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong><br />';
+		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong> ';
 		echo '<img src="../img/folder_up.gif" alt="'.get_lang('Up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category=0&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
 	}
 	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$_GET['view']."&amp;action=add\"><img src=\"../img/submit_file.gif\" align=\"absmiddle\"/> ".get_lang('UploadNewFile')."</a>&nbsp;\n";
 	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$_GET['view']."&amp;action=addsentcategory\"><img src=\"../img/folder_new.gif\" align=\"absmiddle\" /> ".get_lang('AddNewCategory')."</a>\n";
-
+	echo '</div>';
 	//echo '<form name="sent_files" method="post" action="'.api_get_self().'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'">';
 
 	// object initialisation

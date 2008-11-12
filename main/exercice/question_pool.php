@@ -1,9 +1,13 @@
-<?php
+<?php // $Id: question_pool.php 16726 2008-11-12 15:44:48Z pcool $
+ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -19,13 +23,14 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
+
 /**
 *	Question Pool
 * 	This script allows administrators to manage questions and add them into their exercises.
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 15999 2008-08-14 17:33:35Z juliomontoya $
+* 	@version $Id: question_pool.php 16726 2008-11-12 15:44:48Z pcool $
 */
 
 // name of the language file that needs to be included
@@ -137,38 +142,47 @@ if($is_allowedToEdit)
 	Display::display_header($nameTools,"Exercise");
 ?>
 
-<h3>
-  <?php echo $nameTools; ?>
-</h3>
+<h3><?php echo $nameTools; ?></h3>
 
-<form method="get" action="<?php echo api_get_self(); ?>">
-<input type="hidden" name="fromExercise" value="<?php echo $fromExercise; ?>">
-<table class="data_table">
-<tr>
-  <td colspan="<?php echo $fromExercise?2:3; ?>" align="right">
-	<?php echo get_lang('Filter'); ?> : <select name="exerciseId">
+<div class="actions">
+	<?php
+	if(!empty($fromExercise))
+	{
+		echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('quiz.gif'),get_lang('GoBackToEx'),'</a>';
+	}
+	else
+	{
+		echo '<a href="admin.php?',api_get_cidreq(),'&newQuestion=yes">'.Display::return_icon('new_test.gif'),get_lang('NewQu'),'</a>';
+	}
+	?>
+
+	<form method="get" action="<?php echo api_get_self(); ?>" style="display:inline;">
+	<input type="hidden" name="fromExercise" value="<?php echo $fromExercise; ?>">
+
+	<?php echo get_lang('Filter'); ?> : 
+	<select name="exerciseId">
 	<option value="0">-- <?php echo get_lang('AllExercises'); ?> --</option>
 	<option value="-1" <?php if($exerciseId == -1) echo 'selected="selected"'; ?>>-- <?php echo get_lang('OrphanQuestions'); ?> --</option>
 
-<?php 
+	<?php 
 	$sql="SELECT id,title FROM $TBL_EXERCICES WHERE id<>'".Database::escape_string($fromExercise)."' AND active<>'-1' ORDER BY id";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 
 	// shows a list-box allowing to filter questions
 	while($row=Database::fetch_array($result))
 	{
-?>
+	?>
 
 	<option value="<?php echo $row['id']; ?>" <?php if($exerciseId == $row['id']) echo 'selected="selected"'; ?>><?php echo $row['title']; ?></option>
 
-<?php
+	<?php
 	}
-?> 
-
+	?> 
     </select> <input type="submit" value="<?php echo get_lang('Ok'); ?>">
-  </td>
-</tr>
+    </form>
+</div>
 
+<table class="data_table">
 <?php
 	$from=$page*$limitQuestPage;
 
@@ -198,14 +212,6 @@ if($is_allowedToEdit)
     	'<table border="0" cellpadding="0" cellspacing="0" width="100%">',
     	'<tr>',
     	  '<td>';
-	if(!empty($fromExercise))
-	{
-		echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">&lt;&lt;',get_lang('GoBackToEx'),'</a>';
-	}
-	else
-	{
-		echo '<a href="admin.php?',api_get_cidreq(),'&newQuestion=yes">',get_lang('NewQu'),'</a>';
-	}
 	echo '</td>',
 	 '<td align="right">';
 	 
@@ -296,8 +302,7 @@ if($is_allowedToEdit)
             '<td colspan="',($fromExercise?2:3),'">',get_lang('NoQuestion'),'</td>',
             '</tr>';
 	}
-    echo '</table>',
-        '</form>';
+    echo '</table>';
 	Display::display_footer();
 }
 // if not admin of course

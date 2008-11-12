@@ -1,28 +1,34 @@
-<?php
+<?php // $Id: question.class.php 16726 2008-11-12 15:44:48Z pcool $
+ 
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
-
 
 /**
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 15984 2008-08-13 17:24:24Z juliomontoya $
+* 	@version $Id: question.class.php 16726 2008-11-12 15:44:48Z pcool $
 */
 
 
@@ -854,7 +860,7 @@ abstract class Question
 	static function display_type_menu ()
 	{
 		global $exerciseId;
-		echo '<strong>'.get_lang('AddQ').' :</strong> <div>';
+		//echo '<strong>'.get_lang('AddQ').' :</strong> <div>';
 		foreach(self::$questionTypes as $i=>$a_type)
 		{
 			
@@ -865,32 +871,30 @@ abstract class Question
 			eval('$img = '.$a_type[1].'::$typePicture;');
 			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
 
-			echo '
-			<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">
-				<a href="admin.php?newQuestion=yes&answerType='.$i.'">
-					<div>
-						<img src="'.api_get_path(WEB_IMG_PATH).'/'.$img.'" />
-					</div>
-					<div>
-						'.$explanation.'
-					</div>
-				</a>
-			</div>';
+			//echo '<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">';
+			echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">';
+			//echo '<div>';
+			Display::display_icon($img,'',array('align'=>'middle'));
+			//echo '</div>';
+			//echo '<div>';
+			echo $explanation;
+			//echo '</div>';
+			echo '</a>';
+			//echo '</div>';
 			
 		}
-		echo '
-			<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">
-				<a href="question_pool.php?fromExercise='.$exerciseId.'">
-			<div>
-				<img src="'.api_get_path(WEB_IMG_PATH).'/database.gif" />
-			</div>
-			<div>
-				'.get_lang('GetExistingQuestion').'
-			</div>				
-			</a>
-			</div>
-		</div>
-		<div style="clear:both"></div>';
+		//echo '<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">';
+		echo '<a href="question_pool.php?fromExercise='.$exerciseId.'">';
+		//echo '<div>';
+		Display::display_icon('database.gif','',array('align'=>'middle'));
+		//echo '</div>';
+		//echo '<div>';
+		echo get_lang('GetExistingQuestion');
+		//echo '</div>';
+		echo '</a>';
+		//echo '</div>';
+		//echo '</div>';
+		//echo '<div style="clear:both"></div>';
 
 	}
 }

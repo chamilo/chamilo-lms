@@ -1,9 +1,13 @@
-<?php
+<?php // $Id: exercice_submit.php 16726 2008-11-12 15:44:48Z pcool $
+ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2008 Dokeos SPRL
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -19,6 +23,7 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
+
 /**
 *	Exercise submission
 * 	This script allows to run an exercise. According to the exercise type, questions
@@ -37,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 16694 2008-11-07 16:53:10Z dperales $
+* 	@version $Id: exercice_submit.php 16726 2008-11-12 15:44:48Z pcool $
 */
 
 
@@ -985,11 +990,7 @@ else
 	 <input type='hidden' name='origin' value='".$origin."' />
 	 <input type='hidden' name='learnpath_id' value='".$learnpath_id."' />
 	 <input type='hidden' name='learnpath_item_id' value='".$learnpath_item_id."' />
-	 <input type='hidden' name='exerciseId' value='".$exerciseId."' />
-	<table width='100%' border='0' cellpadding='1' cellspacing='0'>
-	 <tr>
-	  <td>
-	  <table width='100%' cellpadding='3' cellspacing='0' border='0'>";
+	 <input type='hidden' name='exerciseId' value='".$exerciseId."' />";
 	echo $s;
 	
 	$i=0;
@@ -1026,11 +1027,9 @@ else
 			}
 		}
 	
-		$s="<tr>
-		 <td width='3%' bgcolor='#e6e6e6'><img src=\"".api_get_path(WEB_IMG_PATH)."test.gif\" align=\"absmiddle\"></td>
-		 <td valign='middle' bgcolor='#e6e6e6'>
-			".get_lang('Question')." ";
+		$s="<div class=\"sectiontitle\"><img src=\"".api_get_path(WEB_IMG_PATH)."test.gif\" align=\"absmiddle\">".get_lang('Question')." ";
 		$s.=$i.' : ';
+		//$s.='</div>';
 		if($exerciseType == 2) $s.=' / '.$nbrQuestions.' ';
 	
 		echo $s;
@@ -1046,12 +1045,7 @@ else
 		}
 	}	// end foreach()
 	
-	$s="</table>
-	  </td>
-	 </tr>
-	 <tr>
-	  <td>
-		 <!-- <input type='submit' name='buttonCancel' value=".get_lang('Cancel')." />
+	$s="<!-- <input type='submit' name='buttonCancel' value=".get_lang('Cancel')." />
 	   &nbsp;&nbsp; //-->
 		 <input type='submit' name='submit' value='";
 	
@@ -1065,7 +1059,7 @@ else
 	  }
 	  //$s.='\'&gt;';
 	  $s.= '\' />';
-	  $s.="</td></tr></form></table>";
+	  $s.="</form>";
 	
 	$b=2;
 	echo $s;

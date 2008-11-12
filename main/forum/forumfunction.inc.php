@@ -1,11 +1,13 @@
-<?php
+<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
+ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006-2008 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -862,9 +864,8 @@ function display_up_down_icon($content, $id, $list)
 function change_visibility($content, $id, $target_visibility)
 {
 	global $_course;
-	$my_user_id = api_get_user_id();
 	$constants=array('forumcategory'=>TOOL_FORUM_CATEGORY, 'forum'=>TOOL_FORUM, 'thread'=>TOOL_FORUM_THREAD);
-	api_item_property_update($_course,$constants[$content],$id,$target_visibility,$my_user_id); // note: check if this returns true or false => returnmessage depends on it.
+	api_item_property_update($_course,$constants[$content],$id,$target_visibility,api_get_user_id()); // note: check if this returns true or false => returnmessage depends on it.
 	if ($target_visibility=='visible')
 	{
 		handle_mail_cue($content, $id);
@@ -2416,7 +2417,8 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 		$values = $form->exportValues();
 	}
 
-	$form->addElement('submit', 'SubmitPost', get_lang('OK'));
+
+	$form->addElement('submit', 'SubmitPost', get_lang('Ok'));
 	global $charset;
 	// setting the default values for the form elements
 	$defaults['post_title']=prepare4display(html_entity_decode($current_post['post_title'],ENT_QUOTES,$charset));

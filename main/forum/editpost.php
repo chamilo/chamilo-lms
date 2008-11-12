@@ -1,10 +1,13 @@
-<?php
+<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
+ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006-2008 Dokeos S.A.
-	Copyright (c) 2006 Ghent University (UGent)
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -16,7 +19,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -186,7 +189,7 @@ if (!api_is_allowed_to_edit() AND $current_forum['allow_edit']==0)
 */
 echo "<table class=\"data_table\" width='100%'>\n";
 // the forum category
-echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"2\">";
+echo "\t<tr>\n\t\t<th align=\"left\" colspan=\"2\">";
 echo '<a href="viewforum.php?forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a><br />';
 echo '<span class="forum_description">'.prepare4display($current_forum['forum_comment']).'</span>';echo "</th>\n";
 echo "</th>\n";
@@ -212,11 +215,6 @@ if (!empty($values) and $_POST['SubmitPost'])
 	
 }
 
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
-
+// footer
 Display :: display_footer();
 ?>

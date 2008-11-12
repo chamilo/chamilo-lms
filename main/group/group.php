@@ -1,13 +1,13 @@
-<?php
+<?php // $Id: group.php 16728 2008-11-12 15:49:54Z pcool $
+ 
 /*
-===============================================================================
+==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
-	Copyright (c) Bart Mollet
+	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -20,9 +20,10 @@
 	See the GNU General Public License for more details.
 
 	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	
-===============================================================================
+	Mail: info@dokeos.com
+==============================================================================
 */
+
 /**
 ==============================================================================
 *	Main page for the group module.
@@ -86,13 +87,8 @@ if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath')
 }
 Display::display_header(get_lang('Groups'));
 
-/*
------------------------------------------------------------
-	Introduction section
-	(editable by course admins)
------------------------------------------------------------
-*/
-Display::display_introduction_section(TOOL_GROUP);
+// introduction section
+Display::display_introduction_section(TOOL_GROUP,'left');
 
 /*
  * Self-registration and unregistration
@@ -182,32 +178,31 @@ if (api_is_allowed_to_edit(false,true))
 		}
 	}
 	// Show admin-panel
-	echo '<div id="actions">';
-	echo '<ul id="groupItems">';
+	echo '<div class="actions">';
 	if (get_setting('allow_group_categories') == 'true')
 	{
-		echo '<li><a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.get_lang('AddCategory').'</a>&nbsp;</li>';
+		echo Display::return_icon('folder_new.gif') . '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.get_lang('AddCategory').'</a>&nbsp;';
 	}
 	else
 	{
 		//echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
-		echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.get_lang('PropModify').'</a>&nbsp;';
+		echo Display::return_icon('settings.gif') . '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.get_lang('PropModify').'</a>&nbsp;';
 	}
 	//echo '<a href="group_creation.php?'.api_get_cidreq().'">'.Display::return_icon('group_add_big.gif').'&nbsp;'.get_lang('NewGroupCreate').'</a>&nbsp;';
-	echo '<li><a href="group_creation.php?'.api_get_cidreq().'">'.get_lang('NewGroupCreate').'</a>&nbsp;</li>';
+	echo Display::return_icon('groupadd.gif') . '<a href="group_creation.php?'.api_get_cidreq().'">'.get_lang('NewGroupCreate').'</a>&nbsp;';
 	if( Database::count_rows(Database::get_course_table(TABLE_GROUP)) > 0)
 	{
 		//echo '<a href="group_overview.php?'.api_get_cidreq().'">'.Display::return_icon('group_view.gif').'&nbsp;'.get_lang('GroupOverview').'</a>&nbsp;';
-		echo '<li><a href="group_overview.php?'.api_get_cidreq().'">'.get_lang('GroupOverview').'</a>&nbsp;</li>';
+		echo Display::return_icon('group.gif') .'<a href="group_overview.php?'.api_get_cidreq().'">'.get_lang('GroupOverview').'</a>&nbsp;';
 	}
 }
 $group_cats = GroupManager :: get_categories();
 if (get_setting('allow_group_categories') == 'true' && count($group_cats) > 1)
 {
 	//echo '<p><a href="?'.api_get_cidreq().'&show_all=1">'.get_lang('ShowAll').'</a></p>';
-	echo '<li><a href="?'.api_get_cidreq().'&show_all=1">'.get_lang('ShowAll').'</a></li>';
+	echo '<a href="?'.api_get_cidreq().'&show_all=1">'.get_lang('ShowAll').'</a>';
 }
-echo '</ul>';
+echo '</div>';
 /*
  * List all categories
  */

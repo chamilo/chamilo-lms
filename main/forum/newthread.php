@@ -1,10 +1,13 @@
-<?php
+<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
+ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006-2008 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -16,7 +19,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 108 rue du Corbeau, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -176,7 +179,7 @@ handle_forum_and_forumcategories();
 echo "<table class=\"data_table\" width='100%'>\n";
 
 if ($origin != 'learnpath') {
-	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\"  colspan=\"2\">";
+	echo "\t<tr>\n\t\t<th align=\"left\"  colspan=\"2\">";
 	
 	echo '<span class="forum_title">'.prepare4display($current_forum['forum_title']).'</span>';
 

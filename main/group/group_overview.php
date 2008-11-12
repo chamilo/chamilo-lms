@@ -1,13 +1,13 @@
-<?php
+<?php // $Id: group_overview.php 16728 2008-11-12 15:49:54Z pcool $
+ 
 /*
-===============================================================================
+==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
-	Copyright (c) Bart Mollet
+	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -19,9 +19,11 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-===============================================================================
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
+
 /**
 ============================================================================== 
 *	Main page for the group module.
@@ -105,8 +107,13 @@ else
 {
 ?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/default.css" /> <?php
 }
-echo '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a>';
-echo ' | <a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.get_lang('ExportAsXLS').'</a>';
+
+// action links
+echo '<div class="actions">';
+echo Display::return_icon('csv.gif').'<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a> ';
+echo Display::return_icon('excel.gif').' <a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.get_lang('ExportAsXLS').'</a>';
+echo '</div>';
+
 $categories = GroupManager::get_categories();
 foreach($categories as $index => $category)
 {

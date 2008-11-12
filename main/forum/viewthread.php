@@ -1,10 +1,13 @@
-<?php
+<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
+ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006-2008 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -16,10 +19,11 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 108 rue du Corbeau, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
+
 /**
 *	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 *	@Copyright Ghent University
@@ -150,6 +154,7 @@ if ($message<>'PostDeletedSpecial') {
 		Action Links
 	-----------------------------------------------------------
 	*/
+	echo '<div class="actions">';
 	echo '<div style="float:right;">';
 	$my_url = '<a href="viewthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;search='.Security::remove_XSS(urlencode($_GET['search']));
 	echo $my_url.'&amp;view=flat&origin='.$origin.'">'.get_lang('FlatView').'</a> | ';
@@ -176,8 +181,9 @@ if ($message<>'PostDeletedSpecial') {
 			}
 		}
 	}
-	// note: this is to prevent that some browsers display the links over the table (FF does it but Opera doesn't)
-	echo '&nbsp;';
+	echo '</div>&nbsp;';
+
+
 	/*
 	-----------------------------------------------------------
 		Display Forum Category and the Forum information

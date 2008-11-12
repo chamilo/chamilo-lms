@@ -1,10 +1,13 @@
-<?php
+<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
+ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -16,7 +19,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 108, rue du Corbeau, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -110,7 +113,9 @@ api_display_tool_title($nameTools);
 //echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
 
 // tool introduction
-Display::display_introduction_section(TOOL_FORUM);
+Display::display_introduction_section(TOOL_FORUM,'left');
+
+
 
 /*
 ------------------------------------------------------------------------------------------------------
@@ -180,6 +185,7 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' ) {
 	------------------------------------------------------------------------------------------------------
 	*/
 	//if (api_is_allowed_to_edit() and !$_GET['action'])
+	echo '<div class="actions">';
 	echo '<span style="float:right;">'.search_link().'</span>';
 	if (api_is_allowed_to_edit(false,true)) {
 		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forumcategory"> '.Display::return_icon('forum_category_new.gif').' '.get_lang('AddForumCategory').'</a> ';
@@ -188,13 +194,14 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' ) {
 		}
 		//echo ' | <a href="forum_migration.php">'.get_lang('MigrateForum').'</a>';
 	}
+	echo '</div>';
 	
 	/*
 	------------------------------------------------------------------------------------------------------
 		Display Forum Categories and the Forums in it
 	------------------------------------------------------------------------------------------------------
 	*/
-	echo '<table class="data_table" width="100%">'."\n";
+	echo '<table class="data_table">'."\n";
 	// Step 3: we display the forum_categories first
 	if(is_array($forum_categories_list)) {
 		foreach ($forum_categories_list as $forum_category_key => $forum_category) {
@@ -212,7 +219,7 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' ) {
 			}			
 			echo "</th>\n";
 			
-			echo '<th style="padding: 5px; vertical-align: top;" align="center" >';
+			echo '<th style="vertical-align: top;" align="center" >';
 			if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($_SESSION['id_session'])!=0)) {
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=edit&amp;content=forumcategory&amp;id=".prepare4display($forum_category['cat_id'])."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&amp;content=forumcategory&amp;id=".prepare4display($forum_category['cat_id'])."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";

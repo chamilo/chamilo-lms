@@ -1,10 +1,13 @@
-<?php
+<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
+ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006-2008 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -16,7 +19,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 108 rue du Corbeau, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -162,11 +165,13 @@ if ($_GET['action']!='add') {
 		Action Links
 	-----------------------------------------------------------
 	*/
+	echo '<div class="actions">';
 	echo '<span style="float:right;">'.search_link().'</span>';
 	if (api_is_allowed_to_edit(false,true)) {
 		//echo '<a href="'.api_get_self().'?forumcategory='.$_GET['forumcategory'].'&amp;action=add&amp;content=forumcategory">'.get_lang('AddForumCategory').'</a> | ';
 		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=add&amp;content=forum">'.Display::return_icon('forum_new.gif').' '.get_lang('AddForum').'</a>';
 	}
+	echo '</div>';
 	
 	/*
 	-----------------------------------------------------------
@@ -175,12 +180,12 @@ if ($_GET['action']!='add') {
 	*/
 	echo "<table class=\"data_table\" width='100%'>\n";
 	
-	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"5\">";
+	echo "\t<tr>\n\t\t<th align=\"left\" colspan=\"5\">";
 	echo '<span class="forum_title">'.prepare4display($forum_category['cat_title']).'</span><br />';
 	echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
 	echo "</th>\n";
 	if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($_SESSION['id_session'])!=0)) {
-		echo '<th style="padding: 5px; vertical-align: top;" align="center" >';			
+		echo '<th style="vertical-align: top;" align="center" >';			
 		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forumcategory&amp;id=".$forum_category['cat_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=delete&amp;content=forumcategory&amp;amp;id=".$forum_category['cat_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 		display_visible_invisible_icon('forumcategory', $forum_category['cat_id'], $forum_category['visibility'], array("forumcategory"=>$_GET['forumcategory']));

@@ -1,10 +1,13 @@
-<?php
+<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
+ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006-2008 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -242,6 +245,7 @@ if (!empty($message)) {
 	Action Links
 -----------------------------------------------------------
 */
+echo '<div class="actions">';
 echo '<span style="float:right;">'.search_link().'</span>';
 // The link should appear when
 // 1. the course admin is here
@@ -254,17 +258,18 @@ if (api_is_allowed_to_edit(false,true) OR ($current_forum['allow_new_threads']==
 		echo get_lang('ForumLocked');
 	}
 }
+echo '</div>';
 
 /*
 -----------------------------------------------------------
 					Display
 -----------------------------------------------------------
 */
-echo "<table class=\"data_table\" width='100%'>\n";
+echo "<table class=\"data_table\" >\n";
 
 // the current forum 
 if ($origin != 'learnpath') {
-	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"7\">";	
+	echo "\t<tr>\n\t\t<th align=\"left\" colspan=\"7\">";	
 	echo '<span class="forum_title">'.prepare4display($current_forum['forum_title']).'</span>';
 		
 	if (!empty ($current_forum['forum_comment'])) {

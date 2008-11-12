@@ -1,29 +1,51 @@
-<?php
+<?php // $Id: banner.inc.php 16728 2008-11-12 15:49:54Z pcool $
+ 
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
+*/
 /**
 ==============================================================================
-*	This script contains the actual html code to display the "header"
+*	This script contains the actual html code to display the Dokeos header
 *	or "banner" on top of every Dokeos page.
 *
 *	@package dokeos.include
 ==============================================================================
 */
 ?>
-<div id="header">  <!-- header section start -->
-<div id="header1"> <!-- top of banner with institution name/hompage link -->
-<div id="top_corner"></div> 
-<div id="institution">
-<a href="<?php echo api_get_path(WEB_PATH);?>index.php" target="_top"><?php echo api_get_setting('siteName') ?></a>
-<?php
-$iurl = api_get_setting('InstitutionUrl');
-$iname = api_get_setting('Institution');
-if (!empty($iname))
-{
+<div id="header">
+	<div id="header1">
+		<div id="institution">
+			<a href="<?php echo api_get_path(WEB_PATH);?>index.php" target="_top"><?php echo api_get_setting('siteName') ?></a>
+			<?php
+			$iurl = api_get_setting('InstitutionUrl');
+			$iname = api_get_setting('Institution');
+			if (!empty($iname))
+			{
 	echo '-&nbsp;<a href="'.$iurl.'" target="_top">'.$iname.'</a>';
-}
+			}
+			?>
 
-?>
-</div>
-
+		</div>
 <?php
 /*
 -----------------------------------------------------------------------------
@@ -33,11 +55,9 @@ if (!empty($iname))
 if (!empty($_cid) and $_cid != -1 and isset($_course))
 {
 	//Put the name of the course in the header
-	?>
-	<div id="my_courses"><a href="<?php echo api_get_path(WEB_COURSE_PATH).$_course['path']; ?>/index.php" target="_top">
-	<?php
-
-	echo $_course['name']." ";
+	echo '
+		<div id="header1right">
+			<a href="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/index.php" target="_top">'.$_course['name'].' ';
 	if (api_get_setting("display_coursecode_in_courselist") == "true")
 	{
 		echo $_course['official_code'];
@@ -55,7 +75,9 @@ if (!empty($_cid) and $_cid != -1 and isset($_course))
 	{
 		echo stripslashes($_course['titular']);
 	}
-	echo "</a></div>";
+	echo '	</a>';
+	echo '
+		</div>';
 }
 elseif (isset ($nameTools) && $language_file != 'course_home')
 {
@@ -74,7 +96,7 @@ elseif (isset ($nameTools) && $language_file != 'course_home')
 	}
 }
 //not to let the header disappear if there's nothing on the left
- echo '<div class="clear">&nbsp;</div>';
+echo '		<div class="clear">&nbsp;</div>';
 
 /*
 -----------------------------------------------------------------------------
@@ -102,18 +124,20 @@ if (isset($_course['extLink']) && $_course['extLink']['name'] != "")
 	else
 		echo $_course['extLink']['name'];
 }
-echo "</div> <!-- end of #header1 -->";
+?>
+
+	</div>
 
 
-echo '<div id="header2">';
-echo '<div id="Header2Right">';
-echo '<ul>';
-
+	<div id="header2">
+		<div id="header2right">
+			<ul>
+<?php 
 if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR (api_get_setting('showonline','users') == "true" AND $_user['user_id']) OR (api_get_setting('showonline','course') == "true" AND $_user['user_id'] AND $_cid))
 {
 	if(api_get_setting("use_session_mode") == "true" && isset($_user['user_id']) && api_is_coach())
 	{
-		echo "<li><a href='".api_get_path(WEB_PATH)."whoisonlinesession.php?id_coach=".$_user['user_id']."&referer=".urlencode($_SERVER['REQUEST_URI'])."' target='_top'>".get_lang('UsersConnectedToMySessions')."</a></li>";
+		echo '	<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$_user['user_id'].'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';
 	}
 
 	$statistics_database = Database :: get_statistic_database();
@@ -127,12 +151,12 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
 	{
 		$number_online_in_course = 0;
 	}
-	echo "<li>".get_lang('UsersOnline').": ";
+	echo '				<li>'.get_lang('UsersOnline').': ';
 
 	// Display the who's online of the platform
 	if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR (api_get_setting('showonline','users') == "true" AND $_user['user_id']))
 	{
-		echo "<a href='".api_get_path(WEB_PATH)."whoisonline.php' target='_top'>".$number."</a>";
+		echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top">'.$number.'</a>';
 	}
 
 	// Display the who's online for the course
@@ -170,15 +194,10 @@ if ( api_is_allowed_to_edit() )
 ?>
 		</ul>
 	</div>
-<!-- link to campus home (not logged in)
-	<a href="<?php echo api_get_path(WEB_PATH); ?>index.php" target="_top"><?php echo api_get_setting('siteName'); ?></a>
- -->
-<?php
-//not to let the empty header disappear and ensure help pic is inside the header
-echo "<div class=\"clear\">&nbsp;</div>";
-?>
-</div> <!-- End of header 2-->
-<div id="header3">
+		<div class="clear">&nbsp;</div>
+	</div>
+	
+	<div id="header3">
 <?php
 /*
 -----------------------------------------------------------------------------
@@ -200,20 +219,14 @@ if ($_user['user_id'])
 	?>
 	 <!-- start user section line with name, my course, my profile, scorm info, etc -->
 
-	<form method="get" action="<?php echo api_get_path(WEB_PATH); ?>index.php" class="banner_links" target="_top">
-	<input type="hidden" name="logout" value="true"/>
-	<input type="hidden" name="uid" value="<?php echo $_user['user_id']; ?>"/>
 	 <ul id="logout">
-	 <li>
-	<input type="submit" name="submit" value="<?php echo get_lang("Logout").' '.$login; ?>"
-	onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"
-	class="logout" style="	height:20px;" />
-	 </li>
+				<li><a href="<?php echo api_get_path(WEB_PATH); ?>index.php?action=logout"><span><?php echo get_lang('Logout').' '.$login; ?></span></a></li>
 	 </ul>
-	</form>
 <?php
 }
-echo "<ul>\n";
+?>
+		<ul>
+<?php
 $navigation = array();
 
 $possible_tabs = get_tabs();
@@ -322,24 +335,17 @@ foreach($navigation as $section => $navigation_info)
 	{
 		$current = '';
 	}
-	echo '<li'.$current.'>';
-	echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
-	echo '</li>';
-	echo "\n";
+	echo '			<li'.$current.'><a href="'.$navigation_info['url'].'" target="_top"><span>'.$navigation_info['title'].'</span></a></li>'."\n";
 }
 ?>
-</ul><!-- small hack to have it look good in opera -->&nbsp;
-</div> <!-- end of header3 (user) section -->
-<?php
-/*
------------------------------------------------------------------------------
-	BREADCRUMBS
------------------------------------------------------------------------------
-*/
-?>
-<div id="header4">
-<?php
-/*
+		</ul>
+		<div style="clear: both;" class="clear"> </div>
+	</div>
+	
+
+	<div id="header4">
+			<?php
+			/*
  * if the user is a coach he can see the users who are logged in its session
  */
 $navigation = array();
@@ -386,13 +392,14 @@ foreach($navigation as $index => $navigation_info)
 {
 	if(!empty($navigation_info['title']))
 	{
-		$final_navigation[$index] = '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
+		$final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="breadcrumb breadcrumb'.$index.'" target="_top">'.$navigation_info['title'].'</a>';
 	}
 }
 echo implode(' &gt; ',$final_navigation);
 ?>
 
-</div><!-- end of header4 -->
+	</div>
+
 <?php
 if(api_get_setting('show_toolshortcuts')=='true')
 {
@@ -414,7 +421,7 @@ if (isset ($dokeos_database_connection))
 }
 ?>
 
-</div> <!-- end of the whole #header section -->
+</div>
 <div class="clear">&nbsp;</div>
 <?php
 //to mask the main div, set $header_hide_main_div to true in any script just before calling Display::display_header();
@@ -426,7 +433,7 @@ if(!empty($header_hide_main_div) && $header_hide_main_div===true)
 else
 {
 ?>
-<div id="main"> <!-- start of #main wrapper for #content and #menu divs -->
+<div id="main">
 <?php
 }
 /*
@@ -465,8 +472,8 @@ if(api_get_setting('show_navigation_menu') != 'false' && api_get_setting('show_n
 			{
  				if (isset($_cid) )
                	{
-					echo '<div id="centerwrap"> <!-- start of #centerwrap -->';
-					echo '<div id="center"> <!-- start of #center -->';
+					echo '<div id="centerwrap">';
+					echo '<div id="center">';
 				}
 			}
  		}
@@ -474,8 +481,8 @@ if(api_get_setting('show_navigation_menu') != 'false' && api_get_setting('show_n
  		{
 			if (isset($_cid) )
 			{
-				echo '<div id="centerwrap"> <!-- start of #centerwrap -->';
-				echo '<div id="center"> <!-- start of #center -->';
+				echo '<div id="centerwrap">';
+				echo '<div id="center">';
 			}
  		}
  	}
@@ -571,4 +578,3 @@ function get_tabs()
 	return $navigation;
 }
 ?>
-<!--   Begin Of script Output   -->

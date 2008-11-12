@@ -1,11 +1,13 @@
-<?php
-/**
-===============================================================================
-
+<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
+ 
+/*
+==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) Keppens Toon
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -19,12 +21,7 @@
 
 	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
-
-===============================================================================
-
-	Functions in this API file:
-
-===============================================================================
+==============================================================================
 */
 
 /**
@@ -1307,7 +1304,7 @@ class Blog
 
 
 			echo '<form name="add_post" enctype="multipart/form-data"  method="post" action="blog.php?blog_id=' . $blog_id . '">
-				 <span class="blogpost_title">' . get_lang('NewPost') . '</span> 
+				 <div class="form_header">' . get_lang('NewPost') . '</div> 
 						<table width="100%" border="0" cellspacing="2" cellpadding="0">
 							<tr>
 						   <td width="80" valign="top">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
@@ -1340,7 +1337,7 @@ class Blog
 									$oFCKeditor->Create() ;
 			echo '			 <br /></td>
 							</tr> 
-							<tr><td><b>'.get_lang('AddAnAttachment').'</b><br /><br /></td></tr>	
+							<tr><td><b>'.get_lang('AddAnAttachment').'</b></td></tr>	
 							<tr><td width="80" valign="top">' . ucwords(get_lang('FileName') ). ':&nbsp;&nbsp;</td>
 						    <td><input type="file" name="user_upload"/></td><br></tr>						    
 						    <tr><td width="80" valign="top">' . get_lang('FileComment'). ':&nbsp;&nbsp;</td>
@@ -1448,8 +1445,14 @@ class Blog
 			$counter = 0;
 			global $color2;
 
+			echo '<div class="actions">';
 			echo '<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $blog_id . '&amp;do=add"><img src="../img/blog.gif" border="0" align="middle" alt="scormbuilder" />' . get_lang('AddTasks') . '</a> ';
 			echo '<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $blog_id . '&amp;do=assign"><img src="../img/blog.gif" border="0" align="middle" alt="scormbuilder" />' . get_lang('AssignTasks') . '</a>';
+			?>
+				<a href="<?php echo api_get_self(); ?>?action=manage_rights&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageRights') ?>"><?php echo get_lang('RightsManager') ?></a>
+			<?php	
+			echo '</div>';
+			
 			echo '<span class="blogpost_title">' . get_lang('TaskList') . '</span><br />';
 			echo "<table class=\"data_table\">";
 			echo	"<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">",
@@ -1578,11 +1581,8 @@ class Blog
 
 		// Display
 		echo '<form name="add_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">
-					<table width="100%" border="0" cellspacing="2" cellpadding="0" style="background-color: #f6f6f6; border: 1px solid #dddddd">
-					  <tr>
-					  	<td width="200"></td>
-					  	<td><b>' . get_lang('AddTask') . '</b><br /><br /></td>
-					  </tr>
+					<div class="form_header">' . get_lang('AddTask') . '</div>
+					<table width="100%" border="0" cellspacing="2">
 						<tr>
 					   <td align="right">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
 					   <td><input name="task_name" type="text" size="70" /></td>
@@ -1596,19 +1596,19 @@ class Blog
 						echo "\t" . '<tr>' . "\n";
 							echo "\t\t" . '<td style="text-align:right; vertical-align:top;">Task management:&nbsp;&nbsp;</td>' . "\n";
 							echo "\t\t" . '<td>' . "\n";
-								echo "\t\t\t" . '<table cellspacing="0" style="border:1px solid #808080; border-collapse:collapse; width:446px;">';
-									echo "\t\t\t\t" . '<tr style="background:#E5EDF9;">' . "\n";
-										echo "\t\t\t\t\t" . '<th colspan="2" style="border:1px solid #808080; width:223px;">' . get_lang('ArticleManager') . '</th>' . "\n";
-										echo "\t\t\t\t\t" . '<th style="border:1px solid #808080;" width:223px;>' . get_lang('CommentManager') . '</th>' . "\n";
-									echo "\t\t\t\t" . '</tr>' . "\n";
-									echo "\t\t\t\t" . '<tr style="background:#E5EDF9;">' . "\n";
-										echo "\t\t\t\t\t" . '<th style="border:1px solid #808080; width:111px;"><label for="articleDelete">' . get_lang('Delete') . '</label></th>' . "\n";
-										echo "\t\t\t\t\t" . '<th style="border:1px solid #808080; width:112px;"><label for="articleEdit">' . get_lang('Edit') . '</label></th>' . "\n";
-										echo "\t\t\t\t\t" . '<th style="border:1px solid #808080; width:223px;"><label for="commentsDelete">' . get_lang('Delete') . '</label></th>' . "\n";
+								echo "\t\t\t" . '<table class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
+									echo "\t\t\t\t" . '<tr>' . "\n";
+										echo "\t\t\t\t\t" . '<th colspan="2" style="width:223px;">' . get_lang('ArticleManager') . '</th>' . "\n";
+										echo "\t\t\t\t\t" . '<th width:223px;>' . get_lang('CommentManager') . '</th>' . "\n";
 									echo "\t\t\t\t" . '</tr>' . "\n";
 									echo "\t\t\t\t" . '<tr>' . "\n";
-										echo "\t\t\t\t\t" . '<td style="border:1px dotted #808080; text-align:center;"><input id="articleDelete" name="chkArticleDelete" type="checkbox" /></td>' . "\n";
-										echo "\t\t\t\t\t" . '<td style="border:1px dotted #808080; text-align:center;"><input id="articleEdit" name="chkArticleEdit" type="checkbox" /></td>' . "\n";
+										echo "\t\t\t\t\t" . '<th style="width:111px;"><label for="articleDelete">' . get_lang('Delete') . '</label></th>' . "\n";
+										echo "\t\t\t\t\t" . '<th style="width:112px;"><label for="articleEdit">' . get_lang('Edit') . '</label></th>' . "\n";
+										echo "\t\t\t\t\t" . '<th style="width:223px;"><label for="commentsDelete">' . get_lang('Delete') . '</label></th>' . "\n";
+									echo "\t\t\t\t" . '</tr>' . "\n";
+									echo "\t\t\t\t" . '<tr>' . "\n";
+										echo "\t\t\t\t\t" . '<td style="text-align:center;"><input id="articleDelete" name="chkArticleDelete" type="checkbox" /></td>' . "\n";
+										echo "\t\t\t\t\t" . '<td style="text-align:center;"><input id="articleEdit" name="chkArticleEdit" type="checkbox" /></td>' . "\n";
 										echo "\t\t\t\t\t" . '<td style="border:1px dotted #808080; text-align:center;"><input id="commentsDelete" name="chkCommentsDelete" type="checkbox" /></td>' . "\n";
 									echo "\t\t\t\t" . '</tr>' . "\n";
 								echo "\t\t\t" . '</table>' . "\n";
@@ -1656,11 +1656,8 @@ class Blog
 
 		// Display
 		echo '<form name="edit_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">
-					<table width="100%" border="0" cellspacing="2" cellpadding="0" style="background-color: #f6f6f6; border: 1px solid #dddddd">
-					  <tr>
-					  	<td width="200"></td>
-					  	<td><b>' . get_lang('EditTask') . '</b><br /><br /></td>
-					  </tr>
+					<div class="form_header">' . get_lang('EditTask') . '</div>
+					<table width="100%" border="0" cellspacing="2">
 						<tr>
 					   <td align="right">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
 					   <td><input name="task_name" type="text" size="70" value="'.stripslashes($task['title']) . '" /></td>
@@ -1689,20 +1686,20 @@ class Blog
 						echo "\t" . '<tr>' . "\n";
 							echo "\t\t" . '<td style="text-align:right; vertical-align:top;">Task management:&nbsp;&nbsp;</td>' . "\n";
 							echo "\t\t" . '<td>' . "\n";
-								echo "\t\t\t" . '<table cellspacing="0" style="border:1px solid #808080; border-collapse:collapse; width:446px;">';
-									echo "\t\t\t\t" . '<tr style="background:#E5EDF9;">' . "\n";
-										echo "\t\t\t\t\t" . '<th colspan="2" style="border:1px solid #808080; width:223px;">' . get_lang('ArticleManager') . '</th>' . "\n";
-										echo "\t\t\t\t\t" . '<th style="border:1px solid #808080;" width:223px;>' . get_lang('CommentManager') . '</th>' . "\n";
-									echo "\t\t\t\t" . '</tr>' . "\n";
-									echo "\t\t\t\t" . '<tr style="background:#E5EDF9;">' . "\n";
-										echo "\t\t\t\t\t" . '<th style="border:1px solid #808080; width:111px;"><label for="articleDelete">' . get_lang('Delete') . '</label></th>' . "\n";
-										echo "\t\t\t\t\t" . '<th style="border:1px solid #808080; width:112px;"><label for="articleEdit">' . get_lang('Edit') . '</label></th>' . "\n";
-										echo "\t\t\t\t\t" . '<th style="border:1px solid #808080; width:223px;"><label for="commentsDelete">' . get_lang('Delete') . '</label></th>' . "\n";
+								echo "\t\t\t" . '<table  class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
+									echo "\t\t\t\t" . '<tr>' . "\n";
+										echo "\t\t\t\t\t" . '<th colspan="2" style="width:223px;">' . get_lang('ArticleManager') . '</th>' . "\n";
+										echo "\t\t\t\t\t" . '<th width:223px;>' . get_lang('CommentManager') . '</th>' . "\n";
 									echo "\t\t\t\t" . '</tr>' . "\n";
 									echo "\t\t\t\t" . '<tr>' . "\n";
-										echo "\t\t\t\t\t" . '<td style="border:1px dotted #808080; text-align:center;"><input ' . ((in_array('article_delete', $arrPermissions)) ? 'checked ' : '') . 'id="articleDelete" name="chkArticleDelete" type="checkbox" /></td>' . "\n";
-										echo "\t\t\t\t\t" . '<td style="border:1px dotted #808080; text-align:center;"><input ' . ((in_array('article_edit', $arrPermissions)) ? 'checked ' : '') . 'id="articleEdit" name="chkArticleEdit" type="checkbox" /></td>' . "\n";
-										echo "\t\t\t\t\t" . '<td style="border:1px dotted #808080; text-align:center;"><input ' . ((in_array('article_comments_delete', $arrPermissions)) ? 'checked ' : '') . 'id="commentsDelete" name="chkCommentsDelete" type="checkbox" /></td>' . "\n";
+										echo "\t\t\t\t\t" . '<th style="width:111px;"><label for="articleDelete">' . get_lang('Delete') . '</label></th>' . "\n";
+										echo "\t\t\t\t\t" . '<th style="width:112px;"><label for="articleEdit">' . get_lang('Edit') . '</label></th>' . "\n";
+										echo "\t\t\t\t\t" . '<th style="width:223px;"><label for="commentsDelete">' . get_lang('Delete') . '</label></th>' . "\n";
+									echo "\t\t\t\t" . '</tr>' . "\n";
+									echo "\t\t\t\t" . '<tr>' . "\n";
+										echo "\t\t\t\t\t" . '<td style="text-align:center;"><input ' . ((in_array('article_delete', $arrPermissions)) ? 'checked ' : '') . 'id="articleDelete" name="chkArticleDelete" type="checkbox" /></td>' . "\n";
+										echo "\t\t\t\t\t" . '<td style="text-align:center;"><input ' . ((in_array('article_edit', $arrPermissions)) ? 'checked ' : '') . 'id="articleEdit" name="chkArticleEdit" type="checkbox" /></td>' . "\n";
+										echo "\t\t\t\t\t" . '<td style="text-align:center;"><input ' . ((in_array('article_comments_delete', $arrPermissions)) ? 'checked ' : '') . 'id="commentsDelete" name="chkCommentsDelete" type="checkbox" /></td>' . "\n";
 									echo "\t\t\t\t" . '</tr>' . "\n";
 								echo "\t\t\t" . '</table>' . "\n";
 							echo "\t\t" . '</td>' . "\n";
@@ -1790,11 +1787,8 @@ class Blog
 
 		// Display
 		echo '<form name="assign_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">
-					<table width="100%" border="0" cellspacing="2" cellpadding="0" style="background-color: #f6f6f6; border: 1px solid #dddddd">
-					  <tr>
-					  	<td width="200"></td>
-					  	<td><b>' . get_lang('AssignTask') . '</b><br /><br /></td>
-					  </tr>
+					<div class="form_header">' . get_lang('AssignTask') . '</div>
+					<table width="100%" border="0" cellspacing="2" cellpadding="0">
 						<tr>
 					   <td align="right">' . get_lang('SelectUser') . ':&nbsp;&nbsp;</td>
 					   <td>' . $select_user_list . '</td>
@@ -2429,13 +2423,8 @@ class Blog
 	function display_new_comment_form($blog_id, $post_id, $title)
 	{
 		echo '<form name="add_post" enctype="multipart/form-data" method="post" action="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '">
+				<div class="form_header">'.(isset($_GET['task_id']) ? get_lang('ExecuteThisTask') : get_lang('NewComment')) . '</div>
 					<table width="100%" border="0" cellspacing="2" cellpadding="0" class="new_comment">
-						<tr>
-							<td colspan="2">
-								<span class="blogpost_title">'.(isset($_GET['task_id']) ? get_lang('ExecuteThisTask') : get_lang('NewComment')) . '</span><br />
-			 					<a name="add_comment" />
-							</td>
-						</tr>
 						<tr>
 					   <td width="100" valign="top">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
 					   <td><input name="comment_title" id="comment_title" type="text" size="60" value="Re: '.stripslashes($title) . '" /><br /><br /></td>
@@ -2595,11 +2584,11 @@ class Blog
 			}
 		}
 
-		echo 	'<table id="smallcalendar">',
+		echo 	'<table id="smallcalendar" class="data_table">',
 				"<tr id=\"title\">\n",
-				"<td width=\"10%\"><a href=\"", $backwardsURL, "\">&laquo;</a></td>\n",
-				"<td align=\"center\" width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n",
-				"<td width=\"10%\" align=\"right\"><a href=\"", $forewardsURL, "\">&raquo;</a></td>\n", "</tr>\n";
+				"<th width=\"10%\"><a href=\"", $backwardsURL, "\">&laquo;</a></th>\n",
+				"<th align=\"center\" width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</th>\n",
+				"<th width=\"10%\" align=\"right\"><a href=\"", $forewardsURL, "\">&raquo;</a></th>\n", "</tr>\n";
 
 		echo "<tr>\n";
 

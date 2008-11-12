@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 16496 2008-10-10 22:34:23Z yannoo $
+<?php // $Id: user_list.php 16718 2008-11-12 15:34:59Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -605,7 +605,9 @@ else
 	$form->addElement('text','keyword',get_lang('keyword'));
 	$form->addElement('submit','submit',get_lang('Search'));
 	$form->addElement('static','search_advanced_link',null,'<a href="user_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
+	echo '<div class="actions">';
 	$form->display();
+	echo '</div>';
 	if (isset ($_GET['keyword']))
 	{
 		$parameters = array ('keyword' => $_GET['keyword']);

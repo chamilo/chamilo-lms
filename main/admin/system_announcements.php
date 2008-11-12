@@ -1,5 +1,4 @@
-<?php
-// $Id: system_announcements.php 16013 2008-08-18 15:02:38Z juliomontoya $
+<?php // $Id: system_announcements.php 16720 2008-11-12 15:38:24Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -78,7 +77,9 @@ Display :: display_header($tool_name);
 
 if($_GET['action'] != 'add' && $_GET['action'] != 'edit')
 {
-	echo '<a href="?action=add">'.get_lang('AddAnnouncement').'</a>';
+	echo '<div class="actions">';
+	echo '<a href="?action=add">'.Display::return_icon('announce_add.gif').get_lang('AddAnnouncement').'</a>';
+	echo '</div>';
 }
 $form_action = "";
 $show_announcement_list = true;

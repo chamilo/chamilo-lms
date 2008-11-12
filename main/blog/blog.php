@@ -1,4 +1,4 @@
-<?php
+<?php //$Id: announcements.php 16702 2008-11-10 13:02:30Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -235,9 +235,9 @@ switch ($current_page)
 
 //Display::display_header($nameTools,'Blogs');
 ?>
-<span class="blog_title"><?php echo Blog::get_blog_title($blog_id); ?></span><br />
-<span class="blog_subtitle"><?php echo Blog::get_blog_subtitle($blog_id); ?></span>
-<br /><br />
+<h3><?php echo Blog::get_blog_title($blog_id); ?></h3>
+<h4><?php echo Blog::get_blog_subtitle($blog_id); ?></h4>
+
 <table width="100%">
 <tr>
 	<td width="220" class="blog_left" valign="top">
@@ -250,7 +250,7 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 		<br />
 		<table width="100%">
 			<tr>
-				<td class="blog_menu_title"><?php echo get_lang('ThisBlog') ?></td>
+				<td class="sectiontitle"><?php echo get_lang('ThisBlog') ?></td>
 			</tr>
 			<tr>
 				<td class="blog_menu">
@@ -266,14 +266,14 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 		<br />
 		<table width="100%">
 			<tr>
-				<td class="blog_menu_title"><?php echo get_lang('Search') ?></td>
+				<td class="sectiontitle"><?php echo get_lang('Search') ?></td>
 			</tr>
 			<tr>
 				<td class="blog_menu">
 					<form action="blog.php" method="get" enctype="multipart/form-data">
 						<input type="hidden" name="blog_id" value="<?php echo $blog_id ?>" />
 						<input type="hidden" name="action" value="view_search_result" />
-						<input type="text" size="20" name="q" value="<?php echo (isset($_GET['q']) ? $_GET['q'] : ''); ?>" /><input type="submit" value="Go" />
+						<input type="text" size="20" name="q" value="<?php echo (isset($_GET['q']) ? $_GET['q'] : ''); ?>" /><input type="submit" value="<?php echo get_lang('Search'); ?>" />
 					</form>
 				</td>
 			</tr>
@@ -281,7 +281,7 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 		<br />
 		<table width="100%">
 			<tr>
-				<td class="blog_menu_title"><?php echo get_lang('MyTasks') ?></td>
+				<td class="sectiontitle"><?php echo get_lang('MyTasks') ?></td>
 			</tr>
 			<tr>
 				<td class="blog_menu">
@@ -421,12 +421,6 @@ switch ($current_page)
 			echo '<br /><br />';
 			Blog :: display_assigned_task_list($blog_id);
 			echo '<br /><br />';
-			if (api_is_allowed('BLOG_'.$blog_id, 'role_management'))
-			{
-			?>
-				<a href="<?php echo api_get_self(); ?>?action=manage_rights&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageRights') ?>"><?php echo get_lang('RightsManager') ?></a>
-			<?php
-			}
 		}
 		else
 			api_not_allowed();

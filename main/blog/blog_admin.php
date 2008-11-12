@@ -1,4 +1,4 @@
-<?php
+<?php //$Id: announcements.php 16702 2008-11-10 13:02:30Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -108,8 +108,10 @@ if (api_is_allowed_to_edit())
 			Blog::display_edit_blog_form(mysql_real_escape_string((int)$_GET['blog_id']));
 		}
 	
+		echo '<div class="actions">';
 		echo "<a href='".api_get_self()."?action=add'>",
 		"<img src='../img/blog_new.gif' border=\"0\" align=\"absmiddle\" alt='".get_lang('NewBlog')."'>&nbsp;&nbsp;".get_lang('AddBlog')."</a>";
+		echo '</div>';
 		echo "<table width=\"100%\" border=\"0\" cellspacing=\"2\" class='data_table'>";
 		echo	"<tr>",
 					 "<th>",get_lang('Title'),"</th>\n",

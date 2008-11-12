@@ -1,5 +1,4 @@
-<?php
-// $Id: course_list.php 16709 2008-11-10 22:22:28Z yannoo $
+<?php // $Id: course_list.php 16719 2008-11-12 15:36:21Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -223,7 +222,9 @@ else
 	$form->addElement('text','keyword',get_lang('keyword'));
 	$form->addElement('submit','submit',get_lang('Search'));
 	$form->addElement('static','search_advanced_link',null,'<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
+	echo '<div class="actions">';
 	$form->display();
+	echo '</div>';
 	// Create a sortable table with the course data
 	$table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data',2);
 	$parameters=array();

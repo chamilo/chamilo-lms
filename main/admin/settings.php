@@ -1,5 +1,4 @@
-<?php
-// $Id: settings.php 16418 2008-09-26 18:27:24Z juliomontoya $
+<?php // $Id: settings.php 16719 2008-11-12 15:36:21Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -80,8 +79,8 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 {
 	$form = new FormValidator('settings', 'post', 'settings.php?category='.$_GET['category']);
 	$renderer = & $form->defaultRenderer();
-	$renderer->setHeaderTemplate('<div class="settingtitle">{header}</div>'."\n");
-	$renderer->setElementTemplate('<div class="settingcomment">{label}</div>'."\n".'<div class="settingvalue">{element}</div>'."\n");
+	$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
+	$renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
 	$my_category = mysql_real_escape_string($_GET['category']);
 	
 	if ($_configuration['access_url']==1)
@@ -247,19 +246,33 @@ if (!empty($_GET['action']) && $_GET['action'] == "stored")
 	Display :: display_normal_message($SettingsStored);
 }
 
+// the action images
+$action_images['platform'] 		= 'dokeos.gif';
+$action_images['course'] 		= 'lp_dokeos_module.gif';
+$action_images['tools'] 		= 'reference.gif';
+$action_images['user'] 			= 'students.gif';
+$action_images['gradebook']		= 'gradebook_eval_not_empty.gif';
+$action_images['ldap'] 			= 'loginmanager.gif';
+$action_images['security'] 		= 'passwordprotected.gif';
+$action_images['languages']		= 'forum.gif';
+$action_images['tuning'] 		= 'tuning.gif';
+$action_images['plugins'] 		= 'plugin.gif';
+$action_images['stylesheets'] 	= 'theme.gif';
+
+
 // grabbing the categories
 //$selectcategories = "SELECT DISTINCT category FROM ".$table_settings_current." WHERE category NOT IN ('stylesheets','Plugins')";
 //$resultcategories = api_sql_query($selectcategories, __FILE__, __LINE__);
 $resultcategories = api_get_settings_categories(array('stylesheets','Plugins'));
-echo "\n<div><ul>";
+echo "\n<div class=\"actions\">";
 //while ($row = mysql_fetch_array($resultcategories))
 foreach($resultcategories as $row)
 {
-	echo "\n\t<li><a href=\"".api_get_self()."?category=".$row['category']."\">".ucfirst(get_lang($row['category']))."</a></li>";
+	echo "\n\t<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])]).ucfirst(get_lang($row['category']))."</a>";
 }
-echo "\n\t<li><a href=\"".api_get_self()."?category=Plugins\">".ucfirst(get_lang('Plugins'))."</a></li>";
-echo "\n\t<li><a href=\"".api_get_self()."?category=stylesheets\">".ucfirst(get_lang('Stylesheets'))."</a></li>";
-echo "\n</ul></div>";
+echo "\n\t<a href=\"".api_get_self()."?category=Plugins\">".Display::return_icon($action_images['plugins']).ucfirst(get_lang('Plugins'))."</a>";
+echo "\n\t<a href=\"".api_get_self()."?category=stylesheets\">".Display::return_icon($action_images['stylesheets']).ucfirst(get_lang('Stylesheets'))."</a>";
+echo "\n</div>";
 
 if (isset ($_GET['category']))
 {

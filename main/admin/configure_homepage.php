@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 15986 2008-08-13 18:12:25Z juliomontoya $
+<?php // $Id: configure_homepage.php 16719 2008-11-12 15:36:21Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -885,10 +885,14 @@ switch($action){
 		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 		<tr>
 		  <td width="80%" colspan="2">
+		  	<div class="actions">
 			<a href="<?php echo api_get_self(); ?>?action=edit_top"><img src="../img/edit.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_top"><?php echo get_lang('EditHomePage'); ?></a>
+		  	</div>
 		  </td>
 		  <td width="20%">
+		  	<div class="actions">
 			<a href="<?php echo api_get_self(); ?>?action=insert_link"><img src="../img/insert_row.png" border="0" alt="" /></a> <a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
+			</div>
 		  </td>
 		</tr>
 		<tr>
@@ -913,8 +917,9 @@ switch($action){
 			</tr>
 			<tr>
 			  <td width="50%">
-				<br />
+				<div class="actions">
 				<a href="course_category.php"><img src="../img/edit.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>"/></a> <a href="course_category.php"><?php echo get_lang('EditCategories'); ?></a>
+				</div>
 			  </td>
 			  <td width="50%">
 				<br />

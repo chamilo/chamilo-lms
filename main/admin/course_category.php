@@ -1,4 +1,4 @@
-<?php // $Id: course_category.php 14214 2008-01-31 03:31:49Z yannoo $
+<?php // $Id: course_category.php 16719 2008-11-12 15:36:21Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -128,26 +128,15 @@ if(empty($action))
 	$Categories=api_store_result($result);
 }
 
-if(!empty($category) && empty($action))
-{
-	$myquery = "SELECT parent_id FROM $tbl_category WHERE code='$category'";
-	$result=api_sql_query($myquery,__FILE__,__LINE__);
-	$parent_id = 0;
-	if(Database::num_rows($result)>0){
-		$parent_id=Database::fetch_row($result);
-	}
-	?>
 	
-	<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($parent_id); ?>">&lt;&lt; <?php echo get_lang("Back"); if(!empty($parent_id)) echo ' ('.$parent_id.')'; ?></a>
 	
-	<?php
-}
 
 if($action == 'add' || $action == 'edit')
 {
 	?>
-	
-	<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>">&lt;&lt; <?php echo get_lang("Back"); if(!empty($category)) echo ' ('.Security::remove_XSS($category).')'; ?></a>
+	<div class="actions">
+	<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>"><?php echo Display::return_icon('folder_up.gif').get_lang("Back"); if(!empty($category)) echo ' ('.Security::remove_XSS($category).')'; ?></a>
+	</div>	
 	
 	<h3><?php echo ($action == 'add')?get_lang('AddACategory'):get_lang('EditNode'); if(!empty($category)) echo ' '.get_lang('Into').' '.Security::remove_XSS($category); ?></h3>
 	
@@ -201,7 +190,25 @@ if($action == 'add' || $action == 'edit')
 else
 {
 ?>
+<div class="actions">
+<?php 
+if(!empty($category) && empty($action))
+{
+	$myquery = "SELECT parent_id FROM $tbl_category WHERE code='$category'";
+	$result=api_sql_query($myquery,__FILE__,__LINE__);
+	$parent_id = 0;
+	if(Database::num_rows($result)>0){
+		$parent_id=Database::fetch_row($result);
+	}
+	?>
 
+	<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($parent_id); ?>"><?php echo Display::return_icon('folder_up.gif').get_lang("Back"); if(!empty($parent_id)) echo ' ('.$parent_id.')'; ?></a>
+
+	<?php
+}
+?>
+<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=add"><?php echo Display::return_icon('folder_new.gif').get_lang("AddACategory"); if(!empty($category)) echo ' '.get_lang('Into').' '.Security::remove_XSS($category); ?></a>
+</div>
 <ul>
 
 <?php
@@ -229,7 +236,7 @@ else
 ?>
 </ul>
 
-<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=add"><?php echo get_lang("AddACategory"); if(!empty($category)) echo ' '.get_lang('Into').' '.Security::remove_XSS($category); ?></a>
+
 
 <?php
 }

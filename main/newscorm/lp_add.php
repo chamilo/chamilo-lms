@@ -1,28 +1,25 @@
-<?php
+<?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
-	Copyright (c) 2004 Dokeos S.A.
+
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Patrick Cool
-	Copyright (c) Denes Nagy
-	Copyright (c) Yannick Warnier
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
+==============================================================================
 */
+
 /**
 ============================================================================== 
 * This is a learning path creation and player tool in Dokeos - previously learnpath_handler.php
@@ -65,8 +62,8 @@ $language_file = 'learnpath';
 -----------------------------------------------------------
 */ 
 $currentstyle = api_get_setting('stylesheets');
-$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'css/'.$currentstyle.'/learnpath.css"/>';
-$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="learnpath.css" />'; //will be a merged with original learnpath.css
+//$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'css/'.$currentstyle.'/learnpath.css"/>';
+//$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="learnpath.css" />'; //will be a merged with original learnpath.css
 $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="dtree.css" />'; //will be moved
 /*
 -----------------------------------------------------------
@@ -115,43 +112,19 @@ $interbreadcrumb[]= array ("url"=>"#", "name"=> get_lang("_add_learnpath"));
 
 Display::display_header(null,'Path');
 
-/*
------------------------------------------------------------
-	DISPLAY SECTION
------------------------------------------------------------
-*/
-echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
-	echo '<tr>';
-		echo '<td class="tree">';
-			echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"><strong style="color:#999999">'.get_lang("BasicOverview").'</strong>&nbsp;<strong style="color:#999999">'.get_lang("Display").'</strong></p>';
-			//links for adding a module, chapter or step
-			echo '<div class="lp_actions">';
-				echo '<p class="lp_action">';
-					echo '<img align="left" alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" /><strong style="color:#999999">'.get_lang("NewChapter").'</strong>';
-				echo '</p>';
-				echo '<p class="lp_action">';
-					echo '<img align="left" alt="'.get_lang("NewStep").'" src="../img/lp_dokeos_step_add.png" title="'.get_lang("NewStep").'" /><strong style="color:#999999">'.get_lang("NewStep").'</strong>';
-				echo '</p>';
-			echo '</div>';
-		echo '</td>';
-		echo '<td class="workspace">';
-			Display::display_normal_message(get_lang('AddLpIntro'),false);
-			echo '<div style="background:#F8F8F8; border:1px solid #999999; margin:10px; padding:10px; width:490px;">';
-				echo '<p style="font-weight:bold">'.get_lang('AddLpToStart').' :</p>';
-				echo '<form method="post">';
-					echo '<label for="idTitle" style="margin-right:10px;">'.get_lang('Title').' :</label><input id="idTitle" name="learnpath_name" type="text" class="input_titles" />';
-					echo '<p><input style="background:#FFFFFF; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:75px;" type="submit" value="'.get_lang('Ok').'" /></p>';
-					echo '<input name="post_time" type="hidden" value="' . time() . '" />';
-				echo '</form>';
-			echo '</div>';
-		echo '</td>';
-	echo '</tr>';		
-echo '</table>';
+echo '<div class="actions">';
+echo Display::return_icon('scorm.gif').' <a href="lp_controller.php?cidReq='.$_course['sysCode'].'">'.get_lang('ReturnToLearningPaths').'</a>';
+echo '</div>';
 
-/*
-==============================================================================
-		FOOTER 
-==============================================================================
-*/ 
+Display::display_normal_message(get_lang('AddLpIntro'),false);
+
+echo '<p>'.get_lang('AddLpToStart').' :</p>';
+echo '<form method="post">';
+	echo '<label for="idTitle">'.get_lang('Title').' : </label><input id="idTitle" name="learnpath_name" type="text" /> ';
+	echo '<input type="submit" value="'.get_lang('Ok').'" />';
+					echo '<input name="post_time" type="hidden" value="' . time() . '" />';
+echo '</form>';
+
+// footer
 Display::display_footer();
 ?>

@@ -1,9 +1,10 @@
-<?php
+<?php // $Id: survey.php 16739 2008-11-13 15:36:40Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -15,16 +16,17 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
 ==============================================================================
 */
+
+
 
 /**
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 16485 2008-10-10 12:49:22Z elixir_inter $
+* 	@version $Id: survey.php 16739 2008-11-13 15:36:40Z pcool $
 *
 * 	@todo use quickforms for the forms
 */
@@ -142,39 +144,36 @@ SurveyUtil::check_first_last_question($_GET['survey_id']);
 
 // Action links
 $survey_actions = get_lang('Survey').': ';
-$survey_actions .= '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-$survey_actions .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$_GET['survey_id'].'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+$survey_actions .= '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).' '.get_lang('EditSurvey').'</a>';
+$survey_actions .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$_GET['survey_id'].'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).' '.get_lang('DeleteSurvey').'</a>';
 //$survey_actions .= '<a href="create_survey_in_another_language.php?id_survey='.$_GET['survey_id'].'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
-$survey_actions .= '<a href="preview.php?'.api_get_cidreq().'&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('preview.gif', get_lang('Preview')).'</a>';
-$survey_actions .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('survey_publish.gif', get_lang('Publish')).'</a>';
-$survey_actions .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
-echo '<div style="float:right;">'.$survey_actions.'</div>';
+$survey_actions .= '<a href="preview.php?'.api_get_cidreq().'&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('preview.gif', get_lang('Preview')).' '.get_lang('Preview').'</a>';
+$survey_actions .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('survey_publish.gif', get_lang('Publish')).' '.get_lang('Publish').'</a>';
+$survey_actions .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).' '.get_lang('Reporting').'</a>';
+echo '<div class="actions">'.$survey_actions.'</div>';
 
 //print_r($survey_data);
 
 if ($survey_data['survey_type']==0)
 {	
-	echo '<div>';
-	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=yesno&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/yesno.gif" /><br />'.get_lang('YesNo').'</a></div>';
-	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multiplechoice&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/mcua.gif" /><br />'.get_lang('MultipleChoice').'</a></div>';
-	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multipleresponse&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/mcma.gif" /><br />'.get_lang('MultipleResponse').'</a></div>';
-	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=open&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/open_answer.gif" /><br />'.get_lang('Open').'</a></div>';
-	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=dropdown&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/dropdown.gif" /><br />'.get_lang('Dropdown').'</a></div>';
-	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=percentage&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/percentagequestion.gif" /><br />'.get_lang('Percentage').'</a></div>';
-	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=score&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/scorequestion.gif" /><br />'.get_lang('Score').'</a></div>';
-	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=comment&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/commentquestion.gif" /><br />'.get_lang('Comment').'</a></div>';
-	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=pagebreak&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/page_end.gif" /><br />'.get_lang('Pagebreak').'</a></div>';
+	echo '<div class="actionsbig">';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=yesno&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/yesno.gif" />'.get_lang('YesNo').'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multiplechoice&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/mcua.gif" />'.get_lang('MultipleChoice').'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multipleresponse&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/mcma.gif" />'.get_lang('MultipleResponse').'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=open&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/open_answer.gif" />'.get_lang('Open').'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=dropdown&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/dropdown.gif" />'.get_lang('Dropdown').'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=percentage&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/percentagequestion.gif" />'.get_lang('Percentage').'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=score&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/scorequestion.gif" />'.get_lang('Score').'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=comment&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/commentquestion.gif" />'.get_lang('Comment').'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=pagebreak&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/page_end.gif" />'.get_lang('Pagebreak').'</a>';
 	echo '</div>';
-	echo '<div style="clear:both;"></div>';
-
 }
 else
 {	
 	echo '<div>';
-	//echo '<div style="float:left; text-align:center; margin:5px;"><a href="group.php?'.api_get_cidreq().'&amp;action=add&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/yesno.gif" /><br />'.get_lang('Add groups').'</a></div>';
-	echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?'.api_get_cidreq().'&amp;action=add&type=personality&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/yesno.gif" /><br />'.get_lang('PersonalityQuestion').'</a></div>';
+	//echo '<a href="group.php?'.api_get_cidreq().'&amp;action=add&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/yesno.gif" /><br />'.get_lang('Add groups').'</a></div>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=personality&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/yesno.gif" />'.get_lang('PersonalityQuestion').'</a></div>';
 	echo '</div>';	 
-	echo '<div style="clear:both;"></div>';	
 }
 
 

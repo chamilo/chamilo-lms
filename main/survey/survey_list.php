@@ -1,10 +1,10 @@
-<?php
+<?php // $Id: survey_list.php 16739 2008-11-13 15:36:40Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2006-2008	Patrick Cool
+	Copyright (c) 2003 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -16,17 +16,18 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
 ==============================================================================
 */
+
+
 
 /**
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey_list.php 16486 2008-10-10 13:32:05Z elixir_inter $
+* 	@version $Id: survey_list.php 16739 2008-11-13 15:36:40Z pcool $
 *
 * 	@todo use quickforms for the forms
 */
@@ -74,6 +75,9 @@ else
 // Header
 Display :: display_header($tool_name,'Survey');
 //api_display_tool_title($tool_name);
+
+// introduction section
+Display::display_introduction_section('survey', 'left');
 
 // Action handling: searching
 if (isset ($_GET['search']) AND $_GET['search'] == 'advanced')
@@ -149,13 +153,15 @@ if ($_POST['action'])
 	}
 }
 echo $extended_rights_for_coachs;
+echo '<div class="actions">';
 if (!api_is_course_coach() || $extend_rights_for_coachs=='true')
 {
 	// Action links
-	echo '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.get_lang('CreateNewSurvey').'</a> | ';
+	echo Display::return_icon('surveyadd.gif') . '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.get_lang('CreateNewSurvey').'</a> ';
 }
-//echo '<a href="survey_all_courses.php">'.get_lang('CreateExistingSurvey').'</a> | ';
-echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.get_lang('Search').'</a>';
+//echo '<a href="survey_all_courses.php">'.get_lang('CreateExistingSurvey').'</a> ';
+echo Display::return_icon('search.gif') . '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.get_lang('Search').'</a>';
+echo '</div>';
 
 //Load main content
 if (api_is_course_coach() && $extend_rights_for_coachs=='false')

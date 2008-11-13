@@ -1,10 +1,10 @@
-<?php
-
+<?php // $Id: work.php 16739 2008-11-13 15:36:40Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.P.R.L
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -16,8 +16,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
 ==============================================================================
 */
 
@@ -27,7 +26,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 16694 2008-11-07 16:53:10Z dperales $
+*  	@version $Id: work.php 16739 2008-11-13 15:36:40Z pcool $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -472,12 +471,8 @@ else
 	$uploadvisibledisabled = $row["show_score"];
 }
 
-/*
------------------------------------------------------------
-	Introduction section
------------------------------------------------------------
-*/
-Display :: display_introduction_section(TOOL_STUDENTPUBLICATION);
+// introduction section
+Display :: display_introduction_section(TOOL_STUDENTPUBLICATION,'left');
 
 /*
 -----------------------------------------------------------

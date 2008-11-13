@@ -1,11 +1,10 @@
-<?php
+<?php // $Id: link.php 16739 2008-11-13 15:36:40Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003-2005 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) 2003 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -17,10 +16,10 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
 ==============================================================================
 */
+
 /**
 ==============================================================================
 * Main script for the links tool.
@@ -186,7 +185,7 @@ if(isset($_GET['action']))
 	Introduction section
 -----------------------------------------------------------
 */
-Display::display_introduction_section(TOOL_LINK);
+Display::display_introduction_section(TOOL_LINK,'left');
 
 
 if (is_allowed_to_edit() and isset($_GET['action']))
@@ -195,12 +194,10 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 	// has been submitted yet, hence !isset($submitLink)
 	if (($_GET['action']=="addlink" or $_GET['action']=="editlink") and empty($_POST['submitLink']))
 	{
-		echo "<h4>";
 		if ($_GET['action']=="addlink")
-			{echo get_lang("LinkAdd");}
+			{echo '<div class="form_header">'.get_lang("LinkAdd").'</div>';}
 		else
-			{echo get_lang("LinkMod");}
-		echo "</h4>\n\n";
+			{echo '<div class="form_header">'.get_lang("LinkMod").'</div>';}
 		if ($category=="")
 			{$category=0;}
 		echo "<form method=\"post\" action=\"".api_get_self()."?action=".$_GET['action']."&amp;urlview=".$urlview."\">";
@@ -250,9 +247,9 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 	{
 		echo "<h4>";
 		if ($_GET['action']=="addcategory")
-			{echo get_lang("CategoryAdd");}
+			{echo '<div class="form_header">'.get_lang('CategoryAdd').'</div>';}
 		else
-			{echo get_lang("CategoryMod");}
+			{echo '<div class="form_header">'.get_lang('CategoryMod').'</div>';}
 		echo "</h4>\n\n";
 		echo "<form method=\"post\" action=\"".api_get_self()."?action=".$_GET['action']."&amp;urlview=".$urlview."\">";
 		if ($_GET['action']=="editcategory")
@@ -298,7 +295,7 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 		Action Links
 	-----------------------------------------------------------
 	*/
-	
+	echo '<div class="actions">';
 	if(is_allowed_to_edit())
 	{
 		echo Display::return_icon('file_html_new.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addlink&amp;category=".(!empty($category)?$category:'')."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
@@ -322,13 +319,13 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 	echo "1";
 	}
 	echo "\">$showall</a>";
+	echo '</div>';
 
 	//Starting the table which contains the categories
-	
 	$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
 	$resultcategories=api_sql_query($sqlcategories);
 	
-	echo '<br /><br /><table class="data_table">';
+	echo '<table class="data_table">';
 	// displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
 		$sqlLinks = "SELECT * FROM ".$tbl_link." WHERE category_id=0 or category_id IS NULL";
 		$result = api_sql_query($sqlLinks);

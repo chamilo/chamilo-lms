@@ -1,11 +1,10 @@
-<?php
+<?php // $Id: courseLog.php 16739 2008-11-13 15:36:40Z pcool $
 /*
- * ==============================================================================
+==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos SPRL
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -17,10 +16,10 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
 ==============================================================================
 */
+
 /**
 ==============================================================================
 *	@author Thomas Depraetere
@@ -166,30 +165,27 @@ function sort_users($a,$b){
 ==============================================================================
 */
 
-
+echo '<div class="actions">';
 if($_GET['studentlist'] == 'false')
 {
-	echo '<div style="float:left; clear:left">
-			<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;|
-			'.get_lang('CourseTracking').'
-		  </div>';
+	echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;|&nbsp;'.get_lang('CourseTracking');
 }
 else
 {
-	echo '<div style="float:left; clear:left">
-			'.get_lang('StudentsTracking').' |
-			<a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>&nbsp;
-		  </div>';
+	echo get_lang('StudentsTracking').' | <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>';
 }
-echo '<div style="float:right; clear:right">';
 echo '&nbsp;<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>';
-if($_GET['studentlist'] == 'false'){	
-	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&studentlist=false"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a></div>';
+if($_GET['studentlist'] == 'false')
+{	
+	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&studentlist=false"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 }
-else{
-	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a></div>';
+else
+{
+	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 }
-echo '<div class="clear"></div>';
+echo '</div>';
+
+
 if($_GET['studentlist'] == 'false')
 {
 	echo'<br /><br />';

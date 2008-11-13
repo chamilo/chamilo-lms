@@ -1,28 +1,25 @@
-<?php
+<?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
-	Copyright (c) 2004-2005 Dokeos S.A.
+
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Denes Nagy
-	Copyright (c) Yannick Warnier
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
+
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
 ==============================================================================
 */
+
 /**
 ==============================================================================
 * This is a function library for the learning path.
@@ -551,7 +548,7 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 
 				if ($row_items["description"])
 				{
-					echo "<div align='justify'><font color='#999999'>&nbsp;&nbsp;&nbsp;{$row_items['description']}</font>";
+					echo "<div align='justify'>&nbsp;&nbsp;&nbsp;{$row_items['description']}";
 				}
 
 				echo "</td>";
@@ -580,7 +577,7 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 							$number_items2 = Database::num_rows($result_items2);
 							if ($number_items2 == 0)
 							{
-								echo "<font color='red'>$lang_prereq_deleted_error</font>";
+								echo $lang_prereq_deleted_error;
 							}
 							$row_items2 = mysql_fetch_array($result_items2);
 							display_addedresource_link_in_learnpath($row_items2["item_type"], $row_items2["ref"], '', $row_items2["id"], 'builder', '', 0);
@@ -1718,7 +1715,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 
 			//2 Prepare table output
-			$expcontent .= "<table id=\"agenda_list\" >";
+			$expcontent .= "<table class=\"data_table\" >";
 			$barreMois = "";
 
 			//3 For each event corresponding to this agenda, do the following:

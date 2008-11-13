@@ -1,12 +1,10 @@
-<?php // $Id: userInfo.php 16701 2008-11-09 17:04:19Z spyroux $
+<?php // $Id: userInfo.php 16739 2008-11-13 15:36:40Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 hent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
+	Copyright (c) 2003 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -18,9 +16,10 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
 ==============================================================================
 */
+
 /**
 ==============================================================================
 *	This script displays info about one specific user, specified through
@@ -248,7 +247,7 @@ if ($allowedToEditContent)
 ==============================================================================
 */
 // Back button for each display mode (Top)
-echo "<div align=\"right\"><a href=\"user.php?".api_get_cidreq()."&amp;origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
+echo "<div class=\"actions\"><a href=\"user.php?".api_get_cidreq()."&amp;origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
 if ($displayMode == "viewDefEdit")
 {
 	/*>>>>>>>>>>>> CATEGORIES DEFINITIONS : EDIT <<<<<<<<<<<<*/
@@ -535,7 +534,7 @@ elseif ($displayMode == "viewContentList") // default display
 }
 
 // Back button for each display mode (bottom)
-echo "<div align=\"right\"><a href=\"user.php?".api_get_cidreq()."&amp;origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
+//echo "<div class=\"actions\"><a href=\"user.php?".api_get_cidreq()."&amp;origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
 /*
 ==============================================================================
 		FOOTER

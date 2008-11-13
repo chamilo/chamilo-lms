@@ -1,9 +1,10 @@
-<?php
+<?php // $Id: reporting.php 16739 2008-11-13 15:36:40Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2008 Dokeos SPRL
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -15,16 +16,17 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
 ==============================================================================
 */
+
+
 
 /**
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 16697 2008-11-07 21:47:40Z yannoo $
+* 	@version $Id: reporting.php 16739 2008-11-13 15:36:40Z pcool $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -150,10 +152,10 @@ SurveyUtil::handle_reporting_actions();
 if (!$_GET['action'] OR $_GET['action'] == 'overview')
 {
 	$myweb_survey_id = Security::remove_XSS($_GET['survey_id']);
-	echo '<b><a href="reporting.php?action=questionreport&amp;survey_id='.$myweb_survey_id.'">'.get_lang('DetailedReportByQuestion').'</a></b> <br />'.get_lang('DetailedReportByQuestionDetail').' <br /><br />';
-	echo '<b><a href="reporting.php?action=userreport&amp;survey_id='.$myweb_survey_id.'">'.get_lang('DetailedReportByUser').'</a></b><br />'.get_lang('DetailedReportByUserDetail').'.<br /><br />';
-	echo '<b><a href="reporting.php?action=comparativereport&amp;survey_id='.$myweb_survey_id.'">'.get_lang('ComparativeReport').'</a></b><br />'.get_lang('ComparativeReportDetail').'.<br /><br />';
-	echo '<b><a href="reporting.php?action=completereport&amp;survey_id='.$myweb_survey_id.'">'.get_lang('CompleteReport').'</a></b><br />'.get_lang('CompleteReportDetail').'<br /><br />';
+	echo '<div class="sectiontitle"><a href="reporting.php?action=questionreport&amp;survey_id='.$myweb_survey_id.'">'.get_lang('DetailedReportByQuestion').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByQuestionDetail').' </div>';
+	echo '<div class="sectiontitle"><a href="reporting.php?action=userreport&amp;survey_id='.$myweb_survey_id.'">'.get_lang('DetailedReportByUser').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByUserDetail').'.</div>';
+	echo '<div class="sectiontitle"><a href="reporting.php?action=comparativereport&amp;survey_id='.$myweb_survey_id.'">'.get_lang('ComparativeReport').'</a></div><div class="sectioncomment">'.get_lang('ComparativeReportDetail').'.</div>';
+	echo '<div class="sectiontitle"><a href="reporting.php?action=completereport&amp;survey_id='.$myweb_survey_id.'">'.get_lang('CompleteReport').'</a></div><div class="sectioncomment">'.get_lang('CompleteReportDetail').'</div>';
 }
 
 

@@ -1,28 +1,26 @@
-<?php
+<?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
-	Copyright (c) 2004 Dokeos S.A.
+
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Patrick Cool
-	Copyright (c) Denes Nagy
-	Copyright (c) Yannick Warnier
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
+==============================================================================
 */
+
+
 /**
 ============================================================================== 
 * This is a learning path creation and player tool in Dokeos - previously learnpath_handler.php
@@ -172,7 +170,7 @@ switch($_GET['action'])
 		
 		if(isset($is_success) && $is_success === true)
 		{
-			echo '<div class="lp_message">';
+			echo '<div class="confirmation-message">';
 			
 				echo get_lang("_learnpath_item_edited");
 			
@@ -189,7 +187,7 @@ switch($_GET['action'])
 		
 		if(isset($is_success) && $is_success === true)
 		{
-			echo '<div class="lp_message">';
+			echo '<div class="confirmation-message">';
 			
 				echo get_lang("_learnpath_item_deleted");
 			

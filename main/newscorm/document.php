@@ -1,13 +1,10 @@
-<?php //$id:$
+<?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2005 Dokeos S.A.
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2004 Denes Nagy
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -19,9 +16,10 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
 ==============================================================================
 */
+
 /**
 ==============================================================================
 * This file was origially the copy of document.php, but many modifications happened since then ;
@@ -266,7 +264,7 @@ if ($curDirPath)
   <tr>
     <td colspan="<?php echo $colspan ?>" align="left" bgcolor="#4171B5">
       <img src="../img/opendir.gif" align="absbottom" vspace="2" hspace="3" alt="open_dir" />
-      <font color="#ffffff"><b><?php echo $tmpcurDirPath ?></b></font>
+      <?php echo $tmpcurDirPath ?>
     </td>
   </tr>
   <?php

@@ -1,30 +1,25 @@
-<?php
+<?php // $Id: subscribe_user.php 16739 2008-11-13 15:36:40Z pcool $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
-	Copyright (c) 2004-2005 Dokeos SPRL
+
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Elie harfouche (elie at harfdesign dot com)
-	Copyright (c) Roan Embrechts, Vrije Universiteit Brussel	
-	Copyright (c) Wolfgang Schneider
-	Copyright (c) Bart Mollet, Hogeschool Gent
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-============================================================================== 
+
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
+==============================================================================
 */
+
 /**
 ============================================================================== 
 *	This script allows teachers to subscribe existing users
@@ -352,11 +347,14 @@ function active_filter($active, $url_params, $row)
 
 
 // Build search-form
+echo '<div class="actions">';
 $form = new FormValidator('search_user', 'POST',api_get_self().'?type='.$_REQUEST['type'],'',null,false);
 $renderer = & $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->add_textfield('keyword', '', false);
 $form->addElement('submit', 'submit', get_lang('SearchButton'));
+$form->display();
+echo '</div>';
 
 // Build table
 $table = new SortableTable('users', 'get_number_of_users', 'get_user_data', 2);
@@ -376,9 +374,7 @@ $table->set_header($col ++, get_lang('reg'), false);
 $table->set_column_filter($col -1, 'reg_filter');
 $table->set_form_actions(array ('subscribe' => get_lang('reg')), 'user');
 
-// Display form & table
-$form->display();
-echo '<br />';
+// Display table
 $table->display();
 
 if ( !empty($_POST['keyword']))

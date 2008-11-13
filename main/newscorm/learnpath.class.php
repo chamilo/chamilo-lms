@@ -1,4 +1,25 @@
-<?php //$id:$
+<?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
+==============================================================================
+*/
+
 /**
  * This (abstract?) class defines the parent attributes and methods for the dokeos learnpaths and scorm
  * learnpaths. It is used by the scorm class as well as the dokeos_lp class.
@@ -544,11 +565,12 @@ class learnpath {
     	}
     	
 		// upload audio
-		if (!empty($_FILES['mp3']['tmp_name']))
+		if (!empty($_FILES['mp3']['name']))
 		{
 			// create the audio folder if it does not exist yet
 			global $_course;
 			$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/';
+						
 			if(!is_dir($filepath.'audio'))
 			{
 				$perm = api_get_setting('permissions_for_new_directories');
@@ -560,6 +582,7 @@ class learnpath {
 			
 			// upload the file in the documents tool			
 			include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
+			
 			$file_path = handle_uploaded_document($_course, $_FILES['mp3'],api_get_path('SYS_COURSE_PATH').$_course['path'].'/document','/audio',api_get_user_id(),'','','','','',false);			
 			
 			// getting the filename only
@@ -1995,19 +2018,23 @@ class learnpath {
 		$sql = "SELECT * FROM " . $tbl_lp_item . " as lp WHERE lp.id = '" . $_SESSION['oLP']->current."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$row= mysql_fetch_assoc($result);
-		
+		$output='';		
+		if (!empty($row['audio']))
+		{
 		// the mp3 player	
-		$output .= '<div id="container"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>';
-		$output .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
-		$output .= '<script type="text/javascript">
+			$output = '<div id="container"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>';
+			$output .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
+			$output .= '<script type="text/javascript">
 						var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
 						s1.addParam("allowscriptaccess","always");
-						s1.addParam("flashvars","file=../../courses/'.$_course['path'].'/document/audio/'.$row['audio'].'&image=preview.jpg&autostart=true");
+							s1.addParam("flashvars","file='.api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/audio/'.$row['audio'].'&image=preview.jpg&autostart=true");
 						s1.write("container");
 					</script>';
+		}
 		return $output;		
 	}
 
+	
 	
     /**
      * Gets a progress bar for the learnpath by counting the number of items in it and the number of items
@@ -2587,15 +2614,23 @@ class learnpath {
     	//echo $this->current;
     	//$parent = $this->items[$this->current]->get_parent();
     	//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
-    	$html = '<div class="inner_lp_toc">'."\n" ;
-    	$html.= '<div class="scorm_title"><div class="scorm_title_text">'.mb_convert_encoding($this->get_name(),$this->encoding,$mych).'</div></div>';
+    	$html= '<div class="scorm_title"><div class="scorm_title_text">'.mb_convert_encoding($this->get_name(),$this->encoding,$mych).'</div></div>';
     	
     	// build, display
     	if(api_is_allowed_to_edit())
     	{
-    		$html.='<div class="scorm_title_text"><br />'."<a  target='_parent' href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."' style= target='_parent'>".mb_convert_encoding(get_lang("Build"),$this->encoding,$mych)."</a>&nbsp;&#124;&nbsp;<a href='lp_controller.php?".api_get_cidreq()."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".mb_convert_encoding(get_lang("BasicOverview"),$this->encoding,$mych)."</a>&nbsp;&#124;&nbsp;".mb_convert_encoding(get_lang("Display"),$this->encoding,$mych).'<br /><br /></div>';
+    		$html	.='<div class="actions_lp">';
+    		$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=build&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('learnpath_build.gif').' '.mb_convert_encoding(get_lang('Build'),$this->encoding,$mych)."</a>";
+    		$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=admin_view&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('learnpath_organize.gif').' '.mb_convert_encoding(get_lang('BasicOverview'),$this->encoding,$mych)."</a>";
+    		$html 	.= '<span>'.Display::return_icon('learnpath_view.gif').' '.mb_convert_encoding(get_lang("Display"),$this->encoding,$mych).'</span>';
+    		$html 	.= '</div>';
 			unset($mych);
     	}
+    	
+    	$html.= '<div class="inner_lp_toc">'."\n" ;
+    	//$html.= '<div class="scorm_title"><div class="scorm_title_text">'.mb_convert_encoding($this->get_name(),$this->encoding,$mych).'</div></div>';
+    	
+    
     	//		" onchange=\"javascript:document.getElementById('toc_$parent').focus();\">\n";
 		require_once('resourcelinker.inc.php');
 		
@@ -2683,7 +2718,7 @@ class learnpath {
     			$html .= stripslashes($title);
     		}   		
     		
-    		$html .= "<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'],0,1)."' />"; 		
+    		$html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'],0,1)."' />"; 		
     		$html .= "</div>";
     		
     		if ($scorm_color_background!='')
@@ -4197,11 +4232,12 @@ class learnpath {
 		
 		if(api_is_allowed_to_edit())
 		{
-			$return .= '<p>';
-			$return = '<span style="float:right;"><a href="'.api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'&amp;updateaudio=true">'.get_lang('UpdateAllAudioFragments').'</a></span>';
-			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=build&amp;lp_id=' . $this->lp_id . '">'.get_lang("Advanced").'</a>'."\n";
-			$return .= '&nbsp;&#124;&nbsp;'.get_lang("BasicOverview").'&nbsp;&#124;&nbsp;';
-			$return .= '<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$this->lp_id.'">'.get_lang("Display").'</a></p>';
+			$return .= '<div class="actions">';
+			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=build&amp;lp_id=' . $this->lp_id . '">'.Display::return_icon('learnpath_build.gif').' '.get_lang('Advanced').'</a>';
+			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=admin_overview&amp;lp_id=' . $this->lp_id . '">'.Display::return_icon('learnpath_organize.gif').' '.get_lang('BasicOverview').'</a>';
+			$return .= '<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$this->lp_id.'">'.Display::return_icon('learnpath_view.gif').' '.get_lang("Display").'</a>';
+			$return .= '<a href="'.api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'&amp;updateaudio=true">'.Display::return_icon('audio.gif').' '.get_lang('UpdateAllAudioFragments').'</a>';
+			$return .= '</div>';
 		}
 		
 		// we need to start a form when we want to update all the mp3 files
@@ -4797,13 +4833,13 @@ class learnpath {
 	{
 		global $_course; //TODO: don't use globals
 		
-		$return = '<div style="margin:3px 12px;">' . "\n";
+			$return .= '<div class="sectiontitle">'.get_lang('CreateNewStep').'</div>';
 		
-			$return .= '<p class="lp_title" style="margin-top:0;">'.get_lang("CreateNewStep").'</p>';
+			$return .= '<div class="sectioncomment"><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("NewDocument").'</a></div>';
 		
-			$return .= '<div style="margin-left:7px;"><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("NewDocument").'</a></div>';
+			$return .= '<div class="sectiontitle">'.get_lang('UseAnExistingResource').'</div>';
 			
-			$return .= '<p class="lp_title" style="margin-top:10px;">'.get_lang("UseAnExistingResource").'</p>';
+			$return .= '<div class="sectioncomment">';
 			
 			/* get all the docs */
 			$return .= $this->get_documents();
@@ -4820,7 +4856,7 @@ class learnpath {
 			/* get al the forums */
 			$return .= $this->get_forums();
 		
-		$return .= '</div>' . "\n";
+			$return .= '</div>';
 		
 		return $return;
 	}
@@ -4864,7 +4900,7 @@ class learnpath {
 		
 		//TODO: add a path filter
 		if($iframe){
-			$return .= '<iframe frameborder="0" src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document' . str_replace('%2F','/',urlencode($row_doc['path'])) . '?'.api_get_cidreq().'" style="background:#FFFFFF; border:1px solid #CCCCCC; height:490px; width:100%; margin-top: 20px;"></iframe>';
+			$return .= '<iframe id="learnpath_preview_frame" frameborder="0" src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document' . str_replace('%2F','/',urlencode($row_doc['path'])) . '?'.api_get_cidreq().'"></iframe>';
 		}
 		else{
 			$return .= file_get_contents(api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path']);
@@ -4916,7 +4952,7 @@ class learnpath {
 		
 		$item_title = mb_convert_encoding($item_title,$charset,$this->encoding);
 		
-		$return = '<div style="margin:3px 12px;">';
+		$return = '<div class="sectiontitle">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -4958,32 +4994,44 @@ class learnpath {
 			unset($this->arrMenu);
 			
 			if($action == 'add')
-				$return .= '<p class="lp_title">'.get_lang("CreateTheExercise").'&nbsp;:</p>' . "\n";
+				$return .= get_lang("CreateTheExercise").'&nbsp;:' . "\n";
 			elseif($action == 'move')
-				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentExercise").'&nbsp;:</p>' . "\n";
+				$return .= get_lang("MoveTheCurrentExercise").'&nbsp;:' . "\n";
 			else
-				$return .= '<p class="lp_title">'.get_lang("EditCurrentExecice").'&nbsp;:</p>' . "\n";
+				$return .= get_lang("EditCurrentExecice").'&nbsp;:' . "\n";
 			
 			if(isset($_GET['edit']) && $_GET['edit'] == 'true')
 			{
-				$return .= '<div class="lp_message" style="margin-bottom:15px;">';
+				$return .= '<div class="warning-message">';
 				
 					$return .= '<p class="lp_title">'.get_lang("Warning").' !</p>';
 					$return .= get_lang("WarningEditingDocument");
 				
 				$return .= '</div>';
 			}
+			$return .= '</div>';
+			$return .= '<div class="sectioncomment">';
 			
 			$return .= '<form method="POST">' . "\n";
 			
-				$return .= "\t" . '<table cellpadding="0" cellspacing="0" class="lp_form">' . "\n";
+				$return .= "\t" . '<table>' . "\n";
+				
+					if($action != 'move')
+					{
+						$return .= "\t\t" . '<tr>' . "\n";
+							
+							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").'&nbsp;:</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" class="learnpath_item_form" value="' . $item_title . '" /></td>' . "\n";
+						
+						$return .= "\t\t" . '</tr>' . "\n";
+					}				
 				
 					$return .= "\t\t" . '<tr>' . "\n";
 					
 						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").'&nbsp;:</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
+							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
 								
@@ -5024,7 +5072,7 @@ class learnpath {
 						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").'&nbsp;:</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
+							$return .= "\t\t\t\t" . '<select class="learnpath_item_form" id="idPosition" name="previous" size="1">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">'.get_lang('FirstPosition').'</option>';
 								
@@ -5051,12 +5099,6 @@ class learnpath {
 					
 					if($action != 'move')
 					{
-						$return .= "\t\t" . '<tr>' . "\n";
-							
-							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").'&nbsp;:</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
-						
-						$return .= "\t\t" . '</tr>' . "\n";
 						
 						
 						$id_prerequisite=0;
@@ -5086,7 +5128,7 @@ class learnpath {
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 						$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").'&nbsp;:</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
+							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 							
 							foreach($arrHide as $key => $value){
 								if($key==$s_selected_position && $action == 'add'){
@@ -5115,7 +5157,7 @@ class learnpath {
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang('Ok').'" /></td>' . "\n";
+						$return .= "\t\t\t" . '<td>&nbsp;</td><td><input class="button" name="submit_button" type="submit" value="'.get_lang('Ok').'" /></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 				
@@ -5238,7 +5280,7 @@ class learnpath {
 
 			if(isset($_GET['edit']) && $_GET['edit'] == 'true')
 			{
-				$return .= '<div class="lp_message" style="margin-bottom:15px;">';
+				$return .= '<div class="warning-message">';
 
 					$return .= '<p class="lp_title">'.get_lang("Warning").' !</p>';
 					$return .= get_lang("WarningEditingDocument");
@@ -5354,7 +5396,7 @@ class learnpath {
 						$return .= "\t\t" . '<tr>' . "\n";
 
 							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
+							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 
 							foreach($arrHide as $key => $value){
 								if($key==$s_selected_position && $action == 'add'){
@@ -5459,7 +5501,7 @@ class learnpath {
 		$item_title=mb_convert_encoding($item_title,$charset,$this->encoding);
 		$item_description=mb_convert_encoding($item_description,$charset,$this->encoding);
 				
-		$return = '<div style="margin:3px 12px;">';
+		$return = '<div class="sectiontitle">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -5499,22 +5541,35 @@ class learnpath {
 			unset($this->arrMenu);
 			
 			if($action == 'add')
-				$return .= '<p class="lp_title">'.get_lang("CreateTheForum").'&nbsp;:</p>' . "\n";
+				$return .= get_lang("CreateTheForum").'&nbsp;:' . "\n";
 			elseif($action == 'move')
-				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentForum").'&nbsp;:</p>' . "\n";
+				$return .= get_lang("MoveTheCurrentForum").'&nbsp;:' . "\n";
 			else
-				$return .= '<p class="lp_title">'.get_lang("EditCurrentForum").'&nbsp;:</p>' . "\n";
+				$return .= get_lang("EditCurrentForum").'&nbsp;:' . "\n";
+				
+			$return .= '</div>';
+			$return .= '<div class="sectioncomment">';
 			
 			$return .= '<form method="POST">' . "\n";
 			
-				$return .= "\t" . '<table cellpadding="0" cellspacing="0" class="lp_form">' . "\n";
+				$return .= "\t" . '<table>' . "\n";
+				
+					if($action != 'move')
+					{
+						$return .= "\t\t" . '<tr>' . "\n";
+							
+							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").'&nbsp;:</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>' . "\n";
+						
+						$return .= "\t\t" . '</tr>' . "\n";
+					}				
 				
 					$return .= "\t\t" . '<tr>' . "\n";
 					
 						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").'&nbsp;:</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
+							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
 								
@@ -5553,7 +5608,7 @@ class learnpath {
 						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").'&nbsp;:</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
+							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1" class="learnpath_item_form">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">'.get_lang('FirstPosition').'</option>';
 								
@@ -5580,13 +5635,6 @@ class learnpath {
 					
 					if($action != 'move')
 					{
-						$return .= "\t\t" . '<tr>' . "\n";
-							
-							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").'&nbsp;:</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
-						
-						$return .= "\t\t" . '</tr>' . "\n";
-						
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							//Remove temporaly the test description
@@ -5620,7 +5668,7 @@ class learnpath {
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'&nbsp;:</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
+							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 							
 							foreach($arrHide as $key => $value){
 								if($key==$s_selected_position && $action == 'add'){
@@ -5886,7 +5934,7 @@ class learnpath {
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").'&nbsp;:</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
+							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 							
 							foreach($arrHide as $key => $value){
 								if($key==$s_selected_position && $action == 'add'){
@@ -5967,7 +6015,7 @@ class learnpath {
 			$item_description	= '';
 		}
 		
-		$return = '<div style="margin:10px 12px;">';
+		$return = '<div class="sectiontitle">';
 			
 		if($id != 0 && is_array($extra_info))
 			$parent = $extra_info['parent_item_id'];
@@ -6007,7 +6055,10 @@ class learnpath {
 		$arrLP = $this->arrMenu;		
 		unset($this->arrMenu);
 			
-		$return .= '<p class="lp_title">' . $title . '</p>' . "\n";
+		$return .= $title . "\n";
+		$return .= '</div>';
+		$return .= '<div class="sectioncomment">';
+		
 		require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');		
 		$form = new FormValidator('form','POST',api_get_self()."?".$_SERVER["QUERY_STRING"]);
 		
@@ -6051,7 +6102,17 @@ class learnpath {
 				}
 			}
 			
-			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent")."&nbsp;:", '', 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;" onchange="load_cbo(this.value);"');
+			if($action != 'move')
+			{
+				$form->addElement('text','title', get_lang('Title').'&nbsp;:','id="idTitle" class="learnpath_chapter_form"');
+				//$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"');
+			}
+			else
+			{
+				$form->addElement('hidden','title');
+			}			
+			
+			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent")."&nbsp;:", '', 'class="learnpath_chapter_form" id="Parent" onchange="load_cbo(this.value);"');
 
 			foreach($arrHide as $key => $value)
 			{
@@ -6078,7 +6139,7 @@ class learnpath {
 			}
 		}
 		
-		$position = &$form->addElement('select', 'previous', get_lang("Position")."&nbsp;:", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
+		$position = &$form->addElement('select', 'previous', get_lang("Position")."&nbsp;:", '', 'id="idPosition" class="learnpath_chapter_form"');
 		
 		$position->addOption(get_lang('FirstPosition'),0,'style="padding-left:'.$value['padding'].'px;"');
 		
@@ -6091,17 +6152,7 @@ class learnpath {
 		
 		if(is_array($arrLP)) { reset($arrLP); }
 		
-		if($action != 'move')
-		{
-			$form->addElement('text','title', get_lang('Title').'&nbsp;:','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
-			//$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"  style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
-		}
-		else
-		{
-			$form->addElement('hidden','title');
-		}
-		
-		$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="padding:1px 2px; width:75px;"');
+		$form->addElement('submit', 'submit_button', get_lang('Ok'));
 		
 		if($item_type == 'module' || $item_type == 'dokeos_module')
 		{
@@ -6141,12 +6192,6 @@ class learnpath {
 	function display_document_form($action = 'add', $id = 0, $extra_info = 'new')
 	{
 		global $charset;
-		echo '
-		<style>
-	        div.row div.formw { 	              
-    		width: 80%; 	                        
- 	              }
- 	                 </style>';
 			
 		$tbl_lp_item = Database::get_course_table('lp_item');
 		$tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
@@ -6186,7 +6231,6 @@ class learnpath {
 		if($id != 0 && is_array($extra_info))
 		{
 			$item_title			= stripslashes($extra_info['title']);
-			
 			$item_description	= stripslashes($extra_info['description']);	
             $item_terms         = stripslashes($extra_info['terms']);        
 			if(empty($item_title))
@@ -6230,7 +6274,7 @@ class learnpath {
 			$item_description	= '';
 		}
 		
-		$return = '<div style="margin:3px 12px;">';
+		$return = '<div class="sectiontitle">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -6273,29 +6317,29 @@ class learnpath {
 			
 			if($action == 'add')
 			{
-				$return .= '<p class="lp_title">'.get_lang("CreateTheDocument").'&nbsp;:</p>' . "\n";
+				$return .= get_lang("CreateTheDocument") . "\n";
 			}
 			elseif($action == 'move')
 			{
-				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentDocument").'&nbsp;:</p>' . "\n";
+				$return .= get_lang("MoveTheCurrentDocument") . "\n";
 			}
 			else
 			{
-				$return .= '<p class="lp_title">'.get_lang("EditTheCurrentDocument").'&nbsp;:</p>' . "\n";
+				$return .= get_lang("EditTheCurrentDocument") . "\n";
 			}
 
 			$return .= '</div>';
 
 			if(isset($_GET['edit']) && $_GET['edit'] == 'true')
 			{
-				$return .= '<div class="lp_message" style="margin-bottom:15px;">';				
-				$return .= '<p class="lp_title">'.get_lang("Warning").' !</p>';
+				$return .= '<div class="warning-message">';				
+				$return .= '<strong>'.get_lang("Warning").' !</strong><br />';
 				$return .= get_lang("WarningEditingDocument");				
 				$return .= '</div>';
 			}
 			/*
 			if($no_display_add==true){
-				$return .= '<div class="lp_message" style="margin-bottom:15px;">';
+				$return .= '<div class="warning-message">';
 				$return .= get_lang("CantEditDocument");
 				$return .= '</div>';
 				return $return;
@@ -6314,6 +6358,11 @@ class learnpath {
 			$defaults["description"]=mb_convert_encoding($item_description,$charset,$this->encoding);
 		
 			$form->addElement('html',$return);
+						
+			if($action != 'move')
+			{
+				$form->addElement('text','title', get_lang('Title').'&nbsp;:','id="idTitle" class="learnpath_item_form"');
+			}			
 						
 			//$arrHide = array($id);
 			
@@ -6341,7 +6390,7 @@ class learnpath {
 					}
 				}
 			}
-			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent")."&nbsp;:", '', 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;" onchange="load_cbo(this.value);"');
+			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent")."&nbsp;:", '', 'class="learnpath_item_form" onchange="load_cbo(this.value);"');
 
 			foreach($arrHide as $key => $value)
 			{
@@ -6370,8 +6419,8 @@ class learnpath {
 				}
 			}
 			
-			$position = &$form->addElement('select', 'previous', get_lang("Position")."&nbsp;:", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
-			$position->addOption(get_lang("FirstPosition"),0,'style="padding-left:3px;"');
+			$position = &$form->addElement('select', 'previous', get_lang("Position")."&nbsp;:", '', 'id="idPosition" class="learnpath_item_form"');
+			$position->addOption(get_lang("FirstPosition"),0);
 			
 			foreach($arrHide as $key => $value)
 			{
@@ -6385,8 +6434,6 @@ class learnpath {
 			
 			if($action != 'move')
 			{
-				$form->addElement('text','title', get_lang('Title').'&nbsp;:','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:295px;"');
-
 				
 				$id_prerequisite=0;
 				if(is_array($arrLP))
@@ -6399,8 +6446,8 @@ class learnpath {
 					}
 				}
 
-				$select_prerequisites=$form->addElement('select', 'prerequisites', get_lang('Prerequisites').'&nbsp;:', '', 'id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
-				$select_prerequisites->addOption(get_lang("NoPrerequisites"),0,'style="padding-left:3px;"');
+				$select_prerequisites=$form->addElement('select', 'prerequisites', get_lang('Prerequisites').'&nbsp;:', '', 'id="prerequisites" class="learnpath_item_form"');
+				$select_prerequisites->addOption(get_lang("NoPrerequisites"),0);
 
 				// form element for uploading an mp3 file
 				$form->addElement('file','mp3',get_lang('UploadMp3audio'),'id="mp3" size="33"');
@@ -6409,7 +6456,7 @@ class learnpath {
                 if ( api_get_setting('search_enabled') === 'true' )
                 {
                     //add terms field
-                    $terms = $form->addElement('text','terms', get_lang('SearchFeatureTerms').'&nbsp;:','id="idTerms" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:295px;"');
+                    $terms = $form->addElement('text','terms', get_lang('SearchFeatureTerms').'&nbsp;:','id="idTerms" class="learnpath_item_form"');
                     $terms->setValue($item_terms); 
                 }
 
@@ -6457,7 +6504,7 @@ class learnpath {
 						else
 							$content = '';
 						
-						$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="padding:1px 2px; width:75px;"');
+						$form->addElement('submit', 'submit_button', get_lang('Ok'));
 						
 						if(!$no_display_edit_textarea)
 						{
@@ -6475,7 +6522,7 @@ class learnpath {
 					elseif(is_numeric($extra_info))
 					{
 			
-						$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="padding:1px 2px; width:75px;"');
+						$form->addElement('submit', 'submit_button', get_lang('Ok'));
 			
 						$return = $this->display_document($extra_info, true, true, true);
 						$form->addElement('html',$return);
@@ -6490,12 +6537,12 @@ class learnpath {
 			}
 			if(is_numeric($extra_info))
 			{
-				$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="padding:1px 2px; width:75px;"');
+				$form->addElement('submit', 'submit_button', get_lang('Ok'));
 				$form->addElement('hidden', 'path', $extra_info);
 			}
 			elseif(is_array($extra_info))
 			{
-				$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="padding:1px 2px; width:75px;"');
+				$form->addElement('submit', 'submit_button', get_lang('Ok'));
 				$form->addElement('hidden', 'path', $extra_info['path']);
 			}
 			
@@ -6555,7 +6602,7 @@ class learnpath {
 		$item_title=mb_convert_encoding($item_title,$charset,$this->encoding);
 		$item_description=mb_convert_encoding($item_description,$charset,$this->encoding);
 				
-		$return = '<div style="margin:3px 12px;">';
+		$return = '<div class="sectiontitle">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -6595,22 +6642,34 @@ class learnpath {
 			unset($this->arrMenu);
 			
 			if($action == 'add')
-				$return .= '<p class="lp_title">'.get_lang("CreateTheLink").'&nbsp;:</p>' . "\n";
+				$return .= get_lang("CreateTheLink").'&nbsp;:' . "\n";
 			elseif($action == 'move')
-				$return .= '<p class="lp_title">'.get_lang("MoveCurrentLink").'&nbsp;:</p>' . "\n";
+				$return .= get_lang("MoveCurrentLink").'&nbsp;:' . "\n";
 			else
-				$return .= '<p class="lp_title">'.get_lang("EditCurrentLink").'&nbsp;:</p>' . "\n";
+				$return .= get_lang("EditCurrentLink").'&nbsp;:' . "\n";
 			
+			$return .= '</div>';
+			$return .= '<div class="sectioncomment">';
 			$return .= '<form method="POST">' . "\n";
 			
-				$return .= "\t" . '<table cellpadding="0" cellspacing="0" class="lp_form">' . "\n";
+				$return .= "\t" . '<table>' . "\n";
+				
+					if($action != 'move')
+					{
+						$return .= "\t\t" . '<tr>' . "\n";
+							
+							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" class="learnpath_item_form"/></td>' . "\n";
+						
+						$return .= "\t\t" . '</tr>' . "\n";
+					}				
 				
 					$return .= "\t\t" . '<tr>' . "\n";
 					
 						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").' :</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
+							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
 								
@@ -6649,7 +6708,7 @@ class learnpath {
 						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").' :</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
+							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1" class="learnpath_item_form">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">'.get_lang("FirstPosition").'</option>';
 								
@@ -6676,24 +6735,18 @@ class learnpath {
 					
 					if($action != 'move')
 					{
-						$return .= "\t\t" . '<tr>' . "\n";
-							
-							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
-						
-						$return .= "\t\t" . '</tr>' . "\n";
 						
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang("Description").' :</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" class="learnpath_item_form" rows="4">' . $item_description . '</textarea></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 						
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idURL">'.get_lang("Url").' :</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input' . (is_numeric($extra_info) ? ' disabled="disabled"' : '') . ' id="idURL" name="url" type="text" value="' . $item_url . '" /></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input' . (is_numeric($extra_info) ? ' disabled="disabled"' : '') . ' id="idURL" name="url" type="text" value="' . $item_url . '" class="learnpath_item_form" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 						
@@ -6722,7 +6775,7 @@ class learnpath {
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
+							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 							
 							foreach($arrHide as $key => $value)
 							{
@@ -6746,7 +6799,7 @@ class learnpath {
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang("Ok").'" /></td>' . "\n";
+						$return .= "\t\t\t" . '<td>&nbsp;</td><td><input class="button" name="submit_button" type="submit" value="'.get_lang("Ok").'" /></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 				
@@ -6817,7 +6870,7 @@ class learnpath {
 		}
 		
 		$item_title=mb_convert_encoding($item_title,$charset,$this->encoding);			
-		$return = '<div style="margin:3px 12px;">';
+		$return = '<div class="sectiontitle">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -6857,22 +6910,35 @@ class learnpath {
 			unset($this->arrMenu);
 			
 			if($action == 'add')
-				$return .= '<p class="lp_title">'.get_lang("Student_publication").'&nbsp;:</p>' . "\n";
+				$return .= get_lang("Student_publication").'&nbsp;:' . "\n";
 			elseif($action == 'move')
-				$return .= '<p class="lp_title">'.get_lang("MoveCurrentStudentPublication").'&nbsp;:</p>' . "\n";
+				$return .= get_lang("MoveCurrentStudentPublication").'&nbsp;:' . "\n";
 			else
-				$return .= '<p class="lp_title">'.get_lang("EditCurrentStudentPublication").'&nbsp;:</p>' . "\n";
+				$return .= get_lang("EditCurrentStudentPublication").'&nbsp;:' . "\n";
+			
+			$return .= '</div>';
+			$return .= '<div class="sectioncomment">';
 			
 			$return .= '<form method="POST">' . "\n";
 			
-				$return .= "\t" . '<table cellpadding="0" cellspacing="0" class="lp_form">' . "\n";
+				$return .= "\t" . '<table>' . "\n";
+				
+					if($action != 'move')
+					{
+						$return .= "\t\t" . '<tr>' . "\n";
+							
+							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>' . "\n";
+						
+						$return .= "\t\t" . '</tr>' . "\n";			
+					}	
 				
 					$return .= "\t\t" . '<tr>' . "\n";
 					
 						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").' :</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
+							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
 								
@@ -6913,7 +6979,7 @@ class learnpath {
 						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").' :</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
+							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1" class="learnpath_item_form">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">'.get_lang("FirstPosition").'</option>';
 								
@@ -6940,12 +7006,6 @@ class learnpath {
 					
 					if($action != 'move')
 					{
-						$return .= "\t\t" . '<tr>' . "\n";
-							
-							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
-						
-						$return .= "\t\t" . '</tr>' . "\n";
 						
 						$id_prerequisite=0;
 						if(is_array($arrLP))
@@ -6974,7 +7034,7 @@ class learnpath {
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
+							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 							
 							foreach($arrHide as $key => $value){
 								if($key==$s_selected_position && $action == 'add'){
@@ -6996,7 +7056,7 @@ class learnpath {
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang("Ok").'" /></td>' . "\n";
+						$return .= "\t\t\t" . '<td>&nbsp</td><td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang("Ok").'" /></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 				
@@ -7035,7 +7095,7 @@ class learnpath {
 	function display_manipulate($item_id, $item_type = TOOL_DOCUMENT)
 	{
 		global $charset, $_course; 
-		$return = '<div class="lp_manipulate"><table border="0" width="100%"><tr><td valign="top" width="550">';
+		$return = '<div class="actions">';
 		
 		switch($item_type)
 		{
@@ -7093,12 +7153,11 @@ class learnpath {
 		$s_title = $row['title'];
 		$s_title=mb_convert_encoding($s_title,$charset,$this->encoding);
 		
-		$return .= '<p class="lp_title">' . $lang . '</p>';
 		
 				// we display an audio player if needed
 		if (!empty($row['audio']))
 		{
-			$return .= '<div style="float: right;" id="container"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>';
+			$return .= '<div class="lp_mediaplayer" id="container"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>';
 			$return .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
 			$return .= '<script type="text/javascript">
 							var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
@@ -7107,6 +7166,8 @@ class learnpath {
 							s1.write("container");
 						</script>';
 		}
+		
+		$return .= $lang.': '; 
 		
 		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Edit the current item"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="Edit the current item" /> '.get_lang("Edit").'</a>';
 		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="Move the current item" /> '.get_lang("Move").'</a>';
@@ -7119,7 +7180,7 @@ class learnpath {
 		
 		//$return .= '<br><br><p class="lp_text">' . ((trim($s_description) == '') ? ''.get_lang("NoDescription").'' : stripslashes(nl2br($s_description))) . '</p>';
 		
-		$return.="</td><td valign='top'>";
+		//$return.="</td><td valign='top'>";
 		
 		// get the audiorecorder. Use of ob_* functions since there are echos in the file
 		ob_start();
@@ -7132,7 +7193,6 @@ class learnpath {
 		ob_end_clean();
 		// end of audiorecorder include
 		
-		$return.="</td></tr></table>";
 		
 		$return .= '</div>';
 		
@@ -7385,20 +7445,22 @@ class learnpath {
 		//$preq_max = $row['max_score'];
 		
 		$return = $this->display_manipulate($item_id, TOOL_DOCUMENT);
-		$return .= '<div style="margin:3px 12px;">';
-		$return .= '<p class="lp_title">'.get_lang("AddEditPrerequisites").'</p>';
+		$return .= '<div class="sectiontitle">';
+		$return .= get_lang('AddEditPrerequisites');
+		$return .= '</div>';
+		$return .= '<div class="sectioncomment">';
 		$return .= '<form method="POST">';
-		$return .= '<table class="lp_form">';
+		$return .= '<table class="lp_prerequisites">';
 		$return .= '<tr>';
 		$return .= '<th></th>';
-		$return .= '<th class="exercise">'.get_lang("Minimum").'</th>';
-		$return .= '<th class="exercise">'.get_lang("Maximum").'</th>';
+		$return .= '<th >'.get_lang('Minimum').'</th>';
+		$return .= '<th>'.get_lang('Maximum').'</th>';
 		$return .= '</tr>';
 		$return .= '<tr>';
-		$return .= '<td class="radio" colspan="3">';
+		$return .= '<td class="radio">';
 		$return .= '<input checked="checked" id="idNone" name="prerequisites" style="margin-left:0; margin-right:10px;" type="radio" />';
-		$return .= '<label for="idNone">'.get_lang("None").'</label>';
-		$return .= '</td>';
+		$return .= '<label for="idNone">'.get_lang('None').'</label>';
+		$return .= '</td><td colspan="2" />';
 		$return .= '</tr>';
 					
 		$sql = "
@@ -7499,7 +7561,7 @@ class learnpath {
 			ORDER BY path ASC";
 		$res_doc = api_sql_query($sql_doc, __FILE__, __LINE__);
 		
-		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_DOCUMENT . '.gif" style="margin-right:5px;" title="" />'.get_lang("Document").'</div>';
+		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_DOCUMENT . '.gif" style="margin-right:5px;" title="" />'.get_lang("Document").'</div>';
 		$return .= '<div class="lp_resource_elements" id="resDoc">';
 		
 		
@@ -7576,7 +7638,7 @@ class learnpath {
 					$icon = choose_image($resource);
 					$position = strrpos($icon,'.');
 					$icon=substr($icon,0,$position).'_small.gif';
-					$return .= '<div><div style="margin-left:' . (($num+1) * 15) . 'px;margin-right:5px;"><a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $this->lp_id . '"><img align="left" alt="" src="../img/'.$icon.'" title="" />&nbsp;'.$resource."</a></div></div>\r\n";
+					$return .= '<div><div style="margin-left:' . (($num+1) * 15) . 'px;margin-right:5px;"><a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $this->lp_id . '"><img alt="" src="../img/'.$icon.'" title="" />&nbsp;'.$resource."</a></div></div>\r\n";
 				}
 				
 			}
@@ -7609,8 +7671,8 @@ class learnpath {
 		$res_quiz = api_sql_query($sql_quiz, __FILE__, __LINE__);
 	  	$res_hot = api_sql_query($sql_hot, __FILE__, __LINE__);
 
-		$return .= '<div class="lp_resource_header_end"' . " onclick=\"if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_QUIZ . '.gif" style="margin-right:5px;" title="" />'.get_lang('Quiz').'</div>';
-		$return .= '<div class="lp_resource_elements_end" id="resExercise">';
+		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' ><img align="left" alt="" src="../img/lp_' . TOOL_QUIZ . '.gif" style="margin-right:5px;" title="" />'.get_lang('Quiz').'</div>';
+		$return .= '<div class="lp_resource_elements" id="resExercise">';
 
 		while ($row_hot = Database::fetch_array($res_hot))
  		{
@@ -7664,20 +7726,20 @@ class learnpath {
 			ORDER BY title ASC";
 		$res_link = api_sql_query($sql_link, __FILE__, __LINE__);
 		
-		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resLink').style.display == 'block') {document.getElementById('resLink').style.display = 'none';} else {document.getElementById('resLink').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_LINK . '.gif" style="margin-right:5px;" title="" />'.get_lang("Links").'</div>';
+		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resLink').style.display == 'block') {document.getElementById('resLink').style.display = 'none';} else {document.getElementById('resLink').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_LINK . '.gif" style="margin-right:5px;" title="" />'.get_lang("Links").'</div>';
 		$return .= '<div class="lp_resource_elements" id="resLink">';
 		
 			while($row_link = Database::fetch_array($res_link))
 			{
 				$return .= '<div class="lp_resource_element">';
 				
-					$return .= '<img align="left" alt="" src="../img/file_html_small.gif" style="margin-right:5px;" title="" />';
+					$return .= '<img alt="" src="../img/file_html_small.gif" style="margin-right:5px;" title="" />';
 					$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_link['title'] . '</a>';
 				
 				$return .= '</div>';
 			}
 		$return .= '<div class="lp_resource_element">';
-			$return .= '<img align="left" alt="" src="../img/file_html_new_small.gif" style="margin-right:5px;" title="" />';
+			$return .= '<img alt="" src="../img/file_html_new_small.gif" style="margin-right:5px;" title="" />';
 			$return .= '<a href="'.api_get_path(REL_CODE_PATH).'link/link.php?'.api_get_cidreq().'&action=addlink" title="' . get_lang('LinkAdd') . '">' . get_lang('LinkAdd') . '</a>';
 		$return .= '</div>';
 			
@@ -7704,8 +7766,8 @@ class learnpath {
 			ORDER BY title ASC";
 		$res_student = api_sql_query($sql_student, __FILE__, __LINE__);
 		
-		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . ' style="border-bottom:1px solid #999999; cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.gif" style="margin-right:5px;" title="" />'.get_lang('Student_publication').'</div>';
-		$return .= '<div class="lp_resource_elements" id="resStudent" style="border-bottom:1px solid #999999; border-top:0;">';
+		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.gif" style="margin-right:5px;" title="" />'.get_lang('Student_publication').'</div>';
+		$return .= '<div class="lp_resource_elements" id="resStudent">';
 		$return .= '<div class="lp_resource_element">';
 		$return .= '<img align="left" alt="" src="../img/works_small.gif" style="margin-right:5px;" title="" />';
 		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
@@ -7732,8 +7794,8 @@ class learnpath {
 		$table_users = Database :: get_main_table(TABLE_MAIN_USER);
 		$a_forums = get_forums();
 		
-		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('forums').style.display == 'block') {document.getElementById('forums').style.display = 'none';} else {document.getElementById('forums').style.display = 'block';}\"" . ' style="border-bottom:1px solid #999999; cursor:pointer;"><img align="left" alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />'.get_lang('Forums').'</div>';
-		$return .= '<div class="lp_resource_elements" id="forums" style="border-bottom:1px solid #999999; border-top:0;">';
+		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('forums').style.display == 'block') {document.getElementById('forums').style.display = 'none';} else {document.getElementById('forums').style.display = 'block';}\"" . '><img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />'.get_lang('Forums').'</div>';
+		$return .= '<div class="lp_resource_elements" id="forums">';
 		
 		foreach($a_forums as $forum)
 		{
@@ -7751,7 +7813,7 @@ class learnpath {
 						}
 						</script>
 						';
-			$return .= '<img align="left" alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';
+			$return .= '<img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';
 			$return .= '<a style="cursor:hand" onclick="toggle_forum('.$forum['forum_id'].')" style="vertical-align:middle"><img src="'.api_get_path(WEB_IMG_PATH).'add.gif" id="forum_'.$forum['forum_id'].'_opener" align="absbottom" /></a>
 						<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . $forum['forum_title'] . '</a><ul style="display:none" id="forum_'.$forum['forum_id'].'_content">';
 			$a_threads = get_threads($forum['forum_id']);
@@ -7765,7 +7827,7 @@ class learnpath {
 		}
 		
 		$return .= '<div class="lp_resource_element">';
-		$return .= '<img align="left" alt="" src="../img/forum_new_small.gif" style="margin-right:5px;" title="" />';
+		$return .= '<img alt="" src="../img/forum_new_small.gif" style="margin-right:5px;" title="" />';
 		$return .= '<a href="'.api_get_path(REL_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&action=add&amp;content=forum" title="'.get_lang('CreateANewForum').'">'.get_lang('CreateANewForum').'</a>';
 		$return .= '</div>';
 		

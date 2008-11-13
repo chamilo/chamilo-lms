@@ -1,12 +1,10 @@
-<?php
+<?php // $Id: user.php 16739 2008-11-13 15:36:40Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -18,10 +16,10 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
 ==============================================================================
 */
+
 /**
 ==============================================================================
 *	This script displays a list of the users of the current course.
@@ -371,29 +369,35 @@ event_access_tool(TOOL_USER);
 --------------------------------------
 */
 $is_allowed_to_track = ($is_courseAdmin || $is_courseTutor) && $_configuration['tracking_enabled'];
-/*
 
 
-/*
------------------------------------------------------------
-	Introduction section
-	(editable by course admins)
------------------------------------------------------------
-*/
-Display::display_introduction_section(TOOL_USER, $is_allowed);
+
+// introduction section
+Display::display_introduction_section(TOOL_USER, 'left');
 
 if( api_is_allowed_to_edit())
 {
-	echo "<div align=\"right\">";
-	echo '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('excel.gif', get_lang('ExportAsCSV')).'&nbsp;'.get_lang('ExportAsCSV').'</a> | ';
-	echo '<a href="subscribe_user.php?'.api_get_cidreq().'">'.Display::return_icon('add_user_big.gif',get_lang("SubscribeUserToCourse")).'&nbsp;'.get_lang("SubscribeUserToCourse").'</a> | ';
-	echo "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('add_user_big.gif', get_lang("SubscribeUserToCourseAsTeacher"))."&nbsp;".get_lang("SubscribeUserToCourseAsTeacher")."</a> | ";
-	echo "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('edit_group.gif', get_lang("GroupUserManagement"))."&nbsp;".get_lang("GroupUserManagement")."</a>";
+	echo "<div class=\"actions\">";
+	
+	// the action links
+	$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'&nbsp;'.get_lang('ExportAsCSV').'</a> ';
+	$actions .= '<a href="subscribe_user.php?'.api_get_cidreq().'">'.Display::return_icon('add_user_big.gif',get_lang("SubscribeUserToCourse")).'&nbsp;'.get_lang("SubscribeUserToCourse").'</a> ';
+	$actions .= "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('add_user_big.gif', get_lang("SubscribeUserToCourseAsTeacher"))."&nbsp;".get_lang("SubscribeUserToCourseAsTeacher")."</a> ";
+	$actions .= "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('edit_group.gif', get_lang("GroupUserManagement"))."&nbsp;".get_lang("GroupUserManagement")."</a>";
 	if(api_get_setting('use_session_mode')=='false')
 	{
-		echo ' | <a href="class.php?'.api_get_cidreq().'">'.get_lang('Classes').'</a>';
+		$actions .= ' <a href="class.php?'.api_get_cidreq().'">'.get_lang('Classes').'</a>';
 	}
-	echo "</div>";
+		
+	// Build search-form
+	$form = new FormValidator('search_user', 'get','','',null,false);
+	$renderer = & $form->defaultRenderer();
+	$renderer->setElementTemplate('<span>{element}</span> ');
+	$form->add_textfield('keyword', '', false);
+	$form->addElement('submit', 'submit', get_lang('SearchButton'));
+	$form->addElement('static','additionalactions',null,$actions);
+	$form->display();
+	echo '</div>';
 }
 /*
 if (1) // platform setting api_get_setting('subscribe_user_by_coach')
@@ -668,15 +672,6 @@ $table->set_column_filter($header_nr-1,'modify_filter');
 	$table->set_form_actions(array ('unsubscribe' => get_lang('Unreg')), 'user');
 }
 
-// Build search-form
-
-$form = new FormValidator('search_user', 'get','','',null,false);
-$renderer = & $form->defaultRenderer();
-$renderer->setElementTemplate('<span>{element}</span> ');
-$form->add_textfield('keyword', '', false);
-$form->addElement('submit', 'submit', get_lang('SearchButton'));
-$form->display();
-echo '<br />';
 $table->display();
 
 if ( !empty($_GET['keyword']) && !empty($_GET['submit']) )

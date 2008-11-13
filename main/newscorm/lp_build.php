@@ -1,28 +1,26 @@
-<?php
+<?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
-	Copyright (c) 2004 Dokeos S.A.
+
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Patrick Cool
-	Copyright (c) Denes Nagy
-	Copyright (c) Yannick Warnier
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
+==============================================================================
 */
+
+
 /**
 ============================================================================== 
 * This is a learning path creation and player tool in Dokeos - previously learnpath_handler.php
@@ -191,25 +189,31 @@ function confirmation(name)
 	DISPLAY SECTION
 -----------------------------------------------------------
 */
+echo '<div class="actions">';
+echo '<span>'.Display::return_icon('learnpath_build.gif').' '.get_lang('Build').'</span>';
+echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.Display::return_icon('learnpath_organize.gif').' '.get_lang("BasicOverview").'</a>';
+echo '<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.Display::return_icon('learnpath_view.gif').' '.get_lang("Display").'</a>';
+echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'"><img alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';
+echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewStep").'"><img alt="'.get_lang("NewStep").'" src="../img/lp_dokeos_step_add.png" title="'.get_lang("NewStep").'" />'.get_lang("NewStep").'</a>';
+echo '</div>';
+
 echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 
 	echo '<tr>';
 			
 		echo '<td class="tree">';
 		
-			echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;">'.get_lang("Build").'&nbsp;&#124;&nbsp;<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("BasicOverview").'</a>&nbsp;&#124;&nbsp;<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.get_lang("Display").'</a></p>';
-			
 			//links for adding a module, chapter or step
 			echo '<div class="lp_actions">';
 				
 				echo '<p class="lp_action">';
 				
-					echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'"><img align="left" alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';
+					
 						
 				echo '</p>';
 				echo '<p class="lp_action">';
 				
-					echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewStep").'"><img align="left" alt="'.get_lang("NewStep").'" src="../img/lp_dokeos_step_add.png" title="'.get_lang("NewStep").'" />'.get_lang("NewStep").'</a>';
+					
 				
 				echo '</p>';
 				
@@ -227,7 +231,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 		
 			if(isset($is_success) && $is_success === true)
 			{
-				echo '<div class="lp_message" style="margin:3px 10px;">';
+				echo '<div class="confirmation-message">';
 			
 					echo get_lang("ItemRemoved");
 			
@@ -237,7 +241,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 			{
 				if($is_new)
 				{
-					echo '<div class="lp_message" style="margin:3px 10px;">';
+					echo '<div class="confirmation-message">';
 				
 						echo get_lang("LearnPathAdded");
 				
@@ -245,10 +249,10 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				}
 				
 				if($is_new){
-					echo '<p style="font-weight:bold; text-align:center;">'.get_lang("LPCreatedToContinue").'</p>';
+					Display::display_normal_message(get_lang("LPCreatedToContinue"));
 				}
 				else{
-					echo '<p style="font-weight:bold; text-align:center;">'.get_lang("LPCreatedAddChapterStep").'</p>';
+					Display::display_normal_message(get_lang('LPCreatedAddChapterStep'));
 				}
 								
 			}

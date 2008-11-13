@@ -1,9 +1,10 @@
-<?php
+<?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -15,10 +16,10 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
 ==============================================================================
 */
+
 /**
 *	@package dokeos.studentpublications
 * 	@author Thomas, Hugues, Christophe - original version
@@ -41,7 +42,7 @@ require_once('../inc/lib/fileDisplay.lib.php');
 
 function display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form)
 {
-	$display_output = "";
+	$display_output = '<div class="actions">';
 	if(strlen($cur_dir_path) > 0 && $cur_dir_path != '/')
 	{
 		$parent_dir = dirname($cur_dir_path);
@@ -70,6 +71,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	{
 		echo $display_output;
 	}
+	echo '</div>';
 }
 
 /**

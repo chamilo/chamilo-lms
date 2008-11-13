@@ -1,9 +1,10 @@
-<?php
+<?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -15,8 +16,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
 ==============================================================================
 */
 
@@ -173,6 +173,7 @@ if($_user['status']==DRH)
 	$menu_items[] = '<a href="'.api_get_self().'?view=drh">'.get_lang('DrhInterface').'</a>';
 }
 
+echo '<div class="actions">';
 $nb_menu_items = count($menu_items);
 if($nb_menu_items>1)
 {
@@ -184,14 +185,13 @@ if($nb_menu_items>1)
 			echo ' | ';
 		}
 	}
-	echo '<br />';
 }
-echo '<div align="left" style="float:left"><h4>'.$title.'</h4></div>
-	  <div align="right">
+echo '
 		<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-		<a href="'.api_get_self().'?export=csv&amp;view='.$view.'&amp;display='.Security::remove_XSS($_GET['display']).'">'.'<img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
-	  </div>
-	  <div class="clear"></div>';
+		<a href="'.api_get_self().'?export=csv&view='.$view.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+';
+echo '</div>';
+echo '<h4>'.$title.'</h4>';
 
 if($_user['status']==DRH && $view=='drh')
 {
@@ -742,11 +742,7 @@ if($export_csv)
 	Export :: export_table_csv($csv_content, 'reporting_index');
 }
  
-/*
-==============================================================================
-FOOTER
-==============================================================================
-*/
+//footer
 if(!$export_csv)
 {
 	Display::display_footer();

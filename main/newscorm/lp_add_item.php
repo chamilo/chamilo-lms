@@ -1,29 +1,26 @@
-<?php
+<?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Patrick Cool
-	Copyright (c) Denes Nagy
-	Copyright (c) Yannick Warnier
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-============================================================================== 
+
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
+==============================================================================
 */
+
+
 /**
 ============================================================================== 
 * This is a learning path creation and player tool in Dokeos - previously 
@@ -206,28 +203,21 @@ function confirmation(name)
 	DISPLAY SECTION
 -----------------------------------------------------------
 */
+echo '<div class="actions">';
+echo '<span>'.Display::return_icon('learnpath_build.gif').' '.get_lang('Build').'</span>';
+echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.Display::return_icon('learnpath_build.gif').' '.get_lang("BasicOverview").'</a>';
+echo '<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.Display::return_icon('learnpath_organize.gif').' '.get_lang('Display').'</a>';
+echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'"><img alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';
+echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewStep").'"><img alt="'.get_lang("NewStep").'" src="../img/lp_dokeos_step_add.png" title="'.get_lang("NewStep").'" />'.get_lang("NewStep").'</a>';
+echo '</div>';
+
 echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 
 	echo '<tr>';
 			
 		echo '<td class="tree">';
 		
-			echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;">'.get_lang("Build").'&nbsp;&#124;&nbsp;<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("BasicOverview").'</a>&nbsp;&#124;&nbsp;<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.get_lang("Display").'</a></p>';
-			
-			//links for adding a module, chapter or step
-			echo '<div class="lp_actions">';				
-				echo '<p class="lp_action">';				
-					echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'"><img align="left" alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';						
-				echo '</p>';
-				echo '<p class="lp_action">';
-				
-					echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewStep").'"><img align="left" alt="'.get_lang("NewStep").'" src="../img/lp_dokeos_step_add.png" title="'.get_lang("NewStep").'" />'.get_lang("NewStep").'</a>';
-				
-				echo '</p>';
-				
-			echo '</div>';
-			
-			echo '<div class="lp_tree" style="height:250px">';					
+			echo '<div class="lp_tree">';					
 				//build the tree with the menu items in it
 				echo $_SESSION['oLP']->build_tree();			
 			echo '</div>';
@@ -235,8 +225,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 			// show the template list 
 			if ($_GET['type']=='document')
 			{
-				echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>'; //line					
-				echo '<br>';			
+				echo '<br />';			
 				echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
 			}
 							
@@ -253,7 +242,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 						
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
 						
-						echo '<div class="lp_message" style="margin:3px 10px;">';
+						echo '<div class="confirmation-message">';
 						
 							echo get_lang("NewChapterCreated");
 						
@@ -265,7 +254,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 						
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
 						
-						echo '<div class="lp_message" style="margin:3px 10px;">';
+						echo '<div class="confirmation-message">';
 						
 							echo get_lang("NewLinksCreated");
 						
@@ -277,7 +266,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 						
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
 						
-						echo '<div class="lp_message" style="margin:3px 10px;">';
+						echo '<div class="confirmation-message">';
 						
 							echo get_lang("NewStudentPublicationCreated");
 						
@@ -289,7 +278,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 						
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
 						
-						echo '<div class="lp_message" style="margin:3px 10px;">';
+						echo '<div class="confirmation-message">';
 						
 							echo get_lang("NewModuleCreated");
 						
@@ -301,7 +290,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 					
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
 						
-						echo '<div class="lp_message" style="margin:3px 10px;">';
+						echo '<div class="confirmation-message">';
 						
 							echo get_lang("NewExerciseCreated");
 						
@@ -312,7 +301,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 					
 					case TOOL_DOCUMENT:
 						
-						$msg = '<div class="lp_message" style="margin-bottom:10px;">';
+						$msg = '<div class="confirmation-message">';
 						
 							$msg .= get_lang("NewDocumentCreated");
 						
@@ -326,7 +315,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 					case TOOL_FORUM:
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
 						
-						echo '<div class="lp_message" style="margin:3px 10px;">';
+						echo '<div class="confirmation-message">';
 						
 							echo get_lang("NewForumCreated");
 						
@@ -338,7 +327,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 					case 'thread':
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
 						
-						echo '<div class="lp_message" style="margin:3px 10px;">';
+						echo '<div class="confirmation-message">';
 						
 							echo get_lang("NewThreadCreated");
 						

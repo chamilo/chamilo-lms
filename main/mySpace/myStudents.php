@@ -1,10 +1,10 @@
-<?php //$Id: myStudents.php 16554 2008-10-17 08:29:59Z elixir_inter $
+<?php // $Id: myStudents.php 16739 2008-11-13 15:36:40Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006-2008 Dokeos SPRL
-	Copyright (c) 2006-2008 Elixir Interactive http://www.elixir-interactive.com
+	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -16,8 +16,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
+	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
 ==============================================================================
 */
  
@@ -200,9 +199,9 @@ if(!empty($_GET['student']))
 	
 	$a_infosUser['name'] = $a_infosUser['firstname'].' '.$a_infosUser['lastname'];
 	
-	echo '<div align="right">
-		<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-		<a href="'.api_get_self().'?'.$_SERVER['QUERY_STRING'].'&export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+	echo '<div class="actions">
+		<a href="#" onclick="window.print()"><img src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
+		<a href="'.api_get_self().'?'.$_SERVER['QUERY_STRING'].'&export=csv"><img src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
 	  </div>';
 	  
 	  
@@ -285,9 +284,6 @@ if(!empty($_GET['student']))
 	
 ?>
 	<a name="infosStudent"></a>
-	<table class="data_table">
-		<tr>
-			<td class="border">
 				<table width="100%" border="0" >
 					<tr>
 						
@@ -298,15 +294,16 @@ if(!empty($_GET['student']))
 								echo '</td>';
 							?>
 						
-						<td class="none" width="40%" valign="top">
-							<table width="100%">
+			<td width="40%" valign="top">
+			
+				<table width="100%" class="data_table">
 								<tr>
 									<th>
 										<?php echo get_lang('Informations'); ?>
 									</th>
 								</tr>
 								<tr>
-									<td class="none">
+						<td>
 										<?php 
 											echo get_lang('Name').' : ';
 											echo $a_infosUser['name']; 
@@ -314,7 +311,7 @@ if(!empty($_GET['student']))
 									</td>
 								</tr>
 								<tr>
-									<td class="none">
+						<td>
 										<?php
 											echo get_lang('Email').' : ';
 											if(!empty($a_infosUser['email']))
@@ -329,7 +326,7 @@ if(!empty($_GET['student']))
 									</td>
 								</tr>
 								<tr>
-									<td class="none">
+						<td>
 										<?php
 											echo get_lang('Tel').'. ';
 											
@@ -345,7 +342,7 @@ if(!empty($_GET['student']))
 									</td>
 								</tr>
 								<tr>
-									<td class="none">
+						<td>
 										<?php
 											echo get_lang('OfficialCode').' : ';
 											
@@ -361,7 +358,7 @@ if(!empty($_GET['student']))
 									</td>
 								</tr>
 								<tr>
-									<td class="none">
+						<td>
 										<?php
 											echo get_lang('OnLine').' : ';
 											echo $online;
@@ -371,69 +368,65 @@ if(!empty($_GET['student']))
 							</table>
 						</td>
 						<td class="borderLeft" width="35%" valign="top">
-							<table width="100%">
+				
+				<table width="100%" class="data_table">
 								<tr>
-									<th>
+						<th colspan="2">
 										<?php echo get_lang('Tracking'); ?>
 									</th>
 								</tr>
 								<tr>
-									<td>
-										<table>
-											<tr>
-												<td class="none" align="right">
+						<td align="right">
 													<?php echo get_lang('FirstLogin') ?>
 												</td>
-												<td class="none" align="left">
+						<td align="left">
 													<?php echo $first_connection_date ?>
 												</td>
 											</tr>
 											<tr>
-												<td class="none" align="right">
+						<td align="right">
 													<?php echo get_lang('LatestLogin') ?>
 												</td>
-												<td class="none" align="left">
+						<td align="left">
 													<?php echo $last_connection_date ?>
 												</td>
 											</tr>
 											<tr>
-												<td class="none" align="right">
+						<td align="right">
 													<?php echo get_lang('TimeSpentOnThePlatform') ?>
 												</td>
-												<td class="none" align="left">
+						<td align="left">
 													<?php echo $time_spent_on_the_platform ?>
 												</td>
 											</tr>
 											<tr>
-												<td class="none" align="right">
+						<td align="right">
 													<?php echo get_lang('Progress') ?>
 												</td>
-												<td class="none" align="left">
+						<td align="left">
 													<?php echo $avg_student_progress.' %' ?>
 												</td>
 											</tr>
 											<tr>
-												<td class="none" align="right">
+						<td align="right">
 													<?php 
 													echo get_lang('Score');
 													Display :: display_icon('info2.gif',get_lang('ScormAndLPTestTotalAverage') , array ('style' => 'margin-bottom:-5px;'));
 													?>
 												</td>
-												<td class="none" align="left">
+						<td align="left">
 													<?php  echo $avg_student_score.' %' ?>
 												</td>
 											</tr>
 										</table>
 									</td>
-								</tr>
-							</table>
-						</td>
 					<?php
 							$sendMail = Display::encrypted_mailto_link($a_infosUser['email'], ' '.get_lang('SendMail'));
-						
 					?>
 						<td class="borderLeft" width="15%" valign="top">
-							<table width="100%">
+				
+						
+				<table width="100%" class="data_table">
 								<tr>
 									<th>
 										<?php echo get_lang('Actions'); ?>
@@ -445,13 +438,13 @@ if(!empty($_GET['student']))
 											if(!empty($a_infosUser['email']))
 											{
 												echo "<td class='none'>";
-												echo '<img align="absbottom" src="../img/send_mail.gif">&nbsp;'.$sendMail;
+									echo '<img src="../img/send_mail.gif">&nbsp;'.$sendMail;
 												echo "</td>";
 											}
 											else
 											{
 												echo "<td class='noLink none'>";
-												echo '<img align="absbottom" src="../img/send_mail.gif">&nbsp; <strong> > '.get_lang('SendMail').'</strong>';
+									echo '<img src="../img/send_mail.gif">&nbsp; <strong> > '.get_lang('SendMail').'</strong>';
 												echo "</td>";
 											}
 										?>
@@ -462,7 +455,7 @@ if(!empty($_GET['student']))
                                             {   //only show link to connection details if course and student were defined in the URL
                                                 echo '<tr>';
                                                 echo '<td class="noLink none">';
-                                                echo '<img align="absbottom" src="../img/statistics.gif">&nbsp; <strong> <a href="access_details.php?student='.$_GET['student'].'&course='.$_GET['course'].'">'.get_lang('AccessDetails').'</a> </strong>';
+							echo '<img src="../img/statistics.gif">&nbsp; <strong> <a href="access_details.php?student='.$_GET['student'].'&course='.$_GET['course'].'">'.get_lang('AccessDetails').'</a> </strong>';
                                                 echo '</td>';
                                                 echo '</tr>';
                                             }
@@ -471,9 +464,7 @@ if(!empty($_GET['student']))
 						</td>
 					</tr>
 				</table>
-			</td>
-		</tr>
-	</table>
+
 	<table class="data_table">
 		<tr>
 			<td colspan="5" style="border-width: 0px;">&nbsp;</td>
@@ -552,13 +543,14 @@ if(!empty($_GET['student']))
 				$csv_content[] = array(str_replace('&nbsp;','',$tableTitle));	
 				
 ?>
-		<tr class="tableName">
+		<tr>
 			<td colspan="6">
 					<strong><?php echo $tableTitle; ?></strong>
 			</td>
 		</tr>
-		<tr> <!-- line about learnpaths -->
-			<td>
+	</table>
+		
+	<!-- line about learnpaths -->
 				<table class="data_table">
 					<tr>
 						<th>
@@ -568,15 +560,14 @@ if(!empty($_GET['student']))
 							<?php echo get_lang('Time'); ?>
 						</th>
 						<th>
-							<?php echo get_lang('Progress'); ?>
-						</th>
-						<th>
 							<?php 
 							echo get_lang('Score');
 							Display :: display_icon('info3.gif',get_lang('LPTestScore') , array ('style' => 'margin-bottom:-5px;')); 
 							?>
 						</th>
-						
+						<th>
+							<?php echo get_lang('Progress'); ?>
+						</th>
 						<th>
 							<?php echo get_lang('LastConnexion'); ?>
 						</th>
@@ -776,13 +767,11 @@ if(!empty($_GET['student']))
 						<?php echo api_time_to_hms($total_time) ?>
 						</td>
 						<td align="right">
+							<?php echo $total_weighting>0 ? $score.'%' : '-' ?>
+						</td>
+						<td align="right">
 							<?php echo $progress ?>
 						</td>
-						
-						<td align="right">
-							<?php echo ($total_weighting>0 && $progress!='0%') ? $score.'%' : '-' ?>
-						</td>
-						
 						<td align="center">
 							<?php if($start_time!='' && $start_time>0) echo format_locale_date(get_lang('DateFormatLongWithoutDay'),$start_time); else echo '-'; ?>
 						</td>
@@ -818,10 +807,8 @@ if(!empty($_GET['student']))
 				}
 ?>
 				</table>
-			</td>
-		</tr>
-		<tr> <!-- line about exercises -->
-			<td>
+
+	<!-- line about exercises -->
 			<table class="data_table">
 				<tr>
 					<th>
@@ -854,7 +841,6 @@ if(!empty($_GET['student']))
 									FROM ".$t_quiz." AS quiz
 									WHERE active='1' ORDER BY quiz.title ASC
 									";
-		
 				$resultExercices = api_sql_query($sqlExercices,__FILE__,__LINE__);
 				$i = 0;
 				if(Database::num_rows($resultExercices)>0)
@@ -876,7 +862,6 @@ if(!empty($_GET['student']))
 									 AND exe_cours_id = '".$a_infosCours['code']."'
 									 AND exe_exo_id = ".$a_exercices['id']."
 									 ORDER BY exe_date DESC LIMIT 1";
-	
 						$resultScore = api_sql_query($sqlScore,__FILE__,__LINE__);
 						$score = 0; 
 						while($a_score = Database::fetch_array($resultScore))
@@ -904,9 +889,9 @@ if(!empty($_GET['student']))
 						
 						$i++;
 						
-						echo "<tr class='$s_css_class'>
+				echo '<tr class="'.$s_css_class.'">
 								<td>
-							 ";
+					 ';
 						echo 		$a_exercices['title'];
 						echo "	</td>
 							 ";
@@ -963,11 +948,11 @@ if(!empty($_GET['student']))
 					
 ?>					
 					</table>
-				</td>
-			</tr>
-		<tr><!-- line about other tools -->
-			<td>
+
+	<!-- line about other tools -->
 			<table class="data_table">
+	<tr>
+		<td>
 			<?php
 			$csv_content[] = array();
 			

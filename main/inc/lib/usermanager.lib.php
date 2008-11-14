@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 16444 2008-10-06 18:14:14Z juliomontoya $
+<?php // $Id: usermanager.lib.php 16749 2008-11-14 20:51:36Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -532,11 +532,12 @@ class UserManager
 		}
 				
 		$path = trim($user['picture_uri']);
+		error_log('Path is '.$path);
 		
 		if (empty($path)) 
-		{			
-			if ($anonymous) 
-			{			
+		{
+			if ($anonymous)
+			{
 				switch($type)
 				{
 					case 'system': //return the complete path to the file, from root
@@ -571,10 +572,7 @@ class UserManager
 				$first = substr(''.$user_id,0,1).'/';
 			}
 		}
-		else
-		{
-			$first = $user_id.'/';
-		}
+		$first .= $user_id.'/';
 				
 		switch($type)
 		{
@@ -591,6 +589,7 @@ class UserManager
 			default:
 				break;
 		}
+		error_log('User image path is '.$dir,0);
 		return array('dir'=>$dir,'file'=>$path);
 	}
 

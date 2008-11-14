@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 16726 2008-11-12 15:44:48Z pcool $
+<?php // $Id: exercice.php 16747 2008-11-14 14:54:50Z elixir_inter $
  
 /*
 ==============================================================================
@@ -169,7 +169,36 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 
 			$totquery = "update $TBL_TRACK_EXERCICES set exe_result = '".Database::escape_string($tot)."' where exe_Id='".Database::escape_string($id)."'";
 			api_sql_query($totquery, __FILE__, __LINE__);
-
+			
+			// if this quiz is integrated in lps, we need to update the score in lp_view_item table
+			
+			// at first we need to get the id of the quiz
+			$sql = 'SELECT exe_exo_id FROM '.$TBL_TRACK_EXERCICES.' WHERE exe_id='.intval($id);
+			$rs = api_sql_query($sql,__FILE__,__LINE__);
+			$exercise_id_to_update = intval(Database::result($rs,0,0));
+			
+			//then we need to get items where this quiz is integrated
+			$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+			$sql = 'SELECT * FROM '.$tbl_lp_item.' WHERE item_type="quiz" AND path='.$exercise_id_to_update;
+			$rs_items = api_sql_query($sql,__FILE__,__LINE__);
+			while($lp_item = Database::fetch_array($rs_items))
+			{
+				$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
+				
+				//we need to get last lp_view id of the user
+				$sql = 'SELECT id FROM '.$tbl_lp_view.' WHERE lp_id='.intval($lp_item['lp_id']).' AND user_id='.api_get_user_id().' ORDER BY view_count DESC LIMIT 1';
+				$rs_view = api_sql_query($sql,__FILE__,__LINE__);
+				if($view_id = Database::result($rs_view,0,'id'))
+				{
+					// then we can update the score of the lp_view_item row
+					$tbl_lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+					$sql = 'UPDATE '.$tbl_lp_item_view.' SET score='.intval($tot).' WHERE lp_view_id='.intval($view_id).' AND lp_item_id='.intval($lp_item['id']);
+					api_sql_query($sql, __FILE__, __LINE__);
+				} 
+				
+			}			
+			
+			// select the items where this quiz is integrated
 		}
 		else
 		{

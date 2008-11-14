@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 16725 2008-11-12 15:43:21Z pcool $
+<?php // $Id: document.inc.php 16752 2008-11-14 22:07:56Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -83,7 +83,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 	}
 	
 	//group documents cannot be uploaded in the root
-	if($group_dir=='')
+	if(empty($group_dir))
 	{
 		$parent_select -> addOption(get_lang('HomeDirectory'),'/');
 		if(is_array($folders))

@@ -1,4 +1,4 @@
-<?php // $Id: userInfo.php 16739 2008-11-13 15:36:40Z pcool $
+<?php // $Id: userInfo.php 16753 2008-11-14 22:27:04Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -88,7 +88,10 @@ api_display_tool_title(get_lang("Users"));
  *	$currentCourseID
  */
 
-$userIdViewed = $uInfo; // Id of the user we want to view coming from the user.php
+//$userIdViewed = $uInfo; // Id of the user we want to view coming from the user.php
+
+//get information about one user 
+$userIdViewed = Security::remove_XSS($_REQUEST['uInfo']);
 
 /*
 -----------------------------------------------------------
@@ -177,9 +180,13 @@ if ($allowedToEditDef)
 	}
 	elseif (!empty($_REQUEST['submitMainUserInfo']))
 	{	
+		/*
 		if (isset ($_REQUEST['submitMainUserInfo']))
 		{
+		*/
 			$userIdViewed = strval(intval($_REQUEST['submitMainUserInfo']));
+			
+			/*
 			//is teacher		
 			$promoteCourseAdmin=$_REQUEST['promoteCourseAdmin'];			
 			$userProperties['status'] = 5; 	
@@ -207,11 +214,27 @@ if ($allowedToEditDef)
 				$role=$_REQUEST['role'];	 
 				$userProperties['role'] = $role;
 			}	  		
+			*/
+			
+			//get information about one user - task #3009  
+      
+			if(!empty($_POST['promoteCourseAdmin']) && $_POST['promoteCourseAdmin']){
+				$userProperties['status'] = 1;
+			}else{
+				$userProperties['status'] = 5;
+			}		
+				
+			if(!empty($_POST['promoteTutor']) && $_POST['promoteTutor']){
+				$userProperties['tutor'] = 1;
+			}else{
+				$userProperties['tutor'] = 0;
+			}
+			
+			$userProperties['role'] = $_POST['role']; 
 				  
 			update_user_course_properties($userIdViewed, $courseCode, $userProperties);
 			
 			$displayMode = "viewContentList";
-		}	
 	}
 }
 

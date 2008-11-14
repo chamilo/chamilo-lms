@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 16694 2008-11-07 16:53:10Z dperales $
+* 	@version $Id: exercise_result.php 16751 2008-11-14 21:41:05Z juliomontoya $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -1081,7 +1081,8 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 if($_configuration['tracking_enabled'])
 {
 	//	Updates the empty exercise  
-	update_event_exercice($exeId, $objExercise->selectId(),$totalScore,$totalWeighting,$answer,$question_id);
+	//update_event_exercice($exeId, $objExercise->selectId(),$totalScore,$totalWeighting,$answer,$question_id);
+	update_event_exercice($exeId, $objExercise->selectId(),$totalScore,$totalWeighting,api_get_session_id());
 }
 
 if($objExercise->results_disabled)

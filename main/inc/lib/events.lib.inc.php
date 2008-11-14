@@ -1,4 +1,4 @@
-<?php // $Id: events.lib.inc.php 16694 2008-11-07 16:53:10Z dperales $
+<?php // $Id: events.lib.inc.php 16751 2008-11-14 21:41:05Z juliomontoya $
 /* See license terms in /dokeos_license.txt */
 /**
 ============================================================================== 
@@ -417,11 +417,12 @@ function event_link($link_id)
  * @param exo_id ( id in courseDb exercices table )
  * @param result ( score @ exercice )
  * @param weighting ( higher score )
+ * @param session_id 
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @author Julio Montoya <gugli100@gmail.com>
  * @desc Record result of user when an exercice was done
 */
-function update_event_exercice($exeid,$exo_id, $score, $weighting)
+function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id)
 {
 	if ($exeid!='')
 	{
@@ -431,6 +432,7 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting)
 				   exe_exo_id 	= 	'".$exo_id."',
 				   exe_result	=	  '".$score."',
 				   exe_weighting = '".$weighting."',
+				   session_id		= '".$session_id."',
 				   exe_date= FROM_UNIXTIME(".$reallyNow."),status = '', data_tracking=''
 				 WHERE exe_id = '".$exeid."'";	
 		$res = @api_sql_query($sql,__FILE__,__LINE__);

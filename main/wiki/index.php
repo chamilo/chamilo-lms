@@ -109,10 +109,9 @@ if ($_SESSION['_gid'] OR $_GET['group_id'])
 	}
 	elseif ($group_properties['wiki_state']==2)
 	{
-
-		if (!api_is_allowed_to_edit() and !GroupManager :: is_user_in_group($_user['user_id']))	
+ 		if (!api_is_allowed_to_edit() and !GroupManager :: is_user_in_group($_user['user_id'], $_SESSION['_gid']))	
 		{
-			echo api_not_allowed();
+			echo api_not_allowed();	
 		}
 	}	
 	

@@ -2172,10 +2172,7 @@ function save_wiki()
 	$_clean['user_id']=(int)Database::escape_string(api_get_user_id());
 	$_clean['assignment']=Database::escape_string($_POST['assignment']);
     $_clean['comment']=Database::escape_string($_POST['comment']);	
-    $_clean['progress']=Database::escape_string($_POST['progress']);
-	$_clean['startdate_assig']=Database::escape_string($_POST['startdate_assig']);
-    $_clean['enddate_assig']=Database::escape_string($_POST['enddate_assig']);
-	$_clean['delayedsubmit']=Database::escape_string($_POST['delayedsubmit']);		
+    $_clean['progress']=Database::escape_string($_POST['progress']);	
 	$_clean['version']=Database::escape_string($_POST['version'])+1;	
 	$_clean['linksto'] = links_to($_clean['content']); //and check links content	
 	$dtime = date( "Y-m-d H:i:s" );
@@ -2189,7 +2186,7 @@ function save_wiki()
  	   	$_clean['group_id']=Database::escape_string($_GET['group_id']);
     }
 	
-	$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
+	$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
 	
 	$result=api_sql_query($sql);	
     $Id = Database::insert_id();		
@@ -2274,10 +2271,7 @@ function save_new_wiki()
 	}	
 
 	$_clean['comment']=Database::escape_string($_POST['comment']);
-	$_clean['progress']=Database::escape_string($_POST['progress']);	
-	$_clean['startdate_assig']=Database::escape_string($_POST['startdate_assig']);
-	$_clean['enddate_assig']=Database::escape_string($_POST['enddate_assig']);
-	$_clean['delayedsubmit']=Database::escape_string($_POST['delayedsubmit']);		
+	$_clean['progress']=Database::escape_string($_POST['progress']);
 	$_clean['version']=1;
 		
 	if (isset($_SESSION['_gid']))
@@ -2311,7 +2305,7 @@ function save_new_wiki()
 		{ 	
 			$dtime = date( "Y-m-d H:i:s" );
 			 
-			$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, startdate_assig, enddate_assig, delayedsubmit, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
+			$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
 			   
 		   $result=api_sql_query($sql,__LINE__,__FILE__);
 		   $Id = Database::insert_id();	

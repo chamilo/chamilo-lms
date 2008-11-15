@@ -854,6 +854,7 @@ function update_Db_course($courseDbName)
 	
 	$sql = "CREATE TABLE `".$TABLETOOLWIKI . "` (
 		id int NOT NULL auto_increment,
+		id_page int NOT NULL default 0,
 		reflink varchar(250) NOT NULL default 'index',
 		title text NOT NULL,
 		content text NOT NULL,
@@ -866,10 +867,7 @@ function update_Db_course($courseDbName)
 		addlock_disc int NOT NULL default 1,
 		visibility_disc int NOT NULL default 1,
 		ratinglock_disc int NOT NULL default 1,	
-		assignment int NOT NULL default 0,	
-		startdate_assig datetime NOT NULL default '0000-00-00 00:00:00',
-		enddate_assig datetime  NOT NULL default '0000-00-00 00:00:00',
-		delayedsubmit int NOT NULL default 0,
+		assignment int NOT NULL default 0,		
 		comment text NOT NULL,
 		progress text NOT NULL,
 		score int NULL default 0,
@@ -884,13 +882,16 @@ function update_Db_course($courseDbName)
 		
 	//
 	$sql = "CREATE TABLE `".$TABLEWIKICONF . "` (
-		id int NOT NULL auto_increment,		
+		id int NOT NULL auto_increment,
+		page_id int NOT NULL default 0,		
 		feedback1 text NOT NULL,
 		feedback2 text NOT NULL,
 		feedback3 text NOT NULL,
 		max_size int default NULL,
 		max_text int default NULL,
-		allow_attachments int default NULL,
+		startdate_assig datetime NOT NULL default '0000-00-00 00:00:00',
+		enddate_assig datetime  NOT NULL default '0000-00-00 00:00:00',
+		delayedsubmit int NOT NULL default 0,
 		PRIMARY KEY (id)
 		)";	
 	api_sql_query($sql, __FILE__, __LINE__);

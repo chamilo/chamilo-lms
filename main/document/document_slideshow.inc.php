@@ -1,9 +1,9 @@
-<?php // $Id: document_slideshow.inc.php 15178 2008-04-29 18:35:20Z yannoo $
+<?php // $Id: document_slideshow.inc.php 16755 2008-11-15 19:50:44Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
@@ -17,23 +17,10 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
-==============================================================================
-Developped by Patrick Cool
-patrick.cool@UGent.be
-Ghent University
-Mai 2004
-http://icto.UGent.be
-
-Please bear in mind that this is only an alpha release. 
-I wrote this quite quick and didn't think too much about it in advance. 
-It is not perfect at all but it is workable and usefull (I think)
-Do not consider this as a powerpoint replacement, although it has
-the same starting point. 
-
 *	This is a plugin for the documents tool. It looks for .jpg, .jpeg, .gif, .png
 *	files (since these are the files that can be viewed in a browser) and creates
 *	a slideshow with it by allowing to go to the next/previous image.
@@ -86,10 +73,6 @@ if(count($array_to_search) > 0) {
 }
 
 
-// storing the extension of all the documents in an array 
-// and checking if there is a .jpg, .jpeg, .gif or .png file
-// if this is the case a slideshow can be made. 
-$all_extensions=array(); 
 $image_present=0;
 
 if ( count($all_files) > 0 )
@@ -98,7 +81,6 @@ if ( count($all_files) > 0 )
 	{
 		$slideshow_extension=strrchr($file,"."); 
 		$slideshow_extension=strtolower($slideshow_extension); 
-		$all_extensions[]=$slideshow_extension;
 		if (in_array($slideshow_extension,$accepted_extensions))
 		{
 			$image_present=1;
@@ -127,6 +109,7 @@ function sort_files($table){
 	foreach($table as $file_array){
 		if($file_array['filetype']=='file'){
 			$slideshow_extension=strrchr($file_array['path'],".");
+            $slideshow_extension=strtolower($slideshow_extension);
 			if (in_array($slideshow_extension,$accepted_extensions))
 			{
 				$temp[] = array('file', basename($file_array['path']), $file_array['size'], $file_array['insert_date']);

@@ -56,6 +56,11 @@ Perl:  '/regexp/x'  where x == option ( x = i:ignore case , x = s: DOT gets \n a
 ========================END OF INITIAL COMMENTS=================================
 */
 
+//Juan Carlos Raña. Solve the conflict with a external library fpdf.php. For example when is loaded by the package of XAMP PEAR. Use the built in Dokeos, not the external, because the file that contains Dokeos was amended
+$configurationPearPath = $configuration['root_sys'].'/main/plugin/html2fpdf';
+ini_set('include_path', $configurationPearPath);
+//
+
 define('HTML2FPDF_VERSION','3.0(beta)');
 if (!defined('RELATIVE_PATH')) define('RELATIVE_PATH','');
 if (!defined('FPDF_FONTPATH')) define('FPDF_FONTPATH','font/');

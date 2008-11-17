@@ -1,101 +1,79 @@
-<?php // $Id: myStudents.php 16739 2008-11-13 15:36:40Z pcool $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php //$Id: myStudents.php 16769 2008-11-17 22:19:30Z yannoo $
+/* For licensing terms, see /dokeos_license.txt */
+/**
+ * Implements the tracking of students in the Reporting pages
+ * @package dokeos.mySpace
+ */
  
  // name of the language file that needs to be included 
 $language_file = array ('registration', 'index', 'tracking', 'exercice','admin');
 $cidReset=true;
-include ('../inc/global.inc.php');
+require '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
+require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once '../newscorm/learnpath.class.php';
 
-include_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'export.lib.inc.php');
-include_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'course.lib.php');
-include_once('../newscorm/learnpath.class.php');
- 
- 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-if($export_csv)
-{
+
+if ($export_csv) {
 	ob_start();
 }
 $csv_content = array();
+
+$this_section = "session_my_space";
+
+$nameTools=get_lang("StudentDetails");
+//$nameTools=SECTION_PLATFORM_ADMIN;
  
- $this_section = "session_my_space";
  
- $nameTools=get_lang("StudentDetails");
- 
- 
- 
- if(isset($_GET['details']))
- {
- 	if(!empty($_GET['origin']) && $_GET['origin'] == 'user_course')
- 	{
+if (isset($_GET['details'])) {
+ 	if (!empty($_GET['origin']) && $_GET['origin'] == 'user_course') {
  		$course_infos = CourseManager :: get_course_information($_GET['course']);
- 		if(empty($cidReq))
+ 		if (empty($cidReq)) {
  			$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_infos['directory'], 'name' => $course_infos['title']);
+ 		}
  		$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".$_GET['course'], "name" => get_lang("Users"));
- 	}
- 	else if(!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course')
- 	{
+ 	} else if (!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
  		$course_infos = CourseManager :: get_course_information($_GET['course']);
- 		if(empty($cidReq))
+ 		if (empty($cidReq)) {
  			$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_infos['directory'], 'name' => $course_infos['title']);
+ 		}
  		$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$_GET['course'].'&studentlist=true&id_session='.(empty($_SESSION['id_session'])?'':$_SESSION['id_session']), "name" => get_lang("Tracking"));
- 	}
- 	else
- 	{
+ 	} else if (!empty($_GET['origin']) && $_GET['origin'] == 'resume_session') {
+		$interbreadcrumb[]=array('url' => '../admin/index.php',"name" => get_lang('PlatformAdmin'));
+		$interbreadcrumb[]=array('url' => "../admin/session_list.php","name" => get_lang('SessionList'));
+		$interbreadcrumb[]=array('url' => "../admin/resume_session.php?id_session=".$_GET['id_session'],"name" => get_lang('SessionOverview'));
+ 	} else {
  		$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
- 		if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0){
+ 		if (isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0) {
  			$interbreadcrumb[] = array ("url" => "student.php?id_coach=".$_GET['id_coach'], "name" => get_lang("CoachStudents"));
  			$interbreadcrumb[] = array ("url" => "myStudents.php?student=".$_GET['student'].'&id_coach='.$_GET['id_coach'], "name" => get_lang("StudentDetails"));
- 		}
- 		else{
+ 		} else {
  			$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
  			$interbreadcrumb[] = array ("url" => "myStudents.php?student=".$_GET['student'], "name" => get_lang("StudentDetails"));
  		}	 	
  	}
  	$nameTools=get_lang("DetailsStudentInCourse");
- }
- else
- {
- 	$interbreadcrumb[] = array ('url' => '../admin/index.php', 'name' => get_lang('PlatformAdmin'));
- 	
- 	if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0)
- 	{
- 		if(isset($_GET['id_session']) && intval($_GET['id_session'])!=0)
- 		{ 
- 			$interbreadcrumb[] = array ("url" => "student.php?id_coach=".$_GET['id_coach']."&id_session=".$_GET['id_session'], "name" => get_lang("CoachStudents"));
- 		}
- 		else
- 		{
- 			$interbreadcrumb[] = array ("url" => "student.php?id_coach=".$_GET['id_coach'], "name" => get_lang("CoachStudents"));
- 		}
+} else {
+ 	if (!empty($_GET['origin']) && $_GET['origin'] == 'resume_session') {
+		$interbreadcrumb[]=array('url' => '../admin/index.php',"name" => get_lang('PlatformAdmin'));
+		$interbreadcrumb[]=array('url' => "../admin/session_list.php","name" => get_lang('SessionList'));
+		$interbreadcrumb[]=array('url' => "../admin/resume_session.php?id_session=".Security::remove_XSS($_GET['id_session']),"name" => get_lang('SessionOverview'));
+ 	} else {
+ 		$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+	 	if (isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0) {
+	 		if (isset($_GET['id_session']) && intval($_GET['id_session'])!=0) {
+	 			$interbreadcrumb[] = array ("url" => "student.php?id_coach=".Security::remove_XSS($_GET['id_coach'])."&id_session=".$_GET['id_session'], "name" => get_lang("CoachStudents"));
+	 		} else {
+	 			$interbreadcrumb[] = array ("url" => "student.php?id_coach=".Security::remove_XSS($_GET['id_coach']), "name" => get_lang("CoachStudents"));
+	 		}
+	 	} else {
+	 		$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
+	 	}
  	}
- 	else
- 	{ 
- 		$interbreadcrumb[] = array ('url' => '../admin/user_list.php', 'name' => get_lang('UserList'));
- 		
- 	}
- }
+}
  
 api_block_anonymous_users();
 
@@ -718,9 +696,7 @@ if(!empty($_GET['student']))
 					
 					if(Database::num_rows($rs_lp_item_id_scorm)>0){
 						$lp_item_id = Database::result($rs_lp_item_id_scorm,0,'id');
-						
 						$lp_item__max_score = Database::result($rs_lp_item_id_scorm,0,'max_score');	
-						
 						$total_weighting+=$lp_item__max_score;
 						
 						//We get the last view id of this LP
@@ -841,6 +817,7 @@ if(!empty($_GET['student']))
 									FROM ".$t_quiz." AS quiz
 									WHERE active='1' ORDER BY quiz.title ASC
 									";
+		
 				$resultExercices = api_sql_query($sqlExercices,__FILE__,__LINE__);
 				$i = 0;
 				if(Database::num_rows($resultExercices)>0)
@@ -862,6 +839,7 @@ if(!empty($_GET['student']))
 									 AND exe_cours_id = '".$a_infosCours['code']."'
 									 AND exe_exo_id = ".$a_exercices['id']."
 									 ORDER BY exe_date DESC LIMIT 1";
+	
 						$resultScore = api_sql_query($sqlScore,__FILE__,__LINE__);
 						$score = 0; 
 						while($a_score = Database::fetch_array($resultScore))
@@ -1067,12 +1045,12 @@ if(!empty($_GET['student']))
 						</td>';
 						if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0){
 							echo '<td align="center" width="10">
-								<a href="'.api_get_self().'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'&id_coach='.$_GET['id_coach'].'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
+								<a href="'.api_get_self().'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.Security::remove_XSS($_GET['id_session']).'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
 							</td>';
 						}
 						else{
 							echo '<td align="center" width="10">
-								<a href="'.api_get_self().'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
+								<a href="'.api_get_self().'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.Security::remove_XSS($_GET['id_session']).'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
 							</td>';
 						}
 					echo '</tr>';

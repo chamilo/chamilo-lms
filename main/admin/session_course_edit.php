@@ -1,10 +1,15 @@
-<?php
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
+/**
+ * Implements the edition of course-session settings
+ * @package dokeos.admin
+ */
 // name of the language file that needs to be included 
 $language_file='admin';
 
 $cidReset=true;
 
-include('../inc/global.inc.php');
+require '../inc/global.inc.php';
 
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -23,22 +28,22 @@ $tbl_course			= Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_session		= Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
-$tool_name=get_lang('ModifySessionCourse');
+$course_info=api_get_course_info($_REQUEST['course_code']);
+$tool_name=$course_info['name'];
+
+$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang("SessionList"));
+$interbreadcrumb[]=array('url' => "../admin/resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']),"name" => get_lang('SessionOverview'));
+$interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" =>htmlentities($session_name,ENT_QUOTES,$charset));
 
 $result=api_sql_query("SELECT name,title FROM $tbl_session_course,$tbl_session,$tbl_course WHERE id_session=id AND course_code=code AND id_session='$id_session' AND course_code='".addslashes($course_code)."'",__FILE__,__LINE__);
 
-if(!list($session_name,$course_title)=mysql_fetch_row($result))
-{
+if (!list($session_name,$course_title)=mysql_fetch_row($result)) {
 	header('Location: session_course_list.php?id_session='.$id_session);
 	exit();
 }
 
-$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang("SessionList"));
-$interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" => get_lang("CourseSessionList")." &quot;".htmlentities($session_name,ENT_QUOTES,$charset)."&quot;");
-
-if($_POST['formSent'])
-{
+if ($_POST['formSent']) {
 	$formSent=1;
 
 	$id_coach=intval($_POST['id_coach']);
@@ -50,13 +55,10 @@ if($_POST['formSent'])
 	header('Location: '.$_GET['page'].'?id_session='.$id_session);
 	exit();
 
-}
-else
-{
+}else {
 	$result=api_sql_query("SELECT id_coach FROM $tbl_session_course WHERE id_session='$id_session' AND course_code='$course_code'",__FILE__,__LINE__);
 
-	if(!$infos=mysql_fetch_array($result))
-	{
+	if (!$infos=Database::fetch_array($result)) {
 		//header('Location: '.$_GET['page'].'?id_session='.$id_session);
 		exit();
 	}
@@ -66,13 +68,13 @@ $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'
 
 $result=api_sql_query($sql,__FILE__,__LINE__);
 
-$Coaches=api_store_result($result);
+$coaches=api_store_result($result);
 
 Display::display_header($tool_name);
 
+$tool_name=get_lang('ModifySessionCourse');
 api_display_tool_title($tool_name);
 ?>
-
 <form method="post" action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $_GET['page'] ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
 
@@ -104,7 +106,7 @@ if(!empty($errorMsg))
 	<option value="0" <?php if((!$sent && $enreg['user_id'] == $infos['id_coach']) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo get_lang('None') ?></option>
 <?php
 
-foreach($Coaches as $enreg)
+foreach($coaches as $enreg)
 {
 ?>
 
@@ -113,7 +115,7 @@ foreach($Coaches as $enreg)
 <?php
 }
 
-unset($Coaches);
+unset($coaches);
 ?>
 
   </select></td>

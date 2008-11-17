@@ -1,25 +1,5 @@
-<?php // $Id: courseLog.php 16739 2008-11-13 15:36:40Z pcool $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
-==============================================================================
-*/
-
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *	@author Thomas Depraetere
@@ -31,61 +11,50 @@
 *	@package dokeos.tracking
 ==============================================================================
 */
-
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/**
+ *	INIT SECTION
+ */
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
-// name of the language file that needs to be included 
 
+// name of the language file that needs to be included 
+$language_file[] = 'admin';
 $language_file[] = 'tracking';
 $language_file[] = 'scorm';
 
-include('../inc/global.inc.php');
-
-
+require '../inc/global.inc.php';
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
 
-if(!$is_allowedToTrack)
-{
+if (!$is_allowedToTrack) {
 	Display :: display_header(null);
 	api_not_allowed();
 	Display :: display_footer();
 }
-
 //includes for SCORM and LP
-require_once('../newscorm/learnpath.class.php');
-require_once('../newscorm/learnpathItem.class.php');
-require_once('../newscorm/learnpathList.class.php');
-require_once('../newscorm/scorm.class.php');
-require_once('../newscorm/scormItem.class.php');
-require_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'export.lib.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-
-
+require_once '../newscorm/learnpath.class.php';
+require_once '../newscorm/learnpathItem.class.php';
+require_once '../newscorm/learnpathList.class.php';
+require_once '../newscorm/scorm.class.php';
+require_once '../newscorm/scormItem.class.php';
+require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-if($export_csv)
-{
+if ($export_csv) {
 	ob_start();
 }
 $csv_content = array();
 
 // charset determination
-if (!empty($_GET['scormcontopen']))
-{
-	$tbl_lp = Database::get_course_table('lp');
-	$contopen = (int) $_GET['scormcontopen'];
-	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
-	$res = api_sql_query($sql,__FILE__,__LINE__);
-	$row = Database::fetch_array($res);
-	$lp_charset = $row['default_encoding'];
-	//header('Content-Type: text/html; charset='. $row['default_encoding']);
+if (!empty($_GET['scormcontopen'])) {
+    $tbl_lp = Database::get_course_table('lp');
+    $contopen = (int) $_GET['scormcontopen'];
+    $sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
+    $res = api_sql_query($sql,__FILE__,__LINE__);
+    $row = Database::fetch_array($res);
+    $lp_charset = $row['default_encoding'];
 }
 
 $htmlHeadXtra[] = "<style type='text/css'>
@@ -98,7 +67,6 @@ $htmlHeadXtra[] = "<style type='text/css'>
 <style media='print' type='text/css'>
 
 </style>";
-
 
 /*
 -----------------------------------------------------------
@@ -126,37 +94,42 @@ $tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);
 $tbl_learnpath_view = Database::get_course_table(TABLE_LP_VIEW);
 $tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
+if (isset($_GET['origin']) && $_GET['origin']=='resume_session') {
+    $interbreadcrumb[]=array('url' => '../admin/index.php','name' => get_lang('PlatformAdmin'));
+    $interbreadcrumb[]=array('url' => '../admin/session_list.php','name' => get_lang('SessionList'));
+    $interbreadcrumb[]=array('url' => '../admin/resume_session.php?id_session='.$_SESSION['id_session'],'name' => get_lang('SessionOverview'));
+}
+
 $view = (isset($_REQUEST['view'])?$_REQUEST['view']:'');
 
 $nameTools = get_lang('Tracking');
 
-Display::display_header($nameTools, "Tracking");
-include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
-include("../resourcelinker/resourcelinker.inc.php");
+Display::display_header($nameTools, 'Tracking');
 
+require api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
+require '../resourcelinker/resourcelinker.inc.php';
 
- 
 $a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, (empty($_SESSION['id_session'])?null:$_SESSION['id_session']));
 $nbStudents = count($a_students);
 
 /**
  * count the number of students in this course (used for SortableTable)
  */
-function count_student_in_course()
-{
+function count_student_in_course() {
 	global $nbStudents;
 	return $nbStudents;
 }
 
 
 
-function sort_users($a,$b){
+function sort_users($a,$b) {
 	$a = trim(strtolower($a[$_SESSION['tracking_column']]));
 	$b = trim(strtolower($b[$_SESSION['tracking_column']]));
-	if($_SESSION['tracking_direction'] == 'DESC')
+	if ($_SESSION['tracking_direction'] == 'DESC') {
 		return strcmp($b, $a);
-	else
+    } else {
 		return strcmp($a, $b);
+    }
 }
 
 /*
@@ -166,28 +139,21 @@ function sort_users($a,$b){
 */
 
 echo '<div class="actions">';
-if($_GET['studentlist'] == 'false')
-{
+if ($_GET['studentlist'] == 'false') {
 	echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;|&nbsp;'.get_lang('CourseTracking');
-}
-else
-{
+} else {
 	echo get_lang('StudentsTracking').' | <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>';
 }
 echo '&nbsp;<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>';
-if($_GET['studentlist'] == 'false')
-{	
+if($_GET['studentlist'] == 'false') {	
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&studentlist=false"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
-}
-else
-{
+} else {
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 }
 echo '</div>';
 
 
-if($_GET['studentlist'] == 'false')
-{
+if($_GET['studentlist'] == 'false') {
 	echo'<br /><br />';
 	
 	
@@ -195,84 +161,70 @@ if($_GET['studentlist'] == 'false')
 	 * LEARNING PATHS
 	 ***************************/
 	 
-	 echo "<div class='admin_section'>
+	 echo '<div class="admin_section">
 				<h4>
-					<img src='../img/scormbuilder.gif' align='absbottom'>&nbsp;".get_lang('AverageProgressInLearnpath')."
+					<img src="../img/scormbuilder.gif" align="absbottom">&nbsp;'.get_lang('AverageProgressInLearnpath').'
 				</h4>
-			<table class='data_table'>";
+			<table class="data_table">';
 			
 	$list = new LearnpathList($student);
 	$flat_list = $list->get_flat_list();
 	
-	if($export_csv){
+	if ($export_csv) {
     	$temp=array(get_lang('AverageProgressInLearnpath'),'');
     	$csv_content[] = array('','');
     	$csv_content[] = $temp;
     }
 	
-	if(count($flat_list)>0)
-	{
-		foreach($flat_list as $lp_id => $lp)
-		{
+	if (count($flat_list)>0)	{
+		foreach ($flat_list as $lp_id => $lp) {
 			$lp_avg_progress = 0;
-			foreach($a_students as $student_id => $student)
-			{
+			foreach ($a_students as $student_id => $student) {
 				
 				// get the progress in learning pathes	
 				$lp_avg_progress += learnpath::get_db_progress($lp_id,$student_id);
 				
 				
 			}
-			if($nbStudents > 0)
-			{
+			if($nbStudents > 0) {
 				$lp_avg_progress = $lp_avg_progress / $nbStudents;
 			}
 			echo '<tr><td>'.$lp['lp_name'].'</td><td align="right">'.round($lp_avg_progress,1).' %</td></tr>';
-			if($export_csv){
+			if($export_csv) {
 				$temp=array($lp['lp_name'],$lp_avg_progress);
 				$csv_content[] = $temp;
 			}
 		}
-	}
-	else
-	{
+	} else {
 		echo '<tr><td>'.get_lang('NoLearningPath').'</td></tr>';
-		if($export_csv){
+		if ($export_csv) {
     		$temp=array(get_lang('NoLearningPath'),'');
 			$csv_content[] = $temp;
     	}
 	}
-	
 	echo '</table></div>';
-	
-	
 	echo '<div class="clear"></div>';
-	
-	
 	/***************************
 	 * EXERCICES
 	 ***************************/
-	 
-	 echo "<div class='admin_section'>
+	 echo '<div class="admin_section">
 				<h4>
-					<img src='../img/quiz.gif' align='absbottom'>&nbsp;".get_lang('AverageResultsToTheExercices')." <a href='../exercice/exercice.php?".api_get_cidreq()."&show=result'>".get_lang('SeeDetail')."</a>
+					<img src="../img/quiz.gif" align="absbottom">&nbsp;'.get_lang('AverageResultsToTheExercices').' <a href="../exercice/exercice.php?'.api_get_cidreq().'&show=result">'.get_lang('SeeDetail').'</a>
 				</h4>
-			<table class='data_table'>";
+			<table class="data_table">';
 			
 	$sql = "SELECT id, title
 			FROM ".Database :: get_course_table(TABLE_QUIZ_TEST);
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
 	
-	if($export_csv){
+	if ($export_csv) {
     	$temp=array(get_lang('AverageProgressInLearnpath'),'');
     	$csv_content[] = array('','');
     	$csv_content[] = $temp;
     }
 	
-	if(Database::num_rows($rs)>0)
-	{
-		while($quiz = Database::fetch_array($rs))
-		{
+	if (Database::num_rows($rs)>0) {
+		while($quiz = Database::fetch_array($rs)) {
 			$quiz_avg_score = 0;
 			
 			// get the progress in learning pathes	
@@ -283,29 +235,25 @@ if($_GET['studentlist'] == 'false')
 					LIMIT 0, 1';
 			$rsAttempt = api_sql_query($sql, __FILE__, __LINE__);
 			$nb_attempts = 0;
-			while($attempt = Database::fetch_array($rsAttempt))
-			{
+			while ($attempt = Database::fetch_array($rsAttempt)) {
 				$nb_attempts++;
 				$exe_weight=$attempt['exe_weighting'];
-				if ($exe_weight>0)
-				{
+				if ($exe_weight>0) {
 					$quiz_avg_score += $attempt['exe_result']/$exe_weight*100;
 				}
 			}
-			if($nb_attempts>0)
+			if($nb_attempts>0) {
 				$quiz_avg_score = $quiz_avg_score / $nb_attempts;
-			
+            }
 			echo '<tr><td>'.$quiz['title'].'</td><td align="right">'.round($quiz_avg_score,1).' %</td></tr>';
-			if($export_csv){
+			if ($export_csv) {
 				$temp=array($quiz['title'],$quiz_avg_score);
 				$csv_content[] = $temp;
 			}
 		}
-	}
-	else
-	{
+	} else {
 		echo '<tr><td>'.get_lang('NoExercises').'</td></tr>';
-		if($export_csv){
+		if($export_csv) {
     		$temp=array(get_lang('NoExercises'),'');
 			$csv_content[] = $temp;
     	}
@@ -313,39 +261,35 @@ if($_GET['studentlist'] == 'false')
 	
 	echo '</table></div>';
 	echo '<div class="clear"></div>';
-	
-	
 	/**********************
 	 * TOOLS
 	 **********************/
-	
-	echo "<div class='admin_section'>
+	echo '<div class="admin_section">
 				<h4>
-					<img src='../img/acces_tool.gif' align='absbottom'>&nbsp;".get_lang('ToolsMostUsed')."
+					<img src="../img/acces_tool.gif" align="absbottom">&nbsp;'.get_lang('ToolsMostUsed').'
 				</h4>
-			<table class='data_table'>";
+			<table class="data_table">';
 			 
-	$sql = "SELECT `access_tool`, COUNT(DISTINCT `access_user_id`),count( `access_tool` ) as count_access_tool
+	$sql = "SELECT access_tool, COUNT(DISTINCT access_user_id),count( access_tool ) as count_access_tool
             FROM $TABLETRACK_ACCESS
-            WHERE `access_tool` IS NOT NULL
-                AND `access_cours_code` = '$_cid'
-            GROUP BY `access_tool`
+            WHERE access_tool IS NOT NULL
+                AND access_cours_code = '$_cid'
+            GROUP BY access_tool
 			ORDER BY count_access_tool DESC
 			LIMIT 0, 3";
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
 	
-	 if($export_csv){
+	if ($export_csv) {
     	$temp=array(get_lang('ToolsMostUsed'),'');
     	$csv_content[] = $temp;
     }
 	
-	while ($row = Database::fetch_array($rs))
-	{
+	while ($row = Database::fetch_array($rs)) {
 		echo '	<tr>
 					<td>'.get_lang(ucfirst($row['access_tool'])).'</td>
 					<td align="right">'.$row['count_access_tool'].' '.get_lang('Clicks').'</td>
 				</tr>';
-		if($export_csv){
+		if ($export_csv) {
 			$temp=array(get_lang(ucfirst($row['access_tool'])),$row['count_access_tool'].' '.get_lang('Clicks'));
 			$csv_content[] = $temp;
 		}
@@ -360,45 +304,41 @@ if($_GET['studentlist'] == 'false')
 	 * DOCUMENTS
 	 ***************************/
 	 
-	 echo "<div class='admin_section'>
+	 echo '<div class="admin_section">
 				<h4>
-					<img src='../img/documents.gif' align='absbottom'>&nbsp;".get_lang('DocumentsMostDownloaded')."
+					<img src="../img/documents.gif" align="absbottom">&nbsp;'.get_lang('DocumentsMostDownloaded').'
 				</h4>
-			<table class='data_table'>";
+			<table class="data_table">';
 			
-	$sql = "SELECT `down_doc_path`, COUNT(DISTINCT `down_user_id`), COUNT(`down_doc_path`) as count_down
+	$sql = "SELECT down_doc_path, COUNT(DISTINCT down_user_id), COUNT(down_doc_path) as count_down
             FROM $TABLETRACK_DOWNLOADS
-            WHERE `down_cours_id` = '$_cid'
-            GROUP BY `down_doc_path`
+            WHERE down_cours_id = '$_cid'
+            GROUP BY down_doc_path
 			ORDER BY count_down DESC
 			LIMIT 0, 3";
     $rs = api_sql_query($sql, __FILE__, __LINE__);
     
-    if($export_csv){
+    if ($export_csv) {
     	$temp=array(get_lang('DocumentsMostDownloaded'),'');
     	$csv_content[] = array('','');
     	$csv_content[] = $temp;
     }
     
-    if(Database::num_rows($rs)>0)
-    {
-	    while($row = Database::fetch_array($rs))
-	    {
+    if (Database::num_rows($rs)>0) {
+	    while($row = Database::fetch_array($rs)) {
 	    	echo '	<tr>
 						<td>'.$row['down_doc_path'].'</td>
 						<td align="right">'.$row['count_down'].' '.get_lang('Clicks').'</td>
 					</tr>';
 					
-			if($export_csv){
+			if ($export_csv) {
 				$temp=array($row['down_doc_path'],$row['count_down'].' '.get_lang('Clicks'));
 				$csv_content[] = $temp;
 			}
 	    }
-    }
-    else
-    {
+    } else {
     	echo '<tr><td>'.get_lang('NoDocumentDownloaded').'</td></tr>';
-    	if($export_csv){
+    	if ($export_csv) {
     		$temp=array(get_lang('NoDocumentDownloaded'),'');
 			$csv_content[] = $temp;
     	}
@@ -412,31 +352,29 @@ if($_GET['studentlist'] == 'false')
 	 * LINKS
 	 ***************************/
 	 
-	 echo "<div class='admin_section'>
+	 echo '<div class="admin_section">
 				<h4>
-					<img src='../img/link.gif' align='absbottom'>&nbsp;".get_lang('LinksMostClicked')."
+					<img src="../img/link.gif" align="absbottom">&nbsp;'.get_lang('LinksMostClicked').'
 				</h4>
-			<table class='data_table'>";
+			<table class="data_table">';
 			
-	$sql = "SELECT `cl`.`title`, `cl`.`url`,count(DISTINCT `sl`.`links_user_id`), count(`cl`.`title`) as count_visits
+	$sql = "SELECT cl.title, cl.url,count(DISTINCT sl.links_user_id), count(cl.title) as count_visits
             FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
-            WHERE `sl`.`links_link_id` = `cl`.`id`
-                AND `sl`.`links_cours_id` = '$_cid'
-            GROUP BY `cl`.`title`, `cl`.`url`
+            WHERE sl.links_link_id = cl.id
+                AND sl.links_cours_id = '$_cid'
+            GROUP BY cl.title, cl.url
 			ORDER BY count_visits DESC
 			LIMIT 0, 3";
     $rs = api_sql_query($sql, __FILE__, __LINE__);
     
-    if($export_csv){
+    if ($export_csv) {
     	$temp=array(get_lang('LinksMostClicked'),'');
     	$csv_content[] = array('','');
     	$csv_content[] = $temp;
     }
     
-    if(Database::num_rows($rs)>0)
-    {
-	    while($row = Database::fetch_array($rs))
-	    {
+    if (Database::num_rows($rs)>0) {
+	    while ($row = Database::fetch_array($rs)) {
 	    	echo '	<tr>
 						<td>'.$row['title'].'</td>
 						<td align="right">'.$row['count_visits'].' '.get_lang('Clicks').'</td>
@@ -446,30 +384,23 @@ if($_GET['studentlist'] == 'false')
 				$csv_content[] = $temp;
 			}
 	    }
-    }
-    else
-    {
+    } else {
     	echo '<tr><td>'.get_lang('NoLinkVisited').'</td></tr>';
-    	if($export_csv){
+    	if ($export_csv) {
     		$temp=array(get_lang('NoLinkVisited'),'');
 			$csv_content[] = $temp;
     	}
     }
 	echo '</table></div>';
-	
-	
 	echo '<div class="clear"></div>';	
 	
 	// send the csv file if asked
-	if($export_csv)
-	{
+	if ($export_csv) {
 		ob_end_clean();
 		Export :: export_table_csv($csv_content, 'reporting_course_tracking');
 	}
-	
-}
+} else {
 // else display student list with all the informations
-else {
 	
 	// BEGIN : form to remind inactives susers
 	$form = new FormValidator('reminder_form','get',api_get_path(REL_CODE_PATH).'announcements/announcements.php');
@@ -501,8 +432,7 @@ else {
 	$tracking_column = isset($_GET['tracking_column']) ? $_GET['tracking_column'] : 0;
 	$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : 'DESC';
 	
-	if(count($a_students)>0)
-	{
+	if (count($a_students)>0) {
 		$table = new SortableTable('tracking', 'count_student_in_course');
 		$table -> set_header(0, get_lang('OfficialCode'), false, 'align="center"');
 		$table -> set_header(1, get_lang('LastName'), true, 'align="center"');
@@ -516,8 +446,7 @@ else {
 		$table -> set_header(9, get_lang('LatestLogin'), false, 'align="center"');
 		$table -> set_header(10, get_lang('Details'),false);
 	     
-	    if($export_csv)
-		{
+	    if ($export_csv) {
 			$csv_content[] = array ( 
 									get_lang('OfficialCode'),
 									get_lang('LastName'),
@@ -534,8 +463,7 @@ else {
 	    
 	    $all_datas = array();
 	    $course_code = $_course['id'];
-		foreach($a_students as $student_id => $student)
-		{
+		foreach ($a_students as $student_id => $student) {
 			$student_datas = UserManager :: get_user_info_by_id($student_id);
 			
 			$avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0 ;
@@ -558,8 +486,7 @@ else {
 			$row[] = Tracking :: get_first_connection_date_on_the_course($student_id, $course_code);
 			$row[] = Tracking :: get_last_connection_date_on_the_course($student_id, $course_code);
 			
-			if($export_csv)
-			{
+			if ($export_csv) {
 				$row[8] = strip_tags($row[8]);
 				$csv_content[] = $row;
 			}
@@ -574,13 +501,11 @@ else {
 		$page = $table->get_pager()->getCurrentPageID();
 		$all_datas = array_slice($all_datas, ($page-1)*$table -> per_page, $table -> per_page);
 		
-		if($export_csv)
-		{
+		if ($export_csv) {
 			usort($csv_content, 'sort_users');
 		}
 		
-		foreach($all_datas as $row)
-		{
+		foreach ($all_datas as $row) {
 			$table -> addRow($row,'align="right"');	
 		}
 		$table -> setColAttributes(0,array('align'=>'left'));
@@ -591,15 +516,12 @@ else {
 		$table -> setColAttributes(9,array('align'=>'center'));
 		$table -> display();
 		
-	}
-	else
-	{
+	} else {
 		echo get_lang('NoUsersInCourseTracking');
 	}
 	
 	// send the csv file if asked
-	if($export_csv)
-	{
+	if ($export_csv) {
 		ob_end_clean();
 		Export :: export_table_csv($csv_content, 'reporting_student_list');
 	}
@@ -607,7 +529,5 @@ else {
 }
 ?>
 </table>
-
 <?php
 Display::display_footer();
-?>

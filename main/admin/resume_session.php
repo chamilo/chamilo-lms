@@ -1,27 +1,5 @@
-<?php
-// $Id: course_list.php,v 1.15.2.1 2005/10/31 09:15:57 olivierb78 Exp $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php // $Id: resume_session.php 16769 2008-11-17 22:19:30Z yannoo $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 	@author Bart Mollet
@@ -37,15 +15,15 @@
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
-require ('../inc/global.inc.php');
+require '../inc/global.inc.php';
 
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
 $tool_name = get_lang('SessionOverview');
-$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
+$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 // Database Table Definitions
 $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -58,7 +36,7 @@ $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_C
 $tbl_class							= Database::get_main_table(TABLE_MAIN_CLASS);
 $tbl_class_rel_user					= Database::get_main_table(TABLE_MAIN_CLASS_USER);
 
-$id_session = $_GET['id_session'];
+$id_session = (int)$_GET['id_session'];
 
 $sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end
 		FROM '.$tbl_session.'
@@ -211,18 +189,22 @@ else {
 		$sql = 'SELECT COUNT(id_user) as nb_users FROM '.$tbl_session_rel_course_rel_user.' WHERE course_code="'.Database::escape_string($course['code']).'" AND id_session='.intval($id_session);
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		$course['nbr_users'] = mysql_result($rs,0,0);
-		if(empty($course['username']))
-			$coach = get_lang('None');
-		else
+		if (empty($course['username'])) {
+			$coach = get_lang('None');		
+		} else {
 			$coach = $course['lastname'].' '.$course['firstname'].' ('.$course['username'].')';
+		}
+
+		$orig_param = '&origin=resume_session';	
+		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
 		echo '
 		<tr>
 			<td>'.$course['title'].' ('.$course['visual_code'].')</td>
 			<td>'.$coach.'</td>
 			<td>'.$course['nbr_users'].'</td>
 			<td>
-				<a href="../tracking/courseLog.php?id_session='.$id_session.'&cidReq='.$course['code'].'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Tracking').'" alt="'.get_lang('Tracking').'"/></a>&nbsp;
-				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].'"><img src="../img/edit.gif" border="0" align="absmiddle" title="'.get_lang('Edit').'"></a>
+				<a href="../tracking/courseLog.php?id_session='.$id_session.'&cidReq='.$course['code'].$orig_param.'&hide_course_breadcrumb=1"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Tracking').'" alt="'.get_lang('Tracking').'"/></a>&nbsp;
+				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].''.$orig_param.'"><img src="../img/edit.gif" border="0" align="absmiddle" title="'.get_lang('Edit').'"></a>
 				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="'.get_lang('Delete').'"></a>
 			</td>
 		</tr>';
@@ -261,13 +243,14 @@ else {
 
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$users=api_store_result($result);
+	$orig_param = '&origin=resume_session&id_session='.$id_session; // change breadcrumb in destination page
 	foreach($users as $user){
 		echo '<tr>
 					<td width="90%">
 						<b>'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</b>
 					</td>
 					<td>
-						<a href="../mySpace/myStudents.php?student='.$user['user_id'].'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="'.get_lang('Delete').'"></a>
+						<a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="'.get_lang('Delete').'"></a>
 					</td>
 				  </tr>';
 	}

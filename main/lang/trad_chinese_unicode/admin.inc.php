@@ -33,7 +33,6 @@ $langDBManagementOnlyForServerAdmin = "數據庫管理僅對伺服器管理員�
 $langShowUsersOfCourse = "顯示註冊該課程用戶";
 $langShowClassesOfCourse = "顯示註冊該課程班級";
 $langShowGroupsOfCourse = "顯示註冊該課程用戶組";
-$langLoginName = "登入名稱";
 $langPhone = "電話";
 $langPhoneNumber = "電話號碼";
 $langActions = "操作";

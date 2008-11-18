@@ -19,6 +19,7 @@ $langGroup = "Grupo";
 $langEdit = "Modificar";
 $langGroupForum = "Foro";
 $Language = "Idioma";
+$LoginName = "Nome de usuario";
 $AutostartMp3 = "Pulse OK se desexa que o arquivo de audio se reproduza automaticamente.";
 $Assignments = "Tarefas dos estudantes";
 $Forum = "Foro";

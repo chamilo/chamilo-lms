@@ -179,4 +179,6 @@ $IllegalSurveyId = "Identificador de encuesta desconocido";
 $SurveyQuestionMoved = "La pregunta ha sido movida";
 $IdenticalSurveycodeWarning = "Este código de la encuesta ya existe. Probablemente esto sea debido a que la encuesta también existe en otros idiomas. Los usuarios podrán elegir entre diferentes idiomas.";
 $ThisSurveyCodeSoonExistsInThisLanguage = "Este código de encuesta ya existe en este idioma";
+$SurveyUserAnswersHaveBeenRemovedSuccessfully = "Las respuestas del usuario han sido eliminadas satisfactoriamente";
+$DeleteSurveyByUser = "Eliminar las respuesta de este usuario de esta encuesta";
 ?>

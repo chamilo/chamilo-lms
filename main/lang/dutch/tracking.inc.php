@@ -217,4 +217,12 @@ $FirstLogin = "Eerste login";
 $AccessDetails = "Toegangsdetails";
 $DateAndTimeOfAccess = "Datum en tijd van toegang";
 $Duration = "Duur";
+$DisplayCoaches = "Coaches overzicht";
+$DisplayUserOverview = "gebruikersoverzicht";
+$ExportUserOverviewOptions = "Export opties voor het gebruiksersoverzicht";
+$FollowingFieldsWillAlsoBeExported = "De volgende velden worden mee geëxporteerd";
+$TotalExercisesScoreObtained = "Totaal behaalde score van de oefeningen";
+$TotalExercisesScorePossible = "Totaal mogelijke score van de oefeningen";
+$TotalExercisesAnswered = "Aantal oefeningen beantwoord";
+$TotalExercisesScorePercentage = "Procentuele totale score van de oefeningen";
 ?>

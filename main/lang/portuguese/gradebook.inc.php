@@ -102,4 +102,8 @@ $TotalUser = "Total do utilizador";
 $AverageTotal = "Média total";
 $Evaluation = "Avaliação";
 $EvaluationAverage = "Média da avaliação";
+$EditCategory = "Editar categoria";
+$GradebookQualificationTotal = "Total";
+$ResourceType = "Tipo de recurso";
+$GradebookWhoChangedItLog = "Quem o alterou";
 ?>

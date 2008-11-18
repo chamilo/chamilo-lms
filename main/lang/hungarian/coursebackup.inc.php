@@ -46,4 +46,5 @@ $UploadError = "Sikertelen feltöltés. Kérjük, ellen&#337;rizze a fájlnagyság lim
 $DocumentsWillBeAddedToo = "Dokumentumok szintén hozzá lesznek adva";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Ha tesztet tartalmazó tanösvényt szeretne exportálni, gy&#337;z&#337;djön meg róla, hogy a kívánt teszteket tartalmazza az exportálás. Ehhez ki kell jelölnie a teszteket a listából.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Az archíválás célkönyvtára nem írható. Lépjen kapcsolatba a rendszergazdával.";
+$DestinationCourse = "Cél kurzus";
 ?>

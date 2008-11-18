@@ -8,6 +8,7 @@ $langVisible = "显示/隐藏";
 $langGroup = "小组";
 $langEdit = "编辑";
 $langGroupForum = "小组论坛";
+$LoginName = "登录名";
 $langCode = "代码";
 $langUp = "向上";
 $langCourseCreate = "新建课程";

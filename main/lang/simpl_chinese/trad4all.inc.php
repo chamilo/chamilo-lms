@@ -19,6 +19,7 @@ $langGroup = "小组";
 $langEdit = "编辑";
 $langGroupForum = "小组论坛";
 $Language = "语言";
+$LoginName = "登录";
 $Assignments = "学生作业";
 $Forum = "论坛";
 $langCode = "课程代码";

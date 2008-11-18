@@ -18,6 +18,7 @@ $langGroup = "小組";
 $langEdit = "編輯";
 $langGroupForum = "小組論壇";
 $Language = "語言";
+$LoginName = "登入名稱";
 $AutostartMp3 = "若你想音訊檔自動插放，請按「確定」。";
 $Assignments = "課業";
 $Forum = "討論區";

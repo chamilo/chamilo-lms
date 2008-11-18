@@ -37,7 +37,6 @@ $langDBManagementOnlyForServerAdmin = "Datumbazo alirebla nur por servila mastru
 $langShowUsersOfCourse = "Vidigi uzulojn en &#265;i-kurso ";
 $langShowClassesOfCourse = "Vidigi klasojn ali&#285;intajn al &#265;i-kurso ";
 $langShowGroupsOfCourse = "Vidigi grupojn de &#265;i-kurso ";
-$langLoginName = "Uzula nomo";
 $langPhone = "Telefono ";
 $langPhoneNumber = "Telefonnumero ";
 $langActions = "Agadoj ";

@@ -18,6 +18,7 @@ $langGroup = "Skupina";
 $langEdit = "Uprav";
 $langGroupForum = "Diskusná skupina";
 $Language = "Jazyk";
+$LoginName = "Prihasovacie meno";
 $Forum = "Fórum";
 $langCode = "Kód kurzu";
 $langUp = "Hore";

@@ -18,6 +18,7 @@ $langGroup = "Group";
 $langEdit = "Edit";
 $langGroupForum = "Forum";
 $Language = "Bahasa";
+$LoginName = "Login";
 $Assignments = "Tugas-tugas";
 $Forum = "Forum";
 $langCode = "Kode Mata Kuliah";

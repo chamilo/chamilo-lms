@@ -33,7 +33,6 @@ $langDBManagementOnlyForServerAdmin = "Database administrasjon er kun tilgjengli
 $langShowUsersOfCourse = "Vis brukere som er abonnerer på dette kurset";
 $langShowClassesOfCourse = "Vis klasser som er abonnerer på dette kurset ";
 $langShowGroupsOfCourse = "Vis grupper i dette kurset";
-$langLoginName = "Pålogging";
 $langPhone = "Telefon";
 $langPhoneNumber = "Telefonnummer";
 $langActions = "Handlinger";

@@ -179,4 +179,6 @@ $IllegalSurveyId = "Unknown survey id";
 $SurveyQuestionMoved = "The question has been moved";
 $IdenticalSurveycodeWarning = "This survey code already exists. That probably means the survey exists in other languages. Invited people will choose between different languages.";
 $ThisSurveyCodeSoonExistsInThisLanguage = "This survey code soon exists in this language";
+$SurveyUserAnswersHaveBeenRemovedSuccessfully = "The user\'s answers to the survey have been succesfully removed.";
+$DeleteSurveyByUser = "Delete this user\'s answers from this survey";
 ?>

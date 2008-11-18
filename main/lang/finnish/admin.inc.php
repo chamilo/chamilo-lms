@@ -24,7 +24,6 @@ $langCourseSubscription = "Kurssin tilaus";
 $langPublicAccess = "Julkinen p‰‰sy";
 $langPrivateAccess = "Yksityinen p‰‰sy";
 $langDBManagementOnlyForServerAdmin = "Tietokannan yll‰pito on sallittu vain palvelimen yll‰pit‰j‰lle";
-$langLoginName = "Kirjaudu";
 $langPhone = "Puhelin";
 $langPhoneNumber = "Puhelinnumero";
 $langAddToCourse = "Lis‰‰ kurssiin";

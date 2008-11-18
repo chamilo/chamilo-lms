@@ -218,4 +218,12 @@ $AccessDetails = "Accessi in dettaglio";
 $DateAndTimeOfAccess = "Data e ora di accesso";
 $Duration = "Durata";
 $WrongDatasForTimeSpentOnThePlatform = "I dati di report dell\'utente sono stati memorizzati quando sulla piattaforma non era possibile la registrazione dei tempi d\'accesso.";
+$DisplayCoaches = "Visualizzazione tutor";
+$DisplayUserOverview = "Visualizzazione corsisti";
+$ExportUserOverviewOptions = "Opzione di esportazione per la visualizzazione corsisti";
+$FollowingFieldsWillAlsoBeExported = "Saranno esportati anche i seguenti campi";
+$TotalExercisesScoreObtained = "Punteggio totale quesiti";
+$TotalExercisesScorePossible = "Punteggio massimo totale quesiti";
+$TotalExercisesAnswered = "Numero di quesiti cui si è risposto";
+$TotalExercisesScorePercentage = "Percentuale di punteggio ottenuto sul totale";
 ?>

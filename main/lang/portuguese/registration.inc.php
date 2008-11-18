@@ -155,4 +155,6 @@ $PictureUploaded = "A foto foi enviada";
 $ProductionUploaded = "O ficheiro foi enviado";
 $FolderUpdated = "Pasta actualizada";
 $UsersRegistered = "Estes utilizadores foram inscritos no curso";
+$UserNotAdded = "Utilizador não acrescentado";
+$UserAlreadyRegisteredByOtherCreator = "Utilizador já resgistado por outro professor";
 ?>

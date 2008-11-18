@@ -32,7 +32,6 @@ $langDBManagementOnlyForServerAdmin = "Datubazes administr&#275;šana ir at&#316;
 $langShowUsersOfCourse = "Par&#257;d&#299;t šaj&#257; kurs&#257; pierakst&#299;tos lietot&#257;jus";
 $langShowClassesOfCourse = "Par&#257;d&#299;t klases šaj&#257; kurs&#257;";
 $langShowGroupsOfCourse = "Par&#257;d&#299;t grupas šaj&#257; kurs&#257;";
-$langLoginName = "lietot&#257;jv&#257;rds";
 $langPhone = "T&#257;lrunis";
 $langPhoneNumber = "T&#257;lr.: Nr.:";
 $langActions = "Darb&#299;bas";

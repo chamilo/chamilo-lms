@@ -37,7 +37,6 @@ $langDBManagementOnlyForServerAdmin = "L\'amministrazione del database è riserva
 $langShowUsersOfCourse = "Mostra gli utenti iscritti a questo corso";
 $langShowClassesOfCourse = "Mostra classi iscritte a questo corso";
 $langShowGroupsOfCourse = "Mostra i gruppi di questo corso";
-$langLoginName = "Nome utente";
 $langPhone = "Telefono";
 $langPhoneNumber = "Numero di Telefono";
 $langActions = "Azioni";

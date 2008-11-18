@@ -18,6 +18,7 @@ $langGroup = "Grup";
 $langEdit = "Düzenle";
 $langGroupForum = "Forum";
 $Language = "Dil";
+$LoginName = "Kullan&#305;c&#305; ad&#305;";
 $Assignments = "Ö&#287;renci Çal&#305;&#351;malar&#305;";
 $Forum = "Forum";
 $langCode = "Ders kodu";

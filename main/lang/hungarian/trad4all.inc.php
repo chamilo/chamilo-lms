@@ -19,6 +19,7 @@ $langGroup = "Csoport";
 $langEdit = "Szerkeszt";
 $langGroupForum = "Csoport fóruma";
 $Language = "Nyelv";
+$LoginName = "Azonosító";
 $AutostartMp3 = "Kattintson az OK-ra, ha azt szeretné, hogy a hangfájl lejátszása automatikusan elinduljon";
 $Assignments = "Hallgatói publikációk";
 $Forum = "Fórum";
@@ -558,4 +559,6 @@ $GroupWiki = "Wiki";
 $ExportToPDF = "Mentés PDF-ként";
 $CommentAdded = "A hozzászólását a rendszer elmentette";
 $BackToPreviousPage = "Vissza az el&#337;z&#337; oldalra";
+$Owner = "Tulajdonos";
+$Phone = "Telefon";
 ?>

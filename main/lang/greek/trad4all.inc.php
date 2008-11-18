@@ -17,6 +17,7 @@ $langGroup = "Ομάδα Χρηστών";
 $langEdit = "Διόρθωση";
 $langGroupForum = "Περιοχή συζητήσεων";
 $Language = "&#915;&#955;&#974;&#963;&#963;&#945;";
+$LoginName = "Login";
 $Assignments = "Assignments";
 $Forum = "Forum";
 $langCode = "Κωδικός Μαθήματος";

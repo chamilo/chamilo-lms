@@ -103,4 +103,14 @@ $AverageTotal = "Media total";
 $Evaluation = "Evaluación";
 $EvaluationAverage = "Media de la evaluación";
 $EditCategory = "Editar calificación";
+$EditAllWeights = "Editar todos los pesos";
+$GradebookQualificationTotal = "Total";
+$GradebookEvaluationDeleted = "La evaluación ha sido eliminada";
+$GradebookQualifyLog = "Historial de pesos del cuaderno";
+$GradebookNameLog = "Nombre del cuaderno";
+$GradebookDescriptionLog = "Descripción del cuaderno";
+$GradebookVisibilityLog = "Visibilidad del cuaderno";
+$ResourceType = "Tipo de recurso";
+$GradebookWhoChangedItLog = "Quien lo modificó";
+$EvaluationEdited = "La evaluación ha sido modificada";
 ?>

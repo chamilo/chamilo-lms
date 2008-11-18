@@ -218,4 +218,12 @@ $AccessDetails = "Podrobnosti dostopa";
 $DateAndTimeOfAccess = "Datum in čas dostopa";
 $Duration = "Trajanje";
 $WrongDatasForTimeSpentOnThePlatform = "Podatki o tem uporabniku so bili zapisani, ko izračun časa, porabljenega na platformi, ni bil možen.";
+$DisplayCoaches = "Inštruktorjev pregled";
+$DisplayUserOverview = "Pregled uporabnika";
+$ExportUserOverviewOptions = "Opcije izvoza za uporabnikov pregled";
+$FollowingFieldsWillAlsoBeExported = "Tudi naslednja našteta polja bodo del izvoza";
+$TotalExercisesScoreObtained = "Skupen dosežen rezultat vaj/testov";
+$TotalExercisesScorePossible = "Skupen možen rezultat vaj/testov";
+$TotalExercisesAnswered = "Število reševanih vaj/testov";
+$TotalExercisesScorePercentage = "Skupen rezultat vaj/testov [%]";
 ?>

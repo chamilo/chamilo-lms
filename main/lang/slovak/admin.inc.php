@@ -33,7 +33,6 @@ $langDBManagementOnlyForServerAdmin = "Databázu môžu spravova&#357; iba administ
 $langShowUsersOfCourse = "Ukáž užívate&#318;ov prihlásených do tohto kurzu";
 $langShowClassesOfCourse = "Ukáž triedy prihlásené do tohto kurzu";
 $langShowGroupsOfCourse = "Ukáž skupiny v tomto kurze";
-$langLoginName = "Prihasovacie meno";
 $langPhone = "Telefón";
 $langPhoneNumber = "Telefónne &#269;íslo";
 $langActions = "Akcie";

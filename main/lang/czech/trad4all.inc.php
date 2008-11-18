@@ -16,6 +16,7 @@ $langVisible = "Viditelné/skryté";
 $langGroup = "Skupina";
 $langEdit = "Uprav";
 $Language = "Jazyk";
+$LoginName = "Login (P&#345;ihlásit)";
 $langCode = "Kód kurzu";
 $langUp = "Nahor&#367;";
 $Down = "Dol&#367;";

@@ -37,7 +37,6 @@ $langDBManagementOnlyForServerAdmin = "Databankbeheer enkel toegelaten voor een 
 $langShowUsersOfCourse = "Toon gebruikers in deze cursus";
 $langShowClassesOfCourse = "Toon klassen ingeschreven in deze cursus";
 $langShowGroupsOfCourse = "Toon groepen van deze cursus";
-$langLoginName = "Gebruikersnaam";
 $langPhone = "Telefoonnummer";
 $langPhoneNumber = "Telefoonnummer";
 $langActions = "Acties";

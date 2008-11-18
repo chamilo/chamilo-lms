@@ -19,6 +19,7 @@ $langGroup = "Groupes";
 $langEdit = "Modifier";
 $langGroupForum = "Forum du groupe";
 $Language = "Langue";
+$LoginName = "Login";
 $AutostartMp3 = "Cliquez sur Ok pour que le son demarre automatiquement. Cliquez sur Annuler pour que le son demarre quand on cliquera sur Play.";
 $Assignments = "Travaux";
 $Forum = "Forums";

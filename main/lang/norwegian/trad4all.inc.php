@@ -14,6 +14,7 @@ $Download = "Last opp";
 $langGroup = "Gruppe";
 $langEdit = "Rediger";
 $Language = "Språk";
+$LoginName = "Pålogging";
 $Forum = "Forum";
 $langCode = "Kurskode";
 $langUp = "Opp";

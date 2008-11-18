@@ -19,6 +19,7 @@ $langGroup = "Grupo";
 $langEdit = "Editar";
 $langGroupForum = "Fóruns de grupo";
 $Language = "Idioma";
+$LoginName = "Login";
 $Assignments = "Tarefas";
 $Forum = "Fórum";
 $langCode = "Código do curso";

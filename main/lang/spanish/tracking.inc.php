@@ -218,4 +218,12 @@ $AccessDetails = "Detalles de acceso";
 $DateAndTimeOfAccess = "Fecha y hora de acceso";
 $Duration = "Duración";
 $WrongDatasForTimeSpentOnThePlatform = "Datos sobre del usuario que estaba registrado cuando el cálculo de su tiempo de permanencia en la plataforma no era posible.";
+$DisplayCoaches = "Sumario de tutores";
+$DisplayUserOverview = "Sumario de usuario";
+$ExportUserOverviewOptions = "Opción de exportación del sumario de usuario";
+$FollowingFieldsWillAlsoBeExported = "Los siguientes campos también serán exportados";
+$TotalExercisesScoreObtained = "Puntuación total del ejercicio";
+$TotalExercisesScorePossible = "Máxima puntuación total posible";
+$TotalExercisesAnswered = "Número de ejercicios contestados";
+$TotalExercisesScorePercentage = "Porcentaje total de la puntuación de los ejercicios";
 ?>

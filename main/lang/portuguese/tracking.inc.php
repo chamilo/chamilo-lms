@@ -217,4 +217,5 @@ $FirstLogin = "Primeira ligação";
 $AccessDetails = "Detalhes de acesso";
 $DateAndTimeOfAccess = "Data e tempo dos acessos";
 $Duration = "Duração";
+$DisplayUserOverview = "Sumário do utilizador";
 ?>

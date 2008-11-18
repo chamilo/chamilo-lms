@@ -37,7 +37,6 @@ $langDBManagementOnlyForServerAdmin = "A xestión da base de datos está só dispoñ
 $langShowUsersOfCourse = "Amosar usuarios suscritos ó curso";
 $langShowClassesOfCourse = "Amosar clases suscritas ó curso";
 $langShowGroupsOfCourse = "Amosar grupos deste curso";
-$langLoginName = "Nome de usuario";
 $langPhone = "Teléfono";
 $langPhoneNumber = "Número de teléfono";
 $langActions = "Accións";

@@ -18,6 +18,7 @@ $langGroup = "Grupo";
 $langEdit = "&#348;an&#285;i";
 $langGroupForum = "Forumo de Grupo";
 $Language = "Lingvo";
+$LoginName = "Uzula nomo";
 $Assignments = "Studentaj publika&#309;oj ";
 $Forum = "Forumo ";
 $langCode = "Kurskodo ";

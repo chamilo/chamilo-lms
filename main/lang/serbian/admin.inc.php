@@ -32,7 +32,6 @@ $langDBManagementOnlyForServerAdmin = "Administriranje baze podataka je omogu&#2
 $langShowUsersOfCourse = "Prikaži korisnike prijavljene na kurs";
 $langShowClassesOfCourse = "Prikaži razrede prijavljene na kurs";
 $langShowGroupsOfCourse = "Prikaži grupe ovog kursa";
-$langLoginName = "Korisni&#269;ko ime";
 $langPhone = "Telefon";
 $langPhoneNumber = "Broj telefona";
 $langActions = "Akcije";

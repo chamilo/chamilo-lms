@@ -19,6 +19,7 @@ $langGroup = "Ryhm‰";
 $langEdit = "Muokkaa";
 $langGroupForum = "Ryhmien foorumit";
 $Language = "Kieli";
+$LoginName = "Kirjaudu";
 $AutostartMp3 = "Haluatko ett‰ ‰‰ni soitetaan automaattisesti?";
 $Assignments = "Oppilaan teht‰v‰t";
 $Forum = "Keskustelualue";

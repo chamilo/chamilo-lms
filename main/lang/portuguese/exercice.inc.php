@@ -239,4 +239,7 @@ $ExportWithoutUserFields = "Excluir os campos do utilizador da exportação";
 $DisableResults = "Não mostrar resultados aos estudantes";
 $EnableResults = "Mostrar resultados aos estudantes";
 $ValidateAnswer = "Validar respostas";
+$ExerciseAttempts = "Número máximo de tentativas";
+$DoNotRandomize = "Não desordenar";
+$Infinite = "Infinito";
 ?>

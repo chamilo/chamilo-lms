@@ -37,7 +37,6 @@ $langDBManagementOnlyForServerAdmin = "Database management is only available for
 $langShowUsersOfCourse = "Show users subscribed to this course";
 $langShowClassesOfCourse = "Show classes subscribed to this course";
 $langShowGroupsOfCourse = "Show groups of this course";
-$langLoginName = "Login";
 $langPhone = "Phone";
 $langPhoneNumber = "Phone number";
 $langActions = "Actions";

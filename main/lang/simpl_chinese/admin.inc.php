@@ -37,7 +37,6 @@ $langDBManagementOnlyForServerAdmin = "数据库管理仅对服务器管理员开放";
 $langShowUsersOfCourse = "显示注册该课程用户";
 $langShowClassesOfCourse = "显示注册该课程班级";
 $langShowGroupsOfCourse = "显示注册该课程用户组";
-$langLoginName = "登录";
 $langPhone = "电话";
 $langPhoneNumber = "电话号码";
 $langActions = "动作";

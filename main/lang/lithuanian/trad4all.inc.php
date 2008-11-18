@@ -19,6 +19,7 @@ $langGroup = "Grupės";
 $langEdit = "Redaguoti";
 $langGroupForum = "Grupės Forumas";
 $Language = "Kalba";
+$LoginName = "Prisijungimo vardas";
 $Assignments = "Studentų publikacijos";
 $Forum = "Forumas";
 $langCode = "Course code";

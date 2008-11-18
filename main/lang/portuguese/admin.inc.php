@@ -37,7 +37,6 @@ $langDBManagementOnlyForServerAdmin = "A gestão da base de dados está disponível
 $langShowUsersOfCourse = "Mostrar utilizadores inscritos neste curso";
 $langShowClassesOfCourse = "Mostrar turmas inscritas neste curso";
 $langShowGroupsOfCourse = "Mostrar grupos deste curso";
-$langLoginName = "Nome de Utilizador";
 $langPhone = "Telefone";
 $langPhoneNumber = "Número de Telefone";
 $langActions = "Acções";
@@ -808,4 +807,16 @@ $StylesheetAdded = "A folha de estilos foi acrescentada";
 $LDAPFilledTutorFieldValueTitle = "Valor de identificação do professor";
 $LDAPFilledTutorFieldValueComment = "Quando se realiza uma verificação no campo professor que aparece acima, para que o utilizador seja considerado professor, o valor que se lhe atribui deve ser um dos sub-elementos do campo professor. Se deixa este campo em branco, a única condição para que seja considerado como professor é que neste utilizador LDAP o campo exista. Por exemplo, o campo pode ser \"memberof\" e o valor de busca pode ser \"CN=G_TRAINER,OU=Trainer\"";
 $IsNotWritable = "não é editável";
+$CannotMoveField = "Não se pode mover o campo";
+$FieldDeleted = "O campo foi eliminado";
+$CannotDeleteField = "Não se pode eliminar o campo";
+$CannotMoveFieldOption = "Não se pode mover a opção";
+$DisplayOrder = "Mostrar ordem";
+$DaysBefore = "Dias antes";
+$DaysAfter = "dias depois";
+$SessionAddTypeUnique = "Inscrição única";
+$SessionAddTypeMultiple = "Inscrição múltipla";
+$SearchASession = "Procurar uma sessão";
+$ActiveSession = "Activação da sessão";
+$AddUrl = "Adicionar Url";
 ?>

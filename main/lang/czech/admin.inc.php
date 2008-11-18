@@ -32,7 +32,6 @@ $langDBManagementOnlyForServerAdmin = "Správa databáze je p&#345;ístupná pouze s
 $langShowUsersOfCourse = "Zobraz uživatele p&#345;ihlášeného do tohoto kurzu";
 $langShowClassesOfCourse = "Zobraz t&#345;ídy p&#345;ihlášené do tohoto kurzu ";
 $langShowGroupsOfCourse = "Zobraz skupiny tohoto kurzu";
-$langLoginName = "Login (P&#345;ihlásit)";
 $langPhone = "Telefon";
 $langPhoneNumber = "&#268;íslo telefónu";
 $langActions = "Akce";

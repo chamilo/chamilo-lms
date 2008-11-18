@@ -46,4 +46,5 @@ $UploadError = "Falha no envio de ficheiro; por favor, verificar os limites de u
 $DocumentsWillBeAddedToo = "Os documentos serão igualmente acrescentados";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Se desejar exportar uma Sequência de Aprendizagem contendo um  ou mais exercícios, deve confirmar que os exercícios correspondentes estão incluídos na exportação. Para isso, tem de seleccioná-los na lista de exercícios.";
 $ArchivesDirectoryNotWriteableContactAdmin = "A directoria de arquivos usadas por esta aplicação não é editável. Por favor, contacte o administrador da plataforma.";
+$DestinationCourse = "Curso de destino";
 ?>

@@ -37,7 +37,6 @@ $langDBManagementOnlyForServerAdmin = "Duomenų bazės administravimas prieinama
 $langShowUsersOfCourse = "Rodyti užsirašiusius į kursą studentus";
 $langShowClassesOfCourse = "Rodyti užsirašiusias į kursą klases";
 $langShowGroupsOfCourse = "Rodyti šio kurso grupes";
-$langLoginName = "Prisijungimo vardas";
 $langPhone = "Telefonas";
 $langPhoneNumber = "Telefono numeris";
 $langActions = "Veiksmai";

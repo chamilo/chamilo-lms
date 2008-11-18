@@ -103,4 +103,14 @@ $AverageTotal = "Average total";
 $Evaluation = "Evaluation";
 $EvaluationAverage = "Evaluation average";
 $EditCategory = "Edit category";
+$EditAllWeights = "Edit all weights";
+$GradebookQualificationTotal = "Total";
+$GradebookEvaluationDeleted = "The evaluation has been succesfully deleted";
+$GradebookQualifyLog = "Gradebook weight history";
+$GradebookNameLog = "Gradebook name";
+$GradebookDescriptionLog = "Gradebook description";
+$GradebookVisibilityLog = "Gradebook visibility";
+$ResourceType = "Resource type";
+$GradebookWhoChangedItLog = "Who changed it";
+$EvaluationEdited = "The evaluation has been succesfully edited";
 ?>

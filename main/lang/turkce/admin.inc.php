@@ -37,7 +37,6 @@ $langDBManagementOnlyForServerAdmin = "Veritaban&#305; yönetimi yaln&#305;zca su
 $langShowUsersOfCourse = "Bu derse kay&#305;tl&#305; ö&#287;rencileri göster";
 $langShowClassesOfCourse = "Bu derse kay&#305;tl&#305; s&#305;n&#305;flar&#305; göster";
 $langShowGroupsOfCourse = "Derse ait gruplar&#305; göster";
-$langLoginName = "Kullan&#305;c&#305; ad&#305;";
 $langPhone = "Telefon";
 $langPhoneNumber = "Telefon no";
 $langActions = "Eylemler";

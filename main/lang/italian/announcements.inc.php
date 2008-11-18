@@ -50,4 +50,5 @@ $NoAnnouncements = "Non ci sono avvisi";
 $SelectEverybody = "Seleziona tutti";
 $SelectedUsersGroups = "Gruppi di utenti selezionati";
 $LearnerMessage = "Messaggio da un corsista";
+$TitleIsRequired = "Il titolo è indispensabile";
 ?>

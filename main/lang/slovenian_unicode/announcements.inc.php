@@ -50,4 +50,5 @@ $NoAnnouncements = "Tu ni nobenih obvestil";
 $SelectEverybody = "Izberi vse";
 $SelectedUsersGroups = "izbrani uporabniki, skupine";
 $LearnerMessage = "Sporočilo tečajnika";
+$TitleIsRequired = "Naslov je zahtevan";
 ?>

@@ -32,7 +32,6 @@ $langDBManagementOnlyForServerAdmin = "Manajemen Database hanya tersedia bagi ad
 $langShowUsersOfCourse = "Tampilkan user yang terdaftar di mata kuliah ini";
 $langShowClassesOfCourse = "Tampilkan klas yang terdaftar di mata kuliah ini";
 $langShowGroupsOfCourse = "Tampilkan group-group pada mata kuliah ini";
-$langLoginName = "Login";
 $langPhone = "Telepon";
 $langPhoneNumber = "Nomor Telepon";
 $langActions = "Aksi";

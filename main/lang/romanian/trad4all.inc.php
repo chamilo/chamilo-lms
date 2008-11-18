@@ -18,6 +18,7 @@ $langGroup = "Grup";
 $langEdit = "Editeaza";
 $langGroupForum = "Forumul grupului";
 $Language = "Limba";
+$LoginName = "Login(logare)";
 $Assignments = "Publicatiile studentilor";
 $Forum = "Forum";
 $langCode = "Codul cursului";

@@ -33,7 +33,6 @@ $langDBManagementOnlyForServerAdmin = "Zarz&#261;dzania baz&#261; danych wymaga 
 $langShowUsersOfCourse = "Poka&#380; u&#380;ytkowników zapisanych na ten kurs";
 $langShowClassesOfCourse = "Poka&#380; klasy (grupy dydaktyczne) zapisane na ten kurs";
 $langShowGroupsOfCourse = "Poka&#380; grupy nale&#380;&#261;ce do tego kursu";
-$langLoginName = "Login";
 $langPhone = "Telefon";
 $langPhoneNumber = "Numer telefonu";
 $langActions = "Czynno&#347;ci";

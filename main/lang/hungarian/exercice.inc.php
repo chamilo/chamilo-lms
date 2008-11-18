@@ -239,4 +239,13 @@ $ExportWithoutUserFields = "Felhasználói mez&#337;k kihagyása exportáláskor";
 $DisableResults = "Ne mutassa meg az eredményeket a hallgatóknak";
 $EnableResults = "Mutassa meg az eredményeket a hallgatóknak";
 $ValidateAnswer = "Válaszok kiértékelése";
+$FillInBlankSwitchable = "Válaszok sorrendjének összekeverésének engedélyezése";
+$ReachedMaxAttempts = "Nem töltheti ki újra a(z) \'%s\' tesztet, mivel túllépte a maximális próbálkozások (%s) számát.";
+$AdvancedParameters = "További paraméterek";
+$RandomQuestionsToDisplay = "Mennyi véletlenszer&#369;en rendezett kérdés jelenjen meg";
+$RandomQuestionsHelp = "A véletlenszer&#369;en rendezett kérdések száma; 0 esetén az összes kérdés a helyes sorrendben jelenik meg";
+$RandomQuestionsHelp = "A véletlenszer&#369;en kiválasztott kérdések száma, amiket a rendszer véletlenszer&#369;en választott a teljes listából. 0 megadása esetén egy sem lesz összekeverve. <br />Adja meg az összes kérdés számát, ha össze akarja keverni az összes kérdést. ";
+$ExerciseAttempts = "Engedélyezett próbálkozások száma";
+$DoNotRandomize = "Ne keverje össze véletlenszer&#369;en";
+$Infinite = "korlátlanul";
 ?>

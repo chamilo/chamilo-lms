@@ -37,7 +37,6 @@ $langDBManagementOnlyForServerAdmin = "Database-håndtering er kun tilgængelig fo
 $langShowUsersOfCourse = "Vis brugerne på deltagerlisten";
 $langShowClassesOfCourse = "Vis klasserne tilknyttet kursussiden";
 $langShowGroupsOfCourse = "Vis grupperne i dette kursus";
-$langLoginName = "Login";
 $langPhone = "Telefon";
 $langPhoneNumber = "Telefonnummer";
 $langActions = "Handlinger";

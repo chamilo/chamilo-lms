@@ -37,7 +37,6 @@ $langDBManagementOnlyForServerAdmin = " لا يسمح بإدارة ركيزة ا
 $langShowUsersOfCourse = " إظهار المستخدمين المسجلين في هذا المقرر";
 $langShowClassesOfCourse = " إظهار فصول هذا المقرر";
 $langShowGroupsOfCourse = " إظهار مجموعات هذا المقرر";
-$langLoginName = " التسجيل";
 $langPhone = " الهاتف";
 $langPhoneNumber = " رقم الهاتف";
 $langActions = " اجراءات";

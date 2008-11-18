@@ -18,6 +18,7 @@ $langGroup = "Grupa";
 $langEdit = "Labot";
 $langGroupForum = "Grupas diskusija";
 $Language = "Valoda";
+$LoginName = "lietot&#257;jv&#257;rds";
 $Assignments = "Studentu publik&#257;cijas";
 $Forum = "Diskusija";
 $langCode = "Kursa kods";

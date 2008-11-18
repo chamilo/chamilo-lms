@@ -103,4 +103,14 @@ $AverageTotal = "Media complessiva";
 $Evaluation = "Valutazione";
 $EvaluationAverage = "Valutazione media";
 $EditCategory = "Modifica la categoria";
+$EditAllWeights = "Modifica tutti i pesi";
+$GradebookQualificationTotal = "Totale";
+$GradebookEvaluationDeleted = "La valutazione è stata eliminata come richiesto";
+$GradebookQualifyLog = "Storico dei Registro";
+$GradebookNameLog = "Nome del Registro";
+$GradebookDescriptionLog = "Descrizione del Registro";
+$GradebookVisibilityLog = "Visibilità del Registro";
+$ResourceType = "Tipo di risorsa";
+$GradebookWhoChangedItLog = "Cambiato da";
+$EvaluationEdited = "La valutazione è stata modificata come richiesto";
 ?>

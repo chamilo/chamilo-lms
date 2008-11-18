@@ -18,6 +18,7 @@ $langGroup = "กลุ่ม";
 $langEdit = "แก้ไข";
 $langGroupForum = "กลุ่มอภิปราย";
 $Language = "ภาษา ";
+$LoginName = "ชื่อที่ใช้เข้าสู่ระบบ";
 $Assignments = "งานที่อาจารย์มอบหมาย/การบ้าน";
 $Forum = "การอภิปราย : Forum";
 $langCode = "รหัสวิชา";

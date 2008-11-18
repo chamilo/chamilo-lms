@@ -218,4 +218,12 @@ $AccessDetails = "Access details";
 $DateAndTimeOfAccess = "Date and time of access";
 $Duration = "Duration";
 $WrongDatasForTimeSpentOnThePlatform = "The datas about this user were registered when the calculation of time spent on the platform wasn\'t possible.";
+$DisplayCoaches = "Coaches Overview";
+$DisplayUserOverview = "User overview";
+$ExportUserOverviewOptions = "User overview export options";
+$FollowingFieldsWillAlsoBeExported = "The following fields will also be exported";
+$TotalExercisesScoreObtained = "Total obtained exercise score";
+$TotalExercisesScorePossible = "Total possible exercise score";
+$TotalExercisesAnswered = "Number of exercises answered";
+$TotalExercisesScorePercentage = "Procentual total score of the exercises";
 ?>

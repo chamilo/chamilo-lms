@@ -17,6 +17,7 @@ $langGroup = "Grupa";
 $langEdit = "Izmeni";
 $langGroupForum = "Forum grupe";
 $Language = "Jezik";
+$LoginName = "Korisni&#269;ko ime";
 $Assignments = "Publikacije studenata ";
 $Forum = "Forum ";
 $langCode = "Šifra kursa";

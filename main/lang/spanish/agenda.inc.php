@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$AgendaAdd = "Añadir un evento";
+$AgendaAdd = "Añadir un evento ";
 $ShowAll = "Mostrar todos los eventos";
 $ShowCurrent = "Mostrar todos los eventos del mes";
 $AddCalendarItem = "Añadir un nuevo evento a la agenda";

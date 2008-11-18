@@ -32,7 +32,6 @@ $langDBManagementOnlyForServerAdmin = "การบริหารจัดการระบบฐานข้อมูล อนุญาตเฉพาะผ
 $langShowUsersOfCourse = "แสดงชื่อสมาชิกที่สมัครเข้าเรียนในรายวิชา ";
 $langShowClassesOfCourse = "แสดงชื่อหมู่เรียนที่สมัครเรียนในรายวิชานี้ ";
 $langShowGroupsOfCourse = "แสดงกลุ่มของรายวิชา ";
-$langLoginName = "ชื่อที่ใช้เข้าสู่ระบบ";
 $langPhone = "โทรศัพท์ ";
 $langPhoneNumber = "เบอร์โทรศัพท์ ";
 $langActions = "สิทธิฐานะ";

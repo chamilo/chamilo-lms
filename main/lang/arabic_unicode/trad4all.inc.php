@@ -19,6 +19,7 @@ $langGroup = "مجموعات";
 $langEdit = "تحرير ";
 $langGroupForum = "منتدى المجموعة ";
 $Language = "اللغة ";
+$LoginName = " التسجيل";
 $AutostartMp3 = "اضغط على موافق إذا كنت ترغب في تشغيل الملف الصوتي تلقائياً";
 $Assignments = "نشرات الطلاب ";
 $Forum = "منتدى ";

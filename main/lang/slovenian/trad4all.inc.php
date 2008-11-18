@@ -19,6 +19,7 @@ $langGroup = "Skupine";
 $langEdit = "Uredi";
 $langGroupForum = "Forum skupine";
 $Language = "Jezik";
+$LoginName = "Uporabniško ime";
 $AutostartMp3 = "Kliknite OK, èe želite, da bo avdio datoteka predvajana avtomatièno";
 $Assignments = "Zadolžitve";
 $Forum = "Forum";

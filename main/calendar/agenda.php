@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 16723 2008-11-12 15:41:34Z pcool $
+<?php //$Id: agenda.php 16785 2008-11-18 21:32:39Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -327,14 +327,14 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		     $course_info = api_get_course_info();
 			    $event_start    = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
                 $event_stop     = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
-				$id = agenda_add_item($course_info,$_POST['title'],$_POST['content'],$event_start,$event_stop,$_POST['selectedform']);
+				$id = agenda_add_item($course_info,$_POST['title'],$_POST['content'],$event_start,$event_stop,$_REQUEST['group'],$_REQUEST['user'],$_POST['selectedform']);
                 if(!empty($_POST['repeat']))
                 {
                 	$end_y = intval($_POST['repeat_end_year']);
                     $end_m = intval($_POST['repeat_end_month']);
                     $end_d = intval($_POST['repeat_end_day']);
                     $end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
-                    $res = agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,$event_start,$event_stop,$_POST['selectedform']);
+                    $res = agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,null,$_REQUEST['group'],$_REQUEST['user']);                                       
                 }
 				display_agenda_items();
 			}
@@ -349,7 +349,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			{ // a coach can only delete an element belonging to his session
 				if ($_POST['submit_event'])
 				{
-						store_edited_agenda_item();
+						store_edited_agenda_item($_REQUEST['user'],$_REQUEST['group']);
 						display_agenda_items();
 				}
 				else

@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 16723 2008-11-12 15:41:34Z pcool $
+<?php //$Id: agenda.inc.php 16785 2008-11-18 21:32:39Z yannoo $
 
 /*
 ==============================================================================
@@ -1066,9 +1066,8 @@ function change_visibility($tool,$id)
 * The links that allows the course administrator to add a new agenda item, to filter on groups or users
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function display_courseadmin_links()
-{
-	echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=add&amp;origin=".$_GET['origin']."'><img src=\"../img/calendar_add.gif\" alt=\"".get_lang('MoreStats')."\" border=\"0\" /> ".get_lang("AgendaAdd")."</a> ";
+function display_courseadmin_links() {	
+	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;group=".Security::remove_XSS($_REQUEST['group'])."&amp;user=".Security::remove_XSS($_REQUEST['user'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'><img src=\"../img/calendar_add.gif\" alt=\"".get_lang('MoreStats')."\" border=\"0\" /> ".get_lang("AgendaAdd")."</a>";
 	
 	if (empty ($_SESSION['toolgroup']))
 	{
@@ -1090,30 +1089,30 @@ function display_student_links()
 	global $show;
 	if ($_SESSION['sort'] == 'DESC')
 	{
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_up.gif',get_lang('AgendaSortChronologicallyUp')).' '.get_lang("AgendaSortChronologicallyUp")."</a> ";
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;group=".Security::remove_XSS($_REQUEST['group'])."&amp;user=".Security::remove_XSS($_REQUEST['user'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_up.gif',get_lang('AgendaSortChronologicallyUp')).' '.get_lang("AgendaSortChronologicallyUp")."</a> ";
 	}
 	else
 	{
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=desc&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_down.gif',get_lang('AgendaSortChronologicallyDown')).' '.get_lang("AgendaSortChronologicallyDown")."</a> ";
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=desc&amp;group=".Security::remove_XSS($_REQUEST['group'])."&amp;user=".Security::remove_XSS($_REQUEST['user'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_down.gif',get_lang('AgendaSortChronologicallyDown')).' '.get_lang("AgendaSortChronologicallyDown")."</a> ";
 	}
 
 	// showing the link to show all items or only those of the current month
 	if ($_SESSION['show']=="showcurrent")
 	{
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showall&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_select.gif').' '.get_lang("ShowAll")."</a> ";
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showall&amp;group=".Security::remove_XSS($_REQUEST['group'])."&amp;user=".Security::remove_XSS($_REQUEST['user'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_select.gif').' '.get_lang("ShowAll")."</a> ";
 	}
 	else
 	{
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showcurrent&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_month.gif').' '.get_lang("ShowCurrent")."</a> ";
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showcurrent&amp;group=".Security::remove_XSS($_REQUEST['group'])."&amp;user=".Security::remove_XSS($_REQUEST['user'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_month.gif').' '.get_lang("ShowCurrent")."</a> ";
 	}
 	
 	if ($_SESSION['view'] <> 'month')
 	{
-		echo "\t<a href=\"".api_get_self()."?action=view&amp;view=month\"><img src=\"../img/calendar_month.gif\" border=\"0\" alt=\"".get_lang('MonthView')."\" /> ".get_lang('MonthView')."</a> ";
+		echo "<a href=\"".api_get_self()."?action=view&amp;group=".Security::remove_XSS($_REQUEST['group'])."&amp;user=".Security::remove_XSS($_REQUEST['user'])."&amp;view=month\"><img src=\"../img/calendar_month.gif\" border=\"0\" alt=\"".get_lang('MonthView')."\" /> ".get_lang('MonthView')."</a> ";
 	}
 	else 
 	{
-		echo "\t<a href=\"".api_get_self()."?action=view&amp;view=list\"><img src=\"../img/calendar_select.gif\" border=\"0\" alt=\"".get_lang('ListView')."\" /> ".get_lang('ListView')."</a> ";
+		echo "\t<a href=\"".api_get_self()."?action=view&amp;group=".Security::remove_XSS($_REQUEST['group'])."&amp;user=".Security::remove_XSS($_REQUEST['user'])."&amp;view=list\"><img src=\"../img/calendar_select.gif\" border=\"0\" alt=\"".get_lang('ListView')."\" /> ".get_lang('ListView')."</a> ";
 	}
 }
 
@@ -1179,7 +1178,7 @@ function get_agenda_item($id)
 * 3. modify the attachments (if needed)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function store_edited_agenda_item()
+function store_edited_agenda_item($id_user,$id_group)
 {
 	global $_user, $_course;
 
@@ -1227,7 +1226,7 @@ function store_edited_agenda_item()
 		}
 		else // the message is sent to everyone, so we set the group to 0
 		{
-			api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_user['user_id'], '','',$start_date,$end_date);
+			api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_user['user_id'], $id_group,$id_user,$start_date,$end_date);
 		}
 
 	} //if ($edit_result=true)
@@ -1661,15 +1660,16 @@ function display_agenda_items()
     	{
     		if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) )
 			{ // a coach can only delete an element belonging to his session
+				$mylink = api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;group='.Security::remove_XSS($_REQUEST['group']).'&amp;user='.Security::remove_XSS($_REQUEST['user']).'&amp;id='.$myrow['id'];
 	    		echo '<td align="center">';
 	    		// edit
-    			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.$_GET['origin'].'&amp;action=edit&amp;id='.$myrow['id'].'" title="'.get_lang("ModifyCalendarItem").'">';
+    			echo '<a href="'.$mylink.'&amp;action=edit" title="'.get_lang("ModifyCalendarItem").'">';
 	    		echo "<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang("ModifyCalendarItem")."\" /></a>";
 	    		
-    			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;origin=".$_GET['origin']."&amp;action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\"> ";
+    			echo "<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\"> ";
 	    		echo "<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang("Delete")."\"/></a>";
 	    		 	 
-    			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.$_GET['origin'].'&amp;action=announce&amp;id='.$myrow['id'].'" title="'.get_lang("AddAnnouncement").'">';				
+    			echo '<a href="'.$mylink.'&amp;action=announce" title="'.get_lang("AddAnnouncement").'">';				
     			echo "<img src=\"../img/announce_add.gif\" border=\"0\" alt=\"".get_lang("AddAnnouncement")."\"/></a> ";
 	    		if ($myrow['visibility']==1)
 	    		{
@@ -1679,7 +1679,7 @@ function display_agenda_items()
 	    		{
 	    			$image_visibility="invisible";
 	    		}
-    			echo 	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.$_GET['origin'].'&amp;action=showhide&amp;id='.$myrow['id'].'" title="'.get_lang("langVisible").'">',
+    			echo 	'<a href="'.$mylink.'&amp;action=showhide" title="'.get_lang("langVisible").'">',
     					'<img src="../img/'.$image_visibility.'.gif" border="0" alt="'.get_lang("Visible").'" /></a> ';
 			}
     
@@ -1698,9 +1698,10 @@ function display_agenda_items()
     	{
     		$td_colspan= '<td colspan="2">';
     	}
-		echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'].'&amp;class=confidential" title="'.get_lang('ExportiCalConfidential').'"><img src="'.$export_icon_high.'" alt="'.get_lang('ExportiCalConfidential').'"/></a> ';
-    	echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'].'&amp;class=private" title="'.get_lang('ExportiCalPrivate').'"><img src="'.$export_icon_low.'" alt="'.get_lang('ExportiCalPrivate').'"/></a> ';
-    	echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'].'&amp;class=public" title="'.get_lang('ExportiCalPublic').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalPublic').'"/></a> ';
+    	$mylink = 'ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'];
+		echo '<a class="ical_export" href="'.$mylink.'&amp;class=confidential" title="'.get_lang('ExportiCalConfidential').'"><img src="'.$export_icon_high.'" alt="'.get_lang('ExportiCalConfidential').'"/></a> ';
+    	echo '<a class="ical_export" href="'.$mylink.'&amp;class=private" title="'.get_lang('ExportiCalPrivate').'"><img src="'.$export_icon_low.'" alt="'.get_lang('ExportiCalPrivate').'"/></a> ';
+    	echo '<a class="ical_export" href="'.$mylink.'&amp;class=public" title="'.get_lang('ExportiCalPublic').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalPublic').'"/></a> ';
 	    echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('print.gif', get_lang('Print')).'</a>&nbsp;';	    	
     	echo '</td>';
     	echo '</tr>';    	
@@ -1928,31 +1929,28 @@ function display_one_agenda_item($agenda_id)
 		DISPLAY: edit delete button (course admin only)
 	  --------------------------------------------------*/
 	echo '<tr><td colspan="2">';
-	if (!$repeat && api_is_allowed_to_edit(false,true))
-		{
+	if (!$repeat && api_is_allowed_to_edit(false,true))	{
 		// edit
-		echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;origin=".$_GET['origin']."&amp;action=edit&amp;id=".$myrow['id']."\">",
+		$mylink = api_get_self()."?".api_get_cidreq()."&amp;origin=".Security::remove_XSS($_GET['origin'])."&amp;group=".Security::remove_XSS($_REQUEST['group'])."&amp;user=".Security::remove_XSS($_REQUEST['user'])."&amp;id=".$myrow['id'];
+		echo 	"<a href=\"".$mylink."&amp;action=edit\">",
 				"<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang("ModifyCalendarItem")."\" /></a>",
-				"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;origin=".$_GET['origin']."&amp;action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">",
+				"<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">",
 				"<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang("Delete")."\" /></a>";
-		if ($myrow['visibility']==1)
-			{
+		if ($myrow['visibility']==1) {
 			$image_visibility="visible";
-			}
-		else
-			{
+		} else {
 			$image_visibility="invisible";
-			}
-		echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;origin=".$_GET['origin']."&amp;action=showhide&amp;id=".$myrow['id']."\">",
-				"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" alt=\"".get_lang("Visible")."\" /></a><br /><br />";
 		}
-    echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'].'&amp;class=confidential" title="'.get_lang('ExportiCalConfidential').'"><img src="'.$export_icon_high.'" alt="'.get_lang('ExportiCalConfidential').'"/></a>';
-    echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'].'&amp;class=private" title="'.get_lang('ExportiCalPrivate').'"><img src="'.$export_icon_low.'" alt="'.get_lang('ExportiCalPrivate').'"/></a>';
-    echo '<a class="ical_export" href="ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'].'&amp;class=public" title="'.get_lang('ExportiCalPublic').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalPublic').'"/></a>';
+		echo 	"<a href=\"".$mylink."&amp;action=showhide\">",
+				"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" alt=\"".get_lang("Visible")."\" /></a><br /><br />";
+	}
+   	$mylink = 'ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'];
+    echo '<a class="ical_export" href="'.$mylink.'&amp;class=confidential" title="'.get_lang('ExportiCalConfidential').'"><img src="'.$export_icon_high.'" alt="'.get_lang('ExportiCalConfidential').'"/></a>';
+    echo '<a class="ical_export" href="'.$mylink.'&amp;class=private" title="'.get_lang('ExportiCalPrivate').'"><img src="'.$export_icon_low.'" alt="'.get_lang('ExportiCalPrivate').'"/></a>';
+    echo '<a class="ical_export" href="'.$mylink.'&amp;class=public" title="'.get_lang('ExportiCalPublic').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalPublic').'"/></a>';
     echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('print.gif', get_lang('Print')).'</a>&nbsp;';	
 	echo "</td>";
-    if($repeat)
-    {
+    if($repeat) {
     	echo '<tr>';
     	echo '<td colspan="2">',get_lang('RepeatedEvent'),'<a href="',api_get_self(),'?',api_get_cidreq(),'&amp;agenda_id=',$repeat_id,'" alt="',get_lang('RepeatedEventViewOriginalEvent'),'">',get_lang('RepeatedEventViewOriginalEvent'),'</a></td>';
         echo '</tr>';
@@ -2080,7 +2078,8 @@ function show_add_form($id = '')
 <form enctype="multipart/form-data" action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
 <input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
 <input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
-
+<input type="hidden" name="group" value="<?php echo Security::remove_XSS($_REQUEST['group']); ?>" />
+<input type="hidden" name="user" value="<?php echo Security::remove_XSS($_REQUEST['user']); ?>" />
 <table border="0" cellpadding="5" cellspacing="0" width="100%" id="newedit_form">
 	<!-- the title -->
 	<tr class="title">
@@ -3832,7 +3831,7 @@ function add_year($timestamp,$num=1)
  * @param   int     Parent id (optional)
  * @return  int     The new item's DB ID
  */
-function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date, $to=array(), $parent_id=null)
+function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date,$group_id,$id_user,$to=array(), $parent_id=null)
 {
     $user_id    = api_get_user_id();
     $t_agenda   = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
@@ -3879,7 +3878,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     
     if(!$done) // the message is sent to everyone, so we set the group to 0
     {
-        api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id, '','',$start_date,$end_date);
+        api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id, $group_id,$id_user,$start_date,$end_date);
     }
     // storing the resources
     store_resources($_SESSION['source_type'],$last_id);
@@ -3891,10 +3890,12 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
  * @param   int     The original event's id
  * @param   string  Type of repetition
  * @param   int     Timestamp of end of repetition (repeating until that date)
- * @param   array   Original event's destination
+ * @param   array   Original event's destination (users list)
+ * @param	int		Group ID
+ * @param	int		User ID
  * @return  boolean False if error, True otherwise
  */
-function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest)
+function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$id_group=null,$id_user=null)
 {
 	$t_agenda   = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
     $t_agenda_r = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_info['dbName']);
@@ -3950,20 +3951,20 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest)
             case 'daily':
                 for($i = $orig_start + 86400; ($i <= $end); $i += 86400)
                 {
-                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $i), date('Y-m-d H:i:s', $i+$diff), $orig_dest, $orig_id);
+                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $i), date('Y-m-d H:i:s', $i+$diff), $id_group, $id_user, $orig_dest, $orig_id);
                 }
                 break;
             case 'weekly':
                 for($i = $orig_start + 604800; ($i <= $end); $i += 604800)
                 {
-                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $i), date('Y-m-d H:i:s', $i+$diff), $orig_dest, $orig_id);
+                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $i), date('Y-m-d H:i:s', $i+$diff), $id_group, $id_user, $orig_dest, $orig_id);
                 }
                 break;
             case 'monthlyByDate':
                 $next_start = add_month($orig_start);
                 while($next_start <= $end)
                 {
-                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_start+$diff), $orig_dest, $orig_id);
+                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_start+$diff), $id_group, $id_user, $orig_dest, $orig_id);
                     $next_start = add_month($next_start);
                 }
                 break;
@@ -3977,7 +3978,7 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest)
                 $next_start = add_year($orig_start);
                 while($next_start <= $end)
                 {
-                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_start+$diff), $orig_dest, $orig_id);
+                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_start+$diff), $id_group, $id_user,$orig_dest, $orig_id);
                     $next_start = add_year($next_start);
                 }
                 break;
@@ -4045,4 +4046,3 @@ function agenda_import_ical($course_info,$file)
     }
     return true;
 }
-?>

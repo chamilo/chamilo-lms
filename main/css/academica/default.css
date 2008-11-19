@@ -358,12 +358,11 @@ form span.form_error {
 /* actions */
 .actions_lp {
 	background:#F8F8F8;
-	/*border-bottom:1px solid #999999; */
-	/*border-top:1px solid #999999; */
+	border-bottom:1px solid #4171b5;
+	border-top:1px solid #4171b5;
 	height:29px;
 	padding-left: -17px;
 	margin-bottom: 1px;
-	background:url(images/actions.jpg) repeat-x;
 	vertical-align:middle;
 	width: 90%;
 	margin-left:17px;
@@ -1029,10 +1028,61 @@ span.radio {
 	padding: 0;
 	margin: 0 .8em;
 }
+
+/* system announcements */
+div.system_announcement {
+	padding: .2em;
+	background-color: #d6e3f5;
+	border: 1px solid #002D6D;
+	color: #002D6D;
+}
+
+.system_announcement {
+	background: #8cafe1 url('images/crystal3.png') repeat-x;
+	font: bold 100% arial, sans-serif, sans;
+	color: #fff;
+}
+
+.system_announcement a {
+	color: #d6e3f5;
+}
+
+.system_announcement a:hover,.system_announcement a:focus {
+	color: #fff;
+}
+
+.system_announcement_content {
+	font: normal 100% 'Lucida Grande', verdana, Arial, sans-serif, sans;
+}
+
+.system_announcements {
+	background: transparent url('images/systemenouvelles.jpg') no-repeat top
+		left;
+	padding-top: 30px;
+	width: 50%;
+}
+
+.system_announcements h3 {
+	text-align: center;
+}
+
+.system_announcement_title {
+	color: #fff;
+}
+
 #image_preview {
 	text-align:center;
 	padding-left: 17px;
 }
 .skip {
 	display: none;
+}
+/* Specific forms: profile,add course,advanced search,advanced course search,etc.. */
+#add_course,#profile,#advanced_course_search,#advanced_search,#category,#course_user_import,#export_users,#update_course,#user_add,#user_import
+	{
+	border: 1px solid #0049AF;
+	background: transparent url("images/headerform.jpg") no-repeat top left;
+	width: 550px;
+	position: relative;
+	padding: 60px 0 1em 0;
 }

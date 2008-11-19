@@ -1,447 +1,239 @@
-/*
-==============================================================================
-							BABY STYLESHEET
-==============================================================================
-*/
-/*
-==============================================================================
-	GLOBAL STYLES - REDEFINED HTML TAGS
-==============================================================================
-*/
-
+/* Styles that should disappear */
+.row {
+	width:100%;
+}
+div.row div.label {
+	width: 0%;
+}
+div.row div.formw {
+	width: 100%;
+}
+/* Redefining html styles */
+body {
+	font-family: arial, verdana, helvetica, sans-serif;
+	font-size: 12px;
+	color: #000;
+	background-color: #fff;	
+	margin: 0;
+	padding: 0;
+}
+img {
+	border: none;
+}
 a {
+	font-family:Arial, Helvetica, sans-serif;
+	font-weight: bold;
 	text-decoration: none;
-	font: bold 100% Arial, sans-serif, sans;
+}
+a:link {
 	color: #317100;
 }
-
-a:hover,a:focus {
+a:visited {
+	color: #317100;
+}
+a:hover {
 	color: #683000;
 }
-
-blockquote {
-	font: 1.1em arial, sans, sans-serif;
+a:active {
 }
-
-body {
-	margin: 0;
-	padding: 0;
-	font-size: .85em;
-	font-family: 'Lucida Grande', verdana, Arial, sans-serif, sans;
-	color: #000;
-	background-color: #fff;
+input, input[type=file], select, textarea {
+	border:1px solid #EE4C03;
+	padding:1px 2px;
 }
-
-h3 {
-	font: bold 1.3em Arial, sans-serif, sans;
+input[type=button], input[type=submit] {
+	border:1px solid #EE4C03;
+	background:#F0F0F0;
+	padding-left:10px;
+	padding-right:10px;
+	font-weight:bold;
+	color:#EE4C03;
 }
-
-h4 {
-	font: bold 1.2em Arial, sans-serif, sans;
-}
-
-img {
-	border: 0;
-}
-
-input {
-	margin-left: 1em;
-	border-color: #EE4C03;
-	border-width: 1px;
-	background-color: #fff;
-	font: normal 90% verdana, Arial, sans, sans-serif;
-}
-
-p {
-	clear: both;
-	width: 90%;
-}
-
-select,textarea {
-	font: normal 90% verdana, Arial, sans, sans-serif;
-	border: 1px solid #EE4C03;
-}
-
-small {
-	font-size: .9em;
-}
-
-table {
-	clear: both;
-	padding: 0;
-}
-
-tr,td {
-	padding: .35em;
-}
-
-ul {
-	list-style: none;
-}
-
-/*
-==============================================================================
-	PAGE STRUCTURE
-==============================================================================
-*/
-
-/* user_portal course status icon */
-.coursestatusicons {
-	float: left;
-	clear: left;
-	margin-right: .5em;
-}
-
-/* user_portal course list */
-.courses {
-	font-weight: bold;
-	list-style: none;
-	margin-bottom: .2em;
-	font-family: arial, sans-serif, sans;
-	font-size: 110%;
-}
-
-#main {
-	font-size: 89%;
-	width: 96%;
-	padding: 0 1% 15px 3%;
-	/* min-height hack for ie6 or older*/
-	min-height: 320px;
-	height: auto !important;
-	height: 320px;
-	clear: both;
-	float: left;
-	margin-bottom:1em;
-}
-
-/* For ie6 browsers or older*/
-* html #main {
-	padding: 0 1% 15px 2.96%;
-}
-
-
-.maincontent {
-	margin: 0 0 1em 1em;
-	width: 69%;
-	float: right;
-	clear: right;
-}
-
-#outerframe {
-	background-color: #fff;
-	width: 100%;
-	margin: 0;
-	padding: 0;
-}
-
-.user_course_category {
-	font: bold 110% sans, sans-serif, arial;
-	text-transform: capitalize;
-	text-align: left;
-	background: transparent url("images/thindivider.jpg") no-repeat 20% 100%;
-	height: 2.8em;
-	border-top:2px solid #5F5700;
-	padding-top:0.5em;
-	color: #5F5700;
-	width:80%;
-	margin:.8em 0;
-}
-.sessions_list {
-    line-height: 20px; margin-top: 20px;
-}
-.sessions_list_inactive {
-    line-height: 20px;
-}
-.session_box {
-	font: bold 110% sans, sans-serif, arial;
-	text-transform: capitalize;
-	text-align: left;
-	background: transparent url("images/thindivider.jpg") no-repeat 20% 100%;
-	height: 2.8em;
-	border-top:2px solid #5F5700;
-	padding-top:0.5em;
-	color: #5F5700;
-	width:80%;
-	margin:.8em 0;
-	margin-bottom: 10px;
-}
-.session_box_title {
-}
-.session_box_coach {
-}
-.session_course_item {
-    padding: 0px; margin: 0px;
-}
-/*
-==============================================================================
-	HEADER STYLES
-==============================================================================
-*/
-
+/* header 1 styles */ 
 #header {
 	background: transparent url('images/bgheader.jpg') repeat-y top right;
-	font: bold .85em Arial, sans-serif, sans;
-	width: 100%;
-	line-height: .8em;
-	float: left;
-	clear: both;
-	margin-bottom: .5em;
-	position:relative;
+	font-weight: bold;
 }
-
-#header a {
-	text-decoration: none;
-}
-
-#header li#current a,#header a:hover,header a:focus {
-	text-decoration: none;
-}
-
-/*
-------------------------------------------------------------------------------
-	HEADER 1: Title, portal, organisation, course title
-------------------------------------------------------------------------------
-*/
-
 #header1 {
-	width: 30%;
-	float: left;
-	clear: left;
-	margin: .5em 0 0 0;
+	padding-left: 30px;
 }
-
-#header1 a:hover,#header1 a:focus {
+#header1 a {
 	text-decoration: none;
 }
-
-#header1 #my_courses {
-	display: none;
-	visibility: hidden;
+#header1 a:hover {
 }
-
-#top_corner
-{
-
+#header1right {
+	float: right;
+	font-weight: bold;
 }
-
-#institution {
-	margin: 0 0 0 3.9em;
+#header1 img {
+	border: 0px;
 }
-
-/*
-------------------------------------------------------------------------------
-	HEADER 2: Users online, help, student/teacher view
-------------------------------------------------------------------------------
-*/
-
+/* header 2 styles */ 
 #header2 {
-	width: 60%;
-	text-align: right;
-	float: right;
-	clear: right;
-	margin: .5em 0 0 0;
-	padding: 0;
-	text-align: right;
-}
-
-#header2 ul {
-	list-style: none;
-	margin: 0 1.9em 0 0;
-	padding: 0;
-}
-
-#header2 ul li {
-	display: inline;
-	width: auto;
-	margin: 0 .1em 0 .2em;
-	padding: 0;
-}
-
-#Header2Right li a img {
-	margin: -.4em 0 0 0;
-	padding: 0;
-}
-
-/*
-------------------------------------------------------------------------------
-	HEADER 3: Main menu
-------------------------------------------------------------------------------
-*/
-
-#header3 {
-	width: 100%;
-	margin: 0;
-	padding: 0;
-	float: left;
-	clear: both;
-}
-
-#header3 input.logout {
-	/* makes an input appear like a link in this header */
-	background-color: transparent;
-	border: none;
-	color: #e4031e;
-	height: auto;
-	display: inline;
-	line-height: 1em;
-	font: bold 1em Arial, sans-serif, sans;
-	margin: -.3em 0 0 2em;
-	padding: 0;
-}
-
-#header3 form {
-	margin: 0;
-	padding: 0;
-}
-
-#header3 #logout {
-	display: inline;
-	float: right;
-	clear: right;
-	margin: 0 1.5em 0 0;
-	padding: 0;
-	width: 10%;
-}
-
-#header3 #logout li {
-	display: block;
-	margin: 0;
-	padding: 0;
 	float: right;
 	clear: right;
 }
-
-#header3 ul {
-	list-style: none;
-	margin: 0 0 0 3.9em;
-	padding: 0;
-	width: 80%;
-}
-
-#header3 ul li {
-	float: left;
-	display: inline;
-	list-style: none;
-	margin: 0 1em 0 0;
-	padding: 0;
-	width: auto;
-}
-
-#header3 ul li a {
-	display: inline;
-}
-
-/*
-------------------------------------------------------------------------------
-    HEADER 4:
-------------------------------------------------------------------------------
-*/
-
-#header4 {
-	margin-top: .9em;
-	text-indent: 3.9em;
-	width: 100%;
-	float: left;
-	clear: both;
-	line-height: .9em;
-	height: auto;
-	background: #fff none;
-	position: relative;
-	padding: 0;
-}
-
-/* Solves the IE inherited margin bug */ /* IE-7*/
-* :first-child+html #header4 {
-	margin-top: 0;
-}
-
-/*IE-6 or older*/
-* html #header4 {
-	margin-top: 0;
-}
-
-#header4 a {
-	font-size: 120%;
-	letter-spacing: -.05em;
-}
-
-#header4 a:hover,a:focus {
+#header2 a {
 	text-decoration: none;
 }
-
-#header4 .clear {
-	width: 100%;
-	background: url('images/shadowheader.jpg') no-repeat bottom right;
-	clear: both;
-	position: absolute;
-	top: -.9em;
-	right: 0;
+#header2 a:hover {
+}
+#header2right ul {
+	float: right;
+	list-style-type: none;
+	text-align: right;
 	margin: 0;
 	padding: 0;
 }
-
-/*
-------------------------------------------------------------------------------
-    SHORTCUTS
-------------------------------------------------------------------------------
-*/
-
-#toolshortcuts {
-	width:550px;
-	position: absolute;
-	bottom:-.75em;
-	right:.5em;
-	padding: 0;
-	margin:0;
-	text-align: right;
+#header2right ul li {
+	display: inline;
 }
+#header2right ul li a {
 
-#toolshortcuts a {
-	margin:0 3px 0 3px;
 }
+#header2right ul li a:hover {
 
-/*
-==============================================================================
-    FOOTER STYLES
-==============================================================================
-*/
-
-#footer {
-	font-family: bold .7em Arial, sans-serif, sans;
-	width: 98%;
-	float: left;
-	clear: both;
-	color: #f7d77e;
-	margin-top: -1.7em;
-	padding: 82px 0 .8em 2%;
-	background: transparent url('images/bg.jpg') no-repeat 100% 100%;
 }
-
-#footer .copyright {
+/* header 3 styles */ 
+#header3 {
+	border-bottom: 1px solid #aeaeae;
+	height:auto;
+	font-weight: bold;
+	margin: 0;
+	padding: 0;	
+}
+#header3 ul {
+	list-style:none;
+}
+#header3 li {
+	display:inline;
+    cursor: pointer;
+}
+#header3 a {
+	float:left;
+	text-decoration:none;
+	cursor: pointer;
+	padding-right: 1px;
+	height:25px;
+}
+#header3 li a:hover {
+	float:left;
+	text-decoration:none;
+	cursor: pointer;
+}
+#header3 li a span {
+	float:left;
+	cursor: pointer;
+	padding-right: 10px;
+	padding-top: 5px;
+	height:20px;
+}
+#header3 li a:hover span {
+	float:left;
+	cursor: pointer;
+}
+#header3 #current a {
+	color: #fff;
+	float:left;
+	text-decoration:none;
+}
+#header3 #current a span {
+	float:left;
+}
+#logout li a {
+	display: inline;
 	float: right;
-	clear: right;
-	margin: 0 2em 0 0;
+	vertical-align:top;
+	margin-right:5px;
+	text-decoration:none;
+}
+#logout li a:hover {
+	float: right;
+	vertical-align:top;
+	text-decoration:none;
+	margin-right:5px;	
+}
+#logout li a span {
+	float:left;
+	cursor: pointer;
+}
+#logout li a:hover span{
 }
 
-#bottom_corner
-{
-	
+/* header 4 styles */ 
+#header4 {
+	background-color: #fff;
+	height: 21px;
 }
-
-
-/*
-==============================================================================
-    NAVIGATION MENU
-==============================================================================
-*/
-
-#lang_form select {
-	font-family: sans-serif, sans, arial;
-	margin: 1em 18px;
-	width: 179px;
-	text-align: center;
+a.breadcrumb {
+	height: 21px;
 }
-
+a.breadcrumb0 {
+	background:url(images/home.gif) no-repeat;
+	padding-left: 22px;
+}
+/* footer styles */
+#footer {
+	background: #4171b5 url('images/bg.jpg') no-repeat 100% 100%;
+	color: #f7d77e;
+	padding: 82px 0 .8em 2%;
+}
+#footerright {
+	margin-top: 10px;
+	float: right;
+	margin-right:20px;
+}
+#footerleft {
+	padding-top: 10px;
+}
+#footer a {
+	font-weight:normal;
+}
+/* main styles */
+#main {
+	padding-left: 30px;
+	position: relative;
+	min-height: 320px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-bottom: 5px;
+}
+/* my courses styles */
+#maincontent {
+	float: left;
+	width: 80%;
+	min-height: 333px;
+	margin-top:0;
+	float: right;
+	clear: right;	
+}
+.coursestatusicons {
+	border: 0px solid #000;
+	float: left;
+	padding-right: 5px;
+	width: auto;
+}
+.courseslist {
+	margin-left: -25px;
+}
+.courses {
+	list-style-type: none;
+	margin-bottom: 5px;
+}
+.courses a {
+	text-decoration:underline;
+}
+.user_course_category {
+	background: transparent url("images/thindivider.jpg") no-repeat left;
+	background-color: #fff;
+	padding-top: 10px;
+	font-weight: bold;
+	color: #666;
+	list-style-type: none;
+	margin: 5px;
+	padding: 5px;
+	padding-left: 130px;
+}
 .menu {
 	background: url('images/bglogin.jpg') repeat-y top center;
 	float: left;
@@ -450,947 +242,91 @@ ul {
 	border: 1px solid #EE4C03;
 	margin: 0 0 1em 0;
 	padding: 0 0 .3em 0;
-	font-family: Arial, sans-serif, sans;
 	/* min-height hack for ie6 or older*/
 	min-height: 320px;
 	height: auto !important;
 	height: 320px;
+	
 }
-
-.menu #formLogin {
-	text-align: center;
+.menu #lang_form select {
+	margin: 1em 31px;
+}
+.menu form {
+	color: #000915;
 	font-weight: bold;
 	margin-bottom: .8em;
+	text-align: center;
 }
-
-.menu #formLogin input {
-	margin: .3em auto;
+.menucaption {
+	font-size: 12px;
+	font-weight: bold;
+	padding-left: 12px;
 }
-
 .menusection {
 	width: 100%;
 	margin: .3em 0 .3em 0;
+	padding-left: 3px;
 }
-
-.menusection .menulist {
-	float: left;
-	clear: both;
-	margin: 0;
-	padding: 0;
-	text-indent: 1.2em;
-	width: 100%;
-	list-style: none;
-}
-
-.menusection .menulist li {
-	margin: .4em .5em .4em 0;
-}
-
 .menusectioncaption {
-	font: bold 1.2em Arial, sans-serif, sans;
-	color: #111;
-	margin: 0 0 .5em 1em;
+	font-weight:bold;
+	position: relative;
 }
-
-/* Specific for administration section*/
-.menu img {
-	margin: 0 0 0 1.2em;
-	vertical-align: baseline;
-}
-
-.menu label {
-	display: block;
-	clear: both;
-	font: bold 1.2em Arial, sans-serif, sans;
-	color: #111;
-	text-align: center;
-	margin: .3em 0;
-	padding: 0;
-	width: 100%
-}
-
-.menu #loginform {
-	text-align: center;
-	font-weight: bold;
-	margin-bottom: .8em;
-}
-
-.menu #loginform input {
-	margin: .3em auto;
-	display: block;
-}
-
-.menu .note {
-	margin: .3em 0 .3em .5em;
-}
-
-td #lang_form select {
-	margin: 1em 31px;
-}
-
-td .menu {
-	background: url('images/bgloginconf.jpg') repeat-y top left;
-	width: 244px;
-	margin: 0 auto;
-}
-
 .menulist {
 	list-style: none;
-	margin: 0 0 12px 0;
 	padding: 0;
 }
-#centerwrap {
-  float: left;
-  width: 100%;
-  margin-right: -95%;
-	/* this needs to be less than 100% for Moz/Mac which thinks
-         it's empty otherwise. The difference is made up by putting a
-         negative left margin on the left float:
-	   Note IE/Mac doesn't like this method ~ it wants the 100% so it can
-	   be fed in using IE only CSS below becasue IE/Win also works with the 100% method.
-	*/
+.note {
+	width: auto;
+	margin: 24px 6px 0 6px;
+	padding: 3px;
+	border: 2px outset;
+	border-color:#4171b5;
 }
-/* --- course navigation menu as a definition list  --- */
-#swap_menu_link {
-  float: left;
+/* form styles */
+.form {
+	width: 75%;
+	float: 'left';
 }
-#toolnavbox {
-	margin: 0 0 0 10px;
-	padding: 0;
-	float: left;
-	border: 1px solid #f0f0f0;
+form div.row {
+	clear: both;
+	padding-top: 5px;
 }
-#toolnavbox dl {
-	width: 160px;
-	margin: 0 auto;
-	padding: 0;
-	background: transparent;
-	font-size: 12px;
-	text-align: center;
-}
-#toolnavbox dt {
-	margin: 0;
-	padding: 0;
+.form_header {
+	white-space: nowrap;
+	padding: 2px;
+	background-color: #f0f0f0;
+	border: 1px solid #bbb;
 	font-weight: bold;
-	font-size: 12px;
-	text-align: center;
-	color: #000;
-	border-bottom: 1px solid #fff;
-	background: transparent;
 }
-#toolnavbox dd {
-	margin: 0;
-	padding: 0;
-	color: #009;
-	text-align: left;
-	border-bottom:1px solid #fff;
-	background: #E5EDF9;
-}
-#toolnav img {
+form div.row div.label {
 	float: left;
-	width: 25px;
-	height: 25px;
-	margin: 0 4px 0 0;
+	width: 18%;
+	text-align: right;
 }
-#toolnavlist a, #toolnavlist a:link {
-	background: #E5EDF9;
-	color: #dcdcdc;
-	padding: 5px 5px 5px 10px;
-	margin: 0;
-	text-decoration: none;
-	display: block;
+form div.row div.formw {
+	width: 80%;
 }
-#toolnavlist a:hover {
-	background: #fff;
-	color:#dcdcdc;
-}
-#toolnavlist a#here {
-	background: #fff;
-	color:#dcdcdc;
-}
-/* --- end of course navigation menu section  --- */
-/*
-this lets the navigation menu appear to the left:
-#center { margin: 0 0 0 180px; padding: 10px 0 40px 0;
- min-height: 300px; }
-
-#toolnav { float: left; width: 180px; padding: 20px 0 0 0;
- margin-left: -5%;
-}
-#toolnav { float: right; width: 180px; padding: 0; margin: 0;
- margin-left: -5%; /* the difference to make the left colum appear flush left */
-}
-
-/* Hide from IE5-mac. Only IE-win sees this. \*/
-* html #toolnav { margin-right: 0px;}
-* html #center { height: 1%; margin-left: 0; }
- /* End hide from IE5/mac */
-*/
-
-
-/*
-==============================================================================
-    DOCUMENT MODULE AND DATA TABLES
-==============================================================================
-*/
-
-/* Data tables */
-.data_table {
-	margin: 0 auto;
-	width: 98%;
-	clear: both;
-	font: bold 100% Arial, sans, sans-serif;
-}
-
-.data_table a {
-	font: bold 100% Arial, sans, sans-serif;
-	text-decoration: none;
-}
-
-.data_table .row_even td {
-	border-right: 1px solid #fff;
-	background: #ffdc9f;
-	padding: .2em;
-	margin: 0;
-}
-
-.data_table .row_odd td {
-	border-right: 1px solid #fff;
-	background: #ffea9f;
-	padding: .2em;
-	margin: 0;
-}
-
-.data_table .row_even:hover td,.data_table .row_odd:hover td {
-	background: #eebb03 none;
-	color: #fff;
-}
-
-.data_table th,.data_table .row_odd th,.row_odd th {
-	font: bold 100% sans, sans-serif, arial;
-	text-transform: capitalize;
-	padding: .2em;
-	background: #ffb963 url('images/headertables.jpg') repeat-x;
-	color: #3c471c;
-}
-
-.data_table .row_odd th a {
-	text-decoration: none;
-	font-size: 110%;
-}
-
-/*Forum*/
-
-.row_odd img,.row_even img {
-	margin: 0 1em 0 1em;
-}
-
-/* Document links */
-#doc_links {
-	margin-left: .5em;
-}
-
-#doc_links a,#folderselector {
-	font: bold 100% Arial, sans-serif, sans;
-	text-decoration: none;
-}
-
-#folderselector {
-	color: #000;
-}
-
-#folderselector select {
-	margin: 0 .2em;
-}
-
-.forum_attach_comment {
-	color: #737780;	
-	font-style: italic ;
-	font-weight: normal;	
-}
-.document_owner {text-align: right;}
-/*
-==============================================================================
-    FORM STYLES
-==============================================================================
-*/
-
-div.row {
-	clear: both;
-	padding-top: 8px;
-	margin-left: 1em;
-}
-
-div.row div.label {
-	float: left;
-	text-align: left;
-	font: bold 115% Arial, sans-serif, sans;
-	width: 25%;
-	margin: 0;
-}
-
-div.row div.formw {
-	width: 73%;
-	margin: 0;
-}
-
-.row .formw input {
-	margin: 0;
-}
-
-.label {
-	margin-right: 1em;
-}
-
-.formw {
-	margin-top: .2em;
-	padding-left: .6em;
-}
-
-/* Solves the IE inherited margin bug */ /* IE-7*/
-* :first-child+html .row .formw input {
-	margin-left: -1em;
-}
-
-/*IE-6 or older*/
-* html .row .formw input {
-	margin-left: -1em;
-}
-
-[dir=ltr] div.row div.label,[dir=rtl] div.row div.formw {
+[dir=ltr] form div.row div.label, [dir=rtl] form div.row div.formw {
 	float: left;
 	text-align: right;
 }
-
-[dir=rtl] div.row div.label,[dir=ltr] div.row div.formw {
+[dir=rtl] form div.row div.label, [dir=ltr] form div.row div.formw {
 	float: right;
 	text-align: left;
 }
-
-/* Specific forms: profile,add course,advanced search,advanced course search,etc.. */
-#add_course,#profile,#advanced_course_search,#advanced_search,#category,#course_user_import,#export_users,#update_course,#user_add,#user_import
-	{
-	border: 1px solid #EE4C03;
-	background: transparent url("images/headerform.jpg") no-repeat top left;
-	width: 550px;
-	position: relative;
-	padding: 60px 0 1em 0;
+form span.form_required {
+	color: #f00;
 }
-
-#advanced_search,#category,#course_user_import {
-	background: transparent url("images/headerform2.jpg") no-repeat top left
-		;
+form span.form_error {
+	color: #f00;
+	font-size: x-small;
+	margin: 2px;
 }
-
-#export_users,#update_course,#user_add,#user_import {
-	background: transparent url("images/headerform3.jpg") no-repeat top left
-		;
-}
-
-#add_course,#advanced_course_search,#advanced_search,#course_user_import,#export_users,#update_course,#user_add,#user_import
-	{
-	width: 650px;
-	float: left;
-	clear: left;
-	padding-top: 50px;
-	margin-bottom: 1em;
-}
-
-#add_course .label,#advanced_course_search .label,#advanced_search .label,#category .label,#course_user_import .label,#export_users .label,#user_import .label
-	{
-	text-align: left;
-}
-
-#advanced_search,#course_user_import,#export_users,#user_import {
-	width: 550px;
-}
-
-#category {
-	clear: both;
-}
-
-#category select {
-	margin-right: .8em;
-}
-
-#export_users .label,#user_import .label {
-	width: 45%;
-	text-align: left;
-}
-
-#export_users .formw,#user_import .formw {
-	width: 53%;
-}
-
-#myprofilefooter {
-	float: left;
-	clear: both;
-	width: 50%;
-	margin: 3em auto;
-	padding-bottom:2em;
-	background: transparent url("images/tinydivider.jpg") no-repeat bottom center;
-	font-size: 110%;
-	text-align: center;
-	width: 550px;
-}
-
-#profile {
-	border:none;
-}
-
-#profile .clear {
-	position: absolute;
-	background: transparent url("images/divider.jpg") no-repeat top center;
-	top: 30px;
-	left: 1em;
-	height: 55px;
-	width: 100%;
-}
-
-#profile .label,#update_course .label,#user_add .label {
-	text-align: right;
-}
-
-#profile .formw,#profile .label {
-	position: relative;
-	left: 20%;
-}
-
-#update_course {
-	width: 90%;
-}
-
-#update_course .formw {
-	margin-top: .7em;
-}
-
-#update_course .label {
-	margin-top: .6em;
-}
-
-#user_add {
-	width: 80%;
-}
-
-#user_add input {
-	margin-left: .3em;
-}
-
-/*
-==============================================================================
-    ADMIN SECTION
-==============================================================================
-*/
-
-.admin_section {
-	float: left;
-	margin: 1em 1em;
-	width: 40%;
-	border: 1px solid #EE4C03;
-	padding: .5em .7em .5em .7em;
-	line-height: 120%;
-}
-
-.admin_section h4 {
-	margin: 0;
-	width: 100%;
-	font-size: 120%;
-	font-family: Arial, sans, sans-serif;
-	font-weight: bold;
-}
-
-.admin_section input {
-	margin: .5em;
-}
-
-.admin_section a {
-	text-decoration: none;
-	font: bold 100% Arial, sans-serif, sans;
-	color: #317100;
-}
-
-.admin_section  a:hover,.admin_section  a:focus {
-	color: #683000;
-}
-
-/*
-==============================================================================
-    COURSE ADMIN
-==============================================================================
-*/
-
-.courseadminview {
-	width: 80%;
-	text-align: center;
-	border: 1px solid #EE4C03;
-	margin: 1.5em auto;
-}
-
-.courseadminview a {
-	text-decoration: none;
-	margin: 0 auto;
-	text-align: center;
-	font: bold 100% Arial, sans-serif, sans;
-}
-
-.courseadminview table td {
-	text-align: left;
-}
-
-#courseintro_icons {
+/* feedback messages */
+.confirmation-message,.error-message,.normal-message,.warning-message {
+	border: 2px solid #EE8003;
 	margin: 1em auto;
-	clear: both;
-	width: 80%;
-}
-
-.viewcaption {
-	font: bold 110% arial, sans, sans-serif;
-	position: relative;
-	background-color: #fff;
-	float: left;
-	clear: left;
-	top: -1.1em;
-	padding: 0 .2em;
-	margin: 0;
-}
-
-/*
-==============================================================================
-    AGENDA
-==============================================================================
-*/
-
-#agenda_list {
-	margin: 0 auto;
-	width: 95%;
-}
-
-#agenda_list .datanow {
-	background: #ffb963 url('images/headertables.jpg') repeat-x;
-	border: 1px solid #EE4C03;
-	vertical-align: top;
-}
-
-#agenda_list img {
-	margin-right: .8em;
-}
-
-#agenda_list td.data img,#agenda_list td.datanow img {
-	margin-bottom: -.6em;
-	margin-top: -.3em;
-}
-
-#agenda_list td.textnow {
-	border: 1px solid #EEB103;
-	background-color: #eee;
-	padding: .5em;
-}
-
-#agenda_list tr,#agenda_list td {
-	width: auto;
-	border: none;
-}
-
-#agenda_list tr.data,#agenda_list td.data,.data {
-	background: #ffb963 url('images/headertables.jpg') repeat-x top center;
-	vertical-align: top;
-	border: 1px solid #EE4C03;
-	color: #000;
-}
-
-#agenda_list tr.text,#agenda_list td.text,.text {
-	border: 1px solid #EEB103;
-}
-
-.agenda_month_divider,.title {
-	font: bold 1.2em Arial, sans-serif, sans;
-	color: #000;
-	text-align: center;
-}
-
-.agenda_month_divider {
-	text-align: center;
-	background: transparent url("images/divider2.jpg") no-repeat 50% 1.3em;
-	height: 2.8em;
-	color: #EE4C03;
-}
-
-#agenda_select img {
-	margin-right: .2em;
-}
-
-#agenda_select li {
-	margin-bottom: .6em;
-	font: bold 1em Arial, sans-serif, sans;
-}
-
-#agenda_select li a {
-	font: bold 1em Arial, sans-serif, sans;
-	text-decoration: none;
-}
-
-.alternativeBgLight {
-	background-color: #EEB103;
-}
-
-.announcements_datum {
-	color: #C67D44;
-	border: 1px solid #5F5700;
-	background-color: #FFF15F;
-}
-
-.data,.announcements_datum,.datanow {
-	font: bold 1em Arial, sans-serif, sans;
-}
-
-.datanotbold {
-	font-weight: normal;
-}
-
-span.agendaitem {
-	text-align: center;
-	display: block;
-	font-size: 95%;
-	width: 90%;
-	margin: 0 auto;
-	font-size: .9em;
-}
-
-span.agendaitem i {
-	font: bold 97% Arial, sans-serif, sans;
-	color: #EE8003;
-}
-
-/* Calendar */
-.days_today {
-	font: bold 1em Arial, sans-serif, sans;
-	text-decoration: none;
-	color: #000;
-}
-
-.days_week {
-	background: #ffea9f;
-}
-
-.days_week,.days_weekend,.days_today {
-	text-align: center;
-}
-
-.days_weekend {
-	background: #ffdc9f;
-}
-
-.days_week a,.days_weekend a {
-	font: bold 1em Arial, sans-serif, sans;
-}
-
-.days_week a:hover,.days_weekend a:hover,.days_week a:focus,.days_weekend a:focus
-	{
-	text-decoration: none;
-}
-
-.days_week .agendaitem i,.days_weekend .agendaitem i {
-	color: #3F3A00;
-}
-
-#newedit_form tr.title {
-	background:none;
-	text-align:left;
-}
-
-.title {
-	background: #ffb963 url('images/headertables.jpg') repeat-x;
-}
-
-.weekdays {
-	font: bold 1.1em Arial, sans-serif, sans;
-	color: #fff;
-	background: #eebb03;
-	text-align: center;
-}
-.ical_export { float: right; margin-top: 0.2em;}
-/*
-==============================================================================
-    DOKEOS CONFIG SETTINGS
-==============================================================================
-*/
-
-#settings {
-	width: 70%;
-	margin: .5em auto;
-	border: 1px solid #EE4C03;
-	padding: .2em;
-}
-
-.settingtitle {
-	text-align: left;
-	text-indent: .5em;
-	font: bold 130% Arial, sans-serif, sans;
-	color: #000;
-	margin: .1em auto .1em auto;
-	padding: .1em;
-	border: 1px solid #EE4C03;
-	background: #ffb963 url('images/headertables.jpg') repeat-x top center;
-	width: 99.5%;
-	letter-spacing: -.03em;
-}
-
-.settingcomment {
-	margin: .5em 0 .5em .5em;
-	font: bold 110% Arial, sans-serif, sans;
-}
-
-.settingvalue {
-	margin: .5em 0 2em .5em;
-}
-
-/*
-==============================================================================
-    BLOG
-==============================================================================
-*/
-
-.blog_left,.blog_right {
-	background: #fff url("images/vertdivider.jpg") no-repeat top left;
-	padding-left: 10px;
-}
-
-.blog_right {
-	text-align: justify;
-	padding-left: 1em;
-	background-color: transparent;
-}
-
-.blog_right a img {
-	margin-right: .2em;
-}
-
-.blog_right table {
-	margin-left: .8em;
-}
-
-.blog_menu_title,.blogpost_title {
-	color: #fff;
-	font: bold 110% Arial, sans-serif, sans;
-}
-
-.blog_menu_title {
-	width: 99%;
-	border-bottom: 1px solid #EE8003;
-	background: #ffb963 url('images/headertables.jpg') repeat-x top center;
-}
-
-.blogpost {
-	margin: .2em 1.5em;
-	background: transparent url("images/tinydivider.jpg") no-repeat bottom
-		center;
-	padding-bottom: 2em;
-	text-indent: 1em;
-}
-
-.blogpost_actions img {
-	margin: 0 0 0 .8em;
-	vertical-align: bottom;
-}
-
-.blogpost_comment {
-	text-indent: 2em;
-	margin-top: .5em;
-}
-
-.blogpost_date,.blog_subtitle,.blog_menu_title,.blogpost_comment_date {
-	color: #fff;
-	font: bold 110% Arial, sans-serif, sans;
-}
-
-.blogpost_date,.blogpost_comment_date {
-	border: none;
-	margin-left: 1em;
-}
-
-.blogpost_info,.blogpost_comment_info {
-	margin-left: 1em;
-	font: bold 100% Arial, sans-serif, sans;
-}
-
-.blogpost_introduction,.blogpost_text {
-	display: block;
-	clear: both;
-	margin: .5em 0;
-	text-indent: 2em;
-}
-
-.blogpost_title {
-	font: bold 130% Arial, sans-serif, sans;
-	margin: 0 0 .5em 1em;
-	color: #000;
-}
-
-.blog_subtitle {
-	position: relative;
-	top: .8em;
-	padding: .2em .9em;
-	witdh: 100%;
-	border: 1px solid #EEB103;
-	background:  #ffb963 url('images/headertables.jpg') repeat-x top center;
-	display:block;
-	width:250px;
-	margin:0 0 -1em 0;
-}
-
-/*Hack for KHTML and safari browser to fit left*/
-body:last-child:not(:root:root) .blog_subtitle {
-	width:220px;
-}
-
-.blog_title {
-	padding: .1em 1em;
-	font: bold 140% Arial, sans-serif, sans;
-	color: #EE4C03;
-	text-transform:uppercase;
-	margin:0 0 -1.3em 0;
-	display:block;
-}
-
-.comments,.new_comment {
-	margin-left: 1em;
-}
-
-.blogpost_comment {
-	background: transparent url('images/thindivider.jpg') no-repeat bottom
-		center;
-	padding-bottom: 25px;
-	margin-bottom: 2em;
-}
-
-.blogpost_comment_title {
-	font-size: 95%;
-	background: #ffb963 url('images/headertables.jpg') repeat-x top
-		center;
-	padding: 0.4em;
-	border: 1px solid #EE8003;
-}
-
-.blogpost_comment_date {
-	font-size: 95%;
-}
-
-.blogpost_comment .blogpost_text {
-	border: 1px solid #EE8003;
-	padding: .6em;
-}
-
-#title {
-	font: bold 1.2em Arial, sans-serif, sans;
-	color: #000;
-	text-align: center;
-}
-
-.attachment_comment {
-	color: #737780;	
-	font-style: italic ;
-	font-weight: normal;	
-}
-
-/*
-==============================================================================
-    TRACKING
-==============================================================================
-*/
-
-a.specialLink {
-	font: bold 80% Arial, sans-serif, sans;
-	color: #317100;
-}
-
-a.specialLink:hover,a.specialLink:focus {
-	color: #683000;
-}
-
-/*
-==============================================================================
-    FORUM
-==============================================================================
-*/
-
-.forum {
-	border: 1px solid #BFAF00;
-	padding: 1px;
-}
-
-.forum_header td {
-	background: transparent url('images/line.jpg') repeat-x bottom center;
-}
-
-th span {
-	color:#000;
-}
-
-/*
-------------------------------------------------------------------------------
-    POST
-------------------------------------------------------------------------------
-*/
-
-.forum_message_post_title {
-	text-align: left;
-	font: bold 95% Arial, sans-serif, sans;
-	background:  #ffb963 url('images/headertables.jpg') repeat-x top
-		center;
-	padding: 0.2em;
-	vertical-align: top;
-	height: 20px;
-	border: 1px solid #EE8003;
-}
-
-.forum_message_left {
-	background: #ebc41f url('images/bglogin.jpg') repeat-y top center;
-	border-right: 1px solid #EE8003;
-	vertical-align: top;
-	width: 15em;
-	border-collapse: collapse;
-}
-
-.forum_message_post_text {
-	margin-bottom: 10px;
-	vertical-align: top;
-}
-
-.forum_description {
-	color: #000;
-	font-weight: normal;
-	font-family:Arial,sans,sans-serif;
-}
-
-.forum_title{
-	color: #317100;
-	font-size: 14px;
-	font-family:Arial,sans,sans-serif;
-
-}
-
-.forum_low_description{
-	color: #000;	
-	font-style: italic ;
-	font-weight: normal;
-	
-	font-size: 11px;
-	font-family:Arial,sans,sans-serif;
-}
-
-
-
-/*
-==============================================================================
-    DISPLAY MESSAGES
-==============================================================================
-*/
-
-/* Common message styles */
-.normal-message,.warning-message,.confirmation-message,.error-message {
-	border: 1px solid #EE8003;
-	margin: 1em auto;
-	padding: 40px .3em .5em .3em;
+	padding: 40px .5em .5em .3em;
 	position: relative;
 	width: 500px;
 	color: #EE4C03;
@@ -1399,7 +335,7 @@ th span {
 	text-align: left;
 }
 
-.normal-message img,.warning-message img,.confirmation-message img,.error-message img
+.confirmation-message img,.error-message img,.normal-message img,.warning-message img
 	{
 	position: absolute;
 	top: 0;
@@ -1411,34 +347,675 @@ th span {
 	bottom: 0.2em;
 	right: 0.5em;
 }
-#message {
+/* other styles */
+.clear {
+	clear: both;
+	line-height: 0px;
+	height: 0;
+}
+/* actions */
+.actions_lp {
+	background-color:#FDDEAA;
+	border-bottom:1px solid #EE4C03;
+	border-top:1px solid #EE4C03;
+	height:29px;
+	padding-left: -17px;
+	margin-bottom: 1px;
+	vertical-align:middle;
+	width: 90%;
+	margin-left:17px;
+}
+.actions_lp img {
+	vertical-align:middle;
+}
+.actions_lp a {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions_lp span {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions_lp form {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions {
+	background-color:#FDDEAA;
+	border-bottom:1px solid #EE4C03;
+	border-top:1px solid #EE4C03;
+	/*height:35px;*/
+	padding:2px;
+	margin-bottom: 5px;
+	/*background:url(images/actions.jpg) repeat-x;*/
+	vertical-align:middle;
+}
+.actions img {
+	/*display:inline-block;*/
+	border: none;
+	text-decoration: none;
+	background-color: #efefef;
+	padding-right: 5px;
+	vertical-align:middle;
+}
+.actions a {
+	display:inline-block;
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions span {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions form {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+/* big actions */
+.actionsbig {
+	background:#F8F8F8;
+	border-bottom:1px solid #4171b5;
+	border-top:1px solid #4171b5;
+	background-color:#efefef;
+	height:64px;
+	padding:2px;
+	margin-bottom: 5px;
+	vertical-align:middle;
+}
+.actions img {
+	vertical-align:middle;
+}
+.actions a {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+/* styles for the profile page */
+.profile_image {
+	float: right;
+	margin-right: 20px;
+}
+.profile_form {
+	float: left;
+	width: 75%;
+}
+/* course introduction */
+#courseintrocenter {
+	position: relative;
+	width: 80%;
+	margin: 25px auto 10px;
+}
+#courseintro_iconscenter {
+	position: relative;
+	width: 80%;
+	margin: 0px auto 10px;
+}
+#courseintroleft {
+	position: relative;
+	width: 80%;
+	margin-bottom: 5px;
+}
+#courseintro_iconsleft {
+	position: relative;
+	width: 80%;
+}
+/* styles for the agenda */
+#agenda {
+	width: 100%;
 	margin: 0 auto;
+	border: 1px solid #CCCCCC;
+	border-collapse: collapse;
+}
+/* The cells with the name of the days of the weeks (mon->sun)*/
+.weekdays {
+	background-color: #dcdcdc;
+	text-align: center;
+	font-weight: bold;
+	border: 1px solid #CCCCCC;
+	border-collapse: collapse;
+}
+/* The cells for the days (1->31) */
+.days_week {
+	height: 40px;
+	width: 12%;
+	border: 1px solid #CCCCCC;
+	border-collapse: collapse;
+	background-color: #f9f9f9;
+}
+.days_weekend {
+	height: 40px;
+	width: 12%;
+	border: 1px solid #CCCCCC;
+	border-collapse: collapse;
+	background-color: #eaeaea;
+}
+.days_today {
+	height: 40px;
+	width: 12%;
+	border: 1px solid #CCCCCC;
+	border-collapse: collapse;
+	background-color: #FFCA8D;
+	color: #CC3300;
+	font-weight: bold;
+}
+.agenda_month_divider {
+	background-color: #FDDEAA;
+	color: #EE4C03;
+	text-align: center;
+	border:1px solid #EE4C03;
+}
+/*The caption of the calendar (displays the month and the << and >> links*/
+#agenda_list .title {
+	background-color: #680157;
+	color: #fff;
+	text-align: left;
+	padding: 2px 10px;
+	text-align: center;
+	border: 1px solid #bbb;
+}
+#agenda_list .title a:link, #agenda_list #title a:visited {
+	color: #fff;
+	padding: 2px 10px;
 	text-align: center;
 }
-
-#message select {
-	margin: 10px 0;
-	width: 220px;
+#agenda_list .title a:hover {
+	color: #B70297;
+	padding: 2px 10px;
+	text-align: center;
 }
-
-#message textarea {
-	margin: 10px 0;
+/* text in the cells: display of agenda items (visible)*/
+#agenda_list .data {
+	background-color: #eee;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: bold;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
 }
-
-#message td {
-	padding: 4px;
+#agenda_list .datanotbold {
+	background-color: #eee;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
 }
-
-/*
-==============================================================================
-    DROPBOX
-==============================================================================
-*/
-
+#agenda_list .text {
+	background-color: #fff;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+}
+/*text in the cells: display of agenda items (invisible)*/
+#agenda_list .data_hidden {
+	background-color: #eee;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: bold;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+	color: #999999;
+}
+#agenda_list .datanotbold_hidden {
+	background-color: #eee;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+	color: #999999;
+}
+#agenda_list .text_hidden {
+	background-color: #fff;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+	color: #999999;
+}
+/*text in the cells: display of agenda items (highlighted)*/
+#agenda_list .datanow {
+	background-color: #FFCC00;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: bold;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+}
+#agenda_list .datanotboldnow {
+	background-color: #FFCC00;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+}
+#agenda_list .textnow {
+	background-color: #fff;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+}
+.personal_agenda {
+	color: #008000;
+}
+.personal_agenda a:link, .personal_agenda a:visited {
+	color: #008000;
+}
+a.personal_agenda:link, a.personal_agenda:visited {
+	color: #008000;
+}
+.personal_agenda a:hover, .personal_agenda a:hover {
+	color: #B70297;
+}
+a.personal_agenda:hover, a.personal_agenda:hover {
+	color: #B70297;
+}
+/* Login form */
+#formLogin div {
+	margin-bottom: 3px;
+}
+#formLogin div input[type=submit] {
+	width: 109px;
+}
+/* normal table*/
+.normal_table {
+	margin: 3px;
+	border-collapse: collapse;
+	width: 98%;
+	padding: 5px;
+}
+/* Data table */
+.data_table {
+	margin: 3px;
+	border-collapse: collapse;
+	width: 100%;
+	padding: 5px;
+}
+.data_table th {
+	text-transform: capitalize;
+	padding: .2em;
+	background: #FDDEAA url('images/headertables.jpg') repeat-x;
+	color: #3c471c;
+	border-right: 1px solid #fff;
+}
+.data_table th a {
+	text-decoration:none;
+}
+.data_table th a:hover{
+}
+.data_table tr.row_odd {
+	border-right: 1px solid #fff;
+	background: #ffea9f;
+	padding: .2em;
+	color: #00122B;
+	margin: 0;
+	border-right: 2px solid #fff;
+}
+.data_table tr.row_odd:hover, .data_table tr.row_even:hover {
+	background-color: #eebb03;
+}
+.data_table tr.row_even {
+	border-right: 1px solid #fff;
+	background: #ffdc9f;
+	padding: .2em;
+	color: #00122B;
+	margin: 0;
+	border-right: 1px solid #fff;
+}
+.data_table td {
+	padding: 5px;
+	vertical-align: top;
+	border-bottom: 2px solid #fff;
+	border-right: 2px solid #fff;
+	border-left: 2px solid #fff;
+}
+/*  sections in the page */
+.sectiontitle {
+	background: url('images/headertables.jpg') repeat-x top center;
+	background-color: #ffb963;
+	border: 1px solid #EE4C03;
+	font-weight: bold;
+	color: #EE4C03;
+	list-style-type: none;
+	margin: 5px;
+	padding: 5px;
+}
+.sectioncomment {
+	color: #000000;
+	margin: 5px;
+	padding: 5px;
+}
+.sectionvalue {
+	list-style-type: none;
+	margin: 5px;
+	padding: 5px;
+}
+/* invisible styles */
+a.invisible {
+	color: #999999;
+}
+a.invisible:visited {
+	color: #999999;
+}
+a.invisible:active {
+	color: #999999;
+}
+a.invisible:hover {
+	color: #999999;
+}
+/* Platform Administration */
+div.admin_section {
+	width: 40%;
+	float: left;
+	margin: 10px 20px;
+	border: 1px solid #EE4C03;	
+}
+div.admin_section h4 {
+	background-color: #FDDEAA;
+	font-weight: bold;
+	list-style-type: none;
+	margin: 0px;
+	padding: 5px;
+}
+/* course homepage */
+.courseadminview, .platformadminview {
+	position: relative;
+	width: 80%;
+	margin: 25px auto 10px;
+	padding: 10px;
+	border: 1px solid #EE4C03;
+}
+.courseadminview img, .platformadminview img {
+	display:inline-block;
+	border: none;
+	text-decoration: none;
+	background-color: #fff;
+	padding-right: 5px;
+	vertical-align:middle;
+}
+.viewcaption {
+	position: relative;
+	top: -20px;
+	font-weight: bold;
+	background-color: #fff;
+	padding: 0 4px;
+}
+/* learning path */
+table.lp_build {
+	height:400px;
+	width:100%;
+}
+table.lp_build td {
+	vertical-align:top;
+}
+table.lp_build td.tree {
+	border-right:1px solid #999999;
+	width:240px;
+}
+table.lp_build td.workspace {
+	padding: 0px;
+	padding-left:5px;
+	width:auto;
+}
+table.lp_overview {
+	width:100%;
+}
+table.lp_overview td {
+	border-bottom:1px solid #999999;
+	border-top:1px solid #999999;
+	height:20px;
+	padding:3px;
+	vertical-align:middle;
+	width:auto;
+}
+table.lp_overview td.title {
+	width:200px;
+}
+table.lp_overview td.actions {
+	text-align:center;
+	width:100px;
+}
+table.lp_overview td.move {
+	text-align:center;
+	width:50px;
+}
+table.lp_overview th {
+	background:#FFFFFF;
+	padding-left:3px;
+	text-align:center;
+}
+table.lp_overview tr {
+	background:#F8F8F8;
+}
+table.lp_overview tr:hover {
+	background:#E5EDF9;
+}
+table.lp_overview img {
+	margin-left:3px;
+}
+table.lp_prerequisites th {
+	background:#F8F8F8;
+	border-bottom:1px solid #999999;
+	border-top:1px solid #999999;
+}
+.lp_mediaplayer {
+	float: right;
+	padding-top: 3px;
+	margin-right: 5px;
+}
+div.lp_manipulate {
+	background:#F8F8F8;
+	border-bottom:1px dotted #999999;
+	margin-bottom:0px;
+	padding:3px 0 3px 10px;
+}
+div.lp_manipulate a {
+	padding-right:10px;
+}
+div.lp_resource_header {
+	background:#F0F0F0;
+	border:1px solid #999999;
+	font-weight:bold;
+	padding:10px;
+	width:350px;
+	cursor:pointer;
+	margin-top: -1px;
+}
+div.lp_resource_elements {
+	background:#FAFAFA;
+	border:1px solid #999999;
+	display:none;
+	padding:5px 10px;
+	width:350px;
+	margin-top: -1px;
+}
+.learnpath_chapter_form {
+	width: 300px;
+}
+.learnpath_item_form {
+	width: 300px;
+}
+#learnpath_preview_frame {
+	margin-top: 5px;
+	border:1px solid #CCCCCC;
+	height:490px;
+	width:95%;
+}
+/* exercices styles */
+.exercice_form {
+	width: 300px;
+}
+#validationButton {
+	text-decoration: none;
+	margin: 5px;
+	border:1px solid #999999;
+	background:#F0F0F0;
+	padding: 3px;
+	padding-left:10px;
+	padding-right:10px;
+	font-weight:bold;
+	color:#666;
+}
+.exercise_scenario_label {
+}
+.exercise_scenario_element {
+}
+span.checkbox {
+	width: 19px;
+	height: 25px;
+	padding: 0 5px 0 0;
+	background: url(images/checkbox.gif) no-repeat;
+	display: block;
+	clear: left;
+	float: left;
+}
+span.radio {
+	width: 19px;
+	height: 25px;
+	padding: 0 5px 0 0;
+	background: url(images/radio.gif) no-repeat;
+	display: block;
+	clear: left;
+	float: left;
+}
+/* forum styles */
+.forum_header {
+	background: transparent url('images/line.jpg') repeat-x bottom center;
+	font-weight: bold;
+}
+.forum_threadheader {
+	background: transparent url('images/line.jpg') repeat-x bottom center;
+	font-weight: bold;
+}
+.forum_message_left {
+	width: 150px;
+	vertical-align: top;
+	/*border-bottom: 1px solid #666666;*/
+	border-right: 1px solid #EE4C03;
+	background: url('images/bglogin.jpg') repeat-y top center;
+	background-color: #ebc41f;
+}
+.forum_message_post_title {
+	border-bottom: 1px solid #EE4C03;
+	font-weight: bold;
+	background-color: #FDDEAA;
+	height: 20px;
+	color: #EE4C03; 
+}
+/* Survey styles */
+#survey_title {
+	background-color:#dcdcdc;
+	color:#000;
+	padding:2px;
+}
+#survey_subtitle {
+	background-color:#dcdcdc;
+	color:#000;
+	padding:2px;
+}
+.survey_content {
+	background-color:#EFEFEF;
+	color:#264269;
+	padding:5px;
+	border: 1px solid #999;
+}
+.survey_question_wrapper {
+	border: 1px solid #999;
+}
+.survey_question {
+	/* 264269 4271b5 E5EDF9 */
+	background-color:#f0f0f0;
+	color:#999;
+	padding:5px;/*border: 1px solid #264269;*/
+}
+.survey_question_options {
+	/* 264269 4271b5 E5EDF9 */
+	background-color:#FFF;
+	color:#000;
+	padding:5px;/*border: 1px solid #264269;*/
+}
+/* Blog */
+.blog_menu {
+	border-bottom: 1px dashed #dddddd;
+	border-right: 1px dashed #dddddd;
+	border-left: 1px dashed #dddddd;
+	padding: 10px;
+}
+.blogpost {
+	border: 1px solid #DDDDDD;
+	background-color: #ECECEC;
+	margin-bottom: 15px;
+	padding: 10px;
+}
+.blogpost_title {
+	display: block;
+	font-weight: bold;
+	padding-bottom: 5px;
+}
+.blogpost_date {
+	display: block;
+	font-weight: bold;
+	color: #333333;
+	padding-bottom: 10px;
+}
+.blogpost_info {
+	display: block;
+	color: #333333;
+	border-top: 1px solid #dddddd;
+	margin-top: 5px;
+}
+.blogpost_comment {
+	border-top: 1px dashed #dddddd;
+	border-right: 1px dashed #dddddd;
+	border-bottom: 1px dashed #dddddd;
+	border-left: 1px dashed #dddddd;
+	margin-bottom: 10px;
+	padding: 10px;
+	background-color: white;
+}
+.blogpost_comment_title {
+	display: block;
+	font-weight: bold;
+	color: #1657A9;
+	padding-bottom: 5px;
+}
+.blogpost_comment_date {
+	display: block;
+	font-size: 10px;
+	font-weight: bold;
+	color: #333333;
+	padding-bottom: 10px;
+}
+.blogpost_comment_info {
+	font-size: 10px;
+	display: block;
+	color: #333333;
+	border-top: 1px solid #dddddd;
+	margin-top: 10px;
+}
+.blogpost {
+	border: 1px solid #DDDDDD;
+	background-color: #ECECEC;
+	margin-bottom: 15px;
+	padding: 10px;
+}
+.comments {
+	border: 1px solid #dddddd;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	padding: 10px;
+	background-color: #F4F4F4;
+}
+/* tabbed menu */
 #tabbed_menu {
 	border: 1px solid #EE8003;
 	background: transparent url('images/dropbox.jpg') no-repeat top left;
-	width: 10em;
+	width: 300px;
 	margin: 0 0 1em 0;
 }
 
@@ -1446,6 +1023,7 @@ th span {
 	width: 90%;
 	margin: 15px .2em 0 .2em;
 	padding: 0;
+	list-style-type: none;
 }
 
 #tabbed_menu_tabs li {
@@ -1453,21 +1031,9 @@ th span {
 	margin: 0 .8em;
 }
 
-.dropbox_date {
-	color: #737780;	
-	font-style: italic ;
-	font-weight: normal;	
-}
 
-
-/*
-==============================================================================
-    SYSTEM ANNOUNCEMENTS
-==============================================================================
-*/
-
+/* system announcements */
 div.system_announcement {
-	padding: .2em;
 	border: 1px solid #EE8003;
 }
 
@@ -1476,8 +1042,7 @@ div.system_announcement {
 }
 
 .system_announcements {
-	background: transparent url('images/systemenouvelles.gif') no-repeat top
-		left;
+	background: transparent url('images/systemenouvelles.gif') no-repeat top left;
 	padding-top: 30px;
 	width: 50%;
 }
@@ -1494,165 +1059,30 @@ div.system_announcement {
 .system_announcement_content {
 	font: normal 100% 'Lucida Grande', verdana, Arial, sans-serif, sans;
 }
-/*
-==============================================================================
-	FCKEDITOR
-==============================================================================
-*/
 
+#image_preview {
+	text-align:center;
+	padding-left: 17px;
+}
 .skip {
-	position:absolute;
-	top:0;
-	left:-9000px;
+	display: none;
 }
 
-
-/*
-==============================================================================
-    INSTALLATION
-==============================================================================
-*/
-
-#installation_steps {
-	background-color: #EFEFEF;
-	float: left;
+/* Specific forms: profile,add course,advanced search,advanced course search,etc.. */
+#add_course,#profile,#advanced_course_search,#advanced_search,#category,#course_user_import,#export_users,#update_course,#user_add,#user_import
+{
+	border: 1px solid #EE4C03;
+	background: transparent url("images/headerform.jpg") no-repeat top left;
+	width: 550px;
+	position: relative;
+	padding: 60px 0 1em 0;
+}
+#advanced_search,#category,#course_user_import {
+	background: transparent url("images/headerform2.jpg") no-repeat top left
+		;
 }
 
-.current_step {
-	font-weight: bold;
+#export_users,#update_course,#user_add,#user_import {
+	background: transparent url("images/headerform3.jpg") no-repeat top left
+		;
 }
-
-.RequirementHeading {
-	margin-right: 10px;
-}
-
-.RequirementHeading h1 {
-	border-bottom: 1px solid #0066CC;
-	color: #0066CC;
-	font-size: 1.2em;
-	font-weight: bold;
-}
-
-.RequirementText {
-	color: #666;
-	float: right;
-	font-size: 1.0em;
-	font-weight: normal;
-	width: 200px;
-}
-
-.RequirementContent {
-	color: #000;
-	font-size: 1.0em;
-	font-weight: normal;
-}
-
-.RequirementContent table {
-	border: 1px solid #ccc;
-	width: 400px;
-}
-
-.RequirementContent table th {
-	border-bottom: 1px solid #ccc;
-	text-align: left;
-}
-
-.requirements-item {
-	background-color: #f7f7f7;
-	padding-left: 2px;
-	width: 50%;
-}
-
-/*
-------------------------------------------------------------------------------
-    Survey
-------------------------------------------------------------------------------
-*/
-#survey_title{
-	background-color:#264269;
-	color:#FFF;
-	padding:2px;
-	border: 1px solid #264269;
-}
-#survey_subtitle{
-	background-color:#264269;
-	color:#FFF;
-	padding:2px;
-	border: 1px solid #264269;
-}
-.survey_content{
-	background-color:#EFEFEF;
-	color:#264269;
-	padding:5px;
-	border: 1px solid #264269;
-}
-.survey_question_wrapper{
- 	border: 1px solid #4271b5;
-}
-.survey_question{
-	/* 264269 4271b5 E5EDF9 */
-	background-color:#4271b5;
-	color:#FFFFFF;
-	padding:5px;
-	/*border: 1px solid #264269;*/
-}
-.survey_question_options{
-	/* 264269 4271b5 E5EDF9 */
-	background-color:#FFF;
-	color:#000;
-	padding:5px;
-	/*border: 1px solid #264269;*/
-}
-.survey_export_link { float: right; }
-/*
-------------------------------------------------------------------------------^M
-    sessions
-------------------------------------------------------------------------------^M
-*/
-
-#ajax_list_coachs {
-        position:absolute;
-        border:1px solid #4171B5;
-        margin:0px;
-        padding:0px;
-        margin-left:200px;
-        margin-top:-23px;
-        background-color:#FFFFFF;
-        height:auto;
-        overflow:auto;
-}
-#ajax_list_courses {
-        position:absolute;
-        border:1px solid #4171B5;
-        margin:0px;
-        padding:0px;
-        margin-left:200px;
-        background-color:#FFFFFF;
-        height:auto;
-        overflow:auto;
-}
-#ajax_list_users {
-        position:absolute;
-        border:1px solid #4171B5;
-        margin:0px;
-        padding:0px;
-        margin-left:200px;
-        background-color:#FFFFFF;
-        height:auto;
-        overflow:auto;
-}
-
-#chat_login_name {
-	color : #317100;  
-}
-/* Quizzes tool */
-.quiz_export_link { float: right; }
-
-/*
-------------------------------------------------------------------------------
-    Learning path
-------------------------------------------------------------------------------
-*/
-#show_audiorecorder_div{background:#F0F0F0; border:1px solid #999999; font-weight:bold; padding:2px; width:350px;}
-
-

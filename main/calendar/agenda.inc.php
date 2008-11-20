@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 16785 2008-11-18 21:32:39Z yannoo $
+<?php //$Id: agenda.inc.php 16847 2008-11-20 19:29:21Z herodoto $
 
 /*
 ==============================================================================
@@ -1099,11 +1099,11 @@ function display_student_links()
 	// showing the link to show all items or only those of the current month
 	if ($_SESSION['show']=="showcurrent")
 	{
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showall&amp;group=".Security::remove_XSS($_REQUEST['group'])."&amp;user=".Security::remove_XSS($_REQUEST['user'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_select.gif').' '.get_lang("ShowAll")."</a> ";
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showall&amp;group=".Security::remove_XSS($_REQUEST['group'])."&amp;user=".Security::remove_XSS($_REQUEST['user'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_select.gif', get_lang("ShowAll")).' '.get_lang("ShowAll")."</a> ";
 	}
 	else
 	{
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showcurrent&amp;group=".Security::remove_XSS($_REQUEST['group'])."&amp;user=".Security::remove_XSS($_REQUEST['user'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_month.gif').' '.get_lang("ShowCurrent")."</a> ";
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showcurrent&amp;group=".Security::remove_XSS($_REQUEST['group'])."&amp;user=".Security::remove_XSS($_REQUEST['user'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_month.gif', get_lang("ShowCurrent")).' '.get_lang("ShowCurrent")."</a> ";
 	}
 	
 	if ($_SESSION['view'] <> 'month')

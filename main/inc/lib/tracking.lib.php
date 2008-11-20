@@ -335,38 +335,29 @@ class Tracking {
 			if(Database::num_rows($sql_result_lp)>0){
 				//Scorm test
 				while($a_learnpath = Database::fetch_array($sql_result_lp)){
-					$sql = 'SELECT id, max_score 
-							FROM '.$lp_item_table.' AS lp_item
-							WHERE lp_id='.$a_learnpath['id'].'
-							AND item_type="sco" LIMIT 1';
-				
-					$rs_lp_item_id_scorm = api_sql_query($sql, __FILE__, __LINE__);
 					
-					if(Database::num_rows($rs_lp_item_id_scorm)>0){
-						$lp_item_id = Database::result($rs_lp_item_id_scorm,0,'id');
-						$lp_item__max_score = Database::result($rs_lp_item_id_scorm,0,'max_score');				
-						
-						//We get the last view id of this LP
-						$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';	
-						$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
-						$lp_view_id = Database::result($rs_last_lp_view_id,0,'id');
-						
-						$sql='SELECT SUM(score)/count(lp_item_id) as score FROM '.$lp_item_view_table.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
-	
-						$rs_score = api_sql_query($sql, __FILE__, __LINE__);
-						if(Database::num_rows($rs_score)>0)
-						{
-							$lp_scorm_score = Database::result($rs_score,0,'score');
-							$lp_scorm_score = ($lp_scorm_score / $lp_item__max_score) * 100;
-							
-							$lp_scorm_score_total+=$lp_scorm_score;
-							$lp_scorm_weighting_total+=100;
-						}
-					}
+					//We get the last view id of this LP
+					$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';	
+					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
+					$lp_view_id = Database::result($rs_last_lp_view_id,0,'id');
+					
+					
+					$sql='SELECT SUM(lp_iv.score)/count(lp_item_id) as score, SUM(lp_iv.max_score)/count(lp_item_id) as max_score 
+							FROM '.$lp_item_view_table.' as lp_iv
+							INNER JOIN '.$lp_item_table.' as lp_i
+								ON lp_i.id = lp_iv.lp_item_id
+								AND lp_i.item_type="sco"
+							WHERE lp_iv.max_score != ""
+							AND lp_view_id="'.$lp_view_id.'"';
+					
+					$rs = api_sql_query($sql, __FILE__, __LINE__);	
+					$lp_scorm_score_total+=Database::result($rs, 0, 'score');
+					$lp_scorm_weighting_total+=Database::result($rs, 0, 'max_score');
 				}
-				//mysql_data_seek() moves the internal row pointer of the MySQL result associated with the specified result identifier to point to the specified row number. 
+					
 				//The next call to a MySQL fetch function, such as mysql_fetch_assoc(), would return that row. 
 				mysql_data_seek($sql_result_lp,0);
+				
 				
 				//Quizz in a LP
 				while($a_learnpath = Database::fetch_array($sql_result_lp)){

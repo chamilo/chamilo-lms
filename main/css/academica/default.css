@@ -61,7 +61,7 @@ input[type=button], input[type=submit] {
 }
 #header1 a:hover {
 }
-#header1right {
+#my_courses {
 	float: right;
 	font-weight: bold;
 }
@@ -79,20 +79,20 @@ input[type=button], input[type=submit] {
 }
 #header2 a:hover {
 }
-#header2right ul {
+#Header2Right ul {
 	float: right;
 	list-style-type: none;
 	text-align: right;
 	margin: 0;
 	padding: 0;
 }
-#header2right ul li {
+#Header2Right ul li {
 	display: inline;
 }
-#header2right ul li a {
+#Header2Right ul li a {
 
 }
-#header2right ul li a:hover {
+#Header2Right ul li a:hover {
 
 }
 /* header 3 styles */ 
@@ -657,7 +657,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	padding: .2em;
 	color: #00122B;
 	margin: 0;
-	border-right: 2px solid #fff;
 }
 .data_table tr.row_odd:hover, .data_table tr.row_even:hover {
 	background-color: #8cafe1;
@@ -668,7 +667,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	padding: .2em;
 	color: #00122B;
 	margin: 0;
-	border-right: 1px solid #fff;
 }
 .data_table td {
 	padding: 5px;

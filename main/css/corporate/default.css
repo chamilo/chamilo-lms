@@ -57,7 +57,7 @@ input[type=button], input[type=submit] {
 }
 #header1 a:hover {
 }
-#header1right {
+#my_courses {
 	float: right; 
 	font-weight: bold;
 	margin-right: 100px;
@@ -77,7 +77,7 @@ input[type=button], input[type=submit] {
 }
 #header2 a:hover {
 }
-#header2right ul {
+#Header2Right ul {
 	float: right;
 	list-style-type: none;
 	text-align: right;
@@ -85,13 +85,13 @@ input[type=button], input[type=submit] {
 	margin: 0;
 	padding: 0;
 }
-#header2right ul li {
+#Header2Right ul li {
 	display: inline; 
 }
-#header2right ul li a {
+#Header2Right ul li a {
 	color:#333;
 }
-#header2right ul li a:hover {
+#Header2Right ul li a:hover {
 	color:#333;
 }
 /* header 3 styles */ 

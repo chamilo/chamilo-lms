@@ -300,7 +300,7 @@ function show_tools_category($course_tool_category)
 					$toollink = "\t" . '<a ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';
 				}
 				echo $toollink;
-				Display::display_icon($toolsRow['image']);
+				Display::display_icon($toolsRow['image'], get_lang(ucfirst($toolsRow['name'])));
 				echo '</a> ';
 					
 				echo $toollink;	

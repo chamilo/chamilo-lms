@@ -11,6 +11,7 @@
 ?>
 <div id="header">
 	<div id="header1">
+		<div id="top_corner"></div> 
 		<div id="institution">
 			<a href="<?php echo api_get_path(WEB_PATH);?>index.php" target="_top"><?php echo api_get_setting('siteName') ?></a>
 			<?php
@@ -32,7 +33,7 @@
 if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 	//Put the name of the course in the header
 	echo '
-		<div id="header1right">
+		<div id="my_courses">
 			<a href="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/index.php" target="_top">'.$_course['name'].' ';
 	if (api_get_setting("display_coursecode_in_courselist") == "true") {
 		echo $_course['official_code'];
@@ -94,7 +95,7 @@ if (isset($_course['extLink']) && $_course['extLink']['name'] != "") {
 
 
 	<div id="header2">
-		<div id="header2right">
+		<div id="Header2Right">
 			<ul>
 <?php 
 if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR (api_get_setting('showonline','users') == "true" AND $_user['user_id']) OR (api_get_setting('showonline','course') == "true" AND $_user['user_id'] AND $_cid)) {

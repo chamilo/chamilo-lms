@@ -298,9 +298,10 @@ class Tracking {
 	 * 
 	 * @param User id
 	 * @param Course id
+	 * @param Array limit average to listed lp ids
 	 * @return string value (number %) Which represents a round integer explain in got in 3.
 	 */
-	function get_avg_student_score($student_id, $course_code) {
+	function get_avg_student_score($student_id, $course_code, $lp_ids=array()) {
 		
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -309,7 +310,9 @@ class Tracking {
 		$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$tbl_stats_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 		
-	
+
+		
+		
 		$course = CourseManager :: get_course_information($course_code);
 		if(!empty($course['db_name']))
 		{
@@ -320,6 +323,10 @@ class Tracking {
 			$lp_item_view_table = Database  :: get_course_table(TABLE_LP_ITEM_VIEW,$course['db_name']);
 	
 			$sql_course_lp = 'SELECT id FROM '.$lp_table;
+			if(count($lp_ids)!=0)
+			{
+				$sql_course_lp.=' WHERE id IN ('.implode(',',$lp_ids).')';
+			}
 			$sql_result_lp = api_sql_query($sql_course_lp, __FILE__, __LINE__);
 			
 			$lp_scorm_score_total = 0;
@@ -449,8 +456,12 @@ class Tracking {
 			if($lp_scorm_weighting_total>0)
 			{
 				$pourcentageScore = round(($totalScore * 100) / $lp_scorm_weighting_total);
+				return $pourcentageScore;
 			}	
-			return $pourcentageScore;
+			else
+			{
+				return null;
+			}
 		}
 		else
 		{

@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 16769 2008-11-17 22:19:30Z yannoo $
+<?php //$Id: myStudents.php 16820 2008-11-20 09:14:14Z elixir_inter $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -621,107 +621,8 @@ if(!empty($_GET['student']))
 					}
 					
 					//QUIZZ IN LP
-					//Path is the exercise id we need this to search the last attempt					 
-					$sql = 'SELECT id as item_id, path,max_score 
-							FROM '.$t_lpi.' AS lp_item
-							WHERE lp_id='.$a_learnpath['id'].'
-							AND item_type="quiz"';
-
-					$rsItems = api_sql_query($sql, __FILE__, __LINE__);				
-					//We get the last view id of this LP
-					$sql='SELECT max(id) as id FROM '.$t_lpv.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
-					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
-					$lp_view_id = 0;
-					if(Database::num_rows($rs_last_lp_view_id)>0)
-					{
-						$lp_view_id = Database::result($rs_last_lp_view_id,0,'id');
-						if($lp_view_id > 0)	$any_result = true;
-					}
-					
-					$total_score = $total_weighting = 0;
-					if($lp_view_id)
-					{
-						while($item = Database :: fetch_array($rsItems, 'ASSOC'))
-						{
-							$sql = 'SELECT score as student_score 
-									FROM '.$t_lpiv.' as lp_view_item
-									WHERE lp_view_item.lp_item_id = '.$item['item_id'].'
-									AND lp_view_id = "'.$lp_view_id.'"';
-									
-							$rsScores = api_sql_query($sql, __FILE__, __LINE__);
-							
-							// Real max score we search into the stats							
-					 		$sql_last_attempt = 'SELECT exe_id FROM '. $tbl_stats_exercices. ' ' .
-					 							'WHERE exe_exo_id="' .$item['path']. '" AND exe_user_id="' . $student_id . '" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
-							
-							$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
-							$num = Database :: num_rows($resultLastAttempt);				
-							if ($num > 0){								
-								if ($num > 1){
-									while ($rowLA = Database :: fetch_row($resultLastAttempt)) {
-										$id_last_attempt = $rowLA[0];						
-									}
-								} else {
-									$id_last_attempt = Database :: result($resultLastAttempt, 0, 0);							
-								} 
-							}	
-							$sql = "SELECT SUM(t.ponderation) as maxscore from ( SELECT distinct question_id, marks,ponderation FROM $tbl_stats_attempts as at " .
-						  	"INNER JOIN  $tbl_quiz_questions as q  on(q.id = at.question_id) where exe_id ='$id_last_attempt' ) as t";
-														
-							$result = api_sql_query($sql, __FILE__, __LINE__);
-							$row_max_score = Database :: fetch_array($result);							
-							$maxscore = $row_max_score['maxscore'];							
-							if ($maxscore=='')
-							{
-								$maxscore = $item['max_score'];
-							}				
-							
-							if (Database::num_rows($rsScores) > 0)
-							{			
-								$total_score += Database::result($rsScores, 0, 0);
-							}
-							
-							//$total_weighting += $item['max_score'];
-							$total_weighting += $maxscore;
-						}
-						$any_result = true;
-					}
-					
-					$sql = 'SELECT id, max_score 
-							FROM '.$t_lpi.' AS lp_item
-							WHERE lp_id='.$a_learnpath['id'].'
-							AND item_type="sco" LIMIT 1';
-					
-					$rs_lp_item_id_scorm = api_sql_query($sql, __FILE__, __LINE__);
-					
-					if(Database::num_rows($rs_lp_item_id_scorm)>0){
-						$lp_item_id = Database::result($rs_lp_item_id_scorm,0,'id');
-						$lp_item__max_score = Database::result($rs_lp_item_id_scorm,0,'max_score');	
-						$total_weighting+=$lp_item__max_score;
-						
-						//We get the last view id of this LP
-						$sql='SELECT max(id) as id FROM '.$t_lpv.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
-						$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
-						$lp_view_id = Database::result($rs_last_lp_view_id,0,'id');
-						
-						// this will get the FINAL SCORE
-						$sql='SELECT SUM(score)/count(lp_item_id) as score FROM '.$t_lpiv.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
-						
-						$rs_score = api_sql_query($sql, __FILE__, __LINE__);
-						if(Database::num_rows($rs_score)>0)
-						{
-							$lp_scorm_score = Database::result($rs_score,0,'score');
-							
-							$total_score+=$lp_scorm_score;
-							$any_result = true;
-						}
-					}
-
-					$score = 0;
-					if($total_weighting != 0)
-					{
-						$score = round($total_score / $total_weighting * 100,2);
-					}
+					$score = Tracking::get_avg_student_score(intval($_GET['student']), Database::escape_string($_GET['course']), array($a_learnpath['id']));
+				
 					
 					if($i%2==0){
 						$s_css_class="row_odd";
@@ -743,7 +644,7 @@ if(!empty($_GET['student']))
 						<?php echo api_time_to_hms($total_time) ?>
 						</td>
 						<td align="right">
-							<?php echo $total_weighting>0 ? $score.'%' : '-' ?>
+							<?php if(!is_null($score)) echo $score.' %'; else echo '-'; ?>
 						</td>
 						<td align="right">
 							<?php echo $progress ?>

@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 16726 2008-11-12 15:44:48Z pcool $
+<?php // $Id: admin.php 16865 2008-11-21 23:24:21Z herodoto $
  
 /*
 ==============================================================================
@@ -67,7 +67,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 16726 2008-11-12 15:44:48Z pcool $
+* 	@version $Id: admin.php 16865 2008-11-21 23:24:21Z herodoto $
 */
 
 
@@ -466,9 +466,8 @@ if(!empty($description))
 
 
 echo '<div class="actions">';
-echo Display::return_icon('search.gif').'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
+echo Display::return_icon('search.gif', get_lang('Preview')).'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
 echo '</div>';
-
 
 if($newQuestion || $editQuestion)
 {
@@ -487,7 +486,6 @@ if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspota
 {
 	// question list management
 	include('question_list_admin.inc.php');
-
 }
 
 

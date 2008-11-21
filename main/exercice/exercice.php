@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 16747 2008-11-14 14:54:50Z elixir_inter $
+<?php // $Id: exercice.php 16865 2008-11-21 23:24:21Z herodoto $
  
 /*
 ==============================================================================
@@ -556,22 +556,22 @@ echo '<div class="actions">';
 	//show pages navigation link for previous page
 	if($page)
 	{
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;page=".($page-1)."\">".Display::return_icon('previous.gif').get_lang("PreviousPage")."</a> | ";
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;page=".($page-1)."\">".Display::return_icon('previous.gif', get_lang("PreviousPage")).get_lang("PreviousPage")."</a> | ";
 	}
 	elseif($nbrExercises+$nbrNextTests > $limitExPage)
 	{
-			echo Display::return_icon('previous.gif').get_lang('PreviousPage')." | ";
+			echo Display::return_icon('previous.gif', get_lang("PreviousPage")).get_lang('PreviousPage')." | ";
 	}
 
 	//show pages navigation link for previous page
 	if($nbrExercises+$nbrNextTests > $limitExPage)
 	{
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;page=".($page+1)."\">".get_lang("NextPage").Display::return_icon('next.gif')."</a>";
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;page=".($page+1)."\">".get_lang("NextPage").Display::return_icon('next.gif', get_lang("NextPage"))."</a>";
 
 	}
 	elseif($page)
 	{
-			echo get_lang("NextPage") . Display::return_icon('next.gif');
+			echo get_lang("NextPage") . Display::return_icon('next.gif', get_lang("NextPage"));
 	}
 		echo '</span>';
 	}
@@ -580,7 +580,7 @@ echo '<div class="actions">';
 	{
 		echo '<a href="exercise_admin.php?'.api_get_cidreq().'">'.Display::return_icon('new_test.gif',get_lang('NewEx')).get_lang('NewEx').'</a>';
 		echo '<a href="hotpotatoes.php">'.Display::return_icon('jqz.jpg',get_lang('ImportHotPotatoesQuiz')).get_lang('ImportHotPotatoesQuiz').'</a>';
-		echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=result').'">'.Display::return_icon('show_test_results.gif',get_lang('ImportHotPotatoesQuiz')).get_lang("Results").'</a>';
+		echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=result').'">'.Display::return_icon('show_test_results.gif',get_lang("Results")).get_lang("Results").'</a>';
 
 		// the actions for the statistics
 		if($show == 'result')
@@ -601,7 +601,7 @@ echo '<div class="actions">';
 				echo '<a href="#" onclick="document.form1a.submit();">'.Display::return_icon('excel.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
 				echo '<a href="#" onclick="document.form1b.submit();">'.Display::return_icon('excel.gif',get_lang('ExportAsXLS')).get_lang('ExportAsXLS').'</a>';
 				echo '<a href="#" onclick="document.form1c.submit();">'.Display::return_icon('synthese_view.gif',$alt).$alt.'</a>';			
-				echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=test').'">'.Display::return_icon('quiz.gif').get_lang('BackToExercisesList').'</a>';
+				echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=test').'">'.Display::return_icon('quiz.gif', get_lang('BackToExercisesList')).get_lang('BackToExercisesList').'</a>';
 				echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
 				echo '<input type="hidden" name="export_report" value="export_report">';
 				echo '<input type="hidden" name="export_format" value="csv">';
@@ -679,7 +679,7 @@ echo '</div>'; // closing the actions div
 			{
 				echo '<tr class="'.$s_class.'">'."\n";
 				?>
-				<td><?php Display::display_icon('quiz.gif')?></td>
+				<td><?php Display::display_icon('quiz.gif', get_lang('Exercice'))?></td>
 				<td><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
 		      <?php $row['title']=api_parse_tex($row['title']); ?>
 				<td><a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$mylpitemid; ?>&amp;exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a></td>

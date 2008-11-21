@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 16726 2008-11-12 15:44:48Z pcool $
+<?php // $Id: question.class.php 16865 2008-11-21 23:24:21Z herodoto $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 16726 2008-11-12 15:44:48Z pcool $
+* 	@version $Id: question.class.php 16865 2008-11-21 23:24:21Z herodoto $
 */
 
 
@@ -874,7 +874,7 @@ abstract class Question
 			//echo '<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">';
 			echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">';
 			//echo '<div>';
-			Display::display_icon($img,'',array('align'=>'middle'));
+			Display::display_icon($img, $explanation, array('align'=>'middle'));
 			//echo '</div>';
 			//echo '<div>';
 			echo $explanation;
@@ -886,7 +886,7 @@ abstract class Question
 		//echo '<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">';
 		echo '<a href="question_pool.php?fromExercise='.$exerciseId.'">';
 		//echo '<div>';
-		Display::display_icon('database.gif','',array('align'=>'middle'));
+		Display::display_icon('database.gif', get_lang('GetExistingQuestion'), array('align'=>'middle'));
 		//echo '</div>';
 		//echo '<div>';
 		echo get_lang('GetExistingQuestion');

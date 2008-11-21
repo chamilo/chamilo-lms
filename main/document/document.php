@@ -1,4 +1,4 @@
-<?php // $Id: document.php 16725 2008-11-12 15:43:21Z pcool $
+<?php // $Id: document.php 16862 2008-11-21 21:45:30Z herodoto $
  
 /*
 ==============================================================================
@@ -624,7 +624,7 @@ if($folders===false)
 	{
 	?>
 		 <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo urlencode((dirname($curdirpath)=='\\')?'/':dirname($curdirpath)).$req_gid ?>">
-				<img src="../img/folder_up.gif" border="0" align="absbottom" hspace="5" alt="" />
+				<img src="../img/folder_up.gif" border="0" align="absbottom" hspace="5" title="<?php echo get_lang('Up'); ?>"alt="" />
 				<?php echo get_lang('Up'); ?></a>&nbsp;
 	<?php
 	}
@@ -640,9 +640,9 @@ if($folders===false)
 			<a href="upload.php?<?php echo api_get_cidreq();?>&path=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/submit_file.gif" border="0" title="<?php echo get_lang('UplUploadDocument'); ?>" alt="" /></a>
 			<a href="upload.php?<?php echo api_get_cidreq();?>&path=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang('UplUploadDocument'); ?></a>&nbsp;
 			<!-- create directory -->
-			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><img src="../img/folder_new.gif" border="0" alt ="" /></a>
+			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><img src="../img/folder_new.gif" border="0" title="<?php echo get_lang('CreateDir'); ?>" alt ="" /></a>
 			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><?php echo get_lang("CreateDir"); ?></a>&nbsp;
-			<a href="quota.php?<?php echo api_get_cidreq();?>"><?php Display::display_icon('statistics.gif'); ?><?php echo get_lang("ShowCourseQuotaUse"); ?></a>
+			<a href="quota.php?<?php echo api_get_cidreq();?>"><?php Display::display_icon('statistics.gif', get_lang("ShowCourseQuotaUse")); ?><?php echo get_lang("ShowCourseQuotaUse"); ?></a>
 		<?php
 	}
 	?>

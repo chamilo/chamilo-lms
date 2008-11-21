@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 16721 2008-11-12 15:39:03Z pcool $
+<?php //$Id: announcements.php 16864 2008-11-21 22:20:28Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -338,7 +338,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			if(!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id))
 			{
 				change_visibility(TOOL_ANNOUNCEMENT,$id);
-				$message = get_lang("Visible");
+				$message = get_lang("VisibilityChanged");
 			}
 		}
 	}
@@ -1464,14 +1464,16 @@ if(!empty($error_message))
 							if ($myrow['visibility']==1)
 							{
 									$image_visibility="visible";
+									$alt_visibility=get_lang('Invisible');
 							}
 							else
 							{
 									$image_visibility="invisible";
+									$alt_visibility=get_lang('Visible');
 							}
 
 							echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".(!empty($_GET['origin'])?$_GET['origin']:'')."&action=showhide&id=".$myrow['id']."\">",
-									"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" alt=\"".get_lang('Visible')."\"/></a>";
+									"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" alt=\"".$alt_visibility."\"/></a>";
 
 
 

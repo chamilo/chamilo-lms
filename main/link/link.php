@@ -1,4 +1,4 @@
-<?php // $Id: link.php 16739 2008-11-13 15:36:40Z pcool $
+<?php // $Id: link.php 16861 2008-11-21 21:21:00Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -298,8 +298,8 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 	echo '<div class="actions">';
 	if(is_allowed_to_edit())
 	{
-		echo Display::return_icon('file_html_new.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addlink&amp;category=".(!empty($category)?$category:'')."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
-		echo Display::return_icon('folder_new.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addcategory&amp;urlview=".$urlview."\">".get_lang("CategoryAdd")."</a>\n";
+		echo Display::return_icon('file_html_new.gif',get_lang('LinkAdd'))." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addlink&amp;category=".(!empty($category)?$category:'')."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
+		echo Display::return_icon('folder_new.gif', get_lang("CategoryAdd"))." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addcategory&amp;urlview=".$urlview."\">".get_lang("CategoryAdd")."</a>\n";
 		   /* "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=importcsv&amp;urlview=".$urlview."\">".get_lang('CsvImport')."</a>\n", // RH*/
 	}
 	//making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
@@ -307,13 +307,13 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 	$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
 	$resultcategories=api_sql_query($sqlcategories);
 	$aantalcategories = @mysql_num_rows($resultcategories);
-	echo Display::return_icon('remove.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
+	echo Display::return_icon('remove.gif', $shownone)." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
 	for($j = 1; $j <= $aantalcategories; $j++)
 	{
 		echo "0";
 	}
 	echo "\">$shownone</a>";
-	echo Display::return_icon('add.gif')." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
+	echo Display::return_icon('add.gif', $showall)." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
 	for($j = 1; $j <= $aantalcategories; $j++)
 	{
 	echo "1";

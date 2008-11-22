@@ -1,4 +1,4 @@
-<?php // $Id: survey_list.php 16739 2008-11-13 15:36:40Z pcool $
+<?php // $Id: survey_list.php 16875 2008-11-22 23:34:28Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,7 +27,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey_list.php 16739 2008-11-13 15:36:40Z pcool $
+* 	@version $Id: survey_list.php 16875 2008-11-22 23:34:28Z herodoto $
 *
 * 	@todo use quickforms for the forms
 */
@@ -157,10 +157,10 @@ echo '<div class="actions">';
 if (!api_is_course_coach() || $extend_rights_for_coachs=='true')
 {
 	// Action links
-	echo Display::return_icon('surveyadd.gif') . '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.get_lang('CreateNewSurvey').'</a> ';
+	echo Display::return_icon('surveyadd.gif', get_lang('CreateNewSurvey')) . '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.get_lang('CreateNewSurvey').'</a> ';
 }
 //echo '<a href="survey_all_courses.php">'.get_lang('CreateExistingSurvey').'</a> ';
-echo Display::return_icon('search.gif') . '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.get_lang('Search').'</a>';
+echo Display::return_icon('search.gif', get_lang('Search')) . '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.get_lang('Search').'</a>';
 echo '</div>';
 
 //Load main content

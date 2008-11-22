@@ -108,14 +108,15 @@ if(api_is_allowed_to_edit())
 
   //include('content_makers.inc.php');
   echo	'<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.
-		'<img src="../img/wizard.gif" border="0" align="absmiddle" alt="scormbuilder">&nbsp;'.get_lang('_add_learnpath').
+		'<img src="../img/wizard.gif" border="0" align="absmiddle" alt="'.get_lang('_add_learnpath').
+		'">&nbsp;'.get_lang('_add_learnpath').
 		'</a>' .
 		str_repeat('&nbsp;',3).
-		'<a href="../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/file_zip.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("UploadScorm").'</a>';
+		'<a href="../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/file_zip.gif" border="0" alt="'.get_lang("UploadScorm").'" align="absmiddle">&nbsp;'.get_lang("UploadScorm").'</a>';
 		if (api_get_setting('service_ppt2lp', 'active') == 'true')
 		{
-			echo  str_repeat('&nbsp;',3).'<a href="../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/powerpoint.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("PowerPointConvert").'</a>';
-       		echo  str_repeat('&nbsp;',3).'<a href="../upload/upload_word.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/word.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("WordConvert").'</a>';
+			echo  str_repeat('&nbsp;',3).'<a href="../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/powerpoint.gif" border="0" alt="'.get_lang("PowerPointConvert").'" align="absmiddle">&nbsp;'.get_lang("PowerPointConvert").'</a>';
+       		echo  str_repeat('&nbsp;',3).'<a href="../upload/upload_word.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/word.gif" border="0" alt="'.get_lang("WordConvert").'" align="absmiddle">&nbsp;'.get_lang("WordConvert").'</a>';
         }
 			
        
@@ -193,7 +194,7 @@ if (is_array($flat_list))
 
 		$url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
 		$name = $details['lp_name'];
-		$image='<img src="../img/kcmdf.gif" border="0" align="absmiddle" alt="scorm">'."\n";
+		$image='<img src="../img/kcmdf.gif" border="0" align="absmiddle" alt="' . $name . '">'."\n";
 	    $dsp_line =	'<tr align="center" class="'.$oddclass.'">'."\n" .
         	'<td align="left" valign="top">' .
 			'<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_lp.'">' .
@@ -279,14 +280,14 @@ if (is_array($flat_list))
 			if ($details['lp_published'] == "i")
 			{
 		        $dsp_publish =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=v\">" .
-				"<img src=\"../img/visible_LP_list.gif\" border=\"0\" title=\"".get_lang('_publish')."\" />" .
+				"<img src=\"../img/invisible_LP_list.gif\" border=\"0\" title=\"".get_lang('_publish')."\" />" .
 				"</a>" .
 				"";
 			}
 			else
 			{
 				$dsp_publish =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=i'>" .
-				"<img src=\"../img/invisible_LP_list.gif\" border=\"0\" title=\"".get_lang('_no_publish')."\" />" .
+				"<img src=\"../img/visible_LP_list.gif\" border=\"0\" title=\"".get_lang('_no_publish')."\" />" .
 				"</a>".
 				"";
 			}
@@ -363,7 +364,7 @@ if (is_array($flat_list))
 	    	elseif($current == $max-1 && $max != 1) //last element
 	    	{
 	    		$dsp_order .= '<td><img src="../img/blanco.png" border="0" alt="" title="" /><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_up&lp_id='.$id.'">' .
-	    				'<img src="../img/arrow_up_0.gif" border="0" alt="'.get_lang("MoveDown").'" title="'.get_lang("MoveDown").'"/>' .
+	    				'<img src="../img/arrow_up_0.gif" border="0" alt="'.get_lang("MoveUp").'" title="'.get_lang("MoveUp").'"/>' .
 	    				'</a></td>';
 	    	}
 	    	elseif($max == 1)

@@ -2620,9 +2620,9 @@ class learnpath {
     	if(api_is_allowed_to_edit())
     	{
     		$html	.='<div class="actions_lp">';
-    		$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=build&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('learnpath_build.gif').' '.mb_convert_encoding(get_lang('Build'),$this->encoding,$mych)."</a>";
-    		$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=admin_view&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('learnpath_organize.gif').' '.mb_convert_encoding(get_lang('BasicOverview'),$this->encoding,$mych)."</a>";
-    		$html 	.= '<span>'.Display::return_icon('learnpath_view.gif').' '.mb_convert_encoding(get_lang("Display"),$this->encoding,$mych).'</span>';
+    		$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=build&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('learnpath_build.gif', get_lang('Build')).' '.mb_convert_encoding(get_lang('Build'),$this->encoding,$mych)."</a>";
+    		$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=admin_view&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('learnpath_organize.gif', get_lang('BasicOverview')).' '.mb_convert_encoding(get_lang('BasicOverview'),$this->encoding,$mych)."</a>";
+    		$html 	.= '<span>'.Display::return_icon('learnpath_view.gif', get_lang("Display")).' '.mb_convert_encoding(get_lang("Display"),$this->encoding,$mych).'</span>';
     		$html 	.= '</div>';
 			unset($mych);
     	}
@@ -4233,10 +4233,13 @@ class learnpath {
 		if(api_is_allowed_to_edit())
 		{
 			$return .= '<div class="actions">';
-			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=build&amp;lp_id=' . $this->lp_id . '">'.Display::return_icon('learnpath_build.gif').' '.get_lang('Advanced').'</a>';
-			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=admin_overview&amp;lp_id=' . $this->lp_id . '">'.Display::return_icon('learnpath_organize.gif').' '.get_lang('BasicOverview').'</a>';
-			$return .= '<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$this->lp_id.'">'.Display::return_icon('learnpath_view.gif').' '.get_lang("Display").'</a>';
-			$return .= '<a href="'.api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'&amp;updateaudio=true">'.Display::return_icon('audio.gif').' '.get_lang('UpdateAllAudioFragments').'</a>';
+			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=build&amp;lp_id=' . $this->lp_id . '">'.Display::return_icon('learnpath_build.gif', get_lang('Build')).' '.get_lang('Build').'</a>';			
+						
+			$return .= '<span>'.Display::return_icon('learnpath_organize.gif', get_lang("BasicOverview")).' '.get_lang("BasicOverview").'</span>';
+									
+			$return .= '<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$this->lp_id.'">'.Display::return_icon('learnpath_view.gif', get_lang("Display")).' '.get_lang("Display").'</a>';			
+			
+			$return .= '<a href="'.api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'&amp;updateaudio=true">'.Display::return_icon('audio.gif', get_lang('UpdateAllAudioFragments')).' '.get_lang('UpdateAllAudioFragments').'</a>';
 			$return .= '</div>';
 		}
 		
@@ -4310,7 +4313,7 @@ class learnpath {
 							if($arrLP[$i]['previous_item_id'] != 0)
 							{
 								$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;direction=up&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
-									$return .= '<img alt="" src="../img/arrow_up_' . ($arrLP[$i]['depth'] % 3) . '.gif" />';
+									$return .= '<img alt="" src="../img/arrow_up_' . ($arrLP[$i]['depth'] % 3) . '.gif" title="' . get_lang('MoveUp') . '"/>';
 								$return .= '</a>' . "\n";
 							}
 							else
@@ -4319,7 +4322,8 @@ class learnpath {
 							if($arrLP[$i]['next_item_id'] != 0)
 							{
 								$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;direction=down&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
-									$return .= '<img src="../img/arrow_down_' . ($arrLP[$i]['depth'] % 3) . '.gif" />';
+									$return .= '<img src="../img/arrow_down_' . ($arrLP[$i]['depth'] % 3) . '.gif" title="' . get_lang('MoveDown') . '" />';							
+									
 								$return .= '</a>' . "\n";
 							}
 							else
@@ -7169,14 +7173,14 @@ class learnpath {
 		
 		$return .= $lang.': '; 
 		
-		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Edit the current item"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="Edit the current item" /> '.get_lang("Edit").'</a>';
-		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="Move the current item" /> '.get_lang("Move").'</a>';
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang("Edit").'"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="'.get_lang("Edit").'" /> '.get_lang("Edit").'</a>';
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="'.get_lang("Move").'" /> '.get_lang("Move").'</a>';
 		// commented for now as prerequisites cannot be added to chapters
 		if($item_type != 'dokeos_chapter' && $item_type != 'chapter')
 		{
 			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang('Prerequisites').'"><img align="absbottom" alt="'.get_lang('Prerequisites').'" src="../img/right.gif" title="'.get_lang('Prerequisites').'" /> '.get_lang('Prerequisites').'</a>';
 		}
-		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' .addslashes($s_title). '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="Delete the current item" /> '.get_lang("Delete").'</a>';
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' .addslashes($s_title). '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="'.get_lang("Delete").'" /> '.get_lang("Delete").'</a>';
 		
 		//$return .= '<br><br><p class="lp_text">' . ((trim($s_description) == '') ? ''.get_lang("NoDescription").'' : stripslashes(nl2br($s_description))) . '</p>';
 		
@@ -7561,7 +7565,7 @@ class learnpath {
 			ORDER BY path ASC";
 		$res_doc = api_sql_query($sql_doc, __FILE__, __LINE__);
 		
-		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_DOCUMENT . '.gif" style="margin-right:5px;" title="" />'.get_lang("Document").'</div>';
+		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_DOCUMENT . '.gif" style="margin-right:5px;" title="" />'.get_lang("Documents").'</div>';
 		$return .= '<div class="lp_resource_elements" id="resDoc">';
 		
 		

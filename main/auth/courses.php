@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 15674 2008-07-01 16:04:43Z juliomontoya $
+<?php // $Id: courses.php 16876 2008-11-22 23:47:37Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -196,29 +196,29 @@ if (isset($message))
 echo "<div id=\"actions\">\n";
 if ($safe['action'] <> 'sortmycourses' AND isset($safe['action']))
 {
-	echo "<a href=\"".api_get_self()."?action=sortmycourses\">".Display::return_icon('deplacer_fichier.gif').' '.get_lang("SortMyCourses")."</a>";
+	echo "<a href=\"".api_get_self()."?action=sortmycourses\">".Display::return_icon('deplacer_fichier.gif', get_lang("SortMyCourses")).' '.get_lang("SortMyCourses")."</a>";
 }
 else
 {
-	echo '<b>'.Display::return_icon('deplacer_fichier.gif').' '.get_lang('SortMyCourses').'</b>';
+	echo '<b>'.Display::return_icon('deplacer_fichier.gif', get_lang('SortMyCourses')).' '.get_lang('SortMyCourses').'</b>';
 }
 echo '&nbsp;&nbsp;';
 if ($safe['action']<>'createcoursecategory')
 {
-	echo "<a href=\"".api_get_self()."?action=createcoursecategory\">".Display::return_icon('folder_new.gif').' '.get_lang("CreateCourseCategory")."</a>\n";
+	echo "<a href=\"".api_get_self()."?action=createcoursecategory\">".Display::return_icon('folder_new.gif', get_lang("CreateCourseCategory")).' '.get_lang("CreateCourseCategory")."</a>\n";
 }
 else
 {
-	echo '<b>'.Display::return_icon('folder_new.gif').' '.get_lang('CreateCourseCategory').'</b>';
+	echo '<b>'.Display::return_icon('folder_new.gif', get_lang("CreateCourseCategory")).' '.get_lang('CreateCourseCategory').'</b>';
 }
 echo '&nbsp;&nbsp;';
 if ($safe['action']<>'subscribe')
 {
-	echo "\t\t<a href=\"".api_get_self()."?action=subscribe\">".Display::return_icon('view_more_stats.gif').' '.get_lang("SubscribeToCourse")."</a>\n";
+	echo "\t\t<a href=\"".api_get_self()."?action=subscribe\">".Display::return_icon('view_more_stats.gif', get_lang("SubscribeToCourse")).' '.get_lang("SubscribeToCourse")."</a>\n";
 }
 else
 {
-	echo '<b>'.Display::return_icon('view_more_stats.gif').' '.get_lang("SubscribeToCourse").'</b>';
+	echo '<b>'.Display::return_icon('view_more_stats.gif', get_lang("SubscribeToCourse")).' '.get_lang("SubscribeToCourse").'</b>';
 }
 echo "</div>";
 
@@ -1021,7 +1021,7 @@ function display_category_icons($current_category, $all_user_categories)
    		echo "</td>";
 		echo "<td rowspan=\"2\">";
 		echo " <a href=\"courses.php?action=deletecoursecategory&amp;id=".$current_category."&amp;sec_token=".$stok."\">";
-		Display::display_icon('delete.gif',get_lang('Edit'),array('onclick'=>"javascript:if(!confirm('".addslashes(htmlentities(get_lang("CourseCategoryAbout2bedeleted"),ENT_QUOTES,$charset))."')) return false;"));
+		Display::display_icon('delete.gif',get_lang('Delete'),array('onclick'=>"javascript:if(!confirm('".addslashes(htmlentities(get_lang("CourseCategoryAbout2bedeleted"),ENT_QUOTES,$charset))."')) return false;"));
 		echo "</a>";
 		echo "</td>";
  		echo "</tr>";

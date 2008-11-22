@@ -3352,7 +3352,7 @@ function display_forum_search_results($search_term)
  */
 function search_link()
 {
-	$return = '<a href="forumsearch.php?'.api_get_cidreq().'&action=search"> '.Display::return_icon('search.gif').' '.get_lang('Search').'</a>';
+	$return = '<a href="forumsearch.php?'.api_get_cidreq().'&action=search"> '.Display::return_icon('search.gif', get_lang('Search')).' '.get_lang('Search').'</a>';
 	if (!empty($_GET['search']))
 	{
 		$return .= ': '.Security::remove_XSS($_GET['search']).' ';

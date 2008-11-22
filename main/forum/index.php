@@ -64,7 +64,7 @@ api_protect_course_script(true);
 // including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-$nameTools=get_lang('Forum');
+$nameTools=get_lang('Forums');
 
 /*
 -----------------------------------------------------------
@@ -188,9 +188,9 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' ) {
 	echo '<div class="actions">';
 	echo '<span style="float:right;">'.search_link().'</span>';
 	if (api_is_allowed_to_edit(false,true)) {
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forumcategory"> '.Display::return_icon('forum_category_new.gif').' '.get_lang('AddForumCategory').'</a> ';
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forumcategory"> '.Display::return_icon('forum_category_new.gif', get_lang('AddForumCategory')).' '.get_lang('AddForumCategory').'</a>';
 		if (is_array($forum_categories_list)) {
-			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forum"> '.Display::return_icon('forum_new.gif').' '.get_lang('AddForum').'</a>';
+			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forum"> '.Display::return_icon('forum_new.gif', get_lang('AddForum')).' '.get_lang('AddForum').'</a>';
 		}
 		//echo ' | <a href="forum_migration.php">'.get_lang('MigrateForum').'</a>';
 	}
@@ -321,11 +321,11 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' ) {
 							if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']])) {
 								echo icon('../img/forumgroupnew.gif');
 							} else {
-								echo icon('../img/forumgroup.gif');
+								echo icon('../img/forumgroup.gif', get_lang('GroupForum'));
 							}
 						} else {
 							if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']])) {
-								echo icon('../img/forum.gif');
+								echo icon('../img/forum.gif', get_lang('Forum'));
 							} else {
 								echo icon('../img/forum.gif');
 							}

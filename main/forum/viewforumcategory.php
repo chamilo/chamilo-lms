@@ -169,7 +169,7 @@ if ($_GET['action']!='add') {
 	echo '<span style="float:right;">'.search_link().'</span>';
 	if (api_is_allowed_to_edit(false,true)) {
 		//echo '<a href="'.api_get_self().'?forumcategory='.$_GET['forumcategory'].'&amp;action=add&amp;content=forumcategory">'.get_lang('AddForumCategory').'</a> | ';
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=add&amp;content=forum">'.Display::return_icon('forum_new.gif').' '.get_lang('AddForum').'</a>';
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=add&amp;content=forum">'.Display::return_icon('forum_new.gif', get_lang('AddForum')).' '.get_lang('AddForum').'</a>';
 	}
 	echo '</div>';
 	
@@ -264,11 +264,11 @@ if ($_GET['action']!='add') {
 					if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']])) {
 						echo icon('../img/forumgroupnew.gif');
 					} else {
-						echo icon('../img/forumgroup.gif');
+						echo icon('../img/forumgroup.gif', get_lang('GroupForum'));
 					}
 				} else {
 					if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']])) {
-						echo icon('../img/forum.gif');
+						echo icon('../img/forum.gif', get_lang('Forum'));
 					} else {
 						echo icon('../img/forum.gif');
 					}

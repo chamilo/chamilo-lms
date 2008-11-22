@@ -63,6 +63,15 @@ else // user clicked ON a hotspot
 	//$_SESSION['exerciseResult'][$questionId]['order'][$answerOrderId] = $answerId;
 }
 
+//round-up the coordinates
+$coords = explode('/',$coordinates);
+$coordinates = '';
+foreach ($coords as $coord) {
+    list($x,$y) = explode(';',$coord);
+    $coordinates .= round($x).';'.round($y).'/';
+}
+$coordinates = substr($coordinates,0,-1);
+
 $TBL_TRACK_E_HOTSPOT   = Database::get_statistic_table(STATISTIC_TRACK_E_HOTSPOTS);
 
 // update db

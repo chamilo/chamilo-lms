@@ -364,7 +364,7 @@ function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $per
 					
 					echo "\t\t\t <a href=\"".$url."\">";					
 				}
-				echo "<img src=\"../img/checkbox_on2.gif\" border=\"0\"/>";
+				echo "<img src=\"../img/checkbox_on2.gif\" border=\"0\"/ title=\"".get_lang('UserHasPermission')."\">";
 				if($editable)
 				{
 					echo "</a>";
@@ -393,7 +393,7 @@ function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $per
 					//echo "\t\t\t <a href=\"".str_replace('&', '&amp;', $_SERVER['REQUEST_URI'])."&amp;action=grant&amp;permission=$permission&amp;tool=$tool\">";
 					echo "\t\t\t <a href=\"".$url."\">";					
 				}
-				echo "<img src=\"../img/wrong.gif\" border=\"0\"/>";
+				echo "<img src=\"../img/wrong.gif\" border=\"0\"/ title=\"".get_lang('UserHasPermissionNot')."\">";
 				if($editable)
 				{
 					echo "</a>";

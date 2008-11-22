@@ -493,15 +493,15 @@ function get_logged_user_course_html($my_course)
 
 	if($s_course_status==1)
 	{
-		$s_htlm_status_icon=Display::return_icon('teachers.gif');
+		$s_htlm_status_icon=Display::return_icon('teachers.gif', get_lang('Teacher'));
 	}
 	if($s_course_status==2)
 	{
-		$s_htlm_status_icon=Display::return_icon('coachs.gif');
+		$s_htlm_status_icon=Display::return_icon('coachs.gif', get_lang('GeneralCoach'));
 	}
 	if($s_course_status==5)
 	{
-		$s_htlm_status_icon=Display::return_icon('students.gif');
+		$s_htlm_status_icon=Display::return_icon('students.gif', get_lang('Student'));
 	}
 
 	//display course entry

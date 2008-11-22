@@ -53,7 +53,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	
 	if (! $always_show_upload_form )
 	{
-		$display_output .= "&nbsp;&nbsp;<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") .'</a>&nbsp;&nbsp;&nbsp;&nbsp;';			
+		$display_output .= "&nbsp;&nbsp;<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('submit_file.gif', get_lang("UploadADocument"))." ". get_lang("UploadADocument") .'</a>&nbsp;&nbsp;&nbsp;&nbsp;';			
 	}
 	
 	if (! $always_show_tool_options && api_is_allowed_to_edit(false,true) )
@@ -64,7 +64,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 		
 		if(api_is_allowed_to_edit()) // the coach can't edit options of the tool
 			// Options
-			$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".Security::remove_XSS($_GET['origin'])."&amp;display_tool_options=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a>&nbsp;&nbsp;";							
+			$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".Security::remove_XSS($_GET['origin'])."&amp;display_tool_options=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('acces_tool.gif', get_lang("EditToolOptions")).' ' . get_lang("EditToolOptions") . "</a>&nbsp;&nbsp;";							
 	}
 
 	if ($display_output != "")
@@ -705,7 +705,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			
 			$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));			
 			$row[]= build_document_icon_tag('file',$work->url);			
-			$row[]= '<a href="'.$currentCourseRepositoryWeb.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;
+			$row[]= '<a href="'.$currentCourseRepositoryWeb.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Download').'" />'.$work->title.'</a><br />'.$work->description;
 			$row[]= display_user_link($user_id,$work->author).$qualification_string;// $work->author;			
 			$row[]= date_to_str_ago($work->sent_date).$add_string.'<br><span class="dropbox_date">'.$work->sent_date.'</span>';
 			

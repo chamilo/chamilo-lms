@@ -1,4 +1,4 @@
-<?php // $Id: group.php 16811 2008-11-19 15:08:03Z pcool $
+<?php // $Id: group.php 16873 2008-11-22 23:22:02Z herodoto $
  
 /*
 ==============================================================================
@@ -181,19 +181,19 @@ if (api_is_allowed_to_edit(false,true))
 	echo '<div class="actions">';
 	if (get_setting('allow_group_categories') == 'true')
 	{
-		echo Display::return_icon('folder_new.gif') . '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.get_lang('AddCategory').'</a>&nbsp;';
+		echo Display::return_icon('folder_new.gif', get_lang('AddCategory')) . '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.get_lang('AddCategory').'</a>&nbsp;';
 	}
 	else
 	{
 		//echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
-		echo Display::return_icon('settings.gif') . '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.get_lang('PropModify').'</a>&nbsp;';
+		echo Display::return_icon('settings.gif', get_lang('PropModify')) . '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.get_lang('PropModify').'</a>&nbsp;';
 	}
 	//echo '<a href="group_creation.php?'.api_get_cidreq().'">'.Display::return_icon('group_add_big.gif').'&nbsp;'.get_lang('NewGroupCreate').'</a>&nbsp;';
-	echo Display::return_icon('group_add.gif') . '<a href="group_creation.php?'.api_get_cidreq().'">'.get_lang('NewGroupCreate').'</a>&nbsp;';
+	echo Display::return_icon('group_add.gif', get_lang('NewGroupCreate')) . '<a href="group_creation.php?'.api_get_cidreq().'">'.get_lang('NewGroupCreate').'</a>&nbsp;';
 	if( Database::count_rows(Database::get_course_table(TABLE_GROUP)) > 0)
 	{
 		//echo '<a href="group_overview.php?'.api_get_cidreq().'">'.Display::return_icon('group_view.gif').'&nbsp;'.get_lang('GroupOverview').'</a>&nbsp;';
-		echo Display::return_icon('group.gif') .'<a href="group_overview.php?'.api_get_cidreq().'">'.get_lang('GroupOverview').'</a>&nbsp;';
+		echo Display::return_icon('group.gif', get_lang('GroupOverview')) .'<a href="group_overview.php?'.api_get_cidreq().'">'.get_lang('GroupOverview').'</a>&nbsp;';
 	}
 }
 $group_cats = GroupManager :: get_categories();

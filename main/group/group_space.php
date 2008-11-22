@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 16248 2008-09-05 13:30:55Z elixir_inter $
+<?php //$Id: group_space.php 16873 2008-11-22 23:22:02Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -60,7 +60,7 @@ if(!is_array($current_group) ) {
 }
 
 $nameTools = get_lang("GroupSpace");
-$interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang("GroupManagement"));
+$interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang("Groups"));
 
 /*
 -----------------------------------------------------------
@@ -163,35 +163,35 @@ if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SES
 		{
 			if($value['forum_group_public_private'] == 'public' || ($user_subscribe_to_current_group && $value['forum_group_public_private'] == 'private') || $user_is_tutor || api_is_allowed_to_edit(false,true))
 			{
-				$tools.= Display::return_icon('forum.gif') . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.$value['forum_title'].'</a><br />';
+				$tools.= Display::return_icon('forum.gif', get_lang("GroupForum")) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.$value['forum_title'].'</a><br />';
 			}
 		}
 	}
 	if( $current_group['doc_state'] != TOOL_NOT_AVAILABLE )
 	{
 		// link to the documents area of this group
-		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../document/document.php?".api_get_cidreq()."&amp;gidReq=".$current_group['id']."\">".Display::return_icon('folder_document.gif')."&nbsp;".get_lang("GroupDocument")."</a></div>";
+		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../document/document.php?".api_get_cidreq()."&amp;gidReq=".$current_group['id']."\">".Display::return_icon('folder_document.gif', get_lang("GroupDocument"))."&nbsp;".get_lang("GroupDocument")."</a></div>";
 	}
 	if ( $current_group['calendar_state'] != TOOL_NOT_AVAILABLE)
 	{
 		//link to a group-specific part of agenda
-		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../calendar/agenda.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."&amp;group=".$current_group['id']."&amp;acces=0\">".Display::return_icon('agenda.gif')."&nbsp;".get_lang("GroupCalendar")."</a></div>";
+		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../calendar/agenda.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."&amp;group=".$current_group['id']."&amp;acces=0\">".Display::return_icon('agenda.gif', get_lang("GroupCalendar"))."&nbsp;".get_lang("GroupCalendar")."</a></div>";
 	}
 	if ( $current_group['work_state'] != TOOL_NOT_AVAILABLE)
 	{
 		//link to the works area of this group
-		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../work/work.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('works.gif')."&nbsp;".get_lang("GroupWork")."</a></div>";
+		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../work/work.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('works.gif', get_lang("GroupWork"))."&nbsp;".get_lang("GroupWork")."</a></div>";
 	}
 	if ( $current_group['announcements_state'] != TOOL_NOT_AVAILABLE)
 	{
 		//link to a group-specific part of announcements
-		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../announcements/announcements.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('valves.gif')."&nbsp;".get_lang("GroupAnnouncements")."</a></div>";
+		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../announcements/announcements.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('valves.gif', get_lang("GroupAnnouncements"))."&nbsp;".get_lang("GroupAnnouncements")."</a></div>";
 	}
 
 	if ( $current_group['wiki_state'] != TOOL_NOT_AVAILABLE)
 	{
 		//link to the wiki area of this group
-		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../wiki/index.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('wiki.gif')."&nbsp;".get_lang("GroupWiki")."</a></div>"; 
+		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../wiki/index.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('wiki.gif', get_lang("GroupWiki"))."&nbsp;".get_lang("GroupWiki")."</a></div>"; 
 	}
 
 	echo '<b>'.get_lang("Tools").':</b>';
@@ -211,35 +211,35 @@ else
 		{
 			if($value['forum_group_public_private'] == 'public' )
 			{
-				$tools.= Display::return_icon('forum.gif') . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.$value['forum_title'].'</a><br />';
+				$tools.= Display::return_icon('forum.gif', get_lang("GroupForum")) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.$value['forum_title'].'</a><br />';
 			}
 		}
 	}	
 	if( $current_group['doc_state'] == TOOL_PUBLIC )
 	{
 		// link to the documents area of this group
-		$tools .= "<a href=\"../document/document.php?".api_get_cidreq()."&amp;gidReq=".$current_group['id']."&amp;origin=$origin\">".Display::return_icon('folder_document.gif')."&nbsp;".get_lang("GroupDocument")."</a><br/>";
+		$tools .= "<a href=\"../document/document.php?".api_get_cidreq()."&amp;gidReq=".$current_group['id']."&amp;origin=$origin\">".Display::return_icon('folder_document.gif', get_lang("GroupDocument"))."&nbsp;".get_lang("GroupDocument")."</a><br/>";
 	}
 	if ( $current_group['calendar_state'] == TOOL_PUBLIC )
 	{
 		//link to a group-specific part of agenda
-		$tools .= "<a href=\"../calendar/agenda.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."&amp;group=".$current_group['id']."\">".Display::return_icon('agenda.gif')."&nbsp;".get_lang("GroupCalendar")."</a><br/>";
+		$tools .= "<a href=\"../calendar/agenda.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."&amp;group=".$current_group['id']."\">".Display::return_icon('agenda.gif', get_lang("GroupCalendar"))."&nbsp;".get_lang("GroupCalendar")."</a><br/>";
 	}
 	if ( $current_group['work_state'] == TOOL_PUBLIC )
 	{
 		//link to the works area of this group
-		$tools .= "<a href=\"../work/work.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('works.gif')."&nbsp;".get_lang("GroupWork")."</a><br/>";
+		$tools .= "<a href=\"../work/work.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('works.gif', get_lang("GroupWork"))."&nbsp;".get_lang("GroupWork")."</a><br/>";
 	}
 	if ( $current_group['announcements_state'] == TOOL_PUBLIC)
 	{
 		//link to a group-specific part of announcements
-		$tools .= "<a href=\"../announcements/announcements.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."&amp;group=".$current_group['id']."\">".Display::return_icon('valves.gif')."&nbsp;".get_lang("GroupAnnouncements")."</a><br/>";
+		$tools .= "<a href=\"../announcements/announcements.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."&amp;group=".$current_group['id']."\">".Display::return_icon('valves.gif', get_lang("GroupAnnouncements"))."&nbsp;".get_lang("GroupAnnouncements")."</a><br/>";
 	}
 	
 	if ( $current_group['wiki_state'] == TOOL_PUBLIC )
 	{
 		//link to the wiki area of this group
-		$tools .= "<a href=\"../wiki/index.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('wiki.gif')."&nbsp;".get_lang('GroupWiki')."</a><br/>";
+		$tools .= "<a href=\"../wiki/index.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('wiki.gif', get_lang('GroupWiki'))."&nbsp;".get_lang('GroupWiki')."</a><br/>";
 	}
 		
 	

@@ -110,7 +110,7 @@ if (api_is_allowed_to_edit())
 	
 		echo '<div class="actions">';
 		echo "<a href='".api_get_self()."?action=add'>",
-		"<img src='../img/blog_new.gif' border=\"0\" align=\"absmiddle\" alt='".get_lang('NewBlog')."'>&nbsp;&nbsp;".get_lang('AddBlog')."</a>";
+		"<img src='../img/blog_new.gif' border=\"0\" align=\"absmiddle\" alt='".get_lang('AddBlog')."'>&nbsp;&nbsp;".get_lang('AddBlog')."</a>";
 		echo '</div>';
 		echo "<table width=\"100%\" border=\"0\" cellspacing=\"2\" class='data_table'>";
 		echo	"<tr>",

@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 16719 2008-11-12 15:36:21Z pcool $
+<?php // $Id: settings.php 16878 2008-11-23 00:04:52Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -268,10 +268,10 @@ echo "\n<div class=\"actions\">";
 //while ($row = mysql_fetch_array($resultcategories))
 foreach($resultcategories as $row)
 {
-	echo "\n\t<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])]).ucfirst(get_lang($row['category']))."</a>";
+	echo "\n\t<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])], ucfirst(get_lang($row['category']))).ucfirst(get_lang($row['category']))."</a>";
 }
-echo "\n\t<a href=\"".api_get_self()."?category=Plugins\">".Display::return_icon($action_images['plugins']).ucfirst(get_lang('Plugins'))."</a>";
-echo "\n\t<a href=\"".api_get_self()."?category=stylesheets\">".Display::return_icon($action_images['stylesheets']).ucfirst(get_lang('Stylesheets'))."</a>";
+echo "\n\t<a href=\"".api_get_self()."?category=Plugins\">".Display::return_icon($action_images['plugins'], ucfirst(get_lang('Plugins'))).ucfirst(get_lang('Plugins'))."</a>";
+echo "\n\t<a href=\"".api_get_self()."?category=stylesheets\">".Display::return_icon($action_images['stylesheets'], ucfirst(get_lang('Stylesheets'))).ucfirst(get_lang('Stylesheets'))."</a>";
 echo "\n</div>";
 
 if (isset ($_GET['category']))

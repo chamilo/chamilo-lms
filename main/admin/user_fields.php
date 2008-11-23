@@ -170,7 +170,7 @@ if(1)
 	//$form->addElement('text','title',get_lang('FieldTitle'));
 	//$form->addElement('text','default',get_lang('FieldDefaultValue'));
 	//$form->addElement('submit','submit',get_lang('Search'));
-	$form->addElement('static','search_advanced_link',null,'<a href="user_fields_add.php?action=fill">'.Display::return_icon('fieldadd.gif').get_lang('AddUserField').'</a>');
+	$form->addElement('static','search_advanced_link',null,'<a href="user_fields_add.php?action=fill">'.Display::return_icon('fieldadd.gif', get_lang('AddUserField')).get_lang('AddUserField').'</a>');
 	echo '<div class="actions">';
 	$form->display();
 	echo '</div>';

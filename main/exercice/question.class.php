@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 16865 2008-11-21 23:24:21Z herodoto $
+<?php // $Id: question.class.php 16879 2008-11-23 05:14:43Z yannoo $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 16865 2008-11-21 23:24:21Z herodoto $
+* 	@version $Id: question.class.php 16879 2008-11-23 05:14:43Z yannoo $
 */
 
 
@@ -668,6 +668,16 @@ abstract class Question
 		{
 			// deletes the position in the array containing the wanted exercise ID
 			unset($this->exerciseList[$pos]);
+            //update order of other elements
+            $sql = "SELECT question_order FROM $TBL_EXERCICE_QUESTION WHERE question_id='".Database::escape_string($id)."' AND exercice_id='".Database::escape_string($exerciseId)."'";
+            $res = api_sql_query($sql,__FILE__,__LINE__);
+            if (Database::num_rows($res)>0) {
+                $row = Database::fetch_array($res);
+                if (!empty($row['question_order'])) {
+                    $sql = "UPDATE $TBL_EXERCICE_QUESTION SET question_order = question_order-1 WHERE exercice_id='".Database::escape_string($exerciseId)."' AND question_order > ".$row['question_order'];
+                    $res = api_sql_query($sql,__FILE__,__LINE__);
+                }
+            }
 
 			$sql="DELETE FROM $TBL_EXERCICE_QUESTION WHERE question_id='".Database::escape_string($id)."' AND exercice_id='".Database::escape_string($exerciseId)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
@@ -693,6 +703,17 @@ abstract class Question
 		// if the question must be removed from all exercises
 		if(!$deleteFromEx)
 		{
+            //update the question_order of each question to avoid inconsistencies
+            $sql = "SELECT exercice_id, question_order FROM $TBL_EXERCICE_QUESTION WHERE question_id='".Database::escape_string($id)."'";
+            $res = api_sql_query($sql,__FILE__,__LINE__);
+            if (Database::num_rows($res)>0) {
+                while ($row = Database::fetch_array($res)) {
+                    if (!empty($row['question_order'])) {
+                        $sql = "UPDATE $TBL_EXERCICE_QUESTION SET question_order = question_order-1 WHERE exercice_id='".Database::escape_string($row['exercice_id'])."' AND question_order > ".$row['question_order'];
+                        $res = api_sql_query($sql,__FILE__,__LINE__);
+                    }
+                }
+            }
 			$sql="DELETE FROM $TBL_EXERCICE_QUESTION WHERE question_id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 

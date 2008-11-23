@@ -23,7 +23,7 @@
 *	5 arrays are created to receive the attributes of each answer belonging to a specified question
 * 	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer.class.php 15832 2008-07-21 08:02:02Z yannoo $
+* 	@version $Id: answer.class.php 16879 2008-11-23 05:14:43Z yannoo $
 */
 
 
@@ -64,7 +64,7 @@ class Answer
 	 */
 	function Answer($questionId)
 	{
-		$this->questionType=$questionType;
+		//$this->questionType=$questionType;
 		$this->questionId=$questionId;
 		$this->answer=array();
 		$this->correct=array();

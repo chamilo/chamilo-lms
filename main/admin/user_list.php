@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 16718 2008-11-12 15:34:59Z pcool $
+<?php // $Id: user_list.php 16888 2008-11-24 20:03:34Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -151,7 +151,7 @@ function login_user($user_id)
 	$sql_query = "SELECT * FROM $main_user_table WHERE user_id='$user_id'";
 	$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 	$result = Database :: fetch_array($sql_result);
-
+	
 	$firstname = $result["firstname"];
 	$lastname = $result["lastname"];
 	$user_id = $result["user_id"];
@@ -186,6 +186,7 @@ function login_user($user_id)
 		}
 
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+
 
 		if (Database::num_rows($sql_result) > 0)
 		{
@@ -260,7 +261,7 @@ function get_number_of_users()
 		$keyword_status = Database::escape_string($_GET['keyword_status']);
 		$query_admin_table = '';
 		$keyword_admin = '';
-		if($keyword_status == 10)
+		if($keyword_status == SESSIONADMIN)
 		{
 			$keyword_status = '%';
 			$query_admin_table = " , $admin_table a ";
@@ -285,6 +286,7 @@ function get_number_of_users()
 			$sql .= " AND u.active='0'";
 		}
 	}
+
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$obj = Database::fetch_object($res);
 	return $obj->total_number_of_items;
@@ -297,18 +299,18 @@ function get_user_data($from, $number_of_items, $column, $direction)
 {
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT
-                 u.user_id			AS col0,
+                 u.user_id				AS col0,
                  u.official_code		AS col1,
 				 u.lastname 			AS col2,
                  u.firstname 			AS col3,
-                 u.username			AS col4,
+                 u.username				AS col4,
                  u.email				AS col5,
                  u.status				AS col6,
                  u.active				AS col7,
-                 u.user_id			AS col8
-
+                 u.user_id				AS col8
              FROM
-                 $user_table u";
+                 $user_table u ";
+                 
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = Database::escape_string($_GET['keyword']);
@@ -324,7 +326,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		$keyword_status = Database::escape_string($_GET['keyword_status']);
 		$query_admin_table = '';
 		$keyword_admin = '';
-		if($keyword_status == 10)
+		
+		if($keyword_status == SESSIONADMIN)
 		{
 			$keyword_status = '%';
 			$query_admin_table = " , $admin_table a ";
@@ -339,6 +342,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				//"AND u.official_code LIKE '%".$keyword_officialcode."%'    " .
 				"AND u.status LIKE '".$keyword_status."'" .
 				$keyword_admin;
+
 		if($keyword_active && !$keyword_inactive)
 		{
 			$sql .= " AND u.active='1'";
@@ -351,6 +355,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
 	$res = api_sql_query($sql, __FILE__, __LINE__);
+		
 	$users = array ();
 	while ($user = Database::fetch_row($res))
 	{
@@ -376,6 +381,7 @@ function email_filter($email)
 function modify_filter($user_id,$url_params,$row)
 {
 	global $charset;
+	global $_user;
 	
 	$result .= '<span id="tooltip">
 				<span class="toolbox">
@@ -398,7 +404,13 @@ function modify_filter($user_id,$url_params,$row)
 	}
 
 	$result .= '<a href="user_edit.php?user_id='.$user_id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;';
-	$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>';
+
+	if ($row[0]<>$_user['user_id']) { // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
+		$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>';
+	} else {
+		$result .= '<img src="../img/delete_na.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/>';
+	}
+
 	return $result;
 }
 
@@ -514,7 +526,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	$status_options['%'] = get_lang('All');
 	$status_options[STUDENT] = get_lang('Student');
 	$status_options[COURSEMANAGER] = get_lang('Teacher');
-	$status_options[10] = get_lang('Administrator');
+	$status_options[SESSIONADMIN] = get_lang('Administrator');//
 	$form->addElement('select','keyword_status',get_lang('Status'),$status_options);
 	$active_group = array();
 	$active_group[] = $form->createElement('checkbox','keyword_active','',get_lang('Active'));

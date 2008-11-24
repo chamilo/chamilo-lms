@@ -1,4 +1,4 @@
-<?php // $Id: survey_list.php 16875 2008-11-22 23:34:28Z herodoto $
+<?php // $Id: survey_list.php 16890 2008-11-24 20:22:56Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,7 +27,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey_list.php 16875 2008-11-22 23:34:28Z herodoto $
+* 	@version $Id: survey_list.php 16890 2008-11-24 20:22:56Z yannoo $
 *
 * 	@todo use quickforms for the forms
 */
@@ -112,10 +112,18 @@ if (isset($_GET['action']) AND $_GET['action'] == 'delete' AND isset($_GET['surv
 
 if(isset($_GET['action']) && $_GET['action'] == 'empty')
 {
-	if(!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_SURVEY,intval($_GET['survey_id']))))
-	{// the coach can't empty a survey not belonging to his session
-		api_not_allowed();
-		exit;
+	$mysession = api_get_session_id();
+	if ( $mysession != 0 ) {
+		if(!((api_is_course_coach() || api_is_platform_admin()) && api_is_element_in_the_session(TOOL_SURVEY,intval($_GET['survey_id'])))) {
+			// the coach can't empty a survey not belonging to his session
+			api_not_allowed();
+			exit;
+		}
+	} else { 
+		if (!(api_is_course_admin() || api_is_platform_admin())) {
+			api_not_allowed();
+			exit;			
+		} 
 	}
 	$return = survey_manager::empty_survey(intval($_GET['survey_id']));
 	if ($return)

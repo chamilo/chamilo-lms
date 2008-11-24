@@ -250,6 +250,7 @@ INSERT INTO course_module VALUES
 (24,'survey','survey/survey_list.php','survey.gif',2,1,'basic'),
 (25,'wiki','wiki/index.php','wiki.gif',2,3,'basic'),
 (26,'gradebook','gradebook/index.php','gradebook.gif',2,2,'basic');
+(27,'glossary','glossary/index.php','file_txt.gif',2,1,'basic');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE course_module ENABLE KEYS */;
 
@@ -623,7 +624,8 @@ VALUES
 ('extend_rights_for_coach_on_survey',NULL,'radio','Security','true','ExtendRightsForCoachOnSurveyTitle','ExtendRightsForCoachOnSurveyComment',NULL,NULL),
 ('course_create_active_tools','wiki','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Wiki'),
 ('show_session_coach', NULL, 'radio','Platform','false', 'ShowSessionCoachTitle','ShowSessionCoachComment', NULL, NULL),
-('course_create_active_tools','gradebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Gradebook');
+('course_create_active_tools','gradebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Gradebook'),
+('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary');
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;

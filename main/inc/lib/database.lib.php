@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 16685 2008-11-06 16:27:42Z yannoo $
+<?php // $Id: database.lib.php 16892 2008-11-24 20:58:06Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -182,7 +182,8 @@ define('TABLE_WIKI_CONF', 'wiki_conf');
 define('TABLE_WIKI_DISCUSS', 'wiki_discuss');
 define('TABLE_WIKI_MAILCUE', 'wiki_mailcue');
 
-
+// GLOSSARY
+define('TABLE_GLOSSARY', 'glossary');
 /*
 ==============================================================================
 		DATABASE CLASS

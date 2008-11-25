@@ -1,4 +1,4 @@
-<?php // $Id: index.php 16729 2008-11-12 15:53:07Z pcool $
+<?php // $Id: index.php 16894 2008-11-25 03:49:33Z yannoo $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 16729 2008-11-12 15:53:07Z pcool $
+* 	@version $Id: index.php 16894 2008-11-25 03:49:33Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -170,7 +170,7 @@ Display :: display_header('', 'dokeos');
 		MAIN CODE
 ==============================================================================
 */
-echo '<div id="maincontent">';
+echo '<div class="maincontent" id="maincontent">';
 
 // Plugins for loginpage_main AND campushomepage_main
 if (!api_get_user_id())

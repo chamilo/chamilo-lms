@@ -138,6 +138,7 @@ define('TOOL_VISIO_CLASSROOM','visio_classroom');
 define('TOOL_SURVEY','survey');
 define('TOOL_WIKI','wiki');
 define('TOOL_GLOSSARY','glossary');
+define('TOOL_GRADEBOOK','gradebook');
 
 // CONSTANTS defining dokeos sections
 define('SECTION_CAMPUS', 'mycampus');
@@ -172,12 +173,10 @@ define('DIR_HOTPOTATOES','/HotPotatoes_files');
 * @todo replace global variable
 * @author Roan Embrechts
 */
-function api_protect_course_script($print_headers=false)
-{	
+function api_protect_course_script($print_headers=false) {	
  	global $is_allowed_in_course; 	 	 	
 	//if (!isset ($_SESSION["_course"]) || !$is_allowed_in_course)	
-	if (!$is_allowed_in_course)
-	{			
+	if (!$is_allowed_in_course) {			
 		api_not_allowed($print_headers);
 	}
 }
@@ -192,10 +191,8 @@ function api_protect_course_script($print_headers=false)
 *
 * @author Roan Embrechts
 */
-function api_protect_admin_script($allow_sessions_admins=false)
-{
-	if (!api_is_platform_admin($allow_sessions_admins))
-	{
+function api_protect_admin_script($allow_sessions_admins=false) {
+	if (!api_is_platform_admin($allow_sessions_admins)) {
 		include (api_get_path(INCLUDE_PATH)."header.inc.php");
 		api_not_allowed();
 	}
@@ -206,12 +203,10 @@ function api_protect_admin_script($allow_sessions_admins=false)
 *
 * @author Roan Embrechts
 */
-function api_block_anonymous_users()
-{
+function api_block_anonymous_users() {
 	global $_user;
 
-	if (!(isset ($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'],true))
-	{
+	if (!(isset ($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'],true)) {
 		include (api_get_path(INCLUDE_PATH)."header.inc.php");
 		api_not_allowed();
 	}
@@ -227,33 +222,24 @@ function api_block_anonymous_users()
 /**
 *	@return an array with the navigator name and version
 */
-function api_get_navigator()
-{
+function api_get_navigator() {
 	$navigator = 'Unknown';
 	$version = 0;
-	if (strstr($_SERVER['HTTP_USER_AGENT'], 'Opera'))
-	{
+	if (strstr($_SERVER['HTTP_USER_AGENT'], 'Opera')) {
 		$navigator = 'Opera';
 		list (, $version) = explode('Opera', $_SERVER['HTTP_USER_AGENT']);
-	}
-	elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-	{
+	} elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 		$navigator = 'Internet Explorer';
 		list (, $version) = explode('MSIE', $_SERVER['HTTP_USER_AGENT']);
-	}
-	elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'Gecko'))
-	{
+	} elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'Gecko')) {
 		$navigator = 'Mozilla';
 		list (, $version) = explode('; rv:', $_SERVER['HTTP_USER_AGENT']);
-	}
-	elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'Netscape'))
-	{
+	} elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'Netscape')) {
 		$navigator = 'Netscape';
 		list (, $version) = explode('Netscape', $_SERVER['HTTP_USER_AGENT']);
 	}
 	$version = doubleval($version);
-	if (!strstr($version, '.'))
-	{
+	if (!strstr($version, '.')) {
 		$version = number_format(doubleval($version), 1);
 	}
 	return array ('name' => $navigator, 'version' => $version);
@@ -261,14 +247,10 @@ function api_get_navigator()
 /**
 *	@return True if user selfregistration is allowed, false otherwise.
 */
-function api_is_self_registration_allowed()
-{
-	if(isset($GLOBALS['allowSelfReg']))
-	{
+function api_is_self_registration_allowed() {
+	if(isset($GLOBALS['allowSelfReg'])) {
 		return $GLOBALS["allowSelfReg"];
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
@@ -306,66 +288,49 @@ function api_is_self_registration_allowed()
 * 	LIBRARY_PATH
 * 	CONFIGURATION_PATH
 */
-function api_get_path($path_type)
-{
+function api_get_path($path_type) {
 	global $_configuration;	
-	if ($_configuration['access_url']==1 || $_configuration['access_url']=='')
-	{
+	if ($_configuration['access_url']==1 || $_configuration['access_url']=='') {
 		//by default we call the $_configuration['root_web'] we don't query to the DB
 		//$url_info= api_get_access_url(1);
 		//$root_web = $url_info['url'];		
 		$root_web = $_configuration['root_web'];
-	}
-	else
-	{
+	} else {
 		//we look into the DB the function api_get_access_url 
 		//this funcion have a problem because we can't called to the Database:: functions
 		$url_info= api_get_access_url($_configuration['access_url']);		
-		if ($url_info['active']==1)
-		{
+		if ($url_info['active']==1) {
 			$root_web = $url_info['url'];
-		}
-		else
-		{
+		} else {
 			$root_web = $_configuration['root_web'];
 		}
 	}
 	 
-	switch ($path_type)
-	{
+	switch ($path_type) {
 		case WEB_PATH :
 			// example: http://www.mydokeos.com/ or http://www.mydokeos.com/portal/ if you're using
 			// a subdirectory of your document root for Dokeos
-			if(substr($root_web,-1) == '/')
-			{
+			if (substr($root_web,-1) == '/') {
 				return $root_web;
-			}
-			else
-			{
+			} else {
 				return $root_web.'/';
 			}
 			break;
 
 		case SYS_PATH :
 			// example: /var/www/
-			if(substr($_configuration['root_sys'],-1) == '/')
-			{
+			if (substr($_configuration['root_sys'],-1) == '/') {
 				return $_configuration['root_sys'];
-			}
-			else
-			{
+			} else {
 				return $_configuration['root_sys'].'/';				
 			}
 			break;
 
 		case REL_PATH :
 			// example: dokeos/
-			if (substr($_configuration['url_append'], -1) === '/')
-			{
+			if (substr($_configuration['url_append'], -1) === '/') {
 				return $_configuration['url_append'];
-			}
-			else
-			{
+			} else {
 				return $_configuration['url_append'].'/';
 			}
 			break;
@@ -451,10 +416,8 @@ function api_get_path($path_type)
 * 			if (api_get_user_id())
 * @return integer the id of the current user
 */
-function api_get_user_id()
-{
-	if(empty($GLOBALS['_user']['user_id']))
-	{
+function api_get_user_id() {
+	if (empty($GLOBALS['_user']['user_id'])) {
 		return 0;
 	}
 	return $GLOBALS['_user']['user_id'];
@@ -466,19 +429,14 @@ function api_get_user_id()
  * @version 21 September 2004
  * @desc find all the information about a user. If no paramater is passed you find all the information about the current user.
 */
-function api_get_user_info($user_id = '')
-{
+function api_get_user_info($user_id = '') {
 	global $tbl_user;
-	if ($user_id == '')
-	{
+	if ($user_id == '') {
 		return $GLOBALS["_user"];
-	}
-	else
-	{
+	} else {
 		$sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id='".mysql_real_escape_string($user_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		if(mysql_num_rows($result) > 0)
-		{
+		if(mysql_num_rows($result) > 0) {
 			$result_array = mysql_fetch_array($result);
 			// this is done so that it returns the same array-index-names
 			// ideally the names of the fields of the user table are renamed so that they match $_user (or vice versa)
@@ -502,8 +460,7 @@ function api_get_user_info($user_id = '')
 /**
  * Returns the current course id (integer)
 */
-function api_get_course_id()
-{
+function api_get_course_id() {
 	return $GLOBALS["_cid"];
 }
 /**
@@ -514,14 +471,10 @@ function api_get_course_id()
  * @return	string	The directory where the course is located inside the Dokeos "courses" directory
  * @author	Yannick Warnier <yannick.warnier@dokeos.com>
 */
-function api_get_course_path($course_code=null)
-{
-	if(!empty($course_code))
-	{
+function api_get_course_path($course_code=null) {
+	if(!empty($course_code)) {
 		$info = api_get_course_info($course_code);
-	}
-	else
-	{
+	} else {
 		$info = api_get_course_info();
 	}
 	return $info['path'];
@@ -531,13 +484,12 @@ function api_get_course_path($course_code=null)
  * @param	string	The name of the setting we want from the table
  * @return	mixed	The value of that setting in that table. Return -1 if not found.
  */
-function api_get_course_setting($setting_name)
-{
+function api_get_course_setting($setting_name) {
 	$table = Database::get_course_table(TABLE_COURSE_SETTING);
 	$setting_name = mysql_real_escape_string($setting_name);
 	$sql = "SELECT * FROM $table WHERE variable = '$setting_name'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	if(Database::num_rows($res)>0){
+	if (Database::num_rows($res)>0) {
 		$row = Database::fetch_array($res);
 		return $row['value'];
 	}
@@ -552,19 +504,15 @@ function api_get_course_setting($setting_name)
  * status of "6" (anonymous).
  * @return	int	User ID of the anonymous user, or O if no anonymous user found
  */
-function api_get_anonymous_id()
-{
+function api_get_anonymous_id() {
 	$table = Database::get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT user_id FROM $table WHERE status = 6";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	if(Database::num_rows($res)>0)
-	{
+	if (Database::num_rows($res)>0) {
 		$row = Database::fetch_array($res);
 		//error_log('api_get_anonymous_id() returns '.$row['user_id'],0);
 		return $row['user_id'];
-	}
-	else //no anonymous user was found
-	{
+	} else {//no anonymous user was found
 		return 0;
 	}
 }
@@ -572,10 +520,8 @@ function api_get_anonymous_id()
 /**
  * Returns the cidreq parameter name + current course id
 */
-function api_get_cidreq()
-{
-	if (!empty ($GLOBALS["_cid"]))
-	{
+function api_get_cidreq() {
+	if (!empty ($GLOBALS["_cid"])) {
 		return 'cidReq='.htmlspecialchars($GLOBALS["_cid"]);
 	}
 	return '';
@@ -600,10 +546,8 @@ function api_get_cidreq()
 *   particular course, not specially the current one.
 * @todo	same behaviour as api_get_user_info so that api_get_course_id becomes absolete too
 */
-function api_get_course_info($course_code=null)
-{
-	if(!empty($course_code))
-	{
+function api_get_course_info($course_code=null) {
+	if (!empty($course_code)) {
 		$course_code = Database::escape_string($course_code);
 		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     	$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -614,8 +558,7 @@ function api_get_course_info($course_code=null)
                  WHERE `course`.`code` = '$course_code'";
         $result = api_sql_query($sql,__FILE__,__LINE__);
         $_course = array();
-        if (Database::num_rows($result)>0)
-        {
+        if (Database::num_rows($result)>0) {
         	global $_configuration;
             $cData = Database::fetch_array($result);
 			$_course['id'          ]         = $cData['code'             ]; //auto-assigned integer
@@ -637,9 +580,7 @@ function api_get_course_info($course_code=null)
 			$_course['unubscribe_allowed']   = $cData['unsubscribe'];
         }
         return $_course;			
-	}
-	else
-	{
+	} else {
 		global $_course;
 		return $_course;
 	}
@@ -660,12 +601,10 @@ function api_get_course_info($course_code=null)
  * @param  string $line - optional, the line of the error (__LINE__)
  * @return resource - the return value of the query
  */
-function api_sql_query($query, $file = '', $line = 0)
-{
+function api_sql_query($query, $file = '', $line = 0) {
 	$result = @mysql_query($query);
 
-	if ($line && !$result)
-	{
+	if ($line && !$result) {
 			$info = '<pre>';
 			$info .= '<b>MYSQL ERROR :</b><br/> ';
 			$info .= mysql_error();
@@ -692,11 +631,9 @@ function api_sql_query($query, $file = '', $line = 0)
  * @param  resource $result - the return value of the query
  * @return array - the value returned by the query
  */
-function api_store_result($result)
-{
+function api_store_result($result) {
 	$tab = array ();
-	while ($row = mysql_fetch_array($result))
-	{
+	while ($row = mysql_fetch_array($result)) {
 		$tab[] = $row;
 	}
 	return $tab;
@@ -718,8 +655,7 @@ function api_store_result($result)
  * @author Olivier Brouckaert
  * @param  string variable - the variable name to save into the session
  */
-function api_session_start($already_installed = true)
-{
+function api_session_start($already_installed = true) {
 	global $storeSessionInDb;
 	global $_configuration;
 	
@@ -734,26 +670,20 @@ function api_session_start($already_installed = true)
 		session_set_cookie_params($session_lifetime,api_get_path(REL_PATH));
 		
 	}*/
-	if (is_null($storeSessionInDb))
-	{
+	if (is_null($storeSessionInDb)) {
 		$storeSessionInDb = false;
 	}
-	if ($storeSessionInDb && function_exists('session_set_save_handler'))
-	{
+	if ($storeSessionInDb && function_exists('session_set_save_handler')) {
 		include_once (api_get_path(LIBRARY_PATH).'session_handler.class.php');
 		$session_handler = new session_handler();
 		@ session_set_save_handler(array (& $session_handler, 'open'), array (& $session_handler, 'close'), array (& $session_handler, 'read'), array (& $session_handler, 'write'), array (& $session_handler, 'destroy'), array (& $session_handler, 'garbage'));
 	}
 	session_name('dk_sid');
 	session_start();
-	if ($already_installed)
-	{
-		if (empty ($_SESSION['checkDokeosURL']))
-		{
+	if ($already_installed) {
+		if (empty ($_SESSION['checkDokeosURL'])) {
 			$_SESSION['checkDokeosURL'] = api_get_path(WEB_PATH);
-		}
-		elseif ($_SESSION['checkDokeosURL'] != api_get_path(WEB_PATH))
-		{
+		} elseif ($_SESSION['checkDokeosURL'] != api_get_path(WEB_PATH)) {
 			api_session_clear();
 		}
 	}
@@ -766,8 +696,7 @@ function api_session_start($already_installed = true)
  * @author Olivier Brouckaert
  * @param  string variable - the variable name to save into the session
  */
-function api_session_register($variable)
-{
+function api_session_register($variable) {
 	global $$variable;
 	session_register($variable);
 	$_SESSION[$variable] = $$variable;
@@ -778,15 +707,12 @@ function api_session_register($variable)
  * @author Olivier Brouckaert
  * @param  string variable - the variable name to remove from the session
  */
-function api_session_unregister($variable)
-{
-	if(isset($GLOBALS[$variable]))
-	{
+function api_session_unregister($variable) {
+	if(isset($GLOBALS[$variable])) {
 		unset ($GLOBALS[$variable]);
 	}
 	
-	if(isset($_SESSION[$variable]))
-	{
+	if(isset($_SESSION[$variable])) {
 		$_SESSION[$variable] = null;
 		session_unregister($variable);		
 	}	
@@ -796,8 +722,7 @@ function api_session_unregister($variable)
  *
  * @author Olivier Brouckaert
  */
-function api_session_clear()
-{
+function api_session_clear() {
 	session_regenerate_id();
 	session_unset();
 	$_SESSION = array ();
@@ -807,8 +732,7 @@ function api_session_clear()
  *
  * @author Olivier Brouckaert
  */
-function api_session_destroy()
-{
+function api_session_destroy() {
 	session_unset();
 	$_SESSION = array ();
 	session_destroy();
@@ -819,41 +743,32 @@ function api_session_destroy()
 		STRING MANAGEMENT
 ==============================================================================
 */
-function api_add_url_param($url, $param)
-{
-	if (empty ($param))
-	{
+function api_add_url_param($url, $param) {
+	if (empty ($param)) {
 		return $url;
 	}
-	if (strstr($url, '?'))
-	{
-		if ($param[0] != '&')
-		{
+	if (strstr($url, '?')) {
+		if ($param[0] != '&') {
 			$param = '&'.$param;
 		}
 		list (, $query_string) = explode('?', $url);
 		$param_list1 = explode('&', $param);
 		$param_list2 = explode('&', $query_string);
 		$param_list1_keys = $param_list1_vals = array ();
-		foreach ($param_list1 as $key => $enreg)
-		{
+		foreach ($param_list1 as $key => $enreg) {
 			list ($param_list1_keys[$key], $param_list1_vals[$key]) = explode('=', $enreg);
 		}
 		$param_list1 = array ('keys' => $param_list1_keys, 'vals' => $param_list1_vals);
-		foreach ($param_list2 as $enreg)
-		{
+		foreach ($param_list2 as $enreg) {
 			$enreg = explode('=', $enreg);
 			$key = array_search($enreg[0], $param_list1['keys']);
-			if (!is_null($key) && !is_bool($key))
-			{
+			if (!is_null($key) && !is_bool($key)) {
 				$url = str_replace($enreg[0].'='.$enreg[1], $enreg[0].'='.$param_list1['vals'][$key], $url);
 				$param = str_replace('&'.$enreg[0].'='.$param_list1['vals'][$key], '', $param);
 			}
 		}
 		$url .= $param;
-	}
-	else
-	{
+	} else {
 		$url = $url.'?'.$param;
 	}
 	return $url;
@@ -863,16 +778,13 @@ function api_add_url_param($url, $param)
 * @param int $length, the length of the password
 * @return string the generated password
 */
-function api_generate_password($length = 8)
-{
+function api_generate_password($length = 8) {
 	$characters = 'abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-	if ($length < 2)
-	{
+	if ($length < 2) {
 		$length = 2;
 	}
 	$password = '';
-	for ($i = 0; $i < $length; $i ++)
-	{
+	for ($i = 0; $i < $length; $i ++) {
 		$password .= $characters[rand() % strlen($characters)];
 	}
 	return $password;
@@ -882,42 +794,30 @@ function api_generate_password($length = 8)
 * @param string $password
 * @return true if the password is acceptable, false otherwise
 */
-function api_check_password($password)
-{
+function api_check_password($password) {
 	$lengthPass = strlen($password);
-	if ($lengthPass < 5)
-	{
+	if ($lengthPass < 5) {
 		return false;
 	}
 	$passLower = strtolower($password);
 	$cptLettres = $cptChiffres = 0;
 	$consecutif = 0;
 	$codeCharPrev = 0;
-	for ($i = 0; $i < $lengthPass; $i ++)
-	{
+	for ($i = 0; $i < $lengthPass; $i ++) {
 		$codeCharCur = ord($passLower[$i]);
-		if ($i && abs($codeCharCur - $codeCharPrev) <= 1)
-		{
+		if ($i && abs($codeCharCur - $codeCharPrev) <= 1) {
 			$consecutif ++;
-			if ($consecutif == 3)
-			{
+			if ($consecutif == 3) {
 				return false;
 			}
-		}
-		else
-		{
+		} else {
 			$consecutif = 1;
 		}
-		if ($codeCharCur >= 97 && $codeCharCur <= 122)
-		{
+		if ($codeCharCur >= 97 && $codeCharCur <= 122) {
 			$cptLettres ++;
-		}
-		elseif ($codeCharCur >= 48 && $codeCharCur <= 57)
-		{
+		} elseif ($codeCharCur >= 48 && $codeCharCur <= 57) {
 			$cptChiffres ++;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 		$codeCharPrev = $codeCharCur;
@@ -933,17 +833,13 @@ function api_check_password($password)
  * @param	bool	database check switch - passed to api_is_anonymous()
  * @return	bool	true if succesfully unregistered, false if not anonymous. 
  */
-function api_clear_anonymous($db_check=false)
-{
+function api_clear_anonymous($db_check=false) {
 	global $_user;
-	if(api_is_anonymous($_user['user_id'],$db_check))
-	{
+	if (api_is_anonymous($_user['user_id'],$db_check)) {
 		unset($_user['user_id']);
 		api_session_unregister('_uid');
 		return true;
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
@@ -957,28 +853,21 @@ function api_clear_anonymous($db_check=false)
  * @param  string endStr - suffix
  * @param  boolean middle - if true, truncates on string middle
  */
-function api_trunc_str($text, $length = 30, $endStr = '...', $middle = false)
-{
-	if (strlen($text) <= $length)
-	{
+function api_trunc_str($text, $length = 30, $endStr = '...', $middle = false) {
+	if (strlen($text) <= $length) {
 		return $text;
 	}
-	if ($middle)
-	{
+	if ($middle) {
 		$text = rtrim(substr($text, 0, round($length / 2))).$endStr.ltrim(substr($text, -round($length / 2)));
-	}
-	else
-	{
+	} else {
 		$text = rtrim(substr($text, 0, $length)).$endStr;
 	}
 	return $text;
 }
 // deprecated, use api_trunc_str() instead
-function shorten($input, $length = 15)
-{
+function shorten($input, $length = 15) {
 	$length = intval($length);
-	if (!$length)
-	{
+	if (!$length) {
 		$length = 15;
 	}
 	return api_trunc_str($input, $length);
@@ -989,8 +878,7 @@ function shorten($input, $length = 15)
  * @author Denes Nagy
  * @param  string variable - the variable to be revised
  */
-function domesticate($input)
-{
+function domesticate($input) {
 	$input = stripslashes($input);
 	$input = str_replace("'", "''", $input);
 	$input = str_replace('"', "''", $input);
@@ -1023,8 +911,7 @@ $api_failureList = array ();
  * @global array $api_failureList
  * @return bolean false to stay consistent with the main script
  */
-function api_set_failure($failureType)
-{
+function api_set_failure($failureType) {
 	global $api_failureList;
 	$api_failureList[] = $failureType;
 	return false;
@@ -1037,22 +924,15 @@ function api_set_failure($failureType)
  * time we get on a course homepage or on a neutral page (index, admin, my space)
  * @return	bool	true if set user as anonymous, false if user was already logged in or anonymous id could not be found
  */
-function api_set_anonymous()
-{
+function api_set_anonymous() {
 	global $_user;
-	if(!empty($_user['user_id']))
-	{
+	if(!empty($_user['user_id'])) {
 		return false;
-	}
-	else
-	{
+	} else {
 		$user_id = api_get_anonymous_id();
-		if($user_id == 0)
-		{
+		if($user_id == 0) {
 			return false;
-		}
-		else
-		{
+		} else {
 			api_session_unregister('_user');
 			$_user['user_id'] = $user_id;
 			$_user['is_anonymous'] = true;
@@ -1070,8 +950,7 @@ function api_set_anonymous()
  * @param void
  * @return string - the last failure stored
  */
-function api_get_last_failure()
-{
+function api_get_last_failure() {
 	global $api_failureList;
 	return $api_failureList[count($api_failureList) - 1];
 }
@@ -1101,8 +980,7 @@ class api_failure
 	 * @global array  $api_failureList
 	 * @return bolean false to stay consistent with the main script
 	 */
-	function set_failure($failureType)
-	{
+	function set_failure($failureType) {
 		global $api_failureList;
 		$api_failureList[] = $failureType;
 		return false;
@@ -1114,8 +992,7 @@ class api_failure
 	 * @param void
 	 * @return string - the last failure stored
 	 */
-	function get_last_failure()
-	{
+	function get_last_failure() {
 		global $api_failureList;
         if(count($api_failureList)==0){return '';}
 		return $api_failureList[count($api_failureList) - 1];
@@ -1130,8 +1007,7 @@ class api_failure
 /**
 * DEPRECATED, use api_get_setting instead
 */
-function get_setting($variable, $key = NULL)
-{
+function get_setting($variable, $key = NULL) {
 	global $_setting;
 	return api_get_setting($variable, $key);
 }
@@ -1140,8 +1016,7 @@ function get_setting($variable, $key = NULL)
  * Gets the current Dokeos (not PHP/cookie) session ID, if active
  * @return  int     O if no active session, the session ID otherwise
  */
-function api_get_session_id()
-{
+function api_get_session_id() {
 	if (empty($_SESSION['id_session'])) {
 		return 0;
 	} else {
@@ -1153,10 +1028,8 @@ function api_get_session_id()
  * @param   int     Session ID (optional)
  * @return  string  The session name, or null if unfound
  */
-function api_get_session_name($session_id)
-{
-    if (empty($session_id))
-    {
+function api_get_session_name($session_id) {
+    if (empty($session_id)) {
         $session_id = api_get_session_id();
         if (empty($session_id)) {return null;}
     }
@@ -1183,8 +1056,7 @@ function api_get_session_name($session_id)
 * @author Rene Haentjens
 * @author Bart Mollet
 */
-function api_get_setting($variable, $key = NULL)
-{
+function api_get_setting($variable, $key = NULL) {
 	global $_setting;
 	return is_null($key) ? (!empty($_setting[$variable])?$_setting[$variable]:null) : $_setting[$variable][$key];
 }
@@ -1193,8 +1065,7 @@ function api_get_setting($variable, $key = NULL)
  * Returns an escaped version of $_SERVER['PHP_SELF'] to avoid XSS injection
  * @return	string	Escaped version of $_SERVER['PHP_SELF']
  */
-function api_get_self()
-{
+function api_get_self() {
 	return htmlentities($_SERVER['PHP_SELF']);
 }
 
@@ -1214,17 +1085,14 @@ function api_get_self()
 * @author Roan Embrechts
 * @author Patrick Cool
 */
-function get_lang($variable, $notrans = 'DLTT')
-{
+function get_lang($variable, $notrans = 'DLTT') {
 	$ot = '[='; //opening tag for missing vars
 	$ct = '=]'; //closing tag for missing vars
-	if(api_get_setting('hide_dltt_markup') == 'true')
-	{
+	if(api_get_setting('hide_dltt_markup') == 'true') {
 		$ot = '';
 		$ct = '';
 	}
-	if (api_get_setting('server_type') != 'test')
-	{
+	if (api_get_setting('server_type') != 'test') {
 		$lvv = isset ($GLOBALS['lang'.$variable]) ? $GLOBALS['lang'.$variable] : (isset ($GLOBALS[$variable]) ? $GLOBALS[$variable] : $ot.$variable.$ct);
 		if (!is_string($lvv))
 			return $lvv;
@@ -1235,38 +1103,28 @@ function get_lang($variable, $notrans = 'DLTT')
 	global $language_interface, $language_files;
 	//language file specified in tool
     $langpath = api_get_path(SYS_CODE_PATH).'lang/';
-	if (isset ($language_files))
-	{
-		if (!is_array($language_files))
-		{
+	if (isset ($language_files)) {
+		if (!is_array($language_files)) {
 			@include ($langpath.$language_interface.'/'.$language_files.'.inc.php');
-		}
-		else
-		{
-			foreach ($language_files as $index => $language_file)
-			{
+		} else {
+			foreach ($language_files as $index => $language_file) {
 				@include ($langpath.$language_interface.'/'.$language_file.'.inc.php');
 			}
 		}
 	}
 	@ eval ('$langvar = $'.$variable.';'); // Note (RH): $$var doesn't work with arrays, see PHP doc
-	if (isset ($langvar) && is_string($langvar) && strlen($langvar) > 0)
-	{
+	if (isset ($langvar) && is_string($langvar) && strlen($langvar) > 0) {
 		return str_replace("\\'", "'", $langvar);
 	}
 	@ eval ('$langvar = $lang'.$variable.';');
-	if (isset ($langvar) && is_string($langvar) && strlen($langvar) > 0)
-	{
+	if (isset ($langvar) && is_string($langvar) && strlen($langvar) > 0) {
 		return str_replace("\\'", "'", $langvar);
 	}
 	if ($notrans != 'DLTT')
 		return $ot.$variable.$ct;
-	if (!is_array($language_files))
-	{
+	if (!is_array($language_files)) {
 		$language_file = $language_files;
-	}
-	else
-	{
+	} else {
 		$language_file = implode('.inc.php',$language_files);
 	}
 	return $ot.$variable.$ct."<a href=\"http://www.dokeos.com/DLTT/suggestion.php?file=".$language_file.".inc.php&amp;variable=$".$variable."&amp;language=".$language_interface."\" style=\"color:#FF0000\"><strong>#</strong></a>";
@@ -1276,8 +1134,7 @@ function get_lang($variable, $notrans = 'DLTT')
  * Gets the current interface language
  * @return string The current language of the interface
  */
-function api_get_interface_language()
-{
+function api_get_interface_language() {
 	global 	$language_interface;
 	return $language_interface;
 }
@@ -1292,15 +1149,14 @@ function api_get_interface_language()
 * @return boolean True if the user has platform admin rights,
 * false otherwise.
 */
-function api_is_platform_admin($allow_sessions_admins = false)
-{
-	if($_SESSION['is_platformAdmin'])
+function api_is_platform_admin($allow_sessions_admins = false) {
+	if($_SESSION['is_platformAdmin']) {
 		return true;
-	else
-	{
+	} else {
 		global $_user;
-		if($allow_sessions_admins && $_user['status']==SESSIONADMIN)
+		if ($allow_sessions_admins && $_user['status']==SESSIONADMIN) {
 			return true;
+		}	
 	}
 	return false;
 }
@@ -1309,40 +1165,35 @@ function api_is_platform_admin($allow_sessions_admins = false)
 * @return boolean True if the user has course creation rights,
 * false otherwise.
 */
-function api_is_allowed_to_create_course()
-{
+function api_is_allowed_to_create_course() {
 	return $_SESSION["is_allowedCreateCourse"];
 }
 /**
  * Check if the current user is a course administrator
  * @return boolean True if current user is a course administrator
  */
-function api_is_course_admin()
-{
+function api_is_course_admin() {
 	return $_SESSION["is_courseAdmin"];
 }
 /**
  * Check if the current user is a course coach
  * @return	bool	True if current user is a course coach
  */
-function api_is_course_coach()
-{
+function api_is_course_coach() {
 	return $_SESSION['is_courseCoach'];
 }
 /**
  * Check if the current user is a course tutor
  * @return 	bool	True if current user is a course tutor
  */
-function api_is_course_tutor()
-{
+function api_is_course_tutor() {
 	return $_SESSION['is_courseTutor'];
 }
 /**
  * Check if the current user is a course or session coach
  * @return boolean True if current user is a course or session coach
  */
-function api_is_coach()
-{
+function api_is_coach() {
 	global $_user;
 	global $sessionIsCoach;
 
@@ -1361,12 +1212,9 @@ function api_is_coach()
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	$sessionIsCoach = array_merge($sessionIsCoach , api_store_result($result));
 
-	if(count($sessionIsCoach) > 0)
-	{
+	if(count($sessionIsCoach) > 0) {
 		return true;
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
@@ -1398,25 +1246,20 @@ function api_is_coach()
  *                               'subTitle'
  * @return void
  */
-function api_display_tool_title($titleElement)
-{
-	if (is_string($titleElement))
-	{
+function api_display_tool_title($titleElement) {
+	if (is_string($titleElement)) {
 		$tit = $titleElement;
 		unset ($titleElement);
 		$titleElement['mainTitle'] = $tit;
 	}
 	echo '<h3>';
-	if (!empty($titleElement['supraTitle']))
-	{
+	if (!empty($titleElement['supraTitle'])) {
 		echo '<small>'.$titleElement['supraTitle'].'</small><br>';
 	}
-	if (!empty($titleElement['mainTitle']))
-	{
+	if (!empty($titleElement['mainTitle'])) {
 		echo $titleElement['mainTitle'];
 	}
-	if (!empty($titleElement['subTitle']))
-	{
+	if (!empty($titleElement['subTitle'])) {
 		echo '<br><small>'.$titleElement['subTitle'].'</small>';
 	}
 	echo '</h3>';
@@ -1444,10 +1287,8 @@ function api_display_tool_title($titleElement)
 *	@version 1.2
 *	@todo rewrite code so it is easier to understand
 */
-function api_display_tool_view_option()
-{
-	if (api_get_setting('student_view_enabled') != "true")
-	{
+function api_display_tool_view_option() {
+	if (api_get_setting('student_view_enabled') != "true") {
 		return '';
 	}
 	$output_string='';
@@ -1455,24 +1296,20 @@ function api_display_tool_view_option()
 	$sourceurl = '';
 	$is_framed = false;
 	// Exceptions apply for all multi-frames pages
-	if (strpos($_SERVER['REQUEST_URI'],'chat/chat_banner.php')!==false)
-	{	//the chat is a multiframe bit that doesn't work too well with the student_view, so do not show the link
+	if (strpos($_SERVER['REQUEST_URI'],'chat/chat_banner.php')!==false) {	//the chat is a multiframe bit that doesn't work too well with the student_view, so do not show the link
 		$is_framed = true;
 		return '';
 	}
 	// Uncomment to remove student view link from document view page
-	if(strpos($_SERVER['REQUEST_URI'],'document/headerpage.php')!==false)
-	{
+	if (strpos($_SERVER['REQUEST_URI'],'document/headerpage.php')!==false) {
 		$sourceurl = str_replace('document/headerpage.php','document/showinframes.php',$_SERVER['REQUEST_URI']);
 		//showinframes doesn't handle student view anyway...
 		//return '';
 		$is_framed = true;
 	}
     // Uncomment to remove student view link from document view page
-    if(strpos($_SERVER['REQUEST_URI'],'newscorm/lp_header.php')!==false)
-    {
-    	if(empty($_GET['lp_id']))
-        {
+    if (strpos($_SERVER['REQUEST_URI'],'newscorm/lp_header.php')!==false) {
+    	if (empty($_GET['lp_id'])) {
         	return '';
         }
         $sourceurl = substr($_SERVER['REQUEST_URI'],0,strpos($_SERVER['REQUEST_URI'],'?'));
@@ -1483,37 +1320,27 @@ function api_display_tool_view_option()
     }
 
 	// check if the $_SERVER['REQUEST_URI'] contains already url parameters (thus a questionmark)
-	if(!$is_framed)
-	{
-		if (!strstr($_SERVER['REQUEST_URI'], "?"))
-		{
+	if (!$is_framed) {
+		if (!strstr($_SERVER['REQUEST_URI'], "?")) {
 			$sourceurl = api_get_self()."?".api_get_cidreq();
-		}
-		else
-		{
+		} else {
 			$sourceurl = $_SERVER['REQUEST_URI'];
 			//$sourceurl = str_replace('&', '&amp;', $sourceurl);
 		}
 	}
-	if(!empty($_SESSION['studentview']))
-	{
-		if ($_SESSION['studentview']=='studentview')
-		{
+	if(!empty($_SESSION['studentview'])) {
+		if ($_SESSION['studentview']=='studentview') {
 			// we have to remove the isStudentView=true from the $sourceurl
 			$sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
 			$sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
 			$output_string .= '<a href="'.$sourceurl.'&isStudentView=false" target="_top">'.get_lang("CourseManagerview").'</a>';
-		}
-		elseif ($_SESSION['studentview']=='teacherview')
-		{
+		} elseif ($_SESSION['studentview']=='teacherview') {
 			//switching to teacherview
 			$sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
 			$sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
 			$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_top">'.get_lang("StudentView").'</a>';
 		}
-	}
-	else
-	{
+	} else {
 		$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_top">'.get_lang("StudentView").'</a>';
 	}
 	echo $output_string;
@@ -1522,10 +1349,8 @@ function api_display_tool_view_option()
  * Displays the contents of an array in a messagebox.
  * @param array $info_array An array with the messages to show
  */
-function api_display_array($info_array)
-{
-	foreach ($info_array as $element)
-	{
+function api_display_array($info_array) {
+	foreach ($info_array as $element) {
 		$message .= $element."<br>";
 	}
 	Display :: display_normal_message($message);
@@ -1536,8 +1361,7 @@ function api_display_array($info_array)
 *	@author Roan Embrechts
 *	@version 1.1, March 2004
 */
-function api_display_debug_info($debug_info)
-{
+function api_display_debug_info($debug_info) {
 	$message = "<i>Debug info</i><br>";
 	$message .= $debug_info;
 	Display :: display_normal_message($message);
@@ -1545,8 +1369,7 @@ function api_display_debug_info($debug_info)
 /**
 *	@deprecated, use api_is_allowed_to_edit() instead
 */
-function is_allowed_to_edit()
-{
+function is_allowed_to_edit() {
 	return api_is_allowed_to_edit();
 }
 
@@ -1564,24 +1387,21 @@ function is_allowed_to_edit()
 *	@version 1.1, February 2004
 *	@return boolean, true: the user has the rights to edit, false: he does not
 */
-function api_is_allowed_to_edit($tutor=false,$coach=false)
-{
+function api_is_allowed_to_edit($tutor=false,$coach=false) {
 	$is_courseAdmin = api_is_course_admin() || api_is_platform_admin();
-	if(!$is_courseAdmin && $tutor == true)
-	{	//if we also want to check if the user is a tutor...
+	if(!$is_courseAdmin && $tutor == true) {	//if we also want to check if the user is a tutor...
 		$is_courseAdmin = $is_courseAdmin || api_is_course_tutor();
 	}
-	if(!$is_courseAdmin && $coach == true)
-	{	//if we also want to check if the user is a coach...
+	if(!$is_courseAdmin && $coach == true) {	//if we also want to check if the user is a coach...
 		$is_courseAdmin = $is_courseAdmin || api_is_course_coach();
 	}	
-	if(api_get_setting('student_view_enabled') == 'true')
-	{	//check if the student_view is enabled, and if so, if it is activated
+	if(api_get_setting('student_view_enabled') == 'true') {	//check if the student_view is enabled, and if so, if it is activated
 		$is_allowed = $is_courseAdmin && $_SESSION['studentview'] != "studentview";
 		return $is_allowed;
-	}
-	else
+	} else {
 		return $is_courseAdmin;
+	}
+		
 }
 
 /**
@@ -1591,30 +1411,26 @@ function api_is_allowed_to_edit($tutor=false,$coach=false)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version 1.0
 */
-function api_is_allowed($tool, $action, $task_id = 0)
-{
+function api_is_allowed($tool, $action, $task_id = 0) {
 	global $_course;
 	global $_user;
 
-	if(api_is_course_admin())
+	if (api_is_course_admin()) {
 		return true;
-
+	}
 	//if(!$_SESSION['total_permissions'][$_course['code']] and $_course)
-	if($_course)
-	{
+	if ($_course) {
 		require_once(api_get_path(SYS_CODE_PATH) . 'permissions/permissions_functions.inc.php');
 		require_once(api_get_path(LIBRARY_PATH) . "/groupmanager.lib.php");
 
 		// getting the permissions of this user
-		if($task_id == 0)
-		{
+		if ($task_id == 0) {
 			$user_permissions = get_permissions('user', $_user['user_id']);
 			$_SESSION['total_permissions'][$_course['code']] = $user_permissions;
 		}
 
 		// getting the permissions of the task
-		if($task_id != 0)
-		{
+		if ($task_id != 0) {
 			$task_permissions = get_permissions('task', $task_id);
 			/* !!! */$_SESSION['total_permissions'][$_course['code']] = $task_permissions;
 		}
@@ -1642,22 +1458,23 @@ function api_is_allowed($tool, $action, $task_id = 0)
 	}
 
 	// ifthe permissions are limited we have to map the extended ones to the limited ones
-	if(api_get_setting('permissions') == 'limited')
-	{
-		if($action == 'Visibility')
+	if (api_get_setting('permissions') == 'limited') {
+		if ($action == 'Visibility') {
 			$action = 'Edit';
-
-		if($action == 'Move')
+		}
+		if($action == 'Move') {
 			$action = 'Edit';
+		}
 	}
 
 	// the session that contains all the permissions already exists for this course
 	// so there is no need to requery everything.
 	//my_print_r($_SESSION['total_permissions'][$_course['code']][$tool]);
-	if(in_array($action, $_SESSION['total_permissions'][$_course['code']][$tool]))
+	if (in_array($action, $_SESSION['total_permissions'][$_course['code']][$tool])) {
 		return true;
-	else
+	} else {
 		return false;
+	}
 }
 
 /**
@@ -1666,36 +1483,28 @@ function api_is_allowed($tool, $action, $task_id = 0)
  * @param	bool	Whether to check in the database (true) or simply in the session (false) to see if the current user is the anonymous user
  * @return	bool	true if this user is anonymous, false otherwise
  */
-function api_is_anonymous($user_id=null,$db_check=false)
-{
-	if(!isset($user_id))
-	{
+function api_is_anonymous($user_id=null,$db_check=false) {
+	if(!isset($user_id)) {
 		$user_id = api_get_user_id();
 	}
-	if($db_check)
-	{
+	if($db_check) {
 		$info = api_get_user_info($user_id);
-		if($info['status'] == 6)
-		{
+		if($info['status'] == 6) {
 			return true;
 		}
-	}
-	else
-	{
+	} else {
 		global $_user;
-		if(!isset($_user)){
+		if (!isset($_user)) {
 			//in some cases, api_set_anonymous doesn't seem to be
 			//triggered in local.inc.php. Make sure it is.	
 			//Occurs in agenda for admin links - YW
 			global $use_anonymous;
-                        if(isset($use_anonymous) && $use_anonymous == true)
-                        {
+                        if (isset($use_anonymous) && $use_anonymous == true) {
                                 api_set_anonymous();
                         }
 			return true;
 		}
-		if(isset($_user['is_anonymous']) and $_user['is_anonymous'] === true)
-		{
+		if (isset($_user['is_anonymous']) and $_user['is_anonymous'] === true) {
 			return true;
 		}
 	}
@@ -1713,38 +1522,32 @@ function api_is_anonymous($user_id=null,$db_check=false)
  * @version 1.0, February 2004
  * @version dokeos 1.8, August 2006
 */
-function api_not_allowed($print_headers = false)
-{
+function api_not_allowed($print_headers = false) {
 	$home_url = api_get_path(WEB_PATH);
 	$user = api_get_user_id();
 	$course = api_get_course_id();
-	if((isset($user) && !api_is_anonymous()) 
+	if ((isset($user) && !api_is_anonymous()) 
 		&& (!isset($course) || $course==-1) 
 		&& empty($_GET['cidReq']))
 	{//if the access is not authorized and there is some login information 
 	 // but the cidReq is not found, assume we are missing course data and send the user
 	 // to the user_portal			
-	 	if(!headers_sent() or $print_headers){Display::display_header('');}
+	 	if (!headers_sent() or $print_headers){Display::display_header('');}
 		echo '<div align="center">';
 		Display :: display_error_message(get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$_SERVER['HTTP_REFERRER'].'">'.get_lang('BackToPreviousPage').'</a><br/>',false);
 		echo '</div>';
-		if($print_headers){Display::display_footer();}
+		if ($print_headers){Display::display_footer();}
 		die();
-	}
-	elseif(!empty($_SERVER['REQUEST_URI']) && !empty($_GET['cidReq']))
-	{
+	} elseif (!empty($_SERVER['REQUEST_URI']) && !empty($_GET['cidReq'])) {
 		//only display form and return to the previous URL if there was a course ID included
-		if(!empty($user) && !api_is_anonymous())
-		{
-			if(!headers_sent() or $print_headers){Display::display_header('');}
+		if (!empty($user) && !api_is_anonymous()) {
+			if (!headers_sent() or $print_headers) { Display::display_header('');}
 			echo '<div align="center">';
 			Display :: display_error_message(get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$_SERVER['HTTP_REFERRER'].'">'.get_lang('BackToPreviousPage').'</a><br/>',false);
 			echo '</div>';
-			if($print_headers){Display::display_footer();}
+			if ($print_headers) {Display::display_footer();}
 			die();			
-		}
-		else
-		{
+		} else {
 			include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');$form = new FormValidator('formLogin','post',api_get_self().'?'.$_SERVER['QUERY_STRING']);
 			$form->addElement('static',null,null,'Username');
 			$form->addElement('text','login','',array('size'=>15));
@@ -1757,29 +1560,24 @@ function api_not_allowed($print_headers = false)
 			Display :: display_error_message(get_lang('NotAllowed').'<br/><br/>'.get_lang('PleaseLoginAgainFromFormBelow').'<br/>'.$test,false);
 			echo '</div>';
 			$_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
-			if($print_headers){Display::display_footer();}
+			if ($print_headers) {Display::display_footer();}
 			die();
 		}
-	}
-	else
-	{
-		if(!empty($user) && !api_is_anonymous())
-		{
-			if(!headers_sent() or $print_headers){Display::display_header('');}
+	} else {
+		if (!empty($user) && !api_is_anonymous()) {
+			if (!headers_sent() or $print_headers) {Display::display_header('');}
 			echo '<div align="center">';
 			Display :: display_error_message(get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$_SERVER['HTTP_REFERRER'].'">'.get_lang('BackToPreviousPage').'</a><br/>',false);
 			echo '</div>';
-			if($print_headers){Display::display_footer();}
+			if ($print_headers) {Display::display_footer();}
 			die();			
-		}
-		else
-		{
+		} else {
 			//if no course ID was included in the requested URL, redirect to homepage
-			if($print_headers){Display::display_header('');}
+			if ($print_headers) {Display::display_header('');}
 			echo '<div align="center">';
 			Display :: display_error_message(get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br/>',false);
 			echo '</div>';
-			if($print_headers){Display::display_footer();}
+			if ($print_headers) {Display::display_footer();}
 			die();
 		}
 	}
@@ -1799,8 +1597,7 @@ function api_not_allowed($print_headers = false)
  * @version October 2003
  * @desc convert sql date to unix timestamp
 */
-function convert_mysql_date($last_post_datetime)
-{
+function convert_mysql_date($last_post_datetime) {
 	list ($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
 	list ($year, $month, $day) = explode("-", $last_post_date);
 	list ($hour, $min, $sec) = explode(":", $last_post_time);
@@ -1815,9 +1612,8 @@ function convert_mysql_date($last_post_datetime)
  * @param	int		The item ID in the given tool
  * @return	int		-1 on error, 0 if invisible, 1 if visible 
  */
-function api_get_item_visibility($_course,$tool,$id)
-{
-	if(!is_array($_course) or count($_course)==0 or empty($tool) or empty($id)) return -1;
+function api_get_item_visibility($_course,$tool,$id) {
+	if (!is_array($_course) or count($_course)==0 or empty($tool) or empty($id)) return -1;
 	$tool = Database::escape_string($tool);
 	$id = Database::escape_string($id);
 	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY,$_course['dbName']);
@@ -1847,8 +1643,7 @@ function api_get_item_visibility($_course,$tool,$id)
  * @version January 2005
  * @desc update the item_properties table (if entry not exists, insert) of the course
  */
-function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = NULL, $start_visible = 0, $end_visible = 0)
-{
+function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = NULL, $start_visible = 0, $end_visible = 0) {
 	$tool = Database::escape_string($tool);
 	$item_id = Database::escape_string($item_id);
 	$lastedit_type = Database::escape_string($lastedit_type);
@@ -1880,8 +1675,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 			$to_filter = " AND to_group_id='$to_group_id'"; // set filter to intended group
 	// update if possible
 	$set_type = "";
-	switch ($lastedit_type)
-	{
+	switch ($lastedit_type) {
 		case "delete" : // delete = make item only visible for the platform admin
 			$visibility = '2';
 			$sql = "UPDATE $TABLE_ITEMPROPERTY
@@ -1911,14 +1705,12 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 
 	$res = mysql_query($sql);
 	// insert if no entries are found (can only happen in case of $lastedit_type switch is 'default')
-	if (mysql_affected_rows() == 0)
-	{
+	if (mysql_affected_rows() == 0) {
 		if (!is_null($to_user_id)) // $to_user_id has more priority than $to_group_id
 		{
 			$to_field = "to_user_id";
 			$to_value = $to_user_id;
-		}
-		else // $to_user_id is not set
+		} else // $to_user_id is not set
 			{
 			$to_field = "to_group_id";
 			$to_value = $to_group_id;
@@ -1987,8 +1779,7 @@ function api_get_languages_combo($name="language") {
 *   @param  boolean Hide form if only one language available (defaults to false = show the box anyway)
 *   @return void Display the box directly
 */
-function api_display_language_form($hide_if_no_choice=false)
-{
+function api_display_language_form($hide_if_no_choice=false) {
 	$platformLanguage = api_get_setting('platformLanguage');
 	$dirname = api_get_path(SYS_PATH)."main/lang/"; // this line is probably no longer needed
 	// retrieve a complete list of all the languages.
@@ -2039,13 +1830,11 @@ function api_display_language_form($hide_if_no_choice=false)
 *  array['name'] = An array with the name of every language
 *  array['folder'] = An array with the corresponding dokeos-folder
 */
-function api_get_languages()
-{
+function api_get_languages() {
 	$tbl_language = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 	$sql = "SELECT * FROM $tbl_language WHERE available='1' ORDER BY original_name ASC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	while ($row = mysql_fetch_array($result))
-	{
+	while ($row = mysql_fetch_array($result)) {
 		$language_list['name'][] = $row['original_name'];
 		$language_list['folder'][] = $row['dokeos_folder'];
 	}
@@ -2055,13 +1844,11 @@ function api_get_languages()
  * Get language isocode column from the language table, taking the current language as a query
  * @return	string	The isocode (two-letters code or 5 letters code, fr or fr-BE) or null if error
  */
-function api_get_language_isocode()
-{
+function api_get_language_isocode() {
 	$tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 	$sql = "SELECT isocode FROM $tbl_language WHERE dokeos_folder = '".api_get_interface_language()."'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	if(mysql_num_rows($res))
-	{
+	if(mysql_num_rows($res)) {
 		$row = mysql_fetch_array($res);
 		return $row['isocode'];
 	}
@@ -2071,33 +1858,24 @@ function api_get_language_isocode()
  * Returns a list of CSS themes currently available in the CSS folder
  * @return	array	List of themes directories from the css folder
  */
-function api_get_themes()
-{
+function api_get_themes() {
 	$cssdir = api_get_path(SYS_PATH).'main/css/';
 	$list_dir= array();
 	$list_name= array();
 	
-	if (@is_dir($cssdir))
-	{
+	if (@is_dir($cssdir)) {
 		$themes = @scandir($cssdir);
 		
-		if (is_array($themes))
-		{
-			if($themes !== false)
-			{
+		if (is_array($themes)) {
+			if($themes !== false) {
 				sort($themes);
 				
-				foreach($themes as $theme)
-				{
-					if(substr($theme,0,1)=='.')
-					{
+				foreach($themes as $theme) {
+					if(substr($theme,0,1)=='.') {
 						//ignore
 						continue;
-					}
-					else
-					{
-						if(@is_dir($cssdir.$theme))
-						{
+					} else {
+						if(@is_dir($cssdir.$theme)) {
 							$list_dir[] = $theme;
 							$list_name[] = ucwords(str_replace('_',' ',$theme));
 						}	
@@ -2126,34 +1904,28 @@ function api_get_themes()
 * @param int $width The width of the form element
 * @param string $optAttrib optional attributes for the form element
 */
-function api_disp_html_area($name, $content = '', $height = '', $width = '100%', $optAttrib = '')
-{
+function api_disp_html_area($name, $content = '', $height = '', $width = '100%', $optAttrib = '') {
 	global $_configuration, $_course, $fck_attribute;
 	require_once(dirname(__FILE__).'/formvalidator/Element/html_editor.php');
 	$editor = new HTML_QuickForm_html_editor($name);
 	$editor->setValue($content);
-	if( $height != '')
-	{
+	if( $height != '') {
 		$fck_attribute['Height'] = $height;
 	}
-	if( $width != '')
-	{
+	if( $width != '') {
 		$fck_attribute['Width'] = $width;
 	}
 	echo $editor->toHtml();
 }
-function api_return_html_area($name, $content = '', $height = '', $width = '100%', $optAttrib = '')
-{
+function api_return_html_area($name, $content = '', $height = '', $width = '100%', $optAttrib = '') {
 	global $_configuration, $_course, $fck_attribute;
 	require_once(dirname(__FILE__).'/formvalidator/Element/html_editor.php');
 	$editor = new HTML_QuickForm_html_editor($name);
 	$editor->setValue($content);
-	if( $height != '')
-	{
+	if( $height != '') {
 		$fck_attribute['Height'] = $height;
 	}
-	if( $width != '')
-	{
+	if( $width != '') {
 		$fck_attribute['Width'] = $width;
 	}
 	return $editor->toHtml();
@@ -2172,8 +1944,7 @@ function api_return_html_area($name, $content = '', $height = '', $width = '100%
  * @param string $additional_headers
  * @param string $additional_parameters
  */
-function api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = null)
-{
+function api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = null) {
 	return mail($to, $subject, $message, $additional_headers, $additional_parameters);
 }
 
@@ -2186,20 +1957,16 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
  * @param int $user_course_category: the id of the user_course_category
  * @return int the value of the highest sort of the user_course_category
 */
-function api_max_sort_value($user_course_category, $user_id)
-{
+function api_max_sort_value($user_course_category, $user_id) {
 
 	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 	$sql_max = "SELECT max(sort) as max_sort FROM $tbl_course_user WHERE user_id='".$user_id."' AND user_course_cat='".$user_course_category."'";
 	$result_max = mysql_query($sql_max) or die(mysql_error());
-	if (mysql_num_rows($result_max) == 1)
-	{
+	if (mysql_num_rows($result_max) == 1) {
 		$row_max = mysql_fetch_array($result_max);
 		$max_sort = $row_max['max_sort'];
-	}
-	else
-	{
+	} else {
 		$max_sort = 0;
 	}
 
@@ -2213,14 +1980,11 @@ function api_max_sort_value($user_course_category, $user_id)
  * @return boolean true or false
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function string_2_boolean($string)
-{
-	if ($string == "true")
-	{
+function string_2_boolean($string) {
+	if ($string == "true") {
 		return true;
 	}
-	if ($string == "false")
-	{
+	if ($string == "false") {
 		return false;
 	}
 }
@@ -2228,11 +1992,9 @@ function string_2_boolean($string)
 /**
  * Determines the number of plugins installed for a given location
  */
-function api_number_of_plugins($location)
-{
+function api_number_of_plugins($location) {
 	global $_plugins;
-	if (isset($_plugins[$location]) && is_array($_plugins[$location]))
-	{
+	if (isset($_plugins[$location]) && is_array($_plugins[$location])) {
 		return count($_plugins[$location]);
 	}
 	return 0;
@@ -2242,14 +2004,11 @@ function api_number_of_plugins($location)
  * including the necessary plugins
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function api_plugin($location)
-{
+function api_plugin($location) {
 	global $_plugins;
 
-	if (isset($_plugins[$location]) && is_array($_plugins[$location]))
-	{
-		foreach ($_plugins[$location] as $this_plugin)
-		{
+	if (isset($_plugins[$location]) && is_array($_plugins[$location])) {
+		foreach ($_plugins[$location] as $this_plugin) {
 			include (api_get_path(SYS_PLUGIN_PATH)."$this_plugin/index.php");
 		}
 	}
@@ -2259,10 +2018,8 @@ function api_plugin($location)
 * Checks to see wether a certain plugin is installed.
 * @return boolean true if the plugin is installed, false otherwise.
 */
-function api_is_plugin_installed($plugin_list, $plugin_name)
-{
-	foreach ($plugin_list as $plugin_location)
-	{
+function api_is_plugin_installed($plugin_list, $plugin_name) {
+	foreach ($plugin_list as $plugin_location) {
 		if ( array_search($plugin_name, $plugin_location) !== false ) return true;
 	}
 	return false;
@@ -2276,14 +2033,10 @@ function api_is_plugin_installed($plugin_list, $plugin_name)
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @version June 2004
 */
-function api_parse_tex($textext)
-{
-	if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-	{
+function api_parse_tex($textext) {
+	if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 		$textext = str_replace(array ("[tex]", "[/tex]"), array ("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
-	}
-	else
-	{
+	} else {
 		$textext = str_replace(array ("[tex]", "[/tex]"), array ("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
 	}
 	return $textext;
@@ -2296,12 +2049,10 @@ function api_parse_tex($textext)
  * @param integer the number of seconds
  * @return string the formated time
  */
-function api_time_to_hms($seconds)
-{
+function api_time_to_hms($seconds) {
   
   //if seconds = -1, it means we have wrong datas in the db
-  if($seconds==-1)
-  {
+  if($seconds==-1) {
   	  return get_lang('Unknown').Display :: return_icon('info2.gif',get_lang('WrongDatasForTimeSpentOnThePlatform'));
   }
   
@@ -2334,8 +2085,7 @@ function api_time_to_hms($seconds)
  * @param copied_files the returned array of copied files
  */
 
-function copyr($source, $dest, $exclude=array(), $copied_files=array())
-{
+function copyr($source, $dest, $exclude=array(), $copied_files=array()) {
     // Simple copy for a file
     if (is_file($source)) {
     	$path_infos = pathinfo($source);
@@ -2375,9 +2125,9 @@ function api_chmod_R($path, $filemode) {
 
     $dh = opendir($path);
     while ($file = readdir($dh)) {
-        if($file != '.' && $file != '..') {
+        if ($file != '.' && $file != '..') {
             $fullpath = $path.'/'.$file;
-            if(!is_dir($fullpath)) {
+            if (!is_dir($fullpath)) {
               if (!chmod($fullpath, $filemode))
                  return FALSE;
             } else {
@@ -2399,15 +2149,11 @@ function api_chmod_R($path, $filemode) {
  * Get Dokeos version from the configuration files
  * @return	string	A string of type "1.8.4", or an empty string if the version could not be found
  */
-function api_get_version()
-{
+function api_get_version() {
 	global $_configuration;
-	if(!empty($_configuration['dokeos_version']))
-	{
+	if(!empty($_configuration['dokeos_version'])) {
 		return $_configuration['dokeos_version'];
-	}
-	else
-	{
+	} else {
 		return '';
 	}
 }
@@ -2418,15 +2164,11 @@ function api_get_version()
  * @param mixed the status (can be either int either string)
  * @return true if the status exists, else returns false
  */
-function api_status_exists($status_asked)
-{
+function api_status_exists($status_asked) {
 	global $_status_list;
-	if(in_array($status_asked, $_status_list))
-	{
+	if (in_array($status_asked, $_status_list)) {
 		return true;
-	}
-	else 
-	{
+	} else  {
 		return isset($_status_list[$status_asked]);
 	}
 }
@@ -2436,15 +2178,11 @@ function api_status_exists($status_asked)
  * @param mixed the status (can be either int either string)
  * @return true if the status exists, else returns false
  */
-function api_status_key($status)
-{
+function api_status_key($status) {
 	global $_status_list;
-	if(isset($_status_list[$status]))
-	{
+	if (isset($_status_list[$status])) {
 		return $status;
-	}
-	else
-	{
+	} else {
 		return array_search($status,$_status_list);
 	}
 }
@@ -2453,8 +2191,7 @@ function api_status_key($status)
  * get the status langvars list
  * @return array the list of status with their translations
  */
-function api_get_status_langvars()
-{
+function api_get_status_langvars() {
 	return array(
 				COURSEMANAGER=>get_lang('Teacher'),
 				SESSIONADMIN=>get_lang('SessionsAdmin'),
@@ -2471,8 +2208,7 @@ function api_get_status_langvars()
  * @param	string	The category if any (in most cases, this will remain null)
  * @param	int		The access_url for which this parameter is valid
  */
-function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1)
-{
+function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1) {
 	if(empty($var)) { return false; }
 	$t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 	$var = Database::escape_string($var);
@@ -2480,48 +2216,36 @@ function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1)
 	$access_url = (int) $access_url;
 	if(empty($access_url)){$access_url=1;}
 	$select = "SELECT * FROM $t_settings WHERE variable = '$var' ";
-	if(!empty($subvar))
-	{
+	if(!empty($subvar)) {
 		$subvar = Database::escape_string($subvar);
 		$select .= " AND subkey = '$subvar'";
 	}
-	if(!empty($cat))
-	{
+	if(!empty($cat)) {
 		$cat = Database::escape_string($cat);
 		$select .= " AND category = '$cat'";
 	}
-	if($access_url > 1)
-	{
+	if($access_url > 1) {
 		$select .= " AND access_url = $access_url";
-	}
-	else
-	{
+	} else {
 		$select .= " AND access_url = 1 ";
 	}	
 	$res = api_sql_query($select,__FILE__,__LINE__);
-	if(Database::num_rows($res)>0)
-	{   //found item for this access_url
+	if(Database::num_rows($res)>0) {   //found item for this access_url
 		$row = Database::fetch_array($res);
 		$update = "UPDATE $t_settings SET selected_value = '$value' WHERE id = ".$row['id'] ;
 		$res = api_sql_query($update,__FILE__,__LINE__); 	
-	}
-	else
-	{ //item not found for this access_url, we have to check if the whole thing is missing 
+	} else { //item not found for this access_url, we have to check if the whole thing is missing 
 	  //(in which case we ignore the insert) or if there *is* a record but just for access_url=1
 		$select = "SELECT * FROM $t_settings WHERE variable = '$var' AND access_url = '1' ";
-		if ($access_url==1)
-		{
-			if(!empty($subvar))
-			{
+		if ($access_url==1) {
+			if (!empty($subvar)) {
 				$select .= " AND subkey = '$subvar'";
 			}
-			if(!empty($cat))
-			{
+			if (!empty($cat)) {
 				$select .= " AND category = '$cat'";
 			}	
 			$res = api_sql_query($select,__FILE__,__LINE__);
-			if(Database::num_rows($select)>0)
-			{ //we have a setting for access_url 1, but none for the current one, so create one
+			if (Database::num_rows($select)>0) { //we have a setting for access_url 1, but none for the current one, so create one
 				$row = Database::fetch_array($res);
 				$insert = "INSERT INTO $t_settings " .
 						"(variable,subkey," .
@@ -2536,30 +2260,22 @@ function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1)
 						"".(!empty($row['comment'])?"'".$row['comment']."'":"NULL").",'".(!empty($row['scope'])?"'".$row['scope']."'":"NULL")."'," .
 						"'".(!empty($row['subkeytext'])?"'".$row['subkeytext']."'":"NULL")."',$access_url)";
 				$res = api_sql_query($insert,__FILE__,__LINE__);
-			}
-			else
-			{ // this setting does not exist
+			} else { // this setting does not exist
 				error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all',0);
 			}
-		}
-		else
-		{	
+		} else {	
 			// other access url 
-			if(!empty($subvar))
-			{
+			if (!empty($subvar)) {
 				$select .= " AND subkey = '$subvar'";
 			}
-			if(!empty($cat))
-			{
+			if (!empty($cat)) {
 				$select .= " AND category = '$cat'";
 			}
 			$res = api_sql_query($select,__FILE__,__LINE__);
 						
-			if(Database::num_rows($res)>0)
-			{ //we have a setting for access_url 1, but none for the current one, so create one				
+			if (Database::num_rows($res)>0) { //we have a setting for access_url 1, but none for the current one, so create one				
 				$row = Database::fetch_array($res);
-				if ($row['access_url_changeable']==1)
-				{
+				if ($row['access_url_changeable']==1) {
 					$insert = "INSERT INTO $t_settings " .
 							"(variable,subkey," .
 							"type,category," .
@@ -2576,9 +2292,7 @@ function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1)
 							"'".(!empty($row['subkeytext'])?"'".$row['subkeytext']."'":"NULL")."',$access_url,".$row['access_url_changeable'].")";
 					$res = api_sql_query($insert,__FILE__,__LINE__);
 				}
-			}
-			else
-			{ // this setting does not exist
+			} else { // this setting does not exist
 				error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all. The access_url is: '.$access_url.' ',0);
 			}			
 		}	
@@ -2590,23 +2304,19 @@ function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1)
  * @param	string 	Value
  * @param	int		Access URL. Optional. Defaults to 1
  */
-function api_set_settings_category($category,$value=null,$access_url=1)
-{
-	if(empty($category)){return false;}
+function api_set_settings_category($category,$value=null,$access_url=1) {
+	if (empty($category)){return false;}
 	$category = Database::escape_string($category);
 	$t_s = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 	$access_url = (int) $access_url;
-	if(empty($access_url)){$access_url=1;}
-	if(isset($value))
-	{
+	if (empty($access_url)){$access_url=1;}
+	if (isset($value)) {
 		$value = Database::escape_string($value);
 		$sql = "UPDATE $t_s SET selected_value = '$value' WHERE category = '$category' AND access_url = $access_url";
 		$res = api_sql_query($sql,__FILE__,__LINE__); 
 		if($res === false){ return false; }
 		return true;
-	}
-	else
-	{
+	} else {
 		$sql = "UPDATE $t_s SET selected_value = NULL WHERE category = '$category' AND access_url = $access_url";
 		$res = api_sql_query($sql,__FILE__,__LINE__); 
 		if($res === false){ return false; }
@@ -2617,8 +2327,7 @@ function api_set_settings_category($category,$value=null,$access_url=1)
  * Get all available access urls in an array (as in the database)
  * @return	array	Array of database records
  */
-function api_get_access_urls($from=0,$to=1000000,$order='url',$direction='ASC')
-{
+function api_get_access_urls($from=0,$to=1000000,$order='url',$direction='ASC') {
 	$result = array();
 	$t_au = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
 	$from = (int) $from;
@@ -2627,8 +2336,7 @@ function api_get_access_urls($from=0,$to=1000000,$order='url',$direction='ASC')
 	$direction = Database::escape_string($direction);
 	$sql = "SELECT id, url, description, active, created_by, tms FROM $t_au ORDER BY $order $direction LIMIT $to OFFSET $from";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	if($res !==false)
-	{
+	if ($res !==false) {
 		$result = api_store_result($res);
 	}
 	return $result;
@@ -2640,8 +2348,7 @@ function api_get_access_urls($from=0,$to=1000000,$order='url',$direction='ASC')
  * @return	array Array with all the info (url, description, active, created_by, tms) from the access_url table 
  * @author 	Julio Montoya Armas
  */
-function api_get_access_url($id)
-{
+function api_get_access_url($id) {
 	global $_configuration;
 	$result = array();
 	// calling the Database:: library dont work this is handmade
@@ -2662,27 +2369,20 @@ function api_get_access_url($id)
  * @param	int		Active (1= active, 0=disabled)
  * @return	int		The new database id, or the existing database id if this url already exists
  */
-function api_add_access_url($u,$d='',$a=1)
-{
+function api_add_access_url($u,$d='',$a=1) {
 	$t_au = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
 	$u = Database::escape_string($u);
 	$d = Database::escape_string($d);
 	$a = (int) $a;
 	$sql = "SELECT * FROM $t_au WHERE url LIKE '$u'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	if($res === false)
-	{
+	if($res === false) {
 		//problem querying the database - return false
 		return false;
-	}
-	else
-	{
-		if(Database::num_rows($res)>0)
-		{
+	} else {
+		if(Database::num_rows($res)>0) {
 			return Database::result($res,0,'id');
-		}
-		else
-		{
+		} else {
 			$ui = api_get_user_id();
 			$time = 
 			$sql = "INSERT INTO $t_au (url,description,active,created_by,tms)"
@@ -2700,35 +2400,29 @@ function api_add_access_url($u,$d='',$a=1)
  * @param	int		Access URL's ID. Optional. Uses 1 by default, which is the unique URL
  * @return	array	Array of database results for the current settings of the current access URL
  */
-function api_get_settings($cat=null,$ordering='list',$access_url=1,$url_changeable=0)
-{
+function api_get_settings($cat=null,$ordering='list',$access_url=1,$url_changeable=0) {
 	$results = array();
 	$t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 	$access_url = (int) $access_url;
 	
 	$url_changeable_where='';
-	if ($url_changeable==1)
-	{
+	if ($url_changeable==1) {
 		$url_changeable_where= " AND access_url_changeable= '1' "; 
 	}	
-	if(empty($access_url)){$access_url=1;}
+	if (empty($access_url)) {$access_url=1;}
 	$sql = "SELECT id, variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable " .
 			" FROM $t_cs WHERE access_url = $access_url  $url_changeable_where ";
-	if(!empty($cat))
-	{
+	if(!empty($cat)) {
 		$cat = Database::escape_string($cat);
 		$sql .= " AND category='$cat' ";
 	}
-	if($ordering=='group')
-	{
+	if($ordering=='group') {
 		$sql .= " GROUP BY variable ORDER BY id ASC";
-	}
-	else
-	{
+	} else {
 		$sql .= " ORDER BY 1,2 ASC";
 	} 
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	if($res === false){return $results;}
+	if ($res === false) {return $results;}
 	$results = api_store_result($res);
 	return $results;
 }
@@ -2738,20 +2432,17 @@ function api_get_settings($cat=null,$ordering='list',$access_url=1,$url_changeab
  * @param	int		Access URL. Optional. Defaults to 1
  * @return	array	A list of categories
  */
-function api_get_settings_categories($exceptions=array(),$access_url=1)
-{
+function api_get_settings_categories($exceptions=array(),$access_url=1) {
 	$result = array();
 	$access_url = (int) $access_url;
 	$t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 	$list = "'".implode("','",$exceptions)."'";
 	$sql = "SELECT DISTINCT category FROM $t_cs";
-	if($list != "'',''" and $list != "''" and !empty($list))
-	{
+	if ($list != "'',''" and $list != "''" and !empty($list)) {
 		$sql .= " WHERE category NOT IN ($list)"; 
 	}
 	$r = api_sql_query($sql,__FILE__,__LINE__);
-	if($r === false)
-	{
+	if ($r === false) {
 		return $result;
 	}
 	$result = api_store_result($r);
@@ -2764,22 +2455,18 @@ function api_get_settings_categories($exceptions=array(),$access_url=1)
  * @param	int		Access URL
  * @return	boolean	False on failure, true on success
  */
-function api_delete_setting($v,$s=NULL,$a=1)
-{
-	if(empty($v)){return false;}
+function api_delete_setting($v,$s=NULL,$a=1) {
+	if (empty($v)) {return false;}
 	$t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 	$v = Database::escape_string($v);
 	$a = (int) $a;
-	if(empty($a)){$a=1;}
-	if(!empty($s))
-	{
+	if (empty($a)){$a=1;}
+	if (!empty($s)) {
 		$s = Database::escape_string($s);
 		$sql = "DELETE FROM $t_cs WHERE variable = '$v' AND subkey = '$s' AND access_url = $a";
 		$r = api_sql_query($sql);
 		return $r;
-	}
-	else
-	{
+	} else {
 		$sql = "DELETE FROM $t_cs WHERE variable = '$v' AND access_url = $a";
 		$r = api_sql_query($sql);
 		return $r;
@@ -2791,9 +2478,8 @@ function api_delete_setting($v,$s=NULL,$a=1)
  * @param	int		Access URL
  * @return	boolean	False on failure, true on success
  */
-function api_delete_category_settings($c,$a=1)
-{
-	if(empty($c)){return false;}
+function api_delete_category_settings($c,$a=1) {
+	if (empty($c)){return false;}
 	$t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 	$c = Database::escape_string($c);
 	$a = (int) $a;
@@ -2817,37 +2503,29 @@ function api_delete_category_settings($c,$a=1)
  * @param	int		The changeability of this setting for non-master urls
  * @return	boolean	true on success, false on failure
  */
-function api_add_setting($val,$var,$sk=null,$type='textfield',$c=null,$title='',$com='',$sc=null,$skt=null,$a=1,$v=0)
-{
-	if(empty($var) or !isset($val)) { return false; }
+function api_add_setting($val,$var,$sk=null,$type='textfield',$c=null,$title='',$com='',$sc=null,$skt=null,$a=1,$v=0) {
+	if (empty($var) or !isset($val)) { return false; }
 	$t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 	$var = Database::escape_string($var);
 	$val = Database::escape_string($val);
 	$a = (int) $a;
-	if(empty($a)){$a=1;}
+	if (empty($a)){$a=1;}
 	//check if this variable doesn't exist already
 	$select = "SELECT * FROM $t_settings WHERE variable = '$var' ";
-	if(!empty($sk))
-	{
+	if (!empty($sk)) {
 		$sk = Database::escape_string($sk);
 		$select .= " AND subkey = '$sk'";
 	}
-	if($a > 1)
-	{
+	if ($a > 1) {
 		$select .= " AND access_url = $a";
-	}
-	else
-	{
+	} else {
 		$select .= " AND access_url = 1 ";
 	}
 	$res = api_sql_query($select,__FILE__,__LINE__);
-	if(Database::num_rows($res)>0)
-	{ //found item for this access_url
+	if(Database::num_rows($res)>0) { //found item for this access_url
 		$row = Database::fetch_array($res);
 		return $row['id']; 	
-	}
-	else
-	{ //item not found for this access_url, we have to check if the whole thing is missing 
+	} else { //item not found for this access_url, we have to check if the whole thing is missing 
 	  //(in which case we ignore the insert) or if there *is* a record but just for access_url=1		
 		$insert = "INSERT INTO $t_settings " .
 				"(variable,selected_value," .
@@ -2856,67 +2534,46 @@ function api_add_setting($val,$var,$sk=null,$type='textfield',$c=null,$title='',
 				"comment,scope," .
 				"subkeytext,access_url,access_url_changeable)" .
 				" VALUES ('$var','$val',";
-		if(isset($type))
-		{
+		if (isset($type)) {
 			$type = Database::escape_string($type);
 			$insert .= "'$type',";
-		}
-		else
-		{
+		} else {
 			$insert .= "NULL,";
 		}
-		if(isset($c)) //category
-		{
+		if(isset($c)) {//category
 			$c = Database::escape_string($c);
 			$insert .= "'$c',";
-		}
-		else
-		{
+		} else {
 			$insert .= "NULL,";
 		}
-		if(isset($sk)) //subkey
-		{
+		if (isset($sk)) { //subkey
 			$sk = Database::escape_string($sk);
 			$insert .= "'$sk',";
-		}
-		else
-		{
+		} else {
 			$insert .= "NULL,";
 		}
-		if(isset($title)) //title
-		{
+		if(isset($title)) {//title
 			$title = Database::escape_string($title);
 			$insert .= "'$title',";
-		}
-		else
-		{
+		} else {
 			$insert .= "NULL,";
 		}
-		if(isset($com)) //comment
-		{
+		if (isset($com)) {//comment
 			$com = Database::escape_string($com);
 			$insert .= "'$com',";
-		}
-		else
-		{
+		} else {
 			$insert .= "NULL,";
 		}
-		if(isset($sc)) //scope
-		{
+		if(isset($sc)) {//scope
 			$sc = Database::escape_string($sc);
 			$insert .= "'$sc',";
-		}
-		else
-		{
+		} else {
 			$insert .= "NULL,";
 		}
-		if(isset($skt)) //subkey text
-		{
+		if (isset($skt)) {//subkey text
 			$skt = Database::escape_string($skt);
 			$insert .= "'$skt',";
-		}
-		else
-		{
+		} else {
 			$insert .= "NULL,";
 		}
 		$insert .= "$a,$v)";
@@ -2935,8 +2592,7 @@ function api_is_course_visible_for_user( $userid = null, $cid = null ) {
     if ( $userid == null ) {
         $userid = $_SESSION['_user']['user_id'];
     }
-    if( empty ($userid) or strval(intval($userid)) != $userid )
-    {
+    if( empty ($userid) or strval(intval($userid)) != $userid ) {
         if ( api_is_anonymous() ) {
         	$userid = api_get_anonymous_id();
         } else {
@@ -2966,14 +2622,11 @@ function api_is_course_visible_for_user( $userid = null, $cid = null ) {
     if (Database::num_rows($result) > 0) {
         $visibility = Database::fetch_array($result);
         $visibility = $visibility['visibility'];
-    }
-    else
-    {
+    } else {
         $visibility = 0;
     }
     //shortcut permissions in case the visibility is "open to the world"
-    if($visibility === COURSE_VISIBILITY_OPEN_WORLD)
-    {
+    if ($visibility === COURSE_VISIBILITY_OPEN_WORLD) {
         return true;
     }
     
@@ -3146,16 +2799,13 @@ function api_is_course_visible_for_user( $userid = null, $cid = null ) {
  * @param int the session_id to compare with element session id
  * @return boolean true if the element is in the session, false else
  */
-function api_is_element_in_the_session($tool, $element_id, $session_id=null)
-{
-	if(is_null($session_id))
-	{
+function api_is_element_in_the_session($tool, $element_id, $session_id=null) {
+	if (is_null($session_id)) {
 		$session_id = intval($_SESSION['id_session']);
 	}
 	
 	// get informations to build query depending of the tool
-	switch ($tool)
-	{
+	switch ($tool) {
 		case TOOL_SURVEY : 
 			$table_tool = Database::get_course_table(TABLE_SURVEY);
 			$key_field = 'survey_id';
@@ -3178,13 +2828,10 @@ function api_is_element_in_the_session($tool, $element_id, $session_id=null)
 	
 	$sql = 'SELECT session_id FROM '.$table_tool.' WHERE '.$key_field.'='.intval($element_id);
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
-	if($element_session_id = Database::result($rs, 0, 0))
-	{
-		if($element_session_id == intval($session_id))
-		{ // element belongs to the session
+	if ($element_session_id = Database::result($rs, 0, 0)) {
+		if ($element_session_id == intval($session_id)) { // element belongs to the session
 			return true;
 		}
 	}
 	return false;
 }
-?>

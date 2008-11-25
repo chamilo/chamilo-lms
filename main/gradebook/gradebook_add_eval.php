@@ -1,12 +1,10 @@
-<?php
-
-
-// $Id: gradebook_add_eval.php 880 2007-05-07 09:32:52Z bert $
+<?php // $Id: $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006 Dokeos S.A.
+	Copyright (c) 2008 Dokeos Latinoamerica SAC
+	Copyright (c) 2006 Dokeos SPRL
 	Copyright (c) 2006 Ghent University (UGent)
 	Copyright (c) various contributors
 
@@ -20,16 +18,15 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
 $language_file = 'gradebook';
-$cidReset = true;
-include_once ('../inc/global.inc.php');
-include_once ('lib/be.inc.php');
-include_once ('lib/gradebook_functions.inc.php');
-include_once ('lib/fe/evalform.class.php');
+require_once ('../inc/global.inc.php');
+require_once ('lib/be.inc.php');
+require_once ('lib/gradebook_functions.inc.php');
+require_once ('lib/fe/evalform.class.php');
 api_block_anonymous_users();
 block_students();
 
@@ -51,17 +48,19 @@ if ($form->validate()) {
 	$eval->set_name($values['name']);
 	$eval->set_description($values['description']);
 	$eval->set_user_id($values['hid_user_id']);
-	if (!empty ($values['hid_course_code']))
+	if (!empty ($values['hid_course_code'])) {
 		$eval->set_course_code($values['hid_course_code']);
+	}
 	$eval->set_category_id($values['hid_category_id']);
 	$eval->set_weight($values['weight']);
 	//converts the date back to unix timestamp format
 	$eval->set_date(strtotime($values['date']));
 	$eval->set_max($values['max']);
-	if (empty ($values['visible']))
+	if (empty ($values['visible'])) {
 		$visible = 0;
-	else
+	} else {
 		$visible = 1;
+	}
 	$eval->set_visible($visible);
 	$eval->add();
 	if ($eval->get_course_code() == null) {
@@ -69,7 +68,7 @@ if ($form->validate()) {
 			header('Location: gradebook_add_user.php?selecteval=' . $eval->get_id());
 			exit;
 		} else {
-			header('Location: gradebook.php?selectcat=' . $eval->get_category_id());
+			header('Location: '.$_SESSION['gradebook_dest'].'?selectcat=' . $eval->get_category_id());
 			exit;
 		}
 	} else {
@@ -77,15 +76,14 @@ if ($form->validate()) {
 			header('Location: gradebook_add_result.php?selecteval=' . $eval->get_id());
 			exit;
 		} else {
-			header('Location: gradebook.php?selectcat=' . $eval->get_category_id());
+			header('Location: '.$_SESSION['gradebook_dest'].'?selectcat=' . $eval->get_category_id());
 			exit;
 		}
 	}
-
 }
 
 $interbreadcrumb[] = array (
-	'url' => 'gradebook.php?selectcat='.Security::remove_XSS($_GET['selectcat']),
+	'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']),
 	'name' => get_lang('Gradebook'
 ));
 Display :: display_header(get_lang('NewEvaluation'));
@@ -94,4 +92,3 @@ if ($evaladd->get_course_code() == null) {
 }
 $form->display();
 Display :: display_footer();
-?>

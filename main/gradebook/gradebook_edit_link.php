@@ -1,5 +1,5 @@
 <?php
-// $Id: gradebook_edit_link.php 400 2007-04-10 13:58:55Z stijn $
+// $Id: $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -22,14 +22,17 @@
 ==============================================================================
 */
 $language_file = 'gradebook';
-$cidReset = true;
-include_once ('../inc/global.inc.php');
-include_once ('lib/be.inc.php');
-include_once ('lib/gradebook_functions.inc.php');
-include_once ('lib/fe/linkform.class.php');
-include_once ('lib/fe/linkaddeditform.class.php');
+//$cidReset = true;
+require_once ('../inc/global.inc.php');
+require_once ('lib/be.inc.php');
+require_once ('lib/gradebook_functions.inc.php');
+require_once ('lib/fe/linkform.class.php');
+require_once ('lib/fe/linkaddeditform.class.php');
 api_block_anonymous_users();
 block_students();
+
+$tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
+$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 $linkarray = LinkFactory :: load($_GET['editlink']);
 $link = $linkarray[0];
@@ -42,23 +45,23 @@ $form = new LinkAddEditForm(LinkAddEditForm :: TYPE_EDIT,
 							api_get_self() . '?selectcat=' . $_GET['selectcat']
 												 . '&editlink=' . $_GET['editlink']);
 
-if ($form->validate())
-{
+if ($form->validate()) {
 	$values = $form->exportValues();
 	$link->set_weight($values['weight']);
 	$link->set_date(strtotime($values['date']));
 	$link->set_visible(empty ($values['visible']) ? 0 : 1);
 	$link->save();
-	header('Location: gradebook.php?linkedited=&selectcat=' . $link->get_category_id());
+	$sql_t='UPDATE '.$tbl_forum_thread.' SET thread_weight='.$values['weight'].' WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.$_GET['editlink'].' and type=5);';
+	api_sql_query($sql_t);
+	header('Location: '.$_SESSION['gradebook_dest'].'?linkedited=&selectcat=' . $link->get_category_id());
 	exit;
 }
 
 $interbreadcrumb[] = array (
-	'url' => 'gradebook.php?selectcat='.$_GET['selectcat'],
+	'url' => $_SESSION['gradebook_dest'].'?selectcat='.$_GET['selectcat'],
 	'name' => get_lang('Gradebook'
 ));
 
 Display :: display_header(get_lang('EditLink'));
 $form->display();
 Display :: display_footer();
-?>

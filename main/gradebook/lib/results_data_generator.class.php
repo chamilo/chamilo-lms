@@ -1,9 +1,31 @@
 <?php
+/*
+==============================================================================
+	Dokeos - elearning and course management software
 
+	Copyright (c) 2008 Dokeos Latinoamerica SAC
+	Copyright (c) 2006 Dokeos SPRL
+	Copyright (c) 2006 Ghent University (UGent)
+	Copyright (c) various contributors
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
+*/
 /**
  * Class to select, sort and transform object data into array data,
  * used for the teacher's evaluation results view
- * @author Bert Steppé
+ * @author Bert SteppÃ©
  */
 class ResultsDataGenerator
 {
@@ -29,8 +51,7 @@ class ResultsDataGenerator
 	 */
     function ResultsDataGenerator ( $evaluation,
     								$results = array(),
-    								$include_edit = false)
-    {
+    								$include_edit = false) {
     	$this->evaluation = $evaluation;
 		$this->results = (isset($results) ? $results : array());
     }
@@ -39,8 +60,7 @@ class ResultsDataGenerator
 	/**
 	 * Get total number of results (rows)
 	 */
-	public function get_total_results_count()
-	{
+	public function get_total_results_count () {
 		return count($this->results);
 	}
 
@@ -55,21 +75,19 @@ class ResultsDataGenerator
 	 * 4 ['score']     : student's score
 	 * 5 ['display']   : custom score display (only if custom scoring enabled)
 	 */
-	public function get_data ($sorting = 0, $start = 0, $count = null, $ignore_score_color = false)
-	{
+	public function get_data ($sorting = 0, $start = 0, $count = null, $ignore_score_color = false) {
 
 		// do some checks on count, redefine if invalid value
-		if (!isset($count))
+		if (!isset($count)) {
 			$count = count ($this->results) - $start;
-		if ($count < 0)
+		}
+		if ($count < 0) {
 			$count = 0;
-
+		}
 		$scoredisplay = ScoreDisplay :: instance();
-
 		// generate actual data array
 		$table = array();
-		foreach($this->results as $result)
-		{
+		foreach($this->results as $result) {
 			$user = array();
 			$info = get_user_info_from_id($result->get_user_id());
 			$user['id'] = $result->get_user_id();
@@ -84,77 +102,69 @@ class ResultsDataGenerator
 
 
 		// sort array
-		if ($sorting & self :: RDG_SORT_LASTNAME)
+		if ($sorting & self :: RDG_SORT_LASTNAME) {
 			usort($table, array('ResultsDataGenerator', 'sort_by_last_name'));
-		elseif ($sorting & self :: RDG_SORT_FIRSTNAME)
-			usort($table, array('ResultsDataGenerator', 'sort_by_first_name'));
-		elseif ($sorting & self :: RDG_SORT_SCORE)
+		} elseif ($sorting & self :: RDG_SORT_FIRSTNAME) {
+			usort($table, array('ResultsDataGenerator', 'sort_by_first_name'));	
+		} elseif ($sorting & self :: RDG_SORT_SCORE) {
 			usort($table, array('ResultsDataGenerator', 'sort_by_score'));
-		elseif ($sorting & self :: RDG_SORT_MASK)
-			usort($table, array('ResultsDataGenerator', 'sort_by_mask'));
-		if ($sorting & self :: RDG_SORT_DESC)
-			$table = array_reverse($table);
-
-
+		} elseif ($sorting & self :: RDG_SORT_MASK) {
+			usort($table, array('ResultsDataGenerator', 'sort_by_mask'));			
+		}
+		if ($sorting & self :: RDG_SORT_DESC) {
+			$table = array_reverse($table);			
+		}
 		return array_slice($table, $start, $count);
 
 	}
 
-
-
-	private function get_score_display ($score, $realscore, $ignore_score_color)
-	{
-		if ($score != null)
-		{
+	private function get_score_display ($score, $realscore, $ignore_score_color) {
+		if ($score != null) {
 			$display_type = SCORE_DIV_PERCENT;
-			if ($ignore_score_color)
-				$display_type |= SCORE_IGNORE_SPLIT;
+			if ($ignore_score_color) {
+				$display_type |= SCORE_IGNORE_SPLIT;				
+			}
 			$scoredisplay = ScoreDisplay :: instance();
 			return $scoredisplay->display_score
 					(array($score,$this->evaluation->get_max()),
 					 $display_type,
 					 $realscore ? SCORE_ONLY_DEFAULT : SCORE_ONLY_CUSTOM);
-		}
-		else
-			return '';
+			}
+			else {
+				return '';			
+		  }
 	}
-
-
-
-
 
 	// Sort functions - used internally
-
-	function sort_by_last_name($item1, $item2)
-	{
-		if (strtolower($item1['lastname']) == strtolower($item2['lastname']))
+	function sort_by_last_name($item1, $item2) {
+		if (strtolower($item1['lastname']) == strtolower($item2['lastname'])) {
 			return 0;
-		else
-			return (strtolower($item1['lastname']) < strtolower($item2['lastname']) ? -1 : 1);
+		} else {
+			return (strtolower($item1['lastname']) < strtolower($item2['lastname']) ? -1 : 1);			
+		}
 	}
 
-	function sort_by_first_name($item1, $item2)
-	{
-		if (strtolower($item1['firstname']) == strtolower($item2['firstname']))
+	function sort_by_first_name($item1, $item2) {
+		if (strtolower($item1['firstname']) == strtolower($item2['firstname'])) {
 			return 0;
-		else
-			return (strtolower($item1['firstname']) < strtolower($item2['firstname']) ? -1 : 1);
+		}
+		else {
+			return (strtolower($item1['firstname']) < strtolower($item2['firstname']) ? -1 : 1);			
+		}
+
 	}
 	
-	function sort_by_score($item1, $item2)
-	{
-		if ($item1['score'] == $item2['score'])
-			return 0;
-		else
-			return ($item1['score'] < $item2['score'] ? -1 : 1);
+	function sort_by_score($item1, $item2) {
+		if ($item1['score'] == $item2['score']) {
+			return 0;			
+		}else {
+			return ($item1['score'] < $item2['score'] ? -1 : 1);			
+		}
 	}
 	
-	function sort_by_mask ($item1, $item2)
-	{
+	function sort_by_mask ($item1, $item2) {
 		$score1 = (isset($item1['score']) ? array($item1['score'],$this->evaluation->get_max()) : null);
 		$score2 = (isset($item2['score']) ? array($item2['score'],$this->evaluation->get_max()) : null);
 		return ScoreDisplay :: compare_scores_by_custom_display($score1, $score2);
 	}
-
 }
-?>

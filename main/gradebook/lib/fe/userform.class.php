@@ -1,8 +1,31 @@
 <?php
-include_once (dirname(__FILE__).'/../../../inc/global.inc.php');
-include_once (dirname(__FILE__).'/../be.inc.php');
-include_once (dirname(__FILE__).'/../gradebook_functions.inc.php');
-include_once (api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php');
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2008 Dokeos Latinoamerica SAC
+	Copyright (c) 2006 Dokeos SPRL
+	Copyright (c) 2006 Ghent University (UGent)
+	Copyright (c) various contributors
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
+*/
+require_once (dirname(__FILE__).'/../../../inc/global.inc.php');
+require_once (dirname(__FILE__).'/../be.inc.php');
+require_once (dirname(__FILE__).'/../gradebook_functions.inc.php');
+require_once (api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php');
 /**
  * Extends formvalidator with import and export forms
@@ -21,33 +44,26 @@ class UserForm extends FormValidator
 	 * @param method
 	 * @param action
 	 */
-	function UserForm($form_type, $user, $form_name, $method= 'post', $action= null)
-	{
+	function UserForm($form_type, $user, $form_name, $method= 'post', $action= null) {
 		parent :: __construct($form_name, $method, $action);
 		$this->form_type= $form_type;
-		if (isset ($user))
-		{
+		if (isset ($user)) {
 			$this->user_info= $user;
 		}
-		if (isset ($result_object))
-		{
+		if (isset ($result_object)) {
 			$this->result_object= $result_object;
 		}
-		if ($this->form_type == self :: TYPE_USER_INFO)
-		{
+		if ($this->form_type == self :: TYPE_USER_INFO) {
 			$this->build_user_info_form();
 		}
-		elseif ($this->form_type == self :: TYPE_SIMPLE_SEARCH)
-		{
+		elseif ($this->form_type == self :: TYPE_SIMPLE_SEARCH) {
 			$this->build_simple_search();
 		}
 		$this->setDefaults();
 	}
 	
-	protected function build_simple_search()
-	{	
-		if (isset($_GET['search']) && (!empty($_GET['search'])))
-		{
+	protected function build_simple_search() {	
+		if (isset($_GET['search']) && (!empty($_GET['search']))) {
 		   	$this->setDefaults(array(
    		    'keyword' => Security::remove_XSS($_GET['search'])
    		    ));
@@ -58,8 +74,7 @@ class UserForm extends FormValidator
 		$this->addElement('submit','submit',get_lang('Search'));
 	}
 	
-	protected function build_user_info_form()
-	{
+	protected function build_user_info_form() {
 		$this->addElement('static', 'fname', get_lang('FirstName'), $this->user_info['firstname']);
 		$this->addElement('static', 'lname', get_lang('LastName'), $this->user_info['lastname']);
 		$this->addElement('static', 'uname', get_lang('UserName'), $this->user_info['username']);
@@ -68,13 +83,10 @@ class UserForm extends FormValidator
 		$this->addElement('static', 'phone', get_lang('Phone'), $this->user_info['phone']);
 		$this->addElement('submit', null, get_lang('Back'));
 	}
-	function display()
-	{
+	function display() {
 		parent :: display();
 	}
-	function setDefaults($defaults= array ())
-	{
+	function setDefaults($defaults= array ()) {
 		parent :: setDefaults($defaults);
 	}
 }
-?>

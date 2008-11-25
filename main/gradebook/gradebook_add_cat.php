@@ -1,11 +1,10 @@
-<?php
-
-// $Id: gradebook_add_cat.php 880 2007-05-07 09:32:52Z bert $
+<?php // $Id: $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006 Dokeos S.A.
+	Copyright (c) 2008 Dokeos Latinoamerica SAC
+    Copyright (c) 2006 Dokeos SPRL
 	Copyright (c) 2006 Ghent University (UGent)
 	Copyright (c) various contributors
 
@@ -19,25 +18,34 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, 108 rue du Corbeau, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
-
 $language_file = 'gradebook';
-$cidReset = true;
-include_once ('../inc/global.inc.php');
-include_once ('lib/be.inc.php');
-include_once ('lib/gradebook_functions.inc.php');
-include_once ('lib/fe/catform.class.php');
+require_once '../inc/global.inc.php';
+$_in_course = true;
+$course_code = api_get_course_id();
+if ( empty ($course_code ) ) {
+	$_in_course = false;
+}
+
+require_once 'lib/be.inc.php';
+require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/fe/catform.class.php';
 api_block_anonymous_users();
 block_students();
 
 $catadd = new Category();
-$catadd->set_user_id($_user['user_id']);
+$my_user_id = api_get_user_id();
+$catadd->set_user_id($my_user_id);
 $catadd->set_parent_id(Database::escape_string($_GET['selectcat']));
 $catcourse = Category :: load ($_GET['selectcat']);
-$catadd->set_course_code($catcourse[0]->get_course_code());
+if ($_in_course) {
+	$catadd->set_course_code($course_code);
+} else {
+	$catadd->set_course_code($catcourse[0]->get_course_code());
+}
 $form = new CatForm(CatForm :: TYPE_ADD, $catadd, 'add_cat_form', null, api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']));
 if ($form->validate()) {
 	$values = $form->exportValues();
@@ -58,20 +66,23 @@ if ($form->validate()) {
 	$cat->set_user_id($values['hid_user_id']);
 	$cat->set_parent_id($values['hid_parent_id']);
 	$cat->set_weight($values['weight']);
-	if (empty ($values['visible']))
+	if (empty ($values['visible'])) {
 		$visible = 0;
-	else
+	} else {
 		$visible = 1;
+	}
 	$cat->set_visible($visible);
 	$cat->add();
-	header('Location: gradebook.php?addcat=&selectcat=' . $cat->get_parent_id());
+	header('Location: '.$_SESSION['gradebook_dest'].'?addcat=&selectcat=' . $cat->get_parent_id());
 	exit;
 }
+
+if ( !$_in_course ) {
 $interbreadcrumb[] = array (
-	'url' => 'gradebook.php?selectcat='.Security::remove_XSS($_GET['selectcat']),
-	'name' => get_lang('Gradebook'
-));
+	'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']),
+	'name' => get_lang('Gradebook')
+	);
+}
 Display :: display_header(get_lang('NewCategory'));
 $form->display();
 Display :: display_footer();
-?>

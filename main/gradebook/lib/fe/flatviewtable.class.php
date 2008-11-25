@@ -1,7 +1,29 @@
 <?php
+/*
+==============================================================================
+	Dokeos - elearning and course management software
 
-include_once (dirname(__FILE__).'/../../../inc/global.inc.php');
-include_once (dirname(__FILE__).'/../be.inc.php');
+	Copyright (c) 2008 Dokeos Latinoamerica SAC
+	Copyright (c) 2006 Dokeos SPRL
+	Copyright (c) 2006 Ghent University (UGent)
+	Copyright (c) various contributors
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
+*/
+require_once (dirname(__FILE__).'/../../../inc/global.inc.php');
+require_once (dirname(__FILE__).'/../be.inc.php');
 
 define ('LIMIT',10);
 
@@ -22,8 +44,7 @@ class FlatViewTable extends SortableTable
 	/**
 	 * Constructor
 	 */
-	function FlatViewTable ($selectcat, $users= array (), $evals= array (), $links= array (), $limit_enabled = false, $offset = 0, $addparams = null)
-	{
+	function FlatViewTable ($selectcat, $users= array (), $evals= array (), $links= array (), $limit_enabled = false, $offset = 0, $addparams = null) {
 		parent :: SortableTable ('flatviewlist', null, null, 0);
 
 		$this->datagen = new FlatViewDataGenerator($users, $evals, $links);
@@ -32,34 +53,33 @@ class FlatViewTable extends SortableTable
 		$this->limit_enabled = $limit_enabled;
 		$this->offset = $offset;
 		
-		if (isset ($addparams))
+		if (isset ($addparams)) {
 			$this->set_additional_parameters($addparams);
+		}
+			
 	}
 
 	/**
 	 * Function used by SortableTable to get total number of items in the table
 	 */
-	function get_total_number_of_items()
-	{
+	function get_total_number_of_items () {
 		return $this->datagen->get_total_users_count();
 	}
 
 	/** 
 	 * Function used by SortableTable to generate the data to display
 	 */
-	function get_table_data($from = 1)
-	{
+	function get_table_data ($from = 1) {
 
 		// create page navigation if needed
 
 		$totalitems = $this->datagen->get_total_items_count();
-		if ($this->limit_enabled && $totalitems > LIMIT)
+		if ($this->limit_enabled && $totalitems > LIMIT) {
 			$selectlimit = LIMIT;
-		else
+		} else {
 			$selectlimit = $totalitems;
-		
-		if ($this->limit_enabled && $totalitems > LIMIT)
-		{
+		}
+		if ($this->limit_enabled && $totalitems > LIMIT) {
 	      	$calcprevious = LIMIT;
 			$header .= '<div class="normal-message">'
 						.'<table style="width: 100%; text-align: left; margin-left: auto; margin-right: auto;" border="0" cellpadding="2">'
@@ -68,8 +88,7 @@ class FlatViewTable extends SortableTable
 
 			// previous X
 	      	$header .= '<td style="width:40%;">';
-	      	if ($this->offset >= LIMIT)
-	      	{
+	      	if ($this->offset >= LIMIT) {
 	      		$header .= '<a href="'.api_get_self()
 	      							.'?selectcat='.Security::remove_XSS($_GET['selectcat'])
 	      							.'&offset='.(($this->offset)-LIMIT)
@@ -77,20 +96,17 @@ class FlatViewTable extends SortableTable
 	      					.'<img src="../img/lp_leftarrow.gif" alt="'.get_lang('Previous').'/" />'
 	      					.get_lang('Previous').' '.$calcprevious . ' ' . get_lang('Evaluations')
 	      					.'</a>';
-	      	}
-	      	else
+	      	} else {
 	      		$header .= '<img src="../img/lp_leftarrow.gif" alt="'.get_lang('Previous').' ' . get_lang('Evaluations').'/" />'.get_lang('Previous').' ' . get_lang('Evaluations');
+	      	}	
 	      	$header .= '</td>';
-
 	      	// 'glue'
 	      	$header .= '<td style="width:20%;"></td>';
-
 			// next X
 	      	$calcnext = (($this->offset+(2*LIMIT)) > $totalitems) ?
 	      					($totalitems-(LIMIT+$this->offset)) : LIMIT;
       		$header .= '<td style="text-align: right; width: 40%;">';
-      		if ($calcnext > 0)
-      		{
+      		if ($calcnext > 0) {
 	      		$header .= '<a href="'.api_get_self()
 	      							.'?selectcat='.Security::remove_XSS($_GET['selectcat'])
 	      							.'&offset='.($this->offset+LIMIT)
@@ -98,9 +114,7 @@ class FlatViewTable extends SortableTable
 	      					.get_lang('Next').' '.$calcnext . ' '.get_lang('Evaluations')
 	      					.'<img src="../img/lp_rightarrow.gif" alt="'.get_lang('Next').'/" />'
 	      					.'</a>';
-      		}
-      		else
-      		{
+      		} else {
   				$header .= get_lang('Next').' '.get_lang('Evaluations').'<img src="../img/lp_rightarrow.gif" alt="'.get_lang('Next').'/" />';
 	          			
       		}
@@ -113,13 +127,11 @@ class FlatViewTable extends SortableTable
 		// retrieve sorting type
 		$users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_LASTNAME
 											 : FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME);
-		if ($this->direction == 'DESC')
+		if ($this->direction == 'DESC') {
 			$users_sorting |= FlatViewDataGenerator :: FVDG_SORT_DESC;
-		else
+		} else {
 			$users_sorting |= FlatViewDataGenerator :: FVDG_SORT_ASC;
-
-
-
+		}
 		// step 1: generate columns: evaluations and links
 
 		$header_names = $this->datagen->get_header_names($this->offset, $selectlimit);
@@ -128,12 +140,12 @@ class FlatViewTable extends SortableTable
 		$this->set_header($column++, $header_names[0]);
 		$this->set_header($column++, $header_names[1]);
 
-		while ($column < count($header_names))
-		{
+		while ($column < count($header_names)) {
 			$this->set_header($column, $header_names[$column], false);
 			$column++;
 		}
-
+		
+		//$this->set_header($column++, get_lang('Total'));
 
 		// step 2: generate rows: students
 		
@@ -142,14 +154,14 @@ class FlatViewTable extends SortableTable
 										 $this->offset, $selectlimit);
 
 		$table_data = array();
-		foreach ($data_array as $user_row)
-		{
+		foreach ($data_array as $user_row) {
 			$table_row = array ();
 			$count = 0;
 			$table_row[]= $this->build_name_link($user_row[$count++], $user_row[$count++]);
 			$table_row[]= $user_row[$count++];
-			while ($count < count($user_row))
-				$table_row[] = $user_row[$count++];
+			while ($count < count($user_row)) {
+				$table_row[] = $user_row[$count++];	
+			}
 			$table_data[]= $table_row;
 		}
 		return $table_data;
@@ -160,11 +172,7 @@ class FlatViewTable extends SortableTable
 
 	// Other functions
 
-	private function build_name_link ($user_id, $lastname)
-	{
+	private function build_name_link ($user_id, $lastname) {
 		return '<a href="user_stats.php?userid='.$user_id.'&selectcat='.$this->selectcat->get_id().'">'.$lastname.'</a>';
 	}
-
-	
 }
-?>

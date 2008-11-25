@@ -1,4 +1,27 @@
 <?php
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2008 Dokeos Latinoamerica SAC
+	Copyright (c) 2006 Dokeos SPRL
+	Copyright (c) 2006 Ghent University (UGent)
+	Copyright (c) various contributors
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
+*/
 /**
  * Prints an HTML page with a table containing the gradebook data
  * @param	array 	Array containing the data to be printed in the table	
@@ -6,8 +29,7 @@
  * @param	string	View to print as a title for the table
  * @param	string	Course name to print as title for the table
  */
-function print_table($data_array,$header_names,$view,$coursename)
-{
+function print_table ($data_array,$header_names,$view,$coursename) {
 	$printdata= '<!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -61,16 +83,13 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
 	$printdata .= '<h2>'.$view.' : '.$coursename.'</h2>';
 	$printdata .= '<h3>'.get_lang('Date').' : '.date('j/n/Y g:i').'</h3>';
 	$printdata .= '<table border="1" width="90%" cellspacing="1" cellpadding="1">';
-	foreach ($header_names as $header)
-	{
+	foreach ($header_names as $header) {
 		$printdata .= '<th>'.$header.'</th>';		
 		
 	}
-	foreach ($data_array as $data)
-	{
+	foreach ($data_array as $data) {
 		$printdata .= '<tr>';
-		foreach ($data as $rowdata)
-		{
+		foreach ($data as $rowdata) {
 			$printdata .= '<td>'.$rowdata.'</td>';	
 		}
 		$printdata .= '</tr>';
@@ -86,20 +105,16 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
  * @param	array		Table headers
  * @param	string		Format (portrait or landscape) 
  */
-function export_pdf($pdf,$newarray,$header_names,$format)
-{
+function export_pdf($pdf,$newarray,$header_names,$format) {
 	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 	$pdf->ezSetCmMargins(0,0,0,0);
 	$pdf->ezSetY(($format=='portrait')?'820':'570');
 	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 	$pdf->ezText(get_lang('FlatView').' ('. date('j/n/Y g:i') .')',12,array('justification'=>'center'));
-	if ($format=='portrait')
-	{
+	if ($format=='portrait') {
 		$pdf->line(40,790,540,790);
 		$pdf->line(40,40,540,40);
-	}
-	else
-	{
+	} else {
 		$pdf->line(40,540,790,540);
 		$pdf->line(40,40,790,40);		
 	}
@@ -108,4 +123,3 @@ function export_pdf($pdf,$newarray,$header_names,$format)
 	$pdf->ezStream();	
 	
 }
-?>

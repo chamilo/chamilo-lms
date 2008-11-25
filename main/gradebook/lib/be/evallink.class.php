@@ -1,8 +1,30 @@
 <?php
+/*
+==============================================================================
+	Dokeos - elearning and course management software
 
+	Copyright (c) 2008 Dokeos Latinoamerica SAC
+	Copyright (c) 2006 Dokeos SPRL
+	Copyright (c) 2006 Ghent University (UGent)
+	Copyright (c) various contributors
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
+*/
 /**
  * Class to be used as basis for links referring to Evaluation objects.
- * @author Bert Steppé
+ * @author Bert SteppÃ©
  * @package dokeos.gradebook
  */
 abstract class EvalLink extends AbstractLink
@@ -13,30 +35,23 @@ abstract class EvalLink extends AbstractLink
 	/**
 	 * Constructor
 	 */
-    function EvalLink()
-    {
+    function EvalLink() {
 
     }
-
-
 // Functions implementing AbstractLink
 
-    public function has_results()
-    {
+    public function has_results() {
     	$eval = $this->get_evaluation();
 		return $eval->has_results();
     }
     
-    public function calc_score($stud_id = null)
-    {
+    public function calc_score($stud_id = null) {
     	$eval = $this->get_evaluation();
 		return $eval->calc_score($stud_id);
     }
 
-	public function get_link()
-	{
+	public function get_link() {
     	$eval = $this->get_evaluation();
-
 		// course/platform admin can go to the view_results page
 		if (api_is_allowed_to_create_course())
 			return 'gradebook_view_result.php?selecteval=' . $eval->get_id();
@@ -47,110 +62,95 @@ abstract class EvalLink extends AbstractLink
 			return null;
 	}
 	
-
-    public function get_name()
-    {
+    public function get_name() {
     	$eval = $this->get_evaluation();
     	return $eval->get_name();
     }
     
-    public function get_description()
-    {
+    public function get_description() {
     	$eval = $this->get_evaluation();
     	return $eval->get_description();
     }
     
-    public function get_max()
-    {
+    public function get_max() {
     	$eval = $this->get_evaluation();
     	return $eval->get_max();
     }
 
-    public function is_valid_link()
-    {
+    public function is_valid_link() {
     	$eval = $this->get_evaluation();
     	return (isset($eval));
     }
-
-
-	public function needs_name_and_description()
-	{
+	public function needs_name_and_description() {
 		return true;
 	}
 	
-	public function needs_max()
-	{
+	public function needs_max() {
 		return true;
 	}
 
-	public function needs_results()
-	{
+	public function needs_results() {
 		return true;
 	}
 
 
-	public function add_linked_data()
-	{
-		if ($this->is_valid_link())
-		{
+	public function add_linked_data() {
+		if ($this->is_valid_link()) {
 			$this->evaluation->add();
 			$this->set_ref_id($this->evaluation->get_id());
 		}
 	}
 	
-	public function save_linked_data()
-	{
-		if ($this->is_valid_link())
-			$this->evaluation->save();
+	public function save_linked_data() {
+		if ($this->is_valid_link()) {
+			$this->evaluation->save();			
+		}
 	}
 	
-	public function delete_linked_data()
-	{
-		if ($this->is_valid_link())
-			$this->evaluation->delete_with_results();
+	public function delete_linked_data() {
+		if ($this->is_valid_link()) {
+			$this->evaluation->delete_with_results();			
+		}
 	}
 
 
-	public function set_name ($name)
-	{
-		if ($this->is_valid_link())
-			$this->evaluation->set_name($name);
-	}
-	
-	public function set_description ($description)
-	{
-		if ($this->is_valid_link())
-			$this->evaluation->set_description($description);
+	public function set_name ($name) {
+		if ($this->is_valid_link()) {
+			$this->evaluation->set_name($name);			
+		}
 	}
 	
-	public function set_max ($max)
-	{
-		if ($this->is_valid_link())
-			$this->evaluation->set_max($max);
+	public function set_description ($description) {
+		if ($this->is_valid_link()) {
+			$this->evaluation->set_description($description);			
+		}
 	}
-
-
+	
+	public function set_max ($max) {
+		if ($this->is_valid_link()) {
+			$this->evaluation->set_max($max);		
+		}
+	}
 // Functions overriding non-trivial implementations from AbstractLink
-
-	public function set_date ($date)
-	{
+	public function set_date ($date) {
 		$this->link_date = $date;
-		if ($this->is_valid_link())
-			$this->evaluation->set_date($date);
+		if ($this->is_valid_link()) {
+			$this->evaluation->set_date($date);			
+		}
 	}
 	
-	public function set_weight ($weight)
-	{
+	public function set_weight ($weight) {
 		$this->weight = $weight;
-		if ($this->is_valid_link())
-			$this->evaluation->set_weight($weight);
+		if ($this->is_valid_link()) {
+			$this->evaluation->set_weight($weight);			
+		}
 	}
 	
-	public function set_visible ($visible)
-	{
+	public function set_visible ($visible) {
 		$this->visible = $visible;
-		if ($this->is_valid_link())
-			$this->evaluation->set_visible($visible);
+		if ($this->is_valid_link()) {
+			$this->evaluation->set_visible($visible);			
+		}
 	}
 
 
@@ -160,17 +160,12 @@ abstract class EvalLink extends AbstractLink
 	/**
 	 * Lazy load function to get the linked evaluation
 	 */
-	protected function get_evaluation ()
-	{
-		if (!isset($this->evaluation))
-		{
-			if (isset($this->ref_id))
-			{
+	protected function get_evaluation () {
+		if (!isset($this->evaluation)) {
+			if (isset($this->ref_id)) {
 		    	$evalarray = Evaluation::load($this->get_ref_id());
 				$this->evaluation = $evalarray[0];
-			}
-			else
-			{
+			} else {
 				$eval = new Evaluation();
 				$eval->set_category_id(-1);
 				$eval->set_date(time()); // these values will be changed
@@ -186,7 +181,4 @@ abstract class EvalLink extends AbstractLink
 		}
 		return $this->evaluation;
 	}
-	
-
 }
-?>

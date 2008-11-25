@@ -1,10 +1,10 @@
-<?php
-// $Id: gradebook_add_result.php 252 2007-03-29 13:46:31Z stijn $
+<?php // $Id: $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006 Dokeos S.A.
+	Copyright (c) 2008 Dokeos Latinoamerica SAC
+	Copyright (c) 2006 Dokeos SPRL
 	Copyright (c) 2006 Ghent University (UGent)
 	Copyright (c) various contributors
 
@@ -18,18 +18,18 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
 $language_file = 'gradebook';
-$cidReset = true;
-include_once ('../inc/global.inc.php');
-include_once ('lib/be.inc.php');
-include_once ('lib/fe/displaygradebook.php');
-include_once ('lib/gradebook_functions.inc.php');
-include_once ('lib/fe/evalform.class.php');
-include_once ('lib/scoredisplay.class.php');
+//$cidReset = true;
+require_once ('../inc/global.inc.php');
+require_once ('lib/be.inc.php');
+require_once ('lib/fe/displaygradebook.php');
+require_once ('lib/gradebook_functions.inc.php');
+require_once ('lib/fe/evalform.class.php');
+require_once ('lib/scoredisplay.class.php');
 api_block_anonymous_users();
 block_students();
 
@@ -39,21 +39,23 @@ $edit_result_form = new EvalForm(EvalForm :: TYPE_ALL_RESULTS_EDIT, $evaluation[
 if ($edit_result_form->validate()) {
 	$values = $edit_result_form->exportValues();
 	$scores = ($values['score']);
-	foreach ($scores as $row){
+	foreach ($scores as $row) {
 		$resultedit = Result :: load (key($scores));
-		if ((!empty ($row)) || ($row == '0')) $resultedit[0]->set_score($row);
+		if ((!empty ($row)) || ($row == '0')) {
+			$resultedit[0]->set_score($row);
+		}
 		$resultedit[0]->save();
 		next($scores);
 	}
-	header('Location: gradebook_view_result.php?selecteval='.$_GET['selecteval'].'&editallresults=');
+	header('Location: gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'&editallresults=');
 	exit;
 }
 $interbreadcrumb[] = array (
-	'url' => 'gradebook.php',
+	'url' => $_SESSION['gradebook_dest'],
 	'name' => get_lang('Gradebook'
 ));
 $interbreadcrumb[]= array (
-	'url' => 'gradebook_view_result.php?selecteval='.$_GET['selecteval'],
+	'url' => 'gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']),
 	'name' => get_lang('ViewResult'
 ));
 Display :: display_header(get_lang('EditResult'));
@@ -62,4 +64,3 @@ echo '<div class="main">';
 echo $edit_result_form->toHtml();
 echo '</div>';
 Display :: display_footer();
-?>

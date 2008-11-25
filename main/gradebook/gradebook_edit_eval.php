@@ -1,12 +1,10 @@
-<?php
-
-
-// $Id: gradebook_edit_eval.php 880 2007-05-07 09:32:52Z bert $
+<?php // $Id: $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2006 Dokeos S.A.
+	Copyright (c) 2008 Dokeos Latinoamerica SAC
+	Copyright (c) 2006 Dokeos SPRL
 	Copyright (c) 2006 Ghent University (UGent)
 	Copyright (c) various contributors
 
@@ -20,16 +18,16 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
 $language_file = 'gradebook';
-$cidReset = true;
-include_once ('../inc/global.inc.php');
-include_once ('lib/be.inc.php');
-include_once ('lib/gradebook_functions.inc.php');
-include_once ('lib/fe/evalform.class.php');
+//$cidReset = true;
+require_once ('../inc/global.inc.php');
+require_once ('lib/be.inc.php');
+require_once ('lib/gradebook_functions.inc.php');
+require_once ('lib/fe/evalform.class.php');
 api_block_anonymous_users();
 block_students();
 
@@ -47,22 +45,20 @@ if ($form->validate()) {
 	$eval->set_weight($values['weight']);
 	$eval->set_date(strtotime($values['date']));
 	$eval->set_max($values['max']);
-	if (empty ($values['visible']))
-		$visible = 0;
-	else
-		$visible = 1;
+	if (empty ($values['visible'])) {
+		$visible = 0;	
+	} else {
+		$visible = 1;		
+	}
 	$eval->set_visible($visible);
 	$eval->save();
-	//var_dump($values);
-	//echo 'visible :' . $visible;
-	header('Location: gradebook.php?editeval=&selectcat=' . $eval->get_category_id());
+	header('Location: '.$_SESSION['gradebook_dest'].'?editeval=&selectcat=' . $eval->get_category_id());
 	exit;
 }
 $interbreadcrumb[] = array (
-	'url' => 'gradebook.php?selectcat='.$_GET['selectcat'],
+	'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']),
 	'name' => get_lang('Gradebook'
 ));
 Display :: display_header(get_lang('EditEvaluation'));
 $form->display();
 Display :: display_footer();
-?>

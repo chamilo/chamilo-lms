@@ -1,14 +1,33 @@
 <?php
+/*
+==============================================================================
+	Dokeos - elearning and course management software
 
+	Copyright (c) 2008 Dokeos Latinoamerica SAC
+	Copyright (c) 2006 Dokeos SPRL
+	Copyright (c) 2006 Ghent University (UGent)
+	Copyright (c) various contributors
 
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
+*/
 // Score display types constants
 define('SCORE_DIV',1);
 define('SCORE_PERCENT',2);
 define('SCORE_DIV_PERCENT',3);
 define('SCORE_AVERAGE',4);
-
 define('SCORE_IGNORE_SPLIT', 8);
-
 define('SCORE_BOTH',1);
 define('SCORE_ONLY_DEFAULT',2);
 define('SCORE_ONLY_CUSTOM',3);
@@ -28,11 +47,11 @@ class ScoreDisplay
 	/**
 	 * Get the instance of this class
 	 */
-	public static function instance()
-	{
+	public static function instance() {
 		static $instance;
-		if (!isset ($instance))
-			$instance = new ScoreDisplay();
+		if (!isset ($instance)) {
+			$instance = new ScoreDisplay();	
+		}
 		return $instance;
 	}
 	
@@ -44,24 +63,22 @@ class ScoreDisplay
 	 */
 	public static function compare_scores_by_custom_display ($score1, $score2)
 	{
-		if (!isset($score1))
-			return (isset($score2) ? 1 : 0);
-		elseif (!isset($score2))
-			return -1;
-		else
-		{
+		if (!isset($score1)) {
+			return (isset($score2) ? 1 : 0);			
+		} elseif (!isset($score2)) {
+			return -1;			
+		} else {
 			$scoredisplay = ScoreDisplay :: instance();
 			$custom1 = $scoredisplay->display_custom($score1);
 			$custom2 = $scoredisplay->display_custom($score2);
-			if ($custom1 == $custom2)
-				return 0;
-			else
-				return (($score1[0]/$score1[1]) < ($score2[0]/$score2[1]) ? -1 : 1);
+			if ($custom1 == $custom2) {
+				return 0;				
+			} else {
+				return (($score1[0]/$score1[1]) < ($score2[0]/$score2[1]) ? -1 : 1);				
+			}
+
 		}
 	}
-
-
-
 // As object
 
 	private $coloring_enabled;
@@ -75,23 +92,18 @@ class ScoreDisplay
 	/**
 	 * Protected constructor - call instance() to instantiate
 	 */
-    protected function ScoreDisplay()
-    {
+    protected function ScoreDisplay() {
     	$this->coloring_enabled = $this->load_bool_setting('gradebook_score_display_coloring',0);
-    	if ($this->coloring_enabled)
-    		$this->color_split_value = $this->load_int_setting('gradebook_score_display_colorsplit',50);
-    	
+    	if ($this->coloring_enabled) {
+    		$this->color_split_value = $this->load_int_setting('gradebook_score_display_colorsplit',50);    		
+    	}
     	$this->custom_enabled = $this->load_bool_setting('gradebook_score_display_custom', 0);
-    	if ($this->custom_enabled)
-    	{
+    	if ($this->custom_enabled) {
     		$this->upperlimit_included = $this->load_bool_setting('gradebook_score_display_upperlimit', 0);
     		$this->custom_display = $this->get_custom_displays();
     		$this->custom_display_conv = $this->convert_displays($this->custom_display);
     	}
     }
-
-	
-
 	/**
 	 * Is coloring enabled ?
 	 */
@@ -99,7 +111,6 @@ class ScoreDisplay
 	{
 		return $this->coloring_enabled;
 	}
-	
 	/**
 	 * Is custom score display enabled ?
 	 */
@@ -107,7 +118,6 @@ class ScoreDisplay
 	{
 		return $this->custom_enabled;
 	}
-
 	/**
 	 * Is upperlimit included ?
 	 */
@@ -115,14 +125,11 @@ class ScoreDisplay
 	{
 		return $this->upperlimit_included;
 	}
-
-
 	/**
 	 * Update the 'coloring' setting
 	 * @param boolean $coloring coloring enabled or disabled
 	 */
-	public function set_coloring_enabled ($coloring)
-	{
+	public function set_coloring_enabled ($coloring) {
 		$this->coloring_enabled = $coloring;
 		$this->save_bool_setting ('gradebook_score_display_coloring', $coloring);
 	}
@@ -131,8 +138,7 @@ class ScoreDisplay
 	 * Update the 'colorsplit' setting
 	 * @param int $colorsplit color split value, in percent
 	 */
-	public function set_color_split_value ($colorsplit)
-	{
+	public function set_color_split_value ($colorsplit) {
 		$this->color_split_value = $colorsplit;
 		$this->save_int_setting ('gradebook_score_display_colorsplit', $colorsplit);
 	}
@@ -142,8 +148,7 @@ class ScoreDisplay
 	 * Update the 'custom' setting
 	 * @param boolean $custom custom enabled or disabled
 	 */
-	public function set_custom ($custom)
-	{
+	public function set_custom ($custom) {
 		$this->custom_enabled = $custom;
 		$this->save_bool_setting ('gradebook_score_display_custom', $custom);
 	}
@@ -152,8 +157,7 @@ class ScoreDisplay
 	 * Update the 'upperlimit' setting
 	 * @param boolean $upperlimit_included true if upper limit must be included, false otherwise
 	 */
-	public function set_upperlimit_included ($upperlimit_included)
-	{
+	public function set_upperlimit_included ($upperlimit_included) {
 		$this->upperlimit_incl = $upperlimit_included;
 		$this->save_bool_setting ('gradebook_score_display_upperlimit', $upperlimit_included);
 	}
@@ -163,8 +167,7 @@ class ScoreDisplay
 	 * See also update_custom_score_display_settings
 	 * @return array current settings (or null if feature not enabled)
 	 */
-	public function get_custom_score_display_settings()
-	{
+	public function get_custom_score_display_settings() {
 		return $this->custom_display;
 	}
 
@@ -172,8 +175,7 @@ class ScoreDisplay
 	 * If coloring is enabled, scores below this value will be displayed in red.
 	 * @return int color split value, in percent (or null if feature not enabled)
 	 */
-	public function get_color_split_value()
-	{
+	public function get_color_split_value() {
 		return $this->color_split_value;
 	}
 
@@ -181,8 +183,7 @@ class ScoreDisplay
 	 * Update custom score display settings
 	 * @param array $displays 2-dimensional array - every subarray must have keys (score, display)
 	 */
-	public function update_custom_score_display_settings ($displays)
-	{
+	public function update_custom_score_display_settings ($displays) {
 		$this->custom_display = $displays;
    		$this->custom_display_conv = $this->convert_displays($this->custom_display);
 		
@@ -194,18 +195,15 @@ class ScoreDisplay
 		// add new settings
 		$sql = 'INSERT INTO '.$tbl_display.' (id, score, display) VALUES ';
 		$count = 0;
-		foreach ($displays as $display)
-		{
-			if ($count > 0)
-				$sql .= ',';
+		foreach ($displays as $display) {
+			if ($count > 0) {
+				$sql .= ',';				
+			}
 			$sql .= "(NULL, '".$display['score']."', '".$display['display']."')";
 			$count++;
 		}
-		
 		api_sql_query($sql, __FILE__, __LINE__);
 	}
-
-	
 
 	/**
 	 * Display a score according to the current settings
@@ -215,47 +213,40 @@ class ScoreDisplay
 	 * @param int $what one of the following constants: SCORE_BOTH, SCORE_ONLY_DEFAULT, SCORE_ONLY_CUSTOM (default: SCORE_BOTH)
 	 * (only taken into account if custom score display is enabled and for course/platform admin)
 	 */
-	public function display_score($score,$type,$what = SCORE_BOTH)
-	{
+	public function display_score($score,$type,$what = SCORE_BOTH) {
 		$type2 = $type & 7;	// removes the 'SCORE_IGNORE_SPLIT' bit
 		$split_enabled = ($type2 == $type);
 		
-		if (!isset($score))
-			return '';
+		if (!isset($score)) {
+			return '';			
+		} elseif ($this->custom_enabled && isset($this->custom_display_conv)) {
+				// students only see the custom display
+				if (!api_is_allowed_to_create_course()) {
+					$display = $this->display_custom($score);				
+				}
+				// course/platform admins
+				elseif ($what == SCORE_ONLY_DEFAULT) {
+					$display = $this->display_default ($score, $type2);				
+				}
+				elseif ($what == SCORE_ONLY_CUSTOM) {
+					$display = $this->display_custom ($score);				
+				} else {
+					$display = $this->display_default ($score, $type2)
+							.' ('.$this->display_custom ($score).')';				
+			}
 
-		elseif ($this->custom_enabled && isset($this->custom_display_conv))
-		{
-			// students only see the custom display
-			if (!api_is_allowed_to_create_course())
-				$display = $this->display_custom($score);
-
-			// course/platform admins
-			elseif ($what == SCORE_ONLY_DEFAULT)
-				$display = $this->display_default ($score, $type2);
-			elseif ($what == SCORE_ONLY_CUSTOM)
-				$display = $this->display_custom ($score);
-			else
-				$display = $this->display_default ($score, $type2)
-							.' ('.$this->display_custom ($score).')';
-		}
-
+		} else {
 		// if no custom display set, use default display
-		else
-			$display = $this->display_default ($score, $type2);
-
+			$display = $this->display_default ($score, $type2);		
+		}
 		return (($split_enabled ? $this->get_color_display_start_tag($score) : '')
 				. $display
 				. ($split_enabled ? $this->get_color_display_end_tag($score) : ''));
 	}
-
-
-
 // Internal functions
 
-	private function display_default ($score, $type)
-	{
-		switch ($type)
-		{
+	private function display_default ($score, $type) {
+		switch ($type) {
 			case SCORE_DIV :			// X / Y
 				return $this->display_as_div($score);
 
@@ -271,56 +262,46 @@ class ScoreDisplay
 		}
 	}
 
-	private function display_as_percent ($score)
-	{
+	private function display_as_percent ($score) {
 		return round(($score[0] / $score[1]) * 100) . ' %';
 	}
 
-	private function display_as_div ($score)
-	{
+	private function display_as_div ($score) {
 		return $score[0] . ' / ' . $score[1];
 	}
 
-	private function display_custom ($score)
-	{
+	private function display_custom ($score) {
 		$scaledscore = $score[0] / $score[1];
-		if ($this->upperlimit_included)
-		{
-			foreach ($this->custom_display_conv as $displayitem)
-			{
-				if ($scaledscore <= $displayitem['score'])
+		if ($this->upperlimit_included) {
+			foreach ($this->custom_display_conv as $displayitem) {
+				if ($scaledscore <= $displayitem['score']) {
 					return $displayitem['display'];
+				}
 			}
-		}
-		else
-		{
-			foreach ($this->custom_display_conv as $displayitem)
-			{
-				if ($scaledscore < $displayitem['score'] || $displayitem['score'] == 1)
+		} else {
+			foreach ($this->custom_display_conv as $displayitem) {
+				if ($scaledscore < $displayitem['score'] || $displayitem['score'] == 1) {
 					return $displayitem['display'];
+				}
 			}
 		}
 	}
-
-
-	private function load_bool_setting ($property, $default = 0)
-	{
+	private function load_bool_setting ($property, $default = 0) {
 		$value = $this->load_int_setting($property, $default);
 		return ($value == 'true' ? true : false);
 	}
 
-	private function load_int_setting ($property, $default = 0)
-	{
+	private function load_int_setting ($property, $default = 0) {
     	$tbl_setting = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
 		$sql = "SELECT selected_value FROM ".$tbl_setting
 				." WHERE category = 'Gradebook' AND variable = '".$property."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
-		if ($data = mysql_fetch_row($result))
+		if ($data = Database::fetch_row($result)) {
 			return $data[0];
-		else
-		{
+		}
+		else {
 			// if not present, add default setting into table...
 			$sql = "INSERT INTO ".$tbl_setting
 					." (variable, selected_value, category)"
@@ -332,13 +313,11 @@ class ScoreDisplay
 	}
 
 	
-	private function save_bool_setting ($property, $value)
-	{
+	private function save_bool_setting ($property, $value) {
 		$this->save_int_setting ($property, ($value ? 'true' : 'false') );
 	}
 
-	private function save_int_setting ($property, $value)
-	{
+	private function save_int_setting ($property, $value) {
     	$tbl_setting = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 		$sql = 'UPDATE '.$tbl_setting
 				." SET selected_value = '".$value."' "
@@ -351,8 +330,7 @@ class ScoreDisplay
 	 * Get current custom score display settings
 	 * @return array 2-dimensional array - every element contains 3 subelements (id, score, display)
 	 */
-	private function get_custom_displays()
-	{
+	private function get_custom_displays() {
     	$tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
 		$sql = 'SELECT * FROM '.$tbl_display.' ORDER BY score';
 		//echo $sql;
@@ -364,20 +342,17 @@ class ScoreDisplay
 	/**
 	 * Convert display settings to internally used values
 	 */
-	private function convert_displays($custom_display)
-	{
-		if (isset($custom_display))
-		{
+	private function convert_displays($custom_display) {
+		if (isset($custom_display)) {
 			// get highest score entry, and copy each element to a new array
 			$converted = array();
 			$highest = 0;
-			foreach ($custom_display as $element)
-			{
-				if ($element['score'] > $highest)
+			foreach ($custom_display as $element) {
+				if ($element['score'] > $highest) {
 					$highest = $element['score'];
+				}
 				$converted[] = $element;
 			}
-
 			// sort the new array (ascending)
 			usort($converted, array('ScoreDisplay', 'sort_display'));
 
@@ -385,44 +360,39 @@ class ScoreDisplay
 			// each score is scaled between 0 and 1
 			// the highest score in this array will be equal to 1
 			$converted2 = array();
-			foreach ($converted as $element)
-			{
+			foreach ($converted as $element) {
 				$newelement = array();
 				$newelement['score'] = $element['score'] / $highest;
 				$newelement['display'] = $element['display'];
 				$converted2[] = $newelement;
 			}
-			
 			return $converted2;
-		}
-		else
+		} else {
 			return null;
+		}
 	}
 
-	private function sort_display ($item1, $item2)
-	{
-		if ($item1['score'] == $item2['score'])
+	private function sort_display ($item1, $item2) {
+		if ($item1['score'] == $item2['score']) {
 			return 0;
-		else
+		} else {
 			return ($item1['score'] < $item2['score'] ? -1 : 1);
+		}	
 	}
 
-
-	private function get_color_display_start_tag($score)
-	{
-		if ($this->coloring_enabled && ($score[0]/$score[1]) < ($this->color_split_value / 100))
+	private function get_color_display_start_tag($score) {
+		if ($this->coloring_enabled && ($score[0]/$score[1]) < ($this->color_split_value / 100)) {
 			return '<font color="red">';
-		else
-			return '';
+		} else {
+			return '';	
+		}
 	}
 
-	private function get_color_display_end_tag($score)
-	{
-		if ($this->coloring_enabled && ($score[0]/$score[1]) < ($this->color_split_value / 100))
+	private function get_color_display_end_tag($score) {
+		if ($this->coloring_enabled && ($score[0]/$score[1]) < ($this->color_split_value / 100)) {
 			return '</font>';
-		else
+		} else {
 			return '';
+		}
 	}
-
 }
-?>

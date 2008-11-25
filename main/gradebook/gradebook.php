@@ -1,8 +1,9 @@
-<?php // $Id: gradebook.php 15047 2008-04-23 22:41:04Z juliomontoya $
+<?php // $Id: gradebook.php 16915 2008-11-25 20:15:42Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
+	Copyright (c) 2008 Dokeos Latinoamerica SAC
 	Copyright (c) 2006-2008 Dokeos SPRL
 	Copyright (c) 2006 Ghent University (UGent)
 	Copyright (c) various contributors
@@ -22,20 +23,25 @@
 ==============================================================================
 */
 $language_file= 'gradebook';
+// $cidReset : This is the main difference with gradebook.php, here we say,
+// basically, that we are inside a course, and many things depend from that
 $cidReset= true;
-include_once ('../inc/global.inc.php');
+$_in_course = false;
+//make sure the destination for scripts is index.php instead of gradebook.php
+require_once ('../inc/global.inc.php');
+$_SESSION['gradebook_dest'] = 'gradebook.php';
 $this_section = SECTION_MYGRADEBOOK;
-include_once ('lib/be.inc.php');
-include_once ('lib/scoredisplay.class.php');
-include_once ('lib/gradebook_functions.inc.php');
-include_once ('lib/fe/catform.class.php');
-include_once ('lib/fe/evalform.class.php');
-include_once ('lib/fe/linkform.class.php');
-include_once ('lib/gradebook_data_generator.class.php');
-include_once ('lib/fe/gradebooktable.class.php');
-include_once ('lib/fe/displaygradebook.php');
-include_once ('lib/fe/userform.class.php');
-include_once (api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php');
+require_once ('lib/be.inc.php');
+require_once ('lib/scoredisplay.class.php');
+require_once ('lib/gradebook_functions.inc.php');
+require_once ('lib/fe/catform.class.php');
+require_once ('lib/fe/evalform.class.php');
+require_once ('lib/fe/linkform.class.php');
+require_once ('lib/gradebook_data_generator.class.php');
+require_once ('lib/fe/gradebooktable.class.php');
+require_once ('lib/fe/displaygradebook.php');
+require_once ('lib/fe/userform.class.php');
+require_once (api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php');
 api_block_anonymous_users();
 
 $htmlHeadXtra[]= '<script type="text/javascript">
@@ -47,7 +53,6 @@ function confirmation ()
 		{return false;}
 }
 </script>';
-
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
 // --------------------------------------------------------------------------------
@@ -55,14 +60,11 @@ $filter_warning_msg = true;
 // --------------------------------------------------------------------------------
 
 //this is called when there is no data for the course admin
-if (isset ($_GET['createallcategories']))
-{
+if (isset ($_GET['createallcategories'])) {
 	block_students();
 	$coursecat= Category :: get_not_created_course_categories(api_get_user_id());
-	if (!count($coursecat) == 0)
-	{
-		foreach ($coursecat as $row)
-		{
+	if (!count($coursecat) == 0) {
+		foreach ($coursecat as $row) {
 			$cat= new Category();
 			$cat->set_name($row[1]);
 			$cat->set_course_code($row[0]);
@@ -75,39 +77,31 @@ if (isset ($_GET['createallcategories']))
 			unset ($cat);
 		}
 	}
-	header('Location: gradebook.php?addallcat=&selectcat=0');
+	header('Location: '.$_SESSION['gradebook_dest'].'?addallcat=&selectcat=0');
 	exit;
 }
-
 //move a category
-if (isset ($_GET['movecat']))
-{
+if (isset ($_GET['movecat'])) {
 	block_students();
 	$cats= Category :: load($_GET['movecat']);
-	if (!isset ($_GET['targetcat']))
-	{
+	if (!isset ($_GET['targetcat'])) {
 		$move_form= new CatForm(CatForm :: TYPE_MOVE,
 								$cats[0],
 								'move_cat_form',
 								null,
 								api_get_self() . '?movecat=' . Security::remove_XSS($_GET['movecat'])
 													 . '&selectcat=' . Security::remove_XSS($_GET['selectcat']));
-		if ($move_form->validate())
-		{
+		if ($move_form->validate()) {
 			header('Location: ' . api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
 													   . '&movecat=' . Security::remove_XSS($_GET['movecat'])
 													   . '&targetcat=' . $move_form->exportValue('move_cat'));
 			exit;
 		}
-	}
-
-	else
-	{
+	} else {
 		$targetcat= Category :: load($_GET['targetcat']);
 		$course_to_crsind = ($cats[0]->get_course_code() != null && $targetcat[0]->get_course_code() == null);
 
-		if (!($course_to_crsind && !isset($_GET['confirm'])))
-		{
+		if (!($course_to_crsind && !isset($_GET['confirm']))) {
 			$cats[0]->move_to_cat($targetcat[0]);
 			header('Location: ' . api_get_self() . '?categorymoved=&selectcat=' . Security::remove_XSS($_GET['selectcat']));
 			exit;
@@ -118,12 +112,10 @@ if (isset ($_GET['movecat']))
 }
 
 //move an evaluation
-if (isset ($_GET['moveeval']))
-{
+if (isset ($_GET['moveeval'])) {
 	block_students();
 	$evals= Evaluation :: load($_GET['moveeval']);
-	if (!isset ($_GET['targetcat']))
-	{
+	if (!isset ($_GET['targetcat'])) {
 
 		$move_form= new EvalForm(EvalForm :: TYPE_MOVE,
 								 $evals[0],
@@ -133,22 +125,17 @@ if (isset ($_GET['moveeval']))
 								 api_get_self() . '?moveeval=' . Security::remove_XSS($_GET['moveeval'])
 								 					  . '&selectcat=' . Security::remove_XSS($_GET['selectcat']));
 
-		if ($move_form->validate())
-		{
+		if ($move_form->validate()) {
 			header('Location: ' .api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
 													   . '&moveeval=' . Security::remove_XSS($_GET['moveeval'])
 													   . '&targetcat=' . $move_form->exportValue('move_cat'));
 			exit;
 		}
-	}
-
-	else
-	{
+	} else {
 		$targetcat= Category :: load($_GET['targetcat']);
 		$course_to_crsind = ($evals[0]->get_course_code() != null && $targetcat[0]->get_course_code() == null);
 
-		if (!($course_to_crsind && !isset($_GET['confirm'])))
-		{
+		if (!($course_to_crsind && !isset($_GET['confirm']))) {
 			$evals[0]->move_to_cat($targetcat[0]);
 			header('Location: ' . api_get_self() . '?evaluationmoved=&selectcat=' . Security::remove_XSS($_GET['selectcat']));
 			exit;
@@ -159,13 +146,11 @@ if (isset ($_GET['moveeval']))
 }
 
 //move a link
-if (isset ($_GET['movelink']))
-{
+if (isset ($_GET['movelink'])) {
 	block_students();
 	$link= LinkFactory :: load($_GET['movelink']);
 	$move_form= new LinkForm(LinkForm :: TYPE_MOVE, null, $link[0], 'move_link_form', null, api_get_self() . '?movelink=' . $_GET['movelink'] . '&selectcat=' . Security::remove_XSS($_GET['selectcat']));
-	if ($move_form->validate())
-	{
+	if ($move_form->validate()) {
 		$targetcat= Category :: load($move_form->exportValue('move_cat'));
 		$link[0]->move_to_cat($targetcat[0]);
 		unset ($link);
@@ -174,116 +159,106 @@ if (isset ($_GET['movelink']))
 	}
 }
 
-
 //parameters for categories
-if (isset ($_GET['visiblecat']))
-{
+if (isset ($_GET['visiblecat'])) {
 	block_students();
-	if (isset ($_GET['set_visible']))
-		$visibility_command= 1;
-	else
-		$visibility_command= 0;
+	if (isset ($_GET['set_visible'])) {
+		$visibility_command= 1;		
+	} else {
+		$visibility_command= 0;		
+	}
 	$cats= Category :: load($_GET['visiblecat']);
 	$cats[0]->set_visible($visibility_command);
 	$cats[0]->save();
 	$cats[0]->apply_visibility_to_children();
 	unset ($cats);
-	if ($visibility_command)
-	{
+	if ($visibility_command) {
 		$confirmation_message = get_lang('ViMod');
 		$filter_confirm_msg = false;
-	}
-	else
-	{
+	} else {
 		$confirmation_message = get_lang('InViMod');
 		$filter_confirm_msg = false;
 	}
 }
-if (isset ($_GET['deletecat']))
-{
+if (isset ($_GET['deletecat'])) {
 	block_students();
 	$cats= Category :: load($_GET['deletecat']);
 	//delete all categories,subcategories and results
-	if ($cats[0] != null)
-	{
-		if ($cats[0]->get_id() != 0) // better don't try to delete the root...
-			$cats[0]->delete_all();
+	if ($cats[0] != null) {
+		if ($cats[0]->get_id() != 0) {
+			// better don't try to delete the root...
+			$cats[0]->delete_all();		
+		} 
 	}
 	$confirmation_message = get_lang('CategoryDeleted');
 	$filter_confirm_msg = false;
 }
 //parameters for evaluations
-if (isset ($_GET['visibleeval']))
-{
+if (isset ($_GET['visibleeval'])) {
 	block_students();
-	if (isset ($_GET['set_visible']))
-		$visibility_command= 1;
-	else
-		$visibility_command= 0;
+	if (isset ($_GET['set_visible'])) {
+		$visibility_command= 1;		
+	} else {
+		$visibility_command= 0;		
+	}
+
 	$eval= Evaluation :: load($_GET['visibleeval']);
 	$eval[0]->set_visible($visibility_command);
 	$eval[0]->save();
 	unset ($eval);
-	if ($visibility_command)
-	{
+	if ($visibility_command) {
 		$confirmation_message = get_lang('ViMod');
 		$filter_confirm_msg = false;
-	}
-	else
-	{
+	} else {
 		$confirmation_message = get_lang('InViMod');
 		$filter_confirm_msg = false;
 	}
 }
-if (isset ($_GET['deleteeval']))
-{
+if (isset ($_GET['deleteeval'])) {
 	block_students();
 	$eval= Evaluation :: load($_GET['deleteeval']);
-	if ($eval[0] != null)
-		$eval[0]->delete_with_results();
-	$confirmation_message = get_lang('EvaluationDeleted');
+	if ($eval[0] != null) {
+		$eval[0]->delete_with_results();		
+	}
+	$confirmation_message = get_lang('GradebookEvaluationDeleted');
 	$filter_confirm_msg = false;
 }
 //parameters for links
-if (isset ($_GET['visiblelink']))
-{
+if (isset ($_GET['visiblelink'])) {
 	block_students();
-	if (isset ($_GET['set_visible']))
-		$visibility_command= 1;
-	else
-		$visibility_command= 0;
+	if (isset ($_GET['set_visible'])) {
+		$visibility_command= 1;		
+	}else {
+		$visibility_command= 0;		
+	}
 	$link= LinkFactory :: load($_GET['visiblelink']);
 	$link[0]->set_visible($visibility_command);
 	$link[0]->save();
 	unset ($link);
-	if ($visibility_command)
-	{
+	if ($visibility_command) {
 		$confirmation_message = get_lang('ViMod');
 		$filter_confirm_msg = false;
-	}
-	else
-	{
+	} else {
 		$confirmation_message = get_lang('InViMod');
 		$filter_confirm_msg = false;
 	}
 }
-if (isset ($_GET['deletelink']))
-{
+if (isset ($_GET['deletelink'])) {
 	block_students();
 	$link= LinkFactory :: load($_GET['deletelink']);
-	if ($link[0] != null)
-		$link[0]->delete();
+	if ($link[0] != null) {
+		$link[0]->delete();		
+	}
 	unset ($link);
 	$confirmation_message = get_lang('LinkDeleted');
 	$filter_confirm_msg = false;
 }
 
-if ($course_to_crsind && !isset($_GET['confirm']))
-{
+if ($course_to_crsind && !isset($_GET['confirm'])) {
 	block_students();
-	if (!isset($_GET['movecat']) && !isset($_GET['moveeval']))
-		die ('Error: movecat or moveeval not defined');
-
+	if (!isset($_GET['movecat']) && !isset($_GET['moveeval'])) {
+		die ('Error: movecat or moveeval not defined');		
+	}
 	$button = '<form name="confirm"
 					 method="post"
 					 action="'.api_get_self() .'?confirm='
@@ -297,47 +272,40 @@ if ($course_to_crsind && !isset($_GET['confirm']))
 	$warning_message = get_lang('MoveWarning').'<br><br>'.$button;
 	$filter_warning_msg = false;
 }
-
-
 //actions on the sortabletable
-if (isset ($_POST['action']))
-{
+if (isset ($_POST['action'])) {
 	block_students();
 	$number_of_selected_items= count($_POST['id']);
-	if ($number_of_selected_items == '0')
-	{
+	if ($number_of_selected_items == '0') {
 		$warning_message = get_lang('NoItemsSelected');
 		$filter_warning_msg = false;
 	}
-	else
-	{
-		switch ($_POST['action'])
-		{
+	else {
+		switch ($_POST['action']) {
 			case 'delete' :
 				$number_of_deleted_categories= 0;
 				$number_of_deleted_evaluations= 0;
 				$number_of_deleted_links= 0;
-				foreach ($_POST['id'] as $indexstr)
-				{
-					if (substr($indexstr, 0, 4) == 'CATE')
-					{
+				foreach ($_POST['id'] as $indexstr) {
+					if (substr($indexstr, 0, 4) == 'CATE') {
 						$cats= Category :: load(substr($indexstr, 4));
-						if ($cats[0] != null)
+						if ($cats[0] != null) {
 							$cats[0]->delete_all();
+						}
 						$number_of_deleted_categories++;
 					}
-					if (substr($indexstr, 0, 4) == 'EVAL')
-					{
+					if (substr($indexstr, 0, 4) == 'EVAL') {
 						$eval= Evaluation :: load(substr($indexstr, 4));
-						if ($eval[0] != null)
-							$eval[0]->delete_with_results();
+						if ($eval[0] != null) {
+						$eval[0]->delete_with_results();						
+						}
 						$number_of_deleted_evaluations++;
 					}
-					if (substr($indexstr, 0, 4) == 'LINK')
-					{
+					if (substr($indexstr, 0, 4) == 'LINK') {
 						$link= LinkFactory :: load(substr($indexstr, 4));
-						if ($link[0] != null)
-							$link[0]->delete();
+						if ($link[0] != null) {
+							$link[0]->delete();							
+						}
 						$number_of_deleted_links++;
 					}
 				}
@@ -400,121 +368,116 @@ if (isset ($_POST['action']))
 	}
 }
 
-if (isset ($_POST['submit']) && isset ($_POST['keyword']))
-{
+if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
 	header('Location: ' . api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
 											   . '&search='.Security::remove_XSS($_POST['keyword']));
 	exit;
 }
-
-
 // --------------------------------------------------------------------------------
 // -                       DISPLAY HEADERS AND MESSAGES                           -
 // --------------------------------------------------------------------------------
 
-if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate']))
-{
-	if (isset ($_GET['studentoverview']))
-	{
+if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
+	if (isset ($_GET['studentoverview'])) {
 		$interbreadcrumb[]= array (
-			'url' => 'gradebook.php?selectcat=' . Security::remove_XSS($_GET['selectcat']),
+			'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
 			'name' => get_lang('Gradebook')
 		);
 		Display :: display_header(get_lang('FlatView'));
 	}
-	elseif (isset ($_GET['search']))
-	{
+	elseif (isset ($_GET['search'])) {
 		$interbreadcrumb[]= array (
-			'url' => 'gradebook.php?selectcat=' . Security::remove_XSS($_GET['selectcat']),
+			'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
 			'name' => get_lang('Gradebook')
 		);
 		Display :: display_header(get_lang('SearchResults'));
-	} else
-	{
+	} else{
 		Display :: display_header(get_lang('Gradebook'));
 	}
 }
 
-if (isset ($_GET['categorymoved']))
-	Display :: display_confirmation_message(get_lang('CategoryMoved'),false);
-if (isset ($_GET['evaluationmoved']))
+if (isset ($_GET['categorymoved'])) {
+	Display :: display_confirmation_message(get_lang('CategoryMoved'),false);	
+} 
+if (isset ($_GET['evaluationmoved'])) {
 	Display :: display_confirmation_message(get_lang('EvaluationMoved'),false);
-if (isset ($_GET['linkmoved']))
-	Display :: display_confirmation_message(get_lang('LinkMoved'),false);
-if (isset ($_GET['addcat']))
-	Display :: display_confirmation_message(get_lang('CategoryAdded'),false);
-if (isset ($_GET['linkadded']))
-	Display :: display_confirmation_message(get_lang('LinkAdded'),false);
-if (isset ($_GET['addresult']))
+}
+if (isset ($_GET['linkmoved'])) {
+	Display :: display_confirmation_message(get_lang('LinkMoved'),false);	
+}
+if (isset ($_GET['addcat'])) {
+	Display :: display_confirmation_message(get_lang('CategoryAdded'),false);	
+}
+if (isset ($_GET['linkadded'])) {
+	Display :: display_confirmation_message(get_lang('LinkAdded'),false);	
+}
+if (isset ($_GET['addresult'])) {
 	Display :: display_confirmation_message(get_lang('ResultAdded'),false);
-if (isset ($_GET['editcat']))
-	Display :: display_confirmation_message(get_lang('CategoryEdited'),false);
-if (isset ($_GET['editeval']))
-	Display :: display_confirmation_message(get_lang('EvaluationEdited'),false);
-if (isset ($_GET['linkedited']))
-	Display :: display_confirmation_message(get_lang('LinkEdited'),false);
-if (isset ($_GET['nolinkitems']))
-	Display :: display_warning_message(get_lang('NoLinkItems'),false);
-if (isset ($_GET['addallcat']))
-	Display :: display_normal_message(get_lang('AddAllCat'),false);
-
-if (isset ($confirmation_message))
+}
+if (isset ($_GET['editcat'])) {
+	Display :: display_confirmation_message(get_lang('CategoryEdited'),false);	
+}
+if (isset ($_GET['editeval'])) {
+	Display :: display_confirmation_message(get_lang('EvaluationEdited'),false);	
+}
+if (isset ($_GET['linkedited'])) {
+	Display :: display_confirmation_message(get_lang('LinkEdited'),false);	
+}
+if (isset ($_GET['nolinkitems'])) {
+	Display :: display_warning_message(get_lang('NoLinkItems'),false);	
+}
+if (isset ($_GET['addallcat'])) {
+	Display :: display_normal_message(get_lang('AddAllCat'),false);	
+}
+if (isset ($confirmation_message)) {
 	Display :: display_confirmation_message($confirmation_message,$filter_confirm_msg);
-if (isset ($warning_message))
-	Display :: display_warning_message($warning_message,$filter_warning_msg);
-
-if (isset ($move_form))
-	Display :: display_normal_message($move_form->toHtml(),false);
-
-
+}
+if (isset ($warning_message)) {
+	Display :: display_warning_message($warning_message,$filter_warning_msg);	
+}
+if (isset ($move_form)) {
+	Display :: display_normal_message($move_form->toHtml(),false);	
+}
 // --------------------------------------------------------------------------------
 // -                        LOAD DATA & DISPLAY TABLE                             -
 // --------------------------------------------------------------------------------
-
-
 $is_platform_admin= api_is_platform_admin();
 $is_course_admin= api_is_allowed_to_create_course();
-
-
 //load data for category, evaluation and links
-if (!isset ($_GET['selectcat']) || empty ($_GET['selectcat']))
+if (!isset ($_GET['selectcat']) || empty ($_GET['selectcat'])) {
 	$category= 0;
-else
-	$category= $_GET['selectcat'];
-
+	} else {
+	$category= $_GET['selectcat'];		
+	}
 // search form
 $simple_search_form= new UserForm(UserForm :: TYPE_SIMPLE_SEARCH, null, 'simple_search_form', null, api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']));
 $values= $simple_search_form->exportValues();
 $keyword = '';
-if (isset($_GET['search']) && !empty($_GET['search']))
-	$keyword = Security::remove_XSS($_GET['search']);
-if ($simple_search_form->validate() && (empty($keyword)))
+if (isset($_GET['search']) && !empty($_GET['search'])) {
+	$keyword = Security::remove_XSS($_GET['search']);	
+}
+if ($simple_search_form->validate() && (empty($keyword))) {
 	$keyword = $values['keyword'];
-
-
-if (!empty($keyword))
-{
+}
+if (!empty($keyword)) {
 	$cats= Category :: load($category);
 	$allcat= array ();
 	$alleval= Evaluation :: find_evaluations($keyword, $cats[0]->get_id());
 	$alllink= LinkFactory :: find_links($keyword, $cats[0]->get_id());
-}
-elseif (isset ($_GET['studentoverview']))
-{
+} elseif (isset ($_GET['studentoverview'])) {
 	$cats= Category :: load($category);
 	$stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
 	$allcat= array ();
 	$alleval= $cats[0]->get_evaluations($stud_id, true);
 	$alllink= $cats[0]->get_links($stud_id, true);
-	if (isset ($_GET['exportpdf']))
-	{
+	if (isset ($_GET['exportpdf'])) {
 		$datagen = new GradebookDataGenerator ($allcat,$alleval, $alllink);
 		$header_names = array(get_lang('Name'),get_lang('Description'),get_lang('Weight'),get_lang('Date'),get_lang('Results'));
 		$data_array = $datagen->get_data(GradebookDataGenerator :: GDG_SORT_NAME,0,null,true);	
 		$newarray = array();
-		foreach ($data_array as $data)
-			$newarray[] = array_slice($data, 1);		
-		
+		foreach ($data_array as $data) {
+			$newarray[] = array_slice($data, 1);				
+		}
 		$pdf= new Cezpdf();
 		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 		$pdf->ezSetMargins(30, 30, 50, 30);
@@ -527,17 +490,13 @@ elseif (isset ($_GET['studentoverview']))
 		$pdf->ezStream();
 		exit;
 	}
-}
-elseif(!empty($_GET['export_certificate']))
-{
+} elseif (!empty($_GET['export_certificate'])){
 	$user_id = strval(intval($_GET['user']));
-	if(!api_is_allowed_to_edit(true,true))
-	{
+	if (!api_is_allowed_to_edit(true,true)) {
 		$user_id = api_get_user_id();
 	}
 	$category = Category :: load ($_GET['cat']);
-	if($category[0]->is_certificate_available($user_id))
-	{
+	if ($category[0]->is_certificate_available($user_id)) {
 		$user= get_user_info_from_id($user_id);
 		$scoredisplay = ScoreDisplay :: instance();
 		$scorecourse = $category[0]->calc_score($user_id);
@@ -576,38 +535,30 @@ elseif(!empty($_GET['export_certificate']))
 		$pdf->ezStream();
 	}
 	exit;	
-}
-else
-{
+} else {
 	$cats= Category :: load($category);
 	$stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
 	$allcat= $cats[0]->get_subcategories($stud_id);
 	$alleval= $cats[0]->get_evaluations($stud_id);
 	$alllink= $cats[0]->get_links($stud_id);
 }
-
 $addparams = array ('selectcat' => $cats[0]->get_id());
-if (isset($_GET['search']))
-	$addparams['search'] = $keyword;
-if (isset ($_GET['studentoverview']))
+if (isset($_GET['search'])) {
+	$addparams['search'] = $keyword;	
+}
+if (isset ($_GET['studentoverview'])) {
 	$addparams['studentoverview'] = '';
-
-
+}
 $gradebooktable= new GradebookTable($cats[0], $allcat, $alleval, $alllink, $addparams);
-if ((empty ($allcat)) && (empty ($alleval)) && (empty ($alllink)) && (!$is_platform_admin) && ($is_course_admin) && (!isset ($_GET['selectcat'])))
-{
+if ((empty ($allcat)) && (empty ($alleval)) && (empty ($alllink)) && (!$is_platform_admin) && ($is_course_admin) && (!isset ($_GET['selectcat']))) {
 	Display :: display_normal_message(get_lang('GradebookWelcomeMessage') . '<br /><br /><form name="createcat" method="post" action="' . api_get_self() . '?createallcategories=1"><input type="submit" value="' . get_lang('CreateAllCat') . '"></form>',false);
 }
 //here we are in a sub category
-if ($category != '0')
-{
+if ($category != '0') {
 	DisplayGradebook :: display_header_gradebook($cats[0], 1, $_GET['selectcat'], $is_course_admin, $is_platform_admin, $simple_search_form);
-}
-//this is the root category
-else
-{
+} else {
+	//this is the root category
 	DisplayGradebook :: display_header_gradebook($cats[0], (((count($allcat) == '0') && (!isset ($_GET['search']))) ? 0 : 1), 0, $is_course_admin, $is_platform_admin, $simple_search_form);
 }
 $gradebooktable->display();
 Display :: display_footer();
-?>

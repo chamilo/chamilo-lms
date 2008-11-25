@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 16892 2008-11-24 20:58:06Z yannoo $
+<?php // $Id: database.lib.php 16919 2008-11-25 23:31:07Z iflorespaz $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -45,7 +45,9 @@ define('TABLE_MAIN_TEMPLATES', 'templates');
 define('TABLE_MAIN_OPENID_ASSOCIATION','openid_association');
 define('TABLE_MAIN_GRADEBOOK_CATEGORY', 	'gradebook_category');
 define('TABLE_MAIN_GRADEBOOK_EVALUATION', 	'gradebook_evaluation');
+define('TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG', 	'gradebook_linkeval_log');
 define('TABLE_MAIN_GRADEBOOK_RESULT', 		'gradebook_result');
+define('TABLE_MAIN_GRADEBOOK_RESULT_LOG', 		'gradebook_result_log');
 define('TABLE_MAIN_GRADEBOOK_LINK', 		'gradebook_link');
 define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY','gradebook_score_display');
 define('TABLE_MAIN_USER_FIELD',			'user_field');

@@ -156,4 +156,5 @@ $PictureUploaded = "Uw afbeelding werd geüploaded";
 $ProductionUploaded = "Het bestand van uw productie is geüploaded.";
 $FolderUpdated = "De folder werd geüpdated.";
 $UsersRegistered = "Deze gebruikers werden ingeschreven in de cursus";
+$NoUsersRead = "Gelieve uw XML/CSV bestand te controleren";
 ?>

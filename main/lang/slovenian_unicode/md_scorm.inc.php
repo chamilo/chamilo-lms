@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$nameTools = "Scorm Manifest Metadata";
+$nameTools = "nerabljena jez. variabla";
 $langMdCallingTool = "Učna pot - Scorm";
 $langTool = "Scorm MD operacije";
 $langNotInDB = "ni vnosa v Dokeos podatkovno bazo";

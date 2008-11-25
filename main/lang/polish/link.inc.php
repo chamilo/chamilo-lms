@@ -43,4 +43,5 @@ $langAll_Link_Deleted = "Link zosta&#322; usuni&#281;ty";
 $langOnHomepage = "Poka&#380; link na stronie domowej";
 $langShowLinkOnHomepage = "Poka&#380; ten link jako ikon&#281; na domowej stronie kursu";
 $langCsvImport = "Import CSV";
+$General = "Ogólne";
 ?>

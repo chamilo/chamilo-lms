@@ -2,9 +2,9 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langScormVersion = "verzija";
-$langScormRestarted = "Vse lekcije so sedaj nedokončane.";
-$langScormNoNext = "To je zadnja lekcija.";
-$langScormNoPrev = "To je prva lekcija.";
+$langScormRestarted = "Vsi koraki so sedaj nedokončani.";
+$langScormNoNext = "To je zadnji korak.";
+$langScormNoPrev = "To je prvi korak.";
 $langScormTime = "Čas";
 $langScormNoOrder = "Zaporedje ni določeno, s klikom lahko izbereš poljubno lekcijo.";
 $langScormScore = "Rezultat";

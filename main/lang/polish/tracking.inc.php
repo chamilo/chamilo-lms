@@ -3,6 +3,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langToolName = "&#346;ledzenie";
 $TrackingDisabled = "&#346;ledzenie zosta&#322;o wy&#322;&#261;czone przez administratora systemu.";
+$InactivesStudents = "U&#380;ytkownicy nieaktywni";
+$NbActiveSessions = "Sesje aktywne";
 $langShowNone = "Ukryj";
 $langCourseStats = "Statystyka kursu";
 $langToolsAccess = "Dost&#281;p do narz&#281;dzi";
@@ -131,6 +133,10 @@ $SynthesisView = "Widok syntetyczny";
 $Visited = "Obejrzano";
 $FirstAccess = "Pierwszy dost&#281;p";
 $LastAccess = "Ostatni dost&#281;p";
+$Time = "Czas";
+$LastConnexion = "Ostatnie po&#322;&#261;czenie";
+$NoLearnpath = "Brak &#347;cie&#380;ki nauki";
+$Attempts = "Próby";
 $CourseTitle = "Nazwa kursu";
 $TeacherInterface = "Widok nauczyciela";
 $AdminInterface = "Widok administratora";

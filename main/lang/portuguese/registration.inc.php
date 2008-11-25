@@ -155,6 +155,12 @@ $PictureUploaded = "A foto foi enviada";
 $ProductionUploaded = "O ficheiro foi enviado";
 $FolderUpdated = "Pasta actualizada";
 $UsersRegistered = "Estes utilizadores foram inscritos no curso";
+$UserAlreadyRegisterByOtherCreator = "O utilizador já foi registado por outro professor";
+$UserCreatedPlatform = "Utilizador criado na plataforma";
+$UserInSession = "Utilizador acrescentado à sessão";
 $UserNotAdded = "Utilizador não acrescentado";
+$NoSessionId = "A sessão não foi identificada";
+$NoUsersRead = "Por favor verifique o seu ficheiro XML/CVS";
+$UserImportFileMessage = "Se no ficheiro XML/CVS os nomes de utilizadores estão em falta, o primeiro e o último nome serão utilizados para recriar um Nome de Utilizador; por ex.: para o nome Julio Montoya, o Nome de Utilizador será jmontoya";
 $UserAlreadyRegisteredByOtherCreator = "Utilizador já resgistado por outro professor";
 ?>

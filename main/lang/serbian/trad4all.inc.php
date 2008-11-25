@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$Title = "Naslov";
 $UsersOnline = "Online korisnici";
 $Remove = "Ukloni";
 $Description = "Opis";
@@ -18,16 +19,22 @@ $langEdit = "Izmeni";
 $langGroupForum = "Forum grupe";
 $Language = "Jezik";
 $LoginName = "Korisni&#269;ko ime";
-$Assignments = "Publikacije studenata ";
+$AutostartMp3 = "Da li želite da se audio datoteka startuje automatski?";
+$Assignments = "publikacije polaznika ";
 $Forum = "Forum ";
 $langCode = "Šifra kursa";
 $langUp = "Gore";
-$Down = "Dole";
+$Down = "dole";
 $Up = "gore";
+$Theme = "Tema";
 $TheListIsEmpty = "Lista je prazna.";
 $langCourseCreate = "Kreiraj okruženje kursa";
 $langTodo = "Treba uraditi";
 $UserName = "Korisni&#269;ko ime";
+$Hide = "Sakrij";
+$langArchive = "Arhiva";
+$langCourseCode = "Šifra kursa";
+$Reporting = "Izveštaji";
 $iso639_2_code = "en";
 $iso639_1_code = "eng";
 $charset = "iso-8859-1";

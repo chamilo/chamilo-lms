@@ -1,0 +1,12 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$TermAddNew = "Ajouter un nouveau terme";
+$TermName = "Terme";
+$TermDefinition = "Définition";
+$TermDeleted = "Terme supprimé";
+$TermUpdated = "Terme mis à jour";
+$TermConfirmDelete = "Supprimer ce terme";
+$TermAddButton = "Ajouter ce terme";
+$TermUpdateButton = "Enregistrer modification";
+?>

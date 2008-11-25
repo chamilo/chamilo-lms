@@ -128,6 +128,7 @@ $UsernameWrong = "Twoja nazwa u&#380;ytkownika mo&#380;e zawiera&#263; tylko lit
 $langphone = "Telefon";
 $Unreg = "Wypisz";
 $MyProgress = "Moje post&#281;py";
+$Select = "Wybierz";
 $On = "na";
 $ActiveAccount = "Aktywne konto";
 $YourAccountHasToBeApproved = "Twoje konto musi by&#263; zatwierdzone";

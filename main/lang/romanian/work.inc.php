@@ -28,4 +28,9 @@ $langDirCr = "Creaza directorul";
 $langCurrentDir = "Director curent";
 $UploadADocument = "Incarcati documentul";
 $EditToolOptions = "Editati optiunile pentru unelte";
+$DocumentDeleted = "Document sters";
+$SendMailBody = "Un utilizator a postat un document in instrumentul de publicare al studentilor din cursul dvs";
+$DirDelete = "Sterge directorul";
+$ValidateChanges = "Valideaza modificarile";
+$FolderUpdated = "Folder actualizat";
 ?>

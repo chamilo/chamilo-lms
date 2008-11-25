@@ -103,7 +103,14 @@ $AverageTotal = "Média total";
 $Evaluation = "Avaliação";
 $EvaluationAverage = "Média da avaliação";
 $EditCategory = "Editar categoria";
+$EditAllWeights = "Editar todas as ponderações";
 $GradebookQualificationTotal = "Total";
+$GradebookEvaluationDeleted = "A avaliação foi eliminada";
+$GradebookQualifyLog = "Historial das ponderações do livro";
+$GradebookNameLog = "Nome do livro";
+$GradebookDescriptionLog = "Descrição do livro";
+$GradebookVisibilityLog = "Visibilidade do livro";
 $ResourceType = "Tipo de recurso";
 $GradebookWhoChangedItLog = "Quem o alterou";
+$EvaluationEdited = "A avaliação foi alterada";
 ?>

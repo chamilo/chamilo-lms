@@ -10,6 +10,7 @@ $langUsed       = "u&#380;ywany";
 $langPresent   = "Ok";
 $langMissing    = "brakuj&#261;cy";
 $langExist      = "istnieje";
+$ShowNumberOfCourses = "Poka&#380; liczb&#281; kursów";
 $DisplayTeacherInCourselistTitle = "Wy&#347;wietl Nazw&#281; Wyk&#322;adowcy w tytule kursu";
 $DisplayTeacherInCourselistComment = "Wy&#347;wietl nazw&#281; wyk&#322;adowcy na li&#347;cie komentarzy kursu";
 $DisplayCourseCodeInCourselistComment = "Wy&#347;wietl kod kursu na li&#347;cie komentarzy kursu";

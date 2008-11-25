@@ -7,4 +7,6 @@ $ShowPageHistory = "Poka&#380; histori&#281; strony";
 $AllPages = "Wszystkie strony";
 $AddNew = "Dodaj now&#261; stron&#281;";
 $Legend = "Legenda";
+$Visits = "wizyty";
+$Changes = "modyfikacje";
 ?>

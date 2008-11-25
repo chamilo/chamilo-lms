@@ -193,4 +193,7 @@ $OogieBadExtension = "O ficheiro não tem uma extensão correcta";
 $WoogieBadExtension = "Por favor envie somente documentos de texto. A extensão deve ser só .doc, .docx ou .odt";
 $ShowAudioRecorder = "Mostrar gravador de áudio";
 $ViewLearningPath = "Ver Sequência de Aprendizagem";
+$SearchFeatureDoIndexDocument = "Indexar o conteúdo do documento?";
+$SearchFeatureDocumentTagsIfIndexing = "Etiquetas para acrescentar ao documento, em caso de indexação";
+$SearchFeatureDocumentLanguage = "Idioma do documento para indexação";
 ?>

@@ -1,10 +1,10 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$AgendaAdd = "Aggiungi evento in agenda";
-$ShowAll = "Mostra tutti gli eventi in agenda";
-$ShowCurrent = "Mostra gli eventi del mese corrente";
-$AddCalendarItem = "Aggiungi un evento";
+$AgendaAdd = "Aggiungi evento";
+$ShowAll = "Tutti gli eventi";
+$ShowCurrent = "Eventi del mese";
+$AddCalendarItem = "Aggiungi evento";
 $Day = "Giorno";
 $Month = "Mese";
 $Year = "Anno";
@@ -18,7 +18,7 @@ $NoAgendaItems = "Non ci sono eventi in agenda";
 $lang_september = "Settembre";
 $langClassName = "Nome della Classe";
 $lang_agenda = "Agenda";
-$ModifyCalendarItem = "Modifica un evento dell\'agenda";
+$ModifyCalendarItem = "Modifica un evento";
 $ItemTitle = "Titolo dell\'evento";
 $langDay = "giorno";
 $month_default = "Mese di default";
@@ -36,16 +36,16 @@ $langDetail = "dettagli";
 $MonthView = "Visualizza il mese";
 $WeekView = "Visualizza la settimana";
 $DayView = "Visualizza il giorno";
-$AddPersonalItem = "Aggiungi un evento all\'Agenda personale";
+$AddPersonalItem = "Aggiungi un evento personale";
 $Week = "Settimana";
 $Date = "Data";
 $Time = "Ora";
-$AddPersonalCalendarItem = "Aggiungi un evento dell\'agenda personale";
-$ModifyPersonalCalendarItem = "Modifica un evento dell\'agenda personale";
+$AddPersonalCalendarItem = "Aggiungi un evento personale";
+$ModifyPersonalCalendarItem = "Modifica un evento personale";
 $PeronalAgendaItemAdded = "L\'evento della tua agenda personale è stato aggiunto";
 $PeronalAgendaItemEdited = "L\'evento della tua agenda personale è stato modificato";
 $PeronalAgendaItemDeleted = "L\'evento della tua agenda personale è stato eliminato";
-$ViewPersonalItem = "Visualizza l\'agenda personale";
+$ViewPersonalItem = "Eventi personali";
 $UserGroupFilter = "Filtra sulla base dei gruppi/utenti";
 $ShowAll = "Mostra tutto";
 $Print = "Stampa";

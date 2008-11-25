@@ -27,4 +27,5 @@ $langGroupUserManagement = "Zarz&#261;dzanie grupowe";
 $langUserInfo = "dane u&#380;ytkownika";
 $langUnregister = "Wyrejestruj";
 $langAddAUser = "Dodaj u&#380;ytkowników";
+$UsersUnsubscribed = "Wybrany u&#380;ytkownik zosta&#322; wypisany z kursu";
 ?>

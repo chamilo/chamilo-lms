@@ -68,4 +68,13 @@ $ShowLinksPages = "Geef de paginas weer die naar deze pagina linken";
 $MoreWikiOptions = "Meer wiki opties";
 $DefaultTitle = "Start";
 $DiscussNotAvailable = "De discussie optie is niet beschikbaar";
+$Print = "Afdrukken";
+$Version = "Versie";
+$EditPage = "Pas aan";
+$AddedBy = "toegevoegd door";
+$EditedBy = "aangepast door";
+$DeletedBy = "gewist door";
+$WikiStandardMode = "Wiki mode";
+$HidePage = "Verberg pagina";
+$ShowPage = "Toon pagina";
 ?>

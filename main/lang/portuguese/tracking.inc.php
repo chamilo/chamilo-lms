@@ -217,5 +217,13 @@ $FirstLogin = "Primeira ligação";
 $AccessDetails = "Detalhes de acesso";
 $DateAndTimeOfAccess = "Data e tempo dos acessos";
 $Duration = "Duração";
+$WrongDatasForTimeSpentOnThePlatform = "Os dados sobre este utilizador foram registados quando o cálculo do tempo despendido na Plataforma Dokeos ainda não era possível.";
+$DisplayCoaches = "Sumário de professores";
 $DisplayUserOverview = "Sumário do utilizador";
+$ExportUserOverviewOptions = "Opções de exportação do resumo do utilizador";
+$FollowingFieldsWillAlsoBeExported = "Os seguintes campos também serão exportados";
+$TotalExercisesScoreObtained = "Pontuação total do exercício";
+$TotalExercisesScorePossible = "Máxima pontuação total possível";
+$TotalExercisesAnswered = "Número de exercícios respondidos";
+$TotalExercisesScorePercentage = "Percentagem total da pontuação dos exercícios";
 ?>

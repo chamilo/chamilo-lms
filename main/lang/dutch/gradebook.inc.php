@@ -102,4 +102,5 @@ $TotalUser = "Totaal van de gebruiker.";
 $AverageTotal = "Totaal gemiddelde";
 $Evaluation = "Evaluatie";
 $EvaluationAverage = "Gemiddelde van de evaluatie.";
+$GradebookQualificationTotal = "Totaal";
 ?>

@@ -29,7 +29,7 @@ $Opinio = "Opinia";
 $Intranet = "Intranet";
 $langInvalidForSelfRegistration = "Niepoprawna nazwa u&#380;ytkownika - je&#347;li nie jeste&#347; zarejestrowany(-a), zrób to za pomoc&#261;  <a href=claroline/auth/inscription.php>formularza rejestracyjnego</a>";
 $langSubCat = "podkategoriach";
-$langMenuGeneral = "Ogólna";
+$langMenuGeneral = "Ogólne";
 $langMenuUser = "U&#380;ytkownik";
 $langMenuAdmin = "Platforma Administratora";
 $langUsersOnLineList = "Lista u&#380;ytkowników online";
@@ -56,4 +56,5 @@ $langOpenarea = "Otwarte pole osobiste";
 $langProductions = "Produkcje";
 $langSendChatRequest = "Wy&#347;lij tej osobie zaproszenie do czatu";
 $langRequestDenied = "Odmowa realizacji tego po&#322;&#261;czenia";
+$CourseView = "Wy&#347;wietl pe&#322;n&#261; list&#281; kursów";
 ?>

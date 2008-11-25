@@ -239,4 +239,5 @@ $ExportWithoutUserFields = "Neem de velden van de gebruikers niet mee in de expo
 $DisableResults = "Resultaten niet weergeven aan de cursisten";
 $EnableResults = "Resultaten weergeven aan de cursisten";
 $ValidateAnswer = "Antwoorden valideren";
+$ExerciseAttempts = "Max aantal pogingen";
 ?>

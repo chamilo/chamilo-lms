@@ -50,4 +50,5 @@ $NoAnnouncements = "Er zijn geen aankondigingen.";
 $SelectEverybody = "Selecteer iedereen";
 $SelectedUsersGroups = "Gebruikers van de geselecteerde groepen";
 $LearnerMessage = "Bericht van een student";
+$TitleIsRequired = "Titel is verplicht";
 ?>

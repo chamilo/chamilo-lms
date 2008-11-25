@@ -179,4 +179,6 @@ $IllegalSurveyId = "Número de questionário desconhecido";
 $SurveyQuestionMoved = "A questão foi movida";
 $IdenticalSurveycodeWarning = "O código do questionário já existe. Isso pode significar que o questionário existe noutro idioma. As pessoas convidadas a responder ao questionário poderão escolher entre diferentes idiomas.";
 $ThisSurveyCodeSoonExistsInThisLanguage = "O código do questionário já existe neste idioma";
+$SurveyUserAnswersHaveBeenRemovedSuccessfully = "As respostas do utilizador foram removidas do questionário";
+$DeleteSurveyByUser = "Eliminar as respostas deste utilizador neste questionário";
 ?>

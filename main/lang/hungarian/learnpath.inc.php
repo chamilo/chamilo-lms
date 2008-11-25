@@ -193,4 +193,5 @@ $OogieBadExtension = "Kérjük, hogy csak prezentációkat töltsön fel. Az állomány 
 $WoogieBadExtension = "Kérjük, hogy csak szöveges dokumentumokat töltsön fel. Az állomány neve .doc-ra, .docx-re, vagy .odt-re kell hogy végz&#337;djön.";
 $ShowAudioRecorder = "Hangrögzít&#337; megjelenítése";
 $SearchFeatureNotEnabledComment = "A full-text keresés nincs engedélyezve a rendszeren. Lépjen kapcsolatba a rendszergazdával, ha szeretné használni ezt a lehet&#337;séget.";
+$ViewLearningPath = "Tanösvény megtekintése";
 ?>

@@ -138,12 +138,10 @@ else {
 
 $nosession=false;
 
-if(api_get_setting('use_session_mode')=='true' && !$nosession)
-{
+if(api_get_setting('use_session_mode')=='true' && !$nosession) {
 	if (isset($_GET['inactives'])){
 		$display_actives = false;
-	}
-	else {
+	} else {
 		$display_actives = true;
 	}
 }
@@ -156,10 +154,9 @@ $this_section = SECTION_COURSES;
 	Check configuration parameters integrity
 -----------------------------------------------------------
 */
-if (CONFVAL_showExtractInfo != SCRIPTVAL_UnderCourseList and $orderKey[0] != "keyCourse")
-{
+if (CONFVAL_showExtractInfo != SCRIPTVAL_UnderCourseList and $orderKey[0] != "keyCourse") {
 	// CONFVAL_showExtractInfo must be SCRIPTVAL_UnderCourseList to accept $orderKey[0] !="keyCourse"
-	if (DEBUG || api_is_platform_admin()) // Show bug if admin. Else force a new order
+	if (DEBUG || api_is_platform_admin()){ // Show bug if admin. Else force a new order
 		die('
 					<strong>config error:'.__FILE__.'</strong><br />
 					set
@@ -176,8 +173,7 @@ if (CONFVAL_showExtractInfo != SCRIPTVAL_UnderCourseList and $orderKey[0] != "ke
 							(actually : '.$orderKey[0].')
 						</li>
 					</ul>');
-	else
-	{
+	}else {
 		$orderKey = array ('keyCourse', 'keyTools', 'keyTime');
 	}
 }
@@ -218,8 +214,7 @@ Display :: display_header($nameTools);
 * @param $user_id, the id of the user
 * @return an array with courses
 */
-function get_personal_course_list($user_id)
-{
+function get_personal_course_list($user_id) {
 	// initialisation
 	$personal_course_list = array();
 
@@ -244,8 +239,7 @@ function get_personal_course_list($user_id)
 	
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 
-	while ($result_row = mysql_fetch_array($course_list_sql_result))
-	{
+	while ($result_row = Database::fetch_array($course_list_sql_result)) {
 		$personal_course_list[] = $result_row;
 	}
 
@@ -257,8 +251,7 @@ function get_personal_course_list($user_id)
 
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 
-	while ($result_row = mysql_fetch_array($course_list_sql_result))
-	{
+	while ($result_row = Database::fetch_array($course_list_sql_result)) {
 		$personal_course_list[] = $result_row;
 	}
 
@@ -272,8 +265,7 @@ function get_personal_course_list($user_id)
 
 	//$personal_course_list = array_merge($personal_course_list, $course_list_sql_result);
 
-	while ($result_row = mysql_fetch_array($course_list_sql_result))
-	{
+	while ($result_row = Database::fetch_array($course_list_sql_result)) {
 		$personal_course_list[] = $result_row;
 	}
 	return $personal_course_list;
@@ -290,8 +282,7 @@ function get_personal_course_list($user_id)
  * Warning: this function defines a global.
  * @todo use the correct get_path function
  */
-function display_admin_links()
-{
+function display_admin_links() {
 	global $rootAdminWeb;
 	echo "<li><a href=\"".$rootAdminWeb."\">".get_lang('PlatformAdmin')."</a></li>";
 }
@@ -299,16 +290,14 @@ function display_admin_links()
  * Enter description here...
  *
  */
-function display_create_course_link()
-{
+function display_create_course_link() {
 	echo "<li><a href=\"main/create_course/add_course.php\">".get_lang('CourseCreate')."</a></li>";
 }
 /**
  * Enter description here...
  *
  */
-function display_edit_course_list_links()
-{
+function display_edit_course_list_links() {
 	echo "<li><a href=\"main/auth/courses.php\">".get_lang('CourseManagement')."</a></li>";
 }
 
@@ -320,53 +309,38 @@ function display_edit_course_list_links()
 *
 *	@version 1.0
 */
-function display_digest($toolsList, $digest, $orderKey, $courses)
-{
-	if (is_array($digest) && (CONFVAL_showExtractInfo == SCRIPTVAL_UnderCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both))
-	{
+function display_digest($toolsList, $digest, $orderKey, $courses) {
+	if (is_array($digest) && (CONFVAL_showExtractInfo == SCRIPTVAL_UnderCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both)) {
 		// // // LEVEL 1 // // //
 		reset($digest);
 		echo "<br /><br />\n";
-		while (list ($key1) = each($digest))
-		{
-			if (is_array($digest[$key1]))
-			{
+		while (list ($key1) = each($digest)) {
+			if (is_array($digest[$key1])) {
 				// // // Title of LEVEL 1 // // //
 				echo "<b>\n";
-				if ($orderKey[0] == 'keyTools')
-				{
+				if ($orderKey[0] == 'keyTools') {
 					$tools = $key1;
 					echo $toolsList[$key1]['name'];
-				}
-				elseif ($orderKey[0] == 'keyCourse')
-				{
+				} elseif ($orderKey[0] == 'keyCourse') {
 					$courseSysCode = $key1;
 					echo "<a href=\"", api_get_path(WEB_COURSE_PATH), $courses[$key1]['coursePath'], "\">", $courses[$key1]['courseCode'], "</a>\n";
-				}
-				elseif ($orderKey[0] == 'keyTime')
-				{
+				} elseif ($orderKey[0] == 'keyTime') {
 					echo format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($digest[$key1]));
 				}
 				echo "</b>\n";
 				// // // End Of Title of LEVEL 1 // // //
 				// // // LEVEL 2 // // //
 				reset($digest[$key1]);
-				while (list ($key2) = each($digest[$key1]))
-				{
+				while (list ($key2) = each($digest[$key1])) {
 					// // // Title of LEVEL 2 // // //
 					echo "<p>\n", "\n";
-					if ($orderKey[1] == 'keyTools')
-					{
+					if ($orderKey[1] == 'keyTools') {
 						$tools = $key2;
 						echo $toolsList[$key2][name];
-					}
-					elseif ($orderKey[1] == 'keyCourse')
-					{
+					} elseif ($orderKey[1] == 'keyCourse') {
 						$courseSysCode = $key2;
 						echo "<a href=\"", api_get_path(WEB_COURSE_PATH), $courses[$key2]['coursePath'], "\">", $courses[$key2]['courseCode'], "</a>\n";
-					}
-					elseif ($orderKey[1] == 'keyTime')
-					{
+					} elseif ($orderKey[1] == 'keyTime') {
 						echo format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($key2));
 					}
 					echo "\n";
@@ -374,30 +348,22 @@ function display_digest($toolsList, $digest, $orderKey, $courses)
 					// // // End Of Title of LEVEL 2 // // //
 					// // // LEVEL 3 // // //
 					reset($digest[$key1][$key2]);
-					while (list ($key3, $dataFromCourse) = each($digest[$key1][$key2]))
-					{
+					while (list ($key3, $dataFromCourse) = each($digest[$key1][$key2])) {
 						// // // Title of LEVEL 3 // // //
-						if ($orderKey[2] == 'keyTools')
-						{
+						if ($orderKey[2] == 'keyTools') {
 							$level3title = "<a href=\"".$toolsList[$key3]["path"].$courseSysCode."\">".$toolsList[$key3]['name']."</a>";
-						}
-						elseif ($orderKey[2] == 'keyCourse')
-						{
+						} elseif ($orderKey[2] == 'keyCourse') {
 							$level3title = "&#8226; <a href=\"".$toolsList[$tools]["path"].$key3."\">".$courses[$key3]['courseCode']."</a>\n";
-						}
-						elseif ($orderKey[2] == 'keyTime')
-						{
+						} elseif ($orderKey[2] == 'keyTime') {
 							$level3title = "&#8226; <a href=\"".$toolsList[$tools]["path"].$courseSysCode."\">".format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($key3))."</a>";
 						}
 						// // // End Of Title of LEVEL 3 // // //
 						// // // LEVEL 4 (data) // // //
 						reset($digest[$key1][$key2][$key3]);
-						while (list ($key4, $dataFromCourse) = each($digest[$key1][$key2][$key3]))
-						{
+						while (list ($key4, $dataFromCourse) = each($digest[$key1][$key2][$key3])) {
 							echo $level3title, ' &ndash; ', substr(strip_tags($dataFromCourse), 0, CONFVAL_NB_CHAR_FROM_CONTENT);
 							//adding ... (three dots) if the texts are too large and they are shortened
-							if (strlen($dataFromCourse) >= CONFVAL_NB_CHAR_FROM_CONTENT)
-							{
+							if (strlen($dataFromCourse) >= CONFVAL_NB_CHAR_FROM_CONTENT) {
 								echo '...';
 							}
 						}
@@ -425,12 +391,10 @@ function display_digest($toolsList, $digest, $orderKey, $courses)
  * @todo move code for what's new icons to a separate function to clear things up
  * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
  */
-function get_logged_user_course_html($my_course)
-{
+function get_logged_user_course_html($my_course) {
 	global $nosession;
 
-	if(api_get_setting('use_session_mode')=='true' && !$nosession)
-	{
+	if (api_get_setting('use_session_mode')=='true' && !$nosession) {
 		global $now, $date_start, $date_end;
 	}
 
@@ -462,27 +426,22 @@ function get_logged_user_course_html($my_course)
 	
 	//function logic - act on the data
 	$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($my_course['k']);
-	if ($is_virtual_course)
-	{
+	if ($is_virtual_course) {
 		// If the current user is also subscribed in the real course to which this
 		// virtual course is linked, we don't need to display the virtual course entry in
 		// the course list - it is combined with the real course entry.
 		$target_course_code = CourseManager :: get_target_of_linked_course($course_system_code);
 		$is_subscribed_in_target_course = CourseManager :: is_user_subscribed_in_course(api_get_user_id(), $target_course_code);
-		if ($is_subscribed_in_target_course)
-		{
+		if ($is_subscribed_in_target_course) {
 			return; //do not display this course entry
 		}
 	}
 	$has_virtual_courses = CourseManager :: has_virtual_courses_from_code($course_system_code, api_get_user_id());
-	if ($has_virtual_courses)
-	{
+	if ($has_virtual_courses) {
 		$return_result = CourseManager :: determine_course_title_from_course_info(api_get_user_id(), $course_info);
 		$course_display_title = $return_result['title'];
 		$course_display_code = $return_result['code'];
-	}
-	else
-	{
+	} else {
 		$course_display_title = $course_title;
 		$course_display_code = $course_visual_code;
 	}
@@ -491,16 +450,13 @@ function get_logged_user_course_html($my_course)
 
 	$s_htlm_status_icon="";
 
-	if($s_course_status==1)
-	{
+	if ($s_course_status==1) {
 		$s_htlm_status_icon=Display::return_icon('teachers.gif', get_lang('Teacher'));
 	}
-	if($s_course_status==2)
-	{
+	if ($s_course_status==2) {
 		$s_htlm_status_icon=Display::return_icon('coachs.gif', get_lang('GeneralCoach'));
 	}
-	if($s_course_status==5)
-	{
+	if ($s_course_status==5) {
 		$s_htlm_status_icon=Display::return_icon('students.gif', get_lang('Student'));
 	}
 
@@ -508,46 +464,33 @@ function get_logged_user_course_html($my_course)
 	$result.="\n\t";
 	$result .= '<li class="courses"><div class="coursestatusicons">'.$s_htlm_status_icon.'</div>';
 	//show a hyperlink to the course, unless the course is closed and user is not course admin
-	if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER)
-	{
-		if(api_get_setting('use_session_mode')=='true' && !$nosession)
-		{
-			if(empty($my_course['id_session']))
-			{
+	if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
+		if(api_get_setting('use_session_mode')=='true' && !$nosession) {
+			if(empty($my_course['id_session'])) {
 				$my_course['id_session'] = 0;
 			}
-			if($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start=='0000-00-00')
-			{
+			if($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start=='0000-00-00') {
 				$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'].'">'.$course_display_title.'</a>';
 			}
-		}
-		else
-		{
+		} else {
 			$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/">'.$course_display_title.'</a>';
 		}
-	}
-	else
-	{
+	} else {
 		$result .= $course_display_title." "." ".get_lang('CourseClosed')."";
 	}
 	// show the course_code and teacher if chosen to display this
-	if (get_setting('display_coursecode_in_courselist') == 'true' OR get_setting('display_teacher_in_courselist') == 'true')
-	{
+	if (get_setting('display_coursecode_in_courselist') == 'true' OR get_setting('display_teacher_in_courselist') == 'true') {
 		$result .= '<br />';
 	}
-	if (get_setting('display_coursecode_in_courselist') == 'true')
-	{
+	if (get_setting('display_coursecode_in_courselist') == 'true') {
 		$result .= $course_display_code;
 	}
-	if (get_setting('display_coursecode_in_courselist') == 'true' AND get_setting('display_teacher_in_courselist') == 'true')
-	{
+	if (get_setting('display_coursecode_in_courselist') == 'true' AND get_setting('display_teacher_in_courselist') == 'true') {
 		$result .= ' &ndash; ';
 	}
-	if (get_setting('display_teacher_in_courselist') == 'true')
-	{
+	if (get_setting('display_teacher_in_courselist') == 'true') {
 		$result .= $course_teacher;
-		if(!empty($course_teacher_email))
-		{
+		if(!empty($course_teacher_email)) {
 			$result .= ' ('.$course_teacher_email.')';
 		}
 	}
@@ -558,42 +501,32 @@ function get_logged_user_course_html($my_course)
 	// display the what's new icons
 	$result .= show_notification($my_course);
 
-	if ((CONFVAL_showExtractInfo == SCRIPTVAL_InCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both) && $nbDigestEntries > 0)
-	{
+	if ((CONFVAL_showExtractInfo == SCRIPTVAL_InCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both) && $nbDigestEntries > 0) {
 		reset($digest);
 		$result .= '
 					<ul>';
-		while (list ($key2) = each($digest[$thisCourseSysCode]))
-		{
+		while (list ($key2) = each($digest[$thisCourseSysCode])) {
 			$result .= '<li>';
-			if ($orderKey[1] == 'keyTools')
-			{
+			if ($orderKey[1] == 'keyTools') {
 				$result .= "<a href=\"$toolsList[$key2] [\"path\"] $thisCourseSysCode \">";
 				$result .= "$toolsList[$key2][\"name\"]</a>";
-			}
-			else
-			{
+			} else {
 				$result .= format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($key2));
 			}
 			$result .= '</li>';
 			$result .= '<ul>';
 			reset($digest[$thisCourseSysCode][$key2]);
-			while (list ($key3, $dataFromCourse) = each($digest[$thisCourseSysCode][$key2]))
-			{
+			while (list ($key3, $dataFromCourse) = each($digest[$thisCourseSysCode][$key2])) {
 				$result .= '<li>';
-				if ($orderKey[2] == 'keyTools')
-				{
+				if ($orderKey[2] == 'keyTools') {
 					$result .= "<a href=\"$toolsList[$key3] [\"path\"] $thisCourseSysCode \">";
 					$result .= "$toolsList[$key3][\"name\"]</a>";
-				}
-				else
-				{
+				} else {
 					$result .= format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($key3));
 				}
 				$result .= '<ul compact="compact">';
 				reset($digest[$thisCourseSysCode][$key2][$key3]);
-				while (list ($key4, $dataFromCourse) = each($digest[$thisCourseSysCode][$key2][$key3]))
-				{
+				while (list ($key4, $dataFromCourse) = each($digest[$thisCourseSysCode][$key2][$key3])) {
 					$result .= '<li>';
 					$result .= htmlspecialchars(substr(strip_tags($dataFromCourse), 0, CONFVAL_NB_CHAR_FROM_CONTENT));
 					$result .= '</li>';
@@ -609,12 +542,10 @@ function get_logged_user_course_html($my_course)
 	$result .= '</li>';
 
 
-	if(api_get_setting('use_session_mode')=='true' && !$nosession)
-	{
+	if (api_get_setting('use_session_mode')=='true' && !$nosession) {
 		$session = '';
 		$active = false;
-		if(!empty($my_course['session_name']))
-		{
+		if (!empty($my_course['session_name'])) {
 			
 			// Request for the name of the general coach
 			$sql = 'SELECT lastname, firstname
@@ -644,9 +575,7 @@ function get_logged_user_course_html($my_course)
 			}
 		}
 		$output = array ($my_course['user_course_cat'], $result, $my_course['id_session'], $session, 'active'=>$active);
-	}
-	else
-	{
+	} else {
 		$output = array ($my_course['user_course_cat'], $result);
 	}
 	return $output;
@@ -658,8 +587,7 @@ function get_logged_user_course_html($my_course)
  * @return	string	The HTML link to be shown next to the course
  * @version
  */
-function show_notification($my_course)
-{
+function show_notification($my_course) {
 	$statistic_database = Database :: get_statistic_database();
 	$user_id = api_get_user_id();
 	$course_database = $my_course['db'];
@@ -674,8 +602,7 @@ function show_notification($my_course)
 									 AND access_user_id = '$user_id'";
 	$resLastTrackInCourse = api_sql_query($sqlLastTrackInCourse, __FILE__, __LINE__);
 	$oldestTrackDate = "3000-01-01 00:00:00";
-	while ($lastTrackInCourse = mysql_fetch_array($resLastTrackInCourse))
-	{
+	while ($lastTrackInCourse = Database::fetch_array($resLastTrackInCourse)) {
 		$lastTrackInCourseDate[$lastTrackInCourse['access_tool']] = $lastTrackInCourse['access_date'];
 		if ($oldestTrackDate > $lastTrackInCourse['access_date'])
 			$oldestTrackDate = $lastTrackInCourse['access_date'];
@@ -696,19 +623,15 @@ function show_notification($my_course)
 	$group_ids = GroupManager :: get_group_ids($course_database, $user_id);
 	$groups_ids[] = 0; //add group 'everyone'
 	//filter all selected items
-	while ($res && ($item_property = mysql_fetch_array($res)))
-	{
-		if ((!isset ($lastTrackInCourseDate[$item_property['tool']]) || $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date']) && (in_array($item_property['to_group_id'], $groups_ids) || $item_property['to_user_id'] == $user_id) && ($item_property['visibility'] == '1' || ($my_course['s'] == '1' && $item_property['visibility'] == '0') || !isset ($item_property['visibility'])))
-		{
+	while ($res && ($item_property = Database::fetch_array($res))) {
+		if ((!isset ($lastTrackInCourseDate[$item_property['tool']]) || $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date']) && (in_array($item_property['to_group_id'], $groups_ids) || $item_property['to_user_id'] == $user_id) && ($item_property['visibility'] == '1' || ($my_course['s'] == '1' && $item_property['visibility'] == '0') || !isset ($item_property['visibility']))) {
 			$notifications[$item_property['tool']] = $item_property;
 		}
 	}
 	//show all tool icons where there is something new
 	$retvalue = '&nbsp;';
-	if (isset ($notifications))
-	{
-		while (list ($key, $notification) = each($notifications))
-		{
+	if (isset ($notifications)) {
+		while (list ($key, $notification) = each($notifications)) {
 			$lastDate = date('d/m/Y H:i', convert_mysql_date($notification['lastedit_date']));
 			$type = $notification['lastedit_type'];
 			//$notification[image]=str_replace(".png","gif",$notification[image]);
@@ -724,16 +647,14 @@ function show_notification($my_course)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @return array containing all the titles of the user defined courses with the id as key of the array
 */
-function get_user_course_categories()
-{
+function get_user_course_categories() {
 	global $_user;
 
 	$output = array();
 	$table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 	$sql = "SELECT * FROM ".$table_category." WHERE user_id='".$_user['user_id']."'";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
-	while ($row = mysql_fetch_array($result))
-	{
+	while ($row = Database::fetch_array($result)) {
 		$output[$row['id']] = $row['title'];
 	}
 	return $output;
@@ -749,23 +670,19 @@ function get_user_course_categories()
 		PERSONAL COURSE LIST
 ==============================================================================
 */
-if (!isset ($maxValvas))
-{
+if (!isset ($maxValvas)) {
 	$maxValvas = CONFVAL_maxValvasByCourse; // Maximum number of entries
 }
-if (!isset ($maxAgenda))
-{
+if (!isset ($maxAgenda)) {
 	$maxAgenda = CONFVAL_maxAgendaByCourse; //  collected from each course
 }
-if (!isset ($maxCourse))
-{
+if (!isset ($maxCourse)) {
 	$maxCourse = CONFVAL_maxTotalByCourse; //  and displayed in summary.
 }
 $maxValvas = (int) $maxValvas;
 $maxAgenda = (int) $maxAgenda;
 $maxCourse = (int) $maxCourse; // 0 if invalid
-if ($maxCourse > 0)
-{
+if ($maxCourse > 0) {
 	unset ($allentries); // we shall collect all summary$key1 entries in here:
 	$toolsList['agenda']['name'] = get_lang('Agenda');
 	$toolsList['agenda']['path'] = api_get_path(WEB_CODE_PATH)."calendar/agenda.php?cidReq=";
@@ -773,12 +690,9 @@ if ($maxCourse > 0)
 	$toolsList['valvas']['path'] = api_get_path(WEB_CODE_PATH)."announcements/announcements.php?cidReq=";
 }
 
-
 echo '	<div class="maincontent" id="maincontent">'; // start of content for logged in users
-
 // Plugins for the my courses main area
 api_plugin('mycourses_main');
-
 /*
 -----------------------------------------------------------------------------
 	System Announcements
@@ -788,13 +702,10 @@ $announcement = isset($_GET['announcement']) ? $_GET['announcement'] : -1;
 $visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
 SystemAnnouncementManager :: display_announcements($visibility, $announcement);
 
-if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['include']))
-{
+if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['include'])) {
 	include ('./home/'.$_GET['include']);
 	$pageIncluded = true;
-}
-else
-{
+} else {
 	/*--------------------------------------
 	              DISPLAY COURSES
 	   --------------------------------------*/
@@ -803,8 +714,7 @@ else
 
 	$personal_course_list = UserManager::get_personal_session_course_list($_user['user_id']);
 
-	foreach ($personal_course_list as $my_course)
-	{
+	foreach ($personal_course_list as $my_course) {
 		$thisCourseDbName = $my_course['db'];
 		$thisCourseSysCode = $my_course['k'];
 		$thisCoursePublicCode = $my_course['c'];
@@ -814,10 +724,10 @@ else
 		$status[$dbname] = $my_course['s'];
 
 		$nbDigestEntries = 0; // number of entries already collected
-		if ($maxCourse < $maxValvas)
+		if ($maxCourse < $maxValvas) {
 			$maxValvas = $maxCourse;
-		if ($maxCourse > 0)
-		{
+		}
+		if ($maxCourse > 0) {
 			$courses[$thisCourseSysCode]['coursePath'] = $thisCoursePath;
 			$courses[$thisCourseSysCode]['courseCode'] = $thisCoursePublicCode;
 		}
@@ -831,15 +741,13 @@ else
 		$query = "SELECT visibility FROM $course_tool_table WHERE link = 'announcements/announcements.php' AND visibility = 1";
 		$result = api_sql_query($query);
 		// collect from announcements, but only if tool is visible for the course
-		if ($result && $maxValvas > 0 && mysql_num_rows($result) > 0)
-		{
+		if ($result && $maxValvas > 0 && Database::num_rows($result) > 0) {
 			//Search announcements table
 			//Take the entries listed at the top of advalvas/announcements tool
 			$course_announcement_table = Database::get_course_table(TABLE_ANNOUNCEMENT);
 			$sqlGetLastAnnouncements = "SELECT end_date publicationDate, content
 									                            FROM ".$course_announcement_table;
-			switch (CONFVAL_limitPreviewTo)
-			{
+			switch (CONFVAL_limitPreviewTo) {
 				case SCRIPTVAL_NewEntriesOfTheDay :
 					$sqlGetLastAnnouncements .= "WHERE DATE_FORMAT(end_date,'%Y %m %d') >= '".date("Y m d")."'";
 					break;
@@ -852,10 +760,8 @@ else
 			$sqlGetLastAnnouncements .= "ORDER BY end_date DESC
 									                             LIMIT ".$maxValvas;
 			$resGetLastAnnouncements = api_sql_query($sqlGetLastAnnouncements, __FILE__, __LINE__);
-			if ($resGetLastAnnouncements)
-			{
-				while ($annoncement = mysql_fetch_array($resGetLastAnnouncements))
-				{
+			if ($resGetLastAnnouncements) {
+				while ($annoncement = Database::fetch_array($resGetLastAnnouncements)) {
 					$keyTools = "valvas";
 					$keyTime = $annoncement['publicationDate'];
 					$keyCourse = $thisCourseSysCode;
@@ -874,11 +780,11 @@ else
 		$query = "SELECT visibility FROM $course_tool_table WHERE link = 'calendar/agenda.php' AND visibility = 1";
 		$result = api_sql_query($query);
 		$thisAgenda = $maxCourse - $nbDigestEntries; // new max entries for agenda
-		if ($maxAgenda < $thisAgenda)
+		if ($maxAgenda < $thisAgenda) {
 			$thisAgenda = $maxAgenda;
+		}	
 		// collect from agenda, but only if tool is visible for the course
-		if ($result && $thisAgenda > 0 && mysql_num_rows($result) > 0)
-		{
+		if ($result && $thisAgenda > 0 && Database::num_rows($result) > 0) {
 			$tableCal = $courseTablePrefix.$thisCourseDbName.$_configuration['db_glue']."calendar_event";
 			$sqlGetNextAgendaEvent = "SELECT  start_date , title content, start_time
 									                          FROM $tableCal
@@ -886,10 +792,8 @@ else
 									                          ORDER BY start_date, start_time
 									                          LIMIT $maxAgenda";
 			$resGetNextAgendaEvent = api_sql_query($sqlGetNextAgendaEvent, __FILE__, __LINE__);
-			if ($resGetNextAgendaEvent)
-			{
-				while ($agendaEvent = mysql_fetch_array($resGetNextAgendaEvent))
-				{
+			if ($resGetNextAgendaEvent) {
+				while ($agendaEvent = Database::fetch_array($resGetNextAgendaEvent)) {
 					$keyTools = 'agenda';
 					$keyTime = $agendaEvent['start_date'];
 					$keyCourse = $thisCourseSysCode;
@@ -918,15 +822,12 @@ if ( is_array($list) ) {
 			echo '	
 	<ul class="courseslist">';
 
-			if ($old_user_category<>$value[0])
-			{
-				if ($key<>0 OR $value[0]<>0) // there are courses in the previous category
-				{
+			if ($old_user_category<>$value[0]) {
+				if ($key<>0 OR $value[0]<>0) {// there are courses in the previous category
 					echo "\n</ul>";
 				}
 				echo "\n\n\t<ul class=\"user_course_category\"><li>".$userdefined_categories[$value[0]]."</li></ul>\n";
-				if ($key<>0 OR $value[0]<>0) // there are courses in the previous category
-				{
+				if ($key<>0 OR $value[0]<>0){ // there are courses in the previous category
 					echo "<ul class=\"courseslist\">";
 				}
 				$old_user_category=$value[0];
@@ -952,8 +853,7 @@ if ( is_array($list) ) {
 	if(count($listActives)>0 && $display_actives){
 		echo "<ul class=\"courseslist\">\n";
 
-		foreach ($listActives as $key => $value)
-		{
+		foreach ($listActives as $key => $value) {
 			if (!empty($value[2])) {
 				if ((isset($old_session) && $old_session != $value[2]) or ((!isset($old_session)) && isset($value[2]))) {
 					$old_session = $value[2];
@@ -978,15 +878,14 @@ if ( is_array($list) ) {
 
 	}
 
-	if(count($listInactives)>0 && !$display_actives){
+	if (count($listInactives)>0 && !$display_actives) {
 		echo '<ul class="sessions_list_inactive">';
 
-		foreach ($listInactives as $key => $value)
-		{
-			if(!empty($value[2])){
-				if($old_session != $value[2]){
+		foreach ($listInactives as $key => $value) {
+			if (!empty($value[2])) {
+				if ($old_session != $value[2]) {
 					$old_session = $value[2];
-					if($key != 0){
+					if ($key != 0) {
 						echo '</ul>';
 					}
 					echo '<ul class="session_box">' .
@@ -1020,13 +919,11 @@ api_session_register('status');
 echo '	<div class="menu">';
 
 // tabs that are deactivated are added here
-if (!empty($menu_navigation))
-{
+if (!empty($menu_navigation)) {
 	echo '<div class="menusection">';
 	echo '<span class="menusectioncaption">'.get_lang('MainNavigation').'</span>';
 	echo '<ul class="menulist">';
-	foreach($menu_navigation as $section => $navigation_info)
-	{
+	foreach ($menu_navigation as $section => $navigation_info) {
 		$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
 		echo '<li'.$current.'>';
 		echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
@@ -1043,11 +940,15 @@ echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
 echo '<ul class="menulist">';
 
 $display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION["studentview"] != "studentenview");
-if ($display_add_course_link)
-	display_create_course_link();
+if ($display_add_course_link) {
+	if ( api_get_setting('allow_users_to_create_courses')=='false' && !api_is_platform_admin()) {
+		//echo get_lang('NotHavePermissionToCreateCourses');
+	} else {
+		display_create_course_link();
+	}
+}
 display_edit_course_list_links();
-if(isset($toolsList) and is_array($toolsList) and isset($digest))
-{
+if (isset($toolsList) and is_array($toolsList) and isset($digest)) {
 	display_digest($toolsList, $digest, $orderKey, $courses);
 }
 
@@ -1055,16 +956,12 @@ echo '</ul>';
 echo '</div>';
 
 // plugins for the my courses menu
-if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu'])){
-
+if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu'])) {
 	echo '<div class="note">';
 	api_plugin('mycourses_menu');
 	echo '</div>';
-
 }
 
 echo '</div>'; // end of menu
-
 //footer
 Display :: display_footer();
-?>

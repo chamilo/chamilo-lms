@@ -1,33 +1,26 @@
-<?php // $Id: index.php 16894 2008-11-25 03:49:33Z yannoo $
- 
+<?php
 /*
-==============================================================================
-	Dokeos - elearning and course management software
+    DOKEOS - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
+    For a full list of contributors, see documentation/credits.html
 
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
+    Contact:
+		Dokeos
+		Rue du Corbeau, 108
+		B-1030 Brussels - Belgium
+		Contact: info@dokeos.com
 */
 
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 16894 2008-11-25 03:49:33Z yannoo $
+* 	@version $Id: index.php 16923 2008-11-25 23:40:04Z iflorespaz $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -65,7 +58,6 @@ $setting_show_also_closed_courses = (api_get_setting('show_closed_courses')=='tr
 
 // the section (for the tabs)
 $this_section = SECTION_CAMPUS;
-
 /*
 -----------------------------------------------------------
 	Action Handling
@@ -76,11 +68,9 @@ $this_section = SECTION_CAMPUS;
  * 			this can be usefull when you are on an open course and you need to log in to edit something and you immediately want to check how anonymous users
  * 			will see it.
  */
-if (isset($_GET['action']) && $_GET['action'] == 'logout')
-{
+if (!empty($_GET['logout'])) {
 	logout();
 }
-
 /*
 -----------------------------------------------------------
 	Table definitions
@@ -100,8 +90,7 @@ $track_login_table 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_L
 $_setting['display_courses_to_anonymous_users'] = 'true';
 
 /** @todo remove this piece of code because this is not used */
-if (isset ($_user['user_id']))
-{
+if (isset ($_user['user_id'])) {
 	$nameTools = api_get_setting('siteName');
 }
 
@@ -114,8 +103,7 @@ if (isset ($_user['user_id']))
  * @todo This piece of code should probably move to local.inc.php where the actual login / logout procedure is handled.
  * @todo consider removing this piece of code because does nothing.
  */
-if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1)
-{
+if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
 	// nice lie!!!
 	echo 'Attempted breakin - sysadmins notified.';
 	session_destroy();
@@ -128,36 +116,31 @@ if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1)
  * 		 the code does the stuff in local.inc.php and then redirects to index.php or user_portal.php depending
  * 		 on api_get_setting('page_after_login')
  */
-if (!empty($_POST["submitAuth"]))
-{
+if (!empty($_POST["submitAuth"])) {
 	// the user is already authenticated, we now find the last login of the user.
-	if (isset ($_user['user_id']))
-	{
+	if (isset ($_user['user_id'])) {
 		$sql_last_login = "SELECT UNIX_TIMESTAMP(login_date)
 								FROM $track_login_table
 								WHERE login_user_id = '".$_user['user_id']."'
 								ORDER BY login_date DESC LIMIT 1";
 		$result_last_login = api_sql_query($sql_last_login, __FILE__, __LINE__);
 		if (!$result_last_login)
-			if (mysql_num_rows($result_last_login) > 0)
-			{
-				$user_last_login_datetime = mysql_fetch_array($result_last_login);
+			if (Database::num_rows($result_last_login) > 0) {
+				$user_last_login_datetime = Database::fetch_array($result_last_login);
 				$user_last_login_datetime = $user_last_login_datetime[0];
 				api_session_register('user_last_login_datetime');
 			}
 		mysql_free_result($result_last_login);
 
 		//event_login();
-		if (api_is_platform_admin())
-		{
+		if (api_is_platform_admin()) {
 			// decode all open event informations and fill the track_c_* tables
 			include (api_get_path(LIBRARY_PATH)."stats.lib.inc.php");
 			decodeOpenInfos();
 		}
 	}
 } // end login -- if($_POST["submitAuth"])
-else
-{
+else {
 	// only if login form was not sent because if the form is sent the user was already on the page.
 	event_open();
 }
@@ -170,56 +153,39 @@ Display :: display_header('', 'dokeos');
 		MAIN CODE
 ==============================================================================
 */
-echo '<div class="maincontent" id="maincontent">';
+echo '<div class="maincontent" id="content">';
 
 // Plugins for loginpage_main AND campushomepage_main
-if (!api_get_user_id())
-{
+if (!api_get_user_id()) {
 	api_plugin('loginpage_main');
-}
-else
-{
+} else {
 	api_plugin('campushomepage_main');
 }
 
 // Including the page for the news
 $page_included = false;
-if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['include']))
-{
+if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['include'])) {
 	include ('./home/'.$_GET['include']);
 	$page_included = true;
-}
-else
-{
+} else {
 	
-	if(!empty($_SESSION['user_language_choice']))
-	{
+	if (!empty($_SESSION['user_language_choice'])) {
 		$user_selected_language=$_SESSION['user_language_choice'];
-	}
-	elseif(!empty($_SESSION['_user']['language']))
-	{
+	} elseif(!empty($_SESSION['_user']['language'])) {
 		$user_selected_language=$_SESSION['_user']['language'];
-	}
-	else
-	{
+	} else {
 		$user_selected_language=get_setting('platformLanguage');
 	}
 	
-	if(!file_exists('home/home_news_'.$user_selected_language.'.html'))
-	{
+	if(!file_exists('home/home_news_'.$user_selected_language.'.html')) {
 		$home_top_temp=file('home/home_top.html');
 		$home_top_temp=implode('',$home_top_temp);
 		$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);
 		echo $open;
-	}
-	else
-	{
-		if(file_exists('home/home_top_'.$user_selected_language.'.html'))
-		{
+	} else {
+		if(file_exists('home/home_top_'.$user_selected_language.'.html')) {
 			$home_top_temp = file_get_contents('home/home_top_'.$user_selected_language.'.html');
-		}
-		else
-		{
+		} else {
 			$home_top_temp = file_get_contents('home/home_top.html');
 		}
 		$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);
@@ -231,22 +197,17 @@ else
 $announcement = isset($_GET['announcement']) ? $_GET['announcement'] : -1;
 $announcement = intval($announcement);
 
-if (isset($_user['user_id']))
-{
+if (isset($_user['user_id'])) {
 	$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
 	SystemAnnouncementManager :: display_announcements($visibility, $announcement);
-}
-else
-{
+} else {
 	SystemAnnouncementManager :: display_announcements(VISIBLE_GUEST, $announcement);
 }
 
 // Display courses and category list
-if (!$page_included)
-{
+if (!$page_included) {
 
-	if (api_get_setting('display_categories_on_homepage') == 'true')
-	{
+	if (api_get_setting('display_categories_on_homepage') == 'true') {
 		echo '<div class="home_cats">';
 		display_anonymous_course_list();
 		echo '</div>';
@@ -271,14 +232,12 @@ Display :: display_footer();
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function logout()
-{
+function logout() {
 	global $_configuration, $extAuthSource;
 	// variable initialisation
 	$query_string='';
 
-	if(!empty($_SESSION['user_language_choice']))
-	{
+	if (!empty($_SESSION['user_language_choice'])) {
 		$query_string='?language='.$_SESSION['user_language_choice'];
 	}
 
@@ -289,17 +248,14 @@ function logout()
 	$uid = intval($_GET['uid']);
 	$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='$uid' ORDER BY login_date DESC LIMIT 0,1";
 	$q_last_connection=api_sql_query($sql_last_connection);
-	if(Database::num_rows($q_last_connection)>0)
-	{
-		$i_id_last_connection=mysql_result($q_last_connection,0,"login_id");
+	if (Database::num_rows($q_last_connection)>0) {
+		$i_id_last_connection=Database::result($q_last_connection,0,"login_id");
 	}
 	
-	if(!isset($_SESSION['login_as']))
-	{
+	if (!isset($_SESSION['login_as'])) {
 		$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
 		api_sql_query($s_sql_update_logout_date);
 	}
-
 	LoginDelete($uid, $_configuration['statistics_database']); //from inc/lib/online.inc.php - removes the "online" status
 	
 	//the following code enables the use of an external logout function.
@@ -308,17 +264,13 @@ function logout()
 	// (using *authent_name*_logout as the function name) and the following code 
 	// will find and execute it 
 	$uinfo = api_get_user_info($uid);
-	if(($uinfo['auth_source'] != PLATFORM_AUTH_SOURCE) && is_array($extAuthSource))
-	{
-		if(is_array($extAuthSource[$uinfo['auth_source']]))
-		{
+	if (($uinfo['auth_source'] != PLATFORM_AUTH_SOURCE) && is_array($extAuthSource)) {
+		if (is_array($extAuthSource[$uinfo['auth_source']])) {
 			$subarray = $extAuthSource[$uinfo['auth_source']];
-			if(!empty($subarray['logout']) && file_exists($subarray['logout']))
-			{
+			if (!empty($subarray['logout']) && file_exists($subarray['logout'])) {
 				include_once($subarray['logout']);
 				$logout_function = $uinfo['auth_source'].'_logout';
-				if(function_exists($logout_function))
-				{
+				if (function_exists($logout_function)) {
 					$logout_function($uinfo);
 				}
 			}
@@ -326,8 +278,7 @@ function logout()
 	}
 
 	api_session_destroy();
-
-	header("Location: index.php$query_string");
+header("Location: index.php$query_string");
 	exit();
 }
 
@@ -337,29 +288,22 @@ function logout()
  * @param unknown_type $category
  * @return boolean
  */
-function category_has_open_courses($category)
-{
+function category_has_open_courses($category) {
 	global $setting_show_also_closed_courses;
 	
 	$user_identified = (api_get_user_id()>0 && !api_is_anonymous());
 	$main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql_query = "SELECT * FROM $main_course_table WHERE category_code='$category'";
 	$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
-	while ($course = mysql_fetch_array($sql_result))
-	{
-		if ($setting_show_also_closed_courses == false)
-		{
-			if((api_get_user_id()>0 
+	while ($course = Database::fetch_array($sql_result)) {
+		if ($setting_show_also_closed_courses == false) {
+			if ((api_get_user_id()>0 
 				and $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-				or ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD))
-			{
+				or ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)) {
 				return true; //at least one open course
 			}
-		}
-		else 
-		{
-			if(isset($course['visibility']))
-			{
+		} else  {
+			if(isset($course['visibility'])){
 				return true; //at least one course (does not matter weither it's open or not because $setting_show_also_closed_courses = true
 			}			
 		}
@@ -367,13 +311,11 @@ function category_has_open_courses($category)
 	return false;
 }
 
-function display_create_course_link()
-{
+function display_create_course_link() {
 	echo "<li><a href=\"main/create_course/add_course.php\">".get_lang("CourseCreate")."</a></li>";
 }
 
-function display_edit_course_list_links()
-{
+function display_edit_course_list_links() {
 	echo "<li><a href=\"main/auth/courses.php\">".get_lang("CourseManagement")."</a></li>";
 }
 
@@ -384,64 +326,53 @@ function display_edit_course_list_links()
  * @version 1.0.1
  * @todo does $_plugins need to be global?
  */
-function display_anonymous_right_menu()
-{
+function display_anonymous_right_menu() {
 	global $loginFailed, $_plugins, $_user, $menu_navigation;
 
 	$platformLanguage = api_get_setting('platformLanguage');
 
-	if ( !($_user['user_id']) or api_is_anonymous($_user['user_id']) ) // only display if the user isn't logged in
-	{
+	if ( !($_user['user_id']) or api_is_anonymous($_user['user_id']) ) {  // only display if the user isn't logged in
 		api_display_language_form(true);
 		echo '<br />';
 		display_login_form();
 
-		if ($loginFailed)
-		{
+		if ($loginFailed) {
 			handle_login_failed();
 		}
-		if (api_get_setting('allow_lostpassword') == 'true' OR api_get_setting('allow_registration') == 'true')
-		{
+		if (api_get_setting('allow_lostpassword') == 'true' OR api_get_setting('allow_registration') == 'true') {
 			echo '<div class="menusection"><span class="menusectioncaption">'.get_lang('MenuUser').'</span><ul class="menulist">';
-			if (get_setting('allow_registration') <> 'false')
-			{
+			if (get_setting('allow_registration') <> 'false') {
 				echo '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';
 			}
-			if (get_setting('allow_lostpassword') == 'true')
-			{
+			if (get_setting('allow_lostpassword') == 'true') {
 				display_lost_password_info();
 			}
 			echo '</ul></div>';
 		}
-		if(api_number_of_plugins('loginpage_menu') > 0)
-		{
-			echo '<div class="note">';
+		if (api_number_of_plugins('loginpage_menu') > 0) {
+			echo '<div class="note" style="background: none">';
 			api_plugin('loginpage_menu');
 			echo '</div>';
 		}
 	}
 
 	/*** hide right menu "general" and other parts on anonymous right menu  *****/
-	echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
+	 echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
 	 echo "<ul class=\"menulist\">";
 
 	$user_selected_language = api_get_interface_language();
 	if (!isset ($user_selected_language))
 		$user_selected_language = $platformLanguage;
-	if(!file_exists('home/home_menu_'.$user_selected_language.'.html'))
-	{
+	if (!file_exists('home/home_menu_'.$user_selected_language.'.html')) {
 		include ('home/home_menu.html');
-	}
-	else
-	{
+	} else {
 		include('home/home_menu_'.$user_selected_language.'.html');
 	}
 	echo '</ul>';
 	echo '</div>';
 
-	if ($_user['user_id'] && api_number_of_plugins('campushomepage_menu') > 0)
-	{
-		echo '<div class="note">';
+	if ($_user['user_id'] && api_number_of_plugins('campushomepage_menu') > 0) {
+		echo '<div class="note" style="background: none">';
 		api_plugin('campushomepage_menu');
 		echo '</div>';
 	}
@@ -449,16 +380,13 @@ function display_anonymous_right_menu()
 	/**
 	 * User section
 	 */
-	if(isset($_SESSION['_user']['user_id']) && $_SESSION['_user']['user_id']!=0)
-	{
+	if (isset($_SESSION['_user']['user_id']) && $_SESSION['_user']['user_id']!=0) {
 		// tabs that are deactivated are added here
-		if (!empty($menu_navigation))
-		{
+		if (!empty($menu_navigation)) {
 			echo "<div class=\"menusection\">";
 			echo "<span class=\"menusectioncaption\">".get_lang("MainNavigation")."</span>";
 			echo "<ul class=\"menulist\">";
-			foreach($menu_navigation as $section => $navigation_info)
-			{
+			foreach($menu_navigation as $section => $navigation_info) {
 				$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
 				echo '<li'.$current.'>';
 				echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
@@ -474,8 +402,13 @@ function display_anonymous_right_menu()
 		echo "<ul class=\"menulist\">";
 
 		$display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION["studentview"] != "studentenview");
-		if ($display_add_course_link)
+		if ($display_add_course_link) {
+			if (api_get_setting('allow_users_to_create_courses')=='false' && !api_is_platform_admin()) {
+				//echo get_lang('NotHavePermissionToCreateCourses');
+			} else {
 			display_create_course_link();
+		    }
+	   }
 		display_edit_course_list_links();
 
 		echo "</ul>";
@@ -485,21 +418,15 @@ function display_anonymous_right_menu()
 
 	
 	// includes for any files to be displayed below anonymous right menu
-	if(!file_exists('home/home_notice_'.$user_selected_language.'.html') && file_get_contents('home/home_notice.html')!='')
-	{
+	if (!file_exists('home/home_notice_'.$user_selected_language.'.html') && file_get_contents('home/home_notice.html')!='') {
 		echo '<div class="note">';
 		include ('home/home_notice.html');
 		echo '</div>';
-	}
-	elseif(file_exists('home/home_notice_'.$user_selected_language.'.html') && file_get_contents('home/home_notice_'.$user_selected_language.'.html')!='')
-	{
+	} elseif(file_exists('home/home_notice_'.$user_selected_language.'.html') && file_get_contents('home/home_notice_'.$user_selected_language.'.html')!='') {
 		echo '<div class="note">';
 		include('home/home_notice_'.$user_selected_language.'.html');
 		echo '</div>';
 	}
-	
-
-
 }
 
 /**
@@ -509,24 +436,17 @@ function display_anonymous_right_menu()
 *
 *	@version 1.0.1
 */
-function handle_login_failed()
-{
-	if(!isset($_GET['error']))
-	{
+function handle_login_failed() {
+	if (!isset($_GET['error'])) {
 		$message = get_lang("InvalidId");
-		if (api_is_self_registration_allowed())
-		{
+		if (api_is_self_registration_allowed()) {
 			$message = get_lang("InvalidForSelfRegistration");
 		}
-	}
-	else
-	{
-		switch ($_GET['error'])
-		{
+	} else {
+		switch ($_GET['error']) {
 			case '':
 				$message = get_lang("InvalidId");
-				if (api_is_self_registration_allowed())
-				{
+				if (api_is_self_registration_allowed()) {
 					$message = get_lang("InvalidForSelfRegistration");
 				}
 				break;
@@ -548,8 +468,7 @@ function handle_login_failed()
 *	Adds a form to let users login
 *	@version 1.1
 */
-function display_login_form()
-{
+function display_login_form() {
 	$form = new FormValidator('formLogin');
 	$form->addElement('text','login',get_lang('UserName'),array('size'=>15));
 	$form->addElement('password','password',get_lang('Pass'),array('size'=>15));
@@ -557,8 +476,7 @@ function display_login_form()
 	$renderer =& $form->defaultRenderer();
 	$renderer->setElementTemplate('<div><label>{label}</label></div><div>{element}</div>');
 	$form->display();
-	if(api_get_setting('openid_authentication')=='true')
-	{
+	if (api_get_setting('openid_authentication')=='true') {
 		include_once('main/auth/openid/login.php');
 		echo '<div>'.openid_form().'</div>';
 	}
@@ -566,8 +484,7 @@ function display_login_form()
 /**
  * Displays a link to the lost password section
  */
-function display_lost_password_info()
-{
+function display_lost_password_info() {
 	echo "<li><a href=\"main/auth/lostPassword.php\">".get_lang("LostPassword")."</a></li>";
 }
 
@@ -578,8 +495,7 @@ function display_lost_password_info()
 * @version 1.1
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University - refactoring and code cleaning
 */
-function display_anonymous_course_list()
-{
+function display_anonymous_course_list() {
 	$ctok = $_SESSION['sec_token'];
 	$stok = Security::get_token();	
 	
@@ -597,37 +513,27 @@ function display_anonymous_course_list()
 
 	//get list of courses in category $category
 	$sql_get_course_list = "SELECT * FROM $main_course_table cours
-								WHERE category_code = '".mysql_real_escape_string($_GET["category"])."'
+								WHERE category_code = '".Database::escape_string($_GET["category"])."'
 								ORDER BY title, UPPER(visual_code)";
 	//removed: AND cours.visibility='".COURSE_VISIBILITY_OPEN_WORLD."'
 	$sql_result_courses = api_sql_query($sql_get_course_list, __FILE__, __LINE__);
 
-	while ($course_result = mysql_fetch_array($sql_result_courses))
-	{
+	while ($course_result = Database::fetch_array($sql_result_courses)) {
 		$course_list[] = $course_result;
 	}
 
 	$platform_visible_courses = '';
 	// $setting_show_also_closed_courses
-	if($user_identified)
-	{
-		if ($setting_show_also_closed_courses)
-		{
+	if($user_identified) {
+		if ($setting_show_also_closed_courses) {
 			$platform_visible_courses = '';
-		}
-		else 
-		{
+		} else  {
 			$platform_visible_courses = "  AND (t3.visibility='".COURSE_VISIBILITY_OPEN_WORLD."' OR t3.visibility='".COURSE_VISIBILITY_OPEN_PLATFORM."' )";	
 		}
-	}
-	else 
-	{
-		if ($setting_show_also_closed_courses)
-		{
+	} else {
+		if ($setting_show_also_closed_courses) {
 			$platform_visible_courses = '';
-		}
-		else 
-		{
+		} else  {
 			$platform_visible_courses = "  AND (t3.visibility='".COURSE_VISIBILITY_OPEN_WORLD."' )";	
 		}				
 	}
@@ -640,29 +546,22 @@ function display_anonymous_course_list()
 				GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
 	$resCats = api_sql_query($sqlGetSubCatList, __FILE__, __LINE__);
 	$thereIsSubCat = false;
-	if (mysql_num_rows($resCats) > 0)
-	{
-		$htmlListCat = "<h4>".get_lang("CatList")."</h4>"."<ul>";
-		while ($catLine = mysql_fetch_array($resCats))
-		{
-			if ($catLine['code'] != $category)
-			{
+	if (Database::num_rows($resCats) > 0) {
+		$htmlListCat = "<h4 style=\"margin-top: 0px;\">".get_lang("CatList")."</h4>"."<ul>";
+		while ($catLine = Database::fetch_array($resCats)) {
+			if ($catLine['code'] != $category) {
 
 				$category_has_open_courses = category_has_open_courses($catLine['code']);
-				if ($category_has_open_courses)
-				{
+				if ($category_has_open_courses) {
 					//the category contains courses accessible to anonymous visitors
 					$htmlListCat .= "<li>";
 					$htmlListCat .= "<a href=\"".api_get_self()."?category=".$catLine['code']."\">".$catLine['name']."</a>";
-					if (api_get_setting('show_number_of_courses') == 'true')
-					{
+					if (api_get_setting('show_number_of_courses') == 'true') {
 						$htmlListCat .= " (".$catLine['nbCourse']." ".get_lang("Courses").")";
 					}
 					$htmlListCat .= "</li>\n";
 					$thereIsSubCat = true;
-				}
-				elseif ($catLine['children_count'] > 0)
-				{
+				} elseif ($catLine['children_count'] > 0) {
 					//the category has children, subcategories
 					$htmlListCat .= "<li>";
 					$htmlListCat .= "<a href=\"".api_get_self()."?category=".$catLine['code']."\">".$catLine['name']."</a>";
@@ -672,32 +571,24 @@ function display_anonymous_course_list()
 				/************************************************************************
 				 end changed code to eliminate the (0 courses) after empty categories
 				 ************************************************************************/
-				elseif (api_get_setting('show_empty_course_categories') == 'true')
-				{
+				elseif (api_get_setting('show_empty_course_categories') == 'true') {
 					$htmlListCat .= "<li>";
 					$htmlListCat .= $catLine['name'];
 					$htmlListCat .= "</li>\n";
 					$thereIsSubCat = true;
 				}//else don't set thereIsSubCat to true to avoid printing things if not requested
-			}
-			else
-			{
+			} else {
 				$htmlTitre = "<p>";
-				if (api_get_setting('show_back_link_on_top_of_tree') == 'true')
-				{
+				if (api_get_setting('show_back_link_on_top_of_tree') == 'true') {
 					$htmlTitre .= "<a href=\"".api_get_self()."\">"."&lt;&lt; ".get_lang("BackToHomePage")."</a>";
 				}
-				if (!is_null($catLine['parent_id']) || (api_get_setting('show_back_link_on_top_of_tree') <> 'true' && !is_null($catLine['code'])))
-				{
+				if (!is_null($catLine['parent_id']) || (api_get_setting('show_back_link_on_top_of_tree') <> 'true' && !is_null($catLine['code']))) {
 					$htmlTitre .= "<a href=\"".api_get_self()."?category=".$catLine['parent_id']."\">"."&lt;&lt; ".get_lang("Up")."</a>";
 				}
 				$htmlTitre .= "</p>\n";
-				if ($category != "" && !is_null($catLine['code']))
-				{
+				if ($category != "" && !is_null($catLine['code'])) {
 					$htmlTitre .= "<h3>".$catLine['name']."</h3>\n";
-				}
-				else
-				{
+				} else {
 					$htmlTitre .= "<h3>".get_lang("Categories")."</h3>\n";
 				}
 			}
@@ -705,58 +596,46 @@ function display_anonymous_course_list()
 		$htmlListCat .= "</ul>\n";
 	}
 	echo $htmlTitre;
-	if ($thereIsSubCat)
-	{
+	if ($thereIsSubCat) {
 		echo $htmlListCat;
 	}
-	while ($categoryName = mysql_fetch_array($resCats))
-	{
+	while ($categoryName = Database::fetch_array($resCats)) {
 		echo "<h3>", $categoryName['name'], "</h3>\n";
 	}
-	$numrows = mysql_num_rows($sql_result_courses);
+	$numrows = Database::num_rows($sql_result_courses);
 	$courses_list_string = '';
 	$courses_shown = 0;
-	if ($numrows > 0)
-	{
-		if ($thereIsSubCat)
-		{
+	if ($numrows > 0) {
+		if ($thereIsSubCat) {
 			$courses_list_string .= "<hr size=\"1\" noshade=\"noshade\">\n";
 		}
-		$courses_list_string .= "<h4>".get_lang("CourseList")."</h4>\n"."<ul>\n";
+		$courses_list_string .= "<h4 style=\"margin-top: 0px;\">".get_lang("CourseList")."</h4>\n"."<ul>\n";
 		
-		if (api_get_user_id())
-		{
+		if (api_get_user_id()) {
 			$courses_of_user = get_courses_of_user(api_get_user_id());
 		}
 		
-		foreach ($course_list AS $course)
-		{
+		foreach ($course_list AS $course) {
 			// $setting_show_also_closed_courses
 			
-			if ($setting_show_also_closed_courses==false)
-			{
+			if ($setting_show_also_closed_courses==false) {
 				// if we do not show the closed courses 
 				// we only show the courses that are open to the world (to everybody)
 				// and the courses that are open to the platform (if the current user is a registered user
-				if( ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) OR ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD))
-				{
+				if( ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) OR ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)) {
 					$courses_shown++;
 					$courses_list_string .= "<li>\n";
 				$courses_list_string .= "<a href=\"".$web_course_path.$course['directory']."/\">".$course['title']."</a><br />";
-				if (get_setting("display_coursecode_in_courselist") == "true")
-				{
+				if (get_setting("display_coursecode_in_courselist") == "true") {
 					$courses_list_string .= $course['visual_code'];
 				}
-				if (get_setting("display_coursecode_in_courselist") == "true" AND get_setting("display_teacher_in_courselist") == "true")
-				{
+				if (get_setting("display_coursecode_in_courselist") == "true" AND get_setting("display_teacher_in_courselist") == "true") {
 					$courses_list_string .= " - ";
 				}
-				if (get_setting("display_teacher_in_courselist") == "true")
-				{
+				if (get_setting("display_teacher_in_courselist") == "true") {
 					$courses_list_string .= $course['tutor_name'];
 				}				
-					if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] <> api_get_setting('platformLanguage'))
-					{
+					if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] <> api_get_setting('platformLanguage')) {
 						$courses_list_string .= ' - '.$course['course_language'];
 					}
 					$courses_list_string .= "</li>\n";
@@ -770,61 +649,50 @@ function display_anonymous_course_list()
 			// 4. the user is logged in and the user is course admin of te course (regardless of the course visibility setting)
 			// 5. the user is the platform admin api_is_platform_admin()
 			// 
-			else 
-			{
+			else {
 				$courses_shown++;
 				$courses_list_string .= "<li>\n";
-					if( $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
+					if ( $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
 							OR ($user_identified AND $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) 
 							OR ($user_identified AND key_exists($course['code'],$courses_of_user) AND $course['visibility'] <> COURSE_VISIBILITY_CLOSED) 
 							OR $courses_of_user[$course['code']]['status'] == '1'
-							OR api_is_platform_admin())
-					{
+							OR api_is_platform_admin()) {
 						$courses_list_string .= "<a href=\"".$web_course_path.$course['directory']."/\">";
 					}
 					$courses_list_string .= $course['title'];
-					if( $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
+					if ( $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
 							OR ($user_identified AND $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) 
 							OR ($user_identified AND key_exists($course['code'],$courses_of_user) AND $course['visibility'] <> COURSE_VISIBILITY_CLOSED) 
 							OR $courses_of_user[$course['code']]['status'] == '1'
-							OR api_is_platform_admin())
-					{
+							OR api_is_platform_admin()) {
 						$courses_list_string .="</a><br />";
 					}
-					if (get_setting("display_coursecode_in_courselist") == "true")
-					{
+					if (get_setting("display_coursecode_in_courselist") == "true") {
 						$courses_list_string .= $course['visual_code'];
 					}
-					if (get_setting("display_coursecode_in_courselist") == "true" AND get_setting("display_teacher_in_courselist") == "true")
-					{
+					if (get_setting("display_coursecode_in_courselist") == "true" AND get_setting("display_teacher_in_courselist") == "true") {
 						$courses_list_string .= " - ";
 					}
 					if (get_setting("display_teacher_in_courselist") == "true")
 					{
 						$courses_list_string .= $course['tutor_name'];
 					}				
-				if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] <> api_get_setting('platformLanguage'))
-				{
+				if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] <> api_get_setting('platformLanguage')) {
 					$courses_list_string .= ' - '.$course['course_language'];
 				}
-					if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] <> api_get_setting('platformLanguage'))
-					{
+					if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] <> api_get_setting('platformLanguage')) {
 						$courses_list_string .= ' - '.$course['course_language'];
 					}
 					// We display a subscription link if 
 					// 1. it is allowed to register for the course and if the course is not already in the courselist of the user and if the user is identiefied
 					// 2
-					if ($user_identified AND !key_exists($course['code'],$courses_of_user))
-					{
-						if ($course['subscribe'] == '1')
-						{
+					if ($user_identified AND !key_exists($course['code'],$courses_of_user)) {
+						if ($course['subscribe'] == '1') {
 							$courses_list_string .= "<form action=\"main/auth/courses.php?action=subscribe&category=".$_GET['category']."\" method=\"post\">";
 							$courses_list_string .= '<input type="hidden" name="sec_token" value="'.$stok.'">';
 							$courses_list_string .= "<input type=\"hidden\" name=\"subscribe\" value=\"".$course['code']."\" />";
 							$courses_list_string .= "<input type=\"image\" name=\"unsub\" src=\"main/img/enroll.gif\" alt=\"".get_lang("Subscribe")."\" />".get_lang("Subscribe")."</form>";
-						}
-						else
-						{
+						} else {
 							$courses_list_string .= '<br />'.get_lang("SubscribingNotAllowed");
 						}
 					}
@@ -832,18 +700,14 @@ function display_anonymous_course_list()
 			}
 		}
 		$courses_list_string .= "</ul>\n";
-	}
-	else
-	{
+	} else {
 		// echo "<blockquote>",get_lang('_No_course_publicly_available'),"</blockquote>\n";
 	}
-	if($courses_shown > 0)
-	{ //only display the list of courses and categories if there was more than
+	if ($courses_shown > 0) { //only display the list of courses and categories if there was more than
 	  // 0 courses visible to the world (we're in the anonymous list here)
 		echo $courses_list_string;
 	}
-	if ($category != "")
-	{
+	if ($category != "") {
 		echo "<p>", "<a href=\"".api_get_self()."\"><b>&lt;&lt;</b> ", get_lang("BackToHomePage"), "</a>", "</p>\n";
 	}
 }
@@ -854,8 +718,7 @@ function display_anonymous_course_list()
  * @param int $user_id: the id of the user
  * @return array an array containing all the information of the courses of the given user
 */
-function get_courses_of_user($user_id)
-{
+function get_courses_of_user($user_id) {
 	$table_course		= Database::get_main_table(TABLE_MAIN_COURSE);
 	$table_course_user	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
@@ -870,11 +733,9 @@ function get_courses_of_user($user_id)
 		                        AND   course_rel_user.user_id = '".$user_id."'
 		                        ORDER BY course_rel_user.sort ASC";
 	$result = api_sql_query($sql_select_courses,__FILE__,__LINE__);
-	while ($row=Database::fetch_array($result))
-	{
+	while ($row=Database::fetch_array($result)) {
 		// we only need the database name of the course
 		$courses[$row['k']] = array("db"=> $row['db'], "code" => $row['k'], "visual_code" => $row['vc'], "title" => $row['i'], "directory" => $row['dir'], "status" => $row['status'], "tutor" => $row['t'], "subscribe" => $row['subscr'], "unsubscribe" => $row['unsubscr'], "sort" => $row['sort'], "user_course_category" => $row['user_course_cat']);
 	}
 	return $courses;
 }
-?>

@@ -7,6 +7,7 @@
  */
 $language_file = array('glossary');
 require_once('../inc/global.inc.php');
+api_protect_course_script(true);
 require_once('glossaryfunction.inc.php');
 $status = $_user['status'];
 /*
@@ -33,7 +34,7 @@ Display::display_header($tool);
 //---------------------------------------------------------
 
 if ($status == 1) {
-	echo '<a href="index.php?action=addglossary"><img src="../img/filenew.gif" title ="'.get_lang('AddNewTerm').'">'.get_lang('AddNewTerm').'</a>';
+	echo '<a href="index.php?action=addglossary"><img src="../img/filenew.gif" title ="'.get_lang('TermAddNew').'"> '.get_lang('TermAddNew').'</a>';
 	
 	/*======================================
 				Form Glossary 
@@ -83,32 +84,33 @@ if ($_GET['action'] == 'delete_glossary') {
 
 $glossary_list=get_glossary_details(); //returns a results resource		
 Database::num_rows($glossary_list);
-echo '<p><div><dl>';
+echo '<div class="glossary-terms-list">';
 while ($row_glossary_list=Database::fetch_array($glossary_list)) {
 	if ( ($_GET['action'] == 'edit_glossary') && ($_GET['glossary_id'] == $row_glossary_list['glossary_id']) ) {				
-		echo '<body onload="text_focus()">';
+		//echo '<body onload="text_focus()">';
+        echo '<div class="glossary-term-edit-form">';
 		echo '<form name="form_glossary" action="index.php">';
 		echo '<input type="hidden" name="g_id" value="'.Security::remove_XSS($_GET['glossary_id']).'">';
-        echo '<dl>';
-		echo '  <dt><strong>'.get_lang('TermName').'</strong><br />';
-        echo '    <input type="text" name="n_glossary" value="'.$row_glossary_list['name'].'" onfocus="this.select()">';
-        echo '  </dt>';
-		echo '  <dd><strong>'.get_lang('TermDefinition').'</strong><br /><textarea cols="60" rows="5" maxlength="255" name="d_glossary" onfocus="this.select()">'.$row_glossary_list['description'].'</textarea><br />';
-		echo '    <input type="submit" value="'.get_lang('TermUpdateButton').'">';
-        echo '  </dd><br />';
-		echo '</dl></form></body>';
+		echo '<span class="glossary-term-edit-title">'.get_lang('TermName').'</span><br />';
+        echo '<input type="text" name="n_glossary" value="'.$row_glossary_list['name'].'" onfocus="this.select()"><br />';
+		echo '<span class="glossary-term-edit-desc">'.get_lang('TermDefinition').'</span><br /><textarea cols="60" rows="5" maxlength="255" name="d_glossary" onfocus="this.select()">'.$row_glossary_list['description'].'</textarea><br />';
+		echo '<input type="submit" value="'.get_lang('TermUpdateButton').'">';
+		echo '</form></div>';
 	} else {
-		echo '<dt><strong>'.$row_glossary_list['name'].'</strong></dt>';
-		echo '<dd>'.$row_glossary_list['description'].'<br /><br />';			
-		$icon_edit ='edit.gif';
-		$icon_delete ='delete.gif';
+		echo '<div class="glossary-term"><span class="glossary-term-title">'.$row_glossary_list['name'].'</span><br />';
+		echo '<span class="glossary-term-desc">'.$row_glossary_list['description'].'</span><br />';			
 		if ($status == 1) {
-		    echo '<a href="index.php?action=edit_glossary&glossary_id='.$row_glossary_list['glossary_id'].'"><img src="../img/'.$icon_edit.'" title ="'.get_lang('Editar').'"></a>&nbsp;';
-		    echo '<a href="index.php?action=delete_glossary&glossary_id='.$row_glossary_list['glossary_id'].'" onclick="return confirmation(\''.$row_glossary_list['name'].'\');"><img src="../img/'.$icon_delete.'" title ="'.get_lang('Eliminar').'"></a></dd>';
+            $icon_edit ='edit.gif';
+            $icon_delete ='delete.gif';
+            echo '<span class="glossary-term-action-links">';
+		    echo '<a href="index.php?action=edit_glossary&glossary_id='.$row_glossary_list['glossary_id'].'"><img src="../img/'.$icon_edit.'" title ="'.get_lang('TermEditAction').'"></a>&nbsp;';
+		    echo '<a href="index.php?action=delete_glossary&glossary_id='.$row_glossary_list['glossary_id'].'" onclick="return confirmation(\''.$row_glossary_list['name'].'\');"><img src="../img/'.$icon_delete.'" title ="'.get_lang('TermDeleteAction').'"></a></dd>';
+            echo '</span>';
 		}
+        echo '</div>';
 	}			
 }					
-echo '</dl></p></div>';
+echo '</div>';
 /*
 ==============================================================================
 		FOOTER

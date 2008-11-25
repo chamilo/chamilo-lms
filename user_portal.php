@@ -774,7 +774,7 @@ if ($maxCourse > 0)
 }
 
 
-echo '	<div id="maincontent">'; // start of content for logged in users
+echo '	<div class="maincontent" id="maincontent">'; // start of content for logged in users
 
 // Plugins for the my courses main area
 api_plugin('mycourses_main');

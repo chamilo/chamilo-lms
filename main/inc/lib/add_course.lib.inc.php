@@ -529,6 +529,7 @@ function update_Db_course($courseDbName)
          thread_title_qualify varchar(255) default '',
          thread_qualify_max int unsigned default 0,
          thread_close_date datetime default '0000-00-00 00:00:00',
+         thread_weight smallint default 0,
 		 PRIMARY KEY (thread_id)
 		) TYPE=MyISAM";
 

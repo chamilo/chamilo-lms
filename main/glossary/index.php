@@ -104,7 +104,7 @@ while ($row_glossary_list=Database::fetch_array($glossary_list)) {
 		$icon_delete ='delete.gif';
 		if ($status == 1) {
 		    echo '<a href="index.php?action=edit_glossary&glossary_id='.$row_glossary_list['glossary_id'].'"><img src="../img/'.$icon_edit.'" title ="'.get_lang('Editar').'"></a>&nbsp;';
-		    echo '<a href="index.php?action=delete_glossary&glossary_id='.$row_glossary_list['glossary_id'].'" onclick="return confirmation(\''.$row_glossary_list['name'].'\');"><img src="../img/'.$icon_delete.'" title ="'.get_lang('Eliminar').'"></a></dd><p>';
+		    echo '<a href="index.php?action=delete_glossary&glossary_id='.$row_glossary_list['glossary_id'].'" onclick="return confirmation(\''.$row_glossary_list['name'].'\');"><img src="../img/'.$icon_delete.'" title ="'.get_lang('Eliminar').'"></a></dd>';
 		}
 	}			
 }					

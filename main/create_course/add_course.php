@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 16709 2008-11-10 22:22:28Z yannoo $
+// $Id: add_course.php 16920 2008-11-25 23:33:04Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -58,13 +58,15 @@ include_once (api_get_path(CONFIGURATION_PATH).'course_info.conf.php');
 $interbreadcrumb[] = array('url'=>api_get_path(WEB_PATH).'user_portal.php', 'name'=> get_lang('MyCourses'));
 // Displaying the header
 $tool_name = get_lang('CreateSite');
-Display :: display_header($tool_name);
 
+if (api_get_setting('allow_users_to_create_courses')=='false' && !api_is_platform_admin()) {
+	api_not_allowed(true);
+}
+Display :: display_header($tool_name);
 // Displaying the tool title
 api_display_tool_title($tool_name);
 // Check access rights
-if (!api_is_allowed_to_create_course())
-{
+if (!api_is_allowed_to_create_course()) {
 	Display :: display_error_message(get_lang("NotAllowed"));
 	Display::display_footer();
 	exit;
@@ -94,20 +96,16 @@ $form->addElement('submit', null, get_lang('Ok'));
 $form->add_progress_bar();
 
 // Set default values
-if(isset($_user["language"]) && $_user["language"]!="")
-{
+if (isset($_user["language"]) && $_user["language"]!="") {
 	$values['course_language'] = $_user["language"];
-}
-else
-{
+} else {
 	$values['course_language'] = get_setting('platformLanguage');
 }
 
 $values['tutor_name'] = $_user['firstName']." ".$_user['lastName'];
 $form->setDefaults($values);
 // Validate the form
-if($form->validate())
-{
+if ($form->validate()) {
 	$course_values = $form->exportValues();
 	$wanted_code = $course_values['wanted_code'];
 	$tutor_name = $course_values['tutor_name'];
@@ -115,19 +113,16 @@ if($form->validate())
 	$title = $course_values['title'];
 	$course_language = $course_values['course_language'];
 	
-	if(trim($wanted_code) == ''){
+	if (trim($wanted_code) == '') {
 		$wanted_code = generate_course_code(substr($title,0,$maxlength));
 	}
 	
 	$keys = define_course_keys($wanted_code, "", $_configuration['db_prefix']);
 	
 	$sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"',Database :: escape_string($wanted_code));
-	//$result_check = mysql_query($sql_check);
 	$result_check = api_sql_query($sql_check,__FILE__,__LINE__); //I don't know why this api function doesn't work...
-	if(Database::num_rows($result_check)<1)
-	{
-		if (sizeof($keys))
-		{
+	if ( Database::num_rows($result_check)<1 ) {
+		if (sizeof($keys)) {
 			$visual_code = $keys["currentCourseCode"];
 			$code = $keys["currentCourseId"];
 			$db_name = $keys["currentCourseDbName"];
@@ -144,17 +139,13 @@ if($form->validate())
 		$message .= "<br /><br /><br />";
 		$message .= '<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
 		Display :: display_confirmation_message($message,false);
-	}
-	else
-	{
+	} else {
 		Display :: display_error_message(get_lang('CourseCodeAlreadyExists'),false);
 		$form->display();
 		echo '<p>'.get_lang('CourseCodeAlreadyExistExplained').'</p>';
 	}
 		
-}
-else
-{
+} else {
 	// Display the form
 	$form->display();
 	echo '<p>'.get_lang('Explanation').'</p>';
@@ -165,4 +156,3 @@ else
 ==============================================================================
 */
 Display :: display_footer();
-?>

@@ -1,11 +1,10 @@
-<?php
-/*
- * Created on 19/11/2008
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
+/**
+ * @package dokeos.glossary
  * @author Christian Fasanando
- * 
- * This class allows the maintenance of the tool glossary
+ * This library enables maintenance of the glossary tool
  */
- 
 /**
 * This function retrieves glossary details by course
 * @return	array Array of type ([glossary_id=>w,name=>x,description=>y],[])
@@ -14,9 +13,9 @@
 */
 
 function get_glossary_details() {
-	$t_glosary = Database :: get_course_table(TABLE_GLOSSARY);
-	$sql = "SELECT glossary_id,name,description
-			  FROM $t_glosary";
+	$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
+	$sql = "SELECT glossary_id, name, description
+			  FROM $t_glossary";
 
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	return $result;
@@ -31,15 +30,14 @@ function get_glossary_details() {
 * @version november 2008, dokeos 1.8.6
 */
 function add_glossary_details($name,$description) {
-	$t_glosary = Database :: get_course_table(TABLE_GLOSSARY);
+	$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
+    if (empty($name) || empty($description)) {
+        return false;
+    }
 	$safe_name = Database::escape_string($name);
 	$safe_description = Database::escape_string($description);
 	
-	if (empty($name) || empty($description)) {
-		return false;
-	}
-	
-	$sql = "INSERT INTO $t_glosary(name,description) VALUES('$safe_name' , '$safe_description')";
+	$sql = "INSERT INTO $t_glossary (name, description) VALUES('$safe_name', '$safe_description')";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	return $result;
 } 
@@ -54,15 +52,15 @@ function add_glossary_details($name,$description) {
 * @version november 2008, dokeos 1.8.6
 */
 function edit_glossary_details($glossary_id,$name,$description) {
-	$t_glosary 			= Database :: get_course_table(TABLE_GLOSSARY);
+	$t_glossary 			= Database :: get_course_table(TABLE_GLOSSARY);
+
+    if (empty($glossary_id) || empty($name) || empty($description)) { return false; }
+
 	$safe_name 			= Database::escape_string($name);
 	$safe_description 	= Database::escape_string($description);
 	$safe_glossary_id 	= Database::escape_string($glossary_id);
-	
-	if (empty($name) || empty($description))return false;
-	
-	$sql = "UPDATE $t_glosary SET name='$safe_name' , description='$safe_description' WHERE glossary_id=$safe_glossary_id";
 
+	$sql = "UPDATE $t_glossary SET name='$safe_name', description='$safe_description' WHERE glossary_id=$safe_glossary_id";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	return $result;
 }
@@ -76,11 +74,11 @@ function edit_glossary_details($glossary_id,$name,$description) {
 */
 
 function delete_glossary_details($glossary_id) {
-	$t_glosary 			= Database :: get_course_table(TABLE_GLOSSARY);	
+	$t_glossary 			= Database :: get_course_table(TABLE_GLOSSARY);	
 	$safe_glossary_id 	= Database::escape_string($glossary_id);
-			
-	$sql = "DELETE FROM $t_glosary  WHERE glossary_id=$safe_glossary_id";
+	if (empty($glossary_id)) { return false; }
 
+	$sql = "DELETE FROM $t_glossary WHERE glossary_id=$safe_glossary_id";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	return $result;
-}  
+}

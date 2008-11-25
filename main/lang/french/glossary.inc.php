@@ -9,4 +9,6 @@ $TermUpdated = "Terme mis à jour";
 $TermConfirmDelete = "Supprimer ce terme";
 $TermAddButton = "Ajouter ce terme";
 $TermUpdateButton = "Enregistrer modification";
+$TermEditAction = "Éditer le terme";
+$TermDeleteAction = "Supprimer ce terme";
 ?>

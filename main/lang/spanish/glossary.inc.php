@@ -9,4 +9,6 @@ $TermUpdated = "Término actualizado";
 $TermConfirmDelete = "Realmente desea eliminar este término";
 $TermAddButton = "Añadir este término";
 $TermUpdateButton = "Actualizar término";
+$TermEditAction = "Editar término";
+$TermDeleteAction = "Eliminar término";
 ?>

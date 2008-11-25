@@ -1,5 +1,4 @@
-<?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
 /**
 ==============================================================================
 *	This script contains the actual html code to display the "header"
@@ -9,21 +8,15 @@
 ==============================================================================
 */
 ?>
-<div id="header">
-	<div id="header1">
-		<div id="top_corner"></div> 
-		<div id="institution">
-			<a href="<?php echo api_get_path(WEB_PATH);?>index.php" target="_top"><?php echo api_get_setting('siteName') ?></a>
-			<?php
-			$iurl = api_get_setting('InstitutionUrl');
-			$iname = api_get_setting('Institution');
-			if (!empty($iname))
-			{
-	           echo '-&nbsp;<a href="'.$iurl.'" target="_top">'.$iname.'</a>';
-			}
-			?>
+<div id="header">  <!-- header section start -->
+<div id="header1"> <!-- top of banner with institution name/hompage link -->
+<div id="top_corner"></div> 
+<div id="institution">
+<a href="<?php echo api_get_path(WEB_PATH);?>index.php" target="_top"><?php echo api_get_setting('siteName') ?></a>
+-
+<a href="<?php echo api_get_setting('InstitutionUrl') ?>" target="_top"><?php echo api_get_setting('Institution') ?></a>
+</div>
 
-		</div>
 <?php
 /*
 -----------------------------------------------------------------------------
@@ -32,14 +25,16 @@
 */
 if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 	//Put the name of the course in the header
-	echo '
-		<div id="my_courses">
-			<a href="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/index.php" target="_top">'.$_course['name'].' ';
+	?>
+	<div id="my_courses"><a href="<?php echo api_get_path(WEB_COURSE_PATH).$_course['path']; ?>/index.php" target="_top">
+	<?php
+
+	echo $_course['name']." ";
 	if (api_get_setting("display_coursecode_in_courselist") == "true") {
 		echo $_course['official_code'];
 	}
 
-	if(api_get_setting("use_session_mode") == "true" && isset($_SESSION['session_name'])) { 
+	if(api_get_setting("use_session_mode") == "true" && isset($_SESSION['session_name'])) {
 		echo ' ('.$_SESSION['session_name'].')';
 	}
 	if (api_get_setting("display_coursecode_in_courselist") == "true" AND api_get_setting("display_teacher_in_courselist") == "true") {
@@ -48,9 +43,7 @@ if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 	if (api_get_setting("display_teacher_in_courselist") == "true") {
 		echo stripslashes($_course['titular']);
 	}
-	echo '	</a>';
-	echo '
-		</div>';
+	echo "</a></div>";
 } elseif (isset ($nameTools) && $language_file != 'course_home') {
 	//Put the name of the user-tools in the header
 	if (!isset ($_user['user_id'])) {
@@ -62,7 +55,7 @@ if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 	}
 }
 //not to let the header disappear if there's nothing on the left
-echo '		<div class="clear">&nbsp;</div>';
+ echo '<div class="clear">&nbsp;</div>';
 
 /*
 -----------------------------------------------------------------------------
@@ -86,23 +79,18 @@ if (isset($_course['extLink']) && $_course['extLink']['name'] != "") {
 		echo "</a>";
 	} else {
 		echo $_course['extLink']['name'];
-	}
-		
+	}	
 }
-?>
+echo "</div> <!-- end of #header1 -->";
 
-	</div>
+echo '<div id="header2">';
+echo '<div id="Header2Right">';
+echo '<ul>';
 
-
-	<div id="header2">
-		<div id="Header2Right">
-			<ul>
-<?php 
 if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR (api_get_setting('showonline','users') == "true" AND $_user['user_id']) OR (api_get_setting('showonline','course') == "true" AND $_user['user_id'] AND $_cid)) {
 	if (api_get_setting("use_session_mode") == "true" && isset($_user['user_id']) && api_is_coach()) {
-		echo '	<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$_user['user_id'].'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';
+		echo "<li><a href='".api_get_path(WEB_PATH)."whoisonlinesession.php?id_coach=".$_user['user_id']."&referer=".urlencode($_SERVER['REQUEST_URI'])."' target='_top'>".get_lang('UsersConnectedToMySessions')."</a></li>";
 	}
-
 	$statistics_database = Database :: get_statistic_database();
 	$number = count(WhoIsOnline(api_get_user_id(), $statistics_database, api_get_setting('time_limit_whosonline')));
 	if(!empty($_course['id'])) {
@@ -111,24 +99,22 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
 	} else {
 		$number_online_in_course = 0;
 	}
-	echo '				<li>'.get_lang('UsersOnline').': ';
+	echo "<li>".get_lang('UsersOnline').": ";
 
 	// Display the who's online of the platform
 	if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR (api_get_setting('showonline','users') == "true" AND $_user['user_id'])) {
-		echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top">'.$number.'</a>';
+		echo "<a href='".api_get_path(WEB_PATH)."whoisonline.php' target='_top'>".$number."</a>";
 	}
 
 	// Display the who's online for the course
 	if (is_array($_course) AND api_get_setting('showonline','course') == "true" AND isset($_course['sysCode'])) {
 		echo "(<a href='".api_get_path(WEB_PATH)."whoisonline.php?cidReq=".$_course['sysCode']."' target='_top'>$number_online_in_course ".get_lang('InThisCourse')."</a>)";
 	}
-
-
 	echo '</li>';
 }
 
 if ($_user['user_id'] && isset($_cid)) {
-	if ((api_is_course_admin() || api_is_platform_admin()) && api_get_setting('student_view_enabled') == 'true') {
+	if (api_is_course_admin() && api_get_setting('student_view_enabled') == 'true') {
 		echo '<li>| ';
 		api_display_tool_view_option();
 		echo '</li>';
@@ -148,10 +134,15 @@ if ( api_is_allowed_to_edit() ) {
 ?>
 		</ul>
 	</div>
-		<div class="clear">&nbsp;</div>
-	</div>
-	
-	<div id="header3">
+<!-- link to campus home (not logged in)
+	<a href="<?php echo api_get_path(WEB_PATH); ?>index.php" target="_top"><?php echo api_get_setting('siteName'); ?></a>
+ -->
+<?php
+//not to let the empty header disappear and ensure help pic is inside the header
+echo "<div class=\"clear\">&nbsp;</div>";
+?>
+</div> <!-- End of header 2-->
+<div id="header3">
 <?php
 /*
 -----------------------------------------------------------------------------
@@ -160,7 +151,7 @@ if ( api_is_allowed_to_edit() ) {
 */
 if ($_user['user_id']) {
 	$login = '';
-	if(api_is_anonymous()) {
+	if (api_is_anonymous()) {
 		$login = '('.get_lang('Anonymous').')';
 	} else {
 		$uinfo = api_get_user_info(api_get_user_id());
@@ -169,14 +160,20 @@ if ($_user['user_id']) {
 	?>
 	 <!-- start user section line with name, my course, my profile, scorm info, etc -->
 
+	<form method="get" action="<?php echo api_get_path(WEB_PATH); ?>index.php" class="banner_links" target="_top">
+	<input type="hidden" name="logout" value="true"/>
+	<input type="hidden" name="uid" value="<?php echo $_user['user_id']; ?>"/>
 	 <ul id="logout">
-				<li><a href="<?php echo api_get_path(WEB_PATH); ?>index.php?action=logout"><span><?php echo get_lang('Logout').' '.$login; ?></span></a></li>
+	 <li>
+	<input type="submit" name="submit" value="<?php echo get_lang("Logout").' '.$login; ?>"
+	onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"
+	class="logout" style="	height:20px;" />
+	 </li>
 	 </ul>
+	</form>
 <?php
 }
-?>
-		<ul>
-<?php
+echo "<ul>\n";
 $navigation = array();
 
 $possible_tabs = get_tabs();
@@ -192,7 +189,7 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 	// My Courses
 	if (api_get_setting('show_tabs', 'my_courses') == 'true') {
 		$navigation['mycourses'] = $possible_tabs['mycourses'];
-	} else{
+	} else {
 		$menu_navigation['mycourses'] = $possible_tabs['mycourses'];
 	}
 
@@ -214,20 +211,20 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 	if (api_get_setting('gradebook_enable') == 'true') {
 		if (api_get_setting('show_tabs', 'my_gradebook') == 'true') {
 			$navigation['mygradebook'] = $possible_tabs['mygradebook'];
-		} else{
+		} else {
 			$menu_navigation['mygradebook'] = $possible_tabs['mygradebook'];
 		}
 	}
 	
 	// Reporting
 	if (api_get_setting('show_tabs', 'reporting') == 'true') {
-		if(api_is_allowed_to_create_course() || $_user['status'] == DRH) {
+		if (api_is_allowed_to_create_course() || $_user['status'] == DRH) {
 			$navigation['session_my_space'] = $possible_tabs['session_my_space'];
 		} else {
 			$navigation['session_my_space'] = $possible_tabs['session_my_progress'];
 		}
 	} else {
-		if(api_is_allowed_to_create_course() || $_user['status'] == DRH) {
+		if (api_is_allowed_to_create_course() || $_user['status'] == DRH) {
 			$menu_navigation['session_my_space'] = $possible_tabs['session_my_space'];
 		} else {
 			$menu_navigation['session_my_space'] = $possible_tabs['session_my_progress'];
@@ -235,7 +232,7 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 	}
 	
 	
-	if(api_is_platform_admin(true)) {
+	if (api_is_platform_admin(true)) {
 		if (api_get_setting('show_tabs', 'platform_administration') == 'true') {
 			$navigation['platform_admin'] = $possible_tabs['platform_admin'];
 		} else {
@@ -246,28 +243,34 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 
 // Displaying the tabs
 foreach($navigation as $section => $navigation_info) {
-	if(isset($GLOBALS['this_section'])) {
+	if (isset($GLOBALS['this_section'])) {
 		$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
 	} else {
 		$current = '';
 	}
-	echo '			<li'.$current.'><a href="'.$navigation_info['url'].'" target="_top"><span>'.$navigation_info['title'].'</span></a></li>'."\n";
+	echo '<li'.$current.'>';
+	echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
+	echo '</li>';
+	echo "\n";
 }
 ?>
-		</ul>
-		<div style="clear: both;" class="clear"> </div>
-	</div>
-	
-
-	<div id="header4">
-			<?php
-			/*
+</ul><!-- small hack to have it look good in opera -->&nbsp;
+</div> <!-- end of header3 (user) section -->
+<?php
+/*
+-----------------------------------------------------------------------------
+	BREADCRUMBS
+-----------------------------------------------------------------------------
+*/
+?>
+<div id="header4">
+<?php
+/*
  * if the user is a coach he can see the users who are logged in its session
  */
 $navigation = array();
 // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
-		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
-if (isset ($_cid) and $_cid!=-1 and isset($_course) and !isset($_GET['hide_course_breadcrumb'])) {
+if (isset ($_cid) and $_cid!=-1 and isset($_course)) {
 	$navigation_item['url'] = $web_course_path . $_course['path'].'/index.php';
 	switch(api_get_setting('breadcrumbs_course_homepage')) {
 		case 'get_lang':
@@ -284,7 +287,7 @@ if (isset ($_cid) and $_cid!=-1 and isset($_course) and !isset($_GET['hide_cours
 }
 // part 2: Interbreadcrumbs. If there is an array $interbreadcrumb defined then these have to appear before the last breadcrumb (which is the tool itself)
 if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
-	foreach($interbreadcrumb as $breadcrumb_step) {
+	foreach ($interbreadcrumb as $breadcrumb_step) {
 		$sep = (strrchr($breadcrumb_step['url'], '?') ? '&amp;' : '?');
 		$navigation_item['url'] = $breadcrumb_step['url'].$sep.api_get_cidreq();
 		$navigation_item['title'] = $breadcrumb_step['name'];
@@ -300,18 +303,17 @@ if (isset ($nameTools) AND $language_file<>"course_home") {
 }
 
 $final_navigation = array();
-foreach($navigation as $index => $navigation_info) {
-	if(!empty($navigation_info['title'])) {
-		$final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="breadcrumb breadcrumb'.$index.'" target="_top">'.$navigation_info['title'].'</a>';
+foreach ($navigation as $index => $navigation_info) {
+	if (!empty($navigation_info['title'])) {
+		$final_navigation[$index] = '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
 	}
 }
 echo implode(' &gt; ',$final_navigation);
 ?>
 
-	</div>
-
+</div><!-- end of header4 -->
 <?php
-if(api_get_setting('show_toolshortcuts')=='true') {
+if (api_get_setting('show_toolshortcuts')=='true') {
 	echo '<div id="toolshortcuts">';
 	require_once('tool_navigation_menu.inc.php');
  	show_navigation_tool_shortcuts();
@@ -334,7 +336,7 @@ if (isset ($dokeos_database_connection)) {
 <?php
 //to mask the main div, set $header_hide_main_div to true in any script just before calling Display::display_header();
 global $header_hide_main_div;
-if (!empty($header_hide_main_div) && $header_hide_main_div===true) {
+if(!empty($header_hide_main_div) && $header_hide_main_div===true) {
 	//do nothing
 } else {
 ?>
@@ -367,8 +369,8 @@ if(api_get_setting('show_navigation_menu') != 'false' && api_get_setting('show_n
 		echo '<div id="menuButton">';
  		echo $output_string_menu;
  		echo '</div>';
-		if(isset($_SESSION['hideMenu'])) {
-			if($_SESSION['hideMenu'] =="shown") {
+		if (isset($_SESSION['hideMenu'])) {
+			if ($_SESSION['hideMenu'] =="shown") {
  				if (isset($_cid) ) {
 					echo '<div id="centerwrap"> <!-- start of #centerwrap -->';
 					echo '<div id="center"> <!-- start of #center -->';
@@ -403,7 +405,7 @@ function get_tabs() {
 
 	// My Courses
 	if(api_get_setting('use_session_mode')=='true') {
-		if(api_is_allowed_to_create_course()) {
+		if (api_is_allowed_to_create_course()) {
 			// Link to my courses for teachers
 			$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php?nosession=true';
 			$navigation['mycourses']['title'] = get_lang('MyCourses');
@@ -412,6 +414,13 @@ function get_tabs() {
 			$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
 			$navigation['mycourses']['title'] = get_lang('MyCourses');
 		}
+
+		// Link to active sessions
+		//$navigation[SECTION_ACTIVESESSIONS]['url'] = api_get_path(WEB_PATH).'user_portal.php';
+		//$navigation[SECTION_ACTIVESESSIONS]['title'] = get_lang('myActiveSessions');
+		// Link to inactive sessions
+		//$navigation[SECTION_INACTIVESESSIONS]['url'] = api_get_path(WEB_PATH).'user_portal.php?inactives';
+		//$navigation[SECTION_INACTIVESESSIONS]['title'] = get_lang('myInActiveSessions');
 
 	} else {
 		// Link to my courses
@@ -436,18 +445,17 @@ function get_tabs() {
 	// Reporting
 	if(api_is_allowed_to_create_course() || $_user['status']==DRH) {
 		// Link to my space
-		$navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/';
+		$navigation['session_my_space']['url'] = api_get_path(WEB_PATH).'main/mySpace/';
 		$navigation['session_my_space']['title'] = get_lang('MySpace');
 	} else {
 		// Link to my progress
-		$navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH).'auth/my_progress.php';
+		$navigation['session_my_progress']['url'] = api_get_path(WEB_PATH).'main/auth/my_progress.php';
 		$navigation['session_my_progress']['title'] = get_lang('MyProgress');
 	}
 
 	// Platform administration
 	if (api_is_platform_admin(true)) {
-		//$navigation['platform_admin']['url'] = $rootAdminWeb;
-		$navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/';
+		$navigation['platform_admin']['url'] = $rootAdminWeb;
 		$navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
 	}
 

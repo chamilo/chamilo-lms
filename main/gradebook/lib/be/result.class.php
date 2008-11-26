@@ -171,7 +171,7 @@ class Result
 			
 			$sql = 'INSERT INTO '.$tbl_grade_results_log
 					.' (id_result,user_id, evaluation_id,
-					date';
+					date_log';
 			if (isset($arr['score'])) {
 			 	$sql .= ',score';	
 			}

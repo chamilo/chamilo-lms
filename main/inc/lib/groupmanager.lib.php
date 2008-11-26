@@ -176,7 +176,7 @@ class GroupManager
 		{
 			$places = $category['max_student'];
 		}
-		$sql = "INSERT INTO ".$table_group." SET category_id='".$category_id."', max_student = '".$places."', doc_state = '".$category['doc_state']."', calendar_state = '".$category['calendar_state']."', work_state = '".$category['work_state']."', announcements_state = '".$category['announcements_state']."', wiki_state = '".$category['wiki_state']."', self_registration_allowed = '".$category['self_reg_allowed']."',  self_unregistration_allowed = '".$category['self_unreg_allowed']."', session_id=".intval($_SESSION['id_session']);
+		$sql = "INSERT INTO ".$table_group." SET category_id='".$category_id."', max_student = '".$places."', doc_state = '".$category['doc_state']."', calendar_state = '".$category['calendar_state']."', work_state = '".$category['work_state']."', announcements_state = '".$category['announcements_state']."', forum_state = '".$category['forum_state']."', wiki_state = '".$category['wiki_state']."', self_registration_allowed = '".$category['self_reg_allowed']."',  self_unregistration_allowed = '".$category['self_unreg_allowed']."', session_id=".intval($_SESSION['id_session']);
 		api_sql_query($sql,__FILE__,__LINE__);
 		$lastId = mysql_insert_id();
 		/*$secret_directory = uniqid("")."_team_".$lastId;
@@ -398,7 +398,7 @@ class GroupManager
 	/**
 	 * Get group properties
 	 * @param int $group_id The group from which properties are requested.
-	 * @return array All properties. Array-keys are name, tutor_id, description, maximum_number_of_students, directory
+	 * @return array All properties. Array-keys are name, tutor_id, description, maximum_number_of_students, directory and visibility of tools
 	 */
 	function get_group_properties($group_id)
 	{
@@ -418,6 +418,7 @@ class GroupManager
 		$result['work_state'] = $db_object->work_state;
 		$result['calendar_state'] = $db_object->calendar_state;
 		$result['announcements_state'] = $db_object->announcements_state;
+		$result['forum_state'] = $db_object->forum_state;
 		$result['wiki_state'] = $db_object->wiki_state;
 		$result['directory'] = $db_object->secret_directory;
 		$result['self_registration_allowed'] = $db_object->self_registration_allowed;
@@ -427,25 +428,31 @@ class GroupManager
 	/**
 	 * Set group properties
 	 * Changes the group's properties.
-	 * @param int $group_id
-	 * @param string $name
-	 * @param string $description
-	 * @param int $tutor_id
-	 * @param int $maximum_number_of_students
-	 * @param bool $self_registration_allowed
-	 * @param bool $self_unregistration_allowed
-	 * @return bool TRUE if properties are successfully changed.
+	 * @param int		Group Id
+	 * @param string 	Group name
+	 * @param string	Group description
+	 * @param int		Max number of students in group
+	 * @param int		Document tool's visibility (0=none,1=private,2=public)
+	 * @param int		Work tool's visibility (0=none,1=private,2=public)
+	 * @param int		Calendar tool's visibility (0=none,1=private,2=public)
+	 * @param int		Announcement tool's visibility (0=none,1=private,2=public)
+	 * @param int		Forum tool's visibility (0=none,1=private,2=public)
+	 * @param int		Wiki tool's visibility (0=none,1=private,2=public)
+	 * @param bool 		Whether self registration is allowed or not
+	 * @param bool 		Whether self unregistration is allowed or not
+	 * @return bool 	TRUE if properties are successfully changed, false otherwise
 	 */
-	function set_group_properties($group_id, $name, $description, $maximum_number_of_students, $doc_state, $work_state, $calendar_state, $announcements_state, $wiki_state, $self_registration_allowed, $self_unregistration_allowed)
-	{
+	function set_group_properties($group_id, $name, $description, $maximum_number_of_students, $doc_state, $work_state, $calendar_state, $announcements_state, $forum_state,$wiki_state, $self_registration_allowed, $self_unregistration_allowed) {
 		$table_group = Database :: get_course_table(TABLE_GROUP);
-		//$table_forum = Database :: get_course_table(TABLE_FORUM);
+		$table_forum = Database :: get_course_table(TABLE_FORUM);
+		//$forum_id = get_forums_of_group($group_id);
 		$sql = "UPDATE ".$table_group."
 					SET name='".trim($name)."',
 					doc_state = '".$doc_state."',
 					work_state = '".$work_state."',
 					calendar_state = '".$calendar_state."',
 					announcements_state = '".$announcements_state."',
+					forum_state = '".$forum_state."',
 					wiki_state = '".$wiki_state."',
 					description='".trim($description)."',
 					max_student=".$maximum_number_of_students.",
@@ -453,8 +460,18 @@ class GroupManager
 					self_unregistration_allowed='".$self_unregistration_allowed."'
 					WHERE id=".$group_id;
 		$result = api_sql_query($sql,__FILE__,__LINE__);
-		//$sql = "UPDATE ".$table_forum." SET forum_name='".trim($name)."' WHERE forum_id=".$forum_id;
-		//$result &= api_sql_query($sql,__FILE__,__LINE__);
+		//Here we are updating a field in the table forum_forum that perhaps duplicates the table group_info.forum_state cvargas 
+		$forum_state = (int) $forum_state;
+		if ($forum_state!==0) {
+			$sql2 = "UPDATE ".$table_forum." SET ";
+			if ($forum_state===1) {
+				$sql2 .= " forum_group_public_private='public' ";
+			} else if ($forum_state===2) {
+				$sql2 .= " forum_group_public_private='private' ";
+			}
+			$sql2 .=" WHERE forum_of_group=".$group_id;
+			$result2 = api_sql_query($sql2,__FILE__,__LINE__);
+		}
 		return $result;
 	}
 	/**

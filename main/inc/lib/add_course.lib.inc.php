@@ -970,6 +970,7 @@ function update_Db_course($courseDbName)
 		calendar_state tinyint unsigned NOT NULL default 0,
 		work_state tinyint unsigned NOT NULL default 0,
 		announcements_state tinyint unsigned NOT NULL default 0,
+		forum_state tinyint unsigned NOT NULL default 0,
 		wiki_state tinyint unsigned NOT NULL default 1,
 		secret_directory varchar(255) default NULL,
 		self_registration_allowed tinyint unsigned NOT NULL default '0',

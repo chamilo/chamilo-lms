@@ -127,3 +127,4 @@ ALTER TABLE forum_notification CHANGE post_id post_id INT NULL;
 ALTER TABLE forum_thread ADD thread_weight smallint default 0;
 ALTER TABLE forum_notification CHANGE post_id post_id INT NULL;
 ALTER TABLE quiz_answer CHANGE hotspot_coordinates hotspot_coordinates text;
+ALTER TABLE group_info ADD forum_state TINYINT NULL AFTER announcements_state;

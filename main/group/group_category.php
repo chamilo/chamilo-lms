@@ -1,5 +1,5 @@
 <?php
-// $Id: group_category.php 16248 2008-09-05 13:30:55Z elixir_inter $
+// $Id: group_category.php 16962 2008-11-26 20:40:18Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -81,7 +81,7 @@ if (get_setting('allow_group_categories') == 'true')
 	{
 		$nameTools = get_lang('AddCategory');
 		// default values for new category
-		$category = array ('groups_per_user' => 1, 'doc_state' => TOOL_PRIVATE, 'work_state' => TOOL_PRIVATE, 'wiki_state' => TOOL_PRIVATE, 'calendar_state' => TOOL_PRIVATE, 'announcements_state' => TOOL_PRIVATE, 'max_student' => 0);
+		$category = array ('groups_per_user' => 1, 'doc_state' => TOOL_PRIVATE, 'work_state' => TOOL_PRIVATE, 'wiki_state' => TOOL_PRIVATE, 'calendar_state' => TOOL_PRIVATE, 'announcements_state'=> TOOL_PRIVATE, 'forum_state' => TOOL_PRIVATE, 'max_student' => 0);
 	}
 }
 else

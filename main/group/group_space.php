@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 16873 2008-11-22 23:22:02Z herodoto $
+<?php //$Id: group_space.php 16962 2008-11-26 20:40:18Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -125,11 +125,6 @@ if( isset($_GET['action']))
 			break;
 	}
 }
-
-
-
-
-
 /*
 -----------------------------------------------------------
 	Main Display Area
@@ -146,9 +141,6 @@ if (!empty($current_group['description']))
 {
 	echo '<blockquote>'.stripslashes($current_group['description']).'</blockquote>';
 }
-
-
-
 /*
  * Group Tools
  */
@@ -156,15 +148,15 @@ if (!empty($current_group['description']))
 if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SESSION['_user']['user_id'], $current_group['id']))
 {
 	$tools = '';
+	// link to the forum of this group
 	$forums_of_groups = get_forums_of_group($current_group['id']);
-	if (is_array($forums_of_groups))
-	{
-		foreach ($forums_of_groups as $key => $value)
-		{
-			if($value['forum_group_public_private'] == 'public' || ($user_subscribe_to_current_group && $value['forum_group_public_private'] == 'private') || $user_is_tutor || api_is_allowed_to_edit(false,true))
-			{
-				$tools.= Display::return_icon('forum.gif', get_lang("GroupForum")) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.$value['forum_title'].'</a><br />';
-			}
+	if (is_array($forums_of_groups)) {
+		if ( $current_group['forum_state'] != TOOL_NOT_AVAILABLE ) {
+			foreach ($forums_of_groups as $key => $value) {
+					if ($value['forum_group_public_private'] == 'public' || ($user_subscribe_to_current_group && $value['forum_group_public_private'] == 'private') || $user_is_tutor || api_is_allowed_to_edit(false,true)) {
+						$tools.= Display::return_icon('forum.gif', get_lang("GroupForum")) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.$value['forum_title'].'</a><br />';
+					}
+				}
 		}
 	}
 	if( $current_group['doc_state'] != TOOL_NOT_AVAILABLE )
@@ -204,14 +196,14 @@ if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SES
 else
 {
 	$tools = '';
+	// link to the forum of this group
 	$forums_of_groups = get_forums_of_group($current_group['id']);
-	if (is_array($forums_of_groups))
-	{
-		foreach ($forums_of_groups as $key => $value)
-		{
-			if($value['forum_group_public_private'] == 'public' )
-			{
-				$tools.= Display::return_icon('forum.gif', get_lang("GroupForum")) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.$value['forum_title'].'</a><br />';
+	if (is_array($forums_of_groups)) {
+		if ( $current_group['forum_state'] == TOOL_PUBLIC ) {
+			foreach ($forums_of_groups as $key => $value) {
+				if ($value['forum_group_public_private'] == 'public' ) {
+					$tools.= Display::return_icon('forum.gif', get_lang("GroupForum")) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.$value['forum_title'].'</a><br />';
+				}
 			}
 		}
 	}	

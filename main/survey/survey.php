@@ -1,4 +1,4 @@
-<?php // $Id: survey.php 16739 2008-11-13 15:36:40Z pcool $
+<?php // $Id: survey.php 16967 2008-11-26 22:22:07Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -26,7 +26,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 16739 2008-11-13 15:36:40Z pcool $
+* 	@version $Id: survey.php 16967 2008-11-26 22:22:07Z yannoo $
 *
 * 	@todo use quickforms for the forms
 */
@@ -67,7 +67,12 @@ $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Surv
 
 // getting the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
-$tool_name = substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
+
+if (substr($survey_data['title'],0,3)!='<p>'){
+	$tool_name = substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
+}else{
+	$tool_name = substr(html_entity_decode(substr($survey_data['title'],3,-4),ENT_QUOTES,$charset), 0, 40);
+}
 $is_survey_type_1 = ($survey_data['survey_type']==1)?true:false;
 if (strlen(strip_tags($survey_data['title'])) > 40)
 {

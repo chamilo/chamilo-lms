@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 16888 2008-11-24 20:03:34Z yannoo $
+<?php // $Id: user_list.php 16958 2008-11-26 15:07:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -386,29 +386,29 @@ function modify_filter($user_id,$url_params,$row)
 	$result .= '<span id="tooltip">
 				<span class="toolbox">
 				<a style="position: relative;" class="tooltipLinkInner" href="#">
-				<img src="../img/courses.gif" id="coursesofuser'.$user_id.'" onmouseout="document.getElementById(\'user'.$user_id.'\').style.display=\'none\'" onmouseover="xajax_courses_of_user('.$user_id.');" style="vertical-align:middle;"/>
+				'.Display::return_icon('edit.gif', get_lang('Edit')).'<img src="../img/.gif" id="coursesofuser'.$user_id.'" onmouseout="document.getElementById(\'user'.$user_id.'\').style.display=\'none\'" onmouseover="xajax_courses_of_user('.$user_id.');" style="vertical-align:middle;"/>
 				<span id="user'.$user_id.'" style="margin-left: -100px; border:1px solid black; width: 200px; background-color:white; z-index:99; padding: 3px; display: none; margin-right:inherit;">
-				<div style="text-align:center;"><img src="../img/anim-loader.gif" height="20" /></div>
+				<div style="text-align:center;">'.Display::return_icon('anim-loader.gif', '', array('height' => '20')).'</div>
 				</span></a></span></span>';	
-	$result .= '<a href="user_information.php?user_id='.$user_id.'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>&nbsp;';
-	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'"><img src="../img/login_as.gif" border="0" style="vertical-align: middle;" alt="'.get_lang('LoginAs').'" title="'.get_lang('LoginAs').'"/></a>&nbsp;';
+	$result .= '<a href="user_information.php?user_id='.$user_id.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;';
+	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;';
 
 	$statusname = api_get_status_langvars();
 	if ($row['6'] != $statusname[STUDENT])
 	{
-		$result .= '<img src="../img/statistics_na.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/>&nbsp;';
+		$result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'nbsp;';
 	}
 	else
 	{
-		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;';
+		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;';
 	}
 
-	$result .= '<a href="user_edit.php?user_id='.$user_id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;';
+	$result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;';
 
 	if ($row[0]<>$_user['user_id']) { // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-		$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>';
+		$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 	} else {
-		$result .= '<img src="../img/delete_na.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/>';
+		$result .= Display::return_icon('delete_na.gif', get_lang('Delete'));
 	}
 
 	return $result;
@@ -441,7 +441,7 @@ function active_filter($active, $url_params, $row)
 
 	if ($row['0']<>$_user['user_id']) // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
 	{
-		$result = '<a href="user_list.php?action='.$action.'&amp;user_id='.$row['0'].'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"><img src="../img/'.$image.'.gif" border="0" style="vertical-align: middle;" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></a>';
+		$result = '<a href="user_list.php?action='.$action.'&amp;user_id='.$row['0'].'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon($image.'.gif', get_lang(ucfirst($action))).'</a>';
 	}
 	return $result;
 }

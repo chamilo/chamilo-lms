@@ -1,5 +1,5 @@
 <?php
-// $Id: user_information.php 16954 2008-11-26 14:41:35Z pcool $
+// $Id: user_information.php 16958 2008-11-26 15:07:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -162,12 +162,12 @@ if(count($sessions)>0){
 			$row[] = $my_course['k'];
 			$row[] = $my_course['i'];
 			$row[] = $my_course['s'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
-			$tools = '<a href="course_information.php?code='.$my_course['k'].'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle" /></a>'.
-					'<a href="'.api_get_path(WEB_COURSE_PATH).$my_course['d'].'?id_session='.$id_session.'"><img src="../img/course_home.gif" border="0" style="vertical-align: middle" /></a>' .
-					'<a href="course_edit.php?course_code='.$my_course['k'].'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>';
+			$tools = '<a href="course_information.php?code='.$my_course['k'].'">'.Display::return_icon('synthese_view.gif').'</a>'.
+					'<a href="'.api_get_path(WEB_COURSE_PATH).$my_course['d'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif').'</a>' .
+					'<a href="course_edit.php?course_code='.$my_course['k'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 			
 			if( $my_course->status == STUDENT ){
-				$tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$my_course['k'].'&user_id='.$user['user_id'].'"><img src="../img/delete.gif"/></a>';
+				$tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$my_course['k'].'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 						
 			}
 			$row[] = $tools;
@@ -207,12 +207,12 @@ if (mysql_num_rows($res) > 0)
 		$row[] = $course->code;
 		$row[] = $course->title;
 		$row[] = $course->status == STUDENT ? get_lang('Student') : get_lang('Teacher');
-		$tools = '<a href="course_information.php?code='.$course->code.'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle" /></a>'.
-				'<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'"><img src="../img/course_home.gif" border="0" style="vertical-align: middle" /></a>' .
-				'<a href="course_edit.php?course_code='.$course->code.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>';
+		$tools = '<a href="course_information.php?code='.$course->code.'">'.Display::return_icon('synthese_view.gif').'</a>'.
+				'<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'">'.Display::return_icon('course_home.gif').'</a>' .
+				'<a href="course_edit.php?course_code='.$course->code.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 		if( $course->status == STUDENT )
 		{
-			$tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$course->code.'&user_id='.$user['user_id'].'"><img src="../img/delete.gif"/></a>';
+			$tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$course->code.'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 				
 		}
 		$row[] = $tools;
@@ -245,7 +245,7 @@ if (mysql_num_rows($res) > 0)
 	{
 		$row = array();
 		$row[] = $class->name;
-		$row[] = '<a href="class_information.php?id='.$class->id.'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle" /></a>';
+		$row[] = '<a href="class_information.php?id='.$class->id.'">'.Display::return_icon('synthese_view.gif').'</a>';
 		$data[] = $row;
 	}
 	echo '<p><b>'.get_lang('Classes').'</b></p>';

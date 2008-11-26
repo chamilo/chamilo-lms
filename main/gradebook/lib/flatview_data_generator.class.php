@@ -138,6 +138,7 @@ class FlatViewDataGenerator
 		if ($ignore_score_color) {
 			$displaytype |= SCORE_IGNORE_SPLIT;			
 		}
+
 		foreach ($selected_users as $user) {
 			$row = array ();
 			$row[] = $user[0];	// user id
@@ -151,9 +152,9 @@ class FlatViewDataGenerator
 				 ($count < $items_count ) && ($items_start + $count < count($this->evals_links));
 				 $count++) {
 				$item = $this->evals_links [$count + $items_start];
-				$score = $item->calc_score($user[0]);
-				$item_value+=$score[0];
-				$item_total+=$score[1];				
+				$score = $item->calc_score($user[0]);					
+				$item_value+=$score[0]/$score[1]*$item->get_weight();			
+				$item_total+=$item->get_weight();				
 				$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);								
 			}
 			$total_score=array($item_value,$item_total);

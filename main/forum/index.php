@@ -311,8 +311,10 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' ) {
 						echo "\t<tr class=\"forum\">\n";
 						
 						// Showing the image
-						echo "\t\t<td width=\"50\">"; 
-						echo '<img src="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$forum['forum_image'].'">';
+						echo "\t\t<td width=\"50\">";
+						if(!empty($forum['forum_image'])) {
+							echo '<img src="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$forum['forum_image'].'">';
+						}
 						echo "</td>\n";
 					
 					

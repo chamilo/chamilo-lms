@@ -1,4 +1,4 @@
-<?php // $Id: userInfo.php 16753 2008-11-14 22:27:04Z juliomontoya $
+<?php // $Id: userInfo.php 16965 2008-11-26 22:06:10Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -492,8 +492,19 @@ elseif ($displayMode == "viewContentList") // default display
 				echo "</tr>",
 				"</table>";
 				//"<p><a href=\"mailto:",$mainUserInfo['email'],"\">",$mainUserInfo['email'],"</a>",
-				echo "<p>". Display::encrypted_mailto_link($mainUserInfo['email'],$mainUserInfo['email']). "</p>";
 				
+				if (api_get_setting("show_email_addresses") == "true")
+				{				
+					echo "<p>". Display::encrypted_mailto_link($mainUserInfo['email'],$mainUserInfo['email']). "</p>";
+				}
+				else
+				{
+					if (api_is_allowed_to_edit())
+					{
+						echo "<p>". Display::encrypted_mailto_link($mainUserInfo['email'],$mainUserInfo['email']). "</p>";
+					}
+				}
+								
 				if (api_get_setting('extended_profile') == 'true')
 				{
 					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';

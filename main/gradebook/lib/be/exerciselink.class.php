@@ -113,35 +113,50 @@ class ExerciseLink extends AbstractLink
 	 */
     public function calc_score($stud_id = null) {
     	$tbl_stats = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    	$sql = 'SELECT * FROM '.$tbl_stats
-    			." WHERE exe_cours_id = '".$this->get_course_code()."'"
-    			.' AND exe_exo_id = '.$this->get_ref_id();
-    	
-    	if (isset($stud_id)) {
-     	$sql .= ' AND exe_user_id = '.$stud_id;  		
-    	}
-    	// order by id, that way the student's first attempt is accessed first
-		$sql .= ' ORDER BY exe_id';
-
-    	$scores = api_sql_query($sql, __FILE__, __LINE__);
-
+    	$tbl_stats_e_attempt_recording = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);  
 		// for 1 student
-    	if (isset($stud_id)) {
-    		if ($data=Database::fetch_array($scores)) {
-    			return array ($data['exe_result'], $data['exe_weighting']);    			
-    		} else {
-     			return null;   			
-    		}
+    	if (isset($stud_id))
+    	{    			
+    		$sql = "SELECT DISTINCT  e.exe_id, exe_result, exe_weighting, exe_user_id
+					FROM $tbl_stats  as e INNER JOIN 
+					$tbl_stats_e_attempt_recording as r
+					ON (e.exe_id =r.exe_id)
+					WHERE e.exe_cours_id = '".$this->get_course_code()."'AND					
+					e.exe_id = '".$this->get_ref_id()."'  AND author != ''  AND exe_user_id = '$stud_id' ORDER BY  e.exe_id DESC ";
+			$scores = api_sql_query($sql, __FILE__, __LINE__);
+    		
+    		if ($data=mysql_fetch_array($scores))
+    		{	
+    			return array ($data['exe_result'], $data['exe_weighting']);
+       		}
+    		else
+    			return null;
+    	}    	
+    	// all students -> get average
+    	else
+    	{
+    		// normal way of getting the info
+		
+			$sql = "SELECT DISTINCT  e.exe_id, exe_result, exe_weighting, exe_user_id
+				FROM $tbl_stats  as e INNER JOIN 
+				$tbl_stats_e_attempt_recording as r
+				ON (e.exe_id =r.exe_id)
+				WHERE e.exe_cours_id = '".$this->get_course_code()."'AND					
+				e.exe_exo_id = '".$this->get_ref_id()."'  AND author != ''  ORDER BY  e.exe_id DESC ";
+				    						
+	    	$scores = api_sql_query($sql, __FILE__, __LINE__);
 
-    	} else {// all students -> get average
     		$students=array();  // user list, needed to make sure we only
     							// take first attempts into account
 			$rescount = 0;
 			$sum = 0;
 
-			while ($data=Database::fetch_array($scores)) {
-				if (!(array_key_exists($data['exe_user_id'],$students))) {
-					if ($data['exe_weighting'] != 0) {
+			while ($data=mysql_fetch_array($scores))
+			{
+				if (!(array_key_exists($data['exe_user_id'],$students)))
+				{
+					if ($data['exe_weighting'] != 0)
+					{
 						$students[$data['exe_user_id']] = $data['exe_result'];
 						$rescount++;
 						$sum += ($data['exe_result'] / $data['exe_weighting']);
@@ -149,12 +164,10 @@ class ExerciseLink extends AbstractLink
 				}
 			}
 
-			if ($rescount == 0) {
-				return null;				
-			} else {
-				return array ($sum , $rescount);				
-			}
-
+			if ($rescount == 0)
+				return null;
+			else
+				return array ($sum , $rescount);
     	}
     }
     

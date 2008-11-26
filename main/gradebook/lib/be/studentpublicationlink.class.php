@@ -24,7 +24,7 @@
 */
 /**
  * Gradebook link to student publication item
- * @author Bert Steppé
+ * @author Bert Steppï¿½
  * @package dokeos.gradebook
  */
 class StudentPublicationLink extends AbstractLink
@@ -154,7 +154,7 @@ class StudentPublicationLink extends AbstractLink
 		$query = api_sql_query($sql,__FILE__,__LINE__);
 		$assignment = Database::fetch_array($query);
 
-    	if(Database::num_rows($assignment)==0) {
+    	if(count($assignment)==0) {
     		 $v_assigment_id ='0';
     	} else { 
     		 $v_assigment_id = $assignment['id'];
@@ -175,7 +175,7 @@ class StudentPublicationLink extends AbstractLink
     		if ($data=Database::fetch_array($scores)) {
      			return array ($data['qualification'], $assignment['qualification']);   			
     		} else {
-     			return null;   			
+     			return '';   			
     		}
     	} else {
     		$students=array();  // user list, needed to make sure we only

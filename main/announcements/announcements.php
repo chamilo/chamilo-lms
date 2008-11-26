@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 16864 2008-11-21 22:20:28Z herodoto $
+<?php //$Id: announcements.php 16959 2008-11-26 15:10:46Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1374,12 +1374,12 @@ if(!empty($error_message))
 				// User or group icon
 				if ($myrow['to_group_id']!== '0' and $myrow['to_group_id']!== 'NULL')
 				{
-					echo "\t\t\t\t\t\t<img alt=\"$alt_ug\" src='../img/group.gif'>\n";
+					echo "\t\t\t\t\t\t".Display::return_icon('group.gif', $alt_ug)."\n";
 				}
 				// the email icon
 				if ($myrow['email_sent'] == '1')
 				{
-					echo "\t\t\t\t\t\t<img alt=\"$alt_mail\" src='../img/email.gif'>\n";
+					echo "\t\t\t\t\t\t".Display::return_icon('email.gif', $alt_mail)."\n";
 				}
 				echo "\t\t\t\t\t</th>\n";
 				/*==================================================================
@@ -1453,12 +1453,12 @@ if(!empty($error_message))
 												SHOW MOD/DEL/VIS FUNCTIONS
 					=====================================================================*/
 					echo	"<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$myrow['id']."\">",
-							"<img src=\"../img/edit.gif\" title=\"",get_lang('Modify'),"\" border=\"0\" align=\"absmiddle\">",
+							Display::return_icon('edit.gif', get_lang('Edit')),
 							"</a>";
 
 
 					if (api_is_allowed_to_edit(false,true)) echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">",
-							"<img src=\"../img/delete.gif\" title=\"",get_lang('Delete'),"\" border=\"0\" align=\"absmiddle\">",
+							Display::return_icon('delete.gif', get_lang('Delete')),
 							"</a>";
 
 							if ($myrow['visibility']==1)
@@ -1473,7 +1473,7 @@ if(!empty($error_message))
 							}
 
 							echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".(!empty($_GET['origin'])?$_GET['origin']:'')."&action=showhide&id=".$myrow['id']."\">",
-									"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" alt=\"".$alt_visibility."\"/></a>";
+									Display::return_icon($image_visibility.'.gif', $alt_visibility)."</a>";
 
 
 
@@ -1483,7 +1483,7 @@ if(!empty($error_message))
 							{
 
 							echo	"<a href=\"".api_get_self()."?".api_get_cidreq()."&up=",$myrow["id"],"\">",
-									"<img src=../img/up.gif border=0 title=\"".get_lang('Up')."\" align=\"absmiddle\">",
+									Display::return_icon('up.gif', get_lang('Up')),
 									"</a>";
 							}
 
@@ -1492,7 +1492,7 @@ if(!empty($error_message))
 							{
 
 							echo	"<a href=\"".api_get_self()."?".api_get_cidreq()."&down=".$myrow["id"]."\">",
-									"<img src=\"../img/down.gif\" border=\"0\" title=\"".get_lang('Down')."\" align=\"absmiddle\">",
+									Display::return_icon('down.gif', get_lang('Down')),
 									"</a>";
 							}
 
@@ -1504,7 +1504,7 @@ if(!empty($error_message))
 					$iterator ++;
 				} // is_allowed_to_edit
 
-				echo "<tr><td width=\"100%\" colspan=\"3\"><a href=\"#top\"><img src=\"../img/top.gif\" border=\"0\" alt=\"To top\" align=\"right\"></a></td></tr>";
+				echo "<tr><td width=\"100%\" colspan=\"3\"><a href=\"#top\">".Display::return_icon('top.gif', get_lang('Top'))."</a></td></tr>";
 			}
 			$displayed[]=$myrow['id'];
 		}	// end while ($myrow = Database::fetch_array($result))

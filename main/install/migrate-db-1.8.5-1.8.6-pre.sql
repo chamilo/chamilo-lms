@@ -37,7 +37,7 @@ INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES 
 ALTER TABLE gradebook_category ADD session_id int DEFAULT NULL;
 CREATE TABLE gradebook_result_log (id int NOT NULL auto_increment,id_result int NOT NULL,user_id int NOT NULL,evaluation_id int NOT NULL,date_log datetime default '0000-00-00 00:00:00',score float unsigned default NULL,PRIMARY KEY(id));
 CREATE TABLE gradebook_linkeval_log (id int NOT NULL auto_increment,id_linkeval_log int NOT NULL,name text,description text,date_log datetime default '0000-00-00 00:00:00',weight smallint default NULL,visible tinyint default NULL,type varchar(20) NOT NULL,user_id_log int NOT NULL,PRIMARY KEY  (id));
-INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES ('glossary','glossary/index.php','file_txt.gif',2,1,'basic');
+INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES ('glossary','glossary/index.php','glossary.gif',2,1,'basic');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary',1,0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_users_to_create_courses',NULL,'radio','Course','true','AllowUsersToCreateCoursesTitle','AllowUsersToCreateCoursesComment',NULL,NULL);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_users_to_create_courses','true','Yes'),('allow_users_to_create_courses','false','No');

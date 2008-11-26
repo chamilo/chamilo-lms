@@ -1951,7 +1951,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_SURVEY."','survey/survey_list.php','survey.gif','".string2binary(api_get_setting('course_create_active_tools', 'survey')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);	
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_WIKI ."','wiki/index.php','wiki.gif','".string2binary(api_get_setting('course_create_active_tools', 'wiki')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
     api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GRADEBOOK."','gradebook/index.php','gradebook.gif','".string2binary(api_get_setting('course_create_active_tools', 'gradebook'))."','0','','NO','_self','authoring')");   
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GLOSSARY."','glossary/index.php','file_txt.gif','".string2binary(api_get_setting('course_create_active_tools', 'gradebook'))."','0','','NO','_self','authoring')");
+	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GLOSSARY."','glossary/index.php','glossary.gif','".string2binary(api_get_setting('course_create_active_tools', 'glossary'))."','0','','NO','_self','authoring')");
 	if(api_get_setting('service_visio','active')=='true')
 	{
 		$mycheck = api_get_setting('service_visio','visio_host');

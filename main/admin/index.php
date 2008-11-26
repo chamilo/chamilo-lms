@@ -1,4 +1,4 @@
-<?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
+<?php // $Id: index.php 16954 2008-11-26 14:41:35Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -80,7 +80,7 @@ $keyword_url = Security::remove_XSS((empty($_GET['keyword'])?'':$_GET['keyword']
 ?>
 
 <div class="admin_section">
-<h4><img src="../img/members.gif" border="0" style="vertical-align: middle;" alt="" /> <?php echo ucfirst(get_lang('Users')); ?></h4>
+<h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo ucfirst(get_lang('Users')); ?></h4>
 	<ul><li style="list-style-type:none"><form method="get" action="user_list.php">
 
 	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
@@ -99,7 +99,7 @@ $keyword_url = Security::remove_XSS((empty($_GET['keyword'])?'':$_GET['keyword']
 </div>
 
 <div class="admin_section">
-<h4><img src="../img/course.gif" border="0" style="vertical-align: middle;" alt="" /> <?php echo ucfirst(get_lang('Courses')); ?></h4>
+<h4><?php Display::display_icon('course.gif', get_lang('Courses')); ?> <?php echo ucfirst(get_lang('Courses')); ?></h4>
 	<ul><li style="list-style-type:none"><form method="get" action="course_list.php">
 
 	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
@@ -120,10 +120,7 @@ $keyword_url = Security::remove_XSS((empty($_GET['keyword'])?'':$_GET['keyword']
 </div>
 
 <div class="admin_section">
- <h4>
-  <img src="../img/settings.gif" border="0" style="vertical-align: middle;" alt="" />
-  <?php echo ucfirst(get_lang('Platform')); ?>
- </h4>
+ <h4><?php Display::display_icon('settings.gif', get_lang('Platform')); ?> <?php echo ucfirst(get_lang('Platform')); ?></h4>
  <ul>
   <li><a href="settings.php"><?php echo get_lang('DokeosConfigSettings') ?></a></li>
   <li><a href="system_announcements.php"><?php echo get_lang('SystemAnnouncements') ?></a></li>
@@ -150,10 +147,7 @@ if(api_get_setting('use_session_mode')=='true')
 ?>
 
 <div class="admin_section">
- <h4>
-  <img src="../img/agenda.gif" border="0" align="absmiddle" alt="" />
-  <?php echo get_lang('Sessions') ?>
- </h4>
+ <h4><?php Display::display_icon('agenda.gif', get_lang('Sessions')); ?> <?php echo get_lang('Sessions') ?></h4>
  <ul>
  <li style="list-style-type:none"><form method="POST" action="session_list.php">
 	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
@@ -175,7 +169,7 @@ else if(api_is_platform_admin())
 ?>
 
 <div class="admin_section">
-<h4><img src="../img/group.gif" border="0" style="vertical-align: middle;" alt="" /> <?php echo ucfirst(get_lang('AdminClasses')); ?></h4>
+<h4><?php Display::display_icon('group.gif', get_lang('AdminClasses')); ?> <?php echo ucfirst(get_lang('AdminClasses')); ?></h4>
 <ul>
 <li style="list-style-type:none"><form method="get" action="class_list.php">
 
@@ -204,10 +198,7 @@ if(api_is_platform_admin()){
 
 
 <div class="admin_section">
- <h4>
-  <img src="../img/visio_meeting.gif" border="0" style="vertical-align: middle;" alt="" />
-  <?php echo ucfirst(get_lang('ConfigureExtensions')); ?>
- </h4>
+ <h4><?php Display::display_icon('visio_meeting.gif', get_lang('ConfigureExtensions')); ?> <?php echo ucfirst(get_lang('ConfigureExtensions')); ?></h4>
  <ul>
   <li><a href="configure_extensions.php?display=visio"><?php echo get_lang('Visioconf'); ?></a></li>
   <li><a href="configure_extensions.php?display=ppt2lp"><?php echo get_lang('Ppt2lp'); ?></a></li>
@@ -222,7 +213,7 @@ if(api_is_platform_admin()){
 	?>
 	<!-- dynamic ldap code --> 
 	<div class="admin_section">
-	 <h4><img src="../img/members.gif" border="0" style="vertical-align: middle;" alt="LDAP" />LDAP</h4>
+	 <h4><?php Display::display_icon('members.gif', 'LDAP'); ?> LDAP</h4>
 	 <ul>
 	  <li><a href="ldap_users_list.php"><?php echo get_lang('ImportLDAPUsersIntoPlatform');?></a></li>
 	  <li><a href="ldap_import_students.php"><?php echo get_lang('ImportLDAPUsersIntoCourse');?></a></li>
@@ -235,10 +226,7 @@ if(api_is_platform_admin()){
 	}
 ?>
 <div class="admin_section">
- <h4>
-  <img src="../img/dokeos.gif" border="0" style="vertical-align: middle;" alt="" />
-  <?php echo "dokeos.com"; ?>
- </h4>
+ <h4><?php Display::display_icon('dokeos.gif', 'Dokeos'); ?> Dokeos.com</h4>
  <ul>
   <li><a href="http://www.dokeos.com/"><?php echo get_lang('DokeosHomepage'); ?></a></li>
   <li><a href="http://www.dokeos.com/forum/"><?php echo get_lang('DokeosForum'); ?></a></li>  

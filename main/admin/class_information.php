@@ -1,4 +1,4 @@
-<?php // $Id: class_information.php 14280 2008-02-11 10:51:59Z elixir_inter $
+<?php // $Id: class_information.php 16954 2008-11-26 14:41:35Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -80,7 +80,7 @@ foreach($users as $index => $user)
 	$row[] = $user['lastname'];
 	$row[] = Display :: encrypted_mailto_link($user['email'], $user['email']);
 	$row[] = $user['status'] == 5 ? get_lang('Student') : get_lang('Teacher');
-	$row[] = '<a href="user_information.php?user_id='.$user['user_id'].'"><img src="../img/synthese_view.gif" border="0" /></a>';
+	$row[] = '<a href="user_information.php?user_id='.$user['user_id'].'">'.Display::return_icon('synthese_view.gif').'</a>';
 	$data[] = $row;
 }
 Display::display_sortable_table($table_header,$data,array(),array(),array('id'=>$_GET['id']));
@@ -105,8 +105,9 @@ if (count($courses) > 0)
 		$row = array ();
 		$row[] = $course['visual_code'];
 		$row[] = $course['title'];
-		$row[] = '<a href="course_information.php?code='.$course['code'].'"><img src="../img/info_small.gif" border="0" /></a>'.'<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'"><img src="../img/course_home.gif" border="0"/></a>' .
-				'<a href="course_edit.php?course_code='.$course['code'].'"><img src="../img/edit.gif" border="0" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>';
+		$row[] = '<a href="course_information.php?code='.$course['code'].'">'.Display::return_icon('info_small.gif', get_lang('Delete')).'</a>'.
+					'<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'">'.Display::return_icon('course_home.gif', get_lang('CourseHome')).'</a>' .
+					'<a href="course_edit.php?course_code='.$course['code'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 		$data[] = $row;
 	}
 	echo '<p><b>'.get_lang('Courses').'</b></p>';

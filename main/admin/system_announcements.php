@@ -1,4 +1,4 @@
-<?php // $Id: system_announcements.php 16878 2008-11-23 00:04:52Z herodoto $
+<?php // $Id: system_announcements.php 16954 2008-11-26 14:41:35Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -274,15 +274,15 @@ if ($show_announcement_list)
 	{
 		$row = array ();
 		$row[] = $announcement->id;
-		$row[] = "<img src=\"../img/". ($announcement->visible ? 'visible.gif' : 'invisible.gif')."\"/>";
+		$row[] = Display::return_icon(($announcement->visible ? 'visible.gif' : 'invisible.gif'));
 		$row[] = $announcement->date_start;
 		$row[] = $announcement->date_end;
-		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_TEACHER."&amp;action=". ($announcement->visible_teacher ? 'make_invisible' : 'make_visible')."\"><img src=\"../img/". ($announcement->visible_teacher  ? 'visible.gif' : 'invisible.gif')."\" border=\"0\"></a>";
-		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_STUDENT."&amp;action=". ($announcement->visible_student  ? 'make_invisible' : 'make_visible')."\"><img src=\"../img/". ($announcement->visible_student ? 'visible.gif' : 'invisible.gif')."\" border=\"0\"></a>";
-		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_GUEST."&amp;action=". ($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\"><img src=\"../img/". ($announcement->visible_guest  ? 'visible.gif' : 'invisible.gif')."\" border=\"0\"></a>";
+		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_TEACHER."&amp;action=". ($announcement->visible_teacher ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_teacher  ? 'visible.gif' : 'invisible.gif'))."</a>";
+		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_STUDENT."&amp;action=". ($announcement->visible_student  ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_student  ? 'visible.gif' : 'invisible.gif'))."</a>";
+		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_GUEST."&amp;action=". ($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_guest  ? 'visible.gif' : 'invisible.gif'))."</a>";
 		$row[] = $announcement->title;
 		$row[] = $announcement->lang;
-		$row[] = "<a href=\"?action=edit&id=".$announcement->id."\"><img src=\"../img/edit.gif\" border=\"0\"/></a> <a href=\"?action=delete&id=".$announcement->id."\"  onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"><img src=\"../img/delete.gif\" border=\"0\"/></a>";
+		$row[] = "<a href=\"?action=edit&id=".$announcement->id."\">".Display::return_icon('edit.gif', get_lang('Edit'))."</a> <a href=\"?action=delete&id=".$announcement->id."\"  onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.gif', get_lang('Delete'))."</a>";
 		$announcement_data[] = $row;
 	}
 	$table = new SortableTableFromArray($announcement_data);

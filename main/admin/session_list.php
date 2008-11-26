@@ -219,10 +219,10 @@ else{
 		  <td><?php echo htmlentities($enreg['date_end'],ENT_QUOTES,$charset); ?></td>
 		  <td><?php echo htmlentities($enreg['firstname'],ENT_QUOTES,$charset).' '.htmlentities($enreg['lastname'],ENT_QUOTES,$charset); ?></td>
 		  <td>
-			<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><img src="../img/add_user_big.gif" border="0" align="absmiddle" title="<?php echo get_lang('SubscribeUsersToSession'); ?>"></a>
-			<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><img src="../img/synthese_view.gif" border="0" align="absmiddle" title="<?php echo get_lang('SubscribeCoursesToSession'); ?>"></a>
-			<a href="session_edit.php?page=session_list.php&id=<?php echo $enreg['id']; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="<?php echo get_lang('Edit'); ?>"></a>
-			<a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="<?php echo get_lang('Delete'); ?>" alt="<?php echo get_lang('Delete'); ?>"></a>
+			<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('add_user_big.gif', get_lang('SubscribeUsersToSession')); ?></a>
+			<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('synthese_view.gif', get_lang('SubscribeCoursesToSession')); ?></a>
+			<a href="session_edit.php?page=session_list.php&id=<?php echo $enreg['id']; ?>"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a>
+			<a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('delete.gif', get_lang('Delete')); ?></a>
 		  </td>
 		</tr>
 	

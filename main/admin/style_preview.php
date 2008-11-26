@@ -25,7 +25,7 @@ include(api_get_path(INCLUDE_PATH).'banner.inc.php');
       <p>This is the introduction text.
     </div>
     <div id="courseintro_icons">
-    <a href="#"><img src="../img/edit.gif" alt="edit"/></a><a href="#"><img src="../img/delete.gif" alt="delete"/></a></div>
+    <a href="#"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a><a href="#"><?php Display::display_icon('delete.gif', get_lang('Delete')); ?></a></div>
     <div class="normal-message"> Normal Message </div>
     <div class="error-message"> Error Message </div>
     <table width="750">

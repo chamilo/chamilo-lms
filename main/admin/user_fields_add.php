@@ -1,4 +1,4 @@
-<?php // $Id: user_fields_add.php 15870 2008-07-30 13:38:51Z pcool $
+<?php // $Id: user_fields_add.php 16954 2008-11-26 14:41:35Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -86,7 +86,7 @@ $form->applyFilter('fieldtitle','html_filter');
 $form->applyFilter('fieldtitle','trim');
 $form->addRule('fieldtitle', get_lang('ThisFieldIsRequired'), 'required');
 // Field options
-$form->addElement('text','fieldoptions',get_lang('FieldPossibleValues').' <img src="../img/info3.gif" height="16" width="16" alt="'.get_lang('FieldPossibleValuesComment').'" title="'.get_lang('FieldPossibleValuesComment').'">');
+$form->addElement('text','fieldoptions',get_lang('FieldPossibleValues').' '.Display::return_icon('info3.gif', get_lang('FieldPossibleValuesComment')));
 $form->applyFilter('fieldoptions','trim');
 if (is_numeric($_GET['field_id']))
 {
@@ -168,11 +168,8 @@ if(!empty($_GET['message']))
 	//Display::display_normal_message(get_lang('UserFieldsAddHelp'),false);
 //}
 $form->display();
-echo '<br /><img src="../img/add_user_field_howto.png" alt="'.get_lang('AddUserFields').'" />';
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+echo '<br />'.Display::return_icon('add_user_field_howto.png', get_lang('AddUserFields'));
+
+// footer
 Display::display_footer();
 ?>

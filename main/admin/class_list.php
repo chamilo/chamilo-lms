@@ -1,5 +1,5 @@
 <?php
-// $Id: class_list.php 14209 2008-01-30 23:16:20Z yannoo $
+// $Id: class_list.php 16954 2008-11-26 14:41:35Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -87,10 +87,10 @@ function modify_filter($class_id)
 {
 	global $charset;
 	$class_id = Security::remove_XSS($class_id);
-	$result = '<a href="class_information.php?id='.$class_id.'"><img src="../img/synthese_view.gif" border="0" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>';
-	$result .= '<a href="class_edit.php?idclass='.$class_id.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>';
-	$result .= '<a href="class_list.php?action=delete_class&amp;class_id='.$class_id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>';
-	$result .= '<a href="subscribe_user2class.php?idclass='.$class_id.'"><img src="../img/add_multiple_users.gif" border="0" alt="'.get_lang('AddUsersToAClass').'" title="'.get_lang('AddUsersToAClass').'"/></a>';
+	$result = '<a href="class_information.php?id='.$class_id.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>';
+	$result .= '<a href="class_edit.php?idclass='.$class_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+	$result .= '<a href="class_list.php?action=delete_class&amp;class_id='.$class_id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+	$result .= '<a href="subscribe_user2class.php?idclass='.$class_id.'">'.Display::return_icon('add_multiple_users.gif', get_lang('AddUsersToAClass')).'</a>';
 	return $result;
 }
 

@@ -1,4 +1,4 @@
-<?php // $Id: course_list.php 16719 2008-11-12 15:36:21Z pcool $
+<?php // $Id: course_list.php 16954 2008-11-26 14:41:35Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -120,11 +120,11 @@ function modify_filter($code)
 {
 	global $charset;
 	return
-		'<a href="course_information.php?code='.$code.'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>&nbsp;'.
-		'<a href="../course_home/course_home.php?cidReq='.$code.'"><img src="../img/course_home.gif" border="0" style="vertical-align: middle" title="'.get_lang('CourseHomepage').'" alt="'.get_lang('CourseHomepage').'"/></a>&nbsp;'.
-		'<a href="../tracking/courseLog.php?cidReq='.$code.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle" title="'.get_lang('Tracking').'" alt="'.get_lang('Tracking').'"/></a>&nbsp;'.
-		'<a href="course_edit.php?course_code='.$code.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;'.
-		'<a href="course_list.php?delete_course='.$code.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>';	
+		'<a href="course_information.php?code='.$code.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;'.
+		'<a href="../course_home/course_home.php?cidReq='.$code.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'.
+		'<a href="../tracking/courseLog.php?cidReq='.$code.'">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;'.
+		'<a href="course_edit.php?course_code='.$code.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;'.
+		'<a href="course_list.php?delete_course='.$code.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 }
 /**
  * Return an icon representing the visibility of the course
@@ -132,20 +132,20 @@ function modify_filter($code)
 function get_course_visibility_icon($v)
 {
 	$path = api_get_path(REL_CODE_PATH);
-	$style = 'style="margin-bottom:-5px;margin-right:5px;"';
+	$style = 'margin-bottom:-5px;margin-right:5px;';
 	switch($v)
 	{
 		case 0:
-			return '<img src="'.$path.'img/bullet_red.gif" title="'.get_lang('CourseVisibilityClosed').'" '.$style.' />';
+			return Display::return_icon('bullet_red.gif', get_lang('CourseVisibilityClosed'), array('style'=>$style));
 			break;
 		case 1:
-			return '<img src="'.$path.'img/bullet_orange.gif" title="'.get_lang('Private').'" '.$style.' />';
+			return Display::return_icon('bullet_orange.gif', get_lang('Private'), array('style'=>$style));
 			break;
 		case 2:
-			return '<img src="'.$path.'img/bullet_green.gif" title="'.get_lang('OpenToThePlatform').'" '.$style.' />';
+			return Display::return_icon('bullet_green.gif', get_lang('OpenToThePlatform'), array('style'=>$style));
 			break;
 		case 3:
-			return '<img src="'.$path.'img/bullet_blue.gif" title="'.get_lang('OpenToTheWorld').'" '.$style.' />';
+			return Display::return_icon('bullet_blue.gif', get_lang('OpenToTheWorld'), array('style'=>$style));
 			break;
 		default:
 			return '';

@@ -73,7 +73,8 @@ if (empty($annee) && empty($course))
 {
 		Display::display_header($tool_name);
 		echo '<div style="align:center">';
-		echo '<img src="../img/group.gif" alt="'.get_lang('LDAPSelectFilterOnUsersOU').'" /> '.get_lang('LDAPSelectFilterOnUsersOU');
+		Display::display_icon('group.gif', get_lang('LDAPSelectFilterOnUsersOU'));
+		echo get_lang('LDAPSelectFilterOnUsersOU');
 		//echo '<em>'.get_lang('ToDoThisYouMustEnterYearComponentAndComponentStep').'</em><br />';
 		///echo get_lang('FollowEachOfTheseStepsStepByStep').'<br />';
 		
@@ -114,7 +115,7 @@ elseif ($annee <> "" && $composante == "" && $etape == "") // form 2 annee != 0;
 
 		echo '<div style="align: center">';
 		echo '<br />';
-		echo '<h3><img src="../img/group.gif" alt="'.get_lang('SelectComponent').'" />'.get_lang('SelectComponent').'</h3>';
+		echo '<h3>'.Display::return_icon('group.gif', get_lang('SelectComponent')).' '.get_lang('SelectComponent').'</h3>';
 		echo '<form method="get" action="'.api_get_self().'">';
 		echo '<b>'.get_lang('RegistrationYear').'</b> : ';
 		echo '<input type="text" name="annee" size="4" maxlength="30" value="'.$annee.'">';
@@ -143,7 +144,7 @@ elseif ($annee <> "" && $composante <> "" && $etape == "") // form3 :annee!=0com
 
 		Display::display_header($tool_name);
 	echo '<div style="align: center">';
-	echo '<h3><img src="../img/group.gif" alt="'.get_lang('SearchResults').'" />'.get_lang('SearchResults').'</h3>';
+	echo '<h3>'.Display::return_icon('group.gif', get_lang('SearchResults')).' '.get_lang('SearchResults').'</h3>';
 	$ds = ldap_connect($ldap_host, $ldap_port);
 	ldap_set_version($ds);
 
@@ -216,7 +217,7 @@ elseif(!empty($annee) && empty($course))
 {
 	Display::display_header($tool_name);
 	echo '<div style="align:center">';
-	echo '<img src="../img/course.gif" alt="'.get_lang('SelectCourseToImportUsersTo').'" />'.get_lang('SelectCourseToImportUsersTo').'<br />';
+	echo Display::return_icon('course.gif', get_lang('SelectCourseToImportUsersTo')).' '.get_lang('SelectCourseToImportUsersTo').'<br />';
 	echo '<form method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'"><br />';
 	echo '<select name="course">';
 	$courses = CourseManager::get_courses_list();
@@ -237,7 +238,7 @@ elseif (!empty($annee) && !empty($course) && empty($_POST['confirmed']))
 	echo '<div style="align: center;">';
 	echo '<br />';
 	echo '<br />';
-	echo '<h3><img src="../img/group.gif" alt="'.get_lang('SelectStudents').'" /> '.get_lang('SelectStudents').'</h3>';
+	echo '<h3>'.Display::return_icon('group.gif', get_lang('SelectStudents')).' '.get_lang('SelectStudents').'</h3>';
 	//echo "Connection ...";
 	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
 	ldap_set_version($ds);

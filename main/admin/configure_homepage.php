@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 16719 2008-11-12 15:36:21Z pcool $
+<?php // $Id: configure_homepage.php 16954 2008-11-26 14:41:35Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -886,12 +886,12 @@ switch($action){
 		<tr>
 		  <td width="80%" colspan="2">
 		  	<div class="actions">
-			<a href="<?php echo api_get_self(); ?>?action=edit_top"><img src="../img/edit.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_top"><?php echo get_lang('EditHomePage'); ?></a>
+			<a href="<?php echo api_get_self(); ?>?action=edit_top"><?php Display::display_icon('edit.gif', get_lang('EditHomePage')); ?></a> <a href="<?php echo api_get_self(); ?>?action=edit_top"><?php echo get_lang('EditHomePage'); ?></a>
 		  	</div>
 		  </td>
 		  <td width="20%">
 		  	<div class="actions">
-			<a href="<?php echo api_get_self(); ?>?action=insert_link"><img src="../img/insert_row.png" border="0" alt="" /></a> <a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
+			<a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('insert_row.png'); ?></a> <a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
 			</div>
 		  </td>
 		</tr>
@@ -918,12 +918,12 @@ switch($action){
 			<tr>
 			  <td width="50%">
 				<div class="actions">
-				<a href="course_category.php"><img src="../img/edit.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>"/></a> <a href="course_category.php"><?php echo get_lang('EditCategories'); ?></a>
+				<a href="course_category.php"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a> <a href="course_category.php"><?php echo get_lang('EditCategories'); ?></a>
 				</div>
 			  </td>
 			  <td width="50%">
 				<br />
-				<!--<a href="<?php echo api_get_self(); ?>?action=edit_news"><img src="../img/edit.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>-->
+				<!--<a href="<?php echo api_get_self(); ?>?action=edit_news"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a> <a href="<?php echo api_get_self(); ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>-->
 			  </td>
 			</tr>
 			<tr>
@@ -934,7 +934,7 @@ switch($action){
 				{
 					foreach($Categories as $enreg)
 					{
-						echo '<tr><td><img src="../img/opendir.gif" border="0" alt="" />&nbsp;'.$enreg['name'].'</td></tr>';
+						echo '<tr><td>'.Display::return_icon('opendir.gif').'&nbsp;'.$enreg['name'].'</td></tr>';
 					}		
 					unset($Categories);
 				}
@@ -1009,8 +1009,8 @@ switch($action){
 				
 						if(!empty($enreg))
 						{
-							$edit_link='<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$key.'"><img src="../img/edit.gif" border="0" style="margin-top: 2px;" alt="" title="'.htmlentities(get_lang('Modify'),ENT_QUOTES,$charset).'"/></a>';
-							$delete_link='<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;"><img src="../img/delete.gif" border="0" style="margin-top: 2px;" alt="" title="'.htmlentities(get_lang('Delete'),ENT_QUOTES,$charset).'"/></a>';
+							$edit_link='<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$key.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+							$delete_link='<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 				
 							echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=','<br />'.$edit_link.' '.$delete_link.'</li>'),$enreg);
 						}
@@ -1021,7 +1021,7 @@ switch($action){
 			</div>
 		
 			<br />
-			&nbsp;&nbsp;<a href="<?php echo api_get_self(); ?>?action=edit_notice"><img src="../img/edit.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php echo get_lang('EditNotice'); ?></a>
+			&nbsp;&nbsp;<a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a> <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php echo get_lang('EditNotice'); ?></a>
 		
 			<div class="note">
 		

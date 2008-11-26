@@ -1,4 +1,4 @@
-<?php // $Id: resume_session.php 16769 2008-11-17 22:19:30Z yannoo $
+<?php // $Id: resume_session.php 16954 2008-11-26 14:41:35Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -102,7 +102,7 @@ api_display_tool_title($tool_name);
 <table class="data_table" width="100%">
 <tr>
   <th colspan="2"><?php echo get_lang('GeneralProperties'); ?>
-  	<a href="session_edit.php?page=resume_session.php&id=<?php echo $id_session; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="<?php echo get_lang('Edit'); ?>"></a></th>
+  	<a href="session_edit.php?page=resume_session.php&id=<?php echo $id_session; ?>"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a></th>
   </th>
 </tr>
 <tr>
@@ -155,7 +155,7 @@ api_display_tool_title($tool_name);
 <table class="data_table" width="100%">
 <tr>
   <th colspan="4"><?php echo get_lang('CourseList'); ?>
-  	<a href="add_courses_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="<?php echo get_lang('Edit'); ?>"></a></th>
+  	<a href="add_courses_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a></th>
   </th>
 </tr>
 <tr>
@@ -203,9 +203,9 @@ else {
 			<td>'.$coach.'</td>
 			<td>'.$course['nbr_users'].'</td>
 			<td>
-				<a href="../tracking/courseLog.php?id_session='.$id_session.'&cidReq='.$course['code'].$orig_param.'&hide_course_breadcrumb=1"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Tracking').'" alt="'.get_lang('Tracking').'"/></a>&nbsp;
-				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].''.$orig_param.'"><img src="../img/edit.gif" border="0" align="absmiddle" title="'.get_lang('Edit').'"></a>
-				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="'.get_lang('Delete').'"></a>
+				<a href="../tracking/courseLog.php?id_session='.$id_session.'&cidReq='.$course['code'].$orig_param.'&hide_course_breadcrumb=1">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;
+				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].''.$orig_param.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>
+				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>
 			</td>
 		</tr>';
 	}
@@ -219,7 +219,7 @@ else {
 <table class="data_table" width="100%">
 <tr>
   <th colspan="4"><?php echo get_lang('UserList'); ?>
-  	<a href="add_users_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="<?php echo get_lang('Edit'); ?>"></a></th>
+  	<a href="add_users_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a></th>
   </th>
 </tr>
 </tr>
@@ -250,7 +250,7 @@ else {
 						<b>'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</b>
 					</td>
 					<td>
-						<a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="'.get_lang('Delete').'"></a>
+						<a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>
 					</td>
 				  </tr>';
 	}
@@ -258,15 +258,6 @@ else {
 ?>
 </table>
 <?php
-
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+// footer
 Display :: display_footer();
 ?>
-
-
-
-

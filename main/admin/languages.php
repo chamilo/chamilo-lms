@@ -1,5 +1,5 @@
 <?php
-// $Id: languages.php 15243 2008-05-08 14:05:14Z pcool $
+// $Id: languages.php 16954 2008-11-26 14:41:35Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -175,11 +175,11 @@ while ($row = mysql_fetch_array($result_select))
 	// the fourth column with the visibility icon and the edit icon
 	if ($row['available'] == 1)
 	{
-		$row_td[] = "<a href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'><img src='../img/visible.gif' border='0'></a> <a href='".api_get_self()."?action=edit&id=".$row['id']."'><img src='../img/edit.gif' border='0'></a>";
+		$row_td[] = "<a href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.gif')."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>";
 	}
 	else
 	{
-		$row_td[] = "<a href='".api_get_self()."?action=makeavailable&id=".$row['id']."'><img src='../img/invisible.gif' border='0'></a> <a href='".api_get_self()."?action=edit&id=".$row['id']."'><img src='../img/edit.gif' border='0'></a>";
+		$row_td[] = "<a href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".Display::return_icon('invisible.gif')."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>";
 	}
 
 	$language_data[] = $row_td;

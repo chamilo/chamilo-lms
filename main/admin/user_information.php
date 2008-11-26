@@ -1,5 +1,5 @@
 <?php
-// $Id: user_information.php 13900 2007-12-04 04:10:41Z yannoo $
+// $Id: user_information.php 16954 2008-11-26 14:41:35Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -70,7 +70,7 @@ if( isset($_GET['action']) )
 	}	
 }
 api_display_tool_title($tool_name);
-echo '<div align="right" style="margin-right:4em;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$_GET['user_id'].'" title="'.get_lang('Reporting').'"><img src="'.api_get_path(WEB_CODE_PATH).'img/statistics.gif" /></a></div>'."\n";
+echo '<div align="right" style="margin-right:4em;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$_GET['user_id'].'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.gif').'</a></div>'."\n";
 if ($user['picture_uri'] != '')
 {
 	echo '<p><img src="'.api_get_path(WEB_CODE_PATH).'upload/users/'.$user['picture_uri'].'" style="width:150px;"/></p>';

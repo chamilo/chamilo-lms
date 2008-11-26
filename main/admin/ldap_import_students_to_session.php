@@ -71,7 +71,7 @@ if (empty($annee) && empty($id_session))
 {
 		Display::display_header($tool_name);
 		echo '<div style="align:center">';
-		echo '<img src="../img/group.gif" alt="'.get_lang('LDAPSelectFilterOnUsersOU').'" /> '.get_lang('LDAPSelectFilterOnUsersOU');
+		echo Display::return_icon('group.gif', get_lang('LDAPSelectFilterOnUsersOU')).' '.get_lang('LDAPSelectFilterOnUsersOU');
 		echo '<form method="get" action="'.api_get_self().'"><br />';
 		echo '<em>'.get_lang('LDAPOUAttributeFilter').' :</em> ';
 		echo '<input  type="text" name="annee" size="4" maxlength="30" value="'.$annee_base.'"> ';
@@ -84,7 +84,7 @@ elseif(!empty($annee) && empty($id_session))
 {
 	Display::display_header($tool_name);
 	echo '<div style="align:center">';
-	echo '<img src="../img/course.gif" alt="'.get_lang('SelectSessionToImportUsersTo').'" />'.get_lang('SelectSessionToImportUsersTo').'<br />';
+	echo Display::return_icon('course.gif', get_lang('SelectSessionToImportUsersTo')).' '.get_lang('SelectSessionToImportUsersTo').'<br />';
 	echo '<form method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'"><br />';
 	echo '<select name="id_session">';
 
@@ -113,7 +113,7 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed']))
 	echo '<div style="align: center;">';
 	echo '<br />';
 	echo '<br />';
-	echo '<h3><img src="../img/group.gif" alt="'.get_lang('SelectStudents').'" /> '.get_lang('SelectStudents').'</h3>';
+	echo '<h3>'.Display::return_icon('group.gif', get_lang('SelectStudents')).' '.get_lang('SelectStudents').'</h3>';
 	//echo "Connection ...";
 	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
 	ldap_set_version($ds);

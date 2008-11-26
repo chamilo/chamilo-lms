@@ -289,7 +289,7 @@ Display::display_header($nameTool);
 			<table width="100%">
 				<tr>
 					<td>
-						<img src="<?php echo api_get_path(WEB_IMG_PATH).'screenshot_conf.jpg' ?>" />
+						<?php Display::display_icon('screenshot_conf.jpg'); ?>
 					</td>
 					<td align="center" width="50%">
 						<?php 
@@ -344,7 +344,7 @@ Display::display_header($nameTool);
 			<table width="100%">
 				<tr>
 					<td width="50%" valign="top">
-						<img src="<?php echo api_get_path(WEB_IMG_PATH).'screenshot_ppt2lp.jpg' ?>" />
+						<?php Display::display_icon('screenshot_ppt2lp.jpg'); ?>
 					</td>
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
@@ -425,9 +425,9 @@ Display::display_header($nameTool);
 										<TR>
 											<TD>
 												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-												<A title="http://www.ephorus.com/dokeos_activate.html" href="http://www.ephorus.com/dokeos_activate.html" target="_blank">
-												<IMG style="WIDTH: 235px; HEIGHT: 78px" height="66" alt="Ephorus" hspace="3" src="<?php echo api_get_path(WEB_IMG_PATH).'ephorus.gif' ?>" width="213" vspace="1" border="0">
-												</A>
+												<a title="http://www.ephorus.com/dokeos_activate.html" href="http://www.ephorus.com/dokeos_activate.html" target="_blank">
+												<?php Display::display_icon('ephorus.gif','Ephorus'); ?>
+												</a>
 											</TD>
 											<TD>
 												<P align=center>
@@ -483,7 +483,7 @@ Display::display_header($nameTool);
 			<table width="100%">
 				<tr>
 					<td width="50%">
-						<img src="<?php echo api_get_path(WEB_IMG_PATH).'screenshot_search.jpg' ?>" />
+						<?php Display::display_icon('screenshot_search.jpg'); ?>
 					</td>
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
@@ -506,7 +506,7 @@ Display::display_header($nameTool);
 			<table width="100%">
 				<tr>
 					<td width="50%">
-						<img src="<?php echo api_get_path(WEB_IMG_PATH).'screenshot_serverstats.jpg' ?>" />
+						<?php Display::display_icon('screenshot_serverstats.jpg'); ?>
 					</td>
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
@@ -529,7 +529,7 @@ Display::display_header($nameTool);
 			<table width="100%">
 				<tr>
 					<td width="50%">
-						<img src="<?php echo api_get_path(WEB_IMG_PATH).'screenshot_bandwidth.jpg' ?>" />
+						<?php Display::display_icon('screenshot_bandwidth.jpg'); ?>
 					</td>
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">

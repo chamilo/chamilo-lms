@@ -288,7 +288,7 @@ function order_filter($field_order,$url_params,$row)
  */
 function modify_visibility($visibility,$url_params,$row)
 {
-	return ($visibility?'<a href="'.api_get_self().'?action=hide_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'visible.gif" alt="'.get_lang('Hide').'" /></a>':'<a href="'.api_get_self().'?action=show_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'invisible.gif" alt="'.get_lang('Show').'" /></a>');
+	return ($visibility?'<a href="'.api_get_self().'?action=hide_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('visible.gif', get_lang('Hide')).'</a>':'<a href="'.api_get_self().'?action=show_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('invisible.gif', get_lang('Show')).'</a>');
 }
 /**
  * Modify the changeability field to show links and icons
@@ -299,7 +299,7 @@ function modify_visibility($visibility,$url_params,$row)
  */
 function modify_changeability($changeability,$url_params,$row)
 {
-	return ($changeability?'<a href="'.api_get_self().'?action=freeze_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'right.gif" alt="'.get_lang('MakeUnchangeable').'" /></a>':'<a href="'.api_get_self().'?action=thaw_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'"><img src="'.api_get_path(WEB_IMG_PATH).'wrong.gif" alt="'.get_lang('MakeChangeable').'" /></a>');
+	return ($changeability?'<a href="'.api_get_self().'?action=freeze_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('right.gif', get_lang('MakeUnchangeable')).'</a>':'<a href="'.api_get_self().'?action=thaw_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('wrong.gif', get_lang('MakeChangeable')).'</a>');
 }
 
 function edit_filter($id,$url_params,$row)

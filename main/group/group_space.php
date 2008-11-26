@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 16962 2008-11-26 20:40:18Z yannoo $
+<?php //$Id: group_space.php 16968 2008-11-26 22:28:32Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -277,8 +277,21 @@ $table->set_additional_parameters($parameters);
 $table->set_header(0, '');
 $table->set_header(1, get_lang('LastName'));
 $table->set_header(2, get_lang('FirstName'));
-$table->set_header(3, get_lang('Email'));
-$table->set_column_filter(3, 'email_filter');
+
+if (api_get_setting("show_email_addresses") == "true")
+{
+	$table->set_header(3, get_lang('Email'));
+	$table->set_column_filter(3, 'email_filter');
+}
+else
+{
+	if (api_is_allowed_to_edit())
+    {
+		$table->set_header(3, get_lang('Email'));
+		$table->set_column_filter(3, 'email_filter');
+	}
+}
+
 $table->set_column_filter(0, 'user_icon_filter');
 $table->display();
 

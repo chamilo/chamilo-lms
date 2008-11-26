@@ -1,4 +1,4 @@
-<?php // $Id: group.php 16873 2008-11-22 23:22:02Z herodoto $
+<?php // $Id: group.php 16968 2008-11-26 22:28:32Z herodoto $
  
 /*
 ==============================================================================
@@ -324,7 +324,14 @@ foreach ($group_cats as $index => $category)
 			{
 				foreach($tutorsids_of_group as $tutor_id){
 					$tutor = api_get_user_info($tutor_id);
-					$tutor_info .= Display::encrypted_mailto_link($tutor['mail'],$tutor['firstName'].' '.$tutor['lastName']).', ';
+					if (api_get_setting("show_email_addresses") == "true")
+					{	
+						$tutor_info .= Display::encrypted_mailto_link($tutor['mail'],$tutor['firstName'].' '.$tutor['lastName']).', ';								
+					}
+					else
+					{						
+						$tutor_info .= $tutor['firstName'].' '.$tutor['lastName'].', ';
+					}					
 				}
 			}
 			$tutor_info = substr($tutor_info,0,strlen($tutor_info)-2);

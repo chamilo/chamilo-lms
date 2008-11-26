@@ -32,9 +32,13 @@
 */
 if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 	//Put the name of the course in the header
-	echo '
+?>
+	<div id="my_courses"><a href="<?php echo api_get_path(WEB_COURSE_PATH).$_course['path']; ?>/index.php" target="_top">
+<?php
+	echo $_course['name']." ";
+	/*echo '
 		<div id="my_courses">
-			<a href="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/index.php" target="_top">'.$_course['name'].' ';
+			<a href="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/index.php" target="_top">'.$_course['name'].' ';*/
 	if (api_get_setting("display_coursecode_in_courselist") == "true") {
 		echo $_course['official_code'];
 	}
@@ -48,9 +52,7 @@ if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 	if (api_get_setting("display_teacher_in_courselist") == "true") {
 		echo stripslashes($_course['titular']);
 	}
-	echo '	</a>';
-	echo '
-		</div>';
+	echo "</a></div>";
 } elseif (isset ($nameTools) && $language_file != 'course_home') {
 	//Put the name of the user-tools in the header
 	if (!isset ($_user['user_id'])) {
@@ -100,7 +102,7 @@ if (isset($_course['extLink']) && $_course['extLink']['name'] != "") {
 <?php 
 if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR (api_get_setting('showonline','users') == "true" AND $_user['user_id']) OR (api_get_setting('showonline','course') == "true" AND $_user['user_id'] AND $_cid)) {
 	if (api_get_setting("use_session_mode") == "true" && isset($_user['user_id']) && api_is_coach()) {
-		echo '	<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$_user['user_id'].'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';
+	    echo '  <li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$_user['user_id'].'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';
 	}
 
 	$statistics_database = Database :: get_statistic_database();
@@ -111,7 +113,7 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
 	} else {
 		$number_online_in_course = 0;
 	}
-	echo '				<li>'.get_lang('UsersOnline').': ';
+ 		echo "<li>".get_lang('UsersOnline').": ";
 
 	// Display the who's online of the platform
 	if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR (api_get_setting('showonline','users') == "true" AND $_user['user_id'])) {
@@ -122,8 +124,6 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
 	if (is_array($_course) AND api_get_setting('showonline','course') == "true" AND isset($_course['sysCode'])) {
 		echo "(<a href='".api_get_path(WEB_PATH)."whoisonline.php?cidReq=".$_course['sysCode']."' target='_top'>$number_online_in_course ".get_lang('InThisCourse')."</a>)";
 	}
-
-
 	echo '</li>';
 }
 
@@ -170,7 +170,7 @@ if ($_user['user_id']) {
 	 <!-- start user section line with name, my course, my profile, scorm info, etc -->
 
 	 <ul id="logout">
-				<li><a href="<?php echo api_get_path(WEB_PATH); ?>index.php?action=logout"><span><?php echo get_lang('Logout').' '.$login; ?></span></a></li>
+				<li><a href="<?php echo api_get_path(WEB_PATH); ?>index.php?logout=logout"><span><?php echo get_lang('Logout').' '.$login; ?></span></a></li>
 	 </ul>
 <?php
 }
@@ -251,7 +251,7 @@ foreach($navigation as $section => $navigation_info) {
 	} else {
 		$current = '';
 	}
-	echo '			<li'.$current.'><a href="'.$navigation_info['url'].'" target="_top"><span>'.$navigation_info['title'].'</span></a></li>'."\n";
+	echo '<li'.$current.'><a href="'.$navigation_info['url'].'" target="_top"><span>'.$navigation_info['title'].'</span></a></li>'."\n";
 }
 ?>
 		</ul>

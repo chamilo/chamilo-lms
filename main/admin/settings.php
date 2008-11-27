@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 16953 2008-11-26 14:25:10Z iflorespaz $
+<?php // $Id: settings.php 16991 2008-11-27 22:20:01Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -79,8 +79,8 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 {
 	$form = new FormValidator('settings', 'post', 'settings.php?category='.$_GET['category']);
 	$renderer = & $form->defaultRenderer();
-	$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
-	$renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
+	$renderer->setHeaderTemplate('<div class="settingtitle">{header}</div>'."\n");
+	$renderer->setElementTemplate('<div class="settingcomment">{label}</div>'."\n".'<div class="settingvalue">{element}</div>'."\n");
 	$my_category = mysql_real_escape_string($_GET['category']);
 	
 	if ($_configuration['access_url']==1)

@@ -109,7 +109,7 @@ if (!empty($course))
 		}
 	?>
 	<tr>
-	  <td width="1%" valign="top"><?php if($status == 1) echo '<img src="../img/teachers.gif" align="absbottom" border="0" alt="" style="margin: 1px;">'; else echo '<img src="../img/students.gif" align="absbottom" border="0" alt="" style="margin: 1px;">';?></td>
+	  <td width="1%" valign="top"><?php if($status == 1) echo Display::return_icon('teachers.gif', get_lang('Edit')).' '; else echo Display::return_icon('students.gif');?></td>
 	  <td width="99%"><a <?php if($status == 1) echo 'class="master"'; ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo api_get_self(); ?>?showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><?php echo ucfirst($enreg['firstname']).' '.ucfirst($enreg['lastname']); ?></a></td>
 	</tr>
 	<?php
@@ -118,7 +118,7 @@ if (!empty($course))
 	
 	if($showPic == $enreg['user_id']): ?>
 	<tr>
-	  <td colspan="2" align="center"><img src="<?php echo $file_url;?>" border="0" width="100" alt="" style="margin-top: 5px;"></td>
+	  <td colspan="2" align="center"><img src="<?php echo $file_url;?>" border="0" width="100" alt="" style="margin-top: 5px;" /></td>
 	</tr>
 	<?php endif; ?>
 	<?php

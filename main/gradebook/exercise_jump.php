@@ -52,8 +52,8 @@ if (isset($_GET['doexercise'])) {
 	exit;
 } else {
 	if (isset($_GET['gradebook'])) {
-		$add_url = '&gradebook=view&exerciseId='.(int)$_GET['exerciseId'];
+		$add_url = '&gradebook=view&exerciseId='.Security::remove_XSS((int)$_GET['exerciseId']);
 	}
-	header('Location: ../exercice/exercice.php?cidReq='.Security::remove_XSS($cidReq).'&show=result'.Security::remove_XSS($add_url));
+	header('Location: ../exercice/exercice.php?cidReq='.Security::remove_XSS($cidReq).'&show=result'.$add_url);
 	exit;
 }

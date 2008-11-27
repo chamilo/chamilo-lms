@@ -54,9 +54,19 @@ class GradebookTable extends SortableTable
 		}	
 		$this->set_header($column++, get_lang('Type'));
 		$this->set_header($column++, get_lang('Name'));
-		$this->set_header($column++, get_lang('Description')); 
-		$this->set_header($column++, get_lang('Weight'));
-		$this->set_header($column++, get_lang('Date'),true, 'width="100"');
+		$this->set_header($column++, get_lang('Description'));
+		if (api_is_allowed_to_create_course()) {
+		$this->set_header($column++, get_lang('Weight'));	
+		} else {
+			if (!isset($_GET['selectcat'])) {	
+			$this->set_header($column++, get_lang('Evaluation'));
+			}
+			else {
+			$this->set_header($column++, get_lang('Weight'));	
+			}	
+		}		 
+							
+		$this->set_header($column++, get_lang('Date'),true, 'width="100"');				
 		
 		//admins get an edit column
 		if (api_is_allowed_to_create_course()) {
@@ -71,7 +81,9 @@ class GradebookTable extends SortableTable
  	             if(count($evals_links)>0) {
  	             	$this->set_header($column++, get_lang('Results'), false);
  	             }
-			//$this->set_header($column++, get_lang('Certificates'), false);
+		 	    if (!isset($_GET['selectcat'])) {         
+				$this->set_header($column++, get_lang('Certificates'),false);
+		 	    }	
 		}
     }
 
@@ -121,7 +133,9 @@ class GradebookTable extends SortableTable
 			$row = array ();
 
 			$item = $data[0];
-
+			if (!isset($_GET['selectcat'])) {
+				$certificate_min_score = $this->build_cetificate_min_score($item);
+			}														
 			//if the item is invisible, wrap it in a span with class invisible
 			$invisibility_span_open = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
 			$invisibility_span_close = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '</span>' : '';
@@ -133,9 +147,38 @@ class GradebookTable extends SortableTable
 			$row[] = $this->build_type_column ($item);
 			$row[] = $invisibility_span_open . $this->build_name_link ($item) . $invisibility_span_close;
 			$row[] = $invisibility_span_open . $data[2] . $invisibility_span_close;
-			$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;
+			
+			if (api_is_allowed_to_create_course()) {
+			$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;	
+			} else {
+					
+				if (!isset($_GET['selectcat'])) {					
+					// generating the total score for a course
+				    $stud_id= api_get_user_id();
+				      
+					$cats_course = Category :: load (0, null, null, null, null, null, false);
+					$alleval_course= $cats_course[0]->get_evaluations($stud_id,true);
+					$alllink_course= $cats_course[0]->get_links($stud_id,true);
+					$evals_links = array_merge($alleval_course, $alllink_course);	
+					$item_value=0;
+					$item_total=0;				
+					for ($count=0; $count < count($evals_links); $count++) {
+								$item = $evals_links[$count];
+								$score = $item->calc_score($stud_id);					
+								$item_value+=$score[0]/$score[1]*$item->get_weight();			
+								$item_total+=$item->get_weight();															
+							}			
+					$item_value = number_format($item_value, 2, '.', ' ');	
+					$cattotal = Category :: load(0);
+					$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
+					$scoretotal_display = (isset($scoretotal) ? $scoretotal[0].'/'.$scoretotal[1].'('.round(($scoretotal[0] / $scoretotal[1]) * 100) . ' %)': get_lang('NoResultsAvailable'));
+					$row[] = $item_value;
+				} else {
+			   		$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;	
+			   }											
+			}	
 			$row[] = $invisibility_span_open . str_replace(' ','&nbsp;',$data[4]) . $invisibility_span_close;
-
+			
 			//admins get an edit column
 			if (api_is_allowed_to_create_course()) {
 				$row[] = $this->build_edit_column ($item);
@@ -144,7 +187,14 @@ class GradebookTable extends SortableTable
 				if (count($this->evals_links)>0) {
 					$row[] = $data[5];
 				}
-				//$row[] = $data[6];
+				if (!isset($_GET['selectcat'])) {
+					if ((int)$item_value >= (int)$certificate_min_score) {
+						$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/index.php?export_certificate=yes"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" /></a>&nbsp;'.$scoretotal_display; 	
+					} else {
+						$certificates = get_lang('NoResultsAvailable');	
+					}					
+				$row[] = $certificates;
+				}												
 			}
 			$sortable_data[] = $row;
 		}
@@ -153,7 +203,12 @@ class GradebookTable extends SortableTable
 	}
 // Other functions
 
-	private function build_id_column ($item) {
+
+private function build_cetificate_min_score ($item) {
+	return $item->get_certificate_min_score();
+}
+
+private function build_id_column ($item) {
 		switch ($item->get_item_type()) {
 			// category
 			case 'C' :

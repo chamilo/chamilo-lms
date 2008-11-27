@@ -122,15 +122,11 @@ Version 1.4 (Yannick Warnier)
 */
 // the file that contains all the initialisation stuff (and includes all the configuration stuff)
 require_once( "dropbox_init.inc.php");
-
 // get the last time the user accessed the tool
-if ($_SESSION['last_access'][$_course['id']][TOOL_DROPBOX]=='')
-{
+if ($_SESSION['last_access'][$_course['id']][TOOL_DROPBOX]=='') {
 	$last_access=get_last_tool_access(TOOL_DROPBOX,$_course['code'],$_user['user_id']);
 	$_SESSION['last_access'][$_course['id']][TOOL_DROPBOX]=$last_access;
-}
-else
-{
+} else {
 	$last_access=$_SESSION['last_access'][$_course['id']][TOOL_DROPBOX];
 }
 
@@ -157,16 +153,13 @@ Display::display_introduction_section(TOOL_DROPBOX,'left');
 */
 
 // *** display the form for adding a new dropbox item. ***
-if ($_GET['action']=="add")
-{
+if ($_GET['action']=="add") {
 	display_add_form();
 }
 
-if ($_POST['submitWork'])
-{
+if ($_POST['submitWork']) {
 	$check = Security::check_token();
-	if($check)
-	{
+	if ($check) {
 		Display :: display_normal_message(store_add_dropbox());
 		//include_once('dropbox_submit.php');
 	}
@@ -174,47 +167,38 @@ if ($_POST['submitWork'])
 
 
 // *** display the form for adding a category ***
-if ($_GET['action']=="addreceivedcategory" or $_GET['action']=="addsentcategory")
-{
+if ($_GET['action']=="addreceivedcategory" or $_GET['action']=="addsentcategory") {
 	display_addcategory_form($_POST['category_name']);
 }
 
 // *** editing a category: displaying the form ***
-if ($_GET['action']=='editcategory' and isset($_GET['id']))
-{
-	if (!$_POST)
-	{
+if ($_GET['action']=='editcategory' and isset($_GET['id'])) {
+	if (!$_POST) {
 		display_addcategory_form('',$_GET['id']);
 	}
 }
 
 // *** storing a new or edited category ***
-if ($_POST['StoreCategory'])
-{
+if ($_POST['StoreCategory']) {
 	Display :: display_normal_message(store_addcategory());
 }
 
 // *** Move a File ***
-if (($_GET['action']=='movesent' OR $_GET['action']=='movereceived') AND isset($_GET['move_id']))
-{
+if (($_GET['action']=='movesent' OR $_GET['action']=='movereceived') AND isset($_GET['move_id'])) {
 	display_move_form(str_replace('move','',$_GET['action']), $_GET['move_id'], get_dropbox_categories(str_replace('move','',$_GET['action'])));
 }
-if ($_POST['do_move'])
-{
+if ($_POST['do_move']) {
 	Display :: display_normal_message(store_move($_POST['id'], $_POST['move_target'], $_POST['part']));
 }
 
 // *** Delete a file ***
-if (($_GET['action']=='deletereceivedfile' OR $_GET['action']=='deletesentfile') AND isset($_GET['id']) AND is_numeric($_GET['id']))
-{
+if (($_GET['action']=='deletereceivedfile' OR $_GET['action']=='deletesentfile') AND isset($_GET['id']) AND is_numeric($_GET['id'])) {
 	$dropboxfile=new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
-	if ($_GET['action']=='deletereceivedfile')
-	{
+	if ($_GET['action']=='deletereceivedfile') {
 		$dropboxfile->deleteReceivedWork($_GET['id']);
 		$message=get_lang('ReceivedFileDeleted');
 	}
-	if ($_GET['action']=='deletesentfile')
-	{
+	if ($_GET['action']=='deletesentfile') {
 		$dropboxfile->deleteSentWork($_GET['id']);
 		$message=get_lang('SentFileDeleted');
 	}
@@ -222,8 +206,7 @@ if (($_GET['action']=='deletereceivedfile' OR $_GET['action']=='deletesentfile')
 }
 
 // *** Delete a category ***
-if (($_GET['action']=='deletereceivedcategory' OR $_GET['action']=='deletesentcategory') AND isset($_GET['id']) AND is_numeric($_GET['id']))
-{
+if (($_GET['action']=='deletereceivedcategory' OR $_GET['action']=='deletesentcategory') AND isset($_GET['id']) AND is_numeric($_GET['id'])) {
 	$message=delete_category($_GET['action'], $_GET['id']);
 }
 
@@ -231,53 +214,43 @@ if (($_GET['action']=='deletereceivedcategory' OR $_GET['action']=='deletesentca
 // only the download has is handled separately in dropbox_init_inc.php because this has to be done before the headers are sent
 // (which also happens in dropbox_init.inc.php
 
-if (!isset($_POST['feedback']) && ($_POST['action'] == 'delete_received' OR $_POST['action'] == 'download_received' OR $_POST['action'] == 'delete_sent' OR $_POST['action'] == 'download_sent'))
-{
+if (!isset($_POST['feedback']) && ($_POST['action'] == 'delete_received' OR $_POST['action'] == 'download_received' OR $_POST['action'] == 'delete_sent' OR $_POST['action'] == 'download_sent')) {
 	$display_message=handle_multiple_actions();
 	Display :: display_normal_message($display_message);
 }
 
 // *** Store Feedback ***
-if ($_POST['feedback'])
-{
+if ($_POST['feedback']) {
 	$display_message = store_feedback();
 	Display :: display_normal_message($display_message);
 }
 
 
 // *** Error Message ***
-if (isset($_GET['error']) AND !empty($_GET['error']))
-{
+if (isset($_GET['error']) AND !empty($_GET['error'])) {
 	Display :: display_normal_message(get_lang($_GET['error']));
 }
 
 
 
-if ($_GET['action']!="add")
-{
+if ($_GET['action']!="add") {
 // getting all the categories in the dropbox for the given user
 $dropbox_categories=get_dropbox_categories();
 // creating the arrays with the categories for the received files and for the sent files
-foreach ($dropbox_categories as $category)
-{
-	if ($category['received']=='1')
-	{
+foreach ($dropbox_categories as $category) {
+	if ($category['received']=='1') {
 		$dropbox_received_category[]=$category;
 	}
-	if ($category['sent']=='1')
-	{
+	if ($category['sent']=='1') {
 		$dropbox_sent_category[]=$category;
 	}
 }
-
-
 /*
 -----------------------------------------------------------
 	THE MENU TABS
 -----------------------------------------------------------
 */
-if ($dropbox_cnf['sent_received_tabs'])
-{
+if ($dropbox_cnf['sent_received_tabs']) {
 ?>
 <div id="tabbed_menu">
 	<ul id="tabbed_menu_tabs">
@@ -293,25 +266,20 @@ if ($dropbox_cnf['sent_received_tabs'])
 	RECEIVED FILES
 -----------------------------------------------------------
 */
-if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false)
-{
+if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false) {
 	//echo '<h3>'.get_lang('ReceivedFiles').'</h3>';
 
 	// This is for the categories
-	if (isset($_GET['view_received_category']) AND $_GET['view_received_category']<>'')
-	{
+	if (isset($_GET['view_received_category']) AND $_GET['view_received_category']<>'') {
 		$view_dropbox_category_received=$_GET['view_received_category'];
-	}
-	else
-	{
+	} else {
 		$view_dropbox_category_received=0;
 	}
 
 
 	/* *** Menu Received *** */
 	echo '<div class="actions">';
-	if ($view_dropbox_category_received<>0)
-	{
+	if ($view_dropbox_category_received<>0) {
 		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
 		echo '<img src="../img/folder_up.gif" alt="'.get_lang('up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
 	}
@@ -366,22 +334,18 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 	
 	
 	// the content of the sortable table = the received files
-	foreach ( $dropbox_person -> receivedWork as $dropbox_file)
-	{
+	foreach ( $dropbox_person -> receivedWork as $dropbox_file) {
 		$dropbox_file_data=array();
-		if ($view_dropbox_category_received==$dropbox_file->category) // we only display the files that are in the category that we are in.
-		{
+		if ($view_dropbox_category_received==$dropbox_file->category) {// we only display the files that are in the category that we are in.
 			$dropbox_file_data[]=$dropbox_file->id;
 			
-			if (!is_array($_SESSION['_seen'][$_course['id']][TOOL_DROPBOX]))
-			{			
+			if (!is_array($_SESSION['_seen'][$_course['id']][TOOL_DROPBOX])) {			
 				$_SESSION['_seen'][$_course['id']][TOOL_DROPBOX] = array();
 			}
 			
 			// new icon
 			$new_icon='';
-			if ($dropbox_file->last_upload_date > $last_access AND !in_array($dropbox_file->id,$_SESSION['_seen'][$_course['id']][TOOL_DROPBOX]))
-			{
+			if ($dropbox_file->last_upload_date > $last_access AND !in_array($dropbox_file->id,$_SESSION['_seen'][$_course['id']][TOOL_DROPBOX])) {
 				$new_icon='&nbsp;<img src="../img/new.gif" align="absmiddle" alt="'.get_lang('New').'" />';
 			}
 			
@@ -402,8 +366,7 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 			//						<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;action=deletereceivedfile&amp;id='.$dropbox_file->id.'" onclick="return confirmation(\''.$dropbox_file->title.'\');"><img src="../img/delete.gif"  alt="'.get_lang('Delete').'"/></a>';
 			// this is a hack to have an additional row in a sortable table
 			
-			if($_GET['action']=='viewfeedback' AND isset($_GET['id']) and is_numeric($_GET['id']) AND $dropbox_file->id==$_GET['id'])
-			{
+			if ($_GET['action']=='viewfeedback' AND isset($_GET['id']) and is_numeric($_GET['id']) AND $dropbox_file->id==$_GET['id']) {
 				$action_icons.="</td></tr>\n"; // ending the normal row of the sortable table
 				$action_icons.='<tr><td colspan="2"><a href="index.php?"'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category']."&amp;view_sent_category=".$_GET['view_sent_category']."&amp;view=".$_GET['view']."\">".get_lang('CloseFeedback')."</a></td><td colspan=\"7\">".feedback($dropbox_file->feedback2)."</td>\n</tr>\n";
 			}
@@ -419,14 +382,11 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 	
 
 	// the content of the sortable table = the categories (if we are not in the root)
-	if ($view_dropbox_category_received==0)
-	{
-		foreach ($dropbox_categories as $category) // note: this can probably be shortened since the categories for the received files are already in the $dropbox_received_category array;
-		{
+	if ($view_dropbox_category_received==0) {
+		foreach ($dropbox_categories as $category) { // note: this can probably be shortened since the categories for the received files are already in the $dropbox_received_category array;
 			$dropbox_category_data=array();
-			if ($category['received']=='1')
-			{
-				$dropbox_category_data[]=''; // this is where the checkbox icon for the files appear
+			if ($category['received']=='1') {
+				$dropbox_category_data[]=$category['cat_id']; // this is where the checkbox icon for the files appear
 				// the icon of the category
 				$dropbox_category_data[]=build_document_icon_tag('folder',$category['cat_name']);
 				$dropbox_category_data[]='<a href="dropbox_download.php?'.api_get_cidreq().'&cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=received"><img width="16" height="16" src="../img/folder_zip.gif" style="float:right;" alt="'.get_lang('Save').'"/></a><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$category['cat_id'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.$category['cat_name'].'</a>';
@@ -436,13 +396,11 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 				$dropbox_category_data[]='<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=editcategory&amp;id='.$category['cat_id'].'"><img src="../img/edit.gif" alt="'.get_lang('Edit').'" /></a>
 										  <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=deletereceivedcategory&amp;id='.$category['cat_id'].'" onclick="return confirmation(\''.$category['cat_name'].'\');"><img src="../img/delete.gif" alt="'.get_lang('Delete').'" /></a>';
 			}
-			if (is_array($dropbox_category_data) && count($dropbox_category_data)>0)
-			{
+			if (is_array($dropbox_category_data) && count($dropbox_category_data)>0) {
 				$dropbox_data_recieved[]=$dropbox_category_data;
 			}
 		}
 	}
-	
 	// Displaying the table
 	$additional_get_parameters=array('view'=>$_GET['view'], 'view_received_category'=>$_GET['view_received_category'],'view_sent_category'=>$_GET['view_sent_category']);	
 	Display::display_sortable_config_table($column_header, $dropbox_data_recieved, $sorting_options, $paging_options, $additional_get_parameters,$column_show,$column_order, array ('delete_received' => get_lang('Delete'),'download_received'=>get_lang('Download')));
@@ -454,24 +412,19 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 	SENT FILES
 -----------------------------------------------------------
 */
-if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
-{
+if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false) {
 	//echo '<h3>'.get_lang('SentFiles').'</h3>';
 
 	// This is for the categories
-	if (isset($_GET['view_sent_category']) AND $_GET['view_sent_category']<>'')
-	{
+	if (isset($_GET['view_sent_category']) AND $_GET['view_sent_category']<>'') {
 		$view_dropbox_category_sent=$_GET['view_sent_category'];
-	}
-	else
-	{
+	} else {
 		$view_dropbox_category_sent=0;
 	}
 
 	/* *** Menu Sent *** */
 	echo '<div class="actions">';
-	if ($view_dropbox_category_sent<>0)
-	{
+	if ($view_dropbox_category_sent<>0) {
 		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong> ';
 		echo '<img src="../img/folder_up.gif" alt="'.get_lang('Up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category=0&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
 	}
@@ -529,18 +482,15 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 	$column_order[]=8;
 	
 	// the content of the sortable table = the received files
-	foreach ( $dropbox_person -> sentWork as $dropbox_file)
-	{
+	foreach ( $dropbox_person -> sentWork as $dropbox_file) {
 		$dropbox_file_data=array();
 
-		if ($view_dropbox_category_sent==$dropbox_file->category)
-		{
+		if ($view_dropbox_category_sent==$dropbox_file->category) {
 			$dropbox_file_data[]=$dropbox_file->id;
 			$dropbox_file_data[]=build_document_icon_tag('file',$dropbox_file->title);
 			$dropbox_file_data[]='<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download"><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" /></a><a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">'.$dropbox_file->title.'</a><br>'.$dropbox_file->description;
 			$dropbox_file_data[]=ceil(($dropbox_file->filesize)/1024).' '.get_lang('kB');
-			foreach ($dropbox_file->recipients as $recipient)
-			{
+			foreach ($dropbox_file->recipients as $recipient) {
 				$receivers_celldata=display_user_link($recipient['user_id'], $recipient['name']).', '.$receivers_celldata;
 			}
 			$dropbox_file_data[]=$receivers_celldata;					
@@ -553,8 +503,7 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=movesent&amp;move_id='.$dropbox_file->id.'"><img src="../img/deplacer_fichier.gif" alt="'.get_lang('Move').'" align="absmiddle"/></a>
 									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=deletesentfile&amp;id='.$dropbox_file->id.'" onclick="return confirmation(\''.$dropbox_file->title.'\');"><img src="../img/delete.gif" alt="'.get_lang('Delete').'" align="absmiddle" /></a>';
 			// this is a hack to have an additional row in a sortable table
-			if($_GET['action']=='viewfeedback' AND isset($_GET['id']) and is_numeric($_GET['id']) AND $dropbox_file->id==$_GET['id'])
-			{
+			if ($_GET['action']=='viewfeedback' AND isset($_GET['id']) and is_numeric($_GET['id']) AND $dropbox_file->id==$_GET['id']) {
 				$action_icons.="</td></tr>\n"; // ending the normal row of the sortable table
 				$action_icons.="<tr>\n\t<td colspan=\"2\"><a href=\"index.php?".api_get_cidreq()."&view_received_category=".$_GET['view_received_category']."&amp;view_sent_category=".$_GET['view_sent_category']."&amp;view=".$_GET['view']."\">".get_lang('CloseFeedback')."</a></td><td colspan=\"7\">".feedback($dropbox_file->feedback2)."</td>\n</tr>\n";
 
@@ -563,19 +512,15 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 			$dropbox_file_data[]=$dropbox_file->last_upload_date;			
 			$action_icons='';
 			$dropbox_data_sent[]=$dropbox_file_data;
-
 		}
 	}
 
 	// the content of the sortable table = the categories (if we are not in the root)
-	if ($view_dropbox_category_sent==0)
-	{
-		foreach ($dropbox_categories as $category)
-		{
+	if ($view_dropbox_category_sent==0) {
+		foreach ($dropbox_categories as $category) {
 			$dropbox_category_data=array();
-			if ($category['sent']=='1')
-			{
-				$dropbox_category_data[]=''; // this is where the checkbox icon for the files appear
+			if ($category['sent']=='1') {
+				$dropbox_category_data[]=$category['cat_id']; // this is where the checkbox icon for the files appear
 				$dropbox_category_data[]=build_document_icon_tag('folder',$category['cat_name']);
 				$dropbox_category_data[]='<a href="dropbox_download.php?'.api_get_cidreq().'&cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=sent"><img width="16" height="16" src="../img/folder_zip.gif" style="float:right;" alt="'.get_lang('Save').'" /></a><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$category['cat_id'].'&amp;view='.$_GET['view'].'">'.$category['cat_name'].'</a>';
 				//$dropbox_category_data[]=''; 
@@ -586,8 +531,7 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 				$dropbox_category_data[]='<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=editcategory&id='.$category['cat_id'].'"><img src="../img/edit.gif" alt="'.get_lang('Edit').'"/></a>
 										  <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=deletesentcategory&amp;id='.$category['cat_id'].'" onclick="return confirmation(\''.$category['cat_name'].'\');"><img src="../img/delete.gif" alt="'.get_lang('Delete').'" /></a>';
 			}
-			if (is_array($dropbox_category_data) && count($dropbox_category_data)>0)
-			{
+			if (is_array($dropbox_category_data) && count($dropbox_category_data)>0) {
 				$dropbox_data_sent[]=$dropbox_category_data;
 			}
 		}
@@ -595,7 +539,6 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 	// Displaying the table
 	$additional_get_parameters=array('view'=>$_GET['view'], 'view_received_category'=>$_GET['view_received_category'],'view_sent_category'=>$_GET['view_sent_category']);
 	Display::display_sortable_config_table($column_header, $dropbox_data_sent, $sorting_options, $paging_options, $additional_get_parameters,$column_show,$column_order, array ('delete_received' => get_lang('Delete'),'download_received'=>get_lang('Download')));
-}
+  }
 }
 Display::display_footer();
-?>

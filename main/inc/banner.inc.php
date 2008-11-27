@@ -170,7 +170,7 @@ if ($_user['user_id']) {
 	 <!-- start user section line with name, my course, my profile, scorm info, etc -->
 
 	 <ul id="logout">
-				<li><a href="<?php echo api_get_path(WEB_PATH); ?>index.php?logout=logout"><span><?php echo get_lang('Logout').' '.$login; ?></span></a></li>
+				<li><a target="_main" href="<?php echo api_get_path(WEB_PATH); ?>index.php?logout=logout"><span><?php echo get_lang('Logout').' '.$login; ?></span></a></li>
 	 </ul>
 <?php
 }

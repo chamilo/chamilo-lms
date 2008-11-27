@@ -1,4 +1,4 @@
-<?php //$Id: myagenda.php 16723 2008-11-12 15:41:34Z pcool $
+<?php //$Id: myagenda.php 16978 2008-11-27 11:04:12Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -215,13 +215,13 @@ if (isset ($_user['user_id']))
 	// Starting the output
 	
 	echo "\n<div class=\"actions\">\n";
-	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=month\"><img src=\"../img/calendar_month.gif\" alt=\"".get_lang('MonthView')."\" /> ".get_lang('MonthView')."</a> \n";
-	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=week\"><img src=\"../img/calendar_week.gif\" alt=\"".get_lang('WeekView')."\" /> ".get_lang('WeekView')."</a> \n";
-	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=day\"><img src=\"../img/calendar_day.gif\" alt=\"".get_lang('DayView')."\" /> ".get_lang('DayView')."</a> \n";
+	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=month\">".Display::return_icon('calendar_month.gif', get_lang('MonthView'))." ".get_lang('MonthView')."</a> \n";
+	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=week\">".Display::return_icon('calendar_week.gif', get_lang('WeekView'))." ".get_lang('WeekView')."</a> \n";
+	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=day\">".Display::return_icon('calendar_day.gif', get_lang('DayView'))." ".get_lang('DayView')."</a> \n";
 	if (get_setting('allow_personal_agenda') == 'true')
 	{
-		echo "\t<a href=\"".api_get_self()."?action=add_personal_agenda_item\"><img src=\"../img/calendar_personal_add.gif\" /> ".get_lang("AddPersonalItem")."</a> \n";
-		echo "\t<a href=\"".api_get_self()."?action=view&amp;view=personal\"><img src=\"../img/calendar_personal.gif\" />  ".get_lang("ViewPersonalItem")."</a> \n";
+		echo "\t<a href=\"".api_get_self()."?action=add_personal_agenda_item\">".Display::return_icon('calendar_personal_add.gif', get_lang('AddPersonalItem'))." ".get_lang('AddPersonalItem')."</a> \n";
+		echo "\t<a href=\"".api_get_self()."?action=view&amp;view=personal\">".Display::return_icon('calendar_personal.gif', get_lang('ViewPersonalItem'))."  ".get_lang('ViewPersonalItem')."</a> \n";
 	}
 	echo "</div>\n\n";	
 	

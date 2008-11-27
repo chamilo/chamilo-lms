@@ -111,7 +111,7 @@ foreach($Courses as $enreg)
   	</td>
 
   	<td align='center'>
-		<a href="<?php echo api_get_self(); ?>?course=<?php echo $enreg['code']; ?>"> <?php echo '<img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" />';?> </a>
+		<a href="<?php echo api_get_self(); ?>?course=<?php echo $enreg['code']; ?>"> <?php Display::display_icon('2rightarrow.gif'); ?> </a>
   	</td>
 </tr>
 
@@ -361,7 +361,7 @@ foreach($Courses as $enreg)
 									<td align="center" width="25">
 								 ';
 							if($a_essais['essais']>0)
-								echo '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$exe_id.'&cidReq='.$a_infosCours['code'].'&id_session='.$_GET['id_session'].'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
+								echo '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$exe_id.'&cidReq='.$a_infosCours['code'].'&id_session='.$_GET['id_session'].'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
 							echo "	</td>
 								  </tr>
 								 ";

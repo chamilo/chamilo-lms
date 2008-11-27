@@ -419,7 +419,7 @@ function show_new_personal_item_form($id = "")
 		echo "\t<option value=\"".$value."\">".$value."</option>\n";
 	}
 	echo "</select>";
-	echo "<a title=\"Kalender\" href=\"javascript:openCalendar('newedit_form', 'frm_')\"><img src=\"../img/calendar_select.gif\" border=\"0\" valign=\"absmiddle\"/></a>";
+	echo "<a title=\"Kalender\" href=\"javascript:openCalendar('newedit_form', 'frm_')\">".Display::return_icon('calendar_select.gif')."</a>";
 	echo "</td><td width=\"50%\">";
 	// ********** The form containing the hours  (00->23) ********** \\
 	echo "<!-- time: hour -->\n";
@@ -697,9 +697,9 @@ function show_personal_agenda()
 			echo ucfirst(strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"])));
 			echo "</td>";
 			echo '<td class="'.$style.'">';
-			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=confidential" title="'.get_lang('ExportiCalConfidential').'"><img src="'.$export_icon_high.'" alt="'.get_lang('ExportiCalConfidential').'"/></a>';
-			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=private" title="'.get_lang('ExportiCalPrivate').'"><img src="'.$export_icon_low.'" alt="'.get_lang('ExportiCalPrivate').'"/></a>';
-			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=public" title="'.get_lang('ExportiCalPublic').'"><img src="'.$export_icon.'" alt="'.get_lang('ExportiCalPublic').'"/></a>';
+			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a>';
+			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a>';
+			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a>';
 			echo "\n\t\t</td>\n\t";
 			echo "</tr>";
 			/*--------------------------------------------------
@@ -723,8 +723,8 @@ function show_personal_agenda()
 			 			display: the edit / delete icons
 			  --------------------------------------------------*/
 			echo "\t<tr>\n\t\t<td class=\"".$text_style."\" colspan='2'>";
-			echo "<a href=\"myagenda.php?action=edit_personal_agenda_item&amp;id=".$myrow['id']."\"><img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang('Edit')."\" /></a>";
-			echo "<a href=\"".api_get_self()."?action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\"><img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Delete')."\" /></a>";
+			echo "<a href=\"myagenda.php?action=edit_personal_agenda_item&amp;id=".$myrow['id']."\">".Display::return_icon('edit.gif', get_lang('Edit'))."</a>";
+			echo "<a href=\"".api_get_self()."?action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.gif', get_lang('Delete'))."</a>";
 			echo "</td></tr>";
 		}
 	}

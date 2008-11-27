@@ -1,4 +1,4 @@
-<?php // $Id: authldap.php 15253 2008-05-09 03:00:19Z yannoo $
+<?php // $Id: authldap.php 16978 2008-11-27 11:04:12Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -559,7 +559,7 @@ function modify_filter($user_id,$url_params, $row)
 {
 	$url_params_id="id[]=".$row[0];
 	//$url_params_id="id=".$row[0];	
-	$result .= '<a href="ldap_users_list.php?action=add_user&amp;user_id='.$user_id.'&amp;id_session='.Security::remove_XSS($_GET['id_session']).'&amp;'.$url_params_id.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;"><img src="../img/add_user.gif" border="0" style="vertical-align: middle;" title="'.get_lang('AddUsers').'" alt="'.get_lang('AddUsers').'"/></a>';
+	$result .= '<a href="ldap_users_list.php?action=add_user&amp;user_id='.$user_id.'&amp;id_session='.Security::remove_XSS($_GET['id_session']).'&amp;'.$url_params_id.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.Display::return_icon('add_user.gif', get_lang('AddUsers')).'</a>';
 	return $result;
 }
 

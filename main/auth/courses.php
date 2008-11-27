@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 16876 2008-11-22 23:47:37Z herodoto $
+<?php // $Id: courses.php 16978 2008-11-27 11:04:12Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1011,7 +1011,7 @@ function display_category_icons($current_category, $all_user_categories)
 		if ($current_category<>$all_user_categories[0])
 		{
 			echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=up&amp;category=".$current_category."&amp;sec_token=".$stok."\">";
-			echo "<img src=\"../img/up.gif\" alt=\"".htmlentities(get_lang("Up"),ENT_QUOTES,$charset)."\"></a>";
+			echo Display::return_icon('up.gif', get_lang('Up')).'</a>';
 		}
 		echo "</td>";
    		echo " <td rowspan=\"2\">";
@@ -1030,7 +1030,7 @@ function display_category_icons($current_category, $all_user_categories)
 		if ($current_category<>$all_user_categories[$max_category_key-1])
 		{
 			echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=down&amp;category=".$current_category."&amp;sec_token=".$stok."\">";
-			echo "<img src=\"../img/down.gif\" alt=\"".htmlentities(get_lang("Down"),ENT_QUOTES,$charset)."\"></a>";
+			echo Display::return_icon('down.gif', get_lang('Down')).'</a>';
 		}
 		echo "</td>";
  		echo " </tr>";

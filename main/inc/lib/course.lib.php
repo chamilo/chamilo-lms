@@ -296,6 +296,9 @@ class CourseManager
 	 */
 	function unsubscribe_user($user_id, $course_code)
 	{
+		$tbl_session_rel_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 		if(!is_array($user_id))
 		{
 			$user_id = array($user_id);
@@ -324,8 +327,31 @@ class CourseManager
 		api_sql_query($sql,__FILE__,__LINE__);
 
 		// Unsubscribe user from the course
+		if(!empty($_SESSION["id_session"])) {
+			// delete in table session_rel_course_rel_user	
+			$add_session_course_rel = "DELETE FROM $tbl_session_rel_course_user 	
+										WHERE id_session ='".$_SESSION["id_session"]."'
+										AND course_code = '".$_SESSION['_course']['id']."'
+										AND id_user  IN ($user_ids)";
+			$result = api_sql_query($add_session_course_rel,__FILE__, __LINE__);	
+			// delete in table session_rel_user			    
+			$add_session_rel_user = "DELETE FROM $tbl_session_rel_user 	
+									WHERE id_session ='".$_SESSION["id_session"]."'											  
+									AND id_user  IN ($user_ids)";
+			$result = api_sql_query($add_session_rel_user,__FILE__, __LINE__);
+			// update the table session
+			$sql = "SELECT COUNT(*) from $tbl_session_rel_user WHERE id_session = '".$_SESSION["id_session"]."'";
+			$result = api_sql_query($sql,__FILE__, __LINE__);
+			$row = Database::fetch_array($result);						    			    	
+			$count = $row[0]; // number of users by session
+								 		
+			$update_user_session = "UPDATE $tbl_session set nbr_users = '$count' WHERE id = '".$_SESSION["id_session"]."'" ;  	
+			$result = api_sql_query($update_user_session,__FILE__,__LINE__);
+		}	
+		else {
 		$sql = "DELETE FROM $table_course_user WHERE user_id IN (".$user_ids.") AND course_code = '".$course_code."'";
 		api_sql_query($sql, __FILE__, __LINE__);
+		}
 	}
 
 
@@ -334,43 +360,59 @@ class CourseManager
 	 * course subscription is allowed.
 	 * @see add_user_to_course
 	 */
-	function subscribe_user($user_id, $course_code, $status = STUDENT)
-	{
+	function subscribe_user($user_id, $course_code, $status = STUDENT) {
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$location_table = Database :: get_main_table(MAIN_LOCATION_TABLE);
 		$user_role_table = Database :: get_main_table(MAIN_USER_ROLE_TABLE);
-
+		$tbl_session_rel_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+		
 		$status = ($status == STUDENT || $status == COURSEMANAGER) ? $status : STUDENT;
 		$role_id = ($status == COURSEMANAGER) ? COURSE_ADMIN : NORMAL_COURSE_MEMBER;
 
-		if (empty ($user_id) || empty ($course_code))
-		{
+		if (empty ($user_id) || empty ($course_code)) {
 			return false;
-		}
-		else
-		{
+		} else {
 			// previously check if the user are already registered on the platform
 
 			$handle = api_sql_query("SELECT status FROM ".$user_table."
 														WHERE `user_id` = '$user_id' ", __FILE__, __LINE__);
-			if (Database::num_rows($handle) == 0)
-			{
+			if (Database::num_rows($handle) == 0){
 				return false; // the user isn't registered to the platform
-			}
-			else
-			{
+			} else {
 				//check if user isn't already subscribed to the course
 				$handle = api_sql_query("SELECT * FROM ".$course_user_table."
 																	WHERE `user_id` = '$user_id'
 																	AND `course_code` ='$course_code'", __FILE__, __LINE__);
-				if (Database::num_rows($handle) > 0)
-				{
+				if (Database::num_rows($handle) > 0) {
 					return false; // the user is already subscribed to the course
-				}
-				else
-				{
+				} else {
+					if (!empty($_SESSION["id_session"])) {
+						// add in table session_rel_course_rel_user	
+						$add_session_course_rel = "INSERT INTO $tbl_session_rel_course_user 	
+												  SET id_session ='".$_SESSION["id_session"]."',
+												  course_code = '".$_SESSION['_course']['id']."',
+												  id_user = '".$user_id."'";
+					    $result = @api_sql_query($add_session_course_rel,__FILE__, __LINE__);	
+					    //var_dump($result);
+					    // add in table session_rel_user			    
+					    $add_session_rel_user = "INSERT INTO $tbl_session_rel_user 	
+												  SET id_session ='".$_SESSION["id_session"]."',											  
+												  id_user = '".$user_id."'";
+					    $result = @api_sql_query($add_session_rel_user,__FILE__, __LINE__);
+					    // update the table session
+				    	$sql = "SELECT COUNT(*) from $tbl_session_rel_user WHERE id_session = '".$_SESSION["id_session"]."'";
+				    	$result = @api_sql_query($sql,__FILE__, __LINE__);
+				    	$row = Database::fetch_array($result);						    			    	
+				 		$count = $row[0]; // number of users by session
+				 		
+				 		$update_user_session = "UPDATE $tbl_session set nbr_users = '$count' WHERE id = '".$_SESSION["id_session"]."'" ;  	
+						$result = @api_sql_query($update_user_session,__FILE__,__LINE__);
+						
+					} else {
 					$course_sort = CourseManager :: userCourseSort($user_id,$course_code);
 					$add_course_user_entry_sql = "INSERT INTO ".$course_user_table."
 										SET `course_code` = '$course_code',
@@ -378,12 +420,10 @@ class CourseManager
 											`status`    = '".$status."',
 											`sort`  =   '". ($course_sort)."'";
 					$result = api_sql_query($add_course_user_entry_sql, __FILE__, __LINE__);
-					if ($result)
-					{
-						return true;
 					}
-					else
-					{
+					if ($result) {
+						return true;
+					} else {
 						return false;
 					}
 				}
@@ -1087,44 +1127,36 @@ class CourseManager
 	*	@param string $course_code
 	*	@return array with user info
 	*/
-	function get_user_list_from_course_code($course_code, $with_session=true, $session_id=0, $limit='', $order_by='')
-	{		
+	function get_user_list_from_course_code($course_code, $with_session=true, $session_id=0, $limit='', $order_by='') {		
 		$session_id = intval($session_id);
 		$a_users = array();		
 		$table_users = Database :: get_main_table(TABLE_MAIN_USER);		
-		$where = array();
-		
-		if ( $session_id == 0 ) 
-        {
+		$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+		$where = array();		
+		if ( $session_id == 0 ) {
 			$sql = 'SELECT DISTINCT course_rel_user.status, user.user_id ';
-		}
-		else
-		{
+		} else {
 			$sql = 'SELECT DISTINCT user.user_id ';
 		}
 		
-        if ( $session_id == 0 ) 
-        {
+        if ( $session_id == 0 ) {
         	$sql .= ', course_rel_user.role, course_rel_user.tutor_id ';
         }	
         	
         $sql .= ' FROM '.$table_users.' as user ';
 
-		if(api_get_setting('use_session_mode')=='true' && $with_session)
-		{
+		if (api_get_setting('use_session_mode')=='true' && $with_session) {
 			$table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 			$sql .= ' LEFT JOIN '.$table_session_course_user.' as session_course_user
 	        			 ON user.user_id = session_course_user.id_user
 						 AND session_course_user.course_code="'.Database::escape_string($course_code).'"';
-			if($session_id!=0) 
-			{
+			if ($session_id!=0) {
 				$sql .= ' AND session_course_user.id_session = '.$session_id;
 			}
 			$where[] = ' session_course_user.course_code IS NOT NULL ';
 		}
 		
-		if($session_id == 0)
-		{
+		if ($session_id == 0) {
 			$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 			$sql .= ' LEFT JOIN '.$table_course_user.' as course_rel_user
 				        ON user.user_id = course_rel_user.user_id
@@ -1139,17 +1171,13 @@ class CourseManager
 	 
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		
-		while($user = Database::fetch_array($rs))
-		{
+		while($user = Database::fetch_array($rs)) {
 			$user_infos = Database :: get_user_info_from_id($user['user_id']);					
 			$user_infos['status'] = $user['status'];
-			//$user['status']=$user_infos['status'] ; 
-            if ( isset($user['role']) ) 
-            {
+            if ( isset($user['role']) ) {
                 $user_infos['role'] = $user['role'];
             }
-            if ( isset($user['tutor_id']) ) 
-            {
+            if ( isset($user['tutor_id']) ) {
                 $user_infos['tutor_id'] = $user['tutor_id'];
             }                
 			$a_users[$user['user_id']] = $user_infos; 

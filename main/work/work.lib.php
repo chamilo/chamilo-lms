@@ -39,16 +39,19 @@ require_once '../document/document.inc.php';
 require_once '../inc/lib/fileDisplay.lib.php';
 
 
-function display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form) 
-{
+function display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form)  {
 	$display_output = "";
-	if(strlen($cur_dir_path) > 0 && $cur_dir_path != '/') {
+	if (strlen($cur_dir_path) > 0 && $cur_dir_path != '/') {
 		$parent_dir = dirname($cur_dir_path);
 		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.Security::remove_XSS($_GET['origin']).'&curdirpath='.$parent_dir.'">'.Display::return_icon('folder_up.gif').' '.get_lang('Up').'</a>&nbsp&nbsp';
 	}
 	
 	if (! $always_show_upload_form ) {
-		$display_output .= "&nbsp&nbsp<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") .'</a>&nbsp&nbsp&nbsp&nbsp';			
+		$user_info = api_get_user_info();
+		$user_status = $user_info['status']; 
+		if ($user_status != 1) {
+			$display_output .= "&nbsp&nbsp<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") .'</a>&nbsp&nbsp&nbsp&nbsp';	
+		}					
 	}
 	
 	if (! $always_show_tool_options && api_is_allowed_to_edit()) {
@@ -75,8 +78,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 * @param $cur_dir_path	Current subdirectory of 'work/'
 * @param $cur_dir_path_url Current subdirectory of 'work/', url-encoded
 */
-function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cur_dir_path,$cur_dir_path_url)
-{
+function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cur_dir_path,$cur_dir_path_url) {
 	global $charset, $group_properties;
 	$is_allowed_to_edit = api_is_allowed_to_edit();
 	$work_table 		= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -126,8 +128,7 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 * @param $uploadvisibledisabled
 * @param $origin
 */
-function display_default_visibility_form($uploadvisibledisabled)
-{
+function display_default_visibility_form($uploadvisibledisabled) {
 	?>
 	<tr class="row_odd"><td align="right">
 		<strong><?php echo get_lang("_default_upload"); ?></strong></td>
@@ -1070,8 +1071,7 @@ function count_dir($path_dir, $recurse)
 * validation when you create a work
 * this goes into the $htmlHeadXtra[] array
 */
-function to_javascript() 
-{
+function to_javascript_work() {
 	return '<script>
 			function updateDocumentTitle(value){
 			

@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 16891 2008-11-24 20:35:40Z yannoo $
+*  	@version $Id: work.php 16994 2008-11-28 00:18:27Z iflorespaz $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -112,7 +112,7 @@ require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.ph
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = to_javascript();
+$htmlHeadXtra[] = to_javascript_work();
 
 /*
 -----------------------------------------------------------

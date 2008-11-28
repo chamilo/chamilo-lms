@@ -892,6 +892,7 @@ function update_Db_course($courseDbName)
 		feedback3 text NOT NULL,
 		max_size int default NULL,
 		max_text int default NULL,
+		max_version int default NULL,
 		startdate_assig datetime NOT NULL default '0000-00-00 00:00:00',
 		enddate_assig datetime  NOT NULL default '0000-00-00 00:00:00',
 		delayedsubmit int NOT NULL default 0,
@@ -907,7 +908,7 @@ function update_Db_course($courseDbName)
 		userc_id int NOT NULL default 0,
 		comment text NOT NULL,
 		p_score varchar(255) default NULL,
-		timestamp timestamp(14) NOT NULL,		
+		dtime datetime NOT NULL default '0000-00-00 00:00:00',		
 		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);

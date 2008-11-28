@@ -1625,14 +1625,20 @@ if ($_GET['action']=='allpages')
 
 if ($_GET['action']=='discuss')
 {
+
+	//first extract the date of last version
+	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id DESC';
+	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$row=Database::fetch_array($result);
+	$lastversiondate=$row['dtime'];
+	$lastuserinfo=Database::get_user_info_from_id($row['user_id']);
+	
 	//select page to discuss
     $sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
 	$result=api_sql_query($sql,__LINE__,__FILE__);
-	$row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version	
+	$row=Database::fetch_array($result);
 	$id=$row['id'];
-	$wuid=$row['user_id'];
-	$userinfo=Database::get_user_info_from_id($row['user_id']);
-		
+	$firstuserid=$row['user_id'];
 
 	//check discuss visibility.  Show discussion to students if isn't hidden. Show page to all teachers if is hidden. 
 	if (check_visibility_discuss())
@@ -1718,7 +1724,7 @@ if ($_GET['action']=='discuss')
 		if($row['visibility_disc']==1 || api_is_allowed_to_edit() || api_is_platform_admin() || ($row['assignment']==2 && $row['visibility_disc']==0 && (api_get_user_id()==$row['user_id'])))
 	    {													
 		    echo '<div id="wikititle">';
-			echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.$row['title'].'<br/>'.'<a href="index.php?action=discuss&amp;actionpage=addlock_disc&amp;title='.$page.'">'.$addlock_disc.'</a>'.'&nbsp;&nbsp;&nbsp;<a href="index.php?action=discuss&amp;actionpage=visibility_disc&amp;title='.$page.'">'.$visibility_disc.'</a>'.'&nbsp;&nbsp;&nbsp;<a href="index.php?action=discuss&amp;actionpage=ratinglock_disc&amp;title='.$page.'">'.$ratinglock_disc.'</a>&nbsp;&nbsp;&nbsp;<a href="index.php?action=discuss&amp;actionpage=notify_disc&amp;title='.$page.'">'.$notify_disc.'</a>&nbsp;&nbsp;&nbsp;<font size="-2"><i> ('.get_lang('MostRecentVersionBy').'<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['firstname'].' '.$userinfo['lastname'].'</a> '.$row['dtime'].$countWPost.')'.$avg_WPost_score.' </i></font>'; //TODO: read avg score
+			echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.$row['title'].'<br/>'.'<a href="index.php?action=discuss&amp;actionpage=addlock_disc&amp;title='.$page.'">'.$addlock_disc.'</a>'.'&nbsp;&nbsp;&nbsp;<a href="index.php?action=discuss&amp;actionpage=visibility_disc&amp;title='.$page.'">'.$visibility_disc.'</a>'.'&nbsp;&nbsp;&nbsp;<a href="index.php?action=discuss&amp;actionpage=ratinglock_disc&amp;title='.$page.'">'.$ratinglock_disc.'</a>&nbsp;&nbsp;&nbsp;<a href="index.php?action=discuss&amp;actionpage=notify_disc&amp;title='.$page.'">'.$notify_disc.'</a>&nbsp;&nbsp;&nbsp;<font size="-2"><i> ('.get_lang('MostRecentVersionBy').'<a href="../user/userInfo.php?uInfo='.$lastuserinfo['user_id'].'">'.$lastuserinfo['firstname'].' '.$lastuserinfo['lastname'].'</a> '.$lastversiondate.$countWPost.')'.$avg_WPost_score.' </i></font>'; //TODO: read avg score
 			echo '</div>';
 	
 			if($row['addlock_disc']==1 || api_is_allowed_to_edit() || api_is_platform_admin()) //show comments but students can't add theirs
@@ -1767,10 +1773,13 @@ if ($_GET['action']=='discuss')
 				<?php
 				if ($_POST['Submit'])
 				{
-					$sql="INSERT INTO $tbl_wiki_discuss (publication_id, userc_id, comment, p_score) VALUES ('".$id."','".api_get_user_id()."','".$_POST['comment']."','".$_POST['rating']."')";
-					$result=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
+					$dtime = date( "Y-m-d H:i:s" );
+					$message_author=api_get_user_id();
 					
-					check_emailcue($id, 'D');
+					$sql="INSERT INTO $tbl_wiki_discuss (publication_id, userc_id, comment, p_score, dtime) VALUES ('".$id."','".$message_author."','".$_POST['comment']."','".$_POST['rating']."','".$dtime."')";
+					$result=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());					
+					
+					check_emailcue($id, 'D', $dtime, $message_author);			
 										
 				}
 			}//end discuss lock
@@ -1778,7 +1787,7 @@ if ($_GET['action']=='discuss')
 			echo '<hr noshade size="1">';
 			$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 			
-			$sql="SELECT * FROM $tbl_wiki_discuss reviews, $user_table user  WHERE reviews.publication_id='".$id."' AND user.user_id='".$wuid."' ORDER BY id DESC";
+			$sql="SELECT * FROM $tbl_wiki_discuss reviews, $user_table user  WHERE reviews.publication_id='".$id."' AND user.user_id='".$firstuserid."' ORDER BY id DESC";
 			$result=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
 			
 			$countWPost = Database::num_rows($result); 
@@ -2192,7 +2201,7 @@ function save_wiki()
     $Id = Database::insert_id();		
 	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id());
 	
-	check_emailcue($_clean['reflink'], 'P');
+	check_emailcue($_clean['reflink'], 'P', $dtime, $_clean['user_id']);
 	
 	return get_lang('ChangesStored');
 }
@@ -3214,7 +3223,7 @@ function check_notify_all()
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
  
-function check_emailcue($id_or_ref, $type)
+function check_emailcue($id_or_ref, $type, $lastime, $lastuser)
 {
 	global $tbl_wiki;
 	global $groupfilter;	
@@ -3224,13 +3233,29 @@ function check_emailcue($id_or_ref, $type)
     $_clean['group_id']=(int)$_SESSION['_gid'];
 	
 	$group_properties  = GroupManager :: get_group_properties($_clean['group_id']);	
-	$group_name= $group_properties['name'];		
+	$group_name= $group_properties['name'];
 
     $allow_send_mail=false; //define the variable to below
 	
 	if ($type=='P')
 	{
-	//if modifying a wiki page		
+	//if modifying a wiki page
+		
+		//first, current author and time
+		//Who is the author?
+		$userinfo=	Database::get_user_info_from_id($lastuser);		
+		$email_user_author= get_lang('EditedBy').': '.$userinfo['firstname'].' '.$userinfo['lastname'];		
+		
+		//When ?		
+		$year = substr($lastime, 0, 4);
+		$month = substr($lastime, 5, 2);
+		$day = substr($lastime, 8, 2);
+		$hours=substr($lastime, 11,2);
+		$minutes=substr($lastime, 14,2);
+		$seconds=substr($lastime, 17,2);
+		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;	
+		
+		//second, extract data from first reg
 	 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.$id_or_ref.'" AND '.$groupfilter.' ORDER BY id ASC'; //id_or_ref is reflink from tblwiki
 		
 		$result=api_sql_query($sql,__LINE__,__FILE__);
@@ -3238,22 +3263,8 @@ function check_emailcue($id_or_ref, $type)
 		
 		$id=$row['id'];
 		$email_page_name=$row['title'];
-	
-		//Who is the author?
-		$userinfo=	Database::get_user_info_from_id($row['user_id']);		
-		$email_user_author= get_lang('EditedBy').': '.$userinfo['firstname'].' '.$userinfo['lastname'];		
-		
-		//When ?		
-		$year = substr($row['dtime'], 0, 4);
-		$month = substr($row['dtime'], 5, 2);
-		$day = substr($row['dtime'], 8, 2);
-		$hours=substr($row['dtime'], 11,2);
-		$minutes=substr($row['dtime'], 14,2);
-		$seconds=substr($row['dtime'], 17,2);
-		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;		
 		
 			
-				
 		if ($row['visibility']==1)
 		{
 			$allow_send_mail=true; //if visibility off - notify off	
@@ -3269,6 +3280,22 @@ function check_emailcue($id_or_ref, $type)
 	{
 	//if added a post to discuss
 	
+		//first, current author and time
+		//Who is the author of last message?
+		$userinfo=	Database::get_user_info_from_id($lastuser);		
+		$email_user_author= get_lang('AddedBy').': '.$userinfo['firstname'].' '.$userinfo['lastname'];		
+		
+		//When ?		
+		$year = substr($lastime, 0, 4);
+		$month = substr($lastime, 5, 2);
+		$day = substr($lastime, 8, 2);
+		$hours=substr($lastime, 11,2);
+		$minutes=substr($lastime, 14,2);
+		$seconds=substr($lastime, 17,2);
+		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;	
+		
+		//second, extract data from first reg	
+		
 		$id=$id_or_ref; //$id_or_ref is id from tblwiki
 		
 		$sql='SELECT * FROM '.$tbl_wiki.'WHERE id="'.$id.'" ORDER BY id ASC';
@@ -3276,20 +3303,7 @@ function check_emailcue($id_or_ref, $type)
 		$result=api_sql_query($sql,__LINE__,__FILE__);
 		$row=Database::fetch_array($result);
 		
-		$email_page_name=$row['title'];		
-		
-		//Who is the author?
-		$userinfo=	Database::get_user_info_from_id($row['user_id']);		
-		$email_user_author= get_lang('AddedBy').': '.$userinfo['firstname'].' '.$userinfo['lastname'];		
-		
-		//When ?		
-		$year = substr($row['dtime'], 0, 4);
-		$month = substr($row['dtime'], 5, 2);
-		$day = substr($row['dtime'], 8, 2);
-		$hours=substr($row['dtime'], 11,2);
-		$minutes=substr($row['dtime'], 14,2);
-		$seconds=substr($row['dtime'], 17,2);
-		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;
+		$email_page_name=$row['title'];
 		
 		
 		if ($row['visibility_disc']==1)

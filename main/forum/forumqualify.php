@@ -35,9 +35,21 @@ $current_forum_category=get_forumcategory_information($current_forum['forum_cate
 $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
 $interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => $nameTools);
 $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
-$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
+
+if (isset($_GET['gradebook']) && $_GET['gradebook']=='view') {
+	$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
+	$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$info_thread['forum_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
+} else {
+	$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
+}
 if ($message<>'PostDeletedSpecial') {
-	$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+	
+	if (isset($_GET['gradebook']) && $_GET['gradebook']=='view') {
+		$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
+		$interbreadcrumb[]=array("url" => "viewthread.php?forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+	} else {
+		$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+	}
 }
 
 Display::display_header();
@@ -57,18 +69,17 @@ if ($userinf['status']=='1') {
 	$max_qualify=show_qualify('2',$_GET['cidReq'],$_GET['forum'],$userid,$threadid);
 	require_once 'forumbody.inc.php';
 	
-	if(!empty($_REQUEST['idtextqualify'])) {
+	if (!empty($_REQUEST['idtextqualify'])) {
 		$value_return=store_theme_qualify($userid,$threadid,$qualify,'',date("Y-m-d H:i:s"),'');
 		$url="cidReq=".Security::remove_XSS($_GET['cidReq'])."&forum=".Security::remove_XSS($_GET['forum'])."&thread=".Security::remove_XSS($_GET['thread'])."&post=".Security::remove_XSS($_GET['post'])."&user_id=".Security::remove_XSS($_GET['user_id']);
 		$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$userid,$threadid);
 		//header('location:forumqualify.php?'.$url.'&idtextqualify='.$current_qualify_thread);
-		if($value_return[0]!=$_REQUEST['idtextqualify'] && $value_return[1]=='update')
-		{		
+		if($value_return[0]!=$_REQUEST['idtextqualify'] && $value_return[1]=='update') {		
 			store_qualify_historical('1','',$_GET['forum'],$userid,$threadid,$_REQUEST['idtextqualify'],api_get_user_id());
 		}
 	}
 	
-	if(!empty($_REQUEST['idtextqualify']) && $_REQUEST['idtextqualify'] > $max_qualify) { 
+	if (!empty($_REQUEST['idtextqualify']) && $_REQUEST['idtextqualify'] > $max_qualify) { 
 		$return_message = get_lang('QualificationNotBeGreaterThanMaxScore');	
 		Display :: display_error_message($return_message,false);
 	}
@@ -78,10 +89,9 @@ if ($userinf['status']=='1') {
 	$opt=Database::escape_string($_GET['type']);
 	$qualify_historic = get_historical_qualify($user_id_thread, $threadid, $opt);	
 	$counter= count($qualify_historic);	
-	if($counter>0)
-	{
+	if ($counter>0) {
 		echo '<h4>'.get_lang('QualificationChangesHistory').'</h4>';	
-		if($_GET['type'] == 'false') {
+		if ($_GET['type'] == 'false') {
 			echo '<div style="float:left; clear:left">'.get_lang('OrderBy').'&nbsp;:<a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.$threadid.'&user_id='.Security::remove_XSS($_GET['user_id']).'&type=true">'.get_lang('MoreRecent').'</a>&nbsp;|
 					'.get_lang('Older').'
 				  </div>';
@@ -105,15 +115,11 @@ if ($userinf['status']=='1') {
 		}						
 		$table_list.= '</table>';
 		echo $table_list;
-	}
-	else
-	{
+	} else {
 		echo get_lang('NotChanged');
 	}			
-}
-else
-{
-	//return false;
+} else {
 	api_not_allowed();	
 }
+//footer
 Display::display_footer();

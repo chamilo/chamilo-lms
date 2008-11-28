@@ -1,4 +1,4 @@
-<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
+<?php // $Id: $
  
 /*
 ==============================================================================
@@ -108,11 +108,17 @@ $current_forum_category=get_forumcategory_information($current_forum['forum_cate
 	Breadcrumbs
 -----------------------------------------------------------
 */
+
+if( (isset($_GET['gradebook']) && $_GET['gradebook']=='view') || ( isset($_POST['gradebook']) && $_POST['gradebook']=='view')) {
+		$interbreadcrumb[]= array (
+			'url' => '../gradebook/index.php',
+			'name' => get_lang('Gradebook')
+		);
+}
 $interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
 $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => $current_forum_category['cat_title']);
 $interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
 $interbreadcrumb[]=array("url" => "newthread.php?forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));
-
 /*
 -----------------------------------------------------------
 	Resource Linker
@@ -148,7 +154,7 @@ if($origin=='learnpath') {
 // 4. anonymous posts are not allowed and the user is not logged in
 // I have split this is several pieces for clarity.
 
-if (!api_is_allowed_to_edit(false,true) AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0))) {
+if (!api_is_allowed_to_edit(false,true) && (($current_forum_category['visibility']==0 || $current_forum['visibility']==0))) {
 	forum_not_allowed_here();
 }
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager

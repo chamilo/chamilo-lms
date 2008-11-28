@@ -1,11 +1,12 @@
-<?php
+<?php  // $Id:  $
 
 $current_thread=get_thread_information($_GET['thread']);
-$my_cid_req = Security::remove_XSS($_GET['cidReq']);
-$my_forum = Security::remove_XSS($_GET['forum']);
-$my_thread = Security::remove_XSS($_GET['thread']);
-$my_user_id = Security::remove_XSS($_GET['user_id']);
-$my_idtextqualify = Security::remove_XSS($_REQUEST['idtextqualify']);
+$my_cid_req		 	= Security::remove_XSS($_GET['cidReq']);
+$my_forum 			= Security::remove_XSS($_GET['forum']);
+$my_thread 			= Security::remove_XSS($_GET['thread']);
+$my_user_id 		= Security::remove_XSS($_GET['user_id']);
+$my_idtextqualify   = Security::remove_XSS($_REQUEST['idtextqualify']);
+$my_gradebook		= Security::remove_XSS($_GET['gradebook']);
 $output = <<<FIN
 <div class="forum-body-form">
  	<table>
@@ -14,6 +15,7 @@ $output = <<<FIN
  		<input type="hidden" name="forum" value="{$my_forum}">
  		<input type="hidden" name="thread" value="{$my_thread}">
  		<input type="hidden" name="user_id" value="{$my_user_id}">
+ 		<input type="hidden" name="gradebook" value="{$my_gradebook}">
     	<tr>
 FIN;
 $output .= '

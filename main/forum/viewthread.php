@@ -1,5 +1,5 @@
-<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
- 
+<?php // $Id:  $
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -60,7 +60,7 @@ require_once 'forumfunction.inc.php';
 
 //are we in a lp ?
 $origin = '';
-if(isset($_GET['origin'])) {
+if (isset($_GET['origin'])) {
 	$origin =  Security::remove_XSS($_GET['origin']);
 }
 
@@ -101,9 +101,19 @@ if ($origin=='learnpath') {
 
 	$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => $nameTools);
 	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
-	$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
+	if (isset($_GET['gradebook']) and $_GET['gradebook']=='view') {
+		$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
+		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$info_thread['forum_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));	
+	} else {
+		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
+	}
 	if ($message<>'PostDeletedSpecial') {
-		$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+			if (isset($_GET['gradebook']) and $_GET['gradebook']=='view') {
+				$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
+				$interbreadcrumb[]=array("url" => "viewthread.php?forum=".$info_thread['forum_id']."&amp;gradebook=".Security::remove_XSS($_GET['gradebook'])."&thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+			} else {
+				$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+			}
 	}
 	// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
 	Display :: display_header('');
@@ -174,7 +184,12 @@ if ($message<>'PostDeletedSpecial') {
 			if ((api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1)) {
 				if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
 					echo '&nbsp;&nbsp;'; 
-					echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'">'.Display::return_icon('forumthread_new.gif', get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';
+					if ( isset($_GET['gradebook']) && $_GET['gradebook']!=""){
+						$info_thread=get_thread_information($_GET['thread']);
+						echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.$info_thread['forum_id'].'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'">'.Display::return_icon('forumthread_new.gif', get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';
+					} else {
+						echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'">'.Display::return_icon('forumthread_new.gif', get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';
+					} 
 				} else {
 					echo get_lang('ForumLocked');
 				}
@@ -219,7 +234,7 @@ if ($message<>'PostDeletedSpecial') {
 	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";		
 	echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
 	
-	if($origin!='learnpath') {		
+	if ($origin!='learnpath') {		
 		echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title']).' - ';				
 	}
 		
@@ -250,6 +265,6 @@ if ($message<>'PostDeletedSpecial') {
 		FOOTER
 ==============================================================================
 */
-if($origin!='learnpath') {
+if ($origin!='learnpath') {
 	Display :: display_footer();
 }

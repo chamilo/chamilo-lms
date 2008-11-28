@@ -1,5 +1,4 @@
-<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
- 
+<?php
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -65,7 +64,7 @@ $nameTools=get_lang('Forum');
 
 //are we in a lp ?
 $origin = '';
-if(isset($_GET['origin'])) {
+if (isset($_GET['origin'])) {
 	$origin =  Security::remove_XSS($_GET['origin']);
 	$origin_string = '&origin='.$origin;
 }
@@ -110,7 +109,7 @@ $interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS($_GET
 $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
 $interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
 
-if($origin=='learnpath') {
+if ($origin=='learnpath') {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
 } else {
 	// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
@@ -123,6 +122,7 @@ if($origin=='learnpath') {
 	Actions
 -----------------------------------------------------------
 */
+$table_link 			= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 // Change visibility of a forum or a forum category
 if (($_GET['action']=='invisible' OR $_GET['action']=='visible') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
 	$message=change_visibility($_GET['content'], $_GET['id'],$_GET['action']);// note: this has to be cleaned first
@@ -134,6 +134,9 @@ if (($_GET['action']=='lock' OR $_GET['action']=='unlock') AND isset($_GET['cont
 // deleting
 if ($_GET['action']=='delete'  AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
 	$message=delete_forum_forumcategory_thread($_GET['content'],$_GET['id']); // note: this has to be cleaned first
+	//delete link
+	$sql_link='DELETE FROM '.$table_link.' WHERE ref_id='.Security::remove_XSS($_GET['id']).' and type=5 and course_code="'.api_get_course_id().'";';
+	api_sql_query($sql_link);
 }
 // moving
 if ($_GET['action']=='move' and isset($_GET['thread']) AND api_is_allowed_to_edit(false,true)) {
@@ -213,12 +216,11 @@ if ($_GET['action'] == 'liststd' AND isset($_GET['content']) AND isset($_GET['id
 							
 		$table_list.= '</table></center>';
 		$table_list .= '<br /></div>';
-	}
-	else 
-	{
+	} else {
 		$table_list .= get_lang('NoParticipation');
 	}
 }
+
 
 /*
 -----------------------------------------------------------
@@ -240,6 +242,8 @@ if (!api_is_allowed_to_edit(false,true) AND ($current_forum_category['visibility
 if (!empty($message)) {
 	Display :: display_confirmation_message($message);
 }
+
+
 /*
 -----------------------------------------------------------
 	Action Links
@@ -253,7 +257,7 @@ echo '<span style="float:right;">'.search_link().'</span>';
 // 3. a visitor is here and new threads AND allowed AND  anonymous posts are allowed
 if (api_is_allowed_to_edit(false,true) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1)) {
 	if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) { 
-		echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.Display::return_icon('forumthread_new.gif', get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';
+		echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.Display::return_icon('forumthread_new.gif',get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';
 	} else {
 		echo get_lang('ForumLocked');
 	}
@@ -350,13 +354,13 @@ if(is_array($threads)) {
 				$last_post=$row['thread_date']." ".get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name);
 			} elseif ($origin!='learnpath') {
 				$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
-				$last_post_result=api_sql_query($last_post_sql, __LINE__, __FILE__);
+				$last_post_result=api_sql_query($last_post_sql, __FILE__, __LINE__);
 				$last_post_row=mysql_fetch_array($last_post_result);
 				$name=$last_post_row['firstname'].' '.$last_post_row['lastname'];
 				$last_post=$last_post_row['post_date']." ".get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name);
 			} else {
 				$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
-				$last_post_result=api_sql_query($last_post_sql, __LINE__, __FILE__);
+				$last_post_result=api_sql_query($last_post_sql, __FILE__, __LINE__);
 				$last_post_row=mysql_fetch_array($last_post_result);
 				$name=$last_post_row['firstname'].' '.$last_post_row['lastname'];
 				$last_post=$last_post_row['post_date']." ".get_lang('By').' '.$name;

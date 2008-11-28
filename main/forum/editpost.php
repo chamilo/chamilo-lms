@@ -1,5 +1,5 @@
-<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
- 
+<?php // $Id: $
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -87,9 +87,7 @@ $fck_attribute['Config']['FlashUploadPath'] = 'upload/forum/';
 // including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-
-if(!api_is_allowed_to_edit())
-{
+if(!api_is_allowed_to_edit()) {
 	$fck_attribute['Config']['UserStatus'] = 'student';
 }
 
@@ -136,14 +134,13 @@ $interbreadcrumb[]=array("url" => "reply.php?forum=".Security::remove_XSS($_GET[
 	Resource Linker
 -----------------------------------------------------------
 */
-if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resources'))
-{
+if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resources')) {
 	$_SESSION['formelements']=$_POST;
 	$_SESSION['origin']=$_SERVER['REQUEST_URI'];
 	$_SESSION['breadcrumbs']=$interbreadcrumb;
 	header("Location: ../resourcelinker/resourcelinker.php");
 }
-
+$table_link 			= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 /*
 -----------------------------------------------------------
 	Header
@@ -151,7 +148,7 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resour
 */
 Display :: display_header(null);
 api_display_tool_title($nameTools);
-////echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
+//echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
 /*
 -----------------------------------------------------------
 	Is the user allowed here?
@@ -165,20 +162,16 @@ api_display_tool_title($nameTools);
 // The only exception is the course manager
 // I have split this is several pieces for clarity.
 //if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0) OR ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)))
-if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0)))
-{
+if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0))) {
 	forum_not_allowed_here();
 }
-if (!api_is_allowed_to_edit() AND ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0))
-{
+if (!api_is_allowed_to_edit() AND ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)) {
 	forum_not_allowed_here();
 }
-if (!$_user['user_id'] AND $current_forum['allow_anonymous']==0)
-{
+if (!$_user['user_id'] AND $current_forum['allow_anonymous']==0) {
 	forum_not_allowed_here();
 }
-if (!api_is_allowed_to_edit() AND $current_forum['allow_edit']==0)
-{
+if (!api_is_allowed_to_edit() AND $current_forum['allow_edit']==0) {
 	forum_not_allowed_here();
 }
 
@@ -198,23 +191,25 @@ echo '</table>';
 
 // the form for the reply
 $values=show_edit_post_form($current_post, $current_thread, $current_forum, $_SESSION['formelements']);
-if (!empty($values) and $_POST['SubmitPost'])
-{
+if (!empty($values) and $_POST['SubmitPost']) {
 	store_edit_post($values);
-	//add gradebook function
+
 	$option_chek=$values['thread_qualify_gradebook'];// values 1 or 0
-	//var_dump($values);
-		if($option_chek==1){
-		$id=$values['thread_id'];// last id from 
-		$title_gradebook=$values['calification_notebook_title'];
-		$value_calification=$values['numeric_calification'];
-		$description="";
-		//add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title, 0, $_POST['qualification_value'], Database::escape_string($_POST['description']), "'".date('Y-m-d H:i:s')."'", 1);
-		add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title_gradebook, 0,$value_calification,$description, "'".date('Y-m-d H:i:s')."'",api_get_session_id());
+		if ( 1== $option_chek ) {
+			$id=$values['thread_id'];
+			$title_gradebook=$values['calification_notebook_title'];
+			$value_calification=$values['numeric_calification'];
+			$weight_calification=$values['weight_calification'];
+			$description="";
+			$link_id=is_resource_in_course_gradebook(api_get_course_id(),5,$id,null);
+			if ( $link_id==false ) {
+				add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title_gradebook,$weight_calification,$value_calification,$description,time(),1,api_get_session_id());	
+			} else {
+				api_sql_query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
+			}
+				
 	}
 	
 }
-
 // footer
 Display :: display_footer();
-?>

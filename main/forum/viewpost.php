@@ -52,7 +52,7 @@ $htmlHeadXtra[] = '<script language="javascript">
 
 //are we in a lp ?
 $origin = '';
-if(isset($_GET['origin'])) {
+if (isset($_GET['origin'])) {
 	$origin =  Security::remove_XSS($_GET['origin']);
 }
 /*
@@ -77,14 +77,25 @@ $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
 	Header and Breadcrumbs
 -----------------------------------------------------------
 */
-if($origin=='learnpath') {
+if ($origin=='learnpath') {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
 } else {
 	$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => $nameTools);
 	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
-	$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
+	if (isset($_GET['gradebook']) and $_GET['gradebook']=='view') {
+		$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
+		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$info_thread['forum_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));	
+	} else {
+		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
+	}
+
 	if ($message<>'PostDeletedSpecial') {
-		$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+		if (isset($_GET['gradebook']) and $_GET['gradebook']=='view') {
+			$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
+			$interbreadcrumb[]=array("url" => "viewthread.php?forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+		} else {
+			$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+		}
 	}
 	// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
 	Display :: display_header('');
@@ -107,10 +118,10 @@ if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR 
 	Actions
 -----------------------------------------------------------
 */
-if ($_GET['action']=='delete' AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
+if ($_GET['action']=='delete' && isset($_GET['content']) && isset($_GET['id']) && api_is_allowed_to_edit(false,true)) {
 	$message=delete_post($_GET['id']); // note: this has to be cleaned first
 }
-if (($_GET['action']=='invisible' OR $_GET['action']=='visible') AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
+if (($_GET['action']=='invisible' || $_GET['action']=='visible') && isset($_GET['id']) && api_is_allowed_to_edit(false,true)) {
 	$message=approve_post($_GET['id'],$_GET['action']); // note: this has to be cleaned first
 }
 if ($_GET['action']=='move' and isset($_GET['post'])) {
@@ -180,7 +191,7 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
 		$viewmode=Database::escape_string($_GET['view']);
 		$_SESSION['view']=$viewmode;
 	} 
-	if(empty($viewmode)) {
+	if (empty($viewmode)) {
 		$viewmode = 'flat';
 	}
 
@@ -198,8 +209,7 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
 	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";		
 	echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
 	
-	if($origin!='learnpath')
-	{		
+	if ($origin!='learnpath') {		
 		echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title']).' - ';				
 	}
 		
@@ -217,6 +227,6 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
 		FOOTER
 ==============================================================================
 */
-if($origin!='learnpath') {
+if ($origin!='learnpath') {
 	Display :: display_footer();
 }

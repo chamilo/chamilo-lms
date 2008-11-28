@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 16991 2008-11-27 22:20:01Z yannoo $
+<?php // $Id: settings.php 17018 2008-11-28 23:21:02Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -154,11 +154,16 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 			}	
 		}	
 				
-		switch ($row['type'])
-		{
-			case 'textfield' :						
-				$form->addElement('text', $row['variable'], get_lang($row['comment']),$hideme);
-				$default_values[$row['variable']] = $row['selected_value'];
+		switch ($row['type']) {
+			case 'textfield' :	
+				if ($row['variable']=='account_valid_duration') {
+					$form->addElement('text', $row['variable'], get_lang($row['comment']),array('maxlength'=>'5'));
+					$default_values[$row['variable']] = $row['selected_value'];	
+				} else {
+					$form->addElement('text', $row['variable'], get_lang($row['comment']),$hideme);
+					$default_values[$row['variable']] = $row['selected_value'];		
+				}					
+
 				break;
 			case 'textarea' :
 				$form->addElement('textarea', $row['variable'], get_lang($row['comment']),$hideme);
@@ -167,11 +172,11 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 			case 'radio' :
 				$values = get_settings_options($row['variable']);
 				$group = array ();
-				foreach ($values as $key => $value)
-				{
+				foreach ($values as $key => $value) {
 					$element = & $form->createElement('radio', $row['variable'], '', get_lang($value['display_text']), $value['value']);
-					if ($hide_element)
+					if ($hide_element) {
 						$element->freeze();
+					}
 					$group[] = $element; 
 				}
 				
@@ -182,15 +187,14 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 				$sql = "SELECT * FROM settings_current WHERE variable='".$row['variable']."'";
 				$result = api_sql_query($sql, __FILE__, __LINE__);
 				$group = array ();	
-				while ($rowkeys = mysql_fetch_array($result))
-				{
+				while ($rowkeys = Database::fetch_array($result)) {
 					$element = & $form->createElement('checkbox', $rowkeys['subkey'], '', get_lang($rowkeys['subkeytext']));
-					if ($rowkeys['selected_value'] == 'true' && ! $form->isSubmitted())
-					{
+					if ($rowkeys['selected_value'] == 'true' && ! $form->isSubmitted()) {
 						$element->setChecked(true); 
 					}
-					if ($hide_element)
+					if ($hide_element) {
 						$element->freeze();
+					}
 					$group[] = $element;
 				}
 				$form->addGroup($group, $row['variable'], get_lang($row['comment']), '<br />'."\n");

@@ -1,4 +1,4 @@
-<?php
+<?php  // $Id:  $
 /**
  * @todo use Database :: get_course_table
  * @todo move the tool constants to the appropriate place
@@ -54,5 +54,3 @@ $forum_setting['allow_sticky']=true;
 // might slow down the page with the fora.
 // note: I'm currently investigating how it would be possible to increase the performance of this part.
 $forum_setting['show_last_post']=false; 
-
-?>

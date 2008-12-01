@@ -30,11 +30,11 @@ function text_focus(){
 </script>";
 
 $tool = TOOL_GLOSSARY;
-Display::display_header($tool);
+Display::display_header(ucfirst($tool));
 //---------------------------------------------------------
 
 if ($status == 1) {
-	echo '<a href="index.php?action=addglossary"><img src="../img/filenew.gif" title ="'.get_lang('TermAddNew').'"> '.get_lang('TermAddNew').'</a>';
+	echo '<a href="index.php?'.api_get_cidreq().'&action=addglossary"><img src="../img/filenew.gif" title ="'.get_lang('TermAddNew').'"> '.get_lang('TermAddNew').'</a>';
 	
 	/*======================================
 				Form Glossary 
@@ -42,7 +42,7 @@ if ($status == 1) {
 	 
 	echo '<p><div>';
 	if ($_GET['action'] == 'addglossary') {
-		echo '<form name="frm_glossary" action="index.php">';
+		echo '<form name="frm_glossary" action="index.php?'.api_get_cidreq().'">';
 		echo '<div class="term_glossary">'.get_lang('TermName').'<br /><input type="text" name="name_glossary"></div>';
 		echo '<div class="definition_glossary">'.get_lang('TermDefinition').'<br /><textarea cols="60" rows="5" maxlength="255" name="description_glossary"></textarea></div>';
 		echo '<div class="action_glossary"><input type="submit" value="'.get_lang('TermAddButton').'"></div>';
@@ -89,7 +89,7 @@ while ($row_glossary_list=Database::fetch_array($glossary_list)) {
 	if ( ($_GET['action'] == 'edit_glossary') && ($_GET['glossary_id'] == $row_glossary_list['glossary_id']) ) {				
 		//echo '<body onload="text_focus()">';
         echo '<div class="glossary-term-edit-form">';
-		echo '<form name="form_glossary" action="index.php">';
+		echo '<form name="form_glossary" action="index.php'.api_get_cidreq().'">';
 		echo '<input type="hidden" name="g_id" value="'.Security::remove_XSS($_GET['glossary_id']).'">';
 		echo '<span class="glossary-term-edit-title">'.get_lang('TermName').'</span><br />';
         echo '<input type="text" name="n_glossary" value="'.$row_glossary_list['name'].'" onfocus="this.select()"><br />';
@@ -97,14 +97,14 @@ while ($row_glossary_list=Database::fetch_array($glossary_list)) {
 		echo '<input type="submit" value="'.get_lang('TermUpdateButton').'">';
 		echo '</form></div>';
 	} else {
-		echo '<div class="glossary-term"><span class="glossary-term-title">'.$row_glossary_list['name'].'</span><br />';
+		echo '<div class="glossary-term"><a name="term-'.$row_glossary_list['glossary_id'].'"></a><span class="glossary-term-title">'.$row_glossary_list['name'].'</span><br />';
 		echo '<span class="glossary-term-desc">'.$row_glossary_list['description'].'</span><br />';			
 		if ($status == 1) {
             $icon_edit ='edit.gif';
             $icon_delete ='delete.gif';
             echo '<span class="glossary-term-action-links">';
-		    echo '<a href="index.php?action=edit_glossary&glossary_id='.$row_glossary_list['glossary_id'].'"><img src="../img/'.$icon_edit.'" title ="'.get_lang('TermEditAction').'"></a>&nbsp;';
-		    echo '<a href="index.php?action=delete_glossary&glossary_id='.$row_glossary_list['glossary_id'].'" onclick="return confirmation(\''.$row_glossary_list['name'].'\');"><img src="../img/'.$icon_delete.'" title ="'.get_lang('TermDeleteAction').'"></a></dd>';
+		    echo '<a href="index.php?'.api_get_cidreq().'&action=edit_glossary&glossary_id='.$row_glossary_list['glossary_id'].'"><img src="../img/'.$icon_edit.'" title ="'.get_lang('TermEditAction').'"></a>&nbsp;';
+		    echo '<a href="index.php?'.api_get_cidreq().'&action=delete_glossary&glossary_id='.$row_glossary_list['glossary_id'].'" onclick="return confirmation(\''.$row_glossary_list['name'].'\');"><img src="../img/'.$icon_delete.'" title ="'.get_lang('TermDeleteAction').'"></a></dd>';
             echo '</span>';
 		}
         echo '</div>';

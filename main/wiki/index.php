@@ -1805,7 +1805,14 @@ if ($_GET['action']=='discuss')
 			
 			echo ' - '.get_lang('NumCommentsScore').': '.$countWPost_score;//
 			
-			$avg_WPost_score = round($row2['sumWPost'] / $countWPost_score,2).' / 10';
+			if ($countWPost_score!=0)
+			{
+				$avg_WPost_score = round($row2['sumWPost'] / $countWPost_score,2).' / 10';
+			}
+			else
+			{
+				$avg_WPost_score = $countWPost_score;
+			}
 			
 			echo ' - '.get_lang('RatingMedia').': '.$avg_WPost_score; // average rating
 	

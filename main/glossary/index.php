@@ -30,7 +30,7 @@ function text_focus(){
 </script>";
 
 $tool = TOOL_GLOSSARY;
-Display::display_header(ucfirst($tool));
+Display::display_header(get_lang(ucfirst($tool)));
 //---------------------------------------------------------
 
 if ($status == 1) {

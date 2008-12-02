@@ -488,7 +488,7 @@ function display_add_form()
 	$token = Security::get_token();
 	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 	?>
-	<form method="post" action="index.php?view_received_category=<?php echo $_GET['view_received_category']; ?>&view_sent_category=<?php echo $_GET['view_sent_category']; ?>&view=<?php echo $_GET['view']; ?>&<?php echo "&origin=$origin"; ?>" enctype="multipart/form-data" onsubmit="return checkForm(this)">
+	<form method="post" action="index.php?view_received_category=<?php echo $_GET['view_received_category']; ?>&view_sent_category=<?php echo $_GET['view_sent_category']; ?>&view=<?php echo $_GET['view']; ?>&<?php echo "origin=$origin"."&".api_get_cidreq(); ?>" enctype="multipart/form-data" onsubmit="return checkForm(this)">
 	<table border="0">
 		<tr>
 			<td  align="right">

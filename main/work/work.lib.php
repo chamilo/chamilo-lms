@@ -157,14 +157,15 @@ function display_user_link($user_id, $name='')
 	global $_otherusers;
 
 	if ($user_id<>0) {
+		
+		$table_user = Database::get_main_table(TABLE_MAIN_USER);
+		$sql="SELECT * FROM $table_user WHERE user_id='".Database::escape_string($user_id)."'";
+		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$row=Database::fetch_array($result);
 		if ($name=='') {
-			$table_user = Database::get_main_table(TABLE_MAIN_USER);
-			$sql="SELECT * FROM $table_user WHERE user_id='".Database::escape_string($user_id)."'";
-			$result=api_sql_query($sql,__FILE__,__LINE__);
-			$row=mysql_fetch_array($result);
-			return "<a href=\"../user/userInfo.php?uInfo=".$row['user_id']."\">".$row['firstname']." ".$row['lastname']."</a>";
+			return "<a href=\"../user/userInfo.php?cidReq=".api_get_course_id()."&origin=&uInfo=".$row['user_id']."\">".$row['firstname']." ".$row['lastname']."</a>";
 		} else {
-			return "<a href=\"../user/userInfo.php?uInfo=".$user_id."\">".$name."</a>";
+			return "<a href=\"../user/userInfo.php?cidReq=".api_get_course_id()."&origin=&uInfo=".$user_id."\">".$name."</a>";
 		}
 	} else {
 		return $name.' ('.get_lang('Anonymous').')';
@@ -464,9 +465,6 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 
 				$form_folder -> addElement('submit','submit_edit_dir',get_lang('Ok'));
 
-
-
-
 				if($there_is_a_end_date == true) {
 					$defaults = array_merge($defaults,convert_date_to_array($homework['ends_on'],'ends'));
 				}
@@ -587,8 +585,10 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	while( $work = mysql_fetch_object($sql_result)) {
 		//Get the author ID for that document from the item_property table
 		$is_author = false;
-		$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=".$work->id;
+		$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND ref=".$work->id;
 		$author_qry = api_sql_query($author_sql,__FILE__,__LINE__);
+		$row2=Database::fetch_array($author_qry);
+		
 		
 		if(Database::num_rows($author_qry)==1) {
 			$is_author = true;
@@ -621,7 +621,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));			
 			$row[]= build_document_icon_tag('file',$work->url);			
 			$row[]= '<a href="'.$currentCourseRepositoryWeb.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;
-			$row[]= display_user_link($user_id,$work->author).$qualification_string;// $work->author;			
+			$row[]= display_user_link($row2['insert_user_id'],$work->author).$qualification_string;// $work->author;			
 			$row[]= date_to_str_ago($work->sent_date).$add_string.'<br><span class="dropbox_date">'.$work->sent_date.'</span>';
 			
 			if( $is_allowed_to_edit) {

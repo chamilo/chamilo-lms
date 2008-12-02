@@ -402,11 +402,14 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 			'name' => get_lang('Gradebook')
 		);
 		
-		$interbreadcrumb[]= array (
-			'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
-			'name' => get_lang('Details')
-		);
-		Display :: display_header();
+			if (!isset($_GET['gradebooklist_direction'])) {
+				$interbreadcrumb[]= array (
+			    'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
+			    'name' => get_lang('Details')
+			  );
+			}
+
+		Display :: display_header('');
 	} else {
 		Display :: display_header(get_lang('Gradebook'));
 	}
@@ -632,6 +635,13 @@ if (isset($_GET['search'])) {
 if (isset ($_GET['studentoverview'])) {
 	$addparams['studentoverview'] = '';
 }
+//$addparams['cidReq']='';
+if (isset($_GET['cidReq']) && $_GET['cidReq']!='') {
+	$addparams['cidReq']=$_GET['cidReq'];
+} else {
+	$addparams['cidReq']='';
+}
+
 $gradebooktable= new GradebookTable($cats[0], $allcat, $alleval,$alllink, $addparams);
 $no_qualification = false;
 if (( count($allcat) == 0) && ( count($alleval) == 0 ) && ( count($alllink) == 0 )) {
@@ -649,10 +659,15 @@ if ($category != '0') {
 }
 
 if (api_is_platform_admin() || api_is_allowed_to_create_course()) {
-	if (!isset ($_GET['selectcat'])) {
-		$cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
-		DisplayGradebook :: display_reduce_header_gradebook($cats[0],$is_course_admin, $is_platform_admin, $simple_search_form, false, false);
-	}
+
+	if ( (isset ($_GET['selectcat']) && $_GET['selectcat']<>0) ) {
+	//
+	} else {
+			if ( ((isset ($_GET['selectcat']) && $_GET['selectcat']==0) || ((isset($_GET['cidReq']) && $_GET['cidReq']!==''))) ) {
+			$cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
+			DisplayGradebook :: display_reduce_header_gradebook($cats[0],$is_course_admin, $is_platform_admin, $simple_search_form, false, false);	
+		} 
+	} 																										
 }
 $gradebooktable->display();
 Display :: display_footer();

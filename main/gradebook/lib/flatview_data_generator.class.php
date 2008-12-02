@@ -152,8 +152,11 @@ class FlatViewDataGenerator
 				 ($count < $items_count ) && ($items_start + $count < count($this->evals_links));
 				 $count++) {
 				$item = $this->evals_links [$count + $items_start];
-				$score = $item->calc_score($user[0]);					
-				$item_value+=$score[0]/$score[1]*$item->get_weight();			
+				$score = $item->calc_score($user[0]);
+				$divide=$score[1]*$item->get_weight();
+				if ($divide!=0) {
+					$item_value+=$score[0]/$divide;
+				}							
 				$item_total+=$item->get_weight();				
 				$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);								
 			}

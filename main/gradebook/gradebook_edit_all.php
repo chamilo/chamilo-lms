@@ -61,9 +61,13 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 		$interbreadcrumb[]= array (
 			'url' => 'index.php?',
 			'name' => get_lang('Gradebook'));
+		
+		$interbreadcrumb[]= array (
+			'url' => 'index.php?&selectcat='.Security::remove_XSS($_GET['selectcat']),
+			'name' => get_lang('Details'));
 
 		Display :: display_header('');
-		//api_get_cidreq()
+
 	}
 }
 

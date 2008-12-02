@@ -133,7 +133,7 @@ class DisplayGradebook
 	*/
 	function display_header_reduce_flatview($catobj, $showeval, $showlink,$simple_search_form) {
 		$header= '<table border="0" cellpadding="5">';
-		$header .= '<td style="vertical-align: top;"><a href="index.php' . '"><< ' . get_lang('BackToOverview') . '</a></td>';
+		$header .= '<td style="vertical-align: top;"><a href="index.php?'.api_get_cidreq().'"><< ' . get_lang('BackToOverview') . '</a></td>';
 		
 
 //		$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?exportpdf=&offset='.Security::remove_XSS($_GET['offset']).'&search=' . Security::remove_XSS($_GET['search']).'&selectcat=' . $catobj->get_id() . '"><img src=../img/calendar_up.gif alt=' . get_lang('ExportPDF') . '/> ' . get_lang('ExportPDF') . '</a>';
@@ -280,17 +280,17 @@ class DisplayGradebook
     				$header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '" ><img src="../img/folder_new.gif" alt="' . get_lang('NewSubCategory') . '" align="absmiddle" /> ' . get_lang('NewSubCategory') . '</a></td>';
                 }
                 if ($show_add_link === true) {
-    				$header .= '<td><a href="gradebook_add_eval.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '" ><img src="../img/filenew.gif" alt="' . get_lang('NewEvaluation') . '" align="absmiddle" /> ' . get_lang('NewEvaluation') . '</a>';
+    				$header .= '<td><a href="gradebook_add_eval.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '" ><img src="../img/filenew.gif" alt="' . get_lang('NewEvaluation') . '" align="absmiddle" /> ' . get_lang('NewEvaluation') . '</a>&nbsp;';
                     $cats= Category :: load($selectcat);
                     if ($cats[0]->get_course_code() != null) {
                         //$header .= '<td><a href="gradebook_add_link.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/link.gif" alt="' . get_lang('MakeLink') . '" align="absmiddle" /> ' . get_lang('MakeLink') . '</a>';
-                        $header .= '<td><a href="gradebook_add_link.php?course_code='.api_get_course_id().'&selectcat=' . $catobj->get_id() . '"><img src="../img/link.gif" alt="' . get_lang('MakeLink') . '" align="absmiddle" /> ' . get_lang('MakeLink') . '</a>';
+                        $header .= '<td><a href="gradebook_add_link.php?course_code='.api_get_course_id().'&selectcat=' . $catobj->get_id() . '"><img src="../img/link.gif" alt="' . get_lang('MakeLink') . '" align="absmiddle" /> ' . get_lang('MakeLink') . '</a>&nbsp;';
                         
                     } else {
-                        $header .= '<td><a href="gradebook_add_link_select_course.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/link.gif" alt="' . get_lang('MakeLink') . '" align="absmiddle" /> ' . get_lang('MakeLink') . '</a>';
+                        $header .= '<td><a href="gradebook_add_link_select_course.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/link.gif" alt="' . get_lang('MakeLink') . '" align="absmiddle" /> ' . get_lang('MakeLink') . '</a>&nbsp;';
                     }
                 }
-                 $header .= '<td><a href="gradebook_edit_all.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/quiz.gif" alt="' . get_lang('EditAllWeights') . '" /> ' . get_lang('EditAllWeights') . '</a>';
+                 $header .= '<td><a href="gradebook_edit_all.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/quiz.gif" alt="' . get_lang('EditAllWeights') . '" align="absmiddle"/> ' . get_lang('EditAllWeights') . '</a>';
 			}
 		} elseif (isset ($_GET['search'])) {
 			$header .= '<b>'.get_lang('SearchResults').' :</b>';

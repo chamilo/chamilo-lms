@@ -717,8 +717,8 @@ if ($_GET['action']=='wanted')
 		if(!in_array($v, $pages))
 		{	
 			if (trim($v)!=="")
-			{			
-				 echo   '<li><a href=http://localhost/dokeos185svn/main/wiki/index.php?cidReq=&action=addnew&title='.urlencode(str_replace('_',' ',$v)).'&group_id='.Security::remove_XSS($_GET['group_id']).' class="new_wiki_link">'.str_replace('_',' ',$v).'</a></li>';					
+			{	
+				echo   '<li><a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq=&action=addnew&title='.urlencode(str_replace('_',' ',$v)).'&group_id='.Security::remove_XSS($_GET['group_id']).'" class="new_wiki_link">'.str_replace('_',' ',$v).'</a></li>';					
 			}					
 		}	
 	}

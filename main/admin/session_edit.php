@@ -19,6 +19,7 @@ $errorMsg='';
 // Database Table Definitions
 $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
 $tool_name = get_lang('EditSession');
 
@@ -32,7 +33,6 @@ if(!$infos=mysql_fetch_array($result))
 	header('Location: session_list.php');
 	exit();
 }
-
 list($year_start,$month_start,$day_start)=explode('-',$infos['date_start']);
 list($year_end,$month_end,$day_end)=explode('-',$infos['date_end']);
 
@@ -70,8 +70,7 @@ if($_POST['formSent'])
 	elseif(empty($_POST['nolimit']) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) $errorMsg=get_lang('InvalidEndDate');
 	elseif(empty($_POST['nolimit']) && $date_start >= $date_end) $errorMsg=get_lang('StartDateShouldBeBeforeEndDate');
 	else
-	{
-
+	{		
 		$rs = api_sql_query("SELECT id FROM $tbl_session WHERE name='".addslashes($name)."'");
 		$exists = false;
 		while($row = mysql_fetch_array($rs)){
@@ -90,6 +89,10 @@ if($_POST['formSent'])
 						   nb_days_access_before_beginning = ".$nb_days_access_before.",
 						   nb_days_access_after_end = ".$nb_days_access_after." 
 					   WHERE id='$id'",__FILE__,__LINE__);
+			$sqlu = "UPDATE $tbl_session_rel_course
+					   SET id_coach='$id_coach'						   
+					   WHERE id_session='$id'";
+			api_sql_query($sqlu,__FILE__,__LINE__);
 			header('Location: resume_session.php?id_session='.$id);
 			exit();
 		}
@@ -101,7 +104,6 @@ $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'
 $result=api_sql_query($sql,__FILE__,__LINE__);
 
 $Coaches=api_store_result($result);
-
 $thisYear=date('Y');
 
 Display::display_header($tool_name);

@@ -193,18 +193,15 @@ class GroupManager
 		api_sql_query($sql,__FILE__,__LINE__);
 		
 		// create a forum if needed
-		if ($category['forum_state'] > 0)
-		{
+		if ($category['forum_state'] >= 0) {
 			include_once(api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php');
 			include_once(api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php');
 			
 			$forum_categories = get_forum_categories();
 			$values['forum_title'] = get_lang('ForumOfGroup').' '.$name;
 			$counter = 0;
-			foreach ($forum_categories as $key=>$value)
-			{
-				if ($counter==0)	
-				{
+			foreach ($forum_categories as $key=>$value) {
+				if ($counter==0) {
 					$forum_category_id = $key;
 				}
 				$counter++;
@@ -217,13 +214,12 @@ class GroupManager
 			$values['allow_new_threads_group']['allow_new_threads'] = 1;
 			$values['default_view_type_group']['default_view_type']=api_get_setting('default_forum_view');
 			$values['group_forum'] = $lastId; 
-			if ($category['forum_state'] == '1')
-			{
+			if ($category['forum_state'] == '1') {
 				$values['public_private_group_forum_group']['public_private_group_forum']='public';
-			}
-			else 
-			{
+			} elseif  ($category['forum_state'] == '2') {
 				$values['public_private_group_forum_group']['public_private_group_forum']='private';
+			} elseif  ($category['forum_state'] == '0') {
+				$values['public_private_group_forum_group']['public_private_group_forum']='unavailable';
 			}
 			store_forum($values);
 		}
@@ -462,16 +458,17 @@ class GroupManager
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		//Here we are updating a field in the table forum_forum that perhaps duplicates the table group_info.forum_state cvargas 
 		$forum_state = (int) $forum_state;
-		if ($forum_state!==0) {
-			$sql2 = "UPDATE ".$table_forum." SET ";
-			if ($forum_state===1) {
-				$sql2 .= " forum_group_public_private='public' ";
-			} else if ($forum_state===2) {
-				$sql2 .= " forum_group_public_private='private' ";
-			}
-			$sql2 .=" WHERE forum_of_group=".$group_id;
-			$result2 = api_sql_query($sql2,__FILE__,__LINE__);
+		$sql2 = "UPDATE ".$table_forum." SET ";
+		if ($forum_state===1) {
+			$sql2 .= " forum_group_public_private='public' ";
+		} elseif ($forum_state===2) {
+			$sql2 .= " forum_group_public_private='private' ";
+		} elseif ($forum_state===0) {
+			$sql2 .= " forum_group_public_private='unavailable' ";
 		}
+		$sql2 .=" WHERE forum_of_group=".$group_id;
+		$result2 = api_sql_query($sql2,__FILE__,__LINE__);
+		
 		return $result;
 	}
 	/**

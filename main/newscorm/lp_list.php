@@ -343,7 +343,7 @@ if (is_array($flat_list))
 			}else{
 				$dsp_build = '<img src="../img/wizard_gray.gif" border="0" title="'.get_lang("Build").'">&nbsp;';
 			}
-			if($test_mode == 'test' or api_is_course_admin())
+			if($test_mode == 'test' or api_is_platform_admin())
 			{
 				if($details['lp_scorm_debug']==1){
 					$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .

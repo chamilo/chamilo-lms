@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 16708 2008-11-10 22:14:49Z yannoo $
+<?php // $Id: user_add.php 17048 2008-12-02 20:46:55Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -342,7 +342,7 @@ if( $form->validate())
 		{
 			//we want to add more. Prepare report message and redirect to the same page (to clean the form)
 			$tok = Security::get_token();
-			header('Location: user_add.php?message='.urlencode(get_lang('UserAdded').'&sec_token='.$tok));
+			header('Location: user_add.php?message='.urlencode(get_lang('UserAdded')).'&sec_token='.$tok);
 			exit ();
 		}
 		else

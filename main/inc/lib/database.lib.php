@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 16919 2008-11-25 23:31:07Z iflorespaz $
+<?php // $Id: database.lib.php 17061 2008-12-03 21:43:06Z cfasanando $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -79,6 +79,7 @@ define('TABLE_SCORM_SCO_DATA', 'scorm_sco_data');
 define('TABLE_AGENDA', 'calendar_event');
 define('TABLE_AGENDA_REPEAT', 'calendar_event_repeat');
 define('TABLE_AGENDA_REPEAT_NOT', 'calendar_event_repeat_not');
+define('TABLE_AGENDA_ATTACHMENT','calendar_event_attachment');
 define('TABLE_ANNOUNCEMENT', 'announcement');
 define('TABLE_CHAT_CONNECTED', 'chat_connected'); // @todo: probably no longer in use !!!
 define('TABLE_COURSE_DESCRIPTION', 'course_description');

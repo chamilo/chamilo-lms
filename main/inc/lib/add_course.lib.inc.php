@@ -236,6 +236,8 @@ function prepare_course_repository($courseRepository, $courseId)
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/blog", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/learning_path", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/learning_path/images", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/calendar", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/calendar/images", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/work", $perm);
 
 	//create .htaccess in dropbox
@@ -298,6 +300,7 @@ function update_Db_course($courseDbName)
 	$TABLETOOLAGENDA 			= $courseDbName . 'calendar_event';
 	$TABLETOOLAGENDAREPEAT		= $courseDbName . 'calendar_event_repeat';
 	$TABLETOOLAGENDAREPEATNOT	= $courseDbName . 'calendar_event_repeat_not';
+	$TABLETOOLAGENDAATTACHMENT	= $courseDbName . 'calendar_event_attachment';
 
 	// Announcements
 	$TABLETOOLANNOUNCEMENTS 	= $courseDbName . 'announcement';
@@ -762,6 +765,18 @@ function update_Db_course($courseDbName)
 		)";
 	api_sql_query($sql,__FILE__,__LINE__);
 		
+		
+	// Agenda Attachment
+	$sql = "CREATE TABLE  `".$TABLETOOLAGENDAATTACHMENT."` (
+			  id int NOT NULL auto_increment,
+			  path varchar(255) NOT NULL,
+			  comment text,
+			  size int NOT NULL default 0,
+			  agenda_id int NOT NULL,
+			  filename varchar(255) NOT NULL,
+			  PRIMARY KEY (id)
+			)";
+	api_sql_query($sql, __FILE__, __LINE__);		
 	/*
 	-----------------------------------------------------------
 		Document tool

@@ -106,7 +106,17 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		//upload > learning_path > images
 		if(!is_dir($currentCourseRepositorySys."upload/learning_path/images")){
 			mkdir($currentCourseRepositorySys."upload/learning_path/images",$perm);
-		}			
+		}		
+		
+		//upload > calendar 
+		if(!is_dir($currentCourseRepositorySys."upload/calendar")){
+			mkdir($currentCourseRepositorySys."upload/calendar",$perm);
+		}	
+		
+		//upload > calendar > images
+		if(!is_dir($currentCourseRepositorySys."upload/calendar/images")){
+			mkdir($currentCourseRepositorySys."upload/calendar/images",$perm);
+		}	
 	}		
 }
 else

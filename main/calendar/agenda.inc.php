@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 16978 2008-11-27 11:04:12Z pcool $
+<?php //$Id: agenda.inc.php 17061 2008-12-03 21:43:06Z cfasanando $
 
 /*
 ==============================================================================
@@ -1717,7 +1717,23 @@ function display_agenda_items()
     	echo $td_colspan;	
 
     	echo $content;
-    	echo '</td></tr>';
+    	// attachment list
+	    	$attachment_list=get_attachment($myrow['id']);	
+		
+			if (!empty($attachment_list)) {
+					
+				$realname=$attachment_list['path'];			
+				$user_filename=$attachment_list['filename'];
+				$full_file_name = 'download.php?file='.$realname;				
+				echo Display::return_icon('attachment.gif',get_lang('Attachment'));
+				echo '<a href="'.$full_file_name.'';		
+				echo ' "> '.$user_filename.' </a>';
+				echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span><br />';	
+						
+			}
+	    	
+	    echo '</td></tr>';
+    	    	
     
         /*--------------------------------------------------
      			display: the added resources
@@ -1740,7 +1756,6 @@ function display_agenda_items()
     	$event_list.=$myrow['id'].',';
     
     	$counter++;
-    
         /*--------------------------------------------------
     	 display: jump-to-top icon
          --------------------------------------------------*/
@@ -1766,6 +1781,25 @@ function display_agenda_items()
     echo "</td>",
     	"</tr>",
     	"</table>";
+}
+
+/**
+ * Show a list with all the attachments according to the post's id
+ * @param the post's id 
+ * @return array with the post info   
+ * @author Christian Fasanando 
+ * @version November 2008, dokeos 1.8.6
+ */ 
+ 
+function get_attachment($agenda_id) {	
+	$agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
+	$row=array();	
+	$sql = 'SELECT path, filename,comment FROM '. $agenda_table_attachment.' WHERE agenda_id = '.(int)$agenda_id.'';
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	if (Database::num_rows($result)!=0) {
+		$row=Database::fetch_array($result);
+	}
+	return $row;	
 }
 
 /**
@@ -1996,7 +2030,6 @@ function show_add_form($id = '')
 	}
 	else
 	{
-
 		// we are coming from the resource linker so there might already have been some information in the form.
 		// When we clicked on the button to add resources we stored every form information into a session and now we
 		// are doing the opposite thing: getting the information out of the session and putting it into variables to
@@ -2018,8 +2051,7 @@ function show_add_form($id = '')
 		$to=$form_elements['to'];
         $repeat = $form_elements['repeat'];
 	}
-
-
+	
 	//	switching the send to all/send to groups/send to users
 	if ($_POST['To'])
 	{
@@ -2040,7 +2072,6 @@ function show_add_form($id = '')
 			$id				= $_POST['id'];
             $repeat         = !empty($_POST['repeat'])?true:false;
 		}
-
 
 	// if the id is set then we are editing an agenda item
 	if (is_int($id))
@@ -2067,7 +2098,6 @@ function show_add_form($id = '')
 	// we start a completely new item, we do not come from the resource linker
 	if ($_GET['originalresource']!=="no" and $_GET['action']=="add")
 	{
-
 		$_SESSION["formelements"]=null;
 		unset_session_resources();
 	}
@@ -2105,7 +2135,6 @@ function show_add_form($id = '')
 	}
 	else
 	{
-
 		?>
 		<tr class="subtitle">
 			<td valign="top" colspan="3">
@@ -2121,7 +2150,7 @@ function show_add_form($id = '')
 				}
 				echo '<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</a>';
 				show_to_form($to);
-				if (isset($_GET['id']) && $to!='everyone'){
+				if (isset($_GET['id']) && $to!='everyone') {
 					echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';
 				}
 			?>
@@ -2404,20 +2433,20 @@ function show_add_form($id = '')
 		
 		//for images
 		$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-		$oFCKeditor->Config['ImageUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
+		$oFCKeditor->Config['ImageUploadURL'] =  $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
 
 		//for flash
 		$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-		$oFCKeditor->Config['FlashUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
-		$oFCKeditor->Config['MediaBrowserURL'] = 	$oFCKeditor->Config['FlashBrowserURL'];
+		$oFCKeditor->Config['FlashUploadURL'] =  $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
+		$oFCKeditor->Config['MediaBrowserURL'] = $oFCKeditor->Config['FlashBrowserURL'];
 		
 		//for MP3
-		$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-		$oFCKeditor->Config['MP3UploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
+		$oFCKeditor->Config['MP3BrowserURL'] = 	$oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+		$oFCKeditor->Config['MP3UploadURL'] =  	$oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
 
 		//for Videos
 		$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-		$oFCKeditor->Config['VideoUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
+		$oFCKeditor->Config['VideoUploadURL'] =  $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
 
 		//link		
 		$oFCKeditor->Config['LinkBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
@@ -2450,8 +2479,20 @@ function show_add_form($id = '')
 	   echo "\t\t</td>\n\t</tr>\n";
 	   /* END ADDED BY UGENT, Patrick Cool, march 2004 */
     if(empty($id)) //only show repeat fields when adding the first time
-    {
+    { 
 	?>
+	<tr><td colspan="2"><br /><b><?php echo get_lang('AddAnAttachment') ?><br /><br /></td></tr>
+	<tr>
+		<td colspan="2">
+	        <label for="file_name"><?php echo ucwords(get_lang('FileName'))?></label>	    
+	        <input type="file" name="user_upload"/>
+	    </td>
+	 </tr><tr>   	    
+	    <td colspan="2">     
+	    	<label for="comment"><?php echo get_lang('FileComment')?></label><br />	    
+	    	<textarea name="file_comment" rows ="4" cols = "34" ></textarea>    	    
+	    </td>
+    </tr>
     <tr>
       <td><label for="repeat"><?php echo get_lang('RepeatedEvent');?></label><input type="checkbox" name="repeat" <?php echo ($repeat?'checked="checked"':'');?>/></td>
       <td colspan="2" />
@@ -3830,11 +3871,12 @@ function add_year($timestamp,$num=1)
  * @param   int     Parent id (optional)
  * @return  int     The new item's DB ID
  */
-function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date,$group_id,$id_user,$to=array(), $parent_id=null)
+function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date,$group_id,$id_user,$to=array(), $parent_id=null,$file_comment)
 {
+	global $_course;	
     $user_id    = api_get_user_id();
     $t_agenda   = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
-    
+    $agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
     // some filtering of the input data
     $title      = Database::escape_string($title); // no html allowed in the title
     $content    = Database::escape_string($content);
@@ -3849,6 +3891,46 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     
     $result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
     $last_id=Database::insert_id();
+        
+    // Storing the attachments
+
+    if(!empty($_FILES['user_upload']['name'])) {
+		$upload_ok = process_uploaded_file($_FILES['user_upload']);							
+	}
+	
+	if ($upload_ok) {			
+			$courseDir   = $_course['path'].'/upload/calendar';			
+			$sys_course_path = api_get_path(SYS_COURSE_PATH);					
+			$updir = $sys_course_path.$courseDir;
+						
+			// Try to add an extension to the file if it hasn't one
+			$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);	
+			// user's file name
+			$file_name =$_FILES['user_upload']['name'];
+						
+			if (!filter_extension($new_file_name))  {
+				Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));				
+			} else {				
+				$new_file_name = uniqid('');									
+				$new_path=$updir.'/'.$new_file_name;				
+				$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);				
+				$safe_file_comment= Database::escape_string($file_comment);				
+				$safe_file_name = Database::escape_string($file_name);	
+				$safe_new_file_name = Database::escape_string($new_file_name);			
+				// Storing the attachments if any
+				if ($result) {					
+					$sql='INSERT INTO '.$agenda_table_attachment.'(filename,comment, path,agenda_id,size) '.
+						 "VALUES ( '".$safe_file_name."', '".$safe_file_comment."', '".$safe_new_file_name."' , '".$last_id."', '".$_FILES['user_upload']['size']."' )";						
+					$result=api_sql_query($sql, __LINE__, __FILE__);					
+					$message.=' / '.get_lang('FileUploadSucces').'<br />';
+					
+					$last_id_file=Database::insert_id();
+					api_item_property_update($_course, 'calendar_event_attachment', $last_id_file ,'AgendaAttachmentAdded', api_get_user_id());
+								
+				}			
+			}			 
+		} 
+    
     
     // store in last_tooledit (first the groups, then the users
     $done = false;
@@ -3894,7 +3976,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
  * @param	int		User ID
  * @return  boolean False if error, True otherwise
  */
-function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$id_group=null,$id_user=null)
+function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$id_group=null,$id_user=null,$file_comment)
 {
 	$t_agenda   = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
     $t_agenda_r = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_info['dbName']);
@@ -3950,20 +4032,20 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$id_
             case 'daily':
                 for($i = $orig_start + 86400; ($i <= $end); $i += 86400)
                 {
-                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $i), date('Y-m-d H:i:s', $i+$diff), $id_group, $id_user, $orig_dest, $orig_id);
+                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $i), date('Y-m-d H:i:s', $i+$diff), $id_group, $id_user, $orig_dest, $orig_id,$file_comment);
                 }
                 break;
             case 'weekly':
                 for($i = $orig_start + 604800; ($i <= $end); $i += 604800)
                 {
-                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $i), date('Y-m-d H:i:s', $i+$diff), $id_group, $id_user, $orig_dest, $orig_id);
+                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $i), date('Y-m-d H:i:s', $i+$diff), $id_group, $id_user, $orig_dest, $orig_id,$file_comment);
                 }
                 break;
             case 'monthlyByDate':
                 $next_start = add_month($orig_start);
                 while($next_start <= $end)
                 {
-                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_start+$diff), $id_group, $id_user, $orig_dest, $orig_id);
+                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_start+$diff), $id_group, $id_user, $orig_dest, $orig_id,$file_comment);
                     $next_start = add_month($next_start);
                 }
                 break;
@@ -3977,7 +4059,7 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$id_
                 $next_start = add_year($orig_start);
                 while($next_start <= $end)
                 {
-                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_start+$diff), $id_group, $id_user,$orig_dest, $orig_id);
+                    $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_start+$diff), $id_group, $id_user,$orig_dest, $orig_id,$file_comment);
                     $next_start = add_year($next_start);
                 }
                 break;

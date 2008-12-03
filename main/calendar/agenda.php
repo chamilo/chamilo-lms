@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 16785 2008-11-18 21:32:39Z yannoo $
+<?php //$Id: agenda.php 17061 2008-12-03 21:43:06Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -59,6 +59,8 @@ api_protect_course_script();
 */
 $_SESSION['source_type'] = 'Agenda';
 include('../resourcelinker/resourcelinker.inc.php');
+require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+
 if (!empty($addresources)) // When the "Add Resource" button is clicked we store all the form data into a session
 {
 $form_elements= array ('day'=>$_POST['fday'], 'month'=>$_POST['fmonth'], 'year'=>$_POST['fyear'], 'hour'=>$_POST['fhour'], 'minutes'=>$_POST['fminute'],
@@ -183,7 +185,7 @@ if (empty($_GET['origin']) or $_GET['origin'] != 'learnpath')
 else
 {
 	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".$clarolineRepositoryWeb."css/default.css\"/>";
-	}
+}
 
 /* ==============================================================================
   			TRACKING
@@ -293,7 +295,6 @@ $fck_attribute['ToolbarSet'] = 'Middle';
 $fck_attribute['Config']['CreateDocumentDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
 $fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
 
-
 if(isset($_SESSION['_course']) && $_SESSION['_course']['path']!='')
 {
 	$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
@@ -302,11 +303,6 @@ else
 {
 	$upload_path = api_get_path(REL_PATH).'main/default_course_document/';
 }
-		
- 
-		
-
-
 
 // THE RIGHT PART
 echo "<td valign=\"top\">";
@@ -327,14 +323,14 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		     $course_info = api_get_course_info();
 			    $event_start    = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
                 $event_stop     = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
-				$id = agenda_add_item($course_info,$_POST['title'],$_POST['content'],$event_start,$event_stop,$_REQUEST['group'],$_REQUEST['user'],$_POST['selectedform']);
+				$id = agenda_add_item($course_info,$_POST['title'],$_POST['content'],$event_start,$event_stop,$_REQUEST['group'],$_REQUEST['user'],$_POST['selectedform'],false,$_POST['file_comment']);
                 if(!empty($_POST['repeat']))
                 {
                 	$end_y = intval($_POST['repeat_end_year']);
                     $end_m = intval($_POST['repeat_end_month']);
                     $end_d = intval($_POST['repeat_end_day']);
                     $end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
-                    $res = agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,null,$_REQUEST['group'],$_REQUEST['user']);                                       
+                    $res = agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,null,$_REQUEST['group'],$_REQUEST['user'],$_POST['file_comment']);                                       
                 }
 				display_agenda_items();
 			}

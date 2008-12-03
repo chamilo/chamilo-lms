@@ -113,4 +113,6 @@ $GradebookVisibilityLog = "Gradebook visibility";
 $ResourceType = "Resource type";
 $GradebookWhoChangedItLog = "Who changed it";
 $EvaluationEdited = "The evaluation has been succesfully edited";
+$CategoryEdited = "Category updated";
+$OnlyNumbers = "Only numbers";
 ?>

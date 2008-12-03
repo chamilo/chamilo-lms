@@ -12,4 +12,5 @@ $langSendPage = "Page to upload";
 $langPageTitleModified = "The title of the page has been modified";
 $langPageAdded = "Page added";
 $langAddPage = "Add a page";
+$Choose = "Browse";
 ?>

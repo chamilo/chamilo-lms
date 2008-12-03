@@ -33,4 +33,5 @@ $SendMailBody = "Um utilizador publicou um documento na secção trabalhos do seu 
 $DirDelete = "Apagar directoria";
 $ValidateChanges = "Validar alterações";
 $FolderUpdated = "Pasta actualizada";
+$EndsAt = "Termina a (completamente encerrado)";
 ?>

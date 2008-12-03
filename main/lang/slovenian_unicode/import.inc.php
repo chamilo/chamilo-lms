@@ -12,4 +12,5 @@ $langSendPage = "Stran za prenos (upload)";
 $langPageTitleModified = "Naslov strani je bil spremenjen";
 $langPageAdded = "Stran je dodana";
 $langAddPage = "Dodaj stran";
+$Choose = "Razišči";
 ?>

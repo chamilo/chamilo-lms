@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$NewForumCreated = "Uusi foorumi luotu";
+$NewThreadCreated = "Uusi viestiketju luotu";
 $lang_learning_path = "Oppimispolku";
 $lang_learning_path_builder = "Oppimispolun muokkaus";
 $lang_description = "kuvaus";
@@ -30,7 +32,30 @@ $langLearnpathScore = "Tulos";
 $langLearnpathTime = "Aika";
 $langLearnpathVersion = "versio";
 $langLearnpathNoNext = "Tämä on viimeinen askel";
+$langLearnpathNoPrev = "Tämä on ensimmäinen askel.";
 $lang_add_learnpath = "Lisää oppimispolku";
 $lang_edit_learnpath = "muokkaa oppimispolkua";
 $lang_delete_learnpath = "poista oppimispolku";
+$lang_learnpath_edited = "oppimispolkua muokattu";
+$lang_learnpath_deleted = "oppimispolku poistettu";
+$lang_no_publish = "älä julkaise";
+$lang_publish = "julkaise";
+$lang_no_published = "ei julkaistu";
+$lang_add_learnpath_module = "Lisää uusi luku";
+$lang_delete_learnpath_module = "Poista luku";
+$langBasicOverview = "Järjestä";
+$langAdvanced = "Muokkaa";
+$langCreateNewStep = "Luo uusi askel";
+$langNewDocument = "Uusi dokumentti";
+$langNewExerciseCreated = "Uusi harjoitus luotu";
+$langLearnpathFullScreen = "koko näyttö";
+$langNewDocumentCreated = "Uusi dokumentti luotu";
+$langEditCurrentChapter = "Muokkaa nykyistä lukua";
+$langEditTheCurrentDocument = "Muokkaa nykyistä dokumenttia";
+$langCreateTheExercise = "Luo harjoitus";
+$CreateTheForum = "Lisää foorumi";
+$LinkAdd = "Lisää linkki";
+$CorrectAnswers = "Oikeat vastaukset";
+$LatencyTimeSpent = "Käytetty aika";
+$ViewLearningPath = "Näytä oppimispolku";
 ?>

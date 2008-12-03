@@ -113,4 +113,6 @@ $GradebookVisibilityLog = "Visibilidad del cuaderno";
 $ResourceType = "Tipo de recurso";
 $GradebookWhoChangedItLog = "Quien lo modificó";
 $EvaluationEdited = "La evaluación ha sido modificada";
+$CategoryEdited = "Categoría actualizada";
+$OnlyNumbers = "Solamente numeros";
 ?>

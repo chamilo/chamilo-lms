@@ -198,4 +198,12 @@ $ViewLearningPath = "Vedi il modulo didattico";
 $SearchFeatureDoIndexDocument = "Indicizzare il testo del documento?";
 $SearchFeatureDocumentTagsIfIndexing = "Tag da aggiungere al documento, se indicizzato";
 $SearchFeatureDocumentLanguage = "Lingua del documento per l\'indicizzazione";
+$ReturnToLearningPaths = "Ritorna ai moduli didattici";
+$UploadMp3audio = "Carica un file audio mp3";
+$UpdateAllAudioFragments = "Aggiorna tutti gli spezzoni audio";
+$LeaveEmptyToKeepCurrentFile = "Lascia vuoto per conservare il file in uso";
+$RemoveAudio = "Elimina l\'audio";
+$SaveAudio = "Salva";
+$ChangesStored = "Modifiche salvate";
+$ViewScoreChangeHistory = "Vedi lo storico dei punteggi";
 ?>

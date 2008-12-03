@@ -12,4 +12,5 @@ $langSendPage = "Enviar Página";
 $langPageTitleModified = "O título da página foi alterado";
 $langPageAdded = "A página foi acrescentada";
 $langAddPage = "Acrescentar uma página";
+$Choose = "Seleccionar";
 ?>

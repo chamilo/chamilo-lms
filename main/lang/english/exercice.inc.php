@@ -248,4 +248,12 @@ $RandomQuestionsHelp = "The number of questions that will be picked randomly wit
 $ExerciseAttempts = "Max number of attempts";
 $DoNotRandomize = "Do not randomize";
 $Infinite = "Infinite";
+$BackToExercisesList = "Back to exercises";
+$ViewScoreChangeHistory = "View score change history";
+$NoStartDate = "No start date";
+$NoLogOfDuration = "No log of duration";
+$EnableTimeLimits = "Enable time limits";
+$ExeStartTime = "Start date";
+$ExeEndTime = "End date";
+$Value = "Value";
 ?>

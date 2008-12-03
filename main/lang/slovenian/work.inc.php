@@ -2,11 +2,11 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Orodja";
-$langDownloadFile = "Prenesi dokument (upload)";
+$langDownloadFile = "Naloži dokument";
 $langTooBig = "Nisi izbral nobene datoteke ali pa je ta prevelika.";
 $langListDeleted = "Celoten seznam je bil odstranjen.";
 $langDocModif = "Naziv dokumenta je bil spremenjen";
-$langDocAdd = "Dokument je dodan";
+$langDocAdd = "Dokument je bin dodan na seznam objavljenih dokumentov";
 $langDocDel = "Dokument je odstranjen";
 $langTitleWork = "Naziv dokumenta";
 $langAuthors = "Avtor(ji)";
@@ -26,11 +26,12 @@ $langNameDir = "Preimenuj mapo";
 $langFileExists = "Datoteka že obstaja";
 $langDirCr = "Ustvari mapo";
 $langCurrentDir = "trenutna mapa";
-$UploadADocument = "Prenesi dokument";
+$UploadADocument = "Naloži dokument";
 $EditToolOptions = "Opcije orodja Uredi";
 $DocumentDeleted = "Dokument je bil odstranjen";
 $SendMailBody = "Uporabnik je prepisal dokument v objave teajnikov tvojega teèaja.";
 $DirDelete = "Odstrani mapo";
 $ValidateChanges = "Uveljavi spremembe";
 $FolderUpdated = "Mapa je bila ažurirana";
+$EndsAt = "kon&#269;a (popolnoma zaprta)";
 ?>

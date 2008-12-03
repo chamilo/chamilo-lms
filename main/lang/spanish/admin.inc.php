@@ -844,4 +844,10 @@ $ExtendRightsForCoachComment = "La activación de esta opción dará a los tutores 
 $ExtendRightsForCoachOnSurveyComment = "La activación de esta opción dará a los tutores el derecho de crear y editar encuestas";
 $ExtendRightsForCoachOnSurveyTitle = "Ampliar los derechos de los tutores en las encuestas";
 $CannotDeleteUserBecauseOwnsCourse = "Este usuario no se puede eliminar porque sigue como docente de un curso o más. Puede cambiar su título de docente de estos cursos antes de eliminarlo, o bloquear su cuenta.";
+$AllowUsersToCreateCoursesTitle = "Permitir creación de cursos";
+$AllowUsersToCreateCoursesComment = "Permite a usuarios no administradores (profesores) de crear nuevos cursos en el portal";
+$YesWillDeletePermanently = "Sí (los archivos se eliminarán permanentemente y no podrán ser recuperados)";
+$NoWillDeletePermanently = "No (los archivos se borrarán de la aplicación y podrán ser recuperados manualmente por su administrador)";
+$SelectAResponsible = "Seleccione a un responsable";
+$ThereIsNotStillAResponsible = "No hay responsables aún";
 ?>

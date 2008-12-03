@@ -209,4 +209,5 @@ $TemplateTitleStopAndThink = "Zaustavi se in premisli";
 $TemplateTitleListLeftListDescription = "Seznam na levi z vodičem";
 $TemplateTitleStopAndThinkDescription = "Prodloga vzpodbude k zaustavitvi in razmisleku";
 $SaveDocument = "Shrani dokument";
+$CreateTheDocument = "Shrani dokument";
 ?>

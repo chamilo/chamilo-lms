@@ -248,4 +248,12 @@ $RandomQuestionsHelp = "Numero di quesiti da scegliere a caso tra quelli present
 $ExerciseAttempts = "Numero massimo di tentativi";
 $DoNotRandomize = "Non cambiare l\'ordine";
 $Infinite = "Illimitate";
+$BackToExercisesList = "Ritorna ai quesiti";
+$ViewScoreChangeHistory = "Guarda lo storico dei punteggi";
+$NoStartDate = "Nessuna data d\'inizio";
+$NoLogOfDuration = "Nessuna registrazione della durata";
+$EnableTimeLimits = "Abilita il limite di tempo";
+$ExeStartTime = "Data iniziale";
+$ExeEndTime = "Data finale";
+$Value = "Valore";
 ?>

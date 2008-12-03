@@ -12,4 +12,5 @@ $langSendPage = "Pagina da inviare";
 $langPageTitleModified = "L\'intestazione della pagina è stata modificata";
 $langPageAdded = "Pagina aggiunta";
 $langAddPage = "Aggiungi una pagina";
+$Choose = "Scegli il file";
 ?>

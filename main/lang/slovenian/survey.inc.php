@@ -179,4 +179,6 @@ $IllegalSurveyId = "Neznan ID vprašalnika";
 $SurveyQuestionMoved = "Vprašanje je bilo prestavljeno";
 $IdenticalSurveycodeWarning = "Ta koda vprašalnika že obstaja. Verjetno to pomeni, da vprašalnik že obstaja v nekem drugem jeziku. V takem primeru bodo pozvan osebe lahko pri odgovarjanju na vprašanja izbirale med jezikovnimi variantami vprašalnika.";
 $ThisSurveyCodeSoonExistsInThisLanguage = "Ta koda vprašalnika bo kmalu obstajala v tej jezikovni varianti.";
+$SurveyUserAnswersHaveBeenRemovedSuccessfully = "Uporabnikovi odgovori tega vprašalnika so bili uspešno odstranjeni.";
+$DeleteSurveyByUser = "Odstrani uporabnikove odgovore s tega vprašalnika";
 ?>

@@ -103,4 +103,15 @@ $AverageTotal = "Povpreèje zbirov";
 $Evaluation = "Ocenjevanje";
 $EvaluationAverage = "Povpreèje ocenjevanja";
 $EditCategory = "Uredi kategorijo";
+$EditAllWeights = "Uredi vse uteži";
+$GradebookQualificationTotal = "Skupaj";
+$GradebookEvaluationDeleted = "Ocenjevanje je bilo uspešno odstranjeno";
+$GradebookQualifyLog = "Zgodovina uteži redovalnice";
+$GradebookNameLog = "Ime redovalnice";
+$GradebookDescriptionLog = "Opis redovalnice";
+$GradebookVisibilityLog = "Vidnost redovalnice";
+$ResourceType = "Vrsta vira";
+$GradebookWhoChangedItLog = "Kdo je izvršil spremembo";
+$EvaluationEdited = "Urejanje ocenjevanja je bilo uspešno";
+$CategoryEdited = "Kategorija je bila ažurirana";
 ?>

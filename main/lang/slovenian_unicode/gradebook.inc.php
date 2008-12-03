@@ -113,4 +113,5 @@ $GradebookVisibilityLog = "Vidnost redovalnice";
 $ResourceType = "Vrsta vira";
 $GradebookWhoChangedItLog = "Kdo je izvršil spremembo";
 $EvaluationEdited = "Urejanje ocenjevanja je bilo uspešno dokončano";
+$CategoryEdited = "Kategorija je bila ažurirana";
 ?>

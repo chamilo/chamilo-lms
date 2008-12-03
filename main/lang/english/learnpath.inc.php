@@ -198,4 +198,15 @@ $ViewLearningPath = "View learning path";
 $SearchFeatureDoIndexDocument = "Index document text?";
 $SearchFeatureDocumentTagsIfIndexing = "Tags to add to the document, if indexing";
 $SearchFeatureDocumentLanguage = "Document language for indexation";
+$ReturnToLearningPaths = "Return to lectures";
+$UploadMp3audio = "Upload Mp3 audio";
+$UpdateAllAudioFragments = "Update all audio fragments";
+$LeaveEmptyToKeepCurrentFile = "Leave empty to keep current file";
+$RemoveAudio = "Remove audio";
+$SaveAudio = "Save";
+$ChangesStored = "Changes stored";
+$ViewScoreChangeHistory = "View score change history";
+$ImageWillResizeMsg = "Image will resize msg";
+$ImagePreview = "Image preview";
+$UplAlreadyExists = "Up already exists";
 ?>

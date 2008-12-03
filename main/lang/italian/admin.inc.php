@@ -844,4 +844,6 @@ $ExtendRightsForCoachComment = "Attivando l\'opzione il tutor avrà gli stessi di
 $ExtendRightsForCoachOnSurveyComment = "Attivando l\'opzione il tutor potrà creare e modificare i questionari";
 $ExtendRightsForCoachOnSurveyTitle = "Diritti estesi per il tutor sui questionari";
 $CannotDeleteUserBecauseOwnsCourse = "L\'utente non può essere eliminato in quanto è ancora docente in un corso. Per eliminare l\'account devi prima cancellare il suo stato di docente nei corsi, oppure puoi sospendere l\'account anziché eliminarlo.";
+$AllowUsersToCreateCoursesTitle = "Anche chi non è amministratore può creare corsi ";
+$AllowUsersToCreateCoursesComment = "Anche i docenti, non amministratori, possono creare nuovi corsi autonomamente";
 ?>

@@ -198,4 +198,12 @@ $ViewLearningPath = "Poglej učno pot";
 $SearchFeatureDoIndexDocument = "Indeksiram vsebino dokumentov?";
 $SearchFeatureDocumentTagsIfIndexing = "Zaznamki, ki se dodajo dokumentu v primeru indeksiranja";
 $SearchFeatureDocumentLanguage = "Jezik dokumenta za indeksiranje";
+$ReturnToLearningPaths = "Nazaj na lekcije";
+$UploadMp3audio = "Naloži MP3 audio";
+$UpdateAllAudioFragments = "Ažuriraj vse audio fragmente";
+$LeaveEmptyToKeepCurrentFile = "Pusti prazno, če želiš obdržati trenutno datoteko";
+$RemoveAudio = "Odstrani zvok";
+$SaveAudio = "Shrani";
+$ChangesStored = "Spremembe so bile shranjene";
+$ViewScoreChangeHistory = "Poglej zgodovino sprememb rezultatov";
 ?>

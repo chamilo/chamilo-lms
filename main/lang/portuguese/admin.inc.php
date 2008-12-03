@@ -833,4 +833,5 @@ $SearchASession = "Procurar uma sessão";
 $ActiveSession = "Activação da sessão";
 $AddUrl = "Adicionar Url";
 $ShowSessionCoachTitle = "Mostrar o professor da sessão";
+$ExtendRightsForCoachTitle = "Ampliar os direitos do tutor";
 ?>

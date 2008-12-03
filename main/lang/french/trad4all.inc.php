@@ -567,4 +567,5 @@ $NoOfficialCode = "Pas de code oficiel";
 $Owner = "Propriétaire";
 $CategoryDeleted = "La catégorie a été supprimée";
 $CategoryAdded = "Catégorie créée";
+$Wiki = "Wiki";
 ?>

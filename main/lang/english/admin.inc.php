@@ -844,4 +844,10 @@ $ExtendRightsForCoachComment = "Activate this option will give the coachs the sa
 $ExtendRightsForCoachOnSurveyComment = "Activate this option will allow the coachs to create and edit surveys";
 $ExtendRightsForCoachOnSurveyTitle = "Extend rights for coachs on surveys";
 $CannotDeleteUserBecauseOwnsCourse = "This user cannot be deleted because he is still teacher in a course. You can either remove his teacher status from these courses and then delete his account, or disable his account instead of deleting it.";
+$AllowUsersToCreateCoursesTitle = "Allow non admin to create courses";
+$AllowUsersToCreateCoursesComment = "Allow non administrator users (teachers) to create new courses on the portal";
+$YesWillDeletePermanently = "Yes (the files will be deleted permanently and will not be recoverable)";
+$NoWillDeletePermanently = "Not (the files will be deleted from the application and will yes manually retrieved  by your administrator)";
+$SelectAResponsible = "Select a manager";
+$ThereIsNotStillAResponsible = "No HR manager available";
 ?>

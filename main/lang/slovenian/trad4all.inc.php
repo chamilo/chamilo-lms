@@ -570,4 +570,8 @@ $GeneralCoach = "Splošen coach";
 $CategoryDeleted = "Kategorija je bila odstranjena";
 $CategoryAdded = "Kategorija je bila dodana";
 $IP = "IP";
+$Qualify = "Definiraj";
+$Words = "Besed(e)";
+$GoBack = "Nazaj";
+$Details = "Podrobnosti";
 ?>

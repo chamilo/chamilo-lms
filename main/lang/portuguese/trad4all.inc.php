@@ -580,4 +580,10 @@ $ForumThreads = "Temas do fórum";
 $GradebookVisible = "Visível";
 $GradebookInvisible = "Invisível";
 $Phone = "Telefone";
+$InfoMessage = "Mensagem de informação";
+$ConfirmationMessage = "Mensagem de confirmação";
+$WarningMessage = "Mensagem de alerta";
+$ErrorMessage = "Mensagem de erro";
+$Glossary = "Glossário";
+$Coach = "Tutor";
 ?>

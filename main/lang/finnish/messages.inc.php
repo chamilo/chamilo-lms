@@ -17,6 +17,7 @@ $Myself = "Minulle";
 $From = "Keneltä";
 $To = "Kenelle";
 $Date = "Päiväys";
+$ErrorSendingMessage = "Virhe viestin lähetyksessä.";
 $SureYouWantToDeleteSelectedMessages = "Haluatko varmasti poistaa valitut viestit?";
 $SelectedMessagesDeleted = "Valitut viestit on poistettu";
 ?>

@@ -2,10 +2,10 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langChapter = "Poglavje";
-$langDocumentList = "Spisek vseh dokumentov";
+$langDocumentList = "Seznam dokumentov";
 $langOrganisationList = "Kazalo vsebine";
 $langEditTOC = "Uredi kazalo vsebine";
-$langEditDocument = "Uredi";
+$langEditDocument = "Uredi dokument";
 $langCreateDocument = "Kreiraj dokument";
 $langMissingImagesDetected = "Manjkajo slike";
 $langPublish = "Objavi";
@@ -60,6 +60,6 @@ $langScormBuilder = "Kreator učne poti";
 $langCreateDoc = "Ustvari dokument";
 $langOrganiseDocuments = "Organiziraj dokumente";
 $langUncompress = "Dekomprimiraj";
-$ExportShort = "izvozi";
+$ExportShort = "izvozi v obliki SCORM";
 $progress = "Status napredovanja";
 ?>

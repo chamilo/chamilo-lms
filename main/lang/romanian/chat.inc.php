@@ -33,4 +33,6 @@ $langChat_reset_by = "reseteaza chatul";
 $OrFile = "Sau fisierul";
 $langCallSent = "Apelul de chat a fost trimis. Asteapta aprobarea partenerului.";
 $langChatDenied = "Apelul tau a fost respins de catre partener.";
+$Send = "Trimite";
+$Connected = "Parteneri de chat";
 ?>

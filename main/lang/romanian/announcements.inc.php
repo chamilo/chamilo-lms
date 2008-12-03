@@ -48,4 +48,7 @@ $AnnouncementDeletedAll = "Toate anunturile au fost sterse";
 $AnnouncementMoved = "Anunturile au fost mutate";
 $NoAnnouncements = "Nu este nici un anunt";
 $SelectEverybody = "Selecteaza tot";
+$SelectedUsersGroups = "Grupurile de utiilizatori selectate";
+$LearnerMessage = "Mesaj de la un elev";
+$TitleIsRequired = "Titlul este obligatoriu";
 ?>

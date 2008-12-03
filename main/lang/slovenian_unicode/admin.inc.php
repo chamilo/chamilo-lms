@@ -844,4 +844,8 @@ $ExtendRightsForCoachComment = "Aktiviranje te opcije dodeli inštruktorju enake
 $ExtendRightsForCoachOnSurveyComment = "Aktiviranje te opcije omogoči inštruktorju kreiranje in urejanje evalvacijskih vprašalnikov";
 $ExtendRightsForCoachOnSurveyTitle = "Razširi pravice za inštruktorja pri evalvacijskih vprašalnikih";
 $CannotDeleteUserBecauseOwnsCourse = "Uporabnika ni možno odstraniti, ker je še vedno učitelj v tečaju. Ali mu odstranite status učitelja v tečaju in nato odstranite njegov uporabniški račun ali pa enostavno onemogočite njegov uporabniški račun.";
+$AllowUsersToCreateCoursesTitle = "Dovoli ne-upraviteljem kreiranje tečajev";
+$AllowUsersToCreateCoursesComment = "Dovoli ne-upraviteljem (učitelji) kreiranje novih tečajev na platformi";
+$YesWillDeletePermanently = "Da (datoteke bodo trajno odstranjene in morebitno restavriranje ne bo možno)";
+$NoWillDeletePermanently = "Ne (datoteke bodo odstranjene zgolj iz aplikacije; restavrira jih lahko upravitelj sistema)";
 ?>

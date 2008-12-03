@@ -268,6 +268,29 @@ function show_add_forum_form($inputvalues=array()) {
 	$group[] =& HTML_QuickForm::createElement('radio', 'public_private_group_forum', null, get_lang('Public'), 'public');
 	$group[] =& HTML_QuickForm::createElement('radio', 'public_private_group_forum', null, get_lang('Private'), 'private');
 	$form->addGroup($group, 'public_private_group_forum_group', get_lang('PublicPrivateGroupForum'), '&nbsp;');
+
+	
+	 // Forum image 	 
+	         $form->add_progress_bar(); 	 
+	         if (strlen($inputvalues['forum_image']) > 0) { 	 
+	  	 
+	                 $show_preview_image='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$inputvalues['forum_image'].'>'; 	 
+	                 $div = '<div class="row"> 	 
+	                 <div class="label">'.get_lang('PreviewImage').'</div> 	 
+	                 <div class="formw"> 	 
+	                 '.$show_preview_image.' 	 
+	                 </div> 	 
+	                 </div>'; 	 
+	  	 
+	                 $form->addElement('html', $div .'<br/>'); 	 
+	                 $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage')); 	 
+	         } 	 
+	  	 
+	         $form->addElement('file', 'picture', ($inputvalues['forum_image'] != '' ? get_lang('UpdateImage') : get_lang('AddImage'))); 	 
+	         $form->addRule('picture', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));
+	
+	
+	
 	// The OK button
 	$form->addElement('submit', 'SubmitForum', get_lang('OK'));
 	// setting the rules
@@ -312,6 +335,29 @@ function show_add_forum_form($inputvalues=array()) {
 	}
 }
 
+/**
+ * This function deletes the forum image if exists
+*
+* @param int forum id
+* @return boolean true if success
+* @author Julio Montoya <gugli100@gmail.com>, Dokeos
+* @version february 2006, dokeos 1.8
+*/
+function delete_forum_image($forum_id)
+{
+	$table_forums = Database::get_course_table(TABLE_FORUM);        
+	echo '<br />';
+	$sql="SELECT forum_image FROM $table_forums WHERE forum_id = '".$forum_id."' ";
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$row=Database::fetch_array($result);
+	if ($row['forum_image']!='') {
+		$del_file = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$row['forum_image'];
+		return @unlink($del_file);
+	} else {
+		return false;
+	}
+ 	  	 
+}
 
 
 /**
@@ -421,40 +467,94 @@ function store_forum($values) {
 	
 	$clean_title=Security::remove_XSS(Database::escape_string(htmlspecialchars($values['forum_title'])));
 	
+	// forum images
+	
+	$image_moved=false;
+	if (!empty($_FILES['picture']['name'])) {
+		$upload_ok = process_uploaded_file($_FILES['picture']);
+        $has_attachment=true;
+    } else {
+        $image_moved=true;
+    }
+ 
+    // remove existing picture if asked
+	if ($values['remove_picture']) {
+    	delete_forum_image($values['forum_id']);
+	}
+ 
+	if ($upload_ok) {
+		if ($has_attachment) {
+			$courseDir   = $_course['path'].'/upload/forum/images';
+			$sys_course_path = api_get_path(SYS_COURSE_PATH);
+			$updir = $sys_course_path.$courseDir;
+            // Try to add an extension to the file if it hasn't one
+			$new_file_name = add_ext_on_mime(Database::escape_string($_FILES['picture']['name']), $_FILES['picture']['type']);
+            // user's file name
+			$file_name =$_FILES['picture']['name'];
+ 
+            if (!filter_extension($new_file_name)) {
+                 //Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+                 $image_moved=false;
+            } else {
+                 $file_extension = explode('.', $_FILES['picture']['name']);
+                 $file_extension = strtolower($file_extension[sizeof($file_extension) - 1]);
+                 $new_file_name = uniqid('').'.'.$file_extension;
+                 $new_path=$updir.'/'.$new_file_name;
+                 $result= @move_uploaded_file($_FILES['picture']['tmp_name'], $new_path);
+                 // Storing the attachments if any
+                 if ($result) {
+                         $image_moved=true;
+                 }
+            }
+		}
+	}
+		
 	if (isset($values['forum_id'])) {
+		$sql_image='';
+	  	if ($image_moved) {
+		$sql_image=" forum_image='".Database::escape_string($new_file_name)."', ";
+		delete_forum_image($values['forum_id']);
+	}
 	
 	// storing an edit
-		$sql="UPDATE ".$table_forums." SET
-					forum_title='".$clean_title."',
-					forum_comment='".Database::escape_string($values['forum_comment'])."',
-					forum_category='".Database::escape_string($values['forum_category'])."',
-					allow_anonymous='".Database::escape_string($values['allow_anonymous_group']['allow_anonymous'])."',
-					allow_edit='".Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
-					approval_direct_post='".Database::escape_string($values['approval_direct_group']['approval_direct'])."',
-					allow_attachments='".Database::escape_string($values['allow_attachments_group']['allow_attachments'])."',
-					allow_new_threads='".Database::escape_string($values['allow_new_threads_group']['allow_new_threads'])."',
-					forum_group_public_private='".Database::escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
-					default_view='".Database::escape_string($values['default_view_type_group']['default_view_type'])."',
-					forum_of_group='".Database::escape_string($values['group_forum'])."'
-				WHERE forum_id='".Database::escape_string($values['forum_id'])."'";
+	$sql="UPDATE ".$table_forums." SET
+			forum_title='".$clean_title."',
+			".$sql_image."		
+			forum_comment='".Database::escape_string($values['forum_comment'])."',
+			forum_category='".Database::escape_string($values['forum_category'])."',
+			allow_anonymous='".Database::escape_string($values['allow_anonymous_group']['allow_anonymous'])."',
+			allow_edit='".Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
+			approval_direct_post='".Database::escape_string($values['approval_direct_group']['approval_direct'])."',
+			allow_attachments='".Database::escape_string($values['allow_attachments_group']['allow_attachments'])."',
+			allow_new_threads='".Database::escape_string($values['allow_new_threads_group']['allow_new_threads'])."',
+			forum_group_public_private='".Database::escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
+			default_view='".Database::escape_string($values['default_view_type_group']['default_view_type'])."',
+			forum_of_group='".Database::escape_string($values['group_forum'])."'
+		WHERE forum_id='".Database::escape_string($values['forum_id'])."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 		$return_message=get_lang('ForumEdited');
 	} else {
+		$sql_image='';
+		if ($image_moved) {
+			$sql_image="'".$new_file_name."', ";
+		}
+			
 		$sql="INSERT INTO ".$table_forums."
-					(forum_title, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order, session_id)
-					VALUES ('".$clean_title."',
-						'".Database::escape_string($values['forum_comment'])."',
-						'".Database::escape_string($values['forum_category'])."',
-						'".Database::escape_string($values['allow_anonymous_group']['allow_anonymous'])."',
-						'".Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
-						'".Database::escape_string($values['approval_direct_group']['approval_direct'])."',
-						'".Database::escape_string($values['allow_attachments_group']['allow_attachments'])."',
-						'".Database::escape_string($values['allow_new_threads_group']['allow_new_threads'])."',
-						'".Database::escape_string($values['default_view_type_group']['default_view_type'])."',
-						'".Database::escape_string($values['group_forum'])."',
-						'".Database::escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
-						'".Database::escape_string($new_max)."',
-						".intval($session_id).")";
+			(forum_title, forum_image, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order, session_id)
+			VALUES ('".$clean_title."',
+				".$sql_image."	
+				'".Database::escape_string($values['forum_comment'])."',
+				'".Database::escape_string($values['forum_category'])."',
+				'".Database::escape_string($values['allow_anonymous_group']['allow_anonymous'])."',
+				'".Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
+				'".Database::escape_string($values['approval_direct_group']['approval_direct'])."',
+				'".Database::escape_string($values['allow_attachments_group']['allow_attachments'])."',
+				'".Database::escape_string($values['allow_new_threads_group']['allow_new_threads'])."',
+				'".Database::escape_string($values['default_view_type_group']['default_view_type'])."',
+				'".Database::escape_string($values['group_forum'])."',
+				'".Database::escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
+				'".Database::escape_string($new_max)."',
+				".intval($session_id).")";
 		api_sql_query($sql,__FILE__,__LINE__);
 		$last_id=Database::get_last_insert_id();
 		api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", api_get_user_id());

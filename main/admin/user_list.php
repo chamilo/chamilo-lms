@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 17054 2008-12-03 13:38:03Z pcool $
+<?php // $Id: user_list.php 17056 2008-12-03 18:07:11Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -96,7 +96,9 @@ function empty_courses_of_user($arg)
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '		<style>
-		.tooltipLinkInner {
+		.tooltipLinkInner { 
+			position:relative;
+			float:left;
 			color:blue;
 			text-decoration:none;												
 		}
@@ -107,7 +109,7 @@ $htmlHeadXtra[] = '		<style>
 		}
 		
 		#tooltip .toolbox a:hover span {
-		  display: block! important;
+		 /* display: block! important;*/
 		  color: black;
 		  position: absolute;
 		}
@@ -382,35 +384,34 @@ function modify_filter($user_id,$url_params,$row)
 {
 	global $charset;
 	global $_user;
-	
+
 	$result .= '<span id="tooltip">
 				<span class="toolbox">
-				<a style="position: relative;" class="tooltipLinkInner" href="#">
-				<img src="../img/edit.gif" id="coursesofuser'.$user_id.'" onmouseout="document.getElementById(\'user'.$user_id.'\').style.display=\'none\'" onmouseover="xajax_courses_of_user('.$user_id.');" style="vertical-align:middle;"/>
+				<a class="tooltipLinkInner" href="#">
+				<img src="../img/course.gif" id="coursesofuser'.$user_id.'" onmouseout="document.getElementById(\'user'.$user_id.'\').style.display=\'none\';return false;" onclick="xajax_courses_of_user('.$user_id.');return false;" style="vertical-align:middle;"/>
 				<span id="user'.$user_id.'" style="margin-left: -100px; border:1px solid black; width: 200px; background-color:white; z-index:99; padding: 3px; display: none; margin-right:inherit;">
 				<div style="text-align:center;">'.Display::return_icon('anim-loader.gif', '', array('height' => '20')).'</div>
-				</span></a></span></span>';	
-	$result .= '<a href="user_information.php?user_id='.$user_id.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;';
-	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;';
+				</span></a></span></span>&nbsp;&nbsp';
+	$result .= '<a href="user_information.php?user_id='.$user_id.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;&nbsp;';
+	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
 
 	$statusname = api_get_status_langvars();
 	if ($row['6'] != $statusname[STUDENT])
 	{
-		$result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'nbsp;';
+		$result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'&nbsp;&nbsp;';
 	}
 	else
 	{
-		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;';
+		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;&nbsp;';
 	}
 
-	$result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;';
+	$result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;&nbsp;';
 
 	if ($row[0]<>$_user['user_id']) { // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
 		$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 	} else {
 		$result .= Display::return_icon('delete_na.gif', get_lang('Delete'));
 	}
-
 	return $result;
 }
 

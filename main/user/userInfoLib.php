@@ -620,26 +620,3 @@ function htmlize($phrase)
 	global $charset;
 	return nl2br(htmlspecialchars($phrase,ENT_QUOTES,$charset));
 }
-
-
-/**
- * replaces some dangerous character in a string for HTML use
- *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - string (string) string
- * @return - the string cleaned of dangerous character
- */
-
-function replace_dangerous_char($string)
-{
-	$search[]="/" ; $replace[]="-";
-	$search[]="\|"; $replace[]="-";
-	$search[]="\""; $replace[]=" ";
-
-	foreach($search as $key=>$char )
-	{
-		$string = str_replace($char, $replace[$key], $string);
-	}
-
-	return $string;
-}

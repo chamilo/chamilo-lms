@@ -100,7 +100,7 @@ if (is_allowed_to_edit())
 		echo 	"<br><br><br>\n";
 		echo	"<table class=\"message\" width=\"70%\" align=\"center\">\n",
 				"<tr><td width=\"7%\" align=\"center\">\n",
-			   	"<a href=\"".$toolsRow['link']."\"><img src=\"",$toolsRow['image'],"\" alt=\"\" align=\"absmiddle\" border=\"0\">","</a></td>\n",
+			   	"<a href=\"".$toolsRow['link']."\">".Display::return_icon($toolsRow['image'], get_lang('Delete')),"</a></td>\n",
 				"<td width=\"28%\" height=\"45\"><small>\n",
 				"<a href=\"".$toolsRow['link']."\">".$tool_name."</a></small></td>\n";
 		echo	"<td align=\"center\">\n",
@@ -171,7 +171,7 @@ if (is_allowed_to_edit())
 
 				"<form method=\"post\" action=\"".api_get_self()."\">\n",
 				"<input type=\"hidden\" name=\"id\" value=\"$id\">\n",
-				"Image : <img alt=\"\" src=\"".$image."\" border=\"0\" align=\"absmiddle\">\n",
+				"Image : ".Display::return_icon($image)."\n",
 				"</td>\n",
 
 				"<td>\n",

@@ -1,5 +1,5 @@
 <?php
-// $Id: btf_functions.php 13294 2007-09-27 02:14:48Z yannoo $
+// $Id: btf_functions.php 17054 2008-12-03 13:38:03Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -163,7 +163,7 @@ function showtools2($cat)
 		// VISIBLE
 		if ($toolsRow['visibility'] or $cat == 'courseAdmin' or $cat == 'claroAdmin')
 		{
-			$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'"><img src="'.$toolsRow['img'].'" alt="" border="0" style="vertical-align:middle;"/></a>'."\n";
+			$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'">'.Display::return_icon($toolsRow['img']).'</a>'."\n";
 			$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'">'.$tool_name."</a>\n";
 		}
 		// INVISIBLE
@@ -171,12 +171,12 @@ function showtools2($cat)
 		{
 			if (api_is_allowed_to_edit())
 			{
-				$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'"><img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" alt="" border="0" style="vertical-align:middle;"/></a>'."\n";
+				$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'">'.Display::return_icon(str_replace(".gif", "_na.gif", $toolsRow['img'])).'</a>'."\n";
 				$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'" class="invisible">'.$tool_name.'</a>'."\n";
 			}
 			else
 			{
-				$cell_content .= '<img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" alt="" border="0" style="vertical-align:middle;">'."\n";
+				$cell_content .= Display::return_icon(str_replace(".gif", "_na.gif", $toolsRow['img']), '', array('style' => 'vertical-align:middle;'))."\n";
 				$cell_content .= '<span class="invisible">'.$tool_name.'</span>';
 			}
 		}
@@ -186,13 +186,13 @@ function showtools2($cat)
 		{
 			if ($toolsRow["visibility"])
 			{
-				$link['name'] = '<img src="'.api_get_path(WEB_IMG_PATH).'remove.gif"  style="vertical-align:middle;" alt="'.get_lang('Deactivate').'"/>';
+				$link['name'] = Display::return_icon('remove.gif', get_lang('Deactivate'), array('style' => 'vertical-align:middle;'));
 				$link['cmd'] = "hide=yes";
 				$lnk[] = $link;
 			}
 			else
 			{
-				$link['name'] = '<img src="'.api_get_path(WEB_IMG_PATH).'add.gif" style="vertical-align:middle;" alt="'.get_lang('Activate').'"/>';
+				$link['name'] = Display::return_icon('add.gif', get_lang('Activate'), array('style' => 'vertical-align:middle;'));
 				$link['cmd'] = "restore=yes";
 				$lnk[] = $link;
 
@@ -213,7 +213,7 @@ function showtools2($cat)
 				{
 					if ($toolsRow['adminlink'])
 					{
-						$cell_content .= '<a href="'.$properties['adminlink'].'">'.'<img src="'.api_get_path(WEB_IMG_PATH).'edit.gif" alt="'.get_lang('Edit').'"/>'.'</a>';
+						$cell_content .= '<a href="'.$properties['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 						//echo "edit link:".$properties['adminlink'];
 					}
 					else

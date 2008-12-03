@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 16958 2008-11-26 15:07:00Z pcool $
+<?php // $Id: user_list.php 17054 2008-12-03 13:38:03Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -386,7 +386,7 @@ function modify_filter($user_id,$url_params,$row)
 	$result .= '<span id="tooltip">
 				<span class="toolbox">
 				<a style="position: relative;" class="tooltipLinkInner" href="#">
-				'.Display::return_icon('edit.gif', get_lang('Edit')).'<img src="../img/.gif" id="coursesofuser'.$user_id.'" onmouseout="document.getElementById(\'user'.$user_id.'\').style.display=\'none\'" onmouseover="xajax_courses_of_user('.$user_id.');" style="vertical-align:middle;"/>
+				<img src="../img/edit.gif" id="coursesofuser'.$user_id.'" onmouseout="document.getElementById(\'user'.$user_id.'\').style.display=\'none\'" onmouseover="xajax_courses_of_user('.$user_id.');" style="vertical-align:middle;"/>
 				<span id="user'.$user_id.'" style="margin-left: -100px; border:1px solid black; width: 200px; background-color:white; z-index:99; padding: 3px; display: none; margin-right:inherit;">
 				<div style="text-align:center;">'.Display::return_icon('anim-loader.gif', '', array('height' => '20')).'</div>
 				</span></a></span></span>';	

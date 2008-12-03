@@ -159,9 +159,8 @@ function show_tools($course_tool_category)
 					'<a href="', htmlspecialchars($toolsRow['link'])
 						.(($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif") ? '' : $qm_or_amp.api_get_cidreq()),
 						'" target="' , $toolsRow['target'], '" '.$class.'>',
-					'<img src="', $web_code_path, 'img/',
-						$toolsRow['image'], '" align="absmiddle" border="0" alt="', $toolsRow['image'],'" />',
-					'&nbsp;', ($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif" || $toolsRow['image']=="scormbuilder.gif" || $toolsRow['image']=="blog.gif") ? htmlspecialchars( $toolsRow['name'],ENT_QUOTES,$charset) : get_lang(ucfirst($toolsRow['name'])),
+						Display::return_icon($toolsRow['image']),
+						'&nbsp;', ($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif" || $toolsRow['image']=="scormbuilder.gif" || $toolsRow['image']=="blog.gif") ? htmlspecialchars( $toolsRow['name'],ENT_QUOTES,$charset) : get_lang(ucfirst($toolsRow['name'])),
 					"</a>\n ";
 
 			// This part displays the links to hide or remove a tool.
@@ -171,27 +170,27 @@ function show_tools($course_tool_category)
 			{
 				if ($toolsRow["visibility"] == '1')
 				{
-					$link['name'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/remove.gif" align="absmiddle" alt="'.get_lang("Deactivate").'"/>';
+					$link['name'] = Display::return_icon('remove.gif', get_lang('Deactivate'));
 					$link['cmd'] = "hide=yes";
 					$lnk[] = $link;
 				}
 
 				if ($course_tool_category == TOOL_PUBLIC_BUT_HIDDEN)
 				{
-					$link['name'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/add.gif" align="absmiddle" alt="'.get_lang("Activate").'"/>';
+					$link['name'] = Display::return_icon('add.gif', get_lang('Activate'));
 					$link['cmd']  = "restore=yes";
 					$lnk[] = $link;
 
 					if($toolsRow["added_tool"] == 1)
 					{
-						$link['name'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/delete.gif" align="absmiddle" alt="'.get_lang("Remove").'"/>';
+						$link['name'] = Display::return_icon('delete.gif', get_lang('Remove'));
 						$link['cmd']  = "remove=yes";
 						$lnk[] = $link;
 					}
 				}
 				if ($toolsRow['adminlink'])
 				{
-					echo	'<a href="'.$toolsRow['adminlink'].'"><img src="'.api_get_path(WEB_CODE_PATH).'img/edit.gif" align="absmiddle" alt="'.get_lang("Edit").'"/></a>';
+					echo	'<a href="'.$toolsRow['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 					//echo "edit link:".$properties['adminlink'];
 				}
 
@@ -200,7 +199,7 @@ function show_tools($course_tool_category)
 			{
 				if ($toolsRow["visibility"]==2)
 				{
-					$link['name'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/undelete.gif" align="absmiddle" alt="'.get_lang("Activate").'"/>';
+					$link['name'] = Display::return_icon('undelete.gif', get_lang('Activate'));
 
 					$link['cmd']  = "hide=yes";
 					$lnk[] = $link;
@@ -215,7 +214,7 @@ function show_tools($course_tool_category)
 
 				if ($toolsRow["visibility"] == 0 && $toolsRow["added_tool"] == 0)
 				{
-					$link['name'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/delete.gif" align="absmiddle" alt="'.get_lang("Remove").'"/>';
+					$link['name'] = Display::return_icon('delete.gif', get_lang('Remove'));
 					$link['cmd'] = "remove=yes";
 					$lnk[] = $link;
 				}

@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 16752 2008-11-14 22:07:56Z ivantcholakov $
+<?php // $Id: document.inc.php 17054 2008-12-03 13:38:03Z pcool $
 
 /*
 ==============================================================================
@@ -180,7 +180,7 @@ function create_document_link($www,$title,$path,$filetype,$size,$visibility)
 		$url=api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$url_path.$req_gid;
 	}
 	//the little download icon
-	$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'><img width="16" height="16" src="'.api_get_path(WEB_CODE_PATH).'img/'.$forcedownload_icon.'" alt="" /></a>';
+	$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'),array('height'=>'16', 'width' => '16')).'</a>';
 	
 	$tooltip_title = str_replace('?cidReq='.$_GET['cidReq'],'',basename($path));
 	return '<a href="'.$url.'" title="'.$tooltip_title.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html;
@@ -200,7 +200,7 @@ function build_document_icon_tag($type,$path)
 	{
 		$icon=choose_image(basename($path));
 	}
-	return '<img src="'.api_get_path(WEB_CODE_PATH).'img/'.$icon.'" border="0" hspace="5" align="middle" alt="" />';
+	return Display::return_icon($icon, '', array('hspace'=>'5', 'align' => 'middle'));
 }
 
 /**
@@ -250,10 +250,10 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$
 		
 	if ($is_read_only)
 	{
-		$modify_icons = '<img src="../img/edit_na.gif" border="0" title="'.get_lang('Modify').'" alt="" />';		
-        $modify_icons .= '&nbsp;<img src="../img/delete_na.gif" border="0" title="'.get_lang('Delete').'" alt="" />';
-        $modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_na.gif" border="0" title="'.get_lang('Move').'" alt="" />';
-        $modify_icons .= '&nbsp;<img src="../img/'.$visibility_icon.'_na.gif" border="0" title="'.get_lang('Visible').'" alt="" />';
+		$modify_icons = Display::return_icon('edit_na.gif', get_lang('Modify'));		
+        $modify_icons .= '&nbsp;'.Display::return_icon('delete.gif', get_lang('Delete'));
+        $modify_icons .= '&nbsp;'.Display::return_icon('deplacer_fichier_na.gif', get_lang('Move'));
+        $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'_na.gif', get_lang('Visible'));
 	}
 	else
 	{

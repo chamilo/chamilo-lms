@@ -241,7 +241,7 @@ function show_tools_category($course_tool_category)
 
 				if(!empty($toolsRow['adminlink']))
 				{
-					echo	'<a href="'.$toolsRow['adminlink'].'"><img src="'.api_get_path(WEB_CODE_PATH).'img/edit.gif" align="absmiddle" alt="'.get_lang("Edit").'"/></a>';
+					echo	'<a href="'.$toolsRow['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 				}
 
 			}

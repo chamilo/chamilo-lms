@@ -1,4 +1,4 @@
-<?php // $Id: index.php 16724 2008-11-12 15:42:23Z pcool $
+<?php // $Id: index.php 17054 2008-12-03 13:38:03Z pcool $
 
 /*
 ==============================================================================
@@ -267,7 +267,7 @@ if ($show_description_list)
 		echo '<div class="actions">';
 		foreach ($categories as $id => $title)
 		{
-			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$id.'"><img src="'.$default_description_icon[$id].'" height="20" /> '.$title.'</a>';
+			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$id.'">'.Display::return_icon($default_description_icon[$id], $title, array('height'=>'20')).' '.$title.'</a>';
 			$i++;
 		}
 		echo '</div>';
@@ -281,12 +281,12 @@ if ($show_description_list)
 			{
 				//delete
 				echo '<a href="'.api_get_self().'?action=delete&amp;description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
-				echo '<img src="../img/delete.gif" alt="'.get_lang("Delete").'" border="0" style="vertical-align:middle;float:right;margin:2px;" />';
+				echo Display::return_icon('delete.gif', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'));
 				echo '</a> ';
 				
 				//edit
 				echo '<a href="'.api_get_self().'?action=edit&amp;description_id='.$description->id.'">';
-				echo '<img src="../img/edit.gif" alt="'.get_lang("Edit").'" border="0" style="vertical-align:middle;float:right;margin:2px;" />';
+				echo Display::return_icon('edit.gif', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right;'));
 				echo '</a> ';
 			}
 			echo $description->title;

@@ -118,7 +118,7 @@ if (!empty($course))
 	
 	if($showPic == $enreg['user_id']): ?>
 	<tr>
-	  <td colspan="2" align="center"><img src="<?php echo $file_url;?>" border="0" width="100" alt="" style="margin-top: 5px;" /></td>
+	  <td colspan="2" align="center"><img src="<?php echo $file_url;?>" border="0" width="100" alt="" /></td>
 	</tr>
 	<?php endif; ?>
 	<?php

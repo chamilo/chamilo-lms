@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 16750 2008-11-14 20:56:14Z yannoo $
+<?php // $Id: usermanager.lib.php 17075 2008-12-04 22:49:14Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -867,6 +867,7 @@ class UserManager
 		{
 			while($rowf = Database::fetch_array($resf))
 			{
+				
 				$fields[$rowf['id']] = array(
 					0=>$rowf['id'],
 					1=>$rowf['field_variable'],
@@ -893,10 +894,11 @@ class UserManager
 							2=>(empty($rowo['option_display_text'])?'':$rowo['option_display_text']),
 							3=>$rowo['option_order']
 						);
-					}	
+					}					
 				}
 			}
 		}
+			
 		return $fields;
 	}
 	
@@ -1087,26 +1089,20 @@ class UserManager
 					                field_display_text = '".Database::escape_string($fieldtitle)."',
 					                field_default_value = '".Database::escape_string($fielddefault)."',
 					                tms = FROM_UNIXTIME($time)
-					                WHERE field_id = '".Database::escape_string($fieldid)."'";
-		//$result = api_sql_query($sql,__FILE__,__LINE__);
+					                WHERE id = '".Database::escape_string($fieldid)."'";
+		$result = api_sql_query($sql,__FILE__,__LINE__);
 
 		// we create an array with all the options (will be used later in the script)
-		if($fieldtype == USER_FIELD_TYPE_DOUBLE_SELECT)
-		{
+		if ($fieldtype == USER_FIELD_TYPE_DOUBLE_SELECT) {
 			$twolist = explode('|', $fieldoptions);
 			$counter = 0;
-			foreach ($twolist as $individual_list)
-			{
+			foreach ($twolist as $individual_list) {
 				$splitted_individual_list = split(';',$individual_list);
-				foreach	($splitted_individual_list as $individual_list_option)				
-				{
+				foreach	($splitted_individual_list as $individual_list_option) {
 					//echo 'counter:'.$counter; 
-					if ($counter == 0)
-					{
+					if ($counter == 0) {
 						$list[] = trim($individual_list_option);
-					}
-					else 
-					{
+					} else {
 						$list[] = str_repeat('*',$counter).trim($individual_list_option);
 					}
 				}
@@ -1122,6 +1118,7 @@ class UserManager
 		// Remove all the field options (and also the choices of the user) that are NOT in the new list of options
 		$sql = "SELECT * FROM $table_field_options WHERE option_value NOT IN ('".implode("','", $list)."') AND field_id = '".Database::escape_string($fieldid)."'";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$return['deleted_options'] = 0;
 		while ($row = Database::fetch_array($result))
 		{
 			// deleting the option
@@ -1145,7 +1142,6 @@ class UserManager
 			{
 				$key = array_search(trim($row['option_display_text']),$list);
 				unset($list[$key]);
-				echo 'unset '.$key.$list[$key];
 			}
 		}
 		
@@ -1210,14 +1206,22 @@ class UserManager
 						" AND user_id=".$user_id;
 				$resu = api_sql_query($sqlu,__FILE__,__LINE__);
 				$fval = '';
+				// get default value
+				$sql_df = "SELECT field_default_value as fval_df " .
+						" FROM $t_uf " .
+						" WHERE id=".$row['id'];
+				$res_df = api_sql_query($sql_df,__FILE__,__LINE__);						
 				if(Database::num_rows($resu)>0)
 				{
-					$rowu = Database::fetch_array($resu);
+					$rowu = Database::fetch_array($resu);					
 					$fval = $rowu['fval'];
 					if($row['type'] ==  USER_FIELD_TYPE_SELECT_MULTIPLE)
 					{
 						$fval = split(';',$rowu['fval']);
 					}					
+				} else {					
+					$row_df = Database::fetch_array($res_df);
+					$fval = $row_df['fval_df'];
 				}
 				if($prefix)
 				{

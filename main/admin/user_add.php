@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 17058 2008-12-03 21:07:59Z yannoo $
+<?php // $Id: user_add.php 17075 2008-12-04 22:49:14Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -188,10 +188,9 @@ $form->addGroup($group, 'max_member_group', null, '', false);
 $form->addElement('radio','active',get_lang('ActiveAccount'),get_lang('Active'),1);
 $form->addElement('radio','active','',get_lang('Inactive'),0);
 
-
-
 // EXTRA FIELDS
 $extra = UserManager::get_extra_fields(0,50,5,'ASC');
+$extra_data = UserManager::get_extra_user_data(0,true);
 foreach($extra as $id => $field_details)
 {
 	switch($field_details[2])
@@ -241,6 +240,49 @@ foreach($extra as $id => $field_details)
 			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3]);
 			$form->applyFilter('theme', 'trim');
 			break;
+		case USER_FIELD_TYPE_DOUBLE_SELECT:
+			foreach ($field_details[8] as $key=>$element)
+			{
+				if ($element[2][0] == '*')
+				{
+					$values['*'][$element[0]] = str_replace('*','',$element[2]);
+				}
+				else 
+				{
+					$values[0][$element[0]] = $element[2];
+				}
+			}
+			
+			$group='';
+			$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1],'',$values[0],'');
+			$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*','',$values['*'],'');
+			$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+
+			// recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
+			if (key_exists('extra_'.$field_details[1], $extra_data))
+			{
+				// exploding all the selected values (of both select forms)
+				$selected_values = explode(';',$extra_data['extra_'.$field_details[1]]);
+				$extra_data['extra_'.$field_details[1]]  =array();
+				
+				// looping through the selected values and assigning the selected values to either the first or second select form
+				foreach ($selected_values as $key=>$selected_value)
+				{
+					if (key_exists($selected_value,$values[0]))
+					{
+						$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
+					}
+					else 
+					{
+						$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
+					}
+				}
+			}
+			break;
+		case USER_FIELD_TYPE_DIVIDER:
+			$form->addElement('static',$field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
+			break;
 	}
 }
 
@@ -258,6 +300,7 @@ $defaults['expiration_date']['F']=date('m',$time);
 $defaults['expiration_date']['Y']=date('Y',$time);
 $defaults['radio_expiration_date'] = 0;
 $defaults['status'] = STUDENT;
+$defaults = array_merge($defaults,$extra_data);
 $form->setDefaults($defaults);
 // Submit button
 $form->addElement('submit', 'submit', get_lang('Add'));

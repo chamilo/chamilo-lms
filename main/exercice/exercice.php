@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 17067 2008-12-04 07:49:49Z yannoo $
+<?php // $Id: exercice.php 17068 2008-12-04 07:50:33Z yannoo $
  
 /*
 ==============================================================================
@@ -1113,7 +1113,7 @@ if($_configuration['tracking_enabled'])
 		?>
 
 		 <tr>
-		  <td colspan="5"><?php echo get_lang("NoResult"); ?></td>
+		  <td colspan="6"><?php echo get_lang("NoResult"); ?></td>
 		 </tr>
 
 		<?php

@@ -447,14 +447,14 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 									if($homework['expires_on']='0000-00-00 00:00:00') {
 										$homework['expires_on']=date("Y-m-d H:i:s");		
 										$there_is_a_expire_date = true;
-										$form_folder -> addElement('checkbox', 'enableRandomExpires', null, get_lang('MakeRandomExpires'),'1');
+										$form_folder -> addElement('checkbox', 'enableExpiryDate', null, get_lang('EnableExpiryDate'),'1');
 										$form_folder -> addGroup(create_group_date_select(),'expires',get_lang('Expires_At'));
 										
 									}
 									if($homework['ends_on']='0000-00-00 00:00:00') {	
 										$homework['ends_on']=date("Y-m-d H:i:s");		
 										$there_is_a_end_date = true;
-										$form_folder -> addElement('checkbox', 'enableRandomEnds', null, get_lang('MakeRandomEnd'),'1');
+										$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'),'1');
 										$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('Ends_At'));
 										
 									}	
@@ -488,14 +488,14 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 								$ends_query =   ' ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
 								api_sql_query('UPDATE '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT).$expires_query.$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
 						} else if($row['view_properties']=='0') {								
-								if ($_POST['enableRandomExpires']=='1') {								
+								if ($_POST['enableExpiryDate']=='1') {								
 									$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'";
 									//$ends_query =   ' ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";							
 									api_sql_query('UPDATE '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT).$expires_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
 									$sql_add_publication = "UPDATE ".Database :: get_course_table(TABLE_STUDENT_PUBLICATION)." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
 									api_sql_query($sql_add_publication, __FILE__, __LINE__);
 								}
-								if ($_POST['enableRandomEnds']=='1') {								
+								if ($_POST['enableEndDate']=='1') {								
 									//$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'".',';
 									$ends_query =   ' SET ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";							
 									api_sql_query('UPDATE '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT).$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);

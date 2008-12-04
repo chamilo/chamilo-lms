@@ -87,7 +87,7 @@ if (empty($mycourseid))
 	// if it is not set $mycourse id we reload the chat_message window in order to hide the
 	// textarea to submit a message
 	echo '<script type="text/javascript" language="javascript">';
-	echo "parent.chat_message.location.href='chat_whoisonline.php';";
+	echo "parent.chat_message.location.href='chat_whoisonline.php?".api_get_cidreq()."';";
 	echo '</script>';
 }
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -116,7 +116,7 @@ function updateChat()
 {
 	if('<?php echo $chat_size_old; ?>' != '<?php echo $chat_size_new; ?>')
 	{
-		parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size_new; ?>#bottom';				
+		parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size_new.'&cidReq='.$_GET['cidReq']; ?>#bottom';				
 	}
 }
 
@@ -137,7 +137,7 @@ function eventMessage()
 {
 	<?php if($chat_size): ?>
 	parent.chat_hidden.document.formHidden.chat_size_old.value='<?php echo $chat_size; ?>';
-	parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size; ?>#bottom';
+	parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size.'&cidReq='.$_GET['cidReq']; ?>#bottom';
 	<?php endif; ?>
 
 	document.formMessage.message.focus();

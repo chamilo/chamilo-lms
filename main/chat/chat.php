@@ -1,4 +1,4 @@
-<?php // $Id: chat.php 15067 2008-04-24 17:39:03Z juliomontoya $
+<?php // $Id: chat.php 17078 2008-12-04 23:23:53Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -100,18 +100,18 @@ switch($my_style){
 		$footer_size = 48;
 		break;
 }
+$cidreq=$_GET['cidReq'];
 ?>
-
 <frameset rows="130,*,<?php echo $footer_size;?>" border="0" frameborder="0" framespacing="1">
-	<frame src="chat_banner.php" name="chat_banner" scrolling="no">
+	<frame src="chat_banner.php?<?php echo 'cidReq='.$cidreq; ?>" name="chat_banner" scrolling="no">
 	<frameset cols="200,*,0" border="1" frameborder="1" framespacing="1">
-		<frame src="chat_whoisonline.php" name="chat_whoisonline" scrolling="auto">
+		<frame src="chat_whoisonline.php?<?php echo 'cidReq='.$cidreq; ?>" name="chat_whoisonline" scrolling="auto">
 		<frameset rows="75,15" border="1" frameborder="1" framespacing="1">
-			<frame src="chat_chat.php?origin=<?php echo $_GET["origin"]; ?>&target=<?php echo $_GET["target"]; ?>" name="chat_chat" scrolling="auto">
-			<frame src="chat_message.php" name="chat_message" scrolling="no">
+			<frame src="chat_chat.php?origin=<?php echo $_GET["origin"]; ?>&target=<?php echo $_GET["target"].'&amp;cidReq='.$cidreq; ?>" name="chat_chat" scrolling="auto">
+			<frame src="chat_message.php?<?php echo 'cidReq='.$cidreq; ?>" name="chat_message" scrolling="no">
 		</frameset>
-		<frame src="chat_hidden.php" name="chat_hidden" scrolling="no">
+		<frame src="chat_hidden.php?<?php echo 'cidReq='.$cidreq; ?>" name="chat_hidden" scrolling="no">
 	</frameset>
-	<frame src="chat_footer.php" name="chat_footer" scrolling="no">
+	<frame src="chat_footer.php?<?php echo 'cidReq='.$cidreq; ?>" name="chat_footer" scrolling="no">
 </frameset>
 </html>

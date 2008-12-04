@@ -36,7 +36,8 @@ $language_file = array ('chat');
 require('../inc/global.inc.php');
 include(api_get_path(LIBRARY_PATH).'document.lib.php');
 include (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-$course=api_get_course_id();
+//$course=api_get_course_id();
+$course=$_GET['cidReq'];
 
 // if we have the session set up 
 if (!empty($course))
@@ -146,7 +147,7 @@ if (!empty($course))
 	{
 		$rand=mt_rand(1,1000);		
 		echo '<div style="margin-left: 5px;">';
-		echo '<a href="'.api_get_self().'?rand='.$rand.'&reset=1#bottom" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmReset'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('ClearList')).' '.get_lang('ClearList').'</a>';
+		echo '<a href="'.api_get_self().'?rand='.$rand.'&reset=1&cidReq='.$_GET['cidReq'].'#bottom" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmReset'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('ClearList')).' '.get_lang('ClearList').'</a>';
 		echo '</div>';
 	}
 }

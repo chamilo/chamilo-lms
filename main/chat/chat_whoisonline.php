@@ -46,17 +46,17 @@ if (!empty($course))
 	$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
 	$tbl_session_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 	$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
-	$tbl_chat_connected	= Database::get_course_chat_connected_table();
+	$tbl_chat_connected	= Database::get_course_table(CHAT_CONNECTED_TABLE,$_course['dbName']);
 	
 	$query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 	$result=api_sql_query($query,__FILE__,__LINE__);
 	
-	list($pseudoUser)=mysql_fetch_row($result);
+	list($pseudoUser)=Database::fetch_array($result);
 	
 	$isAllowed=(empty($pseudoUser) || !$_cid)?false:true;
 	$isMaster=$is_courseAdmin?true:false;
 		
-	$date_inter=date('Y-m-d H:i:s',time()-60); 
+	$date_inter=date('Y-m-d H:i:s',time()-120); 
 	
 	$Users = array(); 
 	
@@ -110,7 +110,7 @@ if (!empty($course))
 	?>
 	<tr>
 	  <td width="1%" valign="top"><?php if($status == 1) echo Display::return_icon('teachers.gif', get_lang('Edit')).' '; else echo Display::return_icon('students.gif');?></td>
-	  <td width="99%"><a <?php if($status == 1) echo 'class="master"'; ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo api_get_self(); ?>?showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><?php echo ucfirst($enreg['firstname']).' '.ucfirst($enreg['lastname']); ?></a></td>
+	  <td width="99%"><a <?php if($status == 1) echo 'class="master"';// ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><?php echo ucfirst($enreg['firstname']).' '.ucfirst($enreg['lastname']); ?></a></td>
 	</tr>
 	<?php
 	$user_image=UserManager::get_user_picture_path_by_id($enreg['user_id'],'web',false,true);

@@ -66,6 +66,7 @@ $sql="SELECT user_id FROM $tbl_chat_connected WHERE user_id='".$_user['user_id']
 $result=api_sql_query($sql);
 
 //The user_id exists so we must do an UPDATE and not a INSERT
+$current_time=date('Y-m-d H:i:s');
 if(mysql_num_rows($result)==0){
 	$query="INSERT INTO $tbl_chat_connected(user_id,last_connection) VALUES('".$_user['user_id']."',NOW())";
 }
@@ -84,7 +85,7 @@ list($connected_new)=mysql_fetch_row($result);
 include("header_frame.inc.php");
 ?>
 
-<form name="formHidden" method="post" action="<?php echo api_get_self(); ?>">
+<form name="formHidden" method="post" action="<?php echo api_get_self().'?cidReq='.$_GET['cidReq']; ?>">
 <input type="hidden" name="chat_size_old" value="<?php echo $chat_size_new; ?>">
 <input type="hidden" name="connected_old" value="<?php echo $connected_new; ?>">
 </form>

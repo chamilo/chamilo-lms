@@ -44,7 +44,7 @@ $tbl_chat_connected 	= Database::get_course_chat_connected_table();
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 $result=api_sql_query($query,__FILE__,__LINE__);
 
-list($pseudoUser)=mysql_fetch_row($result);
+list($pseudoUser)=Database::fetch_row($result);
 
 $isAllowed=(empty($pseudoUser) || !$_cid)?false:true;
 $isMaster=$is_courseAdmin?true:false;
@@ -67,11 +67,11 @@ $result=api_sql_query($sql);
 
 //The user_id exists so we must do an UPDATE and not a INSERT
 $current_time=date('Y-m-d H:i:s');
-if(mysql_num_rows($result)==0){
-	$query="INSERT INTO $tbl_chat_connected(user_id,last_connection) VALUES('".$_user['user_id']."',NOW())";
+if (Database::num_rows($result)==0){
+	$query="INSERT INTO $tbl_chat_connected(user_id,last_connection) VALUES('".$_user['user_id']."','".$current_time."')";
 }
 else{
-	$query="UPDATE $tbl_chat_connected set last_connection=NOW() WHERE user_id='".$_user['user_id']."'";
+	$query="UPDATE $tbl_chat_connected set last_connection='".$current_time."' WHERE user_id='".$_user['user_id']."'";
 }
 
 api_sql_query($query,__FILE__,__LINE__);
@@ -80,7 +80,7 @@ $query="SELECT COUNT(user_id) FROM $tbl_chat_connected WHERE last_connection>'".
 $result=api_sql_query($query,__FILE__,__LINE__);
 
 $connected_old=intval($_POST['connected_old']);
-list($connected_new)=mysql_fetch_row($result);
+list($connected_new)=Database::fetch_row($result);
 
 include("header_frame.inc.php");
 ?>

@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 16442 2008-10-06 13:40:41Z yannoo $ 
+<?php // $Id: scorm_api.php 17064 2008-12-04 05:36:10Z yannoo $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -452,19 +452,21 @@ function LMSSetValue(param, val) {
 			elem_id = myres[1];
 			if(elem_id > interactions.length) //interactions setting should start at 0
 			{
-				G_LastError = G_InvalidArgumentError;
+				/*
+                G_LastError = G_InvalidArgumentError;
                 G_LastErrorString = 'Invalid argument (interactions)';
 				return_value = false;
+                */
+                interactions[0] = ['0','','','','','','',''];
 			}
-			else
-			{
-				if(interactions[elem_id] == null){
+			
+			if(interactions[elem_id] == null){
 					interactions[elem_id] = ['','','','','','','',''];
 					//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
 					interactions[elem_id][4] = new Array();
-				}
-				elem_attrib = myres[2];
-				switch(elem_attrib) {
+			}
+			elem_attrib = myres[2];
+			switch(elem_attrib) {
 					case "id":
 						interactions[elem_id][0] = val;
 						logit_scorm("Interaction "+elem_id+"'s id updated",2);
@@ -509,7 +511,6 @@ function LMSSetValue(param, val) {
 					default:
 							G_lastError = G_NotImplementedError;
 							G_lastErrorString = 'Not implemented yet';
-				}
 			}
 		}else if(param.substring(0,15)== 'cmi.objectives.'){
 			var myres = '';

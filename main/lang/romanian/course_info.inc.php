@@ -95,4 +95,13 @@ $CourseRegistrationPassword = "Parola pentru inregistrarea la curs";
 $langDescriptionDeleteCourse = "Apasa pe aceasta legatura pentru a elimina orice urma a cursului pe server.<br><br>Aceasta optiune trebuie utilizata cu precautie maxima!";
 $langDescriptionCopyCourse = "Dokeos introduce posibilitatea de duplicare a intregului curs sau fragmente din acesta fata de alt curs, care pot fi inital goale.<br><br>Singura preconditie este de a avea un curs care sa contina cateva documente, reclame, forumuri... si un al 2-lea curs care nu contine elementele din primul !";
 $DescriptionRecycleCourse = "Aceasta unealta goleste cursul de elementele selectate, sau de toate elementele pe care le contine. Elimina documentele, forumurile, legaturile... Aceasta procedura poate fi implementata la safarsitul anului universitar. Desigur, inaintea \"reciclarii\", va trebui sa aveti grija sa salvati intregul curs.";
+$QuizEmailAlert = "Alerta prin e-mail la trimiterea unui nou quiz";
+$QuizEmailAlertActivate = "Activeaza trimiterea e-mail cand utilizatorul trimite raspunsuri la un nou quiz";
+$QuizEmailAlertDeactivate = "Dezactiveaza alerta prin e-mail cand se trimit raspunsuri noi la quiz-uri";
+$AllowUserImageForum = "Imagine utilizator in forum";
+$AllowUserImageForumActivate = "Afiseaza imaginile utilizatorilor in forum";
+$AllowUserImageForumDeactivate = "Ascunde imaginile utilizatorilor in forum";
+$AllowLearningPathTheme = "Activeaza tema de stil pentru calea de invatare";
+$AllowLearningPathThemeAllow = "Permis";
+$AllowLearningPathThemeDisallow = "Interzis";
 ?>

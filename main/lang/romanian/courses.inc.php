@@ -62,4 +62,11 @@ $CourseSortingDone = "Sortarea cursurilor a fost finalizata";
 $ExistingCourseCategories = "Categoriile existente de cursuri";
 $YouAreNowUnsubscribed = "Ai renuntat la acest curs.";
 $ViewOpenCourses = "Vizualizeaza cursurile deschise";
+$ErrorContactPlatformAdmin = "A avut loc o eroare neidentificata. Va rugam contactati administratorul platformei.";
+$CourseRegistrationCodeIncorrect = "Codul de curs este incorect";
+$CourseRequiresPassword = "Cursul necesita o parola";
+$SubmitRegistrationCode = "Trimiteti codul de inregistrare";
+$CourseCategoryDeleted = "Categoria a fost stearsa";
+$CategorySortingDone = "S-a incheiat sortarea categoriei";
+$CourseCategoryEditStored = "Categorie actualizata";
 ?>

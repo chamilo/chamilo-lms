@@ -222,8 +222,8 @@ $DisplayCoaches = "Coaches Overview";
 $DisplayUserOverview = "User overview";
 $ExportUserOverviewOptions = "User overview export options";
 $FollowingFieldsWillAlsoBeExported = "The following fields will also be exported";
-$TotalExercisesScoreObtained = "Total obtained exercise score";
-$TotalExercisesScorePossible = "Total possible exercise score";
+$TotalExercisesScoreObtained = "Total score obtained for exercises";
+$TotalExercisesScorePossible = "Total possible score for exercises";
 $TotalExercisesAnswered = "Number of exercises answered";
-$TotalExercisesScorePercentage = "Procentual total score of the exercises";
+$TotalExercisesScorePercentage = "Total score percentage for exercises";
 ?>

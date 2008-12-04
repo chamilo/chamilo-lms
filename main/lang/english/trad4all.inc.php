@@ -592,8 +592,11 @@ $CourseSettings = "Course settings";
 $EmailNotifications = "Email notifications";
 $UserRights = "User rights";
 $Theming = "Theming";
-$Coach = "Coach";
-$coach = "Coach";
 $Qualification = "Qualification";
 $OnlyNumbers = "Only numbers";
+$ReorderOptions = "Reorder options";
+$EditUserFields = "Edit user fields";
+$OptionText = "Text";
+$FieldTypeDoubleSelect = "Double select";
+$FieldTypeDivider = "Visual divider";
 ?>

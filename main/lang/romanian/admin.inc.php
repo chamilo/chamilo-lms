@@ -848,4 +848,6 @@ $AllowUsersToCreateCoursesTitle = "Permiteti ca utilizatorii fara drept de admin
 $AllowUsersToCreateCoursesComment = "Permiteti ca utilizatorii fara drept de administrare (profesori) sa creeze cursuri noi in portal";
 $YesWillDeletePermanently = "Da (fisierele vor fi sterse definitiv si nu vor putea fi recuperate)";
 $NoWillDeletePermanently = "Nu (fisierele vor fi sterse din aplicatie si vor putea fi recuperate manual de catre administratorul dvs)";
+$SelectAResponsible = "Selectati un manager";
+$ThereIsNotStillAResponsible = "Nu este disponibil nici un HR manager";
 ?>

@@ -592,6 +592,4 @@ $CourseSettings = "Nastavitve tečaja";
 $EmailNotifications = "E-poštno obveščanje";
 $UserRights = "Pravice uporabnikov";
 $Theming = "Tema";
-$Coach = "Inštruktor";
-$coach = "inštruktor";
 ?>

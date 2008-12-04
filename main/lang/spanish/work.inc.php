@@ -43,9 +43,6 @@ $ExpiresAt = "Expira en";
 $AddToCalendar = "Agregar a agenda";
 $DirectoryCreated = "Directorio creado";
 $Assignment = "Asignación";
-$Expires_At = "Expira en";
-$Ends_At = "Acaba en (totalmente cerrado)";
 $AdvancedParameters = "Parámetros avanzados";
-$MakeRandomExpires = "Hacer que expire al azar";
 $ExpiryDateToSendWorkIs = "Fecha de vencimiento para enviar trabajos";
 ?>

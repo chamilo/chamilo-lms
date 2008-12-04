@@ -103,4 +103,16 @@ $AverageTotal = "Total moyen";
 $Evaluation = "Évaluation";
 $EvaluationAverage = "Moyenne de l\'évaluation";
 $EditCategory = "Éditer la catégorie";
+$EditAllWeights = "Éditer tous les poids";
+$GradebookQualificationTotal = "Total";
+$GradebookEvaluationDeleted = "L\'évalutation a bien été supprimée";
+$GradebookQualifyLog = "Historique des poids du bulletin";
+$GradebookNameLog = "Nom du bulletin";
+$GradebookDescriptionLog = "Description du bulletin";
+$GradebookVisibilityLog = "Visibilité du bulletin";
+$ResourceType = "Type de ressource";
+$GradebookWhoChangedItLog = "Qui l\'a modifié";
+$EvaluationEdited = "Cette évaluation a bien été modifiée";
+$CategoryEdited = "Catégorie mise à jour";
+$OnlyNumbers = "Nombres uniquement";
 ?>

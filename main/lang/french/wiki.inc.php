@@ -136,4 +136,15 @@ $FullNotifyByEmail = "Recevoir une alerte par e-mail à chaque modification du wi
 $FullCancelNotifyByEmail = "Arrêter l\'envoi des alertes par e-mail à chaque modification du wiki";
 $EmailWikiChangesExt_1 = "Cette alerte a été envoyée selon la configuration des alertes du wiki. Cette option est actuellement activée.";
 $EmailWikiChangesExt_2 = "Si vous voulez arrêter de recevoir des alertes à propos des modifications du wiki, sélectionnez l\'onglet <strong>Modifications récentes</strong>, <strong>Page courante</strong>, <strong>Discussion</strong> et sélectionnez la bonne option";
+$Visits = "visites";
+$OrphanedPages = "Pages orphelines";
+$WantedPages = "Pages désirées";
+$MostVisitedPages = "Pages ls plus visitées";
+$MostChangedPages = "Pages les plus modifiées";
+$Changes = "modifications";
+$MostActiveUsers = "Utilisateurs les plus actifs";
+$Contributions = "contributions";
+$UserContributions = "Contributions utilisateurs";
+$MostActiveUsers = "Utilisateurs les plus actifs";
+$WarningDeleteMainPage = "Il n\'est pas recommandé de supprimer la page d\'accueil du wiki car il s\'agit de l\'accès principal à sa structure hiérarchique.<br />Si toutefois vous avec besoin de le faire, n\'oubliez pas de recréer cette page d\'accueil. Tant que vous ne l\'aurez pas fait, les autres utilisateurs ne pourront pas ajouter de nouvelles pages.";
 ?>

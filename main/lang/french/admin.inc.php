@@ -837,8 +837,17 @@ $EnableSearchComment = "Sélectionnez \"Oui\" pour activer la fonctionnalité de r
 $SearchASession = "Rechercher une session";
 $ActiveSession = "Activation de la session";
 $AddUrl = "Ajouter URL";
+$ShowSessionCoachTitle = "Afficher le coach de session";
+$ShowSessionCoachComment = "Afficher le nom du coach global de session dans le cadre de titre de session, sur la page de liste de cours";
 $ExtendRightsForCoachTitle = "Donner des droits étendus au coach";
 $ExtendRightsForCoachComment = "Activer cette option donner aux coachs les mêmes droits qu\'au formateur sur les outils de production";
 $ExtendRightsForCoachOnSurveyComment = "Activer cette option donnera aux coachs le droit de créer et éditer les enquêtes";
 $ExtendRightsForCoachOnSurveyTitle = "Etendre les droits des coachs sur les enquêtes";
+$CannotDeleteUserBecauseOwnsCourse = "Cet utilisateur ne peut être supprimé car il est toujours professeur dans un ou plusieurs cours. Vous pouvez soit lui retirer son statut de professeur dans ce/ces cours, soit le désactiver au lieu de le supprimer.";
+$AllowUsersToCreateCoursesTitle = "Autoriser les utilisateurs non-administrateurs à créer des cours";
+$AllowUsersToCreateCoursesComment = "Autoriser les non-administrateurs (professeurs) à créer de nouveaux cours sur le portail";
+$YesWillDeletePermanently = "Oui (les fichiers seront supprimés de manière permanente et ne pourront pas être récupérés)";
+$NoWillDeletePermanently = "Non (les fichiers seront supprimés de l\'application et pourront être récupérés manuellement par l\'administrateur du serveur)";
+$SelectAResponsible = "Sélectionnez un responsable RH";
+$ThereIsNotStillAResponsible = "Aucun responsable RH disponible";
 ?>

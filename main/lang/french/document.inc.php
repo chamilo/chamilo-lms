@@ -209,4 +209,5 @@ $TemplateTitleStopAndThink = "Faisons le point";
 $TemplateTitleListLeftListDescription = "Liste à gauche avec un instructeur";
 $TemplateTitleStopAndThinkDescription = "Présentation invitant à réfléchir";
 $SaveDocument = "Enregistrer le document";
+$CreateTheDocument = "Enregistrer le document";
 ?>

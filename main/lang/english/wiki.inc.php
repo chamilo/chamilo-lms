@@ -146,5 +146,5 @@ $MostActiveUsers = "Most active users";
 $Contributions = "contributions";
 $UserContributions = "User contributions";
 $MostActiveUsers = "Most active users";
-$WarningDeleteMainPage = "It isn\'t recommended erasing the Home Page of the Wiki as it\'s the main access to the hierarchical structure of it.<br> If however you need to do it, do not forget to recreate this Home Page. Until you do so, other users can not add new pages.";
+$WarningDeleteMainPage = "It isn\'t recommended erasing the Home Page of the Wiki as it\'s the main access to the hierarchical structure of it.<br />If, however, you need to do it, do not forget to recreate this Home Page. Until you do, other users will not be able to add new pages.";
 ?>

@@ -847,7 +847,7 @@ $CannotDeleteUserBecauseOwnsCourse = "This user cannot be deleted because he is 
 $AllowUsersToCreateCoursesTitle = "Allow non admin to create courses";
 $AllowUsersToCreateCoursesComment = "Allow non administrator users (teachers) to create new courses on the portal";
 $YesWillDeletePermanently = "Yes (the files will be deleted permanently and will not be recoverable)";
-$NoWillDeletePermanently = "Not (the files will be deleted from the application and will yes manually retrieved  by your administrator)";
+$NoWillDeletePermanently = "No (the files will be deleted from the application but will be manually recoverable  by your server administrator)";
 $SelectAResponsible = "Select a manager";
 $ThereIsNotStillAResponsible = "No HR manager available";
 ?>

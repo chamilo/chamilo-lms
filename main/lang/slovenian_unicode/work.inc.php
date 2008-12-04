@@ -43,8 +43,6 @@ $ExpiresAt = "Poteče dne";
 $AddToCalendar = "Dodaj v koledar";
 $DirectoryCreated = "Mapa je bila ustvarjena";
 $Assignment = "Zadolžitev";
-$Expires_At = "Poteče dne";
-$Ends_At = "Se konča dne (popolnoma zaprta)";
 $AdvancedParameters = "Napredni parametri";
 $ExpiryDateToSendWorkIs = "Zadnji rok za pošiljanje nalog/izdelkov";
 ?>

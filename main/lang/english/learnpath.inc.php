@@ -208,5 +208,5 @@ $ChangesStored = "Changes stored";
 $ViewScoreChangeHistory = "View score change history";
 $ImageWillResizeMsg = "Image will resize msg";
 $ImagePreview = "Image preview";
-$UplAlreadyExists = "Up already exists";
+$UplAlreadyExists = "File already exists";
 ?>

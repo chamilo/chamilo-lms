@@ -188,7 +188,6 @@ $OneQuestionPerPage = "Eno vprašanje na stran";
 $PersonalityQuestion = "Uredi vprašanje";
 $YouNeedToCreateGroups = "Ustvariti morate skupine";
 $ManageGroups = "Upravljaj skupine";
-$Condition = "Pogoj";
 $Create = "Ustvari";
 $GroupCreatedSuccessfully = "Skupina je bila uspešno ustvarjena";
 $GroupNeedName = "Skupina zahteva ime skupine";

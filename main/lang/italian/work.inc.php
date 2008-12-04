@@ -43,9 +43,6 @@ $ExpiresAt = "Si conclude il";
 $AddToCalendar = "Aggiungi al calendario";
 $DirectoryCreated = "Cartella creata";
 $Assignment = "Compito";
-$Expires_At = "Si conclude il";
-$Ends_At = "Si conclude definitivamente il";
 $AdvancedParameters = "Parametri avanzati";
-$MakeRandomExpires = "Rendi casuale la scadenza";
 $ExpiryDateToSendWorkIs = "Data di scadenza per l\'invio di elaborati";
 ?>

@@ -218,4 +218,12 @@ $AccessDetails = "Détails d\'accès";
 $DateAndTimeOfAccess = "Date et heure d\'accès";
 $Duration = "Durée";
 $WrongDatasForTimeSpentOnThePlatform = "Les données de suivi à propos de cet apprenant ont été enregistrées à une époque où le calcul du temps sur la plateforme était impossible.";
+$DisplayCoaches = "Vue des coaches";
+$DisplayUserOverview = "Vue des utilisateurs";
+$ExportUserOverviewOptions = "Option d\'export de la vue utilisateurs";
+$FollowingFieldsWillAlsoBeExported = "Les champs suivants seront également exportés";
+$TotalExercisesScoreObtained = "Score total obtenu pour les exercices";
+$TotalExercisesScorePossible = "Score total possible pour les exercices";
+$TotalExercisesAnswered = "Nombre d\'exercices répondus";
+$TotalExercisesScorePercentage = "Pourcentage du score total pour les exercices";
 ?>

@@ -189,7 +189,6 @@ $ActivateShuffle = "Attiva il mescolamento";
 $PersonalityQuestion = "Modifica il quesito";
 $YouNeedToCreateGroups = "Devi creare dei gruppi";
 $ManageGroups = "Gestisci i gruppi";
-$Condition = "Condizione";
 $Create = "Crea";
 $GroupCreatedSuccessfully = "Gruppo creato";
 $GroupNeedName = "Il gruppo deve avere un nome";

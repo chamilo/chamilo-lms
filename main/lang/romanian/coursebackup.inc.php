@@ -42,4 +42,9 @@ $langBackup = "Copie de rezerva";
 $langImportBackupInfo = "Importa o copie de rezerva. Vei putea sa transferi copia de rezerva de pe calculatorul tau sau poti folosi o copie de rezerva de pe server.";
 $langCreateBackupInfo = "Creaza o copie de rezerva a acestui curs. Selecteaza componentele cursului pentru a le pune in copia de rezerva.";
 $ToolIntro = "Introducerea uneltei";
+$UploadError = "Incarcare esuata, va rugam verificati dimensiunea maxima a fisierului si drepturile asupra directorului.";
+$DocumentsWillBeAddedToo = "Se vor adauga si documente";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Daca doriti sa exportati o cale de invatare ce contine un test, trebuie sa va asigurati ca testele respective vor fi adaugate in export deci, va trebui sa le selectati din lista de teste.";
+$ArchivesDirectoryNotWriteableContactAdmin = "Directorul cu arhivele utilizat de acest instrument este needitabil. Va rugam contactati administratorul platformei.";
+$DestinationCourse = "Cursul destinatie";
 ?>

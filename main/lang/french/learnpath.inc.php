@@ -198,4 +198,15 @@ $ViewLearningPath = "Voir le parcours";
 $SearchFeatureDoIndexDocument = "Indexer le contenu du document?";
 $SearchFeatureDocumentTagsIfIndexing = "Tags à ajouter au document, en cas d\'indexation";
 $SearchFeatureDocumentLanguage = "Langue du document, pour indexation";
+$ReturnToLearningPaths = "Retour aux cours";
+$UploadMp3audio = "Envoyer audio MP3";
+$UpdateAllAudioFragments = "Modifier tous les morceaux sonores";
+$LeaveEmptyToKeepCurrentFile = "Laisser vide pour conserver le fichier actuel";
+$RemoveAudio = "Supprimer l\'audio";
+$SaveAudio = "Enregistrer";
+$ChangesStored = "Modifications enregistrées";
+$ViewScoreChangeHistory = "Afficher l\'historique des changements de score";
+$ImageWillResizeMsg = "L\'image sera redimensionnée";
+$ImagePreview = "Prévisualisation image";
+$UplAlreadyExists = "Ce fichier existe déjà";
 ?>

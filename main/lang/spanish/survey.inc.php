@@ -190,7 +190,6 @@ $ShowFormProfile = "Mostrar el formato del perfil";
 $PersonalityQuestion = "Editar pregunta";
 $YouNeedToCreateGroups = "Tu necesitas crear grupos";
 $ManageGroups = "Administrar grupos";
-$Condition = "Condicion";
 $Create = "Crear";
 $GroupCreatedSuccessfully = "Grupo creado con exito";
 $GroupNeedName = "Grupo necesita nombre";

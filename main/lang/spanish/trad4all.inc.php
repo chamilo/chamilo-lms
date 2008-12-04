@@ -592,8 +592,11 @@ $CourseSettings = "Configuración del curso";
 $EmailNotifications = "Notificaciones por e-mail";
 $UserRights = "Derechos de usuario";
 $Theming = "Tema";
-$Coach = "Tutor";
-$coach = "Tutor";
 $Qualification = "Calificación";
 $OnlyNumbers = "Solamente numeros";
+$ReorderOptions = "Reordenar opciones";
+$EditUserFields = "Editar campos de usuario";
+$OptionText = "Opción de texto";
+$FieldTypeDoubleSelect = "Campo de tipo selección doble";
+$FieldTypeDivider = "Campo de tipo separador";
 ?>

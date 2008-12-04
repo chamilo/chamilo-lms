@@ -23,4 +23,6 @@ $GreyIcons = "Unelte";
 $Interaction = "Interactiune";
 $Authoring = "Creator";
 $Administration = "Administratie";
+$IntroductionTextUpdated = "Textul introductiv a fost actualizat";
+$IntroductionTextDeleted = "Textul introductiv a fost eliminat";
 ?>

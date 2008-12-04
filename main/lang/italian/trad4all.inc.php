@@ -592,6 +592,4 @@ $CourseSettings = "Configurazione del corso";
 $EmailNotifications = "Notifica e-mail";
 $UserRights = "Permessi dell\'utente";
 $Theming = "Tema";
-$Coach = "Tutor";
-$coach = "Tutor";
 ?>

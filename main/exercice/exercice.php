@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 16865 2008-11-21 23:24:21Z herodoto $
+<?php // $Id: exercice.php 17067 2008-12-04 07:49:49Z yannoo $
  
 /*
 ==============================================================================
@@ -934,9 +934,10 @@ if($_configuration['tracking_enabled'])
 				<table class="data_table">
 				 <tr class="row_odd">
 				  <?php if($is_allowedToEdit || $is_tutor): ?>
-		  <th><?php echo get_lang("User"); ?></th><?php endif; ?>
-		  <th><?php echo get_lang("Exercice"); ?></th>
-		  <th><?php echo get_lang("Date"); ?></th>
+		           <th><?php echo get_lang("User"); ?></th><?php endif; ?>
+		           <th><?php echo get_lang("Exercice"); ?></th>
+                   <th><?php echo get_lang("Description"); ?></th>
+		           <th><?php echo get_lang("Date"); ?></th>
 				  <th><?php echo get_lang("Result"); ?></th>
 				  <th><?php echo (($is_allowedToEdit||$is_tutor)?get_lang("CorrectTest"):get_lang("ViewTest")); ?></th>
 		

@@ -158,9 +158,16 @@ function show_add_forumcategory_form($inputvalues=array()) {
 
 	// The validation or display
 	if ( $form->validate() ) {
-	   $values = $form->exportValues();
-	   store_forumcategory($values);
+		$check = Security::check_token('post');	
+		if ($check) {
+	   		$values = $form->exportValues();
+	   		store_forumcategory($values);
+		}
+		Security::clear_token();
 	} else {
+		$token = Security::get_token();
+		$form->addElement('hidden','sec_token');
+		$form->setConstants(array('sec_token' => $token));		
 		$form->display();
 	}
 }
@@ -328,10 +335,17 @@ function show_add_forum_form($inputvalues=array()) {
 	$form->setDefaults($defaults);
 	// The validation or display
 	if( $form->validate() ) {
-	   $values = $form->exportValues();
-	   store_forum($values);
+		$check = Security::check_token('post');	
+		if ($check) {
+			$values = $form->exportValues();
+	   		store_forum($values);
+		}
+		Security::clear_token();
 	} else {
-		$form->display();
+			$token = Security::get_token();
+			$form->addElement('hidden','sec_token');
+			$form->setConstants(array('sec_token' => $token));
+			$form->display();
 	}
 }
 
@@ -394,7 +408,7 @@ function show_edit_forumcategory_form($inputvalues=array()) {
 	$form->addRule('forum_category_title', get_lang('ThisFieldIsRequired'), 'required');
 
 	// The validation or display
-	if( $form->validate() ) {
+	if ( $form->validate() ) {
 	   $values = $form->exportValues();
 	   store_forumcategory($values);
 	} else {
@@ -1839,9 +1853,17 @@ function show_add_post_form($action='', $id='', $form_values='') {
 
 	// The validation or display
 	if( $form->validate() ) {
-	   $values = $form->exportValues();
-	   return $values;
+		$check = Security::check_token('post');	
+		if ($check) {
+	   		$values = $form->exportValues();
+	   		Security::clear_token();
+	   		return $values;
+		}
+	   
 	} else {
+		$token = Security::get_token();
+		$form->addElement('hidden','sec_token');
+		$form->setConstants(array('sec_token' => $token));
 		$form->display();
 		echo '<br />';
 		if ($forum_setting['show_thread_iframe_on_reply'] and $action<>'newthread') {

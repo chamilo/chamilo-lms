@@ -59,6 +59,21 @@ $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
+
+if ( !isset($_GET['selectcat']) && ($_SESSION['studentview']=='studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true') ) {
+	Display :: display_header(get_lang('Gradebook'));
+	$cats = Category :: load (0, null, null, null, null, null, false);
+	$allcat= $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
+	$alleval= $cats[0]->get_evaluations($stud_id);
+	$alllink= $cats[0]->get_links($stud_id);
+	$gradebooktable= new GradebookTable($cats[0], $allcat, $alleval,$alllink, $addparams);
+	$gradebooktable->display();
+	Display :: display_footer();
+	exit;
+}	
+
+
+		
 // --------------------------------------------------------------------------------
 // -                                  ACTIONS                                     -
 // --------------------------------------------------------------------------------
@@ -412,6 +427,16 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 		Display :: display_header('');
 	} else {
 		Display :: display_header(get_lang('Gradebook'));
+		/*if ( ($_SESSION['studentview']=='studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true') ) {
+			$cats = Category :: load (0, null, null, null, null, null, false);
+			$allcat= $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
+			$alleval= $cats[0]->get_evaluations($stud_id);
+			$alllink= $cats[0]->get_links($stud_id);
+			$gradebooktable= new GradebookTable($cats[0], $allcat, $alleval,$alllink, $addparams);
+			$gradebooktable->display();
+			Display :: display_footer();
+			exit;
+		}*/
 	}
 }
 
@@ -524,6 +549,7 @@ if (isset ($_GET['studentoverview'])) {
 	if (!api_is_allowed_to_edit(true,true)) {
 		$user_id = api_get_user_id();
 	}
+
 	$category = Category :: load ($_GET['cat']);
 	if ($category[0]->is_certificate_available($user_id)) {
 		$user= get_user_info_from_id($user_id);
@@ -570,7 +596,6 @@ if (isset ($_GET['studentoverview'])) {
     // we have to show the root category and show its subcategories that
     // are inside this course. This is done at the time of calling
     // $cats[0]->get_subcategories(), not at the time of doing Category::load() 
-    
     // $category comes from GET['selectcat']
     $course_code = api_get_course_id();
     $session_id = api_get_session_id();
@@ -582,7 +607,6 @@ if (isset ($_GET['studentoverview'])) {
         // When *inside* a course, we want to make sure there is one (and only
         // one) category for this course or for this session.
 	    $cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
-
         if (empty($cats)) {
             // There is no category for this course+session, so create one
             $cat= new Category();
@@ -663,7 +687,7 @@ if (api_is_platform_admin() || api_is_allowed_to_create_course()) {
 	if ( (isset ($_GET['selectcat']) && $_GET['selectcat']<>0) ) {
 	//
 	} else {
-			if ( ((isset ($_GET['selectcat']) && $_GET['selectcat']==0) || ((isset($_GET['cidReq']) && $_GET['cidReq']!==''))) ) {
+			if ( ((isset ($_GET['selectcat']) && $_GET['selectcat']==0) || ((isset($_GET['cidReq']) && $_GET['cidReq']!==''))) || isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') {
 			$cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
 			DisplayGradebook :: display_reduce_header_gradebook($cats[0],$is_course_admin, $is_platform_admin, $simple_search_form, false, false);	
 		} 

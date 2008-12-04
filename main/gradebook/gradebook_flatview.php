@@ -158,8 +158,10 @@ if (isset($_GET['exportpdf'])) {
 } else {
 	Display :: display_header(get_lang('FlatView'));
 }
-DisplayGradebook :: display_header_reduce_flatview($cat[0], $showeval, $showlink, $simple_search_form);
-$flatviewtable->display();
+if ( !isset($_GET['selectcat']) && ($_SESSION['studentview']=='studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true') ) {
+	DisplayGradebook :: display_header_reduce_flatview($cat[0], $showeval, $showlink, $simple_search_form);
+	$flatviewtable->display();
+}
 Display :: display_footer();
 
 function get_printable_data($users,$alleval, $alllinks) {

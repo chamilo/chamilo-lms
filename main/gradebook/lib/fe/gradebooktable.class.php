@@ -49,27 +49,28 @@ class GradebookTable extends SortableTable
 			$this->set_additional_parameters($addparams);
 		}
 		$column= 0;
-		if (api_is_allowed_to_create_course()) {
+		if (api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 			$this->set_header($column++, '', false);
 		}	
 		$this->set_header($column++, get_lang('Type'));
 		$this->set_header($column++, get_lang('Name'));
 		$this->set_header($column++, get_lang('Description'));
-		if (api_is_allowed_to_create_course()) {
-		$this->set_header($column++, get_lang('Weight'));	
+		if (api_is_allowed_to_create_course() && $_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
+			$this->set_header($column++, get_lang('Weight'));	
 		} else {
-			if (!isset($_GET['selectcat'])) {	
-			$this->set_header($column++, get_lang('Evaluation'));
+			if (!isset($_GET['selectcat']) || ($_SESSION['studentview']=='studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true')) || !api_is_allowed_to_create_course()) {	
+				$this->set_header($column++, get_lang('Evaluation'));
 			}
 			else {
 			$this->set_header($column++, get_lang('Weight'));	
+			
 			}	
 		}		 
 							
 		$this->set_header($column++, get_lang('Date'),true, 'width="100"');				
 		
 		//admins get an edit column
-		if (api_is_allowed_to_create_course()) {
+		if (api_is_allowed_to_create_course() && $_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 			$this->set_header($column++, get_lang('Modify'), false, 'width="100"');
 			//actions on multiple selected documents
 			$this->set_form_actions(array (
@@ -81,8 +82,8 @@ class GradebookTable extends SortableTable
  	             if(count($evals_links)>0) {
  	             	$this->set_header($column++, get_lang('Results'), false);
  	             }
-		 	    if (!isset($_GET['selectcat'])) {         
-				$this->set_header($column++, get_lang('Certificates'),false);
+		 	    if (!isset($_GET['selectcat']) ||(isset($_GET['isStudentView']) && $_GET['isStudentView']=='true') || !api_is_allowed_to_create_course()) {         
+					$this->set_header($column++, get_lang('Certificates'),false);
 		 	    }	
 		}
     }
@@ -141,7 +142,7 @@ class GradebookTable extends SortableTable
 			$invisibility_span_close = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '</span>' : '';
 			
 			
-			if (api_is_allowed_to_create_course()) {
+			if (api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 				$row[] = $this->build_id_column ($item);
 			}
 			$row[] = $this->build_type_column ($item);
@@ -152,7 +153,7 @@ class GradebookTable extends SortableTable
 			$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;	
 			} else {
 					
-				if (!isset($_GET['selectcat'])) {					
+				if (!isset($_GET['selectcat']) && isset($certificate_min_score)) {					
 					// generating the total score for a course
 				    $stud_id= api_get_user_id();
 				      
@@ -180,14 +181,14 @@ class GradebookTable extends SortableTable
 			$row[] = $invisibility_span_open . str_replace(' ','&nbsp;',$data[4]) . $invisibility_span_close;
 			
 			//admins get an edit column
-			if (api_is_allowed_to_create_course()) {
+			if (api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false'))) {
 				$row[] = $this->build_edit_column ($item);
 			} else {
 			//students get the results and certificates columns
 				if (count($this->evals_links)>0) {
 					$row[] = $data[5];
 				}
-				if (!isset($_GET['selectcat'])) {
+				if (!isset($_GET['selectcat']) && isset($certificate_min_score) && !api_is_allowed_to_create_course) {
 					if ((int)$item_value >= (int)$certificate_min_score) {
 						$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/index.php?export_certificate=yes"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" /></a>&nbsp;'.$scoretotal_display; 	
 					} else {

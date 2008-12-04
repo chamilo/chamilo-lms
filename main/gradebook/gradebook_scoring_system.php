@@ -122,9 +122,10 @@ if ($scoreform->validate()) {
 }
 
 Display :: display_header(get_lang('ScoreEdit'));
-if (isset ($_GET['scoringupdated'])) {
-	Display :: display_confirmation_message(get_lang('ScoringUpdated'),false);
-}
+if (!isset($_GET['selectcat']) && ($_SESSION['studentview']=='studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true')) {
+	if (isset ($_GET['scoringupdated'])) {
+		Display :: display_confirmation_message(get_lang('ScoringUpdated'),false);
+	}
 
 if (isset ($_GET['nouniqueranges'])) {
 	Display :: display_error_message(get_lang('NoUniqueScoreRanges'),false);
@@ -133,4 +134,5 @@ if (isset ($_GET['nouniqueranges'])) {
 echo '<div class="maincontent">';
 $scoreform->display();
 echo '</div>';
+}
 Display :: display_footer();

@@ -260,7 +260,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$sort_params[] = 'direction='.Security::remove_XSS($_GET['direction']);
 	}
 	$sort_params = implode('&amp;',$sort_params);
-	
+	$my_params=$sort_params;
 	$origin=Security::remove_XSS($origin);
 	
 	if(substr($sub_course_dir,-1,1)!='/' && !empty($sub_course_dir)) {
@@ -269,7 +269,6 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	if($sub_course_dir == '/') {
 		$sub_course_dir='';
 	}
-	
 	$session_condition =  intval($_SESSION['id_session'])!=0 ?"AND session_id IN (0,".intval($_SESSION['id_session']).")" : "";
 	//Get list from database
 	if($is_allowed_to_edit) {
@@ -653,8 +652,14 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	$sorting_options['column']=1; 
 	
 	$paging_options=array();
-	Display::display_sortable_config_table($table_header,$table_data,$sorting_options, $paging_options,NULL,$column_show,$column_order);
-}
+	if (isset($_GET['curdirpath'])) {
+		$my_params = array ('curdirpath' => Security::remove_XSS($_GET['curdirpath']));
+	}
+	if (isset($_GET['edit_dir'])) {
+		$my_params = array ('edit_dir' => Security::remove_XSS($_GET['edit_dir']));
+	}
+	Display::display_sortable_config_table($table_header,$table_data,$sorting_options, $paging_options,$my_params,$column_show,$column_order);
+}  
 
 /**
  * Returns a list of subdirectories found in the given directory.

@@ -99,11 +99,11 @@ function show_tools_category($course_tool_category)
 		$all_tools_list[]=$temp_row;
 	}
 	
-	if(api_is_course_coach())
+	/*if(api_is_course_coach())
 	{
 		$result = api_sql_query("SELECT * FROM $course_tool_table WHERE name='tracking'",__FILE__,__LINE__);
 		$all_tools_list[]=Database :: fetch_array($result);
-	}
+	}*/
 
 	$i=0;
 	// grabbing all the links that have the property on_homepage set to 1

@@ -323,7 +323,7 @@ class DisplayGradebook
 			
 			if ($is_course_admin) {
 				$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/stats_access.gif" alt="' . get_lang('FlatView') . '" /> ' . get_lang('FlatView') . '</a>';
-				if ($is_platform_admin)
+				if ($is_platform_admin || $is_course_admin)
 					$header .= '<td style="vertical-align: top;"><a href="gradebook_scoring_system.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() .'"><img src="../img/acces_tool.gif" alt="' . get_lang('ScoreEdit') . '" /> ' . get_lang('ScoreEdit') . '</a>';
 			} elseif (!(isset ($_GET['studentoverview']))) {
 				$header .= '<td style="vertical-align: top;"><a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&selectcat=' . $catobj->get_id() . '"><img src="../img/stats_access.gif" alt="' . get_lang('FlatView') . '" /> ' . get_lang('FlatView') . '</a>';

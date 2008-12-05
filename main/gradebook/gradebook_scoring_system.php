@@ -30,7 +30,7 @@ require_once ('lib/gradebook_functions.inc.php');
 require_once ('lib/fe/scoredisplayform.class.php');
 require_once ('lib/scoredisplay.class.php');
 api_block_anonymous_users();
-api_protect_admin_script();
+//api_protect_admin_script();
 
 $htmlHeadXtra[]= '
   <script language="JavaScript">
@@ -122,7 +122,8 @@ if ($scoreform->validate()) {
 }
 
 Display :: display_header(get_lang('ScoreEdit'));
-if (!isset($_GET['selectcat']) && ($_SESSION['studentview']=='studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true')) {
+
+if (((isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') || (isset($_GET['selectcat']) && ($_SESSION['studentview']=='teacherview')))) {
 	if (isset ($_GET['scoringupdated'])) {
 		Display :: display_confirmation_message(get_lang('ScoringUpdated'),false);
 	}

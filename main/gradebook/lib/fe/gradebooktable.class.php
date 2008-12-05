@@ -152,7 +152,7 @@ class GradebookTable extends SortableTable
 			if (api_is_allowed_to_create_course()) {
 			$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;	
 			} else {
-					
+				
 				if (!isset($_GET['selectcat']) && isset($certificate_min_score)) {					
 					// generating the total score for a course
 				    $stud_id= api_get_user_id();
@@ -232,7 +232,11 @@ private function build_id_column ($item) {
 		switch ($item->get_item_type()) {
 			// category
 			case 'C' :
-				return '&nbsp;<a href="'.$_SESSION['gradebook_dest'].'?selectcat=' . $item->get_id() . '">'
+				$prms_uri='?selectcat=' . $item->get_id();
+				if ( isset($_GET['isStudentView']) || ( isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
+					$prms_uri=$prms_uri.'&amp;isStudentView='.$_GET['isStudentView'];
+				}
+				return '&nbsp;<a href="'.$_SESSION['gradebook_dest'].$prms_uri.'">'
 				 		. $item->get_name()
 				 		. '</a>'
 				 		. ($item->is_course() ? ' &nbsp;[' . $item->get_course_code() . ']' : '');

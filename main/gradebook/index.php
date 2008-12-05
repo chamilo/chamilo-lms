@@ -60,18 +60,35 @@ $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
 
-if ( !isset($_GET['selectcat']) && ($_SESSION['studentview']=='studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true') ) {
-	Display :: display_header(get_lang('Gradebook'));
-	$cats = Category :: load (0, null, null, null, null, null, false);
-	$allcat= $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
-	$alleval= $cats[0]->get_evaluations($stud_id);
-	$alllink= $cats[0]->get_links($stud_id);
-	$gradebooktable= new GradebookTable($cats[0], $allcat, $alleval,$alllink, $addparams);
+if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
+	$interbreadcrumb[]= array (
+		'url' => 'index.php'.'?selectcat=0&amp;isStudentView='.$_GET['isStudentView'],
+		'name' => get_lang('Gradebook')
+	);
+}
+
+if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
+	Display :: display_header(get_lang('Details'));
+	$gradebooktable= new GradebookTable(null, $allcat, $alleval,$alllink, $addparams);
 	$gradebooktable->display();
 	Display :: display_footer();
 	exit;
-}	
-
+} else {
+	if ( !isset($_GET['selectcat']) && ($_SESSION['studentview']=='studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true') ) {
+		Display :: display_header(get_lang('Gradebook'));
+		$stud_id=api_get_user_id();
+		$course_code=api_get_course_id();
+		$session_id=api_get_session_id();
+		$cats = Category :: load (0, null, null, null, null, null, false);
+		$allcat= $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
+		$alleval= $cats[0]->get_evaluations($stud_id);
+		$alllink= $cats[0]->get_links($stud_id);
+		$gradebooktable= new GradebookTable($cats[0], $allcat, $alleval,$alllink, $addparams);
+		$gradebooktable->display();
+		Display :: display_footer();
+		exit;
+	}	
+}
 
 		
 // --------------------------------------------------------------------------------

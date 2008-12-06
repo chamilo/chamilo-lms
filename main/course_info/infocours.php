@@ -1,4 +1,4 @@
-<?php // $Id: infocours.php 16724 2008-11-12 15:42:23Z pcool $
+<?php // $Id: infocours.php 17084 2008-12-06 16:44:47Z herodoto $
 
 /*
 ==============================================================================
@@ -184,8 +184,6 @@ $form->addElement('static', null, null, get_lang("ConfTip"));
 $form->add_textfield('course_registration_password', get_lang('CourseRegistrationPassword'), false, array ('size' => '60'));
 
 
-
-
 $form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;">'.get_lang('EmailNotifications').'</div>');
 $form->addElement('radio', 'email_alert_manager_on_new_doc', get_lang('WorkEmailAlert'), get_lang('WorkEmailAlertActivate'), 1);
 $form->addElement('radio', 'email_alert_manager_on_new_doc', null, get_lang('WorkEmailAlertDeactivate'), 0);
@@ -197,8 +195,6 @@ $form -> addElement('html',$linebreak);
 
 $form->addElement('radio', 'email_alert_manager_on_new_quiz', get_lang('QuizEmailAlert'), get_lang('QuizEmailAlertActivate'), 1);
 $form->addElement('radio', 'email_alert_manager_on_new_quiz', null, get_lang('QuizEmailAlertDeactivate'), 0);
-
-
 
 
 $form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;">'.get_lang('UserRights').'</div>');
@@ -214,7 +210,10 @@ $form->addElement('radio', 'allow_user_image_forum', get_lang('AllowUserImageFor
 $form->addElement('radio', 'allow_user_image_forum', null, get_lang('AllowUserImageForumDeactivate'), 0);
 $form -> addElement('html',$linebreak);
 
-
+$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;">'.get_lang('ConfigChat').'</div>');
+$form->addElement('radio', 'allow_open_chat_window', get_lang('AllowOpenchatWindow'), get_lang('AllowOpenChatWindowActivate'), 1);
+$form->addElement('radio', 'allow_open_chat_window', null, get_lang('AllowOpenChatWindowDeactivate'), 0);
+$form -> addElement('html',$linebreak);
 
 // Course theme picker
 if (api_get_setting('allow_course_theme') == 'true')
@@ -224,16 +223,13 @@ if (api_get_setting('allow_course_theme') == 'true')
 	//Allow Learning path 
 	$form->addElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeAllow'), 1);
 	$form->addElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
-	$form -> addElement('html',$linebreak);
-	
+	$form -> addElement('html',$linebreak);	
 	
 	$form->addElement('select_theme', 'course_theme', get_lang('Theme'));
 	$form->applyFilter('course_theme', 'trim');
+	$form -> addElement('html',$linebreak);
 }
 
-
-$form->addElement('static', null, null, get_lang("ConfTip"));
-$form->add_textfield('course_registration_password', get_lang('CourseRegistrationPassword'), false, array ('size' => '60'));
 if (is_settings_editable())
 	{
 	$form->addElement('submit', null, get_lang('Ok'));
@@ -275,6 +271,8 @@ $values['allow_user_edit_agenda'] = api_get_course_setting('allow_user_edit_agen
 $values['allow_user_edit_announcement'] = api_get_course_setting('allow_user_edit_announcement');
 // get allow_user_image_forum from table
 $values['allow_user_image_forum'] = api_get_course_setting('allow_user_image_forum');
+// get allow_open_chat_window from table
+$values['allow_open_chat_window'] = api_get_course_setting('allow_open_chat_window');
 // get course_theme from table
 $values['course_theme'] = api_get_course_setting('course_theme');
 // get allow_learning_path_theme from table
@@ -330,7 +328,11 @@ if ($form->validate() && is_settings_editable())
 	if($update_values['allow_user_image_forum'] != $values['allow_user_image_forum']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_image_forum']." WHERE variable = 'allow_user_image_forum' ";
 		api_sql_query($sql,__FILE__,__LINE__);
-	}
+	}	
+	if($update_values['allow_open_chat_window'] != $values['allow_open_chat_window']){
+		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_open_chat_window']." WHERE variable = 'allow_open_chat_window' ";
+		api_sql_query($sql,__FILE__,__LINE__);
+	}	
 	if($update_values['course_theme'] != $values['course_theme']){
 		$sql = "UPDATE $table_course_setting SET value = '".$update_values['course_theme']."' WHERE variable = 'course_theme' ";
 		api_sql_query($sql,__FILE__,__LINE__); 

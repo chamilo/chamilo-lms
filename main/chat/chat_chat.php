@@ -37,6 +37,7 @@ require('../inc/global.inc.php');
 include(api_get_path(LIBRARY_PATH).'document.lib.php');
 include (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 //$course=api_get_course_id();
+
 $course=$_GET['cidReq'];
 
 // if we have the session set up 
@@ -134,7 +135,7 @@ if (!empty($course))
 	echo '<div style="margin-left: 5px;">';
 	foreach($content as $thisLine)
 	{
-		echo strip_tags(html_entity_decode($thisLine),'<br> <span> <b>');
+		echo strip_tags(html_entity_decode($thisLine),'<br> <span> <b> <i> <img> <font>');
 	}
 	echo '</div>';
 	
@@ -152,7 +153,8 @@ if (!empty($course))
 	}
 }
 else
-{	include('header_frame.inc.php');
+{	
+	include('header_frame.inc.php');
 	$message=get_lang('CloseOtherSession');	
 	Display :: display_error_message($message);	
 }

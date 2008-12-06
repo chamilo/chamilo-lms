@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 16040 2008-08-21 13:48:58Z yannoo $
+// $Id: tool_navigation_menu.inc.php 17084 2008-12-06 16:44:47Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -198,7 +198,16 @@ function show_navigation_menu()
 			echo '<dd>';
 			$url_item = parse_url($navigation_item['link']);
 			$url_current = parse_url($_SERVER['REQUEST_URI']);
-			echo '<a href="'.$navigation_item['link'].'"';
+			
+			if (strpos($navigation_item['link'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
+			{
+				echo '<a href="#" onclick="window.open(\''.$navigation_item['link'].'\',\'window_chat\',config=\'height=\'+480+\', width=\'+725+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
+			}
+			else
+			{
+				echo '<a href="'.$navigation_item['link'].'"';		
+			}			
+			
 			if (stristr($url_item['path'],$url_current['path']))
 			{
 				if(! isset($_GET['learnpath_id']) || strpos($url_item['query'],'learnpath_id='.$_GET['learnpath_id']) === 0)
@@ -242,7 +251,16 @@ function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
 	$navigation_items = get_navigation_items(false);
 	foreach ($navigation_items as $key => $navigation_item)
 	{
-		echo '<a href="'.$navigation_item['link'].'"';
+				
+		if (strpos($navigation_item['link'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
+	    {
+		  	echo '<a href="#" onclick="window.open(\''.$navigation_item['link'].'\',\'window_chat\',config=\'height=\'+480+\', width=\'+725+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
+	    }
+	    else
+	    {
+		  	echo '<a href="'.$navigation_item['link'].'"';		
+	    }		
+		
 		if (strpos(api_get_self(), $navigation_item['link']) !== false)
 		{
 			echo ' id="here"';

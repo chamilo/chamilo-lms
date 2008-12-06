@@ -1,4 +1,4 @@
-<?php // $Id: chat.php 17078 2008-12-04 23:23:53Z iflorespaz $
+<?php // $Id: chat.php 17084 2008-12-06 16:44:47Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -81,6 +81,7 @@ if (!empty($mycourseid) && $mycourseid != -1)
 		}				
 	
 	}
+	$open_chat_window=api_get_course_setting('allow_open_chat_window');
 }
 
 switch($my_style){
@@ -96,22 +97,37 @@ switch($my_style){
 	case 'baby_orange' : 
 		$footer_size = 120;
 		break;
+	case 'public_admin' : 
+		$footer_size = 90;
+		break;
 	default : 
 		$footer_size = 48;
 		break;
 }
 $cidreq=$_GET['cidReq'];
+
+echo '<html>';
+echo'<HEAD><TITLE>'.get_lang('Chat').' - '.$mycourseid.' - '.api_get_setting('siteName').'</TITLE>';
+
+if ($open_chat_window==false)
+{
+	echo'<frameset rows="135,*,'.$footer_size.'" border="0" frameborder="0" framespacing="1">';
+	echo '<frame src="chat_banner.php?cidReq='.$cidreq.'" name="chat_banner" scrolling="no">';
+}
+echo '<frameset cols="200,*,0" border="1" frameborder="1" framespacing="1">';
+echo '<frame src="chat_whoisonline.php?cidReq='.$cidreq.'" name="chat_whoisonline" scrolling="auto">';
+echo'<frameset rows="50,15" border="1" frameborder="1" framespacing="1">';
+echo '<frame src="chat_chat.php?origin='.$_GET["origin"].'&target='.$_GET["target"].'&amp;cidReq='.$cidreq.'" name="chat_chat" scrolling="auto">';
+echo '<frame src="chat_message.php?cidReq='.$cidreq.'" name="chat_message" scrolling="no">';
+echo '</frameset>';
+echo '<frame src="chat_hidden.php?cidReq='.$cidreq.'" name="chat_hidden" scrolling="no">';
+echo'</frameset>';
+
+if ($open_chat_window==false)
+{
+	echo '<frame src="chat_footer.php?cidReq='.$cidreq.'" name="chat_footer" scrolling="no">';
+	echo '</frameset>';
+}
+echo'<noframes></noframes>';
+echo '</html>';
 ?>
-<frameset rows="130,*,<?php echo $footer_size;?>" border="0" frameborder="0" framespacing="1">
-	<frame src="chat_banner.php?<?php echo 'cidReq='.$cidreq; ?>" name="chat_banner" scrolling="no">
-	<frameset cols="200,*,0" border="1" frameborder="1" framespacing="1">
-		<frame src="chat_whoisonline.php?<?php echo 'cidReq='.$cidreq; ?>" name="chat_whoisonline" scrolling="auto">
-		<frameset rows="75,15" border="1" frameborder="1" framespacing="1">
-			<frame src="chat_chat.php?origin=<?php echo $_GET["origin"]; ?>&target=<?php echo $_GET["target"].'&amp;cidReq='.$cidreq; ?>" name="chat_chat" scrolling="auto">
-			<frame src="chat_message.php?<?php echo 'cidReq='.$cidreq; ?>" name="chat_message" scrolling="no">
-		</frameset>
-		<frame src="chat_hidden.php?<?php echo 'cidReq='.$cidreq; ?>" name="chat_hidden" scrolling="no">
-	</frameset>
-	<frame src="chat_footer.php?<?php echo 'cidReq='.$cidreq; ?>" name="chat_footer" scrolling="no">
-</frameset>
-</html>

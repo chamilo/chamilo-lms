@@ -129,57 +129,55 @@ if (!empty($course))
 	$chat_size=0;
 	
 	//define emoticons
-	$emoticon_text1='--)';
-		$emoticon_img1= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_arrow.gif" alt="'.get_lang('Arrow').'" title="'.get_lang('Arrow').'" />';	
+	$emoticon_text1=':-k';
+	$emoticon_img1= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_think.gif" alt="'.get_lang('Think').'" title="'.get_lang('Think').'" />';	
 	$emoticon_text2=':-D';
-		$emoticon_img2= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_biggrin.gif" alt="'.get_lang('BigGrin').'" title="'.get_lang('BigGrin').'" />';
-		$emoticon_text3='=8-o';
-		$emoticon_img3= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_eek.gif" alt="'.get_lang('Clap').'" title="'.get_lang('Clap').'" />';
-		$emoticon_text4=':-?';
-		$emoticon_img4= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_confused.gif" alt="'.get_lang('Confused').'" title="'.get_lang('Confused').'" />';
-		$emoticon_text5='8-)';
-		$emoticon_img5= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_cool.gif" alt="'.get_lang('Cool').'" title="'.get_lang('Cool').'" />';
-		$emoticon_text6=':!:';
-		$emoticon_img6= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_exclaim.gif" alt="'.get_lang('Exclaim').'" title="'.get_lang('Exclaim').'" />';
-		$emoticon_text7='=;';
-		$emoticon_img7= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_hand.gif" alt="'.get_lang('Hand').'" title="'.get_lang('Hand').'" />';
-		$emoticon_text8=';-)';
-		$emoticon_img8= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_wink.gif" alt="'.get_lang('Wink').'" title="'.get_lang('Wink').'" />';
-		$emoticon_text9=':-|)';
-		$emoticon_img9= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_neutral.gif" alt="'.get_lang('Neutral').'" title="'.get_lang('Neutral').'" />';	
-		$emoticon_text10=':?:';
-		$emoticon_img10= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_question.gif" alt="'.get_lang('Question').'" title="'.get_lang('Question').'" />';
-		$emoticon_text11=':-P';
-		$emoticon_img11= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_razz.gif" alt="'.get_lang('Razz').'" title="'.get_lang('Razz').'" />';
-		$emoticon_text12=':-8';
-		$emoticon_img12= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_redface.gif" alt="'.get_lang('Redface').'" title="'.get_lang('Redface').'" />';			
-		$emoticon_text13=':-(';
-		$emoticon_img13= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_sad.gif" alt="'.get_lang('Sad').'" title="'.get_lang('Sad').'" />';
-		$emoticon_text14=':-=';
-		$emoticon_img14= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_shhh.gif" alt="'.get_lang('Shhhh').'" title="'.get_lang('Shhhh').'" />';
-		$emoticon_text15=':-#)';
-		$emoticon_img15= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_silenced.gif" alt="'.get_lang('Silenced').'" title="'.get_lang('Silenced').'" />';
-		$emoticon_text16=':-)';
-		$emoticon_img16= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_smile.gif" alt="'.get_lang('Smile').'" title="'.get_lang('Smile').'" />';
-		$emoticon_text17=':-o)';
-		$emoticon_img17= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_surprised.gif" alt="'.get_lang('Surprised').'" title="'.get_lang('Surprised').'" />';					
-		$emoticon_text18=':-k';
-		$emoticon_img18= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_think.gif" alt="'.get_lang('Think').'" title="'.get_lang('Think').'" />';
-		$emoticon_text19=':-((';
-		$emoticon_img19= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_snooty.gif" alt="'.get_lang('Snooty').'" title="'.get_lang('Snooty').'" />';
-		$emoticon_text20='0-';
-		$emoticon_img20= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_idea.gif" alt="'.get_lang('Idea').'" title="'.get_lang('Idea').'" />';		
-	  //
-		$emoticon_text201='*';
-		$emoticon_img201= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/waiting.gif" alt="'.get_lang('AskPermissionSpeak').'" title="'.get_lang('AskPermissionSpeak').'" />';
-		$emoticon_text202=':speak:';
-		$emoticon_img202= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/flag_green_small.gif" alt="'.get_lang('GiveTheFloorTo').'" title="'.get_lang('GiveTheFloorTo').'" />';		
-		$emoticon_text203=':pause:';
-		$emoticon_img203= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/flag_yellow_small.gif" alt="'.get_lang('Pause').'" title="'.get_lang('Pause').'" />';					
-		$emoticon_text204=':stop:';
-		$emoticon_img204= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/flag_red_small.gif" alt="'.get_lang('Stop').'" title="'.get_lang('Stop').'" />';
-
-	
+	$emoticon_img2= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_biggrin.gif" alt="'.get_lang('BigGrin').'" title="'.get_lang('BigGrin').'" />';
+	$emoticon_text3='=8-o';
+	$emoticon_img3= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_eek.gif" alt="'.get_lang('Clap').'" title="'.get_lang('Clap').'" />';
+	$emoticon_text4=':-?';
+	$emoticon_img4= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_confused.gif" alt="'.get_lang('Confused').'" title="'.get_lang('Confused').'" />';
+	$emoticon_text5='8-)';
+	$emoticon_img5= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_cool.gif" alt="'.get_lang('Cool').'" title="'.get_lang('Cool').'" />';
+	$emoticon_text6=':-o)';
+	$emoticon_img6= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_surprised.gif" alt="'.get_lang('Surprised').'" title="'.get_lang('Surprised').'" />';
+	$emoticon_text7='=;';
+	$emoticon_img7= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_hand.gif" alt="'.get_lang('Hand').'" title="'.get_lang('Hand').'" />';
+	$emoticon_text8=';-)';
+	$emoticon_img8= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_wink.gif" alt="'.get_lang('Wink').'" title="'.get_lang('Wink').'" />';
+	$emoticon_text9=':-|)';
+	$emoticon_img9= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_neutral.gif" alt="'.get_lang('Neutral').'" title="'.get_lang('Neutral').'" />';	
+	$emoticon_text10=':-[8';
+	$emoticon_img10= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_snooty.gif" alt="'.get_lang('Snooty').'" title="'.get_lang('Snooty').'" />';
+	$emoticon_text11=':-P';
+	$emoticon_img11= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_razz.gif" alt="'.get_lang('Razz').'" title="'.get_lang('Razz').'" />';
+	$emoticon_text12=':-8';
+	$emoticon_img12= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_redface.gif" alt="'.get_lang('Redface').'" title="'.get_lang('Redface').'" />';			
+	$emoticon_text13=':-(';
+	$emoticon_img13= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_sad.gif" alt="'.get_lang('Sad').'" title="'.get_lang('Sad').'" />';
+	$emoticon_text14=':-=';
+	$emoticon_img14= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_shhh.gif" alt="'.get_lang('Shhhh').'" title="'.get_lang('Shhhh').'" />';
+	$emoticon_text15=':-#)';
+	$emoticon_img15= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_silenced.gif" alt="'.get_lang('Silenced').'" title="'.get_lang('Silenced').'" />';
+	$emoticon_text16=':-)';
+	$emoticon_img16= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_smile.gif" alt="'.get_lang('Smile').'" title="'.get_lang('Smile').'" />';
+	$emoticon_text17=':!:';
+	$emoticon_img17= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_exclaim.gif" alt="'.get_lang('Exclaim').'" title="'.get_lang('Exclaim').'" />';				
+	$emoticon_text18='--)';
+	$emoticon_img18= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_arrow.gif" alt="'.get_lang('Arrow').'" title="'.get_lang('Arrow').'" />';
+	$emoticon_text19=':?:';
+	$emoticon_img19= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_question.gif" alt="'.get_lang('Question').'" title="'.get_lang('Question').'" />';
+	$emoticon_text20='0-';
+	$emoticon_img20= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_idea.gif" alt="'.get_lang('Idea').'" title="'.get_lang('Idea').'" />';				
+  //
+	$emoticon_text201='*';
+	$emoticon_img201= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/waiting.gif" alt="'.get_lang('AskPermissionSpeak').'" title="'.get_lang('AskPermissionSpeak').'" />';
+	$emoticon_text202=':speak:';
+	$emoticon_img202= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/flag_green_small.gif" alt="'.get_lang('GiveTheFloorTo').'" title="'.get_lang('GiveTheFloorTo').'" />';		
+	$emoticon_text203=':pause:';
+	$emoticon_img203= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/flag_yellow_small.gif" alt="'.get_lang('Pause').'" title="'.get_lang('Pause').'" />';					
+	$emoticon_text204=':stop:';
+	$emoticon_img204= '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/flag_red_small.gif" alt="'.get_lang('Stop').'" title="'.get_lang('Stop').'" />';	
 	
 	if($sent)
 	{

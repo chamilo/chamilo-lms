@@ -121,9 +121,38 @@ if (!$already_installed)
 
 //Assigning a variable to avoid several useless calls to the database setting. 
 // Do not over-user. This is only for this script's local use.
-$lib_path = api_get_path(LIBRARY_PATH); 
+$lib_path = api_get_path(LIBRARY_PATH);
+
 // Add the path to the pear packages to the include path
-ini_set('include_path',ini_get('include_path').PATH_SEPARATOR.$lib_path.'pear');
+//ini_set('include_path',ini_get('include_path').PATH_SEPARATOR.$lib_path.'pear');
+function create_dokeos_include_path()
+{
+	$include_path = ini_get('include_path');
+	if (!empty($include_path))
+	{
+		$include_path_array = explode(PATH_SEPARATOR, $include_path);
+		$dot_found = array_search('.', $include_path_array);
+		if ($dot_found !== false)
+		{
+			$result = array();
+			foreach ($include_path_array as $path)
+			{
+				$result[] = $path;
+				if ($path == '.')
+				{
+					// The path of Dokeos PEAR packages is to be inserted after the current directory path.
+					$result[] = api_get_path(LIBRARY_PATH).'pear';
+				}
+			}
+			return implode(PATH_SEPARATOR, $result);
+		}
+		// Current directory is not listed in the include_path setting, low probability is here.
+		return api_get_path(LIBRARY_PATH).'pear'.PATH_SEPARATOR.$include_path;
+	}
+	// The include_path setting is empty, low probability is here.
+	return api_get_path(LIBRARY_PATH).'pear';
+}
+ini_set('include_path', create_dokeos_include_path());
 
 // Include the libraries that are necessary everywhere
 require_once($lib_path.'database.lib.php');

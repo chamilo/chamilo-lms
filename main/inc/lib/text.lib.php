@@ -1,4 +1,4 @@
-<?php // $Id: text.lib.php 15174 2008-04-29 18:00:04Z yannoo $
+<?php // $Id: text.lib.php 17091 2008-12-07 05:21:42Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -84,14 +84,22 @@ function make_clickable($string)
 
 function format_locale_date( $dateFormat, $timeStamp = -1)
 {
-	// Defining the shorts for the days
-	$DaysShort = array (get_lang("SundayShort"), get_lang("MondayShort"), get_lang("TuesdayShort"), get_lang("WednesdayShort"), get_lang("ThursdayShort"), get_lang("FridayShort"), get_lang("SaturdayShort"));
-	// Defining the days of the week to allow translation of the days
-	$DaysLong = array (get_lang("SundayLong"), get_lang("MondayLong"), get_lang("TuesdayLong"), get_lang("WednesdayLong"), get_lang("ThursdayLong"), get_lang("FridayLong"), get_lang("SaturdayLong"));
-	// Defining the shorts for the months
-	$MonthsShort = array (get_lang("JanuaryShort"), get_lang("FebruaryShort"), get_lang("MarchShort"), get_lang("AprilShort"), get_lang("MayShort"), get_lang("JuneShort"), get_lang("JulyShort"), get_lang("AugustShort"), get_lang("SeptemberShort"), get_lang("OctoberShort"), get_lang("NovemberShort"), get_lang("DecemberShort"));
-	// Defining the months of the year to allow translation of the months
-	$MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
+	static $initialized = false;
+	static $DaysShort, $DaysLong, $MonthsShort, $MonthsLong;
+
+	if (!$initialized)
+	{
+		// Defining the shorts for the days
+		$DaysShort = array (get_lang("SundayShort"), get_lang("MondayShort"), get_lang("TuesdayShort"), get_lang("WednesdayShort"), get_lang("ThursdayShort"), get_lang("FridayShort"), get_lang("SaturdayShort"));
+		// Defining the days of the week to allow translation of the days
+		$DaysLong = array (get_lang("SundayLong"), get_lang("MondayLong"), get_lang("TuesdayLong"), get_lang("WednesdayLong"), get_lang("ThursdayLong"), get_lang("FridayLong"), get_lang("SaturdayLong"));
+		// Defining the shorts for the months
+		$MonthsShort = array (get_lang("JanuaryShort"), get_lang("FebruaryShort"), get_lang("MarchShort"), get_lang("AprilShort"), get_lang("MayShort"), get_lang("JuneShort"), get_lang("JulyShort"), get_lang("AugustShort"), get_lang("SeptemberShort"), get_lang("OctoberShort"), get_lang("NovemberShort"), get_lang("DecemberShort"));
+		// Defining the months of the year to allow translation of the months
+		$MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
+
+		$initialized = true;
+	}
 
 	if ($timeStamp == -1) $timeStamp = time();
 
@@ -292,21 +300,58 @@ function latex_gif_renderer($latex_code)
 
 function date_to_str_ago($date)
 {
+	static $initialized = false;
+	static $Today, $Yesterday;
+	static $MinDecade, $MinYear, $MinMonth, $MinWeek, $MinDay, $MinHour, $MinMinute;
+	static $MinDecades, $MinYears, $MinMonths, $MinWeeks, $MinDays, $MinHours, $MinMinutes;
+	static $sec_time_time, $sec_time_sing, $sec_time_plu;
+
+	if (!$initialized)
+	{
+		$Today = ucfirst(get_lang('Today'));
+		$Yesterday = ucfirst(get_lang('Yesterday'));
+
+		$MinDecade=get_lang('MinDecade');
+		$MinYear=get_lang('MinYear');
+		$MinMonth=get_lang('MinMonth');
+		$MinWeek=get_lang('MinWeek');
+		$MinDay=get_lang('MinDay');
+		$MinHour=get_lang('MinHour');
+		$MinMinute=get_lang('MinMinute');
+	
+		$MinDecades=get_lang('MinDecades');
+		$MinYears=get_lang('MinYears');
+		$MinMonths=get_lang('MinMonths');
+		$MinWeeks=get_lang('MinWeeks');
+		$MinDays=get_lang('MinDays');
+		$MinHours=get_lang('MinHours');
+		$MinMinutes=get_lang('MinMinutes');
+	
+		// original 1 
+		//$sec_time=array("century"=>3.1556926*pow(10,9),"decade"=>315569260,"year"=>31556926,"month"=>2629743.83,"week"=>604800,"day"=>86400,"hour"=>3600,"minute"=>60,"second"=>1);	
+		//$sec_time=array(get_lang('MinDecade')=>315569260,get_lang('MinYear')=>31556926,get_lang('MinMonth')=>2629743.83,get_lang('MinWeek')=>604800,get_lang('MinDay')=>86400,get_lang('MinHour')=>3600,get_lang('MinMinute')=>60);
+		$sec_time_time=array(315569260,31556926,2629743.83,604800,86400,3600,60);		
+		$sec_time_sing=array($MinDecade,$MinYear,$MinMonth,$MinWeek,$MinDay,$MinHour,$MinMinute);
+		$sec_time_plu =array($MinDecades,$MinYears,$MinMonths,$MinWeeks,$MinDays,$MinHours,$MinMinutes);
+
+		$initialized = true;
+	}
+
 	$dst_date=strtotime($date);
 	//for not call date several times
 	$date_array=date("s/i/G/j/n/Y",$dst_date);
 	$date_split=explode("/",$date_array);
-			
+
 	$dst_s=$date_split[0];
-	$dst_m=$date_split[1];  
+	$dst_m=$date_split[1];
 	$dst_h=$date_split[2];
 	$dst_day=$date_split[3];
 	$dst_mth=$date_split[4];
-	$dst_yr=$date_split[5];	
-	
-	$dst_date = mktime($dst_h,$dst_m,$dst_s,$dst_mth,$dst_day,$dst_yr);	
+	$dst_yr=$date_split[5];
+
+	$dst_date = mktime($dst_h,$dst_m,$dst_s,$dst_mth,$dst_day,$dst_yr);
 	$time=$offset = time()-$dst_date; //seconds between current days and today
-			
+
 	//------------ Here start the functions sec_to_str
 	$act_day=date('d');
 	$act_mth=date('n');
@@ -314,37 +359,13 @@ function date_to_str_ago($date)
 	
 	if ($dst_day==$act_day && $dst_mth==$act_mth && $dst_yr == $act_yr )
 	{
-		return ucfirst(get_lang('Today'));
+		return $Today;
 	}
-		
+
 	if ($dst_day==$act_day-1 && $dst_mth==$act_mth && $dst_yr == $act_yr )
 	{
-		return ucfirst(get_lang('Yesterday'));
+		return $Yesterday;
 	}
-	
-	// original 1 
-	//$sec_time=array("century"=>3.1556926*pow(10,9),"decade"=>315569260,"year"=>31556926,"month"=>2629743.83,"week"=>604800,"day"=>86400,"hour"=>3600,"minute"=>60,"second"=>1);	
-	//$sec_time=array(get_lang('MinDecade')=>315569260,get_lang('MinYear')=>31556926,get_lang('MinMonth')=>2629743.83,get_lang('MinWeek')=>604800,get_lang('MinDay')=>86400,get_lang('MinHour')=>3600,get_lang('MinMinute')=>60);
-
-	$MinDecade=get_lang('MinDecade');
-	$MinYear=get_lang('MinYear');
-	$MinMonth=get_lang('MinMonth');
-	$MinWeek=get_lang('MinWeek');
-	$MinDay=get_lang('MinDay');
-	$MinHour=get_lang('MinHour');
-	$MinMinute=get_lang('MinMinute');
-	
-	$MinDecades=get_lang('MinDecades');
-	$MinYears=get_lang('MinYears');
-	$MinMonths=get_lang('MinMonths');
-	$MinWeeks=get_lang('MinWeeks');
-	$MinDays=get_lang('MinDays');
-	$MinHours=get_lang('MinHours');
-	$MinMinutes=get_lang('MinMinutes');
-	
-	$sec_time_time=array(315569260,31556926,2629743.83,604800,86400,3600,60);		
-	$sec_time_sing=array($MinDecade,$MinYear,$MinMonth,$MinWeek,$MinDay,$MinHour,$MinMinute);
-	$sec_time_plu =array($MinDecades,$MinYears,$MinMonths,$MinWeeks,$MinDays,$MinHours,$MinMinutes);
 	
 				
 	$str_result=array();	
@@ -363,7 +384,7 @@ function date_to_str_ago($date)
 					
 		$current_value=intval($time/$seconds);
 					
-		if ($current_value!='1') 
+		if ($current_value != 1) 
 		{			
 			$date_str=	$sec_time_plu[$i];
 		} 

@@ -289,8 +289,8 @@ function api_is_self_registration_allowed() {
 * 	CONFIGURATION_PATH
 */
 function api_get_path($path_type) {
-	global $_configuration;	
-	if ($_configuration['access_url']==1 || $_configuration['access_url']=='') {
+	global $_configuration;
+	if (!isset($_configuration['access_url']) || $_configuration['access_url']==1 || $_configuration['access_url']=='') {
 		//by default we call the $_configuration['root_web'] we don't query to the DB
 		//$url_info= api_get_access_url(1);
 		//$root_web = $url_info['url'];		
@@ -2855,3 +2855,25 @@ function replace_dangerous_char($filename, $strict = 'loose')
 
 	return ereg_replace("[^!-~]", "x", $filename);
 }
+
+/**
+ * Fixes the $_SERVER["REQUEST_URI"] that is empty in IIS6.
+ * @author Ivan Tcholakov, 28-JUN-2006.
+ */
+function api_request_uri()
+{
+   if (!empty($_SERVER['REQUEST_URI']))
+   {
+      return $_SERVER['REQUEST_URI'];
+   }
+   else
+   {
+      $uri = $_SERVER['SCRIPT_NAME'];
+      if (!empty($_SERVER['QUERY_STRING']))
+      {
+         $uri .= '?'.$_SERVER['QUERY_STRING'];
+      }
+      $_SERVER['REQUEST_URI'] = $uri;
+      return $uri;
+   }
+} 

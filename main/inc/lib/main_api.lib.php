@@ -2876,4 +2876,38 @@ function api_request_uri()
       $_SERVER['REQUEST_URI'] = $uri;
       return $uri;
    }
-} 
+}
+
+/**
+ * Creates the "include_path" php-setting, following the rule that
+ * PEAR packages of Dokeos should be read before other external packages.
+ * To be used in global.inc.php only.
+ * @author Ivan Tcholakov, 06-NOV-2008.
+ */
+function create_dokeos_include_path()
+{
+	$include_path = ini_get('include_path');
+	if (!empty($include_path))
+	{
+		$include_path_array = explode(PATH_SEPARATOR, $include_path);
+		$dot_found = array_search('.', $include_path_array);
+		if ($dot_found !== false)
+		{
+			$result = array();
+			foreach ($include_path_array as $path)
+			{
+				$result[] = $path;
+				if ($path == '.')
+				{
+					// The path of Dokeos PEAR packages is to be inserted after the current directory path.
+					$result[] = api_get_path(LIBRARY_PATH).'pear';
+				}
+			}
+			return implode(PATH_SEPARATOR, $result);
+		}
+		// Current directory is not listed in the include_path setting, low probability is here.
+		return api_get_path(LIBRARY_PATH).'pear'.PATH_SEPARATOR.$include_path;
+	}
+	// The include_path setting is empty, low probability is here.
+	return api_get_path(LIBRARY_PATH).'pear';
+}

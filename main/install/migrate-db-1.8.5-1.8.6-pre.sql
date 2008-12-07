@@ -43,6 +43,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_users_to_create_courses','true','Yes'),('allow_users_to_create_courses','false','No');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools','survey','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Survey',1,0),
 INSERT INTO settings_current (variable, glossary, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools','survey','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary',1,0);
+ALTER TABLE user_field_values CHANGE user_id user_id int unsigned not null;
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';

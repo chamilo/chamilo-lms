@@ -993,7 +993,7 @@ CREATE TABLE user_field_options (
 DROP TABLE IF EXISTS user_field_values;
 CREATE TABLE user_field_values(
 	id	int	NOT NULL auto_increment,
-	user_id	int	NOT NULL,
+	user_id	int	unsigned NOT NULL,
 	field_id int NOT NULL,
 	field_value	text,
 	tms TIMESTAMP,

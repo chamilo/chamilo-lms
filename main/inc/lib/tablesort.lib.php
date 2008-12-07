@@ -129,13 +129,15 @@ class TableSort
 	 * @author bart.mollet@hogent.be
 	 */
 	function is_numeric_column($data, $column)
-	{	
+	{
 		$is_numeric = true;
-	
+
 		foreach ($data as $index => $row)
 		{
 			$is_numeric &= is_numeric(strip_tags($row[$column]));
-		}		
+		}
+
+		return $is_numeric;
 	}
 	/**
 	 * Checks if a column of a 2D-array contains only dates (GNU date syntax)

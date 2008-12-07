@@ -1,9 +1,11 @@
-<?php
+<?php //$id: $
 require(api_get_path(INCLUDE_PATH).'lib/phpmailer/class.phpmailer.php');
 require_once(api_get_path(INCLUDE_PATH).'/conf/mail.conf.php');
 
  //regular expression to test for valid email address
- $regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,3})$";
+ // this should actually be revised to use the complete RFC3696 description
+ // http://tools.ietf.org/html/rfc3696#section-3
+ $regexp = "^[0-9a-z_\.+-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,3})$";
 
 /**
  * Sends email using the phpmailer class

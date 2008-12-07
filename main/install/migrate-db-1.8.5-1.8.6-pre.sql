@@ -39,11 +39,12 @@ CREATE TABLE gradebook_result_log (id int NOT NULL auto_increment,id_result int 
 CREATE TABLE gradebook_linkeval_log (id int NOT NULL auto_increment,id_linkeval_log int NOT NULL,name text,description text,date_log datetime default '0000-00-00 00:00:00',weight smallint default NULL,visible tinyint default NULL,type varchar(20) NOT NULL,user_id_log int NOT NULL,PRIMARY KEY  (id));
 INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES ('glossary','glossary/index.php','glossary.gif',2,1,'basic');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary',1,0);
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_users_to_create_courses',NULL,'radio','Course','true','AllowUsersToCreateCoursesTitle','AllowUsersToCreateCoursesComment',NULL,NULL);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('allow_users_to_create_courses',NULL,'radio','Course','true','AllowUsersToCreateCoursesTitle','AllowUsersToCreateCoursesComment',NULL,NULL,1,0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_users_to_create_courses','true','Yes'),('allow_users_to_create_courses','false','No');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools','survey','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Survey',1,0),
-INSERT INTO settings_current (variable, glossary, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools','survey','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary',1,0);
 ALTER TABLE user_field_values CHANGE user_id user_id int unsigned not null;
+UPDATE TABLE settings_options SET display_text = 'YesWillDeletePermanently' WHERE variable = 'permanently_remove_deleted_files' and value = 'true';
+UPDATE TABLE settings_options SET display_text = 'NoWillDeletePermanently' WHERE variable = 'permanently_remove_deleted_files' and value = 'false';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';

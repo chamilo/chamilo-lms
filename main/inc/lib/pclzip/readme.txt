@@ -1,11 +1,11 @@
 // --------------------------------------------------------------------------------
-// PclZip 2.5 - readme.txt
+// PclZip 2.6 - readme.txt
 // --------------------------------------------------------------------------------
 // License GNU/LGPL - March 2006
 // Vincent Blavet - vincent@phpconcept.net
 // http://www.phpconcept.net
 // --------------------------------------------------------------------------------
-// $Id: readme.txt 12518 2007-06-01 04:36:54Z yannoo $
+// $Id: readme.txt 17088 2008-12-07 02:53:53Z ivantcholakov $
 // --------------------------------------------------------------------------------
 
 
@@ -32,6 +32,26 @@
 2 - What's new
 ==============
 
+  Version 2.6 :
+    - Code optimisation
+    - New attributes PCLZIP_ATT_FILE_COMMENT gives the ability to
+      add a comment for a specific file. (Don't really know if this is usefull)
+    - New attribute PCLZIP_ATT_FILE_CONTENT gives the ability to add a string 
+      as a file.
+    - New attribute PCLZIP_ATT_FILE_MTIME modify the timestamp associated with
+      a file.
+    - Correct a bug. Files archived with a timestamp with 0h0m0s were extracted
+      with current time
+    - Add CRC value in the informations returned back for each file after an
+      action.
+    - Add missing closedir() statement.
+    - When adding a folder, and removing the path of this folder, files were
+      incorrectly added with a '/' at the beginning. Which means files are 
+      related to root in unix systems. Corrected.
+    - Add conditional if before constant definition. This will allow users
+      to redefine constants without changing the file, and then improve
+      upgrade of pclzip code for new versions.
+  
   Version 2.5 :
     - Introduce the ability to add file/folder with individual properties (file descriptor).
       This gives for example the ability to change the filename of a zipped file.

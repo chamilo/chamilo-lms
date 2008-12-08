@@ -1634,6 +1634,7 @@ function update_Db_course($courseDbName)
 			  glossary_id int unsigned NOT NULL auto_increment,			  
 			  name varchar(255) NOT NULL,
 			  description text not null,
+			  display_order int,		
 			  PRIMARY KEY  (glossary_id)
 			)";
 	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));

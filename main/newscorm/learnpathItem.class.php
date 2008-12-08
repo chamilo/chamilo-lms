@@ -369,17 +369,83 @@ class learnpathItem{
     	return 0;
     }
     /**
+     * Loads the interactions into the item object, from the database.
+     * If object interactions exist, they will be overwritten by this function,
+     * using the database elements only.
+     * @return void Directly sets the interactions attribute in memory
+     */
+    function load_interactions() {
+            $this->interactions = array();
+            $tbl = Database::get_course_table('lp_item_view');
+            $sql = "SELECT id FROM $tbl " .
+                    "WHERE lp_item_id = ".$this->db_id." " .
+                    "AND   lp_view_id = ".$this->view_id." " .
+                    "AND   view_count = ".$this->attempt_id;
+            $res = api_sql_query($sql,__FILE__,__LINE__);
+            if (Database::num_rows($res)>0) {
+                $row = Database::fetch_array($res);
+                $lp_iv_id = $row[0];
+                $iva_table = Database::get_course_table('lp_iv_interaction');
+                $iva_sql = "SELECT * FROM $iva_table " .
+                            "WHERE lp_iv_id = $lp_iv_id ";
+                $res_sql = api_sql_query($iva_sql);
+                while ($row = Database::fetch_array($res_sql)) {
+                    $this->interactions[$row['interaction_id']] = array($row['interaction_id'],$row['interaction_type'],$row['weighting'],$row['completion_time'],$row['correct_responses'],$row['student_responses'],$row['result'],$row['latency']);
+                }
+            }
+    }
+    /**
      * Gets the current count of interactions recorded in the database
+     * @param   bool    Whether to count from database or not (defaults to no)
      * @return	int	The current number of interactions recorder
      */
-    function get_interactions_count()
+    function get_interactions_count($checkdb=false)
     {
     	if($this->debug>1){error_log('New LP - In learnpathItem::get_interactions_count()',0);}
-    	$res = 0;
-    	if(!empty($this->interactions_count)){
-    		$res = $this->interactions_count;
+    	$return = 0;
+        if ($checkdb) {
+            $tbl = Database::get_course_table('lp_item_view');
+            $sql = "SELECT id FROM $tbl " .
+                    "WHERE lp_item_id = ".$this->db_id." " .
+                    "AND   lp_view_id = ".$this->view_id." " .
+                    "AND   view_count = ".$this->attempt_id;
+            $res = api_sql_query($sql,__FILE__,__LINE__);
+            if (Database::num_rows($res)>0) {
+                $row = Database::fetch_array($res);
+                $lp_iv_id = $row[0];
+                $iva_table = Database::get_course_table('lp_iv_interaction');
+                $iva_sql = "SELECT count(id) as mycount FROM $iva_table " .
+                            "WHERE lp_iv_id = $lp_iv_id ";
+                $res_sql = api_sql_query($iva_sql);
+                if (Database::num_rows($res_sql)>0) {
+                	$row = Database::fetch_array($res_sql);
+                    $return = $row['mycount'];
+                }
+            }
+        } else {
+        	if(!empty($this->interactions_count)){
+        		$return = $this->interactions_count;
+        	}
+        }
+    	return $return;
+    }
+    /**
+     * Gets the JavaScript array content to fill the interactions array.
+     * @params  bool    Whether to check directly into the database (default no)
+     * @return  string  An empty string if no interaction, a JS array definition otherwise
+     */
+    function get_interactions_js_array($checkdb=false) {
+        $return = '';
+        if ($checkdb) {
+            $this->load_interactions(true);
+        }
+        foreach ($this->interactions as $id=>$in) {
+    		$return .= "['$id','".$in[1]."','".$in[2]."','".$in[3]."','".$in[4]."','".$in[5]."','".$in[6]."','".$in[7]."'],";
     	}
-    	return $res;
+        if (!empty($return)) {
+        	$return = substr($return,0,-1);
+        }
+        return $return;
     }
     /**
      * Gets the current count of objectives recorded in the database
@@ -1546,7 +1612,8 @@ class learnpathItem{
 			$this->current_start_time = 0;
 			$this->current_stop_time = 0;
 			$this->current_data = '';
-			$this->status = $this->possible_status[0];			
+			$this->status = $this->possible_status[0];
+            $this->interactions_count = $this->get_interactions_count(true);
 		}
     	return true;
     }

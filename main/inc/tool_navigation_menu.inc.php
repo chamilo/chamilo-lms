@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 17084 2008-12-06 16:44:47Z herodoto $
+// $Id: tool_navigation_menu.inc.php 17115 2008-12-08 19:05:18Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -201,8 +201,8 @@ function show_navigation_menu()
 			
 			if (strpos($navigation_item['link'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
 			{
-				echo '<a href="#" onclick="window.open(\''.$navigation_item['link'].'\',\'window_chat\',config=\'height=\'+480+\', width=\'+725+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
-			}
+				echo '<a href="#" onclick="window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
+			}			
 			else
 			{
 				echo '<a href="'.$navigation_item['link'].'"';		
@@ -254,7 +254,7 @@ function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
 				
 		if (strpos($navigation_item['link'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
 	    {
-		  	echo '<a href="#" onclick="window.open(\''.$navigation_item['link'].'\',\'window_chat\',config=\'height=\'+480+\', width=\'+725+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
+		  	echo '<a href="#" onclick="window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
 	    }
 	    else
 	    {

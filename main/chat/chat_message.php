@@ -45,7 +45,7 @@ api_protect_course_script();
 $course=api_get_course_id();
 
 /////
-// Juan Carlos Raña insert smileys
+// Juan Carlos Raña insert smileys and self-closing window
 ////
 ?>
 <script language="javascript" type="text/javascript">
@@ -65,11 +65,26 @@ function insert(text) {
    	chat.focus(smile)
 }
 
+function close_chat_window() {
+	var chat_window = top.window.self;
+	chat_window.opener = top.window.self;
+	chat_window.top.close();
+}
+
+
 </script>
+
 <?php
 
+// mode open in a new window: close the window when there isn't an user login
+
+if(empty($_user['user_id']))
+{	
+	echo '<script languaje="javascript"> close_chat_window() </script>';	
+}
+
 // if we have the session set up 
-if (!empty($course))
+if (!empty($course) && !empty($_user['user_id']))
 {
 	include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 	include_once(api_get_path(LIBRARY_PATH).'text.lib.php');
@@ -234,13 +249,13 @@ if (!empty($course))
 			if($isMaster)
 			{
 				$photo= '<img src="'.api_get_path(WEB_IMG_PATH).'teachers.gif" alt="'.$firstname.' '.$lastname.'"  width="11" height="11" align="top"  title="'.$firstname.' '.$lastname.'"  />';				
-				fputs($fp,'<font  color="#CCCCCC" size="-2">['.$timeNow.']</font>'.$photo.' <span id="chat_login_name"><b>'.$firstname.' '.$lastname.'</b></span> : <i>'.$message.'</i><br>'."\n");	 		
+				fputs($fp,'<span style="color:#CCCCCC; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <span id="chat_login_name"><b>'.$firstname.' '.$lastname.'</b></span> : <i>'.$message.'</i><br>'."\n");	 		
 				
 			}
 			else
 			{
 				$photo= '<img src="'.api_get_path(WEB_IMG_PATH).'students.gif" alt="'.$firstname.' '.$lastname.'"  width="11" height="11" align="top"  title="'.$firstname.' '.$lastname.'"  />';
-				 fputs($fp,'<font  color="#CCCCCC" size="-2">['.$timeNow.']</font>'.$photo.' <b>'.$firstname.' '.$lastname.'</b> : <i>'.$message.'</i><br>'."\n");
+				 fputs($fp,'<span style="color:#CCCCCC; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <b>'.$firstname.' '.$lastname.'</b> : <i>'.$message.'</i><br>'."\n");
 			}
 	
 			fclose($fp);
@@ -256,8 +271,8 @@ if (!empty($course))
 	<input type="hidden" name="sent" value="1">
 	<table border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tr>
-        <td width="420" valign="middle">
-        <textarea name="message" style="width: 420px; height: 35px" onkeydown="send_message(event);" onclick="javascript:insert_smile(this);"></textarea>
+        <td width="320" valign="middle">
+        <textarea name="message" style="width: 320px; height: 35px" onkeydown="send_message(event);" onclick="javascript:insert_smile(this);"></textarea>
         </td>
         <td>
         <input type="submit" value="<?php echo get_lang("Send"); ?>" class="background_submit">

@@ -1,4 +1,4 @@
-<?php // $Id: chat.php 17084 2008-12-06 16:44:47Z herodoto $
+<?php // $Id: chat.php 17115 2008-12-08 19:05:18Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -114,7 +114,7 @@ if ($open_chat_window==false)
 	echo'<frameset rows="135,*,'.$footer_size.'" border="0" frameborder="0" framespacing="1">';
 	echo '<frame src="chat_banner.php?cidReq='.$cidreq.'" name="chat_banner" scrolling="no">';
 }
-echo '<frameset cols="200,*,0" border="1" frameborder="1" framespacing="1">';
+echo '<frameset cols="150,*,0" border="1" frameborder="1" framespacing="1">';
 echo '<frame src="chat_whoisonline.php?cidReq='.$cidreq.'" name="chat_whoisonline" scrolling="auto">';
 echo'<frameset rows="50,15" border="1" frameborder="1" framespacing="1">';
 echo '<frame src="chat_chat.php?origin='.$_GET["origin"].'&target='.$_GET["target"].'&amp;cidReq='.$cidreq.'" name="chat_chat" scrolling="auto">';

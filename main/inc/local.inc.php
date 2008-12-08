@@ -337,7 +337,7 @@ else
              * to provide this $_user['user_id'].
              */
 
-            if (is_array($extAuthSource))
+            if (isset($extAuthSource) && is_array($extAuthSource))
             {
                 foreach($extAuthSource as $thisAuthSource)
                 {

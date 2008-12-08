@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 16708 2008-11-10 22:14:49Z yannoo $
+// $Id: inscription.php 17144 2008-12-08 23:49:52Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -65,7 +65,9 @@ $fck_attribute['ToolbarSet'] = "Profil";
 $form = new FormValidator('registration');
 //	LAST NAME and FIRST NAME
 $form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
+$form->applyFilter('lastname','trim');
 $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
+$form->applyFilter('firstname','trim');
 $form->addRule('lastname',  get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 //	EMAIL

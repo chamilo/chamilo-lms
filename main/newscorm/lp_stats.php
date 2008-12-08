@@ -203,7 +203,8 @@ foreach ($list as $my_item_id) {
 		} else {
 			$oddclass = "row_even";
 		}
-		if ($inter_num) {
+        $extend_link='';
+		if (!empty($inter_num)) {
 			$extend_link = '<a href="' . api_get_self() . '?action=stats&fold_id=' . $my_item_id . $url_suffix . '"><img src="../img/visible.gif" alt="fold_view" border="0"></a>' . "\n";
 		}
 		$title = $row['mytitle'];

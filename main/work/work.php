@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 16994 2008-11-28 00:18:27Z iflorespaz $
+*  	@version $Id: work.php 17112 2008-12-08 15:34:13Z yannoo $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -703,9 +703,9 @@ if ($_POST['submitWork'] && $is_course_member && $check) {
 			if (!$title) {
 				$title = $_FILES['file']['name'];
 			}
-			if (!$authors) {
-				$authors = $currentUserFirstName . " " . $currentUserLastName;
-			}
+			//if (!$authors) {
+			$authors = $currentUserFirstName . " " . $currentUserLastName;
+			//}
 
 			// compose a unique file name to avoid any conflict
 
@@ -1026,13 +1026,14 @@ if ($is_course_member) {
 		$titleWork = $form->addElement('text', 'title', get_lang("TitleWork"), 'id="file_upload"  style="width: 350px;"');
 		$defaults["title"] = ($edit ? stripslashes($workTitle) : stripslashes($title));
 
-		$titleAuthors = $form->addElement('text', 'authors', get_lang("Authors"), 'style="width: 350px;"');
+		//Removed to avoid incoherences
+		//$titleAuthors = $form->addElement('text', 'authors', get_lang("Authors"), 'style="width: 350px;"');
 
-		if (empty ($authors)) {
-			$authors = $_user['firstName'] . " " . $_user['lastName'];
-		}
+		//if (empty ($authors)) {
+		$authors = $_user['firstName'] . " " . $_user['lastName'];
+		//}
 
-		$defaults["authors"] = ($edit ? stripslashes($workAuthor) : stripslashes($authors));
+		//$defaults["authors"] = ($edit ? stripslashes($workAuthor) : stripslashes($authors));
 		$titleAuthors = $form->addElement('textarea', 'description', get_lang("Description"), 'style="width: 350px; height: 60px;"');
 		$defaults["description"] = ($edit ? stripslashes($workDescription) : stripslashes($description));
 

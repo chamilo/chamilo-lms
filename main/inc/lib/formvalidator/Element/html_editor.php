@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 16594 2008-10-22 17:28:53Z elixir_inter $
+// $Id: html_editor.php 17101 2008-12-08 04:14:33Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -96,24 +96,19 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		$this -> fck_editor->Config['EditorAreaCSS'] = $this -> fck_editor->Config['ToolbarComboPreviewCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/default.css';
 
 		//FCKeditor Configuration for documents		
-		if(isset($_SESSION['_course']) && $_SESSION['_course']['path']!='')
-		{		
+		if(isset($_SESSION['_course']) && $_SESSION['_course']['path']!='') {		
 			$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
-		}
-		else 
-		{
+        } else {
 			$upload_path = api_get_path(REL_PATH).'main/default_course_document/';
 		}		 
 	
-		// if we don't find the CreateDocumentWebDir set we change it with th absolute path http://www.dok..
-		if ($this -> fck_editor->Config['CreateDocumentWebDir']=='' )
-		{			
+		// if we don't find the CreateDocumentWebDir set we change it with the absolute path http://www.dok..
+		if (empty($this -> fck_editor->Config['CreateDocumentWebDir'])) {			
 			$this -> fck_editor->Config['CreateDocumentWebDir']=api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';							
 		};
 		
 		// if we don't find the CreateDocumentWebDir set we change it with th absolute path http://www.dok..
-		if ($this -> fck_editor->Config['CreateDocumentDir']== '')
-		{			
+		if (empty($this -> fck_editor->Config['CreateDocumentDir'])) {			
 			$this -> fck_editor->Config['CreateDocumentDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';				
 		};
 						

@@ -43,7 +43,7 @@ if ($is_allowed_to_edit) {
 
 	echo '<div class="glossary-add-form">';
 	if ($_GET['action'] == 'addglossary') {		
-		echo '<form name="frm_glossary" action="index.php?'.api_get_cidreq().'" method="post">';
+		echo '<form name="frm_glossary" action="index.php?'.api_get_cidreq().'">';
 		echo '<div class="term_glossary">'.get_lang('TermName').'<br /><input type="text" name="name_glossary"></div>';
 		echo '<div class="definition_glossary">'.get_lang('TermDefinition').'<br /><textarea cols="60" rows="5" maxlength="255" name="description_glossary"></textarea></div>';
 		echo '<div class="action_glossary"><input type="submit" value="'.get_lang('TermAddButton').'"></div>';

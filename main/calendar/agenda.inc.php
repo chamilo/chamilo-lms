@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17061 2008-12-03 21:43:06Z cfasanando $
+<?php //$Id: agenda.inc.php 17104 2008-12-08 04:53:39Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -2252,7 +2252,7 @@ function show_add_form($id = '')
 				<option value="--">--</option>
 				<?php
 					echo "\n";
-					foreach (range(1, 24) as $i)
+					foreach (range(0, 23) as $i)
 					{
 						// values have to have double digits
 						$value = ($i <= 9 ? '0'.$i : $i );
@@ -2358,7 +2358,7 @@ function show_add_form($id = '')
 				<option value="--">--</option>
 				<?php
 					echo "\n";
-					foreach (range(1, 24) as $i)
+					foreach (range(0, 23) as $i)
 					{
 						// values have to have double digits
 						$value = ($i <= 9 ? '0'.$i : $i );

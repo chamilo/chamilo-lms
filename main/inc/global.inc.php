@@ -125,7 +125,7 @@ $lib_path = api_get_path(LIBRARY_PATH);
 
 // Add the path to the pear packages to the include path
 //ini_set('include_path',ini_get('include_path').PATH_SEPARATOR.$lib_path.'pear');
-ini_set('include_path', create_dokeos_include_path());
+ini_set('include_path', create_include_path_setting());
 
 // Include the libraries that are necessary everywhere
 require_once($lib_path.'database.lib.php');

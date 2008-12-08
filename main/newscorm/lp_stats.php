@@ -57,7 +57,7 @@ if($origin != 'tracking')
 		$lp_charset = api_get_setting('platform_charset');
 	}
 	$charset = $lp_charset;
-	$w = $tablewidth -20;
+	//$w = $tablewidth -20;
 	$htmlHeadXtra[] = ''.'<style type="text/css" media="screen, projection">
 		/*<![CDATA[*/
 		@import "../css/public_admin/scorm.css";
@@ -82,9 +82,9 @@ else
 
 // The dokeos interface's encoding
 $dokeos_charset = api_get_setting('platform_charset');
-
+$output = '';
 //if display in fullscreen required
-if (strcmp($_GET["fs"], "true") == 0) 
+if (!empty($_GET['fs']) && strcmp($_GET['fs'], 'true') == 0) 
 {
 	$output .= '<table width="100%" align="center">';
 } 
@@ -140,7 +140,7 @@ $total_max_score = 0;
 $total_time = 0;
 $h = get_lang('h');
 
-if ($export_csv) {
+if (!empty($export_csv)) {
 	$csv_content[] = array (
 		get_lang('ScormLessonTitle'),
 		get_lang('ScormStatus'),
@@ -539,7 +539,7 @@ foreach ($list as $my_item_id) {
 			//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
 			 . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . ($score == 0 ? '-' : ($maxscore == 0 ? $score : $score . '/' . $maxscore)) . "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $time . "</div></td><td>$correct_test_link</td>\n" . "</tr>\n";
 
-			if ($export_csv) {
+			if (!empty($export_csv)) {
 				$temp = array ();
 				$temp[] = $title;
 				$temp[] = html_entity_decode($my_lesson_status);
@@ -621,7 +621,7 @@ $output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . '<td colspan="4"><div cl
 
 $output .= "</table></td></tr></table>";
 
-if ($export_csv) {
+if (!empty($export_csv)) {
 	$temp = array (
 		'',
 		'',
@@ -644,7 +644,6 @@ if ($origin != 'tracking') {
 	$output .= "</body></html>";
 }
 
-if (!$export_csv) {
+if (empty($export_csv)) {
 	echo $output;
 }
-?>

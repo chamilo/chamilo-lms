@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 17072 2008-12-04 21:54:56Z yannoo $
+<?php // $Id: document.inc.php 17099 2008-12-08 02:46:36Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -131,9 +131,10 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
  * @param string $path
  * @param string $filetype (file/folder)
  * @param int $visibility (1/0)
+ * @param int $show_as_icon - if it is true, only a clickable icon will be shown
  * @return string url
  */
-function create_document_link($www,$title,$path,$filetype,$size,$visibility)
+function create_document_link($www, $title, $path, $filetype, $size, $visibility, $show_as_icon = false)
 {
 	global $dbl_click_id;
 	if(isset($_SESSION['_gid']))
@@ -147,12 +148,17 @@ function create_document_link($www,$title,$path,$filetype,$size,$visibility)
 	$url_path = urlencode($path);
 	//add class="invisible" on invisible files
 	$visibility_class= ($visibility==0)?' class="invisible"':'';
-	//build download link (icon)
-	$forcedownload_link=($filetype=='folder')?api_get_self().'?'.api_get_cidreq().'&action=downloadfolder&amp;path='.$url_path.$req_gid:api_get_self().'?'.api_get_cidreq().'&amp;action=download&amp;id='.$url_path.$req_gid;
-	//folder download or file download?
-	$forcedownload_icon=($filetype=='folder')?'folder_zip.gif':'filesave.gif';
-	//prevent multiple clicks on zipped folder download
-	$prevent_multiple_click =($filetype=='folder')?" onclick=\"javascript:if(typeof clic_$dbl_click_id == 'undefined' || clic_$dbl_click_id == false) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"":'';
+
+	if (!$show_as_icon)
+	{
+		//build download link (icon)
+		$forcedownload_link=($filetype=='folder')?api_get_self().'?'.api_get_cidreq().'&action=downloadfolder&amp;path='.$url_path.$req_gid:api_get_self().'?'.api_get_cidreq().'&amp;action=download&amp;id='.$url_path.$req_gid;
+		//folder download or file download?
+		$forcedownload_icon=($filetype=='folder')?'folder_zip.gif':'filesave.gif';
+		//prevent multiple clicks on zipped folder download
+		$prevent_multiple_click =($filetype=='folder')?" onclick=\"javascript:if(typeof clic_$dbl_click_id == 'undefined' || clic_$dbl_click_id == false) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"":'';
+	}
+
 	$target='_top';
 	if($filetype=='file') {
 		//check the extension
@@ -179,11 +185,21 @@ function create_document_link($www,$title,$path,$filetype,$size,$visibility)
 	{
 		$url=api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$url_path.$req_gid;
 	}
+
 	//the little download icon
-	$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'),array('height'=>'16', 'width' => '16')).'</a>';
-	
-	$tooltip_title = str_replace('?cidReq='.$_GET['cidReq'],'',basename($path));
-	return '<a href="'.$url.'" title="'.$tooltip_title.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html;
+	//$tooltip_title = str_replace('?cidReq='.$_GET['cidReq'],'',basename($path));
+	$tooltip_title = explode('?', basename($path));
+	$tooltip_title = $tooltip_title[0];
+
+	if (!$show_as_icon)
+	{
+		$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'),array('height'=>'16', 'width' => '16')).'</a>';
+		return '<a href="'.$url.'" title="'.$tooltip_title.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html;
+	}
+	else
+	{
+		return '<a href="'.$url.'" title="'.$tooltip_title.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $tooltip_title).'</a>';
+	}
 }
 
 /**
@@ -193,14 +209,20 @@ function create_document_link($www,$title,$path,$filetype,$size,$visibility)
  * @param string $path
  * @return string img html tag
  */
-function build_document_icon_tag($type,$path)
+function build_document_icon_tag($type, $path)
 {
-	$icon='folder_document.gif';
-	if($type=='file')
+	$basename = basename($path);
+
+	if ($type == 'file')
 	{
-		$icon=choose_image(basename($path));
+		$icon = choose_image($basename);
 	}
-	return Display::return_icon($icon, '', array('hspace'=>'5', 'align' => 'middle'));
+	else
+	{
+		$icon = 'folder_document.gif';
+	}
+
+	return Display::return_icon($icon, $basename, array('hspace'=>'5', 'align' => 'middle'));
 }
 
 /**

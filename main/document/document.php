@@ -1,4 +1,4 @@
-<?php // $Id: document.php 16862 2008-11-21 21:45:30Z herodoto $
+<?php // $Id: document.php 17099 2008-12-08 02:46:36Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -624,7 +624,7 @@ if($folders===false)
 	{
 	?>
 		 <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo urlencode((dirname($curdirpath)=='\\')?'/':dirname($curdirpath)).$req_gid ?>">
-				<img src="../img/folder_up.gif" border="0" align="absbottom" hspace="5" title="<?php echo get_lang('Up'); ?>"alt="" />
+				<img src="../img/folder_up.gif" border="0" title="<?php echo get_lang('Up'); ?>" alt="" />
 				<?php echo get_lang('Up'); ?></a>&nbsp;
 	<?php
 	}
@@ -696,8 +696,6 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 		{
 			$row[] = $id['path'];			
 		}
-		//icons
-		$row[]= build_document_icon_tag($id['filetype'],$id['path']);
 		
 		// Show the Owner of the file only in groups				
 		$user_link='';	
@@ -712,8 +710,13 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 			}
 		}
 		
+		//icons (clickable)
+		//$row[]= build_document_icon_tag($id['filetype'],$id['path']);
+		$row[] = create_document_link($http_www,  $document_name,  $id['path'], $id['filetype'],  $size, $id['visibility'], true);
+
 		//document title with hyperlink
 		$row[] = create_document_link($http_www,$document_name,$id['path'],$id['filetype'],$size,$id['visibility']).'<br />'.$invisibility_span_open.nl2br(htmlspecialchars($id['comment'],ENT_QUOTES,$charset)).$invisibility_span_close.$user_link;
+
 		//comments => display comment under the document name
 		//$row[] = $invisibility_span_open.nl2br(htmlspecialchars($id['comment'])).$invisibility_span_close;
 		$display_size = format_file_size($size);

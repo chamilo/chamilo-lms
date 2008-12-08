@@ -48,10 +48,7 @@ window.onload = function()
 	for ( var i = 0 ; i < aTypes.length ; i++ )
 	{
 		if ( oConnector.ShowAllTypes || aTypes[i][0] == oConnector.ResourceType )
-		{	
-		 	
 			AddSelectOption( oCombo, aTypes[i][1], aTypes[i][0] ) ;
-		}
 	}
 }
 

@@ -104,7 +104,7 @@ oConnector.SendCommand = function( command, params, callBackFunction )
 
 	// Add a random salt to avoid getting a cached version of the command execution
 	sUrl += '&uuid=' + new Date().getTime() ;
-	
+
 	var oXML = new FCKXml() ;
 
 	if ( callBackFunction )

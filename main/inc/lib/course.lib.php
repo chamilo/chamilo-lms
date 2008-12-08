@@ -316,7 +316,10 @@ class CourseManager
 		$course = Database::fetch_object($res);
 		$table_group = Database :: get_course_table(TABLE_GROUP_USER, $course->db_name);
 		$sql = "DELETE FROM $table_group WHERE user_id IN (".$user_ids.")";
-		api_sql_query($sql, __FILE__, __LINE__);		
+		api_sql_query($sql, __FILE__, __LINE__);
+		$tbl_group_rel_tutor = Database::get_course_table(TABLE_GROUP_TUTOR, $course->db_name);
+		$sql = "DELETE FROM $tbl_group_rel_tutor WHERE user_id IN (".$user_ids.")";
+		api_sql_query($sql, __FILE__, __LINE__);
 		
 		// Unsubscribe user from all blogs in the course
 		$table_blog_user = Database::get_course_table(TABLE_BLOGS_REL_USER, $course->db_name);

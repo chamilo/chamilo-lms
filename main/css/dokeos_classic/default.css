@@ -1632,4 +1632,46 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 */
 #show_audiorecorder_div{background:#F0F0F0; border:1px solid #999999; font-weight:bold; padding:2px; width:350px;}
 
+/* Glossary tool */
+.glossary-term {
+	margin: 1em;
+	background-color: #ffe99b;
+	padding: 0.5em 0.5em 1.8em 0;
+	-moz-border-radius: 0.5em;
+}
+.glossary-term-title {
+	margin: 2em 0 1em 0.5em;
+	font-weight: bold;
+	font-size: 120%;
+}
 
+.glossary-term-desc {
+	margin-left: 1em; 
+}
+.glossary-term-action-links {
+	float: right;
+}
+.glossary-term-edit-form {
+	margin: 1em;
+	background-color: #FFE4C4;
+	padding: 0.5em 0.5em 2em 0;
+	-moz-border-radius: 0.5em;
+}
+.glossary-term-edit-desc {
+	font-weight: bold;
+	font-size: 120%;
+}
+
+.glossary-term-edit-title {
+	font-weight: bold;
+	font-size: 120%;
+}
+.glossary-add-form {
+	font-weight: bold;
+	font-size: 120%;
+	margin: 1em;
+}
+.glossary-orderby-link {
+	float:right;
+	margin: 1em;
+}

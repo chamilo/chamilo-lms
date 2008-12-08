@@ -1,4 +1,4 @@
-<?php
+<?php //$id: $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 17112 2008-12-08 15:34:13Z yannoo $
+*  	@version $Id: work.php 17113 2008-12-08 15:35:12Z yannoo $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */

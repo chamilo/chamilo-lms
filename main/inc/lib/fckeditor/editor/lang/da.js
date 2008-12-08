@@ -44,6 +44,7 @@ RemoveFormat		: "Fjern formatering",
 InsertLinkLbl		: "Hyperlink",
 InsertLink			: "Indsæt/rediger hyperlink",
 RemoveLink			: "Fjern hyperlink",
+VisitLink			: "Open Link",	//MISSING
 Anchor				: "Indsæt/rediger bogmærke",
 AnchorDelete		: "Remove Anchor",	//MISSING
 InsertImageLbl		: "Indsæt billede",
@@ -72,6 +73,9 @@ BlockJustify		: "Lige margener",
 DecreaseIndent		: "Formindsk indrykning",
 IncreaseIndent		: "Forøg indrykning",
 Blockquote			: "Blockquote",	//MISSING
+CreateDiv			: "Create Div Container",	//MISSING
+EditDiv				: "Edit Div Container",	//MISSING
+DeleteDiv			: "Remove Div Container",	//MISSING
 Undo				: "Fortryd",
 Redo				: "Annuller fortryd",
 NumberedListLbl		: "Talopstilling",
@@ -157,6 +161,7 @@ UnknownToolbarSet	: "Værktøjslinjen \"%1\" eksisterer ikke!",
 NoActiveX			: "Din browsers sikkerhedsindstillinger begrænser nogle af editorens muligheder.<br>Slå \"Kør ActiveX-objekter og plug-ins\" til, ellers vil du opleve fejl og manglende muligheder.",
 BrowseServerBlocked : "Browseren kunne ikke åbne de nødvendige ressourcer!<br>Slå pop-up blokering fra.",
 DialogBlocked		: "Dialogvinduet kunne ikke åbnes!<br>Slå pop-up blokering fra.",
+VisitLinkBlocked	: "It was not possible to open a new window. Make sure all popup blockers are disabled.",	//MISSING
 
 // Dialogs
 DlgBtnOK			: "OK",
@@ -303,6 +308,11 @@ DlgTableCellSpace	: "Celleafstand",
 DlgTableCellPad		: "Cellemargen",
 DlgTableCaption		: "Titel",
 DlgTableSummary		: "Resume",
+DlgTableHeaders		: "Headers",	//MISSING
+DlgTableHeadersNone		: "None",	//MISSING
+DlgTableHeadersColumn	: "First column",	//MISSING
+DlgTableHeadersRow		: "First Row",	//MISSING
+DlgTableHeadersBoth		: "Both",	//MISSING
 
 // Table Cell Dialog
 DlgCellTitle		: "Egenskaber for celle",
@@ -325,6 +335,9 @@ DlgCellVerAlignTop	: "Øverst",
 DlgCellVerAlignMiddle	: "Centreret",
 DlgCellVerAlignBottom	: "Nederst",
 DlgCellVerAlignBaseline	: "Grundlinje",
+DlgCellType		: "Cell Type",	//MISSING
+DlgCellTypeData		: "Data",	//MISSING
+DlgCellTypeHeader	: "Header",	//MISSING
 DlgCellRowSpan		: "Højde i antal rækker",
 DlgCellCollSpan		: "Bredde i antal kolonner",
 DlgCellBackColor	: "Baggrundsfarve",
@@ -511,5 +524,30 @@ DlgAboutAboutTab	: "Om",
 DlgAboutBrowserInfoTab	: "Generelt",
 DlgAboutLicenseTab	: "Licens",
 DlgAboutVersion		: "version",
-DlgAboutInfo		: "For yderlig information gå til"
+DlgAboutInfo		: "For yderlig information gå til",
+
+// Div Dialog
+DlgDivGeneralTab	: "General",	//MISSING
+DlgDivAdvancedTab	: "Advanced",	//MISSING
+DlgDivStyle		: "Style",	//MISSING
+DlgDivInlineStyle	: "Inline Style",	//MISSING
+
+// MP3 Dialog
+DlgMP3Title     : "Import MP3",
+DlgMP3Upload    : "From my Computer",
+DlgMP3Tab       : "From course",
+
+// Image admin
+DlgImageManagerTitle : "Import Image",
+
+// Movies
+DlgEmbedMoviesBtn        : 'Embed Movies',
+DlgEmbedMoviesDlgTitle   : 'Embed Movies',
+DlgEmbedMoviesDlgName    : 'Embed Movies',
+DlgEmbedMoviesTooltip    : 'Insert a movie display inside your document.',
+DlgEmbedMoviesInfoTab    : 'Info',
+DlgEmbedMoviesUploadTab  : 'Upload',
+DlgEmbedMoviesURL        : 'URL',
+DlgEmbedMoviesAlertUrl   : 'No movie URL specified.',
+DlgEmbedMoviesExtensionSupported : 'Only a mpg, mpeg, avi, wmv, mov or asf file extension allowed.'
 };

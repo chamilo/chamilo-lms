@@ -44,6 +44,7 @@ RemoveFormat		: "Ukloni formatiranje",
 InsertLinkLbl		: "Link",
 InsertLink			: "Unesi/izmeni link",
 RemoveLink			: "Ukloni link",
+VisitLink			: "Open Link",	//MISSING
 Anchor				: "Unesi/izmeni sidro",
 AnchorDelete		: "Remove Anchor",	//MISSING
 InsertImageLbl		: "Slika",
@@ -72,6 +73,9 @@ BlockJustify		: "Obostrano ravnanje",
 DecreaseIndent		: "Smanji levu marginu",
 IncreaseIndent		: "Uvećaj levu marginu",
 Blockquote			: "Blockquote",	//MISSING
+CreateDiv			: "Create Div Container",	//MISSING
+EditDiv				: "Edit Div Container",	//MISSING
+DeleteDiv			: "Remove Div Container",	//MISSING
 Undo				: "Poni�ti akciju",
 Redo				: "Ponovi akciju",
 NumberedListLbl		: "Nabrojiva lista",
@@ -157,6 +161,7 @@ UnknownToolbarSet	: "Toolbar \"%1\" ne postoji",
 NoActiveX			: "Your browser's security settings could limit some features of the editor. You must enable the option \"Run ActiveX controls and plug-ins\". You may experience errors and notice missing features.",	//MISSING
 BrowseServerBlocked : "The resources browser could not be opened. Make sure that all popup blockers are disabled.",	//MISSING
 DialogBlocked		: "It was not possible to open the dialog window. Make sure all popup blockers are disabled.",	//MISSING
+VisitLinkBlocked	: "It was not possible to open a new window. Make sure all popup blockers are disabled.",	//MISSING
 
 // Dialogs
 DlgBtnOK			: "OK",
@@ -303,6 +308,11 @@ DlgTableCellSpace	: "Ćelijski prostor",
 DlgTableCellPad		: "Razmak ćelija",
 DlgTableCaption		: "Naslov tabele",
 DlgTableSummary		: "Summary",	//MISSING
+DlgTableHeaders		: "Headers",	//MISSING
+DlgTableHeadersNone		: "None",	//MISSING
+DlgTableHeadersColumn	: "First column",	//MISSING
+DlgTableHeadersRow		: "First Row",	//MISSING
+DlgTableHeadersBoth		: "Both",	//MISSING
 
 // Table Cell Dialog
 DlgCellTitle		: "Osobine ćelije",
@@ -325,6 +335,9 @@ DlgCellVerAlignTop	: "Gornje",
 DlgCellVerAlignMiddle	: "Sredina",
 DlgCellVerAlignBottom	: "Donje",
 DlgCellVerAlignBaseline	: "Bazno",
+DlgCellType		: "Cell Type",	//MISSING
+DlgCellTypeData		: "Data",	//MISSING
+DlgCellTypeHeader	: "Header",	//MISSING
 DlgCellRowSpan		: "Spajanje redova",
 DlgCellCollSpan		: "Spajanje kolona",
 DlgCellBackColor	: "Boja pozadine",
@@ -511,5 +524,30 @@ DlgAboutAboutTab	: "O editoru",
 DlgAboutBrowserInfoTab	: "Informacije o pretraživacu",
 DlgAboutLicenseTab	: "License",	//MISSING
 DlgAboutVersion		: "verzija",
-DlgAboutInfo		: "Za više informacija posetite"
+DlgAboutInfo		: "Za više informacija posetite",
+
+// Div Dialog
+DlgDivGeneralTab	: "General",	//MISSING
+DlgDivAdvancedTab	: "Advanced",	//MISSING
+DlgDivStyle		: "Style",	//MISSING
+DlgDivInlineStyle	: "Inline Style",	//MISSING
+
+// MP3 Dialog
+DlgMP3Title     : "Import MP3",
+DlgMP3Upload    : "From my Computer",
+DlgMP3Tab       : "From course",
+
+// Image admin
+DlgImageManagerTitle : "Import Image",
+
+// Movies
+DlgEmbedMoviesBtn        : 'Embed Movies',
+DlgEmbedMoviesDlgTitle   : 'Embed Movies',
+DlgEmbedMoviesDlgName    : 'Embed Movies',
+DlgEmbedMoviesTooltip    : 'Insert a movie display inside your document.',
+DlgEmbedMoviesInfoTab    : 'Info',
+DlgEmbedMoviesUploadTab  : 'Upload',
+DlgEmbedMoviesURL        : 'URL',
+DlgEmbedMoviesAlertUrl   : 'No movie URL specified.',
+DlgEmbedMoviesExtensionSupported : 'Only a mpg, mpeg, avi, wmv, mov or asf file extension allowed.'
 };

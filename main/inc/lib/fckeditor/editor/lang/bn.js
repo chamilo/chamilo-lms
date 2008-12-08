@@ -44,6 +44,7 @@ RemoveFormat		: "ফরমেট সরাও",
 InsertLinkLbl		: "লিংকের যুক্ত করার লেবেল",
 InsertLink			: "লিংক যুক্ত কর",
 RemoveLink			: "লিংক সরাও",
+VisitLink			: "Open Link",	//MISSING
 Anchor				: "নোঙ্গর",
 AnchorDelete		: "Remove Anchor",	//MISSING
 InsertImageLbl		: "ছবির লেবেল যুক্ত কর",
@@ -72,6 +73,9 @@ BlockJustify		: "ব্লক জাস্টিফাই",
 DecreaseIndent		: "ইনডেন্ট কমাও",
 IncreaseIndent		: "ইনডেন্ট বাড়াও",
 Blockquote			: "Blockquote",	//MISSING
+CreateDiv			: "Create Div Container",	//MISSING
+EditDiv				: "Edit Div Container",	//MISSING
+DeleteDiv			: "Remove Div Container",	//MISSING
 Undo				: "আনডু",
 Redo				: "রি-ডু",
 NumberedListLbl		: "সাংখ্যিক লিস্টের লেবেল",
@@ -157,6 +161,7 @@ UnknownToolbarSet	: "টুলবার সেট \"%1\" এর অস্তি�
 NoActiveX			: "আপনার ব্রাউজারের সুরক্ষা সেটিংস কারনে এডিটরের কিছু ফিচার পাওয়া নাও যেতে পারে। আপনাকে অবশ্যই \"Run ActiveX controls and plug-ins\" এনাবেল করে নিতে হবে। আপনি ভুলভ্রান্তি কিছু কিছু ফিচারের অনুপস্থিতি উপলব্ধি করতে পারেন।",
 BrowseServerBlocked : "রিসোর্স ব্রাউজার খোলা গেল না। নিশ্চিত করুন যে সব পপআপ ব্লকার বন্ধ করা আছে।",
 DialogBlocked		: "ডায়ালগ ইউন্ডো খোলা গেল না। নিশ্চিত করুন যে সব পপআপ ব্লকার বন্ধ করা আছে।",
+VisitLinkBlocked	: "It was not possible to open a new window. Make sure all popup blockers are disabled.",	//MISSING
 
 // Dialogs
 DlgBtnOK			: "ওকে",
@@ -303,6 +308,11 @@ DlgTableCellSpace	: "সেল স্পেস",
 DlgTableCellPad		: "সেল প্যাডিং",
 DlgTableCaption		: "শীর্ষক",
 DlgTableSummary		: "সারাংশ",
+DlgTableHeaders		: "Headers",	//MISSING
+DlgTableHeadersNone		: "None",	//MISSING
+DlgTableHeadersColumn	: "First column",	//MISSING
+DlgTableHeadersRow		: "First Row",	//MISSING
+DlgTableHeadersBoth		: "Both",	//MISSING
 
 // Table Cell Dialog
 DlgCellTitle		: "সেল প্রোপার্টি",
@@ -325,6 +335,9 @@ DlgCellVerAlignTop	: "উপর",
 DlgCellVerAlignMiddle	: "মধ্য",
 DlgCellVerAlignBottom	: "নীচে",
 DlgCellVerAlignBaseline	: "মূলরেখা",
+DlgCellType		: "Cell Type",	//MISSING
+DlgCellTypeData		: "Data",	//MISSING
+DlgCellTypeHeader	: "Header",	//MISSING
 DlgCellRowSpan		: "রো স্প্যান",
 DlgCellCollSpan		: "কলাম স্প্যান",
 DlgCellBackColor	: "ব্যাকগ্রাউন্ড রং",
@@ -511,5 +524,30 @@ DlgAboutAboutTab	: "কে বানিয়েছে",
 DlgAboutBrowserInfoTab	: "ব্রাউজারের ব্যাপারে তথ্য",
 DlgAboutLicenseTab	: "লাইসেন্স",
 DlgAboutVersion		: "ভার্সন",
-DlgAboutInfo		: "আরও তথ্যের জন্য যান"
+DlgAboutInfo		: "আরও তথ্যের জন্য যান",
+
+// Div Dialog
+DlgDivGeneralTab	: "General",	//MISSING
+DlgDivAdvancedTab	: "Advanced",	//MISSING
+DlgDivStyle		: "Style",	//MISSING
+DlgDivInlineStyle	: "Inline Style",	//MISSING
+
+// MP3 Dialog
+DlgMP3Title     : "Import MP3",
+DlgMP3Upload    : "From my Computer",
+DlgMP3Tab       : "From course",
+
+// Image admin
+DlgImageManagerTitle : "Import Image",
+
+// Movies
+DlgEmbedMoviesBtn        : 'Embed Movies',
+DlgEmbedMoviesDlgTitle   : 'Embed Movies',
+DlgEmbedMoviesDlgName    : 'Embed Movies',
+DlgEmbedMoviesTooltip    : 'Insert a movie display inside your document.',
+DlgEmbedMoviesInfoTab    : 'Info',
+DlgEmbedMoviesUploadTab  : 'Upload',
+DlgEmbedMoviesURL        : 'URL',
+DlgEmbedMoviesAlertUrl   : 'No movie URL specified.',
+DlgEmbedMoviesExtensionSupported : 'Only a mpg, mpeg, avi, wmv, mov or asf file extension allowed.'
 };

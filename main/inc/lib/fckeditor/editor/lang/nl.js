@@ -44,6 +44,7 @@ RemoveFormat		: "Opmaak verwijderen",
 InsertLinkLbl		: "Link",
 InsertLink			: "Link invoegen/wijzigen",
 RemoveLink			: "Link verwijderen",
+VisitLink			: "Link volgen",
 Anchor				: "Interne link",
 AnchorDelete		: "Anker verwijderen",
 InsertImageLbl		: "Afbeelding",
@@ -72,6 +73,9 @@ BlockJustify		: "Uitvullen",
 DecreaseIndent		: "Inspringen verkleinen",
 IncreaseIndent		: "Inspringen vergroten",
 Blockquote			: "Citaatblok",
+CreateDiv			: "DIV aanmaken",
+EditDiv				: "DIV wijzigen",
+DeleteDiv			: "DIV verwijderen",
 Undo				: "Ongedaan maken",
 Redo				: "Opnieuw uitvoeren",
 NumberedListLbl		: "Genummerde lijst",
@@ -157,6 +161,7 @@ UnknownToolbarSet	: "Menubalk \"%1\" bestaat niet.",
 NoActiveX			: "De beveilingsinstellingen van je browser zouden sommige functies van de editor kunnen beperken. De optie \"Activeer ActiveX-elementen en plug-ins\" dient ingeschakeld te worden. Het kan zijn dat er nu functies ontbreken of niet werken.",
 BrowseServerBlocked : "De bestandsbrowser kon niet geopend worden. Zorg ervoor dat pop-up-blokkeerders uit staan.",
 DialogBlocked		: "Kan het dialoogvenster niet weergeven. Zorg ervoor dat pop-up-blokkeerders uit staan.",
+VisitLinkBlocked	: "Het was niet mogelijk een nieuw venster te openen. Controleer of er geen pop-up-blocker aktief is.",
 
 // Dialogs
 DlgBtnOK			: "OK",
@@ -303,6 +308,11 @@ DlgTableCellSpace	: "Afstand tussen cellen",
 DlgTableCellPad		: "Afstand vanaf rand cel",
 DlgTableCaption		: "Naam",
 DlgTableSummary		: "Samenvatting",
+DlgTableHeaders		: "Headers",	//MISSING
+DlgTableHeadersNone		: "None",	//MISSING
+DlgTableHeadersColumn	: "First column",	//MISSING
+DlgTableHeadersRow		: "First Row",	//MISSING
+DlgTableHeadersBoth		: "Both",	//MISSING
 
 // Table Cell Dialog
 DlgCellTitle		: "Eigenschappen cel",
@@ -325,6 +335,9 @@ DlgCellVerAlignTop	: "Boven",
 DlgCellVerAlignMiddle	: "Midden",
 DlgCellVerAlignBottom	: "Beneden",
 DlgCellVerAlignBaseline	: "Basislijn",
+DlgCellType		: "Cell Type",	//MISSING
+DlgCellTypeData		: "Data",	//MISSING
+DlgCellTypeHeader	: "Header",	//MISSING
 DlgCellRowSpan		: "Overkoepeling rijen",
 DlgCellCollSpan		: "Overkoepeling kolommen",
 DlgCellBackColor	: "Achtergrondkleur",
@@ -511,5 +524,30 @@ DlgAboutAboutTab	: "Over",
 DlgAboutBrowserInfoTab	: "Browserinformatie",
 DlgAboutLicenseTab	: "Licentie",
 DlgAboutVersion		: "Versie",
-DlgAboutInfo		: "Voor meer informatie ga naar "
+DlgAboutInfo		: "Voor meer informatie ga naar ",
+
+// Div Dialog
+DlgDivGeneralTab	: "Algemeen",
+DlgDivAdvancedTab	: "Geavanceerd",
+DlgDivStyle		: "Style",
+DlgDivInlineStyle	: "Inline Style",
+
+// MP3 Dialog
+DlgMP3Title     : "Import MP3",
+DlgMP3Upload    : "From my Computer",
+DlgMP3Tab       : "From course",
+
+// Image admin
+DlgImageManagerTitle : "Import Image",
+
+// Movies
+DlgEmbedMoviesBtn        : 'Embed Movies',
+DlgEmbedMoviesDlgTitle   : 'Embed Movies',
+DlgEmbedMoviesDlgName    : 'Embed Movies',
+DlgEmbedMoviesTooltip    : 'Insert a movie display inside your document.',
+DlgEmbedMoviesInfoTab    : 'Info',
+DlgEmbedMoviesUploadTab  : 'Upload',
+DlgEmbedMoviesURL        : 'URL',
+DlgEmbedMoviesAlertUrl   : 'No movie URL specified.',
+DlgEmbedMoviesExtensionSupported : 'Only a mpg, mpeg, avi, wmv, mov or asf file extension allowed.'
 };

@@ -44,6 +44,7 @@ RemoveFormat		: "Noņemt stilus",
 InsertLinkLbl		: "Hipersaite",
 InsertLink			: "Ievietot/Labot hipersaiti",
 RemoveLink			: "Noņemt hipersaiti",
+VisitLink			: "Open Link",	//MISSING
 Anchor				: "Ievietot/Labot iezīmi",
 AnchorDelete		: "Remove Anchor",	//MISSING
 InsertImageLbl		: "Attēls",
@@ -72,6 +73,9 @@ BlockJustify		: "Izlīdzināt malas",
 DecreaseIndent		: "Samazināt atkāpi",
 IncreaseIndent		: "Palielināt atkāpi",
 Blockquote			: "Blockquote",	//MISSING
+CreateDiv			: "Create Div Container",	//MISSING
+EditDiv				: "Edit Div Container",	//MISSING
+DeleteDiv			: "Remove Div Container",	//MISSING
 Undo				: "Atcelt",
 Redo				: "Atkārtot",
 NumberedListLbl		: "Numurēts saraksts",
@@ -157,6 +161,7 @@ UnknownToolbarSet	: "Rīku joslas komplekts \"%1\" neeksistē",
 NoActiveX			: "Interneta pārlūkprogrammas drošības uzstādījumi varētu ietekmēt dažas no redaktora īpašībām. Jābūt aktivizētai sadaļai \"Run ActiveX controls and plug-ins\". Savādāk ir iespējamas kļūdas darbībā un kļūdu paziņojumu parādīšanās.",
 BrowseServerBlocked : "Resursu pārlūks nevar tikt atvērts. Pārliecinieties, ka uznirstošo logu bloķētāji ir atslēgti.",
 DialogBlocked		: "Nav iespējams atvērt dialoglogu. Pārliecinieties, ka uznirstošo logu bloķētāji ir atslēgti.",
+VisitLinkBlocked	: "It was not possible to open a new window. Make sure all popup blockers are disabled.",	//MISSING
 
 // Dialogs
 DlgBtnOK			: "Darīts!",
@@ -303,6 +308,11 @@ DlgTableCellSpace	: "Rūtiņu atstatums",
 DlgTableCellPad		: "Rūtiņu nobīde",
 DlgTableCaption		: "Leģenda",
 DlgTableSummary		: "Anotācija",
+DlgTableHeaders		: "Headers",	//MISSING
+DlgTableHeadersNone		: "None",	//MISSING
+DlgTableHeadersColumn	: "First column",	//MISSING
+DlgTableHeadersRow		: "First Row",	//MISSING
+DlgTableHeadersBoth		: "Both",	//MISSING
 
 // Table Cell Dialog
 DlgCellTitle		: "Rūtiņas īpašības",
@@ -325,6 +335,9 @@ DlgCellVerAlignTop	: "Augša",
 DlgCellVerAlignMiddle	: "Vidus",
 DlgCellVerAlignBottom	: "Apakša",
 DlgCellVerAlignBaseline	: "Pamatrindā",
+DlgCellType		: "Cell Type",	//MISSING
+DlgCellTypeData		: "Data",	//MISSING
+DlgCellTypeHeader	: "Header",	//MISSING
 DlgCellRowSpan		: "Rindu pārnese",
 DlgCellCollSpan		: "Kolonnu pārnese",
 DlgCellBackColor	: "Fona krāsa",
@@ -511,5 +524,30 @@ DlgAboutAboutTab	: "Par",
 DlgAboutBrowserInfoTab	: "Informācija par pārlūkprogrammu",
 DlgAboutLicenseTab	: "Licence",
 DlgAboutVersion		: "versija",
-DlgAboutInfo		: "Papildus informācija ir pieejama"
+DlgAboutInfo		: "Papildus informācija ir pieejama",
+
+// Div Dialog
+DlgDivGeneralTab	: "General",	//MISSING
+DlgDivAdvancedTab	: "Advanced",	//MISSING
+DlgDivStyle		: "Style",	//MISSING
+DlgDivInlineStyle	: "Inline Style",	//MISSING
+
+// MP3 Dialog
+DlgMP3Title     : "Import MP3",
+DlgMP3Upload    : "From my Computer",
+DlgMP3Tab       : "From course",
+
+// Image admin
+DlgImageManagerTitle : "Import Image",
+
+// Movies
+DlgEmbedMoviesBtn        : 'Embed Movies',
+DlgEmbedMoviesDlgTitle   : 'Embed Movies',
+DlgEmbedMoviesDlgName    : 'Embed Movies',
+DlgEmbedMoviesTooltip    : 'Insert a movie display inside your document.',
+DlgEmbedMoviesInfoTab    : 'Info',
+DlgEmbedMoviesUploadTab  : 'Upload',
+DlgEmbedMoviesURL        : 'URL',
+DlgEmbedMoviesAlertUrl   : 'No movie URL specified.',
+DlgEmbedMoviesExtensionSupported : 'Only a mpg, mpeg, avi, wmv, mov or asf file extension allowed.'
 };

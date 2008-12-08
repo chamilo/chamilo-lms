@@ -44,6 +44,7 @@ RemoveFormat		: "Formázás eltávolítása",
 InsertLinkLbl		: "Hivatkozás",
 InsertLink			: "Hivatkozás beillesztése/módosítása",
 RemoveLink			: "Hivatkozás törlése",
+VisitLink			: "Open Link",	//MISSING
 Anchor				: "Horgony beillesztése/szerkesztése",
 AnchorDelete		: "Horgony eltávolítása",
 InsertImageLbl		: "Kép",
@@ -72,6 +73,9 @@ BlockJustify		: "Sorkizárt",
 DecreaseIndent		: "Behúzás csökkentése",
 IncreaseIndent		: "Behúzás növelése",
 Blockquote			: "Idézet blokk",
+CreateDiv			: "Create Div Container",	//MISSING
+EditDiv				: "Edit Div Container",	//MISSING
+DeleteDiv			: "Remove Div Container",	//MISSING
 Undo				: "Visszavonás",
 Redo				: "Ismétlés",
 NumberedListLbl		: "Számozás",
@@ -157,6 +161,7 @@ UnknownToolbarSet	: "Az eszközkészlet \"%1\" nem létezik",
 NoActiveX			: "A böngésző biztonsági beállításai korlátozzák a szerkesztő lehetőségeit. Engedélyezni kell ezt az opciót: \"Run ActiveX controls and plug-ins\". Ettől függetlenül előfordulhatnak hibaüzenetek ill. bizonyos funkciók hiányozhatnak.",
 BrowseServerBlocked : "Nem lehet megnyitni a fájlböngészőt. Bizonyosodjon meg róla, hogy a felbukkanó ablakok engedélyezve vannak.",
 DialogBlocked		: "Nem lehet megnyitni a párbeszédablakot. Bizonyosodjon meg róla, hogy a felbukkanó ablakok engedélyezve vannak.",
+VisitLinkBlocked	: "It was not possible to open a new window. Make sure all popup blockers are disabled.",	//MISSING
 
 // Dialogs
 DlgBtnOK			: "Rendben",
@@ -303,6 +308,11 @@ DlgTableCellSpace	: "Cella térköz",
 DlgTableCellPad		: "Cella belső margó",
 DlgTableCaption		: "Felirat",
 DlgTableSummary		: "Leírás",
+DlgTableHeaders		: "Headers",	//MISSING
+DlgTableHeadersNone		: "None",	//MISSING
+DlgTableHeadersColumn	: "First column",	//MISSING
+DlgTableHeadersRow		: "First Row",	//MISSING
+DlgTableHeadersBoth		: "Both",	//MISSING
 
 // Table Cell Dialog
 DlgCellTitle		: "Cella tulajdonságai",
@@ -325,6 +335,9 @@ DlgCellVerAlignTop	: "Tetejére",
 DlgCellVerAlignMiddle	: "Középre",
 DlgCellVerAlignBottom	: "Aljára",
 DlgCellVerAlignBaseline	: "Egyvonalba",
+DlgCellType		: "Cell Type",	//MISSING
+DlgCellTypeData		: "Data",	//MISSING
+DlgCellTypeHeader	: "Header",	//MISSING
 DlgCellRowSpan		: "Sorok egyesítése",
 DlgCellCollSpan		: "Oszlopok egyesítése",
 DlgCellBackColor	: "Háttérszín",
@@ -511,5 +524,30 @@ DlgAboutAboutTab	: "Névjegy",
 DlgAboutBrowserInfoTab	: "Böngésző információ",
 DlgAboutLicenseTab	: "Licensz",
 DlgAboutVersion		: "verzió",
-DlgAboutInfo		: "További információkért látogasson el ide:"
+DlgAboutInfo		: "További információkért látogasson el ide:",
+
+// Div Dialog
+DlgDivGeneralTab	: "General",	//MISSING
+DlgDivAdvancedTab	: "Advanced",	//MISSING
+DlgDivStyle		: "Style",	//MISSING
+DlgDivInlineStyle	: "Inline Style",	//MISSING
+
+// MP3 Dialog
+DlgMP3Title     : "Import MP3",
+DlgMP3Upload    : "From my Computer",
+DlgMP3Tab       : "From course",
+
+// Image admin
+DlgImageManagerTitle : "Import Image",
+
+// Movies
+DlgEmbedMoviesBtn        : 'Embed Movies',
+DlgEmbedMoviesDlgTitle   : 'Embed Movies',
+DlgEmbedMoviesDlgName    : 'Embed Movies',
+DlgEmbedMoviesTooltip    : 'Insert a movie display inside your document.',
+DlgEmbedMoviesInfoTab    : 'Info',
+DlgEmbedMoviesUploadTab  : 'Upload',
+DlgEmbedMoviesURL        : 'URL',
+DlgEmbedMoviesAlertUrl   : 'No movie URL specified.',
+DlgEmbedMoviesExtensionSupported : 'Only a mpg, mpeg, avi, wmv, mov or asf file extension allowed.'
 };

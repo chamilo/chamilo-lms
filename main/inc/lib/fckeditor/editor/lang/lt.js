@@ -44,6 +44,7 @@ RemoveFormat		: "Panaikinti formatą",
 InsertLinkLbl		: "Nuoroda",
 InsertLink			: "Įterpti/taisyti nuorodą",
 RemoveLink			: "Panaikinti nuorodą",
+VisitLink			: "Open Link",	//MISSING
 Anchor				: "Įterpti/modifikuoti žymę",
 AnchorDelete		: "Remove Anchor",	//MISSING
 InsertImageLbl		: "Vaizdas",
@@ -72,6 +73,9 @@ BlockJustify		: "Lygiuoti abi puses",
 DecreaseIndent		: "Sumažinti įtrauką",
 IncreaseIndent		: "Padidinti įtrauką",
 Blockquote			: "Blockquote",	//MISSING
+CreateDiv			: "Create Div Container",	//MISSING
+EditDiv				: "Edit Div Container",	//MISSING
+DeleteDiv			: "Remove Div Container",	//MISSING
 Undo				: "Atšaukti",
 Redo				: "Atstatyti",
 NumberedListLbl		: "Numeruotas sąrašas",
@@ -157,6 +161,7 @@ UnknownToolbarSet	: "Mygtukų juostos rinkinys \"%1\" neegzistuoja",
 NoActiveX			: "Jūsų naršyklės saugumo nuostatos gali riboti kai kurias redaktoriaus savybes. Jūs turite aktyvuoti opciją \"Run ActiveX controls and plug-ins\". Kitu atveju Jums bus pranešama apie klaidas ir trūkstamas savybes.",
 BrowseServerBlocked : "Neįmanoma atidaryti naujo naršyklės lango. Įsitikinkite, kad iškylančių langų blokavimo programos neveiksnios.",
 DialogBlocked		: "Neįmanoma atidaryti dialogo lango. Įsitikinkite, kad iškylančių langų blokavimo programos neveiksnios.",
+VisitLinkBlocked	: "It was not possible to open a new window. Make sure all popup blockers are disabled.",	//MISSING
 
 // Dialogs
 DlgBtnOK			: "OK",
@@ -303,6 +308,11 @@ DlgTableCellSpace	: "Tarpas tarp langelių",
 DlgTableCellPad		: "Trapas nuo langelio rėmo iki teksto",
 DlgTableCaption		: "Antraštė",
 DlgTableSummary		: "Santrauka",
+DlgTableHeaders		: "Headers",	//MISSING
+DlgTableHeadersNone		: "None",	//MISSING
+DlgTableHeadersColumn	: "First column",	//MISSING
+DlgTableHeadersRow		: "First Row",	//MISSING
+DlgTableHeadersBoth		: "Both",	//MISSING
 
 // Table Cell Dialog
 DlgCellTitle		: "Langelio savybės",
@@ -325,6 +335,9 @@ DlgCellVerAlignTop	: "Viršų",
 DlgCellVerAlignMiddle	: "Vidurį",
 DlgCellVerAlignBottom	: "Apačią",
 DlgCellVerAlignBaseline	: "Apatinę liniją",
+DlgCellType		: "Cell Type",	//MISSING
+DlgCellTypeData		: "Data",	//MISSING
+DlgCellTypeHeader	: "Header",	//MISSING
 DlgCellRowSpan		: "Eilučių apjungimas",
 DlgCellCollSpan		: "Stulpelių apjungimas",
 DlgCellBackColor	: "Fono spalva",
@@ -511,5 +524,30 @@ DlgAboutAboutTab	: "Apie",
 DlgAboutBrowserInfoTab	: "Naršyklės informacija",
 DlgAboutLicenseTab	: "License",	//MISSING
 DlgAboutVersion		: "versija",
-DlgAboutInfo		: "Papildomą informaciją galima gauti"
+DlgAboutInfo		: "Papildomą informaciją galima gauti",
+
+// Div Dialog
+DlgDivGeneralTab	: "General",	//MISSING
+DlgDivAdvancedTab	: "Advanced",	//MISSING
+DlgDivStyle		: "Style",	//MISSING
+DlgDivInlineStyle	: "Inline Style",	//MISSING
+
+// MP3 Dialog
+DlgMP3Title     : "Import MP3",
+DlgMP3Upload    : "From my Computer",
+DlgMP3Tab       : "From course",
+
+// Image admin
+DlgImageManagerTitle : "Import Image",
+
+// Movies
+DlgEmbedMoviesBtn        : 'Embed Movies',
+DlgEmbedMoviesDlgTitle   : 'Embed Movies',
+DlgEmbedMoviesDlgName    : 'Embed Movies',
+DlgEmbedMoviesTooltip    : 'Insert a movie display inside your document.',
+DlgEmbedMoviesInfoTab    : 'Info',
+DlgEmbedMoviesUploadTab  : 'Upload',
+DlgEmbedMoviesURL        : 'URL',
+DlgEmbedMoviesAlertUrl   : 'No movie URL specified.',
+DlgEmbedMoviesExtensionSupported : 'Only a mpg, mpeg, avi, wmv, mov or asf file extension allowed.'
 };

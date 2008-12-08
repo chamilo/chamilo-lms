@@ -44,6 +44,7 @@ RemoveFormat		: "Eliminar Formato",
 InsertLinkLbl		: "Hiperligação",
 InsertLink			: "Inserir/Editar Hiperligação",
 RemoveLink			: "Eliminar Hiperligação",
+VisitLink			: "Open Link",	//MISSING
 Anchor				: " Inserir/Editar Âncora",
 AnchorDelete		: "Remove Anchor",	//MISSING
 InsertImageLbl		: "Imagem",
@@ -72,6 +73,9 @@ BlockJustify		: "Justificado",
 DecreaseIndent		: "Diminuir Avanço",
 IncreaseIndent		: "Aumentar Avanço",
 Blockquote			: "Blockquote",	//MISSING
+CreateDiv			: "Create Div Container",	//MISSING
+EditDiv				: "Edit Div Container",	//MISSING
+DeleteDiv			: "Remove Div Container",	//MISSING
 Undo				: "Anular",
 Redo				: "Repetir",
 NumberedListLbl		: "Numeração",
@@ -157,6 +161,7 @@ UnknownToolbarSet	: "Nome de barra \"%1\" não definido",
 NoActiveX			: "As definições de segurança do navegador podem limitar algumas potencalidades do editr. Deve activar a opção \"Executar controlos e extensões ActiveX\". Pode ocorrer erros ou verificar que faltam potencialidades.",
 BrowseServerBlocked : "Não foi possível abrir o navegador de recursos. Certifique-se que todos os bloqueadores de popup estão desactivados.",
 DialogBlocked		: "Não foi possível abrir a janela de diálogo. Certifique-se que todos os bloqueadores de popup estão desactivados.",
+VisitLinkBlocked	: "It was not possible to open a new window. Make sure all popup blockers are disabled.",	//MISSING
 
 // Dialogs
 DlgBtnOK			: "OK",
@@ -303,6 +308,11 @@ DlgTableCellSpace	: "Esp. e/células",
 DlgTableCellPad		: "Esp. interior",
 DlgTableCaption		: "Título",
 DlgTableSummary		: "Sumário",
+DlgTableHeaders		: "Headers",	//MISSING
+DlgTableHeadersNone		: "None",	//MISSING
+DlgTableHeadersColumn	: "First column",	//MISSING
+DlgTableHeadersRow		: "First Row",	//MISSING
+DlgTableHeadersBoth		: "Both",	//MISSING
 
 // Table Cell Dialog
 DlgCellTitle		: "Propriedades da Célula",
@@ -325,6 +335,9 @@ DlgCellVerAlignTop	: "Topo",
 DlgCellVerAlignMiddle	: "Médio",
 DlgCellVerAlignBottom	: "Fundi",
 DlgCellVerAlignBaseline	: "Linha de Base",
+DlgCellType		: "Cell Type",	//MISSING
+DlgCellTypeData		: "Data",	//MISSING
+DlgCellTypeHeader	: "Header",	//MISSING
 DlgCellRowSpan		: "Unir Linhas",
 DlgCellCollSpan		: "Unir Colunas",
 DlgCellBackColor	: "Cor do Fundo",
@@ -511,5 +524,30 @@ DlgAboutAboutTab	: "Acerca",
 DlgAboutBrowserInfoTab	: "Informação do Nevegador",
 DlgAboutLicenseTab	: "Licença",
 DlgAboutVersion		: "versão",
-DlgAboutInfo		: "Para mais informações por favor dirija-se a"
+DlgAboutInfo		: "Para mais informações por favor dirija-se a",
+
+// Div Dialog
+DlgDivGeneralTab	: "General",	//MISSING
+DlgDivAdvancedTab	: "Advanced",	//MISSING
+DlgDivStyle		: "Style",	//MISSING
+DlgDivInlineStyle	: "Inline Style",	//MISSING
+
+// MP3 Dialog
+DlgMP3Title     : "Import MP3",
+DlgMP3Upload    : "From my Computer",
+DlgMP3Tab       : "From course",
+
+// Image admin
+DlgImageManagerTitle : "Import Image",
+
+// Movies
+DlgEmbedMoviesBtn        : 'Embed Movies',
+DlgEmbedMoviesDlgTitle   : 'Embed Movies',
+DlgEmbedMoviesDlgName    : 'Embed Movies',
+DlgEmbedMoviesTooltip    : 'Insert a movie display inside your document.',
+DlgEmbedMoviesInfoTab    : 'Info',
+DlgEmbedMoviesUploadTab  : 'Upload',
+DlgEmbedMoviesURL        : 'URL',
+DlgEmbedMoviesAlertUrl   : 'No movie URL specified.',
+DlgEmbedMoviesExtensionSupported : 'Only a mpg, mpeg, avi, wmv, mov or asf file extension allowed.'
 };

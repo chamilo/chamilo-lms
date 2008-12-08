@@ -44,7 +44,7 @@ function GetResourceTypeDirectory( $resourceType, $sCommand )
 			return $Config['QuickUploadAbsolutePath'][$resourceType] ;
 
 		// Map the "UserFiles" path to a local directory.
-		return Server_MapPath( $Config['QuickUploadPath'][$resourceType] ) ;		
+		return Server_MapPath( $Config['QuickUploadPath'][$resourceType] ) ;
 	}
 	else
 	{
@@ -53,16 +53,16 @@ function GetResourceTypeDirectory( $resourceType, $sCommand )
 
 		// Map the "UserFiles" path to a local directory.
 		return Server_MapPath( $Config['FileTypesPath'][$resourceType] ) ;
-		
 	}
 }
+
 /*
  * this is the function that is call to change the URL in the fckeditor source view
 */
 function GetUrlFromPath( $resourceType, $folderPath, $sCommand )
 {
 	global $currentCourseRepositoryWeb;	
-//return CombinePaths( GetResourceTypePath( $resourceType, $sCommand ), $folderPath ) ;
+	//return CombinePaths( GetResourceTypePath( $resourceType, $sCommand ), $folderPath ) ;
 	$resourceType =strtolower($resourceType); 
 		//return $GLOBALS["UserFilesPath"] . $resourceType . $folderPath ;
 	return $resourceType . $folderPath;
@@ -74,14 +74,15 @@ function RemoveExtension( $fileName )
 }
 
 function ServerMapFolder( $resourceType, $folderPath, $sCommand )
-{	
+{
 	// Get the resource type directory.
 	//this should be fixed
-	$resourceType = strtolower($resourceType); 
+	$resourceType = strtolower($resourceType);
+
 	/*
 	//$sResourceTypePath = GetResourceTypeDirectory( $resourceType, $sCommand ) ;
 	$sResourceTypePath = $GLOBALS["UserFilesDirectory"] . $resourceType . '/' ;
-	
+
 	// Ensure that the directory exists.
 	$sErrorMsg = CreateServerFolder( $sResourceTypePath ) ;
 	if ( $sErrorMsg != '' )
@@ -90,7 +91,8 @@ function ServerMapFolder( $resourceType, $folderPath, $sCommand )
 	// Return the resource type directory combined with the required path.
 	return CombinePaths( $sResourceTypePath , $folderPath ) ;
 	*/
-		// Get the resource type directory.
+
+	// Get the resource type directory.
 	$sResourceTypePath = $GLOBALS["UserFilesDirectory"] . $resourceType . '/' ; 
 	
 	// Ensure that the directory exists.
@@ -103,7 +105,7 @@ function ServerMapFolder( $resourceType, $folderPath, $sCommand )
 function GetParentFolder( $folderPath )
 {
 	$sPattern = "-[/\\\\][^/\\\\]+[/\\\\]?$-" ;
-	return preg_replace( $sPattern, '', $folderPath );	
+	return preg_replace( $sPattern, '', $folderPath ) ;
 }
 
 function CreateServerFolder( $folderPath, $lastFolder = null )
@@ -115,7 +117,7 @@ function CreateServerFolder( $folderPath, $lastFolder = null )
 	while ( strpos($folderPath, '//') !== false )
 	{
 		$folderPath = str_replace( '//', '/', $folderPath ) ;
-	} 
+	}
 
 	// Check if the parent exists, or create it.
 	if ( !file_exists( $sParent ) )
@@ -170,18 +172,19 @@ function CreateServerFolder( $folderPath, $lastFolder = null )
 
 function GetRootPath()
 {
-/*	if (!isset($_SERVER)) 
-	{
+	/*
+	if (!isset($_SERVER)) {
 		global $_SERVER;
-	} 
-	
+	}
 	$sRealPath = realpath( './' ) ;
 	// #2124 ensure that no slash is at the end
 	$sRealPath = rtrim($sRealPath,"\\/");
 
 	$sSelfPath = $_SERVER['PHP_SELF'] ;
 	$sSelfPath = substr( $sSelfPath, 0, strrpos( $sSelfPath, '/' ) ) ;
+
 	$sSelfPath = str_replace( '/', DIRECTORY_SEPARATOR, $sSelfPath ) ;
+
 	$position = strpos( $sRealPath, $sSelfPath ) ;
 
 	// This can check only that this script isn't run from a virtual dir
@@ -191,18 +194,18 @@ function GetRootPath()
 
 	return substr( $sRealPath, 0, $position ) ;
 	*/
+
 	$sRealPath = realpath( './' ) ;
 	$sSelfPath = htmlentities($_SERVER['PHP_SELF']);
 	$sSelfPath = substr( $sSelfPath, 0, strrpos( $sSelfPath, '/' ) ) ;	
 	return substr( $sRealPath, 0, strlen( $sRealPath ) - strlen( $sSelfPath ) ) ;
 }
 
-
 // Emulate the asp Server.mapPath function.
 // given an url path return the physical directory that it corresponds to
 function Server_MapPath( $path )
 {
-	 // This function is available only for Apache
+	// This function is available only for Apache
 	if ( function_exists( 'apache_lookup_uri' ) )
 	{
 		$info = apache_lookup_uri( $path ) ;
@@ -212,7 +215,6 @@ function Server_MapPath( $path )
 	// This isn't correct but for the moment there's no other solution
 	// If this script is under a virtual directory or symlink it will detect the problem and stop
 	return GetRootPath() . $path ;
-
 }
 
 function IsAllowedExt( $sExtension, $resourceType )

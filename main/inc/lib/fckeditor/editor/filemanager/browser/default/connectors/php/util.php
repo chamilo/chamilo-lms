@@ -76,7 +76,7 @@ function ConvertToXmlAttribute( $value )
 	{
 		return ( htmlspecialchars( $value ) ) ;
 	}
-	
+
 	return $value;
 }
 

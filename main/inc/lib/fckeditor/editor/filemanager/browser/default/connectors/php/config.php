@@ -29,6 +29,7 @@ global $Config ;
 //		authenticated users can access this file or use some kind of session checking.
 $Config['Enabled'] = true ;
 
+
 // Path to user files relative to the document root.
 //$Config['UserFilesPath'] = '/userfiles/' ;
 
@@ -50,6 +51,7 @@ $Config['SecureImageUploads'] = true;
 $Config['ConfigAllowedCommands'] = array('QuickUpload', 'FileUpload', 'GetFolders', 'GetFoldersAndFiles', 'CreateFolder') ;
 
 // Allowed Resource Types.
+//$Config['ConfigAllowedTypes'] = array('File', 'Image', 'Flash', 'Media') ;
 $Config['ConfigAllowedTypes'] = array('File', 'Images', 'Flash', 'Media','MP3','Video') ;  
 
 // For security, HTML is allowed in the first Kb of data for files having the
@@ -130,6 +132,7 @@ $Config['DeniedExtensions']['Flash']	= array() ;
 
 $Config['AllowedExtensions']['MP3']	= array('mp3') ;
 $Config['DeniedExtensions']['MP3']	= array() ;
+
 //supported files according to fck:embedmovies -->>  mpg|mpeg|avi|wmv|mov|asf
 // old ones
 //$Config['AllowedExtensions']['Videos']	= array('avi','mpg','mpeg','mov','wmv','rm') ;
@@ -163,6 +166,6 @@ $Config['DeniedExtensions']['Media']	= array() ;
 $Config['FileTypesPath']['Media']		= $Config['UserFilesPath'] . 'media/' ;
 $Config['FileTypesAbsolutePath']['Media']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'media/' ;
 $Config['QuickUploadPath']['Media']		= $Config['UserFilesPath'] ;
-$Config['QuickUploadAbsolutePath']['Media']= $Config['UserFilesAbsolutePath'] ; 
+$Config['QuickUploadAbsolutePath']['Media']= $Config['UserFilesAbsolutePath'] ;
 */
 ?>

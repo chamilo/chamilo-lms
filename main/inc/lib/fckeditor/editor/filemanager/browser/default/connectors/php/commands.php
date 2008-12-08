@@ -42,9 +42,11 @@ function GetFolders( $resourceType, $currentFolder )
 
 	// Open the "Folders" node.
 	echo "<Folders>" ;
+
 	natcasesort( $aFolders ) ;
 	foreach ( $aFolders as $sFolder )
 		echo $sFolder ;
+
 	// Close the "Folders" node.
 	echo "</Folders>" ;
 }

@@ -75,16 +75,16 @@ DoResponse() ;
 
 function DoResponse()
 {
-    if (!isset($_GET)) 
-	{
+    if (!isset($_GET)) {
         global $_GET;
     }
 	if ( !isset( $_GET['Command'] ) || !isset( $_GET['Type'] ) || !isset( $_GET['CurrentFolder'] ) )
 		return ;
- 
+
 	// Get the main request informaiton.
 	$sCommand		= $_GET['Command'] ;
-	$sResourceType	= $_GET['Type'];
+	$sResourceType	= $_GET['Type'] ;
+
 	//$sCurrentFolder	= GetCurrentFolder() ;
 	$sCurrentFolder	= $_GET['CurrentFolder'] ;
 
@@ -108,7 +108,7 @@ function DoResponse()
 	// Execute the required command.
 	switch ( $sCommand )
 	{
-		case 'GetFolders' :			
+		case 'GetFolders' :
 			GetFolders( $sResourceType, $sCurrentFolder ) ;
 			break ;
 		case 'GetFoldersAndFiles' :
@@ -118,7 +118,9 @@ function DoResponse()
 			CreateFolder( $sResourceType, $sCurrentFolder ) ;
 			break ;
 	}
+
 	CreateXmlFooter() ;
-	exit;
+
+	exit ;
 }
 ?>

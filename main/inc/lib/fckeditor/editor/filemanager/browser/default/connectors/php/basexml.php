@@ -44,7 +44,7 @@ function SetXmlHeaders()
 
 function CreateXmlHeader( $command, $resourceType, $currentFolder )
 {
-	SetXmlHeaders() ; 
+	SetXmlHeaders() ;
 
 	// Create the XML document header.
 	echo '<?xml version="1.0" encoding="utf-8" ?>' ;
@@ -53,7 +53,7 @@ function CreateXmlHeader( $command, $resourceType, $currentFolder )
 	echo '<Connector command="' . $command . '" resourceType="' . $resourceType . '">' ;
 
 	// Add the current folder node.
-	echo '<CurrentFolder path="' . ConvertToXmlAttribute( $currentFolder ) . '" url="'. ConvertToXmlAttribute( GetUrlFromPath( $resourceType, $currentFolder, $command ) ) .'" />' ;
+	echo '<CurrentFolder path="' . ConvertToXmlAttribute( $currentFolder ) . '" url="' . ConvertToXmlAttribute( GetUrlFromPath( $resourceType, $currentFolder, $command ) ) . '" />' ;
 
 	$GLOBALS['HeaderSent'] = true ;
 }

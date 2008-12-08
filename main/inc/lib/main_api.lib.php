@@ -2884,7 +2884,7 @@ function api_request_uri()
  * To be used in global.inc.php only.
  * @author Ivan Tcholakov, 06-NOV-2008.
  */
-function create_include_path_setting()
+function api_create_include_path_setting()
 {
 	$include_path = ini_get('include_path');
 	if (!empty($include_path))

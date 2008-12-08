@@ -18,7 +18,7 @@
  *    http://www.mozilla.org/MPL/MPL-1.1.html
  *
  * == END LICENSE ==
-+   Template's in frame changes  by Julio Montoya Armas (gugli100@gmail.com)
+ * +   Template's in frame changes  by Julio Montoya Armas (gugli100@gmail.com)
  * This page is used by all dialog box as the container.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -83,12 +83,13 @@ var FCKConfig		= E.FCKConfig ;
 window.focus() ;
 
 // Dialog's size
-var WindowSize= '295px';		
+var WindowSize= '295px';
 
 // Sets the Skin CSS
 document.write( FCKTools.GetStyleHtml( FCKConfig.SkinDialogCSS ) ) ;
 
 // Sets the language direction.
+//var langDir = E.FCKLang.Dir ;
 var langDir = document.documentElement.dir = E.FCKLang.Dir ;
 
 // For IE6-, the fck_dialog_ie6.js is loaded, used to fix limitations in the browser.
@@ -412,6 +413,11 @@ var Selection =
 	 */
 	EnsureSelection : function()
 	{
+		// Move the focus to the Cancel button so even if the dialog contains a 
+		// contentEditable element the selection is properly restored in the editor #2496
+		window.focus() ;
+		$( 'btnCancel' ).focus() ;
+
 		FCK.Selection.Restore() ;
 	},
 
@@ -576,6 +582,8 @@ var onReadyRegister = function()
 	// Program entry point.
 	window.Init = function()
 	{
+		$( 'contents' ).dir = langDir;
+
 		// Start the throbber timer.
 		Throbber.Show( 1000 ) ;
 
@@ -595,7 +603,9 @@ var onReadyRegister = function()
 		// Disable the previous dialog if it exists.
 		if ( ParentDialog() )
 		{
-			//ParentDialog().contentWindow.SetEnabled( false ) ; 
+			//
+			//ParentDialog().contentWindow.SetEnabled( false ) ;
+			//
 			if ( FCKBrowserInfo.IsIE && !FCKBrowserInfo.IsIE7 )
 			{
 				var currentParent = ParentDialog() ;
@@ -762,9 +772,9 @@ var onReadyRegister = function()
 			<div id="header">
 				<div id="TitleArea" class="PopupTitle PopupTitleBorder">
 					<script type="text/javascript">
-						// <![CDATA[
-						document.write( Args().Title ) ;
-						// ]]>
+// <![CDATA[
+document.write( Args().Title ) ;
+// ]]>
 					</script>
 					<div id="closeButton" onclick="Cancel();"></div>
 				</div>

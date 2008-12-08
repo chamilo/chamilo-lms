@@ -1,4 +1,4 @@
-/*
+﻿/*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
  * Copyright (C) 2003-2008 Frederico Caldeira Knabben
  *
@@ -199,7 +199,6 @@ function LoadSelection()
 //#### The OK button was hit.
 function Ok()
 {
-	
 	if ( GetE('txtUrl').value.length == 0 )
 	{
 		dialog.SetSelectedTab( 'Info' ) ;
@@ -274,7 +273,6 @@ function UpdateImage( e, skipId )
 {
 	e.src = GetE('txtUrl').value ;
 	SetAttribute( e, "_fcksavedurl", GetE('txtUrl').value ) ;
-	
 	SetAttribute( e, "alt"   , GetE('txtAlt').value ) ;
 	SetAttribute( e, "width" , GetE('txtWidth').value ) ;
 	SetAttribute( e, "height", GetE('txtHeight').value ) ;

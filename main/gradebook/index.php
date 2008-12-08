@@ -534,6 +534,7 @@ if (!empty($keyword))
 }
 else
 */
+
 if (isset ($_GET['studentoverview'])) {
 	$cats= Category :: load($category);
 	$stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
@@ -567,14 +568,14 @@ if (isset ($_GET['studentoverview'])) {
 		$user_id = api_get_user_id();
 	}
 
-	$category = Category :: load ($_GET['cat']);
+	$category = Category :: load ($_GET['cat_id']);	
 	if ($category[0]->is_certificate_available($user_id)) {
 		$user= get_user_info_from_id($user_id);
 		$scoredisplay = ScoreDisplay :: instance();
 		$scorecourse = $category[0]->calc_score($user_id);
 		$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
 
-		$cattotal = Category :: load(0);
+		$cattotal = Category :: load($_GET['cat_id']);
 		$scoretotal= $cattotal[0]->calc_score($user_id);
 		$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
 		

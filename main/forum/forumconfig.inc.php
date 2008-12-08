@@ -32,7 +32,7 @@ $table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
 -----------------------------------------------------------
 */
 define('TOOL_FORUM_CATEGORY','forum_category');
-define('TOOL_FORUM','forum');
+//define('TOOL_FORUM','forum'); defined in main_api
 define('TOOL_FORUM_THREAD','forum_thread');
 define('TOOL_FORUM_POST','forum_post');
 define('TOOL_FORUM_ATTACH','forum_attachment');

@@ -316,8 +316,8 @@ class CourseManager
 		$course = Database::fetch_object($res);
 		$table_group = Database :: get_course_table(TABLE_GROUP_USER, $course->db_name);
 		$sql = "DELETE FROM $table_group WHERE user_id IN (".$user_ids.")";
-		api_sql_query($sql, __FILE__, __LINE__);
-
+		api_sql_query($sql, __FILE__, __LINE__);		
+		
 		// Unsubscribe user from all blogs in the course
 		$table_blog_user = Database::get_course_table(TABLE_BLOGS_REL_USER, $course->db_name);
 		$sql = "DELETE FROM  ".$table_blog_user." WHERE user_id IN (".$user_ids.")";
@@ -378,40 +378,57 @@ class CourseManager
 		} else {
 			// previously check if the user are already registered on the platform
 
-			$handle = api_sql_query("SELECT status FROM ".$user_table."
+			$handle = @api_sql_query("SELECT status FROM ".$user_table."
 														WHERE `user_id` = '$user_id' ", __FILE__, __LINE__);
 			if (Database::num_rows($handle) == 0){
 				return false; // the user isn't registered to the platform
 			} else {
 				//check if user isn't already subscribed to the course
-				$handle = api_sql_query("SELECT * FROM ".$course_user_table."
+				$handle = @api_sql_query("SELECT * FROM ".$course_user_table."
 																	WHERE `user_id` = '$user_id'
 																	AND `course_code` ='$course_code'", __FILE__, __LINE__);
 				if (Database::num_rows($handle) > 0) {
 					return false; // the user is already subscribed to the course
 				} else {
 					if (!empty($_SESSION["id_session"])) {
-						// add in table session_rel_course_rel_user	
-						$add_session_course_rel = "INSERT INTO $tbl_session_rel_course_user 	
-												  SET id_session ='".$_SESSION["id_session"]."',
-												  course_code = '".$_SESSION['_course']['id']."',
-												  id_user = '".$user_id."'";
-					    $result = @api_sql_query($add_session_course_rel,__FILE__, __LINE__);	
-					    //var_dump($result);
-					    // add in table session_rel_user			    
-					    $add_session_rel_user = "INSERT INTO $tbl_session_rel_user 	
-												  SET id_session ='".$_SESSION["id_session"]."',											  
-												  id_user = '".$user_id."'";
-					    $result = @api_sql_query($add_session_rel_user,__FILE__, __LINE__);
-					    // update the table session
-				    	$sql = "SELECT COUNT(*) from $tbl_session_rel_user WHERE id_session = '".$_SESSION["id_session"]."'";
-				    	$result = @api_sql_query($sql,__FILE__, __LINE__);
-				    	$row = Database::fetch_array($result);						    			    	
-				 		$count = $row[0]; // number of users by session
-				 		
-				 		$update_user_session = "UPDATE $tbl_session set nbr_users = '$count' WHERE id = '".$_SESSION["id_session"]."'" ;  	
-						$result = @api_sql_query($update_user_session,__FILE__,__LINE__);
 						
+						//check if user isn't already estore to the session_rel_course_user table
+						$sql1 = "SELECT * FROM $tbl_session_rel_course_user
+								WHERE course_code = '".$_SESSION['_course']['id']."'
+								AND id_session ='".$_SESSION["id_session"]."'
+								AND id_user = '".$user_id."'";
+						$result1 = @api_sql_query($sql1,__FILE__,__LINE__);
+						$check1 = Database::num_rows($result1);
+						
+						//check if user isn't already estore to the session_rel_user table
+						$sql2 = "SELECT * FROM $tbl_session_rel_user
+								WHERE id_session ='".$_SESSION["id_session"]."'
+								AND id_user = '".$user_id."'";
+						$result2 = @api_sql_query($sql2,__FILE__,__LINE__);
+						$check2 = Database::num_rows($result2);
+						
+						if ($check1 > 0 || $check2 > 0) {
+							return false;
+						} else {
+							// add in table session_rel_course_rel_user	
+							$add_session_course_rel = "INSERT INTO $tbl_session_rel_course_user 	
+													  SET id_session ='".$_SESSION["id_session"]."',
+													  course_code = '".$_SESSION['_course']['id']."',
+													  id_user = '".$user_id."'";
+						    $result = @api_sql_query($add_session_course_rel,__FILE__, __LINE__);					    	
+						    // add in table session_rel_user			    
+						    $add_session_rel_user = "INSERT INTO $tbl_session_rel_user 	
+													  SET id_session ='".$_SESSION["id_session"]."',											  
+													  id_user = '".$user_id."'";
+						    $result = @api_sql_query($add_session_rel_user,__FILE__, __LINE__);					    
+						    // update the table session
+					    	$sql = "SELECT COUNT(*) from $tbl_session_rel_user WHERE id_session = '".$_SESSION["id_session"]."'";
+					    	$result = @api_sql_query($sql,__FILE__, __LINE__);				    	
+					    	$row = Database::fetch_array($result);						    			    	
+					 		$count = $row[0]; // number of users by session				 		
+					 		$update_user_session = "UPDATE $tbl_session set nbr_users = '$count' WHERE id = '".$_SESSION["id_session"]."'" ;  	
+							$result = @api_sql_query($update_user_session,__FILE__,__LINE__);
+						}					
 					} else {
 					$course_sort = CourseManager :: userCourseSort($user_id,$course_code);
 					$add_course_user_entry_sql = "INSERT INTO ".$course_user_table."
@@ -419,7 +436,7 @@ class CourseManager
 										`user_id`    = '$user_id',
 											`status`    = '".$status."',
 											`sort`  =   '". ($course_sort)."'";
-					$result = api_sql_query($add_course_user_entry_sql, __FILE__, __LINE__);
+					$result = @api_sql_query($add_course_user_entry_sql, __FILE__, __LINE__);
 					}
 					if ($result) {
 						return true;

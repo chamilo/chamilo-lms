@@ -1,4 +1,4 @@
-<?php // $Id: user.php 17013 2008-11-28 15:55:13Z iflorespaz $
+<?php // $Id: user.php 17122 2008-12-08 21:13:55Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -178,8 +178,8 @@ if (api_is_allowed_to_edit()) {
 					AND rel_course.course_code = "'.$currentCourseID.'"
 					ORDER BY lastname, firstname';
 			$result=api_sql_query($sql,__FILE__,__LINE__);			
-			$row=Database::fetch_array($result,'ASSOC');					
-			if ($row['user_id']!=$user_id || $row['user_id']=="") {	
+			$row=Database::fetch_array($result,'ASSOC');							
+			if ($row['user_id']==$user_id || $row['user_id']=="") {	
 				CourseManager::unsubscribe_user($_GET['user_id'],$_SESSION['_course']['sysCode']);
 				$message = get_lang('UserUnsubscribed');
 			} else {				

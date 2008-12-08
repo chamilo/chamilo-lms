@@ -95,3 +95,6 @@ FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE
 
 // reduce format list
 FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5' ;
+
+//Added by Ivan Tcholakov
+FCKConfig.Plugins.Add( "customizations" ) ;

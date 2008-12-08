@@ -1,4 +1,4 @@
-<?php // $Id: user_portal.php 17065 2008-12-04 06:07:44Z yannoo $
+<?php // $Id: user_portal.php 17100 2008-12-08 04:11:34Z yannoo $
   
 /* For licensing terms, see /dokeos_license.txt */
 /**
@@ -389,7 +389,6 @@ function get_logged_user_course_html($my_course) {
 	$course_group_user_table 	= Database :: get_course_table(TOOL_USER, $course_database);
 		
 	$user_id = api_get_user_id();
-	$session_id = $my_course['id_session'];
 	$course_system_code = $my_course['k'];
 	$course_visual_code = $my_course['c'];
 	$course_title = $my_course['i'];

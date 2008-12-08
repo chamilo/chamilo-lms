@@ -42,7 +42,7 @@ if ($is_allowed_to_edit) {
 	======================================*/
 
 	echo '<div class="glossary-add-form">';
-	if ($_GET['action'] == 'addglossary') {		
+	if (isset($_GET['action']) && $_GET['action'] == 'addglossary') {		
 		echo '<form name="frm_glossary" action="index.php?'.api_get_cidreq().'">';
 		echo '<div class="term_glossary">'.get_lang('TermName').'<br /><input type="text" name="name_glossary"></div>';
 		echo '<div class="definition_glossary">'.get_lang('TermDefinition').'<br /><textarea cols="60" rows="5" maxlength="255" name="description_glossary"></textarea></div>';
@@ -54,25 +54,30 @@ if ($is_allowed_to_edit) {
 /*======================================
 			Add Glossary Details
 ======================================*/
-
+if (isset($_GET['name_glossary']) || isset($_GET['description_glossary'])) {
 $name_glossary = Security::remove_XSS($_GET['name_glossary']);
-$description_glossary = Security::remove_XSS($_GET['description_glossary']);
+$description_glossary = Security::remove_XSS($_GET['description_glossary']);	
 $add_glossary = add_glossary_details($name_glossary,$description_glossary);
+}
+
+
 
 /*======================================
 			Edit Glossary Details
 ======================================*/
-
+if (isset($_GET['g_id']) || isset($_GET['n_glossary']) || isset($_GET['d_glossary'])) {
 $g_id = Security::remove_XSS($_GET['g_id']);
 $n_glossary = Security::remove_XSS($_GET['n_glossary']);
 $d_glossary = Security::remove_XSS($_GET['d_glossary']);
-$edit_glossary = edit_glossary_details($g_id,$n_glossary,$d_glossary);
+$edit_glossary = edit_glossary_details($g_id,$n_glossary,$d_glossary);	
+}
+
 
 /*======================================
 			Delete Glossary Details
 ======================================*/
 
-if ($_GET['action'] == 'delete_glossary') {
+if (isset($_GET['action']) && $_GET['action'] == 'delete_glossary') {
 	$g_id = Security::remove_XSS($_GET['glossary_id']);
 	$delete_glossary = delete_glossary_details($g_id);
 
@@ -95,9 +100,10 @@ case 'move_lp_down':
 }
 
 // order by type (one = By Start Date, two = By End Date, three = By Term Name)
-$type = (int)$_GET['type'];
+isset($_GET['type'])?$type=(int)$_GET['type']:$type='';
 $glossary_list=get_glossary_details($type); //returns a results resource
-$max = Database::num_rows($glossary_list);
+
+$max = Database::num_rows($glossary_list);	
 $current = 0;
 if ($max > 1) {
 	if ($type == 1) {
@@ -134,7 +140,7 @@ echo '<div class="glossary-terms-list">';
 while ($row_glossary_list=Database::fetch_array($glossary_list)) {
 	
 	$dsp_order = '';
-	if ( ($_GET['action'] == 'edit_glossary') && ($_GET['glossary_id'] == $row_glossary_list['glossary_id']) ) {
+	if ( (isset($_GET['action']) && $_GET['action'] == 'edit_glossary') && (isset($_GET['glossary_id']) && $_GET['glossary_id'] == $row_glossary_list['glossary_id']) ) {
 		if ($is_allowed_to_edit) {
 	        echo '<div class="glossary-term-edit-form"><a name="term-'.$row_glossary_list['glossary_id'].'"></a>';
 			echo '<form name="form_glossary" action="index.php?'.api_get_cidreq().'">';

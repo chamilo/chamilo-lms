@@ -196,6 +196,7 @@ class SortableTable extends HTML_Table
 	{
 		global $charset;
 		$empty_table = false;
+		$html = '';
 		if ($this->get_total_number_of_items() == 0)
 		{
 			$cols = $this->getColCount();

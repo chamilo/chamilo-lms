@@ -41,24 +41,25 @@ require_once '../inc/lib/fileDisplay.lib.php';
 
 function display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form)  {
 	$display_output = "";
+	isset($_GET['origin'])?$origin = Security::remove_XSS($_GET['origin']):$origin='';
 	if (strlen($cur_dir_path) > 0 && $cur_dir_path != '/') {
 		$parent_dir = dirname($cur_dir_path);
-		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.Security::remove_XSS($_GET['origin']).'&curdirpath='.$parent_dir.'">'.Display::return_icon('folder_up.gif').' '.get_lang('Up').'</a>&nbsp&nbsp';
+		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$parent_dir.'">'.Display::return_icon('folder_up.gif').' '.get_lang('Up').'</a>&nbsp&nbsp';
 	}
 	
 	if (! $always_show_upload_form ) {
 		$user_info = api_get_user_info();
 		$user_status = $user_info['status']; 
 		if ($user_status != 1) {
-			$display_output .= "&nbsp&nbsp<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") .'</a>&nbsp&nbsp&nbsp&nbsp';	
+			$display_output .= "&nbsp&nbsp<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".$origin."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") .'</a>&nbsp&nbsp&nbsp&nbsp';	
 		}					
 	}
 	
 	if (! $always_show_tool_options && api_is_allowed_to_edit()) {
-		// Create dir
-		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.Security::remove_XSS($_GET['origin']).'"><img src="../img/folder_new.gif" border="0"alt ="'.get_lang('CreateDir').'" /> '.get_lang('CreateDir').' </a>&nbsp&nbsp';
+		// Create dir		
+		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'"><img src="../img/folder_new.gif" border="0"alt ="'.get_lang('CreateDir').'" /> '.get_lang('CreateDir').' </a>&nbsp&nbsp';
 		// Options
-		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".Security::remove_XSS($_GET['origin'])."&amp;display_tool_options=true&amp;origin=".Security::remove_XSS($_GET['origin'])."\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a>&nbsp&nbsp";							
+		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".$origin."&amp;display_tool_options=true&amp;origin=".$origin."\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a>&nbsp&nbsp";							
 	}
 
 	if ($display_output != "") {
@@ -269,7 +270,8 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	if($sub_course_dir == '/') {
 		$sub_course_dir='';
 	}
-	$session_condition =  intval($_SESSION['id_session'])!=0 ?"AND session_id IN (0,".intval($_SESSION['id_session']).")" : "";
+	isset($_SESSION['id_session'])?$id_session=$_SESSION['id_session']:$id_session=null;
+	$session_condition =  intval($id_session)!=0 ?"AND session_id IN (0,".intval($id_session).")" : "";
 	//Get list from database
 	if($is_allowed_to_edit) {
 		$sql_get_publications_list = 	"SELECT * " .
@@ -295,7 +297,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$subdirs_query = "WHERE url NOT LIKE '$sub_course_dir%/%' AND url LIKE '$sub_course_dir%'";
 		}
 		
-	   $sql_get_publications_list = 	"SELECT * FROM  $work_table $group_query $subdirs_query ".$add_in_where_query." AND session_id IN (0,".intval($_SESSION['id_session']).") ORDER BY id";
+	   $sql_get_publications_list = 	"SELECT * FROM  $work_table $group_query $subdirs_query ".$add_in_where_query." AND session_id IN (0,".intval($id_session).") ORDER BY id";
 		$sql_get_publications_num = "SELECT count(url) " .
 										"FROM  ".$work_table." " .
 										"WHERE url LIKE BINARY '$sub_course_dir%' " .
@@ -375,7 +377,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$mydir_temp = '/'.$my_sub_dir.$dir;
 		}
 
-		$session_condition =  intval($_SESSION['id_session'])!=0 ?"AND work.session_id IN (0,".intval($_SESSION['id_session']).")" : "";				   
+		$session_condition =  intval($id_session)!=0 ?"AND work.session_id IN (0,".intval($id_session).")" : "";				   
 		$sql_select_directory= "SELECT prop.lastedit_date, id, author, has_properties, view_properties, description, qualification,id FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE " .
 							   	     "work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $session_condition";												   
 		$result=api_sql_query($sql_select_directory,__FILE__,__LINE__);
@@ -393,7 +395,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$mydir = $my_sub_dir.$dir;	
 			
 		if ($is_allowed_to_edit) {			
-			$clean_edit_dir=Security :: remove_XSS(Database::escape_string($_GET['edit_dir']));
+			isset($_GET['edit_dir'])?$clean_edit_dir=Security :: remove_XSS(Database::escape_string($_GET['edit_dir'])):$clean_edit_dir='';
 						
 			// form edit directory				
 			if(isset($clean_edit_dir) && $clean_edit_dir==$mydir) {	
@@ -544,7 +546,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$dirtext='';
 		}
 
-		if($display_edit_form && isset($clean_edit_dir) && $clean_edit_dir==$mydir) {
+		if (!empty($display_edit_form) && isset($clean_edit_dir) && $clean_edit_dir==$mydir) {
 			$row[] = '<span class="invisible" style="display:none">'.$dir.'</span>'.$form_folder->toHtml(); // form to edit the directory's name
 		} else {
 			$tbl_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
@@ -603,10 +605,9 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				$class='';
 			}
 			
-
-			if(defined('IS_ASSIGNMENT')):
-				$add_string = '';
-	
+			$qualification_string = '';
+			$add_string = '';
+			if(defined('IS_ASSIGNMENT')):					
 				if($work->qualification=='') {
 					$qualification_string = ' / <b style="color:orange">'.get_lang('NotRevised').'<b>';
 				} else {

@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17170 2008-12-09 16:38:45Z yannoo $
+<?php //$Id: agenda.inc.php 17182 2008-12-09 17:57:05Z cfasanando $
 
 /*
 ==============================================================================
@@ -770,12 +770,12 @@ function separate_users_groups($to)
 {
 	$grouplist = array();
     $userlist  = array();
+    $send_to = null;
 	if(is_array($to) && count($to)>0)
     {
         foreach($to as $to_item)
     	{
-    	list($type, $id) = explode(':', $to_item);
-    
+    	list($type, $id) = explode(':', $to_item);    
     	switch($type)
     		{
     		case 'GROUP':
@@ -788,7 +788,7 @@ function separate_users_groups($to)
     	}
         $send_to['groups']=$grouplist;
         $send_to['users']=$userlist;
-    }
+    }    
     return $send_to;
 }
 
@@ -3871,7 +3871,7 @@ function add_year($timestamp,$num=1)
  * @param   int     Parent id (optional)
  * @return  int     The new item's DB ID
  */
-function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date,$group_id,$id_user,$to=array(), $parent_id=null,$file_comment)
+function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date,$group_id,$id_user,$to=array(), $parent_id=null,$file_comment='')
 {
 	global $_course;	
     $user_id    = api_get_user_id();
@@ -3882,12 +3882,12 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     $content    = Database::escape_string($content);
     $start_date = Database::escape_string($db_start_date);
     $end_date   = Database::escape_string($db_end_date);
-    
+    isset($_SESSION['id_session'])?$id_session=intval($_SESSION['id_session']):$id_session=null;
     // store in the table calendar_event
     $sql = "INSERT INTO ".$t_agenda."
                             (title,content, start_date, end_date".(!empty($parent_id)?',parent_event_id':'').", session_id)
                             VALUES
-                            ('".$title."','".$content."', '".$start_date."','".$end_date."'".(!empty($parent_id)?','.((int)$parent_id):'').", ".intval($_SESSION['id_session']).")";
+                            ('".$title."','".$content."', '".$start_date."','".$end_date."'".(!empty($parent_id)?','.((int)$parent_id):'').", '".$id_session."')";
     
     $result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
     $last_id=Database::insert_id();
@@ -3898,7 +3898,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
 		$upload_ok = process_uploaded_file($_FILES['user_upload']);							
 	}
 	
-	if ($upload_ok) {			
+	if (!empty($upload_ok)) {			
 			$courseDir   = $_course['path'].'/upload/calendar';			
 			$sys_course_path = api_get_path(SYS_COURSE_PATH);					
 			$updir = $sys_course_path.$courseDir;
@@ -3962,7 +3962,9 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
         api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id, $group_id,$id_user,$start_date,$end_date);
     }
     // storing the resources
-    store_resources($_SESSION['source_type'],$last_id);
+    if (!empty($_SESSION['source_type']) && !empty($last_id)) {
+    store_resources($_SESSION['source_type'],$last_id);	
+    }    
     return $last_id;	
 }
 /**
@@ -3976,7 +3978,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
  * @param	int		User ID
  * @return  boolean False if error, True otherwise
  */
-function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$id_group=null,$id_user=null,$file_comment)
+function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$id_group=null,$id_user=null,$file_comment='')
 {
 	$t_agenda   = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
     $t_agenda_r = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_info['dbName']);

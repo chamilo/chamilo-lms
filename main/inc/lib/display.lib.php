@@ -339,9 +339,13 @@ class Display {
 		{
 			for ($i=0;$i<count($column_show);$i++)
 			{
-				if ($column_show[$i])
-				{
-					$table->set_header($i, $header[$i][0], $header[$i][1], $header[$i][2], $header[$i][3]);
+				if (!empty($column_show[$i]))
+				{					
+					isset($header[$i][0])?$val0=$header[$i][0]:$val0=null;
+					isset($header[$i][1])?$val1=$header[$i][1]:$val1=null;
+					isset($header[$i][2])?$val2=$header[$i][2]:$val2=null;
+					isset($header[$i][3])?$val3=$header[$i][3]:$val3=null;	
+					$table->set_header($i, $val0, $val1, $val2, $val3);
 				}			
 			}
 		}		

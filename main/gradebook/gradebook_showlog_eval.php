@@ -35,7 +35,7 @@ $interbreadcrumb[] = array (
 	'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']),
 	'name' => get_lang('Gradebook'
 ));
-Display :: display_header();
+Display :: display_header('');
 $t_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $t_user=	 Database :: get_main_table(TABLE_MAIN_USER);
 $evaledit = Evaluation :: load($_GET['visiblelog']);

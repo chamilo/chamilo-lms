@@ -107,14 +107,16 @@ if (!empty($course))
 		{
 			if(CourseManager::is_course_teacher($enreg['user_id'],$_SESSION['_course']['id'])) $status=1; else $status=5;
 		}
-	?>
-	<tr>
-	  <td width="1%" valign="top"><?php if($status == 1) echo Display::return_icon('teachers.gif', get_lang('Edit')).' '; else echo Display::return_icon('students.gif');?></td>
-	  <td width="99%"><a <?php if($status == 1) echo 'class="master"';// ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><?php echo ucfirst($enreg['firstname']).' '.ucfirst($enreg['lastname']); ?></a></td>
-	</tr>
-	<?php
+		
 	$user_image=UserManager::get_user_picture_path_by_id($enreg['user_id'],'web',false,true);
 	$file_url=$user_image['dir'].$user_image['file'];
+		
+	?>    
+    <tr>    
+	  <td width="1%" valign="top"><img src="<?php echo $file_url;?>" border="0" width="22" alt="" /></td>
+	  <td width="99%"><?php if($status == 1) echo Display::return_icon('teachers.gif', get_lang('Teacher'),array('height' => '11')).' '; else echo Display::return_icon('students.gif', get_lang('Student'), array('height' => '11'));?><a <?php if($status == 1) echo 'class="master"';// ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><?php echo ucfirst($enreg['firstname']).' '.ucfirst($enreg['lastname']); ?></a></td>
+	</tr>
+	<?php
 	
 	if($showPic == $enreg['user_id']): ?>
 	<tr>

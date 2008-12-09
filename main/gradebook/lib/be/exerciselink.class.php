@@ -240,10 +240,9 @@ class ExerciseLink extends AbstractLink
      * Lazy load function to get the database table of the exercise
      */
     private function get_exercise_table () {
-    	if (!isset($this->exercise_table))
-    	{
+    	if (!isset($this->exercise_table)) {
 	    	$course_info = Database :: get_course_info($this->get_course_code());
-			$database_name = $course_info['db_name'];
+			$database_name = isset($course_info['db_name']) ? $course_info['db_name'] : '';
 			$this->exercise_table = Database :: get_course_table(TABLE_QUIZ_TEST, $database_name);
     	}
    		return $this->exercise_table;

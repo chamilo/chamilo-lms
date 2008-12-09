@@ -274,7 +274,8 @@ function openid_authentication_request($claimed_id, $identity, $return_to = '', 
     $request['openid.trust_root'] = $realm;
   }
 
-  // Simple Registration
+  // Simple Registration - we don't ask lastname and firstname because the only
+  // available similar data is "fullname" and we would have to guess where to split 
   $request['openid.sreg.required'] = 'nickname,email';
   $request['openid.ns.sreg'] = "http://openid.net/extensions/sreg/1.1";
 

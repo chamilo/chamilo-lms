@@ -724,7 +724,6 @@ $form->display();
 &lt;/Contacts&gt;
 </pre>
 </blockquote>
-<p><?php echo get_lang('UserImportFileMessage')?></p>
 <?php
 /*
 ==============================================================================

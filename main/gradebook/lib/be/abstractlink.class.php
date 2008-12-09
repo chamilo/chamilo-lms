@@ -278,7 +278,8 @@ abstract class AbstractLink implements GradebookItem
 		$tbl_grade_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 		$dateobject=AbstractLink::load ($idevaluation,null,null,null,null);
 		$arreval=get_object_vars($dateobject[0]);
-		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,date_log,weight,visible,type,user_id_log)VALUES('".$arreval['id']."','".$arreval['course_code']."','".$arreval['description']."','".$arreval['link_date']."','".$arreval['weight']."','".$arreval['visible']."','Link',".api_get_user_id().")";
+		$description_log=isset($arreval['description'])?$arreval['description']:'';
+		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,date_log,weight,visible,type,user_id_log)VALUES('".$arreval['id']."','".$arreval['course_code']."','".$description_log."','".$arreval['link_date']."','".$arreval['weight']."','".$arreval['visible']."','Link',".api_get_user_id().")";
 		api_sql_query($sql,__FILE__,__LINE__);
 	
 	}	

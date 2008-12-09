@@ -186,7 +186,8 @@ class GradebookTable extends SortableTable
 			} else {
 			//students get the results and certificates columns
 				if (count($this->evals_links)>0) {
-					$row[] = $data[5];
+					$value_data=isset($data[5]) ? $data[5] : null;
+					$row[] = $value_data;
 				}
 				
 				if (empty($_GET['selectcat'])) {
@@ -233,13 +234,19 @@ private function build_id_column ($item) {
 			// category
 			case 'C' :
 				$prms_uri='?selectcat=' . $item->get_id();
-				if ( isset($_GET['isStudentView']) || ( isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
-					$prms_uri=$prms_uri.'&amp;isStudentView='.$_GET['isStudentView'];
+				if (isset($_GET['isStudentView'])) {
+					if ( isset($is_student) || ( isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
+						$prms_uri=$prms_uri.'&amp;isStudentView='.$_GET['isStudentView'];
+					}
 				}
+
+				$cat=new Category();
+				$show_message=$cat->show_message_resource_delete($item->get_course_code());
+				
 				return '&nbsp;<a href="'.$_SESSION['gradebook_dest'].$prms_uri.'">'
 				 		. $item->get_name()
 				 		. '</a>'
-				 		. ($item->is_course() ? ' &nbsp;[' . $item->get_course_code() . ']' : '');
+				 		. ($item->is_course() ? ' &nbsp;[' . $item->get_course_code() . ']'.$show_message : '');
 			// evaluation
 			case 'E' :
 
@@ -260,17 +267,25 @@ private function build_id_column ($item) {
 				}
 			// link
 			case 'L' :
+				$cat=new Category();
+				$dblib=new Database();
+		
+				$category_id=Security::remove_XSS($_GET['selectcat']);
+				$course_id=$dblib->get_course_by_category($category_id);
+				$show_message=$cat->show_message_resource_delete($course_id);
+				
 				$url = $item->get_link();				
-				if (isset($url)) {
+				if (isset($url) && $show_message=='') {
 					$text = '&nbsp;<a href="' . $item->get_link() . '">'
 							. $item->get_name()
 							. '</a>';
 				} else {
 					$text = $item->get_name();
 				}
-				$text .= '&nbsp;[' . $item->get_type_name() . ']';
+
+				$text .= '&nbsp;[' . $item->get_type_name() . ']'.$show_message;
 				$cc = $this->currentcat->get_course_code();
-				if(empty($cc)) {
+				if (empty($cc)) {
 					$text .= '&nbsp;[<a href="'.api_get_path(REL_COURSE_PATH).$item->get_course_code().'/">'.$item->get_course_code().'</a>]';
 				}
 				return $text;	

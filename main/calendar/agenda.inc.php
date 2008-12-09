@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17104 2008-12-08 04:53:39Z ivantcholakov $
+<?php //$Id: agenda.inc.php 17170 2008-12-09 16:38:45Z yannoo $
 
 /*
 ==============================================================================
@@ -512,13 +512,13 @@ echo "\n<table id=\"recipient_list\" style=\"display: none;\">\n";
 	// the buttons for adding or removing groups/users
 	echo "\n\t\t<td valign=\"middle\">\n";
 	echo "\t\t<input type=\"button\" ",
-				"onclick=\"move(this.form.elements[4],this.form.elements[7])\" ",
+				"onclick=\"move(document.getElementById('not_selected_form'),document.getElementById('selected_form'))\" ",
 				"value=\"   &gt;&gt;   \" />",
 
 				"\n\t\t<p>&nbsp;</p>",
 
 				"\n\t\t<input type=\"button\" ",
-				"onclick=\"move(this.form.elements[7],this.form.elements[4])\" ",
+				"onclick=\"move(document.getElementById('selected_form'),document.getElementById('not_selected_form'))\" ",
 				"value=\"   &lt;&lt;   \" />";
 	echo "\t\t</td>\n";
 	echo "\n\t\t<td>\n";
@@ -536,7 +536,7 @@ echo "</table>";
 */
 function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected=array())
 {
-	echo "\t\t<select name=\"not_selected_form[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">\n";
+	echo "\t\t<select id=\"not_selected_form\" name=\"not_selected_form[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">\n";
 
 	// adding the groups to the select form
 	if (is_array($group_list))
@@ -591,7 +591,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 	$ref_array_users=get_course_users();
 
 	// we construct the form of the already selected groups / users
-	echo "\t\t<select name=\"selectedform[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
+	echo "\t\t<select id=\"selected_form\" name=\"selectedform[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
 	if(is_array($to_already_selected))
 	{
 		foreach($to_already_selected as $groupuser)

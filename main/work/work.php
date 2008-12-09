@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 17182 2008-12-09 17:57:05Z cfasanando $
+*  	@version $Id: work.php 17186 2008-12-09 20:47:49Z cfasanando $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -108,7 +108,7 @@ require_once (api_get_path(LIBRARY_PATH) . 'debug.lib.inc.php');
 require_once (api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 require_once (api_get_path(LIBRARY_PATH) . 'security.lib.php');
 require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php');
-
+require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
 
@@ -308,7 +308,16 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false,true); //has to come after di
 ==============================================================================
 */
 
-if (isset ($_POST['changeProperties'])) {
+//-------------------------------------------------------------------//
+
+//download of an completed folder
+if(isset($_GET['action']) && $_GET['action']=="downloadfolder")
+{
+	include('downloadfolder.inc.php');
+}
+//-------------------------------------------------------------------//
+
+if (!empty ($_POST['changeProperties'])) {
 	$query = "UPDATE " . $main_course_table . " SET show_score='" . $uploadvisibledisabled . "' WHERE code='" . $_course['sysCode'] . "'";
 	api_sql_query($query, __FILE__, __LINE__);
 
@@ -332,8 +341,8 @@ if (api_is_allowed_to_edit(false,true)) {
 	/*-------------------------------------------
 				DELETE WORK COMMAND
 	-----------------------------------------*/
-	if ($delete) {
-		if ($delete == "all") {
+	if (!empty($delete)) {
+		if (isset($delete) && $delete == "all") {
 			$queryString1 = "SELECT url FROM " . $work_table . "";
 			$queryString2 = "DELETE FROM  " . $work_table . "";
 						
@@ -352,11 +361,11 @@ if (api_is_allowed_to_edit(false,true)) {
 	           EDIT COMMAND WORK COMMAND
 	  -----------------------------------------*/
 	$qualification_number=0;
-	if ($edit) {		
+	if (!empty($edit)) {		
 		$sql = "SELECT * FROM  " . $work_table . "  WHERE id='" . $edit . "'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
-		if ($result) {
+		if (!empty($result)) {
 			$row = mysql_fetch_array($result);
 			$workTitle = $row['title'];
 			$workAuthor = $row['author'];
@@ -370,8 +379,8 @@ if (api_is_allowed_to_edit(false,true)) {
 		MAKE INVISIBLE WORK COMMAND
 	  -----------------------------------------*/
 
-	if ($make_invisible) {
-		if ($make_invisible == "all") {
+	if (!empty($make_invisible)) {
+		if (isset($make_invisible) && $make_invisible == "all") {
 			$sql = "ALTER TABLE " . $work_table . "
 						        CHANGE accepted accepted TINYINT(1) DEFAULT '0'";
 
@@ -394,8 +403,8 @@ if (api_is_allowed_to_edit(false,true)) {
 		MAKE VISIBLE WORK COMMAND
 	  -----------------------------------------*/
 
-	if ($make_visible) { 
-		if ($make_visible == "all") {
+	if (!empty($make_visible)) { 
+		if (isset($make_visible) && $make_visible == "all") {
 			$sql = "ALTER TABLE  " . $work_table . "
 						        CHANGE accepted accepted TINYINT(1) DEFAULT '1'";
 			api_sql_query($sql, __FILE__, __LINE__);
@@ -435,7 +444,7 @@ if (api_is_allowed_to_edit(false,true)) {
 			
 			// we insert here the directory in the table $work_table		
 			$dir_name_sql=''; 
-			if ($created_dir) {			
+			if (!empty($created_dir)) {			
 				if ($cur_dir_path=='/') {			
 					$dir_name_sql = $created_dir;
 				} else {
@@ -471,15 +480,15 @@ if (api_is_allowed_to_edit(false,true)) {
 			 	//----------------inser into student_publication_assignment-------------------//		
 				//return something like this: 2008-02-45 00:00:00			
 				
-				if($_POST['type1'] || $_POST['type2']) {
-	
+				if(!empty($_POST['type1']) || !empty($_POST['type2'])) {
+								
 								$TSTDPUBASG=Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 								
 									isset($_POST['enable_calification'])?$enable_calification = (int)$_POST['enable_calification']:$enable_calification=null;
 									$sql_add_homework = "INSERT INTO ".$TSTDPUBASG." SET " .			
-													   "expires_on         = '".(($_POST['type1']==1) ? get_date_from_select('expires') : '0000-00-00 00:00:00'). "',
-												        ends_on        = '".(($_POST['type2']==1) ? get_date_from_select('ends') : '0000-00-00 00:00:00')."',
-									                    add_to_calendar  = '".(int)$_POST['add_to_calendar']."',
+													   "expires_on         = '".((isset($_POST['type1']) && $_POST['type1']==1) ? get_date_from_select('expires') : '0000-00-00 00:00:00'). "',
+												        ends_on        = '".((isset($_POST['type2']) && $_POST['type2']==1) ? get_date_from_select('ends') : '0000-00-00 00:00:00')."',
+									                    add_to_calendar  = '".(isset($_POST['add_to_calendar'])?(int)$_POST['add_to_calendar']:'')."',
 									                    enable_qualification = '".$enable_calification."',
 									                    publication_id = '".$id."'";
 									api_sql_query($sql_add_homework, __FILE__, __LINE__);		
@@ -496,8 +505,8 @@ if (api_is_allowed_to_edit(false,true)) {
 									$sql_add_homework = "INSERT INTO ".$TSTDPUBASG." SET " .			
 													   "expires_on         = '0000-00-00 00:00:00',
 												        ends_on        = '0000-00-00 00:00:00',
-									                    add_to_calendar  = '".(int)$_POST['add_to_calendar']."',
-									                    enable_qualification = '".(int)$_POST['enable_calification']."',
+									                    add_to_calendar  = '".(isset($_POST['add_to_calendar'])?(int)$_POST['add_to_calendar']:'')."',
+									                    enable_qualification = '".(isset($_POST['enable_calification'])?(int)$_POST['enable_calification']:'')."',
 									                    publication_id = '".$id."'";
 									api_sql_query($sql_add_homework, __FILE__, __LINE__);		
 								    //api_sql_query($sql_add_publication, __FILE__, __LINE__);
@@ -507,7 +516,7 @@ if (api_is_allowed_to_edit(false,true)) {
 							
 				}
 			 	
-			 	if($_POST['make_calification']==1) {
+			 	if(isset($_POST['make_calification']) && $_POST['make_calification']==1) {
 
 				 	require_once('../gradebook/lib/be/gradebookitem.class.php');
 				 	require_once('../gradebook/lib/be/evaluation.class.php');
@@ -521,7 +530,7 @@ if (api_is_allowed_to_edit(false,true)) {
 			 	}
 			 	//----------------inser into agenda----------------------//
 			 	
-			 	if(!empty($_POST['type1']) && $_POST['add_to_calendar']==1):
+			 	if(!empty($_POST['type1']) && isset($_POST['add_to_calendar']) && $_POST['add_to_calendar']==1):
 					include_once('../calendar/agenda.inc.php');
 					include_once('../resourcelinker/resourcelinker.inc.php');						
 					isset($course_info)?$course=$course_info:$course=null;							

@@ -416,7 +416,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				$qualification_input[] = FormValidator :: createElement('text','qualification');
 				
 				$form_folder -> addGroup($qualification_input,'qualification',get_lang('QualificationNumberOver'),'size="10"');	
-											
+				$there_is_a_end_date =false; 							
 				if($row['view_properties']=='1') {			
 					if($homework['expires_on']!='0000-00-00 00:00:00'){		
 						$there_is_a_expire_date = true;
@@ -559,7 +559,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			} else {
 				$add_to_name = '';
 			}
-			$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;				
+			$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;						
 		}
 		
 		if ($count_files!=0) {
@@ -619,12 +619,13 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			endif;
 			
 			$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));			
-			$row[]= build_document_icon_tag('file',$work->url);			
+			$row[]= build_document_icon_tag('file',$work->url);
 			$row[]= '<a href="'.$currentCourseRepositoryWeb.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;
 			$row[]= display_user_link($row2['insert_user_id'],$work->author).$qualification_string;// $work->author;			
 			$row[]= date_to_str_ago($work->sent_date).$add_string.'<br><span class="dropbox_date">'.$work->sent_date.'</span>';
 			
 			if( $is_allowed_to_edit) {
+				
 				$action = '';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('WorkDelete').'" ><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';

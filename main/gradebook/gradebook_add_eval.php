@@ -1,4 +1,4 @@
-<?php // $Id: $
+<?php // $Id $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -30,7 +30,6 @@ require_once ('lib/fe/evalform.class.php');
 api_block_anonymous_users();
 block_students();
 
-$this_section = SECTION_GRADEBOOK;
 $is_allowedToEdit = $is_courseAdmin;
 $evaladd = new Evaluation();
 $evaladd->set_user_id($_user['user_id']);

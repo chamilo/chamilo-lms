@@ -1,4 +1,4 @@
-<?php // $Id: index.php 17054 2008-12-03 13:38:03Z pcool $
+<?php // $Id: index.php 17194 2008-12-09 23:43:57Z iflorespaz $
 
 /*
 ==============================================================================
@@ -69,7 +69,7 @@ if(isset($_GET['description_id']) && $_GET['description_id']==8) $interbreadcrum
 
 api_protect_course_script(true);
 $nameTools = get_lang('CourseProgram');
-Display :: display_header();
+Display :: display_header('');
 //api_display_tool_title($nameTools);
 
 

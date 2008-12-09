@@ -30,7 +30,8 @@ require_once ('lib/gradebook_functions.inc.php');
 require_once ('lib/fe/catform.class.php');
 api_block_anonymous_users();
 block_students();
-$catedit = Category :: load($_GET['editcat']);
+$edit_cat= isset($_GET['editcat']) ? $_GET['editcat'] : '';
+$catedit = Category :: load($edit_cat);
 $form = new CatForm(CatForm :: TYPE_EDIT, $catedit[0], 'edit_cat_form');
 if ($form->validate()) {
 	$values = $form->exportValues();
@@ -57,8 +58,9 @@ if ($form->validate()) {
 	header('Location: '.$_SESSION['gradebook_dest'].'?editcat=&selectcat=' . $cat->get_parent_id());
 	exit;
 }
+$selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
 $interbreadcrumb[] = array (
-	'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']),
+	'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectcat,
 	'name' => get_lang('Gradebook'
 ));
 Display :: display_header(get_lang('EditCategory'));

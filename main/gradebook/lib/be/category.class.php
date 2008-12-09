@@ -337,7 +337,29 @@ class Category implements GradebookItem
 		$sql = 'DELETE FROM '.$tbl_grade_categories.' WHERE id = '.$this->id;
 		api_sql_query($sql, __FILE__, __LINE__);
 	}
+	/**
+	 * Not delete this category from the database,when visible=3 is category eliminated
+	 */
+	public function update_category_delete($course_id){
+		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+		$sql = 'UPDATE '.$tbl_grade_categories.' SET visible=3 WHERE course_code ="'.$course_id.'"';
+		api_sql_query($sql, __FILE__, __LINE__);
+	}
+	/**
+	 * Show message 
+	 */
+	public function show_message_resource_delete($course_id) {
+		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+		$sql = 'SELECT count(*) AS num from '.$tbl_grade_categories.' WHERE course_code ="'.$course_id.'" AND visible=3';
+		$res=api_sql_query($sql, __FILE__, __LINE__);
+		$option=Database::fetch_array($res,'ASSOC');
+		if ($option['num']>=1) {
+			return '&nbsp;&nbsp;<span class="resource-deleted">(&nbsp;'.get_lang('ResourceDeleted').'&nbsp;)</span>';
+		} else {
+			return false;
+		}
 
+	}
 
 // OTHER FUNCTIONS
 
@@ -544,8 +566,15 @@ class Category implements GradebookItem
     					.' AND status = '.COURSEMANAGER
     					.')';
             }
+        }elseif (api_is_platform_admin()) {
+        	if (isset($session_id) && $session_id!=0) {
+        		$sql.=' AND session_id='.$session_id;
+        	} else {
+        		$sql.=' AND coalesce(session_id,0)=0';
+        	}
+        	
+        	
         }
-
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$cats = Category::create_category_objects_from_sql_result($result);
 

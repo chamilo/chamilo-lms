@@ -1,4 +1,4 @@
-<?php // $Id: gradebook.php 16915 2008-11-25 20:15:42Z yannoo $
+<?php
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -81,6 +81,7 @@ if (isset ($_GET['createallcategories'])) {
 	exit;
 }
 //move a category
+$selectcat=isset($_GET['selectcat']) ?  Security::remove_XSS($_GET['selectcat']) : '';
 if (isset ($_GET['movecat'])) {
 	block_students();
 	$cats= Category :: load($_GET['movecat']);
@@ -253,7 +254,7 @@ if (isset ($_GET['deletelink'])) {
 	$confirmation_message = get_lang('LinkDeleted');
 	$filter_confirm_msg = false;
 }
-
+$course_to_crsind = isset ($course_to_crsind) ? $course_to_crsind : '';
 if ($course_to_crsind && !isset($_GET['confirm'])) {
 	block_students();
 	if (!isset($_GET['movecat']) && !isset($_GET['moveeval'])) {
@@ -450,7 +451,8 @@ if (!isset ($_GET['selectcat']) || empty ($_GET['selectcat'])) {
 	$category= $_GET['selectcat'];		
 	}
 // search form
-$simple_search_form= new UserForm(UserForm :: TYPE_SIMPLE_SEARCH, null, 'simple_search_form', null, api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']));
+
+$simple_search_form= new UserForm(UserForm :: TYPE_SIMPLE_SEARCH, null, 'simple_search_form', null, api_get_self() . '?selectcat=' . $selectcat);
 $values= $simple_search_form->exportValues();
 $keyword = '';
 if (isset($_GET['search']) && !empty($_GET['search'])) {

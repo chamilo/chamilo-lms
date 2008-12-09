@@ -56,19 +56,34 @@ if (($showlink == '0') && ($showeval == '0')) {
 }
 $cat= Category :: load($_REQUEST['selectcat']);
 
+if (isset($_GET['userid'])) {
+	$userid=$_GET['userid'];
+} else {
+	$userid='';
+}
+
 if ($showeval) {
-	$alleval= $cat[0]->get_evaluations($_GET['userid'], true);
+	$alleval= $cat[0]->get_evaluations($userid, true);
+} else {
+	$alleval=null;
 }
 
 if ($showlink) {
-	$alllinks= $cat[0]->get_links($_GET['userid'], true);
+	$alllinks= $cat[0]->get_links($userid, true);
+} else {
+	$alllinks=null;
 }
 
 if (isset ($export_flatview_form) && (!$file_type == 'pdf')) {
 	Display :: display_normal_message($export_flatview_form->toHtml(),false);
 }
+if (isset($_GET['selectcat'])) {
+	$category_id=$_GET['selectcat'];	
+} else {
+	$category_id='';
+}
 
-$simple_search_form= new UserForm(UserForm :: TYPE_SIMPLE_SEARCH, null, 'simple_search_form', null, api_get_self() . '?selectcat=' . $_GET['selectcat']);
+$simple_search_form= new UserForm(UserForm :: TYPE_SIMPLE_SEARCH, null, 'simple_search_form', null, api_get_self() . '?selectcat=' .$category_id);
 $values= $simple_search_form->exportValues();
 $keyword = '';
 if (isset($_GET['search']) && !empty($_GET['search'])) {
@@ -82,7 +97,11 @@ if ($simple_search_form->validate() && (empty($keyword))) {
 if (!empty($keyword)) {
 	$users= find_students($keyword);
 } else {
-	$users= get_all_users($alleval, $alllinks);
+	if (isset($alleval) && isset($alllinks)) {
+		$users= get_all_users($alleval, $alllinks);
+	}else {
+		$users=null;
+	}	
 }
 if (isset ($_GET['exportpdf']))	{
 	$interbreadcrumb[]= array (
@@ -118,7 +137,7 @@ if(!empty($_POST['export_report']) && $_POST['export_report'] == 'export_report'
 		if(empty($_SESSION['export_user_fields'])) { 
 			$_SESSION['export_user_fields'] = false;
 		}
-		if(!$is_allowedToEdit and !$is_tutor) {
+		if(!api_is_allowed_to_edit(false,false) and !api_is_course_tutor()) {
 			$user_id = api_get_user_id();
 		}
 	

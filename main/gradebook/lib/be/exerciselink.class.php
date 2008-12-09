@@ -240,20 +240,26 @@ class ExerciseLink extends AbstractLink
      * Lazy load function to get the database table of the exercise
      */
     private function get_exercise_table () {
-    	if (!isset($this->exercise_table)) {
-	    	$course_info = Database :: get_course_info($this->get_course_code());
-			$database_name = isset($course_info['db_name']) ? $course_info['db_name'] : '';
-			$this->exercise_table = Database :: get_course_table(TABLE_QUIZ_TEST, $database_name);
-    	}
-   		return $this->exercise_table;
+    	$course_info = Database :: get_course_info($this->get_course_code());
+		$database_name = isset($course_info['db_name']) ? $course_info['db_name'] : '';
+		if ($database_name!='') {
+    		if (!isset($this->exercise_table)) {
+				$this->exercise_table = Database :: get_course_table(TABLE_QUIZ_TEST, $database_name);
+    		}
+   			return $this->exercise_table;
+   		} else {
+   			return '';
+   		}
     }
 
     /**
      * Lazy load function to get the database contents of this exercise
      */
     private function get_exercise_data () {
-    	if (!isset($this->exercise_data))
-    	{
+    	$tbl_exercise=$this->get_exercise_table();
+    	if ($tbl_exercise=='') {
+    		return false;
+    	} elseif (!isset($this->exercise_data)) {
 			$sql = 'SELECT * from '.$this->get_exercise_table()
 					.' WHERE id = '.$this->get_ref_id();
 			$result = api_sql_query($sql, __FILE__, __LINE__);

@@ -1,4 +1,4 @@
-<?php // $Id $
+<?php
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -30,6 +30,7 @@ require_once ('lib/fe/evalform.class.php');
 api_block_anonymous_users();
 block_students();
 
+$select_cat=isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
 $is_allowedToEdit = $is_courseAdmin;
 $evaladd = new Evaluation();
 $evaladd->set_user_id($_user['user_id']);
@@ -40,7 +41,7 @@ if (isset ($_GET['selectcat']) && (!empty ($_GET['selectcat']))) {
 } else {
 	$evaladd->set_category_id(0);
 }
-$form = new EvalForm(EvalForm :: TYPE_ADD, $evaladd, null, 'add_eval_form',null,api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']));
+$form = new EvalForm(EvalForm :: TYPE_ADD, $evaladd, null, 'add_eval_form',null,api_get_self() . '?selectcat=' .$select_cat);
 if ($form->validate()) {
 	$values = $form->exportValues();
 	$eval = new Evaluation();
@@ -83,7 +84,7 @@ if ($form->validate()) {
 }
 
 $interbreadcrumb[] = array (
-	'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']),
+	'url' => $_SESSION['gradebook_dest'].'?selectcat='.$select_cat,
 	'name' => get_lang('Gradebook'
 ));
 Display :: display_header(get_lang('NewEvaluation'));

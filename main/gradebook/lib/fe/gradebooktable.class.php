@@ -74,7 +74,7 @@ class GradebookTable extends SortableTable
 			$this->set_header($column++, get_lang('Modify'), false, 'width="100"');
 			//actions on multiple selected documents
 			$this->set_form_actions(array (
-				'deleted' => get_lang('DeleteSelected'),
+				'delete' => get_lang('DeleteSelected'),
 				'setvisible' => get_lang('SetVisible'),
 				'setinvisible' => get_lang('SetInvisible')));
 		} else {

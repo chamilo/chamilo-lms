@@ -1,4 +1,4 @@
-<?php // $Id: $
+<?php
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -49,13 +49,14 @@ if ($_in_course) {
 $form = new CatForm(CatForm :: TYPE_ADD, $catadd, 'add_cat_form', null, api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']));
 if ($form->validate()) {
 	$values = $form->exportValues();
+	$select_course=isset($values['select_course']) ? $values['select_course'] : array();
 	$cat = new Category();
 	if ($values['hid_parent_id'] == '0') {
-		if ($values['select_course'] == 'COURSEINDEPENDENT') {
+		if ($select_course == 'COURSEINDEPENDENT') {
 			$cat->set_name($values['name']);
 			$cat->set_course_code(null);
 		} else {
-			$cat->set_course_code($values['select_course']);
+			$cat->set_course_code($select_course);
 			$cat->set_name($values['name']);
 		}
 	} else {

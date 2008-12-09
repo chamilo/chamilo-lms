@@ -60,16 +60,27 @@ $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
 
-if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
-	$interbreadcrumb[]= array (
+if (isset($_GET['isStudentView'])) {
+	if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
+		$interbreadcrumb[]= array (
 		'url' => 'index.php'.'?selectcat=0&amp;isStudentView='.$_GET['isStudentView'],
 		'name' => get_lang('Gradebook')
-	);
+		);
+	}
 }
 
 if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
 	Display :: display_header(get_lang('Details'));
-	$gradebooktable= new GradebookTable(null, $allcat, $alleval,$alllink, $addparams);
+	$category= $_GET['selectcat'];
+	$stud_id=api_get_user_id();
+	$course_code=api_get_course_id();
+	$session_id=api_get_session_id();
+	$cats = Category :: load ($category, null, null, null, null, null, false);
+	$allcat= $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
+	$alleval= $cats[0]->get_evaluations($stud_id);
+	$alllink= $cats[0]->get_links($stud_id);
+	$addparams=array();
+	$gradebooktable= new GradebookTable($cats[0], $allcat, $alleval,$alllink, $addparams);
 	$gradebooktable->display();
 	Display :: display_footer();
 	exit;
@@ -79,6 +90,7 @@ if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['st
 		$stud_id=api_get_user_id();
 		$course_code=api_get_course_id();
 		$session_id=api_get_session_id();
+		$addparams=array();
 		$cats = Category :: load (0, null, null, null, null, null, false);
 		$allcat= $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
 		$alleval= $cats[0]->get_evaluations($stud_id);
@@ -296,7 +308,7 @@ if (isset ($_GET['deletelink'])) {
 	$filter_confirm_msg = false;
 }
 
-if ($course_to_crsind && !isset($_GET['confirm'])) {
+if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
 	block_students();
 	
 	if (!isset($_GET['movecat']) && !isset($_GET['moveeval'])) {
@@ -513,6 +525,7 @@ if (empty ($_GET['selectcat'])) {
 } else {
 	$category= $_GET['selectcat'];
 }
+$simple_search_form='';
 // search disabled in course context
 /*
 $simple_search_form= new UserForm(UserForm :: TYPE_SIMPLE_SEARCH, null, 'simple_search_form', null, api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']));
@@ -694,7 +707,16 @@ if (( count($allcat) == 0) && ( count($alleval) == 0 ) && ( count($alllink) == 0
 } 
 //here we are in a sub category
 if ($category != '0') {
-	DisplayGradebook :: display_header_gradebook($cats[0], 0, $_GET['selectcat'], $is_course_admin, $is_platform_admin, $simple_search_form, false, true);
+	$cat=new Category();
+	$dblib=new Database();
+		
+	$category_id=Security::remove_XSS($_GET['selectcat']);
+	$course_id=$dblib->get_course_by_category($category_id);
+	$show_message=$cat->show_message_resource_delete($course_id);
+	if ($show_message=='') {
+		DisplayGradebook :: display_header_gradebook($cats[0], 0, $_GET['selectcat'], $is_course_admin, $is_platform_admin, $simple_search_form, false, true);
+	}
+
 } else {
 //this is the root category
 	//DisplayGradebook :: display_header_gradebook($cats[0], 0, 0, $is_course_admin, $is_platform_admin, $simple_search_form, false, false);

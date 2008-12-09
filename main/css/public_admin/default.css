@@ -62,7 +62,7 @@ body {
 	margin: 0 190px 0 0;
 	padding: 10px 0 40px 0;
 	min-height: 300px;
-	background-color: #00ff00;
+	background-color: #fff;
 }
 .invisible {
 	color: #999;
@@ -417,9 +417,13 @@ input[text] {font-size: 12px; }
 {
 	
 }
-/*****************************************************
- *  NAVIGATION MENU                                  *
- *****************************************************/
+
+/*
+==============================================================================
+    NAVIGATION MENU
+==============================================================================
+*/
+
 .menu {
 	float: right;
 	width: 200px;
@@ -435,24 +439,28 @@ input[text] {font-size: 12px; }
 	font-weight: bold;
 	padding-left: 12px;
 }
+
 .menusection {
-	width: auto;
+	border: 1px solid #4171B5;
 	margin: 24px 6px 0 6px;
 	padding-left: 10px;
-	border: 1px solid #bbb;
+	width: auto;
 }
+
 .menusectioncaption {
-	position: relative;
-	top: -9px;
-	background-color:#F0F0F0;
+	background-color: #E5EDF9;
 	font-size: 12px;
 	padding: 0 8px 0 4px;
+	position: relative;
+	top: -9px;
 }
+
 .menulist {
 	list-style: none;
 	margin: 0 0 12px 0;
 	padding: 0;
 }
+
 #centerwrap {
   float: left;
   width: 100%;
@@ -464,65 +472,110 @@ input[text] {font-size: 12px; }
 	   be fed in using IE only CSS below becasue IE/Win also works with the 100% method.
 	*/
 }
-/* --- course navigation menu as a definition list  --- */
-#swap_menu_link {
-  float: left;
+
+#center {
+	margin: 0 190px 0 0;
+	min-height: 300px;
+	padding: 10px 0 40px 0;
 }
-#toolnavbox {
-	margin: 0 0 0 10px;
-	padding: 0;
-	float: left;
-	border: 1px solid #f0f0f0;
-}
-#toolnavbox dl {
-	width: 160px;
-	margin: 0 auto;
-	padding: 0;
-	background: transparent;
-	font-size: 12px;
-	text-align: center;
-}
-#toolnavbox dt {
+
+#toolnav {
+	float: right;
 	margin: 0;
-	padding: 0;
-	font-weight: bold;
-	font-size: 12px;
-	text-align: center;
-	color: #000;
-	border-bottom: 1px solid #fff;
-	background: transparent;
+ 	margin-left: -5%;  /* the difference to make the left colum appear flush left */
+ 	padding: 0;
+ 	width: 180px;
 }
-#toolnavbox dd {
-	margin: 0;
-	padding: 0;
-	color: #009;
-	text-align: left;
-	border-bottom:1px solid #fff;
-	background: #E5EDF9;
-}
+
 #toolnav img {
 	float: left;
 	width: 25px;
 	height: 25px;
 	margin: 0 4px 0 0;
 }
-#toolnavlist a, #toolnavlist a:link {
-	background: #E5EDF9;
-	color: #dcdcdc;
-	padding: 5px 5px 5px 10px;
+
+/* Hide from IE5-mac. Only IE-win sees this. \*/
+* html #toolnav { margin-right: 0px;}
+* html #center { height: 1%; margin-left: 0; }
+ /* End hide from IE5/mac */
+
+/*
+this lets the navigation menu appear to the left:
+#center {
+	margin: 0 0 0 180px;
+	min-height: 300px;
+ 	padding: 10px 0 40px 0;
+}
+
+#toolnav {
+	float: left;
+	width: 180px;
+	padding: 20px 0 0 0;
+ 	margin-left: -5%;
+}
+*/
+
+
+/*
+------------------------------------------------------------------------------
+    course navigation menu as a definition list
+------------------------------------------------------------------------------
+*/
+#swap_menu_link {
+  float: left;
+}
+#toolnavbox {
+	border: 1px solid #4271b5;
+	float: left;
+	margin: 0 0 0 10px;
+	padding: 0;
+}
+
+#toolnavbox dl {
+	background: transparent;
+	font-size: 12px;
+	margin: 0 auto;
+	text-align: center;
+	width: 160px;
+}
+
+#toolnavbox dt {
+	background: transparent;
+	border-bottom: 1px solid #fff;
+	color: #000;
+	font-size: 12px;
+	font-weight: bold;
 	margin: 0;
-	text-decoration: none;
+	text-align: center;
+}
+
+#toolnavbox dd {
+	background: #E5EDF9;
+	border-bottom:1px solid #fff;
+	color: #009;
+	margin: 0;
+	text-align: left;
+}
+
+#toolnavlist a,
+#toolnavlist a:link {
+	background: #E5EDF9;
+	color: #4171b5;
 	display: block;
+	margin: 0;
+	padding: 5px 5px 5px 10px;
+	text-decoration: none;
 }
-#toolnavlist a:hover {
-	background: #fff;
-	color:#dcdcdc;
-}
+
+#toolnavlist a:hover,
 #toolnavlist a#here {
 	background: #fff;
-	color:#dcdcdc;
+	color:#4171b5;
 }
+
 /* --- end of course navigation menu section  --- */
+
+
 /*
 this lets the navigation menu appear to the left:
 #center { margin: 0 0 0 180px; padding: 10px 0 40px 0;

@@ -63,7 +63,7 @@ body {
 	margin: 0 190px 0 0;
 	padding: 10px 0 40px 0;
 	min-height: 300px;
-	background-color: #00ff00;
+	background-color: #fff;
 }
 .invisible {
 	color: #999;
@@ -421,15 +421,9 @@ input[text] {font-size: 12px; }
 /*****************************************************
  *  NAVIGATION MENU                                  *
  *****************************************************/
-.menu {
-	float: right;
-	width: 200px;
-    min-height: 150px;
-	background-color: #F0F0F0;
-	border: 1px solid #bbb;
-    padding: 60px 10px 10px 10px;
-	background: #f0f0f0 url(images/fondoNav.jpg) no-repeat top center;
-}
+
+/*NAVIGATION MENU BAR*/
+
 
 .menucaption {
 	font-size: 12px;
@@ -440,12 +434,12 @@ input[text] {font-size: 12px; }
 	width: auto;
 	margin: 24px 6px 0 6px;
 	padding-left: 10px;
-	border: 1px solid #bbb;
+	border: 1px solid #4171B5;
 }
 .menusectioncaption {
 	position: relative;
 	top: -9px;
-	background-color:#F0F0F0;
+	background-color: #E5EDF9;
 	font-size: 12px;
 	padding: 0 8px 0 4px;
 }
@@ -465,6 +459,21 @@ input[text] {font-size: 12px; }
 	   be fed in using IE only CSS below becasue IE/Win also works with the 100% method.
 	*/
 }
+
+#center { margin: 0 190px 0 0; padding: 10px 0 40px 0;
+ min-height: 300px; }
+
+#toolnav { float: right; width: 180px; padding: 0; margin: 0;
+ margin-left: -5%; /* the difference to make the left colum appear flush left */
+}
+
+/* Hide from IE5-mac. Only IE-win sees this. \*/
+* html #toolnav { margin-right: 0px;}
+* html #center { height: 1%; margin-left: 0; }
+ /* End hide from IE5/mac */
+
+
+
 /* --- course navigation menu as a definition list  --- */
 #swap_menu_link {
   float: left;
@@ -473,7 +482,7 @@ input[text] {font-size: 12px; }
 	margin: 0 0 0 10px;
 	padding: 0;
 	float: left;
-	border: 1px solid #f0f0f0;
+	border: 1px solid #4271b5;
 }
 #toolnavbox dl {
 	width: 160px;
@@ -508,8 +517,8 @@ input[text] {font-size: 12px; }
 	margin: 0 4px 0 0;
 }
 #toolnavlist a, #toolnavlist a:link {
-	background: #E5EDF9;
-	color: #dcdcdc;
+	background: #FFC0CB;
+	color: #4171b5;
 	padding: 5px 5px 5px 10px;
 	margin: 0;
 	text-decoration: none;
@@ -517,14 +526,17 @@ input[text] {font-size: 12px; }
 }
 #toolnavlist a:hover {
 	background: #fff;
-	color:#dcdcdc;
+	color:#4171b5;
 }
 #toolnavlist a#here {
 	background: #fff;
-	color:#dcdcdc;
+	color:#4171b5;
 }
 /* --- end of course navigation menu section  --- */
-/*
+------------------------------------------------------------------------------
+    course navigation menu as a definition list
+------------------------------------------------------------------------------
+*/
 this lets the navigation menu appear to the left:
 #center { margin: 0 0 0 180px; padding: 10px 0 40px 0;
  min-height: 300px; }

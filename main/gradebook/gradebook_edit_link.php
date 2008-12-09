@@ -36,14 +36,16 @@ $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 $linkarray = LinkFactory :: load($_GET['editlink']);
 $link = $linkarray[0];
+$linkcat  = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']):'';
+$linkedit = isset($_GET['editlink']) ? Security::remove_XSS($_GET['editlink']):'';
 
 $form = new LinkAddEditForm(LinkAddEditForm :: TYPE_EDIT,
 							null,
 							null,
 							$link,
 							'edit_link_form',
-							api_get_self() . '?selectcat=' . $_GET['selectcat']
-												 . '&editlink=' . $_GET['editlink']);
+							api_get_self() . '?selectcat=' . $linkcat
+												 . '&editlink=' . $linkedit);
 
 if ($form->validate()) {
 	$values = $form->exportValues();
@@ -58,7 +60,7 @@ if ($form->validate()) {
 }
 
 $interbreadcrumb[] = array (
-	'url' => $_SESSION['gradebook_dest'].'?selectcat='.$_GET['selectcat'],
+	'url' => $_SESSION['gradebook_dest'].'?selectcat='.$linkcat,
 	'name' => get_lang('Gradebook'
 ));
 

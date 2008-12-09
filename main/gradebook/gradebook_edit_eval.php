@@ -55,8 +55,9 @@ if ($form->validate()) {
 	header('Location: '.$_SESSION['gradebook_dest'].'?editeval=&selectcat=' . $eval->get_category_id());
 	exit;
 }
+$selectcat_inter=isset($_GET['selectcat'])?Security::remove_XSS($_GET['selectcat']):'';
 $interbreadcrumb[] = array (
-	'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']),
+	'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectcat_inter,
 	'name' => get_lang('Gradebook'
 ));
 Display :: display_header(get_lang('EditEvaluation'));

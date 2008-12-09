@@ -104,8 +104,8 @@ function get_table_type_course($type,$course) {
 	global $table_evaluated;
 	return Database::get_course_table($table_evaluated[$type][0],$_configuration['db_prefix'].$course);
 }
-
-if($_POST['submitted']==1) {
+$submitted=isset($_POST['submitted'])?$_POST['submitted']:'';
+if($submitted==1) {
 	Display :: display_normal_message(get_lang('GradebookWeightUpdated')) . '<br /><br />';
 	if (isset($_POST['evaluation'])) {
 		require_once 'lib/be/evaluation.class.php';
@@ -120,6 +120,7 @@ if($_POST['submitted']==1) {
 }
 
 $category_id = (int)$_GET['selectcat'];
+$output='';
 $sql='SELECT * FROM '.$table_link.' WHERE category_id = '.$category_id;
 $result = api_sql_query($sql,__FILE__,__LINE__);
 	while($row = Database ::fetch_array($result)){

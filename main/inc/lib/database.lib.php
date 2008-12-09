@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 17061 2008-12-03 21:43:06Z cfasanando $
+<?php // $Id: database.lib.php 17172 2008-12-09 16:57:47Z iflorespaz $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -420,6 +420,9 @@ class Database
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		$result = mysql_fetch_array($sql_result);
 		$result = Database::generate_abstract_course_field_names($result);
+		if ($result===false) {
+			$result['db_name']='';
+		}
 		return $result;
 	}
 	/**
@@ -461,15 +464,19 @@ class Database
 	* 		  There should be consistency in the variable names and the use throughout the scripts
 	* 		  for the database name we should consistently use or db_name or database (db_name probably being the better one)
 	*/
-	function generate_abstract_course_field_names($result_array)
-	{
-		$result_array["official_code"] = $result_array["visual_code"];
-		$result_array["visual_code"] = $result_array["visual_code"];
-		$result_array["real_code"] = $result_array["code"];
-		$result_array["system_code"] = $result_array["code"];
-		$result_array["title"] = $result_array['title'];
-		$result_array["database"] = $result_array["db_name"];
-		$result_array["faculty"] = $result_array["category_code"];
+	function generate_abstract_course_field_names($result_array) {
+		$visual_code = isset($result_array["visual_code"]) ? $result_array["visual_code"] : null;
+		$code        = isset($result_array["code"]) ? $result_array["code"] : null;
+		$title       = isset($result_array['title']) ? $result_array['title'] : null;
+		$db_name     = isset($result_array["db_name"]) ? $result_array["db_name"] : null;
+		$category_code= isset($result_array["category_code"]) ? $result_array["category_code"] : null;
+		$result_array["official_code"] = $visual_code;
+		$result_array["visual_code"]   = $visual_code;
+		$result_array["real_code"]     = $code;
+		$result_array["system_code"]   = $code;
+		$result_array["title"]         = $title;
+		$result_array["database"]      = $db_name;
+		$result_array["faculty"]       = $category_code;
 		//$result_array["directory"] = $result_array["directory"];
 		/*
 		still to do: (info taken from local.inc.php)
@@ -733,6 +740,22 @@ class Database
     {
     	return mysql_error();
     }
+	/**
+	 * @param integer
+	 * @return integer 
+	 */
+    function get_course_by_category ($category_id) {
+    	$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+		$sql = 'SELECT DISTINCT(course_code) FROM '.$tbl_grade_categories.' WHERE category_id='.$category_id;
+		$res=api_sql_query($sql, __FILE__, __LINE__);
+		$option=Database::fetch_array($res,'ASSOC');
+		if ($option) {
+			return $option['course_code'];
+		}else {
+			return false;
+		}
+		
+    }	
 }
 //end class Database
 ?>

@@ -71,7 +71,8 @@ if ($form->validate()) {
 			exit;
 		}
 	} else {
-		if ($values['addresult'] == 1) {
+		$val_addresult=isset($values['addresult'])?$values['addresult']:null;
+		if ($val_addresult == 1) {
 			header('Location: gradebook_add_result.php?selecteval=' . $eval->get_id());
 			exit;
 		} else {

@@ -113,8 +113,8 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 		} else {
 			$link->add();
 		}
-
-		if ($addvalues['addresult'] == 1) {
+		$addvalue_result=!empty($addvalues['addresult'])?$addvalues['addresult']:array();
+		if ($addvalue_result == 1) {
 			header('Location: gradebook_add_result.php?selecteval=' . $link->get_ref_id());
 			exit;
 		} else {

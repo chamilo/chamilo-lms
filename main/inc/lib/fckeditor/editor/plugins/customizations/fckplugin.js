@@ -4,7 +4,7 @@
  *	Copyright (c) 2004-2008 Dokeos S.A.
  *	Copyright (c) 2003 Ghent University (UGent)
  *	Copyright (c) 2001 Universite catholique de Louvain (UCL)
- *	Copyright (c) Julio Montoya
+ *	Copyright (c) 2008 Julio Montoya
  *
  *	For a full list of contributors, see "credits.txt".
  *	The full license can be read in "license.txt".
@@ -20,92 +20,101 @@
  *	Mail: info@dokeos.com
  */
 
-// Dokeos
-//---------------------------------------------------
 
-FCKDocumentProcessor.AppendNew().ProcessDocument=function(A)
+/*
+ * Customizations by Julio Montoya for handling audio and video files.
+ */
+
+// mp3 files
+FCKDocumentProcessor.AppendNew().ProcessDocument = function(A)
 {
-	var B=A.getElementsByTagName('embed'); 
+	var B = A.getElementsByTagName('embed'); 
 	var C;
-	var i=B.length-1; 
-	while (i>=0&&(C=B[i--]))
+	var i = B.length - 1; 
+	while (i >= 0 && (C = B[i--]))
 	{
-		var str=C.src;
-		var leng=str.length;	
-		var extension = str.substring(leng -3, leng ); // !!!
+		var str = C.src;
+		var leng = str.length;	
+		var extension = str.substring(leng -3, leng );
 		if (extension == 'mp3')
 		{			 
-			var D=FCKDocumentProcessor_CreateFakeImage('FCK__MP3',C.cloneNode(true));
-			D.setAttribute('_fckmp3','true',0);
-			C.parentNode.insertBefore(D,C);
+			var D = FCKDocumentProcessor_CreateFakeImage('FCK__MP3', C.cloneNode(true));
+			D.setAttribute('_fckmp3', 'true', 0);
+			C.parentNode.insertBefore(D, C);
 			C.parentNode.removeChild(C);			
 		}
 	}
 };
 
-// files supported by fckembedvideo mpg, mpeg, avi, wmv, mov and asf. ')
-FCKDocumentProcessor.AppendNew().ProcessDocument=function(A)
+// Files supported by fckembedvideo mpg, mpeg, avi, wmv, mov and asf. ')
+FCKDocumentProcessor.AppendNew().ProcessDocument = function(A)
 {
-	var B=A.getElementsByTagName('embed'); 
+	var B = A.getElementsByTagName('embed'); 
 	var C;
-	var i=B.length-1; 
-	while (i>=0&&(C=B[i--]))
+	var i = B.length - 1; 
+	while (i >= 0 && (C = B[i--]))
 	{
-		var str=C.src;		
-		var leng=str.length;	
-		var extension = str.substring(leng -3, leng ); // !!!
+		var str = C.src;		
+		var leng = str.length;	
+		var extension = str.substring(leng -3, leng);
 		if (extension == 'mpg' || extension == 'mpeg'|| extension == 'avi' || extension == 'wmv' || extension == 'mov' || extension == 'asf' )
 		{			 
-			var D=FCKDocumentProcessor_CreateFakeImage('FCK__Video',C.cloneNode(true));
-			D.setAttribute('_fckvideo','true',0);
-			C.parentNode.insertBefore(D,C);
+			var D = FCKDocumentProcessor_CreateFakeImage('FCK__Video', C.cloneNode(true));
+			D.setAttribute('_fckvideo', 'true', 0);
+			C.parentNode.insertBefore(D, C);
 			C.parentNode.removeChild(C);			
 		}
 	}
 };
-			
-FCKEmbedAndObjectProcessor.AddCustomHandler(function(A,B){
-if (!(A.nodeName.IEquals('embed')&&(A.type=='application/x-shockwave-flash'||/\.swf($|#|\?)/i.test(A.src)))) return;
-if(A.src.match(/mediaplayer/g)){B.className='FCK__MP3'}//DOKEOS CUSTOMIZATION : the mp3 fake should appear if the flash is the mediaplayer
-else{B.className='FCK__Flash';}
-B.setAttribute('_fckflash','true',0);});
 
-//---------------------------------------------------
-
-
-//julio montoya fixed to enable the template in dokeos  2 of 4 steps 
-//----------------------- 2--------------------------
-
-FCKDialogCommand.prototype.Execute=function()
+// Fake images handling customization
+FCKEmbedAndObjectProcessor.AddCustomHandler(function(A, B)
 {
-	FCKDialog.OpenDialog('FCKDialog_'+this.Name,this.Title,this.Url,this.Width,this.Height,this.CustomValue,null,this.Resizable);
-};
+	if (!(A.nodeName.IEquals('embed') &&
+		(A.type == 'application/x-shockwave-flash' || /\.swf($|#|\?)/i.test(A.src)))) return;
+	if (A.src.match(/mediaplayer/g)) 
+	{
+		B.className = 'FCK__MP3'  //DOKEOS CUSTOMIZATION : the mp3 fake should appear if the flash is the mediaplayer
+	}
+	else
+	{
+		B.className = 'FCK__Flash';
+	}
+	B.setAttribute('_fckflash', 'true', 0);
+});
 
-FCKDialogCommand.prototype.ExecuteFrame=function()
+
+/*
+ * Customizations by Julio Montoya for enabling the external template selection dialog.
+ */
+
+FCKToolbarButton.prototype.Click = function()
 {
-	return FCKDialog.OpenDialogFrame('FCKDialog_'+this.Name,this.Title,this.Url,this.Width,this.Height,this.CustomValue,null,this.Resizable);
-}; 
-
-//---------------------------------------------------
-
-//julio montoya fixed to enable the template in dokeos  1 of 4 steps :)
-//----------------------- 1 -------------------------
-
-FCKToolbarButton.prototype.Click=function()
-{
-	var A=this._ToolbarButton||this;
+	var A = this._ToolbarButton || this;
 	FCK.ToolbarSet.CurrentInstance.Commands.GetCommand(A.CommandName).Execute();
 };
 
-FCKToolbarButton.prototype.ClickFrame=function()
+FCKToolbarButton.prototype.ClickFrame = function()
 {
-	var A=this._ToolbarButton||this;
+	var A = this._ToolbarButton || this;
 	return FCK.ToolbarSet.CurrentInstance.Commands.GetCommand(A.CommandName).ExecuteFrame();
 };
 
-//---------------------------------------------------
+FCKDialogCommand.prototype.Execute = function()
+{
+	FCKDialog.OpenDialog('FCKDialog_' + this.Name, this.Title, this.Url, this.Width, this.Height, this.CustomValue, null, this.Resizable);
+};
+
+FCKDialogCommand.prototype.ExecuteFrame = function()
+{
+	return FCKDialog.OpenDialogFrame('FCKDialog_' + this.Name, this.Title, this.Url, this.Width, this.Height, this.CustomValue, null, this.Resizable);
+}; 
 
 /*
+ * The following customization of the dialog sub-system for enabling
+ * the external template selection uses original source code,
+ * FCKeditor version 2.6.4 SVN, Build 21065 (nightly, 06-DEC-2008).
+ * 
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
  * Copyright (C) 2003-2008 Frederico Caldeira Knabben
  *
@@ -243,31 +252,52 @@ var FCKDialog = ( function()
 			topDialog = dialog ;
 		},
 
-		// Dokeos
-		//---------------------------------------------------
+		/*
+		 * Added by Julio Montoya for enabling the external template selection dialog.
+		 */
 
-		OpenDialogFrame:function(dialogName,dialogTitle,dialogPage,width,height,customValue,parentWindow,resizable){//if (!topDialog) this.DisplayMainCover();
-			var I={Title:dialogTitle,Page:dialogPage,Editor:window,CustomValue:customValue,TopWindow:topWindow};
+		OpenDialogFrame: function(dialogName, dialogTitle, dialogPage, width, height, customValue, parentWindow, resizable)
+		{
+			//if (!topDialog) this.DisplayMainCover();
+			var I = 
+			{
+				Title: dialogTitle,
+				Page: dialogPage,
+				Editor: window,
+				CustomValue: customValue,
+				TopWindow: topWindow
+			};
 			FCK.ToolbarSet.CurrentInstance.Selection.Save();
-			var J=FCKTools.GetViewPaneSize(topWindow);
-			var K={ 'X':0,'Y':0 };
-			var L=FCKBrowserInfo.IsIE&&(!FCKBrowserInfo.IsIE7||!FCKTools.IsStrictMode(topWindow.document));if (L) K=FCKTools.GetScrollPosition(topWindow);
-			var M=Math.max(K.Y+(J.Height-height-20)/2,0);
-			var N=Math.max(K.X+(J.Width-width-20)/2,0);
-			var O=topDocument.createElement('iframe');
+			var J = FCKTools.GetViewPaneSize(topWindow);
+			var K = { 'X': 0, 'Y': 0 };
+			var L = FCKBrowserInfo.IsIE && (!FCKBrowserInfo.IsIE7 || !FCKTools.IsStrictMode(topWindow.document));
+			if (L) K = FCKTools.GetScrollPosition(topWindow);
+			var M = Math.max(K.Y + (J.Height - height - 20)/2,0);
+			var N = Math.max(K.X + (J.Width - width - 20)/2,0);
+			var O = topDocument.createElement('iframe');
 			//FCKTools.ResetStyles(O);
-			O.src=FCKConfig.BasePath+'fckdialogframe.html';
-			O.frameBorder=0;
-			O.allowTransparency=true;
-			FCKDomTools.SetElementStyles(O,{'position':(L)?'absolute':'fixed','top':M+'px','left':N+'px','width':width+'px','height':height+'px','zIndex':getZIndex()});
-			O._DialogArguments=I;
+			O.src = FCKConfig.BasePath + 'fckdialogframe.html';
+			O.frameBorder = 0;
+			O.allowTransparency = true;
+			FCKDomTools.SetElementStyles(O,
+			{
+				'position': (L) ? 'absolute' : 'fixed',
+				'top': M + 'px',
+				'left': N + 'px',
+				'width': width + 'px',
+				'height': height + 'px',
+				'zIndex': getZIndex()
+			});
+			O._DialogArguments = I;
 			//E.body.appendChild(O);
-			O._ParentDialog=topDialog;
-			topDialog=O;
+			O._ParentDialog = topDialog;
+			topDialog = O;
 			return I;
 		},
 
-		//---------------------------------------------------
+		/*
+		 * End of the added code.
+		 */
 
 		/**
 		 * (For internal use)

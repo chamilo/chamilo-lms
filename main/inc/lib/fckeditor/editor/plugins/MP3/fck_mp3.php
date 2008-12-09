@@ -18,9 +18,9 @@ include('../../../../../../inc/global.inc.php');
 		<script src="fck_mp3.js" type="text/javascript"></script>
 		<link href="../../dialog/common/fck_dialog_common.css" type="text/css" rel="stylesheet">
 	</head>
-	<body> <!--scroll="no" style="OVERFLOW: hidden"-->
+	<body> <!--scroll="no" style="overflow: hidden"-->
 		<div id="divInfo">
-		  <div id="divExtra1"  style="DISPLAY: none">
+		  <div id="divExtra1" style="display: none">
 			<table cellspacing="1" cellpadding="1" border="0" width="100%">
 				<tr>
 					<td>
@@ -28,10 +28,10 @@ include('../../../../../../inc/global.inc.php');
 							<tr>
 							<td valign="top" width="100%">								
 								<span fckLang="DlgMP3URL">URL</span><br>
-								<input id="mpUrl" onBlur="updatePreview();" style="WIDTH: 100%" type="text">
+								<input id="mpUrl" onBlur="javascript:updatePreview();" style="width: 100%" type="text">
 							</td>
 							<td id="tdBrowse" valign="bottom" nowrap>
-								<input type="button" fckLang="DlgMP3BtnBrowse" value="Browse Server" onClick="BrowseServer();" id="btnBrowse">
+								<input type="button" fckLang="DlgMP3BtnBrowse" value="Browse Server" onClick="javascript:BrowseServer();" id="btnBrowse">
 							</td>
 						</tr>
 						</table>
@@ -47,13 +47,13 @@ include('../../../../../../inc/global.inc.php');
 		  }		  
 		  ?>
 		</div>
-		<div id="divUpload" style="DISPLAY: none">		
+		<div id="divUpload" style="display: none">		
 		<?php		
 			include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-			$form = new FormValidator('frmUpload','POST','','UploadWindow','id="frmUpload" enctype="multipart/form-data" onSubmit="return CheckUpload();"');			
+			$form = new FormValidator('frmUpload','POST','','UploadWindow','id="frmUpload" enctype="multipart/form-data" onSubmit="javascript:return CheckUpload();"');			
 			$form->addElement('html','<table cellspacing="1" cellpadding="1" border="0" width="90%" align="center">');			
 			$form->addElement('html','<tr><td>');
-			$form->addElement('file','NewFile','','id="txtUploadFile" style="WIDTH: 100%" size="40"');
+			$form->addElement('file','NewFile','','id="txtUploadFile" style="width: 100%" size="30"');
 			$form->addElement('html','</td></tr>');			
 			$form->addElement('html','<tr><td>');
 			$renderer = & $form->defaultRenderer();
@@ -63,12 +63,12 @@ include('../../../../../../inc/global.inc.php');
 			$form->addElement('html','<tr><td>');
 			$form->addElement('submit','','Send it to the Server','id="btnUpload" fckLang="DlgLnkBtnUpload"');
 			$form->addElement('html','</td></tr></table>');			
-			$form->addElement('html','<iframe name="UploadWindow" style="DISPLAY: none" src="../fckblank.html"></iframe>');
+			$form->addElement('html','<iframe name="UploadWindow" style="display: none" src="../fckblank.html"></iframe>');
 			
 			$form->add_real_progress_bar('fckMP3','NewFile');			
 			$form->display();			
 		?>		
 		</div>
-		<script language="javascript">window_onload();</script>
+		<script type="text/javascript">window_onload();</script>
 	</body>
 </html>

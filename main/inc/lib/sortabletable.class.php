@@ -203,6 +203,7 @@ class SortableTable extends HTML_Table
 			$this->setCellContents(1, 0, get_lang('TheListIsEmpty'));
 			$empty_table = true;
 		}
+		$html='';
 		if (!$empty_table)
 		{
 			$form = $this->get_page_select_form();
@@ -294,6 +295,7 @@ class SortableTable extends HTML_Table
 	function get_table_html()
 	{
 		$pager = $this->get_pager();
+		$val = $pager->getOffsetByPageId();
 		$offset = $pager->getOffsetByPageId();
 		$from = $offset[0] - 1;
 		$table_data = $this->get_table_data($from);

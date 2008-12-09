@@ -240,7 +240,8 @@ class DisplayGradebook
 				for ($i= 0; $i < $cat[2]; $i++) {
 					$line .= '&mdash;';
 				}
-				if ($_GET['selectcat'] == $cat[0]) {
+				$line=isset($line) ? $line : '';
+				if (isset($_GET['selectcat']) && $_GET['selectcat'] == $cat[0]) {
 					$header .= '<option selected value=' . $cat[0] . '>' . $line . ' ' . $cat[1] . '</option>';
 				} else {
 					$header .= '<option value=' . $cat[0] . '>' . $line . ' ' . $cat[1] . '</option>';

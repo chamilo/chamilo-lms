@@ -3366,9 +3366,9 @@ function get_notifications_of_user($user_id = 0, $force = false) {
 	
 	// database table definition
 	$table_notification = Database::get_course_table('forum_notification');
-	
-	if (!$_SESSION['forum_notification'] OR $_SESSION['forum_notification']['course'] <> $_course['code'] OR $force=true) {
-		$_SESSION['forum_notification']['course'] = $_course['code'];
+	$my_code = isset($_course['code']) ? $_course['code'] : '';
+	if (!$_SESSION['forum_notification'] OR $_SESSION['forum_notification']['course'] <> $my_code OR $force=true) {
+		$_SESSION['forum_notification']['course'] = $my_code;
 		
 		$sql = "SELECT * FROM $table_notification WHERE user_id='".Database::escape_string($user_id)."'";
 		$result=api_sql_query($sql, __FILE__, __LINE__);

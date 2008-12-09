@@ -74,6 +74,12 @@ var FCKConfig	= oEditor.FCKConfig ;
 
 var Size = window.parent.WindowSize;
 
+// Added by Ivan Tcholakov, a temporary fix.
+// The following statement sets the Skin CSS.
+// This is needed only when this dialog is shown in the Documents tool.
+document.write( '<link href="' + FCKConfig.SkinPath + 'fck_dialog.css" type="text/css" rel="stylesheet">' ) ;
+//
+
 window.onload = function()
 {
 	// Set the right box height (browser dependent).
@@ -212,7 +218,7 @@ function SelectTemplate( index )
 
 	</script>
 </head>
-<body scroll="no" style="overflow: hidden">
+<body scroll="no" style="overflow: hidden; background-color: #ffffff;">
 	<table width="100%" style="height: 100%" valign="top">
 		<tr>
 			<td height="100%" align="center" valign="top">

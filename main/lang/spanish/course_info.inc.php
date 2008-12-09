@@ -104,4 +104,8 @@ $AllowUserImageForumDeactivate = "Oculta las imágenes de los usuarios en el foro
 $AllowLearningPathTheme = "Permitir temas en Itinerarios de aprendizaje";
 $AllowLearningPathThemeAllow = "Permitido";
 $AllowLearningPathThemeDisallow = "No permitido";
+$ConfigChat = "Configuración del chat";
+$AllowOpenchatWindow = "Abrir el chat en una nueva ventana";
+$AllowOpenChatWindowActivate = "Activar abrir el chat en una nueva ventana";
+$AllowOpenChatWindowDeactivate = "Desactivar abrir el chat en una nueva ventana";
 ?>

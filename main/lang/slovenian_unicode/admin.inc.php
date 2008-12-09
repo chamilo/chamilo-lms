@@ -848,4 +848,6 @@ $AllowUsersToCreateCoursesTitle = "Dovoli ne-upraviteljem kreiranje tečajev";
 $AllowUsersToCreateCoursesComment = "Dovoli ne-upraviteljem (učitelji) kreiranje novih tečajev na platformi";
 $YesWillDeletePermanently = "Da (datoteke bodo trajno odstranjene in morebitno restavriranje ne bo možno)";
 $NoWillDeletePermanently = "Ne (datoteke bodo odstranjene zgolj iz aplikacije; restavrira jih lahko upravitelj sistema)";
+$SelectAResponsible = "Izberi managerja";
+$ThereIsNotStillAResponsible = "Noben HR manager ni na voljo";
 ?>

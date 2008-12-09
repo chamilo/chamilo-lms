@@ -1,6 +1,9 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$ForumDeleted = "Forum sters";
+$ForumCategoryDeleted = "Categorie in forum stearsa";
+$ForumLocked = "Forum blocat";
 $Forum = "Forum";
 $AddForumCategory = "Adaugati o noua categorie de forum";
 $AddForum = "Adaugati un forum nou";
@@ -60,4 +63,34 @@ $EditPostStored = "Mesajul a fost modificat";
 $NewForumPost = "Mesaj nou in forum";
 $YouWantedToStayInformed = "Ati ales ca vreti sa fiti informat prin e-mail de fiecare data cand cineva raspunde discutiei";
 $MessageHasToBeApproved = "Mesajul dumneavoastra va trebui aprobat inainte sa fie publicat";
+$AllowAttachments = "Permite atasamente";
+$EditForumCategory = "Editeaza categoria din forum";
+$MovePost = "Muta postare";
+$MoveToThread = "Muta pe un thread";
+$ANewThread = "Un nou thread";
+$Reply = "Replica";
+$DeleteForum = "Sterg forum?";
+$DeleteForumCategory = "Sterg categorie forum?";
+$Lock = "Blocheaza";
+$Unlock = "Deblocheaza";
+$MoveThread = "Muta thread";
+$PostVisibilityChanged = "Vizibilitatea postului a fost modificata";
+$PostDeleted = "Postul a fost sters";
+$MakeInvisible = "Fa invizibil";
+$ThreadCanBeFoundHere = "Thread-ul poate fi gasit aici";
+$MakeVisible = "Fa vizibil";
+$DeleteCompleteThread = "Sterge thread-ul complet?";
+$PostDeletedSpecial = "Postare speciala stearsa";
+$ThreadDeleted = "Thread sters";
+$NextMessage = "Urmatorul mesaj";
+$PrevMessage = "Mesajul anterior";
+$FirstMessage = "Primul mesaj";
+$LastMessage = "Ultimul mesaj";
+$ForumSearch = "Cauta in forum";
+$SearchTerm  = "Termenul de cautare";
+$ForumSearchResults = "Rezultatele cautarii in forum";
+$ForumSearchInformation = "Cautati pe mai multe cuvinte folosind semnul +";
+$YouWillBeNotifiedOfNewPosts = "Veti fi notificati asupra postarilor noi prin e-mail";
+$YouWillNoLongerBeNotifiedOfNewPosts = "Nu veti mai fi notificat asupra noilor postari prin email";
+$TooShort = "Prea scurt";
 ?>

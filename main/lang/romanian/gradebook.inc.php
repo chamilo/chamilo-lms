@@ -1,4 +1,55 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$FlatView = "Vizualizare simpla";
+$ScoreEdit = "Editare regulilor pentru scoruri";
+$ScoreColor = "Culoarea scorului";
+$ScoringSystem = "Sistemul de scor";
+$EnableScoreColor = "Activeaza colorarea scorurilor";
+$Below = "sub";
+$WillColorRed = "va fi colorat in rosu";
+$EnableScoringSystem = "Activeaza sistemul de scor";
+$IncludeUpperLimit = "Include limita superioara";
+$ScoreInfo = "Informatii despre scor";
+$Between = "intre";
+$CurrentCategory = "Categoria curenta";
+$RootCat = "Categoria radacina";
+$NewCategory = "Categorie noua";
+$NewEvaluation = "Evaluare noua";
+$Weight = "Pondere";
+$PickACourse = "Alege un curs";
+$CategoryName = "Numele categoriei";
+$CourseIndependent = "Independent de curs";
+$CourseIndependentEvaluation = "Evaluare independenta de curs";
+$EvaluationName = "Numele evaluarii";
+$Max = "Maxim";
+$DateEval = "Data evaluarii";
+$AddUserToEval = "Adauga utilizatori la evaluare";
+$NewSubCategory = "Subcategorie noua";
+$MakeLink = "Creaza o legatura";
+$DeleteSelected = "Sterge selectia";
+$SetVisible = "Seteaza ca vizibil";
+$SetInvisible = "Seteaza ca invizibil";
+$ChooseLink = "Alege tipul legaturii";
+$DokeosExercises = "Exercitii Dokeos";
+$DokeosDropbox = "Cosul Dokeos";
+$DokeosStudentPublications = "Publicatii ale studentilor Dokeos";
+$DokeosLearningPaths = "Cai de invatare Dokeos";
+$ChooseExercise = "Alege exercitiul";
+$AddResult = "Adauga rezultate";
+$BackToOverview = "Inapoi la sumar";
+$ExportPDF = "Exporta in format PDF";
+$Print = "Printeaza";
+$ChooseOrientation = "Alege orientarea";
+$Portrait = "Portret";
+$Landscape = "Peisaj";
+$FilterCategory = "Filtreaza categoria";
+$DeleteAll = "Sterge tot";
+$ScoringUpdated = "Actualizare scoruri";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s certifica faptul ca\\n\\n %s \\n\\na completat cu succes cursul \\n\\n \'%s\' \\n\\ncu un grad de \\n\\n \'%s\'";
+$CertificateMinScore = "Scorul minim pentru certificare";
+$CategoryAdded = "Categorie adaugata";
+$InViMod = "Categorie facuta invizibila";
+$ViMod = "Categorie facuta vizibila";
+$ViewResult = "Afiseaza rezultatele";
 ?>

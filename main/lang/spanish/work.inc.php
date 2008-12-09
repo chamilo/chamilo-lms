@@ -42,7 +42,9 @@ $DatesAvailables = "Fechas disponibles";
 $ExpiresAt = "Expira en";
 $AddToCalendar = "Agregar a agenda";
 $DirectoryCreated = "Directorio creado";
-$Assignment = "Asignación";
+$Assignment = "Tarea";
 $AdvancedParameters = "Parámetros avanzados";
 $ExpiryDateToSendWorkIs = "Fecha de vencimiento para enviar trabajos";
+$EnableExpiryDate = "Activar fecha de vencimiento";
+$EnableEndDate = "Activar fecha de finalización";
 ?>

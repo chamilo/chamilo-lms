@@ -592,4 +592,11 @@ $CourseSettings = "Nastavitve tečaja";
 $EmailNotifications = "E-poštno obveščanje";
 $UserRights = "Pravice uporabnikov";
 $Theming = "Tema";
+$Qualification = "Kvalifikacija";
+$OnlyNumbers = "Zgolj numerične vrednosti";
+$ReorderOptions = "Menjaj vrstni red možnosti";
+$EditUserFields = "Uredi uporabniška polja";
+$OptionText = "Besedilo";
+$FieldTypeDoubleSelect = "Dvojna izbira";
+$FieldTypeDivider = "Vizualni delilec";
 ?>

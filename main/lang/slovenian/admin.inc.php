@@ -846,4 +846,8 @@ $ExtendRightsForCoachOnSurveyTitle = "Razširi pravice za inštruktorja pri evalva
 $CannotDeleteUserBecauseOwnsCourse = "Uporabnika ni možno odstraniti, ker je še vedno uèitelj v teèaju. Ali mu odstranite status uèitelja v teèaju in nato odstranite njegov uporabniški raèun ali pa enostavno onemogoèite njegov uporabniški raèun.";
 $AllowUsersToCreateCoursesTitle = "Dovoli ne-upraviteljem kreiranje teèajev";
 $AllowUsersToCreateCoursesComment = "Dovoli ne-upraviteljem (uèitelji) kreiranje novih teèajev na platformi";
+$YesWillDeletePermanently = "Da (datoteke bodo trajno odstranjene in morebitno restavriranje ne bo možno)";
+$NoWillDeletePermanently = "Ne (datoteke bodo odstranjene zgolj iz aplikacije; restavrira jih lahko upravitelj sistema) ";
+$SelectAResponsible = "Izberi managerja";
+$ThereIsNotStillAResponsible = "Noben HR manager ni na voljo";
 ?>

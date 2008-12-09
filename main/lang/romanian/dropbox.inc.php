@@ -121,4 +121,8 @@ $FileUploadSucces = "Fisierul a fost incarcat cu succes.";
 $mailingNonMailingError = "Mailing nu poate fi suprascris de non-mailing si vice-versa";
 $MailingSelectNoOther = "Trimiterea prin mail nu poate fi combinata cu alte recipiente";
 $mailingJustUploadSelectNoOther = "Doar Incarcarea nu poate fi combinata cu alte recipiente";
+$NoFilesHere = "Nu exista fisiere aici";
+$NoFilesHere = "Nu exista fisiere aici";
+$NewDropboxFileUploaded = "A fost trimis un nou fisier in instrumentul \"dropbox\"";
+$NewDropboxFileUploadedContent = "A fost trimis un nou fisier in instrumentul \"dropbox\" al cursului dvs";
 ?>

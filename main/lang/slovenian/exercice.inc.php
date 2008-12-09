@@ -248,4 +248,13 @@ $RandomQuestionsHelp = "Število vprašanj, ki se bo nakljuèno izbralo iz nabora v
 $ExerciseAttempts = "Najveèje število poskusov";
 $DoNotRandomize = "Brez nakljuènosti";
 $Infinite = "Neomejeno";
+$BackToExercisesList = "Nazaj na vaje/teste";
+$ViewScoreChangeHistory = "Poglej zgodovino sprememb rezultatov";
+$NoStartDate = "Brez zaèetnega èasa";
+$NoLogOfDuration = "Brez beleženja trajanja";
+$EnableTimeLimits = "Omogoèi èasovne omejitve";
+$ExeStartTime = "Zaèetni datum";
+$ExeEndTime = "Konèni datum";
+$Value = "Vrednost";
+$DeleteAttempt = "Odstranim poskus?";
 ?>

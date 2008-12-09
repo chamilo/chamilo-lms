@@ -251,9 +251,10 @@ $Infinite = "Infinito";
 $BackToExercisesList = "Regresar a ejercicios";
 $ViewScoreChangeHistory = "Ver puntuacion de historial de cambio";
 $NoStartDate = "No empieza fecha ";
-$NoLogOfDuration = "Ningun registro de duracion";
+$NoLogOfDuration = "Ningún registro de duración";
 $EnableTimeLimits = "Permitir limite de tiempo";
 $ExeStartTime = "Fecha de inicio";
 $ExeEndTime = "Fecha de fin";
 $Value = "Valor";
+$DeleteAttempt = "¿ Eliminar este intento ?";
 ?>

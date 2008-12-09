@@ -198,4 +198,17 @@ $ViewLearningPath = "Poglej uèno pot";
 $SearchFeatureDoIndexDocument = "Indeksiram vsebino dokumentov?";
 $SearchFeatureDocumentTagsIfIndexing = "Zaznamki, ki se dodajo dokumentu v primeru indeksiranja";
 $SearchFeatureDocumentLanguage = "Jezik dokumentov za indeksiranje";
+$ReturnToLearningPaths = "Nazaj na lekcije";
+$UploadMp3audio = "Naloži Mp3 datoteko";
+$UpdateAllAudioFragments = "Ažuriraj vse zvoène fragmente";
+$LeaveEmptyToKeepCurrentFile = "Pusti prazno, èe želiš obdržati trenutno datoteko";
+$RemoveAudio = "Odstrani zvok";
+$SaveAudio = "Shrani";
+$ChangesStored = "Spremembe so bile shranjene";
+$ViewScoreChangeHistory = "Poglej zgodovino sprememb rezultatov";
+$ImageWillResizeMsg = "Slika bo spremenila velikost sporoèila";
+$ImagePreview = "Predogled slike";
+$UplAlreadyExists = "Datoteka že obstaja";
+$UnknownPackageFormat = "Neznan format paketa";
+$UplUnableToSaveFile = "Ne morem shraniti datoteke";
 ?>

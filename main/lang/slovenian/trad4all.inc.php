@@ -574,4 +574,5 @@ $Qualify = "Definiraj";
 $Words = "Besed(e)";
 $GoBack = "Nazaj";
 $Details = "Podrobnosti";
+$EditLink = "Uredi povezavo";
 ?>

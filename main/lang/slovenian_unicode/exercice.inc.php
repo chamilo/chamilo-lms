@@ -256,4 +256,5 @@ $EnableTimeLimits = "Omogoči časovno omejevanje";
 $ExeStartTime = "Začetni datum";
 $ExeEndTime = "Končni datum";
 $Value = "Vrednost";
+$DeleteAttempt = "Izbrišem poskus ?";
 ?>

@@ -256,4 +256,5 @@ $EnableTimeLimits = "Enable time limits";
 $ExeStartTime = "Start date";
 $ExeEndTime = "End date";
 $Value = "Value";
+$DeleteAttempt = "Delete attempt?";
 ?>

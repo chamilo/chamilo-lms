@@ -114,4 +114,7 @@ $ResourceType = "Vrsta vira";
 $GradebookWhoChangedItLog = "Kdo je izvršil spremembo";
 $EvaluationEdited = "Urejanje ocenjevanja je bilo uspešno";
 $CategoryEdited = "Kategorija je bila ažurirana";
+$OnlyNumbers = "Zgolj števila";
+$IncorrectData = "Napaèni podatki";
+$Resource = "Vir";
 ?>

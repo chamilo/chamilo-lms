@@ -209,4 +209,6 @@ $ViewScoreChangeHistory = "View score change history";
 $ImageWillResizeMsg = "Image will resize msg";
 $ImagePreview = "Image preview";
 $UplAlreadyExists = "File already exists";
+$UnknownPackageFormat = "Unknown package format";
+$UplUnableToSaveFile = "Unable to save file";
 ?>

@@ -92,4 +92,5 @@ $ForumSearchResults = "Forum search results";
 $ForumSearchInformation = "You search on multiple words by using the + sign";
 $YouWillBeNotifiedOfNewPosts = "You will be notified of new posts by e-mail.";
 $YouWillNoLongerBeNotifiedOfNewPosts = "You will no longer be notified of new posts by email";
+$TooShort = "Too short";
 ?>

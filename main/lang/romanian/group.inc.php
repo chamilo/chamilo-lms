@@ -87,4 +87,6 @@ $GroupAnnouncements = "Anunturi";
 $NoCategoriesDefined = "Nici o categorie definita";
 $GroupsFromClasses = "Grupuri din clase";
 $GroupsFromClassesInfo = "Utilizand aceasta optiune, puteti crea grupuri bazate pe clasele inscrise la cursul dumneavoastra.";
+$Group = "Grup";
+$ForumOfGroup = "Forumul grupului:";
 ?>

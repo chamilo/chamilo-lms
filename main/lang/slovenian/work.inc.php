@@ -34,4 +34,6 @@ $DirDelete = "Odstrani mapo";
 $ValidateChanges = "Uveljavi spremembe";
 $FolderUpdated = "Mapa je bila ažurirana";
 $EndsAt = "kon&#269;a (popolnoma zaprta)";
+$AddToCalendar = "Dodaj v koledar";
+$AdvancedParameters = "Napredni parametri";
 ?>

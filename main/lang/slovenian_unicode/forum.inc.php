@@ -92,4 +92,5 @@ $ForumSearchResults = "Rezultat iskanja po forumu";
 $ForumSearchInformation = "Iskanje večih besed izvedete z uporabo + znaka";
 $YouWillBeNotifiedOfNewPosts = "O novih objavah boste obveščeni preko e-pošte.";
 $YouWillNoLongerBeNotifiedOfNewPosts = "Obvestila o novih objavah preko e-pošte so preklicana";
+$TooShort = "Prekratko";
 ?>

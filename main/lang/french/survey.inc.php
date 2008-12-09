@@ -198,4 +198,9 @@ $Condition = "Condition";
 $Primary = "Primaire";
 $Secondary = "Secondaire";
 $CourseSettings = "Paramètres de cours";
+$PleaseChooseACondition = "Veuillez sélectionner une condition";
+$ChooseDifferentCategories = "Sélectionnez différentes catégories";
+$Version = "Version";
+$Normal = "Normal";
+$NoLogOfDuration = "Pas d\'historique de durée";
 ?>

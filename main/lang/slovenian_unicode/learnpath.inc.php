@@ -206,4 +206,9 @@ $RemoveAudio = "Odstrani zvok";
 $SaveAudio = "Shrani";
 $ChangesStored = "Spremembe so bile shranjene";
 $ViewScoreChangeHistory = "Poglej zgodovino sprememb rezultatov";
+$ImageWillResizeMsg = "Slika bo spremenila velikost sporočila";
+$ImagePreview = "Predogled slike";
+$UplAlreadyExists = "Datoteka že obstaja";
+$UnknownPackageFormat = "Neznan format paketa";
+$UplUnableToSaveFile = "Ne morem shraniti datoteke";
 ?>

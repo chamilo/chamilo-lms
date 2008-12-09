@@ -209,4 +209,6 @@ $ViewScoreChangeHistory = "Ver puntuacion de historial de cambio";
 $ImageWillResizeMsg = "La imagen sera ajustada al buen tamaño";
 $ImagePreview = "Vista previa de la imagen";
 $UplAlreadyExists = "Ya existe";
+$UnknownPackageFormat = "Formato desconocido de paquete";
+$UplUnableToSaveFile = "Imposible de guardar el archivo";
 ?>

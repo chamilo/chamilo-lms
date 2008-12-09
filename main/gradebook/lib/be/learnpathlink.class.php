@@ -250,10 +250,11 @@ class LearnpathLink extends AbstractLink
      */
     private function get_learnpath_table ()
     {
-    	if (!isset($this->learnpath_table))
-    	{
-	    	$course_info = api_get_course_info($this->get_course_code());
-			$database_name = $course_info['dbName'];
+    	$course_info = api_get_course_info($this->get_course_code());
+		$database_name = isset($course_info['dbName']) ? $course_info['dbName'] : '';
+		if ($database_name=='') {
+			return '';
+		} elseif (!isset($this->learnpath_table)) {
 			$this->learnpath_table = Database :: get_course_table(TABLE_LP_MAIN, $database_name);
     	}
    		return $this->learnpath_table;
@@ -262,10 +263,11 @@ class LearnpathLink extends AbstractLink
     /**
      * Lazy load function to get the database contents of this learnpath
      */
-    private function get_learnpath_data()
-    {
-    	if (!isset($this->learnpath_data))
-    	{
+    private function get_learnpath_data() {
+    	$tb_learnpath=$this->get_learnpath_table();
+    	if ($tb_learnpath=='') {
+    		return false;
+    	} elseif (!isset($this->learnpath_data)) {
 			$sql = 'SELECT * from '.$this->get_learnpath_table()
 					.' WHERE id = '.$this->get_ref_id();
 			$result = api_sql_query($sql, __FILE__, __LINE__);

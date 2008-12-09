@@ -148,8 +148,8 @@ $result = api_sql_query($sql,__FILE__,__LINE__);
 			AbstractLink::add_link_log($row['id']);
 			$row['weight'] = trim($_POST['evaluation'][$row['id']]);
 		}
-
-	$output.= '<tr><td> [ '.get_lang('Evaluation').$table_evaluated[$row['type']][3].' ] '.$row['name'].'</td><td><input type="text" size="10" name="evaluation['.$row['id'].']" value="'.$row['weight'].'"/></td></tr>';	
+	$type_evaluated = isset($row['type']) ? $table_evaluated[$type_evaluated][3] : null;
+	$output.= '<tr><td> [ '.get_lang('Evaluation').$type_evaluated.' ] '.$row['name'].'</td><td><input type="text" size="10" name="evaluation['.$row['id'].']" value="'.$row['weight'].'"/></td></tr>';	
 }
 ?>
 <a href="/main/gradebook/index.php?<?php echo api_get_cidreq() ?>&selectcat=<?php echo $category_id ?>"><< <?php echo get_lang('Back') ?>

@@ -139,14 +139,19 @@ class DisplayGradebook
 //		$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?exportpdf=&offset='.Security::remove_XSS($_GET['offset']).'&search=' . Security::remove_XSS($_GET['search']).'&selectcat=' . $catobj->get_id() . '"><img src=../img/calendar_up.gif alt=' . get_lang('ExportPDF') . '/> ' . get_lang('ExportPDF') . '</a>';
 
 		// this MUST be a GET variable not a POST
-		echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
+		if (isset($_GET['show'])) {
+			$show=Security::remove_XSS($_GET['show']);
+		} else {
+			$show='';
+		}
+		echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?show='.$show.'">';
 		echo '<input type="hidden" name="export_report" value="export_report">';
 		echo '<input type="hidden" name="selectcat" value="'.$catobj->get_id() .'">';
 		
 		echo '<input type="hidden" name="export_format" value="csv">';
 		echo '</form>';
 		
-		echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
+		echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?show='.$show.'">';
 		echo '<input type="hidden" name="export_report" value="export_report">';
 		echo '<input type="hidden" name="selectcat" value="'.$catobj->get_id() .'">';
 		echo '<input type="hidden" name="export_format" value="xls">';
@@ -222,6 +227,7 @@ class DisplayGradebook
 			Display :: display_normal_message($scoreinfo,false);
 		}
 		// show navigation tree and buttons?
+		$header='';
 		$header .= '<table border=0 cellpadding=5>';
 		if (($showtree == '1') || (isset ($_GET['studentoverview']))) {
 			
@@ -319,7 +325,7 @@ class DisplayGradebook
 			*/
 		}
 			// show navigation tree and buttons?
-			$header .= '<table border=0 cellpadding=5 >';
+			$header = '<table border=0 cellpadding=5 >';
 			
 			if ($is_course_admin) {
 				$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/stats_access.gif" alt="' . get_lang('FlatView') . '" /> ' . get_lang('FlatView') . '</a>';

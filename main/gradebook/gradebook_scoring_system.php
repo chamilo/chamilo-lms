@@ -76,16 +76,18 @@ $scoreform= new ScoreDisplayForm('scoring_system_form',
 							 api_get_self() . '?selectcat=' . $_GET['selectcat']
 							 );
 if ($scoreform->validate()) {
-	$values= $scoreform->exportValues();
-
+	$value_export='';
+	$value_export=$scoreform->exportValues();
+	$value_export=isset($value_export) ? $scoreform->exportValues(): '';
+	$values= $value_export;
 
 // create new array of custom display settings
 // this loop also checks if all score ranges are unique
 
 	$scoringdisplay= array ();
 	$ranges_ok = true;
-	$endscore= $values['endscore'];
-	$displaytext= $values['displaytext'];
+	$endscore= isset($values['endscore']) ? $values['endscore'] : null;
+	$displaytext=isset($values['displaytext']) ? $values['displaytext'] : null;
 	for ($counter= 1; $ranges_ok && $counter <= 20; $counter++) {
 			$setting= array ();
 			$setting['score']= $endscore[$counter];
@@ -107,13 +109,17 @@ if ($scoreform->validate()) {
 
 
 	// update color settings
-	$displayscore->set_coloring_enabled(($values['enablescorecolor'] == '1') ? true : false);
+	$val_enablescorecolor=isset($values['enablescorecolor']) ? $values['enablescorecolor'] : null;
+	$displayscore->set_coloring_enabled(($val_enablescorecolor == '1') ? true : false);
 	if ($displayscore->is_coloring_enabled()) {
 		$displayscore->set_color_split_value($values['scorecolpercent']);	
 	}
 	// update custom display settings
-	$displayscore->set_custom(($values['enablescore'] == '1') ? true : false);
-	$displayscore->set_upperlimit_included(($values['includeupperlimit'] == '1') ? true : false);
+	$val_enablescore=isset($values['enablescore']) ? $values['enablescore'] : null;
+	$val_includeupperlimit=isset($values['includeupperlimit']) ? $values['includeupperlimit'] : null;
+	
+	$displayscore->set_custom(($val_enablescore == '1') ? true : false);
+	$displayscore->set_upperlimit_included(($val_includeupperlimit == '1') ? true : false);
 	if ($displayscore->is_custom() && !empty($scoringdisplay)) {
 		$displayscore->update_custom_score_display_settings($scoringdisplay);
 	}

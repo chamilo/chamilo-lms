@@ -1,4 +1,4 @@
-<?php //$id: $
+<?php
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 17186 2008-12-09 20:47:49Z cfasanando $
+*  	@version $Id: work.php 17192 2008-12-09 23:15:45Z yannoo $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -1140,15 +1140,24 @@ function draw_date_picker($prefix,$default='') {
 		$new_folder_text .= '<input type="button" name="create_dir" onClick="validate();" value="' . get_lang('Ok') . '"/>';
 		//new additional fields inside the "if condition" just to agroup
 		if(true):
-		$addtext = '<div style="padding:10px">'.get_lang('Description').'<br /><textarea name="description" rows="4" cols="70"></textarea></div>';		
+
+		$addtext .= '<div style="padding:10px">'.get_lang('Description').'<br /><textarea name="description" rows="4" cols="70"></textarea></div>';
+				
+		$addtext .= '<div style="align:left"> <div class="label">&nbsp;</div> <div class="formw"> <a href="javascript://" onclick=" return plus();"><span id="plus">&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>';
+		$addtext .='</div> </div>';
+			
+		// Random questions
+		$addtext .='<br /><div id="options" style="display: none;">';		
+
+
 		$addtext .= '<div style="padding:10px">';		
 		$addtext .= '<fieldset style="padding:5px"><legend>'.get_lang('QualificationOfAssignment').'</legend>';
 		$addtext .= make_checkbox('make_calification').get_lang('MakeQualifiable').'<br />';
 		$addtext .= '<table cellspacing="0" cellpading="0" border="0"><tr>';
-		$addtext .= '<td>'.get_lang('WeightInTheGradebook').'</td><td>';
-		$addtext .= '&nbsp;&nbsp;&nbsp;<div id="msg_error_weight" style="display:none;color:red"></div>';
+		$addtext .= '<td colspan="2">'.get_lang('WeightInTheGradebook').'</td><td>';
+		$addtext .= '<div id="msg_error_weight" style="display:none;color:red"></div>';
 		$addtext .= '<input type="text" name="weight" value="" size="5"/></td></tr>';
-		$addtext .= '<td>'.get_lang('QualificationNumberOver').'</td><td>';
+		$addtext .= '<td colspan="2">'.get_lang('QualificationNumberOver').'</td><td>';
 		$addtext .= '<input type="text" name="qualification_value" value="" size="5"/></td></tr></table>';		
 		$addtext .= '</fieldset><br />';		
 		$addtext .= '<fieldset style="padding:5px"><legend>'.get_lang('DatesAvailables').'</legend>';
@@ -1163,6 +1172,7 @@ function draw_date_picker($prefix,$default='') {
 		$addtext .= '<div style="padding:4px"><input type="checkbox" value="1" name="type2" />';
 		$addtext .= draw_date_picker('ends').'</div>';
 		$addtext .= '</fieldset>';				
+		$addtext .= '</div>';
 		$addtext .= '</div>';		
 		$new_folder_text .= $addtext;
 		endif;

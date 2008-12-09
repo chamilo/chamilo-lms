@@ -432,7 +432,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 						$form_folder -> addElement('html','<div class="row">
 	 	                         <div class="label">&nbsp;</div>
  	  	                         <div class="formw">
- 	  	                                 <a href="javascript://" onclick="if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}"><img src="../img/add_na.gif" alt="" />'.get_lang('AdvancedParameters').'</a>
+ 	  	                                 <a href="javascript://" onclick="if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}"><img src="../img/add_na.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</a>
  	  	                         </div>
 	  	                         </div>	');
 	  	                         
@@ -1080,6 +1080,17 @@ function count_dir($path_dir, $recurse)
 */
 function to_javascript_work() {
 	return '<script>
+			function plus() {
+				if(document.getElementById(\'options\').style.display == \'none\') {
+					document.getElementById(\'options\').style.display = \'block\';
+					document.getElementById(\'plus\').innerHTML=\'&nbsp;<img src="../img/nolines_minus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+				} else {
+				document.getElementById(\'options\').style.display = \'none\';
+				document.getElementById(\'plus\').innerHTML=\'&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+				}	
+			}
+			
+			
 			function updateDocumentTitle(value){
 			
 				var temp = value.indexOf("/");

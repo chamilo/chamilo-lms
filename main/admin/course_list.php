@@ -1,4 +1,4 @@
-<?php // $Id: course_list.php 16954 2008-11-26 14:41:35Z pcool $
+<?php // $Id: course_list.php 17195 2008-12-09 23:47:07Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -44,6 +44,8 @@ api_protect_admin_script();
 require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
+require_once '../gradebook/lib/be/gradebookitem.class.php';
+require_once '../gradebook/lib/be/category.class.php';
 /**
  * Get the number of courses which will be displayed
  */
@@ -213,7 +215,12 @@ else
 	//api_display_tool_title($tool_name);
 	if (isset ($_GET['delete_course']))
 	{
+
 		CourseManager :: delete_course($_GET['delete_course']);
+		
+		$obj_cat=new Category();
+		$obj_cat->update_category_delete($_GET['delete_course']);
+		
 	}
 	// Create a search-box
 	$form = new FormValidator('search_simple','get','','',null,false);

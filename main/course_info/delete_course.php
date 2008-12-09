@@ -1,5 +1,5 @@
 <?php
-// $Id: delete_course.php 12263 2007-05-03 13:34:40Z elixir_julian $
+// $Id: delete_course.php 17195 2008-12-09 23:47:07Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -38,7 +38,8 @@ $language_file = array ('admin','course_info');
 
 include ('../inc/global.inc.php');
 include (api_get_path(LIBRARY_PATH).'course.lib.php');
-
+require_once '../gradebook/lib/be/gradebookitem.class.php';
+require_once '../gradebook/lib/be/category.class.php';
 $this_section = SECTION_COURSES;
 
 $currentCourseCode = $_course['official_code'];
@@ -52,6 +53,10 @@ $tool_name = get_lang('DelCourse');
 if (isset($_GET['delete']) && $_GET['delete'] == 'yes')
 {
 	CourseManager :: delete_course($_course['sysCode']);
+	
+	$obj_cat=new Category();
+	$obj_cat->update_category_delete($_course['sysCode']);
+	
 	// DELETE CONFIRMATION MESSAGE
 	unset ($_course);
 	unset ($_cid);

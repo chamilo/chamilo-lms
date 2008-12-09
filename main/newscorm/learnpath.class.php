@@ -3791,6 +3791,7 @@ class learnpath {
 			}else{
 				//if sco, then it is supposed to have been updated by some other call
 			}
+            $this->items[$this->current]->restart();
     	}
 		if($this->debug>0){error_log('New LP - End of learnpath::start_current_item()',0);}
     	return true;

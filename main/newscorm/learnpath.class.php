@@ -3398,6 +3398,7 @@ class learnpath {
      * Restart the whole learnpath. Return the URL of the first element.
      * Make sure the results are saved with anoter method. This method should probably be
      * redefined in children classes.
+     * To use a similar method  statically, use the create_new_attempt() method
      * @return string URL to load in the viewer
      */
     function restart()
@@ -8830,6 +8831,30 @@ EOD;
 		}
 		return false;
 	}
-	
+	/**
+     * Create a new attempt for the current learning path. This is similar to
+     * the restart() method, except that this version is to be used statically.
+     * Call this function to define a new attempt for the given path and user,
+     * then reload the learning path object with the user and it will offer
+     * a new attempt.
+     * @param   int Learning path ID
+     * @param   int User ID
+     * @return  New attempt ID (new view ID from the database)
+	 */
+    function create_new_attempt($lp_id,$user_id) {
+        $lp_id = (int) $lp_id;
+        $user_id = (int) $user_id;
+        $t = Database::get_course_table(TABLE_LP_VIEW);
+        $sql = "SELECT max(view_count) FROM $t WHERE lp_id = $lp_id AND user_id = $user_id";
+        $res = api_sql_query($sql,__FILE__,__LINE__);
+        if ($res === false) { return 0;}
+        if (Database::num_rows($res)!=1) { return 0;}
+        $row = Database::fetch_array($res);
+        $vc = $row[0]+1;
+        $sqlins = "INSERT INTO $t (lp_id,user_id,view_count,last_item,progress) VALUES ($lp_id,$user_id, $vc,0,0)";
+        $resins = api_sql_query($sql,__FILE__,__LINE__);
+        if ($resins === false) { return 0; }
+        return $vc;
+    }
 }
 ?>

@@ -71,7 +71,11 @@ if (strlen(strip_tags($survey_data['title'])) > 40)
 
 // breadcrumbs
 $interbreadcrumb[] = array ('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
-$interbreadcrumb[] = array ('url' => 'survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']), 'name' => $urlname);
+if (api_is_course_admin()) {
+    $interbreadcrumb[] = array ('url' => 'survey.php?survey_id='.$_GET['survey_id'], 'name' => $urlname);
+} else {
+    $interbreadcrumb[] = array ('url' => 'survey_invite.php?survey_id='.$_GET['survey_id'], 'name' => $urlname);    
+}
 $tool_name = get_lang('SurveyPublication');
 
 // Displaying the header

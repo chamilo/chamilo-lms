@@ -36,7 +36,7 @@ $interbreadcrumb[] = array (
 	'name' => get_lang('Gradebook'
 ));
 
-Display :: display_header();
+Display :: display_header('');
 $t_user=	 Database :: get_main_table(TABLE_MAIN_USER);
 $t_link_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);	
 $evaledit = EvalLink :: load($_GET['visiblelink']);
@@ -54,10 +54,16 @@ echo '<table width="100%" border="0" >';
 		echo '<td align="center" style="Gradebook-table-header"><strong>'.get_lang('GradebookWhoChangedItLog').'</strong></td>';
 echo '</tr>';
 while($row=Database::fetch_array($result)){
+
+if ('0000-00-00 00:00:00'!=$row[2]) {
+	$date_log=date('d-m-Y H:i:s',$row[2]);	
+} else {
+	$date_log='0000-00-00 00:00:00';
+}
 echo '<tr>';
 		echo '<td align="center" Class="Gradebook-table-body">'.$row[0].'</td>';
 		echo '<td align="center" Class="Gradebook-table-body">'.$row[1].'</td>';
-		echo '<td align="center" Class="Gradebook-table-body">'.date('d-m-Y H:i:s',$row[2]).'</td>';
+		echo '<td align="center" Class="Gradebook-table-body">'.$date_log.'</td>';
 		echo '<td align="center" Class="Gradebook-table-body">'.$row[3].'</td>';
 		if (1 == $row[4]) {
 			$visib=get_lang('GradebookVisible');

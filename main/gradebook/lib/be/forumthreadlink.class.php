@@ -179,12 +179,17 @@ class ForumThreadLink extends AbstractLink
      * Lazy load function to get the database table of the student publications
      */
     private function get_forum_thread_table () {
-    	if (!isset($this->forum_thread_table)) {
-	    	$course_info = Database :: get_course_info($this->get_course_code());
-			$database_name = $course_info['db_name'];
-			$this->forum_thread_table = Database :: get_course_table(TABLE_FORUM_THREAD, $database_name);
-    	}
-   		return $this->forum_thread_table;
+    	$course_info = Database :: get_course_info($this->get_course_code());
+		$database_name = isset($course_info['db_name']) ? $course_info['db_name'] : '';
+		if ($database_name!='') {
+			if (!isset($this->forum_thread_table)) {
+				$this->forum_thread_table = Database :: get_course_table(TABLE_FORUM_THREAD, $database_name);
+    		}
+   			return $this->forum_thread_table;
+		} else {
+			return '';
+		}
+
     }
 
     /**
@@ -212,11 +217,12 @@ class ForumThreadLink extends AbstractLink
     	 
     public function get_name() {
     	$this->get_exercise_data();
-    	
-    	if ( isset($this->exercise_data['thread_title_qualify']) and $this->exercise_data['thread_title_qualify']!="") {
+    	$thread_title=isset($this->exercise_data['thread_title']) ? $this->exercise_data['thread_title'] : '';
+    	$thread_title_qualify=isset($this->exercise_data['thread_title_qualify']) ? $this->exercise_data['thread_title_qualify'] : '';
+    	if ( isset($thread_title_qualify) && $thread_title_qualify!="") {
     		return $this->exercise_data['thread_title_qualify'];
     	} else {
-    		return $this->exercise_data['thread_title'];
+    		return $thread_title;
     	}
     }    
 	
@@ -239,16 +245,18 @@ class ForumThreadLink extends AbstractLink
     } 
     
     public function get_link() {
-		$url = api_get_path(WEB_PATH)
-			.'main/forum/viewthread.php?cidReq='.$this->get_course_code().'&thread='.$this->get_ref_id().'&gradebook=view';
-		
+    	$url = api_get_path(WEB_PATH)
+		.'main/forum/viewthread.php?cidReq='.$this->get_course_code().'&thread='.$this->get_ref_id().'&gradebook=view';
 		return $url;
 	}
 	private function get_exercise_data() {
-    	if (!isset($this->exercise_data)) {
-    	$sql = 'SELECT * FROM '.$this->get_forum_thread_table()." WHERE thread_id = '".$this->get_ref_id()."'";
-		$query = api_sql_query($sql,__FILE__,__LINE__);
-		$this->exercise_data = Database::fetch_array($query);
+		$tbl_name=$this->get_forum_thread_table();
+		if ($tbl_name=='') {
+			return false;
+		}elseif (!isset($this->exercise_data)) {
+    			$sql = 'SELECT * FROM '.$this->get_forum_thread_table()." WHERE thread_id = '".$this->get_ref_id()."'";
+				$query = api_sql_query($sql,__FILE__,__LINE__);
+				$this->exercise_data = Database::fetch_array($query);
     	}
     	return $this->exercise_data;
     }

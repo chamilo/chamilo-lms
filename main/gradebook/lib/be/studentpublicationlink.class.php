@@ -129,6 +129,7 @@ class StudentPublicationLink extends AbstractLink
 		while ($data=Database::fetch_array($result)) {
 			$cats[] = array ($data['id'], $data['url']);
 		}
+		$cats=isset($cats) ? $cats : array();
 		return $cats;
     }
 
@@ -207,12 +208,17 @@ class StudentPublicationLink extends AbstractLink
      * Lazy load function to get the database table of the student publications
      */
     private function get_studpub_table () {
-    	if (!isset($this->studpub_table)) {
-	    	$course_info = Database :: get_course_info($this->get_course_code());
-			$database_name = $course_info['db_name'];
-			$this->studpub_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION, $database_name);
-    	}
-   		return $this->studpub_table;
+    	$course_info = Database :: get_course_info($this->get_course_code());
+		$database_name = isset($course_info['db_name']) ? $course_info['db_name'] : '';
+		if ($database_name!='') {
+			if (!isset($this->studpub_table)) {
+				$this->studpub_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION, $database_name);
+    		}
+   			return $this->studpub_table;
+		} else {
+			return false;
+		}
+
     }
 
     /**
@@ -221,7 +227,7 @@ class StudentPublicationLink extends AbstractLink
     private function get_itemprop_table () {
     	if (!isset($this->itemprop_table)) {
 	    	$course_info = Database :: get_course_info($this->get_course_code());
-			$database_name = $course_info['db_name'];
+			$database_name = isset($course_info['db_name']) ? $course_info['db_name'] : '';
 			$this->itemprop_table = Database :: get_course_table(TABLE_ITEM_PROPERTY, $database_name);
     	}
    		return $this->itemprop_table;
@@ -256,10 +262,13 @@ class StudentPublicationLink extends AbstractLink
 	}
 	
 	private function get_exercise_data() {
-    	if (!isset($this->exercise_data)) {
-    	$sql = 'SELECT * FROM '.$this->get_studpub_table()." WHERE id = '".$this->get_ref_id()."'";
-		$query = api_sql_query($sql,__FILE__,__LINE__);
-		$this->exercise_data = Database::fetch_array($query);
+		$tbl_name=$this->get_studpub_table();
+		if ($tbl_name=='') {
+			return false;
+		} elseif (!isset($this->exercise_data)) {
+    		$sql = 'SELECT * FROM '.$this->get_studpub_table()." WHERE id = '".$this->get_ref_id()."'";
+			$query = api_sql_query($sql,__FILE__,__LINE__);
+			$this->exercise_data = Database::fetch_array($query);
     	}
     	return $this->exercise_data;
     }

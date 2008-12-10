@@ -311,7 +311,13 @@ var FCKDialog = ( function()
 			if ( dialog._ParentDialog )		// Nested Dialog.
 			{
 				topDialog = dialog._ParentDialog ;
-				dialog._ParentDialog.contentWindow.SetEnabled( true ) ;
+				// Modified by Ivan Tcholakov, caused errors during tests.
+				//dialog._ParentDialog.contentWindow.SetEnabled( true ) ;
+				if (dialog._ParentDialog.contentWindow)
+				{
+					dialog._ParentDialog.contentWindow.SetEnabled( true ) ;
+				}
+				//
 			}
 			else							// First Dialog.
 			{

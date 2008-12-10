@@ -39,6 +39,7 @@ include('../../../../../../inc/global.inc.php');
 				</tr>
 			</table>
 		  </div>
+		  <div style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px;">
 		  <?php
 		  $sType = "MP3";
 		  if(isset($_course["sysCode"]))
@@ -46,6 +47,7 @@ include('../../../../../../inc/global.inc.php');
 		 	 include(api_get_path(INCLUDE_PATH).'course_document.inc.php');
 		  }		  
 		  ?>
+		  </div>
 		</div>
 		<div id="divUpload" style="display: none">		
 		<?php		

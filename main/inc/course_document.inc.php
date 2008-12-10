@@ -171,7 +171,7 @@ if($docs_and_folders)
 	//*************************************************************************************************
 	//do we need the title field for the document name or not?
 	//we get the setting here, so we only have to do it once
-	$use_document_title = get_setting('use_document_title');
+	$use_document_title = api_get_setting('use_document_title');
 	//create a sortable table with our data
 	$sortable_data = array();
 	while (list ($key, $id) = each($docs_and_folders))
@@ -204,7 +204,10 @@ if($docs_and_folders)
 		//icons
 		$row[]= build_document_icon_tag($id['filetype'],$id['path']);
 		//document title with hyperlink
-		$row[] = '<a href="#" onclick="OpenFile(\''.$http_www.'/'.$id['title'].'\', \''.$sType.'\');return false;">'.$id['title'].'</a>';
+		// Modified by Ivan Tcholakov, 07-FEB-2008.
+		//$row[] = '<a href="#" onclick="OpenFile(\''.$http_www.'/'.$id['title'].'\', \''.$sType.'\');return false;">'.$id['title'].'</a>';
+		$row[] = '<a href="#" onclick="javascript:OpenFile(\''.$http_www.'/'.$id['title'].'\', \''.$sType.'\');return false;">'.$id['title'].'</a>';
+		//
 		//comments => display comment under the document name
 		//$row[] = $invisibility_span_open.nl2br(htmlspecialchars($id['comment'])).$invisibility_span_close;
 		$display_size = format_file_size($size);
@@ -306,7 +309,7 @@ function getlist ($directory) {
 
 }
 ?>
-<SCRIPT LANGUAGE="JavaScript">
+<script type="text/javascript">
 <!--
 function OpenFile( fileUrl, type )
 {
@@ -326,4 +329,4 @@ function OpenFile( fileUrl, type )
 	//window.close() ;
 }
 //-->
-</SCRIPT>
+</script>

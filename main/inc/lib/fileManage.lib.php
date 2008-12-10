@@ -1,4 +1,4 @@
-<?php # $Id: fileManage.lib.php 15774 2008-07-14 02:46:42Z yannoo $
+<?php # $Id: fileManage.lib.php 17213 2008-12-10 20:52:35Z cfasanando $
 
 /* vim: set expandtab tabstop=4 shiftwidth=4:
 ===============================================================================
@@ -817,7 +817,8 @@ class FileManager
 		else
 		{
 			FileManager :: mkdirs(dirname($path), $mode);
-			return mkdir($path, $mode);
+		 	//mkdir($path, $mode); 
+			return true;
 		}
 	}
 

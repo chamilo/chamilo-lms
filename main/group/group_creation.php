@@ -55,21 +55,23 @@ if (isset ($_POST['action']))
 	{
 		case 'create_groups' :
 			$groups = array ();
+			
 			for ($i = 0; $i < $_POST['number_of_groups']; $i ++)
 			{
-				$group['name'] = strlen($_POST['group_'.$i.'_name']) == 0 ? get_lang('Group').' '.$i : $_POST['group_'.$i.'_name'] ;
-				$group['category'] = $_POST['group_'.$i.'_category'];
-				$group['tutor'] = $_POST['group_'.$i.'_tutor'];
-				$group['places'] = $_POST['group_'.$i.'_places'];
-				$groups[] = $group;
+				$group1['name'] = strlen($_POST['group_'.$i.'_name']) == 0 ? get_lang('Group').' '.$i : $_POST['group_'.$i.'_name'] ;
+				$group1['category'] = isset($_POST['group_'.$i.'_category'])?$_POST['group_'.$i.'_category']:null;				
+				$group1['tutor'] = isset($_POST['group_'.$i.'_tutor'])?$_POST['group_'.$i.'_tutor']:null;
+				$group1['places'] = isset($_POST['group_'.$i.'_places'])?$_POST['group_'.$i.'_places']:null;
+				$groups[] = $group1;
 			}
+			
 			foreach ($groups as $index => $group)
 			{
-				if ($_POST['same_tutor'])
+				if (!empty($_POST['same_tutor']))
 				{
 					$group['tutor'] = $_POST['group_0_tutor'];
 				}
-				if ($_POST['same_places'])
+				if (!empty($_POST['same_places']))
 				{
 					$group['places'] = $_POST['group_0_places'];
 				}
@@ -81,7 +83,7 @@ if (isset ($_POST['action']))
 				{
 					$group['category'] = $_POST['group_0_category'];
 				}
-				GroupManager :: create_group(strip_tags($group['name']), $group['category'],$group['tutor'] , $group['places']);
+				GroupManager :: create_group(strip_tags($group['name']),$group['category'],$group['tutor'] , $group['places']);
 			}
 			$msg = urlencode(count($groups).' '.get_lang('GroupsAdded'));
 			header('Location: group.php?action=show_msg&msg='.$msg);
@@ -107,7 +109,7 @@ $nameTools = get_lang('GroupCreation');
 $interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang('GroupManagement'));
 Display :: display_header($nameTools, "Group");
 api_display_tool_title($nameTools);
-if (!api_is_allowed_to_edit(false,true))
+if (!is_allowed_to_edit())
 {
 	api_not_allowed();
 }

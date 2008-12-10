@@ -167,7 +167,7 @@ class GroupManager
 	function create_group($name, $category_id, $tutor, $places)
 	{
 		global $_course,$_user;
-		
+		isset($_SESSION['id_session'])?$my_id_session = intval($_SESSION['id_session']):$my_id_session=null;
 		$currentCourseRepository = $_course['path'];
 		$table_group = Database :: get_course_table(TABLE_GROUP);
 		$table_forum = Database :: get_course_table(TABLE_FORUM);
@@ -177,7 +177,7 @@ class GroupManager
 		{
 			$places = $category['max_student'];
 		}
-		$sql = "INSERT INTO ".$table_group." SET category_id='".$category_id."', max_student = '".$places."', doc_state = '".$category['doc_state']."', calendar_state = '".$category['calendar_state']."', work_state = '".$category['work_state']."', announcements_state = '".$category['announcements_state']."', forum_state = '".$category['forum_state']."', wiki_state = '".$category['wiki_state']."', self_registration_allowed = '".$category['self_reg_allowed']."',  self_unregistration_allowed = '".$category['self_unreg_allowed']."', session_id=".intval($_SESSION['id_session']);
+		$sql = "INSERT INTO ".$table_group." SET category_id='".$category_id."', max_student = '".$places."', doc_state = '".$category['doc_state']."', calendar_state = '".$category['calendar_state']."', work_state = '".$category['work_state']."', announcements_state = '".$category['announcements_state']."', forum_state = '".$category['forum_state']."', wiki_state = '".$category['wiki_state']."', self_registration_allowed = '".$category['self_reg_allowed']."',  self_unregistration_allowed = '".$category['self_unreg_allowed']."', session_id='".$my_id_session."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 		$lastId = mysql_insert_id();
 		/*$secret_directory = uniqid("")."_team_".$lastId;
@@ -344,7 +344,7 @@ class GroupManager
 		$group_user_table 		= Database :: get_course_table(TABLE_GROUP_USER, $course_db);
 		$forum_table 			= Database :: get_course_table(TABLE_FORUM, $course_db);
 		$forum_post_table 		= Database :: get_course_table(TABLE_FORUM_POST, $course_db);
-		$forum_post_text_table 	= Database :: get_course_table(TOOL_FORUM_POST_TEXT_TABLE, $course_db);
+		//$forum_post_text_table 	= Database :: get_course_table(TOOL_FORUM_POST_TEXT_TABLE, $course_db);
 		$forum_topic_table 		= Database :: get_course_table(TABLE_FORUM_POST, $course_db);
 		
 		$group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
@@ -405,21 +405,23 @@ class GroupManager
 		$table_group = Database :: get_course_table(TABLE_GROUP);
 		$sql = 'SELECT   *  FROM '.$table_group.' WHERE id = '.$group_id;
 		$db_result = api_sql_query($sql,__FILE__,__LINE__);
-		$db_object = mysql_fetch_object($db_result);
-		$result['id'] = $db_object->id;
-		$result['name'] = $db_object->name;
-		$result['tutor_id'] = $db_object->tutor_id;
-		$result['description'] = $db_object->description;
-		$result['maximum_number_of_students'] = $db_object->max_student;
-		$result['doc_state'] = $db_object->doc_state;
-		$result['work_state'] = $db_object->work_state;
-		$result['calendar_state'] = $db_object->calendar_state;
-		$result['announcements_state'] = $db_object->announcements_state;
-		$result['forum_state'] = $db_object->forum_state;
-		$result['wiki_state'] = $db_object->wiki_state;
-		$result['directory'] = $db_object->secret_directory;
-		$result['self_registration_allowed'] = $db_object->self_registration_allowed;
-		$result['self_unregistration_allowed'] = $db_object->self_unregistration_allowed;
+
+			$db_object = mysql_fetch_object($db_result);
+			$result['id'] = $db_object->id;
+			$result['name'] = $db_object->name;
+			$result['tutor_id'] = isset($db_object->tutor_id)?$db_object->tutor_id:null;
+			$result['description'] = $db_object->description;
+			$result['maximum_number_of_students'] = $db_object->max_student;
+			$result['doc_state'] = $db_object->doc_state;
+			$result['work_state'] = $db_object->work_state;
+			$result['calendar_state'] = $db_object->calendar_state;
+			$result['announcements_state'] = $db_object->announcements_state;
+			$result['forum_state'] = $db_object->forum_state;
+			$result['wiki_state'] = $db_object->wiki_state;
+			$result['directory'] = $db_object->secret_directory;
+			$result['self_registration_allowed'] = $db_object->self_registration_allowed;
+			$result['self_unregistration_allowed'] = $db_object->self_unregistration_allowed;
+
 		return $result;
 	}
 	/**
@@ -708,7 +710,7 @@ class GroupManager
 	 */
 	function get_users($group_id)
 	{
-		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER, $course_db);
+		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
 		$sql = "SELECT user_id FROM $group_user_table WHERE group_id = $group_id";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$users = array ();

@@ -119,7 +119,7 @@ function check_group_members($value)
 	{
 		return true;
 	}
-	if ($value['max_member'] < count($value['group_members']))
+	if (isset($value['max_member']) && isset($value['group_members']) && $value['max_member'] < count($value['group_members']))
 	{
 		return array ('group_members' => get_lang('GroupTooMuchMembers'));
 	}
@@ -219,6 +219,7 @@ foreach ($complete_user_list as $index => $user)
 // Group tutors
 $group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);
 $selected_users = array ();
+$selected_tutors = array();
 foreach ($group_tutor_list as $index => $user)
 {
 	//$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'];
@@ -304,6 +305,7 @@ if ($form->validate())
 $defaults = $current_group;
 $defaults['group_members'] = $selected_users;
 $defaults['group_tutors'] = $selected_tutors;
+isset($_GET['action'])?$action=$_GET['action']:$action='';
 $defaults['action'] = $action;
 if ($defaults['maximum_number_of_students'] == MEMBER_PER_GROUP_NO_LIMIT)
 {

@@ -1,4 +1,4 @@
-<?php // $Id: group.php 16968 2008-11-26 22:28:32Z herodoto $
+<?php // $Id: group.php 17213 2008-12-10 20:52:35Z cfasanando $
  
 /*
 ==============================================================================
@@ -276,10 +276,10 @@ foreach ($group_cats as $index => $category)
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_WORK) ||
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_WIKI))
 					&& !(api_is_course_coach() && intval($this_group['session_id'])!=intval($_SESSION['id_session'])))
-			{
-				
-				$group_name = '<a href="group_space.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gidReq='.$this_group['id'].'">'.stripslashes($this_group['name']).'</a>';
-				if ($_SESSION['_user']['user_id'] && $_SESSION['_user']['user_id'] == $this_group['id_tutor'])
+			{				
+				isset($origin)?$orig=$origin:$orig=null;
+				$group_name = '<a href="group_space.php?'.api_get_cidreq().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.stripslashes($this_group['name']).'</a>';				
+				if (!empty($_SESSION['_user']['user_id']) && !empty($this_group['id_tutor']) && $_SESSION['_user']['user_id'] == $this_group['id_tutor'])
 				{
 					$group_name .= ' ('.get_lang('OneMyGroups').')';
 				}
@@ -345,7 +345,10 @@ foreach ($group_cats as $index => $category)
 				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=fill_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;" title="'.get_lang('FillGroup').'"><img src="../img/add_user.gif" alt="'.get_lang('FillGroup').'"/></a>';
 				$row[] = $edit_actions;
 			}
-			$totalRegistered = $totalRegistered + $this_group['nbMember'];
+			if (!empty($this_group['nbMember'])) {
+				$totalRegistered = $totalRegistered + $this_group['nbMember'];	
+			}
+			
 			$group_data[] = $row;
 		} // while loop
 		if (isset ($_GET['show_all']))
@@ -357,7 +360,8 @@ foreach ($group_cats as $index => $category)
 			$paging_options = array ();
 		}
 		$table = new SortableTableFromArray($group_data, 1);
-		$table->set_additional_parameters(array('category'=>$_GET['category']));
+		isset($_GET['category'])?$my_cat = $_GET['category']: $my_cat = null; 
+		$table->set_additional_parameters(array('category'=>$my_cat));
 		$column = 0;
 		if (api_is_allowed_to_edit(false,true) and count($group_list) > 1)
 		{

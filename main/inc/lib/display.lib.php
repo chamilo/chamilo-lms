@@ -488,33 +488,33 @@ class Display {
 	function encrypted_mailto_link($email, $clickable_text = null, $style_class = '')
 	{
 		global $charset;
+		$clickable_text = '';
 		if (is_null($clickable_text))
 		{
 			$clickable_text = $email;
 		}
 		//mailto already present?
-		if (substr($email, 0, 7) != 'mailto:')
+		if (substr($email, 0, 7) != 'mailto:') {
 			$email = 'mailto:'.$email;
-
+		}
 		//class (stylesheet) defined?
-		if ($style_class != '')
+		if ($style_class != '') {
 			$style_class = ' class="'.$style_class.'"';
-
+		}
 		//encrypt email
 		$hmail = '';
-		for ($i = 0; $i < strlen($email); $i ++)
+		for ($i = 0; $i < strlen($email); $i ++) {
 			$hmail .= '&#'.ord($email {
 			$i }).';';
-
+		}
 		//encrypt clickable text if @ is present
-		if (strpos($clickable_text, '@'))
-		{
-			for ($i = 0; $i < strlen($clickable_text); $i ++)
+		if (strpos($clickable_text, '@')) {
+			
+			for ($i = 0; $i < strlen($clickable_text); $i ++) {
 				$hclickable_text .= '&#'.ord($clickable_text {
 				$i }).';';
-		}
-		else
-		{
+			}
+		} else {
 			$hclickable_text = htmlspecialchars($clickable_text,ENT_QUOTES,$charset);
 		}
 

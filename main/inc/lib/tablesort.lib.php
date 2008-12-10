@@ -29,8 +29,10 @@
 *	@package dokeos.library
 ============================================================================== 
 */
+
 define('SORT_DATE', 3);
 define('SORT_IMAGE',4);
+
 class TableSort
 {
 	/**
@@ -117,7 +119,9 @@ class TableSort
 		}
 		$function_body = '$el1 = $a['.$column.']; $el2 = $b['.$column.']; return ('.$direction.' == SORT_ASC ? ('.$compare_function.') : !('.$compare_function.'));';
 		// Sort the content
-		usort($data, create_function('$a,$b', $function_body));
+				
+		//usort($data, create_function('$a,$b', $function_body));
+		
 		return $data;
 	}
 	/**

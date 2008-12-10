@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 16968 2008-11-26 22:28:32Z herodoto $
+<?php //$Id: group_space.php 17213 2008-12-10 20:52:35Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -78,7 +78,7 @@ Display::display_header($nameTools,"Group");
 /*
  * User wants to register in this group
  */
-if ($_GET['selfReg'] && GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id']))
+if (!empty($_GET['selfReg']) && GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id']))
 {
 	GroupManager :: subscribe_users($_SESSION['_user']['user_id'], $current_group['id']);
 	Display :: display_normal_message(get_lang('GroupNowMember'));
@@ -87,7 +87,7 @@ if ($_GET['selfReg'] && GroupManager :: is_self_registration_allowed($_SESSION['
 /*
  * User wants to unregister from this group
  */
-if ($_GET['selfUnReg'] && GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $current_group['id']))
+if (!empty($_GET['selfUnReg']) && GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $current_group['id']))
 {
 	GroupManager :: unsubscribe_users($_SESSION['_user']['user_id'], $current_group['id']);
 	Display::display_normal_message(get_lang('StudentDeletesHimself'));
@@ -97,14 +97,15 @@ if ($_GET['selfUnReg'] && GroupManager :: is_self_unregistration_allowed($_SESSI
  */
 if (api_is_allowed_to_edit(false,true) or GroupManager :: is_tutor($_user['user_id']))
 {
-	echo "<a href=\"group_edit.php?origin=$origin\">".get_lang("EditGroup")."</a><br/><br/>";
+	isset($origin)?$my_origin = $origin:$my_origin='';
+	echo "<a href=\"group_edit.php?origin=$my_origin\">".get_lang("EditGroup")."</a><br/><br/>";
 }
 
 /*
  * Register to group
  */
 if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id']))
-{
+{	  
 	echo '<p align="right"><a href="'.api_get_self().'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.get_lang("RegIntoGroup").'</a></p>';
 }
 
@@ -246,15 +247,17 @@ else
  * list all the tutors of the current group
  */
 $tutors = GroupManager::get_subscribed_tutors($current_group['id']);
+$tutor_info = '';
 if (count($tutors) == 0)
 {
 	$tutor_info = get_lang("GroupNoneMasc");
 }
 else
 {
+	isset($origin)?$my_origin = $origin:$my_origin='';
 	foreach($tutors as $index => $tutor)
 	{
-		$tutor_info .= "<div style='margin-bottom: 5px;'><a href='../user/userInfo.php?origin=".$origin."&amp;uInfo=".$tutor['user_id']."'><img src='../img/coachs.gif' align='absbottom'>&nbsp;".$tutor['firstname']." ".$tutor['lastname']."</a></div>";
+		$tutor_info .= "<div style='margin-bottom: 5px;'><a href='../user/userInfo.php?origin=".$my_origin."&amp;uInfo=".$tutor['user_id']."'><img src='../img/coachs.gif' align='absbottom'>&nbsp;".$tutor['firstname']." ".$tutor['lastname']."</a></div>";
 	}
 }
 echo '<b>'.get_lang("GroupTutors").':</b>';

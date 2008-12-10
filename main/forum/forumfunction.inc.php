@@ -92,7 +92,7 @@ function handle_forum_and_forumcategories() {
 	$post_submit_forum= isset($_POST['SubmitForum']) ? $_POST['SubmitForum'] : false;
 	$get_id=isset($_GET['id']) ? $_GET['id'] : false;
 	// Adding a forum category
-	if (($action_forum_cat=='add' && $_GET['content']=='forumcategory') || $post_submit_cat ) {
+	if ($action_forum_cat=='add' && $_GET['content']=='forumcategory') {
 		show_add_forumcategory_form();
 	}
 	// Adding a forum
@@ -100,7 +100,7 @@ function handle_forum_and_forumcategories() {
 		if ($action_forum_cat=='edit' && $get_id || $post_submit_forum ) {
 			$inputvalues=get_forums(strval(intval($get_id))); // note: this has to be cleaned first
 		} else {
-			$inputvalues=null;
+			$inputvalues='';
 		}
 		show_add_forum_form($inputvalues);
 	}
@@ -196,8 +196,9 @@ function show_add_forum_form($inputvalues=array()) {
 	$form->addElement('header', '', get_lang('AddForum').$session_header);
 
 	// we have a hidden field if we are editing
-	if (is_array($inputvalues) && isset($inputvalues['forum_id'])) {
-		$form->addElement('hidden', 'forum_id', $inputvalues['forum_id']);
+	if (is_array($inputvalues)) {
+		$my_forum_id=isset($inputvalues['forum_id']) ? $inputvalues['forum_id'] : null;
+		$form->addElement('hidden', 'forum_id', $my_forum_id);
 	}
 	// The title of the forum
 	$form->addElement('text', 'forum_title', get_lang('Title'),'class="input_titles"');
@@ -403,10 +404,10 @@ function show_edit_forumcategory_form($inputvalues=array()) {
 	$form->addElement('submit', 'SubmitEditForumCategory',get_lang('OK'));
 	global $charset;
 	// setting the default values
-	$defaultvalues['forum_category_id']=$inputvalues['cat_id'];
+	$defaultvalues['forum_category_id']=isset($inputvalues['cat_id'])?$inputvalues['cat_id']:null;
 
-	$defaultvalues['forum_category_title']=prepare4display(html_entity_decode($inputvalues['cat_title'],ENT_QUOTES,$charset));
-	$defaultvalues['forum_category_comment']=prepare4display($inputvalues['cat_comment']);
+	$defaultvalues['forum_category_title']=prepare4display(html_entity_decode(isset($inputvalues['cat_title'])?$inputvalues['cat_title']:null,ENT_QUOTES,$charset));
+	$defaultvalues['forum_category_comment']=prepare4display(isset($inputvalues['cat_comment'])?$inputvalues['cat_comment']:null);
 	$form->setDefaults($defaultvalues);
 
 	// setting the rules
@@ -529,7 +530,8 @@ function store_forum($values) {
 	}
 		
 	if (isset($values['forum_id'])) {
-		$sql_image='';
+		$sql_image=isset($sql_image)?$sql_image:'';
+		$new_file_name=isset($new_file_name) ? $new_file_name:'';
 	  	if ($image_moved) {
 		$sql_image=" forum_image='".Database::escape_string($new_file_name)."', ";
 		delete_forum_image($values['forum_id']);
@@ -541,10 +543,10 @@ function store_forum($values) {
 			".$sql_image."		
 			forum_comment='".Database::escape_string($values['forum_comment'])."',
 			forum_category='".Database::escape_string($values['forum_category'])."',
-			allow_anonymous='".Database::escape_string($values['allow_anonymous_group']['allow_anonymous'])."',
+			allow_anonymous='".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous'])?$values['allow_anonymous_group']['allow_anonymous']:null)."',
 			allow_edit='".Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
-			approval_direct_post='".Database::escape_string($values['approval_direct_group']['approval_direct'])."',
-			allow_attachments='".Database::escape_string($values['allow_attachments_group']['allow_attachments'])."',
+			approval_direct_post='".Database::escape_string(isset($values['approval_direct_group']['approval_direct'])?$values['approval_direct_group']['approval_direct']:null)."',
+			allow_attachments='".Database::escape_string(isset($values['allow_attachments_group']['allow_attachments'])?$values['allow_attachments_group']['allow_attachments']:null)."',
 			allow_new_threads='".Database::escape_string($values['allow_new_threads_group']['allow_new_threads'])."',
 			forum_group_public_private='".Database::escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
 			default_view='".Database::escape_string($values['default_view_type_group']['default_view_type'])."',
@@ -1000,7 +1002,7 @@ function class_visible_invisible($current_visibility_status) {
 function get_forum_categories($id='') {
 	$table_categories		= Database :: get_course_table(TABLE_FORUM_CATEGORY);
 	$table_item_property	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
+	$forum_categories_list=array();
 	if ($id=='') {
 		$sql="SELECT * FROM".$table_categories." forum_categories, ".$table_item_property." item_properties
 					WHERE forum_categories.cat_id=item_properties.ref
@@ -1045,7 +1047,7 @@ function get_forums_in_category($cat_id)
 {
 	global $table_forums;
 	global $table_item_property;
-
+	$forum_list=array();
 	$sql="SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
 				WHERE forum.forum_category='".Database::escape_string($cat_id)."'
 				AND forum.forum_id=item_properties.ref
@@ -1284,7 +1286,7 @@ function get_threads($forum_id) {
 	global $table_threads;
 	global $table_posts;
 	global $table_users;
-
+	$thread_list=array();
 	// important note: 	it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement
 	//					because we also have thread.* in it. This is because thread has a field locked and post also has the same field
 	// 					since we are merging these we would have the post.locked value but in fact we want the thread.locked value
@@ -3373,7 +3375,7 @@ function get_notifications_of_user($user_id = 0, $force = false) {
 	// database table definition
 	$table_notification = Database::get_course_table('forum_notification');
 	$my_code = isset($_course['code']) ? $_course['code'] : '';
-	if (!$_SESSION['forum_notification'] OR $_SESSION['forum_notification']['course'] <> $my_code OR $force=true) {
+	if (!isset($_SESSION['forum_notification']) OR $_SESSION['forum_notification']['course'] <> $my_code OR $force=true) {
 		$_SESSION['forum_notification']['course'] = $my_code;
 		
 		$sql = "SELECT * FROM $table_notification WHERE user_id='".Database::escape_string($user_id)."'";

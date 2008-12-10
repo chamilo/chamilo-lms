@@ -92,8 +92,8 @@ if(!api_is_allowed_to_edit(false,true)) {
 -----------------------------------------------------------
 */
 $current_forum_category=get_forum_categories($_GET['forumcategory']);
-$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => $nameTools);
-$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
+$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),"name" => $nameTools);
+$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),"name" => prepare4display($current_forum_category['cat_title']));
 
 
 if (!empty($_GET['action']) && !empty($_GET['content'])) {	  
@@ -128,16 +128,18 @@ if (!api_is_allowed_to_edit(false,true) AND $current_forum_category['visibility'
 	ACTIONS
 ------------------------------------------------------------------------------------------------------
 */
+$action_forums=isset($_GET['action']) ? $_GET['action'] : '';
 if (api_is_allowed_to_edit(false,true)) {
 	handle_forum_and_forumcategories();
 }
 
 // notification
-if ($_GET['action'] == 'notify' AND isset($_GET['content']) AND isset($_GET['id'])) {
+if ($action_forums == 'notify' AND isset($_GET['content']) AND isset($_GET['id'])) {
 	$return_message = set_notification($_GET['content'],$_GET['id']);
 	Display :: display_confirmation_message($return_message,false);
 }
-if ($_GET['action']!='add') { 
+
+if ($action_forums!='add') { 
 	/*
 	------------------------------------------------------------------------------------------------------
 		RETRIEVING ALL THE FORUM CATEGORIES AND FORUMS
@@ -179,12 +181,13 @@ if ($_GET['action']!='add') {
 	-----------------------------------------------------------
 	*/
 	echo "<table class=\"data_table\" width='100%'>\n";
-	
+	$my_session=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : null;
+	$forum_categories_list='';
 	echo "\t<tr>\n\t\t<th align=\"left\" colspan=\"5\">";
 	echo '<span class="forum_title">'.prepare4display($forum_category['cat_title']).'</span><br />';
 	echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
 	echo "</th>\n";
-	if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($_SESSION['id_session'])!=0)) {
+	if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($my_session)!=0)) {
 		echo '<th style="vertical-align: top;" align="center" >';			
 		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forumcategory&amp;id=".$forum_category['cat_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=delete&amp;content=forumcategory&amp;amp;id=".$forum_category['cat_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";

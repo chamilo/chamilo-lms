@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 17213 2008-12-10 20:52:35Z cfasanando $
+<?php //$Id: group_space.php 17219 2008-12-10 22:38:55Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -388,7 +388,8 @@ function user_icon_filter($user_id)
 }
 
 // footer
-if ($origin != 'learnpath')
+isset($origin)?$orig=$origin:$orig='';
+if ($orig != 'learnpath')
 {
 	Display::display_footer();
 }

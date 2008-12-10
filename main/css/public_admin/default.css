@@ -1698,3 +1698,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	float:right;
 	margin: 1em;
 }
+/* Gradebook */
+.resource-deleted {
+	color:#990000;
+}

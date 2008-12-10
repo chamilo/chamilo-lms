@@ -85,7 +85,7 @@ function choose_image($file_name)
 		$type['web'       ] = array('htm', 'html', 'htx', 'xml',  'xsl',  'php');
 		$type['image'     ] = array('gif', 'jpg',  'png', 'bmp',  'jpeg');
 		$type['audio'     ] = array('wav', 'mid',  'mp2', 'mp3',  'midi', 'sib');
-		$type['video'     ] = array('mp4', 'mov',  'rm',  'pls',  'mpg',  'mpeg', 'au');
+		$type['video'     ] = array('mp4', 'mov',  'rm',  'pls',  'mpg',  'mpeg', 'au', 'flv', 'avi');
 		$type['excel'     ] = array('xls', 'xlt',  'xls', 'xlt');
 		$type['compressed'] = array('zip', 'tar',  'rar', 'gz');
 		$type['code'      ] = array('js',  'cpp',  'c',   'java', 'phps');

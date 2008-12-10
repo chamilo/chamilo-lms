@@ -1,4 +1,4 @@
-<?php // $Id:  $
+<?php
  
 /*
 ==============================================================================
@@ -87,26 +87,31 @@ get_notifications_of_user();
 * @version february 2006, dokeos 1.8
 */
 function handle_forum_and_forumcategories() {
+	$action_forum_cat = isset($_GET['action']) ? $_GET['action'] : false;
+	$post_submit_cat= isset($_POST['SubmitForumCategory']) ? $_POST['SubmitForumCategory'] : false;
+	$post_submit_forum= isset($_POST['SubmitForum']) ? $_POST['SubmitForum'] : false;
+	$get_id=isset($_GET['id']) ? $_GET['id'] : false;
 	// Adding a forum category
-	if (($_GET['action']=='add' && $_GET['content']=='forumcategory') || $_POST['SubmitForumCategory'] ) {
+	if (($action_forum_cat=='add' && $_GET['content']=='forumcategory') || $post_submit_cat ) {
 		show_add_forumcategory_form();
 	}
 	// Adding a forum
-	if ((($_GET['action']=='add' || $_GET['action']=='edit') && $_GET['content']=='forum') || $_POST['SubmitForum'] ) {
-		
-		if ($_GET['action']=='edit' && isset($_GET['id']) || $_POST['SubmitForum'] ) {
-			$inputvalues=get_forums(strval(intval($_GET['id']))); // note: this has to be cleaned first
+	if ((($action_forum_cat=='add' || $action_forum_cat=='edit') && $_GET['content']=='forum') || $post_submit_forum ) {
+		if ($action_forum_cat=='edit' && $get_id || $post_submit_forum ) {
+			$inputvalues=get_forums(strval(intval($get_id))); // note: this has to be cleaned first
+		} else {
+			$inputvalues=null;
 		}
 		show_add_forum_form($inputvalues);
 	}
 	// Edit a forum category
-	if (($_GET['action']=='edit' && $_GET['content']=='forumcategory' && isset($_GET['id'])) || $_POST['SubmitEditForumCategory'] ) {
-		$forum_category=get_forum_categories(strval(intval($_GET['id']))); // note: this has to be cleaned first
+	if (($action_forum_cat=='edit' && $_GET['content']=='forumcategory' && $get_id) || $post_submit_cat ) {
+		$forum_category=get_forum_categories(strval(intval($get_id))); // note: this has to be cleaned first
 		show_edit_forumcategory_form($forum_category);
 	}
 	// Delete a forum category
-	if (( isset($_GET['action']) && $_GET['action']=='delete') && isset($_GET['content']) && isset($_GET['id'])) {
-		$id_forum=Security::remove_XSS($_GET['id']);
+	if (( isset($_GET['action']) && $_GET['action']=='delete') && isset($_GET['content']) && $get_id) {
+		$id_forum=Security::remove_XSS($get_id);
 		$list_threads=get_threads($id_forum);
 		
 		for ( $i=0; $i < count($list_threads); $i++ ) {
@@ -119,17 +124,17 @@ function handle_forum_and_forumcategories() {
 		Display :: display_confirmation_message($return_message,false);
 	}
 	// Change visibility of a forum or a forum category
-	if (($_GET['action']=='invisible' || $_GET['action']=='visible') && isset($_GET['content']) && isset($_GET['id'])) {
+	if (($action_forum_cat=='invisible' || $action_forum_cat=='visible') && isset($_GET['content']) && isset($_GET['id'])) {
 		$return_message=change_visibility($_GET['content'], $_GET['id'],$_GET['action']);// note: this has to be cleaned first
 		Display :: display_confirmation_message($return_message,false);
 	}
 	// Change lock status of a forum or a forum category
-	if (($_GET['action']=='lock' || $_GET['action']=='unlock') && isset($_GET['content']) && isset($_GET['id'])) {
+	if (($action_forum_cat=='lock' || $action_forum_cat=='unlock') && isset($_GET['content']) && isset($_GET['id'])) {
 		$return_message=change_lock_status($_GET['content'], $_GET['id'],$_GET['action']);// note: this has to be cleaned first
 		Display :: display_confirmation_message($return_message,false);
 	}
 	// Move a forum or a forum category
-	if ($_GET['action']=='move' && isset($_GET['content']) && isset($_GET['id']) && isset($_GET['direction'])) {
+	if ($action_forum_cat=='move' && isset($_GET['content']) && isset($_GET['id']) && isset($_GET['direction'])) {
 		$return_message=move_up_down($_GET['content'], $_GET['direction'], $_GET['id']);// note: this has to be cleaned first
 		Display :: display_confirmation_message($return_message,false);
 	}
@@ -191,7 +196,7 @@ function show_add_forum_form($inputvalues=array()) {
 	$form->addElement('header', '', get_lang('AddForum').$session_header);
 
 	// we have a hidden field if we are editing
-	if (is_array($inputvalues)) {
+	if (is_array($inputvalues) && isset($inputvalues['forum_id'])) {
 		$form->addElement('hidden', 'forum_id', $inputvalues['forum_id']);
 	}
 	// The title of the forum
@@ -279,7 +284,7 @@ function show_add_forum_form($inputvalues=array()) {
 	
 	 // Forum image 	 
 	         $form->add_progress_bar(); 	 
-	         if (strlen($inputvalues['forum_image']) > 0) { 	 
+	         if (isset($inputvalues['forum_image']) && strlen($inputvalues['forum_image']) > 0) { 	 
 	  	 
 	                 $show_preview_image='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$inputvalues['forum_image'].'>'; 	 
 	                 $div = '<div class="row"> 	 
@@ -292,8 +297,8 @@ function show_add_forum_form($inputvalues=array()) {
 	                 $form->addElement('html', $div .'<br/>'); 	 
 	                 $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage')); 	 
 	         } 	 
-	  	 
-	         $form->addElement('file', 'picture', ($inputvalues['forum_image'] != '' ? get_lang('UpdateImage') : get_lang('AddImage'))); 	 
+	  	 	 $forum_image=isset($inputvalues['forum_image']) ? $inputvalues['forum_image'] : '';
+	         $form->addElement('file', 'picture', ($forum_image != '' ? get_lang('UpdateImage') : get_lang('AddImage'))); 	 
 	         $form->addRule('picture', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));
 	
 	
@@ -319,18 +324,18 @@ function show_add_forum_form($inputvalues=array()) {
 			$defaults['forum_category']=Security::remove_XSS($_GET['forumcategory']);
 		}
 	} else {   // the default values when editing = the data in the table
-		$defaults['forum_id']=$inputvalues['forum_id'];
-		$defaults['forum_title']=prepare4display(html_entity_decode($inputvalues['forum_title'],ENT_QUOTES,$charset));
-		$defaults['forum_comment']=prepare4display($inputvalues['forum_comment']);
-		$defaults['forum_category']=$inputvalues['forum_category'];
-		$defaults['allow_anonymous_group']['allow_anonymous']=$inputvalues['allow_anonymous'];
-		$defaults['students_can_edit_group']['students_can_edit']=$inputvalues['allow_edit'];
-		$defaults['approval_direct_group']['approval_direct']=$inputvalues['approval_direct_post'];
-		$defaults['allow_attachments_group']['allow_attachments']=$inputvalues['allow_attachments'];
-		$defaults['allow_new_threads_group']['allow_new_threads']=$inputvalues['allow_new_threads'];
-		$defaults['default_view_type_group']['default_view_type']=$inputvalues['default_view'];
-		$defaults['public_private_group_forum_group']['public_private_group_forum']=$inputvalues['forum_group_public_private'];
-		$defaults['group_forum']=$inputvalues['forum_of_group'];
+		$defaults['forum_id']=isset($inputvalues['forum_id']) ? $inputvalues['forum_id'] : null;
+		$defaults['forum_title']=prepare4display(html_entity_decode(isset($inputvalues['forum_title']) ? $inputvalues['forum_title'] : null,ENT_QUOTES,$charset));
+		$defaults['forum_comment']=prepare4display(isset($inputvalues['forum_comment'])?$inputvalues['forum_comment']:null);
+		$defaults['forum_category']=isset($inputvalues['forum_category']) ? $inputvalues['forum_category'] : null;
+		$defaults['allow_anonymous_group']['allow_anonymous']=isset($inputvalues['allow_anonymous']) ? $inputvalues['allow_anonymous'] :null;
+		$defaults['students_can_edit_group']['students_can_edit']=isset($inputvalues['allow_edit'])?$inputvalues['allow_edit']:null;
+		$defaults['approval_direct_group']['approval_direct']=isset($inputvalues['approval_direct_post'])?$inputvalues['approval_direct_post']:null;
+		$defaults['allow_attachments_group']['allow_attachments']=isset($inputvalues['allow_attachments'])?$inputvalues['allow_attachments']:null;
+		$defaults['allow_new_threads_group']['allow_new_threads']=isset($inputvalues['allow_new_threads'])?$inputvalues['allow_new_threads']:null;
+		$defaults['default_view_type_group']['default_view_type']=isset($inputvalues['default_view'])?$inputvalues['default_view']:null;
+		$defaults['public_private_group_forum_group']['public_private_group_forum']=isset($inputvalues['forum_group_public_private'])?$inputvalues['forum_group_public_private']:null;
+		$defaults['group_forum']=isset($inputvalues['forum_of_group'])?$inputvalues['forum_of_group']:null;
 	}
 	$form->setDefaults($defaults);
 	// The validation or display

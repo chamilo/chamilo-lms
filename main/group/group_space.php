@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 17221 2008-12-10 22:49:43Z cfasanando $
+<?php //$Id: group_space.php 17225 2008-12-10 23:57:22Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -275,7 +275,10 @@ if (!empty($tutor_info))
 echo '<b>'.get_lang("GroupMembers").':</b>';
 
 $table = new SortableTable('group_users', 'get_number_of_group_users', 'get_group_user_data',2);
-$parameters = array('cidReq' => $_GET['cidReq'], 'origin'=> $_GET['origin'], 'gidReq' => $_GET['gidReq']);
+$my_cidreq=isset($_GET['cidReq']) ? $_GET['cidReq'] : '';
+$my_origin=isset($_GET['origin']) ? $_GET['origin'] : '';
+$my_gidreq=isset($_GET['gidReq']) ? $_GET['gidReq'] : '';
+$parameters = array('cidReq' => $my_cidreq, 'origin'=> $my_origin, 'gidReq' => $my_gidreq);
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '');
 $table->set_header(1, get_lang('LastName'));

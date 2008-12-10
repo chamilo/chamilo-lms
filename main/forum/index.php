@@ -96,9 +96,10 @@ if(!api_is_allowed_to_edit(false,true)) {
 	Header
 -----------------------------------------------------------
 */
-$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS($_GET['search']),"name" => $nameTools);
+$search_forum=isset($_GET['search']) ? Security::remove_XSS($_GET['search']) : '';
+$interbreadcrumb[]=array("url" => "index.php?search=".$search_forum,"name" => $nameTools);
 
-if ($_GET['action']=='add' ) {
+if (isset($_GET['action']) && $_GET['action']=='add' ) {
 		
 	switch ($_GET['content']) {
 		case 'forum':	$interbreadcrumb[] = array ("url" => api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forum', 'name' => get_lang('AddForum')); break;
@@ -107,14 +108,14 @@ if ($_GET['action']=='add' ) {
 	}
 }
  
-Display :: display_header(null);
+Display :: display_header('');
 
 api_display_tool_title($nameTools);
 //echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
 
 // tool introduction
 Display::display_introduction_section(TOOL_FORUM,'left');
-
+$form_count=0;
 
 
 /*
@@ -122,18 +123,18 @@ Display::display_introduction_section(TOOL_FORUM,'left');
 	ACTIONS
 ------------------------------------------------------------------------------------------------------
 */
+$get_actions=isset($_GET['action']) ? $_GET['action'] : '';
 if (api_is_allowed_to_edit(false,true)) {
 	$fck_attribute['ToolbarSet'] = 'ForumLight';
 	handle_forum_and_forumcategories();
 }
 
 // notification
-if ($_GET['action'] == 'notify' AND isset($_GET['content']) AND isset($_GET['id'])) {
+if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['content']) AND isset($_GET['id'])) {
 	$return_message = set_notification($_GET['content'],$_GET['id']);
 	Display :: display_confirmation_message($return_message,false);
 }
-
-if ($_GET['action']!='add' && $_GET['action']!='edit' ) {
+if ($get_actions!='add' && $get_actions!='edit' ) {
 	get_whats_new();
 	$whatsnew_post_info = array();
 	$whatsnew_post_info = $_SESSION['whatsnew_post_info'];
@@ -184,6 +185,7 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' ) {
 		ACTION LINKS
 	------------------------------------------------------------------------------------------------------
 	*/
+	$session_id=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : false;
 	//if (api_is_allowed_to_edit() and !$_GET['action'])
 	echo '<div class="actions">';
 	echo '<span style="float:right;">'.search_link().'</span>';
@@ -220,7 +222,7 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' ) {
 			echo "</th>\n";
 			
 			echo '<th style="vertical-align: top;" align="center" >';
-			if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($_SESSION['id_session'])!=0)) {
+			if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($session_id)!=0)) {
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=edit&amp;content=forumcategory&amp;id=".prepare4display($forum_category['cat_id'])."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&amp;content=forumcategory&amp;id=".prepare4display($forum_category['cat_id'])."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 				display_visible_invisible_icon('forumcategory', prepare4display($forum_category['cat_id']), prepare4display($forum_category['visibility']));
@@ -248,15 +250,17 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' ) {
 			foreach ($forum_list as $key=>$forum) {
 				// Here we clean the whatnew_post_info array a little bit because to display the icon we
 				// test if $whatsnew_post_info[$forum['forum_id']] is empty or not.
-				if(is_array($whatsnew_post_info[$forum['forum_id']])) {
-					foreach ($whatsnew_post_info[$forum['forum_id']] as $key_thread_id => $new_post_array) {
-						if (empty($whatsnew_post_info[$forum['forum_id']][$key_thread_id]))	{
-							unset($whatsnew_post_info[$forum['forum_id']][$key_thread_id]);
-							unset($_SESSION['whatsnew_post_info'][$forum['forum_id']][$key_thread_id]);
+				if (!empty($whatsnew_post_info)) {
+					if (is_array($whatsnew_post_info[$forum['forum_id']])) {
+						foreach ($whatsnew_post_info[$forum['forum_id']] as $key_thread_id => $new_post_array) {
+							if (empty($whatsnew_post_info[$forum['forum_id']][$key_thread_id]))	{
+								unset($whatsnew_post_info[$forum['forum_id']][$key_thread_id]);
+								unset($_SESSION['whatsnew_post_info'][$forum['forum_id']][$key_thread_id]);
+							}
 						}
-					}
+					}							
 				}
-										
+				
 				// note: this can be speeded up if we transform the $forum_list to an array that uses the forum_category as the key.
 				if (prepare4display($forum['forum_category'])==prepare4display($forum_category['cat_id'])) { 
 					// the forum has to be showed if
@@ -326,10 +330,12 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' ) {
 								echo icon('../img/forumgroup.gif', get_lang('GroupForum'));
 							}
 						} else {
-							if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']])) {
-								echo icon('../img/forum.gif', get_lang('Forum'));
-							} else {
-								echo icon('../img/forum.gif');
+							if (!empty($whatsnew_post_info)) {
+								if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']])) {
+									echo icon('../img/forum.gif', get_lang('Forum'));
+								} else {
+									echo icon('../img/forum.gif');
+								}
 							}
 						}
 						echo "</td>\n";
@@ -348,8 +354,10 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' ) {
 						echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".prepare4display($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
 						//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 						// the number of topics and posts
-						echo "\t\t<td>".$forum['number_of_threads']."</td>\n";
-						echo "\t\t<td>".$forum['number_of_posts']."</td>\n";
+						$number_threads=isset($forum['number_of_threads']) ? $forum['number_of_threads'] : null;
+						$number_posts  =isset($forum['number_of_posts']) ? $forum['number_of_posts'] : null;
+						echo "\t\t<td>".$number_threads."</td>\n";
+						echo "\t\t<td>".$number_posts."</td>\n";
 						// the last post in the forum
 						if ($forum['last_poster_name']<>'') {
 							$name=$forum['last_poster_name'];
@@ -364,10 +372,8 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' ) {
 							echo $forum['last_post_date']."<br /> ".get_lang('By').' '.display_user_link($poster_id, $name);
 						}
 						echo "</td>\n";
-		
-		
 						echo "\t\t<td NOWRAP align='center'>";
-						if (api_is_allowed_to_edit(false,true) && !($forum['session_id']==0 && intval($_SESSION['id_session'])!=0)) {
+						if (api_is_allowed_to_edit(false,true) && !($forum['session_id']==0 && intval($session_id)!=0)) {
 							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForum"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 							display_visible_invisible_icon('forum',$forum['forum_id'], $forum['visibility']);
@@ -375,8 +381,9 @@ if ($_GET['action']!='add' && $_GET['action']!='edit' ) {
 							display_up_down_icon('forum',$forum['forum_id'], $forums_in_category);
 						}
 						$iconnotify = 'send_mail.gif';
-						if (is_array($_SESSION['forum_notification']['forum'])) {
-							if (in_array($forum['forum_id'],$_SESSION['forum_notification']['forum'])) {
+						$session_forum_noti=isset($_SESSION['forum_notification']['forum']) ? $_SESSION['forum_notification']['forum'] : false;
+						if (is_array($session_forum_noti)) {
+							if (in_array($forum['forum_id'],$session_forum_noti)) {
 								$iconnotify = 'send_mail_checked.gif';
 							}
 						}

@@ -38,12 +38,19 @@ if ( oFakeImage )
 		oFakeImage = null ;
 }
 
-function window_onload()
+function window_onload(tab_to_elect)
 {
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage(document) ;
 
-	window.parent.SetSelectedTab( 'Upload' ) ;
+	if (!tab_to_elect)
+	{
+		window.parent.SetSelectedTab( 'Upload' ) ;
+	}
+	else
+	{
+		window.parent.SetSelectedTab( tab_to_elect ) ;
+	}
 
 	// Load the selected element information (if any).
 	LoadSelection() ;

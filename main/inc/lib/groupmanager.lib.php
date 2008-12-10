@@ -109,7 +109,8 @@ class GroupManager
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER, $course_db);
-		$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' g.session_id IN (0,'.intval($_SESSION['id_session']).') ';
+		$session_id=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : false;
+		$session_condition = intval($session_id)==0 ? '' : ' g.session_id IN (0,'.intval($session_id).') ';
 		
 		$sql = "SELECT  g.id ,
 						g.name ,

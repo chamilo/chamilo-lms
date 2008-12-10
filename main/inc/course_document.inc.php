@@ -201,8 +201,9 @@ if($docs_and_folders)
 			$row[] = $id['path'];
 		}
 		*/
-		//icons
-		$row[]= build_document_icon_tag($id['filetype'],$id['path']);
+		// icons with hyperlinks
+		//$row[]= build_document_icon_tag($id['filetype'],$id['path']);
+		$row[]= '<a href="#" onclick="javascript:OpenFile(\''.$http_www.'/'.$id['title'].'\', \''.$sType.'\');return false;">'.build_document_icon_tag($id['filetype'],$id['path']).'</a>';
 		//document title with hyperlink
 		// Modified by Ivan Tcholakov, 07-FEB-2008.
 		//$row[] = '<a href="#" onclick="OpenFile(\''.$http_www.'/'.$id['title'].'\', \''.$sType.'\');return false;">'.$id['title'].'</a>';

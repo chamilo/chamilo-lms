@@ -312,6 +312,7 @@ if ($get_actions!='add' && $get_actions!='edit' ) {
 		
 					if ($show_forum) {
 						$form_count++;
+						$mywhatsnew_post_info=isset($whatsnew_post_info[$forum['forum_id']]) ? $whatsnew_post_info[$forum['forum_id']]: null;
 						echo "\t<tr class=\"forum\">\n";
 						
 						// Showing the image
@@ -325,7 +326,7 @@ if ($get_actions!='add' && $get_actions!='edit' ) {
 						echo "\t\t<td width=\"20\">";
 						
 						if ($forum['forum_of_group']!=='0') {
-							if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']])) {
+							if (is_array($mywhatsnew_post_info) and !empty($mywhatsnew_post_info)) {
 								echo icon('../img/forumgroupnew.gif');
 							} else {
 								echo icon('../img/forumgroup.gif', get_lang('GroupForum'));
@@ -342,8 +343,10 @@ if ($get_actions!='add' && $get_actions!='edit' ) {
 						}
 						echo "</td>\n";
 						if ($forum['forum_of_group']<>'0') {
-							$group_title=substr($all_groups[$forum['forum_of_group']]['name'],0,30);
-							$forum_title_group_addition=' (<a href="../group/group_space.php?'.api_get_cidreq().'&gidReq='.$all_groups[$forum['forum_of_group']]['id'].'" class="forum_group_link">'.$group_title.'</a>)';
+							$my_all_groups_forum_name=isset($all_groups[$forum['forum_of_group']]['name']) ? $all_groups[$forum['forum_of_group']]['name'] : null;
+							$my_all_groups_forum_id=isset($all_groups[$forum['forum_of_group']]['id']) ? $all_groups[$forum['forum_of_group']]['id'] : null;
+							$group_title=substr($my_all_groups_forum_name,0,30);
+							$forum_title_group_addition=' (<a href="../group/group_space.php?'.api_get_cidreq().'&gidReq='.$my_all_groups_forum_id.'" class="forum_group_link">'.$group_title.'</a>)';
 						} else {
 							$forum_title_group_addition='';
 						}

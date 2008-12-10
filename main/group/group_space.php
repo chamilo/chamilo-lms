@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 17219 2008-12-10 22:38:55Z cfasanando $
+<?php //$Id: group_space.php 17221 2008-12-10 22:49:43Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -154,7 +154,7 @@ if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SES
 	if (is_array($forums_of_groups)) {
 		if ( $current_group['forum_state'] != TOOL_NOT_AVAILABLE ) {
 			foreach ($forums_of_groups as $key => $value) {
-					if ($value['forum_group_public_private'] == 'public' || ($user_subscribe_to_current_group && $value['forum_group_public_private'] == 'private') || $user_is_tutor || api_is_allowed_to_edit(false,true)) {
+					if ($value['forum_group_public_private'] == 'public' || (!empty($user_subscribe_to_current_group) && $value['forum_group_public_private'] == 'private') || !empty($user_is_tutor) || api_is_allowed_to_edit(false,true)) {
 						$tools.= Display::return_icon('forum.gif', get_lang("GroupForum")) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.$value['forum_title'].'</a><br />';
 					}
 				}

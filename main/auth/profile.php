@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 16704 2008-11-10 15:36:35Z yannoo $
+<?php // $Id: profile.php 17222 2008-12-10 23:09:20Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -604,7 +604,7 @@ elseif ($form->validate())
 	$user_data = $form->exportValues();
 
 	// set password if a new one was provided
-	if ($user_data['password1'])
+	if (isset($user_data['password1']))
 		$password = $user_data['password1'];
 
 	// upload picture if a new one is provided
@@ -617,7 +617,7 @@ elseif ($form->validate())
 		}
 	}
 	// remove existing picture if asked
-	elseif ($user_data['remove_picture'])
+	elseif (isset($user_data['remove_picture']))
 	{
 		remove_user_image($_user['user_id']);
 		$user_data['picture_uri'] = '';
@@ -645,9 +645,10 @@ elseif ($form->validate())
 
 	// Following RFC2396 (http://www.faqs.org/rfcs/rfc2396.html), a URI uses ':' as a reserved character
 	// we can thus ensure the URL doesn't contain any scheme name by searching for ':' in the string
-	if(!preg_match('/^[^:]*:\/\/.*$/',$user_data['openid']))
+	$my_user_openid=isset($user_data['openid']) ? $user_data['openid'] : '';
+	if(!preg_match('/^[^:]*:\/\/.*$/',$my_user_openid))
 	{	//ensure there is at least a http:// scheme in the URI provided
-		$user_data['openid'] = 'http://'.$user_data['openid'];
+		$user_data['openid'] = 'http://'.$my_user_openid;
 	}
 	$extras = array();
 	// build SQL query
@@ -714,12 +715,12 @@ elseif (!empty($update_success))
 {
 	$message=get_lang('ProfileReg');
 	
-	if ($upload_picture_success) 
+	if (isset($upload_picture_success)) 
 	{
 		$message.='<br /> '.get_lang('PictureUploaded');
 	}
 	
-	if ($upload_production_success) 
+	if (isset($upload_production_success)) 
 	{
 		$message.='<br />'.get_lang('ProductionUploaded');
 	}

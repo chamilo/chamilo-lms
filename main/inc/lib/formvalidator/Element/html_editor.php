@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 17101 2008-12-08 04:14:33Z yannoo $
+// $Id: html_editor.php 17214 2008-12-10 21:13:59Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -120,7 +120,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		//for flash
 		$this -> fck_editor->Config['FlashBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
 		$this -> fck_editor->Config['FlashUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
-		$this -> fck_editor->Config['MediaBrowserURL'] = 	$this -> fck_editor->Config['FlashBrowserURL'];
+		//$this -> fck_editor->Config['MediaBrowserURL'] = 	$this -> fck_editor->Config['FlashBrowserURL'];
 		
 		//for MP3
 		$this -> fck_editor->Config['MP3BrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
@@ -132,6 +132,9 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 
 		//link		
 		$this -> fck_editor->Config['LinkBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+
+		// for flv Player (Videos)
+		$this -> fck_editor->Config['MediaBrowserURL'] = 	$this -> fck_editor->Config['VideoBrowserURL'];
 	}
 	/**
 	 * Check if the browser supports FCKeditor

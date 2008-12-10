@@ -1,5 +1,4 @@
-<?php // $Id: $
-
+<?php
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -190,11 +189,11 @@ echo "\t</tr>\n";
 echo '</table>';
 
 // the form for the reply
-$values=show_edit_post_form($current_post, $current_thread, $current_forum, $_SESSION['formelements']);
+$values=show_edit_post_form($current_post, $current_thread, $current_forum, isset($_SESSION['formelements'])?$_SESSION['formelements']:'');
 if (!empty($values) and $_POST['SubmitPost']) {
 	store_edit_post($values);
 
-	$option_chek=$values['thread_qualify_gradebook'];// values 1 or 0
+	$option_chek=isset($values['thread_qualify_gradebook'])?$values['thread_qualify_gradebook']:null;// values 1 or 0
 		if ( 1== $option_chek ) {
 			$id=$values['thread_id'];
 			$title_gradebook=$values['calification_notebook_title'];

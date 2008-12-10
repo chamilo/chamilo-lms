@@ -1639,9 +1639,9 @@ function store_thread($values) {
 				VALUES ('".$clean_post_title."',
 						'".Database::escape_string($values['forum_id'])."',
 						'".Database::escape_string($_user['user_id'])."',
-						'".Database::escape_string($values['poster_name'])."',
+						'".Database::escape_string(isset($values['poster_name'])?$values['poster_name']:null)."',
 						'".Database::escape_string($post_date)."',
-						'".Database::escape_string($values['thread_sticky'])."'," .
+						'".Database::escape_string(isset($values['thread_sticky'])?$values['thread_sticky']:null)."'," .
 						"'".Database::escape_string($values['calification_notebook_title'])."'," .
 						"'".Database::escape_string($values['numeric_calification'])."'," .
 						"'".Database::escape_string($values['weight_calification'])."'," .
@@ -1651,7 +1651,7 @@ function store_thread($values) {
 
 		//add option gradebook qualify 
 		
-		if( 1==$values['thread_qualify_gradebook']) {
+		if(isset($values['thread_qualify_gradebook']) && 1==$values['thread_qualify_gradebook']) {
 			//add function gradebook
 			$coursecode=api_get_course_id();
 			$resourcetype=5;
@@ -1683,9 +1683,9 @@ function store_thread($values) {
 				'".Database::escape_string($last_thread_id)."',
 				'".Database::escape_string($values['forum_id'])."',
 				'".Database::escape_string($_user['user_id'])."',
-				'".Database::escape_string($values['poster_name'])."',
+				'".Database::escape_string(isset($values['poster_name'])?$values['poster_name']:null)."',
 				'".Database::escape_string($post_date)."',
-				'".Database::escape_string($values['post_notification'])."','0',
+				'".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."','0',
 				'".Database::escape_string($visible)."')";
 		api_sql_query($sql, __FILE__,__LINE__);
 		$last_post_id=Database::insert_id();
@@ -1738,8 +1738,8 @@ function store_thread($values) {
 			$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
 		}
 		$reply_info['new_post_id'] = $last_post_id;
-
-		if ($values['post_notification'] == 1) {
+		$my_post_notification=isset($values['post_notification']) ? $values['post_notification'] : null;
+		if ($my_post_notification == 1) {
 			set_notification('thread',$last_thread_id, true);
 		}		
 		
@@ -1775,13 +1775,18 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	global $charset; 
 
 	// initiate the object
-	$form = new FormValidator('thread', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post']).'&action='.Security::remove_XSS($_GET['action']).'&origin='.$origin);
+	$my_thread  = isset($_GET['thread']) ? $_GET['thread']:'';
+	$my_forum   = isset($_GET['forum'])  ? $_GET['forum']:'';
+	$my_action  = isset($_GET['action']) ? $_GET['action']:'';
+	$my_post    = isset($_GET['post'])   ? $_GET['post']:'';
+	$my_gradebook    = isset($_GET['gradebook'])   ? $_GET['gradebook']:'';
+	$form = new FormValidator('thread', 'post', api_get_self().'?forum='.Security::remove_XSS($my_forum).'&thread='.Security::remove_XSS($my_thread).'&post='.Security::remove_XSS($my_post).'&action='.Security::remove_XSS($my_action).'&origin='.$origin);
 	$form->setConstants(array('forum' => '5'));
 
 	// settting the form elements
-	$form->addElement('hidden', 'forum_id', strval(intval($_GET['forum'])));
-	$form->addElement('hidden', 'thread_id', strval(intval($_GET['thread'])));
-	$form->addElement('hidden', 'gradebook', $_GET['gradebook']);
+	$form->addElement('hidden', 'forum_id', strval(intval($my_forum)));
+	$form->addElement('hidden', 'thread_id', strval(intval($my_thread)));
+	$form->addElement('hidden', 'gradebook', $my_gradebook);
 
 	// if anonymous posts are allowed we also display a form to allow the user to put his name or username in
 	if ($current_forum['allow_anonymous']==1 AND !isset($_user['user_id'])) {
@@ -1813,7 +1818,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	$info    =api_get_user_info($userid);
 	$courseid=api_get_course_id();
 	
-	if( (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($_GET['thread']) ){
+	if( (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($my_thread) ){
 		// thread qualify
 		$form->addElement('static','Group', '<br /><strong>'.get_lang('QualifyThread').'</strong>');
 		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'));
@@ -1838,12 +1843,12 @@ function show_add_post_form($action='', $id='', $form_values='') {
 
 	// if we are quoting a message we have to retrieve the information of the post we are quoting so that
 	// we can add this as default to the textarea
-	if (($action=='quote' || $action=='replymessage') && isset($_GET['post'])) {
+	if (($action=='quote' || $action=='replymessage') && isset($my_post)) {
 		// we also need to put the parent_id of the post in a hidden form when we are quoting or replying to a message (<> reply to a thread !!!)
-		$form->addElement('hidden', 'post_parent_id', strval(intval($_GET['post']))); // note this has to be cleaned first
+		$form->addElement('hidden', 'post_parent_id', strval(intval($my_post))); // note this has to be cleaned first
 
 		// if we are replying or are quoting then we display a default title.
- 		$values=get_post_information($_GET['post']); // note: this has to be cleaned first
+ 		$values=get_post_information($my_post); // note: this has to be cleaned first
 		$defaults['post_title']=get_lang('ReplyShort').html_entity_decode($values['post_title'],ENT_QUOTES,$charset);
 		// When we are quoting a message then we have to put that message into the wysiwyg editor.
 		// note: the style has to be hardcoded here because using class="quote" didn't work
@@ -1851,7 +1856,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 			$defaults['post_text']='<div>&nbsp;</div><div style="margin: 5px;"><div style="font-size: 90%;	font-style: italic;">'.get_lang('Quoting').' '.$values['firstname'].' '.$values['lastname'].':</div><div style="color: #006600; font-size: 90%;	font-style: italic; background-color: #FAFAFA; border: #D1D7DC 1px solid; padding: 3px;">'.prepare4display($values['post_text']).'</div></div><div>&nbsp;</div><div>&nbsp;</div>';
 		}
 	}
-	$form->setDefaults($defaults);
+	$form->setDefaults(isset($defaults)?$defaults:null);
 
 	// the course admin can make a thread sticky (=appears with special icon and always on top)
 	$form->addRule('post_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
@@ -1875,7 +1880,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 		$form->display();
 		echo '<br />';
 		if ($forum_setting['show_thread_iframe_on_reply'] and $action<>'newthread') {
-			echo "<iframe src=\"iframe_thread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."#".Security::remove_XSS($_GET['post'])."\" width=\"80%\"></iframe>";
+			echo "<iframe src=\"iframe_thread.php?forum=".Security::remove_XSS($my_forum)."&amp;thread=".Security::remove_XSS($my_thread)."#".Security::remove_XSS($my_post)."\" width=\"80%\"></iframe>";
 		}
 	}
 }
@@ -2062,13 +2067,13 @@ function store_reply($values) {
 		// We first store an entry in the forum_post table
 		$sql="INSERT INTO $table_posts (post_title, post_text, thread_id, forum_id, poster_id, post_date, post_notification, post_parent_id, visible)
 				VALUES ('".Database::escape_string($values['post_title'])."',
-						'".Database::escape_string($values['post_text'])."',
+						'".Database::escape_string(isset($values['post_text']) ? $values['post_text'] : null)."',
 						'".Database::escape_string($values['thread_id'])."',
 						'".Database::escape_string($values['forum_id'])."',
 						'".Database::escape_string($_user['user_id'])."',
 						'".Database::escape_string($post_date)."',
-						'".Database::escape_string($values['post_notification'])."',
-						'".Database::escape_string($values['post_parent_id'])."',
+						'".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."',
+						'".Database::escape_string(isset($values['post_parent_id'])?$values['post_parent_id']:null)."',
 						'".Database::escape_string($visible)."')";
 		$result=api_sql_query($sql, __LINE__, __FILE__);
 		$new_post_id=Database::insert_id();
@@ -2124,7 +2129,8 @@ function store_reply($values) {
 		$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'&origin='.$origin.'">'.get_lang('Message').'</a>';
 	
 		// setting the notification correctly
-		if ($values['post_notification'] == 1) {
+		$my_post_notification=isset($values['post_notification']) ? $values['post_notification'] :null;
+		if ($my_post_notification == 1) {
 			set_notification('thread',$values['thread_id'], true);
 		}
 		
@@ -2171,7 +2177,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	}
 	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
-	if (!$_GET['edit']) {
+	if (!isset($_GET['edit'])) {
 		$form->addElement('static','Group', '<br /><strong>'.get_lang('AlterQualifyThread').'</strong>');
 		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'));
 		$defaults['thread_qualify_gradebook']=is_resource_in_course_gradebook(api_get_course_id(),5,$_GET['thread'],api_get_session_id());
@@ -2192,7 +2198,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 		}
 	}
 	if ($current_forum['allow_attachments']=='1' OR api_is_allowed_to_edit()) {
-		if (empty($form_values) AND !$_POST['SubmitPost']) {
+		if (empty($form_values) AND !isset($_POST['SubmitPost'])) {
 			//edit_added_resources('forum_post',$current_post['post_id']);
 		}
 		//$form->add_resource_button();
@@ -2245,7 +2251,7 @@ function store_edit_post($values) {
 	// first we check if the change affects the thread and if so we commit the changes (sticky and post_title=thread_title are relevant)
 	if (array_key_exists('is_first_post_of_thread',$values) AND $values['is_first_post_of_thread']=='1') {
 		$sql="UPDATE $table_threads SET thread_title='".Database::escape_string($values['post_title'])."',
-					thread_sticky='".Database::escape_string($values['thread_sticky'])."'," .
+					thread_sticky='".Database::escape_string(isset($values['thread_sticky']) ? $values['thread_sticky'] : null)."'," .
 					"thread_title_qualify='".Database::escape_string($values['calification_notebook_title'])."'," .
 					"thread_qualify_max='".Database::escape_string($values['numeric_calification'])."',".
 					"thread_weight='".Database::escape_string($values['weight_calification'])."'".
@@ -2257,7 +2263,7 @@ function store_edit_post($values) {
 	// update the post_title and the post_text
 	$sql="UPDATE $table_posts SET post_title='".Database::escape_string($values['post_title'])."',
 				post_text='".Database::escape_string($values['post_text'])."',
-				post_notification='".Database::escape_string($values['post_notification'])."'
+				post_notification='".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."'
 				WHERE post_id='".Database::escape_string($values['post_id'])."'";
 				//error_log($sql);
 	api_sql_query($sql,__FILE__, __LINE__);
@@ -2266,7 +2272,8 @@ function store_edit_post($values) {
         $ccode = api_get_course_id();
         $sid = api_get_session_id();
     	$link_id = is_resource_in_course_gradebook($ccode,5,$values['thread_id'],$sid);
-        if ($values['thread_qualify_gradebook']!=1) {
+    	$thread_qualify_gradebook=isset($values['thread_qualify_gradebook']) ? $values['thread_qualify_gradebook'] : null;
+        if ($thread_qualify_gradebook!=1) {
             if ($link_id !== false) {
             	remove_resource_from_course_gradebook($link_id);
             }
@@ -3103,10 +3110,11 @@ function delete_attachment($id) {
 	$sql = 'DELETE FROM '. $forum_table_attachment.' WHERE post_id ="'.$id.'"';
 	$result=api_sql_query($sql, __FILE__, __LINE__);
 	
-	$courseDir   = $_course['path'].'/upload/forum';
+	$courseDir       = $_course['path'].'/upload/forum';
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);		
-	$updir = $sys_course_path.$courseDir;
-	$file=$updir.'/'.$attach_list['path'];
+	$updir           = $sys_course_path.$courseDir;
+	$my_path         =isset($attach_list['path']) ? $attach_list['path'] : null;
+	$file            =$updir.'/'.$my_path;
 	
 	api_item_property_update($_course, TOOL_FORUM_ATTACH, $id ,'ForumAttachmentDelete', api_get_user_id());
 												
@@ -3314,7 +3322,9 @@ function send_notifications($forum_id=0, $thread_id=0, $post_id=0) {
 	// the content of the mail
 	$email_subject = get_lang('NewForumPost')." - ".$_course['official_code'];
 	$thread_link= api_get_path('WEB_CODE_PATH').'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forum_id.'&thread='.$thread_id;
-	$message .= $link;
+	$my_link=isset($link)?$link:'';
+	$my_message=isset($message)?$message:'';
+	$my_message .= $my_link;
 	
 	// users who subscribed to the forum
 	if ($forum_id<>0) {

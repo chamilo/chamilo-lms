@@ -251,7 +251,7 @@ if ($get_actions!='add' && $get_actions!='edit' ) {
 				// Here we clean the whatnew_post_info array a little bit because to display the icon we
 				// test if $whatsnew_post_info[$forum['forum_id']] is empty or not.
 				if (!empty($whatsnew_post_info)) {
-					if (is_array($whatsnew_post_info[$forum['forum_id']])) {
+					if (is_array(isset($whatsnew_post_info[$forum['forum_id']])?$whatsnew_post_info[$forum['forum_id']]:null)) {
 						foreach ($whatsnew_post_info[$forum['forum_id']] as $key_thread_id => $new_post_array) {
 							if (empty($whatsnew_post_info[$forum['forum_id']][$key_thread_id]))	{
 								unset($whatsnew_post_info[$forum['forum_id']][$key_thread_id]);
@@ -323,6 +323,7 @@ if ($get_actions!='add' && $get_actions!='edit' ) {
 					
 					
 						echo "\t\t<td width=\"20\">";
+						
 						if ($forum['forum_of_group']!=='0') {
 							if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']])) {
 								echo icon('../img/forumgroupnew.gif');
@@ -330,8 +331,9 @@ if ($get_actions!='add' && $get_actions!='edit' ) {
 								echo icon('../img/forumgroup.gif', get_lang('GroupForum'));
 							}
 						} else {
-							if (!empty($whatsnew_post_info)) {
-								if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']])) {
+							$my_whatsnew_post_info=isset($my_whatsnew_post_info[$forum['forum_id']])?$my_whatsnew_post_info[$forum['forum_id']]:'';;
+							if (!empty($my_whatsnew_post_info)) {
+								if (is_array($my_whatsnew_post_info) and !empty($my_whatsnew_post_info)) {
 									echo icon('../img/forum.gif', get_lang('Forum'));
 								} else {
 									echo icon('../img/forum.gif');

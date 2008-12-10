@@ -1,4 +1,4 @@
-<?php // $Id:  $
+<?php
 
 /*
 ==============================================================================
@@ -95,19 +95,20 @@ if (!empty($_GET['gradebook'])) {
 			'name' => get_lang('Gradebook')
 		);
 }
+$my_search=isset($_GET['search']) ? $_GET['search'] : '';
 if ($origin=='learnpath') {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
 } else {
 
-	$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => $nameTools);
-	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
+	$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode($my_search)),"name" => $nameTools);
+	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum_category['cat_title']));
 	if (isset($_GET['gradebook']) and $_GET['gradebook']=='view') {
 		$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
-		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$info_thread['forum_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));	
+		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$info_thread['forum_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum['forum_title']));	
 	} else {
-		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
+		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum['forum_title']));
 	}
-	if ($message<>'PostDeletedSpecial') {
+	if (isset($message) && $message<>'PostDeletedSpecial') {
 			if (isset($_GET['gradebook']) and $_GET['gradebook']=='view') {
 				$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
 				$interbreadcrumb[]=array("url" => "viewthread.php?forum=".$info_thread['forum_id']."&amp;gradebook=".Security::remove_XSS($_GET['gradebook'])."&thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
@@ -136,13 +137,14 @@ if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR 
 	Actions
 -----------------------------------------------------------
 */
-if ($_GET['action']=='delete' AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
+$my_action = isset($_GET['action']) ? $_GET['action'] : '';
+if ($my_action=='delete' AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
 	$message=delete_post($_GET['id']); // note: this has to be cleaned first
 }
-if (($_GET['action']=='invisible' OR $_GET['action']=='visible') AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
+if (($my_action=='invisible' OR $my_action=='visible') AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
 	$message=approve_post($_GET['id'],$_GET['action']); // note: this has to be cleaned first
 }
-if ($_GET['action']=='move' and isset($_GET['post'])) {
+if ($my_action=='move' and isset($_GET['post'])) {
 	$message=move_post_form();
 }
 
@@ -151,11 +153,12 @@ if ($_GET['action']=='move' and isset($_GET['post'])) {
 	Display the action messages
 -----------------------------------------------------------
 */
-if (isset($message)) {
-	Display :: display_confirmation_message(get_lang($message));
+$my_message = isset($message) ? $message : '';
+if ($my_message) {
+	Display :: display_confirmation_message(get_lang($my_message));
 }
 
-if ($message<>'PostDeletedSpecial') { 
+if ($my_message<>'PostDeletedSpecial') { 
 	// in this case the first and only post of the thread is removed
 	// this increases the number of times the thread has been viewed
 	increase_thread_view($_GET['thread']);
@@ -166,7 +169,7 @@ if ($message<>'PostDeletedSpecial') {
 	*/
 	echo '<div class="actions">';
 	echo '<div style="float:right;">';
-	$my_url = '<a href="viewthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;search='.Security::remove_XSS(urlencode($_GET['search']));
+	$my_url = '<a href="viewthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;search='.Security::remove_XSS(urlencode($my_search));
 	echo $my_url.'&amp;view=flat&origin='.$origin.'">'.get_lang('FlatView').'</a> | ';
 	echo $my_url.'&amp;view=threaded&origin='.$origin.'">'.get_lang('ThreadedView').'</a> | ';
 	echo $my_url.'&amp;view=nested&origin='.$origin.'">'.get_lang('NestedView').'</a>';
@@ -205,7 +208,7 @@ if ($message<>'PostDeletedSpecial') {
 	-----------------------------------------------------------
 	*/
 
-	if (!$_SESSION['view'])	{
+	if (!isset($_SESSION['view']))	{
 		$viewmode=$current_forum['default_view'];
 	} else {
 		$viewmode=$_SESSION['view'];
@@ -241,7 +244,7 @@ if ($message<>'PostDeletedSpecial') {
 	echo prepare4display($current_forum['forum_title']).'<br />';					
 	echo "</th>\n";
 	echo "\t</tr>\n";		
-	echo '<span>'.prepare4display($current_thread['thread_comment']).'</span>';	
+	echo '<span>'.prepare4display(isset($current_thread['thread_comment'])?$current_thread['thread_comment']:'').'</span>';	
 	echo "</table>";
 	
 	switch ($viewmode) {

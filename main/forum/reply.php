@@ -186,7 +186,10 @@ echo "\t</tr>\n";
 echo '</table>';
 
 // the form for the reply
-$values=show_add_post_form($_GET['action'], $_GET['post'], $_SESSION['formelements']); // note: this has to be cleaned first
+$my_action   = isset($_GET['action']) ? $_GET['action'] : '';
+$my_post     = isset($_GET['post']) ? $_GET['post'] : '';
+$my_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '';
+$values=show_add_post_form($my_action,$my_post, $my_elements); // note: this has to be cleaned first
 
 if (!empty($values) AND $_POST['SubmitPost']) {
 	store_reply($values);

@@ -65,7 +65,7 @@
 */
 // name of the language file that needs to be included
 $language_file = 'forum';
-$this_section=SECTION_COURSES;
+//$this_section=SECTION_COURSES;
 require_once '../inc/global.inc.php';
 /* ------------	ACCESS RIGHTS ------------ */
 // notice for unauthorized people.

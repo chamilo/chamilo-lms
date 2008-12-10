@@ -1,4 +1,4 @@
-<?php // $Id: $
+<?php
  
 /*
 ==============================================================================
@@ -201,7 +201,7 @@ if ($origin != 'learnpath') {
 }
 echo '</table>';
 
-$values=show_add_post_form('newthread','', $_SESSION['formelements']);
+$values=show_add_post_form('newthread','', isset($_SESSION['formelements'])?$_SESSION['formelements']:null);
 
 if (!empty($values) and isset($values['SubmitPost'])) {
 	//add new thread in table forum_thread

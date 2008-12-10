@@ -64,6 +64,7 @@ $nameTools=get_lang('Forum');
 
 //are we in a lp ?
 $origin = '';
+$origin_string='';
 if (isset($_GET['origin'])) {
 	$origin =  Security::remove_XSS($_GET['origin']);
 	$origin_string = '&origin='.$origin;
@@ -95,7 +96,8 @@ $userinf=api_get_user_info($userid);
 // we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
-$current_forum=get_forum_information($_GET['forum']); // note: this has to be validated that it is an existing forum.
+$my_forum=isset($_GET['forum'])?$_GET['forum']:'';
+$current_forum=get_forum_information($my_forum); // note: this has to be validated that it is an existing forum.
 $current_forum_category=get_forumcategory_information($current_forum['forum_category']);
 
 
@@ -105,9 +107,11 @@ $current_forum_category=get_forumcategory_information($current_forum['forum_cate
 	Header and Breadcrumbs
 -----------------------------------------------------------
 */
-$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS($_GET['search']),"name" => $nameTools);
-$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
-$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
+$my_search=isset($_GET['search'])?$_GET['search']:'';
+$my_action=isset($_GET['action'])?$_GET['action']:'';
+$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS($my_search),"name" => $nameTools);
+$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum_category['cat_title']));
+$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($my_forum)."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum['forum_title']));
 
 if ($origin=='learnpath') {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
@@ -124,35 +128,35 @@ if ($origin=='learnpath') {
 */
 $table_link 			= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 // Change visibility of a forum or a forum category
-if (($_GET['action']=='invisible' OR $_GET['action']=='visible') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
+if (($my_action=='invisible' OR $my_action=='visible') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
 	$message=change_visibility($_GET['content'], $_GET['id'],$_GET['action']);// note: this has to be cleaned first
 }
 // locking and unlocking
-if (($_GET['action']=='lock' OR $_GET['action']=='unlock') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
-	$message=change_lock_status($_GET['content'], $_GET['id'],$_GET['action']);// note: this has to be cleaned first
+if (($my_action=='lock' OR $my_action=='unlock') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
+	$message=change_lock_status($_GET['content'], $_GET['id'],$my_action);// note: this has to be cleaned first
 }
 // deleting
-if ($_GET['action']=='delete'  AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
+if ($my_action=='delete'  AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
 	$message=delete_forum_forumcategory_thread($_GET['content'],$_GET['id']); // note: this has to be cleaned first
 	//delete link
 	$sql_link='DELETE FROM '.$table_link.' WHERE ref_id='.Security::remove_XSS($_GET['id']).' and type=5 and course_code="'.api_get_course_id().'";';
 	api_sql_query($sql_link);
 }
 // moving
-if ($_GET['action']=='move' and isset($_GET['thread']) AND api_is_allowed_to_edit(false,true)) {
+if ($my_action=='move' and isset($_GET['thread']) AND api_is_allowed_to_edit(false,true)) {
 	$message=move_thread_form();
 }
 // notification
-if ($_GET['action'] == 'notify' AND isset($_GET['content']) AND isset($_GET['id'])) {
+if ($my_action == 'notify' AND isset($_GET['content']) AND isset($_GET['id'])) {
 	$return_message = set_notification($_GET['content'],$_GET['id']);
 	Display :: display_confirmation_message($return_message,false);
 }
 
 // student list 
 
-if ($_GET['action'] == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) AND $userinf['status']=='1') {
+if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) AND $userinf['status']=='1') {
 	
-	switch($_GET['list']) {	
+	switch(isset($_GET['list'])) {	
 		case "qualify":
 			$student_list=get_thread_users_qualify($_GET['id']);			
 			$nrorow3 =-2;
@@ -168,7 +172,7 @@ if ($_GET['action'] == 'liststd' AND isset($_GET['content']) AND isset($_GET['id
 	}	
 	$table_list = '<p><br /><h3>'.get_lang('ThreadUsersList').'&nbsp;:'.get_name_thread_by_id($_GET['id']).'</h3>';
 	if ($nrorow3>0 || $nrorow3==-2) {		
-		$url = 'cidReq='.Security::remove_XSS($_GET['cidReq']).'&forum='.Security::remove_XSS($_GET['forum']).'&action='.Security::remove_XSS($_GET['action']).'&content='.Security::remove_XSS($_GET['content']).'&id='.Security::remove_XSS($_GET['id']);
+		$url = 'cidReq='.Security::remove_XSS($_GET['cidReq']).'&forum='.Security::remove_XSS($my_forum).'&action='.Security::remove_XSS($_GET['action']).'&content='.Security::remove_XSS($_GET['content']).'&id='.Security::remove_XSS($_GET['id']);
 		$table_list.= '<br />
 				 <div style="width:50%">
 				 <table class="data_table" border="0">
@@ -194,7 +198,7 @@ if ($_GET['action'] == 'liststd' AND isset($_GET['content']) AND isset($_GET['id
 			$table_list.= '<th>'.get_lang('Qualify').'</th>';
 		}	
 		$table_list.= '</tr>';
-		$max_qualify=show_qualify('2',$_GET['cidReq'],$_GET['forum'],$userid,$_GET['id']);
+		$max_qualify=show_qualify('2',$_GET['cidReq'],$my_forum,$userid,$_GET['id']);
 		$counter_stdlist=0;	
 		while ($row_student_list=Database::fetch_array($student_list)) {
 			if ($counter_stdlist%2==0) {
@@ -203,13 +207,13 @@ if ($_GET['action'] == 'liststd' AND isset($_GET['content']) AND isset($_GET['id
 					$class_stdlist="row_even";
 			}
 			$name_user_theme = 	$row_student_list['firstname'].' '.$row_student_list['lastname'];					
-			$table_list.= '<tr class="$class_stdlist"><td><a href="../user/userInfo.php?uInfo='.$row_student_list['user_id'].'&tipo=sdtlist&'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.$name_user_theme.'</a></td>';
+			$table_list.= '<tr class="$class_stdlist"><td><a href="../user/userInfo.php?uInfo='.$row_student_list['user_id'].'&tipo=sdtlist&'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).$origin_string.'">'.$name_user_theme.'</a></td>';
 			if ($_GET['list']=='qualify') {
 				$table_list.= '<td>'.$row_student_list['qualify'].'/'.$max_qualify.'</td>';
 			}
 			if ($userinf['status']=='1') {
-				$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$row_student_list['user_id'],$_GET['id']);					
-				$table_list.= '<td><a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['id']).'&user_id='.$row_student_list['user_id'].'&idtextqualify='.$current_qualify_thread.'">'.icon('../img/'.$icon_qualify,get_lang('Qualify')).'</a></td></tr>';
+				$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$my_forum,$row_student_list['user_id'],$_GET['id']);					
+				$table_list.= '<td><a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&thread='.Security::remove_XSS($_GET['id']).'&user_id='.$row_student_list['user_id'].'&idtextqualify='.$current_qualify_thread.'">'.icon('../img/'.$icon_qualify,get_lang('Qualify')).'</a></td></tr>';
 			}
 			$counter_stdlist++;
 		}	
@@ -257,7 +261,7 @@ echo '<span style="float:right;">'.search_link().'</span>';
 // 3. a visitor is here and new threads AND allowed AND  anonymous posts are allowed
 if (api_is_allowed_to_edit(false,true) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1)) {
 	if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) { 
-		echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.Display::return_icon('forumthread_new.gif',get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';
+		echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).$origin_string.'">'.Display::return_icon('forumthread_new.gif',get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';
 	} else {
 		echo get_lang('ForumLocked');
 	}
@@ -302,9 +306,9 @@ echo "\t\t<td>".get_lang('Actions')."</td>\n";
 echo "\t</tr>\n";
 
 // getting al the threads
-$threads=get_threads($_GET['forum']); // note: this has to be cleaned first
+$threads=get_threads($my_forum); // note: this has to be cleaned first
 
-$whatsnew_post_info=$_SESSION['whatsnew_post_info'];
+$whatsnew_post_info=isset($_SESSION['whatsnew_post_info'])?$_SESSION['whatsnew_post_info']:null;
 
 $counter=0;
 if(is_array($threads)) {
@@ -318,7 +322,8 @@ if(is_array($threads)) {
 			}
 			echo "\t<tr class=\"$class\">\n";
 			echo "\t\t<td>";
-			if (is_array($whatsnew_post_info[$_GET['forum']][$row['thread_id']]) and !empty($whatsnew_post_info[$_GET['forum']][$row['thread_id']])) {
+			$my_whatsnew_post_info=isset($whatsnew_post_info[$my_forum][$row['thread_id']])?$whatsnew_post_info[$my_forum][$row['thread_id']]:null;
+			if (is_array($my_whatsnew_post_info) and !empty($my_whatsnew_post_info)) {
 				echo icon('../img/forumthread.gif');
 			} else {
 				echo icon('../img/forumthread.gif');
@@ -329,7 +334,7 @@ if(is_array($threads)) {
 			}
 			echo "</td>\n";
 			echo "\t\t<td>";			
-			echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".$row['thread_id'].$origin_string."&amp;search=".Security::remove_XSS(urlencode($_GET['search']))."\" ".class_visible_invisible($row['visibility']).">".prepare4display($row['thread_title'])."</a></td>\n";
+			echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;thread=".$row['thread_id'].$origin_string."&amp;search=".Security::remove_XSS(urlencode($my_search))."\" ".class_visible_invisible($row['visibility']).">".prepare4display($row['thread_title'])."</a></td>\n";
 			echo "\t\t<td>".$row['thread_replies']."</td>\n";
 			if ($row['user_id']=='0') {
 				$name=prepare4display($row['thread_poster_name']);
@@ -368,22 +373,22 @@ if(is_array($threads)) {
 			echo "\t\t<td>".$last_post."</td>\n";
 			echo "\t\t<td>";	
 			if (api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) {
-				echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($row['thread_id'])."&amp;post=".$row['post_id']."&origin=".$origin."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;action=delete&amp;content=thread&amp;id=".$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteCompleteThread"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
-				display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array("forum"=>$_GET['forum'],'origin'=>$origin));
-				display_lock_unlock_icon('thread',$row['thread_id'], $row['locked'], array("forum"=>$_GET['forum'],'origin'=>$origin));
-				echo "<a href=\"viewforum.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;action=move&amp;thread=".$row['thread_id'].$origin_string."\">".icon('../img/deplacer_fichier.gif',get_lang('MoveThread'))."</a>";
+				echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;thread=".Security::remove_XSS($row['thread_id'])."&amp;post=".$row['post_id']."&origin=".$origin."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;action=delete&amp;content=thread&amp;id=".$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteCompleteThread"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
+				display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array("forum"=>$my_forum,'origin'=>$origin));
+				display_lock_unlock_icon('thread',$row['thread_id'], $row['locked'], array("forum"=>$my_forum,'origin'=>$origin));
+				echo "<a href=\"viewforum.php?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;action=move&amp;thread=".$row['thread_id'].$origin_string."\">".icon('../img/deplacer_fichier.gif',get_lang('MoveThread'))."</a>";
 			}
 			$iconnotify = 'send_mail.gif';
-			if (is_array($_SESSION['forum_notification']['thread'])) {
+			if (is_array(isset($_SESSION['forum_notification']['thread'])?$_SESSION['forum_notification']['thread']:null)) {
 				if (in_array($row['thread_id'],$_SESSION['forum_notification']['thread'])) {
 					$iconnotify = 'send_mail_checked.gif';
 				}
 			}
 			$icon_liststd = 'group.gif';
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($_GET['forum'])."&amp;action=notify&amp;content=thread&amp;id=".$row['thread_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($my_forum)."&amp;action=notify&amp;content=thread&amp;id=".$row['thread_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
 			if ($userinf['status']=='1') {
-				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;action=liststd&amp;content=thread&amp;id='.$row['thread_id'].'">'.icon('../img/'.$icon_liststd,get_lang('StudentList')).'</a>';			
+				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;action=liststd&amp;content=thread&amp;id='.$row['thread_id'].'">'.icon('../img/'.$icon_liststd,get_lang('StudentList')).'</a>';			
 			}
 			echo "</td>\n";
 			echo "\t</tr>\n";
@@ -394,7 +399,7 @@ if(is_array($threads)) {
 	}
 }
 echo "</table>";
-echo $table_list;
+echo isset($table_list)?$table_list:'';
 /*
 ==============================================================================
 		FOOTER

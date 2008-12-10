@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17182 2008-12-09 17:57:05Z cfasanando $
+<?php //$Id: agenda.inc.php 17198 2008-12-10 10:52:11Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -2249,7 +2249,7 @@ function show_add_form($id = '')
 			<td>
 
 			<select name="fhour" onchange="javascript:document.new_calendar_item.end_fhour.value=this.value;">
-				<option value="--">--</option>
+				<!-- <option value="--">--</option> -->
 				<?php
 					echo "\n";
 					foreach (range(0, 23) as $i)
@@ -2269,8 +2269,8 @@ function show_add_form($id = '')
 			</select>
 			<?php echo get_lang('HourMinuteDivider'); ?>
 			<select name="fminute" onchange="javascript:document.new_calendar_item.end_fminute.value=this.value;">
-				<option value="<?php echo $minutes ?>"><?php echo $minutes; ?></option>
-				<option value="--">--</option>
+				<!-- <option value="<?php echo $minutes ?>"><?php echo $minutes; ?></option> -->
+				<!-- <option value="--">--</option> -->
 				<?php
 					foreach (range(0, 59) as $i)
 					{
@@ -2355,7 +2355,7 @@ function show_add_form($id = '')
 			<td>
 
 			<select name="end_fhour">
-				<option value="--">--</option>
+				<!-- <option value="--">--</option> -->
 				<?php
 					echo "\n";
 					foreach (range(0, 23) as $i)
@@ -2371,8 +2371,8 @@ function show_add_form($id = '')
 			</select>
 			<?php echo get_lang('HourMinuteDivider'); ?>
 			<select name="end_fminute">
-				<option value="<?php echo $end_minutes; ?>"><?php echo $end_minutes; ?></option>
-				<option value="--">--</option>
+				<!-- <option value="<?php echo $end_minutes; ?>"><?php echo $end_minutes; ?></option> -->
+				<!-- <option value="--">--</option> -->
 				<?php
 					foreach (range(0, 59) as $i)
 					{

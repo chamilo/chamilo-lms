@@ -559,7 +559,13 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			} else {
 				$add_to_name = '';
 			}
-			$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;						
+			
+			$show_as_icon = get_work_id($mydir); //true or false
+			if ($show_as_icon && api_is_allowed_to_edit()) {
+				$row[] = '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&action=downloadfolder&path=/'.$mydir.'"><img src="../img/zip_save.gif" style="float:right;" alt="'.get_lang('Save').'" width="17" height="17"/></a><a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;
+			} else {
+				$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;	
+			}									
 		}
 		
 		if ($count_files!=0) {
@@ -618,9 +624,11 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				}
 			endif;
 			
-			$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));			
+			$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));
+			
+			//$full_file_name = 'download.php?file='.$realname;			
 			$row[]= build_document_icon_tag('file',$work->url);
-			$row[]= '<a href="'.$currentCourseRepositoryWeb.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;
+			$row[]= '<a href="download.php?file='.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;
 			$row[]= display_user_link($row2['insert_user_id'],$work->author).$qualification_string;// $work->author;			
 			$row[]= date_to_str_ago($work->sent_date).$add_string.'<br><span class="dropbox_date">'.$work->sent_date.'</span>';
 			
@@ -1230,3 +1238,20 @@ function to_javascript_work() {
 			}		
 			</script>';
 }
+/**
+ * Gets the id of a student publication with a given path
+ * @param string $path
+ * @return true if is found / false if not found
+ */
+function get_work_id($path) {
+	$TBL_STUDENT_PUBLICATION = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+	$sql = "SELECT id FROM $TBL_STUDENT_PUBLICATION WHERE url LIKE  'work/".$path."%'";
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$num_rows = Database::num_rows($result);
+	
+	if ($result && $num_rows > 0) {		
+		return true;
+	} else {
+		return false;
+	}
+}	

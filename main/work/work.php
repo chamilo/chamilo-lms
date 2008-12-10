@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 17192 2008-12-09 23:15:45Z yannoo $
+*  	@version $Id: work.php 17211 2008-12-10 17:37:31Z cfasanando $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -89,7 +89,7 @@ $language_file = array (
 	'document',
 	'admin'
 );
-
+require("../inc/global.inc.php");
 // @todo why is this needed?
 //session
 if (isset ($_GET['id_session'])) {
@@ -101,7 +101,6 @@ isset($_SESSION['id_session'])?$id_session=$_SESSION['id_session']:$id_session=n
 	Including necessary files
 -----------------------------------------------------------
 */
-require_once '../inc/global.inc.php';
 require_once 'work.lib.php';
 require_once (api_get_path(LIBRARY_PATH) . 'course.lib.php');
 require_once (api_get_path(LIBRARY_PATH) . 'debug.lib.inc.php');
@@ -244,6 +243,16 @@ if (!api_is_course_admin()) {
 		api_session_register('toolgroup');
 	}
 }
+
+//-------------------------------------------------------------------//
+
+//download of an completed folder
+if(isset($_GET['action']) && $_GET['action']=="downloadfolder")
+{
+	include('downloadfolder.inc.php');
+}
+//-------------------------------------------------------------------//
+
 /*
 -----------------------------------------------------------
 	Header
@@ -308,14 +317,7 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false,true); //has to come after di
 ==============================================================================
 */
 
-//-------------------------------------------------------------------//
 
-//download of an completed folder
-if(isset($_GET['action']) && $_GET['action']=="downloadfolder")
-{
-	include('downloadfolder.inc.php');
-}
-//-------------------------------------------------------------------//
 
 if (!empty ($_POST['changeProperties'])) {
 	$query = "UPDATE " . $main_course_table . " SET show_score='" . $uploadvisibledisabled . "' WHERE code='" . $_course['sysCode'] . "'";
@@ -1141,7 +1143,7 @@ function draw_date_picker($prefix,$default='') {
 		//new additional fields inside the "if condition" just to agroup
 		if(true):
 
-		$addtext .= '<div style="padding:10px">'.get_lang('Description').'<br /><textarea name="description" rows="4" cols="70"></textarea></div>';
+		$addtext = '<div style="padding:10px">'.get_lang('Description').'<br /><textarea name="description" rows="4" cols="70"></textarea></div>';
 				
 		$addtext .= '<div style="align:left"> <div class="label">&nbsp;</div> <div class="formw"> <a href="javascript://" onclick=" return plus();"><span id="plus">&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>';
 		$addtext .='</div> </div>';

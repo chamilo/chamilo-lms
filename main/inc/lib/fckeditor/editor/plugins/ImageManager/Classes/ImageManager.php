@@ -442,8 +442,7 @@ class ImageManager
 
 		// Second, filtering using a special function of the system.
 		$result = filter_extension($file_name);
-		//if ($result == 0 || $file_name != $file['name'])
-		if ($result == 0)
+		if (($result == 0) || ($file_name != $file['name']))
 		{
 			Files::delFile($file['tmp_name']);
 			return false;

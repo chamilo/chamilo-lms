@@ -72,7 +72,7 @@ include('../../../../../../inc/global.inc.php');
 			$form->addElement('html','<tr><td>');
 			$form->addElement('submit','','Send it to the Server','id="btnUpload" fckLang="DlgLnkBtnUpload"');
 			$form->addElement('html','</td></tr></table>');			
-			$form->addElement('html','<iframe name="UploadWindow" style="display: none" src="../fckblank.html"></iframe>');
+			$form->addElement('html','<iframe name="UploadWindow" style="display: none" src="../../fckblank.html"></iframe>');
 			
 			$form->add_real_progress_bar('fckMP3','NewFile');			
 			$form->display();			

@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 17172 2008-12-09 16:57:47Z iflorespaz $
+<?php // $Id: database.lib.php 17238 2008-12-11 20:41:05Z iflorespaz $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -745,13 +745,13 @@ class Database
 	 * @return integer 
 	 */
     function get_course_by_category ($category_id) {
-    	$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-		$sql = 'SELECT DISTINCT(course_code) FROM '.$tbl_grade_categories.' WHERE category_id='.$category_id;
+    	$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+		$sql = 'SELECT course_code FROM '.$tbl_grade_categories.' WHERE id='.$category_id;
 		$res=api_sql_query($sql, __FILE__, __LINE__);
 		$option=Database::fetch_array($res,'ASSOC');
 		if ($option) {
 			return $option['course_code'];
-		}else {
+		} else {
 			return false;
 		}
 		

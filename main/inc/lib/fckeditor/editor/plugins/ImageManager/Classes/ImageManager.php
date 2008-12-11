@@ -6,6 +6,9 @@
  * @package ImageManager
  */
 
+require_once '../../../../../global.inc.php';
+require_once '../../../../fileUpload.lib.php';
+
 require_once('Files.php');
 require_once('Transform.php');
 
@@ -404,28 +407,56 @@ class ImageManager
 		
 		if($file['error']!=0)
 		{
-			Return false;
+			return false;
 		}
 
 		if(!is_file($file['tmp_name']))
 		{
-			Return false;
+			return false;
 		}
 
 		if(!is_uploaded_file($file['tmp_name']))
 		{
 			Files::delFile($file['tmp_name']);
-			Return false;
+			return false;
 		}
 		
+		$file_name = $file['name'];
+		$extension = explode('.', $file_name);
+		$count = count($extension);
+		if ($count == 1)
+		{
+			$extension = '';
+		}
+		else
+		{
+			$extension = strtolower($extension[$count - 1]);
+		}
 
+		// Checking for image by file extension first, using the configuration file.
+		if (!in_array($extension, $this->config['accepted_extensions']))
+		{
+			Files::delFile($file['tmp_name']);
+			return false;
+		}
+
+		// Second, filtering using a special function of the system.
+		$result = filter_extension($file_name);
+		//if ($result == 0 || $file_name != $file['name'])
+		if ($result == 0)
+		{
+			Files::delFile($file['tmp_name']);
+			return false;
+		}
+
+		// Checking for a valid image by reading binary file (partially in most cases).
 		if($this->config['validate_images'] == true)
 		{
 			$imgInfo = @getImageSize($file['tmp_name']);
 			if(!is_array($imgInfo))
 			{
 				Files::delFile($file['tmp_name']);
-				Return false;
+				return false;
 			}
 		}
 
@@ -457,7 +488,7 @@ class ImageManager
 
 		//delete tmp files.
 		Files::delFile($file['tmp_name']);
-		Return false;
+		return false;
 	}
 
 	/**

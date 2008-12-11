@@ -206,6 +206,11 @@ $IMConfig['maxHeight'][1] = 180;
 
 
 /*
+  Uploaded files will be accepted as images if they have file extensions from the list below.
+ */
+$IMConfig['accepted_extensions'] = array('gif', 'jpg', 'png', 'bmp', 'jpeg');
+
+/*
  Possible values: true, false
 
  TRUE - If set to true, uploaded files will be validated based on the 

@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17230 2008-12-11 15:39:27Z cfasanando $
+<?php //$Id: agenda.inc.php 17235 2008-12-11 19:38:27Z cfasanando $
 
 /*
 ==============================================================================
@@ -1192,6 +1192,7 @@ function get_agenda_item($id)
     //TODO - add management of repeat exceptions
 	return $item;
 }
+
 /**
 * This is the function that updates an agenda item. It does 3 things
 * 1. storethe start_date, end_date, title and message in the calendar_event table
@@ -1199,7 +1200,7 @@ function get_agenda_item($id)
 * 3. modify the attachments (if needed)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function store_edited_agenda_item($id_user,$id_group)
+function store_edited_agenda_item($id_user,$id_group,$id_attach,$file_comment)
 {
 	global $_user, $_course;
 
@@ -1216,7 +1217,13 @@ function store_edited_agenda_item($id_user,$id_group)
 	$to=$_POST['selectedform'];
 	// 1.b. the actual saving in calendar_event table
 	$edit_result=save_edit_agenda_item($id,$title,$content,$start_date,$end_date);
-
+	
+	if (empty($id_attach)) {
+		add_agenda_attachment_file($file_comment,$id);
+	} else {
+		edit_agenda_attachment_file($file_comment,$id,$id_attach);
+	}
+	
 	// step 2: editing the item_propery table (=delete all and add the new destination users/groups)
 	if ($edit_result=true)
 	{
@@ -1672,10 +1679,13 @@ function display_agenda_items()
     	}
     	echo "</td>\n";
     	
+    	// attachment list
+	    	$attachment_list=get_attachment($myrow['id']);
+    	
         /*--------------------------------------------------
     	 display: edit delete button (course admin only)
          --------------------------------------------------*/
-    
+    	
     	
     	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())))
     	{
@@ -1684,7 +1694,7 @@ function display_agenda_items()
 				$mylink = api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;group='.Security::remove_XSS($_REQUEST['group']).'&amp;user='.Security::remove_XSS($_REQUEST['user']).'&amp;id='.$myrow['id'];
 	    		echo '<td align="center">';
 	    		// edit
-    			echo '<a href="'.$mylink.'&amp;action=edit" title="'.get_lang("ModifyCalendarItem").'">';
+    			echo '<a href="'.$mylink.'&amp;action=edit&amp;id_attach='.$attachment_list['id'].'" title="'.get_lang("ModifyCalendarItem").'">';
 	    		echo Display::return_icon('edit.gif', get_lang('ModifyCalendarItem'))."</a>";
 	    		
     			echo "<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\"> ";
@@ -1738,9 +1748,7 @@ function display_agenda_items()
     	echo $td_colspan;	
 
     	echo $content;
-    	// attachment list
-	    	$attachment_list=get_attachment($myrow['id']);	
-		
+    	// show attachment list 			
 			if (!empty($attachment_list)) {
 					
 				$realname=$attachment_list['path'];			
@@ -1749,7 +1757,8 @@ function display_agenda_items()
 				echo Display::return_icon('attachment.gif',get_lang('Attachment'));
 				echo '<a href="'.$full_file_name.'';		
 				echo ' "> '.$user_filename.' </a>';
-				echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span><br />';	
+				echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
+				echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';	
 						
 			}
 	    	
@@ -1815,7 +1824,7 @@ function display_agenda_items()
 function get_attachment($agenda_id) {	
 	$agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
 	$row=array();	
-	$sql = 'SELECT path, filename,comment FROM '. $agenda_table_attachment.' WHERE agenda_id = '.(int)$agenda_id.'';
+	$sql = 'SELECT id,path, filename,comment FROM '. $agenda_table_attachment.' WHERE agenda_id = '.(int)$agenda_id.'';
 	$result=api_sql_query($sql, __FILE__, __LINE__);
 	if (Database::num_rows($result)!=0) {
 		$row=Database::fetch_array($result);
@@ -2130,6 +2139,7 @@ function show_add_form($id = '')
 <input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
 <input type="hidden" name="group" value="<?php echo Security::remove_XSS($_REQUEST['group']); ?>" />
 <input type="hidden" name="user" value="<?php echo Security::remove_XSS($_REQUEST['user']); ?>" />
+<input type="hidden" name="id_attach" value="<?php echo Security::remove_XSS($_REQUEST['id_attach']); ?>" />
 <table border="0" cellpadding="5" cellspacing="0" width="100%" id="newedit_form">
 	<!-- the title -->
 	<tr class="title">
@@ -2499,12 +2509,9 @@ function show_add_form($id = '')
 	   echo display_resources(0);
 	   $test=$_SESSION['addedresource'];
 	   echo "\t\t</td>\n\t</tr>\n";
-	   /* END ADDED BY UGENT, Patrick Cool, march 2004 */
-    if(empty($id)) //only show repeat fields when adding the first time
-    { 
-	?>
-	
-	<tr>
+	?>   
+	   <!-- Attachment file -->
+	   <tr>
 		<td>
 			<div>
 				<div class="label">&nbsp;
@@ -2534,8 +2541,13 @@ function show_add_form($id = '')
 			 </div>   
     	</td>
     </tr>
-    
-    
+	   
+	<?php   
+	   /* END ADDED BY UGENT, Patrick Cool, march 2004 */
+    if(empty($id)) //only show repeat fields when adding the first time
+    { 
+	?>
+
     <tr>
     <td colspan="4">
 			<div>
@@ -3945,6 +3957,16 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     $end_date   = Database::escape_string($db_end_date);
     isset($_SESSION['id_session'])?$id_session=intval($_SESSION['id_session']):$id_session=null;
     // store in the table calendar_event
+    
+    // check if exists in calendar_event table
+    $sql = "SELECT * FROM $t_agenda WHERE title='$title' AND content = '$content' AND start_date = '$start_date'
+    		AND end_date = '$end_date' ".(!empty($parent_id)? "AND parent_event_id = '$parent_id'":"")." AND session_id = '$id_session'";
+    $result = api_sql_query($sql,__FILE__,__LINE__);
+    $count = Database::num_rows($result);    
+    if ($count > 0) {
+    	return false;
+    }
+    
     $sql = "INSERT INTO ".$t_agenda."
                             (title,content, start_date, end_date".(!empty($parent_id)?',parent_event_id':'').", session_id)
                             VALUES
@@ -3953,45 +3975,9 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     $result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
     $last_id=Database::insert_id();
         
-    // Storing the attachments
-
-    if(!empty($_FILES['user_upload']['name'])) {
-		$upload_ok = process_uploaded_file($_FILES['user_upload']);							
-	}
-	
-	if (!empty($upload_ok)) {			
-			$courseDir   = $_course['path'].'/upload/calendar';			
-			$sys_course_path = api_get_path(SYS_COURSE_PATH);					
-			$updir = $sys_course_path.$courseDir;
-						
-			// Try to add an extension to the file if it hasn't one
-			$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);	
-			// user's file name
-			$file_name =$_FILES['user_upload']['name'];
-						
-			if (!filter_extension($new_file_name))  {
-				Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));				
-			} else {				
-				$new_file_name = uniqid('');									
-				$new_path=$updir.'/'.$new_file_name;				
-				$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);				
-				$safe_file_comment= Database::escape_string($file_comment);				
-				$safe_file_name = Database::escape_string($file_name);	
-				$safe_new_file_name = Database::escape_string($new_file_name);			
-				// Storing the attachments if any
-				if ($result) {					
-					$sql='INSERT INTO '.$agenda_table_attachment.'(filename,comment, path,agenda_id,size) '.
-						 "VALUES ( '".$safe_file_name."', '".$safe_file_comment."', '".$safe_new_file_name."' , '".$last_id."', '".$_FILES['user_upload']['size']."' )";						
-					$result=api_sql_query($sql, __LINE__, __FILE__);					
-					$message.=' / '.get_lang('FileUploadSucces').'<br />';
-					
-					$last_id_file=Database::insert_id();
-					api_item_property_update($_course, 'calendar_event_attachment', $last_id_file ,'AgendaAttachmentAdded', api_get_user_id());
-								
-				}			
-			}			 
-		} 
+    // add a attachment file in agenda
     
+    add_agenda_attachment_file($file_comment,$last_id);
     
     // store in last_tooledit (first the groups, then the users
     $done = false;
@@ -4028,6 +4014,128 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     }    
     return $last_id;	
 }
+
+/**
+ * This function delete a attachment file by id
+ * @param integer attachment file Id
+ *  
+ */
+function delete_attachment_file($id_attach) {
+	
+	global $_course;
+	$agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
+		
+	$sql="DELETE FROM $agenda_table_attachment WHERE id = ".(int)$id_attach;
+	$result=api_sql_query($sql, __LINE__, __FILE__);					
+	$last_id_file=Database::insert_id();	
+	// update item_property	
+	api_item_property_update($_course, 'calendar_event_attachment', $id_attach ,'AgendaAttachmentDeleted', api_get_user_id());	
+	if (!empty($result)) {
+	Display::display_normal_message(get_lang("AttachmentFileDeleteSuccess"));
+	}
+}
+
+/**
+ * This function add a attachment file into agenda 
+ * @param string  a comment about file
+ * @param int last id from calendar table
+ * 
+ */
+function add_agenda_attachment_file($file_comment,$last_id) {
+	
+	global $_course;
+	$agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
+	// Storing the attachments
+
+    if(!empty($_FILES['user_upload']['name'])) {
+		$upload_ok = process_uploaded_file($_FILES['user_upload']);							
+	}
+	
+	if (!empty($upload_ok)) {			
+			$courseDir   = $_course['path'].'/upload/calendar';			
+			$sys_course_path = api_get_path(SYS_COURSE_PATH);					
+			$updir = $sys_course_path.$courseDir;
+						
+			// Try to add an extension to the file if it hasn't one
+			$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);	
+			// user's file name
+			$file_name =$_FILES['user_upload']['name'];
+						
+			if (!filter_extension($new_file_name))  {
+				Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));				
+			} else {				
+				$new_file_name = uniqid('');									
+				$new_path=$updir.'/'.$new_file_name;				
+				$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);				
+				$safe_file_comment= Database::escape_string($file_comment);				
+				$safe_file_name = Database::escape_string($file_name);	
+				$safe_new_file_name = Database::escape_string($new_file_name);			
+				// Storing the attachments if any
+				if ($result) {					
+					$sql='INSERT INTO '.$agenda_table_attachment.'(filename,comment, path,agenda_id,size) '.
+						 "VALUES ( '".$safe_file_name."', '".$safe_file_comment."', '".$safe_new_file_name."' , '".$last_id."', '".$_FILES['user_upload']['size']."' )";						
+					$result=api_sql_query($sql, __LINE__, __FILE__);					
+					$message.=' / '.get_lang('FileUploadSucces').'<br />';
+					
+					$last_id_file=Database::insert_id();
+					api_item_property_update($_course, 'calendar_event_attachment', $last_id_file ,'AgendaAttachmentAdded', api_get_user_id());
+								
+				}			
+			}			 
+		} 	
+}
+
+
+/**
+ * This function edit a attachment file into agenda 
+ * @param string  a comment about file
+ * @param int Agenda Id 
+ *  @param int attachment file Id
+ */
+function edit_agenda_attachment_file($file_comment,$agenda_id,$id_attach) {
+	
+	global $_course;
+	$agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
+	// Storing the attachments
+
+    if(!empty($_FILES['user_upload']['name'])) {
+		$upload_ok = process_uploaded_file($_FILES['user_upload']);							
+	}
+	
+	if (!empty($upload_ok)) {			
+			$courseDir   = $_course['path'].'/upload/calendar';			
+			$sys_course_path = api_get_path(SYS_COURSE_PATH);					
+			$updir = $sys_course_path.$courseDir;
+						
+			// Try to add an extension to the file if it hasn't one
+			$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);	
+			// user's file name
+			$file_name =$_FILES['user_upload']['name'];
+						
+			if (!filter_extension($new_file_name))  {
+				Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));				
+			} else {				
+				$new_file_name = uniqid('');									
+				$new_path=$updir.'/'.$new_file_name;				
+				$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);				
+				$safe_file_comment= Database::escape_string($file_comment);				
+				$safe_file_name = Database::escape_string($file_name);	
+				$safe_new_file_name = Database::escape_string($new_file_name);
+				$safe_agenda_id = (int)$agenda_id;	
+				$safe_id_attach = (int)$id_attach;		
+				// Storing the attachments if any
+				if ($result) {					
+					$sql="UPDATE $agenda_table_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', agenda_id = '$safe_agenda_id', size ='".$_FILES['user_upload']['size']."'
+						   WHERE id = '$safe_id_attach'";					
+					$result=api_sql_query($sql, __LINE__, __FILE__);										
+										
+					api_item_property_update($_course, 'calendar_event_attachment', $safe_id_attach ,'AgendaAttachmentUpdated', api_get_user_id());
+								
+				}			
+			}			 
+		} 	
+}
+
 /**
  * Adds a repetitive item to the database
  * @param   array   Course info

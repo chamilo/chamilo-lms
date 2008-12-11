@@ -26,7 +26,7 @@
 *	but this code will hopefully be replaced soon by an Apache URL
 *	rewrite mechanism.
 *
-*	@package dokeos.document
+*	@package dokeos.calendar
 ==============================================================================
 */
 
@@ -41,7 +41,7 @@ session_cache_limiter('public');
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
-include(api_get_path(LIBRARY_PATH).'document.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 include 'agenda.inc.php';
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
@@ -89,8 +89,8 @@ $sql='SELECT filename FROM '.$tbl_agenda_attachment.'
 
 $result= api_sql_query($sql, __FILE__, __LINE__);
 $row= Database::fetch_array($result);
-
-DocumentManager::file_send_for_download($full_file_name,TRUE, $row['filename']);
+$title = str_replace(' ','_', $row['filename']); 
+DocumentManager::file_send_for_download($full_file_name,TRUE, $title);
 
 exit;
 ?>

@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 17061 2008-12-03 21:43:06Z cfasanando $
+<?php //$Id: agenda.php 17235 2008-12-11 19:38:27Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -311,7 +311,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 {
 	switch ($_GET['action'])
 	{
-		case 'add':
+		case "add":
             if(!empty($_POST['ical_submit']))
             {
                 $course_info = api_get_course_info();
@@ -344,8 +344,11 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id']) ) ) )
 			{ // a coach can only delete an element belonging to his session
 				if ($_POST['submit_event'])
-				{
-						store_edited_agenda_item($_REQUEST['user'],$_REQUEST['group']);
+				{		$my_id_attach = (int)$_REQUEST['id_attach'];
+						$my_user = (int)$_REQUEST['user'];
+						$my_group = (int)$_REQUEST['group'];
+						$my_file_comment = Database::escape_string($_REQUEST['file_comment']);
+						store_edited_agenda_item($my_user,$my_group,$my_id_attach,$my_file_comment);
 						display_agenda_items();
 				}
 				else
@@ -386,6 +389,15 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 				Display::display_normal_message(get_lang('CopiedAsAnnouncement').'<a href="../announcements/announcements.php?id='.$ann_id.$tool_group_link.'">'.get_lang('NewAnnouncement').'</a>', false);
 			}
 			display_agenda_items();
+			break;
+		case "delete_attach": //delete attachment file
+			$id_attach = (int)$_GET['id_attach'];
+			if (!empty($id_attach)) {
+				delete_attachment_file($id_attach);
+			}
+			display_agenda_items();
+			break;
+			
 	}
 }
 

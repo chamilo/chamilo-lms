@@ -199,10 +199,12 @@ $IMConfig['watermarks'] = array	(
 	If only one set is specified, no select list will show and this set will be used by default.
 	Setting the single set its values to either zero or empty will allow any size.
 */
-$IMConfig['maxWidth'][0] = 333;
-$IMConfig['maxHeight'][0] = 333;
-$IMConfig['maxWidth'][1] = 100;
-$IMConfig['maxHeight'][1] = 180;
+//$IMConfig['maxWidth'][0] = 333;
+//$IMConfig['maxHeight'][0] = 333;
+//$IMConfig['maxWidth'][1] = 100;
+//$IMConfig['maxHeight'][1] = 180;
+$IMConfig['maxWidth'][0] = 0;
+$IMConfig['maxHeight'][0] = 0;
 
 
 /*

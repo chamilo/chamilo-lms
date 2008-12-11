@@ -348,14 +348,14 @@ Class Image_Transform_Driver_GD extends Image_Transform
             return false; /*PEAR::raiseError('You have already resized the image without saving it.  Your previous resizing will be overwritten', null, PEAR_ERROR_TRIGGER, E_USER_NOTICE);*/
         }
         if(function_exists('ImageCreateTrueColor')){
-            $new_img =ImageCreateTrueColor($new_x,$new_y);
+            $new_img = @ImageCreateTrueColor($new_x,$new_y);
         } else {
-            $new_img =ImageCreate($new_x,$new_y);
+            $new_img = @ImageCreate($new_x,$new_y);
         }
         if(function_exists('ImageCopyResampled')){
-            ImageCopyResampled($new_img, $this->imageHandle, 0, 0, 0, 0, $new_x, $new_y, $this->img_x, $this->img_y);
+            @ImageCopyResampled($new_img, $this->imageHandle, 0, 0, 0, 0, $new_x, $new_y, $this->img_x, $this->img_y);
         } else {
-            ImageCopyResized($new_img, $this->imageHandle, 0, 0, 0, 0, $new_x, $new_y, $this->img_x, $this->img_y);
+            @ImageCopyResized($new_img, $this->imageHandle, 0, 0, 0, 0, $new_x, $new_y, $this->img_x, $this->img_y);
         }
         $this->old_image = $this->imageHandle;
         $this->imageHandle = $new_img;

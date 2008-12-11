@@ -87,12 +87,12 @@ get_notifications_of_user();
 * @version february 2006, dokeos 1.8
 */
 function handle_forum_and_forumcategories() {
-	$action_forum_cat = isset($_GET['action']) ? $_GET['action'] : false;
-	$post_submit_cat= isset($_POST['SubmitForumCategory']) ? $_POST['SubmitForumCategory'] : false;
-	$post_submit_forum= isset($_POST['SubmitForum']) ? $_POST['SubmitForum'] : false;
-	$get_id=isset($_GET['id']) ? $_GET['id'] : false;
+	$action_forum_cat = isset($_GET['action']) ? $_GET['action'] : '';
+	$post_submit_cat= isset($_POST['SubmitForumCategory']) ? $_POST['SubmitForumCategory'] : '';
+	$post_submit_forum= isset($_POST['SubmitForum']) ? $_POST['SubmitForum'] : '';
+	$get_id=isset($_GET['id']) ? $_GET['id'] : '';
 	// Adding a forum category
-	if ($action_forum_cat=='add' && $_GET['content']=='forumcategory') {
+	if (($action_forum_cat=='add' && $_GET['content']=='forumcategory')) {
 		show_add_forumcategory_form();
 	}
 	// Adding a forum
@@ -415,9 +415,16 @@ function show_edit_forumcategory_form($inputvalues=array()) {
 
 	// The validation or display
 	if ( $form->validate() ) {
-	   $values = $form->exportValues();
-	   store_forumcategory($values);
+		$check = Security::check_token('post');	
+		if ($check) {
+	   		$values = $form->exportValues();
+	  		store_forumcategory($values);
+		}
+		Security::clear_token();
 	} else {
+		$token = Security::get_token();
+		$form->addElement('hidden','sec_token');
+		$form->setConstants(array('sec_token' => $token));
 		$form->display();
 	}
 }

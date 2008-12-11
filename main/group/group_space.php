@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 17225 2008-12-10 23:57:22Z iflorespaz $
+<?php //$Id: group_space.php 17231 2008-12-11 15:45:09Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -154,7 +154,7 @@ if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SES
 	if (is_array($forums_of_groups)) {
 		if ( $current_group['forum_state'] != TOOL_NOT_AVAILABLE ) {
 			foreach ($forums_of_groups as $key => $value) {
-					if ($value['forum_group_public_private'] == 'public' || (!empty($user_subscribe_to_current_group) && $value['forum_group_public_private'] == 'private') || !empty($user_is_tutor) || api_is_allowed_to_edit(false,true)) {
+					if ($value['forum_group_public_private'] == 'private' || (!empty($user_subscribe_to_current_group) && $value['forum_group_public_private'] == 'private') || !empty($user_is_tutor) || api_is_allowed_to_edit(false,true)) {
 						$tools.= Display::return_icon('forum.gif', get_lang("GroupForum")) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.$value['forum_title'].'</a><br />';
 					}
 				}
@@ -284,18 +284,13 @@ $table->set_header(0, '');
 $table->set_header(1, get_lang('LastName'));
 $table->set_header(2, get_lang('FirstName'));
 
-if (api_get_setting("show_email_addresses") == "true")
-{
+if (api_get_setting("show_email_addresses") == "true") {
 	$table->set_header(3, get_lang('Email'));
 	$table->set_column_filter(3, 'email_filter');
 }
-else
-{
-	if (api_is_allowed_to_edit())
-    {
-		$table->set_header(3, get_lang('Email'));
-		$table->set_column_filter(3, 'email_filter');
-	}
+else {
+	$table->set_header(3, get_lang('Email'));
+	$table->set_column_filter(3, 'email_filter');
 }
 
 $table->set_column_filter(0, 'user_icon_filter');

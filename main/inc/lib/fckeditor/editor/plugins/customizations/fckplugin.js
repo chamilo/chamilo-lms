@@ -22,97 +22,7 @@
 
 
 /*
- * Customizations by Julio Montoya for handling audio and video files.
- */
-
-// mp3 files
-FCKDocumentProcessor.AppendNew().ProcessDocument = function(A)
-{
-	var B = A.getElementsByTagName('embed'); 
-	var C;
-	var i = B.length - 1; 
-	while (i >= 0 && (C = B[i--]))
-	{
-		var str = C.src;
-		var leng = str.length;	
-		var extension = str.substring(leng -3, leng );
-		if (extension == 'mp3')
-		{			 
-			var D = FCKDocumentProcessor_CreateFakeImage('FCK__MP3', C.cloneNode(true));
-			D.setAttribute('_fckmp3', 'true', 0);
-			C.parentNode.insertBefore(D, C);
-			C.parentNode.removeChild(C);			
-		}
-	}
-};
-
-// Files supported by fckembedvideo mpg, mpeg, avi, wmv, mov and asf. ')
-FCKDocumentProcessor.AppendNew().ProcessDocument = function(A)
-{
-	var B = A.getElementsByTagName('embed'); 
-	var C;
-	var i = B.length - 1; 
-	while (i >= 0 && (C = B[i--]))
-	{
-		var str = C.src;		
-		var leng = str.length;	
-		var extension = str.substring(leng -3, leng);
-		if (extension == 'mpg' || extension == 'mpeg'|| extension == 'avi' || extension == 'wmv' || extension == 'mov' || extension == 'asf' )
-		{			 
-			var D = FCKDocumentProcessor_CreateFakeImage('FCK__Video', C.cloneNode(true));
-			D.setAttribute('_fckvideo', 'true', 0);
-			C.parentNode.insertBefore(D, C);
-			C.parentNode.removeChild(C);			
-		}
-	}
-};
-
-// Fake images handling customization
-FCKEmbedAndObjectProcessor.AddCustomHandler(function(A, B)
-{
-	if (!(A.nodeName.IEquals('embed') &&
-		(A.type == 'application/x-shockwave-flash' || /\.swf($|#|\?)/i.test(A.src)))) return;
-	if (A.src.match(/mediaplayer/g)) 
-	{
-		B.className = 'FCK__MP3'  //DOKEOS CUSTOMIZATION : the mp3 fake should appear if the flash is the mediaplayer
-	}
-	else
-	{
-		B.className = 'FCK__Flash';
-	}
-	B.setAttribute('_fckflash', 'true', 0);
-});
-
-
-/*
- * Customizations by Julio Montoya for enabling the external template selection dialog.
- */
-
-FCKToolbarButton.prototype.Click = function()
-{
-	var A = this._ToolbarButton || this;
-	FCK.ToolbarSet.CurrentInstance.Commands.GetCommand(A.CommandName).Execute();
-};
-
-FCKToolbarButton.prototype.ClickFrame = function()
-{
-	var A = this._ToolbarButton || this;
-	return FCK.ToolbarSet.CurrentInstance.Commands.GetCommand(A.CommandName).ExecuteFrame();
-};
-
-FCKDialogCommand.prototype.Execute = function()
-{
-	FCKDialog.OpenDialog('FCKDialog_' + this.Name, this.Title, this.Url, this.Width, this.Height, this.CustomValue, null, this.Resizable);
-};
-
-FCKDialogCommand.prototype.ExecuteFrame = function()
-{
-	return FCKDialog.OpenDialogFrame('FCKDialog_' + this.Name, this.Title, this.Url, this.Width, this.Height, this.CustomValue, null, this.Resizable);
-}; 
-
-/*
- * The following customization of the dialog sub-system for enabling
- * the external template selection uses original source code,
+ * This plugin uses also fragments of the original source code of
  * FCKeditor version 2.6.4 SVN, Build 21065 (nightly, 06-DEC-2008).
  * 
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
@@ -133,8 +43,99 @@ FCKDialogCommand.prototype.ExecuteFrame = function()
  *    http://www.mozilla.org/MPL/MPL-1.1.html
  *
  * == END LICENSE ==
- *
- * Dialog windows operations.
+ */
+
+
+/*
+ **************************************************************************************
+ * General note: This plugin alters some basic functionality of FCKEditor.
+ * This is why it should be loaded first, before the other plugins.
+ **************************************************************************************
+ */
+
+
+/*
+ **************************************************************************************
+ * Customizations by Julio Montoya for managing fake images for
+ * representation of embedded objects in editor's area.
+ * December, 2008
+ **************************************************************************************
+ */
+
+// A custom handler for mediaplayer, used to play mp3 files
+FCKEmbedAndObjectProcessor.AddCustomHandler( function( el, fakeImg )
+	{
+		if ( ! ( el.nodeName.IEquals( 'embed' ) && ( el.type == 'application/x-shockwave-flash' || /\.swf($|#|\?)/i.test( el.src ) ) ) )
+			return ;
+
+		if (el.src.match(/mediaplayer/g)) 
+		{
+			fakeImg.className = 'FCK__MP3'  //DOKEOS CUSTOMIZATION : the mp3 fake should appear if the flash is the mediaplayer
+		}
+		fakeImg.setAttribute('_fckflash', 'true', 0);
+	} ) ;
+
+// Fake images for mp3 files.
+FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
+	{
+		var embeds = document.getElementsByTagName( 'embed' ); 
+		var embed;
+		var i = embeds.length - 1; 
+		while ( i >= 0 && ( embed = embeds[i--] ) )
+		{
+			var extension = embed.src.match(/\.(mp3)$/i);
+			if (extension != null)
+			{	 
+				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__MP3', embed.cloneNode(true) );
+				oImg.setAttribute( '_fckmp3', 'true', 0 );
+				embed.parentNode.insertBefore( oImg, embed );
+				embed.parentNode.removeChild( embed );			
+			}
+		}
+	};
+
+// Fake images for files supported by fckembedvideo - mpg, mpeg, avi, wmv, mov and asf.
+FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
+	{
+		var embeds = document.getElementsByTagName( 'embed' ); 
+		var embed;
+		var i = embeds.length - 1; 
+		while ( i >= 0 && ( embed = embeds[i--] ) )
+		{
+			var extension = embed.src.match(/\.(mpg|mpeg|avi|wmv|mov|asf)$/i);
+			if (extension != null)
+			{			 
+				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', embed.cloneNode(true) );
+				oImg.setAttribute( '_fckvideo', 'true', 0 );
+				embed.parentNode.insertBefore( oImg, embed );
+				embed.parentNode.removeChild( embed );			
+			}
+		}
+	};
+
+
+/*
+ **************************************************************************************
+ * Customizations by Julio Montoya for enabling the external template selection dialog.
+ * December, 2008
+ **************************************************************************************
+ */
+
+FCKToolbarButton.prototype.ClickFrame = function()
+{
+	var A = this._ToolbarButton || this;
+	return FCK.ToolbarSet.CurrentInstance.Commands.GetCommand(A.CommandName).ExecuteFrame();
+};
+
+FCKDialogCommand.prototype.ExecuteFrame = function()
+{
+	return FCKDialog.OpenDialogFrame( 'FCKDialog_' + this.Name, this.Title, this.Url, this.Width, this.Height, this.CustomValue, null, this.Resizable );
+}; 
+
+/*
+ * The following customization of the dialog sub-system for enabling
+ * the external template selection uses original source code,
+ * FCKeditor version 2.6.4 SVN, Build 21065 (nightly, 06-DEC-2008).
  */
 
 var FCKDialog = ( function()
@@ -254,12 +255,15 @@ var FCKDialog = ( function()
 
 		/*
 		 * Added by Julio Montoya for enabling the external template selection dialog.
+		 ***************************************************************************************
 		 */
 
-		OpenDialogFrame: function(dialogName, dialogTitle, dialogPage, width, height, customValue, parentWindow, resizable)
+		OpenDialogFrame: function( dialogName, dialogTitle, dialogPage, width, height, customValue, parentWindow, resizable )
 		{
-			//if (!topDialog) this.DisplayMainCover();
-			var I = 
+			//if ( !topDialog )
+			//	this.DisplayMainCover() ;
+
+			var dialogInfo = 
 			{
 				Title: dialogTitle,
 				Page: dialogPage,
@@ -267,36 +271,45 @@ var FCKDialog = ( function()
 				CustomValue: customValue,
 				TopWindow: topWindow
 			};
-			FCK.ToolbarSet.CurrentInstance.Selection.Save();
-			var J = FCKTools.GetViewPaneSize(topWindow);
-			var K = { 'X': 0, 'Y': 0 };
-			var L = FCKBrowserInfo.IsIE && (!FCKBrowserInfo.IsIE7 || !FCKTools.IsStrictMode(topWindow.document));
-			if (L) K = FCKTools.GetScrollPosition(topWindow);
-			var M = Math.max(K.Y + (J.Height - height - 20)/2,0);
-			var N = Math.max(K.X + (J.Width - width - 20)/2,0);
-			var O = topDocument.createElement('iframe');
-			//FCKTools.ResetStyles(O);
-			O.src = FCKConfig.BasePath + 'fckdialogframe.html';
-			O.frameBorder = 0;
-			O.allowTransparency = true;
-			FCKDomTools.SetElementStyles(O,
+
+			//FCK.ToolbarSet.CurrentInstance.Selection.Save();
+			FCK.ToolbarSet.CurrentInstance.Selection.Save( true ) ;
+
+			var viewSize = FCKTools.GetViewPaneSize( topWindow );
+			var scrollPosition = { 'X': 0, 'Y': 0 };
+			var useAbsolutePosition = FCKBrowserInfo.IsIE && ( !FCKBrowserInfo.IsIE7 || !FCKTools.IsStrictMode( topWindow.document ) );
+			if (useAbsolutePosition) scrollPosition = FCKTools.GetScrollPosition(topWindow);
+			var iTop = Math.max(scrollPosition.Y + ( viewSize.Height - height - 20 ) / 2, 0 );
+			var iLeft = Math.max(scrollPosition.X + ( viewSize.Width - width - 20 ) / 2, 0 );
+
+			var dialog = topDocument.createElement('iframe');
+			//FCKTools.ResetStyles( dialog );
+			dialog.src = FCKConfig.BasePath + 'fckdialogframe.html';
+
+			dialog.frameBorder = 0;
+			dialog.allowTransparency = true;
+			FCKDomTools.SetElementStyles(dialog,
 			{
-				'position': (L) ? 'absolute' : 'fixed',
-				'top': M + 'px',
-				'left': N + 'px',
-				'width': width + 'px',
-				'height': height + 'px',
-				'zIndex': getZIndex()
+				'position'	: (useAbsolutePosition) ? 'absolute' : 'fixed',
+				'top'		: iTop + 'px',
+				'left'		: iLeft + 'px',
+				'width'		: width + 'px',
+				'height'	: height + 'px',
+				'zIndex'	: getZIndex()
 			});
-			O._DialogArguments = I;
-			//E.body.appendChild(O);
-			O._ParentDialog = topDialog;
-			topDialog = O;
-			return I;
+
+			dialog._DialogArguments = dialogInfo;
+
+			//E.body.appendChild( dialog );
+
+			dialog._ParentDialog = topDialog;
+			topDialog = dialog;
+
+			return dialogInfo;
 		},
 
 		/*
-		 * End of the added code.
+		 ***************************************************************************************
 		 */
 
 		/**

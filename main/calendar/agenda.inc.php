@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17198 2008-12-10 10:52:11Z ivantcholakov $
+<?php //$Id: agenda.inc.php 17230 2008-12-11 15:39:27Z cfasanando $
 
 /*
 ==============================================================================
@@ -409,6 +409,27 @@ function reverseAll(cbList)
 		cbList[i].selected = !(cbList[i].selected)
 	}
 }
+
+function plus_attachment() {
+				if (document.getElementById('options').style.display == 'none') {
+					document.getElementById('options').style.display = 'block';
+					document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/nolines_minus.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
+				} else {
+				document.getElementById('options').style.display = 'none';
+				document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/nolines_plus.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
+				}	
+}
+
+function plus_repeated_event() {
+				if (document.getElementById('options2').style.display == 'none') {
+					document.getElementById('options2').style.display = 'block';
+					document.getElementById('plus2').innerHTML='&nbsp;<img src=\"../img/nolines_minus.gif\" alt=\"\" />&nbsp;".get_lang('RepeatedEvent')."';
+				} else {
+				document.getElementById('options2').style.display = 'none';
+				document.getElementById('plus2').innerHTML='&nbsp;<img src=\"../img/nolines_plus.gif\" alt=\"\" />&nbsp;".get_lang('RepeatedEvent')."';
+				}	
+}
+
 //	End	-->
 </script>";
 }
@@ -2011,7 +2032,7 @@ function show_add_form($id = '')
 {
 
 	global $MonthsLong;
-
+	$htmlHeadXtra[] = to_javascript();
 	// the default values for the forms
 	if ($_GET['originalresource'] !== 'no')
 	{
@@ -2168,7 +2189,7 @@ function show_add_form($id = '')
 
 			<table cellpadding="0" cellspacing="0" border="0" width="100%">
 
-			<tr><td width="110">
+			<tr><td> 
 				<!-- date: 1 -> 31 -->
 				<?php echo get_lang('StartDate').": \n"; ?>
 			</td>
@@ -2241,7 +2262,7 @@ function show_add_form($id = '')
 
 			<table cellpadding="0" cellspacing="0" border="0" width="100%">
 
-			<tr><td width="110">
+			<tr><td> 
 				<!-- date: 1 -> 31 -->
 				<?php echo get_lang('StartTime').": \n"; ?>
 			</td>
@@ -2289,7 +2310,7 @@ function show_add_form($id = '')
 
 			<table cellpadding="0" cellspacing="0" border="0" width="100%">
 
-			<tr><td width="110">
+			<tr><td>
 				<!-- date: 1 -> 31 -->
 				<?php echo get_lang('EndDate').": \n"; ?>
 			</td>
@@ -2347,7 +2368,7 @@ function show_add_form($id = '')
 
 			<table cellpadding="0" cellspacing="0" border="0" width="100%">
 
-			<tr><td width="110">
+			<tr><td>
 				<!-- date: 1 -> 31 -->
 				<?php echo get_lang('EndTime').": \n"; ?>
 			</td>
@@ -2381,7 +2402,8 @@ function show_add_form($id = '')
 						echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 					} ?>
 			</select>
-			</td></tr></table>
+			</td></tr>
+		</table>
 		</td>
 	</tr>
 
@@ -2481,89 +2503,128 @@ function show_add_form($id = '')
     if(empty($id)) //only show repeat fields when adding the first time
     { 
 	?>
-	<tr><td colspan="2"><br /><b><?php echo get_lang('AddAnAttachment') ?><br /><br /></td></tr>
+	
 	<tr>
-		<td colspan="2">
-	        <label for="file_name"><?php echo ucwords(get_lang('FileName'))?></label>	    
-	        <input type="file" name="user_upload"/>
-	    </td>
-	 </tr><tr>   	    
-	    <td colspan="2">     
-	    	<label for="comment"><?php echo get_lang('FileComment')?></label><br />	    
-	    	<textarea name="file_comment" rows ="4" cols = "34" ></textarea>    	    
-	    </td>
+		<td>
+			<div>
+				<div class="label">&nbsp;
+				</div>
+				<div class="formw">
+					<a href="javascript://" onclick="return plus_attachment();"><span id="plus">&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;<?php echo get_lang('AddAnAttachment') ?></span></a>
+				</div>
+			</div>
+	
+			<div id="options" style="display: none;">
+				<table>
+					<tr><br />
+					</tr>
+					<tr>
+						<td colspan="2">
+					        <label for="file_name"><?php echo ucwords(get_lang('FileName'))?></label>	    
+					        <input type="file" name="user_upload"/>
+					    </td>
+					 </tr>
+					 <tr>   	    
+					    <td colspan="2">     
+					    	<label for="comment"><?php echo get_lang('FileComment')?></label><br />	    
+					    	<textarea name="file_comment" rows ="4" cols = "34" ></textarea>    	    
+					    </td>
+				    </tr>
+			    </table>
+			 </div>   
+    	</td>
     </tr>
+    
+    
     <tr>
-      <td><label for="repeat"><?php echo get_lang('RepeatedEvent');?></label><input type="checkbox" name="repeat" <?php echo ($repeat?'checked="checked"':'');?>/></td>
-      <td colspan="2" />
-    </tr>
-    <tr>
-      <td><label for="repeat_type"><?php echo get_lang('RepeatType');?></label>
-        <select name="repeat_type">
-          <option value="daily"><?php echo get_lang('RepeatDaily');?></option>
-          <option value="weekly"><?php echo get_lang('RepeatWeekly');?></option>
-          <option value="monthlyByDate"><?php echo get_lang('RepeatMonthlyByDate');?></option>
-          <!--option value="monthlyByDay"><?php echo get_lang('RepeatMonthlyByDay');?></option>
-          <option value="monthlyByDayR"><?php echo get_lang('RepeatMonthlyByDayR');?></option-->
-          <option value="yearly"><?php echo get_lang('RepeatYearly');?></option>
-        </select>
-      </td>
-      <td colspan="2" />
-    </tr>
-    <tr>
-      <td><label for="repeat_end_day"><?php echo get_lang('RepeatEnd');?></label>
-            <select name="repeat_end_day">
-                <?php
-                    // small loop for filling all the dates
-                    // 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
-                    echo "\n";
-                    foreach (range(1, 31) as $i)
-                    {
-                        // values have to have double digits
-                        $value = ($i <= 9 ? '0'.$i : $i );
-                        // the current day is indicated with [] around the date
-                        if ($value==$end_day)
-                            { echo "\t\t\t\t <option value=\"".$value."\" selected> ".$i." </option>\n";}
-                        else
-                            { echo "\t\t\t\t <option value=\"".$value."\">".$i."</option>\n"; }
-                        }?>
-                </select>
-
-                <!-- month: january -> december -->
-                <select name="repeat_end_month">
-                    <?php
-                    echo "\n";
-                    foreach (range(1, 12) as $i)
-                    {
-                        // values have to have double digits
-                        $value = ($i <= 9 ? '0'.$i : $i );
-                        if ($value==$end_month+1)
-                            { echo "\t\t\t\t ",'<option value="',$value,'" selected="selected">',$MonthsLong[$i-1],"</option>\n"; }
-                        else
-                            { echo "\t\t\t\t ",'<option value="',$value,'">',$MonthsLong[$i-1],"</option>\n"; }
-                        }?>
-                </select>
-
-                <select name="repeat_end_year">
-                    <option value="<?php echo ($end_year-1) ?>"><?php echo ($end_year-1) ?></option>
-                    <option value="<?php echo $end_year ?>" selected> <?php echo $end_year ?> </option>
-                    <?php
-                    echo "\n";
-                    for ($i=1; $i<=5; $i++)
-                    {
-                        $value=$end_year+$i;
-                        echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
-                    } ?>
-            </select>
-            <a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')"><?php Display::display_icon('calendar_select.gif'); ?></a>
-      </td>
-      <td colspan="2" />      
-    </tr>
+    <td colspan="4">
+			<div>
+				<div class="label">&nbsp;
+				</div>
+				<div class="formw">
+					<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;<?php echo get_lang('RepeatedEvent') ?></span></a>
+				</div>
+			</div>
+	
+			<div id="options2" style="display: none;">
+				<table>
+					<tr><br />
+					</tr>
+					<tr>
+    
+			      <td><label for="repeat"><?php echo get_lang('RepeatedEvent');?></label><input type="checkbox" name="repeat" <?php echo ($repeat?'checked="checked"':'');?>/></td>
+			      <td colspan="2" />
+			    </tr>
+			    <tr>
+			      <td><label for="repeat_type"><?php echo get_lang('RepeatType');?></label>
+			        <select name="repeat_type">
+			          <option value="daily"><?php echo get_lang('RepeatDaily');?></option>
+			          <option value="weekly"><?php echo get_lang('RepeatWeekly');?></option>
+			          <option value="monthlyByDate"><?php echo get_lang('RepeatMonthlyByDate');?></option>
+			          <!--option value="monthlyByDay"><?php echo get_lang('RepeatMonthlyByDay');?></option>
+			          <option value="monthlyByDayR"><?php echo get_lang('RepeatMonthlyByDayR');?></option-->
+			          <option value="yearly"><?php echo get_lang('RepeatYearly');?></option>
+			        </select>
+			      </td>
+			      <td colspan="2" />
+			    </tr>
+			    <tr>
+			      <td><label for="repeat_end_day"><?php echo get_lang('RepeatEnd');?></label><br />
+			            <select name="repeat_end_day">
+			                <?php
+			                    // small loop for filling all the dates
+			                    // 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
+			                    echo "\n";
+			                    foreach (range(1, 31) as $i)
+			                    {
+			                        // values have to have double digits
+			                        $value = ($i <= 9 ? '0'.$i : $i );
+			                        // the current day is indicated with [] around the date
+			                        if ($value==$end_day)
+			                            { echo "\t\t\t\t <option value=\"".$value."\" selected> ".$i." </option>\n";}
+			                        else
+			                            { echo "\t\t\t\t <option value=\"".$value."\">".$i."</option>\n"; }
+			                        }?>
+			                </select>
+			
+			                <!-- month: january -> december -->
+			                <select name="repeat_end_month">
+			                    <?php
+			                    echo "\n";
+			                    foreach (range(1, 12) as $i)
+			                    {
+			                        // values have to have double digits
+			                        $value = ($i <= 9 ? '0'.$i : $i );
+			                        if ($value==$end_month+1)
+			                            { echo "\t\t\t\t ",'<option value="',$value,'" selected="selected">',$MonthsLong[$i-1],"</option>\n"; }
+			                        else
+			                            { echo "\t\t\t\t ",'<option value="',$value,'">',$MonthsLong[$i-1],"</option>\n"; }
+			                        }?>
+			                </select>
+			
+			                <select name="repeat_end_year">
+			                    <option value="<?php echo ($end_year-1) ?>"><?php echo ($end_year-1) ?></option>
+			                    <option value="<?php echo $end_year ?>" selected> <?php echo $end_year ?> </option>
+			                    <?php
+			                    echo "\n";
+			                    for ($i=1; $i<=5; $i++)
+			                    {
+			                        $value=$end_year+$i;
+			                        echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
+			                    } ?>
+			            </select>
+			            <a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')"><?php Display::display_icon('calendar_select.gif'); ?></a>
+								    </td>
+				    </tr>
+			    </table>
+			 </div>   
+    	</td>
     <?php
     }//only show repeat fields if adding, not if editing
     ?>
 	<tr>
 		<td colspan="3">
+		<br />
 			<input type="submit" name="submit_event" value="<?php echo get_lang('Ok'); ?>" onclick="selectAll(this.form.elements[7],true)" />
 		</td>
 	</tr>

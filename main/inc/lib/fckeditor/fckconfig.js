@@ -59,6 +59,9 @@ FCKConfig.PluginsPath = FCKConfig.BasePath + 'plugins/' ;
 // FCKConfig.Plugins.Add( 'dragresizetable' );
 FCKConfig.AutoGrowMax = 400 ;
 
+// Added by Ivan Tcholakov
+//FCKConfig.Plugins.Add( "customizations" ) ;
+
 //
 FCKConfig.ProtectedSource.Add( /<script[\s\S]*?\/script>/gi ) ;	// <SCRIPT> tags.
 //
@@ -378,6 +381,3 @@ FCKConfig.BackgroundBlockerOpacity = 0.50 ;
 FCKConfig.MsWebBrowserControlCompat = false ;
 
 FCKConfig.PreventSubmitHandler = false ;
-
-// Added by Ivan Tcholakov
-FCKConfig.Plugins.Add( "customizations" ) ;

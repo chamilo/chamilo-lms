@@ -389,6 +389,10 @@ class GroupManager
 		// delete the groups
 		$sql = "DELETE FROM ".$group_table." WHERE id IN ('".implode("' , '", $group_ids)."')";
 		api_sql_query($sql,__FILE__,__LINE__);
+		
+		$sql2 = "DELETE FROM ".$forum_table." WHERE forum_of_group IN ('".implode("' , '", $group_ids)."')";
+		api_sql_query($sql2,__FILE__,__LINE__);
+		
 		return mysql_affected_rows();
 	}
 

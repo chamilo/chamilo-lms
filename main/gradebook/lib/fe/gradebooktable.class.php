@@ -247,21 +247,29 @@ private function build_id_column ($item) {
 				 		. ($item->is_course() ? ' &nbsp;[' . $item->get_course_code() . ']'.$show_message : '');
 			// evaluation
 			case 'E' :
-
+				$cat=new Category();
+				$dblib=new Database();
+		
+				$category_id=Security::remove_XSS($_GET['selectcat']);
+				$course_id=$dblib->get_course_by_category($category_id);
+				$show_message=$cat->show_message_resource_delete($course_id);
+				
 				// course/platform admin can go to the view_results page
-				if (api_is_allowed_to_create_course()) {
+				if (api_is_allowed_to_create_course() && $show_message===false) {
+					
 					return '&nbsp;'
 						. '<a href="gradebook_view_result.php?selecteval=' . $item->get_id() . '">'
 						. $item->get_name()
-						. '</a>';
+						. '</a>&nbsp;['.get_lang('Evaluation').']';
 				} elseif (ScoreDisplay :: instance()->is_custom()) {
 					// students can go to the statistics page (if custom display enabled)
 					return '&nbsp;'
 						. '<a href="gradebook_statistics.php?selecteval=' . $item->get_id() . '">'
 						. $item->get_name()
 						. '</a>';
+						
 				} else {
-					return $item->get_name();
+					return '['.get_lang('Evaluation').']&nbsp;&nbsp;'.$item->get_name().$show_message;
 				}
 			// link
 			case 'L' :
@@ -273,7 +281,7 @@ private function build_id_column ($item) {
 				$show_message=$cat->show_message_resource_delete($course_id);
 				
 				$url = $item->get_link();				
-				if (isset($url) && $show_message=='') {
+				if (isset($url) && $show_message===false) {
 					$text = '&nbsp;<a href="' . $item->get_link() . '">'
 							. $item->get_name()
 							. '</a>';

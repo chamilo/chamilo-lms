@@ -1,5 +1,4 @@
 <?php
-// $Id: $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -30,9 +29,11 @@ require_once ('lib/fe/linkform.class.php');
 require_once ('lib/fe/linkaddeditform.class.php');
 api_block_anonymous_users();
 block_students();
-
-$tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
+$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+//selected name of database
+$my_db_name=name_database_by_link($_GET['editlink']);
+$tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_name);
 
 $linkarray = LinkFactory :: load($_GET['editlink']);
 $link = $linkarray[0];

@@ -180,18 +180,25 @@ function get_icon_file_name ($type) {
  * @param int $selectcat id of selected category
  */
 function build_edit_icons_cat($cat, $selectcat) {
-	$visibility_icon= ($cat->is_visible() == 0) ? 'invisible' : 'visible';
-	$visibility_command= ($cat->is_visible() == 0) ? 'set_visible' : 'set_invisible';
-	$modify_icons= '<a href="gradebook_edit_cat.php?editcat=' . $cat->get_id() . '"><img src="../img/edit.gif" border="0" title="' . get_lang('Modify') . '" alt="" /></a>';
-	//$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('DeleteAll') . '" alt="" /></a>';
-	//no move ability for root categories
-	if ($cat->is_movable()) {
-		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
-	} else {
-		//$modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_na.gif" border="0" title="' . get_lang('Move') . '" alt="" />';
+
+	$show_message=$cat->show_message_resource_delete($cat->get_name());
+	if ($show_message===false) {
+		$visibility_icon= ($cat->is_visible() == 0) ? 'invisible' : 'visible';
+		$visibility_command= ($cat->is_visible() == 0) ? 'set_visible' : 'set_invisible';
+		
+		$modify_icons= '<a href="gradebook_edit_cat.php?editcat=' . $cat->get_id() . '"><img src="../img/edit.gif" border="0" title="' . get_lang('Modify') . '" alt="" /></a>';
+		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('DeleteAll') . '" alt="" /></a>';
+		
+		//no move ability for root categories
+		if ($cat->is_movable()) {
+			$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
+		} else {
+			//$modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_na.gif" border="0" title="' . get_lang('Move') . '" alt="" />';
+		}
+		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblecat=' . $cat->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . '"><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="" /></a>';
+		
+		return $modify_icons;
 	}
-	$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblecat=' . $cat->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . '"><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="" /></a>';
-	return $modify_icons;
 }
 /**
  * Builds the course or platform admin icons to edit an evaluation
@@ -199,16 +206,21 @@ function build_edit_icons_cat($cat, $selectcat) {
  * @param int $selectcat id of selected category
  */
 function build_edit_icons_eval($eval, $selectcat) {
-	$visibility_icon= ($eval->is_visible() == 0) ? 'invisible' : 'visible';
-	$visibility_command= ($eval->is_visible() == 0) ? 'set_visible' : 'set_invisible';
-	$modify_icons= '<a href="gradebook_edit_eval.php?editeval=' . $eval->get_id() . '"><img src="../img/edit.gif" border="0" title="' . get_lang('Modify') . '" alt="" /></a>';
-	$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deleteeval=' . $eval->get_id() . '&selectcat=' . $selectcat . '" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('Delete') . '" alt="" /></a>';
-	//$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?moveeval=' . $eval->get_id() . '&selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
-	$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visibleeval=' . $eval->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . '"><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="" /></a>';
-	if (api_is_course_admin() == true){
-		$modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog=' . $eval->get_id() . '&amp;selectcat=' . $selectcat . '"><img src="../img/file_txt_small.gif" border="0" title="' . get_lang('GradebookQualifyLog') . '" alt="" /></a>';
+	$eval->get_course_code();
+	$cat=new Category();
+	$message_eval=$cat->show_message_resource_delete($eval->get_course_code());
+	if ($message_eval===false) {
+		$visibility_icon= ($eval->is_visible() == 0) ? 'invisible' : 'visible';
+		$visibility_command= ($eval->is_visible() == 0) ? 'set_visible' : 'set_invisible';
+		$modify_icons= '<a href="gradebook_edit_eval.php?editeval=' . $eval->get_id() . '"><img src="../img/edit.gif" border="0" title="' . get_lang('Modify') . '" alt="" /></a>';
+		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deleteeval=' . $eval->get_id() . '&selectcat=' . $selectcat . '" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('Delete') . '" alt="" /></a>';
+		//$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?moveeval=' . $eval->get_id() . '&selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
+		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visibleeval=' . $eval->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . '"><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="" /></a>';
+		if (api_is_course_admin() == true){
+			$modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog=' . $eval->get_id() . '&amp;selectcat=' . $selectcat . '"><img src="../img/file_txt_small.gif" border="0" title="' . get_lang('GradebookQualifyLog') . '" alt="" /></a>';
+		}
+		return $modify_icons;
 	}
-	return $modify_icons;
 }
 /**
  * Builds the course or platform admin icons to edit a link
@@ -216,17 +228,24 @@ function build_edit_icons_eval($eval, $selectcat) {
  * @param int $selectcat id of selected category
  */
 function build_edit_icons_link($link, $selectcat) {
-	$visibility_icon= ($link->is_visible() == 0) ? 'invisible' : 'visible';
-	$visibility_command= ($link->is_visible() == 0) ? 'set_visible' : 'set_invisible';
-	$modify_icons= '<a href="gradebook_edit_link.php?editlink=' . $link->get_id() . '"><img src="../img/edit.gif" border="0" title="' . get_lang('Modify') . '" alt="" /></a>';
-	$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletelink=' . $link->get_id() . '&selectcat=' . $selectcat . '" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('Delete') . '" alt="" /></a>';
-	//$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movelink=' . $link->get_id() . '&selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
-	$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblelink=' . $link->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . '"><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="" /></a>';
-	$modify_icons .= '&nbsp;<a href="gradebook_showlog_link.php?visiblelink=' . $link->get_id() . '&amp;selectcat=' . $selectcat . '"><img src="../img/file_txt_small.gif" border="0" title="' . get_lang('GradebookQualifyLog') . '" alt="" /></a>';
-	//if (api_is_course_admin() == true){
-	//$modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog=' . $eval->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . '"><img src="../img/file_txt_small.gif" border="0" title="' . get_lang('GradebookQualifyLog') . '" alt="" /></a>';
-	//}
-	return $modify_icons;
+
+	//$varrr=name_database_by_link($link->get_id());
+	$link->get_course_code();
+	$cat=new Category();
+	$message_link=$cat->show_message_resource_delete($link->get_course_code());
+	if ($message_link===false) {
+		$visibility_icon= ($link->is_visible() == 0) ? 'invisible' : 'visible';
+		$visibility_command= ($link->is_visible() == 0) ? 'set_visible' : 'set_invisible';
+		$modify_icons= '<a href="gradebook_edit_link.php?editlink=' . $link->get_id() . '"><img src="../img/edit.gif" border="0" title="' . get_lang('Modify') . '" alt="" /></a>';
+		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletelink=' . $link->get_id() . '&selectcat=' . $selectcat . '" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('Delete') . '" alt="" /></a>';
+		//$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movelink=' . $link->get_id() . '&selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
+		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblelink=' . $link->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . '"><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="" /></a>';
+		$modify_icons .= '&nbsp;<a href="gradebook_showlog_link.php?visiblelink=' . $link->get_id() . '&amp;selectcat=' . $selectcat . '"><img src="../img/file_txt_small.gif" border="0" title="' . get_lang('GradebookQualifyLog') . '" alt="" /></a>';
+		//if (api_is_course_admin() == true){
+		//$modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog=' . $eval->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . '"><img src="../img/file_txt_small.gif" border="0" title="' . get_lang('GradebookQualifyLog') . '" alt="" /></a>';
+		//}
+		return $modify_icons;
+	}
 }
 
 /**
@@ -286,4 +305,17 @@ function remove_resource_from_course_gradebook($link_id) {
     $sql = "DELETE FROM $l WHERE id = ".(int)$link_id;
     $res = api_sql_query($sql,__FILE__,__LINE__);
     return true;
+}
+/**
+ * return the database name  
+ * @param    int
+ * @return   String
+ */
+function name_database_by_link($id_link) {
+	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+	$res=api_sql_query('SELECT db_name from '.$course_table.' c inner join '.$tbl_grade_links.' l 
+	on c.code=l.course_code WHERE l.id='.$id_link);
+	$my_db_name=Database::fetch_array($res,'ASSOC');
+	return $my_db_name['db_name'];
 }

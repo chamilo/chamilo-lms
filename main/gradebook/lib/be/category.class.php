@@ -620,12 +620,11 @@ class Category implements GradebookItem
         }
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$cats = Category::create_category_objects_from_sql_result($result);
-
 		// course independent categories
-
-		$indcats = Category::load(null,$user_id,$course_code,0,null,$session_id);
-		$cats = array_merge($cats, $indcats);
-
+		if (isset($course_code)) {
+			$indcats = Category::load(null,$user_id,$course_code,0,null,$session_id);
+			$cats = array_merge($cats, $indcats);
+		}
 		return $cats;
 	}
 	

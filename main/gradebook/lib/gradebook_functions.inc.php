@@ -185,7 +185,6 @@ function build_edit_icons_cat($cat, $selectcat) {
 	if ($show_message===false) {
 		$visibility_icon= ($cat->is_visible() == 0) ? 'invisible' : 'visible';
 		$visibility_command= ($cat->is_visible() == 0) ? 'set_visible' : 'set_invisible';
-		
 		$modify_icons= '<a href="gradebook_edit_cat.php?editcat=' . $cat->get_id() . '"><img src="../img/edit.gif" border="0" title="' . get_lang('Modify') . '" alt="" /></a>';
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('DeleteAll') . '" alt="" /></a>';
 		
@@ -315,7 +314,7 @@ function name_database_by_link($id_link) {
 	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 	$res=api_sql_query('SELECT db_name from '.$course_table.' c inner join '.$tbl_grade_links.' l 
-	on c.code=l.course_code WHERE l.id='.$id_link);
+	on c.code=l.course_code WHERE l.id='.$id_link.' OR l.category_id='.$id_link);
 	$my_db_name=Database::fetch_array($res,'ASSOC');
 	return $my_db_name['db_name'];
 }

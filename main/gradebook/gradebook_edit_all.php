@@ -1,4 +1,4 @@
-<?php // $Id: $
+<?php 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -36,8 +36,7 @@ require_once ('lib/fe/gradebooktable.class.php');
 require_once ('lib/fe/displaygradebook.php');
 
 api_block_anonymous_users();
-
-if (!api_is_allowed_to_edit()) {
+if (!api_is_allowed_to_create_course()) {
 	header('Location: /index.php');
 }
 // --------------------------------------------------------------------------------
@@ -74,7 +73,9 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 
 $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-$table_forum_thread=Database::get_course_table(TABLE_FORUM_THREAD);
+//$table_forum_thread=Database::get_course_table(TABLE_FORUM_THREAD);
+$my_db_name=name_database_by_link($_GET['selectcat']);
+$table_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_name);
 /*
 if($_SERVER['REQUEST_METHOD']=='POST'):
 	foreach($_POST['link'] as $key => $value){
@@ -124,11 +125,11 @@ $output='';
 $sql='SELECT * FROM '.$table_link.' WHERE category_id = '.$category_id;
 $result = api_sql_query($sql,__FILE__,__LINE__);
 	while($row = Database ::fetch_array($result)){
-	
 		//update only if value changed
 		if(isset($_POST['link'][$row['id']]) && $_POST['link'][$row['id']] != $row['weight']) {
 			api_sql_query('UPDATE '.$table_link.' SET weight = '."'".trim($_POST['link'][$row['id']])."'".' WHERE id = '.$row['id'],__FILE__,__LINE__);
-			api_sql_query('UPDATE '.$table_forum_thread.' SET thread_weight='.$_POST['link'][$row['id']].' WHERE thread_id='.$row['ref_id']);
+			$sql='UPDATE '.$table_forum_thread.' SET thread_weight='.$_POST['link'][$row['id']].' WHERE thread_id='.$row['ref_id'];
+			api_sql_query($sql);
 			AbstractLink::add_link_log($row['id']);
 			$row['weight'] = trim($_POST['link'][$row['id']]);
 		}

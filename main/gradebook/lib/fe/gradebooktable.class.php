@@ -180,7 +180,13 @@ class GradebookTable extends SortableTable
 			
 			//admins get an edit column
 			if (api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false'))) {
-				$row[] = $this->build_edit_column ($item);
+				$cat=new Category();
+				$show_message=$cat->show_message_resource_delete($item->get_course_code());
+				
+				if ($show_message===false) {
+					$row[] = $this->build_edit_column ($item);
+				}
+				
 			} else {
 			//students get the results and certificates columns
 				if (count($this->evals_links)>0) {
@@ -261,7 +267,7 @@ private function build_id_column ($item) {
 						. '<a href="gradebook_view_result.php?selecteval=' . $item->get_id() . '">'
 						. $item->get_name()
 						. '</a>&nbsp;['.get_lang('Evaluation').']';
-				} elseif (ScoreDisplay :: instance()->is_custom()) {
+				} elseif (ScoreDisplay :: instance()->is_custom() && $show_message===false) {
 					// students can go to the statistics page (if custom display enabled)
 					return '&nbsp;'
 						. '<a href="gradebook_statistics.php?selecteval=' . $item->get_id() . '">'

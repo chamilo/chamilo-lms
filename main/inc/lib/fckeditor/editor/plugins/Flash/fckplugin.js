@@ -1,6 +1,6 @@
 // Register the related commands.
 var dialogPath = FCKConfig.PluginsPath + 'Flash/fck_flash.html';
-var flashDialogCmd = new FCKDialogCommand( FCKLang["DlgFlashTitle"], FCKLang["DlgFlashTitle"], dialogPath, 480, 470 );
+var flashDialogCmd = new FCKDialogCommand( FCKLang["DlgFlashTitle"], FCKLang["DlgFlashTitle"], dialogPath, 540, 470 );
 FCKCommands.RegisterCommand( 'Flash', flashDialogCmd ) ;
 
 // Create the Flash toolbar button.

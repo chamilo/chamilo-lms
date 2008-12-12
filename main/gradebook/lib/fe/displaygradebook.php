@@ -306,9 +306,12 @@ class DisplayGradebook
                 }
                 if ($message_resource===false ) {
                  	$header .= '<td><a href="gradebook_edit_all.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/quiz.gif" alt="' . get_lang('EditAllWeights') . '" align="absmiddle"/> ' . get_lang('EditAllWeights') . '</a>';
-                	$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/stats_access.gif" alt="' . get_lang('FlatView') . '" align="absmiddle"/> ' . get_lang('FlatView') . '</a>';
-					if ($is_course_admin && $message_resource===false) {
-						$header .= '<td style="vertical-align: top;"><a href="gradebook_scoring_system.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() .'"><img src="../img/acces_tool.gif" alt="' . get_lang('ScoreEdit') . '" align="absmiddle"/> ' . get_lang('ScoreEdit') . '</a>';
+                	$my_course_id=api_get_course_id();
+                	if (!isset($my_course_id)) {
+	                	$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/stats_access.gif" alt="' . get_lang('FlatView') . '" align="absmiddle"/> ' . get_lang('FlatView') . '</a>';
+						if ($is_course_admin && $message_resource===false) {
+							$header .= '<td style="vertical-align: top;"><a href="gradebook_scoring_system.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() .'"><img src="../img/acces_tool.gif" alt="' . get_lang('ScoreEdit') . '" align="absmiddle"/> ' . get_lang('ScoreEdit') . '</a>';
+						}
 					}
                 }
 			}

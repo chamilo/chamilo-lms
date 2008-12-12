@@ -50,13 +50,13 @@ class GradebookTable extends SortableTable
 		}
 		$column= 0;
 		if (api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
-			$this->set_header($column++, '', false);
+			$this->set_header($column++, '', false,'','width="25px"');
 		}	
-		$this->set_header($column++, get_lang('Type'));
+		$this->set_header($column++, get_lang('Type'),'','width="35px"');
 		$this->set_header($column++, get_lang('Name'));
 		$this->set_header($column++, get_lang('Description'));
 		if (api_is_allowed_to_create_course() && $_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
-			$this->set_header($column++, get_lang('Weight'));	
+			$this->set_header($column++, get_lang('Weight'),'','width="50px"');	
 		} else {
 			if (empty($_GET['selectcat'])) {	
 				$this->set_header($column++, get_lang('Evaluation'));
@@ -275,6 +275,12 @@ private function build_id_column ($item) {
 						. $item->get_name()
 						. '</a>';
 						
+				} elseif ($show_message===false && !api_is_allowed_to_create_course() && !(ScoreDisplay :: instance()->is_custom())) {
+					return '&nbsp;'
+						. '<a href="gradebook_statistics.php?selecteval=' . $item->get_id() . '">'
+						. $item->get_name()
+						. '</a>';
+					
 				} else {
 					return '['.get_lang('Evaluation').']&nbsp;&nbsp;'.$item->get_name().$show_message;
 				}

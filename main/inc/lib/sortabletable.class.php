@@ -249,6 +249,7 @@ class SortableTable extends HTML_Table
 			$html .= '<td colspan="2">';
 			if (count($this->form_actions) > 0)
 			{
+				$html .= '<br/>';
 				$html .= '<a href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript:setCheckbox(true);return false;">'.get_lang('SelectAll').'</a> - ';
 				$html .= '<a href="?'.$params.'" onclick="javascript:setCheckbox(false);return false;">'.get_lang('UnSelectAll').'</a> ';
 				$html .= '<select name="action">';

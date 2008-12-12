@@ -289,10 +289,9 @@ class DisplayGradebook
                 if ($show_add_link === true) {
 				    //$header .= '<td><a href="gradebook_add_eval.php?'.api_get_cidreq().'"><img src="../img/filenew.gif" alt="' . get_lang('NewEvaluation') . '" /> ' . get_lang('NewEvaluation') . '</a>';
                 }
-
 			} else {
                 if ($show_add_qualification === true && $message_resource===false) {
-    				$header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '" ><img src="../img/folder_new.gif" alt="' . get_lang('NewSubCategory') . '" align="absmiddle" /> ' . get_lang('NewSubCategory') . '</a></td>';
+    				//$header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '" ><img src="../img/folder_new.gif" alt="' . get_lang('NewSubCategory') . '" align="absmiddle" /> ' . get_lang('NewSubCategory') . '</a></td>';
                 }
                 if ($show_add_link === true && $message_resource==false) {
     				$header .= '<td><a href="gradebook_add_eval.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '" ><img src="../img/filenew.gif" alt="' . get_lang('NewEvaluation') . '" align="absmiddle" /> ' . get_lang('NewEvaluation') . '</a>&nbsp;';

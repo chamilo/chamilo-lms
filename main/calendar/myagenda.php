@@ -1,4 +1,4 @@
-<?php //$Id: myagenda.php 16978 2008-11-27 11:04:12Z pcool $
+<?php //$Id: myagenda.php 17254 2008-12-12 17:17:19Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -278,10 +278,12 @@ if (isset ($_user['user_id']))
 			store_personal_item($_POST['frm_day'], $_POST['frm_month'], $_POST['frm_year'], $_POST['frm_hour'], $_POST['frm_minute'], $_POST['frm_title'], $_POST['frm_content'], (int)$_GET['id']);
 			if ($_GET['id'])
 			{
+				echo '<br />';
 				Display :: display_normal_message(get_lang("PeronalAgendaItemEdited"));
 			}
 			else
 			{
+				echo '<br />';
 				Display :: display_normal_message(get_lang("PeronalAgendaItemAdded"));
 			}
 			show_personal_agenda();
@@ -291,6 +293,7 @@ if (isset ($_user['user_id']))
 			break;
 		case "delete_personal_agenda_item" :
 			delete_personal_agenda((int)$_GET['id']);
+			echo '<br />';
 			Display :: display_normal_message(get_lang('PeronalAgendaItemDeleted'));
 			show_personal_agenda();
 			break;

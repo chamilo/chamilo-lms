@@ -283,7 +283,7 @@ if (isset ($_POST['action'])) {
 	}
 	else {
 		switch ($_POST['action']) {
-			case 'delete' :
+			case 'deleted' :
 				$number_of_deleted_categories= 0;
 				$number_of_deleted_evaluations= 0;
 				$number_of_deleted_links= 0;

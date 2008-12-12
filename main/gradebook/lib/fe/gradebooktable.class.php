@@ -65,16 +65,14 @@ class GradebookTable extends SortableTable
 			$this->set_header($column++, get_lang('Weight'));	
 			
 			}	
-		}		 
-							
+		}		 					
 		$this->set_header($column++, get_lang('Date'),true, 'width="100"');				
-		
 		//admins get an edit column
 		if (api_is_allowed_to_create_course() && $_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 			$this->set_header($column++, get_lang('Modify'), false, 'width="100"');
 			//actions on multiple selected documents
 			$this->set_form_actions(array (
-				'delete' => get_lang('DeleteSelected'),
+				'deleted' => get_lang('DeleteSelected'),
 				'setvisible' => get_lang('SetVisible'),
 				'setinvisible' => get_lang('SetInvisible')));
 		} else {

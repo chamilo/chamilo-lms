@@ -262,14 +262,14 @@ class DisplayGradebook
             } else {
             	$header .= '<td></td>';
             }
-			if ($is_course_admin && $message_resource===false) {
+			if ($is_course_admin && $message_resource===false && $_GET['selectcat']!=0) {
 				$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/stats_access.gif" alt="' . get_lang('FlatView') . '" /> ' . get_lang('FlatView') . '</a>';
 				if ($is_platform_admin && $message_resource===false) {
 					$header .= '<td style="vertical-align: top;"><a href="gradebook_scoring_system.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() .'"><img src="../img/acces_tool.gif" alt="' . get_lang('ScoreEdit') . '" /> ' . get_lang('ScoreEdit') . '</a>';
-				}	
+				}
 			} elseif (!(isset ($_GET['studentoverview']))) {
 				if ( $message_resource===false ) {
-					$header .= '<td style="vertical-align: top;"><a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&selectcat=' . $catobj->get_id() . '"><img src="../img/stats_access.gif" alt="' . get_lang('FlatView') . '" /> ' . get_lang('FlatView') . '</a>';
+					//$header .= '<td style="vertical-align: top;"><a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&selectcat=' . $catobj->get_id() . '"><img src="../img/stats_access.gif" alt="' . get_lang('FlatView') . '" /> ' . get_lang('FlatView') . '</a>';
 				}
 			} else {
 				$header .= '<td style="vertical-align: top;"><a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&exportpdf=&selectcat=' . $catobj->get_id() . '" target="_blank"><img src="../img/calendar_up.gif" alt="' . get_lang('ExportPDF') . '" /> ' . get_lang('ExportPDF') . '</a>';
@@ -283,10 +283,10 @@ class DisplayGradebook
 		if (($is_course_admin) && (!isset ($_GET['search']))) {
 			if ($selectcat == '0') {
                 if ($show_add_qualification === true) {
-				    $header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat=0"><img src="../img/folder_new.gif" alt="' . get_lang('NewCategory') . '" /> ' . get_lang('NewCategory') . '</a></td>';
+				   // $header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat=0"><img src="../img/folder_new.gif" alt="' . get_lang('NewCategory') . '" /> ' . get_lang('NewCategory') . '</a></td>';
                 }
                 if ($show_add_link === true) {
-				    $header .= '<td><a href="gradebook_add_eval.php?'.api_get_cidreq().'"><img src="../img/filenew.gif" alt="' . get_lang('NewEvaluation') . '" /> ' . get_lang('NewEvaluation') . '</a>';
+				    //$header .= '<td><a href="gradebook_add_eval.php?'.api_get_cidreq().'"><img src="../img/filenew.gif" alt="' . get_lang('NewEvaluation') . '" /> ' . get_lang('NewEvaluation') . '</a>';
                 }
 
 			} else {
@@ -298,7 +298,7 @@ class DisplayGradebook
                     $cats= Category :: load($selectcat);
                     if ($cats[0]->get_course_code() != null && $message_resource===false) {
                         //$header .= '<td><a href="gradebook_add_link.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/link.gif" alt="' . get_lang('MakeLink') . '" align="absmiddle" /> ' . get_lang('MakeLink') . '</a>';
-                        $header .= '<td><a href="gradebook_add_link.php?course_code='.api_get_course_id().'&selectcat=' . $catobj->get_id() . '"><img src="../img/link.gif" alt="' . get_lang('MakeLink') . '" align="absmiddle" /> ' . get_lang('MakeLink') . '</a>&nbsp;';
+                        $header .= '<td><a href="gradebook_add_link.php?course_code='.$cats[0]->get_course_code().'&selectcat=' . $catobj->get_id() . '"><img src="../img/link.gif" alt="' . get_lang('MakeLink') . '" align="absmiddle" /> ' . get_lang('MakeLink') . '</a>&nbsp;';
                         
                     } else {
                         $header .= '<td><a href="gradebook_add_link_select_course.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/link.gif" alt="' . get_lang('MakeLink') . '" align="absmiddle" /> ' . get_lang('MakeLink') . '</a>&nbsp;';

@@ -163,8 +163,9 @@ class GradebookTable extends SortableTable
 					$item_total=0;				
 					for ($count=0; $count < count($evals_links); $count++) {						
 								$item = $evals_links[$count];
-								$score = $item->calc_score($stud_id);								
-								$item_value+=$score[0]/$score[1]*$item->get_weight();
+								$score = $item->calc_score($stud_id);
+								$score_denom=($score[1]*$item->get_weight()==0) ? 1 : $score[1]*$item->get_weight();								
+								$item_value+=$score[0]/$score_denom;
 								$item_total+=$item->get_weight();
 					}			
 					$item_value = number_format($item_value, 2, '.', ' ');	

@@ -271,7 +271,8 @@ class ScoreDisplay
 	}
 
 	private function display_custom ($score) {
-		$scaledscore = $score[0] / $score[1];
+		$my_score_denom= ($score[1]==0)?1:$score[1];
+		$scaledscore = $score[0] / $my_score_denom;
 		if ($this->upperlimit_included) {
 			foreach ($this->custom_display_conv as $displayitem) {
 				if ($scaledscore <= $displayitem['score']) {
@@ -381,7 +382,8 @@ class ScoreDisplay
 	}
 
 	private function get_color_display_start_tag($score) {
-		if ($this->coloring_enabled && ($score[0]/$score[1]) < ($this->color_split_value / 100)) {
+		$my_score_denom=($score[1]==0)?1:$score[1];
+		if ($this->coloring_enabled && ($score[0]/$my_score_denom) < ($this->color_split_value / 100)) {
 			return '<font color="red">';
 		} else {
 			return '';	
@@ -389,7 +391,8 @@ class ScoreDisplay
 	}
 
 	private function get_color_display_end_tag($score) {
-		if ($this->coloring_enabled && ($score[0]/$score[1]) < ($this->color_split_value / 100)) {
+		$my_score_denom=($score[1]==0)?1:$score[1];
+		if ($this->coloring_enabled && ($score[0]/$my_score_denom) < ($this->color_split_value / 100)) {
 			return '</font>';
 		} else {
 			return '';

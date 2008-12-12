@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 16725 2008-11-12 15:43:21Z pcool $
+<?php // $Id: create_document.php 17244 2008-12-12 13:10:32Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -57,7 +57,7 @@ function InnerDialogLoaded()
 	var temp=false;
 	var temp2=false;
 	var use_document_title='.api_get_setting('use_document_title').';
-	var load_default_template = true;
+	var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true' ) .';
 
 	function launch_templates()
 	{		

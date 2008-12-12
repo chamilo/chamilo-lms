@@ -10,7 +10,8 @@ include_once('global.inc.php');
 
 include(api_get_path(SYS_CODE_PATH).'document/document.inc.php');
 
-if(!$is_in_admin){
+//if(!$is_in_admin){
+if(!api_is_platform_admin()){
 	api_protect_course_script();
 }
 
@@ -46,8 +47,30 @@ $sType = strtolower($sType);
 
 $course_dir   = $_course['path']."/document/".$sType;
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
-$base_work_dir = $sys_course_path.$course_dir;
-$http_www = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/'.$sType;
+
+//$base_work_dir = $sys_course_path.$course_dir;
+//$http_www = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/'.$sType;
+//The user is in a course
+if(isset($_SESSION["_course"]["sysCode"]))
+{
+	if(api_is_allowed_to_edit())
+	{
+		$base_work_dir = api_get_path(SYS_COURSE_PATH).$_SESSION["_course"]["path"]."/document/".$sType;
+		$http_www = api_get_path(WEB_COURSE_PATH).$_SESSION["_course"]["path"]."/document/".$sType;
+	}
+	else
+	{
+		$base_work_dir = api_get_path(SYS_COURSE_PATH).$_SESSION["_course"]["path"]."/upload/";
+		$http_www = api_get_path(WEB_COURSE_PATH).$_SESSION["_course"]["path"]."/upload/";
+	}
+}
+//Out of any course (admin)
+else
+{
+	$base_work_dir = $_configuration['root_sys'].'main/default_course_document/'.$sType;
+	$http_www = $_configuration['root_web'].'main/default_course_document/'.$sType;
+}
+
 $dbl_click_id = 0; // used to avoid double-click
 $is_allowed_to_edit = api_is_allowed_to_edit();
 
@@ -281,8 +304,7 @@ function getlist ($directory) {
 
 			$path = $directory . $filename;
 
-			if ($filename != '..')
-			if ($filename != '.')
+			if ($filename != '.' && $filename != '..' && $filename != '.svn')
 			{
 				$file = array(
 					"lastedit_date" =>date ("Y-m-d H:i:s", filemtime($path)),
@@ -291,23 +313,18 @@ function getlist ($directory) {
 					"title" => basename($path),
 					"filetype" => filetype($path),
 					"size" => filesize ($path)
-			);
+				);
 
-
-					$files[] = $file;
-
+				$files[] = $file;
 			}
-
 		}
 
 		return $files;
-
 	} 
 	else
 	{
 		return false;
 	}
-
 }
 ?>
 <script type="text/javascript">

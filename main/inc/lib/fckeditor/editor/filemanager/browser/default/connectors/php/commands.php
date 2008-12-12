@@ -64,7 +64,7 @@ function GetFoldersAndFiles( $resourceType, $currentFolder )
 
 	while ( $sFile = readdir( $oCurrentFolder ) )
 	{
-		if ( $sFile != '.' && $sFile != '..' )
+		if ( $sFile != '.' && $sFile != '..' && $sFile != '.svn')
 		{
 			if ( is_dir( $sServerDir . $sFile ) )
 				$aFolders[] = '<Folder name="' . ConvertToXmlAttribute( $sFile ) . '" />' ;

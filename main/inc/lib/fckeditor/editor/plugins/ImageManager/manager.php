@@ -13,7 +13,7 @@
 	$dirs = $manager->getDirs();
 	$var = explode('/',$_GET['base_url_alt']);
 	// if the base_url_alt parameter there is a default_course_document we change the allow upload parameter	
-	if ($var[count($var)-2] == 'default_course_document')
+	if (($var[count($var)-2] == 'default_course_document') && !api_is_platform_admin())
 	{ 
 		$IMConfig['allow_upload']=false;
 	}	

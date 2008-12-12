@@ -3386,8 +3386,11 @@ function send_notifications($forum_id=0, $thread_id=0, $post_id=0) {
  * @since May 2008, dokeos 1.8.5
  */
 function get_notifications_of_user($user_id = 0, $force = false) {
-	global $_course; 
-	
+	global $_course;
+	$course = api_get_course_id();
+	if (empty($course) OR $course==-1) {
+		return null;
+	}
 	if ($user_id == 0) {
 		global $_user;
 		$user_id = $_user['user_id'];

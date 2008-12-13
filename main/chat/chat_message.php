@@ -41,7 +41,7 @@ define('FRAME','message');
 $language_file = array ('chat');
 
 require('../inc/global.inc.php');
-api_protect_course_script();
+
 $course=api_get_course_id();
 
 /////
@@ -81,6 +81,10 @@ function close_chat_window() {
 if(empty($_user['user_id']))
 {	
 	echo '<script languaje="javascript"> close_chat_window() </script>';	
+}
+else
+{
+	api_protect_course_script();
 }
 
 // if we have the session set up 

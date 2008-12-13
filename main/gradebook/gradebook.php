@@ -59,10 +59,12 @@ $filter_warning_msg = true;
 // -                                  ACTIONS                                     -
 // --------------------------------------------------------------------------------
 
-$my_selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
-$my_db_name   = name_database_by_link($my_selectcat);
-$tbl_forum_thread =  Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_name);
-$tbl_grade_links  =  Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+$my_selectcat =isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
+if ($my_selectcat!='') {
+	$my_db_name       = name_database_by_link($my_selectcat);
+	$tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_name);
+	$tbl_grade_links  = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);	
+}
 
 //this is called when there is no data for the course admin
 if (isset ($_GET['createallcategories'])) {

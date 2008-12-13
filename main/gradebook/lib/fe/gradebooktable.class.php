@@ -50,7 +50,7 @@ class GradebookTable extends SortableTable
 		}
 		$column= 0;
 		if (api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
-			$this->set_header($column++, '', false,'','width="25px"');
+			$this->set_header($column++,'','','width="25px"');
 		}	
 		$this->set_header($column++, get_lang('Type'),'','width="35px"');
 		$this->set_header($column++, get_lang('Name'));
@@ -66,7 +66,7 @@ class GradebookTable extends SortableTable
 			
 			}	
 		}		 					
-		$this->set_header($column++, get_lang('Date'),true, 'width="100"');				
+		$this->set_header($column++, get_lang('Date'),true, 'width="100px"');				
 		//admins get an edit column
 		if (api_is_allowed_to_create_course() && $_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 			$this->set_header($column++, get_lang('Modify'), false, 'width="100"');

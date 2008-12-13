@@ -1702,3 +1702,11 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 .resource-deleted {
 	color:#990000;
 }
+.Gradebook-table-header {
+    border: 1px solid rgb(153, 153, 153); 
+    background: rgb(240, 240, 240) none repeat scroll 0% 0%;
+}
+.Gradebook-table-body {
+    border: 1px solid rgb(153, 153, 153); 
+    background: rgb(255, 255, 255) none repeat scroll 0% 0%;    
+}

@@ -43,7 +43,7 @@ $sql="SELECT le.name,le.description,le.date_log,le.weight,le.visible,le.type,us.
 $result=api_sql_query($sql);
 	echo '<table width="100%" border="0" >';
 		echo '<tr>';
-		echo '<td align="center" style="Gradebook-table-header"><strong>'.get_lang('GradebookNameLog').'</strong></td>';
+		echo '<td align="center" class="Gradebook-table-header"><strong>'.get_lang('GradebookNameLog').'</strong></td>';
 		echo '<td align="center" class="Gradebook-table-header"><strong>'.get_lang('GradebookDescriptionLog').'</strong></td>';
 		echo '<td align="center" class="Gradebook-table-header"><strong>'.get_lang('Date').'</strong></td>';
 		echo '<td align="center" class="Gradebook-table-header"><strong>'.get_lang('Weight').'</strong></td>';

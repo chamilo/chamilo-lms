@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 17254 2008-12-12 17:17:19Z cfasanando $
+<?php //$Id: agenda.php 17266 2008-12-13 15:51:49Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -403,6 +403,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			{ // a coach can only delete an element belonging to his session
 				$ann_id = store_agenda_item_as_announcement($id);
 				$tool_group_link = (isset($_SESSION['toolgroup'])?'&toolgroup='.$_SESSION['toolgroup']:'');
+				echo '<br />';
 				Display::display_normal_message(get_lang('CopiedAsAnnouncement').'<a href="../announcements/announcements.php?id='.$ann_id.$tool_group_link.'">'.get_lang('NewAnnouncement').'</a>', false);
 			}
 			if (api_get_setting('display_upcoming_events') == 'true') {

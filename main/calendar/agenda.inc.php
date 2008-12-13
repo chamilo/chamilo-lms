@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17254 2008-12-12 17:17:19Z cfasanando $
+<?php //$Id: agenda.inc.php 17266 2008-12-13 15:51:49Z cfasanando $
 
 /*
 ==============================================================================
@@ -2147,7 +2147,7 @@ function show_add_form($id = '')
 	<!-- the title -->
 	<tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr>
 	<tr class="title">
-		<td>
+		<td colspan="2" align="left">
 		<span style="font-weight: bold;"><?php echo (isset($id) AND $id<>'')?get_lang('ModifyCalendarItem'):get_lang("AddCalendarItem"); ?></span>
 		</td>
         <td colspan="2" align="right">
@@ -2172,7 +2172,7 @@ function show_add_form($id = '')
 	{
 		?>
 		<tr class="subtitle">
-			<td valign="top" colspan="3">
+			<td valign="top" colspan="4">
 				<?php
 				// this variable defines if the course administrator can send a message to a specific user / group
 				// or not
@@ -2198,230 +2198,207 @@ function show_add_form($id = '')
 	?>
 
 	<!-- START date and time -->
-	<tr class="subtitle">
-		<td>
+<tr>
+<div>
+<table>
 
-			<table cellpadding="0" cellspacing="0" border="0" width="100%">
-
-			<tr><td>
-				<!-- date: 1 -> 31 -->
-				<?php echo get_lang('StartDate').": \n"; ?>
-			</td>
-
-			<td>
-
-			<select name="fday" onchange="javascript:document.new_calendar_item.end_fday.value=this.value;">
-				<?php
-					// small loop for filling all the dates
-					// 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
-					echo "\n";
-					foreach (range(1, 31) as $i)
-					{
-						// values have to have double digits
-						$value = ($i <= 9 ? '0'.$i : $i );
-						// the current day is indicated with [] around the date
-						if ($value==$day)
-						{
-							echo "\t\t\t\t <option value=\"".$value."\" selected> ".$i." </option>\n";
-						}
-						else
-						{
-							echo "\t\t\t\t<option value=\"$value\">$i</option>\n";
-						}
-					}
-					 ?>
-			</select>
-
-			<!-- month: january -> december -->
-			<select name="fmonth" onchange="javascript:document.new_calendar_item.end_fmonth.value=this.value;">
-				<?php
-					echo "\n";
-					for ($i=1; $i<=12; $i++)
-					{
-						// values have to have double digits
-						if ($i<=9)
-						{
-							$value="0".$i;
-						}
-						else
-						{
-							$value=$i;
-						}
-						if ($value==$month)
-						{
-							echo "\t\t\t\t <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n";
-						}
-						else
-						{
-							echo "\t\t\t\t <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n";
-						}
-					} ?>
-			</select>
-
-			<select name="fyear" onchange="javascript:document.new_calendar_item.end_fyear.value=this.value;">
-				<option value="<?php echo ($year-1); ?>"><?php echo ($year-1); ?></option>
-				<option value="<?php echo $year; ?>" selected="selected"><?php echo $year; ?></option>
-				<?php
-					echo "\n";
-					for ($i=1; $i<=5; $i++)
-					{
-						$value=$year+$i;
-						echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
-					} ?>
-			</select>
-			<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif'); ?></a>
-			</td></tr></table>
-		</td>
-		<td>
-
-			<table cellpadding="0" cellspacing="0" border="0" width="100%">
-
-			<tr><td>
-				<!-- date: 1 -> 31 -->
-				<?php echo get_lang('StartTime').": \n"; ?>
-			</td>
-
-			<td>
-
-			<select name="fhour" onchange="javascript:document.new_calendar_item.end_fhour.value=this.value;">
-				<!-- <option value="--">--</option> -->
-				<?php
-					echo "\n";
-					foreach (range(0, 23) as $i)
-					{
-						// values have to have double digits
-						$value = ($i <= 9 ? '0'.$i : $i );
-						// the current hour is indicated with [] around the hour
-						if ($hours==$value)
-						{
-							echo "\t\t\t\t<option value=\"".$value."\" selected> ".$value." </option>\n";
-						}
-						else
-						{
-							echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
-						}
-					} ?>
-			</select>
-			<?php echo get_lang('HourMinuteDivider'); ?>
-			<select name="fminute" onchange="javascript:document.new_calendar_item.end_fminute.value=this.value;">
-				<!-- <option value="<?php echo $minutes ?>"><?php echo $minutes; ?></option> -->
-				<!-- <option value="--">--</option> -->
-				<?php
-					foreach (range(0, 59) as $i)
-					{
-						// values have to have double digits
-						$value = ($i <= 9 ? '0'.$i : $i );
-						echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
-					} ?>
-			</select>
-			</td></tr></table>
-		</td>
-	</tr>
-	<!-- END date and time -->
-
-	<tr class="subtitle">
-		<td>
-
-			<table cellpadding="0" cellspacing="0" border="0" width="100%">
-
-			<tr><td>
-				<!-- date: 1 -> 31 -->
-				<?php echo get_lang('EndDate').": \n"; ?>
-			</td>
-
-			<td>
-
-			<select name="end_fday">
-				<?php
-					// small loop for filling all the dates
-					// 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
-					echo "\n";
-					foreach (range(1, 31) as $i)
-					{
-						// values have to have double digits
-						$value = ($i <= 9 ? '0'.$i : $i );
-						// the current day is indicated with [] around the date
-						if ($value==$end_day)
-							{ echo "\t\t\t\t <option value=\"".$value."\" selected> ".$i." </option>\n";}
-						else
-							{ echo "\t\t\t\t <option value=\"".$value."\">".$i."</option>\n"; }
-						}?>
-				</select>
-
-				<!-- month: january -> december -->
-				<select name="end_fmonth">
+				<td >	
+					<!-- date: 1 -> 31 -->
+					<?php echo get_lang('StartDate').": \n"; ?>
+				</td>
+				<td >
+					<select name="fday" onchange="javascript:document.new_calendar_item.end_fday.value=this.value;">
+							<?php
+							// small loop for filling all the dates
+							// 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
+							echo "\n";
+							foreach (range(1, 31) as $i)
+											{
+											// values have to have double digits
+											$value = ($i <= 9 ? '0'.$i : $i );
+											// the current day is indicated with [] around the date
+											if ($value==$day)
+											{
+												echo "\t\t\t\t <option value=\"".$value."\" selected> ".$i." </option>\n";
+											}
+											else
+											{
+												echo "\t\t\t\t<option value=\"$value\">$i</option>\n";
+											}
+										}
+										 ?>
+					</select>
+					<!-- month: january -> december -->
+					<select name="fmonth" onchange="javascript:document.new_calendar_item.end_fmonth.value=this.value;">
 					<?php
-					echo "\n";
-					foreach (range(1, 12) as $i)
-					{
-						// values have to have double digits
-						$value = ($i <= 9 ? '0'.$i : $i );
-						if ($value==$end_month)
-							{ echo "\t\t\t\t <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n"; }
-						else
-							{ echo "\t\t\t\t <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n"; }
-						}?>
-				</select>
+											echo "\n";
+											for ($i=1; $i<=12; $i++)
+											{
+												// values have to have double digits
+												if ($i<=9)
+												{
+													$value="0".$i;
+												}
+												else
+												{
+													$value=$i;
+												}
+												if ($value==$month)
+												{
+													echo "\t\t\t\t <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n";
+												}
+												else
+												{
+													echo "\t\t\t\t <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n";
+												}
+											} ?>
+					</select>
+					<select name="fyear" onchange="javascript:document.new_calendar_item.end_fyear.value=this.value;">
+										<option value="<?php echo ($year-1); ?>"><?php echo ($year-1); ?></option>
+											<option value="<?php echo $year; ?>" selected="selected"><?php echo $year; ?></option>
+											<?php
+												echo "\n";
+												for ($i=1; $i<=5; $i++)
+												{
+													$value=$year+$i;
+													echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
+												} ?>
+					</select>
+					<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif'); ?></a>
+				</td>
+				<td >
+						<!-- date: 1 -> 31 -->
+						<?php echo get_lang('StartTime').": "; ?>
+				</td>
+				<td >
 
-				<select name="end_fyear">
-					<option value="<?php echo ($end_year-1) ?>"><?php echo ($end_year-1) ?></option>
-					<option value="<?php echo $end_year ?>" selected> <?php echo $end_year ?> </option>
-					<?php
-					echo "\n";
-					for ($i=1; $i<=5; $i++)
-					{
-						$value=$end_year+$i;
-						echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
-					} ?>
-			</select>
-			<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif'); ?></a>
-			</td></tr></table>
-		</td>
+						<select name="fhour" onchange="javascript:document.new_calendar_item.end_fhour.value=this.value;">
+							<!-- <option value="--">--</option> -->
+							<?php
+								echo "\n";
+								foreach (range(0, 23) as $i)
+								{
+									// values have to have double digits
+									$value = ($i <= 9 ? '0'.$i : $i );
+									// the current hour is indicated with [] around the hour
+									if ($hours==$value)
+									{
+										echo "\t\t\t\t<option value=\"".$value."\" selected> ".$value." </option>\n";
+									}
+									else
+									{
+										echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
+									}
+								} ?>
+						</select>
+						
+						<select name="fminute" onchange="javascript:document.new_calendar_item.end_fminute.value=this.value;">
+							<!-- <option value="<?php echo $minutes ?>"><?php echo $minutes; ?></option> -->
+							<!-- <option value="--">--</option> -->
+							<?php
+								foreach (range(0, 59) as $i)
+								{
+									// values have to have double digits
+									$value = ($i <= 9 ? '0'.$i : $i );
+									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
+								} ?>
+						</select>
+					</td>
 
-		<td>
+</div>
+</tr>
+			<!-- END date and time -->
+<tr>
+<div>
 
-			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+					<td >			
+							<!-- date: 1 -> 31 -->
+							<?php echo get_lang('EndDate').": "; ?>
+					</td>
+					<td  >
+						<select name="end_fday">
+							<?php
+								// small loop for filling all the dates
+								// 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
+								echo "\n";
+								foreach (range(1, 31) as $i)
+								{
+									// values have to have double digits
+									$value = ($i <= 9 ? '0'.$i : $i );
+									// the current day is indicated with [] around the date
+									if ($value==$end_day)
+										{ echo "\t\t\t\t <option value=\"".$value."\" selected> ".$i." </option>\n";}
+									else
+										{ echo "\t\t\t\t <option value=\"".$value."\">".$i."</option>\n"; }
+									}?>
+						</select>
+							<!-- month: january -> december -->
+						<select name="end_fmonth">
+								<?php
+								echo "\n";
+								foreach (range(1, 12) as $i)
+								{
+									// values have to have double digits
+									$value = ($i <= 9 ? '0'.$i : $i );
+									if ($value==$end_month)
+										{ echo "\t\t\t\t <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n"; }
+									else
+										{ echo "\t\t\t\t <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n"; }
+									}?>
+						</select>			
+						<select name="end_fyear">
+								<option value="<?php echo ($end_year-1) ?>"><?php echo ($end_year-1) ?></option>
+								<option value="<?php echo $end_year ?>" selected> <?php echo $end_year ?> </option>
+								<?php
+								echo "\n";
+								for ($i=1; $i<=5; $i++)
+								{
+									$value=$end_year+$i;
+									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
+								} ?>
+						</select>
+						<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif'); ?></a>
+					</td>
 
-			<tr><td>
-				<!-- date: 1 -> 31 -->
-				<?php echo get_lang('EndTime').": \n"; ?>
-			</td>
+				<td >
+							<!-- date: 1 -> 31 -->
+							<?php echo get_lang('EndTime').": \n"; ?>
+				</td >
+				<td >
+						<select name="end_fhour">
+							<!-- <option value="--">--</option> -->
+							<?php
+								echo "\n";
+								foreach (range(0, 23) as $i)
+								{
+									// values have to have double digits
+									$value = ($i <= 9 ? '0'.$i : $i );
+									// the current hour is indicated with [] around the hour
+									if ($end_hours==$value)
+										{ echo "\t\t\t\t<option value=\"".$value."\" selected> ".$value." </option>\n"; }
+									else
+										{ echo "\t\t\t\t<option value=\"".$value."\"> ".$value." </option>\n"; }
+								} ?>
+						</select>
+						
+						<select name="end_fminute">
+							<!-- <option value="<?php echo $end_minutes; ?>"><?php echo $end_minutes; ?></option> -->
+							<!-- <option value="--">--</option> -->
+							<?php
+								foreach (range(0, 59) as $i)
+								{
+									// values have to have double digits
+									$value = ($i <= 9 ? '0'.$i : $i );
+									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
+								} ?>
+						</select>
+						
+						<br>
+				</td>
+</div>
+</tr>
 
-			<td>
-
-			<select name="end_fhour">
-				<!-- <option value="--">--</option> -->
-				<?php
-					echo "\n";
-					foreach (range(0, 23) as $i)
-					{
-						// values have to have double digits
-						$value = ($i <= 9 ? '0'.$i : $i );
-						// the current hour is indicated with [] around the hour
-						if ($end_hours==$value)
-							{ echo "\t\t\t\t<option value=\"".$value."\" selected> ".$value." </option>\n"; }
-						else
-							{ echo "\t\t\t\t<option value=\"".$value."\"> ".$value." </option>\n"; }
-					} ?>
-			</select>
-			<?php echo get_lang('HourMinuteDivider'); ?>
-			<select name="end_fminute">
-				<!-- <option value="<?php echo $end_minutes; ?>"><?php echo $end_minutes; ?></option> -->
-				<!-- <option value="--">--</option> -->
-				<?php
-					foreach (range(0, 59) as $i)
-					{
-						// values have to have double digits
-						$value = ($i <= 9 ? '0'.$i : $i );
-						echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
-					} ?>
-			</select>
-			</td></tr>
-		</table>
-		</td>
-	</tr>
-
-	<tr class="subtitle">
+<tr class="subtitle">
 		<td colspan="3" valign="top"><hr noshade="noshade" color="#cccccc" /><?php echo get_lang('ItemTitle'); ?> :
 			<!--<div style='margin-left: 80px'><textarea name="title" cols="50" rows="2" wrap="virtual" style="vertical-align:top; width:75%; height:50px;"><?php  if (isset($title)) echo $title; ?></textarea></div>-->
 			<input type="text" size="60" name="title" value="<?php  if (isset($title)) echo $title; ?>" />
@@ -2516,7 +2493,7 @@ function show_add_form($id = '')
 	?>
 	   <!-- Attachment file -->
 	   <tr>
-		<td>
+		<td colspan="4">
 			<div>
 				<div class="label">&nbsp;
 				</div>
@@ -2585,7 +2562,7 @@ function show_add_form($id = '')
 			      <td colspan="2" />
 			    </tr>
 			    <tr>
-			      <td><label for="repeat_end_day"><?php echo get_lang('RepeatEnd');?></label><br />
+			      <td><label for="repeat_end_day"><?php echo get_lang('RepeatEnd');?></label>
 			            <select name="repeat_end_day">
 			                <?php
 			                    // small loop for filling all the dates

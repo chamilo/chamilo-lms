@@ -1037,6 +1037,7 @@ function insert_all_directory_in_course_table($base_work_dir)
 
 	for($i=0;$i<count($only_dir);$i++) {		
 		global $work_table;
+        $sql_insert_all= "INSERT INTO " . $work_table . " SET url = '" . $only_dir[$i] . "', " .
 							  "title        = '',
 			                   description 	= '',
 			                   author      	= '',
@@ -1044,7 +1045,8 @@ function insert_all_directory_in_course_table($base_work_dir)
 							   accepted		= '1',
 							   filetype		= 'folder',
 							   post_group_id = '0',
-							   sent_date	= '0000-00-00 00:00:00' ";				  
+							   sent_date	= '0000-00-00 00:00:00' ";
+        //api_sql_query($sql_insert_all, __FILE__, __LINE__);
 	}	
 }
 

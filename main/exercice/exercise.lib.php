@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 16726 2008-11-12 15:44:48Z pcool $
+<?php // $Id: exercise.lib.php 17265 2008-12-13 14:00:10Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 16726 2008-11-12 15:44:48Z pcool $
+* 	@version $Id: exercise.lib.php 17265 2008-12-13 14:00:10Z ivantcholakov $
 */
 
 
@@ -99,7 +99,8 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 			$oFCKeditor->Config['IMUploadPath'] = 'upload/test/';
 			$oFCKeditor->ToolbarSet = "Test";
-			$oFCKeditor->Width  = '80%';
+			//$oFCKeditor->Width  = '80%';
+			$oFCKeditor->Width  = '100%';
 			$oFCKeditor->Height = '300';
 			$oFCKeditor->Value	= '' ;
 

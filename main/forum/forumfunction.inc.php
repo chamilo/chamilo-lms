@@ -348,10 +348,12 @@ function show_add_forum_form($inputvalues=array()) {
 		}
 		Security::clear_token();
 	} else {
+		
 			$token = Security::get_token();
 			$form->addElement('hidden','sec_token');
 			$form->setConstants(array('sec_token' => $token));
 			$form->display();
+			
 	}
 }
 
@@ -609,14 +611,32 @@ function store_forum($values) {
 */
 function delete_forum_forumcategory_thread($content, $id) {
 	global $_course;
+	$table_forums = Database::get_course_table(TABLE_FORUM);
+	$table_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
 
 	if ($content=='forumcategory') {
 		$tool_constant=TOOL_FORUM_CATEGORY;
 		$return_message=get_lang('ForumCategoryDeleted');
+		
+		$sql="SELECT forum_id FROM ". $table_forums . "WHERE forum_category='".$id."'";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$row = Database::fetch_array($result);
+		foreach ($row as $arr_forum) {
+			$forum_id = $arr_forum['forum_id'];
+			api_item_property_update($_course,'forum',$forum_id,'delete',api_get_user_id());			
+		}	
 	}
 	if ($content=='forum') {
 		$tool_constant=TOOL_FORUM;
 		$return_message=get_lang('ForumDeleted');
+		
+		$sql="SELECT thread_id FROM". $table_forum_thread . "WHERE forum_id='".$id."'";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$row = mysql_fetch_array($result);
+		foreach ($row as $arr_forum) {
+			$forum_id = $arr_forum['thread_id'];
+			api_item_property_update($_course,'forum_thread',$forum_id,'delete',api_get_user_id());			
+		}
 	}
 	if ($content=='thread') {
 		$tool_constant=TOOL_FORUM_THREAD;

@@ -1025,7 +1025,7 @@ CREATE TABLE gradebook_linkeval_log (
 	id_linkeval_log int NOT NULL,
 	name text,
 	description text,
-	date_log datetime default '0000-00-00 00:00:00',
+	date_log int,
 	weight smallint default NULL,
 	visible tinyint default NULL,
 	type varchar(20) NOT NULL,

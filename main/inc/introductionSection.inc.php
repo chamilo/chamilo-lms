@@ -67,6 +67,7 @@ $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<div style="width: 80%; margin: 0px auto;">{element}</div>');
 
 $form->add_html_editor('intro_content',null,null,false);
+$form->addElement('html', '<br/>');
 $form->addElement('submit','intro_cmdUpdate',get_lang('Ok'));
 
 /*=========================================================
@@ -86,7 +87,7 @@ if ($intro_editAllowed)
 
 			if ( ! empty($intro_content) )
 			{
-				$sql = "REPLACE $TBL_INTRODUCTION SET id='$moduleId',intro_text='".mysql_real_escape_string($intro_content)."'";
+				$sql = "REPLACE $TBL_INTRODUCTION SET id='$moduleId',intro_text='".Database::escape_string($intro_content)."'";
 				api_sql_query($sql,__FILE__,__LINE__);
 				Display::display_confirmation_message(get_lang('IntroductionTextUpdated'),false);
 			}
@@ -152,7 +153,8 @@ if ($intro_dispForm)
 {
 	$default['intro_content'] = $intro_content;
 	$form->setDefaults($default);
-	echo '<div id="courseintro">';
+	//echo '<div id="courseintro">';
+	echo '<div id="courseintro" style="width: 100%">';
 	$form->display();
 	echo '</div>';
 }

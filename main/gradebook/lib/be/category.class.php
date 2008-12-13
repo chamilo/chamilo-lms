@@ -346,7 +346,7 @@ class Category implements GradebookItem
 		api_sql_query($sql, __FILE__, __LINE__);
 	}
 	/**
-	 * Show message 
+	 * Show message resource delete 
 	 */
 	public function show_message_resource_delete($course_id) {
 		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
@@ -358,9 +358,22 @@ class Category implements GradebookItem
 		} else {
 			return false;
 		}
-
 	}
-
+	
+	/**
+	 * Shows all information of an category  
+	 */
+	 public function shows_all_information_an_category ($selectcat='') {
+	 	if($selectcat=='') {
+	 		return null;
+	 	} else {
+		 	$tbl_category=Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+		 	$sql='SELECT name,description,user_id,course_code,parent_id,weight,visible,certif_min_score,session_id FROM '.$tbl_category.' c WHERE c.id='.$selectcat;
+		 	$result=api_sql_query($sql,__FILE__,__LINE__);
+		 	$row=Database::fetch_array($result,'ASSOC');
+		 	return $row;	
+	 	}
+	 }
 // OTHER FUNCTIONS
 
 	/**

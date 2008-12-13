@@ -59,6 +59,11 @@ $filter_warning_msg = true;
 // -                                  ACTIONS                                     -
 // --------------------------------------------------------------------------------
 
+$my_selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
+$my_db_name   = name_database_by_link($my_selectcat);
+$tbl_forum_thread =  Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_name);
+$tbl_grade_links  =  Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+
 //this is called when there is no data for the course admin
 if (isset ($_GET['createallcategories'])) {
 	block_students();
@@ -248,6 +253,8 @@ if (isset ($_GET['deletelink'])) {
 	block_students();
 	$link= LinkFactory :: load($_GET['deletelink']);
 	if ($link[0] != null) {
+		$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.$_GET['deletelink'].');';
+		api_sql_query($sql);
 		$link[0]->delete();		
 	}
 	unset ($link);

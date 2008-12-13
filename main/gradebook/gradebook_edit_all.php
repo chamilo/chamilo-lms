@@ -74,7 +74,8 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 //$table_forum_thread=Database::get_course_table(TABLE_FORUM_THREAD);
-$my_db_name=name_database_by_link($_GET['selectcat']);
+$my_selectcat=isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
+$my_db_name=name_database_by_link($my_selectcat);
 $table_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_name);
 /*
 if($_SERVER['REQUEST_METHOD']=='POST'):
@@ -152,10 +153,18 @@ $result = api_sql_query($sql,__FILE__,__LINE__);
 	$type_evaluated = isset($row['type']) ? $table_evaluated[$type_evaluated][3] : null;
 	$output.= '<tr><td> [ '.get_lang('Evaluation').$type_evaluated.' ] '.$row['name'].'</td><td><input type="text" size="10" name="evaluation['.$row['id'].']" value="'.$row['weight'].'"/></td></tr>';	
 }
+//by iflorespaz
+$my_category=array();
+$cat=new Category();
+$my_category   = $cat->shows_all_information_an_category($my_selectcat);
+$my_api_cidreq = api_get_cidreq();
+if ($my_api_cidreq=='') {
+	$my_api_cidreq='cidReq='.$my_category['course_code'];
+}
 ?>
-<a href="/main/gradebook/index.php?<?php echo api_get_cidreq() ?>&selectcat=<?php echo $category_id ?>"><< <?php echo get_lang('Back') ?>
-<!--<a href="/main/gradebook/index.php?<?php echo api_get_cidreq() ?>&selectcat=<?php echo $category_id ?>"><< <?php echo get_lang('Back') ?></a>-->
-<form method="post" action="gradebook_edit_all.php?<?php echo api_get_cidreq() ?>&selectcat=<?php echo $category_id?>">
+<a href="/main/gradebook/index.php?<?php echo $my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"><< <?php echo get_lang('Back') ?>
+<!--<a href="/main/gradebook/index.php?<?php echo $my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"><< <?php echo get_lang('Back') ?></a>-->
+<form method="post" action="gradebook_edit_all.php?<?php echo $my_api_cidreq ?>&selectcat=<?php echo $category_id?>">
 <table class="data_table">
 		 <tr class="row_odd">
 		  <th><?php echo get_lang('Resource'); ?></th>

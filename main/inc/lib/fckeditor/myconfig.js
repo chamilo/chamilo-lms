@@ -17,27 +17,27 @@ FCKConfig.ToolbarSets["Question"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Middle"] = [
-	['Source','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Table','-','ImageManager','Flash']
+	['Source','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Unlink','Table','-','ImageManager','Flash']
 ] ;
 
 FCKConfig.ToolbarSets["Agenda"] = [
-	['FontSize','Bold','Italic','Underline','StrikeThrough','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Table','-','ImageManager']
+	['FontSize','Bold','Italic','Underline','StrikeThrough','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Unlink','Table','-','ImageManager']
 ] ;
 
 FCKConfig.ToolbarSets["Small"] = [
-	['Bold','Italic','Underline','StrikeThrough','Link','ImageManager','Flash','OrderedList','UnorderedList','Table']
+	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','ImageManager','Flash','OrderedList','UnorderedList','Table']
 ] ;
 
 FCKConfig.ToolbarSets["Profil"] = [
-	['Bold','Italic','Underline','StrikeThrough','Link','OrderedList','UnorderedList']
+	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','OrderedList','UnorderedList']
 ] ;
 
 FCKConfig.ToolbarSets["Blog"] = [
-	['Bold','Italic','Underline','StrikeThrough','Link','ImageManager','OrderedList','UnorderedList','Table']
+	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','ImageManager','OrderedList','UnorderedList','Table']
 ] ;
 
 FCKConfig.ToolbarSets["Announcements"] = [
-	['Bold','Italic','Underline','StrikeThrough','Link','ImageManager','OrderedList','UnorderedList','Table']
+	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','ImageManager','OrderedList','UnorderedList','Table']
 ] ;
 
 FCKConfig.ToolbarSets["Full"] = [
@@ -53,19 +53,19 @@ FCKConfig.ToolbarSets["ForumLight"] = [
 ] ;
 
 FCKConfig.ToolbarSets["NewTest"] = [
-	['Source','Bold','Italic','Underline','StrikeThrough','Link','ImageManager','Flash','MP3','OrderedList','UnorderedList','Table']
+	['Source','Bold','Italic','Underline','StrikeThrough','Link','Unlink','ImageManager','Flash','MP3','OrderedList','UnorderedList','Table']
 ] ;
 
 FCKConfig.ToolbarSets["TestComment"] = [
-	['Source','FontName','FontSize','TextColor','BGColor'],['Bold','Italic','Underline','StrikeThrough','Subscript', 'Superscript','Link','ImageManager','Flash','MP3','OrderedList','UnorderedList','Table']
+	['Source','FontName','FontSize','TextColor','BGColor'],['Bold','Italic','Underline','StrikeThrough','Subscript', 'Superscript','Link','Unlink','ImageManager','Flash','MP3','OrderedList','UnorderedList','Table']
 ] ;
 
 FCKConfig.ToolbarSets["Test"] = [
-	['Bold','Italic','Underline','StrikeThrough','Subscript','Superscript','Link','ImageManager','MP3','OrderedList','UnorderedList','Table']
+	['Bold','Italic','Underline','StrikeThrough','Subscript','Superscript','Link','Unlink','ImageManager','MP3','OrderedList','UnorderedList','Table']
 ] ;
 
 FCKConfig.ToolbarSets["Survey"] = [
-	['FontSize','Bold','Italic','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Table','-','ImageManager','Source']
+	['FontSize','Bold','Italic','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Unlink','Table','-','ImageManager','Source']
 ] ;
 
 FCKConfig.ToolbarSets["Wiki"] = [

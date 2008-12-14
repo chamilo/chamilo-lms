@@ -93,10 +93,10 @@ if (is_allowed_to_edit())
 		$tool_name = htmlspecialchars($toolsRow['name'] != "" ? $toolsRow['name'] : $toolsRow['link'],ENT_QUOTES,$charset);
 		if($toolsRow['img'] != "external.gif")
 		{
-			$toolsRow['link']=$clarolineRepositoryWeb.$toolsRow['link'];
+			$toolsRow['link']=api_get_path(WEB_CODE_PATH).$toolsRow['link'];
 		}
-		$toolsRow['image']=$clarolineRepositoryWeb."img/".$toolsRow['image'];
-		
+		$toolsRow['image']=api_get_path(WEB_CODE_PATH)."img/".$toolsRow['image'];
+	
 		echo 	"<br><br><br>\n";
 		echo	"<table class=\"message\" width=\"70%\" align=\"center\">\n",
 				"<tr><td width=\"7%\" align=\"center\">\n",
@@ -304,7 +304,7 @@ if ($is_platformAdmin and is_allowed_to_edit())
 			"<font color=\"#F66105\" >",get_lang('PlatformAdminOnly'),"</font>\n",
 			"</td>\n","</tr>\n";
 	echo	"<tr>\n<td colspan=\"6\">";
-	showtools2('claroAdmin');
+	showtools2('platformAdmin');
 	echo 	"</td>\n</tr>\n";
 }
 

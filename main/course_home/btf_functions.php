@@ -1,5 +1,5 @@
 <?php
-// $Id: btf_functions.php 17054 2008-12-03 13:38:03Z pcool $
+// $Id: btf_functions.php 17284 2008-12-14 21:30:40Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -78,7 +78,7 @@ function showtools2($cat)
 									WHERE admin=1 AND a.link=t.link ORDER BY t.row, t.column";
 			break;
 
-		case 'claroAdmin' :
+		case 'platformAdmin' :
 			$sql = "SELECT *, image img FROM $TBL_ACCUEIL WHERE visibility = 2 ORDER BY id";
 	}
 	$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -161,22 +161,34 @@ function showtools2($cat)
 		$toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img'];
 
 		// VISIBLE
-		if ($toolsRow['visibility'] or $cat == 'courseAdmin' or $cat == 'claroAdmin')
-		{
-			$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'">'.Display::return_icon($toolsRow['img']).'</a>'."\n";
-			$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'">'.$tool_name."</a>\n";
+		if ($toolsRow['visibility'] or $cat == 'courseAdmin' or $cat == 'platformAdmin')
+		{	
+			if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
+			{					
+				$cell_content .= '<a href="#" onclick="window.open(\'' .$toolsRow['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '"><img src="'.$toolsRow['img'].'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']				
+			}			
+			else 
+			{
+				$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'"><img src="'.$toolsRow['img'].'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
+			}			
 		}
 		// INVISIBLE
 		else
 		{
 			if (api_is_allowed_to_edit())
 			{
-				$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'">'.Display::return_icon(str_replace(".gif", "_na.gif", $toolsRow['img'])).'</a>'."\n";
-				$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'" class="invisible">'.$tool_name.'</a>'."\n";
+				if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
+				{					
+					$cell_content .= '<a href="#" onclick="window.open(\'' .$toolsRow['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
+				}			
+				else 
+				{
+					$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'.$tool_name.'</a>'."\n";// don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']				
+				}		
 			}
 			else
 			{
-				$cell_content .= Display::return_icon(str_replace(".gif", "_na.gif", $toolsRow['img']), '', array('style' => 'vertical-align:middle;'))."\n";
+				$cell_content .= '<img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']	
 				$cell_content .= '<span class="invisible">'.$tool_name.'</span>';
 			}
 		}
@@ -199,7 +211,7 @@ function showtools2($cat)
 				/*if($toolsRow["img"] == $dokeosRepositoryWeb."img/external.gif")
 				{
 					$link['name'] = get_lang('Remove'); $link['cmd']  = "remove=yes";
-					if ($toolsRow["visibility"]==2 and $cat=="claroAdmin")
+					if ($toolsRow["visibility"]==2 and $cat=="platformAdmin")
 					{
 						$link['name'] = get_lang('Delete'); $link['cmd'] = "askDelete=yes";
 						$lnk[] = $link;

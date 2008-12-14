@@ -2004,19 +2004,23 @@ function store_theme_qualify($user_id,$thread_id,$thread_qualify=0,$qualify_user
 * @param boolean contains the information of option to run
 * @return array()
 * @author Christian Fasanando <christian.fasanando@dokeos.com>, 
+* @author Isaac Flores <isaac.flores@dokeos.com>, 
 * @version October 2008, dokeos  1.8.6
 */
  function get_historical_qualify($user_id,$thread_id,$opt) {
-
+	$my_qualify_log=array();
  	$table_threads_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG,''); 	
 	$opt = Database::escape_string($opt);	
-		if($opt=='false') {
+		if ($opt=='false') {
 			$sql="SELECT * FROM ".$table_threads_qualify_log." WHERE thread_id='".Database::escape_string($thread_id)."' and user_id='".Database::escape_string($user_id)."' ORDER BY qualify_time";	
 		} else {
 			$sql="SELECT * FROM ".$table_threads_qualify_log." WHERE thread_id='".Database::escape_string($thread_id)."' and user_id='".Database::escape_string($user_id)."' ORDER BY qualify_time DESC";	
 		} 		
-		$rs=api_sql_query($sql,__FILE__,__LINE__);		
-		return $rs; 	
+		$rs=api_sql_query($sql,__FILE__,__LINE__);
+		while ($row=Database::fetch_array($rs,'ASSOC')) {
+			$my_qualify_log[]=$row;
+		}		
+		return $my_qualify_log; 	
  } 
 
 /**

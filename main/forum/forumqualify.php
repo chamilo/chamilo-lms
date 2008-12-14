@@ -52,7 +52,7 @@ if ($message<>'PostDeletedSpecial') {
 	}
 }
 
-Display::display_header();
+Display::display_header('');
 		
 $userinf=api_get_user_info(api_get_user_id());
 if ($userinf['status']=='1') {
@@ -73,7 +73,6 @@ if ($userinf['status']=='1') {
 		$value_return=store_theme_qualify($userid,$threadid,$qualify,'',date("Y-m-d H:i:s"),'');
 		$url="cidReq=".Security::remove_XSS($_GET['cidReq'])."&forum=".Security::remove_XSS($_GET['forum'])."&thread=".Security::remove_XSS($_GET['thread'])."&post=".Security::remove_XSS($_GET['post'])."&user_id=".Security::remove_XSS($_GET['user_id']);
 		$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$userid,$threadid);
-		//header('location:forumqualify.php?'.$url.'&idtextqualify='.$current_qualify_thread);
 		if($value_return[0]!=$_REQUEST['idtextqualify'] && $value_return[1]=='update') {		
 			store_qualify_historical('1','',$_GET['forum'],$userid,$threadid,$_REQUEST['idtextqualify'],api_get_user_id());
 		}
@@ -87,7 +86,7 @@ if ($userinf['status']=='1') {
 	// show qualifications history
 	$user_id_thread = (int)$_GET['user_id'];
 	$opt=Database::escape_string($_GET['type']);
-	$qualify_historic = get_historical_qualify($user_id_thread, $threadid, $opt);	
+	$qualify_historic = get_historical_qualify($user_id_thread, $threadid, $opt);
 	$counter= count($qualify_historic);	
 	if ($counter>0) {
 		echo '<h4>'.get_lang('QualificationChangesHistory').'</h4>';	
@@ -105,16 +104,17 @@ if ($userinf['status']=='1') {
 		$table_list.= '<th>'.get_lang('WhoChanged').'</th>';
 		$table_list.= '<th>'.get_lang('NoteChanged').'</th>';				
 		$table_list.= '<th>'.get_lang('DateChanged').'</th>';	
-		$table_list.= '</tr>';						
-		foreach ($qualify_historic as $row1) {
-			    $my_user_info=api_get_user_info($row1['qualify_user_id']);
+		$table_list.= '</tr>';
+		for($i=0;$i<count($qualify_historic);$i++) {
+			    $my_user_info=api_get_user_info($qualify_historic['user_id']);
 				$name = $my_user_info['firstName']." ".$my_user_info['lastName'];					
 				$table_list.= '<tr class="$class"><td>'.$name.'</td>';			
-				$table_list.= '<td>'.$row1['qualify'].'</td>';
-				$table_list.= '<td>'.$row1['qualify_time'].'</td></tr>';			
+				$table_list.= '<td>'.$qualify_historic[$i]['qualify'].'</td>';
+				$table_list.= '<td>'.$qualify_historic[$i]['qualify_time'].'</td></tr>';			
 		}						
 		$table_list.= '</table>';
 		echo $table_list;
+		
 	} else {
 		echo get_lang('NotChanged');
 	}			

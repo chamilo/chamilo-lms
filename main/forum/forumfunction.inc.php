@@ -2064,7 +2064,22 @@ function store_qualify_historical($option,$couser_id,$forum_id,$user_id,$thread_
 		api_sql_query($sql2,__FILE__,__LINE__);
 	}
 }
+/**
+* 
+*  This function show current thread qualify .
+* @param integer contains the information the current thread id
+* @param integer contains the information the current session id
+* @return integer
+* @author Isaac Flores <isaac.flores@dokeos.com>, U.N.A.S University
+* @version December 2008, dokeos  1.8.6
+*/
+function current_qualify_of_thread($thread_id,$session_id) {
 
+	$table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY,'');
+	$res=api_sql_query('SELECT qualify FROM '.$table_threads_qualify.' WHERE thread_id='.$thread_id.' AND session_id='.$session_id);
+	$row=Database::fetch_array($res,'ASSOC');
+	return $row['qualify'];
+}
 /**
 * This function stores a reply in the forum_post table.
 * It also updates the forum_threads table (thread_replies +1 , thread_last_post, thread_date)

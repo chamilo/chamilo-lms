@@ -61,7 +61,10 @@ if ($userinf['status']=='1') {
 	$current_thread=get_thread_information($_GET['thread']);	
 	$userid=(int)$_GET['user_id'];
 	$threadid=$current_thread['thread_id'];
-	$qualify=(int)$_REQUEST['idtextqualify'];	
+
+	//current qualify
+	$qualify=current_qualify_of_thread($threadid,api_get_session_id());	
+	
 	//return current qualify thread
 	$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$userid,$threadid);
 	
@@ -73,7 +76,8 @@ if ($userinf['status']=='1') {
 		$value_return=store_theme_qualify($userid,$threadid,$qualify,'',date("Y-m-d H:i:s"),'');
 		$url="cidReq=".Security::remove_XSS($_GET['cidReq'])."&forum=".Security::remove_XSS($_GET['forum'])."&thread=".Security::remove_XSS($_GET['thread'])."&post=".Security::remove_XSS($_GET['post'])."&user_id=".Security::remove_XSS($_GET['user_id']);
 		$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$userid,$threadid);
-		if($value_return[0]!=$_REQUEST['idtextqualify'] && $value_return[1]=='update') {		
+		
+		if ($value_return[0]!=$_REQUEST['idtextqualify'] && $value_return[1]=='update') {		
 			store_qualify_historical('1','',$_GET['forum'],$userid,$threadid,$_REQUEST['idtextqualify'],api_get_user_id());
 		}
 	}

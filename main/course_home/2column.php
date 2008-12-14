@@ -154,14 +154,18 @@ function show_tools($course_tool_category)
 			$qm_or_amp = ((strpos($toolsRow['link'],'?')===FALSE)?'?':'&amp;');
 
 			$toolsRow['link'] = $toolsRow['link'];
-			echo	'<td width="50%" height="30">', "\n",
-
-					'<a href="', htmlspecialchars($toolsRow['link'])
-						.(($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif") ? '' : $qm_or_amp.api_get_cidreq()),
-						'" target="' , $toolsRow['target'], '" '.$class.'>',
-						Display::return_icon($toolsRow['image']),
-						'&nbsp;', ($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif" || $toolsRow['image']=="scormbuilder.gif" || $toolsRow['image']=="blog.gif") ? htmlspecialchars( $toolsRow['name'],ENT_QUOTES,$charset) : get_lang(ucfirst($toolsRow['name'])),
-					"</a>\n ";
+			echo	'<td width="50%" height="30">';
+			
+			if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
+			{					
+				echo  '<a href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) .(($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif") ? '' : $qm_or_amp.api_get_cidreq()). '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '"'.$class.'>';
+			}			
+			else 
+			{
+				echo	'<a href="'. htmlspecialchars($toolsRow['link']).(($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif") ? '' : $qm_or_amp.api_get_cidreq()).'" target="' , $toolsRow['target'], '" '.$class.'>';				
+			}
+					
+			echo Display::return_icon($toolsRow['image']),'&nbsp;', ($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif" || $toolsRow['image']=="scormbuilder.gif" || $toolsRow['image']=="blog.gif") ? htmlspecialchars( $toolsRow['name'],ENT_QUOTES,$charset) : get_lang(ucfirst($toolsRow['name'])),'</a>';
 
 			// This part displays the links to hide or remove a tool.
 			// These links are only visible by the course manager.

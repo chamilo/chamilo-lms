@@ -118,6 +118,6 @@ FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'BBCode'
 // toolbar set may be defined in the configuration file with more or less entries.
 FCKConfig.ToolbarSets["Default"] = [
 	['Source'],
-	['Bold','Italic','Underline','-','Link'],
+	['Bold','Italic','Underline','-','Link','Unlink'],
 	['About']
 ] ;

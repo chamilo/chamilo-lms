@@ -24,7 +24,7 @@
 */
 /**
  * Defines a gradebook Category object
- * @author Bert Steppé, Stijn Konings
+ * @author Bert Steppï¿½, Stijn Konings
  * @package dokeos.gradebook
  */
 class Category implements GradebookItem
@@ -483,10 +483,11 @@ class Category implements GradebookItem
 			foreach ($links as $link) {
 			$linkres = $link->calc_score ($stud_id);
 			if (isset($linkres) && $link->get_weight() != 0) {
-				$linkweight = $link->get_weight();
+				$linkweight     = $link->get_weight();
+				$link_res_denom = ($linkres[1]==0) ? 1 : $linkres[1];
 				$rescount++;
 				$weightsum += $linkweight;
-				$ressum += (($linkres[0]/$linkres[1]) * $linkweight);
+				$ressum += (($linkres[0]/$link_res_denom) * $linkweight);
 			}
 		}
 

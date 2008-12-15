@@ -67,7 +67,7 @@ $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<div style="width: 80%; margin: 0px auto;">{element}</div>');
 
 $form->add_html_editor('intro_content',null,null,false);
-$form->addElement('html', '<br/>');
+$form->addElement('html', '<br />');
 //$form->addElement('submit','intro_cmdUpdate',get_lang('Ok'));
 $form->addElement('submit','intro_cmdUpdate','    '.get_lang('Save').'    ');
 

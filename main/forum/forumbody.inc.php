@@ -19,19 +19,19 @@ $output = <<<FIN
     	<tr>
 FIN;
 $output .= '
-			<td width="10%">'.get_lang('User').'&nbsp;:</td >
-        	<td width="90%"><div align="left">'.get_name_user_by_id($userid).'</div></td>
+			<td width="10%" class="forum-thread-header">'.get_lang('User').'&nbsp;:</td >
+        	<td width="90%" class="forum-thread-body"><div align="left">'.get_name_user_by_id($userid).'</div></td>
         </tr>
         <tr>
-    		<td width="10%">'.get_lang('Thread').'&nbsp;:</td >
-            <td  width="90%">
+    		<td width="10%" class="forum-thread-header">'.get_lang('Thread').'&nbsp;:</td >
+            <td  width="90%" class="forum-thread-body">
                 <div align="left">'.$current_thread['thread_title'].'</div>
             </td>
         </tr>
         <tr>
-            <td width="10%"><div align="left">'.get_lang('Qualification').'&nbsp;:</div></td >
-            <td  width="90%"><div align="left">
-            	<input type="text" maxlength="4" id="idtextqualify" style="width:40px;" name="idtextqualify" value="'.$my_idtextqualify.'"/>&nbsp;&nbsp;'.get_lang('MaxScore').'&nbsp;: '.$max_qualify.'</div>
+            <td width="10%" class="forum-thread-header"><div align="left">'.get_lang('Qualification').'&nbsp;:</div></td >
+            <td  width="90%" class="forum-thread-body"><div align="left">
+            	<input type="text" maxlength="4" id="idtextqualify" style="width:40px;" name="idtextqualify" value="'.$my_idtextqualify.'" />&nbsp;&nbsp;'.get_lang('MaxScore').'&nbsp;: '.$max_qualify.'</div>
             </td>
         </tr>
     	<tr>

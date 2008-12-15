@@ -1933,7 +1933,6 @@ function store_theme_qualify($user_id,$thread_id,$thread_qualify=0,$qualify_user
 		$sql_string="SELECT thread_qualify_max FROM ". $table_threads ." WHERE thread_id=".$thread_id.";";
 		$res_string=api_sql_query($sql_string,__FILE__,__LINE__);
 		$row_string=Database::fetch_array($res_string);
-
 		if ($thread_qualify<=$row_string[0]) {
 			
 			$sql1="SELECT COUNT(*) FROM ".$table_threads_qualify." WHERE user_id=".$user_id." and thread_id=".$thread_id.";";

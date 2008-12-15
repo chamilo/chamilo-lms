@@ -22,7 +22,7 @@
 /**
 * 	@package dokeos.forum
 */
-$language_file=array('admin','user','forum');
+$language_file=array('admin','forum');
 require_once '../inc/global.inc.php';
 require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
@@ -53,33 +53,24 @@ if ($message<>'PostDeletedSpecial') {
 }
 
 Display::display_header('');
-		
 $userinf=api_get_user_info(api_get_user_id());
 if ($userinf['status']=='1') {
 	echo "<strong>".get_lang('ThreadQualification')."</strong>";
 	echo "<br />";
-	$current_thread=get_thread_information($_GET['thread']);	
+	$current_thread=get_thread_information($_GET['thread']);
 	$userid=(int)$_GET['user_id'];
 	$threadid=$current_thread['thread_id'];
-
-	//current qualify
-	$qualify=current_qualify_of_thread($threadid,api_get_session_id());	
-	
-	//return current qualify thread
-	$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$userid,$threadid);
-	
-	//return Max qualify thread
+	//show current qualify in my form
+	$qualify=current_qualify_of_thread($threadid,api_get_session_id());
+	//show max qualify in my form
 	$max_qualify=show_qualify('2',$_GET['cidReq'],$_GET['forum'],$userid,$threadid);
 	require_once 'forumbody.inc.php';
-	
-	if (!empty($_REQUEST['idtextqualify'])) {
-		$value_return=store_theme_qualify($userid,$threadid,$qualify,'',date("Y-m-d H:i:s"),'');
-		$url="cidReq=".Security::remove_XSS($_GET['cidReq'])."&forum=".Security::remove_XSS($_GET['forum'])."&thread=".Security::remove_XSS($_GET['thread'])."&post=".Security::remove_XSS($_GET['post'])."&user_id=".Security::remove_XSS($_GET['user_id']);
-		$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$userid,$threadid);
+	$value_return = store_theme_qualify($userid,$threadid,$_REQUEST['idtextqualify'],api_get_user_id(),date("Y-m-d H:i:s"),api_get_session_id());
+	$url='cidReq='.Security::remove_XSS($_GET['cidReq']).'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post']).'&user_id='.Security::remove_XSS($_GET['user_id']);
+	$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$userid,$threadid);
 		
-		if ($value_return[0]!=$_REQUEST['idtextqualify'] && $value_return[1]=='update') {		
-			store_qualify_historical('1','',$_GET['forum'],$userid,$threadid,$_REQUEST['idtextqualify'],api_get_user_id());
-		}
+	if ($value_return[0]!=$_REQUEST['idtextqualify'] && $value_return[1]=='update') {		
+		store_qualify_historical('1','',$_GET['forum'],$userid,$threadid,$_REQUEST['idtextqualify'],api_get_user_id());
 	}
 	
 	if (!empty($_REQUEST['idtextqualify']) && $_REQUEST['idtextqualify'] > $max_qualify) { 
@@ -103,11 +94,11 @@ if ($userinf['status']=='1') {
 					<a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.$threadid.'&user_id='.Security::remove_XSS($_GET['user_id']).'&type=false">'.get_lang('Older').'</a>&nbsp;
 				  </div>';
 		}				
-		$table_list.= '<br /><br /><table class="data_table" style="width:50%">';	
+		$table_list.= '<br /><br /><table class="data_table" style="width:100%">';	
 		$table_list.= '<tr>';
-		$table_list.= '<th>'.get_lang('WhoChanged').'</th>';
-		$table_list.= '<th>'.get_lang('NoteChanged').'</th>';				
-		$table_list.= '<th>'.get_lang('DateChanged').'</th>';	
+		$table_list.= '<th width="50%">'.get_lang('WhoChanged').'</th>';
+		$table_list.= '<th width="10%">'.get_lang('NoteChanged').'</th>';				
+		$table_list.= '<th width="40%">'.get_lang('DateChanged').'</th>';	
 		$table_list.= '</tr>';
 		for($i=0;$i<count($qualify_historic);$i++) {
 			    $my_user_info=api_get_user_info($qualify_historic['user_id']);

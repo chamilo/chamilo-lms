@@ -2191,7 +2191,8 @@ function save_wiki()
 	$_clean['assignment']=Database::escape_string($_POST['assignment']);
     $_clean['comment']=Database::escape_string($_POST['comment']);	
     $_clean['progress']=Database::escape_string($_POST['progress']);	
-	$_clean['version']=Database::escape_string($_POST['version'])+1;	
+	$_clean['version']=Database::escape_string($_POST['version']);
+	$_clean['version']=$_clean['version']+1;//sum 1 here instead of adding in Database::escape_string($_POST['version']), to avoid failures in the sum when there is heavy use of the database
 	$_clean['linksto'] = links_to($_clean['content']); //and check links content	
 	$dtime = date( "Y-m-d H:i:s" );
 

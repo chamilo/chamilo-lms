@@ -1,4 +1,4 @@
-<?php // $Id: question_pool.php 16726 2008-11-12 15:44:48Z pcool $
+<?php // $Id: question_pool.php 17300 2008-12-15 20:05:50Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -30,7 +30,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 16726 2008-11-12 15:44:48Z pcool $
+* 	@version $Id: question_pool.php 17300 2008-12-15 20:05:50Z ivantcholakov $
 */
 
 // name of the language file that needs to be included
@@ -194,7 +194,18 @@ if($is_allowedToEdit)
 	// if we have selected the option 'Orphan questions' in the list-box 'Filter'
 	elseif($exerciseId == -1)
 	{
-		$sql='SELECT id, question, type, exercice_id FROM '.$TBL_QUESTIONS.' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions ON questions.id=quizz_questions.question_id AND exercice_id IS NULL';
+		// Old logic: When a test is deleted, the correspondent records in 'quiz' and 'quiz_rel_question' tables are deleted.
+		//$sql='SELECT id, question, type, exercice_id FROM '.$TBL_QUESTIONS.' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions ON questions.id=quizz_questions.question_id WHERE exercice_id IS NULL';
+
+		// New logic: When a test is deleted, the field 'active' takes value -1 (it is in the correspondent record in 'quiz' table).
+		//$sql='SELECT questions.id, questions.question, questions.type, quizz_questions.exercice_id FROM '.$TBL_QUESTIONS.
+		//	' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions ON questions.id=quizz_questions.question_id LEFT JOIN '.$TBL_EXERCICES.
+		//	' as exercices ON exercice_id=exercices.id WHERE exercices.active = -1';
+
+		// This is more safe to changes, it is a mix between old and new logic.
+		$sql='SELECT questions.id, questions.question, questions.type, quizz_questions.exercice_id FROM '.$TBL_QUESTIONS.
+			' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions ON questions.id=quizz_questions.question_id LEFT JOIN '.$TBL_EXERCICES.
+			' as exercices ON exercice_id=exercices.id WHERE quizz_questions.exercice_id IS NULL OR exercices.active = -1';
 	}
 	// if we have not selected any option in the list-box 'Filter'
 	else

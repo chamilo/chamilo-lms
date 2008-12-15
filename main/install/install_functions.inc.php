@@ -920,13 +920,14 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 		</td>
 		<?php else: ?>
 		<td colspan="2">
-			<div class="error-message">
+			<div style="float:left;" class="error-message">
 				<div  style="float:left; margin-right:10px;">
 				<img src="../img/message_error.png" alt="Error" />
 				</div>
 				<div style="float:left;">
 				<strong>MySQL error: <?php echo mysql_errno(); ?></strong><br />
-				<?php echo mysql_error(); ?>
+				<?php echo mysql_error().'<br/>'; ?>
+				<strong><?php echo get_lang('Details').': '. get_lang('FailedConectionDatabase'); ?></strong><br />
 				</div>
 			</div>
 		</td>
@@ -1132,51 +1133,38 @@ function display_after_install_message($installType, $nbr_courses)
 * In step 3. Test the connection to the DB in case of single or multy DB.
 * Return "1"if no problems, "0" if, in case of multiDB we can't create a new DB and "-1" if there is no connection.
 */
-function test_db_connect ($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm)
-{
+function test_db_connect ($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm) {
 	$dbConnect = -1;
-	if($singleDbForm == 1)
-	{
-		if(mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm) !== false)
-		{
+	if ($singleDbForm == 1) {
+		if(mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm) !== false) {
 			$dbConnect = 1;
-		}
-		else
-		{
+		} else {
 			$dbConnect = -1;
 		}
-	}
-	elseif($singleDbForm == 0)
-	{
-		if(mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm) !== false)
-		{
+	} elseif ($singleDbForm == 0) {
+		$res=@mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
+		if ($res===false) {
+			return $res;
+		}
+		if ($res !== false) {
 			// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
 			@mysql_query("set session sql_mode='';");
 
 			$multipleDbCheck = @mysql_query("CREATE DATABASE ".$dbPrefixForm."test_dokeos_connection");
-			if($multipleDbCheck !== false)
-			{
+			if ($multipleDbCheck !== false) {
 				$multipleDbCheck = @mysql_query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test_dokeos_connection");
-				if($multipleDbCheck !== false)
-				{
+				if ($multipleDbCheck !== false) {
 					$dbConnect = 1;
-				}
-				else
-				{
+				} else {
 					$dbConnect = 0;
 				}
-			}
-			else
-			{
+			} else {
 				$dbConnect = 0;
 			}
-		}
-		else
-		{
+		} else {
 			$dbConnect = -1;
 		}
 	}
 	return($dbConnect); //return "1"if no problems, "0" if, in case of multiDB we can't create a new DB and "-1" if there is no connection.
 }
-
 ?>

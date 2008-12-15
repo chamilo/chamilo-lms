@@ -216,32 +216,30 @@ class ScoreDisplay
 	public function display_score($score,$type,$what = SCORE_BOTH) {
 		$type2 = $type & 7;	// removes the 'SCORE_IGNORE_SPLIT' bit
 		$split_enabled = ($type2 == $type);
-		
-		if (!isset($score)) {
-			return '';			
-		} elseif ($this->custom_enabled && isset($this->custom_display_conv)) {
+		$my_score=($score==0) ? 1 : $score;
+		if ($this->custom_enabled && isset($this->custom_display_conv)) {
 				// students only see the custom display
 				if (!api_is_allowed_to_create_course()) {
-					$display = $this->display_custom($score);				
+					$display = $this->display_custom($my_score);				
 				}
 				// course/platform admins
 				elseif ($what == SCORE_ONLY_DEFAULT) {
-					$display = $this->display_default ($score, $type2);				
+					$display = $this->display_default ($my_score, $type2);				
 				}
 				elseif ($what == SCORE_ONLY_CUSTOM) {
-					$display = $this->display_custom ($score);				
+					$display = $this->display_custom ($my_score);				
 				} else {
-					$display = $this->display_default ($score, $type2)
-							.' ('.$this->display_custom ($score).')';				
+					$display = $this->display_default ($my_score, $type2)
+							.' ('.$this->display_custom ($my_score).')';				
 			}
 
 		} else {
 		// if no custom display set, use default display
-			$display = $this->display_default ($score, $type2);		
+			$display = $this->display_default ($my_score, $type2);		
 		}
-		return (($split_enabled ? $this->get_color_display_start_tag($score) : '')
+		return (($split_enabled ? $this->get_color_display_start_tag($my_score) : '')
 				. $display
-				. ($split_enabled ? $this->get_color_display_end_tag($score) : ''));
+				. ($split_enabled ? $this->get_color_display_end_tag($my_score) : ''));
 	}
 // Internal functions
 

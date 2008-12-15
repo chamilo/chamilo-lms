@@ -43,28 +43,28 @@ $sql="SELECT le.name,le.description,le.date_log,le.weight,le.visible,le.type,us.
 $result=api_sql_query($sql);
 	echo '<table width="100%" border="0" >';
 		echo '<tr>';
-		echo '<td align="center" class="Gradebook-table-header"><strong>'.get_lang('GradebookNameLog').'</strong></td>';
-		echo '<td align="center" class="Gradebook-table-header"><strong>'.get_lang('GradebookDescriptionLog').'</strong></td>';
-		echo '<td align="center" class="Gradebook-table-header"><strong>'.get_lang('Date').'</strong></td>';
-		echo '<td align="center" class="Gradebook-table-header"><strong>'.get_lang('Weight').'</strong></td>';
-		echo '<td align="center" class="Gradebook-table-header"><strong>'.get_lang('GradebookVisibilityLog').'</strong></td>';
-		echo '<td align="center" class="Gradebook-table-header"><strong>'.get_lang('ResourceType').'</strong></td>';
-		echo '<td align="center" class="Gradebook-table-header"><strong>'.get_lang('GradebookWhoChangedItLog').'</strong></td>';
+		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('GradebookNameLog').'</strong></td>';
+		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('GradebookDescriptionLog').'</strong></td>';
+		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('Date').'</strong></td>';
+		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('Weight').'</strong></td>';
+		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('GradebookVisibilityLog').'</strong></td>';
+		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('ResourceType').'</strong></td>';
+		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('GradebookWhoChangedItLog').'</strong></td>';
 		echo '</tr>';
 	while($row=Database::fetch_array($result)) {
 	echo '<tr>';
-		echo '<td align="center" Class="Gradebook-table-body">'.$row[0].'</td>';
-		echo '<td align="center" class="Gradebook-table-body">'.$row[1].'</td>';
-		echo '<td align="center" class="Gradebook-table-body">'.date('d-m-Y H:i:s',$row[2]).'</td>';
-		echo '<td align="center" class="Gradebook-table-body">'.$row[3].'</td>';
+		echo '<td align="center" Class="gradebook-table-body">'.$row[0].'</td>';
+		echo '<td align="center" class="gradebook-table-body">'.$row[1].'</td>';
+		echo '<td align="center" class="gradebook-table-body">'.date('d-m-Y H:i:s',$row[2]).'</td>';
+		echo '<td align="center" class="gradebook-table-body">'.$row[3].'</td>';
 		if (1 == $row[4]) {
 			$visib=get_lang('GradebookVisible');
 		} else {
 			$visib=get_lang('GradebookInvisible');
 		}
-		echo '<td align="center" Class="Gradebook-table-body">'.$visib.'</td>';
-		echo '<td align="center" class="Gradebook-table-body">'.$row[5].'</td>';
-		echo '<td align="center" class="Gradebook-table-body">'.$row[6].'</td>';
+		echo '<td align="center" Class="gradebook-table-body">'.$visib.'</td>';
+		echo '<td align="center" class="gradebook-table-body">'.$row[5].'</td>';
+		echo '<td align="center" class="gradebook-table-body">'.$row[6].'</td>';
 	echo '</tr>';
 }
 echo '</table>';

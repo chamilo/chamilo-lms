@@ -208,8 +208,8 @@ class DisplayGradebook
 			for ($count=0; $count < count($evals_links); $count++) {
 				$item = $evals_links[$count];
 				$score = $item->calc_score($user_id);
-				$my_score_denom=($score[1]*$item->get_weight()==0) ? 1 : $score[1]*$item->get_weight();					
-				$item_value+=$score[0]/$my_score_denom;			
+				$my_score_denom=($score[1]==0) ? 1 : $score[1];					
+				$item_value+=$score[0]/$my_score_denom*$item->get_weight();			
 				$item_total+=$item->get_weight();				
 				//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);								
 			}			

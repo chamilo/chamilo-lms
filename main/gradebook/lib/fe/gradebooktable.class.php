@@ -27,7 +27,7 @@ require_once (dirname(__FILE__).'/../be.inc.php');
 /**
  * Table to display categories, evaluations and links
  * @author Stijn Konings
- * @author Bert SteppÃ© (refactored, optimised)
+ * @author Bert Steppé (refactored, optimised)
  */
 class GradebookTable extends SortableTable
 {
@@ -164,8 +164,9 @@ class GradebookTable extends SortableTable
 					for ($count=0; $count < count($evals_links); $count++) {						
 								$item = $evals_links[$count];
 								$score = $item->calc_score($stud_id);
-								$score_denom=($score[1]*$item->get_weight()==0) ? 1 : $score[1]*$item->get_weight();								
-								$item_value+=$score[0]/$score_denom;
+
+								$score_denom=($score[1]==0) ? 1 : $score[1];								
+								$item_value+=$score[0]/$score_denom*$item->get_weight();
 								$item_total+=$item->get_weight();
 					}			
 					$item_value = number_format($item_value, 2, '.', ' ');	

@@ -447,18 +447,7 @@ if($_GET['studentlist'] == 'false') {
 		$table -> set_header(10, get_lang('Details'),false);
 	     
 	    if ($export_csv) {
-			$csv_content[] = array ( 
-									get_lang('OfficialCode'),
-									get_lang('LastName'),
-									get_lang('FirstName'),
-									get_lang('Time'),
-									get_lang('Progress'),
-									get_lang('Score'),
-									get_lang('Student_publication'),
-									get_lang('Messages'),
-									get_lang('FirstLogin'),
-									get_lang('LatestLogin')
-								   );
+			$csv_content[] = array ();
 		}
 	    
 	    $all_datas = array();
@@ -522,6 +511,19 @@ if($_GET['studentlist'] == 'false') {
 	
 	// send the csv file if asked
 	if ($export_csv) {
+		
+		$csv_content[] = array ( 
+									get_lang('OfficialCode'),
+									get_lang('LastName'),
+									get_lang('FirstName'),
+									get_lang('Time'),
+									get_lang('Progress'),
+									get_lang('Score'),
+									get_lang('Student_publication'),
+									get_lang('Messages'),
+									get_lang('FirstLogin'),
+									get_lang('LatestLogin')
+								   );
 		ob_end_clean();
 		Export :: export_table_csv($csv_content, 'reporting_student_list');
 	}

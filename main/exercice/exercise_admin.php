@@ -46,7 +46,18 @@ if(!api_is_allowed_to_edit())
 	api_not_allowed(true);
 }
 
-
+$htmlHeadXtra[] = '<script>
+			function advanced_parameters() {
+				if(document.getElementById(\'options\').style.display == \'none\') {
+					document.getElementById(\'options\').style.display = \'block\';
+					document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_minus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+				} else {
+				document.getElementById(\'options\').style.display = \'none\';
+				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+				}	
+			}
+		</script>';
+		
 /*********************
  * INIT EXERCISE
  *********************/

@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 16686 2008-11-06 16:31:22Z dperales $
+* 	@version $Id: exercise.class.php 17296 2008-12-15 17:08:44Z cfasanando $
 */
 
 
@@ -751,8 +751,8 @@ class Exercise
 	 * @param FormValidator $form the formvalidator instance (by reference)
 	 */
 	function createForm ($form)
-	{
-
+	{				
+		
 		// title
 		$form -> addElement('text', 'exerciseTitle', get_lang('ExerciseName').' : ','class="input_titles"');
 
@@ -781,7 +781,7 @@ class Exercise
 		$form -> addElement('html','<div class="row">
 			<div class="label">&nbsp;</div>
 			<div class="formw">
-				<a href="javascript://" onclick="if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}"><img src="../img/add_na.gif" alt="" />'.get_lang('AdvancedParameters').'</a>
+				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>
 			</div>
 			</div>');
 			
@@ -819,9 +819,10 @@ class Exercise
 		// rules
 		$form -> addRule ('exerciseTitle', get_lang('GiveExerciseName'), 'required');
 		$form -> addRule ('exerciseAttempts', get_lang('Numeric'), 'numeric');
-        $form -> addRule (array('start_time','end_time'), get_lang('DateValidation'), 'comparedate');
-        $form -> addRule ('start_time', get_lang('Dateinconsistent'), 'errordate');
-        $form -> addRule ('end_time', get_lang('Dateinconsistent'), 'errordate');
+		$form -> addRule ('start_time', get_lang('DateNotValid'), 'errordate');
+        $form -> addRule ('end_time', get_lang('DateNotValid'), 'errordate');
+        $form -> addRule (array('start_time','end_time'), get_lang('StartDateMustNotBeGreaterThanEndDate'), 'comparedate');
+        
 
 		// defaults
 		$defaults = array();

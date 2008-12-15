@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: QuickForm.php 14987 2008-04-21 17:14:12Z juliomontoya $
+// $Id: QuickForm.php 17296 2008-12-15 17:08:44Z cfasanando $
 
 require_once('PEAR.php');
 require_once('HTML/Common.php');
@@ -62,7 +62,9 @@ $GLOBALS['_HTML_QuickForm_registered_rules'] = array(
     'nopunctuation' => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
     'nonzero'       => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
     'callback'      => array('html_quickform_rule_callback', 'HTML/QuickForm/Rule/Callback.php'),
-    'compare'       => array('html_quickform_rule_compare',  'HTML/QuickForm/Rule/Compare.php')
+    'compare'       => array('html_quickform_rule_compare',  'HTML/QuickForm/Rule/Compare.php'),
+    'comparedate'   => array('html_quickform_rule_comparedate',  'HTML/QuickForm/Rule/CompareDate.php'),
+    'errordate'  	=> array('html_quickform_rule_date',  'HTML/QuickForm/Rule/Date.php')    
 );
 
 // {{{ error codes

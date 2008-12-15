@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 17211 2008-12-10 17:37:31Z cfasanando $
+*  	@version $Id: work.php 17309 2008-12-15 23:32:23Z iflorespaz $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -838,8 +838,8 @@ if (!empty($_POST['submitWork']) && !empty($is_course_member) && !empty($check))
 						
 			$sql = "UPDATE  " . $work_table . "
 						        SET	title       = '" . $title . "',
-						            description = '" . $description . "',
-						            author      = '" . $authors . "'".$add_to_update."
+						            description = '" . $description . "'
+						            ".$add_to_update."
 						        WHERE id    = '$id'";
 
 			api_sql_query($sql, __FILE__, __LINE__);

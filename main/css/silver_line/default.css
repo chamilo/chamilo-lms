@@ -1280,7 +1280,22 @@ a.specialLink:hover,a.specialLink:focus {
 	font-weight: normal;	
 }
 
-
+.forum-thread-header{
+    color: #000000;
+    background-color: #F7F7F7;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    border-top: 1px solid #aaa;
+}
+.forum-thread-body{
+    color: #000000;
+    background-color: #FFFFFF;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    border-top: 1px solid #aaa;
+}
 
 /*
 ------------------------------------------------------------------------------
@@ -1763,3 +1778,15 @@ div.system_announcement {
 	color:#4171b5;
 }
 /* --- end of course navigation menu section  --- */
+/* Gradebook */
+.resource-deleted {
+    color:#990000;
+}
+.gradebook-table-header {
+    border: 1px solid rgb(153, 153, 153); 
+    background: rgb(240, 240, 240) none repeat scroll 0% 0%;
+}
+.gradebook-table-body {
+    border: 1px solid rgb(153, 153, 153); 
+    background: rgb(255, 255, 255) none repeat scroll 0% 0%;    
+}

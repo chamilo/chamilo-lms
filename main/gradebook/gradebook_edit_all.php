@@ -75,7 +75,7 @@ $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 //$table_forum_thread=Database::get_course_table(TABLE_FORUM_THREAD);
 $my_selectcat=isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
-$my_db_name=name_database_by_link($my_selectcat);
+$my_db_name=get_database_name_by_link_id($my_selectcat);
 $table_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_name);
 /*
 if($_SERVER['REQUEST_METHOD']=='POST'):

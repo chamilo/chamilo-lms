@@ -32,7 +32,7 @@ block_students();
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 //selected name of database
-$my_db_name=name_database_by_link($_GET['editlink']);
+$my_db_name=get_database_name_by_link_id($_GET['editlink']);
 $tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_name);
 
 $linkarray = LinkFactory :: load($_GET['editlink']);

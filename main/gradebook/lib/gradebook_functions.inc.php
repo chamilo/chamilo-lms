@@ -228,7 +228,6 @@ function build_edit_icons_eval($eval, $selectcat) {
  */
 function build_edit_icons_link($link, $selectcat) {
 
-	//$varrr=name_database_by_link($link->get_id());
 	$link->get_course_code();
 	$cat=new Category();
 	$message_link=$cat->show_message_resource_delete($link->get_course_code());
@@ -310,7 +309,7 @@ function remove_resource_from_course_gradebook($link_id) {
  * @param    int
  * @return   String
  */
-function name_database_by_link($id_link) {
+function get_database_name_by_link_id($id_link) {
 	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 	$res=api_sql_query('SELECT db_name from '.$course_table.' c inner join '.$tbl_grade_links.' l 

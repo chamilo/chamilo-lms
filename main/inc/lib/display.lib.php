@@ -487,8 +487,7 @@ class Display {
 	 */
 	function encrypted_mailto_link($email, $clickable_text = null, $style_class = '')
 	{
-		global $charset;
-		$clickable_text = '';
+		global $charset;		
 		if (is_null($clickable_text))
 		{
 			$clickable_text = $email;

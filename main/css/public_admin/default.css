@@ -1121,6 +1121,22 @@ tr.forum_category_header a{
 }
 tr.forum_threadheader td{
 }
+.forum-thread-header{
+    color: #000000;
+    background-color: #F7F7F7;
+	border-left: 1px solid #aaa;
+	border-right: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+	border-top: 1px solid #aaa;
+}
+.forum-thread-body{
+    color: #000000;
+    background-color: #FFFFFF;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    border-top: 1px solid #aaa;
+}
 
 /* **** POST **** */
 .quote{

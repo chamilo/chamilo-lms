@@ -62,6 +62,7 @@ if(!$is_allowedToEdit){
 
 $TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_EXERCICES			= Database::get_course_table(TABLE_QUIZ_TEST);
+$TBL_EXERCICES_QUESTION	= Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TBL_TRACK_ATTEMPT_RECORDING= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 //$nameTools=get_lang('Exercices');
@@ -87,6 +88,7 @@ $TBL_TRACK_ATTEMPT_RECORDING= Database::get_statistic_table(TABLE_STATISTIC_TRAC
 		 <tr class="row_odd">
 		  <th><?php echo get_lang('Question'); ?></th>
 		  <th><?php echo get_lang('Value'); ?></th>
+		  <th><?php echo get_lang('FeedBack'); ?></th>
 		  <th><?php echo get_lang('Date'); ?></th>
 		  <th><?php echo get_lang('Author'); ?></th>
 		 </tr>
@@ -98,7 +100,7 @@ $sql = 'SELECT * FROM '.$TBL_EXERCICES;
 $query = api_sql_query($sql,__FILE__,__LINE__);
 */
 
-$sql = 'SELECT *, CONCAT(firstname,'."' '".',lastname) as full_name FROM '.$TBL_TRACK_ATTEMPT_RECORDING.' LEFT JOIN '.$TBL_USER.' ON user_id = author where exe_id = '.(int)$_GET['exe_id'].' ORDER BY insert_date ASC';
+$sql = "SELECT *, quiz_question.question, CONCAT(firstname,' ',lastname) as full_name FROM $TBL_TRACK_ATTEMPT_RECORDING,$TBL_USER,$TBL_EXERCICES_QUESTION quiz_question WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY insert_date ASC";
 $query = api_sql_query($sql,__FILE__,__LINE__);
 
 while($row = mysql_fetch_array($query)){
@@ -106,12 +108,14 @@ while($row = mysql_fetch_array($query)){
 	if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"';
 	echo '>';
 	
-	echo '<td>'.$row['question_id'].'</td>';
+	echo '<td>'.$row['question'].'</td>';
+	echo '<td>'.get_lang('NewScore').': '.$row['marks'].'</td>';
 	if(!empty($row['teacher_comment'])){
 		echo '<td>'.get_lang('NewComment').': '.$row['teacher_comment'].'</td>';
 	} else {
-		echo '<td>'.get_lang('NewScore').': '.$row['marks'].'</td>';
+		echo '<td>'.get_lang('WithoutComment').'</td>';
 	}
+	
 	echo '<td>'.$row['insert_date'].'</td>';
 	echo '<td>'.(empty($row['full_name'])?'<i>'.get_lang('OriginalValue').'</i>':$row['full_name']).'</td>';
 

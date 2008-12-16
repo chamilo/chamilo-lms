@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 17296 2008-12-15 17:08:44Z cfasanando $
+* 	@version $Id: exercise.class.php 17311 2008-12-16 00:53:24Z cfasanando $
 */
 
 
@@ -805,8 +805,10 @@ class Exercise
         $form -> addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts').' : ',$attempt_option);
 
         $form -> addElement('checkbox', 'enabletimelimit',null ,get_lang('EnableTimeLimits'));
-        $form -> addElement('date', 'start_time', get_lang('ExeStartTime'), array('language'=>'es','format' => 'dMYHi'));
-        $form -> addElement('date', 'end_time', get_lang('ExeEndTime'), array('language'=>'es','format' => 'dMYHi'));
+        //$form -> addElement('date', 'start_time', get_lang('ExeStartTime'), array('language'=>'es','format' => 'dMYHi'));
+        //$form -> addElement('date', 'end_time', get_lang('ExeEndTime'), array('language'=>'es','format' => 'dMYHi'));
+        $form->addElement('datepicker', 'start_time', get_lang('ExeStartTime'), array('form_name'=>'exercise_admin'));
+		$form->addElement('datepicker', 'end_time', get_lang('ExeEndTime'), array('form_name'=>'exercise_admin'));
 
 		// Exercise attempts
 		//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));		
@@ -819,9 +821,9 @@ class Exercise
 		// rules
 		$form -> addRule ('exerciseTitle', get_lang('GiveExerciseName'), 'required');
 		$form -> addRule ('exerciseAttempts', get_lang('Numeric'), 'numeric');
-		$form -> addRule ('start_time', get_lang('DateNotValid'), 'errordate');
-        $form -> addRule ('end_time', get_lang('DateNotValid'), 'errordate');
-        $form -> addRule (array('start_time','end_time'), get_lang('StartDateMustNotBeGreaterThanEndDate'), 'comparedate');
+		$form -> addRule ('start_time', get_lang('DateNotValid'), 'date');
+        $form -> addRule ('end_time', get_lang('DateNotValid'), 'date');
+        $form->addRule(array ('start_time', 'end_time'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
         
 
 		// defaults
@@ -877,9 +879,9 @@ class Exercise
 		if($form -> getSubmitValue('enabletimelimit')==1)
         {
            $start_time = $form -> getSubmitValue('start_time');
-           $this->start_time = $start_time['Y'].'-'.$start_time['M'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00';
+           $this->start_time = $start_time['Y'].'-'.$start_time['F'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00';
            $end_time = $form -> getSubmitValue('end_time');
-           $this->end_time = $end_time['Y'].'-'.$end_time['M'].'-'.$end_time['d'].' '.$end_time['H'].':'.$end_time['i'].':00';
+           $this->end_time = $end_time['Y'].'-'.$end_time['F'].'-'.$end_time['d'].' '.$end_time['H'].':'.$end_time['i'].':00';
         }
           else
   		{

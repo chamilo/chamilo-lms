@@ -151,8 +151,13 @@ class GroupManager
 			if($thisGroup['session_id']!=0)
 			{
 				$sql_session = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$thisGroup['session_id'];
+				error_log($sql_session);
 				$rs_session = api_sql_query($sql_session,__FILE__,__LINE__);
-				$thisGroup['session_name'] = Database::result($rs_session,0,0);
+				if (Database::num_rows($rs_session)>0) {
+					$thisGroup['session_name'] = Database::result($rs_session,0,0);
+				} else {
+					//the session has probably been removed, so the group is now orphaned
+				}
 			}
 			$groups[] = $thisGroup;
 		}

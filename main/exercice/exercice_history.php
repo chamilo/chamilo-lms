@@ -82,7 +82,7 @@ $TBL_TRACK_ATTEMPT_RECORDING= Database::get_statistic_table(TABLE_STATISTIC_TRAC
 //event_access_tool(TOOL_QUIZ);
 
 ?>
-<a href="/main/exercice/exercice.php?cidReq=<?php echo $_GET['cidReq'] ?>&show=result"><< <?php echo get_lang('Back') ?></a>
+<a href="exercice.php?cidReq=<?php echo $_GET['cidReq'] ?>&show=result"><< <?php echo get_lang('Back') ?></a>
 
 <table class="data_table">
 		 <tr class="row_odd">
@@ -100,14 +100,14 @@ $sql = 'SELECT * FROM '.$TBL_EXERCICES;
 $query = api_sql_query($sql,__FILE__,__LINE__);
 */
 
-$sql = "SELECT *, quiz_question.question, CONCAT(firstname,' ',lastname) as full_name FROM $TBL_TRACK_ATTEMPT_RECORDING,$TBL_USER,$TBL_EXERCICES_QUESTION quiz_question WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY insert_date ASC";
+$sql = "SELECT *, quiz_question.question, CONCAT(firstname,' ',lastname) as full_name FROM $TBL_TRACK_ATTEMPT_RECORDING,$TBL_USER,$TBL_EXERCICES_QUESTION quiz_question WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY question ASC";
 $query = api_sql_query($sql,__FILE__,__LINE__);
 
 while($row = mysql_fetch_array($query)){
 	echo '<tr';
 	if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"';
 	echo '>';
-	
+
 	echo '<td>'.$row['question'].'</td>';
 	echo '<td>'.get_lang('NewScore').': '.$row['marks'].'</td>';
 	if(!empty($row['teacher_comment'])){
@@ -115,7 +115,7 @@ while($row = mysql_fetch_array($query)){
 	} else {
 		echo '<td>'.get_lang('WithoutComment').'</td>';
 	}
-	
+
 	echo '<td>'.$row['insert_date'].'</td>';
 	echo '<td>'.(empty($row['full_name'])?'<i>'.get_lang('OriginalValue').'</i>':$row['full_name']).'</td>';
 

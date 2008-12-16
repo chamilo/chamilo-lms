@@ -1,5 +1,5 @@
-<?php // $Id: exercice_submit.php 17277 2008-12-14 02:26:03Z cfasanando $
- 
+<?php // $Id: exercice_submit.php 17317 2008-12-16 14:05:45Z cfasanando $
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 17277 2008-12-14 02:26:03Z cfasanando $
+* 	@version $Id: exercice_submit.php 17317 2008-12-16 14:05:45Z cfasanando $
 */
 
 
@@ -128,7 +128,9 @@ if ( empty ($buttonCancel) ) {
 	$buttonCancel 	= $_REQUEST['buttonCancel'];
 }
 $error = '';
-
+if (!isset($exerciseType)) {
+$exe_start_date= date('Y-m-d H:i:s');
+}
 // if the user has clicked on the "Cancel" button
 if($buttonCancel)
 {
@@ -164,13 +166,13 @@ if (empty($exerciseType)) {
 }
 
 if ($exerciseType == 1) {
-	$_SESSION['exercice_start_date'] = date('Y-m-d H:i:s');
+	$_SESSION['exercice_start_date'] = $exe_start_date;
 }
 
 if ($_configuration['live_exercise_tracking'] == true && $exerciseType == 2) {
 	$sql = api_sql_query('SELECT * FROM '.$stat_table.$condition,__FILE__,__LINE__);
 	if(Database::num_rows($sql) > 0 ){
-		
+
 		$getIncomplete = Database::fetch_array($sql);
 		$exe_id = $getIncomplete['exe_id'];
 		if ($_SERVER['REQUEST_METHOD']!='POST') {
@@ -179,7 +181,7 @@ if ($_configuration['live_exercise_tracking'] == true && $exerciseType == 2) {
 			$sql = api_sql_query('SELECT * FROM '.$exercice_attemp_table.' WHERE exe_id = '.$getIncomplete['exe_id'].' ORDER BY tms ASC',__FILE__,__LINE__);
 			while ($row = Database::fetch_array($sql)) {
 				$recorded['exerciseResult'][$row['question_id']] = 1;
-		
+
 			}
 			$exerciseResult = $_SESSION['exerciseResult'] = $recorded['exerciseResult'];
 			$exerciseType = 2;
@@ -203,7 +205,7 @@ if ($formSent) {
         $exerciseResult=array();
         $exerciseResultCoordinates=array();
     }
-    
+
 
     // if the user has answered at least one question
     if (is_array($choice)) {
@@ -230,14 +232,14 @@ if ($formSent) {
 
                 //saving each question
                 if ($_configuration['live_exercise_tracking'] == true && $exerciseType == 2):
-					$nro_question = $questionNum;// - 1; 
+					$nro_question = $questionNum;// - 1;
 //START of saving and qualifying each question submitted
 //------------------------------------------------------------------------------------------
 //
 	define('ENABLED_LIVE_EXERCISE_TRACKING',1);
 	require_once 'question.class.php';
 	require_once 'answer.class.php';
-	require_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');	
+	require_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 	$counter=0;
 	$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$table_ans 				= Database :: get_course_table(TABLE_QUIZ_ANSWER);
@@ -248,9 +250,9 @@ if ($formSent) {
 		$counter++;
 		// gets the student choice for this question
 		$choice=$exerciseResult[$questionId];
-		
+
 		//print_r($choice); echo "<br>";
-		
+
 		// creates a temporary Question object
 
 		$objQuestionTmp = Question :: read($questionId);
@@ -271,7 +273,7 @@ if ($formSent) {
 		if ($answerType == FREE_ANSWER) {
 			$nbrAnswers = 1;
 		}
-			
+
 		for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 			$answer=$objAnswerTmp->selectAnswer($answerId);
 			$answerComment=$objAnswerTmp->selectComment($answerId);
@@ -303,32 +305,32 @@ if ($formSent) {
 										break;
 				// for fill in the blanks
 				case FILL_IN_BLANKS :
-									
+
 							    		// the question is encoded like this
 									    // [A] B [C] D [E] F::10,10,10@1
 									    // number 1 before the "@" means that is a switchable fill in blank question
 									    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
-									    // means that is a normal fill blank question			
+									    // means that is a normal fill blank question
 
 										// first we explode the "::"
-										$pre_array = explode('::', $answer);	
-				
+										$pre_array = explode('::', $answer);
+
 										// is switchable fill blank or not
-                                        $last = count($pre_array)-1;		
+                                        $last = count($pre_array)-1;
 										$is_set_switchable = explode('@', $pre_array[$last]);
-										
+
 										$switchable_answer_set=false;
 										if (isset($is_set_switchable[1]) && $is_set_switchable[1]==1) {
 											$switchable_answer_set=true;
-										}								
-										
+										}
+
                                         $answer = '';
                                         for ($k=0; $k<$last; $k++) {
 										  $answer .= $pre_array[$k];
                                         }
-										
+
 										// splits weightings that are joined with a comma
-										$answerWeighting = explode(',',$is_set_switchable[0]);				
+										$answerWeighting = explode(',',$is_set_switchable[0]);
 
 										// we save the answer because it will be modified
 										$temp=$answer;
@@ -346,7 +348,7 @@ if ($formSent) {
 
 										$answer='';
 										$j=0;
-										
+
                                         //initialise answer tags
 										$user_tags=array();
 										$correct_tags=array();
@@ -363,7 +365,7 @@ if ($formSent) {
                                                 $real_text[] = $answer;
 												break; //no more "blanks", quit the loop
 											}
-											// adds the piece of text that is before the blank 
+											// adds the piece of text that is before the blank
                                             //and ends with '[' into a general storage array
                                             $real_text[]=substr($temp,0,$pos+1);
 											$answer.=substr($temp,0,$pos+1);
@@ -383,40 +385,40 @@ if ($formSent) {
 											$temp=substr($temp,$pos+1);
                                             //$answer .= ']';
 										}
-																			
-										$answer='';			
-										$real_correct_tags = $correct_tags;							
+
+										$answer='';
+										$real_correct_tags = $correct_tags;
 										$chosen_list=array();
 
 										for ($i=0;$i<count($real_correct_tags);$i++) {
 											if ($i==0) {
 												$answer.=$real_text[0];
 											}
-											
-											if (!$switchable_answer_set) {						
+
+											if (!$switchable_answer_set) {
 												if ($correct_tags[$i]==$user_tags[$i]) {
 													// gives the related weighting to the student
-													$questionScore+=$answerWeighting[$i]; 
+													$questionScore+=$answerWeighting[$i];
 													// increments total score
 													$totalScore+=$answerWeighting[$i];
 													// adds the word in green at the end of the string
-													$answer.=stripslashes($correct_tags[$i]); 
+													$answer.=stripslashes($correct_tags[$i]);
 												}
-												// else if the word entered by the student IS NOT the same as the one defined by the professor											
+												// else if the word entered by the student IS NOT the same as the one defined by the professor
 												elseif(!empty($user_tags[$i])) {
 													// adds the word in red at the end of the string, and strikes it
-													$answer.='<font color="red"><s>'.stripslashes($user_tags[$i]).'</s></font>'; 
+													$answer.='<font color="red"><s>'.stripslashes($user_tags[$i]).'</s></font>';
 												} else {
 													// adds a tabulation if no word has been typed by the student
 													$answer.='&nbsp;&nbsp;&nbsp;';
-												}												
-											} else { 	
+												}
+											} else {
 												// switchable fill in the blanks
 												if (in_array($user_tags[$i],$correct_tags)) {
-													$chosen_list[]=$user_tags[$i];													
+													$chosen_list[]=$user_tags[$i];
 													$correct_tags=array_diff($correct_tags,$chosen_list);
-																	
-													// gives the related weighting to the student												
+
+													// gives the related weighting to the student
 													$questionScore+=$answerWeighting[$i];
 													// increments total score
 													$totalScore+=$answerWeighting[$i];
@@ -425,18 +427,18 @@ if ($formSent) {
 												} elseif(!empty($user_tags[$i])) {
 													// else if the word entered by the student IS NOT the same as the one defined by the professor
 													// adds the word in red at the end of the string, and strikes it
-													$answer.='<font color="red"><s>'.stripslashes($user_tags[$i]).'</s></font>'; 
+													$answer.='<font color="red"><s>'.stripslashes($user_tags[$i]).'</s></font>';
 												} else {
 													// adds a tabulation if no word has been typed by the student
 													$answer.='&nbsp;&nbsp;&nbsp;';
-												}												
+												}
 											}
 											// adds the correct word, followed by ] to close the blank
 											$answer.=' / <font color="green"><b>'.$real_correct_tags[$i].'</b></font>]';
 											if ( isset( $real_text[$i+1] ) ) {
                                                 $answer.=$real_text[$i+1];
                                             }
-										} 
+										}
 
 										break;
 				// for free answer
@@ -498,10 +500,10 @@ if ($formSent) {
 			if (empty($choice)) {
 				$choice = 0;
 			}
-			if ($answerType==MULTIPLE_ANSWER ) {				
+			if ($answerType==MULTIPLE_ANSWER ) {
 				if ($choice != 0) {
 					$reply = array_keys($choice);
-							
+
 					for ($i=0;$i<sizeof($reply);$i++) {
 						$ans = $reply[$i];
 						exercise_attempt($questionScore,$ans,$quesId,$exeId,$i);
@@ -516,13 +518,13 @@ if ($formSent) {
 					$val = $choice[$j];
 					if (preg_match_all ('#<font color="red"><s>([0-9a-z ]*)</s></font>#', $val, $arr1)) {
 						$val = $arr1[1][0];
-					}						
+					}
 					$val=addslashes($val);
 					$val=strip_tags($val);
 					$sql = "select position from $table_ans where question_id='".Database::escape_string($questionId)."' and answer='".Database::escape_string($val)."' AND correct=0";
 					$res = api_sql_query($sql, __FILE__, __LINE__);
-					$answer = mysql_result($res,0,"position");				
-					
+					$answer = mysql_result($res,0,"position");
+
 					exercise_attempt($questionScore,$answer,$quesId,$exeId,$j);
 
 				}
@@ -542,7 +544,7 @@ if ($formSent) {
 		api_sql_query('UPDATE '.$stat_table.' SET exe_result = exe_result + '.(int)$totalScore.',exe_weighting = exe_weighting + '.(int)$totalWeighting.' WHERE exe_id = '.$exe_id,__FILE__,__LINE__);
 //END of saving and qualifying
 //------------------------------------------------------------------------------------------
-//	
+//
 				endif;
 
                 if (isset($_POST['hotspot'])) {
@@ -822,7 +824,7 @@ if( $exerciseAttempts > 0){
 
  	$aquery = api_sql_query($sql, __FILE__, __LINE__);
  	$attempt = Database::fetch_array($aquery);
- 	  	 
+
     if ( $attempt[0] >= $exerciseAttempts ) {
     	if (!api_is_allowed_to_edit()) {
 	    	Display::display_warning_message(sprintf(get_lang('ReachedMaxAttempts'),$exerciseTitle,$exerciseAttempts));
@@ -832,19 +834,19 @@ if( $exerciseAttempts > 0){
 	        Display::display_warning_message(sprintf(get_lang('ReachedMaxAttemptsAdmin'),$exerciseTitle,$exerciseAttempts));
 		}
 	}
-}	  	 
+}
 
 if (!function_exists('convert_date_to_number')) {
 function convert_date_to_number($default){
 	// 2008-10-12 00:00:00 ---to--> 12345672218 (timestamp)
 	$parts = split(' ',$default);
 	list($d_year,$d_month,$d_day) = split('-',$parts[0]);
-	list($d_hour,$d_minute,$d_second) = split(':',$parts[1]);	
+	list($d_hour,$d_minute,$d_second) = split(':',$parts[1]);
 	return mktime($d_hour, $d_minute, $d_second, $d_month, $d_day, $d_year);
 }
 }
 
-$limit_time_exists = (($Exe_starttime!='0000-00-00 00:00:00')||($Exe_endtime!='0000-00-00 00:00:00'))? true : false; 
+$limit_time_exists = (($Exe_starttime!='0000-00-00 00:00:00')||($Exe_endtime!='0000-00-00 00:00:00'))? true : false;
 if($limit_time_exists){
 	$exercise_start_time = convert_date_to_number($Exe_starttime);
 	$exercise_end_time = convert_date_to_number($Exe_endtime);
@@ -876,18 +878,18 @@ else
 		echo "<a href=\"../document/download.php?doc_url=%2Faudio%2F".$exerciseSound."\" target=\"_blank\">",
 			"<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=",get_lang('Sound')."\" /></a>";
 	}
-	
-	
+
+
 	// Get number of hotspot questions for javascript validation
 	$number_of_hotspot_questions = 0;
 	$onsubmit = '';
 	$i=0;
-	
+
 	foreach($questionList as $questionId)
 	{
 		$i++;
 		$objQuestionTmp = Question :: read($questionId);
-	
+
 		// for sequential exercises
 		if($exerciseType == 2)
 		{
@@ -913,13 +915,13 @@ else
 			}
 		}
 	}
-	
+
 	if($number_of_hotspot_questions > 0)
 	{
 		$onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
 	}
 	$s="<p>$exerciseDescription</p>";
-	
+
 	if($exerciseType==2){
 		$s2 = "&exerciseId=".$exerciseId;
 	}
@@ -937,13 +939,13 @@ else
 	  <td>
 	  <table width='100%' cellpadding='3' cellspacing='0' border='0'>";
 	echo $s;
-	
+
 	$i=0;
-	
+
 	foreach($questionList as $questionId)
 	{
 		$i++;
-	
+
 		// for sequential exercises
 		if($exerciseType == 2)
 		{
@@ -959,31 +961,31 @@ else
 				{
 					// construction of the Question object
 					$objQuestionTmp = Question::read($questionId);
-	
+
 					$questionName=$objQuestionTmp->selectTitle();
-	
+
 					// destruction of the Question object
 					unset($objQuestionTmp);
-	
+
 					echo '<tr><td>'.get_lang('AlreadyAnswered').' &quot;'.$questionName.'&quot;</td></tr>';
-	
+
 					break;
 				}
 			}
 		}
-	
+
 		$s="<tr>
 		 <td width='3%' bgcolor='#e6e6e6'><img src=\"".api_get_path(WEB_IMG_PATH)."test.gif\" align=\"absmiddle\"></td>
 		 <td valign='middle' bgcolor='#e6e6e6'>
 			".get_lang('Question')." ";
 		$s.=$i.' : ';
 		if($exerciseType == 2) $s.=' / '.$nbrQuestions;
-	
+
 		echo $s;
-	
+
 		// shows the question and its answers
 		showQuestion($questionId, false, $origin);
-	
+
 		// for sequential exercises
 		if($exerciseType == 2)
 		{
@@ -991,7 +993,7 @@ else
 			break;
 		}
 	}	// end foreach()
-	
+
 	$s="</table>
 	  </td>
 	 </tr>
@@ -1000,10 +1002,10 @@ else
 		 <!-- <input type='submit' name='buttonCancel' value=".get_lang('Cancel')." />
 	   &nbsp;&nbsp; //-->
 		 <input type='submit' name='submit' value='";
-	
-	  if ($exerciseType == 1 || $nbrQuestions == $questionNum) 
+
+	  if ($exerciseType == 1 || $nbrQuestions == $questionNum)
 	  {
-		$s.=get_lang('ValidateAnswer'); 
+		$s.=get_lang('ValidateAnswer');
 	  }
 	  else
 	  {
@@ -1012,7 +1014,7 @@ else
 	  //$s.='\'&gt;';
 	  $s.= '\' />';
 	  $s.="</td></tr></form></table>";
-	
+
 	$b=2;
 	echo $s;
 }
@@ -1026,16 +1028,13 @@ else
 				'VALUES ' .
 				'('."'$exerciseId','".api_get_user_id()."','".$_course['id']."','incomplete','".api_get_session_id()."','".implode(',',$questionList)."','".date('Y-m-d H:i:s')."'".') ',__FILE__,__LINE__);
     		} else {
-   			api_sql_query('INSERT INTO '.$stat_table.' ' .
-				'(exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date) ' .
-				'VALUES ' .
-				'('."'$exerciseId','".api_get_user_id()."','".$_course['id']."','incomplete','".api_get_session_id()."','".date('Y-m-d H:i:s')."'".') ',__FILE__,__LINE__);
+   			api_sql_query("INSERT INTO $stat_table (exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date)
+						   VALUES('$exerciseId','".api_get_user_id()."','".$_course['id']."','incomplete','".api_get_session_id()."','".date('Y-m-d H:i:s')."')",__FILE__,__LINE__);
     		}
 		}
 	endif;
 
-//var_dump($_SESSION);exit;
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display::display_footer();
-} 
+}
 ?>

@@ -1,7 +1,7 @@
-<?php // $Id: events.lib.inc.php 16751 2008-11-14 21:41:05Z juliomontoya $
+<?php // $Id: events.lib.inc.php 17317 2008-12-16 14:05:45Z cfasanando $
 /* See license terms in /dokeos_license.txt */
 /**
-============================================================================== 
+==============================================================================
 * EVENTS LIBRARY
 *
 * This is the events library for Dokeos.
@@ -12,12 +12,12 @@
 *
 * @package dokeos.library
 * @todo convert queries to use Database API
-============================================================================== 
+==============================================================================
 */
 /*
-============================================================================== 
+==============================================================================
 	   INIT SECTION
-============================================================================== 
+==============================================================================
 */
 // REGROUP TABLE NAMES FOR MAINTENANCE PURPOSE
 $TABLETRACK_LOGIN = $_configuration['statistics_database'].".track_e_login";
@@ -32,9 +32,9 @@ $TABLETRACK_LASTACCESS = $_configuration['statistics_database'].".track_e_lastac
 $TABLETRACK_DEFAULT = $_configuration['statistics_database'].".track_e_default";
 
 /*
-============================================================================== 
+==============================================================================
 		FUNCTIONS
-============================================================================== 
+==============================================================================
 */
 
 /**
@@ -45,7 +45,7 @@ function event_open()
 {
 	global $_configuration;
 	global $TABLETRACK_OPEN;
-	
+
 	// if tracking is disabled record nothing
 	if (!$_configuration['tracking_enabled'])
 	{
@@ -92,10 +92,10 @@ function event_open()
  */
 function event_login()
 {
-	global $_configuration;	
+	global $_configuration;
 	global $_user;
 	global $TABLETRACK_LOGIN;
-	
+
 	// if tracking is disabled record nothing
 	if (!$_configuration['tracking_enabled'])
 	{
@@ -104,11 +104,11 @@ function event_login()
 
 	$reallyNow = time();
 	$sql = "INSERT INTO ".$TABLETRACK_LOGIN."
-	
+
 				(login_user_id,
 				 login_ip,
 				 login_date)
-	
+
 				 VALUES
 					('".$_user['user_id']."',
 					'".Database::escape_string($_SERVER['REMOTE_ADDR'])."',
@@ -125,27 +125,27 @@ function event_login()
  */
 function event_access_course()
 {
-	global $_configuration;	
+	global $_configuration;
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_ACCESS;
 	global $TABLETRACK_LASTACCESS; //for "what's new" notification
-	
+
 	// if tracking is disabled record nothing
 	if (!$_configuration['tracking_enabled'])
 	{
 		return 0;
 	}
-	
+
 	if(api_get_setting('use_session_mode')=='true' && isset($_SESSION['id_session']))
 	{
 		$id_session = intval($_SESSION['id_session']);
 	}
-	else 
+	else
 	{
 		$id_session = 0;
 	}
-	
+
 	$reallyNow = time();
 	if ($_user['user_id'])
 	{
@@ -156,13 +156,13 @@ function event_access_course()
 		$user_id = "NULL";
 	}
 	$sql = "INSERT INTO ".$TABLETRACK_ACCESS."
-	
+
 				(access_user_id,
 				 access_cours_code,
 				 access_date)
-	
+
 				VALUES
-	
+
 				(".$user_id.",
 				'".$_cid."',
 				FROM_UNIXTIME(".$reallyNow."))";
@@ -195,7 +195,7 @@ function event_access_course()
  *  ...
  *  Values can be added if new modules are created (15char max)
  *  I encourage to use $nameTool as $tool when calling this function
- *  
+ *
  * 	Functionality for "what's new" notification is added by Toon Van Hoecke
  */
 function event_access_tool($tool, $id_session=0)
@@ -209,16 +209,16 @@ function event_access_tool($tool, $id_session=0)
 	global $_configuration;
 	global $_course;
 	global $TABLETRACK_LASTACCESS; //for "what's new" notification
-	
+
 	if(api_get_setting('use_session_mode')=='true' && isset($_SESSION['id_session']))
 	{
 		$id_session = intval($_SESSION['id_session']);
 	}
-	else 
+	else
 	{
 		$id_session = 0;
 	}
-	
+
 	$reallyNow = time();
 	$user_id = $_user['user_id'] ? "'".$_user['user_id']."'" : "NULL"; // "NULL" is anonymous
 	// record information
@@ -236,9 +236,9 @@ function event_access_tool($tool, $id_session=0)
 							 access_cours_code,
 							 access_tool,
 							 access_date)
-			
+
 							VALUES
-			
+
 							(".$user_id.",".// Don't add ' ' around value, it's already done.
 					"'".$_cid."' ,
 					'".htmlspecialchars($tool, ENT_QUOTES)."',
@@ -276,11 +276,11 @@ function event_access_tool($tool, $id_session=0)
  */
 function event_download($doc_url)
 {
-	global $_configuration;	
+	global $_configuration;
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_DOWNLOADS;
-	
+
 	// if tracking is disabled record nothing
 	if (!$_configuration['tracking_enabled'])
 	{
@@ -303,7 +303,7 @@ function event_download($doc_url)
 				 down_doc_path,
 				 down_date
 				)
-	
+
 				VALUES
 				(
 				 ".$user_id.",
@@ -325,7 +325,7 @@ function event_download($doc_url)
  */
 function event_upload($doc_id)
 {
-	global $_configuration;	
+	global $_configuration;
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_UPLOADS;
@@ -351,7 +351,7 @@ function event_upload($doc_id)
 				 upload_work_id,
 				 upload_date
 				)
-	
+
 				VALUES
 				(
 				 ".$user_id.",
@@ -372,11 +372,11 @@ function event_upload($doc_id)
 */
 function event_link($link_id)
 {
-	global $_configuration;	
+	global $_configuration;
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_LINKS;
-	
+
 	// if tracking is disabled record nothing
 	if (!$_configuration['tracking_enabled'])
 	{
@@ -399,7 +399,7 @@ function event_link($link_id)
 				 links_link_id,
 				 links_date
 				)
-	
+
 				VALUES
 				(
 				 ".$user_id.",
@@ -417,7 +417,7 @@ function event_link($link_id)
  * @param exo_id ( id in courseDb exercices table )
  * @param result ( score @ exercice )
  * @param weighting ( higher score )
- * @param session_id 
+ * @param session_id
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @author Julio Montoya <gugli100@gmail.com>
  * @desc Record result of user when an exercice was done
@@ -426,19 +426,19 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id)
 {
 	if ($exeid!='')
 	{
-		$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);	
+		$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$reallyNow = time();
-		$sql = "UPDATE $TABLETRACK_EXERCICES SET				
+		$sql = "UPDATE $TABLETRACK_EXERCICES SET
 				   exe_exo_id 	= 	'".$exo_id."',
 				   exe_result	=	  '".$score."',
 				   exe_weighting = '".$weighting."',
 				   session_id		= '".$session_id."',
-				   exe_date= FROM_UNIXTIME(".$reallyNow."),status = '', data_tracking=''
-				 WHERE exe_id = '".$exeid."'";	
+				   exe_date= FROM_UNIXTIME(".$reallyNow."),status = '', data_tracking='',start_date ='".$_SESSION['exercice_start_date']."'
+				 WHERE exe_id = '".$exeid."'";
 		$res = @api_sql_query($sql,__FILE__,__LINE__);
 		return $res;
 	}
-	else 
+	else
 		return false;
 }
 
@@ -452,7 +452,7 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id)
 function create_event_exercice($exo_id)
 {
 	global $_user, $_cid, $_configuration;
-	$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);		
+	$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	$reallyNow = time();
 	if ($_user['user_id'])
 	{
@@ -462,7 +462,7 @@ function create_event_exercice($exo_id)
 		{
 		$user_id = "NULL";
 	}
-	
+
 	if(defined('ENABLED_LIVE_EXERCISE_TRACKING')){
 		$condition = ' WHERE ' .
 				'exe_exo_id =   '."'".$exo_id."'".' AND ' .
@@ -470,16 +470,16 @@ function create_event_exercice($exo_id)
 				'exe_cours_id = '."'".$_cid."'".' AND ' .
 				'status = '."'incomplete'".' AND '.
 				'session_id = '."'".api_get_session_id()."'";
-		$sql = api_sql_query('SELECT exe_id FROM '.$TABLETRACK_EXERCICES.$condition,__FILE__,__LINE__);	
+		$sql = api_sql_query('SELECT exe_id FROM '.$TABLETRACK_EXERCICES.$condition,__FILE__,__LINE__);
 		$row = mysql_fetch_array($sql);
 		return $row['exe_id'];
 	}
-	
+
 	$sql = "INSERT INTO $TABLETRACK_EXERCICES
 			  (
 			   exe_user_id,
-			   exe_cours_id	
-			  )	
+			   exe_cours_id
+			  )
 			  VALUES
 			  (
 			  ".$user_id.",
@@ -505,7 +505,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 {
 	global $_configuration, $_user, $_cid;
 	$TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-	
+
 	// if tracking is disabled record nothing
 	if (!$_configuration['tracking_enabled'])
 	{
@@ -521,8 +521,8 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 	{
 		$user_id = "NULL";
 	}
-	
-	$sql = "INSERT INTO $TBL_TRACK_ATTEMPT  
+
+	$sql = "INSERT INTO $TBL_TRACK_ATTEMPT
 			  (
 			   exe_id,
 			   user_id,
@@ -552,12 +552,12 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 		question_id,
 		marks,
 		insert_date,
-		author) 
+		author)
 		VALUES
 		('."'$exeId','".$quesId."','$score','".date('Y-m-d H:i:s')."',''".')';
 		api_sql_query($recording_changes,__FILE__,__LINE__);
-	}		 
-	  
+	}
+
 	$res = @api_sql_query($sql,__FILE__,__LINE__);
 	return $res;
 }
@@ -574,10 +574,10 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
  */
 function event_system($event_type, $event_value_type, $event_value, $timestamp = null, $user_id=null, $course_code=null)
 {
-	global $_configuration;	
+	global $_configuration;
 	global $_user;
 	global $TABLETRACK_DEFAULT;
-	
+
 	// if tracking is disabled record nothing
 	if (!$_configuration['tracking_enabled'])
 	{
@@ -597,7 +597,7 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 	}
 
 	$sql = "INSERT INTO ".$TABLETRACK_DEFAULT."
-	
+
 				(default_user_id,
 				 default_cours_code,
 				 default_date, .

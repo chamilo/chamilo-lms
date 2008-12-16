@@ -1,5 +1,5 @@
-<?php // $Id: exercice.php 17277 2008-12-14 02:26:03Z cfasanando $
- 
+<?php // $Id: exercice.php 17317 2008-12-16 14:05:45Z cfasanando $
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -81,7 +81,7 @@ $TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_H
 $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $TBL_TRACK_ATTEMPT_RECORDING = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
-// document path 
+// document path
 $documentPath= api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 // picture path
 $picturePath=$documentPath.'/images';
@@ -133,7 +133,7 @@ if($origin == 'learnpath'){
 
 if($_GET['delete']=='delete' && ($is_allowedToEdit || api_is_coach()) && !empty($_GET['did'])){
 	$sql='DELETE FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES).' WHERE exe_id = '.(int)$_GET['did'];
-	api_sql_query ($sql,__FILE__,__LINE__); 	
+	api_sql_query ($sql,__FILE__,__LINE__);
 	header('Location: exercice.php?cidReq='.htmlentities($_GET['cidReq']).'&show=result');
 	exit;
 }
@@ -155,8 +155,8 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 			$result =api_sql_query($sql, __FILE__, __LINE__);
 			$ques_name = Database::result($result,0,"question");
 
-			$query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '".Database::escape_string($v)."' 
-						WHERE question_id = '".Database::escape_string($keyexp[1])."' 
+			$query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '".Database::escape_string($v)."'
+						WHERE question_id = '".Database::escape_string($keyexp[1])."'
 						AND exe_id='".Database::escape_string($id)."'";
 			api_sql_query($query, __FILE__, __LINE__);
 
@@ -169,28 +169,28 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 
 			$totquery = "update $TBL_TRACK_EXERCICES set exe_result = '".Database::escape_string($tot)."' where exe_Id='".Database::escape_string($id)."'";
 			api_sql_query($totquery, __FILE__, __LINE__);
-			
+
 			$recording_changes = 'INSERT INTO '.$TBL_RECORDING.' ' .
 					'(exe_id,
 					question_id,
 					marks,
 					insert_date,
-					author) 
+					author)
 					VALUES
 					('."'$id','".$keyexp[1]."','$v','".date('Y-m-d H:i:s')."','".api_get_user_id()."'".')';
 			api_sql_query($recording_changes, __FILE__, __LINE__);
 		} else {
-		  $query = "UPDATE $TBL_TRACK_ATTEMPT SET teacher_comment = '".Database::escape_string($v)."' 
-		  			WHERE question_id = '".Database::escape_string($keyexp[1])."' 
+		  $query = "UPDATE $TBL_TRACK_ATTEMPT SET teacher_comment = '".Database::escape_string($v)."'
+		  			WHERE question_id = '".Database::escape_string($keyexp[1])."'
 		  			AND exe_id = '".Database::escape_string($id)."'";
 		   api_sql_query($query, __FILE__, __LINE__);
-		   
+
 			$recording_changes = 'INSERT INTO '.$TBL_RECORDING.' ' .
 					'(exe_id,
 					question_id,
 					teacher_comment,
 					insert_date,
-					author) 
+					author)
 					VALUES
 					('."'$id','".$keyexp[1]."','$v','".date('Y-m-d H:i:s')."','".api_get_user_id()."'".')';
 			api_sql_query($recording_changes, __FILE__, __LINE__);
@@ -198,7 +198,7 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 		}
 
 }
-	
+
 $qry = 'SELECT DISTINCT question_id, marks
 			FROM '.$TBL_TRACK_ATTEMPT.' where exe_id = '.intval($id).'
 			GROUP BY question_id';
@@ -265,10 +265,10 @@ $headers="From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset="
 //mail($emailid, $subject, $mess,$headers);
 
 api_mail_html($emailid, $emailid, $subject, $mess, $from_name, $from);
-	
+
 
 if (in_array($origin, array('tracking_course','user_course'))){
-		//Redirect to the reporting		
+		//Redirect to the reporting
 		header('location: ../mySpace/myStudents.php?origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['course']);
 	}
 }
@@ -306,10 +306,10 @@ if ($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2') {
 	$temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";
 	$temp_xml_file = $temp_zip_dir."/qti2export_".$exerciseId.'.xml';
 	file_put_contents($temp_xml_file,$export);
-	$zip_folder=new PclZip($temp_zip_file);	
+	$zip_folder=new PclZip($temp_zip_file);
 	$zip_folder->add($temp_xml_file, PCLZIP_OPT_REMOVE_ALL_PATH);
 	$name = 'qti2_export_'.$exerciseId.'.zip';
-	
+
 	//DocumentManager::string_send_for_download($export,true,'qti2export_'.$exerciseId.'.xml');
 	DocumentManager::file_send_for_download($temp_zip_file,true,$name);
 	unlink($temp_zip_file);
@@ -386,12 +386,12 @@ HotPotGCt($documentPath,1,$_user['user_id']);
 // only for administrator
 
 if ($is_allowedToEdit) {
-	
+
 	if (!empty($choice)) {
 		// construction of Exercise
-		
+
 		$objExerciseTmp=new Exercise();
-		
+
 		if ($objExerciseTmp->read($exerciseId)) {
 			switch ($choice) {
 				case 'delete':	// deletes an exercise
@@ -559,7 +559,7 @@ if ($show == 'test') {
 	 <th><?php echo get_lang('State');?></th>
 
   </tr>
-	<?php 
+	<?php
 }
 	// show message if no HP test to show
 	if (!($nbrExercises+$nbrHpTests) ) {
@@ -579,7 +579,7 @@ $mylpid = (empty($learnpath_id)?'':'&learnpath_id='.$learnpath_id);
 $mylpitemid = (empty($learnpath_item_id)?'':'&learnpath_item_id='.$learnpath_item_id);
 while($row=Database::fetch_array($result)) {
 	if($i%2==0) $s_class="row_odd"; else $s_class="row_even";
-	
+
 	// prof only
 	if ($is_allowedToEdit) {
 	echo '<tr class="'.$s_class.'">'."\n";
@@ -639,7 +639,7 @@ $eid = $row['id'];
 $uid= api_get_user_id();
 //this query might be improved later on by ordering by the new "tms" field rather than by exe_id
 $qry = "SELECT * FROM $TBL_TRACK_EXERCICES " .
-		   "WHERE exe_exo_id = '".Database::escape_string($eid)."' and exe_user_id = '".Database::escape_string($uid)."' and exe_cours_id = '".api_get_course_id()."' AND session_id =  '".api_get_session_id()."' ORDER BY exe_id DESC";	
+		   "WHERE exe_exo_id = '".Database::escape_string($eid)."' and exe_user_id = '".Database::escape_string($uid)."' and exe_cours_id = '".api_get_course_id()."' AND session_id =  '".api_get_session_id()."' ORDER BY exe_id DESC";
 	$qryres = api_sql_query($qry);
 	$num = Database::num_rows($qryres);
     if ($num>0) {
@@ -676,7 +676,7 @@ $i++;
 		} else {
 			$to = $limitExPage;
 		}
-		
+
 		if($is_allowedToEdit) {
 			$sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
 				FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
@@ -692,7 +692,7 @@ $i++;
 		}
 
 		$result = api_sql_query ($sql,__FILE__,__LINE__);
-		
+
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
 			$attribute['path'      ][] = $row['path'      ];
 			$attribute['visibility'][] = $row['visibility'];
@@ -800,24 +800,36 @@ if ($_configuration['tracking_enabled']) {
  				foreach($values as $key => $value) {
  					$output .= '<option value="'.$key.'" '.(($checked==$key)?'selected="selected"':'').'>'.$value.'</option>';
  				}
- 					$output .= '</select>';	
+ 					$output .= '</select>';
  				return $output;
 			}
 		}
-	
-	if (api_is_allowed_to_edit()) { 
-		if (!$_REQUEST['filter']) {
-			$filter_by_not_revised = true;		
-			$filter=1;	
+
+		if (!function_exists('make_select_users')) {
+			function make_select_users($name,$values,$checked=''){
+				$output .= '<select name="'.$name.'" >';
+				$output .= '<option value="all">'.get_lang('EveryBody').'</option>';
+ 				foreach($values as $key => $value) {
+ 					$output .= '<option value="'.$key.'" '.(($checked==$key)?'selected="selected"':'').'>'.$value.'</option>';
+ 				}
+ 					$output .= '</select>';
+ 				return $output;
+			}
 		}
-		$filter = (int)$_REQUEST['filter']; 
-		
-		
+
+	if (api_is_allowed_to_edit()) {
+		if (!$_REQUEST['filter']) {
+			$filter_by_not_revised = true;
+			$filter=1;
+		}
+		$filter = (int)$_REQUEST['filter'];
+
+
 		switch($filter){
-		 case 1: 
+		 case 1:
 				$filter_by_not_revised = true;
 				break;
-	 	 case 2:  
+	 	 case 2:
 				$filter_by_revised = true;
 				break;
 		 default:
@@ -827,11 +839,11 @@ if ($_configuration['tracking_enabled']) {
 		$form_filter .= make_select('filter',array(1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised')),$filter);
 		$form_filter .= '<input type="submit" value="'.get_lang('FilterExercices').'"> </form>';
 		echo $form_filter;
-	} 
+	}
 
 		// the form
 		if(api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-			
+
 			echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
 			echo '<input type="hidden" name="export_report" value="export_report">';
 			echo '<input type="hidden" name="export_format" value="csv">';
@@ -852,7 +864,7 @@ if ($_configuration['tracking_enabled']) {
 			echo '<a class="quiz_export_link" href="#" onclick="document.form1a.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif" alt="'.get_lang('ExportAsCSV').'">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 			echo '<a class="quiz_export_link" href="#" onclick="document.form1b.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif" alt="'.get_lang('ExportAsXLS').'">&nbsp;'.get_lang('ExportAsXLS').'</a>';
 			echo '<a class="quiz_export_link" href="#" onclick="document.form1c.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'synthese_view.gif" alt="'.$alt.'">&nbsp;'.$alt.'</a>';
-			echo '<br /><br />';		
+			echo '<br /><br />';
 		}
 		?>
 		<table class="data_table">
@@ -870,50 +882,54 @@ if ($_configuration['tracking_enabled']) {
 		if (api_get_session_id()!=0) {
 			$session_id_and = ' AND session_id = ' .api_get_session_id().' ';
 		}
-			
+
 		if($is_allowedToEdit || $is_tutor) {
 			$user_id_and='';
-			
+
 			if (!empty($_POST['filter_by_user'])) {
-				$user_id_and = ' AND user_id = ' . Database::escape_string ( (int)$_POST['filter_by_user'] ).' ';
+				if ($_POST['filter_by_user'] =='all') {
+					$user_id_and = " AND user_id like '%'";
+				} else {
+				$user_id_and = " AND user_id = '" . Database::escape_string ( (int)$_POST['filter_by_user'] )."' ";
+				}
 			}
-			
+
 			if($_GET['gradebook']=='view') {
 				$exercise_where_query = 'te.exe_exo_id =ce.id AND ';
 			}
-			
-			$sql="SELECT CONCAT(lastname,' ',firstname), ce.title, te.exe_result ,
-						 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, email,UNIX_TIMESTAMP(ce.start_time),steps_counter,user_id
+
+			$sql="SELECT CONCAT(lastname,' ',firstname) as users, ce.title, te.exe_result ,
+						 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, email,UNIX_TIMESTAMP(te.start_date),steps_counter,user_id
 				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
 				  WHERE  te.exe_exo_id = ce.id AND te.status != 'incomplete' AND user_id=te.exe_user_id AND te.exe_cours_id='".Database::escape_string($_cid)."'
 				  AND user.status<>1 $user_id_and $session_id_and AND ce.active <>-1
-				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
-	
+				  ORDER BY users, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
+
 
 			$hpsql="SELECT CONCAT(tu.lastname,' ',tu.firstname), tth.exe_name,
 						tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date)
 					FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
 					WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '".Database::escape_string($_cid)." $user_id_and '
 					ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
-			} else { 
+			} else {
 				// get only this user's results
 				$user_id_and = ' AND te.exe_user_id = ' . Database::escape_string ( api_get_user_id() ).' ';
-				 
-				$sql="SELECT CONCAT(lastname,' ',firstname),ce.title, te.exe_result ,
-						te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id,email,UNIX_TIMESTAMP(ce.start_time),steps_counter,user_id 
-				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user 
+
+				$sql="SELECT CONCAT(lastname,' ',firstname) as users,ce.title, te.exe_result ,
+						te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id,email,UNIX_TIMESTAMP(te.start_date),steps_counter,user_id
+				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
 				  WHERE  te.exe_exo_id = ce.id AND te.status != 'incomplete' AND user_id=te.exe_user_id AND te.exe_cours_id='".Database::escape_string($_cid)."'
 				  AND user.status<>1 $user_id_and  $session_id_and AND ce.active <>-1
-				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
+				  ORDER BY users, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
 				$hpsql="SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)
 					FROM $TBL_TRACK_HOTPOTATOES
 					WHERE exe_user_id = '".$_user['user_id']."' AND exe_cours_id = '".Database::escape_string($_cid)."'
 					ORDER BY exe_cours_id ASC, exe_date DESC";
 					//error_log($hpsql);
-			
+
 		}
-		
+
 		$results=getManyResultsXCol($sql,10);
 		$hpresults=getManyResultsXCol($hpsql,5);
 
@@ -929,32 +945,32 @@ if ($_configuration['tracking_enabled']) {
 			}
 			$sizeof = sizeof($results);
 			$user_list_name = $user_list_id = array();
-			
+
 			for ($i = 0; $i < $sizeof; $i++) {
-						
+
 				$revised = false;
-				$sql_exe='SELECT exe_id FROM '.Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING).' WHERE author != '."''".' AND exe_id = '."'".$results[$i][5]."'".' LIMIT 1';				
+				$sql_exe='SELECT exe_id FROM '.Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING).' WHERE author != '."''".' AND exe_id = '."'".$results[$i][5]."'".' LIMIT 1';
 				$query = api_sql_query($sql_exe,__FILE__,__LINE__);
 
 				if ( Database::num_rows($query) > 0) {
-					$revised = true;	
+					$revised = true;
 				}
 				if ($filter_by_not_revised && $revised == true) {
 					continue;
 				}
 				if($filter_by_revised && $revised == false) {
-					continue;	
-				}					
+					continue;
+				}
 				if($from_gradebook && ($is_allowedToEdit || $is_tutor)) {
 					if(in_array($results[$i][1].$results[$i][0],$users_array_id)) {
-						continue;						
+						continue;
 					}
-					$users_array_id[] = $results[$i][1].$results[$i][0];					
+					$users_array_id[] = $results[$i][1].$results[$i][0];
 				}
-				
+
 				$user_list_name[] =  $results[$i][0];
 				$user_list_id[] =  $results[$i][9];
-		
+
 				$id = $results[$i][5];
 				$mailid = $results[$i][6];
 				$user = $results[$i][0];
@@ -963,15 +979,15 @@ if ($_configuration['tracking_enabled']) {
 				$res = $results[$i][2];
 				echo '<tr';
 				if ($i%2==0) {
-					echo 'class="row_odd"'; 
+					echo 'class="row_odd"';
 				} else {
 					echo 'class="row_even"';
-				}	
+				}
 				echo '>';
 				$add_start_date = $lang_nostartdate;
 				if ($is_allowedToEdit || $is_tutor) {
 					$user = $results[$i][0];
-					echo '<td>'.$user.' '.$duration.'</td>';					
+					echo '<td>'.$user.' '.$duration.'</td>';
 				}
 				echo '<td>'.$test.'</td>';
 				echo '<td>';
@@ -984,9 +1000,9 @@ if ($_configuration['tracking_enabled']) {
 				} else {
 					echo get_lang('NoLogOfDuration');
 				}
-				
+
 				echo '</td>';
-								
+
 				echo '<td>'.$add_start_date.format_locale_date('%b %d, %Y %H:%M',$results[$i][4]).'</td>';//get_lang('dateTimeFormatLong')
 		  		echo '<td>'.round(($res/($results[$i][3]!=0?$results[$i][3]:1))*100).'% ('.$res.' / '.$results[$i][3].')</td>';
 				echo '<td>'.(($is_allowedToEdit||$is_tutor)?
@@ -1021,7 +1037,7 @@ if ($_configuration['tracking_enabled']) {
 		} else {
 			$NoHPTestRes = 1;
 		}
-		
+
 		if ($NoTestRes==1 && $NoHPTestRes==1) {
 			?>
 			 <tr>
@@ -1033,32 +1049,32 @@ if ($_configuration['tracking_enabled']) {
 		</table>
 		<br />
 		<?php
-		if (api_is_allowed_to_edit()) { 
+		if (api_is_allowed_to_edit()) {
 			$user_count = count($user_list_name);
-			if ($user_count >0 ) {			
-				$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.api_get_course_id().'&show=result">';		
+			if ($user_count >0 ) {
+				$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.api_get_course_id().'&show=result">';
 				$user_list_for_select =array();
 				for ($i=0;$i<$user_count;$i++) {
 					$user_list_for_select[$user_list_id[$i]]=$user_list_name[$i];
 				}
-				$form_filter .= make_select('filter_by_user',$user_list_for_select,(int)$_REQUEST['filter_by_user']);
-				$form_filter .= '<input type="hidden" name="filter" value="'.$filter.'">';		
+				$form_filter .= make_select_users('filter_by_user',$user_list_for_select,(int)$_REQUEST['filter_by_user']);
+				$form_filter .= '<input type="hidden" name="filter" value="'.$filter.'">';
 				$form_filter .= '<input type="submit" value="'.get_lang('FilterExercicesByUsers').'"></form>';
 				echo $form_filter;
-			}		
+			}
 		}
 		} else {
 			echo '<p><img src="'.api_get_path(WEB_IMG_PATH).'show_test_results.gif" align="absbottom">&nbsp;<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=result').'">'.get_lang("Results").' &gt;&gt;</a></p>';
-	
+
 		}
 	// end if($show == 'result')
-	
+
 
 }// end if tracking is enabled
 
-	
-		
-		
+
+
+
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
 	Display::display_footer();

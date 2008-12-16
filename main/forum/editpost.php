@@ -200,7 +200,8 @@ if (!empty($values) and $_POST['SubmitPost']) {
 			$value_calification=$values['numeric_calification'];
 			$weight_calification=$values['weight_calification'];
 			$description="";
-			$link_id=is_resource_in_course_gradebook(api_get_course_id(),5,$id,null);
+			$session_id=api_get_session_id();
+			$link_id=is_resource_in_course_gradebook(api_get_course_id(),5,$id,$session_id);
 			if ( $link_id==false ) {
 				add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title_gradebook,$weight_calification,$value_calification,$description,time(),1,api_get_session_id());	
 			} else {

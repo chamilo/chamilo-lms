@@ -2252,7 +2252,7 @@ class learnpathItem{
 //		     					"AND order_id = $index";
 								//also check for the interaction ID as it must be unique for this SCO view
 		     					"AND (order_id = $index " .
-		     					"OR interaction_id = '".$interaction[0]."')";
+		     					"OR interaction_id = '".Database::escape_string($interaction[0])."')";
 		     			$iva_res = api_sql_query($iva_sql,__FILE__,__LINE__);
 						//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
 		     			if(Database::num_rows($iva_res)>0){
@@ -2260,14 +2260,14 @@ class learnpathItem{
 		     				$iva_row = Database::fetch_array($iva_res);
 		     				$iva_id = $iva_row[0];
 		     				$ivau_sql = "UPDATE $iva_table " .
-		     					"SET interaction_id = '".$interaction[0]."'," .
-		     					"interaction_type = '".$interaction[1]."'," .
-		     					"weighting = '".$interaction[3]."'," .
-		     					"completion_time = '".$interaction[2]."'," .
-		     					"correct_responses = '".$correct_resp."'," .
-		     					"student_response = '".$interaction[5]."'," .
-		     					"result = '".$interaction[6]."'," .
-		     					"latency = '".$interaction[7]."'" .
+		     					"SET interaction_id = '".Database::escape_string($interaction[0])."'," .
+		     					"interaction_type = '".Database::escape_string($interaction[1])."'," .
+		     					"weighting = '".Database::escape_string($interaction[3])."'," .
+		     					"completion_time = '".Database::escape_string($interaction[2])."'," .
+		     					"correct_responses = '".Database::escape_string($correct_resp)."'," .
+		     					"student_response = '".Database::escape_string($interaction[5])."'," .
+		     					"result = '".Database::escape_string($interaction[6])."'," .
+		     					"latency = '".Database::escape_string($interaction[7])."'" .
 		     					"WHERE id = $iva_id";
 		     				$ivau_res = api_sql_query($ivau_sql,__FILE__,__LINE__);
 		     			}else{
@@ -2277,9 +2277,9 @@ class learnpathItem{
 		     						"weighting, completion_time, correct_responses, " .
 		     						"student_response, result, latency)" .
 		     						"VALUES" .
-		     						"(".$index.",".$lp_iv_id.",'".$interaction[0]."','".$interaction[1]."'," .
-		     						"'".$interaction[3]."','".$interaction[2]."','".$correct_resp."'," .
-		     						"'".$interaction[5]."','".$interaction[6]."','".$interaction[7]."'" .
+		     						"(".$index.",".$lp_iv_id.",'".Database::escape_string($interaction[0])."','".Database::escape_string($interaction[1])."'," .
+		     						"'".Database::escape_string($interaction[3])."','".Database::escape_string($interaction[2])."','".Database::escape_string($correct_resp)."'," .
+		     						"'".Database::escape_string($interaction[5])."','".Database::escape_string($interaction[6])."','".Database::escape_string($interaction[7])."'" .
 		     						")";
 		     				$ivai_res = api_sql_query($ivai_sql,__FILE__,__LINE__);
 		     			}

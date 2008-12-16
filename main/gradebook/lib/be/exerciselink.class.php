@@ -122,9 +122,8 @@ class ExerciseLink extends AbstractLink
 					$tbl_stats_e_attempt_recording as r
 					ON (e.exe_id =r.exe_id)
 					WHERE e.exe_cours_id = '".$this->get_course_code()."'AND					
-					e.exe_id = '".$this->get_ref_id()."'  AND author != ''  AND exe_user_id = '$stud_id' ORDER BY  e.exe_id DESC ";
+					e.exe_id = '".$stud_id."'  AND author != ''  AND exe_user_id = '$stud_id' ORDER BY  e.exe_id DESC ";
 			$scores = api_sql_query($sql, __FILE__, __LINE__);
-    		
     		if ($data=mysql_fetch_array($scores))
     		{	
     			return array ($data['exe_result'], $data['exe_weighting']);

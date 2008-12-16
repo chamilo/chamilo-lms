@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 17329 2008-12-16 18:27:38Z cfasanando $
+<?php //$Id: announcements.inc.php 17332 2008-12-16 20:10:35Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -197,23 +197,25 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 
 	// we construct the form of the already selected groups / users
 	echo "\t\t<select name=\"selectedform[]\" size=\"5\" multiple style=\"width:200px\" width=\"200px\">";
-	foreach($to_already_selected as $groupuser)
-	{
-		list($type,$id)=explode(":",$groupuser);
-		if ($type=="GROUP")
+	if (is_array($to_already_selected)) {
+		foreach($to_already_selected as $groupuser)
 		{
-			echo "\t\t<option value=\"".$groupuser."\">G: ".$ref_array_groups[$id]['name']."</option>";
-		}
-		else
-		{
-			
-			foreach($ref_array_users as $key=>$value){
-
-				if($value['user_id']==$id){
-					echo "\t\t<option value=\"".$groupuser."\">".$value['lastName']." ".$value['firstName']."</option>";
-					break;
-				}
+			list($type,$id)=explode(":",$groupuser);
+			if ($type=="GROUP")
+			{
+				echo "\t\t<option value=\"".$groupuser."\">G: ".$ref_array_groups[$id]['name']."</option>";
+			}
+			else
+			{
 				
+				foreach($ref_array_users as $key=>$value){
+	
+					if($value['user_id']==$id){
+						echo "\t\t<option value=\"".$groupuser."\">".$value['lastName']." ".$value['firstName']."</option>";
+						break;
+					}
+					
+				}
 			}
 		}
 	}

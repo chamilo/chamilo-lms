@@ -18,4 +18,6 @@ $labelPolyMenu = "Zapri poligon";
 $triesleft = "Preostalih poskusov";
 $exeFinished = "Vsi odgovori so definirani. Sedaj lahko preuredite vroèe toèke ali kliknite Shrani.";
 $nextAnswer = "Sedaj kliknite na: &done=done";
+$delineation = "Orisovanje";
+$labelDelineationMenu = "Zapri orisovanje";
 ?>

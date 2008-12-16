@@ -104,4 +104,8 @@ $AllowUserImageForumDeactivate = "Ascunde imaginile utilizatorilor in forum";
 $AllowLearningPathTheme = "Activeaza tema de stil pentru calea de invatare";
 $AllowLearningPathThemeAllow = "Permis";
 $AllowLearningPathThemeDisallow = "Interzis";
+$ConfigChat = "Setari chat";
+$AllowOpenchatWindow = "Deschidere chat in fereastra noua";
+$AllowOpenChatWindowActivate = "Activarea deschide chat in fereastra noua";
+$AllowOpenChatWindowDeactivate = "Dezactivarea deschide chat in fereastra noua";
 ?>

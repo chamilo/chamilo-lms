@@ -186,6 +186,7 @@ $Conditional = "Condizionale";
 $ParentSurvey = "Questionario principale";
 $OneQuestionPerPage = "Un quesito per pagina";
 $ActivateShuffle = "Attiva il mescolamento";
+$ShowFormProfile = "Mostra il modulo del profilo";
 $PersonalityQuestion = "Modifica il quesito";
 $YouNeedToCreateGroups = "Devi creare dei gruppi";
 $ManageGroups = "Gestisci i gruppi";
@@ -197,4 +198,9 @@ $Condition = "Condizione";
 $Primary = "Primario";
 $Secondary = "Secondario";
 $CourseSettings = "Configurazione del corso";
+$PleaseChooseACondition = "Scegli una condizione";
+$ChooseDifferentCategories = "Scegli categorie diverse";
+$Version = "Versione";
+$Normal = "Normale";
+$NoLogOfDuration = "Nessuno storico della durata";
 ?>

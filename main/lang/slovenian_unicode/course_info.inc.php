@@ -104,4 +104,8 @@ $AllowUserImageForumDeactivate = "Skrij slike uporabnikov v forumih";
 $AllowLearningPathTheme = "Dovoli uporabo teme učne poti";
 $AllowLearningPathThemeAllow = "Dovoljeno";
 $AllowLearningPathThemeDisallow = "Prepovedano";
+$ConfigChat = "Nastavitve klepeta";
+$AllowOpenchatWindow = "Odpri klepet v novem oknu";
+$AllowOpenChatWindowActivate = "Aktiviraj odpiranje klepeta v novem oknu";
+$AllowOpenChatWindowDeactivate = "Deaktiviraj odpiranje klepeta v novem oknu";
 ?>

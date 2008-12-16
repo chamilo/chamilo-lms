@@ -33,4 +33,14 @@ $SendMailBody = "A kurzusod egyik résztvev&#337;je beküldött egy hallgatói publi
 $DirDelete = "Könyvtár törlése";
 $ValidateChanges = "Változások jóváhagyása";
 $FolderUpdated = "Mappa frissítve";
+$EndsAt = "Befejezés mikor (teljesen lezárul)";
+$WeightInTheGradebook = "Súlyozása a leckekönyvben";
+$ExpiresAt = "Lejárat ekkor:";
+$AddToCalendar = "Hozzáadás a naptárhoz";
+$DirectoryCreated = "A mappa létrejött";
+$Assignment = "Feladat";
+$AdvancedParameters = "További beállítások";
+$ExpiryDateToSendWorkIs = "A határid&#337;, ami el&#337;tt a feladatokat be kell küldeni";
+$EnableExpiryDate = "Határid&#337; bekapcsolása";
+$EnableEndDate = "Befejezési dátum engedélyezése";
 ?>

@@ -181,4 +181,11 @@ $IdenticalSurveycodeWarning = "Ta koda vprašalnika že obstaja. Verjetno to pomen
 $ThisSurveyCodeSoonExistsInThisLanguage = "Ta koda vprašalnika bo kmalu obstajala v tej jezikovni varianti.";
 $SurveyUserAnswersHaveBeenRemovedSuccessfully = "Uporabnikovi odgovori tega vprašalnika so bili uspešno odstranjeni.";
 $DeleteSurveyByUser = "Odstrani uporabnikove odgovore s tega vprašalnika";
+$PersonalityQuestion = "Uredi vprašanje";
+$ManageGroups = "Upravljaj skupine";
+$Create = "Ustvari";
+$Personality = "Personaliziraj";
+$Primary = "Primaren";
+$Secondary = "Sekundaren";
+$Version = "Razlièica";
 ?>

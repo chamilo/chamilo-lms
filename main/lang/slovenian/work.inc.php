@@ -35,5 +35,7 @@ $ValidateChanges = "Uveljavi spremembe";
 $FolderUpdated = "Mapa je bila ažurirana";
 $EndsAt = "kon&#269;a (popolnoma zaprta)";
 $AddToCalendar = "Dodaj v koledar";
+$DirectoryCreated = "Mapa je bila ustvarjena";
+$Assignment = "Zadolžitev";
 $AdvancedParameters = "Napredni parametri";
 ?>

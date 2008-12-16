@@ -104,4 +104,8 @@ $AllowUserImageForumDeactivate = "Non mostrare nel forum l\'immagine memorizzata
 $AllowLearningPathTheme = "Abilita aspetti personalizzati per i moduli didattici";
 $AllowLearningPathThemeAllow = "Abilitato";
 $AllowLearningPathThemeDisallow = "Disabilitato";
+$ConfigChat = "Configurazione Chat";
+$AllowOpenchatWindow = "Apri la Chat in una nuova finestra";
+$AllowOpenChatWindowActivate = "Attiva l\'apertura di una Chat in una nuova finestra";
+$AllowOpenChatWindowDeactivate = "Disabilita l\'apertura della Chat in una nuova finestra";
 ?>

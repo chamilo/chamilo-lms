@@ -11,4 +11,8 @@ $TermAddButton = "Dodaj ta termin";
 $TermUpdateButton = "Ažuriraj termin";
 $TermEditAction = "Uredi termin";
 $TermDeleteAction = "Odstrani termin";
+$OrderBy = "Razvrščeno po";
+$CreationDate = "Datum kreiranja";
+$UpdateDate = "Datum zadnje spremembe";
+$PreSelectedOrder = "Razvrščanje z izbiro";
 ?>

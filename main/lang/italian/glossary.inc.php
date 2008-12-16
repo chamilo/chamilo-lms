@@ -11,4 +11,8 @@ $TermAddButton = "Aggiungi questa voce";
 $TermUpdateButton = "Aggiorna la voce";
 $TermEditAction = "Modifica la voce";
 $TermDeleteAction = "Elimina la voce";
+$OrderBy = "Ordina per";
+$CreationDate = "Data di creazione";
+$UpdateDate = "Aggiorna la data";
+$PreSelectedOrder = "Ordina per selezione";
 ?>

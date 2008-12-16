@@ -114,4 +114,7 @@ $ResourceType = "Tipo di risorsa";
 $GradebookWhoChangedItLog = "Cambiato da";
 $EvaluationEdited = "La valutazione è stata modificata come richiesto";
 $CategoryEdited = "Categoria aggiornata";
+$OnlyNumbers = "Solo numeri";
+$IncorrectData = "Dati non corretti";
+$Resource = "Risorsa";
 ?>

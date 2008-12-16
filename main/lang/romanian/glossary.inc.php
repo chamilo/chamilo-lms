@@ -11,4 +11,8 @@ $TermAddButton = "Adaugati acest termen";
 $TermUpdateButton = "Actualizati termenul";
 $TermEditAction = "Editati termenul";
 $TermDeleteAction = "Stergeti termenul";
+$OrderBy = "Ordonare dupa";
+$CreationDate = "Data creerii";
+$UpdateDate = "Data actualizarii";
+$PreSelectedOrder = "Ordoneaza dupa selectie";
 ?>

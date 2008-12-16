@@ -592,4 +592,12 @@ $CourseSettings = "Configurazione del corso";
 $EmailNotifications = "Notifica e-mail";
 $UserRights = "Permessi dell\'utente";
 $Theming = "Tema";
+$Qualification = "Valutazione";
+$OnlyNumbers = "Solo numeri";
+$ReorderOptions = "Riordina le opzioni";
+$EditUserFields = "Modifica i campi utente";
+$OptionText = "Testo";
+$FieldTypeDoubleSelect = "Campo di selezione doppia";
+$FieldTypeDivider = "Separatore";
+$ResourceDeleted = "Risorsa eliminata";
 ?>

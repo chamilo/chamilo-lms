@@ -7,7 +7,7 @@ $circle = "Elipsa";
 $poly = "Poligon";
 $status1 = "Nariši vročo točko";
 $status2_poly = "Uporabi desni klik za zapiranje poligona";
-$status2_other = "Sprostite miškin gumb za sranjevanje vroče točke.";
+$status2_other = "Sprostite miškin gumb za shranitev vroče točke.";
 $status3 = "Vroča točka je bila shranjena";
 $exercise_status_1 = "Status : Vprašanje še ni zaključeno";
 $exercise_status_2 = "Kliknite za zapis odgovorov";
@@ -18,6 +18,6 @@ $labelPolyMenu = "Zapri poligon";
 $triesleft = "Preostalih poskusov";
 $exeFinished = "Vsi odgovori so definirani. Sedaj lahko preuredite vroče točke ali kliknite Shrani.";
 $nextAnswer = "Sedaj kliknite na: &done=done";
-$delineation = "Delitev";
-$labelDelineationMenu = "Zapri delitev";
+$delineation = "Orisovanje";
+$labelDelineationMenu = "Zapri orisovanje";
 ?>

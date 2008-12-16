@@ -846,4 +846,8 @@ $ExtendRightsForCoachOnSurveyTitle = "Diritti estesi per il tutor sui questionar
 $CannotDeleteUserBecauseOwnsCourse = "L\'utente non può essere eliminato in quanto è ancora docente in un corso. Per eliminare l\'account devi prima cancellare il suo stato di docente nei corsi, oppure puoi sospendere l\'account anziché eliminarlo.";
 $AllowUsersToCreateCoursesTitle = "Anche chi non è amministratore può creare corsi ";
 $AllowUsersToCreateCoursesComment = "Anche i docenti, non amministratori, possono creare nuovi corsi autonomamente";
+$YesWillDeletePermanently = "Sì (i file saranno eliminati permanentemente e non saranno recuperabili)";
+$NoWillDeletePermanently = "No (i file saranno cancellati, ma l\'amministratore del sistema potrà recuperarli in modo non automatico)";
+$SelectAResponsible = "Seleziona un gestore delle RU";
+$ThereIsNotStillAResponsible = "Non c\'è un responsabile RU disponibile";
 ?>

@@ -662,6 +662,7 @@ $LDAPEnableTitle = "LDAP bekapcsolása";
 $LDAPVersion2 = "LDAP 2";
 $LDAPVersion3 = "LDAP 3";
 $AllSlashNone = "Összes/semmi";
+$TabsMyGradebook = "Leckekönyvem fül";
 $VisioUseRtmptTitle = "Használja az rtmpt protokollt";
 $DisplayOrder = "Megjelenés sorrendje";
 $EnableSearchTitle = "Full-text keresési lehet&#337;ség";

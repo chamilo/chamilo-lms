@@ -11,4 +11,8 @@ $TermAddButton = "Dodaj ta izraz";
 $TermUpdateButton = "Ažuriraj izraz";
 $TermEditAction = "Uredi izraz";
 $TermDeleteAction = "Odstrani izraz";
+$OrderBy = "Urejeno po";
+$CreationDate = "Datum kreiranja";
+$UpdateDate = "Datum zadnje spremembe";
+$PreSelectedOrder = "Urejeno z izbiro";
 ?>

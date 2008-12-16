@@ -126,7 +126,7 @@ $langCourseHomepage = "Domača stran tečaja";
 $langCourseManagerview = "Učiteljev pogled";
 $langStudentView = "Uporabnikov pogled";
 $AddResource = "Dodaj";
-$AddedResources = "Resursi dodani";
+$AddedResources = "Priponke";
 $lang_modify_resource = "Spremeni / Dodaj resurse";
 $lang_resource = "Resurs";
 $lang_resources = "Resursi";
@@ -598,5 +598,6 @@ $ReorderOptions = "Menjaj vrstni red možnosti";
 $EditUserFields = "Uredi uporabniška polja";
 $OptionText = "Besedilo";
 $FieldTypeDoubleSelect = "Dvojna izbira";
-$FieldTypeDivider = "Vizualni delilec";
+$FieldTypeDivider = "Vizualni ločilec";
+$ResourceDeleted = "Resurs odstranjen";
 ?>

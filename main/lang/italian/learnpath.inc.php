@@ -206,4 +206,9 @@ $RemoveAudio = "Elimina l\'audio";
 $SaveAudio = "Salva";
 $ChangesStored = "Modifiche salvate";
 $ViewScoreChangeHistory = "Vedi lo storico dei punteggi";
+$ImageWillResizeMsg = "L\'immagine sarà ridimensionata";
+$ImagePreview = "Anteprima immagine";
+$UplAlreadyExists = "Il file esiste già";
+$UnknownPackageFormat = "Formato sconosciuto";
+$UplUnableToSaveFile = "Impossibile salvare il file";
 ?>

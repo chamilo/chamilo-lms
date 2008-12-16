@@ -93,16 +93,24 @@ function handle_multiple_actions()
 	}
 
 	// STEP 3C: moving
-	if (strstr($_POST['actions'], 'move_'))
+	if (strstr($_POST['action'], 'move_'))
 	{
-		$target=str_replace('move_', '',$_POST['actions']);
+        	// check move_received_n or move_sent_n command
+		if (strstr($_POST['action'],'received')){
+                	$part = 'received';
+                	$to_cat_id = str_replace('move_received_','',$_POST['action']);
+        	}
+        	else {
+                	$part = 'sent';
+                	$to_cat_id = str_replace('move_sent_','',$_POST['action']);
+        	}
 
 		foreach ($checked_file_ids as $key=>$value)
 		{
-			store_move($value, $target, $part);
+			store_move($value, $to_cat_id, $part);
 		}
 		return get_lang('FilesMoved');
-	}
+    }
 
 	// STEP 3D: downloading
 	if ($_POST['action']=='download_sent' || $_POST['action']=='download_received')

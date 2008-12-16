@@ -214,7 +214,10 @@ if (($_GET['action']=='deletereceivedcategory' OR $_GET['action']=='deletesentca
 // only the download has is handled separately in dropbox_init_inc.php because this has to be done before the headers are sent
 // (which also happens in dropbox_init.inc.php
 
-if (!isset($_POST['feedback']) && ($_POST['action'] == 'delete_received' OR $_POST['action'] == 'download_received' OR $_POST['action'] == 'delete_sent' OR $_POST['action'] == 'download_sent')) {
+if (!isset($_POST['feedback']) && (strstr($_POST['action'],'move_received') OR
+        $_POST['action'] == 'delete_received' OR $_POST['action'] == 'download_received' OR
+        $_POST['action'] == 'delete_sent' OR $_POST['action'] == 'download_sent'))
+{
 	$display_message=handle_multiple_actions();
 	Display :: display_normal_message($display_message);
 }
@@ -282,6 +285,7 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 	if ($view_dropbox_category_received<>0) {
 		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
 		echo '<img src="../img/folder_up.gif" alt="'.get_lang('up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
+        $movelist[0] = 'Root'; // move_received selectbox content
 	}
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory"><img src="../img/folder_new.gif" align=\"absmiddle\"/> '.get_lang('AddNewCategory').'</a>';
 	echo '</div>';
@@ -386,6 +390,7 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 		foreach ($dropbox_categories as $category) { // note: this can probably be shortened since the categories for the received files are already in the $dropbox_received_category array;
 			$dropbox_category_data=array();
 			if ($category['received']=='1') {
+                $movelist[$category['cat_id']] = $category['cat_name'];
 				$dropbox_category_data[]=$category['cat_id']; // this is where the checkbox icon for the files appear
 				// the icon of the category
 				$dropbox_category_data[]=build_document_icon_tag('folder',$category['cat_name']);
@@ -402,8 +407,12 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 		}
 	}
 	// Displaying the table
-	$additional_get_parameters=array('view'=>$_GET['view'], 'view_received_category'=>$_GET['view_received_category'],'view_sent_category'=>$_GET['view_sent_category']);	
-	Display::display_sortable_config_table($column_header, $dropbox_data_recieved, $sorting_options, $paging_options, $additional_get_parameters,$column_show,$column_order, array ('delete_received' => get_lang('Delete'),'download_received'=>get_lang('Download')));
+	$additional_get_parameters=array('view'=>$_GET['view'], 'view_received_category'=>$_GET['view_received_category'],'view_sent_category'=>$_GET['view_sent_category']);
+	$selectlist = array ('delete_received' => get_lang('Delete'),'download_received'=>get_lang('Download'));
+    	foreach ($movelist as $catid => $catname){
+        	$selectlist['move_received_'.$catid] = get_lang('Move') . '->'. $catname;
+    	}
+	Display::display_sortable_config_table($column_header, $dropbox_data_recieved, $sorting_options, $paging_options, $additional_get_parameters,$column_show,$column_order, $selectlist);
 }
 
 

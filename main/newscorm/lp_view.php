@@ -38,7 +38,7 @@ require_once('back_compat.inc.php');
 require_once('scorm.lib.php');
 require_once('learnpath.class.php');
 require_once('learnpathItem.class.php');
-require_once('lp_comm.common.php'); //xajax functions
+//require_once('lp_comm.common.php'); //xajax functions
 
 if ($is_allowed_in_course == false) api_not_allowed();
 /*
@@ -59,8 +59,8 @@ $user_id = api_get_user_id();
 -----------------------------------------------------------
 */
 //$htmlHeadXtra[] = '<script type="text/javascript" src="lp_view.lib.js"></script>';
-$htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/')."\n";
-
+//$htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/')."\n";
+$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 
 $_SESSION['oLP']->error = '';
 $lp_type = $_SESSION['oLP']->get_type();

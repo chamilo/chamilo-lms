@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 17064 2008-12-04 05:36:10Z yannoo $ 
+<?php // $Id: scorm_api.php 17337 2008-12-16 21:29:29Z yannoo $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -58,7 +58,7 @@ require_once('scorm.class.php');
 
 // Is this needed? This is probabaly done in the header file
 //$_user							= $_SESSION['_user'];
-$file							= $_SESSION['file'];
+$file							= (empty($_SESSION['file'])?'':$_SESSION['file']);
 $oLP							= unserialize($_SESSION['lpobject']);
 $oItem 							= $oLP->items[$oLP->current];
 if(!is_object($oItem)){
@@ -139,7 +139,7 @@ var total_time = '<?php echo $oItem->get_scorm_time('js');?>';
 var mastery_score = '<?php echo $oItem->get_mastery_score();?>';
 var launch_data = '<?php echo $oItem->get_launch_data();?>';
 var max_time_allowed = '<?php echo $oItem->get_max_time_allowed();?>';
-var interactions = new Array();
+var interactions = new Array(<?php echo $oItem->get_interactions_js_array();?>);
 item_objectives = new Array();
 
 //Dokeos internal variables
@@ -980,16 +980,15 @@ function switch_item(current_item, next_item){
 	//(1) save the current item
 	logit_lms('Called switch_item with params '+lms_item_id+' and '+next_item+'',0);
 	if(lms_lp_type==1 || lms_item_type=='asset' || session_time == '0' || session_time == '0:00:00'){
-		xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions, lms_item_core_exit);		
+        xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions, lms_item_core_exit);
 	}else{
-		xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
+        xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
 	}
 	if(item_objectives.length>0)
 	{
 		xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
 	}
 	//(2) Refresh all the values inside this SCORM API object - use AJAX
-	//xajax_backup_item_details(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data);
 	xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item);
 	
 	//(3) open the new item in the content_id frame
@@ -1028,6 +1027,115 @@ function switch_item(current_item, next_item){
 	
 	
 	return true;
+}
+/**
+ * Save a specific item (with its interactions, if any) into the LMS through
+ * an AJAX call. Originally, we used the xajax library. Now we use jQuery.
+ * Because of the need to pass an array, we have to build the parameters
+ * manually into GET[]
+ */
+function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit) {
+        params='';
+        params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
+        params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
+        params += '&status='+lesson_status+'&t='+session_time;
+        params += '&suspend='+suspend_data+'&loc='+lesson_location;
+        params += '&core_exit='+lms_item_core_exit;
+        interact_string = '';
+        for (i in interactions){
+        	interact_string += '&interact['+i+']=';
+            interact_temp = '[';
+            for (j in interactions[i]) {
+            	interact_temp += interactions[i][j]+',';
+            }
+            interact_temp = interact_temp.substr(0,(interact_temp.length-2)) + ']';
+            interact_string += encodeURIComponent(interact_temp);
+        }
+        //interact_string = encodeURIComponent(interact_string.substr(0,(interact_string.length-1)));
+        params += interact_string;
+        /*params = {
+            'lid': lms_lp_id,
+            'uid': lms_user_id,
+            'vid': lms_view_id,
+            'iid': lms_item_id,
+            's': score,
+            'max': max,
+            'min': min,
+            'status': lesson_status, 
+            't': session_time, 
+            'suspend': suspend_data,
+            'loc': lesson_location,
+            'interact': interac_string, 
+            'core_exit': lms_item_core_exit
+        }
+        */
+        $.ajax({
+            type:"GET",
+            data: params,
+            url: "lp_ajax_save_item.php", 
+            dataType: "script",
+            async: false
+            }
+        );
+}
+/**
+ * Starts the timer with the server clock time.
+ * Originally, we used the xajax library. Now we use jQuery
+ */
+function xajax_start_timer() {
+    $.ajax({
+        type: "GET",
+        url: "lp_ajax_start_timer.php",
+        dataType: "script",
+        async: false
+    });	
+}
+/**
+ * Save a specific item's objectives into the LMS through
+ * an AJAX call. Originally, we used the xajax library. Now we use jQuery
+ */
+function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives) {
+        params='';
+        params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
+        params += '&iid='+lms_item_id;
+        obj_string = '';
+        for (i in item_objectives){
+            obj_string += '&objectives['+i+']=';
+            obj_temp = '[';
+            for (j in item_objectives[i]) {
+                obj_temp += item_objectives[i][j]+',';
+            }
+            obj_temp = obj_temp.substr(0,(obj_temp.length-2)) + ']';
+            obj_string += encodeURIComponent(obj_temp);
+        }
+        params += obj_string;
+        $.ajax({
+            type: "GET",
+            data: params,
+            url: "lp_ajax_save_objectives.php",
+            dataType: "script",
+            async: false
+        });
+}
+/**
+ * Switch between two items through
+ * an AJAX call. Originally, we used the xajax library. Now we use jQuery
+ */
+function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item) {
+    params = {
+        'lid': lms_lp_id,
+        'uid': lms_user_id,
+        'vid': lms_view_id,
+        'iid': lms_item_id,
+        'next': next_item
+    }
+    $.ajax({
+        type: "GET",
+        data: params,
+        url: "lp_ajax_switch_item.php",
+        dataType: "script",
+        async: false
+    });
 }
 addEvent(window,'load',addListeners,false);
 if(lms_lp_type==1 || lms_item_type=='asset'){

@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 17333 2008-12-16 20:36:52Z iflorespaz $
+* 	@version $Id: survey.lib.php 17336 2008-12-16 21:23:21Z iflorespaz $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -3340,7 +3340,8 @@ class SurveyUtil {
 				{
 					foreach ($possible_option as $option_id=>$value)
 					{
-						$key = array_keys($answers_of_user[$question_id]);
+						$my_answer_of_user=($answers_of_user[$question_id]==null) ? array() : $answers_of_user[$question_id];
+						$key = array_keys($my_answer_of_user);
 						if(substr($key[0],0,4)=='open')
 						{
 							$return .= '"'.str_replace('"','""',html_entity_decode(strip_tags($answers_of_user[$question_id][$key[0]]['option_id']))).'"';
@@ -3577,7 +3578,8 @@ class SurveyUtil {
 				{
 					foreach ($possible_option as $option_id=>$value)
 					{
-						$key = array_keys($answers_of_user[$question_id]);
+						$my_answers_of_user=($answers_of_user[$question_id]==null) ? array() : $answers_of_user[$question_id];
+						$key = array_keys($my_answers_of_user);
 						if(substr($key[0],0,4)=='open')
 						{
 							$return[] = html_entity_decode(strip_tags($answers_of_user[$question_id][$key[0]]['option_id']));

@@ -1837,28 +1837,30 @@ class learnpath {
 		$manifest = '';
 
 		//the following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?)
-		foreach($zipContentArray as $thisContent)
-		{
-			if ( preg_match('~.(php.*|phtml)$~i', $thisContent['filename']) )
-			{
-				//New behaviour: Don't do anything. These files will be removed in scorm::import_package
-			}
-			elseif(stristr($thisContent['filename'],'imsmanifest.xml')!==FALSE)
-			{
-				$manifest = $thisContent['filename']; //just the relative directory inside scorm/
-				$package_type = 'scorm';
-				break;//exit the foreach loop
-			}
-			elseif(preg_match('/aicc\//i',$thisContent['filename'])!=false)
-			{//if found an aicc directory... (!= false means it cannot be false (error) or 0 (no match))
-				$package_type='aicc';
-				//break;//don't exit the loop, because if we find an imsmanifest afterwards, we want it, not the AICC
-			}
-			else
-			{
-				$package_type = '';
-			}
-		}
+		if (is_array($zipContentArray) && count($zipContentArray)>0) {
+            foreach($zipContentArray as $thisContent)
+    		{
+    			if ( preg_match('~.(php.*|phtml)$~i', $thisContent['filename']) )
+    			{
+    				//New behaviour: Don't do anything. These files will be removed in scorm::import_package
+    			}
+    			elseif(stristr($thisContent['filename'],'imsmanifest.xml')!==FALSE)
+    			{
+    				$manifest = $thisContent['filename']; //just the relative directory inside scorm/
+    				$package_type = 'scorm';
+    				break;//exit the foreach loop
+    			}
+    			elseif(preg_match('/aicc\//i',$thisContent['filename'])!=false)
+    			{//if found an aicc directory... (!= false means it cannot be false (error) or 0 (no match))
+    				$package_type='aicc';
+    				//break;//don't exit the loop, because if we find an imsmanifest afterwards, we want it, not the AICC
+    			}
+    			else
+    			{
+    				$package_type = '';
+    			}
+    		}
+        }
 		return $package_type;
 	}
     /**

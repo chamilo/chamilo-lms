@@ -116,4 +116,5 @@ $EvaluationEdited = "Cette évaluation a bien été modifiée";
 $CategoryEdited = "Catégorie mise à jour";
 $OnlyNumbers = "Nombres uniquement";
 $IncorrectData = "Données incorrectes";
+$Resource = "Ressource";
 ?>

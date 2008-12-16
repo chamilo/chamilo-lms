@@ -599,5 +599,5 @@ $EditUserFields = "Edit user fields";
 $OptionText = "Text";
 $FieldTypeDoubleSelect = "Double select";
 $FieldTypeDivider = "Visual divider";
-$ResourceDeleted = "Resource remove";
+$ResourceDeleted = "Resource deleted";
 ?>

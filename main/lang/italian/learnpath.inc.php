@@ -211,4 +211,5 @@ $ImagePreview = "Anteprima immagine";
 $UplAlreadyExists = "Il file esiste già";
 $UnknownPackageFormat = "Formato sconosciuto";
 $UplUnableToSaveFile = "Impossibile salvare il file";
+$UnknownPackageFormat = "Il formato del pacchetto non è riconosciuto. Scegli un pacchetto valido.";
 ?>

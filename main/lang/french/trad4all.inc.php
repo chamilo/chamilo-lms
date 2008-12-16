@@ -599,4 +599,5 @@ $EditUserFields = "Éditer les champs utilisateurs";
 $OptionText = "Texte";
 $FieldTypeDoubleSelect = "Double boîte de sélection";
 $FieldTypeDivider = "Diviseur visuel";
+$ResourceDeleted = "Ressource supprimée";
 ?>

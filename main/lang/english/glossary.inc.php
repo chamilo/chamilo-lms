@@ -14,5 +14,5 @@ $TermDeleteAction = "Delete term";
 $OrderBy = "Order by";
 $CreationDate = "Creation date";
 $UpdateDate = "Update date";
-$PreSelectedOrder = "Order by selection";
+$PreSelectedOrder = "Pre-defined";
 ?>

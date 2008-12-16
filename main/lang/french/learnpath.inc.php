@@ -209,4 +209,7 @@ $ViewScoreChangeHistory = "Afficher l\'historique des changements de score";
 $ImageWillResizeMsg = "L\'image sera redimensionnée";
 $ImagePreview = "Prévisualisation image";
 $UplAlreadyExists = "Ce fichier existe déjà";
+$UnknownPackageFormat = "Format de paquet inconnu";
+$UplUnableToSaveFile = "Impossible de sauvegarder le fichier";
+$UnknownPackageFormat = "Le format du fichier envoyé n\'a pas pu être identifié. Veuillez vérifier qu\'il s\'agit bien d\'un fichier valide.";
 ?>

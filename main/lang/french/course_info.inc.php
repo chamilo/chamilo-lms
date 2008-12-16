@@ -104,4 +104,8 @@ $AllowUserImageForumDeactivate = "Ne pas afficher les photos des utilisateurs da
 $AllowLearningPathTheme = "Autoriser les thèmes de cours";
 $AllowLearningPathThemeAllow = "Autorisé";
 $AllowLearningPathThemeDisallow = "Non autorisé";
+$ConfigChat = "Configuration du chat";
+$AllowOpenchatWindow = "Ouvrir le chat dans une nouvelle fenêtre";
+$AllowOpenChatWindowActivate = "Activer l\'ouverture du chat dans une nouvelle fenêtre";
+$AllowOpenChatWindowDeactivate = "Désactiver l\'ouverture du chat dans une nouvelle fenêtre";
 ?>

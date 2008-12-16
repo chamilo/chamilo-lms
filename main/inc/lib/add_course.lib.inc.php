@@ -890,6 +890,7 @@ function update_Db_course($courseDbName)
 		progress text NOT NULL,
 		score int NULL default 0,
 		version int default NULL,
+		is_editing int NOT NULL default 0,
 		hits int default 0,
 		linksto text NOT NULL,	
 		tag text NOT NULL,		

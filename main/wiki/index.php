@@ -2591,7 +2591,7 @@ function display_wiki_entry()
         }
         </script>
 		<?php				
-		echo '<span style="float:right;">';
+		echo '<span style="float:right; cursor:pointer;">';
 		echo '<img src="../img/wiki/wprint.gif" title="'.get_lang('Print').'" alt="'.get_lang('Print').'" onclick="goprint()">';
 		echo '</span>';
 		

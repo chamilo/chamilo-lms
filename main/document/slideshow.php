@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 16725 2008-11-12 15:43:21Z pcool $
+<?php // $Id: slideshow.php 17320 2008-12-16 14:47:36Z cfasanando $
 
 /*
 ==============================================================================
@@ -150,22 +150,18 @@ function MM_openBrWindow(theURL,winName,features) { //v2.0
 	}
 
 	// exit the slideshow
-	echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.get_lang('_exit_slideshow').'</a> ';
+	echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'parent.gif" alt="">'.get_lang('_exit_slideshow').'</a>&nbsp;';
 
 	// show thumbnails
-	if ($slide_id <> "all")
-	{
-		echo "<a href='slideshow.php?slide_id=all&curdirpath=".$pathurl."'>".get_lang('_show_thumbnails')."</a> ";
-	}
-	else 
-	{
+	if ($slide_id <> "all") {
+		echo '<a href="slideshow.php?slide_id=all&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'scormexitfullscreen.jpg" alt="">'.get_lang('_show_thumbnails').'</a>&nbsp;';
+	} else {
 		echo get_lang('_show_thumbnails').' '; 
 	}
-
 	$image = $sys_course_path.$_course['path']."/document/".$folder.$image_files_only[$slide];
 	
 	// slideshow options
-	echo '<a href="slideshowoptions.php?curdirpath='.$pathurl.'">'.get_lang('_set_slideshow_options').'</a> ';
+	echo '<a href="slideshowoptions.php?curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'acces_tool.gif" alt="">'.get_lang('_set_slideshow_options').'</a> &nbsp;';
 ?>
 </div>
 

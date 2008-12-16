@@ -1,4 +1,4 @@
-<?php // $Id: document.php 17099 2008-12-08 02:46:36Z ivantcholakov $
+<?php // $Id: document.php 17320 2008-12-16 14:47:36Z cfasanando $
  
 /*
 ==============================================================================
@@ -645,11 +645,14 @@ if($folders===false)
 			<a href="quota.php?<?php echo api_get_cidreq();?>"><?php Display::display_icon('statistics.gif', get_lang("ShowCourseQuotaUse")); ?><?php echo get_lang("ShowCourseQuotaUse"); ?></a>
 		<?php
 	}
+	
+	if ($docs_and_folders!=null) {
 	?>
 	<!-- download zipped folder -->
 	<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder&amp;path=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/zip_save.gif" border="0" title="<?php echo get_lang("Save"); ?> (ZIP)" alt="" /></a>
 	<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder&amp;path=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang("Save"); ?> (ZIP)</a>&nbsp;
-	<?php
+<?php
+	}
 	// Slideshow by Patrick Cool, May 2004
 	include("document_slideshow.inc.php");
 	if ($image_present)

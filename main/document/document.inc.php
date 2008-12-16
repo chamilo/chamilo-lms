@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 17099 2008-12-08 02:46:36Z ivantcholakov $
+<?php // $Id: document.inc.php 17320 2008-12-16 14:47:36Z cfasanando $
 
 /*
 ==============================================================================
@@ -66,10 +66,12 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 	}
 	else
 	{
-		foreach($folders as $folder)
-		{
-			$folder_titles[$folder] = basename($folder);	
-		}	
+		if (!isset($folders)){
+			foreach($folders as $folder)
+			{
+				$folder_titles[$folder] = basename($folder);	
+			}	
+		}
 	}
 	
 	require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');

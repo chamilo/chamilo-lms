@@ -134,7 +134,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 	$return_message = set_notification($_GET['content'],$_GET['id']);
 	Display :: display_confirmation_message($return_message,false);
 }
-if ($get_actions!='add' && $get_actions!='edit' ) {
+
 	get_whats_new();
 	$whatsnew_post_info = array();
 	$whatsnew_post_info = $_SESSION['whatsnew_post_info'];
@@ -185,19 +185,19 @@ if ($get_actions!='add' && $get_actions!='edit' ) {
 		ACTION LINKS
 	------------------------------------------------------------------------------------------------------
 	*/
-	$session_id=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : false;
-	//if (api_is_allowed_to_edit() and !$_GET['action'])
-	echo '<div class="actions">';
-	echo '<span style="float:right;">'.search_link().'</span>';
-	if (api_is_allowed_to_edit(false,true)) {
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forumcategory"> '.Display::return_icon('forum_category_new.gif', get_lang('AddForumCategory')).' '.get_lang('AddForumCategory').'</a>';
-		if (is_array($forum_categories_list)) {
-			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forum"> '.Display::return_icon('forum_new.gif', get_lang('AddForum')).' '.get_lang('AddForum').'</a>';
+		$session_id=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : false;
+		//if (api_is_allowed_to_edit() and !$_GET['action'])
+		echo '<div class="actions">';
+		echo '<span style="float:right;">'.search_link().'</span>';
+		if (api_is_allowed_to_edit(false,true)) {
+			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forumcategory"> '.Display::return_icon('forum_category_new.gif', get_lang('AddForumCategory')).' '.get_lang('AddForumCategory').'</a>';
+			if (is_array($forum_categories_list)) {
+				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forum"> '.Display::return_icon('forum_new.gif', get_lang('AddForum')).' '.get_lang('AddForum').'</a>';
+			}
+			//echo ' | <a href="forum_migration.php">'.get_lang('MigrateForum').'</a>';
 		}
-		//echo ' | <a href="forum_migration.php">'.get_lang('MigrateForum').'</a>';
-	}
-	echo '</div>';
-	
+		echo '</div>';
+
 	/*
 	------------------------------------------------------------------------------------------------------
 		Display Forum Categories and the Forums in it
@@ -405,7 +405,7 @@ if ($get_actions!='add' && $get_actions!='edit' ) {
 		}
 	}
 	echo "</table>\n";
-}
+
 /*
 ==============================================================================
 		FOOTER

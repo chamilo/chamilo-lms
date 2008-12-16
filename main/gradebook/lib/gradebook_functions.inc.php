@@ -71,7 +71,8 @@ function add_resource_to_course_gradebook($course_code, $resource_type, $resourc
         // => create one
         $cat= new Category();
         if (!empty($session_id)) {
-            $s_name = api_get_session_name();
+        	$my_session_id=api_get_session_id();
+            $s_name = api_get_session_name($my_session_id);
             $cat->set_name($course_code.' - '.get_lang('Session').' '.$s_name);
             $cat->set_session_id($session_id);
         } else {

@@ -644,7 +644,8 @@ if (isset ($_GET['studentoverview'])) {
             $course_code = api_get_course_id();
             $session_id = api_get_session_id();
             if (!empty($session_id)) {
-                $s_name = api_get_session_name();
+            	$my_session_id=api_get_session_id();
+                $s_name = api_get_session_name($my_session_id);
             	$cat->set_name($course_code.' - '.get_lang('Session').' '.$s_name);
                 $cat->set_session_id($session_id);
             } else {

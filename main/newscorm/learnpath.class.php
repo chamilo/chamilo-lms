@@ -6514,10 +6514,9 @@ class learnpath {
 						else
 							$content = '';
 						
-						$form->addElement('submit', 'submit_button', get_lang('Ok'));
-						
 						if(!$no_display_edit_textarea)
 						{
+							$form->addElement('submit', 'submit_button', get_lang('Ok'));
 							$renderer = $form->defaultRenderer();
 							$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}','content_lp');
 

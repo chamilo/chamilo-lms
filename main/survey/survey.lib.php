@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 17323 2008-12-16 16:14:27Z cfasanando $
+* 	@version $Id: survey.lib.php 17333 2008-12-16 20:36:52Z iflorespaz $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -2435,9 +2435,10 @@ class SurveyUtil {
 	{
 		// getting the number of question
 		$temp_questions_data = survey_manager::get_questions($_GET['survey_id']);
-	
+
 		// sorting like they should be displayed and removing the non-answer question types (comment and pagebreak)
-		foreach ($temp_questions_data as $key=>$value)
+		$my_temp_questions_data=($temp_questions_data==null) ? array() : $temp_questions_data;
+		foreach ($my_temp_questions_data as $key=>$value)
 		{
 			if ($value['type'] <> 'comment' AND $value['type']<>'pagebreak')
 			{
@@ -4393,8 +4394,8 @@ class SurveyUtil {
 			{
 				$search_term[] = 'lang =\''.Database::escape_string($_GET['keyword_language']).'\'';
 			}
-	
-			$search_restriction = implode(' AND ', $search_term);
+			$my_search_term=($search_term==null) ? array() : $search_term;
+			$search_restriction = implode(' AND ', $my_search_term);
 			return $search_restriction;
 		}
 		else

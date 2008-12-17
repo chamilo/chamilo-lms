@@ -618,24 +618,28 @@ function delete_forum_forumcategory_thread($content, $id) {
 		$tool_constant=TOOL_FORUM_CATEGORY;
 		$return_message=get_lang('ForumCategoryDeleted');
 		
-		$sql="SELECT forum_id FROM ". $table_forums . "WHERE forum_category='".$id."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
-		$row = Database::fetch_array($result);
-		foreach ($row as $arr_forum) {
-			$forum_id = $arr_forum['forum_id'];
-			api_item_property_update($_course,'forum',$forum_id,'delete',api_get_user_id());			
+		if (!empty($forum_list)){
+			$sql="SELECT forum_id FROM ". $table_forums . "WHERE forum_category='".$id."'";
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$row = Database::fetch_array($result);
+			foreach ($row as $arr_forum) {
+				$forum_id = $arr_forum['forum_id'];
+				api_item_property_update($_course,'forum',$forum_id,'delete',api_get_user_id());			
+			}
 		}	
 	}
 	if ($content=='forum') {
 		$tool_constant=TOOL_FORUM;
 		$return_message=get_lang('ForumDeleted');
 		
-		$sql="SELECT thread_id FROM". $table_forum_thread . "WHERE forum_id='".$id."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
-		$row = mysql_fetch_array($result);
-		foreach ($row as $arr_forum) {
-			$forum_id = $arr_forum['thread_id'];
-			api_item_property_update($_course,'forum_thread',$forum_id,'delete',api_get_user_id());			
+		if (!empty($number_threads)){
+			$sql="SELECT thread_id FROM". $table_forum_thread . "WHERE forum_id='".$id."'";
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$row = mysql_fetch_array($result);
+			foreach ($row as $arr_forum) {
+				$forum_id = $arr_forum['thread_id'];
+				api_item_property_update($_course,'forum_thread',$forum_id,'delete',api_get_user_id());			
+			}
 		}
 	}
 	if ($content=='thread') {

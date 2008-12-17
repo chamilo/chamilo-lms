@@ -165,7 +165,7 @@ function show_tools($course_tool_category)
 				echo	'<a href="'. htmlspecialchars($toolsRow['link']).(($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif") ? '' : $qm_or_amp.api_get_cidreq()).'" target="' , $toolsRow['target'], '" '.$class.'>';				
 			}
 					
-			echo Display::return_icon($toolsRow['image']),'&nbsp;', ($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif" || $toolsRow['image']=="scormbuilder.gif" || $toolsRow['image']=="blog.gif") ? htmlspecialchars( $toolsRow['name'],ENT_QUOTES,$charset) : get_lang(ucfirst($toolsRow['name'])),'</a>';
+			echo Display::return_icon($toolsRow['image'], get_lang(ucfirst($toolsRow['name']))),'&nbsp;', ($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif" || $toolsRow['image']=="scormbuilder.gif" || $toolsRow['image']=="blog.gif") ? htmlspecialchars( $toolsRow['name'],ENT_QUOTES,$charset) : get_lang(ucfirst($toolsRow['name'])),'</a>';
 
 			// This part displays the links to hide or remove a tool.
 			// These links are only visible by the course manager.

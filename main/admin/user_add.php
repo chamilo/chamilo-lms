@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 17075 2008-12-04 22:49:14Z cfasanando $
+<?php // $Id: user_add.php 17362 2008-12-17 23:21:17Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -34,11 +34,11 @@ $cidReset = true;
 // including necessary libraries
 require ('../inc/global.inc.php');
 $libpath = api_get_path(LIBRARY_PATH);
-include_once ($libpath.'fileManage.lib.php');
-include_once ($libpath.'fileUpload.lib.php');
-include_once ($libpath.'usermanager.lib.php');
+require_once ($libpath.'fileManage.lib.php');
+require_once ($libpath.'fileUpload.lib.php');
+require_once ($libpath.'usermanager.lib.php');
 require_once ($libpath.'formvalidator/FormValidator.class.php');
-
+require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 // section for the tabs
 $this_section=SECTION_PLATFORM_ADMIN;
 
@@ -48,7 +48,7 @@ api_protect_admin_script();
 // Database table definitions
 $table_admin 	= Database :: get_main_table(TABLE_MAIN_ADMIN);
 $table_user 	= Database :: get_main_table(TABLE_MAIN_USER);
-
+$database 		= Database::get_main_database();
 
 $htmlHeadXtra[] = '
 <script language="JavaScript" type="text/JavaScript">
@@ -84,7 +84,7 @@ function display_drh_list(){
 
 if(!empty($_GET['message'])){
 	$message = urldecode($_GET['message']);
-}
+}	
 
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $tool_name = get_lang('AddUsers');
@@ -305,6 +305,7 @@ $form->setDefaults($defaults);
 // Submit button
 $form->addElement('submit', 'submit', get_lang('Add'));
 $form->addElement('submit', 'submit_plus', get_lang('Add').'+');
+	
 // Validate form
 if( $form->validate())
 {
@@ -315,19 +316,55 @@ if( $form->validate())
 		$picture_element = & $form->getElement('picture');
 		$picture = $picture_element->getValue();
 		$picture_uri = '';
-		if (strlen($picture['name']) > 0)
-		{
-			if(!is_dir(api_get_path(SYS_CODE_PATH).'upload/users/')){
-				if(mkdir(api_get_path(SYS_CODE_PATH).'upload/users/'))
-				{
+		
+		// get the next id from a user
+		$sql = "SHOW TABLE STATUS FROM $database LIKE 'user'";
+		$result = api_sql_query($sql,__FILE__,__LINE__);		
+		$array = Database::fetch_array($result);
+		$auto_increment = $array['Auto_increment'];
+		// picture path
+		$picture_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$auto_increment.'/';		
+						
+		if (strlen($picture['name']) > 0 ) {			
+			if (!is_dir($picture_path)) {
+				if (mkdir($picture_path)) {
 					$perm = api_get_setting('permissions_for_new_directories');
-					$perm = octdec(!empty($perm)?$perm:'0770');
-					chmod(api_get_path(SYS_CODE_PATH).'upload/users/');
+					$perm = octdec(!empty($perm)?$perm:'0770');					
+					chmod($picture_path,$perm);
 				}
-			}
+			}						
 			$picture_uri = uniqid('').'_'.replace_dangerous_char($picture['name']);
-			$picture_location = api_get_path(SYS_CODE_PATH).'upload/users/'.$picture_uri;
-			move_uploaded_file($picture['tmp_name'], $picture_location);
+			$picture_location = $picture_path.$picture_uri;
+			$big_picture_location = $picture_path.'big_'.$picture_uri;
+			
+			// get the picture and resize it 100x150 
+			$temp = new image($_FILES['picture']['tmp_name']);
+			
+			$picture_infos=getimagesize($_FILES['picture']['tmp_name']);
+			$thumbwidth = IMAGE_THUMBNAIL_WIDTH;
+			if (empty($thumbwidth) or $thumbwidth==0) {
+				$thumbwidth=150;
+			}
+			$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
+		
+			$temp->resize($thumbwidth,$new_height,0);
+			$type=$picture_infos[2];
+			
+			// original picture
+			$big_temp = new image($_FILES['picture']['tmp_name']);
+			
+		    switch (!empty($type)) {
+		            case 2 : $temp->send_image('JPG',$picture_location);
+		            		 $big_temp->send_image('JPG',$big_picture_location);
+		            		 break;
+		            case 3 : $temp->send_image('PNG',$picture_location);
+		            		 $big_temp->send_image('JPG',$big_picture_location);
+		            		 break;
+		            case 1 : $temp->send_image('GIF',$picture_location);
+		            		 $big_temp->send_image('JPG',$big_picture_location);
+		            		 break;
+		    }
+
 		}
 		$lastname = $user['lastname'];
 		$firstname = $user['firstname'];

@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 16708 2008-11-10 22:14:49Z yannoo $
+<?php // $Id: user_edit.php 17362 2008-12-17 23:21:17Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -54,14 +54,22 @@ function display_drh_list(){
 		document.getElementById("drh_select").options[0].selected="selected";
 	}
 }
+		
+function show_image(image,width,height) {
+	width = parseInt(width) + 20;
+	height = parseInt(height) + 20;			
+	window_x = window.open(\'\',\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
+	window_x.document.write("<img src=\'"+image+"?rand='.time().'\'/>");		
+}		
 //-->
 </script>';
 
 
-include(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-include(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-include(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 $user_id=isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
 $noPHP_SELF=true;
 $tool_name=get_lang('ModifyUserInfo');
@@ -300,7 +308,7 @@ if( $form->validate())
     //get the picture directory
     $picture_paths = UserManager::get_user_picture_path_by_id($user_id,'system',true);
     $picture_location = $picture_paths['dir'];
-    
+    $big_picture_location = $picture_paths['dir'];
 	if (strlen($picture['name']) > 0)
 	{
 		$picture_uri = uniqid('').'_'.replace_dangerous_char($picture['name']);
@@ -309,7 +317,36 @@ if( $form->validate())
         	mkpath($picture_location);
         }
 		$picture_location .= $picture_uri;
-		move_uploaded_file($picture['tmp_name'], $picture_location);
+		$big_picture_location .= 'big_'.$picture_uri;
+		
+		// get the picture and resize it 100x150
+		$temp = new image($_FILES['picture']['tmp_name']);
+		
+		$picture_infos=getimagesize($_FILES['picture']['tmp_name']);
+		$thumbwidth = IMAGE_THUMBNAIL_WIDTH;
+		if (empty($thumbwidth) or $thumbwidth==0) {
+			$thumbwidth=150;
+		}
+		$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
+	
+		$temp->resize($thumbwidth,$new_height,0);
+		$type=$picture_infos[2];
+		
+		// original picture
+		$big_temp = new image($_FILES['picture']['tmp_name']);
+		
+	    switch (!empty($type)) {
+	            case 2 : $temp->send_image('JPG',$picture_location);
+	            		 $big_temp->send_image('JPG',$big_picture_location);
+	            		 break;
+	            case 3 : $temp->send_image('PNG',$picture_location);
+	            		 $big_temp->send_image('JPG',$big_picture_location);
+	            		 break;
+	            case 1 : $temp->send_image('GIF',$picture_location);
+	            		 $big_temp->send_image('JPG',$big_picture_location);
+	            		 break;
+	    }
+
 	}
 	elseif(isset($user['delete_picture']))
 	{
@@ -426,7 +463,13 @@ $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
 if ($image_size[0] > 300) //limit display width to 300px
     $img_attributes .= 'width="300" ';
 
-echo '<img '.$img_attributes.'/>';
+// get the path,width and height from original picture
+$big_image = $image_dir.'big_'.$image;
+$big_image_size = @getimagesize($big_image);
+$big_image_width= $big_image_size[0];
+$big_image_height= $big_image_size[1];
+
+echo '<input type="image" '.$img_attributes.' onclick="return show_image(\''.$big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 
 // Display form
 $form->display();

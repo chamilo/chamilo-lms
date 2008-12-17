@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 17144 2008-12-08 23:49:52Z yannoo $
+<?php // $Id: usermanager.lib.php 17362 2008-12-17 23:21:17Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -209,7 +209,7 @@ class UserManager
 		$user_info = api_get_user_info($user_id);
 		if(strlen($user_info['picture_uri']) > 0)
 		{
-			$img_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_info['picture_uri'];
+			$img_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id.'/'.$user_info['picture_uri'];
 			unlink($img_path);
 		}
 

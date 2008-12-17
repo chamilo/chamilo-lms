@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 16820 2008-11-20 09:14:14Z elixir_inter $
+<?php //$Id: myStudents.php 17362 2008-12-17 23:21:17Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -14,6 +14,18 @@ require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once '../newscorm/learnpath.class.php';
+
+
+$htmlHeadXtra[] = '<script type="text/javascript">
+				
+function show_image(image,width,height) {
+	width = parseInt(width) + 20;
+	height = parseInt(height) + 20;			
+	window_x = window.open(\'\',\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
+	window_x.document.write("<img src=\'"+image+"?rand='.time().'\'/>");		
+}
+				
+</script>';
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 
@@ -70,7 +82,7 @@ if (isset($_GET['details'])) {
 	 			$interbreadcrumb[] = array ("url" => "student.php?id_coach=".Security::remove_XSS($_GET['id_coach']), "name" => get_lang("CoachStudents"));
 	 		}
 	 	} else {
-	 		$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
+	 			$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
 	 	}
  	}
 }
@@ -181,8 +193,7 @@ if(!empty($_GET['student']))
 		<a href="#" onclick="window.print()"><img src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
 		<a href="'.api_get_self().'?'.$_SERVER['QUERY_STRING'].'&export=csv"><img src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
 	  </div>';
-	  
-	  
+	  	  
 	// is the user online ?
 	$statistics_database = Database :: get_statistic_database();
 	$a_usersOnline = WhoIsOnline($_GET['student'], $statistics_database, 30);
@@ -198,9 +209,7 @@ if(!empty($_GET['student']))
 			$online = get_lang('No');
 		}
 	}
-	
-	
-	
+			
 	$avg_student_progress = $avg_student_score = $nb_courses = 0;
 	$sql = 'SELECT course_code FROM '.$tbl_course_user.' WHERE user_id='.$a_infosUser['user_id'];
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
@@ -217,8 +226,7 @@ if(!empty($_GET['student']))
 	{
 		$a_courses[$row['course_code']] = $row['course_code'];
 	}
-	
-	
+		
 	foreach ($a_courses as $key=>$course_code)
 	{
 		if(!CourseManager::is_user_subscribed_in_course($a_infosUser['user_id'], $course_code, true))
@@ -267,8 +275,21 @@ if(!empty($_GET['student']))
 						
 							<?php							
 								$image_array=UserManager::get_user_picture_path_by_id($a_infosUser['user_id'],'web',false, true);																					
-								echo '<td class="borderRight" width="10%" valign="top">';
-								echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';
+								echo '<td class="borderRight" width="10%" valign="top">';								
+								
+								// get the path,width and height from original picture
+								$image_file = $image_array['dir'].$image_array['file'];
+								$big_image = $image_array['dir'].'big_'.$image_array['file'];
+								$big_image_size = @getimagesize($big_image);
+								$big_image_width= $big_image_size[0];
+								$big_image_height= $big_image_size[1];
+								
+								$img_attributes = 'src="'.$image_file.'?rand='.time().'" '
+								.'alt="'.$a_infosUser['lastname'].' '.$a_infosUser['firstname'].'" '
+								.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
+								
+								echo '<input type="image" '.$img_attributes.' onclick="return show_image(\''.$big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
+								
 								echo '</td>';
 							?>
 						
@@ -1064,4 +1085,3 @@ if($export_csv)
 ==============================================================================
 */
 Display::display_footer();
-?>

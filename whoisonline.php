@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 16703 2008-11-10 15:36:25Z elixir_inter $
+<?php // $Id: whoisonline.php 17362 2008-12-17 23:21:17Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -40,6 +40,16 @@ require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 // table definitions
 $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 
+$htmlHeadXtra[] = '<script type="text/javascript">
+				
+	function show_image(image,width,height) {
+		width = parseInt(width) + 20;
+		height = parseInt(height) + 20;			
+		window_x = window.open(\'\',\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
+		window_x.document.write("<img src=\'"+image+"?rand='.time().'\'/>");		
+	}
+					
+</script>';
 
 if ($_GET['chatid'] != '')
 {
@@ -117,6 +127,7 @@ function display_individual_user($user_id)
 	global $interbreadcrumb;
 	$safe_user_id = Database::escape_string($user_id);
 
+	
 	// to prevent a hacking attempt: http://www.dokeos.com/forum/viewtopic.php?t=5363
 	$user_table=Database::get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT * FROM $user_table WHERE user_id='".$safe_user_id."'";
@@ -143,9 +154,13 @@ function display_individual_user($user_id)
 			$resizing = (($height > 200) ? 'height="200"' : '');
 			$height += 30;
 			$width += 30;
-			$window_name = 'window'.uniqid('');
-			$onclick = $window_name."=window.open('".$fullurl."','".$window_name."','alwaysRaised=yes, alwaysLowered=no,alwaysOnTop=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=".$width.",height=".$height.",left=200,top=20'); return false;";
-			echo '<a href="#" onclick="'.$onclick.'" ><img src="'.$fullurl.'" '.$resizing.' alt="'.$alt.'"/></a><br />';
+			$window_name = 'window'.uniqid('');			
+			// get the path,width and height from original picture			
+			$big_image = $webdir.'big_'.$user_object->picture_uri;
+			$big_image_size = @getimagesize($big_image);
+			$big_image_width= $big_image_size[0];
+			$big_image_height= $big_image_size[1];
+			echo '<input type="image" src="'.$fullurl.'" alt="'.$alt.'" onclick="return show_image(\''.$big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/><br />';
 		}
 		if (api_get_setting("show_email_addresses") == "true")
 		{

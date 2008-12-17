@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 17222 2008-12-10 23:09:20Z iflorespaz $
+<?php // $Id: profile.php 17362 2008-12-17 23:21:17Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -56,6 +56,14 @@ function confirmation(name)
 	else
 		{return false;}
 }
+		
+function show_image(image,width,height) {
+	width = parseInt(width) + 20;
+	height = parseInt(height) + 20;			
+	window_x = window.open(\'\',\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
+	window_x.document.write("<img src=\'"+image+"?rand='.time().'\'/>");		
+}
+				
 </script>';
 
 if (!empty ($_GET['coursePath']))
@@ -439,65 +447,56 @@ function upload_user_image($user_id)
   	$file_extension = explode('.', $_FILES['picture']['name']);
 	$file_extension = strtolower($file_extension[count($file_extension) - 1]);
 
-	if (!file_exists($image_repository))
-	{
-		//error_log('Making path '.$image_repository,0);
+	if (!file_exists($image_repository)) {
 		mkpath($image_repository);
-	}
-	else
-	{
-		//error_log('Path '.$image_repository.' exists',0);
-	}
-	if ($existing_image != '')
-	{
-		if (KEEP_THE_NAME_WHEN_CHANGE_IMAGE)
-		{
+	} 
+	
+	if ($existing_image != '') {
+		if (KEEP_THE_NAME_WHEN_CHANGE_IMAGE) {
 			$picture_filename = $existing_image;
 			$old_picture_filename = 'saved_'.date('Y_m_d_H_i_s').'_'.uniqid('').'_'.$existing_image;
-		}
-		else
-		{
+		} else {
 			$old_picture_filename = $existing_image;
 			$picture_filename = (PREFIX_IMAGE_FILENAME_WITH_UID ? 'u'.$user_id.'_' : '').uniqid('').'.'.$file_extension;
 		}
 
-		if (KEEP_THE_OLD_IMAGE_AFTER_CHANGE)
-		{
+		if (KEEP_THE_OLD_IMAGE_AFTER_CHANGE) {
 			@rename($image_repository.$existing_image, $image_repository.$old_picture_filename);
-		}
-		else
-		{
+		} else {
 			@unlink($image_repository.$existing_image);
 		}
-	}
-	else
-	{
+	} else {
 		$picture_filename = (PREFIX_IMAGE_FILENAME_WITH_UID ? $user_id.'_' : '').uniqid('').'.'.$file_extension;
 	}
 
+	// get the picture and resize it 200x200
 	$temp = new image($_FILES['picture']['tmp_name']);
+	
 	$picture_infos=getimagesize($_FILES['picture']['tmp_name']);
-	$thumbwidth = IMAGE_THUMBNAIL_WIDTH;
-	if(empty($thumbwidth) or $thumbwidth==0)
-	{
-		$thumbwidth=100;
+	$thumbwidth = 200;
+	if (empty($thumbwidth) or $thumbwidth==0) {
+		$thumbwidth=200;
 	}
 	$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
 
 	$temp->resize($thumbwidth,$new_height,0);
 	$type=$picture_infos[2];
-
-    switch ($type) {
+	
+	// original picture
+	$big_temp = new image($_FILES['picture']['tmp_name']);
+		      
+    switch (!empty($type)) {
             case 2 : $temp->send_image('JPG',$image_repository.$picture_filename);
-            break;
+            		 $big_temp->send_image('JPG',$image_repository.'big_'.$picture_filename);
+            		 break;
             case 3 : $temp->send_image('PNG',$image_repository.$picture_filename);
-            break;
+            		 $big_temp->send_image('JPG',$image_repository.'big_'.$picture_filename);
+            		 break;
             case 1 : $temp->send_image('GIF',$image_repository.$picture_filename);
-            break;
+            		 $big_temp->send_image('JPG',$image_repository.'big_'.$picture_filename);
+            		 break;
     }
-
     return $picture_filename;
-
 }
 
 /**
@@ -749,10 +748,18 @@ $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
 	.'alt="'.$user_data['lastname'].' '.$user_data['firstname'].'" '
 	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
 
-if ($image_size[0] > 300) //limit display width to 300px
-	$img_attributes .= 'width="300" ';
+if ($image_size[0] > 300) {
+	//limit display width to 300px
+	$img_attributes .= 'width="300" ';	
+}
 
-echo '<img '.$img_attributes.'/>';
+// get the path,width and height from original picture
+$big_image = $image_dir.'big_'.$image;
+$big_image_size = @getimagesize($big_image);
+$big_image_width= $big_image_size[0];
+$big_image_height= $big_image_size[1];
+
+echo '<input type="image" '.$img_attributes.' onclick="return show_image(\''.$big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 
 $form->display();
 

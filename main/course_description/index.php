@@ -1,4 +1,4 @@
-<?php // $Id: index.php 17194 2008-12-09 23:43:57Z iflorespaz $
+<?php // $Id: index.php 17356 2008-12-17 16:16:11Z iflorespaz $
 
 /*
 ==============================================================================
@@ -95,14 +95,14 @@ $default_description_titles[5]= get_lang('CourseMaterial');
 $default_description_titles[6]= get_lang('HumanAndTechnicalResources');
 $default_description_titles[7]= get_lang('Assessment');
 $default_description_icon = array();
-$default_description_icon[1]= api_get_path(WEB_IMG_PATH).'/edu_miscellaneous.gif';
-$default_description_icon[2]= api_get_path(WEB_IMG_PATH).'/spire.gif';
-$default_description_icon[3]= api_get_path(WEB_IMG_PATH).'/kcmdf_big.gif';
-$default_description_icon[4]= api_get_path(WEB_IMG_PATH).'/misc.gif';
-$default_description_icon[5]= api_get_path(WEB_IMG_PATH).'/laptop.gif';
-$default_description_icon[6]= api_get_path(WEB_IMG_PATH).'/personal.gif';
-$default_description_icon[7]= api_get_path(WEB_IMG_PATH).'/korganizer.gif';
-$default_description_icon[8]= api_get_path(WEB_IMG_PATH).'/ktip.gif';
+$default_description_icon[1]= 'edu_miscellaneous.gif';
+$default_description_icon[2]= 'spire.gif';
+$default_description_icon[3]= 'kcmdf_big.gif';
+$default_description_icon[4]= 'misc.gif';
+$default_description_icon[5]= 'laptop.gif';
+$default_description_icon[6]= 'personal.gif';
+$default_description_icon[7]= 'korganizer.gif';
+$default_description_icon[8]= 'ktip.gif';
 $question = array();
 $question[1]= get_lang('GeneralDescriptionQuestions');
 $question[2]= get_lang('ObjectivesQuestions');

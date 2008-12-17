@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 17336 2008-12-16 21:23:21Z iflorespaz $
+* 	@version $Id: survey.lib.php 17360 2008-12-17 20:51:09Z iflorespaz $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1213,6 +1213,7 @@ class survey_manager
 									SURVEY ANSWERS FUNCTIONS
 	 *****************************************************************************************************/
 
+
 	/**
 	 * This function deletes all the answers anyone has given on this survey
 	 * This function is normally only called when a survey is deleted
@@ -1223,10 +1224,11 @@ class survey_manager
 	 * @todo write the function
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version January 2007
+	 * @version January 2007,december 2008 
 	 */
-	function delete_all_survey_answers($survey_id)
-	{
+	function delete_all_survey_answers($survey_id) {
+		$table_survey_answer 	= Database :: get_course_table(TABLE_SURVEY_ANSWER);
+		api_sql_query('DELETE FROM '.$table_survey_answer.' WHERE survey_id='.$survey_id,__FILE__,__LINE__);
 		return true;
 	}
 
@@ -4028,7 +4030,8 @@ class SurveyUtil {
 								
 					// storing the invitation (only if the user_id is not in $already_invited['course_users'] OR email is not in $already_invited['additional_users']
 					$add_users_array = explode(';',$already_invited['additional_users']);
-					if ((is_numeric($value) AND !in_array($value,$already_invited['course_users'])) OR (!is_numeric($value) AND !in_array($value,$add_users_array)))
+					$my_alredy_invited=($already_invited['course_users']==null) ? array() : $already_invited['course_users'];
+					if ((is_numeric($value) AND !in_array($value,$my_alredy_invited)) OR (!is_numeric($value) AND !in_array($value,$add_users_array)))
 					{
 						if(is_array($survey_invitations))
 						{

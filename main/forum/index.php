@@ -291,7 +291,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 							if ($forum['forum_group_public_private']=='public') {
 								$show_forum=true;
 								//echo '-publiek';
-							} else {
+							} else if ($forum['forum_group_public_private']=='private') {
 								// it is a group forum and it is private
 								//echo '-prive';
 								// it is a group forum and it is private but the user is member of the group
@@ -302,6 +302,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 									//echo '-is GEEN lid';
 									$show_forum=false;
 								}
+							} else {
+								$show_forum=false;
 							}
 		
 						}

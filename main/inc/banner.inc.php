@@ -267,17 +267,20 @@ foreach($navigation as $section => $navigation_info) {
 $navigation = array();
 // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
 		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
+$session_id     = api_get_session_id();
+$session_name   = api_get_session_name($my_session_id);
+$my_session_name= ($session_name==null) ? '' : '&nbsp;('.$session_name.')';
 if (isset ($_cid) and $_cid!=-1 and isset($_course) and !isset($_GET['hide_course_breadcrumb'])) {
 	$navigation_item['url'] = $web_course_path . $_course['path'].'/index.php';
 	switch(api_get_setting('breadcrumbs_course_homepage')) {
 		case 'get_lang':
-			$navigation_item['title'] =  get_lang('CourseHomepageLink');
+			$navigation_item['title'] =  get_lang('CourseHomepageLink').$my_session_name;
 			break;
 		case 'course_code':
-			$navigation_item['title'] =  $_course['official_code'];
+			$navigation_item['title'] =  $_course['official_code'].$my_session_name;
 			break;
 		default:
-			$navigation_item['title'] =  $_course['name'];
+			$navigation_item['title'] =  $_course['name'].$my_session_name;
 			break;
 	}
 	$navigation[] = $navigation_item;

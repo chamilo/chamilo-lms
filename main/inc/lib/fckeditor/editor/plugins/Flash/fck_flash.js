@@ -239,6 +239,7 @@ function SetUrl( url )
 
 /* ============================================================ */
 /* Esta clase contendra el elemento. 							*/
+/* This class will contain the element.                         */
 /* ============================================================ */
 //'url' : '',
 //'width' : '',
@@ -275,6 +276,7 @@ var Media = function (o){
 
 /**
  * Toma los datos de un elemento.
+ * 	Takes data from an item.
  */ 
 Media.prototype.setObjectElement = function (e){
 	if (!e) return ;
@@ -335,6 +337,7 @@ Media.prototype.replaceObject = function(o){
 
 /**
  * Devuelve el valor de classid para el elemento que estamos visualizando.
+ * Returns the value of classid for the item you're viewing.
  */
 Media.prototype.getClassId = function (){
 	var fl = 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000';
@@ -348,6 +351,7 @@ Media.prototype.getClassId = function (){
 
 /**
  * Devuelve el valor de codebase para el elemento que estamos visualizando.
+ * Returns the value of codebase for the item you're viewing.
  */
 Media.prototype.getCodeBase = function (){
 	var fl = 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=5,0,0,0';
@@ -361,6 +365,7 @@ Media.prototype.getCodeBase = function (){
 
 /**
  * Devuelve el valor de pluginpage para el elemento que estamos visualizando.
+ * Returns the value of pluginpage for the item you're viewing.
  */
 Media.prototype.getPluginsPage = function (){
 	var fl = 'http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash';
@@ -374,6 +379,7 @@ Media.prototype.getPluginsPage = function (){
 
 /**
  * Devuelve el valor de mime type para el elemento que estamos visualizando.
+ * Returns the value of mime type for the item you're viewing.
  */
 Media.prototype.getMimeType = function (){
 	var fl = 'application/x-shockwave-flash';
@@ -388,6 +394,7 @@ Media.prototype.getMimeType = function (){
 
 /**
  * Devuelve el codigo HTML externo del elemento
+ * Returns the HTML code of the external element
  */
 Media.prototype.getOuterHTML = function (objectId){
 	var s;
@@ -417,6 +424,7 @@ Media.prototype.getOuterHTML = function (objectId){
 
 /**
  * Devuelve el codigo HTML interno del elemento
+ * 	Returns the HTML code inside the element
  */
 Media.prototype.getInnerHTML = function (objectId){
 	var s = "";

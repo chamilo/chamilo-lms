@@ -73,6 +73,7 @@ function window_onload(tab_to_elect)
 
 /**
  * obtiene el elemento seleccionado
+ * gets the selected item
  */
 function getSelectedMovie()
 {
@@ -183,6 +184,7 @@ function UpdateEmbed( e )
 
 /**
  * Obtiene los datos del form y actualiza el objeto..
+ * Obtains data from the form and updates the object ...
  */
 function updateMovie(e)
 {
@@ -246,6 +248,7 @@ var Media = function (o)
 
 /**
  * Toma los datos de un elemento.
+ * Takes data from an item.
  */ 
 Media.prototype.setObjectElement = function (e)
 {
@@ -287,6 +290,7 @@ Media.prototype.setObjectElement = function (e)
 
 /**
  * Devuelve el codigo HTML externo del elemento
+ * Returns the HTML code of the external element
  */
 Media.prototype.getOuterHTML = function (objectId){
 	var s;
@@ -296,6 +300,7 @@ Media.prototype.getOuterHTML = function (objectId){
 
 /**
  * Devuelve el codigo HTML interno del elemento
+ * Returns the HTML code inside the element
  */
 Media.prototype.getInnerHTML = function (objectId)
 {

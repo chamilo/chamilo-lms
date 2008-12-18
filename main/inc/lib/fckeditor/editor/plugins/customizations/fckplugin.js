@@ -5,6 +5,7 @@
  *	Copyright (c) 2003 Ghent University (UGent)
  *	Copyright (c) 2001 Universite catholique de Louvain (UCL)
  *	Copyright (c) 2008 Julio Montoya
+ *	Copyright (c) 2008 Ivan Tcholakov
  *
  *	For a full list of contributors, see "credits.txt".
  *	The full license can be read in "license.txt".
@@ -48,74 +49,6 @@
 
 /*
  **************************************************************************************
- * General note: This plugin alters some basic functionality of FCKEditor.
- * This is why it should be loaded first, before the other plugins.
- **************************************************************************************
- */
-
-
-/*
- **************************************************************************************
- * Customizations by Julio Montoya for managing fake images for
- * representation of embedded objects in editor's area.
- * December, 2008
- **************************************************************************************
- */
-
-// A custom handler for mediaplayer, used to play mp3 files
-FCKEmbedAndObjectProcessor.AddCustomHandler( function( el, fakeImg )
-	{
-		if ( ! ( el.nodeName.IEquals( 'embed' ) && ( el.type == 'application/x-shockwave-flash' || /\.swf($|#|\?)/i.test( el.src ) ) ) )
-			return ;
-
-		if (el.src.match(/mediaplayer/g)) 
-		{
-			fakeImg.className = 'FCK__MP3'  //DOKEOS CUSTOMIZATION : the mp3 fake should appear if the flash is the mediaplayer
-		}
-		fakeImg.setAttribute('_fckflash', 'true', 0);
-	} ) ;
-
-// Fake images for mp3 files.
-FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
-	{
-		var embeds = document.getElementsByTagName( 'embed' ); 
-		var embed;
-		var i = embeds.length - 1; 
-		while ( i >= 0 && ( embed = embeds[i--] ) )
-		{
-			var extension = embed.src.match(/\.(mp3)$/i);
-			if (extension != null)
-			{	 
-				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__MP3', embed.cloneNode(true) );
-				oImg.setAttribute( '_fckmp3', 'true', 0 );
-				embed.parentNode.insertBefore( oImg, embed );
-				embed.parentNode.removeChild( embed );			
-			}
-		}
-	};
-
-// Fake images for files supported by fckembedvideo - mpg, mpeg, avi, wmv, mov and asf.
-FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
-	{
-		var embeds = document.getElementsByTagName( 'embed' ); 
-		var embed;
-		var i = embeds.length - 1; 
-		while ( i >= 0 && ( embed = embeds[i--] ) )
-		{
-			var extension = embed.src.match(/\.(mpg|mpeg|avi|wmv|mov|asf)$/i);
-			if (extension != null)
-			{			 
-				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', embed.cloneNode(true) );
-				oImg.setAttribute( '_fckvideo', 'true', 0 );
-				embed.parentNode.insertBefore( oImg, embed );
-				embed.parentNode.removeChild( embed );			
-			}
-		}
-	};
-
-
-/*
- **************************************************************************************
  * Customizations by Julio Montoya for enabling the external template selection dialog.
  * December, 2008
  **************************************************************************************
@@ -131,12 +64,6 @@ FCKDialogCommand.prototype.ExecuteFrame = function()
 {
 	return FCKDialog.OpenDialogFrame( 'FCKDialog_' + this.Name, this.Title, this.Url, this.Width, this.Height, this.CustomValue, null, this.Resizable );
 }; 
-
-/*
- * The following customization of the dialog sub-system for enabling
- * the external template selection uses original source code,
- * FCKeditor version 2.6.4 SVN, Build 21065 (nightly, 06-DEC-2008).
- */
 
 var FCKDialog = ( function()
 {
@@ -419,3 +346,291 @@ var FCKDialog = ( function()
 		}
 	} ;
 } )() ;
+
+
+/*
+ **************************************************************************************
+ * Customizations by the Dokeos Company to make all the plugins compatible.
+ **************************************************************************************
+ */
+
+
+/*
+ **************************************************************************************
+ * Fake images support
+ **************************************************************************************
+ */
+
+// A custom handler for mediaplayer, used to play mp3 files
+FCKEmbedAndObjectProcessor.AddCustomHandler( function( el, fakeImg )
+	{
+		if ( !is_audio( el ) )
+		{
+			return ;
+		}
+
+		fakeImg.className = 'FCK__MP3';
+		fakeImg.setAttribute( '_fckmp3', 'true', 0 );
+	} ) ;
+
+// Fake images for mp3 files.
+FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
+	{
+		var embeds = document.getElementsByTagName( 'embed' ); 
+		var embed;
+		var i = embeds.length - 1; 
+		while ( i >= 0 && ( embed = embeds[i--] ) )
+		{
+			if ( is_audio( embed ) )
+			{
+				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__MP3', embed.cloneNode(true) );
+				oImg.setAttribute( '_fckmp3', 'true', 0 );
+				embed.parentNode.insertBefore( oImg, embed );
+				embed.parentNode.removeChild( embed );			
+			}
+		}
+
+		var objects = document.getElementsByTagName( 'object' ); 
+		var obj;
+		var i = objects.length - 1; 
+		while ( i >= 0 && ( obj = objects[i--] ) )
+		{
+			if ( is_audio( obj ) )
+			{
+				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__MP3', obj.cloneNode(true) );
+				oImg.setAttribute( '_fckmp3', 'true', 0 );
+				obj.parentNode.insertBefore( oImg, obj );
+				obj.parentNode.removeChild( obj );			
+			}
+		}
+	};
+
+// Fake images for files supported by fckembedvideo - mpg, mpeg, avi, wmv, mov and asf.
+FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
+	{
+		var embeds = document.getElementsByTagName( 'embed' ); 
+		var embed;
+		var i = embeds.length - 1; 
+		while ( i >= 0 && ( embed = embeds[i--] ) )
+		{
+			var extension = embed.src.match(/\.(mpg|mpeg|avi|wmv|mov|asf)$/i);
+			if (extension != null)
+			{			 
+				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', embed.cloneNode(true) );
+				oImg.setAttribute( '_fckvideo', 'true', 0 );
+				embed.parentNode.insertBefore( oImg, embed );
+				embed.parentNode.removeChild( embed );			
+			}
+		}
+	};
+
+
+/*
+ **************************************************************************************
+ * Context menu support
+ **************************************************************************************
+ */
+
+// Removing some built-in context menu commands.
+// Their default functionalities break proper working of the activated plugins.
+for ( var i in FCK.ContextMenu.Listeners )
+{
+	var listener = '';
+
+	if ( FCK.ContextMenu.Listeners[i].AddItems )
+	{
+		listener = FCK.ContextMenu.Listeners[i].AddItems.toString();
+	}
+
+	// Dealing with the built-in context menu handler for images.
+	if ( listener.indexOf( 'IMG' ) != -1 && listener.indexOf( '_fckfakelement' ) != -1 )
+	{
+		FCK.ContextMenu.Listeners[i].AddItems = function( menu, tag, tagName )
+			{
+				return;
+			} ;
+	}
+
+	// Dealing with the built-in context menu handler for flash objects.
+	if ( listener.indexOf( 'IMG' ) != -1 && listener.indexOf( '_fckflash' ) != -1 )
+	{
+		FCK.ContextMenu.Listeners[i].AddItems = function( menu, tag, tagName )
+			{
+				return;
+			} ;
+	}
+}
+
+// Adding context menu commands.
+
+// Image-related commands.
+FCK.ContextMenu.RegisterListener( {
+	AddItems : function( menu, tag, tagName )
+	{
+		if ( tagName == 'IMG' &&
+			!tag.getAttribute( '_fckfakelement' ) &&
+			!tag.getAttribute( '_fckflash' ) &&
+			!tag.getAttribute( '_fckmp3' ) &&
+			!tag.getAttribute( '_fckvideo' ) )
+		{
+			// Grouping all image-related commands at the bottom.
+			menu.AddSeparator();
+			menu.AddItem( 'Image', FCKLang.ImageProperties, 37 ) ;
+			menu.AddItem( 'ImageManager', FCKLang.ImageProperties, FCKConfig.PluginsPath + 'ImageManager/icon.gif' ) ;
+			// The "imgmap" plugin should add its own icon here.
+		}
+	}}
+);
+
+// Flash command.
+FCK.ContextMenu.RegisterListener( {
+	AddItems : function( menu, tag, tagName )
+	{
+		if ( tagName == 'IMG' && tag.getAttribute( '_fckflash' ) &&
+			!tag.getAttribute( '_fckmp3' ) &&
+			!tag.getAttribute( '_fckvideo' ) )
+		{
+			menu.AddSeparator() ;
+			menu.AddItem( 'Flash', FCKLang.FlashProperties, 38 ) ;
+		}
+	}}
+);
+
+// MP3 command.
+FCK.ContextMenu.RegisterListener( {
+	AddItems : function( menu, tag, tagName )
+	{
+		if ( tagName == 'IMG' && tag.getAttribute( '_fckmp3' ) )
+		{
+			menu.AddSeparator();
+			menu.AddItem( 'MP3', FCKLang.DlgMP3Title, FCKConfig.PluginsPath + 'MP3/button.flash.gif' ) ;
+		}
+	}}
+);
+
+
+/*
+ **************************************************************************************
+ * Double click support
+ **************************************************************************************
+ */
+
+// Flash command.
+FCK.RegisterDoubleClickHandler(
+	function ( tag )
+	{
+		if ( tag.tagName == 'IMG' && tag.getAttribute( '_fckflash' ) )
+		{
+			FCKCommands.GetCommand( 'Flash' ).Execute() ;
+		}
+	}, 'IMG'
+) ;	
+
+// MP3 command.
+FCK.RegisterDoubleClickHandler(
+	function ( tag )
+	{
+		if ( tag.tagName == 'IMG' && tag.getAttribute( '_fckmp3' ) )
+		{
+			FCKCommands.GetCommand( 'MP3' ).Execute() ;
+		}
+	}, 'IMG'
+) ;	
+
+
+/*
+ **************************************************************************************
+ * Common utilities
+ **************************************************************************************
+ */
+
+// Checking for audio (mp3) file reference which is to be used by a flash player.
+function is_audio( tag )
+{
+	if ( tag.nodeName.IEquals( 'embed' ) )
+	{
+		if ( !tag.src )
+		{
+			return false ;
+		}
+
+		if ( tag.type == 'application/x-shockwave-flash' || /\.swf($|#|\?|&)?/i.test( tag.src ) )
+		{
+
+			if ( /\.mp3/i.test( tag.src ) )
+			{
+				return true ;
+			}
+
+			var flashvars = FCKDomTools.GetAttributeValue( tag, 'flashvars' );
+			flashvars = flashvars ? flashvars.toLowerCase() : '' ;
+
+			if ( /\.mp3/i.test( flashvars ) )
+			{
+				return true ;
+			}
+		}
+	}
+	else if ( tag.nodeName.IEquals( 'object' ) )
+	{
+		for (var i = 0; i < tag.childNodes.length; i++)
+		{
+			if ( tag.childNodes[i].nodeName.IEquals( 'param' ) )
+			{
+				var name = tag.childNodes[i].name ? tag.childNodes[i].name.toLowerCase() : '' ;
+				var value = tag.childNodes[i].value ? tag.childNodes[i].value.toLowerCase() : '' ;
+
+				if ( name == 'movie' )
+				{
+					if ( /\.mp3/i.test( value ) )
+					{
+						return true ;
+					}
+				}
+			}
+		}
+	}
+
+	return false ;
+}
+
+// This is a utility for debugging purposes.
+function var_dump(variable, level)
+{
+	var result = '';
+
+	if (!level)
+	{
+		level = 0;
+	}
+
+	var padding = '';
+
+	for (var i = 0; i < level + 1; i++)
+	{
+		padding += '    ';
+	}
+
+	if (typeof(variable) == 'object')
+	{
+		for (var item in variable)
+		{
+			var value = variable[item];
+			
+			if (typeof(value) == 'object')
+			{
+				result += padding + "'" + item + "' ...\n";
+				result += var_dump(value, level + 1);
+			}
+			else
+			{
+				result += padding + "'" + item + "' => \"" + value + "\"\n";
+			}
+		}
+	}
+	else
+	{
+		result = '===>' + variable + '<===(' + typeof(variable) + ')';
+	}
+	return result;
+}

@@ -46,7 +46,15 @@
     // Open the Placeholder dialog on double click.
     function ImageManager_doubleClick (img) {
 
-		if ( img.tagName == 'IMG' ) FCKCommands.GetCommand( 'ImageManager' ).Execute() ;
+		//if ( img.tagName == 'IMG' ) FCKCommands.GetCommand( 'ImageManager' ).Execute() ;
+		if ( img.tagName == 'IMG' &&
+			!img.getAttribute( '_fckfakelement' ) &&
+			!img.getAttribute( '_fckflash' ) &&
+			!img.getAttribute( '_fckmp3' ) &&
+			!img.getAttribute( '_fckvideo' ) )
+		{
+			FCKCommands.GetCommand( 'ImageManager' ).Execute() ;
+		}
 	}
 
 	FCK.RegisterDoubleClickHandler( ImageManager_doubleClick, 'IMG' ) ;	

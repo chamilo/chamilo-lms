@@ -875,7 +875,7 @@ function update_Db_course($courseDbName)
 		page_id int NOT NULL default 0,
 		reflink varchar(250) NOT NULL default 'index',
 		title text NOT NULL,
-		content text NOT NULL,
+		content mediumtext NOT NULL,
 		user_id int NOT NULL default 0,
 		group_id int DEFAULT NULL,
 		dtime datetime NOT NULL default '0000-00-00 00:00:00',				

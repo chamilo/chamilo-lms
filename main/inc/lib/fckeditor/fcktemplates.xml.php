@@ -816,12 +816,7 @@ $default_course_dir = api_get_path(REL_CODE_PATH).'default_course_document/';
 					<td>					
 					<div align="center">
 					<span style="text-align: center;">
-                        <object width="90" height="25" align="" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" id="test">
-                            <param name="movie" value="<?php echo api_get_path(REL_CODE_PATH) ?>inc/lib/mp3player/player_mp3.swf?autostart=true&mp3file=<?php echo $default_course_dir;?>audio/ListeningComprehension.mp3" />
-                            <param name="quality" value="high" />
-                            <param name="bgcolor" value="#FFFFFF" /> 
-                            <embed width="90" height="25" align="" src="<?php echo api_get_path(REL_CODE_PATH) ?>inc/lib/mp3player/player_mp3.swf?autostart=true&mp3file=<?php echo $default_course_dir;?>audio/ListeningComprehension.mp3" quality="high" bgcolor="#FFFFFF" name="Streaming" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>
-                          </object>
+						<embed  type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" width="300" height="20" bgcolor="#FFFFFF" src="<?php echo api_get_path(REL_CODE_PATH); ?>inc/lib/mediaplayer/player.swf" allowfullscreen="false" allowscriptaccess="always" flashvars="file=<?php echo $default_course_dir; ?>audio/ListeningComprehension.mp3&amp;autostart=true"></embed>
                     </span></div>     
 					
 					<br>

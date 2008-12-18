@@ -44,15 +44,23 @@ FCKToolbarItems.RegisterItem('imgmapPopup', imgmapButton);
 FCK.ContextMenu.RegisterListener({
 	AddItems : function( menu, tag, tagName ) {
 		// under what circumstances do we display this option
-		if (tagName == 'IMG') {
+		if ( tagName == 'IMG' &&
+			!tag.getAttribute( '_fckfakelement' ) &&
+			!tag.getAttribute( '_fckflash' ) &&
+			!tag.getAttribute( '_fckmp3' ) &&
+			!tag.getAttribute( '_fckvideo' ) )
+		{
 			// when the option is displayed, show a separator  the command
-			menu.AddSeparator();
+			//menu.AddSeparator();
 			// the command needs the registered command name, the title for the context menu, and the icon path
 			menu.AddItem('imgmapPopup', FCKLang.imgmapDlgTitle, imgmapButton.IconPath);
 		}
 	}
 });
 
+
+/*
+// Removed by Ivan Tcholakov, 18-DEC-2008.
 
 // The code has been added in FCKeditor 2.5, so we only need it here for previous versions.
 if ( !FCKRegexLib.ProtectUrlsArea )
@@ -106,3 +114,4 @@ if ( !FCKRegexLib.ProtectUrlsArea )
 		return html ;
 	}
 }
+*/

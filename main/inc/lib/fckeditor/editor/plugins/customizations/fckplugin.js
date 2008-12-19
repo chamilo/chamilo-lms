@@ -57,13 +57,13 @@
 FCKToolbarButton.prototype.ClickFrame = function()
 {
 	var A = this._ToolbarButton || this;
-	return FCK.ToolbarSet.CurrentInstance.Commands.GetCommand(A.CommandName).ExecuteFrame();
+	return FCK.ToolbarSet.CurrentInstance.Commands.GetCommand(A.CommandName).ExecuteFrame() ;
 };
 
 FCKDialogCommand.prototype.ExecuteFrame = function()
 {
-	return FCKDialog.OpenDialogFrame( 'FCKDialog_' + this.Name, this.Title, this.Url, this.Width, this.Height, this.CustomValue, null, this.Resizable );
-}; 
+	return FCKDialog.OpenDialogFrame( 'FCKDialog_' + this.Name, this.Title, this.Url, this.Width, this.Height, this.CustomValue, null, this.Resizable ) ;
+};
 
 var FCKDialog = ( function()
 {
@@ -197,24 +197,24 @@ var FCKDialog = ( function()
 				Editor: window,
 				CustomValue: customValue,
 				TopWindow: topWindow
-			};
+			} ;
 
 			//FCK.ToolbarSet.CurrentInstance.Selection.Save();
 			FCK.ToolbarSet.CurrentInstance.Selection.Save( true ) ;
 
-			var viewSize = FCKTools.GetViewPaneSize( topWindow );
-			var scrollPosition = { 'X': 0, 'Y': 0 };
-			var useAbsolutePosition = FCKBrowserInfo.IsIE && ( !FCKBrowserInfo.IsIE7 || !FCKTools.IsStrictMode( topWindow.document ) );
-			if (useAbsolutePosition) scrollPosition = FCKTools.GetScrollPosition(topWindow);
-			var iTop = Math.max(scrollPosition.Y + ( viewSize.Height - height - 20 ) / 2, 0 );
-			var iLeft = Math.max(scrollPosition.X + ( viewSize.Width - width - 20 ) / 2, 0 );
+			var viewSize = FCKTools.GetViewPaneSize( topWindow ) ;
+			var scrollPosition = { 'X': 0, 'Y': 0 } ;
+			var useAbsolutePosition = FCKBrowserInfo.IsIE && ( !FCKBrowserInfo.IsIE7 || !FCKTools.IsStrictMode( topWindow.document ) ) ;
+			if (useAbsolutePosition) scrollPosition = FCKTools.GetScrollPosition( topWindow ) ;
+			var iTop = Math.max(scrollPosition.Y + ( viewSize.Height - height - 20 ) / 2, 0 ) ;
+			var iLeft = Math.max(scrollPosition.X + ( viewSize.Width - width - 20 ) / 2, 0 ) ;
 
-			var dialog = topDocument.createElement('iframe');
+			var dialog = topDocument.createElement( 'iframe' ) ;
 			//FCKTools.ResetStyles( dialog );
-			dialog.src = FCKConfig.BasePath + 'fckdialogframe.html';
+			dialog.src = FCKConfig.BasePath + 'fckdialogframe.html' ;
 
-			dialog.frameBorder = 0;
-			dialog.allowTransparency = true;
+			dialog.frameBorder = 0 ;
+			dialog.allowTransparency = true ;
 			FCKDomTools.SetElementStyles(dialog,
 			{
 				'position'	: (useAbsolutePosition) ? 'absolute' : 'fixed',
@@ -223,16 +223,16 @@ var FCKDialog = ( function()
 				'width'		: width + 'px',
 				'height'	: height + 'px',
 				'zIndex'	: getZIndex()
-			});
+			}) ;
 
-			dialog._DialogArguments = dialogInfo;
+			dialog._DialogArguments = dialogInfo ;
 
-			//E.body.appendChild( dialog );
+			//E.body.appendChild( dialog ) ;
 
-			dialog._ParentDialog = topDialog;
-			topDialog = dialog;
+			dialog._ParentDialog = topDialog ;
+			topDialog = dialog ;
 
-			return dialogInfo;
+			return dialogInfo ;
 		},
 
 		/*
@@ -361,68 +361,136 @@ var FCKDialog = ( function()
  **************************************************************************************
  */
 
-// A custom handler for mediaplayer, used to play mp3 files
-FCKEmbedAndObjectProcessor.AddCustomHandler( function( el, fakeImg )
+// A custom handler for audio files when a new tag has been added.
+FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
 	{
-		if ( !is_audio( el ) )
+		if ( !FCK.is_audio( el ) )
 		{
 			return ;
 		}
 
 		fakeImg.className = 'FCK__MP3';
-		fakeImg.setAttribute( '_fckmp3', 'true', 0 );
+		fakeImg.setAttribute( '_fckmp3', 'true', 0 ) ;
 	} ) ;
 
-// Fake images for mp3 files.
-FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
+// Fake images for audio files when the document has been opened.
+FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
 	{
-		var embeds = document.getElementsByTagName( 'embed' ); 
-		var embed;
-		var i = embeds.length - 1; 
+		var embeds = document.getElementsByTagName( 'embed' ) ; 
+		var embed ;
+		var i = embeds.length - 1 ; 
 		while ( i >= 0 && ( embed = embeds[i--] ) )
 		{
-			if ( is_audio( embed ) )
+			if ( FCK.is_audio( embed ) )
 			{
-				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__MP3', embed.cloneNode(true) );
-				oImg.setAttribute( '_fckmp3', 'true', 0 );
-				embed.parentNode.insertBefore( oImg, embed );
-				embed.parentNode.removeChild( embed );			
+				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__MP3', embed.cloneNode(true) ) ;
+				oImg.setAttribute( '_fckmp3', 'true', 0 ) ;
+				embed.parentNode.insertBefore( oImg, embed ) ;
+				embed.parentNode.removeChild( embed ) ;			
+			}
+		}
+	} ;
+
+// A custom handler for mpg, mpeg, avi, wmv, mov, asf, flv files and youtube streaming when a new tag has been added.
+FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
+	{
+		if ( !FCK.is_video( el ) )
+		{
+			return ;
+		}
+
+		fakeImg.className = 'FCK__Video';
+		fakeImg.setAttribute( '_fckvideo', 'true', 0 ) ;
+	} ) ;
+
+// Fake images for mpg, mpeg, avi, wmv, mov, asf, flv files and youtube streaming when the document has been opened.
+FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
+	{
+		var embeds = document.getElementsByTagName( 'embed' ) ; 
+		var embed;
+		var i = embeds.length - 1 ; 
+		while ( i >= 0 && ( embed = embeds[i--] ) )
+		{
+			if ( FCK.is_video( embed ) )
+			{
+				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', embed.cloneNode(true) ) ;
+				oImg.setAttribute( '_fckvideo', 'true', 0 ) ;
+				embed.parentNode.insertBefore( oImg, embed ) ;
+				embed.parentNode.removeChild( embed ) ;			
+			}
+		}
+	} ;
+
+// Checking for audio file reference which is to be used by a flash player.
+FCK.is_audio = function ( tag )
+	{
+		if ( tag.nodeName.IEquals( 'embed' ) )
+		{
+			if ( !tag.src )
+			{
+				return false ;
+			}
+
+			if ( tag.type == 'application/x-shockwave-flash' || /\.swf($|#|\?|&)?/i.test( tag.src ) )
+			{
+				// Possible way of detection for other players.
+				if ( /\.mp3/i.test( tag.src ) )
+				{
+					return true ;
+				}
+
+				// Specific to mediaplayer detection.
+				var flashvars = FCKDomTools.GetAttributeValue( tag, 'flashvars' ) ;
+				flashvars = flashvars ? flashvars.toLowerCase() : '' ;
+
+				if ( /\.mp3/i.test( flashvars ) )
+				{
+					return true ;
+				}
 			}
 		}
 
-		var objects = document.getElementsByTagName( 'object' ); 
-		var obj;
-		var i = objects.length - 1; 
-		while ( i >= 0 && ( obj = objects[i--] ) )
-		{
-			if ( is_audio( obj ) )
-			{
-				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__MP3', obj.cloneNode(true) );
-				oImg.setAttribute( '_fckmp3', 'true', 0 );
-				obj.parentNode.insertBefore( oImg, obj );
-				obj.parentNode.removeChild( obj );			
-			}
-		}
-	};
+		return false ;
+	} ;
 
-// Fake images for files supported by fckembedvideo - mpg, mpeg, avi, wmv, mov and asf.
-FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
+//Checking for video file reference within an embedded object.
+FCK.is_video = function ( tag )
 	{
-		var embeds = document.getElementsByTagName( 'embed' ); 
-		var embed;
-		var i = embeds.length - 1; 
-		while ( i >= 0 && ( embed = embeds[i--] ) )
+		if ( tag.nodeName.IEquals( 'embed' ) )
 		{
-			var extension = embed.src.match(/\.(mpg|mpeg|avi|wmv|mov|asf)$/i);
-			if (extension != null)
-			{			 
-				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', embed.cloneNode(true) );
-				oImg.setAttribute( '_fckvideo', 'true', 0 );
-				embed.parentNode.insertBefore( oImg, embed );
-				embed.parentNode.removeChild( embed );			
+			if ( !tag.src )
+			{
+				return false ;
+			}
+
+			// There are three plugins dealing with video content. Detection looks a bit messy.
+			if ( tag.type == 'application/x-shockwave-flash' || /\.swf($|#|\?|&)?/i.test( tag.src ) )
+			{
+				// Youtube.
+				if ( /\.youtube\.com/i.test( tag.src ) )
+				{
+					return true ;
+				}
+
+				// "Embed video" + "FLV player".
+				if ( /\.(mpg|mpeg|avi|wmv|mov|asf|flv)/i.test( tag.src ) )
+				{
+					return true ;
+				}
+
+				// All above that is supported by mediaplayer, it uses flashvars attribute.
+				var flashvars = FCKDomTools.GetAttributeValue( tag, 'flashvars' ) ;
+				flashvars = flashvars ? flashvars.toLowerCase() : '' ;
+
+				if (  /\.(mpg|mpeg|avi|wmv|mov|asf|flv)/i.test( flashvars ) )
+				{
+					return true ;
+				}
 			}
 		}
-	};
+
+		return false ;
+	} ;
 
 
 /*
@@ -435,28 +503,28 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 // Their default functionalities break proper working of the activated plugins.
 for ( var i in FCK.ContextMenu.Listeners )
 {
-	var listener = '';
+	var listener = '' ;
 
 	if ( FCK.ContextMenu.Listeners[i].AddItems )
 	{
-		listener = FCK.ContextMenu.Listeners[i].AddItems.toString();
+		listener = FCK.ContextMenu.Listeners[i].AddItems.toString() ;
 	}
 
 	// Dealing with the built-in context menu handler for images.
 	if ( listener.indexOf( 'IMG' ) != -1 && listener.indexOf( '_fckfakelement' ) != -1 )
 	{
-		FCK.ContextMenu.Listeners[i].AddItems = function( menu, tag, tagName )
+		FCK.ContextMenu.Listeners[i].AddItems = function ( menu, tag, tagName )
 			{
-				return;
+				return ;
 			} ;
 	}
 
 	// Dealing with the built-in context menu handler for flash objects.
 	if ( listener.indexOf( 'IMG' ) != -1 && listener.indexOf( '_fckflash' ) != -1 )
 	{
-		FCK.ContextMenu.Listeners[i].AddItems = function( menu, tag, tagName )
+		FCK.ContextMenu.Listeners[i].AddItems = function ( menu, tag, tagName )
 			{
-				return;
+				return ;
 			} ;
 	}
 }
@@ -465,7 +533,7 @@ for ( var i in FCK.ContextMenu.Listeners )
 
 // Image-related commands.
 FCK.ContextMenu.RegisterListener( {
-	AddItems : function( menu, tag, tagName )
+	AddItems : function ( menu, tag, tagName )
 	{
 		if ( tagName == 'IMG' &&
 			!tag.getAttribute( '_fckfakelement' ) &&
@@ -479,12 +547,12 @@ FCK.ContextMenu.RegisterListener( {
 			menu.AddItem( 'ImageManager', FCKLang.ImageProperties, FCKConfig.PluginsPath + 'ImageManager/icon.gif' ) ;
 			// The "imgmap" plugin should add its own icon here.
 		}
-	}}
-);
+	} }
+) ;
 
 // Flash command.
 FCK.ContextMenu.RegisterListener( {
-	AddItems : function( menu, tag, tagName )
+	AddItems : function ( menu, tag, tagName )
 	{
 		if ( tagName == 'IMG' && tag.getAttribute( '_fckflash' ) &&
 			!tag.getAttribute( '_fckmp3' ) &&
@@ -493,20 +561,20 @@ FCK.ContextMenu.RegisterListener( {
 			menu.AddSeparator() ;
 			menu.AddItem( 'Flash', FCKLang.FlashProperties, 38 ) ;
 		}
-	}}
-);
+	} }
+) ;
 
 // MP3 command.
 FCK.ContextMenu.RegisterListener( {
-	AddItems : function( menu, tag, tagName )
+	AddItems : function ( menu, tag, tagName )
 	{
 		if ( tagName == 'IMG' && tag.getAttribute( '_fckmp3' ) )
 		{
-			menu.AddSeparator();
+			menu.AddSeparator() ;
 			menu.AddItem( 'MP3', FCKLang.DlgMP3Title, FCKConfig.PluginsPath + 'MP3/button.flash.gif' ) ;
 		}
-	}}
-);
+	} }
+) ;
 
 
 /*
@@ -544,93 +612,43 @@ FCK.RegisterDoubleClickHandler(
  **************************************************************************************
  */
 
-// Checking for audio (mp3) file reference which is to be used by a flash player.
-function is_audio( tag )
-{
-	if ( tag.nodeName.IEquals( 'embed' ) )
-	{
-		if ( !tag.src )
-		{
-			return false ;
-		}
-
-		if ( tag.type == 'application/x-shockwave-flash' || /\.swf($|#|\?|&)?/i.test( tag.src ) )
-		{
-
-			if ( /\.mp3/i.test( tag.src ) )
-			{
-				return true ;
-			}
-
-			var flashvars = FCKDomTools.GetAttributeValue( tag, 'flashvars' );
-			flashvars = flashvars ? flashvars.toLowerCase() : '' ;
-
-			if ( /\.mp3/i.test( flashvars ) )
-			{
-				return true ;
-			}
-		}
-	}
-	else if ( tag.nodeName.IEquals( 'object' ) )
-	{
-		for (var i = 0; i < tag.childNodes.length; i++)
-		{
-			if ( tag.childNodes[i].nodeName.IEquals( 'param' ) )
-			{
-				var name = tag.childNodes[i].name ? tag.childNodes[i].name.toLowerCase() : '' ;
-				var value = tag.childNodes[i].value ? tag.childNodes[i].value.toLowerCase() : '' ;
-
-				if ( name == 'movie' )
-				{
-					if ( /\.mp3/i.test( value ) )
-					{
-						return true ;
-					}
-				}
-			}
-		}
-	}
-
-	return false ;
-}
-
 // This is a utility for debugging purposes.
-function var_dump(variable, level)
+function var_dump( variable, level )
 {
-	var result = '';
+	var result = '' ;
 
-	if (!level)
+	if ( !level )
 	{
-		level = 0;
+		level = 0 ;
 	}
 
-	var padding = '';
+	var padding = '' ;
 
-	for (var i = 0; i < level + 1; i++)
+	for ( var i = 0; i < level + 1; i++ )
 	{
-		padding += '    ';
+		padding += '    ' ;
 	}
 
-	if (typeof(variable) == 'object')
+	if (typeof( variable ) == 'object')
 	{
-		for (var item in variable)
+		for ( var item in variable )
 		{
-			var value = variable[item];
+			var value = variable[item] ;
 			
-			if (typeof(value) == 'object')
+			if (typeof( value ) == 'object')
 			{
-				result += padding + "'" + item + "' ...\n";
-				result += var_dump(value, level + 1);
+				result += padding + "'" + item + "' ...\n" ;
+				result += var_dump( value, level + 1 ) ;
 			}
 			else
 			{
-				result += padding + "'" + item + "' => \"" + value + "\"\n";
+				result += padding + "'" + item + "' => \"" + value + "\"\n" ;
 			}
 		}
 	}
 	else
 	{
-		result = '===>' + variable + '<===(' + typeof(variable) + ')';
+		result = '===>' + variable + '<===(' + typeof(variable) + ')' ;
 	}
-	return result;
+	return result ;
 }

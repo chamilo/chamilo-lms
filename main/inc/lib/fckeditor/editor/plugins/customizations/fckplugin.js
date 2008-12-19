@@ -482,7 +482,7 @@ FCK.is_video = function ( tag )
 				var flashvars = FCKDomTools.GetAttributeValue( tag, 'flashvars' ) ;
 				flashvars = flashvars ? flashvars.toLowerCase() : '' ;
 
-				if (  /\.(mpg|mpeg|avi|wmv|mov|asf|flv)/i.test( flashvars ) )
+				if ( /\.(mpg|mpeg|avi|wmv|mov|asf|flv)/i.test( flashvars ) )
 				{
 					return true ;
 				}
@@ -587,7 +587,9 @@ FCK.ContextMenu.RegisterListener( {
 FCK.RegisterDoubleClickHandler(
 	function ( tag )
 	{
-		if ( tag.tagName == 'IMG' && tag.getAttribute( '_fckflash' ) )
+		if ( tag.tagName == 'IMG' && tag.getAttribute( '_fckflash' ) &&
+			!tag.getAttribute( '_fckmp3' ) &&
+			!tag.getAttribute( '_fckvideo' ) )
 		{
 			FCKCommands.GetCommand( 'Flash' ).Execute() ;
 		}

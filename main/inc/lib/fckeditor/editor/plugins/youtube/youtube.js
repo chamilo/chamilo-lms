@@ -65,8 +65,8 @@ function Ok()
 
 	if ( !oFakeImage )
 	{
-		oFakeImage	= oEditor.FCKDocumentProcessor_CreateFakeImage( 'FCK__Flash', oEmbed ) ;
-		oFakeImage.setAttribute( '_fckflash', 'true', 0 ) ;
+		oFakeImage	= oEditor.FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', oEmbed ) ;
+		oFakeImage.setAttribute( '_fckvideo', 'true', 0 ) ;
 		oFakeImage	= FCK.InsertElement( oFakeImage ) ;
 	}
 

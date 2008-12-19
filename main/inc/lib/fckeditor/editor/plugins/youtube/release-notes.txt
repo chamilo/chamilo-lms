@@ -1,0 +1,54 @@
+                     YouTube Plugin For FCKeditor
+                            Version 2.62
+                           Release Notes
+
+INTRODUCTION:
+
+This document contains the release notes for the 1.1.0 version of YouTube Plugin For FCKeditor.
+
+===============================================================================================
+
+CHANGES WITH VERSION 1.1.0
+
+-Language file deleted: fr, es, nl
+-Use URL of youtube video instead of embed code
+-Add Selection of video's quality
+
+
+BUG FIXES IN 1.0.3
+
+-None
+
+===============================================================================================
+
+CHANGES WITH VERSION 1.0.3
+
+-Language file added: fr
+-Resize placeholder image to movie size
+
+
+BUG FIXES IN 1.0.3
+
+-None
+
+===============================================================================================
+
+CHANGES WITH VERSION 1.0.2
+
+-None
+
+
+BUG FIXES IN 1.0.2
+
+-Can not close self in vista
+
+===============================================================================================
+
+CHANGES WITH VERSION 1.0.1
+
+-Language file added: es, nl, zh-cn
+
+
+BUG FIXES IN 1.0.1
+
+-None

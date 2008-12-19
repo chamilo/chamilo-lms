@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<title>YouTube Properties</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta content="noindex, nofollow" name="robots">
+	<script src="../../dialog/common/fck_dialog_common.js" type="text/javascript"></script>
+	<script src="youtube.js" type="text/javascript"></script>
+	<link href="../../dialog/common/fck_dialog_common.css" type="text/css" rel="stylesheet">
+</head>
+<body scroll="no" style="OVERFLOW: hidden">
+	<div id="divInfo">
+		<table cellSpacing="1" cellPadding="1" width="100%" border="0">
+			<tr>
+				<td>
+					<table cellSpacing="0" cellPadding="0" width="100%" border="0">
+						<tr>
+							<td width="100%"><span fckLang="DlgYouTubeURL">URL</span>
+							</td>
+						</tr>
+						<tr>
+							<td vAlign="top"><input id="txtUrl" style="WIDTH: 100%" type="text">
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table cellSpacing="0" cellPadding="0" border="0">
+						<tr>
+							<td nowrap>
+								<span fckLang="DlgYouTubeWidth">Width</span><br>
+								<input id="txtWidth" onkeypress="return IsDigit(event);" type="text" size="3" value="425">
+							</td>
+							<td>&nbsp;</td>
+							<td>
+								<span fckLang="DlgYouTubeHeight">Height</span><br>
+								<input id="txtHeight" onkeypress="return IsDigit(event);" type="text" size="3" value="344">
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<fieldset>
+					<legend><span fckLang="DlgYouTubeQuality">Quality</span>:</legend>
+					<table cellSpacing="0" cellPadding="0" border="0">
+						<tr>
+							<td nowrap>
+								<input type="radio" id="radioLow" name="qlty" value="low" checked>
+								<span fckLang="DlgYouTubeLow">Low</span>
+							</td>
+							<td>&nbsp;</td>
+							<td>
+								<input type="radio" id="radioHigh" name="qlty" value="high">
+								<span fckLang="DlgYouTubeHigh">High (If available)</span>
+							</td>
+						</tr>
+					</table>
+					</fieldset>
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

@@ -73,24 +73,22 @@ function window_onload(tab_to_elect)
 
 /**
  * obtiene el elemento seleccionado
- * gets the selected item
+ * Gets the selected item.
  */
 function getSelectedMovie()
 {
 	var oSel = null;
+
 	// explorer..
-	if (is_ie)
-	{
+	if (is_ie) {
 		oSel = FCK.Selection.GetSelectedElement( 'OBJECT' );
 	}
 	
 	// gecko
-	else if (is_gecko)
-	{
+	else if (is_gecko) {
 		var o = FCK.EditorWindow.getSelection() ;
 
-		if ((o != null) && (o.anchorNode.tagName == 'OBJECT'))
-		{
+		if ((o != null) && (o.anchorNode.tagName == 'OBJECT')) {
 			oSel = o.anchorNode;
 		}
 	}
@@ -389,6 +387,7 @@ function getObjData(mpUrl)
 
 function setSoundUrl(url)
 {
+/* Weird!
 	var pos= url.indexOf('audio');	
 	var end=url.length;	
 	var string_audio = url.substring(pos, end );  // i.e    -->>    audio/listeningaudio.mp3
@@ -408,6 +407,7 @@ function setSoundUrl(url)
 		}
 		
 	}	 
+*/
 	mp3_url=url;
 }
 

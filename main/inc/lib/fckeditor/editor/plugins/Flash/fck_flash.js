@@ -13,6 +13,7 @@ var is_ie = (sAgent.indexOf("msie") != -1); // FCKBrowserInfo.IsIE
 var is_gecko = !is_ie; // FCKBrowserInfo.IsGecko
 
 // contendr� el object sobre el que trabajamos.
+// Contains the object on which we work.
 var oMedia = null;
 
 
@@ -34,6 +35,7 @@ function window_onload()
 
 /**
  * obtiene el elemento seleccionado
+ * Gets the selected item.
  */
 function getSelectedMovie()
 {
@@ -134,6 +136,7 @@ function setFlashUrl(url)
 
 /**
  * Obtiene los datos del form y actualiza el objeto..
+ * Obtains data from the form and updates the object ...
  */
 function updateMovie(e)
 {
@@ -405,6 +408,7 @@ Media.prototype.getOuterHTML = function (objectId){
 	s+= this.createAttribute('codebase',this.getCodeBase());
 
 	// si me paso el id, lo uso..
+	// 	if I pass the id, what use ...
   if (objectId)						s+= this.createAttribute('id',objectId);
 	else if (this.id != '') s+= this.createAttribute('id',this.id);  
   if (this.width > 0)  		s+= this.createAttribute('width',this.width);
@@ -521,4 +525,3 @@ function SelectBackColor( color )
 		updatePreview()
 	}
 }
-	

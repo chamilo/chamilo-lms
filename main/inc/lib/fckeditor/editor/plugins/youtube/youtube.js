@@ -23,6 +23,14 @@ dialog.AddTab( 'Info', oEditor.FCKLang.DlgInfoTab ) ;
 var oFakeImage = FCK.Selection.GetSelectedElement() ;
 var oEmbed ;
 
+if ( oFakeImage )
+{
+	if ( oFakeImage.tagName == 'IMG' && oFakeImage.getAttribute('_fckvideo') )
+		oEmbed = FCK.GetRealElement( oFakeImage ) ;
+	else
+		oFakeImage = null ;
+}
+
 window.onload = function()
 {
 	// Translate the dialog box texts.

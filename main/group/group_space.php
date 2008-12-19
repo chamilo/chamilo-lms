@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 17391 2008-12-19 23:39:04Z herodoto $
+<?php //$Id: group_space.php 17392 2008-12-19 23:51:03Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -98,7 +98,7 @@ if (!empty($_GET['selfUnReg']) && GroupManager :: is_self_unregistration_allowed
 if (api_is_allowed_to_edit(false,true) or GroupManager :: is_tutor($_user['user_id']))
 {
 	isset($origin)?$my_origin = $origin:$my_origin='';
-	echo "<a href=\"group_edit.php?origin=$my_origin\">".get_lang("EditGroup")."</a><br/><br/>";
+	echo Display::return_icon('settings.gif', get_lang("EditGroup"))."<a href=\"group_edit.php?origin=$my_origin\">".get_lang("EditGroup")."</a><br/><br/>";
 }
 
 /*

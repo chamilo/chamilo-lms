@@ -348,7 +348,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 							$my_all_groups_forum_name=isset($all_groups[$forum['forum_of_group']]['name']) ? $all_groups[$forum['forum_of_group']]['name'] : null;
 							$my_all_groups_forum_id=isset($all_groups[$forum['forum_of_group']]['id']) ? $all_groups[$forum['forum_of_group']]['id'] : null;
 							$group_title=substr($my_all_groups_forum_name,0,30);
-							$forum_title_group_addition=' (<a href="../group/group_space.php?'.api_get_cidreq().'&gidReq='.$my_all_groups_forum_id.'" class="forum_group_link">'.$group_title.'</a>)';
+							$forum_title_group_addition=' (<a href="../group/group_space.php?'.api_get_cidreq().'&gidReq='.$my_all_groups_forum_id.'" class="forum_group_link">'.get_lang('GoTo').' '.$group_title.'</a>)';
 						} else {
 							$forum_title_group_addition='';
 						}

@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 17390 2008-12-19 23:01:20Z cvargas1 $
+<?php //$Id: group_space.php 17391 2008-12-19 23:39:04Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -155,7 +155,7 @@ if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SES
 		if ( $current_group['forum_state'] != TOOL_NOT_AVAILABLE ) {
 			foreach ($forums_of_groups as $key => $value) {
 					if ($value['forum_group_public_private'] == 'public' || (/*!empty($user_subscribe_to_current_group) && */ $value['forum_group_public_private'] == 'private') || !empty($user_is_tutor) || api_is_allowed_to_edit(false,true)) {
-						$tools.= Display::return_icon('forum.gif', get_lang("GroupForum")) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.get_lang("Forum").'</a><br />';
+						$tools.= Display::return_icon('forum.gif', get_lang("Forum")) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.get_lang("Forum").': '.$value['forum_title'].'</a><br />';
 					}
 			}
 		}
@@ -203,7 +203,7 @@ else
 		if ( $current_group['forum_state'] == TOOL_PUBLIC ) {
 			foreach ($forums_of_groups as $key => $value) {
 				if ($value['forum_group_public_private'] == 'public' ) {
-					$tools.= Display::return_icon('forum.gif', get_lang("GroupForum")) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.$value['forum_title'].'</a><br />';
+					$tools.= Display::return_icon('forum.gif', get_lang("Forum")) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.get_lang("Forum").': '.$value['forum_title'].'</a><br />';
 				}
 			}
 		}

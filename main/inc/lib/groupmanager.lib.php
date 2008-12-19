@@ -203,7 +203,7 @@ class GroupManager
 			include_once(api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php');
 			
 			$forum_categories = get_forum_categories();
-			$values['forum_title'] = get_lang('ForumOfGroup').' '.$name;
+			$values['forum_title'] = $name;
 			$counter = 0;
 			foreach ($forum_categories as $key=>$value) {
 				if ($counter==0) {

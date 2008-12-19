@@ -1828,7 +1828,9 @@ class CourseManager
 		$rs = api_sql_query($sql,__FILE__,__LINE__);
 		return Database::num_rows($rs);
 	}	
-		
+
+} //end class CourseManager
+
 	/**
 	 * Send an email to tutor after the auth-suscription of a student in your course
 	 * @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
@@ -1873,5 +1875,3 @@ class CourseManager
 			
 		@ api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);		
 	}
-} //end class CourseManager
-?>

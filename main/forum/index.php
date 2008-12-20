@@ -334,14 +334,14 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 								echo icon('../img/forumgroup.gif', get_lang('GroupForum'));
 							}
 						} else {
-							$my_whatsnew_post_info=isset($my_whatsnew_post_info[$forum['forum_id']])?$my_whatsnew_post_info[$forum['forum_id']]:'';;
-							if (!empty($my_whatsnew_post_info)) {
-								if (is_array($my_whatsnew_post_info) and !empty($my_whatsnew_post_info)) {
+							//$my_whatsnew_post_info=isset($my_whatsnew_post_info[$forum['forum_id']])?$my_whatsnew_post_info[$forum['forum_id']]:'';;
+							
+								if (is_array($mywhatsnew_post_info) and !empty($mywhatsnew_post_info)) {
 									echo icon('../img/forum.gif', get_lang('Forum'));
 								} else {
 									echo icon('../img/forum.gif');
 								}
-							}
+							
 						}
 						echo "</td>\n";
 						if ($forum['forum_of_group']<>'0') {

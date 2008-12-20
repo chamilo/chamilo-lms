@@ -92,7 +92,7 @@ function getSelectedMovie()
 			oSel = o.anchorNode;
 		}
 	}
-	
+
 	// other
 	else
 	{
@@ -406,9 +406,9 @@ function setSoundUrl(url)
 			url = FCKConfig.CreateDocumentDir + string_audio; // // FCKConfig.CreateDocumentDir variable is defined in create_document.php
 		}
 		
-	}	 
+	}
 */
-	mp3_url=url;
+	mp3_url = url ;
 }
 
 function getSoundUrl()

@@ -364,21 +364,22 @@ var FCKDialog = ( function()
 // This is a modification of the original function.
 FCKDocumentProcessor_CreateFakeImage = function( fakeClass, realElement )
 {
-	var real = FCKTools.GetElementDocument( realElement ) ;
-	var oImg = real.createElement( 'IMG' ) ;
+	var oImg = FCKTools.GetElementDocument( realElement ).createElement( 'IMG' ) ;
 	oImg.className = fakeClass ;
 	oImg.src = FCKConfig.BasePath + 'images/spacer.gif' ;
 	oImg.setAttribute( '_fckfakelement', 'true', 0 ) ;
 	oImg.setAttribute( '_fckrealelement', FCKTempBin.AddElement( realElement ), 0 ) ;
 	if ( fakeClass == 'FCK__Video' )
 	{
-		if ( real.width )
+		var width = realElement.width ;
+		var height = realElement.height ;
+		if ( width )
 		{
-			oImg.style.width = FCKTools.ConvertHtmlSizeToStyle( real.width ) ;
+			oImg.style.width = width.toString().indexOf('%') != -1 ? width : ( width + 'px' ) ;
 		}
-		if ( real.height )
+		if ( height )
 		{
-			oImg.style.height = FCKTools.ConvertHtmlSizeToStyle( real.height ) ;
+			oImg.style.height = height.toString().indexOf('%') != -1 ? height : ( height + 'px' ) ;
 		}
 	}
 	return oImg ;
@@ -540,6 +541,10 @@ FCK.ContextMenu.RegisterListener( {
 					menu.AddSeparator() ;
 					menu.AddItem( 'EmbedMovies', FCKLang.DlgMP3Title, FCKConfig.PluginsPath + 'fckEmbedMovies/embedmovies.gif' ) ;
 					break ;
+				case 'youtube' :
+					menu.AddSeparator() ;
+					menu.AddItem( 'YouTube', FCKLang.DlgMP3Title, FCKConfig.PluginsPath + 'youtube/youtube.gif' ) ;
+					break ;
 				default :
 					break ;
 			}
@@ -587,6 +592,9 @@ FCK.RegisterDoubleClickHandler(
 			{
 				case 'embedded_video' :
 					FCKCommands.GetCommand( 'EmbedMovies' ).Execute() ;
+					break ;
+				case 'youtube' :
+					FCKCommands.GetCommand( 'YouTube' ).Execute() ;
 					break ;
 				default :
 					break ;

@@ -154,14 +154,24 @@ if ($action_forums!='add') {
 	// step 2: we find all the forums
 	$forum_list=array();
 	$forum_list=get_forums();
+		
 	/*
 	------------------------------------------------------------------------------------------------------
-		RETRIEVING ALL GROUPS OF THE USER
+		RETRIEVING ALL GROUPS AND THOSE OF THE USER
 	------------------------------------------------------------------------------------------------------
 	*/
+	// the groups of the user
 	$groups_of_user=array();
 	$groups_of_user=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
-	//my_print_r($groups_of_user);
+	// all groups in the course (and sorting them as the id of the group = the key of the array
+	$all_groups=GroupManager::get_group_list();
+	if(is_array($all_groups)) {
+		foreach ($all_groups as $group) {
+			$all_groups[$group['id']]=$group;
+		}
+	}	
+	
+	
 	/*
 	-----------------------------------------------------------
 		Action Links
@@ -278,12 +288,27 @@ if ($action_forums!='add') {
 					}
 				}
 				echo "</td>\n";
+				
+				if ($forum['forum_of_group']<>'0')
+				{
+					$my_all_groups_forum_name=isset($all_groups[$forum['forum_of_group']]['name']) ? $all_groups[$forum['forum_of_group']]['name'] : null;
+					$my_all_groups_forum_id=isset($all_groups[$forum['forum_of_group']]['id']) ? $all_groups[$forum['forum_of_group']]['id'] : null;
+					$group_title=substr($my_all_groups_forum_name,0,30);
+					$forum_title_group_addition=' (<a href="../group/group_space.php?'.api_get_cidreq().'&gidReq='.$my_all_groups_forum_id.'" class="forum_group_link">'.get_lang('GoTo').' '.$group_title.'</a>)';
+				}
+				else
+				{
+					$forum_title_group_addition='';
+				}
+								
+				
 				if((!isset($_SESSION['id_session']) || $_SESSION['id_session']==0) && !empty($forum['session_name'])) {
 					$session_displayed = ' ('.$forum['session_name'].')';
 				} else {
 					$session_displayed = '';
 				}
-				echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:''))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).$session_displayed.'</a><br />'.prepare4display($forum['forum_comment'])."</td>\n";
+				echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:''))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
+				
 				//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 				// the number of topics and posts
 				$my_number_threads=isset($forum['number_of_threads']) ? $forum['number_of_threads'] : '';

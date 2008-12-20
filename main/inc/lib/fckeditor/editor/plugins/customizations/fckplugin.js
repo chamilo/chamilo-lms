@@ -414,7 +414,7 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
 		}
 	} ;
 
-// A custom handler for mpg, mpeg, avi, wmv, mov, asf, flv files and youtube streaming when a new tag has been added.
+// A custom handler for video when a new tag has been added.
 FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
 	{
 		if ( !FCK.is_video( el ) )
@@ -426,7 +426,7 @@ FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
 		fakeImg.setAttribute( '_fckvideo', 'true', 0 ) ;
 	} ) ;
 
-// Fake images for mpg, mpeg, avi, wmv, mov, asf, flv files and youtube streaming when the document has been opened.
+// Fake images for video when the document has been opened.
 FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
 	{
 		var embeds = document.getElementsByTagName( 'embed' ) ; 
@@ -647,7 +647,7 @@ FCK.is_video = function ( tag )
 			// There are three plugins dealing with video content. Detection looks a bit messy.
 
 			// Embedded video.
-			if ( /\.(mpg|mpeg|avi|wmv|mov|asf)/i.test( tag.src ) )
+			if ( /\.(mpg|mpeg|mp4|avi|wmv|mov|asf)/i.test( tag.src ) )
 			{
 				return true ;
 			}
@@ -695,7 +695,7 @@ FCK.get_video_type = function ( img )
 	}
 
 	// Embedded video.
-	if ( /\.(mpg|mpeg|avi|wmv|mov|asf)/i.test( tag.src ) )
+	if ( /\.(mpg|mpeg|mp4|avi|wmv|mov|asf)/i.test( tag.src ) )
 	{
 		return 'embedded_video' ;
 	}

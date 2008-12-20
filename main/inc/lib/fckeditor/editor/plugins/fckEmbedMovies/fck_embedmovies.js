@@ -110,11 +110,11 @@ function CreateEmbeddedMovie(e, url)
 {
 
 	var sType, pluginspace, codebase, classid;
-	var sExt = url.match(/\.(mpg|mpeg|avi|wmv|mov|asf)$/i);
+	var sExt = url.match(/\.(mpg|mpeg|mp4|avi|wmv|mov|asf)$/i);
 
 	if (sExt ==null)
 	{
-		alert('We only support these extensions mpg, mpeg, avi, wmv, mov and asf. ')
+		alert('We only support these extensions mpg, mpeg, mp4, avi, wmv, mov and asf. ')
 		return false;
 	}
 	else
@@ -124,9 +124,11 @@ function CreateEmbeddedMovie(e, url)
 		else
 			sExt = '';
 			
-		sType = (sExt=="mpg"||sExt=="mpeg")             ?"video/mpeg":
-	          (sExt=="avi"||sExt=="wmv"||sExt=="asf") ?"video/x-msvideo":
-					  (sExt=="mov") ?"video/quicktime" : "video/x-msvideo";
+		sType = (sExt=="mpg"||sExt=="mpeg") ? "video/mpeg" :
+				(sExt=="avi"||sExt=="wmv"||sExt=="asf") ? "video/x-msvideo" :
+				(sExt=="mov") ? "video/quicktime" :
+				(sExt=="mp4") ? "video/mpeg4-generic" :
+				"video/x-msvideo" ;
 		
 		// window media player?
 		var wmp = sExt != "mov";

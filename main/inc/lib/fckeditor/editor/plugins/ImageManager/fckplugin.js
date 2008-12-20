@@ -83,8 +83,14 @@
 			wArgs.f_className = im.className ? im.className : '';
 			
 			// (-1 when not set under gecko for some reason)
-			wArgs.f_horiz = (im.hspace >= 0) ? im.attributes['hspace'].nodeValue : ''; 
-			wArgs.f_vert = (im.vspace >= 0) ? wArgs.f_vert = im.attributes['vspace'].nodeValue : '';			
+			if ( im.hspace )
+			{
+				wArgs.f_horiz = (im.hspace >= 0) ? im.attributes['hspace'].nodeValue : '';
+			}
+			if ( im.vspace )
+			{
+				wArgs.f_vert = (im.vspace >= 0) ? wArgs.f_vert = im.attributes['vspace'].nodeValue : '';
+			}
 		} else {
 			wArgs = null;
 		}

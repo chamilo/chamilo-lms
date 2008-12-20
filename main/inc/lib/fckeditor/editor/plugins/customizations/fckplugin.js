@@ -361,6 +361,29 @@ var FCKDialog = ( function()
  **************************************************************************************
  */
 
+// This is a modification of the original function.
+FCKDocumentProcessor_CreateFakeImage = function( fakeClass, realElement )
+{
+	var real = FCKTools.GetElementDocument( realElement ) ;
+	var oImg = real.createElement( 'IMG' ) ;
+	oImg.className = fakeClass ;
+	oImg.src = FCKConfig.BasePath + 'images/spacer.gif' ;
+	oImg.setAttribute( '_fckfakelement', 'true', 0 ) ;
+	oImg.setAttribute( '_fckrealelement', FCKTempBin.AddElement( realElement ), 0 ) ;
+	if ( fakeClass == 'FCK__Video' )
+	{
+		if ( real.width )
+		{
+			oImg.style.width = FCKTools.ConvertHtmlSizeToStyle( real.width ) ;
+		}
+		if ( real.height )
+		{
+			oImg.style.height = FCKTools.ConvertHtmlSizeToStyle( real.height ) ;
+		}
+	}
+	return oImg ;
+}
+
 // A custom handler for audio files when a new tag has been added.
 FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
 	{
@@ -369,7 +392,7 @@ FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
 			return ;
 		}
 
-		fakeImg.className = 'FCK__MP3';
+		fakeImg.className = 'FCK__MP3' ;
 		fakeImg.setAttribute( '_fckmp3', 'true', 0 ) ;
 	} ) ;
 
@@ -399,7 +422,7 @@ FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
 			return ;
 		}
 
-		fakeImg.className = 'FCK__Video';
+		fakeImg.className = 'FCK__Video' ;
 		fakeImg.setAttribute( '_fckvideo', 'true', 0 ) ;
 	} ) ;
 
@@ -419,77 +442,6 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
 				embed.parentNode.removeChild( embed ) ;			
 			}
 		}
-	} ;
-
-// Checking for audio file reference which is to be used by a flash player.
-FCK.is_audio = function ( tag )
-	{
-		if ( tag.nodeName.IEquals( 'embed' ) )
-		{
-			if ( !tag.src )
-			{
-				return false ;
-			}
-
-			if ( tag.type == 'application/x-shockwave-flash' || /\.swf($|#|\?|&)?/i.test( tag.src ) )
-			{
-				// Possible way of detection for other players.
-				if ( /\.mp3/i.test( tag.src ) )
-				{
-					return true ;
-				}
-
-				// Specific to mediaplayer detection.
-				var flashvars = FCKDomTools.GetAttributeValue( tag, 'flashvars' ) ;
-				flashvars = flashvars ? flashvars.toLowerCase() : '' ;
-
-				if ( /\.mp3/i.test( flashvars ) )
-				{
-					return true ;
-				}
-			}
-		}
-
-		return false ;
-	} ;
-
-//Checking for video file reference within an embedded object.
-FCK.is_video = function ( tag )
-	{
-		if ( tag.nodeName.IEquals( 'embed' ) )
-		{
-			if ( !tag.src )
-			{
-				return false ;
-			}
-
-			// There are three plugins dealing with video content. Detection looks a bit messy.
-			if ( tag.type == 'application/x-shockwave-flash' || /\.swf($|#|\?|&)?/i.test( tag.src ) )
-			{
-				// Youtube.
-				if ( /\.youtube\.com/i.test( tag.src ) )
-				{
-					return true ;
-				}
-
-				// "Embed video" + "FLV player".
-				if ( /\.(mpg|mpeg|avi|wmv|mov|asf|flv)/i.test( tag.src ) )
-				{
-					return true ;
-				}
-
-				// All above that is supported by mediaplayer, it uses flashvars attribute.
-				var flashvars = FCKDomTools.GetAttributeValue( tag, 'flashvars' ) ;
-				flashvars = flashvars ? flashvars.toLowerCase() : '' ;
-
-				if ( /\.(mpg|mpeg|avi|wmv|mov|asf|flv)/i.test( flashvars ) )
-				{
-					return true ;
-				}
-			}
-		}
-
-		return false ;
 	} ;
 
 
@@ -576,6 +528,24 @@ FCK.ContextMenu.RegisterListener( {
 	} }
 ) ;
 
+// Video-related commands.
+FCK.ContextMenu.RegisterListener( {
+	AddItems : function ( menu, tag, tagName )
+	{
+		if ( tagName == 'IMG' && tag.getAttribute( '_fckvideo' ) )
+		{
+			switch ( FCK.get_video_type( tag ) )
+			{
+				case 'embedded_video' :
+					menu.AddSeparator() ;
+					menu.AddItem( 'EmbedMovies', FCKLang.DlgMP3Title, FCKConfig.PluginsPath + 'fckEmbedMovies/embedmovies.gif' ) ;
+					break ;
+				default :
+					break ;
+			}
+		}
+	} }
+) ;
 
 /*
  **************************************************************************************
@@ -607,12 +577,151 @@ FCK.RegisterDoubleClickHandler(
 	}, 'IMG'
 ) ;	
 
+// Video-related commands.
+FCK.RegisterDoubleClickHandler(
+	function ( tag )
+	{
+		if ( tag.tagName == 'IMG' && tag.getAttribute( '_fckvideo' ) )
+		{
+			switch ( FCK.get_video_type( tag ) )
+			{
+				case 'embedded_video' :
+					FCKCommands.GetCommand( 'EmbedMovies' ).Execute() ;
+					break ;
+				default :
+					break ;
+			}
+		}
+	}, 'IMG'
+) ;	
+
 
 /*
  **************************************************************************************
  * Common utilities
  **************************************************************************************
  */
+
+// Checking for audio file reference which is to be used by a flash player.
+FCK.is_audio = function ( tag )
+	{
+		if ( tag.nodeName.IEquals( 'embed' ) )
+		{
+			if ( !tag.src )
+			{
+				return false ;
+			}
+
+			if ( tag.type == 'application/x-shockwave-flash' || /\.swf($|#|\?|&)?/i.test( tag.src ) )
+			{
+				// Possible way of detection for other players.
+				if ( /\.mp3/i.test( tag.src ) )
+				{
+					return true ;
+				}
+
+				// Specific to mediaplayer detection.
+				var flashvars = FCKDomTools.GetAttributeValue( tag, 'flashvars' ) ;
+				flashvars = flashvars ? flashvars.toLowerCase() : '' ;
+
+				if ( /\.mp3/i.test( flashvars ) )
+				{
+					return true ;
+				}
+			}
+		}
+
+		return false ;
+	} ;
+
+// Checking for video file reference within an embedded object.
+FCK.is_video = function ( tag )
+	{
+		if ( tag.nodeName.IEquals( 'embed' ) )
+		{
+			if ( !tag.src )
+			{
+				return false ;
+			}
+
+			// There are three plugins dealing with video content. Detection looks a bit messy.
+
+			// Embedded video.
+			if ( /\.(mpg|mpeg|avi|wmv|mov|asf)/i.test( tag.src ) )
+			{
+				return true ;
+			}
+
+			if ( tag.type == 'application/x-shockwave-flash' || /\.swf($|#|\?|&)?/i.test( tag.src ) )
+			{
+				// Youtube.
+				if ( /\.youtube\.com/i.test( tag.src ) )
+				{
+					return true ;
+				}
+
+				// FLV player.
+				if ( /\.flv/i.test( tag.src ) )
+				{
+					return true ;
+				}
+
+				var flashvars = FCKDomTools.GetAttributeValue( tag, 'flashvars' ) ;
+				flashvars = flashvars ? flashvars.toLowerCase() : '' ;
+
+				if ( /\.flv/i.test( flashvars ) )
+				{
+					return true ;
+				}
+			}
+		}
+
+		return false ;
+	} ;
+
+// Returns specific type/source of embedded video.
+FCK.get_video_type = function ( img )
+{
+	var tag = FCK.GetRealElement( img ) ;
+
+	if ( !tag )
+	{
+		return false ;
+	}
+
+	if ( !tag.src )
+	{
+		return false ;
+	}
+
+	// Embedded video.
+	if ( /\.(mpg|mpeg|avi|wmv|mov|asf)/i.test( tag.src ) )
+	{
+		return 'embedded_video' ;
+	}
+
+	// Youtube.
+	if ( /\.youtube\.com/i.test( tag.src ) )
+	{
+		return 'youtube' ;
+	}
+
+	// FLV player.
+	if ( /\.flv/i.test( tag.src ) )
+	{
+		return 'flv' ;
+	}
+
+	var flashvars = FCKDomTools.GetAttributeValue( tag, 'flashvars' ) ;
+	flashvars = flashvars ? flashvars.toLowerCase() : '' ;
+
+	if ( /\.flv/i.test( flashvars ) )
+	{
+		return 'flv' ;
+	}
+
+	return false ;
+}
 
 // This is a utility for debugging purposes.
 function var_dump( variable, level )

@@ -25,7 +25,7 @@ var is_gecko = !is_ie; // FCKBrowserInfo.IsGecko
 
 if ( oFakeImage )
 {
-	if ( oFakeImage.tagName == 'IMG' && oFakeImage.getAttribute('_fckflash') )
+	if ( oFakeImage.tagName == 'IMG' && oFakeImage.getAttribute('_fckvideo') )
 		oEmbed = FCK.GetRealElement( oFakeImage ) ;
 	else
 		oFakeImage = null ;
@@ -134,7 +134,7 @@ function CreateEmbeddedMovie(e, url)
 		{
 			pluginspace = "http://www.microsoft.com/Windows/MediaPlayer/";
 			codebase    = "http://www.microsoft.com/Windows/MediaPlayer/";
-			classid     = 'CLASSID="CLSID:22d6f312-b0f6-11d0-94ab-0080c74c7e95"';
+			classid     = 'classid="CLSID:22d6f312-b0f6-11d0-94ab-0080c74c7e95"';
 		}
 		else
 		{
@@ -146,26 +146,26 @@ function CreateEmbeddedMovie(e, url)
 		var html;
 		if (EmbedInObject)
 		{
-			html  = '<OBJECT '+ classid +'>';
-			html += '<PARAM name="url" value="'+ url +'" />';
-			html += '<PARAM name="filename" value="'+ url +'" />';
-			html += '<PARAM name="autostart" value="'+ (GetE('chkAutostart').checked?"true":"false") +'" />';
-			html += '<PARAM name="showcontrols" value="'+ (GetE('chkShowcontrols').checked?"true":"false") +'" />';
-			html += '<PARAM name="showpositioncontrols" value="'+ (GetE('chkShowpositioncontrols').checked?"true":"false") +'" />';
-			html += '<PARAM name="showtracker" value="'+ (GetE('chkShowtracker').checked?"true":"false") +'" />';
-			html += '<PARAM name="showaudiocontrols" value="'+ (GetE('chkShowaudiocontrols').checked?"true":"false") +'" />';
-			html += '<PARAM name="showgotobar" value="'+ (GetE('chkShowgotobar').checked?"true":"false") +'" />';
-			html += '<PARAM name="showstatusbar" value="'+ (GetE('chkShowstatusbar').checked?"true":"false") +'" />';
-			html += '<PARAM name="standby" value="Loading Video..." />';
-			html += '<PARAM name="pluginspace" value="'+ pluginspace +'" />';
-			html += '<PARAM name="codebase" value="'+ codebase +'" />'; 
-			html += '<EMBED type="'+ sType +'" src="'+ url +'"></EMBED>';
-			html += '<NOEMBED>Download movie: <A HREF="'+ url +'">'+ url +'</A></NOEMBED>';
-			html += '</OBJECT>';
+			html  = '<object '+ classid +'>';
+			html += '<param name="url" value="'+ url +'" />';
+			html += '<param name="filename" value="'+ url +'" />';
+			html += '<param name="autostart" value="'+ (GetE('chkAutostart').checked?"true":"false") +'" />';
+			html += '<param name="showcontrols" value="'+ (GetE('chkShowcontrols').checked?"true":"false") +'" />';
+			html += '<param name="showpositioncontrols" value="'+ (GetE('chkShowpositioncontrols').checked?"true":"false") +'" />';
+			html += '<param name="showtracker" value="'+ (GetE('chkShowtracker').checked?"true":"false") +'" />';
+			html += '<param name="showaudiocontrols" value="'+ (GetE('chkShowaudiocontrols').checked?"true":"false") +'" />';
+			html += '<param name="showgotobar" value="'+ (GetE('chkShowgotobar').checked?"true":"false") +'" />';
+			html += '<param name="showstatusbar" value="'+ (GetE('chkShowstatusbar').checked?"true":"false") +'" />';
+			html += '<param name="standby" value="Loading Video..." />';
+			html += '<param name="pluginspace" value="'+ pluginspace +'" />';
+			html += '<param name="codebase" value="'+ codebase +'" />'; 
+			html += '<embed type="'+ sType +'" src="'+ url +'"></embed>';
+			html += '<noembed>Download movie: <a href="'+ url +'">'+ url +'</a></noembed>';
+			html += '</object>';
 		}
 		else
 		{
-			html = '<EMBED type="'+ sType +'" src="'+ url +'" '+
+			html = '<embed type="'+ sType +'" src="'+ url +'" '+
 			       'autosize="'+ (GetE('chkAutosize').checked?"true":"false") +'" '+
 			       'autostart="'+ (GetE('chkAutostart').checked?"true":"false") +'" '+
 			       'showcontrols="'+ (GetE('chkShowcontrols').checked?"true":"false") +'" '+
@@ -178,7 +178,7 @@ function CreateEmbeddedMovie(e, url)
 			       'codebase="'+ codebase +'"';
 			if (!GetE('chkAutosize').checked)	
 				html += 'width="'+ GetE('txtWidth').value +'" height="'+ GetE('txtHeight').value +'"';
-			html += '></EMBED>';
+			html += '></embed>';
 		}			
 		//e.innerHTML = html;
 		//FCK.InsertHtml(html);
@@ -199,7 +199,7 @@ function setVideoUrl(url)
 	{		
 		if (FCKConfig.CreateDocumentDir == '/')
 		{	
-			return_url = url; // // FCKConfig.CreateDocumentDir variable is defined in create_document.php		
+			return_url = url; // FCKConfig.CreateDocumentDir variable is defined in create_document.php		
 		}
 		else
 		{	
@@ -225,15 +225,13 @@ function Ok()
 		return false ;
 	}
 
-	if (!oContainerDiv)
-	{
-		oContainerDiv = FCK.CreateElement('DIV');
-	}
+	// Disabled by Ivan Tcholakov.
+	//if (!oContainerDiv)
+	//{
+	//	oContainerDiv = FCK.CreateElement('DIV');
+	//}
 	
-	//if ( )
-	//{	
-		// code that makes posible the fake image
-		
+	// code that makes posible the fake image
 	if ( !oEmbed )
 	{
 		oEmbed		= FCK.EditorDocument.createElement( 'embed' ) ;		

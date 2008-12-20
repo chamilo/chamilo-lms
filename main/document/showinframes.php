@@ -1,4 +1,4 @@
-<?php // $Id: showinframes.php 15013 2008-04-22 17:47:13Z juliomontoya $ 
+<?php // $Id: showinframes.php 17403 2008-12-20 15:27:21Z herodoto $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -87,10 +87,10 @@ header('Pragma: no-cache');
 $browser_display_title = "Dokeos Documents - " . $_GET['cidReq'] . " - " . $file;
 
 //only admins get to see the "no frames" link in pageheader.php, so students get a header that's not so high
-$frameheight = 130;
+$frameheight = 135;
 if($is_courseAdmin)
 {
-	$frameheight = 155;	
+	$frameheight = 165;	
 }
 $file_root=$_course['path'].'/document'.str_replace('%2F', '/',$file);
 $file_url_sys=api_get_path('SYS_COURSE_PATH').$file_root;
@@ -120,5 +120,5 @@ $file_url_web=api_get_path('WEB_COURSE_PATH').$file_root;
 			We suggest you try Mozilla, Firefox, Safari, Opera, or other browsers updated this millenium.</p>
 	</body>
 	</noframes>
-	</frameset>
+	<frame src="UntitledFrame-1"></frameset>
 </html>

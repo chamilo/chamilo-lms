@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 17244 2008-12-12 13:10:32Z ivantcholakov $
+<?php // $Id: create_document.php 17399 2008-12-20 02:08:01Z herodoto $
 
 /*
 ==============================================================================
@@ -121,14 +121,16 @@ function InnerDialogLoaded()
 					bestandsnaamNieuw += contentTextArray[x];
 				}
 			}
-	
-			if(document.getElementById(\'title_edited\').value == "false")
-			{
-				document.getElementById(\'filename\').value = bestandsnaamNieuw;
-				if(use_document_title){
-					document.getElementById(\'title\').value = bestandsnaamNieuw;
-				}
-			}
+			
+		// comment see FS#3335
+		//	if(document.getElementById(\'title_edited\').value == "false")
+		//	{
+		//		document.getElementById(\'filename\').value = bestandsnaamNieuw;
+		//		if(use_document_title){
+		//			document.getElementById(\'title\').value = bestandsnaamNieuw;
+		//		}
+		//	}
+		
 		}
 		temp=true;
 	}

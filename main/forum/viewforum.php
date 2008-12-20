@@ -385,7 +385,7 @@ if(is_array($threads)) {
 					$iconnotify = 'send_mail_checked.gif';
 				}
 			}
-			$icon_liststd = 'group.gif';
+			$icon_liststd = 'students.gif';
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($my_forum)."&amp;action=notify&amp;content=thread&amp;id=".$row['thread_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
 			if ($userinf['status']=='1') {
 				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;action=liststd&amp;content=thread&amp;id='.$row['thread_id'].'">'.icon('../img/'.$icon_liststd,get_lang('StudentList')).'</a>';			

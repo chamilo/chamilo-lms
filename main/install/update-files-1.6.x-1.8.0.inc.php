@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.6.x-1.8.0.inc.php 15578 2008-06-12 22:30:58Z yannoo $
+<?php //$Id: update-files-1.6.x-1.8.0.inc.php 17410 2008-12-21 02:31:40Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -115,7 +115,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				mkdir($currentCourseRepositorySys."document/video",$perm);
 				insert_db($db_name,"video",get_lang('Video'));
 			}
-		
+
+			if(!is_dir($currentCourseRepositorySys."document/video/flv")){
+				mkdir($currentCourseRepositorySys."document/video/flv",$perm);
+				insert_db($db_name,"video",get_lang('Video')." (flv)");
+			}
+
 		//FOLDER UPLOAD
 			
 			//upload

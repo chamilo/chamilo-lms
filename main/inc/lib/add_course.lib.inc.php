@@ -1858,7 +1858,7 @@ function fill_course_repository($courseRepository)
 		foreach($video_array as $key => $value){
 
 			if($value["dir"]!=""){
-				mkdir($course_documents_folder_video.$value["dir"],$perm);
+				@mkdir($course_documents_folder_video.$value["dir"],$perm);
 			}
 			if($value["file"]!=""){
 				copy($video_code_path.$value["file"],$course_documents_folder_video.$value["file"]);

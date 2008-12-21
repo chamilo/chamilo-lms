@@ -856,7 +856,7 @@ $default_course_dir = api_get_path(REL_CODE_PATH).'default_course_document/';
 			                
         <div style="border-style: none; overflow: hidden; height: 200px; width: 300px; background-color: rgb(220, 220, 220); background-image: url(<?php echo api_get_path(REL_PATH) ?>main/inc/lib/fckeditor/editor/plugins/flvPlayer/flvPlayer.gif); background-repeat: no-repeat; background-position: center center;"><script src="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/fckeditor/editor/plugins/flvPlayer/swfobject.js" type="text/javascript"></script>
         <div id="player810625"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.
-        <div id="player810625-config" style="overflow: hidden; display: none; visibility: hidden; width: 0px; height: 0px;">url=<?php echo api_get_path(REL_PATH) ?>main/<?php echo api_get_path(REL_CODE_PATH) ?>default_course_document/video/example.flv width=400 height=200 loop=false play=false downloadable=false fullscreen=true displayNavigation=true displayDigits=true align=left dispPlaylist=none playlistThumbs=false</div>
+        <div id="player810625-config" style="overflow: hidden; display: none; visibility: hidden; width: 0px; height: 0px;">url=<?php echo api_get_path(REL_PATH) ?>main/<?php echo api_get_path(REL_CODE_PATH) ?>default_course_document/video/flv/example.flv width=400 height=200 loop=false play=false downloadable=false fullscreen=true displayNavigation=true displayDigits=true align=left dispPlaylist=none playlistThumbs=false</div>
 
         </div>
         <script type="text/javascript">
@@ -864,11 +864,11 @@ $default_course_dir = api_get_path(REL_CODE_PATH).'default_course_document/';
 	s1.addVariable("width","400");
 	s1.addVariable("height","200");
 	s1.addVariable("autostart","false");
-	s1.addVariable("file","<?php echo api_get_path(REL_CODE_PATH) ?>default_course_document/video/example.flv");
+	s1.addVariable("file","<?php echo api_get_path(REL_CODE_PATH) ?>default_course_document/video/flv/example.flv");
 s1.addVariable("repeat","false");
 	s1.addVariable("image","");
 	s1.addVariable("showdownload","false");
-	s1.addVariable("link","<?php echo api_get_path(REL_CODE_PATH) ?>default_course_document/video/example.flv");
+	s1.addVariable("link","<?php echo api_get_path(REL_CODE_PATH) ?>default_course_document/video/flv/example.flv");
 	s1.addParam("allowfullscreen","true");
 	s1.addVariable("showdigits","true");
 	s1.addVariable("shownavigation","true");

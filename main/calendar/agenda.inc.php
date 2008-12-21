@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17412 2008-12-21 02:58:00Z ivantcholakov $
+<?php //$Id: agenda.inc.php 17413 2008-12-21 03:44:36Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -2462,11 +2462,12 @@ function show_add_form($id = '')
 
 		//link
 		$oFCKeditor->Config['LinkBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-		$return =	$oFCKeditor->CreateHtml();
 
 		//for Videos (flv)
 		$oFCKeditor->Config['MediaBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$upload_path";
 		$oFCKeditor->Config['MediaUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
+
+		$return =	$oFCKeditor->CreateHtml();
 
 		echo $return;
 

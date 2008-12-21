@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 17214 2008-12-10 21:13:59Z ivantcholakov $
+// $Id: html_editor.php 17412 2008-12-21 02:58:00Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -120,8 +120,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		//for flash
 		$this -> fck_editor->Config['FlashBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
 		$this -> fck_editor->Config['FlashUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
-		//$this -> fck_editor->Config['MediaBrowserURL'] = 	$this -> fck_editor->Config['FlashBrowserURL'];
-		
+
 		//for MP3
 		$this -> fck_editor->Config['MP3BrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
 		$this -> fck_editor->Config['MP3UploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
@@ -130,11 +129,12 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		$this -> fck_editor->Config['VideoBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
 		$this -> fck_editor->Config['VideoUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
 
-		//link		
+		//link
 		$this -> fck_editor->Config['LinkBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
 
 		// for flv Player (Videos)
-		$this -> fck_editor->Config['MediaBrowserURL'] = 	$this -> fck_editor->Config['VideoBrowserURL'];
+		$this -> fck_editor->Config['MediaBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+		$this -> fck_editor->Config['MediaUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
 	}
 	/**
 	 * Check if the browser supports FCKeditor

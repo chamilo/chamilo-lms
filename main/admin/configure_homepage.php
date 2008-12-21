@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 16954 2008-11-26 14:41:35Z pcool $
+<?php // $Id: configure_homepage.php 17412 2008-12-21 02:58:00Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -857,7 +857,6 @@ switch($action){
 			//for flash
 			$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
 			$oFCKeditor->Config['FlashUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
-			$oFCKeditor->Config['MediaBrowserURL'] = $oFCKeditor->Config['FlashBrowserURL'];
 		
 			//for MP3
 			$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
@@ -867,6 +866,10 @@ switch($action){
 			$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
 			$oFCKeditor->Config['VideoUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
 			
+			// for flv Player (Videos)
+			$oFCKeditor->Config['MediaBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
+			$oFCKeditor->Config['MediaUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
+
 			echo $oFCKeditor->CreateHtml();
 		}
 		?>

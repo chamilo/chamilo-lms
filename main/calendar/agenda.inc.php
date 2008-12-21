@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17266 2008-12-13 15:51:49Z cfasanando $
+<?php //$Id: agenda.inc.php 17412 2008-12-21 02:58:00Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -2451,7 +2451,6 @@ function show_add_form($id = '')
 		//for flash
 		$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
 		$oFCKeditor->Config['FlashUploadURL'] =  $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
-		$oFCKeditor->Config['MediaBrowserURL'] = $oFCKeditor->Config['FlashBrowserURL'];
 
 		//for MP3
 		$oFCKeditor->Config['MP3BrowserURL'] = 	$oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
@@ -2464,6 +2463,10 @@ function show_add_form($id = '')
 		//link
 		$oFCKeditor->Config['LinkBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
 		$return =	$oFCKeditor->CreateHtml();
+
+		//for Videos (flv)
+		$oFCKeditor->Config['MediaBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+		$oFCKeditor->Config['MediaUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
 
 		echo $return;
 

@@ -52,7 +52,7 @@ $Config['ConfigAllowedCommands'] = array('QuickUpload', 'FileUpload', 'GetFolder
 
 // Allowed Resource Types.
 //$Config['ConfigAllowedTypes'] = array('File', 'Image', 'Flash', 'Media') ;
-$Config['ConfigAllowedTypes'] = array('File', 'Images', 'Flash', 'Media','MP3','Video') ;  
+$Config['ConfigAllowedTypes'] = array('File', 'Images', 'Flash', 'Media', 'MP3', 'Video', 'Video/flv') ;  
 
 // For security, HTML is allowed in the first Kb of data for files having the
 // following extensions only.
@@ -138,6 +138,9 @@ $Config['DeniedExtensions']['MP3']	= array() ;
 //$Config['AllowedExtensions']['Videos']	= array('avi','mpg','mpeg','mov','wmv','rm') ;
 $Config['AllowedExtensions']['Video']	= array('avi','mpg','mpeg','mov','wmv','asf') ;
 $Config['DeniedExtensions']['Video']	= array() ;
+
+$Config['AllowedExtensions']['Video/flv']	= array('flv') ;
+$Config['DeniedExtensions']['Video/flv']	= array() ;
 
 /*
 $Config['AllowedExtensions']['File']	= array('7z', 'aiff', 'asf', 'avi', 'bmp', 'csv', 'doc', 'fla', 'flv', 'gif', 'gz', 'gzip', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'ods', 'odt', 'pdf', 'png', 'ppt', 'pxd', 'qt', 'ram', 'rar', 'rm', 'rmi', 'rmvb', 'rtf', 'sdc', 'sitd', 'swf', 'sxc', 'sxw', 'tar', 'tgz', 'tif', 'tiff', 'txt', 'vsd', 'wav', 'wma', 'wmv', 'xls', 'xml', 'zip') ;

@@ -224,6 +224,7 @@ function prepare_course_repository($courseRepository, $courseId)
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/audio", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/flash", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/video", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/video/flv", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/dropbox", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/group", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/page", $perm);

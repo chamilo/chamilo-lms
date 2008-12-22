@@ -162,7 +162,7 @@ if ($my_api_cidreq=='') {
 	$my_api_cidreq='cidReq='.$my_category['course_code'];
 }
 ?>
-<a href="/main/gradebook/index.php?<?php echo $my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"><< <?php echo get_lang('Back') ?>
+<a href="../gradebook/index.php?<?php echo $my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"><< <?php echo get_lang('Back') ?>
 <!--<a href="/main/gradebook/index.php?<?php echo $my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"><< <?php echo get_lang('Back') ?></a>-->
 <form method="post" action="gradebook_edit_all.php?<?php echo $my_api_cidreq ?>&selectcat=<?php echo $category_id?>">
 <table class="data_table">

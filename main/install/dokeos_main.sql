@@ -777,7 +777,8 @@ VALUES
 ('show_session_coach', 'true', 'Yes'),
 ('show_session_coach', 'false', 'No'),
 ('allow_users_to_create_courses','true','Yes'),
-('allow_users_to_create_courses','false','No');
+('allow_users_to_create_courses','false','No'),
+('breadcrumbs_course_homepage', 'session_name_and_course_title', 'SessionNameAndCourseTitle');
 UNLOCK TABLES;
 
 /*!40000 ALTER TABLE settings_options ENABLE KEYS */;

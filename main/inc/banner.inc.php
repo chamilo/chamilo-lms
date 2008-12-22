@@ -274,13 +274,16 @@ if (isset ($_cid) and $_cid!=-1 and isset($_course) and !isset($_GET['hide_cours
 	$navigation_item['url'] = $web_course_path . $_course['path'].'/index.php';
 	switch(api_get_setting('breadcrumbs_course_homepage')) {
 		case 'get_lang':
-			$navigation_item['title'] =  get_lang('CourseHomepageLink').$my_session_name;
+			$navigation_item['title'] =  get_lang('CourseHomepageLink');
 			break;
 		case 'course_code':
-			$navigation_item['title'] =  $_course['official_code'].$my_session_name;
+			$navigation_item['title'] =  $_course['official_code'];
+			break;
+		case 'session_name_and_course_title':
+			$navigation_item['title'] =  $_course['name'].$my_session_name;
 			break;
 		default:
-			$navigation_item['title'] =  $_course['name'].$my_session_name;
+			$navigation_item['title'] =  $_course['name'];
 			break;
 	}
 	$navigation[] = $navigation_item;

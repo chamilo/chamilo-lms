@@ -45,7 +45,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 ALTER TABLE user_field_values CHANGE user_id user_id int unsigned not null;
 UPDATE TABLE settings_options SET display_text = 'YesWillDeletePermanently' WHERE variable = 'permanently_remove_deleted_files' and value = 'true';
 UPDATE TABLE settings_options SET display_text = 'NoWillDeletePermanently' WHERE variable = 'permanently_remove_deleted_files' and value = 'false';
-
+INSERT INTO settings_options (variable, value, display_text) VALUES ('breadcrumbs_course_homepage','session_name_and_course_title','SessionNameAndCourseTitle');
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';
 ALTER TABLE track_e_exercices ADD data_tracking text NOT NULL default '';

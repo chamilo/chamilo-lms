@@ -85,39 +85,68 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 		if(!is_dir($origCRS)){
 			error_log('Directory '.$origCRS.' does not exist. Skipping.',0);
-			continue;	
+			continue;
 		}
 		//move everything to the new hierarchy (from old path to new path)
 		error_log('Renaming '.$origCRS.' to '.$sys_course_path.$courses_directories['directory'],0);
 		rename($origCRS,$sys_course_path.$courses_directories['directory']);
-		error_log('Creating dirs in '.$currentCourseRepositorySys,0);	
+		error_log('Creating dirs in '.$currentCourseRepositorySys,0);
 	
-		//FOLDER UPLOAD			
+		//FOLDER DOCUMENT
+
+		//document > audio
+		if(!is_dir($currentCourseRepositorySys."document/audio")){
+			mkdir($currentCourseRepositorySys."document/audio",$perm);
+			insert_db($db_name,"audio",get_lang('Audio'));
+		}
+		//document > flash
+		if(!is_dir($currentCourseRepositorySys."document/flash")){
+			mkdir($currentCourseRepositorySys."document/flash",$perm);
+			insert_db($db_name,"flash",get_lang('Flash'));
+		}
+		//document > images
+		if(!is_dir($currentCourseRepositorySys."document/images")){
+			mkdir($currentCourseRepositorySys."document/images",$perm);
+			insert_db($db_name,"images",get_lang('Images'));
+		}
+		//document > video
+		if(!is_dir($currentCourseRepositorySys."document/video")){
+			mkdir($currentCourseRepositorySys."document/video",$perm);
+			insert_db($db_name,"video",get_lang('Video'));
+		}
+		//document > video > flv
+		if(!is_dir($currentCourseRepositorySys."document/video/flv")){
+			mkdir($currentCourseRepositorySys."document/video/flv",$perm);
+			insert_db($db_name,"video",get_lang('Video')." (flv)");
+		}
+
+		//FOLDER UPLOAD
+
 		//upload > forum > images
 		if(!is_dir($currentCourseRepositorySys."upload/forum/images")){
 			mkdir($currentCourseRepositorySys."upload/forum/images",$perm);
 		}
-		
-		//upload > learning_path 
+
+		//upload > learning_path
 		if(!is_dir($currentCourseRepositorySys."upload/learning_path")){
 			mkdir($currentCourseRepositorySys."upload/learning_path",$perm);
 		}	
-		
+
 		//upload > learning_path > images
 		if(!is_dir($currentCourseRepositorySys."upload/learning_path/images")){
 			mkdir($currentCourseRepositorySys."upload/learning_path/images",$perm);
 		}		
-		
+
 		//upload > calendar 
 		if(!is_dir($currentCourseRepositorySys."upload/calendar")){
 			mkdir($currentCourseRepositorySys."upload/calendar",$perm);
 		}	
-		
+
 		//upload > calendar > images
 		if(!is_dir($currentCourseRepositorySys."upload/calendar/images")){
 			mkdir($currentCourseRepositorySys."upload/calendar/images",$perm);
-		}	
-	}		
+		}
+	}
 }
 else
 {

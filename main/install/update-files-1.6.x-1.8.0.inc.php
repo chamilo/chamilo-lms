@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.6.x-1.8.0.inc.php 17410 2008-12-21 02:31:40Z ivantcholakov $
+<?php //$Id: update-files-1.6.x-1.8.0.inc.php 17420 2008-12-22 11:50:15Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -95,71 +95,71 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		error_log('Creating dirs in '.$currentCourseRepositorySys,0);
 
 		//FOLDER DOCUMENT
-			//document > audio
-			if(!is_dir($currentCourseRepositorySys."document/audio")){
-				mkdir($currentCourseRepositorySys."document/audio",$perm);
-				insert_db($db_name,"audio",get_lang('Audio'));
-			}
-			//document > flash
-			if(!is_dir($currentCourseRepositorySys."document/flash")){
-				mkdir($currentCourseRepositorySys."document/flash",$perm);
-				insert_db($db_name,"flash",get_lang('Flash'));
-			}
-			//document > images
-			if(!is_dir($currentCourseRepositorySys."document/images")){
-				mkdir($currentCourseRepositorySys."document/images",$perm);
-				insert_db($db_name,"images",get_lang('Images'));
-			}
-			
-			if(!is_dir($currentCourseRepositorySys."document/video")){
-				mkdir($currentCourseRepositorySys."document/video",$perm);
-				insert_db($db_name,"video",get_lang('Video'));
-			}
 
-			if(!is_dir($currentCourseRepositorySys."document/video/flv")){
-				mkdir($currentCourseRepositorySys."document/video/flv",$perm);
-				insert_db($db_name,"video",get_lang('Video')." (flv)");
-			}
+		//document > audio
+		if(!is_dir($currentCourseRepositorySys."document/audio")){
+			mkdir($currentCourseRepositorySys."document/audio",$perm);
+			insert_db($db_name,"audio",get_lang('Audio'));
+		}
+		//document > flash
+		if(!is_dir($currentCourseRepositorySys."document/flash")){
+			mkdir($currentCourseRepositorySys."document/flash",$perm);
+			insert_db($db_name,"flash",get_lang('Flash'));
+		}
+		//document > images
+		if(!is_dir($currentCourseRepositorySys."document/images")){
+			mkdir($currentCourseRepositorySys."document/images",$perm);
+			insert_db($db_name,"images",get_lang('Images'));
+		}
+		//document > video
+		if(!is_dir($currentCourseRepositorySys."document/video")){
+			mkdir($currentCourseRepositorySys."document/video",$perm);
+			insert_db($db_name,"video",get_lang('Video'));
+		}
+		//document > video > flv
+		if(!is_dir($currentCourseRepositorySys."document/video/flv")){
+			mkdir($currentCourseRepositorySys."document/video/flv",$perm);
+			insert_db($db_name,"video",get_lang('Video')." (flv)");
+		}
 
 		//FOLDER UPLOAD
-			
-			//upload
-			if(!is_dir($currentCourseRepositorySys."upload")){
-				mkdir($currentCourseRepositorySys."upload",$perm);
-			}
+
+		//upload
+		if(!is_dir($currentCourseRepositorySys."upload")){
+			mkdir($currentCourseRepositorySys."upload",$perm);
+		}
 		
-			//upload > blog
-			if(!is_dir($currentCourseRepositorySys."upload/blog")){
-				mkdir($currentCourseRepositorySys."upload/blog",$perm);
-			}
-			//upload > forum
-			if(!is_dir($currentCourseRepositorySys."upload/forum")){
-				mkdir($currentCourseRepositorySys."upload/forum",$perm);
-			}
-			//upload > test
-			if(!is_dir($currentCourseRepositorySys."upload/test")){
-				mkdir($currentCourseRepositorySys."upload/test",$perm);
-			}
-			
-			//Updating index file in courses directories to change claroline/ into main/
-			$content = '<?php'."\n".
-					'$cidReq="'.$courses_directories['code'].'";'."\n" .
-					'$dbname="'.$courses_directories['db_name'].'";'."\n" .
-					'include("../../main/course_home/course_home.php");'."\n" .
-					'?>';
-			unlink($currentCourseRepositorySys.'index.php');
-			$fp = @ fopen($currentCourseRepositorySys.'index.php', 'w');
-			if ($fp)
-			{
-				error_log('Writing redirection file in '.$currentCourseRepositorySys.'index.php',0);			
-				fwrite($fp, $content);
-				fclose($fp);
-			}else{
-				error_log('Could not open file '.$currentCourseRepositorySys.'index.php',0);
-			}
-			
+		//upload > blog
+		if(!is_dir($currentCourseRepositorySys."upload/blog")){
+			mkdir($currentCourseRepositorySys."upload/blog",$perm);
+		}
+		//upload > forum
+		if(!is_dir($currentCourseRepositorySys."upload/forum")){
+			mkdir($currentCourseRepositorySys."upload/forum",$perm);
+		}
+		//upload > test
+		if(!is_dir($currentCourseRepositorySys."upload/test")){
+			mkdir($currentCourseRepositorySys."upload/test",$perm);
+		}
 		
+		//Updating index file in courses directories to change claroline/ into main/
+		$content = '<?php'."\n".
+				'$cidReq="'.$courses_directories['code'].'";'."\n" .
+				'$dbname="'.$courses_directories['db_name'].'";'."\n" .
+				'include("../../main/course_home/course_home.php");'."\n" .
+				'?>';
+		unlink($currentCourseRepositorySys.'index.php');
+		$fp = @ fopen($currentCourseRepositorySys.'index.php', 'w');
+		if ($fp)
+		{
+			error_log('Writing redirection file in '.$currentCourseRepositorySys.'index.php',0);			
+			fwrite($fp, $content);
+			fclose($fp);
+		}else{
+			error_log('Could not open file '.$currentCourseRepositorySys.'index.php',0);
+		}
 	}
+
 	umask($old_umask);
 	// Write the Dokeos config file
 	write_dokeos_config_file('../inc/conf/configuration.php');

@@ -409,9 +409,11 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 	// Displaying the table
 	$additional_get_parameters=array('view'=>$_GET['view'], 'view_received_category'=>$_GET['view_received_category'],'view_sent_category'=>$_GET['view_sent_category']);
 	$selectlist = array ('delete_received' => get_lang('Delete'),'download_received'=>get_lang('Download'));
-    	foreach ($movelist as $catid => $catname){
+    if (is_array($movelist)) {
+        foreach ($movelist as $catid => $catname){
         	$selectlist['move_received_'.$catid] = get_lang('Move') . '->'. $catname;
     	}
+    }
 	Display::display_sortable_config_table($column_header, $dropbox_data_recieved, $sorting_options, $paging_options, $additional_get_parameters,$column_show,$column_order, $selectlist);
 }
 

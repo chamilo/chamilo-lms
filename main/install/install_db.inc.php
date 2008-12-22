@@ -203,7 +203,7 @@ $installation_settings['{ADMINPASSWORD}'] = $passToStore;
 $installation_settings['{ADMINEMAIL}'] = $emailForm;
 $installation_settings['{ADMINPHONE}'] = $adminPhoneForm;
 $installation_settings['{PLATFORM_AUTH_SOURCE}'] = PLATFORM_AUTH_SOURCE;
-
+$installation_settings['{ADMINLANGUAGE}'] = $languageForm;
 load_main_database($installation_settings);
 
 /**

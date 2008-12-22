@@ -278,7 +278,7 @@ $Document = "Documentos";
 $Learnpath = "Lecciones";
 $Link = "Enlaces";
 $Announcement = "Anuncios";
-$Dropbox = "Buzón de tareas";
+$Dropbox = "Compartir documentos";
 $Quiz = "Ejercicios";
 $langChat = "Chat";
 $Conference = "Conferencia Online";
@@ -600,4 +600,6 @@ $OptionText = "Opción de texto";
 $FieldTypeDoubleSelect = "Campo de tipo selección doble";
 $FieldTypeDivider = "Campo de tipo separador";
 $ResourceDeleted = "Recurso eliminado";
+$AdvancedParameters = "Parámetros avanzados";
+$GoTo = "Ir a";
 ?>

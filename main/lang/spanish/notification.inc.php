@@ -14,7 +14,7 @@ $lang_new_link = "nuevo enlace añadido";
 $lang_new_forum_topic = "nuevo tema añadido";
 $lang_new_groupforum_topic = "nuevo tema añadido al foro del grupo";
 $lang_new_dropbox_file = "nuevo archivo recibido";
-$lang_update_dropbox_file = "un archivo de su buzón de tareas ha sido actualizado";
+$lang_update_dropbox_file = "un archivo de sus documentos compartidos ha sido actualizado";
 $ForumCategoryAdded = "se ha añadido una categoría de foro";
 $LearnpathAdded = "Itinerario de aprendizaje añadido";
 ?>

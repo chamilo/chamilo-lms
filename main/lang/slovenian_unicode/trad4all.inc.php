@@ -600,4 +600,5 @@ $OptionText = "Besedilo";
 $FieldTypeDoubleSelect = "Dvojna izbira";
 $FieldTypeDivider = "Vizualni ločilec";
 $ResourceDeleted = "Resurs odstranjen";
+$AdvancedParameters = "Napredni parametri";
 ?>

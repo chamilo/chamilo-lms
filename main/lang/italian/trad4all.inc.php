@@ -570,7 +570,7 @@ $GeneralCoach = "Tutor globale";
 $CategoryDeleted = "La categoria è stata eliminata";
 $CategoryAdded = "Categoria aggiunta";
 $IP = "IP";
-$Qualify = "Qualifica";
+$Qualify = "Valuta";
 $Words = "Parole";
 $GoBack = "Indietro";
 $Details = "Dettagli";
@@ -600,4 +600,6 @@ $OptionText = "Testo";
 $FieldTypeDoubleSelect = "Campo di selezione doppia";
 $FieldTypeDivider = "Separatore";
 $ResourceDeleted = "Risorsa eliminata";
+$AdvancedParameters = "Parametri avanzati";
+$GoTo = "Vai a";
 ?>

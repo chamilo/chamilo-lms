@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 17392 2008-12-19 23:51:03Z herodoto $
+<?php //$Id: group_space.php 17424 2008-12-22 15:01:13Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -69,6 +69,13 @@ $interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang("Groups"));
 */
 Display::display_header($nameTools,"Group");
 
+/*
+-----------------------------------------------------------
+	Introduction section
+	(editable by course admin)
+-----------------------------------------------------------
+*/
+Display::display_introduction_section(group_space_.$_SESSION['_gid']);
 
 /*
 -----------------------------------------------------------

@@ -1,4 +1,4 @@
-<?php // $Id: group.php 17236 2008-12-11 20:04:55Z cfasanando $
+<?php // $Id: group.php 17429 2008-12-23 01:15:36Z cvargas1 $
  
 /*
 ==============================================================================
@@ -270,7 +270,8 @@ foreach ($group_cats as $index => $category)
 			// group name
 			if ((api_is_allowed_to_edit(false,true) || 
 					in_array($_user['user_id'],$tutorsids_of_group) || 
-					$this_group['is_member'] || 
+					$this_group['is_member'] ||
+					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_FORUM) || 
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_DOCUMENTS) ||
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_CALENDAR) ||
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_ANNOUNCEMENT) ||

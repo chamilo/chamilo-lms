@@ -61,7 +61,7 @@ define("TOOL_PRIVATE", "2");
 /**
  * Constants for the available group tools
  */
-//define("GROUP_TOOL_FORUM", "0");
+define("GROUP_TOOL_FORUM", "0");
 define("GROUP_TOOL_DOCUMENTS", "1");
 define("GROUP_TOOL_CALENDAR","2");
 define("GROUP_TOOL_ANNOUNCEMENT","3");
@@ -1420,6 +1420,9 @@ class GroupManager
 	{
 		switch ($tool)
 		{
+			case GROUP_TOOL_FORUM :
+				$state_key = 'forum_state';
+				break;
 			case GROUP_TOOL_DOCUMENTS :
 				$state_key = 'doc_state';
 				break;

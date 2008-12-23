@@ -96,10 +96,23 @@ $userinf=api_get_user_info($userid);
 // we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
-$my_forum=isset($_GET['forum'])?$_GET['forum']:'';
-$current_forum=get_forum_information($my_forum); // note: this has to be validated that it is an existing forum.
-$current_forum_category=get_forumcategory_information($current_forum['forum_category']);
 
+$my_forum_group=isset($_GET['gidReq'])?$_GET['gidReq']:'';
+$my_forum=isset($_GET['forum'])?$_GET['forum']:'';
+$val=GroupManager::user_has_access($userid,$my_forum_group,GROUP_TOOL_FORUM);
+
+if(!empty($my_forum_group)){
+		if (api_is_allowed_to_edit(false,true) || $val==true) {
+			$current_forum=get_forum_information($my_forum); // note: this has to be validated that it is an existing forum.
+			$current_forum_category=get_forumcategory_information($current_forum['forum_category']);
+		}
+} else {
+	$result=get_forum_information($my_forum);
+	if($result['forum_of_group']==0){
+		$current_forum=get_forum_information($my_forum); // note: this has to be validated that it is an existing forum.
+		$current_forum_category=get_forumcategory_information($current_forum['forum_category']);
+	}	
+}
 
 
 /*
@@ -385,7 +398,7 @@ if(is_array($threads)) {
 					$iconnotify = 'send_mail_checked.gif';
 				}
 			}
-			$icon_liststd = 'students.gif';
+			$icon_liststd = 'group.gif';
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($my_forum)."&amp;action=notify&amp;content=thread&amp;id=".$row['thread_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
 			if ($userinf['status']=='1') {
 				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;action=liststd&amp;content=thread&amp;id='.$row['thread_id'].'">'.icon('../img/'.$icon_liststd,get_lang('StudentList')).'</a>';			

@@ -179,7 +179,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 			$all_groups[$group['id']]=$group;
 		}
 	}
-	
 	/*
 	------------------------------------------------------------------------------------------------------
 		ACTION LINKS
@@ -347,7 +346,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 							$my_all_groups_forum_name=isset($all_groups[$forum['forum_of_group']]['name']) ? $all_groups[$forum['forum_of_group']]['name'] : null;
 							$my_all_groups_forum_id=isset($all_groups[$forum['forum_of_group']]['id']) ? $all_groups[$forum['forum_of_group']]['id'] : null;
 							$group_title=substr($my_all_groups_forum_name,0,30);
+
 							$forum_title_group_addition=' (<a href="../group/group_space.php?'.api_get_cidreq().'&gidReq='.$my_all_groups_forum_id.'" class="forum_group_link">'.get_lang('GoTo').' '.$group_title.'</a>)';
+
 						} else {
 							$forum_title_group_addition='';
 						}
@@ -357,7 +358,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						} else {
 							$session_displayed = '';
 						}
-						echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".prepare4display($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
+						echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&gidReq=".Security::remove_XSS($my_all_groups_forum_id)."&forum=".prepare4display($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
 						//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 						// the number of topics and posts
 						$number_threads=isset($forum['number_of_threads']) ? $forum['number_of_threads'] : null;

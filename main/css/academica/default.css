@@ -1145,7 +1145,67 @@ div.system_announcement {
 	margin: 1em;
 }
 
+/* Notebook */
+.notebook-add-form {
+    margin: 1em;
+    background-color: #c3d9ff;
+    padding: 1em  1em;
+    width: 48%;
+    -moz-border-radius: 0.5em;
+}
+.style-add-textarea {
+    background-color: #f2f5f8;
+    border-color: #ffe99b;
+    overflow: hidden;
+}
 
+.style-edit-textarea {
+    background-color: #e0ecff;
+    border-color: #ffe99b;
+    overflow: hidden;
+}
+
+.msg_error {
+    color: #FF0000;
+    display :none;
+    background-color: #ffe99b;
+    width: 40%;     
+}
+
+.notebook-list{
+    margin: 1em 1em 0em 1em;
+    background-color: #79b;
+    padding: 0.3em  0.3em;
+    width: 70%;    
+    -moz-border-radius: 0.5em;
+}
+
+.note-number{
+    color : #fff;
+    padding: 0.3em  0.3em;
+    font-weight: bold;
+    font-size: 120%;
+}
+
+.desc-notebook {
+    margin: 0em;
+    background-color: #f2f5f8;
+    padding: 0.5em 0.3em 2em 0.3em;
+    height:50%;
+    border: 1px solid #79b; 
+}
+
+.notebook-term-action-links {
+    padding: 0.3em  0.3em;
+    width: 50%;    
+    color : #fff;
+}
+
+.date_information {
+    padding: 0 0.3em;
+    font-weight: bold;
+    font-size: 90%;
+}
 
 /*NAVIGATION MENU BAR*/
 

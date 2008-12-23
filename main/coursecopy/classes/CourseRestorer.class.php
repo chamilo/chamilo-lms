@@ -1,4 +1,4 @@
-<?php // $Id: CourseRestorer.class.php 16101 2008-08-28 08:52:29Z elixir_julian $
+<?php // $Id: CourseRestorer.class.php 17440 2008-12-23 20:21:04Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -103,6 +103,7 @@ class CourseRestorer
 		$this->restore_quizzes(); // after restore_documents! (for correct import of sound/video)
 		$this->restore_learnpaths();
 		$this->restore_surveys();
+		$this->restore_student_publication();
 		// Restore the item properties
 		$table = Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->destination_db);
 		foreach ($this->course->resources as $type => $resources)
@@ -998,6 +999,94 @@ class CourseRestorer
 			}
 		}
 	}
+	/**
+	 * restore works
+	 */
+	function restore_student_publication () {
+		$my_course_id=api_get_course_id();
+		$my_course_info=api_get_course_info($my_course_id);//student_publication_assignment
+
+		$my_tbl_db_spa_origin=Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT,$my_course_info['dbName']);
+		$my_tbl_db_spa_destination = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT, $this->course->destination_db);
+		
+		$my_tbl_db_origin=Database :: get_course_table(TABLE_STUDENT_PUBLICATION,$my_course_info['dbName']);
+		$my_tbl_db_destination = Database :: get_course_table(TABLE_STUDENT_PUBLICATION, $this->course->destination_db);
+		
+		$my_tbl_db_item_property_origin=Database :: get_course_table(TABLE_ITEM_PROPERTY, $my_course_info['dbName']);
+		$my_tbl_db_item_property_destination=Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->destination_db);
+		
+		//query in student publication
+		
+		$query_sql_fin_sp='INSERT IGNORE INTO '.$my_tbl_db_destination.'' .
+		'(id,url,title,description,author,active,accepted,post_group_id,sent_date,' .
+		'filetype,has_properties,view_properties,qualification,date_of_qualification,' .
+		'parent_id,qualificator_id,session_id) ';
+		
+		$query_sql_ini_sp='SELECT id,url,title,description,author,active,accepted,post_group_id,' .
+		'sent_date,filetype,has_properties,view_properties,qualification,date_of_qualification,' .
+		'parent_id,qualificator_id,session_id FROM '.$my_tbl_db_origin.' WHERE filetype="folder" ';
+		//var_dump($query_sql_ini_sp);
+		$destination='../../courses/'.$this->course->destination_path.'/work/';
+		$origin='../../courses/'.api_get_course_id().'/work/';
+
+		self::api_create_all_directory($origin,$destination,false);
+		
+		//query in item property
+		
+		$query_sql_fin_ip='INSERT IGNORE INTO '.$my_tbl_db_item_property_destination.'' .
+		'(tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,' .
+		'to_user_id,visibility,start_visible,end_visible) ';
+		
+		$query_sql_ini_ip='SELECT tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,' .
+		'lastedit_user_id,to_group_id,to_user_id,visibility,start_visible,
+		end_visible FROM '.$my_tbl_db_item_property_origin.' ip INNER JOIN '.$my_tbl_db_origin.' sp' .
+		' ON ip.ref=sp.id WHERE tool="work" ';
+		
+		
+		$query_sql_fin_sa='INSERT IGNORE INTO '.$my_tbl_db_spa_destination.'' .
+		'(id,expires_on,ends_on,add_to_calendar,enable_qualification,publication_id) ';
+		
+		$query_sql_ini_sa='SELECT sa.id,sa.expires_on,sa.ends_on,sa.add_to_calendar,sa.enable_qualification,sa.publication_id FROM '.$my_tbl_db_spa_origin.' sa INNER JOIN '.$my_tbl_db_origin.' sp
+		ON sa.publication_id=sp.id WHERE filetype="folder" ';
+		
+		$query_sql_sp    = $query_sql_fin_sp.$query_sql_ini_sp;
+		$query_sql_ip    = $query_sql_fin_ip.$query_sql_ini_ip;
+		$query_sql_sa    = $query_sql_fin_sa.$query_sql_ini_sa;
+		
+		api_sql_query($query_sql_sp,__FILE__,__LINE__);
+		api_sql_query($query_sql_ip,__FILE__,__LINE__);
+		api_sql_query($query_sql_sa,__FILE__,__LINE__);
+		
+	}
+	
+/**
+ * copy all directory and sub directory
+ */
+	function api_create_all_directory($source, $dest, $overwrite = false){
+   		if(!is_dir($dest)) {
+    		mkdir($dest);
+    	}
+    
+	    if ($handle = opendir($source)) {        // if the folder exploration is sucsessful, continue
+	        while (false !== ($file = readdir($handle))) { // as long as storing the next file to $file is successful, continue
+	            if ($file != '.' && $file != '..') {
+	                $path = $source . '/' . $file;
+	                if (is_file($path)) {
+	                   /* if (!is_file($dest . '/' . $file) || $overwrite)
+	                    if (!@copy($path, $dest . '/' . $file)) {
+	                        echo '<font color="red">File ('.$path.') '.get_lang('NotHavePermission').'</font>';
+	                    }*/
+	                } elseif(is_dir($path)) {
+	                    if (!is_dir($dest . '/' . $file))
+	                    mkdir($dest . '/' . $file);
+	                   self:: api_create_all_directory($path, $dest . '/' . $file, $overwrite);
+	                }
+	            }
+	        }
+	        closedir($handle);
+	    }
+	}
+
 	/**
 	 * Gets the new ID of one specific tool item from the tool name and the old ID
 	 * @param	string	Tool name

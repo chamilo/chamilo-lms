@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 17362 2008-12-17 23:21:17Z cfasanando $
+<?php // $Id: profile.php 17445 2008-12-23 22:47:46Z derrj $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -731,19 +731,14 @@ if(!empty($warning_msg))
 {
 	Display :: display_warning_message($warning_msg,false);
 }
-//	USER PICTURE
-$image_path = UserManager::get_user_picture_path_by_id($_user['user_id'],'web');
+//User picture size is calculated from SYSTEM path
+$image_syspath = UserManager::get_user_picture_path_by_id($userid,'system',false,true);
+$image_size = getimagesize($image_syspath['dir'].$image_syspath['file']);
+//Web path
+$image_path = UserManager::get_user_picture_path_by_id($_user['user_id'],'web',false,true);
 $image_dir = $image_path['dir'];
 $image = $image_path['file'];
 $image_file = $image_dir.$image;
-if (!empty($image)) {
-    $image_path = UserManager::get_user_picture_path_by_id($_user['user_id'],'system');
-    $image_size = @getimagesize($image_path['dir'].$image_path['file']);
-} else {
-    $image_file = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
-    $image_size = @getimagesize(api_get_path(SYS_CODE_PATH).'img/unknown.jpg');
-} 
-
 $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
 	.'alt="'.$user_data['lastname'].' '.$user_data['firstname'].'" '
 	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';

@@ -55,10 +55,10 @@ class DisplayGradebook
 		} else {
 			$visible= get_lang('No');
 		}
-		
-		$scoredisplay = ScoreDisplay :: instance(); 
+
+		$scoredisplay = ScoreDisplay :: instance();
 		if (($evalobj->has_results())){ // TODO this check needed ?
-			
+
 			$score= $evalobj->calc_score();
 			if ($score != null)
 				$average= get_lang('Average') . ' :<b> ' .$scoredisplay->display_score($score,SCORE_AVERAGE) . '</b>';
@@ -79,7 +79,7 @@ class DisplayGradebook
 		elseif ($scoredisplay->is_custom() && api_get_self() != '/dokeos/main/gradebook/gradebook_statistics.php')
 			$evalinfo .= '<br /><br /><a href="gradebook_statistics.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '. get_lang('ViewStatistics') . '</a>';
 		$evalinfo .= '</td><td><img style="left:0;position:relative" src="../img/tutorial.gif"></img></td></table>';
-        Display :: display_normal_message($evalinfo,false);
+		Display :: display_normal_message($evalinfo,false);
 		echo $header;
 
 	}
@@ -124,7 +124,7 @@ class DisplayGradebook
 		}
 		echo $header;
 	}
-	
+
 		/**
 	* Displays the header for the flatview page containing filters
 	* @param $catobj
@@ -134,7 +134,7 @@ class DisplayGradebook
 	function display_header_reduce_flatview($catobj, $showeval, $showlink,$simple_search_form) {
 		$header= '<table border="0" cellpadding="5">';
 		$header .= '<td style="vertical-align: top;"><a href="index.php?'.api_get_cidreq().'"><< ' . get_lang('BackToOverview') . '</a></td>';
-		
+
 
 //		$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?exportpdf=&offset='.Security::remove_XSS($_GET['offset']).'&search=' . Security::remove_XSS($_GET['search']).'&selectcat=' . $catobj->get_id() . '"><img src=../img/calendar_up.gif alt=' . get_lang('ExportPDF') . '/> ' . get_lang('ExportPDF') . '</a>';
 
@@ -147,22 +147,22 @@ class DisplayGradebook
 		echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?show='.$show.'">';
 		echo '<input type="hidden" name="export_report" value="export_report">';
 		echo '<input type="hidden" name="selectcat" value="'.$catobj->get_id() .'">';
-		
+
 		echo '<input type="hidden" name="export_format" value="csv">';
 		echo '</form>';
-		
+
 		echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?show='.$show.'">';
 		echo '<input type="hidden" name="export_report" value="export_report">';
 		echo '<input type="hidden" name="selectcat" value="'.$catobj->get_id() .'">';
 		echo '<input type="hidden" name="export_format" value="xls">';
 		echo '</form>';
-			
+
 		$header .= '<td style="vertical-align: top;"><a class="quiz_export_link" href="#" onclick="document.form1a.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif" alt="'.get_lang('ExportAsCSV').'">&nbsp;'.get_lang('ExportAsCSV').'</a></td>';
 		$header .= '<td style="vertical-align: top;"><a class="quiz_export_link" href="#" onclick="document.form1b.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif" alt="'.get_lang('ExportAsXLS').'">&nbsp;'.get_lang('ExportAsXLS').'</a></td>';
-	
+
 		$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?print=&selectcat=' . $catobj->get_id() . '" target="_blank"><img src="../img/printmgr.gif" alt=' . get_lang('Print') . '/> ' . get_lang('Print') . '</a>';
 		$header .= '</td></tr></table>';
-		
+
 		if (!$catobj->get_id() == '0') {
 			//this is necessary?
 			//$header .= '<table border="0" cellpadding="5"><tr><td><form name="itemfilter" method="post" action="' . api_get_self() . '?selectcat=' . $catobj->get_id() . '"><input type="checkbox" name="showeval" onclick="document.itemfilter.submit()" ' . (($showeval == '1') ? 'checked' : '') . '>Show Evaluations &nbsp;';
@@ -173,7 +173,7 @@ class DisplayGradebook
 		}
 		echo $header;
 	}
-	
+
 	/**
 	 * Displays the header for the gradebook containing the navigation tree and links
 	 * @param category_object $currentcat
@@ -188,44 +188,44 @@ class DisplayGradebook
 		//student
 		$objcat=new Category();
 		$objdat=new Database();
-		
+
 		$course_id=$objdat->get_course_by_category($selectcat);
 		$message_resource=$objcat->show_message_resource_delete($course_id);
 		if (!$is_course_admin) {
 			$user_id = api_get_user_id();
-			$user= get_user_info_from_id($user_id);		
-			
+			$user= get_user_info_from_id($user_id);
+
 			$catcourse= Category :: load($catobj->get_id());
 			$scoredisplay = ScoreDisplay :: instance();
 			$scorecourse = $catcourse[0]->calc_score($user_id);
-			
+
 			// generating the total score for a course
 			$allevals= $catcourse[0]->get_evaluations($user_id,true);
 			$alllinks= $catcourse[0]->get_links($user_id,true);
-			$evals_links = array_merge($allevals, $alllinks);			
+			$evals_links = array_merge($allevals, $alllinks);
 			$item_value=0;
-			$item_total=0;				
+			$item_total=0;
 			for ($count=0; $count < count($evals_links); $count++) {
 				$item = $evals_links[$count];
 				$score = $item->calc_score($user_id);
-				$my_score_denom=($score[1]==0) ? 1 : $score[1];					
-				$item_value+=$score[0]/$my_score_denom*$item->get_weight();			
-				$item_total+=$item->get_weight();				
-				//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);								
-			}			
-			$item_value = number_format($item_value, 2, '.', ' ');			
+				$my_score_denom=($score[1]==0) ? 1 : $score[1];
+				$item_value+=$score[0]/$my_score_denom*$item->get_weight();
+				$item_total+=$item->get_weight();
+				//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
+			}
+			$item_value = number_format($item_value, 2, '.', ' ');
 			$total_score=array($item_value,$item_total);
 			$scorecourse_display = $scoredisplay->display_score($total_score,SCORE_DIV_PERCENT);
 			//----------------------
-			
-			
-			//$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));			
+
+
+			//$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
 			$cattotal = Category :: load(0);
 			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
 			$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
 			$scoreinfo = get_lang('StatsStudent') . ' :<b> '.$user['lastname'].' '.$user['firstname'].'</b><br />';
-			
-			
+
+
 			if ((!$catobj->get_id() == '0') && (!isset ($_GET['studentoverview'])) && (!isset ($_GET['search']))) {
 				$scoreinfo.= '<br />'.get_lang('Total') . ' : <b>' . $scorecourse_display . '</b>';
 			}
@@ -236,10 +236,10 @@ class DisplayGradebook
 		$header='';
 		$header .= '<table border=0 cellpadding=5>';
 		if (($showtree == '1') || (isset ($_GET['studentoverview']))) {
-			
+
 			$header .= '<tr><td style="vertical-align: top;">' . get_lang('CurrentCategory') . '</td><td style="vertical-align: top;"><form name="selector"><select name="selectcat" onchange="document.selector.submit()">';
 			$cats= Category :: load();
-			
+
 			$tree= $cats[0]->get_tree();
 			unset ($cats);
 			foreach ($tree as $cat) {
@@ -278,7 +278,7 @@ class DisplayGradebook
 			$header .= '</td></tr>';
 		}
 		$header.='</table>';
-		
+
 		// for course admin & platform admin add item buttons are added to the header
 		$header .= '<table border="0" cellpadding="0"><tr><td>';
 		if (($is_course_admin) && (!isset ($_GET['search']))) {
@@ -304,7 +304,7 @@ class DisplayGradebook
                     if ($cats[0]->get_course_code() != null && $message_resource===false) {
                         //$header .= '<td><a href="gradebook_add_link.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/link.gif" alt="' . get_lang('MakeLink') . '" align="absmiddle" /> ' . get_lang('MakeLink') . '</a>';
                         $header .= '<td><a href="gradebook_add_link.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '"><img src="../img/link.gif" alt="' . get_lang('MakeLink') . '" align="absmiddle" /> ' . get_lang('MakeLink') . '</a>&nbsp;';
-                        
+
                     } else {
                         $header .= '<td><a href="gradebook_add_link_select_course.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '"><img src="../img/link.gif" alt="' . get_lang('MakeLink') . '" align="absmiddle" /> ' . get_lang('MakeLink') . '</a>&nbsp;';
                     }
@@ -327,7 +327,7 @@ class DisplayGradebook
 		$header .= '</td></tr></table>';
 		echo $header;
 	}
-	
+
 	function display_reduce_header_gradebook($catobj,$is_course_admin, $is_platform_admin, $simple_search_form, $show_add_qualification = true, $show_add_link = true) {
 		//student
 		if (!$is_course_admin) {
@@ -348,10 +348,10 @@ class DisplayGradebook
 		}
 			// show navigation tree and buttons?
 			$header = '<table border=0 cellpadding=5 >';
-			
+
 			if ($is_course_admin) {
 				$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/stats_access.gif" alt="' . get_lang('FlatView') . '" /> ' . get_lang('FlatView') . '</a>';
-				if ($is_platform_admin || $is_course_admin) 
+				if ($is_platform_admin || $is_course_admin)
 					$header .= '<td style="vertical-align: top;"><a href="gradebook_scoring_system.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() .'"><img src="../img/acces_tool.gif" alt="' . get_lang('ScoreEdit') . '" /> ' . get_lang('ScoreEdit') . '</a>';
 			} elseif (!(isset ($_GET['studentoverview']))) {
 				$header .= '<td style="vertical-align: top;"><a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&selectcat=' . $catobj->get_id() . '"><img src="../img/stats_access.gif" alt="' . get_lang('FlatView') . '" /> ' . get_lang('FlatView') . '</a>';
@@ -362,23 +362,26 @@ class DisplayGradebook
 		$header.='</table>';
 		echo $header;
 	}
-	
-	
+
+
 	function display_header_user($userid) {
-		$user= get_user_info_from_id($userid);
-		$image= $user['picture_uri'];
-		$image_file= ($image != '' ? api_get_path(WEB_CODE_PATH) . "upload/users/$image" : api_get_path(WEB_CODE_PATH) . 'img/unknown.jpg');
-		$image_size= @ getimagesize($image_file);
-		$img_attributes= 'src="' . $image_file . '?rand=' . time() . '" ' . 'alt="' . $user['lastname'] . ' ' . $user['firstname'] . '" ';
+ 		$user= get_user_info_from_id($userid);
+        //User picture size is calculated from SYSTEM path
+        $image_syspath = UserManager::get_user_picture_path_by_id($userid,'system',false,true);
+        $image_size = getimagesize($image_syspath['dir'].$image_syspath['file']);
+        //Web path
+        $image_path = UserManager::get_user_picture_path_by_id($userid,'web',false,true);
+        $image_file = $image_path['dir'].$image_path['file'];
+ 		$img_attributes= 'src="' . $image_file . '?rand=' . time() . '" ' . 'alt="' . $user['lastname'] . ' ' . $user['firstname'] . '" ';
 		if ($image_size[0] > 200) {
 		 //limit display width to 200px
-			$img_attributes .= 'width="200" ';	
+ 			$img_attributes .= 'width="200" ';
 		}
 		$cattotal= Category :: load(0);
 		$info = '<table width="100%" border=0 cellpadding=5><tr><td width="80%">';
 		$info.= get_lang('Name') . ' : <b>' . $user['lastname'] . ' ' . $user['firstname'] . '</b> ( <a href="user_info.php?userid=' . $userid . '&selecteval=' . Security::remove_XSS($_GET['selecteval']) . '">' . get_lang('MoreInfo') . '...</a> )<br>';
 		$info.= get_lang('Email') . ' : <b><a href="mailto:' . $user['email'] . '">' . $user['email'] . '</a></b><br><br>';
-		$scoredisplay = ScoreDisplay :: instance(); 
+		$scoredisplay = ScoreDisplay :: instance();
 		$score_stud= $cattotal[0]->calc_score($userid);
 		$score_stud_display = (isset($score_stud) ? $scoredisplay->display_score($score_stud,SCORE_PERCENT) : get_lang('NoResultsAvailable') );
 		$score_avg= $cattotal[0]->calc_score();

@@ -36,7 +36,7 @@
 	var base_url_alt= "<?php echo $_GET['base_url_alt'].'images'; ?>";  	  	
 	var server_name = "<?php echo $IMConfig['server_name']; ?>";
 
-	window.resizeTo(680, 550);
+	window.resizeTo(700, 500);
 
 	if(window.opener.ImageManager && window.opener.ImageManager.I18N)
 	{
@@ -72,18 +72,18 @@
 </head>
 
 <body>
-<div class="title">Insert Image</div>
+<div class="PopupTitle">Insert Image</div>
 <form action="images.php" id="uploadForm" method="post" enctype="multipart/form-data">
-<fieldset><legend>Image Manager</legend>
+<fieldset style="margin-left: 15px; margin-right: 15px;"><legend>Image Manager</legend>
 <div class="dirs">
 	<label for="dirPath">Directory</label>
-	<select name="dir" class="dirWidth" id="dirPath" onchange="updateDir(this)">
+	<select name="dir" class="dirWidth" id="dirPath" onchange="updateDir(this)" style="width: 400px;">
 	<option value="/">/</option>
 <?php foreach($dirs as $relative=>$fullpath) { ?>
 		<option value="<?php echo rawurlencode($relative); ?>"><?php echo $relative; ?></option>
 <?php } ?>
 	</select>
-	<a href="#" onclick="javascript: goUpDir();" title="Directory Up"><img src="img/btnFolderUp.gif" height="15" width="15" alt="Directory Up" /></a>
+	<a href="#" onclick="javascript: goUpDir();" title="Directory Up"><img src="img/btnFolderUp.gif" height="15" width="15" alt="Directory Up" />&nbsp;<span>Directory Up</span></a>
 <?php if($IMConfig['safe_mode'] == false && $IMConfig['allow_new_dir']) { ?>
 	<a href="#" onclick="newFolder();" title="New Folder"><img src="img/btnFolderNew.gif" height="15" width="15" alt="New Folder" /></a>
 <?php } ?>
@@ -175,12 +175,13 @@
 			<td colspan="5"><label for="constrain_prop">Constrain Proportions</label></td>
 		</tr>
 	</table>
-<!--// image properties -->	
-	<div style="text-align: right;"> 
-          <hr />
-		  <button type="button" class="buttons" onclick="return refresh();">Refresh</button>
-          <button type="button" class="buttons" onclick="return onOK();">OK</button>
-          <button type="button" class="buttons" onclick="return onCancel();">Cancel</button>
+<!--// image properties -->
+	<div class="PopupButtons" style="width: 100%;">
+	<div style="text-align: right; margin-left: 15px; margin-right: 15px;">
+		  <button type="button" class="Button" onclick="return refresh();">Refresh</button>&nbsp;
+          <button type="button" class="Button" onclick="return onOK();">OK</button>&nbsp;
+          <button type="button" class="Button" onclick="return onCancel();">Cancel</button>
+    </div>
     </div>
 	<input type="hidden" id="f_file" name="f_file" />
 </form>

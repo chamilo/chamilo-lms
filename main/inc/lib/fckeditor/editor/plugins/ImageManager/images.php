@@ -55,7 +55,7 @@ function drawFiles($list, &$manager)
 	{ ?>
 		<td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
 		<a href="javascript:;" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo $entry; ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);"title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"><img src="<?php echo $manager->getThumbnail($file['relative']); ?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"/></a>
-		</td></tr><tr><td class="edit">
+		</td></tr><tr><td class="edit" style="padding-top: 5px;">
 		<?php if($IMConfig['allow_delete'] == true) { ?>
 			<a href="images.php?dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>
 		<?php } ?>
@@ -76,17 +76,17 @@ function drawDirs($list, &$manager)
 {
 	global $relative;
 
-	foreach($list as $path => $dir) 
+	foreach($list as $path => $dir)
 	{ ?>
 		<td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
 		<a href="images.php?dir=<?php echo rawurlencode($path); ?>" onclick="updateDir('<?php echo $path; ?>')" title="<?php echo $dir['entry']; ?>"><img src="img/folder.gif" height="80" width="80" alt="<?php echo $dir['entry']; ?>" /></a>
 		</td></tr><tr>
-		<td class="edit">
-			<a href="images.php?dir=<?php echo $relative; ?>&amp;deld=<?php echo rawurlencode($path); ?>" title="Trash" onclick="return confirmDeleteDir('<?php echo $dir['entry']; ?>', <?php echo $dir['count']; ?>);"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>
+		<td class="edit" style="padding-top: 5px;">
+			<a href="images.php?dir=<?php echo $relative; ?>&amp;deld=<?php echo rawurlencode($path); ?>" title="Trash" onclick="return confirmDeleteDir('<?php echo $dir['entry']; ?>', <?php echo $dir['count']; ?>);"><img src="img/edit_trash.gif" style="width: 15px; height: 15px;" alt="Trash"/></a>
 			<?php echo $dir['entry']; ?>
 		</td>
 		</tr></table></td>
-	  <?php 
+	  <?php
 	} //foreach
 }//function drawDirs
 
@@ -94,7 +94,7 @@ function drawDirs($list, &$manager)
 /**
  * No directories and no files.
  */
-function drawNoResults() 
+function drawNoResults()
 {
 ?>
 <table width="100%">
@@ -102,7 +102,7 @@ function drawNoResults()
     <td class="noResult">No Images Found</td>
   </tr>
 </table>
-<?php	
+<?php
 }
 
 /**

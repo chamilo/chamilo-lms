@@ -1,19 +1,50 @@
-html, body {  background-color: ButtonFace;  color: ButtonText; font: 11px Tahoma,Verdana,sans-serif; margin: 0; padding: 0;}
-body { padding: 5px; }
-fieldset { padding: 0;}
-.title { background-color: #ddf; color: #000; font-weight: bold; font-size: 120%; padding: 3px 10px; margin-bottom: 10px; border-bottom: 1px  solid black; letter-spacing: 2px;}
-form { padding: 0px;  margin: 0 auto; width: 550px;}
-.dirWidth { width: 70%; }
-a { padding: 5px; border: 1px solid ButtonFace;	}	
-a img	{ border: 0; }	
-a:hover { border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight; }
-.dirs {	padding: 1em; 	}
-.imageFrame { width: 525px; height: 145px; margin: 0 auto; margin-top: 1em; background-color: White;}
-.smallWidth{ width: 4em; }
-.largelWidth{ width: 22em; }
+html, body {  background-color: #f7f7f7;  color: #000000; font-size: 11px; font-family: 'Microsoft Sans Serif', Arial, Helvetica, Verdana; margin: 0; padding: 0; }
+/* body { padding: 5px; } */
+fieldset { padding: 0; }
+.title { background-color: #dedede; color: #000000; font-weight: bold; font-size: 120%; padding: 3px 10px; margin-bottom: 10px; border-bottom: 1px  solid #cec6b5; letter-spacing: 2px; }
+form { padding: 0px; padding-bottom: 0px;  margin: 0 auto; width: 100%; }
+.dirWidth { width: 400px; }
+a { padding: 5px; border: 1px solid ButtonFace; color: #000000; text-decoration: none; }
+a img	{ border: 0; vertical-align: middle; }
+a:hover { border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight; color: #000000; text-decoration: none; }
+.dirs {	padding: 1em; }
+.imageFrame { width: 100%; height: 158px; margin: 0 auto; margin-top: 1em; background-color: #ffffff; }
+.smallWidth { width: 4em; }
+.largelWidth { width: 22em; }
 .inputTable { margin: 1em auto; }
 select, input, button { font: 11px Tahoma,Verdana,sans-serif; }
 .buttons { width: 70px; text-align: center; }
-.clearboth{ clear: both; }
+.clearboth { clear: both; }
 #messages { position: relative; left: 175px; top: 115px; background-color: white; width:200px;  float: left; margin-top: -52px; border: 1px solid #ccc; text-align: center; padding: 15px; }
 #message  { font-size: 15px; font-weight: bold; color: #69c; }
+
+.PopupTitle
+{
+	font-weight: bold;
+	font-size: 14pt;
+	color: #504845;
+	border-bottom: #cec6b5 1px solid;
+	background-color: #dedede;
+	padding: 3px 10px 3px 10px;
+	margin-bottom: 15px;
+}
+
+.PopupButtons
+{
+	position: absolute;
+	/* right: 0px;
+	left: 0px; */
+	bottom: 0px;
+	border-top: #cec6b5 1px solid;
+	background-color: #dedede;
+	padding: 7px 10px 7px 10px;
+}
+
+.Button
+{
+	border: #7a7261 1px solid;
+	color: #504845;
+	background-color: #cec6b5;
+	width: 100px;
+}
+

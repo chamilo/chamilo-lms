@@ -1,4 +1,4 @@
-<?php // $Id: download.php 12218 2007-05-01 18:27:14Z yannoo $
+<?php // $Id: download.php 17433 2008-12-23 10:56:06Z derrj $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -83,7 +83,7 @@ if(is_dir(api_get_path(SYS_COURSE_PATH).$_course['path']."/document".$doc_url))
 {
 	//remove last slash if present
 	//$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url; 
-	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
+	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (Renï¿½)
 	while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
 	//group folder?
 	$gid_req = ($_GET['gidReq'])?'&gidReq='.$_GET['gidReq']:'';
@@ -98,6 +98,14 @@ event_download($doc_url);
 
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $full_file_name = $sys_course_path.$_course['path'].'/document'.$doc_url;
+
+// check visibility of document and paths
+$is_allowed_to_edit = api_is_allowed_to_edit();
+if (!$is_allowed_to_edit &&
+    !DocumentManager::is_visible($doc_url, $_course)){
+       echo "document not visible"; //api_not_allowed backbutton won't work
+       exit; // you shouldn't be here anyway
+}
 
 DocumentManager::file_send_for_download($full_file_name);
 ?>

@@ -1,5 +1,4 @@
-<?php // $Id: document.php 17320 2008-12-16 14:47:36Z cfasanando $
- 
+<?php // $Id: document.php 17433 2008-12-23 10:56:06Z derrj $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -80,6 +79,18 @@ api_protect_course_script(true);
 //session
 if(isset($_GET['id_session']))
 	$_SESSION['id_session'] = $_GET['id_session'];
+
+// Is the document tool visible?
+// Check whether the tool is actually visible
+$table_course_tool = Database::get_course_table(TABLE_TOOL_LIST, $_course['dbName']);
+$tool_sql = 'SELECT visibility FROM ' . $table_course_tool . ' WHERE name = "'. TOOL_DOCUMENT .'" LIMIT 1';
+$tool_result = api_sql_query($tool_sql,__FILE__,__LINE__);
+$tool_row = mysql_fetch_array($tool_result);
+$tool_visibility = $tool_row['visibility'];
+if ($tool_visibility == '0' && $to_group_id == '0' && !($is_allowed_to_edit || $group_member_with_upload_rights))
+{
+ api_not_allowed(true);
+}
 
 $htmlHeadXtra[] =
 "<script type=\"text/javascript\">
@@ -207,6 +218,10 @@ if($to_group_id!=0 && $curdirpath=='/')
 }
 //-----------------------------------------------------------
 
+// check visibility of the current dir path. Don't show anything if not allowed
+if (!(DocumentManager::is_visible($curdirpath, $_course)||$is_allowed_to_edit)){
+    api_not_allowed();
+}
 /*
 -----------------------------------------------------------
 	Constants and variables
@@ -239,10 +254,17 @@ if (isset($_GET['action']) && $_GET['action']=="download")
 		$error404 .= '</body></html>';
 		echo($error404);
 		exit;
-	}
+	}  
 	// launch event
 	event_download($_GET['id']);
-	$doc_url=$_GET['id'];
+	
+    // check visibility of document and paths
+    if (!($is_allowed_to_edit || $group_member_with_upload_rights) &&
+        !DocumentManager::is_visible($_GET['id'], $_course)){        
+        api_not_allowed();
+    }
+
+    $doc_url=$_GET['id'];
 	$full_file_name = $base_work_dir.$doc_url;
 	DocumentManager::file_send_for_download($full_file_name,true);
 	exit;

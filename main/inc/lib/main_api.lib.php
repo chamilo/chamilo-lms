@@ -1534,7 +1534,7 @@ function api_not_allowed($print_headers = false) {
 	 // to the user_portal			
 	 	if (!headers_sent() or $print_headers){Display::display_header('');}
 		echo '<div align="center">';
-		Display :: display_error_message(get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$_SERVER['HTTP_REFERRER'].'">'.get_lang('BackToPreviousPage').'</a><br/>',false);
+		Display::display_error_message(get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br/>',false);
 		echo '</div>';
 		if ($print_headers){Display::display_footer();}
 		die();
@@ -1543,7 +1543,7 @@ function api_not_allowed($print_headers = false) {
 		if (!empty($user) && !api_is_anonymous()) {
 			if (!headers_sent() or $print_headers) { Display::display_header('');}
 			echo '<div align="center">';
-			Display :: display_error_message(get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$_SERVER['HTTP_REFERRER'].'">'.get_lang('BackToPreviousPage').'</a><br/>',false);
+			Display::display_error_message(get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br/>',false);
 			echo '</div>';
 			if ($print_headers) {Display::display_footer();}
 			die();			
@@ -1557,7 +1557,7 @@ function api_not_allowed($print_headers = false) {
 			$test = $form->return_form();
 			if(!headers_sent() or $print_headers){Display::display_header('');}
 			echo '<div align="center">';
-			Display :: display_error_message(get_lang('NotAllowed').'<br/><br/>'.get_lang('PleaseLoginAgainFromFormBelow').'<br/>'.$test,false);
+			Display::display_error_message(get_lang('NotAllowed').'<br/><br/>'.get_lang('PleaseLoginAgainFromFormBelow').'<br/>'.$test,false);
 			echo '</div>';
 			$_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
 			if ($print_headers) {Display::display_footer();}
@@ -1567,7 +1567,7 @@ function api_not_allowed($print_headers = false) {
 		if (!empty($user) && !api_is_anonymous()) {
 			if (!headers_sent() or $print_headers) {Display::display_header('');}
 			echo '<div align="center">';
-			Display :: display_error_message(get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$_SERVER['HTTP_REFERRER'].'">'.get_lang('BackToPreviousPage').'</a><br/>',false);
+			Display::display_error_message(get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br/>',false);
 			echo '</div>';
 			if ($print_headers) {Display::display_footer();}
 			die();			
@@ -1575,7 +1575,7 @@ function api_not_allowed($print_headers = false) {
 			//if no course ID was included in the requested URL, redirect to homepage
 			if ($print_headers) {Display::display_header('');}
 			echo '<div align="center">';
-			Display :: display_error_message(get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br/>',false);
+			Display::display_error_message(get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br/>',false);
 			echo '</div>';
 			if ($print_headers) {Display::display_footer();}
 			die();
@@ -1616,7 +1616,7 @@ function api_get_item_visibility($_course,$tool,$id) {
 	if (!is_array($_course) or count($_course)==0 or empty($tool) or empty($id)) return -1;
 	$tool = Database::escape_string($tool);
 	$id = Database::escape_string($id);
-	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY,$_course['dbName']);
+	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$_course['dbName']);
 	$sql = "SELECT * FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = $id";
 	$res = api_sql_query($sql);
 	if($res === false or Database::num_rows($res)==0) return -1;
@@ -1655,7 +1655,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 
 	$time = time();
 	$time = date("Y-m-d H:i:s", $time);
-	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY,$_course['dbName']);
+	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$_course['dbName']);
 	if ($to_user_id <= 0)
 		$to_user_id = NULL; //no to_user_id set
 	$start_visible = ($start_visible == 0) ? "0000-00-00 00:00:00" : $start_visible;
@@ -1831,7 +1831,7 @@ function api_display_language_form($hide_if_no_choice=false) {
 *  array['folder'] = An array with the corresponding dokeos-folder
 */
 function api_get_languages() {
-	$tbl_language = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+	$tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 	$sql = "SELECT * FROM $tbl_language WHERE available='1' ORDER BY original_name ASC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_array($result)) {
@@ -1959,7 +1959,7 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
 */
 function api_max_sort_value($user_course_category, $user_id) {
 
-	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+	$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 	$sql_max = "SELECT max(sort) as max_sort FROM $tbl_course_user WHERE user_id='".$user_id."' AND user_course_cat='".$user_course_category."'";
 	$result_max = mysql_query($sql_max) or die(mysql_error());
@@ -2053,7 +2053,7 @@ function api_time_to_hms($seconds) {
   
   //if seconds = -1, it means we have wrong datas in the db
   if($seconds==-1) {
-  	  return get_lang('Unknown').Display :: return_icon('info2.gif',get_lang('WrongDatasForTimeSpentOnThePlatform'));
+  	  return get_lang('Unknown').Display::return_icon('info2.gif',get_lang('WrongDatasForTimeSpentOnThePlatform'));
   }
   
   //How many hours ?

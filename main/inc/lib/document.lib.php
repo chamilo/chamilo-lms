@@ -81,7 +81,7 @@ class DocumentManager
 	{
 		global $_course, $maxFilledSpace;
 		$course_code = $_course['sysCode'];
-		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 
 		$sql_query = "SELECT `".DISK_QUOTA_FIELD."` FROM $course_table WHERE `code` = '$course_code'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
@@ -374,7 +374,7 @@ class DocumentManager
 		{
 			//no forced download, just let the browser decide what to do according to the mimetype
 
-			$content_type = DocumentManager :: file_get_mime_type($filename);
+			$content_type = DocumentManager::file_get_mime_type($filename);
 			header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 			header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
             // Commented to avoid double caching declaration when playing with IE and HTTPS
@@ -448,7 +448,7 @@ class DocumentManager
 		{
 			//no forced download, just let the browser decide what to do according to the mimetype
 
-			$content_type = DocumentManager :: file_get_mime_type($filename);
+			$content_type = DocumentManager::file_get_mime_type($filename);
 			header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 			header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 			header('Cache-Control: no-cache, must-revalidate');
@@ -484,8 +484,8 @@ class DocumentManager
 	*/
 	function get_all_document_data($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false)
 	{
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
-		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+		$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
+		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 
 		//if to_user_id = NULL -> change query (IS NULL)
 		//$to_user_id = (is_null($to_user_id))?'IS NULL':'= '.$to_user_id;
@@ -575,8 +575,8 @@ class DocumentManager
 	 */
 	function get_all_document_folders($_course, $to_group_id = '0', $can_see_invisible = false)
 	{
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
-		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+		$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
+		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		if(empty($to_group_id)){$to_group_id = '0';} //avoid empty strings in $to_group_id
 		if ($can_see_invisible)
 		{
@@ -687,8 +687,8 @@ class DocumentManager
 			$document_id = DocumentManager::get_document_id($_course, $file);
 		}		
 		
-		$TABLE_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
-		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+		$TABLE_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
+		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		
 		if ($to_delete)
 		{
@@ -748,14 +748,7 @@ class DocumentManager
 				{	
 					return true;				
 				}			
-			}
-			
-
-				
-			
-			
-		
-		
+			}		
 		}
 		return false;
 	}
@@ -768,11 +761,11 @@ class DocumentManager
 	 **/
 	function is_folder($_course, $document_id)
 	{	
-		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		//if (!empty($document_id))
 		
 		$resultans   =  api_sql_query('SELECT filetype FROM '.$TABLE_DOCUMENT.' WHERE id='.$document_id.'', __FILE__, __LINE__);		
-		$result=  Database ::fetch_array($resultans,'ASSOC');
+		$result=  Database::fetch_array($resultans,'ASSOC');
 		if ($result['filetype']=='folder')
 		{
 			return true;			
@@ -780,9 +773,7 @@ class DocumentManager
 		else
 		{
 			return false;
-		}
-				
-		
+		}		
 	}
 	
 	/**
@@ -996,7 +987,28 @@ class DocumentManager
 		api_sql_query($sql);
 		
 	}
-	
+	/**
+	 * return true if the documentpath and all parent folders have visibility=1 as item_property
+	 *
+	 * @param string $document_path the relative complete path of the document
+     * @param array  $course the _course array info of the document's course
+	 */
+	function is_visible($doc_path, $course){
+       	$docTable  = Database::get_course_table(TABLE_DOCUMENT, $course['dbName']);
+		$propTable = Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName']);
+        //note the extra / at the end of doc_path to match every path in the
+        // document table that is part of the document path
+        $sql = "SELECT path FROM $docTable d, $propTable ip " .
+                "where d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND visibility=0 AND ".
+                "locate(concat(path,'/'),'".$doc_path."/')=1";
+        $result = api_sql_query($sql,__FILE__,__LINE__);
+        if (Database::num_rows($result) > 0){
+            $row = Database::fetch_array($result);
+            //echo "$row[0] not visible";
+            return false;
+        }
+        return true; // ok, document is visible
+    }
 
 }
 //end class DocumentManager

@@ -250,6 +250,9 @@ class Category implements GradebookItem
      * Insert this category into the database
      */
 	public function add() {
+		if ( isset($this->name) && -1===$this->name) {
+			return false;
+		}
 		if (isset($this->name) && isset($this->user_id) && isset($this->weight) && isset($this->visible)) {
 			$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 			$sql = 'INSERT INTO '.$tbl_grade_categories

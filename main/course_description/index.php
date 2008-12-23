@@ -1,4 +1,4 @@
-<?php // $Id: index.php 17356 2008-12-17 16:16:11Z iflorespaz $
+<?php // $Id: index.php 17447 2008-12-23 23:54:19Z iflorespaz $
 
 /*
 ==============================================================================
@@ -44,12 +44,12 @@
 // name of the language file that needs to be included
 $language_file = array ('course_description', 'pedaSuggest', 'accessibility');
 
-include ('../inc/global.inc.php');
+include '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+include api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
-include_once(api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php');
+include_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 /*
 -----------------------------------------------------------
 	Header
@@ -135,24 +135,25 @@ $default_description_title_editable[7] = true;
 ==============================================================================
 */
 $description_id = isset ($_REQUEST['description_id']) ? intval($_REQUEST['description_id']) : null;
-if (api_is_allowed_to_edit() && !is_null($description_id))
-{
+$action = $_GET['action'];
+if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 	// Delete a description block
-	if (isset ($_GET['action']) && $_GET['action'] == 'delete')
-	{
+	if (isset ($_GET['action']) && $_GET['action'] == 'delete') {
 		$sql = "DELETE FROM $tbl_course_description WHERE id='$description_id'";
 		api_sql_query($sql, __FILE__, __LINE__);
 		Display :: display_confirmation_message(get_lang('CourseDescriptionDeleted'));
 	}
 	// Add or edit a description block
-	else
-	{
+	else {
+		if (!empty($description_id)) {
 		$sql = "SELECT * FROM $tbl_course_description WHERE id='$description_id'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		if ($description = mysql_fetch_array($result))
-		{
+		if ($description = mysql_fetch_array($result)) {
 			$default_description_titles[$description_id] = $description['title'];
 			$description_content = $description['content'];
+
+		} else {
+			$current_title = $default_description_titles[$description_id];				
 		}
 		
 		$fck_attribute['Width'] = '100%';
@@ -164,12 +165,42 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 		$fck_attribute['Config']['CreateDocumentDir'] = '../../'; 
 		$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
 
+		} else {
+			$sql = "SELECT MAX(id) as MAX FROM $tbl_course_description ";
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$max= mysql_fetch_array($result);				
+			$description_id = $max['MAX']+1;
+			if ($description_id < ADD_BLOCK) {
+					$description_id=8;
+			} 			
+		}
+		echo '
+		<style>
+		.row{
+			width:100%;
+		}
+		div.row div.label {
+			width: 60px;
+		}
+		
+		div.row div.formw {
+			width: 100%;
+		}
+		</style>';
 		
 		// Build the form
 		$form = new FormValidator('course_description','POST','index.php','','style="width: 100%;"');
 		$form->addElement('hidden', 'description_id');
-		if (($description_id == ADD_BLOCK) || $default_description_title_editable[$description_id])
-		{
+		
+		if ($_GET['action']=='edit' || $_POST['edit']==1 ) {
+			$form->addElement('hidden', 'edit','1');
+		}		
+
+		if ($_GET['action']=='add' || $_POST['add']==1 ) {
+			$form->addElement('hidden', 'add','1');	
+		}		
+			
+		if (($description_id >= ADD_BLOCK) || $default_description_title_editable[$description_id] || $_GET['action']=='add' || $_POST['add']=='1') {
 			$form->add_textfield('title', get_lang('Title'), true, array('style'=>'width: 350px;'));
 		}
 		
@@ -183,11 +214,12 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 		$default['title'] = $default_description_titles[$description_id];
 		$default['contentDescription'] = $description_content;
 		$default['description_id'] = $description_id;
-		if($description_id == ADD_BLOCK) $default['description_id'] = ADD_BLOCK;
+		if ($description_id == ADD_BLOCK) {
+			$default['description_id'] = ADD_BLOCK;
+		} 
 		$form->setDefaults($default);
 		// If form validates: save the description block
-		if ($form->validate())
-		{
+		if ($form->validate()) {
 			$description = $form->exportValues();
 			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 				$content = WCAG_Rendering::prepareXHTML();
@@ -195,21 +227,25 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 				$content = $description['contentDescription'];
 			}
 			$title = $description['title'];
-			if ($description['description_id'] == ADD_BLOCK)
-			{
-				$sql = "SELECT id FROM $tbl_course_description WHERE id = ".ADD_BLOCK;
+			if ($description['description_id'] >= ADD_BLOCK) {
+				if ($description['edit']=='1') {					
+					$sql = "UPDATE $tbl_course_description SET  title = '".mysql_real_escape_string($title)."', content = '".mysql_real_escape_string($content)."' WHERE id = '".$description_id."' ";				
+					api_sql_query($sql, __FILE__, __LINE__);					
+				} else {								
+					$result = api_sql_query($sql, __FILE__, __LINE__);
+					$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$description_id."', title = '".mysql_real_escape_string($title)."', content = '".mysql_real_escape_string($content)."'";				
+					api_sql_query($sql, __FILE__, __LINE__);
+				}
+				/*$sql = "SELECT id FROM $tbl_course_description WHERE id = ".ADD_BLOCK;
 				$result = api_sql_query($sql, __FILE__, __LINE__);
                 if (Database::num_rows($result)>0){
                 	$sqldel = "DELETE FROM $tbl_course_description WHERE id = ".ADD_BLOCK;
                     $resultdel = api_sql_query($sqldel,__FILE__,__LINE__);
                 }
 				$sqlins = "INSERT INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string($title)."', content = '".Database::escape_string($content)."'";
-				api_sql_query($sqlins, __FILE__, __LINE__);
-			}
-			else
-			{
-				if (!$default_description_title_editable[$description_id])
-				{
+				api_sql_query($sqlins, __FILE__, __LINE__);*/
+			} else {
+				if (!$default_description_title_editable[$description_id]) {
 					$title = $default_description_titles[$description_id];
 				}
 				$sql = "DELETE FROM $tbl_course_description WHERE id = '".$description_id."'";
@@ -220,12 +256,9 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 			Display :: display_confirmation_message(get_lang('CourseDescriptionUpdated'));
 		}
 		// Show the form
-		else
-		{
-			if ($show_peda_suggest)
-			{
-				if (isset ($question[$description_id]))
-				{
+		else {
+			if ($show_peda_suggest) {
+				if (isset ($question[$description_id])) {
 					$message = '<strong>'.get_lang('QuestionPlan').'</strong><br />';
 					$message .= $question[$description_id];
 					Display::display_normal_message($message, false);
@@ -244,41 +277,37 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 }
 
 // Show the list of all description blocks
-if ($show_description_list)
-{
+if ($show_description_list) {
 	$sql = "SELECT * FROM $tbl_course_description ORDER BY id";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	$descriptions;
-	while ($description = mysql_fetch_object($result))
-	{
+	while ($description = mysql_fetch_object($result)) {
 		$descriptions[$description->id] = $description;
 	}
-	if (api_is_allowed_to_edit())
-	{
+	if (api_is_allowed_to_edit()) {
 		$categories = array ();
 		
-		foreach ($default_description_titles as $id => $title)
-		{
+		foreach ($default_description_titles as $id => $title) {
 			$categories[$id] = $title;
 		}
 		$categories[ADD_BLOCK] = get_lang('NewBloc');
 		
 		$i=1;
 		echo '<div class="actions">';
-		foreach ($categories as $id => $title)
-		{
-			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$id.'">'.Display::return_icon($default_description_icon[$id], $title, array('height'=>'20')).' '.$title.'</a>';
-			$i++;
+		foreach ($categories as $id => $title) {
+			if ($i==8) { 
+				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add">'.Display::return_icon($default_description_icon[$id], $title, array('height'=>'20')).' '.$title.'</a>';
+			} else {
+				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$id.'">'.Display::return_icon($default_description_icon[$id], $title, array('height'=>'20')).' '.$title.'</a>';
+				$i++;
+			}
 		}
 		echo '</div>';
 	}
-	if (isset($descriptions) && count($descriptions) > 0)
-	{
-		foreach ($descriptions as $id => $description)
-		{
+	if (isset($descriptions) && count($descriptions) > 0) {
+		foreach ($descriptions as $id => $description) {
 			echo '<div class="sectiontitle">';
-			if (api_is_allowed_to_edit())
-			{
+			if (api_is_allowed_to_edit()) {
 				//delete
 				echo '<a href="'.api_get_self().'?action=delete&amp;description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
 				echo Display::return_icon('delete.gif', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'));
@@ -295,9 +324,7 @@ if ($show_description_list)
 			echo text_filter($description->content);
 			echo '</div>';
 		}
-	}
-	else
-	{
+	} else {
 		echo '<em>'.get_lang('ThisCourseDescriptionIsEmpty').'</em>';
 	}
 }

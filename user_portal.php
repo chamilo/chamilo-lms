@@ -1,4 +1,4 @@
-<?php // $Id: user_portal.php 17100 2008-12-08 04:11:34Z yannoo $
+<?php // $Id: user_portal.php 17439 2008-12-23 19:28:15Z derrj $
   
 /* For licensing terms, see /dokeos_license.txt */
 /**
@@ -598,10 +598,17 @@ function show_notification($my_course) {
 	$res = api_sql_query($sql);
 	//get the group_id's with user membership
 	$group_ids = GroupManager :: get_group_ids($course_database, $user_id);
-	$groups_ids[] = 0; //add group 'everyone'
+	$group_ids[] = 0; //add group 'everyone'
 	//filter all selected items
 	while ($res && ($item_property = Database::fetch_array($res))) {
-		if ((!isset ($lastTrackInCourseDate[$item_property['tool']]) || $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date']) && (in_array($item_property['to_group_id'], $groups_ids) || $item_property['to_user_id'] == $user_id) && ($item_property['visibility'] == '1' || ($my_course['s'] == '1' && $item_property['visibility'] == '0') || !isset ($item_property['visibility']))) {
+		if ((!isset ($lastTrackInCourseDate[$item_property['tool']]) 
+                || $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date'])
+            && ((in_array($item_property['to_group_id'], $group_ids) && $item_property['tool'] != TOOL_DROPBOX)
+                || $item_property['to_user_id'] == $user_id)
+            && ($item_property['visibility'] == '1'
+                || ($my_course['s'] == '1' && $item_property['visibility'] == '0')
+                || !isset ($item_property['visibility'])))
+        {
 			$notifications[$item_property['tool']] = $item_property;
 		}
 	}

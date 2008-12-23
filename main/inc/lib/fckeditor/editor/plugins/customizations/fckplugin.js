@@ -371,15 +371,32 @@ FCKDocumentProcessor_CreateFakeImage = function( fakeClass, realElement )
 	oImg.setAttribute( '_fckrealelement', FCKTempBin.AddElement( realElement ), 0 ) ;
 	if ( fakeClass == 'FCK__Video' )
 	{
-		var width = realElement.width ;
-		var height = realElement.height ;
-		if ( width )
+		// Specific to flv player, SWFObject attaching technique.
+		if ( realElement.nodeName.IEquals( 'div' ) )
 		{
-			oImg.style.width = width.toString().indexOf('%') != -1 ? width : ( width + 'px' ) ;
+			for ( var i = 0; i < realElement.childNodes.length; i++ )
+			{
+				if ( realElement.childNodes[i].nodeName.IEquals( 'div' ) )
+				{
+					oImg.style.width = realElement.childNodes[i].style.width ;
+					oImg.style.height = realElement.childNodes[i].style.height ;
+					break ;
+				}
+			}
 		}
-		if ( height )
+		// For embedded video.
+		else
 		{
-			oImg.style.height = height.toString().indexOf('%') != -1 ? height : ( height + 'px' ) ;
+			var width = realElement.width ;
+			var height = realElement.height ;
+			if ( width )
+			{
+				oImg.style.width = width.toString().indexOf('%') != -1 ? width : ( width + 'px' ) ;
+			}
+			if ( height )
+			{
+				oImg.style.height = height.toString().indexOf('%') != -1 ? height : ( height + 'px' ) ;
+			}
 		}
 	}
 	return oImg ;
@@ -441,6 +458,21 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
 				oImg.setAttribute( '_fckvideo', 'true', 0 ) ;
 				embed.parentNode.insertBefore( oImg, embed ) ;
 				embed.parentNode.removeChild( embed ) ;			
+			}
+		}
+
+		// For flv player, SWFObject attaching tecnique.
+		var divs = document.getElementsByTagName( 'div' ) ; 
+		var div;
+		var i = divs.length - 1 ; 
+		while ( i >= 0 && ( div = divs[i--] ) )
+		{
+			if ( FCK.is_video( div ) )
+			{
+				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', div.cloneNode(true) ) ;
+				oImg.setAttribute( '_fckvideo', 'true', 0 ) ;
+				div.parentNode.insertBefore( oImg, div ) ;
+				div.parentNode.removeChild( div ) ;			
 			}
 		}
 	} ;
@@ -678,6 +710,18 @@ FCK.is_video = function ( tag )
 				flashvars = flashvars ? flashvars.toLowerCase() : '' ;
 
 				if ( /\.flv/i.test( flashvars ) )
+				{
+					return true ;
+				}
+			}
+		}
+
+		// This is for the specific flv player and SWFObject technique for attaching multimedia.
+		if ( tag.nodeName.IEquals( 'div' ) )
+		{
+			if ( tag.id )
+			{
+				if ( tag.id.match( /^player[0-9]*-parent$/ ) )
 				{
 					return true ;
 				}

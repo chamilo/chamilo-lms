@@ -28,7 +28,7 @@ $language_file= 'gradebook';
 $cidReset= true;
 $_in_course = false;
 //make sure the destination for scripts is index.php instead of gradebook.php
-require_once ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $_SESSION['gradebook_dest'] = 'gradebook.php';
 $this_section = SECTION_MYGRADEBOOK;
 require_once ('lib/be.inc.php');
@@ -401,8 +401,19 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 			'name' => get_lang('Gradebook')
 		);
 		Display :: display_header(get_lang('SearchResults'));
-	} else{
-		Display :: display_header(get_lang('Gradebook'));
+	} else {
+			$interbreadcrumb[]= array (
+				'url' => $_SESSION['gradebook_dest'],
+				'name' => get_lang('Gradebook')
+			);	
+
+		if ((isset($_GET['selectcat']) && $_GET['selectcat']>0)) {
+			$interbreadcrumb[]= array (
+				'url' => $_SESSION['gradebook_dest'].'?selectcat=0',
+				'name' => get_lang('Details')
+			);	
+		}
+	 Display :: display_header('');
 	}
 }
 

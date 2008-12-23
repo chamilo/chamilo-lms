@@ -46,23 +46,23 @@ if (!api_is_allowed_to_create_course()) {
 if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 	if (isset ($_GET['studentoverview'])) {
 		$interbreadcrumb[]= array (
-			'url' => 'gradebook.php?selectcat=' . Security::remove_XSS($_GET['selectcat']),
+			'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
 			'name' => get_lang('Gradebook')
 		);
 		Display :: display_header(get_lang('FlatView'));
 	} elseif (isset ($_GET['search'])) {
 		$interbreadcrumb[]= array (
-			'url' => 'gradebook.php?selectcat=' . Security::remove_XSS($_GET['selectcat']),
+			'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
 			'name' => get_lang('Gradebook')
 		);
 		Display :: display_header(get_lang('SearchResults'));
 	} else {
 		$interbreadcrumb[]= array (
-			'url' => 'index.php?',
+			'url' => $_SESSION['gradebook_dest'].'?',
 			'name' => get_lang('Gradebook'));
 		
 		$interbreadcrumb[]= array (
-			'url' => 'index.php?&selectcat='.Security::remove_XSS($_GET['selectcat']),
+			'url' => $_SESSION['gradebook_dest'].'?&selectcat='.Security::remove_XSS($_GET['selectcat']),
 			'name' => get_lang('Details'));
 
 		Display :: display_header('');
@@ -162,8 +162,7 @@ if ($my_api_cidreq=='') {
 	$my_api_cidreq='cidReq='.$my_category['course_code'];
 }
 ?>
-<a href="../gradebook/index.php?<?php echo $my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"><< <?php echo get_lang('Back') ?>
-<!--<a href="/main/gradebook/index.php?<?php echo $my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"><< <?php echo get_lang('Back') ?></a>-->
+<a href="<?php echo $_SESSION['gradebook_dest'].'?'.$my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"><< <?php echo get_lang('Back') ?>
 <form method="post" action="gradebook_edit_all.php?<?php echo $my_api_cidreq ?>&selectcat=<?php echo $category_id?>">
 <table class="data_table">
 		 <tr class="row_odd">

@@ -571,11 +571,15 @@ FCK.ContextMenu.RegisterListener( {
 			{
 				case 'embedded_video' :
 					menu.AddSeparator() ;
-					menu.AddItem( 'EmbedMovies', FCKLang.DlgMP3Title, FCKConfig.PluginsPath + 'fckEmbedMovies/embedmovies.gif' ) ;
+					menu.AddItem( 'EmbedMovies', FCKLang.DlgEmbedMoviesTooltip, FCKConfig.PluginsPath + 'fckEmbedMovies/embedmovies.gif' ) ;
 					break ;
 				case 'youtube' :
 					menu.AddSeparator() ;
-					menu.AddItem( 'YouTube', FCKLang.DlgMP3Title, FCKConfig.PluginsPath + 'youtube/youtube.gif' ) ;
+					menu.AddItem( 'YouTube', FCKLang.YouTubeTip, FCKConfig.PluginsPath + 'youtube/youtube.gif' ) ;
+					break ;
+				case 'flv' :
+					menu.AddSeparator() ;
+					menu.AddItem( 'flvPlayer', FCKLang.DlgFLVPlayerTitle, FCKConfig.PluginsPath + 'flvPlayer/flvPlayer.gif' ) ;
 					break ;
 				default :
 					break ;
@@ -627,6 +631,9 @@ FCK.RegisterDoubleClickHandler(
 					break ;
 				case 'youtube' :
 					FCKCommands.GetCommand( 'YouTube' ).Execute() ;
+					break ;
+				case 'flv':
+					FCKCommands.GetCommand( 'flvPlayer' ).Execute() ;
 					break ;
 				default :
 					break ;
@@ -739,6 +746,18 @@ FCK.get_video_type = function ( img )
 	if ( !tag )
 	{
 		return false ;
+	}
+
+	// This is for the specific flv player and SWFObject technique for attaching multimedia.
+	if ( tag.nodeName.IEquals( 'div' ) )
+	{
+		if ( tag.id )
+		{
+			if ( tag.id.match( /^player[0-9]*-parent$/ ) )
+			{
+				return 'flv' ;
+			}
+		}
 	}
 
 	if ( !tag.src )

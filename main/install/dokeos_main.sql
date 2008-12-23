@@ -249,8 +249,9 @@ INSERT INTO course_module VALUES
 (23,'course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'),
 (24,'survey','survey/survey_list.php','survey.gif',2,1,'basic'),
 (25,'wiki','wiki/index.php','wiki.gif',2,3,'basic'),
-(26,'gradebook','gradebook/index.php','gradebook.gif',2,2,'basic');
-(27,'glossary','glossary/index.php','file_txt.gif',2,1,'basic');
+(26,'gradebook','gradebook/index.php','gradebook.gif',2,2,'basic'),
+(27,'glossary','glossary/index.php','glossary.gif',2,1,'basic'),
+(28,'notebook','notebook/index.php','notebook.gif',2,1,'basic');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE course_module ENABLE KEYS */;
 
@@ -627,7 +628,8 @@ VALUES
 ('course_create_active_tools','gradebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Gradebook'),
 ('allow_users_to_create_courses',NULL,'radio','Platform','true','AllowUsersToCreateCoursesTitle','AllowUsersToCreateCoursesComment',NULL,NULL),
 ('course_create_active_tools','survey','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Survey'),
-('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary');
+('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary'),
+('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook');
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;

@@ -139,6 +139,7 @@ define('TOOL_SURVEY','survey');
 define('TOOL_WIKI','wiki');
 define('TOOL_GLOSSARY','glossary');
 define('TOOL_GRADEBOOK','gradebook');
+define('TOOL_NOTEBOOK','notebook');
 
 // CONSTANTS defining dokeos sections
 define('SECTION_CAMPUS', 'mycampus');
@@ -1387,12 +1388,12 @@ function is_allowed_to_edit() {
 *	@version 1.1, February 2004
 *	@return boolean, true: the user has the rights to edit, false: he does not
 */
-function api_is_allowed_to_edit($tutor=false,$coach=false) {
-	$is_courseAdmin = api_is_course_admin() || api_is_platform_admin();
+function api_is_allowed_to_edit($tutor=false,$coach=false) {	
+	$is_courseAdmin = api_is_course_admin() || api_is_platform_admin() || api_is_coach();
 	if(!$is_courseAdmin && $tutor == true) {	//if we also want to check if the user is a tutor...
 		$is_courseAdmin = $is_courseAdmin || api_is_course_tutor();
 	}
-	if(!$is_courseAdmin && $coach == true) {	//if we also want to check if the user is a coach...
+	if(!$is_courseAdmin && $coach == true) {	//if we also want to check if the user is a coach...';
 		$is_courseAdmin = $is_courseAdmin || api_is_course_coach();
 	}	
 	if(api_get_setting('student_view_enabled') == 'true') {	//check if the student_view is enabled, and if so, if it is activated
@@ -1652,27 +1653,32 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 	$to_user_id = Database::escape_string($to_user_id);
 	$start_visible = Database::escape_string($start_visible);
 	$end_visible = Database::escape_string($end_visible);
-
+	$to_filter = "";
 	$time = time();
 	$time = date("Y-m-d H:i:s", $time);
 	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$_course['dbName']);
-	if ($to_user_id <= 0)
-		$to_user_id = NULL; //no to_user_id set
+	if ($to_user_id <= 0) {
+		$to_user_id = NULL;//no to_user_id set
+	} 
 	$start_visible = ($start_visible == 0) ? "0000-00-00 00:00:00" : $start_visible;
 	$end_visible = ($end_visible == 0) ? "0000-00-00 00:00:00" : $end_visible;
 	// set filters for $to_user_id and $to_group_id, with priority for $to_user_id
 	$filter = "tool='$tool' AND ref='$item_id'";
-	if ($item_id == "*")
-		$filter = "tool='$tool' AND visibility<>'2'"; // for all (not deleted) items of the tool
+	if ($item_id == "*") {
+			$filter = "tool='$tool' AND visibility<>'2'"; // for all (not deleted) items of the tool
+	}
 	// check if $to_user_id and $to_group_id are passed in the function call
 	// if both are not passed (both are null) then it is a message for everybody and $to_group_id should be 0 !
-	if (is_null($to_user_id) && is_null($to_group_id))
+	if (is_null($to_user_id) && is_null($to_group_id)) {
 		$to_group_id = 0;
-	if (!is_null($to_user_id))
+	}
+	if (!is_null($to_user_id)) {
 		$to_filter = " AND to_user_id='$to_user_id'"; // set filter to intended user
-	else
-		if (!is_null($to_group_id) and $to_group_id == strval(intval($to_group_id)))
+	} else {
+		if (!is_null($to_group_id) and $to_group_id == strval(intval($to_group_id))) {
 			$to_filter = " AND to_group_id='$to_group_id'"; // set filter to intended group
+		}
+	}
 	// update if possible
 	$set_type = "";
 	switch ($lastedit_type) {
@@ -1706,12 +1712,12 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 	$res = mysql_query($sql);
 	// insert if no entries are found (can only happen in case of $lastedit_type switch is 'default')
 	if (mysql_affected_rows() == 0) {
-		if (!is_null($to_user_id)) // $to_user_id has more priority than $to_group_id
-		{
+		if (!is_null($to_user_id)) {
+			// $to_user_id has more priority than $to_group_id
 			$to_field = "to_user_id";
 			$to_value = $to_user_id;
-		} else // $to_user_id is not set
-			{
+		} else {
+			// $to_user_id is not set	
 			$to_field = "to_group_id";
 			$to_value = $to_group_id;
 		}
@@ -1719,8 +1725,9 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 						   		  			(tool,   ref,       insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id,$to_field,  visibility,   start_visible,   end_visible)
 						         	VALUES 	('$tool','$item_id','$time',    '$user_id',	   '$time',		 '$lastedit_type','$user_id',	   '$to_value','$visibility','$start_visible','$end_visible')";
 		$res = mysql_query($sql);
-		if (!$res)
+		if (!$res) {
 			return FALSE;
+		}
 	}
 	return TRUE;
 }

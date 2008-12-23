@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 17309 2008-12-15 23:32:23Z iflorespaz $
+*  	@version $Id: work.php 17438 2008-12-23 19:12:48Z iflorespaz $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -819,12 +819,16 @@ if (!empty($_POST['submitWork']) && !empty($is_course_member) && !empty($check))
 	else {
 		//Get the author ID for that document from the item_property table
 		$is_author = false;
-		$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" . mysql_real_escape_string($id);
-		$author_qry = api_sql_query($author_sql, __FILE__, __LINE__);
-		if (Database :: num_rows($author_qry) == 1) {
-			$is_author = true;
+		if ($id<>'') {
+			$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" . mysql_real_escape_string($id);
+			
+			$author_qry = api_sql_query($author_sql, __FILE__, __LINE__);
+			if (Database :: num_rows($author_qry) == 1) {
+				$is_author = true;
+			}
+		} else {
+			Display::display_error_message(get_lang('IsNotPosibleSaveTheDocument'));
 		}
-
 		if ($id && ($is_allowed_to_edit or $is_author)) {
 			if (!$title) {
 				$title = basename($newWorkUrl);

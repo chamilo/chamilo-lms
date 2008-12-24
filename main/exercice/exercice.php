@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 17317 2008-12-16 14:05:45Z cfasanando $
+<?php // $Id: exercice.php 17450 2008-12-24 10:00:19Z pcool $
 
 /*
 ==============================================================================
@@ -473,30 +473,34 @@ if (!empty($hpchoice)) {
 		}
 }
 
-if ($show == 'test') {
+
+// the actions
+echo '<div class="actions">';
+
+	// display the next and previous link if needed
+	$from=$page*$limitExPage;
+	$sql="SELECT count(id) FROM $TBL_EXERCICES";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	list($nbrexerc) = Database::fetch_array($res);
+	HotPotGCt($documentPath,1,$_user['user_id']);
+	// only for administrator
+	if($is_allowedToEdit)
+	{
+		if($show == 'test')
+		{
 		$sql="SELECT id,title,type,active,description, results_disabled FROM $TBL_EXERCICES WHERE active<>'-1' ORDER BY title LIMIT ".(int)$from.",".(int)($limitExPage+1);
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 	}
-} elseif($show == 'test') {// only for students
+	}
+	// only for students
+	elseif($show == 'test')
+	{
 	$sql="SELECT id,title,type,description, results_disabled FROM $TBL_EXERCICES WHERE active='1' ORDER BY title LIMIT ".(int)$from.",".(int)($limitExPage+1);
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-}
-
-if ($show == 'test') {
-	$nbrExercises=Database::num_rows($result);
-
-	echo '<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">'.
-		'<tr>';
-
-	if (($is_allowedToEdit) and ($origin != 'learnpath')) {
-		echo '<td width="50%" nowrap="nowrap">'.
-			'<img src="../img/new_test.gif" alt="new test" align="absbottom">&nbsp;<a href="exercise_admin.php?'.api_get_cidreq().'">'.get_lang('NewEx').'</a>'.
-			' | <img src="../img/jqz.jpg" alt="HotPotatoes" valign="ABSMIDDLE">&nbsp;<a href="hotpotatoes.php">'.get_lang('ImportHotPotatoesQuiz').'</a>'.
-			'</td>'.
-			'<td width="50%" align="right">';
-	} else {
-		echo '<td align="right">';
 	}
+	if($show == 'test')
+	{
+		$nbrExercises=Database::num_rows($result);
 
 	//get HotPotatoes files (active and inactive)
 	$res = api_sql_query ("SELECT *
@@ -512,32 +516,175 @@ if ($show == 'test') {
 					AND ip.visibility='1'", __FILE__,__LINE__);
 	$nbrActiveTests = Database::num_rows($res);
 
-	if($is_allowedToEdit) {//if user is allowed to edit, also show hidden HP tests
+		if($is_allowedToEdit)
+		{//if user is allowed to edit, also show hidden HP tests
 		$nbrHpTests = $nbrTests;
-	} else {
+		}
+		else
+		{
 		$nbrHpTests = $nbrActiveTests;
 	}
 	$nbrNextTests = $nbrexerc-$nbrHpTests-(($page*$limitExPage));
 
 
+		echo '<span style="float:right">';
 	//show pages navigation link for previous page
-	if($page) {
-		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&page=".($page-1)."\">&lt;&lt; ",get_lang("PreviousPage")."</a> | ";
-	} elseif($nbrExercises+$nbrNextTests > $limitExPage) {
-		echo "&lt;&lt; ",get_lang("PreviousPage")." | ";
+		if($page)
+		{
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;page=".($page-1)."\">".Display::return_icon('previous.gif').get_lang("PreviousPage")."</a> | ";
+		}
+		elseif($nbrExercises+$nbrNextTests > $limitExPage)
+		{
+				echo Display::return_icon('previous.gif').get_lang('PreviousPage')." | ";
 	}
 
 	//show pages navigation link for previous page
-	if($nbrExercises+$nbrNextTests > $limitExPage) {
-		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&page=".($page+1)."\">&gt;&gt; ",get_lang("NextPage")."</a>";
-
-	} elseif($page) {
-		echo get_lang("NextPage") . " &gt;&gt;";
+		if($nbrExercises+$nbrNextTests > $limitExPage)
+		{
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;page=".($page+1)."\">".get_lang("NextPage").Display::return_icon('next.gif')."</a>";
+	
+		}
+		elseif($page)
+		{
+				echo get_lang("NextPage") . Display::return_icon('next.gif');
+		}
+		echo '</span>';
 	}
 
-	echo '</td>',
-			'</tr>',
-			'</table>';
+	if (($is_allowedToEdit) and ($origin != 'learnpath'))
+	{
+		echo '<a href="exercise_admin.php?'.api_get_cidreq().'">'.Display::return_icon('new_test.gif',get_lang('NewEx')).get_lang('NewEx').'</a>';
+		echo '<a href="hotpotatoes.php">'.Display::return_icon('jqz.jpg',get_lang('ImportHotPotatoesQuiz')).get_lang('ImportHotPotatoesQuiz').'</a>';
+		echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=result').'">'.Display::return_icon('show_test_results.gif',get_lang('ImportHotPotatoesQuiz')).get_lang("Results").'</a>';
+
+		// the actions for the statistics
+		if($show == 'result')
+		{
+			// the form
+			if(api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach())
+			{
+				if($_SESSION['export_user_fields']==false)
+				{
+					$alt = get_lang('ExportWithUserFields');
+					$extra_user_fields = '<input type="hidden" name="export_user_fields" value="export_user_fields">';
+				}
+				else
+				{
+					$alt = get_lang('ExportWithoutUserFields');
+					$extra_user_fields =  '<input type="hidden" name="export_user_fields" value="do_not_export_user_fields">';
+				}
+				echo '<a href="#" onclick="document.form1a.submit();">'.Display::return_icon('excel.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
+				echo '<a href="#" onclick="document.form1b.submit();">'.Display::return_icon('excel.gif',get_lang('ExportAsXLS')).get_lang('ExportAsXLS').'</a>';
+				echo '<a href="#" onclick="document.form1c.submit();">'.Display::return_icon('synthese_view.gif',$alt).$alt.'</a>';			
+				echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=test').'">'.Display::return_icon('quiz.gif').get_lang('BackToExercisesList').'</a>';
+				echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
+				echo '<input type="hidden" name="export_report" value="export_report">';
+				echo '<input type="hidden" name="export_format" value="csv">';
+				echo '</form>';
+				echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
+				echo '<input type="hidden" name="export_report" value="export_report">';
+				echo '<input type="hidden" name="export_format" value="xls">';
+				echo '</form>';
+				echo '<form id="form1c" name="form1c" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
+				echo $extra_user_fields;
+				echo '</form>';
+
+			}	
+		}
+	}
+	
+	if ($_configuration['tracking_enabled']) 
+	{
+		if ($show == 'result') 
+		{
+			if (!function_exists('make_select')) 
+			{
+				function make_select($name,$values,$checked='')
+				{
+					$output .= '<select name="'.$name.'" >';
+ 					foreach($values as $key => $value) 
+ 					{
+ 						$output .= '<option value="'.$key.'" '.(($checked==$key)?'selected="selected"':'').'>'.$value.'</option>';
+ 					}
+ 					$output .= '</select>';
+ 				return $output;
+				}
+			}
+
+			if (!function_exists('make_select_users')) 
+			{
+				function make_select_users($name,$values,$checked='')
+				{
+					$output .= '<select name="'.$name.'" >';
+					$output .= '<option value="all">'.get_lang('EveryBody').'</option>';
+	 				foreach($values as $key => $value) 
+	 				{
+	 					$output .= '<option value="'.$key.'" '.(($checked==$key)?'selected="selected"':'').'>'.$value.'</option>';
+	 				}
+	 				$output .= '</select>';
+	 				return $output;
+				}
+			}
+
+			if (api_is_allowed_to_edit()) 
+			{
+				if (!$_REQUEST['filter']) 
+				{
+					$filter_by_not_revised = true;
+					$filter=1;
+				}
+				$filter = (int)$_REQUEST['filter'];
+
+
+				switch($filter)
+				{
+				 case 1:
+						$filter_by_not_revised = true;
+						break;
+			 	 case 2:
+						$filter_by_revised = true;
+						break;
+				 default:
+				 		null;
+				}
+				$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.api_get_course_id().'&show=result">';
+				$form_filter .= make_select('filter',array(1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised')),$filter);
+				$form_filter .= '<input type="submit" value="'.get_lang('FilterExercices').'"> </form>';
+				echo $form_filter;
+			}
+		}
+
+		if (api_is_allowed_to_edit()) 
+		{
+			$user_count = count($user_list_name);
+			if ($user_count >0 ) {
+				$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.api_get_course_id().'&show=result">';
+				$user_list_for_select =array();
+				for ($i=0;$i<$user_count;$i++) {
+					$user_list_for_select[$user_list_id[$i]]=$user_list_name[$i];
+				}
+				$form_filter .= make_select_users('filter_by_user',$user_list_for_select,(int)$_REQUEST['filter_by_user']);
+				$form_filter .= '<input type="hidden" name="filter" value="'.$filter.'">';
+				$form_filter .= '<input type="submit" value="'.get_lang('FilterExercicesByUsers').'"></form>';
+				echo $form_filter;
+			}
+		}		
+		
+	}	
+echo '</div>'; // closing the actions div
+
+
+
+if ($show == 'test') {
+		$sql="SELECT id,title,type,active,description, results_disabled FROM $TBL_EXERCICES WHERE active<>'-1' ORDER BY title LIMIT ".(int)$from.",".(int)($limitExPage+1);
+		$result=api_sql_query($sql,__FILE__,__LINE__);
+	}
+} elseif($show == 'test') {// only for students
+	$sql="SELECT id,title,type,description, results_disabled FROM $TBL_EXERCICES WHERE active='1' ORDER BY title LIMIT ".(int)$from.",".(int)($limitExPage+1);
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+}
+
+if ($show == 'test') {
 
 ?>
 <table class="data_table">
@@ -779,93 +926,15 @@ $i++;
 	?>
 </table>
 <?php
-} else {
-	if ($origin != 'learnpath') {
-		echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=test').'">&lt;&lt; '.get_lang('Back').'</a>';
-	}
-}// end if($show == 'test')
+}
 
 /*****************************************/
 /* Exercise Results (uses tracking tool) */
 /*****************************************/
 
 // if tracking is enabled
-if ($_configuration['tracking_enabled']) {
-
-	if ($show == 'result') {
-
-		if (!function_exists('make_select')) {
-			function make_select($name,$values,$checked=''){
-				$output .= '<select name="'.$name.'" >';
- 				foreach($values as $key => $value) {
- 					$output .= '<option value="'.$key.'" '.(($checked==$key)?'selected="selected"':'').'>'.$value.'</option>';
- 				}
- 					$output .= '</select>';
- 				return $output;
-			}
-		}
-
-		if (!function_exists('make_select_users')) {
-			function make_select_users($name,$values,$checked=''){
-				$output .= '<select name="'.$name.'" >';
-				$output .= '<option value="all">'.get_lang('EveryBody').'</option>';
- 				foreach($values as $key => $value) {
- 					$output .= '<option value="'.$key.'" '.(($checked==$key)?'selected="selected"':'').'>'.$value.'</option>';
- 				}
- 					$output .= '</select>';
- 				return $output;
-			}
-		}
-
-	if (api_is_allowed_to_edit()) {
-		if (!$_REQUEST['filter']) {
-			$filter_by_not_revised = true;
-			$filter=1;
-		}
-		$filter = (int)$_REQUEST['filter'];
-
-
-		switch($filter){
-		 case 1:
-				$filter_by_not_revised = true;
-				break;
-	 	 case 2:
-				$filter_by_revised = true;
-				break;
-		 default:
-		 		null;
-		}
-		$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.api_get_course_id().'&show=result">';
-		$form_filter .= make_select('filter',array(1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised')),$filter);
-		$form_filter .= '<input type="submit" value="'.get_lang('FilterExercices').'"> </form>';
-		echo $form_filter;
-	}
-
-		// the form
-		if(api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-
-			echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
-			echo '<input type="hidden" name="export_report" value="export_report">';
-			echo '<input type="hidden" name="export_format" value="csv">';
-			echo '</form>';
-			echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
-			echo '<input type="hidden" name="export_report" value="export_report">';
-			echo '<input type="hidden" name="export_format" value="xls">';
-			echo '</form>';
-			echo '<form id="form1c" name="form1c" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
-			if($_SESSION['export_user_fields']==false) {
-				$alt = get_lang('ExportWithUserFields');
-				echo '<input type="hidden" name="export_user_fields" value="export_user_fields">';
-			} else {
-				$alt = get_lang('ExportWithoutUserFields');
-				echo '<input type="hidden" name="export_user_fields" value="do_not_export_user_fields">';
-			}
-			echo '</form>';
-			echo '<a class="quiz_export_link" href="#" onclick="document.form1a.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif" alt="'.get_lang('ExportAsCSV').'">&nbsp;'.get_lang('ExportAsCSV').'</a>';
-			echo '<a class="quiz_export_link" href="#" onclick="document.form1b.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif" alt="'.get_lang('ExportAsXLS').'">&nbsp;'.get_lang('ExportAsXLS').'</a>';
-			echo '<a class="quiz_export_link" href="#" onclick="document.form1c.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'synthese_view.gif" alt="'.$alt.'">&nbsp;'.$alt.'</a>';
-			echo '<br /><br />';
-		}
+if ($_configuration['tracking_enabled'] AND ($show == 'result') ) 
+{
 		?>
 		<table class="data_table">
 		 <tr class="row_odd">
@@ -1049,28 +1118,8 @@ if ($_configuration['tracking_enabled']) {
 		</table>
 		<br />
 		<?php
-		if (api_is_allowed_to_edit()) {
-			$user_count = count($user_list_name);
-			if ($user_count >0 ) {
-				$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.api_get_course_id().'&show=result">';
-				$user_list_for_select =array();
-				for ($i=0;$i<$user_count;$i++) {
-					$user_list_for_select[$user_list_id[$i]]=$user_list_name[$i];
-				}
-				$form_filter .= make_select_users('filter_by_user',$user_list_for_select,(int)$_REQUEST['filter_by_user']);
-				$form_filter .= '<input type="hidden" name="filter" value="'.$filter.'">';
-				$form_filter .= '<input type="submit" value="'.get_lang('FilterExercicesByUsers').'"></form>';
-				echo $form_filter;
-			}
-		}
-		} else {
-			echo '<p><img src="'.api_get_path(WEB_IMG_PATH).'show_test_results.gif" align="absbottom">&nbsp;<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=result').'">'.get_lang("Results").' &gt;&gt;</a></p>';
+}
 
-		}
-	// end if($show == 'result')
-
-
-}// end if tracking is enabled
 
 
 

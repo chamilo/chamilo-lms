@@ -43,7 +43,7 @@
 		ImageManager_click(FCK, null)	
 	}
 
-    // Open the Placeholder dialog on double click.
+    // Open the Image properties dialog on double click.
     function ImageManager_doubleClick (img) {
 
 		//if ( img.tagName == 'IMG' ) FCKCommands.GetCommand( 'ImageManager' ).Execute() ;
@@ -53,7 +53,8 @@
 			!img.getAttribute( '_fckmp3' ) &&
 			!img.getAttribute( '_fckvideo' ) )
 		{
-			FCKCommands.GetCommand( 'ImageManager' ).Execute() ;
+			//FCKCommands.GetCommand( 'ImageManager' ).Execute() ;
+			FCKCommands.GetCommand( 'Image' ).Execute() ;
 		}
 	}
 
@@ -61,6 +62,18 @@
 
 	// starting ImageManager
 	function ImageManager_click(editor, sender) {
+
+		// If an existing image has been selected let us use the Image Properties dialog.
+		var image = FCK.Selection.GetSelectedElement() ;
+		if ( image )
+		{
+			if ( image.nodeName.IEquals( 'img' ) )
+			{
+				FCKCommands.GetCommand( 'Image' ).Execute() ;
+				return ;
+			}
+		}
+
 		var wArgs = {};
 		if(FCKSelection.GetType() == 'Control') {
 			var sElm = FCK.Selection.GetSelectedElement();

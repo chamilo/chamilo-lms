@@ -528,7 +528,9 @@ FCK.ContextMenu.RegisterListener( {
 		{
 			// Grouping all image-related commands at the bottom.
 			menu.AddSeparator();
-			menu.AddItem( 'Image', FCKLang.ImageProperties, 37 ) ;
+			// If an existing image has been selected, then Image Manager actually activates the Image Properties dialog.
+			// These two dialogs are united under single button.
+			//menu.AddItem( 'Image', FCKLang.ImageProperties, 37 ) ;
 			menu.AddItem( 'ImageManager', FCKLang.ImageProperties, FCKConfig.PluginsPath + 'ImageManager/icon.gif' ) ;
 			// The "imgmap" plugin should add its own icon here.
 		}

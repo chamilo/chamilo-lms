@@ -36,15 +36,17 @@ $icon_delete ='delete.gif';
 echo '<a href="index.php?action=addnotebook">'.Display::return_icon($icon_add,get_lang('NewNotebook')).get_lang('NewNotebook').'</a>';
 
 if (isset($_REQUEST['action']) && $_REQUEST['action']=='addnotebook') {
-	echo '<div class="notebook-add-form" id="notebook-add">';			
+	echo '<table class="notebook-add-form" id="notebook-add">';	
+	echo '<tr><td>';		
 	echo '<form name="frm_add_notebook" method="post">';	
 	echo '<input type="hidden" name="sec_token" value="'.$stok.'" />';
 	echo '<input type="hidden" name="action" value="addnotebook">';
-	echo '<div class="add-desc-notebook"><textarea class="style-add-textarea" rows="4" cols="95" name="description" maxlength="255" onfocus="this.value=\'\';document.getElementById(\'msg_add_error\').style.display=\'none\';"><<'.get_lang("WriteHereYourNote").'>></textarea></div>';
+	echo '<div class="add-desc-notebook"><textarea class="style-add-textarea" rows="5" cols="80" name="description" maxlength="255" onfocus="this.value=\'\';document.getElementById(\'msg_add_error\').style.display=\'none\';"><<'.get_lang("WriteHereYourNote").'>></textarea></div>';
 	echo '<div class="action_notebook"><input type="button" value="'.get_lang('Ok').'" onclick="return add_notebook()"><input type="button" value="'.get_lang('Cancel').'" onclick="document.getElementById(\'notebook-add\').style.display = \'none\';document.getElementById(\'msg_add_error\').style.display=\'none\';"></div>';
 	echo '<span class="msg_error" id="msg_add_error"></span>';
-	echo '</form>';				
-	echo '</div>';
+	echo '</form>';	
+	echo '</td></tr>';			
+	echo '</table>';
 }
  
 /*======================================
@@ -97,7 +99,7 @@ echo '<div>';
 $counter = 1;
 while ($row_notebook_list=Database::fetch_array($notebook_list)){
 	
-	$title= get_lang("Note").'&nbsp;'.$counter;
+	$title= get_lang('Note').'&nbsp;'.$counter;
 	$notebook_id = $_REQUEST['notebook_id'];
 	echo '<div class="notebook-list">';
 	echo '<div class="note-number">';
@@ -107,7 +109,7 @@ while ($row_notebook_list=Database::fetch_array($notebook_list)){
 		
 	if ((isset($_REQUEST['action']) && $_REQUEST['action']=='edit_notebook') && ($row_notebook_list['notebook_id'] == $notebook_id)){
 		echo '<div class="notebook-edit-form"><a name="note-'.$row_notebook_list['notebook_id'].'"></a>';
-		echo '<form name="frm_edit_notebook" action="index.php" method="post"><input type="hidden" name="upd_notebook_id" value="'.$notebook_id.'"';
+		echo '<form name="frm_edit_notebook" action="index.php" method="post"><input type="hidden" name="upd_notebook_id" value="'.$notebook_id.'" />';
 		echo '<input type="hidden" name="sec_token" value="'.$stok.'" />';				
 		echo '<div class="upd-desc-notebook"><textarea class="style-edit-textarea" rows="4" cols="120"  name="upd_description" maxlength="255" onfocus="this.select()">'.$row_notebook_list['description'].'</textarea></div>';
 		echo '<div class="action_notebook"><input type="button" value="'.get_lang('Ok').'" onclick="edit_notebook()"><input type="button" value="'.get_lang('Cancel').'" onclick="edit_cancel_notebook()"></div>';

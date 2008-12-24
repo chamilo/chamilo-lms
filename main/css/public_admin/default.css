@@ -1720,8 +1720,6 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
     margin: 1em;
     background-color: #c3d9ff;
     padding: 1em  1em;
-    width: 48%;
-    -moz-border-radius: 0.5em;
 }
 .style-add-textarea {
     background-color: #f2f5f8;
@@ -1745,8 +1743,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 .notebook-list{
     margin: 1em 1em 0em 1em;
     background-color: #79b;
-    padding: 0.3em  0.3em;
-    width: 70%;    
+    padding: 0.3em  0.3em; 
     -moz-border-radius: 0.5em;
 }
 

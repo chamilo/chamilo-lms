@@ -2282,8 +2282,6 @@ input.forms	{
     margin: 1em;
     background-color: #c3d9ff;
     padding: 1em  1em;
-    width: 48%;
-    -moz-border-radius: 0.5em;
 }
 .style-add-textarea {
     background-color: #f2f5f8;
@@ -2308,7 +2306,6 @@ input.forms	{
     margin: 1em 1em 0em 1em;
     background-color: #79b;
     padding: 0.3em  0.3em;
-    width: 70%;    
     -moz-border-radius: 0.5em;
 }
 

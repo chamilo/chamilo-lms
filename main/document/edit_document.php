@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 16639 2008-10-29 08:39:49Z elixir_inter $
+<?php // $Id: edit_document.php 17460 2008-12-24 22:30:58Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -589,7 +589,9 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_
 			
 	$defaults['texte'] = $texte;
 			
-	if($extension == 'htm' || $extension == 'html')
+	//if($extension == 'htm' || $extension == 'html')
+	// HotPotatoes tests are html files, but they should not be edited in order their functionality to be preserved.
+	if(($extension == 'htm' || $extension == 'html') && stripos($dir, '/HotPotatoes_files') === false)
 	{
 		if (empty($readonly) && $readonly==0)
 		{	

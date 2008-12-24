@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 17320 2008-12-16 14:47:36Z cfasanando $
+<?php // $Id: document.inc.php 17459 2008-12-24 21:11:18Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -66,7 +66,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 	}
 	else
 	{
-		if (!isset($folders)){
+		if (is_array($folders)){
 			foreach($folders as $folder)
 			{
 				$folder_titles[$folder] = basename($folder);	

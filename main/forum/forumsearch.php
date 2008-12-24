@@ -64,6 +64,11 @@ include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 include('forumfunction.inc.php');
 include('forumconfig.inc.php');
 
+//are we in a lp ?
+$origin = '';
+if (isset($_GET['origin'])) {
+	$origin =  Security::remove_XSS($_GET['origin']);
+}
 
 // name of the tool
 $nameTools=get_lang('Forum');
@@ -73,7 +78,11 @@ $interbreadcrumb[]=array('url' => 'index.php','name' => $nameTools);
 $interbreadcrumb[]=array('url' => 'forumsearch.php','name' => get_lang('ForumSearch'));
 
 // Display the header
-Display :: display_header($nameTools);
+if ($origin=='learnpath') {
+	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
+} else {
+	Display :: display_header($nameTools);
+}
 
 // Display the tool title
 api_display_tool_title($nameTools);
@@ -88,5 +97,6 @@ event_access_tool(TOOL_FORUM);
 forum_search();
 
 // footer
-Display::display_footer();
-?>
+if ($origin!='learnpath') {
+	Display :: display_footer();
+}

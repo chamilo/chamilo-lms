@@ -163,7 +163,7 @@ if ($prev_id<0)
 }
 
 //first message img
-echo '<a title="'.get_lang('FirstMessage').'" href="viewthread.php?'.api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$prev_next_array[0]."\" $class>".$first_page_text."</a>";
+echo '<a title="'.get_lang('FirstMessage').'" href="viewthread.php?'.api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;origin=".$origin."&amp;post=".$prev_next_array[0]."\" $class>".$first_page_text."</a>";
 // prev message link 
 if ($href_prev==1)
 {
@@ -186,7 +186,7 @@ else
 echo '<a href='.$href_next.' '.$class_next.' >'.$next_message.'</a>';
 
 //last message img
-echo '<a title="'.get_lang('LastMessage').'" href="viewthread.php?'.api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$prev_next_array[$max-1]."\" $class>".$last_page_text."</a>";
+echo '<a title="'.get_lang('LastMessage').'" href="viewthread.php?'.api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;origin=".$origin."&amp;post=".$prev_next_array[$max-1]."\" $class>".$last_page_text."</a>";
 
 echo '</center>';
 
@@ -231,7 +231,7 @@ echo $rows[$display_post_id]['post_date'].'<br /><br />';
 // The course admin him/herself can do this off course always
 if (($current_forum['allow_edit']==1 AND $rows[$display_post_id]['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])))
 {
-	echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$rows[$display_post_id]['post_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
+	echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;origin=".$origin."&amp;post=".$rows[$display_post_id]['post_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
 }
 if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))
 {

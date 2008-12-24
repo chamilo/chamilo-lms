@@ -213,4 +213,6 @@ if (!empty($values) and isset($values['SubmitPost'])) {
 		FOOTER
 ==============================================================================
 */
-Display :: display_footer();
+if ($origin!='learnpath') {
+	Display :: display_footer();
+}

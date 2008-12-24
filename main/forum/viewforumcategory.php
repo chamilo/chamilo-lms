@@ -93,7 +93,7 @@ if(!api_is_allowed_to_edit(false,true)) {
 */
 $current_forum_category=get_forum_categories($_GET['forumcategory']);
 $interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),"name" => $nameTools);
-$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),"name" => prepare4display($current_forum_category['cat_title']));
+$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),"name" => prepare4display($current_forum_category['cat_title']));
 
 
 if (!empty($_GET['action']) && !empty($_GET['content'])) {	  
@@ -102,8 +102,18 @@ if (!empty($_GET['action']) && !empty($_GET['content'])) {
 	}
 }
 
-Display :: display_header(null);
-api_display_tool_title($nameTools);
+//are we in a lp ?
+$origin = '';
+if (isset($_GET['origin'])) {
+	$origin =  Security::remove_XSS($_GET['origin']);
+}
+
+if ($origin=='learnpath') {
+	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
+} else {
+	Display :: display_header(null);
+	api_display_tool_title($nameTools);
+}
 
 /*
 ------------------------------------------------------------------------------------------------------
@@ -307,7 +317,7 @@ if ($action_forums!='add') {
 				} else {
 					$session_displayed = '';
 				}
-				echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:''))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
+				echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:''))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
 				
 				//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 				// the number of topics and posts
@@ -359,4 +369,7 @@ if ($action_forums!='add') {
 		FOOTER
 ==============================================================================
 */
-Display :: display_footer();
+// footer
+if ($origin!='learnpath') {
+	Display :: display_footer();
+}

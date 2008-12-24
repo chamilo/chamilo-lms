@@ -1762,7 +1762,7 @@ function store_thread($values) {
 
 		if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit()) {
 			$message.=get_lang('MessageHasToBeApproved').'<br />';
-			$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
+			$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
 		} else {
 			$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
 			$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
@@ -2214,9 +2214,10 @@ function store_reply($values) {
 function show_edit_post_form($current_post, $current_thread, $current_forum, $form_values='') {
 	global $forum_setting;
 	global $_user;
+	global $origin;
 
 	// initiate the object
-	$form = new FormValidator('edit_post', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post']));
+	$form = new FormValidator('edit_post', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post']));
 
 	// settting the form elements
 	$form->addElement('hidden', 'post_id', $current_post['post_id']);
@@ -2300,6 +2301,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 function store_edit_post($values) {
 	global $table_threads;
 	global $table_posts;
+	global $origin;
 	// first we check if the change affects the thread and if so we commit the changes (sticky and post_title=thread_title are relevant)
 	if (array_key_exists('is_first_post_of_thread',$values) AND $values['is_first_post_of_thread']=='1') {
 		$sql="UPDATE $table_threads SET thread_title='".Database::escape_string($values['post_title'])."',
@@ -2342,8 +2344,8 @@ function store_edit_post($values) {
 	//update_added_resources('forum_post',$values['post_id']);
 
 	$message=get_lang('EditPostStored').'<br />';
-	$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'">'.get_lang('Forum').'</a><br />';
-	$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.$values['thread_id'].'&amp;post='.Security::remove_XSS($_GET['post']).'">'.get_lang('Message').'</a>';
+	$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'">'.get_lang('Forum').'</a><br />';
+	$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;thread='.$values['thread_id'].'&amp;post='.Security::remove_XSS($_GET['post']).'">'.get_lang('Message').'</a>';
 
 	session_unregister('formelements');
 	session_unregister('origin');
@@ -3009,13 +3011,14 @@ function prepare4display($input='') {
  * @version march 2008, dokeos 1.8.5
  */
 function forum_search() {
+	global $origin;
 	// initiate the object
-	$form = new FormValidator('forumsearch');
+	$form = new FormValidator('forumsearch','post','forumsearch.php?origin='.$origin.'');
 
 	// settting the form elements
 	$form->addElement('header', '', get_lang('ForumSearch'));
 	$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles"');
-	$form->addElement('static', 'search_information', '', get_lang('ForumSearchInformation'), $dissertation[$_GET['opleidingsonderdeelcode']]['code']);
+	$form->addElement('static', 'search_information', '', get_lang('ForumSearchInformation')/*, $dissertation[$_GET['opleidingsonderdeelcode']]['code']*/);
 	$form->addElement('submit', 'SubmitForumCategory', get_lang('Search'));
 
 	// setting the rules
@@ -3042,6 +3045,7 @@ function forum_search() {
  */
 function display_forum_search_results($search_term) {
 	global $table_categories, $table_forums, $table_threads, $table_posts; 
+	global $origin;
 	
 	// defining the search strings as an array
 	if (strstr($search_term,'+')) {
@@ -3086,10 +3090,10 @@ function display_forum_search_results($search_term) {
 		}
 		
 		if ($display_result == true) {
-			$search_results_item = '<li><a href="viewforumcategory.php?forumcategory='.$forum_list[$row['forum_id']]['forum_category'].'&amp;search='.urlencode($search_term).'">'.$forum_categories_list[$row['forum_id']['forum_category']]['cat_title'].'</a> > ';
-			$search_results_item .= '<a href="viewforum.php?forum='.$row['forum_id'].'&amp;search='.urlencode($search_term).'">'.$forum_list[$row['forum_id']]['forum_title'].'</a> > ';
+			$search_results_item = '<li><a href="viewforumcategory.php?forumcategory='.$forum_list[$row['forum_id']]['forum_category'].'&origin='.$origin.'&amp;search='.urlencode($search_term).'">'.$forum_categories_list[$row['forum_id']['forum_category']]['cat_title'].'</a> > ';
+			$search_results_item .= '<a href="viewforum.php?forum='.$row['forum_id'].'&amp;origin='.$origin.'&amp;search='.urlencode($search_term).'">'.$forum_list[$row['forum_id']]['forum_title'].'</a> > ';
 			//$search_results_item .= '<a href="">THREAD</a> > ';
-			$search_results_item .= '<a href="viewthread.php?forum='.$row['forum_id'].'&amp;thread='.$row['thread_id'].'&amp;search='.urlencode($search_term).'">'.$row['post_title'].'</a>';
+			$search_results_item .= '<a href="viewthread.php?forum='.$row['forum_id'].'&amp;origin='.$origin.'&amp;thread='.$row['thread_id'].'&amp;search='.urlencode($search_term).'">'.$row['post_title'].'</a>';
 			$search_results_item .= '<br />';
 			if (strlen($row['post_title']) > 200 ) {
 				$search_results_item .= substr(strip_tags($row['post_title']),0,200).'...';
@@ -3102,7 +3106,9 @@ function display_forum_search_results($search_term) {
 	}
 	echo '<div class="row"><div class="form_header">'.count($search_results).' '.get_lang('ForumSearchResults').'</div></div>';
 	echo '<ol>';
-	echo implode($search_results);
+	if($search_results)	{
+		echo implode($search_results);
+	}
 	echo '</ol>';
 }
 
@@ -3113,8 +3119,8 @@ function display_forum_search_results($search_term) {
  * @version April 2008, dokeos 1.8.5
  */
 function search_link() {
-	
-	$return = '<a href="forumsearch.php?'.api_get_cidreq().'&action=search"> '.Display::return_icon('search.gif', get_lang('Search')).' '.get_lang('Search').'</a>';
+	global $origin;
+	$return = '<a href="forumsearch.php?'.api_get_cidreq().'&action=search&origin='.$origin.'"> '.Display::return_icon('search.gif', get_lang('Search')).' '.get_lang('Search').'</a>';
 	if (!empty($_GET['search'])) {
 		$return .= ': '.Security::remove_XSS($_GET['search']).' ';
 		$url = api_get_self().'?';

@@ -145,8 +145,18 @@ $table_link 			= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 	Header
 -----------------------------------------------------------
 */
-Display :: display_header(null);
-api_display_tool_title($nameTools);
+//are we in a lp ?
+$origin = '';
+if (isset($_GET['origin'])) {
+	$origin =  Security::remove_XSS($_GET['origin']);
+}
+
+if ($origin=='learnpath') {
+	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
+} else {
+	Display :: display_header(null);
+	api_display_tool_title($nameTools);
+}
 //echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
 /*
 -----------------------------------------------------------
@@ -212,4 +222,6 @@ if (!empty($values) and $_POST['SubmitPost']) {
 	
 }
 // footer
-Display :: display_footer();
+if ($origin!='learnpath') {
+	Display :: display_footer();
+}

@@ -107,6 +107,7 @@ if(api_is_allowed_to_edit())
   }
 
   //include('content_makers.inc.php');
+  echo '<div class="actions">';
   echo	'<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.
 		'<img src="../img/wizard.gif" border="0" align="absmiddle" alt="'.get_lang('_add_learnpath').
 		'">&nbsp;'.get_lang('_add_learnpath').
@@ -118,6 +119,7 @@ if(api_is_allowed_to_edit())
 			echo  str_repeat('&nbsp;',3).'<a href="../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/powerpoint.gif" border="0" alt="'.get_lang("PowerPointConvert").'" align="absmiddle">&nbsp;'.get_lang("PowerPointConvert").'</a>';
        		echo  str_repeat('&nbsp;',3).'<a href="../upload/upload_word.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/word.gif" border="0" alt="'.get_lang("WordConvert").'" align="absmiddle">&nbsp;'.get_lang("WordConvert").'</a>';
         }
+	echo '</div>';
 			
        
 }

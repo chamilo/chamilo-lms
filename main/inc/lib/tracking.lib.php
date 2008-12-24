@@ -787,6 +787,39 @@ class Tracking {
 			return null;
 		}
 	}
+	
+	function last_three_connection_chat($student_id,$course_code) {
+		require_once (api_get_path(LIBRARY_PATH) . 'course.lib.php');
+		
+		//protect datas
+		$student_id = intval($student_id);
+		$course_code = addslashes($course_code);
+		
+		// get the informations of the course 
+		$a_course = CourseManager :: get_course_information($course_code);		
+		
+		if (!empty($a_course['db_name'])) {
+			// table definition
+			$tbl_stats_access = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS, $a_course['db_name']);
+			$sql = "SELECT access_date FROM $tbl_stats_access 
+					 WHERE access_tool='".TOOL_CHAT."' AND access_user_id='$student_id' AND access_cours_code = '$course_code' limit 3";
+					 	
+			$rs = api_sql_query($sql, __LINE__, __FILE__);
+			$last_connnections = array();
+			while ($row = Database::fetch_array($rs)) {
+				$last_connection = $row['access_date'];
+				if (isset($last_connection)) {				
+					$date_format_long = format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_connection));			 
+					$time = explode(' ',$last_connection);	
+					$date_time = $date_format_long.' '.$time[1];	
+					$last_connnections[] = $date_time;										
+				}
+			}
+			return $last_connnections; 
+		} else {
+				return null;
+		}										
+	}
 
 	function count_student_visited_links($student_id, $course_code) {
 		// protect datas

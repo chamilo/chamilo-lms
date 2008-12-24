@@ -38,7 +38,6 @@ ALTER TABLE gradebook_category ADD session_id int DEFAULT NULL;
 CREATE TABLE gradebook_result_log (id int NOT NULL auto_increment,id_result int NOT NULL,user_id int NOT NULL,evaluation_id int NOT NULL,date_log datetime default '0000-00-00 00:00:00',score float unsigned default NULL,PRIMARY KEY(id));
 CREATE TABLE gradebook_linkeval_log (id int NOT NULL auto_increment,id_linkeval_log int NOT NULL,name text,description text,date_log int,weight smallint default NULL,visible tinyint default NULL,type varchar(20) NOT NULL,user_id_log int NOT NULL,PRIMARY KEY  (id));
 INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES ('glossary','glossary/index.php','glossary.gif',2,1,'basic');
-INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES ('notebook','notebook/index.php','notebook.gif',2,1,'basic');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary',1,0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook',1,0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('allow_users_to_create_courses',NULL,'radio','Course','true','AllowUsersToCreateCoursesTitle','AllowUsersToCreateCoursesComment',NULL,NULL,1,0);
@@ -48,6 +47,8 @@ ALTER TABLE user_field_values CHANGE user_id user_id int unsigned not null;
 UPDATE TABLE settings_options SET display_text = 'YesWillDeletePermanently' WHERE variable = 'permanently_remove_deleted_files' and value = 'true';
 UPDATE TABLE settings_options SET display_text = 'NoWillDeletePermanently' WHERE variable = 'permanently_remove_deleted_files' and value = 'false';
 INSERT INTO settings_options (variable, value, display_text) VALUES ('breadcrumbs_course_homepage','session_name_and_course_title','SessionNameAndCourseTitle');
+INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES ('notebook','notebook/index.php','notebook.gif',2,1,'basic');
+
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';
 ALTER TABLE track_e_exercices ADD data_tracking text NOT NULL default '';
@@ -58,6 +59,7 @@ ALTER TABLE track_e_exercices ADD INDEX ( session_id ) ;
 CREATE TABLE track_e_attempt_recording (exe_id int unsigned NOT NULL, question_id int unsigned NOT NULL,  marks int NOT NULL,  insert_date datetime NOT NULL default '0000-00-00 00:00:00',  author int unsigned NOT NULL,  teacher_comment text NOT NULL);
 ALTER TABLE track_e_attempt_recording ADD INDEX (exe_id);
 ALTER TABLE track_e_hotspot CHANGE hotspot_coordinate hotspot_coordinate text NOT NULL;
+
 -- xxUSERxx
 
 -- xxCOURSExx
@@ -138,4 +140,4 @@ CREATE TABLE calendar_event_attachment ( id int NOT NULL auto_increment, path va
 ALTER TABLE glossary ADD display_order int;
 CREATE TABLE calendar_event_attachment ( id int NOT NULL auto_increment, path varchar(255) NOT NULL, comment text, size int NOT NULL default 0, agenda_id int NOT NULL, filename varchar(255) NOT NULL, PRIMARY KEY (id) );
 CREATE TABLE notebook (notebook_id int unsigned NOT NULL auto_increment,user_id int unsigned NOT NULL,course varchar(40) not null,session_id int NOT NULL default 0,description varchar(255) NOT NULL,start_date datetime NOT NULL default '0000-00-00 00:00:00',end_date datetime NOT NULL default '0000-00-00 00:00:00',PRIMARY KEY (notebook_id));
-INSERT INTO course_setting(variable,value,category) VALUES ('allow_open_chat_window',0,'chat');>>>>>>> .r17111
+INSERT INTO course_setting(variable,value,category) VALUES ('allow_open_chat_window',0,'chat');

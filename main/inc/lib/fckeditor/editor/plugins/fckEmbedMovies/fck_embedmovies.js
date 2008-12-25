@@ -15,7 +15,7 @@ var oMovie = null;
 var oContainerDiv = FCK.Selection.GetSelectedElement();
 
 
-// Get the selected flash embed (if available).
+// Get the selected video embed (if available).
 var oFakeImage = dialog.Selection.GetSelectedElement() ;
 var oEmbed ;
 
@@ -46,7 +46,13 @@ if (oContainerDiv)
 	else
 		oContainerDiv = null;
 }
- 
+
+// Added by Ivan Tcholakov.
+if (!EmbedInObject)
+{
+	oMovie = oEmbed;
+}
+
 function GetParam(e, pname, defvalue)
 {
 	if (!e) return defvalue;
@@ -72,12 +78,22 @@ function GetParam(e, pname, defvalue)
 }
 
 window.onload = function ()	
-{ 
+{
 	// First of all, translates the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage(document);
 	
 	// read settings from existing embedded movie or set to default		
-	GetE('txtUrl').value = GetParam(oMovie, (EmbedInObject ? 'url' : 'src'), '');
+	//GetE('txtUrl').value = GetParam(oMovie, (EmbedInObject ? 'url' : 'src'), '');
+	var url = GetParam(oMovie, (EmbedInObject ? 'url' : 'src'), '');
+	if (FCKConfig.CreateDocumentDir)
+	{
+		if ( url.indexOf(FCKConfig.CreateDocumentDir) == 0 )
+		{
+			url = url.substr(FCKConfig.CreateDocumentDir.length);
+		}
+	}
+	GetE('txtUrl').value = url;
+
 	GetE('chkAutosize').checked      = GetParam(oMovie,  'autosize',     true);
 	GetE('txtWidth').value           = GetParam(oMovie,  'width',        250  );
 	GetE('txtHeight').value          = GetParam(oMovie,  'height',       250  );
@@ -196,24 +212,39 @@ function SetUrl( url )
 
 function setVideoUrl(url)
 {
-	return_url = '';	 
-	if( FCKConfig.InDocument)
-	{		
+	return_url = '';
+
+	if (FCKConfig.InDocument)
+	{
 		if (FCKConfig.CreateDocumentDir == '/')
-		{	
+		{
 			return_url = url; // FCKConfig.CreateDocumentDir variable is defined in create_document.php		
 		}
 		else
-		{	
-			return_url = FCKConfig.CreateDocumentDir + url ;
+		{
+			if ( url.indexOf(FCKConfig.CreateDocumentDir) != 0 )
+			{
+				return_url = FCKConfig.CreateDocumentDir + url ;
+			}
+			else
+			{
+				return_url = url ;
+			}
 		}
-		return return_url;
 	}
 	else
-	{	
-		return_url = FCKConfig.CreateDocumentDir + url ;
-		return return_url;
+	{
+		if ( url.indexOf(FCKConfig.CreateDocumentDir) != 0 )
+		{
+			return_url = FCKConfig.CreateDocumentDir + url ;
+		}
+		else
+		{
+			return_url = url ;
+		}
 	}
+
+	return return_url;
 }
 
 

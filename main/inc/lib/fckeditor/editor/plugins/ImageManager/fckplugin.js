@@ -67,11 +67,17 @@
 		var image = FCK.Selection.GetSelectedElement() ;
 		if ( image )
 		{
-			if ( image.nodeName.IEquals( 'img' ) )
+			// Checking whether the selected object is a real image.
+			if ( image.nodeName.IEquals( 'img' ) &&
+				!image.getAttribute( '_fckfakelement' ) &&
+				!image.getAttribute( '_fckflash' ) &&
+				!image.getAttribute( '_fckmp3' ) &&
+				!image.getAttribute( '_fckvideo' ) )
 			{
 				FCKCommands.GetCommand( 'Image' ).Execute() ;
 				return ;
 			}
+			// For other kinds of objects Image Manager should be activated to replace them.
 		}
 
 		var wArgs = {};

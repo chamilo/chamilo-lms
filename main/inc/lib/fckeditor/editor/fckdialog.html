@@ -603,19 +603,29 @@ var onReadyRegister = function()
 		// Disable the previous dialog if it exists.
 		if ( ParentDialog() )
 		{
-			//
-			//ParentDialog().contentWindow.SetEnabled( false ) ;
-			//
+			// The try/catch block deals with "unspecified error", thrown by IE sometimes.
+			try
+			{
+				ParentDialog().contentWindow.SetEnabled( false ) ;
+			}
+			catch ( ex ) { }
+
 			if ( FCKBrowserInfo.IsIE && !FCKBrowserInfo.IsIE7 )
 			{
 				var currentParent = ParentDialog() ;
 				while ( currentParent )
 				{
-					var blockerFrame = currentParent.contentWindow.$( 'blocker' ) ;
-					if ( blockerFrame.readyState == 'complete' )
-						DragAndDrop.RegisterHandlers( blockerFrame.contentWindow ) ;
-					else
-						blockerFrame.onreadystatechange = onReadyRegister ;
+					// The try/catch block deals with "unspecified error", thrown by IE sometimes.
+					try
+					{
+						var blockerFrame = currentParent.contentWindow.$( 'blocker' ) ;
+						if ( blockerFrame.readyState == 'complete' )
+							DragAndDrop.RegisterHandlers( blockerFrame.contentWindow ) ;
+						else
+							blockerFrame.onreadystatechange = onReadyRegister ;
+					}
+					catch ( ex ) { }
+
 					currentParent = ParentDialog( currentParent ) ;
 				}
 			}
@@ -624,7 +634,13 @@ var onReadyRegister = function()
 				var currentParent = ParentDialog() ;
 				while ( currentParent )
 				{
-					DragAndDrop.RegisterHandlers( currentParent.contentWindow ) ;
+					// The try/catch block deals with "unspecified error", thrown by IE sometimes.
+					try
+					{
+						DragAndDrop.RegisterHandlers( currentParent.contentWindow ) ;
+					}
+					catch ( ex ) { }
+
 					currentParent = ParentDialog( currentParent ) ;
 				}
 			}
@@ -633,11 +649,16 @@ var onReadyRegister = function()
 		// If this is the only dialog on screen, enable the background cover.
 		if ( FCKBrowserInfo.IsIE && !FCKBrowserInfo.IsIE7 )
 		{
-			var blockerFrame = FCKDialog.GetCover().firstChild ;
-			if ( blockerFrame.readyState == 'complete' )
-				DragAndDrop.RegisterHandlers( blockerFrame.contentWindow ) ;
-			else
-				blockerFrame.onreadystatechange = onReadyRegister;
+			// The try/catch block deals with "unspecified error", thrown by IE sometimes.
+			try
+			{
+				var blockerFrame = FCKDialog.GetCover().firstChild ;
+				if ( blockerFrame.readyState == 'complete' )
+					DragAndDrop.RegisterHandlers( blockerFrame.contentWindow ) ;
+				else
+					blockerFrame.onreadystatechange = onReadyRegister;
+			}
+			catch ( ex ) { }
 		}
 
 		// Add Enter/Esc hotkeys and disable context menu for the dialog.
@@ -747,7 +768,7 @@ var onReadyRegister = function()
 		{
 			if ( !isEnabled )
 			{
-				// Inser the blocker IFRAME before the cover.
+				// Insert the blocker IFRAME before the cover.
 				var blocker = document.createElement( 'iframe' ) ;
 				blocker.src = FCKTools.GetVoidUrl() ;
 				blocker.hideFocus = true ;

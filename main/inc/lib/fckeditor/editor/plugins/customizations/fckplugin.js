@@ -229,8 +229,10 @@ var FCKDialog = ( function()
 
 			//E.body.appendChild( dialog ) ;
 
-			dialog._ParentDialog = topDialog ;
-			topDialog = dialog ;
+			// Removed by Ivan Tcholakov.
+			// These statements are not relevant to the case, also they cause errors.
+			//dialog._ParentDialog = topDialog ;
+			//topDialog = dialog ;
 
 			return dialogInfo ;
 		},
@@ -253,10 +255,11 @@ var FCKDialog = ( function()
 				topDialog = dialog._ParentDialog ;
 				// Modified by Ivan Tcholakov, caused errors during tests.
 				//dialog._ParentDialog.contentWindow.SetEnabled( true ) ;
-				if (dialog._ParentDialog.contentWindow)
+				try
 				{
 					dialog._ParentDialog.contentWindow.SetEnabled( true ) ;
 				}
+				catch ( ex ) { }
 				//
 			}
 			else							// First Dialog.

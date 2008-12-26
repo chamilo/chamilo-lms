@@ -92,14 +92,20 @@ FCKConfig.Plugins.Add("Attachment", "en", sOtherPluginPath ) ;*/
 
 // added by Julio Montoya
 FCKConfig.Plugins.Add("MP3", "en", sOtherPluginPath ) ;
-FCKConfig.Plugins.Add('ImageManager','en') ; 
-FCKConfig.Plugins.Add('flvPlayer','en') ; 
-FCKConfig.Plugins.Add("Flash", "en");  
+FCKConfig.Plugins.Add('ImageManager','en') ;
+FCKConfig.Plugins.Add('flvPlayer','en') ;
+
+FCKConfig.Plugins.Add("Flash", "en");
+
 FCKConfig.Plugins.Add('fckEmbedMovies');
 FCKConfig.Plugins.Add("wikilink", "en,es", sOtherPluginPath ) ; // support to english, spanish
 FCKConfig.Plugins.Add("imgmap", "en,es", sOtherPluginPath );
+
 FCKConfig.Plugins.Add("googlemaps", "en,es", sOtherPluginPath ) ;
-FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSy5hTGQdsosYD3dz6faZHVrO-02A';//This key is for http://localhost. You must get one for each server where you want to use the plugin, just get the key for free here after agreeing to the Terms of Use of the GoogleMaps API: http://www.google.com/apis/maps/signup.html. If you leave an empty string then the toolbar icon won't be shown 
+// This key is for http://localhost. You must get one for each server where you want to use the plugin,
+// just get the key for free here after agreeing to the Terms of Use of the GoogleMaps API:
+// http://www.google.com/apis/maps/signup.html. // If you leave an empty string then the toolbar icon won't be shown.
+FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSy5hTGQdsosYD3dz6faZHVrO-02A';
 
 //Added by Ivan Tcholakov, 19-DEC-2008.
 FCKConfig.Plugins.Add( 'youtube', 'en' ) ;

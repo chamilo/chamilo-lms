@@ -92,8 +92,11 @@
 	{
 		var closeButton = document.getElementById ( 'closeButton' ) ;
 
-		closeButton.onmouseover	= closeButtonOver ;
-		closeButton.onmouseout	= closeButtonOut ;
+		if ( closeButton )
+		{
+			closeButton.onmouseover	= closeButtonOver ;
+			closeButton.onmouseout	= closeButtonOut ;
+		}
 	}
 
 	var onLoad = function()

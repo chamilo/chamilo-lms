@@ -2383,7 +2383,7 @@ function display_user_link($user_id, $name, $origin='') {
 */
 
 function display_user_image($user_id,$name, $origin='') {
-	$link='<a href="../user/userInfo.php?uInfo='.$user_id.'" '. (!empty($origin)? 'target="_top"': '') .'">';
+	$link='<a href="../user/userInfo.php?uInfo='.$user_id.'" '. (!empty($origin)? 'target="_top"': '') .'>';
 	$attrb=array();
 		
 	if ($user_id<>0) {		

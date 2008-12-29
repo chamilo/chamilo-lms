@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 17479 2008-12-29 20:24:11Z cfasanando $
+<?php //$Id: myStudents.php 17481 2008-12-29 23:12:00Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -253,7 +253,8 @@ if(!empty($_GET['student']))
 		$last_connection_date=get_lang('NoConnexion');
 	}
 	
-	$time_spent_on_the_platform = api_time_to_hms(Tracking::get_time_spent_on_the_platform($a_infosUser['user_id']));
+	
+	$time_spent_on_the_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($a_infosUser['user_id'], $course_code));
 	
 	// cvs informations
 	$csv_content[] = array(get_lang('Informations'));
@@ -265,7 +266,7 @@ if(!empty($_GET['student']))
 	// csv tracking
 	$csv_content[] = array(get_lang('Tracking'));
 	$csv_content[] = array(get_lang('FirstLogin'),get_lang('LatestLogin'), get_lang('TimeSpentOnThePlatform'), get_lang('Progress'), get_lang('Score'));
-	$csv_content[] = array(strip_tags($first_connection_date),strip_tags($last_connection_date), $time_spent_on_the_platform , $avg_student_progress.' %',$avg_student_score.' %');
+	$csv_content[] = array(strip_tags($first_connection_date),strip_tags($last_connection_date), $time_spent_on_the_course , $avg_student_progress.' %',$avg_student_score.' %');
 	
 ?>
 	<a name="infosStudent"></a>
@@ -395,10 +396,10 @@ if(!empty($_GET['student']))
 											</tr>
 											<tr>
 						<td align="right">
-													<?php echo get_lang('TimeSpentOnThePlatform') ?>
+													<?php echo get_lang('TimeSpentOnTheCourse') ?>
 												</td>
 						<td align="left">
-													<?php echo $time_spent_on_the_platform ?>
+													<?php echo $time_spent_on_the_course ?>
 												</td>
 											</tr>
 											<tr>

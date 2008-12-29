@@ -33,7 +33,7 @@ $icon_delete ='delete.gif';
 
 //---------------------------------------------------------
 
-echo '<a href="index.php?action=addnotebook">'.Display::return_icon($icon_add,get_lang('NewNotebook')).get_lang('NewNotebook').'</a>';
+echo '<a href="index.php?action=addnotebook">'.Display::return_icon($icon_add,get_lang('NewNote')).get_lang('NewNote').'</a>';
 
 if (isset($_REQUEST['action']) && $_REQUEST['action']=='addnotebook') {
 	echo '<table class="notebook-add-form" id="notebook-add">';	
@@ -41,8 +41,8 @@ if (isset($_REQUEST['action']) && $_REQUEST['action']=='addnotebook') {
 	echo '<form name="frm_add_notebook" method="post">';	
 	echo '<input type="hidden" name="sec_token" value="'.$stok.'" />';
 	echo '<input type="hidden" name="action" value="addnotebook">';
-	echo '<div class="add-desc-notebook"><textarea class="style-add-textarea" rows="5" cols="80" name="description" maxlength="255" onfocus="this.value=\'\';document.getElementById(\'msg_add_error\').style.display=\'none\';"><<'.get_lang("WriteHereYourNote").'>></textarea></div>';
-	echo '<div class="action_notebook"><input type="button" value="'.get_lang('Ok').'" onclick="return add_notebook()"><input type="button" value="'.get_lang('Cancel').'" onclick="document.getElementById(\'notebook-add\').style.display = \'none\';document.getElementById(\'msg_add_error\').style.display=\'none\';"></div>';
+	echo '<div class="add-desc-notebook"><textarea class="style-add-textarea" rows="5" cols="80" name="description" maxlength="255" onfocus="this.value=\'\';document.getElementById(\'msg_add_error\').style.display=\'none\';"><<'.get_lang('WriteYourNoteHere').'>></textarea></div>';
+	echo '<div class="action_notebook"><input type="button" value="'.get_lang('SaveNote').'" onclick="return add_notebook()"><input type="button" value="'.get_lang('Cancel').'" onclick="document.getElementById(\'notebook-add\').style.display = \'none\';document.getElementById(\'msg_add_error\').style.display=\'none\';"></div>';
 	echo '<span class="msg_error" id="msg_add_error"></span>';
 	echo '</form>';	
 	echo '</td></tr>';			
@@ -58,7 +58,7 @@ if ($ctok==$_POST['sec_token']) {
 			$description = Security::remove_XSS($_REQUEST['description']);
 			$add_notebook= add_notebook_details($user_id,$course_id,$session_id,$description,$date);	
 			if($add_notebook) {
-				Display::display_confirmation_message(get_lang('NotebookAdded'));
+				Display::display_confirmation_message(get_lang('NoteCreated'));
 			}							
 	}		
 }
@@ -72,7 +72,7 @@ if ($ctok==$_POST['sec_token']) {
 		$description = Security::remove_XSS($_REQUEST['upd_description']);
 		$edit_notebook= edit_notebook_details($notebook_id,$user_id,$course_id,$session_id,$description,$date);	
 		if($edit_notebook) {
-			Display::display_confirmation_message(get_lang('NotebookUpdated'));
+			Display::display_confirmation_message(get_lang('NoteUpdated'));
 		}
 	}	
 	
@@ -86,7 +86,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete_notebook'){
 	$notebook_id = Security::remove_XSS($_REQUEST['notebook_id']);	
 	$delete_notebook = delete_notebook_details($notebook_id);	
 	if($delete_notebook) {
-		Display::display_confirmation_message(get_lang('NotebookDeleted'));
+		Display::display_confirmation_message(get_lang('NoteDeleted'));
 	}					
 }
 
@@ -112,7 +112,7 @@ while ($row_notebook_list=Database::fetch_array($notebook_list)){
 		echo '<form name="frm_edit_notebook" action="index.php" method="post"><input type="hidden" name="upd_notebook_id" value="'.$notebook_id.'" />';
 		echo '<input type="hidden" name="sec_token" value="'.$stok.'" />';				
 		echo '<div class="upd-desc-notebook"><textarea class="style-edit-textarea" rows="4" cols="120"  name="upd_description" maxlength="255" onfocus="this.select()">'.$row_notebook_list['description'].'</textarea></div>';
-		echo '<div class="action_notebook"><input type="button" value="'.get_lang('Ok').'" onclick="edit_notebook()"><input type="button" value="'.get_lang('Cancel').'" onclick="edit_cancel_notebook()"></div>';
+		echo '<div class="action_notebook"><input type="button" value="'.get_lang('SaveNote').'" onclick="edit_notebook()"><input type="button" value="'.get_lang('Cancel').'" onclick="edit_cancel_notebook()"></div>';
 		echo '<span class="msg_error" id="msg_edit_error"></span>';
 		echo '</form></div>';	
 	} else {				
@@ -121,7 +121,7 @@ while ($row_notebook_list=Database::fetch_array($notebook_list)){
 		echo '<span><a href="index.php?action=edit_notebook&notebook_id='.$row_notebook_list['notebook_id'].'#note-'.$row_notebook_list['notebook_id'].'" >'.Display::return_icon($icon_edit,get_lang('Edit')).'</a>&nbsp;';
 		echo '<a href="index.php?action=delete_notebook&notebook_id='.$row_notebook_list['notebook_id'].'" onclick="return confirmation(\''.$title.'\');">'.Display::return_icon($icon_delete,get_lang('Edit')).'</a></span>';
 		if ( $row_notebook_list['status']==1 ) {			
-			echo '&nbsp;&nbsp;<span class="date_information">'.get_lang('EndDate').'&nbsp;:&nbsp;'.$row_notebook_list['end_date'].'</span>';	
+			echo '&nbsp;&nbsp;<span class="date_information">'.get_lang('LastUpdateDate').'&nbsp;:&nbsp;'.$row_notebook_list['end_date'].'</span>';	
 		}			
 		echo '</div>';		
 	}

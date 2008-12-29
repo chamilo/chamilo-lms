@@ -5,9 +5,6 @@
  * @author Christian Fasanando
  * This library enables maintenance of the notebook tool
  */
- 
- 
- 
 /**
 * This function retrieves notebook details by users
 * @return	array Array of type ([notebook_id=>a,user_id=>b,course=>c,session_id=>d,description=>e,start_date=>f,end_date=>g,status=>h],[])
@@ -38,17 +35,20 @@ function get_notebook_details($user_id) {
 */
 function add_notebook_details($user_id,$course,$session_id,$description,$start_date) {
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+    if ($user_id !== strval(intval($user_id))) { return false;}
 	$safe_user_id = (int)$user_id;
 	$safe_course = Database::escape_string($course);
-	$safe_session_id = (int)$session_id;
+	if ($session_id !== strval(intval($session_id))) { return false;}
+    $safe_session_id = (int)$session_id;
 	$safe_description = Database::escape_string($description);
+    $safe_start_date = Database::escape_string($start_date);
 	
-	if (empty($description) || empty($start_date)) {
+	if (empty($description) || empty($safe_start_date)) {
 		return false;
 	}
 		
 	$sql = "INSERT INTO $t_notebook(user_id,course,session_id,description,start_date,status)  
-			VALUES('$safe_user_id' , '$safe_course','$safe_session_id','$safe_description','$start_date',0)";
+			VALUES('$safe_user_id' , '$safe_course','$safe_session_id','$safe_description','$safe_start_date',0)";
 
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	return $result;
@@ -69,11 +69,15 @@ function add_notebook_details($user_id,$course,$session_id,$description,$start_d
 function edit_notebook_details($notebook_id,$user_id,$course,$session_id,$description,$end_date) {
 	
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+    if ($notebook_id !== strval(intval($notebook_id))) { return false;}
 	$safe_notebook_id = (int)$notebook_id;
+    if ($user_id !== strval(intval($user_id))) { return false;}
 	$safe_user_id = (int)$user_id;
 	$safe_course = Database::escape_string($course);
-	$safe_session_id = (int)$session_id;
+    if ($session_id !== strval(intval($session_id))) { return false;}
+    $safe_session_id = (int)$session_id;
 	$safe_description = Database::escape_string($description);
+    $safe_end_date = Database::escape_string($end_date);
 	
 	if (empty($description) || empty($end_date)) {
 		return false;
@@ -94,6 +98,7 @@ function edit_notebook_details($notebook_id,$user_id,$course,$session_id,$descri
 */
 function delete_notebook_details($notebook_id) {
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+    if ($notebook_id !== strval(intval($notebook_id))) { return false;}
 	$safe_notebook_id = (int)$notebook_id;
 			
 	$sql = "DELETE FROM $t_notebook  WHERE notebook_id=$safe_notebook_id";
@@ -110,15 +115,15 @@ function to_javascript_notebook() {
 	return "<script type=\"text/javascript\">
 			function confirmation (name)
 			{
-				if (confirm(\" ". get_lang("AreYouSureToDeleteThis") ." \"+ name + \" ?\"))
+				if (confirm(\" ". get_lang('AreYouSureToDelete') ." \"+ name + \" ?\"))
 					{return true;}
 				else
 					{return false;}
 			}
 					
 			function add_notebook() {
-				msg_error='".get_lang("YouMustWriteANote")."';	
-				msg='<<".get_lang("WriteHereYourNote").">>';		
+				msg_error='".get_lang('YouMustWriteANote')."';	
+				msg='<<".get_lang('WriteYourNoteHere').">>';		
 				if(document.frm_add_notebook.description.value=='' || document.frm_add_notebook.description.value==msg) {
 					document.getElementById('msg_add_error').style.display='block';	
 					document.getElementById('msg_add_error').innerHTML=msg_error;
@@ -134,7 +139,7 @@ function to_javascript_notebook() {
 			}		
 			
 			function edit_notebook() {
-				msg_error='".get_lang("YouMustWriteANote")."';			
+				msg_error='".get_lang('YouMustWriteANote')."';			
 				if(document.frm_edit_notebook.upd_description.value=='') {
 					document.getElementById('msg_edit_error').style.display='block';	
 					document.getElementById('msg_edit_error').innerHTML=msg_error;

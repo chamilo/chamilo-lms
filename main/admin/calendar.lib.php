@@ -67,9 +67,6 @@ $MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang
 function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 {
 	global $DaysShort;
-	$month=Database::escape_string($month);
-	$month=Database::escape_string($monthName);
-	$year=Database::escape_string($year);
 	//Handle leap year
 	$numberofdays = array (0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 	if (($year % 400 == 0) or ($year % 4 == 0 and $year % 100 <> 0))

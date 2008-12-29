@@ -465,7 +465,6 @@ class CourseManager
 	*/
 	function add_user_to_course($user_id, $course_code, $status = STUDENT)
 	{
-		email_to_tutor($user_id,$course_code);
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -1025,8 +1024,7 @@ class CourseManager
 					}
 					else
                     {
-                            $sql = 'SELECT 1 FROM '.Database
-::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.intval($_SESSION['id_session']).' AND id_coach='.$user_id;
+                            $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.intval($_SESSION['id_session']).' AND id_coach='.$user_id;
                             $rs = api_sql_query($sql, __FILE__, __LINE__);
                             if(Database::num_rows($rs)>0)
                             {
@@ -1822,15 +1820,11 @@ class CourseManager
 	 * @param string course_code
 	 * @return true if exists, false else
 	 */
-	function course_exists($course_code)
-	{
+	function course_exists($course_code) {
 		$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_COURSE).' WHERE code="'.Database::escape_string($course_code).'"';
 		$rs = api_sql_query($sql,__FILE__,__LINE__);
 		return Database::num_rows($rs);
 	}	
-
-} //end class CourseManager
-
 	/**
 	 * Send an email to tutor after the auth-suscription of a student in your course
 	 * @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
@@ -1838,40 +1832,33 @@ class CourseManager
 		* @param  string $course_code the course code
 	  * @return string we return the message that is displayed when the action is succesfull
 	 */
-	function email_to_tutor($user_id,$course_code){
+	function email_to_tutor($user_id,$course_code) {
 		
 		$TABLECOURS=Database::get_main_table(TABLE_MAIN_COURSE);
-		$TABLECOURSUSER=Database::get_main_table(TABLE_MAIN_COURSE_USER);
 		$TABLE_USER= Database::get_main_table(TABLE_MAIN_USER);
-		
+		$TABLECOURSUSER=Database::get_main_table(TABLE_MAIN_COURSE_USER);
+		$sql_me="SELECT * FROM ".$TABLE_USER." WHERE user_id='".$user_id."'";
+		$result_me=api_sql_query($sql_me,__FILE__,__LINE__);
+		$student = Database::fetch_array($result_me);
 		$information =  CourseManager::get_course_information($course_code);
-		$tutor_name=$information['tutor_name'];
 		$name_course=$information['title'];
-		
-		$sql="SELECT user_id FROM ".$TABLECOURSUSER." WHERE course_code='".$course_code."' AND tutor_id='1'";
+		$sql="SELECT * FROM ".$TABLECOURSUSER." WHERE course_code='".$course_code."' AND tutor_id=1";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
-		$row = Database::fetch_array($result);
-		$tutor= $row['user_id'];
-		
-	
-		$sql2="SELECT * FROM ".$TABLE_USER." WHERE user_id='".$tutor."'";
-		$result2=api_sql_query($sql2,__FILE__,__LINE__);
-		$tutor = Database::fetch_array($result2);	
-		
-		$sql3="SELECT * FROM ".$TABLE_USER." WHERE user_id='".$user_id."'";
-		$result3=api_sql_query($sql3,__FILE__,__LINE__);
-		$student = Database::fetch_array($result3);
-		
+		while ($row = Database::fetch_array($result)) {
+				$sql_tutor="SELECT * FROM ".$TABLE_USER." WHERE user_id='".$row['user_id']."'";
+				$result_tutor=api_sql_query($sql_tutor,__FILE__,__LINE__);
+				$tutor=Database::fetch_array($result_tutor);
 				$emailto		= $tutor['email'];
 				$emailsubject	= get_lang('NewUserInTheCourse').': '.$name_course;
-				$emailbody		= get_lang('Dear').': '. $tutor_name."\n";
+				$emailbody		= get_lang('Dear').': '. $tutor['firstname'].' '.$tutor['lastname']."\n";
 				$emailbody		.=get_lang('MessageNewUserInTheCourse').': '.$name_course."\n";
 				$emailbody		.=get_lang('UserName').': '.$student['username']."\n";
 				$emailbody		.=get_lang('LastName').': '.$student['lastname']."\n";
 				$emailbody		.=get_lang('FirstName').': '.$student['firstname']."\n";
 				$emailbody		.=get_lang('Email').': '.$student['email']."\n\n";
 				$emailheaders = "From: ".get_setting('administratorSurname')." ".get_setting('administratorName')." <".get_setting('emailAdministrator').">\n";
-				$emailheaders .= "Reply-To: ".get_setting('emailAdministrator');
-			
-		@ api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);		
+				$emailheaders .= "Reply-To: ".get_setting('emailAdministrator');		
+				@ api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+		}
 	}
+} //end class CourseManager

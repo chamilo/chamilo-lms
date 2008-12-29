@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 17362 2008-12-17 23:21:17Z cfasanando $
+<?php // $Id: user_edit.php 17479 2008-12-29 20:24:11Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -58,8 +58,7 @@ function display_drh_list(){
 function show_image(image,width,height) {
 	width = parseInt(width) + 20;
 	height = parseInt(height) + 20;			
-	window_x = window.open(\'\',\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
-	window_x.document.write("<img src=\'"+image+"?rand='.time().'\'/>");		
+	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');		
 }		
 //-->
 </script>';
@@ -468,8 +467,13 @@ $big_image = $image_dir.'big_'.$image;
 $big_image_size = @getimagesize($big_image);
 $big_image_width= $big_image_size[0];
 $big_image_height= $big_image_size[1];
+$url_big_image = $big_image.'?rnd='.time();
+if ($image=='') {
+	echo '<img '.$img_attributes.' />';
+} else {
+	echo '<input type="image" '.$img_attributes.' onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
+}
 
-echo '<input type="image" '.$img_attributes.' onclick="return show_image(\''.$big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 
 // Display form
 $form->display();

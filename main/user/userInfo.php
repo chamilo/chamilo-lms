@@ -1,4 +1,4 @@
-<?php // $Id: userInfo.php 16965 2008-11-26 22:06:10Z herodoto $
+<?php // $Id: userInfo.php 17479 2008-12-29 20:24:11Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -48,6 +48,16 @@ $language_file = array ('registration', 'userInfo');
 include ("../inc/global.inc.php");
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+
+$htmlHeadXtra[] = '<script type="text/javascript">
+				
+function show_image(image,width,height) {
+	width = parseInt(width) + 20;
+	height = parseInt(height) + 20;			
+	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');		
+}
+				
+</script>';
 
 $editMainUserInfo = Security::remove_XSS($_REQUEST['editMainUserInfo']);
 $uInfo = $editMainUserInfo; 
@@ -366,8 +376,19 @@ elseif ($displayMode == "viewMainInfoEdit")
 		($mainUserInfo['status'] == 1) ? $courseAdminChecked = "checked" : $courseAdminChecked = "";
 		($mainUserInfo['tutor_id'] == 1) ? $tutorChecked = "checked" : $tutorChecked = "";
 				
-		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);						
-		echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';			
+		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);			
+		// get the path,width and height from original picture
+		$big_image = $image_array['dir'].'big_'.$image_array['file'];
+		$big_image_size = @getimagesize($big_image);
+		$big_image_width= $big_image_size[0];
+		$big_image_height= $big_image_size[1];
+		$url_big_image = $big_image.'?rnd='.time();
+		
+		if ($image_array['file']=='unknown.jpg') {
+		echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';
+		} else {
+		echo '<input type="image" src="'.$image_array['dir'].$image_array['file'].'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
+		}						
 		 
 		//"<td>", get_lang('Tutor'), "</td>\n",
 		echo "<form action=\"".api_get_self()."\" method=\"post\">\n",
@@ -429,8 +450,20 @@ elseif ($displayMode == "viewContentList") // default display
 	
 	if ($mainUserInfo)
 	{		
-		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);			
+		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);	
+		// get the path,width and height from original picture
+		$big_image = $image_array['dir'].'big_'.$image_array['file'];
+		$big_image_size = @getimagesize($big_image);
+		$big_image_width= $big_image_size[0];
+		$big_image_height= $big_image_size[1];
+		$url_big_image = $big_image.'?rnd='.time();
+		
+		if ($image_array['file']=='unknown.jpg') {
 		echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';
+		} else {
+		echo '<input type="image" src="'.$image_array['dir'].$image_array['file'].'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
+		}		
+		
 		
 		//DISPLAY TABLE HEADING
 		if ($origin == 'learnpath') { $allowedToEditDef=false; $is_allowedToTrack=false; }

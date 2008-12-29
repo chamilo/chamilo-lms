@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 17456 2008-12-24 20:34:06Z cfasanando $
+<?php //$Id: myStudents.php 17479 2008-12-29 20:24:11Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -21,8 +21,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 function show_image(image,width,height) {
 	width = parseInt(width) + 20;
 	height = parseInt(height) + 20;			
-	window_x = window.open(\'\',\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
-	window_x.document.write("<img src=\'"+image+"?rand='.time().'\'/>");		
+	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');		
 }
 				
 </script>';
@@ -283,12 +282,16 @@ if(!empty($_GET['student']))
 								$big_image_size = @getimagesize($big_image);
 								$big_image_width= $big_image_size[0];
 								$big_image_height= $big_image_size[1];
-								
+								$url_big_image = $big_image.'?rnd='.time();
 								$img_attributes = 'src="'.$image_file.'?rand='.time().'" '
 								.'alt="'.$a_infosUser['lastname'].' '.$a_infosUser['firstname'].'" '
 								.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
-								
-								echo '<input type="image" '.$img_attributes.' onclick="return show_image(\''.$big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
+															
+								if ($image_array['file']=='unknown.jpg') {
+								echo '<img '.$img_attributes.' />';
+								} else {
+								echo '<input type="image" '.$img_attributes.' onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
+								}								
 								
 								echo '</td>';
 							?>

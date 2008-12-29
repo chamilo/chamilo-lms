@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 17362 2008-12-17 23:21:17Z cfasanando $
+<?php // $Id: user_add.php 17479 2008-12-29 20:24:11Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -316,55 +316,8 @@ if( $form->validate())
 		$picture_element = & $form->getElement('picture');
 		$picture = $picture_element->getValue();
 		$picture_uri = '';
-		
-		// get the next id from a user
-		$sql = "SHOW TABLE STATUS FROM $database LIKE 'user'";
-		$result = api_sql_query($sql,__FILE__,__LINE__);		
-		$array = Database::fetch_array($result);
-		$auto_increment = $array['Auto_increment'];
-		// picture path
-		$picture_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$auto_increment.'/';		
-						
-		if (strlen($picture['name']) > 0 ) {			
-			if (!is_dir($picture_path)) {
-				if (mkdir($picture_path)) {
-					$perm = api_get_setting('permissions_for_new_directories');
-					$perm = octdec(!empty($perm)?$perm:'0770');					
-					chmod($picture_path,$perm);
-				}
-			}						
-			$picture_uri = uniqid('').'_'.replace_dangerous_char($picture['name']);
-			$picture_location = $picture_path.$picture_uri;
-			$big_picture_location = $picture_path.'big_'.$picture_uri;
-			
-			// get the picture and resize it 100x150 
-			$temp = new image($_FILES['picture']['tmp_name']);
-			
-			$picture_infos=getimagesize($_FILES['picture']['tmp_name']);
-			$thumbwidth = IMAGE_THUMBNAIL_WIDTH;
-			if (empty($thumbwidth) or $thumbwidth==0) {
-				$thumbwidth=150;
-			}
-			$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
-		
-			$temp->resize($thumbwidth,$new_height,0);
-			$type=$picture_infos[2];
-			
-			// original picture
-			$big_temp = new image($_FILES['picture']['tmp_name']);
-			
-		    switch (!empty($type)) {
-		            case 2 : $temp->send_image('JPG',$picture_location);
-		            		 $big_temp->send_image('JPG',$big_picture_location);
-		            		 break;
-		            case 3 : $temp->send_image('PNG',$picture_location);
-		            		 $big_temp->send_image('JPG',$big_picture_location);
-		            		 break;
-		            case 1 : $temp->send_image('GIF',$picture_location);
-		            		 $big_temp->send_image('JPG',$big_picture_location);
-		            		 break;
-		    }
-
+		if (strlen($picture['name']) > 0 ) {
+		$picture_uri = uniqid('').'_'.replace_dangerous_char($picture['name']);
 		}
 		$lastname = $user['lastname'];
 		$firstname = $user['firstname'];
@@ -398,6 +351,50 @@ if( $form->validate())
 		$active = intval($user['active']);
 	
 		$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active, $hr_dept_id);
+
+		// picture path
+		$picture_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id.'/';		
+						
+		if (strlen($picture['name']) > 0 ) {			
+			if (!is_dir($picture_path)) {
+				if (mkdir($picture_path)) {
+					$perm = api_get_setting('permissions_for_new_directories');
+					$perm = octdec(!empty($perm)?$perm:'0770');					
+					chmod($picture_path,$perm);
+				}
+			}
+			$picture_location = $picture_path.$picture_uri;
+			$big_picture_location = $picture_path.'big_'.$picture_uri;
+			
+			// get the picture and resize it 100x150 
+			$temp = new image($_FILES['picture']['tmp_name']);
+			
+			$picture_infos=getimagesize($_FILES['picture']['tmp_name']);
+			$thumbwidth = IMAGE_THUMBNAIL_WIDTH;
+			if (empty($thumbwidth) or $thumbwidth==0) {
+				$thumbwidth=150;
+			}
+			$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
+		
+			$temp->resize($thumbwidth,$new_height,0);
+			$type=$picture_infos[2];
+			
+			// original picture
+			$big_temp = new image($_FILES['picture']['tmp_name']);
+			
+		    switch (!empty($type)) {
+		            case 2 : $temp->send_image('JPG',$picture_location);
+		            		 $big_temp->send_image('JPG',$big_picture_location);
+		            		 break;
+		            case 3 : $temp->send_image('PNG',$picture_location);
+		            		 $big_temp->send_image('JPG',$big_picture_location);
+		            		 break;
+		            case 1 : $temp->send_image('GIF',$picture_location);
+		            		 $big_temp->send_image('JPG',$big_picture_location);
+		            		 break;
+		    }
+
+		}
 		
 		$extras = array();
 		foreach($user as $key => $value)

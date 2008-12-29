@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 17362 2008-12-17 23:21:17Z cfasanando $
+<?php // $Id: whoisonline.php 17479 2008-12-29 20:24:11Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -45,8 +45,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 	function show_image(image,width,height) {
 		width = parseInt(width) + 20;
 		height = parseInt(height) + 20;			
-		window_x = window.open(\'\',\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
-		window_x.document.write("<img src=\'"+image+"?rand='.time().'\'/>");		
+		window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');		
 	}
 					
 </script>';
@@ -160,7 +159,10 @@ function display_individual_user($user_id)
 			$big_image_size = @getimagesize($big_image);
 			$big_image_width= $big_image_size[0];
 			$big_image_height= $big_image_size[1];
-			echo '<input type="image" src="'.$fullurl.'" alt="'.$alt.'" onclick="return show_image(\''.$big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/><br />';
+			$url_big_image = $big_image.'?rnd='.time();
+						
+			echo '<input type="image" src="'.$fullurl.'" alt="'.$alt.'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/><br />';
+						
 		}
 		if (api_get_setting("show_email_addresses") == "true")
 		{

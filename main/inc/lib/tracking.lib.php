@@ -802,7 +802,7 @@ class Tracking {
 			// table definition
 			$tbl_stats_access = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS, $a_course['db_name']);
 			$sql = "SELECT access_date FROM $tbl_stats_access 
-					 WHERE access_tool='".TOOL_CHAT."' AND access_user_id='$student_id' AND access_cours_code = '$course_code' limit 3";
+					 WHERE access_tool='".TOOL_CHAT."' AND access_user_id='$student_id' AND access_cours_code = '$course_code' ORDER BY access_date DESC limit 3";
 					 	
 			$rs = api_sql_query($sql, __LINE__, __FILE__);
 			$last_connnections = array();

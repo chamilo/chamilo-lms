@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 17445 2008-12-23 22:47:46Z derrj $
+<?php // $Id: profile.php 17471 2008-12-29 09:54:41Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -564,6 +564,9 @@ function upload_user_production($user_id)
 ==============================================================================
 */
 $filtered_extension = false;
+$update_success = false;
+$upload_picture_success = false;
+$upload_production_success = false;
 
 if (!empty($_SESSION['profile_update']))
 {
@@ -603,7 +606,7 @@ elseif ($form->validate())
 	$user_data = $form->exportValues();
 
 	// set password if a new one was provided
-	if (isset($user_data['password1']))
+	if (!empty($user_data['password1']))
 		$password = $user_data['password1'];
 
 	// upload picture if a new one is provided
@@ -616,7 +619,7 @@ elseif ($form->validate())
 		}
 	}
 	// remove existing picture if asked
-	elseif (isset($user_data['remove_picture']))
+	elseif (!empty($user_data['remove_picture']))
 	{
 		remove_user_image($_user['user_id']);
 		$user_data['picture_uri'] = '';
@@ -714,12 +717,12 @@ elseif (!empty($update_success))
 {
 	$message=get_lang('ProfileReg');
 	
-	if (isset($upload_picture_success)) 
+	if ($upload_picture_success == true) 
 	{
 		$message.='<br /> '.get_lang('PictureUploaded');
 	}
 	
-	if (isset($upload_production_success)) 
+	if ($upload_production_success == true) 
 	{
 		$message.='<br />'.get_lang('ProductionUploaded');
 	}

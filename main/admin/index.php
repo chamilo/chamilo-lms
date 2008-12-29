@@ -1,4 +1,4 @@
-<?php // $Id: index.php 16954 2008-11-26 14:41:35Z pcool $
+<?php // $Id: index.php 17478 2008-12-29 20:13:08Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -127,6 +127,7 @@ $keyword_url = Security::remove_XSS((empty($_GET['keyword'])?'':$_GET['keyword']
   <li><a href="languages.php"><?php echo get_lang('Languages'); ?></a></li>
   <li><a href="configure_homepage.php"><?php echo get_lang('ConfigureHomePage'); ?></a></li>
   <li><a href="statistics/index.php"><?php echo get_lang('ToolName'); ?> </a></li>
+  <li><a href="calendar.php"><?php echo get_lang('GlobalAgenda'); ?> </a></li>
   <?php if(!empty($phpMyAdminPath)): ?>
   <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang("AdminDatabases"); ?></a><br />(<?php echo get_lang("DBManagementOnlyForServerAdmin"); ?>)</li>
   <?php endif; ?>

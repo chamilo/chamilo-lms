@@ -1035,3 +1035,12 @@ CREATE TABLE gradebook_linkeval_log (
 	user_id_log int NOT NULL,
 	PRIMARY KEY  (id)
 );
+
+CREATE TABLE  sys_calendar (
+  id int unsigned NOT NULL auto_increment,
+  title varchar(200) NOT NULL,
+  content text,
+  start_date datetime NOT NULL default '0000-00-00 00:00:00',
+  end_date datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (id)
+);

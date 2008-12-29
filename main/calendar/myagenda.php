@@ -1,4 +1,4 @@
-<?php //$Id: myagenda.php 17254 2008-12-12 17:17:19Z cfasanando $
+<?php //$Id: myagenda.php 17478 2008-12-29 20:13:08Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -246,6 +246,7 @@ if (isset ($_user['user_id']))
 	{
 		case "month_view" :
 			$agendaitems = get_myagendaitems($courses_dbs, $month, $year);
+			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 			if (get_setting("allow_personal_agenda") == "true")
 			{
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
@@ -254,6 +255,7 @@ if (isset ($_user['user_id']))
 			break;
 		case "week_view" :
 			$agendaitems = get_week_agendaitems($courses_dbs, $month, $year, $week);
+			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
 			if (get_setting("allow_personal_agenda") == "true")
 			{
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
@@ -262,6 +264,7 @@ if (isset ($_user['user_id']))
 			break;
 		case "day_view" :
 			$agendaitems = get_day_agendaitems($courses_dbs, $month, $year, $day);
+			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");
 			if (get_setting("allow_personal_agenda") == "true")
 			{
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");

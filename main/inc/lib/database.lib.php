@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 17441 2008-12-23 21:19:58Z cfasanando $
+<?php // $Id: database.lib.php 17478 2008-12-29 20:13:08Z cvargas1 $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -54,6 +54,7 @@ define('TABLE_MAIN_USER_FIELD',			'user_field');
 define('TABLE_MAIN_USER_FIELD_OPTIONS',	'user_field_options');
 define('TABLE_MAIN_USER_FIELD_VALUES',	'user_field_values');
 define('TABLE_MAIN_ACCESS_URL', 'access_url');
+define('TABLE_MAIN_SYSTEM_CALENDAR', 'sys_calendar');
 
 //statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');

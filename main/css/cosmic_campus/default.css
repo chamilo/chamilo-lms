@@ -1177,7 +1177,12 @@ div.system_announcement_content{
 	float:right;
 	margin: 1em;
 }
-
+.glossary-msg-error {
+    color: #FF0000;
+    display :none;
+    font-weight: normal;
+    font-size: 80%;    
+}
 /* Notebook */
 .notebook-add-form {
     margin: 1em;

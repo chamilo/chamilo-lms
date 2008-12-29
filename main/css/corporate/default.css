@@ -1138,6 +1138,12 @@ span.radio {
 	float:right;
 	margin: 1em;
 }
+.glossary-msg-error {
+    color: #FF0000;
+    display :none;
+    font-weight: normal;
+    font-size: 80%;    
+}
 /*NAVIGATION MENU BAR*/
 
 

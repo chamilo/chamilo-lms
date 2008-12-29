@@ -1690,7 +1690,12 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	float:right;
 	margin: 1em;
 }
-
+.glossary-msg-error {
+    color: #FF0000;
+    display :none;
+    font-weight: normal;
+    font-size: 80%;    
+}
 
 /* Notebook */
 .notebook-add-form {

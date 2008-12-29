@@ -111,7 +111,7 @@ while ($row_notebook_list=Database::fetch_array($notebook_list)){
 		echo '<div class="notebook-edit-form"><a name="note-'.$row_notebook_list['notebook_id'].'"></a>';
 		echo '<form name="frm_edit_notebook" action="index.php" method="post"><input type="hidden" name="upd_notebook_id" value="'.$notebook_id.'" />';
 		echo '<input type="hidden" name="sec_token" value="'.$stok.'" />';				
-		echo '<div class="upd-desc-notebook"><textarea class="style-edit-textarea" rows="4" cols="120"  name="upd_description" maxlength="255" onfocus="this.select()">'.$row_notebook_list['description'].'</textarea></div>';
+		echo '<div class="upd-desc-notebook"><textarea class="style-edit-textarea" rows="4" cols="120"  name="upd_description" maxlength="255" onfocus="this.select();document.getElementById(\'msg_edit_error\').style.display=\'none\';">'.$row_notebook_list['description'].'</textarea></div>';
 		echo '<div class="action_notebook"><input type="button" value="'.get_lang('SaveNote').'" onclick="edit_notebook()"><input type="button" value="'.get_lang('Cancel').'" onclick="edit_cancel_notebook()"></div>';
 		echo '<span class="msg_error" id="msg_edit_error"></span>';
 		echo '</form></div>';	

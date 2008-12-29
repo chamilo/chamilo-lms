@@ -34,21 +34,17 @@ function get_notebook_details($user_id) {
 * @version octubre 2008, dokeos 1.8
 */
 function add_notebook_details($user_id,$course,$session_id,$description,$start_date) {
-	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
-    if ($user_id !== strval(intval($user_id))) { return false;}
-	$safe_user_id = (int)$user_id;
-	$safe_course = Database::escape_string($course);
-	if ($session_id !== strval(intval($session_id))) { return false;}
-    $safe_session_id = (int)$session_id;
+	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);	    
+	$safe_course = Database::escape_string($course);	
 	$safe_description = Database::escape_string($description);
     $safe_start_date = Database::escape_string($start_date);
 	
-	if (empty($description) || empty($safe_start_date)) {
+	if (empty($safe_description) || empty($safe_start_date)) {
 		return false;
 	}
 		
 	$sql = "INSERT INTO $t_notebook(user_id,course,session_id,description,start_date,status)  
-			VALUES('$safe_user_id' , '$safe_course','$safe_session_id','$safe_description','$safe_start_date',0)";
+			VALUES('$user_id' , '$safe_course','$session_id','$safe_description','$safe_start_date',0)";
 
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	return $result;
@@ -71,11 +67,7 @@ function edit_notebook_details($notebook_id,$user_id,$course,$session_id,$descri
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
     if ($notebook_id !== strval(intval($notebook_id))) { return false;}
 	$safe_notebook_id = (int)$notebook_id;
-    if ($user_id !== strval(intval($user_id))) { return false;}
-	$safe_user_id = (int)$user_id;
 	$safe_course = Database::escape_string($course);
-    if ($session_id !== strval(intval($session_id))) { return false;}
-    $safe_session_id = (int)$session_id;
 	$safe_description = Database::escape_string($description);
     $safe_end_date = Database::escape_string($end_date);
 	
@@ -83,7 +75,7 @@ function edit_notebook_details($notebook_id,$user_id,$course,$session_id,$descri
 		return false;
 	}
 	
-	$sql = "UPDATE $t_notebook SET user_id='$safe_user_id' , course='$safe_course',session_id='$safe_session_id',description='$safe_description',end_date='$end_date',status='1' WHERE notebook_id='$notebook_id'";
+	$sql = "UPDATE $t_notebook SET user_id='$user_id' , course='$safe_course',session_id='$session_id',description='$safe_description',end_date='$end_date',status='1' WHERE notebook_id='$notebook_id'";
 
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	return $result;

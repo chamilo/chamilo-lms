@@ -1,4 +1,4 @@
-<?php // $Id: events.lib.inc.php 17317 2008-12-16 14:05:45Z cfasanando $
+<?php // $Id: events.lib.inc.php 17484 2008-12-30 21:47:26Z cfasanando $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -418,11 +418,13 @@ function event_link($link_id)
  * @param result ( score @ exercice )
  * @param weighting ( higher score )
  * @param session_id
+ * @param learnpath_id (id of the learnpath)
+ * @param learnpath_item_id (id of the learnpath_item)
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @author Julio Montoya <gugli100@gmail.com>
  * @desc Record result of user when an exercice was done
 */
-function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id)
+function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$learnpath_id=0,$learnpath_item_id=0)
 {
 	if ($exeid!='')
 	{
@@ -433,6 +435,8 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id)
 				   exe_result	=	  '".$score."',
 				   exe_weighting = '".$weighting."',
 				   session_id		= '".$session_id."',
+				   orig_lp_id = '".$learnpath_id."',		
+				   orig_lp_item_id = '".$learnpath_item_id."',		
 				   exe_date= FROM_UNIXTIME(".$reallyNow."),status = '', data_tracking='',start_date ='".$_SESSION['exercice_start_date']."'
 				 WHERE exe_id = '".$exeid."'";
 		$res = @api_sql_query($sql,__FILE__,__LINE__);

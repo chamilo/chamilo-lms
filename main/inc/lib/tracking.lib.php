@@ -395,10 +395,10 @@ class Tracking {
 									';
 		
 							$rsScores = api_sql_query($sql, __FILE__, __LINE__);
-							
+														 
 							// Real max score - this was implemented because of the random exercises							
 					 		$sql_last_attempt = 'SELECT exe_id FROM '. $tbl_stats_exercices. ' ' .
-					 							'WHERE exe_exo_id="' .$item['path']. '" AND exe_user_id="' . $student_id . '" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
+					 							'WHERE exe_exo_id="' .$item['path']. '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.$a_learnpath['id'].'" AND orig_lp_item_id = "'.$item['item_id'].'" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
 							
 							$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
 							$num = Database :: num_rows($resultLastAttempt);				

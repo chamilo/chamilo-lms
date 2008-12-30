@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 17481 2008-12-29 23:12:00Z cfasanando $
+<?php //$Id: myStudents.php 17484 2008-12-30 21:47:26Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -754,6 +754,8 @@ if(!empty($_GET['student']))
 										FROM $tbl_stats_exercices AS ex
 										WHERE  ex.exe_cours_id = '".$a_infosCours['code']."'
 										AND ex.exe_exo_id = ".$a_exercices['id']."
+										AND orig_lp_id = 0
+										AND orig_lp_item_id = 0				
 										AND exe_user_id='".$_GET["student"]."'"
 									 ;
 						$resultEssais = api_sql_query($sqlEssais,__FILE__,__LINE__);
@@ -764,6 +766,8 @@ if(!empty($_GET['student']))
 									 WHERE exe_user_id = ".$_GET['student']."
 									 AND exe_cours_id = '".$a_infosCours['code']."'
 									 AND exe_exo_id = ".$a_exercices['id']."
+									 AND orig_lp_id = 0
+									 AND orig_lp_item_id = 0
 									 ORDER BY exe_date DESC LIMIT 1";
 	
 						$resultScore = api_sql_query($sqlScore,__FILE__,__LINE__);
@@ -810,7 +814,7 @@ if(!empty($_GET['student']))
 								<td align='center'>
 							 ";
 						
-						$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$a_exercices['id'].'" AND exe_user_id="'.$_GET['student'].'" AND exe_cours_id="'.$a_infosCours['code'].'" ORDER BY exe_date DESC LIMIT 1';
+						$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$a_exercices['id'].'" AND exe_user_id="'.$_GET['student'].'" AND exe_cours_id="'.$a_infosCours['code'].'" AND orig_lp_id = 0 AND orig_lp_item_id = 0 ORDER BY exe_date DESC LIMIT 1';
 						$resultLastAttempt = api_sql_query($sql_last_attempt,__FILE__,__LINE__);
 						if(Database::num_rows($resultLastAttempt)>0)
 						{

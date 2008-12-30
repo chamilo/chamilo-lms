@@ -213,15 +213,15 @@ foreach ($list as $my_item_id) {
 		if (empty ($title)) {
 			$title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
 		}
-
+		
 		if ($row['item_type'] != 'dokeos_chapter') {
 			$correct_test_link = array ();
 			if ($row['item_type'] == 'quiz') 
 			{			
 				if ($origin != 'tracking') {
-					 $sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
+					 $sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
 				} else {
-					 $sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $_GET['student_id'] . '" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
+					 $sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $_GET['student_id'] . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
 				}
 
 				$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
@@ -420,9 +420,9 @@ foreach ($list as $my_item_id) {
 		
 		// selecting the exe_id from stats attempts tables in order to look the max score value
 		if ($origin != 'tracking') {
-			$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
+			$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
 		} else {
-			$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $_GET['student_id'] . '" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
+			$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $_GET['student_id'] . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
 		}
 
 		$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
@@ -500,9 +500,9 @@ foreach ($list as $my_item_id) {
 				$correct_test_link = '';
 
 				if ($origin != 'tracking' && $origin != 'tracking_course') {
-					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date ASC';
+					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date ASC';
 				} else {
-					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . Database :: escape_string($_GET['student_id']) . '" AND exe_cours_id="' . Database :: escape_string($_GET['course']) . '" ORDER BY exe_date';
+					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . Database :: escape_string($_GET['student_id']) . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($_GET['course']) . '" ORDER BY exe_date';
 				}
 
 				$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);

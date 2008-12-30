@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 17317 2008-12-16 14:05:45Z cfasanando $
+<?php // $Id: exercice_submit.php 17484 2008-12-30 21:47:26Z cfasanando $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 17317 2008-12-16 14:05:45Z cfasanando $
+* 	@version $Id: exercice_submit.php 17484 2008-12-30 21:47:26Z cfasanando $
 */
 
 
@@ -150,12 +150,15 @@ if ($origin=='builder') {
 	if(isset($_SESSION['exerciseResult']))	{ api_session_unregister('exerciseResult');	unset($exerciseResult); }
 	if(isset($_SESSION['exerciseResultCoordinates']))	{ api_session_unregister('exerciseResultCoordinates');	unset($exerciseResultCoordinates); }
 }
-
+$safe_lp_id = ($learnpath_id=='')?0:(int)$learnpath_id;
+$safe_lp_item_id = ($learnpath_item_id=='')?0:(int)$learnpath_item_id;
 $condition = ' WHERE ' .
 		'exe_exo_id = '."'".$exerciseId."'".' AND ' .
 		'exe_user_id = '."'".api_get_user_id()."'".' AND ' .
 		'exe_cours_id = '."'".$_course['id']."'".' AND ' .
 		'status = '."'incomplete'".' AND '.
+		'orig_lp_id = '."'".$safe_lp_id."'".' AND '.
+		'orig_lp_item_id = '."'".$safe_lp_item_id."'".' AND '.
 		'session_id = '."'".(int)$_SESSION['id_session']."'";
 
 if (empty($exerciseType)) {
@@ -815,12 +818,12 @@ echo "<h3>".$exerciseTitle."</h3>";
 if( $exerciseAttempts > 0){
 	$user_id = api_get_user_id();
 	$course_code = api_get_course_id();
- 	$sql = 'SELECT count(*)
- 	        FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES).'
- 	        WHERE exe_exo_id = '.$quizID.' '.
-			'and exe_user_id = '.$user_id.' '.
-			"and status != 'incomplete' ".
-            "and exe_cours_id = '$course_code'".' and session_id = '."'".(int)$_SESSION['id_session']."'";
+ 	$sql = "SELECT count(*) FROM $stat_table WHERE exe_exo_id = '$quizID'
+			AND exe_user_id = '$user_id'
+			AND status != 'incomplete'
+			AND orig_lp_id = $safe_lp_id 
+			AND orig_lp_item_id = $safe_lp_item_id  
+            AND exe_cours_id = '$course_code' AND session_id = '".(int)$_SESSION['id_session']."'";
 
  	$aquery = api_sql_query($sql, __FILE__, __LINE__);
  	$attempt = Database::fetch_array($aquery);
@@ -1023,13 +1026,11 @@ else
     	//if($questionNum < 2){
     	if($table_recorded_not_exist){
     		if($exerciseType == 2){
-			api_sql_query('INSERT INTO '.$stat_table.' ' .
-				'(exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date) ' .
-				'VALUES ' .
-				'('."'$exerciseId','".api_get_user_id()."','".$_course['id']."','incomplete','".api_get_session_id()."','".implode(',',$questionList)."','".date('Y-m-d H:i:s')."'".') ',__FILE__,__LINE__);
+			api_sql_query("INSERT INTO $stat_table(exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date,orig_lp_id,orig_lp_item_id)
+							VALUES('$exerciseId','".api_get_user_id()."','".$_course['id']."','incomplete','".api_get_session_id()."','".implode(',',$questionList)."','".date('Y-m-d H:i:s')."',$safe_lp_id,$safe_lp_item_id)",__FILE__,__LINE__);
     		} else {
-   			api_sql_query("INSERT INTO $stat_table (exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date)
-						   VALUES('$exerciseId','".api_get_user_id()."','".$_course['id']."','incomplete','".api_get_session_id()."','".date('Y-m-d H:i:s')."')",__FILE__,__LINE__);
+   			api_sql_query("INSERT INTO $stat_table (exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
+						   VALUES('$exerciseId','".api_get_user_id()."','".$_course['id']."','incomplete','".api_get_session_id()."','".date('Y-m-d H:i:s')."',$safe_lp_id,$safe_lp_item_id)",__FILE__,__LINE__);
     		}
 		}
 	endif;

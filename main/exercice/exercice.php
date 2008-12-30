@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 17450 2008-12-24 10:00:19Z pcool $
+<?php // $Id: exercice.php 17484 2008-12-30 21:47:26Z cfasanando $
 
 /*
 ==============================================================================
@@ -786,7 +786,7 @@ $eid = $row['id'];
 $uid= api_get_user_id();
 //this query might be improved later on by ordering by the new "tms" field rather than by exe_id
 $qry = "SELECT * FROM $TBL_TRACK_EXERCICES " .
-		   "WHERE exe_exo_id = '".Database::escape_string($eid)."' and exe_user_id = '".Database::escape_string($uid)."' and exe_cours_id = '".api_get_course_id()."' AND session_id =  '".api_get_session_id()."' ORDER BY exe_id DESC";
+		   "WHERE exe_exo_id = '".Database::escape_string($eid)."' and exe_user_id = '".Database::escape_string($uid)."' AND exe_cours_id = '".api_get_course_id()."' AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id =  '".api_get_session_id()."' ORDER BY exe_id DESC";
 	$qryres = api_sql_query($qry);
 	$num = Database::num_rows($qryres);
     if ($num>0) {
@@ -971,7 +971,7 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 						 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, email,UNIX_TIMESTAMP(te.start_date),steps_counter,user_id
 				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
 				  WHERE  te.exe_exo_id = ce.id AND te.status != 'incomplete' AND user_id=te.exe_user_id AND te.exe_cours_id='".Database::escape_string($_cid)."'
-				  AND user.status<>1 $user_id_and $session_id_and AND ce.active <>-1
+				  AND user.status<>1 $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 
 				  ORDER BY users, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
 
@@ -988,7 +988,7 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 						te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id,email,UNIX_TIMESTAMP(te.start_date),steps_counter,user_id
 				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
 				  WHERE  te.exe_exo_id = ce.id AND te.status != 'incomplete' AND user_id=te.exe_user_id AND te.exe_cours_id='".Database::escape_string($_cid)."'
-				  AND user.status<>1 $user_id_and  $session_id_and AND ce.active <>-1
+				  AND user.status<>1 $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 
 				  ORDER BY users, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
 				$hpsql="SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)

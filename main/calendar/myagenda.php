@@ -1,4 +1,4 @@
-<?php //$Id: myagenda.php 17478 2008-12-29 20:13:08Z cvargas1 $
+<?php //$Id: myagenda.php 17483 2008-12-30 15:04:12Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -230,6 +230,7 @@ if (isset ($_user['user_id']))
 	// output: the small calendar item on the left and the view / add links
 	echo "<td width=\"220\" valign=\"top\">";
 	$agendaitems = get_myagendaitems($courses_dbs, $month, $year);
+	$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 	if (get_setting('allow_personal_agenda') == 'true')
 	{
 		$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");

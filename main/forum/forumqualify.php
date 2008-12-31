@@ -71,7 +71,7 @@ if ($origin=='learnpath') {
 
 $userinf=api_get_user_info(api_get_user_id());
 if ($userinf['status']=='1') {
-	echo "<strong>".get_lang('ThreadQualification')."</strong>";
+	echo "<strong>".get_lang('QualifyThread')."</strong>";
 	echo "<br />";
 	$current_thread=get_thread_information($_GET['thread']);
 	$userid=(int)$_GET['user_id'];

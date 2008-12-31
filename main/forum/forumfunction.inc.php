@@ -749,6 +749,7 @@ function check_if_last_post_of_thread($thread_id) {
 * @version february 2006, dokeos 1.8
 */
 function display_visible_invisible_icon($content, $id, $current_visibility_status, $additional_url_parameters='') {
+	global $origin;
 	$id = Security::remove_XSS($id);
 	if ($current_visibility_status=='1') {
 		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
@@ -757,7 +758,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
 				echo $key.'='.$value.'&amp;';
 			}
 		}
-		echo 'action=invisible&amp;content='.$content.'&amp;id='.$id.'">'.icon('../img/visible.gif',get_lang('MakeInvisible')).'</a>';
+		echo 'action=invisible&amp;content='.$content.'&amp;id='.$id.'&amp;origin='.$origin.'">'.icon('../img/visible.gif',get_lang('MakeInvisible')).'</a>';
 	}
 	if ($current_visibility_status=='0') {
 		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
@@ -766,7 +767,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
 				echo $key.'='.$value.'&amp;';
 			}
 		}
-		echo 'action=visible&amp;content='.$content.'&amp;id='.$id.'">'.icon('../img/invisible.gif',get_lang('MakeVisible')).'</a>';
+		echo 'action=visible&amp;content='.$content.'&amp;id='.$id.'&amp;origin='.$origin.'">'.icon('../img/invisible.gif',get_lang('MakeVisible')).'</a>';
 	}
 }
 

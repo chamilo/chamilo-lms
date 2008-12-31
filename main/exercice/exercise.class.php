@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 17311 2008-12-16 00:53:24Z cfasanando $
+* 	@version $Id: exercise.class.php 17489 2008-12-31 15:47:30Z marvil07 $
 */
 
 
@@ -513,15 +513,21 @@ class Exercise
 		}
 
 		// updates the question position
-		foreach($this->questionList as $position=>$questionId)
-		{ 
-			//$sql="UPDATE $TBL_QUESTIONS SET position='".Database::escape_string($position)."' WHERE id='".Database::escape_string($questionId)."'";
-			$sql="UPDATE $TBL_QUIZ_QUESTION SET question_order='".Database::escape_string($position)."' " .
-				 "WHERE question_id='".Database::escape_string($questionId)."' and exercice_id='".Database::escape_string($id)."'";
-			api_sql_query($sql,__FILE__,__LINE__);
-		
-		}
+        $this->update_question_positions();
 	}
+
+    function update_question_positions() {
+    	// updates the question position
+        $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        foreach($this->questionList as $position=>$questionId)
+        {
+            //$sql="UPDATE $TBL_QUESTIONS SET position='".Database::escape_string($position)."' WHERE id='".Database::escape_string($questionId)."'";
+            $sql="UPDATE $TBL_QUIZ_QUESTION SET question_order='".Database::escape_string($position)."' " .
+                 "WHERE question_id='".Database::escape_string($questionId)."' and exercice_id=".Database::escape_string($this->id)."";
+            api_sql_query($sql,__FILE__,__LINE__);
+
+        }
+    }
 
 	/**
 	 * moves a question up in the list

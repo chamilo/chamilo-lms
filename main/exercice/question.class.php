@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 16879 2008-11-23 05:14:43Z yannoo $
+<?php // $Id: question.class.php 17489 2008-12-31 15:47:30Z marvil07 $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 16879 2008-11-23 05:14:43Z yannoo $
+* 	@version $Id: question.class.php 17489 2008-12-31 15:47:30Z marvil07 $
 */
 
 
@@ -858,7 +858,7 @@ abstract class Question
 
 	    // modify the exercise
 	    $objExercise->addToList($this -> id);
-	    $objExercise->save();
+        $objExercise->update_question_positions();
 
 	}
 

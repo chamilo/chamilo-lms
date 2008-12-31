@@ -34,7 +34,9 @@ function get_notebook_details($user_id) {
 * @version octubre 2008, dokeos 1.8
 */
 function add_notebook_details($user_id,$course,$session_id,$description,$start_date) {
-	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);	    
+	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+    if ($user_id != strval(intval($user_id))) { return false; }
+    if ($session_id != strval(intval($session_id))) { return false; }
 	$safe_course = Database::escape_string($course);	
 	$safe_description = Database::escape_string($description);
     $safe_start_date = Database::escape_string($start_date);
@@ -65,7 +67,9 @@ function add_notebook_details($user_id,$course,$session_id,$description,$start_d
 function edit_notebook_details($notebook_id,$user_id,$course,$session_id,$description,$end_date) {
 	
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
-    if ($notebook_id !== strval(intval($notebook_id))) { return false;}
+    if ($notebook_id != strval(intval($notebook_id))) { return false;}
+    if ($user_id != strval(intval($user_id))) { return false; }
+    if ($session_id != strval(intval($session_id))) { return false; }
 	$safe_notebook_id = (int)$notebook_id;
 	$safe_course = Database::escape_string($course);
 	$safe_description = Database::escape_string($description);
@@ -90,7 +94,7 @@ function edit_notebook_details($notebook_id,$user_id,$course,$session_id,$descri
 */
 function delete_notebook_details($notebook_id) {
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
-    if ($notebook_id !== strval(intval($notebook_id))) { return false;}
+    if ($notebook_id != strval(intval($notebook_id))) { return false;}
 	$safe_notebook_id = (int)$notebook_id;
 			
 	$sql = "DELETE FROM $t_notebook  WHERE notebook_id=$safe_notebook_id";

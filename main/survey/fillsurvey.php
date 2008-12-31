@@ -75,7 +75,7 @@ $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION, $_course['db_name']);
 
 // first we check if the needed parameters are present
-if (!isset ($_GET['course']) || !isset ($_GET['invitationcode'])) 
+if ((!isset ($_GET['course']) || !isset ($_GET['invitationcode']))&& !isset($_GET['user_id'])) 
 {
 	Display :: display_error_message(get_lang('SurveyParametersMissingUseCopyPaste'), false);
 	Display :: display_footer();
@@ -94,7 +94,7 @@ if (Database :: num_rows($result) < 1)
 $survey_invitation = Database :: fetch_array($result, 'ASSOC');
 
 // now we check if the user already filled the survey
-if ($survey_invitation['answered'] == 1) 
+if ($survey_invitation['answered'] == 1 && !isset($_GET['user_id'])) 
 {
 	Display :: display_error_message(get_lang('YouAlreadyFilledThisSurvey'), false);
 	Display :: display_footer();
@@ -606,6 +606,18 @@ if (isset ($_GET['show']) || isset ($_POST['personality']))
 		}
 
 		if (key_exists($_GET['show'], $paged_questions)) {
+			if (isset($_GET['user_id'])) {
+			$sql = "SELECT survey_question.survey_group_sec1, survey_question.survey_group_sec2, survey_question.survey_group_pri,					
+					survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
+					survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
+					FROM $table_survey_question survey_question
+					LEFT JOIN $table_survey_question_option survey_question_option
+					ON survey_question.question_id = survey_question_option.question_id
+					WHERE survey_question.survey_id = '" . Database :: escape_string($survey_invitation['survey_id']) . "'
+					AND survey_question.question_id NOT IN (SELECT sa.question_id FROM ".$table_survey_answer." sa WHERE sa.user=".api_get_user_id()." )
+					ORDER BY survey_question.sort, survey_question_option.sort ASC";
+			} else {
+			
 			$sql = "SELECT survey_question.survey_group_sec1, survey_question.survey_group_sec2, survey_question.survey_group_pri,					
 					survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
 					survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
@@ -615,6 +627,7 @@ if (isset ($_GET['show']) || isset ($_POST['personality']))
 					WHERE survey_question.survey_id = '" . Database :: escape_string($survey_invitation['survey_id']) . "'
 					AND survey_question.question_id IN (" . implode(',', $paged_questions[$_GET['show']]) . ")
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
+			}	
 
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$question_counter_max = Database :: num_rows($result);
@@ -623,6 +636,7 @@ if (isset ($_GET['show']) || isset ($_POST['personality']))
 			$questions = array ();
 
 			while ($row = Database :: fetch_array($result, 'ASSOC')) {
+
 				// if the type is not a pagebreak we store it in the $questions array
 				if ($row['type'] <> 'pagebreak') {
 					$questions[$row['sort']]['question_id'] = $row['question_id'];
@@ -1057,11 +1071,10 @@ if (isset ($_GET['show']) || isset ($_POST['personality']))
 							WHERE survey_question.survey_id = '" . Database :: escape_string($survey_invitation['survey_id']) . "'
 							AND survey_question.question_id IN (" .$imploded. ")  
 							ORDER $order_sql ";	
-					$result = api_sql_query($sql, __FILE__, __LINE__);
+					 $result = api_sql_query($sql, __FILE__, __LINE__);
 					$question_counter_max = Database :: num_rows($result);				
 				}
-			}
-			
+			}	
 			if (!is_null($result))
 			{
 				$counter = 0;
@@ -1130,7 +1143,9 @@ $g_ic = (isset ($_GET['invitationcode']) ? Security :: remove_XSS($_GET['invitat
 $g_cr = (isset ($_GET['cidReq']) ? Security :: remove_XSS($_GET['cidReq']) : '');
 $p_l  = (isset ($_POST['language']) ? Security :: remove_XSS($_POST['language']) : '');
 
-echo '<form id="question" name="question" method="post" action="' . api_get_self() . '?course=' . $g_c . '&invitationcode=' . $g_ic . '&show=' . $show . '&cidReq=' . $g_cr . '">';
+$add_parameters=isset($_GET['user_id']) ? 'user_id='.$_GET['user_id'].'&amp;': '';
+
+echo '<form id="question" name="question" method="post" action="' . api_get_self() .'?'.$add_parameters. 'course=' . $g_c . '&invitationcode=' . $g_ic . '&show=' . $show . '&cidReq=' . $g_cr . '">';
 echo '<input type="hidden" name="language" value="' . $p_l . '" />';
 
 if (isset ($questions) && is_array($questions)) 

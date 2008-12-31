@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 17360 2008-12-17 20:51:09Z iflorespaz $
+* 	@version $Id: survey.lib.php 17494 2008-12-31 21:15:21Z iflorespaz $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -4587,26 +4587,48 @@ class SurveyUtil {
 		global $_course;	
 	
 		// Database table definitions
+		$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
 		$table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
 		$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
 		$table_user 			= Database :: get_main_table(TABLE_MAIN_USER);
-	
-		$sql = "SELECT * FROM $table_survey survey, $table_survey_invitation survey_invitation
-				WHERE survey_invitation.user = '".Database::escape_string($user_id)."'
-				AND survey.code = survey_invitation.survey_code
-				AND survey.avail_from <= '".date('Y-m-d H:i:s')."'
-				AND survey.avail_till >= '".date('Y-m-d H:i:s')."'
-				";
-	
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$all_question_id=array();
+		
+		$sql='SELECT question_id from '.$table_survey_question;
+		$result=api_sql_query($sql,__FILE__,__LINE__);
+		
+		while($row=Database::fetch_array($result,'ASSOC')) {
+			$all_question_id[]=$row;
+		}
+		
+		$count=0;
+		for ($i=0;$i<count($all_question_id);$i++) {
+			$sql='SELECT COUNT(*) as count FROM '.$table_survey_answer.' WHERE question_id='.$all_question_id[$i]['question_id'].' AND user='.api_get_user_id();
+			$result=api_sql_query($sql,__FILE__,__LINE__);
+			while($row=Database::fetch_array($result,'ASSOC')) {
+				if ($row['count'] == 0) {
+					$count++;
+					break;
+				}
+			}
+			if ($count>0) {
+				$link_add=true;
+				break;
+			}
+		}
 		
 		echo '<table class="data_table">';
 		echo '<tr>';
 		echo '	<th>'.get_lang('SurveyName').'</th>';
 		echo '	<th>'.get_lang('Anonymous').'</th>';
 		echo '</tr>';
-		
+		$sql = "SELECT * FROM $table_survey survey, $table_survey_invitation survey_invitation
+				WHERE survey_invitation.user = '".Database::escape_string($user_id)."'
+				AND survey.code = survey_invitation.survey_code
+				AND survey.avail_from <= '".date('Y-m-d H:i:s')."'
+				AND survey.avail_till >= '".date('Y-m-d H:i:s')."'
+				";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$counter = 0;
 		while ($row = Database::fetch_array($result,'ASSOC'))
 		{
@@ -4623,6 +4645,10 @@ class SurveyUtil {
 			echo ($row['anonymous'] == 1)?get_lang('Yes'):get_lang('No');
 			echo '</td>';
 			echo '</tr>';
+			$link_available=self::show_link_available(api_get_user_id(),$row['code']);
+			if ($link_add===true && $link_available===true) {
+				echo '<tr><td><a href="fillsurvey.php?user_id='.api_get_user_id().'&amp;course='.$_course['sysCode'].'&amp;invitationcode='.$row['invitation_code'].'&amp;cidReq='.$_course['sysCode'].'">'.get_lang('CompleteTheSurveysQuestions').'</a></td><td></td></tr>';
+			}
 		}
 		echo '</table>';
 	}
@@ -4867,6 +4893,36 @@ class SurveyUtil {
 			}
 		}
 		return $field_list_array;
+	}
+		/**
+	 * @author Isaac Flores Paz <florespaz@bidsoftperu.com>
+	 * @param Integer user_id
+	 * @return boolean  
+	 *  
+	 */
+	function show_link_available($user_id,$survey_code) {
+		$table_survey = Database :: get_course_table(TABLE_SURVEY);
+		$table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
+		$table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
+		$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
+
+		$sql='SELECT COUNT(*) as count FROM '.$table_survey_invitation.' WHERE user='.$user_id.' AND survey_code="'.$survey_code.'" AND answered="1";';
+		$sql2='SELECT COUNT(*) as count FROM '.$table_survey.' s INNER JOIN '.$table_survey_question.' q ON s.survey_id=q.survey_id WHERE s.code="'.$survey_code.'";';
+		$sql3='SELECT COUNT(*) as count FROM '.$table_survey_answer.' WHERE survey_id=(SELECT survey_id FROM '.$table_survey.' WHERE code="'.$survey_code.'" AND user='.$user_id.' )';		
+		
+		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result2=api_sql_query($sql2,__FILE__,__LINE__);
+		$result3=api_sql_query($sql3,__FILE__,__LINE__);
+		
+		$row=Database::fetch_array($result,'ASSOC');
+		$row2=Database::fetch_array($result2,'ASSOC');
+		$row3=Database::fetch_array($result3,'ASSOC');
+
+		if ($row['count']==1 && $row3['count']!=$row2['count']) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 

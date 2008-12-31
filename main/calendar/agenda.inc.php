@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17487 2008-12-31 14:49:18Z cvargas1 $
+<?php //$Id: agenda.inc.php 17496 2008-12-31 21:47:40Z yannoo $
 
 /*
 ==============================================================================
@@ -2535,13 +2535,13 @@ function show_add_form($id = '')
 					</tr>
 					<tr>
 						<td colspan="2">
-					        <label for="file_name"><?php echo ucwords(get_lang('FileName'))?></label>
+					        <label for="file_name"><?php echo get_lang('FileName');?>&nbsp;:</label>
 					        <input type="file" name="user_upload"/>
 					    </td>
 					 </tr>
 					 <tr>
 					    <td colspan="2">
-					    	<label for="comment"><?php echo get_lang('FileComment')?></label><br />
+					    	<label for="comment"><?php echo get_lang('FileComment');?></label><br />
 					    	<textarea name="file_comment" rows ="4" cols = "34" ></textarea>
 					    </td>
 				    </tr>

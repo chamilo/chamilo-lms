@@ -1307,7 +1307,7 @@ class Blog
 				 <div class="form_header">' . get_lang('NewPost') . '</div> 
 						<table width="100%" border="0" cellspacing="2" cellpadding="0">
 							<tr>
-						   <td width="80" valign="top">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
+						   <td width="120" valign="top">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
 						   <td><input name="post_title" id="post_title" type="text" size="60" onblur="check_if_still_empty()" />' .
 						   		'<input type="hidden" name="post_title_edited" id="post_title_edited" value="false" /><br /><br /></td>
 							</tr>
@@ -1338,7 +1338,7 @@ class Blog
 			echo '			 <br /></td>
 							</tr> 
 							<tr><td><b>'.get_lang('AddAnAttachment').'</b></td></tr>	
-							<tr><td width="80" valign="top">' . ucwords(get_lang('FileName') ). ':&nbsp;&nbsp;</td>
+							<tr><td width="80" valign="top">' . get_lang('FileName'). ':&nbsp;&nbsp;</td>
 						    <td><input type="file" name="user_upload"/></td><br></tr>						    
 						    <tr><td width="80" valign="top">' . get_lang('FileComment'). ':&nbsp;&nbsp;</td>
 						    <td><br /><textarea name="post_file_comment" cols="34" /></textarea></td></tr>
@@ -2458,7 +2458,7 @@ class Blog
 						</tr>
 							 
 							<tr><td><b>'.get_lang('AddAnAttachment').'</b><br /><br /></td></tr>	
-							<tr><td width="80" valign="top">' . ucwords(get_lang('FileName') ). ':&nbsp;&nbsp;</td>
+							<tr><td width="80" valign="top">' . get_lang('FileName'). ':&nbsp;&nbsp;</td>
 						    <td><input type="file" name="user_upload"/></td><br></tr>						    
 						    <tr><td width="80" valign="top">' .get_lang('FileComment'). ':&nbsp;&nbsp;</td>
 						    <td><br /><textarea name="post_file_comment" cols="34" /></textarea></td></tr>

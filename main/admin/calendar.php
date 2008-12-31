@@ -253,11 +253,13 @@ if (empty($select_year) && empty($select_month))
 	$select_month = $today['mon'];
 }
 
-echo '<div class="actions" style="float:right">';
+echo '<div class="actions" style="float:left">';
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 {
+	display_student_links();
 	display_courseadmin_links();
 }
+
 echo '</div><br /><br />';
 
 
@@ -292,7 +294,7 @@ $fck_attribute['ToolbarSet'] = 'Middle';
 // THE RIGHT PART
 echo '<td valign="top">';
 echo '<div class="sort" style="float:right">';
-display_student_links();
+
 echo '</div>';
 if (api_is_allowed_to_edit(false,true))
 {

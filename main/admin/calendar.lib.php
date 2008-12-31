@@ -253,108 +253,6 @@ function MM_jumpMenu(targ,selObj,restore){
 </script>
 ";
 }
-/**
-* this function gets all the users of the current course
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @return array: associative array where the key is the id of the user and the value is an array containing
-			the first name, the last name, the user id
-*/
-function get__users()
-{/*
-global $tbl_user;
-global $tbl_courseUser, $tbl_session_course_user;
-global $_cid;
-
-// not 100% if this is necessary, this however prevents a notice
-if (!isset($courseadmin_filter))
-	{$courseadmin_filter='';}
-
-$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstname firstName
-		FROM $tbl_user as u, $tbl_courseUser as cu
-		WHERE cu.course_code = '".$_cid."'
-			AND cu.user_id = u.user_id $courseadmin_filter
-		ORDER BY u.lastname, u.firstname";
-$result = api_sql_query($sql,__FILE__,__LINE__);
-while($user=Database::fetch_array($result)){
-	$users[$user[0]] = $user;
-}
-
-if(!empty($_SESSION['id_session'])){
-	$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstName firstName
-			FROM $tbl_session_course_user AS session_course_user
-			INNER JOIN $tbl_user u
-				ON u.user_id = session_course_user.id_user
-			WHERE id_session='".$_SESSION['id_session']."'
-			AND course_code='$_cid'";
-
-	$result = api_sql_query($sql,__FILE__,__LINE__);
-	while($user=Database::fetch_array($result)){
-		$users[$user[0]] = $user;
-	}
-
-}
-
-return $users;
-*/
-}
-
-/**
-* this function gets all the groups of the course
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @return array
-*/
-function get_course_groups()
-{/*
-	global $tbl_group;
-	global $tbl_groupUser;
-	$group_list = array();
-	
-	$sql = "SELECT g.id, g.name, COUNT(gu.id) userNb
-			        FROM ".$tbl_group." AS g LEFT JOIN ".$tbl_groupUser." gu
-			        ON g.id = gu.group_id
-			        GROUP BY g.id";
-	
-	$result = api_sql_query($sql,__FILE__,__LINE__);
-	while ($group_data = Database::fetch_array($result))
-	{
-		$group_list [$group_data['id']] = $group_data;
-	}
-	return $group_list;*/
-}
-/**
-* this function shows the form for sending a message to a specific group or user.
-* @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @return html code
-*/
-function show_to_form($to_already_selected)
-{
-/*$user_list=get_course_users();
-$group_list=get_course_groups();
-
-echo "\n<table id=\"recipient_list\" style=\"display: none;\">\n";
-	echo "\t<tr>\n";
-	// the form containing all the groups and all the users of the course
-	echo "\t\t<td>\n";
-		construct_not_selected_select_form($group_list,$user_list,$to_already_selected);
-	echo "\t\t</td>\n";
-	// the buttons for adding or removing groups/users
-	echo "\n\t\t<td valign=\"middle\">\n";
-	echo "\t\t<input type=\"button\" ",
-				"onclick=\"move(this.form.elements[2],this.form.elements[5])\" ",
-				"value=\"   &gt;&gt;   \" />",
-
-				"\n\t\t<p>&nbsp;</p>",
-
-				"\n\t\t<input type=\"button\" ",
-				"onclick=\"move(this.form.elements[5],this.form.elements[2])\" ",
-				"value=\"   &lt;&lt;   \" />";
-	echo "\t\t</td>\n";
-	echo "\n\t\t<td>\n";
-		construct_selected_select_form($group_list,$user_list,$to_already_selected);
-	echo "\t\t</td>\n";
-	echo "\t</tr>\n";
-echo "</table>";*/
-}
 
 function display_monthcalendar($month, $year)
 {
@@ -452,78 +350,6 @@ echo "</table>";
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return html code
 */
-function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected=array())
-{
-	/*echo "\t\t<select name=\"not_selected_form[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">\n";
-
-	// adding the groups to the select form
-	if (is_array($group_list))
-	{
-		foreach($group_list as $this_group)
-		{
-			//api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
-			if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
-				{
-				echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
-					"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
-					"</option>\n";
-			}
-		}
-		// a divider
-		echo	"\t\t<option value=\"\">----------------------------------</option>\n";
-	}
-
-	// adding the individual users to the select form
-	foreach($user_list as $this_user)
-	{
-		if (!is_array($to_already_selected) || !in_array("USER:".$this_user['uid'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
-		{
-			echo	"\t\t<option value=\"USER:",$this_user['uid'],"\">",
-				"",$this_user['lastName']," ",$this_user['firstName'],
-				"</option>\n";
-		}
-	}
-	echo "\t\t</select>\n";*/
-}
-/**
-* This function shows the form with the user that were selected
-* @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @return html code
-*/
-function construct_selected_select_form($group_list=null, $user_list=null,$to_already_selected)
-{
-/*	// we separate the $to_already_selected array (containing groups AND users into
-	// two separate arrays
-	if (is_array($to_already_selected))
-	{
-		 $groupuser=separate_users_groups($to_already_selected);
-	}
-	$groups_to_already_selected=$groupuser['groups'];
-	$users_to_already_selected=$groupuser['users'];
-
-	// we load all the groups and all the users into a reference array that we use to search the name of the group / user
-	$ref_array_groups=get_course_groups();
-	$ref_array_users=get_course_users();
-
-	// we construct the form of the already selected groups / users
-	echo "\t\t<select name=\"selectedform[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
-	if(is_array($to_already_selected))
-	{
-		foreach($to_already_selected as $groupuser)
-		{
-			list($type,$id)=explode(":",$groupuser);
-			if ($type=="GROUP")
-			{
-				echo "\t\t<option value=\"".$groupuser."\">G: ".$ref_array_groups[$id]['name']."</option>";
-			}
-			else
-			{
-				echo "\t\t<option value=\"".$groupuser."\">".$ref_array_users[$id]['lastName']." ".$ref_array_users[$id]['firstName']."</option>";
-			}
-		}
-	}
-	echo "</select>\n";*/
-}
 /**
 * This function stores the Agenda Item in the table calendar_event and updates the item_property table also
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -603,128 +429,15 @@ function store_new_agenda_item()
     }
 	return $last_id;*/
 }
-/**
- * Stores the given agenda item as an announcement (unlinked copy)
- * @param	integer		Agenda item's ID
- * @return	integer		New announcement item's ID
- */
-function store_agenda_item_as_announcement($item_id){/*
-	$table_agenda = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-	$table_ann = Database::get_course_table(TABLE_ANNOUNCEMENT);
-	//check params
-	if(empty($item_id) or $item_id != strval(intval($item_id))){return -1;}
-	//get the agenda item
-	$sql = "SELECT * FROM $table_agenda WHERE id = '".$item_id."'";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
-	if(Database::num_rows($res)>0){
-		$row = Database::fetch_array($res);
-		//we have the agenda event, copy it
-		//get the maximum value for display order in announcement table
-		$sql_max = "SELECT MAX(display_order) FROM $table_ann";
-		$res_max = api_sql_query($sql_max,__FILE__,__LINE__);
-		$row_max = Database::fetch_array($res_max);
-		$max = $row_max[0]+1;
-		//build the announcement text
-		$content = $row['start_date']." - ".$row['end_date']."\n\n".$row['content'];
-		//insert announcement
 
-		$sql_ins = "INSERT INTO $table_ann (title,content,end_date,display_order) " .
-				"VALUES ('".$row['title']."','$content','".$row['end_date']."','$max')";
-		$res_ins = api_sql_query($sql_ins,__FILE__,__LINE__);
-		if($res > 0)
-		{
-			$ann_id = Database::get_last_insert_id();
-			//Now also get the list of item_properties rows for this agenda_item (calendar_event)
-			//and copy them into announcement item_properties
-			$table_props = Database::get_course_table(TABLE_ITEM_PROPERTY);
-			$sql_props = "SELECT * FROM $table_props WHERE tool = 'calendar_event' AND ref='$item_id'";
-			$res_props = api_sql_query($sql_props,__FILE__,__LINE__);
-			if(Database::num_rows($res_props)>0)
-			{
-				while($row_props = Database::fetch_array($res_props))
-				{
-					//insert into announcement item_property
-					$time = date("Y-m-d H:i:s", time());
-					$sql_ins_props = "INSERT INTO $table_props " .
-							"(tool, insert_user_id, insert_date, " .
-							"lastedit_date, ref, lastedit_type," .
-							"lastedit_user_id, to_group_id, to_user_id, " .
-							"visibility, start_visible, end_visible)" .
-							" VALUES " .
-							"('announcement','".$row_props['insert_user_id']."','".$time."'," .
-							"'$time','$ann_id','AnnouncementAdded'," .
-							"'".$row_props['last_edit_user_id']."','".$row_props['to_group_id']."','".$row_props['to_user_id']."'," .
-							"'".$row_props['visibility']."','".$row_props['start_visible']."','".$row_props['end_visible']."')";
-					$res_ins_props = api_sql_query($sql_ins_props,__FILE__,__LINE__);
-					if($res_ins_props <= 0){
-						error_log('SQL Error in '.__FILE__.' at line '.__LINE__.': '.$sql_ins_props);
-					}else{
-						//copy was a success
-						return $ann_id;
-					}
-				}
-			}
-		}else{
-			return -1;
-		}
-	}
-	return -1;*/
-}
-
-/**
-* This function separates the users from the groups
-* users have a value USER:XXX (with XXX the dokeos id
-* groups have a value GROUP:YYY (with YYY the group id)
-* @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @return array
-*/
-function separate_users_groups($to)
-{
-/*	$grouplist = array();
-    $userlist  = array();
-	if(is_array($to) && count($to)>0)
-    {
-        foreach($to as $to_item)
-    	{
-    	list($type, $id) = explode(':', $to_item);
-    
-    	switch($type)
-    		{
-    		case 'GROUP':
-    			$grouplist[] =$id;
-    			break;
-    		case 'USER':
-    			$userlist[] =$id;
-    			break;
-    		}
-    	}
-        $send_to['groups']=$grouplist;
-        $send_to['users']=$userlist;
-    }
-    return $send_to;*/
-}
-
-/**
-* returns all the users and all the groups a specific Agenda item has been sent to
-* @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @return array
-*/
-function sent_to($tool, $id)
-{
-}
-
-function load_edit_users($tool, $id)
-{}
-/**
-* This functions swithes the visibility a course resource using the visible field in 'last_tooledit' values: 0 = invisible
-* @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*/
-function change_visibility($tool,$id)
-{}
 /**
 * The links that allows the student AND course administrator to show all agenda items and sort up/down
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
+function display_courseadmin_links() {
+	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_personal_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
+
+}
 function display_student_links()
 {
 	global $show;
@@ -1556,7 +1269,6 @@ function show_add_form($id = '')
 <input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
 <input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
 <table border="0" cellpadding="5" cellspacing="0" width="100%" id="newedit_form">
-	<tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr>
 	<tr class="title">
 	
 	
@@ -3261,20 +2973,7 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest)
  * @param   array   Course info
  * @return  boolean True on success, false otherwise
  */
-function display_courseadmin_links()
-{
-	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
-/*
-	if (empty ($_SESSION['toolgroup']))
-	{
-		echo "<li>".get_lang('UserGroupFilter')."<br/>";
-		echo "<form name=\"filter\">";
-		show_user_group_filter_form();
-		echo "</form>";
-	}
-*/
 
-}
 function agenda_import_ical($course_info,$file)
 {
 	require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');

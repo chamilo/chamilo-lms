@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17478 2008-12-29 20:13:08Z cvargas1 $
+<?php //$Id: agenda.inc.php 17487 2008-12-31 14:49:18Z cvargas1 $
 
 /*
 ==============================================================================
@@ -234,8 +234,8 @@ function display_monthcalendar($month, $year)
 
 	// grabbing all the calendar items for this year and storing it in a array
 	$data=get_calendar_items($month,$year);
-
-
+//	$data_global=get_global_calendar_items($month,$year);
+//	$data_global=get_global_agenda_items($agendaitems, $day, $month, $year, $week, $type);
 	//Handle leap year
 	$numberofdays = array(0,31,28,31,30,31,30,31,31,30,31,30,31);
 	if (($year%400 == 0) or ($year%4==0 and $year%100<>0)) $numberofdays[2] = 29;
@@ -291,8 +291,11 @@ function display_monthcalendar($month, $year)
 							$dayheader .= '<br /><b>'.substr($value['start_date'],11,8).'</b>';
 							$dayheader .= ' - ';
 							$dayheader .= $value['title'];
+								//$agendaitems = get_global_agenda_items($agendaitems, $curday, $month, $year, $startdayofweek, "month_view");
+								//echo $agendaitems['title'];
 						}
-					}
+
+					}				
 				}
 
 				if (($curday==$today['mday'])&&($year ==$today['year'])&&($month == $today['mon']))
@@ -432,6 +435,7 @@ function plus_repeated_event() {
 				document.getElementById('plus2').innerHTML='&nbsp;<img src=\"../img/nolines_plus.gif\" alt=\"\" />&nbsp;".get_lang('RepeatedEvent')."';
 				}
 }
+
 
 //	End	-->
 </script>";
@@ -641,8 +645,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return integer the id of the last added agenda item
 */
-function store_new_agenda_item()
-{
+function store_new_agenda_item() {
 	global $_user, $_course;
 	$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
     $t_agenda_repeat = Database::get_course_Table(TABLE_AGENDA_REPEAT);
@@ -674,23 +677,19 @@ function store_new_agenda_item()
 	{
 		$send_to=separate_users_groups($to);
 		// storing the selected groups
-		if (is_array($send_to['groups']))
-		{
-			foreach ($send_to['groups'] as $group)
-			{
+		if (is_array($send_to['groups'])) {
+			foreach ($send_to['groups'] as $group) {
 				api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_user['user_id'], $group,'',$start_date, $end_date);
 			}
 		}
 		// storing the selected users
-		if (is_array($send_to['users']))
-		{
-			foreach ($send_to['users'] as $user)
-			{
+		if (is_array($send_to['users'])) {
+			foreach ($send_to['users'] as $user) {
 				api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_user['user_id'],'',$user, $start_date,$end_date);
 			}
 		}
 	}
-	else // the message is sent to everyone, so we set the group to 0
+	else // the message is sent to everyone, so we set the group to 0 
 	{
 		api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_user['user_id'], '','',$start_date,$end_date);
 	}
@@ -698,10 +697,8 @@ function store_new_agenda_item()
 	store_resources($_SESSION['source_type'],$last_id);
 
     //if repetitive, insert element into agenda_repeat table
-    if(!empty($_POST['repeat']) && !empty($_POST['repeat_type']))
-    {
-    	if(!empty($_POST['repeat_end_year']) && !empty($_POST['repeat_end_month']) && !empty($_POST['repeat_end_day']))
-        {
+    if(!empty($_POST['repeat']) && !empty($_POST['repeat_type'])) {
+    	if(!empty($_POST['repeat_end_year']) && !empty($_POST['repeat_end_month']) && !empty($_POST['repeat_end_day'])) {
         	$end_y = intval($_POST['repeat_end_year']);
             $end_m = intval($_POST['repeat_end_month']);
             $end_d = intval($_POST['repeat_end_day']);
@@ -1008,13 +1005,15 @@ function show_user_group_filter_form()
 
 	// Groups
 	echo "\n\t<optgroup label=\"".get_lang("Groups")."\">";
-	$group_list=get_course_groups();
-	foreach($group_list as $this_group)
-	{
-		// echo "<option value=\"agenda.php?isStudentView=true&amp;group=".$this_group['id']."\">".$this_group['name']."</option>";
-		echo "\n\t\t<option value=\"agenda.php?group=".$this_group['id']."\" ";
-		echo ($this_group['id']==$_SESSION['group'])? " selected":"" ;
-		echo ">".$this_group['name']."</option>";
+	if(isset($group_list)){
+		$group_list=get_course_groups();
+		foreach($group_list as $this_group)
+		{
+			// echo "<option value=\"agenda.php?isStudentView=true&amp;group=".$this_group['id']."\">".$this_group['name']."</option>";
+			echo "\n\t\t<option value=\"agenda.php?group=".$this_group['id']."\" ";
+			echo ($this_group['id']==$_SESSION['group'])? " selected":"" ;
+			echo ">".$this_group['name']."</option>";
+		}
 	}
 	echo "\n\t</optgroup>";
 
@@ -1105,8 +1104,6 @@ function change_visibility($tool,$id)
 */
 function display_courseadmin_links() {
 
-	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>&nbsp;|&nbsp;";
-
 	if (empty ($_SESSION['toolgroup']))
 	{
 		echo get_lang('UserGroupFilter');
@@ -1114,6 +1111,7 @@ function display_courseadmin_links() {
 		show_user_group_filter_form();
 		echo "</form> ";
 	}
+	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
 }
 
 
@@ -2171,7 +2169,6 @@ function show_add_form($id = '')
 <input type="hidden" name="sort" value="asc" />
 <table border="0" cellpadding="5" cellspacing="0" width="100%" id="newedit_form">
 	<!-- the title -->
-	<tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr>
 	<tr class="title">
 		<td colspan="2" align="left">
 		<span style="font-weight: bold;"><?php echo (isset($id) AND $id<>'')?get_lang('ModifyCalendarItem'):get_lang("AddCalendarItem"); ?></span>
@@ -4097,8 +4094,6 @@ function add_agenda_attachment_file($file_comment,$last_id) {
 			}
 		}
 }
-
-
 /**
  * This function edit a attachment file into agenda
  * @param string  a comment about file
@@ -4397,7 +4392,8 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 			{
 				$halfhour = $halfhour +1;
 			}
-			$agendaitems[$halfhour] .= "<div><i>$hour:$minute</i><b>".get_lang('Evento Global'). ":  </b><a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
+			//$agendaitems[$halfhour] .= "<div><i>$hour:$minute</i> <b>".get_lang('Evento Global'). ":  </b><a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
+			$agendaitems[$halfhour] .= "<div><i>$hour:$minute</i> <b>".get_lang('Evento Global'). ":  </b>".$item['title']."</div>";
 		}
 	}
 	//print_r($agendaitems);

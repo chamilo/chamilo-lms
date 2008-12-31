@@ -1534,7 +1534,7 @@ class Blog
 			"</tr>\n";
 
 
-		$sql = "SELECT task_rel_user.*, task.title, user.firstname, user.lastname, task.description FROM $tbl_blogs_tasks_rel_user task_rel_user
+		$sql = "SELECT task_rel_user.*, task.title, user.firstname, user.lastname, task.description, task.system_task, task.blog_id, task.task_id FROM $tbl_blogs_tasks_rel_user task_rel_user
 		INNER JOIN $tbl_blogs_tasks task ON task_rel_user.task_id = task.task_id
 		INNER JOIN $tbl_users user ON task_rel_user.user_id = user.user_id
 		WHERE task_rel_user.blog_id = '".(int)$blog_id."' ORDER BY `target_date` ASC";
@@ -1545,10 +1545,10 @@ class Blog
 		{
 			$counter++;
 			$css_class = (($counter % 2)==0) ? "row_odd" : "row_even";
-			$delete_icon = ($task['system_task'] == '1') ? "delete_na.gif" : "delete.gif";
-			$delete_title = ($task['system_task'] == '1') ? get_lang('DeleteSystemTask') : get_lang('DeleteTask');
-			$delete_link = ($task['system_task'] == '1') ? '#' : api_get_self() . '?action=manage_tasks&amp;blog_id=' . $task['blog_id'] . '&amp;do=delete&amp;task_id=' . $task['task_id'];
-			$delete_confirm = ($task['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"';
+			$delete_icon = ($assignment['system_task'] == '1') ? "delete_na.gif" : "delete.gif";
+			$delete_title = ($assignment['system_task'] == '1') ? get_lang('DeleteSystemTask') : get_lang('DeleteTask');
+			$delete_link = ($assignment['system_task'] == '1') ? '#' : api_get_self() . '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=delete&amp;task_id=' . $assignment['task_id'];
+			$delete_confirm = ($assignment['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"';
 
 			echo	'<tr class="' . $css_class . '" valign="top">',
 						 '<td width="240">' . $assignment['firstname'] . ' ' . $assignment['lastname'] . '</td>',
@@ -1880,13 +1880,14 @@ class Blog
 
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
-		$arrUserTasks = array();*/
+		$arrUserTasks = array();
 
-		while($row = mysql_fetch_assoc($result))
-		{
-			$arrUserTasks[] = $row['task_id'];
-		}
-
+        while($row = mysql_fetch_assoc($result))
+        {
+            $arrUserTasks[] = $row['task_id'];
+        }
+        */
+        
 		// Get assignd date;
 		$sql = "
 			SELECT target_date
@@ -2411,7 +2412,7 @@ class Blog
 		echo '<span class="blogpost_title">' . get_lang('RightsManager') . '</span>';
 
 		// Integration of patricks permissions system.
-		include_once('../permissions/blog_permissions.inc.php');
+		require_once(api_get_path(SYS_CODE_PATH).'permissions/blog_permissions.inc.php');
 	}
 
 	/**

@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 17484 2008-12-30 21:47:26Z cfasanando $
+<?php //$Id: myStudents.php 17486 2008-12-31 00:46:42Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -265,7 +265,7 @@ if(!empty($_GET['student']))
 	
 	// csv tracking
 	$csv_content[] = array(get_lang('Tracking'));
-	$csv_content[] = array(get_lang('FirstLogin'),get_lang('LatestLogin'), get_lang('TimeSpentOnThePlatform'), get_lang('Progress'), get_lang('Score'));
+	$csv_content[] = array(get_lang('FirstLogin'),get_lang('LatestLogin'), get_lang('TimeSpentInTheCourse'), get_lang('Progress'), get_lang('Score'));
 	$csv_content[] = array(strip_tags($first_connection_date),strip_tags($last_connection_date), $time_spent_on_the_course , $avg_student_progress.' %',$avg_student_score.' %');
 	
 ?>
@@ -396,7 +396,7 @@ if(!empty($_GET['student']))
 											</tr>
 											<tr>
 						<td align="right">
-													<?php echo get_lang('TimeSpentOnTheCourse') ?>
+													<?php echo get_lang('TimeSpentInTheCourse') ?>
 												</td>
 						<td align="left">
 													<?php echo $time_spent_on_the_course ?>

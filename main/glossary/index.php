@@ -60,6 +60,13 @@ if ($ctok==$_GET['sec_token']) {
 		$name_glossary = Security::remove_XSS($_GET['name_glossary']);
 		$description_glossary = Security::remove_XSS($_GET['description_glossary']);
 		$add_glossary = add_glossary_details($name_glossary,$description_glossary);
+		if ($add_glossary=='error') {
+			Display::display_error_message(get_lang('ThisTermNameAlreadyExists'));			
+		} else {
+			if ($add_glossary=='ok') {
+				Display::display_confirmation_message(get_lang('TermAdded'));				
+			}
+		}
 	}
 }
 
@@ -73,6 +80,13 @@ if ($ctok==$_GET['sec_token']) {
 	$n_glossary = Security::remove_XSS($_GET['n_glossary']);
 	$d_glossary = Security::remove_XSS($_GET['d_glossary']);
 	$edit_glossary = edit_glossary_details($g_id,$n_glossary,$d_glossary);
+		if ($edit_glossary=='error') {
+				Display::display_error_message(get_lang('ThisTermNameAlreadyExists'));				
+		} else {
+			if ($edit_glossary=='ok') {
+					Display::display_confirmation_message(get_lang('TermAdded'));
+			}
+		}
 	}
 }
 

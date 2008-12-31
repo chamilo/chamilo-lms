@@ -41,7 +41,7 @@ function get_glossary_details($type) {
 * This function add glosary details by course
 * @param name type String
 * @param description type String
-* @return	String (Message about results)
+* @return	String (message about the results)
 * @author Christian Fasanando <christian.fasanando@dokeos.com>,
 * @version november 2008, dokeos 1.8.6
 */
@@ -66,19 +66,22 @@ function add_glossary_details($name,$description) {
 	// check if term name exists
 	$sql = "SELECT name FROM $t_glossary WHERE name = '$safe_name'";
 	$result = @api_sql_query($sql,__FILE__,__LINE__);
-	$count = Database::num_rows($result);
-	if ($count > 0) {
-		return Display::display_error_message(get_lang('ThisTermNameAlreadyExists'));
-	}
-
-	$sql = "INSERT INTO $t_glossary (name, description,display_order) VALUES('$safe_name', '$safe_description',$safe_dsp)";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
-	$id = Database::get_last_insert_id();
-	if ($id>0) {
-		//insert into item_property
-		api_item_property_update(api_get_course_info(),TOOL_GLOSSARY,$id,'GlossaryAdded',api_get_user_id());
-	}
-	return Display::display_confirmation_message(get_lang('TermAdded'));
+	$count = Database::num_rows($result);	
+	$msg='';
+	if ($count > 0) {	
+		$msg='error';
+		return $msg;				
+	} else {
+		$sql = "INSERT INTO $t_glossary (name, description,display_order) VALUES('$safe_name', '$safe_description',$safe_dsp)";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$id = Database::get_last_insert_id();
+		if ($id>0) {
+			//insert into item_property
+			api_item_property_update(api_get_course_info(),TOOL_GLOSSARY,$id,'GlossaryAdded',api_get_user_id());
+		}
+		$msg='ok';
+		return $msg;		
+	}	
 }
 
 /**
@@ -86,7 +89,7 @@ function add_glossary_details($name,$description) {
 * @param glossary_id int
 * @param name type String
 * @param description type String
-* @return	String (Message about results)
+* @return String (message about the results) 
 * @author Christian Fasanando <christian.fasanando@dokeos.com>,
 * @version november 2008, dokeos 1.8.6
 */
@@ -103,25 +106,28 @@ function edit_glossary_details($glossary_id,$name,$description) {
 	$sql = "SELECT name FROM $t_glossary WHERE name = '$safe_name' AND glossary_id NOT IN($safe_glossary_id)";
 	$result = @api_sql_query($sql,__FILE__,__LINE__);
 	$count = Database::num_rows($result);
+	$msg='';
 	if ($count > 0) {
-		return Display::display_error_message(get_lang('ThisTermNameAlreadyExists'));
-	}
-
-	$sql = "UPDATE $t_glossary SET name='$safe_name', description='$safe_description' WHERE glossary_id=$safe_glossary_id";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
-	//update glossary into item_property
-	api_item_property_update(api_get_course_info(),TOOL_GLOSSARY,$safe_glossary_id,'GlossaryModified',api_get_user_id());
-	return Display::display_confirmation_message(get_lang('TermUpdated'));
+		$msg='error';
+		return $msg;				
+	} else {
+		$sql = "UPDATE $t_glossary SET name='$safe_name', description='$safe_description' WHERE glossary_id=$safe_glossary_id";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		//update glossary into item_property
+		api_item_property_update(api_get_course_info(),TOOL_GLOSSARY,$safe_glossary_id,'GlossaryModified',api_get_user_id());
+		$msg ='ok';
+		return $msg;	
+	}		
 }
 
+
 /**
-* This function delete glosary details by course
+* This function delete glossary details by course
 * @param glossary_id int
 * @return	boolean
 * @author Christian Fasanando <christian.fasanando@dokeos.com>,
 * @version november 2008, dokeos 1.8.6
 */
-
 function delete_glossary_details($glossary_id) {
 	$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 	$safe_glossary_id 	= Database::escape_string($glossary_id);
@@ -147,7 +153,7 @@ function delete_glossary_details($glossary_id) {
  * This function update glossary display order
  * @param $n_order int
  * @param $glossary_id int
- *
+ * 
  */
 function update_display_order($n_order,$glossary_id) {
 	$t_glossary = Database::get_course_table(TABLE_GLOSSARY);

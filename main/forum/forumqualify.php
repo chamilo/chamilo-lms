@@ -23,11 +23,18 @@
 * 	@package dokeos.forum
 */
 $language_file=array('admin','forum');
-require_once '../inc/global.inc.php';
+require '../inc/global.inc.php';
 require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 $nameTools = get_lang('Forum');
 $this_section = SECTION_COURSES;
+
+$origin = '';
+$origin_string='';
+if (isset($_GET['origin'])) {
+	$origin =  Security::remove_XSS($_GET['origin']);
+}
+
 
 $current_thread=get_thread_information($_GET['thread']); // note: this has to be validated that it is an existing thread
 $current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
@@ -52,7 +59,16 @@ if ($message<>'PostDeletedSpecial') {
 	}
 }
 
-Display::display_header('');
+
+if ($origin=='learnpath') {
+	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
+} else {
+	// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
+	
+	Display::display_header('');
+	api_display_tool_title($nameTools);
+}
+
 $userinf=api_get_user_info(api_get_user_id());
 if ($userinf['status']=='1') {
 	echo "<strong>".get_lang('ThreadQualification')."</strong>";
@@ -66,7 +82,7 @@ if ($userinf['status']=='1') {
 	$max_qualify=show_qualify('2',$_GET['cidReq'],$_GET['forum'],$userid,$threadid);
 	require_once 'forumbody.inc.php';
 	$value_return = store_theme_qualify($userid,$threadid,$_REQUEST['idtextqualify'],api_get_user_id(),date("Y-m-d H:i:s"),api_get_session_id());
-	$url='cidReq='.Security::remove_XSS($_GET['cidReq']).'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post']).'&user_id='.Security::remove_XSS($_GET['user_id']);
+	$url='cidReq='.Security::remove_XSS($_GET['cidReq']).'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post']).'&origin='.$origin.'&user_id='.Security::remove_XSS($_GET['user_id']);
 	$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$userid,$threadid);
 		
 	if ($value_return[0]!=$_REQUEST['idtextqualify'] && $value_return[1]=='update') {		
@@ -86,12 +102,12 @@ if ($userinf['status']=='1') {
 	if ($counter>0) {
 		echo '<h4>'.get_lang('QualificationChangesHistory').'</h4>';	
 		if ($_GET['type'] == 'false') {
-			echo '<div style="float:left; clear:left">'.get_lang('OrderBy').'&nbsp;:<a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.$threadid.'&user_id='.Security::remove_XSS($_GET['user_id']).'&type=true">'.get_lang('MoreRecent').'</a>&nbsp;|
+			echo '<div style="float:left; clear:left">'.get_lang('OrderBy').'&nbsp;:<a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&thread='.$threadid.'&user_id='.Security::remove_XSS($_GET['user_id']).'&type=true">'.get_lang('MoreRecent').'</a>&nbsp;|
 					'.get_lang('Older').'
 				  </div>';
 		} else {
 			echo '<div style="float:left; clear:left">'.get_lang('OrderBy').'&nbsp;:'.get_lang('MoreRecent').' |
-					<a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.$threadid.'&user_id='.Security::remove_XSS($_GET['user_id']).'&type=false">'.get_lang('Older').'</a>&nbsp;
+					<a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&thread='.$threadid.'&user_id='.Security::remove_XSS($_GET['user_id']).'&type=false">'.get_lang('Older').'</a>&nbsp;
 				  </div>';
 		}				
 		$table_list.= '<br /><br /><table class="data_table" style="width:100%">';	
@@ -117,4 +133,6 @@ if ($userinf['status']=='1') {
 	api_not_allowed();	
 }
 //footer
-Display::display_footer();
+if ($origin != 'learnpath') {
+	Display :: display_footer();
+}

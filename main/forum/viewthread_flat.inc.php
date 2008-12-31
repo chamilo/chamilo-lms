@@ -23,6 +23,8 @@
 /**
 * 	@package dokeos.forum
 */
+if (isset($current_thread['thread_id'])){
+
 $rows=get_posts($current_thread['thread_id']);
 foreach ($rows as $row) {
 	echo "<table width=\"100%\" class=\"post\" cellspacing=\"5\" border=\"0\">\n";
@@ -136,4 +138,5 @@ foreach ($rows as $row) {
 	unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
 	unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']]);
 	echo "</table>";
+}
 }

@@ -124,8 +124,8 @@ $current_post=get_post_information($_GET['post']);
 */
 $interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
 $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => prepare4display($current_forum_category['cat_title']));
-$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum']),"name" => prepare4display($current_forum['forum_title']));
-$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".$_GET['thread'],"name" => prepare4display($current_thread['thread_title']));
+$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => prepare4display($current_forum['forum_title']));
+$interbreadcrumb[]=array("url" => "viewthread.php?origin=".$origin."&amp;forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".$_GET['thread'],"name" => prepare4display($current_thread['thread_title']));
 $interbreadcrumb[]=array("url" => "reply.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => get_lang('EditPost'));
 
 /*
@@ -192,7 +192,7 @@ if (!api_is_allowed_to_edit() AND $current_forum['allow_edit']==0) {
 echo "<table class=\"data_table\" width='100%'>\n";
 // the forum category
 echo "\t<tr>\n\t\t<th align=\"left\" colspan=\"2\">";
-echo '<a href="viewforum.php?forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a><br />';
+echo '<a href="viewforum.php?&origin='.$origin.'&forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a><br />';
 echo '<span class="forum_description">'.prepare4display($current_forum['forum_comment']).'</span>';echo "</th>\n";
 echo "</th>\n";
 echo "\t</tr>\n";

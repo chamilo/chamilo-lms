@@ -74,7 +74,7 @@ foreach ($rows as $post) {
 		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=delete&amp;content=post&amp;id=".$post['post_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeletePost"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>\n";
 		display_visible_invisible_icon('post', $post['post_id'], $post['visible'],array('forum'=>Security::remove_XSS($_GET['forum']),'thread'=>Security::remove_XSS($_GET['thread']) ));
 		echo "\n";
-		echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=move&amp;post=".$post['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>";
+		echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=move&amp;origin=".$origin."&amp;post=".$post['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>";
 	}
 	$userinf=api_get_user_info($post['user_id']);
 	if($userinf['status']!='1')	{

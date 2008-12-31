@@ -120,7 +120,7 @@ $result = get_statistical_information($current_thread['thread_id'], $_GET['user'
 if($userinf['status']!='1') {
 	echo '<div class="forum-qualification-input-box">';
 	require_once 'forumbody.inc.php';
-	echo '<a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&user_id='.$userid.'">'.get_lang('ViewHistoryChange').'</a>';
+	echo '<a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&origin='.$origin.'&user_id='.$userid.'">'.get_lang('ViewHistoryChange').'</a>';
 	echo '</div>';
 }
 echo '<div class="forum-qualification-stats-box">

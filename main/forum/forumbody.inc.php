@@ -7,6 +7,8 @@ $my_thread 			= Security::remove_XSS($_GET['thread']);
 $my_user_id 		= Security::remove_XSS($_GET['user_id']);
 $my_idtextqualify   = isset($_REQUEST['idtextqualify']) ? Security::remove_XSS($_REQUEST['idtextqualify']) : $qualify;
 $my_gradebook		= Security::remove_XSS($_GET['gradebook']);
+$to_origin				= Security::remove_XSS($_GET['origin']);
+
 $output = <<<FIN
 <div class="forum-body-form">
  	<table>
@@ -16,6 +18,7 @@ $output = <<<FIN
  		<input type="hidden" name="thread" value="{$my_thread}">
  		<input type="hidden" name="user_id" value="{$my_user_id}">
  		<input type="hidden" name="gradebook" value="{$my_gradebook}">
+  		<input type="hidden" name="origin" value="{$to_origin}">
     	<tr>
 FIN;
 $output .= '

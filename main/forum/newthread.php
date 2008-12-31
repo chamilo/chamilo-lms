@@ -117,8 +117,8 @@ if( (isset($_GET['gradebook']) && $_GET['gradebook']=='view') || ( isset($_POST[
 }
 $interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
 $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => $current_forum_category['cat_title']);
-$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
-$interbreadcrumb[]=array("url" => "newthread.php?forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));
+$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
+$interbreadcrumb[]=array("url" => "newthread.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));
 /*
 -----------------------------------------------------------
 	Resource Linker

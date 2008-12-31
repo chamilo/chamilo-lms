@@ -124,7 +124,7 @@ $my_search=isset($_GET['search'])?$_GET['search']:'';
 $my_action=isset($_GET['action'])?$_GET['action']:'';
 $interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS($my_search),"name" => $nameTools);
 $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum_category['cat_title']));
-$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($my_forum)."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum['forum_title']));
+$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum['forum_title']));
 
 if ($origin=='learnpath') {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
@@ -190,9 +190,9 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 				 <div style="width:50%">
 				 <table class="data_table" border="0">
 					<tr>
-						<th height="22"><a href="viewforum.php?'.$url.'&list=all">'.get_lang('AllStudents').'</a></th>
-						<th><a href="viewforum.php?'.$url.'&list=qualify">'.get_lang('StudentsQualified').'</a></th>
-						<th><a href="viewforum.php?'.$url.'&list=notqualify">'.get_lang('StudentsNotQualified').'</a></th>					
+						<th height="22"><a href="viewforum.php?'.$url.'&origin='.$origin.'&list=all">'.get_lang('AllStudents').'</a></th>
+						<th><a href="viewforum.php?'.$url.'&origin='.$origin.'&list=qualify">'.get_lang('StudentsQualified').'</a></th>
+						<th><a href="viewforum.php?'.$url.'&origin='.$origin.'&list=notqualify">'.get_lang('StudentsNotQualified').'</a></th>					
 					</tr>
 				 </table></div>
 				 <div style="border:1px solid gray; width:99%; margin-top:5px; padding:4px; float:left">
@@ -226,7 +226,7 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 			}
 			if ($userinf['status']=='1') {
 				$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$my_forum,$row_student_list['user_id'],$_GET['id']);					
-				$table_list.= '<td><a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&thread='.Security::remove_XSS($_GET['id']).'&user_id='.$row_student_list['user_id'].'&idtextqualify='.$current_qualify_thread.'">'.icon('../img/'.$icon_qualify,get_lang('Qualify')).'</a></td></tr>';
+				$table_list.= '<td><a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&thread='.Security::remove_XSS($_GET['id']).'&user_id='.$row_student_list['user_id'].'&idtextqualify='.$current_qualify_thread.'&origin='.$origin.'">'.icon('../img/'.$icon_qualify,get_lang('Qualify')).'</a></td></tr>';
 			}
 			$counter_stdlist++;
 		}	
@@ -401,7 +401,7 @@ if(is_array($threads)) {
 			$icon_liststd = 'group.gif';
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($my_forum)."&origin=".$origin."&amp;action=notify&amp;content=thread&amp;id=".$row['thread_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
 			if ($userinf['status']=='1') {
-				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;action=liststd&amp;content=thread&amp;id='.$row['thread_id'].'">'.icon('../img/'.$icon_liststd,get_lang('StudentList')).'</a>';			
+				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&origin='.$origin.'&amp;action=liststd&amp;content=thread&amp;id='.$row['thread_id'].'">'.icon('../img/'.$icon_liststd,get_lang('StudentList')).'</a>';			
 			}
 			echo "</td>\n";
 			echo "\t</tr>\n";

@@ -79,7 +79,6 @@ get_notifications_of_user();
 * This function handles all the forum and forumcategories actions. This is a wrapper for the
 * forum and forum categories. All this code code could go into the section where this function is
 * called but this make the code there cleaner.
-*
 * @param
 * @return
 *
@@ -226,6 +225,18 @@ function show_add_forum_form($inputvalues=array()) {
 	//$form->addElement('radio', 'students_can_edit', get_lang('StudentsCanEdit'), get_lang('Yes'), 1);
 	//$form->addElement('radio', 'students_can_edit', '', get_lang('No'), 0);
 	// This is for horizontal
+	
+			/*		if (document.getElementById('id_qualify').style.display == 'none') {
+					document.getElementById('id_qualify').style.display = 'block';
+					document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/nolines_minus.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
+				} else {
+				document.getElementById('options').style.display = 'none';
+				document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/nolines_plus.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
+				}*/
+			
+		$form->addElement('static','Group','<div id="plus"><a href="javascript://" onclick="if(document.getElementById(\'id_qualify\').style.display==\'none\'){ document.getElementById(\'id_qualify\').style.display=\'block\'; } else { document.getElementById(\'id_qualify\').style.display=\'none\'; }" ><br /><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</a></div>');
+		$form->addElement('html','<div id="id_qualify" style="display:none">');
+	
 	$group='';
 	$group[] =& HTML_QuickForm::createElement('radio', 'students_can_edit',null,get_lang('Yes'),1);
 	$group[] =& HTML_QuickForm::createElement('radio', 'students_can_edit',null,get_lang('No'),0);
@@ -302,6 +313,16 @@ function show_add_forum_form($inputvalues=array()) {
 	         $form->addRule('picture', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));
 	
 	
+	
+	
+		$form->addElement('html','</div>');
+	
+	
+	
+	
+	
+	
+		
 	
 	// The OK button
 	$form->addElement('submit', 'SubmitForum', get_lang('OK'));
@@ -1841,7 +1862,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	
 	// user upload
 	$form->addElement('html','<br /><b><div class="row"><div class="label">'.get_lang('AddAnAttachment').'</div></div></b><br /><br />');
-	$form->addElement('file','user_upload',ucwords(get_lang('FileName')),'');		
+	$form->addElement('file','user_upload',get_lang('FileName'),'');		
 	$form->addElement('textarea','file_comment',get_lang('FileComment'),array ('rows' => 4, 'cols' => 34));
 	
 	$userid  =api_get_user_id();
@@ -2841,8 +2862,9 @@ function move_thread_form() {
 * @version february 2006, dokeos 1.8
 */
 function move_post_form() {
+	global $origin;
 	// initiate the object
-	$form = new FormValidator('movepost', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post']).'&action='.Security::remove_XSS($_GET['action']).'&post='.Security::remove_XSS($_GET['post']));
+	$form = new FormValidator('movepost', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&origin='.$origin.'&post='.Security::remove_XSS($_GET['post']).'&action='.Security::remove_XSS($_GET['action']).'&post='.Security::remove_XSS($_GET['post']));
 	// the header for the form
 	$form->addElement('header', '', get_lang('MovePost'));
 

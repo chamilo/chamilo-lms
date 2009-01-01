@@ -1,28 +1,6 @@
 <?php
-// $Id: add_course.php 16920 2008-11-25 23:33:04Z iflorespaz $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) 2005 Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+// $Id: add_course.php 17497 2009-01-01 23:51:57Z yannoo $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 * This script allows professors and administrative staff to create course sites.
@@ -134,8 +112,9 @@ if ($form->validate()) {
 			fill_Db_course($db_name, $directory, $course_language,$pictures_array);
 			register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);
 		}
+        $link = api_get_path(WEB_COURSE_PATH).$directory.'/';
 		$message = get_lang('JustCreated');
-		$message .= " <strong>".$visual_code."</strong>";
+		$message .= ' <a href="'.$link.'">'.$visual_code."</a>";
 		$message .= "<br /><br /><br />";
 		$message .= '<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
 		Display :: display_confirmation_message($message,false);

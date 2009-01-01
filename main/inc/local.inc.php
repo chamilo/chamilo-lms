@@ -893,7 +893,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 	{
     	if ($_course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)
     		$is_allowed_in_course = true;
-    	elseif ($_course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && isset($_user['user_id']) )
+    	elseif ($_course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && isset($_user['user_id']) && !api_is_anonymous($_user['user_id']))
     		$is_allowed_in_course = true;
     	elseif ($_course['visibility'] == COURSE_VISIBILITY_REGISTERED && ($is_platformAdmin || $is_courseMember))
     		$is_allowed_in_course = true;

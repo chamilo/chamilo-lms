@@ -1420,7 +1420,7 @@ function api_is_allowed($tool, $action, $task_id = 0) {
 		return true;
 	}
 	//if(!$_SESSION['total_permissions'][$_course['code']] and $_course)
-	if ($_course) {
+	if (is_array($_course) and count($_course)>0) {
 		require_once(api_get_path(SYS_CODE_PATH) . 'permissions/permissions_functions.inc.php');
 		require_once(api_get_path(LIBRARY_PATH) . "/groupmanager.lib.php");
 

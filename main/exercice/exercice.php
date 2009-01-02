@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 17484 2008-12-30 21:47:26Z cfasanando $
+<?php // $Id: exercice.php 17511 2009-01-02 21:55:41Z cfasanando $
 
 /*
 ==============================================================================
@@ -428,49 +428,59 @@ if ($is_allowedToEdit) {
 
 		// destruction of Exercise
 		unset($objExerciseTmp);
-}
+	}
 
-if (!empty($hpchoice)) {
-		switch($hpchoice) {
-				case 'delete':	// deletes an exercise
-					$imgparams = array();
-					$imgcount = 0;
-					GetImgParams($file,$documentPath,$imgparams,$imgcount);
-					$fld = GetFolderName($file);
-					for($i=0;$i < $imgcount;$i++)
-					{
-							my_delete($documentPath.$uploadPath."/".$fld."/".$imgparams[$i]);
-							update_db_info("delete", $uploadPath."/".$fld."/".$imgparams[$i]);
-					}
+	if (!empty($hpchoice)) {
+			switch($hpchoice) {
+					case 'delete':	// deletes an exercise
+						$imgparams = array();
+						$imgcount = 0;
+						GetImgParams($file,$documentPath,$imgparams,$imgcount);
+						$fld = GetFolderName($file);
+						for($i=0;$i < $imgcount;$i++)
+						{
+								my_delete($documentPath.$uploadPath."/".$fld."/".$imgparams[$i]);
+								update_db_info("delete", $uploadPath."/".$fld."/".$imgparams[$i]);
+						}
+	
+						if ( my_delete($documentPath.$file))
+						{
+							update_db_info("delete", $file);
+						}
+						my_delete($documentPath.$uploadPath."/".$fld."/");
+						break;
+					case 'enable':  // enables an exercise
+						$newVisibilityStatus = "1"; //"visible"
+	                    $query = "SELECT id FROM $TBL_DOCUMENT WHERE path='".Database::escape_string($file)."'";
+	                    $res = api_sql_query($query,__FILE__,__LINE__);
+	                    $row = Database::fetch_array($res, 'ASSOC');
+	                    api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'visible', $_user['user_id']);
+	                    //$dialogBox = get_lang('ViMod');
+	
+								break;
+					case 'disable': // disables an exercise
+						$newVisibilityStatus = "0"; //"invisible"
+	                    $query = "SELECT id FROM $TBL_DOCUMENT WHERE path='".Database::escape_string($file)."'";
+	                    $res = api_sql_query($query,__FILE__,__LINE__);
+	                    $row = Database::fetch_array($res, 'ASSOC');
+	                    api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'invisible', $_user['user_id']);
+						#$query = "UPDATE $TBL_DOCUMENT SET visibility='$newVisibilityStatus' WHERE path=\"".$file."\""; //added by Toon
+						#api_sql_query($query,__FILE__,__LINE__);
+						//$dialogBox = get_lang('ViMod');
+						break;
+					default:
+						break;
+			}
+	}
 
-					if ( my_delete($documentPath.$file))
-					{
-						update_db_info("delete", $file);
-					}
-					my_delete($documentPath.$uploadPath."/".$fld."/");
-					break;
-				case 'enable':  // enables an exercise
-					$newVisibilityStatus = "1"; //"visible"
-                    $query = "SELECT id FROM $TBL_DOCUMENT WHERE path='".Database::escape_string($file)."'";
-                    $res = api_sql_query($query,__FILE__,__LINE__);
-                    $row = Database::fetch_array($res, 'ASSOC');
-                    api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'visible', $_user['user_id']);
-                    //$dialogBox = get_lang('ViMod');
-
-							break;
-				case 'disable': // disables an exercise
-					$newVisibilityStatus = "0"; //"invisible"
-                    $query = "SELECT id FROM $TBL_DOCUMENT WHERE path='".Database::escape_string($file)."'";
-                    $res = api_sql_query($query,__FILE__,__LINE__);
-                    $row = Database::fetch_array($res, 'ASSOC');
-                    api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'invisible', $_user['user_id']);
-					#$query = "UPDATE $TBL_DOCUMENT SET visibility='$newVisibilityStatus' WHERE path=\"".$file."\""; //added by Toon
-					#api_sql_query($query,__FILE__,__LINE__);
-					//$dialogBox = get_lang('ViMod');
-					break;
-				default:
-					break;
-		}
+	if ($show == 'test') {
+			$sql="SELECT id,title,type,active,description, results_disabled FROM $TBL_EXERCICES WHERE active<>'-1' ORDER BY title LIMIT ".(int)$from.",".(int)($limitExPage+1);
+			$result=api_sql_query($sql,__FILE__,__LINE__);
+	}
+	
+} elseif($show == 'test') {// only for students //fin
+	$sql="SELECT id,title,type,description, results_disabled FROM $TBL_EXERCICES WHERE active='1' ORDER BY title LIMIT ".(int)$from.",".(int)($limitExPage+1);
+	$result=api_sql_query($sql,__FILE__,__LINE__);
 }
 
 
@@ -484,17 +494,12 @@ echo '<div class="actions">';
 	list($nbrexerc) = Database::fetch_array($res);
 	HotPotGCt($documentPath,1,$_user['user_id']);
 	// only for administrator
-	if($is_allowedToEdit)
-	{
-		if($show == 'test')
-		{
+	if($is_allowedToEdit) {
+		if ($show == 'test') {
 		$sql="SELECT id,title,type,active,description, results_disabled FROM $TBL_EXERCICES WHERE active<>'-1' ORDER BY title LIMIT ".(int)$from.",".(int)($limitExPage+1);
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-	}
-	}
-	// only for students
-	elseif($show == 'test')
-	{
+		}
+	} elseif($show == 'test') { // only for students
 	$sql="SELECT id,title,type,description, results_disabled FROM $TBL_EXERCICES WHERE active='1' ORDER BY title LIMIT ".(int)$from.",".(int)($limitExPage+1);
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	}
@@ -502,51 +507,50 @@ echo '<div class="actions">';
 	{
 		$nbrExercises=Database::num_rows($result);
 
-	//get HotPotatoes files (active and inactive)
-	$res = api_sql_query ("SELECT *
+		//get HotPotatoes files (active and inactive)
+		$res = api_sql_query ("SELECT *
 					FROM $TBL_DOCUMENT
 					WHERE
 					path LIKE '".Database::escape_string($uploadPath)."/%/%'",__FILE__,__LINE__);
-	$nbrTests = Database::num_rows($res);
-	$res = api_sql_query ("SELECT *
+		$nbrTests = Database::num_rows($res);
+		$res = api_sql_query ("SELECT *
 					FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
 					WHERE  d.id = ip.ref
 					AND ip.tool = '".TOOL_DOCUMENT."'
 					AND d.path LIKE '".Database::escape_string($uploadPath)."/%/%'
 					AND ip.visibility='1'", __FILE__,__LINE__);
-	$nbrActiveTests = Database::num_rows($res);
+		$nbrActiveTests = Database::num_rows($res);
 
 		if($is_allowedToEdit)
 		{//if user is allowed to edit, also show hidden HP tests
-		$nbrHpTests = $nbrTests;
+			$nbrHpTests = $nbrTests;
 		}
 		else
 		{
-		$nbrHpTests = $nbrActiveTests;
-	}
-	$nbrNextTests = $nbrexerc-$nbrHpTests-(($page*$limitExPage));
+			$nbrHpTests = $nbrActiveTests;
+		}
+		$nbrNextTests = $nbrexerc-$nbrHpTests-(($page*$limitExPage));
 
 
 		echo '<span style="float:right">';
-	//show pages navigation link for previous page
+		//show pages navigation link for previous page
 		if($page)
 		{
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;page=".($page-1)."\">".Display::return_icon('previous.gif').get_lang("PreviousPage")."</a> | ";
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;page=".($page-1)."\">".Display::return_icon('previous.gif').get_lang("PreviousPage")."</a> | ";
 		}
 		elseif($nbrExercises+$nbrNextTests > $limitExPage)
 		{
-				echo Display::return_icon('previous.gif').get_lang('PreviousPage')." | ";
-	}
-
-	//show pages navigation link for previous page
+			echo Display::return_icon('previous.gif').get_lang('PreviousPage')." | ";
+		}
+	
+		//show pages navigation link for previous page
 		if($nbrExercises+$nbrNextTests > $limitExPage)
 		{
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;page=".($page+1)."\">".get_lang("NextPage").Display::return_icon('next.gif')."</a>";
-	
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;page=".($page+1)."\">".get_lang("NextPage").Display::return_icon('next.gif')."</a>";
 		}
 		elseif($page)
 		{
-				echo get_lang("NextPage") . Display::return_icon('next.gif');
+			echo get_lang("NextPage") . Display::return_icon('next.gif');
 		}
 		echo '</span>';
 	}
@@ -674,16 +678,6 @@ echo '<div class="actions">';
 echo '</div>'; // closing the actions div
 
 
-
-if ($show == 'test') {
-		$sql="SELECT id,title,type,active,description, results_disabled FROM $TBL_EXERCICES WHERE active<>'-1' ORDER BY title LIMIT ".(int)$from.",".(int)($limitExPage+1);
-		$result=api_sql_query($sql,__FILE__,__LINE__);
-	}
-} elseif($show == 'test') {// only for students
-	$sql="SELECT id,title,type,description, results_disabled FROM $TBL_EXERCICES WHERE active='1' ORDER BY title LIMIT ".(int)$from.",".(int)($limitExPage+1);
-	$result=api_sql_query($sql,__FILE__,__LINE__);
-}
-
 if ($show == 'test') {
 
 ?>
@@ -701,7 +695,7 @@ if ($show == 'test') {
   <?php
 } else {
 	 ?> <tr>
-     <th><?php echo get_lang('ExerciseName');?></th>
+     <th colspan="3"><?php echo get_lang('ExerciseName');?></th>
      <th><?php echo get_lang('QuantityQuestions');?></th>
 	 <th><?php echo get_lang('State');?></th>
 
@@ -712,10 +706,10 @@ if ($show == 'test') {
 	if (!($nbrExercises+$nbrHpTests) ) {
 	?>
   <tr>
-    <td <?php echo ($is_allowedToEdit?'colspan="6"':'colspan="3"'); ?>><?php echo get_lang("NoEx"); ?></td>
+    <td <?php echo ($is_allowedToEdit?'colspan="6"':'colspan="5"'); ?>><?php echo get_lang("NoEx"); ?></td>
   </tr>
   <?php
-}
+	}
 $i=1;
 // while list exercises
 
@@ -731,10 +725,10 @@ while($row=Database::fetch_array($result)) {
 	if ($is_allowedToEdit) {
 	echo '<tr class="'.$s_class.'">'."\n";
 				?>
-		  <td><?php Display::display_icon('quiz.gif', get_lang('Exercice'))?></td>
-				<td><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
+		  <td width="30" align="left"><?php Display::display_icon('quiz.gif', get_lang('Exercice'))?></td>
+		  <td width="15" valign="left"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
 		      <?php $row['title']=api_parse_tex($row['title']); ?>
-				<td><a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$mylpitemid; ?>&amp;exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a></td>
+		  <td><a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$mylpitemid; ?>&amp;exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a></td>
 		  <td> <?php
 		  $exid = $row['id'];
 		  $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '".Database::escape_string($exid)."'";
@@ -767,14 +761,11 @@ echo "</td>";
 echo "</tr>\n";
 } else {// student only
 				?>
-      <td><table border="0" cellpadding="0" cellspacing="0" width="100%">
           <tr>
-            <td width="20" valign="top" align="right"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
-            <td width="1">&nbsp;</td>
+            <td><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
+            <td>&nbsp;</td>
             <?php $row['title']=api_parse_tex($row['title']);?>
             <td><a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$myllpitemid; ?>&exerciseId=<?php echo $row['id']; ?>"><?php echo $row['title']; ?></a></td>
-			</tr>
-    </table></td>
 	 <td align="center"> <?php
 $exid = $row['id'];
 $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '".Database::escape_string($exid)."'";
@@ -863,16 +854,13 @@ $i++;
 				if($is_allowedToEdit) {
 					/************/
 					?>
-  <td width="27%" colspan="2">
-  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+  
     <tr>
-      <td width="30" align="left"><img src="../img/jqz.jpg" alt="HotPotatoes" /></td>
-	   <td width="15" align="center"><?php echo ($ind+($page*$limitExPage)).'.'; ?></td>
-       <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_user['user_id'];?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>
-    </tr>
-  </table></td>
+      <td><img src="../img/jqz.jpg" alt="HotPotatoes" /></td>
+	   <td><?php echo ($ind+($page*$limitExPage)).'.'; ?></td>
+       <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_user['user_id'];?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>    
   <td></td><td></td>
-      <td width="12%" align="center"><a href="adminhp.php?hotpotatoesName=<?php echo $path; ?>"> <img src="../img/edit.gif" border="0" alt="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" /></a>
+      <td><a href="adminhp.php?hotpotatoesName=<?php echo $path; ?>"> <img src="../img/edit.gif" border="0" alt="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" /></a>
        <img src="../img/wizard_gray_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build'),ENT_QUOTES,$charset); ?>" alt="<?php echo htmlentities(get_lang('Build'),ENT_QUOTES,$charset); ?>" />
   <a href="<?php echo $exercicePath; ?>?hpchoice=delete&amp;file=<?php echo $path; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('AreYouSure'),ENT_QUOTES,$charset).$title."?"); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>
     <?php
@@ -894,14 +882,12 @@ $i++;
 					if ($active==1) {
 						$nbrActiveTests = $nbrActiveTests + 1;
 						?>
-    <td width="40%"><table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
 
-        <td width="20" align="right"><?php echo ($ind+($page*$limitExPage)).'.'; ?><!--<img src="../img/jqz.jpg" alt="HotPotatoes" />--></td>
-       <td width="1">&nbsp;</td>
+        <td><?php echo ($ind+($page*$limitExPage)).'.'; ?><!--<img src="../img/jqz.jpg" alt="HotPotatoes" />--></td>
+       <td>&nbsp;</td>
         <td><a href="showinframes.php?<?php echo api_get_cidreq()."&amp;file=".$path."&amp;cid=".$_course['official_code']."&amp;uid=".$_user['user_id'].'"'; if(!$active) echo 'class="invisible"'; ?>"><?php echo $title;?></a></td>
-
-     </tr>
-    </table></td>
+		<td>&nbsp;</td><td>&nbsp;</td>
   </tr>
   <?php
 					}

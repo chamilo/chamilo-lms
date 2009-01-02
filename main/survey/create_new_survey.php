@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 16486 2008-10-10 13:32:05Z elixir_inter $
+* 	@version $Id: create_new_survey.php 17501 2009-01-02 03:03:34Z yannoo $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -179,8 +179,9 @@ $surveytypes[1] = get_lang('Conditional');
 
 if ($_GET['action'] == 'add')
 {
-	$form->addElement('select', 'survey_type', get_lang('SelectType'), $surveytypes, array('onchange' => 'if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}'));	
-	$form -> addElement('html','<div id="options" style="display: none;">');
+	//$form->addElement('select', 'survey_type', get_lang('SelectType'), $surveytypes, array('onchange' => 'if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}'));	
+	$form->addElement('hidden','survey_type',0);
+    $form -> addElement('html','<div id="options" style="display: none;">');
 		
 	require_once(api_get_path(LIBRARY_PATH).'surveymanager.lib.php');
 	$survey_tree = new SurveyTree();

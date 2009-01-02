@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 17511 2009-01-02 21:55:41Z cfasanando $
+<?php // $Id: exercice.php 17516 2009-01-02 22:46:25Z iflorespaz $
 
 /*
 ==============================================================================
@@ -40,7 +40,7 @@ $language_file='exercice';
 
 // including the global library
 require_once('../inc/global.inc.php');
-
+require_once ('../gradebook/lib/be.inc.php');
 // setting the tabs
 $this_section=SECTION_COURSES;
 
@@ -382,7 +382,7 @@ $res = api_sql_query($sql,__FILE__,__LINE__);
 list($nbrexerc) = Database::fetch_array($res);
 
 HotPotGCt($documentPath,1,$_user['user_id']);
-
+$tbl_grade_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 // only for administrator
 
 if ($is_allowedToEdit) {
@@ -396,6 +396,16 @@ if ($is_allowedToEdit) {
 			switch ($choice) {
 				case 'delete':	// deletes an exercise
 								$objExerciseTmp->delete();
+								
+								//delete link of exercise of gradebook tool
+								$sql='SELECT gl.id FROM '.$tbl_grade_link.' gl WHERE gl.type="1" AND gl.ref_id="'.$exerciseId.'";';
+								$result=api_sql_query($sql,__FILE__,__LINE__);
+								$row=Database::fetch_array($result,'ASSOC');
+								
+								$link= LinkFactory :: load($row['id']);
+								if ($link[0] != null) {
+									$link[0]->delete();
+								}
 								Display::display_confirmation_message(get_lang('ExerciseDeleted'));
 								break;
 				case 'enable':  // enables an exercise

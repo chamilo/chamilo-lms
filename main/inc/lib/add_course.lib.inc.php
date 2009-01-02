@@ -1648,10 +1648,11 @@ function update_Db_course($courseDbName)
 			  notebook_id int unsigned NOT NULL auto_increment,
 			  user_id int unsigned NOT NULL,
 			  course varchar(40) not null,		
-			  session_id int NOT NULL default 0,		 					  
-			  description varchar(255) NOT NULL,
-			  start_date datetime NOT NULL default '0000-00-00 00:00:00',
-			  end_date datetime NOT NULL default '0000-00-00 00:00:00',
+			  session_id int NOT NULL default 0,
+			  title varchar(255) NOT NULL,				 					  
+			  description text NOT NULL,
+			  creation_date datetime NOT NULL default '0000-00-00 00:00:00',
+			  update_date datetime NOT NULL default '0000-00-00 00:00:00',
 			  status int,
 			  PRIMARY KEY  (notebook_id)
 			)";

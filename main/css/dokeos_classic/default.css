@@ -1703,57 +1703,66 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
     background-color: #c3d9ff;
     padding: 1em  1em;
 }
-.style-add-textarea {
+.notebook-add-desc-textarea {
     background-color: #f2f5f8;
     border-color: #ffe99b;
     overflow: hidden;
 }
-
-.style-edit-textarea {
+.notebook-add-title-text {
+    background-color: #f2f5f8;
+    border-color: #ffe99b;
+}
+.notebook-edit-desc-textarea {
     background-color: #e0ecff;
     border-color: #ffe99b;
     overflow: hidden;
 }
-
-.msg_error {
+.notebook-edit-title-text {
+    background-color: #e0ecff;
+    border-color: #ffe99b;    
+}
+.notebook-msg-error {
     color: #FF0000;
     display :none;
     background-color: #ffe99b;
     width: 40%;     
 }
-
 .notebook-list{
     margin: 1em 1em 0em 1em;
     background-color: #79b;
-    padding: 0.3em  0.3em;
+    padding: 0.3em  0.3em; 
     -moz-border-radius: 0.5em;
 }
-
-.note-number{
+.notebook-title-list{
     color : #fff;
     padding: 0.3em  0.3em;
     font-weight: bold;
     font-size: 120%;
 }
-
-.desc-notebook {
+.notebook-desc-list {
     margin: 0em;
     background-color: #f2f5f8;
     padding: 0.5em 0.3em 2em 0.3em;
-    height:50%;
     border: 1px solid #79b; 
 }
-
 .notebook-term-action-links {
     padding: 0.3em  0.3em;
     width: 50%;    
     color : #fff;
 }
-
-.date_information {
-    padding: 0 0.3em;
+.notebook-orderby-link {
+    text-align:right;
+    margin-right: 1em;    
+}
+.notebook-search-title {
+    text-align:right;
+    margin: 1em;
+}
+.notebook-date-information {
+    color : #fff;
+    padding: 0.3em;
+    font-size: 120%;
     font-weight: bold;
-    font-size: 90%;
 }
 
 

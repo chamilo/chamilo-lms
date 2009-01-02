@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17496 2008-12-31 21:47:40Z yannoo $
+<?php //$Id: agenda.inc.php 17504 2009-01-02 15:54:13Z yannoo $
 
 /*
 ==============================================================================
@@ -1729,11 +1729,11 @@ function display_agenda_items()
     			echo Display::return_icon('announce_add.gif', get_lang('AddAnnouncement'))."</a> ";
 	    		if ($myrow['visibility']==1)
 	    		{
-	    			$image_visibility="visible";
+	    			$image_visibility="visible.gif";
 	    		}
 	    		else
 	    		{
-	    			$image_visibility="invisible";
+	    			$image_visibility="invisible.gif";
 	    		}
     			echo 	'<a href="'.$mylink.'&amp;action=showhide" title="'.get_lang("langVisible").'">',
     					Display::return_icon($image_visibility, get_lang('Visible')),'</a> ';

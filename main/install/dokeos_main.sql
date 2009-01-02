@@ -629,7 +629,8 @@ VALUES
 ('allow_users_to_create_courses',NULL,'radio','Platform','true','AllowUsersToCreateCoursesTitle','AllowUsersToCreateCoursesComment',NULL,NULL),
 ('course_create_active_tools','survey','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Survey'),
 ('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary'),
-('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook');
+('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook'),
+('advanced_filemanager',NULL,'radio','Platform','false','AdvancedfilemanagerTitle','Advanced_filemanagerComment',NULL,NULL);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -780,7 +781,9 @@ VALUES
 ('show_session_coach', 'false', 'No'),
 ('allow_users_to_create_courses','true','Yes'),
 ('allow_users_to_create_courses','false','No'),
-('breadcrumbs_course_homepage', 'session_name_and_course_title', 'SessionNameAndCourseTitle');
+('breadcrumbs_course_homepage', 'session_name_and_course_title', 'SessionNameAndCourseTitle'),
+('advanced_filemanager','true','Yes'),
+('advanced_filemanager','false','No');
 UNLOCK TABLES;
 
 /*!40000 ALTER TABLE settings_options ENABLE KEYS */;

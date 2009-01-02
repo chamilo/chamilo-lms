@@ -305,70 +305,9 @@ var _QuickUploadLanguage	= 'php' ;	// asp | aspx | cfm | lasso | perl | php | py
 // extension to use for the default File Browser (Perl uses "cgi").
 var _FileBrowserExtension = _FileBrowserLanguage == 'perl' ? 'cgi' : _FileBrowserLanguage ;
 var _QuickUploadExtension = _QuickUploadLanguage == 'perl' ? 'cgi' : _QuickUploadLanguage ;
-
-FCKConfig.LinkBrowser = true ;
-
-//
-//FCKConfig.LinkBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Connector=' + encodeURIComponent( FCKConfig.BasePath + 'filemanager/connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension ) ;
-//
-
-FCKConfig.LinkBrowserWindowWidth	= FCKConfig.ScreenWidth * 0.7 ;		// 70%
-FCKConfig.LinkBrowserWindowHeight	= FCKConfig.ScreenHeight * 0.7 ;	// 70%
-
-FCKConfig.ImageBrowser = true ;
-
-// this is set in the  main/inc/lib/formvalidator/Element/html_editor.php file very hard to find!!
-//FCKConfig.ImageBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Type=Image&Connector=' + encodeURIComponent( FCKConfig.BasePath + 'filemanager/connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension ) ;
-
-FCKConfig.ImageBrowserWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	// 70% ;
-FCKConfig.ImageBrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	// 70% ;
-
-// Flash Browsing
-FCKConfig.FlashBrowser = true ;
-
-// this is set in the  main/inc/lib/formvalidator/Element/html_editor.php file very hard to find!!
-//FCKConfig.FlashBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Type=Flash&Connector=' + encodeURIComponent( FCKConfig.BasePath + 'filemanager/connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension ) ;
-
-FCKConfig.FlashBrowserWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	//70% ;
-FCKConfig.FlashBrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	//70% ;
-
-FCKConfig.MediaBrowser = true ;
-// this is set in the  main/inc/lib/formvalidator/Element/html_editor.php
-//FCKConfig.MediaBrowserURL = FCKConfig.FlashBrowserURL;
-
-FCKConfig.MediaBrowserWindowWidth = FCKConfig.ScreenWidth * 0.7 ;	//70% ;
-FCKConfig.MediaBrowserWindowHeight= FCKConfig.ScreenHeight * 0.7 ;	//70% ;
-
-FCKConfig.LinkUpload = true ;
-FCKConfig.LinkUploadURL = FCKConfig.BasePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension ;
-FCKConfig.LinkUploadAllowedExtensions	= ".(7z|aiff|asf|avi|bmp|csv|doc|fla|flv|gif|gz|gzip|jpeg|jpg|mid|mov|mp3|mp4|mpc|mpeg|mpg|ods|odt|pdf|png|ppt|pxd|qt|ram|rar|rm|rmi|rmvb|rtf|sdc|sitd|swf|sxc|sxw|tar|tgz|tif|tiff|txt|vsd|wav|wma|wmv|xls|xml|zip)$" ;			// empty for all
-FCKConfig.LinkUploadDeniedExtensions	= "" ;	// empty for no one
-
-FCKConfig.ImageUpload = true ;
-FCKConfig.ImageUploadURL = FCKConfig.BasePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension + '?Type=Image' ;
-FCKConfig.ImageUploadAllowedExtensions	= ".(jpg|gif|jpeg|png|bmp)$" ;		// empty for all
-FCKConfig.ImageUploadDeniedExtensions	= "" ;							// empty for no one
-
-// plugin added
-/* 
-FCKConfig.FlashUpload = true ;
-FCKConfig.FlashUploadURL = FCKConfig.BasePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension + '?Type=Flash' ;
-FCKConfig.FlashUploadAllowedExtensions	= ".(swf|flv)$" ;		// empty for all
-FCKConfig.FlashUploadDeniedExtensions	= "" ;					// empty for no one
-*/
-
-// mp3 plugin 
-FCKConfig.MP3Browser = true ;
-// this is set in the  main/inc/lib/formvalidator/Element/html_editor.php 
-//FCKConfig.MP3BrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension ;
-FCKConfig.MP3BrowserWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	//70% ;
-FCKConfig.MP3BrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	//70% ;
-
-FCKConfig.MP3Upload = true ;
-//FCKConfig.MP3UploadURL = FCKConfig.BasePath + 'filemanager/upload/' + FCKConfig.QuickUploadLanguage + '/upload.' + _QuickUploadLanguage + '?Type=MP3' ;
-FCKConfig.MP3UploadAllowedExtensions	= ".(mp3)$" ;		// empty for all
-FCKConfig.MP3UploadDeniedExtensions	= "" ;					// empty for no one
-
+////
+// moved to myconfig.js and myconfig_afm.js
+////
 FCKConfig.SmileyPath	= FCKConfig.BasePath + 'images/smiley/msn/' ;
 FCKConfig.SmileyImages	= ['regular_smile.gif','sad_smile.gif','wink_smile.gif','teeth_smile.gif','confused_smile.gif','tounge_smile.gif','embaressed_smile.gif','omg_smile.gif','whatchutalkingabout_smile.gif','angry_smile.gif','angel_smile.gif','shades_smile.gif','devil_smile.gif','cry_smile.gif','lightbulb.gif','thumbs_down.gif','thumbs_up.gif','heart.gif','broken_heart.gif','kiss.gif','envelope.gif'] ;
 FCKConfig.SmileyColumns = 8 ;

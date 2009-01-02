@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 17459 2008-12-24 21:11:18Z ivantcholakov $
+<?php // $Id: document.inc.php 17509 2009-01-02 21:12:11Z herodoto $
 
 /*
 ==============================================================================
@@ -220,8 +220,15 @@ function build_document_icon_tag($type, $path)
 		$icon = choose_image($basename);
 	}
 	else
-	{
-		$icon = 'folder_document.gif';
+	{ //juan carlos raña
+		if($basename =='sharedfolder')
+		{
+			$icon = 'shared_folder.gif';
+		}
+		else
+		{		
+			$icon = 'folder_document.gif';
+		}
 	}
 
 	return Display::return_icon($icon, $basename, array('hspace'=>'5', 'align' => 'middle'));

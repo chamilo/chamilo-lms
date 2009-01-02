@@ -1,6 +1,6 @@
-<?php // $Id: configure_homepage.php 17412 2008-12-21 02:58:00Z ivantcholakov $
+<?php // $Id: configure_homepage.php 17509 2009-01-02 21:12:11Z herodoto $
 /*
-==============================================================================
+===== =========================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2008 Dokeos SPRL
@@ -67,22 +67,22 @@ if(!empty($action)){
 	}
 }
 
-//The global logic for language priorities should be: 
-//- take language selected when connecting ($_SESSION['user_language_choice']) 
-//  or last language selected (taken from select box into SESSION by global.inc.php) 
+//The global logic for language priorities should be:
+//- take language selected when connecting ($_SESSION['user_language_choice'])
+//  or last language selected (taken from select box into SESSION by global.inc.php)
 //  or, if unavailable;
-//- take default user language ($_SESSION['_user']['language']) - which is taken from 
+//- take default user language ($_SESSION['_user']['language']) - which is taken from
 //  the database in local.inc.php or, if unavailable;
 //- take platform language (taken from the database campus setting 'platformLanguage')
-// Then if a language file doesn't exist, it should be created. 
-// The default language for the homepage should use the default platform language 
+// Then if a language file doesn't exist, it should be created.
+// The default language for the homepage should use the default platform language
 // (if nothing else is selected), which means the 'no-language' file should be taken
 // to fill a new 'language-specified' language file, and then only the latter should be
 // modified. The original 'no-language' files should never be modified.
 
 // ----- Language selection -----
 // The final language selected and used everywhere in this script follows the rules
-// described above and is put into "$lang". Because this script includes 
+// described above and is put into "$lang". Because this script includes
 // global.inc.php, the variables used for language purposes below are considered safe.
 
 $lang = ''; //el for "Edit Language"
@@ -105,7 +105,7 @@ $menuf = 'home_menu'; //menuf for Menu File
 $newsf = 'home_news'; //newsf for News File
 $topf = 'home_top'; //topf for Top File
 $noticef = 'home_notice'; //noticef for Notice File
-$ext = '.html'; //ext for HTML Extension - when used frequently, variables are 
+$ext = '.html'; //ext for HTML Extension - when used frequently, variables are
 				// faster than hardcoded strings
 $homef = array($menuf,$newsf,$topf,$noticef);
 
@@ -143,7 +143,7 @@ if(!empty($action))
 	if($_POST['formSent'])
 	{
 		//variables used are $homep for home path, $menuf for menu file, $newsf
-		// for news file, $topf for top file, $noticef for noticefile, 
+		// for news file, $topf for top file, $noticef for noticefile,
 		// $ext for '.html'
 		switch($action)
 		{
@@ -179,7 +179,7 @@ if(!empty($action))
 			case 'edit_notice':
 				// Filter
 				$notice_title=trim(strip_tags(stripslashes($_POST['notice_title'])));
-				$notice_text=trim(str_replace(array("\r","\n"),array("","<br />"),strip_tags(stripslashes($_POST['notice_text']),'<a>')));	
+				$notice_text=trim(str_replace(array("\r","\n"),array("","<br />"),strip_tags(stripslashes($_POST['notice_text']),'<a>')));
 				/*if(empty($notice_title))
 				{
 					$errorMsg=get_lang('PleaseEnterNoticeTitle');
@@ -215,7 +215,7 @@ if(!empty($action))
 					$fp=fopen($homep.$noticef.'_'.$lang.$ext,"w");
 					fputs($fp,"<b>$notice_title</b><br />\n$notice_text");
 					fclose($fp);
-				}				
+				}
 				break;
 			case 'edit_news':
 				//Filter
@@ -224,12 +224,12 @@ if(!empty($action))
 				{
 					$home_news=WCAG_rendering::prepareXHTML();
 				} else
-				{ 
+				{
 					$home_news=trim(stripslashes($_POST['home_news']));
 				}
 				//Write
 				if($s_languages_news!="all"){
-	
+
 					if(file_exists($homep.$newsf.'_'.$s_languages_news.$ext)){
 						if(is_writable($homep.$newsf.'_'.$s_languages_news.$ext)){
 							$fp=fopen($homep.$newsf.'_'.$s_languages_news.$ext,"w");
@@ -250,11 +250,11 @@ if(!empty($action))
 				else //we update all the news file
 				{
 					$_languages=api_get_languages();
-	
+
 					foreach($_languages["name"] as $key => $value){
-	
+
 						$english_name=$_languages["folder"][$key];
-	
+
 						if(file_exists($homep.$newsf.'_'.$english_name.$ext)){
 							if(is_writable($homep.$newsf.'_'.$english_name.$ext)){
 								$fp=fopen($homep.$newsf.'_'.$english_name.$ext,"w");
@@ -288,7 +288,7 @@ if(!empty($action))
 				}
 				$filename=trim(stripslashes($_POST['filename']));
 				$target_blank=$_POST['target_blank']?true:false;
-	
+
 				if($link_url == 'http://')
 				{
 					$link_url='';
@@ -297,7 +297,7 @@ if(!empty($action))
 				{
 					$link_url='http://'.$link_url;
 				}
-	
+
 				if(!is_writable($homep.$menuf.'_'.$lang.$ext))
 				{
 					$errorMsg=get_lang('HomePageFilesNotWritable');
@@ -324,10 +324,10 @@ if(!empty($action))
 					{
 						$filename=str_replace($ext,'_'.$lang.$ext,$filename);
 					}
-					// Get the contents of home_menu_en.html (or active menu language 
+					// Get the contents of home_menu_en.html (or active menu language
 					// version) into $home_menu as an array of one entry per line
 					$home_menu=file($homep.$menuf.'_'.$lang.$ext);
-					// Prepare place to insert the new link into (default is end of file) 
+					// Prepare place to insert the new link into (default is end of file)
 					if($insert_where < -1 || $insert_where > (sizeof($home_menu) - 1))
 					{
 						$insert_where=sizeof($home_menu) - 1;
@@ -337,20 +337,20 @@ if(!empty($action))
 					{
 						$home_menu[$key]=trim($enreg);
 					}
-					// If the given link url is empty, then replace the link url by a link to the link file created 
+					// If the given link url is empty, then replace the link url by a link to the link file created
 					if(empty($link_url))
 					{
 						$link_url=api_get_path(WEB_PATH).'index.php?include='.urlencode($filename);
 						// If the file doesn't exist, then create it and
-						// fill it with default text	
+						// fill it with default text
 						if(!file_exists(api_get_path(SYS_PATH).'home/'.$filename))
 						{
 							$fp=@fopen(api_get_path(SYS_PATH).'home/'.$filename,'w');
-	
+
 							if($fp)
 							{
 								fputs($fp,get_lang('MyTextHere'));
-	
+
 								fclose($fp);
 							}
 						}
@@ -360,11 +360,11 @@ if(!empty($action))
 					if($action == 'edit_link' && !empty($link_html))
 					{
 						$fp=@fopen(api_get_path(SYS_PATH).'home/'.$filename,'w');
-	
+
 						if($fp)
 						{
 							fputs($fp,$link_html);
-	
+
 							fclose($fp);
 						}
 					}
@@ -384,10 +384,10 @@ if(!empty($action))
 								break;
 							}
 						}
-	
+
 						$home_menu[$insert_where+1]='<li><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'">'.$link_name.'</a></li>';
 					}
-					else // If the request is about a link edition, change the link 
+					else // If the request is about a link edition, change the link
 					{
 						$home_menu[$link_index]='<li><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'">'.$link_name.'</a></li>';
 					}
@@ -412,7 +412,7 @@ if(!empty($action))
 						$fp=fopen($homep.$menuf.'_'.$lang.$ext,"w");
 						fputs($fp,$home_menu);
 						fclose($fp);
-					}				
+					}
 				}
 				break;
 		} //end of switch($action)
@@ -435,9 +435,9 @@ if(!empty($action))
 				// A link is deleted by getting the file into an array, removing the
 				// link and re-writing the array to the file
 				$link_index=intval($_GET['link_index']);
-		
+
 				$home_menu=file($homep.$menuf.'_'.$lang.$ext);
-		
+
 				foreach($home_menu as $key=>$enreg)
 				{
 					if($key == $link_index)
@@ -449,117 +449,117 @@ if(!empty($action))
 						$home_menu[$key]=trim($enreg);
 					}
 				}
-		
+
 				$home_menu=implode("\n",$home_menu);
-		
+
 				$fp=fopen($homep.$menuf.'_'.$lang.$ext,'w');
-		
+
 				fputs($fp,$home_menu);
-		
+
 				fclose($fp);
-		
+
 				header('Location: '.api_get_self());
 				exit();
 				break;
 			case 'edit_top':
 				// This request is only the preparation for the update of the home_top
 				$home_top = '';
-				if(is_file($homep.$topf.'_'.$lang.$ext) 
+				if(is_file($homep.$topf.'_'.$lang.$ext)
 					&& is_readable($homep.$topf.'_'.$lang.$ext))
 				{
-					$home_top=file_get_contents($homep.$topf.'_'.$lang.$ext);				
+					$home_top=file_get_contents($homep.$topf.'_'.$lang.$ext);
 				}
 				elseif(is_file($homep.$topf.$lang.$ext)
 					&& is_readable($homep.$topf.$lang.$ext))
 				{
-					$home_top=file_get_contents($homep.$topf.$lang.$ext);				
+					$home_top=file_get_contents($homep.$topf.$lang.$ext);
 				}
 				else
 				{
-					$errorMsg=get_lang('HomePageFilesNotReadable');					
+					$errorMsg=get_lang('HomePageFilesNotReadable');
 				}
 				break;
 			case 'edit_notice':
 				// This request is only the preparation for the update of the home_notice
 				$home_notice = '';
-				if(is_file($homep.$noticef.'_'.$lang.$ext) 
+				if(is_file($homep.$noticef.'_'.$lang.$ext)
 					&& is_readable($homep.$noticef.'_'.$lang.$ext))
 				{
-					$home_notice=file($homep.$noticef.'_'.$lang.$ext);				
+					$home_notice=file($homep.$noticef.'_'.$lang.$ext);
 				}
 				elseif(is_file($homep.$noticef.$lang.$ext)
 					&& is_readable($homep.$noticef.$lang.$ext))
 				{
-					$home_notice=file($homep.$noticef.$lang.$ext);				
+					$home_notice=file($homep.$noticef.$lang.$ext);
 				}
 				else
 				{
-					$errorMsg=get_lang('HomePageFilesNotReadable');					
-				}		
+					$errorMsg=get_lang('HomePageFilesNotReadable');
+				}
 				$notice_title=strip_tags($home_notice[0]);
 				$notice_text=strip_tags(str_replace('<br />',"\n",$home_notice[1]),'<a>');
 				break;
 			case 'edit_news':
 				// This request is the preparation for the update of the home_news page
 				$home_news = '';
-				if(is_file($homep.$newsf.'_'.$lang.$ext) 
+				if(is_file($homep.$newsf.'_'.$lang.$ext)
 					&& is_readable($homep.$newsf.'_'.$lang.$ext))
 				{
-					$home_news=file_get_contents($homep.$newsf.'_'.$lang.$ext);				
+					$home_news=file_get_contents($homep.$newsf.'_'.$lang.$ext);
 		//			$home_news=file($homep.$newsf.$ext);
 		//			$home_news=implode('',$home_news);
 				}
 				elseif(is_file($homep.$newsf.$lang.$ext)
 					&& is_readable($homep.$newsf.$lang.$ext))
 				{
-					$home_news=file_get_contents($homep.$newsf.$lang.$ext);				
+					$home_news=file_get_contents($homep.$newsf.$lang.$ext);
 				}
 				else
 				{
-					$errorMsg=get_lang('HomePageFilesNotReadable');					
-				}		
+					$errorMsg=get_lang('HomePageFilesNotReadable');
+				}
 				break;
-			case 'insert_link':	
+			case 'insert_link':
 				// This request is the preparation for the addition of an item in home_menu
 				$home_menu = '';
-				if(is_file($homep.$menuf.'_'.$lang.$ext) 
+				if(is_file($homep.$menuf.'_'.$lang.$ext)
 					&& is_readable($homep.$menuf.'_'.$lang.$ext))
 				{
-					$home_menu=file($homep.$menuf.'_'.$lang.$ext);				
+					$home_menu=file($homep.$menuf.'_'.$lang.$ext);
 				}
 				elseif(is_file($homep.$menuf.$lang.$ext)
 					&& is_readable($homep.$menuf.$lang.$ext))
 				{
-					$home_menu=file($homep.$menuf.$lang.$ext);				
+					$home_menu=file($homep.$menuf.$lang.$ext);
 				}
 				else
 				{
-					$errorMsg=get_lang('HomePageFilesNotReadable');					
+					$errorMsg=get_lang('HomePageFilesNotReadable');
 				}
 				break;
 			case 'edit_link':
 				// This request is the preparation for the edition of the links array
 				$home_menu = '';
-				if(is_file($homep.$menuf.'_'.$lang.$ext) 
+				if(is_file($homep.$menuf.'_'.$lang.$ext)
 					&& is_readable($homep.$menuf.'_'.$lang.$ext))
 				{
-					$home_menu=file($homep.$menuf.'_'.$lang.$ext);				
+					$home_menu=file($homep.$menuf.'_'.$lang.$ext);
 				}
 				elseif(is_file($homep.$menuf.$lang.$ext)
 					&& is_readable($homep.$menuf.$lang.$ext))
 				{
-					$home_menu=file($homep.$menuf.$lang.$ext);				
+					$home_menu=file($homep.$menuf.$lang.$ext);
 				}
 				else
 				{
-					$errorMsg=get_lang('HomePageFilesNotReadable');					
+					$errorMsg=get_lang('HomePageFilesNotReadable');
 				}
 
-				$link_index=intval($_GET['link_index']);		
+				$link_index=intval($_GET['link_index']);
 				$target_blank=false;
 				$link_name='';
 				$link_url='';
-		
+
 				// For each line of the home_menu file
 				foreach($home_menu as $key=>$enreg)
 				{
@@ -576,22 +576,22 @@ if(!empty($action))
 						// additional measure in case a link previously contained
 						// unsecure tags)
 						$link_name=strip_tags($enreg);
-						
+
 						// Get the contents of "href" attribute in $link_url
 						$enreg=explode('href="',$enreg);
 						list($link_url)=explode('"',$enreg[sizeof($enreg)-1]);
-		
+
 						// If the link contains the web root of this portal, then strip
 						// it off and keep only the name of the file that needs edition
 						if(strstr($link_url,$_configuration['root_web']) && strstr($link_url,'?include='))
 						{
 							$link_url=explode('?include=',$link_url);
-		
+
 							$filename=$link_url[sizeof($link_url)-1];
-		
+
 							if(!strstr($filename,'/') && strstr($filename,'.html'))
 							{
-								// Get oonly the contents of the link file					
+								// Get oonly the contents of the link file
 								$link_html=file(api_get_path(SYS_PATH).'home/'.$filename);
 								$link_html=implode('',$link_html);
 								$link_url='';
@@ -635,7 +635,7 @@ switch($action){
 		?>
 		<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
 		<input type="hidden" name="formSent" value="1"/>
-		
+
 		<?php
 		if(!empty($errorMsg))
 		{
@@ -643,7 +643,7 @@ switch($action){
 			Display::display_normal_message($errorMsg);
 			//echo '</td></tr>';
 		}
-		
+
 		?>
 		<table border="0" cellpadding="5" cellspacing="0">
 		<tr><td colspan="2"><?php echo '<span style="font-style: italic;">'.get_lang('LetThoseFieldsEmptyToHideTheNotice').'</span>'; ?></tr>
@@ -660,7 +660,7 @@ switch($action){
 		  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"/></td>
 		</tr>
 		</table>
-		</form>		
+		</form>
 		<?php
 		break;
 	case 'insert_link':
@@ -670,7 +670,7 @@ switch($action){
 		<input type="hidden" name="formSent" value="1"/>
 		<input type="hidden" name="link_index" value="<?php if($action == 'edit_link') echo $link_index; else echo '0'; ?>"/>
 		<input type="hidden" name="filename" value="<?php if($action == 'edit_link') echo $filename; else echo ''; ?>"/>
-		
+
 		<table border="0" cellpadding="5" cellspacing="0">
 		<?php
 		if(!empty($errorMsg))
@@ -679,7 +679,7 @@ switch($action){
 			Display::display_normal_message($errorMsg); //main API
 			echo '</td></tr>';
 		}
-		?>		
+		?>
 		<tr>
 		  <td nowrap="nowrap"><?php echo get_lang('LinkName'); ?> :</td>
 		  <td><input type="text" name="link_name" size="30" maxlength="50" value="<?php echo htmlentities($link_name,ENT_QUOTES,$charset); ?>" style="width: 350px;"/></td>
@@ -688,39 +688,39 @@ switch($action){
 		  <td nowrap="nowrap"><?php echo get_lang('LinkURL'); ?> (<?php echo get_lang('Optional'); ?>) :</td>
 		  <td><input type="text" name="link_url" size="30" maxlength="100" value="<?php if(empty($link_url)) echo 'http://'; else echo htmlentities($link_url,ENT_QUOTES,$charset); ?>" style="width: 350px;"/></td>
 		</tr>
-		
-		<?php 
-		if($action == 'insert_link') 
+
+		<?php
+		if($action == 'insert_link')
 		{
 		?>
 			<tr>
 			  <td nowrap="nowrap"><?php echo get_lang('InsertThisLink'); ?> :</td>
 			  <td><select name="insert_where">
 			  <option value="-1"><?php echo get_lang('FirstPlace'); ?></option>
-			
+
 			<?php
 			foreach($home_menu as $key=>$enreg)
 			{
 			?>
-			
+
 			  <option value="<?php echo $key; ?>" <?php if($formSent && $insert_where == $key) echo 'selected="selected"'; ?> ><?php echo get_lang('After'); ?> &quot;<?php echo trim(strip_tags($enreg)); ?>&quot;</option>
-			
+
 			<?php
 			}
 			?>
-			
+
 			  </select></td>
 			</tr>
-		<?php 
+		<?php
 		}
 		?>
-		
+
 		<tr>
 		  <td nowrap="nowrap"><?php echo get_lang('OpenInNewWindow'); ?> ?</td>
 		  <td><input class="checkbox" type="checkbox" name="target_blank" value="1" <?php if($target_blank) echo 'checked="checked"'; ?> /> <?php echo get_lang('Yes'); ?></td>
 		</tr>
-		
-		<?php 
+
+		<?php
 		if($action == 'edit_link' && empty($link_url))
 		{
 		?>
@@ -728,23 +728,32 @@ switch($action){
 			<table border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tr>
 			  <td>
-			
+
 			<?php
 			    //api_disp_html_area('link_html',isset($_POST['link_html'])?$_POST['link_html']:$link_html,'400px');
-				if (api_get_setting('wcag_anysurfer_public_pages')=='true') 
+				if (api_get_setting('wcag_anysurfer_public_pages')=='true')
 				{
 					echo WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html);
-				} 
-				else 
+				}
+				else
 				{
 					$oFCKeditor = new FCKeditor('link_html') ;
 					$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
 					$oFCKeditor->Height		= '400';
 					$oFCKeditor->Width		= '100%';
 					$oFCKeditor->Value		= isset($_POST['link_html'])?$_POST['link_html']:$link_html;
-					$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+
+					if(api_get_setting('advanced_filemanager')=='true')
+					{
+						$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
+					}
+					else
+					{
+						$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+					}
+
 					$oFCKeditor->ToolbarSet = "Small";
-				
+
 					$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 					$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
 					$result_sql=api_sql_query($sql,__FILE__,__LINE__);
@@ -752,16 +761,16 @@ switch($action){
 					$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
 					echo $oFCKeditor->CreateHtml();
 				}
-				
+
 			?>
-			
+
 			  </td>
 			</tr>
 			<tr>
 			  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"/></td>
 			</tr>
 		<?php
-		} 
+		}
 		else
 		{
 			echo '<tr>' .
@@ -770,10 +779,10 @@ switch($action){
 				'</tr>';
 		}
 		?>
-		
+
 		</table>
 		</form>
-		
+
 		<?php
 		break;
 	case 'edit_top':
@@ -787,7 +796,7 @@ switch($action){
 		{
 			$name = $newsf;
 			$open=@file_get_contents($homep.$newsf.'_'.$lang.$ext);
-	
+
 		}
 		// print form header + important formSent attribute
 		echo '<form action="'.api_get_self().'?action='.$action.'" method="post" style="margin:0px;">';
@@ -797,7 +806,7 @@ switch($action){
 		{
 			Display::display_normal_message($errorMsg); //main API
 		}
-		
+
 		if($action == 'edit_news'){
 			$_languages=api_get_languages();
 			echo get_lang("ChooseNewsLanguage")." : <select name='news_languages'><option value='all'>".get_lang("AllLanguages")."</option>";
@@ -813,20 +822,21 @@ switch($action){
 			echo "</select>";
 		}
 		?>
-		
+
 		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 		<tr>
 		  <td>
-		
+
 		<?php
-		if (api_get_setting('wcag_anysurfer_public_pages')=='true') 
+		if (api_get_setting('wcag_anysurfer_public_pages')=='true')
 		{
+			//TODO: review these lines
 			// Print WCAG-specific HTML editor
 			echo '<script type="text/javascript" src="'.api_get_path(REL_PATH).'main/inc/lib/fckeditor/editor/plugins/ImageManagerStandalone/generic_dialog_common.js'.'" />';
 			echo WCAG_Rendering::create_xhtml($open);
-			
-		} 
-		else 
+
+		}
+		else
 		{
 			$open=str_replace('{rel_path}',api_get_path(REL_PATH),$open);
 			$oFCKeditor = new FCKeditor($name) ;
@@ -834,42 +844,87 @@ switch($action){
 			$oFCKeditor->Height		= '400';
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Value		= $open;
-			$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+
+			if(api_get_setting('advanced_filemanager')=='true')
+			{
+				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
+			}
+			else
+			{
+				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+			}
+
 			$oFCKeditor->ToolbarSet = "Full";
-		
+
 			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
 			$result_sql=api_sql_query($sql,__FILE__,__LINE__);
 			$isocode_language=Database::result($result_sql,0,0);
 			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-			
+
 			//FCKeditor Configuration for the default_course_document
-			$default_course_path= api_get_path(REL_PATH).'main/default_course_document/';
-			$upload_path = api_get_path(REL_PATH).'main/default_course_document/'; 
-				
+			if(api_get_setting('advanced_filemanager')!='true')
+			{
+				$default_course_path= api_get_path(REL_PATH).'main/default_course_document/'; //TODO: Review this line for simple
+				$upload_path = api_get_path(REL_PATH).'main/default_course_document/'; //TODO: Review this line for simple
+			}
+
 			$oFCKeditor->Config['CreateDocumentDir'] = $upload_path;
 			$oFCKeditor->Config['CreateDocumentWebDir'] = $upload_path;
 
 			//for images
-			$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
-			$oFCKeditor->Config['ImageUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
-	
+			if(api_get_setting('advanced_filemanager')=='true')
+			{
+				$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
+			}
+			else
+			{
+				$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
+				$oFCKeditor->Config['ImageUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
+			}
 			//for flash
-			$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
-			$oFCKeditor->Config['FlashUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
-		
+			if(api_get_setting('advanced_filemanager')=='true')
+			{
+				$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
+			}
+			else
+			{
+				$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
+				$oFCKeditor->Config['FlashUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
+			}
 			//for MP3
-			$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
-			$oFCKeditor->Config['MP3UploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
-	
-			//for video
-			$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
-			$oFCKeditor->Config['VideoUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
-			
-			// for flv Player (Videos)
-			$oFCKeditor->Config['MediaBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
-			$oFCKeditor->Config['MediaUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
+			if(api_get_setting('advanced_filemanager')=='true')
+			{
+				$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
+			}
+			else
+			{
+				$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
+				$oFCKeditor->Config['MP3UploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
+			}
 
+			//for video
+			if(api_get_setting('advanced_filemanager')=='true')
+			{
+				$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
+			}
+			else
+			{
+				$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
+				$oFCKeditor->Config['VideoUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
+			}
+
+
+			// for flv Player (Videos)
+			if(api_get_setting('advanced_filemanager')=='true')
+			{
+				$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
+			}
+			else
+			{
+				$oFCKeditor->Config['MediaBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
+				$oFCKeditor->Config['MediaUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
+			}
 			echo $oFCKeditor->CreateHtml();
 		}
 		?>
@@ -880,11 +935,11 @@ switch($action){
 		</tr>
 		</table>
 		</form>
-		
+
 		<?php
 		break;
 	default: // When no action applies, default page to update campus homepage
-		?>		
+		?>
 		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 		<tr>
 		  <td width="80%" colspan="2">
@@ -911,11 +966,11 @@ switch($action){
 					}
 					else
 					{
-						$home_top_temp=file_get_contents($homep.$topf.$ext);					
+						$home_top_temp=file_get_contents($homep.$topf.$ext);
 					}
 					$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);
 					echo $open;
-				?>		
+				?>
 			  </td>
 			</tr>
 			<tr>
@@ -938,7 +993,7 @@ switch($action){
 					foreach($Categories as $enreg)
 					{
 						echo '<tr><td>'.Display::return_icon('opendir.gif').'&nbsp;'.$enreg['name'].'</td></tr>';
-					}		
+					}
 					unset($Categories);
 				}
 				else
@@ -946,12 +1001,12 @@ switch($action){
 					echo get_lang('NoCategories');
 				}
 				?>
-		
+
 				</table>
 			  </td>
-			  <!--<td width="50%" valign="top">		
+			  <!--<td width="50%" valign="top">
 				<?php
-		
+
 				if(file_exists($homep.$newsf.'_'.$lang.$ext))
 				{
 					include ($homep.$newsf.'_'.$lang.$ext);
@@ -961,7 +1016,7 @@ switch($action){
 					include ($homep.$newsf.$ext);
 				}
 			?>
-		
+
 			  </td>-->
 			</tr>
 			</table>
@@ -994,7 +1049,7 @@ switch($action){
 			<div class="menusection">
 				<span class="menusectioncaption"><?php echo ucfirst(get_lang('General')); ?></span>
 				<ul class="menulist">
-		
+
 				<?php
 					$home_menu = '';
 					if(file_exists($homep.$menuf.'_'.$lang.$ext))
@@ -1005,29 +1060,29 @@ switch($action){
 					{
 						$home_menu = file ($homep.$menuf.$ext);
 					}
-				
+
 					foreach($home_menu as $key=>$enreg)
 					{
 						$enreg=trim($enreg);
-				
+
 						if(!empty($enreg))
 						{
 							$edit_link='<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$key.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 							$delete_link='<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-				
+
 							echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=','<br />'.$edit_link.' '.$delete_link.'</li>'),$enreg);
 						}
 					}
 				?>
-		
+
 				</ul>
 			</div>
-		
+
 			<br />
 			&nbsp;&nbsp;<a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a> <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php echo get_lang('EditNotice'); ?></a>
-		
+
 			<div class="note">
-		
+
 			<?php
 			$home_notice = '';
 			if(file_exists($homep.$noticef.'_'.$lang.$ext))
@@ -1040,13 +1095,13 @@ switch($action){
 			}
 			echo $home_notice
 			?>
-		
+
 			</div>
 			</div>
 		  </td>
 		</tr>
 		</table>
-		
+
 		<?php
 		break;
 }

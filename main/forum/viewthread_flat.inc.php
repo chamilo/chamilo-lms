@@ -73,9 +73,9 @@ foreach ($rows as $row) {
 			$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$row['poster_id'],$_GET['thread']);
 			if( isset($_GET['gradebook'])){
 				$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
-				echo "<a href=\"viewpost.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."&gradebook=".$_GET['gradebook']."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";			
+				echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."&gradebook=".$_GET['gradebook']."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";			
 			} else {
-				echo "<a href=\"viewpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";				
+				echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";				
 			}		
 		}	
 	}

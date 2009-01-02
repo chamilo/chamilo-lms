@@ -202,7 +202,7 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 		$table_list.= '<center><br /><table class="data_table" style="width:50%">';
 		// The column headers (to do: make this sortable)
 		$table_list.= '<tr >';
-		$table_list.= '<th height="24">'.get_lang('NamesAndFirstNames').'</th>';
+		$table_list.= '<th height="24">'.get_lang('NamesAndLastNames').'</th>';
 	
 		if ($_GET['list']=='qualify') {		
 			$table_list.= '<th>'.get_lang('Qualify').'</th>';
@@ -226,7 +226,7 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 			}
 			if ($userinf['status']=='1') {
 				$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$my_forum,$row_student_list['user_id'],$_GET['id']);					
-				$table_list.= '<td><a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&thread='.Security::remove_XSS($_GET['id']).'&user_id='.$row_student_list['user_id'].'&idtextqualify='.$current_qualify_thread.'&origin='.$origin.'">'.icon('../img/'.$icon_qualify,get_lang('Qualify')).'</a></td></tr>';
+				$table_list.= '<td><a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&thread='.Security::remove_XSS($_GET['id']).'&user='.$row_student_list['user_id'].'&user_id='.$row_student_list['user_id'].'&idtextqualify='.$current_qualify_thread.'&origin='.$origin.'">'.icon('../img/'.$icon_qualify,get_lang('Qualify')).'</a></td></tr>';
 			}
 			$counter_stdlist++;
 		}	

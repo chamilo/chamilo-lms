@@ -1875,7 +1875,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 
 		$form->addElement('static','Group','<a href="javascript://" onclick="if(document.getElementById(\'id_qualify\').style.display==\'none\'){ document.getElementById(\'id_qualify\').style.display=\'block\'; } else { document.getElementById(\'id_qualify\').style.display=\'none\'; }" ><br /><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</a>');
 		$form->addElement('html','<div id="id_qualify" style="display:none">');
-		$form->addElement('static','Group', '<br /><strong>'.get_lang('QualifyThread').'</strong>');
+		$form->addElement('static','Group', '<br /><strong>'.get_lang('AlterQualifyThread').'</strong>');
 		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'));
 		$form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
 		$form->addElement('text', 'weight_calification', get_lang('QualifyWeight'),'Style="width:40px"');
@@ -1933,7 +1933,10 @@ function show_add_post_form($action='', $id='', $form_values='') {
 		$form->display();
 		echo '<br />';
 		if ($forum_setting['show_thread_iframe_on_reply'] and $action<>'newthread') {
-			echo "<iframe src=\"iframe_thread.php?forum=".Security::remove_XSS($my_forum)."&amp;thread=".Security::remove_XSS($my_thread)."#".Security::remove_XSS($my_post)."\" width=\"80%\"></iframe>";
+
+				echo "<iframe src=\"iframe_thread.php?forum=".Security::remove_XSS($my_forum)."&amp;thread=".Security::remove_XSS($my_thread)."#".Security::remove_XSS($my_post)."\" width=\"80%\"></iframe>";
+
+			
 		}
 	}
 }

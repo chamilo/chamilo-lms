@@ -161,7 +161,7 @@ while ($row=Database::fetch_array($result)) {
 	} else {
 		$name=$row['firstname'].' '.$row['lastname'];
 	}
-	echo display_user_link($row['user_id'], $name).'<br />';
+	echo $name.'<br />';
 	echo $row['post_date'].'<br /><br />';
 
 	echo "</td>\n";

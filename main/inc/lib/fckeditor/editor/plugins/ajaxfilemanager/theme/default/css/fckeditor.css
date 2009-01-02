@@ -1,3 +1,4 @@
+/*~~~~~~ Hack for Dokeos ~~~~~~~~*/
 /*~~~~~~Global Setting ~~~~~~~~*/
 html, body{
     margin: 0px;
@@ -268,7 +269,7 @@ span.filePPT, span.fileExcel, span.filePhp,
 span.fileMusic, span.fileExe, span.fileAcrobat,
 span.fileRTF, span.fileXml, span.fileCode,
 span.fileZip, span.addMore, span.deleteFile,
-span.cancel,span.uploadProcessing{
+span.cancel,span.uploadProcessing, span.folderShared{
 padding:2px 0 2px 16px;
 background-repeat:no-repeat;
 background-position:0 50%;
@@ -295,6 +296,10 @@ span.fileRTF{background-image:url(../images/small_icon/fileRTF.png);}
 span.fileXml{background-image:url(../images/small_icon/fileXml.png);}
 span.fileCode{background-image:url(../images/small_icon/fileCode.png);}
 span.fileZip{background-image:url(../images/small_icon/fileZip.png);}
+
+span.folderShared{background-image:url(../images/small_icon/folderShared.png);}
+
+
 /* big icon */
 dt.folderEmpty, dt.folder, dt.folderParent,
 dt.fileUnknown, dt.fileText, dt.fileWord,
@@ -302,7 +307,7 @@ dt.fileFlash, dt.fileVideo,
 dt.filePPT, dt.fileExcel, dt.filePhp,
 dt.fileMusic, dt.fileExe, dt.fileAcrobat,
 dt.fileRTF, dt.fileXml, dt.fileCode,
-dt.fileZip{
+dt.fileZip,dt.folderShared{
 margin: 0px;
 padding:0px;
 border:solid #ccc 1px;
@@ -334,6 +339,8 @@ dt.fileRTF{background-image:url(../images/big_icon/fileRTF.png);}
 dt.fileXml{background-image:url(../images/big_icon/fileXml.png);}
 dt.fileCode{background-image:url(../images/big_icon/fileCode.png);}
 dt.fileZip{background-image:url(../images/big_icon/fileZip.png);}
+
+dt.folderShared{background-image:url(../images/big_icon/bigfolderShared.png);}
 
 table.tableSummary{
 border-collapse:collapse;

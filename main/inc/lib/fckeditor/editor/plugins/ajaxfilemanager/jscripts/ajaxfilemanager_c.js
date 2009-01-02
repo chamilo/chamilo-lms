@@ -111,14 +111,17 @@ d = new Date(); savEvtTime = d.getTime(); savTO = setTimeout(function()
 { var typeOf = typeof(supportedExts[i]); if(typeOf.toLowerCase() == 'string' && supportedExts[i].toLowerCase() == ext.toLowerCase())
 { isSupportedExt = true; break;}
 }
+
 if(isSupportedExt)
 { switch(files[num].cssClass)
 { case 'fileVideo':
 case 'fileMusic':
 case 'fileFlash':
-$('#playGround').html('<a id="playGround' + num + '" href="' + files[num].path + '"><div id="player">&nbsp;this is mine</div></a> '); $('#playGround' + num).html(''); $('#playGround' + num).media({ width: 255, height: 210, autoplay: true }); showThickBox($('#a' + num).get(0), appendQueryString('#TB_inline', 'height=250' + '&width=256' + '&inlineId=winPlay&modal=true')); break; default:
-showThickBox(linkElem, appendQueryString(path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));}
+$('#playGround').html('<a id="playGround' + num + '" href="' + '../'+files[num].path + '"><div id="player">&nbsp;this is mine</div></a> '); $('#playGround' + num).html(''); $('#playGround' + num).media({ width: 255, height: 210, autoplay: true }); showThickBox($('#a' + num).get(0), appendQueryString('#TB_inline', 'height=250' + '&width=256' + '&inlineId=winPlay&modal=true')); break; //Juan Carlos Raña added  '../'+  for preview video and flash on  href="' + '../'+files[num].path + 
+default:
+showThickBox(linkElem, appendQueryString('../'+path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));}
 }
+//Juan Carlos Raña (line above added '../'+ to line for preview and don't go to main showThickBox(linkElem, appendQueryString('../'+path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));}
 }
 return false;}, dcTime); return false;}); $(this).dblclick(function()
 { var d = new Date(); dcAt = d.getTime(); if (savTO != null) { clearTimeout( savTO ); savTO = null;}
@@ -126,12 +129,21 @@ if(typeof(selectFile) != 'undefined')
 { selectFile(files[num].url);}else
 generateDownloadIframe(appendQueryString(getUrl('download'), 'path=' + files[num].path, ['path'])); { }
 } );} );}; function tableRuler(element)
-{ var rows = $(element); $(rows).each(function(){ $(this).mouseover(function(){ $(this).addClass('over');}); $(this).mouseout(function(){ $(this).removeClass('over');});});}; function previewMedia(rowNum)
-{ $('#preview' +rowNum).html(''); $('#preview' +rowNum).media({ width: 255, height: 210, autoplay: true }); return false;}; function getFileExtension(filename)
+{ var rows = $(element); $(rows).each(function(){ $(this).mouseover(function(){ $(this).addClass('over');}); $(this).mouseout(function(){ $(this).removeClass('over');});});}; 
+
+
+function previewMedia(rowNum)
+{ $('#preview' +rowNum).html(''); $('#preview' +rowNum).media({ width: 255, height: 210, autoplay: true }); return false;};
+
+function getFileExtension(filename)
 { if( filename.length == 0 ) return ""; var dot = filename.lastIndexOf("."); if( dot == -1 ) return ""; var extension = filename.substr(dot + 1,filename.length); return extension;}; function closeWindow()
 { if(window.confirm(warningCloseWindow))
 { window.close();}
-return false;}; function getUrl(index,limitNeeded , viewNeeded, searchNeeded)
+return false;};
+
+
+
+function getUrl(index,limitNeeded , viewNeeded, searchNeeded)
 { var queryStr = ''; var excluded = new Array(); if(typeof(limitNeeded) == 'boolean' && limitNeeded)
 { var limit = document.getElementById('limit'); var typeLimit = typeof(limit); if(typeLimit != 'undefined' && limit )
 { excluded[excluded.length] = 'limit'; queryStr += (queryStr == ''?'':'&') + 'limit=' + limit.options[limit.selectedIndex].value;}

@@ -143,8 +143,12 @@
 	</fieldset>
 </div>
 <div id="imageArea">
-    <div id="imageContainer">
-    	<img src="<?php echo $path; ?>" name="<?php echo basename($path); ?>" width="<?php echo $imageInfo['width']; ?>" height="<?php echo $imageInfo['height']; ?>" />
+    <div id="imageContainer">    	  
+        <img src="<?php echo "../".$path; ?>" name="<?php echo basename($path); ?>" width="<?php echo $imageInfo['width']; ?>" height="<?php echo $imageInfo['height']; ?>" /><!-- For Dokeos integrating, enter a back directory "../" to avoid introducing main and can not read the image -->
+        
+        
+        
+        
     </div>
     <div id="resizeMe">
     	<div id="resizeSE"></div>

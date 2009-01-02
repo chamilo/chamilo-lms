@@ -151,8 +151,8 @@
 								$tem['path'] = backslashToSlash($finalPath);		
 								$tem['type'] = (is_dir($finalPath)?'folder':'file');
 								$tem['size'] = transformFileSize($tem['size']);
-								$tem['ctime'] = date(DATE_TIME_FORMAT, $tem['ctime']);
-								$tem['mtime'] = date(DATE_TIME_FORMAT, $tem['mtime']);
+								//$tem['ctime'] = date(DATE_TIME_FORMAT, $tem['ctime']); // Juan Carlos Raña. Comment to get a correct date when make a search
+								//$tem['mtime'] = date(DATE_TIME_FORMAT, $tem['mtime']); // Juan Carlos Raña. Comment to get a correct date when make a search
 								$tem['flag'] = (array_search($tem['path'], $selectedDocuments) !== false?($this->sessionAction->getAction() == "copy"?'copyFlag':'cutFlag'):'noFlag');
 								$tem['url'] = getFileUrl($tem['path']);
 								$this->rootFolderInfo['file']++;
@@ -162,7 +162,8 @@
 							}
 						}elseif(is_dir($path) && $this->searchkeywords['recursive'])
 						{
-							$this->Search($baseFolderPath);
+							$this->doSearch($path); //// For Dokeos this line replaces the lower line to run the search recursively from the root directory
+							//$this->Search($baseFolderPath); //comment by Juan Carlos Raña							
 						}
 					}
 				}

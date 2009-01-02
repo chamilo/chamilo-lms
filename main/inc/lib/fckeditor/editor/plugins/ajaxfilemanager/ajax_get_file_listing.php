@@ -7,6 +7,7 @@
 	 * @since 22/May/2007
 	 *
 	 */
+ 	include ('../../../../../../inc/global.inc.php'); // Integrating with Dokeos
 
 	if(!isset($manager))
 	{

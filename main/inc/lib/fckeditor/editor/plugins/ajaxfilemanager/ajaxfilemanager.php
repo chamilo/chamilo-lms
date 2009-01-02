@@ -6,6 +6,10 @@
 	 * @since 22/May/2007
 	 *
 	 */
+	
+	include ('../../../../../../inc/global.inc.php'); // Integrating with Dokeos
+	api_block_anonymous_users();// from Dokeos
+		 
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
 	$session->gc();
 	require_once(CLASS_SESSION_ACTION);
@@ -262,15 +266,11 @@ $(document).ready(
 							<li><a  id="actionUpload" href="#" onclick="return uploadFileWin(this);"><span><?php echo LBL_BTN_UPLOAD; ?></span></a></li>
 							<?php
 						}
-					?>
-																	
-					
-					
-					
+					?>			
 		
 					
 <!--					<li><a href="#" id="actionClose" onclick="closeWindow('<?php echo IMG_WARING_WIN_CLOSE; ?>');"><?php echo IMG_BTN_CLOSE; ?></a></li>-->
-					<li><a href="#" class="thickbox" id="actionInfo" onclick="return infoWin(this);"><span>Info</span></a></li>
+					<!--<li><a href="#" class="thickbox" id="actionInfo" onclick="return infoWin(this);"><span>Info</span></a></li> -->
 					<!-- thest functions will be added in the near future
  					<li ><a href="#" id="actionZip"><span>Zip</span></a><li>
 					<li ><a href="#" id="actionUnzip"><span>Unzip</span></a><li>-->
@@ -673,7 +673,7 @@ $(document).ready(
   	<ul>
   		<li><a href="#" class="contentMenuItem" id="menuSelect"><?php echo MENU_SELECT; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuPreview"><?php echo MENU_PREVIEW; ?></a></li>
-  		<li><a href="#" class="contentMenuItem"  id="menuDownload"><?php echo MENU_DOWNLOAD; ?></a></li>
+  	<!--	<li><a href="#" class="contentMenuItem"  id="menuDownload"><?php echo MENU_DOWNLOAD; ?></a></li> Dokeos temporarily disable contextual menu download -->
   		<li><a href="#" class="contentMenuItem"  id="menuRename"><?php echo MENU_RENAME; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuEdit"><?php echo MENU_EDIT; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuCut"><?php echo MENU_CUT; ?></a></li>

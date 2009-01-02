@@ -5,10 +5,14 @@
 	 * @link www.phpletter.com
 	 * @since 1/August/2007
 	 *
+	 *
+	 * Modify system config setting for Dokeos
+	 * @author Juan Carlos Raña
+	 * @since 31/December/2008
 	 */
 	
 
-error_reporting(E_ALL);	
+//error_reporting(E_ALL);	
 //error_reporting(E_ALL ^ E_NOTICE);	
 	
 	
@@ -34,24 +38,77 @@ error_reporting(E_ALL);
 	define('CONFIG_SYS_THUMBNAIL_VIEW_ENABLE', true);//REMOVE THE thumbnail view if false
 	
 	//User Permissions
-	define('CONFIG_OPTIONS_DELETE', true);
-	define('CONFIG_OPTIONS_CUT', true);
-	define('CONFIG_OPTIONS_COPY', true);
-	define('CONFIG_OPTIONS_NEWFOLDER', true);
-	define('CONFIG_OPTIONS_RENAME', true);
-	define('CONFIG_OPTIONS_UPLOAD', true); //
-	define('CONFIG_OPTIONS_EDITABLE', true); //disable image editor and text editor
+	//Hack by Juan Carlos Raña Trabado
+	
+	if(api_is_allowed_to_edit())
+	{	
+	//api_is_allowed_to_edit() from Dokeos
+		define('CONFIG_OPTIONS_DELETE', false);
+		define('CONFIG_OPTIONS_CUT', false);
+		define('CONFIG_OPTIONS_COPY', false);
+		define('CONFIG_OPTIONS_NEWFOLDER', false);
+		define('CONFIG_OPTIONS_RENAME', false);
+		define('CONFIG_OPTIONS_UPLOAD', true); //
+		define('CONFIG_OPTIONS_EDITABLE', false); //disable image editor and text editor
+
+	}
+	else
+	{		
+		define('CONFIG_OPTIONS_DELETE', false);
+		define('CONFIG_OPTIONS_CUT', false);
+		define('CONFIG_OPTIONS_COPY', false);
+		define('CONFIG_OPTIONS_NEWFOLDER', false);
+		define('CONFIG_OPTIONS_RENAME', false);
+		define('CONFIG_OPTIONS_UPLOAD', true); //
+		define('CONFIG_OPTIONS_EDITABLE', false); //disable image editor and text editor
+	}
+		
+		
 	//FILESYSTEM CONFIG
 		/*
 		* CONFIG_SYS_DEFAULT_PATH is the default folder where the files would be uploaded to
 			and it must be a folder under the CONFIG_SYS_ROOT_PATH or the same folder
 			these two paths accept relative path only, don't use absolute path
 		*/
+			//define('CONFIG_SYS_DEFAULT_PATH', '../uploaded/'); //accept relative path only
+			//define('CONFIG_SYS_ROOT_PATH', '../uploaded/');	//accept relative path only
 		
-	define('CONFIG_SYS_DEFAULT_PATH', '../uploaded/'); //accept relative path only
-	define('CONFIG_SYS_ROOT_PATH', '../uploaded/');	//accept relative path only
-	define('CONFIG_SYS_FOLDER_SHOWN_ON_TOP', true); //show your folders on the top of list if true or order by name 
-	define("CONFIG_SYS_DIR_SESSION_PATH", 'session/');
+	/////////////// Integration for Dokeos
+		
+	if(!empty($_course['path']))
+	{
+		if(!empty($group_properties['directory']))
+		{		 
+			$PathDokeosAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document'.$group_properties['directory'].'/';		   
+		}
+		else
+		{
+			if(api_is_allowed_to_edit())
+			{
+				$PathDokeosAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/';			   
+			}
+			else
+			{					
+				$PathDokeosAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/sharedfolder/';					
+			}		   
+		}
+	}
+	else
+	{		
+			$PathDokeosAjaxFileManager='../../../../../../../main/upload/users/'.api_get_user_id().'/';	
+	}
+	
+	define('CONFIG_SYS_DEFAULT_PATH', $PathDokeosAjaxFileManager);
+	define('CONFIG_SYS_ROOT_PATH', $PathDokeosAjaxFileManager);		
+	
+	////////////// end dokeos
+	
+	define('CONFIG_SYS_FOLDER_SHOWN_ON_TOP', true); //show your folders on the top of list if true or order by name	
+	
+	
+	define("CONFIG_SYS_DIR_SESSION_PATH", session_save_path()); // Hack by Juan Carlos Raña 
+
+	
 	define("CONFIG_SYS_PATTERN_FORMAT", 'list'); //three options: reg ,csv, list, this option define the parttern format for the following patterns
 		/**
 		 * reg => regulare expression
@@ -67,19 +124,14 @@ error_reporting(E_ALL);
 	define('CONFIG_SYS_DELETE_RECURSIVE', 1); //delete all contents within a specific folder if set to be 1
 	
 	//UPLOAD OPTIONS CONFIG
-	define('CONFIG_UPLOAD_MAXSIZE', 50 * 1024 ); //by bytes
-	//define('CONFIG_UPLOAD_MAXSIZE', 2048); //by bytes
-	//define('CONFIG_UPLOAD_VALID_EXTS', 'txt');//
-
-	define('CONFIG_EDITABLE_VALID_EXTS', 'txt,htm,html,xml,js,css'); //make you include all these extension in CONFIG_UPLOAD_VALID_EXTS if you want all valid
+	define('CONFIG_UPLOAD_MAXSIZE', 50000 * 1024 ); //by bytes For Dokeos upgrade from 50 to 50000 (50MB)
+	
+	define('CONFIG_EDITABLE_VALID_EXTS', 'txt,htm,html'); //make you include all these extension in CONFIG_UPLOAD_VALID_EXTS if you want all valid. For Dokeos exclude original xml, js and css
 	
 	define('CONFIG_OVERWRITTEN', false); //overwirte when processing paste
-	define('CONFIG_UPLOAD_VALID_EXTS', 'gif,jpg,png,txt'); // 
-	//define('CONFIG_UPLOAD_VALID_EXTS', 'gif,jpg,png,bmp,tif,zip,sit,rar,gz,tar,htm,html,mov,mpg,avi,asf,mpeg,wmv,aif,aiff,wav,mp3,swf,ppt,rtf,doc,pdf,xls,txt,xml,xsl,dtd');//
-	define("CONFIG_VIEWABLE_VALID_EXTS", 'gif,bmp,txt,jpg,png,tif,html,htm,js,css,xml,xsl,dtd,mp3,wav,wmv,wma,rm,rmvb,mov,swf');
-	//define('CONFIG_UPLOAD_VALID_EXTS', 'gif,jpg,png,txt'); // 
-	define('CONFIG_UPLOAD_INVALID_EXTS', '');
-
+	define('CONFIG_UPLOAD_VALID_EXTS', 'gif,jpg,png,bmp,tif,psd,zip,sit,rar,gz,tar,htm,html,mov,mpg,avi,asf,mpeg,wmv,aif,aiff,wav,mp3,swf, flv, mp4, aac, ppt,rtf,doc, pdf,xls,txt,flv,odt,ods,odp,odg,odc,odf,odb,odi,pps,docx,pptx,xlsx,accdb,xml');//For Dokeos updated
+	define("CONFIG_VIEWABLE_VALID_EXTS", 'gif,bmp,txt,jpg,png,tif,html,htm,mp3, wav,wmv,wma,rm,rmvb,mov,swf,flv,mp4,aac,avi,mpg,mpeg,asf');//For Dokeos updated
+	define('CONFIG_UPLOAD_INVALID_EXTS', 'php,jar,sh,cgi,js,exe,com,bat,pif,scr,msi,ws,wsc,wsf,vb,vbe,vbs,reg,dll'); //For Dokeos added.
 	//Preview
 	define('CONFIG_IMG_THUMBNAIL_MAX_X', 100);
 	define('CONFIG_IMG_THUMBNAIL_MAX_Y', 100);
@@ -118,14 +170,16 @@ error_reporting(E_ALL);
 					fckeditor
 			*/
 	//CONFIG_EDITOR_NAME replaced CONFIG_THEME_MODE since @version 0.8			
-	define('CONFIG_EDITOR_NAME', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['editor'])?secureFileName($_GET['editor']):'stand_alone')); 
+	define('CONFIG_EDITOR_NAME', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['editor'])?secureFileName($_GET['editor']):'fckeditor')); // run mode fckeditor (Dokeos editor)
 	define('CONFIG_THEME_NAME', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['theme'])?secureFileName($_GET['theme']):'default'));  //change the theme to your custom theme rather than default
 	define('CONFIG_DEFAULT_VIEW', (CONFIG_SYS_THUMBNAIL_VIEW_ENABLE?'detail':'detail')); //thumnail or detail
 	define('CONFIG_DEFAULT_PAGINATION_LIMIT', 10);
 	define('CONFIG_LOAD_DOC_LATTER', false); //all documents will be loaded up after the template has been loaded to the client 
 	
+	
 	//General Option Declarations
 	//LANGAUGAE DECLARATIONNS
+	//$langdokajax= api_get_language_isocode(); //from dokeos. return, en, es... 
 	define('CONFIG_LANG_INDEX', 'language'); //the index in the session
 	define('CONFIG_LANG_DEFAULT', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['language']) && file_exists(DIR_LANG . secureFileName($_GET['language']) . '.php')?secureFileName($_GET['language']):'en')); //change it to be your language file base name, such en
 ?>

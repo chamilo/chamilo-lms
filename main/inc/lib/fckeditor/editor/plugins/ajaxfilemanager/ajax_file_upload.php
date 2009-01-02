@@ -61,7 +61,28 @@
 								$tem['ctime'] = date(DATE_TIME_FORMAT, $tem['ctime']);
 								$tem['mtime'] = date(DATE_TIME_FORMAT, $tem['mtime']);
 								$tem['short_name'] = shortenFileName($tem['name']);						
-								$tem['flag'] = 'noFlag';
+								$tem['flag'] = 'noFlag';													
+								
+								/**
+								* Bridge to Dokeos documents tool
+								* @author Juan Carlos Raña Trabado
+								*/							
+								
+								if(!empty($_course['path']))
+								{
+									//only inside courses
+									$folderInfo = $manager->getFolderInfo(); //get	ajaxmanager							
+									$fullPath= $upload->getFilePath();		//get	ajaxmanager						
+									$mainPath= getParentFolderPath($folderInfo['path']);//get	ajaxmanager
+									$dokeosFolder = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1);	
+									$dokeosFile = $tem['name'];	//get	ajaxmanager
+									$dokeosFileSize = $tem['size'];//get ajaxmanager
+									$doc_id = add_document($_course, $dokeosFolder,'file', $dokeosFileSize , $dokeosFile); //get Dokeos																								
+									api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id());//get Dokeos
+								}
+								
+								// end bridge
+																
 								$obj->close();
 								foreach($tem as $k=>$v)
 								{

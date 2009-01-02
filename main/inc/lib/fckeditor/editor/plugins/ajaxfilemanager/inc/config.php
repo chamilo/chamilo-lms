@@ -6,7 +6,48 @@
 	 * @version 1.0
 	 * @since 22/April/2007
 	 *
+	 * Modify system config setting for Dokeos
+	 * @author Juan Carlos Raña
+	 * @since 31/December/2008
 	 */
+	 
+	/////////////////// All from Dokeos
+	
+	include ('../../../../../../inc/global.inc.php');
+	
+	if(!empty($_course['path']))
+	{	
+		include_once (api_get_path(LIBRARY_PATH).'/fileUpload.lib.php');
+		include_once (api_get_path(LIBRARY_PATH).'/document.lib.php');
+		include_once (api_get_path(LIBRARY_PATH).'/groupmanager.lib.php');
+	    //get Dokeos session properties. Before ajaximagemanager!!!
+		$to_group_id = 0;
+		$to_group_id = $_SESSION['_gid'];
+		$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
+		$is_user_in_group = GroupManager::is_user_in_group($_user['user_id'],$_SESSION['_gid']);
+    }
+	
+	////first sanity Dokeos. All from Dokeos
+	$user_folder = api_get_path(SYS_PATH).'main/upload/users/'.api_get_user_id().'/';
+	if (!file_exists($user_folder))
+	{ 
+		mkdir(api_get_path(SYS_PATH).'main/upload/users/'.api_get_user_id().'/', 0777);
+	}
+		
+	if($_course['id'])
+	{
+		$course_shared_folder = api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/sharedfolder/';	 
+		if (!file_exists($course_shared_folder))
+		{	
+			mkdir(api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/sharedfolder/', 0777);	
+			$doc_id = add_document($_course, '/sharedfolder', 'folder', 0, 'sharedfolder');
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'visible', api_get_user_id());
+		} 
+	}
+	
+	
+	/////////////////// end from Dokeos
 	
 	//FILESYSTEM CONFIG	<br>
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "class.auth.php");	

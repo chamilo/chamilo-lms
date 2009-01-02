@@ -1,2 +1,2 @@
 <?php die(); ?>
-gc start at 31/Aug/2008 16:05:40
+gc start at 29/Dec/2008 13:02:24

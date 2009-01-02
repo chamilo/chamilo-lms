@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 17056 2008-12-03 18:07:11Z iflorespaz $
+<?php // $Id: user_list.php 17505 2009-01-02 18:57:04Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -316,7 +316,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = Database::escape_string($_GET['keyword']);
-		$sql .= " WHERE u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%'";
+		$sql .= " WHERE u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%'";
 	}
 	elseif (isset ($_GET['keyword_firstname']))
 	{

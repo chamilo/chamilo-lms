@@ -1,4 +1,4 @@
-<?php // $Id: course_list.php 17195 2008-12-09 23:47:07Z iflorespaz $
+<?php // $Id: course_list.php 17506 2009-01-02 20:07:08Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -166,6 +166,8 @@ if (isset ($_POST['action']))
 				foreach ($course_codes as $index => $course_code)
 				{
 					CourseManager :: delete_course($course_code);
+					$obj_cat=new Category();
+					$obj_cat->update_category_delete($course_code);
 				}
 			}
 			break;

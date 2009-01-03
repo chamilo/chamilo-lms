@@ -94,8 +94,18 @@
 		}
 	}
 	else
-	{		
+	{	
+		if (api_is_platform_admin() && $_SESSION['this_section']=='platform_admin')
+		{
+			//home page portal
+			$PathDokeosAjaxFileManager='../../../../../../../home/default_platform_document/';
+		}
+		else
+		{		
+			//my profile
 			$PathDokeosAjaxFileManager='../../../../../../../main/upload/users/'.api_get_user_id().'/';	
+		}
+
 	}
 	
 	define('CONFIG_SYS_DEFAULT_PATH', $PathDokeosAjaxFileManager);

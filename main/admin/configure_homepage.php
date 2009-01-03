@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 17509 2009-01-02 21:12:11Z herodoto $
+<?php // $Id: configure_homepage.php 17523 2009-01-03 20:59:49Z herodoto $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -31,6 +31,7 @@ $cidReset=true;
 include('../inc/global.inc.php');
 
 $this_section=SECTION_PLATFORM_ADMIN;
+$_SESSION['this_section']=$this_section;
 
 api_protect_admin_script();
 require_once(api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php');

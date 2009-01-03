@@ -33,6 +33,17 @@
 	{ 
 		mkdir(api_get_path(SYS_PATH).'main/upload/users/'.api_get_user_id().'/', 0777);
 	}
+	
+	if(api_is_platform_admin())
+	{	
+		$homepage_folder = api_get_path(SYS_PATH).'home/default_platform_document/';
+		if (!file_exists($homepage_folder))
+		{
+			mkdir(api_get_path(SYS_PATH).'home/default_platform_document/', 0777);
+		}
+		
+	}	
+	
 		
 	if($_course['id'])
 	{

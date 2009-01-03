@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 17479 2008-12-29 20:24:11Z cfasanando $
+<?php // $Id: profile.php 17523 2009-01-03 20:59:49Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -46,6 +46,8 @@ require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $this_section = SECTION_MYPROFILE;
  
+$_SESSION['this_section']=$this_section;
+
 api_block_anonymous_users();
 
 $htmlHeadXtra[] = '<script type="text/javascript">

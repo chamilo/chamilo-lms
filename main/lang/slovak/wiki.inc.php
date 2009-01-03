@@ -1,4 +1,53 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$Wiki = "Wiki";
+$StartPage = "Hlavná stránka";
+$EditThisPage = "Upravi&#357; túto stranu";
+$ShowPageHistory = "História";
+$AllPages = "Všetky strany";
+$AddNew = "Prida&#357; novú stranu";
+$ChangesStored = "Vaše zmeny boli uložené";
+$NewWikiSaved = "Nová wiki domovská stránka bola uložená. Môžete si ju zobrazi&#357; klikom na:";
+$DifferencesNew = "zmeny vo verzii";
+$DifferencesOld = "stará verzia";
+$Differences = "Rozdiely";
+$MostRecentVersion = "Prezrie&#357; naposledy vybranú verziu";
+$Legend = "Legenda";
+$ShowDifferences = "Porovna&#357; vybrané verzie";
+$SearchPages = "H&#318;ada&#357; stránky";
+$History = "História";
+$ShowThisPage = "Prezrie&#357; túto stranu";
+$DeleteThisPage = "Zmaza&#357; túto stranu";
+$HomeWiki = "domovská stránka Wiki";
+$WikiDeleted = "Vaša Wiki bola zmazaná";
+$WikiPageDeleted = "Stránka bola zmazaná s celou svojou históriou";
+$DeletePageHistory = "Zmaza&#357; túto stránku a všetky jej verzie";
+$OnlyAdminDeletePageWiki = "Stránku môžu zmaza&#357; len administrátori kurzu";
+$ConfirmDeletePage = "Naozaj chcete zmaza&#357; túto stránku a celú jej históriu?";
+$PageLocked = "Stránka je chránená";
+$PageUnlocked = "Stránka je nechránená";
+$PageLockedExtra = "Táto stránka je chránená. Zmeni&#357; to môžu len administrátori kurzu.";
+$PageUnlockedExtra = "Táto stránka je nechránená. Všetci ú&#269;astníci kurzu alebo &#269;lenovia skupiny ju môžu upravova&#357;.";
+$NotifyByEmail = "Upozorni ma e-mailom, ke&#271; bude stránka upravená.";
+$MostRecentVersionBy = "Posledná verzia bola upravená";
+$Rating = "Hodnotenie";
+$RatingMedia = "Priemerné hodnotenie stránky je";
+$DefaultTitle = "Domov";
+$Print = "Tla&#269;i&#357;";
+$Version = "Verzia";
+$EditPage = "Upravi&#357;";
+$WikiDiffAddedTex = "Text pridaný";
+$WikiDiffDeletedTex = "Zmazaný text";
+$MustSelectPage = "Najskôr musíte vybra&#357; stranu";
+$Export2ZIP = "Exportova&#357; do formátu ZIP";
+$HidePage = "Skry&#357; stranu";
+$ShowPage = "Zobrazi&#357; stranu";
+$LockRatingDiscuss = "Deaktivova&#357; hodnotenie";
+$Visits = "návštevy";
+$MostVisitedPages = "Naj&#269;astejšie navštevované stránky";
+$MostChangedPages = "Naj&#269;astejšie menené stránky";
+$Changes = "zmeny";
+$MostActiveUsers = "Najaktívnejší užívatelia";
+$MostActiveUsers = "Najaktívnejší užívatelia";
 ?>

@@ -47,4 +47,5 @@ $AdvancedParameters = "Paramètres avancés";
 $ExpiryDateToSendWorkIs = "Date d\'expiration de remise des travaux";
 $EnableExpiryDate = "Activer la date d\'expiration";
 $EnableEndDate = "Activer la date de fin";
+$IsNotPosibleSaveTheDocument = "Impossible de sauver le document";
 ?>

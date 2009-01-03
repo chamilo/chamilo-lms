@@ -117,4 +117,5 @@ $CategoryEdited = "Categoría actualizada";
 $OnlyNumbers = "Namás númberos";
 $IncorrectData = "Datu incorreutu";
 $Resource = "Recursu";
+$PleaseEnableScoringSystem = "Por favor, active\'l sistema de notes ";
 ?>

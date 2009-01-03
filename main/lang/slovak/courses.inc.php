@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $lang_already_enrolled                      = "už prihlásený";
 $lang_my_personnal_course_list              = "Zoznam mojích kurzov";
-$lang_course_enrollment                     = "Kurzy užívate&#318;a";
+$lang_course_enrollment                     = "Kurzy používate&#318;a";
 $lang_course_not_available                  = "Tento kurz nie je dostupný alebo neexistuje.";
 $lang_enroll                                = "Zapísa&#357; sa";
 $lang_enroll_to_a_new_course                = "Zapísa&#357; sa do nového kurzu";
@@ -37,7 +37,7 @@ $langHideAndSubscribeClosed = "Skrytý / Zatvorený";
 $langHideAndSubscribeOpen = "Skrytý / Otvorený";
 $langShowAndSubscribeOpen = "Vidite&#318;ný / Otvorený";
 $langShowAndSubscribeClosed = "Vidite&#318;ný / Zatvorený";
-$langAdminThisUser = "Spä&#357; na užívate&#318;a";
+$langAdminThisUser = "Spä&#357; na používate&#318;a";
 $langManage = "Nastavenie portálu";
 $langEnrollToCourseSuccessful = "Ste zapísaný do kurzu";
 $langSubCat = "podkategórie";

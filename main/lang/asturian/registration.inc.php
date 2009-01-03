@@ -163,4 +163,6 @@ $NoSessionId = "La sesión ta ensin identificar";
 $NoUsersRead = "Por favor, verifique\'l ficheru XML/CSV";
 $UserImportFileMessage = "Si nel archivu XML/CSV los nomes d\'usuariu (usarname) nun tan, va tomase el Nome (Firstname) y l\'Apellíu (Lastname) del usuariu. Por exemplu, pal nome Xuan Suárez el username va ser xsuarez";
 $UserAlreadyRegisteredByOtherCreator = "Un tutor yá rexistró a esti usuariu";
+$NewUserInTheCourse = "Rexistróse un usuariu nuevu nel cursu";
+$MessageNewUserInTheCourse = "Esti ye un mensaxe pa informar que acaba soscribise un usuariu nuevu nel cursu ";
 ?>

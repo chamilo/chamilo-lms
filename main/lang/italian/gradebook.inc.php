@@ -117,4 +117,5 @@ $CategoryEdited = "Categoria aggiornata";
 $OnlyNumbers = "Solo numeri";
 $IncorrectData = "Dati non corretti";
 $Resource = "Risorsa";
+$PleaseEnableScoringSystem = "Sei pregato di attivare la funzionalità dei punteggi";
 ?>

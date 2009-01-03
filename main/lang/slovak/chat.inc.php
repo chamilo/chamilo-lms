@@ -2,14 +2,40 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langOnlineConference  = "Konferencia";
+$langWash  = "Vy&#269;isti&#357;";
+$langReset  = "Reštartova&#357;";
 $langSave  = "Uloži&#357;";
 $langRefresh  = "Obnovi&#357;";
+$langIsNowInYourDocDir  = "je teraz uložený vo vašej zložke dokumentov. <br><B>Tento súbor je vidite&#318;ný</B>";
+$langCopyFailed  = "Tla&#269; neúspešná";
 $langTypeMessage  = "Prosím napí&#353;te svoju správu!";
 $langConfirmReset  = "Naozaj chcete zmaza&#357; všetky správy?";
 $langHasResetChat  = "reštartova&#357; Pokec";
+$langNoOnlineConference  = "Momentálne nie je žiadna konferencia...";
+$langContentFile  = "Prezentácia";
+$langListOfParticipants  = "Zoznam ú&#269;astníkov";
+$langYourPicture  = "Vaša fotografia";
+$langOnlineDescription  = "Popis konferencie";
 $langOnlyCheckForImportantQuestion = "Zaškrtnite len v prípade dôležitej otázky!";
 $langQuestion = "otázka";
 $langClearList = "Vymaza&#357; správy";
+$langWhiteBoard = "Tabu&#318;a";
+$langTextEditorDefault = "<h2>Textový editor</h2> Z programu Ms-Word® môžete vy&#328;a&#357; a sem vloži&#357; text, následne ho upravi&#357;. Ú&#269;astníci budú vaše úpravy vidie&#357; naživo.";
 $langLinkName = "Názov odkazu";
+$langLinkURL = "URL odkaz";
+$langWelcomeToOnlineConf = "Vitajte na <b>Online Konferencii</b>";
+$langNoLinkAvailable = "Žiadny odkaz";
 $langChat_reset_by = "reštartova&#357;  Pokec";
+$OrFile = "Alebo súbor";
+$langCallSent = "Pozvanie na chat hovor bolo poslané. &#268;akám na potvrdenie od vášho partnera.";
+$langChatDenied = "Volaný zamietol Váš hovor.";
+$Send = "Posla&#357;";
+$Connected = "Ú&#269;astníci chatu";
+$Silence = "Ticho";
+$Smile = "Úsmev";
+$Arrow = "Šípka";
+$Question = "Otázka";
+$AskPermissionSpeak = "Požiada&#357; o povolenie hovori&#357;";
+$Pause = "Pauza";
+$Stop = "Stop";
 ?>

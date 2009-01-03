@@ -257,4 +257,9 @@ $ExeStartTime = "Date de début";
 $ExeEndTime = "Date de fin";
 $Value = "Valeur";
 $DeleteAttempt = "Supprimer cette tentative?";
+$QuantityQuestions = "Nombre de questions";
+$FilterExercices = "Filtrer exercices";
+$FilterByNotRevised = "Seulement non cotés";
+$FilterByRevised = "Seulement cotés";
+$Duration = "Durée";
 ?>

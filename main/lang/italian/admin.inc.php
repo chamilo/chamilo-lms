@@ -850,4 +850,7 @@ $YesWillDeletePermanently = "Sì (i file saranno eliminati permanentemente e non 
 $NoWillDeletePermanently = "No (i file saranno cancellati, ma l\'amministratore del sistema potrà recuperarli in modo non automatico)";
 $SelectAResponsible = "Seleziona un gestore delle RU";
 $ThereIsNotStillAResponsible = "Non c\'è un responsabile RU disponibile";
+$GlobalAgenda = "Agenda generale";
+$AdvancedfilemanagerTitle = "File manager avanzato per l\'editor wysiwyg";
+$AdvancedfilemanagerComment = "Permette la gestione avanzata dei file attraverso l\'editor";
 ?>

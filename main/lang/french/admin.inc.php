@@ -850,4 +850,7 @@ $YesWillDeletePermanently = "Oui (les fichiers seront supprimés de manière perma
 $NoWillDeletePermanently = "Non (les fichiers seront supprimés de l\'application et pourront être récupérés manuellement par l\'administrateur du serveur)";
 $SelectAResponsible = "Sélectionnez un responsable RH";
 $ThereIsNotStillAResponsible = "Aucun responsable RH disponible";
+$GlobalAgenda = "Agenda global";
+$AdvancedfilemanagerTitle = "Gestionnaire de fichiers avancé pour l\'éditeur WYSIWYG";
+$AdvancedfilemanagerComment = "Activer le gestionnaire de fichiers avancé pour l\'éditeur WYSIWYG? Cette option ajoutera un nombre considérable d\'options au gestionnaire de fichiers s\'ouvrant en fenêtre pop-up lors de l\'envoi d\'un fichier sur le serveur.";
 ?>

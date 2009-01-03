@@ -165,4 +165,6 @@ $NoSessionId = "The session was not identified";
 $NoUsersRead = "Please verify your XML/CVS file";
 $UserImportFileMessage = "If in the XML/CVS file the usernames are missing, the firstname and the lastname will took to create a username, i.e Julio Montoya into jmontoya";
 $UserAlreadyRegisteredByOtherCreator = "User already register by other coach. ";
+$NewUserInTheCourse = "New user in the course";
+$MessageNewUserInTheCourse = "This is a message to make know than there is a new user in the course";
 ?>

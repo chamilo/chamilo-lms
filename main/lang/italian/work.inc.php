@@ -47,4 +47,5 @@ $AdvancedParameters = "Parametri avanzati";
 $ExpiryDateToSendWorkIs = "Data di scadenza per l\'invio di elaborati";
 $EnableExpiryDate = "Abilita la data di scadenza";
 $EnableEndDate = "Abilita la data di chiusura";
+$IsNotPosibleSaveTheDocument = "Non è possibile salvare il documento";
 ?>

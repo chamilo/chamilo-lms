@@ -1,15 +1,44 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$langSelectOptionForBackup = "Prosím vyberte možnosti zálohovania.";
 $langLetMeSelectItems = "Kopírova&#357; len vybraté &#269;asti";
+$langCreateFullBackup = "Vytvori&#357; kompletnú zálohu tohto kurzu";
+$langCreateBackup = "vytvori&#357; zálohu";
+$langBackupCreated  = "Záloha tohto kurzu bola vytvorená. Prenos súboru za&#269;ne o chví&#318;u. Pokia&#318; prenos neza&#269;ne, kliknite na nasledujúci odkaz";
+$langSelectBackupFile = "vybra&#357; zálohový súbor";
+$langImportBackup = "Importova&#357; zálohu";
+$langImportFullBackup = "Importova&#357; kompletnú zálohu";
+$langImportFinished = "Import ukon&#269;ený";
+$langEvents = "Udalosti";
 $langAnnouncements = "Oznamy";
 $langDocuments  = "Dokumenty";
 $langTests = "Testy";
+$langLearnpaths = "U&#269;ebné osnovy";
 $langCopyCourse = "Kopírova&#357; kurz";
+$langSelectItemsToCopy = "Vybra&#357; položky na kopírovanie";
+$langCopyFinished = "Kopírovanie je ukon&#269;ené";
+$langRecycleCourse = "Recyklova&#357; kurz";
+$langRecycleFinished = "Recyklácia je ukon&#269;ená";
+$langRecycleWarning = "Upozornenie: použitím tejto funkcie zmažete niektoré &#269;asti vášho kurzu, a to nenávratne. Preto vám pred použitím tohto recykla&#269;ného nástroja odporú&#269;ame vytvori&#357; <a href=\"create_backup.php\">zálohu</a>";
 $langSameFilename = "Ako zmeni&#357; názvy kopírovaných súborov, ak už takéto názvy existujú";
 $langSameFilenameSkip = "Presko&#269;i&#357;";
 $langSameFilenameRename = "Premenova&#357; (napr. subor.pdf sa premenuje na subor_1.pdf)";
 $langSameFilenameOverwrite = "Prepísa&#357; súbor";
 $langSelectDestinationCourse = "Vyberte kurz do ktorého kopírova&#357;";
 $langFullCopy  = "Kopírova&#357; všetko";
+$langCourseDescription = "Popis kurzu";
+$langNoResourcesToBackup = "Nie sú zdroje pre zálohovanie";
+$langNoResourcesInBackupFile = "Nie sú zdroje v zálohovanom súbore";
+$langSelectResources = "Vybra&#357; zdroje";
+$langNoResourcesToRecycles = "Nie sú zdroje na recykláciu";
+$langLocalFile = "lokálny súbor";
+$langServerFile = "súbor na serveri";
+$langNoBackupsAvailable = "žiadna záloha k dispozícii";
+$langNoDestinationCoursesAvailable = "Žiadny cie&#318;ový kurz k dispozícii";
+$langBackup = "Záloha";
+$langImportBackupInfo = "Importova&#357; zálohu. Budete môc&#357; nahra&#357; súbor z vášho lokálneho disku alebo použi&#357; zálohu dostupnú na serveri.";
+$langCreateBackupInfo = "Vytvori&#357; zálohu tohto kurzu. Môžete vybra&#357; obsah kurzu a vloži&#357; ho do zálohového súboru.";
+$ToolIntro = "Predstavenie nástroja";
+$DestinationCourse = "Cie&#318;ový kurz";
 ?>

@@ -117,4 +117,5 @@ $CategoryEdited = "Catégorie mise à jour";
 $OnlyNumbers = "Nombres uniquement";
 $IncorrectData = "Données incorrectes";
 $Resource = "Ressource";
+$PleaseEnableScoringSystem = "Veuillez activer le système de cotation";
 ?>

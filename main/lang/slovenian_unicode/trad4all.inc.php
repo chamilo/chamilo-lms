@@ -601,4 +601,8 @@ $FieldTypeDoubleSelect = "Dvojna izbira";
 $FieldTypeDivider = "Vizualni ločilec";
 $ResourceDeleted = "Resurs odstranjen";
 $AdvancedParameters = "Napredni parametri";
+$GoTo = "Pojdi na";
+$SessionNameAndCourseTitle = "Ime seje in naziv tečaja";
+$CreationDate = "Datum nastanka";
+$LastUpdateDate = "Zadnja sprememba";
 ?>

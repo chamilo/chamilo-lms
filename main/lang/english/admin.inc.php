@@ -850,4 +850,7 @@ $YesWillDeletePermanently = "Yes (the files will be deleted permanently and will
 $NoWillDeletePermanently = "No (the files will be deleted from the application but will be manually recoverable  by your server administrator)";
 $SelectAResponsible = "Select a manager";
 $ThereIsNotStillAResponsible = "No HR manager available";
+$GlobalAgenda = "Global agenda";
+$AdvancedfilemanagerTitle = "Advanced file manager for wysiwyg editor";
+$AdvancedfilemanagerComment = "Enable advanced file manager for WYSIWYG editor? This will add a considerable amount of additional options to the file manager that opens in a pop-up window when uploading files to the server.";
 ?>

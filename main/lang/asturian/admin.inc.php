@@ -850,4 +850,5 @@ $YesWillDeletePermanently = "Sí (los archivos van esborrase dafechu y nun se van
 $NoWillDeletePermanently = "Non (los archivos van esborrase de l\'aplicación pero puen volver recuperase, a mano, pol alministrador)";
 $SelectAResponsible = "Escueya un responsable";
 $ThereIsNotStillAResponsible = "Entá nun hai responsables";
+$GlobalAgenda = "Axenda Global";
 ?>

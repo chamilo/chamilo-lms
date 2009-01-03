@@ -164,4 +164,6 @@ $NoSessionId = "Sessione non identificata";
 $NoUsersRead = "Si prega di controllare il file XML/CSV";
 $UserImportFileMessage = "Se nel file XML/CSV ci sono nomi utente omessi il nome e il cognome verranno usati per creare il nome utente, ad es. Albert Einstein diverrà aeinstein";
 $UserAlreadyRegisteredByOtherCreator = "Utente già registrato da parte di un altro docente";
+$NewUserInTheCourse = "Nuovo utente iscritto al corso";
+$MessageNewUserInTheCourse = "Questo è il messaggio che ti permette di sapere se un nuovo corsista si è iscritto al corso";
 ?>

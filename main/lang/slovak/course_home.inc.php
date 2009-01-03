@@ -24,4 +24,5 @@ $Interaction = "Interakcie";
 $Authoring = "Autori";
 $Administration = "Administrácia";
 $IntroductionTextUpdated = "Úvodný text bol aktualizovaný";
+$IntroductionTextDeleted = "Úvodný text je zmazaný";
 ?>

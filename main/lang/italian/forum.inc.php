@@ -93,4 +93,5 @@ $ForumSearchInformation = "Per cercare più parole usa il simbolo + ";
 $YouWillBeNotifiedOfNewPosts = "I nuovi messaggi ti verranno notificati via e-mail";
 $YouWillNoLongerBeNotifiedOfNewPosts = "I nuovi messaggi non ti verranno più notificati via e-mail";
 $TooShort = "Troppo corto";
+$AddImage = "Aggiungi immagine";
 ?>

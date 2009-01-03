@@ -165,4 +165,6 @@ $NoSessionId = "La sesión no ha sido identificada";
 $NoUsersRead = "Por favor verifique su fichero XML/CVS";
 $UserImportFileMessage = "Si en el archivo XML/CVS los nombres de usuarios (username) son omitidos se tomarán el Nombre (Firstname) y el Apellido (Lastname) del usuario. Por ejemplo, para el nombre Julio Montoya el username será jmontoya";
 $UserAlreadyRegisteredByOtherCreator = "El usuario ya ha sido registrado por otro coach ";
+$NewUserInTheCourse = "Nuevo Usuario registrado en el curso";
+$MessageNewUserInTheCourse = "Este es un mensaje para informarle que se ha suscrito un nuevo usuario en el curso";
 ?>

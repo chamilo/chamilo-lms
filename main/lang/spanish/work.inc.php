@@ -47,4 +47,5 @@ $AdvancedParameters = "Parámetros avanzados";
 $ExpiryDateToSendWorkIs = "Fecha de vencimiento para enviar trabajos";
 $EnableExpiryDate = "Activar fecha de vencimiento";
 $EnableEndDate = "Activar fecha de finalización";
+$IsNotPosibleSaveTheDocument = "No se pudo guardar el documento";
 ?>

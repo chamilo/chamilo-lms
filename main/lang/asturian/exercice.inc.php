@@ -257,4 +257,9 @@ $ExeStartTime = "Fecha d\'entamu";
 $ExeEndTime = "Fecha d\'acabu";
 $Value = "Valor";
 $DeleteAttempt = "¿ Esborrar esti intentu ?";
+$QuantityQuestions = "Cantidá d\'entrugues";
+$FilterExercices = "Filtrar exercicios";
+$FilterByNotRevised = "Filtrar por Ensin unviar";
+$FilterByRevised = "Filtrar por Revisáu";
+$Duration = "Duración";
 ?>

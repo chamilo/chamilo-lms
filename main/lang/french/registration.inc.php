@@ -163,4 +163,6 @@ $NoSessionId = "La session n\'a pas pu être identifiée";
 $NoUsersRead = "Veuillez vérifier le format de votre fichier XML/CSV";
 $UserImportFileMessage = "Si des noms d\'utilisateurs ont été oubliés dans le fichier XML/CSV, leur prénom et leur nom seront utilisés pour créer un nouvel utilisateur. Par exemple, Hugues Dupond deviendra hdupond";
 $UserAlreadyRegisteredByOtherCreator = "Cet utilisateur a déjà été enregistré par un autre coach.";
+$NewUserInTheCourse = "Nouvel utilisateur inscrit au cours";
+$MessageNewUserInTheCourse = "Ce message est destiné à vous informer de l\'inscription d\'un nouvel utilisateur dans le cours";
 ?>

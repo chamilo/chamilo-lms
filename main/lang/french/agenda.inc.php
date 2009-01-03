@@ -66,4 +66,5 @@ $RepeatYearly = "Chaque année";
 $RepeatEnd = "Fin de la répétition";
 $RepeatedEventViewOriginalEvent = "Voir l\'évènement initial";
 $ICalFileImport = "Importer un fichier iCal/ics";
+$AllUsersOfThePlatform = "Tous les utilisateurs de la plateforme";
 ?>

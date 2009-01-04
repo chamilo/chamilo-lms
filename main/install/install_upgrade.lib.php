@@ -177,14 +177,10 @@ function write_dokeos_config_file($path)
 	global $session_lifetime;
 	global $new_version;
 	global $new_version_stable;
-	$rootSys = realpath($pathForm).'/';
-	$garbageDir = realpath('../garbage/').'/';
-	//change paths if updating
-	//if($installType=='update'){
-	//	$rootSys = $updatePath;
-	//	$garbageDir = realpath($updatePath.'claroline/garbage/').'/';
-	//	$urlAppendPath = '';	
-	//}
+    $seek = array('\\','//');
+    $destroy = array('/','/');
+	$rootSys = str_replace($seek,$destroy,realpath($pathForm).'/');
+	$garbageDir = str_replace($seek,$destroy,realpath('../garbage/').'/');
 	
 	$file_path = dirname(__FILE__).'/'.DOKEOS_CONFIG_FILENAME;
 	$content = file_get_contents($file_path);

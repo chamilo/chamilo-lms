@@ -463,7 +463,7 @@ CREATE TABLE settings_current (
   INDEX (access_url)
 );
 
-ALTER TABLE settings_current ADD INDEX unique_setting ( variable , subkey , category ) ;
+ALTER TABLE settings_current ADD UNIQUE unique_setting ( variable , subkey , category ) ;
 
 --
 -- Dumping data for table settings_current
@@ -649,7 +649,7 @@ CREATE TABLE settings_options (
   UNIQUE KEY id (id)
 );
 
-ALTER TABLE settings_options ADD INDEX unique_setting_option ( variable , value) ;
+ALTER TABLE settings_options ADD UNIQUE unique_setting_option ( variable , value) ;
 
 --
 -- Dumping data for table settings_options

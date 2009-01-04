@@ -192,8 +192,8 @@ function write_dokeos_config_file($path)
 	$config['{DATABASE_HOST}'] = $dbHostForm;
 	$config['{DATABASE_USER}'] = $dbUsernameForm;
 	$config['{DATABASE_PASSWORD}'] = $dbPassForm;
-	$config['{TRACKING_ENABLED}'] = trueFalse($enableTrackingForm);
-	$config['{SINGLE_DATABASE}'] = trueFalse($singleDbForm);
+	$config['TRACKING_ENABLED'] = trueFalse($enableTrackingForm);
+	$config['SINGLE_DATABASE'] = trueFalse($singleDbForm);
 	$config['{COURSE_TABLE_PREFIX}'] = ($singleDbForm ? 'crs_' : '');
 	$config['{DATABASE_GLUE}'] = ($singleDbForm ? '_' : '`.`');
 	$config['{DATABASE_PREFIX}'] = $dbPrefixForm;
@@ -207,10 +207,10 @@ function write_dokeos_config_file($path)
 	$config['{GARBAGE_DIR}'] = str_replace("\\", '/', $garbageDir);
 	$config['{PLATFORM_LANGUAGE}'] = $languageForm;
 	$config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
-	$config['{ENCRYPT_PASSWORD}'] = trueFalse($encryptPassForm);
-	$config['{SESSION_LIFETIME}'] = $session_lifetime;
+	$config['ENCRYPT_PASSWORD'] = trueFalse($encryptPassForm);
+	$config['SESSION_LIFETIME'] = $session_lifetime;
 	$config['{NEW_VERSION}'] = $new_version;
-	$config['{NEW_VERSION_STABLE}'] = trueFalse($new_version_stable);
+	$config['NEW_VERSION_STABLE'] = trueFalse($new_version_stable);
 	foreach ($config as $key => $value)
 	{
 		$content = str_replace($key, $value, $content);

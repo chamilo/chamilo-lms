@@ -63,9 +63,9 @@ $_configuration['db_password']							= '{DATABASE_PASSWORD}';
 //   Database settings
 //============================================================================
 // Is tracking enabled?
-$_configuration['tracking_enabled'] 					= {TRACKING_ENABLED};
+$_configuration['tracking_enabled'] 					= TRACKING_ENABLED;
 // Is single database enabled (DO NOT MODIFY THIS)
-$_configuration['single_database']    					= {SINGLE_DATABASE};
+$_configuration['single_database']    					= SINGLE_DATABASE;
 // Prefix for course tables (IF NOT EMPTY, can be replaced by another prefix, else leave empty)
 $_configuration['table_prefix']  						= '{COURSE_TABLE_PREFIX}';
 // Separator between database and table name (DO NOT MODIFY THIS)
@@ -138,16 +138,16 @@ $_configuration['verbose_backup']						= false;
 // security word for password recovery
 $_configuration['security_key']      					= '{SECURITY_KEY}';
 // Settings for new and future features
-$userPasswordCrypted          							= {ENCRYPT_PASSWORD};
+$userPasswordCrypted          							= ENCRYPT_PASSWORD;
 // You may have to restart your web server if you change this
 $storeSessionInDb             							= false;
 // Session lifetime
-$_configuration['session_lifetime']						= {SESSION_LIFETIME};
+$_configuration['session_lifetime']						= SESSION_LIFETIME;
 // Activation for multi-url access
 //$_configuration['multiple_access_urls']					= true;
 
 
 // Version settings
 $_configuration['dokeos_version'] 	= '{NEW_VERSION}';
-$_configuration['dokeos_stable'] 	= {NEW_VERSION_STABLE};
+$_configuration['dokeos_stable'] 	= NEW_VERSION_STABLE;
 ?>

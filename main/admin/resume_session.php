@@ -1,4 +1,4 @@
-<?php // $Id: resume_session.php 16954 2008-11-26 14:41:35Z pcool $
+<?php // $Id: resume_session.php 17532 2009-01-04 20:33:49Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -126,7 +126,6 @@ api_display_tool_title($tool_name);
 </tr>
 
 <!-- show nb_days_before and nb_days_after only if they are different from 0 -->
-<?php if(intval($session['nb_days_access_before_beginning'])!=0) : ?>
 <tr>
 	<td>
 		<?php echo ucfirst(get_lang('DaysBefore')) ?> :
@@ -135,9 +134,6 @@ api_display_tool_title($tool_name);
 		<?php echo intval($session['nb_days_access_before_beginning']) ?>
 	</td>
 </tr>
-<?php endif; ?>
-
-<?php if(intval($session['nb_days_access_after_end'])!=0) : ?>
 <tr>
 	<td>
 		<?php echo ucfirst(get_lang('DaysAfter')) ?> :
@@ -146,7 +142,6 @@ api_display_tool_title($tool_name);
 		<?php echo intval($session['nb_days_access_after_end']) ?>
 	</td>
 </tr>
-<?php endif; ?>
 </table>
 
 <br />

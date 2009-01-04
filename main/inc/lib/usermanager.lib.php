@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 17362 2008-12-17 23:21:17Z cfasanando $
+<?php // $Id: usermanager.lib.php 17533 2009-01-04 20:37:33Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1446,7 +1446,10 @@ class UserManager
 		$sessions_sql = "SELECT DISTINCT id, name, date_start, date_end
 								FROM $tbl_session as session
 								WHERE session.id_coach = $user_id
-								AND (date_start <= CURDATE() AND date_end >= CURDATE() OR date_start='0000-00-00')
+                                AND
+                                ( CURDATE() >= DATE_SUB(date_start, INTERVAL nb_days_access_before_beginning DAY) AND
+                                  CURDATE() <= ADDDATE(date_end, INTERVAL nb_days_access_after_end DAY) OR
+                                  date_start='0000-00-00')
 								ORDER BY date_start, date_end, name";
 		$result = api_sql_query($sessions_sql,__FILE__,__LINE__);
 	

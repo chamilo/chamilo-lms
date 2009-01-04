@@ -103,12 +103,21 @@ function search_users($needle)
 				OR firstname LIKE "'.$needle.'%"
 				OR lastname LIKE "'.$needle.'%")
 				ORDER BY lastname, firstname, username
-				LIMIT 10';
+				LIMIT 11';
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		
-		while($user = Database :: fetch_array($rs))
+        $i=0;
+		while ($user = Database :: fetch_array($rs))
 		{
-			$return .= '<a href="#" onclick="add_user_to_session(\''.$user['user_id'].'\',\''.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')'.'\')">'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</a><br />';
+            $i++;
+            if ($i<=10)
+            {
+			     $return .= '<a href="#" onclick="add_user_to_session(\''.$user['user_id'].'\',\''.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')'.'\')">'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</a><br />';
+            }
+            else
+            {
+            	$return .= '...<br />';
+            }
 		}
 	}
 	$xajax_response -> addAssign('ajax_list_users','innerHTML',utf8_encode($return));

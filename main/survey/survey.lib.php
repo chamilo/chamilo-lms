@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 17494 2008-12-31 21:15:21Z iflorespaz $
+* 	@version $Id: survey.lib.php 17530 2009-01-04 20:28:07Z yannoo $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -751,7 +751,7 @@ class survey_manager
 					$empty_answer=true;					
 				}
 			}
-									
+			$additional = array();		
 			if (!$empty_answer)  
 			{			
 				global $_course;			
@@ -1261,7 +1261,8 @@ class survey_manager
 						FROM $table_survey_answer answered_user
 						LEFT JOIN $table_user as user
 							ON answered_user.user = user.user_id
-						WHERE survey_id= '".Database::escape_string($survey_data['survey_id'])."'";
+						WHERE survey_id= '".Database::escape_string($survey_data['survey_id'])."'
+                        ORDER BY user.lastname, user.firstname";
 		}
 		else 
 		{
@@ -2539,7 +2540,7 @@ class SurveyUtil {
 		{
 			if ($survey_data['anonymous'] == 0)
 			{
-				$name = $person['firstname'].' '.$person['lastname'];
+				$name = $person['lastname'].' '.$person['firstname'];
 				$id = $person['user_id'];
 				if($id == ''){
 					$id = $person['invited_user'];
@@ -4061,7 +4062,7 @@ class SurveyUtil {
 							$result = api_sql_query($sql, __FILE__, __LINE__);
 							$row = Database::fetch_array($result);
 							$recipient_email = $row['email'];
-							$recipient_name = $row['firstname'].' '.$row['lastname'];
+							$recipient_name = $row['lastname'].' '.$row['firstname'];
 						}
 						else
 						{
@@ -4070,7 +4071,7 @@ class SurveyUtil {
 						}
 		
 						// sending the mail
-						$sender_name  = $_user['firstName'].' '.$_user['lastName'];
+						$sender_name  = $_user['lastName'].' '.$_user['firstName'];
 						$sender_email = $_user['mail'];
 						
 						$replyto = array();

@@ -1049,7 +1049,7 @@ CREATE TABLE  sys_calendar (
 );
 
 CREATE TABLE IF NOT EXISTS system_template (
-  id int(11) NOT NULL auto_increment,
+  id int UNSIGNED NOT NULL auto_increment,
   title varchar(250) NOT NULL,
   comment text NOT NULL,
   image varchar(250) NOT NULL,

@@ -91,7 +91,7 @@ function handle_forum_and_forumcategories() {
 	$post_submit_forum= isset($_POST['SubmitForum']) ? $_POST['SubmitForum'] : '';
 	$get_id=isset($_GET['id']) ? $_GET['id'] : '';
 	// Adding a forum category
-	if (($action_forum_cat=='add' && $_GET['content']=='forumcategory')) {
+	if (($action_forum_cat=='add' && $_GET['content']=='forumcategory') || $post_submit_cat ) {
 		show_add_forumcategory_form();
 	}
 	// Adding a forum
@@ -150,7 +150,7 @@ function handle_forum_and_forumcategories() {
 */
 function show_add_forumcategory_form($inputvalues=array()) {
 	// initiate the object
-	$form = new FormValidator('forumcategory');
+	$form = new FormValidator('forumcategory','post');
 
 	// settting the form elements
 	$form->addElement('header', '', get_lang('AddForumCategory'));

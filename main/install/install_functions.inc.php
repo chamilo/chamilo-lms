@@ -604,8 +604,8 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 
 		if(!is_writable('../upload'))
 		{
-			$notwritable[] = realpath($curdir.'/../upload');
-			@chmod('../upload', $perm);
+			$notwritable[] = realpath($curdir.'/../upload/users');
+			@chmod('../upload/users', $perm);
 		}
 
         if(!is_writable('../default_course_document/images/'))

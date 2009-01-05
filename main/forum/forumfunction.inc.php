@@ -104,8 +104,9 @@ function handle_forum_and_forumcategories() {
 		show_add_forum_form($inputvalues);
 	}
 	// Edit a forum category
-	if (($action_forum_cat=='edit' && $_GET['content']=='forumcategory' && $get_id) || $post_submit_cat ) {
-		$forum_category=get_forum_categories(strval(intval($get_id))); // note: this has to be cleaned first
+	if (($action_forum_cat=='edit' && $_GET['content']=='forumcategory' && isset($_GET['id'])) || $_POST['SubmitEditForumCategory'] )
+	{
+		$forum_category=get_forum_categories(strval(intval($_GET['id']))); // note: this has to be cleaned first
 		show_edit_forumcategory_form($forum_category);
 	}
 	// Delete a forum category
@@ -234,8 +235,8 @@ function show_add_forum_form($inputvalues=array()) {
 				document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/nolines_plus.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
 				}*/
 			
-		$form->addElement('static','Group','<div id="plus"><a href="javascript://" onclick="if(document.getElementById(\'id_qualify\').style.display==\'none\'){ document.getElementById(\'id_qualify\').style.display=\'block\'; } else { document.getElementById(\'id_qualify\').style.display=\'none\'; }" ><br /><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</a></div>');
-		$form->addElement('html','<div id="id_qualify" style="display:none">');
+		$form->addElement('static','Group','<div id="plus"><a href="javascript://" onclick="advanced_parameters()" ><br /><span id="plus_minus">&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a></div>');
+		$form->addElement('html','<div id="options" style="display:none">');
 	
 	$group='';
 	$group[] =& HTML_QuickForm::createElement('radio', 'students_can_edit',null,get_lang('Yes'),1);
@@ -294,36 +295,35 @@ function show_add_forum_form($inputvalues=array()) {
 
 	
 	 // Forum image 	 
-	         $form->add_progress_bar(); 	 
-	         if (isset($inputvalues['forum_image']) && strlen($inputvalues['forum_image']) > 0) { 	 
-	  	 
-	                 $show_preview_image='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$inputvalues['forum_image'].'>'; 	 
-	                 $div = '<div class="row"> 	 
-	                 <div class="label">'.get_lang('PreviewImage').'</div> 	 
-	                 <div class="formw"> 	 
-	                 '.$show_preview_image.' 	 
-	                 </div> 	 
-	                 </div>'; 	 
-	  	 
-	                 $form->addElement('html', $div .'<br/>'); 	 
-	                 $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage')); 	 
-	         } 	 
-	  	 	 $forum_image=isset($inputvalues['forum_image']) ? $inputvalues['forum_image'] : '';
-	         $form->addElement('file', 'picture', ($forum_image != '' ? get_lang('UpdateImage') : get_lang('AddImage'))); 	 
-	         $form->addRule('picture', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));
+	 $form->add_progress_bar(); 	 
+	 if (isset($inputvalues['forum_image']) && strlen($inputvalues['forum_image']) > 0) { 	 
 	
-	
-	
-	
-		$form->addElement('html','</div>');
-	
-	
-	
-	
-	
-	
-		
-	
+		 $image_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$inputvalues['forum_image'];
+		 $image_size = @getimagesize($image_path);
+		 $img_attributes = '';
+		 if (!empty($image_size)) {
+			 if ($image_size[0] > 100 || $image_size[1] > 100) {
+				//limit display width and height to 100px
+				$img_attributes = 'width="100" height="100"';	
+			 }							
+		 	 $show_preview_image='<img src="'.$image_path.'" '.$img_attributes.'>';
+		     $div = '<div class="row"> 	 
+		     <div class="label">'.get_lang('PreviewImage').'</div> 	 
+		     <div class="formw"> 	 
+		     '.$show_preview_image.' 	 
+		     </div> 	 
+		     </div>';
+		 
+		     $form->addElement('html', $div .'<br/>'); 	 
+	     	 $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
+	     }	
+		  	 
+	 } 	 
+	 $forum_image=isset($inputvalues['forum_image']) ? $inputvalues['forum_image'] : '';
+	 $form->addElement('file', 'picture', ($forum_image != '' ? get_lang('UpdateImage') : get_lang('AddImage'))); 	 
+	 $form->addRule('picture', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));
+	 $form->addElement('html','</div>');
+
 	// The OK button
 	$form->addElement('submit', 'SubmitForum', get_lang('OK'));
 	// setting the rules
@@ -416,7 +416,7 @@ function delete_forum_image($forum_id)
 */
 function show_edit_forumcategory_form($inputvalues=array()) {
 	// initiate the object
-	$form = new FormValidator('forumcategory');
+	$form = new FormValidator('forumcategory','post');
 
 	// settting the form elements
 	$form->addElement('header', '', get_lang('EditForumCategory'));
@@ -426,10 +426,10 @@ function show_edit_forumcategory_form($inputvalues=array()) {
 	$form->addElement('submit', 'SubmitEditForumCategory',get_lang('OK'));
 	global $charset;
 	// setting the default values
-	$defaultvalues['forum_category_id']=isset($inputvalues['cat_id'])?$inputvalues['cat_id']:null;
+	$defaultvalues['forum_category_id']=$inputvalues['cat_id'];
 
-	$defaultvalues['forum_category_title']=prepare4display(html_entity_decode(isset($inputvalues['cat_title'])?$inputvalues['cat_title']:null,ENT_QUOTES,$charset));
-	$defaultvalues['forum_category_comment']=prepare4display(isset($inputvalues['cat_comment'])?$inputvalues['cat_comment']:null);
+	$defaultvalues['forum_category_title']=prepare4display(html_entity_decode($inputvalues['cat_title'],ENT_QUOTES,$charset));
+	$defaultvalues['forum_category_comment']=prepare4display($inputvalues['cat_comment']);
 	$form->setDefaults($defaultvalues);
 
 	// setting the rules
@@ -527,7 +527,7 @@ function store_forum($values) {
     }
  
     // remove existing picture if asked
-	if (isset($values['remove_picture'])) {
+	if (!empty($_POST['remove_picture'])) {
     	delete_forum_image($values['forum_id']);
 	}
  
@@ -561,28 +561,32 @@ function store_forum($values) {
 	if (isset($values['forum_id'])) {
 		$sql_image=isset($sql_image)?$sql_image:'';
 		$new_file_name=isset($new_file_name) ? $new_file_name:'';
-	  	if ($image_moved) {
-		$sql_image=" forum_image='".Database::escape_string($new_file_name)."', ";
-		delete_forum_image($values['forum_id']);
-	}
+	  	if ($image_moved) {			
+	  		if(empty($_FILES['picture']['name'])){
+	  			$sql_image=" ";
+	  		} else {
+	  			$sql_image=" forum_image='".Database::escape_string($new_file_name)."', ";	
+	  			delete_forum_image($values['forum_id']);	
+	  		}
+		}
 	
-	// storing an edit
-	$sql="UPDATE ".$table_forums." SET
-			forum_title='".$clean_title."',
-			".$sql_image."		
-			forum_comment='".Database::escape_string($values['forum_comment'])."',
-			forum_category='".Database::escape_string($values['forum_category'])."',
-			allow_anonymous='".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous'])?$values['allow_anonymous_group']['allow_anonymous']:null)."',
-			allow_edit='".Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
-			approval_direct_post='".Database::escape_string(isset($values['approval_direct_group']['approval_direct'])?$values['approval_direct_group']['approval_direct']:null)."',
-			allow_attachments='".Database::escape_string(isset($values['allow_attachments_group']['allow_attachments'])?$values['allow_attachments_group']['allow_attachments']:null)."',
-			allow_new_threads='".Database::escape_string($values['allow_new_threads_group']['allow_new_threads'])."',
-			forum_group_public_private='".Database::escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
-			default_view='".Database::escape_string($values['default_view_type_group']['default_view_type'])."',
-			forum_of_group='".Database::escape_string($values['group_forum'])."'
-		WHERE forum_id='".Database::escape_string($values['forum_id'])."'";
-		api_sql_query($sql,__FILE__,__LINE__);
-		$return_message=get_lang('ForumEdited');
+		// storing an edit
+		$sql="UPDATE ".$table_forums." SET
+				forum_title='".$clean_title."',
+				".$sql_image."		
+				forum_comment='".Database::escape_string($values['forum_comment'])."',
+				forum_category='".Database::escape_string($values['forum_category'])."',
+				allow_anonymous='".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous'])?$values['allow_anonymous_group']['allow_anonymous']:null)."',
+				allow_edit='".Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
+				approval_direct_post='".Database::escape_string(isset($values['approval_direct_group']['approval_direct'])?$values['approval_direct_group']['approval_direct']:null)."',
+				allow_attachments='".Database::escape_string(isset($values['allow_attachments_group']['allow_attachments'])?$values['allow_attachments_group']['allow_attachments']:null)."',
+				allow_new_threads='".Database::escape_string($values['allow_new_threads_group']['allow_new_threads'])."',
+				forum_group_public_private='".Database::escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
+				default_view='".Database::escape_string($values['default_view_type_group']['default_view_type'])."',
+				forum_of_group='".Database::escape_string($values['group_forum'])."'
+			WHERE forum_id='".Database::escape_string($values['forum_id'])."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+			$return_message=get_lang('ForumEdited');
 	} else {
 		$sql_image='';
 		if ($image_moved) {

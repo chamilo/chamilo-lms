@@ -169,7 +169,7 @@ if ($my_action == 'notify' AND isset($_GET['content']) AND isset($_GET['id'])) {
 
 if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) AND $userinf['status']=='1') {
 	
-	switch(isset($_GET['list'])) {	
+	switch($_GET['list']) {	
 		case "qualify":
 			$student_list=get_thread_users_qualify($_GET['id']);			
 			$nrorow3 =-2;
@@ -362,9 +362,9 @@ if(is_array($threads)) {
 			}
 			
 			if($origin != 'learnpath') {
-				echo "\t\t<td>".display_user_link($row['user_id'], $name)."</td>\n";
+				echo "\t\t<td>".display_user_link($row['user_id'], $row['firstname'].' '.$row['lastname'])."</td>\n";
 			} else {
-				echo "\t\t<td>".$name."</td>\n";
+				echo "\t\t<td>".$row['firstname'].' '.$row['lastname']."</td>\n";
 			}
 			
 			// if the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread

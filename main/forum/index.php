@@ -55,6 +55,18 @@ $htmlHeadXtra[] = '<script language="javascript">
 	$(document).ready(function(){ $(\'.hide-me\').slideUp() });
 	function hidecontent(content){ $(content).slideToggle(\'normal\'); } 
 	</script>';
+$htmlHeadXtra[] = '<script language="javascript">
+		
+		function advanced_parameters() {
+			if(document.getElementById(\'options\').style.display == \'none\') {
+					document.getElementById(\'options\').style.display = \'block\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_minus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			} else {
+					document.getElementById(\'options\').style.display = \'none\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			}		
+		}
+	</script>';	
 // the section (tabs)
 $this_section=SECTION_COURSES;
 
@@ -317,13 +329,20 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						echo "\t<tr class=\"forum\">\n";
 						
 						// Showing the image
-						echo "\t\t<td width=\"50\">";
+						echo "\t\t<td width=\"50\">";	
 						if(!empty($forum['forum_image'])) {
-							echo '<img src="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$forum['forum_image'].'">';
-						}
-						echo "</td>\n";
-					
-					
+							$image_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$forum['forum_image'];												
+							$image_size = @getimagesize($image_path);
+							$img_attributes = '';
+							if (!empty($image_size)) {
+								if ($image_size[0] > 100 || $image_size[1] > 100) {
+									//limit display width and height to 100px
+									$img_attributes = 'width="100" height="100"';	
+								}
+								echo "<img src=\"$image_path\" $img_attributes>";
+							}
+						}														
+						echo "</td>\n";										
 						echo "\t\t<td width=\"20\">";
 						
 						if ($forum['forum_of_group']!=='0') {
@@ -402,7 +421,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 			}
 			
 			if (count($forum_list)==0) {
-				echo "\t<tr><td>".get_lang('NoForumInThisCategory')."</td>".(api_is_allowed_to_edit(false,true)?'<td colspan="5"></td>':'<td colspan="4"></td>')."</tr>\n";
+				echo "\t<tr><td>".get_lang('NoForumInThisCategory')."</td>".(api_is_allowed_to_edit(false,true)?'<td colspan="6"></td>':'<td colspan="6"></td>')."</tr>\n";
 			}
 		}
 	}

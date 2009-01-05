@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 17018 2008-11-28 23:21:02Z iflorespaz $
+<?php // $Id: settings.php 17537 2009-01-05 16:05:24Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -262,12 +262,13 @@ $action_images['languages']		= 'forum.gif';
 $action_images['tuning'] 		= 'tuning.gif';
 $action_images['plugins'] 		= 'plugin.gif';
 $action_images['stylesheets'] 	= 'theme.gif';
+$action_images['templates'] 	= 'template.gif';
 
 
 // grabbing the categories
 //$selectcategories = "SELECT DISTINCT category FROM ".$table_settings_current." WHERE category NOT IN ('stylesheets','Plugins')";
 //$resultcategories = api_sql_query($selectcategories, __FILE__, __LINE__);
-$resultcategories = api_get_settings_categories(array('stylesheets','Plugins'));
+$resultcategories = api_get_settings_categories(array('stylesheets','Plugins', 'Templates'));
 echo "\n<div class=\"actions\">";
 //while ($row = mysql_fetch_array($resultcategories))
 foreach($resultcategories as $row)
@@ -276,6 +277,7 @@ foreach($resultcategories as $row)
 }
 echo "\n\t<a href=\"".api_get_self()."?category=Plugins\">".Display::return_icon($action_images['plugins'], ucfirst(get_lang('Plugins'))).ucfirst(get_lang('Plugins'))."</a>";
 echo "\n\t<a href=\"".api_get_self()."?category=stylesheets\">".Display::return_icon($action_images['stylesheets'], ucfirst(get_lang('Stylesheets'))).ucfirst(get_lang('Stylesheets'))."</a>";
+echo "\n\t<a href=\"".api_get_self()."?category=Templates\">".Display::return_icon($action_images['templates'], ucfirst(get_lang('Templates'))).ucfirst(get_lang('Templates'))."</a>";
 echo "\n</div>";
 
 if (isset ($_GET['category']))

@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 17478 2008-12-29 20:13:08Z cvargas1 $
+<?php // $Id: database.lib.php 17539 2009-01-05 19:50:33Z marvil07 $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -339,6 +339,32 @@ class Database
 		$database_name_with_glue = Database::fix_database_parameter($database_name);
 		return Database::format_glued_course_table_name($database_name_with_glue, $short_table_name);
 	}
+
+    /**
+     * Get a complete course table name from a course code
+     *
+     * @param string $course_code
+     * @param string $table the name of the table
+     */
+    function get_course_table_from_code($course_code, $table) {
+        $ret = NULL;
+
+        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $sql = "SELECT $course_table.db_name, $course_cat_table.code
+            FROM $course_table
+            LEFT JOIN $course_cat_table
+            ON $course_table.category_code =  $course_cat_table.code
+            WHERE $course_table.code = '$course_code'
+            LIMIT 1";
+        $res = api_sql_query($sql, __FILE__, __LINE__);
+        $result = Database::fetch_array($res);
+
+        $ret = sprintf ("%s.%s", $result[0], $table);
+
+        return $ret;
+    }
+
 	/**
 	 * This generic function returns the correct and complete name of any statistic table
 	 * of which you pass the short name as a parameter.

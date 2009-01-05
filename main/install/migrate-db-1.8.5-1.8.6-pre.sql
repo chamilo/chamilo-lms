@@ -49,6 +49,7 @@ UPDATE TABLE settings_options SET display_text = 'NoWillDeletePermanently' WHERE
 INSERT INTO settings_options (variable, value, display_text) VALUES ('breadcrumbs_course_homepage','session_name_and_course_title','SessionNameAndCourseTitle');
 INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES ('notebook','notebook/index.php','notebook.gif',2,1,'basic');
 CREATE TABLE  sys_calendar (  id int unsigned NOT NULL auto_increment,  title varchar(200) NOT NULL,  content text,  start_date datetime NOT NULL default '0000-00-00 00:00:00',  end_date datetime NOT NULL default '0000-00-00 00:00:00',  PRIMARY KEY  (id));
+CREATE TABLE IF NOT EXISTS system_template (id int(11) NOT NULL auto_increment,  title varchar(250) NOT NULL,  comment text NOT NULL,  image varchar(250) NOT NULL,  content text NOT NULL,  PRIMARY KEY  (id));
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';

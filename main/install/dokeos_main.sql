@@ -1047,3 +1047,12 @@ CREATE TABLE  sys_calendar (
   end_date datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (id)
 );
+
+CREATE TABLE IF NOT EXISTS system_template (
+  id int(11) NOT NULL auto_increment,
+  title varchar(250) NOT NULL,
+  comment text NOT NULL,
+  image varchar(250) NOT NULL,
+  content text NOT NULL,
+  PRIMARY KEY  (id)
+);

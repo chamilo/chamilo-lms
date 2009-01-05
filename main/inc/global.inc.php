@@ -45,6 +45,9 @@ else
 // include the main Dokeos platform library file
 require_once($includePath.'/lib/main_api.lib.php');
 
+//fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI']
+api_request_uri();
+
 // Start session
 
 api_session_start($already_installed);

@@ -788,7 +788,116 @@ class Tracking {
 		}
 	}
 	
-	function last_three_connection_chat($student_id,$course_code) {
+/**
+* This function counts the number of post by course
+* @param  string $course_code - Course ID   
+* @return	int the number of post by course
+* @author Christian Fasanando <christian.fasanando@dokeos.com>, 
+* @version enero 2009, dokeos 1.8.6
+*/
+	function count_number_of_posts_by_course($course_code) {		
+		//protect data
+		$course_code = addslashes($course_code);
+		// get the informations of the course 
+		$a_course = CourseManager :: get_course_information($course_code);
+		$count = 0;		
+		if (!empty($a_course['db_name'])) {
+			$tbl_posts = Database :: get_course_table(TABLE_FORUM_POST, $a_course['db_name']);
+			$sql = "SELECT * FROM $tbl_posts";
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$count = Database::num_rows($result);	
+			return $count;			
+		} else {
+			return null;
+		}
+	}
+
+/**
+* This function counts the number of threads by course
+* @param  string $course_code - Course ID   
+* @return	int the number of threads by course
+* @author Christian Fasanando <christian.fasanando@dokeos.com>, 
+* @version enero 2009, dokeos 1.8.6
+*/
+	function count_number_of_threads_by_course($course_code) {		
+		//protect data
+		$course_code = addslashes($course_code);
+		// get the informations of the course 
+		$a_course = CourseManager :: get_course_information($course_code);
+		$count = 0;		
+		if (!empty($a_course['db_name'])) {
+			$tbl_threads = Database :: get_course_table(TABLE_FORUM_THREAD, $a_course['db_name']);
+			$sql = "SELECT * FROM $tbl_threads";
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$count = Database::num_rows($result);	
+			return $count;			
+		} else {
+			return null;
+		}
+	}
+
+/**
+* This function counts the number of forums by course
+* @param  string $course_code - Course ID   
+* @return	int the number of forums by course
+* @author Christian Fasanando <christian.fasanando@dokeos.com>, 
+* @version enero 2009, dokeos 1.8.6
+*/
+	function count_number_of_forums_by_course($course_code) {		
+		//protect data
+		$course_code = addslashes($course_code);
+		// get the informations of the course 
+		$a_course = CourseManager :: get_course_information($course_code);
+		$count = 0;		
+		if (!empty($a_course['db_name'])) {
+			$tbl_forums = Database :: get_course_table(TABLE_FORUM, $a_course['db_name']);
+			$sql = "SELECT * FROM $tbl_forums";
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$count = Database::num_rows($result);	
+			return $count;			
+		} else {
+			return null;
+		}
+	}		
+
+/**
+* This function counts the chat last connections by course in x days
+* @param  string $course_code - Course ID
+* @param  int $last_days -  last x days       
+* @return	int the chat last connections by course in x days
+* @author Christian Fasanando <christian.fasanando@dokeos.com>, 
+* @version enero 2009, dokeos 1.8.6
+*/
+	function chat_connections_during_last_x_days_by_course($course_code,$last_days) {		
+		//protect data
+		$last_days = intval($last_days);
+		$course_code = addslashes($course_code);
+		// get the informations of the course 
+		$a_course = CourseManager :: get_course_information($course_code);
+		$count = 0;		
+		if (!empty($a_course['db_name'])) {
+			$tbl_stats_access = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS, $a_course['db_name']);
+			
+			$sql = "SELECT * FROM $tbl_stats_access WHERE DATE_SUB(NOW(),INTERVAL $last_days DAY) <= access_date 
+					AND access_cours_code = '$course_code' AND access_tool='".TOOL_CHAT."'";
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$count = Database::num_rows($result);	
+			return $count;			
+		} else {
+			return null;
+		}
+	}	
+
+	
+/**
+* This function gets the last student's connection in chat
+* @param  int $student_id - Student ID
+* @param  string $course_code - Course ID
+* @return string the last connection  
+* @author Christian Fasanando <christian.fasanando@dokeos.com>, 
+* @version enero 2009, dokeos 1.8.6
+*/	
+	function chat_last_connection($student_id,$course_code) {
 		require_once (api_get_path(LIBRARY_PATH) . 'course.lib.php');
 		
 		//protect datas
@@ -797,25 +906,23 @@ class Tracking {
 		
 		// get the informations of the course 
 		$a_course = CourseManager :: get_course_information($course_code);		
-		
+		$date_time = '';
 		if (!empty($a_course['db_name'])) {
 			// table definition
 			$tbl_stats_access = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS, $a_course['db_name']);
 			$sql = "SELECT access_date FROM $tbl_stats_access 
-					 WHERE access_tool='".TOOL_CHAT."' AND access_user_id='$student_id' AND access_cours_code = '$course_code' ORDER BY access_date DESC limit 3";
+					 WHERE access_tool='".TOOL_CHAT."' AND access_user_id='$student_id' AND access_cours_code = '$course_code' ORDER BY access_date DESC limit 1";
 					 	
 			$rs = api_sql_query($sql, __LINE__, __FILE__);
-			$last_connnections = array();
-			while ($row = Database::fetch_array($rs)) {
-				$last_connection = $row['access_date'];
-				if (isset($last_connection)) {				
-					$date_format_long = format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_connection));			 
-					$time = explode(' ',$last_connection);	
-					$date_time = $date_format_long.' '.$time[1];	
-					$last_connnections[] = $date_time;										
-				}
+			$row = Database::fetch_array($rs);			
+			$last_connection = $row['access_date'];
+			if (!empty($last_connection)) {				
+				$date_format_long = format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_connection));			 
+				$time = explode(' ',$last_connection);	
+				$date_time = $date_format_long.' '.$time[1];																
 			}
-			return $last_connnections; 
+			
+			return $date_time; 
 		} else {
 				return null;
 		}										

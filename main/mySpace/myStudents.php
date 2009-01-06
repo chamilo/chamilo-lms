@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 17486 2008-12-31 00:46:42Z yannoo $
+<?php //$Id: myStudents.php 17551 2009-01-06 19:31:15Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -868,12 +868,13 @@ if(!empty($_GET['student']))
 			$messages = Tracking :: count_student_messages($a_infosUser['user_id'], $a_infosCours['code']);
 			$links = Tracking :: count_student_visited_links($a_infosUser['user_id'], $a_infosCours['code']);
 			$documents = Tracking :: count_student_downloaded_documents($a_infosUser['user_id'], $a_infosCours['code']);
-			$last_three_connections_chat = Tracking::last_three_connection_chat($a_infosUser['user_id'], $a_infosCours['code']);
+			$chat_last_connection = Tracking::chat_last_connection($a_infosUser['user_id'], $a_infosCours['code']);
 	
 			$csv_content[] = array(get_lang('Student_publication'), $nb_assignments);
 			$csv_content[] = array(get_lang('Messages'), $messages);
 			$csv_content[] = array(get_lang('LinksDetails'), $links);
 			$csv_content[] = array(get_lang('DocumentsDetails'), $documents);
+			$csv_content[] = array(get_lang('ChatLastConnection'), $chat_last_connection);
 			
 			?>
 				<tr>
@@ -915,18 +916,10 @@ if(!empty($_GET['student']))
 				</tr>
 				<tr><!-- Chats -->
 					<td>
-						<?php echo get_lang('LastConnectionsInChat') ?>
+						<?php echo get_lang('ChatLastConnection') ?>
 					</td>
 					<td>
-						<?php 
-						$last_connections_chat ='';						
-						for($i=0;$i<count($last_three_connections_chat);$i++){
-							echo $last_three_connections_chat[$i].'<br/>';
-							
-							$last_connections_chat .= str_replace(',', ' ', $last_three_connections_chat[$i]).' ';							
-						}
-						$csv_content[] = array(get_lang('LastConnectionsInChat'), $last_connections_chat);
-						?>
+						<?php echo $chat_last_connection; ?>
 					</td>
 				</tr>
 			</table>

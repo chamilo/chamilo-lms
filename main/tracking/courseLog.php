@@ -261,6 +261,51 @@ if($_GET['studentlist'] == 'false') {
 	
 	echo '</table></div>';
 	echo '<div class="clear"></div>';
+	
+	/**********************
+	 * FORUMS
+	 **********************/
+	 
+	 echo '<div class="admin_section">
+				<h4>
+					<img src="../img/forum.gif" align="absbottom">&nbsp;'.get_lang('Forum').' <a href="../forum/index.php?cidReq='.$_course['id'].'">'.get_lang('SeeDetail').'</a>
+				</h4>
+			<table class="data_table">';
+	$count_number_of_posts_by_course = Tracking :: count_number_of_posts_by_course($_course['id']);
+	$count_number_of_forums_by_course = Tracking :: count_number_of_forums_by_course($_course['id']);
+	$count_number_of_threads_by_course = Tracking :: count_number_of_threads_by_course($_course['id']);		
+	if ($export_csv) {    	    	
+		$csv_content[] = array(get_lang('Forum'),'');
+    	$csv_content[] = array(get_lang('ForumForumsNumber'),$count_number_of_forums_by_course);
+    	$csv_content[] = array(get_lang('ForumThreadsNumber'),$count_number_of_threads_by_course);
+    	$csv_content[] = array(get_lang('ForumPostsNumber'),$count_number_of_posts_by_course);    	
+    }		
+	echo '<tr><td>'.get_lang('ForumForumsNumber').'</td><td align="right">'.$count_number_of_forums_by_course.'</td></tr>';
+	echo '<tr><td>'.get_lang('ForumThreadsNumber').'</td><td align="right">'.$count_number_of_threads_by_course.'</td></tr>'; 
+	echo '<tr><td>'.get_lang('ForumPostsNumber').'</td><td align="right">'.$count_number_of_posts_by_course.'</td></tr>';  
+	echo '</table></div>';
+	echo '<div class="clear"></div>';
+	
+	/**********************
+	 * CHAT
+	 **********************/
+	 
+	 echo '<div class="admin_section">
+				<h4>
+					<img src="../img/chat.gif" align="absbottom">&nbsp;'.get_lang('Chat').'</a>
+				</h4>
+			<table class="data_table">';
+	$chat_connections_during_last_x_days_by_course = Tracking :: chat_connections_during_last_x_days_by_course($_course['id'],7);	
+	if ($export_csv) {
+		$csv_content[] = array(get_lang('Chat'),'');    	    	
+    	$csv_content[] = array(sprintf(get_lang('ChatConnectionsDuringLastXDays'),'7'),$chat_connections_during_last_x_days_by_course);    		
+    }		
+	echo '<tr><td>'.sprintf(get_lang('ChatConnectionsDuringLastXDays'),'7').'</td><td align="right">'.$chat_connections_during_last_x_days_by_course.'</td></tr>';
+	  
+	echo '</table></div>';
+	echo '<div class="clear"></div>';
+	
+	
 	/**********************
 	 * TOOLS
 	 **********************/

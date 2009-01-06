@@ -1,24 +1,5 @@
 <?php //$id: $
-/* 
-==============================================================================
-	Dokeos - elearning and course management software
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium 
-	info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 * This is the course creation library for Dokeos.
@@ -2018,7 +1999,6 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		course_setting table (courseinfo tool)
 	-----------------------------------------------------------
 	*/
-	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_tutor_on_new_user_in_course',0,'auth')", __FILE__, __LINE__);
 	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_manager_on_new_doc',0,'work')", __FILE__, __LINE__);
 	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_on_new_doc_dropbox',0,'dropbox')", __FILE__, __LINE__);
 	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_edit_agenda',0,'agenda')", __FILE__, __LINE__);
@@ -2028,6 +2008,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('course_theme','','theme')", __FILE__, __LINE__);
 	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_learning_path_theme','1','theme')", __FILE__, __LINE__);
 	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_open_chat_window',0,'chat')", __FILE__, __LINE__);
+    api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_tutor_on_new_user_in_course',0,'registration')", __FILE__, __LINE__);
 	/*
 	-----------------------------------------------------------
 		Course homepage tools for platform admin only

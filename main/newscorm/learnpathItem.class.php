@@ -12,6 +12,7 @@
  */
 class learnpathItem{
 	var $attempt_id; //also called "objectives" SCORM-wise
+    var $audio; //the path to an audio file (stored in document/audio/)
 	var $children = array(); //contains the ids of children items
 	var $condition; //if this item has a special condition embedded
 	var $current_score;
@@ -49,12 +50,11 @@ class learnpathItem{
 	var $prevent_reinit = 1;
 	var $ref;
 	var $save_on_close = true;
+    var $search_did = NULL;
 	var $status;
 	var $title;
 	var $type; // this attribute can contain chapter|link|student_publication|module|quiz|document|forum|thread
 	var $view_id;
-    var $terms;
-    var $search_did;
 	
 	var $debug = 0; //logging param
     /**
@@ -100,10 +100,20 @@ class learnpathItem{
     	if(isset($row['launch_data'])){
     		$this->launch_data = $row['launch_data'];
     	}
-        $this->terms = $row['terms'];
-        $this->search_did = $row['search_did']; 
-   		$this->save_on_close = true;
+		$this->save_on_close = true;
 		$this->db_id = $id;
+
+        // get search_did
+        $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+        $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d LIMIT 1';
+        // TODO: verify if it's possible to assume the actual course instead of getting it from db
+        $sql = sprintf($sql, $tbl_se_ref, api_get_course_id(), TOOL_LEARNPATH, $this->lp_id, $id);
+        $res = api_sql_query($sql, __FILE__, __LINE__);
+        if (Database::num_rows($res) >  0) {
+	        $se_ref = Database::fetch_array($res);
+	        $this->search_did = (int)$se_ref['search_did'];
+        }
+        $this->audio = $row['audio'];
 		
 		//error_log('New LP - End of learnpathItem constructor for item '.$id,0);
     	return true;
@@ -199,10 +209,25 @@ class learnpathItem{
     	$lp_item = Database::get_course_table('lp_item');
     	$sql_del_view = "DELETE FROM $lp_item_view WHERE item_id = ".$this->db_id;
 		//error_log('New LP - Deleting from lp_item_view: '.$sql_del_view,0);
-    	$res_del_view = api_sql_query($sql_del_view);
+		$res_del_view = api_sql_query($sql_del_view);
+
+        $sql_sel = "SELECT * FROM $lp_item WHERE id = ".$this->db_id;
+        $res_sel = api_sql_query($sql_sel,__FILE__,__LINE__);
+        if(Database::num_rows($res_sel)<1){return false;}
+        $row = Database::fetch_array($res_sel);
+
     	$sql_del_item = "DELETE FROM $lp_item WHERE id = ".$this->db_id;
 		//error_log('New LP - Deleting from lp_item: '.$sql_del_view,0);
-    	$res_del_item = api_sql_query($sql_del_item);
+        $res_del_item = api_sql_query($sql_del_item);
+
+        if (api_get_setting('search_enabled') == 'true') {
+        	if (!is_null($this->search_did)) {
+        		require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
+        		$di = new DokeosIndexer();
+        		$di->remove_document($this->search_did);
+        	}
+        }
+
     	return true;
     }
     /**
@@ -1054,20 +1079,15 @@ class learnpathItem{
   		}
 		return $scorm_time;
     }
-    /**
-     * Returns search index's internal ID
-     * @return  int     The indexing engine's internal ID for this lp-item
-     */
-    function get_search_id() {
-        return $this->search_did;
-    }
-    /**
-     * Returns index terms
-     * @return  string  Comma-separated list of index terms
-     */
-    function get_terms() {
-        return $this->terms;
-    }
+    
+function get_terms()
+          {
+                $lp_item = Database::get_course_table(TABLE_LP_ITEM);
+                $sql = "SELECT * FROM $lp_item WHERE id='".Database::escape_string($this->db_id)."'";
+                $res = api_sql_query($sql,__FILE__,__LINE__);
+                $row = Database::fetch_array($res);
+                return $row['terms'];
+          }
     /**
      * Returns the item's title
      * @return	string	Title
@@ -1939,9 +1959,9 @@ class learnpathItem{
      	return false;
     }
     /**
-     * Sets new index terms for item
-     * @param   string  Comma-separated list of terms
-     * @return  boolean False on error, true otherwise
+     * Set the terms for this learnpath item
+     * @param   string  Terms, as a comma-split list
+     * @return  boolean Always return true
      */
     function set_terms($terms) {
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -1957,14 +1977,22 @@ class learnpathItem{
         //TODO: validate csv string
         $terms_update_sql = "UPDATE $lp_item SET terms = '". Database::escape_string(htmlentities($new_terms_string)) . "' WHERE id=".$this->get_id();
         $res = api_sql_query($terms_update_sql,__FILE__,__LINE__);
-
         // save it to search engine
         if (api_get_setting('search_enabled') == 'true') {
             $di = new DokeosIndexer();
-            $di->update_terms($this->get_search_id(), $new_terms);
+            $di->update_terms($this->get_search_did(), $new_terms);
         }
         return true;
     }
+    /**
+     * Get the document ID from inside the text index database
+     * @return  int     Search index database document ID
+     */
+    function get_search_did()
+    {
+        return $this->search_did;
+    }
+           
     /**
      * Sets the item viewing time in a usable form, given that SCORM packages often give it as 00:00:00.0000
      * @param	string	Time as given by SCORM

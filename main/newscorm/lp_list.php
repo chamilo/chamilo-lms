@@ -394,10 +394,6 @@ if (is_array($flat_list))
 echo "</table>";
 echo "<br/><br/>";
 
-/* search widget */
-if (api_get_setting('search_enabled') == 'true')
-    search_widget_show();
-
 /*
 ==============================================================================
   FOOTER

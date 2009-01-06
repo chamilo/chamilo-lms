@@ -11,6 +11,9 @@
  * @package dokeos.learnpath.openofficedocument
  */
 require_once('openoffice_document.class.php');
+require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
+require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
 
 class OpenOfficeTextDocument extends OpenofficeDocument {
 	
@@ -201,7 +204,9 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 			fclose($handle);
 			
 			$document_id = add_document($_course,$this->created_dir.$html_file,'file',filesize($this->base_work_dir.$this->created_dir.$html_file),$html_file);
-		
+			
+			$slide_name = '';
+
 			if ($document_id){	
 							
 				//put the document in item_property update
@@ -212,6 +217,54 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 				$previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
 				if($this->first_item == 0){
 					$this->first_item = $previous;
+				}
+				// code for text indexing
+				if (isset($_POST['index_document']) && $_POST['index_document']) {
+					//Display::display_normal_message(print_r($_POST));
+					$di = new DokeosIndexer();
+					isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
+					$di->connectDb(NULL, NULL, $lang);
+					$ic_slide = new IndexableChunk();
+					$ic_slide->addValue("title", $slide_name);
+					$specific_fields = get_specific_field_list();
+					$all_specific_terms = '';
+					foreach ($specific_fields as $specific_field) {
+						if (isset($_REQUEST[$specific_field['code']])) {
+							$sterms = trim($_REQUEST[$specific_field['code']]);
+							$all_specific_terms .= ' '. $sterms;
+							if (!empty($sterms)) {
+								$sterms = explode(',', $sterms);
+								foreach ($sterms as $sterm) {
+									$ic_slide->addTerm(trim($sterm), $specific_field['code']);
+								}
+							}
+						}
+					}
+					$page_content = $all_specific_terms .' '. $page_content;
+					$ic_slide->addValue("content", $page_content);
+					//       add a comment to say terms separated by commas
+					$courseid=api_get_course_id();
+					$ic_slide->addCourseId($courseid);
+					$ic_slide->addToolId(TOOL_LEARNPATH);
+					$lp_id = $this->lp_id;
+					$xapian_data = array(
+						SE_COURSE_ID => $courseid,
+						SE_TOOL_ID => TOOL_LEARNPATH,
+						SE_DATA => array('lp_id' => $lp_id, 'lp_item'=> $previous, 'document_id' => $document_id),
+						SE_USER => (int)api_get_user_id(),
+					);
+					$ic_slide->xapian_data = serialize($xapian_data);
+					$di->addChunk($ic_slide);
+					//index and return search engine document id
+					$did = $di->index();
+					if ($did) {
+						// save it to db
+						$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+						$sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, ref_id_second_level, search_did)
+                                VALUES (NULL , \'%s\', \'%s\', %s, %s, %s)';
+						$sql = sprintf($sql, $tbl_se_ref, api_get_course_id(), TOOL_LEARNPATH, $lp_id, $previous, $did);
+						api_sql_query($sql,__FILE__,__LINE__);
+					}
 				}
 			}
 		}

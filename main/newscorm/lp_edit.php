@@ -6,29 +6,29 @@
 */
 
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+
 $show_description_field = false; //for now
 $nameTools = get_lang("Doc");
 event_access_tool(TOOL_LEARNPATH);
 if (! $is_allowed_in_course) api_not_allowed();
 $interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_lang("_learning_path"));
 $interbreadcrumb[]= array ("url"=>api_get_self()."?action=admin_view&lp_id=$learnpath_id", "name" => $_SESSION['oLP']->get_name());
+
 Display::display_header(null,'Path');
 
 //Page subtitle
-echo '<span style="font-weight: bold;padding-left:8px;">'.get_lang('_edit_learnpath').'</span>';
+echo '<h4>'.get_lang('EditLPSettings').'</h4>';
 
 $fck_attribute['Width'] = '400px';
 $fck_attribute['Height'] = '150px';
 $fck_attribute['ToolbarSet'] = 'Comment';
 
-
-
 $defaults=array();
-
 $form = new FormValidator('form1', 'post', 'lp_controller.php');
 
 //Title
-$form -> addElement('text', 'lp_name', ucfirst(get_lang('_title')));
+$form -> addElement('text', 'lp_name', ucfirst(get_lang('_title')),array('size'=>47));
 
 //Encoding
 $encoding_select = &$form->addElement('select', 'lp_encoding', get_lang('Charset'));
@@ -84,7 +84,7 @@ if (api_get_setting('allow_course_theme') == 'true')
 //$form -> addElement('text', 'lp_author', ucfirst(get_lang('Author')));
 //$form->add_html_editor('lp_author', get_lang('Author')); 
 
-$form->addElement('html_editor','lp_author',get_lang('Author')); 
+$form->addElement('html_editor','lp_author',get_lang('Author'),array('size'=>80) ); 
 
 // LP image	
 $form->add_progress_bar();
@@ -113,10 +113,22 @@ $form->addElement('html', $div);
 $form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));
 
 // Search terms (only if search is activated)
-if (api_get_setting('search_enabled') == 'true')
+if (api_get_setting('search_enabled') === 'true')
 {
-    $form -> addElement('text', 'lp_terms', get_lang('SearchFeatureTerms'));
-    $defaults['lp_terms'] = $_SESSION['oLP']->get_common_index_terms();
+	$specific_fields = get_specific_field_list();
+	foreach ($specific_fields as $specific_field) {
+		$form -> addElement ('text', $specific_field['code'], $specific_field['name']);
+
+		$filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $_SESSION['oLP']->lp_id, 'tool_id' => '\''. TOOL_LEARNPATH .'\'');
+		$values = get_specific_field_values_list($filter, array('value'));
+		if ( !empty($values) ) {
+			$arr_str_values = array();
+			foreach ($values as $value) {
+				$arr_str_values[] = $value['value'];
+			}
+			$defaults[$specific_field['code']] = implode(', ', $arr_str_values);
+		}
+	}
 }
 
 //default values
@@ -127,19 +139,16 @@ $defaults['lp_name']=$_SESSION['oLP']->get_name();
 $defaults['lp_author']=$_SESSION['oLP']->get_author();
 
 //Submit button
-$form->addElement('submit', 'Submit', get_lang('Ok'));
+$form->addElement('submit', 'Submit', get_lang('SaveLPSettings'));
 
 //Hidden fields
 $form->addElement('hidden', 'action', 'update_lp');
 $form->addElement('hidden', 'lp_id', $_SESSION['oLP']->get_id());
-$form->setDefaults($defaults);
-echo '<div style="padding-left:100px; padding-top:-10px;">';
 
-echo '<table style="border="0" cellspacing="0" cellpadding="0"><tr><td width="530px"><br /><br /><br /><div style="width:530px;"></div>';
+$form->setDefaults($defaults);
+echo '<table><tr><td>';
 	$form -> display();
-echo '</td><td valign="top">';
-echo Display::display_icon('help_course_authoring.png','');
-echo '</td></tr></table>';
-echo '</div>';
+echo '</td><td valign="top"><img src="../img/CourseSettingsPageLayout.png" /></td></tr></table>';
+
 Display::display_footer();
 ?>

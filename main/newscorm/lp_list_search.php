@@ -6,7 +6,8 @@
  */
 require api_get_path(LIBRARY_PATH).'search/search_widget.php';
 require api_get_path(LIBRARY_PATH).'search/DokeosQuery.php';
-
+require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
+require_once api_get_path(LIBRARY_PATH).'/specific_fields_manager.lib.php';
 
 $htmlHeadXtra[] = '
     <style type="text/css">
@@ -23,7 +24,7 @@ $htmlHeadXtra[] = '
     .doc_img img {
         width: 120px;
     }
-    .doc_text, 
+    .doc_text,
     .doc_title {
         padding-left: 10px;
         vertical-align: top;
@@ -33,13 +34,25 @@ $htmlHeadXtra[] = '
         font-weight: bold;
         height: 2em;
     }
+
+    .lightbox_link{
+      padding-top: 10px;
+          padding-bottom: 10px;
+      text-align:center;
+      font-size:26px;
+    }
+
+   .data_table{text-align:center;}
+
+    .table_pager_1{z-index:10;height:20px;padding:5px}
+     .cls{clear:both}
     </style>';
 
 
 search_widget_prepare(&$htmlHeadXtra);
 
-event_access_tool(TOOL_LEARNPATH);
-$interbreadcrumb[]= array ("url"=>"./lp_controller.php?action=list", "name"=> get_lang(ucfirst(TOOL_LEARNPATH)));
+event_access_tool(TOOL_SEARCH);
+$interbreadcrumb[]= array ("url"=>"./index.php", "name"=> get_lang('LectureLibrary'));//get_lang(ucfirst(TOOL_SEARCH))
 Display::display_header(null,'Path');
 
 if (api_get_setting('search_enabled') !== 'true') {
@@ -51,118 +64,105 @@ else
     search_widget_show(empty($search_action)?null:'index.php');
 }
 
-
-/**
- * Utility function to get a table for a specific course.
- * 
- * @param   string $course_code     The course_code as in cidReq 
- * @param   string $table           The desired table, this is just concat'd.
- * @return  string 
- */
-function get_course_table($course_code, $table) {
-    $ret = NULL;
-
-    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-    $sql = "SELECT 
-                $course_table.db_name, $course_cat_table.code
-            FROM $course_table
-            LEFT JOIN $course_cat_table
-            ON 
-                $course_table.category_code =  $course_cat_table.code
-            WHERE 
-                $course_table.code = '$course_code'
-            LIMIT 1";
-    $res = api_sql_query($sql, __FILE__, __LINE__);
-    $result = Database::fetch_array($res);
-
-    $ret = sprintf ("%s.%s",
-        $result[0],
-        $table);
-
-    return $ret;
+$tag_array = array();
+$specific_fields = get_specific_field_list();
+foreach ($specific_fields as $specific_field) {
+	if (isset($_REQUEST[ 'sf_'. $specific_field['code'] ])) {
+		$values = $_REQUEST[ 'sf_'. $specific_field['code'] ];
+		foreach ($values as $term) {
+			if (!empty($term)) {
+				$prefix = $specific_field['code'];
+				$tag_array[] = dokeos_get_boolean_query($prefix . $term);
+			}
+		}
+	}
 }
 
-$tags = explode(",", trim($_REQUEST['tags']));
-$tags2 = '';
+$query = $_REQUEST['query'];
+$query = stripslashes(htmlspecialchars_decode($query,ENT_QUOTES));
 
-foreach ($tags as $tag)
-    if (strlen($tag)> 1)
-        $tags2 .= " tag:".trim($tag);
+$op = 'or';
+if (!empty($_REQUEST['operator']) && $_REQUEST['operator'] == 'and') {
+    $op = $_REQUEST['operator'];	
+}
 
-$query = $_REQUEST['query'] . ' ' . $tags2;
+$fixed_queries = array();
+$course_filter = NULL;
+if ( ($cid=api_get_course_id()) != -1 ) {
+    // results only from actual course
+    $course_filter = dokeos_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
+}
 
-$query_results = dokeos_query_query($query, 0, 1000);
-$count = $query_results[0];
-$results = $query_results[1];
+if (count($tag_array)) {
+	$fixed_queries = dokeos_join_queries($tag_array,null,$op);
+	if ($course_filter != NULL) {
+		$fixed_queries = dokeos_join_queries($fixed_queries, $course_filter, 'and');
+	}
+} else {
+	if (!empty($query)) {
+		$fixed_queries = array($course_filter);
+	}
+}
+
+list($count, $results) = dokeos_query_query(mb_convert_encoding($query,'UTF-8',$charset), 0, 1000, $fixed_queries);
 
 $blocks = array();
 
 $url = api_get_path(WEB_CODE_PATH)."/newscorm/lp_controller.php";
 
-$search_url = sprintf('%s?action=search&query=%s&tags=%s', 
-                $url, $_REQUEST['query'], $_REQUEST['tags']);
+$search_url = sprintf('%s?action=search&query=%s',
+                $url, $_REQUEST['query']);
 
 $link_format = $url.'?cidReq=%s&action=view&lp_id=%s&item_id=%s';
 
+$learnings_id_list = array();
+$mode = ($_GET['mode']!='default') ? 'gallery' : 'default';
 if ($count > 0) {
     foreach ($results as $result) {
-        /* FIXME:diegoe: marco debe darme los valores adecuados. */
-        $ids = explode(":", $result->ids);
-        $course_id = $ids[0];
-        $lp_id = $ids[1];
-        $doc_id = $ids[2];
-
-        if (!api_is_course_visible_for_user(NULL, $course_id))
-            continue;
-
         $tags = '';
         foreach ($result->terms as $term) {
-            $tags .= trim($term['name'], 'T') . ", ";
+            $tags .= $term['name'] . ", ";
         }
         //remove trailing comma
         $tags = substr($tags,0,-2);
 
-        
-        $lpi_table = get_course_table($course_id, TABLE_LP_ITEM);
-        $lp_table = get_course_table($course_id, TABLE_LP_MAIN);
-        $doc_table = get_course_table($course_id, TABLE_DOCUMENT);
-        $sql = "SELECT 
-                    $doc_table.title, $doc_table.path, $lpi_table.id, 
-                    $lp_table.name, $lp_table.author
-                FROM $lp_table, $lpi_table INNER JOIN $doc_table 
-                    ON $lpi_table.path = $doc_table.id 
-                    WHERE 
-                        $lpi_table.lp_id = $lp_id 
-                    AND 
-                        $doc_table.id = $doc_id
-                    AND 
-                        $lp_table.id = $lpi_table.lp_id
-                LIMIT 1";
+        if (!empty($result['url'])) {
+            $a_prefix = '<a href="'.$result['url'].'">';
+            $a_sufix = '</a>'; 
+        }
+        else {
+            $a_prefix = '';
+            $a_sufix = ''; 
+        }
 
-        $dk_result = api_sql_query ($sql);
+        if ($mode == 'gallery') {
+            $title = $a_prefix.str_replace('_',' ',$result['title']). $a_sufix; //TODO: get author.(empty($row['author'])?'':''.$row['author']);
+        } else {
+            $title = '<div style="text-align:left;">'. $a_prefix . $result['title']. $a_sufix .(!empty($result['author'])?$result['author']:'').'<div>';
+        }
 
-        while ($row = Database::fetch_array ($dk_result)) {
-            /* Get the image path */
-            $img_path = str_replace ('.png.html', '_thumb.png', $row['path']);
-            $doc_id = $row['id'];
-            $title = get_lang('Title').': '.'<b>'.$row['name'].'</b><br /><br />'.$row['title'].(empty($row['author'])?'':'<br /><br />'.get_lang('Author').': '.$row['author']);
+        // Fill the result array
+        if (empty($result['thumbnail'])) { // or !file_exists('../../courses/'.api_get_course_path($course_id)."/document/".$img_path)
+            $result['thumbnail'] = '../img/no_document_thumb.jpg';
+        }
 
-            $href = sprintf($link_format, $course_id, $lp_id, $doc_id);
-
-            /* Fill the result array */
-            $blocks[] = array(
-                '<a href="'.$href.'"><img src="'.api_get_path(WEB_COURSE_PATH).api_get_course_path($course_id)."/document/".$img_path.'"></a>', //put a link to the learning path item directly on the image 
-                $title, 
-                $tags,
-                $href
-                );
+        if ($mode == 'gallery') {
+          $blocks[] = array(
+              //'<a name="'.htmlentities('<div class="lightbox_link"><a href="'.$result['url'].'" target="_top">'.get_lang('GoToLearningPath').'</a></div>').'" rel="lightbox" href="'.$result['image'].'"><img src="'.$result['thumbnail'].'"></a>',
+              $a_prefix .'<img src="'.$result['thumbnail'].'" />'. $a_sufix .'<br />'.$title.'<br />'.$result['author'],
+              //$title,
+          );
+        } else {
+          $blocks[] = array(
+              $title,
+          );
         }
     }
 }
 
+
 if (count($blocks) < 1) {
-    Display::display_normal_message(get_lang('SearchFeatureSearchExplanation'), FALSE);
+//    Display::display_normal_message(get_lang('SearchFeatureSearchExplanation'), FALSE);
 }
 else
 {
@@ -171,18 +171,41 @@ else
     }
 
     $s = new SortableTableFromArray($blocks);
-    $s->additional_parameters = array(
-                'action' => 'search',
-                'query' => $_REQUEST['query'],
-                'tags' => $_REQUEST['tags'],
-                );
-    $s->set_header(0, get_lang('Preview'),false,array('width="300px"'));
-    $s->set_header(1, get_lang('Title'));
-    $s->set_header(2, get_lang('Tags'));
-    $s->set_header(3, get_lang('Learning path'));
-    $s->set_column_filter(3,'to_link');
-    $s->display();
-}
+    $s->display_mode = $mode;//default
+    $s->display_mode_params = 3;
+    $s->per_page = 9;
+    $additional_parameters = array(
+      'mode' => $mode,
+      'action' => 'search',
+      'query' => $_REQUEST['query'],
+      );
+    $get_params = '';
+    foreach ($specific_fields as $specific_field) {
+	    if (isset($_REQUEST[ 'sf_'. $specific_field['code'] ])) {
+		    $values = $_REQUEST[ 'sf_'. $specific_field['code'] ];
+		    $additional_parameters[ 'sf_'. $specific_field['code'] ] = $values;
+		    foreach ( $values as $value ) {
+			    $get_params .= '&sf_' . $specific_field['code'] .'[]='. $value;
+		    }
+		    $get_params .= '&';
+	    }
+    }
+    $s->additional_parameters = $additional_parameters;
 
+    if ($mode == 'default') {
+      $s->set_header(0, get_lang('Lectures'));
+    }
+
+    $search_url = api_get_path(WEB_CODE_PATH)."search/index.php";
+
+    echo '<div style="width:940px;border:1px solid #979797;position:relative;background-image:url(\'../img/search_background_bar.jpg\');background-repeat: repeat-x">';
+    echo '<div style="width:100px;padding:4px;position:absolute;top:0px;z-index:9"><a ' .
+        'href="'.$search_url.'?mode=gallery&action=search&query='.$_REQUEST['query'].$get_params.'"><img src="../img/'.(($mode=='gallery')?'ButtonGallOn':'ButtonGallOff').'.png"/></a><a ' .
+        'href="'.$search_url.'?mode=default&action=search&query='.$_REQUEST['query'].$get_params.'"><img src="../img/'.(($mode=='default')?'ButtonListOn':'ButtonListOff').'.png"/></a>
+  </div>';
+
+    $s->display();
+    echo '</div>';
+}
 Display::display_footer();
 ?>

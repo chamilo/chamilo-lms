@@ -109,6 +109,7 @@ define('TOOL_HOTPOTATOES', 'hotpotatoes');
 define('TOOL_CALENDAR_EVENT', 'calendar_event');
 define('TOOL_LINK', 'link');
 define('TOOL_COURSE_DESCRIPTION', 'course_description');
+define('TOOL_SEARCH', 'search');
 define('TOOL_LEARNPATH', 'learnpath');
 define('TOOL_ANNOUNCEMENT', 'announcement');
 define('TOOL_FORUM', 'forum');

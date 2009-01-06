@@ -366,7 +366,7 @@ switch($action)
 			
 			if(isset($_POST['submit_button']) && !empty($_POST['title']))
 			{
-				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites'], $_POST['terms']);
+				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
 				
 				if(isset($_POST['content_lp']))
 				{
@@ -577,21 +577,24 @@ switch($action)
 			$_SESSION['oLP']->set_name($_REQUEST['lp_name']);
 			$author=	$_REQUEST['lp_author'];					
 			//fixing the author name (no body or html tags)		
-            if( stripos($author) != 0 ) {
-                $len = strripos($author,'</p>')-stripos($author,'<p>');                 
-                $author_fixed=substr($author,stripos($author,'<p>'), $len+4);
+		$auth_init = stripos($author,'<p>');
+		if ( $auth_init === false ) {
+		    $auth_init = stripos($author,'<body>');
+		    $auth_end = $auth_init + stripos(substr($author,$auth_init+6),'</body>') + 7;
+		    $len = $auth_end - $auth_init +6;
             } else {
-                $len = strripos($author,'</body>')-stripos($author,'<body>'); 
-                $author_fixed=substr($author,stripos($author,'<body>'), $len+7);
+		    $auth_end  =  strripos($author,'</p>');
+		    $len = $auth_end - $auth_init + 4;
             }
 						
+		$author_fixed=substr($author,$auth_init, $len);
+		//$author_fixed = $author; 
+					
 			$_SESSION['oLP']->set_author($author_fixed);
 			$_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);
 			$_SESSION['oLP']->set_maker($_REQUEST['lp_maker']);
 			$_SESSION['oLP']->set_proximity($_REQUEST['lp_proximity']);			
 			$_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);
-            $_SESSION['oLP']->set_terms($_REQUEST['lp_terms']);
-            			
 			if ($_REQUEST['remove_picture'])
 			{	
 				$_SESSION['oLP']->delete_lp_image();		
@@ -600,6 +603,27 @@ switch($action)
 			if ($_FILES['lp_preview_image']['size']>0)
 				$_SESSION['oLP']->upload_image($_FILES['lp_preview_image']);
 			
+			if (api_get_setting('search_enabled') === 'true')
+			{
+				require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+				$specific_fields = get_specific_field_list();
+				foreach ($specific_fields as $specific_field) {
+					$_SESSION['oLP']->set_terms_by_prefix($_REQUEST[$specific_field['code']], $specific_field['code']);
+					$new_values = explode(',', trim($_REQUEST[$specific_field['code']]));
+					if ( !empty($new_values) ) {
+						array_walk($new_values, 'trim');
+						delete_all_specific_field_value(api_get_course_id(), $specific_field['id'], TOOL_LEARNPATH, $_SESSION['oLP']->lp_id);
+
+						foreach ($new_values as $value)
+						{
+							if ( !empty($value) ) {
+								add_specific_field_value($specific_field['id'], api_get_course_id(), TOOL_LEARNPATH, $_SESSION['oLP']->lp_id, $value);
+							}
+						}
+					}
+				}
+			}
+
 			require('lp_list.php');
 		}	
 		break;

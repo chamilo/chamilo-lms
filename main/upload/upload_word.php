@@ -20,6 +20,7 @@ require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
 		
 
 $form_style= '
@@ -40,6 +41,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 	var myUpload = new upload(0);
 </script>';
 $htmlHeadXtra[] = $form_style;
+$specific_fields = get_specific_field_list();
 
 if(isset($_POST['convert'])){
 	$cwdir = getcwd();
@@ -50,6 +52,17 @@ if(isset($_POST['convert'])){
 		{
 			require('../newscorm/lp_upload.php');
 			if(isset($o_doc) && $first_item_id != 0){
+				foreach ($specific_fields as $specific_field) {
+					$values = explode(',', trim($_POST[$specific_field['code']]));
+					if ( !empty($values) ) {
+						foreach ($values as $value) {
+							$value = trim($value);
+							if ( !empty($value) ) {
+								add_specific_field_value($specific_field['id'], api_get_course_id(), TOOL_LEARNPATH, $o_doc->lp_id, $value);
+							}
+						}
+					}
+				}
 				header('Location: ../newscorm/lp_controller.php?'.api_get_cidreq().'&lp_id='.$o_doc->lp_id.'&action=view_item&id='.$first_item_id);
 			}
 			else {
@@ -155,6 +168,17 @@ EOT;
 $renderer->setElementTemplate($user_file_template);
 
 $form -> addElement ('file', 'user_file','<img src="../img/word_big.gif" align="absbottom" />');
+if (api_get_setting('search_enabled')=='true')
+{
+    $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
+    $form -> addElement ('html','<br />');
+    $form -> addElement ('html', get_lang('SearchFeatureDocumentLanguage').': &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'. api_get_languages_combo());
+    $form -> addElement ('html','<div class="sub-form">');     
+    foreach ($specific_fields as $specific_field) {
+        $form -> addElement ('text', $specific_field['code'], $specific_field['name'].' : ');
+    }
+    $form -> addElement ('html','</div>');     
+}
 
 /*
  * commented because SplitStepsPerChapter is not stable at all
@@ -169,7 +193,7 @@ $form -> addElement ('hidden', 'woogie', 'true');
 
 $form -> add_real_progress_bar(md5(rand(0,10000)), 'user_file', 1, true);
 
-$defaults['split_steps'] = 'per_page';
+$defaults = array('split_steps'=>'per_page','index_document'=>'checked="checked"');
 $form -> setDefaults($defaults);
 
 // display the form

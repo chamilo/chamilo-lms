@@ -856,6 +856,10 @@ class learnpath {
     	$this->update_display_order();//updates the display order of all lps
  		api_item_property_update(api_get_course_info(),TOOL_LEARNPATH,$this->lp_id,'delete',api_get_user_id());
     	//TODO: also delete items and item-views
+        if (api_get_setting('search_enabled') == 'true') {
+          require_once(api_get_path(LIBRARY_PATH) .'specific_fields_manager.lib.php');
+          $r = delete_all_values_for_item($this->cc, TOOL_LEARNPATH, $this->lp_id);
+        }
     }
 
     /**
@@ -919,9 +923,19 @@ class learnpath {
         $res_all = api_sql_query($sql_all,__FILE__,__LINE__);
         // remove from search engine if enabled
         if (api_get_setting('search_enabled') == 'true') {
+          $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+          $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d LIMIT 1';
+          $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp, $id);
+          $res = api_sql_query($sql, __FILE__, __LINE__);
+          if (Database::num_rows($res) > 0) {
+            $row2 = Database::fetch_array($res);
           require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
           $di = new DokeosIndexer();
-          $di->remove_document($row['search_did']);
+            $di->remove_document((int)$row2['search_did']);
+          }
+          $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d LIMIT 1';
+          $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp, $id);
+          api_sql_query($sql, __FILE__, __LINE__);
         }
     }
 
@@ -934,10 +948,10 @@ class learnpath {
 	 * @param   string  Item description
 	 * @param   string  Prerequisites (optional)
 	 * @param   string  Indexing terms (optional)
+     * @param   array   The array resulting of the $_FILES[mp3] element
      * @return	boolean	True on success, false on error
      */
-    function edit_item($id, $parent, $previous, $title, $description, $prerequisites=0, $terms=NULL)
-    {
+    function edit_item($id, $parent, $previous, $title, $description, $prerequisites=0, $audio=NULL) {
     	if($this->debug > 0){error_log('New LP - In learnpath::edit_item()', 0);}
 
     	if(empty($id) or ($id != strval(intval($id))) or empty($title)){ return false; }
@@ -951,16 +965,17 @@ class learnpath {
     	$res_select = api_sql_query($sql_select, __FILE__, __LINE__);
     	$row_select = Database::fetch_array($res_select);
     	
-        $terms_update_sql='';
-        if (!is_null($terms)) {
-          //TODO: validate csv string
-          $terms_update_sql = ", terms = '". $this->escape_string(htmlentities($terms)) . "'";
-
-          // save it to search engine
-          if (api_get_setting('search_enabled') == 'true') {
-            require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
-            $di = new DokeosIndexer();
-            $di->update_terms($row_select['search_did'], explode(',', $terms));
+        $audio_update_sql = '';
+        if (is_array($audio) && !empty($audio['tmp_name']) && $audio['error']===0) {
+            //upload file in documents
+            $pi = pathinfo($audio['name']);
+            if ($pi['extension'] == 'mp3') {
+                $c_det = api_get_course_info($this->cc);
+                $bp = api_get_path(SYS_COURSE_PATH).$c_det['path'].'/document';
+                $path = handle_uploaded_document($c_det,$audio,$bp,'/audio',api_get_user_id(),0,null,'',0,'rename',false,0);
+                $path = substr($path,7);
+                //update reference in lp_item - audio path is the path from inside de document/audio/ dir
+            	$audio_update_sql = ", audio = '".Database::escape_string($path)."' ";
           }
         }
 
@@ -976,7 +991,7 @@ class learnpath {
     				title = '" . $this->escape_string(htmlentities($title)) . "',
 					prerequisite = '".$prerequisites."',
     				description = '" . $this->escape_string(htmlentities($description)) . "'
-                    ". $terms_update_sql . "
+                    ". $audio_update_sql . "
     			WHERE id = " . $id;
     		$res_update = api_sql_query($sql_update, __FILE__, __LINE__);
     	}
@@ -1094,7 +1109,7 @@ class learnpath {
 	    			previous_item_id = " . $previous . ",
 	    			next_item_id = " . $new_next . ",
 	    			display_order = " . $new_order . "
-                    ". $terms_update_sql . "	
+                    ". $audio_update_sql . "
 	    		WHERE id = " . $id;
     		$res_update_next = api_sql_query($sql_update, __FILE__, __LINE__);
     		//echo '<p>' . $sql_update . '</p>';
@@ -1375,36 +1390,25 @@ class learnpath {
     }
 
     /**
-     * Get the index terms shared between all items of this path
-     * @return  string  String of terms, split by a simple comma
+     * Get the specific prefix index terms of this learning path
+     * @return  array Array of terms
      */
-    function get_common_index_terms()
+    function get_common_index_terms_by_prefix($prefix)
     {
-        $terms = array();
-        $i = 0;
-        foreach ( $this->items as $item ) {
-            $i_terms = split(',',$item->terms);
-            if ( $i == 0 ) { $terms = $i_terms; continue; }
+    	require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
+    	$terms = get_specific_field_values_list_by_prefix($prefix, $this->cc, TOOL_LEARNPATH, $this->lp_id);
+        $prefix_terms = array();
             foreach($terms as $term)
             {
-                if ( !in_array($term,$i_terms) )
-                {
-                    $terms = array_diff($terms,array($term)); //remove term from terms array because it is not in the current item's terms (so it is not common to all)
-                }
-            }
+			$prefix_terms[] = $term['value']; 
         }
-        $s = implode(',',$terms);
-        return $s;
+        return $prefix_terms;
     }
 
     /**
-
      * Gets the number of items currently completed
-
      * @return integer The number of items currently completed
-
      */
-
     function get_complete_items_count()
 
     {
@@ -3021,6 +3025,20 @@ class learnpath {
     	}
     }
     /**
+     * Checks if any of the items has an audio element attached
+     * @return  bool    True or false
+     */
+    function has_audio() {
+        $has = false;
+    	foreach ($this->items as $i=>$item) {
+    		if (!empty($this->items[$i]->audio)) { 
+                $has = true;
+                break;
+            }
+    	}
+        return $has;
+    }
+    /**
      * Logs a message into a file
      * @param	string 	Message to log
      * @return	boolean	True on success, false on error or if msg empty
@@ -3661,20 +3679,80 @@ class learnpath {
     	return true;
 
     }
+
     /**
-     * Set index terms for all items in this path
+     * Set index specified prefix terms for all items in this path
      * @param   string  Comma-separated list of terms
+     * @param   char Xapian term prefix
      * @return  boolean False on error, true otherwise
      */
-    function set_terms($terms) {
-        if ( empty($terms) ) return false;
-        if ( trim($terms) == trim($this->get_common_index_terms()) ) return false; //indexing is costly, don't re-index if no change
+    function set_terms_by_prefix($terms_string, $prefix) {
+      if (api_get_setting('search_enabled') !== 'true')
+        return FALSE;
+
+      $terms_string = trim($terms_string);
+      $terms = explode(',', $terms_string);
+      array_walk($terms, 'trim_value');
+      
+      $stored_terms = $this->get_common_index_terms_by_prefix($prefix);
+      //var_dump($stored_terms);
+	  //var_dump($terms);
+
+      // don't do anything if no change, verify only at DB, not the search engine
+      if ( (count(array_diff($terms, $stored_terms))==0) && (count(array_diff($stored_terms, $terms))==0) )
+        return FALSE;
+
+      require_once('xapian.php'); //TODO try catch every xapian use or make wrappers on api
+      require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
+      require_once(api_get_path(LIBRARY_PATH).'search/xapian/XapianQuery.php');
+      require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
+
+      $items_table = Database::get_course_table('lp_item');
+      //TODO: make query secure agains XSS : use member attr instead of post var
+      $lp_id = $_POST['lp_id'];
+      $sql = "SELECT * FROM $items_table WHERE lp_id = $lp_id";
+      $result = api_sql_query($sql);
+      $di = new DokeosIndexer();
         
-        foreach ( $this->items as $item ) {
-            $item->set_terms($terms);
+      while($lp_item = Database::fetch_array($result))
+      {
+        // get search_did
+        $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+        $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d LIMIT 1';
+        $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp_id, $lp_item['id']);
+        $res = api_sql_query($sql, __FILE__, __LINE__);
+        $se_ref = Database::fetch_array($res);
+
+        // compare terms
+        $doc = $di->get_document($se_ref['search_did']);
+        $xapian_terms = xapian_get_doc_terms($doc, $prefix);
+        //var_dump($xapian_terms);
+        $xterms = array();
+        foreach ($xapian_terms as $xapian_term) $xterms[] = substr($xapian_term['name'],1);
+
+        $dterms = $terms;
+        //var_dump($xterms);
+        //var_dump($dterms);
+        
+        $missing_terms = array_diff($dterms, $xterms);
+        $deprecated_terms = array_diff($xterms, $dterms);
+
+        // save it to search engine
+        foreach ($missing_terms as $term)
+        {
+            $doc->add_term($prefix. $term, 1);
         }
+        foreach ($deprecated_terms as $term)
+        {
+        	$doc->remove_term($prefix.$term);	
+        }
+        $di->getDb()->replace_document((int)$se_ref['search_did'], $doc);
+        $di->getDb()->flush();
+        }
+
         return true;
     }    
+
      /**
      * Sets the theme of the LP (local/remote) (and save)
      * @param	string	Optional string giving the new theme of this learnpath
@@ -6465,12 +6543,14 @@ class learnpath {
 				$form->addElement('file','mp3',get_lang('UploadMp3audio'),'id="mp3" size="33"');
 				$form->addRule('file', 'The extension of the Song file should be *.mp3', 'filename', '/^.*\.mp3$/');
 				
+                /* Code deprecated - moved to lp level (not lp-item)
                 if ( api_get_setting('search_enabled') === 'true' )
                 {
                     //add terms field
                     $terms = $form->addElement('text','terms', get_lang('SearchFeatureTerms').'&nbsp;:','id="idTerms" class="learnpath_item_form"');
                     $terms->setValue($item_terms); 
                 }
+                */
 
 				$arrHide=array();
 
@@ -8836,30 +8916,13 @@ EOD;
 		}
 		return false;
 	}
-	/**
-     * Create a new attempt for the current learning path. This is similar to
-     * the restart() method, except that this version is to be used statically.
-     * Call this function to define a new attempt for the given path and user,
-     * then reload the learning path object with the user and it will offer
-     * a new attempt.
-     * @param   int Learning path ID
-     * @param   int User ID
-     * @return  New attempt ID (new view ID from the database)
-	 */
-    function create_new_attempt($lp_id,$user_id) {
-        $lp_id = (int) $lp_id;
-        $user_id = (int) $user_id;
-        $t = Database::get_course_table(TABLE_LP_VIEW);
-        $sql = "SELECT max(view_count) FROM $t WHERE lp_id = $lp_id AND user_id = $user_id";
-        $res = api_sql_query($sql,__FILE__,__LINE__);
-        if ($res === false) { return 0;}
-        if (Database::num_rows($res)!=1) { return 0;}
-        $row = Database::fetch_array($res);
-        $vc = $row[0]+1;
-        $sqlins = "INSERT INTO $t (lp_id,user_id,view_count,last_item,progress) VALUES ($lp_id,$user_id, $vc,0,0)";
-        $resins = api_sql_query($sql,__FILE__,__LINE__);
-        if ($resins === false) { return 0; }
-        return $vc;
+	
+}
+
+if (!function_exists('trim_value')) {
+	function trim_value(&$value) {
+		$value = trim($value);
     }
 }
+
 ?>

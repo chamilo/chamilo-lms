@@ -36,9 +36,11 @@ $interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "
 Display::display_header($nameTools,"Path");
 //show the title
 api_display_tool_title(get_lang("Learnpath")." - ".$nameTools.$add_group_to_title);
+//TODO: Include right language file
 
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include('../newscorm/content_makers.inc.php');
+require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
 
 $form = new FormValidator('','POST','upload.php','','id="upload_form" enctype="multipart/form-data" style="background-image: url(\'../img/scorm.jpg\'); background-repeat: no-repeat; background-position: 600px;"');
 
@@ -58,6 +60,15 @@ $select_content_proximity = &$form->addElement('select','content_proximity',get_
 	$select_content_proximity->addOption(get_lang('Remote'),"remote");
 	$select_content_proximity -> setSelected("local");
 
+if(api_get_setting('search_enabled')=='true')
+{
+	$form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
+	
+	$specific_fields = get_specific_field_list();
+	foreach ($specific_fields as $specific_field) {
+		$form -> addElement ('text', $specific_field['code'], $specific_field['name'].' : ');
+	}
+}
 $form->addElement('submit', 'submit', get_lang('Send'));
 
 $form->addElement('html', '<br><br><br>');
@@ -77,6 +88,7 @@ else{
 
 $form->add_real_progress_bar('uploadScorm','user_file');
 
+$defaults = array('index_document'=>'checked="checked"');
 $form->setDefaults($defaults);
 $form->display();
 

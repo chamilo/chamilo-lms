@@ -1980,6 +1980,10 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		}
 	}
 
+    if (api_get_setting('search_enabled')=='true') {
+        api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_SEARCH. "','search/','info.gif','".string2binary(api_get_setting('course_create_active_tools', 'enable_search')) . "','0','search.gif','NO','_self','authoring')", __FILE__, __LINE__);
+    }
+
 	// Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
 	$sql = "INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL,'" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . string2binary(api_get_setting('course_create_active_tools', 'blogs')) . "','1','squaregrey.gif','NO','_self','admin')";
 	api_sql_query($sql, __FILE__, __LINE__);

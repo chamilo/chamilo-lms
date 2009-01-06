@@ -18,7 +18,22 @@ if($error=='not_a_learning_path')
 {
         $msg = urlencode(get_lang('UnknownPackageFormat'));
 }else{
-        $msg = urlencode(get_lang('UplUploadSucceeded'));
+	require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+	$specific_fields = get_specific_field_list();
+
+	foreach ($specific_fields as $specific_field) {
+		$values = explode(',', trim($_POST[$specific_field['code']]));
+		if ( !empty($values) ) {
+			foreach ($values as $value) {
+				$value = trim($value);
+				if ( !empty($value) ) {
+					add_specific_field_value($specific_field['id'], api_get_course_id(), TOOL_LEARNPATH, $oScorm->lp_id, $value);
+				}
+			}
+		}
+	}
+
+	$msg = urlencode(get_lang('UplUploadSucceeded'));
 }
 header('location: ../newscorm/lp_controller.php?action=list&dialog_box='.$msg);
 ?>

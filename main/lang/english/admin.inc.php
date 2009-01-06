@@ -853,4 +853,9 @@ $ThereIsNotStillAResponsible = "No HR manager available";
 $GlobalAgenda = "Global agenda";
 $AdvancedfilemanagerTitle = "Advanced file manager for wysiwyg editor";
 $AdvancedfilemanagerComment = "Enable advanced file manager for WYSIWYG editor? This will add a considerable amount of additional options to the file manager that opens in a pop-up window when uploading files to the server.";
+$SpecificSearchFields = "Specific search fields";
+$AddSpecificSearchField = "Add a specific search field";
+$EditSpecificSearchField = "Edit a specific search field";
+$FieldName = "Field name";
+$SpecificSearchFieldsIntro = "Adding a specific search field will enable the indexation of extra fields together with documents contents. This will add fields to the import and edition pages of the lectures tool.";
 ?>

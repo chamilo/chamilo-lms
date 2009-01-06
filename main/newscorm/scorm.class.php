@@ -473,6 +473,58 @@ class scorm extends learnpath {
 				$upd_res = api_sql_query($upd);
 				//update previous item id
 				$previous = $item_id;
+
+				// code for indexing, now only index specific fields like terms and the title
+				if (isset($_POST['index_document']) && $_POST['index_document']) {
+					require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
+					require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
+					require_once(api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php');
+
+					$di = new DokeosIndexer();
+					isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
+					$di->connectDb(NULL, NULL, $lang);
+					$ic_slide = new IndexableChunk();
+					$ic_slide->addValue("title", $title);
+					$specific_fields = get_specific_field_list();
+					$all_specific_terms = '';
+					foreach ($specific_fields as $specific_field) {
+						if (isset($_REQUEST[$specific_field['code']])) {
+							$sterms = trim($_REQUEST[$specific_field['code']]);
+							$all_specific_terms .= ' '. $sterms;
+							if (!empty($sterms)) {
+								$sterms = explode(',', $sterms);
+								foreach ($sterms as $sterm) {
+									$ic_slide->addTerm(trim($sterm), $specific_field['code']);
+								}
+							}
+						}
+					}
+					$body_to_index = $all_specific_terms .' '. $title;
+					$ic_slide->addValue("content", $body_to_index);
+					//TODO: add a comment to say terms separated by commas
+					$courseid = api_get_course_id();
+					$ic_slide->addCourseId($courseid);
+					$ic_slide->addToolId(TOOL_LEARNPATH);
+					$xapian_data = array(
+						SE_COURSE_ID => $courseid,
+						SE_TOOL_ID => TOOL_LEARNPATH,
+						SE_DATA => array('lp_id' => $lp_id, 'lp_item'=> $previous, 'document_id' => ''), //TODO unify with other lp types
+						SE_USER => (int)api_get_user_id(),
+					);
+					$ic_slide->xapian_data = serialize($xapian_data);
+					$di->addChunk($ic_slide);
+					//index and return search engine document id
+					$did = $di->index();
+					if ($did) {
+                        // save it to db
+                        $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+                        $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, ref_id_second_level, search_did)
+                                VALUES (NULL , \'%s\', \'%s\', %s, %s, %s)';
+                        $sql = sprintf($sql, $tbl_se_ref, api_get_course_id(), TOOL_LEARNPATH, $lp_id, $previous, $did);
+                        api_sql_query($sql,__FILE__,__LINE__);
+					}
+				}
+
 			}
 		}
      }

@@ -12,12 +12,10 @@
  * @package dokeos.learnpath.openofficedocument
  */
 require_once('openoffice_document.class.php');
-if(api_get_setting('search_enabled')==='true') //the true condition here should be if xapian module is installed
-{
-    require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
-    require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
-}
-
+require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
+require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
+require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+			
 class OpenofficePresentation extends OpenofficeDocument {
 	
 	public $take_slide_name;
@@ -67,8 +65,13 @@ class OpenofficePresentation extends OpenofficeDocument {
 			$document_id = add_document($_course,$this->created_dir.'/'.urlencode($file_name),'file',filesize($this->base_work_dir.$this->created_dir.'/'.$file_name),$slide_name);
 			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',api_get_user_id(),0,0);
 
+
             // Generating the thumbnail
             $image = $this->base_work_dir.$this->created_dir .'/'. $file_name;
+            
+            $pattern = '/(\w+)\.png$/';
+            $replacement = '${1}_thumb.png';
+            $thumb_name = preg_replace($pattern, $replacement, $file_name);
             // calculate thumbnail size
             list($width, $height) = getimagesize($image);
             $thumb_width = 300;
@@ -79,10 +82,15 @@ class OpenofficePresentation extends OpenofficeDocument {
             // resize
             imagecopyresized($thumb, $source, 0, 0, 0, 0, $thumb_width, $thumb_height, $width, $height);
             // output
-            $pattern = '/(\w+)\.png$/';
-            $replacement = '${1}_thumb.png';
-            $thumb_name = preg_replace($pattern, $replacement, $file_name);
             imagepng($thumb, $this->base_work_dir.$this->created_dir .'/'. $thumb_name);
+            /*
+            // new resizing method usign imagemagick
+            $im = new Imagick( $image );
+            $im->thumbnailImage($thumb_width, $thumb_height);
+            //file_put_contents($this->base_work_dir.$this->created_dir .'/'. $thumb_name,$im);
+            $im->writeImage($this->base_work_dir.$this->created_dir .'/'. $thumb_name);
+             */
+
             // adding the thumbnail to documents
             $document_id_thumb = add_document($_course, $this->created_dir.'/'.urlencode($thumb_name), 'file', filesize($this->base_work_dir.$this->created_dir.'/'.$thumb_name), $slide_name);
             api_item_property_update($_course, TOOL_THUMBNAIL, $document_id_thumb,'DocumentAdded',api_get_user_id(),0,0);
@@ -111,40 +119,52 @@ class OpenofficePresentation extends OpenofficeDocument {
 				}
 			}
             // code for text indexing
-            if (isset($_POST['index_document']) && $_POST['index_document'] && api_get_setting('search_enabled')==='true') {
+            if (isset($_POST['index_document']) && $_POST['index_document']) {
               //Display::display_normal_message(print_r($_POST));
               $di = new DokeosIndexer();
               isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
               $di->connectDb(NULL, NULL, $lang);
               $ic_slide = new IndexableChunk();
               $ic_slide->addValue("title", $slide_name);
-              if (isset($_POST['terms'])) {
-                foreach (explode(',', Database::escape_string($_POST['terms'])) as $term){
-                  $ic_slide->addTerm(trim($term),'T');
-                }
+              $specific_fields = get_specific_field_list();
+              $all_specific_terms = '';
+              foreach ($specific_fields as $specific_field) {
+              	if (isset($_REQUEST[$specific_field['code']])) {
+              		$sterms = trim($_REQUEST[$specific_field['code']]);
+              		$all_specific_terms .= ' '. $sterms;
+              		if (!empty($sterms)) {
+              			$sterms = explode(',', $sterms);
+              			foreach ($sterms as $sterm) {
+              				$ic_slide->addTerm(trim($sterm), $specific_field['code']);
+              			}
+              		}
+              	}
               }
+              $slide_body = $all_specific_terms .' '. $slide_body;
               $ic_slide->addValue("content", $slide_body);
               /* FIXME:  cidReq:lp_id:doc_id al indexar  */
               //       add a comment to say terms separated by commas
               $courseid=api_get_course_id();
-              $ic_slide->addTerm($courseid,'C');
-              //TODO: add dokeos tool type instead of filetype
+              $ic_slide->addCourseId($courseid);
+              $ic_slide->addToolId(TOOL_LEARNPATH);
               $lp_id = $this->lp_id;
-              // TODO: get "path" field
-              $ic_slide->addValue('ids', $courseid .':'. $this->lp_id
-              .':'.$document_id );
+              $xapian_data = array(
+              	SE_COURSE_ID => $courseid,
+              	SE_TOOL_ID => TOOL_LEARNPATH,
+              	SE_DATA => array('lp_id' => $lp_id, 'lp_item'=> $previous, 'document_id' => $document_id),
+              	SE_USER => (int)api_get_user_id(),
+              );
+              $ic_slide->xapian_data = serialize($xapian_data);
               $di->addChunk($ic_slide);
               //index and return search engine document id
               $did = $di->index();
               if ($did) {
                 // save it to db
-                $tbl_lp_item = Database::get_course_table('lp_item');
-                $sql_update = "
-                  UPDATE " . $tbl_lp_item . "
-                  SET search_did = " . $did . ",
-                  terms = '".Database::escape_string($_POST['terms'])."'
-                  WHERE id = " . $previous;
-                api_sql_query($sql_update, __FILE__, __LINE__);
+                $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+                $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, ref_id_second_level, search_did)
+                        VALUES (NULL , \'%s\', \'%s\', %s, %s, %s)';
+                $sql = sprintf($sql, $tbl_se_ref, api_get_course_id(), TOOL_LEARNPATH, $lp_id, $previous, $did);
+                api_sql_query($sql,__FILE__,__LINE__);
               }
             }
 		}

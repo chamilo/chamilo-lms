@@ -1,15 +1,21 @@
 <?php
+// some constants to avoid serialize string keys on serialized data array
+define('SE_COURSE_ID', 0);
+define('SE_TOOL_ID', 1);
+define('SE_DATA', 2);
+define('SE_USER', 3);
+
+// in some cases we need top differenciate xapian documents of the same tool
+define('SE_DOCTYPE_EXERCISE_EXERCISE', 0);
+define('SE_DOCTYPE_EXERCISE_QUESTION', 1);
+
+// xapian prefixes
+define('XAPIAN_PREFIX_COURSEID','C');
+define('XAPIAN_PREFIX_TAG','T');
+define('XAPIAN_PREFIX_TOOLID','O');
+
 abstract class _IndexableChunk
 {
-
-    /* int */
-    protected $id;
-
-    /* boolean  */
-    public $parent;
-
-    /* int  */
-    public $parentId;
 
     /* struct (array)
      * {
@@ -18,7 +24,17 @@ abstract class _IndexableChunk
      *     string ids;  <- los flags a guardar "cidReq:lp_id:path"
      * }
      */
-    public $data; 
+    public $data;
+
+    /**
+     * array (
+     * 'SE_COURSE_ID' => string <- course id from course table on main db
+     * 'SE_TOOL_ID' => string <- tool id from mainapi lib constants
+     * 'SE_DATA' => mixed <- extra information, depends on SE_TOOL_ID
+     * 'SE_USER' => id <- user id from user table in main db
+     * )
+     */
+    public $xapian_data;
 
     /**
      * array(
@@ -28,83 +44,70 @@ abstract class _IndexableChunk
      */
     public $terms;
 
-	/**
-	 * Add a value to the indexed item
-	 * @param	string	Key
-	 * @param	string	Value
-	 * @return  void
-	 */
+  /**
+   * Add a value to the indexed item
+   * @param  string  Key
+   * @param  string  Value
+   * @return  void
+   */
     function addValue($key, $value) {
         $this->data[$key] = $value;
     }
 
-    /** 
+    /**
      * Add a term (like xapian definition)
-     * @param string Term 
+     * @param string Term
      * @param string Flag (one character)
      */
-    function addTerm($term, $flag) {
+    public function addTerm($term, $flag) {
+      global $charset;
       if (strlen($flag) == 1) {
-        $this->terms[] = array('name' => $term, 'flag' => $flag);
+        $this->terms[] = array('name' => mb_convert_encoding(stripslashes($term),'UTF-8',$charset), 'flag' => $flag);
       }
     }
 
-	/**
-	 * Get the ID from an indexed item. In case data are in an array, get the second item of the 'ids' element of the array
-	 * @return integer	ID
-	 */
-    function getId() {
-        $id = -1;
-
-        if (is_array($this->data)) {
-            $ids = explode(':', $this->data['ids']);
-
-            /* we need at least course_id and document_id, else it's broken */
-            if (count($ids)) {
-              $id = $ids[1];
-            }
-        }
-
-        return $id;
-    }
-
-	/**
-	 * Sets the parent of the current indexed item
-	 * @param	mixed	A parent object
-	 * @return void
-	 */
-    function setParent($parent) {
-        if (is_a($parent, 'IndexableChunk')) {
-            $this->parentId = $parent->getId();
-            $this->parent = False;
-        } else {
-            $this->parentId = -1;
-            $this->parent = True;
-        }
-    }
-
-	/**
-	 * Class constructor. Just generates an empty 'data' array attribute
-	 */
+  /**
+   * Class constructor. Just generates an empty 'data' array attribute
+   */
     function __construct() {
         $this->data = array();
     }
 
-	/**
-	 * Class desctructor. Unsets attributes.
-	 */
+  /**
+   * Class desctructor. Unsets attributes.
+   */
     function __destruct() {
         unset($this->data);
         unset($this->terms);
-        unset($this->parent);
     }
 }
 
 /**
  * Extension of the _IndexableChunk class to make IndexableChunk extensible.
  */
-class IndexableChunk extends _IndexableChunk 
+class IndexableChunk extends _IndexableChunk
 {
+  /**
+   * Let add tags terms
+   */
+  public function addTagTerm($term) {
+    $this->addTerm($term, XAPIAN_PREFIX_TAG);
+  }
+
+  /**
+   * Let add course id term
+   */
+  public function addCourseId($course_id) {
+    $this->addTerm($course_id, XAPIAN_PREFIX_COURSEID);
+  }
+
+  /**
+   * Let add tool id term
+   */
+  public function addToolId($tool_id) {
+   $this->addTerm($tool_id, XAPIAN_PREFIX_TOOLID);
+  }
+
 }
 
 ?>

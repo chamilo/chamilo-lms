@@ -19,6 +19,7 @@ include("../inc/global.inc.php");
 require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
+require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 		
 
@@ -31,6 +32,13 @@ $form_style= '
 	background: url("../img/scorm.gif") 0px 0px no-repeat;
 	padding: 2px 0px 2px 22px;
 }
+.sub-form{
+	width: 25em;
+}
+.sub-form input{
+    float:right;
+    margin-top:-1.2em;
+}
 #dynamic_div_container{float:left;margin-right:10px;}
 #dynamic_div_waiter_container{float:left;}
 </style>';
@@ -40,6 +48,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 	var myUpload = new upload(0);
 </script>';
 $htmlHeadXtra[] = $form_style;
+$specific_fields = get_specific_field_list();
 
 if(isset($_POST['convert'])){
 	$cwdir = getcwd();
@@ -50,6 +59,17 @@ if(isset($_POST['convert'])){
 		{
 			require('../newscorm/lp_upload.php');
 			if(isset($o_ppt) && $first_item_id != 0){
+				foreach ($specific_fields as $specific_field) {
+					$values = explode(',', trim($_POST[$specific_field['code']]));
+					if ( !empty($values) ) {
+						foreach ($values as $value) {
+							$value = trim($value);
+							if ( !empty($value) ) {
+								add_specific_field_value($specific_field['id'], api_get_course_id(), TOOL_LEARNPATH, $o_ppt->lp_id, $value);
+							}
+						}
+					}
+				}
 				header('Location: ../newscorm/lp_controller.php?'.api_get_cidreq().'&lp_id='.$o_ppt->lp_id.'&action=view_item&id='.$first_item_id);
 			}
 			else {
@@ -134,7 +154,7 @@ $form = new FormValidator('upload_ppt', 'POST', '', '');
 
 // build the form
 
-$form -> addElement ('html','<br>');
+$form -> addElement ('html','<br />');
 
 $div_upload_limit = '&nbsp;&nbsp;'.get_lang('UploadMaxSize').' : '.ini_get('post_max_size');
 
@@ -164,18 +184,25 @@ $renderer->setElementTemplate($user_file_template);
 
 $form -> addElement ('file', 'user_file','<img src="../img/powerpoint_big.gif" align="absbottom" />&nbsp;&nbsp;');
 $form -> addElement ('checkbox', 'take_slide_name','', get_lang('TakeSlideName'));
-if(api_get_setting('search_enabled')==='true')
+if(api_get_setting('search_enabled')=='true')
 {
-  $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
-  $form -> addElement ('text', 'terms', get_lang('SearchFeatureDocumentTagsIfIndexing').': ');
-  $form -> addElement ('html', get_lang('SearchFeatureDocumentLanguage').': '. api_get_languages_combo()); 
+    $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
+    //$form -> addElement ('text', 'terms', get_lang('SearchFeatureDocumentTagsIfIndexing').': ');
+    $form -> addElement ('html','<br />');
+    $form -> addElement ('html', get_lang('SearchFeatureDocumentLanguage').': &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'. api_get_languages_combo());
+    $form -> addElement ('html','<div class="sub-form">');     
+    foreach ($specific_fields as $specific_field) {
+        $form -> addElement ('text', $specific_field['code'], $specific_field['name'].' : ');
+    }
+    $form -> addElement ('html','</div>');     
 }
+
 $form -> addElement ('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
 
 $form -> addElement ('hidden', 'ppt2lp', 'true');
 
 $form -> add_real_progress_bar(md5(rand(0,10000)), 'user_file', 1, true);
-$defaults = array('take_slide_name'=>'checked="checked"');
+$defaults = array('take_slide_name'=>'checked="checked"','index_document'=>'checked="checked"');
 $form->setDefaults($defaults);
 // display the form
 $form -> display();

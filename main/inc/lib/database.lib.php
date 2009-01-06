@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 17539 2009-01-05 19:50:33Z marvil07 $
+<?php // $Id: database.lib.php 17550 2009-01-06 18:56:28Z marvil07 $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -53,6 +53,9 @@ define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY','gradebook_score_display');
 define('TABLE_MAIN_USER_FIELD',			'user_field');
 define('TABLE_MAIN_USER_FIELD_OPTIONS',	'user_field_options');
 define('TABLE_MAIN_USER_FIELD_VALUES',	'user_field_values');
+define('TABLE_MAIN_SPECIFIC_FIELD',			'specific_field');
+define('TABLE_MAIN_SPECIFIC_FIELD_VALUES',	'specific_field_values');
+define('TABLE_MAIN_SEARCH_ENGINE_REF',			'search_engine_ref');
 define('TABLE_MAIN_ACCESS_URL', 'access_url');
 define('TABLE_MAIN_SYSTEM_CALENDAR', 'sys_calendar');
 

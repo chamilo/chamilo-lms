@@ -1,4 +1,4 @@
-<?php // $Id: infocours.php 17543 2009-01-06 00:57:54Z cvargas1 $
+<?php // $Id: infocours.php 17548 2009-01-06 16:12:51Z cvargas1 $
 
 /*
 ==============================================================================
@@ -186,8 +186,9 @@ $form->add_textfield('course_registration_password', get_lang('CourseRegistratio
 
 $form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;">'.get_lang('EmailNotifications').'</div>');
 
-$form->addElement('radio', 'email_alert_tutor_on_new_user_in_course', get_lang('NewUserEmailAlert'), get_lang('NewUserEmailAlertActivate'), 1);
-$form->addElement('radio', 'email_alert_tutor_on_new_user_in_course', null, get_lang('NewUserEmailAlertDeactivate'), 0);
+$form->addElement('radio', 'email_alert_to_teacher_on_new_user_in_course', get_lang('NewUserEmailAlert'), get_lang('NewUserEmailAlertEnable'), 1);
+$form->addElement('radio', 'email_alert_to_teacher_on_new_user_in_course', null,get_lang('NewUserEmailAlertToTeacharAndTutor'),2);
+$form->addElement('radio', 'email_alert_to_teacher_on_new_user_in_course', null, get_lang('NewUserEmailAlertDisable'), 0);
 $form -> addElement('html',$linebreak);
 
 $form->addElement('radio', 'email_alert_manager_on_new_doc', get_lang('WorkEmailAlert'), get_lang('WorkEmailAlertActivate'), 1);
@@ -265,7 +266,7 @@ $values['subscribe'] = $course_access_settings['subscribe'];
 $values['unsubscribe'] = $course_access_settings['unsubscribe'];
 $values['course_registration_password'] =  $all_course_information['registration_code'];
 // get send_mail_setting (auth)from table
-$values['email_alert_tutor_on_new_user_in_course'] = api_get_course_setting('email_alert_tutor_on_new_user_in_course');
+$values['email_alert_to_teacher_on_new_user_in_course'] = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course');
 // get send_mail_setting (work)from table
 $values['email_alert_manager_on_new_doc'] = api_get_course_setting('email_alert_manager_on_new_doc');
 // get send_mail_setting (dropbox) from table
@@ -312,8 +313,8 @@ if ($form->validate() && is_settings_editable())
 
 	//update course_settings table - this assumes those records exist, otherwise triggers an error
 	$table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);
-	if($update_values['email_alert_tutor_on_new_user_in_course'] != $values['email_alert_tutor_on_new_user_in_course']){
-		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_tutor_on_new_user_in_course']." WHERE variable = 'email_alert_tutor_on_new_user_in_course' ";
+	if($update_values['email_alert_to_teacher_on_new_user_in_course'] != $values['email_alert_to_teacher_on_new_user_in_course']){
+		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_to_teacher_on_new_user_in_course']." WHERE variable = 'email_alert_to_teacher_on_new_user_in_course' ";
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
 	if($update_values['email_alert_manager_on_new_doc'] != $values['email_alert_manager_on_new_doc']){

@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 17543 2009-01-06 00:57:54Z cvargas1 $
+<?php // $Id: courses.php 17548 2009-01-06 16:12:51Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -36,7 +36,10 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = 'courses';
+$language_file = array (
+'courses',
+'registration'
+);
 
 //delete the globals["_cid"] we don't need it here 
 $cidReset = true; // Flag forcing the 'current course' reset
@@ -270,9 +273,11 @@ function subscribe_user($course_code)
 	{
 		if (CourseManager::add_user_to_course($_user['user_id'], $course_code))
 		{
-			$send = api_get_course_setting('email_alert_tutor_on_new_user_in_course',$course_code);
-			if ($send > 0) {
-				CourseManager::email_to_tutor($_user['user_id'],$course_code);
+			$send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course',$course_code);
+			if ($send == 1) {
+				CourseManager::email_to_tutor($_user['user_id'],$course_code,$send_to_tutor_also=false);
+			} else if ($send == 2){
+				CourseManager::email_to_tutor($_user['user_id'],$course_code,$send_to_tutor_also=true);
 			}
 			return get_lang('EnrollToCourseSuccessful');
 			

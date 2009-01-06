@@ -1830,9 +1830,10 @@ class CourseManager
 	 * @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
 		* @param  int $user_id the id of the user
 		* @param  string $course_code the course code
+		* @param  string $send_to_tutor_also 
 	  * @return string we return the message that is displayed when the action is succesfull
 	 */
-	function email_to_tutor($user_id,$course_code) {
+	function email_to_tutor($user_id,$course_code,$send_to_tutor_also=false) {
 		
 		$TABLECOURS=Database::get_main_table(TABLE_MAIN_COURSE);
 		$TABLE_USER= Database::get_main_table(TABLE_MAIN_USER);
@@ -1842,10 +1843,16 @@ class CourseManager
 		$student = Database::fetch_array($result_me);
 		$information =  CourseManager::get_course_information($course_code);
 		$name_course=$information['title'];
-		$sql="SELECT * FROM ".$TABLECOURSUSER." WHERE course_code='".$course_code."' AND tutor_id=1";
+		$sql="SELECT * FROM ".$TABLECOURSUSER." WHERE course_code='".$course_code."'";
+				if($send_to_tutor_also=true){
+					$sql.=" AND tutor_id=1";
+				} else {
+					$sql.=" AND status=1";
+				}
+		
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		while ($row = Database::fetch_array($result)) {
-				$sql_tutor="SELECT * FROM ".$TABLE_USER." WHERE user_id='".$row['user_id']."'";
+				$sql_tutor="SELECT * FROM ".$TABLE_USER." WHERE user_id='".$row['user_id']."'";			
 				$result_tutor=api_sql_query($sql_tutor,__FILE__,__LINE__);
 				$tutor=Database::fetch_array($result_tutor);
 				$emailto		= $tutor['email'];

@@ -309,6 +309,7 @@ UPDATE tool SET link = 'newscorm/lp_controller.php' WHERE link = 'scorm/scormdoc
 INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('blog_management','blog/blog_admin.php','blog_admin.gif',0,'1','squaregrey.gif',0,'_self','admin');
 INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('survey','survey/survey_list.php','survey.gif',0,'1','',0,'_self','admin');
 INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('course_maintenance','course_info/maintenance.php','backup.gif',0,'1','',0,'_self', 'admin');
+INSERT INTO course_setting(variable,value,category) VALUES ('email_alert_tutor_on_new_user_in_course',0,'auth');
 INSERT INTO course_setting(variable,value,category) VALUES ('email_alert_manager_on_new_doc',0,'work');
 INSERT INTO course_setting(variable,value,category) VALUES ('email_alert_on_new_doc_dropbox',0,'dropbox');
 INSERT INTO course_setting(variable,value,category) VALUES ('allow_user_edit_agenda',0,'agenda');

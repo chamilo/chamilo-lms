@@ -2018,6 +2018,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		course_setting table (courseinfo tool)
 	-----------------------------------------------------------
 	*/
+	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_tutor_on_new_user_in_course',0,'auth')", __FILE__, __LINE__);
 	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_manager_on_new_doc',0,'work')", __FILE__, __LINE__);
 	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_on_new_doc_dropbox',0,'dropbox')", __FILE__, __LINE__);
 	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_edit_agenda',0,'agenda')", __FILE__, __LINE__);

@@ -483,10 +483,16 @@ function api_get_course_path($course_code=null) {
 /**
  * Gets a course setting from the current course_setting table. Try always using integer values.
  * @param	string	The name of the setting we want from the table
+ * @param	string	Optional: course code
  * @return	mixed	The value of that setting in that table. Return -1 if not found.
  */
-function api_get_course_setting($setting_name) {
-	$table = Database::get_course_table(TABLE_COURSE_SETTING);
+function api_get_course_setting($setting_name, $course_code = null) {
+	if (!empty($course_code)) {
+		$c = api_get_course_info($course_code);
+		$table = Database::get_course_table(TABLE_COURSE_SETTING,$c['dbName']);
+	} else {
+		$table = Database::get_course_table(TABLE_COURSE_SETTING);
+	}
 	$setting_name = mysql_real_escape_string($setting_name);
 	$sql = "SELECT * FROM $table WHERE variable = '$setting_name'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);

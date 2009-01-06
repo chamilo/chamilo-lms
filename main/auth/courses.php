@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 17482 2008-12-29 23:16:42Z cvargas1 $
+<?php // $Id: courses.php 17543 2009-01-06 00:57:54Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -270,7 +270,10 @@ function subscribe_user($course_code)
 	{
 		if (CourseManager::add_user_to_course($_user['user_id'], $course_code))
 		{
-			CourseManager::email_to_tutor($_user['user_id'],$course_code);
+			$send = api_get_course_setting('email_alert_tutor_on_new_user_in_course',$course_code);
+			if ($send > 0) {
+				CourseManager::email_to_tutor($_user['user_id'],$course_code);
+			}
 			return get_lang('EnrollToCourseSuccessful');
 			
 		}

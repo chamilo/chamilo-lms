@@ -56,7 +56,7 @@ require_once (api_get_path(LIBRARY_PATH) . 'course.lib.php');
 // breadcrumbs
 if (!empty ($_user)) 
 {
-	$interbreadcrumb[] = array ("url" => 'survey_list.php','name' => get_lang('SurveyList'));
+	$interbreadcrumb[] = array ("url" => 'survey_list.php?cidReq='.$_GET['course'],'name' => get_lang('SurveyList'));
 }
 
 // Header
@@ -81,10 +81,42 @@ if ((!isset ($_GET['course']) || !isset ($_GET['invitationcode']))&& !isset($_GE
 	Display :: display_footer();
 	exit;
 }
+$invitationcode = $_GET['invitationcode'];
+// start auto-invitation feature FS#3403 (all-users-can-do-the-survey-URL handling)
+if ($invitationcode == "auto" && isset($_GET['scode'])){
+    // not intended for anonymous users
+    if (!(isset ($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'],true)) {		
+		api_not_allowed();
+    }
+    $userid = $_user['user_id'];
+    $scode = Database::escape_string($_GET['scode']); //survey_code of the survey
+    $autoInvitationcode = "auto-$userid-".$scode; //new invitation code from userid
+    // the survey code must exist in this course, or the URL is invalid
+    $sql = "SELECT * FROM $table_survey WHERE code='" . $scode . "'";
+    $result = api_sql_query($sql, __FILE__, __LINE__);
+    if (Database :: num_rows($result) > 0){  // ok
+        // check availability
+        $row = Database :: fetch_array($result, 'ASSOC'); //
+        $tempdata  = survey_manager :: get_survey($row['survey_id']);
+        check_time_availability($tempdata); //exit if survey not available anymore
+        // check for double invitation records (insert should be done once)
+        $sql = "select user from $table_survey_invitation where invitation_code = '".Database::escape_string($autoInvitationcode)."'";
+        $result = api_sql_query($sql, __FILE__, __LINE__);
+        if (Database :: num_rows($result) == 0){ // ok
+            $sql = "insert into $table_survey_invitation (survey_code,user, invitation_code, invitation_date) ";
+            $sql .= " values (\"$scode\", \"$userid\", \"$autoInvitationcode\", now())";
+            api_sql_query($sql, __FILE__, __LINE__);           
+        }
+        // from here we use the new invitationcode auto-userid-surveycode string
+        $_GET['invitationcode'] = $autoInvitationcode;
+        $invitationcode = $autoInvitationcode;
+    }
+}
+// end auto-invitation feature
 
 // now we check if the invitationcode is valid
-$sql = "SELECT * FROM $table_survey_invitation WHERE invitation_code = '" . Database :: escape_string($_GET['invitationcode']) . "'";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$sql = "SELECT * FROM $table_survey_invitation WHERE invitation_code = '" . Database :: escape_string($invitationcode) . "'";
+$result = api_sql_query($sql, __FILE__, false); // false=suppress errors
 if (Database :: num_rows($result) < 1) 
 {
 	Display :: display_error_message(get_lang('WrongInvitationCode'), false);
@@ -261,21 +293,7 @@ echo '<div id="survey_title">' . $survey_data['survey_title'] . '</div>';
 echo '<div id="survey_subtitle">' . $survey_data['survey_subtitle'] . '</div>';
 
 // checking time availability
-$start_date = mktime(0, 0, 0, substr($survey_data['start_date'], 5, 2), substr($survey_data['start_date'], 8, 2), substr($survey_data['start_date'], 0, 4));
-$end_date = mktime(0, 0, 0, substr($survey_data['end_date'], 5, 2), substr($survey_data['end_date'], 8, 2), substr($survey_data['end_date'], 0, 4));
-$cur_date = time();
-
-if ($cur_date < $start_date) {
-	Display :: display_warning_message(get_lang('SurveyNotAvailableYet'), false);
-	Display :: display_footer();
-	exit; 
-}
-if ($cur_date > $end_date) 
-{
-	Display :: display_warning_message(get_lang('SurveyNotAvailableAnymore'), false);
-	Display :: display_footer();
-	exit;
-}
+check_time_availability($survey_data);
 
 // displaying the survey introduction
 if (!isset ($_GET['show'])) 
@@ -510,7 +528,7 @@ if ($survey_data['form_fields'] && $survey_data['anonymous'] == 0 && is_array($u
 				// build SQL query
 				$sql = "UPDATE $table_user SET";
 				foreach ($user_data as $key => $value) 
-				{
+                {
 					if (substr($key, 0, 6) == 'extra_') //an extra field
 						{
 						$extras[substr($key, 6)] = $value;
@@ -1290,4 +1308,26 @@ echo '</form>';
 
 // Footer
 Display :: display_footer();
+
+/**
+ * Check if this survey has ended. If so, display message and exit rhis script
+ */
+function check_time_availability($surv_data){
+    $start_date = mktime(0, 0, 0, substr($surv_data['start_date'], 5, 2), substr($surv_data['start_date'], 8, 2), substr($surv_data['start_date'], 0, 4));
+    $end_date = mktime(0, 0, 0, substr($surv_data['end_date'], 5, 2), substr($surv_data['end_date'], 8, 2), substr($surv_data['end_date'], 0, 4));
+    $cur_date = time();
+
+    if ($cur_date < $start_date) {
+        Display :: display_warning_message(get_lang('SurveyNotAvailableYet'), false);
+        Display :: display_footer();
+        exit;
+    }
+    if ($cur_date > $end_date)
+    {
+        Display :: display_warning_message(get_lang('SurveyNotAvailableAnymore'), false);
+        Display :: display_footer();
+        exit;
+    }
+}
+
 ?>

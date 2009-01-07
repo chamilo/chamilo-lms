@@ -143,6 +143,12 @@ $form->addElement('submit', 'submit', get_lang('Ok'));
 // The rules (required fields)
 $form->addRule('mail_title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('mail_text', get_lang('ThisFieldIsRequired'), 'required');
+// show the URL that can be used by users to fill a survey without invitation
+$auto_survey_link = $_configuration['root_web'].$_configuration['code_append'].
+            'survey/'.'fillsurvey.php?course='.$_course['sysCode'].
+            '&invitationcode=auto&scode='.$survey_data['survey_code'];
+$form->addElement('static',null, null, '<br \><br \>' . get_lang('AutoInviteLink'));
+$form->addElement('static',null, null, $auto_survey_link);
 if ($form->validate())
 {
 	$values = $form->exportValues();

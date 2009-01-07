@@ -72,13 +72,17 @@
 								{
 									//only inside courses
 									$folderInfo = $manager->getFolderInfo(); //get	ajaxmanager							
-									$fullPath= $upload->getFilePath();		//get	ajaxmanager						
-									$mainPath= getParentFolderPath($folderInfo['path']);//get	ajaxmanager
+									$fullPath= $upload->getFilePath();		//get	ajaxmanager. Sample ../../../../../../../courses/TEST/document/Grupo_1_groupdocs/image.jpg						
+									$mainPath= getParentFolderPath($folderInfo['path']);//get	ajaxmanager. Sample ../../../../../../../courses/TEST/document/Grupo_1_groupdocs/
 									$dokeosFolder = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1);	
 									$dokeosFile = $tem['name'];	//get	ajaxmanager
 									$dokeosFileSize = $tem['size'];//get ajaxmanager
+									if(!empty($group_properties['directory'])) //get Dokeos
+									{
+										$dokeosFolder=$group_properties['directory'].$dokeosFolder;//get Dokeos
+									}
 									$doc_id = add_document($_course, $dokeosFolder,'file', $dokeosFileSize , $dokeosFile); //get Dokeos																								
-									api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id());//get Dokeos
+									api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id);//get Dokeos
 								}
 								
 								// end bridge

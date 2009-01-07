@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 17429 2008-12-23 01:15:36Z cvargas1 $
+<?php //$Id: group_space.php 17568 2009-01-07 15:59:24Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -298,15 +298,19 @@ $table->set_header(0, '');
 $table->set_header(1, get_lang('LastName'));
 $table->set_header(2, get_lang('FirstName'));
 
-if (api_get_setting("show_email_addresses") == "true") {
+if (api_get_setting("show_email_addresses") == "true")
+{
 	$table->set_header(3, get_lang('Email'));
 	$table->set_column_filter(3, 'email_filter');
 }
-else {
-	$table->set_header(3, get_lang('Email'));
-	$table->set_column_filter(3, 'email_filter');
+else
+{
+	if (api_is_allowed_to_edit()=="true")
+	{
+		$table->set_header(3, get_lang('Email'));
+		$table->set_column_filter(3, 'email_filter');
+	}
 }
-
 $table->set_column_filter(0, 'user_icon_filter');
 $table->display();
 
@@ -355,16 +359,49 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 	$table_user 		= Database :: get_main_table(TABLE_MAIN_USER);
 	
 	// query
-	$sql = "SELECT 
-				user.user_id 	AS col0,
-				user.lastname 	AS col1,
-				user.firstname 	AS col2,
-				user.email		AS col3
-				FROM ".$table_user." user, ".$table_group_user." group_rel_user 
-				WHERE group_rel_user.user_id = user.user_id 
-				AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
-	$sql .= " ORDER BY col$column $direction ";
-	$sql .= " LIMIT $from,$number_of_items";
+	
+	if (api_get_setting("show_email_addresses") == "true") {	
+	
+		$sql = "SELECT 
+					user.user_id 	AS col0,
+					user.lastname 	AS col1,
+					user.firstname 	AS col2,
+					user.email		AS col3
+					FROM ".$table_user." user, ".$table_group_user." group_rel_user 
+					WHERE group_rel_user.user_id = user.user_id 
+					AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
+		$sql .= " ORDER BY col$column $direction ";
+		$sql .= " LIMIT $from,$number_of_items";
+	}
+	else
+	{
+		if (api_is_allowed_to_edit()=="true")
+		{
+			$sql = "SELECT 
+						user.user_id 	AS col0,
+						user.lastname 	AS col1,
+						user.firstname 	AS col2,
+						user.email		AS col3
+						FROM ".$table_user." user, ".$table_group_user." group_rel_user 
+						WHERE group_rel_user.user_id = user.user_id 
+						AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
+			$sql .= " ORDER BY col$column $direction ";
+			$sql .= " LIMIT $from,$number_of_items";
+		}
+		else
+		{
+			$sql = "SELECT 
+						user.user_id 	AS col0,
+						user.lastname 	AS col1,
+						user.firstname 	AS col2
+						FROM ".$table_user." user, ".$table_group_user." group_rel_user 
+						WHERE group_rel_user.user_id = user.user_id 
+						AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
+			$sql .= " ORDER BY col$column $direction ";
+			$sql .= " LIMIT $from,$number_of_items";
+		}
+	}
+	
 	$return = array ();
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	while ($row = Database::fetch_row($result))

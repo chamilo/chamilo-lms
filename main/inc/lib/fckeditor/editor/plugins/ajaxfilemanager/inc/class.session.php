@@ -114,7 +114,10 @@ class Session
 			{
 				while(false !== ($file = readdir($dirHandler)))
 				{
-					if($file != '.' && $file != '..' && $file != $this->gcCounterFileName && $file != $this->gcLogFileName && $file != session_id() )
+                    // This is to preserve the empty index.html and during development - the hidden .svn folder.
+					//if($file != '.' && $file != '..' && $file != $this->gcCounterFileName && $file != $this->gcLogFileName && $file != session_id() )
+					if($file != '.' && $file != '..' && $file != $this->gcCounterFileName && $file != $this->gcLogFileName && $file != session_id()
+						&& $file != 'index.html' && $file != '.svn')
 					{						
 						$path=$this->dir.$file;
 						$output .= $path ;

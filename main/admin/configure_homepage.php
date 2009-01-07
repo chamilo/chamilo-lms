@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 17523 2009-01-03 20:59:49Z herodoto $
+<?php // $Id: configure_homepage.php 17560 2009-01-07 12:34:08Z herodoto $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -993,7 +993,7 @@ switch($action){
 				{
 					foreach($Categories as $enreg)
 					{
-						echo '<tr><td>'.Display::return_icon('opendir.gif').'&nbsp;'.$enreg['name'].'</td></tr>';
+						echo '<tr><td>'.Display::return_icon('folder_document.gif', $enreg['name']).'&nbsp;'.$enreg['name'].'</td></tr>';
 					}
 					unset($Categories);
 				}

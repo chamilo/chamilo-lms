@@ -803,9 +803,10 @@ class Tracking {
 		$count = 0;		
 		if (!empty($a_course['db_name'])) {
 			$tbl_posts = Database :: get_course_table(TABLE_FORUM_POST, $a_course['db_name']);
-			$sql = "SELECT * FROM $tbl_posts";
+			$sql = "SELECT count(*) FROM $tbl_posts";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$count = Database::num_rows($result);	
+			$row = Database::fetch_row($result);
+			$count = $row[0];	
 			return $count;			
 		} else {
 			return null;
@@ -827,9 +828,10 @@ class Tracking {
 		$count = 0;		
 		if (!empty($a_course['db_name'])) {
 			$tbl_threads = Database :: get_course_table(TABLE_FORUM_THREAD, $a_course['db_name']);
-			$sql = "SELECT * FROM $tbl_threads";
+			$sql = "SELECT count(*) FROM $tbl_threads";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$count = Database::num_rows($result);	
+			$row = Database::fetch_row($result);
+			$count = $row[0];	
 			return $count;			
 		} else {
 			return null;
@@ -851,9 +853,10 @@ class Tracking {
 		$count = 0;		
 		if (!empty($a_course['db_name'])) {
 			$tbl_forums = Database :: get_course_table(TABLE_FORUM, $a_course['db_name']);
-			$sql = "SELECT * FROM $tbl_forums";
+			$sql = "SELECT count(*) FROM $tbl_forums";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$count = Database::num_rows($result);	
+			$row = Database::fetch_row($result);
+			$count = $row[0];	
 			return $count;			
 		} else {
 			return null;
@@ -878,10 +881,11 @@ class Tracking {
 		if (!empty($a_course['db_name'])) {
 			$tbl_stats_access = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS, $a_course['db_name']);
 			
-			$sql = "SELECT * FROM $tbl_stats_access WHERE DATE_SUB(NOW(),INTERVAL $last_days DAY) <= access_date 
+			$sql = "SELECT count(*) FROM $tbl_stats_access WHERE DATE_SUB(NOW(),INTERVAL $last_days DAY) <= access_date 
 					AND access_cours_code = '$course_code' AND access_tool='".TOOL_CHAT."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$count = Database::num_rows($result);	
+			$row = Database::fetch_row($result);
+			$count = $row[0];	
 			return $count;			
 		} else {
 			return null;

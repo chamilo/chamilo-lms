@@ -1,4 +1,4 @@
-<?php // $Id: group.php 17429 2008-12-23 01:15:36Z cvargas1 $
+<?php // $Id: group.php 17573 2009-01-07 18:14:56Z herodoto $
  
 /*
 ==============================================================================
@@ -331,8 +331,15 @@ foreach ($group_cats as $index => $category)
 						$tutor_info .= Display::encrypted_mailto_link($tutor['mail'],$tutor['firstName'].' '.$tutor['lastName']).', ';								
 					}
 					else
-					{						
-						$tutor_info .= $tutor['firstName'].' '.$tutor['lastName'].', ';
+					{	
+						if (api_is_allowed_to_edit()=='true')
+						{
+							$tutor_info .= Display::encrypted_mailto_link($tutor['mail'],$tutor['firstName'].' '.$tutor['lastName']).', ';
+						}
+						else
+						{											
+							$tutor_info .= $tutor['firstName'].' '.$tutor['lastName'].', ';
+						}
 					}					
 				}
 			}

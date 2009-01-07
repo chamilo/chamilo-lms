@@ -41,6 +41,7 @@ $xajax -> registerFunction ('search_courses');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
+$_SESSION['this_section']=$this_section;
 
 // Access restrictions
 api_protect_admin_script(true);

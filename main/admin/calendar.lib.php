@@ -1498,7 +1498,16 @@ function show_add_form($id = '')
 			$oFCKeditor->Height		= '175';
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Value		= $content;
-			$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+
+			if(api_get_setting('advanced_filemanager')=='true')
+			{
+				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
+			}
+			else
+			{
+				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+			}
+			
 			$oFCKeditor->ToolbarSet = 'Agenda';
 
 			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);

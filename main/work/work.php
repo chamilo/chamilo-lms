@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 17491 2008-12-31 17:45:51Z cfasanando $
+*  	@version $Id: work.php 17575 2009-01-07 21:51:12Z cvargas1 $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -239,12 +239,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !sizeof($_POST)) {
 	}
 }
 //toolgroup comes from group. the but of tis variable is to limit post to the group of the student
-if (!api_is_course_admin()) {
+//if (!api_is_course_admin()) {
 	if (!empty ($_GET['toolgroup'])) {
 		$toolgroup = Database::escape_string($_GET['toolgroup']);
 		api_session_register('toolgroup');
 	}
-}
+//}
 
 //-------------------------------------------------------------------//
 
@@ -465,7 +465,7 @@ if (api_is_allowed_to_edit(false,true)) {
 										   active		= '0',
 										   accepted		= '1',
 										   filetype 	= 'folder',
-										   post_group_id = '0',
+										   post_group_id = '".$toolgroup."',
 										   sent_date	= NOW(),
 										   qualification	= '".(($_POST['qualification_value']!='') ? Database::escape_string($_POST['qualification_value']) : '') ."',
 										   parent_id	= '',
@@ -781,9 +781,15 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 				
 			}
 		} elseif ($newWorkUrl) {	
+				if (isset ($_SESSION['toolgroup'])) {
+					$post_group_id = $_SESSION['toolgroup'];
+				} else {
+					$post_group_id = '0';
+				}
+			
 			/*
 			 * SPECIAL CASE ! For a work coming from another area (i.e. groups)
-			 */		 
+			 */	 
 			$url = str_replace('../../' . $_course['path'] . '/', '', $newWorkUrl);
 	
 			if (!$title) {		
@@ -797,11 +803,12 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 			}
 	
 				$sql = "INSERT INTO  " . $work_table . "
-					        SET url         = '" . $url . "',
-					            title       = '" . $title . "',
-					            description = '" . $description . "',
-					            author      = '" . $authors . "',
-					            sent_date     = NOW(),
+					        	SET url        	= '" . $url . "',
+					            title       	= '" . $title . "',
+					            description 	= '" . $description . "',
+					            author      	= '" . $authors . "',					 
+							    post_group_id = '".$post_group_id."',
+					            sent_date    	= NOW(),
 					            session_id = ".intval($id_session);
 	
 			api_sql_query($sql, __FILE__, __LINE__);
@@ -815,9 +822,9 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 			for ($i = 0; $i < count($list_id); $i++) {
 				api_item_property_update($_course, 'work', $list_id[$i], 'FolderUpdated', $user_id);								
 			}	
-			
+
 		}
-	
+
 		/*
 		 * SPECIAL CASE ! For a work edited
 		 */
@@ -870,7 +877,6 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 		}
 	} 
 }
-
 if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 	//last value is to check this is not "just" an edit
 	//YW Tis part serve to send a e-mail to the tutors when a new file is sent

@@ -57,7 +57,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	
 	if (! $always_show_tool_options && api_is_allowed_to_edit()) {
 		// Create dir		
-		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'"><img src="../img/folder_new.gif" border="0" alt="'.get_lang('CreateDir').'" title ="'.get_lang('CreateDir').'" /> '.get_lang('CreateDir').' </a>&nbsp&nbsp';
+		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.$_GET['toolgroup'].'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'"><img src="../img/folder_new.gif" border="0" alt="'.get_lang('CreateDir').'" title ="'.get_lang('CreateDir').'" /> '.get_lang('CreateDir').' </a>&nbsp&nbsp';
 		// Options
 		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".$origin."&amp;display_tool_options=true&amp;origin=".$origin."\">".Display::return_icon('acces_tool.gif', get_lang("EditToolOptions")).' ' . get_lang("EditToolOptions") . "</a>&nbsp&nbsp";							
 	}
@@ -293,11 +293,11 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$group_query = " WHERE post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
 			$subdirs_query = "AND url NOT LIKE BINARY '$sub_course_dir%/%' AND url LIKE BINARY '$sub_course_dir%'";
 		} else {
-			$group_query = '';
-			$subdirs_query = "WHERE url NOT LIKE '$sub_course_dir%/%' AND url LIKE '$sub_course_dir%'";
+			$group_query = " WHERE post_group_id = '0' ";
+			$subdirs_query = "AND url NOT LIKE '$sub_course_dir%/%' AND url LIKE '$sub_course_dir%'";
 		}
 		
-	   $sql_get_publications_list = 	"SELECT * FROM  $work_table $group_query $subdirs_query ".$add_in_where_query." AND session_id IN (0,".intval($id_session).") ORDER BY id";
+	   	$sql_get_publications_list = 	"SELECT * FROM  $work_table $group_query $subdirs_query ".$add_in_where_query." AND session_id IN (0,".intval($id_session).") ORDER BY id";
 		$sql_get_publications_num = "SELECT count(url) " .
 										"FROM  ".$work_table." " .
 										"WHERE url LIKE BINARY '$sub_course_dir%' " .
@@ -378,8 +378,13 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		}
 
 		$session_condition =  intval($id_session)!=0 ?"AND work.session_id IN (0,".intval($id_session).")" : "";				   
-		$sql_select_directory= "SELECT prop.lastedit_date, id, author, has_properties, view_properties, description, qualification,id FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE " .
-							   	     "work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $session_condition";												   
+		$sql_select_directory= "SELECT prop.lastedit_date, id, author, has_properties, view_properties, description, qualification,id FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE ";
+					if (!empty($_SESSION['toolgroup'])) {
+						$sql_select_directory.=" work.post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
+					} else {
+						$sql_select_directory.=" work.post_group_id = '0' ";
+					}
+		$sql_select_directory.=" AND work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $session_condition";												   
 		$result=api_sql_query($sql_select_directory,__FILE__,__LINE__);
 		$row=Database::fetch_array($result);
 		
@@ -1044,9 +1049,9 @@ function insert_all_directory_in_course_table($base_work_dir)
 							   active		= '0',
 							   accepted		= '1',
 							   filetype		= 'folder',
-							   post_group_id = '0',
+							   post_group_id = '".$_GET['toolgroup']."',
 							   sent_date	= '0000-00-00 00:00:00' ";
-        //api_sql_query($sql_insert_all, __FILE__, __LINE__);
+        api_sql_query($sql_insert_all, __FILE__, __LINE__);
 	}	
 }
 

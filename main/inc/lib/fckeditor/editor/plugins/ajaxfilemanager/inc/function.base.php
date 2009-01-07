@@ -832,8 +832,43 @@ function getRootPath() {
 		   {
 		       return trim ( @exec ('file -bi ' . escapeshellarg ( $f ) ) ) ;
 		   }
-		}		
+		}
+
+
+		/**
+		* check if a folder is allowed to shown on the search 'look in' list
+		* @param string $fileName
+		* @return string
+		* @author Juan Carlos Raña Trabado
+		*/
+		function hideFileName($fileName)
+		{
+			//hidden files and folders deleted by Dokeos. Hidde folders css
+			$deleted_by_dokeos='_DELETED_';
+			$css_folder_dokeos='css';
+			
+			//hidden directory of the group if the user is not a member of the group					
+			$group_folder='_groupdocs';
+			
+			//show group's directory only if I'm member
+			$show_doc_group=true;								
+			if(ereg($group_folder, $fileName))
+			{
+				$show_doc_group=false;
+				if($is_user_in_group)
+				{
+					$show_doc_group=true;					
+				}
+			}		
+			
+			if(!ereg($deleted_by_dokeos, $fileName) && !ereg($css_folder_dokeos, $fileName)&& $show_doc_group==true)
+			{			
+				return substr($fileName,strpos($fileName, '-'),strlen($fileName)); //hide the firsts numbers
+			}
 		
+		}
+
+
          /**
           * check if such document is allowed to shown on the list
           *

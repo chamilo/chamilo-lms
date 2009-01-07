@@ -47,11 +47,11 @@
 		
 	if($_course['id'])
 	{
-		$course_shared_folder = api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/sharedfolder/';	 
+		$course_shared_folder = api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/shared_folder/';	 
 		if (!file_exists($course_shared_folder))
 		{	
-			mkdir(api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/sharedfolder/', 0777);	
-			$doc_id = add_document($_course, '/sharedfolder', 'folder', 0, 'sharedfolder');
+			mkdir(api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/shared_folder/', 0777);	
+			$doc_id = add_document($_course, '/shared_folder', 'folder', 0, 'shared_folder');
 			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
 			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'visible', api_get_user_id());
 		} 

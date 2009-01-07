@@ -89,7 +89,7 @@
 			}
 			else
 			{					
-				$PathDokeosAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/sharedfolder/';					
+				$PathDokeosAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/shared_folder/';					
 			}		   
 		}
 	}

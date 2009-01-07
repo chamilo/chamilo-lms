@@ -29,7 +29,7 @@
 				}	
 		
 				//show icon sharedfolder
-				$shared_folder='sharedfolder';
+				$shared_folder='shared_folder';
 		
 			///Second step: hiding as the case
 			//Juan Carlos Raña

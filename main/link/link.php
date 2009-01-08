@@ -1,4 +1,4 @@
-<?php // $Id: link.php 16861 2008-11-21 21:21:00Z herodoto $
+<?php // $Id: link.php 17603 2009-01-08 21:07:16Z marvil07 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -238,6 +238,33 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 		}
 
 		echo "<tr><td align=\"right\">".get_lang("OnHomepage")." ? </td><td><input class=\"checkbox\" type=\"checkbox\" name=\"onhomepage\" id=\"onhomepage\" value=\"1\" $onhomepage><label for=\"onhomepage\"> ".get_lang("Yes")."</label></td></tr>";
+		if(api_get_setting('search_enabled')=='true')
+		{
+			require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+			$specific_fields = get_specific_field_list();
+
+			echo '<tr><td align="right">'.get_lang("SearchFeatureDoIndexLink").' ? </td><td><input class="checkbox" type="checkbox" name="index_document" id="index_document" checked="checked"><label for="index_document">'.get_lang("Yes").'</label></td></tr>';
+			foreach ($specific_fields as $specific_field) {
+				//Author : <input name="A" type="text" />
+
+				$default_values = '';
+                if ($_GET['action']=="editlink")
+				{
+					$filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $_GET['id'], 'tool_id' => '\''. TOOL_LINK .'\'');
+					$values = get_specific_field_values_list($filter, array('value'));
+					if ( !empty($values) ) {
+						$arr_str_values = array();
+						foreach ($values as $value) {
+							$arr_str_values[] = $value['value'];
+						}
+						$default_values = implode(', ', $arr_str_values);
+					}
+				}
+
+				$sf_textbox = '<tr><td align="right">%s</td><td><input name="%s" type="text" value="%s"/>';
+				echo sprintf($sf_textbox, $specific_field['name'], $specific_field['code'], $default_values);
+			}
+		}
 
 		echo "<tr><td></td><td><input type=\"Submit\" name=\"submitLink\" value=\"".get_lang("Ok")."\" /></td></tr>",
 			"</table>",

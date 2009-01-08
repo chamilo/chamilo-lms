@@ -113,6 +113,77 @@ function addlinkcategory($type)
 			$sql = "INSERT INTO ".$tbl_link." (url, title, description, category_id,display_order, on_homepage) VALUES ('$urllink','$title','$description','$selectcategory','$order', '$onhomepage')";
 			$catlinkstatus = get_lang('LinkAdded');
 			api_sql_query($sql, __FILE__, __LINE__);
+			$link_id = Database::insert_id();
+
+			if ( (api_get_setting('search_enabled')=='true') && $link_id) {
+				require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
+				require_once(api_get_path(LIBRARY_PATH) .'search/IndexableChunk.class.php');
+				require_once(api_get_path(LIBRARY_PATH) .'specific_fields_manager.lib.php');
+
+				$courseid = api_get_course_id();
+				$specific_fields = get_specific_field_list();
+				$ic_slide = new IndexableChunk();
+
+				// add all terms to db
+				$all_specific_terms = '';
+				foreach ($specific_fields as $specific_field) {
+					if (isset($_REQUEST[$specific_field['code']])) {
+						$sterms = trim($_REQUEST[$specific_field['code']]);
+						if (!empty($sterms)) {
+							$all_specific_terms .= ' '. $sterms;
+							$sterms = explode(',', $sterms);
+							foreach ($sterms as $sterm) {
+								$ic_slide->addTerm(trim($sterm), $specific_field['code']);
+								add_specific_field_value($specific_field['id'], $courseid, TOOL_LINK, $link_id, $sterm);
+							}
+						}
+					}
+				}
+
+				// build the chunk to index
+				$ic_slide->addValue("title", $title);
+				$ic_slide->addCourseId($courseid);
+				$ic_slide->addToolId(TOOL_LINK);
+				$xapian_data = array(
+					SE_COURSE_ID => $courseid,
+					SE_TOOL_ID => TOOL_LINK,
+					SE_DATA => array('link_id' => (int)$link_id),
+					SE_USER => (int)api_get_user_id(),
+				);
+				$ic_slide->xapian_data = serialize($xapian_data);
+				$description = $all_specific_terms .' '. $description;
+				$ic_slide->addValue("content", $description);
+
+				// add category name if set
+				if (isset($_POST['selectcategory']) && $selectcategory>0) {
+					$table_link_category = Database::get_course_table(TABLE_LINK_CATEGORY);
+					$sql_cat = 'SELECT * FROM %s WHERE id=%d LIMIT 1';
+					$sql_cat = sprintf($sql_cat, $table_link_category, (int)$selectcategory);
+					$result = api_sql_query($sql_cat, __FILE__, __LINE__);
+					if (mysql_num_rows($result) == 1) {
+						$row = mysql_fetch_array($result);
+						$ic_slide->addValue("category", $row['category_title']);
+					}
+				}
+
+				$di = new DokeosIndexer();
+				isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
+				$di->connectDb(NULL, NULL, $lang);
+				$di->addChunk($ic_slide);
+
+				//index and return search engine document id
+				$did = $di->index();
+				if ($did) {
+					// save it to db
+					$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+					$sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
+						VALUES (NULL , \'%s\', \'%s\', %s, %s)';
+					$sql = sprintf($sql, $tbl_se_ref, $courseid, TOOL_LINK, $link_id, $did);
+					api_sql_query($sql,__FILE__,__LINE__);
+				}
+
+			}
+
 			unset ($urllink, $title, $description, $selectcategory);
 
 			Display::display_confirmation_message(get_lang('LinkAdded'));
@@ -160,7 +231,7 @@ function addlinkcategory($type)
 		global $_course;
 		global $nameTools;
 
-		api_item_property_update($_course, TOOL_LINK, mysql_insert_id(), "LinkAdded", $_user['user_id']);
+		api_item_property_update($_course, TOOL_LINK, $link_id, "LinkAdded", $_user['user_id']);
 	}
 
 	return $ok;
@@ -187,6 +258,7 @@ function deletelinkcategory($type)
 		// make a restore function possible for the platform administrator
 		//$sql="DELETE FROM $tbl_link WHERE id='".$_GET['id']."'";
 		api_item_property_update($_course, TOOL_LINK, $id, "delete", $_user['user_id']);
+		delete_link_from_search_engine(api_get_course_id(), $id);
 		$catlinkstatus = get_lang("LinkDeleted");
 		unset ($id);
 
@@ -207,6 +279,36 @@ function deletelinkcategory($type)
 		Display::display_confirmation_message(get_lang('CategoryDeleted'));
 	}
 }
+
+/**
+ * Removes a link from search engine database
+ *
+ * @param string $course_id Course code
+ * @param int $document_id Document id to delete
+ */
+function delete_link_from_search_engine($course_id, $link_id) {
+	// remove from search engine if enabled
+	if (api_get_setting('search_enabled') == 'true') {
+		$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+		$sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
+		$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+		if (Database::num_rows($res) > 0) {
+			$row = Database::fetch_array($res);
+			require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
+			$di = new DokeosIndexer();
+			$di->remove_document((int)$row['search_did']);
+		}
+		$sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
+		$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
+		api_sql_query($sql, __FILE__, __LINE__);
+
+		// remove terms from db
+		require_once(api_get_path(LIBRARY_PATH) .'specific_fields_manager.lib.php');
+		delete_all_values_for_item($course_id, TOOL_DOCUMENT, $link_id);
+	}
+}
+
 
 /**
 * Used to edit a link or a category
@@ -285,6 +387,95 @@ function editlinkcategory($type)
 
 			$sql = "UPDATE ".$tbl_link." set url='".$_POST['urllink']."', title='".$_POST['title']."', description='".$_POST['description']."', category_id='".$_POST['selectcategory']."', display_order='".$max_display_order."', on_homepage='".$_POST['onhomepage']."' WHERE id='".$_POST['id']."'";
 			api_sql_query($sql, __FILE__, __LINE__);
+
+            // update search enchine and its values table if enabled
+            if (api_get_setting('search_enabled')=='true') {
+                $link_id = $_POST['id'];
+                $course_id = api_get_course_id();
+                $link_url = $_POST['urllink'];
+                $link_title = $_POST['title'];
+                $link_description = $_POST['description'];
+
+                // actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one 
+	            // get search_did
+	            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+	            $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
+	            $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
+	            $res = api_sql_query($sql, __FILE__, __LINE__);
+
+	            if (Database::num_rows($res) > 0) {
+                    require_once(api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
+                    require_once(api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php');
+                    require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+
+                    $se_ref = Database::fetch_array($res);
+                    $specific_fields = get_specific_field_list();
+                    $ic_slide = new IndexableChunk();
+
+                    $all_specific_terms = '';
+                    foreach ($specific_fields as $specific_field) {
+                        delete_all_specific_field_value($course_id, $specific_field['id'], TOOL_LINK, $link_id);
+	                    if (isset($_REQUEST[$specific_field['code']])) {
+		                    $sterms = trim($_REQUEST[$specific_field['code']]);
+		                    if (!empty($sterms)) {
+			                    $all_specific_terms .= ' '. $sterms;
+			                    $sterms = explode(',', $sterms);
+			                    foreach ($sterms as $sterm) {
+				                    $ic_slide->addTerm(trim($sterm), $specific_field['code']);
+				                    add_specific_field_value($specific_field['id'], $course_id, TOOL_LINK, $link_id, $sterm);
+			                    }
+		                    }
+	                    }
+                    }
+
+                    // build the chunk to index
+                    $ic_slide->addValue("title", $link_title);
+                    $ic_slide->addCourseId($course_id);
+                    $ic_slide->addToolId(TOOL_LINK);
+                    $xapian_data = array(
+	                    SE_COURSE_ID => $course_id,
+						SE_TOOL_ID => TOOL_LINK,
+						SE_DATA => array('link_id' => (int)$link_id),
+						SE_USER => (int)api_get_user_id(),
+                    );
+                    $ic_slide->xapian_data = serialize($xapian_data);
+                    $link_description = $all_specific_terms .' '. $link_description;
+                    $ic_slide->addValue("content", $link_description);
+
+                    // add category name if set
+                    if (isset($_POST['selectcategory']) && $selectcategory>0) {
+	                    $table_link_category = Database::get_course_table(TABLE_LINK_CATEGORY);
+	                    $sql_cat = 'SELECT * FROM %s WHERE id=%d LIMIT 1';
+	                    $sql_cat = sprintf($sql_cat, $table_link_category, (int)$selectcategory);
+	                    $result = api_sql_query($sql_cat, __FILE__, __LINE__);
+	                    if (mysql_num_rows($result) == 1) {
+		                    $row = mysql_fetch_array($result);
+		                    $ic_slide->addValue("category", $row['category_title']);
+	                    }
+                    }
+
+                    $di = new DokeosIndexer();
+                    isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
+                    $di->connectDb(NULL, NULL, $lang);
+                    $di->remove_document((int)$se_ref['search_did']);
+                    $di->addChunk($ic_slide);
+
+                    //index and return search engine document id
+                    $did = $di->index();
+                    if ($did) {
+	                    // save it to db
+                        $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=\'%s\'';
+                        $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
+                        api_sql_query($sql,__FILE__,__LINE__);
+                        //var_dump($sql);
+	                    $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
+		                    VALUES (NULL , \'%s\', \'%s\', %s, %s)';
+	                    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id, $did);
+	                    api_sql_query($sql,__FILE__,__LINE__);
+                    }
+
+                }
+            }
 
 			// "WHAT'S NEW" notification: update table last_toolEdit
 			api_item_property_update($_course, TOOL_LINK, $_POST['id'], "LinkUpdated", $_user['user_id']);

@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 17509 2009-01-02 21:12:11Z herodoto $
+// $Id: html_editor.php 17581 2009-01-08 09:53:36Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -90,101 +90,80 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		$result_sql=api_sql_query($sql);
 		$isocode_language=mysql_result($result_sql,0,0);
 		$this -> fck_editor->Config['DefaultLanguage'] = $isocode_language;
-		if(api_get_setting('advanced_filemanager')=='true')
-		{
-			$this -> fck_editor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
-		}
-		else
-		{
-			$this -> fck_editor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-		}
 		
 		$this -> fck_editor->ToolbarSet = $fck_attribute['ToolbarSet'] ;
+
 		// css should be dokeos ones
 		$this -> fck_editor->Config['EditorAreaCSS'] = $this -> fck_editor->Config['ToolbarComboPreviewCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/default.css';
 
-		//FCKeditor Configuration for documents (only for FCKeditor simple mode)		
-		if(isset($_SESSION['_course']) && $_SESSION['_course']['path']!='') {		
-			$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
-        } else {
-			$upload_path = api_get_path(REL_PATH).'main/default_course_document/';
-		}		 
-	
-		// if we don't find the CreateDocumentWebDir set we change it with the absolute path http://www.dok..
+		// FCKeditor Configuration for documents
+
+		// If we don't find the CreateDocumentWebDir set we change it with the absolute path http://www.dok..
 		if (empty($this -> fck_editor->Config['CreateDocumentWebDir'])) {			
 			$this -> fck_editor->Config['CreateDocumentWebDir']=api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';							
 		};
-		
-		// if we don't find the CreateDocumentWebDir set we change it with th absolute path http://www.dok..
-		if (empty($this -> fck_editor->Config['CreateDocumentDir'])) {			
-			$this -> fck_editor->Config['CreateDocumentDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';				
-		};
-						
-		
-		//for images
-		if(api_get_setting('advanced_filemanager')=='true')
+
+		if (api_get_setting('advanced_filemanager') == 'true')
 		{
+			// Let javascripts "know" which file manager has been chosen.
+			$this -> fck_editor->Config['AdvancedFileManager'] = true;
+
+			// Configuration path when advanced file manager is used.
+			$this -> fck_editor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
+
+			// For images
 			$this -> fck_editor->Config['ImageBrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';		
-		}
-		else
-		{
-			$this -> fck_editor->Config['ImageBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-			$this -> fck_editor->Config['ImageUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
-		}
 
-
-		//for flash
-		if(api_get_setting('advanced_filemanager')=='true')
-		{
+			// For flash
 			$this -> fck_editor->Config['FlashBrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
-		}
-		else
-		{
-			$this -> fck_editor->Config['FlashBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-			$this -> fck_editor->Config['FlashUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
-		}		
 
-
-		//for MP3
-		if(api_get_setting('advanced_filemanager')=='true')
-		{
+			// For MP3
 			$this -> fck_editor->Config['MP3BrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
-		}
-		else
-		{
-			$this -> fck_editor->Config['MP3BrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-			$this -> fck_editor->Config['MP3UploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
-		}
 
-
-		//for Videos
-		if(api_get_setting('advanced_filemanager')=='true')
-		{
+			// For Videos
 			$this -> fck_editor->Config['VideoBrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
-		}
-		else
-		{
-			$this -> fck_editor->Config['VideoBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-			$this -> fck_editor->Config['VideoUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
-		}
 
-		//link
-		if(api_get_setting('advanced_filemanager')=='true')
-		{
+			// Links
 			$this -> fck_editor->Config['LinkBrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
-		}
-		else
-		{
-			$this -> fck_editor->Config['LinkBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-		}
-		
-		// for flv Player (Videos)
-		if(api_get_setting('advanced_filemanager')=='true')
-		{
+
+			// For flv Player (Videos)
 			$this -> fck_editor->Config['MediaBrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
 		}
 		else
 		{
+			// Passing the file manager setting to javascripts too.
+			$this -> fck_editor->Config['AdvancedFileManager'] = false;
+
+			// Configuration path when simple file manager is used.
+			$this -> fck_editor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+
+			// FCKeditor Configuration for documents (only for FCKeditor simple mode).	
+			if(isset($_SESSION['_course']) && $_SESSION['_course']['path']!='') {		
+				$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
+        	} else {
+				$upload_path = api_get_path(REL_PATH).'main/default_course_document/';
+			}		 
+	
+			// For images
+			$this -> fck_editor->Config['ImageBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+			$this -> fck_editor->Config['ImageUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
+
+			// For flash
+			$this -> fck_editor->Config['FlashBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+			$this -> fck_editor->Config['FlashUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;	
+
+			// For MP3
+			$this -> fck_editor->Config['MP3BrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+			$this -> fck_editor->Config['MP3UploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
+
+			// For Videos
+			$this -> fck_editor->Config['VideoBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+			$this -> fck_editor->Config['VideoUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
+
+			// Links
+			$this -> fck_editor->Config['LinkBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+		
+			// For flv Player (Videos)
 			$this -> fck_editor->Config['MediaBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$upload_path";
 			$this -> fck_editor->Config['MediaUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
 		}

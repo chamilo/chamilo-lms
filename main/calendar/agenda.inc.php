@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17588 2009-01-08 11:05:06Z ivantcholakov $
+<?php //$Id: agenda.inc.php 17600 2009-01-08 15:40:20Z cfasanando $
 
 /*
 ==============================================================================
@@ -65,7 +65,7 @@ function get_calendar_items($month, $year)
 {
 	global $_user, $_course;
 	global $is_allowed_to_edit;
-	
+	global $select_month, $select_year;
 	$month=Database::escape_string($month);
 	$year=Database::escape_string($year);
 
@@ -84,52 +84,192 @@ function get_calendar_items($month, $year)
     $repeats = array();
 
 	$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND agenda.session_id IN (0,'.intval($_SESSION['id_session']).') ';
+	
+	
+	/*--------------------------------------------------
+			CONSTRUCT THE SQL STATEMENT
+	  --------------------------------------------------*/
+
+    $start = 0;
+    $stop = 0;
+	// this is to make a difference between showing everything (all months) or only the current month)
+	// $show_all_current is a part of the sql statement
+	if ($_SESSION['show']!=="showall")
+	{
+		$show_all_current=" AND MONTH(start_date)=$select_month AND year(start_date)=$select_year";
+        $start = mktime(0,0,0,$select_month,1,$select_year);
+        $stop = 0;
+        if(empty($select_year)){$select_year = date('Y');}
+        if(empty($select_month)){$select_month = date('m');}
+        if($select_month==12)
+        {
+            $stop = mktime(0,0,0,1,1,$select_year+1)-1;
+        }
+        else
+        {
+            $stop = mktime(0,0,0,$select_month+1,1,$select_year)-1;
+        }
+	}
+	else
+	{
+		$show_all_current="";
+        $start = time();
+        $stop = mktime(0,0,0,1,1,2038);//by default, set year to maximum for mktime()
+	}
+	
+	// by default we use the id of the current user. The course administrator can see the agenda of other users by using the user / group filter
+	$user_id=$_user['user_id'];
+	if ($_SESSION['user']!==null)
+	{
+		$user_id=$_SESSION['user'];
+	}
+	if ($_SESSION['group']!==null)
+	{
+		$group_id=$_SESSION['group'];
+	}
+	if ($_SESSION['toolgroup']!==null)
+	{
+		$group_id=$_SESSION['toolgroup'];
+	}
+
+    $repeats = array(); //placeholder for repeated events
+	//echo "user:".$_SESSION['user']."group: ".$_SESSION['group'];
+	// A. you are a course admin
+	//if ($is_courseAdmin)
+
+	$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND agenda.session_id IN (0,'.intval($_SESSION['id_session']).') ';
 
 	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 	{
-		$sql="SELECT
-			DISTINCT agenda.*, toolitemproperties.*
-			FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-			WHERE agenda.id = toolitemproperties.ref   ".
-			" AND MONTH(agenda.start_date)='".$month."' AND YEAR(agenda.start_date)='".$year."'
-			AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-			AND toolitemproperties.visibility='1'
-			$session_condition
-			GROUP BY agenda.id ".
-			"ORDER BY  start_date ";
-	}
-	// if the user is not an administrator of that course
+		// A.1. you are a course admin with a USER filter
+		// => see only the messages of this specific user + the messages of the group (s)he is member of.
+		if (!empty($_SESSION['user']))
+		{
+			$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_SESSION['user']);
+			if (is_array($group_memberships) && count($group_memberships)>0)
+			{
+				$sql="SELECT
+					agenda.*, toolitemproperties.*
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
+					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
+					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+					AND	( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+					AND toolitemproperties.visibility='1'
+					$session_condition
+					ORDER BY start_date ".$_SESSION['sort'];
+			}
+			else
+			{
+				$sql="SELECT
+					agenda.*, toolitemproperties.*
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
+					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
+					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+					AND ( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id='0')
+					AND toolitemproperties.visibility='1'
+					$session_condition
+					ORDER BY start_date ".$_SESSION['sort'];
+			}
+		}
+		// A.2. you are a course admin with a GROUP filter
+		// => see only the messages of this specific group
+		elseif (!empty($_SESSION['group']))
+		{
+			$sql="SELECT
+				agenda.*, toolitemproperties.*
+				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
+				WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
+				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+				AND ( toolitemproperties.to_group_id=$group_id OR toolitemproperties.to_group_id='0')
+				AND toolitemproperties.visibility='1'
+				$session_condition
+				GROUP BY toolitemproperties.ref
+				ORDER BY start_date ".$_SESSION['sort'];
+		}
+		// A.3 you are a course admin without any group or user filter
+		else
+		{
+			// A.3.a you are a course admin without user or group filter but WITH studentview
+			// => see all the messages of all the users and groups without editing possibilities
+			if ($_GET['isStudentView']=='true')
+			{
+				$sql="SELECT
+					agenda.*, toolitemproperties.*
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
+					WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
+					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+					AND toolitemproperties.visibility='1'
+					$session_condition
+					GROUP BY toolitemproperties.ref
+					ORDER BY start_date ".$_SESSION['sort'];
+
+			}
+			// A.3.b you are a course admin without user or group filter and WITHOUT studentview (= the normal course admin view)
+			// => see all the messages of all the users and groups with editing possibilities
+			else
+			{
+				$sql="SELECT
+					agenda.*, toolitemproperties.*
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
+					WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
+					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+					AND ( toolitemproperties.visibility='0' or toolitemproperties.visibility='1')
+					$session_condition
+					GROUP BY toolitemproperties.ref
+					ORDER BY start_date ".$_SESSION['sort'];
+			}
+		}
+
+	} //if (is_allowed_to_edit() OR( api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
+
+	// B. you are a student
 	else
 	{
 		if (is_array($group_memberships) and count($group_memberships)>0)
 		{
 			$sql="SELECT
 				agenda.*, toolitemproperties.*
-				FROM ".$TABLEAGENDA." agenda,	".$TABLE_ITEM_PROPERTY." toolitemproperties
-				WHERE agenda.id = toolitemproperties.ref   ".
-				//$show_all_current.
-				" AND MONTH(agenda.start_date)='".$month."'
+				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
+				WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
 				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-				AND	( toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+				AND	( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 				AND toolitemproperties.visibility='1'
 				$session_condition
-				ORDER BY  start_date ";
+				ORDER BY start_date ".$_SESSION['sort'];
 		}
 		else
 		{
-			$sql="SELECT
-				agenda.*, toolitemproperties.*
-				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-				WHERE agenda.id = toolitemproperties.ref   ".
-				" AND MONTH(agenda.start_date)='".$month."'
-				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-				AND ( toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0')
-				AND toolitemproperties.visibility='1'
-				$session_condition
-				ORDER BY  start_date ";
+			if ($_user['user_id'])
+			{
+				$sql="SELECT
+					agenda.*, toolitemproperties.*
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
+					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
+					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+					AND ( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id='0')
+					AND toolitemproperties.visibility='1'
+					$session_condition
+					ORDER BY start_date ".$_SESSION['sort'];
+			}
+			else
+			{
+				$sql="SELECT
+					agenda.*, toolitemproperties.*
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
+					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
+					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+					AND toolitemproperties.to_group_id='0'
+					AND toolitemproperties.visibility='1'
+					$session_condition
+					ORDER BY start_date ".$_SESSION['sort'];
+			}
 		}
-	}
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	} // you are a student
+
+	//echo "<pre>".$sql."</pre>";
+	$result=api_sql_query($sql,__FILE__,__LINE__) or die(Database::error());
+	
+	/////////////////
 	$data=array();
 	while ($row=Database::fetch_array($result))
 	{
@@ -233,7 +373,7 @@ function display_monthcalendar($month, $year)
 	global $origin;
 
 	// grabbing all the calendar items for this year and storing it in a array
-	$data=get_calendar_items($month,$year);
+	$data=get_calendar_items($month,$year);	
 //	$data_global=get_global_calendar_items($month,$year);
 //	$data_global=get_global_agenda_items($agendaitems, $day, $month, $year, $week, $type);
 	//Handle leap year
@@ -390,6 +530,54 @@ function move(fbox,	tbox)
 	}
 }
 
+function checkDate(month, day, year)
+{
+  var monthLength = 
+    new Array(31,28,31,30,31,30,31,31,30,31,30,31);
+
+  if (!day || !month || !year)
+    return false;
+
+  // check for bisestile year
+  if (year/4 == parseInt(year/4))
+    monthLength[1] = 29;
+
+  if (month < 1 || month > 12)
+    return false;
+
+  if (day > monthLength[month-1])
+    return false;
+  
+  return true;
+}		
+
+function mktime() 
+{		    
+    var no, ma = 0, mb = 0, i = 0, d = new Date(), argv = arguments, argc = argv.length;
+    d.setHours(0,0,0); d.setDate(1); d.setMonth(1); d.setYear(1972); 
+    var dateManip = {
+        0: function(tt){ return d.setHours(tt); },
+        1: function(tt){ return d.setMinutes(tt); },
+        2: function(tt){ set = d.setSeconds(tt); mb = d.getDate() - 1; return set; },
+        3: function(tt){ set = d.setMonth(parseInt(tt)-1); ma = d.getFullYear() - 1972; return set; },
+        4: function(tt){ return d.setDate(tt+mb); },
+        5: function(tt){ return d.setYear(tt+ma); }
+    };    
+    for( i = 0; i < argc; i++ ){
+        no = parseInt(argv[i]*1);
+        if (isNaN(no)) {
+            return false;
+        } else {
+            // arg is number, lets manipulate date object
+            if(!dateManip[i](no)){
+                // failed
+                return false;
+            }
+        }
+    } 
+    return Math.floor(d.getTime()/1000);
+}		
+		
 function validate()
 {
 	var	f =	document.new_calendar_item;
@@ -398,14 +586,54 @@ function validate()
 }
 
 function selectAll(cbList,bSelect,showwarning)
-	{
-		if (cbList.length <	1) {
-			alert(\"".get_lang('Send2All')."\");
-			return;
-		}
-		for	(var i=0; i<cbList.length; i++)
-			cbList[i].selected = cbList[i].checked = bSelect
-	}
+{		
+		var start_day = document.new_calendar_item.fday.value;
+		var start_month = document.new_calendar_item.fmonth.value;
+		var start_year = document.new_calendar_item.fyear.value;		
+		var start_hour = document.new_calendar_item.fhour.value;		
+		var start_minute = document.new_calendar_item.fminute.value;
+		var start_date = mktime(start_hour,start_minute,0,start_month,start_day,start_year)
+				
+		var ends_day = document.new_calendar_item.end_fday.value;
+		var ends_month = document.new_calendar_item.end_fmonth.value;
+		var ends_year = document.new_calendar_item.end_fyear.value;		
+		var ends_hour = document.new_calendar_item.end_fhour.value;		
+		var ends_minute = document.new_calendar_item.end_fminute.value;
+		var ends_date = mktime(ends_hour,ends_minute,0,ends_month,ends_day,ends_year)		
+		
+		msg_err1 = document.getElementById(\"err_date\");
+		msg_err2 = document.getElementById(\"err_start_date\");
+		msg_err3 = document.getElementById(\"err_end_date\");
+		msg_err4 = document.getElementById(\"err_title\");
+											
+		if (start_date > ends_date) {			 
+			msg_err1.style.display =\"block\";
+			msg_err1.innerHTML=\"".get_lang('DateExpiredNotBeLessDeadLine')."\";
+			msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";												
+		} else if (checkDate(start_month,start_day,start_year) == false) {
+			msg_err2.style.display =\"block\";
+			msg_err2.innerHTML=\"".get_lang('InvalidDate')."\";
+			msg_err1.innerHTML=\"\";msg_err3.innerHTML=\"\";			 					
+		} else if (checkDate(ends_month,ends_day,ends_year) == false) {
+			msg_err3.style.display =\"block\";
+			msg_err3.innerHTML=\"".get_lang('InvalidDate')."\";
+			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";			 					
+		} else if (document.new_calendar_item.title.value == '') {
+			msg_err4.style.display =\"block\";
+			msg_err4.innerHTML=\"".get_lang('FieldRequired')."\";
+			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";			 					
+		}  else {
+			if (cbList.length <	1) {
+				if (!confirm(\"".get_lang('Send2All')."\")) {
+					return false;		
+				} 			
+			} 	
+			for	(var i=0; i<cbList.length; i++)
+			cbList[i].selected = cbList[i].checked = bSelect;					
+			document.new_calendar_item.submit();
+		}			
+
+}
 
 	function reverseAll(cbList)
 	{
@@ -565,38 +793,41 @@ echo "</table>";
 function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected=array())
 {
 	echo "\t\t<select id=\"not_selected_form\" name=\"not_selected_form[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">\n";
-
+	
 	// adding the groups to the select form
-	if (is_array($group_list))
-	{
-		foreach($group_list as $this_group)
+
+	if (isset($to_already_selected) && $to_already_selected==='everyone') {
+		echo "\t\t<option value=\"\">&nbsp;</option>\n";
+	} else {
+		if (is_array($group_list))
 		{
-			//api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
-			if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
-				{
-				echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
-					"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
+			foreach($group_list as $this_group)
+			{
+				//api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
+				if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
+					{
+					echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
+						"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
+						"</option>\n";
+				}
+			}
+			// a divider
+			
+		}
+		echo	"<option value=\"\">----------------------------------</option>";
+		// adding the individual users to the select form
+		foreach($user_list as $this_user)
+		{
+			if (!is_array($to_already_selected) || !in_array("USER:".$this_user['uid'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
+			{
+				echo	"\t\t<option value=\"USER:",$this_user['uid'],"\">",
+					"",$this_user['lastName']," ",$this_user['firstName'],
 					"</option>\n";
 			}
-		}
-		// a divider
-		echo	"\t\t<option value=\"\">----------------------------------</option>\n";
+		}			
 	}
-
-	// adding the individual users to the select form
-	foreach($user_list as $this_user)
-	{
-		if (!is_array($to_already_selected) || !in_array("USER:".$this_user['uid'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
-		{
-			echo	"\t\t<option value=\"USER:",$this_user['uid'],"\">",
-				"",$this_user['lastName']," ",$this_user['firstName'],
-				"</option>\n";
-		}
-	}
-	echo "\t\t</select>\n";
+		echo "\t\t</select>\n";
 }
-
-
 
 /**
 * This function shows the form with the user that were selected
@@ -616,8 +847,8 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 
 	// we load all the groups and all the users into a reference array that we use to search the name of the group / user
 	$ref_array_groups=get_course_groups();
-	$ref_array_users=get_course_users();
-
+	
+	$ref_array_users=get_course_users();		
 	// we construct the form of the already selected groups / users
 	echo "\t\t<select id=\"selected_form\" name=\"selectedform[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
 	if(is_array($to_already_selected))
@@ -634,6 +865,34 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 				echo "\t\t<option value=\"".$groupuser."\">".$ref_array_users[$id]['lastName']." ".$ref_array_users[$id]['firstName']."</option>";
 			}
 		}
+	} else {
+			if($to_already_selected=='everyone'){							
+				// adding the groups to the select form
+				if (is_array($group_list))
+				{
+					foreach($group_list as $this_group)
+					{
+						//api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
+						if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
+							{
+							echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
+								"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
+								"</option>\n";
+						}
+					}					
+				}
+			
+				// adding the individual users to the select form
+				foreach($user_list as $this_user)
+				{
+					if (!is_array($to_already_selected) || !in_array("USER:".$this_user['uid'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
+					{
+						echo	"\t\t<option value=\"USER:",$this_user['uid'],"\">",
+							"",$this_user['lastName']," ",$this_user['firstName'],
+							"</option>\n";
+					}
+				}
+			}
 	}
 	echo "</select>\n";
 }
@@ -673,7 +932,7 @@ function store_new_agenda_item() {
 	// store in last_tooledit (first the groups, then the users
 	$to=$_POST['selectedform'];
 
-	if ((!is_null($to))or (!empty($_SESSION['toolgroup']))) // !is_null($to): when no user is selected we send it to everyone
+	if ((!is_null($to)) || (!empty($_SESSION['toolgroup']))) // !is_null($to): when no user is selected we send it to everyone
 	{
 		$send_to=separate_users_groups($to);
 		// storing the selected groups
@@ -1005,8 +1264,8 @@ function show_user_group_filter_form()
 
 	// Groups
 	echo "\n\t<optgroup label=\"".get_lang("Groups")."\">";
-	if(isset($group_list)){
-		$group_list=get_course_groups();
+	$group_list=get_course_groups();
+	if(!empty($group_list)){		
 		foreach($group_list as $this_group)
 		{
 			// echo "<option value=\"agenda.php?isStudentView=true&amp;group=".$this_group['id']."\">".$this_group['name']."</option>";
@@ -1111,7 +1370,7 @@ function display_courseadmin_links() {
 		show_user_group_filter_form();
 		echo "</form> ";
 	}
-	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
+	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('calendar_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
 }
 
 
@@ -2162,12 +2421,13 @@ function show_add_form($id = '')
 ?>
 
 <!-- START OF THE FORM  -->
-<form enctype="multipart/form-data" action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
+<form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
 <input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
 <input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
 <input type="hidden" name="id_attach" value="<?php echo Security::remove_XSS($_REQUEST['id_attach']); ?>" />
 <input type="hidden" name="sort" value="asc" />
-<table border="0" cellpadding="5" cellspacing="0" width="100%" id="newedit_form">
+<input type="hidden" name="submit_event" value="ok" />
+<table border="0" cellpadding="5" cellspacing="0" width="80%" id="newedit_form">
 	<!-- the title -->
 	<tr class="title">
 		<td colspan="2" align="left">
@@ -2223,13 +2483,16 @@ function show_add_form($id = '')
 	<!-- START date and time -->
 <tr>
 <div>
-<table>
-
-				<td >	
-					<!-- date: 1 -> 31 -->
+<table border="0" width="80%">
+				<tr><td colspan="3">
+					<div id="err_date" style="display:none;color:red"></div>
+					<div id="err_start_date" style="display:none;color:red"></div>					
+				</td></tr>
+				<td width="10%">	
+					<!-- date: 1 -> 31 -->					
 					<?php echo get_lang('StartDate').": \n"; ?>
 				</td>
-				<td >
+				<td width="30%">
 					<select name="fday" onchange="javascript:document.new_calendar_item.end_fday.value=this.value;">
 							<?php
 							// small loop for filling all the dates
@@ -2288,13 +2551,10 @@ function show_add_form($id = '')
 												} ?>
 					</select>
 					<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif'); ?></a>
-				</td>
-				<td >
-						<!-- date: 1 -> 31 -->
-						<?php echo get_lang('StartTime').": "; ?>
-				</td>
-				<td >
-
+					</td>
+					<td>					
+							&nbsp;<?php echo get_lang('StartTime').": \n"; ?>&nbsp;
+	
 						<select name="fhour" onchange="javascript:document.new_calendar_item.end_fhour.value=this.value;">
 							<!-- <option value="--">--</option> -->
 							<?php
@@ -2333,9 +2593,9 @@ function show_add_form($id = '')
 			<!-- END date and time -->
 <tr>
 <div>
-
+					<tr><td colspan="3"><div id="err_end_date" style="display:none;color:red"></div></td></tr>
 					<td >			
-							<!-- date: 1 -> 31 -->
+							<!-- date: 1 -> 31 -->							
 							<?php echo get_lang('EndDate').": "; ?>
 					</td>
 					<td  >
@@ -2382,12 +2642,9 @@ function show_add_form($id = '')
 						</select>
 						<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif'); ?></a>
 					</td>
+					<td >
+							&nbsp;<?php echo get_lang('EndTime').": \n"; ?>&nbsp;
 
-				<td >
-							<!-- date: 1 -> 31 -->
-							<?php echo get_lang('EndTime').": \n"; ?>
-				</td >
-				<td >
 						<select name="end_fhour">
 							<!-- <option value="--">--</option> -->
 							<?php
@@ -2420,16 +2677,19 @@ function show_add_form($id = '')
 				</td>
 </div>
 </tr>
-
+<tr><td colspan="3">
+<hr noshade="noshade" color="#cccccc" />
+	<div id="err_title" style="display:none;color:red"></div>										
+</td></tr>
 <tr class="subtitle">
-		<td colspan="3" valign="top"><hr noshade="noshade" color="#cccccc" /><?php echo get_lang('ItemTitle'); ?> :
+		<td colspan="3" valign="top"><?php echo get_lang('ItemTitle'); ?> :
 			<!--<div style='margin-left: 80px'><textarea name="title" cols="50" rows="2" wrap="virtual" style="vertical-align:top; width:75%; height:50px;"><?php  if (isset($title)) echo $title; ?></textarea></div>-->
 			<input type="text" size="60" name="title" value="<?php  if (isset($title)) echo $title; ?>" />
 		</td>
 	</tr>
 
 	<tr>
-		<td colspan="3">
+		<td colspan="5">
 
 			<?php
 			require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
@@ -2714,7 +2974,7 @@ function show_add_form($id = '')
 	<tr>
 		<td colspan="3">
 		<br />
-			<input type="submit" name="submit_event" value="<?php echo get_lang('Ok'); ?>" onclick="selectAll(document.getElementById('selected_form'),true)" />
+			<input type="button"  value="<?php echo get_lang('Ok'); ?>" onclick="selectAll(document.getElementById('selected_form'),true)" />
 		</td>
 	</tr>
 </table>
@@ -4066,7 +4326,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
         {
             foreach ($send_to['groups'] as $group)
             {
-                api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id, $group,'',$start_date, $end_date);
+                api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id, $group,0,$start_date, $end_date);
                 $done = true;
             }
         }
@@ -4075,7 +4335,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
         {
             foreach ($send_to['users'] as $user)
             {
-                api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id,'',$user, $start_date,$end_date);
+                api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id,0,$user, $start_date,$end_date);
                 $done = true;
             }
         }
@@ -4083,7 +4343,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
 
     if(!$done) // the message is sent to everyone, so we set the group to 0
     {
-        api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id, $start_date,$end_date);
+        api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id,0,0, $start_date,$end_date);
     }
     // storing the resources
     if (!empty($_SESSION['source_type']) && !empty($last_id)) {

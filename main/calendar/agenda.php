@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 17487 2008-12-31 14:49:18Z cvargas1 $
+<?php //$Id: agenda.php 17600 2009-01-08 15:40:20Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -312,7 +312,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 {
 	switch ($_GET['action'])
 	{
-		case "add":
+		case "add":			
             if(!empty($_POST['ical_submit']))
             {
                 $course_info = api_get_course_info();
@@ -334,7 +334,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
                     $end_m = intval($_POST['repeat_end_month']);
                     $end_d = intval($_POST['repeat_end_day']);
                     $end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
-                    $res = agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,null,$_POST['file_comment']);
+                    $res = agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,$_POST['selectedform'],$_POST['file_comment']);
                 } 
                 if (api_get_setting('display_upcoming_events') == 'true') {
 					display_upcoming_events();
@@ -424,13 +424,12 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 	}
 }
-
 // this is for students and whenever the courseaministrator has not chosen any action. It is in fact the default behaviour
-if (!$_GET['action'] OR $_GET['action']=="showall"  OR $_GET['action']=="showcurrent" OR $_GET['action']=="view")
+if (!$_GET['action'] || $_GET['action']=="showall"  || $_GET['action']=="showcurrent" || $_GET['action']=="view")
 {
 	if ($_GET['origin'] != 'learnpath')
 	{
-		if (!$_SESSION['view'] OR $_SESSION['view'] <> 'month')
+		if (!$_SESSION['view'] || $_SESSION['view'] <> 'month')
 		{
             if(!empty($_GET['agenda_id']))
             {
@@ -444,12 +443,13 @@ if (!$_GET['action'] OR $_GET['action']=="showall"  OR $_GET['action']=="showcur
 			     display_agenda_items();
             }
 		}
-        else
-        {
-        	if (api_get_setting('display_upcoming_events') == 'true') {
+        else 
+        {        	
+        		if (api_get_setting('display_upcoming_events') == 'true') {
 					display_upcoming_events();
-			}
-			display_monthcalendar($select_month, $select_year);
+				}
+				display_monthcalendar($select_month, $select_year);	
+        	
 		}
 	}
 	else

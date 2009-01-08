@@ -1501,10 +1501,14 @@ function show_add_form($id = '')
 
 			if(api_get_setting('advanced_filemanager')=='true')
 			{
+				$oFCKeditor->Config['AdvancedFileManager'] = true;
+
 				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
 			}
 			else
 			{
+				$oFCKeditor->Config['AdvancedFileManager'] = false;
+
 				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 			}
 			

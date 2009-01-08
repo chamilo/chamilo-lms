@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 16959 2008-11-26 15:10:46Z pcool $
+<?php //$Id: announcements.php 17585 2009-01-08 10:50:32Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1120,32 +1120,36 @@ if(!empty($error_message))
 											'.get_lang('OrCopyPasteUrl').' <br />
 											'.api_get_path(WEB_CODE_PATH).'/survey/#page#?temp=#temp#&surveyid=#sid#&uid=#uid#&mail=#mail#&db_name=#db_name&nbsp;';
 		}
-	            //api_disp_html_area('newContent',$content_to_modify,'250px');
-	            
-	            require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
-	            $oFCKeditor = new FCKeditor('newContent') ;
-				$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
-				$oFCKeditor->Height		= '250';
-				$oFCKeditor->Width		= '100%';
-				$oFCKeditor->Value		= $content_to_modify;
-				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-				$oFCKeditor->ToolbarSet = "Announcements";
-				
-				$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-				$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
-				$result_sql=api_sql_query($sql, __FILE__, __LINE__);
-				$isocode_language=Database::result($result_sql,0,0);
-				$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-				
-				echo $oFCKeditor->CreateHtml();
 
-				if(empty($_SESSION['toolgroup'])){
-                	echo '<br /><input type="Submit" name="submitAnnouncement" value="'.get_lang('Ok').'" onclick="selectAll(this.form.elements[3],true)" /><br /><br />';
-				}
-				else{
-					echo '<br /><input type="Submit" name="submitAnnouncement" value="'.get_lang('Ok').'" onclick="selectAll(this.form.elements[4],true)" /><br /><br />';
-				}
-				echo '</form><br />';
+		//api_disp_html_area('newContent',$content_to_modify,'250px');
+
+		require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+	    $oFCKeditor = new FCKeditor('newContent') ;
+		$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+		$oFCKeditor->Height		= '250';
+		$oFCKeditor->Width		= '100%';
+		$oFCKeditor->Value		= $content_to_modify;
+		$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+		$oFCKeditor->ToolbarSet = "Announcements";
+
+		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+		$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+		$result_sql=api_sql_query($sql, __FILE__, __LINE__);
+		$isocode_language=Database::result($result_sql,0,0);
+		$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+
+		$oFCKeditor->Config['AdvancedFileManager'] = api_get_setting('advanced_filemanager') == 'true' ? true : false;
+
+		echo $oFCKeditor->CreateHtml();
+
+		if(empty($_SESSION['toolgroup'])){
+            echo '<br /><input type="Submit" name="submitAnnouncement" value="'.'  '.get_lang('Ok').'  '.'" onclick="selectAll(this.form.elements[3],true)" /><br /><br />';
+		}
+		else{
+			echo '<br /><input type="Submit" name="submitAnnouncement" value="'.'  '.get_lang('Ok').'  '.'" onclick="selectAll(this.form.elements[4],true)" /><br /><br />';
+		}
+		echo '</form><br />';
+
 		if((isset($_GET['action']) && isset($_GET['id']) && is_array($to))||isset($_GET['remindallinactives'])||isset($_GET['remind_inactive'])){
 			echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';
 		}

@@ -49,6 +49,19 @@
 
 /*
  **************************************************************************************
+ * Reading a passed by PHP-scripts parameter, which tells whether simple or
+ * advanced file manager is to be used.
+ **************************************************************************************
+ */
+
+if (FCKConfig.AdvancedFileManager)
+{
+	FCKConfig.AdvancedFileManager = FCKConfig.AdvancedFileManager.toString().toLowerCase() == 'true' ? true : false ;
+}
+
+
+/*
+ **************************************************************************************
  * Customizations by Julio Montoya for enabling the external template selection dialog.
  * December, 2008
  **************************************************************************************

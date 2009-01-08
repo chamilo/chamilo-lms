@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 17516 2009-01-02 22:46:25Z iflorespaz $
+<?php // $Id: exercice.php 17605 2009-01-08 22:29:28Z cfasanando $
 
 /*
 ==============================================================================
@@ -80,6 +80,8 @@ $TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXE
 $TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $TBL_TRACK_ATTEMPT_RECORDING = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+$TBL_LP_ITEM_VIEW		= Database::get_course_table (TABLE_LP_ITEM_VIEW);
+$TBL_LP_VIEW			= Database::get_course_table (TABLE_LP_VIEW);
 
 // document path
 $documentPath= api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
@@ -268,7 +270,17 @@ api_mail_html($emailid, $emailid, $subject, $mess, $from_name, $from);
 
 
 if (in_array($origin, array('tracking_course','user_course'))){
-		//Redirect to the reporting
+		// update score  when you qualify the exercises in Learning path detail
+		if (isset($_REQUEST['lp_item_id']) && isset($_REQUEST['lp_item_view_id']) && isset($_REQUEST['student_id']) && isset($_REQUEST['total_score'])) {
+			$lp_item_id = Security::remove_XSS($_REQUEST['lp_item_id']);
+			$lp_item_view_id = Security::remove_XSS($_REQUEST['lp_item_view_id']);
+			$student_id = Security::remove_XSS($_REQUEST['student_id']);
+			$score = Security::remove_XSS($_REQUEST['total_score']);			
+			$sql = "UPDATE $TBL_LP_ITEM_VIEW SET score = '$score' WHERE lp_item_id = '$lp_item_id'
+					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '$student_id' and lp_id='$lp_item_view_id')";
+			api_sql_query($sql,__FILE__,__LINE__);	
+		}
+		//Redirect to the reporting		
 		header('location: ../mySpace/myStudents.php?origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['course']);
 	}
 }
@@ -787,7 +799,7 @@ $eid = $row['id'];
 $uid= api_get_user_id();
 //this query might be improved later on by ordering by the new "tms" field rather than by exe_id
 $qry = "SELECT * FROM $TBL_TRACK_EXERCICES " .
-		   "WHERE exe_exo_id = '".Database::escape_string($eid)."' and exe_user_id = '".Database::escape_string($uid)."' AND exe_cours_id = '".api_get_course_id()."' AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id =  '".api_get_session_id()."' ORDER BY exe_id DESC";
+		   "WHERE exe_exo_id = '".Database::escape_string($eid)."' and exe_user_id = '".Database::escape_string($uid)."' AND exe_cours_id = '".api_get_course_id()."' AND status <>'incomplete' AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id =  '".api_get_session_id()."' ORDER BY exe_id DESC";
 	$qryres = api_sql_query($qry);
 	$num = Database::num_rows($qryres);
     if ($num>0) {

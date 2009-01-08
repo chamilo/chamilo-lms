@@ -2477,6 +2477,7 @@ class learnpath {
 				'level'=>$this->items[$item_id]->get_level(),
 				'type' =>$this->items[$item_id]->get_type(),
 				'description'=>$this->items[$item_id]->get_description(),
+				'path'=>$this->items[$item_id]->get_path(),
 				);
     	}
     	if($this->debug>2){error_log('New LP - In learnpath::get_toc() - TOC array: '.print_r($toc,true),0);}
@@ -2724,7 +2725,23 @@ class learnpath {
     			$html .= stripslashes($title);
     		}   		
     		
-    		$html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'],0,1)."' />"; 		
+    		$tbl_track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+			$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+			$user_id = api_get_user_id();
+			$course_id = api_get_course_id();
+			$sql = "SELECT path  FROM $tbl_track_e_exercises, $tbl_lp_item
+					WHERE path =   '".$item['path']."' AND exe_user_id =  '$user_id' AND exe_cours_id = '$course_id' AND path = exe_exo_id AND status <> 'incomplete'";
+			$result = api_sql_query($sql,__FILE__,__LINE__);
+			$count = Database::num_rows($result);			
+			if ($item['type']=='quiz') {
+				if ($item['status']=='completed') {
+				$html .= "<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'],0,1)."' />";
+				}
+			} else {
+					$html .= "<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'],0,1)."' />";
+				
+			}		
+    		 		    		 		
     		$html .= "</div>";
     		
     		if ($scorm_color_background!='')

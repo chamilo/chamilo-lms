@@ -31,6 +31,8 @@
 require_once('learnpath.class.php');
 //require_once('scorm.class.php');
 require_once ('resourcelinker.inc.php');
+require_once ('../inc/lib/tracking.lib.php');
+require_once ('../inc/lib/course.lib.php');
 
 
 if(empty($_SESSION['_course']['id']) && isset($_GET['course']))
@@ -127,7 +129,7 @@ $sql = "SELECT max(view_count) FROM $TBL_LP_VIEW " .
 "WHERE lp_id = $lp_id AND user_id = '" . $user_id . "'";
 $res = api_sql_query($sql, __FILE__, __LINE__);
 $view = '';
-
+$num = 0;
 if (Database :: num_rows($res) > 0) {
 	$myrow = Database :: fetch_array($res);
 	$view = $myrow[0];
@@ -161,7 +163,7 @@ foreach ($list as $my_item_id) {
 
 	if (!empty ($view)) {
 		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, " .
-		"iv.score as myscore, iv.total_time as mytime, i.id as myid, " .
+		"iv.score as myscore, iv.total_time as mytime, i.id as myid, i.lp_id as mylpid, " .
 		"i.title as mytitle, i.max_score as mymaxscore, " .
 		"iv.max_score as myviewmaxscore, " .
 		"i.item_type as item_type, iv.view_count as iv_view_count, " .
@@ -176,7 +178,7 @@ foreach ($list as $my_item_id) {
 		" ORDER BY iv.view_count $qry_order ";
 	} else {
 		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, " .
-		"iv.score as myscore, iv.total_time as mytime, i.id as myid, " .
+		"iv.score as myscore, iv.total_time as mytime, i.id as myid, i.lp_id as mylpid,  " .
 		"i.title as mytitle, i.max_score as mymaxscore, " .
 		"iv.max_score as myviewmaxscore, " .
 		"i.item_type as item_type, iv.view_count as iv_view_count, " .
@@ -219,9 +221,9 @@ foreach ($list as $my_item_id) {
 			if ($row['item_type'] == 'quiz') 
 			{			
 				if ($origin != 'tracking') {
-					 $sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
+					 $sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC limit 1';
 				} else {
-					 $sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $_GET['student_id'] . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
+					 $sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $_GET['student_id'] . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC limit 1';
 				}
 
 				$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
@@ -235,7 +237,7 @@ foreach ($list as $my_item_id) {
 							if ($origin != 'tracking') {
 								$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id=' . $id_last_attempt . '&cidReq=' . $course_code . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
 							} else {
-								$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&id=' . $id_last_attempt . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
+								$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_id.'&my_lp_id='.$my_lp_id.'&id=' . $id_last_attempt . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
 							}
 						}
 					} else {
@@ -243,7 +245,7 @@ foreach ($list as $my_item_id) {
 						if ($origin != 'tracking') {
 							$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id=' . $id_last_attempt . '&cidReq=' . $course_code . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
 						} else {
-							$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&id=' . $id_last_attempt . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
+							$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_id.'&my_lp_id='.$my_lp_id.'&id=' . $id_last_attempt . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
 						}
 					}
 				}
@@ -283,7 +285,7 @@ foreach ($list as $my_item_id) {
 			$type;
 			$scoIdentifier = $row['myid'];
 			if ($score == 0) {
-				$maxscore = 0;
+				$maxscore = $row['mymaxscore'];
 			} else {
 				if ($row['item_type'] == 'sco') {
 
@@ -420,9 +422,9 @@ foreach ($list as $my_item_id) {
 		
 		// selecting the exe_id from stats attempts tables in order to look the max score value
 		if ($origin != 'tracking') {
-			$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
+			$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC limit 1';
 		} else {
-			$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $_GET['student_id'] . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
+			$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $_GET['student_id'] . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC limit 1';
 		}
 
 		$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
@@ -439,7 +441,7 @@ foreach ($list as $my_item_id) {
 	
 		if ($score == 0) 
 		{
-			$maxscore = 0;
+			$maxscore = $row['mymaxscore'];
 		}
 		else 
 		{
@@ -500,14 +502,16 @@ foreach ($list as $my_item_id) {
 				$correct_test_link = '';
 
 				if ($origin != 'tracking' && $origin != 'tracking_course') {
-					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date ASC';
+					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date ASC';
 				} else {
-					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . Database :: escape_string($_GET['student_id']) . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($_GET['course']) . '" ORDER BY exe_date';
+					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . Database :: escape_string($_GET['student_id']) . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND status <> "incomplete" ORDER BY exe_date';
 				}
 
 				$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
 				$num = Database :: num_rows($resultLastAttempt);
 				if ($num > 0) {
+					$my_id = $row['myid'];
+					$my_lp_id = $row['mylpid'];					
 					if ($num > 1) {
 						$i = 1;
 						while ($rowLA = Database :: fetch_array($resultLastAttempt)) {
@@ -515,7 +519,7 @@ foreach ($list as $my_item_id) {
 							if ($origin != 'tracking') {
 								$correct_test_link .= '<a href="../exercice/exercise_show.php?origin=student_progress&id=' . $laid . '&cidReq=' . $course_code . '" target="_parent" title="' . get_lang('Attempt') . ' ' . $i . '"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a> ';
 							} else {
-								$correct_test_link .= '<a href="../exercice/exercise_show.php?origin=tracking_course&id=' . $laid . '&cidReq=' . Security :: remove_XSS(Database :: escape_string($_GET['course'])) . '&student=' . $_GET['student_id'] . '" target="_parent" title="' . get_lang('Attempt') . ' ' . $i . '"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a> ';
+								$correct_test_link .= '<a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_id.'&my_lp_id='.$my_lp_id.'&id=' . $laid . '&cidReq=' . Security :: remove_XSS(Database :: escape_string($_GET['course'])) . '&student=' . $_GET['student_id'] . '" target="_parent" title="' . get_lang('Attempt') . ' ' . $i . '"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a> ';
 							}
 							$i++;
 						}
@@ -526,7 +530,7 @@ foreach ($list as $my_item_id) {
 						if ($origin != 'tracking') {
 							$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id=' . $id_last_attempt . '&cidReq=' . $course_code . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
 						} else {
-							$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&id=' . $id_last_attempt . '&cidReq=' . Security :: remove_XSS(Database :: escape_string($_GET['course'])) . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
+							$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_id.'&my_lp_id='.$my_lp_id.'&id=' . $id_last_attempt . '&cidReq=' . Security :: remove_XSS(Database :: escape_string($_GET['course'])) . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
 						}
 					}
 				} else {
@@ -538,13 +542,23 @@ foreach ($list as $my_item_id) {
 
 			$output .= "<tr class='$oddclass'>\n" . "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' . htmlentities($title, ENT_QUOTES, $lp_charset) . '</div></td>' . "\n"
 			//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
-			 . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . ($score == 0 ? '-' : ($maxscore == 0 ? $score : $score . '/' . $maxscore)) . "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $time . "</div></td><td>$correct_test_link</td>\n" . "</tr>\n";
+			 . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">'; 
+			 if ($row['item_type'] == 'quiz') {
+			 	$output .= ($score == 0 ? '0/'.$maxscore : ($maxscore == 0 ? $score : $score . '/' . $maxscore));//$maxscore == 0 ? $score : $score . '/' . $maxscore;
+			 } else {
+			    $output .= ($score == 0 ? '-' : ($maxscore == 0 ? $score : $score . '/' . $maxscore));	
+			 }			  
+			 $output .= "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $time . "</div></td><td>$correct_test_link</td>\n" . "</tr>\n";
 
 			if (!empty($export_csv)) {
 				$temp = array ();
 				$temp[] = $title;
 				$temp[] = html_entity_decode($my_lesson_status);
-				$temp[] = ($score == 0 ? '-' : ($maxscore == 0 ? $score : $score . '/' . $maxscore));
+				if ($row['item_type'] == 'quiz') {
+					$temp[] = ($score == 0 ? '0/'.$maxscore : ($maxscore == 0 ? $score : $score . '/' . $maxscore));
+				} else {
+					$temp[] = ($score == 0 ? '-' : ($maxscore == 0 ? $score : $score . '/' . $maxscore));
+				}
 				$temp[] = $time;
 				$csv_content[] = $temp;
 			}
@@ -582,10 +596,28 @@ foreach ($list as $my_item_id) {
 		}
 
 	}
-	//only sum up the latest attempt each time
-	$total_max_score += $maxscore;
-	$total_score += $score;
+
 	$total_time += $time_for_total;
+	//QUIZZ IN LP
+	$a_my_id = array();	
+	if (!empty($my_lp_id)) {
+		$a_my_id[] = $my_lp_id;	
+	}	    
+}
+
+if (!empty($a_my_id)) {
+	$my_studen_id = 0;
+	$my_course_id = '';
+	if ($origin == 'tracking') {
+		$my_studen_id = intval($_GET['student_id']);
+		$my_course_id = Database::escape_string($_GET['course']);
+	} else {
+		$my_studen_id = intval(api_get_user_id());
+		$my_course_id = Database::escape_string(api_get_course_id());
+	}		
+	$total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, $a_my_id);			
+} else {
+	$total_score = 0;
 }
 
 $total_time = learnpathItem :: get_scorm_time('js', $total_time);
@@ -593,23 +625,8 @@ $total_time = learnpathItem :: get_scorm_time('js', $total_time);
 $total_time = str_replace('NaN', '00' . $h . '00\'00"', $total_time);
 $lp_type = learnpath :: get_type_static($lp_id);
 $total_percent = 0;
-$final_score = '0%';
-if ($lp_type == 2) //if scorm
-	{
-	if ($total_max_score == 0) {
-		$total_percent = number_format((float) $total_score, 1, '.', '');
-		$final_score = ($total_score == 0 ? '-' : $total_percent);
-	} else {
-		$total_percent = number_format((((float) $total_score / (float) $total_max_score) * 100), 1, '.', '');
-		$final_score = ($total_score == 0 ? '-' : $total_percent . '%');
-	}
-} else {
-	if ($total_max_score == 0) {
-		$total_max_score = 1;
-	}
-	$total_percent = number_format((((float) $total_score / (float) $total_max_score) * 100), 1, '.', '');
-	$final_score = ($total_score == 0 ? '-' : $total_percent . '%');
-}
+$final_score = $total_score.'%';
+
 if (($counter % 2) == 0) {
 	$oddclass = "row_odd";
 } else {

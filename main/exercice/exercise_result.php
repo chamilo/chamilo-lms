@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 17484 2008-12-30 21:47:26Z cfasanando $
+* 	@version $Id: exercise_result.php 17605 2009-01-08 22:29:28Z cfasanando $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -1057,13 +1057,14 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		<td>
 		<br />
 			<?php
-			if ($origin != 'learnpath')
-			{
+			if ($origin != 'learnpath') {
 			?>
 			<input type="submit" value="<?php echo get_lang('Finish'); ?>" />
 			<?php
-			}
-			?>
+			} else {							
+			?>							
+				<input type="button" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>'" value="<?php echo get_lang('Finish'); ?>" />
+			<?php }?>
 		</td>
 		</tr>
 		</table>

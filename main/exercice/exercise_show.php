@@ -128,8 +128,9 @@ else {
 	$this_section=SECTION_COURSES;
 }
 
-Display::display_header($nameTools,"Exercise");
-
+if ($origin != 'learnpath') {
+	Display::display_header($nameTools,"Exercise");
+}
 $emailId = $_REQUEST['email'];
 $user_name = $_REQUEST['user'];
 $test 	   = $_REQUEST['test'];
@@ -251,7 +252,7 @@ function display_fill_in_blanks_answer($answer,$id,$questionId)
 		<td>
 			<?php echo nl2br($answer); ?>
 		</td><?php
-		if(!$is_allowedToEdit) {?>
+		if(!api_is_allowed_to_edit()) {?>
 		<td>
 		<?php
 		$comm = get_comments($id,$questionId);
@@ -274,7 +275,7 @@ function display_free_answer($answer,$id,$questionId)
 		<tr>
 		<td>
 			<?php echo nl2br(stripslashes($answer)); ?>
-		</td> <?php if(!$is_allowedToEdit) {?>
+		</td> <?php if(!api_is_allowed_to_edit()) {?>
    <td>
     <?php
 
@@ -344,9 +345,9 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 	<?php
 		$sql_test_name='SELECT title, description FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($id).'"';
 		$result=api_sql_query($sql_test_name);
-		$test=mysql_result($result,0,0);
+		$test=Database::result($result,0,0);
 		$exerciseTitle=api_parse_tex($test);
-		$exerciseDexcription=mysql_result($result,0,1);
+		$exerciseDexcription=Database::result($result,0,1);
 
 $user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($_user['user_id'])." ";
 $query = "select attempts.question_id, answer  from ".$TBL_TRACK_ATTEMPT." as attempts  
@@ -1013,24 +1014,50 @@ $totalWeighting+=$questionWeighting;
 	<tr>
 		<td align="left">
 		<br />
-		<?php $strids = implode(",",$arrid);
-			$marksid = implode(",",$arrmarks);
+		<?php 
+			if (is_array($arrid) && is_array($arrmarks)) {
+				$strids = implode(",",$arrid);
+				$marksid = implode(",",$arrmarks);
+			}
 			if($is_allowedToEdit)
 			{
 		?>
 		
-		<?php
-			if(in_array($origin, array('tracking_course','user_course'))){
-				echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.$test.'&emailid='.$emailId.'&origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['cidReq'].'" method="post">';
-			}
-			else{
-				echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.$test.'&emailid='.$emailId.'" method="post">';
-			}
-		?>
-			
-			 <input type="submit" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');"/>
-			 </form>
-		<?php } ?>
+				<?php
+					if (in_array($origin, array('tracking_course','user_course'))) {
+						echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.$test.'&emailid='.$emailId.'&origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['cidReq'].'" method="post">';
+						if (isset($_GET['myid']) && isset($_GET['my_lp_id']) && isset($_GET['student'])) {
+				?>
+						<input type = "hidden" name="lp_item_id" value="<?php echo Security::remove_XSS($_GET['myid']); ?>">
+						<input type = "hidden" name="lp_item_view_id" value="<?php echo Security::remove_XSS($_GET['my_lp_id']); ?>">
+						<input type = "hidden" name="student_id" value="<?php echo Security::remove_XSS($_GET['student']);?>">
+						<input type = "hidden" name="total_score" value="<?php echo $totalScore; ?>">
+				<?php		
+						}
+					} else {
+						echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.$test.'&emailid='.$emailId.'" method="post">';
+					}
+					
+					if ($origin!='learnpath' && $origin!='student_progress') {
+				?>					
+					 <input type="submit" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');"/>
+					 </form>
+				<?php }
+		 	}  		
+			if ($origin=='learnpath' || $origin=='student_progress') {?>							
+				<input type="button" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>'" value="<?php echo get_lang('Finish'); ?>" />
+			<?php }?>
 		</td>
 		</tr>
 </table>
+<?php
+if ($origin != 'learnpath')
+{
+	//we are not in learnpath tool
+	Display::display_footer();
+}else{
+	//record the results in the learning path, using the SCORM interface (API)
+	echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
+	echo '</body></html>';
+}
+?>

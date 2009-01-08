@@ -1439,7 +1439,8 @@ function get_terms()
 				    					$sql = 'SELECT exe_result, exe_weighting
 												FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES).'
 												WHERE exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' 
-												AND exe_user_id = '.$user_id.' 
+												AND exe_user_id = '.$user_id.'
+												AND status <> "incomplete"		
 												ORDER BY exe_date DESC
 												LIMIT 0, 1';
 										$rs_quiz = api_sql_query($sql, __FILE__, __LINE__);
@@ -2190,6 +2191,11 @@ function get_terms()
 	     	//now save into DB
 	     	$res = 0;
 	     	if(Database::num_rows($check_res)<1){
+	     		if ($this->type=='quiz') {
+	     				$my_status = ' ';
+	     		}else {
+	     				$my_status = $this->get_status(false);	
+	     		}
 		     	$sql = "INSERT INTO $item_view_table " .
 		     			"(total_time, " .
 		     			"start_time, " .
@@ -2206,7 +2212,7 @@ function get_terms()
 		     			"(".$this->get_total_time()."," .
 		     			"".$this->current_start_time."," .
 		     			"".$this->get_score()."," .
-		     			"'".$this->get_status(false)."'," .
+		     			"'".$my_status."'," .
 		     			"'".$this->get_max()."'," .
 		     			"".$this->db_id."," .
 		     			"".$this->view_id."," .
@@ -2236,11 +2242,16 @@ function get_terms()
 	     		}
 	     		else
 	     		{	//for all other content types...
+	     			if ($this->type=='quiz') {
+	     				$my_status = ' ';
+	     			}else {
+	     				$my_status = " status = '".$this->get_status(false)."' ,";	
+	     			}
 			     	$sql = "UPDATE $item_view_table " .
 			     			"SET total_time = ".$this->get_total_time().", " .
 			     			" start_time = ".$this->get_current_start_time().", " .
 			     			" score = ".$this->get_score().", " .
-			     			" status = '".$this->get_status(false)."'," .
+			     			$my_status.
 			     			" max_score = '".$this->get_max()."'," .
 			     			" suspend_data = '".Database::escape_string($this->current_data)."'," .
 			     			//" max_time_allowed = '".$this->get_max_time_allowed()."'," .

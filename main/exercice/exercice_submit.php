@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 17484 2008-12-30 21:47:26Z cfasanando $
+<?php // $Id: exercice_submit.php 17605 2009-01-08 22:29:28Z cfasanando $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 17484 2008-12-30 21:47:26Z cfasanando $
+* 	@version $Id: exercice_submit.php 17605 2009-01-08 22:29:28Z cfasanando $
 */
 
 
@@ -575,7 +575,7 @@ if ($formSent) {
 	    } else {
         	//clean incomplete
         	api_sql_query('UPDATE '.$stat_table.' SET '."status = '', data_tracking='', exe_date = '".date('Y-m-d H:i:s')."'".' WHERE exe_id = '.$exe_id,__FILE__,__LINE__);
-        	header("Location: exercise_show.php?id=$exeId");
+        	header("Location: exercise_show.php?id=$exeId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
         }
         exit();
     }
@@ -1016,7 +1016,7 @@ else
 	  }
 	  //$s.='\'&gt;';
 	  $s.= '\' />';
-	  $s.="</td></tr></form></table>";
+	  $s.="</td></tr></table></form>";
 
 	$b=2;
 	echo $s;
@@ -1038,4 +1038,3 @@ else
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display::display_footer();
 }
-?>

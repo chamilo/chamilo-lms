@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17600 2009-01-08 15:40:20Z cfasanando $
+<?php //$Id: agenda.inc.php 17607 2009-01-08 23:04:13Z juliomontoya $
 
 /*
 ==============================================================================
@@ -1260,32 +1260,49 @@ echo "</select>";
 function show_user_group_filter_form()
 {
 	echo "\n<select name=\"select\" onchange=\"MM_jumpMenu('parent',this,0)\">";
-	echo "\n\t<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
-
+	
 	// Groups
-	echo "\n\t<optgroup label=\"".get_lang("Groups")."\">";
-	$group_list=get_course_groups();
+	$option = "\n\t<optgroup label=\"".get_lang("Groups")."\">";
+	$group_list=get_course_groups();	
+	//echo "\n\t<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
+	
+	$group_available_to_access =array();
+	
 	if(!empty($group_list)){		
-		foreach($group_list as $this_group)
-		{
-			// echo "<option value=\"agenda.php?isStudentView=true&amp;group=".$this_group['id']."\">".$this_group['name']."</option>";
-			echo "\n\t\t<option value=\"agenda.php?group=".$this_group['id']."\" ";
-			echo ($this_group['id']==$_SESSION['group'])? " selected":"" ;
-			echo ">".$this_group['name']."</option>";
+		foreach($group_list as $this_group) {
+			// echo "<option value=\"agenda.php?isStudentView=true&amp;group=".$this_group['id']."\">".$this_group['name']."</option>";				
+			$has_access = GroupManager::user_has_access(api_get_user_id(),$this_group['id'],GROUP_TOOL_CALENDAR);
+			$result = GroupManager::get_group_properties($this_group['id']);
+				
+			if ($result['calendar_state']!='0') {
+				$group_available_to_access[]=$this_group['id'];
+			}	
+					
+			// lastedit 
+			if ($has_access || $result['calendar_state']=='1') {		
+				$option.= "\n\t\t<option value=\"agenda.php?group=".$this_group['id']."\" ";
+				$option.= ($this_group['id']==$_SESSION['group'])? " selected":"" ;
+				$option.=  ">".$this_group['name']."</option>";				
+			}			
 		}
 	}
-	echo "\n\t</optgroup>";
-
+	
+	$all =  "\n\t<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
+	$option = $all.$option;
+	
+	$option.= "\n\t</optgroup>";	
+	echo $option;	
+	
+	global $_course;
+	
 	// Users
 	echo "\n\t<optgroup label=\"".get_lang("Users")."\">";
 	$user_list=get_course_users();
-	foreach($user_list as $this_user)
-		{
-		// echo "<option value=\"agenda.php?isStudentView=true&amp;user=".$this_user['uid']."\">".$this_user['lastName']." ".$this_user['firstName']."</option>";
+	foreach($user_list as $this_user) {
 		echo "\n\t\t<option value=\"agenda.php?user=".$this_user['uid']."\" ";
 		echo ($this_user['uid']==$_SESSION['user'])? " selected":"" ;
-		echo ">".$this_user['lastName']." ".$this_user['firstName']."</option>";
-		}
+		echo ">".$this_user['lastName']." ".$this_user['firstName']."</option>";		
+	}		
 	echo "\n\t</optgroup>";
 	echo "</select>";
 }
@@ -1720,6 +1737,7 @@ function display_agenda_items()
 
 	$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND agenda.session_id IN (0,'.intval($_SESSION['id_session']).') ';
 
+	
 	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 	{
 		// A.1. you are a course admin with a USER filter
@@ -1727,6 +1745,22 @@ function display_agenda_items()
 		if (!empty($_SESSION['user']))
 		{
 			$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_SESSION['user']);
+				
+			$show_user =true;
+			$new_group_memberships=array();
+			foreach($group_memberships as $id)
+			{
+				// did i have access to the same  
+				$has_access = GroupManager::user_has_access(api_get_user_id(),$id,GROUP_TOOL_CALENDAR);
+				$result = GroupManager::get_group_properties($id);
+								
+				if ($has_access && $result['calendar_state']!='0' ) 
+				{						
+					$new_group_memberships[]=$id;					
+				}					
+			}
+			$group_memberships = $new_group_memberships;
+			
 			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
 				$sql="SELECT
@@ -1740,8 +1774,8 @@ function display_agenda_items()
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
 			else
-			{
-				$sql="SELECT
+			{				
+					$sql="SELECT
 					agenda.*, toolitemproperties.*
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
 					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
@@ -1756,6 +1790,19 @@ function display_agenda_items()
 		// => see only the messages of this specific group
 		elseif (!empty($_SESSION['group']))
 		{
+			
+			if (!empty($group_id)) {				
+				$result = GroupManager::get_group_properties($group_id);						
+				$has_access = GroupManager::user_has_access(api_get_user_id(),$group_id,GROUP_TOOL_CALENDAR);
+				//echo '<pre>';print_R($result);
+									
+				// lastedit 
+				if (!$has_access || $result['calendar_state']=='0' )
+				{				
+					$group_id=0;						
+				}				
+			}		
+								
 			$sql="SELECT
 				agenda.*, toolitemproperties.*
 				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
@@ -1785,19 +1832,69 @@ function display_agenda_items()
 					ORDER BY start_date ".$_SESSION['sort'];
 
 			}
-			// A.3.b you are a course admin without user or group filter and WITHOUT studentview (= the normal course admin view)
-			// => see all the messages of all the users and groups with editing possibilities
+			// A.3.b you are a course admin or a student
 			else
 			{
-				$sql="SELECT
-					agenda.*, toolitemproperties.*
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
-					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-					AND ( toolitemproperties.visibility='0' or toolitemproperties.visibility='1')
-					$session_condition
-					GROUP BY toolitemproperties.ref
-					ORDER BY start_date ".$_SESSION['sort'];
+				// A.3.b.1 you are a course admin without user or group filter and WITHOUT studentview (= the normal course admin view)
+				// 	=> see all the messages of all the users and groups with editing possibilities
+				
+				 if (api_is_course_admin())
+				 {
+					 $sql="SELECT
+						agenda.*, toolitemproperties.*
+						FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
+						WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
+						AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+						AND ( toolitemproperties.visibility='0' OR toolitemproperties.visibility='1')
+						$session_condition
+						GROUP BY toolitemproperties.ref
+						ORDER BY start_date ".$_SESSION['sort'];
+				 }
+				 else
+				 {
+				 	// A.3.b.2 you are a student with no group filter possibly showall
+				 	//when showing all the events we do not show the group events
+				 	//todo showing ALL events including the groups events that are available
+				 					 	 
+				 	$sql="SELECT
+						agenda.*, toolitemproperties.*
+						FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
+						WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
+						AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+						AND toolitemproperties.visibility='1' AND toolitemproperties.to_group_id='0'
+						$session_condition
+						GROUP BY toolitemproperties.ref
+						ORDER BY start_date ".$_SESSION['sort'];
+						
+					
+					/*
+				 	if (is_array($group_memberships) && count($group_memberships)>0)
+				 	{  
+				 		echo $sql="SELECT
+						agenda.*, toolitemproperties.*
+						FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
+						WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
+						AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+						AND toolitemproperties.visibility='1' AND toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") 
+						$session_condition
+						GROUP BY toolitemproperties.ref
+						ORDER BY start_date ".$_SESSION['sort'];
+				 	}
+				 	else
+				 	{
+				 		$sql="SELECT
+						agenda.*, toolitemproperties.*
+						FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
+						WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
+						AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+						AND toolitemproperties.visibility='1' AND toolitemproperties.to_group_id='0'
+						$session_condition
+						GROUP BY toolitemproperties.ref
+						ORDER BY start_date ".$_SESSION['sort'];
+				 	}
+				 	*/
+				 	
+				 }
 			}
 		}
 

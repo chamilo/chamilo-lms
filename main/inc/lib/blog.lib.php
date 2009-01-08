@@ -1330,6 +1330,7 @@ class Blog
 									$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
 									
 									$oFCKeditor->Config['InDocument'] = false;		
+									$oFCKeditor->Config['AdvancedFileManager'] = api_get_setting('advanced_filemanager') == 'true' ? true : false;
 									$oFCKeditor->Config['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
 		 
 		
@@ -1409,6 +1410,7 @@ class Blog
 								$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
 								
 								$oFCKeditor->Config['InDocument'] = false;		
+								$oFCKeditor->Config['AdvancedFileManager'] = api_get_setting('advanced_filemanager') == 'true' ? true : false;
 								$oFCKeditor->Config['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
 		
 		
@@ -2449,6 +2451,7 @@ class Blog
 									$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
 									
 									$oFCKeditor->Config['InDocument'] = false;		
+									$oFCKeditor->Config['AdvancedFileManager'] = api_get_setting('advanced_filemanager') == 'true' ? true : false;
 									$oFCKeditor->Config['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
 		
 		

@@ -828,6 +828,8 @@ class DocumentManager
 						$mdStore->mds_delete_offspring($eid);
 
 					}
+
+					DocumentManager::delete_document_from_search_engine(api_get_course_id(), $document_id);
 					//delete documents, do it like this so metadata get's deleted too
 					//update_db_info('delete', $path);
 					//throw it away
@@ -878,6 +880,9 @@ class DocumentManager
     									api_sql_query($sql, __FILE__, __LINE__);
     								}
     							}
+
+                                DocumentManager::delete_document_from_search_engine(api_get_course_id(), $document_id);
+
     							return true;
     						}
     					}
@@ -896,6 +901,9 @@ class DocumentManager
                         error_log(__FILE__.' '.__LINE__.': System inconsistency detected. The file or directory '.$base_work_dir.$path.' seems to have been removed from the filesystem independently from the web platform. To restore consistency, the elements using the same path will be removed from the database',0);
                         $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE path='".$path."' OR path LIKE BINARY '".$path."/%'";
                         $res = Database::query($sql,__FILE__,__LINE__);
+
+                        DocumentManager::delete_document_from_search_engine(api_get_course_id(), $document_id);
+
                         while ( $row = Database::fetch_array($res) ) 
                         {
                         	$sqlipd = "DELETE FROM $TABLE_ITEMPROPERTY WHERE ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
@@ -906,8 +914,39 @@ class DocumentManager
                     }
 				}
 			}
+
 		}
+
         return false;
+	}
+
+	/**
+	 * Removes documents from search engine database
+	 *
+	 * @param string $course_id Course code
+	 * @param int $document_id Document id to delete
+	 */
+	function delete_document_from_search_engine($course_id, $document_id) {
+		// remove from search engine if enabled
+		if (api_get_setting('search_enabled') == 'true') {
+			$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+			$sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
+			$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_DOCUMENT, $document_id);
+			$res = api_sql_query($sql, __FILE__, __LINE__);
+			if (Database::num_rows($res) > 0) {
+				$row2 = Database::fetch_array($res);
+				require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
+				$di = new DokeosIndexer();
+				$di->remove_document((int)$row2['search_did']);
+			}
+			$sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
+			$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_DOCUMENT, $document_id);
+			api_sql_query($sql, __FILE__, __LINE__);
+
+			// remove terms from db
+			require_once(api_get_path(LIBRARY_PATH) .'specific_fields_manager.lib.php');
+			delete_all_values_for_item($course_id, TOOL_DOCUMENT, $document_id);
+		}
 	}
 
 	/**

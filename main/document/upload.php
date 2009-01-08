@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 14802 2008-04-09 12:53:59Z elixir_inter $
+<?php // $Id: upload.php 17608 2009-01-08 23:26:20Z marvil07 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -88,6 +88,85 @@ function check_unzip() {
 // -->
 </script>";
 
+/**
+ * Obtains the text inside the file with the right parser
+ */
+function get_text_content($doc_path, $doc_mime) {
+	// TODO: review w$ compatibility
+
+	// use usual exec output lines array to store stdout instead of a temp file
+	// because we need to store it at RAM anyway before index on DokeosIndexer object
+	$ret_val = NULL;
+	switch ($doc_mime) {
+		case 'text/plain':
+			$handle = fopen($doc_path, "r");
+			$output = array(fread($handle, filesize($doc_path)));
+			fclose($handle);
+			break;
+		case 'application/pdf':
+		    exec("pdftotext $doc_path -", $output, $ret_val);
+		    break;
+		case 'application/postscript':
+			$temp_file = tempnam(sys_get_temp_dir(), 'dokeos');
+		    exec("ps2pdf $doc_path $temp_file", $output, $ret_val);
+		    if ($ret_val !== 0) { // shell fail, probably 127 (command not found)
+			    return FALSE;
+		    }
+		    exec("pdftotext $temp_file -", $output, $ret_val);
+		    unlink($temp_file);
+		    var_dump($output);
+		    break;
+		case 'application/msword':
+		    exec("catdoc $doc_path", $output, $ret_val);
+		    var_dump($output);
+		    break;
+		case 'text/html':
+		    exec("html2text $doc_path", $output, $ret_val);
+		    break;
+        case 'text/rtf':
+            // note: correct handling of code pages in unrtf
+            // on debian lenny unrtf v0.19.2 can not, but unrtf v0.20.5 can
+            exec("unrtf --text $doc_path", $output, $ret_val);
+            if ($ret_val == 127) { // command not found
+                return FALSE;
+            }
+            // avoid index unrtf comments
+            if (is_array($output) && count($output)>1) {
+                $parsed_output = array();
+                foreach ($output as $line) {
+                    if (!preg_match('/^###/', $line, $matches)) {
+                        if (!empty($line)) {
+                            $parsed_output[] = $line;
+                        }
+                    }
+                }
+                $output = $parsed_output;
+            }
+            break;
+        case 'application/vnd.ms-powerpoint':
+            exec("catppt $doc_path", $output, $ret_val);
+            break;
+        case 'application/vnd.ms-excel':
+	        exec("xls2csv -c\" \" $doc_path", $output, $ret_val);
+	        break;
+	}
+
+	$content = '';
+	if (!is_null($ret_val)) {
+		if ($ret_val !== 0) { // shell fail, probably 127 (command not found)
+			return FALSE;
+		}
+	}
+	if (isset($output)) {
+		foreach ( $output as $line ) {
+			$content .= $line ."\n";
+		}
+		return $content;
+	}
+	else {
+		return FALSE;
+	}
+}
 /*
 -----------------------------------------------------------
 	Variables
@@ -156,6 +235,7 @@ else
 include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 include_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 include_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
+require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
 
 //check the path
 //if the path is not found (no document id), set the path to /
@@ -229,6 +309,150 @@ if(isset($_FILES['user_upload']))
         	api_sql_query("UPDATE $table_document SET" . substr($ct, 1) .
         	    " WHERE id = '$docid'", __FILE__, __LINE__);
     	}
+
+      if ( (api_get_setting('search_enabled')=='true') && ($docid = DocumentManager::get_document_id($_course, $new_path))) {
+        $table_document = Database::get_course_table(TABLE_DOCUMENT);
+        $result = api_sql_query("SELECT * FROM $table_document WHERE id = '$docid' LIMIT 1", __FILE__, __LINE__);
+        if (mysql_num_rows($result) == 1) {
+          $row = mysql_fetch_array($result);
+          $doc_path = api_get_path(SYS_COURSE_PATH) . $courseDir. $row['path'];
+          //TODO: mime_content_type is deprecated, fileinfo php extension is enabled by default as of PHP 5.3.0
+          // now versions of PHP on Debian testing(5.2.6-5) and Ubuntu(5.2.6-2ubuntu) are lower, so wait for a while
+          $doc_mime = mime_content_type($doc_path);
+          //echo $doc_mime;
+          //TODO: more mime types
+          $allowed_mime_types = array('text/plain', 'application/pdf', 'application/postscript', 'application/msword', 'text/html', 'text/rtf', 'application/vnd.ms-powerpoint', 'application/vnd.ms-excel');
+
+          // mime_content_type does not detect correctly some formats that are going to be supported for index, so an extensions array is used by the moment
+          if (empty($doc_mime)) {
+          	$allowed_extensions = array('ppt', 'pps', 'xls');
+            $extensions = preg_split("/[\/\\.]/", $doc_path) ;
+            $doc_ext = $extensions[count($extensions)-1];
+            if (in_array($doc_ext, $allowed_extensions)) {
+            	switch ($doc_ext) {
+                    case 'ppt':
+                    case 'pps':
+                        $doc_mime = 'application/vnd.ms-powerpoint';
+                        break;
+                    case 'xls':
+                        $doc_mime = 'application/vnd.ms-excel';
+                        break;
+            	}
+            }
+          }
+
+          if (in_array($doc_mime, $allowed_mime_types) && isset($_POST['index_document']) && $_POST['index_document']) {
+            $file_title = $row['title'];
+            $file_content = get_text_content($doc_path, $doc_mime);
+            $courseid = api_get_course_id();
+            isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
+
+            require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
+            require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
+
+            $ic_slide = new IndexableChunk();
+            $ic_slide->addValue("title", $file_title);
+            $ic_slide->addCourseId($courseid);
+            $ic_slide->addToolId(TOOL_DOCUMENT);
+            $xapian_data = array(
+              SE_COURSE_ID => $courseid,
+              SE_TOOL_ID => TOOL_DOCUMENT,
+              SE_DATA => array('doc_id' => (int)$docid),
+              SE_USER => (int)api_get_user_id(),
+            );
+            $ic_slide->xapian_data = serialize($xapian_data);
+            $di = new DokeosIndexer();
+            $di->connectDb(NULL, NULL, $lang);
+
+            $specific_fields = get_specific_field_list();
+
+            // process different depending on what to do if file exists
+            /**
+             * FIXME: Find a way to really verify if the file had been
+             * overwriten. Now all work is done at
+             * handle_uploaded_document() and it's difficult to verify it
+             */
+			if (!empty($_POST['if_exists']) && $_POST['if_exists'] == 'overwrite') {
+				// overwrite the file on search engine
+				// actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one 
+
+				// get search_did
+				$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+				$sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
+				$sql = sprintf($sql, $tbl_se_ref, $courseid, TOOL_DOCUMENT, $docid);
+				$res = api_sql_query($sql, __FILE__, __LINE__);
+
+				if (Database::num_rows($res) > 0) {
+					$se_ref = Database::fetch_array($res);
+					$di->remove_document((int)$se_ref['search_did']);
+					$all_specific_terms = '';
+					foreach ($specific_fields as $specific_field) {
+						delete_all_specific_field_value($courseid, $specific_field['id'], TOOL_DOCUMENT, $docid);
+						//update search engine
+						$sterms = trim($_REQUEST[$specific_field['code']]);
+						$all_specific_terms .= ' '. $sterms;
+						$sterms = explode(',', $sterms);
+						foreach ($sterms as $sterm) {
+							$sterm = trim($sterm);
+							if (!empty($sterm)) {
+								$ic_slide->addTerm($sterm, $specific_field['code']);
+								add_specific_field_value($specific_field['id'], $courseid, TOOL_DOCUMENT, $docid, $value);
+							}
+						}
+					}
+					// add terms also to content to make terms findable by probabilistic search
+					$file_content = $all_specific_terms .' '. $file_content;
+					$ic_slide->addValue("content", $file_content);
+					$di->addChunk($ic_slide);
+					//index and return a new search engine document id
+					$did = $di->index();
+					if ($did) {
+						// update the search_did on db
+						$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+						$sql = 'UPDATE %s SET search_did=%d WHERE id=%d LIMIT 1';
+						$sql = sprintf($sql, $tbl_se_ref, (int)$did, (int)$se_ref['id']);
+						api_sql_query($sql,__FILE__,__LINE__);
+					}
+
+				}
+			}
+			else {
+				// add all terms
+				$all_specific_terms = '';
+				foreach ($specific_fields as $specific_field) {
+					if (isset($_REQUEST[$specific_field['code']])) {
+						$sterms = trim($_REQUEST[$specific_field['code']]);
+						$all_specific_terms .= ' '. $sterms;
+						if (!empty($sterms)) {
+							$sterms = explode(',', $sterms);
+							foreach ($sterms as $sterm) {
+								$ic_slide->addTerm(trim($sterm), $specific_field['code']);
+								add_specific_field_value($specific_field['id'], $courseid, TOOL_DOCUMENT, $docid, $sterm);
+							}
+						}
+					}
+				}
+				// add terms also to content to make terms findable by probabilistic search
+				$file_content = $all_specific_terms .' '. $file_content;
+				$ic_slide->addValue("content", $file_content);
+				$di->addChunk($ic_slide);
+				//index and return search engine document id
+				$did = $di->index();
+				if ($did) {
+					// save it to db
+					$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+					$sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
+						VALUES (NULL , \'%s\', \'%s\', %s, %s)';
+					$sql = sprintf($sql, $tbl_se_ref, $courseid, TOOL_DOCUMENT, $docid, $did);
+					api_sql_query($sql,__FILE__,__LINE__);
+				}
+			}
+          }
+
+        }
+
+      }
+
 		//check for missing images in html files
 		$missing_files = check_for_missing_files($base_work_dir.$new_path);
 		if($missing_files)
@@ -332,6 +556,22 @@ if(get_setting('use_document_title')=='true')
 
 $form->addElement('checkbox','unzip',get_lang('Options'),get_lang('Uncompress'),'onclick="check_unzip()" value="1"');
 
+if(api_get_setting('search_enabled')=='true')
+{
+	//TODO: include language file
+	$supported_formats = 'Supported formats for index: Text plain, PDF, Postscript, MS Word, HTML, RTF, MS Power Point';
+    $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument') . '<div style="font-size: 80%" >'. $supported_formats .'</div>');
+    $form -> addElement ('html','<br /><div class="row">');
+    $form -> addElement ('html', '<div class="label">'. get_lang('SearchFeatureDocumentLanguage') .'</div>');
+    $form -> addElement ('html', '<div class="formw">'. api_get_languages_combo() .'</div>');
+    $form -> addElement ('html','</div><div class="sub-form">');
+    $specific_fields = get_specific_field_list();
+    foreach ($specific_fields as $specific_field) {
+        $form -> addElement ('text', $specific_field['code'], $specific_field['name'].' : ');
+    }
+    $form -> addElement ('html','</div>');
+}
+
 $form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'nothing');
 $form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'overwrite');
 $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');
@@ -339,6 +579,9 @@ $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename')
 $form->addElement('submit', 'submitDocument', get_lang('Ok'));
 
 $form->add_real_progress_bar('DocumentUpload','user_upload');
+
+$defaults = array('index_document'=>'checked="checked"');
+$form->setDefaults($defaults);
 
 $form->display();
 

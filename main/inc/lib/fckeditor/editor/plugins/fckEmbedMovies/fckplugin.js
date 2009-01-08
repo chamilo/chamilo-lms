@@ -6,8 +6,8 @@ FCKCommands.RegisterCommand(
 		'EmbedMovies',
 		'Embed movies',
 		FCKPlugins.Items['fckEmbedMovies'].Path + 'fck_embedmovies.html',
-		450,
-		400
+		500,
+		380
 	)
 );
 // Create the "EmbedMovies" toolbar button.

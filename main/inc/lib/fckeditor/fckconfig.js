@@ -311,8 +311,8 @@ var _QuickUploadExtension = _QuickUploadLanguage == 'perl' ? 'cgi' : _QuickUploa
 FCKConfig.SmileyPath	= FCKConfig.BasePath + 'images/smiley/msn/' ;
 FCKConfig.SmileyImages	= ['regular_smile.gif','sad_smile.gif','wink_smile.gif','teeth_smile.gif','confused_smile.gif','tounge_smile.gif','embaressed_smile.gif','omg_smile.gif','whatchutalkingabout_smile.gif','angry_smile.gif','angel_smile.gif','shades_smile.gif','devil_smile.gif','cry_smile.gif','lightbulb.gif','thumbs_down.gif','thumbs_up.gif','heart.gif','broken_heart.gif','kiss.gif','envelope.gif'] ;
 FCKConfig.SmileyColumns = 8 ;
-FCKConfig.SmileyWindowWidth		= 320 ;
-FCKConfig.SmileyWindowHeight	= 210 ;
+FCKConfig.SmileyWindowWidth		= 450 ;
+FCKConfig.SmileyWindowHeight	= 250 ;
 
 FCKConfig.BackgroundBlockerColor = '#ffffff' ;
 FCKConfig.BackgroundBlockerOpacity = 0.50 ;

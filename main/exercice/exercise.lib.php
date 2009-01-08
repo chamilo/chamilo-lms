@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 17265 2008-12-13 14:00:10Z ivantcholakov $
+<?php // $Id: exercise.lib.php 17589 2009-01-08 11:19:25Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 17265 2008-12-13 14:00:10Z ivantcholakov $
+* 	@version $Id: exercise.lib.php 17589 2009-01-08 11:19:25Z ivantcholakov $
 */
 
 
@@ -110,6 +110,8 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			$isocode_language=mysql_result($result_sql,0,0);
 			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
 		
+			$oFCKeditor->Config['AdvancedFileManager'] = api_get_setting('advanced_filemanager') == 'true' ? true : false;
+
 			$s .= "<tr><td colspan='2'>".$oFCKeditor->CreateHtml()."</td></tr>";
 			//$s.="<tr><td colspan='2'><textarea cols='80' rows='10' name='choice[".$questionId."]'>$answer</textarea></td></tr>";
 

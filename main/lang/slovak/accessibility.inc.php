@@ -8,6 +8,7 @@ $WCAGLabel = "Názov obrázku";
 $WCAGLink = "Link";
 $WCAGLinkLabel = "Názov linku";
 $errorNoLabel = "Chýba názov obrázku.";
+$AllLanguages = "Všetky jazyky";
 $WCAGEditor = "Editor WCAG";
 $WCAGGoMenu = "Cho&#271; do menu";
 $WCAGGoContent = "Cho&#271; na obsah";

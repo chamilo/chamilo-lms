@@ -851,4 +851,7 @@ $NoWillDeletePermanently = "Non (los archivos van esborrase de l\'aplicación per
 $SelectAResponsible = "Escueya un responsable";
 $ThereIsNotStillAResponsible = "Entá nun hai responsables";
 $GlobalAgenda = "Axenda Global";
+$AdvancedFileManagerTitle = "Xestor avanzáu de ficheros pal editor WYSIWYG";
+$AdvancedFileManagerComment = "Activar el xestor avanzáu de ficheros pal editor WYSIWYG";
+$MultipleAccessURLs = "Entrada d\'URL múltiple";
 ?>

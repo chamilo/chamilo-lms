@@ -851,4 +851,7 @@ $NoWillDeletePermanently = "Ne (datoteke bodo odstranjene zgolj iz aplikacije; r
 $SelectAResponsible = "Izberi managerja";
 $ThereIsNotStillAResponsible = "Noben HR manager ni na voljo";
 $GlobalAgenda = "Globalna agenda";
+$AdvancedFileManagerTitle = "Napreden upravitelj datotek za WYSIWYG editor";
+$AdvancedFileManagerComment = "Omogočim napreden upravitelj datotek za WYSIWYG editor ? Omogočanje bo dodalo dodatne opcije k upravitelju datotek.";
+$MultipleAccessURLs = "URL-ji za dostop do platforme";
 ?>

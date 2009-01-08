@@ -212,17 +212,4 @@ $UplAlreadyExists = "File already exists";
 $UnknownPackageFormat = "Unknown package format";
 $UplUnableToSaveFile = "Unable to save file";
 $UnknownPackageFormat = "The format of this package could not be recognized. Please check this is a valid package.";
-$GoToThisLearningPath = "Watch lecture";
-//$LectureLibrary = "";
-$ImageWillResizeMsg = "If necesarry, the image will be resized to fit the screen";
-$SearchFeatureTerms = "Keywords for search engine";
-$SaveLPSettings = "Save course settings";
-$EditLPSettings = "Course settings";
-$UploadMp3audio = 'Upload MP3 audio';
-$UpdateAllAudioFragments = 'Update all audio fragments';
-$Audio = 'Audio';
-$RemoveAudio = 'Remove audio file';
-$SaveAudio = 'Save audio files';
-$LeaveEmptyToKeepCurrentFile = 'If you want to keep the current file you can leave the input field empty';
-//$Lectures = "";
 ?>

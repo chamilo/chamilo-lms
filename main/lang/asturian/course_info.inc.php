@@ -108,4 +108,8 @@ $ConfigChat = "Configuración del chat";
 $AllowOpenchatWindow = "Abrir el chat nuna ventana nueva";
 $AllowOpenChatWindowActivate = "Activar abrir el chat nuna ventana nueva";
 $AllowOpenChatWindowDeactivate = "Desactivar abrir el chat nuna ventana nueva";
+$NewUserEmailAlert = "Avisar per e-mail de qu\'un usuariu nuevu automatriculóse.";
+$NewUserEmailAlertEnable = "Activar l\'avisu per e-mail pal profesor de qu\'un usuariu nuevu automatriculóse.";
+$NewUserEmailAlertToTeacharAndTutor = "Activar l\'avisu per e-mail pal profesor y pa los tutores de qu\'un usuariu nuevu automatriculóse.";
+$NewUserEmailAlertDisable = "Desactivar l\'avisu per e-mail de qu\'un usuariu nuevu automatriculóse nel cursu.";
 ?>

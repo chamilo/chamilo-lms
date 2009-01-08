@@ -1,4 +1,13 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$NewNote = "Nová poznámka";
+$Note = "Poznámka";
+$NoteDeleted = "Poznámka zmazaná";
+$NoteUpdated = "Poznámka aktualizovaná";
+$NoteCreated = "Poznámka vytvorená";
+$YouMustWriteANote = "Prosím napíšte poznámku";
+$WriteYourNoteHere = "Prosím napíšte vašu poznámku sem";
+$SaveNote = "Uloži&#357; poznámku";
+$WriteYourNoteHere = "Pre napísanie novej poznámky kliknite sem";
 ?>

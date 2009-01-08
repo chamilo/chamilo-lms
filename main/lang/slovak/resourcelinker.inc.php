@@ -1,7 +1,47 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$ResourceAdded = "Zdroj pridaný. Teraz môžete ís&#357; spä&#357; do osnovy a prida&#357; &#271;alšie zdroje.";
 $LearningPath = "U&#269;ebná osnova";
+$AddIt = "Prida&#357;";
+$MainCategory = "hlavná kategória";
+$lang_delete_added_resources = "Zmaza&#357; pridané zdroje";
+$AddToLinks = "Prida&#357; do odkazov kurzu";
+$DontAdd = "neprida&#357;";
+$lang_show_all_added_resources = "Zobrazi&#357; všetky pridané zdroje";
+$ResourcesAdded = "Zdroje pridané";
+$BackTo = "Spä&#357; do";
+$ExternalResources = "Externé zdroje";
+$CourseResources = "Zdroje kurzu";
+$ExternalLink = "Externý odkaz";
+$Exercise = "Testy";
+$Link = "Odkazy";
 $AdValvas = "Oznamy";
+$Document = "Dokument";
+$ShowDelete = "Zobrazi&#357; / Zmaza&#357;";
+$IntroductionText = "Úvodný text";
+$CourseDescription = "Popis kurzu";
+$Groups = "Skupiny";
+$Users = "Používatelia";
+$IntroductionTextAdd = "Prida&#357; stránku s úvodným textom do tejto kapitoly.";
+$CourseDescriptionAdd = "Prida&#357; stránku s popisom kurzu do tejto kapitoly.";
+$SameWindow = "V rovnakom okne";
+$NewWindow = "V novom okne";
+$StepDeleted1 = "Tento";
+$StepDeleted2 = "položka v tomto nástroji bola zmazaná.";
+$Modify = "zmeni&#357;";
+$Chapter = "Kapitola";
+$NoAgendaItems = "Nie sú žiadne položky agendy";
+$AgendaAdd = "Prida&#357; položku agendy";
+$ModifyCalendarItem = "Zmeni&#357; položku agendy";
+$ItemTitle = "Názov";
+$Detail = "Podrobnosti";
+$EditSuccess = "Úprava bola úspešná";
+$AddCalendarItem = "Prida&#357; položku agendy";
 $AddAnn = "Prida&#357; oznam";
+$ForumAddNewTopic = "Fórum: prida&#357; novú tému";
+$ForumEditTopic = "Fórum: upravi&#357; tému";
+$ExerciseAnswers = "Test: Odpovede";
+$ForumReply = "Fórum: odpove&#271;";
+$AgendaSortChronologicallyDown = "Usporiada&#357; agendu chronologicky (zostupne)";
 ?>

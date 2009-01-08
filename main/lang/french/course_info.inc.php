@@ -108,4 +108,8 @@ $ConfigChat = "Configuration du chat";
 $AllowOpenchatWindow = "Ouvrir le chat dans une nouvelle fenêtre";
 $AllowOpenChatWindowActivate = "Activer l\'ouverture du chat dans une nouvelle fenêtre";
 $AllowOpenChatWindowDeactivate = "Désactiver l\'ouverture du chat dans une nouvelle fenêtre";
+$NewUserEmailAlert = "Alerter de nouvelles inscriptions";
+$NewUserEmailAlertEnable = "Activer l\'alerte par e-mail aux professeurs du cours lors de l\'inscription autonome d\'un nouvel utilisateur";
+$NewUserEmailAlertToTeacharAndTutor = "Activer l\'alerte par e-mail aux professeurs et tuteurs lors de l\'inscription autonome d\'un nouvel utilisateur";
+$NewUserEmailAlertDisable = "Ne pas activer l\'alerte pas e-mail lors d\'une nouvelle inscription au cours";
 ?>

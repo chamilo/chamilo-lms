@@ -850,4 +850,7 @@ $YesWillDeletePermanently = "Da (datoteke bodo trajno odstranjene in morebitno r
 $NoWillDeletePermanently = "Ne (datoteke bodo odstranjene zgolj iz aplikacije; restavrira jih lahko upravitelj sistema) ";
 $SelectAResponsible = "Izberi managerja";
 $ThereIsNotStillAResponsible = "Noben HR manager ni na voljo";
+$GlobalAgenda = "Globalna agenda";
+$AdvancedFileManagerTitle = "Napreden upravitelj datotek za WYSIWYG editor ";
+$AdvancedFileManagerComment = "Omogoèim napreden upravitelj datotek za WYSIWYG editor ? Omogoèanje bo dodalo dodatne opcije k upravitelju datotek. ";
 ?>

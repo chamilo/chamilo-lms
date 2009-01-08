@@ -210,4 +210,5 @@ $TemplateTitleListLeftListDescription = "Lista a la izquierda con un instructor"
 $TemplateTitleStopAndThinkDescription = "Invitación a pararse y a reflexionar";
 $SaveDocument = "Guardar documento";
 $CreateTheDocument = "Guardar documento";
+$SharedFolder = "Carpeta compartida";
 ?>

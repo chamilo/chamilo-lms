@@ -257,4 +257,9 @@ $ExeStartTime = "Zaèetni datum";
 $ExeEndTime = "Konèni datum";
 $Value = "Vrednost";
 $DeleteAttempt = "Odstranim poskus?";
+$QuantityQuestions = "Število vprašanj";
+$FilterExercices = "Filtriraj vaje/teste";
+$FilterByNotRevised = "Zgolj neocenjeni";
+$FilterByRevised = "Zgolj ocenjeni";
+$Duration = "Trajanje";
 ?>

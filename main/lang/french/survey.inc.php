@@ -203,4 +203,5 @@ $ChooseDifferentCategories = "Sélectionnez différentes catégories";
 $Version = "Version";
 $Normal = "Normal";
 $NoLogOfDuration = "Pas d\'historique de durée";
+$AutoInviteLink = "Les utilisateurs qui ne sont pas invités peuvent utiliser ce lien pour répondre à l\'enquête:";
 ?>

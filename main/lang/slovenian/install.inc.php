@@ -112,4 +112,5 @@ $ExtensionMySQLNotAvailable = "MySQL razširitev ni na voljo";
 $DokeosArtLicense = "Galeriji slik in drugih medijskih datotek Dokeos-a vsebujejo slike iz galerij Nuvola, Crystal Clear in Tango. Druge slike in medijske datoteke, kot so diagrami, Flash animacije so sposojene iz Wikimedia in gradiv Ali Pakdel-a ter Denis Hoa z njihovim privoljenjem in pod licenco BY-SA Creative Commons. Podrobnosti o licencah lahko najdete na <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>. Povezava na celotno besedilo pogojev uporabe se nahaja na dnu podane strani.";
 $PleasGoBackToStep1 = "Prosim, pojdite nazaj na korak 1";
 $OptionalParameters = "Opcijski parametri";
+$FailedConectionDatabase = "Povezava s podatkovno bazo ni uspela. V splošnem se ta napaka pojavi zaradi napaènega uporabniškega imena, gesla, imena podatkovne baze ali njene predpone. Preverite nastavitve in poskusite ponovno.";
 ?>

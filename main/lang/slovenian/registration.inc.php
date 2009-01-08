@@ -168,4 +168,6 @@ $NoSessionId = "Seja ni bila identificirana";
 $NoUsersRead = "Prosim preverite vašo XML/CVS datoteko";
 $UserImportFileMessage = "V primeru, da v XML/CVS datoteki manjkajo uporabniška imena, se bodo ta generirala iz imena in priimka, npr. Janez Novak bo dobil uporabniško ime jnovak";
 $UserAlreadyRegisteredByOtherCreator = "Uporabnik je že vpisan s strani drugega coach-a.";
+$NewUserInTheCourse = "Nov uporabnik v teèaju";
+$MessageNewUserInTheCourse = "To je sporoèilo, ki vas obvešèa, da je v teèaju nov uporabnik ";
 ?>

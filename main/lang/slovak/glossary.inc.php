@@ -1,4 +1,16 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$TermAddNew = "Prida&#357; nový výraz";
+$TermName = "Výraz";
+$TermDefinition = "Definícia výrazu";
+$TermDeleted = "Výraz odstránený";
+$TermUpdated = "Výraz aktualizovaný";
+$TermConfirmDelete = "Naozaj chcete zmaza&#357; tento výraz";
+$TermAddButton = "Prida&#357; tento výraz";
+$TermUpdateButton = "Aktualizova&#357; výraz";
+$TermEditAction = "Upravi&#357; výraz";
+$TermDeleteAction = "Zmaza&#357; výraz";
+$CreationDate = "Dátum vytvorenia";
+$UpdateDate = "Dátum aktualizácie";
 ?>

@@ -851,6 +851,7 @@ $NoWillDeletePermanently = "No (i file saranno cancellati, ma l\'amministratore 
 $SelectAResponsible = "Seleziona un gestore delle RU";
 $ThereIsNotStillAResponsible = "Non c\'è un responsabile RU disponibile";
 $GlobalAgenda = "Agenda generale";
-$AdvancedfilemanagerTitle = "File manager avanzato per l\'editor wysiwyg";
-$AdvancedfilemanagerComment = "Permette la gestione avanzata dei file attraverso l\'editor";
+$AdvancedFileManagerTitle = "File manager avanzato per l\'editor wysiwyg";
+$AdvancedFileManagerComment = "Permette la gestione avanzata dei file attraverso l\'editor";
+$MultipleAccessURLs = "URL multiple di accesso";
 ?>

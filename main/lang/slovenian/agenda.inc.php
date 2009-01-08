@@ -66,4 +66,5 @@ $RepeatYearly = "Letno";
 $RepeatEnd = "Datum konca ponovitev";
 $RepeatedEventViewOriginalEvent = "Poglej zaèetni dogodek";
 $ICalFileImport = "Uvozi iCal/ics datoteko";
+$AllUsersOfThePlatform = "Vsi uporabniki platforme";
 ?>

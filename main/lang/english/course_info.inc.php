@@ -108,4 +108,8 @@ $ConfigChat = "Chat settings";
 $AllowOpenchatWindow = "Open chat in a new Window";
 $AllowOpenChatWindowActivate = "Activate open the chat in a new window";
 $AllowOpenChatWindowDeactivate = "Deactivate open the chat in a new window";
+$NewUserEmailAlert = "Notice by e-mail  to course\'s  teacher of auto subscription of a new user";
+$NewUserEmailAlertEnable = "Enable the notice by e-mail  to course\'s  teacher of auto subscription of a new user";
+$NewUserEmailAlertToTeacharAndTutor = "Enable the notice by e-mail  to course\'s  teacher and tutors of auto subscription of a new user";
+$NewUserEmailAlertDisable = "Disable the email alert of suscription a new user in the course";
 ?>

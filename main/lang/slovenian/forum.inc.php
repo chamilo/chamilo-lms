@@ -93,4 +93,5 @@ $ForumSearchInformation = "Iskanje sestavljenih izrazov izvedete z uporabo + zna
 $YouWillBeNotifiedOfNewPosts = "O novih objavah boste obvešèeni preko e-pošte.";
 $YouWillNoLongerBeNotifiedOfNewPosts = "Obvestila o novih objavah preko e-pošte so preklicana";
 $TooShort = "Prekratko";
+$AddImage = "Dodaj sliko";
 ?>

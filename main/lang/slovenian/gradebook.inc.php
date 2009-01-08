@@ -117,4 +117,5 @@ $CategoryEdited = "Kategorija je bila ažurirana";
 $OnlyNumbers = "Zgolj števila";
 $IncorrectData = "Napaèni podatki";
 $Resource = "Vir";
+$PleaseEnableScoringSystem = "Omogoèite sistem ocenjevanja";
 ?>

@@ -210,4 +210,5 @@ $TemplateTitleListLeftListDescription = "Llistáu a la izquierda con un instructo
 $TemplateTitleStopAndThinkDescription = "Invitación a parar y pensar";
 $SaveDocument = "Guardar documentu";
 $CreateTheDocument = "Guardar documentu";
+$SharedFolder = "Carpeta compartida ";
 ?>

@@ -69,7 +69,7 @@ function dokeos_preprocess_results($results) {
         if (file_exists($tool_processor_path)) {
             require_once($tool_processor_path);
             $tool_processor = new $tool_processor_class($rows);
-            $processed_results = $tool_processor->process();
+            $processed_results = array_merge($tool_processor->process(), $processed_results);
         }
     }
 

@@ -110,7 +110,6 @@ $ViewSlideshow = "Veure presentació d\'imatges";
 $Options = "Opcions";
 $WelcomeOogieConverter = "Benvingut al convertidor de PowerPoint Oogie<br>1. Examineu el vostre disc dur i busqueu qualsevol fitxer amb les extensions *.ppt o *.odp<br>2. Envieu-lo a Oogie, que el transformarà en un Itinerari formatiu SCORM.<br>3. Podreu afegir comentaris d\'àudio a cada diapositiva i inserir test d\'avaluació entre diapositives.";
 $ConvertToLP = "Convertir en Itinerari formatiu";
-$Validate = "Acceptar";
 $AdvancedSettings = "Configuracions avançades";
 $AdvancedSettings = "Configuracions avançades";
 $File = "Fitxer";

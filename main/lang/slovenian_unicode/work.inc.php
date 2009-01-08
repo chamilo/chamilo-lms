@@ -47,5 +47,5 @@ $AdvancedParameters = "Napredni parametri";
 $ExpiryDateToSendWorkIs = "Zadnji rok za pošiljanje nalog/izdelkov";
 $EnableExpiryDate = "Omogoči datum preteka";
 $EnableEndDate = "Omogoči končni datum";
-$IsNotPosibleSaveTheDocument = "ni možno shraniti dokumenta";
+$IsNotPosibleSaveTheDocument = "Dokumenta ni mogoče shraniti";
 ?>

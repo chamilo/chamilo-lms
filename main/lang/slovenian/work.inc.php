@@ -34,8 +34,13 @@ $DirDelete = "Odstrani mapo";
 $ValidateChanges = "Uveljavi spremembe";
 $FolderUpdated = "Mapa je bila ažurirana";
 $EndsAt = "kon&#269;a (popolnoma zaprta)";
+$ExpiresAt = "Poteèe ob";
 $AddToCalendar = "Dodaj v koledar";
 $DirectoryCreated = "Mapa je bila ustvarjena";
 $Assignment = "Zadolžitev";
 $AdvancedParameters = "Napredni parametri";
+$ExpiryDateToSendWorkIs = "Zadnji rok za pošiljanje nalog/izdelkov";
+$EnableExpiryDate = "Omogoèi datum poteka";
+$EnableEndDate = "Omogoèi konèni datum";
+$IsNotPosibleSaveTheDocument = "Dokumenta ni mogoèe shraniti";
 ?>

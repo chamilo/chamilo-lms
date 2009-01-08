@@ -630,4 +630,16 @@ $langNameOfLang['trad_chinese'] = "chino tradicional";
 $langNameOfLang['turkce'] = "turco";
 $langNameOfLang['ukrainian'] = "ucraniano";
 $langNameOfLang['yoruba'] = "yoruba";
+$SearchGoToLearningPath = "Ir a la lección";
+$SearchLectureLibrary = "Biblioteca de lecciones";
+$SearchImagePreview = "Vista previa";
+$SearchAdvancedOptions = "Opciones de búsqueda avanzadas";
+$SearchResetKeywords = "Limpiar palabras clave";
+$SearchKeywords = "Palabras clave";
+$SearchIntroductionTextDeleted = "El texto te introducción ha sido borrado";
+$SearchKeywordsHelpTitle = "Ayuda búsqueda por palabras clave";
+$SearchKeywordsHelpComment = "Selecciona las palabras clave en uno o más de los campos y haz clic por el botón de búsqueda.<br /><br />Para seleccionar más de una palabra clave en un campo, usa Ctrl+Clic";
+$Validate = "Validar";
+$SearchCombineSearchWith = "Combinar palabras clave con";
+$SearchFeatureNotEnabledComment = "La búsqueda full-text no esta activada por este portal. Por favor ponse en contacto con su administrador.";
 ?>

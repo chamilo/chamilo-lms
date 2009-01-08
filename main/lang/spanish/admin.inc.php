@@ -854,4 +854,8 @@ $GlobalAgenda = "Agenda Global";
 $AdvancedFileManagerTitle = "Gestor avanzado de ficheros para el editor WYSIWYG";
 $AdvancedFileManagerComment = "Activar el gestor avanzado de ficheros para el editor WYSIWYG ";
 $MultipleAccessURLs = "Multiple access URL";
+$SearchShowUnlinkedResultsTitle = "Búsqueda full-text: mostrar resultados no accesibles";
+$SearchShowUnlinkedResultsComment = "Al momento de mostrar los resultados de la búsqueda full-text, como debería comportarse el sistema para los enlaces que no estan accesibles para el usuario actual?";
+$SearchHideUnlinkedResults = "No mostrarlos";
+$SearchShowUnlinkedResults = "Mostrarlos pero sin enlace hasta el recurso";
 ?>

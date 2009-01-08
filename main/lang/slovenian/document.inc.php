@@ -110,7 +110,6 @@ $ViewSlideshow = "Poglej projekcijo slik";
 $Options = "Opcije";
 $WelcomeOogieConverter = "Dobrodošli v OOgie, pretvornik za datoteke v PowerPoint obliki <ul type=\\\"1\\\"><li>Prebrskajte za datotekami .ppt ali .odp</li><li>Naložite jih v Oogie. Ta jih bo pretvoril v Scorm obliko uène poti.</li><li>Po naložitvi imate možnost vsakemu diapozitivu dodati zvoène (avdio) komentarje, besedilo, oziroma vprašanja za sprotno preverjanje.</li>";
 $ConvertToLP = "Pretvori v Uèno pot";
-$Validate = "Validiraj";
 $AdvancedSettings = "Napredne nastavitve";
 $AdvancedSettings = "Napredne nastavitve";
 $File = "Datoteka";
@@ -210,4 +209,5 @@ $TemplateTitleListLeftListDescription = "Seznam na levi z inštruktorjem";
 $TemplateTitleStopAndThinkDescription = "Predloga vzpodbude k zaustavitvi in razmisleku";
 $SaveDocument = "Shrani dokument";
 $CreateTheDocument = "Shrani dokument";
+$SharedFolder = "Mapa v skupni rabi";
 ?>

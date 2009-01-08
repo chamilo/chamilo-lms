@@ -110,7 +110,6 @@ $ViewSlideshow = "Bekijk afbeeldingen als diavoorstelling";
 $Options = "Opties";
 $WelcomeOogieConverter = "Welkom in de conversie applicatie Oogie<br />1. Kies een .ppt of .odp bestand <br/>2. Verstuur dit bestand naar Oogie. Het wordt omgezet in een Scorm leerpad <br />3. U kunt nu audiocommentaar toevoegen aan elke slide en testen tussen de verschillende slides plaatsen";
 $ConvertToLP = "Converteer in leerpad";
-$Validate = "Valideer";
 $AdvancedSettings = "Geavanceerde instellingen";
 $AdvancedSettings = "Geavanceerde instellingen";
 $File = "Bestand";

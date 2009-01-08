@@ -630,4 +630,16 @@ $langNameOfLang['trad_chinese'] = "chinois traditionnel";
 $langNameOfLang['turkce'] = "turque";
 $langNameOfLang['ukrainian'] = "ukrainien";
 $langNameOfLang['yoruba'] = "yoruba";
+$SearchGoToLearningPath = "Voir le parcours";
+$SearchLectureLibrary = "Bibliothèque de présentations";
+$SearchImagePreview = "Prévisualisation";
+$SearchAdvancedOptions = "Options de recherche avancées";
+$SearchResetKeywords = "Vider mots-clef";
+$SearchKeywords = "Mots-clef";
+$SearchIntroductionTextDeleted = "Le texte d\'introduction a été supprimé";
+$SearchKeywordsHelpTitle = "Aide à la recherche par mots-clef";
+$SearchKeywordsHelpComment = "Sélectionnez des mots-clef dans un ou plusieurs champs et cliquez sur le bouton de recherche.<br /><br />Pour sélectionner plus d\'un mot-clef à la fois, utilisez Ctrl+click.";
+$Validate = "Valider";
+$SearchCombineSearchWith = "Combiner les mots-clef par";
+$SearchFeatureNotEnabledComment = "La fonctionnalité de recherche full-text n\'est pas activée sur ce portail. Veuillez contacter l\'administrateur de votre portail.";
 ?>

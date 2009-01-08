@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$langShouldBeCSVFormat = "Plik powinien by&#263; w formacie CSV. Nie dodawaj spacji. Plik powinien mie&#263; struktur&#281;:";
 $langTracking = "&#346;ledzenie";
 $langEnter2passToChange = "Podaj nowe has&#322;o dwukrotnie";
 $langAuthInfo = "Autoryzacja";
@@ -125,16 +126,35 @@ $SearchButton = "Szukaj";
 $SearchNoResultsFound = "Brak wyników wyszukiwania";
 $OnlyImagesAllowed = "Tylko obrazy w formatach PNG, JPG lub GIF s&#261; dozwolone";
 $UsernameWrong = "Twoja nazwa u&#380;ytkownika mo&#380;e zawiera&#263; tylko litery, cyfry i _. -";
+$PasswordRequestFrom = "Jest to &#380;&#261;danie has&#322;a z adresu e-mail:";
+$CorrespondsToAccount = "Adres e-mail odpowiada nast&#281;puj&#261;cemu u&#380;ytkownikowi.";
+$CorrespondsToAccounts = "Adres e-mail odpowiada nast&#281;puj&#261;cym u&#380;ytkownikom. ";
 $langphone = "Telefon";
 $Unreg = "Wypisz";
 $MyProgress = "Moje post&#281;py";
+$ProgressIntroduction = "Zacznij od wyboru sesji kursu (poni&#380;ej).<br /> Mo&#380;esz ogl&#261;da&#263; post&#281;py ka&#380;dego kursu na który si&#281; zapiszesz.";
 $Select = "Wybierz";
+$NeverExpires = "Nigdy nie wygasa";
 $On = "na";
+$ExpirationDate = "Data wyga&#347;ni&#281;cia";
 $ActiveAccount = "Aktywne konto";
 $YourAccountHasToBeApproved = "Twoje konto musi by&#263; zatwierdzone";
 $ApprovalForNewAccount = "Zatwierdzenie nowego konta";
+$ManageUser = "Zarz&#261;dzaj u&#380;ytkownikami";
+$SendMessage = "Wy&#347;lij wiadomo&#347;&#263;";
 $PasswordEncryptedForSecurity = "Twoje has&#322;o jest szyfrowane ze wzgl&#281;dów bezpiecze&#324;stwa. Tak wi&#281;c, po naci&#347;ni&#281;ciu przycisku, zostanie wys&#322;ane do Ciebie ponownie twoje has&#322;o";
+$UsersUnsubscribed = "Wybrani u&#380;ytkownicy zostali wypisani z kursu.";
+$UsernameMaxXCharacters = "Nazwa u&#380;ytkownika mo&#380;e mie&#263; do %s znaków.";
 $PictureUploaded = "Twój obraz zosta&#322; wgrany";
 $FolderUpdated = "Folder zaktualizowany";
+$UsersRegistered = "U&#380;ytkownicy zostali zarejestrowani w kursie. ";
+$UserAlreadyRegisterByOtherCreator = "U&#380;ytkownik ju&#380; zosta&#322; zarejestrowany przez innego prowadz&#261;cego.";
+$UserInSession = "U&#380;ytkownik zosta&#322; dodany do sesji";
 $UserNotAdded = "U&#380;ytkownik nie zosta&#322; dodany";
+$NoSessionId = "Sesja nie zosta&#322;a zidentyfikowana.";
+$NoUsersRead = "Sprawd&#378; plik XML/CSV";
+$UserImportFileMessage = "Je&#380;eli w pliku XML/CVS brakuje nazwy u&#380;ytkownika, nale&#380;y stworzy&#263; nazw&#281; z imienia i nazwiska. Na przyk&#322;ad: Jan Kowalski -> jkowalski.";
+$UserAlreadyRegisteredByOtherCreator = "U&#380;ytkownik ju&#380; zosta&#322; zarejestrowany przez innego prowadz&#261;cego. ";
+$NewUserInTheCourse = "Nowy u&#380;ytkownik dodany do kursu.";
+$MessageNewUserInTheCourse = "Informacja o dodaniu nowego u&#380;ytkownika do kursu.";
 ?>

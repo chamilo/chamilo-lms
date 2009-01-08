@@ -110,7 +110,6 @@ $ViewSlideshow = "Képek diavetítés megtekintése";
 $Options = "Lehet&#337;ségek";
 $WelcomeOogieConverter = "Üdvözöljük az Oogie PowerPoint konverter használójaként!<br>1. Böngéssze merevlemezét, hogy megtalálja .ppt vagy .odp állományait<br>2. Töltse fel at Oogie-hoz. Az eszköz az állományt Scorm típusú tanösvénnyé alakítja.<br>3. A konvertálás után hangot rögzíthet az egyes diákhoz és a diák közé értékel&#337; teszteket illeszthet.";
 $ConvertToLP = "Konvertálás tanösvénnyé";
-$Validate = "Érvényesít";
 $AdvancedSettings = "Haladó beállítások";
 $AdvancedSettings = "Haladó beállítások";
 $File = "Állomány";

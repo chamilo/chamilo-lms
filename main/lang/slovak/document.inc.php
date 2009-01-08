@@ -106,7 +106,6 @@ $ViewSlideshow = "Galéria obrázkov";
 $Options = "Možnosti";
 $WelcomeOogieConverter = "Vitajte v Oogie PowerPoint konvertori<ul type=\\\"1\\\"><li>Preh&#318;adajte svoj pevný disk a nájdite .ppt alebo .odp súbor<li>Na&#269;ítajte ho na Oogie. Tak ho pretvoríte do Scorm u&#269;ebnej osnovy.<li>Potom budete môc&#357; prida&#357; ku každej stránke prezentácie zvukovú poznámku a medzi ne vloži&#357; test pre ohodnotenie.";
 $ConvertToLP = "Skonvertova&#357; do u&#269;ebnej osnovy";
-$Validate = "Potvrdi&#357;";
 $AdvancedSettings = "Rozšírené nastavenia";
 $AdvancedSettings = "Rozšírené nastavenia";
 $File = "Súbor";

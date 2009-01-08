@@ -108,4 +108,8 @@ $ConfigChat = "Nastavitve klepeta";
 $AllowOpenchatWindow = "Odpri klepet v novem oknu";
 $AllowOpenChatWindowActivate = "Aktiviraj odpiranje klepeta v novem oknu";
 $AllowOpenChatWindowDeactivate = "Deaktiviraj odpiranje klepeta v novem oknu";
+$NewUserEmailAlert = "Opozori preko e-pošte učitelja tečaja v primeru samodejnega vpisa novega uporabnika v tečaj";
+$NewUserEmailAlertEnable = "Omogoči opozorilo učitelju tečaja preko e-pošte v primeru samodejnega vpisa novega uporabnika v tečaj";
+$NewUserEmailAlertToTeacharAndTutor = "Omogoči opozorilo učitelju in tutorjem tečaja v primeru samodejnega vpisa novega uporabnika v tečaj";
+$NewUserEmailAlertDisable = "Onemogoči opozorilo v primeru vpisa novega uporabnika v tečaj";
 ?>

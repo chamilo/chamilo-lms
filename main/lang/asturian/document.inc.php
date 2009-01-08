@@ -110,7 +110,6 @@ $ViewSlideshow = "Ver presentación d\'imáxenes";
 $Options = "Opciones";
 $WelcomeOogieConverter = "Bienveníu al conversor de PowerPoint Oogie<br>1. Compruebe\'l so discu duru y busque un archivu con estensión *.ppt o *odp<br>2.Unvíelu a Oogie, que lu va tresformar nun Itinerariu d\'aprendizaxe Scorm.<br>3. Va poder añadir comentarios d\'audiu a caúna les diapositives y insertar un test d\'evaluación ente elles.";
 $ConvertToLP = "Convertir nun Itinerariu d\'aprendizaxe";
-$Validate = "Dar el preste";
 $AdvancedSettings = "Configuraciones avanzaes";
 $AdvancedSettings = "Configuraciones avanzaes";
 $File = "Archivu";

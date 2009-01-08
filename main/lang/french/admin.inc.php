@@ -854,4 +854,8 @@ $GlobalAgenda = "Agenda global";
 $AdvancedFileManagerTitle = "Gestionnaire de fichiers avancé pour l\'éditeur WYSIWYG";
 $AdvancedFileManagerComment = "Activer le gestionnaire de fichiers avancé pour l\'éditeur WYSIWYG? Cette option ajoutera un nombre considérable d\'options au gestionnaire de fichiers s\'ouvrant en fenêtre pop-up lors de l\'envoi d\'un fichier sur le serveur.";
 $MultipleAccessURLs = "Accès via URLs multiples";
+$SearchShowUnlinkedResultsTitle = "Recherche full-text: montrer les résultats non accessibles";
+$SearchShowUnlinkedResultsComment = "Lors de l\'affichage des résultats d\'une recherche full-text, que faire avec les résultats qui ne sont pas accessible à l\'utilisateur?";
+$SearchHideUnlinkedResults = "Ne pas les afficher";
+$SearchShowUnlinkedResults = "Les afficher mais ne pas y placer de lien vers la ressource";
 ?>

@@ -203,4 +203,5 @@ $ChooseDifferentCategories = "Izberite različne kategorije";
 $Version = "Verzija";
 $Normal = "Normalno";
 $NoLogOfDuration = "Brez beleženja trajanja";
+$AutoInviteLink = "Uporabniki, ki niso vabljeni, lahko uporabijo to povezavo za dostop do vprašalnika";
 ?>

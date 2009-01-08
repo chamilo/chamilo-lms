@@ -110,7 +110,6 @@ $ViewSlideshow = "Paveikslėlių demonstracija";
 $Options = "Nustatymai";
 $WelcomeOogieConverter = "Welcome to Oogie PowerPoint converter<ul type=\\\"1\\\"><li>Browse your hard disk to find any .ppt or .odp file<li>Upload it to Oogie. It will tranform it into a Scorm learning path.<li>You will then be allowed to add audio comments on each slide and inserts test between slides for evaluation";
 $ConvertToLP = "Konvertuoti į Mokymosi medžiagą";
-$Validate = "Validuoti";
 $AdvancedSettings = "Išplėstiniai nustatymai";
 $AdvancedSettings = "Išplėstiniai nustatymai";
 $File = "Failas";

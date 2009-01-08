@@ -108,4 +108,8 @@ $ConfigChat = "Nastavitve klepeta";
 $AllowOpenchatWindow = "Odpri klepetalnico v novem oknu";
 $AllowOpenChatWindowActivate = "Aktiviraj odpiranje klepeta v novem oknu";
 $AllowOpenChatWindowDeactivate = "Deaktiviraj odpiranje klepeta v novem oknu";
+$NewUserEmailAlert = "Opozori preko e-pošte uèitelja teèaja v primeru avtomatiènega vpisa novega uporabnika v teèaj";
+$NewUserEmailAlertEnable = "Omogoèi opozorilo uèitelju teèaja preko e-pošte v primeru samodejnega vpisa novega uporabnika v teèaj";
+$NewUserEmailAlertToTeacharAndTutor = "Omogoèi opozorilo uèitelju in tutorjem teèaja v primeru samodejnega vpisa novega uporabnika v teèaj";
+$NewUserEmailAlertDisable = "Onemogoèi opozorilo v primeru vpisa novega uporabnika v teèaj";
 ?>

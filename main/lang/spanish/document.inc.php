@@ -110,7 +110,6 @@ $ViewSlideshow = "Ver presentación de imágenes";
 $Options = "Opciones";
 $WelcomeOogieConverter = "Bienvenido al conversor de PowerPoint Oogie<br>1. Examine su disco duro y busque cualquier archivo con las extensiones *.ppt o *.odp<br>2. Envíelo a Oogie, que lo transformará en un Itinerario de aprendizaje Scorm.<br>3.  Podrá añadir comentarios de audio a cada diapositiva e insertar test de evaluación entre diapositivas.";
 $ConvertToLP = "Convertir en un Itinerario de aprendizaje";
-$Validate = "Aceptar";
 $AdvancedSettings = "Configuraciones avanzadas";
 $AdvancedSettings = "Configuraciones avanzadas";
 $File = "Archivo";

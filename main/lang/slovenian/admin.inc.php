@@ -853,4 +853,5 @@ $ThereIsNotStillAResponsible = "Noben HR manager ni na voljo";
 $GlobalAgenda = "Globalna agenda";
 $AdvancedFileManagerTitle = "Napreden upravitelj datotek za WYSIWYG editor ";
 $AdvancedFileManagerComment = "Omogoèim napreden upravitelj datotek za WYSIWYG editor ? Omogoèanje bo dodalo dodatne opcije k upravitelju datotek. ";
+$MultipleAccessURLs = "URL-ji za dostop do platforme ";
 ?>

@@ -854,4 +854,8 @@ $GlobalAgenda = "Global agenda";
 $AdvancedFileManagerTitle = "Advanced file manager for wysiwyg editor";
 $AdvancedFileManagerComment = "Enable advanced file manager for WYSIWYG editor? This will add a considerable amount of additional options to the file manager that opens in a pop-up window when uploading files to the server.";
 $MultipleAccessURLs = "Multiple access URL";
+$SearchShowUnlinkedResultsTitle = "Full-text search: show unlinked results";
+$SearchShowUnlinkedResultsComment = "When showing the results of a full-text search, what should be done with the results that are not accessible to the current user?";
+$SearchHideUnlinkedResults = "Do not show them";
+$SearchShowUnlinkedResults = "Show them but without a link to the resource";
 ?>

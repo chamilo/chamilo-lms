@@ -78,4 +78,15 @@ $GroupCategory = "Kategorie grup";
 $NoTitleGiven = "Podaj tytu&#322;";
 $InvalidMaxNumberOfMembers = "Wpisz liczb&#281; uczestników (nie wi&#281;cej ni&#380; maks.)";
 $CategoryOrderChanged = "Kolejno&#347;&#263; kategorii zosta&#322;a zmieniona";
+$Wiki = "Wiki - Grupa";
+$CategoryCreated = "Utworzono Kategori&#281;";
+$GroupTutors = "Nauczyciel";
+$GroupWork = "Zadania";
+$GroupCalendar = "Agenda (plan)";
+$GroupAnnouncements = "Og&#322;oszenia";
+$NoCategoriesDefined = "Brak zdefiniowanej kategorii";
+$GroupsFromClasses = "Grupa oparta na klasie kursu";
+$GroupsFromClassesInfo = "U&#380;ywaj&#261;c tej opcji mo&#380;esz stworzy&#263; grup&#281; opart&#261; na klasie przypisanej do kursu.";
+$Group = "Grupa ";
+$ForumOfGroup = "Forum grupy:";
 ?>

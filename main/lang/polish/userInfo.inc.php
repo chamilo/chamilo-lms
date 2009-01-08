@@ -14,6 +14,8 @@ $langBackToUsersList = "Powrót do listy u&#380;ytkowników";
 $langTracking = "Raportowanie";
 $langCourseManager = "Administrator";
 $langModRight = "zmie&#324; uprawnienia dla";
+$langNoAdmin = "ma od tej pory <b>brak</b> uprawnie&#324; do strony.";
+$langAllAdmin = "ma od tej pory <b>pe&#322;ne</b> uprawnienia do strony.";
 $langModRole = "Zmie&#324; rol&#281; na";
 $langRole = "rola/status";
 $langIsNow = "jest odt&#261;d";
@@ -28,4 +30,5 @@ $langUserInfo = "dane u&#380;ytkownika";
 $langUnregister = "Wyrejestruj";
 $langAddAUser = "Dodaj u&#380;ytkowników";
 $UsersUnsubscribed = "Wybrany u&#380;ytkownik zosta&#322; wypisany z kursu";
+$ThisStudentIsSubscribeThroughASession = "Ucze&#324; jest zapisany na kurs przez sesje. Nie mo&#380;na edytowa&#263; tych informacji.";
 ?>

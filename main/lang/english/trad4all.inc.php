@@ -630,4 +630,16 @@ $langNameOfLang['trad_chinese'] = "traditional chinese";
 $langNameOfLang['turkce'] = "turkish";
 $langNameOfLang['ukrainian'] = "ukrainian";
 $langNameOfLang['yoruba'] = "yoruba";
+$SearchGoToLearningPath = "Go to learning path";
+$SearchLectureLibrary = "Lectures library";
+$SearchImagePreview = "Preview image";
+$SearchAdvancedOptions = "Advanced search options";
+$SearchResetKeywords = "Reset keywords";
+$SearchKeywords = "Keywords";
+$SearchIntroductionTextDeleted = "The introduction text has been deleted";
+$SearchKeywordsHelpTitle = "Keywords search help";
+$SearchKeywordsHelpComment = "Select keywords in one or more fields and click the search button.<br /><br />To select more than one keyword in a field, use Ctrl+click.";
+$Validate = "Validate";
+$SearchCombineSearchWith = "Combine keywords with";
+$SearchFeatureNotEnabledComment = "The full-text search feature is not enabled in this portal. Please contact the portal administrator.";
 ?>

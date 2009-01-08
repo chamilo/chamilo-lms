@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17504 2009-01-02 15:54:13Z yannoo $
+<?php //$Id: agenda.inc.php 17588 2009-01-08 11:05:06Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -2448,51 +2448,120 @@ function show_add_form($id = '')
 			$isocode_language=Database::result($result_sql,0,0);
 			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
 
+			//FCKeditor Configuration for documents
 
-		//FCKeditor Configuration for documents
-		if(isset($_SESSION['_course']) && $_SESSION['_course']['path']!='')
-		{
-			$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
-		}
-		else
-		{
-			$upload_path = api_get_path(REL_PATH).'main/default_course_document/';
-		}
+			if (api_get_setting('advanced_filemanager') == 'true')
+			{
+				// TODO: Settings for ajaxfilemanager to be implemented.
 
-		// if we don't find the CreateDocumentWebDir set we change it with th absolute path http://www.dok..
+				//$oFCKeditor->Config['AdvancedFileManager'] = true;
 
-		if ($oFCKeditor->Config['CreateDocumentWebDir']=='')
-		{
-			$oFCKeditor->Config['CreateDocumentWebDir']=api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
-			$oFCKeditor->Config['CreateDocumentDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
-		};
+				// For images
 
-		//for images
-		$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-		$oFCKeditor->Config['ImageUploadURL'] =  $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
+				// For flash
 
-		//for flash
-		$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-		$oFCKeditor->Config['FlashUploadURL'] =  $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
+				// For MP3
 
-		//for MP3
-		$oFCKeditor->Config['MP3BrowserURL'] = 	$oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-		$oFCKeditor->Config['MP3UploadURL'] =  	$oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
+				// For Videos
 
-		//for Videos
-		$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-		$oFCKeditor->Config['VideoUploadURL'] =  $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
+				// Links
 
-		//link
-		$oFCKeditor->Config['LinkBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+				// For Videos (flv)
 
-		//for Videos (flv)
-		$oFCKeditor->Config['MediaBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-		$oFCKeditor->Config['MediaUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
+				//------------------------------------------------------------------------
+				
+				// At the moment here the simple manager does the work.
 
-		$return =	$oFCKeditor->CreateHtml();
+				$oFCKeditor->Config['AdvancedFileManager'] = false;
 
-		echo $return;
+				if (isset($_SESSION['_course']) && $_SESSION['_course']['path']!='')
+				{
+					$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
+				}
+				else
+				{
+					$upload_path = api_get_path(REL_PATH).'main/default_course_document/';
+				}
+
+				// if we don't find the CreateDocumentWebDir set we change it with th absolute path http://www.dok..
+
+				if ($oFCKeditor->Config['CreateDocumentWebDir']=='')
+				{
+					$oFCKeditor->Config['CreateDocumentWebDir']=api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
+					$oFCKeditor->Config['CreateDocumentDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
+				};
+
+				// For images
+				$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+				$oFCKeditor->Config['ImageUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
+
+				// For flash
+				$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+				$oFCKeditor->Config['FlashUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
+
+				// For MP3
+				$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+				$oFCKeditor->Config['MP3UploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
+
+				// For Videos
+				$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+				$oFCKeditor->Config['VideoUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
+
+				// Links
+				$oFCKeditor->Config['LinkBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+
+				// For Videos (flv)
+				$oFCKeditor->Config['MediaBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+				$oFCKeditor->Config['MediaUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
+			}
+			else
+			{
+				$oFCKeditor->Config['AdvancedFileManager'] = false;
+
+				if (isset($_SESSION['_course']) && $_SESSION['_course']['path']!='')
+				{
+					$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
+				}
+				else
+				{
+					$upload_path = api_get_path(REL_PATH).'main/default_course_document/';
+				}
+
+				// if we don't find the CreateDocumentWebDir set we change it with th absolute path http://www.dok..
+
+				if ($oFCKeditor->Config['CreateDocumentWebDir']=='')
+				{
+					$oFCKeditor->Config['CreateDocumentWebDir']=api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
+					$oFCKeditor->Config['CreateDocumentDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
+				};
+
+				// For images
+				$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+				$oFCKeditor->Config['ImageUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
+
+				// For flash
+				$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+				$oFCKeditor->Config['FlashUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
+
+				// For MP3
+				$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+				$oFCKeditor->Config['MP3UploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
+
+				// For Videos
+				$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+				$oFCKeditor->Config['VideoUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
+
+				// Links
+				$oFCKeditor->Config['LinkBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+
+				// For Videos (flv)
+				$oFCKeditor->Config['MediaBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+				$oFCKeditor->Config['MediaUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
+			}
+
+			$return =	$oFCKeditor->CreateHtml();
+
+			echo $return;
 
  ?>
 		</td>

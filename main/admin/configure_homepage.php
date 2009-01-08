@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 17560 2009-01-07 12:34:08Z herodoto $
+<?php // $Id: configure_homepage.php 17583 2009-01-08 10:37:05Z ivantcholakov $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -744,15 +744,6 @@ switch($action){
 					$oFCKeditor->Width		= '100%';
 					$oFCKeditor->Value		= isset($_POST['link_html'])?$_POST['link_html']:$link_html;
 
-					if(api_get_setting('advanced_filemanager')=='true')
-					{
-						$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
-					}
-					else
-					{
-						$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-					}
-
 					$oFCKeditor->ToolbarSet = "Small";
 
 					$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
@@ -760,6 +751,20 @@ switch($action){
 					$result_sql=api_sql_query($sql,__FILE__,__LINE__);
 					$isocode_language=Database::result($result_sql,0,0);
 					$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+
+					if (api_get_setting('advanced_filemanager') == 'true')
+					{
+						$oFCKeditor->Config['AdvancedFileManager'] = true;
+
+						$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
+					}
+					else
+					{
+						$oFCKeditor->Config['AdvancedFileManager'] = false;
+
+						$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+					}
+
 					echo $oFCKeditor->CreateHtml();
 				}
 
@@ -846,15 +851,6 @@ switch($action){
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Value		= $open;
 
-			if(api_get_setting('advanced_filemanager')=='true')
-			{
-				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
-			}
-			else
-			{
-				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-			}
-
 			$oFCKeditor->ToolbarSet = "Full";
 
 			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
@@ -862,6 +858,19 @@ switch($action){
 			$result_sql=api_sql_query($sql,__FILE__,__LINE__);
 			$isocode_language=Database::result($result_sql,0,0);
 			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+
+			if (api_get_setting('advanced_filemanager') == 'true')
+			{
+				$oFCKeditor->Config['AdvancedFileManager'] = true;
+
+				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
+			}
+			else
+			{
+				$oFCKeditor->Config['AdvancedFileManager'] = false;
+
+				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+			}
 
 			//FCKeditor Configuration for the default_course_document
 			if(api_get_setting('advanced_filemanager')!='true')
@@ -873,59 +882,46 @@ switch($action){
 			$oFCKeditor->Config['CreateDocumentDir'] = $upload_path;
 			$oFCKeditor->Config['CreateDocumentWebDir'] = $upload_path;
 
-			//for images
-			if(api_get_setting('advanced_filemanager')=='true')
+			if(api_get_setting('advanced_filemanager') == 'true')
 			{
+				// For images
 				$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
+
+				// For flash
+				$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
+
+				// For MP3
+				$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
+
+				// For video
+				$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
+
+				// For flv Player (Videos)
+				$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
 			}
 			else
 			{
+				// For images
 				$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
 				$oFCKeditor->Config['ImageUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
-			}
-			//for flash
-			if(api_get_setting('advanced_filemanager')=='true')
-			{
-				$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-			}
-			else
-			{
+
+				// For flash
 				$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
 				$oFCKeditor->Config['FlashUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
-			}
-			//for MP3
-			if(api_get_setting('advanced_filemanager')=='true')
-			{
-				$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-			}
-			else
-			{
+
+				// For MP3
 				$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
 				$oFCKeditor->Config['MP3UploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
-			}
 
-			//for video
-			if(api_get_setting('advanced_filemanager')=='true')
-			{
-				$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-			}
-			else
-			{
+				// For video
 				$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
 				$oFCKeditor->Config['VideoUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
-			}
 
-
-			// for flv Player (Videos)
-			if(api_get_setting('advanced_filemanager')=='true')
-			{
-				$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-			}
-			else
-			{
+				// For flv Player (Videos)
 				$oFCKeditor->Config['MediaBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
 				$oFCKeditor->Config['MediaUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
 			}
+
 			echo $oFCKeditor->CreateHtml();
 		}
 		?>

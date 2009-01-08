@@ -104,14 +104,16 @@ class learnpathItem{
 		$this->db_id = $id;
 
         // get search_did
-        $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-        $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d LIMIT 1';
-        // TODO: verify if it's possible to assume the actual course instead of getting it from db
-        $sql = sprintf($sql, $tbl_se_ref, api_get_course_id(), TOOL_LEARNPATH, $this->lp_id, $id);
-        $res = api_sql_query($sql, __FILE__, __LINE__);
-        if (Database::num_rows($res) >  0) {
-	        $se_ref = Database::fetch_array($res);
-	        $this->search_did = (int)$se_ref['search_did'];
+        if (api_get_setting('search_enabled')=='true') {
+            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+            $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d LIMIT 1';
+            // TODO: verify if it's possible to assume the actual course instead of getting it from db
+            $sql = sprintf($sql, $tbl_se_ref, api_get_course_id(), TOOL_LEARNPATH, $this->lp_id, $id);
+            $res = api_sql_query($sql, __FILE__, __LINE__);
+            if (Database::num_rows($res) >  0) {
+    	        $se_ref = Database::fetch_array($res);
+    	        $this->search_did = (int)$se_ref['search_did'];
+            }
         }
         $this->audio = $row['audio'];
 		

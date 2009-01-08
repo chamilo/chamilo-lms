@@ -475,7 +475,7 @@ class scorm extends learnpath {
 				$previous = $item_id;
 
 				// code for indexing, now only index specific fields like terms and the title
-				if (isset($_POST['index_document']) && $_POST['index_document']) {
+				if (!empty($_POST['index_document'])) {
 					require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
 					require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
 					require_once(api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php');

@@ -16,7 +16,7 @@
 // ==============       config settings       ===========
 
 // plugin's language
-	var _editor_lang = "en";
+	var _editor_lang = "en"; // TODO: To be revised for other languages support.
 // show image manager or show immediately the image editor
 // false = use manager, standard behavior
 // true = no manager, only editing the image
@@ -38,7 +38,7 @@
 	var oImageManagerItem = new FCKToolbarButton( 'ImageManager', "ImageManager", null, null, false, true ) ;
 
 	//oImageManagerItem.IconPath = FCKConfig.PluginsPath + 'ImageManager/icon.gif' ;
-	oImageManagerItem.IconPath = FCKConfig.ImagesIcon ; // Use custom icon.
+	oImageManagerItem.IconPath = FCKConfig.ImagesIcon ; // Use a custom icon.
 
 	FCKToolbarItems.RegisterItem( 'ImageManager', oImageManagerItem ) ;
 
@@ -63,10 +63,9 @@
 
 	FCK.RegisterDoubleClickHandler( ImageManager_doubleClick, 'IMG' ) ;
 
-	// starting ImageManager
 	function ImageManager_click(editor, sender) {
 
-		// If an existing image has been selected let us use the Image Properties dialog.
+		// If an existing image has been selected let us use the original Image Properties dialog.
 		var image = FCK.Selection.GetSelectedElement() ;
 		if ( image )
 		{
@@ -82,6 +81,8 @@
 			}
 			// For other kinds of objects Image Manager should be activated to replace them.
 		}
+
+		// Starting ImageManager.
 
 		var wArgs = {};
 		if(FCKSelection.GetType() == 'Control') {

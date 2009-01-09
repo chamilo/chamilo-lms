@@ -13,13 +13,13 @@
 	 
 	/////////////////// All from Dokeos
 	
-	include ('../../../../../../inc/global.inc.php');
+	require_once ('../../../../../../inc/global.inc.php');
+	require_once (api_get_path(LIBRARY_PATH).'/fileUpload.lib.php');
 	
 	if(!empty($_course['path']))
 	{	
-		include_once (api_get_path(LIBRARY_PATH).'/fileUpload.lib.php');
-		include_once (api_get_path(LIBRARY_PATH).'/document.lib.php');
-		include_once (api_get_path(LIBRARY_PATH).'/groupmanager.lib.php');
+		require_once (api_get_path(LIBRARY_PATH).'/document.lib.php');
+		require_once (api_get_path(LIBRARY_PATH).'/groupmanager.lib.php');
 	    //get Dokeos session properties. Before ajaximagemanager!!!
 		$to_group_id = 0;
 		$to_group_id = $_SESSION['_gid'];

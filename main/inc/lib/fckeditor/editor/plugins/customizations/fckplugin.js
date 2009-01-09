@@ -795,11 +795,7 @@ for ( var i in FCK.ContextMenu.Listeners )
 FCK.ContextMenu.RegisterListener( {
 	AddItems : function ( menu, tag, tagName )
 	{
-		if ( tagName == 'IMG' &&
-			!tag.getAttribute( '_fckfakelement' ) &&
-			!tag.getAttribute( '_fckflash' ) &&
-			!tag.getAttribute( '_fckmp3' ) &&
-			!tag.getAttribute( '_fckvideo' ) )
+		if ( FCK.is_real_image( tag ) )
 		{
 			// Grouping all image-related commands at the bottom.
 			menu.AddSeparator();
@@ -925,6 +921,17 @@ FCK.RegisterDoubleClickHandler(
  * Common utilities
  **************************************************************************************
  */
+
+// Checking whether a selected object is a real image or not.
+FCK.is_real_image = function ( tag )
+	{
+		return ( tag.nodeName.IEquals( 'img' ) &&
+			!tag.getAttribute( '_fckfakelement' ) &&
+			!tag.getAttribute( '_fckflash' ) &&
+			!tag.getAttribute( '_fckmp3' ) &&
+			!tag.getAttribute( '_fckvideo' )
+			) ? true : false ;
+	} ;
 
 // Checking for audio file reference which is to be used by a flash player.
 FCK.is_audio = function ( tag )

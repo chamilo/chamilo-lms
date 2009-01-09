@@ -50,11 +50,7 @@
     function ImageManager_doubleClick (img) {
 
 		//if ( img.tagName == 'IMG' ) FCKCommands.GetCommand( 'ImageManager' ).Execute() ;
-		if ( img.tagName == 'IMG' &&
-			!img.getAttribute( '_fckfakelement' ) &&
-			!img.getAttribute( '_fckflash' ) &&
-			!img.getAttribute( '_fckmp3' ) &&
-			!img.getAttribute( '_fckvideo' ) )
+		if ( FCK.is_real_image( img ) )
 		{
 			//FCKCommands.GetCommand( 'ImageManager' ).Execute() ;
 			FCKCommands.GetCommand( 'Image' ).Execute() ;
@@ -70,11 +66,7 @@
 		if ( image )
 		{
 			// Checking whether the selected object is a real image.
-			if ( image.nodeName.IEquals( 'img' ) &&
-				!image.getAttribute( '_fckfakelement' ) &&
-				!image.getAttribute( '_fckflash' ) &&
-				!image.getAttribute( '_fckmp3' ) &&
-				!image.getAttribute( '_fckvideo' ) )
+			if ( FCK.is_real_image( image ) )
 			{
 				FCKCommands.GetCommand( 'Image' ).Execute() ;
 				return ;

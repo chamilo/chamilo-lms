@@ -30,6 +30,7 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
    $mail->Mailer  = $platform_email['SMTP_MAILER'];
    $mail->Host    = $platform_email['SMTP_HOST'];
    $mail->Port    = $platform_email['SMTP_PORT'];
+   $mail->WordWrap = 200; // stay far below SMTP protocol 980 chars limit
 
    if($platform_email['SMTP_AUTH'])
    {
@@ -120,6 +121,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
    $mail->Mailer  = $platform_email['SMTP_MAILER'];
    $mail->Host    = $platform_email['SMTP_HOST'];
    $mail->Port    = $platform_email['SMTP_PORT'];
+   $mail->WordWrap = 200; // stay far below SMTP protocol 980 chars limit
 
    if($platform_email['SMTP_AUTH'])
    {
@@ -206,6 +208,8 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 			}
 		}
 	}
+    // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
+    $mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
    //send mail
    if (!$mail->Send())
    {

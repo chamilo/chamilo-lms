@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 17585 2009-01-08 10:50:32Z ivantcholakov $
+<?php //$Id: announcements.php 17620 2009-01-09 12:45:57Z derrj $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -712,9 +712,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 									  		   Morgen is er geen les, de les wordt geschrapt wegens vergadering (newContent)
 							    */
 
-								$emailsubjbericht = api_is_allowed_to_edit(false,true) ? get_lang('professorMessage') : get_lang('LearnerMessage');
-								$emailSubject = $emailsubjbericht. " - ".$_course['official_code'];
-								$emailSubject = $emailTitle;
+								$emailSubject = "[" . $_course['official_code'] . "] " . $emailTitle;
 
 								$db_name = Database::get_course_table(TABLE_MAIN_SURVEY);
 
@@ -738,10 +736,15 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 	                            }
 	                            else
 	                            {
-									$mail_body = $myrow["lastname"]." ".$myrow["firstname"]." <".$myrow["email"]."><br /> \n\n".stripslashes($emailTitle)."<br />".trim(stripslashes($newContent))." <br /><br />-- <br />";
-									$mail_body .= $_user['firstName'].' '.$_user['lastName']." ";
-									$mail_body .= "<".$_user['mail'].">\n";
-									$mail_body .= $_course['official_code'].' '.$_course['name'];
+                                    // intro of the email: receiver name and subject
+									$mail_body = $myrow["lastname"]." ".$myrow["firstname"]."<br />\n".stripslashes($emailTitle)."<br />";
+									// main part of the email
+                                    $mail_body .= trim(stripslashes($newContent));
+                                    // signature of email: sender name and course URL after -- line
+                                    $mail_body .= "<br />-- <br />";
+                                    $mail_body .= $_user['firstName'].' '.$_user['lastName']." \n";
+                                    $mail_body .= "<br /> \n<a href=\"".api_get_path(WEB_COURSE_PATH).$_course['official_code']."\">";
+                                    $mail_body .= $_course['official_code'].' '.$_course['name'] . "</a>";
 
 									//set the charset and use it for the encoding of the email - small fix, not really clean (should check the content encoding origin first)
 									//here we use the encoding used for the webpage where the text is encoded (ISO-8859-1 in this case)

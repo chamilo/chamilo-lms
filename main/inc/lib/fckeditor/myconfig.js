@@ -70,7 +70,7 @@ FCKConfig.ToolbarSets["Survey"] = [
 
 FCKConfig.ToolbarSets["Wiki"] = [
 	['NewPage','Templates','Save','Print','PageBreak','Preview','ShowBlocks','-','Cut','Copy','Paste','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
-	['Wikilink','Link','Unlink','Anchor','-','Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','MP3','Table','Rule','Smiley','SpecialChar','googlemaps'],
+	['Wikilink','Link','Unlink','Anchor','-','Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3','Table','CreateDiv','Rule','Smiley','SpecialChar','googlemaps'],
 	['FontFormat','FontName','FontSize'],
 	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor','Source'],
 	['FitWindow']

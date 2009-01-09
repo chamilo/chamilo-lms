@@ -54,9 +54,14 @@
  **************************************************************************************
  */
 
-if (FCKConfig.AdvancedFileManager)
+// Reading + converting to boolean type.
+if ( FCKConfig.AdvancedFileManager )
 {
 	FCKConfig.AdvancedFileManager = FCKConfig.AdvancedFileManager.toString().toLowerCase() == 'true' ? true : false ;
+}
+else
+{
+	FCKConfig.AdvancedFileManager = false ;
 }
 
 
@@ -498,8 +503,72 @@ FCKToolbarItems.GetItem = function( itemName )
  **************************************************************************************
  */
 
+// Making a new alternative command for prcessing Images.
+var FCKImageCommand = function( name )
+{
+	this.Name = name ;
+	this.ImageProperties = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 450 ) ;
+	this.ImageManager = null ;
+	// Checking whether ImageManager plugin has been loaded or not.
+	// Thus, a platform administrator will be free safelly to turn this plugin off.
+	for ( var i = 0 ; i < FCKConfig.Plugins.Items.length ; i++ )
+	{
+		if ( FCKConfig.Plugins.Items[i][0] == 'ImageManager' )
+		{
+			this.ImageManager = new FCKImageManager('ImageManager') ;
+			break ;
+		}
+	}
+}
+
+FCKImageCommand.prototype.Execute = function()
+{
+	// If the advanced file manager it to be used, the image properties dialog shoud be activated.
+	if ( FCKConfig.AdvancedFileManager )
+	{
+		this.ImageProperties.Execute() ;
+	}
+	else
+	{
+		// If the ImageManager plugin has not been loaded, the image properties dialog shoud be activated too.
+		if ( !this.ImageManager )
+		{
+			this.ImageProperties.Execute() ;
+		}
+		else
+		{
+			var image = FCK.Selection.GetSelectedElement() ;
+			if ( image )
+			{
+				// If an image has been selected in the editor, the image properties dialog shoud be activated.
+				if ( FCK.is_real_image( image ) )
+				{
+					this.ImageProperties.Execute() ;
+				}
+				// If the selected object is fake image, the image manager dialog should be activated.
+				else
+				{
+					this.ImageManager.Execute() ;
+				}
+			}
+			// In other cases (no object selected or the selected object is not an image),
+			// the image manager dialog should be activated.
+			else
+			{
+				this.ImageManager.Execute() ;
+			}
+		}
+	}
+} ;
+
+FCKImageCommand.prototype.GetState = function()
+{
+	return FCK_TRISTATE_OFF ;
+}
+
 // This function has been redefined here in order hard-coded dialog sizes
 // to be controlled by the developers.
+// The Image command's behaviour has been changed.
 FCKCommands.GetCommand = function( commandName )
 {
 	var oCommand = FCKCommands.LoadedCommands[ commandName ] ;
@@ -531,7 +600,9 @@ FCKCommands.GetCommand = function( commandName )
 		case 'Find'			: oCommand = new FCKDialogCommand( 'Find'		, FCKLang.DlgFindAndReplaceTitle, 'dialog/fck_replace.html'		, 450, 250, null, null, 'Find' ) ; break ;
 		case 'Replace'		: oCommand = new FCKDialogCommand( 'Replace'	, FCKLang.DlgFindAndReplaceTitle, 'dialog/fck_replace.html'		, 450, 250, null, null, 'Replace' ) ; break ;
 
-		case 'Image'		: oCommand = new FCKDialogCommand( 'Image'		, FCKLang.DlgImgTitle			, 'dialog/fck_image.html'		, 600, 450 ) ; break ;
+		//case 'Image'		: oCommand = new FCKDialogCommand( 'Image'		, FCKLang.DlgImgTitle			, 'dialog/fck_image.html'		, 600, 450 ) ; break ;
+		case 'Image'		: oCommand = new FCKImageCommand( 'Image' ) ; break ;
+
 		case 'Flash'		: oCommand = new FCKDialogCommand( 'Flash'		, FCKLang.DlgFlashTitle			, 'dialog/fck_flash.html'		, 600, 450 ) ; break ;
 		case 'SpecialChar'	: oCommand = new FCKDialogCommand( 'SpecialChar', FCKLang.DlgSpecialCharTitle	, 'dialog/fck_specialchar.html'	, 540, 450 ) ; break ;
 		case 'Smiley'		: oCommand = new FCKDialogCommand( 'Smiley'		, FCKLang.DlgSmileyTitle		, 'dialog/fck_smiley.html'		, FCKConfig.SmileyWindowWidth, FCKConfig.SmileyWindowHeight ) ; break ;
@@ -924,103 +995,103 @@ FCK.RegisterDoubleClickHandler(
 
 // Checking whether a selected object is a real image or not.
 FCK.is_real_image = function ( tag )
-	{
-		return ( tag.nodeName.IEquals( 'img' ) &&
-			!tag.getAttribute( '_fckfakelement' ) &&
-			!tag.getAttribute( '_fckflash' ) &&
-			!tag.getAttribute( '_fckmp3' ) &&
-			!tag.getAttribute( '_fckvideo' )
-			) ? true : false ;
-	} ;
+{
+	return ( tag.nodeName.IEquals( 'img' ) &&
+		!tag.getAttribute( '_fckfakelement' ) &&
+		!tag.getAttribute( '_fckflash' ) &&
+		!tag.getAttribute( '_fckmp3' ) &&
+		!tag.getAttribute( '_fckvideo' )
+		) ? true : false ;
+} ;
 
 // Checking for audio file reference which is to be used by a flash player.
 FCK.is_audio = function ( tag )
+{
+	if ( tag.nodeName.IEquals( 'embed' ) )
 	{
-		if ( tag.nodeName.IEquals( 'embed' ) )
+		if ( !tag.src )
 		{
-			if ( !tag.src )
-			{
-				return false ;
-			}
-
-			if ( tag.type == 'application/x-shockwave-flash' || /\.swf($|#|\?|&)?/i.test( tag.src ) )
-			{
-				// Possible way of detection for other players.
-				if ( /\.mp3/i.test( tag.src ) )
-				{
-					return true ;
-				}
-
-				// Specific to mediaplayer detection.
-				var flashvars = FCKDomTools.GetAttributeValue( tag, 'flashvars' ) ;
-				flashvars = flashvars ? flashvars.toLowerCase() : '' ;
-
-				if ( /\.mp3/i.test( flashvars ) )
-				{
-					return true ;
-				}
-			}
+			return false ;
 		}
 
-		return false ;
-	} ;
-
-// Checking for video file reference within an embedded object.
-FCK.is_video = function ( tag )
-	{
-		if ( tag.nodeName.IEquals( 'embed' ) )
+		if ( tag.type == 'application/x-shockwave-flash' || /\.swf($|#|\?|&)?/i.test( tag.src ) )
 		{
-			if ( !tag.src )
-			{
-				return false ;
-			}
-
-			// There are three plugins dealing with video content. Detection looks a bit messy.
-
-			// Embedded video.
-			if ( /\.(mpg|mpeg|mp4|avi|wmv|mov|asf)/i.test( tag.src ) )
+			// Possible way of detection for other players.
+			if ( /\.mp3/i.test( tag.src ) )
 			{
 				return true ;
 			}
 
-			if ( tag.type == 'application/x-shockwave-flash' || /\.swf($|#|\?|&)?/i.test( tag.src ) )
+			// Specific to mediaplayer detection.
+			var flashvars = FCKDomTools.GetAttributeValue( tag, 'flashvars' ) ;
+			flashvars = flashvars ? flashvars.toLowerCase() : '' ;
+
+			if ( /\.mp3/i.test( flashvars ) )
 			{
-				// Youtube.
-				if ( /\.youtube\.com/i.test( tag.src ) )
-				{
-					return true ;
-				}
-
-				// FLV player.
-				if ( /\.flv/i.test( tag.src ) )
-				{
-					return true ;
-				}
-
-				var flashvars = FCKDomTools.GetAttributeValue( tag, 'flashvars' ) ;
-				flashvars = flashvars ? flashvars.toLowerCase() : '' ;
-
-				if ( /\.flv/i.test( flashvars ) )
-				{
-					return true ;
-				}
+				return true ;
 			}
 		}
+	}
 
-		// This is for the specific flv player and SWFObject technique for attaching multimedia.
-		if ( tag.nodeName.IEquals( 'div' ) )
+	return false ;
+} ;
+
+// Checking for video file reference within an embedded object.
+FCK.is_video = function ( tag )
+{
+	if ( tag.nodeName.IEquals( 'embed' ) )
+	{
+		if ( !tag.src )
 		{
-			if ( tag.id )
-			{
-				if ( tag.id.match( /^player[0-9]*-parent$/ ) )
-				{
-					return true ;
-				}
-			}
+			return false ;
 		}
 
-		return false ;
-	} ;
+		// There are three plugins dealing with video content. Detection looks a bit messy.
+
+		// Embedded video.
+		if ( /\.(mpg|mpeg|mp4|avi|wmv|mov|asf)/i.test( tag.src ) )
+		{
+			return true ;
+		}
+
+		if ( tag.type == 'application/x-shockwave-flash' || /\.swf($|#|\?|&)?/i.test( tag.src ) )
+		{
+			// Youtube.
+			if ( /\.youtube\.com/i.test( tag.src ) )
+			{
+				return true ;
+			}
+
+			// FLV player.
+			if ( /\.flv/i.test( tag.src ) )
+			{
+				return true ;
+			}
+
+			var flashvars = FCKDomTools.GetAttributeValue( tag, 'flashvars' ) ;
+			flashvars = flashvars ? flashvars.toLowerCase() : '' ;
+
+			if ( /\.flv/i.test( flashvars ) )
+			{
+				return true ;
+			}
+		}
+	}
+
+	// This is for the specific flv player and SWFObject technique for attaching multimedia.
+	if ( tag.nodeName.IEquals( 'div' ) )
+	{
+		if ( tag.id )
+		{
+			if ( tag.id.match( /^player[0-9]*-parent$/ ) )
+			{
+				return true ;
+			}
+		}
+	}
+
+	return false ;
+} ;
 
 // Returns specific type/source of embedded video.
 FCK.get_video_type = function ( img )
@@ -1076,46 +1147,4 @@ FCK.get_video_type = function ( img )
 	}
 
 	return false ;
-}
-
-// This is a utility for debugging purposes.
-// TODO: To be deleted before the final release (1.8.6).
-function var_dump( variable, level )
-{
-	var result = '' ;
-
-	if ( !level )
-	{
-		level = 0 ;
-	}
-
-	var padding = '' ;
-
-	for ( var i = 0; i < level + 1; i++ )
-	{
-		padding += '    ' ;
-	}
-
-	if (typeof( variable ) == 'object')
-	{
-		for ( var item in variable )
-		{
-			var value = variable[item] ;
-			
-			if (typeof( value ) == 'object')
-			{
-				result += padding + "'" + item + "' ...\n" ;
-				result += var_dump( value, level + 1 ) ;
-			}
-			else
-			{
-				result += padding + "'" + item + "' => \"" + value + "\"\n" ;
-			}
-		}
-	}
-	else
-	{
-		result = '===>' + variable + '<===(' + typeof(variable) + ')' ;
-	}
-	return result ;
-}
+} ;

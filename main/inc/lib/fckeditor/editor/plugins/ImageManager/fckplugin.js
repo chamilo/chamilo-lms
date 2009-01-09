@@ -49,11 +49,10 @@
     // Open the Image properties dialog on double click.
     function ImageManager_doubleClick (img) {
 
-		//if ( img.tagName == 'IMG' ) FCKCommands.GetCommand( 'ImageManager' ).Execute() ;
 		if ( FCK.is_real_image( img ) )
 		{
-			//FCKCommands.GetCommand( 'ImageManager' ).Execute() ;
-			FCKCommands.GetCommand( 'Image' ).Execute() ;
+			var command = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 450 ) ;
+			command.Execute() ;
 		}
 	}
 
@@ -68,7 +67,8 @@
 			// Checking whether the selected object is a real image.
 			if ( FCK.is_real_image( image ) )
 			{
-				FCKCommands.GetCommand( 'Image' ).Execute() ;
+				var command = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 450 ) ;
+				command.Execute() ;
 				return ;
 			}
 			// For other kinds of objects Image Manager should be activated to replace them.

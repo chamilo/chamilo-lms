@@ -1,4 +1,4 @@
-<?php // $Id: user_portal.php 17439 2008-12-23 19:28:15Z derrj $
+<?php // $Id: user_portal.php 17610 2009-01-09 01:47:34Z marvil07 $
   
 /* For licensing terms, see /dokeos_license.txt */
 /**
@@ -944,6 +944,20 @@ if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu']))
 	echo '<div class="note">';
 	api_plugin('mycourses_menu');
 	echo '</div>';
+}
+
+// search textbox
+if (api_get_setting('search_enabled') == 'true') {
+    echo '<div class="searchbox">';
+    $search_btn = get_lang('Search');
+    $search_text_default = get_lang('YourTextHere');
+echo <<<EOD
+<form action="main/search/" method="post">
+<input type="text" id="query" name="query" value="$search_text_default" />
+<input type="submit" name="submit" value="$search_btn" />
+</form>
+EOD;
+    echo '</div>';
 }
 
 echo '</div>'; // end of menu

@@ -24,23 +24,26 @@
 
 // ================================================
 
-	var FCKImageManager = function(name) {  
-		this.Name = name;		
-	}  
-	// manage the plugins' button behavior  
-	FCKImageManager.prototype.GetState = function() {  
-		return FCK_TRISTATE_OFF;  
-	}  
+	var FCKImageManager = function(name) {
+		this.Name = name;
+	}
+	// manage the plugins' button behavior
+	FCKImageManager.prototype.GetState = function() {
+		return FCK_TRISTATE_OFF;
+	}
+
+	FCKCommands.RegisterCommand('ImageManager', new FCKImageManager('ImageManager')) ;
 	 
-	FCKCommands.RegisterCommand('ImageManager', new FCKImageManager('ImageManager')) ;  
-	 
-	// Create the toolbar button. 
-	var oImageManagerItem = new FCKToolbarButton( 'ImageManager', "ImageManager", null, null, false, true ) ; 
-	oImageManagerItem.IconPath = FCKConfig.PluginsPath + 'ImageManager/icon.gif' ; 
+	// Create the toolbar button.
+	var oImageManagerItem = new FCKToolbarButton( 'ImageManager', "ImageManager", null, null, false, true ) ;
+
+	//oImageManagerItem.IconPath = FCKConfig.PluginsPath + 'ImageManager/icon.gif' ;
+	oImageManagerItem.IconPath = FCKConfig.ImagesIcon ; // Use custom icon.
+
 	FCKToolbarItems.RegisterItem( 'ImageManager', oImageManagerItem ) ;
-	
-	FCKImageManager.prototype.Execute = function() {  
-		ImageManager_click(FCK, null)	
+
+	FCKImageManager.prototype.Execute = function() {
+		ImageManager_click(FCK, null)
 	}
 
     // Open the Image properties dialog on double click.
@@ -58,7 +61,7 @@
 		}
 	}
 
-	FCK.RegisterDoubleClickHandler( ImageManager_doubleClick, 'IMG' ) ;	
+	FCK.RegisterDoubleClickHandler( ImageManager_doubleClick, 'IMG' ) ;
 
 	// starting ImageManager
 	function ImageManager_click(editor, sender) {
@@ -88,19 +91,19 @@
 		}
 		
 		if (sElm != null && sElm.nodeName.toLowerCase() == 'img') 
-			var im = sElm;  // is current cell a image ?			
-	
-		if (im) 
+			var im = sElm;  // is current cell a image ?
+
+		if (im)
 		{ // selected object is image
-			wArgs.f_url		= im.src ? im.src : '';			
-			wArgs.f_alt		= im.alt ? im.alt : '';			
+			wArgs.f_url		= im.src ? im.src : '';
+			wArgs.f_alt		= im.alt ? im.alt : '';
 			wArgs.f_title 	= im.title ? im.title : '';
 			wArgs.f_width 	= im.style.width  ? im.style.width  : im.width;
 			wArgs.f_height 	= im.style.height ? im.style.height : im.height;
 			wArgs.f_border 	= im.border ? im.border : '';
 			wArgs.f_align 	= im.align ? im.align : '';
 			wArgs.f_className = im.className ? im.className : '';
-			
+
 			// (-1 when not set under gecko for some reason)
 			if ( im.hspace )
 			{
@@ -135,7 +138,7 @@ function setAttrib(element, name, value, fixval) { // set element attributes
 /* IMAGE MANAGER OBJECT - A CROSS BETWEEN THE STANDALONE & HTMLAREA PLUGIN VERSIONS */
 function ImageManager()
 {
-	//var tt = ImageManager.I18N;	
+	//var tt = ImageManager.I18N;
 };
 
 
@@ -166,22 +169,22 @@ ImageManager.prototype.insert = function(outparam)
 	// show image manager
 	else
 	{
-	
+
 		var manager = FCKConfig.PluginsPath+'ImageManager/manager.php?base_url_alt='+FCKConfig.CreateDocumentDir;
 
 		Dialog(manager, function(param) {
 
 			if (!param) return false; // user must have pressed cancel
 			var sElm = FCK.Selection.GetSelectedElement();
-			if (sElm != null && sElm.nodeName.toLowerCase() == 'img') var im = sElm;				
+			if (sElm != null && sElm.nodeName.toLowerCase() == 'img') var im = sElm;
 
 			if (!im) { // new image// no image - create new image
-				im = FCK.CreateElement('IMG');					
+				im = FCK.CreateElement('IMG');
 			}
 
-			// set image attributes				
-			setAttrib(im, "_fcksavedurl", param.f_url_alt , true);						
-			//setAttrib(im, 'src', param.f_url_alt, true);				
+			// set image attributes
+			setAttrib(im, "_fcksavedurl", param.f_url_alt , true);
+			//setAttrib(im, 'src', param.f_url_alt, true);
 			setAttrib(im, 'src', param.f_url_alt, true);
 			setAttrib(im, 'alt', param.f_alt, true);
 			setAttrib(im, 'title', param.f_title, true);
@@ -190,8 +193,8 @@ ImageManager.prototype.insert = function(outparam)
 			setAttrib(im, 'hspace', param.f_horiz);
 			setAttrib(im, 'vspace', param.f_vert);
 			setAttrib(im, 'width', param.f_width);
-			setAttrib(im, 'height', param.f_height);				
-			setAttrib(im, 'className', param.f_className, true); 
+			setAttrib(im, 'height', param.f_height);
+			setAttrib(im, 'className', param.f_className, true);
 			return;
 
 		}, outparam);
@@ -209,7 +212,7 @@ ImageManager.prototype.insert = function(outparam)
 // Version 3.0 developed by Mihai Bazon.
 //   http://dynarch.com/mishoo
 //
-// Id: dialog.js 26 2004-03-31 02:35:21Z Wei Zhuo 
+// Id: dialog.js 26 2004-03-31 02:35:21Z Wei Zhuo
 
 // Though "Dialog" looks like an object, it isn't really an object.  Instead
 // it's just namespace for protecting global symbols.
@@ -281,7 +284,7 @@ Dialog._geckoOpenModal = function(url, action, init) {
 Dialog._addEvent = function(el, evname, func) {
 	if (Dialog.is_ie) {
 		el.attachEvent("on" + evname, func);
-	} else {		
+	} else {
 		el.addEventListener(evname, func, true);
 	}
 };

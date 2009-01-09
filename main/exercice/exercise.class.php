@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 17489 2008-12-31 15:47:30Z marvil07 $
+* 	@version $Id: exercise.class.php 17609 2009-01-09 00:28:59Z marvil07 $
 */
 
 
@@ -491,6 +491,11 @@ class Exercise
 						"results_disabled='".Database::escape_string($results_disabled)."'
 					WHERE id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
+
+            if (api_get_setting('search_enabled')=='true') {
+                $this -> search_engine_edit();
+            }
+
 		}
 		// creates a new exercise
 		else
@@ -510,6 +515,11 @@ class Exercise
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			$this->id=mysql_insert_id();
+
+			if (api_get_setting('search_enabled')=='true') {
+				$this -> search_engine_save();
+			}
+
 		}
 
 		// updates the question position
@@ -750,6 +760,10 @@ class Exercise
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 		$sql="UPDATE $TBL_EXERCICES SET active='-1' WHERE id='".Database::escape_string($this->id)."'";
 		api_sql_query($sql);
+
+		if (api_get_setting('search_enabled')=='true') {
+			$this -> search_engine_delete();
+		}
 	}
 
 	/**
@@ -820,6 +834,37 @@ class Exercise
 		//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));		
 		
 		$form -> addElement('html','</div>');
+
+        $defaults = array();
+
+        if (api_get_setting('search_enabled') === 'true')
+        {
+            require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+
+            $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
+            $form -> addElement ('html','<br /><div class="row">');
+            $form -> addElement ('html', '<div class="label">'. get_lang('SearchFeatureDocumentLanguage') .'</div>');
+            $form -> addElement ('html', '<div class="formw">'. api_get_languages_combo() .'</div>');
+            $form -> addElement ('html','</div><div class="sub-form">');
+
+            $specific_fields = get_specific_field_list();
+            foreach ($specific_fields as $specific_field) {
+                $form -> addElement ('text', $specific_field['code'], $specific_field['name']);
+
+                $filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $this->id, 'tool_id' => '\''. TOOL_QUIZ .'\'');
+                $values = get_specific_field_values_list($filter, array('value'));
+                if ( !empty($values) ) {
+                    $arr_str_values = array();
+                    foreach ($values as $value) {
+                        $arr_str_values[] = $value['value'];
+                    }
+                    $defaults[$specific_field['code']] = implode(', ', $arr_str_values);
+                }
+            }
+
+            $form -> addElement ('html','</div>');
+
+        }
 		
 		// submit
 		$form -> addElement('submit', 'submitExercise', get_lang('Ok'));
@@ -833,7 +878,6 @@ class Exercise
         
 
 		// defaults
-		$defaults = array();
 		if($this -> id > 0)
 		{
 			if ($this -> random > $this->selectNbrQuestions())
@@ -866,9 +910,13 @@ class Exercise
 			$defaults['start_time'] = date('Y-m-d 12:00:00');
 			$defaults['end_time'] = date('Y-m-d 12:00:00');
 		}
+
+        if (api_get_setting('search_enabled') === 'true') {
+            $defaults['index_document'] = 'checked="checked"';
+        }
+
 		$form -> setDefaults($defaults);
 	}
-
 
 	/**
 	 * function which process the creation of exercises
@@ -897,6 +945,180 @@ class Exercise
         //echo $end_time;exit;
         $this -> save();
 	}
+
+    function search_engine_save() {
+        if ($_POST['index_document'] != 1) {
+            return;
+        }
+
+	    $course_id = api_get_course_id();
+
+	    require_once(api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
+	    require_once(api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php');
+	    require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+
+	    $specific_fields = get_specific_field_list();
+	    $ic_slide = new IndexableChunk();
+
+	    $all_specific_terms = '';
+	    foreach ($specific_fields as $specific_field) {
+		    if (isset($_REQUEST[$specific_field['code']])) {
+			    $sterms = trim($_REQUEST[$specific_field['code']]);
+			    if (!empty($sterms)) {
+				    $all_specific_terms .= ' '. $sterms;
+				    $sterms = explode(',', $sterms);
+				    foreach ($sterms as $sterm) {
+					    $ic_slide->addTerm(trim($sterm), $specific_field['code']);
+					    add_specific_field_value($specific_field['id'], $course_id, TOOL_QUIZ, $this->id, $sterm);
+				    }
+			    }
+		    }
+	    }
+
+	    // build the chunk to index
+	    $ic_slide->addValue("title", $this->exercise);
+	    $ic_slide->addCourseId($course_id);
+	    $ic_slide->addToolId(TOOL_QUIZ);
+	    $xapian_data = array(
+		    SE_COURSE_ID => $course_id,
+			SE_TOOL_ID => TOOL_QUIZ,
+			SE_DATA => array('type' => SE_DOCTYPE_EXERCISE_EXERCISE, 'exercise_id' => (int)$this->id),
+			SE_USER => (int)api_get_user_id(),
+	    );
+	    $ic_slide->xapian_data = serialize($xapian_data);
+	    $exercise_description = $all_specific_terms .' '. $this->description;
+	    $ic_slide->addValue("content", $exercise_description);
+
+	    $di = new DokeosIndexer();
+	    isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
+	    $di->connectDb(NULL, NULL, $lang);
+	    $di->addChunk($ic_slide);
+
+	    //index and return search engine document id
+	    $did = $di->index();
+	    if ($did) {
+		    // save it to db
+            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+		    $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
+			    VALUES (NULL , \'%s\', \'%s\', %s, %s)';
+		    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id, $did);
+		    api_sql_query($sql,__FILE__,__LINE__);
+	    }
+
+    }
+
+    function search_engine_edit() {
+        // update search enchine and its values table if enabled
+        if (api_get_setting('search_enabled')=='true') {
+            $course_id = api_get_course_id();
+
+            // actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one 
+            // get search_did
+            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+            $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
+            $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
+            $res = api_sql_query($sql, __FILE__, __LINE__);
+
+            if (Database::num_rows($res) > 0) {
+                require_once(api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
+                require_once(api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php');
+                require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+
+                $se_ref = Database::fetch_array($res);
+                $specific_fields = get_specific_field_list();
+                $ic_slide = new IndexableChunk();
+
+                $all_specific_terms = '';
+                foreach ($specific_fields as $specific_field) {
+                    delete_all_specific_field_value($course_id, $specific_field['id'], TOOL_QUIZ, $this->id);
+                    if (isset($_REQUEST[$specific_field['code']])) {
+                        $sterms = trim($_REQUEST[$specific_field['code']]);
+                        $all_specific_terms .= ' '. $sterms;
+                        $sterms = explode(',', $sterms);
+                        foreach ($sterms as $sterm) {
+                            $ic_slide->addTerm(trim($sterm), $specific_field['code']);
+                            add_specific_field_value($specific_field['id'], $course_id, TOOL_QUIZ, $this->id, $sterm);
+                        }
+                    }
+                }
+
+                // build the chunk to index
+                $ic_slide->addValue("title", $this->exercise);
+                $ic_slide->addCourseId($course_id);
+                $ic_slide->addToolId(TOOL_QUIZ);
+                $xapian_data = array(
+                    SE_COURSE_ID => $course_id,
+                    SE_TOOL_ID => TOOL_QUIZ,
+                    SE_DATA => array('type' => SE_DOCTYPE_EXERCISE_EXERCISE, 'exercise_id' => (int)$this->id),
+                    SE_USER => (int)api_get_user_id(),
+                );
+                $ic_slide->xapian_data = serialize($xapian_data);
+                $exercise_description = $all_specific_terms .' '. $this->description;
+                $ic_slide->addValue("content", $exercise_description);
+
+                $di = new DokeosIndexer();
+                isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
+                $di->connectDb(NULL, NULL, $lang);
+                $di->remove_document((int)$se_ref['search_did']);
+                $di->addChunk($ic_slide);
+
+                //index and return search engine document id
+                $did = $di->index();
+                if ($did) {
+                    // save it to db
+                    $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=\'%s\'';
+                    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
+                    api_sql_query($sql,__FILE__,__LINE__);
+                    //var_dump($sql);
+                    $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
+                        VALUES (NULL , \'%s\', \'%s\', %s, %s)';
+                    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id, $did);
+                    api_sql_query($sql,__FILE__,__LINE__);
+                }
+
+            }
+        }
+
+    }
+
+    function search_engine_delete() {
+	    // remove from search engine if enabled
+	    if (api_get_setting('search_enabled') == 'true') {
+		    $course_id = api_get_course_id();
+		    $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+		    $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level IS NULL LIMIT 1';
+		    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
+		    $res = api_sql_query($sql, __FILE__, __LINE__);
+		    if (Database::num_rows($res) > 0) {
+			    $row = Database::fetch_array($res);
+			    require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
+			    $di = new DokeosIndexer();
+			    $di->remove_document((int)$row['search_did']);
+                unset($di);
+                $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
+                foreach ( $this->questionList as $question_i) {
+                    $sql = 'SELECT type FROM %s WHERE id=%s';
+                    $sql = sprintf($sql, $tbl_quiz_question, $question_i);
+                    $qres = api_sql_query($sql, __FILE__, __LINE__);
+                    if (Database::num_rows($qres) > 0) {
+                        $qrow = Database::fetch_array($qres);
+                        $objQuestion = Question::getInstance($qrow['type']);
+                        $objQuestion = Question::read((int)$question_i);
+                        $objQuestion->search_engine_edit($this->id, FALSE, TRUE);
+                        unset($objQuestion);
+                    }
+                }
+		    }
+		    $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level IS NULL LIMIT 1';
+		    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
+		    api_sql_query($sql, __FILE__, __LINE__);
+
+		    // remove terms from db
+            require_once(api_get_path(LIBRARY_PATH) .'specific_fields_manager.lib.php');
+		    delete_all_values_for_item($course_id, TOOL_QUIZ, $this->id);
+	    }
+    }
+
 }
 
 endif;

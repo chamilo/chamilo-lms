@@ -24,7 +24,7 @@
 * 	It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_admin.inc.php 15798 2008-07-16 22:07:13Z yannoo $
+* 	@version $Id: question_admin.inc.php 17609 2009-01-09 00:28:59Z marvil07 $
 */
 
 /*
@@ -106,6 +106,8 @@ if(is_object($objQuestion))
 	    $objQuestion -> processCreation($form,$objExercise);
 	    // answers
 	    $objQuestion -> processAnswersCreation($form,$nb_answers);
+
+        // TODO: maybe here is the better place to index this tool, including answers text
 
 	    // redirect
 	    if($objQuestion -> type != HOT_SPOT)

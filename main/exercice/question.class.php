@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 17489 2008-12-31 15:47:30Z marvil07 $
+<?php // $Id: question.class.php 17609 2009-01-09 00:28:59Z marvil07 $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 17489 2008-12-31 15:47:30Z marvil07 $
+* 	@version $Id: question.class.php 17609 2009-01-09 00:28:59Z marvil07 $
 */
 
 
@@ -574,6 +574,19 @@ abstract class Question
 					picture		='".Database::escape_string($picture)."' 
 				WHERE id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
+
+            if (api_get_setting('search_enabled')=='true') {
+                if ($exerciseId != 0) {
+                    $this -> search_engine_edit($exerciseId);
+                }
+                else {
+                    /**
+                     * actually there is *not* an user interface for
+                     * creating questions without a relation with an exercise
+                     */
+                }
+            }
+
 		}
 		// creates a new question
 		else
@@ -602,7 +615,19 @@ abstract class Question
 
 				$sql="INSERT INTO $TBL_ANSWERS (`id` , `question_id` , `answer` , `correct` , `comment` , `ponderation` , `position` , `hotspot_coordinates` , `hotspot_type` ) VALUES ('1', '".Database::escape_string($this->id)."', '', NULL , '', NULL , '1', '0;0|0|0', 'square')";
 				api_sql_query($sql,__FILE__,__LINE__);
-			}
+            }
+
+            if (api_get_setting('search_enabled')=='true') {
+                if ($exerciseId != 0) {
+                    $this -> search_engine_edit($exerciseId, TRUE);
+                }
+                else {
+                    /**
+                     * actually there is *not* an user interface for
+                     * creating questions without a relation with an exercise
+                     */
+                }
+            }
 		}
 
 		// if the question is created in an exercise
@@ -616,17 +641,129 @@ abstract class Question
 			api_sql_query($sql,__FILE__,__LINE__);
 			
 			// adds the exercise into the exercise list of this question
-			$this->addToList($exerciseId);
+			$this->addToList($exerciseId, TRUE);
 		}
 	}
+
+    function search_engine_edit($exerciseId, $addQs=FALSE, $rmQs=FALSE) {
+        // update search engine and its values table if enabled
+        if (api_get_setting('search_enabled')=='true') {
+            $course_id = api_get_course_id();
+
+            // get search_did
+            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+            if ($addQs || $rmQs) {
+                //there's only one row per question on normal db and one document per question on search engine db
+                $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_second_level=%s LIMIT 1';
+                $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
+            }
+            else {
+              $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%s LIMIT 1';
+              $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $exerciseId, $this->id);
+            }
+            $res = api_sql_query($sql, __FILE__, __LINE__);
+
+            if (Database::num_rows($res) > 0 || $addQs) {
+                require_once(api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
+                require_once(api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php');
+
+                $di = new DokeosIndexer();
+                if ($addQs) {
+                	$question_exercises = array((int)$exerciseId);
+                }
+                else {
+                    $question_exercises = array();
+                }
+                isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
+                $di->connectDb(NULL, NULL, $lang);
+
+                // retrieve others exercise ids
+                $se_ref = Database::fetch_array($res);
+                $se_doc = $di->get_document((int)$se_ref['search_did']);
+                if ($se_doc !== FALSE) {
+	                if ( ($se_doc_data=$di->get_document_data($se_doc)) !== FALSE ) {
+		                $se_doc_data = unserialize($se_doc_data);
+		                if (isset($se_doc_data[SE_DATA]['type']) && $se_doc_data[SE_DATA]['type'] == SE_DOCTYPE_EXERCISE_QUESTION) {
+			                if (isset($se_doc_data[SE_DATA]['exercise_ids']) && is_array($se_doc_data[SE_DATA]['exercise_ids'])) {
+                                foreach ($se_doc_data[SE_DATA]['exercise_ids'] as $old_value) {
+                                    if (!in_array($old_value, $question_exercises)) {
+                                    	$question_exercises[] = $old_value;
+                                    }
+                                }
+			                }
+		                } 
+	                }
+                }
+                if ($rmQs) {
+                	while ( ($key=array_search($exerciseId, $question_exercises)) !== FALSE) {
+                		unset($question_exercises[$key]);
+                	}
+                }
+
+                // build the chunk to index
+                $ic_slide = new IndexableChunk();
+                $ic_slide->addValue("title", $this->question);
+                $ic_slide->addCourseId($course_id);
+                $ic_slide->addToolId(TOOL_QUIZ);
+                $xapian_data = array(
+                    SE_COURSE_ID => $course_id,
+                    SE_TOOL_ID => TOOL_QUIZ,
+                    SE_DATA => array('type' => SE_DOCTYPE_EXERCISE_QUESTION, 'exercise_ids' => $question_exercises, 'question_id' => (int)$this->id),
+                    SE_USER => (int)api_get_user_id(),
+                );
+                $ic_slide->xapian_data = serialize($xapian_data);
+                $ic_slide->addValue("content", $this->description);
+
+                //TODO: index answers, see also form validation on question_admin.inc.php
+
+                $di->remove_document((int)$se_ref['search_did']);
+                $di->addChunk($ic_slide);
+
+                //index and return search engine document id
+                if (!empty($question_exercises)) { // if empty there is nothing to index
+                	$did = $di->index();
+                    unset($di);
+                }
+                if ($did || $rmQs) {
+                    // save it to db
+                    if ($addQs || $rmQs) {
+                    	$sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_second_level=\'%s\'';
+                        $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
+                    }
+                    else {
+                        $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=\'%s\' AND ref_id_second_level=\'%s\'';
+                        $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $exerciseId, $this->id);
+                    }
+                    api_sql_query($sql,__FILE__,__LINE__);
+                    if ($rmQs) {
+                        if (!empty($question_exercises)) {
+                          $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, ref_id_second_level, search_did)
+                              VALUES (NULL , \'%s\', \'%s\', %s, %s, %s)';
+                          $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, array_shift($question_exercises), $this->id, $did);
+                          api_sql_query($sql,__FILE__,__LINE__);
+                        }
+                    }
+                    else {
+                        $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, ref_id_second_level, search_did)
+                            VALUES (NULL , \'%s\', \'%s\', %s, %s, %s)';
+                        $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $exerciseId, $this->id, $did);
+                        api_sql_query($sql,__FILE__,__LINE__);
+                    }
+                }
+
+            }
+        }
+
+    }
 
 	/**
 	 * adds an exercise into the exercise list
 	 *
 	 * @author - Olivier Brouckaert
-	 * @param - integer $exerciseId - exercise ID
+     * @param - integer $exerciseId - exercise ID
+     * @param - boolean $fromSave - comming from $this->save() or not
 	 */
-	function addToList($exerciseId)
+	function addToList($exerciseId, $fromSave=FALSE)
 	{
 		global $TBL_EXERCICE_QUESTION;
 
@@ -640,6 +777,11 @@ abstract class Question
 			$sql="INSERT INTO $TBL_EXERCICE_QUESTION(question_id,exercice_id) VALUES('".Database::escape_string($id)."','".Database::escape_string($exerciseId)."')";
 
 			api_sql_query($sql,__FILE__,__LINE__);
+
+            // we do not want to reindex if we had just saved adnd indexed the question
+            if (!$fromSave) {
+            	$this->search_engine_edit($exerciseId, TRUE);
+            }
 		}
 	}
 
@@ -732,6 +874,10 @@ abstract class Question
 		else
 		{
 			$this->removeFromList($deleteFromEx);
+            if (api_get_setting('search_enabled')=='true') {
+                // disassociate question with this exercise
+                $this -> search_engine_edit($deleteFromEx, FALSE, TRUE);
+            }
 		}
 	}
 

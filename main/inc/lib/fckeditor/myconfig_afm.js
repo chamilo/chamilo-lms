@@ -94,7 +94,7 @@ FCKConfig.Plugins.Add("Attachment", "en", sOtherPluginPath ) ;*/
 
 // added by Julio Montoya
 FCKConfig.Plugins.Add("MP3", "en", sOtherPluginPath ) ;
-//FCKConfig.Plugins.Add('ImageManager','en') ;
+FCKConfig.Plugins.Add('ImageManager','en') ;
 FCKConfig.Plugins.Add('flvPlayer','en') ;
 
 FCKConfig.Plugins.Add("Flash", "en");

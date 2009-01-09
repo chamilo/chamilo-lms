@@ -45,7 +45,10 @@
 */
 
 // name of the language file that needs to be included
-$language_file = 'forum';
+$language_file = array (
+	'forum',
+	'group'
+);
 
 // including the global dokeos file
 require '../inc/global.inc.php';
@@ -122,9 +125,29 @@ if(!empty($my_forum_group)){
 */
 $my_search=isset($_GET['search'])?$_GET['search']:'';
 $my_action=isset($_GET['action'])?$_GET['action']:'';
-$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS($my_search),"name" => $nameTools);
-$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum_category['cat_title']));
-$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum['forum_title']));
+
+
+if (!empty($_GET['gidReq'])) {
+	$toolgroup = Database::escape_string($_GET['gidReq']);
+	api_session_register('toolgroup');
+}
+
+if (!empty($_SESSION['toolgroup'])) {
+	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
+	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
+	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
+	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	//$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS($my_search),"name" => $nameTools);
+	//$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum_category['cat_title']));
+	$interbreadcrumb[]=array("url" => "#","name" => prepare4display($current_forum['forum_title'])); 
+	//viewforum.php?forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;gidReq=".$_SESSION['toolgroup']."&amp;search=".Security::remove_XSS(urlencode($my_search)),
+
+} else {
+	$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS($my_search),"name" => $nameTools);
+	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum_category['cat_title']));
+	$interbreadcrumb[]=array("url" => "#","name" => prepare4display($current_forum['forum_title'])); 
+	//viewforum.php?forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search))
+}
 
 if ($origin=='learnpath') {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
@@ -267,7 +290,7 @@ if (!empty($message)) {
 -----------------------------------------------------------
 */
 echo '<div class="actions">';
-echo '<span style="float:right;">'.search_link().'</span>';
+//echo '<span style="float:right;">'.search_link().'</span>';
 // The link should appear when
 // 1. the course admin is here
 // 2. the course member is here and new threads are allowed
@@ -386,11 +409,11 @@ if(is_array($threads)) {
 			echo "\t\t<td>".$last_post."</td>\n";
 			echo "\t\t<td>";	
 			if (api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) {
-				echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;thread=".Security::remove_XSS($row['thread_id'])."&amp;post=".$row['post_id']."&origin=".$origin."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;action=delete&amp;content=thread&amp;id=".$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteCompleteThread"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
-				display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array("forum"=>$my_forum,'origin'=>$origin));
-				display_lock_unlock_icon('thread',$row['thread_id'], $row['locked'], array("forum"=>$my_forum,'origin'=>$origin));
-				echo "<a href=\"viewforum.php?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;action=move&amp;thread=".$row['thread_id'].$origin_string."\">".icon('../img/deplacer_fichier.gif',get_lang('MoveThread'))."</a>";
+				echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;thread=".Security::remove_XSS($row['thread_id'])."&amp;post=".$row['post_id']."&amp;gidReq=".$_SESSION['toolgroup']."&origin=".$origin."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;action=delete&amp;content=thread&amp;gidReq=".$_SESSION['toolgroup']."&amp;id=".$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteCompleteThread"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
+				display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array("forum"=>$my_forum,'origin'=>$origin,"gidReq"=>$_SESSION['toolgroup']));
+				display_lock_unlock_icon('thread',$row['thread_id'], $row['locked'], array("forum"=>$my_forum,'origin'=>$origin,"gidReq"=>$_SESSION['toolgroup']));
+				echo "<a href=\"viewforum.php?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;action=move&amp;gidReq=".$_SESSION['toolgroup']."&amp;thread=".$row['thread_id'].$origin_string."\">".icon('../img/deplacer_fichier.gif',get_lang('MoveThread'))."</a>";
 			}
 			$iconnotify = 'send_mail.gif';
 			if (is_array(isset($_SESSION['forum_notification']['thread'])?$_SESSION['forum_notification']['thread']:null)) {
@@ -399,9 +422,9 @@ if(is_array($threads)) {
 				}
 			}
 			$icon_liststd = 'group.gif';
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($my_forum)."&origin=".$origin."&amp;action=notify&amp;content=thread&amp;id=".$row['thread_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($my_forum)."&origin=".$origin."&amp;action=notify&amp;content=thread&amp;gidReq=".$_SESSION['toolgroup']."&amp;id=".$row['thread_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
 			if ($userinf['status']=='1') {
-				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&origin='.$origin.'&amp;action=liststd&amp;content=thread&amp;id='.$row['thread_id'].'">'.icon('../img/'.$icon_liststd,get_lang('StudentList')).'</a>';			
+				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&origin='.$origin.'&amp;action=liststd&amp;content=thread&amp;gidReq='.$_SESSION['toolgroup'].'&amp;id='.$row['thread_id'].'">'.icon('../img/'.$icon_liststd,get_lang('StudentList')).'</a>';			
 			}
 			echo "</td>\n";
 			echo "\t</tr>\n";

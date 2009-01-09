@@ -109,16 +109,32 @@ $current_forum_category=get_forumcategory_information($current_forum['forum_cate
 -----------------------------------------------------------
 */
 
-if( (isset($_GET['gradebook']) && $_GET['gradebook']=='view') || ( isset($_POST['gradebook']) && $_POST['gradebook']=='view')) {
-		$interbreadcrumb[]= array (
-			'url' => '../gradebook/index.php',
-			'name' => get_lang('Gradebook')
-		);
+
+if (!empty($_GET['gidReq'])) {
+	$toolgroup = Database::escape_string($_GET['gidReq']);
+	api_session_register('toolgroup');
 }
-$interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
-$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => $current_forum_category['cat_title']);
-$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
-$interbreadcrumb[]=array("url" => "newthread.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));
+
+if (!empty($_SESSION['toolgroup'])) {
+	
+	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
+	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
+	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
+	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&amp;gidReq=".$_SESSION['toolgroup']."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
+	$interbreadcrumb[]=array("url" => "newthread.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));
+} else {
+	if( (isset($_GET['gradebook']) && $_GET['gradebook']=='view') || ( isset($_POST['gradebook']) && $_POST['gradebook']=='view')) {
+			$interbreadcrumb[]= array (
+				'url' => '../gradebook/index.php',
+				'name' => get_lang('Gradebook')
+			);
+	}
+	$interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
+	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => $current_forum_category['cat_title']);
+	$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
+	$interbreadcrumb[]=array("url" => "newthread.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));	
+}
 /*
 -----------------------------------------------------------
 	Resource Linker

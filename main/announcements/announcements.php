@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 17620 2009-01-09 12:45:57Z derrj $
+<?php //$Id: announcements.php 17627 2009-01-09 21:50:35Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -275,15 +275,22 @@ if($surveyid)
 	$obj=@Database::fetch_object($res_temp);
 	$template=$obj->template;
 }
-if($surveyid)
-{
-	$interbreadcrumb[] = array ("url" => "../survey/survey_list.php?cidReq=$cidReq", "name" => get_lang('Survey'));
-	$nameTools = get_lang('PublishSurvey');
-}
-else
-$nameTools = get_lang('Announcement');
 
-$nameTools12 = get_lang('PublishSurvey');
+if (!empty($_SESSION['toolgroup'])){
+	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
+	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
+	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
+	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');	
+} else {
+	if($surveyid) {
+	
+			$interbreadcrumb[] = array ("url" => "../survey/survey_list.php?cidReq=$cidReq", "name" => get_lang('Survey'));
+			$nameTools = get_lang('PublishSurvey');
+	}else {
+		$nameTools = get_lang('Announcement');
+		$nameTools12 = get_lang('PublishSurvey');
+	}
+} 
 
 
 

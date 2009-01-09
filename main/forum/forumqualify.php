@@ -53,7 +53,7 @@ $nameTools=get_lang('Forum');
 */
 
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/jquery.js" ></script>';
-$htmlHeadXtra[] = '<script language="javascript">
+$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 										$(document).ready(function(){ $(\'.hide-me\').slideUp() });
 									function hidecontent(content){ $(content).slideToggle(\'normal\'); } 
 									</script>';
@@ -80,37 +80,53 @@ $current_thread=get_thread_information($_GET['thread']); // note: this has to be
 $current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
 $current_forum_category=get_forumcategory_information($current_forum['forum_category']);
 $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
-$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => $nameTools);
-$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
-
 /*
 -----------------------------------------------------------
 	Header and Breadcrumbs
 -----------------------------------------------------------
 */
+
 if ($origin=='learnpath') {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
 } else {
-	$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => $nameTools);
-	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
-	if (isset($_GET['gradebook']) and $_GET['gradebook']=='view') {
-		$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
-		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$info_thread['forum_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));	
-	} else {
+	if (!empty($_SESSION['toolgroup'])) {	
+		
+		$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
+		$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
+		$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
+		$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
-	}
-
-	if ($message<>'PostDeletedSpecial') {
-		if (isset($_GET['gradebook']) and $_GET['gradebook']=='view') {
-			$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
-			$interbreadcrumb[]=array("url" => "viewthread.php?forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
-		} else {
+		if ($message<>'PostDeletedSpecial') {
 			$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
 		}
+		$interbreadcrumb[]=array("url" => "#","name" => get_lang('QualifyThread'));
+		// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
+		Display :: display_header('');
+		api_display_tool_title($nameTools);
+	} else {
+		$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => $nameTools);
+		$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
+		if (isset($_GET['gradebook']) and $_GET['gradebook']=='view') {
+			$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
+			$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$info_thread['forum_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));	
+		} else {
+			$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
+		}
+	
+		if ($message<>'PostDeletedSpecial') {
+			if (isset($_GET['gradebook']) and $_GET['gradebook']=='view') {
+				$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
+				$interbreadcrumb[]=array("url" => "viewthread.php?forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+			} else {
+				$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+			}
+		}
+		// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
+		$interbreadcrumb[]=array("url" => "#","name" => get_lang('QualifyThread'));
+		Display :: display_header('');
+		api_display_tool_title($nameTools);	
+		
 	}
-	// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
-	Display :: display_header('');
-	api_display_tool_title($nameTools);
 }
 
 /*

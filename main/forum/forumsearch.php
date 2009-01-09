@@ -46,7 +46,10 @@
 */
 
 // name of the language file that needs to be included
-$language_file = 'forum';
+$language_file = array (
+	'forum',
+	'group'
+);
 
 // including the global dokeos file
 require ('../inc/global.inc.php');
@@ -74,8 +77,23 @@ if (isset($_GET['origin'])) {
 $nameTools=get_lang('Forum');
 
 // breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => $nameTools);
-$interbreadcrumb[]=array('url' => 'forumsearch.php','name' => get_lang('ForumSearch'));
+
+if (!empty ($_GET['gidReq'])) {
+	$toolgroup = Database::escape_string($_GET['gidReq']);
+	api_session_register('toolgroup');
+}
+
+if (!empty($_SESSION['toolgroup'])) {
+	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
+	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
+	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
+	$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	$interbreadcrumb[] = array ("url" => "viewforum.php?origin=".$origin."&amp;gidReq=".$_SESSION['toolgroup']."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => prepare4display($current_forum['forum_title']));
+	$interbreadcrumb[]=array('url' => 'forumsearch.php','name' => get_lang('ForumSearch'));
+} else {
+	$interbreadcrumb[]=array('url' => 'index.php','name' => $nameTools);
+	$interbreadcrumb[]=array('url' => 'forumsearch.php','name' => get_lang('ForumSearch'));
+}
 
 // Display the header
 if ($origin=='learnpath') {

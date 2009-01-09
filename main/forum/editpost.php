@@ -61,7 +61,10 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = 'forum';
+$language_file = array (
+	'forum',
+	'group'
+);
 
 // including the global dokeos file
 require ('../inc/global.inc.php');
@@ -122,12 +125,24 @@ $current_post=get_post_information($_GET['post']);
 	Header and Breadcrumbs
 -----------------------------------------------------------
 */
-$interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
-$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => prepare4display($current_forum_category['cat_title']));
-$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => prepare4display($current_forum['forum_title']));
-$interbreadcrumb[]=array("url" => "viewthread.php?origin=".$origin."&amp;forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".$_GET['thread'],"name" => prepare4display($current_thread['thread_title']));
-$interbreadcrumb[]=array("url" => "reply.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => get_lang('EditPost'));
 
+
+if (!empty($_SESSION['toolgroup'])) {
+	
+	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
+	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
+	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
+	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	$interbreadcrumb[] = array("url" => "viewforum.php?origin=".$origin."&amp;gidReq=".$_SESSION['toolgroup']."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => prepare4display($current_forum['forum_title']));	
+	$interbreadcrumb[] = array("url" => "#","name" => get_lang('EditPost'));
+	
+} else {
+	$interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
+	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => prepare4display($current_forum_category['cat_title']));
+	$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => prepare4display($current_forum['forum_title']));
+	$interbreadcrumb[]=array("url" => "viewthread.php?origin=".$origin."&amp;forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".$_GET['thread'],"name" => prepare4display($current_thread['thread_title']));
+	$interbreadcrumb[]=array("url" => "#","name" => get_lang('EditPost'));
+}
 /*
 -----------------------------------------------------------
 	Resource Linker

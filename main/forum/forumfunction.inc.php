@@ -156,7 +156,7 @@ function show_add_forumcategory_form($inputvalues=array()) {
 	$form->addElement('header', '', get_lang('AddForumCategory'));
 	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'));
-	$form->addElement('submit', 'SubmitForumCategory', get_lang('OK'));
+	$form->addElement('submit', 'SubmitForumCategory', get_lang('Ok'));
 
 	// setting the rules
 	$form->addRule('forum_category_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
@@ -325,7 +325,7 @@ function show_add_forum_form($inputvalues=array()) {
 	 $form->addElement('html','</div>');
 
 	// The OK button
-	$form->addElement('submit', 'SubmitForum', get_lang('OK'));
+	$form->addElement('submit', 'SubmitForum', get_lang('Ok'));
 	// setting the rules
 	$form->addRule('forum_title', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addRule('forum_category', get_lang('ThisFieldIsRequired'), 'required');
@@ -423,7 +423,7 @@ function show_edit_forumcategory_form($inputvalues=array()) {
 	$form->addElement('hidden', 'forum_category_id');
 	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'));
-	$form->addElement('submit', 'SubmitEditForumCategory',get_lang('OK'));
+	$form->addElement('submit', 'SubmitEditForumCategory',get_lang('Ok'));
 	global $charset;
 	// setting the default values
 	$defaultvalues['forum_category_id']=$inputvalues['cat_id'];
@@ -1788,9 +1788,9 @@ function store_thread($values) {
 
 		if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit()) {
 			$message.=get_lang('MessageHasToBeApproved').'<br />';
-			$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
+			$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
 		} else {
-			$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
+			$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
 			$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
 		}
 		$reply_info['new_post_id'] = $last_post_id;
@@ -2373,8 +2373,8 @@ function store_edit_post($values) {
 	//update_added_resources('forum_post',$values['post_id']);
 
 	$message=get_lang('EditPostStored').'<br />';
-	$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'">'.get_lang('Forum').'</a><br />';
-	$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;thread='.$values['thread_id'].'&amp;post='.Security::remove_XSS($_GET['post']).'">'.get_lang('Message').'</a>';
+	$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;origin='.$origin.'">'.get_lang('Forum').'</a><br />';
+	$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;origin='.$origin.'&amp;thread='.$values['thread_id'].'&amp;post='.Security::remove_XSS($_GET['post']).'">'.get_lang('Message').'</a>';
 
 	session_unregister('formelements');
 	session_unregister('origin');

@@ -51,11 +51,11 @@ $language_file = 'forum';
 // including the global dokeos file
 require '../inc/global.inc.php';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/jquery.js" ></script>';
-$htmlHeadXtra[] = '<script language="javascript">
+$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 	$(document).ready(function(){ $(\'.hide-me\').slideUp() });
 	function hidecontent(content){ $(content).slideToggle(\'normal\'); } 
 	</script>';
-$htmlHeadXtra[] = '<script language="javascript">
+$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 		
 		function advanced_parameters() {
 			if(document.getElementById(\'options\').style.display == \'none\') {
@@ -377,7 +377,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 							$my_all_groups_forum_id=isset($all_groups[$forum['forum_of_group']]['id']) ? $all_groups[$forum['forum_of_group']]['id'] : null;
 							$group_title=substr($my_all_groups_forum_name,0,30);
 
-							$forum_title_group_addition=' (<a href="../group/group_space.php?'.api_get_cidreq().'&gidReq='.$my_all_groups_forum_id.'" class="forum_group_link">'.get_lang('GoTo').' '.$group_title.'</a>)';
+							$forum_title_group_addition=' (<a href="../group/group_space.php?'.api_get_cidreq().'&gidReq='.$forum['forum_of_group'].'" class="forum_group_link">'.get_lang('GoTo').' '.$group_title.'</a>)';
 
 						} else {
 							$forum_title_group_addition='';
@@ -388,7 +388,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						} else {
 							$session_displayed = '';
 						}
-						echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&gidReq=".Security::remove_XSS($my_all_groups_forum_id)."&forum=".prepare4display($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
+						$forum['forum_of_group']==0?$groupid='':$groupid=$forum['forum_of_group'];
+						
+						echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&gidReq=".Security::remove_XSS($groupid)."&forum=".prepare4display($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
 						//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 						// the number of topics and posts
 						$number_threads=isset($forum['number_of_threads']) ? $forum['number_of_threads'] : null;
@@ -403,13 +405,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 							$name=$forum['last_poster_firstname'].' '.$forum['last_poster_lastname'];
 							$poster_id=$forum['last_poster_id'];
 						}
-						echo "\t\t<td NOWRAP>";
+						echo "\t\t<td nowrap=\"nowrap\">";
 						
 						if (!empty($forum['last_post_id'])) {
 							echo $forum['last_post_date']."<br /> ".get_lang('By').' '.display_user_link($poster_id, $name);
 						}
 						echo "</td>\n";
-						echo "\t\t<td NOWRAP align='center'>";
+						echo "\t\t<td nowrap=\"nowrap\" align=\"center\">";
 						if (api_is_allowed_to_edit(false,true) && !($forum['session_id']==0 && intval($session_id)!=0)) {
 							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForum"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";

@@ -47,6 +47,26 @@
 
 // name of the language file that needs to be included
 $language_file = 'forum';
+// including the global dokeos init file
+require '../inc/global.inc.php';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/jquery.js" ></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
+	$(document).ready(function(){ $(\'.hide-me\').slideUp() });
+	function hidecontent(content){ $(content).slideToggle(\'normal\'); } 
+	</script>';
+$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
+		
+		function advanced_parameters() {
+			if(document.getElementById(\'options\').style.display == \'none\') {
+					document.getElementById(\'options\').style.display = \'block\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_minus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			} else {
+					document.getElementById(\'options\').style.display = \'none\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			}		
+		}
+	</script>';	
+
 
 // including the global dokeos file
 require '../inc/global.inc.php';
@@ -200,7 +220,8 @@ if ($action_forums!='add') {
 	echo '<span style="float:right;">'.search_link().'</span>';
 	if (api_is_allowed_to_edit(false,true)) {
 		//echo '<a href="'.api_get_self().'?forumcategory='.$_GET['forumcategory'].'&amp;action=add&amp;content=forumcategory">'.get_lang('AddForumCategory').'</a> | ';
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=add&amp;content=forum">'.Display::return_icon('forum_new.gif', get_lang('AddForum')).' '.get_lang('AddForum').'</a>';
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forum"> '.Display::return_icon('forum_new.gif', get_lang('AddForum')).' '.get_lang('AddForum').'</a>';
+		//echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=add&amp;content=forum">'.Display::return_icon('forum_new.gif', get_lang('AddForum')).' '.get_lang('AddForum').'</a>';
 	}
 	echo '</div>';
 	

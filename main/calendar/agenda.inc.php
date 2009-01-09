@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17607 2009-01-08 23:04:13Z juliomontoya $
+<?php //$Id: agenda.inc.php 17627 2009-01-09 21:50:35Z cvargas1 $
 
 /*
 ==============================================================================
@@ -1401,30 +1401,30 @@ function display_student_links()
 	global $show;
 	if ($_SESSION['sort'] == 'DESC')
 	{
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_up.gif',get_lang('AgendaSortChronologicallyUp')).' '.get_lang("AgendaSortChronologicallyUp")."</a> ";
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_up.gif',get_lang('AgendaSortChronologicallyUp')).' '.get_lang("AgendaSortChronologicallyUp")."</a> ";
 	}
 	else
 	{
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=desc&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_down.gif',get_lang('AgendaSortChronologicallyDown')).' '.get_lang("AgendaSortChronologicallyDown")."</a> ";
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=desc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_down.gif',get_lang('AgendaSortChronologicallyDown')).' '.get_lang("AgendaSortChronologicallyDown")."</a> ";
 	}
 
 	// showing the link to show all items or only those of the current month
 	if ($_SESSION['show']=="showcurrent")
 	{
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showall&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_select.gif', get_lang("ShowAll")).' '.get_lang("ShowAll")."</a> ";
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showall&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_select.gif', get_lang("ShowAll")).' '.get_lang("ShowAll")."</a> ";
 	}
 	else
 	{
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showcurrent&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_month.gif', get_lang("ShowCurrent")).' '.get_lang("ShowCurrent")."</a> ";
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showcurrent&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_month.gif', get_lang("ShowCurrent")).' '.get_lang("ShowCurrent")."</a> ";
 	}
 
 	if ($_SESSION['view'] <> 'month')
 	{
-		echo "<a href=\"".api_get_self()."?action=view&amp;view=month\">".Display::return_icon('calendar_month.gif', get_lang('MonthView'))." ".get_lang('MonthView')."</a> ";
+		echo "<a href=\"".api_get_self()."?action=view&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=month\">".Display::return_icon('calendar_month.gif', get_lang('MonthView'))." ".get_lang('MonthView')."</a> ";
 	}
 	else
 	{
-		echo "\t<a href=\"".api_get_self()."?action=view&amp;view=list\">".Display::return_icon('calendar_select.gif', get_lang('ListView'))." ".get_lang('ListView')."</a> ";
+		echo "\t<a href=\"".api_get_self()."?action=view&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list\">".Display::return_icon('calendar_select.gif', get_lang('ListView'))." ".get_lang('ListView')."</a> ";
 	}
 }
 

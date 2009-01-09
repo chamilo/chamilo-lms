@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 17600 2009-01-08 15:40:20Z cfasanando $
+<?php //$Id: agenda.php 17627 2009-01-09 21:50:35Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,7 +27,7 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = array('agenda','resourcelinker');
+$language_file = array('agenda','resourcelinker','group');
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
@@ -157,8 +157,8 @@ if (!$is_courseAdmin){
 		//$_SESSION['toolgroup']=$_GET['toolgroup'];
 		$toolgroup=$_GET['toolgroup'];
 		api_session_register('toolgroup');
-		}
 	}
+}
 	//It comes from the group tools. If it's define it overwrites $_SESSION['group']
 if (!empty($_GET['isStudentView']) and $_GET['isStudentView']=="false")
 {
@@ -178,12 +178,16 @@ $nameTools = get_lang('Agenda'); // language variable in trad4all.inc.php
 // showing the header if we are not in the learning path, if we are in
 // the learning path, we do not include the banner so we have to explicitly
 // include the stylesheet, which is normally done in the header
-if (empty($_GET['origin']) or $_GET['origin'] != 'learnpath')
-{
+if ($_GET['toolgroup']){
+	$_clean['toolgroup']=(int)$_GET['toolgroup'];
+	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
+	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
+	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');	
 	Display::display_header($nameTools,'Agenda');
-}
-else
-{
+	
+} elseif (empty($_GET['origin']) or $_GET['origin'] != 'learnpath') {
+	Display::display_header($nameTools,'Agenda');
+} else {
 	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".$clarolineRepositoryWeb."css/default.css\"/>";
 }
 

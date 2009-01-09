@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 17575 2009-01-07 21:51:12Z cvargas1 $
+*  	@version $Id: work.php 17627 2009-01-09 21:50:35Z cvargas1 $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -108,6 +108,7 @@ require_once (api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 require_once (api_get_path(LIBRARY_PATH) . 'security.lib.php');
 require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
 $ctok = $_SESSION['sec_token'];
@@ -260,52 +261,105 @@ if(isset($_GET['action']) && $_GET['action']=="downloadfolder")
 	Header
 -----------------------------------------------------------
 */
-
-if (isset($origin) && $origin != 'learnpath') {
+	
+if (!empty($_SESSION['toolgroup'])){
+	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
+	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
+	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
+	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	
 	$url_dir ='';
-	$interbreadcrumb[] = array ('url' => $url_dir,'name' => get_lang('StudentPublications'));
-
-	//if (!$display_tool_options  && !$display_upload_form)
-	//{
-	//------interbreadcrumb for the current directory root path
-	$dir_array = explode("/", $cur_dir_path);
-	$array_len = count($dir_array);
-
-	if ($array_len > 0) {
-		$url_dir = 'work.php?&curdirpath=/';
-		$interbreadcrumb[] = array (
-			'url' => $url_dir,
-			'name' => get_lang('HomeDirectory'));
-	}
-
-	$dir_acum = '';
-	for ($i = 0; $i < $array_len; $i++) {
-		$url_dir = 'work.php?&curdirpath=' . $dir_acum . $dir_array[$i];
-		$interbreadcrumb[] = array (
-			'url' => $url_dir,
-			'name' => $dir_array[$i]
-		);
-		$dir_acum .= $dir_array[$i] . '/';
-	}
-	//	}
-
-	if ($display_upload_form) {
-		$interbreadcrumb[] = array (
-			"url" => "work.php",
-			"name" => get_lang('UploadADocument'));
-	}
-
-	if ($display_tool_options) {		
-		$interbreadcrumb[] = array (
-			"url" => "work.php",
-			"name" => get_lang('EditToolOptions'));
-	}
-	//--------------------------------------------------
+		$interbreadcrumb[] = array ('url' => $url_dir,'name' => get_lang('StudentPublications'));
+	
+		//if (!$display_tool_options  && !$display_upload_form)
+		//{
+		//------interbreadcrumb for the current directory root path
+		$dir_array = explode("/", $cur_dir_path);
+		$array_len = count($dir_array);
+	
+		if ($array_len > 0) {
+			$url_dir = 'work.php?&curdirpath=/';
+			$interbreadcrumb[] = array (
+				'url' => $url_dir,
+				'name' => get_lang('HomeDirectory'));
+		}
+	
+		$dir_acum = '';
+		for ($i = 0; $i < $array_len; $i++) {
+			$url_dir = 'work.php?&curdirpath=' . $dir_acum . $dir_array[$i];
+			$interbreadcrumb[] = array (
+				'url' => $url_dir,
+				'name' => $dir_array[$i]
+			);
+			$dir_acum .= $dir_array[$i] . '/';
+		}
+		//	}
+	
+		if ($display_upload_form) {
+			$interbreadcrumb[] = array (
+				"url" => "work.php",
+				"name" => get_lang('UploadADocument'));
+		}
+	
+		if ($display_tool_options) {		
+			$interbreadcrumb[] = array (
+				"url" => "work.php",
+				"name" => get_lang('EditToolOptions'));
+		}
+	
 	Display :: display_header(null);
+	
+	
 } else {
-	//we are in the learnpath tool
-	include api_get_path(INCLUDE_PATH) . 'reduced_header.inc.php';
+
+
+	if (isset($origin) && $origin != 'learnpath') {
+		$url_dir ='';
+		$interbreadcrumb[] = array ('url' => $url_dir,'name' => get_lang('StudentPublications'));
+	
+		//if (!$display_tool_options  && !$display_upload_form)
+		//{
+		//------interbreadcrumb for the current directory root path
+		$dir_array = explode("/", $cur_dir_path);
+		$array_len = count($dir_array);
+	
+		if ($array_len > 0) {
+			$url_dir = 'work.php?&curdirpath=/';
+			$interbreadcrumb[] = array (
+				'url' => $url_dir,
+				'name' => get_lang('HomeDirectory'));
+		}
+	
+		$dir_acum = '';
+		for ($i = 0; $i < $array_len; $i++) {
+			$url_dir = 'work.php?&curdirpath=' . $dir_acum . $dir_array[$i];
+			$interbreadcrumb[] = array (
+				'url' => $url_dir,
+				'name' => $dir_array[$i]
+			);
+			$dir_acum .= $dir_array[$i] . '/';
+		}
+		//	}
+	
+		if ($display_upload_form) {
+			$interbreadcrumb[] = array (
+				"url" => "work.php",
+				"name" => get_lang('UploadADocument'));
+		}
+	
+		if ($display_tool_options) {		
+			$interbreadcrumb[] = array (
+				"url" => "work.php",
+				"name" => get_lang('EditToolOptions'));
+		}
+		//--------------------------------------------------
+		Display :: display_header(null);
+	} else {
+		//we are in the learnpath tool
+		include api_get_path(INCLUDE_PATH) . 'reduced_header.inc.php';
+	}
 }
+
 
 //stats
 event_access_tool(TOOL_STUDENTPUBLICATION);

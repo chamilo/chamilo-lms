@@ -541,7 +541,7 @@ FCKImageCommand.prototype.Execute = function()
 			if ( image )
 			{
 				// If an image has been selected in the editor, the image properties dialog shoud be activated.
-				if ( FCK.is_real_image( image ) )
+				if ( FCK.IsRealImage( image ) )
 				{
 					this.ImageProperties.Execute() ;
 				}
@@ -751,7 +751,7 @@ FCKDocumentProcessor_CreateFakeImage = function( fakeClass, realElement )
 // A custom handler for audio files when a new tag has been added.
 FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
 	{
-		if ( !FCK.is_audio( el ) )
+		if ( !FCK.IsAudio( el ) )
 		{
 			return ;
 		}
@@ -768,7 +768,7 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
 		var i = embeds.length - 1 ; 
 		while ( i >= 0 && ( embed = embeds[i--] ) )
 		{
-			if ( FCK.is_audio( embed ) )
+			if ( FCK.IsAudio( embed ) )
 			{
 				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__MP3', embed.cloneNode(true) ) ;
 				oImg.setAttribute( '_fckmp3', 'true', 0 ) ;
@@ -781,7 +781,7 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
 // A custom handler for video when a new tag has been added.
 FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
 	{
-		if ( !FCK.is_video( el ) )
+		if ( !FCK.IsVideo( el ) )
 		{
 			return ;
 		}
@@ -798,7 +798,7 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
 		var i = embeds.length - 1 ; 
 		while ( i >= 0 && ( embed = embeds[i--] ) )
 		{
-			if ( FCK.is_video( embed ) )
+			if ( FCK.IsVideo( embed ) )
 			{
 				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', embed.cloneNode(true) ) ;
 				oImg.setAttribute( '_fckvideo', 'true', 0 ) ;
@@ -813,7 +813,7 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
 		var i = divs.length - 1 ; 
 		while ( i >= 0 && ( div = divs[i--] ) )
 		{
-			if ( FCK.is_video( div ) )
+			if ( FCK.IsVideo( div ) )
 			{
 				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', div.cloneNode(true) ) ;
 				oImg.setAttribute( '_fckvideo', 'true', 0 ) ;
@@ -866,7 +866,7 @@ for ( var i in FCK.ContextMenu.Listeners )
 FCK.ContextMenu.RegisterListener( {
 	AddItems : function ( menu, tag, tagName )
 	{
-		if ( FCK.is_real_image( tag ) )
+		if ( FCK.IsRealImage( tag ) )
 		{
 			// Grouping all image-related commands at the bottom.
 			menu.AddSeparator();
@@ -911,7 +911,7 @@ FCK.ContextMenu.RegisterListener( {
 	{
 		if ( tagName == 'IMG' && tag.getAttribute( '_fckvideo' ) )
 		{
-			switch ( FCK.get_video_type( tag ) )
+			switch ( FCK.GetVideoType( tag ) )
 			{
 				case 'embedded_video' :
 					menu.AddSeparator() ;
@@ -968,7 +968,7 @@ FCK.RegisterDoubleClickHandler(
 	{
 		if ( tag.tagName == 'IMG' && tag.getAttribute( '_fckvideo' ) )
 		{
-			switch ( FCK.get_video_type( tag ) )
+			switch ( FCK.GetVideoType( tag ) )
 			{
 				case 'embedded_video' :
 					FCKCommands.GetCommand( 'EmbedMovies' ).Execute() ;
@@ -994,7 +994,7 @@ FCK.RegisterDoubleClickHandler(
  */
 
 // Checking whether a selected object is a real image or not.
-FCK.is_real_image = function ( tag )
+FCK.IsRealImage = function ( tag )
 {
 	return ( tag.nodeName.IEquals( 'img' ) &&
 		!tag.getAttribute( '_fckfakelement' ) &&
@@ -1005,7 +1005,7 @@ FCK.is_real_image = function ( tag )
 } ;
 
 // Checking for audio file reference which is to be used by a flash player.
-FCK.is_audio = function ( tag )
+FCK.IsAudio = function ( tag )
 {
 	if ( tag.nodeName.IEquals( 'embed' ) )
 	{
@@ -1037,7 +1037,7 @@ FCK.is_audio = function ( tag )
 } ;
 
 // Checking for video file reference within an embedded object.
-FCK.is_video = function ( tag )
+FCK.IsVideo = function ( tag )
 {
 	if ( tag.nodeName.IEquals( 'embed' ) )
 	{
@@ -1094,7 +1094,7 @@ FCK.is_video = function ( tag )
 } ;
 
 // Returns specific type/source of embedded video.
-FCK.get_video_type = function ( img )
+FCK.GetVideoType = function ( img )
 {
 	var tag = FCK.GetRealElement( img ) ;
 
@@ -1147,4 +1147,68 @@ FCK.get_video_type = function ( img )
 	}
 
 	return false ;
+} ;
+
+// Removes from a relative url the relative path ( for example: ../../../ ) to the root folder (all documents base).
+FCK.RemoveRelativeRootPath = function ( url )
+{
+	if ( !url )
+	{
+		return '' ;
+	}
+
+	url = url.toString();
+
+	url = url.Trim() ;
+	
+	if ( FCKConfig.CreateDocumentDir )
+	{
+		if ( url.indexOf(FCKConfig.CreateDocumentDir) == 0 )
+		{
+			url = url.substr(FCKConfig.CreateDocumentDir.length);
+		}
+	}
+
+	return url ;
+} ;
+
+// Adds to a relative url the relative path to the root folder.
+FCK.AddRelativeRootPath = function ( url )
+{
+	if ( !url )
+	{
+		return '' ;
+	}
+
+	url = url.toString();
+
+	url = url.Trim() ;
+
+	if ( FCKConfig.InDocument && FCKConfig.CreateDocumentDir == '/' )
+	{
+		 // The target is in the root folder of the Documents tool, nothing to be added.
+		return url ;
+	}
+
+	if ( url.match( /^([^:]+\:)?\/\// ) ) // Absolute url.
+	{
+		return url ;
+	}
+
+	if ( url.indexOf( '/' ) == 0 ) // Absolute url.
+	{
+		return url ;
+	}
+
+	if ( url.indexOf( './' ) == 0 )
+	{
+		url = url.substr( 2 );
+	}
+
+	if ( url.indexOf(FCKConfig.CreateDocumentDir) == 0 )
+	{
+		return url ;
+	}
+
+	return FCKConfig.CreateDocumentDir + url ;
 } ;

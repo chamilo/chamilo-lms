@@ -49,7 +49,7 @@
     // Open the Image properties dialog on double click.
     function ImageManager_doubleClick (img) {
 
-		if ( FCK.is_real_image( img ) )
+		if ( FCK.IsRealImage( img ) )
 		{
 			var command = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 450 ) ;
 			command.Execute() ;
@@ -65,7 +65,7 @@
 		if ( image )
 		{
 			// Checking whether the selected object is a real image.
-			if ( FCK.is_real_image( image ) )
+			if ( FCK.IsRealImage( image ) )
 			{
 				var command = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 450 ) ;
 				command.Execute() ;

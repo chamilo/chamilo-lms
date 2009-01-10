@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 17583 2009-01-08 10:37:05Z ivantcholakov $
+<?php // $Id: configure_homepage.php 17633 2009-01-10 23:25:22Z ivantcholakov $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -901,6 +901,10 @@ switch($action){
 			}
 			else
 			{
+				$oFCKeditor->Config['CreateDocumentDir'] = api_get_path(WEB_PATH)."main/default_course_document/";
+				$oFCKeditor->Config['CreateDocumentWebDir'] = api_get_path(WEB_PATH)."main/default_course_document/";
+				$oFCKeditor->Config['BaseHref'] = api_get_path(WEB_PATH)."main/default_course_document/";
+
 				// For images
 				$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
 				$oFCKeditor->Config['ImageUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;

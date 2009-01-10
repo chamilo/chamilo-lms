@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 17399 2008-12-20 02:08:01Z herodoto $
+<?php // $Id: create_document.php 17631 2009-01-10 18:59:07Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -217,6 +217,7 @@ if ($relative_url== '')
 $fck_attribute['Config']['InDocument'] = true;
 $fck_attribute['Config']['CreateDocumentDir'] = $relative_url;
 $fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
+$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
 
 $filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document'.$dir;
 

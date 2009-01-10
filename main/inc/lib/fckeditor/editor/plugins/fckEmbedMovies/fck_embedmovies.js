@@ -83,17 +83,7 @@ window.onload = function ()
 	oEditor.FCKLanguageManager.TranslatePage(document);
 	
 	// read settings from existing embedded movie or set to default		
-	//GetE('txtUrl').value = GetParam(oMovie, (EmbedInObject ? 'url' : 'src'), '');
-	var url = GetParam(oMovie, (EmbedInObject ? 'url' : 'src'), '');
-	if (FCKConfig.CreateDocumentDir)
-	{
-		if ( url.indexOf(FCKConfig.CreateDocumentDir) == 0 )
-		{
-			url = url.substr(FCKConfig.CreateDocumentDir.length);
-		}
-	}
-	GetE('txtUrl').value = url;
-
+	GetE('txtUrl').value = FCK.RemoveRelativeRootPath( GetParam( oMovie, ( EmbedInObject ? 'url' : 'src' ) ), '' ) ;
 	GetE('chkAutosize').checked      = GetParam(oMovie,  'autosize',     true);
 	GetE('txtWidth').value           = GetParam(oMovie,  'width',        250  );
 	GetE('txtHeight').value          = GetParam(oMovie,  'height',       250  );
@@ -122,9 +112,14 @@ function BrowseServer()
 		FCKConfig.ScreenHeight * 0.7);
 }
 
+function SetUrl( url )
+{
+	 //GetE('txtUrl').value = url;
+	 GetE('txtUrl').value = FCK.RemoveRelativeRootPath( url ) ;
+}
+
 function CreateEmbeddedMovie(e, url)
 {
-
 	var sType, pluginspace, codebase, classid;
 	var sExt = url.match(/\.(mpg|mpeg|mp4|avi|wmv|mov|asf)$/i);
 
@@ -160,6 +155,7 @@ function CreateEmbeddedMovie(e, url)
 			codebase    = "http://www.apple.com/qtactivex/qtplugin.cab";
 			classid     = "";
 		}
+
 	
 		var html;
 		if (EmbedInObject)
@@ -197,56 +193,14 @@ function CreateEmbeddedMovie(e, url)
 			if (!GetE('chkAutosize').checked)	
 				html += 'width="'+ GetE('txtWidth').value +'" height="'+ GetE('txtHeight').value +'"';
 			html += '></embed>';
-		}			
+		}
+
 		//e.innerHTML = html;
 		//FCK.InsertHtml(html);
+
 		return html;
 	}
 }
-
-function SetUrl( url )
-{
-	 GetE('txtUrl').value = url; //this should be CreateDocumentDir
-}
-
-
-function setVideoUrl(url)
-{
-	return_url = '';
-
-	if (FCKConfig.InDocument)
-	{
-		if (FCKConfig.CreateDocumentDir == '/')
-		{
-			return_url = url; // FCKConfig.CreateDocumentDir variable is defined in create_document.php		
-		}
-		else
-		{
-			if ( url.indexOf(FCKConfig.CreateDocumentDir) != 0 )
-			{
-				return_url = FCKConfig.CreateDocumentDir + url ;
-			}
-			else
-			{
-				return_url = url ;
-			}
-		}
-	}
-	else
-	{
-		if ( url.indexOf(FCKConfig.CreateDocumentDir) != 0 )
-		{
-			return_url = FCKConfig.CreateDocumentDir + url ;
-		}
-		else
-		{
-			return_url = url ;
-		}
-	}
-
-	return return_url;
-}
-
 
 function Ok() 
 {
@@ -271,7 +225,7 @@ function Ok()
 		oFakeImage  = null ;
 	}
 	
-	url = setVideoUrl( GetE('txtUrl').value); 
+	url = FCK.AddRelativeRootPath( GetE( 'txtUrl' ).value ) ; 
 
 	if ( !oFakeImage )
 	{	
@@ -285,5 +239,6 @@ function Ok()
 	FCK.InsertHtml(html) ;
 		
 	oEditor.FCKUndo.SaveUndoStep();
-	return true;	
+
+	return true;
 }

@@ -83,7 +83,7 @@ window.onload = function ()
 	oEditor.FCKLanguageManager.TranslatePage(document);
 	
 	// read settings from existing embedded movie or set to default		
-	GetE('txtUrl').value = FCK.RemoveRelativeRootPath( GetParam( oMovie, ( EmbedInObject ? 'url' : 'src' ) ), '' ) ;
+	GetE('txtUrl').value = FCK.RemoveBasePath( GetParam( oMovie, ( EmbedInObject ? 'url' : 'src' ) ), '' ) ;
 	GetE('chkAutosize').checked      = GetParam(oMovie,  'autosize',     true);
 	GetE('txtWidth').value           = GetParam(oMovie,  'width',        250  );
 	GetE('txtHeight').value          = GetParam(oMovie,  'height',       250  );
@@ -115,7 +115,7 @@ function BrowseServer()
 function SetUrl( url )
 {
 	 //GetE('txtUrl').value = url;
-	 GetE('txtUrl').value = FCK.RemoveRelativeRootPath( url ) ;
+	 GetE('txtUrl').value = FCK.RemoveBasePath( url ) ;
 }
 
 function CreateEmbeddedMovie(e, url)
@@ -225,7 +225,7 @@ function Ok()
 		oFakeImage  = null ;
 	}
 	
-	url = FCK.AddRelativeRootPath( GetE( 'txtUrl' ).value ) ; 
+	url = FCK.AddBasePath( GetE( 'txtUrl' ).value ) ; 
 
 	if ( !oFakeImage )
 	{	

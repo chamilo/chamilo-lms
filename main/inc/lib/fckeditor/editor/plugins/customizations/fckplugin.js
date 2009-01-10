@@ -49,12 +49,11 @@
 
 /*
  **************************************************************************************
- * Reading a passed by PHP-scripts parameter, which tells whether simple or
- * advanced file manager is to be used.
+ * Reading some passed by PHP-scripts options.
  **************************************************************************************
  */
 
-// Reading + converting to boolean type.
+// A flag to thell which tells whether simple or advanced file manager is to be used.
 if ( FCKConfig.AdvancedFileManager )
 {
 	FCKConfig.AdvancedFileManager = FCKConfig.AdvancedFileManager.toString().toLowerCase() == 'true' ? true : false ;
@@ -62,6 +61,16 @@ if ( FCKConfig.AdvancedFileManager )
 else
 {
 	FCKConfig.AdvancedFileManager = false ;
+}
+
+// A flag to see whether a course documents repository is to be used.
+if ( FCKConfig.InDocument )
+{
+	FCKConfig.InDocument = FCKConfig.InDocument.toString().toLowerCase() == 'true' ? true : false ;
+}
+else
+{
+	FCKConfig.InDocument = false ;
 }
 
 
@@ -1149,8 +1158,8 @@ FCK.GetVideoType = function ( img )
 	return false ;
 } ;
 
-// Removes from a relative url the relative path ( for example: ../../../ ) to the root folder (all documents base).
-FCK.RemoveRelativeRootPath = function ( url )
+// Makes a URL relative.
+FCK.RemoveBasePath = function ( url )
 {
 	if ( !url )
 	{
@@ -1172,8 +1181,8 @@ FCK.RemoveRelativeRootPath = function ( url )
 	return url ;
 } ;
 
-// Adds to a relative url the relative path to the root folder.
-FCK.AddRelativeRootPath = function ( url )
+// Makes a URL absolute or semi-absolute.
+FCK.AddBasePath = function ( url )
 {
 	if ( !url )
 	{

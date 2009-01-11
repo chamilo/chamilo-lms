@@ -1166,6 +1166,11 @@ FCK.RemoveBasePath = function ( url )
 		return '' ;
 	}
 
+	if ( !FCKConfig.CreateDocumentDir )
+	{
+		return url ;
+	}
+
 	url = url.toString();
 
 	url = url.Trim() ;
@@ -1184,9 +1189,15 @@ FCK.RemoveBasePath = function ( url )
 // Makes a URL absolute or semi-absolute.
 FCK.AddBasePath = function ( url )
 {
+
 	if ( !url )
 	{
 		return '' ;
+	}
+
+	if ( !FCKConfig.CreateDocumentDir )
+	{
+		return url ;
 	}
 
 	url = url.toString();
@@ -1220,4 +1231,68 @@ FCK.AddBasePath = function ( url )
 	}
 
 	return FCKConfig.CreateDocumentDir + url ;
+} ;
+
+// Makes a URL relative towards the documents' repository root.
+FCK.RemoveAbsolutePath = function ( url )
+{
+	if ( !url )
+	{
+		return '' ;
+	}
+
+	if ( !FCKConfig.CreateDocumentWebDir )
+	{
+		return url ;
+	}
+
+	url = url.toString();
+
+	url = url.Trim() ;
+	
+	if ( FCKConfig.CreateDocumentWebDir )
+	{
+		if ( url.indexOf(FCKConfig.CreateDocumentWebDir) == 0 )
+		{
+			url = url.substr(FCKConfig.CreateDocumentWebDir.length);
+		}
+	}
+
+	return url ;
+} ;
+
+// Makes a URL absolute fully (http://mysite/dokeos/...).
+FCK.AddAbsolutePath = function ( url )
+{
+
+	if ( !url )
+	{
+		return '' ;
+	}
+
+	if ( !FCKConfig.CreateDocumentWebDir )
+	{
+		return url ;
+	}
+
+	url = url.toString();
+
+	url = url.Trim() ;
+
+	if ( url.match( /^([^:]+\:)?\/\// ) ) // Absolute url.
+	{
+		return url ;
+	}
+
+	if ( url.indexOf( '/' ) == 0 ) // Absolute url.
+	{
+		return url ;
+	}
+
+	if ( url.indexOf( './' ) == 0 )
+	{
+		url = url.substr( 2 );
+	}
+
+	return FCKConfig.CreateDocumentWebDir + url ;
 } ;

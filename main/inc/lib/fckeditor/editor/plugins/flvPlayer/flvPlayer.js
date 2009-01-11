@@ -85,23 +85,7 @@ function LoadSelection()
 {
 	oMedia = new Media();
 	oMedia = getSelectedMovie();
-	//alert('test');
-/*	
-	alert (
-		"id: " + oMedia.id +
-		"\nUrl: " + oMedia.url + 
-		"\nWidth: " + oMedia.width +
-		"\nHeight: " + oMedia.height +
-		"\nQuality: " + oMedia.quality +
-		"\nScale: " + oMedia.scale +
-		"\nVSpace: " + oMedia.vspace +
-		"\nHSpace: " + oMedia.hspace +
-		"\nAlign: " + oMedia.align +
-		"\nBgcolor: " + oMedia.bgcolor +
-		"\nLoop: " + oMedia.loop +
-		"\nPlay: " + oMedia.play
-	);
-*/
+
 	GetE('rbFileType').value	= oMedia.fileType;
 	GetE('txtURL').value    	= oMedia.url;
 	GetE('txtPlaylist').value   = oMedia.purl;
@@ -197,36 +181,21 @@ function Ok()
 	return true ;
 }
 
-/*
-function setFlvPlayerUrl(url)
-{
-	return_url='';
-	if (oEditor.FCKConfig.CreateDocumentDir == '/')
-	{
-
-		return_url = url; // // FCKConfig.CreateDocumentDir variable is defined in create_document.php	
-	}
-	else
-	{
-
-		return_url = oEditor.FCKConfig.CreateDocumentDir  + url ;
-	}	
-	return return_url;	
-}
-*/
-
 function updateMovie(e)
 {
 	e.fileType = GetE('rbFileType').value;
 	
-	//temp_url = setFlvPlayerUrl(GetE('txtURL').value);	
-	e.url = oEditor.FCKConfig.CreateDocumentWebDir + GetE('txtURL').value;
-	//e.url = temp_url;
-	
+	//e.url = GetE('txtURL').value;
+	e.url = FCK.AddAbsolutePath( GetE('txtURL').value ) ;
 	
 	e.purl = GetE('txtPlaylist').value;
-	e.iurl = GetE('txtImgURL').value;
-	e.wmurl = GetE('txtWMURL').value;
+
+	//e.iurl = GetE('txtImgURL').value;
+	e.iurl = FCK.AddAbsolutePath( GetE('txtImgURL').value ) ;
+
+	//e.wmurl = GetE('txtWMURL').value;
+	e.wmurl = FCK.AddAbsolutePath( GetE('txtWMURL').value ) ;
+
 	e.bgcolor = GetE('txtBgColor').value;
 	e.toolcolor = GetE('txtToolbarColor').value;
 	e.tooltcolor = GetE('txtToolbarTxtColor').value;
@@ -241,7 +210,10 @@ function updateMovie(e)
 	e.displayDigits = (GetE('chkShowDigits').checked) ? 'true' : 'false';
 	e.align =	GetE('selAlign').value;
 	e.dispPlaylist =	GetE('selDispPlaylist').value;
-	e.rurl = GetE('txtRURL').value;
+
+	//e.rurl = GetE('txtRURL').value;
+	e.rurl = FCK.AddAbsolutePath( GetE('txtRURL').value ) ;
+
 	e.playlistDim = GetE('txtPLDim').value;
 	e.playlistThumbs = (GetE('chkPLThumbs').checked) ? 'true' : 'false';
 }
@@ -304,6 +276,10 @@ var sActualBrowser ;
 
 
 function SetUrl( url ) {
+
+	// Added by Ivan Tcholakov.
+	url = FCK.AddAbsolutePath( url ) ;
+
 	if ( sActualBrowser == 'flv' ) {
 		document.getElementById('txtURL').value = url ;
 		GetE('txtHeight').value = GetE('txtWidth').value = '' ;
@@ -317,8 +293,6 @@ function SetUrl( url ) {
 		document.getElementById('txtWMURL').value = url ;
 	}
 }
-
-
 
 
 var Media = function (o){
@@ -530,19 +504,6 @@ Media.prototype.getInnerHTML = function (objectId){
 
 	return s;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 function SelectColor1()

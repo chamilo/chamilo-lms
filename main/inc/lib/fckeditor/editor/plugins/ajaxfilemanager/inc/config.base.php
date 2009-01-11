@@ -170,8 +170,17 @@
 		 * 		
 		 */
 		
+	// Modified by Ivan Tcholakov.
+	//define('CONFIG_WEBSITE_DOCUMENT_ROOT', '');
+	if (preg_match('@'.api_get_path(REL_PATH).'$@', api_get_path(SYS_PATH))) // Sanity check.
+	{
+		define('CONFIG_WEBSITE_DOCUMENT_ROOT', preg_replace('@'.api_get_path(REL_PATH).'$@', '', api_get_path(SYS_PATH)));
+	}
+	else
+	{
+		define('CONFIG_WEBSITE_DOCUMENT_ROOT', ''); // Let the ajaxfilemanager try alone to find the document root.
+	}
 
-	define('CONFIG_WEBSITE_DOCUMENT_ROOT', '');	
 	//theme related setting
 			/*
 			*	options avaialbe for CONFIG_EDITOR_NAME are:

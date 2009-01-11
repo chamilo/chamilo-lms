@@ -755,4 +755,96 @@ function delete_personal_agenda($id)
 		}
 	}
 }
+/**
+ * Get personal agenda items between two dates (=all events from all registered courses)
+ * @param	int		user ID of the user
+ * @param	string	Optional start date in datetime format (if no start date is given, uses today)
+ * @param	string	Optional end date in datetime format (if no date is given, uses one year from now)
+ * @return	array	Array of events ordered by start date, in [0]('datestart','dateend','title'),[1]('datestart','dateend','title') format, where datestart and dateend are in yyyyMMddhhmmss format.
+ * @TODO Implement really personal events (from user DB) and global events (from main DB)
+ */
+function get_personal_agenda_items_between_dates($user_id, $date_start='', $date_end='') {
+	$items = array ();
+	if ($user_id != strval(intval($user_id))) { return $items; }
+	if (empty($date_start)) { $date_start = date('Y-m-d H:i:s');}
+	if (empty($date_end))   { $date_end = date('Y-m-d H:i:s',mktime(0, 0, 0, date("m"),   date("d"),   date("Y")+1));}
+	$expr = '/\d{4}-\d{2}-\d{2}\ \d{2}:\d{2}:\d{2}/';
+	if(!preg_match($expr,$date_start)) { return $items; }
+	if(!preg_match($expr,$date_end)) { return $items; }
+	
+	// get agenda-items for every course
+	$courses = api_get_user_courses($user_id,false);
+	foreach ($courses as $id => $course)
+	{		
+		//databases of the courses
+		$t_a = Database :: get_course_table(TABLE_AGENDA, $course['db']);
+		$t_ip = Database :: get_course_table(TABLE_ITEM_PROPERTY, $course['db']);
+
+		$group_memberships = GroupManager :: get_group_ids($course['db'], $user_id);
+		// if the user is administrator of that course we show all the agenda items
+		if ($course['status'] == '1')
+		{
+			//echo "course admin";
+			$sqlquery = "SELECT
+										DISTINCT agenda.*, item_property.*
+										FROM ".$t_a." agenda,
+											 ".$t_ip." item_property
+										WHERE agenda.id = item_property.ref 
+										AND agenda.start_date>='$date_start'
+										AND agenda.end_date>='$date_end'
+										AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+										AND item_property.visibility='1'
+										GROUP BY agenda.id
+										ORDER BY start_date ";
+		}
+		// if the user is not an administrator of that course
+		else
+		{
+			//echo "NOT course admin";
+			if (is_array($group_memberships) && count($group_memberships)>0)
+			{
+				$sqlquery = "SELECT
+													agenda.*, item_property.*
+													FROM ".$t_a." agenda,
+														".$t_ip." item_property
+													WHERE agenda.id = item_property.ref
+													AND agenda.start_date>='$date_start'
+													AND agenda.end_date>='$date_end'
+													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+													AND	( item_property.to_user_id='".$user_id."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+													AND item_property.visibility='1'
+													ORDER BY start_date ";
+			} else {
+				$sqlquery = "SELECT
+													agenda.*, item_property.*
+													FROM ".$t_a." agenda,
+														".$t_ip." item_property
+													WHERE agenda.id = item_property.ref
+													AND agenda.start_date>='$date_start'
+													AND agenda.end_date>='$date_end'
+													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+													AND ( item_property.to_user_id='".$user_id."' OR item_property.to_group_id='0')
+													AND item_property.visibility='1'
+													ORDER BY start_date ";
+			}
+		}
+
+		$result = api_sql_query($sqlquery, __FILE__, __LINE__);
+		while ($item = Database::fetch_array($result))
+		{
+			$agendaday = date("j",strtotime($item['start_date']));
+			$time= date("H:i",strtotime($item['start_date']));
+			$URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($course["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$agenda_link = Display::return_icon('course_home.gif');
+			$text = '<i>'.$time.'</i> <a href="'.$URL.'" title="'.Security::remove_XSS($course['title']).'">'.$agenda_link.'</a>  '.Security::remove_XSS($item['title']).'<br />';
+			list($year,$month,$day,$hour,$min,$sec) = split('[-: ]',$item['start_date']);
+			$start_date = $year.$month.$day.$hour.$min;
+			list($year,$month,$day,$hour,$min,$sec) = split('[-: ]',$item['end_date']);
+			$end_date = $year.$month.$day.$hour.$min;
+			
+			$items[] = array('datestart'=>$start_date,'dateend'=>$end_date,'text'=>$text);
+		}
+	}
+	return $items;	
+}
 ?>

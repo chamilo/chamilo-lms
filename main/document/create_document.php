@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 17631 2009-01-10 18:59:07Z ivantcholakov $
+<?php // $Id: create_document.php 17647 2009-01-11 13:12:30Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -404,9 +404,11 @@ if ($form->validate())
 		
 		// change the path of mp3 to absolute
 		// first regexp deals with ../../../ urls
-		$content = preg_replace("|(flashvars=\"file=)(\.+/)+|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$content);
+		// Disabled by Ivan Tcholakov.
+		//$content = preg_replace("|(flashvars=\"file=)(\.+/)+|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$content);
 		//second regexp deals with audio/ urls
-		$content = preg_replace("|(flashvars=\"file=)([^/]+)/|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/$2/',$content);		 
+		// Disabled by Ivan Tcholakov.
+		//$content = preg_replace("|(flashvars=\"file=)([^/]+)/|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/$2/',$content);		 
 		 
 		fputs($fp, $content);
 

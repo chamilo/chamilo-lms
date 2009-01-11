@@ -121,30 +121,30 @@ FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5' ;
 FCKConfig.LinkBrowser = true ;
 FCKConfig.LinkBrowserURL =FCKConfig.PluginsPath +'ajaxfilemanager/ajaxfilemanager.php';
 FCKConfig.LinkBrowserWindowWidth    = 782;
-FCKConfig.LinkBrowserWindowHeight   = 440;
+FCKConfig.LinkBrowserWindowHeight   = 490;
 
 
 FCKConfig.ImageBrowser = true ;
 FCKConfig.ImageBrowserURL =FCKConfig.PluginsPath +'ajaxfilemanager/ajaxfilemanager.php';
 FCKConfig.ImageBrowserWindowWidth    = 782;
-FCKConfig.ImageBrowserWindowHeight   = 440;
+FCKConfig.ImageBrowserWindowHeight   = 490;
 
 FCKConfig.FlashBrowser = true ;
 FCKConfig.FlashBrowserURL =FCKConfig.PluginsPath +'ajaxfilemanager/ajaxfilemanager.php';
 FCKConfig.FlashBrowserWindowWidth    = 782;
-FCKConfig.FlashBrowserWindowHeight   = 440;
+FCKConfig.FlashBrowserWindowHeight   = 490;
 
 
 FCKConfig.MediaBrowser = true ;
 FCKConfig.MediaBrowserURL =FCKConfig.PluginsPath +'ajaxfilemanager/ajaxfilemanager.php';
 FCKConfig.MediaBrowserWindowWidth    = 782;
-FCKConfig.MediaBrowserWindowHeight   = 440;
+FCKConfig.MediaBrowserWindowHeight   = 490;
 
 // mp3 plugin 
 FCKConfig.MP3Browser = true ;
 FCKConfig.MP3BrowserURL =FCKConfig.PluginsPath +'ajaxfilemanager/ajaxfilemanager.php';
 FCKConfig.MP3BrowserWindowWidth    = 782;
-FCKConfig.MP3BrowserWindowHeight   = 440;
+FCKConfig.MP3BrowserWindowHeight   = 490;
 
 ///
 FCKConfig.LinkUpload = false ;

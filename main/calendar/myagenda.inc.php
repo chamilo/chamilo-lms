@@ -760,7 +760,7 @@ function delete_personal_agenda($id)
  * @param	int		user ID of the user
  * @param	string	Optional start date in datetime format (if no start date is given, uses today)
  * @param	string	Optional end date in datetime format (if no date is given, uses one year from now)
- * @return	array	Array of events ordered by start date, in [0]('datestart','dateend','title'),[1]('datestart','dateend','title') format, where datestart and dateend are in yyyyMMddhhmmss format.
+ * @return	array	Array of events ordered by start date, in [0]('datestart','dateend','title'),[1]('datestart','dateend','title','link','coursetitle') format, where datestart and dateend are in yyyyMMddhhmmss format.
  * @TODO Implement really personal events (from user DB) and global events (from main DB)
  */
 function get_personal_agenda_items_between_dates($user_id, $date_start='', $date_end='') {
@@ -843,7 +843,7 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 			$items[] = array(
 				'datestart'=>$start_date,
 				'dateend'=>$end_date,
-				'text'=>$item['title'],
+				'title'=>$item['title'],
 				'link'=>$URL,
 				'coursetitle'=>$c['name'],
 			);

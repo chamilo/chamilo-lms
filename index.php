@@ -1,4 +1,4 @@
-<?php // $Id: index.php 16947 2008-11-26 14:04:43Z iflorespaz $
+<?php // $Id: index.php 17648 2009-01-11 23:08:49Z iflorespaz $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 16947 2008-11-26 14:04:43Z iflorespaz $
+* 	@version $Id: index.php 17648 2009-01-11 23:08:49Z iflorespaz $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -59,7 +59,7 @@ include_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'system_announcements.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-
+require_once 'main/chat/chat_functions.lib.php';
 $loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
 $setting_show_also_closed_courses = (api_get_setting('show_closed_courses')=='true') ? true : false;
 
@@ -75,6 +75,7 @@ $this_section = SECTION_CAMPUS;
  * 			this can be usefull when you are on an open course and you need to log in to edit something and you immediately want to check how anonymous users
  * 			will see it.
  */
+ $my_user_id=api_get_user_id();
 if (!empty($_GET['logout'])) {
 	logout();
 }
@@ -260,7 +261,8 @@ function logout() {
 	}
 	
 	if (!isset($_SESSION['login_as'])) {
-		$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
+		$current_date=date('Y-m-d H:i:s',time());
+		$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date='".$current_date."' WHERE login_id='$i_id_last_connection'";
 		api_sql_query($s_sql_update_logout_date);
 	}
 	LoginDelete($uid, $_configuration['statistics_database']); //from inc/lib/online.inc.php - removes the "online" status
@@ -283,7 +285,7 @@ function logout() {
 			}
 		}
 	}
-
+	exit_of_chat($uid);
 	api_session_destroy();
 header("Location: index.php$query_string");
 	exit();

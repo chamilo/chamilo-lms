@@ -1868,4 +1868,23 @@ class CourseManager
 				@ api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
 		}
 	}
+
+/**
+ * @author isaac flores paz
+ * @param int
+ * @return array
+ */
+	function get_courses_list_by_user_id($user_id) {
+		$course_list=array();
+		$tbl_course			 = Database::get_main_table(TABLE_MAIN_COURSE);
+		$tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+		$sql='SELECT c.code,c.db_name FROM '.$tbl_course.' c inner join '.$tbl_course_rel_user.' cru on c.code=cru.course_code  WHERE cru.user_id='.$user_id;
+		$result=api_sql_query($sql,__FILE__,__LINE__);
+		while ($row=Database::fetch_array($result,'ASSOC')) {
+			$course_list[]=$row;			
+		}
+		return $course_list;
+		
+	}
+	
 } //end class CourseManager

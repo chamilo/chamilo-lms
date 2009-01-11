@@ -35,7 +35,7 @@ define('FRAME','hidden');
 $language_file = array ('chat');
 
 require('../inc/global.inc.php');
-
+require_once 'chat_functions.lib.php';
 //$tbl_user=$mainDbName."`.`user";
 //$tbl_chat_connected=$_course['dbNameGlu'].'chat_connected';
 $tbl_user 		= Database::get_main_table(TABLE_MAIN_USER);
@@ -67,10 +67,9 @@ $result=api_sql_query($sql);
 
 //The user_id exists so we must do an UPDATE and not a INSERT
 $current_time=date('Y-m-d H:i:s');
-if (Database::num_rows($result)==0){
+if (Database::num_rows($result)==0) {
 	$query="INSERT INTO $tbl_chat_connected(user_id,last_connection) VALUES('".$_user['user_id']."','".$current_time."')";
-}
-else{
+} else {
 	$query="UPDATE $tbl_chat_connected set last_connection='".$current_time."' WHERE user_id='".$_user['user_id']."'";
 }
 
@@ -80,8 +79,9 @@ $query="SELECT COUNT(user_id) FROM $tbl_chat_connected WHERE last_connection>'".
 $result=api_sql_query($query,__FILE__,__LINE__);
 
 $connected_old=intval($_POST['connected_old']);
-list($connected_new)=Database::fetch_row($result);
-
+list($connected_new) = Database::fetch_row($result);
+/*disconnected user of chat*/
+disconnect_user_of_chat ();
 include("header_frame.inc.php");
 ?>
 

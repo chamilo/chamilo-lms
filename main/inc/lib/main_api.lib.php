@@ -428,7 +428,7 @@ function api_get_user_id() {
  * Get the list of courses a specific user is subscribed to
  * @param	int		User ID
  * @param	boolean	Whether to get session courses or not - NOT YET IMPLEMENTED
- * @return	array	Array of courses in the form [0]=>('code'=>xxx,'db'=>xxx,'dir'=>xxx)
+ * @return	array	Array of courses in the form [0]=>('code'=>xxx,'db'=>xxx,'dir'=>xxx,'status'=>d)
  */
 function api_get_user_courses($userid,$fetch_session=true) {
 	if ($userid != strval(intval($userid))) { return array(); } //get out if not integer
@@ -438,7 +438,7 @@ function api_get_user_courses($userid,$fetch_session=true) {
 	$t_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 	$t_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	
-	$sql_select_courses = "SELECT cc.code code, cc.db_name db, course.directory dir
+	$sql_select_courses = "SELECT cc.code code, cc.db_name db, cc.directory dir, cu.status status
 			                        FROM    $t_course       cc,
 											$t_course_user   cu
 			                        WHERE cc.code = cu.course_code

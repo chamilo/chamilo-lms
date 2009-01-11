@@ -425,6 +425,34 @@ function api_get_user_id() {
 	return $GLOBALS['_user']['user_id'];
 }
 /**
+ * Get the list of courses a specific user is subscribed to
+ * @param	int		User ID
+ * @param	boolean	Whether to get session courses or not - NOT YET IMPLEMENTED
+ * @return	array	Array of courses in the form [0]=>('code'=>xxx,'db'=>xxx,'dir'=>xxx)
+ */
+function api_get_user_courses($userid,$fetch_session=true) {
+	if ($userid != strval(intval($userid))) { return array(); } //get out if not integer
+	$t_course = Database::get_main_table(TABLE_MAIN_COURSE);
+	$t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+	$t_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+	$t_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+	$t_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+	
+	$sql_select_courses = "SELECT cc.code code, cc.db_name db, course.directory dir
+			                        FROM    $t_course       cc,
+											$t_course_user   cu
+			                        WHERE cc.code = cu.course_code
+			                        AND   cu.user_id = '".$userid."'";
+	$result = api_sql_query($sql_select_courses);
+	if ($result===false) { return array(); }
+	while ($row = Database::fetch_array($result))
+	{
+		// we only need the database name of the course
+		$courses[] = $row;
+	}
+	return $courses;
+}
+/**
  * @param $user_id (integer): the id of the user
  * @return $user_info (array): user_id, lastname, firstname, username, email, ...
  * @author Patrick Cool <patrick.cool@UGent.be>

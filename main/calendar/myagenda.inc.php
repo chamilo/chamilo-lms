@@ -776,6 +776,7 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 	$courses = api_get_user_courses($user_id,false);
 	foreach ($courses as $id => $course)
 	{		
+		$c = api_get_course_info($course['code']);
 		//databases of the courses
 		$t_a = Database :: get_course_table(TABLE_AGENDA, $course['db']);
 		$t_ip = Database :: get_course_table(TABLE_ITEM_PROPERTY, $course['db']);
@@ -833,16 +834,19 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 		while ($item = Database::fetch_array($result))
 		{
 			$agendaday = date("j",strtotime($item['start_date']));
-			$time= date("H:i",strtotime($item['start_date']));
-			$URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($course["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
-			$agenda_link = Display::return_icon('course_home.gif');
-			$text = '<i>'.$time.'</i> <a href="'.$URL.'" title="'.Security::remove_XSS($course['title']).'">'.$agenda_link.'</a>  '.Security::remove_XSS($item['title']).'<br />';
+			$URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($course["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday";
 			list($year,$month,$day,$hour,$min,$sec) = split('[-: ]',$item['start_date']);
 			$start_date = $year.$month.$day.$hour.$min;
 			list($year,$month,$day,$hour,$min,$sec) = split('[-: ]',$item['end_date']);
 			$end_date = $year.$month.$day.$hour.$min;
 			
-			$items[] = array('datestart'=>$start_date,'dateend'=>$end_date,'text'=>$text);
+			$items[] = array(
+				'datestart'=>$start_date,
+				'dateend'=>$end_date,
+				'text'=>$item['title'],
+				'link'=>$URL,
+				'coursetitle'=>$c['name'],
+			);
 		}
 	}
 	return $items;	

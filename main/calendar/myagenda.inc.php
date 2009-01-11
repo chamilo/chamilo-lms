@@ -791,7 +791,7 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 											 ".$t_ip." item_property
 										WHERE agenda.id = item_property.ref 
 										AND agenda.start_date>='$date_start'
-										AND agenda.end_date>='$date_end'
+										AND agenda.end_date<='$date_end'
 										AND item_property.tool='".TOOL_CALENDAR_EVENT."'
 										AND item_property.visibility='1'
 										GROUP BY agenda.id
@@ -809,7 +809,7 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 														".$t_ip." item_property
 													WHERE agenda.id = item_property.ref
 													AND agenda.start_date>='$date_start'
-													AND agenda.end_date>='$date_end'
+													AND agenda.end_date<='$date_end'
 													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
 													AND	( item_property.to_user_id='".$user_id."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 													AND item_property.visibility='1'
@@ -821,7 +821,7 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 														".$t_ip." item_property
 													WHERE agenda.id = item_property.ref
 													AND agenda.start_date>='$date_start'
-													AND agenda.end_date>='$date_end'
+													AND agenda.end_date<='$date_end'
 													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
 													AND ( item_property.to_user_id='".$user_id."' OR item_property.to_group_id='0')
 													AND item_property.visibility='1'

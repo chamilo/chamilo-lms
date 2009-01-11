@@ -71,23 +71,10 @@ function LoadSelection()
 {
 	oMedia = new Media() ;
 	oMedia.setObjectElement( getSelectedMovie() ) ;
-/*	
-	alert (
-		"id: " + oMedia.id +
-		"\nUrl: " + oMedia.url + 
-		"\nWidth: " + oMedia.width +
-		"\nHeight: " + oMedia.height +
-		"\nQuality: " + oMedia.quality +
-		"\nScale: " + oMedia.scale +
-		"\nVSpace: " + oMedia.vspace +
-		"\nHSpace: " + oMedia.hspace +
-		"\nAlign: " + oMedia.align +
-		"\nBgcolor: " + oMedia.bgcolor +
-		"\nLoop: " + oMedia.loop +
-		"\nPlay: " + oMedia.play
-	);
-*/
-	GetE( 'txtURL' ).value    	= oMedia.url ;
+
+	//GetE( 'txtURL' ).value    	= oMedia.url ;
+	GetE( 'txtURL' ).value    	=  FCK.RemoveBasePath( oMedia.url ) ;
+
 	GetE( 'txtVSpace' ).value		= oMedia.vspace ;
 	GetE( 'txtHSpace' ).value		= oMedia.hspace ;
 	GetE( 'selAlign' ).value		= oMedia.align ;
@@ -114,29 +101,12 @@ function Ok()
 
 	//var e = ( oMedia || FCK.EditorDocument.createElement( 'OBJECT' ) ) ;
 	var e = ( oMedia || new Media() ) ;
-	e.url = setFlashUrl(  GetE( 'txtURL' ).value ) ;
-	//e.url = oEditor.FCKConfig.CreateDocumentDir + GetE( 'txtURL' ).value;	
+	e.url = FCK.AddBasePath( GetE( 'txtURL' ).value ) ;
 	
 	updateMovie(e) ;	
 
 	FCK.InsertHtml( e.getInnerHTML() ) ;
 	return true ;
-}
-
-function setFlashUrl( url )
-{
-	return_url = '' ;
-
-	if ( oEditor.FCKConfig.CreateDocumentDir == '/' )
-	{
-		return_url = url; // // FCKConfig.CreateDocumentDir variable is defined in create_document.php	
-	}
-	else
-	{
-		return_url = oEditor.FCKConfig.CreateDocumentDir  + url ;
-	}
-
-	return return_url;	
 }
 
 /**

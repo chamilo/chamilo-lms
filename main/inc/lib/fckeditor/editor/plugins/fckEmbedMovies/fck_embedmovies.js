@@ -120,6 +120,9 @@ function SetUrl( url )
 
 function CreateEmbeddedMovie(e, url)
 {
+	// Added by Ivan Tcholakov
+	url = FCK.AddBasePath( url ) ;
+
 	var sType, pluginspace, codebase, classid;
 	var sExt = url.match(/\.(mpg|mpeg|mp4|avi|wmv|mov|asf)$/i);
 

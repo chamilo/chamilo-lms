@@ -1,9 +1,9 @@
-<?php // $Id: usermanager.lib.php 17533 2009-01-04 20:37:33Z yannoo $
+<?php // $Id: usermanager.lib.php 17636 2009-01-11 04:22:39Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -1519,5 +1519,19 @@ class UserManager
 	
 		return $personal_course_list;
 	}
+	/**
+	 * Get user id from a username
+	 * @param	string	Username
+	 * @return	int		User ID (or false if not found)
+	 */
+	function get_user_id_from_username($username) {
+		$username = Database::escape_string($username);
+		$t_user = Database::get_main_table(TABLE_MAIN_USER);
+		$sql = "SELECT user_id FROM $t_user WHERE username = '$username'";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		if ($res===false) { return false; }
+		if (Database::num_rows($res)!==1) { return false; }
+		$row = Database::fetch_array($res);
+		return $row['user_id'];
+	}
 }
-?>

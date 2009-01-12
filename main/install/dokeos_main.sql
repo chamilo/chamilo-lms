@@ -648,8 +648,7 @@ VALUES
 ('course_create_active_tools','survey','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Survey'),
 ('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary'),
 ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook'),
-('advanced_filemanager',NULL,'radio','Platform','true','AdvancedfilemanagerTitle','AdvancedfilemanagerComment',NULL,NULL);
-
+('advanced_filemanager',NULL,'radio','Platform','true','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 

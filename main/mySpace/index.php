@@ -1030,11 +1030,15 @@ function course_info_tracking_filter($user_id,$url_params,$row)
  */
 function exercises_results($user_id, $course_code)
 {
+	$questions_answered = 0;
 	$sql = 'SELECT exe_result , exe_weighting
 					FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES)."
 					WHERE exe_cours_id = '".Database::escape_string($course_code)."'
 					AND exe_user_id = '".Database::escape_string($user_id)."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$score_obtained = 0;
+	$score_possible = 0;
+	$questions_answered = 0;
 	while ($row = Database::fetch_array($result))
 	{
 		$score_obtained += $row['exe_result'];
@@ -1042,7 +1046,9 @@ function exercises_results($user_id, $course_code)
 		$questions_answered ++;
 	}
 	
-	$percentage = round(($score_obtained / $score_possible * 100),2);
+	if ($score_possible !== 0) {
+		$percentage = round(($score_obtained / $score_possible * 100),2);	
+	} 
 	
 	return array('score_obtained' => $score_obtained, 'score_possible' => $score_possible, 'questions_answered' => $questions_answered, 'percentage' => $percentage);
 }

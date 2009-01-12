@@ -386,7 +386,7 @@ class SortableTable extends HTML_Table
 		$param['column'] = $column;
 		if ($sortable)
 		{
-			$link = '<a href="'.api_get_self().'?';
+			$link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;';
 			foreach ($param as $key => $value)
 			{
 				$link .= $this->param_prefix.$key.'='.urlencode($value).'&amp;';

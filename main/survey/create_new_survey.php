@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 17501 2009-01-02 03:03:34Z yannoo $
+* 	@version $Id: create_new_survey.php 17658 2009-01-12 16:07:22Z cfasanando $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -178,56 +178,40 @@ $surveytypes[1] = get_lang('Conditional');
 
 
 if ($_GET['action'] == 'add')
-{
-	//$form->addElement('select', 'survey_type', get_lang('SelectType'), $surveytypes, array('onchange' => 'if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}'));	
+{		
 	$form->addElement('hidden','survey_type',0);
-    $form -> addElement('html','<div id="options" style="display: none;">');
-		
+    $form -> addElement('html','<div id="options" style="display: none;">');		
 	require_once(api_get_path(LIBRARY_PATH).'surveymanager.lib.php');
-	$survey_tree = new SurveyTree();
-	
+	$survey_tree = new SurveyTree();	
 	$list_surveys = $survey_tree->createList($survey_tree->surveylist);	
 	$list_surveys[0]=''; 
 	$form->addElement('select', 'parent_id', get_lang('ParentSurvey'), $list_surveys);
 	$defaults['parent_id']=0;
+} 
 
-}
-else
-{
-	// Aditional Parameters
-	$form -> addElement('html','<div class="row">
-	<div class="label">&nbsp;</div>
-	<div class="formw">
-		<a href="javascript://" onclick="if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}"><img src="../img/add_na.gif" alt="" />'.get_lang('AdvancedParameters').'</a>
-	</div>
-	</div>');
-	$form -> addElement('html','<div id="options" style="display: none;">');
-}
- 
 if ($survey_data['survey_type']==1 || $_GET['action'] == 'add' )
 {
 	$form->addElement('checkbox', 'one_question_per_page', get_lang('OneQuestionPerPage'));
 	$form->addElement('checkbox', 'shuffle', get_lang('ActivateShuffle'));
 }
 
-if ($survey_data['anonymous']==0  )
-{
-	$form->addElement('checkbox', 'show_form_profile', get_lang('ShowFormProfile'));
-}
+if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($_GET['survey_id']) )
+{	
+	if ($survey_data['anonymous']==0  ) {
+		// Aditional Parameters
+		$form -> addElement('html','<div class="row">
+		<div class="label">&nbsp;</div>
+		<div class="formw">
+			<a href="javascript://" onclick="if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}"><img src="../img/add_na.gif" alt="" />'.get_lang('AdvancedParameters').'</a>
+		</div>
+		</div>');
+		$form -> addElement('html','<div id="options" style="display:none">');		
+		$form->addElement('checkbox', 'show_form_profile', get_lang('ShowFormProfile'));
 
-
-
-
-if ($_GET['action'] == 'edit' && is_numeric($_GET['survey_id']) )
-{
-	if ($survey_data['show_form_profile']==1 && $survey_data['anonymous']==0  )
-	{
 		$field_list=SurveyUtil::make_field_list();
 		if (is_array ($field_list))
 		{
-			//TODO hide and show the list in a fancy DIV 
-			//$form->addElement('html', '<a href=javascript>'.get_lang('ViewFields').'</a> <div id="fields"  style="display: none;" >');
-
+			//TODO hide and show the list in a fancy DIV 			
 			foreach ($field_list  as $key=> $field)
 			{
 				if ($field['visibility']==1)
@@ -252,15 +236,13 @@ if ($_GET['action'] == 'edit' && is_numeric($_GET['survey_id']) )
 					}
 				}
 			}
-			//$form->addElement('html', '</div>');
-		}	
+		}		
+		$form->addElement('html', '</div>');
 	}
+ 	
 }
-
-$form -> addElement('html','</div>');
-
+$form -> addElement('html','</div><br />');
 $form->addElement('submit', 'submit_survey', get_lang('Ok'));
-
 
 // setting the rules
 if ($_GET['action'] == 'add')

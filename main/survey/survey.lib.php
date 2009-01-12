@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 17530 2009-01-04 20:28:07Z yannoo $
+* 	@version $Id: survey.lib.php 17658 2009-01-12 16:07:22Z cfasanando $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -4633,6 +4633,11 @@ class SurveyUtil {
 		$counter = 0;
 		while ($row = Database::fetch_array($result,'ASSOC'))
 		{
+			// get the user into survey answer table (user or anonymus)
+			$sql = "SELECT user FROM $table_survey_answer 
+				WHERE survey_id = (SELECT survey_id from $table_survey WHERE code ='".$row['code']."')";
+			$result_answer = api_sql_query($sql, __FILE__, __LINE__);
+			$row_answer = Database::fetch_array($result_answer,'ASSOC');	
 			echo '<tr>';
 			if ($row['answered'] == 0)
 			{
@@ -4646,7 +4651,7 @@ class SurveyUtil {
 			echo ($row['anonymous'] == 1)?get_lang('Yes'):get_lang('No');
 			echo '</td>';
 			echo '</tr>';
-			$link_available=self::show_link_available(api_get_user_id(),$row['code']);
+			$link_available=self::show_link_available(api_get_user_id(),$row['code'],$row_answer['user']);
 			if ($link_add===true && $link_available===true) {
 				echo '<tr><td><a href="fillsurvey.php?user_id='.api_get_user_id().'&amp;course='.$_course['sysCode'].'&amp;invitationcode='.$row['invitation_code'].'&amp;cidReq='.$_course['sysCode'].'">'.get_lang('CompleteTheSurveysQuestions').'</a></td><td></td></tr>';
 			}
@@ -4897,19 +4902,20 @@ class SurveyUtil {
 	}
 		/**
 	 * @author Isaac Flores Paz <florespaz@bidsoftperu.com>
-	 * @param Integer user_id
+	 * @param int $user_id - User ID
+	 * @param int $user_id_answer - User in survey answer table (user id or anonymus)
 	 * @return boolean  
 	 *  
 	 */
-	function show_link_available($user_id,$survey_code) {
+	function show_link_available($user_id,$survey_code,$user_answer) {
 		$table_survey = Database :: get_course_table(TABLE_SURVEY);
 		$table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
 		$table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
 		$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 
-		$sql='SELECT COUNT(*) as count FROM '.$table_survey_invitation.' WHERE user='.$user_id.' AND survey_code="'.$survey_code.'" AND answered="1";';
-		$sql2='SELECT COUNT(*) as count FROM '.$table_survey.' s INNER JOIN '.$table_survey_question.' q ON s.survey_id=q.survey_id WHERE s.code="'.$survey_code.'";';
-		$sql3='SELECT COUNT(*) as count FROM '.$table_survey_answer.' WHERE survey_id=(SELECT survey_id FROM '.$table_survey.' WHERE code="'.$survey_code.'" AND user='.$user_id.' )';		
+		$sql='SELECT COUNT(*) as count FROM '.$table_survey_invitation.' WHERE user='.$user_id.' AND survey_code="'.$survey_code.'" AND answered="1"';
+		$sql2='SELECT COUNT(*) as count FROM '.$table_survey.' s INNER JOIN '.$table_survey_question.' q ON s.survey_id=q.survey_id WHERE s.code="'.$survey_code.'" AND q.type NOT IN("pagebreak","comment")';
+		$sql3='SELECT COUNT(*) as count FROM '.$table_survey_answer.' WHERE survey_id=(SELECT survey_id FROM '.$table_survey.' WHERE code="'.$survey_code.'") AND user="'.$user_answer.'" ';		
 		
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 		$result2=api_sql_query($sql2,__FILE__,__LINE__);

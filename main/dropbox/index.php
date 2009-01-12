@@ -286,8 +286,10 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
 		echo '<img src="../img/folder_up.gif" alt="'.get_lang('up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
         $movelist[0] = 'Root'; // move_received selectbox content
+	} else {
+	    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory"><img src="../img/folder_new.gif" align=\"absmiddle\"/> '.get_lang('AddNewCategory').'</a>';		
 	}
-	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory"><img src="../img/folder_new.gif" align=\"absmiddle\"/> '.get_lang('AddNewCategory').'</a>';
+	
 	echo '</div>';
 
 	// object initialisation
@@ -438,9 +440,12 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false) {
 	if ($view_dropbox_category_sent<>0) {
 		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong> ';
 		echo '<img src="../img/folder_up.gif" alt="'.get_lang('Up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category=0&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
+	} else {
+		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$_GET['view']."&amp;action=addsentcategory\"><img src=\"../img/folder_new.gif\" align=\"absmiddle\" /> ".get_lang('AddNewCategory')."</a>\n";
 	}
+	
 	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$_GET['view']."&amp;action=add\"><img src=\"../img/submit_file.gif\" align=\"absmiddle\"/> ".get_lang('UploadNewFile')."</a>&nbsp;\n";
-	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$_GET['view']."&amp;action=addsentcategory\"><img src=\"../img/folder_new.gif\" align=\"absmiddle\" /> ".get_lang('AddNewCategory')."</a>\n";
+	
 	echo '</div>';
 	//echo '<form name="sent_files" method="post" action="'.api_get_self().'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'">';
 

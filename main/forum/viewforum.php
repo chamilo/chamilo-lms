@@ -290,7 +290,9 @@ if (!empty($message)) {
 -----------------------------------------------------------
 */
 echo '<div class="actions">';
-//echo '<span style="float:right;">'.search_link().'</span>';
+if (empty($_SESSION['toolgroup'])){
+	echo '<span style="float:right;">'.search_link().'</span>';
+}
 // The link should appear when
 // 1. the course admin is here
 // 2. the course member is here and new threads are allowed

@@ -843,13 +843,13 @@ function display_up_down_icon($content, $id, $list) {
 		}
 	}
 	if ($position>1) {
-		$return_value='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=up&amp;content='.$content.'&amp;id='.$id.'" title="'.get_lang('MoveUp').'"><img src="../img/up.gif" /></a>';
+		$return_value='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=up&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveUp').'"><img src="../img/up.gif" /></a>';
 	} else {
 		$return_value='<img src="../img/up_na.gif" />';
 	}
 	
 	if ($position<$total_items) {
-		$return_value.='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=down&amp;content='.$content.'&amp;id='.$id.'" title="'.get_lang('MoveDown').'" ><img src="../img/down.gif" /></a>';
+		$return_value.='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=down&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveDown').'" ><img src="../img/down.gif" /></a>';
 	} else {
 		
 	   $return_value.='<img src="../img/down_na.gif" />';

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 17550 2009-01-06 18:56:28Z marvil07 $
+<?php // $Id: index.php 17660 2009-01-12 17:59:35Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -272,8 +272,8 @@ function version_check()
 	{	
 		$return .= '<form action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';
 		$return .= get_lang('VersionCheckExplanation');
-		$return .= '<input type="checkbox" name="donotlistcampus" value="1" id="checkbox" /> Do not display my campus in the list of Dokeos platforms';
-		$return .= '<input type="submit" name="Register" value="Enable Version Check" id="register" />';
+		$return .= '<input type="checkbox" name="donotlistcampus" value="1" id="checkbox" />'.get_lang('HideCampusFromPublicDokeosPlatformsList');
+		$return .= '<input type="submit" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" />';
 		$return .= '</form>';
 	}
 	else

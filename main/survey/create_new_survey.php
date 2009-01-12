@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 17658 2009-01-12 16:07:22Z cfasanando $
+* 	@version $Id: create_new_survey.php 17666 2009-01-12 21:18:36Z cfasanando $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -35,6 +35,19 @@ $language_file = 'survey';
 
 // including the global dokeos file
 require_once ('../inc/global.inc.php');
+
+$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
+		
+		function advanced_parameters() {
+			if(document.getElementById(\'options\').style.display == \'none\') {
+					document.getElementById(\'options\').style.display = \'block\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_minus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			} else {
+					document.getElementById(\'options\').style.display = \'none\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			}		
+		}
+	</script>';	
 
 // including additional libraries
 /** @todo check if these are all needed */
@@ -202,12 +215,18 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($_GET['surve
 		$form -> addElement('html','<div class="row">
 		<div class="label">&nbsp;</div>
 		<div class="formw">
-			<a href="javascript://" onclick="if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}"><img src="../img/add_na.gif" alt="" />'.get_lang('AdvancedParameters').'</a>
+			<a href="javascript://" onclick="advanced_parameters()" ><br /><span id="plus_minus">&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
 		</div>
 		</div>');
 		$form -> addElement('html','<div id="options" style="display:none">');		
-		$form->addElement('checkbox', 'show_form_profile', get_lang('ShowFormProfile'));
+		$form->addElement('checkbox', 'show_form_profile', get_lang('ShowFormProfile'),'','onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 
+		if ($survey_data['show_form_profile']== 1) {
+		$form -> addElement('html','<div id="options_field" style="display:block">');
+		} else {
+			$form -> addElement('html','<div id="options_field" style="display:none">');
+		}
+		
 		$field_list=SurveyUtil::make_field_list();
 		if (is_array ($field_list))
 		{
@@ -237,7 +256,7 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($_GET['surve
 				}
 			}
 		}		
-		$form->addElement('html', '</div>');
+		$form->addElement('html', '</div></div>');
 	}
  	
 }

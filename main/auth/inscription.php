@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 17144 2008-12-08 23:49:52Z yannoo $
+// $Id: inscription.php 17665 2009-01-12 21:14:26Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -31,30 +31,30 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = "registration";
+$language_file = array("registration");
 
 include ("../inc/global.inc.php");
 
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.php');
-$tool_name = get_lang('Registration');
+//require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
+//require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+//require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 
+$tool_name = get_lang('Registration');
 Display :: display_header($tool_name);
 
 // Forbidden to self-register
-if (get_setting('allow_registration') == 'false')
-{
+if (get_setting('allow_registration') == 'false') {
 	api_not_allowed();
 }
 //api_display_tool_title($tool_name);
-if (get_setting('allow_registration')=='approval')
-{
+if (get_setting('allow_registration')=='approval') {
 	Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
 }
 //if openid was not found
-if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound')
-{
+if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
 	Display::display_warning_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));	
 }
 
@@ -75,13 +75,11 @@ $form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
 if (api_get_setting('registration', 'email') == 'true')
 	$form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email', get_lang('EmailWrong'), 'email');
-if (api_get_setting('openid_authentication')=='true')
-{
+if (api_get_setting('openid_authentication')=='true') {
 	$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));	
 }
 //	OFFICIAL CODE
-if (CONFVAL_ASK_FOR_OFFICIAL_CODE)
-{
+if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
 	$form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
 	if (api_get_setting('registration', 'officialcode') == 'true')
 		$form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
@@ -105,22 +103,23 @@ if (CHECK_PASS_EASY_TO_FIND)
 $form->addElement('text', 'phone', get_lang('Phone'), array('size' => 40));
 if (api_get_setting('registration', 'phone') == 'true')
 	$form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
+	
+// PICTURE
+/*if (api_get_setting('profile', 'picture') == 'true') {
+	$form->addElement('file', 'picture', get_lang('AddPicture'));
+	$allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+	$form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+}*/
 
 //	LANGUAGE
-if (get_setting('registration', 'language') == 'true')
-{
+if (get_setting('registration', 'language') == 'true') {
 	$form->addElement('select_language', 'language', get_lang('Language'));
 }
 //	STUDENT/TEACHER
-if (get_setting('allow_registration_as_teacher') <> 'false')
-{
+if (get_setting('allow_registration_as_teacher') <> 'false') {
 	$form->addElement('radio', 'status', get_lang('Status'), get_lang('RegStudent'), STUDENT);
 	$form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER);
 }
-
-
-
-
 
 //	EXTENDED FIELDS
 if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mycomptetences') == 'true')
@@ -158,9 +157,99 @@ if (api_get_setting('extended_profile') == 'true')
 		$form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
 	}
 }
+// EXTRA FIELDS
+$extra = UserManager::get_extra_fields(0,50,5,'ASC');
+$extra_data = UserManager::get_extra_user_data(api_get_user_id(),true);
+foreach ($extra as $id => $field_details) {
+	if ($field_details[6] == 0) {
+		continue;
+	}
+	switch($field_details[2]) {
+		case USER_FIELD_TYPE_TEXT:
+			$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
+			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+			$form->applyFilter('extra_'.$field_details[1], 'trim');
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+			break;
+		case USER_FIELD_TYPE_TEXTAREA:
+			$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false);
+			//$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
+			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+			$form->applyFilter('extra_'.$field_details[1], 'trim');
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+			break;
+		case USER_FIELD_TYPE_RADIO:
+			$group = array();
+			foreach ($field_details[8] as $option_id => $option_details) {
+				$options[$option_details[1]] = $option_details[2];
+				$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
+			}
+			$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);	
+			break;
+		case USER_FIELD_TYPE_SELECT:
+			$options = array();
+			foreach($field_details[8] as $option_id => $option_details) {
+				$options[$option_details[1]] = $option_details[2];
+			}
+			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');	
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);			
+			break;
+		case USER_FIELD_TYPE_SELECT_MULTIPLE:
+			$options = array();
+			foreach ($field_details[8] as $option_id => $option_details) {
+				$options[$option_details[1]] = $option_details[2];
+			}
+			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);	
+			break;
+		case USER_FIELD_TYPE_DATE:
+			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3]);
+			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+			$form->applyFilter('theme', 'trim');
+			break;
+		case USER_FIELD_TYPE_DATETIME:
+			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3]);
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+			$form->applyFilter('theme', 'trim');
+			break;
+		case USER_FIELD_TYPE_DOUBLE_SELECT:
+			foreach ($field_details[8] as $key=>$element) {
+				if ($element[2][0] == '*') {
+					$values['*'][$element[0]] = str_replace('*','',$element[2]);
+				} else {
+					$values[0][$element[0]] = $element[2];
+				}
+			}
+			
+			$group='';
+			$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1],'',$values[0],'');
+			$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*','',$values['*'],'');
+			$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 
-
-
+			// recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
+			if (key_exists('extra_'.$field_details[1], $extra_data)) {
+				// exploding all the selected values (of both select forms)
+				$selected_values = explode(';',$extra_data['extra_'.$field_details[1]]);
+				$extra_data['extra_'.$field_details[1]]  =array();
+				
+				// looping through the selected values and assigning the selected values to either the first or second select form
+				foreach ($selected_values as $key=>$selected_value) {
+					if (key_exists($selected_value,$values[0])) {
+						$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
+					} else {
+						$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
+					}
+				}
+			}
+			break;
+		case USER_FIELD_TYPE_DIVIDER:
+			$form->addElement('static',$field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
+			break;
+	}
+}
 $form->addElement('submit', 'submit', get_lang('Ok'));
 if(isset($_SESSION["user_language_choice"]) && $_SESSION["user_language_choice"]!=""){
 	$defaults['language'] = $_SESSION["user_language_choice"];
@@ -189,26 +278,36 @@ if (api_get_setting('openid_authentication')=='true' && !empty($_GET['openid']))
 $defaults['status'] = STUDENT;
 $form->setDefaults($defaults);
 
-if ($form->validate())
-{
+if ($form->validate()) {
 	/*-----------------------------------------------------
 	  STORE THE NEW USER DATA INSIDE THE MAIN DOKEOS DATABASE
 	  -----------------------------------------------------*/
 	$values = $form->exportValues();
+	
 	$values['username'] = substr($values['username'],0,20); //make *sure* the login isn't too long
 
-	if (get_setting('allow_registration_as_teacher') == 'false')
-	{
+	if (get_setting('allow_registration_as_teacher') == 'false') {
 		$values['status'] = STUDENT;
 	}
-
+	
 	// creating a new user
-	$user_id = UserManager::create_user($values['firstname'],$values['lastname'],$values['status'],$values['email'],$values['username'],$values['pass1'],$values['official_code'], $values['language'],$values['phone']);
-
-
-
-	if ($user_id)
-	{
+	$user_id = UserManager::create_user($values['firstname'],$values['lastname'],$values['status'],$values['email'],$values['username'],$values['pass1'],$values['official_code'], $values['language'],$values['phone'],$picture_uri);
+	
+	/****** register extra fields*************/
+	$extras=array();
+	foreach($values as $key => $value) {
+		if (substr($key,0,6)=='extra_') {//an extra field
+			$extras[substr($key,6)] = $value;
+		} else {
+			$sql .= " $key = '".Database::escape_string($value)."',";
+		}
+	}
+	//update the extra fields
+	foreach ($extras as $key=>$value) {
+		$myres = UserManager::update_extra_field_value($user_id,$key,$value);
+	}
+	/********************************************/
+	if ($user_id) {
 		// storing the extended profile
 		$store_extended = false;
 		$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET ";

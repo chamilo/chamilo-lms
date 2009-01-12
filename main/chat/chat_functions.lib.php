@@ -22,7 +22,6 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
-include_once '../inc/lib/course.lib.php';
 /**
  * @author isaac flores paz
  * @param integer
@@ -58,7 +57,6 @@ function user_connected_in_chat ($user_id,$database_name) {
  		return false;
  	}
 }
-
 /**
  * @param void
  * @return void
@@ -105,5 +103,4 @@ function users_list_in_chat () {
  	}
  	return $list_users_in_chat;	
 }	
-
 ?>

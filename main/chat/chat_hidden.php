@@ -35,6 +35,7 @@ define('FRAME','hidden');
 $language_file = array ('chat');
 
 require('../inc/global.inc.php');
+include_once '../inc/lib/course.lib.php';
 require_once 'chat_functions.lib.php';
 //$tbl_user=$mainDbName."`.`user";
 //$tbl_chat_connected=$_course['dbNameGlu'].'chat_connected';

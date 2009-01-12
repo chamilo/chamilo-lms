@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 17479 2008-12-29 20:24:11Z cfasanando $
+<?php // $Id: user_add.php 17663 2009-01-12 20:26:15Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -232,12 +232,12 @@ foreach($extra as $id => $field_details)
 			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
 			break;
 		case USER_FIELD_TYPE_DATE:
-			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3]);
+			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'user_add'));
 			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
 			$form->applyFilter('theme', 'trim');
 			break;
 		case USER_FIELD_TYPE_DATETIME:
-			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3]);
+			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'user_add'));
 			$form->applyFilter('theme', 'trim');
 			break;
 		case USER_FIELD_TYPE_DOUBLE_SELECT:

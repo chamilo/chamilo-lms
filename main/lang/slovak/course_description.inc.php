@@ -14,5 +14,5 @@ $langValid  = "Platný";
 $langBackAndForget  = "Spä&#357; a zabudnú&#357;";
 $CourseDescriptionUpdated = "Popis kurzu bol aktualizovaný";
 $CourseDescriptionDeleted = "Popis kurzu bol vymazaný";
-$CourseDescriptionIntro = "Pre vytvorenie popisu kurzu kliknite na nadpis a vyplnte správne polí&#269;ko formuláru.<br><br>Potom kliknite na OK, a vyplnte &#271;a&#318;šií nadpis.";
+$CourseDescriptionIntro = "Pre vytvorenie popisu kurzu kliknite na nadpis a vyplnte správne polí&#269;ko formuláru.<br><br>Potom kliknite na OK, a vyplnte &#271;a&#318;ší nadpis.";
 ?>

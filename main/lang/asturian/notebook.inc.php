@@ -10,4 +10,7 @@ $YouMustWriteANote = "Tien d\'escribir un avisu";
 $WriteYourNoteHere = "Escriba\'l so avisu equí";
 $SaveNote = "Guardar avisu";
 $WriteYourNoteHere = "Escribe\'l to avisu equí";
+$SearchByTitle = "Buscar por títulu";
+$WriteTheTitleHere = "Escriba\'l títulu equí";
+$UpdateDate = "Fecha d\'actualización";
 ?>

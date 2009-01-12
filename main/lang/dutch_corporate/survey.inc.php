@@ -177,4 +177,5 @@ $PeopleAnswered = "personen hebben geantwoord";
 $AnonymousSurveyCannotKnowWhoAnswered = "Deze enquete is anoniem. U kunt niet zien wie heeft geantwoord.";
 $IllegalSurveyId = "Onbekend enquête-id";
 $SurveyQuestionMoved = "De vraag werd verplaatst. ";
+$AutoInviteLink = "Gebruikers die niet uitgenodigd zijn kunnen deze link gebruiken om de enquete te doen:";
 ?>

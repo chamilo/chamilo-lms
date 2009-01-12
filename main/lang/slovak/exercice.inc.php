@@ -12,6 +12,7 @@ $langAnswers = "Odpovede";
 $langTrue = "Správne";
 $langAnswer = "Odpove&#271;";
 $langResult = "Výsledok";
+$langNoResult = "Zatia&#318; bez výsledku";
 $langYourResults = "Vaše výsledky";
 $langStudentResults = "Výsledky študentov";
 $langExerciseType = "Typ testu";

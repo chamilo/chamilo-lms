@@ -33,4 +33,12 @@ $SendMailBody = "U&#380;ytkownik opublikowa&#322; dokument w Publikacjach dla tw
 $DirDelete = "Usu&#324; katalog";
 $ValidateChanges = "Sprawd&#378; zmiany";
 $FolderUpdated = "Folder zosta&#322; zauktualizowany";
+$DatesAvailables = "Dost&#281;pne daty";
+$ExpiresAt = "Wygasa";
+$AddToCalendar = "Dodaj do kalendarza";
+$DirectoryCreated = "Katalog utworzony";
+$AdvancedParameters = "Parametry zaawansowane";
+$EnableExpiryDate = "W&#322;&#261;cz dat&#281; wyga&#347;ni&#281;cia";
+$EnableEndDate = "W&#322;&#261;cz date ko&#324;ca";
+$IsNotPosibleSaveTheDocument = "Nie mo&#380;na zapisa&#263; dokumentu";
 ?>

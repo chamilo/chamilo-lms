@@ -49,6 +49,6 @@ $AnnouncementMoved = "Og&#322;oszenia zosta&#322;y przeniesione";
 $NoAnnouncements = "Brak og&#322;osze&#324;";
 $SelectEverybody = "Zaznacz wszystkich";
 $SelectedUsersGroups = "wybrane grupy u&#380;ytkowników";
-$LearnerMessage = "Wiadomo&#347;&#263; od prowadz&#261;cego";
+$LearnerMessage = "Wiadomo&#347;&#263; od studenta";
 $TitleIsRequired = "Tytu&#322; jest wymagany";
 ?>

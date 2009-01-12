@@ -820,6 +820,7 @@ $FieldMadeUnchangeable = "Het veld kan nu niet gewijzigd worden door de gebruike
 $CannotMakeFieldUnchangeable = "Kan het veld niet onaanpasbaar maken.";
 $FieldDeleted = "Het veld is verwijderd.";
 $CannotDeleteField = "Kan het veld niet verwijderen.";
+$AddUsersByCoachTitle = "Coach mag gebruikers aanmelden";
 $UserFieldsSortOptions = "Sorteer the opties van de extra profielvelden";
 $FieldOptionMovedUp = "De optie is omhoog verplaatst.";
 $CannotMoveFieldOption = "Kan de optie niet verplaatsten.";

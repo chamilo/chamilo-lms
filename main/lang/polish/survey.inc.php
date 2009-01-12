@@ -5,6 +5,7 @@ $SurveyTitle = "Nazwa ankiety";
 $SurveyIntroduction = "Wprowadzenie do ankiety";
 $CreateNewSurvey = "Nowa ankieta";
 $Survey = "Ankieta";
+$SurveyTemplate = "Szablon ankiety";
 $PleaseEnterSurveyTitle = "Prosz&#281; wpisa&#263; nazw&#281; ankiety";
 $PleaseEnterValidDate = "Prosz&#281; poda&#263; poprawn&#261; dat&#281;";
 $NotPublished = "Nie opublikowano";

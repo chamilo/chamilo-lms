@@ -760,5 +760,6 @@ $LDAPFilledTutorFieldValueTitle = "Begeleider identificatie waarde";
 $LDAPFilledTutorFieldValueComment = "Als een check wordt gedaan op het hierboven gegeven begeleiderveld, dan dient deze waarde in een van de begeleider subvelden te vinden zijn voordat de gebruiker beschouwd wordt als lesgever. Als u dit veld leeg laat dan is de enige voorwaarde dat dit veld bestaat voor deze LDAP gebruiker om beschouwd te worden als lesgever. Als voorbeeld kan het veld bijvoorbeeld zijn \"memberof\" en de waarde waarop gezocht dient te worden zou kunnen zijn \"CN=G_TRAINER,OU=Trainer\".";
 $IsNotWritable = "is niet schrijfbaar";
 $CannotMakeFieldChangeable = "Het veld kan niet aanpasbaar gemaakt worden.";
+$AddUsersByCoachTitle = "Coach mag gebruikers aanmelden";
 $AddUrl = "Url toevoegen";
 ?>

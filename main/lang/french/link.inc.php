@@ -44,4 +44,5 @@ $langOnHomepage = "Sur la page d\'accueil";
 $langShowLinkOnHomepage = "Afficher ce lien sous forme d\'icône sur la page d\'accueil du cours";
 $langCsvImport = "Import CSV";
 $General = "Général";
+$SearchFeatureDoIndexLink = "Indexer le titre et la description du lien?";
 ?>

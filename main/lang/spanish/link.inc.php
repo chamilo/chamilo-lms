@@ -44,4 +44,5 @@ $langOnHomepage = "¿ Mostrar el enlace en la página principal del curso";
 $langShowLinkOnHomepage = "Mostrar este enlace como un icono en la página principal del curso";
 $langCsvImport = "Importar CSV";
 $General = "General";
+$SearchFeatureDoIndexLink = "¿Indexar título y descripción?";
 ?>

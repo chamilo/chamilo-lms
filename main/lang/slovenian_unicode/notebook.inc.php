@@ -10,4 +10,7 @@ $YouMustWriteANote = "Prosim, dodajte zapis v beležko";
 $WriteYourNoteHere = "Prosim, dodajte zapis beležke tukaj";
 $SaveNote = "Shrani beležko";
 $WriteYourNoteHere = "Tule zapišite svojo beležko";
+$SearchByTitle = "Išči po naslovu";
+$WriteTheTitleHere = "Tule dodaj naslov";
+$UpdateDate = "Ažuriraj datum";
 ?>

@@ -44,4 +44,5 @@ $langOnHomepage = "¿ Amosar l\'enllaz na páxina d\'entamu del cursu ";
 $langShowLinkOnHomepage = "Amosar esti enllaz en forma iconu na páxina d\'entamu del cursu";
 $langCsvImport = "Importar CSV";
 $General = "Xeneral";
+$SearchFeatureDoIndexLink = "¿Facer índiz tamién del títulu y la descripición?";
 ?>

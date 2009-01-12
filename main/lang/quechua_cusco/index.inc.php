@@ -1,4 +1,52 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$langInvalidId = "Haykuy mana atikunchu - haykuq sutin utaq qelqa pakasqan mana allinchu";
+$langWelcome = "Urapin yachachinakunaqa qespisqallaÃ�Â±a kashanku. Hoq yachachinakunaqa munankupuni  \'Haykuq sutin-ta\' hinallataq huj paka qelqatapas chay \'Qelqachikuy-pi\'  haykuspa. Yachachiqkunapas kamachinkuman yachachinata  chay \'\'Qelqachikuy\"  nisqanpi, ajllarispa  \"kamachiy yachachinata\"";
+$langPass = "Qelqa pakay";
+$langEnter = "Haykuy";
+$langReg = "Suti qelqa";
+$langMenu  = "Ajllachiq";
+$langAdvises = "Ima rimariykuna";
+$langCourseDoesntExist = "<b>Uyarinapaq :</b> Kay yachachinaqa mana kanchu";
+$langGetCourseFromOldPortal = "kaypi q\'apiy  yachachina  hap\'inapaq ñaupaq web raphimanta";
+$langOtherCourses = "Llapan yachachikuna";
+$langSupportForum = "Rimarinakuy yanapanapaq";
+$langCategories  = "Tajsa T\'aqa";
+$langBackToHomePage  = "Kutiy";
+$lang_No_course_publicly_available  = "Manan kanchu yachachikuna  llapan llaqtakunapaqqa";
+$langLostPassword  = "¿Qonqarankichu qelqa pakaykita?";
+$langValvas  = "Qhepa willaykuna";
+$langUp  = "Kuraq T\'aqa";
+$langCatList  = "Huch\'uy T\'aqa";
+$langCourseList  = "Yachachinakuna";
+$langHelptwo = "Yanapay";
+$EussMenu = "Ajllachiq ";
+$Englin = "Ingles simi";
+$langInvalidForSelfRegistration = "Mana  kayman haykunachu. Sichus manaraq  suti qelqakunkiraqchu  chayqa hunt\'achiy kayta <a href=claroline/auth/inscription.php>formulario nisqa suti qelqanapaq</a>";
+$langMenuGeneral = "Tukuy Ajllachiq";
+$langMenuAdmin = "Plataforma nisqamanta kamachiq";
+$langUsersOnLineList = "Llipin haykuqkuna kaypi";
+$langTotalOnLine = "Llapan se\'qepi";
+$langRefresh = "Kunanyachiy raphita";
+$langMe = "Noqa";
+$langSystemAnnouncements = "Willaykuna";
+$langHelpMaj = "Yanapay";
+$langAdmin = "Plataforma nisqamanta kamachiynin";
+$Login = "Haykuna";
+$langRegisterForCourse = "Qelqachikuy yachachinapi";
+$langUnregisterForCourse = "Huj yachachinapi qelqachikusqayta Waqlliy";
+$langCombinedCourse = "Yachachina chaqrosqa";
+$Refresh = "Kunanyachiy";
+$TotalOnLine = "Lliu haykuqkuna  kunan";
+$langCourseClosed = "(kay yachachinaqa kunanqa wisqasqa kashan)";
+$ViewOpenCourses = "Qhaway kichasqa yachachikunata";
+$langCompetences = " Atipanakuna";
+$langTeach = "Imata yachachiyman";
+$langOpenarea = "Llapan runakunapaq kancha";
+$langProductions = "Llank\'anakuna";
+$langSendChatRequest = "Kachariy huj  chat nisqa mañakuyta  kay runaman";
+$langRequestDenied = "Kay waqyayqa mana chaskisqachu";
+$SessionView = "Qhawarichiy yachachikuna sapa pachapi allichasqata ";
+$CourseView = "Qhawarichiy lliu yachachikuna yupasqata";
 ?>

@@ -44,4 +44,5 @@ $langOnHomepage = "Mostra il collegamento sulla pagina iniziale";
 $langShowLinkOnHomepage = "Mostra il collegamento come nuova voce sulla pagina iniziale del corso";
 $langCsvImport = "Importa un file .csv";
 $General = "Generale";
+$SearchFeatureDoIndexLink = "Indicizzare il titolo e la descrizione?";
 ?>

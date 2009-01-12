@@ -40,6 +40,7 @@ $langRename = "przemianuj";
 $langCopy = "kopiuj";
 $langNameDir = "Nazwa nowego katalogu";
 $langDownloadFile = "Za&#322;adauj IMS lub kurs ZIP w formacie scie&#380;ki nauki Scorm";
+$learning_path_access = "kliknij \'Stwórz &#347;cie&#380;k&#281; nauki\' aby usuwa&#263;/modyfikowa&#263;/pokazywa&#263;/ukrywa&#263;/tworzy&#263;/dodawa&#263; &#347;cie&#380;ki nauki";
 $langRoot = "root";
 $lang_edit_learnpath = "Edytuj nazw&#281;/opis";
 $lang_add_title_and_desc = "Przemianuj oraz dodaj opis";

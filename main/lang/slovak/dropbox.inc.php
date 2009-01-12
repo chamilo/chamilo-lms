@@ -72,12 +72,14 @@ $EditCategory = "Upravi&#357; túto kategóriu";
 $CategoryName = "Názov kategórie";
 $ErrorPleaseGiveCategoryName = "Prosím zadajte názov kategórie";
 $CategoryAlreadyExistsEditIt = "Táto kategória už existuje, prosím použite iný názov";
+$CurrentlySeeing = "Práve si prezeráte kategóriu";
 $CategoryStored = "Kategória je uložená.";
 $CategoryModified = "Kategória je zmenená.";
 $CategoryDeleted = "Kategória je zmazaná.";
 $InvalidUserDetected = "Objavený neplatný používate&#318;";
 $InvalidGroupDetected = "Objavená neplatná skupina";
 $TheFileIsNotUploaded = "Súbor nie je na&#269;ítaný.";
+$FileUploadSucces = "Súbor bol úspešne na&#269;ítaný.";
 $NoFilesHere = "Nie sú tu žiadne súbory";
 $NoFilesHere = "Nie sú tu žiadne súbory";
 ?>

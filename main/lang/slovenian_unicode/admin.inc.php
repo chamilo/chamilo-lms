@@ -854,4 +854,8 @@ $GlobalAgenda = "Globalna agenda";
 $AdvancedFileManagerTitle = "Napreden upravitelj datotek za WYSIWYG editor";
 $AdvancedFileManagerComment = "Omogočim napreden upravitelj datotek za WYSIWYG editor ? Omogočanje bo dodalo dodatne opcije k upravitelju datotek.";
 $MultipleAccessURLs = "URL-ji za dostop do platforme";
+$SearchShowUnlinkedResultsTitle = "Iskanje po vsebini: prikaži nepovezane rezultate";
+$SearchShowUnlinkedResultsComment = "Prikaz rezultatov iskanja po vsebini: kaj storiti z rezultati, ki niso dosegljivi trenutnemu uporabniku ?";
+$SearchHideUnlinkedResults = "Ne prikaži jih";
+$SearchShowUnlinkedResults = "Prikaži jih, vendar brez povezav na vire";
 ?>

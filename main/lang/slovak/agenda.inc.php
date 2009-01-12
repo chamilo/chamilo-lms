@@ -50,6 +50,7 @@ $UserGroupFilter = "Filter na skupiny/užívate&#318;ov";
 $ShowAll = "Zobrazi&#357; všetko";
 $Print = "Tla&#269;";
 $MyTextHere = "môj text tu";
+$CopiedAsAnnouncement = "Skopírované ako oznam";
 $NewAnnouncement = "Nový oznam";
 $AddAnnouncement = "Prida&#357; ako oznam";
 $UpcomingEvent = "Nová udalos&#357;";
@@ -62,6 +63,8 @@ $RepeatMonthlyByDate = "Mesa&#269;ne, pod&#318;a dátumu";
 $RepeatMonthlyByDay = "Mesa&#269;ne, pod&#318;a d&#328;a";
 $RepeatMonthlyByDayR = "Mesa&#269;ne, pod&#318;a d&#328;a, obmedzene";
 $RepeatYearly = "Ro&#269;ne";
+$RepeatEnd = "Opakova&#357; dátum ukon&#269;enia";
 $RepeatedEventViewOriginalEvent = "Pozrie&#357; pôvodnú udalos&#357;";
 $ICalFileImport = "Importova&#357; iCal/ics súbor";
+$AllUsersOfThePlatform = "Všetci používatelia platformy";
 ?>

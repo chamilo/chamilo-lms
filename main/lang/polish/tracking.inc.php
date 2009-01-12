@@ -137,8 +137,12 @@ $Time = "Czas";
 $LastConnexion = "Ostatnie po&#322;&#261;czenie";
 $NoLearnpath = "Brak &#347;cie&#380;ki nauki";
 $Attempts = "Próby";
+$LatestLogin = "Ostatnie po&#322;&#261;czenie";
+$StudentDetails = "Szczegó&#322;y ucznia";
 $CourseTitle = "Nazwa kursu";
 $TeacherInterface = "Widok nauczyciela";
 $AdminInterface = "Widok administratora";
+$NumberOfSessions = "Ilo&#347;&#263; sesji";
 $YourCourseList = "Lista twoich kursów";
+$FirstLogin = "Pierwsze po&#322;&#261;czenie";
 ?>

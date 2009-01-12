@@ -203,4 +203,5 @@ $ChooseDifferentCategories = "Escueya otra categoría";
 $Version = "Versión";
 $Normal = "Normal";
 $NoLogOfDuration = "Nun hai rexistru de duración";
+$AutoInviteLink = "Los usuarios que nun tán invitaos puen usar esti enllaz pa facer la encuesta:";
 ?>

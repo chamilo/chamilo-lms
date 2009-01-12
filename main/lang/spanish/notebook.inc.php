@@ -10,4 +10,7 @@ $YouMustWriteANote = "Por favor, escriba una nota";
 $WriteYourNoteHere = "Por favor, escriba su nota aquí";
 $SaveNote = "Guardar nota";
 $WriteYourNoteHere = "Escribe tu nota aqui";
+$SearchByTitle = "Buscar por título";
+$WriteTheTitleHere = "Escriba el título aquí";
+$UpdateDate = "Fecha de actualización";
 ?>

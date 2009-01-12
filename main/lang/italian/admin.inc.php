@@ -854,4 +854,8 @@ $GlobalAgenda = "Agenda generale";
 $AdvancedFileManagerTitle = "File manager avanzato per l\'editor wysiwyg";
 $AdvancedFileManagerComment = "Permette la gestione avanzata dei file attraverso l\'editor";
 $MultipleAccessURLs = "URL multiple di accesso";
+$SearchShowUnlinkedResultsTitle = "Ricerca a testo libero: mostra i risultati non accessibili";
+$SearchShowUnlinkedResultsComment = "Nel mostrare i risultati di una ricerca a testo libero, come comportarsi con i risultati inaccessibili per l\'utente?";
+$SearchHideUnlinkedResults = "non mostrarli";
+$SearchShowUnlinkedResults = "Mostrali, ma rimuovendo il collegamento alla risorsa";
 ?>

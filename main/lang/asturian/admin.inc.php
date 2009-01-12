@@ -854,4 +854,8 @@ $GlobalAgenda = "Axenda Global";
 $AdvancedFileManagerTitle = "Xestor avanzáu de ficheros pal editor WYSIWYG";
 $AdvancedFileManagerComment = "Activar el xestor avanzáu de ficheros pal editor WYSIWYG";
 $MultipleAccessURLs = "Entrada d\'URL múltiple";
+$SearchShowUnlinkedResultsTitle = "Busca full-text: amosar resultaos non enllazaos";
+$SearchShowUnlinkedResultsComment = "En enseñando los resultaos de la busca full-text, ¿qué tendría de facer el sistema colos enllaces que nun tán a disposición del usuariu actual?";
+$SearchHideUnlinkedResults = "Nun los enseñar";
+$SearchShowUnlinkedResults = "Enseñalos, pero ensin l\'enllaz que guia al recursu";
 ?>

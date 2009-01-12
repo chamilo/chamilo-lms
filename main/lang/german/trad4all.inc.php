@@ -565,4 +565,6 @@ $CommentAdded = "Ihr Kommentar wurde hinzugefügt";
 $BackToPreviousPage = "Zurück zur vorherigen Seite";
 $NoOfficialCode = "Kein offizieller Code";
 $Owner = "Eigentümer";
+$SearchFeatureDoIndexDocument = "Dokumenttext indizieren?";
+$SearchFeatureDocumentLanguage = "Dokumentsprache für Indizierung";
 ?>

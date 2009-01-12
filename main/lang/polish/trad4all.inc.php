@@ -457,6 +457,7 @@ $UserBirthday = "Urodziny";
 $Course = "Kurs";
 $FilesUpload = "dokumenty";
 $FileUpload = "dokument";
+$SessionsAdmin = "Administrator sesji";
 $SelectFile = "Wybierz plik";
 $IntroductionTextUpdated = "Tekst wprowadzenia zosta&#322; zaktualizowany";
 $Width = "Szeroko&#347;&#263;";

@@ -33,7 +33,13 @@ $SendMailBody = "Užívate&#318; poslal dokument do Vášho kurzu.";
 $DirDelete = "Zamaza&#357; adresár";
 $ValidateChanges = "Potvrdi&#357; zmeny";
 $FolderUpdated = "Zložka aktualizovaná";
+$EndsAt = "Kon&#269;í o (úplne zatvorený)";
+$DatesAvailables = "Vo&#318;né dátumy";
+$ExpiresAt = "Vyprší o";
 $AddToCalendar = "Prida&#357; do kalendára";
 $Assignment = "Zadanie";
+$AdvancedParameters = "&#270;alšie parametre";
+$EnableExpiryDate = "Aktivova&#357; dátum vypršania";
+$EnableEndDate = "Aktivova&#357; dátum konca";
 $IsNotPosibleSaveTheDocument = "Nie je možné uloži&#357; dokument";
 ?>

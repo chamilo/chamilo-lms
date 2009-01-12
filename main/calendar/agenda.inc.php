@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17627 2009-01-09 21:50:35Z cvargas1 $
+<?php //$Id: agenda.inc.php 17661 2009-01-12 19:32:21Z cvargas1 $
 
 /*
 ==============================================================================
@@ -607,8 +607,8 @@ function selectAll(cbList,bSelect,showwarning)
 		msg_err4 = document.getElementById(\"err_title\");
 											
 		if (start_date > ends_date) {			 
-			msg_err1.style.display =\"block\";
-			msg_err1.innerHTML=\"".get_lang('DateExpiredNotBeLessDeadLine')."\";
+			msg_err1.style.display =\"block\"; 
+			msg_err1.innerHTML=\"".get_lang('EndDateCannotBeBeforeTheStartDate')."\";
 			msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";												
 		} else if (checkDate(start_month,start_day,start_year) == false) {
 			msg_err2.style.display =\"block\";
@@ -4819,7 +4819,7 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 				$halfhour = $halfhour +1;
 			}
 			//$agendaitems[$halfhour] .= "<div><i>$hour:$minute</i> <b>".get_lang('Evento Global'). ":  </b><a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
-			$agendaitems[$halfhour] .= "<div><i>$hour:$minute</i> <b>".get_lang('Evento Global'). ":  </b>".$item['title']."</div>";
+			$agendaitems[$halfhour] .= "<div><i>$hour:$minute</i> <b>".get_lang('GlobalEvent'). ":  </b>".$item['title']."</div>";
 		}
 	}
 	//print_r($agendaitems);

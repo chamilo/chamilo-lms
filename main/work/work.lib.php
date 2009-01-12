@@ -1206,7 +1206,7 @@ function to_javascript_work() {
 				{
 					 
 					msg_id2.style.display ="block";
-					msg_id2.innerHTML="'.get_lang('DateExpiredNotBeLessDeadLine').'";
+					msg_id2.innerHTML="'.get_lang('EndDateCannotBeBeforeTheExpireDate').'";
 					msg_id1.innerHTML="";msg_id3.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";												
 				}
 				else if (checkDate(expires_month,expires_day,expires_year) == false)

@@ -65,8 +65,7 @@ $current_group = GroupManager :: get_group_properties($_SESSION['_gid']);
 $nameTools = get_lang('EditGroup');
 $interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang('GroupManagement'));
 
-if (!api_is_allowed_to_edit(false,true))
-{
+if (!api_is_allowed_to_edit(false,true)) {
 	api_not_allowed(true);
 }
 /*
@@ -79,32 +78,26 @@ if (!api_is_allowed_to_edit(false,true))
  * function to sort users after getting the list in the db. Necessary because there are 2 or 3 queries. Called by usort()
  */
 
-function sort_users($user_a, $user_b)
-{
+function sort_users($user_a, $user_b) {
 	$cmp = strcasecmp($user_a['lastname'], $user_b['lastname']);
-	if($cmp !== 0)
+	if ($cmp !== 0) {
 		return $cmp;
-	else
-	{
+	} else {
 		$cmp = strcasecmp($user_a['firstname'], $user_b['firstname']);
-		if($cmp !== 0)
+		if ($cmp !== 0) {
 			return $cmp;
-		else
-		{
+		} else {
 			return strcasecmp($user_a['username'], $user_b['username']);
 		}
 	}
-	
 }
 
 /**
  * Function to check the given max number of members per group 
  */
-function check_max_number_of_members($value)
-{
+function check_max_number_of_members($value) {
 	$max_member_no_limit = $value['max_member_no_limit'];
-	if ($max_member_no_limit == MEMBER_PER_GROUP_NO_LIMIT)
-	{
+	if ($max_member_no_limit == MEMBER_PER_GROUP_NO_LIMIT) {
 		return true;
 	}
 	$max_member = $value['max_member'];
@@ -113,14 +106,11 @@ function check_max_number_of_members($value)
 /**
  * Function to check if the number of selected group members is valid
  */
-function check_group_members($value)
-{
-	if ($value['max_member_no_limit'] == MEMBER_PER_GROUP_NO_LIMIT)
-	{
+function check_group_members($value) {
+	if ($value['max_member_no_limit'] == MEMBER_PER_GROUP_NO_LIMIT) {
 		return true;
 	}
-	if (isset($value['max_member']) && isset($value['group_members']) && $value['max_member'] < count($value['group_members']))
-	{
+	if (isset($value['max_member']) && isset($value['group_members']) && $value['max_member'] < count($value['group_members'])) {
 		return array ('group_members' => get_lang('GroupTooMuchMembers'));
 	}
 	return true;
@@ -197,12 +187,11 @@ $form->addElement('radio', 'wiki_state', null, get_lang('Public'), TOOL_PUBLIC);
 $form->addElement('radio', 'wiki_state', null, get_lang('Private'), TOOL_PRIVATE);
 
 // getting all the users
-if(isset($_SESSION['id_session'])){
+if (isset($_SESSION['id_session'])) {
 	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'],true,$_SESSION['id_session']);
 	$complete_user_list2 = CourseManager :: get_coach_list_from_course_code($_course['id'],$_SESSION['id_session']);
 	$complete_user_list = array_merge($complete_user_list,$complete_user_list2);
-}
-else{
+} else {
 	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id']);
 }
 
@@ -210,8 +199,7 @@ usort($complete_user_list, 'sort_users');
 
 
 $possible_users = array ();
-foreach ($complete_user_list as $index => $user)
-{
+foreach ($complete_user_list as $index => $user) {
 	$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'].' ('.$user['username'].')';
 }
 
@@ -220,8 +208,7 @@ foreach ($complete_user_list as $index => $user)
 $group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);
 $selected_users = array ();
 $selected_tutors = array();
-foreach ($group_tutor_list as $index => $user)
-{
+foreach ($group_tutor_list as $index => $user) {
 	//$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'];
 	$selected_tutors[] = $user['user_id'];
 }
@@ -243,8 +230,7 @@ $group_tutors_element->setElementTemplate('
 // Group members
 $group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
 $selected_users = array ();
-foreach ($group_member_list as $index => $user)
-{
+foreach ($group_member_list as $index => $user) {
 	//$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'];
 	$selected_users[] = $user['user_id'];
 }
@@ -269,15 +255,11 @@ $form->addFormRule('check_group_members');
 // submit button
 $form->addElement('submit', 'submit', get_lang('Ok'));
 
-if ($form->validate())
-{
+if ($form->validate()) {
 	$values = $form->exportValues();
-	if ($values['max_member_no_limit'] == MEMBER_PER_GROUP_NO_LIMIT)
-	{
+	if ($values['max_member_no_limit'] == MEMBER_PER_GROUP_NO_LIMIT) {
 		$max_member = MEMBER_PER_GROUP_NO_LIMIT;
-	}
-	else
-	{
+	} else {
 		$max_member = $values['max_member'];
 	}
 	$self_registration_allowed = isset ($values['self_registration_allowed']) ? 1 : 0;
@@ -286,41 +268,43 @@ if ($form->validate())
 	
 	// storing the tutors (we first remove all the tutors and then add only those who were selected)
 	GroupManager :: unsubscribe_all_tutors($current_group['id']);
-	if (isset ($_POST['group_tutors']) && count($_POST['group_tutors']) > 0)
-	{
+	if (isset ($_POST['group_tutors']) && count($_POST['group_tutors']) > 0) {
 		GroupManager :: subscribe_tutors($values['group_tutors'], $current_group['id']);
 	}	
 	
 	// storing the users (we first remove all users and then add only those who were selected)
 	GroupManager :: unsubscribe_all_users($current_group['id']);
-	if (isset ($_POST['group_members']) && count($_POST['group_members']) > 0)
-	{
+	if (isset ($_POST['group_members']) && count($_POST['group_members']) > 0) {
 		GroupManager :: subscribe_users($values['group_members'], $current_group['id']);
 	}
 	
 	// returning to the group area (note: this is inconsistent with the rest of dokeos)
 	$cat = GroupManager :: get_category_from_group($current_group['id']);
 	header('Location: '.$values['referer'].'?action=show_msg&msg='.get_lang('GroupSettingsModified').'&category='.$cat['id']);
+
 }
 $defaults = $current_group;
 $defaults['group_members'] = $selected_users;
 $defaults['group_tutors'] = $selected_tutors;
 isset($_GET['action'])?$action=$_GET['action']:$action='';
 $defaults['action'] = $action;
-if ($defaults['maximum_number_of_students'] == MEMBER_PER_GROUP_NO_LIMIT)
-{
+if ($defaults['maximum_number_of_students'] == MEMBER_PER_GROUP_NO_LIMIT) {
 	$defaults['max_member_no_limit'] = MEMBER_PER_GROUP_NO_LIMIT;
-}
-else
-{
+} else {
 	$defaults['max_member_no_limit'] = 1;
 	$defaults['max_member'] = $defaults['maximum_number_of_students'];
 }
 $referer = parse_url($_SERVER['HTTP_REFERER']);
 $referer = basename($referer['path']);
-if ($referer != 'group_space.php' && $referer != 'group.php')
-{
+if ($referer != 'group_space.php' && $referer != 'group.php') {
 	$referer = 'group.php';
+}
+if (isset($_POST['group_members'])) {
+	if (count($_POST['group_members'])<=$defaults['max_member']) {
+		//
+	} else {
+				header('Location:group_edit.php?show_message='.get_lang('GroupTooMuchMembers'));
+	}
 }
 Display :: display_header($nameTools, "Group");
 api_display_tool_title($nameTools);
@@ -329,6 +313,10 @@ api_display_tool_title($nameTools);
 <br/>
 <br/>
 <?php
+
+if (isset($_GET['show_message'])) {
+	echo Display::display_error_message(get_lang($_GET['show_message']));
+}
 $defaults['referer'] = $referer;
 $form->setDefaults($defaults);
 $form->display();

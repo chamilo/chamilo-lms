@@ -301,10 +301,13 @@ class SortableTable extends HTML_Table
 		$offset = $pager->getOffsetByPageId();
 		$from = $offset[0] - 1;
 		$table_data = $this->get_table_data($from);
-		foreach ($table_data as $index => $row)
+		if (is_array($table_data))
 		{
-			$row = $this->filter_data($row);
-			$this->addRow($row);
+			foreach ($table_data as $index => $row)
+			{
+				$row = $this->filter_data($row);
+				$this->addRow($row);
+			}
 		}
 		$this->altRowAttributes(0, array ('class' => 'row_odd'), array ('class' => 'row_even'), true);
 		foreach ($this->th_attributes as $column => $attributes)

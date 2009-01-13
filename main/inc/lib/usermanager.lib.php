@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 17636 2009-01-11 04:22:39Z yannoo $
+<?php // $Id: usermanager.lib.php 17705 2009-01-13 20:13:58Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -622,7 +622,7 @@ class UserManager
 			return false;
 	
 		$production_path = UserManager::get_user_picture_path_by_id($user_id,'web',true);
-		$production_dir = $production_path['dir'].$user_id.'/';
+		$production_dir = $production_path['dir'].'/my_productions/';
 		$del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
 		$del_text = get_lang('Delete');
 	
@@ -651,7 +651,7 @@ class UserManager
 	function get_user_productions($user_id)
 	{
 		$production_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
-		$production_repository = $production_path['dir'].$user_id.'/';
+		$production_repository = $production_path['dir'].'/my_productions/';
 		$productions = array();
 	
 		if (is_dir($production_repository))
@@ -679,7 +679,7 @@ class UserManager
 	function remove_user_production($user_id, $production)
 	{
 		$production_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
-		unlink($production_path['dir'].$user_id.'/'.$production);
+		unlink($production_path['dir'].'/my_productions/'.$production);
 	}
 	/**
 	 * Update an extra field. This function is called when a user changes his/her profile

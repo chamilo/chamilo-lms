@@ -482,10 +482,14 @@ if( isset($language_file) )
 }
 // Include all files (first english and then current interface language)
 $langpath = api_get_path(SYS_CODE_PATH).'lang/';
-foreach($language_files as $index => $language_file)
-{
-	include($langpath.'english/'.$language_file.'.inc.php');
-	include($langpath.$language_interface.'/'.$language_file.'.inc.php');
+
+if (is_array($language_files)) {
+	foreach($language_files as $index => $language_file) {
+		include($langpath.'english/'.$language_file.'.inc.php');
+		if (($language_interface)!='false') {
+			include($langpath.$language_interface.'/'.$language_file.'.inc.php');
+		}
+	}
 }
 
 //load the charset param after langs because the $charset variable in 

@@ -50,6 +50,15 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('breadcrumb
 INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES ('notebook','notebook/index.php','notebook.gif',2,1,'basic');
 CREATE TABLE  sys_calendar (  id int unsigned NOT NULL auto_increment,  title varchar(200) NOT NULL,  content text,  start_date datetime NOT NULL default '0000-00-00 00:00:00',  end_date datetime NOT NULL default '0000-00-00 00:00:00',  PRIMARY KEY  (id));
 CREATE TABLE IF NOT EXISTS system_template (id int UNSIGNED NOT NULL auto_increment,  title varchar(250) NOT NULL,  comment text NOT NULL,  image varchar(250) NOT NULL,  content text NOT NULL,  PRIMARY KEY  (id));
+CREATE TABLE reservation_category (id int unsigned NOT NULL auto_increment,  parent_id  int NOT NULL default 0,   name  varchar(128) NOT NULL default '',  PRIMARY KEY  ( id ));
+CREATE TABLE reservation_category_rights (category_id  int NOT NULL default 0,   class_id  int NOT NULL default 0,   m_items  tinyint NOT NULL default 0);
+CREATE TABLE reservation_item  (id int unsigned NOT NULL auto_increment,   category_id  int unsigned NOT NULL default 0,   course_code  varchar(40) NOT NULL default '',   name  varchar(128) NOT NULL default '',   description  text NOT NULL,   blackout  tinyint NOT NULL default 0,   creator  int unsigned NOT NULL default 0,  PRIMARY KEY  ( id ));
+CREATE TABLE reservation_item_rights (item_id  int unsigned NOT NULL default 0,   class_id  int unsigned NOT NULL default 0,   edit_right  tinyint unsigned NOT NULL default 0,   delete_right  tinyint unsigned NOT NULL default 0,   m_reservation  tinyint unsigned NOT NULL default 0,   view_right  tinyint NOT NULL default 0,  PRIMARY KEY  ( item_id , class_id ));
+CREATE TABLE reservation_main  (id int unsigned NOT NULL auto_increment,   subid  int unsigned NOT NULL default 0,   item_id  int unsigned NOT NULL default 0,   auto_accept  tinyint unsigned NOT NULL default 0,   max_users  int unsigned NOT NULL default 1,   start_at  datetime NOT NULL default '0000-00-00 00:00:00',   end_at  datetime NOT NULL default '0000-00-00 00:00:00',   subscribe_from  datetime NOT NULL default '0000-00-00 00:00:00',   subscribe_until  datetime NOT NULL default '0000-00-00 00:00:00',   subscribers  int unsigned NOT NULL default 0,   notes  text NOT NULL,   timepicker  tinyint NOT NULL default 0,   timepicker_min  int NOT NULL default 0,   timepicker_max  int NOT NULL default 0,  PRIMARY KEY  ( id ));
+CREATE TABLE reservation_subscription  (dummy  int unsigned NOT NULL auto_increment,   user_id  int unsigned NOT NULL default 0,   reservation_id  int unsigned NOT NULL default 0,   accepted  tinyint unsigned NOT NULL default 0,   start_at  datetime NOT NULL default '0000-00-00 00:00:00',   end_at  datetime NOT NULL default '0000-00-00 00:00:00',  PRIMARY KEY  ( dummy ));
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_reservation', NULL, 'radio', 'Tools', 'false', 'AllowReservationTitle', 'AllowReservationComment', NULL, NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_reservation', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_reservation', 'false', 'No'); 
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';
@@ -145,3 +154,4 @@ CREATE TABLE calendar_event_attachment ( id int NOT NULL auto_increment, path va
 CREATE TABLE notebook (notebook_id int unsigned NOT NULL auto_increment,user_id int unsigned NOT NULL,course varchar(40) not null,session_id int NOT NULL default 0,title varchar(255) NOT NULL,description text NOT NULL,creation_date datetime NOT NULL default '0000-00-00 00:00:00',update_date datetime NOT NULL default '0000-00-00 00:00:00',PRIMARY KEY (notebook_id));
 INSERT INTO course_setting(variable,value,category) VALUES ('allow_open_chat_window',0,'chat');
 INSERT INTO course_setting(variable,value,category) VALUES ('email_alert_to_teacher_on_new_user_in_course',0,'registration');
+

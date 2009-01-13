@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 17550 2009-01-06 18:56:28Z marvil07 $
+<?php // $Id: database.lib.php 17683 2009-01-13 18:08:58Z juliomontoya $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -58,6 +58,12 @@ define('TABLE_MAIN_SPECIFIC_FIELD_VALUES',	'specific_field_values');
 define('TABLE_MAIN_SEARCH_ENGINE_REF',			'search_engine_ref');
 define('TABLE_MAIN_ACCESS_URL', 'access_url');
 define('TABLE_MAIN_SYSTEM_CALENDAR', 'sys_calendar');
+//Reservation System
+define('TABLE_MAIN_RESERVATION_ITEM', 'reservation_item');
+define('TABLE_MAIN_RESERVATION_RESERVATION', 'reservation_main');
+define('TABLE_MAIN_RESERVATION_SUBSCRIBTION', 'reservation_subscription');
+define('TABLE_MAIN_RESERVATION_CATEGORY', 'reservation_category');
+define('TABLE_MAIN_RESERVATION_ITEM_RIGHTS', 'reservation_item_rights');
 
 //statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');
@@ -194,6 +200,8 @@ define('TABLE_GLOSSARY', 'glossary');
 
 // GLOSSARY
 define('TABLE_NOTEBOOK', 'notebook');
+
+
 /*
 ==============================================================================
 		DATABASE CLASS
@@ -786,9 +794,10 @@ class Database
 			return $option['course_code'];
 		} else {
 			return false;
-		}
-		
-    }	
+		}		
+    }
+
+    
 }
 //end class Database
 ?>

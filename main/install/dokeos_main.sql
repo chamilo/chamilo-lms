@@ -648,7 +648,8 @@ VALUES
 ('course_create_active_tools','survey','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Survey'),
 ('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary'),
 ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook'),
-('advanced_filemanager',NULL,'radio','Platform','true','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL);
+('advanced_filemanager',NULL,'radio','Platform','true','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL),
+('allow_reservation', NULL, 'radio', 'Tools', 'false', 'AllowReservationTitle', 'AllowReservationComment', NULL, NULL);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -800,7 +801,9 @@ VALUES
 ('allow_users_to_create_courses','false','No'),
 ('breadcrumbs_course_homepage', 'session_name_and_course_title', 'SessionNameAndCourseTitle'),
 ('advanced_filemanager','true','Yes'),
-('advanced_filemanager','false','No');
+('advanced_filemanager','false','No'),
+('allow_reservation', 'true', 'Yes'),
+('allow_reservation', 'false', 'No');
 UNLOCK TABLES;
 
 /*!40000 ALTER TABLE settings_options ENABLE KEYS */;
@@ -1073,3 +1076,107 @@ CREATE TABLE IF NOT EXISTS system_template (
   content text NOT NULL,
   PRIMARY KEY  (id)
 );
+
+--
+-- --------------------------------------------------------
+--
+-- Tables for reservation
+--
+
+
+-- 
+-- Table structure for table reservation category 
+-- 
+
+CREATE TABLE reservation_category (
+   id  int unsigned NOT NULL auto_increment,
+   parent_id  int NOT NULL default 0,
+   name  varchar(128) NOT NULL default '',
+  PRIMARY KEY  ( id )
+);
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table reservation category_rights 
+-- 
+
+CREATE TABLE  reservation_category_rights  (
+   category_id  int NOT NULL default 0,
+   class_id  int NOT NULL default 0,
+   m_items  tinyint NOT NULL default 0
+);
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table  item reservation
+-- 
+
+CREATE TABLE  reservation_item  (
+   id  int unsigned NOT NULL auto_increment,
+   category_id  int unsigned NOT NULL default 0,
+   course_code  varchar(40) NOT NULL default '',
+   name  varchar(128) NOT NULL default '',
+   description  text NOT NULL,
+   blackout  tinyint NOT NULL default 0,
+   creator  int unsigned NOT NULL default 0,
+  PRIMARY KEY  ( id )
+);
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table reservation item_rights 
+-- 
+
+CREATE TABLE  reservation_item_rights  (
+   item_id  int unsigned NOT NULL default 0,
+   class_id  int unsigned NOT NULL default 0,
+   edit_right  tinyint unsigned NOT NULL default 0,
+   delete_right  tinyint unsigned NOT NULL default 0,
+   m_reservation  tinyint unsigned NOT NULL default 0,
+   view_right  tinyint NOT NULL default 0,
+  PRIMARY KEY  ( item_id , class_id )
+);
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for main reservation table
+-- 
+
+CREATE TABLE  reservation_main  (
+   id  int unsigned NOT NULL auto_increment,
+   subid  int unsigned NOT NULL default 0,
+   item_id  int unsigned NOT NULL default 0,
+   auto_accept  tinyint unsigned NOT NULL default 0,
+   max_users  int unsigned NOT NULL default 1,
+   start_at  datetime NOT NULL default '0000-00-00 00:00:00',
+   end_at  datetime NOT NULL default '0000-00-00 00:00:00',
+   subscribe_from  datetime NOT NULL default '0000-00-00 00:00:00',
+   subscribe_until  datetime NOT NULL default '0000-00-00 00:00:00',
+   subscribers  int unsigned NOT NULL default 0,
+   notes  text NOT NULL,
+   timepicker  tinyint NOT NULL default 0,
+   timepicker_min  int NOT NULL default 0,
+   timepicker_max  int NOT NULL default 0,
+  PRIMARY KEY  ( id )
+);
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for reservation subscription table
+-- 
+
+CREATE TABLE  reservation_subscription  (
+   dummy  int unsigned NOT NULL auto_increment,
+   user_id  int unsigned NOT NULL default 0,
+   reservation_id  int unsigned NOT NULL default 0,
+   accepted  tinyint unsigned NOT NULL default 0,
+   start_at  datetime NOT NULL default '0000-00-00 00:00:00',
+   end_at  datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  ( dummy )
+);
+

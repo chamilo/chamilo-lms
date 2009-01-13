@@ -1,0 +1,146 @@
+<?php
+// $Id: m_category.php,v 1.2 2006/05/09 08:51:14 kvansteenkiste Exp $
+/*
+==============================================================================
+    Dokeos - elearning and course management software
+
+    Copyright (c) 2004-2008 Dokeos S.A.
+    Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
+    Copyright (c) Kristof Van Steenkiste
+
+    For a full list of contributors, see "credits.txt".
+    The full license can be read in "license.txt".
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    See the GNU General Public License for more details.
+
+    Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+    Mail: info@dokeos.com
+==============================================================================
+*/
+/** 
+    ---------------------------------------------------------------------
+                Category-manager (add, edit & delete)
+    ---------------------------------------------------------------------
+ */
+require_once ("./rsys.php");
+
+$language_file = 'admin';
+$cidReset = true;
+require ('../inc/global.inc.php');
+$this_section = SECTION_PLATFORM_ADMIN;
+
+api_protect_admin_script();
+
+Rsys :: protect_script('m_category');
+$tool_name = get_lang('BookingSystem');
+$interbreadcrumb[] = array ("url" => "../admin/index.php", "name" => get_lang('PlatformAdmin'));
+
+/**
+    ---------------------------------------------------------------------
+ */
+
+/**
+ *  Filter to display the modify-buttons
+ * 
+ *  @param - int $id The category-id
+ */
+function modify_filter($id) {
+	return '<a href="m_category.php?action=edit&amp;id='.$id.'" title="'.get_lang("EditCategory").'"><img alt="" src="../img/edit.gif" /></a>'.' <a href="m_category.php?action=delete&amp;id='.$id.'" title="'.get_lang("DeleteCategory").'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteCategory")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
+}
+
+/**
+    ---------------------------------------------------------------------
+ */
+
+switch ($_GET['action']) {
+	case 'add' :
+		$interbreadcrumb[] = array ("url" => "m_category.php", "name" => $tool_name);
+		Display :: display_header(get_lang('AddNewCategory'));
+		api_display_tool_title(get_lang('AddNewCategory'));
+		$form = new FormValidator('category', 'post', 'm_category.php?action=add');
+		$form->add_textfield('name', get_lang('CategoryName'), true, array ('maxlength' => '128'));
+		$form->addElement('submit', 'submit', get_lang('Ok'));
+		if ($form->validate()) {
+			$values = $form->exportValues();
+			if (Rsys :: add_category($values['name']))
+				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('CategoryAdded'), "m_category.php", $tool_name),false);
+			else
+				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('CategoryExist'), "m_category.php?action=add", get_lang('AddNewCategory')),false);
+		} else
+			$form->display();
+		break;
+	case 'edit' :
+		$interbreadcrumb[] = array ("url" => "m_category.php", "name" => $tool_name);
+		Display :: display_header(get_lang('EditCategory'));
+		api_display_tool_title(get_lang('EditCategory'));
+		$form = new FormValidator('category', 'post', 'm_category.php?action=edit');
+		$form->add_textfield('name', get_lang('CategoryName'), true, array ('maxlength' => '128'));
+		$form->addElement('hidden', 'id', $_GET['id']);
+		$form->addElement('submit', 'submit', get_lang('Ok'));
+		$form->setDefaults(Rsys :: get_category($_GET['id']));
+		if ($form->validate()) {
+			$values = $form->exportValues();
+			if (Rsys :: edit_category($values['id'], $values['name']))
+				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('CategoryEdited'), "m_category.php", $tool_name),false);
+			else
+				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('CategoryExist'), "m_category.php?action=edit&id=".$values['id'], get_lang('EditRight')),false);
+		} else
+			$form->display();
+		break;
+	case 'delete' :
+		$result = Rsys :: delete_category($_GET['id']);
+		ob_start();
+		if ($result == 0)
+			Display :: display_normal_message(get_lang('CategoryDeleted'),false);
+		else
+			Display :: display_normal_message(str_replace('#NUM#', $result, get_lang('CategoryHasItems')),false);
+		$msg = ob_get_contents();
+		ob_end_clean();
+	default :
+		$NoSearchResults = get_lang('NoCategories');
+		Display :: display_header($tool_name);
+		api_display_tool_title($tool_name);
+		
+		echo $msg;
+		echo '<a href="m_category.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewReservationPeriod').'"/>'.get_lang('AddNewCategory').'</a><br /><br />';
+		if (isset ($_POST['action'])) {
+			switch ($_POST['action']) {
+				case 'delete_categories' :
+					$ids = $_POST['categories'];
+					if (count($ids) > 0) {
+						foreach ($ids as $index => $id) {
+							$result = Rsys :: delete_category($id);
+							if ($result != 0)
+								$warning = true;
+						}
+					}
+					if ($warning) {
+						ob_start();
+						Display :: display_normal_message(get_lang('CategoryNotDeleted'),false);
+						$msg2 = ob_get_contents();
+						ob_end_clean();
+					}
+					break;
+			}
+		}
+		echo $msg2;
+		$table = new SortableTable('category', array ('Rsys', 'get_num_categories'), array ('Rsys', 'get_table_categories'), 1);
+		$table->set_header(0, '', false, array ('style' => 'width:10px'));
+		$table->set_header(1, '', false);
+		$table->set_header(2, '', false, array ('style' => 'width:50px;'));
+		$table->set_column_filter(2, 'modify_filter');
+		$table->set_form_actions(array ('delete_categories' => get_lang('DeleteSelectedCategories')), 'categories');
+		$table->display();
+}
+
+/**
+    ---------------------------------------------------------------------
+ */
+
+Display :: display_footer();
+?>

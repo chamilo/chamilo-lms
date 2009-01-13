@@ -90,9 +90,10 @@ function LoginDelete($user_id)
 function WhoIsOnline($uid=0,$statistics_database='',$valid)
 {				
 	$valid = (int) $valid;
+	$current_date=date('Y-m-d H:i:s',time());
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW()  ";	
-	$result = @api_sql_query($query,__FILE__,__LINE__);							
+	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";	
+	$result = @api_sql_query($query,__FILE__,__LINE__);						
 	if (count($result)>0)
 	{
 		$rtime = time();

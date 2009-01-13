@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 17568 2009-01-07 15:59:24Z herodoto $
+<?php //$Id: group_space.php 17679 2009-01-13 15:37:47Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -64,6 +64,28 @@ $interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang("Groups"));
 
 /*
 -----------------------------------------------------------
+	Ensure all private groups // Juan Carlos Raña Trabado
+-----------------------------------------------------------
+*/
+
+$forums_of_groups = get_forums_of_group($current_group['id']);
+
+$forum_state_public=0;
+if (is_array($forums_of_groups)) {
+	foreach ($forums_of_groups as $key => $value) {
+		if($value['forum_group_public_private'] == 'public') {
+			$forum_state_public=1;
+		}		
+	}
+}
+
+if 	($current_group['doc_state']!=1 and $current_group['calendar_state']!=1 and $current_group['work_state']!=1 and $current_group['announcements_state']!=1 and $current_group['wiki_state']!=1 and $forum_state_public!=1) {
+	if (!api_is_allowed_to_edit() and !GroupManager :: is_user_in_group($_user['user_id'], $current_group['id'])) {		
+		echo api_not_allowed($print_headers);
+	}
+}
+/*
+-----------------------------------------------------------
 	Header
 -----------------------------------------------------------
 */
@@ -85,8 +107,7 @@ Display::display_introduction_section(group_space_.$_SESSION['_gid']);
 /*
  * User wants to register in this group
  */
-if (!empty($_GET['selfReg']) && GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id']))
-{
+if (!empty($_GET['selfReg']) && GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {
 	GroupManager :: subscribe_users($_SESSION['_user']['user_id'], $current_group['id']);
 	Display :: display_normal_message(get_lang('GroupNowMember'));
 }
@@ -94,16 +115,14 @@ if (!empty($_GET['selfReg']) && GroupManager :: is_self_registration_allowed($_S
 /*
  * User wants to unregister from this group
  */
-if (!empty($_GET['selfUnReg']) && GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $current_group['id']))
-{
+if (!empty($_GET['selfUnReg']) && GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {
 	GroupManager :: unsubscribe_users($_SESSION['_user']['user_id'], $current_group['id']);
 	Display::display_normal_message(get_lang('StudentDeletesHimself'));
 }
 /*
  * Edit the group
  */
-if (api_is_allowed_to_edit(false,true) or GroupManager :: is_tutor($_user['user_id']))
-{
+if (api_is_allowed_to_edit(false,true) or GroupManager :: is_tutor($_user['user_id'])) {
 	isset($origin)?$my_origin = $origin:$my_origin='';
 	echo Display::return_icon('settings.gif', get_lang("EditGroup"))."<a href=\"group_edit.php?origin=$my_origin\">".get_lang("EditGroup")."</a><br/><br/>";
 }
@@ -111,23 +130,19 @@ if (api_is_allowed_to_edit(false,true) or GroupManager :: is_tutor($_user['user_
 /*
  * Register to group
  */
-if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id']))
-{	  
+if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {	  
 	echo '<p align="right"><a href="'.api_get_self().'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.get_lang("RegIntoGroup").'</a></p>';
 }
 
 /*
  * Unregister from group
  */
-if (GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $current_group['id']))
-{
+if (GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {
 	echo '<p align="right"><a href="'.api_get_self().'?selfUnReg=1" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.get_lang("StudentUnsubscribe").'</a></p>';
 }
 
-if( isset($_GET['action']))
-{
-	switch( $_GET['action'])
-	{
+if( isset($_GET['action'])) {
+	switch( $_GET['action']) {
 		case 'show_msg':
 			Display::display_normal_message($_GET['msg']);
 			break;
@@ -145,16 +160,14 @@ $is_course_member = CourseManager :: is_user_subscribed_in_real_or_linked_course
  * Group title and comment
  */
 api_display_tool_title($nameTools.' '.stripslashes($current_group['name']));
-if (!empty($current_group['description']))
-{
+if (!empty($current_group['description'])) {
 	echo '<blockquote>'.stripslashes($current_group['description']).'</blockquote>';
 }
 /*
  * Group Tools
  */
 // If the user is subscribed to the group or the user is a tutor of the group then
-if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SESSION['_user']['user_id'], $current_group['id']))
-{
+if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SESSION['_user']['user_id'], $current_group['id'])) {
 	$tools = '';
 	// link to the forum of this group
 	$forums_of_groups = get_forums_of_group($current_group['id']);
@@ -204,9 +217,7 @@ if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SES
 		echo '<blockquote>'.$tools.'</blockquote>';
 	}
 
-}
-else
-{
+} else {
 	$tools = '';
 	// link to the forum of this group
 	$forums_of_groups = get_forums_of_group($current_group['id']);

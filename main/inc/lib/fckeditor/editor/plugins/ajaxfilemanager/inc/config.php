@@ -28,10 +28,10 @@
     }
 	
 	////first sanity Dokeos. All from Dokeos
-	$user_folder = api_get_path(SYS_PATH).'main/upload/users/'.api_get_user_id().'/';
+	$user_folder = api_get_path(SYS_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
 	if (!file_exists($user_folder))
 	{ 
-		mkdir(api_get_path(SYS_PATH).'main/upload/users/'.api_get_user_id().'/', 0777);
+		mkdir(api_get_path(SYS_PATH).'main/upload/users/'.api_get_user_id().'/my_files/', 0777);
 	}
 	
 	if(api_is_platform_admin())

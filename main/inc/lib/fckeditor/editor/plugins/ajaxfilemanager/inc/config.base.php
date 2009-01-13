@@ -103,7 +103,7 @@
 		else
 		{		
 			//my profile
-			$PathDokeosAjaxFileManager='../../../../../../../main/upload/users/'.api_get_user_id().'/';	
+			$PathDokeosAjaxFileManager='../../../../../../../main/upload/users/'.api_get_user_id().'/my_files/';	
 		}
 
 	}

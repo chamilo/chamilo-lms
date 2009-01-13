@@ -4,9 +4,10 @@
 ==============================================================================
     Dokeos - elearning and course management software
 
-    Copyright (c) 2004-2008 Dokeos S.A.
+    Copyright (c) 2004-2008 Dokeos SPRL
     Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
-    Copyright (c) Kristof Van Steenkiste 
+    Copyright (c) Kristof Van Steenkiste
+    Copyright (c) Julio Montoya Armas
 
     For a full list of contributors, see "credits.txt".
     The full license can be read in "license.txt".
@@ -18,7 +19,7 @@
 
     See the GNU General Public License for more details.
 
-    Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
     Mail: info@dokeos.com
 ==============================================================================
 */
@@ -27,7 +28,7 @@
                 Reservation-manager (add, edit & delete)
     ---------------------------------------------------------------------
  */
-require_once ("./rsys.php");
+require_once('rsys.php');
 
 Rsys :: protect_script('m_reservation', $_GET['item_id']);
 $tool_name = get_lang('BookingPeriodList');
@@ -94,10 +95,11 @@ switch ($_GET['action']) {
 	case 'overviewsubscriptions' :
 	
 		$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));		
-		$interbreadcrumb[] = array ("url" => "m_reservation.php", "name" => get_lang('ManageBookingPeriods'));
-		
+		$interbreadcrumb[] = array ("url" => "m_reservation.php", "name" => get_lang('ManageBookingPeriods'));		
 		
 		Display :: display_header(get_lang('OverviewSubscriptions'));
+		api_display_tool_title(get_lang('Overview'));
+		   
 		echo '<form id="cat_form" action="m_reservation.php" method="get">';
 		
 		echo '<input type="hidden" name="action" value="overviewsubscriptions"/>';
@@ -155,8 +157,8 @@ switch ($_GET['action']) {
 		$interbreadcrumb[] = array ("url" => "m_reservation.php", "name" => get_lang('ManageBookingPeriods'));
 		
 		
-		Display :: display_header(get_lang('AddNewReservationPeriod'));
-		api_display_tool_title(get_lang('AddNewReservationPeriod'));
+		Display :: display_header(get_lang('AddNewBookingPeriod'));
+		api_display_tool_title(get_lang('AddNewBookingPeriod'));
 
 		ob_start();
 
@@ -493,7 +495,7 @@ switch ($_GET['action']) {
 		echo '<form id="cat_form" action="m_reservation.php" method="get">';
 		
 		echo '<div class="actions">';
-		echo '<a href="m_reservation.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewReservationPeriod').'"/>'.get_lang('AddNewReservationPeriod').'</a>';
+		echo '<a href="m_reservation.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewBookingPeriod').'</a>';
 		echo '&nbsp;&nbsp;&nbsp;<a href="m_reservation.php?action=overviewsubscriptions">'.get_lang('OverviewReservedPeriods').'</a>';
 		echo '</div>';
 		
@@ -519,7 +521,7 @@ switch ($_GET['action']) {
 		$table->set_header(4, get_lang('SubscribeFrom'), true);
 		$table->set_header(5, get_lang('SubscribeUntil'), true);
 		$table->set_header(6, get_lang('Subscribers'), true);
-		$table->set_header(7, get_lang('Notes'), true);
+		$table->set_header(7, get_lang('Notes'), false);
 		$table->set_header(8, '', false, array ('style' => 'width:65px;'));
 		$table->set_column_filter(8, 'modify_filter');
 		$table->set_form_actions(array ('delete_reservations' => get_lang('DeleteSelectedReservationsPeriod')), 'reservations');

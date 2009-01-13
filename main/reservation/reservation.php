@@ -3,9 +3,10 @@
 ==============================================================================
     Dokeos - elearning and course management software
 
-    Copyright (c) 2004-2008 Dokeos S.A.
+    Copyright (c) 2004-2008 Dokeos SPRL
     Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
-    Copyright (c) Kristof Van Steenkiste 
+    Copyright (c) Kristof Van Steenkiste
+    Copyright (c) Julio Montoya Armas
 
     For a full list of contributors, see "credits.txt".
     The full license can be read in "license.txt".
@@ -17,7 +18,7 @@
 
     See the GNU General Public License for more details.
 
-    Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
     Mail: info@dokeos.com
 ==============================================================================
 */
@@ -26,7 +27,7 @@
                 Reservation-manager (add, edit & delete)
     ---------------------------------------------------------------------
  */
-require_once ("./rsys.php");
+require_once('rsys.php');
 
 Rsys :: protect_script('reservation');
 $tool_name = get_lang('Booking');
@@ -39,7 +40,7 @@ api_display_tool_title($tool_name);
 
 
 echo '<div class="actions">';
-///		echo '<a href="m_reservation.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewReservationPeriod').'"/>'.get_lang('AddNewReservationPeriod').'</a>';
+///		echo '<a href="m_reservation.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewBookingPeriod').'</a>';
 //echo '&nbsp;&nbsp;&nbsp;<a href="m_reservation.php?action=overviewsubscriptions">'.get_lang('OverviewReservedPeriods').'</a>';
 echo '<div style="float: right;"><a href="mysubscriptions.php">'.Display::return_icon('file_txt.gif',get_lang('BookingListView'),array('width'=>'22')).'&nbsp;'.get_lang('GoToListView').'</a></div>';
 echo '<a href="m_item.php?view=calendar">'.Display::return_icon('cube.png',get_lang('Resources')).'&nbsp;'.get_lang('Resources').'</a>';		

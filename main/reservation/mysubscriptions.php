@@ -3,9 +3,10 @@
 ==============================================================================
     Dokeos - elearning and course management software
 
-    Copyright (c) 2004-2008 Dokeos S.A.
+    Copyright (c) 2004-2008 Dokeos S.
     Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
-    Copyright (c) Kristof Van Steenkiste 
+    Copyright (c) Kristof Van Steenkiste
+    Copyright (c) Julio Montoya Armas
 
     For a full list of contributors, see "credits.txt".
     The full license can be read in "license.txt".
@@ -17,7 +18,7 @@
 
     See the GNU General Public License for more details.
 
-    Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
     Mail: info@dokeos.com
 ==============================================================================
 */
@@ -30,9 +31,7 @@
         the possibility (links) for adding new items or reservations
     ---------------------------------------------------------------------
  */
-require_once ("./rsys.php");
-//require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-
+require_once('rsys.php');
 
 Rsys::protect_script('mysubscriptions');
 $tool_name = get_lang('Booking');
@@ -65,7 +64,7 @@ switch ($_GET['action']) {
         api_display_tool_title($tool_name);
         
         echo '<div class="actions">';
-///		echo '<a href="m_reservation.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewReservationPeriod').'"/>'.get_lang('AddNewReservationPeriod').'</a>';
+///		echo '<a href="m_reservation.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewReservationPeriod').'</a>';
 		//echo '&nbsp;&nbsp;&nbsp;<a href="m_reservation.php?action=overviewsubscriptions">'.get_lang('OverviewReservedPeriods').'</a>';
 		
 		echo '<div style="float: right;"><a href="reservation.php">'.Display::return_icon('sessions.gif',get_lang('BookingCalendarView')).'&nbsp;'.get_lang('GoToCalendarView').'</a></div>';

@@ -4,9 +4,10 @@
 ==============================================================================
     Dokeos - elearning and course management software
 
-    Copyright (c) 2004-2008 Dokeos S.A.
+    Copyright (c) 2004-2008 Dokeos SPRL
     Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
     Copyright (c) Kristof Van Steenkiste
+    Copyright (c) Julio Montoya Armas
 
     For a full list of contributors, see "credits.txt".
     The full license can be read in "license.txt".
@@ -18,7 +19,7 @@
 
     See the GNU General Public License for more details.
 
-    Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
     Mail: info@dokeos.com
 ==============================================================================
 */
@@ -27,7 +28,7 @@
                 Item-manager (add, edit & delete)
     ---------------------------------------------------------------------
  */
-require_once ("./rsys.php");
+require_once ('rsys.php');
 
 Rsys :: protect_script('m_item');
 $tool_name = get_lang('ItemManagerHeader');
@@ -52,7 +53,13 @@ function modify_filter($id) {
     if(Rsys::item_allow($id,'delete')) $str.=' <a href="m_item.php?action=delete&amp;id='.$id.'" title="'.get_lang("DeleteItem").'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteItem")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
     if(Rsys::item_allow($id,'edit')){
         $number = Rsys :: get_item($id);
-        $str.= ' <a href="m_item.php?action=blackout&amp;id='.$id.'" title="'.get_lang("Blackout").'"><img alt="" src="../img/blackout'.$number[5].'.gif" /></a>';
+        //checking the status
+        if ($number[5]==1) {
+        	$str.= ' <a href="m_item.php?action=blackout&amp;id='.$id.'" title="'.get_lang('Inactive').'"><img alt="" src="../img/wrong.gif" /></a>';
+        }
+        else { 
+        	$str.= ' <a href="m_item.php?action=blackout&amp;id='.$id.'" title="'.get_lang('Active').'"><img alt="" src="../img/right.gif" /></a>';
+        }
     }
     return $str;
 }
@@ -323,10 +330,10 @@ switch ($_GET['action']) {
 				$table->set_header(0, '', false, array ('style' => 'width:10px'));
 				$table->set_additional_parameters(array('action'=>'m_rights','item_id'=>$_GET['item_id']));
 				$table->set_header(1, get_lang('LangClass'), false);
-                		$table->set_header(2, get_lang('EditItemRight'), false);
+                $table->set_header(2, get_lang('EditItemRight'), false);
 				$table->set_header(3, get_lang('DeleteItemRight'), false);
 				$table->set_header(4, get_lang('MReservationPeriodsRight'), false);
-                		$table->set_header(5, get_lang('ViewItemRight'), false);
+                $table->set_header(5, get_lang('ViewItemRight'), false);
 				$table->set_header(6, '', false, array ('style' => 'width:50px;'));
 				$table->set_column_filter(6, 'modify_rights_filter');
 				$table->set_form_actions(array (
@@ -364,7 +371,7 @@ switch ($_GET['action']) {
 		$form->addRule('category', get_lang('ThisFieldIsRequired'), 'required');
 
 		// TODO: get list of courses (to link it to the item)
-		//$form->addElement('select', 'course_code', get_lang('itemCourse'),array(''=>'','value'=>'tag'));
+		//$form->addElement('select', 'course_code', get_lang('ItemCourse'),array(''=>'','value'=>'tag'));
 		//$form->addRule('course', get_lang('ThisFieldIsRequired'), 'required');
 
 		$form->addElement('submit', 'submit', get_lang('Ok'));
@@ -431,14 +438,19 @@ switch ($_GET['action']) {
 
 		if($_GET['action'] == 'blackout'){
 			$result = Rsys :: black_out_changer($_GET['id']);
-			Display :: display_normal_message(get_lang('BlackoutPage'.$result),false);
+			if ($result==1) {
+				Display :: display_normal_message(get_lang('ResourceInactivated'),false);
+			}
+			else {
+				Display :: display_normal_message(get_lang('ResourceActivated'),false);
+			}
 		}
 
 		echo '<form id="cat_form" action="m_item.php" method="get">';
 		echo '<div class="actions">';
-		echo '<a href="m_item.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewReservationPeriod').'"/>'.get_lang('AddNewItem').'</a>';
+		echo '<a href="m_item.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewItem').'</a>';
 		echo '</div>';
-		echo '<div style="text-align: right;">'.get_lang('CategoryFilter').': ';
+		echo '<div style="text-align: right;">'.get_lang('ResourceFilter').': ';
 		echo '<select name="cat" onchange="this.form.submit();"><option value="0"> '.get_lang('All').' </option>';
 		$cats = Rsys :: get_category_with_items_manager();
 		foreach ($cats as $cat)

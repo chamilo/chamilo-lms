@@ -4,7 +4,7 @@
 ==============================================================================
     Dokeos - elearning and course management software
 
-    Copyright (c) 2004-2008 Dokeos S.A.
+    Copyright (c) 2004-2008 Dokeos SPRL
     Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
     Copyright (c) Kristof Van Steenkiste 
 
@@ -18,7 +18,7 @@
 
     See the GNU General Public License for more details.
 
-    Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
     Mail: info@dokeos.com
 ==============================================================================
 */
@@ -27,7 +27,7 @@
                 Reservation-manager (add, edit & delete)
     ---------------------------------------------------------------------
  */
-require_once ("./rsys.php");
+require_once('rsys.php');
 
 Rsys :: protect_script('reservation');
 $tool_name = get_lang('SubscribeManagerHeader');

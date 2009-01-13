@@ -4,7 +4,7 @@
 ==============================================================================
     Dokeos - elearning and course management software
 
-    Copyright (c) 2004-2008 Dokeos S.A.
+    Copyright (c) 2004-2008 Dokeos SPRL
     Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
     Copyright (c) Kristof Van Steenkiste 
 
@@ -18,7 +18,7 @@
 
     See the GNU General Public License for more details.
 
-    Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
     Mail: info@dokeos.com
 ==============================================================================
 */
@@ -162,7 +162,7 @@ class Rsys {
 	 */
 	function add_category($naam) {
 		if (Rsys :: check_category($naam)) {
-			$sql = "INSERT INTO ".Rsys :: getTable("category")." (name) VALUES ('".mysql_real_escape_string($naam)."')";
+			$sql = "INSERT INTO ".Rsys :: getTable("category")." (name) VALUES ('".Database::escape_string($naam)."')";
 			api_sql_query($sql, __FILE__, __LINE__);
 			return mysql_insert_id();
 		}
@@ -189,7 +189,7 @@ class Rsys {
 	 */
 	function edit_category($id, $name) {
 		if (Rsys :: check_category($name, $id)) {
-			$sql = "UPDATE ".Rsys :: getTable("category")." SET name = '".mysql_real_escape_string($name)."' WHERE id ='".$id."'";
+			$sql = "UPDATE ".Rsys :: getTable("category")." SET name = '".Database::escape_string($name)."' WHERE id ='".$id."'";
 			api_sql_query($sql, __FILE__, __LINE__);
 			return $id;
 		}
@@ -283,12 +283,12 @@ class Rsys {
 	function get_table_categories($from, $per_page, $column, $direction) {
 		$sql = "SELECT id AS col0, name as col1, id AS col2 FROM ".Rsys :: getTable("category");
 		if (isset ($_GET['keyword'])) {
-			$keyword = mysql_real_escape_string($_GET['keyword']);
+			$keyword = Database::escape_string($_GET['keyword']);
 			$sql .= " WHERE name LIKE '%".$keyword."%' OR id LIKE '%".$keyword."%'";
 		}
 		$sql .= " ORDER BY col".$column." ".$direction." LIMIT ".$from.",".$per_page;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result, MYSQL_NUM))
+		while ($array = Database::fetch_array($result, 'NUM'))
 			$arr[] = $array;
 		return $arr;
 	}
@@ -301,7 +301,7 @@ class Rsys {
 	function get_num_categories() {
 		$sql = "SELECT COUNT(id) FROM ".Rsys :: getTable("category");
 		if (isset ($_GET['keyword'])) {
-			$keyword = mysql_real_escape_string($_GET['keyword']);
+			$keyword = Database::escape_string($_GET['keyword']);
 			$sql .= " WHERE name LIKE '%".$keyword."%' OR id LIKE '%".$keyword."%'";
 		}
 		return @ mysql_result(api_sql_query($sql, __FILE__, __LINE__), 0, 0);
@@ -342,7 +342,7 @@ function check_item($item, $category, $id=0) {
 	 */
 	function add_item($name, $description, $category, $course = "") {
 		if (Rsys :: check_item($name, $category)) {
-			$sql = "INSERT INTO ".Rsys :: getTable("item")." (category_id,course_code,name,description,creator) VALUES ('".mysql_real_escape_string($category)."','".mysql_real_escape_string($course)."','".mysql_real_escape_string($name)."','".mysql_real_escape_string($description)."','".api_get_user_id()."')";
+			$sql = "INSERT INTO ".Rsys :: getTable("item")." (category_id,course_code,name,description,creator) VALUES ('".Database::escape_string($category)."','".Database::escape_string($course)."','".Database::escape_string($name)."','".Database::escape_string($description)."','".api_get_user_id()."')";
 			api_sql_query($sql, __FILE__, __LINE__);
 			return mysql_insert_id();
 		}
@@ -363,7 +363,7 @@ function check_item($item, $category, $id=0) {
 			return false;
 		if (!Rsys :: check_item($name, $category, $id))
 			return false;
-		$sql = "UPDATE ".Rsys :: getTable("item")." SET category_id='".mysql_real_escape_string($category)."',course_code='".mysql_real_escape_string($course)."',name='".mysql_real_escape_string($name)."',description='".mysql_real_escape_string($description)."' WHERE id ='".$id."'";
+		$sql = "UPDATE ".Rsys :: getTable("item")." SET category_id='".Database::escape_string($category)."',course_code='".Database::escape_string($course)."',name='".Database::escape_string($name)."',description='".Database::escape_string($description)."' WHERE id ='".$id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
 		return $id;
 	}
@@ -378,7 +378,7 @@ function check_item($item, $category, $id=0) {
 			return false;
 		$sql = "SELECT id,end_at FROM".Rsys :: getTable('reservation')." WHERE item_id='".$id."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result)) {
+		while ($array = Database::fetch_array($result)) {
 			if (Rsys :: mysql_datetime_to_timestamp(date('Y-m-d H:i:s')) <= Rsys :: mysql_datetime_to_timestamp($array[1]))
 				$checked = true;
 		}
@@ -507,7 +507,7 @@ function check_item($item, $category, $id=0) {
 		$sql .= " GROUP BY i.id ORDER BY col".$column." ".$direction." LIMIT ".$from.",".$per_page;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
-		while ($array = mysql_fetch_array($result, MYSQL_NUM)) {
+		while ($array = Database::fetch_array($result, 'NUM')) {
 			if (!$array[4])
 				$array[4] = '-';
 			$arr[] = $array;
@@ -539,7 +539,7 @@ function check_item($item, $category, $id=0) {
                           WHERE ((cu.user_id='".api_get_user_id()."' AND (ir.edit_right=1 OR ir.delete_right=1)) OR i.creator='".api_get_user_id()."'  OR 1=". (api_is_platform_admin() ? 1 : 0).")";
 
 		if (isset ($_GET['keyword']) != 0) {
-			$keyword = mysql_real_escape_string($_GET['keyword']);
+			$keyword = Database::escape_string($_GET['keyword']);
 			$sql .= " WHERE i.category_id  LIKE '%".$keyword."%'";
 		}*/
 		//$sql .= " GROUP BY i.id";
@@ -559,13 +559,13 @@ function check_item($item, $category, $id=0) {
 		$itemid = $_GET['item_id'];
 		$sql = "SELECT id,name FROM ".Database :: get_main_table(TABLE_MAIN_CLASS);
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result, MYSQL_NUM)) {
+		while ($array = Database::fetch_array($result, 'NUM')) {
 			$arr[] = $array;
 		}
 		$sql = "SELECT item_id,class_id,edit_right,delete_right,m_reservation,view_right
 								FROM ".Rsys :: getTable("item_rights")." WHERE item_id=".$itemid;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result, MYSQL_NUM)) {
+		while ($array = Database::fetch_array($result, 'NUM')) {
 			$arr1[] = $array;
 		}
 		$count = -1;
@@ -618,10 +618,10 @@ function check_item($item, $category, $id=0) {
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$switcher = mysql_num_rows($result);
 		if ($switcher > 0) {
-			$sql = $sql = "UPDATE ".Rsys :: getTable("item_rights")." SET ".$column."='".mysql_real_escape_string($value)."' WHERE class_id = '".$class_id."' AND item_id ='".$item_id."'";
+			$sql = $sql = "UPDATE ".Rsys :: getTable("item_rights")." SET ".$column."='".Database::escape_string($value)."' WHERE class_id = '".$class_id."' AND item_id ='".$item_id."'";
 			api_sql_query($sql, __FILE__, __LINE__);
 		} else {
-			$sql = "INSERT INTO ".Rsys :: getTable("item_rights")." (item_id,class_id,".$column.") VALUES ('".mysql_real_escape_string($item_id)."','".mysql_real_escape_string($class_id)."','".$value."')";
+			$sql = "INSERT INTO ".Rsys :: getTable("item_rights")." (item_id,class_id,".$column.") VALUES ('".Database::escape_string($item_id)."','".Database::escape_string($class_id)."','".$value."')";
 			api_sql_query($sql, __FILE__, __LINE__);
 		}
 	}
@@ -671,7 +671,7 @@ function check_item($item, $category, $id=0) {
 	function add_item_right($item_id, $class_id, $edit, $delete, $m_reservation) {
 		if (!Rsys :: item_allow($item_id, 'm_rights'))
 			return false;
-		$sql = "INSERT INTO ".Rsys :: getTable("item_rights")." (item_id,class_id,edit_right,delete_right,m_reservation) VALUES ('".mysql_real_escape_string($item_id)."','".mysql_real_escape_string($class_id)."','".mysql_real_escape_string($edit)."','".mysql_real_escape_string($delete)."','".mysql_real_escape_string($m_reservation)."')";
+		$sql = "INSERT INTO ".Rsys :: getTable("item_rights")." (item_id,class_id,edit_right,delete_right,m_reservation) VALUES ('".Database::escape_string($item_id)."','".Database::escape_string($class_id)."','".Database::escape_string($edit)."','".Database::escape_string($delete)."','".Database::escape_string($m_reservation)."')";
 		api_sql_query($sql, __FILE__, __LINE__);
 	}
 
@@ -688,7 +688,7 @@ function check_item($item, $category, $id=0) {
 	function edit_item_right($item_id, $class_id, $edit, $delete, $m_reservation) {
 		if (!Rsys :: item_allow($item_id, 'm_rights'))
 			return false;
-		$sql = "UPDATE ".Rsys :: getTable("item_rights")." SET edit_right='".mysql_real_escape_string($edit)."', delete_right='".mysql_real_escape_string($delete)."', m_reservation='".mysql_real_escape_string($m_reservation)."'  WHERE class_id = '".$class_id."' AND item_id ='".$item_id."'";
+		$sql = "UPDATE ".Rsys :: getTable("item_rights")." SET edit_right='".Database::escape_string($edit)."', delete_right='".Database::escape_string($delete)."', m_reservation='".Database::escape_string($m_reservation)."'  WHERE class_id = '".$class_id."' AND item_id ='".$item_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
 	}
 
@@ -731,17 +731,17 @@ function check_item($item, $category, $id=0) {
 							 WHERE item_id='".$item_id."' AND subscribers > '0'";
 		$value == 1 ? $sql .= " AND end_at >= (NOW()-7000000) " : $sql .= " AND end_at >= NOW()";
 		$reservations = api_sql_query($sql, __FILE__, __LINE__);
-		while ($reservation = mysql_fetch_array($reservations)) {
+		while ($reservation = Database::fetch_array($reservations)) {
 			$sql = "SELECT user_id FROM ".Rsys :: getTable('subscription')." WHERE reservation_id='".$reservation[0]."'";
 			if ($reservation[1] == 1) {
 				$sql .= " AND end_at >= NOW() ";
 			}
 			$subscriptions = api_sql_query($sql, __FILE__, __LINE__);
-			while ($subscription = mysql_fetch_array($subscriptions)) {
+			while ($subscription = Database::fetch_array($subscriptions)) {
 				$user_info = api_get_user_info($subscription[0]);
 				$sql2 = "SELECT name FROM ".Rsys :: getTable('item')." WHERE id='".$item_id."'";
 				$items = api_sql_query($sql2, __FILE__, __LINE__);
-				$item = mysql_fetch_array($items);
+				$item = Database::fetch_array($items);
 				$item_name=$item['name'];
 				if ($reservation[1] == 0)
 				{
@@ -754,7 +754,7 @@ function check_item($item, $category, $id=0) {
 					$sql2 = "SELECT start_at,end_at FROM ".Rsys :: getTable('subscription')." WHERE reservation_id='".$reservation[0]."'";
 				}
 				$items = api_sql_query($sql2, __FILE__, __LINE__);
-				$item = mysql_fetch_array($items);
+				$item = Database::fetch_array($items);
 				$begindatum = $item['start_at'];
 				$einddatum = $item['end_at'];
 				
@@ -788,7 +788,7 @@ function check_item($item, $category, $id=0) {
 		$sql = "SELECT * FROM ".Rsys :: getTable('reservation')." WHERE item_id='".$item_id."' ORDER BY start_at";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
-		while ($array = mysql_fetch_array($result)) {
+		while ($array = Database::fetch_array($result)) {
 			$GLOBALS['start_date'] = $array[5];
 			$GLOBALS['end_date'] = $array[6];
 			if (Rsys :: mysql_datetime_to_timestamp($array[5]) <= $start_date && Rsys :: mysql_datetime_to_timestamp($array[6]) >= $start_date) {
@@ -803,7 +803,7 @@ function check_item($item, $category, $id=0) {
 											  start_at < '".$end_at."') OR
 											  (end_at > '".$start_at."' AND 
 											  end_at < '".$end_at."') OR (start_at <= '".$start_at."' AND end_at >= '".$end_at."')) AND item_id='".$item_id."'";
-		$result = mysql_fetch_array(api_sql_query($sql, __FILE__, __LINE__));
+		$result = Database::fetch_array(api_sql_query($sql, __FILE__, __LINE__));
 		if (count($result) != 0){
 			$GLOBALS['start_date'] = $result[1];
 			$GLOBALS['end_date'] = $result[2];
@@ -816,7 +816,7 @@ function check_item($item, $category, $id=0) {
 		$sql = "SELECT * FROM ".Rsys :: getTable('reservation')." WHERE item_id='".$item_id."' AND id <> '".$reservation_id."' ORDER BY start_at";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
-		while ($array = mysql_fetch_array($result)) {
+		while ($array = Database::fetch_array($result)) {
 			$GLOBALS['start_date'] = $array[5];
 			$GLOBALS['end_date'] = $array[6];
 			if (Rsys :: mysql_datetime_to_timestamp($array[5]) < $start_date && Rsys :: mysql_datetime_to_timestamp($array[6]) > $start_date) {
@@ -833,7 +833,8 @@ function check_item($item, $category, $id=0) {
 											  end_at < '".$end_at."') OR 
 											  (start_at <= '".$start_at."' AND 
 											  end_at >= '".$end_at."')) AND item_id='".$item_id."' AND id <> '".$reservation_id."'";
-		$result = mysql_fetch_array(api_sql_query($sql, __FILE__, __LINE__));
+		$result = Database::fetch_array(api_sql_query($sql, __FILE__, __LINE__));
+		
 		if (count($result) != 0){
 			$GLOBALS['start_date'] = $result[1];
 			$GLOBALS['end_date'] = $result[2];
@@ -851,7 +852,7 @@ function check_item($item, $category, $id=0) {
 						                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id 
 						                WHERE (cu.user_id='".api_get_user_id()."' AND ir.m_reservation=1 ) OR i.creator='".api_get_user_id()."' OR 1=". (api_is_platform_admin() ? 1 : 0)." ORDER BY cat.name ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result))
+		while ($array = Database::fetch_array($result))
 			$arr[$array['catid']] = $array['catname'];
 		return $arr;
 	}
@@ -869,7 +870,7 @@ function check_item($item, $category, $id=0) {
 						                WHERE ((cu.user_id='".api_get_user_id()."' AND ir.m_reservation=1 ) OR i.creator='".api_get_user_id()."' OR 1=". (api_is_platform_admin() ? 1 : 0).") AND (category_id =".$category.") 
 										ORDER BY cat.name ASC, i.name ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result))
+		while ($array = Database::fetch_array($result))
 			$arr[$array['id']] = $array['catitem'];
 		return $arr;
 	}
@@ -887,7 +888,7 @@ function check_item($item, $category, $id=0) {
 		                                WHERE ((cu.user_id='".api_get_user_id()."' AND ir.view_right=1 ) OR i.creator='".api_get_user_id()."' OR 1=". (api_is_platform_admin() ? 1 : 0).") AND (category_id =".$category.") 
 		                                ORDER BY cat.name ASC, i.name ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result))
+		while ($array = Database::fetch_array($result))
 			$arr[$array['id']] = $array['catitem'];
 		return $arr;
 	}
@@ -902,7 +903,8 @@ function check_item($item, $category, $id=0) {
 	 *  @return -   Array               The returned rows
 	 */
 	function get_table_reservations($from, $per_page, $column, $direction) {
-		$sql = "SELECT DISTINCT r.id AS col0, i.name AS col1, r.start_at AS col2, r.end_at AS col3,r.subscribe_from AS col4, r.subscribe_until AS col5,IF(timepicker <> 0, '".get_lang('TimePicker')."',CONCAT(r.subscribers,'/',r.max_users)) AS col6, r.notes AS col7, r.id as col8  
+		$sql = "SELECT DISTINCT r.id AS col0, i.name AS col1,  DATE_FORMAT(r.start_at,'%Y-%m-%d %k:%i') AS col2, DATE_FORMAT(r.end_at,'%Y-%m-%d %k:%i') AS col3," .
+			   "				DATE_FORMAT(r.subscribe_from,'%Y-%m-%d %k:%i') AS col4, DATE_FORMAT(r.subscribe_until,'%Y-%m-%d %k:%i') AS col5,IF(timepicker <> 0, '".get_lang('TimePicker')."',CONCAT(r.subscribers,'/',r.max_users)) AS col6, r.notes AS col7, r.id as col8  
 						                FROM ".Rsys :: getTable('reservation')." r
 						                INNER JOIN ".Rsys :: getTable('item')." i ON r.item_id=i.id 
 						                LEFT JOIN ".Rsys :: getTable('item_rights')." ir ON ir.item_id=i.id 
@@ -910,13 +912,14 @@ function check_item($item, $category, $id=0) {
 						                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id 
 						                WHERE ((ir.m_reservation=1 AND cu.user_id='".api_get_user_id()."') OR i.creator='".api_get_user_id()."' OR 1=". (api_is_platform_admin() ? 1 : 0).")";
 		if (isset ($_GET['keyword'])) {
-			$keyword = mysql_real_escape_string($_GET['keyword']);
+			$keyword = Database::escape_string($_GET['keyword']);
 			$sql .= "AND (i.name LIKE '%".$keyword."%' OR i.description LIKE '%".$keyword."%' OR r.notes LIKE '%".$keyword."%')";
 		}
 		$sql .= " ORDER BY col".$column." ".$direction." LIMIT ".$from.",".$per_page;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result, MYSQL_NUM))
-			$arr[] = $array;
+		while ($array = Database::fetch_array($result, 'NUM')) {		
+			$arr[] = $array;			
+		}
 		return $arr;
 	}
 
@@ -929,7 +932,7 @@ function check_item($item, $category, $id=0) {
 						                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id 
 						                WHERE ((cu.user_id='".api_get_user_id()."'AND ir.edit_right=1) OR 1=". (api_is_platform_admin() ? 1 : 0).") AND r.id='".$id."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result, MYSQL_NUM)) {
+		while ($array = Database::fetch_array($result, 'NUM')) {
 			$arr[] = $array;
 		}
 		return $result;
@@ -944,7 +947,7 @@ function check_item($item, $category, $id=0) {
 						                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id 
 						                WHERE ((cu.user_id='".api_get_user_id()."'AND ir.delete_right=1) OR 1=". (api_is_platform_admin() ? 1 : 0).") AND r.id='".$id."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result, MYSQL_NUM)) {
+		while ($array = Database::fetch_array($result, 'NUM')) {
 			$arr[] = $array;
 		}
 		return $arr;
@@ -962,14 +965,14 @@ function check_item($item, $category, $id=0) {
 	 */
 	function get_num_reservations() {
 		$sql = "SELECT COUNT(DISTINCT r.id) 
-						                FROM ".Rsys :: getTable('reservation')." r 
-		                                LEFT JOIN ".Rsys :: getTable('item')." i ON i.id=r.item_id 
-						                LEFT JOIN ".Rsys :: getTable('item_rights')." ir ON ir.item_id=r.item_id 
-						                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS)." c ON ir.class_id=c.id AND ir.item_id = r.item_id 
-						                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id 
-						                WHERE ((ir.m_reservation=1 AND cu.user_id='".api_get_user_id()."') OR i.creator='".api_get_user_id()."' OR 1=". (api_is_platform_admin() ? 1 : 0).')';
+                FROM ".Rsys :: getTable('reservation')." r 
+                LEFT JOIN ".Rsys :: getTable('item')." i ON i.id=r.item_id 
+                LEFT JOIN ".Rsys :: getTable('item_rights')." ir ON ir.item_id=r.item_id 
+                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS)." c ON ir.class_id=c.id AND ir.item_id = r.item_id 
+                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id 
+                WHERE ((ir.m_reservation=1 AND cu.user_id='".api_get_user_id()."') OR i.creator='".api_get_user_id()."' OR 1=". (api_is_platform_admin() ? 1 : 0).')';
         if (isset ($_GET['keyword'])) {
-            $keyword = mysql_real_escape_string($_GET['keyword']);
+            $keyword = Database::escape_string($_GET['keyword']);
             $sql .= " AND (i.name LIKE '%".$keyword."%' OR i.description LIKE '%".$keyword."%' OR r.notes LIKE '%".$keyword."%')";
         }
 		return mysql_result(api_sql_query($sql, __FILE__, __LINE__), 0, 0);
@@ -1031,7 +1034,7 @@ function check_item($item, $category, $id=0) {
 			}
 		}
 
-		$sql = "INSERT INTO ".Rsys :: getTable("reservation")." (item_id,auto_accept,max_users,start_at,end_at,subscribe_from,subscribe_until,notes,timepicker,timepicker_min,timepicker_max,subid) VALUES ('".mysql_real_escape_string($item_id)."','".mysql_real_escape_string($auto_accept)."','". (intval($max_users) > 1 ? $max_users : 1)."','".mysql_real_escape_string($start_at)."','".mysql_real_escape_string($end_at)."','".mysql_real_escape_string($subscribe_from)."','".mysql_real_escape_string($subscribe_until)."','".mysql_real_escape_string($notes)."','".$timepicker."','".$min."','".$max."','". ($subid == 0 ? 0 : $subid)."')";
+		$sql = "INSERT INTO ".Rsys :: getTable("reservation")." (item_id,auto_accept,max_users,start_at,end_at,subscribe_from,subscribe_until,notes,timepicker,timepicker_min,timepicker_max,subid) VALUES ('".Database::escape_string($item_id)."','".Database::escape_string($auto_accept)."','". (intval($max_users) > 1 ? $max_users : 1)."','".Database::escape_string($start_at)."','".Database::escape_string($end_at)."','".Database::escape_string($subscribe_from)."','".Database::escape_string($subscribe_until)."','".Database::escape_string($notes)."','".$timepicker."','".$min."','".$max."','". ($subid == 0 ? 0 : $subid)."')";
 		api_sql_query($sql, __FILE__, __LINE__);
 		return 0;
 	}
@@ -1060,7 +1063,7 @@ function check_item($item, $category, $id=0) {
 				return 2;
 		}
 		$sql = "SELECT timepicker, subscribers FROM ".Rsys :: getTable("reservation")." WHERE id='".$id."'";
-		$result = mysql_fetch_array(api_sql_query($sql, __FILE__, __LINE__));
+		$result = Database::fetch_array(api_sql_query($sql, __FILE__, __LINE__));
 		if ($result[0] == 0 && $result[1] > $max_users) {
 			return 3;
 		}
@@ -1071,13 +1074,13 @@ function check_item($item, $category, $id=0) {
 		if ($auto_accept == 1) {
 			$sql = "SELECT dummy FROM ".Rsys :: getTable("subscription")." WHERE reservation_id='".$id."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			while ($array = mysql_fetch_array($result, MYSQL_NUM)) {
+			while ($array = Database::fetch_array($result, 'NUM')) {
 				Rsys :: set_accepted($array[0], 1);
 			}
 		} else {
 			$auto_accept = 0;
 		}
-		$sql = "UPDATE ".Rsys :: getTable("reservation")." SET item_id='".mysql_real_escape_string($item_id)."',auto_accept='".mysql_real_escape_string($auto_accept)."',max_users='". ($max_users > 1 ? $max_users : 1)."',start_at='".mysql_real_escape_string($start_at)."',end_at='".mysql_real_escape_string($end_at)."',subscribe_from='".mysql_real_escape_string($subscribe_from)."',subscribe_until='".mysql_real_escape_string($subscribe_until)."',notes='".mysql_real_escape_string($notes)."' WHERE id='".$id."'";
+		$sql = "UPDATE ".Rsys :: getTable("reservation")." SET item_id='".Database::escape_string($item_id)."',auto_accept='".Database::escape_string($auto_accept)."',max_users='". ($max_users > 1 ? $max_users : 1)."',start_at='".Database::escape_string($start_at)."',end_at='".Database::escape_string($end_at)."',subscribe_from='".Database::escape_string($subscribe_from)."',subscribe_until='".Database::escape_string($subscribe_until)."',notes='".Database::escape_string($notes)."' WHERE id='".$id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
 		return 0;
 	}
@@ -1088,14 +1091,14 @@ function check_item($item, $category, $id=0) {
 	function delete_reservation($id) {
 		$sql = "SELECT id FROM ".Rsys :: getTable("reservation")."WHERE id='".$id."' OR subid='".$id."'";
 		$result2 = api_sql_query($sql, __FILE__, __LINE__);
-		while ($arr = mysql_fetch_array($result2, MYSQL_NUM)) {
+		while ($arr = Database::fetch_array($result2, 'NUM')) {
 			$sql = "SELECT s.dummy, s.user_id, i.name, r.start_at, r.end_at
 											FROM ".Rsys :: getTable("subscription")." s 
 											INNER JOIN ".Rsys :: getTable("reservation")." r ON s.reservation_id = r.id
 											INNER JOIN ".Rsys :: getTable("item")." i ON r.item_id = i.id
 											WHERE s.reservation_id='".$arr[0]."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			while ($array = mysql_fetch_array($result, MYSQL_NUM)) {
+			while ($array = Database::fetch_array($result, 'NUM')) {
 				$user_info = api_get_user_info($array[1]);
 				api_send_mail($user_info['mail'], str_replace('#NAME#', $array[2], get_lang("ReservationDeleteTitle")), str_replace('#START#', $array[3], str_replace('#END#', $array[4], str_replace('#NAME#', $array[2], get_lang("ReservationDeleteMessage")))));
 				$sql = "DELETE FROM ".Rsys :: getTable("subscription")." WHERE dummy='".$array[0]."'";
@@ -1119,14 +1122,14 @@ function check_item($item, $category, $id=0) {
 	
 	function get_reservation($id) {
 		$sql = "SELECT *
-						                FROM ".Rsys :: getTable('reservation')." r 
-						                INNER JOIN ".Rsys :: getTable('item')." i ON r.item_id=i.id 
-						                LEFT JOIN ".Rsys :: getTable('item_rights')." ir ON ir.item_id=i.id 
-						                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS)." c ON ir.class_id=c.id AND ir.item_id = i.id 
-						                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id 
-						                WHERE (cu.user_id='".api_get_user_id()."' OR 1=". (api_is_platform_admin() ? 1 : 0)." OR 1=".(Rsys :: is_owner_item("$id")? 1 : 0).") AND r.id='".$id."'";
+                FROM ".Rsys :: getTable('reservation')." r 
+                INNER JOIN ".Rsys :: getTable('item')." i ON r.item_id=i.id 
+                LEFT JOIN ".Rsys :: getTable('item_rights')." ir ON ir.item_id=i.id 
+                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS)." c ON ir.class_id=c.id AND ir.item_id = i.id 
+                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id 
+                WHERE (cu.user_id='".api_get_user_id()."' OR 1=". (api_is_platform_admin() ? 1 : 0)." OR 1=".(Rsys :: is_owner_item("$id")? 1 : 0).") AND r.id='".$id."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result, MYSQL_NUM))
+		while ($array = Database::fetch_array($result, 'NUM'))
 			$arr[] = $array;
 		return $arr;
 	}
@@ -1149,7 +1152,7 @@ function check_item($item, $category, $id=0) {
 					OR i2.creator='".api_get_user_id()."' 
 					OR 1=". (api_is_platform_admin() ? 1 : 0)."))";
       		if (isset ($_GET['keyword'])) {
-            		$keyword = mysql_real_escape_string($_GET['keyword']);
+            		$keyword = Database::escape_string($_GET['keyword']);
             		$sql .= " AND (i1.name LIKE '%".$keyword."%' or r1.start_at LIKE '%".$keyword."%' or r1.end_at LIKE '%".$keyword."%' or u.lastname LIKE '%".$keyword."%' or u.firstname LIKE '%".$keyword."%' or s.start_at LIKE '%".$keyword."%' or s.end_at LIKE '%".$keyword."%')";
         	}
 		return mysql_result(api_sql_query($sql, __FILE__, __LINE__), 0, 0);
@@ -1174,45 +1177,43 @@ function check_item($item, $category, $id=0) {
 					OR i2.creator='".api_get_user_id()."' 
 					OR 1=". (api_is_platform_admin() ? 1 : 0)."))";
       		if (isset ($_GET['keyword'])) {
-            		$keyword = mysql_real_escape_string($_GET['keyword']);
+            		$keyword = Database::escape_string($_GET['keyword']);
             		$sql .= " AND (i1.name LIKE '%".$keyword."%' or c.name LIKE '%".$keyword."%' or r1.start_at LIKE '%".$keyword."%' or r1.end_at LIKE '%".$keyword."%' or u.lastname LIKE '%".$keyword."%' or u.firstname LIKE '%".$keyword."%' or s.start_at LIKE '%".$keyword."%' or s.end_at LIKE '%".$keyword."%')";
         	}
 		$sql .= " ORDER BY col".$column." ".$direction." LIMIT ".$from.",".$per_page;
 		/*$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result, MYSQL_NUM))
+		while ($array = Database::fetch_array($result, 'NUM'))
 			$arr[] = $array;*/
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result, MYSQL_NUM))
-		{
+		while ($array = Database::fetch_array($result, 'NUM')) {
 			$row = array();
 			$row[] = $array[0];
 			$row[] = $array[1];
 			$row[] = $array[2];
 			$row[] = $array[3];
 			$row[] = $array[4];
-			if ($array[5]=='0000-00-00 00:00:00')
-			{
+			if ($array[5]=='0000-00-00 00:00:00') {				
 				$row[] = $array[2];
-			}else
-			{
+			}
+			else {
 				$row[] = $array[5];
 			}
-			if ($array[6]=='0000-00-00 00:00:00')
-			{
+			if ($array[6]=='0000-00-00 00:00:00') {
 				$row[] = $array[3];
-			}else
-			{
+			}
+			else {
 				$row[] = $array[6];
 			}
+			
 			if ($array[7]=='1')
 			{
 				$row[] = get_lang('Yes');
-			}else
-			{
+			}
+			else {
 				$row[] = get_lang('No');
 			}
 			$arr[] = $row;
-		}	
+		}
 		return $arr;
 	}
 
@@ -1243,7 +1244,7 @@ function check_item($item, $category, $id=0) {
 		}
 		$sql .= " ORDER BY col".$column." ".$direction." LIMIT ".$from.",".$per_page;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result, MYSQL_NUM)) {
+		while ($array = Database::fetch_array($result, 'NUM')) {
 			$arr[] = $array;
 		}
 		$count = 0;
@@ -1254,7 +1255,7 @@ function check_item($item, $category, $id=0) {
 										INNER JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = cl.id
 										WHERE cu.user_id='".$arr[$count][2]."' LIMIT 1";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			while ($array = mysql_fetch_array($result, MYSQL_NUM)) {
+			while ($array = Database::fetch_array($result, 'NUM')) {
 				$arr2[] = $array;
 			}
 			$arr[$count][2] = $arr2[0][0];
@@ -1297,7 +1298,7 @@ function check_item($item, $category, $id=0) {
 								INNER JOIN ".Rsys :: getTable('item')." i ON r.item_id = i.id
 								WHERE dummy='".$id."'";
 		$items = api_sql_query($sql, __FILE__, __LINE__);
-		$item = mysql_fetch_array($items);
+		$item = Database::fetch_array($items);
 		$item_name = $item[0];
 
 		$sql = "select start_at, end_at, timepicker 
@@ -1306,14 +1307,14 @@ function check_item($item, $category, $id=0) {
 	    				from ".Rsys :: getTable('subscription')." 
 					where dummy ='".$id."')";
 		$items = api_sql_query($sql, __FILE__, __LINE__);
-		$item = mysql_fetch_array($items);
+		$item = Database::fetch_array($items);
 		if ($item['timepicker'] == '1')
 		{
 			$sql = "select start_at, end_at
 	    			from ".Rsys :: getTable('subscription')." 
 				where dummy ='".$id."'";
 			$items = api_sql_query($sql, __FILE__, __LINE__);
-			$item = mysql_fetch_array($items);	
+			$item = Database::fetch_array($items);	
 		}		
 		$begin_datum = $item['start_at'];
 		$eind_datum = $item['end_at'];
@@ -1338,7 +1339,7 @@ function check_item($item, $category, $id=0) {
 										WHERE start_at > '".$start_at."' AND id='".$reservation_id."' ";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		if (mysql_num_rows($result) != 0){
-			$result2 = mysql_fetch_array($result);
+			$result2 = Database::fetch_array($result);
 			$GLOBALS['start_date'] = $result2[1];
 			$GLOBALS['end_date'] = $result2[2];
 			return 1;
@@ -1348,7 +1349,7 @@ function check_item($item, $category, $id=0) {
 										WHERE end_at < '".$end_at."' AND id='".$reservation_id."' ";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		if (mysql_num_rows($result) != 0){
-			$result2 = mysql_fetch_array($result);
+			$result2 = Database::fetch_array($result);
 			$GLOBALS['start_date'] = $result2[1];
 			$GLOBALS['end_date'] = $result2[2];
 			return 1;
@@ -1357,7 +1358,7 @@ function check_item($item, $category, $id=0) {
 		
 		$sql = "SELECT * FROM ".Rsys :: getTable('subscription')." WHERE reservation_id='".$reservation_id."' ORDER BY start_at";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result)) {
+		while ($array = Database::fetch_array($result)) {
 			$GLOBALS['start_date'] = $array[4];
 			$GLOBALS['end_date'] = $array[5];
 			if (Rsys :: mysql_datetime_to_timestamp($array[4]) < Rsys :: mysql_datetime_to_timestamp($start_at) && Rsys :: mysql_datetime_to_timestamp($array[5]) > Rsys :: mysql_datetime_to_timestamp($start_at)) {
@@ -1373,7 +1374,7 @@ function check_item($item, $category, $id=0) {
 											  end_at < '".$end_at."')OR 
 											  (start_at <= '".$start_at."' AND 
 											  end_at >= '".$end_at."')) AND reservation_id='".$reservation_id."' ";
-		$result = mysql_fetch_array(api_sql_query($sql, __FILE__, __LINE__));
+		$result = Database::fetch_array(api_sql_query($sql, __FILE__, __LINE__));
 		if (count($result) != 0){
 			$GLOBALS['start_date'] = $result[1];
 			$GLOBALS['end_date'] = $result[2];
@@ -1408,7 +1409,7 @@ function check_item($item, $category, $id=0) {
 	function add_subscription($reservation_id, $user_id, $accepted) {
 		$sql = "SELECT user_id FROM ".Rsys :: getTable("subscription")." WHERE user_id='".$user_id."' AND reservation_id='".$reservation_id."'";
 		if (mysql_num_rows(api_sql_query($sql, __FILE__, __LINE__)) == 0) {
-			$sql = "INSERT INTO ".Rsys :: getTable("subscription")." (user_id,reservation_id,accepted) VALUES ('".mysql_real_escape_string($user_id)."','".mysql_real_escape_string($reservation_id)."','". ($accepted ? '1' : '0')."')";
+			$sql = "INSERT INTO ".Rsys :: getTable("subscription")." (user_id,reservation_id,accepted) VALUES ('".Database::escape_string($user_id)."','".Database::escape_string($reservation_id)."','". ($accepted ? '1' : '0')."')";
 			api_sql_query($sql, __FILE__, __LINE__);
 			$sql = "UPDATE ".Rsys :: getTable("reservation")." SET subscribers=subscribers+1 WHERE id='".$reservation_id."'";
 			api_sql_query($sql, __FILE__, __LINE__);
@@ -1441,7 +1442,7 @@ function check_item($item, $category, $id=0) {
 			if ((Rsys :: mysql_datetime_to_timestamp($end_date)-Rsys :: mysql_datetime_to_timestamp($start_date)) > ($max*60))
 				return 3;
 		}
-		$sql = "INSERT INTO ".Rsys :: getTable("subscription")." (user_id,reservation_id,accepted,start_at,end_at) VALUES ('".mysql_real_escape_string($user_id)."','".mysql_real_escape_string($reservation_id)."','". ($accepted ? '1' : '0')."','".$start_date."','".$end_date."')";
+		$sql = "INSERT INTO ".Rsys :: getTable("subscription")." (user_id,reservation_id,accepted,start_at,end_at) VALUES ('".Database::escape_string($user_id)."','".Database::escape_string($reservation_id)."','". ($accepted ? '1' : '0')."','".$start_date."','".$end_date."')";
 		api_sql_query($sql, __FILE__, __LINE__);
 		return 0;
 	}
@@ -1473,7 +1474,7 @@ function check_item($item, $category, $id=0) {
 				                WHERE s.user_id = '".api_get_user_id()."'";
 		$sql .= " ORDER BY col".$column." ".$direction." LIMIT ".$from.",".$per_page;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result, MYSQL_NUM))
+		while ($array = Database::fetch_array($result, MYSQL_NUM))
 			$arr[] = $array;
 		return $arr;*/
 
@@ -1484,7 +1485,7 @@ function check_item($item, $category, $id=0) {
 				                WHERE s.user_id = '".api_get_user_id()."'";
 		$sql .= " ORDER BY col".$column." ".$direction." LIMIT ".$from.",".$per_page;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result, MYSQL_NUM))
+		while ($array = Database::fetch_array($result, 'NUM'))
 		{	$row = array();
 			$row[] = $array[0];
 			$row[] = $array[1];
@@ -1541,7 +1542,7 @@ function check_item($item, $category, $id=0) {
 	            INNER JOIN ".Rsys::getTable('item')." i ON r.item_id=i.id 
 	            WHERE i.id='".$item_id."'"; //  AND r.subscribe_until < NOW() // TODO: subscribe_until controle
 	    $result=api_sql_query($sql, __FILE__, __LINE__);
-	    while($array=mysql_fetch_array($result))
+	    while($array=Database::fetch_array($result))
 	        $arr[$array['reservation_id']]=$array['start_at'].' - '.$array['end_at'];
 	    return $arr;        
 	}*/
@@ -1572,7 +1573,7 @@ function check_item($item, $category, $id=0) {
 		$till_stamp = Rsys :: mysql_datetime_to_timestamp($till);
 		if (mysql_num_rows($result) == 0)
 			return false;
-		while ($array = mysql_fetch_array($result)) {
+		while ($array = Database::fetch_array($result)) {
 			$ids .= $array['id'].',';
 			$current_start_at = Rsys :: mysql_datetime_to_timestamp($array['start_at']);
 			$current_end_at = Rsys :: mysql_datetime_to_timestamp($array['end_at']);
@@ -1588,7 +1589,7 @@ function check_item($item, $category, $id=0) {
 		$ids = substr($ids, 0, -1);
 		$sql = "SELECT * FROM ".Rsys :: getTable('subscription')." WHERE reservation_id IN (".$ids.") AND (start_at='0000-00-00 00:00:00' OR (start_at<='".$from."' AND end_at>='".$from."') OR (start_at>='".$from."' AND start_at<='".$till."')) ORDER BY start_at ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		while ($array = Database::fetch_array($result, 'ASSOC')) {
 			// echo $array['reservation_id'].': '.$array['start_at'].'-'.$array['end_at'].'<br />';
 			if ($rarr['reservations'][$array['reservation_id']]['info']['timepicker']) { 
 				$current_start_at = Rsys :: mysql_datetime_to_timestamp($array['start_at']);
@@ -1612,7 +1613,7 @@ function check_item($item, $category, $id=0) {
 						                INNER JOIN ".Rsys :: getTable('item')." i ON r.item_id=i.id
 						                WHERE r.id NOT IN (SELECT s.reservation_id FROM ".Rsys :: getTable('subscription')." s WHERE r.id=s.reservation_id AND s.user_id='".api_get_user_id()."') AND i.id='".$item_id."'"; //  AND r.subscribe_until < NOW() // TODO: subscribe_until controle
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result))
+		while ($array = Database::fetch_array($result))
 			$arr[$array['reservation_id']] = $array['start_at'].' - '.$array['end_at'];
 		return $arr;
 	}
@@ -1627,7 +1628,7 @@ function check_item($item, $category, $id=0) {
 		// TODO: only return for current user...
 		$sql = "SELECT r.*,s.start_at AS tp_start,s.end_at AS tp_end,s.accepted FROM ".Rsys :: getTable('subscription')." s INNER JOIN ".Rsys :: getTable('reservation')." r ON s.reservation_id = r.id WHERE ((r.timepicker=0 AND r.start_at>='".$from."' AND r.end_at<='".$till."') OR (s.start_at>='".$from."' AND s.end_at<='".$till."'))";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = mysql_fetch_array($result)) {
+		while ($array = Database::fetch_array($result)) {
 			$arr[] = $array;
 			if ($arr['timepicker'] == 1) {
 				$arr['start_at'] = $arr['tp_start'];
@@ -1640,13 +1641,13 @@ function check_item($item, $category, $id=0) {
 	{	
 		$sql = "SELECT id FROM ".Rsys :: getTable('item')." WHERE name='".$item_name."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		$result_array = mysql_fetch_array($result);
+		$result_array = Database::fetch_array($result);
 		return $result_array['id'];
 	}
 }
 $language_file = 'reservation';
 $cidReset = true; 
-require_once dirname(__FILE__).'/../inc/global.inc.php';
+require_once ('../inc/global.inc.php');
 Rsys :: init();
 require_once 'rcalendar.php';
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');

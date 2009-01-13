@@ -141,7 +141,7 @@ function get_options_data($from, $number_of_items, $column, $direction)
 	return $return;	
 }
 
-function get_number_of_options($from, $number_of_items, $column, $direction)
+function get_number_of_options($from=null, $number_of_items=null, $column=null, $direction=null)
 {
 	// Database table definition
 	$table_userfields_options 	= Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);

@@ -1081,7 +1081,8 @@ function display_user_overview_export_options()
 		$form->addElement('submit', null, get_lang('Ok'));
 		
 		// setting the default values for the form that contains all the extra fields
-		foreach ($_SESSION['additional_export_fields'] as $key => $value)
+		if(is_array($_SESSION['additional_export_fields']))
+		foreach($_SESSION['additional_export_fields'] as $key => $value)
 		{
 			$defaults['extra_export_field'.$value]=1;
 		}
@@ -1109,7 +1110,7 @@ function display_user_overview_export_options()
 			// adding the fields that will be also exported to a message string
 			foreach ($_SESSION['additional_export_fields'] as $key=>$extra_field_export)
 			{
-				$message .= '<li>'.$extrafields[$extra_field_export][3].$count.'</li>';
+				$message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
 			}			
 
 			// Displaying a feedback message

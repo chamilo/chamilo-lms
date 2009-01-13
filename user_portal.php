@@ -1,4 +1,4 @@
-<?php // $Id: user_portal.php 17610 2009-01-09 01:47:34Z marvil07 $
+<?php // $Id: user_portal.php 17686 2009-01-13 18:20:00Z juliomontoya $
   
 /* For licensing terms, see /dokeos_license.txt */
 /**
@@ -943,6 +943,24 @@ echo '</div>';
 if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu'])) {
 	echo '<div class="note">';
 	api_plugin('mycourses_menu');
+	echo '</div>';
+}
+
+if (get_setting('allow_reservation')=='true') {
+	include_once('main/reservation/rsys.php'); 
+	echo '<div class="menusection">';
+	echo '<span class="menusectioncaption">'.get_lang('BookConfig').'</span>';
+	echo '<ul class="menulist">';
+	echo '<a href="main/reservation/reservation.php">'.get_lang('Booking').'</a><br/>'; 
+	//echo '<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br/>';
+	
+	/*require_once('main/reservation/rsys.php'); 
+	if(api_is_platform_admin() || Rsys :: check_user_status() == 1) { // Only for admins & teachers...
+	    echo '<a href="main/reservation/m_item.php">'.get_lang('ManageItems').'</a><br/>';
+	    echo '<a href="main/reservation/m_reservation.php">'.get_lang('ManageReservationPeriods').'</a><br/>';
+	}
+	*/
+	echo '</ul>';
 	echo '</div>';
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 17665 2009-01-12 21:14:26Z iflorespaz $
+// $Id: inscription.php 17680 2009-01-13 16:33:00Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -204,13 +204,13 @@ foreach ($extra as $id => $field_details) {
 			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);	
 			break;
 		case USER_FIELD_TYPE_DATE:
-			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3]);
+			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'registration'));
 			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
 			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			$form->applyFilter('theme', 'trim');
 			break;
 		case USER_FIELD_TYPE_DATETIME:
-			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3]);
+			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'registration'));
 			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			$form->applyFilter('theme', 'trim');
 			break;

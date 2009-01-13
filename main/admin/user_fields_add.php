@@ -1,4 +1,4 @@
-<?php // $Id: user_fields_add.php 16954 2008-11-26 14:41:35Z pcool $
+<?php // $Id: user_fields_add.php 17709 2009-01-13 21:16:03Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -106,17 +106,19 @@ if (is_numeric($_GET['field_id']))
 	$defaults['fieldtype'] = $form_information['field_type'];
 	$count = 0;
 	// we have to concatenate the options
-	foreach ($form_information['options'] as $option_id=>$option)
-	{
-		if ($count<>0)
+	if (count($form_information['options'])>0) {
+		foreach ($form_information['options'] as $option_id=>$option)
 		{
-			$defaults['fieldoptions'] = $defaults['fieldoptions'].'; '.$option['option_display_text'];
+			if ($count<>0)
+			{
+				$defaults['fieldoptions'] = $defaults['fieldoptions'].'; '.$option['option_display_text'];
+			}
+			else 
+			{
+				$defaults['fieldoptions'] = $option['option_display_text'];
+			}
+			$count++;
 		}
-		else 
-		{
-			$defaults['fieldoptions'] = $option['option_display_text'];
-		}
-		$count++;
 	}
 }
 $form->setDefaults($defaults);

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 17660 2009-01-12 17:59:35Z yannoo $
+<?php // $Id: index.php 17685 2009-01-13 18:13:56Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -247,6 +247,17 @@ if(api_is_platform_admin()){
  </ul>
 </div>
 <?php
+	if (get_setting('allow_reservation')=="true") 
+	{
+	?>
+		<div class="admin_section">
+		<h4><img src="../img/settings.gif" border="0" style="vertical-align: middle;" alt="" /> <?php echo ucfirst(get_lang('BookingSystem')); ?></h4>
+		<ul>
+		<li><a href="../reservation/m_category.php"><?php echo get_lang('AdminRCategories'); ?></a></li>
+		</ul>
+		</div>
+	<?php
+	}
 }
 
 /**

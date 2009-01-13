@@ -13,4 +13,7 @@ $TermEditAction = "Upravi&#357; výraz";
 $TermDeleteAction = "Zmaza&#357; výraz";
 $CreationDate = "Dátum vytvorenia";
 $UpdateDate = "Dátum aktualizácie";
+$TermAdded = "Výraz pridaný";
+$YouMustEnterATermName = "Musíte zada&#357; výraz";
+$YouMustEnterATermDefinition = "Musíte zada&#357; definíciu výrazu";
 ?>

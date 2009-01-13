@@ -646,4 +646,6 @@ $SearchCombineSearchWith = "Combina le parole chiave con";
 $SearchFeatureNotEnabledComment = "La ricerca a testo libero non è consentita in questo portale. Contatta l\'amministratore del sistema per ulteriori informazioni.";
 $Top = "Inizio";
 $YourTextHere = "Inserisci il testo";
+$OrderBy = "Ordina per";
+$FieldRequired = "Campo obbligatorio";
 ?>

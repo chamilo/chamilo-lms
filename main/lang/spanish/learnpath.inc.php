@@ -210,4 +210,6 @@ $UplAlreadyExists = "Ya existe";
 $UnknownPackageFormat = "Formato desconocido de paquete";
 $UplUnableToSaveFile = "Imposible de guardar el archivo";
 $UnknownPackageFormat = "El formato de este paquete no ha sido reconocido. Por favor, compruebe este es un paquete válido.";
+$EditLPSettings = "Cambiar parámetros de lección";
+$SaveLPSettings = "Guardar parámetros de lección";
 ?>

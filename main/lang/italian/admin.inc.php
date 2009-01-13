@@ -858,4 +858,7 @@ $SearchShowUnlinkedResultsTitle = "Ricerca a testo libero: mostra i risultati no
 $SearchShowUnlinkedResultsComment = "Nel mostrare i risultati di una ricerca a testo libero, come comportarsi con i risultati inaccessibili per l\'utente?";
 $SearchHideUnlinkedResults = "non mostrarli";
 $SearchShowUnlinkedResults = "Mostrali, ma rimuovendo il collegamento alla risorsa";
+$Templates = "Modelli";
+$HideCampusFromPublicDokeosPlatformsList = "Non mostrare il mio Campus nell\'elenco dei portali Dokeos";
+$EnableVersionCheck = "Abilita il controllo di versione";
 ?>

@@ -67,4 +67,5 @@ $RepeatEnd = "Finalizar las repeticiones el";
 $RepeatedEventViewOriginalEvent = "Ver el evento inicial";
 $ICalFileImport = "Importar un fichero iCal/ics";
 $AllUsersOfThePlatform = "Todos los usuarios de la Plataforma";
+$GlobalEvent = "Evento global";
 ?>

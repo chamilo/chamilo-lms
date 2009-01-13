@@ -646,4 +646,5 @@ $SearchCombineSearchWith = "Combinar palabras clave con";
 $SearchFeatureNotEnabledComment = "La búsqueda full-text no esta activada por este portal. Por favor ponse en contacto con su administrador.";
 $Top = "Inicio";
 $YourTextHere = "Su texto aquí";
+$OrderBy = "Ordenar por";
 ?>

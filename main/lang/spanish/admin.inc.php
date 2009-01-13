@@ -858,4 +858,7 @@ $SearchShowUnlinkedResultsTitle = "Búsqueda full-text: mostrar resultados no acc
 $SearchShowUnlinkedResultsComment = "Al momento de mostrar los resultados de la búsqueda full-text, como debería comportarse el sistema para los enlaces que no estan accesibles para el usuario actual?";
 $SearchHideUnlinkedResults = "No mostrarlos";
 $SearchShowUnlinkedResults = "Mostrarlos pero sin enlace hasta el recurso";
+$Templates = "Plantillas";
+$HideCampusFromPublicDokeosPlatformsList = "No mostrar mi campus en la lista pública de portales Dokeos";
+$EnableVersionCheck = "Activar la verificación de versiones";
 ?>

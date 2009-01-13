@@ -126,4 +126,6 @@ $TitleColumnGradebook = "Título en el cuaderno de calificaciones";
 $QualifyThreadGradebook = "Calificar en el cuaderno de calificaciones";
 $QualifyWeight = "Peso de la calificación";
 $QualifyNumeric = "Calificación numérica sobre";
+$AlterQualifyThread = "Editar la calificación del tema";
+$ForumMoved = "El foro se ha movido";
 ?>

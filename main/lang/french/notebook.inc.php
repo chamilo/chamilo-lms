@@ -13,4 +13,5 @@ $WriteYourNoteHere = "Cliquez ici pour écrire une nouvelle note";
 $SearchByTitle = "Rechercher par titre";
 $WriteTheTitleHere = "Entrez le titre ici";
 $UpdateDate = "Dernière modification";
+$Notebook = "Bloc notes";
 ?>

@@ -8,6 +8,7 @@ $dropbox_lang["noUserSelected"]  = "Prosím vyberte používate&#318;a, ktorému chc
 $dropbox_lang["noFileSpecified"]  = "Neur&#269;ili ste súbor na na&#269;ítanie.";
 $dropbox_lang["tooBig"]  = "Bu&#271; ste súbor nevybrali, alebo je ve&#318;mi ve&#318;ký.";
 $dropbox_lang["uploadError"]  = "Chyba pri na&#269;ítavaní súboru. Prosím kontaktujte svojho systémového administrátora.";
+$dropbox_lang["errorCreatingDir"]  = "Katalóg nie je možné vytvori&#357;. Prosím kontaktujte svojho systémového administrátora.";
 $dropbox_lang["uploadFile"]  = "Uloži&#357; dokument na server";
 $dropbox_lang["authors"]  = "Autori";
 $dropbox_lang["description"]  = "Opis dokumentu";

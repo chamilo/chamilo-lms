@@ -32,4 +32,5 @@ $DocumentDeleted = "Tiedosto poistettu";
 $SendMailBody = "Käyttäjä on tehnyt dokumentin kurssisi julkaisu työkalulla.";
 $DirDelete = "Poista hakemisto";
 $FolderUpdated = "Kansio päivitetty";
+$AddToCalendar = "Lisää kalenteriin";
 ?>

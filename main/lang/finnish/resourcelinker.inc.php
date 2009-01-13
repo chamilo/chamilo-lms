@@ -33,7 +33,7 @@ $Chapter = "Kappale";
 $NoAgendaItems = "Kalenterimerkintöjä ei ole";
 $AgendaAdd = "Lisää merkintä";
 $UserGroupFilter = "Ryhmä valitsin";
-$AgendaSortChronologicallyUp = "Järjestä merkinnät järjesteykseen(vanhin ensin)";
+$AgendaSortChronologicallyUp = "Järjestä merkinnät järjesteykseen (vanhin ensin)";
 $ShowCurrent = "Näytä kalenterimerkinnät";
 $ModifyCalendarItem = "Muokka kalenterimerkintää";
 $ItemTitle = "Nimi";
@@ -45,4 +45,5 @@ $ForumAddNewTopic = "Foorumi: lisää uusi aihe";
 $ForumEditTopic = "Foorumi: muokkaa aihetta";
 $ExerciseAnswers = "Tehtävä: Vastaus";
 $ForumReply = "Foorumi: vastaus";
+$AgendaSortChronologicallyDown = "Järjestä merkinnät järjesteykseen (uusin ensin) ";
 ?>

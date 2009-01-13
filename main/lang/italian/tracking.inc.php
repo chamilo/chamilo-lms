@@ -226,4 +226,9 @@ $TotalExercisesScoreObtained = "Punteggio totale quesiti";
 $TotalExercisesScorePossible = "Punteggio massimo totale quesiti";
 $TotalExercisesAnswered = "Numero di quesiti cui si è risposto";
 $TotalExercisesScorePercentage = "Percentuale di punteggio ottenuto sul totale";
+$ForumForumsNumber = "Numero di forum";
+$ForumThreadsNumber = "Numero di argomenti";
+$ForumPostsNumber = "Numero di messaggi";
+$ChatConnectionsDuringLastXDays = "Numero di connessioni in chat negli ultimi %s giorni";
+$ChatLastConnection = "Ultima connessione in chat";
 ?>

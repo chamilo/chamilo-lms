@@ -15,4 +15,7 @@ $OrderBy = "Trier par";
 $CreationDate = "Date de création";
 $UpdateDate = "Date de modification";
 $PreSelectedOrder = "Prédéfini";
+$TermAdded = "Terme ajouté";
+$YouMustEnterATermName = "Veuillez entrer un terme";
+$YouMustEnterATermDefinition = "Veuillez entrer la définition du terme";
 ?>

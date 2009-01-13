@@ -10,4 +10,8 @@ $YouMustWriteANote = "Scrivi un appunto";
 $WriteYourNoteHere = "Scrivi qui un appunto";
 $SaveNote = "Salva l\'appunto";
 $WriteYourNoteHere = "Scrivi qui il tuo appunto";
+$SearchByTitle = "Cerca nell\'intestazione";
+$WriteTheTitleHere = "Scrivi qui l\'intestazione";
+$UpdateDate = "Ultima modifica";
+$Notebook = "Appunti";
 ?>

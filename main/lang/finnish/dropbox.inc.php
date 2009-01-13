@@ -50,4 +50,6 @@ $dropbox_lang["mailingJustUploadNoOther"]  = "Et voi tallentaa itsellesi ja lähe
 $dropbox_lang["giveFeedback"] = "Anna / muokkaa palautetta";
 $dropbox_lang["showFeedback"] = "Näytä palaute";
 $dropbox_lang["backList"] = "Takaisin";
+$ReceivedFiles = "Vastaanotetut Tiedostot";
+$SentFiles = "Lähetetyt Tiedostot";
 ?>

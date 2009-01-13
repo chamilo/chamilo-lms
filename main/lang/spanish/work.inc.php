@@ -48,4 +48,5 @@ $ExpiryDateToSendWorkIs = "Fecha de vencimiento para enviar tareas";
 $EnableExpiryDate = "Activar fecha de vencimiento";
 $EnableEndDate = "Activar fecha de finalización";
 $IsNotPosibleSaveTheDocument = "No se pudo guardar el documento";
+$EndDateCannotBeBeforeTheExpireDate = "Fecha de término no puede ser antes de la fecha de caducidad";
 ?>

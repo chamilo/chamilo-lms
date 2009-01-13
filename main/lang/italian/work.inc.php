@@ -48,4 +48,5 @@ $ExpiryDateToSendWorkIs = "Data di scadenza per l\'invio di elaborati";
 $EnableExpiryDate = "Abilita la data di scadenza";
 $EnableEndDate = "Abilita la data di chiusura";
 $IsNotPosibleSaveTheDocument = "Non è possibile salvare il documento";
+$EndDateCannotBeBeforeTheExpireDate = "La data di conclusione non può essere successiva alla scadenza ultima";
 ?>

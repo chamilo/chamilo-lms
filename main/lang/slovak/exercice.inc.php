@@ -103,6 +103,7 @@ $langShowScor = "Zobrazi&#357; hodnotenie študentom:";
 $langStep1 = "Krok 1";
 $langStep2 = "Krok 2";
 $langTake = "vzia&#357;";
+$langNoSpace = "Na&#269;ítavanie bolo neúspešné. Vo Vašom katalógu nie je dos&#357; priestoru na disku";
 $langNoImg = "Test bez obrázkov";
 $langImgNote_en = "obrázok / obrázky :";
 $langDocDeleted = "Dokument zmazaný";

@@ -48,4 +48,5 @@ $ExpiryDateToSendWorkIs = "Expiry date before which to send assignments";
 $EnableExpiryDate = "Enable expiry date";
 $EnableEndDate = "Enable end date";
 $IsNotPosibleSaveTheDocument = "Impossible to save the document";
+$EndDateCannotBeBeforeTheExpireDate = "End date cannot be before the expire date";
 ?>

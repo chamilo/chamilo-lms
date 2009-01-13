@@ -13,4 +13,5 @@ $WriteYourNoteHere = "Escribe tu nota aqui";
 $SearchByTitle = "Buscar por título";
 $WriteTheTitleHere = "Escriba el título aquí";
 $UpdateDate = "Fecha de actualización";
+$Notebook = "Notas personales";
 ?>

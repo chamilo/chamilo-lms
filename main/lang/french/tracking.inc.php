@@ -226,4 +226,9 @@ $TotalExercisesScoreObtained = "Score total obtenu pour les exercices";
 $TotalExercisesScorePossible = "Score total possible pour les exercices";
 $TotalExercisesAnswered = "Nombre d\'exercices répondus";
 $TotalExercisesScorePercentage = "Pourcentage du score total pour les exercices";
+$ForumForumsNumber = "Nombre de forums";
+$ForumThreadsNumber = "Nombre de fils de discussion";
+$ForumPostsNumber = "Nombre de messages";
+$ChatConnectionsDuringLastXDays = "Connexions au chat au cours des %s derniers jours";
+$ChatLastConnection = "Dernière connexion au chat";
 ?>

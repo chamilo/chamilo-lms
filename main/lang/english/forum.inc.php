@@ -126,4 +126,6 @@ $TitleColumnGradebook = "Title column gradebook";
 $QualifyThreadGradebook = "Qualify thread in gradebook";
 $QualifyWeight = "Weight of qualification";
 $QualifyNumeric = "Maximum score";
+$AlterQualifyThread = "Alter qualify thread";
+$ForumMoved = "The forum has moved";
 ?>

@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$langStatDB              = "Štatistická databáza";
+$langEnableTracking      = "Aktivova&#357; štatistiku";
 $langDBPassword = "Databázové heslo";
 $langMainDB = "Hlavná Dokeos databáza (DB)";
 $langAllFieldsRequired = "všetky polia povinné";
@@ -18,6 +20,7 @@ $langStep4 = "Krok 4 zo 6";
 $langStep5 = "Krok 5 zo 6";
 $langStep6 = "Krok 6 zo 6";
 $langCfgSetting = "Konfigura&#269;né nastavenia";
+$langDBSetting = "Nastavenia MySQL databázy";
 $langMainLang = "Hlavný jazyk";
 $langLicence = "Licencia";
 $langLastCheck = "Posledná kontrola pred inštaláciou";
@@ -46,9 +49,12 @@ $OK = "OK";
 $RecommendedSettings = "Odporú&#269;ané nastavenia";
 $Setting = "Nastavenie";
 $Actual = "Aktuálne";
+$DirectoryAndFilePermissions = "Povolenia pre katalógy a súbory";
 $IAccept = "Súhlasím";
+$ConfigSettingsInfo = "Nasledujúce hodnoty budú zapísané vo Vašom konfigura&#269;nom súbore";
 $DokeosInstallation = "Dokeos inštalácia";
 $InstallDokeos = "Inštalova&#357; Dokeos";
+$GoToYourNewlyCreatedPortal = "Cho&#271;te na Váš novo zriadený portál.";
 $Version_ = "Verzia";
 $UpdateFromDokeosVersion = "Aktualizácia z Dokeos-u";
 $WelcomToTheDokeosInstaller = "Vitajte v inštala&#269;nom programe Dokeos-u";
@@ -62,6 +68,7 @@ $Error = "Chyba";
 $Back = "Spä&#357;";
 $HasNotBeenFound = "nenájdený";
 $PleaseGoBackToStep1 = "Prosím cho&#271;te spä&#357; na krok 1";
+$HasNotBeenFoundInThatDir = "nebol nájdený v tomto katalógu";
 $PleaseCheckTheseValues = "Prosím skontrolujte tieto hodnoty";
 $PleaseGoBackToStep = "Prosím cho&#271;te spä&#357; na krok";
 $PleasGoBackToStep1 = "Prosím cho&#271;te spä&#357; na krok 1";

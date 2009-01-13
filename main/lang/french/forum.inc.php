@@ -126,4 +126,6 @@ $TitleColumnGradebook = "Titre de colonne dans le bulletin";
 $QualifyThreadGradebook = "Coter ce fil de discussion dans le bulletin";
 $QualifyWeight = "Poids de la cote";
 $QualifyNumeric = "Score maximum";
+$AlterQualifyThread = "Changer la cotation du fil de discussion";
+$ForumMoved = "Le forum a été déplacé";
 ?>

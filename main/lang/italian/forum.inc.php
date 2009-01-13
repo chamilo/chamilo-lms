@@ -126,4 +126,6 @@ $TitleColumnGradebook = "Intestazione di colonna del registro";
 $QualifyThreadGradebook = "Assegna il voto sull\'argomento nel registro";
 $QualifyWeight = "Peso della valutazione";
 $QualifyNumeric = "Punteggio massimo";
+$AlterQualifyThread = "Modifica la qualifica della discussione";
+$ForumMoved = "Il forum è stato spostato";
 ?>

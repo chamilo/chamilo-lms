@@ -1005,6 +1005,11 @@ FCK.RegisterDoubleClickHandler(
 // Checking whether a selected object is a real image or not.
 FCK.IsRealImage = function ( tag )
 {
+	if ( !tag )
+	{
+		return false ;
+	}
+
 	return ( tag.nodeName.IEquals( 'img' ) &&
 		!tag.getAttribute( '_fckfakelement' ) &&
 		!tag.getAttribute( '_fckflash' ) &&
@@ -1016,6 +1021,11 @@ FCK.IsRealImage = function ( tag )
 // Checking for audio file reference which is to be used by a flash player.
 FCK.IsAudio = function ( tag )
 {
+	if ( !tag )
+	{
+		return false ;
+	}
+
 	if ( tag.nodeName.IEquals( 'embed' ) )
 	{
 		if ( !tag.src )
@@ -1048,6 +1058,11 @@ FCK.IsAudio = function ( tag )
 // Checking for video file reference within an embedded object.
 FCK.IsVideo = function ( tag )
 {
+	if ( !tag )
+	{
+		return false ;
+	}
+
 	if ( tag.nodeName.IEquals( 'embed' ) )
 	{
 		if ( !tag.src )

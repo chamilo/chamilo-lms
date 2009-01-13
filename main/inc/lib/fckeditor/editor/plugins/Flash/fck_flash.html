@@ -30,7 +30,8 @@
 		<script type="text/javascript">
 		<!--
 		//document.writeln(FCK.TempBaseTag);
-		document.writeln(FCKConfig.BaseHref);
+		if ( window.parent.FCKConfig.BaseHref.length > 0 )
+			document.write( '<base href="' + window.parent.FCKConfig.BaseHref + '">' ) ;
 		-->
 		</script>
 	</head>

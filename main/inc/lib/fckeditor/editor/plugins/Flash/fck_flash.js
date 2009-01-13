@@ -145,7 +145,8 @@ function updatePreview()
     		GetE( 'txtURL' ).value = sUrl ; 
 		}
 		*/
-		oMedia.url = oEditor.FCKConfig.CreateDocumentWebDir + GetE( 'txtURL' ).value ;	 // this variable is call in document/create_document.php
+		//oMedia.url = oEditor.FCKConfig.CreateDocumentWebDir + GetE( 'txtURL' ).value ;	 // this variable is call in document/create_document.php
+		oMedia.url = FCK.AddAbsolutePath( GetE( 'txtURL' ).value ) ;
 		
 		updateMovie( oMedia ) ;
 		

@@ -20,7 +20,6 @@ require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
 		
 
 $form_style= '
@@ -52,17 +51,22 @@ if(isset($_POST['convert'])){
 		{
 			require('../newscorm/lp_upload.php');
 			if(isset($o_doc) && $first_item_id != 0){
-				foreach ($specific_fields as $specific_field) {
-					$values = explode(',', trim($_POST[$specific_field['code']]));
-					if ( !empty($values) ) {
-						foreach ($values as $value) {
-							$value = trim($value);
-							if ( !empty($value) ) {
-								add_specific_field_value($specific_field['id'], api_get_course_id(), TOOL_LEARNPATH, $o_doc->lp_id, $value);
-							}
-						}
-					}
-				}
+                if (api_get_setting('search_enabled')=='true') {
+                    require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+                    $specific_fields = get_specific_field_list();                    
+                
+    				foreach ($specific_fields as $specific_field) {
+    					$values = explode(',', trim($_POST[$specific_field['code']]));
+    					if ( !empty($values) ) {
+    						foreach ($values as $value) {
+    							$value = trim($value);
+    							if ( !empty($value) ) {
+    								add_specific_field_value($specific_field['id'], api_get_course_id(), TOOL_LEARNPATH, $o_doc->lp_id, $value);
+    							}
+    						}
+    					}
+    				}
+                }
 				header('Location: ../newscorm/lp_controller.php?'.api_get_cidreq().'&lp_id='.$o_doc->lp_id.'&action=view_item&id='.$first_item_id);
 			}
 			else {

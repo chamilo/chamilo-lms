@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 17320 2008-12-16 14:47:36Z cfasanando $
+<?php // $Id: slideshow.php 17720 2009-01-14 17:07:43Z herodoto $
 
 /*
 ==============================================================================
@@ -124,39 +124,15 @@ function MM_openBrWindow(theURL,winName,features) { //v2.0
 
 <div class="actions">
 	<?php
-	// previous slide
-	if ($slide > 0)
-	{
-		echo '<a href="slideshow.php?slide_id='.$previous_slide.'&amp;curdirpath='.$pathurl.'">';
-	}
-	echo '&lt;&lt;'.get_lang('_previous_slide');
-	if ($slide > 0)
-	{
-		echo "</a> ";
-	}
-
-	// divider
-	echo '&nbsp;|&nbsp;';
-
-	// next slide
-	if ($slide < $total_slides -1 and $slide_id <> "all")
-	{
-	echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'>";
-	}
-	echo get_lang('_next_slide').'&gt;&gt;';
-	if ($slide > 0)
-	{
-		echo "</a> ";
-	}
 
 	// exit the slideshow
-	echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'parent.gif" alt="">'.get_lang('_exit_slideshow').'</a>&nbsp;';
+	echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'folder_up.gif" alt="">'.get_lang('_exit_slideshow').'</a>&nbsp;';
 
 	// show thumbnails
 	if ($slide_id <> "all") {
-		echo '<a href="slideshow.php?slide_id=all&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'scormexitfullscreen.jpg" alt="">'.get_lang('_show_thumbnails').'</a>&nbsp;';
+		echo '<a href="slideshow.php?slide_id=all&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'thumbnails.png" alt="">'.get_lang('_show_thumbnails').'</a>&nbsp;';
 	} else {
-		echo get_lang('_show_thumbnails').' '; 
+		echo '<img src="'.api_get_path(WEB_IMG_PATH).'thumbnails_na.png" alt="">'.get_lang('_show_thumbnails').'&nbsp;';
 	}
 	$image = $sys_course_path.$_course['path']."/document/".$folder.$image_files_only[$slide];
 	
@@ -166,11 +142,7 @@ function MM_openBrWindow(theURL,winName,features) { //v2.0
 </div>
 
 <?php
-if ($slide_id <> "all")
-{
-	echo get_lang('_image')." ".$next_slide." ".get_lang('_of')." ".$total_slides;
-}
-echo '<br />'.htmlspecialchars($image_files_only[$slide]);
+echo '<br />';
 
 // =======================================================================
 //				TREATING THE POST DATA FROM SLIDESHOW OPTIONS
@@ -245,8 +217,8 @@ foreach ($image_tag as $image_tag_item)
 	{
 		echo "\n<tr>\n";
 	}
-	echo "\t<td><a href='slideshow.php?slide_id=".$i."&curdirpath=".$pathurl."'>".$image_tag_item."</a></td>\n";
-	if ($i % 3 == 0 and $i !== 0)
+	echo "\t<td style=\"border:solid\"><a href='slideshow.php?slide_id=".$i."&curdirpath=".$pathurl."'>".$image_tag_item."</a></td>\n";
+	if ($i % 6 == 0 and $i !== 0) // 6 cols +1
 	{
 		echo "</tr>\n<tr>\n";
 	}
@@ -285,9 +257,55 @@ if ($slide_id !== "all")
 	$sql = "SELECT * FROM $tbl_documents WHERE path='".$pathpart.$image_files_only[$slide]."'";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	$row = mysql_fetch_array($result);
-	echo $row['comment'];
 
-	echo "<center><img src='download.php?doc_url=$path/".$image_files_only[$slide]."' border='0' $height_width_tags></center>";
+	echo '<table align="center" border="0">';
+	echo '<tr>';
+	echo '<td align="center">';
+	echo "<img src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' border='0' $height_width_tags>";
+	echo '</td>';
+	echo '</tr>';
+	echo '<tr>';
+	echo '<td align="center">';
+	$aux= explode(".", htmlspecialchars($image_files_only[$slide]));
+    $ext= $aux[count($aux)-1];
+	echo '<strong>'.basename(htmlspecialchars($image_files_only[$slide]), '.'.$ext).'</strong>';	
+	echo '<br />'.$row['comment'].'<br />';	
+	list($width, $high) = getimagesize($image);
+	echo $width.' x '.$high.' '.round((filesize($image)/1024),2).' KB';	
+    echo ' - '.$ext; 	
+	echo '</td>';
+	echo '</tr>';
+	echo '<tr>';
+	echo '<td align="center">';
+	// previous slide
+	if ($slide > 0)
+	{
+		echo '<a href="slideshow.php?slide_id='.$previous_slide.'&amp;curdirpath='.$pathurl.'">';
+	}
+	echo '&lt;&lt;'.get_lang('_previous_slide');
+	if ($slide > 0)
+	{
+		echo "</a> ";
+	}	
+	// divider
+	if ($slide_id <> "all")
+	{
+		echo ' '.$next_slide.'/'.$total_slides.' ';
+	}		
+	// next slide
+	if ($slide < $total_slides -1 and $slide_id <> "all")
+	{
+		echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'>";
+	}
+	echo get_lang('_next_slide').'&gt;&gt;';
+	if ($slide > 0)
+	{
+		echo '</a>';
+	}
+	echo '</td>';
+	echo '</tr>';
+	echo '</table>';
+	
 } // if ($slide_id!=="all")
 
 Display :: display_footer();

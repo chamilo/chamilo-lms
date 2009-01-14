@@ -905,7 +905,7 @@ function check_item($item, $category, $id=0) {
 	 *  @return -   Array               The returned rows
 	 */
 	function get_table_reservations($from, $per_page, $column, $direction) {
-		$sql = "SELECT DISTINCT r.id AS col0, i.name AS col1,  DATE_FORMAT(r.start_at,'%Y-%m-%d %k:%i') AS col2, DATE_FORMAT(r.end_at,'%Y-%m-%d %k:%i') AS col3," .
+		$sql = "SELECT DISTINCT r.id AS col0, i.name AS col1,  DATE_FORMAT(r.start_at,'%Y-%m-%d %H:%i') AS col2, DATE_FORMAT(r.end_at,'%Y-%m-%d %H:%i') AS col3," .
 			   "				DATE_FORMAT(r.subscribe_from,'%Y-%m-%d %k:%i') AS col4, DATE_FORMAT(r.subscribe_until,'%Y-%m-%d %k:%i') AS col5,IF(timepicker <> 0, '".get_lang('TimePicker')."',CONCAT(r.subscribers,'/',r.max_users)) AS col6, r.notes AS col7, r.id as col8  
 						                FROM ".Rsys :: getTable('reservation')." r
 						                INNER JOIN ".Rsys :: getTable('item')." i ON r.item_id=i.id 
@@ -1162,9 +1162,13 @@ function check_item($item, $category, $id=0) {
 
 	function get_table_subcribed_reservations($from, $per_page, $column, $direction) {
 		
-		$sql = "SELECT  i1.name as col0,c.name as col1, r1.start_at as col2, r1.end_at as col3,CONCAT(u.lastname,' ',u.firstname) as col4,s.start_at as col5, s.end_at as col6,s.accepted as col7
+		$sql = "SELECT  i1.name as col0,c.name as col1, 
+				DATE_FORMAT(r1.start_at ,'%Y-%m-%d %H:%i') as col2,
+				DATE_FORMAT(r1.end_at ,'%Y-%m-%d %H:%i') as col3, CONCAT(u.lastname,' ',u.firstname) as col4,
+				DATE_FORMAT(s.start_at ,'%Y-%m-%d %H:%i')  as col5,
+				DATE_FORMAT(s.end_at ,'%Y-%m-%d %H:%i')    as col6, s.accepted as col7
 				FROM ".Rsys :: getTable('subscription')." s, ".Rsys :: getTable('reservation')." r1, ".Database :: get_main_table(TABLE_MAIN_USER)." u," .Rsys :: getTable('item')." i1,".Rsys :: getTable('category')." c
-				where r1.id = s.reservation_id
+				WHERE r1.id = s.reservation_id
 				and c.id = i1.category_id
 				and i1.id = r1.item_id
 				and u.user_id = s.user_id
@@ -1194,13 +1198,13 @@ function check_item($item, $category, $id=0) {
 			$row[] = $array[2];
 			$row[] = $array[3];
 			$row[] = $array[4];
-			if ($array[5]=='0000-00-00 00:00:00') {				
+			if ($array[5]=='0000-00-00 00:00') {				
 				$row[] = $array[2];
 			}
 			else {
 				$row[] = $array[5];
 			}
-			if ($array[6]=='0000-00-00 00:00:00') {
+			if ($array[6]=='0000-00-00 00:00') {
 				$row[] = $array[3];
 			}
 			else {
@@ -1386,11 +1390,9 @@ function check_item($item, $category, $id=0) {
 	}
 
 	function check_date_month_calendar($date, $itemid) {
-		$sql = "SELECT id FROM ".Rsys :: getTable('reservation')." 
-				
-				             
-				    					WHERE ((DATE_FORMAT(start_at, '%Y-%m-%e') = '".$date."' OR DATE_FORMAT(end_at, '%Y-%m-%e') = '".$date."' 
-									OR (start_at <= '".$date." 00:00:00' AND end_at >= '".$date." 00:00:00' ) OR (start_at>='".$date." 00:00:00' AND start_at<='".$date." 23:59:59')) AND (subscribers < max_users OR timepicker=1)) AND item_id= '".$itemid."'";
+		$sql = "SELECT id FROM ".Rsys :: getTable('reservation')."             
+				WHERE ((DATE_FORMAT(start_at, '%Y-%m-%e') = '".$date."' OR DATE_FORMAT(end_at, '%Y-%m-%e') = '".$date."' 
+				OR (start_at <= '".$date." 00:00:00' AND end_at >= '".$date." 00:00:00' ) OR (start_at>='".$date." 00:00:00' AND start_at<='".$date." 23:59:59')) AND (subscribers < max_users OR timepicker=1)) AND item_id= '".$itemid."'";
 		/*
 		    WHERE item_id='".$itemid."'  AND 
 		                ((start_at<='".$date."' AND end_at>='".$date."') OR (start_at>='".$date."' AND start_at<='".$date."'))";
@@ -1469,18 +1471,7 @@ function check_item($item, $category, $id=0) {
 	 *  @return -   Array               The returned rows
 	 */
 	function get_table_subscriptions($from, $per_page, $column, $direction) {
-		/*$sql = "SELECT CONCAT(s.reservation_id,'-',s.dummy) AS col0, i.name AS col1, s.start_at AS col2, s.end_at AS col3, CONCAT(s.reservation_id,'-',s.dummy) AS col4
-				                FROM ".Rsys :: getTable("subscription")." s 
-				                INNER JOIN ".Rsys :: getTable("reservation")." r ON r.id = s.reservation_id
-				                INNER JOIN ".Rsys :: getTable("item")." i ON i.id=r.item_id
-				                WHERE s.user_id = '".api_get_user_id()."'";
-		$sql .= " ORDER BY col".$column." ".$direction." LIMIT ".$from.",".$per_page;
-		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($array = Database::fetch_array($result, MYSQL_NUM))
-			$arr[] = $array;
-		return $arr;*/
-
-		$sql = "SELECT CONCAT(s.reservation_id,'-',s.dummy) AS col0, i.name AS col1, s.start_at AS col2, s.end_at AS col3, CONCAT(s.reservation_id,'-',s.dummy) AS col4, r.start_at, r.end_at, s.accepted,i.blackout
+		$sql = "SELECT CONCAT(s.reservation_id,'-',s.dummy) AS col0, i.name AS col1, DATE_FORMAT(s.start_at ,'%Y-%m-%d %H:%i')  AS col2, DATE_FORMAT(s.end_at ,'%Y-%m-%d %H:%i') AS col3, CONCAT(s.reservation_id,'-',s.dummy) AS col4, DATE_FORMAT(r.start_at ,'%Y-%m-%d %H:%i') , DATE_FORMAT(r.end_at ,'%Y-%m-%d %H:%i') , s.accepted,i.blackout
 				                FROM ".Rsys :: getTable("subscription")." s 
 				                INNER JOIN ".Rsys :: getTable("reservation")." r ON r.id = s.reservation_id
 				                INNER JOIN ".Rsys :: getTable("item")." i ON i.id=r.item_id
@@ -1491,7 +1482,8 @@ function check_item($item, $category, $id=0) {
 		{	$row = array();
 			$row[] = $array[0];
 			$row[] = $array[1];
-			if($array[2]=='0000-00-00 00:00:00' && $array[3]=='0000-00-00 00:00:00')
+			
+			if($array[2]=='0000-00-00 00:00' && $array[3]=='0000-00-00 00:00')
 			{
 				$row[] = $array[5];
 				$row[] = $array[6];

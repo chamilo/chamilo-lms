@@ -1,4 +1,4 @@
-<?php // $Id: user_portal.php 17714 2009-01-13 22:51:23Z juliomontoya $
+<?php // $Id: user_portal.php 17725 2009-01-14 18:41:06Z juliomontoya $
   
 /* For licensing terms, see /dokeos_license.txt */
 /**
@@ -946,7 +946,7 @@ if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu']))
 	echo '</div>';
 }
 
-if (get_setting('allow_reservation')=='true') {
+if (get_setting('allow_reservation')=='true' && api_is_allowed_to_create_course() ){ 
 	//include_once('main/reservation/rsys.php'); 
 	echo '<div class="menusection">';
 	echo '<span class="menusectioncaption">'.get_lang('BookConfig').'</span>';

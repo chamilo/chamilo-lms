@@ -1,4 +1,4 @@
-<?php // $Id: index.php 17685 2009-01-13 18:13:56Z juliomontoya $
+<?php // $Id: index.php 17723 2009-01-14 17:50:21Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -253,7 +253,7 @@ if(api_is_platform_admin()){
 		<div class="admin_section">
 		<h4><img src="../img/settings.gif" border="0" style="vertical-align: middle;" alt="" /> <?php echo ucfirst(get_lang('BookingSystem')); ?></h4>
 		<ul>
-		<li><a href="../reservation/m_category.php"><?php echo get_lang('AdminRCategories'); ?></a></li>
+		<li><a href="../reservation/m_category.php"><?php echo get_lang('ConfigureResourceType'); ?></a></li>
 		</ul>
 		</div>
 	<?php

@@ -246,8 +246,15 @@ class ForumThreadLink extends AbstractLink
     } 
     
     public function get_link() {
+    	//it was extracts the forum id
+   		$tbl_name=$this->get_forum_thread_table();
+    	$sql = 'SELECT * FROM '.$this->get_forum_thread_table()." WHERE thread_id = '".$this->get_ref_id()."'";
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$row    = Database::fetch_array($result,'ASSOC');
+		$forum_id=$row['forum_id'];
+		
     	$url = api_get_path(WEB_PATH)
-		.'main/forum/viewthread.php?cidReq='.$this->get_course_code().'&thread='.$this->get_ref_id().'&gradebook=view';
+		.'main/forum/viewthread.php?cidReq='.$this->get_course_code().'&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;
 		return $url;
 	}
 	private function get_exercise_data() {
@@ -261,4 +268,5 @@ class ForumThreadLink extends AbstractLink
     	}
     	return $this->exercise_data;
     }
+    
 }

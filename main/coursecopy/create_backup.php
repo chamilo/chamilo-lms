@@ -1,5 +1,5 @@
 <?php
-// $Id: create_backup.php 15117 2008-04-25 19:36:36Z yannoo $
+// $Id: create_backup.php 17726 2009-01-14 21:42:50Z juliomontoya $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -103,8 +103,8 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 }
 elseif (isset ($_POST['backup_option']) && $_POST['backup_option'] == 'select_items')
 {
-	$cb = new CourseBuilder();
-	$course = $cb->build();
+	$cb = new CourseBuilder('partial');
+	$course = $cb->build();	
 	Display::display_normal_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
 	CourseSelectForm :: display_form($course);
 }

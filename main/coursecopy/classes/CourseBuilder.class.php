@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 15802 2008-07-17 04:52:13Z yannoo $
+<?php // $Id: CourseBuilder.class.php 17726 2009-01-14 21:42:50Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -53,11 +53,12 @@ class CourseBuilder
 	/**
 	 * Create a new CourseBuilder
 	 */
-	function CourseBuilder()
+	function CourseBuilder($type='')
 	{
 		global $_course;
 		$this->course = new Course();
 		$this->course->code = $_course['official_code'];
+		$this->course->type = $type;
 		$this->course->path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
 		$this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['path'];
 	}
@@ -126,8 +127,13 @@ class CourseBuilder
 	function build_documents()
 	{
 		$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
-		$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-		$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 ORDER BY path';
+		$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);	
+		echo $this->course->type;			
+        if (!empty($this->course->type) && $this->course->type=='partial')        	
+        	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND path NOT LIKE \'/images/gallery%\' ORDER BY path';
+        else
+        	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 ORDER BY path';
+		
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{

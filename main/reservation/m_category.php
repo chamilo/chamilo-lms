@@ -48,10 +48,10 @@ $interbreadcrumb[] = array ("url" => "../admin/index.php", "name" => get_lang('P
 /**
  *  Filter to display the modify-buttons
  * 
- *  @param - int $id The category-id
+ *  @param - int $id The ResourceType-id
  */
 function modify_filter($id) {
-	return '<a href="m_category.php?action=edit&amp;id='.$id.'" title="'.get_lang("EditCategory").'"><img alt="" src="../img/edit.gif" /></a>'.' <a href="m_category.php?action=delete&amp;id='.$id.'" title="'.get_lang("DeleteCategory").'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteCategory")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
+	return '<a href="m_category.php?action=edit&amp;id='.$id.'" title="'.get_lang("EditResourceType").'"><img alt="" src="../img/edit.gif" /></a>'.' <a href="m_category.php?action=delete&amp;id='.$id.'" title="'.get_lang("DeleteResourceType").'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteResourceType")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
 }
 
 /**
@@ -61,35 +61,35 @@ function modify_filter($id) {
 switch ($_GET['action']) {
 	case 'add' :
 		$interbreadcrumb[] = array ("url" => "m_category.php", "name" => $tool_name);
-		Display :: display_header(get_lang('AddNewCategory'));
-		api_display_tool_title(get_lang('AddNewCategory'));
+		Display :: display_header(get_lang('AddNewResourceType'));
+		api_display_tool_title(get_lang('AddNewResourceType'));
 		$form = new FormValidator('category', 'post', 'm_category.php?action=add');
-		$form->add_textfield('name', get_lang('CategoryName'), true, array ('maxlength' => '128'));
+		$form->add_textfield('name', get_lang('ResourceTypeName'), true, array ('maxlength' => '128'));
 		$form->addElement('submit', 'submit', get_lang('Ok'));
 		if ($form->validate()) {
 			$values = $form->exportValues();
 			if (Rsys :: add_category($values['name']))
-				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('CategoryAdded'), "m_category.php", $tool_name),false);
+				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('ResourceTypeAdded'), "m_category.php", $tool_name),false);
 			else
-				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('CategoryExist'), "m_category.php?action=add", get_lang('AddNewCategory')),false);
+				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('ResourceTypeExist'), "m_category.php?action=add", get_lang('AddNewResourceType')),false);
 		} else
 			$form->display();
 		break;
 	case 'edit' :
 		$interbreadcrumb[] = array ("url" => "m_category.php", "name" => $tool_name);
-		Display :: display_header(get_lang('EditCategory'));
-		api_display_tool_title(get_lang('EditCategory'));
+		Display :: display_header(get_lang('EditResourceType'));
+		api_display_tool_title(get_lang('EditResourceType'));
 		$form = new FormValidator('category', 'post', 'm_category.php?action=edit');
-		$form->add_textfield('name', get_lang('CategoryName'), true, array ('maxlength' => '128'));
+		$form->add_textfield('name', get_lang('ResourceTypeName'), true, array ('maxlength' => '128'));
 		$form->addElement('hidden', 'id', $_GET['id']);
 		$form->addElement('submit', 'submit', get_lang('Ok'));
 		$form->setDefaults(Rsys :: get_category($_GET['id']));
 		if ($form->validate()) {
 			$values = $form->exportValues();
 			if (Rsys :: edit_category($values['id'], $values['name']))
-				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('CategoryEdited'), "m_category.php", $tool_name),false);
+				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('ResourceTypeEdited'), "m_category.php", $tool_name),false);
 			else
-				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('CategoryExist'), "m_category.php?action=edit&id=".$values['id'], get_lang('EditRight')),false);
+				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('ResourceTypeExist'), "m_category.php?action=edit&id=".$values['id'], get_lang('EditRight')),false);
 		} else
 			$form->display();
 		break;
@@ -97,9 +97,9 @@ switch ($_GET['action']) {
 		$result = Rsys :: delete_category($_GET['id']);
 		ob_start();
 		if ($result == 0)
-			Display :: display_normal_message(get_lang('CategoryDeleted'),false);
+			Display :: display_normal_message(get_lang('ResourceTypeDeleted'),false);
 		else
-			Display :: display_normal_message(str_replace('#NUM#', $result, get_lang('CategoryHasItems')),false);
+			Display :: display_normal_message(str_replace('#NUM#', $result, get_lang('ResourceTypeHasItems')),false);
 		$msg = ob_get_contents();
 		ob_end_clean();
 	default :
@@ -108,7 +108,7 @@ switch ($_GET['action']) {
 		api_display_tool_title($tool_name);
 		
 		echo $msg;
-		echo '<a href="m_category.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewCategory').'</a><br /><br />';
+		echo '<a href="m_category.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewResourceType').'</a><br /><br />';
 		if (isset ($_POST['action'])) {
 			switch ($_POST['action']) {
 				case 'delete_categories' :
@@ -122,7 +122,7 @@ switch ($_GET['action']) {
 					}
 					if ($warning) {
 						ob_start();
-						Display :: display_normal_message(get_lang('CategoryNotDeleted'),false);
+						Display :: display_normal_message(get_lang('ResourceTypeNotDeleted'),false);
 						$msg2 = ob_get_contents();
 						ob_end_clean();
 					}

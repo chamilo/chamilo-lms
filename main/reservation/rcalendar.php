@@ -3,7 +3,7 @@
 ==============================================================================
     Dokeos - elearning and course management software
 
-    Copyright (c) 2004-2008 Dokeos S.A.
+    Copyright (c) 2004-2008 Dokeos SPRL
     Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
     Copyright (c) Kristof Van Steenkiste
 
@@ -89,23 +89,34 @@ class rCalendar {
      * Deze methode retourneert een balkje van een gegeven $width met een bepaalde kleur ($color) met evt. een titel
      *      
      */
-	function get_bar($width, $color, $link = '', $title = '', $id = null) {
-       // 1) width herberekenen om afrondingsfouten te beperken
-       if($GLOBALS['weekday_pointer']!=$GLOBALS['last_weekday_pointer']){
-            $GLOBALS['daytotal']=0;
-            $GLOBALS['lasttotal']=0;
-            $GLOBALS['last_weekday_pointer']=$GLOBALS['weekday_pointer'];
-       }$GLOBALS['daytotal']+=$width;
-       $GLOBALS['rounded_total']=round($GLOBALS['daytotal']);
-       $width=$GLOBALS['rounded_total']-$GLOBALS['lasttotal'];
-       $GLOBALS['lasttotal']=$GLOBALS['rounded_total'];
-       // 2) kleur aanpassen indien item op blackout staat
-       if($GLOBALS['bblackout']&&$color!='red'&&$color!='orange'&&$color!='grey'){
-            $color='black';
-            $link='';
-       }
-       // 3) html code returnen voor gekleurde bar
-	   return '<img src="../img/px_'.$color.'.gif" alt="" style="height: 15px;width: '.$width.'px'. (!empty ($link) ? ';cursor: pointer;" onclick="window.location.href=\''.$link.'\'"' : (!empty ($title) ? ';cursor: help;"' : '"')). (!empty ($title) ? ' title="'.$title.'"' : '').' />';
+	function get_bar($width, $color, $link = '', $title = '', $itemid=null, $cat=null) {
+		// 1) width herberekenen om afrondingsfouten te beperken
+		if($GLOBALS['weekday_pointer']!=$GLOBALS['last_weekday_pointer']) {
+			$GLOBALS['daytotal']=0;
+			$GLOBALS['lasttotal']=0;
+			$GLOBALS['last_weekday_pointer']=$GLOBALS['weekday_pointer'];
+		}
+		
+		$GLOBALS['daytotal']+=$width;
+		$GLOBALS['rounded_total']=round($GLOBALS['daytotal']);
+		$width=$GLOBALS['rounded_total']-$GLOBALS['lasttotal'];
+		$GLOBALS['lasttotal']=$GLOBALS['rounded_total'];
+		// 2) kleur aanpassen indien item op blackout staat
+		if($GLOBALS['bblackout'] && $color!='red' && $color!='orange' && $color!='grey') {
+			$color='black';
+			$link='';
+		}
+		$img='';
+		// 3) html code returnen voor gekleurde bar   
+		if (!empty($itemid) && !empty($cat)&& !empty($link)) {
+			$link.='&cat='.$cat.'&item='.$itemid;
+			$img = '<img src="../img/px_'.$color.'.gif" alt="" style="height: 15px;width: '.$width.'px'. (!empty ($link) ? ';cursor: pointer;" onclick="window.location.href=\''.$link.'\'"' : (!empty ($title) ? ';cursor: help;"' : '"')). (!empty ($title) ? ' title="'.$title.'"' : '').' />';
+		}
+		else {			
+			$img = '<img src="../img/px_'.$color.'.gif" alt="" style="height: 15px;width: '.$width.'px'. (!empty ($link) ? ';cursor: pointer;" onclick="window.location.href=\''.$link.'\'"' : (!empty ($title) ? ';cursor: help;"' : '"')). (!empty ($title) ? ' title="'.$title.'"' : '').' />';			
+		}		
+		return $img;
+		
 	}
     
     /*
@@ -114,7 +125,7 @@ class rCalendar {
      *  - Deze methode ontvangt een item-id & 1 dag als parameter (dag+maand+jaar), de omliggende week (met reservaties etc.) wordt dan opgehaald    
      *  - hoe groter de $day_scale, hoe kleiner de tabel (86400/$day_scale=breedte van 1 dag)
      */
-	function get_week_view($day, $month, $year, $itemid, $day_scale = 180) {
+	function get_week_view($day, $month, $year, $itemid, $day_scale = 180,$cat) {
         // 1) Item is blackout? >> True of False ... wordt gebruikt in get_bar methode om kleur indien nodig om te zetten
         $GLOBALS['bblackout']=Rsys::is_blackout($itemid); 
 		
@@ -205,56 +216,60 @@ class rCalendar {
 						// Subscribe_from is not yet reached
 						$color = "orange";
 						$link = null;
-					} else {
+					}
+					else {
 						// Subscription is not allowed
 						$color = "red";
 						$link = null;
 					}
 				
-			               // ..a2) stel titel in (dat je ziet als je over het balkje zweeft met je muis)
-			               $title = date('H:i (d/m/Y)', $start).' &raquo; '.date('H:i (d/m/Y)', $end);
+	                // ..a2) stel titel in (dat je ziet als je over het balkje zweeft met je muis)
+	                $title = date('H:i (d/m/Y)', $start).' &raquo; '.date('H:i (d/m/Y)', $end);
 
-			               // ..a3) controleer of het reservatie-periode-blok de huidige dag overschrijdt
+			        // ..a3) controleer of het reservatie-periode-blok de huidige dag overschrijdt
 					if ($end > $day_start_dates[$weekday_pointer] + $one_day) {
 						// indien ja, cree�r dan balkjes voor elke volgende dag
 						$trimmed_chunk_size = $chunk_size - ($end - ($day_start_dates[$weekday_pointer] + $one_day));
-						$days[$weekday_pointer] .= $this->get_bar($trimmed_chunk_size / $day_scale, $color, $link, $title);
+						$days[$weekday_pointer] .= $this->get_bar($trimmed_chunk_size / $day_scale, $color, $link, $title, $itemid, $cat);
 						$new_day = true;
 						while ($new_day && $weekday_pointer < 7) {
 							$weekday_pointer ++;
-		                        		$GLOBALS['weekday_pointer']++;
+		                    $GLOBALS['weekday_pointer']++;
 							$start = $days[$weekday_pointer];
 							$chunk_size = $end - $start;
 							if ($end > $day_start_dates[$weekday_pointer] + $one_day) { // If still larger than one day, trim chunk and continue
-								$days[$weekday_pointer] .= $this->get_bar($one_day / $day_scale, $color, $link, $title);
+								$days[$weekday_pointer] .= $this->get_bar($one_day / $day_scale, $color, $link, $title, $itemid, $cat);
 							} else {
 								$trimmed_chunk_size = $end - $day_start_dates[$weekday_pointer];
-								$days[$weekday_pointer] .= $this->get_bar($trimmed_chunk_size / $day_scale, $color, $link, $title);
+								$days[$weekday_pointer] .= $this->get_bar($trimmed_chunk_size / $day_scale, $color, $link, $title, $itemid, $cat);
 								$new_day = false;
 							}
 						}
-					} else // indien niet, voeg dan gewoon het balkje toe aan de huidige dag
-						$days[$weekday_pointer] .= $this->get_bar($chunk_size / $day_scale, $color, $link, $title);
+					} 
+					else // indien niet, voeg dan gewoon het balkje toe aan de huidige dag
+						$days[$weekday_pointer] .= $this->get_bar($chunk_size / $day_scale, $color, $link, $title, $itemid, $cat);
 
 					// 6.4.B) Indien het WEL om een timepicker gaat... (max_users telt hier niet)
-				       	} 
+				    } 
 					else 
 					{
 						$timepicker_min *= 60;
 						$timepicker_max *= 60; 
 						$minute_interval = 30;
-		$minute_interval *= 60;
-		$color = "blue";
-		$pickedcolor = "red";
-		$tosmallchunkcolor = "yellow";
-		$start_pointer = $start;
-		$link = "subscribe.php?rid=".$r['id'].'&amp;timestart='; // + (start)tijd waarop geklikt werd = volwaardige link
-		if(count($s)==0){
+						$minute_interval *= 60;
+						$color = "blue";
+						$pickedcolor = "red";
+						$tosmallchunkcolor = "yellow";
+						$start_pointer = $start;
+						
+						$link = "subscribe.php?rid=".$r['id'].'&amp;timestart='; // + (start)tijd waarop geklikt werd = volwaardige link
+						
+		if(count($s)==0) {
 			if ($start > time())
 			{
 				//controle of dat de time tussen $r['subscribe_from'] en $r['subscribe_until'] ligt
 				if((Rsys :: mysql_datetime_to_timestamp($r['subscribe_from']) <= time() && Rsys :: mysql_datetime_to_timestamp($r['subscribe_until']) > time()) || ($r['subscribe_from'] == '0000-00-00 00:00:00' && $r['subscribe_until'] == '0000-00-00 00:00:00'))				{
-					$days[$weekday_pointer] .= $this->get_bar(($end - $start) / $day_scale, $color, $link.$start_pointer, date('H:i', $start).' &raquo; '.date('H:i', $end));
+					$days[$weekday_pointer] .= $this->get_bar(($end - $start) / $day_scale, $color, $link.$start_pointer, date('H:i', $start).' &raquo; '.date('H:i', $end), $itemid, $cat);
 				}
 				else
 				{
@@ -271,7 +286,7 @@ class rCalendar {
 					if((Rsys :: mysql_datetime_to_timestamp($r['subscribe_from']) <= time() && Rsys :: mysql_datetime_to_timestamp($r['subscribe_until']) > time()) || ($r['subscribe_from'] == '0000-00-00 00:00:00' && $r['subscribe_until'] == '0000-00-00 00:00:00'))					{
 						if (($end - time()) >= $timepicker_min)
 						{
-							$days[$weekday_pointer] .= $this->get_bar(($end - time()) / $day_scale, $color, $link.$start_pointer, date('H:i', time()).' &raquo; '.date('H:i', $end));
+							$days[$weekday_pointer] .= $this->get_bar(($end - time()) / $day_scale, $color, $link.$start_pointer, date('H:i', time()).' &raquo; '.date('H:i', $end), $itemid, $cat);
 						}
 						else
 						{
@@ -292,38 +307,30 @@ class rCalendar {
 		}
 		else
 		{
-			$i = 0;
-			
-			foreach ($s as $key => $sub) 
-			{	
+			$i = 0;			
+			foreach ($s as $key => $sub) {	
 				$start = Rsys :: mysql_datetime_to_timestamp($sub['start_at']);
 				$einde = Rsys :: mysql_datetime_to_timestamp($sub['end_at']);
 				
-				if (Rsys :: mysql_datetime_to_timestamp($sub['start_at']) - $start_pointer <= 0)
-				{	
+				if (Rsys :: mysql_datetime_to_timestamp($sub['start_at']) - $start_pointer <= 0) {	
 					//start onmiddelijk met een rood stuk
 					$start_tijd = date('H:i',$start_pointer);
 					$eind_tijd = date('H:i',$einde);
 					$days[$weekday_pointer] .= $this->get_bar(($einde - $start_pointer) / $day_scale, $pickedcolor, null, $start_tijd.' &raquo; '.$eind_tijd);
 				}
-				else
-				{
-					
+				else {					
 					//start met een blauw of oranje stuk 
 					//kijken of dat de start_tijd al buiten de huidige tijd ligt -> 
-					if ($start_pointer > time())
-					{	
+					if ($start_pointer > time()) {	
 						$start_tijd = date('H:i',$start_pointer);
 						$eind_tijd = date('H:i',$start);
-						if((Rsys :: mysql_datetime_to_timestamp($r['subscribe_from']) <= time() && Rsys :: mysql_datetime_to_timestamp($r['subscribe_until']) > time()) || ($r['subscribe_from'] == '0000-00-00 00:00:00' && $r['subscribe_until'] == '0000-00-00 00:00:00'))						{
+						if((Rsys :: mysql_datetime_to_timestamp($r['subscribe_from']) <= time() && Rsys :: mysql_datetime_to_timestamp($r['subscribe_until']) > time()) || ($r['subscribe_from'] == '0000-00-00 00:00:00' && $r['subscribe_until'] == '0000-00-00 00:00:00')) {
 							//niet buiten tijd!
 							//blauw stuk maken indien groter dan timepicker_min anders geel
-							if (($start - $start_pointer) >= $timepicker_min)
-							{
-								$days[$weekday_pointer] .= $this->get_bar(($start - $start_pointer) / $day_scale, $color, $link.$start_pointer, $start_tijd.' &raquo; '.$eind_tijd);
+							if (($start - $start_pointer) >= $timepicker_min) {
+								$days[$weekday_pointer] .= $this->get_bar(($start - $start_pointer) / $day_scale, $color, $link.$start_pointer, $start_tijd.' &raquo; '.$eind_tijd, $itemid, $cat);
 							}
-							else
-							{
+							else {
 								$days[$weekday_pointer] .= $this->get_bar(($start - $start_pointer) / $day_scale, $tosmallchunkcolor, null, $start_tijd.' &raquo; '.$eind_tijd);
 							}
 						}
@@ -350,16 +357,16 @@ class rCalendar {
 								//blauw stuk maken indien groter dan timepicker_min anders geel
 								if (($start - time()) >= $timepicker_min)
 								{
-									$days[$weekday_pointer] .= $this->get_bar(($start - time()) / $day_scale, $color, $link.time(), date('H:i', time()).' &raquo; '.date('H:i', $start));
+									$days[$weekday_pointer] .= $this->get_bar(($start - time()) / $day_scale, $color, $link.time(), date('H:i', time()).' &raquo; '.date('H:i', $start), $itemid, $cat);
 								}
 								else
 								{
-									$days[$weekday_pointer] .= $this->get_bar(($start - time()) / $day_scale, $tosmallchunkcolor, $null, date('H:i', time()).' &raquo; '.date('H:i', $start));
+									$days[$weekday_pointer] .= $this->get_bar(($start - time()) / $day_scale, $tosmallchunkcolor, null, date('H:i', time()).' &raquo; '.date('H:i', $start), $itemid, $cat);
 								}
 							}
 							else
 							{
-								$days[$weekday_pointer] .= $this->get_bar(($start - time()) / $day_scale, 'orange', $null, date('H:i', time()).' &raquo; '.date('H:i', $start));
+								$days[$weekday_pointer] .= $this->get_bar(($start - time()) / $day_scale, 'orange', null, date('H:i', time()).' &raquo; '.date('H:i', $start));
 							}
 						}
 			
@@ -394,7 +401,7 @@ class rCalendar {
 							if (($end - time()) >= $timepicker_min)
 							{
 								//blauwe stuk
-								$days[$weekday_pointer] .= $this->get_bar(($end - time()) / $day_scale, $color, $link.time(), date('H:i', time()).' &raquo; '.date('H:i', $end));
+								$days[$weekday_pointer] .= $this->get_bar(($end - time()) / $day_scale, $color, $link.time(), date('H:i', time()).' &raquo; '.date('H:i', $end), $itemid, $cat);
 							}
 							else
 							{
@@ -409,28 +416,25 @@ class rCalendar {
 					}
 					else
 					{
-						if((Rsys :: mysql_datetime_to_timestamp($r['subscribe_from']) <= time() && Rsys :: mysql_datetime_to_timestamp($r['subscribe_until']) > time()) || ($r['subscribe_from'] == '0000-00-00 00:00:00' && $r['subscribe_until'] == '0000-00-00 00:00:00'))						{
+						if((Rsys :: mysql_datetime_to_timestamp($r['subscribe_from']) <= time() && Rsys :: mysql_datetime_to_timestamp($r['subscribe_until']) > time()) || ($r['subscribe_from'] == '0000-00-00 00:00:00' && $r['subscribe_until'] == '0000-00-00 00:00:00')) {
 							//blauw stuk maken indien groter dan timepicker_min anders geel
-							if (($end - $start_pointer) >= $timepicker_min)
-							{
+							if (($end - $start_pointer) >= $timepicker_min) {
 								//blauwe stuk
-								$days[$weekday_pointer] .= $this->get_bar(($end - $start_pointer) / $day_scale, $color, $link.$start_pointer, date('H:i', $start_pointer).' &raquo; '.date('H:i', $end));
+								$days[$weekday_pointer] .= $this->get_bar(($end - $start_pointer) / $day_scale, $color, $link.$start_pointer, date('H:i', $start_pointer).' &raquo; '.date('H:i', $end), $itemid, $cat);
 							}
-									else
-									{
-									//gele stuk
-										$days[$weekday_pointer] .= $this->get_bar(($end - $start_pointer) / $day_scale, $tosmallchunkcolor, null, date('H:i', $start_pointer).' &raquo; '.date('H:i', $end));							
-									}
-								}
-								else
-								{
-									$days[$weekday_pointer] .= $this->get_bar(($end - $start_pointer) / $day_scale, 'orange', null, date('H:i', $start_pointer).' &raquo; '.date('H:i', $end));	
-								}
+							else {
+								//gele stuk
+								$days[$weekday_pointer] .= $this->get_bar(($end - $start_pointer) / $day_scale, $tosmallchunkcolor, null, date('H:i', $start_pointer).' &raquo; '.date('H:i', $end));							
 							}
 						}
+						else {
+							$days[$weekday_pointer] .= $this->get_bar(($end - $start_pointer) / $day_scale, 'orange', null, date('H:i', $start_pointer).' &raquo; '.date('H:i', $end));	
+						}
 					}
-				}		
-	     		}	
+				}
+			}
+		}		
+	}	
 
 
 			// 6.5) Zet de $last_end pointer op de eindtijd van de huidige reservatie periode

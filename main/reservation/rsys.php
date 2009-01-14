@@ -93,7 +93,8 @@ class Rsys {
 	 */
 	function get_return_msg($msg, $page, $pageheader) {
 		$target_url = api_get_path(WEB_PATH).'main/reservation/'.$page;
-		return $msg."<br /><br /><a href=\"$target_url\">Return to $pageheader</a>";
+		$return = get_lang('GoTo');
+		return $msg."<br /><br /><a href=\"$target_url\">$return $pageheader</a>";
 	}
 
 	/**
@@ -104,7 +105,8 @@ class Rsys {
 	 *  @param  -   String  $pageheader The tag to display as link
 	 */
 	function get_return_msg2($msg, $page, $pageheader) {
-		return $msg."<br /><br /><a href=\"$page\">Return to $pageheader</a>";
+		$return = get_lang('GoTo');
+		return $msg."<br /><br /><a href=\"$page\">$return $pageheader</a>";
 	}
 
 	/**

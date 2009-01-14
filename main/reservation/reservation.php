@@ -54,23 +54,28 @@ if (api_is_platform_admin())
 			
 echo '</div><br />';
 
-		
+function getBlock($color) {
+	return '<img src="../img/px_'.$color.'.gif" alt="" style="border:1px solid #000;height: 10px;width: 10px;vertical-align:top;margin-left:10px" />';
+}   		
 		
 $gogogo=false;
 // Get resolution of user
-if((empty($_SESSION['swidth'])||empty($_SESSION['sheight']))&&(empty($_GET['swidth'])||empty($_GET['sheight']))){
+if((empty($_SESSION['swidth'])||empty($_SESSION['sheight']))&&(empty($_GET['swidth'])||empty($_GET['sheight']))) {
 ?>
 <script type="text/javascript">
 window.location.href='reservation.php?sheight='+screen. height+'&swidth='+screen.width;
 </script>
 <?php   
-}elseif((empty($_SESSION['swidth']))){
+}
+elseif((empty($_SESSION['swidth']))) {
     $_SESSION['swidth']=$_GET['swidth'];
     $_SESSION['sheight']=$_GET['sheight'];
     $gogogo=true;   
-}else $gogogo=true;
+}
+else 
+	$gogogo=true;
 
-echo '<div style="float: left;"><form id="cat_form" action="reservation.php" method="get"><input type="hidden" name="cat" value="'.$_GET['cat'].'" /><div style="float: left;">'.get_lang('Category').': <select name="cat" onchange="this.form.submit();"><option value="0">'.get_lang('NONE').'</option>';
+echo '<div style="float: left;"><form id="cat_form" action="reservation.php" method="get"><input type="hidden" name="cat" value="'.$_GET['cat'].'" /><div style="float: left;">'.get_lang('ResourceType').': <select name="cat" onchange="this.form.submit();"><option value="0">'.get_lang('NONE').'</option>';
 $cats = Rsys :: get_category_with_items();
 
 if(count($cats)>0){
@@ -79,7 +84,6 @@ if(count($cats)>0){
 }
 
 echo '</select></div></form></div>';
-
 
 if ($gogogo&&!empty($_GET['cat'])) {
 	$itemlist = Rsys :: get_cat_items($_GET['cat']);
@@ -93,19 +97,19 @@ if ($gogogo&&!empty($_GET['cat'])) {
 		echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.get_lang('NoItemsReservation');	
 	}
     echo '</div>';
-	if(!empty($_GET['item'])){
+	if(!empty($_GET['item'])) {
 		$calendar = new rCalendar();
 		$time=Rsys::mysql_datetime_to_array($_GET['date'].' 00:00:00');
 		ob_start();
         echo '<div style="float: left; margin-right: 10px">';
-		if(isset($_GET['changemonth'])){
+		if(isset($_GET['changemonth'])) {
 			echo $calendar->get_mini_month(intval($time['month']),intval($time['year']),"&amp;cat=".$_GET['cat']."&amp;item=".$_GET['item']."&amp;changemonth=yes",$_GET['item']);
 		}
 		else
 			echo $calendar->get_mini_month(date('m'),date('Y'),"&amp;cat=".$_GET['cat']."&amp;item=".$_GET['item'],$_GET['item']);
         echo '</div><div style="float: left" >';
         
-        switch($_SESSION['swidth']){
+        switch($_SESSION['swidth']) {
             case '640': $week_scale= 170;break;
             case '1024': $week_scale=130;break;
             case '1152': $week_scale=110;break;
@@ -118,15 +122,14 @@ if ($gogogo&&!empty($_GET['cat'])) {
             default: $week_scale= 150; // 800x600    
         }
 		if(isset($_GET['date'])){
-			echo $calendar->get_week_view(intval($time['day']),intval($time['month']), $time['year'],$_GET['item'], $week_scale);
+			echo $calendar->get_week_view(intval($time['day']),intval($time['month']), $time['year'],$_GET['item'], $week_scale,$_GET['cat']);
 		}else
-			echo $calendar->get_week_view(intval(date('d')), intval(date('m')), intval(date('Y')), $_GET['item'], $week_scale);
+			echo $calendar->get_week_view(intval(date('d')), intval(date('m')), intval(date('Y')), $_GET['item'], $week_scale,$_GET['cat']);
 		echo '</div>';
        $buffer=ob_get_contents();
        ob_end_clean();
-       function getBlock($color){
-            return '<img src="../img/px_'.$color.'.gif" alt="" style="border:1px solid #000;height: 10px;width: 10px;vertical-align:top;margin-left:10px" />';
-       }
+       
+
        $legend=getBlock('green').' '.ucfirst(get_lang('Reservation')).' '.getBlock('blue').' '.get_lang('TimePicker').' '.getBlock('orange').' '.get_lang('OutPeriod').' '.getBlock('red').' '.get_lang('Reserved').' '.getBlock('grey').' '.get_lang('NoReservations').' '.getBlock('black').' '.get_lang('Blackout');
        echo '<br /><br /><div style="text-align:right; border-bottom: 2px dotted #666; margin: 0 0 0.2em 0; padding: 0.2em;clear:both;font-family: Verdana,sans-serif;font-size: 1.2em;color:#666;font-weight:bold">'.$GLOBALS['weekstart'].' - '.$GLOBALS['weekend'].'</div>'.$buffer.'<div style="clear:both;">&nbsp;</div><div style="background-color:#EEE;padding: 0.5em;font-family:Verdana;sans-serif;font-size:10px;text-align:center">'.$legend.'</div>';
 	}

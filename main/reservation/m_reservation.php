@@ -43,8 +43,8 @@ $tool_name = get_lang('BookingPeriodList');
  *  @param  -   int     $id     The reservation-id
  */
 function modify_filter($id) {
-		$out = '<a href="m_reservation.php?action=edit&amp;id='.$id.'" title="'.get_lang("EditReservationPeriod").'"><img alt="" src="../img/edit.gif" /></a>';
-		$out .= ' <a href="m_reservation.php?action=delete&amp;id='.$id.'" title="'.get_lang("DeleteReservationPeriod").'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteReservationPeriod")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
+		$out = '<a href="m_reservation.php?action=edit&amp;id='.$id.'" title="'.get_lang("EditBookingPeriod").'"><img alt="" src="../img/edit.gif" /></a>';
+		$out .= ' <a href="m_reservation.php?action=delete&amp;id='.$id.'" title="'.get_lang("DeleteBookingPeriod").'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteBookingPeriod")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
 		$out .= ' <a href="m_reservation.php?action=accept&amp;rid='.$id.'" title="'.get_lang("AutoAccept").'"><img alt="" src="../img/visible.gif" /></a>';
 	return $out;
 }
@@ -108,7 +108,7 @@ switch ($_GET['action']) {
 		$table = new SortableTable('reservation', array ('Rsys', 'get_num_subscriptions_overview'), array ('Rsys', 'get_table_subcribed_reservations'), 1);		
 		$table->set_additional_parameters(array ('action' => 'overviewsubscriptions','keyword' => $_GET['keyword']));
 		$table->set_header(0, get_lang('ItemName'), true);
-		$table->set_header(1, get_lang('CategoryName'), true);
+		$table->set_header(1, get_lang('ResourceTypeName'), true);
 		$table->set_header(2, get_lang('StartDate'), true);
 		$table->set_header(3, get_lang('EndDate'), true);
 		$table->set_header(4, get_lang('Name'), true);
@@ -164,10 +164,9 @@ switch ($_GET['action']) {
 
 		$cats = Rsys :: get_category_rights();
 		echo '<form id="cat_form" action="m_reservation.php" method="get">';		
-		echo '<input type="hidden" name="action" value="add"/>';
-		
+		echo '<input type="hidden" name="action" value="add"/>';		
 		echo '<div class="row">';		
-			echo '<div class="label">'.get_lang('Category').': </div>';
+			echo '<div class="label">'.get_lang('ResourceType').': </div>';
 			echo '<div class="formw">';
 		
 			echo '<select name="cat_id" onchange="this.form.submit();">';		
@@ -244,17 +243,66 @@ switch ($_GET['action']) {
 											/* ]]> */
 											</script>\n");
 		if (count($itemlist) > 0) {
-			$defaultvalues['start'] = date('Y-m-d H:i:s');
-			$defaultvalues['end'] = date('Y-m-d H:i:s', time() + (60 * 60));
-			$defaultvalues['subscribe_from'] = date('Y-m-d H:i:s', time() - (60 * 60));
-			$defaultvalues['subscribe_until'] = date('Y-m-d H:i:s');
-			$defaultvalues['recurrence_until'] = date('Y-m-d H:i:s', time() + (14 * 24 * 60 * 60));
+			// here we set the default start and end time that we will see in the form 1h 30m after now()
+			
+			// 1h after now
+			$date_defaults_start = array(
+		        'd' => date('d'),        
+		        'M' => date('n'),
+		        'Y' => date('Y'),
+		        'H' => date('H',time()+60*60),
+		        'i' => '00'
+		    );
+		    
+		    //2h after now
+		    $date_defaults_end = array(
+		        'd' => date('d'),        
+		        'M' => date('n'),
+		        'Y' => date('Y'),
+		        'H' => date('H',time()+60*60*2),
+		        'i' => '00'
+		    );
+		    
+		    
+		    	// 1h after now
+			$date_defaults_start_sub = array(
+		        'd' => date('d'),        
+		        'M' => date('n'),
+		        'Y' => date('Y'),
+		        'H' => date('H',time()-60*60),
+		        'i' => '00'
+		    );
+		    
+		    //2h after now
+		    $date_defaults_end_sub = array(
+		        'd' => date('d'),        
+		        'M' => date('n'),
+		        'Y' => date('Y'),
+		        'H' => date('H',time()),
+		        'i' => '00'
+		    );
+		    
+		    
+		    
+		    			 
+			$defaultvalues['start'] = $date_defaults_start;
+			$defaultvalues['end'] = $date_defaults_end;			
+			$defaultvalues['subscribe_from'] = $date_defaults_start_sub;
+			$defaultvalues['subscribe_until'] = $date_defaults_end_sub;
+			$defaultvalues['recurrence_until'] = $date_defaults_end;
+			
+			$defaultvalues['recurrence_c'] = '0';
+			$defaultvalues['forever'] = '0';
+			$defaultvalues['timepicker'] = '0';
+			
 			$defaultvalues['maxuser'] = '1';
 			$defaultvalues['repeater'] = '1';
 			$defaultvalues['auto_accept'] = '1';
+			
 			$form->setDefaults($defaultvalues);
 			$form->Display();
-		} else {
+		} 
+		else {
 			if ($_GET['cat_id'] != 0)
 				Display :: display_normal_message(get_lang('NoItems'),false);
 		}
@@ -271,29 +319,28 @@ switch ($_GET['action']) {
 			$msg_number = Rsys :: add_reservation($values['itemid'], $values['auto_accept'], $values['maxuser'], $values['start'], $values['end'], $values['subscribe_from'], $values['subscribe_until'], $values['notes'], $values['timepicker'],$values['min'],$values['max'],0);
 			switch($msg_number) {
 				case 0 :
-					Display :: display_normal_message(Rsys :: get_return_msg(get_lang('ReservationPeriodAdded'), "m_reservation.php", $tool_name),false);
+					Display :: display_normal_message(Rsys :: get_return_msg(get_lang('BookingPeriodAdded'), "m_reservation.php", $tool_name),false);
 					break;
 				case 1 :
-					Display :: display_normal_message(str_replace('#END#', "<b>".$GLOBALS['end_date']."</b>",str_replace('#START#', "<b>".$GLOBALS['start_date']."</b>",get_lang('ReservationPeriodDateOverlap'))),false);
+					Display :: display_normal_message(str_replace('#END#', "<b>".$GLOBALS['end_date']."</b>",str_replace('#START#', "<b>".$GLOBALS['start_date']."</b>",get_lang('BookingPeriodDateOverlap'))),false);
 					break;
-				case 2 :		$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('MyReservations'));
-		$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('Configuration'));
-					Display :: display_normal_message(get_lang('ReservationPeriodSubscribeUntilAfterStart'),false);
+				case 2 :		
+					Display :: display_normal_message(get_lang('BookingPeriodSubscribeUntilAfterStart'),false);
 					break;
 				case 3:
-					Display :: display_normal_message(get_lang('ReservationPeriodPast'),false);
+					Display :: display_normal_message(get_lang('BookingPeriodPast'),false);
 					break;
 				case 4:
-					Display :: display_normal_message(get_lang('ReservationPeriodTimePickerLimitation'),false);
+					Display :: display_normal_message(get_lang('BookingPeriodTimePickerLimitation'),false);
 					break;
 				case 5:
-					Display :: display_normal_message(get_lang('ReservationPeriodTimePickerError1'),false);
+					Display :: display_normal_meGotossage(get_lang('BookingPeriodTimePickerError1'),false);
 					break;
 				case 6:
-					Display :: display_normal_message(get_lang('ReservationPeriodTimePickerError2'),false);
+					Display :: display_normal_message(get_lang('BookingPeriodTimePickerError2'),false);
 					break;
 				case 7:
-					Display :: display_normal_message(get_lang('ReservationPeriodTimePickerError3'),false);
+					Display :: display_normal_message(get_lang('BookingPeriodTimePickerError3'),false);
 					break;
 				default :
 					break;
@@ -333,31 +380,28 @@ switch ($_GET['action']) {
 
 		break;
 	case 'edit' :
-
 		if (isset ($_GET["id"]))
 			$Reservation_id = $_GET["id"];
 		else
 			$Reservation_id = $_POST["id"];
 
-		$result = Rsys :: get_num_subscriptions_reservationperiods($Reservation_id);
+		$result = Rsys :: get_num_subscriptions_ReservationPeriods($Reservation_id);
 		
 		if($result != '0')
 		{
 			$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));		
-			$interbreadcrumb[] = array ("url" => "m_reservation.php", "name" => get_lang('ManageBookingPeriods'));
-		
+			$interbreadcrumb[] = array ("url" => "m_reservation.php", "name" => get_lang('ManageBookingPeriods'));		
 			Display :: display_header('');
 			api_display_tool_title($tool_name);
-			Display :: display_normal_message(Rsys :: get_return_msg(str_replace('#NUM#', $result, get_lang('ReservationPeriodHasSubscriptions')),"m_reservation.php",get_lang('ReservationPeriodManagerHeader')),false);
+			Display :: display_normal_message(Rsys :: get_return_msg(str_replace('#NUM#', $result, get_lang('BookingPeriodHasSubscriptions')),"m_reservation.php",get_lang('BookingPeriodManagerHeader')),false);
 		}
 		else
-		{
-			
+		{			
 			$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));		
 			$interbreadcrumb[] = array ("url" => "m_reservation.php", "name" => get_lang('ManageBookingPeriods'));
 					
-			Display :: display_header(get_lang('EditReservationPeriod'));
-			api_display_tool_title(get_lang('EditNewReservationPeriod'));
+			Display :: display_header(get_lang('EditBookingPeriod'));
+			api_display_tool_title(get_lang('EditNewBookingPeriod'));
 			
 			$reservation = Rsys :: get_reservation($Reservation_id);
 			$item_category = Rsys :: get_item($reservation[0][2]);
@@ -374,7 +418,7 @@ switch ($_GET['action']) {
 			echo '<input type="hidden" name="action" value="edit"/>';
 			
 			echo '<div class="row">';		
-			echo '<div class="label">'.get_lang('Category').': </div>';
+			echo '<div class="label">'.get_lang('ResourceType').': </div>';
 			echo '<div class="formw">';
 		
 			echo '<select name="cat_id" onchange="this.form.submit();">';
@@ -383,15 +427,13 @@ switch ($_GET['action']) {
 				echo '<option value="'.$catid.'"'. ($catid == $categori[0] ? ' selected="selected"' : '').'>'.$cat.'</option>';
 			echo '</select></div>';
 			
-			echo '</div>';
-			
-			echo '</form>';
-		
+			echo '</div>';			
+			echo '</form>';		
 	
 			$itemlist = Rsys :: get_cat_r_items($categori[0]);
 			$form = new FormValidator('reservation', 'post', 'm_reservation.php?action=edit&id='.$Reservation_id);
-			$choices[] = $form->createElement('radio', 'forever', '', get_lang('NoPeriod'), ($reservation[0][7] == '0000-00-00 00:00:00' && $reservation[0][8] == '0000-00-00 00:00:00' ? 0 : 1), array ('onclick' => 'javascript:timewindow_hide(\'forever_timewindow\')'));
-			$choices[] = $form->createElement('radio', 'forever', '', get_lang('FixedPeriod'), ($reservation[0][7] == '0000-00-00 00:00:00' || $reservation[0][8] == '0000-00-00 00:00:00' ? 1 : 0), array ('onclick' => 'javascript:timewindow_show(\'forever_timewindow\')'));
+			$choices[] = $form->createElement('radio', 'forever', '', get_lang('NoPeriod'), '0', array ('onclick' => 'javascript:timewindow_hide(\'forever_timewindow\')'));
+			$choices[] = $form->createElement('radio', 'forever', '', get_lang('FixedPeriod'), '1', array ('onclick' => 'javascript:timewindow_show(\'forever_timewindow\')'));
 			$form->addElement('select', 'item_id', get_lang('Item'), $itemlist);
 			
 			$form->add_timewindow('start', 'end', get_lang('StartDate'), get_lang('EndDate'));			
@@ -423,15 +465,30 @@ switch ($_GET['action']) {
 			$form->addElement('hidden', 'id', $Reservation_id);
 			$form->addElement('hidden', 'timepicker2');
 			$form->addElement('hidden', 'period', ($reservation[0][7] == '0000-00-00 00:00:00' && $reservation[0][8] == '0000-00-00 00:00:00' ? 0 : 1));
-	
+		    		
 			if ($categori[0] == $tijdelijke_cat)
 				$defaultvalues['item_id'] = $reservation[0][2];
+				
 			$defaultvalues['auto_accept'] = $reservation[0][3];
 			$defaultvalues['maxuser'] = $reservation[0][4];
 			$defaultvalues['start'] = $reservation[0][5];
 			$defaultvalues['end'] = $reservation[0][6];
-			$defaultvalues['subscribe_from'] = $reservation[0][7];
-			$defaultvalues['subscribe_until'] = $reservation[0][8];
+			
+			$defaultvalues['forever']=($reservation[0][7] == '0000-00-00 00:00:00' && $reservation[0][8] == '0000-00-00 00:00:00' ? 0 : 1);
+			
+			$my_start_date = Rsys :: mysql_datetime_to_timestamp($reservation[0][5]);
+			
+			if ($defaultvalues['forever']==0) {
+				//here we set the default dates 	
+				$defaultvalues['subscribe_from'] = $my_start_date - 60*60 ;
+				$defaultvalues['subscribe_until'] = $my_start_date - 60 ;
+			}
+			else {
+				$defaultvalues['subscribe_from'] = $reservation[0][7];
+				$defaultvalues['subscribe_until'] = $reservation[0][8];				
+			}
+			
+			
 			$defaultvalues['notes'] = $reservation[0][10];
 			$defaultvalues['timepicker'] = $reservation[0][11];
 			$defaultvalues['timepicker2'] = $reservation[0][11];
@@ -448,26 +505,26 @@ switch ($_GET['action']) {
 				$values = $form->exportValues();
 				//print_r($values);
 				$auto_accept = true;
-				if ($values['forever'] == $values['period']) {
+				if (($values['forever'] == $values['period']) || $values['forever']=='0') {
 					$values['subscribe_from'] = 0;
 					$values['subscribe_until'] = 0;
 				}
 				$msg_number = Rsys :: edit_reservation($values['id'], $_POST['item_id'], $values['auto_accept'], $values['maxuser'], $values['start'], $values['end'], $values['subscribe_from'], $values['subscribe_until'], $values['notes'], $values['timepicker2']);
 				switch ($msg_number) {
 					case 0 :
-						Display :: display_normal_message(Rsys :: get_return_msg(get_lang('ReservationPeriodEdited'), "m_reservation.php", $tool_name),false);
+						Display :: display_normal_message(Rsys :: get_return_msg(get_lang('BookingPeriodEdited'), "m_reservation.php", $tool_name),false);
 						break;
 					case 1 :
-						Display :: display_normal_message(str_replace('#END#', "<b>".$GLOBALS['end_date']."</b>",str_replace('#START#', "<b>".$GLOBALS['start_date']."</b>",get_lang('ReservationPeriodDateOverlap'))),false);
+						Display :: display_normal_message(str_replace('#END#', "<b>".$GLOBALS['end_date']."</b>",str_replace('#START#', "<b>".$GLOBALS['start_date']."</b>",get_lang('BookingPeriodDateOverlap'))),false);
 						break;
 					case 2 :
-						Display :: display_normal_message(get_lang('ReservationPeriodSubscribeUntilAfterStart'),false);
+						Display :: display_normal_message(get_lang('BookingPeriodSubscribeUntilAfterStart'),false);
 						break;
 					case 3:
 						Display :: display_normal_message(get_lang('ReservationMaxUsersOverrun'),false);
 						break;
 					case 4:
-						Display :: display_normal_message(get_lang('ReservationPeriodTimepickerLimitation'),false);
+						Display :: display_normal_message(get_lang('BookingPeriodTimepickerLimitation'),false);
 						break;
 					default :
 						break;
@@ -480,13 +537,18 @@ switch ($_GET['action']) {
 	case 'delete' :
 		Rsys :: delete_reservation($_GET["id"]);
 		ob_start();
-		Display :: display_normal_message(Rsys :: get_return_msg(get_lang('ReservationPeriodDeleted'), "m_reservation.php", $tool_name),false);
+		Display :: display_normal_message(Rsys :: get_return_msg(get_lang('BookingPeriodDeleted'), "m_reservation.php", $tool_name),false);
 		$msg = ob_get_contents();
 		ob_end_clean();
 	default :
 		$NoSearchResults = get_lang('NoReservations');
 		
-		$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));		
+		if ($_GET['view']=='calendar') {
+			$interbreadcrumb[] = array ("url" => "reservation.php", "name" => get_lang('Booking'));						
+		}
+		else {
+			$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));						
+		}
 		$interbreadcrumb[] = array ("url" => "m_reservation.php", "name" => get_lang('ManageBookingPeriods'));
 		
 		Display :: display_header('');
@@ -524,7 +586,7 @@ switch ($_GET['action']) {
 		$table->set_header(7, get_lang('Notes'), false);
 		$table->set_header(8, '', false, array ('style' => 'width:65px;'));
 		$table->set_column_filter(8, 'modify_filter');
-		$table->set_form_actions(array ('delete_reservations' => get_lang('DeleteSelectedReservationsPeriod')), 'reservations');
+		$table->set_form_actions(array ('delete_reservations' => get_lang('DeleteSelectedBookingPeriod')), 'reservations');
 		$table->display();
 		
 }

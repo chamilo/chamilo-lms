@@ -7,6 +7,7 @@
     Copyright (c) 2004-2008 Dokeos SPRL
     Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
     Copyright (c) Kristof Van Steenkiste 
+    Copyright (c) Julio Montoya Armas    
 
     For a full list of contributors, see "credits.txt".
     The full license can be read in "license.txt".
@@ -27,10 +28,23 @@
                 Reservation-manager (add, edit & delete)
     ---------------------------------------------------------------------
  */
+ 
 require_once('rsys.php');
-
 Rsys :: protect_script('reservation');
-$tool_name = get_lang('SubscribeManagerHeader');
+
+
+if (!empty($_GET['cat']) && !empty($_GET['item'] )) {
+	$cat = (int)$_GET['cat'];
+	$item = (int)$_GET['item'];
+	$interbreadcrumb[] = array ('url' => "reservation.php?cat=$cat&item=$item", 'name' => get_lang('Booking'));
+}
+else {
+	$interbreadcrumb[] = array ('url' => 'reservation.php', 'name' => get_lang('Booking'));	
+}
+
+
+$tool_name = get_lang('BookIt');
+
 Display :: display_header($tool_name);
 api_display_tool_title($tool_name);
 
@@ -141,10 +155,10 @@ if ($reservation[0][9] < $reservation[0][4]) {
 			$result = Rsys :: add_subscription($_GET['rid'], api_get_user_id(),$values['accepted']);
 			switch ($result) {
 				case 0 :
-					Display :: display_normal_message(Rsys :: get_return_msg2(get_lang('ReservationAdded'), "javascript:history.go(-2)", get_lang('ReservationManagerHeader')),false);
+					Display :: display_normal_message(Rsys :: get_return_msg2(get_lang('ReservationAdded'), "javascript:history.go(-2)", get_lang('BookingView')),false);
 					break;
 				case 1 :
-					Display :: display_normal_message(Rsys :: get_return_msg2(str_replace('#END#', "<b>".$GLOBALS['end_date']."</b>",str_replace('#START#', "<b>".$GLOBALS['start_date']."</b>",get_lang('ReservationAlready'))),"reservation.php?cat=".$item[1]."&item=".$item[0]."", get_lang('ReservationManagerHeader')),false);
+					Display :: display_normal_message(Rsys :: get_return_msg2(str_replace('#END#', "<b>".$GLOBALS['end_date']."</b>",str_replace('#START#', "<b>".$GLOBALS['start_date']."</b>",get_lang('ReservationAlready'))),"reservation.php?cat=".$item[1]."&item=".$item[0]."", get_lang('BookingView')),false);
 					break;
 			}
 
@@ -152,7 +166,7 @@ if ($reservation[0][9] < $reservation[0][4]) {
 			$result = Rsys :: add_subscription_timepicker($_GET['rid'], api_get_user_id(), $values['startpicker'], $values['endpicker'],$values['accepted'],$values['min'],$values['max']);
 			switch ($result) {
 				case 0 :
-					Display :: display_normal_message(Rsys :: get_return_msg2(get_lang('ReservationAdded'), "reservation.php?cat=".$item[1]."&item=".$item[0]."&date=".date( 'Y-m-d',Rsys :: mysql_datetime_to_timestamp($values['startpicker']))."&changemonth=yes", get_lang('ReservationManagerHeader')),false);
+					Display :: display_normal_message(Rsys :: get_return_msg2(get_lang('ReservationAdded'), "reservation.php?cat=".$item[1]."&item=".$item[0]."&date=".date( 'Y-m-d',Rsys :: mysql_datetime_to_timestamp($values['startpicker']))."&changemonth=yes", get_lang('BookingView')),false);
 					break;
 				case 1 :
 					Display :: display_normal_message(str_replace('#END#', "<b>".$GLOBALS['end_date']."</b>",str_replace('#START#', "<b>".$GLOBALS['start_date']."</b>",get_lang('ReservationOutOfDate'))),false);
@@ -160,12 +174,12 @@ if ($reservation[0][9] < $reservation[0][4]) {
 					echo $buffer;
 					break;
 				case 2 :
-					Display :: display_normal_message(get_lang('ReservationPeriodTooSmall'),false);
+					Display :: display_normal_message(get_lang('BookingPeriodTooSmall'),false);
 					$form->display();
 					//echo $buffer;
 					break;
 				case 3 :
-					Display :: display_normal_message(get_lang('ReservationPeriodTooBig'),false);
+					Display :: display_normal_message(get_lang('BookingPeriodTooBig'),false);
 					$form->display();
 					//echo $buffer;
 					break;
@@ -175,7 +189,7 @@ if ($reservation[0][9] < $reservation[0][4]) {
 	else
 		$form->display();
 }else {
-	Display :: display_normal_message(Rsys :: get_return_msg2(get_lang('ReservationTresspassing'), "javascript:history.go(-2)", get_lang('ReservationManagerHeader')),false);
+	Display :: display_normal_message(Rsys :: get_return_msg2(get_lang('ReservationTresspassing'), "javascript:history.go(-2)", get_lang('BookingView')),false);
 }
 
 

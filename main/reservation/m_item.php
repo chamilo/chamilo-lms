@@ -31,7 +31,7 @@
 require_once ('rsys.php');
 
 Rsys :: protect_script('m_item');
-$tool_name = get_lang('ItemManagerHeader');
+$tool_name = get_lang('ResourceList');
 //$interbreadcrumb[] = array ("url" => "../admin/index.php", "name" => get_lang('PlatformAdmin'));
 
 /**
@@ -313,11 +313,10 @@ switch ($_GET['action']) {
 				$NoSearchResults = get_lang('NoRights');
 				
 				
-				$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('MyReservations'));
-				$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('Configuration'));
-				
+				$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));
 				$interbreadcrumb[] = array ("url" => "m_item.php", "name" => get_lang('ManageItems'));
 				Display :: display_header(str_replace('#ITEM#', $item['name'], get_lang('MItemRights')));
+				
 				api_display_tool_title(get_lang('MItemRights2'));
 				
 				echo $msg;
@@ -332,7 +331,7 @@ switch ($_GET['action']) {
 				$table->set_header(1, get_lang('LangClass'), false);
                 $table->set_header(2, get_lang('EditItemRight'), false);
 				$table->set_header(3, get_lang('DeleteItemRight'), false);
-				$table->set_header(4, get_lang('MReservationPeriodsRight'), false);
+				$table->set_header(4, get_lang('MBookingPeriodsRight'), false);
                 $table->set_header(5, get_lang('ViewItemRight'), false);
 				$table->set_header(6, '', false, array ('style' => 'width:50px;'));
 				$table->set_column_filter(6, 'modify_rights_filter');
@@ -365,7 +364,7 @@ switch ($_GET['action']) {
 		$cats = Rsys :: get_category();
 		foreach ($cats as $cat)
 			$catOptions[$cat['id']] = $cat['name'];
-		$form->addElement('select', 'category', get_lang('Category'), $catOptions);
+		$form->addElement('select', 'category', get_lang('ResourceType'), $catOptions);
 		$form->add_textfield('name', get_lang('ItemName'), true, array ('maxlength' => '128'));
 		$form->addElement('textarea', 'description', get_lang('ItemDescription'), array ('rows' => '3', 'cols' => '40'));
 		$form->addRule('category', get_lang('ThisFieldIsRequired'), 'required');
@@ -401,7 +400,7 @@ switch ($_GET['action']) {
 		Display :: display_header(str_replace('#ITEM#', $item['name'], get_lang('EditResource')));
 		api_display_tool_title(get_lang('EditResource'));
 		$form = new FormValidator('item', 'post', 'm_item.php?action=edit');
-		$form->addElement('select', 'category_id', get_lang('Category'), $catOptions);
+		$form->addElement('select', 'category_id', get_lang('ResourceType'), $catOptions);
 		$form->add_textfield('name', get_lang('ItemName'), array ('maxlength' => '128'));
 		$form->addElement('textarea', 'description', get_lang('ItemDescription'), array ('rows' => '3', 'cols' => '40'));
 		$form->addRule('category_id', get_lang('ThisFieldIsRequired'), 'required');
@@ -462,7 +461,7 @@ switch ($_GET['action']) {
 		$table->set_header(0, '', false, array ('style' => 'width:10px'));
 		$table->set_header(1, get_lang('ItemName'), true);
 		$table->set_header(2, get_lang('ItemDescription'), true);
-		$table->set_header(3, get_lang('Category'), true);
+		$table->set_header(3, get_lang('ResourceType'), true);
 		$table->set_header(4, get_lang('ItemCreator'), true);
 		$table->set_header(5, '', false, array ('style' => 'width:100px;'));
 		$table->set_column_filter(5, 'modify_filter');

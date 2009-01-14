@@ -64,7 +64,7 @@ switch ($_GET['action']) {
         api_display_tool_title($tool_name);
         
         echo '<div class="actions">';
-///		echo '<a href="m_reservation.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewReservationPeriod').'</a>';
+///		echo '<a href="m_reservation.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewBookingPeriod').'</a>';
 		//echo '&nbsp;&nbsp;&nbsp;<a href="m_reservation.php?action=overviewsubscriptions">'.get_lang('OverviewReservedPeriods').'</a>';
 		
 		echo '<div style="float: right;"><a href="reservation.php">'.Display::return_icon('sessions.gif',get_lang('BookingCalendarView')).'&nbsp;'.get_lang('GoToCalendarView').'</a></div>';

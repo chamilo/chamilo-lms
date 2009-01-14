@@ -1,4 +1,4 @@
-<?php // $Id: document.php 17433 2008-12-23 10:56:06Z derrj $
+<?php // $Id: document.php 17724 2009-01-14 18:30:19Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -166,7 +166,7 @@ if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='')
 	{
 		$to_group_id = $_SESSION['_gid'];
 		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-		
+		$interbreadcrumb[]= array ("url"=>"../group/group.php", "name"=> get_lang('Groups'));
 		$interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['_gid'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 		//allowed to upload?
 		if($is_allowed_to_edit || GroupManager::is_subscribed($_user['user_id'],$_SESSION['_gid'])) //only courseadmin or group members can upload

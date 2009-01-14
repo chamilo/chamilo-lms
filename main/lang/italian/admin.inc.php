@@ -861,4 +861,6 @@ $SearchShowUnlinkedResults = "Mostrali, ma rimuovendo il collegamento alla risor
 $Templates = "Modelli";
 $HideCampusFromPublicDokeosPlatformsList = "Non mostrare il mio Campus nell\'elenco dei portali Dokeos";
 $EnableVersionCheck = "Abilita il controllo di versione";
+$AllowReservationTitle = "Abilita il servizio di prenotazione";
+$AllowReservationComment = "L\'opzione permette di utilizzare il sistema di prenotazione";
 ?>

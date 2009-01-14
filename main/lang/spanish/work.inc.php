@@ -49,4 +49,10 @@ $EnableExpiryDate = "Activar fecha de vencimiento";
 $EnableEndDate = "Activar fecha de finalización";
 $IsNotPosibleSaveTheDocument = "No se pudo guardar el documento";
 $EndDateCannotBeBeforeTheExpireDate = "Fecha de término no puede ser antes de la fecha de caducidad";
+$SelectAFilter = "Seleccionar filtro";
+$FilterByNotExpired = "Filtrar por no caducado";
+$FilterAssignments = "Filtrar asignaciones";
+$WeightNecessary = "Peso necesario";
+$QualificationOver = "Calificación sobre";
+$CompleteTheSurveysQuestions = "Complete las preguntas de la encuesta";
 ?>

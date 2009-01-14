@@ -647,5 +647,7 @@ $SearchFeatureNotEnabledComment = "The full-text search feature is not enabled i
 $Top = "Top";
 $YourTextHere = "Your text here";
 $OrderBy = "Order by";
+$Notebook = "Notebook";
 $FieldRequired = "Mandatory field";
+$BookingSystem = "Booking system";
 ?>

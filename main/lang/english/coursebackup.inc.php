@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $langSelectOptionForBackup = "Please select a backup-option.";
 $langLetMeSelectItems = "Let me select the course components";
 $langCreateFullBackup = "Create a complete backup of this course";
-$langCreateBackup = "create a backup";
+$langCreateBackup = "Create a backup";
 $langBackupCreated  = "The backup of this course has been created. The download of this file will start in a few moments. If your download does not start, click the following link";
 $langSelectBackupFile = "select a backup file";
 $langImportBackup = "Import backup";

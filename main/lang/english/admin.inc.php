@@ -861,4 +861,7 @@ $SearchShowUnlinkedResults = "Show them but without a link to the resource";
 $Templates = "Templates";
 $HideCampusFromPublicDokeosPlatformsList = "Do not display my campus in the list of Dokeos portals";
 $EnableVersionCheck = "Enable version check";
+$AllowReservationTitle = "Allow the Booking system";
+$AllowReservationComment = "This will allow the use of the Booking system";
+$ConfigureResourceType = "Configure resource type";
 ?>

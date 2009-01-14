@@ -210,4 +210,6 @@ $UplAlreadyExists = "Datoteka že obstaja";
 $UnknownPackageFormat = "Neznan format paketa";
 $UplUnableToSaveFile = "Ne morem shraniti datoteke";
 $UnknownPackageFormat = "Format tega paketa ni bil prepoznan. Preverite, če je paket dejansko veljaven paket.";
+$EditLPSettings = "Uredi nastavitve učne poti";
+$SaveLPSettings = "Shrani nastavitve učne poti";
 ?>

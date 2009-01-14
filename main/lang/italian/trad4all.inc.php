@@ -647,5 +647,6 @@ $SearchFeatureNotEnabledComment = "La ricerca a testo libero non è consentita in
 $Top = "Inizio";
 $YourTextHere = "Inserisci il testo";
 $OrderBy = "Ordina per";
+$Notebook = "Appunti";
 $FieldRequired = "Campo obbligatorio";
 ?>

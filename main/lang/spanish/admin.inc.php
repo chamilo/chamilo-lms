@@ -861,4 +861,7 @@ $SearchShowUnlinkedResults = "Mostrarlos pero sin enlace hasta el recurso";
 $Templates = "Plantillas";
 $HideCampusFromPublicDokeosPlatformsList = "No mostrar mi campus en la lista pública de portales Dokeos";
 $EnableVersionCheck = "Activar la verificación de versiones";
+$AllowReservationTitle = "Habilitar la herramienta de Reservas";
+$AllowReservationComment = "Esta opción habilitará el sistema de Reservas";
+$ConfigureResourceType = "Configurar tipo de recurso";
 ?>

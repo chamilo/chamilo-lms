@@ -646,4 +646,5 @@ $SearchCombineSearchWith = "Kombiniraj ključne besede z";
 $SearchFeatureNotEnabledComment = "Iskanje po vsebini ni omogočeno v tem portalu. Kontaktirajte upravitelja platforme.";
 $Top = "Na vrh";
 $YourTextHere = "Tvoje besedilo ...";
+$Notebook = "Beležka";
 ?>

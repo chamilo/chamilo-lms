@@ -647,4 +647,7 @@ $SearchFeatureNotEnabledComment = "La búsqueda full-text no esta activada por es
 $Top = "Inicio";
 $YourTextHere = "Su texto aquí";
 $OrderBy = "Ordenar por";
+$Notebook = "Notas personales";
+$FieldRequired = "Campo obligatorio";
+$BookingSystem = "Reservas";
 ?>

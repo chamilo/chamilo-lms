@@ -647,5 +647,6 @@ $SearchFeatureNotEnabledComment = "La fonctionnalité de recherche full-text n\'e
 $Top = "Début de page";
 $YourTextHere = "Votre texte";
 $OrderBy = "Trier par";
+$Notebook = "Bloc notes";
 $FieldRequired = "Champ obligatoire";
 ?>

@@ -118,4 +118,12 @@ $OnlyNumbers = "Only numbers";
 $IncorrectData = "Incorrect data";
 $Resource = "Resource";
 $PleaseEnableScoringSystem = "Please enable scoring system";
+$AllResultDeleted = "All results have been removed";
+$ImportNoFile = "Has not imported file";
+$ProblemUploadingFile = "There was a problem sending your file. Nothing has been received.";
+$AllResultsEdited = "All results have been edited";
+$UserInfoDoesNotMatch = "The user info doesn\'t match.";
+$ScoreDoesNotMatch = "The score doesn\'t match";
+$FileUploadComplete = "File upload successfull";
+$NoResultsAvailable = "No results available";
 ?>

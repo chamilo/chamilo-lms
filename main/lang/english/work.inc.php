@@ -49,4 +49,10 @@ $EnableExpiryDate = "Enable expiry date";
 $EnableEndDate = "Enable end date";
 $IsNotPosibleSaveTheDocument = "Impossible to save the document";
 $EndDateCannotBeBeforeTheExpireDate = "End date cannot be before the expire date";
+$SelectAFilter = "Select a filter";
+$FilterByNotExpired = "Filter by not expired";
+$FilterAssignments = "Filter assignments";
+$WeightNecessary = "Weight necessary";
+$QualificationOver = "Qualification over";
+$CompleteTheSurveysQuestions = "Complete the survey\'s questions";
 ?>

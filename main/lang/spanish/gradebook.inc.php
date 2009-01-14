@@ -118,4 +118,12 @@ $OnlyNumbers = "Solamente numeros";
 $IncorrectData = "Dato incorrecto";
 $Resource = "Recurso";
 $PleaseEnableScoringSystem = "Porfavor activar sistema de puntuación";
+$AllResultDeleted = "Todos los resultados han sido eliminados";
+$ImportNoFile = "No ha importado ningun archivo";
+$ProblemUploadingFile = "Ha ocurrido un error mandando su archivo. No se ha recibido nada";
+$AllResultsEdited = "Todos los resultados han sido modificados";
+$UserInfoDoesNotMatch = "No coincide con la información del usuario";
+$ScoreDoesNotMatch = "La puntuación no coincide";
+$FileUploadComplete = "Se cargó el archivo con éxito";
+$NoResultsAvailable = "No hay resultados disponibles";
 ?>

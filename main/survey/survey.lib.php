@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 17658 2009-01-12 16:07:22Z cfasanando $
+* 	@version $Id: survey.lib.php 17721 2009-01-14 17:31:23Z iflorespaz $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -4230,7 +4230,7 @@ class SurveyUtil {
 					</td>
 				</tr>
 				<tr>
-					<td>&nbsp;</td>
+					<td>&nbsp;<input type="hidden" name="cidReq" value="'.api_get_course_id().'"/></td>
 					<td><input type="submit" name="do_search" value="'.get_lang('Ok').'"/></td>
 				</tr>
 			</table>
@@ -4248,10 +4248,11 @@ class SurveyUtil {
 	function display_survey_list()
 	{
 		$parameters = array();
+		$parameters['cidReq']=api_get_course_id();
 		if ($_GET['do_search'])
 		{
 			$message = get_lang('DisplaySearchResults').'<br />';
-			$message .= '<a href="'.api_get_self().'">'.get_lang('DisplayAll').'</a>';
+			$message .= '<a href="'.api_get_self().'?'.api_get_cidreq().'">'.get_lang('DisplayAll').'</a>';
 			Display::display_normal_message($message, false);
 		}
 	
@@ -4272,7 +4273,6 @@ class SurveyUtil {
 		$table->set_header(10, get_lang('Modify'), false,'width="120"');
 		$table->set_column_filter(9, 'anonymous_filter');
 		$table->set_column_filter(10, 'modify_filter');
-		if (api_is_allowed_to_edit(false,true))
 			$table->set_form_actions(array ('delete' => get_lang('DeleteSurvey')));
 		$table->display();	
 	}
@@ -4281,10 +4281,11 @@ class SurveyUtil {
 	function display_survey_list_for_coach()
 	{
 		$parameters = array();
+		$parameters['cidReq']=api_get_course_id();
 		if ($_GET['do_search'])
 		{
 			$message = get_lang('DisplaySearchResults').'<br />';
-			$message .= '<a href="'.api_get_self().'">'.get_lang('DisplayAll').'</a>';
+			$message .= '<a href="'.api_get_self().'?'.api_get_cidreq().'">'.get_lang('DisplayAll').'</a>';
 			Display::display_normal_message($message, false);
 		}
 	
@@ -4390,7 +4391,7 @@ class SurveyUtil {
 		{
 			if ($_GET['keyword_title']<>'')
 			{
-				$search_term[] = 'title =\''.Database::escape_string($_GET['keyword_title']).'\'';
+				$search_term[] = 'title like "%" \''.Database::escape_string($_GET['keyword_title']).'\' "%"';
 			}
 			if ($_GET['keyword_code']<>'')
 			{
@@ -4426,7 +4427,6 @@ class SurveyUtil {
 		{
 			$search_restriction = 'WHERE '.$search_restriction;
 		}
-	
 		$sql = "SELECT count(survey_id) AS total_number_of_items FROM ".$table_survey.' '.$search_restriction;
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$obj = Database::fetch_object($res);
@@ -4900,7 +4900,7 @@ class SurveyUtil {
 		}
 		return $field_list_array;
 	}
-		/**
+	/**
 	 * @author Isaac Flores Paz <florespaz@bidsoftperu.com>
 	 * @param int $user_id - User ID
 	 * @param int $user_id_answer - User in survey answer table (user id or anonymus)

@@ -110,7 +110,7 @@ class quiz_processor extends search_processor {
             // get author
             $author = '';
             $item_result = api_sql_query ($sql);
-            if ($row = Database::fetch_array ($item_result)) {
+            if ($item_result !== FALSE && $row = Database::fetch_array ($item_result)) {
                 $user_data = api_get_user_info($row['insert_user_id']);
                 $author = $user_data['firstName'] .' '. $user_data['lastName'];
             }

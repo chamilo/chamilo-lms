@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 17548 2009-01-06 16:12:51Z cvargas1 $
+<?php // $Id: courses.php 17747 2009-01-15 21:03:02Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -56,7 +56,7 @@ api_block_anonymous_users();
 // include additional libraries
 include_once(api_get_path(LIBRARY_PATH) . 'debug.lib.inc.php');
 include_once(api_get_path(LIBRARY_PATH) . 'course.lib.php');
-
+require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 $ctok = $_SESSION['sec_token'];
 $stok = Security::get_token();
 

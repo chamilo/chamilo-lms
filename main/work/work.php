@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 17746 2009-01-15 20:33:37Z cvargas1 $
+*  	@version $Id: work.php 17747 2009-01-15 21:03:02Z cfasanando $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -110,6 +110,7 @@ require_once (api_get_path(LIBRARY_PATH) . 'security.lib.php');
 require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
 $ctok = $_SESSION['sec_token'];
@@ -987,19 +988,17 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 			$emailfromaddr = get_setting('emailAdministrator');
 			$emailfromname = get_setting('siteName');
 			$emailsubject = "[" . get_setting('siteName') . "] ";
-
+			$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
+		    $email_admin = get_setting('emailAdministrator');
 			// The body can be as long as you wish, and any combination of text and variables
-
-			//$emailbody=get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()." ($title)\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');			
+						
 			$emailbody = get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;curdirpath=".$my_cur_dir_path." (" . stripslashes($title) . ")\n\n" . get_setting('administratorName') . " " . get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . get_setting('siteName') . "\n" . get_lang('Email') . " : " . get_setting('emailAdministrator');
 
 			// Here we are forming one large header line
 			// Every header must be followed by a \n except the last
-			$emailheaders = "From: " . get_setting('administratorName') . " " . get_setting('administratorSurname') . " <" . get_setting('emailAdministrator') . ">\n";
-			$emailheaders .= "Reply-To: " . get_setting('emailAdministrator');
-
-			// Because I predefined all of my variables, this api_send_mail() function looks nice and clean hmm?
-			@ api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+			$headers="From: $sender_name <$email_admin>\r\nReply-to: $email_admin\r\nReturn-Path: $email_admin\r\ncharset=$charset";													
+			@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin,$headers);
+			
 		}
 	}
 	$message = get_lang('DocAdd');

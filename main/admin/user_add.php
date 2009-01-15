@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 17663 2009-01-12 20:26:15Z cfasanando $
+<?php // $Id: user_add.php 17747 2009-01-15 21:03:02Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,6 +39,8 @@ require_once ($libpath.'fileUpload.lib.php');
 require_once ($libpath.'usermanager.lib.php');
 require_once ($libpath.'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
+require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
+
 // section for the tabs
 $this_section=SECTION_PLATFORM_ADMIN;
 
@@ -412,12 +414,13 @@ if( $form->validate())
 		}
 		if (!empty ($email) && $send_mail)
 		{
-			$emailto = $firstname.' '.$lastname.' <'.$email.'>';
-			$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
-			$emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
-			$emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');
-			$emailbody=get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
-			@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+			$recipient_name = $firstname.' '.$lastname;
+			$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');			
+			$emailbody=get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');						
+			$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
+		    $email_admin = get_setting('emailAdministrator');
+			$headers="From: $sender_name <$email_admin>\r\nReply-to: $email_admin\r\nReturn-Path: $email_admin\r\ncharset=$charset";
+			@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin,$headers);
 		}
 		Security::clear_token();
 		if(isset($user['submit_plus']))

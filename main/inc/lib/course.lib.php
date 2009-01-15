@@ -1862,10 +1862,12 @@ class CourseManager
 				$emailbody		.=get_lang('UserName').': '.$student['username']."\n";
 				$emailbody		.=get_lang('LastName').': '.$student['lastname']."\n";
 				$emailbody		.=get_lang('FirstName').': '.$student['firstname']."\n";
-				$emailbody		.=get_lang('Email').': '.$student['email']."\n\n";
-				$emailheaders = "From: ".get_setting('administratorSurname')." ".get_setting('administratorName')." <".get_setting('emailAdministrator').">\n";
-				$emailheaders .= "Reply-To: ".get_setting('emailAdministrator');		
-				@ api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+				$emailbody		.=get_lang('Email').': '.$student['email']."\n\n";				
+				$recipient_name = $tutor['firstname'].' '.$tutor['lastname'];															
+				$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
+		    	$email_admin = get_setting('emailAdministrator');
+				$headers="From: $sender_name <$email_admin>\r\nReply-to: $email_admin\r\nReturn-Path: $email_admin\r\ncharset=$charset";
+				@api_mail($recipient_name, $emailto, $emailsubject, $emailbody, $sender_name,$email_admin,$headers);
 		}
 	}
 

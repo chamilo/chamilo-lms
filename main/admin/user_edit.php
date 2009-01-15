@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 17663 2009-01-12 20:26:15Z cfasanando $
+<?php // $Id: user_edit.php 17747 2009-01-15 21:03:02Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -69,6 +69,7 @@ require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
+require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 $user_id=isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
 $noPHP_SELF=true;
 $tool_name=get_lang('ModifyUserInfo');
@@ -428,18 +429,19 @@ if( $form->validate())
 	
 	if (!empty ($email) && $send_mail)
 	{
-		$emailto = $firstname.' '.$lastname.' <'.$email.'>';
-		$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
-		$emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
-		$emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');
+		$recipient_name = $firstname.' '.$lastname;
+		$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');												
+		$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
+	    $email_admin = get_setting('emailAdministrator');
+		$headers="From: $sender_name <$email_admin>\r\nReply-to: $email_admin\r\nReturn-Path: $email_admin\r\ncharset=$charset";
 		$emailbody = get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username;
 		// Send password by e-mail if it has been modified, even if encrypted in DB (it doesn't make sense to send an e-mail with login info without the password, even if the password is encrypted)
 		if($reset_password > 0)
 		{
 			$emailbody .= "\n".get_lang('Pass')." : ".stripslashes($password);
 		}
-		$emailbody .= "\n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
-		@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+		@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin,$headers);
+			
 	}
 	$tok = Security::get_token();		
 	header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')).'&sec_token='.$tok);

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: lostPassword.php 11873 2007-04-04 19:46:04Z pcool $
+// $Id: lostPassword.php 17747 2009-01-15 21:03:02Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -44,6 +44,7 @@ $language_file = "registration";
 require ('../inc/global.inc.php');
 require_once ('lost_password.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 $tool_name = get_lang('LostPassword');
 Display :: display_header($tool_name);
 

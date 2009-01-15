@@ -1,5 +1,5 @@
 <?php
-// $Id: lost_password.lib.php 14021 2007-12-18 19:48:14Z yannoo $
+// $Id: lost_password.lib.php 17747 2009-01-15 21:03:02Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -34,7 +34,8 @@ function get_email_headers()
 	global $charset;
 	$emailHeaders = "From: \"".addslashes(get_setting('administratorSurname')." ".get_setting('administratorName'))."\" <".get_setting('emailAdministrator').">\n";
 	$emailHeaders .= "Reply-To: ".get_setting('emailAdministrator')."\n";
-	$emailHeaders .= "X-Sender: ".get_setting('emailAdministrator')."\n";
+	$emailHeaders .= "Return-Path: ".get_setting('emailAdministrator')."\n";
+	$emailHeaders .= "X-Sender: ".get_setting('emailAdministrator')."\n";	
 	$emailHeaders .= "X-Mailer: PHP / ".phpversion()."\n";
 	$emailHeaders .= "Content-Type: text/plain;\n\tcharset=\"".$charset."\"\n";
 	$emailHeaders .= "Mime-Version: 1.0";
@@ -80,14 +81,16 @@ function send_password_to_user($user)
 {
 	global $charset;
 	global $_configuration;
-
 	$emailHeaders = get_email_headers(); // Email Headers
 	$emailSubject = "[".get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 	$userAccountList = get_user_account_list($user); // BODY
 	$emailBody = get_lang('YourAccountParam')." ".$_configuration['root_web']."\n\n$userAccountList";
 	// SEND MESSAGE
-	$emailTo = $user[0]["email"];
-	if (@ api_send_mail($emailTo, $emailSubject, $emailBody, $emailHeaders))
+	$emailTo = $user[0]["email"];			
+	$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
+    $email_admin = get_setting('emailAdministrator');			
+				
+	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name,$email_admin,$emailHeaders)==1)
 	{
 		Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
 	}
@@ -113,13 +116,15 @@ function handle_encrypted_password($user)
 	$emailSubject = "[".get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 	$userAccountList = get_user_account_list($user, true); // BODY
 	$emailTo = $user[0]["email"];
-	$secretword = get_secret_word($emailTo);
-	//$emailBody = get_lang("password_request")."\n\n\n".get_lang("YourAccountParam")." ".$_configuration['root_web']."\n\n".$userAccountList;
+	$secretword = get_secret_word($emailTo);	
 	$emailBody = get_lang('DearUser')." :\n".get_lang("password_request")."\n\n";
 	$emailBody .= "-----------------------------------------------\n".$userAccountList."\n-----------------------------------------------\n\n";
 	$emailBody .=get_lang('PasswordEncryptedForSecurity');
 	$emailBody .="\n\n".get_lang('Formula').",\n".get_lang('PlataformAdmin');
-	if (@ api_send_mail($emailTo, $emailSubject, $emailBody, $emailHeaders))
+	$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
+    $email_admin = get_setting('emailAdministrator');
+			
+	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name,$email_admin,$emailHeaders)==1)
 	{
 		Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
 	}

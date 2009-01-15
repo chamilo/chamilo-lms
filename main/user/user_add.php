@@ -35,6 +35,7 @@ $language_file="registration";
 
 
 include("../inc/global.inc.php");
+require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 $this_section=SECTION_COURSES;
 
 if (! ($is_courseAdmin || $is_platformAdmin)) api_not_allowed(true);
@@ -200,13 +201,16 @@ if($register)
 
 		$emailheaders  = "From: ".get_setting('administratorSurname')." ".get_setting('administratorName')." <".$administratorEmail.">\n";
 		$emailheaders .= "Reply-To: ".$administratorEmail."\n";
+		$emailheaders .= "Return-Path: ".$administratorEmail."\n";
+		$emailheaders .= "charset: ".$charset."\n";
 		$emailheaders .= "X-Mailer: PHP/" . phpversion() . "\n";
 		$emailheaders .= "X-Sender-IP: $REMOTE_ADDR"; // (small security precaution...)
-
+		$recipient_name = $firstname_form.' '.$lastname_form;
+		$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
+	    $email_admin = get_setting('emailAdministrator');	
 		if ($courseRegSucceed)
 		{
 			$emailbody = get_lang('Dear')." ".stripslashes("$firstname_form $lastname_form").",\n".get_lang('OneResp')." $currentCourseName ".get_lang('RegYou')." ".get_setting('siteName')." ".get_lang('Settings')." $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is').": ".$_configuration['root_web']."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".get_setting('administratorSurname')." ".get_setting('administratorName')."\n".get_lang('Manager')." ".get_setting('siteName')." \nT. ".get_setting('administratorTelephone')."\n".get_lang('Email').": ".get_setting('emailAdministrator')."\n";
-
 			$message = get_lang('TheU')." ".stripslashes("$firstname_form $lastname_form")." ".get_lang('AddedToCourse')."<a href=\"user.php\">".get_lang('BackUser')."</a>\n";
 		}
 		else
@@ -216,7 +220,7 @@ if($register)
 			$message = stripslashes("$firstname_form $lastname_form")." ".get_lang('AddedU');
 		}
 
-		@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+		@api_mail($recipient_name, $email_form, $emailsubject, $emailbody, $sender_name,$email_admin,$emailheaders);
 
 		/*
 		 * remove <form> variables to prevent any pre-filled fields

@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 17747 2009-01-15 21:03:02Z cfasanando $
+// $Id: inscription.php 17749 2009-01-15 22:18:24Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -350,33 +350,44 @@ if ($form->validate()) {
 		// if the account has to be approved then we set the account to inactive, sent a mail to the platform admin and exit the page.
 		if (get_setting('allow_registration')=='approval')
 		{
+			$TABLE_USER= Database::get_main_table(TABLE_MAIN_USER);
 			// 1. set account inactive
-			$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
-						SET active='0' WHERE user_id='".$user_id."'";
+			$sql = "UPDATE ".$TABLE_USER."	SET active='0' WHERE user_id='".$user_id."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 
-			// 2. send mail to the platform admin
-			$emailfromaddr 	= api_get_setting('emailAdministrator');
-			$emailfromname 	= api_get_setting('siteName');
-			$emailto		= api_get_setting('emailAdministrator');
-			$emailsubject	= get_lang('ApprovalForNewAccount').': '.$values['username'];
-			$emailbody		= get_lang('ApprovalForNewAccount')."\n";
-			$emailbody		.=get_lang('UserName').': '.$values['username']."\n";
-			$emailbody		.=get_lang('LastName').': '.$values['lastname']."\n";
-			$emailbody		.=get_lang('FirstName').': '.$values['firstname']."\n";
-			$emailbody		.=get_lang('Email').': '.$values['email']."\n";
-			$emailbody		.=get_lang('Status').': '.$values['status']."\n\n";
-			$emailbody		.=get_lang('ManageUser').': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;			
-																	
-			$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-		    $email_admin = get_setting('emailAdministrator');
-			$headers="From: $sender_name <$email_admin>\r\nReply-to: $email_admin\r\nReturn-Path: $email_admin\r\ncharset=$charset";
-			@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin,$headers);
+			
+			$sql_get_id_admin="SELECT * FROM ".Database::get_main_table(TABLE_MAIN_ADMIN);
+			$result=api_sql_query($sql_get_id_admin,__FILE__,__LINE__);
+			while ($row = Database::fetch_array($result)) {
+					
+				$sql_admin_list="SELECT * FROM ".$TABLE_USER." WHERE user_id='".$row['user_id']."'";			
+				$result_list=api_sql_query($sql_admin_list,__FILE__,__LINE__);
+				$admin_list=Database::fetch_array($result_list);
+				$emailto		= $admin_list['email'];
 
-			// 3. exit the page
-			unset($user_id);
-			Display :: display_footer();
-			exit;
+
+				// 2. send mail to the platform admin
+				$emailfromaddr 	= api_get_setting('emailAdministrator');
+				$emailfromname 	= api_get_setting('siteName');
+				$emailsubject	= get_lang('ApprovalForNewAccount').': '.$values['username'];
+				$emailbody		= get_lang('ApprovalForNewAccount')."\n";
+				$emailbody		.=get_lang('UserName').': '.$values['username']."\n";
+				$emailbody		.=get_lang('LastName').': '.$values['lastname']."\n";
+				$emailbody		.=get_lang('FirstName').': '.$values['firstname']."\n";
+				$emailbody		.=get_lang('Email').': '.$values['email']."\n";
+				$emailbody		.=get_lang('Status').': '.$values['status']."\n\n";
+				
+				$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
+			    $email_admin = get_setting('emailAdministrator');
+				$headers="From: $sender_name <$email_admin>\r\nReply-to: $email_admin\r\nReturn-Path: $email_admin\r\ncharset=$charset";
+				@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin,$headers);
+				
+			}
+				// 3. exit the page
+				unset($user_id);
+				Display :: display_footer();
+				exit;
+			
 		}
 
 

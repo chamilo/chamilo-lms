@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 17749 2009-01-15 22:18:24Z cvargas1 $
+// $Id: inscription.php 17752 2009-01-15 22:43:10Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -376,11 +376,12 @@ if ($form->validate()) {
 				$emailbody		.=get_lang('FirstName').': '.$values['firstname']."\n";
 				$emailbody		.=get_lang('Email').': '.$values['email']."\n";
 				$emailbody		.=get_lang('Status').': '.$values['status']."\n\n";
+				$emailbody		.=get_lang('ManageUser').': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;	
 				
 				$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
 			    $email_admin = get_setting('emailAdministrator');
-				$headers="From: $sender_name <$email_admin>\r\nReply-to: $email_admin\r\nReturn-Path: $email_admin\r\ncharset=$charset";
-				@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin,$headers);
+				//$headers="From: $sender_name <$email_admin>\r\nReply-to: $email_admin\r\nReturn-Path: $email_admin\r\ncharset=$charset";
+				@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
 				
 			}
 				// 3. exit the page

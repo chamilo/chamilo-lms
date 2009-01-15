@@ -80,6 +80,7 @@ if(isset($_GET['origin']))
 // --------------------------------------
 $thread_structure="<div class=\"structure\">".get_lang('Structure')."</div>";
 $counter=0;
+$count=0;
 $prev_next_array=array();
 foreach ($rows as $post)
 {
@@ -111,9 +112,11 @@ foreach ($rows as $post)
 		{
 			$class='';
 		}
-		$thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$post['post_id']."&amp;origin=$origin\" $class>".prepare4display($post['post_title'])."</a></div>\n";
+		$count_loop=($count==0)?'&id=1' : '';
+		$thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$post['post_id']."&amp;origin=$origin$count_loop\" $class>".prepare4display($post['post_title'])."</a></div>\n";
 		$prev_next_array[]=$post['post_id'];
 	}	
+	$count++;
 }
 
 /*-------------------------------------------------- 
@@ -238,7 +241,9 @@ if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_f
 	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=delete&amp;content=post&amp;id=".$rows[$display_post_id]['post_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeletePost"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>\n";
 	display_visible_invisible_icon('post', $rows[$display_post_id]['post_id'], $rows[$display_post_id]['visible'],array('forum'=>Security::remove_XSS($_GET['forum']),'thread'=>Security::remove_XSS($_GET['thread']), 'post'=>Security::remove_XSS($_GET['post']) ));
 	echo "\n";
-	echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;origin=".$origin."&amp;action=move&amp;post=".$rows[$display_post_id]['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>\n";
+	if (!isset($_GET['id'])) {
+		echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;origin=".$origin."&amp;action=move&amp;post=".$rows[$display_post_id]['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>\n";	
+	}
 }
 $userinf=api_get_user_info($rows[$display_post_id]['user_id']);
 	if($userinf['status']!='1')

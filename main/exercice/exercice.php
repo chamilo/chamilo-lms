@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 17605 2009-01-08 22:29:28Z cfasanando $
+<?php // $Id: exercice.php 17741 2009-01-15 17:36:02Z cfasanando $
 
 /*
 ==============================================================================
@@ -423,10 +423,7 @@ if ($is_allowedToEdit) {
 				case 'enable':  // enables an exercise
 								$objExerciseTmp->enable();
 								$objExerciseTmp->save();
-
-								// "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
-								api_item_property_update($_course, TOOL_QUIZ, $exerciseId, "QuizAdded", $_user['user_id']);
-
+								// "WHAT'S NEW" notification: update table item_property (previously last_tooledit)								
 								Display::display_confirmation_message(get_lang('VisibilityChanged'));
 
 								break;

@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 17609 2009-01-09 00:28:59Z marvil07 $
+* 	@version $Id: exercise.class.php 17741 2009-01-15 17:36:02Z cfasanando $
 */
 
 
@@ -461,10 +461,10 @@ class Exercise
 	 */
 	function save()
 	{
+		global $_course,$_user;
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);        
         $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);        
-
 		$id=$this->id;
 		$exercise=addslashes($this->exercise);
 		$description=addslashes($this->description);
@@ -491,7 +491,10 @@ class Exercise
 						"results_disabled='".Database::escape_string($results_disabled)."'
 					WHERE id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
-
+			
+			// update into the item_property table	
+			api_item_property_update($_course, TOOL_QUIZ, $id,'QuizUpdated',$_user['user_id']);	
+										
             if (api_get_setting('search_enabled')=='true') {
                 $this -> search_engine_edit();
             }
@@ -514,8 +517,10 @@ class Exercise
 						)";
 			api_sql_query($sql,__FILE__,__LINE__);
 
-			$this->id=mysql_insert_id();
-
+			$this->id=mysql_insert_id();		
+        	// insert into the item_property table
+        	
+        	api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizAdded',$_user['user_id']);
 			if (api_get_setting('search_enabled')=='true') {
 				$this -> search_engine_save();
 			}
@@ -757,10 +762,12 @@ class Exercise
 	 * @author - Olivier Brouckaert
 	 */
 	function delete(){
+		global $_course,$_user;
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 		$sql="UPDATE $TBL_EXERCICES SET active='-1' WHERE id='".Database::escape_string($this->id)."'";
 		api_sql_query($sql);
-
+		api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizDeleted',$_user['user_id']);
+		
 		if (api_get_setting('search_enabled')=='true') {
 			$this -> search_engine_delete();
 		}

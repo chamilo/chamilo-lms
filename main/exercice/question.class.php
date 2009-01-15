@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 17609 2009-01-09 00:28:59Z marvil07 $
+<?php // $Id: question.class.php 17741 2009-01-15 17:36:02Z cfasanando $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 17609 2009-01-09 00:28:59Z marvil07 $
+* 	@version $Id: question.class.php 17741 2009-01-15 17:36:02Z cfasanando $
 */
 
 
@@ -552,8 +552,11 @@ abstract class Question
 	 */
 	function save($exerciseId=0)
 	{
-		global $TBL_QUESTIONS, $TBL_EXERCICE_QUESTION, $_course;
-
+		global $_course,$_user;
+		
+		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);		
+		$TBL_QUESTIONS			= Database::get_course_table(TABLE_QUIZ_QUESTION);
+		
 		$id=$this->id;
 		$question=addslashes($this->question);
 		$description=addslashes($this->description);
@@ -562,8 +565,8 @@ abstract class Question
 		$type=$this->type;
 		$picture=addslashes($this->picture);
 
-		// question already exists
-		if($id)
+		// question already exists		
+		if(!empty($id))
 		{
 			$sql="UPDATE $TBL_QUESTIONS SET 
 					question 	='".Database::escape_string($question)."',
@@ -574,7 +577,9 @@ abstract class Question
 					picture		='".Database::escape_string($picture)."' 
 				WHERE id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
-
+			if(!empty($exerciseId)) {
+			api_item_property_update($_course, TOOL_QUIZ, $id,'QuizQuestionUpdated',$_user['user_id']);
+			}
             if (api_get_setting('search_enabled')=='true') {
                 if ($exerciseId != 0) {
                     $this -> search_engine_edit($exerciseId);
@@ -608,7 +613,9 @@ abstract class Question
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			$this->id=mysql_insert_id();
-
+			
+			api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizQuestionAdded',$_user['user_id']);
+			
 			// If hotspot, create first answer
 			if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
 				$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
@@ -838,8 +845,12 @@ abstract class Question
 	 */
 	function delete($deleteFromEx=0)
 	{
-		global $TBL_EXERCICE_QUESTION, $TBL_QUESTIONS, $TBL_REPONSES;
-
+		global $_course,$_user;
+		
+		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);		
+		$TBL_QUESTIONS			= Database::get_course_table(TABLE_QUIZ_QUESTION);
+		$TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
+		
 		$id=$this->id;
 
 		// if the question must be removed from all exercises
@@ -864,7 +875,8 @@ abstract class Question
 
 			$sql="DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
-
+			
+			api_item_property_update($_course, TOOL_QUIZ, $id,'QuizQuestionDeleted',$_user['user_id']);
 			$this->removePicture();
 
 			// resets the object
@@ -878,6 +890,7 @@ abstract class Question
                 // disassociate question with this exercise
                 $this -> search_engine_edit($deleteFromEx, FALSE, TRUE);
             }
+            api_item_property_update($_course, TOOL_QUIZ, $id,'QuizQuestionDeleted',$_user['user_id']);
 		}
 	}
 

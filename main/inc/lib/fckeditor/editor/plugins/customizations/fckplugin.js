@@ -49,7 +49,7 @@
 
 /*
  **************************************************************************************
- * Reading some passed by PHP-scripts options.
+ * Initialization.
  **************************************************************************************
  */
 
@@ -73,6 +73,36 @@ else
 	FCKConfig.InDocument = false ;
 }
 
+// Absolute URL to document repository root.
+if ( !FCKConfig.CreateDocumentWebDir )
+{
+	FCKConfig.CreateDocumentWebDir = '' ;
+}
+
+// Relative path from the document to the repository root.
+if ( !FCKConfig.CreateDocumentDir )
+{
+	FCKConfig.CreateDocumentDir = '' ;
+}
+
+// This is the base of the reltive URLs that are used by the dialog system.
+if ( !FCKConfig.BaseHref || FCKConfig.BaseHref.toString().length == 0 )
+{
+	if ( FCKConfig.BaseHref.toString().length == 0 )
+	{
+		FCKConfig.BaseHref = FCKConfig.CreateDocumentWebDir ;
+	}
+}
+
+FCKConfig.BaseHref = FCKConfig.BaseHref.toString();
+
+if ( FCKConfig.BaseHref.length > 0 )
+{
+	if ( FCKConfig.BaseHref.substr( FCKConfig.BaseHref.length - 1 ) != '/' )
+	{
+		FCKConfig.BaseHref = FCKConfig.BaseHref + '/' ;
+	}
+}
 
 /*
  **************************************************************************************
@@ -998,7 +1028,7 @@ FCK.RegisterDoubleClickHandler(
 
 /*
  **************************************************************************************
- * Common utilities
+ * Routines for testing the type of a selected visual object.
  **************************************************************************************
  */
 
@@ -1172,6 +1202,395 @@ FCK.GetVideoType = function ( img )
 
 	return false ;
 } ;
+
+
+/*
+ **************************************************************************************
+ * Routines to deal with conversions of absolute and relative URLs.
+ **************************************************************************************
+ */
+
+// Constants for fundamental URL conversions.
+var RELATIVE_URL = 'relative' ;
+var ABSOLUTE_URL = 'absolute' ;
+var SEMI_ABSOLUTE_URL = 'semi-absolute' ;
+FCK.RELATIVE_URL = RELATIVE_URL ;
+FCK.ABSOLUTE_URL = ABSOLUTE_URL ;
+FCK.SEMI_ABSOLUTE_URL = SEMI_ABSOLUTE_URL ;
+
+// Constants used for conversions of special relative URLs.
+var REPOSITORY_RELATIVE_URL = 'repository-relative' ;
+var DOCUMENT_RELATIVE_URL = 'document-relative' ;
+FCK.REPOSITORY_RELATIVE_URL = REPOSITORY_RELATIVE_URL ;
+FCK.DOCUMENT_RELATIVE_URL = DOCUMENT_RELATIVE_URL ;
+
+// Conversion of selected by the file managers URLs.
+FCK.GetSelectedUrl = function ( url )
+{
+	url = FCK.GetUrl ( url, DOCUMENT_RELATIVE_URL ) ;
+
+	if ( FCK.GetUrlType (url) != RELATIVE_URL )
+	{
+		url = FCK.GetUrl ( url, SEMI_ABSOLUTE_URL ) ;
+	}
+
+	return url ;
+}
+
+// Conversion of a URL into desired type.
+FCK.GetUrl = function ( url, type )
+{
+	if ( !url )
+	{
+		return url ;
+	}
+
+	if ( !type )
+	{
+		return url ;
+	}
+
+	url = url.toString().Trim() ;
+
+	if ( url.indexOf( './' ) == 0 )
+	{
+		url = url.substr( 2 );
+	}
+
+	switch ( type )
+	{
+		case RELATIVE_URL:
+
+			switch ( FCK.GetUrlType( url ) )
+			{
+				case RELATIVE_URL:
+
+					break ;
+
+				case ABSOLUTE_URL:
+				case SEMI_ABSOLUTE_URL:
+
+					url = FCK.ConvertUrl( url, RELATIVE_URL, FCKConfig.CreateDocumentWebDir ) ;
+					if ( FCK.GetUrlType( url ) == RELATIVE_URL )
+					{
+						url = FCK.GetUrl( url, DOCUMENT_RELATIVE_URL ) ;
+					}
+
+					break ;
+
+				default:
+					break ;
+			}
+
+			break ;
+
+		case REPOSITORY_RELATIVE_URL:
+
+			switch ( FCK.GetUrlType( url ) )
+			{
+				case RELATIVE_URL:
+
+					if ( url.indexOf( FCKConfig.CreateDocumentDir) == 0 )
+					{
+						url = url.substr( FCKConfig.CreateDocumentDir.length ) ;
+					}
+					
+					break ;
+
+				case ABSOLUTE_URL:
+
+					url = FCK.ConvertUrl( url, RELATIVE_URL, FCKConfig.CreateDocumentWebDir ) ;
+
+					break ;
+
+				case SEMI_ABSOLUTE_URL:
+
+					url = FCK.ConvertUrl( url, RELATIVE_URL, FCKConfig.CreateDocumentWebDir ) ;
+
+					break ;
+
+				default:
+					break ;
+			}
+
+			break ;
+
+		case DOCUMENT_RELATIVE_URL:
+
+			switch ( FCK.GetUrlType( url ) )
+			{
+				case RELATIVE_URL:
+
+					if ( FCKConfig.CreateDocumentDir !=  '/' )
+					{
+						url = FCKConfig.CreateDocumentDir + url ;
+					}
+					
+					break ;
+
+				case ABSOLUTE_URL:
+				case SEMI_ABSOLUTE_URL:
+
+					url = FCK.ConvertUrl( url, RELATIVE_URL, FCKConfig.CreateDocumentWebDir ) ;
+					if ( FCK.GetUrlType( url ) == RELATIVE_URL )
+					{
+						url = FCK.GetUrl( url, DOCUMENT_RELATIVE_URL ) ;
+					}
+
+					break ;
+
+				default:
+					break ;
+			}
+
+			break ;
+
+		case ABSOLUTE_URL:
+
+			switch ( FCK.GetUrlType( url ) )
+			{
+				case RELATIVE_URL:
+
+					url = FCK.GetUrl( url, REPOSITORY_RELATIVE_URL ) ;
+					url = FCK.ConvertUrl( url, ABSOLUTE_URL, FCKConfig.CreateDocumentWebDir) ;
+					
+					break ;
+
+				case ABSOLUTE_URL:
+
+					break ;
+
+				case SEMI_ABSOLUTE_URL:
+
+					url = FCK.ConvertUrl( url, ABSOLUTE_URL, FCKConfig.CreateDocumentWebDir) ;
+
+					break ;
+
+				default:
+					break ;
+			}
+
+			break ;
+
+		case SEMI_ABSOLUTE_URL:
+
+			switch ( FCK.GetUrlType( url ) )
+			{
+				case RELATIVE_URL:
+
+					url = FCK.GetUrl( url, REPOSITORY_RELATIVE_URL ) ;
+					url = FCK.ConvertUrl( url, SEMI_ABSOLUTE_URL, FCKConfig.CreateDocumentWebDir) ;
+					
+					break ;
+
+				case ABSOLUTE_URL:
+
+					url = FCK.ConvertUrl( url, SEMI_ABSOLUTE_URL, FCKConfig.CreateDocumentWebDir) ;
+
+					break ;
+
+				case SEMI_ABSOLUTE_URL:
+
+					break ;
+
+				default:
+					break ;
+			}
+
+			break ;
+
+		default:
+			break ;
+	}
+
+	return url ;
+}
+
+// Common URL conversion routine.
+FCK.ConvertUrl = function ( url, type, base )
+{
+	if ( !url )
+	{
+		return '' ;
+	}
+
+	if ( !type )
+	{
+		return '' ;
+	}
+
+	url = url.toString().Trim() ;
+
+	if ( url.indexOf( './' ) == 0 )
+	{
+		url = url.substr( 2 );
+	}
+
+	type = type.toString().Trim() ;
+
+	if ( !base )
+	{
+		base = '' ;
+	}
+
+	base = base.toString().Trim() ;
+
+	if ( base ==  '/' )
+	{
+		base = '' ;
+	}
+
+	switch ( type )
+	{
+		case RELATIVE_URL:
+
+			switch ( FCK.GetUrlType( url ) )
+			{
+				case ABSOLUTE_URL:
+
+					base = FCK.ConvertUrl( base, ABSOLUTE_URL ) ;
+
+					if ( url.indexOf( base ) == 0 )
+					{
+						url = url.substr( base.length ) ;
+					}
+
+					break ;
+
+				case SEMI_ABSOLUTE_URL:
+
+					base = FCK.ConvertUrl( base, SEMI_ABSOLUTE_URL ) ;
+
+					if ( url.indexOf( base ) == 0 )
+					{
+						url = url.substr( base.length ) ;
+					}
+
+					break ;
+
+				default:
+					break ;
+			}
+
+			break ;
+
+		case ABSOLUTE_URL:
+
+			switch ( FCK.GetUrlType( url ) )
+			{
+				case RELATIVE_URL:
+
+					base = FCK.ConvertUrl( base, ABSOLUTE_URL ) ;
+
+					url = base + url ;
+
+					break ;
+
+				case SEMI_ABSOLUTE_URL:
+
+					url = FCK.GetServerBase() + url.substr( 1 ) ;
+
+					break ;
+
+				default:
+					break ;
+			}
+
+			break ;
+
+		case SEMI_ABSOLUTE_URL:
+
+			switch ( FCK.GetUrlType( url ) )
+			{
+				case RELATIVE_URL:
+
+					base = FCK.ConvertUrl( base, SEMI_ABSOLUTE_URL ) ;
+
+					url = base + url ;
+
+					break ;
+
+				case ABSOLUTE_URL:
+
+					var serverBase = FCK.GetServerBase() ;
+					if ( serverBase == FCK.GetServerBase( url ) )
+					{
+						url = '/' + url.substr( serverBase.length ) ;
+					}
+
+					break ;
+
+				default:
+					break ;
+			}
+
+			break ;
+
+		default:
+			break ;
+	}
+
+	return url ;
+}
+
+// Returns type of a given URL.
+// Returned values:
+// RELATIVE_URL ( returned for example for images/image.png )
+// SEMI_ABSOLUTE_URL ( /dokeos/courses/TEST/document/images/image.png )
+// ABSOLUTE_URL ( http://localhost/dokeos/courses/TEST/document/images/image.png )
+// '' - in case of error
+FCK.GetUrlType = function ( url )
+{
+	if ( !url )
+	{
+		return '' ;
+	}
+
+	url = url.toString().Trim() ;
+
+	if ( url.indexOf( '/' ) == 0 )
+	{
+		return SEMI_ABSOLUTE_URL ;
+	}
+
+	if ( url.match( /^([^:]+\:)?\/\// ) )
+	{
+		return ABSOLUTE_URL ;
+	}
+
+	return RELATIVE_URL ;
+} ;
+
+// Extracts the server base from a given URL.
+// If the URL is omited, the function returns the base of the server where LMS runs.
+// Example:
+//     Your site is http://www.mysite.org/dokeos
+//     The server base is http://www.mysite.org/
+FCK.GetServerBase = function ( url )
+{
+	if ( !url )
+	{
+		if ( FCKConfig.CreateDocumentWebDir )
+		{
+			url = FCKConfig.CreateDocumentWebDir ;
+		}
+		else
+		{
+			url = location.href ;
+		}
+	}
+
+	url = url.toString().replace( /(https?:\/\/[^\/]*)\/.*/, '$1' ) + '/' ;
+
+	return url ;
+} ;
+
+
+/*
+ **************************************************************************************
+ * Deprecated routines, to be removed after full adopting the new URL-related routines.
+ **************************************************************************************
+ */
 
 // Makes a URL relative.
 FCK.RemoveBasePath = function ( url )

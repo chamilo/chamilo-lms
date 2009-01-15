@@ -61,12 +61,9 @@
 	/////////////////// end from Dokeos
 	
 	//FILESYSTEM CONFIG	<br>
-	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "class.auth.php");	
+	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "class.auth.php");
 	define('CONFIG_QUERY_STRING_ENABLE', true); //Enable passed query string to setting the system configuration
-	if(!isset($_SESSION))
-	{
-		session_start();
-	}
+
 	if(!headers_sent())
 	{
 		header('Content-Type: text/html; charset=utf-8');
@@ -118,7 +115,7 @@
 	require_once(DIR_AJAX_INC . "function.base.php");	
 	
 	require_once(dirname(__FILE__) .  DIRECTORY_SEPARATOR . "class.session.php");
-	$session = new Session();
+	
 	$auth = new Auth();
 	
 	if(CONFIG_ACCESS_CONTROL_MODE == 1)

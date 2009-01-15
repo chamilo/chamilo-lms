@@ -14,12 +14,12 @@ var clock_set = 0;
  */
 function openCalendar(form, field) {
     window.open("./calendar_view.php", "calendar", "width=220,height=200,status=no");
-	day = eval("document." + form + "." + field + "day.options["+ "document." + form + "." + field + "day.selectedIndex].value");
+    day = eval("document." + form + "." + field + "day.options["+ "document." + form + "." + field + "day.selectedIndex].value");
     month = eval("document." + form + "." + field + "month.options["+ "document." + form + "." + field + "month.selectedIndex].value");
-   	month = month-1;
+    month = month-1;
     year = eval("document." + form + "." + field + "year.options["+ "document." + form + "." + field + "year.selectedIndex].value");
-	formName = form;
-	fieldName =field;
+    formName = form;
+    fieldName =field;
 }
 
 /**
@@ -58,9 +58,9 @@ function formatNum4(i) {
  */
 function initCalendar() {
     if (!year && !month && !day) {
-		day = window.opener.day;
-		month = window.opener.month;
-		year  = window.opener.year;   
+        day = window.opener.day;
+        month = window.opener.month;
+        year  = window.opener.year;   
         if (isNaN(year) || isNaN(month) || isNaN(day) || day == 0) {
             dt      = new Date();
             year    = dt.getFullYear();
@@ -90,7 +90,7 @@ function initCalendar() {
     str = ""
 
     //heading table
-    str += '<table class="calendar"><tr><th class="monthyear" width="50%">';
+    str += '<table class="data_table"><tr><th class="monthyear" width="50%">';
     str += '<a href="javascript:month--; initCalendar();">&laquo;</a> ';
     str += month_names[month];
     str += ' <a href="javascript:month++; initCalendar();">&raquo;</a>';
@@ -100,9 +100,9 @@ function initCalendar() {
     str += ' <a href="javascript:year++; initCalendar();">&raquo;</a>';
     str += '</th></tr></table>';
 
-    str += '<table class="calendar"><tr>';
+    str += '<table class="data_table"><tr>';
     for (i = 0; i < 7; i++) {
-        str += "<th  class='daynames'>" + day_names[i] + "</th>";
+        str += "<td class='weekdays'>" + day_names[i] + "</td>";
     }
     str += "</tr>";
 
@@ -147,93 +147,13 @@ function initCalendar() {
  * @param   string     date text
  */
 function returnDate(d,m,y) {
-	cmd = "window.opener.document."+window.opener.formName+"."+window.opener.fieldName+"day.selectedIndex = "+(d-1);
-	eval(cmd);
-	cmd = "window.opener.document."+window.opener.formName+"."+window.opener.fieldName+"month.selectedIndex = "+m;
-	eval(cmd);
-	date = new Date();
-	year = date.getFullYear()-1;
-	cmd = "window.opener.document."+window.opener.formName+"."+window.opener.fieldName+"year.selectedIndex = "+(y-year);
-	eval(cmd);
+    cmd = "window.opener.document."+window.opener.formName+"."+window.opener.fieldName+"day.selectedIndex = "+(d-1);
+    eval(cmd);
+    cmd = "window.opener.document."+window.opener.formName+"."+window.opener.fieldName+"month.selectedIndex = "+m;
+    eval(cmd);
+    date = new Date();
+    year = date.getFullYear()-1;
+    cmd = "window.opener.document."+window.opener.formName+"."+window.opener.fieldName+"year.selectedIndex = "+(y-year);
+    eval(cmd);
     window.close();
-}
-
-
-
-
-function mktime() {
-                        
-                var no, ma = 0, mb = 0, i = 0, d = new Date(), argv = arguments, argc = argv.length;
-                d.setHours(0,0,0); d.setDate(1); d.setMonth(1); d.setYear(1972);
-             
-                var dateManip = {
-                    0: function(tt){ return d.setHours(tt); },
-                    1: function(tt){ return d.setMinutes(tt); },
-                    2: function(tt){ set = d.setSeconds(tt); mb = d.getDate() - 1; return set; },
-                    3: function(tt){ set = d.setMonth(parseInt(tt)-1); ma = d.getFullYear() - 1972; return set; },
-                    4: function(tt){ return d.setDate(tt+mb); },
-                    5: function(tt){ return d.setYear(tt+ma); }
-                };
-                
-                for( i = 0; i < argc; i++ ){
-                    no = parseInt(argv[i]*1);
-                    if (isNaN(no)) {
-                        return false;
-                    } else {
-                        // arg is number, lets manipulate date object
-                        if(!dateManip[i](no)){
-                            // failed
-                            return false;
-                        }
-                    }
-                }
-             
-                return Math.floor(d.getTime()/1000);
-}   
-
-function validate_date(){
-
-                var fday = document.new_calendar_item.fday.value;
-                var fmonth = document.new_calendar_item.fmonth.value;
-                var fyear = document.new_calendar_item.fyear.value;     
-                var fhour = document.new_calendar_item.fhour.value;     
-                var fminute = document.new_calendar_item.fminute.value;
-                var fdate = mktime(fhour,fminute,0,fmonth,fday,fyear)
-                        
-                var end_fday = document.new_calendar_item.end_fday.value;
-                var end_fmonth = document.new_calendar_item.end_fmonth.value;
-                var end_fyear = document.new_calendar_item.end_fyear.value;     
-                var end_fhour = document.new_calendar_item.end_fhour.value;     
-                var end_fminute = document.new_calendar_item.end_fminute.value;
-                var end_fdate = mktime(end_fhour,end_fminute,0,end_fmonth,end_fday,end_fyear)       
-                
-                var title = document.new_calendar_item.title.value;
-                
-                msg_id1 = document.getElementById(\"msg_error1\");
-                msg_id2 = document.getElementById(\"msg_error2\");      
-                msg_id3 = document.getElementById(\"msg_error3\");
-       
-                
-                
-                if(title==\"\"){
-                     
-                    msg_id1.style.display =\"block\";
-                    msg_id1.innerHTML=".get_lang('FieldRequired').";
-                    msg_id2.innerHTML=\"\"; msg_id3.innerHTML=\"\";   
-                }
-                else if(fdate > end_fdate)
-                {
-                     
-                    msg_id2.style.display =\"block\";
-                    msg_id2.innerHTML=".get_lang('DateExpiredNotBeLessDeadLine').";
-                    msg_id1.innerHTML=\"\"; msg_id3.innerHTML=\"\";                                             
-                }
-                else if (checkDate(ends_month,ends_day,ends_year) == false)
-                {
-                    msg_id3.style.display =\"block\";
-                    msg_id3.innerHTML="'.get_lang('InvalidDate').'";
-                    msg_id1.innerHTML=""; msg_id2.innerHTML="";      
-                }         
-                
-                        
 }

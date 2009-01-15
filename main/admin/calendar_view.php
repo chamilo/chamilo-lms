@@ -47,6 +47,17 @@ $MonthsLong = array(get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang(
 <head>
 <title>Calendar</title>
 <style type="text/css">
+@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/<?php echo api_get_setting('stylesheets'); ?>/default.css";
+.data_table th
+{
+	font-size: 10px;
+}
+.data_table td
+{
+	font-size: 10px;
+	width: 25px;
+	height: 25px;
+}
 table.calendar
 {
 	width: 100%;	

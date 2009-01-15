@@ -146,10 +146,7 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 function to_javascript()
 {
 $Send2All=get_lang("Send2All");
-
-
 return "<script type=\"text/javascript\" language=\"JavaScript\">
-
 <!-- Begin javascript menu swapper
 
 function move(fbox,	tbox)
@@ -206,6 +203,54 @@ function move(fbox,	tbox)
 	}
 }
 
+function checkDate(month, day, year)
+{
+  var monthLength = 
+    new Array(31,28,31,30,31,30,31,31,30,31,30,31);
+
+  if (!day || !month || !year)
+    return false;
+
+  // check for bisestile year
+  if (year/4 == parseInt(year/4))
+    monthLength[1] = 29;
+
+  if (month < 1 || month > 12)
+    return false;
+
+  if (day > monthLength[month-1])
+    return false;
+  
+  return true;
+}		
+
+function mktime() 
+{		    
+    var no, ma = 0, mb = 0, i = 0, d = new Date(), argv = arguments, argc = argv.length;
+    d.setHours(0,0,0); d.setDate(1); d.setMonth(1); d.setYear(1972); 
+    var dateManip = {
+        0: function(tt){ return d.setHours(tt); },
+        1: function(tt){ return d.setMinutes(tt); },
+        2: function(tt){ set = d.setSeconds(tt); mb = d.getDate() - 1; return set; },
+        3: function(tt){ set = d.setMonth(parseInt(tt)-1); ma = d.getFullYear() - 1972; return set; },
+        4: function(tt){ return d.setDate(tt+mb); },
+        5: function(tt){ return d.setYear(tt+ma); }
+    };    
+    for( i = 0; i < argc; i++ ){
+        no = parseInt(argv[i]*1);
+        if (isNaN(no)) {
+            return false;
+        } else {
+            // arg is number, lets manipulate date object
+            if(!dateManip[i](no)){
+                // failed
+                return false;
+            }
+        }
+    } 
+    return Math.floor(d.getTime()/1000);
+}		
+		
 function validate()
 {
 	var	f =	document.new_calendar_item;
@@ -213,27 +258,52 @@ function validate()
 	return true;
 }
 
-function selectAll(cbList,bSelect,showwarning)
-{
-	//if (cbList.length <	1) {
-	//	alert(\"$Send2All\");
-	//	return;
-	//}
-	for	(var i=0; i<cbList.length; i++)
-		cbList[i].selected = cbList[i].checked = bSelect
-}
+function validate_date()
+{		
+		var start_day = document.new_calendar_item.fday.value;
+		var start_month = document.new_calendar_item.fmonth.value;
+		var start_year = document.new_calendar_item.fyear.value;		
+		var start_hour = document.new_calendar_item.fhour.value;		
+		var start_minute = document.new_calendar_item.fminute.value;
+		var start_date = mktime(start_hour,start_minute,0,start_month,start_day,start_year)
+				
+		var ends_day = document.new_calendar_item.end_fday.value;
+		var ends_month = document.new_calendar_item.end_fmonth.value;
+		var ends_year = document.new_calendar_item.end_fyear.value;		
+		var ends_hour = document.new_calendar_item.end_fhour.value;		
+		var ends_minute = document.new_calendar_item.end_fminute.value;
+		var ends_date = mktime(ends_hour,ends_minute,0,ends_month,ends_day,ends_year)		
+		
+		msg_err1 = document.getElementById(\"err_date\");
+		msg_err2 = document.getElementById(\"err_start_date\");
+		msg_err3 = document.getElementById(\"err_end_date\");
+		msg_err4 = document.getElementById(\"err_title\");
+											
+		if (start_date > ends_date) {			 
+			msg_err1.style.display =\"block\"; 
+			msg_err1.innerHTML=\"".get_lang('EndDateCannotBeBeforeTheStartDate')."\";
+			msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";												
+		} else if (checkDate(start_month,start_day,start_year) == false) {
+			msg_err2.style.display =\"block\";
+			msg_err2.innerHTML=\"".get_lang('InvalidDate')."\";
+			msg_err1.innerHTML=\"\";msg_err3.innerHTML=\"\";			 					
+		} else if (checkDate(ends_month,ends_day,ends_year) == false) {
+			msg_err3.style.display =\"block\";
+			msg_err3.innerHTML=\"".get_lang('InvalidDate')."\";
+			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";			 					
+		} else if (document.new_calendar_item.title.value == '') {
+			msg_err4.style.display =\"block\";
+			msg_err4.innerHTML=\"".get_lang('FieldRequired')."\";
+			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";			 					
+		}  else {
+			document.new_calendar_item.submit();
+		}			
 
-function reverseAll(cbList)
-{
-	for	(var i=0; i<cbList.length; i++)
-	{
-		cbList[i].checked  = !(cbList[i].checked)
-		cbList[i].selected = !(cbList[i].selected)
-	}
 }
 //	End	-->
 </script>";
 }
+
 
 
 /**
@@ -1168,7 +1238,7 @@ function show_add_form($id = '')
 {
 
 	global $MonthsLong;
-
+	$htmlHeadXtra[] = to_javascript();
 	// the default values for the forms
 	if ($_GET['originalresource'] !== 'no')
 	{
@@ -1265,14 +1335,14 @@ function show_add_form($id = '')
 ?>
 
 <!-- START OF THE FORM  -->
-<form enctype="multipart/form-data" action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
+<form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
 <input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
 <input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
-<table border="0" cellpadding="5" cellspacing="0" width="100%" id="newedit_form">
+<input type="hidden" name="sort" value="asc" />
+<input type="hidden" name="submit_event" value="ok" />
+<table border="0" cellpadding="5" cellspacing="0" width="80%" id="newedit_form">
+	<!-- the title -->
 	<tr class="title">
-	
-	
-	
 		<td colspan="2" align="left">
 		<span style="font-weight: bold;"><?php echo (isset($id) AND $id<>'')?get_lang('ModifyCalendarItem'):get_lang("AddCalendarItem"); ?></span>
 		</td>
@@ -1281,13 +1351,16 @@ function show_add_form($id = '')
 	<!-- START date and time -->
 <tr>
 <div>
-<table>
-
-				<td >	
-					<!-- date: 1 -> 31 -->
+<table border="0" width="80%">
+				<tr><td colspan="3">
+					<div id="err_date" style="display:none;color:red"></div>
+					<div id="err_start_date" style="display:none;color:red"></div>					
+				</td></tr>
+				<td width="10%">	
+					<!-- date: 1 -> 31 -->					
 					<?php echo get_lang('StartDate').": \n"; ?>
 				</td>
-				<td >
+				<td width="30%">
 					<select name="fday" onchange="javascript:document.new_calendar_item.end_fday.value=this.value;">
 							<?php
 							// small loop for filling all the dates
@@ -1345,14 +1418,11 @@ function show_add_form($id = '')
 													echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 												} ?>
 					</select>
-					<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif'); ?></a>
-				</td>
-				<td >
-						<!-- date: 1 -> 31 -->
-						<?php echo get_lang('StartTime').": "; ?>
-				</td>
-				<td >
-
+					<a href="javascript:openCalendar('new_calendar_item','f')"><?php Display::display_icon('calendar_select.gif'); ?></a>
+					</td>
+					<td>					
+							&nbsp;<?php echo get_lang('StartTime').": \n"; ?>&nbsp;
+	
 						<select name="fhour" onchange="javascript:document.new_calendar_item.end_fhour.value=this.value;">
 							<!-- <option value="--">--</option> -->
 							<?php
@@ -1391,9 +1461,9 @@ function show_add_form($id = '')
 			<!-- END date and time -->
 <tr>
 <div>
-
+					<tr><td colspan="3"><div id="err_end_date" style="display:none;color:red"></div></td></tr>
 					<td >			
-							<!-- date: 1 -> 31 -->
+							<!-- date: 1 -> 31 -->							
 							<?php echo get_lang('EndDate').": "; ?>
 					</td>
 					<td  >
@@ -1440,12 +1510,9 @@ function show_add_form($id = '')
 						</select>
 						<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif'); ?></a>
 					</td>
+					<td >
+							&nbsp;<?php echo get_lang('EndTime').": \n"; ?>&nbsp;
 
-				<td >
-							<!-- date: 1 -> 31 -->
-							<?php echo get_lang('EndTime').": \n"; ?>
-				</td >
-				<td >
 						<select name="end_fhour">
 							<!-- <option value="--">--</option> -->
 							<?php
@@ -1473,14 +1540,15 @@ function show_add_form($id = '')
 									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 								} ?>
 						</select>
-						
 						<br>
 				</td>
 </div>
 </tr>
-
-	<tr class="subtitle">
-		<hr noshade="noshade" color="#cccccc" />
+<tr><td colspan="3">
+<hr noshade="noshade" color="#cccccc" />
+	<div id="err_title" style="display:none;color:red"></div>										
+</td></tr>
+<tr class="subtitle">
 		<td colspan="3" valign="top"><?php echo get_lang('ItemTitle'); ?> :
 			<!--<div style='margin-left: 80px'><textarea name="title" cols="50" rows="2" wrap="virtual" style="vertical-align:top; width:75%; height:50px;"><?php  if (isset($title)) echo $title; ?></textarea></div>-->
 			<input type="text" size="60" name="title" value="<?php  if (isset($title)) echo $title; ?>" />
@@ -1488,7 +1556,7 @@ function show_add_form($id = '')
 	</tr>
 
 	<tr>
-		<td colspan="3">
+		<td colspan="5">
 
 			<?php
 			require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
@@ -1515,9 +1583,9 @@ function show_add_form($id = '')
 			$oFCKeditor->ToolbarSet = 'Agenda';
 
 			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION['_user']['language']."'";
 			$result_sql=api_sql_query($sql);
-			//$isocode_language=Database::result($result_sql,0,0);
+			$isocode_language=Database::result($result_sql,0,0);
 			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
 
 			$return =	$oFCKeditor->CreateHtml();
@@ -1558,7 +1626,8 @@ function show_add_form($id = '')
     ?>
 	<tr>
 		<td colspan="3">
-		<input type="submit" name="submit_event" value="<?php echo get_lang('Ok'); ?>" />
+		<input type="button"  value="<?php echo get_lang('Ok'); ?>" onclick="validate_date()" />
+		
 		</td>
 	</tr>
 </table>
@@ -1905,7 +1974,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 										ORDER BY start_date ";
 		}
 		// if the user is not an administrator of that course
-		else
+		/*else
 		{
 			//echo "GEEN course admin";
 			if (is_array($group_memberships) && count($group_memberships)>0)
@@ -1926,7 +1995,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 													DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
 													ORDER BY start_date ";
 			}
-		}
+		}*/
 		//$sqlquery = "SELECT * FROM $agendadb WHERE DAYOFMONTH(day)='$day' AND month(day)='$month' AND year(day)='$year'";
 		//echo "abc";
 		//echo $sqlquery;
@@ -1956,7 +2025,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 				$agenda_link = Display::return_icon('course_home.gif');
 			}			
 			
-			$URL = $_configuration['root_web'].$mycours["dir"]."/";
+			//$URL = $_configuration['root_web'].$mycours["dir"]."/";
 			$URL = $_configuration['root_web'].'main/admin/agenda.php?cidReq='."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			$items[$halfhour][] .= "<i>".$hours.":".$minutes."</i> <a href=\"$URL\" title=\"".$array_course_info['name']."\">".$agenda_link."</a>  ".$item['title']."<br />";
 		}

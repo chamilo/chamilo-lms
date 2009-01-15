@@ -1,4 +1,4 @@
-<?php // $Id: session_import.php 17747 2009-01-15 21:03:02Z cfasanando $
+<?php // $Id: session_import.php 17754 2009-01-15 22:58:39Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -137,9 +137,8 @@ if($_POST['formSent'])
 							$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');			
 							$emailbody="[NOTE:] ".get_lang('ThisIsAutomaticEmailNoReply').".\n\n".get_lang('langDear')." $firstname $lastname,\n\n".get_lang('langYouAreReg')." ". get_setting('siteName') ." ".get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') ." ". get_lang('langIs') ." ". $serverAddress ."\n\n".get_lang('YouWillSoonReceiveMailFromCoach')."\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');						
 							$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-						    $email_admin = get_setting('emailAdministrator');
-							$headers="From: $sender_name <$email_admin>\r\nReply-to: $email_admin\r\nReturn-Path: $email_admin\r\ncharset=$charset";
-							@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin,$headers);
+						    $email_admin = get_setting('emailAdministrator');							
+							@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);
 						}
 					}
 					else

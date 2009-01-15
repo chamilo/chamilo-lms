@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 17752 2009-01-15 22:43:10Z cvargas1 $
+// $Id: inscription.php 17754 2009-01-15 22:58:39Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -379,8 +379,7 @@ if ($form->validate()) {
 				$emailbody		.=get_lang('ManageUser').': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;	
 				
 				$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-			    $email_admin = get_setting('emailAdministrator');
-				//$headers="From: $sender_name <$email_admin>\r\nReply-to: $email_admin\r\nReturn-Path: $email_admin\r\ncharset=$charset";
+			    $email_admin = get_setting('emailAdministrator');				
 				@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
 				
 			}
@@ -430,12 +429,10 @@ if ($form->validate()) {
 			$emailbody = get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ".get_setting('siteName')." ".get_lang('Settings')." ".$values['username']."\n".get_lang('Pass')." : ".stripslashes($values['pass1'])."\n\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is')." : ".$_configuration['root_web']."\n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n".get_lang('Manager')." ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n".get_lang('Email')." : ".get_setting('emailAdministrator');
 			
 			// Here we are forming one large header line
-			// Every header must be followed by a \n except the last
-			$headers="From: $sender_name <$email_admin>\r\nReply-to: $email_admin\r\nReturn-Path: $email_admin\r\ncharset=$charset";
+			// Every header must be followed by a \n except the last			
 			$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-		    $email_admin = get_setting('emailAdministrator');
-						
-			@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin,$headers);	
+		    $email_admin = get_setting('emailAdministrator');						
+			@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);	
 		}
 	}
 

@@ -220,7 +220,7 @@ if($register)
 			$message = stripslashes("$firstname_form $lastname_form")." ".get_lang('AddedU');
 		}
 
-		@api_mail($recipient_name, $email_form, $emailsubject, $emailbody, $sender_name,$email_admin,$emailheaders);
+		@api_mail($recipient_name, $email_form, $emailsubject, $emailbody, $sender_name,$email_admin);
 
 		/*
 		 * remove <form> variables to prevent any pre-filled fields

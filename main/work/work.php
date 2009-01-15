@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 17747 2009-01-15 21:03:02Z cfasanando $
+*  	@version $Id: work.php 17754 2009-01-15 22:58:39Z cfasanando $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -995,9 +995,8 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 			$emailbody = get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;curdirpath=".$my_cur_dir_path." (" . stripslashes($title) . ")\n\n" . get_setting('administratorName') . " " . get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . get_setting('siteName') . "\n" . get_lang('Email') . " : " . get_setting('emailAdministrator');
 
 			// Here we are forming one large header line
-			// Every header must be followed by a \n except the last
-			$headers="From: $sender_name <$email_admin>\r\nReply-to: $email_admin\r\nReturn-Path: $email_admin\r\ncharset=$charset";													
-			@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin,$headers);
+			// Every header must be followed by a \n except the last															
+			@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
 			
 		}
 	}

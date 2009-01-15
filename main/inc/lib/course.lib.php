@@ -1865,9 +1865,8 @@ class CourseManager
 				$emailbody		.=get_lang('Email').': '.$student['email']."\n\n";				
 				$recipient_name = $tutor['firstname'].' '.$tutor['lastname'];															
 				$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-		    	$email_admin = get_setting('emailAdministrator');
-				$headers="From: $sender_name <$email_admin>\r\nReply-to: $email_admin\r\nReturn-Path: $email_admin\r\ncharset=$charset";
-				@api_mail($recipient_name, $emailto, $emailsubject, $emailbody, $sender_name,$email_admin,$headers);
+		    	$email_admin = get_setting('emailAdministrator');				
+				@api_mail($recipient_name, $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
 		}
 	}
 

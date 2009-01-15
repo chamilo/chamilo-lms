@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 17747 2009-01-15 21:03:02Z cfasanando $
+<?php // $Id: user_edit.php 17754 2009-01-15 22:58:39Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -432,15 +432,14 @@ if( $form->validate())
 		$recipient_name = $firstname.' '.$lastname;
 		$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');												
 		$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-	    $email_admin = get_setting('emailAdministrator');
-		$headers="From: $sender_name <$email_admin>\r\nReply-to: $email_admin\r\nReturn-Path: $email_admin\r\ncharset=$charset";
+	    $email_admin = get_setting('emailAdministrator');		
 		$emailbody = get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username;
 		// Send password by e-mail if it has been modified, even if encrypted in DB (it doesn't make sense to send an e-mail with login info without the password, even if the password is encrypted)
 		if($reset_password > 0)
 		{
 			$emailbody .= "\n".get_lang('Pass')." : ".stripslashes($password);
 		}
-		@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin,$headers);
+		@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);
 			
 	}
 	$tok = Security::get_token();		

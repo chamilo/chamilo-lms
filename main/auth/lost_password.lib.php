@@ -1,5 +1,5 @@
 <?php
-// $Id: lost_password.lib.php 17747 2009-01-15 21:03:02Z cfasanando $
+// $Id: lost_password.lib.php 17754 2009-01-15 22:58:39Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -90,7 +90,7 @@ function send_password_to_user($user)
 	$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
     $email_admin = get_setting('emailAdministrator');			
 				
-	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name,$email_admin,$emailHeaders)==1)
+	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name,$email_admin)==1)
 	{
 		Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
 	}
@@ -124,7 +124,7 @@ function handle_encrypted_password($user)
 	$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
     $email_admin = get_setting('emailAdministrator');
 			
-	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name,$email_admin,$emailHeaders)==1)
+	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name,$email_admin)==1)
 	{
 		Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
 	}

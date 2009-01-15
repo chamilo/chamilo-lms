@@ -430,7 +430,7 @@ if (isset ($_GET['editallresults'])) {
 }
 
 if (isset ($_GET['importok'])) {
-	Display :: display_confirmation_message(get_lang('ImportOk'),false);
+	Display :: display_confirmation_message(get_lang('FileUploadComplete'),false);
 }
 
 if (isset ($_GET['importnofile'])) {
@@ -441,7 +441,7 @@ if (isset ($_GET['incorrectdata'])) {
 	Display :: display_warning_message(get_lang('IncorrectData'),false);
 }
 if (isset ($_GET['nothingadded'])) {
-	Display :: display_warning_message(get_lang('NothingAdded'),false);
+	Display :: display_warning_message(get_lang('ProblemUploadingFile'),false);
 }
 if (isset ($_GET['massdelete'])) {
 	Display :: display_confirmation_message(get_lang('ResultsDeleted'),false);
@@ -453,12 +453,12 @@ if (isset ($_GET['overwritemax'])) {
 	Display :: display_warning_message(get_lang('OverWriteMax'),false);
 }
 if (isset ($_GET['importoverwritescore'])) {
-	Display :: display_confirmation_message(get_lang('ImportOverwriteScore') . ' ' . $_GET['importoverwritescore']);
+	Display :: display_confirmation_message(get_lang('ImportOverWriteScore') . ' ' . $_GET['importoverwritescore']);
 }
 
 if (isset ($_GET['import_user_error'])) {
 	$userinfo= get_user_info_from_id($_GET['import_user_error']);
-	Display :: display_warning_message(get_lang('UserInfoDoesNotMatch') . '<br /><br /><b>' . $userinfo['lastname'] . ' ' . $userinfo['firstname'] . '</b>');
+	Display :: display_warning_message(get_lang('UserInfoDoesNotMatch') . ' ' . $userinfo['lastname'] . ' ' . $userinfo['firstname']);
 }
 if (isset ($_GET['allresdeleted'])) {
 	Display :: display_confirmation_message(get_lang('AllResultDeleted'));
@@ -466,7 +466,7 @@ if (isset ($_GET['allresdeleted'])) {
 
 if (isset ($_GET['import_score_error'])) {
 	$userinfo= get_user_info_from_id($_GET['import_score_error']);
-	Display :: display_warning_message(get_lang('ScoreDoesNotMatch') . '<br /><br /><b>' . $userinfo['lastname'] . ' ' . $userinfo['firstname'] . '</b>');
+	Display :: display_warning_message(get_lang('ScoreDoesNotMatch') . ' ' . $userinfo['lastname'] . ' ' . $userinfo['firstname']);
 }
 if ($file_type == null) { //show the result header
 		if (isset ($export_result_form) && !(isset ($edit_res_form))) {

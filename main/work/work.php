@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 17627 2009-01-09 21:50:35Z cvargas1 $
+*  	@version $Id: work.php 17746 2009-01-15 20:33:37Z cvargas1 $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -87,7 +87,8 @@
 $language_file = array (
 	'work',
 	'document',
-	'admin'
+	'admin',
+	'exercice'
 );
 require("../inc/global.inc.php");
 // @todo why is this needed?
@@ -1317,7 +1318,7 @@ if (!$display_upload_form && !$display_tool_options) {
 		isset($_REQUEST['filter'])?$filter = (int)$_REQUEST['filter']:$filter='';
 		$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.$cidreq.'&curdirpath='.$curdirpath.'">';
 		$form_filter .= make_select('filter',array(0=>get_lang('SelectAFilter'),1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised'),3=>get_lang('FilterByNotExpired')),$filter);
-		$form_filter .= '<input type="submit" value="'.get_lang('FilterAssigments').'"</form>';
+		$form_filter .= '<input type="submit" value="'.get_lang('FilterAssignments').'"</form>';
 		echo $form_filter;
 	} 
 	display_student_publications_list($base_work_dir . '/' . $my_cur_dir_path, 'work/' . $my_cur_dir_path, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_query);

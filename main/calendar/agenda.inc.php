@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17661 2009-01-12 19:32:21Z cvargas1 $
+<?php //$Id: agenda.inc.php 17746 2009-01-15 20:33:37Z cvargas1 $
 
 /*
 ==============================================================================
@@ -4809,7 +4809,7 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 		// if we have a day_view we use a half hour as index => key 33 = 16h30
 		if ($type !== "day_view") // This is the array construction for the WEEK or MONTH view
 		{
-			$agendaitems[$day] .= "<div><i>$hour:$minute</i> <b>".get_lang('Evento Global'). ":  </b>".$item['title']."</div>";
+			$agendaitems[$day] .= "<div><i>$hour:$minute</i> <b>".get_lang('GlobalEvent'). ":  </b>".$item['title']."</div>";
 		}
 		else // this is the array construction for the DAY view
 			{

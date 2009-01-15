@@ -1,4 +1,4 @@
-<?php // $Id: document.php 17724 2009-01-14 18:30:19Z herodoto $
+<?php // $Id: document.php 17746 2009-01-15 20:33:37Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -667,7 +667,7 @@ if($folders===false)
 			<a href="quota.php?<?php echo api_get_cidreq();?>"><?php Display::display_icon('statistics.gif', get_lang("ShowCourseQuotaUse")); ?><?php echo get_lang("ShowCourseQuotaUse"); ?></a>
 		<?php
 	}
-	
+
 	if ($docs_and_folders!=null) {
 	?>
 	<!-- download zipped folder -->

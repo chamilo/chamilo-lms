@@ -59,12 +59,21 @@ else
 $tag_array = array();
 $specific_fields = get_specific_field_list();
 foreach ($specific_fields as $specific_field) {
-    if (isset($_REQUEST[ 'sf_'. $specific_field['code'] ])) {
+    if (!empty($_REQUEST[ 'sf_'. $specific_field['code'] ])) {
         $values = $_REQUEST[ 'sf_'. $specific_field['code'] ];
-        foreach ($values as $term) {
-            if (!empty($term)) {
-                $prefix = $specific_field['code'];
-                $tag_array[] = dokeos_get_boolean_query($prefix . $term);
+        if (in_array('__all__', $values)) {
+            $sf_terms_for_code = xapian_get_all_terms(1000, $specific_field['code']);
+            foreach ($sf_terms_for_code as $term) {
+                if (!empty($term)) {
+                    $tag_array[] = dokeos_get_boolean_query($term['name']); //here name includes prefix
+                }
+            }
+        } else {
+            foreach ($values as $term) {
+                if (!empty($term)) {
+                    $prefix = $specific_field['code'];
+                    $tag_array[] = dokeos_get_boolean_query($prefix . $term);
+                }
             }
         }
     }

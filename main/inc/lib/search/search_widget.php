@@ -163,19 +163,16 @@ function search_widget_show($action="lp_controller.php") {
             $url_params[] = 'sf_'.$specific_field['code'];
             unset($temp);
         }
-
     }
     else {
         //without cid
-        $dktags = xapian_get_all_terms(1000, XAPIAN_PREFIX_TAG);
         //prepare specific fields names (and also get possible URL param names)
         $url_params = array();
+        $dktags = array();
         foreach ($specific_fields as $specific_field) {
-            $temp = array();
             //get Xapian terms for a specific term prefix, in ISO, apparently
             $sf_terms[] = xapian_get_all_terms(1000, $specific_field['code']);
             $url_params[] = 'sf_'.$specific_field['code'];
-            unset($temp);
         }
     }
 
@@ -211,13 +208,14 @@ function search_widget_show($action="lp_controller.php") {
 
     $op = 'or';
     if (!empty($_REQUEST['operator']) && in_array($op,array('or','and'))) {
-        $op = Security::remove_XSS($_REQUEST['operator']); 
+        $op = $_REQUEST['operator'];
     }
  ?>
 <form id="dokeos_search" action="<?php echo $action.'?mode='.htmlentities($_GET['mode']) ?>"
 method="get">
     <input type="hidden" name="action" value="search"/>
     <input type="text" id="query" name="query" size="40" />
+    <input type="hidden" name="tablename_page_nr" value="1" />
     <input type="submit" id="submit" value="<?php echo get_lang("Search") ?>" />
     <!--span id="keywords" style="font-size:12px;font-weight:bold"><?php echo get_lang("Keywords") ?>:</span-->
     <span id="key_wrapper"><?php echo $tags_list ?></span>
@@ -257,8 +255,21 @@ method="get">
         //we took the Xapian results in the same order as the specific fields
         //came, so using the specific fields index, we are able to recover
         //each field's name
-        $multiple_select .= '<td><label class="sf-select-multiple-title" for="sf_'. substr($one_element, 0, 1) .'[]">'.$icons_for_search_terms[$specific_fields[$i]['name']].' '.$specific_fields[$i]['name'].'</label><br />';
-        $multiple_select .= '<select multiple="multiple" size="7" class="sf-select-multiple" name="sf_'. substr($one_element, 0, 1) .'[]">';
+        $multiple_select .= '<td><label class="sf-select-multiple-title" for="sf_'. substr($one_element, 0, 1) .'[]">'.$icons_for_search_terms[$specific_fields[$i]['code']].' '.$specific_fields[$i]['name'].'</label><br />';
+        $multiple_select .= '<select multiple="multiple" size="7" class="sf-select-multiple" name="sf_'. $specific_fields[$i]['code'] .'[]">';
+
+        $all_selected = '';
+        if (!empty($_REQUEST['sf_'. $specific_fields[$i]['code']]) ) {// && in_array($tagged_clean,$_REQUEST['sf_'.$tag_mark])) {
+            if (in_array('__all__', $_REQUEST['sf_'. $specific_fields[$i]['code']])) {
+                $all_selected = 'selected="selected"';
+            }
+        }
+        if ($op == 'and') {
+            $all_selected_name = get_lang('All');
+        } else if ($op == 'or') {
+            $all_selected_name = get_lang('Any');
+        }
+        $multiple_select .= '<option value="__all__" '. $all_selected .' >&lt;'. $all_selected_name .'&gt;</option>';
 
         foreach ($sf_term_array as $tagged)
         {

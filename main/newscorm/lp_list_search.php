@@ -160,6 +160,7 @@ if (count($blocks) > 0) {
             $get_params .= '&';
         }
     }
+    $additional_parameters['operator'] = $op;
     $s->additional_parameters = $additional_parameters;
 
     if ($mode == 'default') {

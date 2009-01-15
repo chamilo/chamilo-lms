@@ -61,9 +61,13 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_rese
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_reservation', 'false', 'No');
 CREATE TABLE access_url_rel_user (access_url_id int unsigned NOT NULL, user_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, user_id));
 INSERT INTO access_url_rel_user(access_url_id, user_id) VALUES (1,1);
+CREATE TABLE user_friend(id bigint unsigned not null auto_increment,user_id int unsigned not null,friend_user_id int unsigned not null,relation_type int not null default 0,PRIMARY KEY(id));
+ALTER TABLE user_friend ADD INDEX idx_user_friend_user(user_id);
+ALTER TABLE user_friend ADD INDEX idx_user_friend_friend_user(friend_user_id);
+ALTER TABLE user_friend ADD INDEX idx_user_friend_user_friend_user(user_id,friend_user_id);
+CREATE TABLE user_friend_relation_type(id int unsigned not null auto_increment,title char(20),PRIMARY KEY(id));
 
  
-
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';
 ALTER TABLE track_e_exercices ADD data_tracking text NOT NULL default '';

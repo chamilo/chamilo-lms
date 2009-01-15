@@ -58,7 +58,11 @@ CREATE TABLE reservation_main  (id int unsigned NOT NULL auto_increment,   subid
 CREATE TABLE reservation_subscription  (dummy  int unsigned NOT NULL auto_increment,   user_id  int unsigned NOT NULL default 0,   reservation_id  int unsigned NOT NULL default 0,   accepted  tinyint unsigned NOT NULL default 0,   start_at  datetime NOT NULL default '0000-00-00 00:00:00',   end_at  datetime NOT NULL default '0000-00-00 00:00:00',  PRIMARY KEY  ( dummy ));
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_reservation', NULL, 'radio', 'Tools', 'false', 'AllowReservationTitle', 'AllowReservationComment', NULL, NULL);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_reservation', 'true', 'Yes');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_reservation', 'false', 'No'); 
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_reservation', 'false', 'No');
+CREATE TABLE access_url_rel_user (access_url_id int unsigned NOT NULL, user_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, user_id));
+INSERT INTO access_url_rel_user(access_url_id, user_id) VALUES (1,1);
+
+ 
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';

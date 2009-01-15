@@ -683,7 +683,7 @@ VALUES
 ('show_administrator_data','false','No'),
 ('homepage_view','activity','HomepageViewActivity'),
 ('homepage_view','2column','HomepageView2column'),
-('homepage_view','3column','HomepageView3column'),
+('homepage_view','3column','HomepageView3columngradebook_result_log'),
 ('show_toolshortcuts','true','Yes'),
 ('show_toolshortcuts','false','No'),
 ('allow_group_categories','true','Yes'),
@@ -1024,6 +1024,7 @@ CREATE TABLE user_field_values(
 	tms TIMESTAMP,
 	PRIMARY KEY(id)
 );
+
 DROP TABLE IF EXISTS access_url;
 CREATE TABLE access_url(
 	id	int	unsigned NOT NULL auto_increment,
@@ -1034,8 +1035,20 @@ CREATE TABLE access_url(
 	tms TIMESTAMP,
 	PRIMARY KEY (id)
 );
-INSERT INTO access_url(url,description,active,created_by) VALUES ('http://localhost/','URL 1',1,1);
+
+INSERT INTO access_url(url, description, active, created_by) VALUES ('http://localhost/','URL 1',1,1);
+
+DROP TABLE IF EXISTS access_url_rel_user;
+CREATE TABLE access_url_rel_user (
+  access_url_id int unsigned NOT NULL,
+  user_id int unsigned NOT NULL,  
+  PRIMARY KEY (access_url_id, user_id)
+);
+INSERT INTO access_url_rel_user(access_url_id, user_id) VALUES (1,1);
+
 ALTER TABLE gradebook_category ADD session_id int DEFAULT NULL;
+
+DROP TABLE IF EXISTS gradebook_result_log;
 CREATE TABLE gradebook_result_log (
 	id int NOT NULL auto_increment,
 	id_result int NOT NULL,
@@ -1046,6 +1059,7 @@ CREATE TABLE gradebook_result_log (
 	PRIMARY KEY(id)
 );
 
+DROP TABLE IF EXISTS gradebook_linkeval_log;
 CREATE TABLE gradebook_linkeval_log (
 	id int NOT NULL auto_increment,
 	id_linkeval_log int NOT NULL,

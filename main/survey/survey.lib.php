@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 17721 2009-01-14 17:31:23Z iflorespaz $
+* 	@version $Id: survey.lib.php 17756 2009-01-15 23:28:02Z iflorespaz $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -4651,7 +4651,12 @@ class SurveyUtil {
 			echo ($row['anonymous'] == 1)?get_lang('Yes'):get_lang('No');
 			echo '</td>';
 			echo '</tr>';
-			$link_available=self::show_link_available(api_get_user_id(),$row['code'],$row_answer['user']);
+			if ($row['anonymous'] == 1) {
+				$current_user_id=$_SESSION['surveyuser'];
+			} else {
+				$current_user_id=api_get_user_id();
+			}
+			$link_available=self::show_link_available(api_get_user_id(),$row['code'],$current_user_id);
 			if ($link_add===true && $link_available===true) {
 				echo '<tr><td><a href="fillsurvey.php?user_id='.api_get_user_id().'&amp;course='.$_course['sysCode'].'&amp;invitationcode='.$row['invitation_code'].'&amp;cidReq='.$_course['sysCode'].'">'.get_lang('CompleteTheSurveysQuestions').'</a></td><td></td></tr>';
 			}

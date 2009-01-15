@@ -627,11 +627,8 @@ if (isset ($_GET['show']) || isset ($_POST['personality']))
 			if (isset($_GET['user_id'])) {
 				
 			// get the user into survey answer table (user or anonymus)
-			$sql = "SELECT user FROM $table_survey_answer 
-				WHERE survey_id = (SELECT survey_id from $table_survey WHERE code ='".$survey_invitation['survey_code']."')";
-			$result_answer = api_sql_query($sql, __FILE__, __LINE__);
-			$row_answer = Database::fetch_array($result_answer,'ASSOC');	
-				
+			$my_user_id=($survey_data['anonymous']==1) ? $_SESSION['surveyuser'] :api_get_user_id();
+
 			$sql = "SELECT survey_question.survey_group_sec1, survey_question.survey_group_sec2, survey_question.survey_group_pri,					
 					survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
 					survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
@@ -639,7 +636,7 @@ if (isset ($_GET['show']) || isset ($_POST['personality']))
 					LEFT JOIN $table_survey_question_option survey_question_option
 					ON survey_question.question_id = survey_question_option.question_id
 					WHERE survey_question.survey_id = '" . Database :: escape_string($survey_invitation['survey_id']) . "'
-					AND survey_question.question_id NOT IN (SELECT sa.question_id FROM ".$table_survey_answer." sa WHERE sa.user='".$row_answer['user']."')
+					AND survey_question.question_id NOT IN (SELECT sa.question_id FROM ".$table_survey_answer." sa WHERE sa.user='".$my_user_id."')
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 			} else {
 			

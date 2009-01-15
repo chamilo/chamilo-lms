@@ -106,8 +106,14 @@ class learnpath_processor extends search_processor {
             $img_location = api_get_path(WEB_COURSE_PATH).api_get_course_path($course_id)."/document/";
             $thumbnail_path = str_replace ('.png.html', '_thumb.png', $row['path']);
             $big_img_path = str_replace ('.png.html', '.png', $row['path']);
-            $thumbnail = $img_location . $thumbnail_path;
-            $image = $img_location . $big_img_path;
+            $thumbnail = '';
+            if (!empty($thumbnail_path)) {
+              $thumbnail = $img_location . $thumbnail_path;
+            }
+            $image = '';
+            if (!empty($big_img_path)) {
+              $image = $img_location . $big_img_path;
+            }
             $name = $row['name'];
         }
 

@@ -185,16 +185,13 @@ function updateMovie(e)
 {
 	e.fileType = GetE('rbFileType').value;
 	
-	//e.url = GetE('txtURL').value;
-	e.url = FCK.AddAbsolutePath( GetE('txtURL').value ) ;
+	e.url = GetE('txtURL').value;
 	
 	e.purl = GetE('txtPlaylist').value;
 
-	//e.iurl = GetE('txtImgURL').value;
-	e.iurl = FCK.AddAbsolutePath( GetE('txtImgURL').value ) ;
+	e.iurl = GetE('txtImgURL').value;
 
-	//e.wmurl = GetE('txtWMURL').value;
-	e.wmurl = FCK.AddAbsolutePath( GetE('txtWMURL').value ) ;
+	e.wmurl = GetE('txtWMURL').value;
 
 	e.bgcolor = GetE('txtBgColor').value;
 	e.toolcolor = GetE('txtToolbarColor').value;
@@ -211,8 +208,7 @@ function updateMovie(e)
 	e.align =	GetE('selAlign').value;
 	e.dispPlaylist =	GetE('selDispPlaylist').value;
 
-	//e.rurl = GetE('txtRURL').value;
-	e.rurl = FCK.AddAbsolutePath( GetE('txtRURL').value ) ;
+	e.rurl = GetE('txtRURL').value;
 
 	e.playlistDim = GetE('txtPLDim').value;
 	e.playlistThumbs = (GetE('chkPLThumbs').checked) ? 'true' : 'false';
@@ -278,7 +274,7 @@ var sActualBrowser ;
 function SetUrl( url ) {
 
 	// Added by Ivan Tcholakov.
-	url = FCK.AddAbsolutePath( url ) ;
+	url = FCK.GetUrl( url, FCK.SEMI_ABSOLUTE_URL ) ;
 
 	if ( sActualBrowser == 'flv' ) {
 		document.getElementById('txtURL').value = url ;
@@ -364,7 +360,10 @@ Media.prototype.getInnerHTML = function (objectId){
 	//s+= '<p>\n';
 	s+= '<div id="player' + randomnumber + '-parent" style="text-align: center;' + cssfloat + '">\n';
 	s+= '<div style="border-style: none; height: ' + thisHeight + 'px; width: ' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220, 220); background-image: url(' + oEditor.FCKConfig.PluginsPath + 'flvPlayer/flvPlayer.gif); background-repeat:no-repeat; background-position:center;' + cssalign + '">';
-	s+= '<script src="' + oEditor.FCKConfig.PluginsPath + 'flvPlayer/swfobject.js" type="text/javascript"></script>\n';
+
+	//s+= '<script src="' + oEditor.FCKConfig.PluginsPath + 'flvPlayer/swfobject.js" type="text/javascript"></script>\n';
+	s+= '<script src="' + FCK.GetUrl( oEditor.FCKConfig.PluginsPath + 'flvPlayer/swfobject.js', FCK.SEMI_ABSOLUTE_URL ) + '" type="text/javascript"></script>\n';
+
 	s+= '<div id="player' + randomnumber + '">';
 	s+= '<a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.';
 	// Moved after info - Added width,height,overflow for MSIE7
@@ -380,7 +379,10 @@ Media.prototype.getInnerHTML = function (objectId){
 	s+= '</div>';
 	s+= '<script type="text/javascript">\n';
 	//s+= '	//NOTE: FOR LIST OF POSSIBLE SETTINGS GOTO http://www.jeroenwijering.com/extras/readme.html\n';
-	s+= '	var s1 = new SWFObject("' + oEditor.FCKConfig.PluginsPath + 'flvPlayer/mediaplayer.swf","' + thisMediaType + '","' + thisWidth + '","' + thisHeight + '","7");\n';
+
+	//s+= '	var s1 = new SWFObject("' + oEditor.FCKConfig.PluginsPath + 'flvPlayer/mediaplayer.swf","' + thisMediaType + '","' + thisWidth + '","' + thisHeight + '","7");\n';
+	s+= '	var s1 = new SWFObject("' + FCK.GetUrl( oEditor.FCKConfig.PluginsPath + 'flvPlayer/mediaplayer.swf', FCK.SEMI_ABSOLUTE_URL ) + '","' + thisMediaType + '","' + thisWidth + '","' + thisHeight + '","7");\n';
+
 	s+= '	s1.addVariable("width","' + thisWidth + '");\n';
 	s+= '	s1.addVariable("height","' + thisHeight + '");\n';
 	s+= '	s1.addVariable("autostart","' + this.play + '");\n';

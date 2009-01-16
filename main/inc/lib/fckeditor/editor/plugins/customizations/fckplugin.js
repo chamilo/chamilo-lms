@@ -104,6 +104,7 @@ if ( FCKConfig.BaseHref.length > 0 )
 	}
 }
 
+
 /*
  **************************************************************************************
  * Internal configuration data. It is meant to be modified by developers only.

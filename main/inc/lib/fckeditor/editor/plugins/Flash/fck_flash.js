@@ -72,16 +72,15 @@ function LoadSelection()
 	oMedia = new Media() ;
 	oMedia.setObjectElement( getSelectedMovie() ) ;
 
-	//GetE( 'txtURL' ).value    	= oMedia.url ;
-	GetE( 'txtURL' ).value    	=  FCK.RemoveBasePath( oMedia.url ) ;
+	GetE( 'txtURL' ).value    	= oMedia.url ;
 
-	GetE( 'txtVSpace' ).value		= oMedia.vspace ;
-	GetE( 'txtHSpace' ).value		= oMedia.hspace ;
-	GetE( 'selAlign' ).value		= oMedia.align ;
-	GetE( 'txtWidth' ).value		= oMedia.width ;
-	GetE( 'txtHeight' ).value		= oMedia.height ;
+	GetE( 'txtVSpace' ).value	= oMedia.vspace ;
+	GetE( 'txtHSpace' ).value	= oMedia.hspace ;
+	GetE( 'selAlign' ).value	= oMedia.align ;
+	GetE( 'txtWidth' ).value	= oMedia.width ;
+	GetE( 'txtHeight' ).value	= oMedia.height ;
 	GetE( 'selQuality' ).value	= oMedia.quality ;
-	GetE( 'selScale' ).value		= oMedia.scale ;
+	GetE( 'selScale' ).value	= oMedia.scale ;
 	GetE( 'txtBgColor' ).value	= oMedia.bgcolor ;
 	GetE( 'chkLoop' ).value		= oMedia.loop ;
 	GetE( 'chkAutoplay' ).value	= oMedia.play ;
@@ -101,7 +100,8 @@ function Ok()
 
 	//var e = ( oMedia || FCK.EditorDocument.createElement( 'OBJECT' ) ) ;
 	var e = ( oMedia || new Media() ) ;
-	e.url = FCK.AddBasePath( GetE( 'txtURL' ).value ) ;
+
+	e.url = GetE( 'txtURL' ).value ;
 	
 	updateMovie(e) ;	
 
@@ -136,17 +136,8 @@ function updatePreview()
 	else
 	{
 		var preview = GetE( 'flashPreview' ) ;  
-		/*
-		var sUrl = oEditor.FCKConfig.CreateDocumentWebDir + GetE( 'txtURL' ).value ;
 		
-		if ( sUrl.indexOf( '?' ) > -1 ) 
-		{
-    		sUrl = sUrl.substr( 0, sUrl.indexOf( '?' ) ) ;
-    		GetE( 'txtURL' ).value = sUrl ; 
-		}
-		*/
-		//oMedia.url = oEditor.FCKConfig.CreateDocumentWebDir + GetE( 'txtURL' ).value ;	 // this variable is call in document/create_document.php
-		oMedia.url = FCK.AddAbsolutePath( GetE( 'txtURL' ).value ) ;
+		oMedia.url = GetE( 'txtURL' ).value ;
 		
 		updateMovie( oMedia ) ;
 		
@@ -210,7 +201,11 @@ function BrowseServer()
 
 function SetUrl( url )
 {
+	// Added by Ivan Tcholakov.
+	url = FCK.GetSelectedUrl( url ) ;
+
 	document.getElementById( 'txtURL' ).value = url ;
+
 	GetE( 'txtHeight' ).value = GetE( 'txtWidth' ).value = '' ;
 	updatePreview() ;
 }

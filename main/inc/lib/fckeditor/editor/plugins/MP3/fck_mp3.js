@@ -387,27 +387,9 @@ function getObjData(mpUrl)
 
 function setSoundUrl(url)
 {
-/* Weird!
-	var pos= url.indexOf('audio');	
-	var end=url.length;	
-	var string_audio = url.substring(pos, end );  // i.e    -->>    audio/listeningaudio.mp3
-	if (pos==-1) //// is in the main/upload 
-	{
-		url = string_audio; 
-	}
-	else
-	{		
-		if (FCKConfig.CreateDocumentDir == '/') 
-		{
-			url = string_audio; 	
-		}
-		else
-		{
-			url = FCKConfig.CreateDocumentDir + string_audio; // // FCKConfig.CreateDocumentDir variable is defined in create_document.php
-		}
-		
-	}
-*/
+	// Added by Ivan Tcholakov.
+	url = FCK.GetUrl( url, FCK.SEMI_ABSOLUTE_URL ) ;
+
 	mp3_url = url ;
 }
 

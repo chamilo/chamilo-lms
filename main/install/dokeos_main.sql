@@ -1049,9 +1049,6 @@ ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_user (user_id)
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url(access_url_id);
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url_user (user_id,access_url_id);
 
-INSERT INTO access_url_rel_user(access_url_id, user_id) VALUES (1,1);
-INSERT INTO access_url_rel_user(access_url_id, user_id) VALUES (1,2);
-
 ALTER TABLE gradebook_category ADD session_id int DEFAULT NULL;
 
 DROP TABLE IF EXISTS gradebook_result_log;

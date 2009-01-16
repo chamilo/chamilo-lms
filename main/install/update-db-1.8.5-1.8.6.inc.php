@@ -1,4 +1,4 @@
-<?php // $Id: update-db-1.8.5-1.8.6.inc.php 17528 2009-01-04 20:14:09Z yannoo $
+<?php // $Id: update-db-1.8.5-1.8.6.inc.php 17777 2009-01-16 16:25:39Z juliomontoya $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -159,6 +159,15 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			}
 		}
 		
+		// Filling the access_url_rel_user table with access_url_id by default = 1	
+		$query = "SELECT user_id FROM $dbNameForm.user";
+		$result = mysql_query($query);
+		while ($row= mysql_fetch_array($result,MYSQL_NUM))
+		{			
+			$sql="INSERT INTO $dbNameForm.access_url_rel_user SET user_id=".$row[0].", access_url_id=1";					
+			$res = mysql_query($sql);
+		}
+		
 		//get the stats queries list (s_q_list)
 		$s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql','stats');
 	
@@ -203,7 +212,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				error_log('Database '.$dbUserForm.' was not found, skipping',0);				
 			}else{
 				mysql_select_db($dbUserForm);
-				foreach($u_q_list as $query){
+				foreach($$u_q_listu_q_list as $query){
 					if($only_test){
 						error_log("mysql_query($dbUserForm,$query)",0);
 						error_log("In $dbUserForm, executed: $query",0);
@@ -215,6 +224,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		}
 		//the SCORM database doesn't need a change in the pre-migrate part - ignore
 	}
+	
 
 	/*
 	-----------------------------------------------------------

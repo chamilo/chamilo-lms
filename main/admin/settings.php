@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 17783 2009-01-16 18:07:17Z cvargas1 $
+<?php // $Id: settings.php 17785 2009-01-16 21:23:31Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -75,7 +75,7 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 $tool_name = get_lang('DokeosConfigSettings');
 
 // Build the form
-if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['category'] <> "stylesheets")
+if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['category'] <> "stylesheets" )
 {
 	$form = new FormValidator('settings', 'post', 'settings.php?category='.$_GET['category']);
 	$renderer = & $form->defaultRenderer();
@@ -127,12 +127,15 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 	$default_values = array();
 	foreach($settings as $row)
 	{		
+		
 		($countsetting['0']%10) < 5 ?$b=$countsetting['0']-10:$b=$countsetting['0'];
 		
 		if ($i % 10 == 0 and $i<$b){
-			$form->addElement('html','<div align="right">');
-			$form->addElement('submit', null,get_lang('SaveSettings'));
-			$form->addElement('html','</div>');		
+			if ($_GET['category'] <> "Languages"){
+				$form->addElement('html','<div align="right">');
+				$form->addElement('submit', null,get_lang('SaveSettings'));
+				$form->addElement('html','</div>');
+			}		
 		}$i++;	
 
 		$form->addElement('header', null, get_lang($row['title']));
@@ -215,9 +218,11 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 				$form->addElement('static', null, get_lang($row['comment']), get_lang('CurrentValue').' : '.$row['selected_value'],$hideme);
 		}
 	}
-	$form->addElement('html','<div align="right">');
-	$form->addElement('submit', null,get_lang('SaveSettings'));
-	$form->addElement('html','</div>');
+	if ($_GET['category'] <> "Languages"){
+		$form->addElement('html','<div align="right">');
+		$form->addElement('submit', null,get_lang('SaveSettings'));
+		$form->addElement('html','</div>');
+	}
 	$form->setDefaults($default_values);
 	if ($form->validate())
 	{

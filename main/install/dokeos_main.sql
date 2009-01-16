@@ -20,24 +20,24 @@
 
 DROP TABLE IF EXISTS user;
 CREATE TABLE user (
-  user_id int(10) unsigned NOT NULL auto_increment,
+  user_id int unsigned NOT NULL auto_increment,
   lastname varchar(60) default NULL,
   firstname varchar(60) default NULL,
   username varchar(20) NOT NULL default '',
   password varchar(50) NOT NULL default '',
   auth_source varchar(50) default 'platform',
   email varchar(100) default NULL,
-  status tinyint(4) NOT NULL default '5',
+  status tinyint NOT NULL default '5',
   official_code varchar(40) default NULL,
   phone varchar(30) default NULL,
   picture_uri varchar(250) default NULL,
-  creator_id int(10) unsigned default NULL,
+  creator_id int unsigned default NULL,
   competences text,
   diplomas text,
   openarea text,
   teach text,
   productions varchar(250) default NULL,
-  chatcall_user_id int(10) unsigned NOT NULL default '0',
+  chatcall_user_id int unsigned NOT NULL default '0',
   chatcall_date datetime NOT NULL default '0000-00-00 00:00:00',
   chatcall_text varchar(50) NOT NULL default '',
   language varchar(40) default NULL,
@@ -95,7 +95,7 @@ CREATE TABLE user_friend_relation_type(
 
 DROP TABLE IF EXISTS admin;
 CREATE TABLE admin (
-  user_id int(10) unsigned NOT NULL default '0',
+  user_id int unsigned NOT NULL default '0',
   UNIQUE KEY user_id (user_id)
 );
 
@@ -116,7 +116,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS class;
 CREATE TABLE class (
-  id mediumint(8) unsigned NOT NULL auto_increment,
+  id mediumint unsigned NOT NULL auto_increment,
   code varchar(40) default '',
   name text NOT NULL,
   PRIMARY KEY  (id)
@@ -138,8 +138,8 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS class_user;
 CREATE TABLE class_user (
-  class_id mediumint(8) unsigned NOT NULL default '0',
-  user_id int(10) unsigned NOT NULL default '0',
+  class_id mediumint unsigned NOT NULL default '0',
+  user_id int unsigned NOT NULL default '0',
   PRIMARY KEY  (class_id,user_id)
 );
 
@@ -166,20 +166,20 @@ CREATE TABLE course (
   title varchar(250) default NULL,
   description text,
   category_code varchar(40) default NULL,
-  visibility tinyint(4) default '0',
-  show_score int(11) NOT NULL default '1',
+  visibility tinyint default '0',
+  show_score int NOT NULL default '1',
   tutor_name varchar(200) default NULL,
   visual_code varchar(40) default NULL,
   department_name varchar(30) default NULL,
   department_url varchar(180) default NULL,
-  disk_quota int(10) unsigned default NULL,
+  disk_quota int unsigned default NULL,
   last_visit datetime default NULL,
   last_edit datetime default NULL,
   creation_date datetime default NULL,
   expiration_date datetime default NULL,
   target_course_code varchar(40) default NULL,
-  subscribe tinyint(4) NOT NULL default '1',
-  unsubscribe tinyint(4) NOT NULL default '1',
+  subscribe tinyint NOT NULL default '1',
+  unsubscribe tinyint NOT NULL default '1',
   registration_code varchar(255) NOT NULL default '',
   PRIMARY KEY  (code)
 );
@@ -200,12 +200,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS course_category;
 CREATE TABLE course_category (
-  id int(10) unsigned NOT NULL auto_increment,
+  id int unsigned NOT NULL auto_increment,
   name varchar(100) NOT NULL default '',
   code varchar(40) NOT NULL default '',
   parent_id varchar(40) default NULL,
-  tree_pos int(10) unsigned default NULL,
-  children_count smallint(6) default NULL,
+  tree_pos int unsigned default NULL,
+  children_count smallint default NULL,
   auth_course_child enum('TRUE','FALSE') default 'TRUE',
   auth_cat_child enum('TRUE','FALSE') default 'TRUE',
   PRIMARY KEY  (id),
@@ -231,12 +231,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS course_module;
 CREATE TABLE course_module (
-  id int(10) unsigned NOT NULL auto_increment,
+  id int unsigned NOT NULL auto_increment,
   name varchar(100) NOT NULL,
   link varchar(255) NOT NULL,
   image varchar(100) default NULL,
-  `row` int(10) unsigned NOT NULL default '0',
-  `column` int(10) unsigned NOT NULL default '0',
+  `row` int unsigned NOT NULL default '0',
+  `column` int unsigned NOT NULL default '0',
   position varchar(20) NOT NULL default 'basic',
   PRIMARY KEY  (id)
 );
@@ -287,7 +287,7 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS course_rel_class;
 CREATE TABLE course_rel_class (
   course_code char(40) NOT NULL,
-  class_id mediumint(8) unsigned NOT NULL,
+  class_id mediumint unsigned NOT NULL,
   PRIMARY KEY  (course_code,class_id)
 );
 
@@ -308,13 +308,13 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS course_rel_user;
 CREATE TABLE course_rel_user (
   course_code varchar(40) NOT NULL,
-  user_id int(10) unsigned NOT NULL default '0',
-  status tinyint(4) NOT NULL default '5',
+  user_id int unsigned NOT NULL default '0',
+  status tinyint NOT NULL default '5',
   role varchar(60) default NULL,
-  group_id int(11) NOT NULL default '0',
-  tutor_id int(10) unsigned NOT NULL default '0',
-  sort int(11) default NULL,
-  user_course_cat int(11) default '0',
+  group_id int NOT NULL default '0',
+  tutor_id int unsigned NOT NULL default '0',
+  sort int default NULL,
+  user_course_cat int default '0',
   PRIMARY KEY  (course_code,user_id)
 );
 ALTER TABLE course_rel_user ADD INDEX (user_id);
@@ -335,12 +335,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS language;
 CREATE TABLE language (
-  id tinyint(3) unsigned NOT NULL auto_increment,
+  id tinyint unsigned NOT NULL auto_increment,
   original_name varchar(255) default NULL,
   english_name varchar(255) default NULL,
   isocode varchar(10) default NULL,
   dokeos_folder varchar(250) default NULL,
-  available tinyint(4) NOT NULL default '1',
+  available tinyint NOT NULL default '1',
   PRIMARY KEY  (id)
 );
 
@@ -415,8 +415,8 @@ DROP TABLE IF EXISTS php_session;
 CREATE TABLE php_session (
   session_id varchar(32) NOT NULL default '',
   session_name varchar(10) NOT NULL default '',
-  session_time int(11) NOT NULL default '0',
-  session_start int(11) NOT NULL default '0',
+  session_time int NOT NULL default '0',
+  session_start int NOT NULL default '0',
   session_value mediumtext NOT NULL,
   PRIMARY KEY  (session_id)
 );
@@ -426,12 +426,12 @@ CREATE TABLE php_session (
 --
 DROP TABLE IF EXISTS session;
 CREATE TABLE session (
-  id smallint(5) unsigned NOT NULL auto_increment,
-  id_coach int(10) unsigned NOT NULL default '0',
+  id smallint unsigned NOT NULL auto_increment,
+  id_coach int unsigned NOT NULL default '0',
   name char(50) NOT NULL default '',
-  nbr_courses smallint(5) unsigned NOT NULL default '0',
-  nbr_users mediumint(8) unsigned NOT NULL default '0',
-  nbr_classes mediumint(8) unsigned NOT NULL default '0',
+  nbr_courses smallint unsigned NOT NULL default '0',
+  nbr_users mediumint unsigned NOT NULL default '0',
+  nbr_classes mediumint unsigned NOT NULL default '0',
   date_start date NOT NULL default '0000-00-00',
   date_end date NOT NULL default '0000-00-00',
   nb_days_access_before_beginning TINYINT UNSIGNED NULL default '0',
@@ -448,10 +448,10 @@ CREATE TABLE session (
 --
 DROP TABLE IF EXISTS session_rel_course;
 CREATE TABLE session_rel_course (
-  id_session smallint(5) unsigned NOT NULL default '0',
+  id_session smallint unsigned NOT NULL default '0',
   course_code char(40) NOT NULL default '',
-  id_coach int(10) unsigned NOT NULL default '0',
-  nbr_users smallint(5) unsigned NOT NULL default '0',
+  id_coach int unsigned NOT NULL default '0',
+  nbr_users smallint unsigned NOT NULL default '0',
   PRIMARY KEY  (id_session,course_code),
   KEY course_code (course_code)
 );
@@ -463,9 +463,9 @@ CREATE TABLE session_rel_course (
 --
 DROP TABLE IF EXISTS session_rel_course_rel_user;
 CREATE TABLE session_rel_course_rel_user (
-  id_session smallint(5) unsigned NOT NULL default '0',
+  id_session smallint unsigned NOT NULL default '0',
   course_code char(40) NOT NULL default '',
-  id_user int(10) unsigned NOT NULL default '0',
+  id_user int unsigned NOT NULL default '0',
   PRIMARY KEY  (id_session,course_code,id_user),
   KEY id_user (id_user),
   KEY course_code (course_code)
@@ -478,8 +478,8 @@ CREATE TABLE session_rel_course_rel_user (
 --
 DROP TABLE IF EXISTS session_rel_user;
 CREATE TABLE session_rel_user (
-  id_session mediumint(8) unsigned NOT NULL default '0',
-  id_user mediumint(8) unsigned NOT NULL default '0',
+  id_session mediumint unsigned NOT NULL default '0',
+  id_user mediumint unsigned NOT NULL default '0',
   PRIMARY KEY  (id_session,id_user)
 );
 
@@ -490,7 +490,7 @@ CREATE TABLE session_rel_user (
 
 DROP TABLE IF EXISTS settings_current;
 CREATE TABLE settings_current (
-  id int(10) unsigned NOT NULL auto_increment,
+  id int unsigned NOT NULL auto_increment,
   variable varchar(255) default NULL,
   subkey varchar(255) default NULL,
   type varchar(255) default NULL,
@@ -684,7 +684,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS settings_options;
 CREATE TABLE settings_options (
-  id int(10) unsigned NOT NULL auto_increment,
+  id int unsigned NOT NULL auto_increment,
   variable varchar(255) default NULL,
   value varchar(255) default NULL,
   display_text varchar(255) NOT NULL default '',
@@ -839,7 +839,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS sys_announcement;
 CREATE TABLE sys_announcement (
-  id int(10) unsigned NOT NULL auto_increment,
+  id int unsigned NOT NULL auto_increment,
   date_start datetime NOT NULL default '0000-00-00 00:00:00',
   date_end datetime NOT NULL default '0000-00-00 00:00:00',
   visible_teacher tinyint NOT NULL default 0,
@@ -867,7 +867,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS shared_survey;
 CREATE TABLE shared_survey (
-  survey_id int(10) unsigned NOT NULL auto_increment,
+  survey_id int unsigned NOT NULL auto_increment,
   code varchar(20) default NULL,
   title text default NULL,
   subtitle text default NULL,
@@ -890,15 +890,15 @@ CREATE TABLE shared_survey (
 
 DROP TABLE IF EXISTS shared_survey_question;
 CREATE TABLE shared_survey_question (
-  question_id int(11) NOT NULL auto_increment,
-  survey_id int(11) NOT NULL default '0',
+  question_id int NOT NULL auto_increment,
+  survey_id int NOT NULL default '0',
   survey_question text NOT NULL,
   survey_question_comment text NOT NULL,
   type varchar(250) NOT NULL default '',
   display varchar(10) NOT NULL default '',
-  sort int(11) NOT NULL default '0',
+  sort int NOT NULL default '0',
   code varchar(40) NOT NULL default '',
-  max_value int(11) NOT NULL,
+  max_value int NOT NULL,
   PRIMARY KEY  (question_id)
 );
 
@@ -910,11 +910,11 @@ CREATE TABLE shared_survey_question (
 
 DROP TABLE IF EXISTS shared_survey_question_option;
 CREATE TABLE shared_survey_question_option (
-  question_option_id int(11) NOT NULL auto_increment,
-  question_id int(11) NOT NULL default '0',
-  survey_id int(11) NOT NULL default '0',
+  question_option_id int NOT NULL auto_increment,
+  question_id int NOT NULL default '0',
+  survey_id int NOT NULL default '0',
   option_text text NOT NULL,
-  sort int(11) NOT NULL default '0',
+  sort int NOT NULL default '0',
   PRIMARY KEY  (question_option_id)
 );
 

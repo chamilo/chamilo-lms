@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 17705 2009-01-13 20:13:58Z herodoto $
+<?php // $Id: usermanager.lib.php 17762 2009-01-16 03:08:30Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1534,4 +1534,62 @@ class UserManager
 		$row = Database::fetch_array($res);
 		return $row['user_id'];
 	}
+    /**
+     * Gets the API key (or keys) and return them into an array
+     * @param   int     Optional user id (defaults to the result of api_get_user_id())
+     * @result  array   Non-indexed array containing the list of API keys for this user, or FALSE on error
+     */
+    function get_api_keys($user_id=null) {
+    	if ($user_id != strval(intval($user_id))) return false;
+        if (empty($user_id)) { $user_id = api_get_user_id(); }
+        if ($user_id === false) return false;
+        $t_api = Database::get_main_table('TABLE_MAIN_USER_API_KEY');
+        $sql = "SELECT id, api_key FROM $t_api WHERE user_id = ".$user_id;
+        $res = api_sql_query($sql,__FILE__,__LINE__);
+        if ($res === false) return false; //error during query
+        $num = Database::num_rows($res);
+        if ($num == 0) return false;
+        $list = array();
+        while ($row = Database::fetch_array($res)) {
+        	$list[$row['id']] = $row['api_key'];
+        }
+        return $list;
+    }
+    /**
+     * Adds a new API key to the users' account
+     * @param   int     Optional user ID (defaults to the results of api_get_user_id())
+     * @return  boolean True on success, false on failure
+     */
+    function add_api_key($user_id=null) {
+        if ($user_id != strval(intval($user_id))) return false;
+        if (empty($user_id)) { $user_id = api_get_user_id(); }
+        if ($user_id === false) return false;
+        $t_api = Database::get_main_table('TABLE_MAIN_USER_API_KEY');
+        $md5 = md5((time()+($user_id*5))-3); //generate some kind of random key
+        $sql = "INSERT INTO $t_api (user_id, api_key) VALUES ($user_id,'$md5')";
+        $res = api_sql_query($sql,__FILE__,__LINE__);
+        if ($res === false) return false; //error during query
+        $num = Database::insert_id();
+        if ($num == 0) return false;
+        return $num;    	
+    }
+    /**
+     * Deletes an API key from the user's account
+     * @param   int     API key's internal ID
+     * @return  boolean True on success, false on failure
+     */
+    function delete_api_key($key_id) {
+        if ($key_id != strval(intval($key_id))) return false;
+        if ($key_id === false) return false;
+        $t_api = Database::get_main_table('TABLE_MAIN_USER_API_KEY');
+        $sql = "SELECT * FROM $t_api WHERE id = ".$key_id;
+        $res = api_sql_query($sql,__FILE__,__LINE__);
+        if ($res === false) return false; //error during query
+        $num = Database::num_rows($res);
+        if ($num !== 1) return false;
+        $sql = "DELETE FROM $t_api WHERE id = ".$key_id;        
+        $res = api_sql_query($sql,__FILE__,__LINE__);
+        if ($res === false) return false; //error during query
+        return true;        
+    }
 }

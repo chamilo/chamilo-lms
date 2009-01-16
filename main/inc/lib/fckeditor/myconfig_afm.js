@@ -31,7 +31,9 @@ FCKConfig.ToolbarSets["Small"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Profil"] = [
-	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','OrderedList','UnorderedList']
+	['FitWindow','PasteWord','Undo','Redo'],
+	['Link','Image','flvPlayer','Flash','EmbedMovies','YouTube','Table','googlemaps'],
+	['Bold','Italic','Underline','OrderedList','UnorderedList','TextColor','-','ShowBlocks']
 ] ;
 
 FCKConfig.ToolbarSets["Blog"] = [
@@ -71,12 +73,14 @@ FCKConfig.ToolbarSets["Survey"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Wiki"] = [
-	['NewPage','Templates','Save','Print','PageBreak','Preview','ShowBlocks','-','Cut','Copy','Paste','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
-	['Wikilink','Link','Unlink','Anchor','-','Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3','Table','CreateDiv','Rule','Smiley','SpecialChar','googlemaps'],
+	['NewPage','Templates','Save','PageBreak','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
+	['Wikilink','Link','Unlink','Anchor'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','CreateDiv','Rule','Smiley','SpecialChar','googlemaps'],
 	['FontFormat','FontName','FontSize'],
-	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor','Source'],
-	['FitWindow']
-	
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['ShowBlocks']	
 ] ;
 
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;
@@ -96,13 +100,12 @@ FCKConfig.Plugins.Add("Attachment", "en", sOtherPluginPath ) ;*/
 FCKConfig.Plugins.Add("MP3", "en", sOtherPluginPath ) ;
 FCKConfig.Plugins.Add('ImageManager','en') ;
 FCKConfig.Plugins.Add('flvPlayer','en') ;
-
 //FCKConfig.Plugins.Add("Flash", "en");
-
 FCKConfig.Plugins.Add('fckEmbedMovies');
+
+// added by Juan Carlos Raña
 FCKConfig.Plugins.Add("wikilink", "en,es", sOtherPluginPath ) ; // support to english, spanish
 FCKConfig.Plugins.Add("imgmap", "en,es", sOtherPluginPath );
-
 FCKConfig.Plugins.Add("googlemaps", "en,es", sOtherPluginPath ) ;
 // This key is for http://localhost. You must get one for each server where you want to use the plugin,
 // just get the key for free here after agreeing to the Terms of Use of the GoogleMaps API:

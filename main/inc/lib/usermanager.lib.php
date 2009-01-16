@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 17762 2009-01-16 03:08:30Z yannoo $
+<?php // $Id: usermanager.lib.php 17763 2009-01-16 03:15:23Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1565,7 +1565,7 @@ class UserManager
         if (empty($user_id)) { $user_id = api_get_user_id(); }
         if ($user_id === false) return false;
         $t_api = Database::get_main_table('TABLE_MAIN_USER_API_KEY');
-        $md5 = md5((time()+($user_id*5))-3); //generate some kind of random key
+        $md5 = md5((time()+($user_id*5))-rand(10000)); //generate some kind of random key
         $sql = "INSERT INTO $t_api (user_id, api_key) VALUES ($user_id,'$md5')";
         $res = api_sql_query($sql,__FILE__,__LINE__);
         if ($res === false) return false; //error during query

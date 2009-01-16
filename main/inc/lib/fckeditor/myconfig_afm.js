@@ -97,7 +97,7 @@ FCKConfig.Plugins.Add("MP3", "en", sOtherPluginPath ) ;
 FCKConfig.Plugins.Add('ImageManager','en') ;
 FCKConfig.Plugins.Add('flvPlayer','en') ;
 
-FCKConfig.Plugins.Add("Flash", "en");
+//FCKConfig.Plugins.Add("Flash", "en");
 
 FCKConfig.Plugins.Add('fckEmbedMovies');
 FCKConfig.Plugins.Add("wikilink", "en,es", sOtherPluginPath ) ; // support to english, spanish

@@ -238,11 +238,11 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 	<?php
 }
 /**
- * Enter description here...
- *
- * @param unknown_type $answer
- * @param unknown_type $id
- * @param unknown_type $questionId
+ * Shows the answer to a fill-in-the-blanks question, as HTML
+ * @param string    Answer text
+ * @param int       Exercise ID
+ * @param int       Question ID
+ * @return void
  */
 function display_fill_in_blanks_answer($answer,$id,$questionId)
 {
@@ -263,11 +263,11 @@ function display_fill_in_blanks_answer($answer,$id,$questionId)
 	<?php }
 }
 /**
- * Enter description here...
- *
- * @param unknown_type $answer
- * @param unknown_type $id
- * @param unknown_type $questionId
+ * Shows the answer to a free-answer question, as HTML
+ * @param string    Answer text
+ * @param int       Exercise ID
+ * @param int       Question ID
+ * @return void
  */
 function display_free_answer($answer,$id,$questionId)
 {
@@ -291,12 +291,12 @@ function display_free_answer($answer,$id,$questionId)
 	<?php
 }
 /**
- * Enter description here...
+ * Displays the answer to a hotspot question
  *
- * @param unknown_type $answerId
- * @param unknown_type $answer
- * @param unknown_type $studentChoice
- * @param unknown_type $answerComment
+ * @param int $answerId
+ * @param string $answer
+ * @param string $studentChoice
+ * @param string $answerComment
  */
 function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment)
 {
@@ -690,14 +690,6 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 						$temp=substr($temp,$pos+1);
 						$i=$i+1;
 					}
-					/*
-					echo "<pre>";
-					print_r($user_tags);
-					echo "<br>";
-					print_r($correct_tags);
-					print_r($answerWeighting);					
-					echo "</pre>";
-					*/
 					$answer='';
 					for($i=0;$i<count($correct_tags);$i++)
 					{		 							

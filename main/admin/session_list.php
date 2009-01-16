@@ -19,7 +19,6 @@ $action=$_REQUEST['action'];
 $sort=in_array($_GET['sort'],array('name','nbr_courses','date_start','date_end'))?$_GET['sort']:'name';
 $idChecked = $_REQUEST['idChecked'];
 
-
 if($action == 'delete')
 {
 	if(is_array($idChecked))
@@ -42,18 +41,15 @@ if($action == 'delete')
 	}
 
 	api_sql_query("DELETE FROM $tbl_session WHERE id IN($idChecked)",__FILE__,__LINE__);
-
 	api_sql_query("DELETE FROM $tbl_session_rel_course WHERE id_session IN($idChecked)",__FILE__,__LINE__);
-
-	api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session IN($idChecked)",__FILE__,__LINE__);
-	
+	api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session IN($idChecked)",__FILE__,__LINE__);	
 	api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session IN($idChecked)",__FILE__,__LINE__);
 
 	header('Location: '.api_get_self().'?sort='.$sort);
 	exit();
 }
 
-$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('AdministrationTools'));
+$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'));
 
 if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 {
@@ -76,7 +72,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	$form->display();
 	
 }
-else{
+else {
 	
 	$limit=20;
 	$from=$page * $limit;
@@ -87,7 +83,7 @@ else{
 		$where = 'WHERE session_admin_id='.intval($_user['user_id']);
 		$where .= (empty($_REQUEST['keyword']) ? " " : " AND name LIKE '%".addslashes($_REQUEST['keyword'])."%'");
 	}
-	else{
+	else {
 		$where .= (empty($_REQUEST['keyword']) ? " " : " WHERE name LIKE '%".addslashes($_REQUEST['keyword'])."%'");
 	}
 	
@@ -121,13 +117,15 @@ else{
 	Display::display_header($tool_name);
 	
 	api_display_tool_title($tool_name);
-	?>
 	
-	<div id="main">
-	
+	echo '<div style="float:right;">
+		<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>									
+	  </div>'; 
+	?>	
+	<div id="main">	
 	<?php
 	
-	if(isset($_GET['action'])){
+	if(isset($_GET['action'])) {
 		Display::display_normal_message(Security::remove_XSS($_GET['message']), false);
 	}
 	

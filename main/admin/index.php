@@ -1,4 +1,4 @@
-<?php // $Id: index.php 17723 2009-01-14 17:50:21Z juliomontoya $
+<?php // $Id: index.php 17781 2009-01-16 17:51:08Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -46,7 +46,7 @@ api_protect_admin_script(true);
 $nameTools = get_lang('PlatformAdmin');
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => $nameTools);
+//$interbreadcrumb[] = array('url' => 'index.php', 'name' => $nameTools);
 
 // setting the name of the tool
 $tool_name=get_lang('PlatformAdmin');
@@ -55,96 +55,115 @@ $tool_name=get_lang('PlatformAdmin');
 Display::display_header($nameTools);
 
 
-if(api_is_platform_admin()):
-if(is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php'))
+if(api_is_platform_admin()) 
 {
-	Display::display_normal_message(get_lang('InstallDirAccessibleSecurityThreat'));
+	if(is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php'))
+	{
+		Display::display_normal_message(get_lang('InstallDirAccessibleSecurityThreat'));
+	}
+	/*
+	==============================================================================
+			ACTION HANDLING
+	==============================================================================
+	*/
+	if (!empty($_POST['Register']))
+	{
+		register_site();
+		Display :: display_confirmation_message(get_lang('VersionCheckEnabled'));
+	}
+	
+	/*
+	==============================================================================
+			MAIN SECTION
+	==============================================================================
+	*/
+	$keyword_url = Security::remove_XSS((empty($_GET['keyword'])?'':$_GET['keyword']));	
 }
-/*
-==============================================================================
-		ACTION HANDLING
-==============================================================================
-*/
-if (!empty($_POST['Register']))
-{
-	register_site();
-	Display :: display_confirmation_message(get_lang('VersionCheckEnabled'));
-}
 
-/*
-==============================================================================
-		MAIN SECTION
-==============================================================================
-*/
-$keyword_url = Security::remove_XSS((empty($_GET['keyword'])?'':$_GET['keyword']));
-?>
-
-<div class="admin_section">
-<h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo ucfirst(get_lang('Users')); ?></h4>
-	<ul><li style="list-style-type:none"><form method="get" action="user_list.php">
-
-	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
-	<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
-	</form></li>
-	<li>
-<a href="user_list.php?search=advanced"><?php echo ucfirst(get_lang('AdvancedSearch')); ?></a>
-
-</li>
-<li><a href="user_list.php"><?php echo get_lang('UserList') ?></a></li>
-<li><a href="user_add.php"><?php echo get_lang('AddUsers') ?></a></li>
-<li><a href="user_export.php"><?php echo get_lang('ExportUserListXMLCSV') ?></a></li>
-<li><a href="user_import.php"><?php echo get_lang('ImportUserListXMLCSV') ?></a></li>
-<li><a href="user_fields.php"><?php echo get_lang('ManageUserFields'); ?></a></li>
-</ul>
-</div>
-
-<div class="admin_section">
-<h4><?php Display::display_icon('course.gif', get_lang('Courses')); ?> <?php echo ucfirst(get_lang('Courses')); ?></h4>
-	<ul><li style="list-style-type:none"><form method="get" action="course_list.php">
-
-	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
-	<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
-	</form></li>
-	<li>
-	<a href="course_list.php?search=advanced"><?php echo ucfirst(get_lang('AdvancedSearch')); ?></a>
-
-</li>
-<li><a href="course_list.php"><?php echo get_lang('CourseList') ?></a></li>
-<li><a href="course_add.php"><?php echo get_lang('AddCourse') ?></a></li>
-<li><a href="course_import.php"><?php echo get_lang('AddCourse').' CSV'; ?></a></li>
-<!--<li><a href="course_virtual.php"><?php //echo get_lang('AdminManageVirtualCourses') ?></a></li>-->
-<li><a href="course_category.php"><?php echo get_lang("AdminCategories"); ?></a></li>
-<li><a href="subscribe_user2course.php"><?php echo get_lang('AddUsersToACourse'); ?></a></li>
-<li><a href="course_user_import.php"><?php echo get_lang('AddUsersToACourse').' CSV'; ?></a></li>
-<?php if (api_get_setting('search_enabled')=='true') { ?>
-  <li><a href="specific_fields.php"><?php echo get_lang('SpecificSearchFields'); ?></a></li>
-<?php } ?>
-</ul>
-</div>
-
-<div class="admin_section">
- <h4><?php Display::display_icon('settings.gif', get_lang('Platform')); ?> <?php echo ucfirst(get_lang('Platform')); ?></h4>
- <ul>
-  <li><a href="settings.php"><?php echo get_lang('DokeosConfigSettings') ?></a></li>
-  <li><a href="system_announcements.php"><?php echo get_lang('SystemAnnouncements') ?></a></li>
-  <li><a href="languages.php"><?php echo get_lang('Languages'); ?></a></li>
-  <li><a href="configure_homepage.php"><?php echo get_lang('ConfigureHomePage'); ?></a></li>
-  <li><a href="statistics/index.php"><?php echo get_lang('ToolName'); ?> </a></li>
-  <li><a href="calendar.php"><?php echo get_lang('GlobalAgenda'); ?> </a></li>
-  <?php if(!empty($phpMyAdminPath)): ?>
-  <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang("AdminDatabases"); ?></a><br />(<?php echo get_lang("DBManagementOnlyForServerAdmin"); ?>)</li>
-  <?php endif; ?>
-  <?php 
-  if(!empty($_configuration['multiple_access_urls']))
-  {
-  	echo '	<li><a href="access_urls.php">'.get_lang('ConfigureMultipleAccessURLs').'</a></li>';
-  }
-  ?>
- </ul>
-</div>
-
+if (api_is_platform_admin()) {
+	?>
+		<div class="admin_section">
+	<h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo ucfirst(get_lang('Users')); ?></h4>
+	<ul>
+		<li style="list-style-type:none"><form method="get" action="user_list.php">	
+			<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
+			<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
+			</form>
+		</li>
+		<li><a href="user_list.php?search=advanced"><?php echo ucfirst(get_lang('AdvancedSearch')); ?></a></li>
+		<li><a href="user_list.php">	<?php echo get_lang('UserList') ?></a></li>
+		<li><a href="user_add.php">		<?php echo get_lang('AddUsers') ?></a></li>
+		<li><a href="user_export.php">	<?php echo get_lang('ExportUserListXMLCSV') ?></a></li>
+		<li><a href="user_import.php">	<?php echo get_lang('ImportUserListXMLCSV') ?></a></li>
+		<li><a href="user_fields.php">	<?php echo get_lang('ManageUserFields'); ?></a></li>
+	</ul>
+	</div>
 <?php
-endif;
+}
+else
+{
+	?>
+	<div class="admin_section">
+	<h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo ucfirst(get_lang('Users')); ?></h4>
+	<ul>		
+		<li><a href="user_list.php">	<?php echo get_lang('UserList') ?></a></li>
+		<li><a href="../mySpace/user_add.php">		<?php echo get_lang('AddUsers') ?></a></li>
+
+	</ul>
+	</div>
+<?php
+}
+
+
+if(api_is_platform_admin()) {
+?>
+	<div class="admin_section">
+	<h4><?php Display::display_icon('course.gif', get_lang('Courses')); ?> <?php echo ucfirst(get_lang('Courses')); ?></h4>
+		<ul><li style="list-style-type:none"><form method="get" action="course_list.php">
+	
+		<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
+		<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
+		</form></li>
+		<li>
+		<a href="course_list.php?search=advanced"><?php echo ucfirst(get_lang('AdvancedSearch')); ?></a>
+	
+	</li>
+	<li><a href="course_list.php"><?php echo get_lang('CourseList') ?></a></li>
+	<li><a href="course_add.php"><?php echo get_lang('AddCourse') ?></a></li>
+	<li><a href="course_import.php"><?php echo get_lang('AddCourse').' CSV'; ?></a></li>
+	<!--<li><a href="course_virtual.php"><?php //echo get_lang('AdminManageVirtualCourses') ?></a></li>-->
+	<li><a href="course_category.php"><?php echo get_lang("AdminCategories"); ?></a></li>
+	<li><a href="subscribe_user2course.php"><?php echo get_lang('AddUsersToACourse'); ?></a></li>
+	<li><a href="course_user_import.php"><?php echo get_lang('AddUsersToACourse').' CSV'; ?></a></li>
+	<?php if (api_get_setting('search_enabled')=='true') { ?>
+	  <li><a href="specific_fields.php"><?php echo get_lang('SpecificSearchFields'); ?></a></li>
+	<?php } ?>
+	</ul>
+	</div>
+	
+	<div class="admin_section">
+	 <h4><?php Display::display_icon('settings.gif', get_lang('Platform')); ?> <?php echo ucfirst(get_lang('Platform')); ?></h4>
+	 <ul>
+	  <li><a href="settings.php"><?php echo get_lang('DokeosConfigSettings') ?></a></li>
+	  <li><a href="system_announcements.php"><?php echo get_lang('SystemAnnouncements') ?></a></li>
+	  <li><a href="languages.php"><?php echo get_lang('Languages'); ?></a></li>
+	  <li><a href="configure_homepage.php"><?php echo get_lang('ConfigureHomePage'); ?></a></li>
+	  <li><a href="statistics/index.php"><?php echo get_lang('ToolName'); ?> </a></li>
+	  <li><a href="calendar.php"><?php echo get_lang('GlobalAgenda'); ?> </a></li>
+	  <?php if(!empty($phpMyAdminPath)): ?>
+	  <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang("AdminDatabases"); ?></a><br />(<?php echo get_lang("DBManagementOnlyForServerAdmin"); ?>)</li>
+	  <?php endif; ?>
+	  <?php 
+	  if(!empty($_configuration['multiple_access_urls']))
+	  {
+	  	echo '	<li><a href="access_urls.php">'.get_lang('ConfigureMultipleAccessURLs').'</a></li>';
+	  }
+	  ?>
+	 </ul>
+	</div>
+	
+	<?php
+}
 
 if(api_get_setting('use_session_mode')=='true')
 {
@@ -247,7 +266,7 @@ if(api_is_platform_admin()){
  </ul>
 </div>
 <?php
-	if (get_setting('allow_reservation')=="true") 
+	if (get_setting('allow_reservation')=='true') 
 	{
 	?>
 		<div class="admin_section">

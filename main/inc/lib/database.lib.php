@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 17764 2009-01-16 03:20:18Z yannoo $
+<?php // $Id: database.lib.php 17781 2009-01-16 17:51:08Z juliomontoya $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -61,6 +61,7 @@ define('TABLE_MAIN_SPECIFIC_FIELD_VALUES',	'specific_field_values');
 define('TABLE_MAIN_SEARCH_ENGINE_REF',			'search_engine_ref');
 //Access URLS
 define('TABLE_MAIN_ACCESS_URL', 'access_url');
+define('TABLE_MAIN_ACCESS_URL_REL_USER', 'access_url_rel_user');
 //Global calendar
 define('TABLE_MAIN_SYSTEM_CALENDAR', 'sys_calendar');
 //Reservation System

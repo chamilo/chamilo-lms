@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 17763 2009-01-16 03:15:23Z yannoo $
+<?php // $Id: usermanager.lib.php 17781 2009-01-16 17:51:08Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -116,8 +116,16 @@ class UserManager
 		$result = api_sql_query($sql);
 		if ($result)
 		{
-			//echo "id returned";
+			//echo "id returned";			
 			$return=Database::get_last_insert_id();
+			global $_configuration;
+			if (api_is_platform_admin(true) && $_configuration['multiple_access_urls']==true) {				
+				require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');			
+				if (api_get_current_access_url_id()!=-1)
+					UrlManager::add_user_to_url($return, api_get_current_access_url_id());
+				else
+					UrlManager::add_user_to_url($return, 1);					
+			}
 		}
 		else
 		{

@@ -68,7 +68,7 @@ ALTER TABLE user_friend ADD INDEX idx_user_friend_user(user_id);
 ALTER TABLE user_friend ADD INDEX idx_user_friend_friend_user(friend_user_id);
 ALTER TABLE user_friend ADD INDEX idx_user_friend_user_friend_user(user_id,friend_user_id);
 CREATE TABLE user_friend_relation_type(id int unsigned not null auto_increment,title char(20),PRIMARY KEY(id));
-CREATE TABLE user_api_key (id int unsigned NOT NULL auto_increment, user_id int unsigned NOT NULL, api_key char(32) NOT NULL, PRIMARY KEY (id));
+CREATE TABLE user_api_key (id int unsigned NOT NULL auto_increment, user_id int unsigned NOT NULL, api_key char(32) NOT NULL, api_service char(10) NOT NULL default 'dokeos', PRIMARY KEY (id));
 ALTER TABLE user_api_key ADD INDEX idx_user_api_keys_user (user_id);
  
 -- xxSTATSxx

@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 17761 2009-01-16 02:52:33Z yannoo $
+<?php // $Id: database.lib.php 17764 2009-01-16 03:20:18Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -141,11 +141,6 @@ define('TABLE_QUIZ_ANSWER', 'quiz_answer');
 define('TABLE_QUIZ_TEST_QUESTION', 'quiz_rel_question');
 //linked resource table
 define('TABLE_LINKED_RESOURCES', 'resource');
-//learnpath tables
-define('TABLE_LEARNPATH_MAIN', 'learnpath_main');
-define('TABLE_LEARNPATH_CHAPTER', 'learnpath_chapter');
-define('TABLE_LEARNPATH_ITEM', 'learnpath_item');
-define('TABLE_LEARNPATH_USER', 'learnpath_user');
 //new scorm tables
 define('TABLE_LP_MAIN', 'lp');
 define('TABLE_LP_ITEM', 'lp_item');

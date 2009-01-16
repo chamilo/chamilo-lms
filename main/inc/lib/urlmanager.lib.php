@@ -254,7 +254,6 @@ class UrlManager
 		$result = api_sql_query($sql); 
 		$access_url_id = Database::result($result, 0, 0);
 		return $access_url_id;
-	}
-	
+	}	
 }
 ?>

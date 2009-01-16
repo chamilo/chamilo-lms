@@ -1254,6 +1254,20 @@ function api_is_coach() {
 		return false;
 	}
 }
+
+/**
+ * Check if the current user is a session administrator
+ * @return boolean True if current user is a course administrator
+ */
+function api_is_session_admin() {
+	global $_user;
+	if ($_user['status']==SESSIONADMIN) {
+		return true;
+	} else{
+		return false;
+	}
+}
+
 /*
 ==============================================================================
 		DISPLAY OPTIONS
@@ -2952,4 +2966,19 @@ function api_create_include_path_setting()
 	}
 	// The include_path setting is empty, low probability is here.
 	return api_get_path(LIBRARY_PATH).'pear';
+}
+/**
+ * */
+function api_get_current_access_url_id()
+{
+	$access_url_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
+	$path = api_get_path(WEB_PATH);  
+	$sql = "SELECT id FROM $access_url_table WHERE url = '".$path."'";
+	$result = api_sql_query($sql); 
+	$access_url_id = Database::result($result, 0, 0);
+	if (empty($access_url_id)){
+		return -1;
+	} else {
+		return $access_url_id;	
+	}
 }

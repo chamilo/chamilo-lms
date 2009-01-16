@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 16724 2008-11-12 15:42:23Z pcool $
+<?php // $Id: course_home.php 17768 2009-01-16 04:05:43Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -184,7 +184,9 @@ $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Full';
 
 $fck_attribute['Config']['InDocument'] = false;
+$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
 $fck_attribute['Config']['CreateDocumentDir'] = 'document/';
+$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
 
 
 Display::display_introduction_section(TOOL_COURSE_HOMEPAGE);

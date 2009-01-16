@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 17627 2009-01-09 21:50:35Z cvargas1 $
+<?php //$Id: announcements.php 17768 2009-01-16 04:05:43Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -850,6 +850,16 @@ if($_REQUEST['publish_survey'])
 /*====================================================
 		     		Tool Title
 ====================================================*/
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '400';
+$fck_attribute['ToolbarSet'] = 'Full';
+
+$fck_attribute['Config']['InDocument'] = false;
+$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
+$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
+
 if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 {
 	//api_display_tool_title($nameTools);

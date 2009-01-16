@@ -1,4 +1,4 @@
-<?php // $Id: document.php 17746 2009-01-15 20:33:37Z cvargas1 $
+<?php // $Id: document.php 17768 2009-01-16 04:05:43Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -338,6 +338,15 @@ if($to_group_id !=0) //add group name after for group documents
 	(editable by course admins)
 -----------------------------------------------------------
 */
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '400';
+$fck_attribute['ToolbarSet'] = 'Full';
+
+$fck_attribute['Config']['InDocument'] = false;
+$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
+$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
 
 if(!empty($_SESSION['_gid']))
 {

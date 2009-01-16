@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 17627 2009-01-09 21:50:35Z cvargas1 $
+<?php //$Id: agenda.php 17768 2009-01-16 04:05:43Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -233,6 +233,16 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false,true) OR (api_get_course_sett
 //api_display_tool_title($nameTools);
 
 // tool introduction
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '400';
+$fck_attribute['ToolbarSet'] = 'Full';
+
+$fck_attribute['Config']['InDocument'] = false;
+$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
+$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
+
 Display::display_introduction_section(TOOL_CALENDAR_EVENT);
 
 // insert an anchor (top) so one can jump back to the top of the page

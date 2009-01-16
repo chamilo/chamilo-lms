@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 17647 2009-01-11 13:12:30Z ivantcholakov $
+<?php // $Id: edit_document.php 17768 2009-01-16 04:05:43Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -125,7 +125,7 @@ for($i=0;$i<($count_dir);$i++)
 $fck_attribute['Config']['InDocument'] = true;
 $fck_attribute['Config']['CreateDocumentDir'] = $relative_url;
 $fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
-$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
+$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir;
 
 $use_document_title = (get_setting('use_document_title')=='true')?true:false;
 $noPHP_SELF=true;

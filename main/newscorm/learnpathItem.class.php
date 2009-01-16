@@ -2191,9 +2191,8 @@ function get_terms()
 	     	//now save into DB
 	     	$res = 0;
 	     	if(Database::num_rows($check_res)<1){
-	     		if ($this->type=='quiz') {
-	     				$my_status = ' ';
-	     		}else {
+                $my_status = '';
+	     		if ($this->type!='quiz') {
 	     				$my_status = $this->get_status(false);	
 	     		}
 		     	$sql = "INSERT INTO $item_view_table " .

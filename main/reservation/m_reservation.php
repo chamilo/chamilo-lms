@@ -199,16 +199,26 @@ switch ($_GET['action']) {
 		$timepicker_arr[] = $form->createElement('radio', 'timepicker', '', get_lang('TimePicker'), 1 , array ('onclick' => 'javascript:window_show(\'timepicker_timewindow\')'));
 		$form->addGroup($timepicker_arr, null, get_lang('TimePicker'), '<br />', false);
 		$form->addElement('html', '<div style="margin-left:25px;display:block;" id="timepicker_timewindow">');
+		
    		$min_arr = array();
+   		//todo this will be fixed  
+   		$min_arr[10] = 10;
+   		$min_arr[20] = 20;
+   		$min_arr[30] = 30;
+   		$min_arr[40] = 40;
+   		$min_arr[50] = 50;
+   		$min_arr[60] = 60;  		
+   		
 		for ($i = 0; $i < 1441; $i++) {
-      			$min_arr[$i] = $i;
+      		//$min_arr[$i] = $i;
    		}
+   		
 		$max_arr = $min_arr;
 		
 		$form->addElement('select',min,get_lang('Minimum'),$min_arr);
-		$form->addElement('select',max,get_lang('Maximum'),$max_arr);		
-		$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">'.get_lang('TimePickerMinMaxNull').'</div></div><br />');
+		$form->addElement('select',max,get_lang('Maximum'),$max_arr);
 				
+		$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">'.get_lang('TimePickerMinMaxNull').'</div></div><br />');				
 		$form->addElement('html', '</div>');
 
 		$recurrence[] = $form->createElement('radio', 'recurrence_c', '', get_lang('NoRecurence'), 0, array ('onclick' => 'javascript:window_hide(\'recurrence_timewindow\')'));
@@ -393,7 +403,7 @@ switch ($_GET['action']) {
 			$interbreadcrumb[] = array ("url" => "m_reservation.php", "name" => get_lang('ManageBookingPeriods'));		
 			Display :: display_header('');
 			api_display_tool_title($tool_name);
-			Display :: display_normal_message(Rsys :: get_return_msg(str_replace('#NUM#', $result, get_lang('BookingPeriodHasSubscriptions')),"m_reservation.php",get_lang('BookingPeriodManagerHeader')),false);
+			Display :: display_normal_message(Rsys :: get_return_msg(str_replace('#NUM#', $result, get_lang('BookingPeriodHasSubscriptions')),"m_reservation.php",get_lang('BookingPeriodList')),false);
 		}
 		else
 		{			

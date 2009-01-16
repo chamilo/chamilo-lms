@@ -139,8 +139,9 @@ if ($reservation[0][9] < $reservation[0][4]) {
 		//$defaultvalues['endpicker'] = Rsys :: timestamp_to_datetime($datum +900);
 		$defaultvalues['endpicker'] = Rsys :: timestamp_to_datetime($datum +($min_timepicker*60));
 		$form->setDefaults($defaultvalues);
-	} else {
-		$form->addElement('html', "<p> **** ".str_replace('#name#', "<b>".$item[3]."</b>",str_replace('#start#', "<b>".$reservation[0][5]."</b>", str_replace('#end#', "<b>".$reservation[0][6]."</b>", get_lang('SubscribeInformation'))))." ****</p>");
+	}
+	else {
+		$form->addElement('html', "<p> * ".str_replace('#name#', "<b>".$item[3]."</b>",str_replace('#start#', "<b>".$reservation[0][5]."</b>", str_replace('#end#', "<b>".$reservation[0][6]."</b>", get_lang('SubscribeInformation'))))." *</p>");
 	}
 	$buttons[] = $form->createElement('submit', 'submit', get_lang('Ok'));
 	$buttons[] = $form->createElement('button', 'cancel', get_lang('Cancel'), array ('onclick' => 'location.href="reservation.php?cat='.$item[1].'&item='.$item[0].'"'));

@@ -462,7 +462,7 @@ switch ($_GET['action']) {
 		$table->set_header(1, get_lang('ItemName'), true);
 		$table->set_header(2, get_lang('ItemDescription'), true);
 		$table->set_header(3, get_lang('ResourceType'), true);
-		$table->set_header(4, get_lang('ItemCreator'), true);
+		$table->set_header(4, get_lang('Owner'), true);
 		$table->set_header(5, '', false, array ('style' => 'width:100px;'));
 		$table->set_column_filter(5, 'modify_filter');
 		$table->set_form_actions(array ('delete_items' => get_lang('DeleteSelectedItems')), 'items');

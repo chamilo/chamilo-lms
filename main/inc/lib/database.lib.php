@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 17683 2009-01-13 18:08:58Z juliomontoya $
+<?php // $Id: database.lib.php 17761 2009-01-16 02:52:33Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -43,6 +43,7 @@ define('TABLE_MAIN_SHARED_SURVEY_QUESTION', 'shared_survey_question');
 define('TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION', 'shared_survey_question_option');
 define('TABLE_MAIN_TEMPLATES', 'templates');
 define('TABLE_MAIN_OPENID_ASSOCIATION','openid_association');
+//Gradebook
 define('TABLE_MAIN_GRADEBOOK_CATEGORY', 	'gradebook_category');
 define('TABLE_MAIN_GRADEBOOK_EVALUATION', 	'gradebook_evaluation');
 define('TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG', 	'gradebook_linkeval_log');
@@ -50,13 +51,17 @@ define('TABLE_MAIN_GRADEBOOK_RESULT', 		'gradebook_result');
 define('TABLE_MAIN_GRADEBOOK_RESULT_LOG', 		'gradebook_result_log');
 define('TABLE_MAIN_GRADEBOOK_LINK', 		'gradebook_link');
 define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY','gradebook_score_display');
+//Profiling
 define('TABLE_MAIN_USER_FIELD',			'user_field');
 define('TABLE_MAIN_USER_FIELD_OPTIONS',	'user_field_options');
 define('TABLE_MAIN_USER_FIELD_VALUES',	'user_field_values');
+//Search engine
 define('TABLE_MAIN_SPECIFIC_FIELD',			'specific_field');
 define('TABLE_MAIN_SPECIFIC_FIELD_VALUES',	'specific_field_values');
 define('TABLE_MAIN_SEARCH_ENGINE_REF',			'search_engine_ref');
+//Access URLS
 define('TABLE_MAIN_ACCESS_URL', 'access_url');
+//Global calendar
 define('TABLE_MAIN_SYSTEM_CALENDAR', 'sys_calendar');
 //Reservation System
 define('TABLE_MAIN_RESERVATION_ITEM', 'reservation_item');
@@ -64,6 +69,11 @@ define('TABLE_MAIN_RESERVATION_RESERVATION', 'reservation_main');
 define('TABLE_MAIN_RESERVATION_SUBSCRIBTION', 'reservation_subscription');
 define('TABLE_MAIN_RESERVATION_CATEGORY', 'reservation_category');
 define('TABLE_MAIN_RESERVATION_ITEM_RIGHTS', 'reservation_item_rights');
+//Social networking
+define('TABLE_MAIN_USER_FRIEND','user_friend');
+define('TABLE_MAIN_USER_FRIEND_RELATION_TYPE','user_friend_relation_type');
+//Web services
+define('TABLE_MAIN_USER_API_KEY','user_api_key');
 
 //statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');

@@ -33,7 +33,7 @@
 		
 			///Second step: hiding as the case
 			//Juan Carlos Raña
-			if((!ereg($deleted_by_dokeos, $file['name']) || !ereg($deleted_by_dokeos, $file['path'])) && !ereg($css_folder_dokeos, $file['path']) && $show_doc_group==true)
+			if((!ereg($deleted_by_dokeos, $file['name']) || !ereg($deleted_by_dokeos, $file['path'])) && !ereg($css_folder_dokeos, $file['path']) && $show_doc_group==true && $file['name'][0]!='.')
 			{
 						
 				?>

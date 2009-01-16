@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 17537 2009-01-05 16:05:24Z pcool $
+<?php // $Id: settings.php 17783 2009-01-16 18:07:17Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -83,6 +83,10 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 	$renderer->setElementTemplate('<div class="settingcomment">{label}</div>'."\n".'<div class="settingvalue">{element}</div>'."\n");
 	$my_category = mysql_real_escape_string($_GET['category']);
 	
+	$sqlcountsettings = "SELECT COUNT(*) FROM $table_settings_current WHERE category='".$my_category."' AND type<>'checkbox'";
+	$resultcountsettings = api_sql_query($sqlcountsettings, __FILE__, __LINE__);
+	$countsetting = mysql_fetch_array($resultcountsettings);
+	 
 	if ($_configuration['access_url']==1)
 	{
 		$settings = api_get_settings($my_category,'group',$_configuration['access_url']);
@@ -122,7 +126,15 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 	//while ($row = mysql_fetch_array($resultsettings))
 	$default_values = array();
 	foreach($settings as $row)
-	{
+	{		
+		($countsetting['0']%10) < 5 ?$b=$countsetting['0']-10:$b=$countsetting['0'];
+		
+		if ($i % 10 == 0 and $i<$b){
+			$form->addElement('html','<div align="right">');
+			$form->addElement('submit', null,get_lang('SaveSettings'));
+			$form->addElement('html','</div>');		
+		}$i++;	
+
 		$form->addElement('header', null, get_lang($row['title']));
 		$hideme=array();
 		$hide_element=false;
@@ -203,7 +215,9 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 				$form->addElement('static', null, get_lang($row['comment']), get_lang('CurrentValue').' : '.$row['selected_value'],$hideme);
 		}
 	}
-	$form->addElement('submit', null, get_lang('Ok'));
+	$form->addElement('html','<div align="right">');
+	$form->addElement('submit', null,get_lang('SaveSettings'));
+	$form->addElement('html','</div>');
 	$form->setDefaults($default_values);
 	if ($form->validate())
 	{

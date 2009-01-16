@@ -1,4 +1,4 @@
-<?php // $Id: user.php 17122 2008-12-08 21:13:55Z cfasanando $
+<?php // $Id: user.php 17769 2009-01-16 04:07:35Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -327,6 +327,16 @@ $is_allowed_to_track = ($is_courseAdmin || $is_courseTutor) && $_configuration['
 
 
 // introduction section
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '400';
+$fck_attribute['ToolbarSet'] = 'Full';
+
+$fck_attribute['Config']['InDocument'] = false;
+$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
+$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
+
 Display::display_introduction_section(TOOL_USER, 'left');
 
 if ( api_is_allowed_to_edit()) {

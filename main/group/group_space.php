@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 17679 2009-01-13 15:37:47Z iflorespaz $
+<?php //$Id: group_space.php 17769 2009-01-16 04:07:35Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -97,6 +97,16 @@ Display::display_header($nameTools,"Group");
 	(editable by course admin)
 -----------------------------------------------------------
 */
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '400';
+$fck_attribute['ToolbarSet'] = 'Full';
+
+$fck_attribute['Config']['InDocument'] = false;
+$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
+$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
+
 Display::display_introduction_section(group_space_.$_SESSION['_gid']);
 
 /*

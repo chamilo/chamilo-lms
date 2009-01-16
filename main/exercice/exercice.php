@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 17741 2009-01-15 17:36:02Z cfasanando $
+<?php // $Id: exercice.php 17769 2009-01-16 04:07:35Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -383,6 +383,15 @@ if ($origin != 'learnpath') {
 include_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 
 event_access_tool(TOOL_QUIZ);
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '400';
+$fck_attribute['ToolbarSet'] = 'Full';
+
+$fck_attribute['Config']['InDocument'] = false;
+$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
+$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
 
 Display::display_introduction_section(TOOL_QUIZ);
 

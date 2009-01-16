@@ -6,6 +6,7 @@
  */
 require_once dirname(__FILE__) . '/IndexableChunk.class.php';
 require_once api_get_path(LIBRARY_PATH).'/specific_fields_manager.lib.php';
+//require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 /**
  * Add some required CSS and JS to html's head.
@@ -17,189 +18,197 @@ require_once api_get_path(LIBRARY_PATH).'/specific_fields_manager.lib.php';
  */
 function search_widget_prepare(&$htmlHeadXtra) {
     $htmlHeadXtra[] = '
-    <style type="text/css">
-    .tags {
-        display: block;
-        margin-top: 20px;
-        width: 90%;
-    }
-    .tag {
-        float: left;
-        display: block;
-        padding: 5px;
-        padding-right: 4px;
-        padding-left: 4px;
-        margin: 3px;
-        border: 1px solid #ddd;
-    }
-    .tag:hover {
-        background: gray;
-        color:white;
-        cursor:pointer;
-      /*  font-weight:bold;*/
-    }
-    .lighttagcolor {
-        background: gray;
-        color:white;
-       /* font-weight:bold;*/
-    }
-    .sf-select-multiple {
-        width: 14em;
-        margin: 0 1em 0 1em;
-    }
-    .sf-select-multiple-title {
-        font-weight: bold;
-        margin-left: 1em;
-        font-size: 130%;
-    }
-    #submit {
-        background-image: url(\'../img/search-lense.gif\');
-        background-repeat: no-repeat;
-        background-position: 0px -1px;
-        padding-left:18px;
-    }
-    .lower-submit {
-        float:right;
-        margin: 0 0.9em 0 0.5em;
-    }
-    #tags-clean {
-        float: right;
-    }
-    .sf-select-splitter {
-        margin-top: 4em;
-    }
-    .search-links-box {
-        background-color: #ddd;
-        border: 1px solid #888;
-        padding: 1em;
-        -moz-border-radius: 0.8em;
-    }
-    .search-help-box {
-        border: 1px solid #888;
-        padding: 0 1em 1em 1em;
-        -moz-border-radius: 0.8em;
-        color: #888;
-    }
+    <script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"></script>
+    <script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.autocomplete.js"></script>
+    <script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'search/search_widget.js"></script>
+    <link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.autocomplete.css" />
+    <link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_LIBRARY_PATH).'search/search_widget.css" />
+    ';
+}
 
-    </style>';
+/**
+ * Get one term html select
+ */
+function format_one_specific_field_select($prefix, $sf_term_array, $op) {
+    $multiple_select .= '<select multiple="multiple" size="7" class="sf-select-multiple" name="sf_'. $prefix .'[]">';
 
+    $all_selected = '';
+    if (!empty($_REQUEST['sf_'. $prefix]) ) {
+        if (in_array('__all__', $_REQUEST['sf_'. $prefix])) {
+            $all_selected = 'selected="selected"';
+        }
+    }
+    if ($op == 'and') {
+        $all_selected_name = get_lang('All');
+    } else if ($op == 'or') {
+        $all_selected_name = get_lang('Any');
+    }
+    $multiple_select .= '<option value="__all__" '. $all_selected .' >&lt;'. $all_selected_name .'&gt;</option>';
 
-    $htmlHeadXtra[] = '
-    <script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>';
+    foreach ($sf_term_array as $raw_term) {
+        $term = substr($raw_term, 1);
+        if (empty($term)) continue;
+        $html_term = htmlspecialchars($term, ENT_QUOTES, $charset);
+        $selected = '';
+        if (!empty($_REQUEST['sf_'.$prefix]) && is_array($_REQUEST['sf_'.$prefix]) && in_array($term,$_REQUEST['sf_'.$prefix])) {
+            $selected = 'selected="selected"';
+        }
+        $multiple_select .= '<option value="'. $html_term .'" '.$selected.'>'. $html_term .'</option>';
+    }
+    $multiple_select .= '</select>';
+    return $multiple_select;
+}
 
-    $htmlHeadXtra[] ='
-      <script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.autocomplete.js"></script>
-    <link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.autocomplete.css" />';
+/**
+ * Get terms html selects
+ */
+function format_specific_fields_selects($sf_terms, $op) {
+    // Process each prefix type term
+    $i = 0;
+    $max = count($sf_terms);
+    $multiple_selects .='';
+    foreach ($sf_terms as $prefix => $sf_term_array) {
+        $multiple_select = '';
+        if ($i>0) {
+            //print "+" image
+            $multiple_select .= '<td><img class="sf-select-splitter" src="../img/search-big-plus.gif" alt="plus-sign-decoration"/></td>';
+        }
+        //sorting the array of terms
+        $temp = array();
+        foreach ($sf_term_array as $key => $value) {
+            $temp[trim(stripslashes($value['name']))] = $key;
+        }
+        $temp = array_flip($temp);
+        unset($sf_term_array);
+        natcasesort($temp);
+        $sf_term_array = $temp;
 
-    $htmlHeadXtra[] = "
-    <script type=\"text/javascript\">
-    var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    $(document).ready(function() {
-      $('a#tags-toggle').click(function() {
-        $('#tags').toggle(150);
-        return false;
-      });
-      $('#tags-clean').click(function() {
-        // clear multiple select
-        $('select option:selected').each(function () {
-            $(this).attr('selected', '');
-        });
+        $sf_copy = $sf_term_array;
+        // get specific field name
+        $sf_value = get_specific_field_list(array( 'code' => "'$prefix'" ));
+        $sf_value = array_shift($sf_value);
+        $multiple_select .= '<td><label class="sf-select-multiple-title" for="sf_'. $prefix .'[]">'.$icons_for_search_terms[$prefix].' '.$sf_value['name'].'</label><br />';
+        $multiple_select .= format_one_specific_field_select($prefix, $sf_term_array, $op);
+        $multiple_select .= '</td>';
+        $multiple_selects .= $multiple_select;
+        $i++;
+    }
+    return $multiple_selects;
+}
 
-        return false;
-      });
-      $('#query').autocomplete('search_suggestions.php', {
-        multiple: false,
-        selectFirst: false,
-        mustMatch: false,
-        autoFill: false
-      });
-
-    });
-    </script>";
+/**
+ * Show search form
+ */
+function display_search_form($action, $show_thesaurus, $sf_terms, $op) {
+    $thesaurus_icon = Display::return_icon('thesaurus.gif', get_lang('SearchAdvancedOptions'), array('id'=>'thesaurus-icon'));
+    $advanced_options = '<a id="tags-toggle" href="#">'.  get_lang('SearchAdvancedOptions') .'</a>';
+    $display_thesaurus = ($show_thesaurus==true? 'block': 'none');
+    $help = '<h3>'. get_lang('SearchKeywordsHelpTitle') .'</h3>'. get_lang('SearchKeywordsHelpComment');
+    $mode = (!empty($_REQUEST['mode'])? htmlentities($_REQUEST['mode']): 'gallery');
+    $type = (!empty($_REQUEST['type'])? htmlentities($_REQUEST['type']): 'normal');
+    /**
+     * POST avoid long urls, but we are using GET because
+     * SortableTableFromArray pagination is done with simple links, so now we
+     * could not send a form in pagination
+     */
+    $form = '
+        <form id="dokeos_search" action="'. $action .'?mode='. $mode .'" method="get">
+            <input type="hidden" name="mode" value="'. $mode .'"/>
+            <input type="hidden" name="type" value="'. $type .'"/>
+            <input type="text" id="query" name="query" size="40" />
+            <input type="hidden" name="tablename_page_nr" value="1" />
+            <input type="submit" id="submit" value="'. get_lang("Search") .'" />
+            <br /><br />
+            <span class="search-links-box">'. $thesaurus_icon . $advanced_options .'&nbsp;</span>
+            <div id="tags" class="tags" style="display:'. $display_thesaurus .';">
+                <div class="search-help-box">'. $help .'</div>
+                <table>
+                <tr>
+            ';
+    $form .= format_specific_fields_selects($sf_terms, $op);
+    $or_checked = '';
+    $and_checked = '';
+    if ($op == 'or') {
+        $or_checked = 'checked="checked"';
+    } else if ($op == 'and') {
+        $and_checked = 'checked="checked"';
+    }
+    $form .= '
+                </tr>
+                <tr>
+                    <td id="operator-select">
+                        '. get_lang('SearchCombineSearchWith') .':<br />
+                        <input type="radio" class="search-operator" name="operator" value="or" '. $or_checked .'>'. strtoupper(get_lang('Or')) .'</input>
+                        <input type="radio" class="search-operator" name="operator" value="and" '. $and_checked .'>'. strtoupper(get_lang('And')) .'</input>
+                    </td>
+                    <td></td>
+                    <td>
+                        <br />
+                        <input class="lower-submit" type="submit" value="'. get_lang('Search') .'" />
+                        <input type="submit" id="tags-clean" value="'. get_lang('SearchResetKeywords') .'" />
+                    </td>
+                </tr>
+                </table>
+            </div>
+        </form>
+        <br style="clear: both;"/>
+        ';
+    echo $form;
 }
 
 /**
  * Show the search widget
- * TODO: reorganize an clean this to reuse code
  *
- * The form will post to lp_controller.php by default, you can pass a value to
+ * The form will post to index.php by default, you can pass a value to
  * $action to use a custom action.
  * IMPORTANT: you have to call search_widget_prepare() before calling this
  * function or otherwise the form will not behave correctly.
  *
  * @param   string $action     Just in case your action is not
- * lp_controller.php
+ * index.php
  */
-function search_widget_show($action="lp_controller.php") {
+function search_widget_show($action='index.php') {
     global $charset;
+    require_once api_get_path(LIBRARY_PATH).'/search/DokeosQuery.php';
     // TODO: load images dinamically when they're avalaible from specific field ui to add
     $icons_for_search_terms = array();
 
-    require_once api_get_path(LIBRARY_PATH).'/search/DokeosQuery.php';
     $sf_terms = array();
     $specific_fields = get_specific_field_list();
+    $url_params = array();
 
-    if ( ($cid=api_get_course_id()) != -1 ) {
-        // with cid
+    if ( ($cid=api_get_course_id()) != -1 ) { // with cid
+
+        // get search engine terms
         $course_filter = dokeos_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
-        $dktags = dokeos_query_simple_query('',0,1000,array($course_filter));
-        $dktags_org = $dktags;
-
-        $temp = array();
-        foreach($dktags[1] as $obj){
-            $temp = array_merge($obj['tags'], $temp);
-        }
-        $dktags = $temp;
-        unset($temp);
+        $dkterms = dokeos_query_simple_query('', 0, 1000, array($course_filter));
 
         //prepare specific fields names (and also get possible URL param names)
-        $url_params = array();
         foreach ($specific_fields as $specific_field) {
             $temp = array();
-            foreach($dktags_org[1] as $obj) {
+            foreach($dkterms[1] as $obj) {
                 $temp = array_merge($obj['sf-'.$specific_field['code']], $temp);
             }
-            $sf_terms[] = $temp;
+            $sf_terms[$specific_field['code']] = $temp;
             $url_params[] = 'sf_'.$specific_field['code'];
             unset($temp);
         }
-    }
-    else {
-        //without cid
-        //prepare specific fields names (and also get possible URL param names)
-        $url_params = array();
-        $dktags = array();
+
+    } else { // without cid
+
+        // prepare specific fields names (and also get possible URL param names)
         foreach ($specific_fields as $specific_field) {
             //get Xapian terms for a specific term prefix, in ISO, apparently
-            $sf_terms[] = xapian_get_all_terms(1000, $specific_field['code']);
+            $sf_terms[$specific_field['code']] = xapian_get_all_terms(1000, $specific_field['code']);
             $url_params[] = 'sf_'.$specific_field['code'];
         }
-    }
 
-    //check if URL params are defined (to see if we show the thesaurus or not)
-    $show_thesaurus = false;
-    foreach ($url_params as $param) {
-        if (is_array($_REQUEST[$param])) {
-            foreach ($_REQUEST[$param] as $term) {
-                if (!empty($term)) { $show_thesaurus = true; }
-            }
-        }
-    }
-
-    //sorting the array of tags and keywords
-    foreach ($dktags as $key => $value) {
-        $temp[trim(stripslashes(mb_convert_encoding($value['name'],$charset,'UTF-8')))] = $key;
-    }
-
-    if (is_array($temp)) {
-        $temp = array_flip($temp);
-        unset($dktags);
-        natcasesort($temp);
-        $dktags = $temp;
     }
 
     echo '<h2>'.get_lang('Search').'</h2>';
 
+    // introduction section
+    if (api_get_course_id() !== -1)
     if (!empty($_SESSION['_gid'])) {
         Display::display_introduction_section(TOOL_SEARCH.$_SESSION['_gid'],'left');
     } else {
@@ -210,102 +219,25 @@ function search_widget_show($action="lp_controller.php") {
     if (!empty($_REQUEST['operator']) && in_array($op,array('or','and'))) {
         $op = $_REQUEST['operator'];
     }
- ?>
-<form id="dokeos_search" action="<?php echo $action.'?mode='.htmlentities($_GET['mode']) ?>"
-method="get">
-    <input type="hidden" name="action" value="search"/>
-    <input type="text" id="query" name="query" size="40" />
-    <input type="hidden" name="tablename_page_nr" value="1" />
-    <input type="submit" id="submit" value="<?php echo get_lang("Search") ?>" />
-    <!--span id="keywords" style="font-size:12px;font-weight:bold"><?php echo get_lang("Keywords") ?>:</span-->
-    <span id="key_wrapper"><?php echo $tags_list ?></span>
-    <input type="hidden" name="tags" id="tag_holder" />
-    <br /><br />
-    <?php
-    echo '<span class="search-links-box">';
-        echo Display::return_icon('thesaurus.gif',get_lang('SearchAdvancedOptions'),array('style'=>'margin-bottom:-6px;')) .' <a id="tags-toggle" href="#">'.  get_lang('SearchAdvancedOptions') .'</a>';
-        echo '&nbsp;';
-    echo '</span>'."\n";
-    echo '<div id="tags" class="tags" style="display:'.($show_thesaurus==true?'block':'none').';">'."\n";
-    echo '<div class="search-help-box"><h3>'.get_lang('SearchKeywordsHelpTitle').'</h3>'.get_lang('SearchKeywordsHelpComment').'</div>';
 
-    // Process each prefix type term
-    echo '<table><tr>';
-    $i = 0;
-    $max = count($sf_terms);
-    foreach ($sf_terms as $sf_term_array) {
-        $multiple_select = '';
-        //sorting the array of tags and keywords
-        if ($i>0) {
-            //print "+" image
-            $multiple_select .= '<td><img class="sf-select-splitter" src="../img/search-big-plus.gif" alt="plus-sign-decoration"/></td>';
-        }
-        $temp = array();
-        foreach ($sf_term_array as $key => $value) {
-            $temp[trim(stripslashes($value['name']))] = $key;
-        }
-        $temp = array_flip($temp);
-        unset($sf_term_array);
-        natcasesort($temp);
-        $sf_term_array = $temp;
-        //            $temp = array_merge($obj['sf-'.$specific_field['code']], $temp);
-
-        $sf_copy = $sf_term_array;
-        $one_element = array_shift($sf_copy);
-        //we took the Xapian results in the same order as the specific fields
-        //came, so using the specific fields index, we are able to recover
-        //each field's name
-        $multiple_select .= '<td><label class="sf-select-multiple-title" for="sf_'. substr($one_element, 0, 1) .'[]">'.$icons_for_search_terms[$specific_fields[$i]['code']].' '.$specific_fields[$i]['name'].'</label><br />';
-        $multiple_select .= '<select multiple="multiple" size="7" class="sf-select-multiple" name="sf_'. $specific_fields[$i]['code'] .'[]">';
-
-        $all_selected = '';
-        if (!empty($_REQUEST['sf_'. $specific_fields[$i]['code']]) ) {// && in_array($tagged_clean,$_REQUEST['sf_'.$tag_mark])) {
-            if (in_array('__all__', $_REQUEST['sf_'. $specific_fields[$i]['code']])) {
-                $all_selected = 'selected="selected"';
+    //check if URL params are defined (to see if we show the thesaurus or not)
+    $show_thesaurus = false;
+    foreach ($url_params as $param) {
+        if (is_array($_REQUEST[$param])) {
+            $thesaurus_decided = FALSE;
+            foreach ($_REQUEST[$param] as $term) {
+                if (!empty($term)) {
+                    $show_thesaurus = true;
+                    $thesaurus_decided = TRUE;
+                    break;
+                }
             }
+            if ($thesaurus_decided) break;
         }
-        if ($op == 'and') {
-            $all_selected_name = get_lang('All');
-        } else if ($op == 'or') {
-            $all_selected_name = get_lang('Any');
-        }
-        $multiple_select .= '<option value="__all__" '. $all_selected .' >&lt;'. $all_selected_name .'&gt;</option>';
-
-        foreach ($sf_term_array as $tagged)
-        {
-            $tag = substr($tagged, 1);
-            $prefix = substr($tagged, 0, 1);
-            $color = "";
-            if (empty($tag)) continue;
-            $word =htmlspecialchars($tag,ENT_QUOTES,$charset);
-            $tag = md5($tag);
-            $selected = '';
-            $tag_mark = substr($tagged,0,1);
-            $tagged_clean = substr($tagged,1);
-            if (isset($_REQUEST['sf_'.$tag_mark]) && in_array($tagged_clean,$_REQUEST['sf_'.$tag_mark])) { 
-                $selected = 'selected="selected"';
-            }
-            $multiple_select .= '<option value="'. $word .'" '.$selected.'>'. $word .'</option>';
-        }
-        $multiple_select .= '</select>';
-        $multiple_select .= '</td>';
-        print $multiple_select;
-        $i++;
     }
-    echo '</tr><tr>';
-    echo '<td colspan="'.((($i-1)*2)-1).'" align="right" style="padding-right:0.9em;">';
-    echo get_lang('SearchCombineSearchWith').':<br />';
-    echo '<input type="radio" class="search-operator" name="operator" value="or" '.($op=='or'?'checked="checked"':'').'>'.strtoupper(get_lang('Or')).'</input>';
-    echo '<input type="radio" class="search-operator" name="operator" value="and" '.($op=='and'?'checked="checked"':'').'>'.strtoupper(get_lang('And')).'</input>';
-    echo '</td><td></td><td><br /><input class="lower-submit" type="submit" value="'.get_lang('Search').'" /><input type="submit" id="tags-clean" value="'. get_lang('SearchResetKeywords') .'" /></td>';
 
-    ?>
-    </tr></table>
-    <div style="clear:both;"></div>
-    </div>
+    // create the form
+    // TODO: use FormValidator
+    display_search_form($action, $show_thesaurus, $sf_terms, $op);
 
-</form>
-<br style="clear: both;"/>
-
-<?php
 }

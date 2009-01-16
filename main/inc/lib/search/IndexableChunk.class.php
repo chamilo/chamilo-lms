@@ -11,7 +11,6 @@ define('SE_DOCTYPE_EXERCISE_QUESTION', 1);
 
 // xapian prefixes
 define('XAPIAN_PREFIX_COURSEID','C');
-define('XAPIAN_PREFIX_TAG','T');
 define('XAPIAN_PREFIX_TOOLID','O');
 
 abstract class _IndexableChunk
@@ -87,13 +86,6 @@ abstract class _IndexableChunk
  */
 class IndexableChunk extends _IndexableChunk
 {
-  /**
-   * Let add tags terms
-   */
-  public function addTagTerm($term) {
-    $this->addTerm($term, XAPIAN_PREFIX_TAG);
-  }
-
   /**
    * Let add course id term
    */

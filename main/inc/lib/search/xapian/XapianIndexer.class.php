@@ -182,7 +182,7 @@ abstract class XapianIndexer {
      * @param   array   terms   New terms of the document
      * @return  boolean false on error
      */
-    function update_terms($did, $terms, $prefix=XAPIAN_PREFIX_TAG) {
+    function update_terms($did, $terms, $prefix) {
       $doc = $this->get_document($did);
       if($doc===false){return false;}
       $doc->clear_terms();

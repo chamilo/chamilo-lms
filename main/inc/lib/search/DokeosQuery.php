@@ -33,26 +33,6 @@ function dokeos_get_boolean_query($term) {
 }
 
 /**
- * Wrapper for getting tags
- *
- * @param   int   $count  Number of terms to retrieve. Optional.
- * @return  array
- */
-function dokeos_query_get_tags($count=100) {
-    return xapian_get_all_terms($count);
-}
-
-/**
- * Wrapper for getting specific document tags
- *
- * @param   mixed   Document entry, with apropiate class
- * @return  array
- */
-function dokeos_query_tags_for_doc($doc) {
-    return xapian_get_doc_terms($doc);
-}
-
-/**
  * Preprocess all results depending on the toolid
  */
 function dokeos_preprocess_results($results) {

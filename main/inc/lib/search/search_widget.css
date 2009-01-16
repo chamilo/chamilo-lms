@@ -1,0 +1,42 @@
+.tags {
+    display: block;
+    margin-top: 20px;
+    width: 90%;
+}
+.sf-select-multiple {
+    width: 14em;
+    margin: 0 1em 0 1em;
+}
+.sf-select-multiple-title {
+    font-weight: bold;
+    margin-left: 1em;
+    font-size: 130%;
+}
+#submit {
+    background-image: url(\'../img/search-lense.gif\');
+    background-repeat: no-repeat;
+    background-position: 0px -1px;
+    padding-left:18px;
+}
+.lower-submit {
+    float:right;
+    margin: 0 0.9em 0 0.5em;
+}
+#tags-clean {
+    float: right;
+}
+.sf-select-splitter {
+    margin-top: 4em;
+}
+.search-links-box {
+    background-color: #ddd;
+    border: 1px solid #888;
+    padding: 1em;
+    -moz-border-radius: 0.8em;
+}
+#thesaurus-icon {
+    margin-bottom: -6px;
+}
+#operator-select {
+    padding-right: 0.9em;
+}

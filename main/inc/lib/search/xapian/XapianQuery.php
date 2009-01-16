@@ -48,7 +48,6 @@ function xapian_query($query_string, $db = NULL, $start = 0, $length = 10,
           $query_parser->set_stemmer($stemmer);
           $query_parser->set_database($db);
           $query_parser->set_stemming_strategy(XapianQueryParser::STEM_SOME);
-          $query_parser->add_boolean_prefix('tag', XAPIAN_PREFIX_TAG);
           $query_parser->add_boolean_prefix('courseid', XAPIAN_PREFIX_COURSEID);
           $query_parser->add_boolean_prefix('toolid', XAPIAN_PREFIX_TOOLID);
           $query = $query_parser->parse_query($query_string);
@@ -84,7 +83,6 @@ function xapian_query($query_string, $db = NULL, $start = 0, $length = 10,
             // rest of data
           	$results[$count]['xapian_data'] = unserialize($document->get_data());
             $results[$count]['score'] = ($i->get_percent());
-            $results[$count]['tags'] = xapian_get_doc_terms($document);
           }
           $i->next();
         }
@@ -126,7 +124,7 @@ function xapian_get_boolean_query($term) {
  * @param   XapianDatabase  $db     Xapian database to connect
  * @return  array
  */
-function xapian_get_all_terms($count=0, $prefix=XAPIAN_PREFIX_TAG, $db=NULL) {
+function xapian_get_all_terms($count=0, $prefix, $db=NULL) {
   try {
     if (!is_object($db)) {
         $db = new XapianDatabase(XAPIAN_DB);
@@ -162,7 +160,7 @@ function xapian_get_all_terms($count=0, $prefix=XAPIAN_PREFIX_TAG, $db=NULL) {
  * @param   XapianDocument  document searched
  * @return  array
  */
-function xapian_get_doc_terms($doc=NULL, $prefix=XAPIAN_PREFIX_TAG) {
+function xapian_get_doc_terms($doc=NULL, $prefix) {
   try {
     if (!is_a($doc, 'XapianDocument')) {
       return;

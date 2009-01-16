@@ -128,10 +128,9 @@ function LoadSelection()
 	var sUrl = oImage.getAttribute( '_fcksavedurl' ) ;
 	if ( sUrl == null )
 		sUrl = GetAttribute( oImage, 'src', '' ) ;
-	// Added by Ivan Tcholakov.
-	sUrl = FCK.RemoveBasePath( sUrl ) ;
 
 	GetE('txtUrl').value    = sUrl ;
+
 	GetE('txtAlt').value    = GetAttribute( oImage, 'alt', '' ) ;
 	GetE('txtVSpace').value	= GetAttribute( oImage, 'vspace', '' ) ;
 	GetE('txtHSpace').value	= GetAttribute( oImage, 'hspace', '' ) ;
@@ -190,10 +189,9 @@ function LoadSelection()
 		var sLinkUrl = oLink.getAttribute( '_fcksavedurl' ) ;
 		if ( sLinkUrl == null )
 			sLinkUrl = oLink.getAttribute('href',2) ;
-		// Added by Ivan Tcholakov.
-		sUrl = FCK.RemoveBasePath( sUrl ) ;
 
 		GetE('txtLnkUrl').value		= sLinkUrl ;
+
 		GetE('cmbLnkTarget').value	= oLink.target ;
 	}
 
@@ -250,9 +248,6 @@ function Ok()
 	}
 	else
 	{
-		// Added by Ivan Tcholakov.
-		sLnkUrl = FCK.AddBasePath( sLnkUrl ) ;
-
 		if ( oLink )	// Modifying an existent link.
 			oLink.href = sLnkUrl ;
 		else			// Creating a new link.
@@ -278,11 +273,9 @@ function Ok()
 
 function UpdateImage( e, skipId )
 {
-	// Modified by Ivan Tcholakov.
-	//e.src = GetE('txtUrl').value ;
-	//SetAttribute( e, "_fcksavedurl", GetE('txtUrl').value ) ;
-	e.src = FCK.AddBasePath( GetE('txtUrl').value ) ;
-	SetAttribute( e, "_fcksavedurl", FCK.AddBasePath( GetE('txtUrl') ).value ) ;
+	e.src = GetE('txtUrl').value ;
+
+	SetAttribute( e, "_fcksavedurl", GetE('txtUrl').value ) ;
 	SetAttribute( e, "alt"   , GetE('txtAlt').value ) ;
 	SetAttribute( e, "width" , GetE('txtWidth').value ) ;
 	SetAttribute( e, "height", GetE('txtHeight').value ) ;
@@ -435,7 +428,7 @@ var sActualBrowser ;
 function SetUrl( url, width, height, alt )
 {
 	// Added by Ivan Tcholakov.
-	url = FCK.RemoveBasePath( url ) ;
+	url = FCK.GetSelectedUrl ( url ) ;
 
 	if ( sActualBrowser == 'Link' )
 	{

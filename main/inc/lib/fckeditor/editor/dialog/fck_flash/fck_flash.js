@@ -221,6 +221,9 @@ function BrowseServer()
 
 function SetUrl( url, width, height )
 {
+	// Added by Ivan Tcholakov.
+	url = FCK.GetSelectedUrl( url ) ;
+
 	GetE('txtUrl').value = url ;
 
 	if ( width )

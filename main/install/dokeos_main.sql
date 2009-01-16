@@ -65,31 +65,6 @@ UNLOCK TABLES;
 /*!40000 ALTER TABLE user ENABLE KEYS */;
 
 --
--- Table structure for table user_friend
---
-CREATE TABLE user_friend(
-  id bigint unsigned not null auto_increment,
-  user_id int unsigned not null,
-  friend_user_id int unsigned not null,
-  relation_type int not null default 0,
-  PRIMARY KEY(id)
-);
-
-ALTER TABLE user_friend ADD INDEX idx_user_friend_user (user_id);
-ALTER TABLE user_friend ADD INDEX idx_user_friend_friend_user(friend_user_id);
-ALTER TABLE user_friend ADD INDEX idx_user_friend_user_friend_user(user_id,friend_user_id);
-
---
--- Table structure for table user_friend_relation_type
---
-CREATE TABLE user_friend_relation_type(
-  id int unsigned not null auto_increment,
-  title char(20),
-  PRIMARY KEY(id)
-);
-
-
---
 -- Table structure for table admin
 --
 
@@ -1225,3 +1200,41 @@ CREATE TABLE  reservation_subscription  (
   PRIMARY KEY  ( dummy )
 );
 
+-- ---------------------------------------------------------
+
+--
+-- Table structure for table user_friend
+--
+CREATE TABLE user_friend(
+  id bigint unsigned not null auto_increment,
+  user_id int unsigned not null,
+  friend_user_id int unsigned not null,
+  relation_type int not null default 0,
+  PRIMARY KEY(id)
+);
+
+ALTER TABLE user_friend ADD INDEX idx_user_friend_user (user_id);
+ALTER TABLE user_friend ADD INDEX idx_user_friend_friend_user(friend_user_id);
+ALTER TABLE user_friend ADD INDEX idx_user_friend_user_friend_user(user_id,friend_user_id);
+
+--
+-- Table structure for table user_friend_relation_type
+--
+CREATE TABLE user_friend_relation_type(
+  id int unsigned not null auto_increment,
+  title char(20),
+  PRIMARY KEY(id)
+);
+
+
+--
+-- Table structure for MD5 API keys for users
+--
+
+CREATE TABLE user_api_key (
+    id int unsigned NOT NULL auto_increment,
+    user_id int unsigned NOT NULL,
+    api_key char(32) NOT NULL,
+    PRIMARY KEY (id)
+);
+ALTER TABLE user_api_key ADD INDEX idx_user_api_keys_user (user_id);

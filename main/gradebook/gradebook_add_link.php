@@ -98,11 +98,13 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 		//update view_properties
 		$work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);	
 		
-		if ( isset($_GET['typeselected']) && 5==$_GET['typeselected'] && (isset($addvalues['select_link']) && $addvalues['select_link']!="")) {
+		if ( isset($_GET['typeselected']) && 5==$_GET['typeselected'] && (isset($addvalues['select_link']) && $addvalues['select_link']<>"")) {
 			$sql1='SELECT thread_title from '.$tbl_forum_thread.' where thread_id='.$addvalues['select_link'].';';
 			$res1=api_sql_query($sql1);
 			$rowtit=Database::fetch_row($res1);
-			$res_l=api_sql_query('SELECT count(*) FROM '.$tbl_link.' WHERE ref_id='.$addvalues['select_link'].' and course_code="'.Security::remove_XSS($_GET['course_code']).'" and type=5;');
+			$course_id=api_get_course_id();
+			$sql_l='SELECT count(*) FROM '.$tbl_link.' WHERE ref_id='.$addvalues['select_link'].' and course_code="'.$course_id.'" and type=5;';
+			$res_l=api_sql_query($sql_l);
 			$row=Database::fetch_row($res_l);
 			
 			if ( $row[0]==0 ) {

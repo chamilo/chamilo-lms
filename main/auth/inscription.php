@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 17754 2009-01-15 22:58:39Z cfasanando $
+// $Id: inscription.php 17789 2009-01-17 12:24:36Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -293,7 +293,7 @@ if ($form->validate()) {
 	
 	// creating a new user
 	$user_id = UserManager::create_user($values['firstname'],$values['lastname'],$values['status'],$values['email'],$values['username'],$values['pass1'],$values['official_code'], $values['language'],$values['phone'],$picture_uri);
-	
+
 	/****** register extra fields*************/
 	$extras=array();
 	foreach($values as $key => $value) {
@@ -304,9 +304,13 @@ if ($form->validate()) {
 		}
 	}
 	//update the extra fields
-	foreach ($extras as $key=>$value) {
-		$myres = UserManager::update_extra_field_value($user_id,$key,$value);
+	$count_extra_field=count($extras);
+	if ($count_extra_field>0) {
+		foreach ($extras as $key=>$value) {
+			$myres = UserManager::update_extra_field_value($user_id,$key,$value);
+		}
 	}
+
 	/********************************************/
 	if ($user_id) {
 		// storing the extended profile
@@ -436,7 +440,7 @@ if ($form->validate()) {
 		}
 	}
 
-	echo "<p>".get_lang('Dear')." ".stripslashes("$firstname $lastname").",<br><br>".get_lang('PersonalSettings').".</p>\n";
+	echo "<p>".get_lang('Dear')." ".stripslashes("$recipient_name").",<br><br>".get_lang('PersonalSettings').".</p>\n";
 
 	if (!empty ($values['email']))
 	{

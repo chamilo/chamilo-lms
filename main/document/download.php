@@ -1,4 +1,4 @@
-<?php // $Id: download.php 17433 2008-12-23 10:56:06Z derrj $
+<?php // $Id: download.php 17795 2009-01-17 19:31:51Z spyroux $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -48,17 +48,12 @@
 ==============================================================================
 */
 
-session_cache_limiter('public');
+session_cache_limiter('none');
 
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
 include(api_get_path(LIBRARY_PATH).'document.lib.php');
-
-// IMPORTANT to avoid caching of documents
-header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
-header('Cache-Control: public');
-header('Pragma: no-cache');
 
 //protection
 api_protect_course_script();

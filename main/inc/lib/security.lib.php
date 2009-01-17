@@ -56,7 +56,7 @@ class Security{
 	/**
 	 * Checks if the absolute path given is really under the checker path
 	 * @param	string	Absolute path to be checked (with trailing slash)
-	 * @param	string	Checker path under which the path should be (with trailing slash)
+	 * @param	string	Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
 	 * @return	bool	True if the path is under the checker, false otherwise
 	 */
 	function check_abs_path($abs_path,$checker_path)
@@ -75,7 +75,7 @@ class Security{
 	/**
 	 * Checks if the relative path given is really under the checker path
 	 * @param	string	Relative path to be checked (relative to the current directory) (with trailing slash)
-	 * @param	string	Checker path under which the path should be (with trailing slash)
+	 * @param	string	Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
 	 * @return	bool	True if the path is under the checker, false otherwise
 	 */
 	function check_rel_path($rel_path,$checker_path)

@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 17779 2009-01-16 17:06:30Z yannoo $
+<?php // $Id: exercice.php 17787 2009-01-17 00:41:06Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -394,6 +394,7 @@ $fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_c
 
 Display::display_introduction_section(TOOL_QUIZ);
 
+$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 // selects $limitExPage exercises at the same time
 $from=$page*$limitExPage;

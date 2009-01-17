@@ -185,6 +185,8 @@ $fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_c
 
 Display::display_introduction_section(TOOL_WIKI);
 
+$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
+
 /*
 -----------------------------------------------------------
   			ACTIONS

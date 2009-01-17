@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 17768 2009-01-16 04:05:43Z ivantcholakov $
+<?php // $Id: course_home.php 17787 2009-01-17 00:41:06Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -190,6 +190,8 @@ $fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_c
 
 
 Display::display_introduction_section(TOOL_COURSE_HOMEPAGE);
+
+$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 /*
 -----------------------------------------------------------

@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 17769 2009-01-16 04:07:35Z ivantcholakov $
+<?php //$Id: group_space.php 17787 2009-01-17 00:41:06Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -108,6 +108,8 @@ $fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_
 $fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
 
 Display::display_introduction_section(group_space_.$_SESSION['_gid']);
+
+$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 /*
 -----------------------------------------------------------

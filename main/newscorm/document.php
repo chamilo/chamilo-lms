@@ -207,6 +207,9 @@ if($my_version=='1.8'){
 }else{
 	api_introductionsection(TOOL_LEARNPATH);
 }
+
+$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
+
 if(api_is_allowed_to_edit())
 {
    /*--------------------------------------

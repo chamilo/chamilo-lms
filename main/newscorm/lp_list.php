@@ -99,6 +99,8 @@ $fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_c
 
 Display::display_introduction_section(TOOL_LEARNPATH);
 
+$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
+
 if(api_is_allowed_to_edit())
 {
 

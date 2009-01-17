@@ -1,4 +1,4 @@
-<?php // $Id: document.php 17768 2009-01-16 04:05:43Z ivantcholakov $
+<?php // $Id: document.php 17787 2009-01-17 00:41:06Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -356,6 +356,8 @@ else
 {
 	Display::display_introduction_section(TOOL_DOCUMENT,'left');
 }
+
+$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 /*============================================================================*/
 

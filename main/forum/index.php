@@ -137,6 +137,9 @@ $fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_
 $fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
 
 Display::display_introduction_section(TOOL_FORUM,'left');
+
+$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
+
 $form_count=0;
 
 

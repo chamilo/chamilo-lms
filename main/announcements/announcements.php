@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 17768 2009-01-16 04:05:43Z ivantcholakov $
+<?php //$Id: announcements.php 17787 2009-01-17 00:41:06Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -865,6 +865,8 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 	//api_display_tool_title($nameTools);
 	Display::display_introduction_section(TOOL_ANNOUNCEMENT);
 }
+
+$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 /*
 ==============================================================================

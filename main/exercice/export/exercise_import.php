@@ -111,6 +111,8 @@ $fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_c
 
 Display::display_introduction_section(TOOL_QUIZ);
 
+$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
+
 //Display Forms or dialog box(if needed)
 
 if ( isset($dialogBox) ) echo Display::display_normal_message($dialogBox,false);

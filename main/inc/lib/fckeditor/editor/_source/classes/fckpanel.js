@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2009 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -149,8 +149,8 @@ FCKPanel.prototype.ResizeForSubpanel = function( panel, width, height )
 		if (this.Subpanel !== panel)
 			return false ;
 
-		// Reset values. 
-		// We leave the IncreasedY untouched to avoid vertical movement of the 
+		// Reset values.
+		// We leave the IncreasedY untouched to avoid vertical movement of the
 		// menu if the submenu is higher than the main menu.
 		this.Subpanel = null ;
 		this.IncreasedX = 0 ;
@@ -170,8 +170,8 @@ FCKPanel.prototype.ResizeForSubpanel = function( panel, width, height )
 	var w = this.IncreasedX ;
 	if ( this.IsRTL )
 		x  = x - w ;
-	
-	// Horizontally increase as needed (sum of widths). 
+
+	// Horizontally increase as needed (sum of widths).
 	// Vertically, use only the maximum of this menu or the submenu
 	var finalWidth = this.ShowRect.w + w ;
 	var finalHeight = Math.max( this.ShowRect.h, this.IncreasedY ) ;

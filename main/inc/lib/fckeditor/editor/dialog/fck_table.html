@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <!--
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2009 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -86,7 +86,7 @@ window.onload = function()
 
 		var eCaption = oEditor.FCKDomTools.GetFirstChild( table, 'CAPTION' ) ;
 		if ( eCaption ) document.getElementById('txtCaption').value = eCaption.innerHTML ;
-		
+
 		hasColumnHeaders = true ;
 		// Check if all the first cells in every row are TH
 		for (var row=0; row<table.rows.length; row++)
@@ -95,13 +95,13 @@ window.onload = function()
 			if ( table.rows[row].cells[0].nodeName != 'TH' )
 			{
 				hasColumnHeaders = false ;
-				
+
 				break;
 			}
 		}
 
 		// Check if the table contains <thead>
-		if ((table.tHead !== null) ) 
+		if ((table.tHead !== null) )
 		{
 			if (hasColumnHeaders)
 				GetE('selHeaders').value = 'both' ;
@@ -133,7 +133,9 @@ function Ok()
 {
 	var bExists = ( table != null ) ;
 
-	var oDoc = oEditor.FCK.EditorDocument ; 
+	var oDoc = oEditor.FCK.EditorDocument ;
+	oEditor.FCKUndo.SaveUndoStep() ;
+
 	if ( ! bExists )
 		table = oDoc.createElement( "TABLE" ) ;
 
@@ -186,10 +188,10 @@ function Ok()
 			var theRow= FCKDomTools.GetFirstChild( tbody, 'TR' ) ;
 
 			//now change TD to TH:
-			for (var i = 0; i<theRow.childNodes.length ; i++) 
+			for (var i = 0; i<theRow.childNodes.length ; i++)
 			{
 				var th = RenameNode(theRow.childNodes[i], 'TH') ;
-				if (th != null) 
+				if (th != null)
 					th.scope='col' ;
 			}
 			oThead.appendChild( theRow ) ;
@@ -202,13 +204,13 @@ function Ok()
 			var tbody = FCKDomTools.GetFirstChild( table, 'TBODY' ) ;
 
 			var previousFirstRow = tbody.firstChild ;
-			while ( tHead.firstChild ) 
+			while ( tHead.firstChild )
 			{
 				var theRow = tHead.firstChild ;
-				for (var i = 0; i < theRow.childNodes.length ; i++ ) 
+				for (var i = 0; i < theRow.childNodes.length ; i++ )
 				{
 					var newCell = RenameNode( theRow.childNodes[i], 'TD' ) ;
-					if ( newCell != null ) 
+					if ( newCell != null )
 						newCell.removeAttribute( 'scope' ) ;
 				}
 				tbody.insertBefore( theRow, previousFirstRow ) ;
@@ -222,7 +224,7 @@ function Ok()
 			for( var row=0 ; row < table.rows.length ; row++ )
 			{
 				var newCell = RenameNode(table.rows[row].cells[0], 'TH') ;
-				if ( newCell != null ) 
+				if ( newCell != null )
 					newCell.scope = 'row' ;
 			}
 		}
@@ -236,7 +238,7 @@ function Ok()
 				if ( oRow.parentNode.nodeName == 'TBODY' )
 				{
 					var newCell = RenameNode(oRow.cells[0], 'TD') ;
-					if (newCell != null) 
+					if (newCell != null)
 						newCell.removeAttribute( 'scope' ) ;
 				}
 			}
@@ -256,10 +258,10 @@ function Ok()
 			var oThead = table.createTHead() ;
 			var oRow = table.insertRow(-1) ;
 			oThead.appendChild(oRow);
-			
+
 			for ( var c = 0 ; c < iCols ; c++ )
 			{
-				var oThcell = oDoc.createElement( 'TH' ) ; 
+				var oThcell = oDoc.createElement( 'TH' ) ;
 				oThcell.scope = 'col' ;
 				oRow.appendChild( oThcell ) ;
 				if ( oEditor.FCKBrowserInfo.IsGeckoLike )
@@ -272,10 +274,10 @@ function Ok()
 		if ( !oTbody )
 		{
 			// make TBODY if it doesn't exist
-			oTbody = oDoc.createElement( 'TBODY' ) ; 
+			oTbody = oDoc.createElement( 'TBODY' ) ;
 			table.appendChild( oTbody ) ;
 		}
-		for ( var r = startRow ; r < iRows; r++ ) 
+		for ( var r = startRow ; r < iRows; r++ )
 		{
 			var oRow = oDoc.createElement( 'TR' ) ;
 			oTbody.appendChild(oRow) ;
@@ -294,15 +296,13 @@ function Ok()
 			}
 			for ( var c = startCol ; c < iCols ; c++ )
 			{
-				// IE will leave the TH at the end of the row if we use now oRow.insertCell(-1) 
+				// IE will leave the TH at the end of the row if we use now oRow.insertCell(-1)
 				var oCell = oDoc.createElement( 'TD' ) ;
 				oRow.appendChild( oCell ) ;
 				if ( oEditor.FCKBrowserInfo.IsGeckoLike )
 					oEditor.FCKTools.AppendBogusBr( oCell ) ;
 			}
 		}
-
-		oEditor.FCKUndo.SaveUndoStep() ;
 
 		oEditor.FCK.InsertElement( table ) ;
 	}
@@ -324,14 +324,14 @@ function Ok()
 									<td>
 										<span fcklang="DlgTableRows">Rows</span>:</td>
 									<td>
-										&nbsp;<input id="txtRows" type="text" maxlength="3" size="2" value="3" 
+										&nbsp;<input id="txtRows" type="text" maxlength="3" size="2" value="3"
 											onkeypress="return IsDigit(event);" /></td>
 								</tr>
 								<tr>
 									<td>
 										<span fcklang="DlgTableColumns">Columns</span>:</td>
 									<td>
-										&nbsp;<input id="txtColumns" type="text" maxlength="2" size="2" value="2" 
+										&nbsp;<input id="txtColumns" type="text" maxlength="2" size="2" value="2"
 											onkeypress="return IsDigit(event);" /></td>
 								</tr>
 								<tr>

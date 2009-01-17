@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <!--
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2009 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -73,13 +73,15 @@ function SetStartupValue()
 		GetE('txtCollSpan').value		= GetAttribute( oCell, 'colSpan' ) ;
 		GetE('txtBackColor').value		= GetAttribute( oCell, 'bgColor' ) ;
 		GetE('txtBorderColor').value	= GetAttribute( oCell, 'borderColor' ) ;
-		GetE('selCellType').value     = oCell.nodeName.toLowerCase() ; 
+		GetE('selCellType').value     = oCell.nodeName.toLowerCase() ;
 	}
 }
 
 // Fired when the user press the OK button
 function Ok()
 {
+	oEditor.FCKUndo.SaveUndoStep() ;
+
 	for( i = 0 ; i < aCells.length ; i++ )
 	{
 		if ( GetE('txtWidth').value.length > 0 )
@@ -100,25 +102,25 @@ function Ok()
 		SetAttribute( aCells[i], 'bgColor'		, GetE('txtBackColor').value ) ;
 		SetAttribute( aCells[i], 'borderColor'	, GetE('txtBorderColor').value ) ;
 
-		var cellType = GetE('selCellType').value ; 
-		if ( aCells[i].nodeName.toLowerCase() != cellType ) 
+		var cellType = GetE('selCellType').value ;
+		if ( aCells[i].nodeName.toLowerCase() != cellType )
 			aCells[i] = RenameNode( aCells[i], cellType ) ;
 	}
 
-	// The cells need to be reselected, otherwise the caret will appear inside the table borders (Gecko) 
-	// or sent back to the beginning of the document (Opera and Safari). 
-	// Strangely, IE works ok so no change is needed for IE. 
-	if ( !oEditor.FCKBrowserInfo.IsIE ) 
-	{ 
-		var selection = oEditor.FCK.EditorWindow.getSelection() ; 
-		selection.removeAllRanges() ; 
-		for ( var i = 0 ; i < aCells.length ; i++ ) 
-		{ 
-			var range = oEditor.FCK.EditorDocument.createRange() ; 
-			range.selectNode( aCells[i] ) ; 
-			selection.addRange( range ) ; 
-		} 
-	} 
+	// The cells need to be reselected, otherwise the caret will appear inside the table borders (Gecko)
+	// or sent back to the beginning of the document (Opera and Safari).
+	// Strangely, IE works ok so no change is needed for IE.
+	if ( !oEditor.FCKBrowserInfo.IsIE )
+	{
+		var selection = oEditor.FCK.EditorWindow.getSelection() ;
+		selection.removeAllRanges() ;
+		for ( var i = 0 ; i < aCells.length ; i++ )
+		{
+			var range = oEditor.FCK.EditorDocument.createRange() ;
+			range.selectNode( aCells[i] ) ;
+			selection.addRange( range ) ;
+		}
+	}
 
 	return true ;
 }
@@ -219,23 +221,23 @@ function SelectColor( wich )
 							<table cellspacing="0" cellpadding="0" border="0">
 								<tr>
 									<td nowrap="nowrap">
-									 <span fcklang="DlgCellType">Cell Type</span>:</td> 
-									<td colspan="2"> 
-										&nbsp; <select id="selCellType"> 
-											<option fcklang="DlgCellTypeData" value="td" />Data 
-											<option fcklang="DlgCellTypeHeader" value="th" />Header 
-										</select> 
-								</tr> 
-								<tr> 
-									<td> 
-										&nbsp;</td> 
-									<td> 
-										&nbsp;</td> 
-									<td> 
-										&nbsp;</td> 
-								</tr> 
-								<tr> 
-									<td nowrap="nowrap"> 
+									 <span fcklang="DlgCellType">Cell Type</span>:</td>
+									<td colspan="2">
+										&nbsp; <select id="selCellType">
+											<option fcklang="DlgCellTypeData" value="td" />Data
+											<option fcklang="DlgCellTypeHeader" value="th" />Header
+										</select>
+								</tr>
+								<tr>
+									<td>
+										&nbsp;</td>
+									<td>
+										&nbsp;</td>
+									<td>
+										&nbsp;</td>
+								</tr>
+								<tr>
+									<td nowrap="nowrap">
 										<span fcklang="DlgCellRowSpan">Rows Span</span>:</td>
 									<td>
 										&nbsp;

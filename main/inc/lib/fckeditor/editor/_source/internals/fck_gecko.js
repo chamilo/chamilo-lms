@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2009 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -321,7 +321,12 @@ FCK.ExecuteRedirectedNamedCommand = function( commandName, commandParameter )
 				if ( FCK.Paste() )
 					FCK.ExecuteNamedCommand( 'Paste', null, true ) ;
 			}
-			catch (e)	{ FCKDialog.OpenDialog( 'FCKDialog_Paste', FCKLang.Paste, 'dialog/fck_paste.html', 400, 330, 'Security' ) ; }
+			catch (e)	{
+				if ( FCKConfig.ForcePasteAsPlainText )
+					FCK.PasteAsPlainText() ;
+				else
+					FCKDialog.OpenDialog( 'FCKDialog_Paste', FCKLang.Paste, 'dialog/fck_paste.html', 400, 330, 'Security' ) ;
+			}
 			break ;
 		default :
 			FCK.ExecuteNamedCommand( commandName, commandParameter ) ;

@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2009 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -130,7 +130,6 @@ function LoadSelection()
 		sUrl = GetAttribute( oImage, 'src', '' ) ;
 
 	GetE('txtUrl').value    = sUrl ;
-
 	GetE('txtAlt').value    = GetAttribute( oImage, 'alt', '' ) ;
 	GetE('txtVSpace').value	= GetAttribute( oImage, 'vspace', '' ) ;
 	GetE('txtHSpace').value	= GetAttribute( oImage, 'hspace', '' ) ;
@@ -191,7 +190,6 @@ function LoadSelection()
 			sLinkUrl = oLink.getAttribute('href',2) ;
 
 		GetE('txtLnkUrl').value		= sLinkUrl ;
-
 		GetE('cmbLnkTarget').value	= oLink.target ;
 	}
 
@@ -274,7 +272,6 @@ function Ok()
 function UpdateImage( e, skipId )
 {
 	e.src = GetE('txtUrl').value ;
-
 	SetAttribute( e, "_fcksavedurl", GetE('txtUrl').value ) ;
 	SetAttribute( e, "alt"   , GetE('txtAlt').value ) ;
 	SetAttribute( e, "width" , GetE('txtWidth').value ) ;

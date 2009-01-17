@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2009 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -537,10 +537,10 @@ FCKEnterKey.prototype._ExecuteEnterBlock = function( blockTag, range )
 				// If we have split the block, adds a temporary span at the
 				// range position and scroll relatively to it.
 				var tmpNode = this.Window.document.createElement( 'span' ) ;
-				
+
 				// We need some content for Safari.
 				tmpNode.innerHTML = '&nbsp;';
-				
+
 				oRange.InsertNode( tmpNode ) ;
 				FCKDomTools.ScrollIntoView( tmpNode, false ) ;
 				oRange.DeleteContents() ;
@@ -552,7 +552,7 @@ FCKEnterKey.prototype._ExecuteEnterBlock = function( blockTag, range )
 				FCKDomTools.ScrollIntoView( eNextBlock || eNewBlock, false ) ;
 			}
 		}
-		
+
 		oRange.Select() ;
 	}
 

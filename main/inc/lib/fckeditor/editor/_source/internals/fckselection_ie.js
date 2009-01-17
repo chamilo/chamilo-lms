@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2009 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -227,7 +227,7 @@ FCKSelection.Save = function( lock )
 
 	if ( selection )
 	{
-		// The call might fail if the document doesn't have the focus (#1801), 
+		// The call might fail if the document doesn't have the focus (#1801),
 		// but we don't want to modify the current selection (#2495) with a call to FCK.Focus() ;
 		try {
 			range = selection.createRange() ;
@@ -260,7 +260,7 @@ FCKSelection._GetSelectionDocument = function( selection )
 
 FCKSelection.Restore = function()
 {
-	if ( this.SelectionData ) 
+	if ( this.SelectionData )
 	{
 		FCK.IsSelectionChangeLocked = true ;
 

@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2009 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -47,7 +47,7 @@ FCKCodeFormatter.Init = function()
 
 FCKCodeFormatter._ProtectData = function( outer, opener, data, closer )
 {
-	return opener + '___FCKpd___' + FCKCodeFormatter.ProtectedData.push( data ) + closer ;
+	return opener + '___FCKpd___' + ( FCKCodeFormatter.ProtectedData.push( data ) - 1 ) + closer ;
 }
 
 FCKCodeFormatter.Format = function( html )

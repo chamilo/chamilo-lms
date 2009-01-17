@@ -172,6 +172,9 @@ $cidReset = isset($cidReset) ? Database::escape_string($cidReset) : '';
 // $cidReset can be set in URL-parameter
 $cidReset = (isset($_GET['cidReq']) && ((isset($_SESSION['_cid']) && $_GET['cidReq']!=$_SESSION['_cid']) || (!isset($_SESSION['_cid'])))) ? Database::escape_string($_GET["cidReq"]) : $cidReset;
 
+// $cDir is a special url param sent by courses/.htaccess
+$cDir = (!empty($_GET['cDir']) ? $_GET['cDir'] : null); 
+
 $gidReset = isset($gidReset) ? $gidReset : '';
 // $gidReset can be set in URL-parameter
 
@@ -466,6 +469,13 @@ else
 	//if anonymous mode is not set, then check if this user is anonymous. If it
 	//is, clean it from being anonymous (make him a nobody :-))
 	api_clear_anonymous();
+}
+
+// if there is a cDir parameter in the URL (coming from courses/.htaccess redirection)
+if (!empty($cDir)) {
+	require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+    $c = CourseManager::get_course_id_from_path($cDir);
+    if ($c != false) { $cidReq = $c; }
 }
 
 // if the requested course is different from the course in session

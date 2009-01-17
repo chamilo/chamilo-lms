@@ -1887,5 +1887,22 @@ class CourseManager
 		return $course_list;
 		
 	}
+    /**
+     * Get course ID from a given course directory name
+     * @param   string  Course directory (without any slash)
+     * @return  string  Course code, or false if not found
+     */
+    function get_course_id_from_path($path) {
+    	$path = str_replace('/','',$path);
+        $path = str_replace('.','',$path);
+        $path = Database::escape_string($path);
+        $t_course          = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT code FROM $t_course WHERE directory LIKE BINARY '$path'";
+        $res = api_sql_query($sql,__FILE__,__LINE__);
+        if ($res === false) {return false;}
+        if (Database::num_rows() != 1) {return false;}
+        $row = Database::fetch_array($res);
+        return $row['code'];
+    }
 	
 } //end class CourseManager

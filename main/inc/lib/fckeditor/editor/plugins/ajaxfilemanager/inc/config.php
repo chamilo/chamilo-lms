@@ -6,60 +6,17 @@
 	 * @version 1.0
 	 * @since 22/April/2007
 	 *
-	 * Modify system config setting for Dokeos
+	 * Modifications of system config setting for Dokeos
 	 * @author Juan Carlos Raña
 	 * @since 31/December/2008
 	 */
-	 
-	/////////////////// All from Dokeos
-	
-	require_once ('../../../../../../inc/global.inc.php');
-	require_once (api_get_path(LIBRARY_PATH).'/fileUpload.lib.php');
-	
-	if(!empty($_course['path']))
-	{	
-		require_once (api_get_path(LIBRARY_PATH).'/document.lib.php');
-		require_once (api_get_path(LIBRARY_PATH).'/groupmanager.lib.php');
-	    //get Dokeos session properties. Before ajaximagemanager!!!
-		$to_group_id = 0;
-		$to_group_id = $_SESSION['_gid'];
-		$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
-		$is_user_in_group = GroupManager::is_user_in_group($_user['user_id'],$_SESSION['_gid']);
-    }
-	
-	////first sanity Dokeos. All from Dokeos
-	$user_folder = api_get_path(SYS_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
-	if (!file_exists($user_folder))
-	{ 
-		mkdir(api_get_path(SYS_PATH).'main/upload/users/'.api_get_user_id().'/my_files/', 0777);
-	}
-	
-	if(api_is_platform_admin())
-	{	
-		$homepage_folder = api_get_path(SYS_PATH).'home/default_platform_document/';
-		if (!file_exists($homepage_folder))
-		{
-			mkdir(api_get_path(SYS_PATH).'home/default_platform_document/', 0777);
-		}
-		
-	}	
-	
-		
-	if($_course['id'])
-	{
-		$course_shared_folder = api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/shared_folder/';	 
-		if (!file_exists($course_shared_folder))
-		{	
-			mkdir(api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/shared_folder/', 0777);	
-			$doc_id = add_document($_course, '/shared_folder', 'folder', 0, 'shared_folder');
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'visible', api_get_user_id());
-		} 
-	}
-	
-	
-	/////////////////// end from Dokeos
-	
+
+	// Loading the global initialization file.
+	require_once '../../../../../../inc/global.inc.php';
+
+	// Loading document repositories settings.
+	require_once api_get_path(LIBRARY_PATH).'fckeditor/repositories_config.php' ;
+
 	//FILESYSTEM CONFIG	<br>
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "class.auth.php");
 	define('CONFIG_QUERY_STRING_ENABLE', true); //Enable passed query string to setting the system configuration

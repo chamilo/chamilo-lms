@@ -5,17 +5,21 @@
 	 * @link www.phpletter.com
 	 * @since 22/May/2007
 	 *
+	 * Modify for Dokeos
+	 * @author Juan Carlos Raña
+	 * @since 18/January/2009
 	 */
 
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");	
-	@ob_start();
-	displayArray($_POST);
-	writeInfo(@ob_get_clean());	
+	
 	echo "{";
 	$error = "";
 	$info = "";	
 /*	$_POST['new_folder'] = substr(md5(time()), 1, 5);
 	$_POST['currentFolderPath'] = "../../uploaded/";*/
+	$_POST['new_folder']=htmlentities($_POST['new_folder'],ENT_QUOTES);//Dokeos improve security 
+	$_POST['currentFolderPath']=htmlentities($_POST['currentFolderPath'],ENT_QUOTES);//Dokeos improve security 
+	
 	if(CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_NEWFOLDER)
 	{
 		$error = SYS_DISABLED;

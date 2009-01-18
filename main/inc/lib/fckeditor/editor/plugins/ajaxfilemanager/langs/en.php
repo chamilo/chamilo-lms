@@ -128,7 +128,7 @@
 	define('SEARCH_TYPE_UNKNOWN', 'Unknown');
 	define('SEARCH_TYPE_XML', 'XML');
 	define('SEARCH_ALL_FILE_TYPES', 'All File Types');
-	define('LBL_SEARCH_RECURSIVELY', 'Search Recursively:');
+	define('LBL_SEARCH_RECURSIVELY', 'Search all:');
 	define('LBL_RECURSIVELY_YES', 'Yes');
 	define('LBL_RECURSIVELY_NO', 'No');
 	define('BTN_SEARCH', 'Search Now');

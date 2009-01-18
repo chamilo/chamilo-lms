@@ -11,7 +11,7 @@
 	{
 		die(SYS_DISABLED);
 	}
-		$session->gc();
+		
 		$_GET['path'] = empty($_GET['path'])?CONFIG_SYS_ROOT_PATH . "ajax_image_editor_demo.jpg":$_GET['path'];
 		if(!empty($_GET['path']) && file_exists($_GET['path']) && is_file($_GET['path']) && isUnderRoot($_GET['path']))
 		{
@@ -54,10 +54,6 @@
 
 -->
 <script type="text/javascript" src="jscripts/ajaximageeditor.js"></script>
-
-
-
-
 
 
 <script type="text/javascript">

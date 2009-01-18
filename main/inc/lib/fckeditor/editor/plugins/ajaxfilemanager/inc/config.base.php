@@ -210,7 +210,16 @@
 	
 	//General Option Declarations
 	//LANGAUGAE DECLARATIONNS
-	//$langdokajax= api_get_language_isocode(); //from dokeos. return, en, es... 
+	$langdoktoajaxfile= api_get_language_isocode(); //from dokeos. return, en, es... 
+	if ($langdoktoajaxfile=='en' || $langdoktoajaxfile=='zh') // ajaxfilemanager full translations (only with all variables translated).
+	{
+	   $langajaxfilemanager=$langdoktoajaxfile;
+	}
+	else
+	{
+		$langajaxfilemanager='en';//default
+	}	
+	
 	define('CONFIG_LANG_INDEX', 'language'); //the index in the session
-	define('CONFIG_LANG_DEFAULT', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['language']) && file_exists(DIR_LANG . secureFileName($_GET['language']) . '.php')?secureFileName($_GET['language']):'en')); //change it to be your language file base name, such en
+	define('CONFIG_LANG_DEFAULT', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['language']) && file_exists(DIR_LANG . secureFileName($_GET['language']) . '.php')?secureFileName($_GET['language']):$langajaxfilemanager)); //change it to be your language file base name, such en
 ?>

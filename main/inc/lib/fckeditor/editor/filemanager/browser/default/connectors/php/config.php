@@ -22,6 +22,12 @@
  * Configuration file for the File Manager Connector for PHP.
  */
 
+// Loading the global initialization file, Dokeos LMS.
+require_once '../../../../../../../../global.inc.php';
+
+// Initialization of the repositories.
+require_once api_get_path(LIBRARY_PATH).'fckeditor/repositories_config.php' ;
+
 global $Config ;
 
 // SECURITY: You must explicitly enable this "connector". (Set it to "true").
@@ -122,12 +128,12 @@ $Config['ChmodOnFolderCreate'] = 0777 ;
 */
 
 $Config['AllowedExtensions']['File']	= array() ;
-$Config['DeniedExtensions']['File']		= array('php','php3','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
+$Config['DeniedExtensions']['File']		= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
 
 $Config['AllowedExtensions']['Images']	= array('jpg','gif','jpeg','png') ;
 $Config['DeniedExtensions']['Images']	= array() ;
 
-$Config['AllowedExtensions']['Flash']	= array('swf','flv') ;
+$Config['AllowedExtensions']['Flash']	= array('swf') ;
 $Config['DeniedExtensions']['Flash']	= array() ;
 
 $Config['AllowedExtensions']['MP3']	= array('mp3') ;
@@ -136,10 +142,10 @@ $Config['DeniedExtensions']['MP3']	= array() ;
 //supported files according to fck:embedmovies -->>  mpg|mpeg|avi|wmv|mov|asf
 // old ones
 //$Config['AllowedExtensions']['Videos']	= array('avi','mpg','mpeg','mov','wmv','rm') ;
-$Config['AllowedExtensions']['Video']	= array('avi','mpg','mpeg','mov','wmv','asf') ;
+$Config['AllowedExtensions']['Video']	= array('avi','mpg','mpeg','mp4','mov','wmv','asf') ;
 $Config['DeniedExtensions']['Video']	= array() ;
 
-$Config['AllowedExtensions']['Video/flv']	= array('flv') ;
+$Config['AllowedExtensions']['Video/flv']	= array('flv','mp4') ;
 $Config['DeniedExtensions']['Video/flv']	= array() ;
 
 /*

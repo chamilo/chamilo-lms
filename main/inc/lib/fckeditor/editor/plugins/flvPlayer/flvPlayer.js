@@ -32,6 +32,7 @@ function window_onload()
 
 
 function getSelectedMovie(){
+/*
 	var oSel = null;
 	oMedia = new Media();
 	oSel = FCK.Selection.GetParentElement();
@@ -48,6 +49,53 @@ function getSelectedMovie(){
 					oMedia.setAttribute(tmp[0],tmp[1]);
 				}
 				is_new_flvplayer = false;
+			}
+		}
+	}
+	return oMedia;
+*/
+
+	var oFakeImage = FCK.Selection.GetSelectedElement() ;
+	var oSel = null ;
+	oMedia = new Media() ;
+
+	if ( oFakeImage )
+	{
+		if ( oFakeImage.tagName == 'IMG' && oFakeImage.getAttribute( '_fckvideo' ) )
+		{
+			oSel = FCK.GetRealElement( oFakeImage ) ;
+			if ( oSel && oSel.id && oSel.id.match( /^player[0-9]*-parent$/ ) )
+			{
+				for ( var i = 0 ; i < oSel.childNodes.length ; i++ )
+				{
+					if ( oSel.childNodes.item(i).nodeName == "DIV" )
+					{
+						for ( var j = 0 ; j < oSel.childNodes.item(i).childNodes.length ; j++ )
+						{
+							if ( oSel.childNodes.item(i).childNodes.item(j).nodeName == "DIV" &&
+								oSel.childNodes.item(i).childNodes.item(j).id &&
+								oSel.childNodes.item(i).childNodes.item(j).id.match( /^player[0-9]*$/ ) )
+							{
+								for ( var k = 0 ; k < oSel.childNodes.item(i).childNodes.item(j).childNodes.length ; k++ )
+								{
+									if ( oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).nodeName == "DIV" &&
+										oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).id &&
+										oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).id.match( /^player[0-9]*-config$/ ) )
+									{
+										var oC = oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).innerHTML.split(' ') ;
+										for ( var o = 0 ; o < oC.length ; o++ )
+										{
+											var tmp = oC[o].split( '=' ) ;
+											oMedia.setAttribute( tmp[0], tmp[1] ) ;
+										}
+										is_new_flvplayer = false ;
+										break ;
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -164,6 +212,7 @@ function Ok()
 
 	// Replace or insert?
 	if (!is_new_flvplayer) {
+/*
 		// Find parent..
 	        oSel = FCK.Selection.GetParentElement();
 		while (oSel != null && !oSel.id.match(/^player[0-9]*-parent$/)) {
@@ -173,6 +222,23 @@ function Ok()
 		if (oSel != null) {
 			oSel.parentNode.removeChild(oSel);
 			FCK.InsertHtml(e.getInnerHTML());
+		}
+*/
+		var oFakeImage = FCK.Selection.GetSelectedElement() ;
+		var oSel = null ;
+		oMedia = new Media() ;
+
+		if ( oFakeImage )
+		{
+			if ( oFakeImage.tagName == 'IMG' && oFakeImage.getAttribute( '_fckvideo' ) )
+			{
+				oSel = FCK.GetRealElement( oFakeImage ) ;
+				if ( oSel )
+				{
+					oSel = null ;
+					FCK.InsertHtml( e.getInnerHTML() ) ;
+				}
+			}
 		}
 	} else {
 		FCK.InsertHtml(e.getInnerHTML());

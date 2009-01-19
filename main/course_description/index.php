@@ -1,4 +1,4 @@
-<?php // $Id: index.php 17625 2009-01-09 20:00:17Z herodoto $
+<?php // $Id: index.php 17838 2009-01-19 20:10:21Z iflorespaz $
 
 /*
 ==============================================================================
@@ -294,9 +294,11 @@ if ($show_description_list) {
 		
 		$i=1;
 		echo '<div class="actions">';
+		ksort($categories);
 		foreach ($categories as $id => $title) {
 			if ($i==8) { 
 				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add">'.Display::return_icon($default_description_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>';
+				break;
 			} else {
 				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$id.'">'.Display::return_icon($default_description_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>&nbsp;&nbsp;';
 				$i++;

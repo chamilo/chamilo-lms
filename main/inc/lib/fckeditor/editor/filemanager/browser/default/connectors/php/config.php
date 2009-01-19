@@ -131,22 +131,19 @@ $Config['AllowedExtensions']['File']	= array() ;
 $Config['DeniedExtensions']['File']		= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
 
 $Config['AllowedExtensions']['Images']	= array('jpg','gif','jpeg','png') ;
-$Config['DeniedExtensions']['Images']	= array() ;
+$Config['DeniedExtensions']['Images']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
 
 $Config['AllowedExtensions']['Flash']	= array('swf') ;
-$Config['DeniedExtensions']['Flash']	= array() ;
+$Config['DeniedExtensions']['Flash']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
 
 $Config['AllowedExtensions']['MP3']	= array('mp3') ;
-$Config['DeniedExtensions']['MP3']	= array() ;
+$Config['DeniedExtensions']['MP3']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
 
-//supported files according to fck:embedmovies -->>  mpg|mpeg|avi|wmv|mov|asf
-// old ones
-//$Config['AllowedExtensions']['Videos']	= array('avi','mpg','mpeg','mov','wmv','rm') ;
 $Config['AllowedExtensions']['Video']	= array('avi','mpg','mpeg','mp4','mov','wmv','asf') ;
-$Config['DeniedExtensions']['Video']	= array() ;
+$Config['DeniedExtensions']['Video']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
 
 $Config['AllowedExtensions']['Video/flv']	= array('flv','mp4') ;
-$Config['DeniedExtensions']['Video/flv']	= array() ;
+$Config['DeniedExtensions']['Video/flv']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
 
 /*
 $Config['AllowedExtensions']['File']	= array('7z', 'aiff', 'asf', 'avi', 'bmp', 'csv', 'doc', 'fla', 'flv', 'gif', 'gz', 'gzip', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'ods', 'odt', 'pdf', 'png', 'ppt', 'pxd', 'qt', 'ram', 'rar', 'rm', 'rmi', 'rmvb', 'rtf', 'sdc', 'sitd', 'swf', 'sxc', 'sxw', 'tar', 'tgz', 'tif', 'tiff', 'txt', 'vsd', 'wav', 'wma', 'wmv', 'xls', 'xml', 'zip') ;

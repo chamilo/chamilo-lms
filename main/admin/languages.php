@@ -1,5 +1,5 @@
 <?php
-// $Id: languages.php 17785 2009-01-16 21:23:31Z cvargas1 $
+// $Id: languages.php 17825 2009-01-19 16:38:37Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -72,6 +72,15 @@ if ($_GET['action'] == 'makeavailable')
 	$sql_make_available = "UPDATE $tbl_admin_languages SET available='1' WHERE id='{$_GET['id']}'";
 	$result = api_sql_query($sql_make_available);
 }
+if ($_GET['action'] == 'setplatformlanguage')
+{
+	$sql_update = "SELECT english_name FROM ". $tbl_admin_languages." WHERE id='".$_GET['id']."'";
+	$result = api_sql_query($sql_update,__FILE__,__LINE__);
+	$lang=Database::fetch_array($result);
+	$sql_update_2 = "UPDATE ".$tbl_settings_current." SET selected_value='".$lang['english_name']."' WHERE variable='platformLanguage'";
+	$result_2 = api_sql_query($sql_update_2);
+}
+
 
 if ($_POST['Submit'])
 {
@@ -141,6 +150,10 @@ echo '<p>'.get_lang('PlatformLanguagesExplanation').'</p>';
 $sql_select = "SELECT * FROM $tbl_admin_languages";
 $result_select = api_sql_query($sql_select);
 
+$sql_select_lang = "SELECT * FROM $tbl_settings_current WHERE  category='Languages'";
+$result_select_lang = api_sql_query($sql_select_lang,__FILE__,__LINE__);
+$row_lang=Database::fetch_array($result_select_lang);
+ 
 /*
 --------------------------------------
 		DISPLAY THE TABLE
@@ -149,23 +162,19 @@ $result_select = api_sql_query($sql_select);
 
 // the table data
 $language_data = array ();
-while ($row = mysql_fetch_array($result_select))
-{
+while ($row = Database::fetch_array($result_select)) {
+	
 	$row_td = array ();	
 	$row_td[] = $row['id'];
 	// the first column is the original name of the language OR a form containing the original name
-	if ($_GET['action'] == 'edit' and $row['id'] == $_GET['id'])
-	{
-		if ($row['english_name'] == api_get_setting('platformLanguage'))
-		{
+	if ($_GET['action'] == 'edit' and $row['id'] == $_GET['id']) {
+		if ($row['english_name'] == api_get_setting('platformLanguage')) {
 			$checked = ' checked="checked" ';
 		}
-		
+
 		$row_td[] = '<input type="hidden" name="edit_id" value="'.$_GET['id'].'" /><input type="text" name="txt_name" value="'.$row['original_name'].'" /> '
 			. '<input type="checkbox" '.$checked.'name="platformlanguage" id="platformlanguage" value="'.$row['english_name'].'" /><label for="platformlanguage">'.$row['original_name'].' '.get_lang('AsPlatformLanguage').'</label> <input type="submit" name="Submit" value="'.get_lang('Ok').'" /><a name="value" />';
-	}
-	else
-	{
+	} else 	{
 		$row_td[] = $row['original_name'];
 	}
 	// the second column
@@ -173,16 +182,16 @@ while ($row = mysql_fetch_array($result_select))
 	// the third column
 	$row_td[] = $row['dokeos_folder'];
 	
-	// the fourth column with the visibility icon and the edit icon
-	if ($row['available'] == 1)
-	{
-		$row_td[] = "<a href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.gif')."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>";
+	if ($row['english_name'] == $row_lang['selected_value']){
+		$setplatformlanguage = Display::return_icon('links.gif', get_lang('CurrentLanguage'));
+	} else {		
+		$setplatformlanguage = "<a href=\"javascript:if (confirm('".get_lang('SetThisLanguage')."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".Display::return_icon('link_na.gif', get_lang('CurrentLanguage'))."</a>";
+	}		
+	if ($row['available'] == 1) {
+		$row_td[] = "<a href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.gif')."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage;
+	} else {
+		$row_td[] = "<a href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".Display::return_icon('invisible.gif')."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage;
 	}
-	else
-	{
-		$row_td[] = "<a href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".Display::return_icon('invisible.gif')."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>";
-	}
-
 	$language_data[] = $row_td;
 }
 

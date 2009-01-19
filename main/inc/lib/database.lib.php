@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 17781 2009-01-16 17:51:08Z juliomontoya $
+<?php // $Id: database.lib.php 17826 2009-01-19 17:18:19Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -788,8 +788,10 @@ class Database
     	return mysql_error();
     }
 	/**
-	 * @param integer
-	 * @return integer 
+     * Return course code from one given gradebook category's id
+	 * @param int  Category ID
+	 * @return string  Course code
+     * @todo move this function in a gradebook-related library
 	 */
     function get_course_by_category ($category_id) {
     	$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
@@ -806,4 +808,3 @@ class Database
     
 }
 //end class Database
-?>

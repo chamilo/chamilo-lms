@@ -80,18 +80,14 @@ function search_users($needle, $id)
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
 		$needle = mb_convert_encoding($needle, $charset, 'utf-8');
-		//$access_url_id = $_POST['access_url_id'];
-		//AND access_url_id =  "'.$id.'"
 		// search users where username or firstname or lastname begins likes $needle
-		// INNER JOIN '.$tbl_access_url_rel_user.' url_rel_user ON(u.user_id = url_rel_user.user_id)
 		$sql = 'SELECT u.user_id, username, lastname, firstname FROM '.$tbl_user.' u 
 				WHERE (username LIKE "'.$needle.'%"
 				OR firstname LIKE "'.$needle.'%"
 				OR lastname LIKE "'.$needle.'%") 
 				ORDER BY lastname, firstname, username
 				LIMIT 11';
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
-		
+		$rs = api_sql_query($sql, __FILE__, __LINE__);		
         $i=0;
 		while ($user = Database :: fetch_array($rs)) {
 			$i++;
@@ -147,15 +143,16 @@ $users=$sessions=array();
 
 if($_POST['formSent']) {	
 	$formSent=$_POST['formSent'];
-	$UserList=$_POST['sessionUsersList'];
-	
+	$UserList=$_POST['sessionUsersList'];	
 	if(!is_array($UserList)) {
 		$UserList=array();
 	}
-
-	if($formSent == 1) {		
-		UrlManager::update_urls_rel_user($UserList,$access_url_id);
-		header('Location: access_urls.php?action=showmessage&message='.get_lang('UsersWereEdited'));
+	if($formSent == 1) {
+		if(is_array($UserList) && count($UserList)>0 ) {						
+			UrlManager::update_urls_rel_user($UserList,$access_url_id);
+			header('Location: access_urls.php?action=show_message&message='.get_lang('UsersWereEdited'));
+		}
+		
 	}
 }
 
@@ -187,7 +184,7 @@ if($ajax_search)
 	foreach($Users as $user) {	
 		if (!in_array($user['user_id'],$user_list_leys))
 			$nosessionUsersList[$user['user_id']] = $user ;
-		}	
+	}	
 }
 
 
@@ -242,7 +239,7 @@ if(!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('UserListInPlatform') ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('UserListInSession') ?> :</b></td>
+  <td align="center"><b><?php echo get_lang('UserListInURL') ?> :</b></td>
 </tr>
 
 <tr>

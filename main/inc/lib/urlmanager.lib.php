@@ -206,7 +206,7 @@ class UrlManager
 	function delete($id)
 	{
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);					
-		$sql= "DELETE FROM $table_access_url WHERE id = ".Database::escape_string($id)."";
+		$sql= "DELETE FROM $table_access_url WHERE id = ".Database::escape_string($id);
 		$result = api_sql_query($sql,  __FILE__, __LINE__);
 		return $result;
 	}

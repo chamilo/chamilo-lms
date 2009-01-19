@@ -48,14 +48,15 @@ require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 // Actions
 if (isset ($_GET['action'])) {
 	
-	if ($_GET['action'] = 'show_message')
+	if ($_GET['action'] == 'show_message')
 		Display :: display_normal_message(Security::remove_XSS(stripslashes($_GET['message'])));
 		
-	$check = Security::check_token('get');
-	if ($check) {	
-		$url_id=Database::escape_string($_GET['url_id']);	
+	$check = Security::check_token('get');		
+	if ($check) {
+		$url_id=Database::escape_string($_GET['url_id']);
+		
 		switch ($_GET['action']) {		
-			case 'delete_url' :
+			case 'delete_url' :		
 				$result = UrlManager::delete($url_id);					
 				if ($result) {
 					Display :: display_normal_message(get_lang('URLDeleted'));
@@ -84,7 +85,8 @@ echo '<div style="float:right;">
 	  </div><br />';		  
 echo '</div>';		  
 
-$table = new SortableTable('urls', 'url_count_mask', 'get_url_data_mask',2);
+$table = new SortableTable('urls', 'url_count_mask', 'get_url_data_mask',2); 
+
 $parameters['sec_token'] = Security::get_token();	
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false);

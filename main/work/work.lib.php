@@ -429,11 +429,11 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				if($row['view_properties']=='1') {			
 					if($homework['expires_on']!='0000-00-00 00:00:00'){		
 						$there_is_a_expire_date = true;
-						$form_folder -> addGroup(create_group_date_select(),'expires',get_lang('Expires_At'));
+						$form_folder -> addGroup(create_group_date_select(),'expires',get_lang('ExpiresAt'));
 					}
 					if($homework['ends_on']!='0000-00-00 00:00:00') {		
 						$there_is_a_end_date = true;
-						$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('Ends_At'));
+						$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('EndsAt'));
 					}
 					$form_folder -> addRule(array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
 				}
@@ -458,14 +458,14 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 										$homework['expires_on']=date("Y-m-d H:i:s");		
 										$there_is_a_expire_date = true;
 										$form_folder -> addElement('checkbox', 'enableExpiryDate', null, get_lang('EnableExpiryDate'),'1');
-										$form_folder -> addGroup(create_group_date_select(),'expires',get_lang('Expires_At'));
+										$form_folder -> addGroup(create_group_date_select(),'expires',get_lang('ExpiresAt'));
 										
 									}
 									if($homework['ends_on']='0000-00-00 00:00:00') {	
 										$homework['ends_on']=date("Y-m-d H:i:s");		
 										$there_is_a_end_date = true;
 										$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'),'1');
-										$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('Ends_At'));
+										$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('EndsAt'));
 										
 									}	
 									$form_folder -> addRule (array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');		

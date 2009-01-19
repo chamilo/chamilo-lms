@@ -539,13 +539,19 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 			<tr>
 				<td class="requirements-item">dokeos/home/</td>
 				<td class="requirements-value">'.check_writable('../home/').'</td>
-			</tr>
-            <tr>
-                <td class="requirements-item">dokeos/searchdb/</td>
-                <td class="requirements-value">'.check_writable('../searchdb/').'</td>
+			</tr>'.
+            //<tr>
+            //    <td class="requirements-item">dokeos/searchdb/</td>
+            //    <td class="requirements-value">'.check_writable('../searchdb/').'</td>
+            //</tr>
+            '<tr>
+                <td class="requirements-item">'.session_save_path().'</td>
+                <td class="requirements-value">'.(is_writable(session_save_path()) 
+					? '<strong><font color="green">'.get_lang('Writable').'</font></strong>'
+					: '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>').'</td>
             </tr>
-			';
-	echo '</table>';
+            ';
+	echo '    </table>';
 	echo '	</div>';
 	echo '</div>';
 

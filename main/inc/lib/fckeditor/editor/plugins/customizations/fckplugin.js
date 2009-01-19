@@ -1225,6 +1225,23 @@ var DOCUMENT_RELATIVE_URL = 'document-relative' ;
 FCK.REPOSITORY_RELATIVE_URL = REPOSITORY_RELATIVE_URL ;
 FCK.DOCUMENT_RELATIVE_URL = DOCUMENT_RELATIVE_URL ;
 
+// Conversion of selected by the file managers Flash URL.
+// In introduction sections relative flash URLs do not work.
+// This is why we will record semi-absolute URLs there.
+FCK.GetSelectedFlashUrl = function ( url )
+{
+	// Detection of introduction section.
+	if ( FCKConfig.CreateDocumentDir == 'document/' ||
+		/\.\.\/.*\/document\/$/.test( FCKConfig.CreateDocumentDir ) )
+	{
+		return FCK.GetUrl( url, SEMI_ABSOLUTE_URL ) ;
+	}
+	else
+	{
+		return FCK.GetSelectedUrl( url ) ;
+	}
+}
+
 // Conversion of selected by the file managers URLs.
 FCK.GetSelectedUrl = function ( url )
 {

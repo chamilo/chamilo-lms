@@ -222,7 +222,8 @@ function BrowseServer()
 function SetUrl( url, width, height )
 {
 	// Added by Ivan Tcholakov.
-	url = FCK.GetSelectedUrl( url ) ;
+	//url = FCK.GetSelectedUrl( url ) ;
+	url = FCK.GetSelectedFlashUrl( url ) ;
 
 	GetE('txtUrl').value = url ;
 

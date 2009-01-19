@@ -54,5 +54,4 @@ $FilterByNotExpired = "Filter by not expired";
 $FilterAssignments = "Filter assignments";
 $WeightNecessary = "Weight necessary";
 $QualificationOver = "Qualification over";
-$CompleteTheSurveysQuestions = "Complete the survey\'s questions";
 ?>

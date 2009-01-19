@@ -89,4 +89,10 @@ $OnlyNumbers = "Len &#269;ísla";
 $IncorrectData = "Nesprávne dáta";
 $Resource = "Zdroj";
 $PleaseEnableScoringSystem = "Prosím sprístupnite systém hodnotenia";
+$AllResultDeleted = "Všetky výsledky boli odstránené";
+$AllResultsEdited = "Všetky výsledky boli upravené";
+$UserInfoDoesNotMatch = "Informácie o používate&#318;ovi nezodpovedajú.";
+$ScoreDoesNotMatch = "Skóre nezodpovedá ";
+$FileUploadComplete = "Na&#269;ítavanie súboru úspešné";
+$NoResultsAvailable = "Žiadne výsledky k dispozícii";
 ?>

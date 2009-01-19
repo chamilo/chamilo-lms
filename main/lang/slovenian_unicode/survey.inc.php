@@ -204,4 +204,6 @@ $Version = "Verzija";
 $Normal = "Normalno";
 $NoLogOfDuration = "Brez beleženja trajanja";
 $AutoInviteLink = "Uporabniki, ki niso vabljeni, lahko uporabijo to povezavo za dostop do vprašalnika";
+$CompleteTheSurveysQuestions = "Zaključi z vprašanji vprašalnika";
+$SurveysDeleted = "Vprašalnik je bil odstranjen";
 ?>

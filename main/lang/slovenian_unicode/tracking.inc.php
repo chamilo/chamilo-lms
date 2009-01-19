@@ -226,4 +226,11 @@ $TotalExercisesScoreObtained = "Skupen dosežen rezultat vaj/testov";
 $TotalExercisesScorePossible = "Skupen možen rezultat vaj/testov";
 $TotalExercisesAnswered = "Število reševanih vaj/testov";
 $TotalExercisesScorePercentage = "Skupen rezultat vaj/testov [%]";
+$ForumForumsNumber = "Številka foruma";
+$ForumThreadsNumber = "Številka niti";
+$ForumPostsNumber = "Številka objave";
+$ChatConnectionsDuringLastXDays = "Povezave na klepet v zadnjih %s dneh";
+$ChatLastConnection = "Zadnja povezava klepeta";
+$CourseInformation = "Informacije o tečaju";
+$NoAdditionalFieldsWillBeExported = "Nobena dodatna polja ne bodo izvožena";
 ?>

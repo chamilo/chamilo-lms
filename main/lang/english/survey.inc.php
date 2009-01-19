@@ -204,4 +204,6 @@ $Version = "Version";
 $Normal = "Normal";
 $NoLogOfDuration = "No log of duration";
 $AutoInviteLink = "Users who are not invited can use this link to take the survey:";
+$CompleteTheSurveysQuestions = "Complete the survey\'s questions";
+$SurveysDeleted = "Surveys deleted";
 ?>

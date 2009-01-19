@@ -126,4 +126,5 @@ $TitleColumnGradebook = "Naslov stolpca redovalnice";
 $QualifyThreadGradebook = "Kvalificiraj nit (redovalnica)";
 $QualifyWeight = "Utež za kvalifikacijo";
 $QualifyNumeric = "Numerična kvalifikacija";
+$ForumMoved = "Forum je bil prestavljen";
 ?>

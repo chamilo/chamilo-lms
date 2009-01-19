@@ -15,4 +15,7 @@ $OrderBy = "Razvrščeno po";
 $CreationDate = "Datum kreiranja";
 $UpdateDate = "Datum zadnje spremembe";
 $PreSelectedOrder = "Razvrščanje z izbiro";
+$TermAdded = "Termin je bil dodan";
+$YouMustEnterATermName = "Vstaviti morate vsebino termina";
+$YouMustEnterATermDefinition = "Vstaviti morate definicijo termina";
 ?>

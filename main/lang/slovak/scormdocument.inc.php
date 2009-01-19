@@ -1,6 +1,52 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$langChapter = "Kapitola";
+$langDocumentList = "Zoznam dokumentov";
+$langEditTOC = "Upravi&#357; TOC";
+$langEditDocument = "Upravi&#357; dokument";
+$langCreateDocument = "Vytvori&#357; dokument";
+$langGroupForumLink = "Skupinové fórum";
+$langGroupSpace = "Skupinový priestor";
+$langNoText = "Prosím napíšte Váš text / HTML obsah";
+$langNoFileName = "Žiadne názov súboru";
+$langMaxFileSize = "Maximálna ve&#318;kos&#357; súboru je";
+$langFileName = "Názov súboru";
+$langFileError = "Súbor na na&#269;ítanie nie je platný.";
+$langDown = "Dole";
+$langViMod = "Vidite&#318;nos&#357; zmenená";
+$langAddComment = "Prida&#357; komentár";
+$langImpossible = "Operácia nemožná";
+$langNewDir = "Názov nového prie&#269;inku";
+$langTo = "komu";
+$langNoSpace = "Na&#269;ítavanie bolo neúspešné. Vo Vašom katalógu nie je dos&#357; priestoru na disku";
+$langDownloadEnd = "Na&#269;ítavanie je dokon&#269;ené";
+$langFileExists = "Operácia  neuskuto&#269;nite&#318;ná.<br>Osnova s týmto názvom už existuje.";
+$langDocCopied = "Dokument skopírovaný";
+$langDocDeleted = "U&#269;ebná osnova zmazaná";
+$langDirCr = "Vytvori&#357; katalóg";
+$langDirMv = "Môj katalóg";
+$langRename = "premenova&#357;";
+$langCopy = "kopírova&#357;";
+$langNameDir = "Názov nového katalógu";
+$learning_path_access = "pre zmazanie/zmenu/zobrazenie/skrytie/vytvorenie/pridanie u&#269;ebnej osnovy kliknite na \'vytvori&#357; u&#269;ebnú osnovu\'";
 $langBuilder = "Tvorca u&#269;ebnej osnovy";
-$lang_add_learnpath = "Prida&#357; u&#269;enbnú osnovu";
+$lang_edit_learnpath = "Upravi&#357; názov/popis";
+$lang_add_title_and_desc = "Premenova&#357; a prida&#357; popis";
+$lang_add_learnpath = "Vytvori&#357; Dokeos u&#269;ebnú osnovu";
+$lang_learnpath_added = "Nová u&#269;ebná osnova bola úspešne vytvorená. Teraz môžete do nej prida&#357; moduly. Ak ju chcete upravi&#357;, kliknite na jej názov.";
+$lang_delete_learnpath = "Zmaza&#357; u&#269;ebnú osnovu";
+$lang_learnpath_edited = "U&#269;ebná osnova bola úspešne upravená";
+$lang_learnpath_deleted = "U&#269;ebná osnova a všetky jej moduly boli zmazané";
+$lang_no_publish = "Skry&#357; pred študentmi";
+$lang_publish = "Ukáza&#357; študentom";
+$lang_no_published = "je teraz pre študentov skrytá";
+$lang_published = "je dostupná pre študentov";
+$lang_description = "popis";
+$lang_title = "názov";
+$langScormBuilder = "Tvorca u&#269;ebnej osnovy";
+$langCreateDoc = "Vytvori&#357; dokument";
+$langOrganiseDocuments = "Usporiada&#357; dokumenty";
+$ExportShort = "Exportova&#357; ako SCORM";
+$progress = "Pokroky";
 ?>

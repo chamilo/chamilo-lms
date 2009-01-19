@@ -646,5 +646,12 @@ $SearchCombineSearchWith = "Kombiniraj ključne besede z";
 $SearchFeatureNotEnabledComment = "Iskanje po vsebini ni omogočeno v tem portalu. Kontaktirajte upravitelja platforme.";
 $Top = "Na vrh";
 $YourTextHere = "Tvoje besedilo ...";
+$OrderBy = "Razvrščeno po";
 $Notebook = "Beležka";
+$FieldRequired = "Obvezno polje";
+$BookingSystem = "Rezervacijski sistem";
+$Any = "Poljuben";
+$SpecificSearchFields = "Specifično iskalno polje";
+$SpecificSearchFieldsIntro = "Tu lahko določite polja, ki jih boste uporabili za indeksiranje vsebine. Pri indeksiranju posameznega elementa lahko dodate enega ali več izrazov ločenih z vejico v vsako izmed polj.";
+$AddSpecificSearchField = "Dodaj specifično iskalno polje";
 ?>

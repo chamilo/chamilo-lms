@@ -1,8 +1,9 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$ReservationPeriodToSmall = "El periodo de reserva es demasiado corto.";
 $BookingSystem = "Sistema de reservas";
-$BookingPeriodList = " ";
+$BookingPeriodList = "Lista de periodos de reserva ";
 $BookingListView = "Lista de reservas";
 $BookingCalendarView = "Vista de calendario";
 $BookingPeriods = "Booking periods";
@@ -12,4 +13,44 @@ $GoToListView = "Ir a la lista";
 $ManageResources = "Administración de recursos";
 $EditResource = "Editar recurso";
 $BookIt = "Reserva";
+$GoTo = "Ir a";
+$NoTimePicker = "No time picker";
+$TimePicker = "Time picker";
+$ManageBookingPeriods = "Administrar periodos de reservas";
+$BookingPeriodToSmall = "El periodo de la reserva es muy pequeña.";
+$BookingPeriodToBig = "El periodo de la reserva es muy grande.";
+$BookingPeriodTimePickerError1 = " No se puede realizar la reserva de un periodo sin un selector de tiempo si el tiempo mínimo y el máximo del periodo es distinto de cero.";
+$BookingPeriodTimePickerError2 = "El periodo de reserva con un selector de tiempo no se puede realizar si el tiempo máximo es inferior al tiempo mínimo del periodo";
+$BookingPeriodTimePickerError3 = "Un periodo de reserva con un selector de tiempo no se puede realizar si el tiempo máximo del periodo no está entre la fecha de inicio y final ";
+$BookingPeriodHasSubscriptions = "No es posible modificar el periodo de reserva debido a que tiene #NUM# reserva(s) activa(s)";
+$TimePickerMaxUsers = "* Cuando el timepicker está siendo usado, el Máximo número de subscripciones es ignorado";
+$TimePickerMinMaxNull = "* Si el mínimo y máximo valor del timepicker es cero, el tiempo puede ser variable";
+$DeleteSelectedBookingPeriod = "Eliminar items selecionados";
+$EditNewBookingPeriod = "Editar un periodo de reserva";
+$BookingPeriodAdded = "El periodo de reserva fue ingresado";
+$BookingPeriodDeleted = "El periodo de reserva fue eliminado";
+$ConfirmDeleteBookingPeriod = "¿ Está seguro de querer eliminar definitivamente este periodo de reserva ? ";
+$DeleteBookingPeriod = "Eliminar este periodo de reserva ";
+$BookingPeriodEdited = "El periodo de reserva ha sido modificado";
+$BookingPeriodDateOverlap = "Una parte del periodo de reserva ya está en uso desde #START# hasta #END#";
+$BookingPeriodSubscribeUntilAfterStart = "El periodo de realización de la reserva es mayor que la fecha de inicio";
+$BookingPeriodPast = "No es posible realizar reservas antes del momento actual ";
+$ReservationMaxUsersOverrun = "Hay más reservas que el máximo que ha seleccionado";
+$AddNewBookingPeriod = "Agregar nuevo periodo de reserva";
+$BookingPeriodTimePickerLimitation = "No es posible realizar reservas con un selector de tiempo si las fechas de inicio y finalización son distintas. ";
+$ResourceList = "Lista de recursos";
+$ResourceTypeName = "Nombre del tipo de recurso";
+$AddNewResourceType = "Agregar nuevo tipo de recurso";
+$ResourceTypeAdded = "El tipo de recurso fue agregado";
+$ResourceTypeEdited = "El tipo de recurso ha sido agregado";
+$ResourceTypeDeleted = "El tipo de recurso ha sido eliminado";
+$ConfirmDeleteResourceType = "¿ Está seguro de querer eliminar definitivamente este tipo de recurso ? ";
+$EditResourceType = "Editar el tipo de recurso ";
+$DeleteResourceType = "Eliminar el tipo de recurso ";
+$DeleteSelectedCategories = " Eliminar los elementos seleccionados";
+$NoResourcesType = "Todavía no hay ningún tipo de recurso";
+$ResourceType = "Tipo de recurso";
+$ResourceTypeExist = "Este tipo de recurso ya existe ";
+$ResourceTypeHasItems = "¡ El tipo de recurso tiene  #NUM# unidades ! La cancelación ha sido anulada";
+$ResourceTypeNotDeleted = "Algunos tipos de recurso no han sido eliminados debido a que hay unidades que aún se mantienen";
 ?>

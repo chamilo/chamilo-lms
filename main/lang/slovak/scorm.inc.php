@@ -1,4 +1,41 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$langScormVersion = "verzia";
+$langScormRestarted = "Všetky etapy sú teraz nekompletné.";
+$langScormNoNext = "Toto je posledná etapa.";
+$langScormNoPrev = "Toto je prvá etapa.";
+$langScormTime = "&#268;as";
+$langScormNoOrder = "Nie je zadan žiadne poradie, môžete kliknú&#357; na ktorúko&#318;vek etapu.";
+$langScormScore = "Skóre";
+$langScormLessonTitle = "Názov etapy";
+$langScormStatus = "Stav";
+$langScormFirstNeedTo = "najskôr musíte dokon&#269;i&#357;";
+$langScormThisStatus = "Táto etapa je teraz";
+$langScormRestart = "Spusti&#357; znova";
+$langScormCompstatus = "Dokon&#269;ený";
+$langScormIncomplete = "Nedokon&#269;ený";
+$langScormPrevious = "Predchádzajúci";
+$langScormNext = "Nasledujúci";
+$langScormMystatus = "Môj stav";
+$langScormNoItems = "Tento obsah nemá žiadne položky.";
+$langScormNoStatus = "Žiadny stav pre tento obsah";
+$langScormLoggedout = "odhlásenie sa z priestoru Scorm";
+$langScormCloseWindow = "Zatvori&#357; okná";
+$ScormBrowsed = "Prehliadaný";
+$langScormExitFullScreen = "Spä&#357; na štandardnú obrazovku";
+$langScormFullScreen = "Celá obrazovka";
+$langCharset = "Súbor znakov";
+$langLocal = "Lokálny";
+$langRemote = "Vzdialený";
+$langAutodetect = "Automatické zis&#357;ovanie";
+$langAccomplishedStepsTotal = "Po&#269;et hotových etáp";
+$langUnknown = "Neznámy";
+$AreYouSureToDeleteSteps = "Naozaj chcete zmaza&#357; tieto etapy?";
+$Remote = "Vzdialený";
+$FileToUpload = "SCORM alebo AICC súbor na na&#269;ítanie";
+$ContentProximity = "Umiestnenie kurzu";
+$MoveCurrentChapter = "Presunú&#357; aktuálnu kapitolu";
+$Attempt = "Pokus";
+$MoveTheCurrentForum = "Presunú&#357; aktuálne fórum";
 ?>

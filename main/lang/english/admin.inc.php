@@ -864,4 +864,10 @@ $EnableVersionCheck = "Enable version check";
 $AllowReservationTitle = "Allow the Booking system";
 $AllowReservationComment = "This will allow the use of the Booking system";
 $ConfigureResourceType = "Configure resource type";
+$ConfigureMultipleAccessURLs = "Configure multiple access URL";
+$URLAdded = "URL has been added";
+$URLAlreadyAdded = "URL already added please select other URL";
+$SaveSettings = "Save settings";
+$AreYouSureYouWantToSetThisLanguageAsThePortalDefault = "Are you sure you want to set this language as the portal\'s default?";
+$CurrentLanguagesPortal = "Current language\'s portal ";
 ?>

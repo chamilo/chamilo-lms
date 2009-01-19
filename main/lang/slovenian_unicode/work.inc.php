@@ -48,4 +48,10 @@ $ExpiryDateToSendWorkIs = "Zadnji rok za pošiljanje nalog/izdelkov";
 $EnableExpiryDate = "Omogoči datum preteka";
 $EnableEndDate = "Omogoči končni datum";
 $IsNotPosibleSaveTheDocument = "Dokumenta ni mogoče shraniti";
+$EndDateCannotBeBeforeTheExpireDate = "Končni datum ne more biti pred datumom poteka";
+$SelectAFilter = "Izberite filter";
+$FilterByNotExpired = "Filtriraj nepotečene";
+$FilterAssignments = "Filtriraj naloge/zadolžitve";
+$WeightNecessary = "Uteži potrebne";
+$QualificationOver = "Kvalifikacije preko";
 ?>

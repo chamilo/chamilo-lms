@@ -118,4 +118,13 @@ $OnlyNumbers = "Solo numeri";
 $IncorrectData = "Dati non corretti";
 $Resource = "Risorsa";
 $PleaseEnableScoringSystem = "Sei pregato di attivare la funzionalità dei punteggi";
+$AllResultDeleted = "Tutti i risultati sono stati eliminati";
+$ImportNoFile = "Non ha alcun file importato";
+$ProblemUploadingFile = "C\'è stato un problema nell\'invio del file. Nessun file ricevuto.";
+$AllResultsEdited = "Tutti i risultati sono stati corretti";
+$UserInfoDoesNotMatch = "Non c\'è corrispondenza con le informazioni sull\'utente";
+$ScoreDoesNotMatch = "Il punteggio non corrisponde";
+$FileUploadComplete = "File caricato con successo";
+$NoResultsAvailable = "Nessun risultato disponibile";
+$CannotChangeTheMaxNote = "Non si può modificare il valore massimo del voto";
 ?>

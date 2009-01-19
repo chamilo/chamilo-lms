@@ -78,5 +78,15 @@ $langNotAllowedToUnsubscribe = "Používatelia nemajú povolené zruši&#357; registr
 $langCourseVisibilityClosed = "Kompletne zatvorený; kurz je dostupný len pre administrátorov a ich asistentov";
 $CourseVisibilityClosed = "Zatvorený - kurz je dostupný len pre administrátorov a ich asistentov";
 $CourseVisibilityModified = "Upravené (detailnejšie nastavenia urobte cez systém rolí a práv)";
+$AllowUserEditAgenda = "Povoli&#357; používate&#318;om upravi&#357; agendu kurzu";
 $CourseRegistrationPassword = "Heslo na registráciu do kurzu";
+$AllowUserImageForum = "Obrázok používate&#318;a vo fóre";
+$AllowUserImageForumActivate = "Zobrazi&#357; obrázky používate&#318;ov vo fóre";
+$AllowUserImageForumDeactivate = "Skry&#357; obrázky používate&#318;ov vo fóre ";
+$AllowLearningPathThemeAllow = "Povolený";
+$AllowLearningPathThemeDisallow = "Nepovolená";
+$ConfigChat = "Nastavenia Pokecu";
+$AllowOpenchatWindow = "Otvori&#357; Pokec v novom okne";
+$AllowOpenChatWindowActivate = "Aktivova&#357; otvorenie Pokecu v novom okne";
+$AllowOpenChatWindowDeactivate = "Deaktivova&#357; otvorenie Pokecu v novom okne ";
 ?>

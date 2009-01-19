@@ -37,6 +37,7 @@ $dropbox_lang["mailingBackToDropbox"]  = "spä&#357; na hlavné okno Schránky na d
 $dropbox_lang["mailingFileNoPrefix"]  = "meno neza&#269;ína s ";
 $dropbox_lang["mailingFileNoPostfix"]  = "meno nekon&#269;í s";
 $dropbox_lang["mailingFileNoRecip"]  = "meno neobsahuje žiadne id prijímate&#318;a";
+$dropbox_lang["mailingFileRecipDup"]  = "viacero používate&#318;ov má";
 $dropbox_lang["mailingFileIsFor"]  = "je pre";
 $dropbox_lang["mailingFileSentTo"]  = "odoslané komu";
 $dropbox_lang["mailingFileNotRegistered"]  = "(neregistrovaný na tento kurz)";

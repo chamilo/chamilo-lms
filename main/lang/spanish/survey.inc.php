@@ -204,4 +204,6 @@ $Version = "Versión";
 $Normal = "Normal";
 $NoLogOfDuration = "Ningún registro de duración";
 $AutoInviteLink = "Usuarios no invitados pueden usar este enlace para tomar la encuesta:";
+$CompleteTheSurveysQuestions = "Complete las preguntas de la encuesta";
+$SurveysDeleted = "Encuestas borradas";
 ?>

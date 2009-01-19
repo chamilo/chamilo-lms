@@ -858,4 +858,8 @@ $SearchShowUnlinkedResultsTitle = "Iskanje po vsebini: prikaži nepovezane rezul
 $SearchShowUnlinkedResultsComment = "Prikaz rezultatov iskanja po vsebini: kaj storiti z rezultati, ki niso dosegljivi trenutnemu uporabniku ?";
 $SearchHideUnlinkedResults = "Ne prikaži jih";
 $SearchShowUnlinkedResults = "Prikaži jih, vendar brez povezav na vire";
+$Templates = "Predloge";
+$URLAdded = "URL je bil dodan";
+$URLAlreadyAdded = "URL je že dodan. Izberite drug URL.";
+$SaveSettings = "Shrani nastavitve";
 ?>

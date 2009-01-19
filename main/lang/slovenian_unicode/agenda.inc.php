@@ -67,4 +67,5 @@ $RepeatEnd = "Datum konca ponovitev";
 $RepeatedEventViewOriginalEvent = "Poglej začetni dogodek";
 $ICalFileImport = "Uvozi iCal/ics datoteko";
 $AllUsersOfThePlatform = "Vsi uporabniki platforme";
+$GlobalEvent = "Globalni dogodek";
 ?>

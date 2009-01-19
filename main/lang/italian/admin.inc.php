@@ -863,4 +863,9 @@ $HideCampusFromPublicDokeosPlatformsList = "Non mostrare il mio Campus nell\'ele
 $EnableVersionCheck = "Abilita il controllo di versione";
 $AllowReservationTitle = "Abilita il servizio di prenotazione";
 $AllowReservationComment = "L\'opzione permette di utilizzare il sistema di prenotazione";
+$ConfigureResourceType = "Configura il tipo di risorsa";
+$ConfigureMultipleAccessURLs = "Configura gli URL per l\'accesso multiplo";
+$URLAdded = "URL aggiunto";
+$URLAlreadyAdded = "URL già in uso, seleziona un URL diverso";
+$SaveSettings = "Salva la configurazione";
 ?>

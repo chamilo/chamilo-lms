@@ -49,4 +49,9 @@ $EnableExpiryDate = "Abilita la data di scadenza";
 $EnableEndDate = "Abilita la data di chiusura";
 $IsNotPosibleSaveTheDocument = "Non è possibile salvare il documento";
 $EndDateCannotBeBeforeTheExpireDate = "La data di conclusione non può essere successiva alla scadenza ultima";
+$SelectAFilter = "Seleziona un filtro";
+$FilterByNotExpired = "Filtra per \"non scaduti\"";
+$FilterAssignments = "Filtra gli elaborati";
+$WeightNecessary = "Assegnazione del peso necessaria";
+$QualificationOver = "Valutazione superiore a";
 ?>

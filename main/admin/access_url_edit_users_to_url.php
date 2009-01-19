@@ -20,14 +20,7 @@
 ==============================================================================
 */
 /**
-=================================================SELECT user_id, username, lastname, firstname FROM
- `dokeossvn_dokeos_main`.`user` u  INNER JOIN `dokeossvn_dokeos_main`.`access_url_rel_user` url_rel_user
-   INNER JOIN ON(u.user_id = url_rel_user.user_id)
-				WHERE (username LIKE "a%"
-				OR firstname LIKE "a%"
-				OR lastname LIKE "a%") WHERE access_url_id =  "undefined"
-				ORDER BY lastname, firstname, username
-				LIMIT 11=============================
+==============================================================================
 *	@package dokeos.admin
 ==============================================================================
 */
@@ -51,7 +44,10 @@ $xajax -> registerFunction ('search_users');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions
-api_protect_admin_script(true);
+api_protect_admin_script();
+if (!$_configuration['multiple_access_urls'])
+	header('Location: index.php');
+
 
 // Database Table Definitions
 $tbl_user				 = Database::get_main_table(TABLE_MAIN_USER);
@@ -144,55 +140,21 @@ function remove_item(origin)
 }
 </script>';
 
-
 $formSent=0;
-$errorMsg=$firstLetterUser=$firstLetterSession='';
+$errorMsg='';
 $UserList=$SessionList=array();
 $users=$sessions=array();
-$noPHP_SELF=true;
-//&& isset($_POST['access_url_id_hidden'])
+
 if($_POST['formSent']) {	
 	$formSent=$_POST['formSent'];
-	$firstLetterUser=$_POST['firstLetterUser'];
-	$firstLetterSession=$_POST['firstLetterSession'];
 	$UserList=$_POST['sessionUsersList'];
-	$ClassList=$_POST['sessionClassesList'];
+	
 	if(!is_array($UserList)) {
 		$UserList=array();
 	}
 
-	if($formSent == 1) {
-		$sql = "SELECT user_id FROM $tbl_access_url_rel_user WHERE access_url_id='$access_url_id'";
-		$result = api_sql_query($sql,__FILE__,__LINE__ );
-		$existingUsers = array();
-		while($row = Database::fetch_array($result)){
-			$existingUsers[] = $row['user_id'];
-		}
-		$sql = "SELECT id FROM $tbl_access_url WHERE id='$access_url_id'";
-		$result=api_sql_query($sql,__FILE__,__LINE__);
-
-		$UrlList=array();
-
-		while($row=Database::fetch_array($result)) {
-			$UrlList[]=$row['id'];
-		}
-
-		foreach($UrlList as $enreg_url) {
-			//adding users
-			foreach($UserList as $enreg_user) {
-				if(!in_array($enreg_user, $existingUsers)) {
-					$sql = "INSERT IGNORE INTO $tbl_access_url_rel_user (access_url_id, user_id) VALUES('$enreg_url','$enreg_user')";					
-					api_sql_query($sql,__FILE__,__LINE__);
-				}
-			}
-			//deleting old users						
-			foreach($existingUsers as $existing_user) {
-				if(!in_array($existing_user, $UserList)) {
-					$sql = "DELETE FROM $tbl_access_url_rel_user WHERE access_url_id='$enreg_url' AND user_id='$existing_user'";
-					api_sql_query($sql,__FILE__,__LINE__);
-				}
-			}			
-		}
+	if($formSent == 1) {		
+		UrlManager::update_urls_rel_user($UserList,$access_url_id);
 		//header('Location: resume_session.php?id_session='.$id_session);
 	}
 }
@@ -201,54 +163,31 @@ Display::display_header($tool_name);
 api_display_tool_title($tool_name);
 
 $nosessionUsersList = $sessionUsersList = array();
-/*$sql = 'SELECT COUNT(1) FROM '.$tbl_user;
-$rs = api_sql_query($sql, __FILE__, __LINE__);
-$count_courses = mysql_result($rs, 0, 0);*/
 $ajax_search = $add_type == 'unique' ? true : false;
 
 if($ajax_search)
-{
-	$sql="SELECT u.user_id, lastname, firstname, username, access_url_id
-			FROM $tbl_user u 
-			INNER JOIN $tbl_access_url_rel_user
-				ON $tbl_access_url_rel_user.user_id = u.user_id
-				AND $tbl_access_url_rel_user.access_url_id = ".intval($access_url_id)."
-			ORDER BY lastname,firstname,username";
-	
-	$result=api_sql_query($sql,__FILE__,__LINE__);	
-	$Users=api_store_result($result);
-	
+{		
+	$Users=UrlManager::get_url_rel_user_data($access_url_id);
 	foreach($Users as $user) {
 		$sessionUsersList[$user['user_id']] = $user ;
 	}	
 } else {	
-	$sql="SELECT u.user_id, lastname, firstname, username, access_url_id
-	  	  	FROM $tbl_user u
-			INNER JOIN $tbl_access_url_rel_user
-			ON $tbl_access_url_rel_user.user_id = u.user_id 
-			ORDER BY lastname,firstname,username";
-	
-	$result=api_sql_query($sql,__FILE__,__LINE__);	
-	$Users=api_store_result($result);
-	
+	$Users=UrlManager::get_url_rel_user_data();	
 	foreach($Users as $user) {
 		if($user['access_url_id'] == $access_url_id) {
 			$sessionUsersList[$user['user_id']] = $user ;
 		}
-	}
-	
+	}	
 	$sql="SELECT u.user_id, lastname, firstname, username
 	  	  	FROM $tbl_user u	
-			ORDER BY lastname,firstname,username";
-	
+			ORDER BY lastname,firstname,username";	
 	$result=api_sql_query($sql,__FILE__,__LINE__);	
 	$Users=api_store_result($result);
 	$user_list_leys = array_keys($sessionUsersList);
 	foreach($Users as $user) {	
 		if (!in_array($user['user_id'],$user_list_leys))
 			$nosessionUsersList[$user['user_id']] = $user ;
-		}
-	
+		}	
 }
 
 
@@ -400,9 +339,9 @@ unset($sessionUsersList);
 		<br />
 		<?php
 		if(isset($_GET['add']))
-			echo '<input type="button" value="'.get_lang("FinishEdition").'" onclick="valide()" />';
+			echo '<input type="button" value="'.get_lang('EditUsers').'" onclick="valide()" />';
 		else
-			echo '<input type="button" value="'.get_lang('Ok').'" onclick="valide()" />';
+			echo '<input type="button" value="'.get_lang('EditUsers').'" onclick="valide()" />';
 		?>
 	</td>
 </tr>

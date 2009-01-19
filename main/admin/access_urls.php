@@ -103,7 +103,7 @@ $table->set_column_filter(4, 'modify_filter');
 $table->display(); 
 /*
 function status_filter($active, $url_params, $row) {	
-	$url_id =UrlManager::check_status($row[1]);	
+	$url_id =UrlManager::get_url_id($row[1]);	
 	if ($row[0] == $url_id ) { 	
 		$action='lock';
 		$image='right';

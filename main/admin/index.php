@@ -1,4 +1,4 @@
-<?php // $Id: index.php 17781 2009-01-16 17:51:08Z juliomontoya $
+<?php // $Id: index.php 17837 2009-01-19 20:06:02Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -119,8 +119,7 @@ if(api_is_platform_admin()) {
 ?>
 	<div class="admin_section">
 	<h4><?php Display::display_icon('course.gif', get_lang('Courses')); ?> <?php echo ucfirst(get_lang('Courses')); ?></h4>
-		<ul><li style="list-style-type:none"><form method="get" action="course_list.php">
-	
+		<ul><li style="list-style-type:none"><form method="get" action="course_list.php">	
 		<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
 		<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
 		</form></li>
@@ -150,14 +149,19 @@ if(api_is_platform_admin()) {
 	  <li><a href="configure_homepage.php"><?php echo get_lang('ConfigureHomePage'); ?></a></li>
 	  <li><a href="statistics/index.php"><?php echo get_lang('ToolName'); ?> </a></li>
 	  <li><a href="calendar.php"><?php echo get_lang('GlobalAgenda'); ?> </a></li>
-	  <?php if(!empty($phpMyAdminPath)): ?>
+	  <?php if(!empty($phpMyAdminPath)) { ?>
 	  <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang("AdminDatabases"); ?></a><br />(<?php echo get_lang("DBManagementOnlyForServerAdmin"); ?>)</li>
-	  <?php endif; ?>
+	  <?php } ?>
 	  <?php 
 	  if(!empty($_configuration['multiple_access_urls']))
 	  {
-	  	echo '	<li><a href="access_urls.php">'.get_lang('ConfigureMultipleAccessURLs').'</a></li>';
+	    echo '<li><a href="access_urls.php">'.get_lang('ConfigureMultipleAccessURLs').'</a></li>';
 	  }
+	  
+	  if (get_setting('allow_reservation')=='true') {
+		  	echo '<li><a href="../reservation/m_category.php">'.get_lang('ConfigureResourceType').'</a></li>';
+	  }
+		
 	  ?>
 	 </ul>
 	</div>
@@ -182,7 +186,7 @@ if(api_get_setting('use_session_mode')=='true')
   <li><a href="session_import.php"><?php echo get_lang('ImportSessionListXMLCSV') ?></a></li>
   <li><a href="session_export.php"><?php echo get_lang('ExportSessionListXMLCSV') ?></a></li>
   </ul>
-  <br /><br />
+  <br /><br />  <br /><br />
 </div>
 
 <?php
@@ -266,17 +270,6 @@ if(api_is_platform_admin()){
  </ul>
 </div>
 <?php
-	if (get_setting('allow_reservation')=='true') 
-	{
-	?>
-		<div class="admin_section">
-		<h4><img src="../img/settings.gif" border="0" style="vertical-align: middle;" alt="" /> <?php echo ucfirst(get_lang('BookingSystem')); ?></h4>
-		<ul>
-		<li><a href="../reservation/m_category.php"><?php echo get_lang('ConfigureResourceType'); ?></a></li>
-		</ul>
-		</div>
-	<?php
-	}
 }
 
 /**

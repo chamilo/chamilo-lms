@@ -116,37 +116,24 @@ FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5' ;
 /////////////////////////////////////////////////////////////////////// moved from fckconfig.js
 
 FCKConfig.LinkBrowser = true ;
-
-//
-//FCKConfig.LinkBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Connector=' + encodeURIComponent( FCKConfig.BasePath + 'filemanager/connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension ) ;
-//
-
-FCKConfig.LinkBrowserWindowWidth	= FCKConfig.ScreenWidth * 0.7 ;		// 70%
-FCKConfig.LinkBrowserWindowHeight	= FCKConfig.ScreenHeight * 0.7 ;	// 70%
+FCKConfig.LinkBrowserWindowWidth	= 782;
+FCKConfig.LinkBrowserWindowHeight	= 490;
 
 FCKConfig.ImageBrowser = true ;
+FCKConfig.ImageBrowserWindowWidth  = 782;
+FCKConfig.ImageBrowserWindowHeight = 490;
 
-// this is set in the  main/inc/lib/formvalidator/Element/html_editor.php file very hard to find!!
-//FCKConfig.ImageBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Type=Image&Connector=' + encodeURIComponent( FCKConfig.BasePath + 'filemanager/connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension ) ;
-
-FCKConfig.ImageBrowserWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	// 70% ;
-FCKConfig.ImageBrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	// 70% ;
-
-// Flash Browsing
 FCKConfig.FlashBrowser = true ;
-
-// this is set in the  main/inc/lib/formvalidator/Element/html_editor.php file very hard to find!!
-//FCKConfig.FlashBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Type=Flash&Connector=' + encodeURIComponent( FCKConfig.BasePath + 'filemanager/connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension ) ;
-
-FCKConfig.FlashBrowserWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	//70% ;
-FCKConfig.FlashBrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	//70% ;
+FCKConfig.FlashBrowserWindowWidth  = 782;
+FCKConfig.FlashBrowserWindowHeight = 490;
 
 FCKConfig.MediaBrowser = true ;
-// this is set in the  main/inc/lib/formvalidator/Element/html_editor.php
-//FCKConfig.MediaBrowserURL = FCKConfig.FlashBrowserURL;
+FCKConfig.MediaBrowserWindowWidth = 782;
+FCKConfig.MediaBrowserWindowHeight= 490;
 
-FCKConfig.MediaBrowserWindowWidth = FCKConfig.ScreenWidth * 0.7 ;	//70% ;
-FCKConfig.MediaBrowserWindowHeight= FCKConfig.ScreenHeight * 0.7 ;	//70% ;
+FCKConfig.MP3Browser = true ;
+FCKConfig.MP3BrowserWindowWidth  = 782;
+FCKConfig.MP3BrowserWindowHeight = 490;
 
 FCKConfig.LinkUpload = true ;
 FCKConfig.LinkUploadURL = FCKConfig.BasePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension ;
@@ -158,22 +145,6 @@ FCKConfig.ImageUploadURL = FCKConfig.BasePath + 'filemanager/connectors/' + _Qui
 FCKConfig.ImageUploadAllowedExtensions	= ".(jpg|gif|jpeg|png|bmp)$" ;		// empty for all
 FCKConfig.ImageUploadDeniedExtensions	= "" ;							// empty for no one
 
-// plugin added
-/* 
-FCKConfig.FlashUpload = true ;
-FCKConfig.FlashUploadURL = FCKConfig.BasePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension + '?Type=Flash' ;
-FCKConfig.FlashUploadAllowedExtensions	= ".(swf|flv)$" ;		// empty for all
-FCKConfig.FlashUploadDeniedExtensions	= "" ;					// empty for no one
-*/
-
-// mp3 plugin 
-FCKConfig.MP3Browser = true ;
-// this is set in the  main/inc/lib/formvalidator/Element/html_editor.php 
-//FCKConfig.MP3BrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension ;
-FCKConfig.MP3BrowserWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	//70% ;
-FCKConfig.MP3BrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	//70% ;
-
 FCKConfig.MP3Upload = true ;
-//FCKConfig.MP3UploadURL = FCKConfig.BasePath + 'filemanager/upload/' + FCKConfig.QuickUploadLanguage + '/upload.' + _QuickUploadLanguage + '?Type=MP3' ;
 FCKConfig.MP3UploadAllowedExtensions	= ".(mp3)$" ;		// empty for all
 FCKConfig.MP3UploadDeniedExtensions	= "" ;					// empty for no one

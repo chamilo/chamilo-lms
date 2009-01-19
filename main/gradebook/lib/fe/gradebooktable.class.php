@@ -27,7 +27,7 @@ require_once (dirname(__FILE__).'/../be.inc.php');
 /**
  * Table to display categories, evaluations and links
  * @author Stijn Konings
- * @author Bert Steppé (refactored, optimised)
+ * @author Bert Steppï¿½ (refactored, optimised)
  */
 class GradebookTable extends SortableTable
 {
@@ -135,7 +135,7 @@ class GradebookTable extends SortableTable
 			$item = $data[0];
 			$id = $item->get_id();
 			if (empty($_GET['selectcat'])) {
-			$certificate_min_score = $this->build_cetificate_min_score($item);
+			$certificate_min_score = $this->build_certificate_min_score($item);
 			}																	
 			//if the item is invisible, wrap it in a span with class invisible
 			$invisibility_span_open = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
@@ -212,7 +212,7 @@ class GradebookTable extends SortableTable
 	
 // Other functions
 
-private function build_cetificate_min_score ($item) {
+private function build_certificate_min_score ($item) {
 	return $item->get_certificate_min_score();
 }
 

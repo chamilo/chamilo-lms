@@ -855,6 +855,17 @@ class learnpath {
     	$res_del_lp = api_sql_query($sql_del_lp, __FILE__, __LINE__);
     	$this->update_display_order();//updates the display order of all lps
  		api_item_property_update(api_get_course_info(),TOOL_LEARNPATH,$this->lp_id,'delete',api_get_user_id());
+		
+		require_once '../gradebook/lib/be.inc.php';
+		$tbl_grade_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+	    //delete link of gradebook tool
+	     $sql='SELECT gl.id FROM '.$tbl_grade_link.' gl WHERE gl.type="4" AND gl.ref_id="'.$id.'";';
+	     $result=api_sql_query($sql,__FILE__,__LINE__);
+	     $row=Database::fetch_array($result,'ASSOC');
+	     $link= LinkFactory :: load($row['id']);
+	     if ($link[0] != null) {
+	     	$link[0]->delete();
+	     }	    	
     	//TODO: also delete items and item-views
         if (api_get_setting('search_enabled') == 'true') {
           require_once(api_get_path(LIBRARY_PATH) .'specific_fields_manager.lib.php');

@@ -493,20 +493,10 @@ switch($action)
 		if($debug>0) error_log('New LP - delete action triggered',0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for delete',0); require('lp_list.php'); }
 		else{
-			 require_once '../gradebook/lib/be.inc.php';
-		 	 $tbl_grade_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 			$_SESSION['refresh'] = 1;
 			//remove lp from homepage if it is there
 			//$_SESSION['oLP']->toggle_visibility((int)$_GET['lp_id'],'i');
 			$_SESSION['oLP']->delete(null,(int)$_GET['lp_id'],'remove');
-			//delete link of gradebook tool
-	         $sql='SELECT gl.id FROM '.$tbl_grade_link.' gl WHERE gl.type="4" AND gl.ref_id="'.Security::remove_XSS($_GET['lp_id']).'";';
-	         $result=api_sql_query($sql,__FILE__,__LINE__);
-	         $row=Database::fetch_array($result,'ASSOC');
-	         $link= LinkFactory :: load($row['id']);
-	         if ($link[0] != null) {
-	         	$link[0]->delete();
-	         }			
 			api_session_unregister('oLP');
 			require('lp_list.php');
 		}

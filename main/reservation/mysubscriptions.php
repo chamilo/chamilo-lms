@@ -62,28 +62,25 @@ switch ($_GET['action']) {
         $NoSearchResults=get_lang('noSubscriptions');
         Display :: display_header($tool_name);
         api_display_tool_title($tool_name);
-        if (api_is_allowed_to_create_course())
-        {
-	        echo '<div class="actions">';
-	///		echo '<a href="m_reservation.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewBookingPeriod').'</a>';
-			//echo '&nbsp;&nbsp;&nbsp;<a href="m_reservation.php?action=overviewsubscriptions">'.get_lang('OverviewReservedPeriods').'</a>';		
+        
+        if (api_is_allowed_to_create_course()) {
+	        echo '<div class="actions">';	
 			echo '<div style="float: right;"><a href="reservation.php">'.Display::return_icon('sessions.gif',get_lang('BookingCalendarView')).'&nbsp;'.get_lang('GoToCalendarView').'</a></div>';
 			echo '<a href="m_item.php?view=list">'.Display::return_icon('cube.png',get_lang('Resources')).'&nbsp;'.get_lang('Resources').'</a>';		
 			echo '&nbsp;&nbsp;<a href="m_reservation.php?view=list">'.Display::return_icon('calendar_day.gif',get_lang('BookingPeriods')).'&nbsp;'.get_lang('BookingPeriods').'</a>';
 			echo '&nbsp;&nbsp;<a href="m_reservation.php?action=add&view=list">'.Display::return_icon('calendar_add.gif',get_lang('BookIt')).'&nbsp;'.get_lang('BookIt').'</a>';
 			
-			if (api_is_platform_admin()) 
-			{
+			if (api_is_platform_admin()) {
 				//echo '&nbsp;&nbsp;<a href="m_category.php">'.Display::return_icon('settings.gif',get_lang('Configuration')).'&nbsp;'.get_lang('Configuration').'</a>';
 			}
 			echo '</div><br />';
         }
         
-        if (isset ($_POST['action'])){
-            switch ($_POST['action']){
+        if (isset ($_POST['action'])) {
+            switch ($_POST['action']) {
                 case 'delete_subscriptions' :
                     $ids = $_POST['subscriptions'];
-                    if (count($ids) > 0){
+                    if (count($ids) > 0) {
                         foreach ($ids as $id)
                             Rsys :: delete_subscription(substr($id,0,strpos($id,'-')),substr($id,strrpos($id,'-')+1));
                     }
@@ -97,7 +94,7 @@ switch ($_GET['action']) {
         $table->set_header(2, get_lang('StartAt'), true);
         $table->set_header(3, get_lang('EndAt'), true);
 		$table->set_header(4, get_lang('Accept'), true);
-        $table->set_header(5, '', false,array('style'=>'width:20px;'));       
+        $table->set_header(5, get_lang('Modify'), false,array('style'=>'width:50px;'));       
         $table->set_column_filter(5, 'modify_filter');
         $table->set_form_actions(array ('delete_subscriptions' => get_lang('DeleteSelectedSubscriptions')),'subscriptions');
         $table->display();

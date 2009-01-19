@@ -45,22 +45,23 @@ $tool_name = get_lang('ResourceList');
  */
 function modify_filter($id) {
     $str='';
-	$outtt=false;
+	$outtt=false;	
+	if(Rsys::item_allow($id,'edit')){
+        $number = Rsys :: get_item($id);
+        //checking the status
+        if ($number[5]==1) {
+        	$str.= ' <a href="m_item.php?action=blackout&amp;id='.$id.'" title="'.get_lang('Inactive').'"><img alt="" src="../img/wrong.gif" /></a>';
+        } else { 
+        	$str.= ' <a href="m_item.php?action=blackout&amp;id='.$id.'" title="'.get_lang('Active').'"><img alt="" src="../img/right.gif" /></a>';
+        }
+    }
+    
     if(Rsys::item_allow($id,'edit')){
         $str.='<a href="m_item.php?action=edit&amp;id='.$id.'" title="'.get_lang("EditItem2").'"><img alt="" src="../img/edit.gif" /></a>';
     }
     //if(Rsys::item_allow($id,'m_rights')) $str.=' &nbsp;<a href="m_item.php?action=m_rights&amp;item_id='.$id.'" title="'.get_lang("MRights").'"><img alt="" src="../img/info_small.gif" /></a>';
     if(Rsys::item_allow($id,'delete')) $str.=' <a href="m_item.php?action=delete&amp;id='.$id.'" title="'.get_lang("DeleteItem").'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteItem")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
-    if(Rsys::item_allow($id,'edit')){
-        $number = Rsys :: get_item($id);
-        //checking the status
-        if ($number[5]==1) {
-        	$str.= ' <a href="m_item.php?action=blackout&amp;id='.$id.'" title="'.get_lang('Inactive').'"><img alt="" src="../img/wrong.gif" /></a>';
-        }
-        else { 
-        	$str.= ' <a href="m_item.php?action=blackout&amp;id='.$id.'" title="'.get_lang('Active').'"><img alt="" src="../img/right.gif" /></a>';
-        }
-    }
+ 
     return $str;
 }
 

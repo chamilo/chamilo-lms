@@ -111,7 +111,7 @@ switch ($_GET['action']) {
 		$table->set_header(1, get_lang('ResourceTypeName'), true);
 		$table->set_header(2, get_lang('StartDate'), true);
 		$table->set_header(3, get_lang('EndDate'), true);
-		$table->set_header(4, get_lang('Name'), true);
+		$table->set_header(4, get_lang('SubscribedPerson'), true);
 		$table->set_header(5, get_lang('SubscribedStartDate'), true);
 		$table->set_header(6, get_lang('SubscribedEndDate'), true);
 		$table->set_header(7, get_lang('Accept'), true);
@@ -139,7 +139,7 @@ switch ($_GET['action']) {
 		$table = new SortableTable('accepting', array ('Rsys', 'get_num_waiting_users'), array ('Rsys', 'get_table_waiting_users'), 1);
 		$table->set_additional_parameters(array ('rid' => $_GET['rid'], 'action' => 'accept'));
 		$table->set_header(0, '', false, array ('style' => 'width:10px'));
-		$table->set_header(1, get_lang('Name'), true);
+		$table->set_header(1, get_lang('SubscribedPerson'), true);
 		$table->set_header(2, get_lang('Class'), true);
 		$table->set_header(3, get_lang('SubscribedStartDate'), true);
 		$table->set_header(4, get_lang('SubscribedEndDate'), true);		
@@ -221,8 +221,8 @@ switch ($_GET['action']) {
 		$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">'.get_lang('TimePickerMinMaxNull').'</div></div><br />');				
 		$form->addElement('html', '</div>');
 
-		$recurrence[] = $form->createElement('radio', 'recurrence_c', '', get_lang('NoRecurence'), 0, array ('onclick' => 'javascript:window_hide(\'recurrence_timewindow\')'));
-		$recurrence[] = $form->createElement('radio', 'recurrence_c', '', get_lang('UntilRecurence'), 1 , array ('onclick' => 'javascript:window_show(\'recurrence_timewindow\')'));
+		$recurrence[] = $form->createElement('radio', 'recurrence_c', '', get_lang('NoRecurrence'), 0, array ('onclick' => 'javascript:window_hide(\'recurrence_timewindow\')'));
+		$recurrence[] = $form->createElement('radio', 'recurrence_c', '', get_lang('UntilRecurrence'), 1 , array ('onclick' => 'javascript:window_show(\'recurrence_timewindow\')'));
 		$form->addGroup($recurrence, null, get_lang('Recurrence'), '<br />', false);
 		$form->addElement('html', '<div style="margin-left:25px;display:block;" id="recurrence_timewindow">');
 		$list_time = Rsys:: recurrence_list();

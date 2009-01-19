@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 17705 2009-01-13 20:13:58Z herodoto $
+<?php // $Id: profile.php 17842 2009-01-19 21:39:37Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -541,7 +541,7 @@ function upload_user_production($user_id)
 {
 	$image_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
 	
-	$production_repository = $image_path['dir'].'my_productions/';
+	$production_repository = $image_path['dir'].$user_id.'/';
 
 	if (!file_exists($production_repository)) 
 	{

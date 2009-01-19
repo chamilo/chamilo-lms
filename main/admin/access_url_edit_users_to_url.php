@@ -3,10 +3,8 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
+	Copyright (c) 2009 Dokeos SPRL
+	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -22,7 +20,14 @@
 ==============================================================================
 */
 /**
-==============================================================================
+=================================================SELECT user_id, username, lastname, firstname FROM
+ `dokeossvn_dokeos_main`.`user` u  INNER JOIN `dokeossvn_dokeos_main`.`access_url_rel_user` url_rel_user
+   INNER JOIN ON(u.user_id = url_rel_user.user_id)
+				WHERE (username LIKE "a%"
+				OR firstname LIKE "a%"
+				OR lastname LIKE "a%") WHERE access_url_id =  "undefined"
+				ORDER BY lastname, firstname, username
+				LIMIT 11=============================
 *	@package dokeos.admin
 ==============================================================================
 */
@@ -36,6 +41,7 @@ $cidReset=true;
 // including some necessary dokeos files
 require('../inc/global.inc.php');
 
+require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 require_once ('../inc/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
 //$xajax->debugOn();
@@ -47,67 +53,52 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // Access restrictions
 api_protect_admin_script(true);
 
-// setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
-
 // Database Table Definitions
-$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_class				= Database::get_main_table(TABLE_MAIN_SESSION_CLASS);
-$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_user							= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_class							= Database::get_main_table(TABLE_MAIN_CLASS);
-$tbl_class_user						= Database::get_main_table(TABLE_MAIN_CLASS_USER);
+$tbl_user				 = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_access_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+$tbl_access_url 		 = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 
-// setting the name of the tool
-$tool_name=get_lang('SubscribeUsersToSession');
 
-$id_session=intval($_GET['id_session']);
+// setting breadcrumbs
+$tool_name = get_lang('EditUsersToURL');
+$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
 $add_type = 'unique';
-if(isset($_GET['add_type']) && $_GET['add_type']!=''){
-	$add_type = $_GET['add_type'];
+if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+	$add_type = $_REQUEST['add_type'];
 }
 
-if(!api_is_platform_admin())
-{
-	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = api_sql_query($sql,__FILE__,__LINE__);
-	if(mysql_result($rs,0,0)!=$_user['user_id'])
-	{
-		api_not_allowed(true);
-	}
+$access_url_id=1;
+if(isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
+	$access_url_id = $_REQUEST['access_url_id'];
 }
 
-
-function search_users($needle)
+function search_users($needle, $id)
 {
-	global $tbl_user;
-	
+	global $tbl_user, $tbl_access_url_rel_user;	
 	$xajax_response = new XajaxResponse();
 	$return = '';
 				
-	if(!empty($needle)) {
-		
+	if(!empty($needle)) {		
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
 		$needle = mb_convert_encoding($needle, $charset, 'utf-8');
-		
+		//$access_url_id = $_POST['access_url_id'];
+		//AND access_url_id =  "'.$id.'"
 		// search users where username or firstname or lastname begins likes $needle
-		$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
+		// INNER JOIN '.$tbl_access_url_rel_user.' url_rel_user ON(u.user_id = url_rel_user.user_id)
+		$sql = 'SELECT u.user_id, username, lastname, firstname FROM '.$tbl_user.' u 
 				WHERE (username LIKE "'.$needle.'%"
 				OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%")
+				OR lastname LIKE "'.$needle.'%") 
 				ORDER BY lastname, firstname, username
 				LIMIT 11';
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		
         $i=0;
 		while ($user = Database :: fetch_array($rs)) {
-            $i++;
+			$i++;
             if ($i<=10) {
 			     $return .= '<a href="#" onclick="add_user_to_session(\''.$user['user_id'].'\',\''.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')'.'\')">'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</a><br />';
             } else {
@@ -120,7 +111,6 @@ function search_users($needle)
 }
 
 $xajax -> processRequests();
-
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script type="text/javascript">
@@ -133,9 +123,16 @@ function add_user_to_session (code, content) {
 	destination.options[destination.length] = new Option(content,code);
 	
 	destination.selectedIndex = -1;
-	sortOptions(destination.options);
-	
+	sortOptions(destination.options);	
 }
+
+	
+function send() {	
+	document.formulaire.formSent.value=0;
+	document.formulaire.add_type.value=\''.$add_type.'\';		
+	document.formulaire.submit();
+}
+	
 function remove_item(origin)
 {
 	for(var i = 0 ; i<origin.options.length ; i++) {
@@ -153,11 +150,8 @@ $errorMsg=$firstLetterUser=$firstLetterSession='';
 $UserList=$SessionList=array();
 $users=$sessions=array();
 $noPHP_SELF=true;
-
-
-
-
-if($_POST['formSent']) {
+//&& isset($_POST['access_url_id_hidden'])
+if($_POST['formSent']) {	
 	$formSent=$_POST['formSent'];
 	$firstLetterUser=$_POST['firstLetterUser'];
 	$firstLetterSession=$_POST['firstLetterSession'];
@@ -168,73 +162,42 @@ if($_POST['formSent']) {
 	}
 
 	if($formSent == 1) {
-		$result = api_sql_query("SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session'");
+		$sql = "SELECT user_id FROM $tbl_access_url_rel_user WHERE access_url_id='$access_url_id'";
+		$result = api_sql_query($sql,__FILE__,__LINE__ );
 		$existingUsers = array();
 		while($row = Database::fetch_array($result)){
-			$existingUsers[] = $row['id_user'];
+			$existingUsers[] = $row['user_id'];
+		}
+		$sql = "SELECT id FROM $tbl_access_url WHERE id='$access_url_id'";
+		$result=api_sql_query($sql,__FILE__,__LINE__);
+
+		$UrlList=array();
+
+		while($row=Database::fetch_array($result)) {
+			$UrlList[]=$row['id'];
 		}
 
-		$result=api_sql_query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'",__FILE__,__LINE__);
-
-		$CourseList=array();
-
-		while($row=Database::fetch_array($result))
-		{
-			$CourseList[]=$row['course_code'];
-		}
-
-		foreach($CourseList as $enreg_course)
-		{
-			$nbr_users=0;
-			foreach($UserList as $enreg_user)
-			{
-				if(!in_array($enreg_user, $existingUsers)){
-					api_sql_query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')",__FILE__,__LINE__);
-
-					if(mysql_affected_rows())
-					{
-						$nbr_users++;
-					}
+		foreach($UrlList as $enreg_url) {
+			//adding users
+			foreach($UserList as $enreg_user) {
+				if(!in_array($enreg_user, $existingUsers)) {
+					$sql = "INSERT IGNORE INTO $tbl_access_url_rel_user (access_url_id, user_id) VALUES('$enreg_url','$enreg_user')";					
+					api_sql_query($sql,__FILE__,__LINE__);
 				}
 			}
-			foreach($existingUsers as $existing_user){
-				if(!in_array($existing_user, $UserList)){
-					$sql = "DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND id_user='$existing_user'";
-					api_sql_query($sql);
-
-					if(mysql_affected_rows())
-					{
-						$nbr_users--;
-					}
+			//deleting old users						
+			foreach($existingUsers as $existing_user) {
+				if(!in_array($existing_user, $UserList)) {
+					$sql = "DELETE FROM $tbl_access_url_rel_user WHERE access_url_id='$enreg_url' AND user_id='$existing_user'";
+					api_sql_query($sql,__FILE__,__LINE__);
 				}
-			}
-			$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
-			$rs = api_sql_query($sql, __FILE__, __LINE__);
-			list($nbr_users) = mysql_fetch_array($rs);
-			api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
-
+			}			
 		}
-
-		api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session = $id_session");
-		$nbr_users = 0;
-		foreach($UserList as $enreg_user){
-			$nbr_users++;
-			api_sql_query("INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$enreg_user')",__FILE__,__LINE__);
-
-		}
-		$nbr_users = count($UserList);
-		api_sql_query("UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ",__FILE__,__LINE__);
-
-		//if(empty($_GET['add']))
-			//header('Location: '.$_GET['page'].'?id_session='.$id_session);
-		//else
-		header('Location: resume_session.php?id_session='.$id_session);
-
+		//header('Location: resume_session.php?id_session='.$id_session);
 	}
 }
 
 Display::display_header($tool_name);
-
 api_display_tool_title($tool_name);
 
 $nosessionUsersList = $sessionUsersList = array();
@@ -245,71 +208,95 @@ $ajax_search = $add_type == 'unique' ? true : false;
 
 if($ajax_search)
 {
-	$sql="SELECT user_id, lastname, firstname, username, id_session
-			FROM $tbl_user
-			INNER JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = $tbl_user.user_id
-				AND $tbl_session_rel_user.id_session = ".intval($id_session)."
+	$sql="SELECT u.user_id, lastname, firstname, username, access_url_id
+			FROM $tbl_user u 
+			INNER JOIN $tbl_access_url_rel_user
+				ON $tbl_access_url_rel_user.user_id = u.user_id
+				AND $tbl_access_url_rel_user.access_url_id = ".intval($access_url_id)."
 			ORDER BY lastname,firstname,username";
 	
 	$result=api_sql_query($sql,__FILE__,__LINE__);	
 	$Users=api_store_result($result);
 	
-	foreach($Users as $user)
-	{
+	foreach($Users as $user) {
 		$sessionUsersList[$user['user_id']] = $user ;
-	}
-}
-else
-{
-	$sql="SELECT user_id, lastname, firstname, username, id_session
-			FROM $tbl_user
-			LEFT JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = $tbl_user.user_id
+	}	
+} else {	
+	$sql="SELECT u.user_id, lastname, firstname, username, access_url_id
+	  	  	FROM $tbl_user u
+			INNER JOIN $tbl_access_url_rel_user
+			ON $tbl_access_url_rel_user.user_id = u.user_id 
 			ORDER BY lastname,firstname,username";
 	
 	$result=api_sql_query($sql,__FILE__,__LINE__);	
 	$Users=api_store_result($result);
 	
-	foreach($Users as $user)
-	{
-		if($user['id_session'] == $id_session)
+	foreach($Users as $user) {
+		if($user['access_url_id'] == $access_url_id) {
 			$sessionUsersList[$user['user_id']] = $user ;
-		else
-			$nosessionUsersList[$user['user_id']] = $user ;
+		}
 	}
+	
+	$sql="SELECT u.user_id, lastname, firstname, username
+	  	  	FROM $tbl_user u	
+			ORDER BY lastname,firstname,username";
+	
+	$result=api_sql_query($sql,__FILE__,__LINE__);	
+	$Users=api_store_result($result);
+	$user_list_leys = array_keys($sessionUsersList);
+	foreach($Users as $user) {	
+		if (!in_array($user['user_id'],$user_list_leys))
+			$nosessionUsersList[$user['user_id']] = $user ;
+		}
+	
 }
 
 
-if($add_type == 'multiple'){
-	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$_GET['add'].'&add_type=unique">'.get_lang('SessionAddTypeUnique').'</a>';
+if($add_type == 'multiple') {
+	$link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeUnique').'</a>';
 	$link_add_type_multiple = get_lang('SessionAddTypeMultiple');
-}
-else{
+} else {
 	$link_add_type_unique = get_lang('SessionAddTypeUnique');
-	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$_GET['add'].'&add_type=multiple">'.get_lang('SessionAddTypeMultiple').'</a>';
+	$link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeMultiple').'</a>';
 }
 
+$url_list = UrlManager::get_url_data();
 
-?>
+?>	
 
 <div style="text-align: left;">
 	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>
 </div>
-<br><br>
-
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page'] ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
+<br /><br/>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
+<?php echo get_lang('SelectUrl').' : '; ?>
+<select name="access_url_id" onchange="javascript:send();">
+<option value="0"> <?php echo get_lang('SelectUrl')?></option>
+	<?php		
+	foreach ($url_list as $url_obj) {
+		$checked = '';
+		if (!empty($access_url_id)) {
+			if ($url_obj[0]==$access_url_id) {
+			$checked = 'selected=true';		
+			}
+		}				
+	?>
+		<option <?php echo $checked;?> value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?></option>
+	<?php
+	}
+	?>		
+</select>
+<br /><br />
 <input type="hidden" name="formSent" value="1" />
+<input type="hidden" name="add_type" value = "<?php echo $add_type ?>" /> 
 
 <?php
-if(!empty($errorMsg))
-{
+if(!empty($errorMsg)) {
 	Display::display_normal_message($errorMsg); //main API
 }
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
-
 
 <!-- Users -->
 <tr>
@@ -323,24 +310,17 @@ if(!empty($errorMsg))
   <td align="center">
   <div id="content_source">
   	  <?php
-  	  if($ajax_search)
-  	  {
+  	  if($ajax_search) {
   	  	?>
-		<input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value)" />
+		<input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)" />
 		<div id="ajax_list_users"></div>
 		<?php
-  	  }
-  	  else
-  	  {
-  	  ?>
-  	  
+  	  } else {
+  	  ?>  	  
 	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:300px;">
-
 		<?php
-		foreach($nosessionUsersList as $enreg)
-		{
+		foreach($nosessionUsersList as $enreg) {
 		?>
-
 			<option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
 
 $xajax -> processRequests();
@@ -384,14 +364,11 @@ function remove_item(origin)
   </td>
   <td width="10%" valign="middle" align="center">
   <?php
-  if($ajax_search)
-  {
+  if($ajax_search) {
   ?>
   	<input type="button" onclick="remove_item(document.getElementById('destination_users'))" value="<<" />
   <?php
-  }
-  else
-  {
+  } else {
   ?>
 	<input type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" value=">>" />
 	<br /><br />
@@ -405,8 +382,7 @@ function remove_item(origin)
   <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:300px;">
 
 <?php
-foreach($sessionUsersList as $enreg)
-{
+foreach($sessionUsersList as $enreg) {
 ?>
 	<option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
 
@@ -424,7 +400,7 @@ unset($sessionUsersList);
 		<br />
 		<?php
 		if(isset($_GET['add']))
-			echo '<input type="button" value="'.get_lang("FinishSessionCreation").'" onclick="valide()" />';
+			echo '<input type="button" value="'.get_lang("FinishEdition").'" onclick="valide()" />';
 		else
 			echo '<input type="button" value="'.get_lang('Ok').'" onclick="valide()" />';
 		?>
@@ -439,8 +415,7 @@ unset($sessionUsersList);
 </form>
 <script type="text/javascript">
 <!--
-function moveItem(origin , destination){
-
+function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
 			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
@@ -450,11 +425,9 @@ function moveItem(origin , destination){
 	}
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-
 }
 
 function sortOptions(options) {
-
 	newOptions = new Array();
 	for (i = 0 ; i<options.length ; i++)
 		newOptions[i] = options[i];
@@ -466,7 +439,7 @@ function sortOptions(options) {
 
 }
 
-function mysort(a, b){
+function mysort(a, b) {
 	if(a.text.toLowerCase() > b.text.toLowerCase()){
 		return 1;
 	}
@@ -521,7 +494,6 @@ function loadUsersInSelect(select){
 }
 
 function makepost(select){
-
 	var options = select.options;
 	var ret = "";
 	for (i = 0 ; i<options.length ; i++)

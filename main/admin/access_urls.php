@@ -75,12 +75,12 @@ if (isset ($_GET['action'])) {
 		}
 		Security::clear_token();
 }
-//<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php">'.Display::return_icon('add_user_big.gif',get_lang('EditUsersToURL'),'').get_lang('EditUsersToURL').'</a>
+
 echo '<div class="actions">';
 echo '<div style="float:right;">
 		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddUrl'),'').get_lang('AddUrl').'</a>&nbsp;&nbsp;
 		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_add_users_to_url.php">'.Display::return_icon('add_user_big.gif',get_lang('AddUserToURL'),'').get_lang('AddUsersToURL').'</a>
-															
+		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php">'.Display::return_icon('del_user_big.gif',get_lang('EditUsersToURL'),'').get_lang('EditUsersToURL').'</a>															
 	  </div><br />';		  
 echo '</div>';		  
 

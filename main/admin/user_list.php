@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 17828 2009-01-19 17:47:32Z juliomontoya $
+<?php // $Id: user_list.php 17831 2009-01-19 17:54:00Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -560,30 +560,25 @@ else
 	$tool_name = get_lang('UserList');
 	Display :: display_header($tool_name, "");
 	
-	
-	echo '<div style="float:right;">
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddUsers')).get_lang('AddUsers').'</a>									
-	  </div>'; 
+	if (api_is_platform_admin()) {
+		echo '<div style="float:right;">
+			<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddUsers')).get_lang('AddUsers').'</a>									
+		  </div>'; 
+	}
 	  
 	//api_display_tool_title($tool_name);
-	if (isset ($_GET['action']))
-	{
+	if (isset ($_GET['action'])) {
 		$check = Security::check_token('get');
-		if($check)
-		{
-			switch ($_GET['action'])
-			{
+		if($check) {
+			switch ($_GET['action']) {
 				case 'show_message' :
 					Display :: display_normal_message(stripslashes($_GET['message']));
 					break;
 				case 'delete_user' :
 					if (api_is_platform_admin()) {						
-						if ($user_id != $_user['user_id'] && UserManager :: delete_user($_GET['user_id']))
-						{
+						if ($user_id != $_user['user_id'] && UserManager :: delete_user($_GET['user_id'])) {
 							Display :: display_normal_message(get_lang('UserDeleted'));
-						}
-						else
-						{
+						} else {
 							Display :: display_error_message(get_lang('CannotDeleteUserBecauseOwnsCourse'));
 						}
 					}

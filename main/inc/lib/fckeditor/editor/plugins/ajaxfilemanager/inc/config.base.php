@@ -211,7 +211,7 @@
 	//General Option Declarations
 	//LANGAUGAE DECLARATIONNS
 	$langdoktoajaxfile= api_get_language_isocode(); //from dokeos. return, en, es... 
-	if ($langdoktoajaxfile=='en' || $langdoktoajaxfile=='zh') // ajaxfilemanager full translations (only with all variables translated).
+	if ($langdoktoajaxfile=='en' || $langdoktoajaxfile=='zh' || $langdoktoajaxfile=='es') // ajaxfilemanager full translations (only with all variables translated).
 	{
 	   $langajaxfilemanager=$langdoktoajaxfile;
 	}

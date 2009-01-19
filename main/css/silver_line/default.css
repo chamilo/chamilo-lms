@@ -1066,7 +1066,7 @@ span.agendaitem i {
 	padding: .2em;
 }
 
-.settingtitle {
+.sectiontitle {
 	text-align: left;
 	text-indent: .5em;
 	font: bold 130% Arial, sans-serif, sans;
@@ -1080,12 +1080,12 @@ span.agendaitem i {
 	letter-spacing: -.03em;
 }
 
-.settingcomment {
+.sectioncomment {
 	margin: .5em 0 .5em .5em;
 	font: bold 110% Arial, sans-serif, sans;
 }
 
-.settingvalue {
+.sectionvalue {
 	margin: .5em 0 2em .5em;
 }
 
@@ -1622,7 +1622,8 @@ div.system_announcement {
 ------------------------------------------------------------------------------
 */
 #show_audiorecorder_div{background:#F0F0F0; border:1px solid #999999; font-weight:bold; padding:2px; width:350px;}
-/* Glossary tool */
+
+/* Glossary tool */
 .glossary-term {
 	margin: 1em;
 	background-color: #ffe99b;
@@ -1863,4 +1864,82 @@ div.system_announcement {
 .gradebook-table-body {
     border: 1px solid rgb(153, 153, 153); 
     background: rgb(255, 255, 255) none repeat scroll 0% 0%;    
+}
+
+/* actions */
+.actions_lp {
+	background:#F8F8F8;
+	/*border-bottom:1px solid #999999; */
+	/*border-top:1px solid #999999; */
+	height:29px;
+	padding-left: -17px;
+	margin-bottom: 1px;
+	background:url(images/actions.jpg) repeat-x;
+	vertical-align:middle;
+	width: 90%;
+	margin-left:17px;
+}
+.actions_lp img {
+	vertical-align:middle;
+}
+.actions_lp a {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions_lp span {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions_lp form {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions {
+	background:#efefef;
+	border-bottom:1px dotted #999999;
+	border-top:1px dotted #999999;
+	/*height:35px;*/
+	padding:2px;
+	margin-bottom: 5px;
+	/*background:url(images/actions.jpg) repeat-x;*/
+	vertical-align:middle;
+}
+.actions img {
+	/*display:inline-block;*/
+	border: none;
+	text-decoration: none;
+	background-color: #efefef;
+	padding-right: 5px;
+	vertical-align:middle;
+}
+.actions a {
+	display:inline-block;
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions span {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions form {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+/* big actions */
+.actionsbig {
+	background:#F8F8F8;
+	border-bottom:1px solid #999999;
+	border-top:1px solid #999999;
+	background-color:#efefef;
+	height:64px;
+	padding:2px;
+	margin-bottom: 5px;
+	vertical-align:middle;
+}
+.actions img {
+	vertical-align:middle;
+}
+.actions a {
+	margin-right: 10px;
+	vertical-align:middle;
 }

@@ -999,7 +999,7 @@ div.admin_section h4 {
 /***************************************************************
  *  DOKEOS CONFIG SETTINGS OF THE PLATFORM ADMIN SECTION 	   *
  ***************************************************************/
-.settingtitle{
+.sectiontitle{
 	background-color: #EFEFEF;
 	border: 1px solid #cccccc;
 	font-weight: bold;
@@ -1009,13 +1009,13 @@ div.admin_section h4 {
 	padding: 5px;
 	font-size: 11px;
 	}
-.settingcomment{
+.sectioncomment{
 	color: #000000;
 	margin: 5px;
 	padding: 5px;
 	font-size: 11px;
 }
-.settingvalue{
+.sectionvalue{
 	list-style-type: none;
 	margin: 5px;
 	padding: 5px;
@@ -1829,4 +1829,82 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 .gradebook-table-body {
     border: 1px solid rgb(153, 153, 153); 
     background: rgb(255, 255, 255) none repeat scroll 0% 0%;    
+}
+
+/* actions */
+.actions_lp {
+	background:#F8F8F8;
+	/*border-bottom:1px solid #999999; */
+	/*border-top:1px solid #999999; */
+	height:29px;
+	padding-left: -17px;
+	margin-bottom: 1px;
+	background:url(images/actions.jpg) repeat-x;
+	vertical-align:middle;
+	width: 90%;
+	margin-left:17px;
+}
+.actions_lp img {
+	vertical-align:middle;
+}
+.actions_lp a {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions_lp span {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions_lp form {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions {
+	background:#efefef;
+	border-bottom:1px dotted #716d61;
+	border-top:1px dotted #716d61;
+	/*height:35px;*/
+	padding:2px;
+	margin-bottom: 5px;
+	/*background:url(images/actions.jpg) repeat-x;*/
+	vertical-align:middle;
+}
+.actions img {
+	/*display:inline-block;*/
+	border: none;
+	text-decoration: none;
+	background-color: #efefef;
+	padding-right: 5px;
+	vertical-align:middle;
+}
+.actions a {
+	display:inline-block;
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions span {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions form {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+/* big actions */
+.actionsbig {
+	background:#F8F8F8;
+	border-bottom:1px solid #999999;
+	border-top:1px solid #999999;
+	background-color:#efefef;
+	height:64px;
+	padding:2px;
+	margin-bottom: 5px;
+	vertical-align:middle;
+}
+.actions img {
+	vertical-align:middle;
+}
+.actions a {
+	margin-right: 10px;
+	vertical-align:middle;
 }

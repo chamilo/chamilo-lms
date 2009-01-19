@@ -592,7 +592,7 @@ div.admin_section h4 {
 }
 
 /* Styles for the Dokeos Config Settings of the platform admin section*/
-.settingtitle{
+.sectiontitle{
 	background-color: #EFEFEF;
 	border: 1px solid #cccccc;
 	font-weight: bold;
@@ -602,13 +602,13 @@ div.admin_section h4 {
 	padding: 5px;
 	font-size: 11px;
 	}
-.settingcomment{
+.sectioncomment{
 	color: #000000;
 	margin: 5px;
 	padding: 5px;
 	font-size: 11px;
 }
-.settingvalue{
+.sectionvalue{
 	list-style-type: none;
 	margin: 5px;
 	padding: 5px;}

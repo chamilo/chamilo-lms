@@ -39,7 +39,9 @@ require_once '../document/document.inc.php';
 require_once '../inc/lib/fileDisplay.lib.php';
 
 
-function display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form)  {
+function display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form)  
+{
+	echo '<div class="actions">';
 	$display_output = "";
 	isset($_GET['origin'])?$origin = Security::remove_XSS($_GET['origin']):$origin='';
 	if (strlen($cur_dir_path) > 0 && $cur_dir_path != '/') {
@@ -62,9 +64,11 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".$origin."&amp;display_tool_options=true&amp;origin=".$origin."\">".Display::return_icon('acces_tool.gif', get_lang("EditToolOptions")).' ' . get_lang("EditToolOptions") . "</a>&nbsp&nbsp";							
 	}
 
-	if ($display_output != "") {
+	if ($display_output != "") 
+	{
 		echo $display_output;
 	}
+	echo '</div>';
 }
 
 /**

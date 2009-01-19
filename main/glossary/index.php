@@ -31,8 +31,11 @@ $icon_gray_up = 'up_na.gif';
 
 //---------------------------------------------------------
 
-if ($is_allowed_to_edit) {
+if ($is_allowed_to_edit)
+{
+	echo '<div class="actions">';
 	echo '<a href="index.php?'.api_get_cidreq().'&action=addglossary">'.Display::return_icon($icon_add,get_lang('TermAddNew')).get_lang('TermAddNew').'</a>';
+	echo '</div>';
 
 	/*======================================
 				Form Glossary

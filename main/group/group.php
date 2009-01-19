@@ -1,4 +1,4 @@
-<?php // $Id: group.php 17787 2009-01-17 00:41:06Z ivantcholakov $
+<?php // $Id: group.php 17818 2009-01-19 12:44:20Z pcool $
  
 /*
 ==============================================================================
@@ -189,8 +189,11 @@ if (api_is_allowed_to_edit(false,true))
 				break;
 		}
 	}
-	// Show admin-panel
+}
 	
+echo '<div class="actions">';
+if (api_is_allowed_to_edit(false,true))
+{	
 	if (get_setting('allow_group_categories') == 'true')
 	{
 		echo Display::return_icon('folder_new.gif', get_lang('AddCategory')) . '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.get_lang('AddCategory').'</a>&nbsp;';
@@ -208,7 +211,6 @@ if (api_is_allowed_to_edit(false,true))
 		echo Display::return_icon('group.gif', get_lang('GroupOverview')) .'<a href="group_overview.php?'.api_get_cidreq().'">'.get_lang('GroupOverview').'</a>&nbsp;';
 	}
 }
-echo '<div class="actions">';
 $group_cats = GroupManager :: get_categories();
 if (get_setting('allow_group_categories') == 'true' && count($group_cats) > 1)
 {

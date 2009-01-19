@@ -32,7 +32,12 @@ $icon_delete ='delete.gif';
 
 //---------------------------------------------------------
 
+echo '<div class="actions">';
+echo '<form name="frm_search" method="POST">';
 echo '<a href="index.php?action=addnotebook">'.Display::return_icon($icon_add,get_lang('NewNote')).get_lang('NewNote').'</a>';
+echo '<input type="hidden" name="action" value="search"/>';
+echo '<input type="text" name="search_title" /><input type="submit" value="'.get_lang('SearchByTitle').'"></form>';
+echo '</div>';
 
 if (isset($_REQUEST['action']) && $_REQUEST['action']=='addnotebook') {
 	echo '<table class="notebook-add-form" id="notebook-add">';	
@@ -102,9 +107,7 @@ isset($_REQUEST['type'])?$type=$_REQUEST['type']:$type='';
 $notebook_list=get_notebook_details($user_id,$course_id,$type);	
 $max = Database::num_rows($notebook_list);	
 
-echo '<div class="notebook-search-title"><form name="frm_search" method="POST">';
-echo '<input type="hidden" name="action" value="search"/>';
-echo '<input type="text" name="search_title" /><input type="submit" value="'.get_lang('SearchByTitle').'"></form></div>';
+
 if ($max > 1) {
 	echo '<div class="notebook-orderby-link">';	
 	if ($type == 3) {

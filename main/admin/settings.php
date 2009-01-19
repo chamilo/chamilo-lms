@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 17785 2009-01-16 21:23:31Z cvargas1 $
+<?php // $Id: settings.php 17818 2009-01-19 12:44:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -79,8 +79,8 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 {
 	$form = new FormValidator('settings', 'post', 'settings.php?category='.$_GET['category']);
 	$renderer = & $form->defaultRenderer();
-	$renderer->setHeaderTemplate('<div class="settingtitle">{header}</div>'."\n");
-	$renderer->setElementTemplate('<div class="settingcomment">{label}</div>'."\n".'<div class="settingvalue">{element}</div>'."\n");
+	$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
+	$renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
 	$my_category = mysql_real_escape_string($_GET['category']);
 	
 	$sqlcountsettings = "SELECT COUNT(*) FROM $table_settings_current WHERE category='".$my_category."' AND type<>'checkbox'";

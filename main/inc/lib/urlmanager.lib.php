@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 17705 2009-01-13 20:13:58Z herodoto $
+<?php
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,12 +27,11 @@
 *	@package dokeos.library
 ==============================================================================
 */
-// define constants for user extra field types
-
 class UrlManager
 {
 	/**
-	  * Creates a new access to Dokeos 
+	  * Creates a new url access to Dokeos
+	  *  
 	  * @author Julio Montoya <gugli100@gmail.com>,
 	  *
 	  * @param	string	The URL of the site 
@@ -46,10 +45,10 @@ class UrlManager
 		$tms = time();
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$sql = "INSERT INTO $table_access_url
-                SET url = '".Database::escape_string($url)."/',
+                SET url 	= '".Database::escape_string($url)."/',
                 description = '".Database::escape_string($description)."',
-                active = '".Database::escape_string($active)."',
-                created_by = '".Database::escape_string(api_get_user_id())."',
+                active 		= '".Database::escape_string($active)."',
+                created_by 	= '".Database::escape_string(api_get_user_id())."',
                 tms = FROM_UNIXTIME(".$tms.")";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		return $result;
@@ -69,11 +68,12 @@ class UrlManager
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$tms = time();		
 		$sql = "UPDATE $table_access_url
-                SET url = '".Database::escape_string($url)."',
+                SET url 	= '".Database::escape_string($url)."',
                 description = '".Database::escape_string($description)."',
-                active = '".Database::escape_string($active)."',
-                created_by = '".Database::escape_string(api_get_user_id())."',
-                tms = FROM_UNIXTIME(".$tms.") WHERE id = '$url_id'";
+                active 		= '".Database::escape_string($active)."',
+                created_by 	= '".Database::escape_string(api_get_user_id())."',
+                tms 		= FROM_UNIXTIME(".$tms.")
+                WHERE id = '$url_id'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		return $result;
 	}
@@ -125,7 +125,7 @@ class UrlManager
 	function get_url_data() 
 	{
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);	
-		$sql = "SELECT id ,  url , description, active  FROM $table_access_url";
+		$sql = "SELECT id, url, description, active  FROM $table_access_url";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$urls = array ();
 		while ($url = Database::fetch_row($res))
@@ -157,8 +157,8 @@ class UrlManager
 	function get_url_rel_user_data($access_url_id='')
 	{
 		$where ='';
-		$table_url_rel_user= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
-		$tbl_user 		= Database :: get_main_table(TABLE_MAIN_USER);
+		$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+		$tbl_user 			= Database :: get_main_table(TABLE_MAIN_USER);
 		
 		if (!empty($access_url_id))
 			$where ="WHERE $table_url_rel_user.access_url_id = ".Database::escape_string($access_url_id);
@@ -304,7 +304,7 @@ class UrlManager
 		$table_access_url	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);		
 				
-		$sql = "SELECT user_id FROM $table_url_rel_user WHERE access_url_id='$access_url_id'";
+		$sql = "SELECT user_id FROM $table_url_rel_user WHERE access_url_id=".Database::escape_string($access_url_id);
 		$result = api_sql_query($sql,__FILE__,__LINE__ );
 		$existingUsers = array();
 		
@@ -331,7 +331,7 @@ class UrlManager
 	function get_url_id($url)
 	{			
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);		  
-		$sql = "SELECT id FROM $table_access_url WHERE url = '".$url."'";
+		$sql = "SELECT id FROM $table_access_url WHERE url = '".Database::escape_string($url)."'";
 		$result = api_sql_query($sql); 
 		$access_url_id = Database::result($result, 0, 0);
 		return $access_url_id;

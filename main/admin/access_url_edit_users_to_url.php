@@ -155,7 +155,7 @@ if($_POST['formSent']) {
 
 	if($formSent == 1) {		
 		UrlManager::update_urls_rel_user($UserList,$access_url_id);
-		//header('Location: resume_session.php?id_session='.$id_session);
+		header('Location: access_urls.php?action=showmessage&message='.get_lang('UsersWereEdited'));
 	}
 }
 

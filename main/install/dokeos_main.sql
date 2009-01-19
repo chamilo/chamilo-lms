@@ -683,7 +683,7 @@ VALUES
 ('show_administrator_data','false','No'),
 ('homepage_view','activity','HomepageViewActivity'),
 ('homepage_view','2column','HomepageView2column'),
-('homepage_view','3column','HomepageView3columngradebook_result_log'),
+('homepage_view','3column','HomepageView3column'),
 ('show_toolshortcuts','true','Yes'),
 ('show_toolshortcuts','false','No'),
 ('allow_group_categories','true','Yes'),

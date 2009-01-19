@@ -21,6 +21,9 @@
  *
  * This is the File Manager Connector for PHP.
  */
+
+// Modifications by Ivan Tcholakov, JAN-2009.
+
 function CombinePaths( $sBasePath, $sFolder )
 {
 	return RemoveFromEnd( $sBasePath, '/' ) . '/' . RemoveFromStart( $sFolder, '/' ) ;
@@ -79,24 +82,24 @@ function ServerMapFolder( $resourceType, $folderPath, $sCommand )
 	//this should be fixed
 	$resourceType = strtolower($resourceType);
 
-	/*
-	//$sResourceTypePath = GetResourceTypeDirectory( $resourceType, $sCommand ) ;
-	$sResourceTypePath = $GLOBALS["UserFilesDirectory"] . $resourceType . '/' ;
-
-	// Ensure that the directory exists.
-	$sErrorMsg = CreateServerFolder( $sResourceTypePath ) ;
-	if ( $sErrorMsg != '' )
-		SendError( 1, "Error creating folder \"{$sResourceTypePath}\" ({$sErrorMsg})" ) ;
-
-	// Return the resource type directory combined with the required path.
-	return CombinePaths( $sResourceTypePath , $folderPath ) ;
-	*/
-
 	// Get the resource type directory.
-	$sResourceTypePath = $GLOBALS["UserFilesDirectory"] . $resourceType . '/' ; 
+	if ( $resourceType != 'file' )
+	{
+		$sResourceTypePath = $GLOBALS["UserFilesDirectory"] . $resourceType . '/' ;
+	}
+	else
+	{
+		$sResourceTypePath = $GLOBALS["UserFilesDirectory"];
+	}
 	
 	// Ensure that the directory exists.
-	CreateServerFolder( $sResourceTypePath ) ;
+	// Modified by Ivan Tcholakov.
+	//CreateServerFolder( $sResourceTypePath ) ;
+	// TODO: To be checked if/when it is necessary.
+	if ( $resourceType != 'file' )
+	{
+		CreateServerFolder( $sResourceTypePath ) ;
+	}
 
 	// Return the resource type directory combined with the required path.
 	return $sResourceTypePath . RemoveFromStart( $folderPath, '/' ) ;	
@@ -172,29 +175,6 @@ function CreateServerFolder( $folderPath, $lastFolder = null )
 
 function GetRootPath()
 {
-	/*
-	if (!isset($_SERVER)) {
-		global $_SERVER;
-	}
-	$sRealPath = realpath( './' ) ;
-	// #2124 ensure that no slash is at the end
-	$sRealPath = rtrim($sRealPath,"\\/");
-
-	$sSelfPath = $_SERVER['PHP_SELF'] ;
-	$sSelfPath = substr( $sSelfPath, 0, strrpos( $sSelfPath, '/' ) ) ;
-
-	$sSelfPath = str_replace( '/', DIRECTORY_SEPARATOR, $sSelfPath ) ;
-
-	$position = strpos( $sRealPath, $sSelfPath ) ;
-
-	// This can check only that this script isn't run from a virtual dir
-	// But it avoids the problems that arise if it isn't checked
-	if ( $position === false || $position <> strlen( $sRealPath ) - strlen( $sSelfPath ) )
-		SendError( 1, 'Sorry, can\'t map "UserFilesPath" to a physical path. You must set the "UserFilesAbsolutePath" value in "editor/filemanager/connectors/php/config.php".' ) ;
-
-	return substr( $sRealPath, 0, $position ) ;
-	*/
-
 	$sRealPath = realpath( './' ) ;
 	$sSelfPath = htmlentities($_SERVER['PHP_SELF']);
 	$sSelfPath = substr( $sSelfPath, 0, strrpos( $sSelfPath, '/' ) ) ;	

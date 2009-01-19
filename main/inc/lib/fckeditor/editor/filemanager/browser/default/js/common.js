@@ -55,12 +55,18 @@
 	}
 })() ;
 
-function AddSelectOption( selectElement, optionText, optionValue )
+function AddSelectOption( selectElement, optionText, optionValue, selected )
 {
 	var oOption = document.createElement("OPTION") ;
 
 	oOption.text	= optionText ;
 	oOption.value	= optionValue ;
+
+	// Added by Ivan Tcholakov.
+	if ( selected )
+	{
+		oOption.selected = true ;
+	}
 
 	selectElement.options.add(oOption) ;
 

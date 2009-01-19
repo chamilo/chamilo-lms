@@ -22,6 +22,8 @@
  * Configuration file for the File Manager Connector for PHP.
  */
 
+// Modifications by Ivan Tcholakov, JAN-2009.
+
 // Loading the global initialization file, Dokeos LMS.
 require_once '../../../../../../../../global.inc.php';
 
@@ -127,21 +129,29 @@ $Config['ChmodOnFolderCreate'] = 0777 ;
 
 */
 
-$Config['AllowedExtensions']['File']	= array() ;
+// TODO: Dokeos system's balck and white lists have to be taken into account here.
+
+// Files
+$Config['AllowedExtensions']['File']	= array('7z', 'aiff', 'asf', 'avi', 'bmp', 'csv', 'doc', 'fla', 'flv', 'gif', 'gz', 'gzip', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'ods', 'odt', 'pdf', 'png', 'ppt', 'pxd', 'qt', 'ram', 'rar', 'rm', 'rmi', 'rmvb', 'rtf', 'sdc', 'sitd', 'swf', 'sxc', 'sxw', 'tar', 'tgz', 'tif', 'tiff', 'txt', 'vsd', 'wav', 'wma', 'wmv', 'xls', 'xml', 'zip') ;
 $Config['DeniedExtensions']['File']		= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
 
+// Images
 $Config['AllowedExtensions']['Images']	= array('jpg','gif','jpeg','png') ;
 $Config['DeniedExtensions']['Images']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
 
+// Flash
 $Config['AllowedExtensions']['Flash']	= array('swf') ;
 $Config['DeniedExtensions']['Flash']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
 
+// MP3 (audio)
 $Config['AllowedExtensions']['MP3']	= array('mp3') ;
 $Config['DeniedExtensions']['MP3']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
 
+// Video
 $Config['AllowedExtensions']['Video']	= array('avi','mpg','mpeg','mp4','mov','wmv','asf') ;
 $Config['DeniedExtensions']['Video']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
 
+// Video/flv
 $Config['AllowedExtensions']['Video/flv']	= array('flv','mp4') ;
 $Config['DeniedExtensions']['Video/flv']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
 

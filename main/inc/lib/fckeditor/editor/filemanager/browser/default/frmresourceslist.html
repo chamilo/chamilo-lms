@@ -122,7 +122,12 @@ function GetFoldersAndFilesCallBack( fckXml )
 	var sCurrentFolderPath	= oFolderNode.attributes.getNamedItem('path').value ;
 	var sCurrentFolderUrl	= oFolderNode.attributes.getNamedItem('url').value ;
 
-//	var dTimer = new Date() ;
+	// Added by Ivan Tcholakov.
+	// For our needs the resource 'file' represents the root folder of the repository.
+	if ( sCurrentFolderUrl.indexOf( 'file/' ) == 0 )
+	{
+		sCurrentFolderUrl = sCurrentFolderUrl.substr( 5 ) ;
+	}
 
 	var oHtml = new StringBuilder( '<table id="tableFiles" cellspacing="1" cellpadding="0" width="100%" border="0">' ) ;
 
@@ -153,9 +158,6 @@ function GetFoldersAndFilesCallBack( fckXml )
 	oHtml.Append( '<\/table>' ) ;
 
 	document.body.innerHTML = oHtml.ToString() ;
-
-//	window.top.document.title = 'Finished processing in ' + ( ( ( new Date() ) - dTimer ) / 1000 ) + ' seconds' ;
-
 }
 
 window.onload = function()

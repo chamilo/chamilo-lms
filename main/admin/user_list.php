@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 17505 2009-01-02 18:57:04Z iflorespaz $
+<?php // $Id: user_list.php 17828 2009-01-19 17:47:32Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -123,8 +123,8 @@ $htmlHeadXtra[] = '		<style>
 		</style>';
 
 $this_section = SECTION_PLATFORM_ADMIN;
+api_protect_admin_script(true);	
 
-api_protect_admin_script();
 /**
 *	Make sure this function is protected
 *	because it does NOT check password!
@@ -313,6 +313,13 @@ function get_user_data($from, $number_of_items, $column, $direction)
              FROM
                  $user_table u ";
                  
+    // adding the filter to see  
+    global $_configuration;
+    if (api_is_session_admin() && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+    	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";    		
+    }
+                 
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = Database::escape_string($_GET['keyword']);
@@ -354,6 +361,10 @@ function get_user_data($from, $number_of_items, $column, $direction)
 			$sql .= " AND u.active='0'";
 		}
 	}
+	
+	if (api_is_session_admin() && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {		
+    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();   	  
+    }
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
 	$res = api_sql_query($sql, __FILE__, __LINE__);
@@ -404,13 +415,15 @@ function modify_filter($user_id,$url_params,$row)
 	{
 		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;&nbsp;';
 	}
-
-	$result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;&nbsp;';
-
-	if ($row[0]<>$_user['user_id']) { // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-		$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-	} else {
-		$result .= Display::return_icon('delete_na.gif', get_lang('Delete'));
+	
+	if (api_is_platform_admin()) {
+		$result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;&nbsp;';
+	
+		if ($row[0]<>$_user['user_id']) { // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
+			$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+		} else {
+			$result .= Display::return_icon('delete_na.gif', get_lang('Delete'));
+		}
 	}
 	return $result;
 }
@@ -504,6 +517,8 @@ function status_filter($status)
 $action = $_GET["action"];
 $login_as_user_id = $_GET["user_id"];
 
+
+
 // Login as ...
 if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 {
@@ -544,6 +559,12 @@ else
 	$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 	$tool_name = get_lang('UserList');
 	Display :: display_header($tool_name, "");
+	
+	
+	echo '<div style="float:right;">
+		<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddUsers')).get_lang('AddUsers').'</a>									
+	  </div>'; 
+	  
 	//api_display_tool_title($tool_name);
 	if (isset ($_GET['action']))
 	{
@@ -556,13 +577,15 @@ else
 					Display :: display_normal_message(stripslashes($_GET['message']));
 					break;
 				case 'delete_user' :
-					if ($user_id != $_user['user_id'] && UserManager :: delete_user($_GET['user_id']))
-					{
-						Display :: display_normal_message(get_lang('UserDeleted'));
-					}
-					else
-					{
-						Display :: display_error_message(get_lang('CannotDeleteUserBecauseOwnsCourse'));
+					if (api_is_platform_admin()) {						
+						if ($user_id != $_user['user_id'] && UserManager :: delete_user($_GET['user_id']))
+						{
+							Display :: display_normal_message(get_lang('UserDeleted'));
+						}
+						else
+						{
+							Display :: display_error_message(get_lang('CannotDeleteUserBecauseOwnsCourse'));
+						}
 					}
 					break;
 				case 'lock' :
@@ -586,25 +609,27 @@ else
 			switch ($_POST['action'])
 			{
 				case 'delete' :
-					$number_of_selected_users = count($_POST['id']);
-					$number_of_deleted_users = 0;
-					foreach ($_POST['id'] as $index => $user_id)
-					{
-						if($user_id != $_user['user_id'])
+					if (api_is_platform_admin()) {	
+						$number_of_selected_users = count($_POST['id']);
+						$number_of_deleted_users = 0;
+						foreach ($_POST['id'] as $index => $user_id)
 						{
-							if(UserManager :: delete_user($user_id))
+							if($user_id != $_user['user_id'])
 							{
-								$number_of_deleted_users++;
+								if(UserManager :: delete_user($user_id))
+								{
+									$number_of_deleted_users++;
+								}
 							}
 						}
-					}
-					if($number_of_selected_users == $number_of_deleted_users)
-					{
-						Display :: display_normal_message(get_lang('SelectedUsersDeleted'));
-					}
-					else
-					{
-						Display :: display_error_message(get_lang('SomeUsersNotDeleted'));
+						if($number_of_selected_users == $number_of_deleted_users)
+						{
+							Display :: display_normal_message(get_lang('SelectedUsersDeleted'));
+						}
+						else
+						{
+							Display :: display_error_message(get_lang('SomeUsersNotDeleted'));
+						}
 					}
 					break;
 			}
@@ -652,7 +677,8 @@ else
 	$table->set_column_filter(6, 'status_filter');
 	$table->set_column_filter(7, 'active_filter');
 	$table->set_column_filter(8, 'modify_filter');
-	$table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
+	if (api_is_platform_admin())
+		$table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
 	$table->display();
 }
 /*

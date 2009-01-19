@@ -118,45 +118,36 @@ else {
 	
 	api_display_tool_title($tool_name);
 	
-	echo '<div style="float:right;">
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>									
-	  </div>'; 
+	 
 	?>	
-	<div id="main">	
+	<div id="main">
+			
 	<?php
 	
 	if(isset($_GET['action'])) {
 		Display::display_normal_message(Security::remove_XSS($_GET['message']), false);
 	}
-	
-	?>
+	echo '<div style="float:right;">
+		<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>									
+	  </div>';	  
+	?>  
 	<form method="POST" action="session_list.php">
 		<input type="text" name="keyword" value="<?php echo Security::remove_XSS($_GET['keyword']); ?>"/>
 		<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
 		<a href="session_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a>
 		</form>
 	<form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
-	
-	<div align="left">
-	
+	<div align="left">	
 	<?php
 	
-	if(count($Sessions)==0 && isset($_POST['keyword']))
-	{
+	if(count($Sessions)==0 && isset($_POST['keyword'])) {
 		echo get_lang('NoSearchResults');
-	}
-	else
-	{
-		if($page)
-		{
-		?>
-	
-		<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Previous'); ?></a>
-	
+	} else {
+		if($page) {
+		?>	
+		<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Previous'); ?></a>	
 		<?php
-		}
-		else
-		{
+		} else {
 			echo get_lang('Previous');
 		}
 		?>

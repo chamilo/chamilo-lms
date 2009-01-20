@@ -125,4 +125,5 @@ $NoFilesHere = "Aquí no hay archivos";
 $NoFilesHere = "Aquí no hay archivos";
 $NewDropboxFileUploaded = "Un nuevo archivo ha sido enviado en los documentos compartidos";
 $NewDropboxFileUploadedContent = "Un nuevo archivo ha sido enviado en los documentos compartidos de su curso";
+$ErrorNoFilesInFolder = "Compruebe al menos un archivo";
 ?>

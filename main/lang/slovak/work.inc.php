@@ -34,6 +34,9 @@ $DirDelete = "Zamaza&#357; adresár";
 $ValidateChanges = "Potvrdi&#357; zmeny";
 $FolderUpdated = "Zložka aktualizovaná";
 $EndsAt = "Kon&#269;í o (úplne zatvorený)";
+$QualificationOfAssignment = "Kvalifikácia zadania";
+$MakeQualifiable = "Aktivova&#357; kvalifikáciu";
+$QualificationNumberOver = "Kvalifikácia skon&#269;ená";
 $DatesAvailables = "Vo&#318;né dátumy";
 $ExpiresAt = "Vyprší o";
 $AddToCalendar = "Prida&#357; do kalendára";
@@ -44,4 +47,5 @@ $EnableExpiryDate = "Aktivova&#357; dátum vypršania";
 $EnableEndDate = "Aktivova&#357; dátum konca";
 $IsNotPosibleSaveTheDocument = "Nie je možné uloži&#357; dokument";
 $SelectAFilter = "Vybra&#357; filter";
+$QualificationOver = "Kvalifikácia skon&#269;ená";
 ?>

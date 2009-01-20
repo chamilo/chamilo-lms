@@ -127,4 +127,5 @@ $ScoreDoesNotMatch = "The score doesn\'t match";
 $FileUploadComplete = "File upload successfull";
 $NoResultsAvailable = "No results available";
 $CannotChangeTheMaxNote = "Cannot change the note max";
+$GradebookWeightUpdated = "Weights updated successfully";
 ?>

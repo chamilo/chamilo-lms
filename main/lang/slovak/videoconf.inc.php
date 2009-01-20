@@ -60,6 +60,7 @@ $DontAskMeAgain = "Nepýtaj sa ma zasa";
 $EditSettings = "Upravi&#357; nastavenia";
 $ShowConfirmationBeforeClearingWhiteboard = "Pred zmazaním tabule žiadaj potvrdenie.";
 $UserInfo = "Informácie o používate&#318;ovi";
+$ClearDrawArea = "Vy&#269;isti&#357; priestor na kreslenie";
 $Undo = "Spä&#357;";
 $SelectAnObject = "Vybra&#357; predmet";
 $Text = "Text";

@@ -125,4 +125,5 @@ $NoFilesHere = "No files here";
 $NoFilesHere = "No files here";
 $NewDropboxFileUploaded = "A new file has been sent in the documents sharing tool";
 $NewDropboxFileUploadedContent = "A new file has been sent in the documents sharing tool of your course";
+$ErrorNoFilesInFolder = "Check at least one file";
 ?>

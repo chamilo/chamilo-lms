@@ -870,4 +870,16 @@ $URLAlreadyAdded = "URL already added please select other URL";
 $SaveSettings = "Save settings";
 $AreYouSureYouWantToSetThisLanguageAsThePortalDefault = "Are you sure you want to set this language as the portal\'s default?";
 $CurrentLanguagesPortal = "Current language\'s portal ";
+$EditUsersToURL = "Edit users and URLs";
+$AddUsersToURL = "Add users to a URL";
+$URLList = "URL list";
+$AddToThatURL = "Add users to that URL";
+$SelectUrl = "Select URL";
+$UserListInURL = "Users subscribed in this URL";
+$UsersWereEdited = "Users were edited";
+$AtLeastOneUserAndOneURL = "At least you must select one user and one URL";
+$UsersBelongURL = "Users were edited";
+$NoParticipation = "There aren\'t participants";
+$LPTestScore = "Test score of lessons";
+$ScormAndLPTestTotalAverage = "Tests total average of SCORM and lessons ";
 ?>

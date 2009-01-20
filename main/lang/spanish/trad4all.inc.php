@@ -654,4 +654,7 @@ $Any = "Cualquiera";
 $SpecificSearchFields = "Campos específicos de búsqueda";
 $SpecificSearchFieldsIntro = "Aquí usted puede definir los campos que quiere usar para indexar el contenido. Cuando esté indexando un elemento podrá agregar uno o más términos en cada campo separados por comas.";
 $AddSpecificSearchField = "Agregar un campo espefífico de búsqueda";
+$Subscribers = "Subscriptores";
+$Accept = "Aceptar";
+$Reserved = "Reservado";
 ?>

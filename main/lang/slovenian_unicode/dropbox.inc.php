@@ -125,4 +125,5 @@ $NoFilesHere = "Tu ni nobenih datotek";
 $NoFilesHere = "Tu ni nobenih datotek";
 $NewDropboxFileUploaded = "V nabiralnik je bila poslana nova datoteka";
 $NewDropboxFileUploadedContent = "V nabiralnik tvojega tečaja je bila poslana nova datoteka";
+$ErrorNoFilesInFolder = "Preveri vsaj eno datoteko";
 ?>

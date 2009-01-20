@@ -118,4 +118,13 @@ $OnlyNumbers = "Zgolj numerične vrednosti";
 $IncorrectData = "Napačni podatki";
 $Resource = "Vir";
 $PleaseEnableScoringSystem = "Prosim, omogočite sistem ocenjevanja";
+$AllResultDeleted = "Vsi rezultati so bili odstranjeni";
+$ImportNoFile = "Datoteka ni bila uvožena";
+$ProblemUploadingFile = "Prišlo je do problemma pri pošiljanju datoteke. Datoteka ni bila prejeta.";
+$AllResultsEdited = "Vsi rezultati so bili urejeni";
+$UserInfoDoesNotMatch = "Informacije o uporabniku se ne ujemajo";
+$ScoreDoesNotMatch = "Rezultat se ne ujema";
+$FileUploadComplete = "Nalaganje datoteke je bilo uspešno";
+$NoResultsAvailable = "Noben rezultat ni na voljo";
+$CannotChangeTheMaxNote = "Ne morem spremenite vrednosti max";
 ?>

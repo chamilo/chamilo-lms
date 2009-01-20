@@ -34,4 +34,14 @@ $DeleteSelectedCategories = "Zmaza&#357; vybrané položky";
 $NoResourcesType = "Zatia&#318; žiadny typ zdroja";
 $ResourceType = "Typ zdroja";
 $ResourceTypeExist = "Tento typ zdroja už existuje";
+$DeleteSelectedSubscriptions = "Zmaza&#357; vybranú rezerváciu";
+$DeleteSubscription = "Zmaza&#357; rezerváciu";
+$SubscriptionDeleted = "Vaša rezervácia bola zmazaná";
+$ReservationAdded = "Rezervácia pridaná";
+$RepeatFor = "Opakova&#357; každý";
+$RepeatUntil = "Opakova&#357; až do";
+$Recurrence = "Opakovanie";
+$NoRecurrence = "Žiadne opakovanie";
+$UntilRecurrence = "Použi&#357; opakovanie";
+$Notes = "Poznámky";
 ?>

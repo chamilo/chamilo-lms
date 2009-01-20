@@ -868,4 +868,6 @@ $ConfigureMultipleAccessURLs = "Configura gli URL per l\'accesso multiplo";
 $URLAdded = "URL aggiunto";
 $URLAlreadyAdded = "URL già in uso, seleziona un URL diverso";
 $SaveSettings = "Salva la configurazione";
+$AreYouSureYouWantToSetThisLanguageAsThePortalDefault = "Sei sicuro di voler usare questa lingua come lingua di default per il portale?";
+$CurrentLanguagesPortal = "Lingua di default del portale";
 ?>

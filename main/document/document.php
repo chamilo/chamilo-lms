@@ -1,4 +1,4 @@
-<?php // $Id: document.php 17787 2009-01-17 00:41:06Z ivantcholakov $
+<?php // $Id: document.php 17868 2009-01-20 17:26:33Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -661,41 +661,7 @@ if($folders===false)
 				<?php echo get_lang('Up'); ?></a>&nbsp;
 	<?php
 	}
-
-	if ($is_allowed_to_edit || $group_member_with_upload_rights)
-	{
-		/* CREATE NEW DOCUMENT OR NEW DIRECTORY / GO TO UPLOAD / DOWNLOAD ZIPPED FOLDER */
-		?>
-			<!-- create new document or directory -->
-			<a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/filenew.gif" border="0" alt="" title="<?php echo get_lang('CreateDoc'); ?>" /></a>
-			<a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang("CreateDoc"); ?></a>&nbsp;&nbsp;
-			<!-- file upload link -->
-			<a href="upload.php?<?php echo api_get_cidreq();?>&path=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/submit_file.gif" border="0" title="<?php echo get_lang('UplUploadDocument'); ?>" alt="" /></a>
-			<a href="upload.php?<?php echo api_get_cidreq();?>&path=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang('UplUploadDocument'); ?></a>&nbsp;
-			<!-- create directory -->
-			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><img src="../img/folder_new.gif" border="0" title="<?php echo get_lang('CreateDir'); ?>" alt ="" /></a>
-			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><?php echo get_lang("CreateDir"); ?></a>&nbsp;
-			<a href="quota.php?<?php echo api_get_cidreq();?>"><?php Display::display_icon('statistics.gif', get_lang("ShowCourseQuotaUse")); ?><?php echo get_lang("ShowCourseQuotaUse"); ?></a>
-		<?php
-	}
-
-	if ($docs_and_folders!=null) {
-	?>
-	<!-- download zipped folder -->
-	<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder&amp;path=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/zip_save.gif" border="0" title="<?php echo get_lang("Save"); ?> (ZIP)" alt="" /></a>
-	<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder&amp;path=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang("Save"); ?> (ZIP)</a>&nbsp;
-<?php
-	}
-	// Slideshow by Patrick Cool, May 2004
-	include("document_slideshow.inc.php");
-	if ($image_present)
-	{
-		echo "<a href=\"slideshow.php?".api_get_cidreq()."&curdirpath=".$curdirpathurl."\"><img src=\"../img/images_gallery.gif\" border=\"0\" title=\"".get_lang('ViewSlideshow')."\"/>&nbsp;". get_lang('ViewSlideshow') . "</a>";
-	}
-	echo "</div>";
-	echo(build_directory_selector($folders,$curdirpath,(isset($group_properties['directory'])?$group_properties['directory']:array()),true));
-//==============================================================================
-
+	
 if(isset($docs_and_folders) && is_array($docs_and_folders))
 {
 	//echo('<pre>');
@@ -719,27 +685,21 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 		//size (or total size of a directory)		
 		$size = $id['filetype']=='folder' ? get_total_folder_size($id['path'],$is_allowed_to_edit) : $id['size'];
 		//get the title or the basename depending on what we're using
-		if ($use_document_title=='true' AND $id['title']<>'')
-		{
+		if ($use_document_title=='true' AND $id['title']<>'') {
 			$document_name=$id['title'];
-		}
-		else
-		{
+		} else {
 			$document_name=basename($id['path']);
 		}
 		//data for checkbox
-		if (($is_allowed_to_edit || $group_member_with_upload_rights) AND count($docs_and_folders)>1)
-		{
+		if (($is_allowed_to_edit || $group_member_with_upload_rights) AND count($docs_and_folders)>1) {
 			$row[] = $id['path'];			
 		}
 		
 		// Show the Owner of the file only in groups				
 		$user_link='';	
 			
-		if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='')
-		{
-			if (!empty($id['insert_user_id']))
-			{
+		if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='') {
+			if (!empty($id['insert_user_id'])) {
 				$user_info=UserManager::get_user_info_by_id($id['insert_user_id']);		
 				$user_name=$user_info['firstname'].' '.$user_info['lastname'];
 				$user_link='<div class="document_owner">'.get_lang('Owner').': '.display_user_link_document($id['insert_user_id'],$user_name).'</div>';
@@ -780,7 +740,9 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 		}
 		$row[] = $last_edit_date;
 		$row[] = $size;
+		$total_size=$total_size+$size;
 		$sortable_data[] = $row;
+		
 	}
 	//*******************************************************************************************
 }
@@ -790,7 +752,44 @@ else
 	$table_footer='<div style="text-align:center;"><strong>'.get_lang('NoDocsInFolder').'</strong></div>';
 }
 
-$column_show=array();
+$column_show=array();	
+
+
+	if ($is_allowed_to_edit || $group_member_with_upload_rights)
+	{
+		/* CREATE NEW DOCUMENT OR NEW DIRECTORY / GO TO UPLOAD / DOWNLOAD ZIPPED FOLDER */
+		?>
+			<!-- create new document or directory -->
+			<a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/filenew.gif" border="0" alt="" title="<?php echo get_lang('CreateDoc'); ?>" /></a>
+			<a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang("CreateDoc"); ?></a>&nbsp;&nbsp;
+			<!-- file upload link -->
+			<a href="upload.php?<?php echo api_get_cidreq();?>&path=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/submit_file.gif" border="0" title="<?php echo get_lang('UplUploadDocument'); ?>" alt="" /></a>
+			<a href="upload.php?<?php echo api_get_cidreq();?>&path=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang('UplUploadDocument'); ?></a>&nbsp;
+			<!-- create directory -->
+			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><img src="../img/folder_new.gif" border="0" title="<?php echo get_lang('CreateDir'); ?>" alt ="" /></a>
+			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><?php echo get_lang("CreateDir"); ?></a>&nbsp;
+			<a href="quota.php?<?php echo api_get_cidreq();?>"><?php Display::display_icon('statistics.gif', get_lang("ShowCourseQuotaUse")); ?><?php echo get_lang("ShowCourseQuotaUse"); ?></a>
+		<?php
+	}
+	if ($docs_and_folders!=null) {	
+		global $total_size;
+		if ($total_size!=0){ ?>
+	<!-- download zipped folder -->
+			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder"><img src="../img/zip_save.gif" border="0" title="<?php echo get_lang("Save"); ?> (ZIP)" alt="" /></a>
+			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder"><?php echo get_lang("Save"); ?> (ZIP)</a>&nbsp;
+<?php
+		}
+	} 
+	// Slideshow by Patrick Cool, May 2004
+	include("document_slideshow.inc.php");
+	if ($image_present)
+	{
+		echo "<a href=\"slideshow.php?".api_get_cidreq()."&curdirpath=".$curdirpathurl."\"><img src=\"../img/images_gallery.gif\" border=\"0\" title=\"".get_lang('ViewSlideshow')."\"/>&nbsp;". get_lang('ViewSlideshow') . "</a>";
+	}
+	echo "</div>";
+	echo(build_directory_selector($folders,$curdirpath,(isset($group_properties['directory'])?$group_properties['directory']:array()),true));
+//==============================================================================
+
 
 if (($is_allowed_to_edit || $group_member_with_upload_rights) AND count($docs_and_folders)>1)
 {

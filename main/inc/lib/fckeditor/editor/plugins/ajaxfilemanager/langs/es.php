@@ -1,7 +1,7 @@
 <?php
 	/**
 	 * language pack
-	 * @author Juan Carlos Raña Trabado
+	 * @author Juan Carlos Raï¿½a Trabado
 	 * @since 19/January/2009
 	 *
 	 */
@@ -197,6 +197,7 @@
 	define('FILE_LBL_MORE', 'A&ntilde;adir m&aacute;s archivos para enviar');
 	define('FILE_CANCEL_UPLOAD', 'Cancelar el env&iacute;o del archivo');
 	define('FILE_LBL_UPLOAD', 'Enviar');
+	
 	//file download
 	define('ERR_DOWNLOAD_FILE_NOT_FOUND', 'No hay seleccionados archivos para descargar.');
 	//Rename

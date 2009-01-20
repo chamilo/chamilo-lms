@@ -522,13 +522,31 @@ $(document).ready(
 		  	<table class="tableForm" cellpadding="0" cellspacing="0">
 		  		<thead>
 		  			<tr>
-		  				<th colspan="2"><?php echo FILE_FORM_TITLE; ?><a class="action" href="#" title="<?php echo FILE_LBL_MORE;  ?>" onclick="return addMoreFile();"><span class="addMore">&nbsp;</span></a></th>
+		  				<th colspan="2">
+		  					<?php echo FILE_FORM_TITLE; ?>		  					
+		  				</th>
 		  			</tr>
+		  			<tr>
+		  			<th colspan="2" align="left">		  			
+		  				<label>
+		  				<a class="action" href="#" title="<?php echo FILE_LBL_MORE;  ?>" onclick="return addMoreFile();">			  				
+			  				<label><?php echo FILE_LBL_MORE;  ?></label><span class="addMore">&nbsp;</span></a>
+			  			</label>			  		
+		  			
+		  			</th>
+		  			</tr>		  			
 		  		</thead>
 		  		<tbody id="fileUploadBody">
 		  			<tr style="display:none">
 		  				<th><label><?php echo FILE_LABEL_SELECT; ?></label></th>
-		  				<td><input type="file" class="input" name="file"  /> <input type="button" class="button" value="<?php echo FILE_LBL_UPLOAD; ?>" /> <a href="#" class="action" title="Cancel" style="display:none" ><span class="cancel">&nbsp;</span></a>  <span class="uploadProcessing" style="display:none">&nbsp;<span></td>
+		  				<td>
+		  					<input type="file" class="input" name="file"  />
+		  					<input type="button" class="button" value="<?php echo FILE_LBL_UPLOAD; ?>" />
+		  					<a href="#" class="action" title="Cancel" style="display:none" >		  	
+		  						<span class="cancel">&nbsp;</span>
+		  					</a>	  						
+		  					<span class="uploadProcessing" style="display:none">&nbsp;</span>		  					
+		  				</td>
 		  			</tr>		
 		  		</tbody>
 		  		<tfoot>

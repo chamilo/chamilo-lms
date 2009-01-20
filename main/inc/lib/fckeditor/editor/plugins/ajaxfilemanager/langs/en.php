@@ -198,9 +198,11 @@
 	define('ERROR_FILE_TOO_BID', 'File too large. (max: %s)');
 	define('FILE_FORM_TITLE', 'File Upload Form');
 	define('FILE_LABEL_SELECT', 'Select File');
-	define('FILE_LBL_MORE', 'Add File Uploader');
+	define('FILE_LBL_MORE', 'Add file to upload');
 	define('FILE_CANCEL_UPLOAD', 'Cancel File Upload');
 	define('FILE_LBL_UPLOAD', 'Upload');
+	
+	
 	//file download
 	define('ERR_DOWNLOAD_FILE_NOT_FOUND', 'No files selected for download.');
 	//Rename

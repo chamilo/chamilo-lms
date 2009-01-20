@@ -116,11 +116,11 @@ if(isSupportedExt)
 { case 'fileVideo':
 case 'fileMusic':
 case 'fileFlash':
-$('#playGround').html('<a id="playGround' + num + '" href="' + '../'+files[num].path + '"><div id="player">&nbsp;this is mine</div></a> '); $('#playGround' + num).html(''); $('#playGround' + num).media({ width: 255, height: 210, autoplay: true }); showThickBox($('#a' + num).get(0), appendQueryString('#TB_inline', 'height=250' + '&width=256' + '&inlineId=winPlay&modal=true')); break; //Juan Carlos Raña added  '../'+  for preview video and flash on  href="' + '../'+files[num].path + 
+$('#playGround').html('<a id="playGround' + num + '" href="' + '../'+files[num].path + '"><div id="player">&nbsp;this is mine</div></a> '); $('#playGround' + num).html(''); $('#playGround' + num).media({ width: 255, height: 210, autoplay: true }); showThickBox($('#a' + num).get(0), appendQueryString('#TB_inline', 'height=250' + '&width=256' + '&inlineId=winPlay&modal=true')); break; //Juan Carlos Raï¿½a added  '../'+  for preview video and flash on  href="' + '../'+files[num].path + 
 default:
 showThickBox(linkElem, appendQueryString('../'+path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));}
 }
-//Juan Carlos Raña (line above added '../'+ to line for preview and don't go to main showThickBox(linkElem, appendQueryString('../'+path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));}
+//Juan Carlos Raï¿½a (line above added '../'+ to line for preview and don't go to main showThickBox(linkElem, appendQueryString('../'+path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));}
 }
 return false;}, dcTime); return false;}); $(this).dblclick(function()
 { var d = new Date(); dcAt = d.getTime(); if (savTO != null) { clearTimeout( savTO ); savTO = null;}
@@ -344,8 +344,10 @@ return menu;}
 { cancelFileUpload(elementId);} ); $(newFileUpload).show(); return false;}; function cancelFileUpload(elementId)
 { $('div#TB_window #' + elementId).parent().parent().remove(); while($('div#TB_window #fileUploadBody tr').length < 2)
 { addMoreFile();}
-return false;}; function uploadFile(elementId)
-{ var ext = getFileExtension($('#' + elementId).val()); if(ext == '')
+return false;}; 
+function uploadFile(elementId)
+{
+var ext = getFileExtension($('#' + elementId).val()); if(ext == '')
 { alert(noFileSelected ); return false;}
 var supportedExts = supportedUploadExts.split(","); var isSupportedExt = false; for (i in supportedExts)
 { if(typeof(supportedExts[i]) == 'string')
@@ -362,7 +364,9 @@ $('#ajax' + elementId).hide(); $('#ajax' + elementId).show(); $.ajaxFileUpload
 { if(i != 'error')
 { files[numRows][i] = data[i];}
 }
-addDocumentHtml(numRows);}
+addDocumentHtml(numRows);
+
+}
 }
 }, error: function (data, status, e)
 { $('#ajax' + elementId).hide(); alert(e);}
@@ -376,7 +380,7 @@ return (id );}; function generateDownloadIframe(url)
 else { var io = document.createElement('iframe'); io.id = frameId; io.name = frameId;}
 io.style.position = 'absolute'; io.style.top = '-1000px'; io.style.left = '-1000px'; io.src = url; document.body.appendChild(io);}; function showThickBox(linkElem, url)
 { $(linkElem).attr('href', url); var t = linkElem.title || linkElem.name || null; var a = linkElem.href || linkElem.alt; var g = linkElem.rel || false; tb_show(t,a,g); linkElem.blur(); return false;}; function uploadFileWin(linkElem)
-{ showThickBox(linkElem, appendQueryString('#TB_inline', 'height=200' + '&width=450' + '&inlineId=winUpload&modal=true')); addMoreFile();}; function newFolderWin(linkElem)
+{ showThickBox(linkElem, appendQueryString('#TB_inline', 'height=200' + '&width=500' + '&inlineId=winUpload&modal=true')); addMoreFile();}; function newFolderWin(linkElem)
 { showThickBox(linkElem, appendQueryString('#TB_inline', 'height=100' + '&width=250' + '&inlineId=winNewFolder&modal=true')); return false;}; function doCreateFolder()
 { $('div#TB_window  #currentNewfolderPath').val(currentFolder.path); var pattern=/^[A-Za-z0-9_ \-]+$/i; var folder = $('div#TB_window #new_folder'); if(!pattern.test($(folder).val()))
 { alert(msgInvalidFolderName);}else

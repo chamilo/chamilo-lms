@@ -108,7 +108,9 @@ switch ($_GET['action']) {
 		api_display_tool_title($tool_name);
 		
 		echo $msg;
-		echo '<a href="m_category.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewResourceType').'</a><br /><br />';
+		echo '<div class="actions">';
+		echo '<a href="m_category.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewResourceType').'</a><br />';
+		echo '</div>';
 		if (isset ($_POST['action'])) {
 			switch ($_POST['action']) {
 				case 'delete_categories' :

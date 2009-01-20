@@ -59,7 +59,7 @@ switch ($_GET['action']) {
         $msg=ob_get_contents();
 		ob_end_clean();
     default :
-        $NoSearchResults=get_lang('noSubscriptions');
+        $NoSearchResults=get_lang('NoReservations');
         Display :: display_header($tool_name);
         api_display_tool_title($tool_name);
         
@@ -90,9 +90,9 @@ switch ($_GET['action']) {
         
         $table = new SortableTable('subscription', array('Rsys','get_num_subscriptions'),array('Rsys','get_table_subscriptions'),2);
         $table->set_header(0, '', false,array('style'=>'width:10px'));
-        $table->set_header(1, get_lang('ItemName'), true);
-        $table->set_header(2, get_lang('StartAt'), true);
-        $table->set_header(3, get_lang('EndAt'), true);
+        $table->set_header(1, get_lang('ResourceName'), true);
+        $table->set_header(2, get_lang('StartDate'), true);
+        $table->set_header(3, get_lang('EndDate'), true);
 		$table->set_header(4, get_lang('Accept'), true);
         $table->set_header(5, get_lang('Modify'), false,array('style'=>'width:50px;'));       
         $table->set_column_filter(5, 'modify_filter');

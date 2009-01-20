@@ -60,7 +60,7 @@ function modify_filter($id) {
         $str.='<a href="m_item.php?action=edit&amp;id='.$id.'" title="'.get_lang("EditItem2").'"><img alt="" src="../img/edit.gif" /></a>';
     }
     //if(Rsys::item_allow($id,'m_rights')) $str.=' &nbsp;<a href="m_item.php?action=m_rights&amp;item_id='.$id.'" title="'.get_lang("MRights").'"><img alt="" src="../img/info_small.gif" /></a>';
-    if(Rsys::item_allow($id,'delete')) $str.=' <a href="m_item.php?action=delete&amp;id='.$id.'" title="'.get_lang("DeleteItem").'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteItem")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
+    if(Rsys::item_allow($id,'delete')) $str.=' <a href="m_item.php?action=delete&amp;id='.$id.'" title="'.get_lang('DeleteResource').'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteResource")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
  
     return $str;
 }
@@ -71,7 +71,7 @@ function modify_filter($id) {
  *  @param  -   int     $id     The item-rights-id's
  */
 function modify_rights_filter($id) {
-	return ' <a href="m_item.php?action=m_rights&amp;subaction=delete&amp;item_id='.substr($id, 0, strpos($id, '-')).'&amp;class_id='.substr($id, strrpos($id, '-') + 1).'" title="'.get_lang("RemoveClassRights").'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteItem")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
+	return ' <a href="m_item.php?action=m_rights&amp;subaction=delete&amp;item_id='.substr($id, 0, strpos($id, '-')).'&amp;class_id='.substr($id, strrpos($id, '-') + 1).'" title="'.get_lang("RemoveClassRights").'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteResource")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
 }
 
 /**
@@ -95,7 +95,7 @@ if (isset ($_POST['action'])) {
 
 				} else {
 
-					Display :: display_normal_message(get_lang('ItemDeleted'), false);
+					Display :: display_normal_message(get_lang('ResourceDeleted'), false);
 				}
 				$msg = ob_get_contents();
 				ob_end_clean();
@@ -359,15 +359,15 @@ switch ($_GET['action']) {
 		$interbreadcrumb[] = array ("url" => "m_item.php", "name" => get_lang('ManageItems'));
 	
 		//$interbreadcrumb[] = array ("url" => "m_item.php", "name" => $tool_name);
-		Display :: display_header(get_lang('AddNewItem'));
-		api_display_tool_title(get_lang('AddNewItem'));
+		Display :: display_header(get_lang('AddNewResource'));
+		api_display_tool_title(get_lang('AddNewResource'));
 		$form = new FormValidator('item', 'post', 'm_item.php?action=add');
 		$cats = Rsys :: get_category();
 		foreach ($cats as $cat)
 			$catOptions[$cat['id']] = $cat['name'];
 		$form->addElement('select', 'category', get_lang('ResourceType'), $catOptions);
-		$form->add_textfield('name', get_lang('ItemName'), true, array ('maxlength' => '128'));
-		$form->addElement('textarea', 'description', get_lang('ItemDescription'), array ('rows' => '3', 'cols' => '40'));
+		$form->add_textfield('name', get_lang('ResourceName'), true, array ('maxlength' => '128'));
+		$form->addElement('textarea', 'description', get_lang('Description'), array ('rows' => '3', 'cols' => '40'));
 		$form->addRule('category', get_lang('ThisFieldIsRequired'), 'required');
 
 		// TODO: get list of courses (to link it to the item)
@@ -379,11 +379,11 @@ switch ($_GET['action']) {
 			$values = $form->exportValues();
 			if (Rsys :: add_item($values['name'], $values['description'], $values['category'], $values['course_code']))
 			{
-				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('ItemAdded'), "m_item.php?action=m_rights&item_id=".Rsys :: get_item_id($values['name']), get_lang('MItemRight').' '.$values['name']),false);
+				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('ResourceAdded'), "m_item.php?action=m_rights&item_id=".Rsys :: get_item_id($values['name']), get_lang('MItemRight').' '.$values['name']),false);
 			}
 			else
 			{
-				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('ItemExist'), "m_item.php?action=add", get_lang('AddNewItem')),false);
+				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('ResourceExist'), "m_item.php?action=add", get_lang('AddNewResource')),false);
 			}
 		} else
 			$form->display();
@@ -402,8 +402,8 @@ switch ($_GET['action']) {
 		api_display_tool_title(get_lang('EditResource'));
 		$form = new FormValidator('item', 'post', 'm_item.php?action=edit');
 		$form->addElement('select', 'category_id', get_lang('ResourceType'), $catOptions);
-		$form->add_textfield('name', get_lang('ItemName'), array ('maxlength' => '128'));
-		$form->addElement('textarea', 'description', get_lang('ItemDescription'), array ('rows' => '3', 'cols' => '40'));
+		$form->add_textfield('name', get_lang('ResourceName'), array ('maxlength' => '128'));
+		$form->addElement('textarea', 'description', get_lang('Description'), array ('rows' => '3', 'cols' => '40'));
 		$form->addRule('category_id', get_lang('ThisFieldIsRequired'), 'required');
 		$form->addElement('hidden', 'id', $item['id']);
 		$form->addElement('submit', 'submit', get_lang('Ok'));
@@ -411,9 +411,9 @@ switch ($_GET['action']) {
 		if ($form->validate()) {
 			$values = $form->exportValues();
 			if (Rsys :: edit_item($values['id'], $values['name'], $values['description'], $values['category_id'], $values['course_id']))
-				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('ItemEdited'), "m_item.php", $tool_name),false);
+				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('ResourceEdited'), "m_item.php", $tool_name),false);
 			else
-				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('ItemExist'), "m_item.php?action=edit&id=".$values['id'], get_lang('EditItem2')),false);
+				Display :: display_normal_message(Rsys :: get_return_msg(get_lang('ResourceExist'), "m_item.php?action=edit&id=".$values['id'], get_lang('EditItem2')),false);
 		} else
 			$form->display();
 		break;
@@ -421,7 +421,7 @@ switch ($_GET['action']) {
 		$result = Rsys :: delete_item($_GET['id']);
 		ob_start();
 		if($result == '0'){
-			Display :: display_normal_message(get_lang('ItemDeleted'),false);}
+			Display :: display_normal_message(get_lang('ResourceDeleted'),false);}
 		else
 			Display :: display_normal_message(str_replace('#NUM#', $result, get_lang('ItemHasReservations')),false);
 		$msg = ob_get_contents();
@@ -448,7 +448,7 @@ switch ($_GET['action']) {
 
 		echo '<form id="cat_form" action="m_item.php" method="get">';
 		echo '<div class="actions">';
-		echo '<a href="m_item.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewItem').'</a>';
+		echo '<a href="m_item.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewResource').'</a>';
 		echo '</div>';
 		echo '<div style="text-align: right;">'.get_lang('ResourceFilter').': ';
 		echo '<select name="cat" onchange="this.form.submit();"><option value="0"> '.get_lang('All').' </option>';
@@ -456,17 +456,17 @@ switch ($_GET['action']) {
 		foreach ($cats as $cat)
 			echo '<option value="'.$cat['id'].'"'. ($cat['id'] == $_GET['cat'] ? ' selected="selected"' : '').'>'.$cat['name'].'</option>';
 		echo '</select></div></form>';
-		echo '<br />';
+		
 		$table = new SortableTable('item', array ('Rsys', 'get_num_items'), array ('Rsys', 'get_table_items'), 1);
 		$table->set_additional_parameters(array('cat'=>$_GET['cat']));
 		$table->set_header(0, '', false, array ('style' => 'width:10px'));
-		$table->set_header(1, get_lang('ItemName'), true);
-		$table->set_header(2, get_lang('ItemDescription'), true);
+		$table->set_header(1, get_lang('ResourceName'), true);
+		$table->set_header(2, get_lang('Description'), true);
 		$table->set_header(3, get_lang('ResourceType'), true);
 		$table->set_header(4, get_lang('Owner'), true);
 		$table->set_header(5, '', false, array ('style' => 'width:100px;'));
 		$table->set_column_filter(5, 'modify_filter');
-		$table->set_form_actions(array ('delete_items' => get_lang('DeleteSelectedItems')), 'items');
+		$table->set_form_actions(array ('delete_items' => get_lang('DeleteSelectedResources')), 'items');
 		$table->display();
 }
 

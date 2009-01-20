@@ -99,15 +99,15 @@ switch ($_GET['action']) {
 		
 		Display :: display_header(get_lang('OverviewSubscriptions'));
 		api_display_tool_title(get_lang('Overview'));
-		   
-		echo '<form id="cat_form" action="m_reservation.php" method="get">';
-		
+		echo '<div class="actions">';   
+		echo '<form id="cat_form" action="m_reservation.php" method="get">';		
 		echo '<input type="hidden" name="action" value="overviewsubscriptions"/>';
-		echo '<div style="text-align: right;"><input type="text" name="keyword" /><input type="submit" value="'.get_lang('Search').'" /></div></form>';
-		echo '<br>';
+		echo '<input type="text" name="keyword" /><input type="submit" value="'.get_lang('Search').'" /></form>';
+		echo '</div><br>';		
+		
 		$table = new SortableTable('reservation', array ('Rsys', 'get_num_subscriptions_overview'), array ('Rsys', 'get_table_subcribed_reservations'), 1);		
 		$table->set_additional_parameters(array ('action' => 'overviewsubscriptions','keyword' => $_GET['keyword']));
-		$table->set_header(0, get_lang('ItemName'), true);
+		$table->set_header(0, get_lang('ResourceName'), true);
 		$table->set_header(1, get_lang('ResourceTypeName'), true);
 		$table->set_header(2, get_lang('StartDate'), true);
 		$table->set_header(3, get_lang('EndDate'), true);
@@ -180,7 +180,7 @@ switch ($_GET['action']) {
 		$form = new FormValidator('reservation', 'post', 'm_reservation.php?action=add&cat_id='.$_GET['cat_id']);
 		$choices[] = $form->createElement('radio', 'forever', '', get_lang('NoPeriod'), 0, array ('onclick' => 'javascript:window_hide(\'forever_timewindow\')'));
 		$choices[] = $form->createElement('radio', 'forever', '', get_lang('FixedPeriod'), 1 , array ('onclick' => 'javascript:window_show(\'forever_timewindow\')'));
-		$form->addElement('select', 'itemid', get_lang('Item'), $itemlist);
+		$form->addElement('select', 'itemid', get_lang('Resource'), $itemlist);
 		
 		$form->add_timewindow('start', 'end', get_lang('StartDate'), get_lang('EndDate'));		
 		$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">'.get_lang('TimePickerLimitation').'</div></div><br />');
@@ -444,7 +444,7 @@ switch ($_GET['action']) {
 			$form = new FormValidator('reservation', 'post', 'm_reservation.php?action=edit&id='.$Reservation_id);
 			$choices[] = $form->createElement('radio', 'forever', '', get_lang('NoPeriod'), '0', array ('onclick' => 'javascript:timewindow_hide(\'forever_timewindow\')'));
 			$choices[] = $form->createElement('radio', 'forever', '', get_lang('FixedPeriod'), '1', array ('onclick' => 'javascript:timewindow_show(\'forever_timewindow\')'));
-			$form->addElement('select', 'item_id', get_lang('Item'), $itemlist);
+			$form->addElement('select', 'item_id', get_lang('Resource'), $itemlist);
 			
 			$form->add_timewindow('start', 'end', get_lang('StartDate'), get_lang('EndDate'));			
 			$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">'.get_lang('TimePickerLimitation').'</div></div><br />');
@@ -570,8 +570,8 @@ switch ($_GET['action']) {
 		echo '<a href="m_reservation.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewBookingPeriod').'</a>';
 		echo '&nbsp;&nbsp;&nbsp;<a href="m_reservation.php?action=overviewsubscriptions">'.get_lang('OverviewReservedPeriods').'</a>';
 		echo '</div>';
+		echo '<div style="text-align: right; "><input type="text" name="keyword" /><input type="submit" value="'.get_lang('Search').'" /></div></form>';
 		
-		echo '<div style="text-align: right;"><input type="text" name="keyword" /><input type="submit" value="'.get_lang('Search').'" /></div></form>';
 		echo '<br>';
 		if (isset ($_POST['action'])) {
 			switch ($_POST['action']) {
@@ -587,7 +587,7 @@ switch ($_GET['action']) {
 		$table = new SortableTable('reservation', array ('Rsys', 'get_num_reservations'), array ('Rsys', 'get_table_reservations'), 1);
 		$table->set_additional_parameters(array ('keyword' => $_GET['keyword']));
 		$table->set_header(0, '', false, array ('style' => 'width:10px'));
-		$table->set_header(1, get_lang('ItemName'), true);
+		$table->set_header(1, get_lang('ResourceName'), true);
 		$table->set_header(2, get_lang('StartDate'), true);
 		$table->set_header(3, get_lang('EndDate'), true);
 		$table->set_header(4, get_lang('SubscribeFrom'), true);

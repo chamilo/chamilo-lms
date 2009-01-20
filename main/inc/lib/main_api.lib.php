@@ -744,6 +744,7 @@ function api_session_register($variable) {
  * @param  string variable - the variable name to remove from the session
  */
 function api_session_unregister($variable) {
+	$variable = strval($variable);
 	if(isset($GLOBALS[$variable])) {
 		unset ($GLOBALS[$variable]);
 	}
@@ -1438,14 +1439,14 @@ function is_allowed_to_edit() {
 *	@return boolean, true: the user has the rights to edit, false: he does not
 */
 function api_is_allowed_to_edit($tutor=false,$coach=false) {	
-	$is_courseAdmin = api_is_course_admin() || api_is_platform_admin() || api_is_coach();
-	if(!$is_courseAdmin && $tutor == true) {	//if we also want to check if the user is a tutor...
+	$is_courseAdmin = api_is_course_admin() || api_is_platform_admin();
+	if (!$is_courseAdmin && $tutor == true) {	//if we also want to check if the user is a tutor...
 		$is_courseAdmin = $is_courseAdmin || api_is_course_tutor();
 	}
-	if(!$is_courseAdmin && $coach == true) {	//if we also want to check if the user is a coach...';
+	if (!$is_courseAdmin && $coach == true) {	//if we also want to check if the user is a coach...';
 		$is_courseAdmin = $is_courseAdmin || api_is_course_coach();
 	}	
-	if(api_get_setting('student_view_enabled') == 'true') {	//check if the student_view is enabled, and if so, if it is activated
+	if (api_get_setting('student_view_enabled') == 'true') {	//check if the student_view is enabled, and if so, if it is activated
 		$is_allowed = $is_courseAdmin && $_SESSION['studentview'] != "studentview";
 		return $is_allowed;
 	} else {
@@ -2003,6 +2004,7 @@ function api_return_html_area($name, $content = '', $height = '', $width = '100%
 function api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = null) {
 	return mail($to, $subject, $message, $additional_headers, $additional_parameters);
 }
+
 
 /**
  * Find the largest sort value in a given user_course_category

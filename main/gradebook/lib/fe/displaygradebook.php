@@ -383,7 +383,7 @@ class DisplayGradebook
 		}
 		$cattotal= Category :: load(0);
 		$info = '<table width="100%" border=0 cellpadding=5><tr><td width="80%">';
-		$info.= get_lang('Name') . ' : <b>' . $user['lastname'] . ' ' . $user['firstname'] . '</b> ( <a href="user_info.php?userid=' . $userid . '&selecteval=' . Security::remove_XSS($_GET['selecteval']) . '">' . get_lang('MoreInfo') . '...</a> )<br>';
+		$info.= get_lang('Name') . ' : <b>' . $user['lastname'] . ' ' . $user['firstname'] . '</b> ( <a href="user_info.php?userid=' . $userid . '&selectcat=' . Security::remove_XSS($_GET['selectcat']) . '">' . get_lang('MoreInfo') . '...</a> )<br>';
 		$info.= get_lang('Email') . ' : <b><a href="mailto:' . $user['email'] . '">' . $user['email'] . '</a></b><br><br>';
 		$scoredisplay = ScoreDisplay :: instance();
 		$score_stud= $cattotal[0]->calc_score($userid);

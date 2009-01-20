@@ -96,7 +96,7 @@ if (isset ($_GET['exportpdf'])) {
 }
 if (isset ($_GET['selectcat'])) {
 	$interbreadcrumb[]= array (
-		'url' => 'gradebook_flatview.php?selecteval=' . Security::remove_XSS($_GET['selectcat']),
+		'url' => 'gradebook_flatview.php?selectcat=' . Security::remove_XSS($_GET['selectcat']),
 		'name' => get_lang('FlatView'
 	));
 	$backto= '<a href=gradebook_flatview.php?selectcat=' .Security::remove_XSS($_GET['selectcat']) . '><img src=../img/lp_leftarrow.gif alt=' . get_lang('BackToOverview') . ' align=absmiddle/> ' . get_lang('BackToOverview') . '</a>&nbsp&nbsp';

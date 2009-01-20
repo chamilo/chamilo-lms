@@ -36,9 +36,9 @@ api_block_anonymous_users();
 block_students();
 
 $user = get_user_info_from_id($_GET['userid']);
-$form = new UserForm(UserForm :: TYPE_USER_INFO, $user, 'user_info_form', null, api_get_self() . '?userid=' . $_GET['userid'] . '&selecteval=' . $_GET['selecteval']);
+$form = new UserForm(UserForm :: TYPE_USER_INFO, $user, 'user_info_form', null, api_get_self() . '?userid=' . $_GET['userid'] . '&selectcat=' . $_GET['selectcat']);
 if ($form->validate()) {
-	header('Location: user_stats.php?selecteval=' . Security::remove_XSS($_GET['selecteval']).'&userid=' .Security::remove_XSS($_GET['userid']));
+	header('Location: user_stats.php?selectcat=' . Security::remove_XSS($_GET['selectcat']).'&userid=' .Security::remove_XSS($_GET['userid']));
 	exit;
 }
 

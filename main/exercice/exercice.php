@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 17787 2009-01-17 00:41:06Z ivantcholakov $
+<?php // $Id: exercice.php 17878 2009-01-20 23:33:10Z cvargas1 $
 
 /*
 ==============================================================================
@@ -1075,7 +1075,7 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 				echo '<td>'.$test.'</td>';
 				echo '<td>';
 				if ($results[$i][7] > 1) {
-					echo ceil((($results[$i][4] - $results[$i][7])/60)).' '.get_lang('Min');
+					echo ceil((($results[$i][4] - $results[$i][7])/60)).' '.get_lang('MinMinutes');
 					if($results[$i][8] > 1) {
 						echo ' ( '.$results[$i][8].' '.get_lang('Steps').' )';
 					}

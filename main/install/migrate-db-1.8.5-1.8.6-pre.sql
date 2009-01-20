@@ -70,6 +70,23 @@ ALTER TABLE user_friend ADD INDEX idx_user_friend_user_friend_user(user_id,frien
 CREATE TABLE user_friend_relation_type(id int unsigned not null auto_increment,title char(20),PRIMARY KEY(id));
 CREATE TABLE user_api_key (id int unsigned NOT NULL auto_increment, user_id int unsigned NOT NULL, api_key char(32) NOT NULL, api_service char(10) NOT NULL default 'dokeos', PRIMARY KEY (id));
 ALTER TABLE user_api_key ADD INDEX idx_user_api_keys_user (user_id);
+
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='Institution';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='InstitutionUrl';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='siteName';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='emailAdministrator';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='administratorSurname';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='administratorName';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_administrator_data';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='stylesheets';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='campus_homepage';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='my_courses';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='reporting';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='platform_administration';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='my_agenda';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='my_profile';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='my_gradebook';
+
  
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';

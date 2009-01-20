@@ -21,7 +21,7 @@
 <div id="outerframe">
 <div id="main">
 <br />
-<h1>Dokeos 1.8.6 - January 2009</h1>
+<h1>Dokeos 1.8.6 - February 2009</h1>
 <h3>Release notes - summary</h3>
 <p>Dokeos 1.8.6 is a major debugging release but includes interesting new features as well.&nbsp;</p>
 <h3>New Features</h3>
@@ -60,12 +60,23 @@
   <li>Improved chat (open in new window option, smileys, teacher/learner difference and time indication for each message, user picture showing directly, possibility to hold several conversations in several courses at the same time)</li>
   <li>Option to hide/show e-mail addresses to all users (FS#3244)</li>
   <li>Added an introduction section for each group area (FS#3200)</li>
+  <li>New Global Agenda (FS#3391)</li>
   <li>New personal notebook tool in courses</li>
   <li>Added reporting on the last connections of a user in the chat</li>
   <li>Added link create course message to go directly to the course(SVN#17497)</li>
   <li>Added ability to take partial surveys and finish them later (FS#2510)</li>
   <li>New Survey Feature: Surveys without invitation mail (FS#3403)</li>
   <li>Added Booking system (a.k.a Reservation 2 Extension) (FS#821)</li> 
+  <li>Added user profiling fields in auto-registration page (FS#2666)</li>
+  <li>Added check for writeable status of session save path in installation directory (FS#2970)</li>
+  <li>Allow forum threads to be moved (FS#3460)</li>
+  <li>Minor - Added update information for quizzes (FS#3417)</li>
+  <li>Sending e-mails to all admin on user account creation confirmation (FS#3475)</li>
+  <li>Changed user profile setting defaults to make phone field disabled and picture enabled (FS#3474)</li>
+  <li>Added intermediary buttons in platform settings pages to avoid scrolling too much to apply atomic changes (FS#3473)</li>
+  <li>Simplify default platform language choice by adding quick icon (FS#3472)</li>
+  <li>Session admins can now add users to the portal (FS#3476)</li>
+  <li>Added Advanced File Manager (FCKEditor plugin) to improve flexibility in files upload (FS#2970)</li>
 </ul>
 <br />
 <h3>Debugging</h3>
@@ -135,11 +146,21 @@
   <li>Fixed: the productions users aren't saved in the the correct directory (FS#3456)</li>
   <li>Fixed error in install/htaccess.dist whereby the url-append was not set correctly (SVN#17791)</li>
   <li>Fixed missing check on cDir in local.inc.php (SVN#17793)</li>
+  <li>Removed possibility to create sub-directories in the dropbox tool - wasn't working anyway for various versions (FS#3434)</li>
+  <li>Improved access control for group tool (FS#3209)</li>
+  <li>Fixed profiling date field popup bug (FS#2985)</li>
+  <li>Added check on max members in group before subscribing new people (FS#3453)</li>
+  <li>Changed usage of mail functions to use api_mail() everywhere and fix mail headers problems (FS#2445)</li>
+  <li>Fixed bug changing the language to false in platform settings (FS#3472)</li>
+  <li>Fix various HTTPS + IE related bugs, related to caching in general (SVN#17795)</li>
+  <li>Fix 31 bugs in file/image/sounds/flash uploads/delete/permissions in profile/homepage/agenda edition pages</li>
 </ul>
 <br />
 <h3>CSS changes</h3>
 <ul>
   <li>Added classes glossary-term, glossary-term-title, glossary-term-desc, glossary-term-action-links for the glossary tool</li>
+  <li>Added personal-notes tool-related styles</li>
+  <li>Changed many things in the public-admin style (Dokeos default) to improve design - will probably affect other styles a little despite efforts not to</li>
 </ul>
 <br />
 <h3>Important language changes</h3>
@@ -149,6 +170,10 @@
 </ul>
 <br />
 <h3>Known issues</h3>
+<ul>
+</ul>
+<br />
+<h3>Deprecated files</h3>
 <ul>
 </ul>
 <br />
@@ -208,7 +233,6 @@
 	<li>Tracking - A new page to display access details by user is available under the Reporting tab, in the user details in a course</li>
 	<li>Removed header from learning path tool. It was taking too much space and was not flexible enough for CSS styling</li>
 	<li>Improved speed of 1.6 to 1.8 migration by adding indexes</li>
-	<li>Improved  Implemented of the Global Agenda see FS#3391 </li>
     </ul>
 <br />
 <h3>Debugging</h3>

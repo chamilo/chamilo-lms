@@ -2285,23 +2285,27 @@ function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1) {
 	} else {
 		$select .= " AND access_url = 1 ";
 	}	
+
 	$res = api_sql_query($select,__FILE__,__LINE__);
-	if(Database::num_rows($res)>0) {   //found item for this access_url
+	if(Database::num_rows($res)>0) {   
+		//found item for this access_url
 		$row = Database::fetch_array($res);
 		$update = "UPDATE $t_settings SET selected_value = '$value' WHERE id = ".$row['id'] ;
-		$res = api_sql_query($update,__FILE__,__LINE__); 	
-	} else { //item not found for this access_url, we have to check if the whole thing is missing 
-	  //(in which case we ignore the insert) or if there *is* a record but just for access_url=1
-		$select = "SELECT * FROM $t_settings WHERE variable = '$var' AND access_url = '1' ";
+		$res = api_sql_query($update,__FILE__,__LINE__);
+	} else { 
+		//Item not found for this access_url, we have to check if it exist with access_url = 1
+		$select = "SELECT * FROM $t_settings WHERE variable = '$var' AND access_url = 1 ";
+		// just in case 
 		if ($access_url==1) {
 			if (!empty($subvar)) {
 				$select .= " AND subkey = '$subvar'";
 			}
 			if (!empty($cat)) {
 				$select .= " AND category = '$cat'";
-			}	
+			}
 			$res = api_sql_query($select,__FILE__,__LINE__);
-			if (Database::num_rows($select)>0) { //we have a setting for access_url 1, but none for the current one, so create one
+			
+			if (Database::num_rows($res)>0) { //we have a setting for access_url 1, but none for the current one, so create one
 				$row = Database::fetch_array($res);
 				$insert = "INSERT INTO $t_settings " .
 						"(variable,subkey," .
@@ -2313,8 +2317,8 @@ function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1) {
 						"('".$row['variable']."',".(!empty($row['subkey'])?"'".$row['subkey']."'":"NULL")."," .
 						"'".$row['type']."','".$row['category']."'," .
 						"'$value','".$row['title']."'," .
-						"".(!empty($row['comment'])?"'".$row['comment']."'":"NULL").",'".(!empty($row['scope'])?"'".$row['scope']."'":"NULL")."'," .
-						"'".(!empty($row['subkeytext'])?"'".$row['subkeytext']."'":"NULL")."',$access_url)";
+						"".(!empty($row['comment'])?"'".$row['comment']."'":"NULL").",".(!empty($row['scope'])?"'".$row['scope']."'":"NULL")."," .
+						"".(!empty($row['subkeytext'])?"'".$row['subkeytext']."'":"NULL").",$access_url)";
 				$res = api_sql_query($insert,__FILE__,__LINE__);
 			} else { // this setting does not exist
 				error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all',0);
@@ -2333,7 +2337,7 @@ function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1) {
 				$row = Database::fetch_array($res);
 				if ($row['access_url_changeable']==1) {
 					$insert = "INSERT INTO $t_settings " .
-							"(variable,subkey," .
+							"(variable,subkey," . 
 							"type,category," .
 							"selected_value,title," .
 							"comment,scope," .
@@ -2345,7 +2349,7 @@ function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1) {
 							"'$value','".$row['title']."'," .
 							"".(!empty($row['comment'])?"'".$row['comment']."'":"NULL").",".
 							(!empty($row['scope'])?"'".$row['scope']."'":"NULL")."," .
-							"'".(!empty($row['subkeytext'])?"'".$row['subkeytext']."'":"NULL")."',$access_url,".$row['access_url_changeable'].")";
+							"".(!empty($row['subkeytext'])?"'".$row['subkeytext']."'":"NULL").",$access_url,".$row['access_url_changeable'].")";
 					$res = api_sql_query($insert,__FILE__,__LINE__);
 				}
 			} else { // this setting does not exist

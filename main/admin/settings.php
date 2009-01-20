@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 17818 2009-01-19 12:44:20Z pcool $
+<?php // $Id: settings.php 17865 2009-01-20 16:33:17Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -125,18 +125,16 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 	//$resultsettings = api_sql_query($sqlsettings, __FILE__, __LINE__);
 	//while ($row = mysql_fetch_array($resultsettings))
 	$default_values = array();
-	foreach($settings as $row)
-	{		
-		
-		($countsetting['0']%10) < 5 ?$b=$countsetting['0']-10:$b=$countsetting['0'];
-		
+	foreach($settings as $row) {		
+		($countsetting['0']%10) < 5 ?$b=$countsetting['0']-10:$b=$countsetting['0'];		
 		if ($i % 10 == 0 and $i<$b){
 			if ($_GET['category'] <> "Languages"){
 				$form->addElement('html','<div align="right">');
 				$form->addElement('submit', null,get_lang('SaveSettings'));
 				$form->addElement('html','</div>');
 			}		
-		}$i++;	
+		}
+		$i++;	
 
 		$form->addElement('header', null, get_lang($row['title']));
 		$hideme=array();
@@ -199,7 +197,18 @@ if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['cate
 				$default_values[$row['variable']] = $row['selected_value'];
 				break;
 			case 'checkbox';
-				$sql = "SELECT * FROM settings_current WHERE variable='".$row['variable']."'";
+				//be default we chose the access_url 1 otherwise we will get parameters from all urls				
+				if ($row['access_url_changeable']==1) {
+					//current access_url
+					$access_url = $_configuration['access_url'];
+					if (empty($access_url)) 
+						$access_url = 1; 
+															
+					$sql = "SELECT * FROM settings_current WHERE variable='".$row['variable']."' AND access_url =  $access_url";											
+				} else {
+					$sql = "SELECT * FROM settings_current WHERE variable='".$row['variable']."' AND access_url =  1";
+				}
+								
 				$result = api_sql_query($sql, __FILE__, __LINE__);
 				$group = array ();	
 				while ($rowkeys = Database::fetch_array($result)) {

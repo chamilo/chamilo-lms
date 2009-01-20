@@ -30,6 +30,9 @@ $tool = TOOL_GLOSSARY;
 // displaying the header
 Display::display_header(get_lang(ucfirst($tool)));
 
+// tool introduction
+Display::display_introduction_section(TOOL_GLOSSARY,'left');
+
 // action links
 echo '<div class="actions">';
 if (api_is_allowed_to_edit())

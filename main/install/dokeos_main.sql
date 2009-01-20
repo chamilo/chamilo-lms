@@ -1236,3 +1236,20 @@ CREATE TABLE user_api_key (
     PRIMARY KEY (id)
 );
 ALTER TABLE user_api_key ADD INDEX idx_user_api_keys_user (user_id);
+--
+-- Table structure for table messages_invitation
+--
+CREATE TABLE messages_invitation(
+	id bigint unsigned not null auto_increment,
+	user_sender_id int unsigned not null,
+	user_receiver_id int unsigned not null,
+	msg_status tinyint not null default 0, -- 0 read, 1 unread, 5 pending invitation, 6 accepted invitation, 7 invitacion denegada
+	send_date int,
+	title varchar(255) not null,
+	content text not null,
+	PRIMARY KEY(id)
+);
+ALTER TABLE messages_invitation ADD INDEX idx_messages_invitation_user_sender(user_sender_id);
+ALTER TABLE messages_invitation ADD INDEX idx_messages_invitation_user_receiver(user_receiver_id);
+ALTER TABLE messages_invitation ADD INDEX idx_messages_invitation_user_sender_user_receiver(user_sender_id,user_receiver_id);
+ALTER TABLE messages_invitation ADD INDEX idx_messages_invitation_msg_status(msg_status);

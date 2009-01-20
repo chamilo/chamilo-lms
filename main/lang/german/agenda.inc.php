@@ -54,7 +54,6 @@ $CopiedAsAnnouncement = "Als Ankündigung kopiert";
 $NewAnnouncement = "Neue Ankündigung";
 $AddAnnouncement = "Als Ankündigung hinzugefügt";
 $UpcomingEvent = "Bevorstehendes Ereignis";
-$ListView = "Als Liste anzeigen";
 $RepeatedEvent = "Wiederholendes Ereignis";
 $RepeatType = "Typ wiederholen";
 $RepeatDaily = "Täglich";

@@ -563,6 +563,7 @@ $GroupWiki = "Wiki";
 $ExportToPDF = "Prenesi datoteku u formatu PDF";
 $CommentAdded = "Vaš komentar je dodan";
 $BackToPreviousPage = "Povratak na prethodnu stranicu";
+$ListView = "Prikaži kao listu";
 $NoOfficialCode = "Nema službene šifre";
 $Owner = "Vlasnik";
 ?>

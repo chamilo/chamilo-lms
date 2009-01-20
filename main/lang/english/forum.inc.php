@@ -98,7 +98,6 @@ $QualifyThread = "Qualify thread";
 $ThreadUsersList = "Users list of the thread";
 $StudentList = "List of students";
 $QualifyThisThread = "Qualify this thread";
-$ViewHistoryChange = "View changes history";
 $CourseUsers = "Users in course";
 $PostsNumber = "Number of posts";
 $NumberOfPostsForThisUser = "Number of posts for this user";

@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langProfessors = "Profesores";
-$langExplanation = "Una vez que haya pulsado Aceptar se creará el sitio web de un curso, que contará con diversas herramientas: un gestor de documentos, un creador de lecciones en formato SCORM, un visualizador de lecciones o itinerarios de aprendizaje; la posibilidad de realizar test y enviar trabajos, discutir en foros y chat, enviar anuncios y mensajes, disponer de una agenda, videoconferencia y pizarra digital, herramientas para el trabajo en grupo,  realizar encuestas y seguimiento de los alumnos, etc.Su identificación como creador de este sitio le permitirá modificarlo según sus necesidades.";
+$langExplanation = "Una vez que haya pulsado Aceptar se creará el sitio web de un curso, que contará con diversas herramientas: un gestor de documentos, un creador de lecciones en formato SCORM, un visualizador de lecciones; la posibilidad de realizar test y enviar trabajos, discutir en foros y chat, enviar anuncios y mensajes, disponer de una agenda, videoconferencia y pizarra digital, herramientas para el trabajo en grupo,  realizar encuestas y seguimiento de los alumnos, etc.Su identificación como creador de este sitio le permitirá modificarlo según sus necesidades.";
 $langEmpty = "No ha rellenado todos los campos.<br>Utilice el botón de retorno de su navegador y vuelva a empezar.<br>Si no conoce el código de su curso, consulte el programa del curso";
 $langCodeTaken = "Este código de curso ya es utilizado por otro curso.<br>Utilice el botón de retorno de su navegador y vuelva a empezar.";
 $langFormula = "Atentamente";
@@ -51,7 +51,7 @@ $langTargetFac = "Este campo puede contener la facultad, el departamento o cualq
 $langMax = "max. 20 caracteres, p. ej. <i>INNOV21</i>";
 $langDoubt = "En caso de dudas sobre el título exacto del curso o el código que le corresponde consultar el";
 $langProgram = "Programa del curso</a>. Si el sitio que usted quiere crear no corresponde a un curso existente, usted puede inventar uno. Por ejemplo <i>INNOVACION</i> si se trata de un programa de formación sobre gestión de la innovación";
-$langScormtool = "Itinerarios de aprendizaje";
+$langScormtool = "Lecciones";
 $langScormbuildertool = "Constructor de lecciones SCORM";
 $langPathbuildertool = "Constructor de lecciones";
 $langOnlineConference = "Conferencia Online";

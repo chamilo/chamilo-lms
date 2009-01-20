@@ -473,4 +473,5 @@ $MinHours = "timmar";
 $MinMinutes = "minuter";
 $HomeDirectory = "hem";
 $Course = "Kurs";
+$ListView = "Visa som lista";
 ?>

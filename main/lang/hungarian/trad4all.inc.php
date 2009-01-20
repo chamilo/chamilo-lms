@@ -559,6 +559,8 @@ $GroupWiki = "Wiki";
 $ExportToPDF = "Mentés PDF-ként";
 $CommentAdded = "A hozzászólását a rendszer elmentette";
 $BackToPreviousPage = "Vissza az el&#337;z&#337; oldalra";
+$ListView = "Megtekintés listaként";
 $Owner = "Tulajdonos";
+$DisplayOrder = "Megjelenés sorrendje";
 $Phone = "Telefon";
 ?>

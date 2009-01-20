@@ -54,7 +54,6 @@ $CopiedAsAnnouncement = "Preslikano kao obavijest";
 $NewAnnouncement = "Nova obavijest";
 $AddAnnouncement = "Dodaj kao obavijest";
 $UpcomingEvent = "Nadolaze&#263;i doga&#273;aj";
-$ListView = "Prikaži kao listu";
 $RepeatedEvent = "Ponovljeni doga&#273;aj";
 $RepeatType = "Vrsta ponovljivosti";
 $RepeatDaily = "Dnevno";

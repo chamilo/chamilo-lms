@@ -664,7 +664,6 @@ $LDAPVersion3 = "LDAP 3";
 $AllSlashNone = "Összes/semmi";
 $TabsMyGradebook = "Leckekönyvem fül";
 $VisioUseRtmptTitle = "Használja az rtmpt protokollt";
-$DisplayOrder = "Megjelenés sorrendje";
 $EnableSearchTitle = "Full-text keresési lehet&#337;ség";
 $AddUrl = "URL hozzáadása";
 ?>

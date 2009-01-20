@@ -444,4 +444,5 @@ $SeeDetail = "Ver detalhes";
 $GroupSingle = "Grupo";
 $PleaseLoginAgainFromHomepage = "Por favor tente realizar o login novamente na página principal";
 $PleaseLoginAgainFromFormBelow = "Por favor tente realizar seu login novamente utilizando o o formulário abaixo";
+$ListView = "Mostrar como lista";
 ?>

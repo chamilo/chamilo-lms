@@ -826,7 +826,6 @@ $UserFieldsSortOptions = "Razvrsti možnosti polj profila";
 $FieldOptionMovedUp = "Možnost je bila prestavljena navzgor.";
 $CannotMoveFieldOption = "Možnosti ni mogoče premakniti.";
 $FieldOptionMovedDown = "Možnost je bila prestavljena navzdol.";
-$DisplayOrder = "Vrstni red prikaza";
 $DefineSessionOptions = "Določi zakasnitev dostopa za inštruktorja";
 $DaysBefore = "dni pred";
 $DaysAfter = "dni po";

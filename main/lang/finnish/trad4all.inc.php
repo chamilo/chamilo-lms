@@ -327,4 +327,5 @@ $Exercise = "Harjoitus";
 $Result = "Tulos";
 $Learner = "Opiskelija";
 $CommentAdded = "Viestisi on lisätty";
+$ListView = "Näytä listana";
 ?>

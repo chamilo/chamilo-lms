@@ -54,7 +54,6 @@ $CopiedAsAnnouncement = "Copiado como anuncio";
 $NewAnnouncement = "Nuevo anuncio";
 $AddAnnouncement = "Añadir como un anuncio";
 $UpcomingEvent = "Próximo evento";
-$ListView = "Mostrar como lista";
 $RepeatedEvent = "Evento periódico";
 $RepeatType = "Periodicidad";
 $RepeatDaily = "Diaria";

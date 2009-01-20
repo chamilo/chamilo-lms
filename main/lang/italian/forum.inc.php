@@ -98,7 +98,6 @@ $QualifyThread = "Valuta l\'intervento";
 $ThreadUsersList = "Partecipanti alla discussione";
 $StudentList = "Elenco dei corsisti";
 $QualifyThisThread = "Valuta l\'argomento";
-$ViewHistoryChange = "Storico delle modifiche";
 $CourseUsers = "Utenti del corso";
 $PostsNumber = "Numero di messaggi";
 $NumberOfPostsForThisUser = "Numero di messaggi per l\'utente";

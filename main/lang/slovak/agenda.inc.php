@@ -54,7 +54,6 @@ $CopiedAsAnnouncement = "Skopírované ako oznam";
 $NewAnnouncement = "Nový oznam";
 $AddAnnouncement = "Prida&#357; ako oznam";
 $UpcomingEvent = "Nová udalos&#357;";
-$ListView = "Zobrazi&#357; ako zoznam";
 $RepeatedEvent = "Opakovaná udalos&#357;";
 $RepeatType = "Periodicita";
 $RepeatDaily = "Denne";

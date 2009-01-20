@@ -54,5 +54,4 @@ $CopiedAsAnnouncement = "Copiado como anúncio";
 $NewAnnouncement = "Novo anúncio";
 $AddAnnouncement = "Acrescentado como anúncio";
 $UpcomingEvent = "Próximo Evento";
-$ListView = "Mostrar como lista";
 ?>

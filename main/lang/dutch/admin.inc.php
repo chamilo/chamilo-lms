@@ -825,6 +825,5 @@ $UserFieldsSortOptions = "Sorteer the opties van de extra profielvelden";
 $FieldOptionMovedUp = "De optie is omhoog verplaatst.";
 $CannotMoveFieldOption = "Kan de optie niet verplaatsten.";
 $FieldOptionMovedDown = "De optie is omlaag verplaatst.";
-$DisplayOrder = "Volgorde van weergave";
 $AddUrl = "Url toevoegen";
 ?>

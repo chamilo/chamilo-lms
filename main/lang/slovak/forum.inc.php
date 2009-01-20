@@ -80,7 +80,6 @@ $AddImage = "Prida&#357; obrázok";
 $QualifyThread = "Posúdi&#357; tému";
 $StudentList = "Zoznam študentov";
 $QualifyThisThread = "Posúdi&#357; túto tému";
-$ViewHistoryChange = "Prezera&#357; históriu zmien";
 $CourseUsers = "Používatelia v kurze";
 $PostsNumber = "Po&#269;et správ";
 $NumberOfPostsForThisUser = "Po&#269;et správ pre tohto používate&#318;a";

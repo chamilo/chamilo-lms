@@ -364,4 +364,6 @@ $InCourse = "in curs";
 $UserOnlineListSession = "Lista userilor online";
 $From = "de la";
 $To = "la";
+$ListView = "Afiseaza ca lista";
+$DisplayOrder = "Ordinea de afisare";
 ?>

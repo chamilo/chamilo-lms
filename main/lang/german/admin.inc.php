@@ -826,7 +826,6 @@ $UserFieldsSortOptions = "Optionen sortieren für die Profile Felder";
 $FieldOptionMovedUp = "Diese Option wurde nach oben verschoben";
 $CannotMoveFieldOption = "Diese Option kann nicht verschoben werden";
 $FieldOptionMovedDown = "Diese Option wurde nach unten verschoben";
-$DisplayOrder = "Anzeige der Reihenfolge ";
 $DefineSessionOptions = "Zugriff Verzögerung für Coach definieren";
 $DaysBefore = "Tage vor";
 $DaysAfter = "Tage nach";

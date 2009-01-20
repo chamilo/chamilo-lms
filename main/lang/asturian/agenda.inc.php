@@ -54,7 +54,6 @@ $CopiedAsAnnouncement = "Copiáu como anuncia";
 $NewAnnouncement = "Anuncia nueva";
 $AddAnnouncement = "Amestar como una anuncia";
 $UpcomingEvent = "Eventu prósimu";
-$ListView = "Amosar como llistáu";
 $RepeatedEvent = "Eventu periódicu";
 $RepeatType = "Periodicidá";
 $RepeatDaily = "Diaria";

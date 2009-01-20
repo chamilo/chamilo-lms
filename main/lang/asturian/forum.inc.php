@@ -98,7 +98,6 @@ $QualifyThread = "Poner nota al tema";
 $ThreadUsersList = "Llistáu d\'usuarios del tema";
 $StudentList = "Llistáu d\'estudiantes";
 $QualifyThisThread = "Poner nota a esti tema";
-$ViewHistoryChange = "Ver historial de cambios";
 $CourseUsers = "Usuarios del Cursu";
 $PostsNumber = "Cantidá de mensaxes ";
 $NumberOfPostsForThisUser = "Cantidá de mensaxes del usuariu";

@@ -54,7 +54,6 @@ $CopiedAsAnnouncement = "Gekopieerd als aankondiging";
 $NewAnnouncement = "Nieuwe aankondiging";
 $AddAnnouncement = "Toevoegen als aankondiging";
 $UpcomingEvent = "Volgende gebeurtenis";
-$ListView = "Als lijst weergeven";
 $RepeatedEvent = "Herhaalde gebeurtenis";
 $RepeatType = "Herhaaltype";
 $RepeatDaily = "Dagelijks";

@@ -13,4 +13,13 @@ $WriteYourNoteHere = "Click here to write a new note";
 $SearchByTitle = "Search by title";
 $WriteTheTitleHere = "Write the title here";
 $UpdateDate = "Last modification";
+$NoteAddNew = "Note add new";
+$OrderByCreationDate = "Order by creation date";
+$OrderByModificationDate = "Order by modification date";
+$OrderByTitle = "Order by title";
+$TableView = "Table view";
+$NoteTitle = "Title of Note";
+$NoteComment = "Comments of Note";
+$NoteAdded = "Note added";
+$NoteConfirmDelete = "Note Confirm Delete";
 ?>

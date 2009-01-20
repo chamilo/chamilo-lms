@@ -826,7 +826,6 @@ $UserFieldsSortOptions = "Ordonner les options des champs de profiling";
 $FieldOptionMovedUp = "L\'option a bien été déplacée vers le haut.";
 $CannotMoveFieldOption = "Impossible de déplacer l\'option.";
 $FieldOptionMovedDown = "L\'option a bien été déplacée vers le bas.";
-$DisplayOrder = "Ordre d\'affichage";
 $DefineSessionOptions = "Définir les délais d\'accès au coach";
 $DaysBefore = "jours avant";
 $DaysAfter = "jours après";

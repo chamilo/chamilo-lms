@@ -125,4 +125,5 @@ $NoFilesHere = "Non ci sono file in questa sezione";
 $NoFilesHere = "Non ci sono file in questa sezione";
 $NewDropboxFileUploaded = "Un nuovo file è stato aggiunto nella sezione scambio file";
 $NewDropboxFileUploadedContent = "Un nuovo file è stato aggiunto nella sezione scambio file del corso";
+$ErrorNoFilesInFolder = "Seleziona almeno un file";
 ?>

@@ -54,7 +54,6 @@ $CopiedAsAnnouncement = "Kopirano kot obvestilo";
 $NewAnnouncement = "Novo obvestilo";
 $AddAnnouncement = "Dodano kot obvestilo";
 $UpcomingEvent = "Prihajajoč dogodek";
-$ListView = "Prikaži kot seznam";
 $RepeatedEvent = "Ponovljiv dogodek";
 $RepeatType = "Vrsta ponovljivosti";
 $RepeatDaily = "Dnevni";

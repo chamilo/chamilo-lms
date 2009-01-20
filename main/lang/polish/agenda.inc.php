@@ -50,5 +50,4 @@ $UserGroupFilter = "Filtr grup/u&#380;ytkowników";
 $ShowAll = "Poka&#380; wszystko";
 $Print = "Drukuj";
 $MyTextHere = "mój tekst tutaj";
-$ListView = "Wy&#347;wietl jako list&#281;";
 ?>

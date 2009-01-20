@@ -563,6 +563,7 @@ $GroupWiki = "Wiki";
 $ExportToPDF = "Exportar a PDF";
 $CommentAdded = "Comentario agregado";
 $BackToPreviousPage = "Volver á páxina anterior";
+$ListView = "Mostrar como lista";
 $NoOfficialCode = "No Código oficial";
 $Owner = "Propietario";
 ?>

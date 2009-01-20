@@ -1,8 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$ResourceAdded = "Recurso añadido. Usted ahora puede volver al itinerario o añadir más recursos.";
-$LearningPath = "Itinerarios de aprendizaje";
+$ResourceAdded = "Recurso añadido. Usted ahora puede volver a lecciones o añadir más recursos.";
+$LearningPath = "Lecciones";
 $LevelUp = "nivel superior";
 $AddIt = "Añadir";
 $MainCategory = "categoría principal";

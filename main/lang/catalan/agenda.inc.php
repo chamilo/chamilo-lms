@@ -54,7 +54,6 @@ $CopiedAsAnnouncement = "Copiat com anunci";
 $NewAnnouncement = "Nou anunci";
 $AddAnnouncement = "Afegir com anunci";
 $UpcomingEvent = "Propera anotació";
-$ListView = "mostrar com una llista";
 $RepeatedEvent = "Anotació periòdica";
 $RepeatType = "Periodicitat";
 $RepeatDaily = "Diària";

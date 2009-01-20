@@ -468,6 +468,7 @@ $GroupWiki = "Wiki";
 $ExportToPDF = "Eksport do PDF";
 $CommentAdded = "Twój komentarz zosta&#322; dodany";
 $BackToPreviousPage = "Powrót do poprzedniej strony";
+$ListView = "Wy&#347;wietl jako list&#281;";
 $CategoryDeleted = "Kategoria zosta&#322;a usuni&#281;ta";
 $CategoryAdded = "Kategoria dodana";
 $IP = "IP";

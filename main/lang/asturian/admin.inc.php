@@ -826,7 +826,6 @@ $UserFieldsSortOptions = "Ordenar les opciones de los campos del perfil";
 $FieldOptionMovedUp = "Esta opción moviose pa enriba.";
 $CannotMoveFieldOption = "Nun se pue mover la opción.";
 $FieldOptionMovedDown = "La opción movióse pa embaxu.";
-$DisplayOrder = "Orde";
 $DefineSessionOptions = "Definir el retardu del accesu del tutor";
 $DaysBefore = "Díes enantes";
 $DaysAfter = "díes dempués";

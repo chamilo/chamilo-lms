@@ -98,7 +98,6 @@ $QualifyThread = "Kvalificiraj nit";
 $ThreadUsersList = "Seznam uporabnikov niti";
 $StudentList = "Seznam tečajnikov";
 $QualifyThisThread = "Kvalificiraj to nit";
-$ViewHistoryChange = "Poglej zgodovino sprememb";
 $CourseUsers = "Uporabniki tečaja";
 $PostsNumber = "Število objav";
 $NumberOfPostsForThisUser = "Število objav tega uporabnika";

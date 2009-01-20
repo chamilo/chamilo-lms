@@ -823,7 +823,6 @@ $UserFieldsSortOptions = "Ordenar as opções dos campos do perfil";
 $FieldOptionMovedUp = "A opção foi movida para cima";
 $CannotMoveFieldOption = "Não se pode mover a opção";
 $FieldOptionMovedDown = "A opção foi movida para baixo";
-$DisplayOrder = "Mostrar ordem";
 $DaysBefore = "Dias antes";
 $DaysAfter = "dias depois";
 $SessionAddTypeUnique = "Inscrição única";

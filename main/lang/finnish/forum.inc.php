@@ -1,7 +1,9 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$ForumDeleted = "Keskustelualue poistettu";
 $Forum = "Keskustelualue";
+$AddForum = "Lisää uusi keskustelualue";
 $Topics = "Aiheet";
 $Posts = "Viestit";
 $LastPosts = "Viimeisin viesti";

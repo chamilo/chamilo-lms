@@ -98,7 +98,6 @@ $QualifyThread = "Calificar el tema";
 $ThreadUsersList = "Lista de usuarios del tema";
 $StudentList = "Lista de estudiantes";
 $QualifyThisThread = "Calificar este tema";
-$ViewHistoryChange = "Ver historial de cambios";
 $CourseUsers = "Usuarios del Curso";
 $PostsNumber = "Número de mensajes";
 $NumberOfPostsForThisUser = "Número de mensajes del usuario";

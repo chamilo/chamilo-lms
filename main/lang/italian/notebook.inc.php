@@ -13,4 +13,13 @@ $WriteYourNoteHere = "Scrivi qui il tuo appunto";
 $SearchByTitle = "Cerca nel titolo";
 $WriteTheTitleHere = "Scrivi qui il titolo";
 $UpdateDate = "Ultima modifica";
+$NoteAddNew = "Nuova annotazione";
+$OrderByCreationDate = "Ordina per data di creazione";
+$OrderByModificationDate = "Ordina per data di modifica";
+$OrderByTitle = "Ordina per titolo";
+$TableView = "Vista tabella";
+$NoteTitle = "Titolo dell\'annotazione";
+$NoteComment = "Commenti all\'annotazione";
+$NoteAdded = "Annotazione aggiunta";
+$NoteConfirmDelete = "Vuoi veramente eliminare l\'annotazione?";
 ?>

@@ -826,7 +826,6 @@ $UserFieldsSortOptions = "Sortati optiunile pentru campurile din profil";
 $FieldOptionMovedUp = "Optiunea a fost deplasata in sus.";
 $CannotMoveFieldOption = "Nu pot muta optiunea.";
 $FieldOptionMovedDown = "Optiunea a fost mutata in  jos.";
-$DisplayOrder = "Ordinea de afisare";
 $DefineSessionOptions = "Definiti intarzierile de acces ale antrenorului";
 $DaysBefore = "zile inainte";
 $DaysAfter = "zile dupa";

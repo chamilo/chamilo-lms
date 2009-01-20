@@ -563,8 +563,10 @@ $GroupWiki = "Wiki";
 $ExportToPDF = "Export nach PDF";
 $CommentAdded = "Ihr Kommentar wurde hinzugefügt";
 $BackToPreviousPage = "Zurück zur vorherigen Seite";
+$ListView = "Als Liste anzeigen";
 $NoOfficialCode = "Kein offizieller Code";
 $Owner = "Eigentümer";
+$DisplayOrder = "Anzeige der Reihenfolge ";
 $SearchFeatureDoIndexDocument = "Dokumenttext indizieren?";
 $SearchFeatureDocumentLanguage = "Dokumentsprache für Indizierung";
 ?>

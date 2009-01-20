@@ -826,7 +826,6 @@ $UserFieldsSortOptions = "Sort the options of the profiling fields";
 $FieldOptionMovedUp = "The option has been moved up.";
 $CannotMoveFieldOption = "Cannot move the option.";
 $FieldOptionMovedDown = "The option has been moved down.";
-$DisplayOrder = "Display order";
 $DefineSessionOptions = "Define access delays of the coach";
 $DaysBefore = "days before";
 $DaysAfter = "days after";

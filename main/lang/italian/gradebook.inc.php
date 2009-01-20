@@ -127,4 +127,5 @@ $ScoreDoesNotMatch = "Il punteggio non corrisponde";
 $FileUploadComplete = "File caricato con successo";
 $NoResultsAvailable = "Nessun risultato disponibile";
 $CannotChangeTheMaxNote = "Non si può modificare il valore massimo del voto";
+$GradebookWeightUpdated = "I pesi sono stati aggiornati";
 ?>

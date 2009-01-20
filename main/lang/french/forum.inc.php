@@ -98,7 +98,6 @@ $QualifyThread = "Coter le fil de discussion";
 $ThreadUsersList = "Liste des utilisateurs du fil";
 $StudentList = "Liste des étudiants";
 $QualifyThisThread = "Coter ce fil";
-$ViewHistoryChange = "Voir l\'historique des modifications";
 $CourseUsers = "Utilisateurs du cours";
 $PostsNumber = "Nombre de messages";
 $NumberOfPostsForThisUser = "Nombre de messages de l\'utilisateur";

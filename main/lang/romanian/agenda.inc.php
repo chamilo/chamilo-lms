@@ -54,7 +54,6 @@ $CopiedAsAnnouncement = "Copiat ca anunt";
 $NewAnnouncement = "Anunt nou";
 $AddAnnouncement = "Adauga un anunt";
 $UpcomingEvent = "Eveniment care urmeaza";
-$ListView = "Afiseaza ca lista";
 $RepeatedEvent = "Eveniment repetitiv";
 $RepeatType = "Repeta tastarea";
 $RepeatDaily = "Zilnic";

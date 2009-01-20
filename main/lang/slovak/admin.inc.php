@@ -667,7 +667,6 @@ $AddUsersByCoachTitle = "Registrova&#357; používate&#318;ov pod&#318;a tútora";
 $FieldOptionMovedUp = "Možnos&#357; bola presunutá hore.";
 $CannotMoveFieldOption = "Nemožno presunú&#357; možnos&#357;.";
 $FieldOptionMovedDown = "Možnos&#357; bola presunutá dole.";
-$DisplayOrder = "Poradie zobrazenia";
 $DaysBefore = "dni pred";
 $DaysAfter = "dni po";
 $SessionAddTypeUnique = "Jednoduchá registrácia";

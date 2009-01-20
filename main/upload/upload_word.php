@@ -40,7 +40,10 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 	var myUpload = new upload(0);
 </script>';
 $htmlHeadXtra[] = $form_style;
-$specific_fields = get_specific_field_list();
+if (api_get_setting('search_enabled')=='true')
+{
+	$specific_fields = get_specific_field_list();
+}
 
 if(isset($_POST['convert'])){
 	$cwdir = getcwd();

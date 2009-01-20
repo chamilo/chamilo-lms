@@ -186,8 +186,7 @@ $renderer->setElementTemplate($user_file_template);
 
 $form -> addElement ('file', 'user_file','<img src="../img/powerpoint_big.gif" align="absbottom" />&nbsp;&nbsp;');
 $form -> addElement ('checkbox', 'take_slide_name','', get_lang('TakeSlideName'));
-if(api_get_setting('search_enabled')=='true')
-{
+if (api_get_setting('search_enabled')=='true') {
     $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
     //$form -> addElement ('text', 'terms', get_lang('SearchFeatureDocumentTagsIfIndexing').': ');
     $form -> addElement ('html','<br />');

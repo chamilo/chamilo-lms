@@ -1,6 +1,6 @@
 <?php //$id:$
 /**
- * Defines the OpenOfficeDocument class, which is meant as a mother class
+ * Defines the OpenofficeDocument class, which is meant as a mother class
  * to help in the conversion of Office documents to learning paths
  * @package dokeos.learnpath
  * @author	Eric Marguin <eric.marguin@dokeos.com>
@@ -81,11 +81,12 @@ abstract class OpenofficeDocument extends learnpath {
 		$cmd .= $this -> add_command_parameters();	
 
 		// to allow openoffice to manipulate docs.
-		chmod ($this->base_work_dir.$this->created_dir,0777);
-		chmod ($this->base_work_dir.'/'.$this->file_path,0777);
+		@chmod ($this->base_work_dir.$this->created_dir,0777);
+		@chmod ($this->base_work_dir.$this->file_path,0777);
 		
 		$locale = $this->original_locale; // TODO : improve it because we're not sure this locale is present everywhere
 		putenv('LC_ALL='.$locale);
+		$files = array(); $return = 0;
 		$shell = exec($cmd, $files, $return);
 		if($return != 0) { //if the java application returns an error code
 			switch($return)

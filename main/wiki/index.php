@@ -573,7 +573,7 @@ if ($_GET['action']=='usercontrib')
 if ($_GET['action']=='mostchanged')
 {
 	echo '<br>';
-	echo '<b>'.get_lang('MostChangesPages').'</b><br>'; 
+	echo '<b>'.get_lang('MostChangedPages').'</b><br>'; 
 	echo '<hr>';
 	
 	

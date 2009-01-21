@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 17842 2009-01-19 21:39:37Z herodoto $
+<?php // $Id: profile.php 17906 2009-01-21 20:27:37Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,7 +39,7 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = 'registration';
+$language_file = array('registration','messages');
 $cidReset = true;
 
 require ('../inc/global.inc.php');
@@ -64,9 +64,24 @@ function show_image(image,width,height) {
 	height = parseInt(height) + 20;			
 	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
 		
-}
-				
+}			
 </script>';
+
+if (api_get_setting('allow_message_tool')=='true') {
+	$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+	$htmlHeadXtra[] ='<script type="text/javascript">
+	$(document).ready(function(){
+		$(".message-content .message-delete").click(function(){
+			$(this).parents(".message-content").animate({ opacity: "hide" }, "slow");
+			
+			$(".message-view").animate({ opacity: "show" }, "slow");
+		});				
+		//$("message-content-internal").load("../messages/index.php");
+		//$("message-content-internal").show();
+		
+	});
+	</script>';	
+}
 
 if (!empty ($_GET['coursePath']))
 {
@@ -687,8 +702,7 @@ elseif ($form->validate())
 		$sql = rtrim($sql, ',');
 	}
 
-	$sql .= " WHERE user_id  = '".$_user['user_id']."'";
-		
+	$sql .= " WHERE user_id  = '".$_user['user_id']."'";		
 	api_sql_query($sql, __FILE__, __LINE__);
 
 	//update the extra fields
@@ -718,8 +732,7 @@ if (!empty($file_deleted))
 }
 elseif (!empty($update_success))
 {
-	$message=get_lang('ProfileReg');
-	
+	$message=get_lang('ProfileReg');	
 	if ($upload_picture_success == true) 
 	{
 		$message.='<br /> '.get_lang('PictureUploaded');
@@ -760,15 +773,47 @@ $big_image_size = @getimagesize($big_image);
 $big_image_width= $big_image_size[0];
 $big_image_height= $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();
+
 if ($image=='unknown.jpg') {
-echo '<img '.$img_attributes.' />';
+	echo '<img '.$img_attributes.' />';
 } else {
-echo '<input type="image" '.$img_attributes.' onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
+	echo '<input type="image" '.$img_attributes.' onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
+}
+
+if (api_get_setting('allow_message_tool')=='true') {
+	
+	include (api_get_path(LIBRARY_PATH).'message.lib.php');
+	$number_of_new_messages = get_new_messages();
+	$cant_msg = ' ('.$number_of_new_messages.')';
+	if($number_of_new_messages==0) {		
+		$cant_msg= ''; 
+	}
+	
+	//$number_of_new_messages=2;
+	//echo '<div class="message-view" style="display:none;">'.get_lang('ViewMessages').'</div>';
+	echo '<div class="message-content">
+			<h2 class="message-title">'.get_lang('Message').'</h2>
+			<p>
+				<a href="../messages/inbox.php" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />
+				<a href="../messages/new_message.php" class="message-body">'.get_lang('Compose').'</a><br />' .
+			'</p>';		
+	
+	/*	 
+	 if ($number_of_new_messages>0) {
+		echo '<div class="message-content-internal">';		
+		echo Display::return_icon('message_new.png',get_lang('NewMessage'));	
+		echo '<a href="inbox.php" style="color:#000000" >'.get_lang('YouHaveNewMessage').'</a>';
+		echo '&nbsp;</div><br/>';		    
+	}			
+	*/
+	echo '<img src="../img/delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" />';
+	if ($count_message>0) {
+		echo '<br/>';
+	}
+echo '</div>';
 }
 
 
-
 $form->display();
-
 Display :: display_footer();
 ?>

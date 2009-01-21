@@ -1,10 +1,12 @@
-<?php // $Id: new_message.php 12996 2007-09-11 14:49:05Z elixir_inter $
+<?php // $Id: new_message.php 17903 2009-01-21 19:50:57Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
+	Copyright (c) 2009 Dokeos SPRL
+	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
 	Copyright (c) Facultad de Matematicas, UADY (México)
-	Copyright (c) Evie, Free University of Brussels (Belgium)
+	Copyright (c) Evie, Free University of Brussels (Belgium)		
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -16,8 +18,8 @@
 
 	See the GNU General Public License for more details.
 
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
+    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+    Mail: info@dokeos.com
 ==============================================================================
 */
 /**
@@ -34,14 +36,21 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file= "messages";
+$language_file= 'messages';
 $cidReset=true;
-include_once('../../main/inc/global.inc.php');
-echo $_SESSION['prueba'];
+include_once('../inc/global.inc.php');
+
 api_block_anonymous_users();
-require_once('./functions.inc.php');
+
+if (api_get_setting('allow_message_tool')!='true'){
+	api_not_allowed();
+}
+
+
+require_once(api_get_path(LIBRARY_PATH).'message.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'/text.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'/formvalidator/FormValidator.class.php');
+$table_message = Database::get_course_table(TABLE_MESSAGE);
 
 /*
 -----------------------------------------------------------
@@ -82,19 +91,20 @@ function show_compose_to_any($user_id)
 
 function show_compose_reply_to_message($message_id, $receiver_id)
 {
-	$query = "SELECT * FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$receiver_id." AND id='".$message_id."';";
+	global $table_message;
+	$query = "SELECT * FROM $table_message WHERE user_receiver_id=".$receiver_id." AND id='".$message_id."';";
 	$result = api_sql_query($query,__FILE__,__LINE__);
-	$row = mysql_fetch_array($result);
+	$row = Database::fetch_array($result);
 
 	if(!isset($row[1]))
 	{
 		echo get_lang('InvalidMessageId');
 		die();
 	}
-
+	
 	echo get_lang('To').':&nbsp;<strong>'.	GetFullUserName($row[1]).'</strong>';
-
-	$default['title'] = "Please enter a title";
+	
+	$default['title'] =get_lang('EnterTitle');
 	$default['user_list'] = $row[1];
 
 	manage_form($default);
@@ -103,48 +113,36 @@ function show_compose_reply_to_message($message_id, $receiver_id)
 function show_compose_to_user($receiver_id)
 {
 	echo get_lang('To').':&nbsp;<strong>'.	GetFullUserName($receiver_id).'</strong>';
-
-	$default['title'] = "Please enter a title";
+	$default['title'] = get_lang('EnterTitle');
 	$default['user_list'] = $receiver_id;
-
 	manage_form($default);
 }
 
 function manage_form($default, $select_from_user_list = null)
 {
+	global $table_message;
+	
 	$form = new FormValidator('compose_message');
 	if (isset($select_from_user_list))
 	{
 		$form->addElement('select', 'user_list', get_lang('SendMessageTo'), $select_from_user_list);
-	}
-	else
-	{
+	} else {
 		$form->addElement('hidden', 'user_list');
 	}
 	$form->add_textfield('title', get_lang('Title'));
-	$form->add_html_editor('content', get_lang('Content'));
-	$form->addElement('submit', 'compose', get_lang('Ok'));
+	$form->add_html_editor('content', '',false,false);
+	$form->addElement('submit', 'compose', get_lang('Send'));
 	$form->setDefaults($default);
 
-	if( $form->validate() )
-	{
+	if($form->validate()) {
 		$values = $form->exportValues();
 		$receiver_user_id = $values['user_list'];
-		$title = mysql_real_escape_string($values['title']);
-		$content = mysql_real_escape_string($values['content']);
+		$title = $values['title'];
+		$content = $values['content'];
 		//all is well, send the message
-		$id_tmp = api_get_user_id().$receiver_user_id.date('d-D-w-m-Y-H-s').microtime().rand();
-		$id_msg = md5($id_tmp);
-		$query = "INSERT INTO `".MESSAGES_DATABASE."` ( `id`, `id_sender`, `id_receiver`, `status`, `date`, `title`, `content` ) ".
-				 " VALUES (".
-		 		 "' ".$id_msg ."' , '".api_get_user_id()."', '".$receiver_user_id."', '1', '".date('Y-m-d H:i:s')."','".$title."','".$content."'".
-		 		 ");";
-		 		 
-		@api_sql_query($query,__FILE__,__LINE__);
+		send_message($receiver_user_id, $title, $content);
 		display_success_message($receiver_user_id);
-	}
-	else
-	{
+	} else {
 		$form->display();
 	}
 }
@@ -154,36 +152,27 @@ function manage_form($default, $select_from_user_list = null)
 		MAIN SECTION
 ==============================================================================
 */
-$interbreadcrumb[] = array ("url" => 'inbox.php', "name" => get_lang('Messages'));
-Display::display_header($nameTools, get_lang("ComposeMessage"));
+$interbreadcrumb[] = array ('url' => 'inbox.php', 'name' => get_lang('Messages'));
+Display::display_header($nameTools, get_lang('ComposeMessage'));
 api_display_tool_title($nameTools);
-if(!isset($_POST['compose']))
-{
-	if(isset($_GET['re_id']))
-	{
+if(!isset($_POST['compose'])) {
+	if(isset($_GET['re_id'])) {
 		$message_id = $_GET['re_id'];
 		$receiver_id = api_get_user_id();
 		show_compose_reply_to_message($message_id, $receiver_id);
-	}
-	else if(isset($_GET['send_to_user']))
-	{
+	} elseif(isset($_GET['send_to_user'])) {
 		show_compose_to_user($_GET['send_to_user']);
-	}
-	else
-	{
+	} else {
 		show_compose_to_any($_user['user_id']);
   	}
-}
-else
-{
-	if(api_get_user_id() && isset($_POST['user_list']) && isset($_POST['content']))
-	{
+} else {
+	if(api_get_user_id() && isset($_POST['user_list']) && isset($_POST['content']))	{
 		$default['title'] = $_POST['title'];
 		$default['user_list'] = $_POST['user_list'];
 		manage_form($default);
-	}
-	else
+	} else {
 		Display::display_error_message(get_lang('ErrorSendingMessage'));
+	}
 }
 
 

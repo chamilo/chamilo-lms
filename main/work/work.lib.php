@@ -570,7 +570,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			}
 			
 			$show_as_icon = get_work_id($mydir); //true or false
-			if ($show_as_icon && api_is_allowed_to_edit()) {
+			if ($show_as_icon) {
 				$row[] = '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&action=downloadfolder&path=/'.$mydir.'"><img src="../img/zip_save.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" width="17" height="17"/></a><a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;
 			} else {
 				$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;	
@@ -1256,7 +1256,12 @@ function to_javascript_work() {
  */
 function get_work_id($path) {
 	$TBL_STUDENT_PUBLICATION = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "SELECT id FROM $TBL_STUDENT_PUBLICATION WHERE url LIKE  'work/".$path."%'";
+	$TBL_PROP_TABLE = Database::get_course_table(TABLE_ITEM_PROPERTY);
+	if (is_allowed_to_edit()) {
+		$sql = "SELECT id FROM $TBL_STUDENT_PUBLICATION AS work,$TBL_PROP_TABLE AS props  WHERE props.tool='work' AND work.id=props.ref AND work.url LIKE 'work/".$path."%' AND work.filetype='file' AND props.visibility<>'2'";
+	} else {
+		$sql = "SELECT id FROM $TBL_STUDENT_PUBLICATION AS work,$TBL_PROP_TABLE AS props  WHERE props.tool='work' AND work.id=props.ref AND work.url LIKE 'work/".$path."%' AND work.filetype='file' AND props.visibility<>'2' AND props.lastedit_user_id='".api_get_user_id()."'";
+	}	
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	$num_rows = Database::num_rows($result);
 	

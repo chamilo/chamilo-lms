@@ -17,7 +17,6 @@ $NoteAddNew = "Nuova annotazione";
 $OrderByCreationDate = "Ordina per data di creazione";
 $OrderByModificationDate = "Ordina per data di modifica";
 $OrderByTitle = "Ordina per titolo";
-$TableView = "Vista tabella";
 $NoteTitle = "Titolo dell\'annotazione";
 $NoteComment = "Commenti all\'annotazione";
 $NoteAdded = "Annotazione aggiunta";

@@ -17,7 +17,6 @@ $NoteAddNew = "Agregar nueva nota";
 $OrderByCreationDate = "Ordenar por fecha de creación";
 $OrderByModificationDate = "Ordenar por fecha de modificación";
 $OrderByTitle = "Ordenar por título";
-$TableView = "Ver cuadro";
 $NoteTitle = "Título de la nota";
 $NoteComment = "Comentarios de la Nota";
 $NoteAdded = "Nota añadida";

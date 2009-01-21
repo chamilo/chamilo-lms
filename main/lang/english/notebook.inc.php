@@ -17,7 +17,6 @@ $NoteAddNew = "Note add new";
 $OrderByCreationDate = "Order by creation date";
 $OrderByModificationDate = "Order by modification date";
 $OrderByTitle = "Order by title";
-$TableView = "Table view";
 $NoteTitle = "Title of Note";
 $NoteComment = "Comments of Note";
 $NoteAdded = "Note added";

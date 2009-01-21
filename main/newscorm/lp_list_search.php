@@ -11,52 +11,33 @@ require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
 require_once api_get_path(LIBRARY_PATH).'/specific_fields_manager.lib.php';
 
 $htmlHeadXtra[] = '
-    <style type="text/css">
-    .doc_table {
-        width: 30%;
-        text-align: left;
-    }
-    .doc_img {
-        border: 1px solid black;
-        padding: 1px solid white;
-        background: white;
-    }
-    .doc_img,
-    .doc_img img {
-        width: 120px;
-    }
-    .doc_text,
-    .doc_title {
-        padding-left: 10px;
-        vertical-align: top;
-    }
-    .doc_title {
-        font-size: large;
-        font-weight: bold;
-        height: 2em;
-    }
-
-   .data_table{text-align:center;}
-
-   .cls{clear:both}
-    </style>';
-
-
-search_widget_prepare(&$htmlHeadXtra);
-
+    <link rel="stylesheet" type="text/css" href="'. api_get_path(WEB_PATH) .'main/newscorm/lp_list_search.css" />
+    ';
 event_access_tool(TOOL_SEARCH);
 $interbreadcrumb[]= array ("url"=>"./index.php", "name"=> get_lang(ucfirst(TOOL_SEARCH)));
+search_widget_prepare(&$htmlHeadXtra);
 Display::display_header(null,'Path');
 
 if (api_get_setting('search_enabled') !== 'true') {
     Display::display_error_message(get_lang('SearchFeatureNotEnabledComment'));
-}
-else
-{
+} else {
     search_widget_show(empty($search_action)?null:'index.php');
 }
 
-$tag_array = array();
+// initialize
+$op = 'or';
+if (!empty($_REQUEST['operator']) && in_array($op, array('or','and'))) {
+    $op = $_REQUEST['operator'];
+}
+
+$query = stripslashes(htmlspecialchars_decode($_REQUEST['query'], ENT_QUOTES));
+
+$mode = 'default';
+if (in_array($_GET['mode'], array('gallery', 'default'))) {
+    $mode = $_GET['mode'];
+}
+
+$term_array = array();
 $specific_fields = get_specific_field_list();
 foreach ($specific_fields as $specific_field) {
     if (!empty($_REQUEST[ 'sf_'. $specific_field['code'] ])) {
@@ -65,37 +46,29 @@ foreach ($specific_fields as $specific_field) {
             $sf_terms_for_code = xapian_get_all_terms(1000, $specific_field['code']);
             foreach ($sf_terms_for_code as $term) {
                 if (!empty($term)) {
-                    $tag_array[] = dokeos_get_boolean_query($term['name']); //here name includes prefix
+                    $term_array[] = dokeos_get_boolean_query($term['name']); //here name includes prefix
                 }
             }
         } else {
             foreach ($values as $term) {
                 if (!empty($term)) {
                     $prefix = $specific_field['code'];
-                    $tag_array[] = dokeos_get_boolean_query($prefix . $term);
+                    $term_array[] = dokeos_get_boolean_query($prefix . $term);
                 }
             }
         }
     }
 }
 
-$query = $_REQUEST['query'];
-$query = stripslashes(htmlspecialchars_decode($query,ENT_QUOTES));
-
-$op = 'or';
-if (!empty($_REQUEST['operator']) && $_REQUEST['operator'] == 'and') {
-    $op = $_REQUEST['operator'];
-}
-
+// get right group of terms to show on multiple select
 $fixed_queries = array();
 $course_filter = NULL;
 if ( ($cid=api_get_course_id()) != -1 ) {
     // results only from actual course
     $course_filter = dokeos_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
 }
-
-if (count($tag_array)) {
-    $fixed_queries = dokeos_join_queries($tag_array,null,$op);
+if (count($term_array)) {
+    $fixed_queries = dokeos_join_queries($term_array, null, $op);
     if ($course_filter != NULL) {
         $fixed_queries = dokeos_join_queries($fixed_queries, $course_filter, 'and');
     }
@@ -107,17 +80,8 @@ if (count($tag_array)) {
 
 list($count, $results) = dokeos_query_query(mb_convert_encoding($query,'UTF-8',$charset), 0, 1000, $fixed_queries);
 
+// prepare blocks to show
 $blocks = array();
-
-$url = api_get_path(WEB_CODE_PATH)."/newscorm/lp_controller.php";
-
-$search_url = sprintf('%s?action=search&query=%s',
-                $url, $_REQUEST['query']);
-
-$link_format = $url.'?cidReq=%s&action=view&lp_id=%s&item_id=%s';
-
-$learnings_id_list = array();
-$mode = ($_GET['mode']!='default') ? 'gallery' : 'default';
 if ($count > 0) {
     foreach ($results as $result) {
         // Fill the result array
@@ -147,7 +111,7 @@ if ($count > 0) {
     }
 }
 
-
+// show results
 if (count($blocks) > 0) {
     $s = new SortableTableFromArray($blocks);
     $s->display_mode = $mode;//default
@@ -176,14 +140,17 @@ if (count($blocks) > 0) {
       $s->set_header(0, get_lang(ucfirst(TOOL_SEARCH)));
     }
 
-    $search_url = api_get_path(WEB_CODE_PATH)."search/index.php";
+    $search_link = '<a href="%ssearch/index.php?mode=%s&action=search&query=%s%s">';
 
-    echo '<div style="width:940px;border:1px solid #979797;position:relative;background-image:url(\'../img/search_background_bar.jpg\');background-repeat: repeat-x">';
-    echo '<div style="width:100px;padding:4px;position:absolute;top:0px;z-index:9"><a ' .
-        'href="'.$search_url.'?mode=gallery&action=search&query='.$_REQUEST['query'].$get_params.'"><img src="../img/'.(($mode=='gallery')?'ButtonGallOn':'ButtonGallOff').'.png"/></a><a ' .
-        'href="'.$search_url.'?mode=default&action=search&query='.$_REQUEST['query'].$get_params.'"><img src="../img/'.(($mode=='default')?'ButtonListOn':'ButtonListOff').'.png"/></a>
-  </div>';
+    $mode_selector = '<div id="mode-selector">';
+    $mode_selector .= sprintf($search_link, api_get_path(WEB_CODE_PATH), 'gallery', $_REQUEST['query'], $get_params);
+    $mode_selector .= '<img src="../img/'. (($mode=='gallery')?'ButtonGallOn':'ButtonGallOff') .'.png" /></a>';
+    $mode_selector .= sprintf($search_link, api_get_path(WEB_CODE_PATH), 'default', $_REQUEST['query'], $get_params);
+    $mode_selector .= '<img src="../img/'.(($mode=='default')?'ButtonListOn':'ButtonListOff').'.png" /></a>';
+    $mode_selector .= '</div>';
 
+    echo '<div id="search-results-container">';
+    echo $mode_selector;
     $s->display();
     echo '</div>';
 }

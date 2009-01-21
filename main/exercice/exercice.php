@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 17878 2009-01-20 23:33:10Z cvargas1 $
+<?php // $Id: exercice.php 17895 2009-01-21 15:21:40Z cvargas1 $
 
 /*
 ==============================================================================
@@ -1092,7 +1092,7 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 							"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".
 							(($revised)?get_lang('Edit'):get_lang('Qualify'))."</a>".
 							((api_is_platform_admin() || $is_tutor)?' - <a href="exercice.php?cidReq='.htmlentities($_GET['cidReq']).'&show=result&filter='.$filter.'&delete=delete&did='.$id.'" onclick="javascript:if(!confirm(\''.sprintf(get_lang('DeleteAttempt'),$user,$dt).'\')) return false;">'.get_lang('Delete').'</a>':'')
-							.(($is_allowedToEdit)?' - <a href="exercice_history.php?cidReq='.htmlentities($_GET['cidReq']).'&exe_id='.$id.'">'.get_lang('ViewHistory').'</a>':'')
+							.(($is_allowedToEdit)?' - <a href="exercice_history.php?cidReq='.htmlentities($_GET['cidReq']).'&exe_id='.$id.'">'.get_lang('ViewHistoryChange').'</a>':'')
 							:(($revised)?"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>":'')).'</td>';
 				echo '</tr>';
 			}

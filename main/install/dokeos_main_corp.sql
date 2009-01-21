@@ -39,3 +39,7 @@ ref_id_high_level INT NOT NULL,
 ref_id_second_level INT NULL,
 search_did INT NOT NULL
 );
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_message_tool', NULL, 'radio', 'Tools', 'false', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_message_tool', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_message_tool', 'false', 'No');

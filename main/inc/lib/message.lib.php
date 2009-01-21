@@ -206,12 +206,10 @@ function inbox_display()
 
 function send_message($receiver_user_id, $title, $content)
 {
-	global $table_message;
-	$id_tmp = api_get_user_id().$receiver_user_id.date('d-D-w-m-Y-H-s').microtime().rand();
-	$id_msg = md5($id_tmp);
-	$query = "INSERT INTO $table_message ( id, user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
+	global $table_message; 
+	$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
 			 " VALUES (".
-	 		 "' ".$id_msg ."' , '".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '1', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
+	 		 "'".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '1', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
 	 		 ");";
 	$result = api_sql_query($query,__FILE__,__LINE__);
 	return $result;	

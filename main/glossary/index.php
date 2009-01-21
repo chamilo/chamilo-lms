@@ -340,8 +340,10 @@ function display_glossary()
 		$table->set_header(2, get_lang('TermDefinition'), true);
 		$table->set_header(3, get_lang('CreationDate'), true);
 		$table->set_header(4, get_lang('UpdateDate'), true);
-		$table->set_header(5, get_lang('Actions'), false);
+		if (api_is_allowed_to_edit()) {
+		$table->set_header(5, get_lang('Actions'), false);		
 		$table->set_column_filter(5, 'actions_filter');
+		}
 		$table->display();
 	}
 	if ($_SESSION['glossary_view'] == 'list')
@@ -363,7 +365,9 @@ function display_glossary_list()
 	{
 		echo '<div class="sectiontitle">'.$glossary_item[1].'</div>';
 		echo '<div class="sectioncomment">'.$glossary_item[2].'</div>';
-		echo '<div>'.actions_filter($glossary_item[5], '',$glossary_item).'</div>';
+		if (api_is_allowed_to_edit()) {
+			echo '<div>'.actions_filter($glossary_item[5], '',$glossary_item).'</div>';
+		}
 	}
 }
 
@@ -404,13 +408,19 @@ function get_glossary_data($from, $number_of_items, $column, $direction)
 	$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 	$t_item_propery = Database :: get_course_table(TABLE_ITEM_PROPERTY);	
 	
+	if (api_is_allowed_to_edit()) {
+		$col5 = ", glossary.glossary_id	as col5";
+	} else {
+		$col5 = " ";
+	}
+	
 	$sql = "SELECT 
 				glossary.display_order 	as col0, 
 				glossary.name 			as col1,
 				glossary.description 	as col2,
 				ip.insert_date			as col3,
-				ip.lastedit_date		as col4,
-				glossary.glossary_id	as col5
+				ip.lastedit_date		as col4
+				$col5
 			FROM $t_glossary glossary, $t_item_propery ip 
 			WHERE glossary.glossary_id = ip.ref 
 			AND tool = '".TOOL_GLOSSARY."' ";	
@@ -446,6 +456,7 @@ function actions_filter($glossary_id,$url_params,$row)
 	}
 
 	$return = '';
+	
 	if ($row[0] > 1)
 	{
 		$return .= '<a href="'.api_get_self().'?action=moveup&amp;glossary_id='.$row[5].'">'.Display::return_icon('up.gif').'</a>';

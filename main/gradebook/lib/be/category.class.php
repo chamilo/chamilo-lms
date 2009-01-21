@@ -553,7 +553,7 @@ class Category implements GradebookItem
                     $sql .= " AND course_code  = '".Database::escape_string($course_code)."'"
                             ." AND session_id = ".(int)$session_id;
                 } else {
-                    $sql .= " AND course_code  = '".Database::escape_string($course_code)."'";
+                    $sql .= " AND course_code  = '".Database::escape_string($course_code)."' AND session_id is null OR session_id=0";
                 }
             } else {
                 //no optional parameter, proceed as usual

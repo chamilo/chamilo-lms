@@ -1943,3 +1943,70 @@ div.system_announcement {
 	margin-right: 10px;
 	vertical-align:middle;
 }
+
+
+/**********************************************
+ *  MESSAGE TOOL                           *
+ **********************************************/
+
+/* styles from the new_message.php file */
+
+.message_view_table{
+ 	cellspacing:0;
+ 	cellpadding:0; 	
+ 	background-color:#dbeaf5;
+ 	border=0;
+  	border-collapse: collapse;
+	width: 100%;	
+}
+.message_view_table th{
+	padding-right: 12px;
+  	border: 1px  solid gray;
+  	background-color: #f0f0f0;
+}
+
+/* styles from the my.profile.php file */
+.message-content {
+	float:right;
+    margin:20px auto;
+    background:#F5E38E;
+    border:2px solid #EBCA4F;
+    padding:10px;
+    width:200px;
+    position:relative;
+	margin-top:115px;
+	margin-right:-100px;
+}
+.message-content .message-delete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+.message-content-internal{
+    display:inline;
+    margin:20px auto;
+    background:#F5E38E;
+    border:2px solid #EBCA4F;
+    padding:10px;
+    width:100px;
+    position:relative;
+    margin-top:150px;
+    margin-right:-100px;	
+}
+.message-title { color:#ff0000; font-size:15px; }
+.message-body { font-size:11px; padding: 0 0 11px; color:#333; }
+.message-link { color:#ff8400; }
+MODUL
+.message-view {
+	float:right;
+    margin:20px auto;
+    background:#F5E38E;
+    border:2px solid #EBCA4F;
+    padding:10px;
+    width:100px;
+    position:relative;
+	margin-top:115px;
+	margin-right:-100px;
+   }
+   

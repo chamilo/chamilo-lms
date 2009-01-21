@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 17756 2009-01-15 23:28:02Z iflorespaz $
+* 	@version $Id: survey.lib.php 17885 2009-01-21 10:08:12Z pcool $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -3351,7 +3351,15 @@ class SurveyUtil {
 						}
 						elseif (!empty($answers_of_user[$question_id][$option_id]))
 						{
+							//$return .= 'v';
+							if ($answers_of_user[$question_id][$option_id]['value']<>0)
+							{
+								$return .= $answers_of_user[$question_id][$option_id]['value'];
+							}
+							else
+							{
 							$return .= 'v';
+						}
 						}
 						$return .= ';';
 					}
@@ -3589,7 +3597,15 @@ class SurveyUtil {
 						}
 						elseif (!empty($answers_of_user[$question_id][$option_id]))
 						{
-							$return[] = 'v';
+							//$return .= 'v';
+							if ($answers_of_user[$question_id][$option_id]['value']<>0)
+							{
+								$return[] = $answers_of_user[$question_id][$option_id]['value'];
+							}
+							else
+							{
+								$return[] = 'v';
+							}
 						}
 						else
 						{

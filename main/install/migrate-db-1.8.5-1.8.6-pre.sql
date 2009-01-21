@@ -186,4 +186,5 @@ CREATE TABLE calendar_event_attachment ( id int NOT NULL auto_increment, path va
 CREATE TABLE notebook (notebook_id int unsigned NOT NULL auto_increment,user_id int unsigned NOT NULL,course varchar(40) not null,session_id int NOT NULL default 0,title varchar(255) NOT NULL,description text NOT NULL,creation_date datetime NOT NULL default '0000-00-00 00:00:00',update_date datetime NOT NULL default '0000-00-00 00:00:00',PRIMARY KEY (notebook_id));
 INSERT INTO course_setting(variable,value,category) VALUES ('allow_open_chat_window',0,'chat');
 INSERT INTO course_setting(variable,value,category) VALUES ('email_alert_to_teacher_on_new_user_in_course',0,'registration');
-
+INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('glossary','glossary/index.php','glossary.gif',0,'0','squaregrey.gif',0,'_self','authoring');
+INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('notebook','notebook/index.php','notebook.gif',0,'0','squaregrey.gif',0,'_self','interaction');

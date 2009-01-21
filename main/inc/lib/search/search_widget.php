@@ -43,7 +43,7 @@ function format_one_specific_field_select($prefix, $sf_term_array, $op) {
     } else if ($op == 'or') {
         $all_selected_name = get_lang('Any');
     }
-    $multiple_select .= '<option value="__all__" '. $all_selected .' >&lt;'. $all_selected_name .'&gt;</option>';
+    $multiple_select .= '<option value="__all__" '. $all_selected .' >-- '. $all_selected_name .' --</option>';
 
     foreach ($sf_term_array as $raw_term) {
         $term = substr($raw_term, 1);

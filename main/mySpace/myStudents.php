@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 17551 2009-01-06 19:31:15Z cfasanando $
+<?php //$Id: myStudents.php 17909 2009-01-21 21:06:39Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -237,11 +237,11 @@ if(!empty($_GET['student']))
 			$nb_courses++;
 			$avg_student_progress += Tracking :: get_avg_student_progress($a_infosUser['user_id'],$course_code);
 			//the score inside the Reporting table
-			$avg_student_score += Tracking :: get_avg_student_score($a_infosUser['user_id'],$course_code);
+			$avg_student_score += Tracking :: get_avg_student_score($a_infosUser['user_id'],$course_code);			
 		}
-	}
-	$avg_student_progress = round($avg_student_progress / $nb_courses,2);
-	$avg_student_score = round($avg_student_score / $nb_courses,2);
+	}	
+	$avg_student_progress = round($avg_student_progress,2);
+	$avg_student_score = round($avg_student_score,2);
 	
 	$first_connection_date = Tracking::get_first_connection_date($a_infosUser['user_id']);
 	if($first_connection_date==''){
@@ -253,9 +253,7 @@ if(!empty($_GET['student']))
 		$last_connection_date=get_lang('NoConnexion');
 	}
 	
-	
-	$time_spent_on_the_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($a_infosUser['user_id'], $course_code));
-	
+	$time_spent_on_the_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($a_infosUser['user_id'], $_GET['course']));
 	// cvs informations
 	$csv_content[] = array(get_lang('Informations'));
 	$csv_content[] = array(get_lang('Name'), get_lang('Email'), get_lang('Tel'));
@@ -646,8 +644,7 @@ if(!empty($_GET['student']))
 					}
 					
 					//QUIZZ IN LP
-					$score = Tracking::get_avg_student_score(intval($_GET['student']), Database::escape_string($_GET['course']), array($a_learnpath['id']));
-				
+					$score = Tracking::get_avg_student_score(intval($_GET['student']), Database::escape_string($_GET['course']), array($a_learnpath['id']));				
 					
 					if($i%2==0){
 						$s_css_class="row_odd";
@@ -781,7 +778,7 @@ if(!empty($_GET['student']))
 						$pourcentageScore = 0;
 						if($weighting!=0)
 						{
-							$pourcentageScore = round(($score*100)/$weighting);
+							$pourcentageScore = round(($score*100)/$weighting,1);
 						}
 		
 						$weighting = 0;
@@ -963,7 +960,7 @@ if(!empty($_GET['student']))
 			$csv_content[] = array();
 			$csv_content[] = array(get_lang('Course'),get_lang('Time'),get_lang('Progress'),get_lang('Score'));
 			foreach($a_courses as $course_code)
-			{
+			{				
 				if(CourseManager :: is_user_subscribed_in_course($student_id,$course_code, true)){
 					$course_infos = CourseManager :: get_course_information($course_code);
 					$time_spent_on_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($a_infosUser['user_id'], $course_code));

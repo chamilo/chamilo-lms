@@ -106,10 +106,10 @@ if ($origin == 'tracking') {
 }
 
 if (!empty ($_GET['extend_all'])) {
-	$extend_all_link = '<a href="' . api_get_self() . '?action=stats' . $url_suffix . '"><img src="../img/view_less_stats.gif" alt="fold_view" border="0"></a>';
+	$extend_all_link = '<a href="' . api_get_self() . '?action=stats' . $url_suffix . '"><img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="'.get_lang('HideAllAttempts').'"></a>';
 	$extend_all = 1;
 } else {
-	$extend_all_link = '<a href="' . api_get_self() . '?action=stats&extend_all=1' . $url_suffix . '"><img src="../img/view_more_stats.gif" alt="extend_view" border="0"></a>';
+	$extend_all_link = '<a href="' . api_get_self() . '?action=stats&extend_all=1' . $url_suffix . '"><img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="'.get_lang('ShowAllAttempts').'"></a>';
 }
 
 if ($origin != 'tracking') {
@@ -194,7 +194,7 @@ foreach ($list as $my_item_id) {
 	
 	
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	$num = Database :: num_rows($result);
+	$num = Database :: num_rows($result);	
 	$time_for_total = 'NaN';
 	if (($extend_this || $extend_all) && $num > 0) {
 		$row = Database :: fetch_array($result);
@@ -233,6 +233,7 @@ foreach ($list as $my_item_id) {
 				if ($num > 0) {
 					if ($num > 1) {
 						while ($rowLA = Database :: fetch_row($resultLastAttempt)) {
+							
 							$id_last_attempt = $rowLA[0];
 							if ($origin != 'tracking') {
 								$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id=' . $id_last_attempt . '&cidReq=' . $course_code . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
@@ -331,13 +332,46 @@ foreach ($list as $my_item_id) {
 				'not attempted' => 'ScormNotAttempted',
 				
 			);
+			
 			$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);
-			//$my_lesson_status = get_lang($mylanglist[$lesson_status]);
-
-			if ($row['item_type'] != 'dokeos_chapter') {
-				$output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . "<td>$extend_attempt_link</td>\n" . '<td colspan="3">' . htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $row['iv_view_count'] . "</td>\n"
-				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
-				 . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . ($score == 0 ? '-' : ($maxscore == 0 ? $score : $score . '/' . $maxscore)) . "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $time . "</div></td><td></td>\n" . "</tr>\n";
+			
+			if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {				
+				if ($origin != 'tracking') {
+						$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row['path'] . '" AND exe_user_id="' . (int)api_get_user_id() . '" AND orig_lp_id = "'.(int)$_GET['lp_id'].'" AND orig_lp_item_id = "'.(int)$_GET['my_lp_id'].'" AND exe_cours_id="' . Database :: escape_string($course_code) . '" AND status <> "incomplete" ORDER BY exe_date';
+				} else {										
+						$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row['path'] . '" AND exe_user_id="' . (int)$_GET['student_id'] . '" AND orig_lp_id = "'.(int)$_GET['lp_id'].'" AND orig_lp_item_id = "'.(int)$_GET['my_lp_id'].'" AND exe_cours_id="' . Database :: escape_string($course_code) . '" AND status <> "incomplete" ORDER BY exe_date';
+				}						
+			} else {
+				if ($origin != 'tracking') {
+						$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row['path'] . '" AND exe_user_id="' . (int)api_get_user_id() . '" AND orig_lp_id = "'.(int)$lp_id.'" AND orig_lp_item_id = "'.(int)$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($course_code) . '" AND status <> "incomplete" ORDER BY exe_date';
+				} else {										
+						$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row['path'] . '" AND exe_user_id="' . (int)$_GET['student_id'] . '" AND orig_lp_id = "'.(int)$lp_id.'" AND orig_lp_item_id = "'.(int)$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($course_code) . '" AND status <> "incomplete" ORDER BY exe_date';
+				}						
+			}			 
+				
+			$res_attempts = api_sql_query($sql_attempts,__FILE__,__LINE__);
+			$num_attempts = Database :: num_rows($res_attempts);				
+			
+			if ($row['item_type'] != 'dokeos_chapter') {						
+				if ($num_attempts > 0) {					
+					$n=1;										
+					while ($row_attempts = Database :: fetch_array($res_attempts)) {
+					$my_score = $row_attempts['exe_result'];
+					$my_maxscore = $row_attempts['exe_weighting'];
+					$my_exe_id	= $row_attempts['exe_id'];
+					$my_orig_lp = $row_attempts['orig_lp_id'];
+					$my_orig_lp_item = $row_attempts['orig_lp_item_id'];					
+					$output .= '<tr class="'.$oddclass.'"><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $n . '</td>'				
+				 			. '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . '</div></font></td><td colspan="2"><div class="mystatus" align="center">' . ($my_score == 0 ? '-' : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore)) . '</div></td><td colspan="2"><div class="mystatus">' . $time . '</div></td>';
+				 	if ($origin != 'tracking') {
+				 		$output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" title="'.get_lang('ShowAttempt').'"></a></td>';						
+					} else {
+						$output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';							
+					}		 				 	        
+				 	$output .= '</tr>';
+					$n++;	
+					}	
+				}						
 			}
 
 			$counter++;
@@ -496,42 +530,28 @@ foreach ($list as $my_item_id) {
 			
 		);
 		$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);
-
 		if ($row['item_type'] != 'dokeos_chapter') {
 			if ($row['item_type'] == 'quiz') {
 				$correct_test_link = '';
-
+				$my_url_suffix ='';
 				if ($origin != 'tracking' && $origin != 'tracking_course') {
-					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date ASC';
+					$my_url_suffix = '&course=' . api_get_course_id() . '&student_id=' . api_get_user_id() . '&lp_id=' . Security::remove_XSS($row['mylpid']);
+					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC ';
 				} else {
-					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . Database :: escape_string($_GET['student_id']) . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND status <> "incomplete" ORDER BY exe_date';
+					$my_url_suffix = '&course=' . $_GET['course'] . '&student_id=' . Security::remove_XSS($_GET['student_id']) . '&lp_id=' . Security::remove_XSS($row['mylpid']);									
+					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . Database :: escape_string($_GET['student_id']) . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND status <> "incomplete"  ORDER BY exe_date DESC ';
 				}
 
 				$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
 				$num = Database :: num_rows($resultLastAttempt);
 				if ($num > 0) {
 					$my_id = $row['myid'];
-					$my_lp_id = $row['mylpid'];					
-					if ($num > 1) {
-						$i = 1;
-						while ($rowLA = Database :: fetch_array($resultLastAttempt)) {
-							$laid = $rowLA['exe_id'];
-							if ($origin != 'tracking') {
-								$correct_test_link .= '<a href="../exercice/exercise_show.php?origin=student_progress&id=' . $laid . '&cidReq=' . $course_code . '" target="_parent" title="' . get_lang('Attempt') . ' ' . $i . '"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a> ';
-							} else {
-								$correct_test_link .= '<a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_id.'&my_lp_id='.$my_lp_id.'&id=' . $laid . '&cidReq=' . Security :: remove_XSS(Database :: escape_string($_GET['course'])) . '&student=' . $_GET['student_id'] . '" target="_parent" title="' . get_lang('Attempt') . ' ' . $i . '"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a> ';
-							}
-							$i++;
-						}
-						$correct_test_link = substr($correct_test_link, 0, -1);
+					$my_lp_id = $row['mylpid'];																																
+					if (isset($_GET['extend_all']) && $_GET['extend_all'] == 1) {
+					$correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '"><img src="../img/view_less_stats.gif" alt="fold_view" border="0"></a>';
+					$extend_all = 1;
 					} else {
-						$id_last_attempt = Database :: result($resultLastAttempt, 0, 0);
-
-						if ($origin != 'tracking') {
-							$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id=' . $id_last_attempt . '&cidReq=' . $course_code . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
-						} else {
-							$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_id.'&my_lp_id='.$my_lp_id.'&id=' . $id_last_attempt . '&cidReq=' . Security :: remove_XSS(Database :: escape_string($_GET['course'])) . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
-						}
+					$correct_test_link = '<a href="' . api_get_self() . '?action=stats&extend_all=1'.$my_url_suffix.'&my_lp_id='.$my_id.'"><img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="'.get_lang('ShowAllAttemptsByExercise').'"></a>';
 					}
 				} else {
 					$correct_test_link = '-';
@@ -633,9 +653,10 @@ if (($counter % 2) == 0) {
 	$oddclass = "row_even";
 }
 
-$output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . '<td colspan="4"><div class="mystatus"><i>' . htmlentities(get_lang('AccomplishedStepsTotal'), ENT_QUOTES, $dokeos_charset) . "</i></div></td>\n"
-//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
- . '<td colspan="2"></td>' . "\n" . '<td colspan="2"><div class="mystatus" align="center">' . $final_score . "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $total_time . '</div></td><td></td>' . "\n" . "</tr>\n";
+if (empty($extend_all)) {
+	$output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . '<td colspan="4"><div class="mystatus"><i>' . htmlentities(get_lang('AccomplishedStepsTotal'), ENT_QUOTES, $dokeos_charset) . "</i></div></td>\n"
+ 			. '<td colspan="2"></td>' . "\n" . '<td colspan="2"><div class="mystatus" align="center">' . $final_score . "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $total_time . '</div></td><td></td>' . "\n" . "</tr>\n";		
+}
 
 $output .= "</table></td></tr></table>";
 

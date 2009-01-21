@@ -78,10 +78,12 @@ $TABLETRACK_ACCESS      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_
 $TABLETRACK_LINKS       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
 $TABLETRACK_DOWNLOADS   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
 $TABLETRACK_ACCESS_2    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+$TABLETRACK_EXERCISES 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TABLECOURSUSER	        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLECOURSE	        = Database::get_main_table(TABLE_MAIN_COURSE);
 $TABLECOURSE_LINKS      = Database::get_course_table(TABLE_LINK);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
+$TABLEQUIZ = Database :: get_course_table(TABLE_QUIZ_TEST);
 
 //$table_scormdata = Database::get_scorm_table(TABLE_SCORM_SCO_DATA);
 //$table_scormmain = Database::get_scorm_table(TABLE_SCORM_MAIN);
@@ -214,7 +216,7 @@ if($_GET['studentlist'] == 'false') {
 			<table class="data_table">';
 			
 	$sql = "SELECT id, title
-			FROM ".Database :: get_course_table(TABLE_QUIZ_TEST);
+			FROM $TABLEQUIZ WHERE active <> -1";
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
 	
 	if ($export_csv) {
@@ -227,12 +229,13 @@ if($_GET['studentlist'] == 'false') {
 		while($quiz = Database::fetch_array($rs)) {
 			$quiz_avg_score = 0;
 			
-			// get the progress in learning pathes	
+			// get the scorn in exercises	
 			$sql = 'SELECT exe_result , exe_weighting
-					FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES).'
+					FROM '.$TABLETRACK_EXERCISES.'
 					WHERE exe_exo_id = '.$quiz['id'].'
-					ORDER BY exe_date DESC
-					LIMIT 0, 1';
+					AND orig_lp_id = 0
+					AND orig_lp_item_id = 0		
+					ORDER BY exe_date DESC';
 			$rsAttempt = api_sql_query($sql, __FILE__, __LINE__);
 			$nb_attempts = 0;
 			while ($attempt = Database::fetch_array($rsAttempt)) {
@@ -502,8 +505,8 @@ if($_GET['studentlist'] == 'false') {
 			
 			$avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0 ;
 			$nb_courses_student = 0;
-			$avg_time_spent = Tracking :: get_time_spent_on_the_course($student_id, $course_code);
-			$avg_student_score = Tracking :: get_avg_student_score($student_id, $course_code);
+			$avg_time_spent = Tracking :: get_time_spent_on_the_course($student_id, $course_code);			
+			$avg_student_score = Tracking :: get_avg_student_score($student_id, $course_code);						
 			$avg_student_progress = Tracking :: get_avg_student_progress($student_id, $course_code);
 			$total_assignments = Tracking :: count_student_assignments($student_id, $course_code);
 			$total_messages = Tracking :: count_student_messages($student_id, $course_code);
@@ -511,8 +514,10 @@ if($_GET['studentlist'] == 'false') {
 			$row = array();
 			$row[] = $student_datas['official_code'];
 			$row[] = $student_datas['lastname'];
-			$row[] = 	$student_datas['firstname'];
-			$row[] = api_time_to_hms($avg_time_spent);
+			$row[] = 	$student_datas['firstname'];			
+			$row[] = api_time_to_hms($avg_time_spent);	
+			if (is_null($avg_student_score)) {$avg_student_score=0;}
+			if (is_null($avg_student_progress)) {$avg_student_progress=0;}		
 			$row[] = $avg_student_progress.' %';
 			$row[] = $avg_student_score.' %';		
 			$row[] = $total_assignments;

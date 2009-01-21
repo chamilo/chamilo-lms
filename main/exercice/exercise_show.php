@@ -1038,7 +1038,9 @@ $totalWeighting+=$questionWeighting;
 		 	}  		
 			if ($origin=='learnpath' || $origin=='student_progress') {?>							
 				<input type="button" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>'" value="<?php echo get_lang('Finish'); ?>" />
-			<?php }?>
+			<?php } else if($origin=='myprogress') {?>
+				<input type="button" onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id()?>'" value="<?php echo get_lang('Finish'); ?>" />
+			<?php }?>	
 		</td>
 		</tr>
 </table>

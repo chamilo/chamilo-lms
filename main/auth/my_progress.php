@@ -310,7 +310,9 @@ foreach($Courses as $enreg)
 							$sqlEssais = "	SELECT COUNT(ex.exe_id) as essais
 											FROM $tbl_stats_exercices AS ex
 											WHERE ex.exe_user_id='".$_user['user_id']."' AND ex.exe_cours_id = '".$a_infosCours['code']."'
-											AND ex.exe_exo_id = ".$a_exercices['id']
+											AND ex.exe_exo_id = ".$a_exercices['id']."
+											AND orig_lp_id = 0
+											AND orig_lp_item_id = 0	"
 										 ;
 							$resultEssais = api_sql_query($sqlEssais);
 							$a_essais = Database::fetch_array($resultEssais);
@@ -320,6 +322,8 @@ foreach($Courses as $enreg)
 										 WHERE exe_user_id = ".$_user['user_id']."
 										 AND exe_cours_id = '".$a_infosCours['code']."'
 										 AND exe_exo_id = ".$a_exercices['id']."
+										 AND orig_lp_id = 0
+										 AND orig_lp_item_id = 0			
 										ORDER BY exe_date DESC LIMIT 1"
 											;
 		
@@ -334,7 +338,7 @@ foreach($Courses as $enreg)
 							
 							if  ($weighting>0)
 							{							
-								$pourcentageScore = round(($score*100)/$weighting);
+								$pourcentageScore = round(($score*100)/$weighting,1);
 							}
 							else
 							{
@@ -361,7 +365,7 @@ foreach($Courses as $enreg)
 									<td align="center" width="25">
 								 ';
 							if($a_essais['essais']>0)
-								echo '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$exe_id.'&cidReq='.$a_infosCours['code'].'&id_session='.$_GET['id_session'].'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
+								echo '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$a_infosCours['code'].'&id_session='.$_GET['id_session'].'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
 							echo "	</td>
 								  </tr>
 								 ";

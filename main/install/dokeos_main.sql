@@ -1240,20 +1240,21 @@ CREATE TABLE user_api_key (
     PRIMARY KEY (id)
 );
 ALTER TABLE user_api_key ADD INDEX idx_user_api_keys_user (user_id);
+
 --
--- Table structure for table messages_invitation
+-- Table structure for table message
 --
-CREATE TABLE messages_invitation(
+CREATE TABLE message(
 	id bigint unsigned not null auto_increment,
 	user_sender_id int unsigned not null,
 	user_receiver_id int unsigned not null,
-	msg_status tinyint not null default 0, -- 0 read, 1 unread, 5 pending invitation, 6 accepted invitation, 7 invitacion denegada
-	send_date int,
+	msg_status tinyint unsigned not null default 0, -- 0 read, 1 unread, 5 pending invitation, 6 accepted invitation, 7 invitation denied
+	send_date datetime not null default '0000-00-00 00:00:00',
 	title varchar(255) not null,
 	content text not null,
 	PRIMARY KEY(id)
 );
-ALTER TABLE messages_invitation ADD INDEX idx_messages_invitation_user_sender(user_sender_id);
-ALTER TABLE messages_invitation ADD INDEX idx_messages_invitation_user_receiver(user_receiver_id);
-ALTER TABLE messages_invitation ADD INDEX idx_messages_invitation_user_sender_user_receiver(user_sender_id,user_receiver_id);
-ALTER TABLE messages_invitation ADD INDEX idx_messages_invitation_msg_status(msg_status);
+ALTER TABLE message ADD INDEX idx_message_user_sender(user_sender_id);
+ALTER TABLE message ADD INDEX idx_message_user_receiver(user_receiver_id);
+ALTER TABLE message ADD INDEX idx_message_user_sender_user_receiver(user_sender_id,user_receiver_id);
+ALTER TABLE message ADD INDEX idx_message_msg_status(msg_status);

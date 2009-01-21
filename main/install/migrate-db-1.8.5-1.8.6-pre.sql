@@ -70,11 +70,11 @@ ALTER TABLE user_friend ADD INDEX idx_user_friend_user_friend_user(user_id,frien
 CREATE TABLE user_friend_relation_type(id int unsigned not null auto_increment,title char(20),PRIMARY KEY(id));
 CREATE TABLE user_api_key (id int unsigned NOT NULL auto_increment, user_id int unsigned NOT NULL, api_key char(32) NOT NULL, api_service char(10) NOT NULL default 'dokeos', PRIMARY KEY (id));
 ALTER TABLE user_api_key ADD INDEX idx_user_api_keys_user (user_id);
-CREATE TABLE messages_invitation(id bigint unsigned not null auto_increment,user_sender_id int unsigned not null,user_receiver_id int unsigned not null,msg_status tinyint not null default 0,send_date int,title varchar(255) not null,content text not null,primary key(id));
-ALTER TABLE messages_invitation ADD INDEX idx_messages_invitation_user_sender(user_sender_id);
-ALTER TABLE messages_invitation ADD INDEX idx_messages_invitation_user_receiver(user_receiver_id);
-ALTER TABLE messages_invitation ADD INDEX idx_messages_invitation_user_sender_user_receiver(user_sender_id,user_receiver_id);
-ALTER TABLE messages_invitation ADD INDEX idx_messages_invitation_msg_status(msg_status);
+CREATE TABLE message (id bigint unsigned not null auto_increment, user_sender_id int unsigned not null, user_receiver_id int unsigned not null,	msg_status tinyint unsigned not null default 0, send_date datetime not null default '0000-00-00 00:00:00', title varchar(255) not null, content text not null, PRIMARY KEY(id));
+ALTER TABLE message ADD INDEX idx_message_user_sender(user_sender_id);
+ALTER TABLE message ADD INDEX idx_message_user_receiver(user_receiver_id);
+ALTER TABLE message ADD INDEX idx_message_user_sender_user_receiver(user_sender_id,user_receiver_id);
+ALTER TABLE message ADD INDEX idx_message_msg_status(msg_status);
 
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='Institution';
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='InstitutionUrl';
@@ -91,7 +91,7 @@ UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs'
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='my_agenda';
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='my_profile';
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='my_gradebook';
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_message_tool', NULL, 'radio', 'Tools', 'false', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_message_tool', NULL, 'radio', 'Tools', 'false', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_message_tool', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_message_tool', 'false', 'No');
  

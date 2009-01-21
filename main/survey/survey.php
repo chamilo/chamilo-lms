@@ -1,4 +1,4 @@
-<?php // $Id: survey.php 16967 2008-11-26 22:22:07Z yannoo $
+<?php // $Id: survey.php 17900 2009-01-21 17:02:59Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -26,7 +26,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 16967 2008-11-26 22:22:07Z yannoo $
+* 	@version $Id: survey.php 17900 2009-01-21 17:02:59Z cvargas1 $
 *
 * 	@todo use quickforms for the forms
 */
@@ -117,7 +117,7 @@ if (isset($_GET['action']))
 	if (($_GET['action'] == 'moveup' OR $_GET['action'] == 'movedown') AND isset($_GET['question_id']))
 	{
 		survey_manager::move_survey_question($_GET['action'], $_GET['question_id'], $_GET['survey_id']);
-		Display::display_confirmation_message('SurveyQuestionMoved', false);
+		Display::display_confirmation_message(get_lang('SurveyQuestionMoved'), false);
 	}
 	if ($_GET['action'] == 'delete' AND is_numeric($_GET['question_id']))
 	{

@@ -943,11 +943,11 @@ function store_add_dropbox()
 			{
 			    if ( ($w->recipients[0]['id'] > dropbox_cnf("mailingIdBase")) xor $thisIsAMailing)
 			    {
-					return get_lang('mailingNonMailingError');
+					return get_lang('MailingNonMailingError');
 				}
 				if ( ($w->recipients[0]['id'] == $_user['user_id']) xor $thisIsJustUpload)
 				{
-					return get_lang('mailingJustUploadNoOther');
+					return get_lang('MailingJustUploadSelectNoOther');
 				}
 				$dropbox_filename = $w->filename;
 				$found = true; // note: do we still need this?

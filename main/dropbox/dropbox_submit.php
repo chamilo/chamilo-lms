@@ -143,7 +143,7 @@ if ( isset( $_POST["submitWork"]))
         {
             $error = TRUE;
 
-            $errormsg = dropbox_lang("mailingJustUploadNoOther");
+            $errormsg = get_lang("MailingJustUploadSelectNoOther");
         }
         elseif ( empty( $_FILES['file']['name']))
         {
@@ -225,7 +225,7 @@ if ( isset( $_POST["submitWork"]))
 							if ( ($w->recipients[0]['id'] == $_user['user_id']) xor $thisIsJustUpload)
 							{
 								$error = TRUE;
-								$errormsg = dropbox_lang("mailingJustUploadNoOther");
+								$errormsg = get_lang("MailingJustUploadSelectNoOther");
 							}
 							$dropbox_filename = $w->filename; $found = true;
 							break;

@@ -88,7 +88,7 @@ $TBL_TRACK_ATTEMPT_RECORDING= Database::get_statistic_table(TABLE_STATISTIC_TRAC
 		 <tr class="row_odd">
 		  <th><?php echo get_lang('Question'); ?></th>
 		  <th><?php echo get_lang('Value'); ?></th>
-		  <th><?php echo get_lang('FeedBack'); ?></th>
+		  <th><?php echo get_lang('Feedback'); ?></th>
 		  <th><?php echo get_lang('Date'); ?></th>
 		  <th><?php echo get_lang('Author'); ?></th>
 		 </tr>

@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 17826 2009-01-19 17:18:19Z yannoo $
+<?php // $Id: database.lib.php 17905 2009-01-21 19:52:11Z juliomontoya $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -206,6 +206,9 @@ define('TABLE_GLOSSARY', 'glossary');
 
 // GLOSSARY
 define('TABLE_NOTEBOOK', 'notebook');
+
+// MESSAGE
+define('TABLE_MESSAGE', 'message'); 
 
 
 /*

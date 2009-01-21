@@ -126,7 +126,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
         //document > images
         if(!is_dir($currentCourseRepositorySys."document/images/gallery")){
             mkdir($currentCourseRepositorySys."document/images/gallery",$perm);
-            insert_db($db_name,"gallery",get_lang('Gallery'));
+            insert_db($db_name,"gallery",get_lang('DefaultCourseImages'));
         }
         //document > images
         if(!is_dir($currentCourseRepositorySys."document/images/gallery/shared")){

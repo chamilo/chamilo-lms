@@ -23,8 +23,8 @@ $SureYouWantToDeleteSelectedMessages = "¿ Está seguro de querer borrar los mensa
 $SelectedMessagesDeleted = "Los mensajes seleccionados han sido suprimidos";
 $EnterTitle = "Ingrese un título";
 $TypeYourMessage = "Escriba su mensaje";
-$MessageDeleted = " ";
-$ConfirmDeleteMessage = " ";
-$DeleteMessage = " ";
-$ReadMessage = " ";
+$MessageDeleted = "El mensaje ha sido eliminado";
+$ConfirmDeleteMessage = "¿Esta seguro desea borrar este mensaje?";
+$DeleteMessage = " Borrar mensaje";
+$ReadMessage = " Leer";
 ?>
